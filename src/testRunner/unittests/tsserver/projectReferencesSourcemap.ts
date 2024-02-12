@@ -69,9 +69,7 @@ fn5();
         content: "{}",
     };
     const dtsLocation = `${dependecyDeclsLocation}/FnS.d.ts`;
-    const dtsPath = dtsLocation.toLowerCase() as ts.Path;
     const dtsMapLocation = `${dependecyDeclsLocation}/FnS.d.ts.map`;
-    const dtsMapPath = dtsMapLocation.toLowerCase() as ts.Path;
 
     const files = [dependencyTs, dependencyConfig, mainTs, mainConfig, libFile, randomFile, randomConfig];
 
@@ -118,79 +116,13 @@ fn5();
         return renameFromDependencyTs(fn + 1);
     }
 
-    function verifyDocumentPositionMapper(
-        session: TestSession,
-        dependencyMap: ts.server.ScriptInfo | undefined,
-        documentPositionMapper: ts.server.ScriptInfo["documentPositionMapper"],
-        equal: boolean,
-        debugInfo?: string,
-    ) {
-        assert.strictEqual(session.getProjectService().filenameToScriptInfo.get(dtsMapPath), dependencyMap, `${debugInfo} dependencyMap`);
-        if (dependencyMap) {
-            verifyEquality(dependencyMap.documentPositionMapper, documentPositionMapper, equal, `${debugInfo} DocumentPositionMapper`);
-        }
-    }
-
-    function verifyDocumentPositionMapperEqual(
-        session: TestSession,
-        dependencyMap: ts.server.ScriptInfo | undefined,
-        documentPositionMapper: ts.server.ScriptInfo["documentPositionMapper"],
-        debugInfo?: string,
-    ) {
-        verifyDocumentPositionMapper(session, dependencyMap, documentPositionMapper, /*equal*/ true, debugInfo);
-    }
-
-    function verifyEquality<T>(actual: T, expected: T, equal: boolean, debugInfo?: string) {
-        if (equal) {
-            assert.strictEqual(actual, expected, debugInfo);
-        }
-        else {
-            assert.notStrictEqual(actual, expected, debugInfo);
-        }
-    }
-
     function verifyAllFnAction<Req extends ts.server.protocol.Request>(
         session: TestSession,
         action: (fn: number) => TestSessionRequest<Req>,
-        existingDependencyMap: ts.server.ScriptInfo | undefined,
-        existingDocumentPositionMapper: ts.server.ScriptInfo["documentPositionMapper"],
-        existingMapEqual: boolean,
-        existingDocumentPositionMapperEqual: boolean,
-        skipMapPathInDtsInfo?: boolean,
     ) {
-        let sourceMapPath: ts.server.ScriptInfo["sourceMapFilePath"] | undefined;
-        let dependencyMap: ts.server.ScriptInfo | undefined;
-        let documentPositionMapper: ts.server.ScriptInfo["documentPositionMapper"];
         for (let fn = 1; fn <= 5; fn++) {
             const fnAction = action(fn);
             session.executeCommandSeq(fnAction);
-            const debugInfo = `${jsonToReadableText(fnAction)}:: ${fn}`;
-            const dtsInfo = session.getProjectService().getScriptInfoForPath(dtsPath);
-            const dtsMapInfo = session.getProjectService().getScriptInfoForPath(dtsMapPath);
-
-            if (fn === 1) {
-                if (dtsInfo) {
-                    if (!skipMapPathInDtsInfo) {
-                        if (dtsMapInfo) {
-                            assert.equal(dtsInfo.sourceMapFilePath, dtsMapPath, `${debugInfo} sourceMapFilePath`);
-                        }
-                        else {
-                            assert.isNotString(dtsInfo.sourceMapFilePath, `${debugInfo} sourceMapFilePath`);
-                            assert.isNotFalse(dtsInfo.sourceMapFilePath, `${debugInfo} sourceMapFilePath`);
-                            assert.isDefined(dtsInfo.sourceMapFilePath, `${debugInfo} sourceMapFilePath`);
-                        }
-                    }
-                }
-                verifyEquality(dtsMapInfo, existingDependencyMap, existingMapEqual, `${debugInfo} dependencyMap`);
-                verifyEquality(existingDocumentPositionMapper, dtsMapInfo?.documentPositionMapper, existingDocumentPositionMapperEqual, `${debugInfo} DocumentPositionMapper`);
-                sourceMapPath = dtsInfo?.sourceMapFilePath;
-                dependencyMap = dtsMapInfo;
-                documentPositionMapper = dependencyMap?.documentPositionMapper;
-            }
-            else {
-                assert.equal(dtsInfo?.sourceMapFilePath, sourceMapPath, `${debugInfo} sourceMapFilePath`);
-                verifyDocumentPositionMapperEqual(session, dependencyMap, documentPositionMapper, debugInfo);
-            }
         }
     }
 
@@ -198,16 +130,9 @@ fn5();
         session: TestSession,
         openFiles: readonly File[],
     ) {
-        const { dependencyMap, documentPositionMapper } = getDocumentPositionMapper(session);
-
         // Collecting at this point retains dependency.d.ts and map
         closeFilesForSession([randomFile], session);
         openFilesForSession([randomFile], session);
-
-        // If map is not collected, document position mapper shouldnt change
-        if (session.getProjectService().filenameToScriptInfo.has(dtsMapPath)) {
-            verifyDocumentPositionMapperEqual(session, dependencyMap, documentPositionMapper);
-        }
 
         // Closing open file, removes dependencies too
         closeFilesForSession([...openFiles, randomFile], session);
@@ -215,11 +140,11 @@ fn5();
     }
 
     type OnHostCreate = (host: TestServerHost) => void;
-    type CreateSessionFn = (onHostCreate?: OnHostCreate) => { host: TestServerHost; session: TestSession; };
+    type CreateSessionFn = (onHostCreate?: OnHostCreate) => TestSession;
     function setupWith(createSession: CreateSessionFn, openFiles: readonly File[], onHostCreate: OnHostCreate | undefined) {
-        const result = createSession(onHostCreate);
-        openFilesForSession(openFiles, result.session);
-        return result;
+        const session = createSession(onHostCreate);
+        openFilesForSession(openFiles, session);
+        return session;
     }
 
     function setupWithMainTs(createSession: CreateSessionFn, onHostCreate: OnHostCreate | undefined) {
@@ -244,15 +169,13 @@ fn5();
             }),
         );
         onHostCreate?.(host);
-        const session = new TestSession(host);
-        return { host, session };
+        return new TestSession(host);
     }
 
     function createSessionWithProjectReferences(onHostCreate?: OnHostCreate) {
         const host = createHostWithSolutionBuild(files, [mainConfig.path]);
         onHostCreate?.(host);
-        const session = new TestSession(host);
-        return { host, session };
+        return new TestSession(host);
     }
 
     function createSessionWithDisabledProjectReferences(onHostCreate?: OnHostCreate) {
@@ -270,14 +193,7 @@ fn5();
             }),
         );
         onHostCreate?.(host);
-        const session = new TestSession(host);
-        return { host, session };
-    }
-
-    function getDocumentPositionMapper(session: TestSession) {
-        const dependencyMap = session.getProjectService().filenameToScriptInfo.get(dtsMapPath);
-        const documentPositionMapper = dependencyMap?.documentPositionMapper;
-        return { dependencyMap, documentPositionMapper };
+        return new TestSession(host);
     }
 
     function makeChangeToMainTs(session: TestSession) {
@@ -309,10 +225,10 @@ fn5();
     }
 
     describe("from project that uses dependency: goToDef", () => {
-        function setupWithActionWith(setup: (onHostCreate?: OnHostCreate) => ReturnType<CreateSessionFn>, onHostCreate: OnHostCreate | undefined) {
-            const result = setup(onHostCreate);
-            result.session.executeCommandSeq(goToDefFromMainTs(1));
-            return { ...result, ...getDocumentPositionMapper(result.session) };
+        function setupWithActionWith(setup: (onHostCreate?: OnHostCreate) => TestSession, onHostCreate: OnHostCreate | undefined) {
+            const session = setup(onHostCreate);
+            session.executeCommandSeq(goToDefFromMainTs(1));
+            return session;
         }
 
         describe("when main tsconfig doesnt have project reference", () => {
@@ -325,15 +241,8 @@ fn5();
             }
 
             it("can go to definition correctly", () => {
-                const { session } = setup();
-                verifyAllFnAction(
-                    session,
-                    goToDefFromMainTs,
-                    /*existingDependencyMap*/ undefined,
-                    /*existingDocumentPositionMapper*/ undefined,
-                    /*existingMapEqual*/ false,
-                    /*existingDocumentPositionMapperEqual*/ false,
-                );
+                const session = setup();
+                verifyAllFnAction(session, goToDefFromMainTs);
                 verifyScriptInfoCollectionWith(session, [mainTs]);
                 baselineTsserverLogs("projectReferencesSourcemap", "usageProject/configHasNoReference/can go to definition correctly", session);
             });
@@ -341,219 +250,132 @@ fn5();
             // Edit
             it(`when usage file changes, document position mapper doesnt change, when timeout occurs before request`, () => {
                 // Create DocumentPositionMapper
-                const { host, session, dependencyMap, documentPositionMapper } = setupWithAction();
+                const session = setupWithAction();
 
                 // change
                 makeChangeToMainTs(session);
-                host.runQueuedTimeoutCallbacks();
-                verifyDocumentPositionMapperEqual(session, dependencyMap, documentPositionMapper);
+                session.host.runQueuedTimeoutCallbacks();
 
                 // action
-                verifyAllFnAction(
-                    session,
-                    goToDefFromMainTs,
-                    dependencyMap,
-                    documentPositionMapper,
-                    /*existingMapEqual*/ true,
-                    /*existingDocumentPositionMapperEqual*/ true,
-                );
+                verifyAllFnAction(session, goToDefFromMainTs);
                 baselineTsserverLogs("projectReferencesSourcemap", "usageProject/configHasNoReference/usage file changes with timeout before request", session);
             });
             it(`when usage file changes, document position mapper doesnt change, when timeout does not occur before request`, () => {
                 // Create DocumentPositionMapper
-                const { session, dependencyMap, documentPositionMapper } = setupWithAction();
+                const session = setupWithAction();
 
                 // change
                 makeChangeToMainTs(session);
 
                 // action
-                verifyAllFnAction(
-                    session,
-                    goToDefFromMainTs,
-                    dependencyMap,
-                    documentPositionMapper,
-                    /*existingMapEqual*/ true,
-                    /*existingDocumentPositionMapperEqual*/ true,
-                );
+                verifyAllFnAction(session, goToDefFromMainTs);
                 baselineTsserverLogs("projectReferencesSourcemap", "usageProject/configHasNoReference/usage file changes", session);
             });
 
             // Edit dts to add new fn
             it(`when dependency .d.ts changes, document position mapper doesnt change, when timeout occurs before request`, () => {
                 // Create DocumentPositionMapper
-                const { host, session, dependencyMap, documentPositionMapper } = setupWithAction();
+                const session = setupWithAction();
 
                 // change
-                changeDtsFile(host);
-                host.runQueuedTimeoutCallbacks();
-                verifyDocumentPositionMapperEqual(session, dependencyMap, documentPositionMapper);
+                changeDtsFile(session.host);
+                session.host.runQueuedTimeoutCallbacks();
 
                 // action
-                verifyAllFnAction(
-                    session,
-                    goToDefFromMainTs,
-                    dependencyMap,
-                    documentPositionMapper,
-                    /*existingMapEqual*/ true,
-                    /*existingDocumentPositionMapperEqual*/ true,
-                );
+                verifyAllFnAction(session, goToDefFromMainTs);
                 baselineTsserverLogs("projectReferencesSourcemap", "usageProject/configHasNoReference/dependency dts changes with timeout before request", session);
             });
             it(`when dependency .d.ts changes, document position mapper doesnt change, when timeout does not occur before request`, () => {
                 // Create DocumentPositionMapper
-                const { host, session, dependencyMap, documentPositionMapper } = setupWithAction();
+                const session = setupWithAction();
 
                 // change
-                changeDtsFile(host);
+                changeDtsFile(session.host);
 
                 // action
-                verifyAllFnAction(
-                    session,
-                    goToDefFromMainTs,
-                    dependencyMap,
-                    documentPositionMapper,
-                    /*existingMapEqual*/ true,
-                    /*existingDocumentPositionMapperEqual*/ true,
-                );
+                verifyAllFnAction(session, goToDefFromMainTs);
                 baselineTsserverLogs("projectReferencesSourcemap", "usageProject/configHasNoReference/dependency dts changes", session);
             });
 
             // Edit map file to represent added new line
             it(`when dependency file's map changes, when timeout occurs before request`, () => {
                 // Create DocumentPositionMapper
-                const { host, session, dependencyMap, documentPositionMapper } = setupWithAction();
+                const session = setupWithAction();
 
                 // change
-                changeDtsMapFile(host);
-                host.runQueuedTimeoutCallbacks();
-                verifyDocumentPositionMapperEqual(session, dependencyMap, documentPositionMapper);
+                changeDtsMapFile(session.host);
+                session.host.runQueuedTimeoutCallbacks();
 
                 // action
-                verifyAllFnAction(
-                    session,
-                    goToDefFromMainTs,
-                    dependencyMap,
-                    documentPositionMapper,
-                    /*existingMapEqual*/ true,
-                    /*existingDocumentPositionMapperEqual*/ false,
-                );
+                verifyAllFnAction(session, goToDefFromMainTs);
                 baselineTsserverLogs("projectReferencesSourcemap", "usageProject/configHasNoReference/dependency dtsMap changes with timeout before request", session);
             });
             it(`when dependency file's map changes, when timeout does not occur before request`, () => {
                 // Create DocumentPositionMapper
-                const { host, session, dependencyMap, documentPositionMapper } = setupWithAction();
+                const session = setupWithAction();
 
                 // change
-                changeDtsMapFile(host);
+                changeDtsMapFile(session.host);
 
                 // action
-                verifyAllFnAction(
-                    session,
-                    goToDefFromMainTs,
-                    dependencyMap,
-                    documentPositionMapper,
-                    /*existingMapEqual*/ true,
-                    /*existingDocumentPositionMapperEqual*/ false,
-                );
+                verifyAllFnAction(session, goToDefFromMainTs);
                 baselineTsserverLogs("projectReferencesSourcemap", "usageProject/configHasNoReference/dependency dtsMap changes", session);
             });
 
             it(`with depedency files map file, when file is not present`, () => {
-                const { session } = setup(host => host.deleteFile(dtsMapLocation));
+                const session = setup(host => host.deleteFile(dtsMapLocation));
 
-                verifyAllFnAction(
-                    session,
-                    goToDefFromMainTs,
-                    /*existingDependencyMap*/ undefined,
-                    /*existingDocumentPositionMapper*/ undefined,
-                    /*existingMapEqual*/ true,
-                    /*existingDocumentPositionMapperEqual*/ true,
-                );
+                verifyAllFnAction(session, goToDefFromMainTs);
                 verifyScriptInfoCollectionWith(session, [mainTs]);
                 baselineTsserverLogs("projectReferencesSourcemap", "usageProject/configHasNoReference/dependency dtsMap not present", session);
             });
             it(`with depedency files map file, when file is created after actions on projects`, () => {
                 let fileContents: string;
-                const { host, session, dependencyMap, documentPositionMapper } = setupWithAction(host => {
+                const session = setupWithAction(host => {
                     fileContents = host.readFile(dtsMapLocation)!;
                     host.deleteFile(dtsMapLocation);
                 });
 
-                host.writeFile(dtsMapLocation, fileContents!);
-                verifyAllFnAction(
-                    session,
-                    goToDefFromMainTs,
-                    dependencyMap,
-                    documentPositionMapper,
-                    /*existingMapEqual*/ false,
-                    /*existingDocumentPositionMapperEqual*/ false,
-                );
+                session.host.writeFile(dtsMapLocation, fileContents!);
+                verifyAllFnAction(session, goToDefFromMainTs);
                 verifyScriptInfoCollectionWith(session, [mainTs]);
                 baselineTsserverLogs("projectReferencesSourcemap", "usageProject/configHasNoReference/dependency dtsMap created", session);
             });
             it(`with depedency files map file, when file is deleted after actions on the projects`, () => {
-                const { host, session, dependencyMap, documentPositionMapper } = setupWithAction();
+                const session = setupWithAction();
 
                 // The dependency file is deleted when orphan files are collected
-                host.deleteFile(dtsMapLocation);
-                verifyAllFnAction(
-                    session,
-                    goToDefFromMainTs,
-                    dependencyMap,
-                    documentPositionMapper,
-                    /*existingMapEqual*/ false,
-                    /*existingDocumentPositionMapperEqual*/ false,
-                );
+                session.host.deleteFile(dtsMapLocation);
+                verifyAllFnAction(session, goToDefFromMainTs);
                 verifyScriptInfoCollectionWith(session, [mainTs]);
                 baselineTsserverLogs("projectReferencesSourcemap", "usageProject/configHasNoReference/dependency dtsMap deleted", session);
             });
 
             it(`with depedency .d.ts file, when file is not present`, () => {
-                const { session } = setup(host => host.deleteFile(dtsLocation));
+                const session = setup(host => host.deleteFile(dtsLocation));
 
-                verifyAllFnAction(
-                    session,
-                    goToDefFromMainTs,
-                    /*existingDependencyMap*/ undefined,
-                    /*existingDocumentPositionMapper*/ undefined,
-                    /*existingMapEqual*/ true,
-                    /*existingDocumentPositionMapperEqual*/ true,
-                );
+                verifyAllFnAction(session, goToDefFromMainTs);
                 verifyScriptInfoCollectionWith(session, [mainTs]);
                 baselineTsserverLogs("projectReferencesSourcemap", "usageProject/configHasNoReference/dependency dts not present", session);
             });
             it(`with depedency .d.ts file, when file is created after actions on projects`, () => {
                 let fileContents: string;
-                const { host, session, dependencyMap, documentPositionMapper } = setupWithAction(host => {
+                const session = setupWithAction(host => {
                     fileContents = host.readFile(dtsLocation)!;
                     host.deleteFile(dtsLocation);
                 });
 
-                host.writeFile(dtsLocation, fileContents!);
-                verifyAllFnAction(
-                    session,
-                    goToDefFromMainTs,
-                    dependencyMap,
-                    documentPositionMapper,
-                    /*existingMapEqual*/ false,
-                    /*existingDocumentPositionMapperEqual*/ false,
-                );
+                session.host.writeFile(dtsLocation, fileContents!);
+                verifyAllFnAction(session, goToDefFromMainTs);
                 verifyScriptInfoCollectionWith(session, [mainTs]);
                 baselineTsserverLogs("projectReferencesSourcemap", "usageProject/configHasNoReference/dependency dts created", session);
             });
             it(`with depedency .d.ts file, when file is deleted after actions on the projects`, () => {
-                const { host, session, dependencyMap, documentPositionMapper } = setupWithAction();
+                const session = setupWithAction();
 
                 // The dependency file is deleted when orphan files are collected
-                host.deleteFile(dtsLocation);
-                verifyAllFnAction(
-                    session,
-                    goToDefFromMainTs,
-                    dependencyMap,
-                    documentPositionMapper,
-                    /*existingMapEqual*/ true,
-                    /*existingDocumentPositionMapperEqual*/ true,
-                );
+                session.host.deleteFile(dtsLocation);
+                verifyAllFnAction(session, goToDefFromMainTs);
                 verifyScriptInfoCollectionWith(session, [mainTs]);
                 baselineTsserverLogs("projectReferencesSourcemap", "usageProject/configHasNoReference/dependency dts deleted", session);
             });
@@ -568,15 +390,8 @@ fn5();
             }
 
             it("can go to definition correctly", () => {
-                const { session } = setup();
-                verifyAllFnAction(
-                    session,
-                    goToDefFromMainTs,
-                    /*existingDependencyMap*/ undefined,
-                    /*existingDocumentPositionMapper*/ undefined,
-                    /*existingMapEqual*/ true,
-                    /*existingDocumentPositionMapperEqual*/ true,
-                );
+                const session = setup();
+                verifyAllFnAction(session, goToDefFromMainTs);
                 verifyScriptInfoCollectionWith(session, [mainTs]);
                 baselineTsserverLogs("projectReferencesSourcemap", "usageProject/configWithReference/can go to definition correctly", session);
             });
@@ -584,268 +399,166 @@ fn5();
             // Edit
             it(`when usage file changes, document position mapper doesnt change, when timeout occurs before request`, () => {
                 // Create DocumentPositionMapper
-                const { host, session, dependencyMap, documentPositionMapper } = setupWithAction();
+                const session = setupWithAction();
 
                 // change
                 makeChangeToMainTs(session);
-                host.runQueuedTimeoutCallbacks();
-                verifyDocumentPositionMapperEqual(session, dependencyMap, documentPositionMapper);
+                session.host.runQueuedTimeoutCallbacks();
 
                 // action
-                verifyAllFnAction(
-                    session,
-                    goToDefFromMainTs,
-                    dependencyMap,
-                    documentPositionMapper,
-                    /*existingMapEqual*/ true,
-                    /*existingDocumentPositionMapperEqual*/ true,
-                );
+                verifyAllFnAction(session, goToDefFromMainTs);
                 baselineTsserverLogs("projectReferencesSourcemap", "usageProject/configWithReference/usage file changes with timeout before request", session);
             });
             it(`when usage file changes, document position mapper doesnt change, when timeout does not occur before request`, () => {
                 // Create DocumentPositionMapper
-                const { session, dependencyMap, documentPositionMapper } = setupWithAction();
+                const session = setupWithAction();
 
                 // change
                 makeChangeToMainTs(session);
 
                 // action
-                verifyAllFnAction(
-                    session,
-                    goToDefFromMainTs,
-                    dependencyMap,
-                    documentPositionMapper,
-                    /*existingMapEqual*/ true,
-                    /*existingDocumentPositionMapperEqual*/ true,
-                );
+                verifyAllFnAction(session, goToDefFromMainTs);
                 baselineTsserverLogs("projectReferencesSourcemap", "usageProject/configWithReference/usage file changes", session);
             });
 
             // Edit dts to add new fn
             it(`when dependency .d.ts changes, document position mapper doesnt change, when timeout occurs before request`, () => {
                 // Create DocumentPositionMapper
-                const { host, session, dependencyMap, documentPositionMapper } = setupWithAction();
+                const session = setupWithAction();
 
                 // change
-                changeDtsFile(host);
-                host.runQueuedTimeoutCallbacks();
-                verifyDocumentPositionMapperEqual(session, dependencyMap, documentPositionMapper);
+                changeDtsFile(session.host);
+                session.host.runQueuedTimeoutCallbacks();
 
                 // action
-                verifyAllFnAction(
-                    session,
-                    goToDefFromMainTs,
-                    dependencyMap,
-                    documentPositionMapper,
-                    /*existingMapEqual*/ true,
-                    /*existingDocumentPositionMapperEqual*/ true,
-                );
+                verifyAllFnAction(session, goToDefFromMainTs);
                 baselineTsserverLogs("projectReferencesSourcemap", "usageProject/configWithReference/dependency dts changes with timeout before request", session);
             });
             it(`when dependency .d.ts changes, document position mapper doesnt change, when timeout does not occur before request`, () => {
                 // Create DocumentPositionMapper
-                const { host, session, dependencyMap, documentPositionMapper } = setupWithAction();
+                const session = setupWithAction();
 
                 // change
-                changeDtsFile(host);
+                changeDtsFile(session.host);
 
                 // action
-                verifyAllFnAction(
-                    session,
-                    goToDefFromMainTs,
-                    dependencyMap,
-                    documentPositionMapper,
-                    /*existingMapEqual*/ true,
-                    /*existingDocumentPositionMapperEqual*/ true,
-                );
+                verifyAllFnAction(session, goToDefFromMainTs);
                 baselineTsserverLogs("projectReferencesSourcemap", "usageProject/configWithReference/dependency dts changes", session);
             });
 
             // Edit map file to represent added new line
             it(`when dependency file's map changes, when timeout occurs before request`, () => {
                 // Create DocumentPositionMapper
-                const { host, session, dependencyMap, documentPositionMapper } = setupWithAction();
+                const session = setupWithAction();
 
                 // change
-                changeDtsMapFile(host);
-                host.runQueuedTimeoutCallbacks();
-                verifyDocumentPositionMapperEqual(session, dependencyMap, documentPositionMapper);
+                changeDtsMapFile(session.host);
+                session.host.runQueuedTimeoutCallbacks();
 
                 // action
-                verifyAllFnAction(
-                    session,
-                    goToDefFromMainTs,
-                    dependencyMap,
-                    documentPositionMapper,
-                    /*existingMapEqual*/ true,
-                    /*existingDocumentPositionMapperEqual*/ true,
-                );
+                verifyAllFnAction(session, goToDefFromMainTs);
                 baselineTsserverLogs("projectReferencesSourcemap", "usageProject/configWithReference/dependency dtsMap changes with timeout before request", session);
             });
             it(`when dependency file's map changes, when timeout does not occur before request`, () => {
                 // Create DocumentPositionMapper
-                const { host, session, dependencyMap, documentPositionMapper } = setupWithAction();
+                const session = setupWithAction();
 
                 // change
-                changeDtsMapFile(host);
+                changeDtsMapFile(session.host);
 
                 // action
-                verifyAllFnAction(
-                    session,
-                    goToDefFromMainTs,
-                    dependencyMap,
-                    documentPositionMapper,
-                    /*existingMapEqual*/ true,
-                    /*existingDocumentPositionMapperEqual*/ true,
-                );
+                verifyAllFnAction(session, goToDefFromMainTs);
                 baselineTsserverLogs("projectReferencesSourcemap", "usageProject/configWithReference/dependency dtsMap changes", session);
             });
 
             it(`with depedency files map file, when file is not present`, () => {
-                const { session } = setup(host => host.deleteFile(dtsMapLocation));
+                const session = setup(host => host.deleteFile(dtsMapLocation));
 
-                verifyAllFnAction(
-                    session,
-                    goToDefFromMainTs,
-                    /*existingDependencyMap*/ undefined,
-                    /*existingDocumentPositionMapper*/ undefined,
-                    /*existingMapEqual*/ true,
-                    /*existingDocumentPositionMapperEqual*/ true,
-                );
+                verifyAllFnAction(session, goToDefFromMainTs);
                 verifyScriptInfoCollectionWith(session, [mainTs]);
                 baselineTsserverLogs("projectReferencesSourcemap", "usageProject/configWithReference/dependency dtsMap not present", session);
             });
             it(`with depedency files map file, when file is created after actions on projects`, () => {
                 let fileContents: string;
-                const { host, session, dependencyMap, documentPositionMapper } = setupWithAction(host => {
+                const session = setupWithAction(host => {
                     fileContents = host.readFile(dtsMapLocation)!;
                     host.deleteFile(dtsMapLocation);
                 });
 
-                host.writeFile(dtsMapLocation, fileContents!);
-                verifyAllFnAction(
-                    session,
-                    goToDefFromMainTs,
-                    dependencyMap,
-                    documentPositionMapper,
-                    /*existingMapEqual*/ true,
-                    /*existingDocumentPositionMapperEqual*/ true,
-                );
+                session.host.writeFile(dtsMapLocation, fileContents!);
+                verifyAllFnAction(session, goToDefFromMainTs);
                 verifyScriptInfoCollectionWith(session, [mainTs]);
                 baselineTsserverLogs("projectReferencesSourcemap", "usageProject/configWithReference/dependency dtsMap created", session);
             });
             it(`with depedency files map file, when file is deleted after actions on the projects`, () => {
-                const { host, session, dependencyMap, documentPositionMapper } = setupWithAction();
+                const session = setupWithAction();
 
                 // The dependency file is deleted when orphan files are collected
-                host.deleteFile(dtsMapLocation);
-                verifyAllFnAction(
-                    session,
-                    goToDefFromMainTs,
-                    dependencyMap,
-                    documentPositionMapper,
-                    /*existingMapEqual*/ true,
-                    /*existingDocumentPositionMapperEqual*/ true,
-                );
+                session.host.deleteFile(dtsMapLocation);
+                verifyAllFnAction(session, goToDefFromMainTs);
                 verifyScriptInfoCollectionWith(session, [mainTs]);
                 baselineTsserverLogs("projectReferencesSourcemap", "usageProject/configWithReference/dependency dtsMap deleted", session);
             });
 
             it(`with depedency .d.ts file, when file is not present`, () => {
-                const { session } = setup(host => host.deleteFile(dtsLocation));
+                const session = setup(host => host.deleteFile(dtsLocation));
 
-                verifyAllFnAction(
-                    session,
-                    goToDefFromMainTs,
-                    /*existingDependencyMap*/ undefined,
-                    /*existingDocumentPositionMapper*/ undefined,
-                    /*existingMapEqual*/ true,
-                    /*existingDocumentPositionMapperEqual*/ true,
-                );
+                verifyAllFnAction(session, goToDefFromMainTs);
                 verifyScriptInfoCollectionWith(session, [mainTs]);
                 baselineTsserverLogs("projectReferencesSourcemap", "usageProject/configWithReference/dependency dts not present", session);
             });
             it(`with depedency .d.ts file, when file is created after actions on projects`, () => {
                 let fileContents: string;
-                const { host, session, dependencyMap, documentPositionMapper } = setupWithAction(host => {
+                const session = setupWithAction(host => {
                     fileContents = host.readFile(dtsLocation)!;
                     host.deleteFile(dtsLocation);
                 });
 
-                host.writeFile(dtsLocation, fileContents!);
-                verifyAllFnAction(
-                    session,
-                    goToDefFromMainTs,
-                    dependencyMap,
-                    documentPositionMapper,
-                    /*existingMapEqual*/ true,
-                    /*existingDocumentPositionMapperEqual*/ true,
-                );
+                session.host.writeFile(dtsLocation, fileContents!);
+                verifyAllFnAction(session, goToDefFromMainTs);
                 verifyScriptInfoCollectionWith(session, [mainTs]);
                 baselineTsserverLogs("projectReferencesSourcemap", "usageProject/configWithReference/dependency dts created", session);
             });
             it(`with depedency .d.ts file, when file is deleted after actions on the projects`, () => {
-                const { host, session, dependencyMap, documentPositionMapper } = setupWithAction();
+                const session = setupWithAction();
 
                 // The dependency file is deleted when orphan files are collected
-                host.deleteFile(dtsLocation);
-                verifyAllFnAction(
-                    session,
-                    goToDefFromMainTs,
-                    dependencyMap,
-                    documentPositionMapper,
-                    /*existingMapEqual*/ true,
-                    /*existingDocumentPositionMapperEqual*/ true,
-                );
+                session.host.deleteFile(dtsLocation);
+                verifyAllFnAction(session, goToDefFromMainTs);
                 verifyScriptInfoCollectionWith(session, [mainTs]);
                 baselineTsserverLogs("projectReferencesSourcemap", "usageProject/configWithReference/dependency dts deleted", session);
             });
             it(`when defining project source changes, when timeout occurs before request`, () => {
                 // Create DocumentPositionMapper
-                const { host, session, dependencyMap, documentPositionMapper } = setupWithAction();
+                const session = setupWithAction();
 
                 // change
                 // Make change, without rebuild of solution
-                host.writeFile(
+                session.host.writeFile(
                     dependencyTs.path,
                     `function fooBar() { }
 ${dependencyTs.content}`,
                 );
-                host.runQueuedTimeoutCallbacks();
-                verifyDocumentPositionMapperEqual(session, dependencyMap, documentPositionMapper);
+                session.host.runQueuedTimeoutCallbacks();
 
                 // action
-                verifyAllFnAction(
-                    session,
-                    goToDefFromMainTs,
-                    /*existingDependencyMap*/ undefined,
-                    /*existingDocumentPositionMapper*/ undefined,
-                    /*existingMapEqual*/ true,
-                    /*existingDocumentPositionMapperEqual*/ true,
-                );
+                verifyAllFnAction(session, goToDefFromMainTs);
                 baselineTsserverLogs("projectReferencesSourcemap", "usageProject/configWithReference/dependency source changes with timeout before request", session);
             });
             it(`when defining project source changes, when timeout does not occur before request`, () => {
                 // Create DocumentPositionMapper
-                const { host, session } = setupWithAction();
+                const session = setupWithAction();
 
                 // change
                 // Make change, without rebuild of solution
-                host.writeFile(
+                session.host.writeFile(
                     dependencyTs.path,
                     `function fooBar() { }
 ${dependencyTs.content}`,
                 );
 
                 // action
-                verifyAllFnAction(
-                    session,
-                    goToDefFromMainTs,
-                    /*existingDependencyMap*/ undefined,
-                    /*existingDocumentPositionMapper*/ undefined,
-                    /*existingMapEqual*/ true,
-                    /*existingDocumentPositionMapperEqual*/ true,
-                );
+                verifyAllFnAction(session, goToDefFromMainTs);
                 baselineTsserverLogs("projectReferencesSourcemap", "usageProject/configWithReference/dependency source changes", session);
             });
 
@@ -853,14 +566,7 @@ ${dependencyTs.content}`,
                 const host = createServerHost(files);
                 const session = new TestSession(host);
                 openFilesForSession([mainTs, randomFile], session);
-                verifyAllFnAction(
-                    session,
-                    goToDefFromMainTs,
-                    /*existingDependencyMap*/ undefined,
-                    /*existingDocumentPositionMapper*/ undefined,
-                    /*existingMapEqual*/ true,
-                    /*existingDocumentPositionMapperEqual*/ true,
-                );
+                verifyAllFnAction(session, goToDefFromMainTs);
                 verifyScriptInfoCollectionWith(session, [mainTs]);
                 baselineTsserverLogs("projectReferencesSourcemap", "usageProject/configWithReference/when projects are not built", session);
             });
@@ -875,15 +581,8 @@ ${dependencyTs.content}`,
             }
 
             it("can go to definition correctly", () => {
-                const { session } = setup();
-                verifyAllFnAction(
-                    session,
-                    goToDefFromMainTs,
-                    /*existingDependencyMap*/ undefined,
-                    /*existingDocumentPositionMapper*/ undefined,
-                    /*existingMapEqual*/ false,
-                    /*existingDocumentPositionMapperEqual*/ false,
-                );
+                const session = setup();
+                verifyAllFnAction(session, goToDefFromMainTs);
                 verifyScriptInfoCollectionWith(session, [mainTs]);
                 baselineTsserverLogs("projectReferencesSourcemap", "usageProject/disabledSourceRef/can go to definition correctly", session);
             });
@@ -891,219 +590,132 @@ ${dependencyTs.content}`,
             // Edit
             it(`when usage file changes, document position mapper doesnt change, when timeout occurs before request`, () => {
                 // Create DocumentPositionMapper
-                const { host, session, dependencyMap, documentPositionMapper } = setupWithAction();
+                const session = setupWithAction();
 
                 // change
                 makeChangeToMainTs(session);
-                host.runQueuedTimeoutCallbacks();
-                verifyDocumentPositionMapperEqual(session, dependencyMap, documentPositionMapper);
+                session.host.runQueuedTimeoutCallbacks();
 
                 // action
-                verifyAllFnAction(
-                    session,
-                    goToDefFromMainTs,
-                    dependencyMap,
-                    documentPositionMapper,
-                    /*existingMapEqual*/ true,
-                    /*existingDocumentPositionMapperEqual*/ true,
-                );
+                verifyAllFnAction(session, goToDefFromMainTs);
                 baselineTsserverLogs("projectReferencesSourcemap", "usageProject/disabledSourceRef/usage file changes with timeout before request", session);
             });
             it(`when usage file changes, document position mapper doesnt change, when timeout does not occur before request`, () => {
                 // Create DocumentPositionMapper
-                const { session, dependencyMap, documentPositionMapper } = setupWithAction();
+                const session = setupWithAction();
 
                 // change
                 makeChangeToMainTs(session);
 
                 // action
-                verifyAllFnAction(
-                    session,
-                    goToDefFromMainTs,
-                    dependencyMap,
-                    documentPositionMapper,
-                    /*existingMapEqual*/ true,
-                    /*existingDocumentPositionMapperEqual*/ true,
-                );
+                verifyAllFnAction(session, goToDefFromMainTs);
                 baselineTsserverLogs("projectReferencesSourcemap", "usageProject/disabledSourceRef/usage file changes", session);
             });
 
             // Edit dts to add new fn
             it(`when dependency .d.ts changes, document position mapper doesnt change, when timeout occurs before request`, () => {
                 // Create DocumentPositionMapper
-                const { host, session, dependencyMap, documentPositionMapper } = setupWithAction();
+                const session = setupWithAction();
 
                 // change
-                changeDtsFile(host);
-                host.runQueuedTimeoutCallbacks();
-                verifyDocumentPositionMapperEqual(session, dependencyMap, documentPositionMapper);
+                changeDtsFile(session.host);
+                session.host.runQueuedTimeoutCallbacks();
 
                 // action
-                verifyAllFnAction(
-                    session,
-                    goToDefFromMainTs,
-                    dependencyMap,
-                    documentPositionMapper,
-                    /*existingMapEqual*/ true,
-                    /*existingDocumentPositionMapperEqual*/ true,
-                );
+                verifyAllFnAction(session, goToDefFromMainTs);
                 baselineTsserverLogs("projectReferencesSourcemap", "usageProject/disabledSourceRef/dependency dts changes with timeout before request", session);
             });
             it(`when dependency .d.ts changes, document position mapper doesnt change, when timeout does not occur before request`, () => {
                 // Create DocumentPositionMapper
-                const { host, session, dependencyMap, documentPositionMapper } = setupWithAction();
+                const session = setupWithAction();
 
                 // change
-                changeDtsFile(host);
+                changeDtsFile(session.host);
 
                 // action
-                verifyAllFnAction(
-                    session,
-                    goToDefFromMainTs,
-                    dependencyMap,
-                    documentPositionMapper,
-                    /*existingMapEqual*/ true,
-                    /*existingDocumentPositionMapperEqual*/ true,
-                );
+                verifyAllFnAction(session, goToDefFromMainTs);
                 baselineTsserverLogs("projectReferencesSourcemap", "usageProject/disabledSourceRef/dependency dts changes", session);
             });
 
             // Edit map file to represent added new line
             it(`when dependency file's map changes, when timeout occurs before request`, () => {
                 // Create DocumentPositionMapper
-                const { host, session, dependencyMap, documentPositionMapper } = setupWithAction();
+                const session = setupWithAction();
 
                 // change
-                changeDtsMapFile(host);
-                host.runQueuedTimeoutCallbacks();
-                verifyDocumentPositionMapperEqual(session, dependencyMap, documentPositionMapper);
+                changeDtsMapFile(session.host);
+                session.host.runQueuedTimeoutCallbacks();
 
                 // action
-                verifyAllFnAction(
-                    session,
-                    goToDefFromMainTs,
-                    dependencyMap,
-                    documentPositionMapper,
-                    /*existingMapEqual*/ true,
-                    /*existingDocumentPositionMapperEqual*/ false,
-                );
+                verifyAllFnAction(session, goToDefFromMainTs);
                 baselineTsserverLogs("projectReferencesSourcemap", "usageProject/disabledSourceRef/dependency dtsMap changes with timeout before request", session);
             });
             it(`when dependency file's map changes, when timeout does not occur before request`, () => {
                 // Create DocumentPositionMapper
-                const { host, session, dependencyMap, documentPositionMapper } = setupWithAction();
+                const session = setupWithAction();
 
                 // change
-                changeDtsMapFile(host);
+                changeDtsMapFile(session.host);
 
                 // action
-                verifyAllFnAction(
-                    session,
-                    goToDefFromMainTs,
-                    dependencyMap,
-                    documentPositionMapper,
-                    /*existingMapEqual*/ true,
-                    /*existingDocumentPositionMapperEqual*/ false,
-                );
+                verifyAllFnAction(session, goToDefFromMainTs);
                 baselineTsserverLogs("projectReferencesSourcemap", "usageProject/disabledSourceRef/dependency dtsMap changes", session);
             });
 
             it(`with depedency files map file, when file is not present`, () => {
-                const { session } = setup(host => host.deleteFile(dtsMapLocation));
+                const session = setup(host => host.deleteFile(dtsMapLocation));
 
-                verifyAllFnAction(
-                    session,
-                    goToDefFromMainTs,
-                    /*existingDependencyMap*/ undefined,
-                    /*existingDocumentPositionMapper*/ undefined,
-                    /*existingMapEqual*/ true,
-                    /*existingDocumentPositionMapperEqual*/ true,
-                );
+                verifyAllFnAction(session, goToDefFromMainTs);
                 verifyScriptInfoCollectionWith(session, [mainTs]);
                 baselineTsserverLogs("projectReferencesSourcemap", "usageProject/disabledSourceRef/dependency dtsMap not present", session);
             });
             it(`with depedency files map file, when file is created after actions on projects`, () => {
                 let fileContents: string;
-                const { host, session, dependencyMap, documentPositionMapper } = setupWithAction(host => {
+                const session = setupWithAction(host => {
                     fileContents = host.readFile(dtsMapLocation)!;
                     host.deleteFile(dtsMapLocation);
                 });
 
-                host.writeFile(dtsMapLocation, fileContents!);
-                verifyAllFnAction(
-                    session,
-                    goToDefFromMainTs,
-                    dependencyMap,
-                    documentPositionMapper,
-                    /*existingMapEqual*/ false,
-                    /*existingDocumentPositionMapperEqual*/ false,
-                );
+                session.host.writeFile(dtsMapLocation, fileContents!);
+                verifyAllFnAction(session, goToDefFromMainTs);
                 verifyScriptInfoCollectionWith(session, [mainTs]);
                 baselineTsserverLogs("projectReferencesSourcemap", "usageProject/disabledSourceRef/dependency dtsMap created", session);
             });
             it(`with depedency files map file, when file is deleted after actions on the projects`, () => {
-                const { host, session, dependencyMap, documentPositionMapper } = setupWithAction();
+                const session = setupWithAction();
 
                 // The dependency file is deleted when orphan files are collected
-                host.deleteFile(dtsMapLocation);
-                verifyAllFnAction(
-                    session,
-                    goToDefFromMainTs,
-                    dependencyMap,
-                    documentPositionMapper,
-                    /*existingMapEqual*/ false,
-                    /*existingDocumentPositionMapperEqual*/ false,
-                );
+                session.host.deleteFile(dtsMapLocation);
+                verifyAllFnAction(session, goToDefFromMainTs);
                 verifyScriptInfoCollectionWith(session, [mainTs]);
                 baselineTsserverLogs("projectReferencesSourcemap", "usageProject/disabledSourceRef/dependency dtsMap deleted", session);
             });
 
             it(`with depedency .d.ts file, when file is not present`, () => {
-                const { session } = setup(host => host.deleteFile(dtsLocation));
+                const session = setup(host => host.deleteFile(dtsLocation));
 
-                verifyAllFnAction(
-                    session,
-                    goToDefFromMainTs,
-                    /*existingDependencyMap*/ undefined,
-                    /*existingDocumentPositionMapper*/ undefined,
-                    /*existingMapEqual*/ true,
-                    /*existingDocumentPositionMapperEqual*/ true,
-                );
+                verifyAllFnAction(session, goToDefFromMainTs);
                 verifyScriptInfoCollectionWith(session, [mainTs]);
                 baselineTsserverLogs("projectReferencesSourcemap", "usageProject/disabledSourceRef/dependency dts not present", session);
             });
             it(`with depedency .d.ts file, when file is created after actions on projects`, () => {
                 let fileContents: string;
-                const { host, session, dependencyMap, documentPositionMapper } = setupWithAction(host => {
+                const session = setupWithAction(host => {
                     fileContents = host.readFile(dtsLocation)!;
                     host.deleteFile(dtsLocation);
                 });
 
-                host.writeFile(dtsLocation, fileContents!);
-                verifyAllFnAction(
-                    session,
-                    goToDefFromMainTs,
-                    dependencyMap,
-                    documentPositionMapper,
-                    /*existingMapEqual*/ false,
-                    /*existingDocumentPositionMapperEqual*/ false,
-                );
+                session.host.writeFile(dtsLocation, fileContents!);
+                verifyAllFnAction(session, goToDefFromMainTs);
                 verifyScriptInfoCollectionWith(session, [mainTs]);
                 baselineTsserverLogs("projectReferencesSourcemap", "usageProject/disabledSourceRef/dependency dts created", session);
             });
             it(`with depedency .d.ts file, when file is deleted after actions on the projects`, () => {
-                const { host, session, dependencyMap, documentPositionMapper } = setupWithAction();
+                const session = setupWithAction();
 
                 // The dependency file is deleted when orphan files are collected
-                host.deleteFile(dtsLocation);
-                verifyAllFnAction(
-                    session,
-                    goToDefFromMainTs,
-                    dependencyMap,
-                    documentPositionMapper,
-                    /*existingMapEqual*/ true,
-                    /*existingDocumentPositionMapperEqual*/ true,
-                );
+                session.host.deleteFile(dtsLocation);
+                verifyAllFnAction(session, goToDefFromMainTs);
                 verifyScriptInfoCollectionWith(session, [mainTs]);
                 baselineTsserverLogs("projectReferencesSourcemap", "usageProject/disabledSourceRef/dependency dts deleted", session);
             });
@@ -1111,10 +723,10 @@ ${dependencyTs.content}`,
     });
 
     describe("from defining project: rename", () => {
-        function setupWithActionWith(setup: (onHostCreate?: OnHostCreate) => ReturnType<CreateSessionFn>, onHostCreate: OnHostCreate | undefined) {
-            const result = setup(onHostCreate);
-            result.session.executeCommandSeq(renameFromDependencyTs(1));
-            return { ...result, ...getDocumentPositionMapper(result.session) };
+        function setupWithActionWith(setup: (onHostCreate?: OnHostCreate) => TestSession, onHostCreate: OnHostCreate | undefined) {
+            const session = setup(onHostCreate);
+            session.executeCommandSeq(renameFromDependencyTs(1));
+            return session;
         }
 
         describe("when main tsconfig doesnt have project reference", () => {
@@ -1127,15 +739,8 @@ ${dependencyTs.content}`,
             }
 
             it("rename locations from dependency", () => {
-                const { session } = setup();
-                verifyAllFnAction(
-                    session,
-                    renameFromDependencyTs,
-                    /*existingDependencyMap*/ undefined,
-                    /*existingDocumentPositionMapper*/ undefined,
-                    /*existingMapEqual*/ false,
-                    /*existingDocumentPositionMapperEqual*/ false,
-                );
+                const session = setup();
+                verifyAllFnAction(session, renameFromDependencyTs);
                 verifyScriptInfoCollectionWith(session, [dependencyTs]);
                 baselineTsserverLogs("projectReferencesSourcemap", "dependency/configHasNoReference/rename locations", session);
             });
@@ -1143,219 +748,132 @@ ${dependencyTs.content}`,
             // Edit
             it(`when usage file changes, document position mapper doesnt change, when timeout occurs before request`, () => {
                 // Create DocumentPositionMapper
-                const { host, session, dependencyMap, documentPositionMapper } = setupWithAction();
+                const session = setupWithAction();
 
                 // change
                 makeChangeToDependencyTs(session);
-                host.runQueuedTimeoutCallbacks();
-                verifyDocumentPositionMapperEqual(session, dependencyMap, documentPositionMapper);
+                session.host.runQueuedTimeoutCallbacks();
 
                 // action
-                verifyAllFnAction(
-                    session,
-                    renameFromDependencyTs,
-                    dependencyMap,
-                    documentPositionMapper,
-                    /*existingMapEqual*/ true,
-                    /*existingDocumentPositionMapperEqual*/ true,
-                );
+                verifyAllFnAction(session, renameFromDependencyTs);
                 baselineTsserverLogs("projectReferencesSourcemap", "dependency/configHasNoReference/usage file changes with timeout before request", session);
             });
             it(`when usage file changes, document position mapper doesnt change, when timeout does not occur before request`, () => {
                 // Create DocumentPositionMapper
-                const { session, dependencyMap, documentPositionMapper } = setupWithAction();
+                const session = setupWithAction();
 
                 // change
                 makeChangeToDependencyTs(session);
 
                 // action
-                verifyAllFnAction(
-                    session,
-                    renameFromDependencyTs,
-                    dependencyMap,
-                    documentPositionMapper,
-                    /*existingMapEqual*/ true,
-                    /*existingDocumentPositionMapperEqual*/ true,
-                );
+                verifyAllFnAction(session, renameFromDependencyTs);
                 baselineTsserverLogs("projectReferencesSourcemap", "dependency/configHasNoReference/usage file changes", session);
             });
 
             // Edit dts to add new fn
             it(`when dependency .d.ts changes, document position mapper doesnt change, when timeout occurs before request`, () => {
                 // Create DocumentPositionMapper
-                const { host, session, dependencyMap, documentPositionMapper } = setupWithAction();
+                const session = setupWithAction();
 
                 // change
-                changeDtsFile(host);
-                host.runQueuedTimeoutCallbacks();
-                verifyDocumentPositionMapperEqual(session, dependencyMap, documentPositionMapper);
+                changeDtsFile(session.host);
+                session.host.runQueuedTimeoutCallbacks();
 
                 // action
-                verifyAllFnAction(
-                    session,
-                    renameFromDependencyTs,
-                    dependencyMap,
-                    documentPositionMapper,
-                    /*existingMapEqual*/ true,
-                    /*existingDocumentPositionMapperEqual*/ true,
-                );
+                verifyAllFnAction(session, renameFromDependencyTs);
                 baselineTsserverLogs("projectReferencesSourcemap", "dependency/configHasNoReference/dependency dts changes with timeout before request", session);
             });
             it(`when dependency .d.ts changes, document position mapper doesnt change, when timeout does not occur before request`, () => {
                 // Create DocumentPositionMapper
-                const { host, session, dependencyMap, documentPositionMapper } = setupWithAction();
+                const session = setupWithAction();
 
                 // change
-                changeDtsFile(host);
+                changeDtsFile(session.host);
 
                 // action
-                verifyAllFnAction(
-                    session,
-                    renameFromDependencyTs,
-                    dependencyMap,
-                    documentPositionMapper,
-                    /*existingMapEqual*/ true,
-                    /*existingDocumentPositionMapperEqual*/ true,
-                );
+                verifyAllFnAction(session, renameFromDependencyTs);
                 baselineTsserverLogs("projectReferencesSourcemap", "dependency/configHasNoReference/dependency dts changes", session);
             });
 
             // Edit map file to represent added new line
             it(`when dependency file's map changes, when timeout occurs before request`, () => {
                 // Create DocumentPositionMapper
-                const { host, session, dependencyMap, documentPositionMapper } = setupWithAction();
+                const session = setupWithAction();
 
                 // change
-                changeDtsMapFile(host);
-                host.runQueuedTimeoutCallbacks();
-                verifyDocumentPositionMapperEqual(session, dependencyMap, documentPositionMapper);
+                changeDtsMapFile(session.host);
+                session.host.runQueuedTimeoutCallbacks();
 
                 // action
-                verifyAllFnAction(
-                    session,
-                    renameFromDependencyTs,
-                    dependencyMap,
-                    documentPositionMapper,
-                    /*existingMapEqual*/ true,
-                    /*existingDocumentPositionMapperEqual*/ false,
-                );
+                verifyAllFnAction(session, renameFromDependencyTs);
                 baselineTsserverLogs("projectReferencesSourcemap", "dependency/configHasNoReference/dependency dtsMap changes with timeout before request", session);
             });
             it(`when dependency file's map changes, when timeout does not occur before request`, () => {
                 // Create DocumentPositionMapper
-                const { host, session, dependencyMap, documentPositionMapper } = setupWithAction();
+                const session = setupWithAction();
 
                 // change
-                changeDtsMapFile(host);
+                changeDtsMapFile(session.host);
 
                 // action
-                verifyAllFnAction(
-                    session,
-                    renameFromDependencyTs,
-                    dependencyMap,
-                    documentPositionMapper,
-                    /*existingMapEqual*/ true,
-                    /*existingDocumentPositionMapperEqual*/ false,
-                );
+                verifyAllFnAction(session, renameFromDependencyTs);
                 baselineTsserverLogs("projectReferencesSourcemap", "dependency/configHasNoReference/dependency dtsMap changes", session);
             });
 
             it(`with depedency files map file, when file is not present`, () => {
-                const { session } = setup(host => host.deleteFile(dtsMapLocation));
+                const session = setup(host => host.deleteFile(dtsMapLocation));
 
-                verifyAllFnAction(
-                    session,
-                    renameFromDependencyTs,
-                    /*existingDependencyMap*/ undefined,
-                    /*existingDocumentPositionMapper*/ undefined,
-                    /*existingMapEqual*/ true,
-                    /*existingDocumentPositionMapperEqual*/ true,
-                );
+                verifyAllFnAction(session, renameFromDependencyTs);
                 verifyScriptInfoCollectionWith(session, [dependencyTs]);
                 baselineTsserverLogs("projectReferencesSourcemap", "dependency/configHasNoReference/dependency dtsMap not present", session);
             });
             it(`with depedency files map file, when file is created after actions on projects`, () => {
                 let fileContents: string;
-                const { host, session, dependencyMap, documentPositionMapper } = setupWithAction(host => {
+                const session = setupWithAction(host => {
                     fileContents = host.readFile(dtsMapLocation)!;
                     host.deleteFile(dtsMapLocation);
                 });
 
-                host.writeFile(dtsMapLocation, fileContents!);
-                verifyAllFnAction(
-                    session,
-                    renameFromDependencyTs,
-                    dependencyMap,
-                    documentPositionMapper,
-                    /*existingMapEqual*/ false,
-                    /*existingDocumentPositionMapperEqual*/ false,
-                );
+                session.host.writeFile(dtsMapLocation, fileContents!);
+                verifyAllFnAction(session, renameFromDependencyTs);
                 verifyScriptInfoCollectionWith(session, [dependencyTs]);
                 baselineTsserverLogs("projectReferencesSourcemap", "dependency/configHasNoReference/dependency dtsMap created", session);
             });
             it(`with depedency files map file, when file is deleted after actions on the projects`, () => {
-                const { host, session, dependencyMap, documentPositionMapper } = setupWithAction();
+                const session = setupWithAction();
 
                 // The dependency file is deleted when orphan files are collected
-                host.deleteFile(dtsMapLocation);
-                verifyAllFnAction(
-                    session,
-                    renameFromDependencyTs,
-                    dependencyMap,
-                    documentPositionMapper,
-                    /*existingMapEqual*/ false,
-                    /*existingDocumentPositionMapperEqual*/ false,
-                );
+                session.host.deleteFile(dtsMapLocation);
+                verifyAllFnAction(session, renameFromDependencyTs);
                 verifyScriptInfoCollectionWith(session, [dependencyTs]);
                 baselineTsserverLogs("projectReferencesSourcemap", "dependency/configHasNoReference/dependency dtsMap deleted", session);
             });
 
             it(`with depedency .d.ts file, when file is not present`, () => {
-                const { session } = setup(host => host.deleteFile(dtsLocation));
+                const session = setup(host => host.deleteFile(dtsLocation));
 
-                verifyAllFnAction(
-                    session,
-                    renameFromDependencyTs,
-                    /*existingDependencyMap*/ undefined,
-                    /*existingDocumentPositionMapper*/ undefined,
-                    /*existingMapEqual*/ true,
-                    /*existingDocumentPositionMapperEqual*/ true,
-                );
+                verifyAllFnAction(session, renameFromDependencyTs);
                 verifyScriptInfoCollectionWith(session, [dependencyTs]);
                 baselineTsserverLogs("projectReferencesSourcemap", "dependency/configHasNoReference/dependency dts not present", session);
             });
             it(`with depedency .d.ts file, when file is created after actions on projects`, () => {
                 let fileContents: string;
-                const { host, session, dependencyMap, documentPositionMapper } = setupWithAction(host => {
+                const session = setupWithAction(host => {
                     fileContents = host.readFile(dtsLocation)!;
                     host.deleteFile(dtsLocation);
                 });
 
-                host.writeFile(dtsLocation, fileContents!);
-                verifyAllFnAction(
-                    session,
-                    renameFromDependencyTs,
-                    dependencyMap,
-                    documentPositionMapper,
-                    /*existingMapEqual*/ false,
-                    /*existingDocumentPositionMapperEqual*/ false,
-                );
+                session.host.writeFile(dtsLocation, fileContents!);
+                verifyAllFnAction(session, renameFromDependencyTs);
                 verifyScriptInfoCollectionWith(session, [dependencyTs]);
                 baselineTsserverLogs("projectReferencesSourcemap", "dependency/configHasNoReference/dependency dts created", session);
             });
             it(`with depedency .d.ts file, when file is deleted after actions on the projects`, () => {
-                const { host, session, dependencyMap, documentPositionMapper } = setupWithAction();
+                const session = setupWithAction();
 
                 // The dependency file is deleted when orphan files are collected
-                host.deleteFile(dtsLocation);
-                verifyAllFnAction(
-                    session,
-                    renameFromDependencyTs,
-                    dependencyMap,
-                    documentPositionMapper,
-                    /*existingMapEqual*/ true,
-                    /*existingDocumentPositionMapperEqual*/ true,
-                );
+                session.host.deleteFile(dtsLocation);
+                verifyAllFnAction(session, renameFromDependencyTs);
                 verifyScriptInfoCollectionWith(session, [dependencyTs]);
                 baselineTsserverLogs("projectReferencesSourcemap", "dependency/configHasNoReference/dependency dts deleted", session);
             });
@@ -1370,15 +888,8 @@ ${dependencyTs.content}`,
             }
 
             it("rename locations from dependency", () => {
-                const { session } = setup();
-                verifyAllFnAction(
-                    session,
-                    renameFromDependencyTs,
-                    /*existingDependencyMap*/ undefined,
-                    /*existingDocumentPositionMapper*/ undefined,
-                    /*existingMapEqual*/ false,
-                    /*existingDocumentPositionMapperEqual*/ false,
-                );
+                const session = setup();
+                verifyAllFnAction(session, renameFromDependencyTs);
                 verifyScriptInfoCollectionWith(session, [dependencyTs]);
                 baselineTsserverLogs("projectReferencesSourcemap", "dependency/configWithReference/rename locations", session);
             });
@@ -1386,225 +897,138 @@ ${dependencyTs.content}`,
             // Edit
             it(`when usage file changes, document position mapper doesnt change, when timeout occurs before request`, () => {
                 // Create DocumentPositionMapper
-                const { host, session, dependencyMap, documentPositionMapper } = setupWithAction();
+                const session = setupWithAction();
 
                 // change
                 makeChangeToDependencyTs(session);
-                host.runQueuedTimeoutCallbacks();
-                verifyDocumentPositionMapperEqual(session, dependencyMap, documentPositionMapper);
+                session.host.runQueuedTimeoutCallbacks();
 
                 // action
-                verifyAllFnAction(
-                    session,
-                    renameFromDependencyTs,
-                    dependencyMap,
-                    documentPositionMapper,
-                    /*existingMapEqual*/ true,
-                    /*existingDocumentPositionMapperEqual*/ true,
-                );
+                verifyAllFnAction(session, renameFromDependencyTs);
                 baselineTsserverLogs("projectReferencesSourcemap", "dependency/configWithReference/usage file changes with timeout before request", session);
             });
             it(`when usage file changes, document position mapper doesnt change, when timeout does not occur before request`, () => {
                 // Create DocumentPositionMapper
-                const { session, dependencyMap, documentPositionMapper } = setupWithAction();
+                const session = setupWithAction();
 
                 // change
                 makeChangeToDependencyTs(session);
 
                 // action
-                verifyAllFnAction(
-                    session,
-                    renameFromDependencyTs,
-                    dependencyMap,
-                    documentPositionMapper,
-                    /*existingMapEqual*/ true,
-                    /*existingDocumentPositionMapperEqual*/ true,
-                );
+                verifyAllFnAction(session, renameFromDependencyTs);
                 baselineTsserverLogs("projectReferencesSourcemap", "dependency/configWithReference/usage file changes", session);
             });
 
             // Edit dts to add new fn
             it(`when dependency .d.ts changes, document position mapper doesnt change, when timeout occurs before request`, () => {
                 // Create DocumentPositionMapper
-                const { host, session, dependencyMap, documentPositionMapper } = setupWithAction();
+                const session = setupWithAction();
 
                 // change
-                changeDtsFile(host);
-                host.runQueuedTimeoutCallbacks();
-                verifyDocumentPositionMapperEqual(session, dependencyMap, documentPositionMapper);
+                changeDtsFile(session.host);
+                session.host.runQueuedTimeoutCallbacks();
 
                 // action
-                verifyAllFnAction(
-                    session,
-                    renameFromDependencyTs,
-                    dependencyMap,
-                    documentPositionMapper,
-                    /*existingMapEqual*/ true,
-                    /*existingDocumentPositionMapperEqual*/ true,
-                );
+                verifyAllFnAction(session, renameFromDependencyTs);
                 baselineTsserverLogs("projectReferencesSourcemap", "dependency/configWithReference/dependency dts changes with timeout before request", session);
             });
             it(`when dependency .d.ts changes, document position mapper doesnt change, when timeout does not occur before request`, () => {
                 // Create DocumentPositionMapper
-                const { host, session, dependencyMap, documentPositionMapper } = setupWithAction();
+                const session = setupWithAction();
 
                 // change
-                changeDtsFile(host);
+                changeDtsFile(session.host);
 
                 // action
-                verifyAllFnAction(
-                    session,
-                    renameFromDependencyTs,
-                    dependencyMap,
-                    documentPositionMapper,
-                    /*existingMapEqual*/ true,
-                    /*existingDocumentPositionMapperEqual*/ true,
-                );
+                verifyAllFnAction(session, renameFromDependencyTs);
                 baselineTsserverLogs("projectReferencesSourcemap", "dependency/configWithReference/dependency dts changes", session);
             });
 
             // Edit map file to represent added new line
             it(`when dependency file's map changes, when timeout occurs before request`, () => {
                 // Create DocumentPositionMapper
-                const { host, session, dependencyMap, documentPositionMapper } = setupWithAction();
+                const session = setupWithAction();
 
                 // change
-                changeDtsMapFile(host);
-                host.runQueuedTimeoutCallbacks();
-                verifyDocumentPositionMapperEqual(session, dependencyMap, documentPositionMapper);
+                changeDtsMapFile(session.host);
+                session.host.runQueuedTimeoutCallbacks();
 
                 // action
-                verifyAllFnAction(
-                    session,
-                    renameFromDependencyTs,
-                    dependencyMap,
-                    documentPositionMapper,
-                    /*existingMapEqual*/ true,
-                    /*existingDocumentPositionMapperEqual*/ false,
-                );
+                verifyAllFnAction(session, renameFromDependencyTs);
                 baselineTsserverLogs("projectReferencesSourcemap", "dependency/configWithReference/dependency dtsMap changes with timeout before request", session);
             });
             it(`when dependency file's map changes, when timeout does not occur before request`, () => {
                 // Create DocumentPositionMapper
-                const { host, session, dependencyMap, documentPositionMapper } = setupWithAction();
+                const session = setupWithAction();
 
                 // change
-                changeDtsMapFile(host);
+                changeDtsMapFile(session.host);
 
                 // action
-                verifyAllFnAction(
-                    session,
-                    renameFromDependencyTs,
-                    dependencyMap,
-                    documentPositionMapper,
-                    /*existingMapEqual*/ true,
-                    /*existingDocumentPositionMapperEqual*/ false,
-                );
+                verifyAllFnAction(session, renameFromDependencyTs);
                 baselineTsserverLogs("projectReferencesSourcemap", "dependency/configWithReference/dependency dtsMap changes", session);
             });
 
             it(`with depedency files map file, when file is not present`, () => {
-                const { session } = setup(host => host.deleteFile(dtsMapLocation));
+                const session = setup(host => host.deleteFile(dtsMapLocation));
 
-                verifyAllFnAction(
-                    session,
-                    renameFromDependencyTs,
-                    /*existingDependencyMap*/ undefined,
-                    /*existingDocumentPositionMapper*/ undefined,
-                    /*existingMapEqual*/ true,
-                    /*existingDocumentPositionMapperEqual*/ true,
-                );
+                verifyAllFnAction(session, renameFromDependencyTs);
                 verifyScriptInfoCollectionWith(session, [dependencyTs]);
                 baselineTsserverLogs("projectReferencesSourcemap", "dependency/configWithReference/dependency dtsMap not present", session);
             });
             it(`with depedency files map file, when file is created after actions on projects`, () => {
                 let fileContents: string;
-                const { host, session, dependencyMap, documentPositionMapper } = setupWithAction(host => {
+                const session = setupWithAction(host => {
                     fileContents = host.readFile(dtsMapLocation)!;
                     host.deleteFile(dtsMapLocation);
                 });
 
-                host.writeFile(dtsMapLocation, fileContents!);
-                verifyAllFnAction(
-                    session,
-                    renameFromDependencyTs,
-                    dependencyMap,
-                    documentPositionMapper,
-                    /*existingMapEqual*/ false,
-                    /*existingDocumentPositionMapperEqual*/ false,
-                );
+                session.host.writeFile(dtsMapLocation, fileContents!);
+                verifyAllFnAction(session, renameFromDependencyTs);
                 verifyScriptInfoCollectionWith(session, [dependencyTs]);
                 baselineTsserverLogs("projectReferencesSourcemap", "dependency/configWithReference/dependency dtsMap created", session);
             });
             it(`with depedency files map file, when file is deleted after actions on the projects`, () => {
-                const { host, session, dependencyMap, documentPositionMapper } = setupWithAction();
+                const session = setupWithAction();
 
                 // The dependency file is deleted when orphan files are collected
-                host.deleteFile(dtsMapLocation);
-                verifyAllFnAction(
-                    session,
-                    renameFromDependencyTs,
-                    dependencyMap,
-                    documentPositionMapper,
-                    /*existingMapEqual*/ false,
-                    /*existingDocumentPositionMapperEqual*/ false,
-                );
+                session.host.deleteFile(dtsMapLocation);
+                verifyAllFnAction(session, renameFromDependencyTs);
                 verifyScriptInfoCollectionWith(session, [dependencyTs]);
                 baselineTsserverLogs("projectReferencesSourcemap", "dependency/configWithReference/dependency dtsMap deleted", session);
             });
 
             it(`with depedency .d.ts file, when file is not present`, () => {
-                const { session } = setup(host => host.deleteFile(dtsLocation));
+                const session = setup(host => host.deleteFile(dtsLocation));
 
-                verifyAllFnAction(
-                    session,
-                    renameFromDependencyTs,
-                    /*existingDependencyMap*/ undefined,
-                    /*existingDocumentPositionMapper*/ undefined,
-                    /*existingMapEqual*/ true,
-                    /*existingDocumentPositionMapperEqual*/ true,
-                );
+                verifyAllFnAction(session, renameFromDependencyTs);
                 verifyScriptInfoCollectionWith(session, [dependencyTs]);
                 baselineTsserverLogs("projectReferencesSourcemap", "dependency/configWithReference/dependency dts not present", session);
             });
             it(`with depedency .d.ts file, when file is created after actions on projects`, () => {
                 let fileContents: string;
-                const { host, session, dependencyMap, documentPositionMapper } = setupWithAction(host => {
+                const session = setupWithAction(host => {
                     fileContents = host.readFile(dtsLocation)!;
                     host.deleteFile(dtsLocation);
                 });
 
-                host.writeFile(dtsLocation, fileContents!);
-                verifyAllFnAction(
-                    session,
-                    renameFromDependencyTs,
-                    dependencyMap,
-                    documentPositionMapper,
-                    /*existingMapEqual*/ false,
-                    /*existingDocumentPositionMapperEqual*/ false,
-                );
+                session.host.writeFile(dtsLocation, fileContents!);
+                verifyAllFnAction(session, renameFromDependencyTs);
                 verifyScriptInfoCollectionWith(session, [dependencyTs]);
                 baselineTsserverLogs("projectReferencesSourcemap", "dependency/configWithReference/dependency dts created", session);
             });
             it(`with depedency .d.ts file, when file is deleted after actions on the projects`, () => {
-                const { host, session, dependencyMap, documentPositionMapper } = setupWithAction();
+                const session = setupWithAction();
 
                 // The dependency file is deleted when orphan files are collected
-                host.deleteFile(dtsLocation);
-                verifyAllFnAction(
-                    session,
-                    renameFromDependencyTs,
-                    dependencyMap,
-                    documentPositionMapper,
-                    /*existingMapEqual*/ true,
-                    /*existingDocumentPositionMapperEqual*/ true,
-                );
+                session.host.deleteFile(dtsLocation);
+                verifyAllFnAction(session, renameFromDependencyTs);
                 verifyScriptInfoCollectionWith(session, [dependencyTs]);
                 baselineTsserverLogs("projectReferencesSourcemap", "dependency/configWithReference/dependency dts deleted", session);
             });
             it(`when defining project source changes, when timeout occurs before request`, () => {
                 // Create DocumentPositionMapper
-                const { host, session, dependencyMap, documentPositionMapper } = setupWithAction();
+                const session = setupWithAction();
 
                 // change
                 // Make change, without rebuild of solution
@@ -1620,23 +1044,15 @@ ${dependencyTs.content}`,
 `,
                     },
                 });
-                host.runQueuedTimeoutCallbacks();
-                verifyDocumentPositionMapperEqual(session, dependencyMap, documentPositionMapper);
+                session.host.runQueuedTimeoutCallbacks();
 
                 // action
-                verifyAllFnAction(
-                    session,
-                    renameFromDependencyTsWithDependencyChange,
-                    /*existingDependencyMap*/ undefined,
-                    /*existingDocumentPositionMapper*/ undefined,
-                    /*existingMapEqual*/ false,
-                    /*existingDocumentPositionMapperEqual*/ false,
-                );
+                verifyAllFnAction(session, renameFromDependencyTsWithDependencyChange);
                 baselineTsserverLogs("projectReferencesSourcemap", "dependency/configWithReference/dependency source changes with timeout before request", session);
             });
             it(`when defining project source changes, when timeout does not occur before request`, () => {
                 // Create DocumentPositionMapper
-                const { session } = setupWithAction();
+                const session = setupWithAction();
 
                 // change
                 // Make change, without rebuild of solution
@@ -1654,14 +1070,7 @@ ${dependencyTs.content}`,
                 });
 
                 // action
-                verifyAllFnAction(
-                    session,
-                    renameFromDependencyTsWithDependencyChange,
-                    /*existingDependencyMap*/ undefined,
-                    /*existingDocumentPositionMapper*/ undefined,
-                    /*existingMapEqual*/ false,
-                    /*existingDocumentPositionMapperEqual*/ false,
-                );
+                verifyAllFnAction(session, renameFromDependencyTsWithDependencyChange);
                 baselineTsserverLogs("projectReferencesSourcemap", "dependency/configWithReference/dependency source changes", session);
             });
 
@@ -1669,14 +1078,7 @@ ${dependencyTs.content}`,
                 const host = createServerHost(files);
                 const session = new TestSession(host);
                 openFilesForSession([dependencyTs, randomFile], session);
-                verifyAllFnAction(
-                    session,
-                    renameFromDependencyTs,
-                    /*existingDependencyMap*/ undefined,
-                    /*existingDocumentPositionMapper*/ undefined,
-                    /*existingMapEqual*/ true,
-                    /*existingDocumentPositionMapperEqual*/ true,
-                );
+                verifyAllFnAction(session, renameFromDependencyTs);
                 verifyScriptInfoCollectionWith(session, [dependencyTs]);
                 baselineTsserverLogs("projectReferencesSourcemap", "dependency/configWithReference/when projects are not built", session);
             });
@@ -1691,15 +1093,8 @@ ${dependencyTs.content}`,
             }
 
             it("rename locations from dependency", () => {
-                const { session } = setup();
-                verifyAllFnAction(
-                    session,
-                    renameFromDependencyTs,
-                    /*existingDependencyMap*/ undefined,
-                    /*existingDocumentPositionMapper*/ undefined,
-                    /*existingMapEqual*/ false,
-                    /*existingDocumentPositionMapperEqual*/ false,
-                );
+                const session = setup();
+                verifyAllFnAction(session, renameFromDependencyTs);
                 verifyScriptInfoCollectionWith(session, [dependencyTs]);
                 baselineTsserverLogs("projectReferencesSourcemap", "dependency/disabledSourceRef/rename locations", session);
             });
@@ -1707,219 +1102,132 @@ ${dependencyTs.content}`,
             // Edit
             it(`when usage file changes, document position mapper doesnt change, when timeout occurs before request`, () => {
                 // Create DocumentPositionMapper
-                const { host, session, dependencyMap, documentPositionMapper } = setupWithAction();
+                const session = setupWithAction();
 
                 // change
                 makeChangeToDependencyTs(session);
-                host.runQueuedTimeoutCallbacks();
-                verifyDocumentPositionMapperEqual(session, dependencyMap, documentPositionMapper);
+                session.host.runQueuedTimeoutCallbacks();
 
                 // action
-                verifyAllFnAction(
-                    session,
-                    renameFromDependencyTs,
-                    dependencyMap,
-                    documentPositionMapper,
-                    /*existingMapEqual*/ true,
-                    /*existingDocumentPositionMapperEqual*/ true,
-                );
+                verifyAllFnAction(session, renameFromDependencyTs);
                 baselineTsserverLogs("projectReferencesSourcemap", "dependency/disabledSourceRef/usage file changes with timeout before request", session);
             });
             it(`when usage file changes, document position mapper doesnt change, when timeout does not occur before request`, () => {
                 // Create DocumentPositionMapper
-                const { session, dependencyMap, documentPositionMapper } = setupWithAction();
+                const session = setupWithAction();
 
                 // change
                 makeChangeToDependencyTs(session);
 
                 // action
-                verifyAllFnAction(
-                    session,
-                    renameFromDependencyTs,
-                    dependencyMap,
-                    documentPositionMapper,
-                    /*existingMapEqual*/ true,
-                    /*existingDocumentPositionMapperEqual*/ true,
-                );
+                verifyAllFnAction(session, renameFromDependencyTs);
                 baselineTsserverLogs("projectReferencesSourcemap", "dependency/disabledSourceRef/usage file changes", session);
             });
 
             // Edit dts to add new fn
             it(`when dependency .d.ts changes, document position mapper doesnt change, when timeout occurs before request`, () => {
                 // Create DocumentPositionMapper
-                const { host, session, dependencyMap, documentPositionMapper } = setupWithAction();
+                const session = setupWithAction();
 
                 // change
-                changeDtsFile(host);
-                host.runQueuedTimeoutCallbacks();
-                verifyDocumentPositionMapperEqual(session, dependencyMap, documentPositionMapper);
+                changeDtsFile(session.host);
+                session.host.runQueuedTimeoutCallbacks();
 
                 // action
-                verifyAllFnAction(
-                    session,
-                    renameFromDependencyTs,
-                    dependencyMap,
-                    documentPositionMapper,
-                    /*existingMapEqual*/ true,
-                    /*existingDocumentPositionMapperEqual*/ true,
-                );
+                verifyAllFnAction(session, renameFromDependencyTs);
                 baselineTsserverLogs("projectReferencesSourcemap", "dependency/disabledSourceRef/dependency dts changes with timeout before request", session);
             });
             it(`when dependency .d.ts changes, document position mapper doesnt change, when timeout does not occur before request`, () => {
                 // Create DocumentPositionMapper
-                const { host, session, dependencyMap, documentPositionMapper } = setupWithAction();
+                const session = setupWithAction();
 
                 // change
-                changeDtsFile(host);
+                changeDtsFile(session.host);
 
                 // action
-                verifyAllFnAction(
-                    session,
-                    renameFromDependencyTs,
-                    dependencyMap,
-                    documentPositionMapper,
-                    /*existingMapEqual*/ true,
-                    /*existingDocumentPositionMapperEqual*/ true,
-                );
+                verifyAllFnAction(session, renameFromDependencyTs);
                 baselineTsserverLogs("projectReferencesSourcemap", "dependency/disabledSourceRef/dependency dts changes", session);
             });
 
             // Edit map file to represent added new line
             it(`when dependency file's map changes, when timeout occurs before request`, () => {
                 // Create DocumentPositionMapper
-                const { host, session, dependencyMap, documentPositionMapper } = setupWithAction();
+                const session = setupWithAction();
 
                 // change
-                changeDtsMapFile(host);
-                host.runQueuedTimeoutCallbacks();
-                verifyDocumentPositionMapperEqual(session, dependencyMap, documentPositionMapper);
+                changeDtsMapFile(session.host);
+                session.host.runQueuedTimeoutCallbacks();
 
                 // action
-                verifyAllFnAction(
-                    session,
-                    renameFromDependencyTs,
-                    dependencyMap,
-                    documentPositionMapper,
-                    /*existingMapEqual*/ true,
-                    /*existingDocumentPositionMapperEqual*/ false,
-                );
+                verifyAllFnAction(session, renameFromDependencyTs);
                 baselineTsserverLogs("projectReferencesSourcemap", "dependency/disabledSourceRef/dependency dtsMap changes with timeout before request", session);
             });
             it(`when dependency file's map changes, when timeout does not occur before request`, () => {
                 // Create DocumentPositionMapper
-                const { host, session, dependencyMap, documentPositionMapper } = setupWithAction();
+                const session = setupWithAction();
 
                 // change
-                changeDtsMapFile(host);
+                changeDtsMapFile(session.host);
 
                 // action
-                verifyAllFnAction(
-                    session,
-                    renameFromDependencyTs,
-                    dependencyMap,
-                    documentPositionMapper,
-                    /*existingMapEqual*/ true,
-                    /*existingDocumentPositionMapperEqual*/ false,
-                );
+                verifyAllFnAction(session, renameFromDependencyTs);
                 baselineTsserverLogs("projectReferencesSourcemap", "dependency/disabledSourceRef/dependency dtsMap changes", session);
             });
 
             it(`with depedency files map file, when file is not present`, () => {
-                const { session } = setup(host => host.deleteFile(dtsMapLocation));
+                const session = setup(host => host.deleteFile(dtsMapLocation));
 
-                verifyAllFnAction(
-                    session,
-                    renameFromDependencyTs,
-                    /*existingDependencyMap*/ undefined,
-                    /*existingDocumentPositionMapper*/ undefined,
-                    /*existingMapEqual*/ true,
-                    /*existingDocumentPositionMapperEqual*/ true,
-                );
+                verifyAllFnAction(session, renameFromDependencyTs);
                 verifyScriptInfoCollectionWith(session, [dependencyTs]);
                 baselineTsserverLogs("projectReferencesSourcemap", "dependency/disabledSourceRef/dependency dtsMap not present", session);
             });
             it(`with depedency files map file, when file is created after actions on projects`, () => {
                 let fileContents: string;
-                const { host, session, dependencyMap, documentPositionMapper } = setupWithAction(host => {
+                const session = setupWithAction(host => {
                     fileContents = host.readFile(dtsMapLocation)!;
                     host.deleteFile(dtsMapLocation);
                 });
 
-                host.writeFile(dtsMapLocation, fileContents!);
-                verifyAllFnAction(
-                    session,
-                    renameFromDependencyTs,
-                    dependencyMap,
-                    documentPositionMapper,
-                    /*existingMapEqual*/ false,
-                    /*existingDocumentPositionMapperEqual*/ false,
-                );
+                session.host.writeFile(dtsMapLocation, fileContents!);
+                verifyAllFnAction(session, renameFromDependencyTs);
                 verifyScriptInfoCollectionWith(session, [dependencyTs]);
                 baselineTsserverLogs("projectReferencesSourcemap", "dependency/disabledSourceRef/dependency dtsMap created", session);
             });
             it(`with depedency files map file, when file is deleted after actions on the projects`, () => {
-                const { host, session, dependencyMap, documentPositionMapper } = setupWithAction();
+                const session = setupWithAction();
 
                 // The dependency file is deleted when orphan files are collected
-                host.deleteFile(dtsMapLocation);
-                verifyAllFnAction(
-                    session,
-                    renameFromDependencyTs,
-                    dependencyMap,
-                    documentPositionMapper,
-                    /*existingMapEqual*/ false,
-                    /*existingDocumentPositionMapperEqual*/ false,
-                );
+                session.host.deleteFile(dtsMapLocation);
+                verifyAllFnAction(session, renameFromDependencyTs);
                 verifyScriptInfoCollectionWith(session, [dependencyTs]);
                 baselineTsserverLogs("projectReferencesSourcemap", "dependency/disabledSourceRef/dependency dtsMap deleted", session);
             });
 
             it(`with depedency .d.ts file, when file is not present`, () => {
-                const { session } = setup(host => host.deleteFile(dtsLocation));
+                const session = setup(host => host.deleteFile(dtsLocation));
 
-                verifyAllFnAction(
-                    session,
-                    renameFromDependencyTs,
-                    /*existingDependencyMap*/ undefined,
-                    /*existingDocumentPositionMapper*/ undefined,
-                    /*existingMapEqual*/ true,
-                    /*existingDocumentPositionMapperEqual*/ true,
-                );
+                verifyAllFnAction(session, renameFromDependencyTs);
                 verifyScriptInfoCollectionWith(session, [dependencyTs]);
                 baselineTsserverLogs("projectReferencesSourcemap", "dependency/disabledSourceRef/dependency dts not present", session);
             });
             it(`with depedency .d.ts file, when file is created after actions on projects`, () => {
                 let fileContents: string;
-                const { host, session, dependencyMap, documentPositionMapper } = setupWithAction(host => {
+                const session = setupWithAction(host => {
                     fileContents = host.readFile(dtsLocation)!;
                     host.deleteFile(dtsLocation);
                 });
 
-                host.writeFile(dtsLocation, fileContents!);
-                verifyAllFnAction(
-                    session,
-                    renameFromDependencyTs,
-                    dependencyMap,
-                    documentPositionMapper,
-                    /*existingMapEqual*/ false,
-                    /*existingDocumentPositionMapperEqual*/ false,
-                );
+                session.host.writeFile(dtsLocation, fileContents!);
+                verifyAllFnAction(session, renameFromDependencyTs);
                 verifyScriptInfoCollectionWith(session, [dependencyTs]);
                 baselineTsserverLogs("projectReferencesSourcemap", "dependency/disabledSourceRef/dependency dts created", session);
             });
             it(`with depedency .d.ts file, when file is deleted after actions on the projects`, () => {
-                const { host, session, dependencyMap, documentPositionMapper } = setupWithAction();
+                const session = setupWithAction();
 
                 // The dependency file is deleted when orphan files are collected
-                host.deleteFile(dtsLocation);
-                verifyAllFnAction(
-                    session,
-                    renameFromDependencyTs,
-                    dependencyMap,
-                    documentPositionMapper,
-                    /*existingMapEqual*/ true,
-                    /*existingDocumentPositionMapperEqual*/ true,
-                );
+                session.host.deleteFile(dtsLocation);
+                verifyAllFnAction(session, renameFromDependencyTs);
                 verifyScriptInfoCollectionWith(session, [dependencyTs]);
                 baselineTsserverLogs("projectReferencesSourcemap", "dependency/disabledSourceRef/dependency dts deleted", session);
             });
@@ -1927,11 +1235,11 @@ ${dependencyTs.content}`,
     });
 
     describe("when opening depedency and usage project: goToDef and rename", () => {
-        function setupWithActionWith(setup: (onHostCreate?: OnHostCreate) => ReturnType<CreateSessionFn>, onHostCreate: OnHostCreate | undefined) {
-            const result = setup(onHostCreate);
-            result.session.executeCommandSeq(goToDefFromMainTs(1));
-            result.session.executeCommandSeq(renameFromDependencyTs(1));
-            return { ...result, ...getDocumentPositionMapper(result.session) };
+        function setupWithActionWith(setup: (onHostCreate?: OnHostCreate) => TestSession, onHostCreate: OnHostCreate | undefined) {
+            const session = setup(onHostCreate);
+            session.executeCommandSeq(goToDefFromMainTs(1));
+            session.executeCommandSeq(renameFromDependencyTs(1));
+            return session;
         }
 
         describe("when main tsconfig doesnt have project reference", () => {
@@ -1944,24 +1252,9 @@ ${dependencyTs.content}`,
             }
 
             it("goto Definition in usage and rename locations from defining project", () => {
-                const { session } = setup();
-                verifyAllFnAction(
-                    session,
-                    goToDefFromMainTs,
-                    /*existingDependencyMap*/ undefined,
-                    /*existingDocumentPositionMapper*/ undefined,
-                    /*existingMapEqual*/ false,
-                    /*existingDocumentPositionMapperEqual*/ false,
-                );
-                const { dependencyMap, documentPositionMapper } = getDocumentPositionMapper(session);
-                verifyAllFnAction(
-                    session,
-                    renameFromDependencyTs,
-                    dependencyMap,
-                    documentPositionMapper,
-                    /*existingMapEqual*/ true,
-                    /*existingDocumentPositionMapperEqual*/ true,
-                );
+                const session = setup();
+                verifyAllFnAction(session, goToDefFromMainTs);
+                verifyAllFnAction(session, renameFromDependencyTs);
                 verifyScriptInfoCollectionWith(session, [mainTs, dependencyTs]);
                 baselineTsserverLogs("projectReferencesSourcemap", "dependencyAndUsage/configHasNoReference/goToDef and rename locations", session);
             });
@@ -1969,321 +1262,145 @@ ${dependencyTs.content}`,
             // Edit
             it(`when usage file changes, document position mapper doesnt change, when timeout occurs before request`, () => {
                 // Create DocumentPositionMapper
-                const { host, session, dependencyMap, documentPositionMapper } = setupWithAction();
+                const session = setupWithAction();
 
                 // change
                 makeChangeToMainTs(session);
                 makeChangeToDependencyTs(session);
-                host.runQueuedTimeoutCallbacks();
-                verifyDocumentPositionMapperEqual(session, dependencyMap, documentPositionMapper);
+                session.host.runQueuedTimeoutCallbacks();
 
                 // action
-                verifyAllFnAction(
-                    session,
-                    goToDefFromMainTs,
-                    dependencyMap,
-                    documentPositionMapper,
-                    /*existingMapEqual*/ true,
-                    /*existingDocumentPositionMapperEqual*/ true,
-                );
-                verifyAllFnAction(
-                    session,
-                    renameFromDependencyTs,
-                    dependencyMap,
-                    documentPositionMapper,
-                    /*existingMapEqual*/ true,
-                    /*existingDocumentPositionMapperEqual*/ true,
-                );
+                verifyAllFnAction(session, goToDefFromMainTs);
+                verifyAllFnAction(session, renameFromDependencyTs);
                 baselineTsserverLogs("projectReferencesSourcemap", "dependencyAndUsage/configHasNoReference/usage file changes with timeout before request", session);
             });
             it(`when usage file changes, document position mapper doesnt change, when timeout does not occur before request`, () => {
                 // Create DocumentPositionMapper
-                const { session, dependencyMap, documentPositionMapper } = setupWithAction();
+                const session = setupWithAction();
 
                 // change
                 makeChangeToMainTs(session);
                 makeChangeToDependencyTs(session);
 
                 // action
-                verifyAllFnAction(
-                    session,
-                    goToDefFromMainTs,
-                    dependencyMap,
-                    documentPositionMapper,
-                    /*existingMapEqual*/ true,
-                    /*existingDocumentPositionMapperEqual*/ true,
-                );
-                verifyAllFnAction(
-                    session,
-                    renameFromDependencyTs,
-                    dependencyMap,
-                    documentPositionMapper,
-                    /*existingMapEqual*/ true,
-                    /*existingDocumentPositionMapperEqual*/ true,
-                );
+                verifyAllFnAction(session, goToDefFromMainTs);
+                verifyAllFnAction(session, renameFromDependencyTs);
                 baselineTsserverLogs("projectReferencesSourcemap", "dependencyAndUsage/configHasNoReference/usage file changes", session);
             });
 
             // Edit dts to add new fn
             it(`when dependency .d.ts changes, document position mapper doesnt change, when timeout occurs before request`, () => {
                 // Create DocumentPositionMapper
-                const { host, session, dependencyMap, documentPositionMapper } = setupWithAction();
+                const session = setupWithAction();
 
                 // change
-                changeDtsFile(host);
-                host.runQueuedTimeoutCallbacks();
-                verifyDocumentPositionMapperEqual(session, dependencyMap, documentPositionMapper);
+                changeDtsFile(session.host);
+                session.host.runQueuedTimeoutCallbacks();
 
                 // action
-                verifyAllFnAction(
-                    session,
-                    goToDefFromMainTs,
-                    dependencyMap,
-                    documentPositionMapper,
-                    /*existingMapEqual*/ true,
-                    /*existingDocumentPositionMapperEqual*/ true,
-                );
-                verifyAllFnAction(
-                    session,
-                    renameFromDependencyTs,
-                    dependencyMap,
-                    documentPositionMapper,
-                    /*existingMapEqual*/ true,
-                    /*existingDocumentPositionMapperEqual*/ true,
-                );
+                verifyAllFnAction(session, goToDefFromMainTs);
+                verifyAllFnAction(session, renameFromDependencyTs);
                 baselineTsserverLogs("projectReferencesSourcemap", "dependencyAndUsage/configHasNoReference/dependency dts changes with timeout before request", session);
             });
             it(`when dependency .d.ts changes, document position mapper doesnt change, when timeout does not occur before request`, () => {
                 // Create DocumentPositionMapper
-                const { host, session, dependencyMap, documentPositionMapper } = setupWithAction();
+                const session = setupWithAction();
 
                 // change
-                changeDtsFile(host);
+                changeDtsFile(session.host);
 
                 // action
-                verifyAllFnAction(
-                    session,
-                    goToDefFromMainTs,
-                    dependencyMap,
-                    documentPositionMapper,
-                    /*existingMapEqual*/ true,
-                    /*existingDocumentPositionMapperEqual*/ true,
-                );
-                verifyAllFnAction(
-                    session,
-                    renameFromDependencyTs,
-                    dependencyMap,
-                    documentPositionMapper,
-                    /*existingMapEqual*/ true,
-                    /*existingDocumentPositionMapperEqual*/ true,
-                );
+                verifyAllFnAction(session, goToDefFromMainTs);
+                verifyAllFnAction(session, renameFromDependencyTs);
                 baselineTsserverLogs("projectReferencesSourcemap", "dependencyAndUsage/configHasNoReference/dependency dts changes", session);
             });
 
             // Edit map file to represent added new line
             it(`when dependency file's map changes, when timeout occurs before request`, () => {
                 // Create DocumentPositionMapper
-                const { host, session, dependencyMap, documentPositionMapper } = setupWithAction();
+                const session = setupWithAction();
 
                 // change
-                changeDtsMapFile(host);
-                host.runQueuedTimeoutCallbacks();
-                verifyDocumentPositionMapperEqual(session, dependencyMap, documentPositionMapper);
+                changeDtsMapFile(session.host);
+                session.host.runQueuedTimeoutCallbacks();
 
                 // action
-                verifyAllFnAction(
-                    session,
-                    goToDefFromMainTs,
-                    dependencyMap,
-                    documentPositionMapper,
-                    /*existingMapEqual*/ true,
-                    /*existingDocumentPositionMapperEqual*/ false,
-                );
-                const { documentPositionMapper: newDocumentPositionMapper } = getDocumentPositionMapper(session);
-                verifyAllFnAction(
-                    session,
-                    renameFromDependencyTs,
-                    dependencyMap,
-                    newDocumentPositionMapper,
-                    /*existingMapEqual*/ true,
-                    /*existingDocumentPositionMapperEqual*/ true,
-                );
+                verifyAllFnAction(session, goToDefFromMainTs);
+                verifyAllFnAction(session, renameFromDependencyTs);
                 baselineTsserverLogs("projectReferencesSourcemap", "dependencyAndUsage/configHasNoReference/dependency dtsMap changes with timeout before request", session);
             });
             it(`when dependency file's map changes, when timeout does not occur before request`, () => {
                 // Create DocumentPositionMapper
-                const { host, session, dependencyMap, documentPositionMapper } = setupWithAction();
+                const session = setupWithAction();
 
                 // change
-                changeDtsMapFile(host);
+                changeDtsMapFile(session.host);
 
                 // action
-                verifyAllFnAction(
-                    session,
-                    goToDefFromMainTs,
-                    dependencyMap,
-                    documentPositionMapper,
-                    /*existingMapEqual*/ true,
-                    /*existingDocumentPositionMapperEqual*/ false,
-                );
-                const { documentPositionMapper: newDocumentPositionMapper } = getDocumentPositionMapper(session);
-                verifyAllFnAction(
-                    session,
-                    renameFromDependencyTs,
-                    dependencyMap,
-                    newDocumentPositionMapper,
-                    /*existingMapEqual*/ true,
-                    /*existingDocumentPositionMapperEqual*/ true,
-                );
+                verifyAllFnAction(session, goToDefFromMainTs);
+                verifyAllFnAction(session, renameFromDependencyTs);
                 baselineTsserverLogs("projectReferencesSourcemap", "dependencyAndUsage/configHasNoReference/dependency dtsMap changes", session);
             });
 
             it(`with depedency files map file, when file is not present`, () => {
-                const { session } = setup(host => host.deleteFile(dtsMapLocation));
+                const session = setup(host => host.deleteFile(dtsMapLocation));
 
-                verifyAllFnAction(
-                    session,
-                    goToDefFromMainTs,
-                    /*existingDependencyMap*/ undefined,
-                    /*existingDocumentPositionMapper*/ undefined,
-                    /*existingMapEqual*/ true,
-                    /*existingDocumentPositionMapperEqual*/ true,
-                );
-                verifyAllFnAction(
-                    session,
-                    renameFromDependencyTs,
-                    /*existingDependencyMap*/ undefined,
-                    /*existingDocumentPositionMapper*/ undefined,
-                    /*existingMapEqual*/ true,
-                    /*existingDocumentPositionMapperEqual*/ true,
-                );
+                verifyAllFnAction(session, goToDefFromMainTs);
+                verifyAllFnAction(session, renameFromDependencyTs);
                 verifyScriptInfoCollectionWith(session, [mainTs, dependencyTs]);
                 baselineTsserverLogs("projectReferencesSourcemap", "dependencyAndUsage/configHasNoReference/dependency dtsMap not present", session);
             });
             it(`with depedency files map file, when file is created after actions on projects`, () => {
                 let fileContents: string;
-                const { host, session, dependencyMap, documentPositionMapper } = setupWithAction(host => {
+                const session = setupWithAction(host => {
                     fileContents = host.readFile(dtsMapLocation)!;
                     host.deleteFile(dtsMapLocation);
                 });
 
-                host.writeFile(dtsMapLocation, fileContents!);
-                verifyAllFnAction(
-                    session,
-                    goToDefFromMainTs,
-                    dependencyMap,
-                    documentPositionMapper,
-                    /*existingMapEqual*/ false,
-                    /*existingDocumentPositionMapperEqual*/ false,
-                );
-                const { dependencyMap: newDependencyMap, documentPositionMapper: newDocumentPositionMapper } = getDocumentPositionMapper(session);
-                verifyAllFnAction(
-                    session,
-                    renameFromDependencyTs,
-                    newDependencyMap,
-                    newDocumentPositionMapper,
-                    /*existingMapEqual*/ true,
-                    /*existingDocumentPositionMapperEqual*/ true,
-                );
+                session.host.writeFile(dtsMapLocation, fileContents!);
+                verifyAllFnAction(session, goToDefFromMainTs);
+                verifyAllFnAction(session, renameFromDependencyTs);
                 verifyScriptInfoCollectionWith(session, [mainTs, dependencyTs]);
                 baselineTsserverLogs("projectReferencesSourcemap", "dependencyAndUsage/configHasNoReference/dependency dtsMap created", session);
             });
             it(`with depedency files map file, when file is deleted after actions on the projects`, () => {
-                const { host, session, dependencyMap, documentPositionMapper } = setupWithAction();
+                const session = setupWithAction();
 
                 // The dependency file is deleted when orphan files are collected
-                host.deleteFile(dtsMapLocation);
-                verifyAllFnAction(
-                    session,
-                    goToDefFromMainTs,
-                    dependencyMap,
-                    documentPositionMapper,
-                    /*existingMapEqual*/ false,
-                    /*existingDocumentPositionMapperEqual*/ false,
-                );
-                const { dependencyMap: newDependencyMap, documentPositionMapper: newDocumentPositionMapper } = getDocumentPositionMapper(session);
-                verifyAllFnAction(
-                    session,
-                    renameFromDependencyTs,
-                    newDependencyMap,
-                    newDocumentPositionMapper,
-                    /*existingMapEqual*/ true,
-                    /*existingDocumentPositionMapperEqual*/ true,
-                );
+                session.host.deleteFile(dtsMapLocation);
+                verifyAllFnAction(session, goToDefFromMainTs);
+                verifyAllFnAction(session, renameFromDependencyTs);
                 verifyScriptInfoCollectionWith(session, [mainTs, dependencyTs]);
                 baselineTsserverLogs("projectReferencesSourcemap", "dependencyAndUsage/configHasNoReference/dependency dtsMap deleted", session);
             });
 
             it(`with depedency .d.ts file, when file is not present`, () => {
-                const { session } = setup(host => host.deleteFile(dtsLocation));
-                verifyAllFnAction(
-                    session,
-                    goToDefFromMainTs,
-                    /*existingDependencyMap*/ undefined,
-                    /*existingDocumentPositionMapper*/ undefined,
-                    /*existingMapEqual*/ true,
-                    /*existingDocumentPositionMapperEqual*/ true,
-                );
-                verifyAllFnAction(
-                    session,
-                    renameFromDependencyTs,
-                    /*existingDependencyMap*/ undefined,
-                    /*existingDocumentPositionMapper*/ undefined,
-                    /*existingMapEqual*/ true,
-                    /*existingDocumentPositionMapperEqual*/ true,
-                );
+                const session = setup(host => host.deleteFile(dtsLocation));
+                verifyAllFnAction(session, goToDefFromMainTs);
+                verifyAllFnAction(session, renameFromDependencyTs);
                 verifyScriptInfoCollectionWith(session, [mainTs, dependencyTs]);
                 baselineTsserverLogs("projectReferencesSourcemap", "dependencyAndUsage/configHasNoReference/dependency dts not present", session);
             });
             it(`with depedency .d.ts file, when file is created after actions on projects`, () => {
                 let fileContents: string;
-                const { host, session, dependencyMap, documentPositionMapper } = setupWithAction(host => {
+                const session = setupWithAction(host => {
                     fileContents = host.readFile(dtsLocation)!;
                     host.deleteFile(dtsLocation);
                 });
 
-                host.writeFile(dtsLocation, fileContents!);
-                verifyAllFnAction(
-                    session,
-                    goToDefFromMainTs,
-                    dependencyMap,
-                    documentPositionMapper,
-                    /*existingMapEqual*/ false,
-                    /*existingDocumentPositionMapperEqual*/ false,
-                );
-                const { dependencyMap: newDependencyMap, documentPositionMapper: newDocumentPositionMapper } = getDocumentPositionMapper(session);
-                verifyAllFnAction(
-                    session,
-                    renameFromDependencyTs,
-                    newDependencyMap,
-                    newDocumentPositionMapper,
-                    /*existingMapEqual*/ true,
-                    /*existingDocumentPositionMapperEqual*/ true,
-                );
+                session.host.writeFile(dtsLocation, fileContents!);
+                verifyAllFnAction(session, goToDefFromMainTs);
+                verifyAllFnAction(session, renameFromDependencyTs);
                 verifyScriptInfoCollectionWith(session, [mainTs, dependencyTs]);
                 baselineTsserverLogs("projectReferencesSourcemap", "dependencyAndUsage/configHasNoReference/dependency dts created", session);
             });
             it(`with depedency .d.ts file, when file is deleted after actions on the projects`, () => {
-                const { host, session, dependencyMap, documentPositionMapper } = setupWithAction();
+                const session = setupWithAction();
 
                 // The dependency file is deleted when orphan files are collected
-                host.deleteFile(dtsLocation);
-                verifyAllFnAction(
-                    session,
-                    goToDefFromMainTs,
-                    dependencyMap,
-                    documentPositionMapper,
-                    /*existingMapEqual*/ true,
-                    /*existingDocumentPositionMapperEqual*/ true,
-                );
-                verifyAllFnAction(
-                    session,
-                    renameFromDependencyTs,
-                    dependencyMap,
-                    documentPositionMapper,
-                    /*existingMapEqual*/ true,
-                    /*existingDocumentPositionMapperEqual*/ true,
-                );
+                session.host.deleteFile(dtsLocation);
+                verifyAllFnAction(session, goToDefFromMainTs);
+                verifyAllFnAction(session, renameFromDependencyTs);
                 verifyScriptInfoCollectionWith(session, [mainTs, dependencyTs]);
                 baselineTsserverLogs("projectReferencesSourcemap", "dependencyAndUsage/configHasNoReference/dependency dts deleted", session);
             });
@@ -2298,23 +1415,9 @@ ${dependencyTs.content}`,
             }
 
             it("goto Definition in usage and rename locations from defining project", () => {
-                const { session } = setup();
-                verifyAllFnAction(
-                    session,
-                    goToDefFromMainTs,
-                    /*existingDependencyMap*/ undefined,
-                    /*existingDocumentPositionMapper*/ undefined,
-                    /*existingMapEqual*/ true,
-                    /*existingDocumentPositionMapperEqual*/ true,
-                );
-                verifyAllFnAction(
-                    session,
-                    renameFromDependencyTs,
-                    /*existingDependencyMap*/ undefined,
-                    /*existingDocumentPositionMapper*/ undefined,
-                    /*existingMapEqual*/ false,
-                    /*existingDocumentPositionMapperEqual*/ false,
-                );
+                const session = setup();
+                verifyAllFnAction(session, goToDefFromMainTs);
+                verifyAllFnAction(session, renameFromDependencyTs);
                 verifyScriptInfoCollectionWith(session, [mainTs, dependencyTs]);
                 baselineTsserverLogs("projectReferencesSourcemap", "dependencyAndUsage/configWithReference/gotoDef and rename locations", session);
             });
@@ -2322,325 +1425,152 @@ ${dependencyTs.content}`,
             // Edit
             it(`when usage file changes, document position mapper doesnt change, when timeout occurs before request`, () => {
                 // Create DocumentPositionMapper
-                const { host, session, dependencyMap, documentPositionMapper } = setupWithAction();
+                const session = setupWithAction();
 
                 // change
                 makeChangeToMainTs(session);
                 makeChangeToDependencyTs(session);
-                host.runQueuedTimeoutCallbacks();
-                verifyDocumentPositionMapperEqual(session, dependencyMap, documentPositionMapper);
+                session.host.runQueuedTimeoutCallbacks();
 
                 // action
-                verifyAllFnAction(
-                    session,
-                    goToDefFromMainTs,
-                    dependencyMap,
-                    documentPositionMapper,
-                    /*existingMapEqual*/ true,
-                    /*existingDocumentPositionMapperEqual*/ true,
-                );
-                verifyAllFnAction(
-                    session,
-                    renameFromDependencyTs,
-                    dependencyMap,
-                    documentPositionMapper,
-                    /*existingMapEqual*/ true,
-                    /*existingDocumentPositionMapperEqual*/ true,
-                );
+                verifyAllFnAction(session, goToDefFromMainTs);
+                verifyAllFnAction(session, renameFromDependencyTs);
                 baselineTsserverLogs("projectReferencesSourcemap", "dependencyAndUsage/configWithReference/usage file changes with timeout before request", session);
             });
             it(`when usage file changes, document position mapper doesnt change, when timeout does not occur before request`, () => {
                 // Create DocumentPositionMapper
-                const { session, dependencyMap, documentPositionMapper } = setupWithAction();
+                const session = setupWithAction();
 
                 // change
                 makeChangeToMainTs(session);
                 makeChangeToDependencyTs(session);
 
                 // action
-                verifyAllFnAction(
-                    session,
-                    goToDefFromMainTs,
-                    dependencyMap,
-                    documentPositionMapper,
-                    /*existingMapEqual*/ true,
-                    /*existingDocumentPositionMapperEqual*/ true,
-                );
-                verifyAllFnAction(
-                    session,
-                    renameFromDependencyTs,
-                    dependencyMap,
-                    documentPositionMapper,
-                    /*existingMapEqual*/ true,
-                    /*existingDocumentPositionMapperEqual*/ true,
-                );
+                verifyAllFnAction(session, goToDefFromMainTs);
+                verifyAllFnAction(session, renameFromDependencyTs);
                 baselineTsserverLogs("projectReferencesSourcemap", "dependencyAndUsage/configWithReference/usage file changes", session);
             });
 
             // Edit dts to add new fn
             it(`when dependency .d.ts changes, document position mapper doesnt change, when timeout occurs before request`, () => {
                 // Create DocumentPositionMapper
-                const { host, session, dependencyMap, documentPositionMapper } = setupWithAction();
+                const session = setupWithAction();
 
                 // change
-                changeDtsFile(host);
-                host.runQueuedTimeoutCallbacks();
-                verifyDocumentPositionMapperEqual(session, dependencyMap, documentPositionMapper);
+                changeDtsFile(session.host);
+                session.host.runQueuedTimeoutCallbacks();
 
                 // action
-                verifyAllFnAction(
-                    session,
-                    goToDefFromMainTs,
-                    dependencyMap,
-                    documentPositionMapper,
-                    /*existingMapEqual*/ true,
-                    /*existingDocumentPositionMapperEqual*/ true,
-                );
-                verifyAllFnAction(
-                    session,
-                    renameFromDependencyTs,
-                    dependencyMap,
-                    documentPositionMapper,
-                    /*existingMapEqual*/ true,
-                    /*existingDocumentPositionMapperEqual*/ true,
-                );
+                verifyAllFnAction(session, goToDefFromMainTs);
+                verifyAllFnAction(session, renameFromDependencyTs);
                 baselineTsserverLogs("projectReferencesSourcemap", "dependencyAndUsage/configWithReference/dependency dts changes with timeout before request", session);
             });
             it(`when dependency .d.ts changes, document position mapper doesnt change, when timeout does not occur before request`, () => {
                 // Create DocumentPositionMapper
-                const { host, session, dependencyMap, documentPositionMapper } = setupWithAction();
+                const session = setupWithAction();
 
                 // change
-                changeDtsFile(host);
+                changeDtsFile(session.host);
 
                 // action
-                verifyAllFnAction(
-                    session,
-                    goToDefFromMainTs,
-                    dependencyMap,
-                    documentPositionMapper,
-                    /*existingMapEqual*/ true,
-                    /*existingDocumentPositionMapperEqual*/ true,
-                );
-                verifyAllFnAction(
-                    session,
-                    renameFromDependencyTs,
-                    dependencyMap,
-                    documentPositionMapper,
-                    /*existingMapEqual*/ true,
-                    /*existingDocumentPositionMapperEqual*/ true,
-                );
+                verifyAllFnAction(session, goToDefFromMainTs);
+                verifyAllFnAction(session, renameFromDependencyTs);
                 baselineTsserverLogs("projectReferencesSourcemap", "dependencyAndUsage/configWithReference/dependency dts changes", session);
             });
 
             // Edit map file to represent added new line
             it(`when dependency file's map changes, when timeout occurs before request`, () => {
                 // Create DocumentPositionMapper
-                const { host, session, dependencyMap, documentPositionMapper } = setupWithAction();
+                const session = setupWithAction();
 
                 // change
-                changeDtsMapFile(host);
-                host.runQueuedTimeoutCallbacks();
-                verifyDocumentPositionMapperEqual(session, dependencyMap, documentPositionMapper);
+                changeDtsMapFile(session.host);
+                session.host.runQueuedTimeoutCallbacks();
 
                 // action
-                verifyAllFnAction(
-                    session,
-                    goToDefFromMainTs,
-                    dependencyMap,
-                    documentPositionMapper,
-                    /*existingMapEqual*/ true,
-                    /*existingDocumentPositionMapperEqual*/ true,
-                );
-                verifyAllFnAction(
-                    session,
-                    renameFromDependencyTs,
-                    dependencyMap,
-                    documentPositionMapper,
-                    /*existingMapEqual*/ true,
-                    /*existingDocumentPositionMapperEqual*/ false,
-                );
+                verifyAllFnAction(session, goToDefFromMainTs);
+                verifyAllFnAction(session, renameFromDependencyTs);
                 baselineTsserverLogs("projectReferencesSourcemap", "dependencyAndUsage/configWithReference/dependency dtsMap changes with timeout before request", session);
             });
             it(`when dependency file's map changes, when timeout does not occur before request`, () => {
                 // Create DocumentPositionMapper
-                const { host, session, dependencyMap, documentPositionMapper } = setupWithAction();
+                const session = setupWithAction();
 
                 // change
-                changeDtsMapFile(host);
+                changeDtsMapFile(session.host);
 
                 // action
-                verifyAllFnAction(
-                    session,
-                    goToDefFromMainTs,
-                    dependencyMap,
-                    documentPositionMapper,
-                    /*existingMapEqual*/ true,
-                    /*existingDocumentPositionMapperEqual*/ true,
-                );
-                verifyAllFnAction(
-                    session,
-                    renameFromDependencyTs,
-                    dependencyMap,
-                    documentPositionMapper,
-                    /*existingMapEqual*/ true,
-                    /*existingDocumentPositionMapperEqual*/ false,
-                );
+                verifyAllFnAction(session, goToDefFromMainTs);
+                verifyAllFnAction(session, renameFromDependencyTs);
                 baselineTsserverLogs("projectReferencesSourcemap", "dependencyAndUsage/configWithReference/dependency dtsMap changes", session);
             });
 
             it(`with depedency files map file, when file is not present`, () => {
-                const { session } = setup(host => host.deleteFile(dtsMapLocation));
+                const session = setup(host => host.deleteFile(dtsMapLocation));
 
-                verifyAllFnAction(
-                    session,
-                    goToDefFromMainTs,
-                    /*existingDependencyMap*/ undefined,
-                    /*existingDocumentPositionMapper*/ undefined,
-                    /*existingMapEqual*/ true,
-                    /*existingDocumentPositionMapperEqual*/ true,
-                );
-                verifyAllFnAction(
-                    session,
-                    renameFromDependencyTs,
-                    /*existingDependencyMap*/ undefined,
-                    /*existingDocumentPositionMapper*/ undefined,
-                    /*existingMapEqual*/ true,
-                    /*existingDocumentPositionMapperEqual*/ true,
-                );
+                verifyAllFnAction(session, goToDefFromMainTs);
+                verifyAllFnAction(session, renameFromDependencyTs);
                 verifyScriptInfoCollectionWith(session, [mainTs, dependencyTs]);
                 baselineTsserverLogs("projectReferencesSourcemap", "dependencyAndUsage/configWithReference/dependency dtsMap not present", session);
             });
             it(`with depedency files map file, when file is created after actions on projects`, () => {
                 let fileContents: string;
-                const { host, session, dependencyMap, documentPositionMapper } = setupWithAction(host => {
+                const session = setupWithAction(host => {
                     fileContents = host.readFile(dtsMapLocation)!;
                     host.deleteFile(dtsMapLocation);
                 });
 
-                host.writeFile(dtsMapLocation, fileContents!);
-                verifyAllFnAction(
-                    session,
-                    goToDefFromMainTs,
-                    dependencyMap,
-                    documentPositionMapper,
-                    /*existingMapEqual*/ true,
-                    /*existingDocumentPositionMapperEqual*/ true,
-                    /*skipMapPathInDtsInfo*/ true,
-                );
-                verifyAllFnAction(
-                    session,
-                    renameFromDependencyTs,
-                    dependencyMap,
-                    documentPositionMapper,
-                    /*existingMapEqual*/ false,
-                    /*existingDocumentPositionMapperEqual*/ false,
-                );
+                session.host.writeFile(dtsMapLocation, fileContents!);
+                verifyAllFnAction(session, goToDefFromMainTs);
+                verifyAllFnAction(session, renameFromDependencyTs);
                 verifyScriptInfoCollectionWith(session, [mainTs, dependencyTs]);
                 baselineTsserverLogs("projectReferencesSourcemap", "dependencyAndUsage/configWithReference/dependency dtsMap created", session);
             });
             it(`with depedency files map file, when file is deleted after actions on the projects`, () => {
-                const { host, session, dependencyMap, documentPositionMapper } = setupWithAction();
+                const session = setupWithAction();
 
                 // The dependency file is deleted when orphan files are collected
-                host.deleteFile(dtsMapLocation);
-                verifyAllFnAction(
-                    session,
-                    goToDefFromMainTs,
-                    dependencyMap,
-                    documentPositionMapper,
-                    /*existingMapEqual*/ false,
-                    /*existingDocumentPositionMapperEqual*/ false,
-                    /*skipMapPathInDtsInfo*/ true,
-                );
-                verifyAllFnAction(
-                    session,
-                    renameFromDependencyTs,
-                    dependencyMap,
-                    documentPositionMapper,
-                    /*existingMapEqual*/ false,
-                    /*existingDocumentPositionMapperEqual*/ false,
-                );
+                session.host.deleteFile(dtsMapLocation);
+                verifyAllFnAction(session, goToDefFromMainTs);
+                verifyAllFnAction(session, renameFromDependencyTs);
                 verifyScriptInfoCollectionWith(session, [mainTs, dependencyTs]);
                 baselineTsserverLogs("projectReferencesSourcemap", "dependencyAndUsage/configWithReference/dependency dtsMap deleted", session);
             });
 
             it(`with depedency .d.ts file, when file is not present`, () => {
-                const { session } = setup(host => host.deleteFile(dtsLocation));
+                const session = setup(host => host.deleteFile(dtsLocation));
 
-                verifyAllFnAction(
-                    session,
-                    goToDefFromMainTs,
-                    /*existingDependencyMap*/ undefined,
-                    /*existingDocumentPositionMapper*/ undefined,
-                    /*existingMapEqual*/ true,
-                    /*existingDocumentPositionMapperEqual*/ true,
-                );
-                verifyAllFnAction(
-                    session,
-                    renameFromDependencyTs,
-                    /*existingDependencyMap*/ undefined,
-                    /*existingDocumentPositionMapper*/ undefined,
-                    /*existingMapEqual*/ true,
-                    /*existingDocumentPositionMapperEqual*/ true,
-                );
+                verifyAllFnAction(session, goToDefFromMainTs);
+                verifyAllFnAction(session, renameFromDependencyTs);
                 verifyScriptInfoCollectionWith(session, [mainTs, dependencyTs]);
                 baselineTsserverLogs("projectReferencesSourcemap", "dependencyAndUsage/configWithReference/dependency dts not present", session);
             });
             it(`with depedency .d.ts file, when file is created after actions on projects`, () => {
                 let fileContents: string;
-                const { host, session, dependencyMap, documentPositionMapper } = setupWithAction(host => {
+                const session = setupWithAction(host => {
                     fileContents = host.readFile(dtsLocation)!;
                     host.deleteFile(dtsLocation);
                 });
 
-                host.writeFile(dtsLocation, fileContents!);
-                verifyAllFnAction(
-                    session,
-                    goToDefFromMainTs,
-                    dependencyMap,
-                    documentPositionMapper,
-                    /*existingMapEqual*/ true,
-                    /*existingDocumentPositionMapperEqual*/ true,
-                );
-                verifyAllFnAction(
-                    session,
-                    renameFromDependencyTs,
-                    dependencyMap,
-                    documentPositionMapper,
-                    /*existingMapEqual*/ false,
-                    /*existingDocumentPositionMapperEqual*/ false,
-                );
+                session.host.writeFile(dtsLocation, fileContents!);
+                verifyAllFnAction(session, goToDefFromMainTs);
+                verifyAllFnAction(session, renameFromDependencyTs);
                 verifyScriptInfoCollectionWith(session, [mainTs, dependencyTs]);
                 baselineTsserverLogs("projectReferencesSourcemap", "dependencyAndUsage/configWithReference/dependency dts created", session);
             });
             it(`with depedency .d.ts file, when file is deleted after actions on the projects`, () => {
-                const { host, session, dependencyMap, documentPositionMapper } = setupWithAction();
+                const session = setupWithAction();
 
                 // The dependency file is deleted when orphan files are collected
-                host.deleteFile(dtsLocation);
-                verifyAllFnAction(
-                    session,
-                    goToDefFromMainTs,
-                    dependencyMap,
-                    documentPositionMapper,
-                    /*existingMapEqual*/ true,
-                    /*existingDocumentPositionMapperEqual*/ true,
-                );
-                verifyAllFnAction(
-                    session,
-                    renameFromDependencyTs,
-                    dependencyMap,
-                    documentPositionMapper,
-                    /*existingMapEqual*/ true,
-                    /*existingDocumentPositionMapperEqual*/ true,
-                );
+                session.host.deleteFile(dtsLocation);
+                verifyAllFnAction(session, goToDefFromMainTs);
+                verifyAllFnAction(session, renameFromDependencyTs);
                 verifyScriptInfoCollectionWith(session, [mainTs, dependencyTs]);
                 baselineTsserverLogs("projectReferencesSourcemap", "dependencyAndUsage/configWithReference/dependency dts deleted", session);
             });
             it(`when defining project source changes, when timeout occurs before request`, () => {
                 // Create DocumentPositionMapper
-                const { host, session, dependencyMap, documentPositionMapper } = setupWithAction();
+                const session = setupWithAction();
 
                 // change
                 // Make change, without rebuild of solution
@@ -2656,31 +1586,16 @@ ${dependencyTs.content}`,
 `,
                     },
                 });
-                host.runQueuedTimeoutCallbacks();
-                verifyDocumentPositionMapperEqual(session, dependencyMap, documentPositionMapper);
+                session.host.runQueuedTimeoutCallbacks();
 
                 // action
-                verifyAllFnAction(
-                    session,
-                    goToDefFromMainTs,
-                    dependencyMap,
-                    documentPositionMapper,
-                    /*existingMapEqual*/ true,
-                    /*existingDocumentPositionMapperEqual*/ true,
-                );
-                verifyAllFnAction(
-                    session,
-                    renameFromDependencyTsWithDependencyChange,
-                    dependencyMap,
-                    documentPositionMapper,
-                    /*existingMapEqual*/ true,
-                    /*existingDocumentPositionMapperEqual*/ true,
-                );
+                verifyAllFnAction(session, goToDefFromMainTs);
+                verifyAllFnAction(session, renameFromDependencyTsWithDependencyChange);
                 baselineTsserverLogs("projectReferencesSourcemap", "dependencyAndUsage/configWithReference/dependency source changes with timeout before request", session);
             });
             it(`when defining project source changes, when timeout does not occur before request`, () => {
                 // Create DocumentPositionMapper
-                const { session, dependencyMap, documentPositionMapper } = setupWithAction();
+                const session = setupWithAction();
 
                 // change
                 // Make change, without rebuild of solution
@@ -2698,22 +1613,8 @@ ${dependencyTs.content}`,
                 });
 
                 // action
-                verifyAllFnAction(
-                    session,
-                    goToDefFromMainTs,
-                    dependencyMap,
-                    documentPositionMapper,
-                    /*existingMapEqual*/ true,
-                    /*existingDocumentPositionMapperEqual*/ true,
-                );
-                verifyAllFnAction(
-                    session,
-                    renameFromDependencyTsWithDependencyChange,
-                    dependencyMap,
-                    documentPositionMapper,
-                    /*existingMapEqual*/ true,
-                    /*existingDocumentPositionMapperEqual*/ true,
-                );
+                verifyAllFnAction(session, goToDefFromMainTs);
+                verifyAllFnAction(session, renameFromDependencyTsWithDependencyChange);
                 baselineTsserverLogs("projectReferencesSourcemap", "dependencyAndUsage/configWithReference/dependency source changes", session);
             });
 
@@ -2721,22 +1622,8 @@ ${dependencyTs.content}`,
                 const host = createServerHost(files);
                 const session = new TestSession(host);
                 openFilesForSession([mainTs, dependencyTs, randomFile], session);
-                verifyAllFnAction(
-                    session,
-                    goToDefFromMainTs,
-                    /*existingDependencyMap*/ undefined,
-                    /*existingDocumentPositionMapper*/ undefined,
-                    /*existingMapEqual*/ true,
-                    /*existingDocumentPositionMapperEqual*/ true,
-                );
-                verifyAllFnAction(
-                    session,
-                    renameFromDependencyTs,
-                    /*existingDependencyMap*/ undefined,
-                    /*existingDocumentPositionMapper*/ undefined,
-                    /*existingMapEqual*/ true,
-                    /*existingDocumentPositionMapperEqual*/ true,
-                );
+                verifyAllFnAction(session, goToDefFromMainTs);
+                verifyAllFnAction(session, renameFromDependencyTs);
                 verifyScriptInfoCollectionWith(session, [mainTs, dependencyTs]);
                 baselineTsserverLogs("projectReferencesSourcemap", "dependencyAndUsage/configWithReference/when projects are not built", session);
             });
@@ -2751,24 +1638,9 @@ ${dependencyTs.content}`,
             }
 
             it("goto Definition in usage and rename locations from defining project", () => {
-                const { session } = setup();
-                verifyAllFnAction(
-                    session,
-                    goToDefFromMainTs,
-                    /*existingDependencyMap*/ undefined,
-                    /*existingDocumentPositionMapper*/ undefined,
-                    /*existingMapEqual*/ false,
-                    /*existingDocumentPositionMapperEqual*/ false,
-                );
-                const { dependencyMap, documentPositionMapper } = getDocumentPositionMapper(session);
-                verifyAllFnAction(
-                    session,
-                    renameFromDependencyTs,
-                    dependencyMap,
-                    documentPositionMapper,
-                    /*existingMapEqual*/ true,
-                    /*existingDocumentPositionMapperEqual*/ true,
-                );
+                const session = setup();
+                verifyAllFnAction(session, goToDefFromMainTs);
+                verifyAllFnAction(session, renameFromDependencyTs);
                 verifyScriptInfoCollectionWith(session, [mainTs, dependencyTs]);
                 baselineTsserverLogs("projectReferencesSourcemap", "dependencyAndUsage/disabledSourceRef/gotoDef and rename locations", session);
             });
@@ -2776,322 +1648,146 @@ ${dependencyTs.content}`,
             // Edit
             it(`when usage file changes, document position mapper doesnt change, when timeout occurs before request`, () => {
                 // Create DocumentPositionMapper
-                const { host, session, dependencyMap, documentPositionMapper } = setupWithAction();
+                const session = setupWithAction();
 
                 // change
                 makeChangeToMainTs(session);
                 makeChangeToDependencyTs(session);
-                host.runQueuedTimeoutCallbacks();
-                verifyDocumentPositionMapperEqual(session, dependencyMap, documentPositionMapper);
+                session.host.runQueuedTimeoutCallbacks();
 
                 // action
-                verifyAllFnAction(
-                    session,
-                    goToDefFromMainTs,
-                    dependencyMap,
-                    documentPositionMapper,
-                    /*existingMapEqual*/ true,
-                    /*existingDocumentPositionMapperEqual*/ true,
-                );
-                verifyAllFnAction(
-                    session,
-                    renameFromDependencyTs,
-                    dependencyMap,
-                    documentPositionMapper,
-                    /*existingMapEqual*/ true,
-                    /*existingDocumentPositionMapperEqual*/ true,
-                );
+                verifyAllFnAction(session, goToDefFromMainTs);
+                verifyAllFnAction(session, renameFromDependencyTs);
                 baselineTsserverLogs("projectReferencesSourcemap", "dependencyAndUsage/disabledSourceRef/usage file changes with timeout before request", session);
             });
             it(`when usage file changes, document position mapper doesnt change, when timeout does not occur before request`, () => {
                 // Create DocumentPositionMapper
-                const { session, dependencyMap, documentPositionMapper } = setupWithAction();
+                const session = setupWithAction();
 
                 // change
                 makeChangeToMainTs(session);
                 makeChangeToDependencyTs(session);
 
                 // action
-                verifyAllFnAction(
-                    session,
-                    goToDefFromMainTs,
-                    dependencyMap,
-                    documentPositionMapper,
-                    /*existingMapEqual*/ true,
-                    /*existingDocumentPositionMapperEqual*/ true,
-                );
-                verifyAllFnAction(
-                    session,
-                    renameFromDependencyTs,
-                    dependencyMap,
-                    documentPositionMapper,
-                    /*existingMapEqual*/ true,
-                    /*existingDocumentPositionMapperEqual*/ true,
-                );
+                verifyAllFnAction(session, goToDefFromMainTs);
+                verifyAllFnAction(session, renameFromDependencyTs);
                 baselineTsserverLogs("projectReferencesSourcemap", "dependencyAndUsage/disabledSourceRef/usage file changes", session);
             });
 
             // Edit dts to add new fn
             it(`when dependency .d.ts changes, document position mapper doesnt change, when timeout occurs before request`, () => {
                 // Create DocumentPositionMapper
-                const { host, session, dependencyMap, documentPositionMapper } = setupWithAction();
+                const session = setupWithAction();
 
                 // change
-                changeDtsFile(host);
-                host.runQueuedTimeoutCallbacks();
-                verifyDocumentPositionMapperEqual(session, dependencyMap, documentPositionMapper);
+                changeDtsFile(session.host);
+                session.host.runQueuedTimeoutCallbacks();
 
                 // action
-                verifyAllFnAction(
-                    session,
-                    goToDefFromMainTs,
-                    dependencyMap,
-                    documentPositionMapper,
-                    /*existingMapEqual*/ true,
-                    /*existingDocumentPositionMapperEqual*/ true,
-                );
-                verifyAllFnAction(
-                    session,
-                    renameFromDependencyTs,
-                    dependencyMap,
-                    documentPositionMapper,
-                    /*existingMapEqual*/ true,
-                    /*existingDocumentPositionMapperEqual*/ true,
-                );
+                verifyAllFnAction(session, goToDefFromMainTs);
+                verifyAllFnAction(session, renameFromDependencyTs);
                 baselineTsserverLogs("projectReferencesSourcemap", "dependencyAndUsage/disabledSourceRef/dependency dts changes with timeout before request", session);
             });
             it(`when dependency .d.ts changes, document position mapper doesnt change, when timeout does not occur before request`, () => {
                 // Create DocumentPositionMapper
-                const { host, session, dependencyMap, documentPositionMapper } = setupWithAction();
+                const session = setupWithAction();
 
                 // change
-                changeDtsFile(host);
+                changeDtsFile(session.host);
 
                 // action
-                verifyAllFnAction(
-                    session,
-                    goToDefFromMainTs,
-                    dependencyMap,
-                    documentPositionMapper,
-                    /*existingMapEqual*/ true,
-                    /*existingDocumentPositionMapperEqual*/ true,
-                );
-                verifyAllFnAction(
-                    session,
-                    renameFromDependencyTs,
-                    dependencyMap,
-                    documentPositionMapper,
-                    /*existingMapEqual*/ true,
-                    /*existingDocumentPositionMapperEqual*/ true,
-                );
+                verifyAllFnAction(session, goToDefFromMainTs);
+                verifyAllFnAction(session, renameFromDependencyTs);
                 baselineTsserverLogs("projectReferencesSourcemap", "dependencyAndUsage/disabledSourceRef/dependency dts changes", session);
             });
 
             // Edit map file to represent added new line
             it(`when dependency file's map changes, when timeout occurs before request`, () => {
                 // Create DocumentPositionMapper
-                const { host, session, dependencyMap, documentPositionMapper } = setupWithAction();
+                const session = setupWithAction();
 
                 // change
-                changeDtsMapFile(host);
-                host.runQueuedTimeoutCallbacks();
-                verifyDocumentPositionMapperEqual(session, dependencyMap, documentPositionMapper);
+                changeDtsMapFile(session.host);
+                session.host.runQueuedTimeoutCallbacks();
 
                 // action
-                verifyAllFnAction(
-                    session,
-                    goToDefFromMainTs,
-                    dependencyMap,
-                    documentPositionMapper,
-                    /*existingMapEqual*/ true,
-                    /*existingDocumentPositionMapperEqual*/ false,
-                );
-                const { documentPositionMapper: newDocumentPositionMapper } = getDocumentPositionMapper(session);
-                verifyAllFnAction(
-                    session,
-                    renameFromDependencyTs,
-                    dependencyMap,
-                    newDocumentPositionMapper,
-                    /*existingMapEqual*/ true,
-                    /*existingDocumentPositionMapperEqual*/ true,
-                );
+                verifyAllFnAction(session, goToDefFromMainTs);
+                verifyAllFnAction(session, renameFromDependencyTs);
                 baselineTsserverLogs("projectReferencesSourcemap", "dependencyAndUsage/disabledSourceRef/dependency dtsMap changes with timeout before request", session);
             });
             it(`when dependency file's map changes, when timeout does not occur before request`, () => {
                 // Create DocumentPositionMapper
-                const { host, session, dependencyMap, documentPositionMapper } = setupWithAction();
+                const session = setupWithAction();
 
                 // change
-                changeDtsMapFile(host);
+                changeDtsMapFile(session.host);
 
                 // action
-                verifyAllFnAction(
-                    session,
-                    goToDefFromMainTs,
-                    dependencyMap,
-                    documentPositionMapper,
-                    /*existingMapEqual*/ true,
-                    /*existingDocumentPositionMapperEqual*/ false,
-                );
-                const { documentPositionMapper: newDocumentPositionMapper } = getDocumentPositionMapper(session);
-                verifyAllFnAction(
-                    session,
-                    renameFromDependencyTs,
-                    dependencyMap,
-                    newDocumentPositionMapper,
-                    /*existingMapEqual*/ true,
-                    /*existingDocumentPositionMapperEqual*/ true,
-                );
+                verifyAllFnAction(session, goToDefFromMainTs);
+                verifyAllFnAction(session, renameFromDependencyTs);
                 baselineTsserverLogs("projectReferencesSourcemap", "dependencyAndUsage/disabledSourceRef/dependency dtsMap changes", session);
             });
 
             it(`with depedency files map file, when file is not present`, () => {
-                const { session } = setup(host => host.deleteFile(dtsMapLocation));
+                const session = setup(host => host.deleteFile(dtsMapLocation));
 
-                verifyAllFnAction(
-                    session,
-                    goToDefFromMainTs,
-                    /*existingDependencyMap*/ undefined,
-                    /*existingDocumentPositionMapper*/ undefined,
-                    /*existingMapEqual*/ true,
-                    /*existingDocumentPositionMapperEqual*/ true,
-                );
-                verifyAllFnAction(
-                    session,
-                    renameFromDependencyTs,
-                    /*existingDependencyMap*/ undefined,
-                    /*existingDocumentPositionMapper*/ undefined,
-                    /*existingMapEqual*/ true,
-                    /*existingDocumentPositionMapperEqual*/ true,
-                );
+                verifyAllFnAction(session, goToDefFromMainTs);
+                verifyAllFnAction(session, renameFromDependencyTs);
                 verifyScriptInfoCollectionWith(session, [mainTs, dependencyTs]);
                 baselineTsserverLogs("projectReferencesSourcemap", "dependencyAndUsage/disabledSourceRef/dependency dtsMap not present", session);
             });
             it(`with depedency files map file, when file is created after actions on projects`, () => {
                 let fileContents: string;
-                const { host, session, dependencyMap, documentPositionMapper } = setupWithAction(host => {
+                const session = setupWithAction(host => {
                     fileContents = host.readFile(dtsMapLocation)!;
                     host.deleteFile(dtsMapLocation);
                 });
 
-                host.writeFile(dtsMapLocation, fileContents!);
-                verifyAllFnAction(
-                    session,
-                    goToDefFromMainTs,
-                    dependencyMap,
-                    documentPositionMapper,
-                    /*existingMapEqual*/ false,
-                    /*existingDocumentPositionMapperEqual*/ false,
-                );
-                const { dependencyMap: newDependencyMap, documentPositionMapper: newDocumentPositionMapper } = getDocumentPositionMapper(session);
-                verifyAllFnAction(
-                    session,
-                    renameFromDependencyTs,
-                    newDependencyMap,
-                    newDocumentPositionMapper,
-                    /*existingMapEqual*/ true,
-                    /*existingDocumentPositionMapperEqual*/ true,
-                );
+                session.host.writeFile(dtsMapLocation, fileContents!);
+                verifyAllFnAction(session, goToDefFromMainTs);
+                verifyAllFnAction(session, renameFromDependencyTs);
                 verifyScriptInfoCollectionWith(session, [mainTs, dependencyTs]);
                 baselineTsserverLogs("projectReferencesSourcemap", "dependencyAndUsage/disabledSourceRef/dependency dtsMap created", session);
             });
             it(`with depedency files map file, when file is deleted after actions on the projects`, () => {
-                const { host, session, dependencyMap, documentPositionMapper } = setupWithAction();
+                const session = setupWithAction();
 
                 // The dependency file is deleted when orphan files are collected
-                host.deleteFile(dtsMapLocation);
-                verifyAllFnAction(
-                    session,
-                    goToDefFromMainTs,
-                    dependencyMap,
-                    documentPositionMapper,
-                    /*existingMapEqual*/ false,
-                    /*existingDocumentPositionMapperEqual*/ false,
-                );
-                const { dependencyMap: newDependencyMap, documentPositionMapper: newDocumentPositionMapper } = getDocumentPositionMapper(session);
-                verifyAllFnAction(
-                    session,
-                    renameFromDependencyTs,
-                    newDependencyMap,
-                    newDocumentPositionMapper,
-                    /*existingMapEqual*/ true,
-                    /*existingDocumentPositionMapperEqual*/ true,
-                );
+                session.host.deleteFile(dtsMapLocation);
+                verifyAllFnAction(session, goToDefFromMainTs);
+                verifyAllFnAction(session, renameFromDependencyTs);
                 verifyScriptInfoCollectionWith(session, [mainTs, dependencyTs]);
                 baselineTsserverLogs("projectReferencesSourcemap", "dependencyAndUsage/disabledSourceRef/dependency dtsMap deleted", session);
             });
 
             it(`with depedency .d.ts file, when file is not present`, () => {
-                const { session } = setup(host => host.deleteFile(dtsLocation));
+                const session = setup(host => host.deleteFile(dtsLocation));
 
-                verifyAllFnAction(
-                    session,
-                    goToDefFromMainTs,
-                    /*existingDependencyMap*/ undefined,
-                    /*existingDocumentPositionMapper*/ undefined,
-                    /*existingMapEqual*/ true,
-                    /*existingDocumentPositionMapperEqual*/ true,
-                );
-                verifyAllFnAction(
-                    session,
-                    renameFromDependencyTs,
-                    /*existingDependencyMap*/ undefined,
-                    /*existingDocumentPositionMapper*/ undefined,
-                    /*existingMapEqual*/ true,
-                    /*existingDocumentPositionMapperEqual*/ true,
-                );
+                verifyAllFnAction(session, goToDefFromMainTs);
+                verifyAllFnAction(session, renameFromDependencyTs);
                 verifyScriptInfoCollectionWith(session, [mainTs, dependencyTs]);
                 baselineTsserverLogs("projectReferencesSourcemap", "dependencyAndUsage/disabledSourceRef/dependency dts not present", session);
             });
             it(`with depedency .d.ts file, when file is created after actions on projects`, () => {
                 let fileContents: string;
-                const { host, session, dependencyMap, documentPositionMapper } = setupWithAction(host => {
+                const session = setupWithAction(host => {
                     fileContents = host.readFile(dtsLocation)!;
                     host.deleteFile(dtsLocation);
                 });
 
-                host.writeFile(dtsLocation, fileContents!);
-                verifyAllFnAction(
-                    session,
-                    goToDefFromMainTs,
-                    dependencyMap,
-                    documentPositionMapper,
-                    /*existingMapEqual*/ false,
-                    /*existingDocumentPositionMapperEqual*/ false,
-                );
-                const { dependencyMap: newDependencyMap, documentPositionMapper: newDocumentPositionMapper } = getDocumentPositionMapper(session);
-                verifyAllFnAction(
-                    session,
-                    renameFromDependencyTs,
-                    newDependencyMap,
-                    newDocumentPositionMapper,
-                    /*existingMapEqual*/ true,
-                    /*existingDocumentPositionMapperEqual*/ true,
-                );
+                session.host.writeFile(dtsLocation, fileContents!);
+                verifyAllFnAction(session, goToDefFromMainTs);
+                verifyAllFnAction(session, renameFromDependencyTs);
                 verifyScriptInfoCollectionWith(session, [mainTs, dependencyTs]);
                 baselineTsserverLogs("projectReferencesSourcemap", "dependencyAndUsage/disabledSourceRef/dependency dts created", session);
             });
             it(`with depedency .d.ts file, when file is deleted after actions on the projects`, () => {
-                const { host, session, dependencyMap, documentPositionMapper } = setupWithAction();
+                const session = setupWithAction();
 
                 // The dependency file is deleted when orphan files are collected
-                host.deleteFile(dtsLocation);
-                verifyAllFnAction(
-                    session,
-                    goToDefFromMainTs,
-                    dependencyMap,
-                    documentPositionMapper,
-                    /*existingMapEqual*/ true,
-                    /*existingDocumentPositionMapperEqual*/ true,
-                );
-                verifyAllFnAction(
-                    session,
-                    renameFromDependencyTs,
-                    dependencyMap,
-                    documentPositionMapper,
-                    /*existingMapEqual*/ true,
-                    /*existingDocumentPositionMapperEqual*/ true,
-                );
+                session.host.deleteFile(dtsLocation);
+                verifyAllFnAction(session, goToDefFromMainTs);
+                verifyAllFnAction(session, renameFromDependencyTs);
                 verifyScriptInfoCollectionWith(session, [mainTs, dependencyTs]);
                 baselineTsserverLogs("projectReferencesSourcemap", "dependencyAndUsage/disabledSourceRef/dependency dts deleted", session);
             });
