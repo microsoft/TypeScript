@@ -2213,7 +2213,7 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
     }
 
     /** @internal */
-    updateTargetFile(rootFile: string, targetFileText: string, pastedText: string): { updatedFile: SourceFile | undefined, updatedProgram: Program | undefined, originalProgram: ts.Program | undefined } {
+    updateTargetFile(rootFile: string, targetFileText: string, pastedText: string): { updatedFile: SourceFile | undefined; updatedProgram: Program | undefined; originalProgram: ts.Program | undefined; } {
         const originalProgram = this.program;
         this.getScriptInfo(rootFile)?.editContent(0, targetFileText.length, pastedText);
         this.updateGraph();

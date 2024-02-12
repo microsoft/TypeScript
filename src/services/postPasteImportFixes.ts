@@ -1,43 +1,91 @@
-import { addRange, append } from "../compiler/core";
-import { AnyImportOrRequireStatement, CancellationToken, Identifier, ModifierFlags, Program, SourceFile, Statement, SymbolFlags,TextRange, TypeChecker, UserPreferences } from "../compiler/types";
-import { hasSyntacticModifier, skipAlias } from "../compiler/utilities";
-import { codefix, Debug, factory, fileShouldUseJavaScriptRequire, forEachChild, formatting, getQuotePreference, insertImports, isIdentifier,nodeSeenTracker, Symbol, textChanges } from "./_namespaces/ts";
-import { addExportToChanges, filterImport, forEachImportInStatement, getExistingLocals, getTopLevelDeclarationStatement, getUsageInfo, isTopLevelDeclaration, makeImportOrRequire, moduleSpecifierFromImport, nameOfTopLevelDeclaration } from "./refactors/moveToFile";
-import { CodeFixContextBase, FileTextChanges, LanguageServiceHost, PostPasteImportFixes } from "./types";
+import {
+    addRange,
+    append,
+} from "../compiler/core";
+import {
+    AnyImportOrRequireStatement,
+    CancellationToken,
+    Identifier,
+    ModifierFlags,
+    Program,
+    SourceFile,
+    Statement,
+    SymbolFlags,
+    TextRange,
+    TypeChecker,
+    UserPreferences,
+} from "../compiler/types";
+import {
+    hasSyntacticModifier,
+    skipAlias,
+} from "../compiler/utilities";
+import {
+    codefix,
+    Debug,
+    factory,
+    fileShouldUseJavaScriptRequire,
+    forEachChild,
+    formatting,
+    getQuotePreference,
+    insertImports,
+    isIdentifier,
+    nodeSeenTracker,
+    Symbol,
+    textChanges,
+} from "./_namespaces/ts";
+import {
+    addExportToChanges,
+    filterImport,
+    forEachImportInStatement,
+    getExistingLocals,
+    getTopLevelDeclarationStatement,
+    getUsageInfo,
+    isTopLevelDeclaration,
+    makeImportOrRequire,
+    moduleSpecifierFromImport,
+    nameOfTopLevelDeclaration,
+} from "./refactors/moveToFile";
+import {
+    CodeFixContextBase,
+    FileTextChanges,
+    LanguageServiceHost,
+    PostPasteImportFixes,
+} from "./types";
 
 /** @internal */
 export function postPasteImportFixesProvider(
-    targetFile: SourceFile, 
+    targetFile: SourceFile,
     host: LanguageServiceHost,
-    pastes: { text: string; range: TextRange }[],
+    pastes: { text: string; range: TextRange; }[],
     preferences: UserPreferences,
     formatContext: formatting.FormatContext,
     cancellationToken: CancellationToken,
     originalFile?: SourceFile,
-    copyLocation?: { file: string, start: { line: number, offset: number }, end: { line: number, offset: number }}): PostPasteImportFixes {
-
+    copyLocation?: { file: string; start: { line: number; offset: number; }; end: { line: number; offset: number; }; },
+): PostPasteImportFixes {
     const changes: FileTextChanges[] = textChanges.ChangeTracker.with({ host, formatContext, preferences }, changeTracker => postPasteFixes(targetFile, host, pastes, preferences, formatContext, cancellationToken, changeTracker, originalFile, copyLocation));
 
-    return { edits: changes }; 
+    return { edits: changes };
 }
 
-function postPasteFixes (
-    targetFile: SourceFile, 
+function postPasteFixes(
+    targetFile: SourceFile,
     host: LanguageServiceHost,
-    pastes: { text: string; range: TextRange }[],
+    pastes: { text: string; range: TextRange; }[],
     preferences: UserPreferences,
     formatContext: formatting.FormatContext,
     cancellationToken: CancellationToken,
     changes: textChanges.ChangeTracker,
     originalFile?: SourceFile,
-    copyLocation?: { file: string, start: { line: number, offset: number }, end: { line: number, offset: number }}) {
+    copyLocation?: { file: string; start: { line: number; offset: number; }; end: { line: number; offset: number; }; },
+) {
     const updatedTargetFile = host.updateTargetFile?.(targetFile.fileName, targetFile.getText(), targetFile.getText().slice(0, pastes[0].range.pos) + pastes[0].text + targetFile.getText().slice(pastes[0].range.end));
     const statements: Statement[] = [];
     Debug.assert(updatedTargetFile && updatedTargetFile.updatedFile && updatedTargetFile.originalProgram && updatedTargetFile.updatedProgram);
-    
+
     if (originalFile) {
-        addRange(statements, originalFile.statements, copyLocation?.start.line, copyLocation ? copyLocation.end.line + 1 : undefined); 
-        const usage = getUsageInfo(originalFile, statements, updatedTargetFile.originalProgram.getTypeChecker(), getExistingLocals(updatedTargetFile.updatedFile, statements, updatedTargetFile.originalProgram.getTypeChecker())); 
+        addRange(statements, originalFile.statements, copyLocation?.start.line, copyLocation ? copyLocation.end.line + 1 : undefined);
+        const usage = getUsageInfo(originalFile, statements, updatedTargetFile.originalProgram.getTypeChecker(), getExistingLocals(updatedTargetFile.updatedFile, statements, updatedTargetFile.originalProgram.getTypeChecker()));
         const importAdder = codefix.createImportAdder(updatedTargetFile.updatedFile, updatedTargetFile.updatedProgram, preferences, host);
 
         const imports = getImportsFromKnownOriginalFile(originalFile, targetFile, updatedTargetFile.updatedProgram, importAdder, usage.oldImportsNeededByTargetFile, usage.targetFileImportsFromOldFile, changes, preferences, host, updatedTargetFile.originalProgram.getTypeChecker());
@@ -45,7 +93,7 @@ function postPasteFixes (
             insertImports(changes, targetFile, imports, /*blankLineBetween*/ true, preferences);
         }
         importAdder.writeFixes(changes, getQuotePreference(originalFile, preferences));
-        host.revertUpdatedFile?.(targetFile.fileName, updatedTargetFile.updatedFile.text, targetFile.text); 
+        host.revertUpdatedFile?.(targetFile.fileName, updatedTargetFile.updatedFile.text, targetFile.text);
     }
     else {
         const context: CodeFixContextBase = {
@@ -53,14 +101,14 @@ function postPasteFixes (
             program: updatedTargetFile.originalProgram,
             cancellationToken,
             host,
-            preferences, 
-            formatContext
-        }
+            preferences,
+            formatContext,
+        };
         const importAdder = codefix.createImportAdder(updatedTargetFile.updatedFile, updatedTargetFile.updatedProgram, preferences, host);
         forEachChild(updatedTargetFile.updatedFile, function cb(node) {
             if (isIdentifier(node)) {
                 if (!updatedTargetFile.originalProgram?.getTypeChecker().resolveName(node.text, node, SymbolFlags.All, /*excludeGlobals*/ false)) {
-                    //generate imports
+                    // generate imports
                     importAdder.addImportsForUnknownSymbols(context, node, /*useAutoImportProvider*/ true);
                 }
             }
@@ -71,7 +119,7 @@ function postPasteFixes (
         importAdder.writeFixes(changes, getQuotePreference(targetFile, preferences));
         host.revertUpdatedFile?.(targetFile.fileName, updatedTargetFile.updatedFile.text, targetFile.text);
     }
-    pastes.forEach(({ text, range}) => {
+    pastes.forEach(({ text, range }) => {
         range.pos === range.end ? changes.replaceRangeWithText(targetFile, { pos: range.pos, end: range.end }, text) : changes.replaceRangeWithText(targetFile, { pos: range.pos, end: range.end }, text);
     });
 }
@@ -86,7 +134,8 @@ function getImportsFromKnownOriginalFile(
     changes: textChanges.ChangeTracker,
     preferences: UserPreferences,
     host: LanguageServiceHost,
-    checker: TypeChecker) {
+    checker: TypeChecker,
+) {
     const copiedOldImports: AnyImportOrRequireStatement[] = [];
     importsToCopy.forEach((isValidTypeOnlyUseSite, symbol) => {
         try {
@@ -134,5 +183,5 @@ function getImportsFromKnownOriginalFile(
         }
     });
 
-    return append(copiedOldImports, makeImportOrRequire(targetFile, oldFileDefault, oldFileNamedImports, originalFile.fileName, program, host, useEsModuleSyntax, quotePreference))
+    return append(copiedOldImports, makeImportOrRequire(targetFile, oldFileDefault, oldFileNamedImports, originalFile.fileName, program, host, useEsModuleSyntax, quotePreference));
 }

@@ -1,0 +1,47 @@
+typescript.d.ts(10425,55): error TS2304: Cannot find name 'SymbolExportInfo'.
+typescript.d.ts(10426,90): error TS2304: Cannot find name 'SymbolExportInfo'.
+typescript.d.ts(10426,120): error TS2304: Cannot find name 'FixAddToExistingImportInfo'.
+typescript.d.ts(10438,38): error TS2304: Cannot find name 'PackageJsonImportFilter'.
+typescript.d.ts(10443,45): error TS2552: Cannot find name 'FixUseNamespaceImport'. Did you mean 'NamespaceImport'?
+typescript.d.ts(10443,69): error TS2304: Cannot find name 'FixAddJsdocTypeImport'.
+typescript.d.ts(10443,93): error TS2304: Cannot find name 'FixAddToExistingImport'.
+typescript.d.ts(10443,118): error TS2304: Cannot find name 'FixAddNewImport'.
+typescript.d.ts(10445,27): error TS2304: Cannot find name 'ImportFix'.
+typescript.internal.d.ts(25311,120): error TS2304: Cannot find name 'FixAddToExistingImportInfo'.
+typescript.internal.d.ts(25365,45): error TS2304: Cannot find name 'FixUseNamespaceImport'.
+typescript.internal.d.ts(25365,69): error TS2304: Cannot find name 'FixAddJsdocTypeImport'.
+typescript.internal.d.ts(25365,93): error TS2304: Cannot find name 'FixAddToExistingImport'.
+typescript.internal.d.ts(25365,118): error TS2304: Cannot find name 'FixAddNewImport'.
+typescript.internal.d.ts(25367,27): error TS2304: Cannot find name 'ImportFix'.
+
+
+==== index.ts (0 errors) ====
+    import ts = require("typescript");
+    import tsInternal = require("typescript-internal");
+    import tsserverlibrary = require("tsserverlibrary");
+    import tsserverlibraryInternal = require("tsserverlibrary-internal");
+    
+==== node_modules/typescript/package.json (0 errors) ====
+    {
+        "name": "typescript",
+        "types": "/.ts/typescript.d.ts"
+    }
+    
+==== node_modules/typescript-internal/package.json (0 errors) ====
+    {
+        "name": "typescript-internal",
+        "types": "/.ts/typescript.internal.d.ts"
+    }
+    
+==== node_modules/tsserverlibrary/package.json (0 errors) ====
+    {
+        "name": "tsserverlibrary",
+        "types": "/.ts/tsserverlibrary.d.ts"
+    }
+    
+==== node_modules/tsserverlibrary-internal/package.json (0 errors) ====
+    {
+        "name": "tsserverlibrary-internal",
+        "types": "/.ts/tsserverlibrary.internal.d.ts"
+    }
+    

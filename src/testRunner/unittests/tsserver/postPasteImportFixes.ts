@@ -12,11 +12,11 @@ import {
 describe("unittests:: tsserver:: postPasteImportFixes", () => {
     it("returns the same file unchanged, after updating and reverting changes added to a file", () => {
         const target: File = {
-            path : "/project/a/target.ts",
+            path: "/project/a/target.ts",
             content: `const a = 1;
 const b = 2;
 const c = 3;`,
-        }
+        };
         const tsconfig: File = {
             path: "/project/tsconfig.json",
             content: "{}",
@@ -33,10 +33,10 @@ const c = 3;`;
 
         const originalContent = target.content;
         const originalProgram = session.getProjectService().configuredProjects.get(tsconfig.path)!.getLanguageService().getProgram();
-        
+
         const hostProject = session.getProjectService().configuredProjects.get(tsconfig.path)!;
         const updatedContent = hostProject.updateTargetFile(target.path, target.content, pastedText);
-        
+
         if (updatedContent.updatedFile !== undefined) {
             hostProject.revertUpdatedFile(target.path, updatedContent.updatedFile.getText(), originalContent);
         }

@@ -2799,8 +2799,8 @@ export class Session<TMessage = string> implements EventSender {
 
     private getPostPasteImportFixes(args: protocol.GetPostPasteImportFixesRequestArgs): protocol.PostPasteImportAction | undefined {
         const { file, project } = this.getFileAndProject(args);
-        const pastes = arrayFrom(args.pastes).map(paste => ({text: paste.text, range: this.getRange({ file, startLine: paste.range.start.line, startOffset: paste.range.start.offset, endLine: paste.range.end.line, endOffset: paste.range.end.offset }, project.getScriptInfoForNormalizedPath(file)!)}))
-        const result = project.getLanguageService().getPostPasteImportFixes( file, pastes, this.getPreferences(file), this.getFormatOptions(file), args.copySpan);
+        const pastes = arrayFrom(args.pastes).map(paste => ({ text: paste.text, range: this.getRange({ file, startLine: paste.range.start.line, startOffset: paste.range.start.offset, endLine: paste.range.end.line, endOffset: paste.range.end.offset }, project.getScriptInfoForNormalizedPath(file)!) }));
+        const result = project.getLanguageService().getPostPasteImportFixes(file, pastes, this.getPreferences(file), this.getFormatOptions(file), args.copySpan);
         if (result === undefined) {
             return undefined;
         }
@@ -2941,7 +2941,7 @@ export class Session<TMessage = string> implements EventSender {
     }
 
     private mapPostPasteAction({ edits }: PostPasteImportFixes): protocol.PostPasteImportAction {
-        return { edits: this.mapTextChangesToCodeEdits(edits)};
+        return { edits: this.mapTextChangesToCodeEdits(edits) };
     }
 
     private mapTextChangesToCodeEdits(textChanges: readonly FileTextChanges[]): protocol.FileCodeEdits[] {

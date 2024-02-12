@@ -161,6 +161,7 @@ declare namespace ts {
                 GetApplicableRefactors = "getApplicableRefactors",
                 GetEditsForRefactor = "getEditsForRefactor",
                 GetMoveToRefactoringFileSuggestions = "getMoveToRefactoringFileSuggestions",
+                GetPostPasteImportFixes = "getPostPasteImportFixes",
                 OrganizeImports = "organizeImports",
                 GetEditsForFileRename = "getEditsForFileRename",
                 ConfigurePlugin = "configurePlugin",
@@ -544,6 +545,26 @@ declare namespace ts {
                     newFileName: string;
                     files: string[];
                 };
+            }
+            /**
+             * Request refactorings at a given position post pasting text from some other location.
+             */
+            interface GetPostPasteImportFixesRequest extends Request {
+                command: CommandTypes.GetPostPasteImportFixes;
+                arguments: GetPostPasteImportFixesRequestArgs;
+            }
+            type GetPostPasteImportFixesRequestArgs = FileRequestArgs & {
+                pastes: {
+                    text: string;
+                    range: TextSpan;
+                }[];
+                copySpan?: FileSpan;
+            };
+            interface GetPostPasteImportFixesResponse extends Response {
+                body: PostPasteImportAction;
+            }
+            interface PostPasteImportAction {
+                edits: FileCodeEdits[];
             }
             /**
              * A set of one or more available refactoring actions, grouped under a parent refactoring.
@@ -4100,6 +4121,7 @@ declare namespace ts {
             private getApplicableRefactors;
             private getEditsForRefactor;
             private getMoveToRefactoringFileSuggestions;
+            private getPostPasteImportFixes;
             private organizeImports;
             private getEditsForFileRename;
             private getCodeFixes;
@@ -4108,6 +4130,7 @@ declare namespace ts {
             private getStartAndEndPosition;
             private mapCodeAction;
             private mapCodeFixAction;
+            private mapPostPasteAction;
             private mapTextChangesToCodeEdits;
             private mapTextChangeToCodeEdit;
             private convertTextChangeToCodeEdit;
@@ -10398,6 +10421,33 @@ declare namespace ts {
             readDirectory(rootDir: string, extensions: readonly string[], excludes: readonly string[] | undefined, includes: readonly string[] | undefined, depth?: number): string[];
         }
     }
+    namespace codefix {
+        function getImportFixes(exportInfos: readonly SymbolExportInfo[], usagePosition: number | undefined, isValidTypeOnlyUseSite: boolean, useRequire: boolean, program: Program, sourceFile: SourceFile, host: LanguageServiceHost, preferences: UserPreferences, importMap?: {
+            getImportsForExportInfo: ({ moduleSymbol, exportKind, targetFlags, symbol }: SymbolExportInfo) => readonly FixAddToExistingImportInfo[];
+        }, fromCacheOnly?: boolean): {
+            computedWithoutCacheCount: number;
+            fixes: readonly ImportFixWithModuleSpecifier[];
+        };
+        function shouldUseRequire(sourceFile: SourceFile, program: Program): boolean;
+        function sortFixInfo(
+            fixes: readonly (FixInfo & {
+                fix: ImportFixWithModuleSpecifier;
+            })[],
+            sourceFile: SourceFile,
+            program: Program,
+            packageJsonImportFilter: PackageJsonImportFilter,
+            host: LanguageServiceHost,
+        ): readonly (FixInfo & {
+            fix: ImportFixWithModuleSpecifier;
+        })[];
+        type ImportFixWithModuleSpecifier = FixUseNamespaceImport | FixAddJsdocTypeImport | FixAddToExistingImport | FixAddNewImport;
+        interface FixInfo {
+            readonly fix: ImportFix;
+            readonly symbolName: string;
+            readonly errorIdentifierText: string | undefined;
+            readonly isJsxNamespaceFix?: boolean;
+        }
+    }
     function getDefaultFormatCodeSettings(newLineCharacter?: string): FormatCodeSettings;
     /**
      * Represents an immutable snapshot of a script at a specified time.Once acquired, the
@@ -10672,6 +10722,26 @@ declare namespace ts {
         uncommentSelection(fileName: string, textRange: TextRange): TextChange[];
         getSupportedCodeFixes(fileName?: string): readonly string[];
         dispose(): void;
+        getPostPasteImportFixes(
+            targetFile: string,
+            pastes: {
+                text: string;
+                range: TextRange;
+            }[],
+            preferences: UserPreferences,
+            formatOptions: FormatCodeSettings,
+            copySpan?: {
+                file: string;
+                start: {
+                    line: number;
+                    offset: number;
+                };
+                end: {
+                    line: number;
+                    offset: number;
+                };
+            },
+        ): PostPasteImportFixes;
     }
     interface JsxClosingTagInfo {
         readonly newText: string;
@@ -10688,6 +10758,9 @@ declare namespace ts {
         All = "All",
         SortAndCombine = "SortAndCombine",
         RemoveUnused = "RemoveUnused",
+    }
+    interface PostPasteImportFixes {
+        edits: readonly FileTextChanges[];
     }
     interface OrganizeImportsArgs extends CombinedCodeFixScope {
         /** @deprecated Use `mode` instead */

@@ -2091,16 +2091,16 @@ export function createLanguageService(
         };
     }
 
-    function getPostPasteImportFixes (
+    function getPostPasteImportFixes(
         targetFile: string,
-        pastes: { text: string; range: TextRange }[],
+        pastes: { text: string; range: TextRange; }[],
         preferences: UserPreferences,
         formatOptions: FormatCodeSettings,
-        copySpan?: { file: string, start: { line: number, offset: number }, end: { line: number, offset: number }}
-        ): PostPasteImportFixes{
+        copySpan?: { file: string; start: { line: number; offset: number; }; end: { line: number; offset: number; }; },
+    ): PostPasteImportFixes {
         synchronizeHostData();
         const originalSourceFile = copySpan ? getValidSourceFile(copySpan.file) : undefined;
-        const edits = postPasteImportFixes.postPasteImportFixesProvider(getValidSourceFile(targetFile), host, pastes, preferences, formatting.getFormatContext(formatOptions, host),cancellationToken, originalSourceFile, copySpan);
+        const edits = postPasteImportFixes.postPasteImportFixesProvider(getValidSourceFile(targetFile), host, pastes, preferences, formatting.getFormatContext(formatOptions, host), cancellationToken, originalSourceFile, copySpan);
         return edits;
     }
 
@@ -3175,7 +3175,7 @@ export function createLanguageService(
         uncommentSelection,
         provideInlayHints,
         getSupportedCodeFixes,
-        getPostPasteImportFixes
+        getPostPasteImportFixes,
     };
 
     switch (languageServiceMode) {
