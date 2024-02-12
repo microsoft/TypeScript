@@ -4388,7 +4388,6 @@ declare namespace Intl {
         numeric?: boolean | undefined;
         caseFirst?: "upper" | "lower" | "false" | undefined;
         sensitivity?: "base" | "accent" | "case" | "variant" | undefined;
-        collation?: string | undefined;
         ignorePunctuation?: boolean | undefined;
     }
 
@@ -4398,8 +4397,8 @@ declare namespace Intl {
         sensitivity: string;
         ignorePunctuation: boolean;
         collation: string;
-        caseFirst: string;
-        numeric: boolean;
+        caseFirst?: string;
+        numeric?: boolean;
     }
 
     interface Collator {

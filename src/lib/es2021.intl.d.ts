@@ -1,4 +1,8 @@
 declare namespace Intl {
+    interface CollatorOptions {
+        collation?: string | undefined;
+    }
+
     interface DateTimeFormatPartTypesRegistry {
         fractionalSecond: never;
     }
