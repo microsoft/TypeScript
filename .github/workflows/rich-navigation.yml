@@ -26,12 +26,12 @@ jobs:
     steps:
       - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
 
-      - uses: actions/setup-node@8f152de45cc393bb48ce5d89d36b731f54556e65 # v4.0.0
+      - uses: actions/setup-node@b39b52d1213e96004bfcb1c61a8a6fa8ab84f3e8 # v4.0.1
 
       - name: Install dependencies
         run: npm ci
 
-      - uses: microsoft/RichCodeNavIndexer@e444937494b8941cc2bcccf2bcf2cd595d402f6b # v0.1
+      - uses: microsoft/RichCodeNavIndexer@c8b97bc908f7bc0151fe4872aa029e99b2a0b96b # v0.1
         with:
           languages: typescript
           repo-token: ${{ secrets.GITHUB_TOKEN }}

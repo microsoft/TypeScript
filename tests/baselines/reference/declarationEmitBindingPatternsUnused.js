@@ -2,6 +2,18 @@
 
 //// [declarationEmitBindingPatternsUnused.ts]
 type Named = { name: string }
+
+// Resons we can't remove aliases that are not used in the function signature: 
+
+// 1.Causes duplicate identifier if we remove alias
+function duplicateIndetifiers({ name: alias, name: alias2 }: Named) { }
+function duplicateIndetifiers2(name: string, { name: alias }: Named) { }
+function duplicateIndetifiers3({ name: alias }: Named, { name: alias2 }: Named) { }
+
+let value = "";
+// 2.Can change in meaning for typeof value if we remove alias
+function shadowedVariable({ value: alias }: { value: string }): typeof value { return value }
+
 function notReferenced({ name: alias }: Named) {
 
 }
@@ -9,8 +21,6 @@ function notReferencedNestedAlias({ p: { name: alias } }: { p: Named }) {
 }
 function notReferencedArrayAlias([a, b, { name: alias }]: Named[]) {
 }
-
-
 
 function referencedInCode({ name: alias }: Named) {
     return alias;
@@ -114,6 +124,14 @@ interface ReferencedInSignartureInterface {
 }
 
 //// [declarationEmitBindingPatternsUnused.js]
+// Resons we can't remove aliases that are not used in the function signature: 
+// 1.Causes duplicate identifier if we remove alias
+function duplicateIndetifiers({ name: alias, name: alias2 }) { }
+function duplicateIndetifiers2(name, { name: alias }) { }
+function duplicateIndetifiers3({ name: alias }, { name: alias2 }) { }
+let value = "";
+// 2.Can change in meaning for typeof value if we remove alias
+function shadowedVariable({ value: alias }) { return value; }
 function notReferenced({ name: alias }) {
 }
 function notReferencedNestedAlias({ p: { name: alias } }) {
@@ -191,12 +209,19 @@ let referencedInSignartureParamTypeCtorType;
 type Named = {
     name: string;
 };
-declare function notReferenced({ name }: Named): void;
-declare function notReferencedNestedAlias({ p: { name } }: {
+declare function duplicateIndetifiers({ name: alias, name: alias2 }: Named): void;
+declare function duplicateIndetifiers2(name: string, { name: alias }: Named): void;
+declare function duplicateIndetifiers3({ name: alias }: Named, { name: alias2 }: Named): void;
+declare let value: string;
+declare function shadowedVariable({ value: alias }: {
+    value: string;
+}): typeof value;
+declare function notReferenced({ name: alias }: Named): void;
+declare function notReferencedNestedAlias({ p: { name: alias } }: {
     p: Named;
 }): void;
-declare function notReferencedArrayAlias([a, b, { name }]: Named[]): void;
-declare function referencedInCode({ name }: Named): string;
+declare function notReferencedArrayAlias([a, b, { name: alias }]: Named[]): void;
+declare function referencedInCode({ name: alias }: Named): string;
 declare function referencedInSignarture({ name: alias }: Named): typeof alias;
 declare function referencedInSignartureKeyword({ function: alias }: {
     function: string;
@@ -210,14 +235,14 @@ declare function referencedNestedAlias({ p: { name: alias } }: {
 }): typeof alias;
 declare function referencedArrayAlias([a, b, { name: alias }]: Named[]): typeof alias;
 declare class NotReferencedClass {
-    constructor({ name }: Named);
-    set x({ name }: Named);
-    m({ name }: Named): void;
+    constructor({ name: alias }: Named);
+    set x({ name: alias }: Named);
+    m({ name: alias }: Named): void;
 }
 declare class ReferencedInCodeClas {
-    constructor({ name }: Named);
-    set x({ name }: Named);
-    m({ name }: Named): void;
+    constructor({ name: alias }: Named);
+    set x({ name: alias }: Named);
+    m({ name: alias }: Named): void;
 }
 declare class ReferencedInSignartureClass {
     constructor({ name: alias }: Named, p: typeof alias);
@@ -228,17 +253,17 @@ declare class ReferencedInSignartureClass {
     mRerturnTypeNested({ name: alias }: Named): NonNullable<typeof alias>;
     mParameter({ name: alias }: Named, p: typeof alias): any;
 }
-declare let notReferencedFnType: ({ name }: Named) => void;
+declare let notReferencedFnType: ({ name: alias }: Named) => void;
 declare let referencedInSignartureReturnTypeFnType: ({ name: alias }: Named) => typeof alias;
 declare let referencedInSignartureParamTypeFnType: ({ name: alias }: Named, p: typeof alias) => void;
-declare let notReferencedCtorType: new ({ name }: Named) => void;
+declare let notReferencedCtorType: new ({ name: alias }: Named) => void;
 declare let referencedInSignartureReturnTypeCtorType: new ({ name: alias }: Named) => typeof alias;
 declare let referencedInSignartureParamTypeCtorType: new ({ name: alias }: Named, p: typeof alias) => void;
 interface NotReferencedInterface {
-    ({ name }: Named): void;
-    new ({ name }: Named): void;
-    set x({ name }: Named);
-    m({ name }: Named): any;
+    ({ name: alias }: Named): void;
+    new ({ name: alias }: Named): void;
+    set x({ name: alias }: Named);
+    m({ name: alias }: Named): any;
 }
 interface ReferencedInSignartureInterface {
     ({ name: alias }: Named, p: typeof alias): void;

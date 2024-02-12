@@ -205,7 +205,7 @@ declare namespace ts {
             /**
              * Request to reload the project structure for all the opened files
              */
-            interface ReloadProjectsRequest extends Message {
+            interface ReloadProjectsRequest extends Request {
                 command: CommandTypes.ReloadProjects;
             }
             /**
@@ -2934,6 +2934,13 @@ declare namespace ts {
                  */
                 readonly organizeImportsCaseFirst?: "upper" | "lower" | false;
                 /**
+                 * Indicates where named type-only imports should sort. "inline" sorts named imports without regard to if the import is
+                 * type-only.
+                 *
+                 * Default: `last`
+                 */
+                readonly organizeImportsTypeOrder?: "last" | "first" | "inline";
+                /**
                  * Indicates whether {@link ReferencesResponseItem.lineText} is supported.
                  */
                 readonly disableLineTextInReferences?: boolean;
@@ -3029,10 +3036,18 @@ declare namespace ts {
                 ES6 = "ES6",
                 ES2015 = "ES2015",
                 ESNext = "ESNext",
+                Node16 = "Node16",
+                NodeNext = "NodeNext",
+                Preserve = "Preserve",
             }
             enum ModuleResolutionKind {
                 Classic = "Classic",
+                /** @deprecated Renamed to `Node10` */
                 Node = "Node",
+                Node10 = "Node10",
+                Node16 = "Node16",
+                NodeNext = "NodeNext",
+                Bundler = "Bundler",
             }
             enum NewLineKind {
                 Crlf = "Crlf",
@@ -3317,18 +3332,6 @@ declare namespace ts {
              * Last version that was reported.
              */
             private lastReportedVersion;
-            /**
-             * Current project's program version. (incremented everytime new program is created that is not complete reuse from the old one)
-             * This property is changed in 'updateGraph' based on the set of files in program
-             */
-            private projectProgramVersion;
-            /**
-             * Current version of the project state. It is changed when:
-             * - new root file was added/removed
-             * - edit happen in some file that is currently included in the project.
-             * This property is different from projectStructureVersion since in most cases edits don't affect set of files in the project
-             */
-            private projectStateVersion;
             protected projectErrors: Diagnostic[] | undefined;
             protected isInitialLoadPending: () => boolean;
             private readonly cancellationToken;
@@ -6653,6 +6656,22 @@ declare namespace ts {
         };
         isSourceFileFromExternalLibrary(file: SourceFile): boolean;
         isSourceFileDefaultLibrary(file: SourceFile): boolean;
+        /**
+         * Calculates the final resolution mode for a given module reference node. This is the resolution mode explicitly provided via import
+         * attributes, if present, or the syntax the usage would have if emitted to JavaScript. In `--module node16` or `nodenext`, this may
+         * depend on the file's `impliedNodeFormat`. In `--module preserve`, it depends only on the input syntax of the reference. In other
+         * `module` modes, when overriding import attributes are not provided, this function returns `undefined`, as the result would have no
+         * impact on module resolution, emit, or type checking.
+         */
+        getModeForUsageLocation(file: SourceFile, usage: StringLiteralLike): ResolutionMode;
+        /**
+         * Calculates the final resolution mode for an import at some index within a file's `imports` list. This is the resolution mode
+         * explicitly provided via import attributes, if present, or the syntax the usage would have if emitted to JavaScript. In
+         * `--module node16` or `nodenext`, this may depend on the file's `impliedNodeFormat`. In `--module preserve`, it depends only on the
+         * input syntax of the reference. In other `module` modes, when overriding import attributes are not provided, this function returns
+         * `undefined`, as the result would have no impact on module resolution, emit, or type checking.
+         */
+        getModeForResolutionAtIndex(file: SourceFile, index: number): ResolutionMode;
         getProjectReferences(): readonly ProjectReference[] | undefined;
         getResolvedProjectReferences(): readonly (ResolvedProjectReference | undefined)[] | undefined;
     }
@@ -6861,6 +6880,7 @@ declare namespace ts {
          * True if this type is assignable to `ReadonlyArray<any>`.
          */
         isArrayLikeType(type: Type): boolean;
+        resolveName(name: string, location: Node | undefined, meaning: SymbolFlags, excludeGlobals: boolean): Symbol | undefined;
         getTypePredicateOfSignature(signature: Signature): TypePredicate | undefined;
         /**
          * Depending on the operation performed, it may be appropriate to throw away the checker
@@ -7000,6 +7020,7 @@ declare namespace ts {
         Transient = 33554432,
         Assignment = 67108864,
         ModuleExports = 134217728,
+        All = -1,
         Enum = 384,
         Variable = 3,
         Value = 111551,
@@ -7069,6 +7090,7 @@ declare namespace ts {
         Default = "default",
         This = "this",
         InstantiationExpression = "__instantiationExpression",
+        ImportAttributes = "__importAttributes",
     }
     /**
      * This represents a string whose leading underscore have been escaped by adding extra leading underscores.
@@ -7633,6 +7655,7 @@ declare namespace ts {
         ESNext = 99,
         Node16 = 100,
         NodeNext = 199,
+        Preserve = 200,
     }
     enum JsxEmit {
         None = 0,
@@ -8784,6 +8807,7 @@ declare namespace ts {
         readonly organizeImportsNumericCollation?: boolean;
         readonly organizeImportsAccentCollation?: boolean;
         readonly organizeImportsCaseFirst?: "upper" | "lower" | false;
+        readonly organizeImportsTypeOrder?: "first" | "last" | "inline";
         readonly excludeLibrarySymbolsInNavTo?: boolean;
     }
     /** Represents a bigint literal value without requiring bigint support */
@@ -9189,6 +9213,7 @@ declare namespace ts {
     function isForInitializer(node: Node): node is ForInitializer;
     function isModuleBody(node: Node): node is ModuleBody;
     function isNamedImportBindings(node: Node): node is NamedImportBindings;
+    function isDeclarationStatement(node: Node): node is DeclarationStatement;
     function isStatement(node: Node): node is Statement;
     function isModuleReference(node: Node): node is ModuleReference;
     function isJsxTagNameExpression(node: Node): node is JsxTagNameExpression;
@@ -9208,11 +9233,13 @@ declare namespace ts {
     function isJSDocLinkLike(node: Node): node is JSDocLink | JSDocLinkCode | JSDocLinkPlain;
     function hasRestParameter(s: SignatureDeclaration | JSDocSignature): boolean;
     function isRestParameter(node: ParameterDeclaration | JSDocParameterTag): boolean;
+    function isInternalDeclaration(node: Node, sourceFile?: SourceFile): boolean;
     const unchangedTextChangeRange: TextChangeRange;
     type ParameterPropertyDeclaration = ParameterDeclaration & {
         parent: ConstructorDeclaration;
         name: Identifier;
     };
+    function isPartOfTypeNode(node: Node): boolean;
     /**
      * This function checks multiple locations for JSDoc comments that apply to a host node.
      * At each location, the whole comment may apply to the node, or only a specific tag in
@@ -9851,7 +9878,7 @@ declare namespace ts {
      * @param visitor The callback used to visit each child.
      * @param context A lexical environment context for the visitor.
      */
-    function visitEachChild<T extends Node>(node: T, visitor: Visitor, context: TransformationContext): T;
+    function visitEachChild<T extends Node>(node: T, visitor: Visitor, context: TransformationContext | undefined): T;
     /**
      * Visits each child of a Node using the supplied visitor, possibly returning a new Node of the same kind in its place.
      *
@@ -9859,7 +9886,7 @@ declare namespace ts {
      * @param visitor The callback used to visit each child.
      * @param context A lexical environment context for the visitor.
      */
-    function visitEachChild<T extends Node>(node: T | undefined, visitor: Visitor, context: TransformationContext, nodesVisitor?: typeof visitNodes, tokenVisitor?: Visitor): T | undefined;
+    function visitEachChild<T extends Node>(node: T | undefined, visitor: Visitor, context: TransformationContext | undefined, nodesVisitor?: typeof visitNodes, tokenVisitor?: Visitor): T | undefined;
     function getTsBuildInfoEmitOutputFilePath(options: CompilerOptions): string | undefined;
     function getOutputFileNames(commandLine: ParsedCommandLine, inputFileName: string, ignoreCase: boolean): readonly string[];
     function createPrinter(printerOptions?: PrinterOptions, handlers?: PrintHandlers): Printer;
@@ -9890,25 +9917,38 @@ declare namespace ts {
      */
     function getModeForFileReference(ref: FileReference | string, containingFileMode: ResolutionMode): ResolutionMode;
     /**
-     * Calculates the final resolution mode for an import at some index within a file's imports list. This is generally the explicitly
-     * defined mode of the import if provided, or, if not, the mode of the containing file (with some exceptions: import=require is always commonjs, dynamic import is always esm).
-     * If you have an actual import node, prefer using getModeForUsageLocation on the reference string node.
+     * Use `program.getModeForResolutionAtIndex`, which retrieves the correct `compilerOptions`, instead of this function whenever possible.
+     * Calculates the final resolution mode for an import at some index within a file's `imports` list. This is the resolution mode
+     * explicitly provided via import attributes, if present, or the syntax the usage would have if emitted to JavaScript. In
+     * `--module node16` or `nodenext`, this may depend on the file's `impliedNodeFormat`. In `--module preserve`, it depends only on the
+     * input syntax of the reference. In other `module` modes, when overriding import attributes are not provided, this function returns
+     * `undefined`, as the result would have no impact on module resolution, emit, or type checking.
      * @param file File to fetch the resolution mode within
      * @param index Index into the file's complete resolution list to get the resolution of - this is a concatenation of the file's imports and module augmentations
+     * @param compilerOptions The compiler options for the program that owns the file. If the file belongs to a referenced project, the compiler options
+     * should be the options of the referenced project, not the referencing project.
      */
-    function getModeForResolutionAtIndex(file: SourceFile, index: number): ResolutionMode;
+    function getModeForResolutionAtIndex(file: SourceFile, index: number, compilerOptions: CompilerOptions): ResolutionMode;
     /**
-     * Calculates the final resolution mode for a given module reference node. This is generally the explicitly provided resolution mode, if
-     * one exists, or the mode of the containing source file. (Excepting import=require, which is always commonjs, and dynamic import, which is always esm).
-     * Notably, this function always returns `undefined` if the containing file has an `undefined` `impliedNodeFormat` - this field is only set when
-     * `moduleResolution` is `node16`+.
+     * Use `program.getModeForUsageLocation`, which retrieves the correct `compilerOptions`, instead of this function whenever possible.
+     * Calculates the final resolution mode for a given module reference node. This is the resolution mode explicitly provided via import
+     * attributes, if present, or the syntax the usage would have if emitted to JavaScript. In `--module node16` or `nodenext`, this may
+     * depend on the file's `impliedNodeFormat`. In `--module preserve`, it depends only on the input syntax of the reference. In other
+     * `module` modes, when overriding import attributes are not provided, this function returns `undefined`, as the result would have no
+     * impact on module resolution, emit, or type checking.
      * @param file The file the import or import-like reference is contained within
      * @param usage The module reference string
+     * @param compilerOptions The compiler options for the program that owns the file. If the file belongs to a referenced project, the compiler options
+     * should be the options of the referenced project, not the referencing project.
      * @returns The final resolution mode of the import
      */
-    function getModeForUsageLocation(file: {
-        impliedNodeFormat?: ResolutionMode;
-    }, usage: StringLiteralLike): ModuleKind.CommonJS | ModuleKind.ESNext | undefined;
+    function getModeForUsageLocation(
+        file: {
+            impliedNodeFormat?: ResolutionMode;
+        },
+        usage: StringLiteralLike,
+        compilerOptions: CompilerOptions,
+    ): ModuleKind.CommonJS | ModuleKind.ESNext | undefined;
     function getConfigFileParsingDiagnostics(configFileParseResult: ParsedCommandLine): readonly Diagnostic[];
     /**
      * A function for determining if a given file is esm or cjs format, assuming modern node module resolution rules, as configured by the
