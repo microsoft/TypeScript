@@ -29,20 +29,10 @@ Output::
 
 
 
-Program root files: ["/user/username/projects/myproject/main.ts"]
-Program options: {"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
-Program structureReused: Not
-Program files::
-/a/lib/lib.d.ts
-/user/username/projects/myproject/main.ts
+//// [/user/username/projects/myproject/main.js]
+var x = 10;
 
-Semantic diagnostics in builder refreshed for::
-/a/lib/lib.d.ts
-/user/username/projects/myproject/main.ts
 
-Shape signatures in builder refreshed for::
-/a/lib/lib.d.ts (used version)
-/user/username/projects/myproject/main.ts (used version)
 
 PolledWatches::
 /user/username/projects/myproject/node_modules/@types: *new*
@@ -62,12 +52,26 @@ FsWatchesRecursive::
 /user/username/projects/myproject: *new*
   {}
 
+Program root files: [
+  "/user/username/projects/myproject/main.ts"
+]
+Program options: {
+  "configFilePath": "/user/username/projects/myproject/tsconfig.json"
+}
+Program structureReused: Not
+Program files::
+/a/lib/lib.d.ts
+/user/username/projects/myproject/main.ts
+
+Semantic diagnostics in builder refreshed for::
+/a/lib/lib.d.ts
+/user/username/projects/myproject/main.ts
+
+Shape signatures in builder refreshed for::
+/a/lib/lib.d.ts (used version)
+/user/username/projects/myproject/main.ts (used version)
+
 exitCode:: ExitStatus.undefined
-
-//// [/user/username/projects/myproject/main.js]
-var x = 10;
-
-
 
 Change:: Write a file
 
@@ -76,29 +80,16 @@ Input::
 const y =10;
 
 
-Timeout callback:: count: 0
-Immedidate callback:: count: 0
 Output::
 [[90m12:00:32 AM[0m] Found 0 errors. Watching for file changes.
 
 
 
-Program root files: ["/user/username/projects/myproject/bar.ts","/user/username/projects/myproject/main.ts"]
-Program options: {"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
-Program structureReused: Not
-Program files::
-/a/lib/lib.d.ts
-/user/username/projects/myproject/bar.ts
-/user/username/projects/myproject/main.ts
+//// [/user/username/projects/myproject/main.js] file written with same contents
+//// [/user/username/projects/myproject/bar.js]
+var y = 10;
 
-Semantic diagnostics in builder refreshed for::
-/a/lib/lib.d.ts
-/user/username/projects/myproject/bar.ts
-/user/username/projects/myproject/main.ts
 
-Shape signatures in builder refreshed for::
-/user/username/projects/myproject/bar.ts (computed .d.ts)
-/user/username/projects/myproject/main.ts (computed .d.ts)
 
 PolledWatches::
 /user/username/projects/myproject/node_modules/@types:
@@ -120,10 +111,26 @@ FsWatchesRecursive::
 /user/username/projects/myproject:
   {}
 
+Program root files: [
+  "/user/username/projects/myproject/bar.ts",
+  "/user/username/projects/myproject/main.ts"
+]
+Program options: {
+  "configFilePath": "/user/username/projects/myproject/tsconfig.json"
+}
+Program structureReused: Not
+Program files::
+/a/lib/lib.d.ts
+/user/username/projects/myproject/bar.ts
+/user/username/projects/myproject/main.ts
+
+Semantic diagnostics in builder refreshed for::
+/a/lib/lib.d.ts
+/user/username/projects/myproject/bar.ts
+/user/username/projects/myproject/main.ts
+
+Shape signatures in builder refreshed for::
+/user/username/projects/myproject/bar.ts (computed .d.ts)
+/user/username/projects/myproject/main.ts (computed .d.ts)
+
 exitCode:: ExitStatus.undefined
-
-//// [/user/username/projects/myproject/main.js] file written with same contents
-//// [/user/username/projects/myproject/bar.js]
-var y = 10;
-
-

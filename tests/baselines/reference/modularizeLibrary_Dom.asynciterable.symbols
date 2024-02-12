@@ -1,0 +1,25 @@
+//// [tests/cases/compiler/modularizeLibrary_Dom.asynciterable.ts] ////
+
+=== modularizeLibrary_Dom.asynciterable.ts ===
+navigator.storage.getDirectory().then(async directory => {
+>navigator.storage.getDirectory().then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --))
+>navigator.storage.getDirectory : Symbol(StorageManager.getDirectory, Decl(lib.dom.d.ts, --, --))
+>navigator.storage : Symbol(NavigatorStorage.storage, Decl(lib.dom.d.ts, --, --))
+>navigator : Symbol(navigator, Decl(lib.dom.d.ts, --, --))
+>storage : Symbol(NavigatorStorage.storage, Decl(lib.dom.d.ts, --, --))
+>getDirectory : Symbol(StorageManager.getDirectory, Decl(lib.dom.d.ts, --, --))
+>then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --))
+>directory : Symbol(directory, Decl(modularizeLibrary_Dom.asynciterable.ts, 0, 43))
+
+    for await (const [key, handle] of directory) {
+>key : Symbol(key, Decl(modularizeLibrary_Dom.asynciterable.ts, 1, 22))
+>handle : Symbol(handle, Decl(modularizeLibrary_Dom.asynciterable.ts, 1, 26))
+>directory : Symbol(directory, Decl(modularizeLibrary_Dom.asynciterable.ts, 0, 43))
+
+        handle.kind;
+>handle.kind : Symbol(FileSystemHandle.kind, Decl(lib.dom.d.ts, --, --))
+>handle : Symbol(handle, Decl(modularizeLibrary_Dom.asynciterable.ts, 1, 26))
+>kind : Symbol(FileSystemHandle.kind, Decl(lib.dom.d.ts, --, --))
+    }
+});
+

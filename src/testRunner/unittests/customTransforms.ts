@@ -164,4 +164,49 @@ describe("unittests:: customTransforms", () => {
             },
         ],
     }, { sourceMap: true, outFile: "source.js" });
+
+    emitsCorrectly("importDeclarationBeforeTransformElision", [
+        {
+            file: "a.ts",
+            text: "export type A = string;",
+        },
+        {
+            file: "index.ts",
+            text: "import { A } from './a.js';\nexport { A } from './a.js';",
+        },
+    ], {
+        before: [
+            context => {
+                const { factory } = context;
+                return (s: ts.SourceFile) => ts.visitEachChild(s, visitor, context);
+
+                function visitor(node: ts.Node): ts.Node {
+                    if (ts.isImportDeclaration(node) && ts.isStringLiteral(node.moduleSpecifier)) {
+                        return factory.updateImportDeclaration(
+                            node,
+                            node.modifiers,
+                            node.importClause,
+                            factory.createStringLiteral(node.moduleSpecifier.text),
+                            node.attributes,
+                        );
+                    }
+
+                    if (ts.isExportDeclaration(node) && node.moduleSpecifier && ts.isStringLiteral(node.moduleSpecifier)) {
+                        return factory.updateExportDeclaration(
+                            node,
+                            node.modifiers,
+                            node.isTypeOnly,
+                            node.exportClause,
+                            factory.createStringLiteral(node.moduleSpecifier.text),
+                            node.attributes,
+                        );
+                    }
+                    return node;
+                }
+            },
+        ],
+    }, {
+        target: ts.ScriptTarget.ESNext,
+        module: ts.ModuleKind.ESNext,
+    });
 });

@@ -4,9 +4,9 @@
 const f = Object.freeze(function foo(a: number, b: string) { return false; });
 >f : (a: number, b: string) => false
 >Object.freeze(function foo(a: number, b: string) { return false; }) : (a: number, b: string) => false
->Object.freeze : { <T extends Function>(f: T): T; <T extends { [idx: string]: object | U; }, U extends string | number | bigint | boolean | symbol>(o: T): Readonly<T>; <T>(o: T): Readonly<T>; }
+>Object.freeze : { <T extends Function>(f: T): T; <T_1 extends { [idx: string]: object | U; }, U extends string | number | bigint | boolean | symbol>(o: T_1): Readonly<T_1>; <T_2>(o: T_2): Readonly<T_2>; }
 >Object : ObjectConstructor
->freeze : { <T extends Function>(f: T): T; <T extends { [idx: string]: object | U; }, U extends string | number | bigint | boolean | symbol>(o: T): Readonly<T>; <T>(o: T): Readonly<T>; }
+>freeze : { <T extends Function>(f: T): T; <T_1 extends { [idx: string]: object | U; }, U extends string | number | bigint | boolean | symbol>(o: T_1): Readonly<T_1>; <T_2>(o: T_2): Readonly<T_2>; }
 >function foo(a: number, b: string) { return false; } : (a: number, b: string) => false
 >foo : (a: number, b: string) => false
 >a : number
@@ -28,9 +28,9 @@ class C { constructor(a: number) { } }
 const c = Object.freeze(C);
 >c : typeof C
 >Object.freeze(C) : typeof C
->Object.freeze : { <T extends Function>(f: T): T; <T extends { [idx: string]: object | U; }, U extends string | number | bigint | boolean | symbol>(o: T): Readonly<T>; <T>(o: T): Readonly<T>; }
+>Object.freeze : { <T extends Function>(f: T): T; <T_1 extends { [idx: string]: object | U; }, U extends string | number | bigint | boolean | symbol>(o: T_1): Readonly<T_1>; <T_2>(o: T_2): Readonly<T_2>; }
 >Object : ObjectConstructor
->freeze : { <T extends Function>(f: T): T; <T extends { [idx: string]: object | U; }, U extends string | number | bigint | boolean | symbol>(o: T): Readonly<T>; <T>(o: T): Readonly<T>; }
+>freeze : { <T extends Function>(f: T): T; <T_1 extends { [idx: string]: object | U; }, U extends string | number | bigint | boolean | symbol>(o: T_1): Readonly<T_1>; <T_2>(o: T_2): Readonly<T_2>; }
 >C : typeof C
 
 new c(1);
@@ -41,9 +41,9 @@ new c(1);
 const a = Object.freeze([1, 2, 3]);
 >a : readonly number[]
 >Object.freeze([1, 2, 3]) : readonly number[]
->Object.freeze : { <T extends Function>(f: T): T; <T extends { [idx: string]: object | U; }, U extends string | number | bigint | boolean | symbol>(o: T): Readonly<T>; <T>(o: T): Readonly<T>; }
+>Object.freeze : { <T extends Function>(f: T): T; <T_1 extends { [idx: string]: object | U; }, U extends string | number | bigint | boolean | symbol>(o: T_1): Readonly<T_1>; <T_2>(o: T_2): Readonly<T_2>; }
 >Object : ObjectConstructor
->freeze : { <T extends Function>(f: T): T; <T extends { [idx: string]: object | U; }, U extends string | number | bigint | boolean | symbol>(o: T): Readonly<T>; <T>(o: T): Readonly<T>; }
+>freeze : { <T extends Function>(f: T): T; <T_1 extends { [idx: string]: object | U; }, U extends string | number | bigint | boolean | symbol>(o: T_1): Readonly<T_1>; <T_2>(o: T_2): Readonly<T_2>; }
 >[1, 2, 3] : number[]
 >1 : 1
 >2 : 2
@@ -64,9 +64,9 @@ a[0] = a[2].toString();
 const o = Object.freeze({ a: 1, b: "string", c: true });
 >o : Readonly<{ a: 1; b: "string"; c: true; }>
 >Object.freeze({ a: 1, b: "string", c: true }) : Readonly<{ a: 1; b: "string"; c: true; }>
->Object.freeze : { <T extends Function>(f: T): T; <T extends { [idx: string]: object | U; }, U extends string | number | bigint | boolean | symbol>(o: T): Readonly<T>; <T>(o: T): Readonly<T>; }
+>Object.freeze : { <T extends Function>(f: T): T; <T_1 extends { [idx: string]: object | U; }, U extends string | number | bigint | boolean | symbol>(o: T_1): Readonly<T_1>; <T_2>(o: T_2): Readonly<T_2>; }
 >Object : ObjectConstructor
->freeze : { <T extends Function>(f: T): T; <T extends { [idx: string]: object | U; }, U extends string | number | bigint | boolean | symbol>(o: T): Readonly<T>; <T>(o: T): Readonly<T>; }
+>freeze : { <T extends Function>(f: T): T; <T_1 extends { [idx: string]: object | U; }, U extends string | number | bigint | boolean | symbol>(o: T_1): Readonly<T_1>; <T_2>(o: T_2): Readonly<T_2>; }
 >{ a: 1, b: "string", c: true } : { a: 1; b: "string"; c: true; }
 >a : 1
 >1 : 1

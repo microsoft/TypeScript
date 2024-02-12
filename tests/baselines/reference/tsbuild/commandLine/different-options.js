@@ -28,7 +28,11 @@ import { a } from "./a";export const c = a;
 import { b } from "./b";export const d = b;
 
 //// [/src/project/tsconfig.json]
-{"compilerOptions":{"composite":true}}
+{
+  "compilerOptions": {
+    "composite": true
+  }
+}
 
 
 
@@ -42,8 +46,16 @@ Output::
 [[90m12:00:14 AM[0m] Building project '/src/project/tsconfig.json'...
 
 exitCode:: ExitStatus.Success
-Program root files: ["/src/project/a.ts","/src/project/b.ts","/src/project/c.ts","/src/project/d.ts"]
-Program options: {"composite":true,"configFilePath":"/src/project/tsconfig.json"}
+Program root files: [
+  "/src/project/a.ts",
+  "/src/project/b.ts",
+  "/src/project/c.ts",
+  "/src/project/d.ts"
+]
+Program options: {
+  "composite": true,
+  "configFilePath": "/src/project/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /lib/lib.d.ts
@@ -234,8 +246,17 @@ Output::
 [[90m12:00:28 AM[0m] Building project '/src/project/tsconfig.json'...
 
 exitCode:: ExitStatus.Success
-Program root files: ["/src/project/a.ts","/src/project/b.ts","/src/project/c.ts","/src/project/d.ts"]
-Program options: {"composite":true,"sourceMap":true,"configFilePath":"/src/project/tsconfig.json"}
+Program root files: [
+  "/src/project/a.ts",
+  "/src/project/b.ts",
+  "/src/project/c.ts",
+  "/src/project/d.ts"
+]
+Program options: {
+  "composite": true,
+  "sourceMap": true,
+  "configFilePath": "/src/project/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /lib/lib.d.ts
@@ -413,8 +434,16 @@ Output::
 [[90m12:00:42 AM[0m] Building project '/src/project/tsconfig.json'...
 
 exitCode:: ExitStatus.Success
-Program root files: ["/src/project/a.ts","/src/project/b.ts","/src/project/c.ts","/src/project/d.ts"]
-Program options: {"composite":true,"configFilePath":"/src/project/tsconfig.json"}
+Program root files: [
+  "/src/project/a.ts",
+  "/src/project/b.ts",
+  "/src/project/c.ts",
+  "/src/project/d.ts"
+]
+Program options: {
+  "composite": true,
+  "configFilePath": "/src/project/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /lib/lib.d.ts
@@ -611,8 +640,18 @@ Output::
 [[90m12:00:56 AM[0m] Building project '/src/project/tsconfig.json'...
 
 exitCode:: ExitStatus.Success
-Program root files: ["/src/project/a.ts","/src/project/b.ts","/src/project/c.ts","/src/project/d.ts"]
-Program options: {"composite":true,"declaration":true,"declarationMap":true,"configFilePath":"/src/project/tsconfig.json"}
+Program root files: [
+  "/src/project/a.ts",
+  "/src/project/b.ts",
+  "/src/project/c.ts",
+  "/src/project/d.ts"
+]
+Program options: {
+  "composite": true,
+  "declaration": true,
+  "declarationMap": true,
+  "configFilePath": "/src/project/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /lib/lib.d.ts
@@ -775,8 +814,16 @@ Output::
 [[90m12:01:14 AM[0m] Building project '/src/project/tsconfig.json'...
 
 exitCode:: ExitStatus.Success
-Program root files: ["/src/project/a.ts","/src/project/b.ts","/src/project/c.ts","/src/project/d.ts"]
-Program options: {"composite":true,"configFilePath":"/src/project/tsconfig.json"}
+Program root files: [
+  "/src/project/a.ts",
+  "/src/project/b.ts",
+  "/src/project/c.ts",
+  "/src/project/d.ts"
+]
+Program options: {
+  "composite": true,
+  "configFilePath": "/src/project/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /lib/lib.d.ts
@@ -960,8 +1007,16 @@ Output::
 [[90m12:01:33 AM[0m] Building project '/src/project/tsconfig.json'...
 
 exitCode:: ExitStatus.Success
-Program root files: ["/src/project/a.ts","/src/project/b.ts","/src/project/c.ts","/src/project/d.ts"]
-Program options: {"composite":true,"configFilePath":"/src/project/tsconfig.json"}
+Program root files: [
+  "/src/project/a.ts",
+  "/src/project/b.ts",
+  "/src/project/c.ts",
+  "/src/project/d.ts"
+]
+Program options: {
+  "composite": true,
+  "configFilePath": "/src/project/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /lib/lib.d.ts
@@ -1120,8 +1175,17 @@ Output::
 [[90m12:01:42 AM[0m] Building project '/src/project/tsconfig.json'...
 
 exitCode:: ExitStatus.Success
-Program root files: ["/src/project/a.ts","/src/project/b.ts","/src/project/c.ts","/src/project/d.ts"]
-Program options: {"composite":true,"inlineSourceMap":true,"configFilePath":"/src/project/tsconfig.json"}
+Program root files: [
+  "/src/project/a.ts",
+  "/src/project/b.ts",
+  "/src/project/c.ts",
+  "/src/project/d.ts"
+]
+Program options: {
+  "composite": true,
+  "inlineSourceMap": true,
+  "configFilePath": "/src/project/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /lib/lib.d.ts
@@ -1287,8 +1351,17 @@ Output::
 [[90m12:01:52 AM[0m] Building project '/src/project/tsconfig.json'...
 
 exitCode:: ExitStatus.Success
-Program root files: ["/src/project/a.ts","/src/project/b.ts","/src/project/c.ts","/src/project/d.ts"]
-Program options: {"composite":true,"sourceMap":true,"configFilePath":"/src/project/tsconfig.json"}
+Program root files: [
+  "/src/project/a.ts",
+  "/src/project/b.ts",
+  "/src/project/c.ts",
+  "/src/project/d.ts"
+]
+Program options: {
+  "composite": true,
+  "sourceMap": true,
+  "configFilePath": "/src/project/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /lib/lib.d.ts

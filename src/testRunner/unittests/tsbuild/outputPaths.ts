@@ -1,6 +1,9 @@
 import * as fakes from "../../_namespaces/fakes";
 import * as ts from "../../_namespaces/ts";
 import {
+    jsonToReadableText,
+} from "../helpers";
+import {
     noChangeRun,
     TestTscEdit,
     TscCompileSystem,
@@ -48,7 +51,7 @@ describe("unittests:: tsbuild - output file paths", () => {
         fs: () =>
             loadProjectFromFiles({
                 "/src/src/index.ts": "export const x = 10;",
-                "/src/tsconfig.json": JSON.stringify({
+                "/src/tsconfig.json": jsonToReadableText({
                     compilerOptions: {
                         outDir: "dist",
                     },
@@ -62,7 +65,7 @@ describe("unittests:: tsbuild - output file paths", () => {
         fs: () =>
             loadProjectFromFiles({
                 "/src/src/index.ts": "export const x = 10;",
-                "/src/tsconfig.json": JSON.stringify({
+                "/src/tsconfig.json": jsonToReadableText({
                     compilerOptions: {
                         outDir: "dist",
                         composite: true,
@@ -77,7 +80,7 @@ describe("unittests:: tsbuild - output file paths", () => {
         fs: () =>
             loadProjectFromFiles({
                 "/src/src/index.ts": "export const x = 10;",
-                "/src/tsconfig.json": JSON.stringify({
+                "/src/tsconfig.json": jsonToReadableText({
                     compilerOptions: {
                         outDir: "dist",
                         rootDir: "src",
@@ -93,7 +96,7 @@ describe("unittests:: tsbuild - output file paths", () => {
             loadProjectFromFiles({
                 "/src/src/index.ts": "export const x = 10;",
                 "/src/types/type.ts": "export type t = string;",
-                "/src/tsconfig.json": JSON.stringify({
+                "/src/tsconfig.json": jsonToReadableText({
                     compilerOptions: {
                         outDir: "dist",
                         rootDir: "src",
@@ -109,7 +112,7 @@ describe("unittests:: tsbuild - output file paths", () => {
             loadProjectFromFiles({
                 "/src/src/index.ts": "export const x = 10;",
                 "/src/types/type.ts": "export type t = string;",
-                "/src/tsconfig.json": JSON.stringify({
+                "/src/tsconfig.json": jsonToReadableText({
                     compilerOptions: {
                         outDir: "dist",
                         rootDir: "src",
