@@ -268,14 +268,14 @@ declare namespace Intl {
         unknown: never;
     }
 
+    interface DateTimeFormatPartTypesRegistry {
+        relatedYear: never;
+        yearName: never;
+    }
+
     interface DateTimeFormatOptions {
         calendar?: string | undefined;
-        dayPeriod?: "narrow" | "short" | "long" | undefined;
         numberingSystem?: string | undefined;
-
-        dateStyle?: "full" | "long" | "medium" | "short" | undefined;
-        timeStyle?: "full" | "long" | "medium" | "short" | undefined;
-        hourCycle?: "h11" | "h12" | "h23" | "h24" | undefined;
     }
 
     type LocaleHourCycleKey = "h12" | "h23" | "h11" | "h24";

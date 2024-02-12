@@ -4477,18 +4477,25 @@ declare namespace Intl {
 
     var NumberFormat: NumberFormatConstructor;
 
+    interface DateTimeFormatOptionsTimeZoneNameRegistry {
+        short: never;
+        long: never;
+    }
+
+    type DateTimeFormatOptionsTimeZoneName = keyof DateTimeFormatOptionsTimeZoneNameRegistry;
+
     interface DateTimeFormatOptions {
-        localeMatcher?: "best fit" | "lookup" | undefined;
-        weekday?: "long" | "short" | "narrow" | undefined;
-        era?: "long" | "short" | "narrow" | undefined;
-        year?: "numeric" | "2-digit" | undefined;
-        month?: "numeric" | "2-digit" | "long" | "short" | "narrow" | undefined;
-        day?: "numeric" | "2-digit" | undefined;
-        hour?: "numeric" | "2-digit" | undefined;
-        minute?: "numeric" | "2-digit" | undefined;
-        second?: "numeric" | "2-digit" | undefined;
-        timeZoneName?: "short" | "long" | "shortOffset" | "longOffset" | "shortGeneric" | "longGeneric" | undefined;
-        formatMatcher?: "best fit" | "basic" | undefined;
+        localeMatcher?: "lookup" | "best fit" | undefined;
+        weekday?: "narrow" | "short" | "long" | undefined;
+        era?: "narrow" | "short" | "long" | undefined;
+        year?: "2-digit" | "numeric" | undefined;
+        month?: "2-digit" | "numeric" | "narrow" | "short" | "long" | undefined;
+        day?: "2-digit" | "numeric" | undefined;
+        hour?: "2-digit" | "numeric" | undefined;
+        minute?: "2-digit" | "numeric" | undefined;
+        second?: "2-digit" | "numeric" | undefined;
+        timeZoneName?: DateTimeFormatOptionsTimeZoneName | undefined;
+        formatMatcher?: "basic" | "best fit" | undefined;
         hour12?: boolean | undefined;
         timeZone?: string | undefined;
     }
@@ -4499,15 +4506,15 @@ declare namespace Intl {
         numberingSystem: string;
         timeZone: string;
         hour12?: boolean;
-        weekday?: string;
-        era?: string;
-        year?: string;
-        month?: string;
-        day?: string;
-        hour?: string;
-        minute?: string;
-        second?: string;
-        timeZoneName?: string;
+        weekday?: "narrow" | "short" | "long";
+        era?: "narrow" | "short" | "long";
+        year?: "2-digit" | "numeric";
+        month?: "2-digit" | "numeric" | "narrow" | "short" | "long";
+        day?: "2-digit" | "numeric";
+        hour?: "2-digit" | "numeric";
+        minute?: "2-digit" | "numeric";
+        second?: "2-digit" | "numeric";
+        timeZoneName?: DateTimeFormatOptionsTimeZoneName;
     }
 
     interface DateTimeFormat {

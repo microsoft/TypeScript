@@ -1,4 +1,11 @@
 declare namespace Intl {
+    interface DateTimeFormatOptionsTimeZoneNameRegistry {
+        shortOffset: never;
+        longOffset: never;
+        shortGeneric: never;
+        longGeneric: never;
+    }
+
     /**
      * An object with some or all properties of the `Intl.Segmenter` constructor `options` parameter.
      *

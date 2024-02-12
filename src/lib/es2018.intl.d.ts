@@ -62,4 +62,12 @@ declare namespace Intl {
     interface NumberFormat {
         formatToParts(number?: number | bigint): NumberFormatPart[];
     }
+
+    interface DateTimeFormatOptions {
+        hourCycle?: "h11" | "h12" | "h23" | "h24" | undefined;
+    }
+
+    interface ResolvedDateTimeFormatOptions {
+        hourCycle?: "h11" | "h12" | "h23" | "h24";
+    }
 }
