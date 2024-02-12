@@ -2563,7 +2563,7 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
     }
 
     function checkStrictModeFunctionName(node: FunctionLikeDeclaration) {
-        if (inStrictMode) {
+        if (inStrictMode && !(node.flags & NodeFlags.Ambient)) {
             // It is a SyntaxError if the identifier eval or arguments appears within a FormalParameterList of a strict mode FunctionDeclaration or FunctionExpression (13.1))
             checkStrictModeEvalOrArguments(node, node.name);
         }
