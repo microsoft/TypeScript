@@ -39,7 +39,7 @@ interface Set<T> {
      */
     difference<U>(other: ReadonlySetLike<U>): Set<T>;
     /**
-     * @returns a new Set containing all the elements in this Set which are in this or in the argument, but not in both.
+     * @returns a new Set containing all the elements which are in either this Set or in the argument, but not in both.
      */
     symmetricDifference<U>(other: ReadonlySetLike<U>): Set<T | U>;
     /**
