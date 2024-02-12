@@ -1,0 +1,53 @@
+//// [tests/cases/compiler/contextualTypeInNestedInference2.ts] ////
+
+=== contextualTypeInNestedInference2.ts ===
+// https://github.com/microsoft/TypeScript/issues/50787
+
+type Model = { s: string; b: boolean }
+>Model : Symbol(Model, Decl(contextualTypeInNestedInference2.ts, 0, 0))
+>s : Symbol(s, Decl(contextualTypeInNestedInference2.ts, 2, 14))
+>b : Symbol(b, Decl(contextualTypeInNestedInference2.ts, 2, 25))
+
+declare let pick: <Keys extends keyof Model>(properties: readonly Keys[]) => Pick<Model, Keys>
+>pick : Symbol(pick, Decl(contextualTypeInNestedInference2.ts, 3, 11))
+>Keys : Symbol(Keys, Decl(contextualTypeInNestedInference2.ts, 3, 19))
+>Model : Symbol(Model, Decl(contextualTypeInNestedInference2.ts, 0, 0))
+>properties : Symbol(properties, Decl(contextualTypeInNestedInference2.ts, 3, 45))
+>Keys : Symbol(Keys, Decl(contextualTypeInNestedInference2.ts, 3, 19))
+>Pick : Symbol(Pick, Decl(lib.es5.d.ts, --, --))
+>Model : Symbol(Model, Decl(contextualTypeInNestedInference2.ts, 0, 0))
+>Keys : Symbol(Keys, Decl(contextualTypeInNestedInference2.ts, 3, 19))
+
+declare let transform1: <T>(obj: T) => T
+>transform1 : Symbol(transform1, Decl(contextualTypeInNestedInference2.ts, 4, 11))
+>T : Symbol(T, Decl(contextualTypeInNestedInference2.ts, 4, 25))
+>obj : Symbol(obj, Decl(contextualTypeInNestedInference2.ts, 4, 28))
+>T : Symbol(T, Decl(contextualTypeInNestedInference2.ts, 4, 25))
+>T : Symbol(T, Decl(contextualTypeInNestedInference2.ts, 4, 25))
+
+declare let transform2: <T extends {}>(obj: T) => T
+>transform2 : Symbol(transform2, Decl(contextualTypeInNestedInference2.ts, 5, 11))
+>T : Symbol(T, Decl(contextualTypeInNestedInference2.ts, 5, 25))
+>obj : Symbol(obj, Decl(contextualTypeInNestedInference2.ts, 5, 39))
+>T : Symbol(T, Decl(contextualTypeInNestedInference2.ts, 5, 25))
+>T : Symbol(T, Decl(contextualTypeInNestedInference2.ts, 5, 25))
+
+const result1 = transform1(pick(["s"]))
+>result1 : Symbol(result1, Decl(contextualTypeInNestedInference2.ts, 7, 5))
+>transform1 : Symbol(transform1, Decl(contextualTypeInNestedInference2.ts, 4, 11))
+>pick : Symbol(pick, Decl(contextualTypeInNestedInference2.ts, 3, 11))
+
+const result2 = transform2(pick(["s"]))
+>result2 : Symbol(result2, Decl(contextualTypeInNestedInference2.ts, 8, 5))
+>transform2 : Symbol(transform2, Decl(contextualTypeInNestedInference2.ts, 5, 11))
+>pick : Symbol(pick, Decl(contextualTypeInNestedInference2.ts, 3, 11))
+
+const intermediate = pick(["s"])
+>intermediate : Symbol(intermediate, Decl(contextualTypeInNestedInference2.ts, 10, 5))
+>pick : Symbol(pick, Decl(contextualTypeInNestedInference2.ts, 3, 11))
+
+const result3 = transform1(intermediate)
+>result3 : Symbol(result3, Decl(contextualTypeInNestedInference2.ts, 11, 5))
+>transform1 : Symbol(transform1, Decl(contextualTypeInNestedInference2.ts, 4, 11))
+>intermediate : Symbol(intermediate, Decl(contextualTypeInNestedInference2.ts, 10, 5))
+

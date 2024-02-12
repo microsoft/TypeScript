@@ -1,0 +1,53 @@
+//// [tests/cases/compiler/contextualTypeInNestedInference2.ts] ////
+
+=== contextualTypeInNestedInference2.ts ===
+// https://github.com/microsoft/TypeScript/issues/50787
+
+type Model = { s: string; b: boolean }
+>Model : { s: string; b: boolean; }
+>s : string
+>b : boolean
+
+declare let pick: <Keys extends keyof Model>(properties: readonly Keys[]) => Pick<Model, Keys>
+>pick : <Keys extends keyof Model>(properties: readonly Keys[]) => Pick<Model, Keys>
+>properties : readonly Keys[]
+
+declare let transform1: <T>(obj: T) => T
+>transform1 : <T>(obj: T) => T
+>obj : T
+
+declare let transform2: <T extends {}>(obj: T) => T
+>transform2 : <T extends {}>(obj: T) => T
+>obj : T
+
+const result1 = transform1(pick(["s"]))
+>result1 : Pick<Model, "s">
+>transform1(pick(["s"])) : Pick<Model, "s">
+>transform1 : <T>(obj: T) => T
+>pick(["s"]) : Pick<Model, "s">
+>pick : <Keys extends keyof Model>(properties: readonly Keys[]) => Pick<Model, Keys>
+>["s"] : "s"[]
+>"s" : "s"
+
+const result2 = transform2(pick(["s"]))
+>result2 : Pick<Model, "s">
+>transform2(pick(["s"])) : Pick<Model, "s">
+>transform2 : <T extends {}>(obj: T) => T
+>pick(["s"]) : Pick<Model, "s">
+>pick : <Keys extends keyof Model>(properties: readonly Keys[]) => Pick<Model, Keys>
+>["s"] : "s"[]
+>"s" : "s"
+
+const intermediate = pick(["s"])
+>intermediate : Pick<Model, "s">
+>pick(["s"]) : Pick<Model, "s">
+>pick : <Keys extends keyof Model>(properties: readonly Keys[]) => Pick<Model, Keys>
+>["s"] : "s"[]
+>"s" : "s"
+
+const result3 = transform1(intermediate)
+>result3 : Pick<Model, "s">
+>transform1(intermediate) : Pick<Model, "s">
+>transform1 : <T>(obj: T) => T
+>intermediate : Pick<Model, "s">
+
