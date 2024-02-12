@@ -10421,33 +10421,6 @@ declare namespace ts {
             readDirectory(rootDir: string, extensions: readonly string[], excludes: readonly string[] | undefined, includes: readonly string[] | undefined, depth?: number): string[];
         }
     }
-    namespace codefix {
-        function getImportFixes(exportInfos: readonly SymbolExportInfo[], usagePosition: number | undefined, isValidTypeOnlyUseSite: boolean, useRequire: boolean, program: Program, sourceFile: SourceFile, host: LanguageServiceHost, preferences: UserPreferences, importMap?: {
-            getImportsForExportInfo: ({ moduleSymbol, exportKind, targetFlags, symbol }: SymbolExportInfo) => readonly FixAddToExistingImportInfo[];
-        }, fromCacheOnly?: boolean): {
-            computedWithoutCacheCount: number;
-            fixes: readonly ImportFixWithModuleSpecifier[];
-        };
-        function shouldUseRequire(sourceFile: SourceFile, program: Program): boolean;
-        function sortFixInfo(
-            fixes: readonly (FixInfo & {
-                fix: ImportFixWithModuleSpecifier;
-            })[],
-            sourceFile: SourceFile,
-            program: Program,
-            packageJsonImportFilter: PackageJsonImportFilter,
-            host: LanguageServiceHost,
-        ): readonly (FixInfo & {
-            fix: ImportFixWithModuleSpecifier;
-        })[];
-        type ImportFixWithModuleSpecifier = FixUseNamespaceImport | FixAddJsdocTypeImport | FixAddToExistingImport | FixAddNewImport;
-        interface FixInfo {
-            readonly fix: ImportFix;
-            readonly symbolName: string;
-            readonly errorIdentifierText: string | undefined;
-            readonly isJsxNamespaceFix?: boolean;
-        }
-    }
     function getDefaultFormatCodeSettings(newLineCharacter?: string): FormatCodeSettings;
     /**
      * Represents an immutable snapshot of a script at a specified time.Once acquired, the

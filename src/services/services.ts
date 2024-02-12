@@ -2100,8 +2100,7 @@ export function createLanguageService(
     ): PostPasteImportFixes {
         synchronizeHostData();
         const originalSourceFile = copySpan ? getValidSourceFile(copySpan.file) : undefined;
-        const edits = postPasteImportFixes.postPasteImportFixesProvider(getValidSourceFile(targetFile), host, pastes, preferences, formatting.getFormatContext(formatOptions, host), cancellationToken, originalSourceFile, copySpan);
-        return edits;
+        return postPasteImportFixes.postPasteImportFixesProvider(getValidSourceFile(targetFile), host, pastes, preferences, formatting.getFormatContext(formatOptions, host), cancellationToken, originalSourceFile, copySpan);
     }
 
     function getNodeForQuickInfo(node: Node): Node {

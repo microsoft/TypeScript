@@ -481,7 +481,7 @@ const enum AddAsTypeOnly {
     NotAllowed = 1 << 2,
 }
 type ImportFix = FixUseNamespaceImport | FixAddJsdocTypeImport | FixAddToExistingImport | FixAddNewImport | FixPromoteTypeOnlyImport;
-export type ImportFixWithModuleSpecifier = FixUseNamespaceImport | FixAddJsdocTypeImport | FixAddToExistingImport | FixAddNewImport;
+type ImportFixWithModuleSpecifier = FixUseNamespaceImport | FixAddJsdocTypeImport | FixAddToExistingImport | FixAddNewImport;
 
 // Properties are be undefined if fix is derived from an existing import
 interface ImportFixBase {
@@ -633,7 +633,7 @@ function getSingleExportInfoForSymbol(symbol: Symbol, symbolName: string, module
     }
 }
 
-export function getImportFixes(
+function getImportFixes(
     exportInfos: readonly SymbolExportInfo[],
     usagePosition: number | undefined,
     isValidTypeOnlyUseSite: boolean,
@@ -840,7 +840,7 @@ function createExistingImportMap(checker: TypeChecker, importingFile: SourceFile
     };
 }
 
-export function shouldUseRequire(sourceFile: SourceFile, program: Program): boolean {
+function shouldUseRequire(sourceFile: SourceFile, program: Program): boolean {
     // 1. TypeScript files don't use require variable declarations
     if (!isSourceFileJS(sourceFile)) {
         return false;
@@ -981,7 +981,7 @@ function newImportInfoFromExistingSpecifier(
     }
 }
 
-export interface FixInfo {
+interface FixInfo {
     readonly fix: ImportFix;
     readonly symbolName: string;
     readonly errorIdentifierText: string | undefined;
@@ -1009,7 +1009,7 @@ function getFixInfos(context: CodeFixContextBase, errorCode: number, pos: number
     return info && sortFixInfo(info, context.sourceFile, context.program, packageJsonImportFilter, context.host);
 }
 
-export function sortFixInfo(fixes: readonly (FixInfo & { fix: ImportFixWithModuleSpecifier; })[], sourceFile: SourceFile, program: Program, packageJsonImportFilter: PackageJsonImportFilter, host: LanguageServiceHost): readonly (FixInfo & { fix: ImportFixWithModuleSpecifier; })[] {
+function sortFixInfo(fixes: readonly (FixInfo & { fix: ImportFixWithModuleSpecifier; })[], sourceFile: SourceFile, program: Program, packageJsonImportFilter: PackageJsonImportFilter, host: LanguageServiceHost): readonly (FixInfo & { fix: ImportFixWithModuleSpecifier; })[] {
     const _toPath = (fileName: string) => toPath(fileName, host.getCurrentDirectory(), hostGetCanonicalFileName(host));
     return sort(fixes, (a, b) =>
         compareBooleans(!!a.isJsxNamespaceFix, !!b.isJsxNamespaceFix) ||

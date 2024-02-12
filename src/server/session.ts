@@ -2804,8 +2804,7 @@ export class Session<TMessage = string> implements EventSender {
         if (result === undefined) {
             return undefined;
         }
-        const allResults = this.mapPostPasteAction(result);
-        return allResults;
+        return this.mapPostPasteAction(result);
     }
 
     private organizeImports(args: protocol.OrganizeImportsRequestArgs, simplifiedResult: boolean): readonly protocol.FileCodeEdits[] | readonly FileTextChanges[] {
