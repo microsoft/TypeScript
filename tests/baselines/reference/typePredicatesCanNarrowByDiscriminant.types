@@ -32,3 +32,33 @@ if (isOneOf(fruit.kind, ['apple', 'banana'] as const)) {
     fruit
 >fruit : { kind: "apple"; } | { kind: "banana"; }
 }
+
+declare const fruit2: { kind: 'apple'} | { kind: 'banana' } | { kind: 'cherry' }
+>fruit2 : { kind: 'apple'; } | { kind: 'banana'; } | { kind: 'cherry'; }
+>kind : "apple"
+>kind : "banana"
+>kind : "cherry"
+
+const kind = fruit2.kind;
+>kind : "apple" | "banana" | "cherry"
+>fruit2.kind : "apple" | "banana" | "cherry"
+>fruit2 : { kind: "apple"; } | { kind: "banana"; } | { kind: "cherry"; }
+>kind : "apple" | "banana" | "cherry"
+
+if (isOneOf(kind, ['apple', 'banana'] as const)) {
+>isOneOf(kind, ['apple', 'banana'] as const) : boolean
+>isOneOf : <T, U extends T>(item: T, array: readonly U[]) => item is U
+>kind : "apple" | "banana" | "cherry"
+>['apple', 'banana'] as const : readonly ["apple", "banana"]
+>['apple', 'banana'] : readonly ["apple", "banana"]
+>'apple' : "apple"
+>'banana' : "banana"
+
+    fruit2.kind
+>fruit2.kind : "apple" | "banana"
+>fruit2 : { kind: "apple"; } | { kind: "banana"; }
+>kind : "apple" | "banana"
+
+    fruit2
+>fruit2 : { kind: "apple"; } | { kind: "banana"; }
+}

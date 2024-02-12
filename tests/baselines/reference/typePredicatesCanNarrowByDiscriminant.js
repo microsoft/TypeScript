@@ -10,9 +10,21 @@ if (isOneOf(fruit.kind, ['apple', 'banana'] as const)) {
     fruit
 }
 
+declare const fruit2: { kind: 'apple'} | { kind: 'banana' } | { kind: 'cherry' }
+const kind = fruit2.kind;
+if (isOneOf(kind, ['apple', 'banana'] as const)) {
+    fruit2.kind
+    fruit2
+}
+
 //// [typePredicatesCanNarrowByDiscriminant.js]
 "use strict";
 if (isOneOf(fruit.kind, ['apple', 'banana'])) {
     fruit.kind;
     fruit;
+}
+var kind = fruit2.kind;
+if (isOneOf(kind, ['apple', 'banana'])) {
+    fruit2.kind;
+    fruit2;
 }

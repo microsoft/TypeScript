@@ -26740,11 +26740,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     function hasMatchingArgument(expression: CallExpression | NewExpression, reference: Node) {
         if (expression.arguments) {
             for (const argument of expression.arguments) {
-                if (
-                    isOrContainsMatchingReference(reference, argument)
-                    || optionalChainContainsReference(argument, reference)
-                    || isAccessExpression(argument) && isMatchingReference(reference, argument.expression)
-                ) {
+                if (isOrContainsMatchingReference(reference, argument) || optionalChainContainsReference(argument, reference)) {
                     return true;
                 }
             }
@@ -28758,12 +28754,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
 
         function narrowTypeByCallExpression(type: Type, callExpression: CallExpression, assumeTrue: boolean): Type {
-            if (hasMatchingArgument(callExpression, reference)) {
-                const signature = assumeTrue || !isCallChain(callExpression) ? getEffectsSignature(callExpression) : undefined;
-                const predicate = signature && getTypePredicateOfSignature(signature);
-                if (predicate && (predicate.kind === TypePredicateKind.This || predicate.kind === TypePredicateKind.Identifier)) {
-                    return narrowTypeByTypePredicate(type, predicate, callExpression, assumeTrue);
-                }
+            const signature = assumeTrue || !isCallChain(callExpression) ? getEffectsSignature(callExpression) : undefined;
+            const predicate = signature && getTypePredicateOfSignature(signature);
+            if (predicate && (predicate.kind === TypePredicateKind.This || predicate.kind === TypePredicateKind.Identifier)) {
+                return narrowTypeByTypePredicate(type, predicate, callExpression, assumeTrue);
             }
             if (containsMissingType(type) && isAccessExpression(reference) && isPropertyAccessExpression(callExpression.expression)) {
                 const callAccess = callExpression.expression;

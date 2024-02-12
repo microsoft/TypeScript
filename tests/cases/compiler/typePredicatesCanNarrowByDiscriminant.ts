@@ -8,3 +8,10 @@ if (isOneOf(fruit.kind, ['apple', 'banana'] as const)) {
     fruit.kind
     fruit
 }
+
+declare const fruit2: { kind: 'apple'} | { kind: 'banana' } | { kind: 'cherry' }
+const kind = fruit2.kind;
+if (isOneOf(kind, ['apple', 'banana'] as const)) {
+    fruit2.kind
+    fruit2
+}
