@@ -1220,6 +1220,7 @@ function forEachChildInJSDocImportTag<T>(node: JSDocImportTag, cbNode: (node: No
     return visitNode(cbNode, node.tagName)
         || visitNode(cbNode, node.importClause)
         || visitNode(cbNode, node.moduleSpecifier)
+        || visitNode(cbNode, node.attributes)
         || (typeof node.comment === "string" ? undefined : visitNodes(cbNode, cbNodes, node.comment));
 }
 
@@ -8355,6 +8356,16 @@ namespace Parser {
             return parseImportEqualsDeclaration(pos, hasJSDoc, modifiers, identifier, isTypeOnly);
         }
 
+        const importClause = tryParseImportClause(identifier, afterImportPos, isTypeOnly);
+        const moduleSpecifier = parseModuleSpecifier();
+        const attributes = tryParseImportAttributes();
+
+        parseSemicolon();
+        const node = factory.createImportDeclaration(modifiers, importClause, moduleSpecifier, attributes);
+        return withJSDoc(finishNode(node, pos), hasJSDoc);
+    }
+
+    function tryParseImportClause(identifier: Identifier | undefined, pos: number, isTypeOnly: boolean, skipJsDocLeadingAsterisks = false) {
         // ImportDeclaration:
         //  import ImportClause from ModuleSpecifier ;
         //  import ModuleSpecifier;
@@ -8364,18 +8375,17 @@ namespace Parser {
             token() === SyntaxKind.AsteriskToken || // import *
             token() === SyntaxKind.OpenBraceToken // import {
         ) {
-            importClause = parseImportClause(identifier, afterImportPos, isTypeOnly);
+            importClause = parseImportClause(identifier, pos, isTypeOnly, skipJsDocLeadingAsterisks);
             parseExpected(SyntaxKind.FromKeyword);
         }
-        const moduleSpecifier = parseModuleSpecifier();
+        return importClause;
+    }
+
+    function tryParseImportAttributes() {
         const currentToken = token();
-        let attributes: ImportAttributes | undefined;
         if ((currentToken === SyntaxKind.WithKeyword || currentToken === SyntaxKind.AssertKeyword) && !scanner.hasPrecedingLineBreak()) {
-            attributes = parseImportAttributes(currentToken);
+            return parseImportAttributes(currentToken);
         }
-        parseSemicolon();
-        const node = factory.createImportDeclaration(modifiers, importClause, moduleSpecifier, attributes);
-        return withJSDoc(finishNode(node, pos), hasJSDoc);
     }
 
     function parseImportAttribute() {
@@ -8431,7 +8441,7 @@ namespace Parser {
         return finished;
     }
 
-    function parseImportClause(identifier: Identifier | undefined, pos: number, isTypeOnly: boolean) {
+    function parseImportClause(identifier: Identifier | undefined, pos: number, isTypeOnly: boolean, skipJsDocLeadingAsterisks: boolean) {
         // ImportClause:
         //  ImportedDefaultBinding
         //  NameSpaceImport
@@ -8446,7 +8456,9 @@ namespace Parser {
             !identifier ||
             parseOptional(SyntaxKind.CommaToken)
         ) {
+            if (skipJsDocLeadingAsterisks) scanner.setSkipJsDocLeadingAsterisks(true);
             namedBindings = token() === SyntaxKind.AsteriskToken ? parseNamespaceImport() : parseNamedImportsOrExports(SyntaxKind.NamedImports);
+            if (skipJsDocLeadingAsterisks) scanner.setSkipJsDocLeadingAsterisks(false);
         }
 
         return finishNode(factory.createImportClause(isTypeOnly, identifier, namedBindings), pos);
@@ -9458,39 +9470,19 @@ namespace Parser {
             }
 
             function parseImportTag(start: number, tagName: Identifier, margin: number, indentText: string): JSDocImportTag {
-                const afterImportTypeTagPos = scanner.getTokenFullStart();
+                const afterImportTagPos = scanner.getTokenFullStart();
 
                 let identifier: Identifier | undefined;
                 if (isIdentifier()) {
                     identifier = parseIdentifier();
                 }
 
-                let importClause: ImportClause | undefined;
-                if (
-                    identifier // @import id
-                    || token() === SyntaxKind.AsteriskToken // @import *
-                    || token() === SyntaxKind.OpenBraceToken // @import {
-                ) {
-                    importClause = parseJsDocImportClause(identifier, afterImportTypeTagPos);
-                    parseExpected(SyntaxKind.FromKeyword);
-                }
-
+                const importClause = tryParseImportClause(identifier, afterImportTagPos, /*isTypeOnly*/ true, /*skipJsDocLeadingAsterisks*/ true);
                 const moduleSpecifier = parseModuleSpecifier();
-                const comments = margin !== undefined && indentText !== undefined ? parseTrailingTagComments(start, getNodePos(), margin, indentText) : undefined;
-                return finishNode(factory.createJSDocImportTag(tagName, importClause, moduleSpecifier, comments), start);
-            }
+                const attributes = tryParseImportAttributes();
 
-            function parseJsDocImportClause(identifier: Identifier | undefined, pos: number) {
-                let namedBindings: NamespaceImport | NamedImports | undefined;
-                if (
-                    !identifier ||
-                    parseOptional(SyntaxKind.CommaToken)
-                ) {
-                    scanner.setSkipJsDocLeadingAsterisks(true);
-                    namedBindings = token() === SyntaxKind.AsteriskToken ? parseNamespaceImport() : parseNamedImportsOrExports(SyntaxKind.NamedImports);
-                    scanner.setSkipJsDocLeadingAsterisks(false);
-                }
-                return finishNode(factory.createImportClause(/*isTypeOnly*/ true, identifier, namedBindings), pos);
+                const comments = margin !== undefined && indentText !== undefined ? parseTrailingTagComments(start, getNodePos(), margin, indentText) : undefined;
+                return finishNode(factory.createJSDocImportTag(tagName, importClause, moduleSpecifier, attributes, comments), start);
             }
 
             function parseExpressionWithTypeArgumentsForAugments(): ExpressionWithTypeArguments & { expression: Identifier | PropertyAccessEntityNameExpression; } {

@@ -4469,6 +4469,9 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
         }
 
         emitExpression(tag.moduleSpecifier);
+        if (tag.attributes) {
+            emitWithLeadingSpace(tag.attributes);
+        }
         emitJSDocComment(tag.comment);
     }
 

@@ -5558,20 +5558,22 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
     }
 
     // @api
-    function createJSDocImportTag(tagName: Identifier | undefined, importClause: ImportClause | undefined, moduleSpecifier: Expression, comment?: string | NodeArray<JSDocComment>): JSDocImportTag {
+    function createJSDocImportTag(tagName: Identifier | undefined, importClause: ImportClause | undefined, moduleSpecifier: Expression, attributes?: ImportAttributes, comment?: string | NodeArray<JSDocComment>): JSDocImportTag {
         const node = createBaseJSDocTag<JSDocImportTag>(SyntaxKind.JSDocImportTag, tagName ?? createIdentifier("import"), comment);
         node.importClause = importClause;
         node.moduleSpecifier = moduleSpecifier;
+        node.attributes = attributes;
         node.comment = comment;
         return node;
     }
 
-    function updateJSDocImportTag(node: JSDocImportTag, tagName: Identifier | undefined, importClause: ImportClause | undefined, moduleSpecifier: Expression, comment: string | NodeArray<JSDocComment> | undefined): JSDocImportTag {
+    function updateJSDocImportTag(node: JSDocImportTag, tagName: Identifier | undefined, importClause: ImportClause | undefined, moduleSpecifier: Expression, attributes: ImportAttributes | undefined, comment: string | NodeArray<JSDocComment> | undefined): JSDocImportTag {
         return node.tagName !== tagName
                 || node.comment !== comment
                 || node.importClause !== importClause
                 || node.moduleSpecifier !== moduleSpecifier
-            ? update(createJSDocImportTag(tagName, importClause, moduleSpecifier, comment), node)
+                || node.attributes !== attributes
+            ? update(createJSDocImportTag(tagName, importClause, moduleSpecifier, attributes, comment), node)
             : node;
     }
 
