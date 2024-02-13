@@ -1,0 +1,1805 @@
+//// [tests/cases/compiler/issue-57087-eopt-merged.ts] ////
+
+=== -57087-01.ts ===
+/**********************/
+
+namespace ns0 {
+>ns0 : typeof ns0
+
+interface FMap<T,R> {
+    f:(x:T)=>R
+>f : (x: T) => R
+>x : T
+
+    g(f:(x:T)=>R):R;
+>g : (f: (x: T) => R) => R
+>f : (x: T) => R
+>x : T
+}
+declare const x1: FMap<1|2,1|2>;
+>x1 : FMap<1 | 2, 1 | 2>
+
+x1.g(x1.f); // no error
+>x1.g(x1.f) : 1 | 2
+>x1.g : (f: (x: 1 | 2) => 1 | 2) => 1 | 2
+>x1 : FMap<1 | 2, 1 | 2>
+>g : (f: (x: 1 | 2) => 1 | 2) => 1 | 2
+>x1.f : (x: 1 | 2) => 1 | 2
+>x1 : FMap<1 | 2, 1 | 2>
+>f : (x: 1 | 2) => 1 | 2
+
+declare const x2: FMap<2|3,"2"|"3">;
+>x2 : FMap<2 | 3, "2" | "3">
+
+x2.g(x2.f); // no error
+>x2.g(x2.f) : "2" | "3"
+>x2.g : (f: (x: 2 | 3) => "2" | "3") => "2" | "3"
+>x2 : FMap<2 | 3, "2" | "3">
+>g : (f: (x: 2 | 3) => "2" | "3") => "2" | "3"
+>x2.f : (x: 2 | 3) => "2" | "3"
+>x2 : FMap<2 | 3, "2" | "3">
+>f : (x: 2 | 3) => "2" | "3"
+
+const x = Math.random() < 0.5 ? x1 : x2;
+>x : FMap<1 | 2, 1 | 2> | FMap<2 | 3, "2" | "3">
+>Math.random() < 0.5 ? x1 : x2 : FMap<1 | 2, 1 | 2> | FMap<2 | 3, "2" | "3">
+>Math.random() < 0.5 : boolean
+>Math.random() : number
+>Math.random : () => number
+>Math : Math
+>random : () => number
+>0.5 : 0.5
+>x1 : FMap<1 | 2, 1 | 2>
+>x2 : FMap<2 | 3, "2" | "3">
+
+x.g; // (method) FMap<T, R>.g(f: ((x: 1 | 2) => 1 | 2) & ((x: 2 | 3) => "2" | "3")): 1 | 2 | "2" | "3"
+>x.g : ((f: (x: 1 | 2) => 1 | 2) => 1 | 2) | ((f: (x: 2 | 3) => "2" | "3") => "2" | "3")
+>x : FMap<1 | 2, 1 | 2> | FMap<2 | 3, "2" | "3">
+>g : ((f: (x: 1 | 2) => 1 | 2) => 1 | 2) | ((f: (x: 2 | 3) => "2" | "3") => "2" | "3")
+
+function ft2(x:1|2):1|2;
+>ft2 : { (x: 1 | 2): 1 | 2; (x: 3): "2" | "3"; }
+>x : 1 | 2
+
+function ft2(x:3):"2"|"3";
+>ft2 : { (x: 1 | 2): 1 | 2; (x: 3): "2" | "3"; }
+>x : 3
+
+//function ft2(x:1|2|3):1|2|"2"|"3";
+function ft2(x:1|2|3):1|2|"2"|"3" {
+>ft2 : { (x: 1 | 2): 1 | 2; (x: 3): "2" | "3"; }
+>x : 1 | 2 | 3
+
+    if (x!==3) return x1.f(x);
+>x!==3 : boolean
+>x : 1 | 2 | 3
+>3 : 3
+>x1.f(x) : 1 | 2
+>x1.f : (x: 1 | 2) => 1 | 2
+>x1 : FMap<1 | 2, 1 | 2>
+>f : (x: 1 | 2) => 1 | 2
+>x : 1 | 2
+
+    else return x2.f(x);
+>x2.f(x) : "2" | "3"
+>x2.f : (x: 2 | 3) => "2" | "3"
+>x2 : FMap<2 | 3, "2" | "3">
+>f : (x: 2 | 3) => "2" | "3"
+>x : 3
+}
+x.g(ft2); // error
+>x.g(ft2) : 1 | 2 | "2" | "3"
+>x.g : ((f: (x: 1 | 2) => 1 | 2) => 1 | 2) | ((f: (x: 2 | 3) => "2" | "3") => "2" | "3")
+>x : FMap<1 | 2, 1 | 2> | FMap<2 | 3, "2" | "3">
+>g : ((f: (x: 1 | 2) => 1 | 2) => 1 | 2) | ((f: (x: 2 | 3) => "2" | "3") => "2" | "3")
+>ft2 : { (x: 1 | 2): 1 | 2; (x: 3): "2" | "3"; }
+}
+
+
+/**********************/
+=== -57087-02.ts ===
+namespace ns1 {
+>ns1 : typeof ns1
+
+interface FMap<T,R> {
+    f:(x:T)=>R
+>f : (x: T) => R
+>x : T
+
+    g(f:(x:T)=>R):R;
+>g : (f: (x: T) => R) => R
+>f : (x: T) => R
+>x : T
+}
+declare const x1: FMap<1|2,1|2>;
+>x1 : FMap<1 | 2, 1 | 2>
+
+x1.g(x1.f); // no error
+>x1.g(x1.f) : 1 | 2
+>x1.g : (f: (x: 1 | 2) => 1 | 2) => 1 | 2
+>x1 : FMap<1 | 2, 1 | 2>
+>g : (f: (x: 1 | 2) => 1 | 2) => 1 | 2
+>x1.f : (x: 1 | 2) => 1 | 2
+>x1 : FMap<1 | 2, 1 | 2>
+>f : (x: 1 | 2) => 1 | 2
+
+declare const x2: FMap<2|3,"2"|"3">;
+>x2 : FMap<2 | 3, "2" | "3">
+
+x2.g(x2.f); // no error
+>x2.g(x2.f) : "2" | "3"
+>x2.g : (f: (x: 2 | 3) => "2" | "3") => "2" | "3"
+>x2 : FMap<2 | 3, "2" | "3">
+>g : (f: (x: 2 | 3) => "2" | "3") => "2" | "3"
+>x2.f : (x: 2 | 3) => "2" | "3"
+>x2 : FMap<2 | 3, "2" | "3">
+>f : (x: 2 | 3) => "2" | "3"
+
+const x = Math.random() < 0.5 ? x1 : x2;
+>x : FMap<1 | 2, 1 | 2> | FMap<2 | 3, "2" | "3">
+>Math.random() < 0.5 ? x1 : x2 : FMap<1 | 2, 1 | 2> | FMap<2 | 3, "2" | "3">
+>Math.random() < 0.5 : boolean
+>Math.random() : number
+>Math.random : () => number
+>Math : Math
+>random : () => number
+>0.5 : 0.5
+>x1 : FMap<1 | 2, 1 | 2>
+>x2 : FMap<2 | 3, "2" | "3">
+
+x.g; // (method) FMap<T, R>.g(f: ((x: 1 | 2) => 1 | 2) & ((x: 2 | 3) => "2" | "3")): 1 | 2 | "2" | "3"
+>x.g : ((f: (x: 1 | 2) => 1 | 2) => 1 | 2) | ((f: (x: 2 | 3) => "2" | "3") => "2" | "3")
+>x : FMap<1 | 2, 1 | 2> | FMap<2 | 3, "2" | "3">
+>g : ((f: (x: 1 | 2) => 1 | 2) => 1 | 2) | ((f: (x: 2 | 3) => "2" | "3") => "2" | "3")
+
+function ft3(x:1):1|2;
+>ft3 : { (x: 1): 1 | 2; (x: 3): "2" | "3"; (x: 2): 1 | 2 | "2" | "3"; }
+>x : 1
+
+function ft3(x:3):"2"|"3";
+>ft3 : { (x: 1): 1 | 2; (x: 3): "2" | "3"; (x: 2): 1 | 2 | "2" | "3"; }
+>x : 3
+
+function ft3(x:2):1|2|"2"|"3";
+>ft3 : { (x: 1): 1 | 2; (x: 3): "2" | "3"; (x: 2): 1 | 2 | "2" | "3"; }
+>x : 2
+
+//function ft3(x:1|2|3):1|2|"2"|"3";
+function ft3(x:1|2|3):1|2|"2"|"3"{
+>ft3 : { (x: 1): 1 | 2; (x: 3): "2" | "3"; (x: 2): 1 | 2 | "2" | "3"; }
+>x : 1 | 2 | 3
+
+    if (x===1) return x1.f(x);
+>x===1 : boolean
+>x : 1 | 2 | 3
+>1 : 1
+>x1.f(x) : 1 | 2
+>x1.f : (x: 1 | 2) => 1 | 2
+>x1 : FMap<1 | 2, 1 | 2>
+>f : (x: 1 | 2) => 1 | 2
+>x : 1
+
+    if (x===3) return x2.f(x);
+>x===3 : boolean
+>x : 2 | 3
+>3 : 3
+>x2.f(x) : "2" | "3"
+>x2.f : (x: 2 | 3) => "2" | "3"
+>x2 : FMap<2 | 3, "2" | "3">
+>f : (x: 2 | 3) => "2" | "3"
+>x : 3
+
+    return Math.random() < 0.5 ? x1.f(x) : x2.f(x);
+>Math.random() < 0.5 ? x1.f(x) : x2.f(x) : 1 | 2 | "2" | "3"
+>Math.random() < 0.5 : boolean
+>Math.random() : number
+>Math.random : () => number
+>Math : Math
+>random : () => number
+>0.5 : 0.5
+>x1.f(x) : 1 | 2
+>x1.f : (x: 1 | 2) => 1 | 2
+>x1 : FMap<1 | 2, 1 | 2>
+>f : (x: 1 | 2) => 1 | 2
+>x : 2
+>x2.f(x) : "2" | "3"
+>x2.f : (x: 2 | 3) => "2" | "3"
+>x2 : FMap<2 | 3, "2" | "3">
+>f : (x: 2 | 3) => "2" | "3"
+>x : 2
+}
+x.g(ft3); // error
+>x.g(ft3) : 1 | 2 | "2" | "3"
+>x.g : ((f: (x: 1 | 2) => 1 | 2) => 1 | 2) | ((f: (x: 2 | 3) => "2" | "3") => "2" | "3")
+>x : FMap<1 | 2, 1 | 2> | FMap<2 | 3, "2" | "3">
+>g : ((f: (x: 1 | 2) => 1 | 2) => 1 | 2) | ((f: (x: 2 | 3) => "2" | "3") => "2" | "3")
+>ft3 : { (x: 1): 1 | 2; (x: 3): "2" | "3"; (x: 2): 1 | 2 | "2" | "3"; }
+}
+
+
+/**********************/
+=== -57087-03.ts ===
+namespace ns2 {
+>ns2 : typeof ns2
+
+interface A9<T> {
+    t: T;
+>t : T
+
+    f():T;
+>f : () => T
+
+    g(f: ()=>T):T[];
+>g : (f: () => T) => T[]
+>f : () => T
+
+};
+
+declare const a9: A9<string> | A9<number>;
+>a9 : A9<string> | A9<number>
+
+// declare const f9: A9<string>["f"] & A9<number>["f"];
+// a9.g(f9); // NO ERROR when argument is defined as an intersection of functions type
+
+const f91 = ()=>Math.random() < 0.5 ? Math.random().toString() : Math.random();
+>f91 : () => string | number
+>()=>Math.random() < 0.5 ? Math.random().toString() : Math.random() : () => string | number
+>Math.random() < 0.5 ? Math.random().toString() : Math.random() : string | number
+>Math.random() < 0.5 : boolean
+>Math.random() : number
+>Math.random : () => number
+>Math : Math
+>random : () => number
+>0.5 : 0.5
+>Math.random().toString() : string
+>Math.random().toString : (radix?: number | undefined) => string
+>Math.random() : number
+>Math.random : () => number
+>Math : Math
+>random : () => number
+>toString : (radix?: number | undefined) => string
+>Math.random() : number
+>Math.random : () => number
+>Math : Math
+>random : () => number
+
+//f91 satisfies A9<string>["f"] & A9<number>["f"] // but is not a valid implementation of either.
+
+a9.g(f91); // INCORRECT ERROR;  argument is as an actual valid implementation, should not be error.
+>a9.g(f91) : string[] | number[]
+>a9.g : ((f: () => string) => string[]) | ((f: () => number) => number[])
+>a9 : A9<string> | A9<number>
+>g : ((f: () => string) => string[]) | ((f: () => number) => number[])
+>f91 : () => string | number
+
+}
+
+
+/**********************/
+=== -57087-04.ts ===
+namespace ns3 {
+>ns3 : typeof ns3
+
+interface C {
+  (x:1):"1";
+>x : 1
+
+  (x:2):"20";
+>x : 2
+
+  (x:number):number | "1" | "20";
+>x : number
+
+};
+interface B {
+  (x:2):"2"
+>x : 2
+
+  (x:3):"30"
+>x : 3
+
+  (x:number):number | "2" | "30";
+>x : number
+
+};
+interface A {
+  (x:3):"3"
+>x : 3
+
+  (x:1):"10"
+>x : 1
+
+  (x:number):number | "3" | "10";
+>x : number
+
+};
+
+  function foo(x:1):"1";
+>foo : { (x: 1): "1"; (x: 2): "2"; (x: 3): "3"; (x: number): number | "2" | "3" | "1"; }
+>x : 1
+
+  function foo(x:2):"2";
+>foo : { (x: 1): "1"; (x: 2): "2"; (x: 3): "3"; (x: number): number | "2" | "3" | "1"; }
+>x : 2
+
+  function foo(x:3):"3";
+>foo : { (x: 1): "1"; (x: 2): "2"; (x: 3): "3"; (x: number): number | "2" | "3" | "1"; }
+>x : 3
+
+  function foo(x:number):number|"1"|"2"|"3";
+>foo : { (x: 1): "1"; (x: 2): "2"; (x: 3): "3"; (x: number): number | "1" | "2" | "3"; }
+>x : number
+
+  function foo(x:number):number|"1"|"2"|"3"{
+>foo : { (x: 1): "1"; (x: 2): "2"; (x: 3): "3"; (x: number): number | "2" | "3" | "1"; }
+>x : number
+
+    if (x==1||x==2||x==3) return String(x) as any;
+>x==1||x==2||x==3 : boolean
+>x==1||x==2 : boolean
+>x==1 : boolean
+>x : number
+>1 : 1
+>x==2 : boolean
+>x : number
+>2 : 2
+>x==3 : boolean
+>x : number
+>3 : 3
+>String(x) as any : any
+>String(x) : string
+>String : StringConstructor
+>x : 1 | 2 | 3
+
+    return x;
+>x : number
+  }
+
+  // The `&`-intersection operator result should be independent of the order of it's operands.
+  foo satisfies A & B & C;
+>foo satisfies A & B & C : { (x: 1): "1"; (x: 2): "2"; (x: 3): "3"; (x: number): number | "2" | "3" | "1"; }
+>foo : { (x: 1): "1"; (x: 2): "2"; (x: 3): "3"; (x: number): number | "2" | "3" | "1"; }
+
+  foo satisfies A & C & B;
+>foo satisfies A & C & B : { (x: 1): "1"; (x: 2): "2"; (x: 3): "3"; (x: number): number | "2" | "3" | "1"; }
+>foo : { (x: 1): "1"; (x: 2): "2"; (x: 3): "3"; (x: number): number | "2" | "3" | "1"; }
+
+  foo satisfies B & A & C;
+>foo satisfies B & A & C : { (x: 1): "1"; (x: 2): "2"; (x: 3): "3"; (x: number): number | "2" | "3" | "1"; }
+>foo : { (x: 1): "1"; (x: 2): "2"; (x: 3): "3"; (x: number): number | "2" | "3" | "1"; }
+
+  foo satisfies B & C & A;
+>foo satisfies B & C & A : { (x: 1): "1"; (x: 2): "2"; (x: 3): "3"; (x: number): number | "2" | "3" | "1"; }
+>foo : { (x: 1): "1"; (x: 2): "2"; (x: 3): "3"; (x: number): number | "2" | "3" | "1"; }
+
+  foo satisfies C & A & B;
+>foo satisfies C & A & B : { (x: 1): "1"; (x: 2): "2"; (x: 3): "3"; (x: number): number | "2" | "3" | "1"; }
+>foo : { (x: 1): "1"; (x: 2): "2"; (x: 3): "3"; (x: number): number | "2" | "3" | "1"; }
+
+  foo satisfies C & B & A;
+>foo satisfies C & B & A : { (x: 1): "1"; (x: 2): "2"; (x: 3): "3"; (x: number): number | "2" | "3" | "1"; }
+>foo : { (x: 1): "1"; (x: 2): "2"; (x: 3): "3"; (x: number): number | "2" | "3" | "1"; }
+
+  type W = (A & B & C)|(A & C & B)|(B & A & C)|(B & C & A)|(C & A & B)|(C & B & A);
+>W : (A & B & C) | (A & C & B) | (B & A & C) | (B & C & A) | (C & A & B) | (C & B & A)
+
+  declare const w:W;
+>w : W
+
+  w(1);// "1","10"
+>w(1) : "1" | "10"
+>w : W
+>1 : 1
+
+  w(2);// "2","20"
+>w(2) : "2" | "20"
+>w : W
+>2 : 2
+
+  w(3);// "3","30"
+>w(3) : "3" | "30"
+>w : W
+>3 : 3
+
+  foo(1); // "1"
+>foo(1) : "1"
+>foo : { (x: 1): "1"; (x: 2): "2"; (x: 3): "3"; (x: number): number | "2" | "3" | "1"; }
+>1 : 1
+
+  foo(2); // "2"
+>foo(2) : "2"
+>foo : { (x: 1): "1"; (x: 2): "2"; (x: 3): "3"; (x: number): number | "2" | "3" | "1"; }
+>2 : 2
+
+  foo(3); // "3"
+>foo(3) : "3"
+>foo : { (x: 1): "1"; (x: 2): "2"; (x: 3): "3"; (x: number): number | "2" | "3" | "1"; }
+>3 : 3
+
+  foo satisfies W;
+>foo satisfies W : { (x: 1): "1"; (x: 2): "2"; (x: 3): "3"; (x: number): number | "2" | "3" | "1"; }
+>foo : { (x: 1): "1"; (x: 2): "2"; (x: 3): "3"; (x: number): number | "2" | "3" | "1"; }
+}
+
+
+/**********************/
+=== -57087-11.ts ===
+namespace ns4 {
+>ns4 : typeof ns4
+
+declare const f: { (x: 1 | 2): 1 | 2; (x: 3): "2" | "3"; }
+>f : { (x: 1 | 2): 1 | 2; (x: 3): "2" | "3"; }
+>x : 1 | 2
+>x : 3
+
+type Garg = ((x: 1 | 2) => 1 | 2) & ((x: 2 | 3) => "2" | "3");
+>Garg : ((x: 1 | 2) => 1 | 2) & ((x: 2 | 3) => "2" | "3")
+>x : 1 | 2
+>x : 2 | 3
+
+f satisfies Garg;
+>f satisfies Garg : { (x: 1 | 2): 1 | 2; (x: 3): "2" | "3"; }
+>f : { (x: 1 | 2): 1 | 2; (x: 3): "2" | "3"; }
+}
+
+
+/**********************/
+=== -57087-12.ts ===
+namespace ns5 {
+>ns5 : typeof ns5
+
+declare const f: { (x: 1): 1 | 2; (x: 3): "2" | "3"; (x: 2): 1 | 2 | "2" | "3"; }
+>f : { (x: 1): 1 | 2; (x: 3): "2" | "3"; (x: 2): 1 | 2 | "2" | "3"; }
+>x : 1
+>x : 3
+>x : 2
+
+type Garg = ((x: 1 | 2) => 1 | 2) & ((x: 2 | 3) => "2" | "3");
+>Garg : ((x: 1 | 2) => 1 | 2) & ((x: 2 | 3) => "2" | "3")
+>x : 1 | 2
+>x : 2 | 3
+
+f satisfies Garg;
+>f satisfies Garg : { (x: 1): 1 | 2; (x: 3): "2" | "3"; (x: 2): 1 | 2 | "2" | "3"; }
+>f : { (x: 1): 1 | 2; (x: 3): "2" | "3"; (x: 2): 1 | 2 | "2" | "3"; }
+}
+
+
+/**********************/
+=== -57087-13.ts ===
+namespace ns6 {
+>ns6 : typeof ns6
+
+declare const f42: () => string | number;
+>f42 : () => string | number
+
+f42 satisfies (() => string) & (() => number);
+>f42 satisfies (() => string) & (() => number) : () => string | number
+>f42 : () => string | number
+
+}
+
+
+/**********************/
+=== -57087-14.ts ===
+namespace ns7 {
+>ns7 : typeof ns7
+
+declare const foo: { (x: 1): "1"; (x: 2): "2"; (x: 3): "3"; (x: number): number | "1" | "2" | "3"; }
+>foo : { (x: 1): "1"; (x: 2): "2"; (x: 3): "3"; (x: number): number | "1" | "2" | "3"; }
+>x : 1
+>x : 2
+>x : 3
+>x : number
+
+interface C {
+    (x:1):"1";
+>x : 1
+
+    (x:2):"20";
+>x : 2
+
+    (x:number):number | "1" | "20";
+>x : number
+
+};
+interface B {
+    (x:2):"2"
+>x : 2
+
+    (x:3):"30"
+>x : 3
+
+    (x:number):number | "2" | "30";
+>x : number
+
+};
+interface A {
+    (x:3):"3"
+>x : 3
+
+    (x:1):"10"
+>x : 1
+
+    (x:number):number | "3" | "10";
+>x : number
+
+};
+
+
+foo satisfies A & B & C;
+>foo satisfies A & B & C : { (x: 1): "1"; (x: 2): "2"; (x: 3): "3"; (x: number): number | "2" | "3" | "1"; }
+>foo : { (x: 1): "1"; (x: 2): "2"; (x: 3): "3"; (x: number): number | "2" | "3" | "1"; }
+
+foo satisfies A & C & B;
+>foo satisfies A & C & B : { (x: 1): "1"; (x: 2): "2"; (x: 3): "3"; (x: number): number | "2" | "3" | "1"; }
+>foo : { (x: 1): "1"; (x: 2): "2"; (x: 3): "3"; (x: number): number | "2" | "3" | "1"; }
+
+foo satisfies B & A & C;
+>foo satisfies B & A & C : { (x: 1): "1"; (x: 2): "2"; (x: 3): "3"; (x: number): number | "2" | "3" | "1"; }
+>foo : { (x: 1): "1"; (x: 2): "2"; (x: 3): "3"; (x: number): number | "2" | "3" | "1"; }
+
+foo satisfies B & C & A;
+>foo satisfies B & C & A : { (x: 1): "1"; (x: 2): "2"; (x: 3): "3"; (x: number): number | "2" | "3" | "1"; }
+>foo : { (x: 1): "1"; (x: 2): "2"; (x: 3): "3"; (x: number): number | "2" | "3" | "1"; }
+
+foo satisfies C & A & B;
+>foo satisfies C & A & B : { (x: 1): "1"; (x: 2): "2"; (x: 3): "3"; (x: number): number | "2" | "3" | "1"; }
+>foo : { (x: 1): "1"; (x: 2): "2"; (x: 3): "3"; (x: number): number | "2" | "3" | "1"; }
+
+foo satisfies C & B & A;
+>foo satisfies C & B & A : { (x: 1): "1"; (x: 2): "2"; (x: 3): "3"; (x: number): number | "2" | "3" | "1"; }
+>foo : { (x: 1): "1"; (x: 2): "2"; (x: 3): "3"; (x: number): number | "2" | "3" | "1"; }
+
+type W = (A & B & C)|(A & C & B)|(B & A & C)|(B & C & A)|(C & A & B)|(C & B & A);
+>W : (A & B & C) | (A & C & B) | (B & A & C) | (B & C & A) | (C & A & B) | (C & B & A)
+
+foo satisfies W;
+>foo satisfies W : { (x: 1): "1"; (x: 2): "2"; (x: 3): "3"; (x: number): number | "2" | "3" | "1"; }
+>foo : { (x: 1): "1"; (x: 2): "2"; (x: 3): "3"; (x: number): number | "2" | "3" | "1"; }
+}
+
+
+/**********************/
+=== -57087-15.ts ===
+namespace ns8 {
+>ns8 : typeof ns8
+
+declare const foo: { (x: 1): "1"; (x: 2): "2"; (x: 3): "3"; (x: number): number; }
+>foo : { (x: 1): "1"; (x: 2): "2"; (x: 3): "3"; (x: number): number; }
+>x : 1
+>x : 2
+>x : 3
+>x : number
+
+interface C {
+    (x:1):"1";
+>x : 1
+
+    (x:2):"20";
+>x : 2
+
+    (x:number):number;
+>x : number
+
+    //(x:number):"1"|"20"|number;
+};
+interface B {
+    (x:2):"2"
+>x : 2
+
+    (x:3):"30"
+>x : 3
+
+    (x:number):number;
+>x : number
+
+    //(x:2|3|number):"2"|"30"|number;
+};
+interface A {
+    (x:3):"3"
+>x : 3
+
+    (x:1):"10"
+>x : 1
+
+    (x:number):number;
+>x : number
+
+    //(x:1|3|number):"3"|"10"|number;
+};
+
+
+foo satisfies A & B & C;
+>foo satisfies A & B & C : { (x: 1): "1"; (x: 2): "2"; (x: 3): "3"; (x: number): number; }
+>foo : { (x: 1): "1"; (x: 2): "2"; (x: 3): "3"; (x: number): number; }
+
+foo satisfies A & C & B;
+>foo satisfies A & C & B : { (x: 1): "1"; (x: 2): "2"; (x: 3): "3"; (x: number): number; }
+>foo : { (x: 1): "1"; (x: 2): "2"; (x: 3): "3"; (x: number): number; }
+
+foo satisfies B & A & C;
+>foo satisfies B & A & C : { (x: 1): "1"; (x: 2): "2"; (x: 3): "3"; (x: number): number; }
+>foo : { (x: 1): "1"; (x: 2): "2"; (x: 3): "3"; (x: number): number; }
+
+foo satisfies B & C & A;
+>foo satisfies B & C & A : { (x: 1): "1"; (x: 2): "2"; (x: 3): "3"; (x: number): number; }
+>foo : { (x: 1): "1"; (x: 2): "2"; (x: 3): "3"; (x: number): number; }
+
+foo satisfies C & A & B;
+>foo satisfies C & A & B : { (x: 1): "1"; (x: 2): "2"; (x: 3): "3"; (x: number): number; }
+>foo : { (x: 1): "1"; (x: 2): "2"; (x: 3): "3"; (x: number): number; }
+
+foo satisfies C & B & A;
+>foo satisfies C & B & A : { (x: 1): "1"; (x: 2): "2"; (x: 3): "3"; (x: number): number; }
+>foo : { (x: 1): "1"; (x: 2): "2"; (x: 3): "3"; (x: number): number; }
+
+type W = (A & B & C)|(A & C & B)|(B & A & C)|(B & C & A)|(C & A & B)|(C & B & A);
+>W : (A & B & C) | (A & C & B) | (B & A & C) | (B & C & A) | (C & A & B) | (C & B & A)
+
+foo satisfies W;
+>foo satisfies W : { (x: 1): "1"; (x: 2): "2"; (x: 3): "3"; (x: number): number; }
+>foo : { (x: 1): "1"; (x: 2): "2"; (x: 3): "3"; (x: number): number; }
+}
+
+
+/**********************/
+=== -57087-21.ts ===
+namespace ns9 {
+>ns9 : typeof ns9
+
+// test f domain does not support Garg domain (3 omitted from f domain) - cannot detect during satisfies but can detect during call to f1
+
+declare const f1: { (x: 1 | 2): 1 | 2; (x: 2): "2" | "3";}
+>f1 : { (x: 1 | 2): 1 | 2; (x: 2): "2" | "3"; }
+>x : 1 | 2
+>x : 2
+
+type Garg1 = ((x: 1 | 2) => 1 | 2) & ((x: 2 | 3) => "2" | "3");
+>Garg1 : ((x: 1 | 2) => 1 | 2) & ((x: 2 | 3) => "2" | "3")
+>x : 1 | 2
+>x : 2 | 3
+
+f1 satisfies Garg1; // no error expected
+>f1 satisfies Garg1 : { (x: 1 | 2): 1 | 2; (x: 2): "2" | "3"; }
+>f1 : { (x: 1 | 2): 1 | 2; (x: 2): "2" | "3"; }
+
+f1(3); // error exptected - No overload matches this call. (ts2769)
+>f1(3) : never
+>f1 : { (x: 1 | 2): 1 | 2; (x: 2): "2" | "3"; }
+>3 : 3
+
+// ~
+
+}
+
+
+/**********************/
+=== -57087-22.ts ===
+namespace ns10 {
+>ns10 : typeof ns10
+
+// test f range exceeds Garg range - should not satisfy
+
+declare const f2: { (x: 1 | 2): 0 |1 | 2; (x: 3): "2" | "3"; }
+>f2 : { (x: 1 | 2): 0 | 1 | 2; (x: 3): "2" | "3"; }
+>x : 1 | 2
+>x : 3
+
+type Garg2 = ((x: 1 | 2) => 1 | 2) & ((x: 2 | 3) => "2" | "3");
+>Garg2 : ((x: 1 | 2) => 1 | 2) & ((x: 2 | 3) => "2" | "3")
+>x : 1 | 2
+>x : 2 | 3
+
+f2 satisfies Garg2; // should not satisfy
+>f2 satisfies Garg2 : { (x: 1 | 2): 0 | 1 | 2; (x: 3): "2" | "3"; }
+>f2 : { (x: 1 | 2): 0 | 1 | 2; (x: 3): "2" | "3"; }
+
+}
+
+
+/**********************/
+=== -57087-31.ts ===
+namespace ns11 {
+>ns11 : typeof ns11
+
+interface Garg31A {
+    (): "01";
+    (x:1, y:1): "211"
+>x : 1
+>y : 1
+
+};
+interface Garg31B {
+    (): "02";
+    (x:2, y:2): "222";
+>x : 2
+>y : 2
+
+    (x:2, y:1): "221"
+>x : 2
+>y : 1
+
+};
+
+declare const f31a: { (): "01"; (x: 1, y: 1): "211"; (x: 2, y: 2): "222"; (x: 2, y: 1): "221"; }
+>f31a : { (): "01"; (x: 1, y: 1): "211"; (x: 2, y: 2): "222"; (x: 2, y: 1): "221"; }
+>x : 1
+>y : 1
+>x : 2
+>y : 2
+>x : 2
+>y : 1
+
+f31a satisfies Garg31A & Garg31B; // should satisfy
+>f31a satisfies Garg31A & Garg31B : { (): "01"; (x: 1, y: 1): "211"; (x: 2, y: 2): "222"; (x: 2, y: 1): "221"; }
+>f31a : { (): "01"; (x: 1, y: 1): "211"; (x: 2, y: 2): "222"; (x: 2, y: 1): "221"; }
+
+declare const f31b: { (): "01"; (x: 1, y: 1): "211"; (x: 2, y: 2): "221" /*should fail match*/; (x: 2, y: 1): "221"; }
+>f31b : { (): "01"; (x: 1, y: 1): "211"; (x: 2, y: 2): "221"; (x: 2, y: 1): "221"; }
+>x : 1
+>y : 1
+>x : 2
+>y : 2
+>x : 2
+>y : 1
+
+f31b satisfies Garg31A & Garg31B; // should not satisfy
+>f31b satisfies Garg31A & Garg31B : { (): "01"; (x: 1, y: 1): "211"; (x: 2, y: 2): "221"; (x: 2, y: 1): "221"; }
+>f31b : { (): "01"; (x: 1, y: 1): "211"; (x: 2, y: 2): "221"; (x: 2, y: 1): "221"; }
+
+declare const f31c: { (): "01"; (x: 1, y: 1): "211"; (x: 2, y: 2): "222"; (x: 2, y: 1): "221"; (x: 1, y: 2): "221" /*should fail match*/; }
+>f31c : { (): "01"; (x: 1, y: 1): "211"; (x: 2, y: 2): "222"; (x: 2, y: 1): "221"; (x: 1, y: 2): "221"; }
+>x : 1
+>y : 1
+>x : 2
+>y : 2
+>x : 2
+>y : 1
+>x : 1
+>y : 2
+
+f31c satisfies Garg31A & Garg31B; // should not satisfy
+>f31c satisfies Garg31A & Garg31B : { (): "01"; (x: 1, y: 1): "211"; (x: 2, y: 2): "222"; (x: 2, y: 1): "221"; (x: 1, y: 2): "221"; }
+>f31c : { (): "01"; (x: 1, y: 1): "211"; (x: 2, y: 2): "222"; (x: 2, y: 1): "221"; (x: 1, y: 2): "221"; }
+
+declare const f31d: { (): "01"; (x?: 1, y?: 1): "211"; (x: 2, y: 2): "222"; (x: 2, y: 1): "221"; }
+>f31d : { (): "01"; (x?: 1, y?: 1): "211"; (x: 2, y: 2): "222"; (x: 2, y: 1): "221"; }
+>x : 1 | undefined
+>y : 1 | undefined
+>x : 2
+>y : 2
+>x : 2
+>y : 1
+
+f31d satisfies Garg31A & Garg31B; // should not satisfy
+>f31d satisfies Garg31A & Garg31B : { (): "01"; (x?: 1 | undefined, y?: 1 | undefined): "211"; (x: 2, y: 2): "222"; (x: 2, y: 1): "221"; }
+>f31d : { (): "01"; (x?: 1 | undefined, y?: 1 | undefined): "211"; (x: 2, y: 2): "222"; (x: 2, y: 1): "221"; }
+
+}
+
+
+/**********************/
+=== -57087-33.ts ===
+namespace ns12 {
+>ns12 : typeof ns12
+
+interface Garg33A {
+    (): "01";
+    (x?:1, y?:1): "211"
+>x : 1 | undefined
+>y : 1 | undefined
+
+};
+interface Garg33B {
+    (): "02";
+    (x?:2, y?:2): "222";
+>x : 2 | undefined
+>y : 2 | undefined
+
+    (x?:2, y?:1): "221"
+>x : 2 | undefined
+>y : 1 | undefined
+
+};
+
+
+declare const f33b: { (): "01"; (x: 1, y: 1): "211"; (x: 2, y: 2): "221" /*should fail match*/; (x: 2, y: 1): "221"; }
+>f33b : { (): "01"; (x: 1, y: 1): "211"; (x: 2, y: 2): "221"; (x: 2, y: 1): "221"; }
+>x : 1
+>y : 1
+>x : 2
+>y : 2
+>x : 2
+>y : 1
+
+f33b satisfies Garg33A & Garg33B; // should not satisfy
+>f33b satisfies Garg33A & Garg33B : { (): "01"; (x: 1, y: 1): "211"; (x: 2, y: 2): "221"; (x: 2, y: 1): "221"; }
+>f33b : { (): "01"; (x: 1, y: 1): "211"; (x: 2, y: 2): "221"; (x: 2, y: 1): "221"; }
+
+declare const f33c: { (): "01"; (x: 1, y: 1): "211"; (x: 2, y: 2): "222"; (x: 2, y: 1): "221"; (x: 1, y: 2): "221" /*should fail match*/; }
+>f33c : { (): "01"; (x: 1, y: 1): "211"; (x: 2, y: 2): "222"; (x: 2, y: 1): "221"; (x: 1, y: 2): "221"; }
+>x : 1
+>y : 1
+>x : 2
+>y : 2
+>x : 2
+>y : 1
+>x : 1
+>y : 2
+
+f33c satisfies Garg33A & Garg33B; // should not satisfy
+>f33c satisfies Garg33A & Garg33B : { (): "01"; (x: 1, y: 1): "211"; (x: 2, y: 2): "222"; (x: 2, y: 1): "221"; (x: 1, y: 2): "221"; }
+>f33c : { (): "01"; (x: 1, y: 1): "211"; (x: 2, y: 2): "222"; (x: 2, y: 1): "221"; (x: 1, y: 2): "221"; }
+
+
+declare const f33a: { (): "01"; (x: 1, y: 1): "211"; (x: 2, y: 2): "222"; (x: 2, y: 1): "221"; }
+>f33a : { (): "01"; (x: 1, y: 1): "211"; (x: 2, y: 2): "222"; (x: 2, y: 1): "221"; }
+>x : 1
+>y : 1
+>x : 2
+>y : 2
+>x : 2
+>y : 1
+
+f33a satisfies Garg33A & Garg33B; // should satisfy
+>f33a satisfies Garg33A & Garg33B : { (): "01"; (x: 1, y: 1): "211"; (x: 2, y: 2): "222"; (x: 2, y: 1): "221"; }
+>f33a : { (): "01"; (x: 1, y: 1): "211"; (x: 2, y: 2): "222"; (x: 2, y: 1): "221"; }
+
+declare const f33d: { (): "01"; (x?: 1, y?: 1): "211"; (x: 2, y: 2): "222"; (x: 2, y: 1): "221"; }
+>f33d : { (): "01"; (x?: 1, y?: 1): "211"; (x: 2, y: 2): "222"; (x: 2, y: 1): "221"; }
+>x : 1 | undefined
+>y : 1 | undefined
+>x : 2
+>y : 2
+>x : 2
+>y : 1
+
+f33d satisfies Garg33A & Garg33B; // should satisfy
+>f33d satisfies Garg33A & Garg33B : { (): "01"; (x?: 1 | undefined, y?: 1 | undefined): "211"; (x: 2, y: 2): "222"; (x: 2, y: 1): "221"; }
+>f33d : { (): "01"; (x?: 1 | undefined, y?: 1 | undefined): "211"; (x: 2, y: 2): "222"; (x: 2, y: 1): "221"; }
+
+declare const f33e: { (): "01"; (x?: 1, y?: 1): "211"; (x?: 2, y?: 2): "222"; (x: 2, y: 1): "221"; }
+>f33e : { (): "01"; (x?: 1, y?: 1): "211"; (x?: 2, y?: 2): "222"; (x: 2, y: 1): "221"; }
+>x : 1 | undefined
+>y : 1 | undefined
+>x : 2 | undefined
+>y : 2 | undefined
+>x : 2
+>y : 1
+
+f33e satisfies Garg33A & Garg33B; // should satisfy
+>f33e satisfies Garg33A & Garg33B : { (): "01"; (x?: 1 | undefined, y?: 1 | undefined): "211"; (x?: 2 | undefined, y?: 2 | undefined): "222"; (x: 2, y: 1): "221"; }
+>f33e : { (): "01"; (x?: 1 | undefined, y?: 1 | undefined): "211"; (x?: 2 | undefined, y?: 2 | undefined): "222"; (x: 2, y: 1): "221"; }
+
+}
+
+
+/**********************/
+=== -57087-35.ts ===
+namespace ns13 {
+>ns13 : typeof ns13
+
+interface Garg35A {
+    ({x,y}:{x:1, y:1}): "111"
+>x : 1
+>y : 1
+>x : 1
+>y : 1
+
+};
+interface Garg35B {
+    ({x,y}:{x?:2, y?:1}): "221"
+>x : 2 | undefined
+>y : 1 | undefined
+>x : 2 | undefined
+>y : 1 | undefined
+
+    ({x,y}:{x:2, y?:2}): "222";
+>x : 2
+>y : 2 | undefined
+>x : 2
+>y : 2 | undefined
+
+};
+
+declare const f35a: { ({x,y}:{x:1, y:1}): "111"; ({x,y}:{x?:2, y?:1}): "221"; ({x,y}:{x:2, y?:2}): "222"; }
+>f35a : { ({ x, y }: { x: 1; y: 1; }): "111"; ({ x, y }: { x?: 2; y?: 1; }): "221"; ({ x, y }: { x: 2; y?: 2; }): "222"; }
+>x : 1
+>y : 1
+>x : 1
+>y : 1
+>x : 2 | undefined
+>y : 1 | undefined
+>x : 2 | undefined
+>y : 1 | undefined
+>x : 2
+>y : 2 | undefined
+>x : 2
+>y : 2 | undefined
+
+f35a satisfies Garg35A & Garg35B; // should satisfy
+>f35a satisfies Garg35A & Garg35B : { ({ x, y }: { x: 1; y: 1; }): "111"; ({ x, y }: { x?: 2; y?: 1; }): "221"; ({ x, y }: { x: 2; y?: 2; }): "222"; }
+>f35a : { ({ x, y }: { x: 1; y: 1; }): "111"; ({ x, y }: { x?: 2; y?: 1; }): "221"; ({ x, y }: { x: 2; y?: 2; }): "222"; }
+
+declare const f35b: { ({x,y}:{x:1, y:1}): "111"; ({x,y}:{x?:2, y?:1}): "221"; ({x,y}:{x:2, y:2}): "222"; }
+>f35b : { ({ x, y }: { x: 1; y: 1; }): "111"; ({ x, y }: { x?: 2; y?: 1; }): "221"; ({ x, y }: { x: 2; y: 2; }): "222"; }
+>x : 1
+>y : 1
+>x : 1
+>y : 1
+>x : 2 | undefined
+>y : 1 | undefined
+>x : 2 | undefined
+>y : 1 | undefined
+>x : 2
+>y : 2
+>x : 2
+>y : 2
+
+f35b satisfies Garg35A & Garg35B; // should satisfy
+>f35b satisfies Garg35A & Garg35B : { ({ x, y }: { x: 1; y: 1; }): "111"; ({ x, y }: { x?: 2; y?: 1; }): "221"; ({ x, y }: { x: 2; y: 2; }): "222"; }
+>f35b : { ({ x, y }: { x: 1; y: 1; }): "111"; ({ x, y }: { x?: 2; y?: 1; }): "221"; ({ x, y }: { x: 2; y: 2; }): "222"; }
+
+declare const f35c: { ({x,y}:{x:1, y:1}): "111"; (arg:Record<string,never>): "221"; ({x}:{x:2}): "221"; ({y}:{y:1}): "221"; ({x,y}:{x:2, y:1}): "221"; ({x,y}:{x:2, y:2}): "222"; }
+>f35c : { ({ x, y }: { x: 1; y: 1; }): "111"; (arg: Record<string, never>): "221"; ({ x }: { x: 2; }): "221"; ({ y }: { y: 1; }): "221"; ({ x, y }: { x: 2; y: 1; }): "221"; ({ x, y }: { x: 2; y: 2; }): "222"; }
+>x : 1
+>y : 1
+>x : 1
+>y : 1
+>arg : Record<string, never>
+>x : 2
+>x : 2
+>y : 1
+>y : 1
+>x : 2
+>y : 1
+>x : 2
+>y : 1
+>x : 2
+>y : 2
+>x : 2
+>y : 2
+
+f35c satisfies Garg35A & Garg35B; // should satisfy
+>f35c satisfies Garg35A & Garg35B : { ({ x, y }: { x: 1; y: 1; }): "111"; (arg: Record<string, never>): "221"; ({ x }: { x: 2; }): "221"; ({ y }: { y: 1; }): "221"; ({ x, y }: { x: 2; y: 1; }): "221"; ({ x, y }: { x: 2; y: 2; }): "222"; }
+>f35c : { ({ x, y }: { x: 1; y: 1; }): "111"; (arg: Record<string, never>): "221"; ({ x }: { x: 2; }): "221"; ({ y }: { y: 1; }): "221"; ({ x, y }: { x: 2; y: 1; }): "221"; ({ x, y }: { x: 2; y: 2; }): "222"; }
+
+const t1 = f35c({}); // no error, return 221
+>t1 : "221"
+>f35c({}) : "221"
+>f35c : { ({ x, y }: { x: 1; y: 1; }): "111"; (arg: Record<string, never>): "221"; ({ x }: { x: 2; }): "221"; ({ y }: { y: 1; }): "221"; ({ x, y }: { x: 2; y: 1; }): "221"; ({ x, y }: { x: 2; y: 2; }): "222"; }
+>{} : {}
+
+declare const f35d: { ({x,y}:{x:1, y:1}): "111"; (arg:Record<string,never>): "221"; /*({x}:{x:2}): "221";*/ ({y}:{y:1}): "221"; ({x,y}:{x:2, y:1}): "221"; ({x,y}:{x:2, y:2}): "222"; }
+>f35d : { ({ x, y }: { x: 1; y: 1; }): "111"; (arg: Record<string, never>): "221"; ({ y }: { y: 1; }): "221"; ({ x, y }: { x: 2; y: 1; }): "221"; ({ x, y }: { x: 2; y: 2; }): "222"; }
+>x : 1
+>y : 1
+>x : 1
+>y : 1
+>arg : Record<string, never>
+>y : 1
+>y : 1
+>x : 2
+>y : 1
+>x : 2
+>y : 1
+>x : 2
+>y : 2
+>x : 2
+>y : 2
+
+f35d satisfies Garg35A & Garg35B; // should satisfy
+>f35d satisfies Garg35A & Garg35B : { ({ x, y }: { x: 1; y: 1; }): "111"; (arg: Record<string, never>): "221"; ({ y }: { y: 1; }): "221"; ({ x, y }: { x: 2; y: 1; }): "221"; ({ x, y }: { x: 2; y: 2; }): "222"; }
+>f35d : { ({ x, y }: { x: 1; y: 1; }): "111"; (arg: Record<string, never>): "221"; ({ y }: { y: 1; }): "221"; ({ x, y }: { x: 2; y: 1; }): "221"; ({ x, y }: { x: 2; y: 2; }): "222"; }
+
+const t2 = f35d({x:2}); // error expected - no overload matches this call
+>t2 : never
+>f35d({x:2}) : never
+>f35d : { ({ x, y }: { x: 1; y: 1; }): "111"; (arg: Record<string, never>): "221"; ({ y }: { y: 1; }): "221"; ({ x, y }: { x: 2; y: 1; }): "221"; ({ x, y }: { x: 2; y: 2; }): "222"; }
+>{x:2} : { x: 2; }
+>x : 2
+>2 : 2
+
+//              ~~~~~
+
+}
+
+
+/**********************/
+=== -57087-36.ts ===
+namespace ns14 {
+>ns14 : typeof ns14
+
+interface Garg36A {
+    ({x,y}:{x:1, y:1}): "111"
+>x : 1
+>y : 1
+>x : 1
+>y : 1
+
+};
+interface Garg36B {
+    ({x,y}:{x?:2, y?:1}): "221"
+>x : 2 | undefined
+>y : 1 | undefined
+>x : 2 | undefined
+>y : 1 | undefined
+
+    ({x,y}:{x:2, y?:2}): "222";
+>x : 2
+>y : 2 | undefined
+>x : 2
+>y : 2 | undefined
+
+};
+
+
+declare const f36d: { ({x,y}:{x:1, y:1}): "111"; ({x,y}:{x:2, y:1}): "221"; ({x,y}:{x:2, y:2}): "222"; }
+>f36d : { ({ x, y }: { x: 1; y: 1; }): "111"; ({ x, y }: { x: 2; y: 1; }): "221"; ({ x, y }: { x: 2; y: 2; }): "222"; }
+>x : 1
+>y : 1
+>x : 1
+>y : 1
+>x : 2
+>y : 1
+>x : 2
+>y : 1
+>x : 2
+>y : 2
+>x : 2
+>y : 2
+
+f36d satisfies Garg36A & Garg36B; // should satisfy
+>f36d satisfies Garg36A & Garg36B : { ({ x, y }: { x: 1; y: 1; }): "111"; ({ x, y }: { x: 2; y: 1; }): "221"; ({ x, y }: { x: 2; y: 2; }): "222"; }
+>f36d : { ({ x, y }: { x: 1; y: 1; }): "111"; ({ x, y }: { x: 2; y: 1; }): "221"; ({ x, y }: { x: 2; y: 2; }): "222"; }
+
+}
+
+
+/**********************/
+=== -57087-37.ts ===
+namespace ns15 {
+>ns15 : typeof ns15
+
+interface Garg37A {
+    ({x,y}:{x:1, y:1}): "111"
+>x : 1
+>y : 1
+>x : 1
+>y : 1
+
+};
+interface Garg37B {
+    ({x,y}:{x?:2, y?:1}): "221"
+>x : 2 | undefined
+>y : 1 | undefined
+>x : 2 | undefined
+>y : 1 | undefined
+
+    ({x,y}:{x:2, y?:2}): "222";
+>x : 2
+>y : 2 | undefined
+>x : 2
+>y : 2 | undefined
+
+};
+
+
+declare const f37d: { ({x,y}:{x:1, y:1}): "111"; (): "221"; ({x}:{x:2}): "221"; ({y}:{y:1}): "221"; ({x,y}:{x:2, y:1}): "221"; ({x,y}:{x:2, y:2}): "222"; }
+>f37d : { ({ x, y }: { x: 1; y: 1; }): "111"; (): "221"; ({ x }: { x: 2; }): "221"; ({ y }: { y: 1; }): "221"; ({ x, y }: { x: 2; y: 1; }): "221"; ({ x, y }: { x: 2; y: 2; }): "222"; }
+>x : 1
+>y : 1
+>x : 1
+>y : 1
+>x : 2
+>x : 2
+>y : 1
+>y : 1
+>x : 2
+>y : 1
+>x : 2
+>y : 1
+>x : 2
+>y : 2
+>x : 2
+>y : 2
+
+f37d satisfies Garg37A & Garg37B; // should satisfy
+>f37d satisfies Garg37A & Garg37B : { ({ x, y }: { x: 1; y: 1; }): "111"; (): "221"; ({ x }: { x: 2; }): "221"; ({ y }: { y: 1; }): "221"; ({ x, y }: { x: 2; y: 1; }): "221"; ({ x, y }: { x: 2; y: 2; }): "222"; }
+>f37d : { ({ x, y }: { x: 1; y: 1; }): "111"; (): "221"; ({ x }: { x: 2; }): "221"; ({ y }: { y: 1; }): "221"; ({ x, y }: { x: 2; y: 1; }): "221"; ({ x, y }: { x: 2; y: 2; }): "222"; }
+
+f37d({}); // error expected - no overload matches this call
+>f37d({}) : never
+>f37d : { ({ x, y }: { x: 1; y: 1; }): "111"; (): "221"; ({ x }: { x: 2; }): "221"; ({ y }: { y: 1; }): "221"; ({ x, y }: { x: 2; y: 1; }): "221"; ({ x, y }: { x: 2; y: 2; }): "222"; }
+>{} : {}
+
+}
+
+
+/**********************/
+=== -57087-callsOnComplexSignatures-01.ts ===
+namespace ns16 {
+>ns16 : typeof ns16
+
+function test3(items: string[] | number[]) {
+>test3 : (items: string[] | number[]) => void
+>items : string[] | number[]
+
+    items.forEach(item => console.log(item)); // must not be error
+>items.forEach(item => console.log(item)) : void
+>items.forEach : ((callbackfn: (value: number, index: number, array: number[]) => void, thisArg?: any) => void) | ((callbackfn: (value: string, index: number, array: string[]) => void, thisArg?: any) => void)
+>items : string[] | number[]
+>forEach : ((callbackfn: (value: number, index: number, array: number[]) => void, thisArg?: any) => void) | ((callbackfn: (value: string, index: number, array: string[]) => void, thisArg?: any) => void)
+>item => console.log(item) : (item: string | number) => void
+>item : string | number
+>console.log(item) : void
+>console.log : (...data: any[]) => void
+>console : Console
+>log : (...data: any[]) => void
+>item : string | number
+
+//                   ~~~~~~~~~~~~~~~~~~~~~~~~~
+// !!! error TS2345: Argument of type '(item: string | number) => void' is not assignable to parameter of type '((value: string, index: number, array: string[]) => void) & ((value: number, index: number, array: number[]) => void)'.
+}
+}
+
+
+/**********************/
+=== -57087-callsOnComplexSignatures-02.ts ===
+namespace ns17 {
+>ns17 : typeof ns17
+
+type MyArray<T> = {
+>MyArray : MyArray<T>
+
+    [n: number]: T;
+>n : number
+
+    forEach(callbackfn: (value: T, index: number, array: MyArray<T>) => unknown): void;
+>forEach : (callbackfn: (value: T, index: number, array: MyArray<T>) => unknown) => void
+>callbackfn : (value: T, index: number, array: MyArray<T>) => unknown
+>value : T
+>index : number
+>array : MyArray<T>
+
+};
+
+
+
+function test3(items: MyArray<string> | MyArray<number>) {
+>test3 : (items: MyArray<string> | MyArray<number>) => void
+>items : MyArray<string> | MyArray<number>
+
+    items.forEach(item => console.log(item));
+>items.forEach(item => console.log(item)) : void
+>items.forEach : ((callbackfn: (value: string, index: number, array: MyArray<string>) => unknown) => void) | ((callbackfn: (value: number, index: number, array: MyArray<number>) => unknown) => void)
+>items : MyArray<string> | MyArray<number>
+>forEach : ((callbackfn: (value: string, index: number, array: MyArray<string>) => unknown) => void) | ((callbackfn: (value: number, index: number, array: MyArray<number>) => unknown) => void)
+>item => console.log(item) : (item: string | number) => void
+>item : string | number
+>console.log(item) : void
+>console.log : (...data: any[]) => void
+>console : Console
+>log : (...data: any[]) => void
+>item : string | number
+}
+}
+
+
+/**********************/
+=== -57087-contextualOverloadListFromArrayUnion-01.ts ===
+namespace ns18 {
+>ns18 : typeof ns18
+
+declare const y1: number[][] | string[];
+>y1 : string[] | number[][]
+
+export const yThen1 = y1.map(item => item.length);
+>yThen1 : number[]
+>y1.map(item => item.length) : number[]
+>y1.map : (<U>(callbackfn: (value: string, index: number, array: string[]) => U, thisArg?: any) => U[]) | (<U_1>(callbackfn: (value: number[], index: number, array: number[][]) => U_1, thisArg?: any) => U_1[])
+>y1 : string[] | number[][]
+>map : (<U>(callbackfn: (value: string, index: number, array: string[]) => U, thisArg?: any) => U[]) | (<U_1>(callbackfn: (value: number[], index: number, array: number[][]) => U_1, thisArg?: any) => U_1[])
+>item => item.length : (item: string | number[]) => number
+>item : string | number[]
+>item.length : number
+>item : string | number[]
+>length : number
+
+}
+
+
+/**********************/
+=== -57087-contextualOverloadListFromArrayUnion-02.ts ===
+namespace ns19 {
+>ns19 : typeof ns19
+
+declare const y2: number[][] | string[];
+>y2 : string[] | number[][]
+
+declare function f2<T extends {length:number}>(x: T): number;
+>f2 : <T extends { length: number; }>(x: T) => number
+>length : number
+>x : T
+
+export const yThen2 = y2.map(f2);
+>yThen2 : number[]
+>y2.map(f2) : number[]
+>y2.map : (<U>(callbackfn: (value: string, index: number, array: string[]) => U, thisArg?: any) => U[]) | (<U_1>(callbackfn: (value: number[], index: number, array: number[][]) => U_1, thisArg?: any) => U_1[])
+>y2 : string[] | number[][]
+>map : (<U>(callbackfn: (value: string, index: number, array: string[]) => U, thisArg?: any) => U[]) | (<U_1>(callbackfn: (value: number[], index: number, array: number[][]) => U_1, thisArg?: any) => U_1[])
+>f2 : <T extends { length: number; }>(x: T) => number
+
+}
+
+
+/**********************/
+=== -57087-contextualOverloadListFromArrayUnion-03.ts ===
+namespace ns20 {
+>ns20 : typeof ns20
+
+declare const y3: number[][] | string[];
+>y3 : string[] | number[][]
+
+declare function f3<T extends {length:number}>(): (x: T) => number;
+>f3 : <T extends { length: number; }>() => (x: T) => number
+>length : number
+>x : T
+
+export const yThen3 = y3.map(f3); // should be an error, but is not
+>yThen3 : ((x: { length: number; }) => number)[]
+>y3.map(f3) : ((x: { length: number; }) => number)[]
+>y3.map : (<U>(callbackfn: (value: string, index: number, array: string[]) => U, thisArg?: any) => U[]) | (<U_1>(callbackfn: (value: number[], index: number, array: number[][]) => U_1, thisArg?: any) => U_1[])
+>y3 : string[] | number[][]
+>map : (<U>(callbackfn: (value: string, index: number, array: string[]) => U, thisArg?: any) => U[]) | (<U_1>(callbackfn: (value: number[], index: number, array: number[][]) => U_1, thisArg?: any) => U_1[])
+>f3 : <T extends { length: number; }>() => (x: T) => number
+
+}
+
+
+/**********************/
+=== -57087-contextualOverloadListFromArrayUnion-04.ts ===
+namespace ns21 {
+>ns21 : typeof ns21
+
+declare const y4: number[][] | string[];
+>y4 : string[] | number[][]
+
+declare function f4<T extends {length:number}>(): (x: T) => number;
+>f4 : <T extends { length: number; }>() => (x: T) => number
+>length : number
+>x : T
+
+export const yThen4 = y4.map(f4()); // should not be an error, but is an error
+>yThen4 : number[]
+>y4.map(f4()) : number[]
+>y4.map : (<U>(callbackfn: (value: string, index: number, array: string[]) => U, thisArg?: any) => U[]) | (<U_1>(callbackfn: (value: number[], index: number, array: number[][]) => U_1, thisArg?: any) => U_1[])
+>y4 : string[] | number[][]
+>map : (<U>(callbackfn: (value: string, index: number, array: string[]) => U, thisArg?: any) => U[]) | (<U_1>(callbackfn: (value: number[], index: number, array: number[][]) => U_1, thisArg?: any) => U_1[])
+>f4() : (x: number[]) => number
+>f4 : <T extends { length: number; }>() => (x: T) => number
+
+}
+
+
+/**********************/
+=== -57087-contextualOverloadListFromArrayUnion-05.ts ===
+namespace ns22 {
+>ns22 : typeof ns22
+
+declare const y5: number[][] | string[];
+>y5 : string[] | number[][]
+
+declare const f5: { (x: number[]): number; (x: string): number;}
+>f5 : { (x: number[]): number; (x: string): number; }
+>x : number[]
+>x : string
+
+export const yThen4 = y5.map(f5);
+>yThen4 : number[]
+>y5.map(f5) : number[]
+>y5.map : (<U>(callbackfn: (value: string, index: number, array: string[]) => U, thisArg?: any) => U[]) | (<U_1>(callbackfn: (value: number[], index: number, array: number[][]) => U_1, thisArg?: any) => U_1[])
+>y5 : string[] | number[][]
+>map : (<U>(callbackfn: (value: string, index: number, array: string[]) => U, thisArg?: any) => U[]) | (<U_1>(callbackfn: (value: number[], index: number, array: number[][]) => U_1, thisArg?: any) => U_1[])
+>f5 : { (x: number[]): number; (x: string): number; }
+
+}
+
+
+/**********************/
+=== -57087-contextualOverloadListFromArrayUnion-10.ts ===
+namespace ns23 {
+>ns23 : typeof ns23
+
+declare const y1: number[][] | string[];
+>y1 : string[] | number[][]
+
+export const yThen1 = y1.map(item => item.length);
+>yThen1 : number[]
+>y1.map(item => item.length) : number[]
+>y1.map : (<U>(callbackfn: (value: string, index: number, array: string[]) => U, thisArg?: any) => U[]) | (<U_1>(callbackfn: (value: number[], index: number, array: number[][]) => U_1, thisArg?: any) => U_1[])
+>y1 : string[] | number[][]
+>map : (<U>(callbackfn: (value: string, index: number, array: string[]) => U, thisArg?: any) => U[]) | (<U_1>(callbackfn: (value: number[], index: number, array: number[][]) => U_1, thisArg?: any) => U_1[])
+>item => item.length : (item: string | number[]) => number
+>item : string | number[]
+>item.length : number
+>item : string | number[]
+>length : number
+
+declare function f12<T extends {length:number}>(x: T): number;
+>f12 : <T extends { length: number; }>(x: T) => number
+>length : number
+>x : T
+
+export const yThen2 = y1.map(f12);
+>yThen2 : number[]
+>y1.map(f12) : number[]
+>y1.map : (<U>(callbackfn: (value: string, index: number, array: string[]) => U, thisArg?: any) => U[]) | (<U_1>(callbackfn: (value: number[], index: number, array: number[][]) => U_1, thisArg?: any) => U_1[])
+>y1 : string[] | number[][]
+>map : (<U>(callbackfn: (value: string, index: number, array: string[]) => U, thisArg?: any) => U[]) | (<U_1>(callbackfn: (value: number[], index: number, array: number[][]) => U_1, thisArg?: any) => U_1[])
+>f12 : <T extends { length: number; }>(x: T) => number
+
+export const yThen2a = y1.map(<T extends {length:number}>(x:T)=>x.length);
+>yThen2a : number[]
+>y1.map(<T extends {length:number}>(x:T)=>x.length) : number[]
+>y1.map : (<U>(callbackfn: (value: string, index: number, array: string[]) => U, thisArg?: any) => U[]) | (<U_1>(callbackfn: (value: number[], index: number, array: number[][]) => U_1, thisArg?: any) => U_1[])
+>y1 : string[] | number[][]
+>map : (<U>(callbackfn: (value: string, index: number, array: string[]) => U, thisArg?: any) => U[]) | (<U_1>(callbackfn: (value: number[], index: number, array: number[][]) => U_1, thisArg?: any) => U_1[])
+><T extends {length:number}>(x:T)=>x.length : <T extends { length: number; }>(x: T) => number
+>length : number
+>x : T
+>x.length : number
+>x : T
+>length : number
+
+declare function f14<T extends {length:number}>(): (x: T) => unknown;
+>f14 : <T extends { length: number; }>() => (x: T) => unknown
+>length : number
+>x : T
+
+export const yThen4 = y1.map(f14()); // should not be an error
+>yThen4 : unknown[]
+>y1.map(f14()) : unknown[]
+>y1.map : (<U>(callbackfn: (value: string, index: number, array: string[]) => U, thisArg?: any) => U[]) | (<U_1>(callbackfn: (value: number[], index: number, array: number[][]) => U_1, thisArg?: any) => U_1[])
+>y1 : string[] | number[][]
+>map : (<U>(callbackfn: (value: string, index: number, array: string[]) => U, thisArg?: any) => U[]) | (<U_1>(callbackfn: (value: number[], index: number, array: number[][]) => U_1, thisArg?: any) => U_1[])
+>f14() : (x: number[]) => unknown
+>f14 : <T extends { length: number; }>() => (x: T) => unknown
+
+export const yThen4a = y1.map(<T extends {length:number}>()=>(x: T) => x.length);
+>yThen4a : ((x: { length: number; }) => number)[]
+>y1.map(<T extends {length:number}>()=>(x: T) => x.length) : ((x: { length: number; }) => number)[]
+>y1.map : (<U>(callbackfn: (value: string, index: number, array: string[]) => U, thisArg?: any) => U[]) | (<U_1>(callbackfn: (value: number[], index: number, array: number[][]) => U_1, thisArg?: any) => U_1[])
+>y1 : string[] | number[][]
+>map : (<U>(callbackfn: (value: string, index: number, array: string[]) => U, thisArg?: any) => U[]) | (<U_1>(callbackfn: (value: number[], index: number, array: number[][]) => U_1, thisArg?: any) => U_1[])
+><T extends {length:number}>()=>(x: T) => x.length : <T extends { length: number; }>() => (x: T) => number
+>length : number
+>(x: T) => x.length : (x: T) => number
+>x : T
+>x.length : number
+>x : T
+>length : number
+
+declare const f15: { (x: number[]): number; (x: string): number;}
+>f15 : { (x: number[]): number; (x: string): number; }
+>x : number[]
+>x : string
+
+export const yThen5 = y1.map(f15);
+>yThen5 : number[]
+>y1.map(f15) : number[]
+>y1.map : (<U>(callbackfn: (value: string, index: number, array: string[]) => U, thisArg?: any) => U[]) | (<U_1>(callbackfn: (value: number[], index: number, array: number[][]) => U_1, thisArg?: any) => U_1[])
+>y1 : string[] | number[][]
+>map : (<U>(callbackfn: (value: string, index: number, array: string[]) => U, thisArg?: any) => U[]) | (<U_1>(callbackfn: (value: number[], index: number, array: number[][]) => U_1, thisArg?: any) => U_1[])
+>f15 : { (x: number[]): number; (x: string): number; }
+
+
+
+
+}
+
+
+/**********************/
+=== -57087-toSorted-01.ts ===
+namespace ns24 {
+>ns24 : typeof ns24
+
+// interface Arr<T> {
+//     toSorted(compareFn?: (a: T, b: T) => number): T[];
+// }
+
+// declare const arr: Arr<number> | Arr<string>;/workspaces/ts+dt/-test
+
+
+const f = (compareFn?: ((
+>f : (compareFn?: ((a: {    id: number;    description: null;} | {    id: number;    description: string;}, b: {    id: number;    description: null;} | {    id: number;    description: string;}) => number) | undefined) => ({ id: number; description: null; } | { id: number; description: string; })[]
+>(compareFn?: ((    a: { id: number; description: null; } | { id: number; description: string; },    b: { id: number; description: null; } | { id: number; description: string; }) => number) | undefined) => {    return 0 as any as ({ id: number; description: null; } | { id: number; description: string; })[]} : (compareFn?: ((a: {    id: number;    description: null;} | {    id: number;    description: string;}, b: {    id: number;    description: null;} | {    id: number;    description: string;}) => number) | undefined) => ({ id: number; description: null; } | { id: number; description: string; })[]
+>compareFn : ((a: {    id: number;    description: null;} | {    id: number;    description: string;}, b: {    id: number;    description: null;} | {    id: number;    description: string;}) => number) | undefined
+
+    a: { id: number; description: null; } | { id: number; description: string; },
+>a : { id: number; description: null; } | { id: number; description: string; }
+>id : number
+>description : null
+>id : number
+>description : string
+
+    b: { id: number; description: null; } | { id: number; description: string; }) => number) | undefined) => {
+>b : { id: number; description: null; } | { id: number; description: string; }
+>id : number
+>description : null
+>id : number
+>description : string
+
+    return 0 as any as ({ id: number; description: null; } | { id: number; description: string; })[]
+>0 as any as ({ id: number; description: null; } | { id: number; description: string; })[] : ({ id: number; description: null; } | { id: number; description: string; })[]
+>0 as any : any
+>0 : 0
+>id : number
+>description : null
+>id : number
+>description : string
+
+};
+
+
+type F1 =  (compareFn?: ((a: { id: number; }, b: { id: number; }) => number) | undefined) =>
+>F1 : (compareFn?: ((a: {    id: number;}, b: {    id: number;}) => number) | undefined) => {    id: number;}[] & {    id: number;    description: string | null;}[]
+>compareFn : ((a: {    id: number;}, b: {    id: number;}) => number) | undefined
+>a : { id: number; }
+>id : number
+>b : { id: number; }
+>id : number
+
+            { id: number; }[] & { id: number; description: string | null; }[];
+>id : number
+>id : number
+>description : string | null
+
+type F2 = (compareFn?: ((a: { id: number; description: string | null; }, b: { id: number; description: string | null; }) => number) | undefined) =>
+>F2 : (compareFn?: ((a: {    id: number;    description: string | null;}, b: {    id: number;    description: string | null;}) => number) | undefined) => {    id: number;}[] & {    id: number;    description: string | null;}[]
+>compareFn : ((a: {    id: number;    description: string | null;}, b: {    id: number;    description: string | null;}) => number) | undefined
+>a : { id: number; description: string | null; }
+>id : number
+>description : string | null
+>b : { id: number; description: string | null; }
+>id : number
+>description : string | null
+
+            { id: number; }[]& { id: number; description: string | null; }[]
+>id : number
+>id : number
+>description : string | null
+
+type F = F1 & F2;
+>F : F1 & F2
+
+f satisfies F;
+>f satisfies F : (compareFn?: ((a: { id: number; description: null; } | { id: number; description: string; }, b: { id: number; description: null; } | { id: number; description: string; }) => number) | undefined) => ({ id: number; description: null; } | { id: number; description: string; })[]
+>f : (compareFn?: ((a: { id: number; description: null; } | { id: number; description: string; }, b: { id: number; description: null; } | { id: number; description: string; }) => number) | undefined) => ({ id: number; description: null; } | { id: number; description: string; })[]
+}
+
+
+/**********************/
+=== -57087-toSorted-02.ts ===
+namespace ns25 {
+>ns25 : typeof ns25
+
+const a = 0 as any as ({ id: number; description: null; } | { id: number; description: string; })[];
+>a : ({ id: number; description: null; } | { id: number; description: string; })[]
+>0 as any as ({ id: number; description: null; } | { id: number; description: string; })[] : ({ id: number; description: null; } | { id: number; description: string; })[]
+>0 as any : any
+>0 : 0
+>id : number
+>description : null
+>id : number
+>description : string
+
+type A = { id: number; }[] & { id: number; description: string | null; }[];
+>A : { id: number; }[] & { id: number; description: string | null; }[]
+>id : number
+>id : number
+>description : string | null
+
+a satisfies A;
+>a satisfies A : ({ id: number; description: null; } | { id: number; description: string; })[]
+>a : ({ id: number; description: null; } | { id: number; description: string; })[]
+
+
+}
+
+
+/**********************/
+=== -57087-unionOfClassCalls-01.ts ===
+namespace ns26 {
+>ns26 : typeof ns26
+{
+    const arr: number[] | string[] = [];  // Works with Array<number | string>
+>arr : string[] | number[]
+>[] : never[]
+
+    const arr1: number[]  = [];
+>arr1 : number[]
+>[] : never[]
+
+    const arr2:  string[] = [];
+>arr2 : string[]
+>[] : never[]
+
+    const t = arr.map((a: number | string, index: number) => {
+>t : number[]
+>arr.map((a: number | string, index: number) => {        return index    }) : number[]
+>arr.map : (<U>(callbackfn: (value: number, index: number, array: number[]) => U, thisArg?: any) => U[]) | (<U_1>(callbackfn: (value: string, index: number, array: string[]) => U_1, thisArg?: any) => U_1[])
+>arr : string[] | number[]
+>map : (<U>(callbackfn: (value: number, index: number, array: number[]) => U, thisArg?: any) => U[]) | (<U_1>(callbackfn: (value: string, index: number, array: string[]) => U_1, thisArg?: any) => U_1[])
+>(a: number | string, index: number) => {        return index    } : (a: number | string, index: number) => number
+>a : string | number
+>index : number
+
+        return index
+>index : number
+
+    });
+}
+
+}
+
+
+/**********************/
+=== -57087-unionOfClassCalls-02.ts ===
+namespace ns27 {
+>ns27 : typeof ns27
+{
+    const arr: number[] | string[] = [];  // Works with Array<number | string>
+>arr : string[] | number[]
+>[] : never[]
+
+    const t = arr.reduce((acc: Array<string>, a: number | string, index: number) => {
+>t : never[]
+>arr.reduce((acc: Array<string>, a: number | string, index: number) => {        return []    }, []) : never[]
+>arr.reduce : { (callbackfn: (previousValue: number, currentValue: number, currentIndex: number, array: number[]) => number): number; (callbackfn: (previousValue: number, currentValue: number, currentIndex: number, array: number[]) => number, initialValue: number): number; <U>(callbackfn: (previousValue: U, currentValue: number, currentIndex: number, array: number[]) => U, initialValue: U): U; } | { (callbackfn: (previousValue: string, currentValue: string, currentIndex: number, array: string[]) => string): string; (callbackfn: (previousValue: string, currentValue: string, currentIndex: number, array: string[]) => string, initialValue: string): string; <U_1>(callbackfn: (previousValue: U_1, currentValue: string, currentIndex: number, array: string[]) => U_1, initialValue: U_1): U_1; }
+>arr : string[] | number[]
+>reduce : { (callbackfn: (previousValue: number, currentValue: number, currentIndex: number, array: number[]) => number): number; (callbackfn: (previousValue: number, currentValue: number, currentIndex: number, array: number[]) => number, initialValue: number): number; <U>(callbackfn: (previousValue: U, currentValue: number, currentIndex: number, array: number[]) => U, initialValue: U): U; } | { (callbackfn: (previousValue: string, currentValue: string, currentIndex: number, array: string[]) => string): string; (callbackfn: (previousValue: string, currentValue: string, currentIndex: number, array: string[]) => string, initialValue: string): string; <U_1>(callbackfn: (previousValue: U_1, currentValue: string, currentIndex: number, array: string[]) => U_1, initialValue: U_1): U_1; }
+>(acc: Array<string>, a: number | string, index: number) => {        return []    } : (acc: Array<string>, a: number | string, index: number) => never[]
+>acc : string[]
+>a : string | number
+>index : number
+
+        return []
+>[] : never[]
+
+    }, [])
+>[] : never[]
+
+}
+
+}
+
+
+/**********************/
+=== -57087-unionOfClassCalls-03.ts ===
+namespace ns28 {
+>ns28 : typeof ns28
+{
+    const arr: number[] | string[] = [];  // Works with Array<number | string>
+>arr : string[] | number[]
+>[] : never[]
+
+    const arr1: number[]  = [];
+>arr1 : number[]
+>[] : never[]
+
+    const arr2:  string[] = [];
+>arr2 : string[]
+>[] : never[]
+
+    const t = arr.forEach((a: number | string, index: number) => {
+>t : void
+>arr.forEach((a: number | string, index: number) => {        return index    }) : void
+>arr.forEach : ((callbackfn: (value: number, index: number, array: number[]) => void, thisArg?: any) => void) | ((callbackfn: (value: string, index: number, array: string[]) => void, thisArg?: any) => void)
+>arr : string[] | number[]
+>forEach : ((callbackfn: (value: number, index: number, array: number[]) => void, thisArg?: any) => void) | ((callbackfn: (value: string, index: number, array: string[]) => void, thisArg?: any) => void)
+>(a: number | string, index: number) => {        return index    } : (a: number | string, index: number) => number
+>a : string | number
+>index : number
+
+        return index
+>index : number
+
+    });
+}
+
+}
+
+
+/**********************/
+=== -57087-unionOfClassCalls-11.ts ===
+namespace ns29 {
+>ns29 : typeof ns29
+{
+    const arr: number[] | string[] = [];  // Works with Array<number | string>
+>arr : string[] | number[]
+>[] : never[]
+
+    const arr1: number[]  = [];
+>arr1 : number[]
+>[] : never[]
+
+    const arr2:  string[] = [];
+>arr2 : string[]
+>[] : never[]
+
+    const t = arr.map((a, index) => {
+>t : number[]
+>arr.map((a, index) => {        return index    }) : number[]
+>arr.map : (<U>(callbackfn: (value: number, index: number, array: number[]) => U, thisArg?: any) => U[]) | (<U_1>(callbackfn: (value: string, index: number, array: string[]) => U_1, thisArg?: any) => U_1[])
+>arr : string[] | number[]
+>map : (<U>(callbackfn: (value: number, index: number, array: number[]) => U, thisArg?: any) => U[]) | (<U_1>(callbackfn: (value: string, index: number, array: string[]) => U_1, thisArg?: any) => U_1[])
+>(a, index) => {        return index    } : (a: string | number, index: number) => number
+>a : string | number
+>index : number
+
+        return index
+>index : number
+
+    });
+}
+
+}
+
+
+/**********************/
+=== -57087-unionOfClassCalls-12.ts ===
+namespace ns30 {
+>ns30 : typeof ns30
+{
+    const arr: number[] | string[] = [];  // Works with Array<number | string>
+>arr : string[] | number[]
+>[] : never[]
+
+    const t = arr.reduce((acc, a, index) => {
+>t : never[]
+>arr.reduce((acc, a, index) => {        return []    }, []) : never[]
+>arr.reduce : { (callbackfn: (previousValue: number, currentValue: number, currentIndex: number, array: number[]) => number): number; (callbackfn: (previousValue: number, currentValue: number, currentIndex: number, array: number[]) => number, initialValue: number): number; <U>(callbackfn: (previousValue: U, currentValue: number, currentIndex: number, array: number[]) => U, initialValue: U): U; } | { (callbackfn: (previousValue: string, currentValue: string, currentIndex: number, array: string[]) => string): string; (callbackfn: (previousValue: string, currentValue: string, currentIndex: number, array: string[]) => string, initialValue: string): string; <U_1>(callbackfn: (previousValue: U_1, currentValue: string, currentIndex: number, array: string[]) => U_1, initialValue: U_1): U_1; }
+>arr : string[] | number[]
+>reduce : { (callbackfn: (previousValue: number, currentValue: number, currentIndex: number, array: number[]) => number): number; (callbackfn: (previousValue: number, currentValue: number, currentIndex: number, array: number[]) => number, initialValue: number): number; <U>(callbackfn: (previousValue: U, currentValue: number, currentIndex: number, array: number[]) => U, initialValue: U): U; } | { (callbackfn: (previousValue: string, currentValue: string, currentIndex: number, array: string[]) => string): string; (callbackfn: (previousValue: string, currentValue: string, currentIndex: number, array: string[]) => string, initialValue: string): string; <U_1>(callbackfn: (previousValue: U_1, currentValue: string, currentIndex: number, array: string[]) => U_1, initialValue: U_1): U_1; }
+>(acc, a, index) => {        return []    } : (acc: never[], a: string | number, index: number) => never[]
+>acc : never[]
+>a : string | number
+>index : number
+
+        return []
+>[] : never[]
+
+    }, [])
+>[] : never[]
+
+}
+
+}
+
+
+/**********************/
+=== -57087-unionOfClassCalls-13.ts ===
+namespace ns31 {
+>ns31 : typeof ns31
+{
+    const arr: number[] | string[] = [];  // Works with Array<number | string>
+>arr : string[] | number[]
+>[] : never[]
+
+    const arr1: number[]  = [];
+>arr1 : number[]
+>[] : never[]
+
+    const arr2:  string[] = [];
+>arr2 : string[]
+>[] : never[]
+
+    const t = arr.forEach((a, index) => {
+>t : void
+>arr.forEach((a, index) => {        return index    }) : void
+>arr.forEach : ((callbackfn: (value: number, index: number, array: number[]) => void, thisArg?: any) => void) | ((callbackfn: (value: string, index: number, array: string[]) => void, thisArg?: any) => void)
+>arr : string[] | number[]
+>forEach : ((callbackfn: (value: number, index: number, array: number[]) => void, thisArg?: any) => void) | ((callbackfn: (value: string, index: number, array: string[]) => void, thisArg?: any) => void)
+>(a, index) => {        return index    } : (a: string | number, index: number) => number
+>a : string | number
+>index : number
+
+        return index
+>index : number
+
+    });
+}
+
+}
+
+
+/**********************/
+=== -57087-unionOfClassCalls-21.ts ===
+namespace ns32 {
+>ns32 : typeof ns32
+{
+    const arr: number[] | string[] = [];  // Works with Array<number | string>
+>arr : string[] | number[]
+>[] : never[]
+
+    const arr1: number[]  = [];
+>arr1 : number[]
+>[] : never[]
+
+    const arr2:  string[] = [];
+>arr2 : string[]
+>[] : never[]
+
+    const t = arr.map(a=>a);
+>t : (string | number)[]
+>arr.map(a=>a) : (string | number)[]
+>arr.map : (<U>(callbackfn: (value: number, index: number, array: number[]) => U, thisArg?: any) => U[]) | (<U_1>(callbackfn: (value: string, index: number, array: string[]) => U_1, thisArg?: any) => U_1[])
+>arr : string[] | number[]
+>map : (<U>(callbackfn: (value: number, index: number, array: number[]) => U, thisArg?: any) => U[]) | (<U_1>(callbackfn: (value: string, index: number, array: string[]) => U_1, thisArg?: any) => U_1[])
+>a=>a : (a: string | number) => string | number
+>a : string | number
+>a : string | number
+}
+
+}
+
+
+/**********************/
+=== -57087-unionOfClassCalls-22.ts ===
+namespace ns33 {
+>ns33 : typeof ns33
+{
+    const arr: number[] | string[] = [];  // Works with Array<number | string>
+>arr : string[] | number[]
+>[] : never[]
+
+    const t = arr.reduce((acc,a) => acc+a)
+>t : string | number
+>arr.reduce((acc,a) => acc+a) : string | number
+>arr.reduce : { (callbackfn: (previousValue: number, currentValue: number, currentIndex: number, array: number[]) => number): number; (callbackfn: (previousValue: number, currentValue: number, currentIndex: number, array: number[]) => number, initialValue: number): number; <U>(callbackfn: (previousValue: U, currentValue: number, currentIndex: number, array: number[]) => U, initialValue: U): U; } | { (callbackfn: (previousValue: string, currentValue: string, currentIndex: number, array: string[]) => string): string; (callbackfn: (previousValue: string, currentValue: string, currentIndex: number, array: string[]) => string, initialValue: string): string; <U_1>(callbackfn: (previousValue: U_1, currentValue: string, currentIndex: number, array: string[]) => U_1, initialValue: U_1): U_1; }
+>arr : string[] | number[]
+>reduce : { (callbackfn: (previousValue: number, currentValue: number, currentIndex: number, array: number[]) => number): number; (callbackfn: (previousValue: number, currentValue: number, currentIndex: number, array: number[]) => number, initialValue: number): number; <U>(callbackfn: (previousValue: U, currentValue: number, currentIndex: number, array: number[]) => U, initialValue: U): U; } | { (callbackfn: (previousValue: string, currentValue: string, currentIndex: number, array: string[]) => string): string; (callbackfn: (previousValue: string, currentValue: string, currentIndex: number, array: string[]) => string, initialValue: string): string; <U_1>(callbackfn: (previousValue: U_1, currentValue: string, currentIndex: number, array: string[]) => U_1, initialValue: U_1): U_1; }
+>(acc,a) => acc+a : (acc: string | number, a: string | number) => any
+>acc : string | number
+>a : string | number
+>acc+a : any
+>acc : string | number
+>a : string | number
+}
+
+}
+
+
+/**********************/
+=== -57087-unionOfClassCalls-23.ts ===
+namespace ns34 {
+>ns34 : typeof ns34
+{
+    const arr: number[] | string[] = [];  // Works with Array<number | string>
+>arr : string[] | number[]
+>[] : never[]
+
+    const arr1: number[]  = [];
+>arr1 : number[]
+>[] : never[]
+
+    const arr2:  string[] = [];
+>arr2 : string[]
+>[] : never[]
+
+    const t = arr.forEach(a => {
+>t : void
+>arr.forEach(a => {        // do something    }) : void
+>arr.forEach : ((callbackfn: (value: number, index: number, array: number[]) => void, thisArg?: any) => void) | ((callbackfn: (value: string, index: number, array: string[]) => void, thisArg?: any) => void)
+>arr : string[] | number[]
+>forEach : ((callbackfn: (value: number, index: number, array: number[]) => void, thisArg?: any) => void) | ((callbackfn: (value: string, index: number, array: string[]) => void, thisArg?: any) => void)
+>a => {        // do something    } : (a: string | number) => void
+>a : string | number
+
+        // do something
+    });
+}
+
+}
