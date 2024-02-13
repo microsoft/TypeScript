@@ -3255,7 +3255,6 @@ declare namespace ts {
             private refreshScriptInfosInDirectory;
             private stopWatchingScriptInfo;
             private getOrCreateScriptInfoNotOpenedByClientForNormalizedPath;
-            private getOrCreateScriptInfoOpenedByClientForNormalizedPath;
             getOrCreateScriptInfoForNormalizedPath(fileName: NormalizedPath, openedByClient: boolean, fileContent?: string, scriptKind?: ScriptKind, hasMixedContent?: boolean, hostToQueryFileExistsOn?: {
                 fileExists(path: string): boolean;
             }): ScriptInfo | undefined;

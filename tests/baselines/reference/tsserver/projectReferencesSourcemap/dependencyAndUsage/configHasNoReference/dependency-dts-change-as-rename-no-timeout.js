@@ -1062,7 +1062,6 @@ Projects::
     projectProgramVersion: 1
 
 Info seq  [hh:mm:ss:mss] FileWatcher:: Triggered with /user/username/projects/myproject/decls/fns.d.ts 2:: WatchInfo: /user/username/projects/myproject/decls/fns.d.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /user/username/projects/myproject/decls/fns.d.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] Scheduled: /user/username/projects/myproject/main/tsconfig.json
 Info seq  [hh:mm:ss:mss] Scheduled: *ensureProjectForOpenFiles*
 Info seq  [hh:mm:ss:mss] Scheduled: /user/username/projects/myproject/dependency/tsconfig.json
@@ -1073,44 +1072,6 @@ Info seq  [hh:mm:ss:mss] Scheduled: /user/username/projects/myproject/main/tscon
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/projects/myproject/decls/FnS.d.ts :: WatchInfo: /user/username/projects/myproject/decls 1 undefined Project: /user/username/projects/myproject/main/tsconfig.json WatchType: Failed Lookup Locations
 Before write /user/username/projects/myproject/decls/FnS.d.ts
 //// [/user/username/projects/myproject/decls/FnS.d.ts] deleted
-
-PolledWatches::
-/user/username/projects/myproject/dependency/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/myproject/main/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/myproject/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/myproject/random/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/a/lib/lib.d.ts:
-  {}
-/user/username/projects/myproject/decls/FnS.d.ts.map:
-  {}
-/user/username/projects/myproject/dependency/tsconfig.json:
-  {}
-/user/username/projects/myproject/main/tsconfig.json:
-  {}
-/user/username/projects/myproject/random/tsconfig.json:
-  {}
-
-FsWatches *deleted*::
-/user/username/projects/myproject/decls/fns.d.ts:
-  {}
-
-FsWatchesRecursive::
-/user/username/projects/myproject/decls:
-  {}
-/user/username/projects/myproject/dependency:
-  {}
-/user/username/projects/myproject/main:
-  {}
-/user/username/projects/myproject/random:
-  {}
 
 Timeout callback:: count: 4
 1: /user/username/projects/myproject/main/tsconfig.json *new*
@@ -1149,8 +1110,10 @@ ScriptInfos::
         /user/username/projects/myproject/dependency/fns.ts
     documentPositionMapper: DocumentPositionMapper1
     containingProjects: 0
-/user/username/projects/myproject/decls/fns.d.ts *deleted*
+/user/username/projects/myproject/decls/fns.d.ts *changed*
     version: Text-1
+    pendingReloadFromDisk: true *changed*
+    deferredDelete: true *changed*
     sourceMapFilePath: /user/username/projects/myproject/decls/fns.d.ts.map
     containingProjects: 0 *changed*
         /user/username/projects/myproject/main/tsconfig.json *deleted*
@@ -1167,6 +1130,10 @@ ScriptInfos::
     containingProjects: 1
         /user/username/projects/myproject/random/tsconfig.json *default*
 
+Info seq  [hh:mm:ss:mss] FileWatcher:: Triggered with /user/username/projects/myproject/decls/fns.d.ts 0:: WatchInfo: /user/username/projects/myproject/decls/fns.d.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] Scheduled: /user/username/projects/myproject/dependency/tsconfig.json, Cancelled earlier one
+Info seq  [hh:mm:ss:mss] Scheduled: *ensureProjectForOpenFiles*, Cancelled earlier one
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms FileWatcher:: Triggered with /user/username/projects/myproject/decls/fns.d.ts 0:: WatchInfo: /user/username/projects/myproject/decls/fns.d.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Triggered with /user/username/projects/myproject/decls/FnS.d.ts :: WatchInfo: /user/username/projects/myproject/decls 1 undefined Project: /user/username/projects/myproject/main/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] Scheduled: /user/username/projects/myproject/main/tsconfig.jsonFailedLookupInvalidation, Cancelled earlier one
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/projects/myproject/decls/FnS.d.ts :: WatchInfo: /user/username/projects/myproject/decls 1 undefined Project: /user/username/projects/myproject/main/tsconfig.json WatchType: Failed Lookup Locations
@@ -1182,11 +1149,46 @@ export declare function fn6(): void;
 
 
 Timeout callback:: count: 4
+3: /user/username/projects/myproject/dependency/tsconfig.json *deleted*
+4: *ensureProjectForOpenFiles* *deleted*
 5: /user/username/projects/myproject/main/tsconfig.jsonFailedLookupInvalidation *deleted*
 1: /user/username/projects/myproject/main/tsconfig.json
-3: /user/username/projects/myproject/dependency/tsconfig.json
-4: *ensureProjectForOpenFiles*
-6: /user/username/projects/myproject/main/tsconfig.jsonFailedLookupInvalidation *new*
+6: /user/username/projects/myproject/dependency/tsconfig.json *new*
+7: *ensureProjectForOpenFiles* *new*
+8: /user/username/projects/myproject/main/tsconfig.jsonFailedLookupInvalidation *new*
+
+ScriptInfos::
+/a/lib/lib.d.ts
+    version: Text-1
+    containingProjects: 3
+        /user/username/projects/myproject/main/tsconfig.json
+        /user/username/projects/myproject/dependency/tsconfig.json
+        /user/username/projects/myproject/random/tsconfig.json
+/user/username/projects/myproject/decls/FnS.d.ts.map
+    version: Text-1
+    declarationInfoPath: /user/username/projects/myproject/decls/fns.d.ts
+    sourceInfos: 1
+        /user/username/projects/myproject/dependency/fns.ts
+    documentPositionMapper: DocumentPositionMapper1
+    containingProjects: 0
+/user/username/projects/myproject/decls/fns.d.ts *changed*
+    version: Text-1
+    pendingReloadFromDisk: true
+    deferredDelete: undefined *changed*
+    sourceMapFilePath: /user/username/projects/myproject/decls/fns.d.ts.map
+    containingProjects: 0
+/user/username/projects/myproject/dependency/FnS.ts (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /user/username/projects/myproject/dependency/tsconfig.json *default*
+/user/username/projects/myproject/main/main.ts (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /user/username/projects/myproject/main/tsconfig.json *default*
+/user/username/projects/myproject/random/random.ts (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /user/username/projects/myproject/random/tsconfig.json *default*
 
 Info seq  [hh:mm:ss:mss] request:
     {
@@ -1200,7 +1202,6 @@ Info seq  [hh:mm:ss:mss] request:
       "type": "request"
     }
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /user/username/projects/myproject/main/tsconfig.json
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/decls/fns.d.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /user/username/projects/myproject/main/tsconfig.json projectStateVersion: 2 projectProgramVersion: 1 structureChanged: true structureIsReused:: SafeModules Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/user/username/projects/myproject/main/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (3)
@@ -1256,47 +1257,11 @@ Info seq  [hh:mm:ss:mss] response:
     }
 After request
 
-PolledWatches::
-/user/username/projects/myproject/dependency/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/myproject/main/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/myproject/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/myproject/random/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/a/lib/lib.d.ts:
-  {}
-/user/username/projects/myproject/decls/FnS.d.ts.map:
-  {}
-/user/username/projects/myproject/decls/fns.d.ts: *new*
-  {}
-/user/username/projects/myproject/dependency/tsconfig.json:
-  {}
-/user/username/projects/myproject/main/tsconfig.json:
-  {}
-/user/username/projects/myproject/random/tsconfig.json:
-  {}
-
-FsWatchesRecursive::
-/user/username/projects/myproject/decls:
-  {}
-/user/username/projects/myproject/dependency:
-  {}
-/user/username/projects/myproject/main:
-  {}
-/user/username/projects/myproject/random:
-  {}
-
 Timeout callback:: count: 3
-6: /user/username/projects/myproject/main/tsconfig.jsonFailedLookupInvalidation *deleted*
+8: /user/username/projects/myproject/main/tsconfig.jsonFailedLookupInvalidation *deleted*
 1: /user/username/projects/myproject/main/tsconfig.json
-3: /user/username/projects/myproject/dependency/tsconfig.json
-4: *ensureProjectForOpenFiles*
+6: /user/username/projects/myproject/dependency/tsconfig.json
+7: *ensureProjectForOpenFiles*
 
 Projects::
 /user/username/projects/myproject/dependency/tsconfig.json (Configured)
@@ -1327,11 +1292,12 @@ ScriptInfos::
         /user/username/projects/myproject/dependency/fns.ts
     documentPositionMapper: DocumentPositionMapper1
     containingProjects: 0
-/user/username/projects/myproject/decls/fns.d.ts *new*
-    version: Text-2
+/user/username/projects/myproject/decls/fns.d.ts *changed*
+    version: Text-2 *changed*
+    pendingReloadFromDisk: false *changed*
     sourceMapFilePath: /user/username/projects/myproject/decls/fns.d.ts.map
-    containingProjects: 1
-        /user/username/projects/myproject/main/tsconfig.json
+    containingProjects: 1 *changed*
+        /user/username/projects/myproject/main/tsconfig.json *new*
 /user/username/projects/myproject/dependency/FnS.ts (Open)
     version: SVC-1-0
     containingProjects: 1

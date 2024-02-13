@@ -25,6 +25,7 @@ import {
     IScriptSnapshot,
     isString,
     LineInfo,
+    missingFileModifiedTime,
     orderedRemoveItem,
     Path,
     ScriptKind,
@@ -181,6 +182,14 @@ export class TextStorage {
         const reloaded = this.reload(newText);
         this.fileSize = fileSize; // NB: after reload since reload clears it
         this.ownFileText = !tempFileName || tempFileName === this.info.fileName;
+        // In case we update this text before mTime gets updated to present file modified time
+        // because its schedule to do that later, update the mTime so we dont re-update the text
+        // Eg. with npm ci where file gets created and editor calls say get error request before
+        // the timeout to update the file stamps in node_modules is run
+        // Test:: watching npm install in codespaces where workspaces folder is hosted at root
+        if (this.ownFileText && this.info.mTime === missingFileModifiedTime.getTime()) {
+            this.info.mTime = (this.host.getModifiedTime!(this.info.fileName) || missingFileModifiedTime).getTime();
+        }
         return reloaded;
     }
 
@@ -398,6 +407,9 @@ export class ScriptInfo {
     sourceInfos?: Set<Path>;
     /** @internal */
     documentPositionMapper?: DocumentPositionMapper | false;
+
+    /** @internal */
+    deferredDelete?: boolean;
 
     constructor(
         private readonly host: ServerHost,
@@ -681,7 +693,7 @@ export class ScriptInfo {
     }
 
     isOrphan() {
-        return !forEach(this.containingProjects, p => !p.isOrphan());
+        return this.deferredDelete || !forEach(this.containingProjects, p => !p.isOrphan());
     }
 
     /** @internal */

@@ -193,7 +193,6 @@ ScriptInfos::
         /a/b/proj1
 
 Info seq  [hh:mm:ss:mss] FileWatcher:: Triggered with /a/b/lib.ts 2:: WatchInfo: /a/b/lib.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /a/b/lib.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] Scheduled: /a/b/proj1
 Info seq  [hh:mm:ss:mss] Scheduled: *ensureProjectForOpenFiles*
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms FileWatcher:: Triggered with /a/b/lib.ts 2:: WatchInfo: /a/b/lib.ts 500 undefined WatchType: Closed Script info
@@ -202,14 +201,6 @@ Before request
 
 
 //// [/a/b/lib.ts] deleted
-
-PolledWatches::
-/a/lib/lib.d.ts:
-  {"pollingInterval":500}
-
-FsWatches *deleted*::
-/a/b/lib.ts:
-  {}
 
 Timeout callback:: count: 2
 1: /a/b/proj1 *new*
@@ -226,8 +217,10 @@ ScriptInfos::
     version: Text-1
     containingProjects: 1
         /a/b/proj1 *default*
-/a/b/lib.ts *deleted*
+/a/b/lib.ts *changed*
     version: Text-1
+    pendingReloadFromDisk: true *changed*
+    deferredDelete: true *changed*
     containingProjects: 0 *changed*
         /a/b/proj1 *deleted*
 
@@ -284,6 +277,8 @@ PolledWatches *deleted*::
   {"pollingInterval":500}
 
 FsWatches::
+/a/b/lib.ts:
+  {}
 /a/b/tsconfig.json: *new*
   {}
 
@@ -303,6 +298,11 @@ ScriptInfos::
     version: Text-1
     containingProjects: 0 *changed*
         /a/b/proj1 *deleted*
+/a/b/lib.ts
+    version: Text-1
+    pendingReloadFromDisk: true
+    deferredDelete: true
+    containingProjects: 0
 
 Info seq  [hh:mm:ss:mss] Loading configured project /a/b/tsconfig.json
 Info seq  [hh:mm:ss:mss] event:
@@ -466,6 +466,8 @@ Info seq  [hh:mm:ss:mss] Elapsed:: *ms FileWatcher:: Triggered with /a/b/tsconfi
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Triggered with /a/b/tsconfig.json :: WatchInfo: /a/b 1 undefined Config: /a/b/tsconfig.json WatchType: Wild card directory
 Info seq  [hh:mm:ss:mss] Project: /a/b/tsconfig.json Detected file add/remove of non supported extension: /a/b/tsconfig.json
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Triggered with /a/b/tsconfig.json :: WatchInfo: /a/b 1 undefined Config: /a/b/tsconfig.json WatchType: Wild card directory
+Info seq  [hh:mm:ss:mss] FileWatcher:: Triggered with /a/b/lib.ts 0:: WatchInfo: /a/b/lib.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms FileWatcher:: Triggered with /a/b/lib.ts 0:: WatchInfo: /a/b/lib.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Triggered with /a/b/lib.ts :: WatchInfo: /a/b 1 undefined Config: /a/b/tsconfig.json WatchType: Wild card directory
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Triggered with /a/b/lib.ts :: WatchInfo: /a/b 1 undefined Config: /a/b/tsconfig.json WatchType: Wild card directory
 Before request
@@ -479,6 +481,8 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
+/a/b/lib.ts:
+  {}
 /a/b/tsconfig.json:
   {}
 
@@ -504,6 +508,11 @@ ScriptInfos::
     version: Text-1
     containingProjects: 1 *changed*
         /a/b/tsconfig.json *new*
+/a/b/lib.ts *changed*
+    version: Text-1
+    pendingReloadFromDisk: true
+    deferredDelete: undefined *changed*
+    containingProjects: 0
 
 Info seq  [hh:mm:ss:mss] request:
     {
@@ -523,14 +532,13 @@ Info seq  [hh:mm:ss:mss] request:
       "seq": 5,
       "type": "request"
     }
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/b/lib.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /a/b/proj1
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined Project: /a/b/proj1 WatchType: Missing file
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /a/b/proj1 projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/a/b/proj1' (External)
 Info seq  [hh:mm:ss:mss] 	Files (2)
 	/a/b/app.ts Text-1 "let x = 1;"
-	/a/b/lib.ts Text-2 ""
+	/a/b/lib.ts Text-1 ""
 
 
 	app.ts
@@ -572,7 +580,7 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
-/a/b/lib.ts: *new*
+/a/b/lib.ts:
   {}
 
 FsWatches *deleted*::
@@ -601,7 +609,8 @@ ScriptInfos::
     containingProjects: 1 *changed*
         /a/b/proj1 *default* *new*
         /a/b/tsconfig.json *deleted*
-/a/b/lib.ts *new*
-    version: Text-2
-    containingProjects: 1
-        /a/b/proj1
+/a/b/lib.ts *changed*
+    version: Text-1
+    pendingReloadFromDisk: false *changed*
+    containingProjects: 1 *changed*
+        /a/b/proj1 *new*
