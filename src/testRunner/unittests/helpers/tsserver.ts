@@ -31,7 +31,7 @@ import {
 } from "./virtualFileSystemWithWatch";
 
 export function baselineTsserverLogs(scenario: string, subScenario: string, sessionOrService: { logger: LoggerWithInMemoryLogs; }) {
-    Harness.Baseline.runBaseline(`tsserver/${scenario}/${subScenario.split(" ").join("-")}.js`, sessionOrService.logger.logs.join("\r\n"));
+    Harness.Baseline.runBaseline(`tsserver/${scenario}/${subScenario.split(" ").join("-")}.js`, sessionOrService.logger.logs.join("\r\n"), { PrintDiff: true });
 }
 
 export function toExternalFile(fileName: string): ts.server.protocol.ExternalFile {
