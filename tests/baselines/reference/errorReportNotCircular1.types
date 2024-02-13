@@ -1,0 +1,79 @@
+//// [tests/cases/compiler/errorReportNotCircular1.ts] ////
+
+=== data.ts ===
+// https://github.com/microsoft/TypeScript/issues/57357
+
+import type { Data } from "./processor";
+>Data : Data
+
+export function getData() {
+>getData : () => { quantity: import("type").Value; }
+
+  return constructData({}) satisfies []; // error
+>constructData({}) satisfies [] : { quantity: import("type").Value; }
+>constructData({}) : { quantity: import("type").Value; }
+>constructData : (data: Data) => { quantity: import("type").Value; }
+>{} : {}
+}
+
+function constructData(data: Data) {
+>constructData : (data: Data) => { quantity: import("type").Value; }
+>data : Data
+
+  const { ...props } = data;
+>props : { quantity: import("type").Value; }
+>data : Data
+
+  return {
+>{    ...props,  } : { quantity: import("type").Value; }
+
+    ...props,
+>props : { quantity: import("type").Value; }
+
+  };
+}
+
+=== type.ts ===
+export type Value = {};
+>Value : {}
+
+=== processor.ts ===
+import { getData } from "./data";
+>getData : () => { quantity: Value; }
+
+import type { Value } from "./type";
+>Value : Value
+
+export type Data = {
+>Data : { quantity: Value; }
+
+  quantity: Value;
+>quantity : Value
+
+};
+
+declare function createRequestProcessor<Req>(pipeline: () => Req): Req;
+>createRequestProcessor : <Req>(pipeline: () => Req) => Req
+>pipeline : () => Req
+
+export const processor = createRequestProcessor(getData);
+>processor : { quantity: Value; }
+>createRequestProcessor(getData) : { quantity: Value; }
+>createRequestProcessor : <Req>(pipeline: () => Req) => Req
+>getData : () => { quantity: Value; }
+
+=== main.ts ===
+import { processor } from "./processor";
+>processor : { quantity: import("type").Value; }
+
+export default processor;
+>processor : { quantity: import("type").Value; }
+
+=== workerinterface.ts ===
+import type Server from "./main";
+>Server : any
+
+export type _T = typeof Server;
+>_T : { quantity: import("type").Value; }
+>Server : { quantity: import("type").Value; }
+

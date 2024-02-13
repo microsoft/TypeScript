@@ -5731,15 +5731,57 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         });
     }
 
+    function resolveTypeAliasSymbol(symbol: Symbol): Symbol | undefined {
+        if (!symbol.declarations) {
+            return;
+        }
+        for (const decl of symbol.declarations) {
+            if (!isTypeAliasDeclaration(decl)) {
+                continue;
+            }
+            const location = getDirectTypeAliasLocation(decl);
+            if (!location) {
+                continue;
+            }
+            const aliased = resolveSymbol(getSymbolAtLocation(location));
+            if (aliased) {
+                return aliased.flags & SymbolFlags.TypeAlias && resolveTypeAliasSymbol(aliased) || aliased;
+            }
+        }
+
+        function getDirectTypeAliasLocation(decl: TypeAliasDeclaration): Node | undefined {
+            if (decl.typeParameters) {
+                return;
+            }
+            const typeNode = decl.type;
+            switch (typeNode.kind) {
+                case SyntaxKind.TypeReference: {
+                    const { typeName, typeArguments } = typeNode as TypeReferenceNode;
+                    if (typeArguments) {
+                        return;
+                    }
+                    return typeName;
+                }
+                case SyntaxKind.ImportType: {
+                    const { qualifier, typeArguments } = typeNode as ImportTypeNode;
+                    if (typeArguments) {
+                        return;
+                    }
+                    return qualifier || typeNode;
+                }
+            }
+        }
+    }
+
     /**
      * Checks if two symbols, through aliasing and/or merging, refer to the same thing
      */
     function getSymbolIfSameReference(s1: Symbol, s2: Symbol) {
-        if (s1.flags & SymbolFlags.TypeAlias && s2.declarations?.find(isTypeAlias)) {
-            s2 = getDeclaredTypeOfTypeAlias(s2).aliasSymbol || s2;
+        if (s1.flags & SymbolFlags.TypeAlias) {
+            s2 = resolveTypeAliasSymbol(s2) || s2;
         }
-        if (s2.flags & SymbolFlags.TypeAlias && s1.declarations?.find(isTypeAlias)) {
-            s1 = getDeclaredTypeOfTypeAlias(s1).aliasSymbol || s1;
+        if (s2.flags & SymbolFlags.TypeAlias) {
+            s1 = resolveTypeAliasSymbol(s1) || s1;
         }
         if (getMergedSymbol(resolveSymbol(getMergedSymbol(s1))) === getMergedSymbol(resolveSymbol(getMergedSymbol(s2)))) {
             return s1;

@@ -1,0 +1,66 @@
+//// [tests/cases/compiler/declarationEmitUsingTypeAlias2.ts] ////
+
+=== node_modules/some-dep/dist/inner.d.ts ===
+export declare type Other = { other: string };
+>Other : Symbol(Other, Decl(inner.d.ts, 0, 0))
+>other : Symbol(other, Decl(inner.d.ts, 0, 29))
+
+export declare type SomeType = { arg: Other };
+>SomeType : Symbol(SomeType, Decl(inner.d.ts, 0, 46))
+>arg : Symbol(arg, Decl(inner.d.ts, 1, 32))
+>Other : Symbol(Other, Decl(inner.d.ts, 0, 0))
+
+=== node_modules/some-dep/dist/indirection.d.ts ===
+import { Other as IndirectOther, SomeType as IndirectSomeType } from './inner';
+>Other : Symbol(IndirectOther, Decl(inner.d.ts, 0, 0))
+>IndirectOther : Symbol(IndirectOther, Decl(indirection.d.ts, 0, 8))
+>SomeType : Symbol(IndirectSomeType, Decl(inner.d.ts, 0, 46))
+>IndirectSomeType : Symbol(IndirectSomeType, Decl(indirection.d.ts, 0, 32))
+
+export declare type Other = IndirectOther;
+>Other : Symbol(Other, Decl(indirection.d.ts, 0, 79))
+>IndirectOther : Symbol(IndirectOther, Decl(indirection.d.ts, 0, 8))
+
+export declare type SomeType = IndirectSomeType
+>SomeType : Symbol(SomeType, Decl(indirection.d.ts, 1, 42))
+>IndirectSomeType : Symbol(IndirectSomeType, Decl(indirection.d.ts, 0, 32))
+
+=== node_modules/some-dep/dist/index.d.ts ===
+import { Other, SomeType as IndirectSomeType } from './indirection';
+>Other : Symbol(Other, Decl(index.d.ts, 0, 8))
+>SomeType : Symbol(IndirectSomeType, Decl(indirection.d.ts, 1, 42))
+>IndirectSomeType : Symbol(IndirectSomeType, Decl(index.d.ts, 0, 15))
+
+export type OtherType = Other;
+>OtherType : Symbol(OtherType, Decl(index.d.ts, 0, 68))
+>Other : Symbol(Other, Decl(index.d.ts, 0, 8))
+
+export type SomeType = IndirectSomeType;
+>SomeType : Symbol(SomeType, Decl(index.d.ts, 1, 30))
+>IndirectSomeType : Symbol(IndirectSomeType, Decl(index.d.ts, 0, 15))
+
+=== src/index.ts ===
+import { SomeType } from "some-dep";
+>SomeType : Symbol(SomeType, Decl(index.ts, 0, 8))
+
+export const foo = (thing: SomeType) => {
+>foo : Symbol(foo, Decl(index.ts, 2, 12))
+>thing : Symbol(thing, Decl(index.ts, 2, 20))
+>SomeType : Symbol(SomeType, Decl(index.ts, 0, 8))
+
+  return thing;
+>thing : Symbol(thing, Decl(index.ts, 2, 20))
+
+};
+
+export const bar = (thing: SomeType) => {
+>bar : Symbol(bar, Decl(index.ts, 6, 12))
+>thing : Symbol(thing, Decl(index.ts, 6, 20))
+>SomeType : Symbol(SomeType, Decl(index.ts, 0, 8))
+
+  return thing.arg;
+>thing.arg : Symbol(arg, Decl(inner.d.ts, 1, 32))
+>thing : Symbol(thing, Decl(index.ts, 6, 20))
+>arg : Symbol(arg, Decl(inner.d.ts, 1, 32))
+
+};
