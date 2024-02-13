@@ -34,7 +34,7 @@ extends:
                 displayName: 'Install Node'
 
               - script: |
-                  which jq && npm install -g `jq -r '.packageManager' < package.json`
+                  npm install -g `node -e 'console.log(JSON.parse(fs.readFileSync("package.json", "utf8")).packageManager)'`
                   npm --version
                 displayName: 'Install packageManager from package.json'
 
