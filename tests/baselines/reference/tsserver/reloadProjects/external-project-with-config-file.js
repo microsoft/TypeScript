@@ -659,7 +659,6 @@ Info seq  [hh:mm:ss:mss] request:
       "type": "request"
     }
 Info seq  [hh:mm:ss:mss] reload projects.
-Info seq  [hh:mm:ss:mss] ExcludeWatcher:: Close:: WatchInfo: /user/username/projects/myproject/file2.ts 500 {"excludeFiles":["/user/username/projects/myproject/file2.ts"]} WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] Scheduled: /user/username/projects/myproject/tsconfig.json
 Info seq  [hh:mm:ss:mss] Scheduled: *ensureProjectForOpenFiles*
 Info seq  [hh:mm:ss:mss] Scheduled: /user/username/projects/myproject/tsconfig.json, Cancelled earlier one
@@ -811,8 +810,10 @@ ScriptInfos::
     version: Text-1
     containingProjects: 1
         /user/username/projects/myproject/tsconfig.json *default*
-/user/username/projects/myproject/file2.ts *deleted*
+/user/username/projects/myproject/file2.ts *changed*
     version: Text-2
+    pendingReloadFromDisk: true *changed*
+    deferredDelete: true *changed*
     containingProjects: 0 *changed*
         /user/username/projects/myproject/tsconfig.json *deleted*
 /user/username/projects/myproject/node_modules/module1/index.d.ts

@@ -657,7 +657,12 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
     }
 
     private getOrCreateScriptInfoAndAttachToProject(fileName: string) {
-        const scriptInfo = this.projectService.getOrCreateScriptInfoNotOpenedByClient(fileName, this.currentDirectory, this.directoryStructureHost);
+        const scriptInfo = this.projectService.getOrCreateScriptInfoNotOpenedByClient(
+            fileName,
+            this.currentDirectory,
+            this.directoryStructureHost,
+            /*deferredDeleteOk*/ false,
+        );
         if (scriptInfo) {
             const existingValue = this.rootFilesMap.get(scriptInfo.path);
             if (existingValue && existingValue.info !== scriptInfo) {
@@ -678,7 +683,12 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
     getScriptVersion(filename: string) {
         // Don't attach to the project if version is asked
 
-        const info = this.projectService.getOrCreateScriptInfoNotOpenedByClient(filename, this.currentDirectory, this.directoryStructureHost);
+        const info = this.projectService.getOrCreateScriptInfoNotOpenedByClient(
+            filename,
+            this.currentDirectory,
+            this.directoryStructureHost,
+            /*deferredDeleteOk*/ false,
+        );
         return (info && info.getLatestVersion())!; // TODO: GH#18217
     }
 
@@ -1658,7 +1668,12 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
             // by the host for files in the program when the program is retrieved above but
             // the program doesn't contain external files so this must be done explicitly.
             inserted => {
-                const scriptInfo = this.projectService.getOrCreateScriptInfoNotOpenedByClient(inserted, this.currentDirectory, this.directoryStructureHost);
+                const scriptInfo = this.projectService.getOrCreateScriptInfoNotOpenedByClient(
+                    inserted,
+                    this.currentDirectory,
+                    this.directoryStructureHost,
+                    /*deferredDeleteOk*/ false,
+                );
                 scriptInfo?.attachToProject(this);
             },
             removed => this.detachScriptInfoFromProject(removed),

@@ -1024,14 +1024,14 @@ export class ProjectService {
      *
      * @internal
      */
-    readonly filenameToScriptInfo = new Map<string, ScriptInfo>();
+    readonly filenameToScriptInfo = new Map<Path, ScriptInfo>();
     private readonly nodeModulesWatchers = new Map<Path, NodeModulesWatcher>();
     /**
      * Contains all the deleted script info's version information so that
      * it does not reset when creating script info again
      * (and could have potentially collided with version where contents mismatch)
      */
-    private readonly filenameToScriptInfoVersion = new Map<string, number>();
+    private readonly filenameToScriptInfoVersion = new Map<Path, number>();
     // Set of all '.js' files ever opened.
     private readonly allJsFilesForOpenFileTelemetry = new Map<string, true>();
 
@@ -1593,11 +1593,12 @@ export class ProjectService {
     }
 
     private onSourceFileChanged(info: ScriptInfo, eventKind: FileWatcherEventKind) {
+        Debug.assert(!info.isScriptOpen());
         if (eventKind === FileWatcherEventKind.Deleted) {
-            // File was deleted
-            this.handleDeletedFile(info);
+            this.handleDeletedFile(info, /*deferredDelete*/ true);
         }
-        else if (!info.isScriptOpen()) {
+        else {
+            if (info.deferredDelete) info.deferredDelete = undefined;
             // file has been changed which might affect the set of referenced files in projects that include
             // this file and set of inferred projects
             info.delayReloadNonMixedContentFile();
@@ -1611,7 +1612,7 @@ export class ProjectService {
         if (info.sourceMapFilePath) {
             if (isString(info.sourceMapFilePath)) {
                 const sourceMapFileInfo = this.getScriptInfoForPath(info.sourceMapFilePath);
-                this.delayUpdateSourceInfoProjects(sourceMapFileInfo && sourceMapFileInfo.sourceInfos);
+                this.delayUpdateSourceInfoProjects(sourceMapFileInfo?.sourceInfos);
             }
             else {
                 this.delayUpdateSourceInfoProjects(info.sourceMapFilePath.sourceInfos);
@@ -1637,28 +1638,17 @@ export class ProjectService {
         }
     }
 
-    private handleDeletedFile(info: ScriptInfo) {
-        this.stopWatchingScriptInfo(info);
-
-        if (!info.isScriptOpen()) {
+    private handleDeletedFile(info: ScriptInfo, deferredDelete: boolean) {
+        Debug.assert(!info.isScriptOpen());
+        this.delayUpdateProjectGraphs(info.containingProjects, /*clearSourceMapperCache*/ false);
+        this.handleSourceMapProjects(info);
+        info.detachAllProjects();
+        if (deferredDelete) {
+            info.delayReloadNonMixedContentFile();
+            info.deferredDelete = true;
+        }
+        else {
             this.deleteScriptInfo(info);
-
-            // capture list of projects since detachAllProjects will wipe out original list
-            const containingProjects = info.containingProjects.slice();
-
-            info.detachAllProjects();
-
-            // update projects to make sure that set of referenced files is correct
-            this.delayUpdateProjectGraphs(containingProjects, /*clearSourceMapperCache*/ false);
-            this.handleSourceMapProjects(info);
-            info.closeSourceMapFileWatcher();
-            // need to recalculate source map from declaration file
-            if (info.declarationInfoPath) {
-                const declarationInfo = this.getScriptInfoForPath(info.declarationInfoPath);
-                if (declarationInfo) {
-                    declarationInfo.sourceMapFilePath = undefined;
-                }
-            }
         }
     }
 
@@ -2053,19 +2043,21 @@ export class ProjectService {
             this.watchClosedScriptInfo(info);
         }
         else {
-            this.handleDeletedFile(info);
+            this.handleDeletedFile(info, /*deferredDelete*/ false);
         }
-
         return ensureProjectsForOpenFiles;
     }
 
     private deleteScriptInfo(info: ScriptInfo) {
+        Debug.assert(!info.isScriptOpen());
         this.filenameToScriptInfo.delete(info.path);
         this.filenameToScriptInfoVersion.set(info.path, info.textStorage.version);
+        this.stopWatchingScriptInfo(info);
         const realpath = info.getRealpathIfDifferent();
         if (realpath) {
             this.realpathToScriptInfos!.remove(realpath, info); // TODO: GH#18217
         }
+        info.closeSourceMapFileWatcher();
     }
 
     private configFileExists(configFileName: NormalizedPath, canonicalConfigFilePath: NormalizedPath, info: OpenScriptInfoOrClosedOrConfigFileInfo) {
@@ -2791,6 +2783,7 @@ export class ProjectService {
                     scriptKind,
                     hasMixedContent,
                     project.directoryStructureHost,
+                    /*deferredDeleteOk*/ false,
                 ));
                 path = scriptInfo.path;
                 const existingValue = projectRootFilesMap.get(path);
@@ -3025,13 +3018,19 @@ export class ProjectService {
     }
 
     /** @internal */
-    getOrCreateScriptInfoNotOpenedByClient(uncheckedFileName: string, currentDirectory: string, hostToQueryFileExistsOn: DirectoryStructureHost) {
+    getOrCreateScriptInfoNotOpenedByClient(
+        uncheckedFileName: string,
+        currentDirectory: string,
+        hostToQueryFileExistsOn: DirectoryStructureHost,
+        deferredDeleteOk: boolean,
+    ) {
         return this.getOrCreateScriptInfoNotOpenedByClientForNormalizedPath(
             toNormalizedPath(uncheckedFileName),
             currentDirectory,
             /*scriptKind*/ undefined,
             /*hasMixedContent*/ undefined,
             hostToQueryFileExistsOn,
+            deferredDeleteOk,
         );
     }
 
@@ -3050,7 +3049,13 @@ export class ProjectService {
 
     /** @internal */
     logErrorForScriptInfoNotFound(fileName: string): void {
-        const names = arrayFrom(this.filenameToScriptInfo.entries(), ([path, scriptInfo]) => ({ path, fileName: scriptInfo.fileName }));
+        const names = arrayFrom(
+            mapDefinedIterator(
+                this.filenameToScriptInfo.entries(),
+                entry => entry[1].deferredDelete ? undefined : entry,
+            ),
+            ([path, scriptInfo]) => ({ path, fileName: scriptInfo.fileName }),
+        );
         this.logger.msg(`Could not find file ${JSON.stringify(fileName)}.\nAll files are: ${JSON.stringify(names)}`, Msg.Err);
     }
 
@@ -3147,7 +3152,7 @@ export class ProjectService {
                         this.refreshScriptInfosInDirectory(dirPath);
                     }
                     else {
-                        const info = this.getScriptInfoForPath(fileOrDirectoryPath);
+                        const info = this.filenameToScriptInfo.get(fileOrDirectoryPath);
                         if (info) {
                             if (isScriptInfoWatchedFromNodeModules(info)) {
                                 this.refreshScriptInfo(info);
@@ -3237,9 +3242,25 @@ export class ProjectService {
         }
     }
 
-    private getOrCreateScriptInfoNotOpenedByClientForNormalizedPath(fileName: NormalizedPath, currentDirectory: string, scriptKind: ScriptKind | undefined, hasMixedContent: boolean | undefined, hostToQueryFileExistsOn: DirectoryStructureHost | undefined) {
+    private getOrCreateScriptInfoNotOpenedByClientForNormalizedPath(
+        fileName: NormalizedPath,
+        currentDirectory: string,
+        scriptKind: ScriptKind | undefined,
+        hasMixedContent: boolean | undefined,
+        hostToQueryFileExistsOn: DirectoryStructureHost | undefined,
+        deferredDeleteOk: boolean,
+    ) {
         if (isRootedDiskPath(fileName) || isDynamicFileName(fileName)) {
-            return this.getOrCreateScriptInfoWorker(fileName, currentDirectory, /*openedByClient*/ false, /*fileContent*/ undefined, scriptKind, hasMixedContent, hostToQueryFileExistsOn);
+            return this.getOrCreateScriptInfoWorker(
+                fileName,
+                currentDirectory,
+                /*openedByClient*/ false,
+                /*fileContent*/ undefined,
+                scriptKind,
+                !!hasMixedContent,
+                hostToQueryFileExistsOn,
+                deferredDeleteOk,
+            );
         }
 
         // This is non rooted path with different current directory than project service current directory
@@ -3254,18 +3275,39 @@ export class ProjectService {
         return undefined;
     }
 
-    private getOrCreateScriptInfoOpenedByClientForNormalizedPath(fileName: NormalizedPath, currentDirectory: string, fileContent: string | undefined, scriptKind: ScriptKind | undefined, hasMixedContent: boolean | undefined) {
-        return this.getOrCreateScriptInfoWorker(fileName, currentDirectory, /*openedByClient*/ true, fileContent, scriptKind, hasMixedContent);
+    getOrCreateScriptInfoForNormalizedPath(
+        fileName: NormalizedPath,
+        openedByClient: boolean,
+        fileContent?: string,
+        scriptKind?: ScriptKind,
+        hasMixedContent?: boolean,
+        hostToQueryFileExistsOn?: { fileExists(path: string): boolean; },
+    ) {
+        return this.getOrCreateScriptInfoWorker(
+            fileName,
+            this.currentDirectory,
+            openedByClient,
+            fileContent,
+            scriptKind,
+            !!hasMixedContent,
+            hostToQueryFileExistsOn,
+            /*deferredDeleteOk*/ false,
+        );
     }
 
-    getOrCreateScriptInfoForNormalizedPath(fileName: NormalizedPath, openedByClient: boolean, fileContent?: string, scriptKind?: ScriptKind, hasMixedContent?: boolean, hostToQueryFileExistsOn?: { fileExists(path: string): boolean; }) {
-        return this.getOrCreateScriptInfoWorker(fileName, this.currentDirectory, openedByClient, fileContent, scriptKind, hasMixedContent, hostToQueryFileExistsOn);
-    }
-
-    private getOrCreateScriptInfoWorker(fileName: NormalizedPath, currentDirectory: string, openedByClient: boolean, fileContent?: string, scriptKind?: ScriptKind, hasMixedContent?: boolean, hostToQueryFileExistsOn?: { fileExists(path: string): boolean; }) {
+    private getOrCreateScriptInfoWorker(
+        fileName: NormalizedPath,
+        currentDirectory: string,
+        openedByClient: boolean,
+        fileContent: string | undefined,
+        scriptKind: ScriptKind | undefined,
+        hasMixedContent: boolean,
+        hostToQueryFileExistsOn: { fileExists(path: string): boolean; } | undefined,
+        deferredDeleteOk: boolean,
+    ) {
         Debug.assert(fileContent === undefined || openedByClient, "ScriptInfo needs to be opened by client to be able to set its user defined content");
         const path = normalizedPathToPath(fileName, currentDirectory, this.toCanonicalFileName);
-        let info = this.getScriptInfoForPath(path);
+        let info = this.filenameToScriptInfo.get(path);
         if (!info) {
             const isDynamic = isDynamicFileName(fileName);
             Debug.assert(isRootedDiskPath(fileName) || isDynamic || openedByClient, "", () => `${JSON.stringify({ fileName, currentDirectory, hostCurrentDirectory: this.currentDirectory, openKeys: arrayFrom(this.openFilesWithNonRootedDiskPath.keys()) })}\nScript info with non-dynamic relative file name can only be open script info or in context of host currentDirectory`);
@@ -3275,7 +3317,7 @@ export class ProjectService {
             if (!openedByClient && !isDynamic && !(hostToQueryFileExistsOn || this.host).fileExists(fileName)) {
                 return;
             }
-            info = new ScriptInfo(this.host, fileName, scriptKind!, !!hasMixedContent, path, this.filenameToScriptInfoVersion.get(path)); // TODO: GH#18217
+            info = new ScriptInfo(this.host, fileName, scriptKind!, hasMixedContent, path, this.filenameToScriptInfoVersion.get(path));
             this.filenameToScriptInfo.set(info.path, info);
             this.filenameToScriptInfoVersion.delete(info.path);
             if (!openedByClient) {
@@ -3285,6 +3327,14 @@ export class ProjectService {
                 // File that is opened by user but isn't rooted disk path
                 this.openFilesWithNonRootedDiskPath.set(this.toCanonicalFileName(fileName), info);
             }
+        }
+        else if (info.deferredDelete) {
+            Debug.assert(!info.isDynamic);
+            // If the file is not opened by client and the file doesnot exist on the disk, return
+            if (!openedByClient && !(hostToQueryFileExistsOn || this.host).fileExists(fileName)) {
+                return deferredDeleteOk ? info : undefined;
+            }
+            info.deferredDelete = undefined;
         }
         if (openedByClient) {
             // Opening closed script info
@@ -3307,13 +3357,19 @@ export class ProjectService {
     }
 
     getScriptInfoForPath(fileName: Path) {
-        return this.filenameToScriptInfo.get(fileName);
+        const info = this.filenameToScriptInfo.get(fileName);
+        return !info || !info.deferredDelete ? info : undefined;
     }
 
     /** @internal */
     getDocumentPositionMapper(project: Project, generatedFileName: string, sourceFileName?: string): DocumentPositionMapper | undefined {
         // Since declaration info and map file watches arent updating project's directory structure host (which can cache file structure) use host
-        const declarationInfo = this.getOrCreateScriptInfoNotOpenedByClient(generatedFileName, project.currentDirectory, this.host);
+        const declarationInfo = this.getOrCreateScriptInfoNotOpenedByClient(
+            generatedFileName,
+            project.currentDirectory,
+            this.host,
+            /*deferredDeleteOk*/ false,
+        );
         if (!declarationInfo) {
             if (sourceFileName) {
                 // Project contains source file and it generates the generated file name
@@ -3346,16 +3402,16 @@ export class ProjectService {
         }
 
         // Create the mapper
-        let sourceMapFileInfo: ScriptInfo | undefined;
-        let mapFileNameFromDeclarationInfo: string | undefined;
-
+        let sourceMapFileInfo: ScriptInfo | string | undefined;
         let readMapFile: ReadMapFile | undefined = (mapFileName, mapFileNameFromDts) => {
-            const mapInfo = this.getOrCreateScriptInfoNotOpenedByClient(mapFileName, project.currentDirectory, this.host);
-            if (!mapInfo) {
-                mapFileNameFromDeclarationInfo = mapFileNameFromDts;
-                return undefined;
-            }
-            sourceMapFileInfo = mapInfo;
+            const mapInfo = this.getOrCreateScriptInfoNotOpenedByClient(
+                mapFileName,
+                project.currentDirectory,
+                this.host,
+                /*deferredDeleteOk*/ true,
+            );
+            sourceMapFileInfo = mapInfo || mapFileNameFromDts;
+            if (!mapInfo || mapInfo.deferredDelete) return undefined;
             const snap = mapInfo.getSnapshot();
             if (mapInfo.documentPositionMapper !== undefined) return mapInfo.documentPositionMapper;
             return getSnapshotText(snap);
@@ -3369,21 +3425,23 @@ export class ProjectService {
         );
         readMapFile = undefined; // Remove ref to project
         if (sourceMapFileInfo) {
-            declarationInfo.sourceMapFilePath = sourceMapFileInfo.path;
-            sourceMapFileInfo.declarationInfoPath = declarationInfo.path;
-            sourceMapFileInfo.documentPositionMapper = documentPositionMapper || false;
-            sourceMapFileInfo.sourceInfos = this.addSourceInfoToSourceMap(sourceFileName, project, sourceMapFileInfo.sourceInfos);
-        }
-        else if (mapFileNameFromDeclarationInfo) {
-            declarationInfo.sourceMapFilePath = {
-                watcher: this.addMissingSourceMapFile(
-                    project.currentDirectory === this.currentDirectory ?
-                        mapFileNameFromDeclarationInfo :
-                        getNormalizedAbsolutePath(mapFileNameFromDeclarationInfo, project.currentDirectory),
-                    declarationInfo.path,
-                ),
-                sourceInfos: this.addSourceInfoToSourceMap(sourceFileName, project),
-            };
+            if (!isString(sourceMapFileInfo)) {
+                declarationInfo.sourceMapFilePath = sourceMapFileInfo.path;
+                sourceMapFileInfo.declarationInfoPath = declarationInfo.path;
+                if (!sourceMapFileInfo.deferredDelete) sourceMapFileInfo.documentPositionMapper = documentPositionMapper || false;
+                sourceMapFileInfo.sourceInfos = this.addSourceInfoToSourceMap(sourceFileName, project, sourceMapFileInfo.sourceInfos);
+            }
+            else {
+                declarationInfo.sourceMapFilePath = {
+                    watcher: this.addMissingSourceMapFile(
+                        project.currentDirectory === this.currentDirectory ?
+                            sourceMapFileInfo :
+                            getNormalizedAbsolutePath(sourceMapFileInfo, project.currentDirectory),
+                        declarationInfo.path,
+                    ),
+                    sourceInfos: this.addSourceInfoToSourceMap(sourceFileName, project),
+                };
+            }
         }
         else {
             declarationInfo.sourceMapFilePath = false;
@@ -3394,7 +3452,12 @@ export class ProjectService {
     private addSourceInfoToSourceMap(sourceFileName: string | undefined, project: Project, sourceInfos?: Set<Path>) {
         if (sourceFileName) {
             // Attach as source
-            const sourceInfo = this.getOrCreateScriptInfoNotOpenedByClient(sourceFileName, project.currentDirectory, project.directoryStructureHost)!;
+            const sourceInfo = this.getOrCreateScriptInfoNotOpenedByClient(
+                sourceFileName,
+                project.currentDirectory,
+                project.directoryStructureHost,
+                /*deferredDeleteOk*/ false,
+            )!;
             (sourceInfos || (sourceInfos = new Set())).add(sourceInfo.path);
         }
         return sourceInfos;
@@ -3429,14 +3492,19 @@ export class ProjectService {
         }
 
         // Need to look for other files.
-        const info = this.getOrCreateScriptInfoNotOpenedByClient(fileName, (project || this).currentDirectory, project ? project.directoryStructureHost : this.host);
+        const info = this.getOrCreateScriptInfoNotOpenedByClient(
+            fileName,
+            (project || this).currentDirectory,
+            project ? project.directoryStructureHost : this.host,
+            /*deferredDeleteOk*/ false,
+        );
         if (!info) return undefined;
 
         // Attach as source
         if (declarationInfo && isString(declarationInfo.sourceMapFilePath) && info !== declarationInfo) {
             const sourceMapInfo = this.getScriptInfoForPath(declarationInfo.sourceMapFilePath);
             if (sourceMapInfo) {
-                (sourceMapInfo.sourceInfos || (sourceMapInfo.sourceInfos = new Set())).add(info.path);
+                (sourceMapInfo.sourceInfos ??= new Set()).add(info.path);
             }
         }
 
@@ -3558,7 +3626,14 @@ export class ProjectService {
             if (this.openFiles.has(info.path)) return; // Skip open files
             if (!info.fileWatcher) return; // not watched file
             // Handle as if file is changed or deleted
-            this.onSourceFileChanged(info, this.host.fileExists(info.fileName) ? FileWatcherEventKind.Changed : FileWatcherEventKind.Deleted);
+            this.onSourceFileChanged(
+                info,
+                this.host.fileExists(info.fileName) ?
+                    info.deferredDelete ?
+                        FileWatcherEventKind.Created :
+                        FileWatcherEventKind.Changed :
+                    FileWatcherEventKind.Deleted,
+            );
         });
         // Cancel all project updates since we will be updating them now
         this.pendingProjectUpdates.forEach((_project, projectName) => {
@@ -3800,8 +3875,23 @@ export class ProjectService {
         });
     }
 
-    private getOrCreateOpenScriptInfo(fileName: NormalizedPath, fileContent: string | undefined, scriptKind: ScriptKind | undefined, hasMixedContent: boolean | undefined, projectRootPath: NormalizedPath | undefined) {
-        const info = this.getOrCreateScriptInfoOpenedByClientForNormalizedPath(fileName, projectRootPath ? this.getNormalizedAbsolutePath(projectRootPath) : this.currentDirectory, fileContent, scriptKind, hasMixedContent)!; // TODO: GH#18217
+    private getOrCreateOpenScriptInfo(
+        fileName: NormalizedPath,
+        fileContent: string | undefined,
+        scriptKind: ScriptKind | undefined,
+        hasMixedContent: boolean | undefined,
+        projectRootPath: NormalizedPath | undefined,
+    ) {
+        const info = this.getOrCreateScriptInfoWorker(
+            fileName,
+            projectRootPath ? this.getNormalizedAbsolutePath(projectRootPath) : this.currentDirectory,
+            /*openedByClient*/ true,
+            fileContent,
+            scriptKind,
+            !!hasMixedContent,
+            /*hostToQueryFileExistsOn*/ undefined,
+            /*deferredDeleteOk*/ true,
+        )!;
         this.openFiles.set(info.path, projectRootPath);
         return info;
     }
@@ -4068,14 +4158,15 @@ export class ProjectService {
     private removeOrphanScriptInfos() {
         const toRemoveScriptInfos = new Map(this.filenameToScriptInfo);
         this.filenameToScriptInfo.forEach(info => {
+            if (info.deferredDelete) return;
             // If script info is open or orphan, retain it and its dependencies
             if (!info.isScriptOpen() && info.isOrphan() && !info.isContainedByBackgroundProject()) {
                 // Otherwise if there is any source info that is alive, this alive too
                 if (!info.sourceMapFilePath) return;
                 let sourceInfos: Set<Path> | undefined;
                 if (isString(info.sourceMapFilePath)) {
-                    const sourceMapInfo = this.getScriptInfoForPath(info.sourceMapFilePath);
-                    sourceInfos = sourceMapInfo && sourceMapInfo.sourceInfos;
+                    const sourceMapInfo = this.filenameToScriptInfo.get(info.sourceMapFilePath);
+                    sourceInfos = sourceMapInfo?.sourceInfos;
                 }
                 else {
                     sourceInfos = info.sourceMapFilePath.sourceInfos;
@@ -4093,13 +4184,22 @@ export class ProjectService {
 
             // Retain this script info
             toRemoveScriptInfos.delete(info.path);
+            // If we retained declaration file, retain source map and sources as well
             if (info.sourceMapFilePath) {
                 let sourceInfos: Set<Path> | undefined;
                 if (isString(info.sourceMapFilePath)) {
                     // And map file info and source infos
-                    toRemoveScriptInfos.delete(info.sourceMapFilePath);
-                    const sourceMapInfo = this.getScriptInfoForPath(info.sourceMapFilePath);
-                    sourceInfos = sourceMapInfo && sourceMapInfo.sourceInfos;
+                    const sourceMapInfo = this.filenameToScriptInfo.get(info.sourceMapFilePath);
+                    if (sourceMapInfo?.deferredDelete) {
+                        info.sourceMapFilePath = {
+                            watcher: this.addMissingSourceMapFile(sourceMapInfo.fileName, info.path),
+                            sourceInfos: sourceMapInfo.sourceInfos,
+                        };
+                    }
+                    else {
+                        toRemoveScriptInfos.delete(info.sourceMapFilePath);
+                    }
+                    sourceInfos = sourceMapInfo?.sourceInfos;
                 }
                 else {
                     sourceInfos = info.sourceMapFilePath.sourceInfos;
@@ -4110,12 +4210,8 @@ export class ProjectService {
             }
         });
 
-        toRemoveScriptInfos.forEach(info => {
-            // if there are not projects that include this script info - delete it
-            this.stopWatchingScriptInfo(info);
-            this.deleteScriptInfo(info);
-            info.closeSourceMapFileWatcher();
-        });
+        // if there are not projects that include this script info - delete it
+        toRemoveScriptInfos.forEach(info => this.deleteScriptInfo(info));
     }
 
     private telemetryOnOpenFile(scriptInfo: ScriptInfo): void {
