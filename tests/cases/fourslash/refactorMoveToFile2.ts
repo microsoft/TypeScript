@@ -1,15 +1,15 @@
 /// <reference path='fourslash.ts' />
 
+/////*a*/
 ////namespace ns {
-////    /*a*/export function fn() {
-////
+////    export function fn() {
 ////    }
 ////    fn();
-////    /*b*/
 ////}
+/////*b*/
 
 goTo.select("a", "b");
-verify.not.refactorAvailable("Move to file",
+verify.refactorAvailable("Move to file",
 undefined,
 undefined,
 {
