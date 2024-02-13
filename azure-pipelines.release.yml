@@ -15,7 +15,7 @@ extends:
   parameters:
     pool:
       name: AzurePipelines-EO
-      image: 1ESPT-Ubuntu22.04
+      image: 1ESPT-Mariner2.0
       os: linux
 
     stages:
