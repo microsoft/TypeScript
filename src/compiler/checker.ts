@@ -22168,7 +22168,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 }
                 else {
                     sourceSignatures = origSourceSignatures;
-                    sourceSignatures.forEach((sourceSignature) => {
+                    sourceSignatures.forEach(sourceSignature => {
                         Debug.assert(!(sourceSignature.compositeSignatures?.length && sourceSignatures[0].compositeKind === TypeFlags.Intersection), "multiple composite intersection signatures not yet ijmplement");
                         const paramsAndReturn = getSignatureCacheData(sourceSignature);
                         sourceOverloadsCached.paramsAndReturn.push(paramsAndReturn);
@@ -22176,7 +22176,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 }
 
                 const onlyOneSourceSig = sourceSignatures.length === 1;
-                 /* eslint-disable-next-line */
+                /* eslint-disable-next-line */
                 for (let si = 0; si < sourceSignatures.length; ++si) {
                     let hadMatch = false;
                     let gReturn = neverType as Type;
@@ -22189,8 +22189,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         if (targetSignatures.length === 0) {
                             return { computed: true, ternary: Ternary.False };
                         }
-                            /* eslint-disable-next-line */
-                            for (let ti = 0; ti < targetSignatures.length; ++ti) {
+                        /* eslint-disable-next-line */
+                        for (let ti = 0; ti < targetSignatures.length; ++ti) {
                             const tsig = targetSignatures[ti];
                             let refTargetParamsOut: CheckFunctionRelatedToIntersectionHelperArgs["refTargetParamsOut"];
                             if (si === 0) {
@@ -37913,7 +37913,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                                 && contextualSignature.compositeKind === TypeFlags.Intersection
                             ) {
                                 compositeIntersectionMembers = [];
-                                contextualSignature.compositeSignatures.forEach((compositeSig) => {
+                                contextualSignature.compositeSignatures.forEach(compositeSig => {
                                     Debug.assert(!compositeSig.compositeSignatures, "case composite signatures member itself has composite signatures: not yet implemented");
                                     compositeIntersectionMembers!.push(
                                         assignContextualParameterTypesToOneSig(cloneSignatureAndParameters(signature), compositeSig),
