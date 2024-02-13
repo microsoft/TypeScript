@@ -11,6 +11,7 @@ import {
     BinaryExpression,
     BindingElement,
     BindingName,
+    BlockLike,
     CallExpression,
     canHaveDecorators,
     canHaveModifiers,
@@ -95,6 +96,7 @@ import {
     isPropertyAccessExpression,
     isPropertyAssignment,
     isRequireCall,
+    isRootNode,
     isSourceFile,
     isStatement,
     isStringLiteral,
@@ -128,6 +130,7 @@ import {
     RequireOrImportCall,
     RequireVariableStatement,
     resolvePath,
+    RootNode,
     ScriptTarget,
     skipAlias,
     some,
@@ -174,10 +177,9 @@ registerRefactor(refactorNameForMoveToFile, {
             const file = context.file;
             const startNode = getTokenAtPosition(file, context.startPosition);
             const endNode = getTokenAtPosition(file, endPosition);
-            if (
-                startNode.kind !== SyntaxKind.SourceFile && isBlockLike(startNode)
-                && endNode.kind !== SyntaxKind.SourceFile && isBlockLike(endNode)
-            ) {
+            const startNodeAncestor = getBlockLikeAncestorOrRootNode(startNode);
+            const endNodeAncestor = getBlockLikeAncestorOrRootNode(endNode);
+            if (!isRootNode(startNodeAncestor) && !isRootNode(endNodeAncestor)) {
                 return emptyArray;
             }
         }
@@ -286,6 +288,17 @@ function getNewStatementsAndRemoveFromOldFile(
         ...imports,
         ...body,
     ];
+}
+
+function getBlockLikeAncestorOrRootNode(node : Node) : BlockLike | RootNode {
+    let currentNode = node;
+    while (!isRootNode(currentNode)) {
+        if (isBlockLike(currentNode)) {
+            break;
+        }
+        currentNode = currentNode.parent;
+    }
+    return currentNode;
 }
 
 function getTargetFileImportsAndAddExportInOldFile(
