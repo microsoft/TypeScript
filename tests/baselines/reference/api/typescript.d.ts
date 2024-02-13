@@ -5789,6 +5789,7 @@ declare namespace ts {
         readonly name?: Identifier;
     }
     type BlockLike = SourceFile | Block | ModuleBlock | CaseOrDefaultClause;
+    type RootNode = SourceFile | Bundle;
     interface Block extends Statement, LocalsContainer {
         readonly kind: SyntaxKind.Block;
         readonly statements: NodeArray<Statement>;
@@ -10356,11 +10357,6 @@ declare namespace ts {
             fileExists(fileName: string): boolean;
             readFile(path: string, encoding?: string): string | undefined;
             readDirectory(rootDir: string, extensions: readonly string[], excludes: readonly string[] | undefined, includes: readonly string[] | undefined, depth?: number): string[];
-        }
-    }
-    namespace refactor {
-        namespace extractSymbol {
-            function isBlockLike(node: Node): node is BlockLike;
         }
     }
     function getDefaultFormatCodeSettings(newLineCharacter?: string): FormatCodeSettings;

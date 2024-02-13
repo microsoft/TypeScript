@@ -114,7 +114,8 @@ Info seq  [hh:mm:ss:mss] request:
         "startOffset": 24,
         "endLine": 1,
         "endOffset": 41,
-        "triggerReason": "implicit"
+        "triggerReason": "implicit",
+        "includeInteractiveActions": true
       },
       "command": "getApplicableRefactors"
     }
@@ -204,7 +205,8 @@ Info seq  [hh:mm:ss:mss] request:
         "startOffset": 24,
         "endLine": 1,
         "endOffset": 41,
-        "triggerReason": "implicit"
+        "triggerReason": "implicit",
+        "includeInteractiveActions": true
       },
       "command": "getApplicableRefactors"
     }
@@ -294,7 +296,8 @@ Info seq  [hh:mm:ss:mss] request:
         "startOffset": 24,
         "endLine": 1,
         "endOffset": 41,
-        "triggerReason": "implicit"
+        "triggerReason": "implicit",
+        "includeInteractiveActions": true
       },
       "command": "getApplicableRefactors"
     }
@@ -384,7 +387,8 @@ Info seq  [hh:mm:ss:mss] request:
         "startOffset": 24,
         "endLine": 1,
         "endOffset": 41,
-        "triggerReason": "implicit"
+        "triggerReason": "implicit",
+        "includeInteractiveActions": true
       },
       "command": "getApplicableRefactors"
     }
@@ -474,7 +478,8 @@ Info seq  [hh:mm:ss:mss] request:
         "startOffset": 24,
         "endLine": 1,
         "endOffset": 41,
-        "triggerReason": "implicit"
+        "triggerReason": "implicit",
+        "includeInteractiveActions": true
       },
       "command": "getApplicableRefactors"
     }
@@ -564,7 +569,8 @@ Info seq  [hh:mm:ss:mss] request:
         "startOffset": 24,
         "endLine": 1,
         "endOffset": 41,
-        "triggerReason": "implicit"
+        "triggerReason": "implicit",
+        "includeInteractiveActions": true
       },
       "command": "getApplicableRefactors"
     }
