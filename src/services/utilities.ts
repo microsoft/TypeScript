@@ -11,7 +11,6 @@ import {
     BindingElement,
     BlockLike,
     BreakOrContinueStatement,
-    Bundle,
     CallExpression,
     canHaveModifiers,
     CaseClause,
@@ -312,6 +311,7 @@ import {
     pseudoBigIntToString,
     QualifiedName,
     RefactorContext,
+    RootNode,
     Scanner,
     ScriptElementKind,
     ScriptElementKindModifier,
@@ -4300,6 +4300,3 @@ export function isRootNode(node: Node): node is RootNode {
             return false;
     }
 }
-
-/** @internal */
-export type RootNode = SourceFile | Bundle;
