@@ -2,7 +2,6 @@
 
 ////namespace ns {
 ////    /*a*/export function fn() {
-////
 ////    }
 ////    fn();
 ////    /*b*/
