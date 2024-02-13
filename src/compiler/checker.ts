@@ -22040,14 +22040,12 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
             // const sourceCount = getParameterCount(source);
             // const sourceRestType = getNonArrayRestType(source);
-
             const sourceRestType = getNonArrayRestType(source);
             const targetRestType = getNonArrayRestType(target);
             if (sourceRestType || targetRestType) {
                 Debug.assert(false, `case getNonArrayRestType(source) || getNonArrayRestType(target), not yet implemented`);
                 void instantiateType(sourceRestType || targetRestType, reportUnreliableMarkers);
             }
-
             // const targetRestType = getNonArrayRestType(target);
             if (refTargetParamsOut) {
                 refTargetParamsOut[0] = getSignatureCacheData(target);
@@ -22126,7 +22124,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
          */
         function checkFunctionRelatedToIntersection(source: Type, target: Type, _reportErrors: boolean): { computed: boolean; ternary: Ternary; } {
             const ret = ((): { computed: boolean; ternary: Ternary; } => {
-                // let refSourceParamsOut:CheckFunctionRelatedToIntersectionHelperArgs["refSourceParamsOut"]  = [undefined];
                 interface SourceOverloadsCached {
                     paramsAndReturn: CheckFunctionRelatedToIntersectionHelperArgsFunctionCache[];
                 }
