@@ -5,7 +5,9 @@ dependentReturnType1.ts(70,9): error TS2322: Type '{ a: "a"; }' is not assignabl
 dependentReturnType1.ts(74,5): error TS2322: Type '{ a: "a"; b: "b"; c: "c"; d: "d"; e: "e"; f: "f"; g: "g"; }' is not assignable to type 'T extends 1 ? One : T extends 2 ? Two : T extends 3 ? Three : Four'.
 dependentReturnType1.ts(80,9): error TS2322: Type '{ a: "a"; }' is not assignable to type 'T extends 1 ? One : T extends 2 ? Two : T extends 3 ? Three : T extends 4 ? Four : One | Two | Three | Four'.
 dependentReturnType1.ts(84,22): error TS2353: Object literal may only specify known properties, and 'b' does not exist in type 'Three & Four'.
+dependentReturnType1.ts(97,9): error TS2322: Type 'LeftOut' is not assignable to type 'Arg extends LeftIn ? LeftOut : RightOut'.
 dependentReturnType1.ts(99,9): error TS2322: Type 'RightOut' is not assignable to type 'Arg extends LeftIn ? LeftOut : RightOut'.
+dependentReturnType1.ts(116,9): error TS2322: Type 'number' is not assignable to type 'T extends Dog ? number : string'.
 dependentReturnType1.ts(118,5): error TS2322: Type 'string' is not assignable to type 'T extends Dog ? number : string'.
 dependentReturnType1.ts(153,13): error TS2322: Type 'string' is not assignable to type 'T extends string ? this : string'.
 dependentReturnType1.ts(155,9): error TS2322: Type 'this' is not assignable to type 'T extends string ? this : string'.
@@ -41,7 +43,7 @@ dependentReturnType1.ts(405,11): error TS2322: Type '2' is not assignable to typ
 dependentReturnType1.ts(428,13): error TS2322: Type 'R' is not assignable to type 'ConditionalReturnType<T, R, EOp>'.
 
 
-==== dependentReturnType1.ts (37 errors) ====
+==== dependentReturnType1.ts (39 errors) ====
     interface A {
         1: number;
         2: string;
@@ -152,9 +154,11 @@ dependentReturnType1.ts(428,13): error TS2322: Type 'R' is not assignable to typ
     {
         type OK = Arg extends LeftIn ? LeftOut : RightOut;
         if (cond(arg)) {
-            return produceLeftOut(arg); // Ok
+            return produceLeftOut(arg); // The narrowed conditional return type has deferred resolution, so this doesn't work.
+            ~~~~~~
+!!! error TS2322: Type 'LeftOut' is not assignable to type 'Arg extends LeftIn ? LeftOut : RightOut'.
         } else {
-            return produceRightOut(arg as RightIn); // Error: Doesn't work because we don't narrow `arg` to `Arg & RightIn` here
+            return produceRightOut(arg as RightIn); // Error: Doesn't work because we can't narrow `arg` to `Arg & RightIn` here
             ~~~~~~
 !!! error TS2322: Type 'RightOut' is not assignable to type 'Arg extends LeftIn ? LeftOut : RightOut'.
         }
@@ -173,7 +177,9 @@ dependentReturnType1.ts(428,13): error TS2322: Type 'R' is not assignable to typ
     declare function doggy(x: Dog): number;
     function f12<T extends Animal>(x: T): T extends Dog ? number : string {
         if (isDog(x)) { // `x` has type `T & Dog` here
-            return doggy(x); // Ok
+            return doggy(x); // The narrowed conditional return type has deferred resolution, so this doesn't work.
+            ~~~~~~
+!!! error TS2322: Type 'number' is not assignable to type 'T extends Dog ? number : string'.
         }
         return ""; // Error: Should not work because we can't express "not a Dog" in the type system
         ~~~~~~

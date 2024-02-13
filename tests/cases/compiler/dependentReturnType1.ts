@@ -98,9 +98,9 @@ function conditionalProducingIf<LeftIn, RightIn, LeftOut, RightOut, Arg extends 
 {
     type OK = Arg extends LeftIn ? LeftOut : RightOut;
     if (cond(arg)) {
-        return produceLeftOut(arg); // Ok
+        return produceLeftOut(arg); // The narrowed conditional return type has deferred resolution, so this doesn't work.
     } else {
-        return produceRightOut(arg as RightIn); // Error: Doesn't work because we don't narrow `arg` to `Arg & RightIn` here
+        return produceRightOut(arg as RightIn); // Error: Doesn't work because we can't narrow `arg` to `Arg & RightIn` here
     }
 }
 
@@ -117,7 +117,7 @@ declare function isDog(x: Animal): x is Dog;
 declare function doggy(x: Dog): number;
 function f12<T extends Animal>(x: T): T extends Dog ? number : string {
     if (isDog(x)) { // `x` has type `T & Dog` here
-        return doggy(x); // Ok
+        return doggy(x); // The narrowed conditional return type has deferred resolution, so this doesn't work.
     }
     return ""; // Error: Should not work because we can't express "not a Dog" in the type system
 }

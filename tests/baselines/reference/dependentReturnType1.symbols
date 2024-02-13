@@ -280,12 +280,12 @@ function conditionalProducingIf<LeftIn, RightIn, LeftOut, RightOut, Arg extends 
 >cond : Symbol(cond, Decl(dependentReturnType1.ts, 88, 13))
 >arg : Symbol(arg, Decl(dependentReturnType1.ts, 87, 98))
 
-        return produceLeftOut(arg); // Ok
+        return produceLeftOut(arg); // The narrowed conditional return type has deferred resolution, so this doesn't work.
 >produceLeftOut : Symbol(produceLeftOut, Decl(dependentReturnType1.ts, 89, 51))
 >arg : Symbol(arg, Decl(dependentReturnType1.ts, 87, 98))
 
     } else {
-        return produceRightOut(arg as RightIn); // Error: Doesn't work because we don't narrow `arg` to `Arg & RightIn` here
+        return produceRightOut(arg as RightIn); // Error: Doesn't work because we can't narrow `arg` to `Arg & RightIn` here
 >produceRightOut : Symbol(produceRightOut, Decl(dependentReturnType1.ts, 90, 45))
 >arg : Symbol(arg, Decl(dependentReturnType1.ts, 87, 98))
 >RightIn : Symbol(RightIn, Decl(dependentReturnType1.ts, 87, 39))
@@ -333,7 +333,7 @@ function f12<T extends Animal>(x: T): T extends Dog ? number : string {
 >isDog : Symbol(isDog, Decl(dependentReturnType1.ts, 108, 1))
 >x : Symbol(x, Decl(dependentReturnType1.ts, 113, 31))
 
-        return doggy(x); // Ok
+        return doggy(x); // The narrowed conditional return type has deferred resolution, so this doesn't work.
 >doggy : Symbol(doggy, Decl(dependentReturnType1.ts, 111, 44))
 >x : Symbol(x, Decl(dependentReturnType1.ts, 113, 31))
     }

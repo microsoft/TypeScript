@@ -265,13 +265,13 @@ function conditionalProducingIf<LeftIn, RightIn, LeftOut, RightOut, Arg extends 
 >cond : (arg: LeftIn | RightIn) => arg is LeftIn
 >arg : Arg
 
-        return produceLeftOut(arg); // Ok
+        return produceLeftOut(arg); // The narrowed conditional return type has deferred resolution, so this doesn't work.
 >produceLeftOut(arg) : LeftOut
 >produceLeftOut : (arg: LeftIn) => LeftOut
 >arg : Arg & LeftIn
 
     } else {
-        return produceRightOut(arg as RightIn); // Error: Doesn't work because we don't narrow `arg` to `Arg & RightIn` here
+        return produceRightOut(arg as RightIn); // Error: Doesn't work because we can't narrow `arg` to `Arg & RightIn` here
 >produceRightOut(arg as RightIn) : RightOut
 >produceRightOut : (arg: RightIn) => RightOut
 >arg as RightIn : RightIn
@@ -307,7 +307,7 @@ function f12<T extends Animal>(x: T): T extends Dog ? number : string {
 >isDog : (x: Animal) => x is Dog
 >x : T
 
-        return doggy(x); // Ok
+        return doggy(x); // The narrowed conditional return type has deferred resolution, so this doesn't work.
 >doggy(x) : number
 >doggy : (x: Dog) => number
 >x : T & Dog

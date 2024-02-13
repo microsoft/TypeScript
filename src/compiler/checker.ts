@@ -18908,60 +18908,14 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             // types can be written `[X] extends [Y] ? ...` and be deferred similarly to `X extends Y ? ...`.
             const checkTuples = isSimpleTupleType(root.node.checkType) && isSimpleTupleType(root.node.extendsType) &&
                 length((root.node.checkType as TupleTypeNode).elements) === length((root.node.extendsType as TupleTypeNode).elements);
-            const forceEagerNarrowing = narrowableCheckTypeVariable && getMappedType(narrowableCheckTypeVariable, narrowMapper) !== narrowableCheckTypeVariable; // >> TODO: can probably optimize this
-            const checkTypeDeferred = isDeferredType(checkType, checkTuples) && !forceEagerNarrowing;
-            let combinedMapper: TypeMapper | undefined;
-            if (root.inferTypeParameters) {
-                // When we're looking at making an inference for an infer type, when we get its constraint, it'll automagically be
-                // instantiated with the context, so it doesn't need the mapper for the inference contex - however the constraint
-                // may refer to another _root_, _uncloned_ `infer` type parameter [1], or to something mapped by `mapper` [2].
-                // [1] Eg, if we have `Foo<T, U extends T>` and `Foo<number, infer B>` - `B` is constrained to `T`, which, in turn, has been instantiated
-                // as `number`
-                // Conversely, if we have `Foo<infer A, infer B>`, `B` is still constrained to `T` and `T` is instantiated as `A`
-                // [2] Eg, if we have `Foo<T, U extends T>` and `Foo<Q, infer B>` where `Q` is mapped by `mapper` into `number` - `B` is constrained to `T`
-                // which is in turn instantiated as `Q`, which is in turn instantiated as `number`.
-                // So we need to:
-                //    * Clone the type parameters so their constraints can be instantiated in the context of `mapper` (otherwise theyd only get inference context information)
-                //    * Set the clones to both map the conditional's enclosing `mapper` and the original params
-                //    * instantiate the extends type with the clones
-                //    * incorporate all of the component mappers into the combined mapper for the true and false members
-                // This means we have three mappers that need applying:
-                //    * The original `mapper` used to create this conditional
-                //    * The mapper that maps the old root type parameter to the clone (`freshMapper`)
-                //    * The mapper that maps the clone to its inference result (`context.mapper`)
-                const freshParams = sameMap(root.inferTypeParameters, maybeCloneTypeParameter);
-                const freshMapper = freshParams !== root.inferTypeParameters ? createTypeMapper(root.inferTypeParameters, freshParams) : undefined;
-                const context = createInferenceContext(freshParams, /*signature*/ undefined, InferenceFlags.None);
-                if (freshMapper) {
-                    const freshCombinedMapper = combineTypeMappers(mapper, freshMapper);
-                    for (const p of freshParams) {
-                        if (root.inferTypeParameters.indexOf(p) === -1) {
-                            p.mapper = freshCombinedMapper;
-                        }
-                    }
-                }
-                if (!checkTypeDeferred) {
-                    // We don't want inferences from constraints as they may cause us to eagerly resolve the
-                    // conditional type instead of deferring resolution. Also, we always want strict function
-                    // types rules (i.e. proper contravariance) for inferences.
-                    inferTypes(context.inferences, checkType, instantiateType(extendsType, freshMapper), InferencePriority.NoConstraints | InferencePriority.AlwaysStrict);
-                }
-                const innerMapper = combineTypeMappers(freshMapper, context.mapper);
-                // It's possible for 'infer T' type paramteters to be given uninstantiated constraints when the
-                // those type parameters are used in type references (see getInferredTypeParameterConstraint). For
-                // that reason we need context.mapper to be first in the combined mapper. See #42636 for examples.
-                combinedMapper = mapper ? combineTypeMappers(innerMapper, mapper) : innerMapper;
-            }
-            // Instantiate the extends type including inferences for 'infer T' type parameters
-            const inferredExtendsType = combinedMapper ? instantiateType(root.extendsType, combinedMapper) : extendsType;
+            const checkTypeDeferred = isDeferredType(checkType, checkTuples);
             // We attempt to resolve the conditional type only when the check and extends types are non-generic
-            // if (!checkTypeDeferred && !isDeferredType(inferredExtendsType, checkTuples)) {
-            if (!checkTypeDeferred) {
+            if (!checkTypeDeferred && !isDeferredType(extendsType, checkTuples)) {
                 // Return falseType for a definitely false extends check. We check an instantiation of the two
                 // types with type parameters mapped to the wildcard type, the most permissive instantiations
                 // possible (the wildcard type is assignable to and from all types). If those are not related,
                 // then no instantiations will be and we can just return the false branch type.
-                if (!(inferredExtendsType.flags & TypeFlags.AnyOrUnknown) && (checkType.flags & TypeFlags.Any || !isTypeAssignableTo(getPermissiveInstantiation(checkType), getPermissiveInstantiation(inferredExtendsType)))) {
+                if (!(extendsType.flags & TypeFlags.AnyOrUnknown) && !isTypeAssignableTo(getPermissiveInstantiation(checkType), getPermissiveInstantiation(extendsType))) {
                     Debug.assert(!(checkType.flags & TypeFlags.Any));
                     // If falseType is an immediately nested conditional type that has an
                     // identical checkType, switch to that type and loop.
@@ -18979,10 +18933,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 // that has no constraint. This ensures that, for example, the type
                 //   type Foo<T extends { x: any }> = T extends { x: string } ? string : number
                 // doesn't immediately resolve to 'string' instead of being deferred.
-                else if (inferredExtendsType.flags & TypeFlags.AnyOrUnknown || isTypeAssignableTo(getRestrictiveInstantiation(checkType), getRestrictiveInstantiation(inferredExtendsType))) {
+                else if (extendsType.flags & TypeFlags.AnyOrUnknown || isTypeAssignableTo(getRestrictiveInstantiation(checkType), getRestrictiveInstantiation(extendsType))) {
                     const trueType = getTypeFromTypeNode(root.node.trueType);
-                    const trueMapper = combinedMapper || mapper;
-                    result = instantiateNarrowType(trueType, narrowMapper, trueMapper);
+                    result = instantiateNarrowType(trueType, narrowMapper, mapper);
                     break;
                 }
             }
