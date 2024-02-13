@@ -915,12 +915,17 @@ ScriptInfos::
     containingProjects: 2
         /user/username/projects/project/src/common/tsconfig.json
         /user/username/projects/project/src/tsconfig.json
-/user/username/projects/project/out/input/keyboard.d.ts
+/user/username/projects/project/out/input/keyboard.d.ts *changed*
     version: Text-1
+    sourceMapFilePath: /user/username/projects/project/out/input/keyboard.d.ts.map *changed*
     containingProjects: 1
         /user/username/projects/project/src/tsconfig.json
 /user/username/projects/project/out/input/keyboard.d.ts.map *new*
     version: Text-1
+    declarationInfoPath: /user/username/projects/project/out/input/keyboard.d.ts
+    sourceInfos: 1
+        /user/username/projects/project/src/common/input/keyboard.ts
+    documentPositionMapper: DocumentPositionMapper
     containingProjects: 0
 /user/username/projects/project/src/common/input/keyboard.test.ts
     version: Text-1

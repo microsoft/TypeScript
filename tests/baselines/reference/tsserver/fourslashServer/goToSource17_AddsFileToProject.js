@@ -395,8 +395,9 @@ ScriptInfos::
     containingProjects: 2
         /dev/null/inferredProject1*
         /dev/null/inferredProject2*
-/node_modules/@types/yargs/callback.d.ts
+/node_modules/@types/yargs/callback.d.ts *changed*
     version: Text-1
+    sourceMapFilePath: false *changed*
     containingProjects: 2
         /dev/null/inferredProject1*
         /dev/null/inferredProject2*
