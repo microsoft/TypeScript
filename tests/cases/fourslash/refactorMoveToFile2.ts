@@ -12,7 +12,9 @@ goTo.select("a", "b");
 verify.refactorAvailable("Move to file",
 undefined,
 undefined,
+undefined,
 {
     allowTextChangesInNewFiles : true
 },
 true);
+

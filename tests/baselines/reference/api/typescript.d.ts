@@ -5789,6 +5789,7 @@ declare namespace ts {
         readonly name?: Identifier;
     }
     type BlockLike = SourceFile | Block | ModuleBlock | CaseOrDefaultClause;
+    type RootNode = SourceFile | Bundle;
     interface Block extends Statement, LocalsContainer {
         readonly kind: SyntaxKind.Block;
         readonly statements: NodeArray<Statement>;

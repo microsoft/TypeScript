@@ -11,6 +11,7 @@ goTo.select("a", "b");
 verify.not.refactorAvailable("Move to file",
 undefined,
 undefined,
+undefined,
 {
     allowTextChangesInNewFiles : true
 },
