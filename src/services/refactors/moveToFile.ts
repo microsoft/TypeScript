@@ -290,7 +290,7 @@ function getNewStatementsAndRemoveFromOldFile(
     ];
 }
 
-function getBlockLikeAncestorOrRootNode(node : Node) : BlockLike | RootNode {
+function getBlockLikeAncestorOrRootNode(node: Node): BlockLike | RootNode {
     let currentNode = node;
     while (!isRootNode(currentNode)) {
         if (isBlockLike(currentNode)) {

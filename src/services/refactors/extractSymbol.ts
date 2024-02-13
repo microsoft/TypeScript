@@ -2221,7 +2221,6 @@ function isExtractableExpression(node: Node): boolean {
     return true;
 }
 
-
 function isInJSXContent(node: Node) {
     return isStringLiteralJsxAttribute(node) ||
         (isJsxElement(node) || isJsxSelfClosingElement(node) || isJsxFragment(node)) && (isJsxElement(node.parent) || isJsxFragment(node.parent));

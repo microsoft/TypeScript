@@ -4291,7 +4291,7 @@ export function isBlockLike(node: Node): node is BlockLike {
 }
 
 /** @internal */
-export function isRootNode(node: Node) : node is RootNode {
+export function isRootNode(node: Node): node is RootNode {
     switch (node.kind) {
         case SyntaxKind.SourceFile:
         case SyntaxKind.Bundle:

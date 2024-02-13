@@ -4445,8 +4445,8 @@ export class TestState {
         test(renameKeys(newFileContents, key => pathUpdater(key) || key), "with file moved");
     }
 
-    private getApplicableRefactorsAtSelection(triggerReason: ts.RefactorTriggerReason = "implicit", kind?: string, preferences = ts.emptyOptions) {
-        return this.getApplicableRefactorsWorker(this.getSelection(), this.activeFile.fileName, preferences, triggerReason, kind, true);
+    private getApplicableRefactorsAtSelection(triggerReason: ts.RefactorTriggerReason = "implicit", kind?: string, preferences = ts.emptyOptions, includeInteractiveActions?: boolean) {
+        return this.getApplicableRefactorsWorker(this.getSelection(), this.activeFile.fileName, preferences, triggerReason, kind, includeInteractiveActions);
     }
     private getApplicableRefactors(rangeOrMarker: Range | Marker, preferences = ts.emptyOptions, triggerReason: ts.RefactorTriggerReason = "implicit", kind?: string, includeInteractiveActions?: boolean): readonly ts.ApplicableRefactorInfo[] {
         return this.getApplicableRefactorsWorker("position" in rangeOrMarker ? rangeOrMarker.position : rangeOrMarker, rangeOrMarker.fileName, preferences, triggerReason, kind, includeInteractiveActions); // eslint-disable-line local/no-in-operator
