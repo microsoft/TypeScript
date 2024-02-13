@@ -1,0 +1,64 @@
+/*
+
+  Copy this file into '.vscode/launch.json' or merge its
+  contents into your existing configurations.
+
+  If you want to remove the errors in comments for all JSON
+  files, add this to your settings in ~/.vscode/User/settings.json
+
+  "files.associations": {
+      "*.json": "jsonc"
+  },
+
+*/
+
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "Mocha Tests (currently opened test)",
+            "runtimeArgs": ["--nolazy"],
+            "program": "${workspaceRoot}/node_modules/mocha/bin/_mocha",
+            "args": [
+                "-u",
+                "bdd",
+                "--no-timeouts",
+                "--colors",
+                "built/local/run.js",
+                "-f",
+                // You can change this to be the name of a specific test file (without the file extension)
+                // to consistently launch the same test
+                "${fileBasenameNoExtension}",
+                "--skip-percent",
+                "0"
+            ],
+            "env": {
+                "NODE_ENV": "testing"
+            },
+            "outFiles": [
+                "${workspaceFolder}/built/**/*.js",
+                "${workspaceFolder}/built/**/*.mjs",
+                "${workspaceFolder}/built/**/*.cjs",
+                "!**/node_modules/**"
+            ],
+            "sourceMaps": true,
+            "smartStep": true,
+            "preLaunchTask": "npm: build:tests",
+            "console": "integratedTerminal",
+            "customDescriptionGenerator": "'__tsDebuggerDisplay' in this ? this.__tsDebuggerDisplay(defaultValue) : defaultValue"
+        },
+        {
+            // See: https://github.com/microsoft/TypeScript/wiki/Debugging-Language-Service-in-VS-Code
+            "type": "node",
+            "request": "attach",
+            "name": "Attach to VS Code TS Server via Port",
+            "processId": "${command:PickProcess}",
+            "customDescriptionGenerator": "'__tsDebuggerDisplay' in this ? this.__tsDebuggerDisplay(defaultValue) : defaultValue"
+        }
+    ]
+}
