@@ -22123,125 +22123,122 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
          * #57087
          */
         function checkFunctionRelatedToIntersection(source: Type, target: Type, _reportErrors: boolean): { computed: boolean; ternary: Ternary; } {
-            const ret = ((): { computed: boolean; ternary: Ternary; } => {
-                interface SourceOverloadsCached {
-                    paramsAndReturn: CheckFunctionRelatedToIntersectionHelperArgsFunctionCache[];
+            interface SourceOverloadsCached {
+                paramsAndReturn: CheckFunctionRelatedToIntersectionHelperArgsFunctionCache[];
+            }
+            const sourceOverloadsCached: SourceOverloadsCached = {
+                paramsAndReturn: [],
+            };
+            const origSourceSignatures = getSignaturesOfType(source, SignatureKind.Call);
+            Debug.assert(origSourceSignatures.length);
+            let sourceSignatures: readonly Signature[];
+            if (origSourceSignatures[0].compositeSignatures?.length && origSourceSignatures[0].compositeKind === TypeFlags.Intersection) {
+                if (origSourceSignatures.length !== 1) {
+                    Debug.assert(false, `origSourceSignatures.length!==1`);
+                    return { computed: false, ternary: Ternary.Unknown };
                 }
-                const sourceOverloadsCached: SourceOverloadsCached = {
-                    paramsAndReturn: [],
-                };
-                const origSourceSignatures = getSignaturesOfType(source, SignatureKind.Call);
-                Debug.assert(origSourceSignatures.length);
-                let sourceSignatures: readonly Signature[];
-                if (origSourceSignatures[0].compositeSignatures?.length && origSourceSignatures[0].compositeKind === TypeFlags.Intersection) {
-                    if (origSourceSignatures.length !== 1) {
-                        Debug.assert(false, `origSourceSignatures.length!==1`);
-                        return { computed: false, ternary: Ternary.Unknown };
-                    }
-                    sourceSignatures = origSourceSignatures[0].compositeSignatures;
-                    if ((target as IntersectionType).types.length !== sourceSignatures.length) {
-                        Debug.assert(false, `(target as IntersectionType).types.length!==sourceSignatures.length`);
-                        return { computed: false, ternary: Ternary.Unknown };
-                    }
-                    for (let si = 0; si < sourceSignatures.length; ++si) {
-                        const sourceSig = sourceSignatures[si];
-                        if (!!origSourceSignatures[0].resolvedReturnType && !sourceSig.resolvedReturnType) {
-                            Debug.assert(false, `!!origSourceSignatures[0].resolvedReturnType && !sourceSig.resolvedReturnType`);
-                        }
-                        const targetType = (target as IntersectionType).types[si];
-                        const targetSigs = getSignaturesOfType(targetType, SignatureKind.Call);
-                        Debug.assert(targetSigs.length === 1);
-
-                        const functionCacheIn = getSignatureCacheData(sourceSig);
-                        if (!checkFunctionRelatedToIntersectionHelper({ source: sourceSig, target: targetSigs[0], functionCacheIn, refSourceParamsOut: undefined, refTargetParamsOut: undefined })) {
-                            return { computed: true, ternary: Ternary.False };
-                        }
-                        const targetReturnType = getReturnTypeOfSignature(targetSigs[0]);
-                        if (targetReturnType !== voidType && !isTypeAssignableTo(functionCacheIn.returnType!, targetReturnType)) {
-                            return { computed: true, ternary: Ternary.False };
-                        }
-                    }
-                    return { computed: true, ternary: Ternary.True };
+                sourceSignatures = origSourceSignatures[0].compositeSignatures;
+                if ((target as IntersectionType).types.length !== sourceSignatures.length) {
+                    Debug.assert(false, `(target as IntersectionType).types.length!==sourceSignatures.length`);
+                    return { computed: false, ternary: Ternary.Unknown };
                 }
-                else {
-                    sourceSignatures = origSourceSignatures;
-                    sourceSignatures.forEach(sourceSignature => {
-                        Debug.assert(!(sourceSignature.compositeSignatures?.length && sourceSignatures[0].compositeKind === TypeFlags.Intersection), "multiple composite intersection signatures not yet ijmplement");
-                        const paramsAndReturn = getSignatureCacheData(sourceSignature);
-                        sourceOverloadsCached.paramsAndReturn.push(paramsAndReturn);
-                    });
-                }
-
-                const onlyOneSourceSig = sourceSignatures.length === 1;
-                /* eslint-disable-next-line */
                 for (let si = 0; si < sourceSignatures.length; ++si) {
-                    let hadMatch = false;
-                    let gReturn = neverType as Type;
-                    let gReturnAllVoid = true;
-                    const ssig = sourceSignatures[si];
-                    /* eslint-disable-next-line */
-                    for (let tti = 0; tti < (target as IntersectionType).types.length; ++tti) {
-                        const targetMember = (target as IntersectionType).types[tti];
-                        const targetSignatures = getSignaturesOfType(targetMember, SignatureKind.Call);
-                        if (targetSignatures.length === 0) {
-                            return { computed: true, ternary: Ternary.False };
-                        }
-                        /* eslint-disable-next-line */
-                        for (let ti = 0; ti < targetSignatures.length; ++ti) {
-                            const tsig = targetSignatures[ti];
-                            let refTargetParamsOut: CheckFunctionRelatedToIntersectionHelperArgs["refTargetParamsOut"];
-                            if (si === 0) {
-                                refTargetParamsOut = [undefined];
-                            }
-                            const targetReturnType = getReturnTypeOfSignature(tsig);
-                            const sourceReturnType = sourceOverloadsCached.paramsAndReturn[si].returnType!;
-                            const someAssignable = (src: Type, trg: Type) => {
-                                const ret = (() => {
-                                    if (trg === voidType) return true; // because the source output can be ignored
-                                    if (src.flags & TypeFlags.Union) {
-                                        return (src as UnionType).types.some(srct => isTypeAssignableTo(srct, trg));
-                                    }
-                                    else return isTypeAssignableTo(src, trg);
-                                })();
-                                return ret;
-                            };
+                    const sourceSig = sourceSignatures[si];
+                    if (!!origSourceSignatures[0].resolvedReturnType && !sourceSig.resolvedReturnType) {
+                        Debug.assert(false, `!!origSourceSignatures[0].resolvedReturnType && !sourceSig.resolvedReturnType`);
+                    }
+                    const targetType = (target as IntersectionType).types[si];
+                    const targetSigs = getSignaturesOfType(targetType, SignatureKind.Call);
+                    Debug.assert(targetSigs.length === 1);
 
-                            if (someAssignable(sourceReturnType, targetReturnType)) {
-                                if (
-                                    checkFunctionRelatedToIntersectionHelper({
-                                        source: ssig,
-                                        target: tsig,
-                                        functionCacheIn: sourceOverloadsCached.paramsAndReturn[si],
-                                        reverseSourceAndTargetInCompareTypes: onlyOneSourceSig,
-                                        refSourceParamsOut: undefined,
-                                        refTargetParamsOut,
-                                    })
-                                ) {
-                                    hadMatch = true;
-                                    if (targetReturnType !== voidType) {
-                                        gReturn = getUnionType([gReturn, targetReturnType]);
-                                        gReturnAllVoid = false;
-                                    }
+                    const functionCacheIn = getSignatureCacheData(sourceSig);
+                    if (!checkFunctionRelatedToIntersectionHelper({ source: sourceSig, target: targetSigs[0], functionCacheIn, refSourceParamsOut: undefined, refTargetParamsOut: undefined })) {
+                        return { computed: true, ternary: Ternary.False };
+                    }
+                    const targetReturnType = getReturnTypeOfSignature(targetSigs[0]);
+                    if (targetReturnType !== voidType && !isTypeAssignableTo(functionCacheIn.returnType!, targetReturnType)) {
+                        return { computed: true, ternary: Ternary.False };
+                    }
+                }
+                return { computed: true, ternary: Ternary.True };
+            }
+            else {
+                sourceSignatures = origSourceSignatures;
+                sourceSignatures.forEach(sourceSignature => {
+                    Debug.assert(!(sourceSignature.compositeSignatures?.length && sourceSignatures[0].compositeKind === TypeFlags.Intersection), "multiple composite intersection signatures not yet ijmplement");
+                    const paramsAndReturn = getSignatureCacheData(sourceSignature);
+                    sourceOverloadsCached.paramsAndReturn.push(paramsAndReturn);
+                });
+            }
+
+            const onlyOneSourceSig = sourceSignatures.length === 1;
+            /* eslint-disable-next-line */
+            for (let si = 0; si < sourceSignatures.length; ++si) {
+                let hadMatch = false;
+                let gReturn = neverType as Type;
+                let gReturnAllVoid = true;
+                const ssig = sourceSignatures[si];
+                /* eslint-disable-next-line */
+                for (let tti = 0; tti < (target as IntersectionType).types.length; ++tti) {
+                    const targetMember = (target as IntersectionType).types[tti];
+                    const targetSignatures = getSignaturesOfType(targetMember, SignatureKind.Call);
+                    if (targetSignatures.length === 0) {
+                        return { computed: true, ternary: Ternary.False };
+                    }
+                    /* eslint-disable-next-line */
+                    for (let ti = 0; ti < targetSignatures.length; ++ti) {
+                        const tsig = targetSignatures[ti];
+                        let refTargetParamsOut: CheckFunctionRelatedToIntersectionHelperArgs["refTargetParamsOut"];
+                        if (si === 0) {
+                            refTargetParamsOut = [undefined];
+                        }
+                        const targetReturnType = getReturnTypeOfSignature(tsig);
+                        const sourceReturnType = sourceOverloadsCached.paramsAndReturn[si].returnType!;
+                        const someAssignable = (src: Type, trg: Type) => {
+                            const ret = (() => {
+                                if (trg === voidType) return true; // because the source output can be ignored
+                                if (src.flags & TypeFlags.Union) {
+                                    return (src as UnionType).types.some(srct => isTypeAssignableTo(srct, trg));
+                                }
+                                else return isTypeAssignableTo(src, trg);
+                            })();
+                            return ret;
+                        };
+
+                        if (someAssignable(sourceReturnType, targetReturnType)) {
+                            if (
+                                checkFunctionRelatedToIntersectionHelper({
+                                    source: ssig,
+                                    target: tsig,
+                                    functionCacheIn: sourceOverloadsCached.paramsAndReturn[si],
+                                    reverseSourceAndTargetInCompareTypes: onlyOneSourceSig,
+                                    refSourceParamsOut: undefined,
+                                    refTargetParamsOut,
+                                })
+                            ) {
+                                hadMatch = true;
+                                if (targetReturnType !== voidType) {
+                                    gReturn = getUnionType([gReturn, targetReturnType]);
+                                    gReturnAllVoid = false;
                                 }
                             }
                         }
                     }
-                    if (!hadMatch) {
+                }
+                if (!hadMatch) {
+                    return { computed: true, ternary: Ternary.False };
+                }
+                else {
+                    const returnType = sourceOverloadsCached.paramsAndReturn[si].returnType;
+                    Debug.assert(returnType, "returnType is unexpectedly undefined");
+                    const tmpReturnType = getReturnTypeOfSignature(ssig);
+                    Debug.assert(returnType === tmpReturnType);
+                    if (!gReturnAllVoid && !isTypeAssignableTo(returnType, gReturn)) {
                         return { computed: true, ternary: Ternary.False };
                     }
-                    else {
-                        const returnType = sourceOverloadsCached.paramsAndReturn[si].returnType;
-                        Debug.assert(returnType, "returnType is unexpectedly undefined");
-                        const tmpReturnType = getReturnTypeOfSignature(ssig);
-                        Debug.assert(returnType === tmpReturnType);
-                        if (!gReturnAllVoid && !isTypeAssignableTo(returnType, gReturn)) {
-                            return { computed: true, ternary: Ternary.False };
-                        }
-                    }
                 }
-                return { computed: true, ternary: Ternary.True };
-            })();
-            return ret;
+            }
+            return { computed: true, ternary: Ternary.True };
         }
         function unionOrIntersectionRelatedTo(source: Type, target: Type, reportErrors: boolean, intersectionState: IntersectionState): Ternary {
             // Note that these checks are specifically ordered to produce correct results. In particular,
