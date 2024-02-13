@@ -3979,8 +3979,8 @@ export class TestState {
         };
     }
 
-    public verifyRefactorAvailable(negative: boolean, triggerReason: ts.RefactorTriggerReason, name: string, actionName?: string, actionDescription?: string, preferences = ts.emptyOptions,  includeInteractiveActions?: boolean) {
-        let refactors = this.getApplicableRefactorsAtSelection(triggerReason, undefined, preferences, includeInteractiveActions);
+    public verifyRefactorAvailable(negative: boolean, triggerReason: ts.RefactorTriggerReason, name: string, actionName?: string, actionDescription?: string, kind?: string, preferences = ts.emptyOptions, includeInteractiveActions?: boolean) {
+        let refactors = this.getApplicableRefactorsAtSelection(triggerReason, kind, preferences, includeInteractiveActions);
         refactors = refactors.filter(r => r.name === name);
 
         if (actionName !== undefined) {

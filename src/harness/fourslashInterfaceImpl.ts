@@ -212,12 +212,12 @@ export class VerifyNegatable {
         this.state.verifyRefactorsAvailable(names);
     }
 
-    public refactorAvailable(name: string, actionName?: string, actionDescription?: string, preferences = ts.emptyOptions, includeInteractiveActions?: boolean) {
-        this.state.verifyRefactorAvailable(this.negative, "implicit", name, actionName, actionDescription, preferences, includeInteractiveActions);
+    public refactorAvailable(name: string, actionName?: string, actionDescription?: string, kind?: string, preferences = ts.emptyOptions, includeInteractiveActions?: boolean) {
+        this.state.verifyRefactorAvailable(this.negative, "implicit", name, actionName, actionDescription, kind, preferences, includeInteractiveActions);
     }
 
-    public refactorAvailableForTriggerReason(triggerReason: ts.RefactorTriggerReason, name: string, actionName?: string, preferences = ts.emptyOptions, includeInteractiveActions?: boolean) {
-        this.state.verifyRefactorAvailable(this.negative, triggerReason, name, actionName, undefined, preferences, includeInteractiveActions);
+    public refactorAvailableForTriggerReason(triggerReason: ts.RefactorTriggerReason, name: string, actionName?: string, actionDescription?: string, kind?: string, preferences = ts.emptyOptions, includeInteractiveActions?: boolean) {
+        this.state.verifyRefactorAvailable(this.negative, triggerReason, name, actionName, actionDescription, kind, preferences, includeInteractiveActions);
     }
 
     public refactorKindAvailable(kind: string, expected: string[], preferences = ts.emptyOptions) {
