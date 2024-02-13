@@ -1884,12 +1884,6 @@ Info seq  [hh:mm:ss:mss] request:
     }
 Info seq  [hh:mm:ss:mss] Finding references to /user/username/projects/myproject/src/main.ts position 50 in project /user/username/projects/myproject/tsconfig-src.json
 Info seq  [hh:mm:ss:mss] Finding references to /user/username/projects/myproject/src/main.ts position 50 in project /user/username/projects/myproject/tsconfig.json
-Info seq  [hh:mm:ss:mss] Search path: /user/username/projects/myproject/src
-Info seq  [hh:mm:ss:mss] For info: /user/username/projects/myproject/src/main.ts :: Config file name: /user/username/projects/myproject/tsconfig.json
-Info seq  [hh:mm:ss:mss] Search path: /user/username/projects/myproject/src
-Info seq  [hh:mm:ss:mss] For info: /user/username/projects/myproject/src/main.ts :: Config file name: /user/username/projects/myproject/tsconfig.json
-Info seq  [hh:mm:ss:mss] Search path: /user/username/projects/myproject/src
-Info seq  [hh:mm:ss:mss] For info: /user/username/projects/myproject/src/main.ts :: Config file name: /user/username/projects/myproject/tsconfig.json
 Info seq  [hh:mm:ss:mss] Search path: /user/username/projects/myproject/src/helpers
 Info seq  [hh:mm:ss:mss] For info: /user/username/projects/myproject/src/helpers/functions.ts :: Config file name: /user/username/projects/myproject/tsconfig.json
 Info seq  [hh:mm:ss:mss] Search path: /user/username/projects/myproject/src/helpers
@@ -1990,12 +1984,6 @@ Info seq  [hh:mm:ss:mss] For info: /user/username/projects/myproject/indirect1/m
 Info seq  [hh:mm:ss:mss] Search path: /user/username/projects/myproject/indirect1
 Info seq  [hh:mm:ss:mss] For info: /user/username/projects/myproject/indirect1/main.ts :: Config file name: /user/username/projects/myproject/tsconfig.json
 Info seq  [hh:mm:ss:mss] Finding references to /user/username/projects/myproject/indirect1/main.ts position 9 in project /user/username/projects/myproject/tsconfig-indirect1.json
-Info seq  [hh:mm:ss:mss] Search path: /user/username/projects/myproject/src
-Info seq  [hh:mm:ss:mss] For info: /user/username/projects/myproject/src/main.ts :: Config file name: /user/username/projects/myproject/tsconfig.json
-Info seq  [hh:mm:ss:mss] Search path: /user/username/projects/myproject/src
-Info seq  [hh:mm:ss:mss] For info: /user/username/projects/myproject/src/main.ts :: Config file name: /user/username/projects/myproject/tsconfig.json
-Info seq  [hh:mm:ss:mss] Search path: /user/username/projects/myproject/src
-Info seq  [hh:mm:ss:mss] For info: /user/username/projects/myproject/src/main.ts :: Config file name: /user/username/projects/myproject/tsconfig.json
 Info seq  [hh:mm:ss:mss] Search path: /user/username/projects/myproject/src/helpers
 Info seq  [hh:mm:ss:mss] For info: /user/username/projects/myproject/src/helpers/functions.ts :: Config file name: /user/username/projects/myproject/tsconfig.json
 Info seq  [hh:mm:ss:mss] Search path: /user/username/projects/myproject/src/helpers
@@ -2097,12 +2085,6 @@ Info seq  [hh:mm:ss:mss] Search path: /user/username/projects/myproject/src/help
 Info seq  [hh:mm:ss:mss] For info: /user/username/projects/myproject/src/helpers/functions.ts :: Config file name: /user/username/projects/myproject/tsconfig.json
 Info seq  [hh:mm:ss:mss] Search path: /user/username/projects/myproject/src/helpers
 Info seq  [hh:mm:ss:mss] For info: /user/username/projects/myproject/src/helpers/functions.ts :: Config file name: /user/username/projects/myproject/tsconfig.json
-Info seq  [hh:mm:ss:mss] Search path: /user/username/projects/myproject/src
-Info seq  [hh:mm:ss:mss] For info: /user/username/projects/myproject/src/main.ts :: Config file name: /user/username/projects/myproject/tsconfig.json
-Info seq  [hh:mm:ss:mss] Search path: /user/username/projects/myproject/src
-Info seq  [hh:mm:ss:mss] For info: /user/username/projects/myproject/src/main.ts :: Config file name: /user/username/projects/myproject/tsconfig.json
-Info seq  [hh:mm:ss:mss] Search path: /user/username/projects/myproject/src
-Info seq  [hh:mm:ss:mss] For info: /user/username/projects/myproject/src/main.ts :: Config file name: /user/username/projects/myproject/tsconfig.json
 Info seq  [hh:mm:ss:mss] response:
     {
       "response": {
@@ -2325,8 +2307,8 @@ ScriptInfos::
 /a/lib/lib.d.ts *changed*
     version: Text-1
     containingProjects: 5 *changed*
-        /user/username/projects/myproject/tsconfig-src.json
         /user/username/projects/myproject/tsconfig.json
+        /user/username/projects/myproject/tsconfig-src.json
         /dev/null/inferredProject1*
         /user/username/projects/myproject/tsconfig-indirect1.json *new*
         /user/username/projects/myproject/tsconfig-indirect2.json *new*
@@ -2488,8 +2470,8 @@ ScriptInfos::
 /a/lib/lib.d.ts
     version: Text-1
     containingProjects: 5
-        /user/username/projects/myproject/tsconfig-src.json
         /user/username/projects/myproject/tsconfig.json
+        /user/username/projects/myproject/tsconfig-src.json
         /dev/null/inferredProject1*
         /user/username/projects/myproject/tsconfig-indirect1.json
         /user/username/projects/myproject/tsconfig-indirect2.json
@@ -2654,8 +2636,8 @@ ScriptInfos::
 /a/lib/lib.d.ts
     version: Text-1
     containingProjects: 5
-        /user/username/projects/myproject/tsconfig-src.json
         /user/username/projects/myproject/tsconfig.json
+        /user/username/projects/myproject/tsconfig-src.json
         /dev/null/inferredProject1*
         /user/username/projects/myproject/tsconfig-indirect1.json
         /user/username/projects/myproject/tsconfig-indirect2.json
@@ -3062,8 +3044,8 @@ ScriptInfos::
     version: Text-1
     containingProjects: 1 *changed*
         /user/username/projects/myproject/indirect3/tsconfig.json *new*
-        /user/username/projects/myproject/tsconfig-src.json *deleted*
         /user/username/projects/myproject/tsconfig.json *deleted*
+        /user/username/projects/myproject/tsconfig-src.json *deleted*
         /dev/null/inferredProject1* *deleted*
         /user/username/projects/myproject/tsconfig-indirect1.json *deleted*
         /user/username/projects/myproject/tsconfig-indirect2.json *deleted*
