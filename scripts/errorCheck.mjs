@@ -28,7 +28,7 @@ async function checkErrorBaselines() {
             const msg = keys.filter(k => messages[k].code === errCode)[0];
             messages[msg].seen = true;
         }
-    };
+    }
 
     console.log("== List of errors not present in baselines ==");
     let count = 0;
