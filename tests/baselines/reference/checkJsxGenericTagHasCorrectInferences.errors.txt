@@ -1,0 +1,23 @@
+file.tsx(13,10): error TS2322: Type '{ initialValues: { x: string; }; nextValues: (a: { x: string; }) => string; }' is not assignable to type 'BaseProps<{ x: string; }>'.
+  The types returned by 'nextValues(...)' are incompatible between these types.
+    Type 'string' is not assignable to type '{ x: string; }'.
+
+
+==== file.tsx (1 errors) ====
+    import * as React from "react";
+    interface BaseProps<T> {
+      initialValues: T;
+      nextValues: (cur: T) => T;
+    }
+    declare class GenericComponent<Props = {}, Values = object> extends React.Component<Props & BaseProps<Values>, {}> {
+      iv: Values;
+    }
+    
+    let a = <GenericComponent initialValues={{ x: "y" }} nextValues={a => a} />; // No error
+    let b = <GenericComponent initialValues={12} nextValues={a => a} />; // No error - Values should be reinstantiated with `number` (since `object` is a default, not a constraint)
+    let c = <GenericComponent initialValues={{ x: "y" }} nextValues={a => ({ x: a.x })} />; // No Error
+    let d = <GenericComponent initialValues={{ x: "y" }} nextValues={a => a.x} />; // Error - `string` is not assignable to `{x: string}`
+             ~~~~~~~~~~~~~~~~
+!!! error TS2322: Type '{ initialValues: { x: string; }; nextValues: (a: { x: string; }) => string; }' is not assignable to type 'BaseProps<{ x: string; }>'.
+!!! error TS2322:   The types returned by 'nextValues(...)' are incompatible between these types.
+!!! error TS2322:     Type 'string' is not assignable to type '{ x: string; }'.

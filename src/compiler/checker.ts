@@ -22291,8 +22291,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                             && target0.flags & TypeFlags.Object && getSignaturesOfType(target0, SignatureKind.Call).length > 0
                         ) {
                             const { computed, ternary } = checkFunctionRelatedToIntersection(source, target as IntersectionType, reportErrors);
-                            if (computed) return ternary;
-                            // falls through
+                            if (computed){
+                                if (ternary === Ternary.True || !reportErrors) return ternary;
+                            }
+                            // falls through if not computed or (not Ternary.True && reportErrors)
                         }
                     }
                 }
