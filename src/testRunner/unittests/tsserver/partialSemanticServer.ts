@@ -217,6 +217,7 @@ function fooB() { }`,
         const project = service.inferredProjects[0];
         assert.isFalse(project.autoImportProviderHost);
         assert.isUndefined(project.getPackageJsonAutoImportProvider());
+        session.host.baselineHost("After getPackageJsonAutoImportProvider");
         assert.deepEqual(project.getPackageJsonsForAutoImport(), ts.emptyArray);
         baselineTsserverLogs("partialSemanticServer", "should not create autoImportProvider or handle package jsons", session);
     });
