@@ -22195,14 +22195,11 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         const targetReturnType = getReturnTypeOfSignature(tsig);
                         const sourceReturnType = sourceOverloadsCached.paramsAndReturn[si].returnType!;
                         const someAssignable = (src: Type, trg: Type) => {
-                            const ret = (() => {
-                                if (trg === voidType) return true; // because the source output can be ignored
-                                if (src.flags & TypeFlags.Union) {
-                                    return (src as UnionType).types.some(srct => isTypeAssignableTo(srct, trg));
-                                }
-                                else return isTypeAssignableTo(src, trg);
-                            })();
-                            return ret;
+                            if (trg === voidType) return true; // because the source output can be ignored
+                            if (src.flags & TypeFlags.Union) {
+                                return (src as UnionType).types.some(srct => isTypeAssignableTo(srct, trg));
+                            }
+                            else return isTypeAssignableTo(src, trg);
                         };
 
                         if (someAssignable(sourceReturnType, targetReturnType)) {
