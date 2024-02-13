@@ -6317,6 +6317,7 @@ export const enum ObjectFlags {
     ContainsSpread   = 1 << 21,  // Object literal contains spread operation
     ObjectRestType   = 1 << 22,  // Originates in object rest declaration
     InstantiationExpressionType = 1 << 23,  // Originates in instantiation expression
+    SingleSignatureType = 1 << 27,  // A single signature type extracted from a potentially broader type
     /** @internal */
     IsClassInstanceClone = 1 << 24, // Type is a clone of a class instance type
     // Flags that require TypeFlags.Object and ObjectFlags.Reference
@@ -6525,6 +6526,12 @@ export interface AnonymousType extends ObjectType {
     target?: AnonymousType; // Instantiation target
     mapper?: TypeMapper; // Instantiation mapper
     instantiations?: Map<string, Type>; // Instantiations of generic type alias (undefined if non-generic)
+}
+
+/** @internal */
+// A SingleSignatureType may have bespoke outer type parameters to handle free type variable inferences
+export interface SingleSignatureType extends AnonymousType {
+    outerTypeParameters?: TypeParameter[];
 }
 
 /** @internal */

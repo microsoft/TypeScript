@@ -965,6 +965,7 @@ import {
     SignatureFlags,
     SignatureKind,
     singleElementArray,
+    SingleSignatureType,
     skipOuterExpressions,
     skipParentheses,
     skipTrivia,
@@ -7088,7 +7089,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
                 const abstractSignatures = filter(resolved.constructSignatures, signature => !!(signature.flags & SignatureFlags.Abstract));
                 if (some(abstractSignatures)) {
-                    const types = map(abstractSignatures, getOrCreateTypeFromSignature);
+                    const types = map(abstractSignatures, s => getOrCreateTypeFromSignature(s));
                     // count the number of type elements excluding abstract constructors
                     const typeElementCount = resolved.callSignatures.length +
                         (resolved.constructSignatures.length - abstractSignatures.length) +
@@ -15648,7 +15649,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return signature;
     }
 
-    function getOrCreateTypeFromSignature(signature: Signature): ObjectType {
+    function getOrCreateTypeFromSignature(signature: Signature, outerTypeParameters?: TypeParameter[]): ObjectType {
         // There are two ways to declare a construct signature, one is by declaring a class constructor
         // using the constructor keyword, and the other is declaring a bare construct signature in an
         // object type literal or interface (using the new keyword). Each way of declaring a constructor
@@ -15659,7 +15660,16 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             // If declaration is undefined, it is likely to be the signature of the default constructor.
             const isConstructor = kind === undefined || kind === SyntaxKind.Constructor || kind === SyntaxKind.ConstructSignature || kind === SyntaxKind.ConstructorType;
 
-            const type = createObjectType(ObjectFlags.Anonymous);
+            // The type must have a symbol with a `Function` flag and a declaration in order to be correctly flagged as possibly containing
+            // type variables by `couldContainTypeVariables`
+            const type = createObjectType(ObjectFlags.Anonymous | ObjectFlags.SingleSignatureType, createSymbol(SymbolFlags.Function, InternalSymbolName.Function)) as SingleSignatureType;
+            if (signature.declaration) {
+                type.symbol.declarations = [signature.declaration];
+                type.symbol.valueDeclaration = signature.declaration;
+            }
+            outerTypeParameters ||= signature.declaration && getOuterTypeParameters(signature.declaration, /*includeThisTypes*/ true);
+            type.outerTypeParameters = outerTypeParameters;
+
             type.members = emptySymbols;
             type.properties = emptyArray;
             type.callSignatures = !isConstructor ? [signature] : emptyArray;
@@ -19630,7 +19640,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         const links = getNodeLinks(declaration);
         const target = type.objectFlags & ObjectFlags.Reference ? links.resolvedType! as DeferredTypeReference :
             type.objectFlags & ObjectFlags.Instantiated ? type.target! : type;
-        let typeParameters = links.outerTypeParameters;
+        let typeParameters = type.objectFlags & ObjectFlags.SingleSignatureType ? (type as SingleSignatureType).outerTypeParameters : links.outerTypeParameters;
         if (!typeParameters) {
             // The first time an anonymous type is instantiated we compute and store a list of the type
             // parameters that are in scope (and therefore potentially referenced). For type literals that
@@ -19859,6 +19869,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
         if (type.objectFlags & ObjectFlags.InstantiationExpressionType) {
             (result as InstantiationExpressionType).node = (type as InstantiationExpressionType).node;
+        }
+        if (type.objectFlags & ObjectFlags.SingleSignatureType) {
+            (result as SingleSignatureType).outerTypeParameters = (type as SingleSignatureType).outerTypeParameters;
         }
         result.target = type;
         result.mapper = mapper;
@@ -25483,6 +25496,13 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
     }
 
+    /**
+     * @returns `true` if `type` has the shape `[T[0]]` where `T` is `typeParameter`
+     */
+    function isTupleOfSelf(typeParameter: TypeParameter, type: Type) {
+        return isTupleType(type) && getTupleElementType(type, 0) === getIndexedAccessType(typeParameter, getNumberLiteralType(0)) && !getTypeOfPropertyOfType(type, "1" as __String);
+    }
+
     function inferTypes(inferences: InferenceInfo[], originalSource: Type, originalTarget: Type, priority = InferencePriority.None, contravariant = false) {
         let bivariant = false;
         let propagationType: Type;
@@ -25611,6 +25631,11 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                             inference.priority = priority;
                         }
                         if (priority === inference.priority) {
+                            // Inferring A to [A[0]] is a zero information inference (it guarantees A becomes its constraint), but oft arises from generic argument list inferences
+                            // By discarding it early, we can allow more fruitful results to be used instead.
+                            if (isTupleOfSelf(inference.typeParameter, candidate)) {
+                                return;
+                            }
                             // We make contravariant inferences only if we are in a pure contravariant position,
                             // i.e. only if we have not descended into a bivariant position.
                             if (contravariant && !bivariant) {
@@ -26347,23 +26372,25 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     // inference error only occurs when there are *conflicting* candidates, i.e.
                     // candidates with no common supertype.
                     const defaultType = getDefaultFromTypeParameter(inference.typeParameter);
-                    if (defaultType) {
-                        // Instantiate the default type. Any forward reference to a type
-                        // parameter should be instantiated to the empty object type.
-                        inferredType = instantiateType(defaultType, mergeTypeMappers(createBackreferenceMapper(context, index), context.nonFixingMapper));
-                    }
+                    inferredType = defaultType;
                 }
             }
             else {
                 inferredType = getTypeFromInference(inference);
             }
 
-            inference.inferredType = inferredType || getDefaultTypeArgumentType(!!(context.flags & InferenceFlags.AnyDefault));
+            const isDefault = !inferredType;
+            inferredType ||= getDefaultTypeArgumentType(!!(context.flags & InferenceFlags.AnyDefault));
+            inference.inferredType = inferredType;
+            // Instantiate the inferred type. Any forward reference to a type
+            // parameter should be instantiated to the empty object type.
+            inferredType = instantiateType(inferredType, mergeTypeMappers(createBackreferenceMapper(context, index), context.nonFixingMapper));
+            inference.inferredType = inferredType;
 
             const constraint = getConstraintOfTypeParameter(inference.typeParameter);
             if (constraint) {
                 const instantiatedConstraint = instantiateType(constraint, context.nonFixingMapper);
-                if (!inferredType || !context.compareTypes(inferredType, getTypeWithThisArgument(instantiatedConstraint, inferredType))) {
+                if (isDefault || !context.compareTypes(inferredType, getTypeWithThisArgument(instantiatedConstraint, inferredType))) {
                     // If the fallback type satisfies the constraint, we pick it. Otherwise, we pick the constraint.
                     inference.inferredType = fallbackType && context.compareTypes(fallbackType, getTypeWithThisArgument(instantiatedConstraint, fallbackType)) ? fallbackType : instantiatedConstraint;
                 }
@@ -34265,7 +34292,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 // If one or more arguments are still excluded (as indicated by CheckMode.SkipContextSensitive),
                 // we obtain the regular type of any object literal arguments because we may not have inferred complete
                 // parameter types yet and therefore excess property checks may yield false positives (see #17041).
-                const checkArgType = checkMode & CheckMode.SkipContextSensitive ? getRegularTypeOfObjectLiteral(argType) : argType;
+                const checkArgType = instantiateType(checkMode & CheckMode.SkipContextSensitive ? getRegularTypeOfObjectLiteral(argType) : argType, signature.mapper);
                 const effectiveCheckArgumentNode = getEffectiveCheckNode(arg);
                 if (!checkTypeRelatedToAndOptionallyElaborate(checkArgType, paramType, relation, reportErrors ? effectiveCheckArgumentNode : undefined, effectiveCheckArgumentNode, headMessage, containingMessageChain, errorOutputContainer)) {
                     Debug.assert(!reportErrors || !!errorOutputContainer.errors, "parameter should have errors when reporting errors");
@@ -39287,7 +39314,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                                 }
                             }
                         }
-                        return getOrCreateTypeFromSignature(instantiateSignatureInContextOf(signature, contextualSignature, context));
+                        // TODO: The signature may reference any outer inference contexts, but we map pop off and then apply new inference contexts, and thus get different inferred types.
+                        // That this is cached on the *first* such attempt is not currently an issue, since expression types *also* get cached on the first pass. If we ever properly speculate, though,
+                        // the cached "isolatedSignatureType" signature field absolutely needs to be included in the list of speculative caches.
+                        return getOrCreateTypeFromSignature(instantiateSignatureInContextOf(signature, contextualSignature, context), flatMap(inferenceContexts, c => c && map(c.inferences, i => i.typeParameter)).slice());
                     }
                 }
             }
