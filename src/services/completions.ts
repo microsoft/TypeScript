@@ -4005,7 +4005,6 @@ function getCompletionData(
                         if (!isIdentifierText(symbolName, getEmitScriptTarget(host.getCompilationSettings()))) return false;
                         if (!detailsEntryId && isStringANonContextualKeyword(symbolName)) return false;
                         if (!isTypeOnlyLocation && !importStatementCompletion && !(targetFlags & SymbolFlags.Value)) return false;
-                        if (!isTypeOnlyLocation && contextToken && isExpression(contextToken) && contains([SyntaxKind.AsKeyword, SyntaxKind.SatisfiesKeyword], stringToToken(symbolName))) return false;
                         if (isTypeOnlyLocation && !(targetFlags & (SymbolFlags.Module | SymbolFlags.Type))) return false;
 
                         // Do not try to auto-import something with a lowercase first letter for a JSX tag
@@ -5902,5 +5901,7 @@ function isContextualKeywordInAutoImportableExpressionSpace(keyword: string) {
         keyword === "declare" ||
         keyword === "module" ||
         keyword === "namespace" ||
-        keyword === "type";
+        keyword === "type" ||
+        keyword === "satisfies" ||
+        keyword === "as";
 }

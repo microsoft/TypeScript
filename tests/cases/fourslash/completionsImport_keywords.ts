@@ -7,8 +7,6 @@
 ////export { _implements as implements };
 ////const _unique = 0;
 ////export { _unique as unique };
-////export function as() {}
-////export function satisfies() {}
 
 // Note: `export const unique = 0;` is legal,
 // but we want to test that we don't block an import completion of 'unique' just because it appears in an ExportSpecifier.
@@ -17,8 +15,6 @@
 ////br/*break*/
 ////im/*implements*/
 ////un/*unique*/
-////1 a/*as*/
-////1 sat/*satisfies*/
 
 const preferences: FourSlashInterface.UserPreferences = { includeCompletionsForModuleExports: true };
 verify.completions(
@@ -34,16 +30,7 @@ verify.completions(
         exact: completion.globals,
         preferences,
     },
-    {
-        marker: "as",
-        exact: completion.globals,
-        preferences,
-    },
-    {
-        marker: "satisfies",
-        exact: completion.globals,
-        preferences,
-    },
+   
     // yes contextual keywords
     {
         marker: "unique",
