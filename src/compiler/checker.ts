@@ -874,6 +874,7 @@ import {
     NodeWithTypeArguments,
     NonNullChain,
     NonNullExpression,
+    noop,
     not,
     noTruncationMaximumTruncationLength,
     NumberLiteralType,
@@ -1373,24 +1374,40 @@ const intrinsicTypeKinds: ReadonlyMap<string, IntrinsicTypeKind> = new Map(Objec
     NoInfer: IntrinsicTypeKind.NoInfer,
 }));
 
-class SaveableLinks {
-    save() {
+/** @internal */
+export class SaveableLinks {
+    /**
+     * Static list of fields which should be reset when state is rewound -
+     *  meaning their data is not cached across speculation boundaries.
+     * 
+     * TODO: This would be better tracked with decorators.
+     */
+    static speculativeCaches = new Set<string>();
+    declare ["constructor"]: typeof SaveableLinks;
+    save(): Partial<this> {
         // TODO: Optimize perf to delay copies until necessary, and to copy only changes.
         // TODO: Some nested deep caches like `specifierCache` or more meaningfully
-        // `extendedContainersByFile` should really be deep copied/restored, since they may refernce
+        // `extendedContainersByFile` should really be deep copied/restored, since they may reference
         // Symbol information for discarded speculative symbols.
-        // TODO: The return type is a `SaveableLinks`, which is an abuse of a type system bug -
-        // the spread will peel away the prototype - there won't be `.save` or `.restore` methods on it.
-        return { ...this };
+        // TODO: The return type is a `this`, which is an abuse of the type system
+        const res = {} as Partial<this>;
+        for (const k of this.constructor.speculativeCaches) {
+            res[k as keyof this] = this[k as keyof this];
+        }
+        return res;
     }
-    restore<T extends SaveableLinks>(state: T) {
-        for (const k in state) {
-            if (Object.prototype.hasOwnProperty.call(state, k)) {
-                this[k as keyof this] = state[k] as unknown as this[keyof this];
+    restore<T extends Partial<this>>(state: T | undefined) {
+        if (state) {
+            for (const k in state) {
+                if (!this.constructor.speculativeCaches.has(k)) continue;
+                if (Object.prototype.hasOwnProperty.call(state, k)) {
+                    this[k as keyof this] = state[k] as unknown as this[keyof this];
+                }
             }
         }
         for (const k in this) {
-            if (!Object.prototype.hasOwnProperty.call(state, k)) {
+            if (!this.constructor.speculativeCaches.has(k)) continue;
+            if (!state || !Object.prototype.hasOwnProperty.call(state, k)) {
                 // TODO: `delete` has perf implications, but we really do want to *remove* the keys we added
                 // Still, `= undefined` might make future copies unnecessarily heavier, but should otherwise be fine.
                 // Should choose between them based on perf testing.
@@ -1401,14 +1418,14 @@ class SaveableLinks {
 }
 
 /** @internal */
-const enum EnumKind {
+export const enum EnumKind {
     Numeric, // Numeric enum (each member has a TypeFlags.Enum type)
     Literal, // Literal enum (each member has a TypeFlags.EnumLiteral type)
 }
 
 // dprint-ignore
 /** @internal */
-class SymbolLinks extends SaveableLinks {
+export class SymbolLinks extends SaveableLinks {
     declare _symbolLinksBrand: any;
     declare immediateTarget?: Symbol;                   // Immediate target of an alias. May be another alias. Do not access directly, use `checker.getImmediateAliasedSymbol` instead.
     declare aliasTarget?: Symbol;                       // Resolved (non-alias) target of an alias
@@ -1457,40 +1474,48 @@ class SymbolLinks extends SaveableLinks {
     declare tupleLabelDeclaration?: NamedTupleMember | ParameterDeclaration; // Declaration associated with the tuple's label
     declare accessibleChainCache?: Map<string, Symbol[] | undefined>;
     declare filteredIndexSymbolCache?: Map<string, Symbol> //Symbol with applicable declarations
-};
 
-/** @internal */ 
-interface TransientSymbolLinks extends SymbolLinks {
+    static override speculativeCaches = new Set([ "type", "writeType", "nameType" ]);
+}
+
+/** @internal */
+export interface TransientSymbolLinks extends SymbolLinks {
     checkFlags: CheckFlags;
 }
 
-/** @internal */ 
+/** @internal */
 export interface TransientSymbol extends Symbol {
     links: TransientSymbolLinks;
 }
 
-interface MappedSymbolLinks extends TransientSymbolLinks {
+/** @internal */
+export interface MappedSymbolLinks extends TransientSymbolLinks {
     mappedType: MappedType;
     keyType: Type;
 }
 
-interface MappedSymbol extends TransientSymbol {
+/** @internal */
+export interface MappedSymbol extends TransientSymbol {
     links: MappedSymbolLinks;
 }
 
-interface ReverseMappedSymbolLinks extends TransientSymbolLinks {
+/** @internal */
+export interface ReverseMappedSymbolLinks extends TransientSymbolLinks {
     propertyType: Type;
     mappedType: MappedType;
     constraintType: IndexType;
 }
 
-interface ReverseMappedSymbol extends TransientSymbol {
+/** @internal */
+export interface ReverseMappedSymbol extends TransientSymbol {
     links: ReverseMappedSymbolLinks;
 }
 
-type TrackedSymbol = [symbol: Symbol, enclosingDeclaration: Node | undefined, meaning: SymbolFlags];
+/** @internal */
+export type TrackedSymbol = [symbol: Symbol, enclosingDeclaration: Node | undefined, meaning: SymbolFlags];
 
-interface SerializedTypeEntry {
+/** @internal */
+export interface SerializedTypeEntry {
     node: TypeNode;
     truncating?: boolean;
     addedLength: number;
@@ -1498,7 +1523,8 @@ interface SerializedTypeEntry {
 }
 
 // dprint-ignore
-class NodeLinks extends SaveableLinks {
+/** @internal */
+export class NodeLinks extends SaveableLinks {
     declare flags: NodeCheckFlags;              // Set of flags specific to Node
     declare resolvedType?: Type;                // Cached type of type node
     declare resolvedEnumType?: Type;            // Cached constraint type from enum jsdoc tag
@@ -1534,7 +1560,20 @@ class NodeLinks extends SaveableLinks {
         super();
         this.flags = NodeCheckFlags.None;
     }
-};
+
+    static override speculativeCaches = new Set([
+        "flags",
+        "resolvedType",
+        "resolvedEnumType",
+        "resolvedSignature",
+        "resolvedSymbol",
+        "resolvedIndexInfo",
+        "effectsSignature",
+        "switchTypes",
+        "contextFreeType",
+        "assertionExpressionType",
+    ]);
+}
 
 /** @internal */
 export function getNodeId(node: Node): number {
@@ -1564,6 +1603,10 @@ export function isInstantiatedModule(node: ModuleDeclaration, preserveConstEnums
 
 /** @internal */
 export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
+    // Why var? It avoids TDZ checks in the runtime which can be costly.
+    // See: https://github.com/microsoft/TypeScript/issues/52924
+    /* eslint-disable no-var */
+
     // List of all caches whose state should be saved and potentially restored on completion of a speculative typechecking operation
     var speculativeCaches: (any[] | Map<any, any> | Set<any> | DiagnosticCollection)[] = [];
     // Transient symbols store their links directly on them, so each transient symbol is also a small speculative cache.
@@ -1572,9 +1615,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     // This has to be an array of weak refs and not a weak map or weak set because we need to iterate over them to attempt to save their state.
     var transientSymbols: WeakRef<TransientSymbol>[] = [];
 
-    // Why var? It avoids TDZ checks in the runtime which can be costly.
-    // See: https://github.com/microsoft/TypeScript/issues/52924
-    /* eslint-disable no-var */
     var deferredDiagnosticsCallbacks: (() => void)[] = registerSpeculativeCache([]);
 
     var addLazyDiagnostic = (arg: () => void) => {
@@ -2095,29 +2135,29 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return res;
     }
 
-    var tupleTypes = registerSpeculativeCache(new Map<string, GenericType>());
-    var unionTypes = registerSpeculativeCache(new Map<string, UnionType>());
-    var unionOfUnionTypes = registerSpeculativeCache(new Map<string, Type>());
-    var intersectionTypes = registerSpeculativeCache(new Map<string, Type>());
-    var stringLiteralTypes = registerSpeculativeCache(new Map<string, StringLiteralType>());
-    var numberLiteralTypes = registerSpeculativeCache(new Map<number, NumberLiteralType>());
-    var bigIntLiteralTypes = registerSpeculativeCache(new Map<string, BigIntLiteralType>());
-    var enumLiteralTypes = registerSpeculativeCache(new Map<string, LiteralType>());
-    var indexedAccessTypes = registerSpeculativeCache(new Map<string, IndexedAccessType>());
-    var templateLiteralTypes = registerSpeculativeCache(new Map<string, TemplateLiteralType>());
-    var stringMappingTypes = registerSpeculativeCache(new Map<string, StringMappingType>());
-    var substitutionTypes = registerSpeculativeCache(new Map<string, SubstitutionType>());
-    var subtypeReductionCache = registerSpeculativeCache(new Map<string, Type[]>());
-    var decoratorContextOverrideTypeCache = registerSpeculativeCache(new Map<string, Type>());
-    var cachedTypes = registerSpeculativeCache(new Map<string, Type>());
-    var evolvingArrayTypes: EvolvingArrayType[] = registerSpeculativeCache([]);
-    var undefinedProperties: SymbolTable = registerSpeculativeCache(new Map());
-    var markerTypes = registerSpeculativeCache(new Set<number>());
+    var tupleTypes = new Map<string, GenericType>();
+    var unionTypes = new Map<string, UnionType>();
+    var unionOfUnionTypes = new Map<string, Type>();
+    var intersectionTypes = new Map<string, Type>();
+    var stringLiteralTypes = new Map<string, StringLiteralType>();
+    var numberLiteralTypes = new Map<number, NumberLiteralType>();
+    var bigIntLiteralTypes = new Map<string, BigIntLiteralType>();
+    var enumLiteralTypes = new Map<string, LiteralType>();
+    var indexedAccessTypes = new Map<string, IndexedAccessType>();
+    var templateLiteralTypes = new Map<string, TemplateLiteralType>();
+    var stringMappingTypes = new Map<string, StringMappingType>();
+    var substitutionTypes = new Map<string, SubstitutionType>();
+    var subtypeReductionCache = new Map<string, Type[]>();
+    var decoratorContextOverrideTypeCache = new Map<string, Type>();
+    var cachedTypes = new Map<string, Type>();
+    var evolvingArrayTypes: EvolvingArrayType[] = [];
+    var undefinedProperties: SymbolTable = new Map();
+    var markerTypes = new Set<number>();
 
     var unknownSymbol = createSymbol(SymbolFlags.Property, "unknown" as __String);
     var resolvingSymbol = createSymbol(0, InternalSymbolName.Resolving);
-    var unresolvedSymbols = registerSpeculativeCache(new Map<string, TransientSymbol>());
-    var errorTypes = registerSpeculativeCache(new Map<string, Type>());
+    var unresolvedSymbols = new Map<string, TransientSymbol>();
+    var errorTypes = new Map<string, Type>();
 
     // We specifically create the `undefined` and `null` types before any other types that can occur in
     // unions such that they are given low type IDs and occur first in the sorted list of union constituents.
@@ -2418,6 +2458,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     var _jsxNamespace: __String;
     var _jsxFactoryEntity: EntityName | undefined;
 
+    // Relationship caches need to be speculative so we can un-upgrade "ErrorAndReported" results back down, since we're rewinding the error
+    // Otherwise, we think we've emitted lots of elaboration that we just swallow up in discarded speculative contexts
     var subtypeRelation = registerSpeculativeCache(new Map<string, RelationComparisonResult>());
     var strictSubtypeRelation = registerSpeculativeCache(new Map<string, RelationComparisonResult>());
     var assignableRelation = registerSpeculativeCache(new Map<string, RelationComparisonResult>());
@@ -34067,24 +34109,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             thisArgumentType;
     }
 
-    
     function inferTypeArguments(node: CallLikeExpression, signature: Signature, args: readonly Expression[], checkMode: CheckMode, context: InferenceContext): Type[] {
-        let result: Type[];
-        speculate(() => {
-            // We speculate here so we can preemptively "lock in" this signature as the resolved signature for the node,
-            // and set its' resolved return type to `any`, since anywhere we witness it in the arguments is a circular reference, which must not contribute to assignability
-            // of the inferred arguments.
-            getNodeLinks(node).resolvedSignature = signature; // Usually this would be the instantiated signature, post-inference. Here, we toss in the uninstantiated signature while we speculate.
-            const resolvedReturn = signature.resolvedReturnType; // this is likely `undefined` unless already pre-cached
-            signature.resolvedReturnType = resolvedReturn || anyType; // flag circularity locations as `any` - they will not contribute to the validity of the call
-            result = inferTypeArgumentsWorker(node, signature, args, checkMode, context);
-            signature.resolvedReturnType = resolvedReturn;
-            return false; // always reset checker state, so the cached signature (and any follow-on caching) are undone
-        });
-        return result!;
-    }
-
-    function inferTypeArgumentsWorker(node: CallLikeExpression, signature: Signature, args: readonly Expression[], checkMode: CheckMode, context: InferenceContext): Type[] {
         if (isJsxOpeningLikeElement(node)) {
             return inferJsxTypeArguments(node, signature, checkMode, context);
         }
@@ -35020,63 +35045,67 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 if (!hasCorrectTypeArgumentArity(candidate, typeArguments) || !hasCorrectArity(node, args, candidate, signatureHelpTrailingComma)) {
                     continue;
                 }
+                const result = speculate(() => {
+                    let checkCandidate: Signature;
+                    let inferenceContext: InferenceContext | undefined;
 
-                let checkCandidate: Signature;
-                let inferenceContext: InferenceContext | undefined;
-
-                if (candidate.typeParameters) {
-                    let typeArgumentTypes: Type[] | undefined;
-                    if (some(typeArguments)) {
-                        typeArgumentTypes = checkTypeArguments(candidate, typeArguments, /*reportErrors*/ false);
-                        if (!typeArgumentTypes) {
-                            candidateForTypeArgumentError = candidate;
-                            continue;
+                    if (candidate.typeParameters) {
+                        let typeArgumentTypes: Type[] | undefined;
+                        if (some(typeArguments)) {
+                            typeArgumentTypes = checkTypeArguments(candidate, typeArguments, /*reportErrors*/ false);
+                            if (!typeArgumentTypes) {
+                                candidateForTypeArgumentError = candidate;
+                                return false;
+                            }
                         }
-                    }
-                    else {
-                        inferenceContext = createInferenceContext(candidate.typeParameters, candidate, /*flags*/ isInJSFile(node) ? InferenceFlags.AnyDefault : InferenceFlags.None);
-                        typeArgumentTypes = inferTypeArguments(node, candidate, args, argCheckMode | CheckMode.SkipGenericFunctions, inferenceContext);
-                        argCheckMode |= inferenceContext.flags & InferenceFlags.SkippedGenericFunction ? CheckMode.SkipGenericFunctions : CheckMode.Normal;
-                    }
-                    checkCandidate = getSignatureInstantiation(candidate, typeArgumentTypes, isInJSFile(candidate.declaration), inferenceContext && inferenceContext.inferredTypeParameters);
-                    // If the original signature has a generic rest type, instantiation may produce a
-                    // signature with different arity and we need to perform another arity check.
-                    if (getNonArrayRestType(candidate) && !hasCorrectArity(node, args, checkCandidate, signatureHelpTrailingComma)) {
-                        candidateForArgumentArityError = checkCandidate;
-                        continue;
-                    }
-                }
-                else {
-                    checkCandidate = candidate;
-                }
-                if (getSignatureApplicabilityError(node, args, checkCandidate, relation, argCheckMode, /*reportErrors*/ false, /*containingMessageChain*/ undefined)) {
-                    // Give preference to error candidates that have no rest parameters (as they are more specific)
-                    (candidatesForArgumentError || (candidatesForArgumentError = [])).push(checkCandidate);
-                    continue;
-                }
-                if (argCheckMode) {
-                    // If one or more context sensitive arguments were excluded, we start including
-                    // them now (and keeping do so for any subsequent candidates) and perform a second
-                    // round of type inference and applicability checking for this particular candidate.
-                    argCheckMode = CheckMode.Normal;
-                    if (inferenceContext) {
-                        const typeArgumentTypes = inferTypeArguments(node, candidate, args, argCheckMode, inferenceContext);
-                        checkCandidate = getSignatureInstantiation(candidate, typeArgumentTypes, isInJSFile(candidate.declaration), inferenceContext.inferredTypeParameters);
+                        else {
+                            inferenceContext = createInferenceContext(candidate.typeParameters, candidate, /*flags*/ isInJSFile(node) ? InferenceFlags.AnyDefault : InferenceFlags.None);
+                            typeArgumentTypes = inferTypeArguments(node, candidate, args, argCheckMode | CheckMode.SkipGenericFunctions, inferenceContext);
+                            argCheckMode |= inferenceContext.flags & InferenceFlags.SkippedGenericFunction ? CheckMode.SkipGenericFunctions : CheckMode.Normal;
+                        }
+                        checkCandidate = getSignatureInstantiation(candidate, typeArgumentTypes, isInJSFile(candidate.declaration), inferenceContext && inferenceContext.inferredTypeParameters);
                         // If the original signature has a generic rest type, instantiation may produce a
                         // signature with different arity and we need to perform another arity check.
                         if (getNonArrayRestType(candidate) && !hasCorrectArity(node, args, checkCandidate, signatureHelpTrailingComma)) {
                             candidateForArgumentArityError = checkCandidate;
-                            continue;
+                            return false;
                         }
+                    }
+                    else {
+                        checkCandidate = candidate;
                     }
                     if (getSignatureApplicabilityError(node, args, checkCandidate, relation, argCheckMode, /*reportErrors*/ false, /*containingMessageChain*/ undefined)) {
                         // Give preference to error candidates that have no rest parameters (as they are more specific)
                         (candidatesForArgumentError || (candidatesForArgumentError = [])).push(checkCandidate);
-                        continue;
+                        return false;
                     }
+                    if (argCheckMode) {
+                        // If one or more context sensitive arguments were excluded, we start including
+                        // them now (and keeping do so for any subsequent candidates) and perform a second
+                        // round of type inference and applicability checking for this particular candidate.
+                        argCheckMode = CheckMode.Normal;
+                        if (inferenceContext) {
+                            const typeArgumentTypes = inferTypeArguments(node, candidate, args, argCheckMode, inferenceContext);
+                            checkCandidate = getSignatureInstantiation(candidate, typeArgumentTypes, isInJSFile(candidate.declaration), inferenceContext.inferredTypeParameters);
+                            // If the original signature has a generic rest type, instantiation may produce a
+                            // signature with different arity and we need to perform another arity check.
+                            if (getNonArrayRestType(candidate) && !hasCorrectArity(node, args, checkCandidate, signatureHelpTrailingComma)) {
+                                candidateForArgumentArityError = checkCandidate;
+                                return false;
+                            }
+                        }
+                        if (getSignatureApplicabilityError(node, args, checkCandidate, relation, argCheckMode, /*reportErrors*/ false, /*containingMessageChain*/ undefined)) {
+                            // Give preference to error candidates that have no rest parameters (as they are more specific)
+                            (candidatesForArgumentError || (candidatesForArgumentError = [])).push(checkCandidate);
+                            return false;
+                        }
+                    }
+                    candidates[candidateIndex] = checkCandidate;
+                    return checkCandidate;
+                });
+                if (result) {
+                    return result;
                 }
-                candidates[candidateIndex] = checkCandidate;
-                return checkCandidate;
             }
 
             return undefined;
@@ -44112,10 +44141,11 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             if (isGeneratorMethod || isIteratorMethod) {
                 const globalType = isGeneratorMethod ? globalGeneratorType : globalIteratorType;
                 const { mapper } = methodType as AnonymousType;
+                const [ yieldType, returnType, nextType ] = globalType.typeParameters!;
                 return createIterationTypes(
-                    getMappedType(globalType.typeParameters![0], mapper!),
-                    getMappedType(globalType.typeParameters![1], mapper!),
-                    methodName === "next" ? getMappedType(globalType.typeParameters![2], mapper!) : undefined,
+                    mapper ? getMappedType(yieldType, mapper) : yieldType,
+                    mapper ? getMappedType(returnType, mapper) : returnType,
+                    methodName === "next" ? mapper ? getMappedType(nextType, mapper) : nextType : undefined,
                 );
             }
         }
@@ -48996,6 +49026,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             restoreCheckerState(initialState);
             return undefined;
         }
+        transientSymbols = concatenate(initialState.transientSymbols, transientSymbols);
         return result;
     }
 
@@ -49004,7 +49035,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return collection;
     }
 
-    type SavedCheckerState = { restores: (() => void)[], transientSymbols: typeof transientSymbols };
+    interface SavedCheckerState {
+        restores: (() => void)[];
+        transientSymbols: typeof transientSymbols;
+    }
 
     function snapshotCheckerState(): SavedCheckerState {
         const state: SavedCheckerState = { restores: concatenate(map(speculativeCaches, save), mapDefined(transientSymbols, saveTransientSymbolLink)), transientSymbols };
@@ -49014,7 +49048,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         function saveTransientSymbolLink(ref: WeakRef<TransientSymbol>): (() => void) | undefined {
             const res = ref.deref();
             if (res) {
-                return save(res.links);
+                return save(ref);
             }
         }
 
@@ -49022,7 +49056,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         // helper is confirmed as locked-in, to avoid the work of building diagnostics until
         // we know we're actually going to use them.
         
-        function save(cache: (typeof speculativeCaches)[number] | TransientSymbolLinks): () => void {
+        function save(cache: (typeof speculativeCaches)[number] | WeakRef<TransientSymbol>): () => void {
             if (Array.isArray(cache)) {
                 for (const k in cache) {
                     const v = cache[k];
@@ -49040,39 +49074,45 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             else if (cache instanceof Set) {
                 return saveSet(cache);
             }
-            else if (cache instanceof SymbolLinks) {
+            else if (cache instanceof WeakRef) {
                 return saveLinks(cache);
             }
-            else if (cache.add! && cache.getDiagnostics!) {
+            else if (cache.add! && cache.getDiagnostics!) { // eslint-disable-line @typescript-eslint/no-unnecessary-type-assertion
                 return saveDiagnosticCollection(cache);
             }
             return Debug.fail("Unknown speculative cache type");
         }
 
-        function saveLinks(cache: SymbolLinks) {
-            const saved = cache.save();
-            return () => cache.restore(saved);
+        function saveLinks(cache: WeakRef<TransientSymbol>) {
+            const saved = cache.deref()?.links.save();
+            if (!saved) {
+                return noop;
+            }
+            return () => cache.deref()?.links.restore(saved);
         }
 
         function saveLinksArray(cache: NodeLinks[] | SymbolLinks[]) {
-            const og: SaveableLinks[] = [];
+            const og: Partial<SaveableLinks>[] = [];
             for (const k in cache) {
-                og[k] = cache[k].save();
+                if (cache[k]) {
+                    og[k] = cache[k].save();
+                }
             }
             return () => {
                 for (const k in cache) {
                     if (!og[k]) {
-                        delete cache[k];
+                        // TODO: there has to be a way to phase the types/cast to make these directly callable
+                        cache[k].restore.call(cache[k], undefined);
                     }
                     else {
-                        cache[k].restore(og[k]);
+                        cache[k].restore.call(cache[k], og[k]);
                     }
                 }
             }
         }
 
         // TODO: All these save/restore methods are as naive as you can get right now, which means speculation
-        // is insanely expensive, as it eagerly saving off the checker state
+        // is insanely expensive, as it is eagerly saving off the checker state
         function saveArray(cache: unknown[]) {
             const original = cache.slice();
             return () => {

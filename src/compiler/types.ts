@@ -14,8 +14,8 @@ import {
     Pattern,
     ProgramBuildInfo,
     SymlinkCache,
-    TransientSymbol,
     ThisContainer,
+    TransientSymbol,
 } from "./_namespaces/ts";
 
 // branded string type used to store absolute, normalized and canonicalized paths
