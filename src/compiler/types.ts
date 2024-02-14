@@ -3305,10 +3305,6 @@ export type BlockLike =
     | ModuleBlock
     | CaseOrDefaultClause;
 
-export type RootNode =
-    | SourceFile
-    | Bundle;
-
 export interface Block extends Statement, LocalsContainer {
     readonly kind: SyntaxKind.Block;
     readonly statements: NodeArray<Statement>;
