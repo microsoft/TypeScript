@@ -34,7 +34,6 @@ import {
     CompletionTriggerKind,
     concatenate,
     ConstructorDeclaration,
-    contains,
     ContextFlags,
     countWhere,
     createModuleSpecifierResolutionHost,
