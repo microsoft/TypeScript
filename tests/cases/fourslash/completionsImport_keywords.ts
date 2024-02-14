@@ -30,7 +30,6 @@ verify.completions(
         exact: completion.globals,
         preferences,
     },
-   
     // yes contextual keywords
     {
         marker: "unique",

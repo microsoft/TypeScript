@@ -4005,7 +4005,6 @@ function getCompletionData(
                         if (!detailsEntryId && isStringANonContextualKeyword(symbolName)) return false;
                         if (!isTypeOnlyLocation && !importStatementCompletion && !(targetFlags & SymbolFlags.Value)) return false;
                         if (isTypeOnlyLocation && !(targetFlags & (SymbolFlags.Module | SymbolFlags.Type))) return false;
-
                         // Do not try to auto-import something with a lowercase first letter for a JSX tag
                         const firstChar = symbolName.charCodeAt(0);
                         if (isRightOfOpenTag && (firstChar < CharacterCodes.A || firstChar > CharacterCodes.Z)) return false;

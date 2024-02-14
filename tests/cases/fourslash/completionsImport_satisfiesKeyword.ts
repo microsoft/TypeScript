@@ -4,7 +4,7 @@
 ////export function satisfies() {}
 
 // @Filename: /b.ts
-////1 sat/*a*/
+////1 sat/*1*/
 ////sat/*2*/
 
 verify.baselineCompletions({
