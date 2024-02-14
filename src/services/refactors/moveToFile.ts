@@ -96,7 +96,6 @@ import {
     isPropertyAccessExpression,
     isPropertyAssignment,
     isRequireCall,
-    isRootNode,
     isSourceFile,
     isStatement,
     isStringLiteral,
@@ -130,7 +129,6 @@ import {
     RequireOrImportCall,
     RequireVariableStatement,
     resolvePath,
-    RootNode,
     ScriptTarget,
     skipAlias,
     some,
@@ -172,14 +170,11 @@ registerRefactor(refactorNameForMoveToFile, {
         if (!interactiveRefactorArguments) {
             return emptyArray;
         }
-        const endPosition = context.endPosition;
-        if (endPosition !== undefined) {
+        if (context.endPosition !== undefined) {
             const file = context.file;
-            const startNode = getTokenAtPosition(file, context.startPosition);
-            const endNode = getTokenAtPosition(file, endPosition);
-            const startNodeAncestor = getBlockLikeAncestorOrRootNode(startNode);
-            const endNodeAncestor = getBlockLikeAncestorOrRootNode(endNode);
-            if (!isRootNode(startNodeAncestor) && !isRootNode(endNodeAncestor)) {
+            const startNodeAncestor = getBlockLikeAncestor(getTokenAtPosition(file, context.startPosition));
+            const endNodeAncestor = getBlockLikeAncestor(getTokenAtPosition(file, context.endPosition));
+            if (!isSourceFile(startNodeAncestor) && !isSourceFile(endNodeAncestor)) {
                 return emptyArray;
             }
         }
@@ -290,12 +285,9 @@ function getNewStatementsAndRemoveFromOldFile(
     ];
 }
 
-function getBlockLikeAncestorOrRootNode(node: Node): BlockLike | RootNode {
+function getBlockLikeAncestor(node: Node): BlockLike {
     let currentNode = node;
-    while (!isRootNode(currentNode)) {
-        if (isBlockLike(currentNode)) {
-            break;
-        }
+    while (!isBlockLike(currentNode)) {
         currentNode = currentNode.parent;
     }
     return currentNode;

@@ -311,7 +311,6 @@ import {
     pseudoBigIntToString,
     QualifiedName,
     RefactorContext,
-    RootNode,
     Scanner,
     ScriptElementKind,
     ScriptElementKindModifier,
@@ -4284,17 +4283,6 @@ export function isBlockLike(node: Node): node is BlockLike {
         case SyntaxKind.SourceFile:
         case SyntaxKind.ModuleBlock:
         case SyntaxKind.CaseClause:
-            return true;
-        default:
-            return false;
-    }
-}
-
-/** @internal */
-export function isRootNode(node: Node): node is RootNode {
-    switch (node.kind) {
-        case SyntaxKind.SourceFile:
-        case SyntaxKind.Bundle:
             return true;
         default:
             return false;
