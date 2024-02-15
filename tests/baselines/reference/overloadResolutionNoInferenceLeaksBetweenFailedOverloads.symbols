@@ -1,0 +1,210 @@
+//// [tests/cases/compiler/overloadResolutionNoInferenceLeaksBetweenFailedOverloads.ts] ////
+
+=== 49820.ts ===
+type A1<T> = { type: "a1", v: T };
+>A1 : Symbol(A1, Decl(49820.ts, 0, 0))
+>T : Symbol(T, Decl(49820.ts, 0, 8))
+>type : Symbol(type, Decl(49820.ts, 0, 14))
+>v : Symbol(v, Decl(49820.ts, 0, 26))
+>T : Symbol(T, Decl(49820.ts, 0, 8))
+
+type B1<T> = { type: "b1", v: T };
+>B1 : Symbol(B1, Decl(49820.ts, 0, 34))
+>T : Symbol(T, Decl(49820.ts, 1, 8))
+>type : Symbol(type, Decl(49820.ts, 1, 14))
+>v : Symbol(v, Decl(49820.ts, 1, 26))
+>T : Symbol(T, Decl(49820.ts, 1, 8))
+
+type A2 = { a2: string };
+>A2 : Symbol(A2, Decl(49820.ts, 1, 34))
+>a2 : Symbol(a2, Decl(49820.ts, 2, 11))
+
+type B2 = { b2: string };
+>B2 : Symbol(B2, Decl(49820.ts, 2, 25))
+>b2 : Symbol(b2, Decl(49820.ts, 3, 11))
+
+function fn<T>(p1: (pp1: 0) => A1<T>, p2: (pp2: A2) => 0): void;
+>fn : Symbol(fn, Decl(49820.ts, 3, 25), Decl(49820.ts, 5, 64), Decl(49820.ts, 6, 64))
+>T : Symbol(T, Decl(49820.ts, 5, 12))
+>p1 : Symbol(p1, Decl(49820.ts, 5, 15))
+>pp1 : Symbol(pp1, Decl(49820.ts, 5, 20))
+>A1 : Symbol(A1, Decl(49820.ts, 0, 0))
+>T : Symbol(T, Decl(49820.ts, 5, 12))
+>p2 : Symbol(p2, Decl(49820.ts, 5, 37))
+>pp2 : Symbol(pp2, Decl(49820.ts, 5, 43))
+>A2 : Symbol(A2, Decl(49820.ts, 1, 34))
+
+function fn<T>(p1: (pp1: 0) => B1<T>, p2: (pp2: B2) => 0): void;
+>fn : Symbol(fn, Decl(49820.ts, 3, 25), Decl(49820.ts, 5, 64), Decl(49820.ts, 6, 64))
+>T : Symbol(T, Decl(49820.ts, 6, 12))
+>p1 : Symbol(p1, Decl(49820.ts, 6, 15))
+>pp1 : Symbol(pp1, Decl(49820.ts, 6, 20))
+>B1 : Symbol(B1, Decl(49820.ts, 0, 34))
+>T : Symbol(T, Decl(49820.ts, 6, 12))
+>p2 : Symbol(p2, Decl(49820.ts, 6, 37))
+>pp2 : Symbol(pp2, Decl(49820.ts, 6, 43))
+>B2 : Symbol(B2, Decl(49820.ts, 2, 25))
+
+function fn<T>(
+>fn : Symbol(fn, Decl(49820.ts, 3, 25), Decl(49820.ts, 5, 64), Decl(49820.ts, 6, 64))
+>T : Symbol(T, Decl(49820.ts, 7, 12))
+
+  p1:
+>p1 : Symbol(p1, Decl(49820.ts, 7, 15))
+
+    | ((pp1: 0) => A1<T>)
+>pp1 : Symbol(pp1, Decl(49820.ts, 9, 8))
+>A1 : Symbol(A1, Decl(49820.ts, 0, 0))
+>T : Symbol(T, Decl(49820.ts, 7, 12))
+
+    | ((pp1: 0) => B1<T>),
+>pp1 : Symbol(pp1, Decl(49820.ts, 10, 8))
+>B1 : Symbol(B1, Decl(49820.ts, 0, 34))
+>T : Symbol(T, Decl(49820.ts, 7, 12))
+
+  p2:
+>p2 : Symbol(p2, Decl(49820.ts, 10, 26))
+
+    | ((pp2: A2) => 0)
+>pp2 : Symbol(pp2, Decl(49820.ts, 12, 8))
+>A2 : Symbol(A2, Decl(49820.ts, 1, 34))
+
+    | ((pp2: B2) => 0)
+>pp2 : Symbol(pp2, Decl(49820.ts, 13, 8))
+>B2 : Symbol(B2, Decl(49820.ts, 2, 25))
+
+) {}
+
+const valA1: A1<string> = ({ type: "a1", v: "" });
+>valA1 : Symbol(valA1, Decl(49820.ts, 16, 5))
+>A1 : Symbol(A1, Decl(49820.ts, 0, 0))
+>type : Symbol(type, Decl(49820.ts, 16, 28))
+>v : Symbol(v, Decl(49820.ts, 16, 40))
+
+const valB1: B1<string> = ({ type: "b1", v: "" });
+>valB1 : Symbol(valB1, Decl(49820.ts, 17, 5))
+>B1 : Symbol(B1, Decl(49820.ts, 0, 34))
+>type : Symbol(type, Decl(49820.ts, 17, 28))
+>v : Symbol(v, Decl(49820.ts, 17, 40))
+
+// expect A
+fn((ap1) => valA1, (ap2) => 0);
+>fn : Symbol(fn, Decl(49820.ts, 3, 25), Decl(49820.ts, 5, 64), Decl(49820.ts, 6, 64))
+>ap1 : Symbol(ap1, Decl(49820.ts, 20, 4))
+>valA1 : Symbol(valA1, Decl(49820.ts, 16, 5))
+>ap2 : Symbol(ap2, Decl(49820.ts, 20, 20))
+
+fn((ap1) => valA1, (ap2: A2) => 0); 
+>fn : Symbol(fn, Decl(49820.ts, 3, 25), Decl(49820.ts, 5, 64), Decl(49820.ts, 6, 64))
+>ap1 : Symbol(ap1, Decl(49820.ts, 21, 4))
+>valA1 : Symbol(valA1, Decl(49820.ts, 16, 5))
+>ap2 : Symbol(ap2, Decl(49820.ts, 21, 20))
+>A2 : Symbol(A2, Decl(49820.ts, 1, 34))
+
+fn((ap1) => valA1, (ap2: any) => 0);
+>fn : Symbol(fn, Decl(49820.ts, 3, 25), Decl(49820.ts, 5, 64), Decl(49820.ts, 6, 64))
+>ap1 : Symbol(ap1, Decl(49820.ts, 22, 4))
+>valA1 : Symbol(valA1, Decl(49820.ts, 16, 5))
+>ap2 : Symbol(ap2, Decl(49820.ts, 22, 20))
+
+fn((ap1) => valA1, (ap2: unknown) => 0);
+>fn : Symbol(fn, Decl(49820.ts, 3, 25), Decl(49820.ts, 5, 64), Decl(49820.ts, 6, 64))
+>ap1 : Symbol(ap1, Decl(49820.ts, 23, 4))
+>valA1 : Symbol(valA1, Decl(49820.ts, 16, 5))
+>ap2 : Symbol(ap2, Decl(49820.ts, 23, 20))
+
+fn((ap1: 0) => valA1, (ap2) => 0);
+>fn : Symbol(fn, Decl(49820.ts, 3, 25), Decl(49820.ts, 5, 64), Decl(49820.ts, 6, 64))
+>ap1 : Symbol(ap1, Decl(49820.ts, 24, 4))
+>valA1 : Symbol(valA1, Decl(49820.ts, 16, 5))
+>ap2 : Symbol(ap2, Decl(49820.ts, 24, 23))
+
+// expect B
+fn((bp1) => valB1, (bp2) => 0); // but it will be A, only this will result in an error
+>fn : Symbol(fn, Decl(49820.ts, 3, 25), Decl(49820.ts, 5, 64), Decl(49820.ts, 6, 64))
+>bp1 : Symbol(bp1, Decl(49820.ts, 26, 4))
+>valB1 : Symbol(valB1, Decl(49820.ts, 17, 5))
+>bp2 : Symbol(bp2, Decl(49820.ts, 26, 20))
+
+fn((bp1) => valB1, (bp2: B2) => 0); 
+>fn : Symbol(fn, Decl(49820.ts, 3, 25), Decl(49820.ts, 5, 64), Decl(49820.ts, 6, 64))
+>bp1 : Symbol(bp1, Decl(49820.ts, 27, 4))
+>valB1 : Symbol(valB1, Decl(49820.ts, 17, 5))
+>bp2 : Symbol(bp2, Decl(49820.ts, 27, 20))
+>B2 : Symbol(B2, Decl(49820.ts, 2, 25))
+
+fn((bp1) => valB1, (bp2: any) => 0);
+>fn : Symbol(fn, Decl(49820.ts, 3, 25), Decl(49820.ts, 5, 64), Decl(49820.ts, 6, 64))
+>bp1 : Symbol(bp1, Decl(49820.ts, 28, 4))
+>valB1 : Symbol(valB1, Decl(49820.ts, 17, 5))
+>bp2 : Symbol(bp2, Decl(49820.ts, 28, 20))
+
+fn((bp1) => valB1, (bp2: unknown) => 0);
+>fn : Symbol(fn, Decl(49820.ts, 3, 25), Decl(49820.ts, 5, 64), Decl(49820.ts, 6, 64))
+>bp1 : Symbol(bp1, Decl(49820.ts, 29, 4))
+>valB1 : Symbol(valB1, Decl(49820.ts, 17, 5))
+>bp2 : Symbol(bp2, Decl(49820.ts, 29, 20))
+
+fn((bp1: 0) => valB1, (bp2) => 0);
+>fn : Symbol(fn, Decl(49820.ts, 3, 25), Decl(49820.ts, 5, 64), Decl(49820.ts, 6, 64))
+>bp1 : Symbol(bp1, Decl(49820.ts, 30, 4))
+>valB1 : Symbol(valB1, Decl(49820.ts, 17, 5))
+>bp2 : Symbol(bp2, Decl(49820.ts, 30, 23))
+
+=== 13430.ts ===
+declare function it(f: () => void): number;
+>it : Symbol(it, Decl(13430.ts, 0, 0), Decl(13430.ts, 0, 43))
+>f : Symbol(f, Decl(13430.ts, 0, 20))
+
+declare function it(f: (x: string) => void): string;
+>it : Symbol(it, Decl(13430.ts, 0, 0), Decl(13430.ts, 0, 43))
+>f : Symbol(f, Decl(13430.ts, 1, 20))
+>x : Symbol(x, Decl(13430.ts, 1, 24))
+
+let r = it((x) => {x});
+>r : Symbol(r, Decl(13430.ts, 3, 3))
+>it : Symbol(it, Decl(13430.ts, 0, 0), Decl(13430.ts, 0, 43))
+>x : Symbol(x, Decl(13430.ts, 3, 12))
+>x : Symbol(x, Decl(13430.ts, 3, 12))
+
+=== 21525.ts ===
+interface TestFunction {
+>TestFunction : Symbol(TestFunction, Decl(21525.ts, 0, 0))
+
+    <T>(input: { [key: number]: T }, callback: (value: T, key: number, collection: { [key: number]: T }) => boolean): boolean;
+>T : Symbol(T, Decl(21525.ts, 1, 5))
+>input : Symbol(input, Decl(21525.ts, 1, 8))
+>key : Symbol(key, Decl(21525.ts, 1, 18))
+>T : Symbol(T, Decl(21525.ts, 1, 5))
+>callback : Symbol(callback, Decl(21525.ts, 1, 36))
+>value : Symbol(value, Decl(21525.ts, 1, 48))
+>T : Symbol(T, Decl(21525.ts, 1, 5))
+>key : Symbol(key, Decl(21525.ts, 1, 57))
+>collection : Symbol(collection, Decl(21525.ts, 1, 70))
+>key : Symbol(key, Decl(21525.ts, 1, 86))
+>T : Symbol(T, Decl(21525.ts, 1, 5))
+
+    <T extends object>(input: T, callback: (value: T[keyof T], key: string, collection: T) => boolean): boolean;
+>T : Symbol(T, Decl(21525.ts, 2, 5))
+>input : Symbol(input, Decl(21525.ts, 2, 23))
+>T : Symbol(T, Decl(21525.ts, 2, 5))
+>callback : Symbol(callback, Decl(21525.ts, 2, 32))
+>value : Symbol(value, Decl(21525.ts, 2, 44))
+>T : Symbol(T, Decl(21525.ts, 2, 5))
+>T : Symbol(T, Decl(21525.ts, 2, 5))
+>key : Symbol(key, Decl(21525.ts, 2, 62))
+>collection : Symbol(collection, Decl(21525.ts, 2, 75))
+>T : Symbol(T, Decl(21525.ts, 2, 5))
+}
+
+const fn: TestFunction = {} as any;
+>fn : Symbol(fn, Decl(21525.ts, 5, 5))
+>TestFunction : Symbol(TestFunction, Decl(21525.ts, 0, 0))
+
+fn({ a: "a", b: "b" }, (value, key) => true);
+>fn : Symbol(fn, Decl(21525.ts, 5, 5))
+>a : Symbol(a, Decl(21525.ts, 6, 4))
+>b : Symbol(b, Decl(21525.ts, 6, 12))
+>value : Symbol(value, Decl(21525.ts, 6, 24))
+>key : Symbol(key, Decl(21525.ts, 6, 30))
+
