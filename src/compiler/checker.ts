@@ -2272,7 +2272,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
     var enumNumberIndexInfo = createIndexInfo(numberType, stringType, /*isReadonly*/ true);
 
-    var iterationTypesCache = registerSpeculativeCache(new Map<string, IterationTypes>()); // cache for common IterationTypes instances
+    var iterationTypesCache = new Map<string, IterationTypes>(); // cache for common IterationTypes instances
     var noIterationTypes: IterationTypes = {
         get yieldType(): Type {
             return Debug.fail("Not supported");
@@ -2330,7 +2330,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
     /** Key is "/path/to/a.ts|/path/to/b.ts". */
     var amalgamatedDuplicates: Map<string, DuplicateInfoForFiles> | undefined;
-    var reverseMappedCache = registerSpeculativeCache(new Map<string, Type | undefined>());
+    var reverseMappedCache = new Map<string, Type | undefined>();
     var homomorphicMappedTypeInferenceStack: string[] = [];
     var ambientModulesCache: Symbol[] | undefined;
     /**
