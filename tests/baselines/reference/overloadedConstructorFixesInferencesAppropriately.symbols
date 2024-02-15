@@ -70,9 +70,7 @@ new AsyncLoader({
     children: result => result.success as any,
 >children : Symbol(children, Decl(overloadedConstructorFixesInferencesAppropriately.ts, 24, 20))
 >result : Symbol(result, Decl(overloadedConstructorFixesInferencesAppropriately.ts, 25, 13))
->result.success : Symbol(success, Decl(overloadedConstructorFixesInferencesAppropriately.ts, 19, 22))
 >result : Symbol(result, Decl(overloadedConstructorFixesInferencesAppropriately.ts, 25, 13))
->success : Symbol(success, Decl(overloadedConstructorFixesInferencesAppropriately.ts, 19, 22))
 
 }); // should work fine
 

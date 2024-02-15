@@ -47,7 +47,7 @@ declare function bar<T>(x: T, func: (p: T) => T): T;
 
 var result = bar(derived, d => d.toBase());
 >result : Derived
->bar(derived, d => d.toBase()) : Base
+>bar(derived, d => d.toBase()) : Derived
 >bar : { <T>(x: T, func: (p: T) => T): T; <T_1>(x: T_1, func: (p: T_1) => T_1): T_1; }
 >derived : Derived
 >d => d.toBase() : (d: Derived) => Base

@@ -27,9 +27,7 @@ const [oops1] = [1, 2, 3].reduce((accu, el) => accu.concat(el), []);
 >reduce : Symbol(Array.reduce, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >accu : Symbol(accu, Decl(destructuringTuple.ts, 10, 34))
 >el : Symbol(el, Decl(destructuringTuple.ts, 10, 39))
->accu.concat : Symbol(Array.concat, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >accu : Symbol(accu, Decl(destructuringTuple.ts, 10, 34))
->concat : Symbol(Array.concat, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >el : Symbol(el, Decl(destructuringTuple.ts, 10, 39))
 
 const [oops2] = [1, 2, 3].reduce((acc: number[], e) => acc.concat(e), []);

@@ -26,20 +26,20 @@ declare var receiver: typeof tuple;
 
 const [oops1] = [1, 2, 3].reduce((accu, el) => accu.concat(el), []);
 >oops1 : any
->[1, 2, 3].reduce((accu, el) => accu.concat(el), []) : number
+>[1, 2, 3].reduce((accu, el) => accu.concat(el), []) : unknown
 >[1, 2, 3].reduce : { (callbackfn: (previousValue: number, currentValue: number, currentIndex: number, array: number[]) => number): number; (callbackfn: (previousValue: number, currentValue: number, currentIndex: number, array: number[]) => number, initialValue: number): number; <U>(callbackfn: (previousValue: U, currentValue: number, currentIndex: number, array: number[]) => U, initialValue: U): U; }
 >[1, 2, 3] : number[]
 >1 : 1
 >2 : 2
 >3 : 3
 >reduce : { (callbackfn: (previousValue: number, currentValue: number, currentIndex: number, array: number[]) => number): number; (callbackfn: (previousValue: number, currentValue: number, currentIndex: number, array: number[]) => number, initialValue: number): number; <U>(callbackfn: (previousValue: U, currentValue: number, currentIndex: number, array: number[]) => U, initialValue: U): U; }
->(accu, el) => accu.concat(el) : (accu: [], el: number) => never[]
->accu : []
+>(accu, el) => accu.concat(el) : (accu: unknown, el: number) => any
+>accu : unknown
 >el : number
->accu.concat(el) : never[]
->accu.concat : { (...items: ConcatArray<never>[]): never[]; (...items: ConcatArray<never>[]): never[]; }
->accu : []
->concat : { (...items: ConcatArray<never>[]): never[]; (...items: ConcatArray<never>[]): never[]; }
+>accu.concat(el) : any
+>accu.concat : any
+>accu : unknown
+>concat : any
 >el : number
 >[] : never[]
 

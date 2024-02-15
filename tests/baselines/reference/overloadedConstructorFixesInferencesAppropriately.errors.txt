@@ -1,0 +1,34 @@
+overloadedConstructorFixesInferencesAppropriately.ts(26,32): error TS2339: Property 'success' does not exist on type '{}'.
+
+
+==== overloadedConstructorFixesInferencesAppropriately.ts (1 errors) ====
+    interface Box<T> {
+        v: T;
+    }
+    
+    interface ErrorResult {
+        readonly error: true
+    }
+    
+    interface AsyncLoaderProps<TResult extends {}> {
+        readonly asyncLoad: () => Box<TResult>;
+        readonly children: (result: Exclude<TResult, ErrorResult>) => string;
+    }
+    
+    class AsyncLoader<TResult extends {}> {
+        constructor(props: string, context: any);
+        constructor(props: AsyncLoaderProps<TResult>);
+        constructor(...args: any[]) {}
+    }
+    
+    function load(): Box<{ success: true } | ErrorResult> {
+        return null as any;
+    }
+    
+    new AsyncLoader({
+        asyncLoad: load,
+        children: result => result.success as any,
+                                   ~~~~~~~
+!!! error TS2339: Property 'success' does not exist on type '{}'.
+    }); // should work fine
+    

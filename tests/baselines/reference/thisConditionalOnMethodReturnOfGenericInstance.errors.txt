@@ -1,0 +1,24 @@
+thisConditionalOnMethodReturnOfGenericInstance.ts(6,15): error TS2577: Return type annotation circularly references itself.
+
+
+==== thisConditionalOnMethodReturnOfGenericInstance.ts (1 errors) ====
+    class A<T> {
+        unmeasurableUsage!: {[K in keyof T]-?: T[K]};
+    }
+    
+    class B<T> extends A<T> {
+        method(): string | (this extends C ? undefined : null) {
+                  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2577: Return type annotation circularly references itself.
+            return "";
+        }
+    }
+    
+    class C<T = any> extends B<T> {
+        marker!: string;
+    }
+    
+    const x = new C<{}>();
+    
+    const y = x.method(); // usage flags `method` in `B` as circular and marks `y` as the error-any type
+    
