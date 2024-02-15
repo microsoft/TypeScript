@@ -1,0 +1,104 @@
+name: Post workflow result
+
+inputs:
+  success_comment:
+    required: true
+    type: string
+  failure_comment:
+    required: true
+    type: string
+
+  github_token:
+    required: true
+    type: string
+  distinct_id:
+    required: true
+    type: string
+  source_issue:
+    required: true
+    type: string
+  requesting_user:
+    required: true
+    type: string
+  status_comment:
+    required: true
+    type: string
+
+runs:
+  using: composite
+  steps:
+    - name: Check status
+      id: should_post_workflow_status
+      run: echo "OK"
+
+    - name: Post workflow result
+      uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea # v7.0.1
+      env:
+        SUCCESS_COMMENT: ${{ inputs.success_comment }}
+        FAILURE_COMMENT: ${{ inputs.failure_comment }}
+        SUCCESS: ${{ steps.should_post_workflow_status.outputs.success == 'success' }}
+        DISTINCT_ID: ${{ inputs.distinct_id }}
+        SOURCE_ISSUE: ${{ inputs.source_issue }}
+        REQUESTING_USER: ${{ inputs.requesting_user }}
+        STATUS_COMMENT: ${{ inputs.status_comment }}
+      with:
+        github-token: ${{ secrets.github_token }}
+        script: |
+          const {
+            SUCCESS_COMMENT,
+            FAILURE_COMMENT,
+            SUCCESS,
+            DISTINCT_ID,
+            SOURCE_ISSUE,
+            REQUESTING_USER,
+            STATUS_COMMENT,
+          } = process.env;
+
+          const success = SUCCESS === "true";
+
+          let commentBody = `Hey, @${REQUESTING_USER}! `;
+          commentBody += success ? SUCCESS_COMMENT : FAILURE_COMMENT;
+          if (!success) {
+            commentBody += `\n\nCheck the logs at: ${context.serverUrl}/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}`;
+          }
+
+          // Post results
+          const resultsComment = await github.rest.issues.createComment({
+            issue_number: +ISSUE_NUMBER,
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            body: commentBody,
+          });
+
+          let emoji = success ? "✅" : "❌";
+
+          const toReplace = `<!--result-${DISTINCT_ID}-->`;
+          while (true) {
+            // Get status comment contents
+            const statusComment = await github.rest.issues.getComment({
+              comment_id: +STATUS_COMMENT_ID,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+            });
+
+            const oldComment = statusComment.data.body;
+            if (!oldComment.includes(toReplace)) {
+              break;
+            }
+
+            const newComment = oldComment.replace(
+              toReplace,
+              `[${emoji} Results](${resultsComment.data.html_url})`,
+            )
+
+            // Update status comment
+            await github.rest.issues.updateComment({
+              comment_id: +STATUS_COMMENT_ID,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: newComment,
+            });
+
+            // Repeat; someone may have edited the comment at the same time.
+            await new Promise((resolve) => setTimeout(resolve, 1000));
+          }

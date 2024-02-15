@@ -1,13 +1,8 @@
 name: Twoslash Code Sample Repros
 
 on:
-  push:
-    branches:
-      - orta-twoslash-repros
   schedule:
     - cron: '0 8 * * *'
-  repository_dispatch:
-    types: [run-twoslash-repros]
   workflow_dispatch:
     inputs:
       issue:
@@ -18,6 +13,26 @@ on:
         description: If set, runs a git bisect on an existing repro. Requires 'issue' to be set. Value can be revision labels (e.g. `good v4.7.3 bad main`) or `true` to infer bisect range.
         required: false
         type: string
+
+      # Inputs provided by the bot
+      distinct_id:
+        description: '(bot) A distinct ID'
+        required: false
+        default: ''
+      source_issue:
+        description: '(bot) The issue that triggered this workflow'
+        required: false
+        default: ''
+      requesting_user:
+        description: '(bot) The user who requested this workflow'
+        required: false
+        default: ''
+      status_comment:
+        description: '(bot) The comment to update with the status of this workflow'
+        required: false
+        default: ''
+
+run-name: ${{ github.workflow }}${{ inputs.distinct_id && format(' (bot run {0})', inputs.distinct_id) || '' }}
 
 permissions:
   contents: read

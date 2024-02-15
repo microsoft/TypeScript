@@ -5,8 +5,6 @@ on:
     - cron: '0 7 * * *'
   # enable users to manually trigger with workflow_dispatch
   workflow_dispatch: {}
-  repository_dispatch:
-    types: [publish-nightly]
 
 permissions:
   contents: read
