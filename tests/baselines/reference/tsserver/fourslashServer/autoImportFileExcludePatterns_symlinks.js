@@ -52,7 +52,7 @@ Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /project/node_mod
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /project/node_modules/.store/@remix-run-server-runtime-virtual-c72daf0d/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /project/node_modules/.store/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /project/node_modules/.store/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject1*' (Inferred)
 Info seq  [hh:mm:ss:mss] 	Files (4)
 	/lib.d.ts Text-1 lib.d.ts-Text
@@ -103,6 +103,29 @@ watchedDirectoriesRecursive::
 /project/node_modules/.store/node_modules/@types: *new*
   {}
 
+Projects::
+/dev/null/inferredProject1* (Inferred) *new*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+
+ScriptInfos::
+/lib.d.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /dev/null/inferredProject1*
+/lib.decorators.d.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /dev/null/inferredProject1*
+/lib.decorators.legacy.d.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /dev/null/inferredProject1*
+/project/node_modules/.store/@remix-run-server-runtime-virtual-c72daf0d/package/package.json (Open) *new*
+    version: SVC-1-0
+    containingProjects: 1
+        /dev/null/inferredProject1* *default*
+
 Info seq  [hh:mm:ss:mss] request:
     {
       "seq": 1,
@@ -115,7 +138,7 @@ Info seq  [hh:mm:ss:mss] request:
 Info seq  [hh:mm:ss:mss] Search path: /project
 Info seq  [hh:mm:ss:mss] For info: /project/index.ts :: No config files found.
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/inferredProject2*
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/inferredProject2* Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/inferredProject2* projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject2*' (Inferred)
 Info seq  [hh:mm:ss:mss] 	Files (4)
 	/lib.d.ts Text-1 lib.d.ts-Text
@@ -138,7 +161,7 @@ Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /project/package.json 
 Info seq  [hh:mm:ss:mss] AutoImportProviderProject: found 1 root files in 1 dependencies in * ms
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /project/node_modules/.store/@remix-run-server-runtime-virtual-c72daf0d/package/index.d.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/autoImportProviderProject1*
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/autoImportProviderProject1* Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/autoImportProviderProject1* projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/dev/null/autoImportProviderProject1*' (AutoImportProvider)
 Info seq  [hh:mm:ss:mss] 	Files (1)
 	/project/node_modules/.store/@remix-run-server-runtime-virtual-c72daf0d/package/index.d.ts Text-1 "export declare function ServerRuntimeMetaFunction(): void;"
@@ -193,6 +216,47 @@ watchedDirectoriesRecursive::
   {}
 /project/node_modules/.store/node_modules/@types:
   {}
+
+Projects::
+/dev/null/autoImportProviderProject1* (AutoImportProvider) *new*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+/dev/null/inferredProject1* (Inferred)
+    projectStateVersion: 1
+    projectProgramVersion: 1
+/dev/null/inferredProject2* (Inferred) *new*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+    autoImportProviderHost: /dev/null/autoImportProviderProject1*
+
+ScriptInfos::
+/lib.d.ts *changed*
+    version: Text-1
+    containingProjects: 2 *changed*
+        /dev/null/inferredProject1*
+        /dev/null/inferredProject2* *new*
+/lib.decorators.d.ts *changed*
+    version: Text-1
+    containingProjects: 2 *changed*
+        /dev/null/inferredProject1*
+        /dev/null/inferredProject2* *new*
+/lib.decorators.legacy.d.ts *changed*
+    version: Text-1
+    containingProjects: 2 *changed*
+        /dev/null/inferredProject1*
+        /dev/null/inferredProject2* *new*
+/project/index.ts (Open) *new*
+    version: SVC-1-0
+    containingProjects: 1
+        /dev/null/inferredProject2* *default*
+/project/node_modules/.store/@remix-run-server-runtime-virtual-c72daf0d/package/index.d.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /dev/null/autoImportProviderProject1*
+/project/node_modules/.store/@remix-run-server-runtime-virtual-c72daf0d/package/package.json (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /dev/null/inferredProject1* *default*
 
 Info seq  [hh:mm:ss:mss] request:
     {

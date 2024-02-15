@@ -71,7 +71,7 @@ Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/inferred
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/bin/a.d.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /b/bin/b.d.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined Project: /dev/null/inferredProject1* WatchType: Missing file
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject1*' (Inferred)
 Info seq  [hh:mm:ss:mss] 	Files (3)
 	/a/bin/a.d.ts Text-1 "export declare function fnA(): void;\nexport interface IfaceA {\n}\nexport declare const instanceA: IfaceA;\n//# sourceMappingURL=a.d.ts.map"
@@ -109,6 +109,25 @@ FsWatches::
   {}
 /b/bin/b.d.ts: *new*
   {}
+
+Projects::
+/dev/null/inferredProject1* (Inferred) *new*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+
+ScriptInfos::
+/a/bin/a.d.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /dev/null/inferredProject1*
+/b/bin/b.d.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /dev/null/inferredProject1*
+/user/user.ts (Open) *new*
+    version: SVC-1-0
+    containingProjects: 1
+        /dev/null/inferredProject1* *default*
 
 Before request
 
@@ -174,6 +193,26 @@ FsWatches::
   {}
 /b/bin/b.d.ts:
   {}
+
+ScriptInfos::
+/a/bin/a.d.ts *changed*
+    version: Text-1
+    sourceMapFilePath: /a/bin/a.d.ts.map *changed*
+    containingProjects: 1
+        /dev/null/inferredProject1*
+/a/bin/a.d.ts.map *new*
+    version: Text-1
+    declarationInfoPath: /a/bin/a.d.ts
+    documentPositionMapper: false
+    containingProjects: 0
+/b/bin/b.d.ts
+    version: Text-1
+    containingProjects: 1
+        /dev/null/inferredProject1*
+/user/user.ts (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /dev/null/inferredProject1* *default*
 
 Before request
 
@@ -245,6 +284,37 @@ FsWatches::
 /b/bin/b.d.ts.map: *new*
   {}
 
+ScriptInfos::
+/a/bin/a.d.ts
+    version: Text-1
+    sourceMapFilePath: /a/bin/a.d.ts.map
+    containingProjects: 1
+        /dev/null/inferredProject1*
+/a/bin/a.d.ts.map
+    version: Text-1
+    declarationInfoPath: /a/bin/a.d.ts
+    documentPositionMapper: false
+    containingProjects: 0
+/b/b.ts *new*
+    version: Text-1
+    containingProjects: 0
+/b/bin/b.d.ts *changed*
+    version: Text-1
+    sourceMapFilePath: /b/bin/b.d.ts.map *changed*
+    containingProjects: 1
+        /dev/null/inferredProject1*
+/b/bin/b.d.ts.map *new*
+    version: Text-1
+    declarationInfoPath: /b/bin/b.d.ts
+    sourceInfos: 1
+        /b/b.ts
+    documentPositionMapper: DocumentPositionMapper
+    containingProjects: 0
+/user/user.ts (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /dev/null/inferredProject1* *default*
+
 Before request
 
 Info seq  [hh:mm:ss:mss] request:
@@ -286,6 +356,45 @@ FsWatches::
 /user/user.ts: *new*
   {}
 
+Projects::
+/dev/null/inferredProject1* (Inferred) *changed*
+    projectStateVersion: 2 *changed*
+    projectProgramVersion: 1
+    dirty: true *changed*
+    isOrphan: true *changed*
+
+ScriptInfos::
+/a/bin/a.d.ts
+    version: Text-1
+    sourceMapFilePath: /a/bin/a.d.ts.map
+    containingProjects: 1
+        /dev/null/inferredProject1*
+/a/bin/a.d.ts.map
+    version: Text-1
+    declarationInfoPath: /a/bin/a.d.ts
+    documentPositionMapper: false
+    containingProjects: 0
+/b/b.ts
+    version: Text-1
+    containingProjects: 0
+/b/bin/b.d.ts
+    version: Text-1
+    sourceMapFilePath: /b/bin/b.d.ts.map
+    containingProjects: 1
+        /dev/null/inferredProject1*
+/b/bin/b.d.ts.map
+    version: Text-1
+    declarationInfoPath: /b/bin/b.d.ts
+    sourceInfos: 1
+        /b/b.ts
+    documentPositionMapper: DocumentPositionMapper
+    containingProjects: 0
+/user/user.ts *changed*
+    open: false *changed*
+    version: SVC-1-0
+    containingProjects: 0 *changed*
+        /dev/null/inferredProject1* *deleted*
+
 Before request
 
 Info seq  [hh:mm:ss:mss] request:
@@ -301,7 +410,7 @@ Info seq  [hh:mm:ss:mss] Search path: /dummy
 Info seq  [hh:mm:ss:mss] For info: /dummy/dummy.ts :: No config files found.
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/inferredProject2*
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined Project: /dev/null/inferredProject2* WatchType: Missing file
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/inferredProject2* Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/inferredProject2* projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject2*' (Inferred)
 Info seq  [hh:mm:ss:mss] 	Files (1)
 	/dummy/dummy.ts SVC-1-0 "let a = 10;"
@@ -364,3 +473,48 @@ FsWatches *deleted*::
   {}
 /user/user.ts:
   {}
+
+Projects::
+/dev/null/inferredProject1* (Inferred) *deleted*
+    projectStateVersion: 2
+    projectProgramVersion: 1
+    dirty: true
+    isClosed: true *changed*
+    isOrphan: true
+/dev/null/inferredProject2* (Inferred) *new*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+
+ScriptInfos::
+/a/bin/a.d.ts *deleted*
+    version: Text-1
+    sourceMapFilePath: /a/bin/a.d.ts.map
+    containingProjects: 0 *changed*
+        /dev/null/inferredProject1* *deleted*
+/a/bin/a.d.ts.map *deleted*
+    version: Text-1
+    declarationInfoPath: /a/bin/a.d.ts
+    documentPositionMapper: false
+    containingProjects: 0
+/b/b.ts *deleted*
+    version: Text-1
+    containingProjects: 0
+/b/bin/b.d.ts *deleted*
+    version: Text-1
+    sourceMapFilePath: /b/bin/b.d.ts.map
+    containingProjects: 0 *changed*
+        /dev/null/inferredProject1* *deleted*
+/b/bin/b.d.ts.map *deleted*
+    version: Text-1
+    declarationInfoPath: /b/bin/b.d.ts
+    sourceInfos: 1
+        /b/b.ts
+    documentPositionMapper: DocumentPositionMapper
+    containingProjects: 0
+/dummy/dummy.ts (Open) *new*
+    version: SVC-1-0
+    containingProjects: 1
+        /dev/null/inferredProject2* *default*
+/user/user.ts *deleted*
+    version: SVC-1-0
+    containingProjects: 0

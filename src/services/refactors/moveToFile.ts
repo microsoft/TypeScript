@@ -2,7 +2,6 @@ import {
     getModuleSpecifier,
 } from "../../compiler/moduleSpecifiers";
 import {
-    __String,
     AnyImportOrRequireStatement,
     append,
     ApplicableRefactorInfo,
