@@ -30,6 +30,7 @@ runs:
     - name: Check status
       id: should_post_workflow_status
       run: echo "OK"
+      shell: bash
 
     - name: Post workflow result
       uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea # v7.0.1
@@ -42,7 +43,7 @@ runs:
         REQUESTING_USER: ${{ inputs.requesting_user }}
         STATUS_COMMENT: ${{ inputs.status_comment }}
       with:
-        github-token: ${{ secrets.github_token }}
+        github-token: ${{ inputs.github_token }}
         script: |
           const {
             SUCCESS_COMMENT,
@@ -64,7 +65,7 @@ runs:
 
           // Post results
           const resultsComment = await github.rest.issues.createComment({
-            issue_number: +ISSUE_NUMBER,
+            issue_number: +SOURCE_ISSUE,
             owner: context.repo.owner,
             repo: context.repo.repo,
             body: commentBody,
@@ -76,7 +77,7 @@ runs:
           while (true) {
             // Get status comment contents
             const statusComment = await github.rest.issues.getComment({
-              comment_id: +STATUS_COMMENT_ID,
+              comment_id: +STATUS_COMMENT,
               owner: context.repo.owner,
               repo: context.repo.repo,
             });
@@ -93,7 +94,7 @@ runs:
 
             // Update status comment
             await github.rest.issues.updateComment({
-              comment_id: +STATUS_COMMENT_ID,
+              comment_id: +STATUS_COMMENT,
               owner: context.repo.owner,
               repo: context.repo.repo,
               body: newComment,
