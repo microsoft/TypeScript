@@ -1912,7 +1912,8 @@ export class Session<TMessage = string> implements EventSender {
         const projects = new Map<Project, MapCodeDocumentMapping[]>();
         args.mappings.forEach(mapping => {
             if (!mapping.file) {
-                return { contents: mapping.contents };
+                // TODO(@zkat): We don't support mapping file-less code yet.
+                return;
             }
             const { file, project } = this.getFileAndProjectWorker(mapping.file, mapping.projectFileName);
             const scriptInfo = this.projectService.getScriptInfoForNormalizedPath(file)!;
@@ -1926,10 +1927,9 @@ export class Session<TMessage = string> implements EventSender {
                     };
                 });
             });
-            if (!projects.has(project)) {
-                projects.set(project, []);
-            }
-            projects.get(project)!.push({
+            let result = projects.get(project);
+            if (!result) projects.set(project, result = []);
+            result.push({
                 contents: mapping.contents,
                 fileName: file,
                 focusLocations,

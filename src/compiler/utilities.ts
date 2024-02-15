@@ -10671,3 +10671,24 @@ export function replaceFirstStar(s: string, replacement: string): string {
 export function getNameFromImportAttribute(node: ImportAttribute) {
     return isIdentifier(node.name) ? node.name.escapedText : escapeLeadingUnderscores(node.name.text);
 }
+
+/**
+ * Returns a token if position is in [start-of-leading-trivia, end), includes JSDoc only in JS files
+ * @internal
+ */
+export function getNodeAtPosition(sourceFile: SourceFile, position: number): Node {
+    const isJavaScriptFile = isSourceFileJS(sourceFile);
+    let current: Node = sourceFile;
+    const getContainingChild = (child: Node) => {
+        if (child.pos <= position && (position < child.end || (position === child.end && (child.kind === SyntaxKind.EndOfFileToken)))) {
+            return child;
+        }
+    };
+    while (true) {
+        const child = isJavaScriptFile && hasJSDocNodes(current) && forEach(current.jsDoc, getContainingChild) || forEachChild(current, getContainingChild);
+        if (!child) {
+            return current;
+        }
+        current = child;
+    }
+}

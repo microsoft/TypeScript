@@ -10701,7 +10701,6 @@ declare namespace ts {
         commentSelection(fileName: string, textRange: TextRange): TextChange[];
         uncommentSelection(fileName: string, textRange: TextRange): TextChange[];
         getSupportedCodeFixes(fileName?: string): readonly string[];
-        mapCode(mappings: MapCodeDocumentMapping[], formatOptions: FormatCodeSettings, preferences: UserPreferences, updates?: FileTextChanges[]): FileTextChanges[];
         dispose(): void;
     }
     interface JsxClosingTagInfo {
@@ -11375,11 +11374,6 @@ declare namespace ts {
          * Classification of the contents of the span
          */
         kind: OutliningSpanKind;
-    }
-    interface MapCodeDocumentMapping {
-        fileName?: string;
-        focusLocations?: TextSpan[][];
-        contents: string[];
     }
     enum OutliningSpanKind {
         /** Single or multi-line comments */
