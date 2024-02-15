@@ -62,7 +62,7 @@ jobs:
           git commit -m 'Update LKG'
           git push
 
-      - uses: ./.github/actions/post-workflow-result
+      - uses: microsoft/TypeScript/.github/actions/post-workflow-result@main
         if: ${{ !cancelled() && inputs.distinct_id }}
         with:
           success_comment: "I've pulled main into ${{ inputs.branch_name }} for you."

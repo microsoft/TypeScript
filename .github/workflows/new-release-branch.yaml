@@ -83,7 +83,7 @@ jobs:
           git commit -m 'Bump version to ${{ inputs.package_version }} and LKG'
           git push --set-upstream origin ${{ inputs.branch_name }}
 
-      - uses: ./.github/actions/post-workflow-result
+      - uses: microsoft/TypeScript/.github/actions/post-workflow-result@main
         if: ${{ !cancelled() && inputs.distinct_id }}
         with:
           success_comment: "I've created ${{ inputs.branch_name }} with version ${{ inputs.package_version }} for you."

@@ -136,7 +136,7 @@ jobs:
 
             core.setOutput("comment_body", commentBody);
 
-      - uses: ./.github/actions/post-workflow-result
+      - uses: microsoft/TypeScript/.github/actions/post-workflow-result@main
         if: ${{ !cancelled() && inputs.distinct_id }}
         with:
           success_comment: ${{ steps.open-pr.outputs.comment_body }}
