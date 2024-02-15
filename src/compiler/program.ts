@@ -96,7 +96,6 @@ import {
     flatten,
     forEach,
     forEachAncestorDirectory,
-    forEachChild,
     forEachChildRecursively,
     forEachEmittedFile,
     forEachEntry,
@@ -128,6 +127,7 @@ import {
     getMatchedFileSpec,
     getMatchedIncludeSpec,
     getNewLineCharacter,
+    getNodeAtPosition,
     getNormalizedAbsolutePath,
     getNormalizedAbsolutePathWithoutRoot,
     getNormalizedPathComponents,
@@ -157,7 +157,6 @@ import {
     hasExtension,
     HasInvalidatedLibResolutions,
     HasInvalidatedResolutions,
-    hasJSDocNodes,
     hasJSFileExtension,
     hasJsonModuleEmitEnabled,
     hasProperty,
@@ -327,7 +326,6 @@ import {
     WriteFileCallback,
     WriteFileCallbackData,
     writeFileEnsuringDirectories,
-    getNodeAtPosition,
 } from "./_namespaces/ts";
 import * as performance from "./_namespaces/ts.performance";
 
