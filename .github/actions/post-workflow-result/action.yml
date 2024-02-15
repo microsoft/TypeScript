@@ -27,17 +27,12 @@ inputs:
 runs:
   using: composite
   steps:
-    - name: Check status
-      id: should_post_workflow_status
-      run: echo "OK"
-      shell: bash
-
     - name: Post workflow result
       uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea # v7.0.1
       env:
         SUCCESS_COMMENT: ${{ inputs.success_comment }}
         FAILURE_COMMENT: ${{ inputs.failure_comment }}
-        SUCCESS: ${{ steps.should_post_workflow_status.outputs.success == 'success' }}
+        SUCCESS: ${{ job.status == 'success' }}
         DISTINCT_ID: ${{ inputs.distinct_id }}
         SOURCE_ISSUE: ${{ inputs.source_issue }}
         REQUESTING_USER: ${{ inputs.requesting_user }}
