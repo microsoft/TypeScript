@@ -21080,6 +21080,18 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
 
         if (!(checkMode & SignatureCheckMode.IgnoreReturnTypes)) {
+            // If a signature resolution is already in-flight, skip issuing a circularity error
+            // here and just use the `any` type directly
+            const targetReturnType = isResolvingReturnTypeOfSignature(target) ? anyType
+                : target.declaration && isJSConstructor(target.declaration) ? getDeclaredTypeOfClassOrInterface(getMergedSymbol(target.declaration.symbol))
+                : getReturnTypeOfSignature(target);
+            if (targetReturnType === voidType || targetReturnType === anyType) {
+                return result;
+            }
+            const sourceReturnType = isResolvingReturnTypeOfSignature(source) ? anyType
+                : source.declaration && isJSConstructor(source.declaration) ? getDeclaredTypeOfClassOrInterface(getMergedSymbol(source.declaration.symbol))
+                : getReturnTypeOfSignature(source);
+        
             // The following block preserves behavior forbidding boolean returning functions from being assignable to type guard returning functions
             const targetTypePredicate = getTypePredicateOfSignature(target);
             if (targetTypePredicate) {
@@ -21095,13 +21107,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 }
             }
             else {
-                const targetReturnType = target.declaration && isJSConstructor(target.declaration) ? getDeclaredTypeOfClassOrInterface(getMergedSymbol(target.declaration.symbol))
-                    : getReturnTypeOfSignature(target);
-                if (targetReturnType === voidType || targetReturnType === anyType) {
-                    return result;
-                }
-                const sourceReturnType = source.declaration && isJSConstructor(source.declaration) ? getDeclaredTypeOfClassOrInterface(getMergedSymbol(source.declaration.symbol))
-                    : getReturnTypeOfSignature(source);
                 // When relating callback signatures, we still need to relate return types bi-variantly as otherwise
                 // the containing type wouldn't be co-variant. For example, interface Foo<T> { add(cb: () => T): void }
                 // wouldn't be co-variant for T without this rule.
