@@ -19834,7 +19834,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             type.objectFlags & ObjectFlags.InstantiationExpressionType ? (type as InstantiationExpressionType).node :
             type.symbol.declarations![0];
         const links = getNodeLinks(declaration);
-        const target = type.objectFlags & ObjectFlags.Reference ? links.resolvedType! as DeferredTypeReference :
+        const target = type.objectFlags & ObjectFlags.Reference ? getTypeFromTypeNode(declaration as TupleTypeNode | ArrayTypeNode) as DeferredTypeReference :
             type.objectFlags & ObjectFlags.Instantiated ? type.target! : type;
         let typeParameters = links.outerTypeParameters;
         if (!typeParameters) {
