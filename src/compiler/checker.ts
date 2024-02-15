@@ -21091,7 +21091,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             const sourceReturnType = isResolvingReturnTypeOfSignature(source) ? anyType
                 : source.declaration && isJSConstructor(source.declaration) ? getDeclaredTypeOfClassOrInterface(getMergedSymbol(source.declaration.symbol))
                 : getReturnTypeOfSignature(source);
-        
+
             // The following block preserves behavior forbidding boolean returning functions from being assignable to type guard returning functions
             const targetTypePredicate = getTypePredicateOfSignature(target);
             if (targetTypePredicate) {
