@@ -1126,12 +1126,6 @@ export interface EditorSettings {
     trimTrailingWhitespace?: boolean;
 }
 
-// export interface PrioritizedSpan {
-//     fileName: string,
-//     textSpan: TextSpan,
-//     priority: number,
-// }
-
 /** @deprecated - consider using FormatCodeSettings instead */
 export interface FormatCodeOptions extends EditorOptions {
     InsertSpaceAfterCommaDelimiter: boolean;

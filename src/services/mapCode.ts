@@ -74,7 +74,6 @@ export function mapCode(
  * Tries to parse something into either "top-level" statements, or into blocks
  * of class-context definitions.
  * @param content
- * @returns
  */
 function parse(content: string): NodeArray<Node> {
     // We're going to speculatively parse different kinds of contexts to see
