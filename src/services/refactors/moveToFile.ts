@@ -170,7 +170,8 @@ registerRefactor(refactorNameForMoveToFile, {
         if (!interactiveRefactorArguments) {
             return emptyArray;
         }
-        // If the start/end nodes of the selection are inside a block like node do not show the `Move to file` code action
+        /** If the start/end nodes of the selection are inside a block like node do not show the `Move to file` code action
+         *  This condition is used in order to show less often the `Move to file` code action */
         if (context.endPosition !== undefined) {
             const file = context.file;
             const startNodeAncestor = findAncestor(getTokenAtPosition(file, context.startPosition), isBlockLike);
