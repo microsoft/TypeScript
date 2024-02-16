@@ -32,10 +32,8 @@ import {
 // These types/enums used to be defined in duplicate here and exported. They are re-exported to avoid breaking changes.
 export { ApplicableRefactorInfo, ClassificationType, CompletionsTriggerCharacter, CompletionTriggerKind, OrganizeImportsMode, RefactorTriggerReason, RenameInfoFailure, SemicolonPreference, SignatureHelpTriggerReason, SymbolDisplayPart, UserPreferences };
 
-/** @internal */
-export type ChangeStringIndexSignature<T, NewStringIndexSignatureType> = { [K in keyof T]: string extends K ? NewStringIndexSignatureType : T[K]; };
-/** @internal */
-export type ChangePropertyTypes<T, Substitutions extends { [K in keyof T]?: any; }> = {
+type ChangeStringIndexSignature<T, NewStringIndexSignatureType> = { [K in keyof T]: string extends K ? NewStringIndexSignatureType : T[K]; };
+type ChangePropertyTypes<T, Substitutions extends { [K in keyof T]?: any; }> = {
     [K in keyof T]: K extends keyof Substitutions ? Substitutions[K] : T[K];
 };
 
