@@ -9,12 +9,12 @@
 /////*b*/
 
 goTo.select("a", "b");
-verify.refactorAvailable("Move to file",
-undefined,
-undefined,
-undefined,
+verify.not.refactorAvailable("Move to file",
+/*actionName*/ undefined,
+/*actionDescription*/ undefined,
+/*kind*/ undefined,
 {
     allowTextChangesInNewFiles : true
 },
-true);
+/*includeInteractiveActions*/ true);
 

@@ -11,7 +11,6 @@ import {
     BinaryExpression,
     BindingElement,
     BindingName,
-    BlockLike,
     CallExpression,
     canHaveDecorators,
     canHaveModifiers,
@@ -41,6 +40,7 @@ import {
     filter,
     find,
     FindAllReferences,
+    findAncestor,
     findIndex,
     findLast,
     firstDefined,
@@ -170,11 +170,12 @@ registerRefactor(refactorNameForMoveToFile, {
         if (!interactiveRefactorArguments) {
             return emptyArray;
         }
+        // If the start/end nodes of the selection are inside a block like node do not show the `Move to file` code action
         if (context.endPosition !== undefined) {
             const file = context.file;
-            const startNodeAncestor = getBlockLikeAncestor(getTokenAtPosition(file, context.startPosition));
-            const endNodeAncestor = getBlockLikeAncestor(getTokenAtPosition(file, context.endPosition));
-            if (!isSourceFile(startNodeAncestor) && !isSourceFile(endNodeAncestor)) {
+            const startNodeAncestor = findAncestor(getTokenAtPosition(file, context.startPosition), isBlockLike);
+            const endNodeAncestor = findAncestor(getTokenAtPosition(file, context.startPosition), isBlockLike)
+            if (startNodeAncestor && !isSourceFile(startNodeAncestor) && endNodeAncestor && !isSourceFile(endNodeAncestor)) {
                 return emptyArray;
             }
         }
@@ -283,14 +284,6 @@ function getNewStatementsAndRemoveFromOldFile(
         ...imports,
         ...body,
     ];
-}
-
-function getBlockLikeAncestor(node: Node): BlockLike {
-    let currentNode = node;
-    while (!isBlockLike(currentNode)) {
-        currentNode = currentNode.parent;
-    }
-    return currentNode;
 }
 
 function getTargetFileImportsAndAddExportInOldFile(

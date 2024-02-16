@@ -9,10 +9,10 @@
 
 goTo.select("a", "b");
 verify.not.refactorAvailable("Move to file",
-undefined,
-undefined,
-undefined,
+/*actionName*/ undefined,
+/*actionDescription*/ undefined,
+/*kind*/ undefined,
 {
     allowTextChangesInNewFiles : true
 },
-true);
+/*includeInteractiveActions*/ true);
