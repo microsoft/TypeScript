@@ -116,4 +116,22 @@ const result = objWithIndex[el];
 >objWithIndex : Symbol(objWithIndex, Decl(indexIntoArrayTupleObjectWithNever.ts, 38, 5))
 >el : Symbol(el, Decl(indexIntoArrayTupleObjectWithNever.ts, 40, 5))
 
+function testUnreachableNeverType(smt: number | string) {
+>testUnreachableNeverType : Symbol(testUnreachableNeverType, Decl(indexIntoArrayTupleObjectWithNever.ts, 41, 32))
+>smt : Symbol(smt, Decl(indexIntoArrayTupleObjectWithNever.ts, 43, 34))
+
+  if(typeof smt === "number") {}
+>smt : Symbol(smt, Decl(indexIntoArrayTupleObjectWithNever.ts, 43, 34))
+
+  else if(typeof smt === "string") {}
+>smt : Symbol(smt, Decl(indexIntoArrayTupleObjectWithNever.ts, 43, 34))
+
+  else {
+    const result = objWithIndex[smt]
+>result : Symbol(result, Decl(indexIntoArrayTupleObjectWithNever.ts, 47, 9))
+>objWithIndex : Symbol(objWithIndex, Decl(indexIntoArrayTupleObjectWithNever.ts, 38, 5))
+>smt : Symbol(smt, Decl(indexIntoArrayTupleObjectWithNever.ts, 43, 34))
+  }
+}
+
 // -----------------------------------------------------------------

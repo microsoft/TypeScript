@@ -44,6 +44,14 @@ const objWithIndex: Record<string, boolean> = {};
 const el = obj.arr[0];
 const result = objWithIndex[el];
 
+function testUnreachableNeverType(smt: number | string) {
+  if(typeof smt === "number") {}
+  else if(typeof smt === "string") {}
+  else {
+    const result = objWithIndex[smt]
+  }
+}
+
 // -----------------------------------------------------------------
 
 //// [indexIntoArrayTupleObjectWithNever.js]
@@ -55,4 +63,11 @@ var obj = {
 var objWithIndex = {};
 var el = obj.arr[0];
 var result = objWithIndex[el];
+function testUnreachableNeverType(smt) {
+    if (typeof smt === "number") { }
+    else if (typeof smt === "string") { }
+    else {
+        var result_1 = objWithIndex[smt];
+    }
+}
 // -----------------------------------------------------------------

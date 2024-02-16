@@ -61,12 +61,12 @@ type T3 = Record<`--${string}`, boolean>[never]
 
 
 const obj = {
->obj : { arr: any[]; }
->{  arr: [],} : { arr: undefined[]; }
+>obj : { arr: never[]; }
+>{  arr: [],} : { arr: never[]; }
 
   arr: [],
->arr : undefined[]
->[] : undefined[]
+>arr : never[]
+>[] : never[]
 
 };
 
@@ -75,17 +75,42 @@ const objWithIndex: Record<string, boolean> = {};
 >{} : {}
 
 const el = obj.arr[0];
->el : any
->obj.arr[0] : any
->obj.arr : any[]
->obj : { arr: any[]; }
->arr : any[]
+>el : never
+>obj.arr[0] : never
+>obj.arr : never[]
+>obj : { arr: never[]; }
+>arr : never[]
 >0 : 0
 
 const result = objWithIndex[el];
->result : boolean
->objWithIndex[el] : boolean
+>result : never
+>objWithIndex[el] : never
 >objWithIndex : Record<string, boolean>
->el : any
+>el : never
+
+function testUnreachableNeverType(smt: number | string) {
+>testUnreachableNeverType : (smt: number | string) => void
+>smt : string | number
+
+  if(typeof smt === "number") {}
+>typeof smt === "number" : boolean
+>typeof smt : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>smt : string | number
+>"number" : "number"
+
+  else if(typeof smt === "string") {}
+>typeof smt === "string" : boolean
+>typeof smt : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>smt : string
+>"string" : "string"
+
+  else {
+    const result = objWithIndex[smt]
+>result : never
+>objWithIndex[smt] : never
+>objWithIndex : Record<string, boolean>
+>smt : never
+  }
+}
 
 // -----------------------------------------------------------------
