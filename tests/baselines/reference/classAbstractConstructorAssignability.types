@@ -39,3 +39,50 @@ new CC;
 >new CC : C
 >CC : typeof C
 
+// https://github.com/microsoft/TypeScript/issues/57412
+
+// private methods have parameters stripped away in the generated declaration files
+abstract class GeneratedConstructable {
+>GeneratedConstructable : GeneratedConstructable
+
+  private constructor() {}
+}
+
+class MyPrivateClass {
+>MyPrivateClass : MyPrivateClass
+
+  private privateVal: boolean;
+>privateVal : boolean
+
+  private constructor(
+    public readonly foo: string,
+>foo : string
+
+    public readonly bar: string,
+>bar : string
+
+  ) {
+    this.privateVal = true;
+>this.privateVal = true : true
+>this.privateVal : boolean
+>this : this
+>privateVal : boolean
+>true : true
+  }
+}
+
+export const funcThatAcceptsAnyGeneratedClass = (
+>funcThatAcceptsAnyGeneratedClass : (clazz: typeof GeneratedConstructable) => void
+>(  clazz: typeof GeneratedConstructable,) => {} : (clazz: typeof GeneratedConstructable) => void
+
+  clazz: typeof GeneratedConstructable,
+>clazz : typeof GeneratedConstructable
+>GeneratedConstructable : typeof GeneratedConstructable
+
+) => {};
+
+funcThatAcceptsAnyGeneratedClass(MyPrivateClass);
+>funcThatAcceptsAnyGeneratedClass(MyPrivateClass) : void
+>funcThatAcceptsAnyGeneratedClass : (clazz: typeof GeneratedConstructable) => void
+>MyPrivateClass : typeof MyPrivateClass
+

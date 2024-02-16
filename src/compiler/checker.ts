@@ -23423,8 +23423,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     }
                     return Ternary.False;
                 }
-                if (!constructorVisibilitiesAreCompatible(sourceSignatures[0], targetSignatures[0], reportErrors)) {
-                    return Ternary.False;
+                const result = relateConstructorVisibilities(sourceSignatures[0], targetSignatures[0], reportErrors);
+                if (result !== undefined) {
+                    return result;
                 }
             }
 
@@ -23653,9 +23654,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             return Ternary.True;
         }
 
-        function constructorVisibilitiesAreCompatible(sourceSignature: Signature, targetSignature: Signature, reportErrors: boolean) {
+        function relateConstructorVisibilities(sourceSignature: Signature, targetSignature: Signature, reportErrors: boolean): Ternary | undefined {
             if (!sourceSignature.declaration || !targetSignature.declaration) {
-                return true;
+                return;
             }
 
             const sourceAccessibility = getSelectedEffectiveModifierFlags(sourceSignature.declaration, ModifierFlags.NonPublicAccessibilityModifier);
@@ -23663,24 +23664,24 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
             // A public, protected and private signature is assignable to a private signature.
             if (targetAccessibility === ModifierFlags.Private) {
-                return true;
+                return Ternary.True;
             }
 
             // A public and protected signature is assignable to a protected signature.
             if (targetAccessibility === ModifierFlags.Protected && sourceAccessibility !== ModifierFlags.Private) {
-                return true;
+                return;
             }
 
             // Only a public signature is assignable to public signature.
             if (targetAccessibility !== ModifierFlags.Protected && !sourceAccessibility) {
-                return true;
+                return;
             }
 
             if (reportErrors) {
                 reportError(Diagnostics.Cannot_assign_a_0_constructor_type_to_a_1_constructor_type, visibilityToString(sourceAccessibility), visibilityToString(targetAccessibility));
             }
 
-            return false;
+            return Ternary.False;
         }
     }
 

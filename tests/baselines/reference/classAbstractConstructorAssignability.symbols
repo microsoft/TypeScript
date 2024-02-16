@@ -36,3 +36,46 @@ new BB;
 new CC;
 >CC : Symbol(CC, Decl(classAbstractConstructorAssignability.ts, 8, 3))
 
+// https://github.com/microsoft/TypeScript/issues/57412
+
+// private methods have parameters stripped away in the generated declaration files
+abstract class GeneratedConstructable {
+>GeneratedConstructable : Symbol(GeneratedConstructable, Decl(classAbstractConstructorAssignability.ts, 12, 7))
+
+  private constructor() {}
+}
+
+class MyPrivateClass {
+>MyPrivateClass : Symbol(MyPrivateClass, Decl(classAbstractConstructorAssignability.ts, 19, 1))
+
+  private privateVal: boolean;
+>privateVal : Symbol(MyPrivateClass.privateVal, Decl(classAbstractConstructorAssignability.ts, 21, 22))
+
+  private constructor(
+    public readonly foo: string,
+>foo : Symbol(MyPrivateClass.foo, Decl(classAbstractConstructorAssignability.ts, 23, 22))
+
+    public readonly bar: string,
+>bar : Symbol(MyPrivateClass.bar, Decl(classAbstractConstructorAssignability.ts, 24, 32))
+
+  ) {
+    this.privateVal = true;
+>this.privateVal : Symbol(MyPrivateClass.privateVal, Decl(classAbstractConstructorAssignability.ts, 21, 22))
+>this : Symbol(MyPrivateClass, Decl(classAbstractConstructorAssignability.ts, 19, 1))
+>privateVal : Symbol(MyPrivateClass.privateVal, Decl(classAbstractConstructorAssignability.ts, 21, 22))
+  }
+}
+
+export const funcThatAcceptsAnyGeneratedClass = (
+>funcThatAcceptsAnyGeneratedClass : Symbol(funcThatAcceptsAnyGeneratedClass, Decl(classAbstractConstructorAssignability.ts, 31, 12))
+
+  clazz: typeof GeneratedConstructable,
+>clazz : Symbol(clazz, Decl(classAbstractConstructorAssignability.ts, 31, 49))
+>GeneratedConstructable : Symbol(GeneratedConstructable, Decl(classAbstractConstructorAssignability.ts, 12, 7))
+
+) => {};
+
+funcThatAcceptsAnyGeneratedClass(MyPrivateClass);
+>funcThatAcceptsAnyGeneratedClass : Symbol(funcThatAcceptsAnyGeneratedClass, Decl(classAbstractConstructorAssignability.ts, 31, 12))
+>MyPrivateClass : Symbol(MyPrivateClass, Decl(classAbstractConstructorAssignability.ts, 19, 1))
+
