@@ -541,19 +541,11 @@ Info seq  [hh:mm:ss:mss] event:
       }
     }
 Info seq  [hh:mm:ss:mss] Finding references to /packages/b/index.ts position 13 in project /tsconfig.json
-Info seq  [hh:mm:ss:mss] Search path: /packages/b
-Info seq  [hh:mm:ss:mss] For info: /packages/b/index.ts :: Config file name: /packages/b/tsconfig.json
-Info seq  [hh:mm:ss:mss] Search path: /packages/b
-Info seq  [hh:mm:ss:mss] For info: /packages/b/index.ts :: Config file name: /packages/b/tsconfig.json
 Info seq  [hh:mm:ss:mss] Search path: /packages/a
 Info seq  [hh:mm:ss:mss] For info: /packages/a/index.ts :: Config file name: /packages/a/tsconfig.json
 Info seq  [hh:mm:ss:mss] Search path: /packages/a
 Info seq  [hh:mm:ss:mss] For info: /packages/a/index.ts :: Config file name: /packages/a/tsconfig.json
 Info seq  [hh:mm:ss:mss] Finding references to /packages/b/index.ts position 13 in project /packages/a/tsconfig.json
-Info seq  [hh:mm:ss:mss] Search path: /packages/b
-Info seq  [hh:mm:ss:mss] For info: /packages/b/index.ts :: Config file name: /packages/b/tsconfig.json
-Info seq  [hh:mm:ss:mss] Search path: /packages/b
-Info seq  [hh:mm:ss:mss] For info: /packages/b/index.ts :: Config file name: /packages/b/tsconfig.json
 Info seq  [hh:mm:ss:mss] response:
     {
       "response": {

@@ -892,8 +892,6 @@ Info seq  [hh:mm:ss:mss] request:
       "seq": 5,
       "type": "request"
     }
-Info seq  [hh:mm:ss:mss] Search path: /user/username/projects/myproject/dependency
-Info seq  [hh:mm:ss:mss] For info: /user/username/projects/myproject/dependency/FnS.ts :: Config file name: /user/username/projects/myproject/dependency/tsconfig.json
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/decls/FnS.d.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/decls/FnS.d.ts.map 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] response:
@@ -1038,9 +1036,14 @@ ScriptInfos::
         /user/username/projects/myproject/random/tsconfig.json
 /user/username/projects/myproject/decls/FnS.d.ts *new*
     version: Text-1
+    sourceMapFilePath: /user/username/projects/myproject/decls/fns.d.ts.map
     containingProjects: 0
 /user/username/projects/myproject/decls/FnS.d.ts.map *new*
     version: Text-1
+    declarationInfoPath: /user/username/projects/myproject/decls/fns.d.ts
+    sourceInfos: 1
+        /user/username/projects/myproject/dependency/fns.ts
+    documentPositionMapper: DocumentPositionMapper
     containingProjects: 0
 /user/username/projects/myproject/dependency/FnS.ts (Open)
     version: Text-1
@@ -1067,7 +1070,7 @@ Info seq  [hh:mm:ss:mss] request:
         "offset": 1,
         "endLine": 1,
         "endOffset": 1,
-        "insertString": "function fooBar() { }\n "
+        "insertString": "function fooBar() { }\n"
       },
       "seq": 6,
       "type": "request"
@@ -1103,9 +1106,14 @@ ScriptInfos::
         /user/username/projects/myproject/random/tsconfig.json
 /user/username/projects/myproject/decls/FnS.d.ts
     version: Text-1
+    sourceMapFilePath: /user/username/projects/myproject/decls/fns.d.ts.map
     containingProjects: 0
 /user/username/projects/myproject/decls/FnS.d.ts.map
     version: Text-1
+    declarationInfoPath: /user/username/projects/myproject/decls/fns.d.ts
+    sourceInfos: 1
+        /user/username/projects/myproject/dependency/fns.ts
+    documentPositionMapper: DocumentPositionMapper
     containingProjects: 0
 /user/username/projects/myproject/dependency/FnS.ts (Open) *changed*
     version: SVC-2-1 *changed*
@@ -1139,7 +1147,7 @@ Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /user/username/pr
 Info seq  [hh:mm:ss:mss] Project '/user/username/projects/myproject/main/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (3)
 	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
-	/user/username/projects/myproject/dependency/FnS.ts SVC-2-1 "function fooBar() { }\n export function fn1() { }\nexport function fn2() { }\nexport function fn3() { }\nexport function fn4() { }\nexport function fn5() { }\n"
+	/user/username/projects/myproject/dependency/FnS.ts SVC-2-1 "function fooBar() { }\nexport function fn1() { }\nexport function fn2() { }\nexport function fn3() { }\nexport function fn4() { }\nexport function fn5() { }\n"
 	/user/username/projects/myproject/main/main.ts SVC-1-0 "import {\n    fn1,\n    fn2,\n    fn3,\n    fn4,\n    fn5\n} from '../decls/fns'\n\nfn1();\nfn2();\nfn3();\nfn4();\nfn5();\n"
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
@@ -1151,19 +1159,19 @@ Info seq  [hh:mm:ss:mss] response:
             "file": "/user/username/projects/myproject/dependency/FnS.ts",
             "start": {
               "line": 2,
-              "offset": 18
+              "offset": 17
             },
             "end": {
               "line": 2,
-              "offset": 21
+              "offset": 20
             },
             "contextStart": {
               "line": 2,
-              "offset": 2
+              "offset": 1
             },
             "contextEnd": {
               "line": 2,
-              "offset": 27
+              "offset": 26
             }
           }
         ],
@@ -1424,11 +1432,9 @@ Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /user/username/pr
 Info seq  [hh:mm:ss:mss] Project '/user/username/projects/myproject/dependency/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (2)
 	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
-	/user/username/projects/myproject/dependency/FnS.ts SVC-2-1 "function fooBar() { }\n export function fn1() { }\nexport function fn2() { }\nexport function fn3() { }\nexport function fn4() { }\nexport function fn5() { }\n"
+	/user/username/projects/myproject/dependency/FnS.ts SVC-2-1 "function fooBar() { }\nexport function fn1() { }\nexport function fn2() { }\nexport function fn3() { }\nexport function fn4() { }\nexport function fn5() { }\n"
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
-Info seq  [hh:mm:ss:mss] Search path: /user/username/projects/myproject/dependency
-Info seq  [hh:mm:ss:mss] For info: /user/username/projects/myproject/dependency/FnS.ts :: Config file name: /user/username/projects/myproject/dependency/tsconfig.json
 Info seq  [hh:mm:ss:mss] response:
     {
       "response": {
@@ -1441,11 +1447,11 @@ Info seq  [hh:mm:ss:mss] response:
           "triggerSpan": {
             "start": {
               "line": 2,
-              "offset": 18
+              "offset": 17
             },
             "end": {
               "line": 2,
-              "offset": 21
+              "offset": 20
             }
           }
         },
@@ -1456,19 +1462,19 @@ Info seq  [hh:mm:ss:mss] response:
               {
                 "start": {
                   "line": 2,
-                  "offset": 18
+                  "offset": 17
                 },
                 "end": {
                   "line": 2,
-                  "offset": 21
+                  "offset": 20
                 },
                 "contextStart": {
                   "line": 2,
-                  "offset": 2
+                  "offset": 1
                 },
                 "contextEnd": {
                   "line": 2,
-                  "offset": 27
+                  "offset": 26
                 }
               }
             ]
@@ -1540,8 +1546,6 @@ Info seq  [hh:mm:ss:mss] request:
       "seq": 13,
       "type": "request"
     }
-Info seq  [hh:mm:ss:mss] Search path: /user/username/projects/myproject/dependency
-Info seq  [hh:mm:ss:mss] For info: /user/username/projects/myproject/dependency/FnS.ts :: Config file name: /user/username/projects/myproject/dependency/tsconfig.json
 Info seq  [hh:mm:ss:mss] response:
     {
       "response": {
@@ -1638,8 +1642,6 @@ Info seq  [hh:mm:ss:mss] request:
       "seq": 14,
       "type": "request"
     }
-Info seq  [hh:mm:ss:mss] Search path: /user/username/projects/myproject/dependency
-Info seq  [hh:mm:ss:mss] For info: /user/username/projects/myproject/dependency/FnS.ts :: Config file name: /user/username/projects/myproject/dependency/tsconfig.json
 Info seq  [hh:mm:ss:mss] response:
     {
       "response": {
@@ -1736,8 +1738,6 @@ Info seq  [hh:mm:ss:mss] request:
       "seq": 15,
       "type": "request"
     }
-Info seq  [hh:mm:ss:mss] Search path: /user/username/projects/myproject/dependency
-Info seq  [hh:mm:ss:mss] For info: /user/username/projects/myproject/dependency/FnS.ts :: Config file name: /user/username/projects/myproject/dependency/tsconfig.json
 Info seq  [hh:mm:ss:mss] response:
     {
       "response": {
@@ -1834,8 +1834,6 @@ Info seq  [hh:mm:ss:mss] request:
       "seq": 16,
       "type": "request"
     }
-Info seq  [hh:mm:ss:mss] Search path: /user/username/projects/myproject/dependency
-Info seq  [hh:mm:ss:mss] For info: /user/username/projects/myproject/dependency/FnS.ts :: Config file name: /user/username/projects/myproject/dependency/tsconfig.json
 Info seq  [hh:mm:ss:mss] response:
     {
       "response": {

@@ -3906,6 +3906,7 @@ declare namespace ts {
             private static escapeFilenameForRegex;
             resetSafeList(): void;
             applySafeList(proj: protocol.ExternalProject): NormalizedPath[];
+            private applySafeListWorker;
             openExternalProject(proj: protocol.ExternalProject): void;
             hasDeferredExtension(): boolean;
             private enableRequestedPluginsAsync;

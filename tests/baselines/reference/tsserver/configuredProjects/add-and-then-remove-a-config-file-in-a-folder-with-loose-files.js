@@ -404,8 +404,8 @@ ScriptInfos::
 /a/lib/lib.d.ts *changed*
     version: Text-1
     containingProjects: 2 *changed*
-        /user/username/projects/myproject/tsconfig.json *new*
         /dev/null/inferredProject2*
+        /user/username/projects/myproject/tsconfig.json *new*
         /dev/null/inferredProject1* *deleted*
 /user/username/projects/myproject/commonFile1.ts (Open) *changed*
     version: SVC-1-0

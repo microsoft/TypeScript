@@ -1191,6 +1191,32 @@ Info seq  [hh:mm:ss:mss] response:
     }
 After request
 
+ScriptInfos::
+/a/lib/lib.d.ts
+    version: Text-1
+    containingProjects: 3
+        /user/username/projects/myproject/main/tsconfig.json
+        /user/username/projects/myproject/dependency/tsconfig.json
+        /user/username/projects/myproject/random/tsconfig.json
+/user/username/projects/myproject/decls/fns.d.ts *changed*
+    version: Text-1
+    sourceMapFilePath sourceInfos: 1 *changed*
+        /user/username/projects/myproject/dependency/fns.ts *new*
+    containingProjects: 1
+        /user/username/projects/myproject/main/tsconfig.json
+/user/username/projects/myproject/dependency/FnS.ts (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /user/username/projects/myproject/dependency/tsconfig.json *default*
+/user/username/projects/myproject/main/main.ts (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /user/username/projects/myproject/main/tsconfig.json *default*
+/user/username/projects/myproject/random/random.ts (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /user/username/projects/myproject/random/tsconfig.json *default*
+
 Before request
 
 Info seq  [hh:mm:ss:mss] request:
@@ -1537,6 +1563,8 @@ ScriptInfos::
         /user/username/projects/myproject/random/tsconfig.json
 /user/username/projects/myproject/decls/fns.d.ts
     version: Text-1
+    sourceMapFilePath sourceInfos: 1
+        /user/username/projects/myproject/dependency/fns.ts
     containingProjects: 1
         /user/username/projects/myproject/main/tsconfig.json
 /user/username/projects/myproject/dependency/FnS.ts (Open)
@@ -1653,6 +1681,8 @@ ScriptInfos::
         /user/username/projects/myproject/random/tsconfig.json
 /user/username/projects/myproject/decls/fns.d.ts
     version: Text-1
+    sourceMapFilePath sourceInfos: 1
+        /user/username/projects/myproject/dependency/fns.ts
     containingProjects: 1
         /user/username/projects/myproject/main/tsconfig.json
 /user/username/projects/myproject/dependency/FnS.ts (Open)
@@ -1763,6 +1793,8 @@ ScriptInfos::
         /user/username/projects/myproject/random/tsconfig.json
 /user/username/projects/myproject/decls/fns.d.ts
     version: Text-1
+    sourceMapFilePath sourceInfos: 1
+        /user/username/projects/myproject/dependency/fns.ts
     containingProjects: 1
         /user/username/projects/myproject/main/tsconfig.json
 /user/username/projects/myproject/dependency/FnS.ts (Open)
@@ -1874,6 +1906,8 @@ ScriptInfos::
         /user/username/projects/myproject/random/tsconfig.json
 /user/username/projects/myproject/decls/fns.d.ts
     version: Text-1
+    sourceMapFilePath sourceInfos: 1
+        /user/username/projects/myproject/dependency/fns.ts
     containingProjects: 1
         /user/username/projects/myproject/main/tsconfig.json
 /user/username/projects/myproject/dependency/FnS.ts *changed*
@@ -1986,6 +2020,8 @@ ScriptInfos::
         /user/username/projects/myproject/random/tsconfig.json
 /user/username/projects/myproject/decls/fns.d.ts
     version: Text-1
+    sourceMapFilePath sourceInfos: 1
+        /user/username/projects/myproject/dependency/fns.ts
     containingProjects: 1
         /user/username/projects/myproject/main/tsconfig.json
 /user/username/projects/myproject/dependency/FnS.ts
@@ -2155,6 +2191,7 @@ ScriptInfos::
         /user/username/projects/myproject/dependency/tsconfig.json *deleted*
 /user/username/projects/myproject/decls/fns.d.ts *deleted*
     version: Text-1
+    sourceMapFilePath: undefined *changed*
     containingProjects: 0 *changed*
         /user/username/projects/myproject/main/tsconfig.json *deleted*
 /user/username/projects/myproject/dependency/FnS.ts *deleted*

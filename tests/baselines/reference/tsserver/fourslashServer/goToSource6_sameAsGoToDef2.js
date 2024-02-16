@@ -283,12 +283,17 @@ ScriptInfos::
 /node_modules/foo/src/a.ts *new*
     version: Text-1
     containingProjects: 0
-/node_modules/foo/types/a.d.ts
+/node_modules/foo/types/a.d.ts *changed*
     version: Text-1
+    sourceMapFilePath: /node_modules/foo/types/a.d.ts.map *changed*
     containingProjects: 1
         /dev/null/inferredProject2*
 /node_modules/foo/types/a.d.ts.map *new*
     version: Text-1
+    declarationInfoPath: /node_modules/foo/types/a.d.ts
+    sourceInfos: 1
+        /node_modules/foo/src/a.ts
+    documentPositionMapper: DocumentPositionMapper
     containingProjects: 0
 
 Info seq  [hh:mm:ss:mss] request:

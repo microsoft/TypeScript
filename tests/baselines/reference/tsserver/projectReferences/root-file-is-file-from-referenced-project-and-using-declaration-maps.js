@@ -757,10 +757,6 @@ Info seq  [hh:mm:ss:mss] request:
 Info seq  [hh:mm:ss:mss] Finding references to /user/username/projects/project/src/common/input/keyboard.ts position 99 in project /user/username/projects/project/src/common/tsconfig.json
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/project/out/input/keyboard.d.ts.map 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] Finding references to /user/username/projects/project/out/input/keyboard.d.ts position 24 in project /user/username/projects/project/src/tsconfig.json
-Info seq  [hh:mm:ss:mss] Search path: /user/username/projects/project/src/common/input
-Info seq  [hh:mm:ss:mss] For info: /user/username/projects/project/src/common/input/keyboard.ts :: Config file name: /user/username/projects/project/src/common/tsconfig.json
-Info seq  [hh:mm:ss:mss] Search path: /user/username/projects/project/src/common/input
-Info seq  [hh:mm:ss:mss] For info: /user/username/projects/project/src/common/input/keyboard.ts :: Config file name: /user/username/projects/project/src/common/tsconfig.json
 Info seq  [hh:mm:ss:mss] response:
     {
       "response": {
@@ -915,12 +911,17 @@ ScriptInfos::
     containingProjects: 2
         /user/username/projects/project/src/common/tsconfig.json
         /user/username/projects/project/src/tsconfig.json
-/user/username/projects/project/out/input/keyboard.d.ts
+/user/username/projects/project/out/input/keyboard.d.ts *changed*
     version: Text-1
+    sourceMapFilePath: /user/username/projects/project/out/input/keyboard.d.ts.map *changed*
     containingProjects: 1
         /user/username/projects/project/src/tsconfig.json
 /user/username/projects/project/out/input/keyboard.d.ts.map *new*
     version: Text-1
+    declarationInfoPath: /user/username/projects/project/out/input/keyboard.d.ts
+    sourceInfos: 1
+        /user/username/projects/project/src/common/input/keyboard.ts
+    documentPositionMapper: DocumentPositionMapper
     containingProjects: 0
 /user/username/projects/project/src/common/input/keyboard.test.ts
     version: Text-1
