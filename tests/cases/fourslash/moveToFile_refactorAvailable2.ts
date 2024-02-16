@@ -9,7 +9,7 @@
 /////*b*/
 
 goTo.select("a", "b");
-verify.not.refactorAvailable("Move to file",
+verify.refactorAvailable("Move to file",
 /*actionName*/ undefined,
 /*actionDescription*/ undefined,
 /*kind*/ undefined,
