@@ -51,3 +51,9 @@ type T1 = IfNoDuplicateElements<[1,1], true, false>
 >true : true
 >false : false
 
+type T2 = Record<string, boolean>[never]
+>T2 : never
+
+type T3 = Record<`--${string}`, boolean>[never]
+>T3 : never
+

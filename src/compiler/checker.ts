@@ -18537,7 +18537,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         objectType = getReducedType(objectType);
         // If the object type has a string index signature and no other members we know that the result will
         // always be the type of that index signature and we can simplify accordingly.
-        if (isStringIndexSignatureOnlyType(objectType) && !(indexType.flags & TypeFlags.Nullable) && isTypeAssignableToKind(indexType, TypeFlags.String | TypeFlags.Number)) {
+        if (isStringIndexSignatureOnlyType(objectType) && !(indexType.flags & TypeFlags.Nullable) && !(indexType.flags & TypeFlags.Never) && isTypeAssignableToKind(indexType, TypeFlags.String | TypeFlags.Number)) {
             indexType = stringType;
         }
         // In noUncheckedIndexedAccess mode, indexed access operations that occur in an expression in a read position and resolve to

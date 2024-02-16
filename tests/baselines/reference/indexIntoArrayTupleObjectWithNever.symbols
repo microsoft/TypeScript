@@ -82,3 +82,11 @@ type T1 = IfNoDuplicateElements<[1,1], true, false>
 >T1 : Symbol(T1, Decl(indexIntoArrayTupleObjectWithNever.ts, 25, 49))
 >IfNoDuplicateElements : Symbol(IfNoDuplicateElements, Decl(indexIntoArrayTupleObjectWithNever.ts, 17, 1))
 
+type T2 = Record<string, boolean>[never]
+>T2 : Symbol(T2, Decl(indexIntoArrayTupleObjectWithNever.ts, 26, 51))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+
+type T3 = Record<`--${string}`, boolean>[never]
+>T3 : Symbol(T3, Decl(indexIntoArrayTupleObjectWithNever.ts, 28, 40))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+
