@@ -175,7 +175,7 @@ registerRefactor(refactorNameForMoveToFile, {
         if (context.endPosition !== undefined) {
             const file = context.file;
             const startNodeAncestor = findAncestor(getTokenAtPosition(file, context.startPosition), isBlockLike);
-            const endNodeAncestor = findAncestor(getTokenAtPosition(file, context.startPosition), isBlockLike)
+            const endNodeAncestor = findAncestor(getTokenAtPosition(file, context.startPosition), isBlockLike);
             if (startNodeAncestor && !isSourceFile(startNodeAncestor) && endNodeAncestor && !isSourceFile(endNodeAncestor)) {
                 return emptyArray;
             }
