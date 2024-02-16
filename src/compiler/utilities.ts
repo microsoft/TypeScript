@@ -4175,12 +4175,12 @@ export function canHaveFlowNode(node: Node): node is HasFlowNode {
         case SyntaxKind.Identifier:
         case SyntaxKind.ThisKeyword:
         case SyntaxKind.SuperKeyword:
-        case SyntaxKind.QualifiedName:
-        case SyntaxKind.MetaProperty:
         case SyntaxKind.ElementAccessExpression:
         case SyntaxKind.PropertyAccessExpression:
-        case SyntaxKind.BindingElement:
         case SyntaxKind.FunctionExpression:
+        case SyntaxKind.QualifiedName:
+        case SyntaxKind.MetaProperty:
+        case SyntaxKind.BindingElement:
         case SyntaxKind.ArrowFunction:
         case SyntaxKind.MethodDeclaration:
         case SyntaxKind.GetAccessor:
