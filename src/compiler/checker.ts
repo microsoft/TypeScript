@@ -18642,11 +18642,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return type;
     }
 
-    function maybeCloneTypeParameter(p: TypeParameter) {
-        const constraint = getConstraintOfTypeParameter(p);
-        return constraint && (isGenericObjectType(constraint) || isGenericIndexType(constraint)) ? cloneTypeParameter(p) : p;
-    }
-
     function isSimpleTupleType(node: TypeNode): boolean {
         return isTupleTypeNode(node) && length(node.elements) > 0 &&
             !some(node.elements, e => isOptionalTypeNode(e) || isRestTypeNode(e) || isNamedTupleMember(e) && !!(e.questionToken || e.dotDotDotToken));
@@ -18689,7 +18684,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             let combinedMapper: TypeMapper | undefined;
             if (root.inferTypeParameters) {
                 // When we're looking at making an inference for an infer type, when we get its constraint, it'll automagically be
-                // instantiated with the context, so it doesn't need the mapper for the inference contex - however the constraint
+                // instantiated with the context, so it doesn't need the mapper for the inference context - however the constraint
                 // may refer to another _root_, _uncloned_ `infer` type parameter [1], or to something mapped by `mapper` [2].
                 // [1] Eg, if we have `Foo<T, U extends T>` and `Foo<number, infer B>` - `B` is constrained to `T`, which, in turn, has been instantiated
                 // as `number`
@@ -18697,36 +18692,25 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 // [2] Eg, if we have `Foo<T, U extends T>` and `Foo<Q, infer B>` where `Q` is mapped by `mapper` into `number` - `B` is constrained to `T`
                 // which is in turn instantiated as `Q`, which is in turn instantiated as `number`.
                 // So we need to:
-                //    * Clone the type parameters so their constraints can be instantiated in the context of `mapper` (otherwise theyd only get inference context information)
-                //    * Set the clones to both map the conditional's enclosing `mapper` and the original params
-                //    * instantiate the extends type with the clones
+                //    * combine `context.nonFixingMapper` with `mapper` so their constraints can be instantiated in the context of `mapper` (otherwise they'd only get inference context information)
                 //    * incorporate all of the component mappers into the combined mapper for the true and false members
-                // This means we have three mappers that need applying:
+                // This means we have two mappers that need applying:
                 //    * The original `mapper` used to create this conditional
-                //    * The mapper that maps the old root type parameter to the clone (`freshMapper`)
-                //    * The mapper that maps the clone to its inference result (`context.mapper`)
-                const freshParams = sameMap(root.inferTypeParameters, maybeCloneTypeParameter);
-                const freshMapper = freshParams !== root.inferTypeParameters ? createTypeMapper(root.inferTypeParameters, freshParams) : undefined;
-                const context = createInferenceContext(freshParams, /*signature*/ undefined, InferenceFlags.None);
-                if (freshMapper) {
-                    const freshCombinedMapper = combineTypeMappers(mapper, freshMapper);
-                    for (let i = 0; i < freshParams.length; i++) {
-                        if (freshParams[i] !== root.inferTypeParameters[i]) {
-                            freshParams[i].mapper = freshCombinedMapper;
-                        }
-                    }
+                //    * The mapper that maps the infer type parameter to its inference result (`context.mapper`)
+                const context = createInferenceContext(root.inferTypeParameters, /*signature*/ undefined, InferenceFlags.None);
+                if (mapper) {
+                    context.nonFixingMapper = combineTypeMappers(context.nonFixingMapper, mapper);
                 }
                 if (!checkTypeDeferred) {
                     // We don't want inferences from constraints as they may cause us to eagerly resolve the
                     // conditional type instead of deferring resolution. Also, we always want strict function
                     // types rules (i.e. proper contravariance) for inferences.
-                    inferTypes(context.inferences, checkType, instantiateType(extendsType, freshMapper), InferencePriority.NoConstraints | InferencePriority.AlwaysStrict);
+                    inferTypes(context.inferences, checkType, extendsType, InferencePriority.NoConstraints | InferencePriority.AlwaysStrict);
                 }
-                const innerMapper = combineTypeMappers(freshMapper, context.mapper);
                 // It's possible for 'infer T' type paramteters to be given uninstantiated constraints when the
                 // those type parameters are used in type references (see getInferredTypeParameterConstraint). For
                 // that reason we need context.mapper to be first in the combined mapper. See #42636 for examples.
-                combinedMapper = mapper ? combineTypeMappers(innerMapper, mapper) : innerMapper;
+                combinedMapper = mapper ? combineTypeMappers(context.mapper, mapper) : context.mapper;
             }
             // Instantiate the extends type including inferences for 'infer T' type parameters
             const inferredExtendsType = combinedMapper ? instantiateType(root.extendsType, combinedMapper) : extendsType;
