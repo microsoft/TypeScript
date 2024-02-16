@@ -51,9 +51,41 @@ type T1 = IfNoDuplicateElements<[1,1], true, false>
 >true : true
 >false : false
 
+// -----------------------------------------------------------------
+
 type T2 = Record<string, boolean>[never]
 >T2 : never
 
 type T3 = Record<`--${string}`, boolean>[never]
 >T3 : never
 
+
+const obj = {
+>obj : { arr: any[]; }
+>{  arr: [],} : { arr: undefined[]; }
+
+  arr: [],
+>arr : undefined[]
+>[] : undefined[]
+
+};
+
+const objWithIndex: Record<string, boolean> = {};
+>objWithIndex : Record<string, boolean>
+>{} : {}
+
+const el = obj.arr[0];
+>el : any
+>obj.arr[0] : any
+>obj.arr : any[]
+>obj : { arr: any[]; }
+>arr : any[]
+>0 : 0
+
+const result = objWithIndex[el];
+>result : boolean
+>objWithIndex[el] : boolean
+>objWithIndex : Record<string, boolean>
+>el : any
+
+// -----------------------------------------------------------------

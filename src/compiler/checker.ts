@@ -18196,7 +18196,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             if (objectType.flags & (TypeFlags.Any | TypeFlags.Never)) {
                 return objectType;
             }
-            if (indexType === neverType) {
+            if (indexType === neverType || indexType === implicitNeverType) {
                 return neverType;
             }
             // If no index signature is applicable, we default to the string index signature. In effect, this means the string

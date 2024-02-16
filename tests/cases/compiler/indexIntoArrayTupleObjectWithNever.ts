@@ -26,5 +26,19 @@ export type IfNoDuplicateElements<
 type T0 = IfNoDuplicateElements<[1], true, false>
 type T1 = IfNoDuplicateElements<[1,1], true, false>
 
+// -----------------------------------------------------------------
+
 type T2 = Record<string, boolean>[never]
 type T3 = Record<`--${string}`, boolean>[never]
+
+
+const obj = {
+  arr: [],
+};
+
+const objWithIndex: Record<string, boolean> = {};
+
+const el = obj.arr[0];
+const result = objWithIndex[el];
+
+// -----------------------------------------------------------------
