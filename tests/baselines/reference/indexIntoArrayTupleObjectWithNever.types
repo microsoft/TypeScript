@@ -11,6 +11,12 @@ type B = [42][never]
 type C = Array<42>[never]
 >C : never
 
+type D = 42[never]
+>D : never
+
+type E = any[never] // any
+>E : any
+
 
 // -----------------------------------------------------------------
 
@@ -114,3 +120,4 @@ function testUnreachableNeverType(smt: number | string) {
 }
 
 // -----------------------------------------------------------------
+

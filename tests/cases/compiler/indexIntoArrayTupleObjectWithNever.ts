@@ -6,6 +6,10 @@ type B = [42][never]
 
 type C = Array<42>[never]
 
+type D = 42[never]
+
+type E = any[never] // any
+
 
 // -----------------------------------------------------------------
 
