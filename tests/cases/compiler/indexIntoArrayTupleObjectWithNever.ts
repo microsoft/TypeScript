@@ -1,3 +1,5 @@
+// @strict: true
+
 type A = { a: 42 }[never]
 
 type B = [42][never]
@@ -40,5 +42,13 @@ const objWithIndex: Record<string, boolean> = {};
 
 const el = obj.arr[0];
 const result = objWithIndex[el];
+
+function testUnreachableNeverType(smt: number | string) {
+  if(typeof smt === "number") {}
+  else if(typeof smt === "string") {}
+  else {
+    const result = objWithIndex[smt]
+  }
+}
 
 // -----------------------------------------------------------------
