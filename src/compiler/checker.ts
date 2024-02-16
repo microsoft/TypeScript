@@ -16883,7 +16883,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             const type = elementTypes[i];
             const flags = target.elementFlags[i];
             if (flags & ElementFlags.Variadic) {
-                if (type.flags & TypeFlags.InstantiableNonPrimitive || isGenericMappedType(type)) {
+                if (type.flags & TypeFlags.Any) {
+                    addElement(type, ElementFlags.Rest, target.labeledElementDeclarations?.[i]);
+                }
+                else if (type.flags & TypeFlags.InstantiableNonPrimitive || isGenericMappedType(type)) {
                     // Generic variadic elements stay as they are.
                     addElement(type, ElementFlags.Variadic, target.labeledElementDeclarations?.[i]);
                 }
