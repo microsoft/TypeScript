@@ -1,0 +1,42 @@
+//// [tests/cases/compiler/assignmentToAnyArrayRestParameters.ts] ////
+
+=== assignmentToAnyArrayRestParameters.ts ===
+// Repro from #57122
+
+function foo<T extends string[]>(
+>foo : Symbol(foo, Decl(assignmentToAnyArrayRestParameters.ts, 0, 0))
+>T : Symbol(T, Decl(assignmentToAnyArrayRestParameters.ts, 2, 13))
+
+    fa: (s: string, ...args: string[]) => string,
+>fa : Symbol(fa, Decl(assignmentToAnyArrayRestParameters.ts, 2, 33))
+>s : Symbol(s, Decl(assignmentToAnyArrayRestParameters.ts, 3, 9))
+>args : Symbol(args, Decl(assignmentToAnyArrayRestParameters.ts, 3, 19))
+
+    fb: (s: string, ...args: T) => string
+>fb : Symbol(fb, Decl(assignmentToAnyArrayRestParameters.ts, 3, 49))
+>s : Symbol(s, Decl(assignmentToAnyArrayRestParameters.ts, 4, 9))
+>args : Symbol(args, Decl(assignmentToAnyArrayRestParameters.ts, 4, 19))
+>T : Symbol(T, Decl(assignmentToAnyArrayRestParameters.ts, 2, 13))
+
+) {
+    const f1: (...args: any) => string = fa;
+>f1 : Symbol(f1, Decl(assignmentToAnyArrayRestParameters.ts, 6, 9))
+>args : Symbol(args, Decl(assignmentToAnyArrayRestParameters.ts, 6, 15))
+>fa : Symbol(fa, Decl(assignmentToAnyArrayRestParameters.ts, 2, 33))
+
+    const f2: (...args: any[]) => string = fa;
+>f2 : Symbol(f2, Decl(assignmentToAnyArrayRestParameters.ts, 7, 9))
+>args : Symbol(args, Decl(assignmentToAnyArrayRestParameters.ts, 7, 15))
+>fa : Symbol(fa, Decl(assignmentToAnyArrayRestParameters.ts, 2, 33))
+
+    const f3: (...args: any) => string = fb;
+>f3 : Symbol(f3, Decl(assignmentToAnyArrayRestParameters.ts, 8, 9))
+>args : Symbol(args, Decl(assignmentToAnyArrayRestParameters.ts, 8, 15))
+>fb : Symbol(fb, Decl(assignmentToAnyArrayRestParameters.ts, 3, 49))
+
+    const f4: (...args: any[]) => string = fb;
+>f4 : Symbol(f4, Decl(assignmentToAnyArrayRestParameters.ts, 9, 9))
+>args : Symbol(args, Decl(assignmentToAnyArrayRestParameters.ts, 9, 15))
+>fb : Symbol(fb, Decl(assignmentToAnyArrayRestParameters.ts, 3, 49))
+}
+
