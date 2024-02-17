@@ -14,7 +14,6 @@ import {
     canHaveModifiers,
     canProduceDiagnostics,
     ClassDeclaration,
-    CommentRange,
     compact,
     concatenate,
     ConditionalTypeNode,
@@ -47,12 +46,10 @@ import {
     factory,
     FileReference,
     filter,
-    findAncestor,
     flatMap,
     flatten,
     forEach,
     FunctionDeclaration,
-    FunctionExpression,
     FunctionTypeNode,
     GeneratedIdentifierFlags,
     GetAccessorDeclaration,
@@ -63,12 +60,9 @@ import {
     getExternalModuleImportEqualsDeclarationExpression,
     getExternalModuleNameFromDeclaration,
     getFirstConstructorWithBody,
-    getLeadingCommentRanges,
-    getLeadingCommentRangesOfNode,
     getLineAndCharacterOfPosition,
     getNameOfDeclaration,
     getNormalizedAbsolutePath,
-    getOriginalNode,
     getOriginalNodeId,
     getOutputPathsFor,
     getParseTreeNode,
@@ -80,7 +74,6 @@ import {
     GetSymbolAccessibilityDiagnostic,
     getTextOfNode,
     getThisParameter,
-    getTrailingCommentRanges,
     hasDynamicName,
     hasEffectiveModifier,
     hasExtension,
@@ -119,13 +112,12 @@ import {
     isFunctionDeclaration,
     isFunctionLike,
     isGlobalScopeAugmentation,
-    isIdentifier,
-    isIdentifierANonContextualKeyword,
     isIdentifierText,
     isImportDeclaration,
     isImportEqualsDeclaration,
     isIndexSignatureDeclaration,
     isInterfaceDeclaration,
+    isInternalDeclaration,
     isJsonSourceFile,
     isLateVisibilityPaintedStatement,
     isLiteralImportTypeNode,
@@ -135,7 +127,6 @@ import {
     isModifier,
     isModuleDeclaration,
     isOmittedExpression,
-    isParameter,
     isPrivateIdentifier,
     isPropertySignature,
     isSemicolonClassElement,
@@ -157,8 +148,6 @@ import {
     isVarAwaitUsing,
     isVariableDeclaration,
     isVarUsing,
-    JSDocFunctionType,
-    last,
     LateBoundDeclaration,
     LateVisibilityPaintedStatement,
     length,
@@ -189,7 +178,6 @@ import {
     pathContainsNodeModules,
     pathIsRelative,
     PropertyDeclaration,
-    PropertyName,
     PropertySignature,
     pushIfUnique,
     removeAllComments,
@@ -201,8 +189,6 @@ import {
     setOriginalNode,
     setParent,
     setTextRange,
-    SignatureDeclaration,
-    skipTrivia,
     some,
     SourceFile,
     startsWith,
@@ -243,35 +229,6 @@ export function getDeclarationDiagnostics(host: EmitHost, resolver: EmitResolver
     return result.diagnostics;
 }
 
-function hasInternalAnnotation(range: CommentRange, currentSourceFile: SourceFile) {
-    const comment = currentSourceFile.text.substring(range.pos, range.end);
-    return comment.includes("@internal");
-}
-
-/** @internal */
-export function isInternalDeclaration(node: Node, currentSourceFile: SourceFile) {
-    const parseTreeNode = getParseTreeNode(node);
-    if (parseTreeNode && parseTreeNode.kind === SyntaxKind.Parameter) {
-        const paramIdx = (parseTreeNode.parent as SignatureDeclaration).parameters.indexOf(parseTreeNode as ParameterDeclaration);
-        const previousSibling = paramIdx > 0 ? (parseTreeNode.parent as SignatureDeclaration).parameters[paramIdx - 1] : undefined;
-        const text = currentSourceFile.text;
-        const commentRanges = previousSibling
-            ? concatenate(
-                // to handle
-                // ... parameters, /** @internal */
-                // public param: string
-                getTrailingCommentRanges(text, skipTrivia(text, previousSibling.end + 1, /*stopAfterLineBreak*/ false, /*stopAtComments*/ true)),
-                getLeadingCommentRanges(text, node.pos),
-            )
-            : getTrailingCommentRanges(text, skipTrivia(text, node.pos, /*stopAfterLineBreak*/ false, /*stopAtComments*/ true));
-        return commentRanges && commentRanges.length && hasInternalAnnotation(last(commentRanges), currentSourceFile);
-    }
-    const leadingCommentRanges = parseTreeNode && getLeadingCommentRangesOfNode(parseTreeNode, currentSourceFile);
-    return !!forEach(leadingCommentRanges, range => {
-        return hasInternalAnnotation(range, currentSourceFile);
-    });
-}
-
 const declarationEmitNodeBuilderFlags = NodeBuilderFlags.MultilineObjectLiterals |
     NodeBuilderFlags.WriteClassExpressionAsTypeLiteral |
     NodeBuilderFlags.UseTypeOfFunction |
@@ -302,7 +259,6 @@ export function transformDeclarations(context: TransformationContext) {
     let lateStatementReplacementMap: Map<NodeId, VisitResult<LateVisibilityPaintedStatement | ExportAssignment | undefined>>;
     let suppressNewDiagnosticContexts: boolean;
     let exportedModulesFromDeclarationEmit: Symbol[] | undefined;
-    const usedBindingElementAliases = new Map<Node, Map<Node, BindingName>>();
 
     const { factory } = context;
     const host = context.getEmitHost();
@@ -378,18 +334,6 @@ export function transformDeclarations(context: TransformationContext) {
                     }
                 }
             }
-            if (symbolAccessibilityResult.bindingElementToMakeVisible) {
-                const bindingElement = symbolAccessibilityResult.bindingElementToMakeVisible;
-                const parameter = findAncestor(bindingElement, isParameter);
-                Debug.assert(parameter !== undefined);
-                const parent = getOriginalNode(parameter.parent);
-                let aliases = usedBindingElementAliases.get(parent);
-                if (!aliases) {
-                    usedBindingElementAliases.set(parent, aliases = new Map());
-                }
-                aliases.set(getOriginalNode(bindingElement), bindingElement.name);
-            }
-
             // TODO: Do all these accessibility checks inside/after the first pass in the checker when declarations are enabled, if possible
         }
         else {
@@ -710,7 +654,7 @@ export function transformDeclarations(context: TransformationContext) {
         return ret;
     }
 
-    function filterBindingPatternInitializersAndRenamings(name: BindingName) {
+    function filterBindingPatternInitializers(name: BindingName) {
         if (name.kind === SyntaxKind.Identifier) {
             return name;
         }
@@ -732,189 +676,13 @@ export function transformDeclarations(context: TransformationContext) {
                 checkEntityNameVisibility(elem.propertyName.expression, enclosingDeclaration);
             }
 
-            if (elem.propertyName && isIdentifier(elem.propertyName) && isIdentifier(elem.name) && !isIdentifierANonContextualKeyword(elem.propertyName)) {
-                // Remove rename. We will add it back if it used.
-                return factory.updateBindingElement(
-                    elem,
-                    elem.dotDotDotToken,
-                    /*propertyName*/ undefined,
-                    elem.propertyName,
-                    shouldPrintWithInitializer(elem) ? elem.initializer : undefined,
-                );
-            }
-
             return factory.updateBindingElement(
                 elem,
                 elem.dotDotDotToken,
                 elem.propertyName,
-                filterBindingPatternInitializersAndRenamings(elem.name),
+                filterBindingPatternInitializers(elem.name),
                 shouldPrintWithInitializer(elem) ? elem.initializer : undefined,
             );
-        }
-    }
-    type SignatureDeclarationWithUsableBindingAliases = Exclude<SignatureDeclaration, JSDocFunctionType | FunctionExpression | IndexSignatureDeclaration>;
-    function ensureBindingAliasesInParameterList<T extends SignatureDeclarationWithUsableBindingAliases>(input: T, updatedNode: T): T;
-    function ensureBindingAliasesInParameterList(input: SignatureDeclarationWithUsableBindingAliases, updatedNode: SignatureDeclarationWithUsableBindingAliases) {
-        const original = getOriginalNode(input);
-        const params = updatedNode.parameters;
-        const aliases = usedBindingElementAliases.get(original);
-        if (!aliases) {
-            return updatedNode;
-        }
-        usedBindingElementAliases.delete(original);
-        const newParams = map(params, addUsedBindingPatternsToParameter);
-        const newParamsNodeArray = factory.createNodeArray(newParams, params.hasTrailingComma);
-        switch (updatedNode.kind) {
-            case SyntaxKind.MethodDeclaration:
-                return factory.updateMethodDeclaration(
-                    updatedNode,
-                    updatedNode.modifiers,
-                    updatedNode.asteriskToken,
-                    updatedNode.name,
-                    updatedNode.questionToken,
-                    updatedNode.typeParameters,
-                    newParamsNodeArray,
-                    updatedNode.type,
-                    updatedNode.body,
-                );
-            case SyntaxKind.Constructor:
-                return factory.updateConstructorDeclaration(
-                    updatedNode,
-                    updatedNode.modifiers,
-                    newParamsNodeArray,
-                    updatedNode.body,
-                );
-            case SyntaxKind.GetAccessor:
-                return factory.updateGetAccessorDeclaration(
-                    updatedNode,
-                    updatedNode.modifiers,
-                    updatedNode.name,
-                    newParamsNodeArray,
-                    updatedNode.type,
-                    updatedNode.body,
-                );
-            case SyntaxKind.SetAccessor:
-                return factory.updateSetAccessorDeclaration(
-                    updatedNode,
-                    updatedNode.modifiers,
-                    updatedNode.name,
-                    newParamsNodeArray,
-                    updatedNode.body,
-                );
-            case SyntaxKind.ArrowFunction:
-                return factory.updateArrowFunction(
-                    updatedNode,
-                    updatedNode.modifiers,
-                    updatedNode.typeParameters,
-                    newParamsNodeArray,
-                    updatedNode.type,
-                    updatedNode.equalsGreaterThanToken,
-                    updatedNode.body,
-                );
-            case SyntaxKind.FunctionDeclaration:
-                return factory.updateFunctionDeclaration(
-                    updatedNode,
-                    updatedNode.modifiers,
-                    updatedNode.asteriskToken,
-                    updatedNode.name,
-                    updatedNode.typeParameters,
-                    newParamsNodeArray,
-                    updatedNode.type,
-                    updatedNode.body,
-                );
-            case SyntaxKind.CallSignature:
-                return factory.updateCallSignature(
-                    updatedNode,
-                    updatedNode.typeParameters,
-                    newParamsNodeArray,
-                    updatedNode.type,
-                );
-            case SyntaxKind.MethodSignature:
-                return factory.updateMethodSignature(
-                    updatedNode,
-                    updatedNode.modifiers,
-                    updatedNode.name,
-                    updatedNode.questionToken,
-                    updatedNode.typeParameters,
-                    newParamsNodeArray,
-                    updatedNode.type,
-                );
-
-            case SyntaxKind.ConstructSignature:
-                return factory.updateConstructSignature(
-                    updatedNode,
-                    updatedNode.typeParameters,
-                    newParamsNodeArray,
-                    updatedNode.type,
-                );
-            case SyntaxKind.FunctionType:
-                return factory.updateFunctionTypeNode(
-                    updatedNode,
-                    updatedNode.typeParameters,
-                    newParamsNodeArray,
-                    updatedNode.type,
-                );
-            case SyntaxKind.ConstructorType:
-                return factory.updateConstructorTypeNode(
-                    updatedNode,
-                    updatedNode.modifiers,
-                    updatedNode.typeParameters,
-                    newParamsNodeArray,
-                    updatedNode.type,
-                );
-            default:
-                Debug.assertNever(updatedNode);
-        }
-
-        function addUsedBindingPatternsToParameter(p: ParameterDeclaration): ParameterDeclaration {
-            return factory.updateParameterDeclaration(
-                p,
-                p.modifiers,
-                p.dotDotDotToken,
-                addUsedBindingPatternAliases(p.name),
-                p.questionToken,
-                p.type,
-                p.initializer,
-            );
-        }
-        function addUsedBindingPatternAliases(name: BindingName) {
-            if (name.kind === SyntaxKind.Identifier) {
-                return name;
-            }
-            else {
-                if (name.kind === SyntaxKind.ArrayBindingPattern) {
-                    return factory.updateArrayBindingPattern(name, visitNodes(name.elements, visitBindingElement, isArrayBindingElement));
-                }
-                else {
-                    return factory.updateObjectBindingPattern(name, visitNodes(name.elements, visitBindingElement, isBindingElement));
-                }
-            }
-
-            function visitBindingElement<T extends Node>(elem: T): T;
-            function visitBindingElement(elem: ArrayBindingElement): ArrayBindingElement {
-                if (elem.kind === SyntaxKind.OmittedExpression) {
-                    return elem;
-                }
-                const usedAlias = aliases!.get(getOriginalNode(elem));
-                // If alias is used and property name was removed by filterBindingPatternInitializersAndRenamings
-                // The alias can be preserved if it is a non contextual keyword.
-                if (usedAlias && !elem.propertyName) {
-                    return factory.updateBindingElement(
-                        elem,
-                        elem.dotDotDotToken,
-                        elem.name as PropertyName,
-                        usedAlias,
-                        elem.initializer,
-                    );
-                }
-                return factory.updateBindingElement(
-                    elem,
-                    elem.dotDotDotToken,
-                    elem.propertyName,
-                    addUsedBindingPatternAliases(elem.name),
-                    elem.initializer,
-                );
-            }
         }
     }
 
@@ -928,7 +696,7 @@ export function transformDeclarations(context: TransformationContext) {
             p,
             maskModifiers(factory, p, modifierMask),
             p.dotDotDotToken,
-            filterBindingPatternInitializersAndRenamings(p.name),
+            filterBindingPatternInitializers(p.name),
             resolver.isOptionalParameter(p) ? (p.questionToken || factory.createToken(SyntaxKind.QuestionToken)) : undefined,
             ensureType(p, type || p.type, /*ignorePrivate*/ true), // Ignore private param props, since this type is going straight back into a param
             ensureNoInitializer(p),
@@ -1367,24 +1135,18 @@ export function transformDeclarations(context: TransformationContext) {
                     return cleanup(factory.updateTypeReferenceNode(node, node.typeName, node.typeArguments));
                 }
                 case SyntaxKind.ConstructSignature:
-                    return cleanup(ensureBindingAliasesInParameterList(
+                    return cleanup(factory.updateConstructSignature(
                         input,
-                        factory.updateConstructSignature(
-                            input,
-                            ensureTypeParams(input, input.typeParameters),
-                            updateParamsList(input, input.parameters),
-                            ensureType(input, input.type),
-                        ),
+                        ensureTypeParams(input, input.typeParameters),
+                        updateParamsList(input, input.parameters),
+                        ensureType(input, input.type),
                     ));
                 case SyntaxKind.Constructor: {
                     // A constructor declaration may not have a type annotation
-                    const ctor = ensureBindingAliasesInParameterList(
-                        input,
-                        factory.createConstructorDeclaration(
-                            /*modifiers*/ ensureModifiers(input),
-                            updateParamsList(input, input.parameters, ModifierFlags.None),
-                            /*body*/ undefined,
-                        ),
+                    const ctor = factory.createConstructorDeclaration(
+                        /*modifiers*/ ensureModifiers(input),
+                        updateParamsList(input, input.parameters, ModifierFlags.None),
+                        /*body*/ undefined,
                     );
                     return cleanup(ctor);
                 }
@@ -1392,18 +1154,15 @@ export function transformDeclarations(context: TransformationContext) {
                     if (isPrivateIdentifier(input.name)) {
                         return cleanup(/*returnValue*/ undefined);
                     }
-                    const sig = ensureBindingAliasesInParameterList(
-                        input,
-                        factory.createMethodDeclaration(
-                            ensureModifiers(input),
-                            /*asteriskToken*/ undefined,
-                            input.name,
-                            input.questionToken,
-                            ensureTypeParams(input, input.typeParameters),
-                            updateParamsList(input, input.parameters),
-                            ensureType(input, input.type),
-                            /*body*/ undefined,
-                        ),
+                    const sig = factory.createMethodDeclaration(
+                        ensureModifiers(input),
+                        /*asteriskToken*/ undefined,
+                        input.name,
+                        input.questionToken,
+                        ensureTypeParams(input, input.typeParameters),
+                        updateParamsList(input, input.parameters),
+                        ensureType(input, input.type),
+                        /*body*/ undefined,
                     );
                     return cleanup(sig);
                 }
@@ -1412,31 +1171,25 @@ export function transformDeclarations(context: TransformationContext) {
                         return cleanup(/*returnValue*/ undefined);
                     }
                     const accessorType = getTypeAnnotationFromAllAccessorDeclarations(input, resolver.getAllAccessorDeclarations(input));
-                    return cleanup(ensureBindingAliasesInParameterList(
+                    return cleanup(factory.updateGetAccessorDeclaration(
                         input,
-                        factory.updateGetAccessorDeclaration(
-                            input,
-                            ensureModifiers(input),
-                            input.name,
-                            updateAccessorParamsList(input, hasEffectiveModifier(input, ModifierFlags.Private)),
-                            ensureType(input, accessorType),
-                            /*body*/ undefined,
-                        ),
+                        ensureModifiers(input),
+                        input.name,
+                        updateAccessorParamsList(input, hasEffectiveModifier(input, ModifierFlags.Private)),
+                        ensureType(input, accessorType),
+                        /*body*/ undefined,
                     ));
                 }
                 case SyntaxKind.SetAccessor: {
                     if (isPrivateIdentifier(input.name)) {
                         return cleanup(/*returnValue*/ undefined);
                     }
-                    return cleanup(ensureBindingAliasesInParameterList(
+                    return cleanup(factory.updateSetAccessorDeclaration(
                         input,
-                        factory.updateSetAccessorDeclaration(
-                            input,
-                            ensureModifiers(input),
-                            input.name,
-                            updateAccessorParamsList(input, hasEffectiveModifier(input, ModifierFlags.Private)),
-                            /*body*/ undefined,
-                        ),
+                        ensureModifiers(input),
+                        input.name,
+                        updateAccessorParamsList(input, hasEffectiveModifier(input, ModifierFlags.Private)),
+                        /*body*/ undefined,
                     ));
                 }
                 case SyntaxKind.PropertyDeclaration:
@@ -1466,29 +1219,25 @@ export function transformDeclarations(context: TransformationContext) {
                     if (isPrivateIdentifier(input.name)) {
                         return cleanup(/*returnValue*/ undefined);
                     }
-                    return cleanup(ensureBindingAliasesInParameterList(
+                    return cleanup(factory.updateMethodSignature(
                         input,
-                        factory.updateMethodSignature(
-                            input,
-                            ensureModifiers(input),
-                            input.name,
-                            input.questionToken,
-                            ensureTypeParams(input, input.typeParameters),
-                            updateParamsList(input, input.parameters),
-                            ensureType(input, input.type),
-                        ),
+                        ensureModifiers(input),
+                        input.name,
+                        input.questionToken,
+                        ensureTypeParams(input, input.typeParameters),
+                        updateParamsList(input, input.parameters),
+                        ensureType(input, input.type),
                     ));
                 }
                 case SyntaxKind.CallSignature: {
-                    return cleanup(ensureBindingAliasesInParameterList(
-                        input,
+                    return cleanup(
                         factory.updateCallSignature(
                             input,
                             ensureTypeParams(input, input.typeParameters),
                             updateParamsList(input, input.parameters),
                             ensureType(input, input.type),
                         ),
-                    ));
+                    );
                 }
                 case SyntaxKind.IndexSignature: {
                     return cleanup(factory.updateIndexSignature(
@@ -1529,26 +1278,20 @@ export function transformDeclarations(context: TransformationContext) {
                     return cleanup(factory.updateConditionalTypeNode(input, checkType, extendsType, trueType, falseType));
                 }
                 case SyntaxKind.FunctionType: {
-                    return cleanup(ensureBindingAliasesInParameterList(
+                    return cleanup(factory.updateFunctionTypeNode(
                         input,
-                        factory.updateFunctionTypeNode(
-                            input,
-                            visitNodes(input.typeParameters, visitDeclarationSubtree, isTypeParameterDeclaration),
-                            updateParamsList(input, input.parameters),
-                            Debug.checkDefined(visitNode(input.type, visitDeclarationSubtree, isTypeNode)),
-                        ),
+                        visitNodes(input.typeParameters, visitDeclarationSubtree, isTypeParameterDeclaration),
+                        updateParamsList(input, input.parameters),
+                        Debug.checkDefined(visitNode(input.type, visitDeclarationSubtree, isTypeNode)),
                     ));
                 }
                 case SyntaxKind.ConstructorType: {
-                    return cleanup(ensureBindingAliasesInParameterList(
+                    return cleanup(factory.updateConstructorTypeNode(
                         input,
-                        factory.updateConstructorTypeNode(
-                            input,
-                            ensureModifiers(input),
-                            visitNodes(input.typeParameters, visitDeclarationSubtree, isTypeParameterDeclaration),
-                            updateParamsList(input, input.parameters),
-                            Debug.checkDefined(visitNode(input.type, visitDeclarationSubtree, isTypeNode)),
-                        ),
+                        ensureModifiers(input),
+                        visitNodes(input.typeParameters, visitDeclarationSubtree, isTypeParameterDeclaration),
+                        updateParamsList(input, input.parameters),
+                        Debug.checkDefined(visitNode(input.type, visitDeclarationSubtree, isTypeNode)),
                     ));
                 }
                 case SyntaxKind.ImportType: {
@@ -1756,18 +1499,15 @@ export function transformDeclarations(context: TransformationContext) {
             }
             case SyntaxKind.FunctionDeclaration: {
                 // Generators lose their generator-ness, excepting their return type
-                const clean = cleanup(ensureBindingAliasesInParameterList(
+                const clean = cleanup(factory.updateFunctionDeclaration(
                     input,
-                    factory.updateFunctionDeclaration(
-                        input,
-                        ensureModifiers(input),
-                        /*asteriskToken*/ undefined,
-                        input.name,
-                        ensureTypeParams(input, input.typeParameters),
-                        updateParamsList(input, input.parameters),
-                        ensureType(input, input.type),
-                        /*body*/ undefined,
-                    ),
+                    ensureModifiers(input),
+                    /*asteriskToken*/ undefined,
+                    input.name,
+                    ensureTypeParams(input, input.typeParameters),
+                    updateParamsList(input, input.parameters),
+                    ensureType(input, input.type),
+                    /*body*/ undefined,
                 ));
                 if (clean && resolver.isExpandoFunctionDeclaration(input) && shouldEmitFunctionProperties(input)) {
                     const props = resolver.getPropertiesOfContainerFunction(input);

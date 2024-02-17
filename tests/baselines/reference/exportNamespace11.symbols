@@ -1,0 +1,20 @@
+//// [tests/cases/conformance/externalModules/typeOnly/exportNamespace11.ts] ////
+
+=== main.ts ===
+import * as intermediate from './intermediate'
+>intermediate : Symbol(intermediate, Decl(main.ts, 0, 6))
+
+const ghost: intermediate.Ghost = new intermediate.Ghost()
+>ghost : Symbol(ghost, Decl(main.ts, 1, 5))
+>intermediate : Symbol(intermediate, Decl(main.ts, 0, 6))
+>Ghost : Symbol(intermediate.Ghost, Decl(ghost.ts, 0, 0))
+>intermediate : Symbol(intermediate, Decl(main.ts, 0, 6))
+
+=== intermediate.ts ===
+
+export type * from './ghost'
+
+=== ghost.ts ===
+export class Ghost {}
+>Ghost : Symbol(Ghost, Decl(ghost.ts, 0, 0))
+

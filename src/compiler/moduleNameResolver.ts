@@ -3,6 +3,7 @@ import {
     appendIfUnique,
     arrayIsEqualTo,
     changeAnyExtension,
+    changeFullExtension,
     CharacterCodes,
     combinePaths,
     CommandLineOption,
@@ -41,10 +42,8 @@ import {
     GetCanonicalFileName,
     getCommonSourceDirectory,
     getCompilerOptionValue,
-    getDeclarationEmitExtensionForPath,
     getDirectoryPath,
     GetEffectiveTypeRootsHost,
-    getEmitModuleKind,
     getEmitModuleResolutionKind,
     getNormalizedAbsolutePath,
     getOwnKeys,
@@ -226,7 +225,7 @@ function createResolvedModuleWithFailedLookupLocationsHandlingSymlink(
     diagnostics: Diagnostic[],
     state: ModuleResolutionState,
     cache: ModuleResolutionCache | NonRelativeModuleNameResolutionCache | undefined,
-    legacyResult?: string,
+    alternateResult?: string,
 ): ResolvedModuleWithFailedLookupLocations {
     // If this is from node_modules for non relative name, always respect preserveSymlinks
     if (
@@ -248,7 +247,7 @@ function createResolvedModuleWithFailedLookupLocationsHandlingSymlink(
         diagnostics,
         state.resultFromCache,
         cache,
-        legacyResult,
+        alternateResult,
     );
 }
 
@@ -260,7 +259,7 @@ function createResolvedModuleWithFailedLookupLocations(
     diagnostics: Diagnostic[],
     resultFromCache: ResolvedModuleWithFailedLookupLocations | undefined,
     cache: ModuleResolutionCache | NonRelativeModuleNameResolutionCache | undefined,
-    legacyResult?: string,
+    alternateResult?: string,
 ): ResolvedModuleWithFailedLookupLocations {
     if (resultFromCache) {
         if (!cache?.isReadonly) {
@@ -290,7 +289,7 @@ function createResolvedModuleWithFailedLookupLocations(
         failedLookupLocations: initializeResolutionField(failedLookupLocations),
         affectingLocations: initializeResolutionField(affectingLocations),
         resolutionDiagnostics: initializeResolutionField(diagnostics),
-        node10Result: legacyResult,
+        alternateResult,
     };
 }
 function initializeResolutionField<T>(value: T[]): T[] | undefined {
@@ -325,6 +324,7 @@ export interface ModuleResolutionState {
     reportDiagnostic: DiagnosticReporter;
     isConfigLookup: boolean;
     candidateIsFromPackageJsonField: boolean;
+    resolvedPackageDirectory: boolean;
 }
 
 /** Just the fields that we use for module resolution.
@@ -348,7 +348,7 @@ interface PackageJson extends PackageJsonPathFields {
     version?: string;
 }
 
-function readPackageJsonField<TMatch, K extends MatchingKeys<PackageJson, string | undefined>>(jsonContent: PackageJson, fieldName: K, typeOfTag: "string", state: ModuleResolutionState): PackageJson[K] | undefined;
+function readPackageJsonField<K extends MatchingKeys<PackageJson, string | undefined>>(jsonContent: PackageJson, fieldName: K, typeOfTag: "string", state: ModuleResolutionState): PackageJson[K] | undefined;
 function readPackageJsonField<K extends MatchingKeys<PackageJson, object | undefined>>(jsonContent: PackageJson, fieldName: K, typeOfTag: "object", state: ModuleResolutionState): PackageJson[K] | undefined;
 function readPackageJsonField<K extends keyof PackageJson>(jsonContent: PackageJson, fieldName: K, typeOfTag: "string" | "object", state: ModuleResolutionState): PackageJson[K] | undefined {
     if (!hasProperty(jsonContent, fieldName)) {
@@ -602,6 +602,7 @@ export function resolveTypeReferenceDirective(typeReferenceDirectiveName: string
         reportDiagnostic: diag => void diagnostics.push(diag),
         isConfigLookup: false,
         candidateIsFromPackageJsonField: false,
+        resolvedPackageDirectory: false,
     };
     let resolved = primaryLookup();
     let primary = true;
@@ -1293,7 +1294,7 @@ function createModuleOrTypeReferenceResolutionCache<T>(
         ...nonRelativeNameResolutionCache,
         clear,
         update,
-        getPackageJsonInfoCache: () => packageJsonInfoCache!,
+        getPackageJsonInfoCache: () => packageJsonInfoCache,
         clearAllExceptPackageJsonInfoCache,
         optionsToRedirectsKey,
     };
@@ -1415,20 +1416,7 @@ export function resolveModuleName(moduleName: string, containingFile: string, co
     else {
         let moduleResolution = compilerOptions.moduleResolution;
         if (moduleResolution === undefined) {
-            switch (getEmitModuleKind(compilerOptions)) {
-                case ModuleKind.CommonJS:
-                    moduleResolution = ModuleResolutionKind.Node10;
-                    break;
-                case ModuleKind.Node16:
-                    moduleResolution = ModuleResolutionKind.Node16;
-                    break;
-                case ModuleKind.NodeNext:
-                    moduleResolution = ModuleResolutionKind.NodeNext;
-                    break;
-                default:
-                    moduleResolution = ModuleResolutionKind.Classic;
-                    break;
-            }
+            moduleResolution = getEmitModuleResolutionKind(compilerOptions);
             if (traceEnabled) {
                 trace(host, Diagnostics.Module_resolution_kind_is_not_specified_using_0, ModuleResolutionKind[moduleResolution]);
             }
@@ -1839,6 +1827,7 @@ function nodeModuleNameResolverWorker(
         reportDiagnostic: diag => void diagnostics.push(diag),
         isConfigLookup,
         candidateIsFromPackageJsonField: false,
+        resolvedPackageDirectory: false,
     };
     if (traceEnabled && moduleResolutionSupportsPackageJsonExportsAndImports(moduleResolution)) {
         trace(host, Diagnostics.Resolving_in_0_mode_with_conditions_1, features & NodeResolutionFeatures.EsmMode ? "ESM" : "CJS", state.conditions.map(c => `'${c}'`).join(", "));
@@ -1856,27 +1845,45 @@ function nodeModuleNameResolverWorker(
         result = tryResolve(extensions, state);
     }
 
-    // For non-relative names that resolved to JS but no types in modes that look up an "import" condition in package.json "exports",
-    // try again with "exports" disabled to try to detect if this is likely a configuration error in a dependency's package.json.
-    let legacyResult;
-    if (
-        result?.value?.isExternalLibraryImport
-        && !isConfigLookup
-        && extensions & (Extensions.TypeScript | Extensions.Declaration)
-        && features & NodeResolutionFeatures.Exports
-        && !isExternalModuleNameRelative(moduleName)
-        && !extensionIsOk(Extensions.TypeScript | Extensions.Declaration, result.value.resolved.extension)
-        && conditions?.includes("import")
-    ) {
-        traceIfEnabled(state, Diagnostics.Resolution_of_non_relative_name_failed_trying_with_modern_Node_resolution_features_disabled_to_see_if_npm_library_needs_configuration_update);
-        const diagnosticState = {
-            ...state,
-            features: state.features & ~NodeResolutionFeatures.Exports,
-            reportDiagnostic: noop,
-        };
-        const diagnosticResult = tryResolve(extensions & (Extensions.TypeScript | Extensions.Declaration), diagnosticState);
-        if (diagnosticResult?.value?.isExternalLibraryImport) {
-            legacyResult = diagnosticResult.value.resolved.path;
+    let alternateResult;
+    if (state.resolvedPackageDirectory && !isConfigLookup && !isExternalModuleNameRelative(moduleName)) {
+        const wantedTypesButGotJs = result?.value
+            && extensions & (Extensions.TypeScript | Extensions.Declaration)
+            && !extensionIsOk(Extensions.TypeScript | Extensions.Declaration, result.value.resolved.extension);
+        if (
+            result?.value?.isExternalLibraryImport
+            && wantedTypesButGotJs
+            && features & NodeResolutionFeatures.Exports
+            && conditions?.includes("import")
+        ) {
+            traceIfEnabled(state, Diagnostics.Resolution_of_non_relative_name_failed_trying_with_modern_Node_resolution_features_disabled_to_see_if_npm_library_needs_configuration_update);
+            const diagnosticState = {
+                ...state,
+                features: state.features & ~NodeResolutionFeatures.Exports,
+                reportDiagnostic: noop,
+            };
+            const diagnosticResult = tryResolve(extensions & (Extensions.TypeScript | Extensions.Declaration), diagnosticState);
+            if (diagnosticResult?.value?.isExternalLibraryImport) {
+                alternateResult = diagnosticResult.value.resolved.path;
+            }
+        }
+        else if (
+            (!result?.value || wantedTypesButGotJs)
+            && moduleResolution === ModuleResolutionKind.Node10
+        ) {
+            traceIfEnabled(state, Diagnostics.Resolution_of_non_relative_name_failed_trying_with_moduleResolution_bundler_to_see_if_project_may_need_configuration_update);
+            const diagnosticsCompilerOptions = { ...state.compilerOptions, moduleResolution: ModuleResolutionKind.Bundler };
+            const diagnosticState = {
+                ...state,
+                compilerOptions: diagnosticsCompilerOptions,
+                features: NodeResolutionFeatures.BundlerDefault,
+                conditions: getConditions(diagnosticsCompilerOptions),
+                reportDiagnostic: noop,
+            };
+            const diagnosticResult = tryResolve(extensions & (Extensions.TypeScript | Extensions.Declaration), diagnosticState);
+            if (diagnosticResult?.value?.isExternalLibraryImport) {
+                alternateResult = diagnosticResult.value.resolved.path;
+            }
         }
     }
 
@@ -1889,7 +1896,7 @@ function nodeModuleNameResolverWorker(
         diagnostics,
         state,
         cache,
-        legacyResult,
+        alternateResult,
     );
 
     function tryResolve(extensions: Extensions, state: ModuleResolutionState): SearchResult<{ resolved: Resolved; isExternalLibraryImport: boolean; }> {
@@ -2083,7 +2090,6 @@ function loadModuleFromFileNoImplicitExtensions(extensions: Extensions, candidat
 /**
  * This function is only ever called with paths written in package.json files - never
  * module specifiers written in source files - and so it always allows the
-
  * candidate to end with a TS extension (but will also try substituting a JS extension for a TS extension).
  */
 function loadFileNameFromPackageJsonField(extensions: Extensions, candidate: string, onlyRecordFailures: boolean, state: ModuleResolutionState): PathAndExtension | undefined {
@@ -2291,9 +2297,7 @@ function loadEntrypointsFromExportMap(
                     extensionsToExtensionsArray(extensions),
                     /*excludes*/ undefined,
                     [
-                        isDeclarationFileName(target)
-                            ? replaceFirstStar(target, "**/*")
-                            : changeAnyExtension(replaceFirstStar(target, "**/*"), getDeclarationEmitExtensionForPath(target)),
+                        changeFullExtension(replaceFirstStar(target, "**/*"), ".*"),
                     ],
                 ).forEach(entry => {
                     entrypoints = appendIfUnique(entrypoints, {
@@ -2352,6 +2356,7 @@ export function getTemporaryModuleResolutionState(packageJsonInfoCache: PackageJ
         reportDiagnostic: noop,
         isConfigLookup: false,
         candidateIsFromPackageJsonField: false,
+        resolvedPackageDirectory: false,
     };
 }
 
@@ -2453,15 +2458,9 @@ function loadNodeModuleFromDirectoryWorker(extensions: Extensions, candidate: st
     }
 
     const loader: ResolutionKindSpecificLoader = (extensions, candidate, onlyRecordFailures, state) => {
-        const fromFile = tryFile(candidate, onlyRecordFailures, state);
+        const fromFile = loadFileNameFromPackageJsonField(extensions, candidate, onlyRecordFailures, state);
         if (fromFile) {
-            const resolved = resolvedIfExtensionMatches(extensions, fromFile);
-            if (resolved) {
-                return noPackageId(resolved);
-            }
-            if (state.traceEnabled) {
-                trace(state.host, Diagnostics.File_0_has_an_unsupported_extension_so_skipping_it, fromFile);
-            }
+            return noPackageId(fromFile);
         }
 
         // Even if extensions is DtsOnly, we can still look up a .ts file as a result of package.json "types"
@@ -2506,12 +2505,6 @@ function loadNodeModuleFromDirectoryWorker(extensions: Extensions, candidate: st
     if (!(state.features & NodeResolutionFeatures.EsmMode)) {
         return loadModuleFromFile(extensions, indexPath, onlyRecordFailuresForIndex, state);
     }
-}
-
-/** Resolve from an arbitrarily specified file. Return `undefined` if it has an unsupported extension. */
-function resolvedIfExtensionMatches(extensions: Extensions, path: string, resolvedUsingTsExtension?: boolean): PathAndExtension | undefined {
-    const ext = tryGetExtensionFromPath(path);
-    return ext !== undefined && extensionIsOk(extensions, ext) ? { path, ext, resolvedUsingTsExtension } : undefined;
 }
 
 /** True if `extension` is one of the supported `extensions`. */
@@ -3074,6 +3067,9 @@ function loadModuleFromSpecificNodeModulesDirectory(extensions: Extensions, modu
         // Previous `packageInfo` may have been from a nested package.json; ensure we have the one from the package root now.
         packageInfo = rootPackageInfo ?? getPackageJsonInfo(packageDirectory, !nodeModulesDirectoryExists, state);
     }
+    if (packageInfo) {
+        state.resolvedPackageDirectory = true;
+    }
     // package exports are higher priority than file/directory/typesVersions lookups and (and, if there's exports present, blocks them)
     if (packageInfo && packageInfo.contents.packageJsonContent.exports && state.features & NodeResolutionFeatures.Exports) {
         return loadModuleFromExports(packageInfo, extensions, combinePaths(".", rest), state, cache, redirectedReference)?.value;
@@ -3204,6 +3200,7 @@ export function classicNameResolver(moduleName: string, containingFile: string, 
         reportDiagnostic: diag => void diagnostics.push(diag),
         isConfigLookup: false,
         candidateIsFromPackageJsonField: false,
+        resolvedPackageDirectory: false,
     };
 
     const resolved = tryResolve(Extensions.TypeScript | Extensions.Declaration) ||
@@ -3304,6 +3301,7 @@ export function loadModuleFromGlobalCache(moduleName: string, projectName: strin
         reportDiagnostic: diag => void diagnostics.push(diag),
         isConfigLookup: false,
         candidateIsFromPackageJsonField: false,
+        resolvedPackageDirectory: false,
     };
     const resolved = loadModuleFromImmediateNodeModulesDirectory(Extensions.Declaration, moduleName, globalCache, state, /*typesScopeOnly*/ false, /*cache*/ undefined, /*redirectedReference*/ undefined);
     return createResolvedModuleWithFailedLookupLocations(

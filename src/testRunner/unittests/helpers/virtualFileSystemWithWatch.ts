@@ -356,6 +356,7 @@ export class TestServerHost implements server.ServerHost, FormatDiagnosticsHost,
     private inodeWatching: boolean | undefined;
     private readonly inodes?: Map<Path, number>;
     watchDirectory: HostWatchDirectory;
+    service?: server.ProjectService;
     constructor(
         fileOrFolderorSymLinkList: FileOrFolderOrSymLinkMap | readonly FileOrFolderOrSymLink[],
         {
@@ -1038,6 +1039,7 @@ export class TestServerHost implements server.ServerHost, FormatDiagnosticsHost,
         this.timeoutCallbacks.serialize(baseline);
         this.immediateCallbacks.serialize(baseline);
         this.pendingInstalls.serialize(baseline);
+        this.service?.baseline();
     }
 
     writtenFiles?: Map<Path, number>;
