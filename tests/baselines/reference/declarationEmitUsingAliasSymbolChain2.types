@@ -1,0 +1,61 @@
+//// [tests/cases/compiler/declarationEmitUsingAliasSymbolChain2.ts] ////
+
+=== lib/index.d.ts ===
+import * as DefaultExport from "./internal/default_exports";
+>DefaultExport : typeof DefaultExport
+
+export { DefaultExport as default };
+>DefaultExport : typeof DefaultExport
+>default : typeof DefaultExport
+
+export * as BaseWindow from "./internal/windows/basewindow";
+>BaseWindow : typeof import("lib/internal/windows/basewindow")
+
+=== lib/internal/default_exports.d.ts ===
+export { default as BaseWindow } from "./windows/basewindow";
+>default : import("lib/internal/windows/basewindow").BaseWindowConstructor
+>BaseWindow : import("lib/internal/windows/basewindow").BaseWindowConstructor
+
+=== lib/internal/windows/basewindow.d.ts ===
+interface BaseWindow {}
+export interface BaseWindowConstructor {}
+declare const BaseWindow: BaseWindowConstructor;
+>BaseWindow : BaseWindowConstructor
+
+export default BaseWindow;
+>BaseWindow : BaseWindow
+
+
+=== lib-utils/shared-types/widget-config.d.ts ===
+import type UI from "../../lib/index";
+>UI : any
+
+export interface WidgetFactory {
+    instantiator(parentWindow: UI.BaseWindow): void;
+>instantiator : (parentWindow: UI.BaseWindow) => void
+>parentWindow : UI.BaseWindow
+>UI : any
+}
+
+=== app/navigator/widget-factory.ts ===
+import {WidgetFactory} from "../../lib-utils/shared-types/widget-config";
+>WidgetFactory : any
+
+declare const instantiator: WidgetFactory['instantiator'];
+>instantiator : (parentWindow: __synthetic_export_lib_1.default.BaseWindow) => void
+
+export default Object.freeze({
+>Object.freeze({    instantiator}) : Readonly<{ instantiator: (parentWindow: __synthetic_export_lib_1.default.BaseWindow) => void; }>
+>Object.freeze : { <T extends Function>(f: T): T; <T_1 extends { [idx: string]: object | U | null | undefined; }, U extends string | number | bigint | boolean | symbol>(o: T_1): Readonly<T_1>; <T_2>(o: T_2): Readonly<T_2>; }
+>Object : ObjectConstructor
+>freeze : { <T extends Function>(f: T): T; <T_1 extends { [idx: string]: object | U | null | undefined; }, U extends string | number | bigint | boolean | symbol>(o: T_1): Readonly<T_1>; <T_2>(o: T_2): Readonly<T_2>; }
+>{    instantiator} : { instantiator: (parentWindow: __synthetic_export_lib_1.default.BaseWindow) => void; }
+
+    instantiator
+>instantiator : (parentWindow: __synthetic_export_lib_1.default.BaseWindow) => void
+
+});
+
+import type * as __synthetic_export_lib_1 from "../../lib/index";
+>__synthetic_export_lib_1 : typeof __synthetic_export_lib_1
+
