@@ -874,7 +874,6 @@ import {
     NodeWithTypeArguments,
     NonNullChain,
     NonNullExpression,
-    noop,
     not,
     noTruncationMaximumTruncationLength,
     NumberLiteralType,
@@ -1375,45 +1374,97 @@ const intrinsicTypeKinds: ReadonlyMap<string, IntrinsicTypeKind> = new Map(Objec
 }));
 
 /** @internal */
-export class SaveableLinks {
-    /**
-     * Static list of fields which should be reset when state is rewound -
-     *  meaning their data is not cached across speculation boundaries.
-     * 
-     * TODO: This would be better tracked with decorators.
-     */
-    static speculativeCaches = new Set<string>();
-    declare ["constructor"]: typeof SaveableLinks;
-    save(): Partial<this> {
-        // TODO: Optimize perf to delay copies until necessary, and to copy only changes.
-        // TODO: Some nested deep caches like `specifierCache` or more meaningfully
-        // `extendedContainersByFile` should really be deep copied/restored, since they may reference
-        // Symbol information for discarded speculative symbols.
-        // TODO: The return type is a `this`, which is an abuse of the type system
-        const res = {} as Partial<this>;
-        for (const k of this.constructor.speculativeCaches) {
-            res[k as keyof this] = this[k as keyof this];
+export interface SpeculationHost {
+    getCurrentSpeculativeEpoch(): number;
+    getDiscardedSpeculativeEpochs(): Set<number>;
+}
+
+/**
+ * Marks an auto accessor as a cache whose value can be rewound by the checker speculation helper.
+ * 
+ * This is implemented by keeping a record of the speculative "epoch" writes are performed at, and
+ * returning the result for the highest epoch that hasn't (yet) been marked as "discarded".
+ * Values stored in discarded epochs are lazily discarded when a read is later performed.
+ * 
+ * This is designed to be compatible with both `experimentalDecorators` and the final decorators spec,
+ * so it can be used both in downlevel targets and natively.
+ */
+const SpeculatableCache = <T extends SpeculatableLinks, V>(
+    valueOrTarget: ClassAccessorDecoratorTarget<T, V> | any,
+    _contextOrPropertyKey: ClassAccessorDecoratorContext<T, V> | string,
+    descriptor?: PropertyDescriptor
+): /*ClassAccessorDecoratorResult<T, V> | void*/ any => {
+
+    const baseGet = (descriptor ? descriptor.get! : (valueOrTarget as ClassAccessorDecoratorTarget<T, V>).get) as (this: T) => V;
+    const baseSet = (descriptor ? descriptor.set! : (valueOrTarget as ClassAccessorDecoratorTarget<T, V>).set) as (this: T, v: V) => V;
+
+    return {
+        ...descriptor,
+        get: readValue,
+        set: setValue,
+        init(this: T, v: V) {
+            const epoch = this.host.getCurrentSpeculativeEpoch();
+            // This array is going to end up sparse, but may at least start dense for high traffic caches
+            const values: V[] = [];
+            const writtenEpochs: number[] = [epoch];
+            values[epoch] = v;
+            return {
+                values,
+                writtenEpochs
+            };
         }
-        return res;
+    };
+
+    function readValue(this: T) {
+        const internals = baseGet.call(this);
+        if (!internals) { return undefined! }
+        const {
+            values,
+            writtenEpochs
+        } = internals;
+
+        const discardedSpeculativeEpochs = this.host.getDiscardedSpeculativeEpochs();
+
+        // When the epoch a symbol was made in is discarded, it no longer participates in speculative caching
+        // if it is kept around. This is a failsafe - ideally transient symbols which are made in a speculative
+        // context shouldn't escape it - but some may be inserted into non-speculative caches and kept around.
+        // Ideally, these locations should also become speculatable caches to avoid data leakage between speculative
+        // contexts.
+        const hostEpoch = this instanceof SymbolLinks ? this.symbolEpoch : 0;
+        const symbolDiscarded = discardedSpeculativeEpochs.has(hostEpoch);
+
+        for (let i = writtenEpochs.length - 1; i >= 0; i--) {
+            if (!symbolDiscarded && discardedSpeculativeEpochs.has(writtenEpochs[i])) {
+                // by discarding epochs on read like this, we make consecutive reads (very common)
+                // shortcut to basically an indirect lookup.
+                delete values[writtenEpochs[i]];
+                writtenEpochs.splice(i, 1);
+                continue;
+            }
+            return values[writtenEpochs[i]];
+        }
+        return undefined!;
     }
-    restore<T extends Partial<this>>(state: T | undefined) {
-        if (state) {
-            for (const k in state) {
-                if (!this.constructor.speculativeCaches.has(k)) continue;
-                if (Object.prototype.hasOwnProperty.call(state, k)) {
-                    this[k as keyof this] = state[k] as unknown as this[keyof this];
-                }
-            }
+
+    function setValue(this: T, value: V | undefined) {
+        const internals = baseGet.call(this);
+        const currentSpeculativeEpoch = this.host.getCurrentSpeculativeEpoch();
+        if (!internals) {
+            const values = [];
+            const writtenEpochs = [];
+            writtenEpochs.push(currentSpeculativeEpoch);
+            values[currentSpeculativeEpoch] = value!;
+            baseSet.call(this, { values, writtenEpochs });
+            return value!;
         }
-        for (const k in this) {
-            if (!this.constructor.speculativeCaches.has(k)) continue;
-            if (!state || !Object.prototype.hasOwnProperty.call(state, k)) {
-                // TODO: `delete` has perf implications, but we really do want to *remove* the keys we added
-                // Still, `= undefined` might make future copies unnecessarily heavier, but should otherwise be fine.
-                // Should choose between them based on perf testing.
-                this[k] = undefined!;
-            }
-        }
+        const {
+            values,
+            writtenEpochs
+        } = internals;
+        writtenEpochs.push(currentSpeculativeEpoch);
+        // Store the new value at the desired speculative depth
+        values[currentSpeculativeEpoch] = value!;
+        return value!;
     }
 }
 
@@ -1423,59 +1474,117 @@ export const enum EnumKind {
     Literal, // Literal enum (each member has a TypeFlags.EnumLiteral type)
 }
 
+
+/** @internal */
+export class SpeculatableLinks {
+    constructor(public host: SpeculationHost) {}
+}
+
 // dprint-ignore
 /** @internal */
-export class SymbolLinks extends SaveableLinks {
-    declare _symbolLinksBrand: any;
-    declare immediateTarget?: Symbol;                   // Immediate target of an alias. May be another alias. Do not access directly, use `checker.getImmediateAliasedSymbol` instead.
-    declare aliasTarget?: Symbol;                       // Resolved (non-alias) target of an alias
-    declare target?: Symbol;                            // Original version of an instantiated symbol
-    declare type?: Type;                                // Type of value symbol
-    declare writeType?: Type;                           // Type of value symbol in write contexts
-    declare nameType?: Type;                            // Type associated with a late-bound symbol
-    declare uniqueESSymbolType?: Type;                  // UniqueESSymbol type for a symbol
-    declare declaredType?: Type;                        // Type of class, interface, enum, type alias, or type parameter
-    declare typeParameters?: TypeParameter[];           // Type parameters of type alias (undefined if non-generic)
-    declare outerTypeParameters?: TypeParameter[];      // Outer type parameters of anonymous object type
-    declare instantiations?: Map<string, Type>;         // Instantiations of generic type alias (undefined if non-generic)
-    declare aliasSymbol?: Symbol;                       // Alias associated with generic type alias instantiation
-    declare aliasTypeArguments?: readonly Type[]        // Alias type arguments (if any)
-    declare inferredClassSymbol?: Map<SymbolId, TransientSymbol>; // Symbol of an inferred ES5 constructor function
-    declare mapper?: TypeMapper;                        // Type mapper for instantiation alias
-    declare referenced?: boolean;                       // True if alias symbol has been referenced as a value that can be emitted
-    declare constEnumReferenced?: boolean;              // True if alias symbol resolves to a const enum and is referenced as a value ('referenced' will be false)
-    declare containingType?: UnionOrIntersectionType;   // Containing union or intersection type for synthetic property
-    declare leftSpread?: Symbol;                        // Left source for synthetic spread property
-    declare rightSpread?: Symbol;                       // Right source for synthetic spread property
-    declare syntheticOrigin?: Symbol;                   // For a property on a mapped or spread type, points back to the original property
-    declare isDiscriminantProperty?: boolean;           // True if discriminant synthetic property
-    declare resolvedExports?: SymbolTable;              // Resolved exports of module or combined early- and late-bound static members of a class.
-    declare resolvedMembers?: SymbolTable;              // Combined early- and late-bound members of a symbol
-    declare exportsChecked?: boolean;                   // True if exports of external module have been checked
-    declare typeParametersChecked?: boolean;            // True if type parameters of merged class and interface declarations have been checked.
-    declare isDeclarationWithCollidingName?: boolean;   // True if symbol is block scoped redeclaration
-    declare bindingElement?: BindingElement;            // Binding element associated with property symbol
-    declare exportsSomeValue?: boolean;                 // True if module exports some value (not just types)
-    declare enumKind?: EnumKind;                        // Enum declaration classification
-    declare originatingImport?: ImportDeclaration | ImportCall; // Import declaration which produced the symbol, present if the symbol is marked as uncallable but had call signatures in `resolveESModuleSymbol`
-    declare lateSymbol?: Symbol;                        // Late-bound symbol for a computed property
-    declare specifierCache?: Map<ModeAwareCacheKey, string>; // For symbols corresponding to external modules, a cache of incoming path -> module specifier name mappings
-    declare extendedContainers?: Symbol[];              // Containers (other than the parent) which this symbol is aliased in
-    declare extendedContainersByFile?: Map<NodeId, Symbol[]>; // Containers (other than the parent) which this symbol is aliased in
-    declare variances?: VarianceFlags[];                // Alias symbol type argument variance cache
-    declare deferralConstituents?: Type[];              // Calculated list of constituents for a deferred type
-    declare deferralWriteConstituents?: Type[];         // Constituents of a deferred `writeType`
-    declare deferralParent?: Type;                      // Source union/intersection of a deferred type
-    declare cjsExportMerged?: Symbol;                   // Version of the symbol with all non export= exports merged with the export= target
-    declare typeOnlyDeclaration?: TypeOnlyAliasDeclaration | false; // First resolved alias declaration that makes the symbol only usable in type constructs
-    declare typeOnlyExportStarMap?: Map<__String, ExportDeclaration & { readonly isTypeOnly: true, readonly moduleSpecifier: Expression }>; // Set on a module symbol when some of its exports were resolved through a 'export type * from "mod"' declaration
-    declare typeOnlyExportStarName?: __String;          // Set to the name of the symbol re-exported by an 'export type *' declaration, when different from the symbol name
-    declare isConstructorDeclaredProperty?: boolean;    // Property declared through 'this.x = ...' assignment in constructor
-    declare tupleLabelDeclaration?: NamedTupleMember | ParameterDeclaration; // Declaration associated with the tuple's label
+export class SymbolLinks extends SpeculatableLinks {
+    declare private _symbolLinksBrand: any;
+    /** Type of value symbol */
+    @SpeculatableCache accessor type: Type | undefined = undefined;
+    /** Type of value symbol in write contexts */
+    @SpeculatableCache accessor writeType: Type | undefined = undefined;
+    /** Type associated with a late-bound symbol */
+    @SpeculatableCache accessor nameType: Type | undefined = undefined;
+    /** Immediate target of an alias. May be another alias. Do not access directly, use `checker.getImmediateAliasedSymbol` instead. */
+    declare immediateTarget?: Symbol;
+    /** Resolved (non-alias) target of an alias */
+    declare aliasTarget?: Symbol;
+    /** Original version of an instantiated symbol */
+    declare target?: Symbol;
+    /** UniqueESSymbol type for a symbol */
+    declare uniqueESSymbolType?: Type;
+    /** Type of class, interface, enum, type alias, or type parameter */
+    declare declaredType?: Type;
+    /** Type parameters of type alias (undefined if non-generic) */
+    declare typeParameters?: TypeParameter[];
+    /** Outer type parameters of anonymous object type */
+    declare outerTypeParameters?: TypeParameter[];
+    /** Instantiations of generic type alias (undefined if non-generic) */
+    declare instantiations?: Map<string, Type>;
+    /** Alias associated with generic type alias instantiation */
+    declare aliasSymbol?: Symbol;
+    /** Alias type arguments (if any) */
+    declare aliasTypeArguments?: readonly Type[]
+    /** Symbol of an inferred ES5 constructor function */
+    declare inferredClassSymbol?: Map<SymbolId, TransientSymbol>;
+    /** Type mapper for instantiation alias */
+    declare mapper?: TypeMapper;
+    /** True if alias symbol has been referenced as a value that can be emitted */
+    declare referenced?: boolean;
+    /** True if alias symbol resolves to a const enum and is referenced as a value ('referenced' will be false) */
+    declare constEnumReferenced?: boolean;
+    /** Containing union or intersection type for synthetic property */
+    declare containingType?: UnionOrIntersectionType;
+    /** Left source for synthetic spread property */
+    declare leftSpread?: Symbol;
+    /** Right source for synthetic spread property */
+    declare rightSpread?: Symbol;
+    /** For a property on a mapped or spread type, points back to the original property */
+    declare syntheticOrigin?: Symbol;
+    /** True if discriminant synthetic property */
+    declare isDiscriminantProperty?: boolean;
+    /** Resolved exports of module or combined early- and late-bound static members of a class. */
+    declare resolvedExports?: SymbolTable;
+    /** Combined early- and late-bound members of a symbol */
+    declare resolvedMembers?: SymbolTable;
+    /** True if exports of external module have been checked */
+    declare exportsChecked?: boolean;
+    /** True if type parameters of merged class and interface declarations have been checked. */
+    declare typeParametersChecked?: boolean;
+    /** True if symbol is block scoped redeclaration */
+    declare isDeclarationWithCollidingName?: boolean;
+    /** Binding element associated with property symbol */
+    declare bindingElement?: BindingElement;
+    /** True if module exports some value (not just types) */
+    declare exportsSomeValue?: boolean;
+    /** Enum declaration classification */
+    declare enumKind?: EnumKind;
+    /** Import declaration which produced the symbol, present if the symbol is marked as uncallable but had call signatures in `resolveESModuleSymbol` */
+    declare originatingImport?: ImportDeclaration | ImportCall;
+    /** Late-bound symbol for a computed property */
+    declare lateSymbol?: Symbol;
+    /** For symbols corresponding to external modules, a cache of incoming path -> module specifier name mappings */
+    declare specifierCache?: Map<ModeAwareCacheKey, string>;
+    /** Containers (other than the parent) which this symbol is aliased in */
+    declare extendedContainers?: Symbol[];
+    /** Containers (other than the parent) which this symbol is aliased in */
+    declare extendedContainersByFile?: Map<NodeId, Symbol[]>;
+    /** Alias symbol type argument variance cache */
+    declare variances?: VarianceFlags[];
+    /** Calculated list of constituents for a deferred type */
+    declare deferralConstituents?: Type[];
+    /** Constituents of a deferred `writeType` */
+    declare deferralWriteConstituents?: Type[];
+    /** Source union/intersection of a deferred type */
+    declare deferralParent?: Type;
+    /** Version of the symbol with all non export= exports merged with the export= target */
+    declare cjsExportMerged?: Symbol;
+    /** First resolved alias declaration that makes the symbol only usable in type constructs */
+    declare typeOnlyDeclaration?: TypeOnlyAliasDeclaration | false;
+    /** Set on a module symbol when some of its exports were resolved through a 'export type * from "mod"' declaration */
+    declare typeOnlyExportStarMap?: Map<__String, ExportDeclaration & { readonly isTypeOnly: true, readonly moduleSpecifier: Expression }>;
+    /** Set to the name of the symbol re-exported by an 'export type *' declaration, when different from the symbol name */
+    declare typeOnlyExportStarName?: __String;
+    /** Property declared through 'this.x = ...' assignment in constructor */
+    declare isConstructorDeclaredProperty?: boolean;
+    /** Declaration associated with the tuple's label */
+    declare tupleLabelDeclaration?: NamedTupleMember | ParameterDeclaration;
     declare accessibleChainCache?: Map<string, Symbol[] | undefined>;
-    declare filteredIndexSymbolCache?: Map<string, Symbol> //Symbol with applicable declarations
+    /** Symbol with applicable declarations */
+    declare filteredIndexSymbolCache?: Map<string, Symbol>;
 
-    static override speculativeCaches = new Set([ "type", "writeType", "nameType" ]);
+    constructor(
+        host: SpeculationHost,
+        /** speculative epoch the associated symbol was manufactured in */
+        public symbolEpoch = 0 // Assume lazily made links are for persistent epoch 0 symbols unless explicitly overridden
+    ) {
+        super(host);
+    }
 }
 
 /** @internal */
@@ -1486,6 +1595,7 @@ export interface TransientSymbolLinks extends SymbolLinks {
 /** @internal */
 export interface TransientSymbol extends Symbol {
     links: TransientSymbolLinks;
+    epoch: number;
 }
 
 /** @internal */
@@ -1524,55 +1634,70 @@ export interface SerializedTypeEntry {
 
 // dprint-ignore
 /** @internal */
-export class NodeLinks extends SaveableLinks {
-    declare flags: NodeCheckFlags;              // Set of flags specific to Node
-    declare resolvedType?: Type;                // Cached type of type node
-    declare resolvedEnumType?: Type;            // Cached constraint type from enum jsdoc tag
-    declare resolvedSignature?: Signature;      // Cached signature of signature node or call expression
-    declare resolvedSymbol?: Symbol;            // Cached name resolution result
-    declare resolvedIndexInfo?: IndexInfo;      // Cached indexing info resolution result
-    declare effectsSignature?: Signature;       // Signature with possible control flow effects
-    declare enumMemberValue?: string | number;  // Constant value of enum member
-    declare isVisible?: boolean;                // Is this node visible
-    declare containsArgumentsReference?: boolean; // Whether a function-like declaration contains an 'arguments' reference
-    declare hasReportedStatementInAmbientContext?: boolean; // Cache boolean if we report statements in ambient context
-    declare jsxFlags?: JsxFlags;                 // flags for knowing what kind of element/attributes we're dealing with
-    declare resolvedJsxElementAttributesType?: Type; // resolved element attributes type of a JSX openinglike element
-    declare resolvedJsxElementAllAttributesType?: Type; // resolved all element attributes type of a JSX openinglike element
-    declare resolvedJSDocType?: Type;           // Resolved type of a JSDoc type reference
-    declare switchTypes?: Type[];               // Cached array of switch case expression types
-    declare jsxNamespace?: Symbol | false;      // Resolved jsx namespace symbol for this node
-    declare jsxImplicitImportContainer?: Symbol | false; // Resolved module symbol the implicit jsx import of this file should refer to
-    declare contextFreeType?: Type;             // Cached context-free type used by the first pass of inference; used when a function's return is partially contextually sensitive
-    declare deferredNodes?: Set<Node>;          // Set of nodes whose checking has been deferred
-    declare capturedBlockScopeBindings?: Symbol[]; // Block-scoped bindings captured beneath this part of an IterationStatement
-    declare outerTypeParameters?: TypeParameter[]; // Outer type parameters of anonymous object type
-    declare isExhaustive?: boolean | 0;         // Is node an exhaustive switch statement (0 indicates in-process resolution)
-    declare skipDirectInference?: true;         // Flag set by the API `getContextualType` call on a node when `Completions` is passed to force the checker to skip making inferences to a node's type
-    declare declarationRequiresScopeChange?: boolean; // Set by `useOuterVariableScopeInParameter` in checker when downlevel emit would change the name resolution scope inside of a parameter.
-    declare serializedTypes?: Map<string, SerializedTypeEntry>; // Collection of types serialized at this location
-    declare decoratorSignature?: Signature;     // Signature for decorator as if invoked by the runtime.
-    declare spreadIndices?: { first: number | undefined, last: number | undefined }; // Indices of first and last spread elements in array literal
-    declare parameterInitializerContainsUndefined?: boolean; // True if this is a parameter declaration whose type annotation contains "undefined".
-    declare fakeScopeForSignatureDeclaration?: "params" | "typeParams"; // If present, this is a fake scope injected into an enclosing declaration chain.
-    declare assertionExpressionType?: Type;     // Cached type of the expression of a type assertion
-    constructor() {
-        super();
-        this.flags = NodeCheckFlags.None;
-    }
+export class NodeLinks extends SpeculatableLinks {
+    /** Set of flags specific to Node */
+    @SpeculatableCache accessor flags: NodeCheckFlags = NodeCheckFlags.None;
+    /** Cached type of type node */
+    @SpeculatableCache accessor resolvedType: Type | undefined = undefined;
+    /** Cached constraint type from enum jsdoc tag */
+    @SpeculatableCache accessor resolvedEnumType: Type | undefined = undefined;
+    /** Cached signature of signature node or call expression */
+    @SpeculatableCache accessor resolvedSignature: Signature | undefined = undefined;
+    /** Cached name resolution result */
+    @SpeculatableCache accessor resolvedSymbol: Symbol | undefined = undefined;
+    /** Cached indexing info resolution result */
+    @SpeculatableCache accessor resolvedIndexInfo: IndexInfo | undefined = undefined;
+    /** Signature with possible control flow effects */
+    @SpeculatableCache accessor effectsSignature: Signature | undefined = undefined;
+    /** Cached array of switch case expression types */
+    @SpeculatableCache accessor switchTypes: Type[] | undefined = undefined;
+    /** Cached context-free type used by the first pass of inference; used when a function's return is partially contextually sensitive */
+    @SpeculatableCache accessor contextFreeType: Type | undefined = undefined;
+    /** Cached type of the expression of a type assertion */
+    @SpeculatableCache accessor assertionExpressionType: Type | undefined = undefined;
 
-    static override speculativeCaches = new Set([
-        "flags",
-        "resolvedType",
-        "resolvedEnumType",
-        "resolvedSignature",
-        "resolvedSymbol",
-        "resolvedIndexInfo",
-        "effectsSignature",
-        "switchTypes",
-        "contextFreeType",
-        "assertionExpressionType",
-    ]);
+    /** Constant value of enum member */
+    declare enumMemberValue?: string | number;
+    /** Is this node visible */
+    declare isVisible?: boolean;
+    /** Whether a function-like declaration contains an 'arguments' reference */
+    declare containsArgumentsReference?: boolean;
+    /** Cache boolean if we report statements in ambient context */
+    declare hasReportedStatementInAmbientContext?: boolean;
+    /** flags for knowing what kind of element/attributes we're dealing with */
+    declare jsxFlags?: JsxFlags;
+    /** resolved element attributes type of a JSX openinglike element */
+    declare resolvedJsxElementAttributesType?: Type;
+    /** resolved all element attributes type of a JSX openinglike element */
+    declare resolvedJsxElementAllAttributesType?: Type;
+    /** Resolved type of a JSDoc type reference */
+    declare resolvedJSDocType?: Type;
+    /** Resolved jsx namespace symbol for this node */
+    declare jsxNamespace?: Symbol | false;
+    /** Resolved module symbol the implicit jsx import of this file should refer to */
+    declare jsxImplicitImportContainer?: Symbol | false;
+    /** Set of nodes whose checking has been deferred */
+    declare deferredNodes?: Set<Node>;
+    /** Block-scoped bindings captured beneath this part of an IterationStatement */
+    declare capturedBlockScopeBindings?: Symbol[];
+    /** Outer type parameters of anonymous object type */
+    declare outerTypeParameters?: TypeParameter[];
+    /** Is node an exhaustive switch statement (0 indicates in-process resolution) */
+    declare isExhaustive?: boolean | 0;
+    /** Flag set by the API `getContextualType` call on a node when `Completions` is passed to force the checker to skip making inferences to a node's type */
+    declare skipDirectInference?: true;
+    /** Set by `useOuterVariableScopeInParameter` in checker when downlevel emit would change the name resolution scope inside of a parameter. */
+    declare declarationRequiresScopeChange?: boolean;
+    /** Collection of types serialized at this location */
+    declare serializedTypes?: Map<string, SerializedTypeEntry>;
+    /** Signature for decorator as if invoked by the runtime. */
+    declare decoratorSignature?: Signature;
+    /** Indices of first and last spread elements in array literal */
+    declare spreadIndices?: { first: number | undefined, last: number | undefined };
+    /** True if this is a parameter declaration whose type annotation contains "undefined". */
+    declare parameterInitializerContainsUndefined?: boolean;
+    /** If present, this is a fake scope injected into an enclosing declaration chain. */
+    declare fakeScopeForSignatureDeclaration?: "params" | "typeParams";
 }
 
 /** @internal */
@@ -1609,11 +1734,20 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
     // List of all caches whose state should be saved and potentially restored on completion of a speculative typechecking operation
     var speculativeCaches: (any[] | Map<any, any> | Set<any> | DiagnosticCollection)[] = [];
-    // Transient symbols store their links directly on them, so each transient symbol is also a small speculative cache.
-    // WeakRef is first supported in node 14 (our earliest test version) - unlike weakmap and weakset which are node 0.12
-    // Do note that this works without WeakRefs, but would mean we can leak memory via unbounded transient symbol creation pretty easily.
-    // This has to be an array of weak refs and not a weak map or weak set because we need to iterate over them to attempt to save their state.
-    var transientSymbols: WeakRef<TransientSymbol>[] = [];
+    /**
+     * The id of the current speculative execution environment - used by speculation helpers to avoid eagerly doing work.
+     * 
+     * This is monotonically increasing, and basically represents a slice of execution time within the checker that we want to
+     * be able to uniquely refer to.
+     */
+    var currentSpeculativeEpoch = 0;
+    // The set of speculative environment ids whose contents have been discarded
+    var discardedSpeculativeEpochs = new Set<number>();
+    // The speculation host object used by symbol and node links to associate their speculation state with this checker's speculation state
+    var speculationHost: SpeculationHost = {
+        getCurrentSpeculativeEpoch() { return currentSpeculativeEpoch; },
+        getDiscardedSpeculativeEpochs() { return discardedSpeculativeEpochs; },
+    }
 
     var deferredDiagnosticsCallbacks: (() => void)[] = registerSpeculativeCache([]);
 
@@ -2433,11 +2567,11 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     var suggestionCount = 0;
     var maximumSuggestionCount = 10;
     var mergedSymbols: Symbol[] = [];
-    var symbolLinks: SymbolLinks[] = registerSpeculativeCache([]);
-    var nodeLinks: NodeLinks[] = registerSpeculativeCache([]);
+    var symbolLinks: SymbolLinks[] = [];
+    var nodeLinks: NodeLinks[] = [];
     var flowLoopCaches: Map<string, Type>[] = registerSpeculativeCache([]);
-    var flowLoopNodes: FlowNode[] = [];
-    var flowLoopKeys: string[] = [];
+    var flowLoopNodes: FlowNode[] = registerSpeculativeCache([]);
+    var flowLoopKeys: string[] = registerSpeculativeCache([]);
     var flowLoopTypes: Type[][] = registerSpeculativeCache([]);
     var sharedFlowNodes: FlowNode[] = registerSpeculativeCache([]);
     var sharedFlowTypes: FlowType[] = registerSpeculativeCache([]);
@@ -2686,9 +2820,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     function createSymbol(flags: SymbolFlags, name: __String, checkFlags?: CheckFlags) {
         symbolCount++;
         const symbol = new Symbol(flags | SymbolFlags.Transient, name) as TransientSymbol;
-        symbol.links = new SymbolLinks() as TransientSymbolLinks;
+        symbol.epoch = currentSpeculativeEpoch;
+        symbol.links = new SymbolLinks(speculationHost, symbol.epoch) as TransientSymbolLinks;
         symbol.links.checkFlags = checkFlags || CheckFlags.None;
-        transientSymbols.push(new WeakRef(symbol));
         return symbol;
     }
 
@@ -2953,12 +3087,12 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     function getSymbolLinks(symbol: Symbol): SymbolLinks {
         if (symbol.flags & SymbolFlags.Transient) return (symbol as TransientSymbol).links;
         const id = getSymbolId(symbol);
-        return symbolLinks[id] ??= new SymbolLinks();
+        return symbolLinks[id] ??= new SymbolLinks(speculationHost);
     }
 
     function getNodeLinks(node: Node): NodeLinks {
         const nodeId = getNodeId(node);
-        return nodeLinks[nodeId] || (nodeLinks[nodeId] = new (NodeLinks as any)());
+        return nodeLinks[nodeId] ??= new NodeLinks(speculationHost);
     }
 
     function isGlobalSourceFile(node: Node) {
@@ -49025,13 +49159,21 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
      * @param cb Speculation callback, operations performed within this context will be rewound and uncached unless the helper returns a truthy value
      */
     function speculate<T>(cb: () => T): T | undefined {
+        currentSpeculativeEpoch++;
+        const startEpoch = currentSpeculativeEpoch;
         const initialState = snapshotCheckerState();
         const result = cb();
+        const endEpoch = currentSpeculativeEpoch;
+        currentSpeculativeEpoch++; // success or fail, the end of a speculative context marks a new epoch
         if (!result) {
+            for (let i = startEpoch; i <= endEpoch; i++) {
+                // Even if intermediate speculation calls worked out, we're discarding this one, so
+                // we need to mark all epochs that occured during this speculation call as discarded
+                discardedSpeculativeEpochs.add(i);
+            }
             restoreCheckerState(initialState);
             return undefined;
         }
-        transientSymbols = concatenate(initialState.transientSymbols, transientSymbols);
         return result;
     }
 
@@ -49042,35 +49184,18 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
     interface SavedCheckerState {
         restores: (() => void)[];
-        transientSymbols: typeof transientSymbols;
     }
 
     function snapshotCheckerState(): SavedCheckerState {
-        const state: SavedCheckerState = { restores: concatenate(map(speculativeCaches, save), mapDefined(transientSymbols, saveTransientSymbolLink)), transientSymbols };
-        transientSymbols = [];
+        const state: SavedCheckerState = { restores: map(speculativeCaches, save) };
         return state;
-
-        function saveTransientSymbolLink(ref: WeakRef<TransientSymbol>): (() => void) | undefined {
-            const res = ref.deref();
-            if (res) {
-                return save(ref);
-            }
-        }
 
         // TODO: Override error reporting functions to just defer work until speculation
         // helper is confirmed as locked-in, to avoid the work of building diagnostics until
         // we know we're actually going to use them.
         
-        function save(cache: (typeof speculativeCaches)[number] | WeakRef<TransientSymbol>): () => void {
+        function save(cache: (typeof speculativeCaches)[number]): () => void {
             if (Array.isArray(cache)) {
-                for (const k in cache) {
-                    const v = cache[k];
-                    if (v instanceof NodeLinks || v instanceof SymbolLinks) {
-                        return saveLinksArray(cache);
-                    }
-                    break;
-                }
-                // A totally empty links array may get `save`'d as a normal array. That should be fine - we should reset it to empty.
                 return saveArray(cache);
             }
             else if (cache instanceof Map) {
@@ -49079,45 +49204,15 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             else if (cache instanceof Set) {
                 return saveSet(cache);
             }
-            else if (cache instanceof WeakRef) {
-                return saveLinks(cache);
-            }
             else if (cache.add! && cache.getDiagnostics!) { // eslint-disable-line @typescript-eslint/no-unnecessary-type-assertion
                 return saveDiagnosticCollection(cache);
             }
             return Debug.fail("Unknown speculative cache type");
         }
 
-        function saveLinks(cache: WeakRef<TransientSymbol>) {
-            const saved = cache.deref()?.links.save();
-            if (!saved) {
-                return noop;
-            }
-            return () => cache.deref()?.links.restore(saved);
-        }
-
-        function saveLinksArray(cache: NodeLinks[] | SymbolLinks[]) {
-            const og: Partial<SaveableLinks>[] = [];
-            for (const k in cache) {
-                if (cache[k]) {
-                    og[k] = cache[k].save();
-                }
-            }
-            return () => {
-                for (const k in cache) {
-                    if (!og[k]) {
-                        // TODO: there has to be a way to phase the types/cast to make these directly callable
-                        cache[k].restore.call(cache[k], undefined);
-                    }
-                    else {
-                        cache[k].restore.call(cache[k], og[k]);
-                    }
-                }
-            }
-        }
-
         // TODO: All these save/restore methods are as naive as you can get right now, which means speculation
-        // is insanely expensive, as it is eagerly saving off the checker state
+        // is insanely expensive, as it is eagerly saving off the checker state.
+        // Where possible, most things should be migrated to lazy caches, like the @SpeculatableCache decorator sets up.
         function saveArray(cache: unknown[]) {
             const original = cache.slice();
             return () => {
@@ -49158,7 +49253,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         for (const restore of state.restores) {
             restore();
         }
-        transientSymbols = state.transientSymbols; // simply discard the current array - all those transient symbols should fall out of scope.
     }
 
     function initializeTypeChecker() {

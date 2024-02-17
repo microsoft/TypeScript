@@ -8,6 +8,7 @@
         "target": "es2021",
         "module": "CommonJS",
         "moduleResolution": "node",
+        "experimentalDecorators": true,
 
         "declaration": true,
         "declarationMap": true,
