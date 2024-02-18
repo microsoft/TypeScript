@@ -1,7 +1,7 @@
 //// [tests/cases/compiler/assignmentToAnyArrayRestParameters.ts] ////
 
 === assignmentToAnyArrayRestParameters.ts ===
-// Repro from #57122
+// Repros from #57122
 
 function foo<T extends string[]>(
 >foo : <T extends string[]>(fa: (s: string, ...args: string[]) => string, fb: (s: string, ...args: T) => string) => void
@@ -36,5 +36,27 @@ function foo<T extends string[]>(
 >f4 : (...args: any[]) => string
 >args : any[]
 >fb : (s: string, ...args: T) => string
+}
+
+function bar<T extends string[], K extends number>() {
+>bar : <T extends string[], K extends number>() => void
+
+    type T00 = string[]["0"];
+>T00 : string
+
+    type T01 = string[]["0.0"];  // Error
+>T01 : any
+
+    type T02 = string[][K | "0"];
+>T02 : string[][K | "0"]
+
+    type T10 = T["0"];
+>T10 : T["0"]
+
+    type T11 = T["0.0"];  // Error
+>T11 : T["0.0"]
+
+    type T12 = T[K | "0"];
+>T12 : T[K | "0"]
 }
 
