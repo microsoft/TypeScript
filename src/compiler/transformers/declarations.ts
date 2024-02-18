@@ -25,6 +25,7 @@ import {
     createEmptyExports,
     createGetSymbolAccessibilityDiagnosticForNode,
     createGetSymbolAccessibilityDiagnosticForNodeName,
+    createModeAwareCacheKey,
     createSymbolTable,
     createUnparsedSourceFile,
     Debug,
@@ -63,6 +64,7 @@ import {
     getLineAndCharacterOfPosition,
     getNameOfDeclaration,
     getNormalizedAbsolutePath,
+    getOriginalNode,
     getOriginalNodeId,
     getOutputPathsFor,
     getParseTreeNode,
@@ -155,6 +157,7 @@ import {
     mapDefined,
     MethodDeclaration,
     MethodSignature,
+    ModeAwareCacheKey,
     Modifier,
     ModifierFlags,
     ModifierLike,
@@ -254,11 +257,11 @@ export function transformDeclarations(context: TransformationContext) {
     let needsScopeFixMarker = false;
     let resultHasScopeMarker = false;
     let enclosingDeclaration: Node;
-    let necessaryTypeReferences: Set<[specifier: string, mode: ResolutionMode]> | undefined;
+    let necessaryTypeReferences: Map<ModeAwareCacheKey, [specifier: string, mode: ResolutionMode]> | undefined;
     let lateMarkedStatements: LateVisibilityPaintedStatement[] | undefined;
     let lateStatementReplacementMap: Map<NodeId, VisitResult<LateVisibilityPaintedStatement | ExportAssignment | undefined>>;
     let suppressNewDiagnosticContexts: boolean;
-    let exportedModulesFromDeclarationEmit: Symbol[] | undefined;
+    let exportedModulesFromDeclarationEmit: Set<Symbol> | undefined;
 
     const { factory } = context;
     const host = context.getEmitHost();
@@ -280,8 +283,8 @@ export function transformDeclarations(context: TransformationContext) {
     let errorFallbackNode: Declaration | undefined;
 
     let currentSourceFile: SourceFile;
-    let refs: Map<NodeId, SourceFile>;
-    let libs: Map<string, boolean>;
+    let refs: Set<SourceFile>;
+    let libs: Set<string>;
     let emittedImports: readonly AnyImportSyntax[] | undefined; // must be declared in container so it can be `undefined` while transformer's first pass
     const resolver = context.getEmitResolver();
     const options = context.getCompilerOptions();
@@ -289,15 +292,20 @@ export function transformDeclarations(context: TransformationContext) {
     return transformRoot;
 
     function recordTypeReferenceDirectivesIfNecessary(typeReferenceDirectives: readonly [specifier: string, mode: ResolutionMode][] | undefined): void {
-        if (!typeReferenceDirectives) {
+        if (!typeReferenceDirectives || typeReferenceDirectives.length === 0) {
             return;
         }
-        necessaryTypeReferences = necessaryTypeReferences || new Set();
-        for (const ref of typeReferenceDirectives) {
-            necessaryTypeReferences.add(ref);
+        necessaryTypeReferences ??= new Map();
+        for (const directive of typeReferenceDirectives) {
+            const referenceKey = createModeAwareCacheKey(...directive);
+            necessaryTypeReferences.set(referenceKey, directive);
         }
     }
 
+    function recordExportedModuleFromDeclarationEmit(symbol: Symbol) {
+        exportedModulesFromDeclarationEmit ??= new Set();
+        exportedModulesFromDeclarationEmit.add(symbol);
+    }
     function trackReferencedAmbientModule(node: ModuleDeclaration, symbol: Symbol) {
         // If it is visible via `// <reference types="..."/>`, then we should just use that
         const directives = resolver.getTypeReferenceDirectivesForSymbol(symbol, SymbolFlags.All);
@@ -305,8 +313,8 @@ export function transformDeclarations(context: TransformationContext) {
             return recordTypeReferenceDirectivesIfNecessary(directives);
         }
         // Otherwise we should emit a path-based reference
-        const container = getSourceFileOfNode(node);
-        refs.set(getOriginalNodeId(container), container);
+        const container = getOriginalNode(getSourceFileOfNode(node), isSourceFile);
+        refs.add(container);
     }
 
     function trackReferencedAmbientModuleFromImport(node: ImportDeclaration | ExportDeclaration | ImportEqualsDeclaration | ImportTypeNode) {
@@ -354,7 +362,7 @@ export function transformDeclarations(context: TransformationContext) {
 
     function trackExternalModuleSymbolOfImportTypeNode(symbol: Symbol) {
         if (!isBundledEmit) {
-            (exportedModulesFromDeclarationEmit || (exportedModulesFromDeclarationEmit = [])).push(symbol);
+            recordExportedModuleFromDeclarationEmit(symbol);
         }
     }
 
@@ -452,8 +460,8 @@ export function transformDeclarations(context: TransformationContext) {
 
         if (node.kind === SyntaxKind.Bundle) {
             isBundledEmit = true;
-            refs = new Map();
-            libs = new Map();
+            refs = new Set();
+            libs = new Set();
             let hasNoDefaultLib = false;
             const bundle = factory.createBundle(
                 map(node.sourceFiles, sourceFile => {
@@ -527,8 +535,11 @@ export function transformDeclarations(context: TransformationContext) {
         lateMarkedStatements = undefined;
         lateStatementReplacementMap = new Map();
         necessaryTypeReferences = undefined;
-        refs = collectReferences(currentSourceFile, new Map());
-        libs = collectLibs(currentSourceFile, new Map());
+        recordTypeReferenceDirectivesIfNecessary(
+            node.typeReferenceDirectives.map(f => [f.fileName, f.resolutionMode ?? currentSourceFile.impliedNodeFormat]),
+        );
+        refs = collectReferences(currentSourceFile, new Set());
+        libs = collectLibs(currentSourceFile, new Set());
         const references: FileReference[] = [];
         const outputFilePath = getDirectoryPath(normalizeSlashes(getOutputPathsFor(node, host, /*forceDtsPaths*/ true).declarationFilePath!));
         const referenceVisitor = mapReferencesIntoArray(references, outputFilePath);
@@ -548,7 +559,7 @@ export function transformDeclarations(context: TransformationContext) {
             }
         }
         const updated = factory.updateSourceFile(node, combinedStatements, /*isDeclarationFile*/ true, references, getFileReferencesForUsedTypeReferences(), node.hasNoDefaultLib, getLibReferences());
-        updated.exportedModulesFromDeclarationEmit = exportedModulesFromDeclarationEmit;
+        updated.exportedModulesFromDeclarationEmit = exportedModulesFromDeclarationEmit && [...exportedModulesFromDeclarationEmit.keys()];
         return updated;
 
         function getLibReferences() {
@@ -556,7 +567,7 @@ export function transformDeclarations(context: TransformationContext) {
         }
 
         function getFileReferencesForUsedTypeReferences() {
-            return necessaryTypeReferences ? mapDefined(arrayFrom(necessaryTypeReferences.keys()), getFileReferenceForSpecifierModeTuple) : [];
+            return necessaryTypeReferences ? mapDefined(arrayFrom(necessaryTypeReferences.values()), getFileReferenceForSpecifierModeTuple) : [];
         }
 
         function getFileReferenceForSpecifierModeTuple([typeName, mode]: [specifier: string, mode: ResolutionMode]): FileReference | undefined {
@@ -579,7 +590,7 @@ export function transformDeclarations(context: TransformationContext) {
 
         function mapReferencesIntoArray(references: FileReference[], outputFilePath: string): (file: SourceFile) => void {
             return file => {
-                if (exportedModulesFromDeclarationEmit?.includes(file.symbol)) {
+                if (exportedModulesFromDeclarationEmit?.has(file.symbol)) {
                     // Already have an import declaration resolving to this file
                     return;
                 }
@@ -633,22 +644,22 @@ export function transformDeclarations(context: TransformationContext) {
         }
     }
 
-    function collectReferences(sourceFile: SourceFile | UnparsedSource, ret: Map<NodeId, SourceFile>) {
+    function collectReferences(sourceFile: SourceFile | UnparsedSource, ret: Set<SourceFile>) {
         if (noResolve || (!isUnparsedSource(sourceFile) && isSourceFileJS(sourceFile))) return ret;
         forEach(sourceFile.referencedFiles, f => {
             const elem = host.getSourceFileFromReference(sourceFile, f);
             if (elem) {
-                ret.set(getOriginalNodeId(elem), elem);
+                ret.add(getOriginalNode(elem, isSourceFile));
             }
         });
         return ret;
     }
 
-    function collectLibs(sourceFile: SourceFile | UnparsedSource, ret: Map<string, boolean>) {
+    function collectLibs(sourceFile: SourceFile | UnparsedSource, ret: Set<string>) {
         forEach(sourceFile.libReferenceDirectives, ref => {
             const lib = host.getLibFileFromReference(ref);
             if (lib) {
-                ret.set(toFileNameLowerCase(ref.fileName), true);
+                ret.add(toFileNameLowerCase(ref.fileName));
             }
         });
         return ret;
@@ -911,7 +922,7 @@ export function transformDeclarations(context: TransformationContext) {
             else {
                 const symbol = resolver.getSymbolOfExternalModuleSpecifier(input);
                 if (symbol) {
-                    (exportedModulesFromDeclarationEmit || (exportedModulesFromDeclarationEmit = [])).push(symbol);
+                    recordExportedModuleFromDeclarationEmit(symbol);
                 }
             }
         }

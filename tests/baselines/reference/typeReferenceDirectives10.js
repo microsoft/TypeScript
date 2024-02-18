@@ -20,6 +20,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 
 
 //// [app.d.ts]
+/// <reference types="lib" />
 import { $ } from "./ref";
 export interface A {
     x: $;

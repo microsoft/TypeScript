@@ -35,4 +35,5 @@ function foo() {
 
 
 //// [app.d.ts]
+/// <reference types="foo" resolution-mode="require"/>
 declare function foo(): any;

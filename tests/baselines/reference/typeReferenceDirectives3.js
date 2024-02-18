@@ -22,6 +22,7 @@ interface A {
 
 //// [app.d.ts]
 /// <reference path="ref.d.ts" />
+/// <reference types="lib" />
 interface A {
     x: () => $;
 }

@@ -25,6 +25,7 @@ exports.y = y;
 
 
 //// [app.d.ts]
+/// <reference types="lib" />
 export declare let $: number;
 export declare let x: typeof $;
 export declare let y: () => number;
