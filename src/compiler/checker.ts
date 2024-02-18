@@ -40536,7 +40536,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         const objectIndexType = isGenericMappedType(objectType) && getMappedTypeNameTypeKind(objectType) === MappedTypeNameTypeKind.Remapping
             ? getIndexTypeForMappedType(objectType, IndexFlags.None)
             : getIndexType(objectType, IndexFlags.None);
-        if (isTypeAssignableTo(indexType, objectIndexType)) {
+        const hasNumberIndexInfo = !!getIndexInfoOfType(objectType, numberType);
+        if (everyType(indexType, t => isTypeAssignableTo(t, objectIndexType) || hasNumberIndexInfo && isApplicableIndexType(t, numberType))) {
             if (
                 accessNode.kind === SyntaxKind.ElementAccessExpression && isAssignmentTarget(accessNode) &&
                 getObjectFlags(objectType) & ObjectFlags.Mapped && getMappedTypeModifiers(objectType as MappedType) & MappedTypeModifiers.IncludeReadonly
@@ -40545,16 +40546,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             }
             return type;
         }
-        // Check if we're indexing with a numeric type and if either object or index types
-        // is a generic type with a constraint that has a numeric index signature.
-        const apparentObjectType = getApparentType(objectType);
-        if (getIndexInfoOfType(apparentObjectType, numberType) && isTypeAssignableToKind(indexType, TypeFlags.NumberLike)) {
-            return type;
-        }
         if (isGenericObjectType(objectType)) {
             const propertyName = getPropertyNameFromIndex(indexType, accessNode);
             if (propertyName) {
-                const propertySymbol = forEachType(apparentObjectType, t => getPropertyOfType(t, propertyName));
+                const propertySymbol = forEachType(getApparentType(objectType), t => getPropertyOfType(t, propertyName));
                 if (propertySymbol && getDeclarationModifierFlagsFromSymbol(propertySymbol) & ModifierFlags.NonPublicAccessibilityModifier) {
                     error(accessNode, Diagnostics.Private_or_protected_member_0_cannot_be_accessed_on_a_type_parameter, unescapeLeadingUnderscores(propertyName));
                     return errorType;
