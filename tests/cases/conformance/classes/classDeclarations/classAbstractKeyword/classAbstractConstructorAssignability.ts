@@ -35,3 +35,24 @@ export const funcThatAcceptsAnyGeneratedClass = (
 ) => {};
 
 funcThatAcceptsAnyGeneratedClass(MyPrivateClass);
+
+abstract class AbstractClass1 {
+  private constructor(arg: string) {}
+}
+
+class SomeClass1 {
+  private constructor(arg: number) {}
+}
+
+const test1: typeof AbstractClass1 = SomeClass1;
+
+abstract class AbstractClass2 {
+  private constructor() {}
+  private test = 10;
+}
+
+class SomeClass2 {
+  constructor() {}
+}
+
+const test2: typeof AbstractClass2 = SomeClass2;

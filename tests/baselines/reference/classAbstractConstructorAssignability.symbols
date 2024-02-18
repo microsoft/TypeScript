@@ -79,3 +79,41 @@ funcThatAcceptsAnyGeneratedClass(MyPrivateClass);
 >funcThatAcceptsAnyGeneratedClass : Symbol(funcThatAcceptsAnyGeneratedClass, Decl(classAbstractConstructorAssignability.ts, 31, 12))
 >MyPrivateClass : Symbol(MyPrivateClass, Decl(classAbstractConstructorAssignability.ts, 19, 1))
 
+abstract class AbstractClass1 {
+>AbstractClass1 : Symbol(AbstractClass1, Decl(classAbstractConstructorAssignability.ts, 35, 49))
+
+  private constructor(arg: string) {}
+>arg : Symbol(arg, Decl(classAbstractConstructorAssignability.ts, 38, 22))
+}
+
+class SomeClass1 {
+>SomeClass1 : Symbol(SomeClass1, Decl(classAbstractConstructorAssignability.ts, 39, 1))
+
+  private constructor(arg: number) {}
+>arg : Symbol(arg, Decl(classAbstractConstructorAssignability.ts, 42, 22))
+}
+
+const test1: typeof AbstractClass1 = SomeClass1;
+>test1 : Symbol(test1, Decl(classAbstractConstructorAssignability.ts, 45, 5))
+>AbstractClass1 : Symbol(AbstractClass1, Decl(classAbstractConstructorAssignability.ts, 35, 49))
+>SomeClass1 : Symbol(SomeClass1, Decl(classAbstractConstructorAssignability.ts, 39, 1))
+
+abstract class AbstractClass2 {
+>AbstractClass2 : Symbol(AbstractClass2, Decl(classAbstractConstructorAssignability.ts, 45, 48))
+
+  private constructor() {}
+  private test = 10;
+>test : Symbol(AbstractClass2.test, Decl(classAbstractConstructorAssignability.ts, 48, 26))
+}
+
+class SomeClass2 {
+>SomeClass2 : Symbol(SomeClass2, Decl(classAbstractConstructorAssignability.ts, 50, 1))
+
+  constructor() {}
+}
+
+const test2: typeof AbstractClass2 = SomeClass2;
+>test2 : Symbol(test2, Decl(classAbstractConstructorAssignability.ts, 56, 5))
+>AbstractClass2 : Symbol(AbstractClass2, Decl(classAbstractConstructorAssignability.ts, 45, 48))
+>SomeClass2 : Symbol(SomeClass2, Decl(classAbstractConstructorAssignability.ts, 50, 1))
+

@@ -86,3 +86,42 @@ funcThatAcceptsAnyGeneratedClass(MyPrivateClass);
 >funcThatAcceptsAnyGeneratedClass : (clazz: typeof GeneratedConstructable) => void
 >MyPrivateClass : typeof MyPrivateClass
 
+abstract class AbstractClass1 {
+>AbstractClass1 : AbstractClass1
+
+  private constructor(arg: string) {}
+>arg : string
+}
+
+class SomeClass1 {
+>SomeClass1 : SomeClass1
+
+  private constructor(arg: number) {}
+>arg : number
+}
+
+const test1: typeof AbstractClass1 = SomeClass1;
+>test1 : typeof AbstractClass1
+>AbstractClass1 : typeof AbstractClass1
+>SomeClass1 : typeof SomeClass1
+
+abstract class AbstractClass2 {
+>AbstractClass2 : AbstractClass2
+
+  private constructor() {}
+  private test = 10;
+>test : number
+>10 : 10
+}
+
+class SomeClass2 {
+>SomeClass2 : SomeClass2
+
+  constructor() {}
+}
+
+const test2: typeof AbstractClass2 = SomeClass2;
+>test2 : typeof AbstractClass2
+>AbstractClass2 : typeof AbstractClass2
+>SomeClass2 : typeof SomeClass2
+

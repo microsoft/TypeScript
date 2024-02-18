@@ -3,9 +3,12 @@ classAbstractConstructorAssignability.ts(7,5): error TS2322: Type 'typeof B' is 
 classAbstractConstructorAssignability.ts(9,5): error TS2322: Type 'typeof B' is not assignable to type 'typeof C'.
   Cannot assign an abstract constructor type to a non-abstract constructor type.
 classAbstractConstructorAssignability.ts(12,1): error TS2511: Cannot create an instance of an abstract class.
+classAbstractConstructorAssignability.ts(57,7): error TS2419: Types of construct signatures are incompatible.
+  Type 'new () => SomeClass2' is not assignable to type 'abstract new () => AbstractClass2'.
+    Property 'test' is missing in type 'SomeClass2' but required in type 'AbstractClass2'.
 
 
-==== classAbstractConstructorAssignability.ts (3 errors) ====
+==== classAbstractConstructorAssignability.ts (4 errors) ====
     class A {}
     
     abstract class B extends A {}
@@ -50,4 +53,30 @@ classAbstractConstructorAssignability.ts(12,1): error TS2511: Cannot create an i
     ) => {};
     
     funcThatAcceptsAnyGeneratedClass(MyPrivateClass);
+    
+    abstract class AbstractClass1 {
+      private constructor(arg: string) {}
+    }
+    
+    class SomeClass1 {
+      private constructor(arg: number) {}
+    }
+    
+    const test1: typeof AbstractClass1 = SomeClass1;
+    
+    abstract class AbstractClass2 {
+      private constructor() {}
+      private test = 10;
+    }
+    
+    class SomeClass2 {
+      constructor() {}
+    }
+    
+    const test2: typeof AbstractClass2 = SomeClass2;
+          ~~~~~
+!!! error TS2419: Types of construct signatures are incompatible.
+!!! error TS2419:   Type 'new () => SomeClass2' is not assignable to type 'abstract new () => AbstractClass2'.
+!!! error TS2419:     Property 'test' is missing in type 'SomeClass2' but required in type 'AbstractClass2'.
+!!! related TS2728 classAbstractConstructorAssignability.ts:50:11: 'test' is declared here.
     
