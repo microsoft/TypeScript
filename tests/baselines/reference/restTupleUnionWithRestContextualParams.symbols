@@ -130,3 +130,83 @@ const f19: (...rest: [string, ...boolean[], string] | [number]) => void = (a, ..
 >a : Symbol(a, Decl(restTupleUnionWithRestContextualParams.ts, 33, 75))
 >rest : Symbol(rest, Decl(restTupleUnionWithRestContextualParams.ts, 33, 77))
 
+type entryArgsWithIndex<o> = {
+>entryArgsWithIndex : Symbol(entryArgsWithIndex, Decl(restTupleUnionWithRestContextualParams.ts, 33, 93))
+>o : Symbol(o, Decl(restTupleUnionWithRestContextualParams.ts, 35, 24))
+
+  [k in keyof o]: [k: k, v: o[k], i: number];
+>k : Symbol(k, Decl(restTupleUnionWithRestContextualParams.ts, 36, 3))
+>o : Symbol(o, Decl(restTupleUnionWithRestContextualParams.ts, 35, 24))
+>k : Symbol(k, Decl(restTupleUnionWithRestContextualParams.ts, 36, 3))
+>o : Symbol(o, Decl(restTupleUnionWithRestContextualParams.ts, 35, 24))
+>k : Symbol(k, Decl(restTupleUnionWithRestContextualParams.ts, 36, 3))
+
+}[keyof o];
+>o : Symbol(o, Decl(restTupleUnionWithRestContextualParams.ts, 35, 24))
+
+declare const iterateEntries1: <const o extends object>(
+>iterateEntries1 : Symbol(iterateEntries1, Decl(restTupleUnionWithRestContextualParams.ts, 39, 13))
+>o : Symbol(o, Decl(restTupleUnionWithRestContextualParams.ts, 39, 32), Decl(restTupleUnionWithRestContextualParams.ts, 39, 56))
+
+  o: o,
+>o : Symbol(o, Decl(restTupleUnionWithRestContextualParams.ts, 39, 32), Decl(restTupleUnionWithRestContextualParams.ts, 39, 56))
+>o : Symbol(o, Decl(restTupleUnionWithRestContextualParams.ts, 39, 32), Decl(restTupleUnionWithRestContextualParams.ts, 39, 56))
+
+  flatMapEntry: (...args: entryArgsWithIndex<o>) => void,
+>flatMapEntry : Symbol(flatMapEntry, Decl(restTupleUnionWithRestContextualParams.ts, 40, 7))
+>args : Symbol(args, Decl(restTupleUnionWithRestContextualParams.ts, 41, 17))
+>entryArgsWithIndex : Symbol(entryArgsWithIndex, Decl(restTupleUnionWithRestContextualParams.ts, 33, 93))
+>o : Symbol(o, Decl(restTupleUnionWithRestContextualParams.ts, 39, 32), Decl(restTupleUnionWithRestContextualParams.ts, 39, 56))
+
+) => void;
+
+const ie1 = iterateEntries1({ a: true, b: false }, (k, v) => [k, v]);
+>ie1 : Symbol(ie1, Decl(restTupleUnionWithRestContextualParams.ts, 44, 5))
+>iterateEntries1 : Symbol(iterateEntries1, Decl(restTupleUnionWithRestContextualParams.ts, 39, 13))
+>a : Symbol(a, Decl(restTupleUnionWithRestContextualParams.ts, 44, 29))
+>b : Symbol(b, Decl(restTupleUnionWithRestContextualParams.ts, 44, 38))
+>k : Symbol(k, Decl(restTupleUnionWithRestContextualParams.ts, 44, 52))
+>v : Symbol(v, Decl(restTupleUnionWithRestContextualParams.ts, 44, 54))
+>k : Symbol(k, Decl(restTupleUnionWithRestContextualParams.ts, 44, 52))
+>v : Symbol(v, Decl(restTupleUnionWithRestContextualParams.ts, 44, 54))
+
+const ie2 = iterateEntries1({ a: true, b: false }, (k, v) => {
+>ie2 : Symbol(ie2, Decl(restTupleUnionWithRestContextualParams.ts, 45, 5))
+>iterateEntries1 : Symbol(iterateEntries1, Decl(restTupleUnionWithRestContextualParams.ts, 39, 13))
+>a : Symbol(a, Decl(restTupleUnionWithRestContextualParams.ts, 45, 29))
+>b : Symbol(b, Decl(restTupleUnionWithRestContextualParams.ts, 45, 38))
+>k : Symbol(k, Decl(restTupleUnionWithRestContextualParams.ts, 45, 52))
+>v : Symbol(v, Decl(restTupleUnionWithRestContextualParams.ts, 45, 54))
+
+  return [k, v];
+>k : Symbol(k, Decl(restTupleUnionWithRestContextualParams.ts, 45, 52))
+>v : Symbol(v, Decl(restTupleUnionWithRestContextualParams.ts, 45, 54))
+
+});
+
+declare const iterateEntries2: <const o extends object>(
+>iterateEntries2 : Symbol(iterateEntries2, Decl(restTupleUnionWithRestContextualParams.ts, 49, 13))
+>o : Symbol(o, Decl(restTupleUnionWithRestContextualParams.ts, 49, 32), Decl(restTupleUnionWithRestContextualParams.ts, 49, 56))
+
+  o: o,
+>o : Symbol(o, Decl(restTupleUnionWithRestContextualParams.ts, 49, 32), Decl(restTupleUnionWithRestContextualParams.ts, 49, 56))
+>o : Symbol(o, Decl(restTupleUnionWithRestContextualParams.ts, 49, 32), Decl(restTupleUnionWithRestContextualParams.ts, 49, 56))
+
+  flatMapEntry: (...args: entryArgsWithIndex<o>) => unknown,
+>flatMapEntry : Symbol(flatMapEntry, Decl(restTupleUnionWithRestContextualParams.ts, 50, 7))
+>args : Symbol(args, Decl(restTupleUnionWithRestContextualParams.ts, 51, 17))
+>entryArgsWithIndex : Symbol(entryArgsWithIndex, Decl(restTupleUnionWithRestContextualParams.ts, 33, 93))
+>o : Symbol(o, Decl(restTupleUnionWithRestContextualParams.ts, 49, 32), Decl(restTupleUnionWithRestContextualParams.ts, 49, 56))
+
+) => void;
+
+const ie3 = iterateEntries2({ a: true, b: false }, (k, v) => [k, v]);
+>ie3 : Symbol(ie3, Decl(restTupleUnionWithRestContextualParams.ts, 54, 5))
+>iterateEntries2 : Symbol(iterateEntries2, Decl(restTupleUnionWithRestContextualParams.ts, 49, 13))
+>a : Symbol(a, Decl(restTupleUnionWithRestContextualParams.ts, 54, 29))
+>b : Symbol(b, Decl(restTupleUnionWithRestContextualParams.ts, 54, 38))
+>k : Symbol(k, Decl(restTupleUnionWithRestContextualParams.ts, 54, 52))
+>v : Symbol(v, Decl(restTupleUnionWithRestContextualParams.ts, 54, 54))
+>k : Symbol(k, Decl(restTupleUnionWithRestContextualParams.ts, 54, 52))
+>v : Symbol(v, Decl(restTupleUnionWithRestContextualParams.ts, 54, 54))
+

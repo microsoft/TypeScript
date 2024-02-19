@@ -136,3 +136,85 @@ const f19: (...rest: [string, ...boolean[], string] | [number]) => void = (a, ..
 >a : string | number
 >rest : (string | number | boolean)[]
 
+type entryArgsWithIndex<o> = {
+>entryArgsWithIndex : entryArgsWithIndex<o>
+
+  [k in keyof o]: [k: k, v: o[k], i: number];
+}[keyof o];
+
+declare const iterateEntries1: <const o extends object>(
+>iterateEntries1 : <const o extends object>(o: o, flatMapEntry: (...args: entryArgsWithIndex<o>) => void) => void
+
+  o: o,
+>o : o
+
+  flatMapEntry: (...args: entryArgsWithIndex<o>) => void,
+>flatMapEntry : (...args: entryArgsWithIndex<o>) => void
+>args : entryArgsWithIndex<o>
+
+) => void;
+
+const ie1 = iterateEntries1({ a: true, b: false }, (k, v) => [k, v]);
+>ie1 : void
+>iterateEntries1({ a: true, b: false }, (k, v) => [k, v]) : void
+>iterateEntries1 : <const o extends object>(o: o, flatMapEntry: (...args: entryArgsWithIndex<o>) => void) => void
+>{ a: true, b: false } : { a: true; b: false; }
+>a : true
+>true : true
+>b : false
+>false : false
+>(k, v) => [k, v] : (k: "a" | "b", v: boolean) => (boolean | "a" | "b")[]
+>k : "a" | "b"
+>v : boolean
+>[k, v] : (boolean | "a" | "b")[]
+>k : "a" | "b"
+>v : boolean
+
+const ie2 = iterateEntries1({ a: true, b: false }, (k, v) => {
+>ie2 : void
+>iterateEntries1({ a: true, b: false }, (k, v) => {  return [k, v];}) : void
+>iterateEntries1 : <const o extends object>(o: o, flatMapEntry: (...args: entryArgsWithIndex<o>) => void) => void
+>{ a: true, b: false } : { a: true; b: false; }
+>a : true
+>true : true
+>b : false
+>false : false
+>(k, v) => {  return [k, v];} : (k: "a" | "b", v: boolean) => (boolean | "a" | "b")[]
+>k : "a" | "b"
+>v : boolean
+
+  return [k, v];
+>[k, v] : (boolean | "a" | "b")[]
+>k : "a" | "b"
+>v : boolean
+
+});
+
+declare const iterateEntries2: <const o extends object>(
+>iterateEntries2 : <const o extends object>(o: o, flatMapEntry: (...args: entryArgsWithIndex<o>) => unknown) => void
+
+  o: o,
+>o : o
+
+  flatMapEntry: (...args: entryArgsWithIndex<o>) => unknown,
+>flatMapEntry : (...args: entryArgsWithIndex<o>) => unknown
+>args : entryArgsWithIndex<o>
+
+) => void;
+
+const ie3 = iterateEntries2({ a: true, b: false }, (k, v) => [k, v]);
+>ie3 : void
+>iterateEntries2({ a: true, b: false }, (k, v) => [k, v]) : void
+>iterateEntries2 : <const o extends object>(o: o, flatMapEntry: (...args: entryArgsWithIndex<o>) => unknown) => void
+>{ a: true, b: false } : { a: true; b: false; }
+>a : true
+>true : true
+>b : false
+>false : false
+>(k, v) => [k, v] : (k: "a" | "b", v: boolean) => (boolean | "a" | "b")[]
+>k : "a" | "b"
+>v : boolean
+>[k, v] : (boolean | "a" | "b")[]
+>k : "a" | "b"
+>v : boolean
+

@@ -35,3 +35,24 @@ const f17: (...rest: [...string[], number]) => void = (a, b, c?) => {};
 const f18: (...rest: [...string[], number]) => void = (a, b, c?: string | number) => {};
 
 const f19: (...rest: [string, ...boolean[], string] | [number]) => void = (a, ...rest) => {};
+
+type entryArgsWithIndex<o> = {
+  [k in keyof o]: [k: k, v: o[k], i: number];
+}[keyof o];
+
+declare const iterateEntries1: <const o extends object>(
+  o: o,
+  flatMapEntry: (...args: entryArgsWithIndex<o>) => void,
+) => void;
+
+const ie1 = iterateEntries1({ a: true, b: false }, (k, v) => [k, v]);
+const ie2 = iterateEntries1({ a: true, b: false }, (k, v) => {
+  return [k, v];
+});
+
+declare const iterateEntries2: <const o extends object>(
+  o: o,
+  flatMapEntry: (...args: entryArgsWithIndex<o>) => unknown,
+) => void;
+
+const ie3 = iterateEntries2({ a: true, b: false }, (k, v) => [k, v]);
