@@ -187,6 +187,7 @@ import {
     getLineAndCharacterOfPosition,
     getLinesBetweenPositions,
     getLineStarts,
+    getModeForUsageLocation,
     getNameOfDeclaration,
     getNormalizedAbsolutePath,
     getNormalizedPathComponents,
@@ -220,6 +221,7 @@ import {
     idText,
     IfStatement,
     ignoredPaths,
+    ImportAttribute,
     ImportCall,
     ImportClause,
     ImportDeclaration,
@@ -282,6 +284,7 @@ import {
     isJSDoc,
     isJSDocAugmentsTag,
     isJSDocFunctionType,
+    isJSDocImplementsTag,
     isJSDocLinkLike,
     isJSDocMemberName,
     isJSDocNameReference,
@@ -467,7 +470,6 @@ import {
     RequireOrImportCall,
     RequireVariableStatement,
     ResolutionMode,
-    ResolutionNameAndModeGetter,
     ResolvedModuleFull,
     ResolvedModuleWithFailedLookupLocations,
     ResolvedTypeReferenceDirective,
@@ -765,18 +767,23 @@ export function moduleResolutionIsEqualTo(oldResolution: ResolvedModuleWithFaile
             oldResolution.resolvedModule.resolvedFileName === newResolution.resolvedModule.resolvedFileName &&
             oldResolution.resolvedModule.originalPath === newResolution.resolvedModule.originalPath &&
             packageIdIsEqual(oldResolution.resolvedModule.packageId, newResolution.resolvedModule.packageId) &&
-            oldResolution.node10Result === newResolution.node10Result;
+            oldResolution.alternateResult === newResolution.alternateResult;
 }
 
 /** @internal */
 export function createModuleNotFoundChain(sourceFile: SourceFile, host: TypeCheckerHost, moduleReference: string, mode: ResolutionMode, packageName: string) {
-    const node10Result = host.getResolvedModule(sourceFile, moduleReference, mode)?.node10Result;
-    const result = node10Result
+    const alternateResult = host.getResolvedModule(sourceFile, moduleReference, mode)?.alternateResult;
+    const alternateResultMessage = alternateResult && (getEmitModuleResolutionKind(host.getCompilerOptions()) === ModuleResolutionKind.Node10
+        ? [Diagnostics.There_are_types_at_0_but_this_result_could_not_be_resolved_under_your_current_moduleResolution_setting_Consider_updating_to_node16_nodenext_or_bundler, [alternateResult]] as const
+        : [
+            Diagnostics.There_are_types_at_0_but_this_result_could_not_be_resolved_when_respecting_package_json_exports_The_1_library_may_need_to_update_its_package_json_or_typings,
+            [alternateResult, alternateResult.includes(nodeModulesPathPart + "@types/") ? `@types/${mangleScopedPackageName(packageName)}` : packageName],
+        ] as const);
+    const result = alternateResultMessage
         ? chainDiagnosticMessages(
             /*details*/ undefined,
-            Diagnostics.There_are_types_at_0_but_this_result_could_not_be_resolved_when_respecting_package_json_exports_The_1_library_may_need_to_update_its_package_json_or_typings,
-            node10Result,
-            node10Result.includes(nodeModulesPathPart + "@types/") ? `@types/${mangleScopedPackageName(packageName)}` : packageName,
+            alternateResultMessage[0],
+            ...alternateResultMessage[1],
         )
         : host.typesPackageExists(packageName)
         ? chainDiagnosticMessages(
@@ -830,20 +837,16 @@ export function typeDirectiveIsEqualTo(oldResolution: ResolvedTypeReferenceDirec
 /** @internal */
 export function hasChangesInResolutions<K, V>(
     names: readonly K[],
-    newSourceFile: SourceFile,
     newResolutions: readonly V[],
-    getOldResolution: (name: string, mode: ResolutionMode) => V | undefined,
+    getOldResolution: (name: K) => V | undefined,
     comparer: (oldResolution: V, newResolution: V) => boolean,
-    nameAndModeGetter: ResolutionNameAndModeGetter<K, SourceFile>,
 ): boolean {
     Debug.assert(names.length === newResolutions.length);
 
     for (let i = 0; i < names.length; i++) {
         const newResolution = newResolutions[i];
         const entry = names[i];
-        const name = nameAndModeGetter.getName(entry);
-        const mode = nameAndModeGetter.getMode(entry, newSourceFile);
-        const oldResolution = getOldResolution(name, mode);
+        const oldResolution = getOldResolution(entry);
         const changed = oldResolution
             ? !newResolution || !comparer(oldResolution, newResolution)
             : newResolution;
@@ -2430,7 +2433,6 @@ export const fullTripleSlashAMDReferencePathRegEx = /^(\/\/\/\s*<amd-dependency\
 const fullTripleSlashAMDModuleRegEx = /^\/\/\/\s*<amd-module\s+.*?\/>/;
 const defaultLibReferenceRegEx = /^(\/\/\/\s*<reference\s+no-default-lib\s*=\s*)(('[^']*')|("[^"]*"))\s*\/>/;
 
-/** @internal */
 export function isPartOfTypeNode(node: Node): boolean {
     if (SyntaxKind.FirstTypeNode <= node.kind && node.kind <= SyntaxKind.LastTypeNode) {
         return true;
@@ -2452,7 +2454,7 @@ export function isPartOfTypeNode(node: Node): boolean {
         case SyntaxKind.VoidKeyword:
             return node.parent.kind !== SyntaxKind.VoidExpression;
         case SyntaxKind.ExpressionWithTypeArguments:
-            return isHeritageClause(node.parent) && !isExpressionWithTypeArgumentsInClassExtendsClause(node);
+            return isPartOfTypeExpressionWithTypeArguments(node);
         case SyntaxKind.TypeParameter:
             return node.parent.kind === SyntaxKind.MappedType || node.parent.kind === SyntaxKind.InferType;
 
@@ -2491,7 +2493,7 @@ export function isPartOfTypeNode(node: Node): boolean {
             }
             switch (parent.kind) {
                 case SyntaxKind.ExpressionWithTypeArguments:
-                    return isHeritageClause(parent.parent) && !isExpressionWithTypeArgumentsInClassExtendsClause(parent);
+                    return isPartOfTypeExpressionWithTypeArguments(parent);
                 case SyntaxKind.TypeParameter:
                     return node === (parent as TypeParameterDeclaration).constraint;
                 case SyntaxKind.JSDocTemplateTag:
@@ -2525,6 +2527,12 @@ export function isPartOfTypeNode(node: Node): boolean {
     }
 
     return false;
+}
+
+function isPartOfTypeExpressionWithTypeArguments(node: Node) {
+    return isJSDocImplementsTag(node.parent)
+        || isJSDocAugmentsTag(node.parent)
+        || isHeritageClause(node.parent) && !isExpressionWithTypeArgumentsInClassExtendsClause(node);
 }
 
 /** @internal */
@@ -8178,7 +8186,7 @@ function Symbol(this: Symbol, flags: SymbolFlags, name: __String) {
     this.exportSymbol = undefined;
     this.constEnumOnlyModule = undefined;
     this.isReferenced = undefined;
-    this.isAssigned = undefined;
+    this.lastAssignmentPos = undefined;
     (this as any).links = undefined; // used by TransientSymbol
 }
 
@@ -8643,6 +8651,9 @@ export const computedOptions = createComputedCompilerOptions({
                     case ModuleKind.NodeNext:
                         moduleResolution = ModuleResolutionKind.NodeNext;
                         break;
+                    case ModuleKind.Preserve:
+                        moduleResolution = ModuleResolutionKind.Bundler;
+                        break;
                     default:
                         moduleResolution = ModuleResolutionKind.Classic;
                         break;
@@ -8674,6 +8685,7 @@ export const computedOptions = createComputedCompilerOptions({
             switch (computedOptions.module.computeValue(compilerOptions)) {
                 case ModuleKind.Node16:
                 case ModuleKind.NodeNext:
+                case ModuleKind.Preserve:
                     return true;
             }
             return false;
@@ -8866,18 +8878,12 @@ export function emitModuleKindIsNonNodeESM(moduleKind: ModuleKind) {
 /** @internal */
 export function hasJsonModuleEmitEnabled(options: CompilerOptions) {
     switch (getEmitModuleKind(options)) {
-        case ModuleKind.CommonJS:
-        case ModuleKind.AMD:
-        case ModuleKind.ES2015:
-        case ModuleKind.ES2020:
-        case ModuleKind.ES2022:
-        case ModuleKind.ESNext:
-        case ModuleKind.Node16:
-        case ModuleKind.NodeNext:
-            return true;
-        default:
+        case ModuleKind.None:
+        case ModuleKind.System:
+        case ModuleKind.UMD:
             return false;
     }
+    return true;
 }
 
 /** @internal */
@@ -8899,12 +8905,6 @@ export function unusedLabelIsError(options: CompilerOptions): boolean {
 export function moduleResolutionSupportsPackageJsonExportsAndImports(moduleResolution: ModuleResolutionKind): boolean {
     return moduleResolution >= ModuleResolutionKind.Node16 && moduleResolution <= ModuleResolutionKind.NodeNext
         || moduleResolution === ModuleResolutionKind.Bundler;
-}
-
-/** @internal */
-export function shouldResolveJsRequire(compilerOptions: CompilerOptions): boolean {
-    // `bundler` doesn't support resolving `require`, but needs to in `noDtsResolution` to support Find Source Definition
-    return !!compilerOptions.noDtsResolution || getEmitModuleResolutionKind(compilerOptions) !== ModuleResolutionKind.Bundler;
 }
 
 /** @internal */
@@ -9141,7 +9141,8 @@ export const commonPackageFolders: readonly string[] = ["node_modules", "bower_c
 
 const implicitExcludePathRegexPattern = `(?!(${commonPackageFolders.join("|")})(/|$))`;
 
-interface WildcardMatcher {
+/** @internal */
+export interface WildcardMatcher {
     singleAsteriskRegexFragment: string;
     doubleAsteriskRegexFragment: string;
     replaceWildcardCharacter: (match: string) => string;
@@ -9223,7 +9224,13 @@ export function getPatternFromSpec(spec: string, basePath: string, usage: "files
     return pattern && `^(${pattern})${usage === "exclude" ? "($|/)" : "$"}`;
 }
 
-function getSubPatternFromSpec(spec: string, basePath: string, usage: "files" | "directories" | "exclude", { singleAsteriskRegexFragment, doubleAsteriskRegexFragment, replaceWildcardCharacter }: WildcardMatcher): string | undefined {
+/** @internal */
+export function getSubPatternFromSpec(
+    spec: string,
+    basePath: string,
+    usage: "files" | "directories" | "exclude",
+    { singleAsteriskRegexFragment, doubleAsteriskRegexFragment, replaceWildcardCharacter }: WildcardMatcher = wildcardMatchers[usage],
+): string | undefined {
     let subpattern = "";
     let hasWrittenComponent = false;
     const components = getNormalizedPathComponents(spec, basePath);
@@ -9583,7 +9590,9 @@ export function usesExtensionsOnImports({ imports }: SourceFile, hasExtension: (
 
 /** @internal */
 export function getModuleSpecifierEndingPreference(preference: UserPreferences["importModuleSpecifierEnding"], resolutionMode: ResolutionMode, compilerOptions: CompilerOptions, sourceFile: SourceFile): ModuleSpecifierEnding {
-    if (preference === "js" || resolutionMode === ModuleKind.ESNext) {
+    const moduleResolution = getEmitModuleResolutionKind(compilerOptions);
+    const moduleResolutionIsNodeNext = ModuleResolutionKind.Node16 <= moduleResolution && moduleResolution <= ModuleResolutionKind.NodeNext;
+    if (preference === "js" || resolutionMode === ModuleKind.ESNext && moduleResolutionIsNodeNext) {
         // Extensions are explicitly requested or required. Now choose between .js and .ts.
         if (!shouldAllowImportingTsExtension(compilerOptions)) {
             return ModuleSpecifierEnding.JsExtension;
@@ -9614,19 +9623,27 @@ export function getModuleSpecifierEndingPreference(preference: UserPreferences["
 
     function inferPreference() {
         let usesJsExtensions = false;
-        const specifiers = sourceFile.imports.length ? sourceFile.imports.map(i => i.text) :
-            isSourceFileJS(sourceFile) ? getRequiresAtTopOfFile(sourceFile).map(r => r.arguments[0].text) :
+        const specifiers = sourceFile.imports.length ? sourceFile.imports :
+            isSourceFileJS(sourceFile) ? getRequiresAtTopOfFile(sourceFile).map(r => r.arguments[0]) :
             emptyArray;
         for (const specifier of specifiers) {
-            if (pathIsRelative(specifier)) {
-                if (fileExtensionIsOneOf(specifier, extensionsNotSupportingExtensionlessResolution)) {
+            if (pathIsRelative(specifier.text)) {
+                if (
+                    moduleResolutionIsNodeNext &&
+                    resolutionMode === ModuleKind.CommonJS &&
+                    getModeForUsageLocation(sourceFile, specifier, compilerOptions) === ModuleKind.ESNext
+                ) {
+                    // We're trying to decide a preference for a CommonJS module specifier, but looking at an ESM import.
+                    continue;
+                }
+                if (fileExtensionIsOneOf(specifier.text, extensionsNotSupportingExtensionlessResolution)) {
                     // These extensions are not optional, so do not indicate a preference.
                     continue;
                 }
-                if (hasTSFileExtension(specifier)) {
+                if (hasTSFileExtension(specifier.text)) {
                     return ModuleSpecifierEnding.TsExtension;
                 }
-                if (hasJSFileExtension(specifier)) {
+                if (hasJSFileExtension(specifier.text)) {
                     usesJsExtensions = true;
                 }
             }
@@ -10352,12 +10369,6 @@ export function isCatchClauseVariableDeclaration(node: Node) {
 }
 
 /** @internal */
-export function isParameterOrCatchClauseVariable(symbol: Symbol) {
-    const declaration = symbol.valueDeclaration && getRootDeclaration(symbol.valueDeclaration);
-    return !!declaration && (isParameter(declaration) || isCatchClauseVariableDeclaration(declaration));
-}
-
-/** @internal */
 export function isFunctionExpressionOrArrowFunction(node: Node): node is FunctionExpression | ArrowFunction {
     return node.kind === SyntaxKind.FunctionExpression || node.kind === SyntaxKind.ArrowFunction;
 }
@@ -10654,4 +10665,9 @@ export function replaceFirstStar(s: string, replacement: string): string {
     // But, we really do want to replace only the first star.
     // Attempt to defeat this analysis by indirectly calling the method.
     return stringReplace.call(s, "*", replacement);
+}
+
+/** @internal */
+export function getNameFromImportAttribute(node: ImportAttribute) {
+    return isIdentifier(node.name) ? node.name.escapedText : escapeLeadingUnderscores(node.name.text);
 }

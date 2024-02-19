@@ -86,7 +86,10 @@ import {
     isComputedPropertyName,
     isDecorator,
     isElementAccessExpression,
+    isEntityName,
     isEnumConst,
+    isExportAssignment,
+    isExportDeclaration,
     isExportOrDefaultModifier,
     isExportSpecifier,
     isExpression,
@@ -96,6 +99,8 @@ import {
     isHeritageClause,
     isIdentifier,
     isImportClause,
+    isImportDeclaration,
+    isImportEqualsDeclaration,
     isImportSpecifier,
     isInJSFile,
     isInstantiatedModule,
@@ -425,13 +430,65 @@ export function transformTypeScript(context: TransformationContext) {
         }
     }
 
-    function visitElidableStatement(node: ImportDeclaration | ImportEqualsDeclaration | ExportAssignment | ExportDeclaration): VisitResult<Node | undefined> {
+    /**
+     * Determines whether import/export elision is blocked for this statement.
+     *
+     * @description
+     * We generally block import/export elision if the statement was modified by a `before` custom
+     * transform, although we will continue to allow it if the statement hasn't replaced a node of a different kind and
+     * as long as the local bindings for the declarations are unchanged.
+     */
+    function isElisionBlocked(node: ImportDeclaration | ImportEqualsDeclaration | ExportAssignment | ExportDeclaration) {
         const parsed = getParseTreeNode(node);
-        if (parsed !== node) {
-            // If the node has been transformed by a `before` transformer, perform no ellision on it
-            // As the type information we would attempt to lookup to perform ellision is potentially unavailable for the synthesized nodes
-            // We do not reuse `visitorWorker`, as the ellidable statement syntax kinds are technically unrecognized by the switch-case in `visitTypeScript`,
-            // and will trigger debug failures when debug verbosity is turned up
+        if (parsed === node || isExportAssignment(node)) {
+            return false;
+        }
+
+        if (!parsed || parsed.kind !== node.kind) {
+            // no longer safe to elide as the declaration was replaced with a node of a different kind
+            return true;
+        }
+
+        switch (node.kind) {
+            case SyntaxKind.ImportDeclaration:
+                Debug.assertNode(parsed, isImportDeclaration);
+                if (node.importClause !== parsed.importClause) {
+                    return true; // no longer safe to elide as the import clause has changed
+                }
+                if (node.attributes !== parsed.attributes) {
+                    return true; // no longer safe to elide as the import attributes have changed
+                }
+                break;
+            case SyntaxKind.ImportEqualsDeclaration:
+                Debug.assertNode(parsed, isImportEqualsDeclaration);
+                if (node.name !== parsed.name) {
+                    return true; // no longer safe to elide as local binding has changed
+                }
+                if (node.isTypeOnly !== parsed.isTypeOnly) {
+                    return true; // no longer safe to elide as `type` modifier has changed
+                }
+                if (node.moduleReference !== parsed.moduleReference && (isEntityName(node.moduleReference) || isEntityName(parsed.moduleReference))) {
+                    return true; // no longer safe to elide as EntityName reference has changed.
+                }
+                break;
+            case SyntaxKind.ExportDeclaration:
+                Debug.assertNode(parsed, isExportDeclaration);
+                if (node.exportClause !== parsed.exportClause) {
+                    return true; // no longer safe to elide as the export clause has changed
+                }
+                if (node.attributes !== parsed.attributes) {
+                    return true; // no longer safe to elide as the export attributes have changed
+                }
+                break;
+        }
+
+        return false;
+    }
+
+    function visitElidableStatement(node: ImportDeclaration | ImportEqualsDeclaration | ExportAssignment | ExportDeclaration): VisitResult<Node | undefined> {
+        if (isElisionBlocked(node)) {
+            // We do not reuse `visitorWorker`, as the ellidable statement syntax kinds are technically unrecognized by
+            // the switch-case in `visitTypeScript`, and will trigger debug failures when debug verbosity is turned up.
             if (node.transformFlags & TransformFlags.ContainsTypeScript) {
                 // This node contains TypeScript, so we should visit its children.
                 return visitEachChild(node, visitor, context);

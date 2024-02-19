@@ -44,7 +44,6 @@ import {
     getExportInfoMap,
     getMeaningFromDeclaration,
     getMeaningFromLocation,
-    getModeForUsageLocation,
     getNameForExportedSymbol,
     getNodeId,
     getOutputExtension,
@@ -53,6 +52,7 @@ import {
     getSourceFileOfNode,
     getSymbolId,
     getTokenAtPosition,
+    getTokenPosOfNode,
     getTypeKeywordOfTypeOnlyImport,
     getUniqueSymbolId,
     hostGetCanonicalFileName,
@@ -97,7 +97,6 @@ import {
     mapDefined,
     memoizeOne,
     ModuleKind,
-    ModuleResolutionKind,
     moduleResolutionUsesNodeModules,
     moduleSpecifiers,
     MultiMap,
@@ -1054,13 +1053,11 @@ function compareModuleSpecifiers(
 // This is a simple heuristic to try to avoid creating an import cycle with a barrel re-export.
 // E.g., do not `import { Foo } from ".."` when you could `import { Foo } from "../Foo"`.
 // This can produce false positives or negatives if re-exports cross into sibling directories
-// (e.g. `export * from "../whatever"`) or are not named "index" (we don't even try to consider
-// this if we're in a resolution mode where you can't drop trailing "/index" from paths).
+// (e.g. `export * from "../whatever"`) or are not named "index".
 function isFixPossiblyReExportingImportingFile(fix: ImportFixWithModuleSpecifier, importingFile: SourceFile, compilerOptions: CompilerOptions, toPath: (fileName: string) => Path): boolean {
     if (
         fix.isReExport &&
         fix.exportInfo?.moduleFileName &&
-        getEmitModuleResolutionKind(compilerOptions) === ModuleResolutionKind.Node10 &&
         isIndexFileName(fix.exportInfo.moduleFileName)
     ) {
         const reExportDir = toPath(getDirectoryPath(fix.exportInfo.moduleFileName));
@@ -1159,6 +1156,7 @@ function getUmdImportKind(importingFile: SourceFile, compilerOptions: CompilerOp
         case ModuleKind.ES2022:
         case ModuleKind.ESNext:
         case ModuleKind.None:
+        case ModuleKind.Preserve:
             // Fall back to the `import * as ns` style import.
             return ImportKind.Namespace;
         case ModuleKind.Node16:
@@ -1406,14 +1404,14 @@ function promoteFromTypeOnly(
                 if (aliasDeclaration.parent.elements.length > 1 && sortKind) {
                     const newSpecifier = factory.updateImportSpecifier(aliasDeclaration, /*isTypeOnly*/ false, aliasDeclaration.propertyName, aliasDeclaration.name);
                     const comparer = OrganizeImports.getOrganizeImportsComparer(preferences, sortKind === SortKind.CaseInsensitive);
-                    const insertionIndex = OrganizeImports.getImportSpecifierInsertionIndex(aliasDeclaration.parent.elements, newSpecifier, comparer);
-                    if (aliasDeclaration.parent.elements.indexOf(aliasDeclaration) !== insertionIndex) {
+                    const insertionIndex = OrganizeImports.getImportSpecifierInsertionIndex(aliasDeclaration.parent.elements, newSpecifier, comparer, preferences);
+                    if (insertionIndex !== aliasDeclaration.parent.elements.indexOf(aliasDeclaration)) {
                         changes.delete(sourceFile, aliasDeclaration);
                         changes.insertImportSpecifierAtIndex(sourceFile, newSpecifier, aliasDeclaration.parent, insertionIndex);
                         return aliasDeclaration;
                     }
                 }
-                changes.deleteRange(sourceFile, aliasDeclaration.getFirstToken()!);
+                changes.deleteRange(sourceFile, { pos: getTokenPosOfNode(aliasDeclaration.getFirstToken()!), end: getTokenPosOfNode(aliasDeclaration.propertyName ?? aliasDeclaration.name) });
                 return aliasDeclaration;
             }
             else {
@@ -1439,7 +1437,7 @@ function promoteFromTypeOnly(
         // Change .ts extension to .js if necessary
         if (!compilerOptions.allowImportingTsExtensions) {
             const moduleSpecifier = tryGetModuleSpecifierFromDeclaration(importClause.parent);
-            const resolvedModule = moduleSpecifier && program.getResolvedModule(sourceFile, moduleSpecifier.text, getModeForUsageLocation(sourceFile, moduleSpecifier))?.resolvedModule;
+            const resolvedModule = moduleSpecifier && program.getResolvedModuleFromModuleSpecifier(moduleSpecifier)?.resolvedModule;
             if (resolvedModule?.resolvedUsingTsExtension) {
                 const changedExtension = changeAnyExtension(moduleSpecifier!.text, getOutputExtension(moduleSpecifier!.text, compilerOptions));
                 changes.replaceNode(sourceFile, moduleSpecifier!, factory.createStringLiteral(changedExtension));
@@ -1538,7 +1536,7 @@ function doAddExistingFix(
                 // type-only, there's no need to ask for the insertion index - it's 0.
                 const insertionIndex = promoteFromTypeOnly && !spec.isTypeOnly
                     ? 0
-                    : OrganizeImports.getImportSpecifierInsertionIndex(existingSpecifiers, spec, comparer);
+                    : OrganizeImports.getImportSpecifierInsertionIndex(existingSpecifiers, spec, comparer, preferences);
                 changes.insertImportSpecifierAtIndex(sourceFile, spec, clause.namedBindings as NamedImports, insertionIndex);
             }
         }

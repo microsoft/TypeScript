@@ -3,3 +3,5 @@
 /// <reference lib="esnext.decorators" />
 /// <reference lib="esnext.disposable" />
 /// <reference lib="esnext.promise" />
+/// <reference lib="esnext.object" />
+/// <reference lib="esnext.collection" />
