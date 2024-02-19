@@ -1628,7 +1628,7 @@
   "Unexpected_token_1012": "予期しないトークンです。",
   "Unexpected_token_A_constructor_method_accessor_or_property_was_expected_1068": "予期しないトークンです。コンストラクター、メソッド、アクセサー、またはプロパティが必要です。",
   "Unexpected_token_A_type_parameter_name_was_expected_without_curly_braces_1069": "予期しないトークンです。型パラメーター名には、中かっこを含めることはできません。",
-  "Unexpected_token_Did_you_mean_or_gt_1382": "予期しないトークンです。`{'>'}` または `>` を意図していましたか?",
+  "Unexpected_token_Did_you_mean_or_gt_1382": "予期しないトークンです。`{'>'}` または `&gt;` を意図していましたか?",
   "Unexpected_token_Did_you_mean_or_rbrace_1381": "予期しないトークンです。`{'}'}` または `&rbrace;` を意図していましたか?",
   "Unexpected_token_expected_1179": "予期しないトークンです。'{' が必要です。",
   "Unknown_build_option_0_5072": "'{0}' は不明なビルド オプションです。",

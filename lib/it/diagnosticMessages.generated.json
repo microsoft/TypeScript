@@ -1628,7 +1628,7 @@
   "Unexpected_token_1012": "Token imprevisto.",
   "Unexpected_token_A_constructor_method_accessor_or_property_was_expected_1068": "Token imprevisto. È previsto un costruttore, un metodo, una funzione di accesso o una proprietà.",
   "Unexpected_token_A_type_parameter_name_was_expected_without_curly_braces_1069": "Token imprevisto. Sono previsti nomi di parametro senza parentesi graffe.",
-  "Unexpected_token_Did_you_mean_or_gt_1382": "Token imprevisto. Si intendeva `{'>'}` o `>`?",
+  "Unexpected_token_Did_you_mean_or_gt_1382": "Token imprevisto. Si intendeva `{'>'}` o `&gt;`?",
   "Unexpected_token_Did_you_mean_or_rbrace_1381": "Token imprevisto. Si intendeva `{'}'}` o `&rbrace;`?",
   "Unexpected_token_expected_1179": "Token imprevisto. È previsto '{'.",
   "Unknown_build_option_0_5072": "L'opzione di compilazione '{0}' è sconosciuta.",

@@ -1628,7 +1628,7 @@
   "Unexpected_token_1012": "Token inesperado.",
   "Unexpected_token_A_constructor_method_accessor_or_property_was_expected_1068": "Token inesperado. Se esperaba un constructor, un método, un descriptor de acceso o una propiedad.",
   "Unexpected_token_A_type_parameter_name_was_expected_without_curly_braces_1069": "Token inesperado. Se esperaba un nombre de parámetro de tipo sin llaves.",
-  "Unexpected_token_Did_you_mean_or_gt_1382": "Token inesperado. ¿Pretendía usar \"{'>'}\" o \">\"?",
+  "Unexpected_token_Did_you_mean_or_gt_1382": "Token inesperado. ¿Pretendía usar \"{'>'}\" o \"&gt;\"?",
   "Unexpected_token_Did_you_mean_or_rbrace_1381": "Token inesperado. ¿Pretendía usar \"{'}'}\" o \"&rbrace;\"?",
   "Unexpected_token_expected_1179": "Token inesperado. Se esperaba \"{\".",
   "Unknown_build_option_0_5072": "Opción de compilación \"{0}\" desconocida.",

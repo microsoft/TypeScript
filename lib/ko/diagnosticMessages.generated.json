@@ -1628,7 +1628,7 @@
   "Unexpected_token_1012": "예기치 않은 토큰입니다.",
   "Unexpected_token_A_constructor_method_accessor_or_property_was_expected_1068": "예기치 않은 토큰입니다. 생성자, 메서드, 접근자 또는 속성이 필요합니다.",
   "Unexpected_token_A_type_parameter_name_was_expected_without_curly_braces_1069": "예기치 않은 토큰입니다. 중괄호가 없는 형식 매개 변수 이름이 필요합니다.",
-  "Unexpected_token_Did_you_mean_or_gt_1382": "예기치 않은 토큰입니다. '{'>'}' 또는 '>'를 사용하시겠습니까?",
+  "Unexpected_token_Did_you_mean_or_gt_1382": "예기치 않은 토큰입니다. '{'>'}' 또는 '&gt;'를 사용하시겠습니까?",
   "Unexpected_token_Did_you_mean_or_rbrace_1381": "예기치 않은 토큰입니다. '{'}'}' 또는 '&rbrace;'를 사용하시겠습니까?",
   "Unexpected_token_expected_1179": "예기치 않은 토큰입니다. '{'가 있어야 합니다.",
   "Unknown_build_option_0_5072": "알 수 없는 빌드 옵션 '{0}'입니다.",

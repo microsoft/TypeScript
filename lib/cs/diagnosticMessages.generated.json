@@ -1628,7 +1628,7 @@
   "Unexpected_token_1012": "Neočekávaný token",
   "Unexpected_token_A_constructor_method_accessor_or_property_was_expected_1068": "Neočekávaný token. Očekával se konstruktor, metoda, přístupový objekt nebo vlastnost.",
   "Unexpected_token_A_type_parameter_name_was_expected_without_curly_braces_1069": "Neočekávaný token. Očekával se název parametru typu bez složených závorek.",
-  "Unexpected_token_Did_you_mean_or_gt_1382": "Neočekávaný token. Měli jste na mysli {'>'} nebo >?",
+  "Unexpected_token_Did_you_mean_or_gt_1382": "Neočekávaný token. Měli jste na mysli {'>'} nebo &gt;?",
   "Unexpected_token_Did_you_mean_or_rbrace_1381": "Neočekávaný token. Měli jste na mysli {'}'} nebo &rbrace;?",
   "Unexpected_token_expected_1179": "Neočekávaný token. Očekává se znak {.",
   "Unknown_build_option_0_5072": "Neznámá možnost sestavení {0}",

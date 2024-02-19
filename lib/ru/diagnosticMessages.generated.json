@@ -1628,7 +1628,7 @@
   "Unexpected_token_1012": "Неожиданный токен.",
   "Unexpected_token_A_constructor_method_accessor_or_property_was_expected_1068": "Неожиданный токен. Ожидался конструктор, метод, метод доступа или свойство.",
   "Unexpected_token_A_type_parameter_name_was_expected_without_curly_braces_1069": "Непредвиденная лексема. Ожидалось имя параметра типа без фигурных скобок.",
-  "Unexpected_token_Did_you_mean_or_gt_1382": "Непредвиденный токен. Возможно, вы хотели использовать \"{'>'}\" или \">\"?",
+  "Unexpected_token_Did_you_mean_or_gt_1382": "Непредвиденный токен. Возможно, вы хотели использовать \"{'>'}\" или \"&gt;\"?",
   "Unexpected_token_Did_you_mean_or_rbrace_1381": "Непредвиденный токен. Возможно, вы хотели использовать \"{'}'}\" или \"&rbrace;\"?",
   "Unexpected_token_expected_1179": "Неожиданный токен. Ожидался символ \"{\".",
   "Unknown_build_option_0_5072": "Неизвестный параметр сборки \"{0}\".",

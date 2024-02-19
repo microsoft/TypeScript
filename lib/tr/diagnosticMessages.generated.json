@@ -1628,7 +1628,7 @@
   "Unexpected_token_1012": "Beklenmeyen belirteç.",
   "Unexpected_token_A_constructor_method_accessor_or_property_was_expected_1068": "Beklenmeyen belirteç. Bir oluşturucu, metot, erişimci veya özellik bekleniyordu.",
   "Unexpected_token_A_type_parameter_name_was_expected_without_curly_braces_1069": "Beklenmeyen belirteç. Küme ayracı olmadan bir tür parametresi adı bekleniyordu.",
-  "Unexpected_token_Did_you_mean_or_gt_1382": "Beklenmeyen belirteç. Şunu mu demek istediniz: `{'>'}` veya `>`?",
+  "Unexpected_token_Did_you_mean_or_gt_1382": "Beklenmeyen belirteç. Şunu mu demek istediniz: `{'>'}` veya `&gt;`?",
   "Unexpected_token_Did_you_mean_or_rbrace_1381": "Beklenmeyen belirteç. Şunu mu demek istediniz: `{'}'}` veya `&rbrace;`?",
   "Unexpected_token_expected_1179": "Beklenmeyen belirteç. '{' bekleniyordu.",
   "Unknown_build_option_0_5072": "Bilinmeyen '{0}' derleme seçeneği.",

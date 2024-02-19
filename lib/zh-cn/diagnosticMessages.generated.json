@@ -1628,7 +1628,7 @@
   "Unexpected_token_1012": "意外的标记。",
   "Unexpected_token_A_constructor_method_accessor_or_property_was_expected_1068": "意外的标记。应为构造函数、方法、访问器或属性。",
   "Unexpected_token_A_type_parameter_name_was_expected_without_curly_braces_1069": "意外的标记。类型参数名不应包含大括号。",
-  "Unexpected_token_Did_you_mean_or_gt_1382": "意外的标记。你是想使用 `{'>'}` 还是 `>`?",
+  "Unexpected_token_Did_you_mean_or_gt_1382": "意外的标记。你是想使用 `{'>'}` 还是 `&gt;`?",
   "Unexpected_token_Did_you_mean_or_rbrace_1381": "意外的标记。你是想使用 `{'}'}` 还是 `&rbrace;`?",
   "Unexpected_token_expected_1179": "意外标记。应为 \"{\"。",
   "Unknown_build_option_0_5072": "未知的生成选项 \"{0}\"。",

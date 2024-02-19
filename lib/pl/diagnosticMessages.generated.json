@@ -1628,7 +1628,7 @@
   "Unexpected_token_1012": "Nieoczekiwany token.",
   "Unexpected_token_A_constructor_method_accessor_or_property_was_expected_1068": "Nieoczekiwany token. Oczekiwano konstruktora, metody, metody dostępu lub właściwości.",
   "Unexpected_token_A_type_parameter_name_was_expected_without_curly_braces_1069": "Nieoczekiwany token. Oczekiwano nazwy parametru typu bez nawiasów klamrowych.",
-  "Unexpected_token_Did_you_mean_or_gt_1382": "Nieoczekiwany token. Czy chodziło o „{'>'}” lub „>”?",
+  "Unexpected_token_Did_you_mean_or_gt_1382": "Nieoczekiwany token. Czy chodziło o „{'>'}” lub „&gt;”?",
   "Unexpected_token_Did_you_mean_or_rbrace_1381": "Nieoczekiwany token. Czy chodziło o „{'}'}” lub „&rbrace;”?",
   "Unexpected_token_expected_1179": "Nieoczekiwany token. Oczekiwano znaku „{”.",
   "Unknown_build_option_0_5072": "Nieznana opcja kompilacji „{0}”.",

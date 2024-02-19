@@ -1628,7 +1628,7 @@
   "Unexpected_token_1012": "Unerwartetes Token.",
   "Unexpected_token_A_constructor_method_accessor_or_property_was_expected_1068": "Unerwartetes Token. Ein Konstruktor, eine Methode, eine Zugriffsmethode oder eine Eigenschaft wurde erwartet.",
   "Unexpected_token_A_type_parameter_name_was_expected_without_curly_braces_1069": "Unerwartetes Token. Es wurde ein Typparametername ohne geschweifte Klammern erwartet.",
-  "Unexpected_token_Did_you_mean_or_gt_1382": "Unerwartetes Token. Meinten Sie \"{'>'}\" oder \">\"?",
+  "Unexpected_token_Did_you_mean_or_gt_1382": "Unerwartetes Token. Meinten Sie \"{'>'}\" oder \"&gt;\"?",
   "Unexpected_token_Did_you_mean_or_rbrace_1381": "Unerwartetes Token. Meinten Sie \"{'}'}\" oder \"&rbrace;\"?",
   "Unexpected_token_expected_1179": "Unerwartetes Token. \"{\" wurde erwartet.",
   "Unknown_build_option_0_5072": "Unbekannte Buildoption \"{0}\".",

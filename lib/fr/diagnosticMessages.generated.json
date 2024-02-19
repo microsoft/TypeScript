@@ -1628,7 +1628,7 @@
   "Unexpected_token_1012": "Jeton inattendu.",
   "Unexpected_token_A_constructor_method_accessor_or_property_was_expected_1068": "Jeton inattendu. Un constructeur, une méthode, un accesseur ou une propriété est attendu.",
   "Unexpected_token_A_type_parameter_name_was_expected_without_curly_braces_1069": "Jeton inattendu. Un nom de paramètre de type est attendu sans accolades.",
-  "Unexpected_token_Did_you_mean_or_gt_1382": "Jeton inattendu. Est-ce que vous avez voulu utiliser '{'>'}' ou '>' ?",
+  "Unexpected_token_Did_you_mean_or_gt_1382": "Jeton inattendu. Est-ce que vous avez voulu utiliser '{'>'}' ou '&gt;' ?",
   "Unexpected_token_Did_you_mean_or_rbrace_1381": "Jeton inattendu. Est-ce que vous avez voulu utiliser '{'}'}' ou '&rbrace;' ?",
   "Unexpected_token_expected_1179": "Jeton inattendu. '{' est attendu.",
   "Unknown_build_option_0_5072": "Option de build inconnue : '{0}'.",

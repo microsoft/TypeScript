@@ -1628,7 +1628,7 @@
   "Unexpected_token_1012": "未預期的語彙基元。",
   "Unexpected_token_A_constructor_method_accessor_or_property_was_expected_1068": "未預期的語彙基元。必須是建構函式、方法、存取子或屬性。",
   "Unexpected_token_A_type_parameter_name_was_expected_without_curly_braces_1069": "權杖錯誤。類型參數名稱不應有大括號。",
-  "Unexpected_token_Did_you_mean_or_gt_1382": "未預期的語彙基元。您是指 `{'>'}` 或 `>` 嗎?",
+  "Unexpected_token_Did_you_mean_or_gt_1382": "未預期的語彙基元。您是指 `{'>'}` 或 `&gt;` 嗎?",
   "Unexpected_token_Did_you_mean_or_rbrace_1381": "未預期的語彙基元。您是指 `{'}'}` 或 `&rbrace;` 嗎?",
   "Unexpected_token_expected_1179": "未預期的語彙基元。必須是 '{'。",
   "Unknown_build_option_0_5072": "未知的組建選項 '{0}'。",
