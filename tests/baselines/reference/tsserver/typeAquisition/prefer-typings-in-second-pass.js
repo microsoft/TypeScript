@@ -61,7 +61,7 @@ Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /a/b 1 undefined 
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /a/b 1 undefined Config: /a/b/jsconfig.json WatchType: Wild card directory
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /a/b/jsconfig.json
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined Project: /a/b/jsconfig.json WatchType: Missing file
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /a/b/jsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /a/b/jsconfig.json projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/a/b/jsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (2)
 	/a/typings/node_modules/@types/bar/index.d.ts Text-1 "export let y: number"
@@ -87,6 +87,21 @@ FsWatches::
 FsWatchesRecursive::
 /a/b: *new*
   {}
+
+Projects::
+/a/b/jsconfig.json (Configured) *new*
+    projectStateVersion: 1
+    projectProgramVersion: 0
+
+ScriptInfos::
+/a/b/app.js (Open) *new*
+    version: SVC-1-0
+    containingProjects: 1
+        /a/b/jsconfig.json *default*
+/a/typings/node_modules/@types/bar/index.d.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /a/b/jsconfig.json
 
 TI:: [hh:mm:ss:mss] Global cache location '/a/typings', safe file path '/safeList.json', types map path /typesMap.json
 TI:: [hh:mm:ss:mss] Processing cache location '/a/typings'
@@ -347,3 +362,8 @@ FsWatchesRecursive::
   {}
 /a/b/node_modules: *new*
   {}
+
+Projects::
+/a/b/jsconfig.json (Configured) *changed*
+    projectStateVersion: 1
+    projectProgramVersion: 1 *changed*

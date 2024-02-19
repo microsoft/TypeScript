@@ -40,8 +40,8 @@ jobs:
           fetch-depth: 0 # Default is 1; need to set to 0 to get the benefits of blob:none.
       - if: ${{ !github.event.inputs.bisect }}
         uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
-      - uses: actions/setup-node@b39b52d1213e96004bfcb1c61a8a6fa8ab84f3e8 # v4.0.1
-      - uses: microsoft/TypeScript-Twoslash-Repro-Action@80178415feb0ebd3ed88d09e263a7cb8c8d6e1d2 # master
+      - uses: actions/setup-node@60edb5dd545a775178f52524783378180af0d1f8 # v4.0.2
+      - uses: microsoft/TypeScript-Twoslash-Repro-Action@8680b5b290d48a7badbc7ba65971d526c61b86b8 # master
         with:
           github-token: ${{ secrets.TS_BOT_GITHUB_TOKEN }}
           issue: ${{ github.event.inputs.issue }}
