@@ -20,7 +20,7 @@
 //// import { t2 } from "./other2";
 //// import { t3 } from "./other3";
 //// export const n = 10;
-//// export const m = t3 + t2 + n;
+//// [|export const m = t3 + t2 + n;|]
 
 // @Filename: /tsconfig.json
 ////{ "files": ["target.ts", "originalFile.ts", "other.ts", "other2.ts", "other3.ts"] }
@@ -28,10 +28,8 @@
 const range = test.ranges();
 format.setOption("insertSpaceAfterSemicolonInForStatements", true);
 verify.postPasteImportFixes({ 
-    pastes: [{
-        text: `const m = t3 + t2 + n;`,
-        range: range[0],
-    }],
+    copies: [{ text: `const m = t3 + t2 + n;`, copyRange: { file: "originalFile.ts", range: range[1]}}],
+    pastes: [range[0]],
     newFileContents: {
         "/target.ts":
 `import { n } from "./originalFile";
@@ -41,6 +39,5 @@ import { t3 } from "./other3";
 const a = t + 1;
 const m = t3 + t2 + n;
 const c = 10;`
-    },
-    copySpan: { file: "originalFile.ts", start: { line : 3, offset: 0}, end : { line: 3, offset: 30}},
+    }
 });

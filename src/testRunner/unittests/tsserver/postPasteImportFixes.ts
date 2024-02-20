@@ -35,7 +35,7 @@ const c = 3;`;
         const originalProgram = session.getProjectService().configuredProjects.get(tsconfig.path)!.getLanguageService().getProgram();
 
         const hostProject = session.getProjectService().configuredProjects.get(tsconfig.path)!;
-        const updatedContent = hostProject.updateTargetFile(target.path, target.content, pastedText);
+        const updatedContent = hostProject.runWithTemporaryFileUpdate(target.path, pastedText);
 
         if (updatedContent.updatedFile !== undefined) {
             hostProject.revertUpdatedFile(target.path, updatedContent.updatedFile.getText(), originalContent);

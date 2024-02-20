@@ -3563,7 +3563,7 @@ export class TestState {
     }
 
     public verifyPostPasteImportFixes(options: FourSlashInterface.PostPasteImportFixOptions): void {
-        const editInfo = this.languageService.getPostPasteImportFixes(this.activeFile.fileName, options.pastes, options.preferences, this.formatCodeSettings, options.copySpan);
+        const editInfo = this.languageService.getPostPasteImportFixes(this.activeFile.fileName, options.copies, options.pastes, options.preferences, this.formatCodeSettings);
         this.verifyNewContent({ newFileContent: options.newFileContents }, editInfo.edits);
     }
 

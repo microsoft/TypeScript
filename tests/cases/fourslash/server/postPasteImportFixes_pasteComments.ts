@@ -11,15 +11,15 @@
 const range = test.ranges();
 format.setOption("insertSpaceAfterSemicolonInForStatements", true);
 verify.postPasteImportFixes({
-    pastes: [{
+    copies: [{
         text: `/**
 * Testing comment line 1
 * line 2
 * line 3
 * line 4
-*/`,
-        range: range[0],
+*/`
     }],
+    pastes: [range[0]],
     newFileContents: {
         "/target.ts":
 `const a = 10;

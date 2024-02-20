@@ -431,7 +431,7 @@ export interface LanguageServiceHost extends GetEffectiveTypeRootsHost, MinimalR
     getParsedCommandLine?(fileName: string): ParsedCommandLine | undefined;
     /** @internal */ onReleaseParsedCommandLine?(configFileName: string, oldResolvedRef: ResolvedProjectReference | undefined, optionOptions: CompilerOptions): void;
     /** @internal */ getIncompleteCompletionsCache?(): IncompleteCompletionsCache;
-    /** @internal */ updateTargetFile?(rootFile: string, targetFileText: string, pastedText: string): { updatedFile: SourceFile | undefined; updatedProgram: Program | undefined; originalProgram: Program | undefined; };
+    /** @internal */ runWithTemporaryFileUpdate?(rootFile: string, pastedText: string): { updatedFile: SourceFile | undefined; updatedProgram: Program | undefined; originalProgram: Program | undefined; };
     /** @internal */ revertUpdatedFile?(rootFile: string, updatedText: string, originalText: string): void;
     jsDocParsingMode?: JSDocParsingMode | undefined;
 }
@@ -687,10 +687,10 @@ export interface LanguageService {
     dispose(): void;
     getPostPasteImportFixes(
         targetFile: string,
-        pastes: { text: string; range: TextRange; }[],
+        copies: { text: string; range?: { file: string; range: TextRange;} }[],
+        pastes: TextRange[],
         preferences: UserPreferences,
         formatOptions: FormatCodeSettings,
-        copySpan?: { file: string; start: { line: number; offset: number; }; end: { line: number; offset: number; }; },
     ): PostPasteImportFixes;
 }
 

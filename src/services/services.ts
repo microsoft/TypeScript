@@ -2093,14 +2093,21 @@ export function createLanguageService(
 
     function getPostPasteImportFixes(
         targetFile: string,
-        pastes: { text: string; range: TextRange; }[],
+        // pastes: { text: string; range: TextRange; }[],
+        // copySpan: { file: string; range: TextRange; } | undefined,
+        copies: { text: string; copyRange?: { file: string; range: TextRange;} }[],
+        pastes: TextRange[],
         preferences: UserPreferences,
         formatOptions: FormatCodeSettings,
-        copySpan?: { file: string; start: { line: number; offset: number; }; end: { line: number; offset: number; }; },
     ): PostPasteImportFixes {
         synchronizeHostData();
-        const originalSourceFile = copySpan ? getValidSourceFile(copySpan.file) : undefined;
-        return postPasteImportFixes.postPasteImportFixesProvider(getValidSourceFile(targetFile), host, pastes, preferences, formatting.getFormatContext(formatOptions, host), cancellationToken, originalSourceFile, copySpan);
+        return postPasteImportFixes.postPasteImportFixesProvider(
+            getValidSourceFile(targetFile),
+            copies.map(({ text, copyRange }) => ({ text, copyRange: copyRange ? { file: getValidSourceFile(copyRange.file), range: copyRange.range } : undefined })),
+            pastes,
+            host, 
+            preferences, 
+            formatting.getFormatContext(formatOptions, host), cancellationToken);
     }
 
     function getNodeForQuickInfo(node: Node): Node {

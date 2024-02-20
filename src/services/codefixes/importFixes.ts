@@ -210,8 +210,8 @@ export interface ImportAdder {
     hasFixes(): boolean;
     addImportFromDiagnostic: (diagnostic: DiagnosticWithLocation, context: CodeFixContextBase) => void;
     addImportFromExportedSymbol: (exportedSymbol: Symbol, isValidTypeOnlyUseSite?: boolean) => void;
+    addImportForUnresolvedIdentifier: (context: CodeFixContextBase, symbolToken: Identifier, useAutoImportProvider: boolean) => void;
     writeFixes: (changeTracker: textChanges.ChangeTracker, oldFileQuotePreference?: QuotePreference) => void;
-    addImportsForUnknownSymbols: (context: CodeFixContextBase, symbolToken: Identifier, useAutoImportProvider: boolean) => void;
 }
 
 /** @internal */
@@ -236,7 +236,7 @@ function createImportAdderWorker(sourceFile: SourceFile, program: Program, useAu
     type NewImportsKey = `${0 | 1}|${string}`;
     /** Use `getNewImportEntry` for access */
     const newImports = new Map<NewImportsKey, Mutable<ImportsCollection & { useRequire: boolean; }>>();
-    return { addImportFromDiagnostic, addImportFromExportedSymbol, writeFixes, hasFixes, addImportsForUnknownSymbols };
+    return { addImportFromDiagnostic, addImportFromExportedSymbol, writeFixes, hasFixes, addImportForUnresolvedIdentifier: addImportsForUnknownSymbols };
 
     function addImportsForUnknownSymbols(context: CodeFixContextBase, symbolToken: Identifier, useAutoImportProvider: boolean) {
         const info = getFixInfosWithoutDiagnostic(context, symbolToken, useAutoImportProvider);

@@ -22,19 +22,12 @@
 const range = test.ranges();
 format.setOption("insertSpaceAfterSemicolonInForStatements", true);
 verify.postPasteImportFixes({
-    pastes: [{
+    copies: [{
         text: `const g = p + q;
 function e();
 const f = r + s;`,
-        range: range[0],
-    },
-    {
-        text: `const g = p + q;
-function e();
-const f = r + s;`,
-        range: range[1],
-    
     }],
+    pastes: [range[0], range[1]],
     newFileContents: {
         "/target.ts":
 `import { p, q } from "./file1";

@@ -22,10 +22,8 @@
 const range = test.ranges();
 format.setOption("insertSpaceAfterSemicolonInForStatements", true);
 verify.postPasteImportFixes({
-    pastes: [{
-        text: `const m = t3 + t2 + 1;`,
-        range: range[0],
-    }],
+    copies: [{ text: `const m = t3 + t2 + 1;`}],
+    pastes: [{ pos: range[0].pos, end: range[0].end }],
     newFileContents: {
         "/target.ts":
 `import { t } from "./other";

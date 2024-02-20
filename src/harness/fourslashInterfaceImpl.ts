@@ -1,6 +1,3 @@
-import {
-    Location,
-} from "../server/protocol";
 import * as FourSlash from "./_namespaces/FourSlash";
 import * as ts from "./_namespaces/ts";
 
@@ -1889,8 +1886,8 @@ export interface VerifyCodeFixAllOptions {
 export interface VerifyPostPasteImportFix {
     targetFile: string;
     pastes: { text: string; range: ts.TextRange; }[];
+    copySpan?: { file: string; range: ts.TextRange; };
     preferences: ts.UserPreferences;
-    copySpan?: { file: string; start: Location; end: Location; };
 }
 
 export interface VerifyRefactorOptions {
@@ -1935,9 +1932,9 @@ export interface MoveToFileOptions {
 
 export interface PostPasteImportFixOptions {
     readonly newFileContents: { readonly [fileName: string]: string; };
-    readonly pastes: { text: string; range: ts.TextRange; }[];
+    readonly copies: { text: string; copyRange?: { file: string; range: ts.TextRange;} }[],
+    readonly pastes: ts.TextRange[],
     readonly preferences: ts.UserPreferences;
-    readonly copySpan?: { file: string; start: Location; end: Location; };
 }
 
 export type RenameLocationsOptions = readonly RenameLocationOptions[] | {

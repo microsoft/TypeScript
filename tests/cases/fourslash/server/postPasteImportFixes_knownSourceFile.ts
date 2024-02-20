@@ -11,21 +11,22 @@
 // @Filename: /file2.ts
 ////import { b } from './file1';
 ////const a = 1;
-////const c = a + b;
-////const t = 9;
+////[|const c = a + b;
+////const t = 9;|]
 
 // @Filename: /tsconfig.json
 ////{ "files": ["file1.ts", "file2.ts", "target.ts"] }
 
 const range = test.ranges();
+const t = range[0];
 format.setOption("insertSpaceAfterSemicolonInForStatements", true);
 verify.postPasteImportFixes({
-    pastes: [{
+    copies: [{ 
         text: `const c = a + b;
 const t = 9;`,
-        range: range[0],
+    copyRange: { file: "file2.ts", range: range[1]}
     }],
-    copySpan: { file:"file2.ts", start: { line : 2, offset: 0}, end : { line: 3, offset: 0}},
+    pastes: [range[0]],
     newFileContents: {
         "/file2.ts":
 `import { b } from './file1';

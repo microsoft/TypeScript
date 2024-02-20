@@ -1,6 +1,5 @@
 import {
     ApplicableRefactorInfo,
-    arrayFrom,
     CallHierarchyIncomingCall,
     CallHierarchyItem,
     CallHierarchyOutgoingCall,
@@ -1013,15 +1012,15 @@ export class SessionClient implements LanguageService {
 
     getPostPasteImportFixes(
         targetFile: string,
-        pastes: { text: string; range: TextRange; }[],
+        copies: { text: string; copyRange?: { file: string; range: TextRange;} }[],
+        pastes: TextRange[],
         _preferences: UserPreferences,
-        _formatOptions: FormatCodeSettings,
-        copySpan?: { file: string; start: { line: number; offset: number; }; end: { line: number; offset: number; }; },
+        _formatOptions: FormatCodeSettings
     ): PostPasteImportFixes {
         const args: protocol.GetPostPasteImportFixesRequestArgs = {
             file: targetFile,
-            pastes: arrayFrom(pastes.map(paste => ({ text: paste.text, range: { start: this.positionToOneBasedLineOffset(targetFile, paste.range.pos), end: this.positionToOneBasedLineOffset(targetFile, paste.range.end) } }))),
-            copySpan,
+            copies: copies.map(copy => ({ text: copy.text, range: copy.copyRange ? { file: copy.copyRange.file, start: this.positionToOneBasedLineOffset(copy.copyRange.file, copy.copyRange.range.pos), end: this.positionToOneBasedLineOffset(copy.copyRange.file, copy.copyRange.range.end) } : undefined })),
+            pastes: pastes.map(paste => ({ start: this.positionToOneBasedLineOffset(targetFile, paste.pos), end: this.positionToOneBasedLineOffset(targetFile, paste.end) })),
         };
         const request = this.processRequest<protocol.GetPostPasteImportFixesRequest>(protocol.CommandTypes.GetPostPasteImportFixes, args);
         const response = this.processResponse<protocol.GetPostPasteImportFixesResponse>(request);

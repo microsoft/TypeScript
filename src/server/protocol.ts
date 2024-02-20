@@ -641,9 +641,12 @@ export interface GetPostPasteImportFixesRequest extends Request {
 }
 
 export type GetPostPasteImportFixesRequestArgs = FileRequestArgs & {
-    pastes: { text: string; range: TextSpan; }[];
-    copySpan?: FileSpan;
-};
+    copies: {
+      text: string;
+      range?: FileSpan;
+    }[];
+    pastes: TextSpan[];
+  };
 export interface GetPostPasteImportFixesResponse extends Response {
     body: PostPasteImportAction;
 }

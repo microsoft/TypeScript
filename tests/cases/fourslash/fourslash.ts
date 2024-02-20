@@ -212,10 +212,6 @@ declare namespace FourSlashInterface {
         start: number;
         end: number;
     }
-    interface Location {
-        line: number;
-        offset: number;
-    }
     class test_ {
         markers(): Marker[];
         markerNames(): string[];
@@ -450,8 +446,8 @@ declare namespace FourSlashInterface {
         uncommentSelection(newFileContent: string): void;
         postPasteImportFixes(options: {
             newFileContents: { readonly [fileName: string]: string };
-            pastes: Array<{ text: string; range: { pos: number, end: number }}>;
-            copySpan?: { file: string, start: Location, end: Location },
+            copies: { text: string; copyRange?: { file: string; range: { pos: number, end: number };} }[],
+            pastes: { pos: number, end: number }[],
         }): void;
     }
     class edit {

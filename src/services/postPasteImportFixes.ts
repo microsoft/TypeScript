@@ -16,6 +16,7 @@ import {
     UserPreferences,
 } from "../compiler/types";
 import {
+    getLineOfLocalPosition,
     hasSyntacticModifier,
     skipAlias,
 } from "../compiler/utilities";
@@ -55,44 +56,47 @@ import {
 /** @internal */
 export function postPasteImportFixesProvider(
     targetFile: SourceFile,
+    //pastes: { text: string; range: TextRange; }[],
+    copies: { text: string; copyRange?: { file: SourceFile; range: TextRange;} }[],
+    pastes: TextRange[],
     host: LanguageServiceHost,
-    pastes: { text: string; range: TextRange; }[],
     preferences: UserPreferences,
     formatContext: formatting.FormatContext,
     cancellationToken: CancellationToken,
-    originalFile?: SourceFile,
-    copyLocation?: { file: string; start: { line: number; offset: number; }; end: { line: number; offset: number; }; },
+    //originalFile?: SourceFile,
+    //copyLocation?: { file: string; range: TextRange; },
 ): PostPasteImportFixes {
-    const changes: FileTextChanges[] = textChanges.ChangeTracker.with({ host, formatContext, preferences }, changeTracker => postPasteFixes(targetFile, host, pastes, preferences, formatContext, cancellationToken, changeTracker, originalFile, copyLocation));
-
+    const changes: FileTextChanges[] = textChanges.ChangeTracker.with({ host, formatContext, preferences }, changeTracker => postPasteFixes(targetFile, copies, pastes, host, preferences, formatContext, cancellationToken, changeTracker));
     return { edits: changes };
 }
 
 function postPasteFixes(
     targetFile: SourceFile,
+    copies: { text: string; copyRange?: { file: SourceFile; range: TextRange;} }[],
+    pastes: TextRange[],
     host: LanguageServiceHost,
-    pastes: { text: string; range: TextRange; }[],
     preferences: UserPreferences,
     formatContext: formatting.FormatContext,
     cancellationToken: CancellationToken,
     changes: textChanges.ChangeTracker,
-    originalFile?: SourceFile,
-    copyLocation?: { file: string; start: { line: number; offset: number; }; end: { line: number; offset: number; }; },
 ) {
-    const updatedTargetFile = host.updateTargetFile?.(targetFile.fileName, targetFile.getText(), targetFile.getText().slice(0, pastes[0].range.pos) + pastes[0].text + targetFile.getText().slice(pastes[0].range.end));
+    const copy = copies[0];
+    const updatedTargetFile = host.runWithTemporaryFileUpdate?.(targetFile.fileName, targetFile.getText().slice(0, pastes[0].pos) + copy.text + targetFile.getText().slice(pastes[0].end));
     const statements: Statement[] = [];
     Debug.assert(updatedTargetFile && updatedTargetFile.updatedFile && updatedTargetFile.originalProgram && updatedTargetFile.updatedProgram);
 
-    if (originalFile) {
-        addRange(statements, originalFile.statements, copyLocation?.start.line, copyLocation ? copyLocation.end.line + 1 : undefined);
-        const usage = getUsageInfo(originalFile, statements, updatedTargetFile.originalProgram.getTypeChecker(), getExistingLocals(updatedTargetFile.updatedFile, statements, updatedTargetFile.originalProgram.getTypeChecker()));
+    if (copy.copyRange) {
+        const _start = getLineOfLocalPosition(copy.copyRange.file, copy.copyRange.range.pos);
+        const _end = getLineOfLocalPosition(copy.copyRange.file, copy.copyRange.range.end);
+        addRange(statements, copy.copyRange.file.statements, getLineOfLocalPosition(copy.copyRange.file, copy.copyRange.range.pos), getLineOfLocalPosition(copy.copyRange.file, copy.copyRange.range.end) + 1);
+        const usage = getUsageInfo(copy.copyRange.file, statements, updatedTargetFile.originalProgram.getTypeChecker(), getExistingLocals(updatedTargetFile.updatedFile, statements, updatedTargetFile.originalProgram.getTypeChecker()));
         const importAdder = codefix.createImportAdder(updatedTargetFile.updatedFile, updatedTargetFile.updatedProgram, preferences, host);
 
-        const imports = getImportsFromKnownOriginalFile(originalFile, targetFile, updatedTargetFile.updatedProgram, importAdder, usage.oldImportsNeededByTargetFile, usage.targetFileImportsFromOldFile, changes, preferences, host, updatedTargetFile.originalProgram.getTypeChecker());
+        const imports = getImportsFromKnownOriginalFile(copy.copyRange.file, targetFile, updatedTargetFile.updatedProgram, importAdder, usage.oldImportsNeededByTargetFile, usage.targetFileImportsFromOldFile, changes, preferences, host, updatedTargetFile.originalProgram.getTypeChecker());
         if (imports.length > 0) {
             insertImports(changes, targetFile, imports, /*blankLineBetween*/ true, preferences);
         }
-        importAdder.writeFixes(changes, getQuotePreference(originalFile, preferences));
+        importAdder.writeFixes(changes, getQuotePreference(copy.copyRange.file, preferences));
         host.revertUpdatedFile?.(targetFile.fileName, updatedTargetFile.updatedFile.text, targetFile.text);
     }
     else {
@@ -109,7 +113,7 @@ function postPasteFixes(
             if (isIdentifier(node)) {
                 if (!updatedTargetFile.originalProgram?.getTypeChecker().resolveName(node.text, node, SymbolFlags.All, /*excludeGlobals*/ false)) {
                     // generate imports
-                    importAdder.addImportsForUnknownSymbols(context, node, /*useAutoImportProvider*/ true);
+                    importAdder.addImportForUnresolvedIdentifier(context, node, /*useAutoImportProvider*/ true);
                 }
             }
             else {
@@ -119,8 +123,9 @@ function postPasteFixes(
         importAdder.writeFixes(changes, getQuotePreference(targetFile, preferences));
         host.revertUpdatedFile?.(targetFile.fileName, updatedTargetFile.updatedFile.text, targetFile.text);
     }
-    pastes.forEach(({ text, range }) => {
-        range.pos === range.end ? changes.replaceRangeWithText(targetFile, { pos: range.pos, end: range.end }, text) : changes.replaceRangeWithText(targetFile, { pos: range.pos, end: range.end }, text);
+    pastes.forEach((paste) => {
+        changes.replaceRangeWithText(targetFile, { pos: paste.pos, end: paste.end }, copy.text);
+        //range.pos === range.end ? changes.replaceRangeWithText(targetFile, { pos: range.pos, end: range.end }, text) : changes.replaceRangeWithText(targetFile, { pos: range.pos, end: range.end }, text);
     });
 }
 

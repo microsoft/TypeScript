@@ -17,15 +17,15 @@
 const range = test.ranges();
 format.setOption("insertSpaceAfterSemicolonInForStatements", true);
 verify.postPasteImportFixes({
-    pastes: [{
+    copies: [{ 
         text: `interface Testing {
             test1: Test1;
             test2: Test2;
             test3: Test3;
             test4: Test4;
         }`,
-        range: range[0],
     }],
+    pastes: [range[0]],
     newFileContents: {
         "/file2.ts":
 `import { Test1, Test2, Test3, Test4 } from "./file1";
