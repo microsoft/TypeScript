@@ -31,16 +31,10 @@ const c = 3;`;
         const session = new TestSession(host);
         openFilesForSession([target], session);
 
-        const originalContent = target.content;
-        const originalProgram = session.getProjectService().configuredProjects.get(tsconfig.path)!.getLanguageService().getProgram();
-
         const hostProject = session.getProjectService().configuredProjects.get(tsconfig.path)!;
-        const updatedContent = hostProject.runWithTemporaryFileUpdate(target.path, pastedText);
-
-        if (updatedContent.updatedFile !== undefined) {
-            hostProject.revertUpdatedFile(target.path, updatedContent.updatedFile.getText(), originalContent);
-        }
-        assert.strictEqual(hostProject.getCurrentProgram()?.getSourceFileByPath(target.path as ts.Path)?.getText(), originalProgram?.getSourceFileByPath(target.path as ts.Path)?.getText());
+        hostProject.runWithTemporaryFileUpdate(target.path, pastedText, (_updatedProgram, _originalProgram, _updatedFile)=>{});
+        
+        assert.strictEqual(hostProject.getCurrentProgram()?.getSourceFileByPath(target.path as ts.Path)?.getText(), target.content);
         baselineTsserverLogs("getPostPasteImportFixes", "Returns the same file unchanged ", session);
     });
 });

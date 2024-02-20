@@ -2216,17 +2216,15 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
     }
 
     /** @internal */
-    runWithTemporaryFileUpdate(rootFile: string, pastedText: string): { updatedFile: SourceFile | undefined; updatedProgram: Program | undefined; originalProgram: ts.Program | undefined; } {
+    runWithTemporaryFileUpdate(rootFile: string, pastedText: string, cb: (updatedProgram: Program | undefined, originalProgram: Program | undefined, updatedFile: SourceFile) => void) {
         const originalProgram = this.program;
-        Debug.assert(this.program && this.program.getSourceFile(rootFile));
+        const originalText = this.program?.getSourceFile(rootFile)?.getText();
+        Debug.assert(this.program && this.program.getSourceFile(rootFile) && originalText);
+        
         this.getScriptInfo(rootFile)?.editContent(0, this.program.getSourceFile(rootFile)!.getText().length, pastedText);
         this.updateGraph();
-        return { updatedFile: (this.program?.getSourceFile(rootFile)), updatedProgram: this.program, originalProgram };
-    }
-
-    /** @internal */
-    revertUpdatedFile(rootFile: string, updatedText: string, originalText: string) {
-        this.getScriptInfo(rootFile)?.editContent(0, updatedText.length, originalText);
+        cb(this.program, originalProgram, (this.program?.getSourceFile(rootFile))!);
+        this.getScriptInfo(rootFile)?.editContent(0, this.program.getSourceFile(rootFile)!.getText().length, originalText);
         this.updateGraph();
     }
 

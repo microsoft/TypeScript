@@ -2799,12 +2799,11 @@ export class Session<TMessage = string> implements EventSender {
 
     private getPostPasteImportFixes(args: protocol.GetPostPasteImportFixesRequestArgs): protocol.PostPasteImportAction | undefined {
         const { file, project } = this.getFileAndProject(args);
-        //const pastes = args.pastes.map(paste => ({ text: paste.text, range: this.getRange({ file, startLine: paste.range.start.line, startOffset: paste.range.start.offset, endLine: paste.range.end.line, endOffset: paste.range.end.offset }, project.getScriptInfoForNormalizedPath(file)!) })); 
-        //const pastes = args.pastes.map(paste => this.getRange({ file, startLine: paste.start.line, startOffset: paste.start.offset, endLine: paste.end.line, endOffset: paste.end.offset }, project.getScriptInfoForNormalizedPath(file)!));
         const copyFile = args.copies[0].range ? args.copies[0].range.file : undefined;
         const result = project.getLanguageService().getPostPasteImportFixes(
             file,
-            args.copies.map(copy => ({ text: copy.text, copyRange: copy.range && copyFile ? { file: copy.range.file, range: this.getRange({ file: copyFile, startLine: copy.range.start.line, startOffset: copy.range.start.offset, endLine: copy.range.end.line, endOffset: copy.range.end.offset }, project.getScriptInfoForNormalizedPath(toNormalizedPath(copyFile))!) }: undefined })),
+            args.copies.map(copy => ({ text: copy.text, copyRange: copy.range && copyFile 
+                ? { file: copy.range.file, range: this.getRange({ file: copyFile, startLine: copy.range.start.line, startOffset: copy.range.start.offset, endLine: copy.range.end.line, endOffset: copy.range.end.offset }, project.getScriptInfoForNormalizedPath(toNormalizedPath(copyFile))!) }: undefined })),
             args.pastes.map(paste => this.getRange({ file, startLine: paste.start.line, startOffset: paste.start.offset, endLine: paste.end.line, endOffset: paste.end.offset }, project.getScriptInfoForNormalizedPath(file)!)), 
             this.getPreferences(file),
             this.getFormatOptions(file));

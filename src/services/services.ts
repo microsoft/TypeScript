@@ -2093,8 +2093,6 @@ export function createLanguageService(
 
     function getPostPasteImportFixes(
         targetFile: string,
-        // pastes: { text: string; range: TextRange; }[],
-        // copySpan: { file: string; range: TextRange; } | undefined,
         copies: { text: string; copyRange?: { file: string; range: TextRange;} }[],
         pastes: TextRange[],
         preferences: UserPreferences,
