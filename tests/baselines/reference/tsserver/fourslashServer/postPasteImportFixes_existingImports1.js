@@ -226,18 +226,20 @@ Info seq  [hh:mm:ss:mss] request:
       "type": "request",
       "arguments": {
         "file": "/target.ts",
+        "copies": [
+          {
+            "text": "const m = t3 + t2 + 1;"
+          }
+        ],
         "pastes": [
           {
-            "text": "const m = t3 + t2 + 1;",
-            "range": {
-              "start": {
-                "line": 4,
-                "offset": 1
-              },
-              "end": {
-                "line": 4,
-                "offset": 14
-              }
+            "start": {
+              "line": 4,
+              "offset": 1
+            },
+            "end": {
+              "line": 4,
+              "offset": 14
             }
           }
         ]

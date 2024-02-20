@@ -245,32 +245,34 @@ Info seq  [hh:mm:ss:mss] request:
       "type": "request",
       "arguments": {
         "file": "/target.ts",
-        "pastes": [
+        "copies": [
           {
             "text": "const m = t3 + t2 + n;",
             "range": {
+              "file": "originalFile.ts",
               "start": {
                 "line": 4,
                 "offset": 1
               },
               "end": {
                 "line": 4,
-                "offset": 14
+                "offset": 30
               }
             }
           }
         ],
-        "copySpan": {
-          "file": "originalFile.ts",
-          "start": {
-            "line": 3,
-            "offset": 0
-          },
-          "end": {
-            "line": 3,
-            "offset": 30
+        "pastes": [
+          {
+            "start": {
+              "line": 4,
+              "offset": 1
+            },
+            "end": {
+              "line": 4,
+              "offset": 14
+            }
           }
-        }
+        ]
       },
       "command": "getPostPasteImportFixes"
     }

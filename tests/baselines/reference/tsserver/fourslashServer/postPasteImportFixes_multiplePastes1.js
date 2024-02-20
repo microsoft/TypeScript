@@ -213,31 +213,30 @@ Info seq  [hh:mm:ss:mss] request:
       "type": "request",
       "arguments": {
         "file": "/target.ts",
+        "copies": [
+          {
+            "text": "const g = p + q;\nfunction e();\nconst f = r + s;"
+          }
+        ],
         "pastes": [
           {
-            "text": "const g = p + q;\nfunction e();\nconst f = r + s;",
-            "range": {
-              "start": {
-                "line": 2,
-                "offset": 1
-              },
-              "end": {
-                "line": 2,
-                "offset": 1
-              }
+            "start": {
+              "line": 2,
+              "offset": 1
+            },
+            "end": {
+              "line": 2,
+              "offset": 1
             }
           },
           {
-            "text": "const g = p + q;\nfunction e();\nconst f = r + s;",
-            "range": {
-              "start": {
-                "line": 5,
-                "offset": 1
-              },
-              "end": {
-                "line": 5,
-                "offset": 1
-              }
+            "start": {
+              "line": 5,
+              "offset": 1
+            },
+            "end": {
+              "line": 5,
+              "offset": 1
             }
           }
         ]

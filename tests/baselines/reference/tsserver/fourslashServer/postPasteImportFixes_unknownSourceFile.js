@@ -197,18 +197,20 @@ Info seq  [hh:mm:ss:mss] request:
       "type": "request",
       "arguments": {
         "file": "/file2.ts",
+        "copies": [
+          {
+            "text": "interface Testing {\n            test1: Test1;\n            test2: Test2;\n            test3: Test3;\n            test4: Test4;\n        }"
+          }
+        ],
         "pastes": [
           {
-            "text": "interface Testing {\n            test1: Test1;\n            test2: Test2;\n            test3: Test3;\n            test4: Test4;\n        }",
-            "range": {
-              "start": {
-                "line": 3,
-                "offset": 1
-              },
-              "end": {
-                "line": 3,
-                "offset": 1
-              }
+            "start": {
+              "line": 3,
+              "offset": 1
+            },
+            "end": {
+              "line": 3,
+              "offset": 1
             }
           }
         ]

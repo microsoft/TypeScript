@@ -212,32 +212,34 @@ Info seq  [hh:mm:ss:mss] request:
       "type": "request",
       "arguments": {
         "file": "/target.ts",
-        "pastes": [
+        "copies": [
           {
             "text": "const c = a + b;\nconst t = 9;",
             "range": {
+              "file": "file2.ts",
               "start": {
-                "line": 2,
+                "line": 3,
                 "offset": 1
               },
               "end": {
-                "line": 2,
-                "offset": 14
+                "line": 4,
+                "offset": 13
               }
             }
           }
         ],
-        "copySpan": {
-          "file": "file2.ts",
-          "start": {
-            "line": 2,
-            "offset": 0
-          },
-          "end": {
-            "line": 3,
-            "offset": 0
+        "pastes": [
+          {
+            "start": {
+              "line": 2,
+              "offset": 1
+            },
+            "end": {
+              "line": 2,
+              "offset": 14
+            }
           }
-        }
+        ]
       },
       "command": "getPostPasteImportFixes"
     }

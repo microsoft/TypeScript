@@ -180,18 +180,20 @@ Info seq  [hh:mm:ss:mss] request:
       "type": "request",
       "arguments": {
         "file": "/target.ts",
+        "copies": [
+          {
+            "text": "/**\n* Testing comment line 1\n* line 2\n* line 3\n* line 4\n*/"
+          }
+        ],
         "pastes": [
           {
-            "text": "/**\n* Testing comment line 1\n* line 2\n* line 3\n* line 4\n*/",
-            "range": {
-              "start": {
-                "line": 2,
-                "offset": 14
-              },
-              "end": {
-                "line": 2,
-                "offset": 14
-              }
+            "start": {
+              "line": 2,
+              "offset": 14
+            },
+            "end": {
+              "line": 2,
+              "offset": 14
             }
           }
         ]

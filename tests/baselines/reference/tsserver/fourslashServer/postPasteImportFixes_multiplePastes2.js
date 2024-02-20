@@ -216,45 +216,44 @@ Info seq  [hh:mm:ss:mss] request:
       "type": "request",
       "arguments": {
         "file": "/target.ts",
-        "pastes": [
+        "copies": [
           {
             "text": "export const t = aa + bb + r + s;\nconst u = 1;",
             "range": {
+              "file": "file1.ts",
               "start": {
-                "line": 2,
+                "line": 4,
                 "offset": 1
               },
               "end": {
-                "line": 2,
+                "line": 5,
                 "offset": 13
-              }
-            }
-          },
-          {
-            "text": "export const t = aa + bb + r + s;\nconst u = 1;",
-            "range": {
-              "start": {
-                "line": 4,
-                "offset": 1
-              },
-              "end": {
-                "line": 4,
-                "offset": 1
               }
             }
           }
         ],
-        "copySpan": {
-          "file": "file1.ts",
-          "start": {
-            "line": 3,
-            "offset": 0
+        "pastes": [
+          {
+            "start": {
+              "line": 2,
+              "offset": 1
+            },
+            "end": {
+              "line": 2,
+              "offset": 13
+            }
           },
-          "end": {
-            "line": 4,
-            "offset": 12
+          {
+            "start": {
+              "line": 4,
+              "offset": 1
+            },
+            "end": {
+              "line": 4,
+              "offset": 1
+            }
           }
-        }
+        ]
       },
       "command": "getPostPasteImportFixes"
     }
