@@ -554,11 +554,11 @@ declare namespace ts {
                 arguments: GetPostPasteImportFixesRequestArgs;
             }
             type GetPostPasteImportFixesRequestArgs = FileRequestArgs & {
-                pastes: {
+                copies: {
                     text: string;
-                    range: TextSpan;
+                    range?: FileSpan;
                 }[];
-                copySpan?: FileSpan;
+                pastes: TextSpan[];
             };
             interface GetPostPasteImportFixesResponse extends Response {
                 body: PostPasteImportAction;
@@ -10686,23 +10686,16 @@ declare namespace ts {
         dispose(): void;
         getPostPasteImportFixes(
             targetFile: string,
-            pastes: {
+            copies: {
                 text: string;
-                range: TextRange;
+                range?: {
+                    file: string;
+                    range: TextRange;
+                };
             }[],
+            pastes: TextRange[],
             preferences: UserPreferences,
             formatOptions: FormatCodeSettings,
-            copySpan?: {
-                file: string;
-                start: {
-                    line: number;
-                    offset: number;
-                };
-                end: {
-                    line: number;
-                    offset: number;
-                };
-            },
         ): PostPasteImportFixes;
     }
     interface JsxClosingTagInfo {
