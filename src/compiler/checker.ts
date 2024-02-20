@@ -15458,9 +15458,17 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         jsdocPredicate = getTypePredicateOfSignature(jsdocSignature);
                     }
                 }
-                signature.resolvedTypePredicate = type && isTypePredicateNode(type) ?
-                    createTypePredicateFromTypePredicateNode(type, signature) :
-                    jsdocPredicate || noTypePredicate;
+                if (type || jsdocPredicate) {
+                    signature.resolvedTypePredicate = type && isTypePredicateNode(type) ?
+                        createTypePredicateFromTypePredicateNode(type, signature) :
+                        jsdocPredicate || noTypePredicate;
+                } else if (signature.declaration && isFunctionLikeDeclaration(signature.declaration) && (!signature.resolvedReturnType || signature.resolvedReturnType === booleanType)) {
+                    const {declaration} = signature;
+                    signature.resolvedTypePredicate = noTypePredicate;  // avoid infinite loop
+                    signature.resolvedTypePredicate = getTypePredicateFromBody(declaration, signature) || noTypePredicate;
+                } else {
+                    signature.resolvedTypePredicate = noTypePredicate;
+                }
             }
             Debug.assert(!!signature.resolvedTypePredicate);
         }
@@ -37386,6 +37394,80 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 return func.parent.kind === SyntaxKind.ObjectLiteralExpression;
             default:
                 return false;
+        }
+    }
+
+    function getTypePredicateFromBody(func: FunctionLikeDeclaration, _sig: Signature): TypePredicate | undefined {
+        const functionFlags = getFunctionFlags(func);
+        if (functionFlags !== FunctionFlags.Normal) return undefined;
+
+        // Only attempt to infer a type predicate if there's exactly one return.
+        let singleReturn: Expression | undefined;
+        if (func.body && func.body.kind !== SyntaxKind.Block) {
+            singleReturn = func.body; // arrow function
+        } else {
+            if (functionHasImplicitReturn(func)) return undefined;
+
+            const bailedEarly = forEachReturnStatement(func.body as Block, returnStatement => {
+                if (singleReturn || !returnStatement.expression) return true;
+                singleReturn = returnStatement.expression;
+            });
+            if (bailedEarly || !singleReturn) return undefined;
+        }
+
+        const predicate = checkIfExpressionRefinesAnyParameter(singleReturn);
+        if (predicate) {
+            const [i, type] = predicate;
+            const param = func.parameters[i];
+            if (isIdentifier(param.name)) {
+                // TODO: is there an alternative to the "as string" here? (It's __String)
+                return createTypePredicate(TypePredicateKind.Identifier, param.name.escapedText as string, i, type);
+            }
+        }
+        return undefined;
+
+        function checkIfExpressionRefinesAnyParameter(expr: Expression): [number, Type] | undefined {
+            expr = skipParentheses(expr, /*excludeJSDocTypeAssertions*/ true);
+            const type = checkExpressionCached(expr, CheckMode.TypeOnly);
+            if (type !== booleanType || !func.body) return undefined;
+
+            return forEach(func.parameters, (param, i) => {
+                const initType = getSymbolLinks(param.symbol).type;
+                if (!initType || initType === booleanType || isSymbolAssigned(param.symbol)) {
+                    // Refining "x: boolean" to "x is true" or "x is false" isn't useful.
+                    return;
+                }
+                const trueType = checkIfExpressionRefinesParameter(expr, param, initType);
+                if (trueType) {
+                    return [i, trueType];
+                }
+            });
+        }
+
+        function checkIfExpressionRefinesParameter(expr: Expression, param: ParameterDeclaration, initType: Type): Type | undefined {
+            const antecedent = (expr as Expression & {flowNode?: FlowNode}).flowNode ?? { flags: FlowFlags.Start };
+            const trueCondition: FlowCondition = {
+                flags: FlowFlags.TrueCondition,
+                node: expr,
+                antecedent,
+            };
+
+            const trueType = getFlowTypeOfReference(param.name, initType, initType, func, trueCondition);
+            if (trueType === initType) return undefined;
+
+            // "x is T" means that x is T if and only if it returns true. If it returns false then x is not T.
+            // However, TS may not be able to represent "not T", in which case we can be more lax.
+            // It's safe to infer a type guard if falseType = Exclude<initType, trueType>
+            // This matches what you'd get if you called the type guard in an if/else statement.
+            const falseCondition: FlowCondition = {
+                ...trueCondition,
+                flags: FlowFlags.FalseCondition,
+            }
+            const falseType = getFlowTypeOfReference(param.name, initType, initType, func, falseCondition);
+            const candidateFalse = filterType(initType, t => !isTypeSubtypeOf(t, trueType));
+            if (isTypeIdenticalTo(candidateFalse, falseType)) {
+                return trueType;
+            }
         }
     }
 
