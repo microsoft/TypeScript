@@ -1,4 +1,4 @@
-error TS5107: Option 'target=ES3' is deprecated and will stop functioning in TypeScript 5.5. Specify compilerOption '"ignoreDeprecations": "5.0"' to silence this error.
+error TS5108: Option 'target=ES3' has been removed. Please remove it from your configuration.
 objectTypeWithStringNamedNumericProperty.ts(33,13): error TS1121: Octal literals are not allowed. Use the syntax '0o1'.
 objectTypeWithStringNamedNumericProperty.ts(34,13): error TS1121: Octal literals are not allowed. Use the syntax '-0o1'.
 objectTypeWithStringNamedNumericProperty.ts(64,13): error TS1121: Octal literals are not allowed. Use the syntax '0o1'.
@@ -9,7 +9,7 @@ objectTypeWithStringNamedNumericProperty.ts(124,13): error TS1121: Octal literal
 objectTypeWithStringNamedNumericProperty.ts(125,13): error TS1121: Octal literals are not allowed. Use the syntax '-0o1'.
 
 
-!!! error TS5107: Option 'target=ES3' is deprecated and will stop functioning in TypeScript 5.5. Specify compilerOption '"ignoreDeprecations": "5.0"' to silence this error.
+!!! error TS5108: Option 'target=ES3' has been removed. Please remove it from your configuration.
 ==== objectTypeWithStringNamedNumericProperty.ts (8 errors) ====
     // string named numeric properties are legal and distinct when indexed by string values
     // indexed numerically the value is converted to a number
