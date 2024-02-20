@@ -6819,6 +6819,8 @@ export interface Signature {
     isolatedSignatureType?: ObjectType; // A manufactured type that just contains the signature for purposes of signature comparison
     /** @internal */
     instantiations?: Map<string, Signature>;    // Generic signature instantiation cache
+    /** @internal */
+    implementationSignatureCache?: Signature;  // Copy of the signature with fresh type parameters to use in checking the body of a potentially self-referential generic function (deferred)
 }
 
 export const enum IndexKind {

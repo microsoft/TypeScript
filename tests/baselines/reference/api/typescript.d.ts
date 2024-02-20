@@ -7241,6 +7241,7 @@ declare namespace ts {
         ContainsSpread = 2097152,
         ObjectRestType = 4194304,
         InstantiationExpressionType = 8388608,
+        SingleSignatureType = 134217728,
     }
     interface ObjectType extends Type {
         objectFlags: ObjectFlags;
