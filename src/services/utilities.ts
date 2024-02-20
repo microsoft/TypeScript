@@ -6,12 +6,12 @@ import {
     addSyntheticTrailingComment,
     AnyImportOrRequireStatement,
     append,
-    //append,
     assertType,
     AssignmentDeclarationKind,
     BinaryExpression,
     binarySearchKey,
     BindingElement,
+    BlockLike,
     BreakOrContinueStatement,
     CallExpression,
     canHaveModifiers,
@@ -381,7 +381,6 @@ import {
     YieldExpression,
 } from "./_namespaces/ts";
 import { addExportToChanges, filterImport, forEachImportInStatement, getTopLevelDeclarationStatement, isTopLevelDeclaration, makeImportOrRequire, moduleSpecifierFromImport, nameOfTopLevelDeclaration } from "./_namespaces/ts.refactor";
-//import { addExportToChanges, filterImport, forEachImportInStatement, getTopLevelDeclarationStatement, isTopLevelDeclaration, makeImportOrRequire,moduleSpecifierFromImport, nameOfTopLevelDeclaration } from "./refactors/moveToFile";
 
 // These utilities are common to multiple language service features.
 // #region
@@ -4278,6 +4277,19 @@ export function fileShouldUseJavaScriptRequire(file: SourceFile | string, progra
         }
     }
     return preferRequire;
+}
+
+/** @internal */
+export function isBlockLike(node: Node): node is BlockLike {
+    switch (node.kind) {
+        case SyntaxKind.Block:
+        case SyntaxKind.SourceFile:
+        case SyntaxKind.ModuleBlock:
+        case SyntaxKind.CaseClause:
+            return true;
+        default:
+            return false;
+    }
 }
 
 /** @internal */

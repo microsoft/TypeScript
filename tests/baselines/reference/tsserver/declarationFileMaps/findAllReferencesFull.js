@@ -967,12 +967,17 @@ ScriptInfos::
     version: Text-2
     containingProjects: 1
         /a/tsconfig.json
-/a/bin/a.d.ts
+/a/bin/a.d.ts *changed*
     version: Text-1
+    sourceMapFilePath: /a/bin/a.d.ts.map *changed*
     containingProjects: 1
         /dev/null/inferredProject1*
 /a/bin/a.d.ts.map *new*
     version: Text-1
+    declarationInfoPath: /a/bin/a.d.ts
+    sourceInfos: 1
+        /a/a.ts
+    documentPositionMapper: DocumentPositionMapper
     containingProjects: 0
 /b/bin/b.d.ts
     version: Text-1
@@ -1052,10 +1057,15 @@ ScriptInfos::
         /a/tsconfig.json
 /a/bin/a.d.ts
     version: Text-1
+    sourceMapFilePath: /a/bin/a.d.ts.map
     containingProjects: 1
         /dev/null/inferredProject1*
 /a/bin/a.d.ts.map
     version: Text-1
+    declarationInfoPath: /a/bin/a.d.ts
+    sourceInfos: 1
+        /a/a.ts
+    documentPositionMapper: DocumentPositionMapper
     containingProjects: 0
 /b/bin/b.d.ts
     version: Text-1
@@ -1188,10 +1198,15 @@ ScriptInfos::
         /a/tsconfig.json *deleted*
 /a/bin/a.d.ts *deleted*
     version: Text-1
+    sourceMapFilePath: /a/bin/a.d.ts.map
     containingProjects: 0 *changed*
         /dev/null/inferredProject1* *deleted*
 /a/bin/a.d.ts.map *deleted*
     version: Text-1
+    declarationInfoPath: /a/bin/a.d.ts
+    sourceInfos: 1
+        /a/a.ts
+    documentPositionMapper: DocumentPositionMapper
     containingProjects: 0
 /b/bin/b.d.ts *deleted*
     version: Text-1

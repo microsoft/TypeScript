@@ -1097,8 +1097,6 @@ Info seq  [hh:mm:ss:mss] request:
       "seq": 9,
       "type": "request"
     }
-Info seq  [hh:mm:ss:mss] Search path: /user/username/projects/myproject/dependency
-Info seq  [hh:mm:ss:mss] For info: /user/username/projects/myproject/dependency/FnS.ts :: Config file name: /user/username/projects/myproject/dependency/tsconfig.json
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/decls/FnS.d.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/decls/FnS.d.ts.map 2000 undefined WatchType: Missing source map file
 Info seq  [hh:mm:ss:mss] response:
@@ -1243,6 +1241,8 @@ ScriptInfos::
         /user/username/projects/myproject/random/tsconfig.json
 /user/username/projects/myproject/decls/FnS.d.ts *new*
     version: Text-1
+    sourceMapFilePath sourceInfos: 1
+        /user/username/projects/myproject/dependency/fns.ts
     containingProjects: 0
 /user/username/projects/myproject/dependency/FnS.ts (Open)
     version: Text-1
@@ -1271,8 +1271,6 @@ Info seq  [hh:mm:ss:mss] request:
       "seq": 10,
       "type": "request"
     }
-Info seq  [hh:mm:ss:mss] Search path: /user/username/projects/myproject/dependency
-Info seq  [hh:mm:ss:mss] For info: /user/username/projects/myproject/dependency/FnS.ts :: Config file name: /user/username/projects/myproject/dependency/tsconfig.json
 Info seq  [hh:mm:ss:mss] response:
     {
       "response": {
@@ -1369,8 +1367,6 @@ Info seq  [hh:mm:ss:mss] request:
       "seq": 11,
       "type": "request"
     }
-Info seq  [hh:mm:ss:mss] Search path: /user/username/projects/myproject/dependency
-Info seq  [hh:mm:ss:mss] For info: /user/username/projects/myproject/dependency/FnS.ts :: Config file name: /user/username/projects/myproject/dependency/tsconfig.json
 Info seq  [hh:mm:ss:mss] response:
     {
       "response": {
@@ -1467,8 +1463,6 @@ Info seq  [hh:mm:ss:mss] request:
       "seq": 12,
       "type": "request"
     }
-Info seq  [hh:mm:ss:mss] Search path: /user/username/projects/myproject/dependency
-Info seq  [hh:mm:ss:mss] For info: /user/username/projects/myproject/dependency/FnS.ts :: Config file name: /user/username/projects/myproject/dependency/tsconfig.json
 Info seq  [hh:mm:ss:mss] response:
     {
       "response": {
@@ -1565,8 +1559,6 @@ Info seq  [hh:mm:ss:mss] request:
       "seq": 13,
       "type": "request"
     }
-Info seq  [hh:mm:ss:mss] Search path: /user/username/projects/myproject/dependency
-Info seq  [hh:mm:ss:mss] For info: /user/username/projects/myproject/dependency/FnS.ts :: Config file name: /user/username/projects/myproject/dependency/tsconfig.json
 Info seq  [hh:mm:ss:mss] response:
     {
       "response": {
@@ -1747,6 +1739,8 @@ ScriptInfos::
         /user/username/projects/myproject/random/tsconfig.json
 /user/username/projects/myproject/decls/FnS.d.ts
     version: Text-1
+    sourceMapFilePath sourceInfos: 1
+        /user/username/projects/myproject/dependency/fns.ts
     containingProjects: 0
 /user/username/projects/myproject/dependency/FnS.ts (Open)
     version: Text-1
@@ -1866,6 +1860,8 @@ ScriptInfos::
         /user/username/projects/myproject/random/tsconfig.json
 /user/username/projects/myproject/decls/FnS.d.ts
     version: Text-1
+    sourceMapFilePath sourceInfos: 1
+        /user/username/projects/myproject/dependency/fns.ts
     containingProjects: 0
 /user/username/projects/myproject/dependency/FnS.ts (Open)
     version: Text-1
@@ -1979,6 +1975,8 @@ ScriptInfos::
         /user/username/projects/myproject/random/tsconfig.json
 /user/username/projects/myproject/decls/FnS.d.ts
     version: Text-1
+    sourceMapFilePath sourceInfos: 1
+        /user/username/projects/myproject/dependency/fns.ts
     containingProjects: 0
 /user/username/projects/myproject/dependency/FnS.ts (Open)
     version: Text-1
@@ -2093,6 +2091,8 @@ ScriptInfos::
         /user/username/projects/myproject/random/tsconfig.json
 /user/username/projects/myproject/decls/FnS.d.ts
     version: Text-1
+    sourceMapFilePath sourceInfos: 1
+        /user/username/projects/myproject/dependency/fns.ts
     containingProjects: 0
 /user/username/projects/myproject/dependency/FnS.ts *changed*
     open: false *changed*
@@ -2208,6 +2208,8 @@ ScriptInfos::
         /user/username/projects/myproject/random/tsconfig.json
 /user/username/projects/myproject/decls/FnS.d.ts
     version: Text-1
+    sourceMapFilePath sourceInfos: 1
+        /user/username/projects/myproject/dependency/fns.ts
     containingProjects: 0
 /user/username/projects/myproject/dependency/FnS.ts
     version: Text-1
@@ -2380,6 +2382,7 @@ ScriptInfos::
         /user/username/projects/myproject/dependency/tsconfig.json *deleted*
 /user/username/projects/myproject/decls/FnS.d.ts *deleted*
     version: Text-1
+    sourceMapFilePath: undefined *changed*
     containingProjects: 0
 /user/username/projects/myproject/dependency/FnS.ts *deleted*
     version: Text-1

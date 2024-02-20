@@ -404,39 +404,18 @@ Info seq  [hh:mm:ss:mss] request:
       "seq": 1,
       "type": "request"
     }
-Info seq  [hh:mm:ss:mss] Creating configuration project /user/username/projects/container/compositeExec/tsconfig.json
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/container/compositeExec/tsconfig.json 2000 undefined Project: /user/username/projects/container/compositeExec/tsconfig.json WatchType: Config file
+Info seq  [hh:mm:ss:mss] Creating configuration project /user/username/projects/container/lib/tsconfig.json
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/container/lib/tsconfig.json 2000 undefined Project: /user/username/projects/container/lib/tsconfig.json WatchType: Config file
 Info seq  [hh:mm:ss:mss] event:
     {
       "seq": 0,
       "type": "event",
       "event": "projectLoadingStart",
       "body": {
-        "projectName": "/user/username/projects/container/compositeExec/tsconfig.json",
+        "projectName": "/user/username/projects/container/lib/tsconfig.json",
         "reason": "Creating configured project in external project: /user/username/projects/container/container"
       }
     }
-Info seq  [hh:mm:ss:mss] Config: /user/username/projects/container/compositeExec/tsconfig.json : {
- "rootNames": [
-  "/user/username/projects/container/compositeExec/index.ts"
- ],
- "options": {
-  "ignoreDeprecations": "5.0",
-  "outFile": "/user/username/projects/container/built/local/compositeExec.js",
-  "composite": true,
-  "declarationMap": true,
-  "configFilePath": "/user/username/projects/container/compositeExec/tsconfig.json"
- },
- "projectReferences": [
-  {
-   "path": "/user/username/projects/container/lib",
-   "originalPath": "../lib",
-   "prepend": true
-  }
- ]
-}
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/container/compositeExec/index.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /user/username/projects/container/compositeExec/tsconfig.json
 Info seq  [hh:mm:ss:mss] Config: /user/username/projects/container/lib/tsconfig.json : {
  "rootNames": [
   "/user/username/projects/container/lib/index.ts"
@@ -448,27 +427,24 @@ Info seq  [hh:mm:ss:mss] Config: /user/username/projects/container/lib/tsconfig.
   "configFilePath": "/user/username/projects/container/lib/tsconfig.json"
  }
 }
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/container/lib/tsconfig.json 2000 undefined Project: /user/username/projects/container/compositeExec/tsconfig.json WatchType: Config file
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/container/lib/index.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /user/username/projects/container/lib/tsconfig.json
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/container/compositeExec/node_modules/@types 1 undefined Project: /user/username/projects/container/compositeExec/tsconfig.json WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/container/compositeExec/node_modules/@types 1 undefined Project: /user/username/projects/container/compositeExec/tsconfig.json WatchType: Type roots
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/container/node_modules/@types 1 undefined Project: /user/username/projects/container/compositeExec/tsconfig.json WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/container/node_modules/@types 1 undefined Project: /user/username/projects/container/compositeExec/tsconfig.json WatchType: Type roots
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/node_modules/@types 1 undefined Project: /user/username/projects/container/compositeExec/tsconfig.json WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/node_modules/@types 1 undefined Project: /user/username/projects/container/compositeExec/tsconfig.json WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /user/username/projects/container/compositeExec/tsconfig.json projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
-Info seq  [hh:mm:ss:mss] Project '/user/username/projects/container/compositeExec/tsconfig.json' (Configured)
-Info seq  [hh:mm:ss:mss] 	Files (3)
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/container/lib/node_modules/@types 1 undefined Project: /user/username/projects/container/lib/tsconfig.json WatchType: Type roots
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/container/lib/node_modules/@types 1 undefined Project: /user/username/projects/container/lib/tsconfig.json WatchType: Type roots
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/container/node_modules/@types 1 undefined Project: /user/username/projects/container/lib/tsconfig.json WatchType: Type roots
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/container/node_modules/@types 1 undefined Project: /user/username/projects/container/lib/tsconfig.json WatchType: Type roots
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/node_modules/@types 1 undefined Project: /user/username/projects/container/lib/tsconfig.json WatchType: Type roots
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/node_modules/@types 1 undefined Project: /user/username/projects/container/lib/tsconfig.json WatchType: Type roots
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /user/username/projects/container/lib/tsconfig.json projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Project '/user/username/projects/container/lib/tsconfig.json' (Configured)
+Info seq  [hh:mm:ss:mss] 	Files (2)
 	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
 	/user/username/projects/container/lib/index.ts Text-1 "namespace container {\n    export const myConst = 30;\n}\n"
-	/user/username/projects/container/compositeExec/index.ts Text-1 "namespace container {\n    export function getMyConst() {\n        return myConst;\n    }\n}\n"
 
 
 	../../../../../a/lib/lib.d.ts
 	  Default library for target 'es5'
-	../lib/index.ts
-	  Source from referenced project '../lib/tsconfig.json' included because '--outFile' specified
 	index.ts
 	  Part of 'files' list in tsconfig.json
 
@@ -479,7 +455,7 @@ Info seq  [hh:mm:ss:mss] event:
       "type": "event",
       "event": "projectLoadingFinish",
       "body": {
-        "projectName": "/user/username/projects/container/compositeExec/tsconfig.json"
+        "projectName": "/user/username/projects/container/lib/tsconfig.json"
       }
     }
 Info seq  [hh:mm:ss:mss] event:
@@ -490,14 +466,14 @@ Info seq  [hh:mm:ss:mss] event:
       "body": {
         "telemetryEventName": "projectInfo",
         "payload": {
-          "projectId": "4a49a35a0acdbaaa4a2991c79826326a1776aff5aebf3ee850c93bbc356c3c66",
+          "projectId": "e61069111d2ca70d3f2bc812f1d97caa1747305429cffa2675dc65febb742492",
           "fileStats": {
             "js": 0,
             "jsSize": 0,
             "jsx": 0,
             "jsxSize": 0,
-            "ts": 2,
-            "tsSize": 144,
+            "ts": 1,
+            "tsSize": 55,
             "tsx": 0,
             "tsxSize": 0,
             "dts": 1,
@@ -506,7 +482,6 @@ Info seq  [hh:mm:ss:mss] event:
             "deferredSize": 0
           },
           "compilerOptions": {
-            "ignoreDeprecations": "",
             "outFile": "",
             "composite": true,
             "declarationMap": true
@@ -634,33 +609,57 @@ Info seq  [hh:mm:ss:mss] event:
         }
       }
     }
-Info seq  [hh:mm:ss:mss] Creating configuration project /user/username/projects/container/lib/tsconfig.json
+Info seq  [hh:mm:ss:mss] Creating configuration project /user/username/projects/container/compositeExec/tsconfig.json
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/container/compositeExec/tsconfig.json 2000 undefined Project: /user/username/projects/container/compositeExec/tsconfig.json WatchType: Config file
 Info seq  [hh:mm:ss:mss] event:
     {
       "seq": 0,
       "type": "event",
       "event": "projectLoadingStart",
       "body": {
-        "projectName": "/user/username/projects/container/lib/tsconfig.json",
+        "projectName": "/user/username/projects/container/compositeExec/tsconfig.json",
         "reason": "Creating configured project in external project: /user/username/projects/container/container"
       }
     }
-Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /user/username/projects/container/lib/tsconfig.json
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/container/lib/node_modules/@types 1 undefined Project: /user/username/projects/container/lib/tsconfig.json WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/container/lib/node_modules/@types 1 undefined Project: /user/username/projects/container/lib/tsconfig.json WatchType: Type roots
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/container/node_modules/@types 1 undefined Project: /user/username/projects/container/lib/tsconfig.json WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/container/node_modules/@types 1 undefined Project: /user/username/projects/container/lib/tsconfig.json WatchType: Type roots
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/node_modules/@types 1 undefined Project: /user/username/projects/container/lib/tsconfig.json WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/node_modules/@types 1 undefined Project: /user/username/projects/container/lib/tsconfig.json WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /user/username/projects/container/lib/tsconfig.json projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
-Info seq  [hh:mm:ss:mss] Project '/user/username/projects/container/lib/tsconfig.json' (Configured)
-Info seq  [hh:mm:ss:mss] 	Files (2)
+Info seq  [hh:mm:ss:mss] Config: /user/username/projects/container/compositeExec/tsconfig.json : {
+ "rootNames": [
+  "/user/username/projects/container/compositeExec/index.ts"
+ ],
+ "options": {
+  "ignoreDeprecations": "5.0",
+  "outFile": "/user/username/projects/container/built/local/compositeExec.js",
+  "composite": true,
+  "declarationMap": true,
+  "configFilePath": "/user/username/projects/container/compositeExec/tsconfig.json"
+ },
+ "projectReferences": [
+  {
+   "path": "/user/username/projects/container/lib",
+   "originalPath": "../lib",
+   "prepend": true
+  }
+ ]
+}
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/container/compositeExec/index.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /user/username/projects/container/compositeExec/tsconfig.json
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/container/compositeExec/node_modules/@types 1 undefined Project: /user/username/projects/container/compositeExec/tsconfig.json WatchType: Type roots
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/container/compositeExec/node_modules/@types 1 undefined Project: /user/username/projects/container/compositeExec/tsconfig.json WatchType: Type roots
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/container/node_modules/@types 1 undefined Project: /user/username/projects/container/compositeExec/tsconfig.json WatchType: Type roots
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/container/node_modules/@types 1 undefined Project: /user/username/projects/container/compositeExec/tsconfig.json WatchType: Type roots
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/node_modules/@types 1 undefined Project: /user/username/projects/container/compositeExec/tsconfig.json WatchType: Type roots
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/node_modules/@types 1 undefined Project: /user/username/projects/container/compositeExec/tsconfig.json WatchType: Type roots
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /user/username/projects/container/compositeExec/tsconfig.json projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Project '/user/username/projects/container/compositeExec/tsconfig.json' (Configured)
+Info seq  [hh:mm:ss:mss] 	Files (3)
 	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
 	/user/username/projects/container/lib/index.ts Text-1 "namespace container {\n    export const myConst = 30;\n}\n"
+	/user/username/projects/container/compositeExec/index.ts Text-1 "namespace container {\n    export function getMyConst() {\n        return myConst;\n    }\n}\n"
 
 
 	../../../../../a/lib/lib.d.ts
 	  Default library for target 'es5'
+	../lib/index.ts
+	  Source from referenced project '../lib/tsconfig.json' included because '--outFile' specified
 	index.ts
 	  Part of 'files' list in tsconfig.json
 
@@ -671,7 +670,7 @@ Info seq  [hh:mm:ss:mss] event:
       "type": "event",
       "event": "projectLoadingFinish",
       "body": {
-        "projectName": "/user/username/projects/container/lib/tsconfig.json"
+        "projectName": "/user/username/projects/container/compositeExec/tsconfig.json"
       }
     }
 Info seq  [hh:mm:ss:mss] event:
@@ -682,14 +681,14 @@ Info seq  [hh:mm:ss:mss] event:
       "body": {
         "telemetryEventName": "projectInfo",
         "payload": {
-          "projectId": "e61069111d2ca70d3f2bc812f1d97caa1747305429cffa2675dc65febb742492",
+          "projectId": "4a49a35a0acdbaaa4a2991c79826326a1776aff5aebf3ee850c93bbc356c3c66",
           "fileStats": {
             "js": 0,
             "jsSize": 0,
             "jsx": 0,
             "jsxSize": 0,
-            "ts": 1,
-            "tsSize": 55,
+            "ts": 2,
+            "tsSize": 144,
             "tsx": 0,
             "tsxSize": 0,
             "dts": 1,
@@ -698,6 +697,7 @@ Info seq  [hh:mm:ss:mss] event:
             "deferredSize": 0
           },
           "compilerOptions": {
+            "ignoreDeprecations": "",
             "outFile": "",
             "composite": true,
             "declarationMap": true
@@ -807,16 +807,16 @@ Info seq  [hh:mm:ss:mss] event:
         }
       }
     }
-Info seq  [hh:mm:ss:mss] Project '/user/username/projects/container/compositeExec/tsconfig.json' (Configured)
-Info seq  [hh:mm:ss:mss] 	Files (3)
+Info seq  [hh:mm:ss:mss] Project '/user/username/projects/container/lib/tsconfig.json' (Configured)
+Info seq  [hh:mm:ss:mss] 	Files (2)
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Project '/user/username/projects/container/exec/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (3)
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
-Info seq  [hh:mm:ss:mss] Project '/user/username/projects/container/lib/tsconfig.json' (Configured)
-Info seq  [hh:mm:ss:mss] 	Files (2)
+Info seq  [hh:mm:ss:mss] Project '/user/username/projects/container/compositeExec/tsconfig.json' (Configured)
+Info seq  [hh:mm:ss:mss] 	Files (3)
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Project '/user/username/projects/container/tsconfig.json' (Configured)
@@ -879,9 +879,9 @@ ScriptInfos::
 /a/lib/lib.d.ts *new*
     version: Text-1
     containingProjects: 3
-        /user/username/projects/container/compositeExec/tsconfig.json
-        /user/username/projects/container/exec/tsconfig.json
         /user/username/projects/container/lib/tsconfig.json
+        /user/username/projects/container/exec/tsconfig.json
+        /user/username/projects/container/compositeExec/tsconfig.json
 /user/username/projects/container/compositeExec/index.ts *new*
     version: Text-1
     containingProjects: 1
@@ -893,9 +893,9 @@ ScriptInfos::
 /user/username/projects/container/lib/index.ts *new*
     version: Text-1
     containingProjects: 3
-        /user/username/projects/container/compositeExec/tsconfig.json
-        /user/username/projects/container/exec/tsconfig.json
         /user/username/projects/container/lib/tsconfig.json
+        /user/username/projects/container/exec/tsconfig.json
+        /user/username/projects/container/compositeExec/tsconfig.json
 
 Before request
 

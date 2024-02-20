@@ -691,9 +691,14 @@ ScriptInfos::
         /user/username/projects/myproject/random/tsconfig.json
 /user/username/projects/myproject/decls/FnS.d.ts.map *new*
     version: Text-1
+    declarationInfoPath: /user/username/projects/myproject/decls/fns.d.ts
+    sourceInfos: 1
+        /user/username/projects/myproject/dependency/fns.ts
+    documentPositionMapper: DocumentPositionMapper
     containingProjects: 0
-/user/username/projects/myproject/decls/fns.d.ts
+/user/username/projects/myproject/decls/fns.d.ts *changed*
     version: Text-1
+    sourceMapFilePath: /user/username/projects/myproject/decls/fns.d.ts.map *changed*
     containingProjects: 1
         /user/username/projects/myproject/main/tsconfig.json
 /user/username/projects/myproject/dependency/FnS.ts *new*
@@ -744,10 +749,15 @@ ScriptInfos::
         /user/username/projects/myproject/random/tsconfig.json
 /user/username/projects/myproject/decls/FnS.d.ts.map
     version: Text-1
+    declarationInfoPath: /user/username/projects/myproject/decls/fns.d.ts
+    sourceInfos: 1
+        /user/username/projects/myproject/dependency/fns.ts
+    documentPositionMapper: DocumentPositionMapper
     containingProjects: 0
 /user/username/projects/myproject/decls/fns.d.ts *changed*
     version: Text-1
     pendingReloadFromDisk: true *changed*
+    sourceMapFilePath: /user/username/projects/myproject/decls/fns.d.ts.map
     containingProjects: 1
         /user/username/projects/myproject/main/tsconfig.json
 /user/username/projects/myproject/dependency/FnS.ts
@@ -838,10 +848,15 @@ ScriptInfos::
         /user/username/projects/myproject/random/tsconfig.json
 /user/username/projects/myproject/decls/FnS.d.ts.map
     version: Text-1
+    declarationInfoPath: /user/username/projects/myproject/decls/fns.d.ts
+    sourceInfos: 1
+        /user/username/projects/myproject/dependency/fns.ts
+    documentPositionMapper: DocumentPositionMapper
     containingProjects: 0
 /user/username/projects/myproject/decls/fns.d.ts *changed*
     version: Text-2 *changed*
     pendingReloadFromDisk: false *changed*
+    sourceMapFilePath: /user/username/projects/myproject/decls/fns.d.ts.map
     containingProjects: 1
         /user/username/projects/myproject/main/tsconfig.json
 /user/username/projects/myproject/dependency/FnS.ts

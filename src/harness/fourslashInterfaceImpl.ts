@@ -212,12 +212,12 @@ export class VerifyNegatable {
         this.state.verifyRefactorsAvailable(names);
     }
 
-    public refactorAvailable(name: string, actionName?: string, actionDescription?: string) {
-        this.state.verifyRefactorAvailable(this.negative, "implicit", name, actionName, actionDescription);
+    public refactorAvailable(name: string, actionName?: string, actionDescription?: string, kind?: string, preferences = ts.emptyOptions, includeInteractiveActions?: boolean) {
+        this.state.verifyRefactorAvailable(this.negative, "implicit", name, actionName, actionDescription, kind, preferences, includeInteractiveActions);
     }
 
-    public refactorAvailableForTriggerReason(triggerReason: ts.RefactorTriggerReason, name: string, actionName?: string) {
-        this.state.verifyRefactorAvailable(this.negative, triggerReason, name, actionName);
+    public refactorAvailableForTriggerReason(triggerReason: ts.RefactorTriggerReason, name: string, actionName?: string, actionDescription?: string, kind?: string, preferences = ts.emptyOptions, includeInteractiveActions?: boolean) {
+        this.state.verifyRefactorAvailable(this.negative, triggerReason, name, actionName, actionDescription, kind, preferences, includeInteractiveActions);
     }
 
     public refactorKindAvailable(kind: string, expected: string[], preferences = ts.emptyOptions) {
@@ -1422,6 +1422,7 @@ export namespace Completion {
         "typeof",
         "unique",
         "unknown",
+        "using",
         "var",
         "void",
         "while",
@@ -1534,6 +1535,7 @@ export namespace Completion {
         "try",
         "type",
         "typeof",
+        "using",
         "var",
         "void",
         "while",
@@ -1639,6 +1641,7 @@ export namespace Completion {
         "typeof",
         "unique",
         "unknown",
+        "using",
         "var",
         "void",
         "while",
@@ -1690,6 +1693,7 @@ export namespace Completion {
         "try",
         "type",
         "typeof",
+        "using",
         "var",
         "void",
         "while",

@@ -301,12 +301,17 @@ ScriptInfos::
     version: Text-1
     containingProjects: 1
         /dev/null/inferredProject2*
-/node_modules/a/dist/index.d.ts (Open)
+/node_modules/a/dist/index.d.ts (Open) *changed*
     version: SVC-1-0
+    sourceMapFilePath: /node_modules/a/dist/index.d.ts.map *changed*
     containingProjects: 1
         /dev/null/inferredProject2* *default*
 /node_modules/a/dist/index.d.ts.map *new*
     version: Text-1
+    declarationInfoPath: /node_modules/a/dist/index.d.ts
+    sourceInfos: 1
+        /node_modules/a/src/index.ts
+    documentPositionMapper: DocumentPositionMapper
     containingProjects: 0
 /node_modules/a/src/index.ts *new*
     version: Text-1

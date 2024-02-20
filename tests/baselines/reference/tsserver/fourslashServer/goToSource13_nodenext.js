@@ -379,8 +379,9 @@ ScriptInfos::
     containingProjects: 2
         /dev/null/inferredProject1*
         /tsconfig.json
-/node_modules/left-pad/index.d.ts
+/node_modules/left-pad/index.d.ts *changed*
     version: Text-1
+    sourceMapFilePath: false *changed*
     containingProjects: 1
         /tsconfig.json
 /node_modules/left-pad/index.js *new*

@@ -749,10 +749,6 @@ Info seq  [hh:mm:ss:mss] request:
 Info seq  [hh:mm:ss:mss] Finding references to /user/username/projects/project/src/common/input/keyboard.ts position 99 in project /user/username/projects/project/src/common/tsconfig.json
 Info seq  [hh:mm:ss:mss] Finding references to /user/username/projects/project/src/common/input/keyboard.ts position 99 in project /user/username/projects/project/src/tsconfig.json
 Info seq  [hh:mm:ss:mss] Search path: /user/username/projects/project/src/common/input
-Info seq  [hh:mm:ss:mss] For info: /user/username/projects/project/src/common/input/keyboard.ts :: Config file name: /user/username/projects/project/src/common/tsconfig.json
-Info seq  [hh:mm:ss:mss] Search path: /user/username/projects/project/src/common/input
-Info seq  [hh:mm:ss:mss] For info: /user/username/projects/project/src/common/input/keyboard.ts :: Config file name: /user/username/projects/project/src/common/tsconfig.json
-Info seq  [hh:mm:ss:mss] Search path: /user/username/projects/project/src/common/input
 Info seq  [hh:mm:ss:mss] For info: /user/username/projects/project/src/common/input/keyboard.test.ts :: Config file name: /user/username/projects/project/src/common/tsconfig.json
 Info seq  [hh:mm:ss:mss] Search path: /user/username/projects/project/src/common/input
 Info seq  [hh:mm:ss:mss] For info: /user/username/projects/project/src/common/input/keyboard.test.ts :: Config file name: /user/username/projects/project/src/common/tsconfig.json

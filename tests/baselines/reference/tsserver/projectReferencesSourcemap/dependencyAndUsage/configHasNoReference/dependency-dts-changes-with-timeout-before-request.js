@@ -914,9 +914,14 @@ ScriptInfos::
         /user/username/projects/myproject/random/tsconfig.json
 /user/username/projects/myproject/decls/FnS.d.ts.map *new*
     version: Text-1
+    declarationInfoPath: /user/username/projects/myproject/decls/fns.d.ts
+    sourceInfos: 1
+        /user/username/projects/myproject/dependency/fns.ts
+    documentPositionMapper: DocumentPositionMapper
     containingProjects: 0
-/user/username/projects/myproject/decls/fns.d.ts
+/user/username/projects/myproject/decls/fns.d.ts *changed*
     version: Text-1
+    sourceMapFilePath: /user/username/projects/myproject/decls/fns.d.ts.map *changed*
     containingProjects: 1
         /user/username/projects/myproject/main/tsconfig.json
 /user/username/projects/myproject/dependency/FnS.ts (Open)
@@ -945,8 +950,6 @@ Info seq  [hh:mm:ss:mss] request:
       "seq": 5,
       "type": "request"
     }
-Info seq  [hh:mm:ss:mss] Search path: /user/username/projects/myproject/dependency
-Info seq  [hh:mm:ss:mss] For info: /user/username/projects/myproject/dependency/FnS.ts :: Config file name: /user/username/projects/myproject/dependency/tsconfig.json
 Info seq  [hh:mm:ss:mss] response:
     {
       "response": {
@@ -1092,10 +1095,15 @@ ScriptInfos::
         /user/username/projects/myproject/random/tsconfig.json
 /user/username/projects/myproject/decls/FnS.d.ts.map
     version: Text-1
+    declarationInfoPath: /user/username/projects/myproject/decls/fns.d.ts
+    sourceInfos: 1
+        /user/username/projects/myproject/dependency/fns.ts
+    documentPositionMapper: DocumentPositionMapper
     containingProjects: 0
 /user/username/projects/myproject/decls/fns.d.ts *changed*
     version: Text-1
     pendingReloadFromDisk: true *changed*
+    sourceMapFilePath: /user/username/projects/myproject/decls/fns.d.ts.map
     containingProjects: 1
         /user/username/projects/myproject/main/tsconfig.json
 /user/username/projects/myproject/dependency/FnS.ts (Open)
@@ -1206,10 +1214,15 @@ ScriptInfos::
         /user/username/projects/myproject/random/tsconfig.json
 /user/username/projects/myproject/decls/FnS.d.ts.map
     version: Text-1
+    declarationInfoPath: /user/username/projects/myproject/decls/fns.d.ts
+    sourceInfos: 1
+        /user/username/projects/myproject/dependency/fns.ts
+    documentPositionMapper: DocumentPositionMapper
     containingProjects: 0
 /user/username/projects/myproject/decls/fns.d.ts *changed*
     version: Text-2 *changed*
     pendingReloadFromDisk: false *changed*
+    sourceMapFilePath: undefined *changed*
     containingProjects: 1
         /user/username/projects/myproject/main/tsconfig.json
 /user/username/projects/myproject/dependency/FnS.ts (Open)
@@ -1276,6 +1289,38 @@ Info seq  [hh:mm:ss:mss] response:
       "responseRequired": true
     }
 After request
+
+ScriptInfos::
+/a/lib/lib.d.ts
+    version: Text-1
+    containingProjects: 3
+        /user/username/projects/myproject/main/tsconfig.json
+        /user/username/projects/myproject/dependency/tsconfig.json
+        /user/username/projects/myproject/random/tsconfig.json
+/user/username/projects/myproject/decls/FnS.d.ts.map
+    version: Text-1
+    declarationInfoPath: /user/username/projects/myproject/decls/fns.d.ts
+    sourceInfos: 1
+        /user/username/projects/myproject/dependency/fns.ts
+    documentPositionMapper: DocumentPositionMapper
+    containingProjects: 0
+/user/username/projects/myproject/decls/fns.d.ts *changed*
+    version: Text-2
+    sourceMapFilePath: /user/username/projects/myproject/decls/fns.d.ts.map *changed*
+    containingProjects: 1
+        /user/username/projects/myproject/main/tsconfig.json
+/user/username/projects/myproject/dependency/FnS.ts (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /user/username/projects/myproject/dependency/tsconfig.json *default*
+/user/username/projects/myproject/main/main.ts (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /user/username/projects/myproject/main/tsconfig.json *default*
+/user/username/projects/myproject/random/random.ts (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /user/username/projects/myproject/random/tsconfig.json *default*
 
 Before request
 
@@ -1498,8 +1543,6 @@ Info seq  [hh:mm:ss:mss] request:
       "seq": 11,
       "type": "request"
     }
-Info seq  [hh:mm:ss:mss] Search path: /user/username/projects/myproject/dependency
-Info seq  [hh:mm:ss:mss] For info: /user/username/projects/myproject/dependency/FnS.ts :: Config file name: /user/username/projects/myproject/dependency/tsconfig.json
 Info seq  [hh:mm:ss:mss] response:
     {
       "response": {
@@ -1596,8 +1639,6 @@ Info seq  [hh:mm:ss:mss] request:
       "seq": 12,
       "type": "request"
     }
-Info seq  [hh:mm:ss:mss] Search path: /user/username/projects/myproject/dependency
-Info seq  [hh:mm:ss:mss] For info: /user/username/projects/myproject/dependency/FnS.ts :: Config file name: /user/username/projects/myproject/dependency/tsconfig.json
 Info seq  [hh:mm:ss:mss] response:
     {
       "response": {
@@ -1694,8 +1735,6 @@ Info seq  [hh:mm:ss:mss] request:
       "seq": 13,
       "type": "request"
     }
-Info seq  [hh:mm:ss:mss] Search path: /user/username/projects/myproject/dependency
-Info seq  [hh:mm:ss:mss] For info: /user/username/projects/myproject/dependency/FnS.ts :: Config file name: /user/username/projects/myproject/dependency/tsconfig.json
 Info seq  [hh:mm:ss:mss] response:
     {
       "response": {
@@ -1792,8 +1831,6 @@ Info seq  [hh:mm:ss:mss] request:
       "seq": 14,
       "type": "request"
     }
-Info seq  [hh:mm:ss:mss] Search path: /user/username/projects/myproject/dependency
-Info seq  [hh:mm:ss:mss] For info: /user/username/projects/myproject/dependency/FnS.ts :: Config file name: /user/username/projects/myproject/dependency/tsconfig.json
 Info seq  [hh:mm:ss:mss] response:
     {
       "response": {
@@ -1890,8 +1927,6 @@ Info seq  [hh:mm:ss:mss] request:
       "seq": 15,
       "type": "request"
     }
-Info seq  [hh:mm:ss:mss] Search path: /user/username/projects/myproject/dependency
-Info seq  [hh:mm:ss:mss] For info: /user/username/projects/myproject/dependency/FnS.ts :: Config file name: /user/username/projects/myproject/dependency/tsconfig.json
 Info seq  [hh:mm:ss:mss] response:
     {
       "response": {

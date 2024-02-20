@@ -384,12 +384,17 @@ ScriptInfos::
     version: SVC-1-0
     containingProjects: 1
         /dev/null/inferredProject1* *default*
-/tests/cases/fourslash/server/indexdef.d.ts
+/tests/cases/fourslash/server/indexdef.d.ts *changed*
     version: Text-1
+    sourceMapFilePath: /tests/cases/fourslash/server/indexdef.d.ts.map *changed*
     containingProjects: 1
         /dev/null/inferredProject2*
 /tests/cases/fourslash/server/indexdef.d.ts.map *new*
     version: Text-1
+    declarationInfoPath: /tests/cases/fourslash/server/indexdef.d.ts
+    sourceInfos: 1
+        /tests/cases/fourslash/server/index.ts
+    documentPositionMapper: DocumentPositionMapper
     containingProjects: 0
 /tests/cases/fourslash/server/mymodule.ts (Open)
     version: SVC-1-0
