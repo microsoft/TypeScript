@@ -32,8 +32,8 @@ const c = 3;`;
         openFilesForSession([target], session);
 
         const hostProject = session.getProjectService().configuredProjects.get(tsconfig.path)!;
-        hostProject.runWithTemporaryFileUpdate(target.path, pastedText, (_updatedProgram, _originalProgram, _updatedFile)=>{});
-        
+        hostProject.runWithTemporaryFileUpdate(target.path, pastedText, (_updatedProgram, _originalProgram, _updatedFile) => {});
+
         assert.strictEqual(hostProject.getCurrentProgram()?.getSourceFileByPath(target.path as ts.Path)?.getText(), target.content);
         baselineTsserverLogs("getPostPasteImportFixes", "Returns the same file unchanged ", session);
     });

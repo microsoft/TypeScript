@@ -2095,7 +2095,7 @@ export function createLanguageService(
 
     function getPostPasteImportFixes(
         targetFile: string,
-        copies: { text: string; copyRange?: { file: string; range: TextRange;} }[],
+        copies: { text: string; copyRange?: { file: string; range: TextRange; }; }[],
         pastes: TextRange[],
         preferences: UserPreferences,
         formatOptions: FormatCodeSettings,
@@ -2105,9 +2105,11 @@ export function createLanguageService(
             getValidSourceFile(targetFile),
             copies.map(({ text, copyRange }) => ({ text, copyRange: copyRange ? { file: getValidSourceFile(copyRange.file), range: copyRange.range } : undefined })),
             pastes,
-            host, 
-            preferences, 
-            formatting.getFormatContext(formatOptions, host), cancellationToken);
+            host,
+            preferences,
+            formatting.getFormatContext(formatOptions, host),
+            cancellationToken,
+        );
     }
 
     function getNodeForQuickInfo(node: Node): Node {

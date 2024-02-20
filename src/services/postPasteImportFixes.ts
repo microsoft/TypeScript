@@ -37,7 +37,7 @@ import {
 /** @internal */
 export function postPasteImportFixesProvider(
     targetFile: SourceFile,
-    copies: { text: string; copyRange?: { file: SourceFile; range: TextRange;} }[],
+    copies: { text: string; copyRange?: { file: SourceFile; range: TextRange; }; }[],
     pastes: TextRange[],
     host: LanguageServiceHost,
     preferences: UserPreferences,
@@ -50,7 +50,7 @@ export function postPasteImportFixesProvider(
 
 function postPasteFixes(
     targetFile: SourceFile,
-    copies: { text: string; copyRange?: { file: SourceFile; range: TextRange;} }[],
+    copies: { text: string; copyRange?: { file: SourceFile; range: TextRange; }; }[],
     pastes: TextRange[],
     host: LanguageServiceHost,
     preferences: UserPreferences,
@@ -60,15 +60,14 @@ function postPasteFixes(
 ) {
     const copy = copies[0];
     const statements: Statement[] = [];
-    
+
     host.runWithTemporaryFileUpdate?.(targetFile.fileName, targetFile.getText().slice(0, pastes[0].pos) + copy.text + targetFile.getText().slice(pastes[0].end), (updatedProgram, originalProgram, updatedFile) => {
         if (copy.copyRange) {
             addRange(statements, copy.copyRange.file.statements, getLineOfLocalPosition(copy.copyRange.file, copy.copyRange.range.pos), getLineOfLocalPosition(copy.copyRange.file, copy.copyRange.range.end) + 1);
             const usage = getUsageInfo(copy.copyRange.file, statements, originalProgram!.getTypeChecker(), getExistingLocals(updatedFile, statements, originalProgram!.getTypeChecker()));
             const importAdder = codefix.createImportAdder(updatedFile, updatedProgram!, preferences, host);
-    
-            const imports = getTargetFileImportsAndAddExportInOldFile(copy.copyRange.file, targetFile.fileName, usage.oldImportsNeededByTargetFile, usage.targetFileImportsFromOldFile, changes,
-                 originalProgram!.getTypeChecker(), updatedProgram!, host, !fileShouldUseJavaScriptRequire(targetFile.fileName, updatedProgram!, host, !!copy.copyRange.file.commonJsModuleIndicator), getQuotePreference(targetFile, preferences), importAdder);
+
+            const imports = getTargetFileImportsAndAddExportInOldFile(copy.copyRange.file, targetFile.fileName, usage.oldImportsNeededByTargetFile, usage.targetFileImportsFromOldFile, changes, originalProgram!.getTypeChecker(), updatedProgram!, host, !fileShouldUseJavaScriptRequire(targetFile.fileName, updatedProgram!, host, !!copy.copyRange.file.commonJsModuleIndicator), getQuotePreference(targetFile, preferences), importAdder);
             if (imports.length > 0) {
                 insertImports(changes, targetFile, imports, /*blankLineBetween*/ true, preferences);
             }
@@ -97,8 +96,8 @@ function postPasteFixes(
             });
             importAdder.writeFixes(changes, getQuotePreference(targetFile, preferences));
         }
-      });
-    pastes.forEach((paste) => {
+    });
+    pastes.forEach(paste => {
         changes.replaceRangeWithText(targetFile, { pos: paste.pos, end: paste.end }, copy.text);
     });
 }

@@ -1012,15 +1012,15 @@ export class SessionClient implements LanguageService {
 
     getPostPasteImportFixes(
         targetFile: string,
-        copies: { text: string; copyRange?: { file: string; range: TextRange;} }[],
+        copies: { text: string; copyRange?: { file: string; range: TextRange; }; }[],
         pastes: TextRange[],
         _preferences: UserPreferences,
-        _formatOptions: FormatCodeSettings
+        _formatOptions: FormatCodeSettings,
     ): PostPasteImportFixes {
         const args: protocol.GetPostPasteImportFixesRequestArgs = {
             file: targetFile,
             copies: copies.map(copy => ({ text: copy.text, range: copy.copyRange ? { file: copy.copyRange.file, start: this.positionToOneBasedLineOffset(copy.copyRange.file, copy.copyRange.range.pos), end: this.positionToOneBasedLineOffset(copy.copyRange.file, copy.copyRange.range.end) } : undefined })),
-            pastes: pastes.map(paste => ({ start: this.positionToOneBasedLineOffset(targetFile, paste.pos), end: this.positionToOneBasedLineOffset(targetFile, paste.end)})),
+            pastes: pastes.map(paste => ({ start: this.positionToOneBasedLineOffset(targetFile, paste.pos), end: this.positionToOneBasedLineOffset(targetFile, paste.end) })),
         };
         const request = this.processRequest<protocol.GetPostPasteImportFixesRequest>(protocol.CommandTypes.GetPostPasteImportFixes, args);
         const response = this.processResponse<protocol.GetPostPasteImportFixesResponse>(request);

@@ -686,7 +686,7 @@ export interface LanguageService {
     dispose(): void;
     getPostPasteImportFixes(
         targetFile: string,
-        copies: { text: string; range?: { file: string; range: TextRange;} }[],
+        copies: { text: string; range?: { file: string; range: TextRange; }; }[],
         pastes: TextRange[],
         preferences: UserPreferences,
         formatOptions: FormatCodeSettings,

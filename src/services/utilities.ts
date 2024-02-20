@@ -1,4 +1,6 @@
-import { getModuleSpecifier } from "../compiler/_namespaces/ts.moduleSpecifiers";
+import {
+    getModuleSpecifier,
+} from "../compiler/_namespaces/ts.moduleSpecifiers";
 import {
     __String,
     addEmitFlags,
@@ -380,7 +382,16 @@ import {
     walkUpParenthesizedExpressions,
     YieldExpression,
 } from "./_namespaces/ts";
-import { addExportToChanges, filterImport, forEachImportInStatement, getTopLevelDeclarationStatement, isTopLevelDeclaration, makeImportOrRequire, moduleSpecifierFromImport, nameOfTopLevelDeclaration } from "./_namespaces/ts.refactor";
+import {
+    addExportToChanges,
+    filterImport,
+    forEachImportInStatement,
+    getTopLevelDeclarationStatement,
+    isTopLevelDeclaration,
+    makeImportOrRequire,
+    moduleSpecifierFromImport,
+    nameOfTopLevelDeclaration,
+} from "./_namespaces/ts.refactor";
 
 // These utilities are common to multiple language service features.
 // #region

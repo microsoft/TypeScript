@@ -2220,7 +2220,7 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
         const originalProgram = this.program;
         const originalText = this.program?.getSourceFile(rootFile)?.getText();
         Debug.assert(this.program && this.program.getSourceFile(rootFile) && originalText);
-        
+
         this.getScriptInfo(rootFile)?.editContent(0, this.program.getSourceFile(rootFile)!.getText().length, pastedText);
         this.updateGraph();
         cb(this.program, originalProgram, (this.program?.getSourceFile(rootFile))!);
