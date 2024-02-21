@@ -34,9 +34,6 @@ import {
     BindingElement,
     BindingElementOfBareOrAccessedRequire,
     Block,
-    BundleFileSection,
-    BundleFileSectionKind,
-    BundleFileTextLike,
     CallExpression,
     CallLikeExpression,
     CallSignatureDeclaration,
@@ -6082,10 +6079,6 @@ export function createTextWriter(newLine: string): EmitTextWriter {
         }
     }
 
-    function getTextPosWithWriteLine() {
-        return lineStart ? output.length : (output.length + newLine.length);
-    }
-
     reset();
 
     return {
@@ -6118,7 +6111,6 @@ export function createTextWriter(newLine: string): EmitTextWriter {
         writeSymbol: (s, _) => write(s),
         writeTrailingSemicolon: write,
         writeComment,
-        getTextPosWithWriteLine,
     };
 }
 
@@ -8057,17 +8049,6 @@ export function getNameOfAccessExpression(node: AccessExpression) {
     }
     Debug.assert(node.kind === SyntaxKind.ElementAccessExpression);
     return node.argumentExpression;
-}
-
-/** @deprecated @internal */
-export function isBundleFileTextLike(section: BundleFileSection): section is BundleFileTextLike {
-    switch (section.kind) {
-        case BundleFileSectionKind.Text:
-        case BundleFileSectionKind.Internal:
-            return true;
-        default:
-            return false;
-    }
 }
 
 /** @internal */

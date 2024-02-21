@@ -29,12 +29,7 @@ import {
     Block,
     BooleanLiteral,
     BreakStatement,
-    BuildInfo,
     Bundle,
-    BundleFileHasNoDefaultLib,
-    BundleFileInfo,
-    BundleFileReference,
-    BundleFileSectionKind,
     CallBinding,
     CallChain,
     CallExpression,
@@ -51,8 +46,6 @@ import {
     ClassStaticBlockDeclaration,
     ColonToken,
     CommaListExpression,
-    CompilerHost,
-    CompilerOptions,
     ComputedPropertyName,
     ConciseBody,
     ConditionalExpression,
@@ -113,13 +106,10 @@ import {
     GeneratedNamePart,
     GeneratedPrivateIdentifier,
     GetAccessorDeclaration,
-    getAllUnscopedEmitHelpers,
-    getBuildInfo,
     getCommentRange,
     getEmitFlags,
     getIdentifierTypeArguments,
     getJSDocTypeAliasName,
-    getLineAndCharacterOfPosition,
     getNameOfDeclaration,
     getNodeId,
     getNonAssignedNameOfDeclaration,
@@ -151,7 +141,6 @@ import {
     IndexedAccessTypeNode,
     IndexSignatureDeclaration,
     InferTypeNode,
-    InputFiles,
     InterfaceDeclaration,
     InternalEmitFlags,
     IntersectionTypeNode,
@@ -218,7 +207,6 @@ import {
     isSourceFile,
     isStatement,
     isStatementOrBlock,
-    isString,
     isStringLiteral,
     isSuperKeyword,
     isSuperProperty,
@@ -302,7 +290,6 @@ import {
     LeftHandSideExpression,
     LiteralToken,
     LiteralTypeNode,
-    map,
     MappedTypeNode,
     MemberName,
     memoize,
@@ -321,7 +308,6 @@ import {
     ModuleBlock,
     ModuleBody,
     ModuleDeclaration,
-    ModuleKind,
     ModuleName,
     ModuleReference,
     Mutable,
@@ -359,7 +345,6 @@ import {
     ParameterDeclaration,
     ParenthesizedExpression,
     ParenthesizedTypeNode,
-    parseNodeFactory,
     PartiallyEmittedExpression,
     Path,
     PlusToken,
@@ -398,13 +383,11 @@ import {
     ScriptTarget,
     SemicolonClassElement,
     SetAccessorDeclaration,
-    setEachParent,
     setEmitFlags,
     setIdentifierAutoGenerate,
     setIdentifierTypeArguments,
     setParent,
     setTextRange,
-    setTextRangePosWidth,
     ShorthandPropertyAssignment,
     SignatureDeclarationBase,
     singleOrUndefined,
@@ -462,14 +445,6 @@ import {
     TypeReferenceNode,
     UnionOrIntersectionTypeNode,
     UnionTypeNode,
-    UnparsedNode,
-    UnparsedPrepend,
-    UnparsedPrologue,
-    UnparsedSource,
-    UnparsedSourceText,
-    UnparsedSyntheticReference,
-    UnparsedTextLike,
-    UnscopedEmitHelper,
     VariableDeclaration,
     VariableDeclarationList,
     VariableStatement,
@@ -1025,12 +1000,6 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
         createRedirectedSourceFile,
         createBundle,
         updateBundle,
-        createUnparsedSource,
-        createUnparsedPrologue,
-        createUnparsedPrepend,
-        createUnparsedTextLike,
-        createUnparsedSyntheticReference,
-        createInputFiles,
         createSyntheticExpression,
         createSyntaxList,
         createNotEmittedStatement,
@@ -6185,9 +6154,8 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
     }
 
     // @api
-    function createBundle(sourceFiles: readonly SourceFile[], prepends: readonly (UnparsedSource | InputFiles)[] = emptyArray) {
+    function createBundle(sourceFiles: readonly SourceFile[]) {
         const node = createBaseNode<Bundle>(SyntaxKind.Bundle);
-        node.prepends = prepends;
         node.sourceFiles = sourceFiles;
         node.syntheticFileReferences = undefined;
         node.syntheticTypeReferences = undefined;
@@ -6197,64 +6165,10 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
     }
 
     // @api
-    function updateBundle(node: Bundle, sourceFiles: readonly SourceFile[], prepends: readonly (UnparsedSource | InputFiles)[] = emptyArray) {
+    function updateBundle(node: Bundle, sourceFiles: readonly SourceFile[]) {
         return node.sourceFiles !== sourceFiles
-                || node.prepends !== prepends
-            ? update(createBundle(sourceFiles, prepends), node)
+            ? update(createBundle(sourceFiles), node)
             : node;
-    }
-
-    // @api
-    function createUnparsedSource(prologues: readonly UnparsedPrologue[], syntheticReferences: readonly UnparsedSyntheticReference[] | undefined, texts: readonly UnparsedSourceText[]) {
-        const node = createBaseNode<UnparsedSource>(SyntaxKind.UnparsedSource);
-        node.prologues = prologues;
-        node.syntheticReferences = syntheticReferences;
-        node.texts = texts;
-        node.fileName = "";
-        node.text = "";
-        node.referencedFiles = emptyArray;
-        node.libReferenceDirectives = emptyArray;
-        node.getLineAndCharacterOfPosition = pos => getLineAndCharacterOfPosition(node, pos);
-        return node;
-    }
-
-    function createBaseUnparsedNode<T extends UnparsedNode>(kind: T["kind"], data?: string) {
-        const node = createBaseNode(kind);
-        node.data = data;
-        return node;
-    }
-
-    // @api
-    function createUnparsedPrologue(data?: string): UnparsedPrologue {
-        return createBaseUnparsedNode(SyntaxKind.UnparsedPrologue, data);
-    }
-
-    // @api
-    function createUnparsedPrepend(data: string | undefined, texts: readonly UnparsedTextLike[]): UnparsedPrepend {
-        const node = createBaseUnparsedNode<UnparsedPrepend>(SyntaxKind.UnparsedPrepend, data);
-        node.texts = texts;
-        return node;
-    }
-
-    // @api
-    function createUnparsedTextLike(data: string | undefined, internal: boolean): UnparsedTextLike {
-        return createBaseUnparsedNode(internal ? SyntaxKind.UnparsedInternalText : SyntaxKind.UnparsedText, data);
-    }
-
-    // @api
-    function createUnparsedSyntheticReference(section: BundleFileHasNoDefaultLib | BundleFileReference): UnparsedSyntheticReference {
-        const node = createBaseNode<UnparsedSyntheticReference>(SyntaxKind.UnparsedSyntheticReference);
-        node.data = section.data;
-        node.section = section;
-        return node;
-    }
-
-    // @api
-    function createInputFiles(): InputFiles {
-        const node = createBaseNode<InputFiles>(SyntaxKind.InputFiles);
-        node.javascriptText = "";
-        node.declarationText = "";
-        return node;
     }
 
     //
@@ -7445,314 +7359,6 @@ const syntheticFactory: BaseNodeFactory = {
 };
 
 export const factory = createNodeFactory(NodeFactoryFlags.NoIndentationOnFreshPropertyAccess, syntheticFactory);
-
-/** @deprecated */
-export function createUnparsedSourceFile(text: string): UnparsedSource;
-/** @deprecated */
-export function createUnparsedSourceFile(inputFile: InputFiles, type: "js" | "dts", stripInternal?: boolean): UnparsedSource;
-/** @deprecated */
-export function createUnparsedSourceFile(text: string, mapPath: string | undefined, map: string | undefined): UnparsedSource;
-export function createUnparsedSourceFile(textOrInputFiles: string | InputFiles, mapPathOrType?: string, mapTextOrStripInternal?: string | boolean): UnparsedSource {
-    let stripInternal: boolean | undefined;
-    let bundleFileInfo: BundleFileInfo | undefined;
-    let fileName: string;
-    let text: string | undefined;
-    let length: number | (() => number);
-    let sourceMapPath: string | undefined;
-    let sourceMapText: string | undefined;
-    let getText: (() => string) | undefined;
-    let getSourceMapText: (() => string | undefined) | undefined;
-    let oldFileOfCurrentEmit: boolean | undefined;
-
-    if (!isString(textOrInputFiles)) {
-        Debug.assert(mapPathOrType === "js" || mapPathOrType === "dts");
-        fileName = (mapPathOrType === "js" ? textOrInputFiles.javascriptPath : textOrInputFiles.declarationPath) || "";
-        sourceMapPath = mapPathOrType === "js" ? textOrInputFiles.javascriptMapPath : textOrInputFiles.declarationMapPath;
-        getText = () => mapPathOrType === "js" ? textOrInputFiles.javascriptText : textOrInputFiles.declarationText;
-        getSourceMapText = () => mapPathOrType === "js" ? textOrInputFiles.javascriptMapText : textOrInputFiles.declarationMapText;
-        length = () => getText!().length;
-        if (textOrInputFiles.buildInfo && textOrInputFiles.buildInfo.bundle) {
-            Debug.assert(mapTextOrStripInternal === undefined || typeof mapTextOrStripInternal === "boolean");
-            stripInternal = mapTextOrStripInternal;
-            bundleFileInfo = mapPathOrType === "js" ? textOrInputFiles.buildInfo.bundle.js : textOrInputFiles.buildInfo.bundle.dts;
-            oldFileOfCurrentEmit = textOrInputFiles.oldFileOfCurrentEmit;
-        }
-    }
-    else {
-        fileName = "";
-        text = textOrInputFiles;
-        length = textOrInputFiles.length;
-        sourceMapPath = mapPathOrType;
-        sourceMapText = mapTextOrStripInternal as string;
-    }
-    const node = oldFileOfCurrentEmit ?
-        parseOldFileOfCurrentEmit(Debug.checkDefined(bundleFileInfo)) :
-        parseUnparsedSourceFile(bundleFileInfo, stripInternal, length);
-    node.fileName = fileName;
-    node.sourceMapPath = sourceMapPath;
-    node.oldFileOfCurrentEmit = oldFileOfCurrentEmit;
-    if (getText && getSourceMapText) {
-        Object.defineProperty(node, "text", { get: getText });
-        Object.defineProperty(node, "sourceMapText", { get: getSourceMapText });
-    }
-    else {
-        Debug.assert(!oldFileOfCurrentEmit);
-        node.text = text ?? "";
-        node.sourceMapText = sourceMapText;
-    }
-
-    return node;
-}
-
-function parseUnparsedSourceFile(bundleFileInfo: BundleFileInfo | undefined, stripInternal: boolean | undefined, length: number | (() => number)) {
-    let prologues: UnparsedPrologue[] | undefined;
-    let helpers: UnscopedEmitHelper[] | undefined;
-    let referencedFiles: FileReference[] | undefined;
-    let typeReferenceDirectives: FileReference[] | undefined;
-    let libReferenceDirectives: FileReference[] | undefined;
-    let prependChildren: UnparsedTextLike[] | undefined;
-    let texts: UnparsedSourceText[] | undefined;
-    let hasNoDefaultLib: boolean | undefined;
-
-    for (const section of bundleFileInfo ? bundleFileInfo.sections : emptyArray) {
-        switch (section.kind) {
-            case BundleFileSectionKind.Prologue:
-                prologues = append(prologues, setTextRange(factory.createUnparsedPrologue(section.data), section));
-                break;
-            case BundleFileSectionKind.EmitHelpers:
-                helpers = append(helpers, getAllUnscopedEmitHelpers().get(section.data)!);
-                break;
-            case BundleFileSectionKind.NoDefaultLib:
-                hasNoDefaultLib = true;
-                break;
-            case BundleFileSectionKind.Reference:
-                referencedFiles = append(referencedFiles, { pos: -1, end: -1, fileName: section.data });
-                break;
-            case BundleFileSectionKind.Type:
-                typeReferenceDirectives = append(typeReferenceDirectives, { pos: -1, end: -1, fileName: section.data });
-                break;
-            case BundleFileSectionKind.TypeResolutionModeImport:
-                typeReferenceDirectives = append(typeReferenceDirectives, { pos: -1, end: -1, fileName: section.data, resolutionMode: ModuleKind.ESNext });
-                break;
-            case BundleFileSectionKind.TypeResolutionModeRequire:
-                typeReferenceDirectives = append(typeReferenceDirectives, { pos: -1, end: -1, fileName: section.data, resolutionMode: ModuleKind.CommonJS });
-                break;
-            case BundleFileSectionKind.Lib:
-                libReferenceDirectives = append(libReferenceDirectives, { pos: -1, end: -1, fileName: section.data });
-                break;
-            case BundleFileSectionKind.Prepend:
-                let prependTexts: UnparsedTextLike[] | undefined;
-                for (const text of section.texts) {
-                    if (!stripInternal || text.kind !== BundleFileSectionKind.Internal) {
-                        prependTexts = append(prependTexts, setTextRange(factory.createUnparsedTextLike(text.data, text.kind === BundleFileSectionKind.Internal), text));
-                    }
-                }
-                prependChildren = addRange(prependChildren, prependTexts);
-                texts = append(texts, factory.createUnparsedPrepend(section.data, prependTexts ?? emptyArray));
-                break;
-            case BundleFileSectionKind.Internal:
-                if (stripInternal) {
-                    if (!texts) texts = [];
-                    break;
-                }
-                // falls through
-
-            case BundleFileSectionKind.Text:
-                texts = append(texts, setTextRange(factory.createUnparsedTextLike(section.data, section.kind === BundleFileSectionKind.Internal), section));
-                break;
-            default:
-                Debug.assertNever(section);
-        }
-    }
-
-    if (!texts) {
-        const textNode = factory.createUnparsedTextLike(/*data*/ undefined, /*internal*/ false);
-        setTextRangePosWidth(textNode, 0, typeof length === "function" ? length() : length);
-        texts = [textNode];
-    }
-
-    const node = parseNodeFactory.createUnparsedSource(prologues ?? emptyArray, /*syntheticReferences*/ undefined, texts);
-    setEachParent(prologues, node);
-    setEachParent(texts, node);
-    setEachParent(prependChildren, node);
-    node.hasNoDefaultLib = hasNoDefaultLib;
-    node.helpers = helpers;
-    node.referencedFiles = referencedFiles || emptyArray;
-    node.typeReferenceDirectives = typeReferenceDirectives;
-    node.libReferenceDirectives = libReferenceDirectives || emptyArray;
-    return node;
-}
-
-function parseOldFileOfCurrentEmit(bundleFileInfo: BundleFileInfo) {
-    let texts: UnparsedTextLike[] | undefined;
-    let syntheticReferences: UnparsedSyntheticReference[] | undefined;
-    for (const section of bundleFileInfo.sections) {
-        switch (section.kind) {
-            case BundleFileSectionKind.Internal:
-            case BundleFileSectionKind.Text:
-                texts = append(texts, setTextRange(factory.createUnparsedTextLike(section.data, section.kind === BundleFileSectionKind.Internal), section));
-                break;
-
-            case BundleFileSectionKind.NoDefaultLib:
-            case BundleFileSectionKind.Reference:
-            case BundleFileSectionKind.Type:
-            case BundleFileSectionKind.TypeResolutionModeImport:
-            case BundleFileSectionKind.TypeResolutionModeRequire:
-            case BundleFileSectionKind.Lib:
-                syntheticReferences = append(syntheticReferences, setTextRange(factory.createUnparsedSyntheticReference(section), section));
-                break;
-
-            // Ignore
-            case BundleFileSectionKind.Prologue:
-            case BundleFileSectionKind.EmitHelpers:
-            case BundleFileSectionKind.Prepend:
-                break;
-
-            default:
-                Debug.assertNever(section);
-        }
-    }
-
-    const node = factory.createUnparsedSource(emptyArray, syntheticReferences, texts ?? emptyArray);
-    setEachParent(syntheticReferences, node);
-    setEachParent(texts, node);
-    node.helpers = map(bundleFileInfo.sources && bundleFileInfo.sources.helpers, name => getAllUnscopedEmitHelpers().get(name)!);
-    return node;
-}
-
-// TODO(rbuckton): Move part of this to factory
-/** @deprecated */
-export function createInputFiles(
-    javascriptText: string,
-    declarationText: string,
-): InputFiles;
-/** @deprecated */
-export function createInputFiles(
-    javascriptText: string,
-    declarationText: string,
-    javascriptMapPath: string | undefined,
-    javascriptMapText: string | undefined,
-    declarationMapPath: string | undefined,
-    declarationMapText: string | undefined,
-): InputFiles;
-/** @deprecated */
-export function createInputFiles(
-    readFileText: (path: string) => string | undefined,
-    javascriptPath: string,
-    javascriptMapPath: string | undefined,
-    declarationPath: string,
-    declarationMapPath: string | undefined,
-    buildInfoPath: string | undefined,
-): InputFiles;
-export function createInputFiles(
-    javascriptTextOrReadFileText: string | ((path: string) => string | undefined),
-    declarationTextOrJavascriptPath: string,
-    javascriptMapPath?: string,
-    javascriptMapTextOrDeclarationPath?: string,
-    declarationMapPath?: string,
-    declarationMapTextOrBuildInfoPath?: string,
-): InputFiles {
-    return !isString(javascriptTextOrReadFileText) ?
-        createInputFilesWithFilePaths(
-            javascriptTextOrReadFileText,
-            declarationTextOrJavascriptPath,
-            javascriptMapPath,
-            javascriptMapTextOrDeclarationPath!,
-            declarationMapPath,
-            declarationMapTextOrBuildInfoPath,
-        ) :
-        createInputFilesWithFileTexts(
-            /*javascriptPath*/ undefined,
-            javascriptTextOrReadFileText,
-            javascriptMapPath,
-            javascriptMapTextOrDeclarationPath,
-            /*declarationPath*/ undefined,
-            declarationTextOrJavascriptPath,
-            declarationMapPath,
-            declarationMapTextOrBuildInfoPath,
-        );
-}
-/** @deprecated @internal */
-export function createInputFilesWithFilePaths(
-    readFileText: (path: string) => string | undefined,
-    javascriptPath: string,
-    javascriptMapPath: string | undefined,
-    declarationPath: string,
-    declarationMapPath: string | undefined,
-    buildInfoPath: string | undefined,
-    host?: CompilerHost,
-    options?: CompilerOptions,
-): InputFiles {
-    const node = parseNodeFactory.createInputFiles();
-    node.javascriptPath = javascriptPath;
-    node.javascriptMapPath = javascriptMapPath;
-    node.declarationPath = declarationPath;
-    node.declarationMapPath = declarationMapPath;
-    node.buildInfoPath = buildInfoPath;
-    const cache = new Map<string, string | false>();
-    const textGetter = (path: string | undefined) => {
-        if (path === undefined) return undefined;
-        let value = cache.get(path);
-        if (value === undefined) {
-            value = readFileText(path);
-            cache.set(path, value !== undefined ? value : false);
-        }
-        return value !== false ? value as string : undefined;
-    };
-    const definedTextGetter = (path: string) => {
-        const result = textGetter(path);
-        return result !== undefined ? result : `/* Input file ${path} was missing */\r\n`;
-    };
-    let buildInfo: BuildInfo | false;
-    const getAndCacheBuildInfo = () => {
-        if (buildInfo === undefined && buildInfoPath) {
-            if (host?.getBuildInfo) {
-                buildInfo = host.getBuildInfo(buildInfoPath, options!.configFilePath) ?? false;
-            }
-            else {
-                const result = textGetter(buildInfoPath);
-                buildInfo = result !== undefined ? getBuildInfo(buildInfoPath, result) ?? false : false;
-            }
-        }
-        return buildInfo || undefined;
-    };
-    Object.defineProperties(node, {
-        javascriptText: { get: () => definedTextGetter(javascriptPath) },
-        javascriptMapText: { get: () => textGetter(javascriptMapPath) }, // TODO:: if there is inline sourceMap in jsFile, use that
-        declarationText: { get: () => definedTextGetter(Debug.checkDefined(declarationPath)) },
-        declarationMapText: { get: () => textGetter(declarationMapPath) }, // TODO:: if there is inline sourceMap in dtsFile, use that
-        buildInfo: { get: getAndCacheBuildInfo },
-    });
-    return node;
-}
-/** @deprecated @internal */
-export function createInputFilesWithFileTexts(
-    javascriptPath: string | undefined,
-    javascriptText: string,
-    javascriptMapPath: string | undefined,
-    javascriptMapText: string | undefined,
-    declarationPath: string | undefined,
-    declarationText: string,
-    declarationMapPath: string | undefined,
-    declarationMapText: string | undefined,
-    buildInfoPath?: string,
-    buildInfo?: BuildInfo,
-    oldFileOfCurrentEmit?: boolean,
-): InputFiles {
-    const node = parseNodeFactory.createInputFiles();
-    node.javascriptPath = javascriptPath;
-    node.javascriptText = javascriptText;
-    node.javascriptMapPath = javascriptMapPath;
-    node.javascriptMapText = javascriptMapText;
-    node.declarationPath = declarationPath;
-    node.declarationText = declarationText;
-    node.declarationMapPath = declarationMapPath;
-    node.declarationMapText = declarationMapText;
-    node.buildInfoPath = buildInfoPath;
-    node.buildInfo = buildInfo;
-    node.oldFileOfCurrentEmit = oldFileOfCurrentEmit;
-    return node;
-}
 
 let SourceMapSource: new (fileName: string, text: string, skipTrivia?: (pos: number) => number) => SourceMapSource;
 
