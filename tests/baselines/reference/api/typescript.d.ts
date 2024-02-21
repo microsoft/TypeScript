@@ -3906,6 +3906,7 @@ declare namespace ts {
             private static escapeFilenameForRegex;
             resetSafeList(): void;
             applySafeList(proj: protocol.ExternalProject): NormalizedPath[];
+            private applySafeListWorker;
             openExternalProject(proj: protocol.ExternalProject): void;
             hasDeferredExtension(): boolean;
             private enableRequestedPluginsAsync;
@@ -4138,7 +4139,7 @@ declare namespace ts {
             responseRequired?: boolean;
         }
     }
-    const versionMajorMinor = "5.4";
+    const versionMajorMinor = "5.5";
     /** The version of the TypeScript compiler release */
     const version: string;
     /**

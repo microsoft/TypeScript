@@ -474,8 +474,6 @@ Info seq  [hh:mm:ss:mss] event:
       }
     }
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: c:/temp/test/project1/index.d.ts 2000 undefined Project: c:/temp/test/project1/tsconfig.json WatchType: Missing generated file
-Info seq  [hh:mm:ss:mss] Search path: C:/temp/test/project1
-Info seq  [hh:mm:ss:mss] For info: C:/temp/test/project1/index.ts :: Config file name: C:/temp/test/project1/tsconfig.json
 Info seq  [hh:mm:ss:mss] response:
     {
       "response": {

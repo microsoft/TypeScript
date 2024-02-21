@@ -85,6 +85,7 @@ import {
     normalizeSlashes,
     optionDeclarations,
     optionsForWatch,
+    orderedRemoveItem,
     PackageJsonAutoImportPreference,
     ParsedCommandLine,
     parseJsonSourceFileConfigFileContent,
@@ -1029,7 +1030,7 @@ export class ProjectService {
     /**
      * maps external project file name to list of config files that were the part of this project
      */
-    private readonly externalProjectToConfiguredProjectMap = new Map<string, NormalizedPath[]>();
+    private readonly externalProjectToConfiguredProjectMap = new Map<string, Set<ConfiguredProject>>();
 
     /**
      * external projects (configuration and list of root files is not controlled by tsserver)
@@ -1882,7 +1883,7 @@ export class ProjectService {
         project.addRoot(info);
         if (info.containingProjects[0] !== project) {
             // Ensure this is first project, we could be in this scenario because info could be part of orphan project
-            info.detachFromProject(project);
+            orderedRemoveItem(info.containingProjects, project);
             info.containingProjects.unshift(project);
         }
         project.updateGraph();
@@ -2287,8 +2288,7 @@ export class ProjectService {
      * otherwise just file name
      */
     private getConfigFileNameForFile(info: OpenScriptInfoOrClosedOrConfigFileInfo) {
-        if (isOpenScriptInfo(info)) {
-            Debug.assert(info.isScriptOpen());
+        if (!isAncestorConfigFileInfo(info)) {
             const result = this.configFileForOpenFiles.get(info.path);
             if (result !== undefined) return result || undefined;
         }
@@ -3428,15 +3428,18 @@ export class ProjectService {
                 this.hostConfiguration.preferences = { ...this.hostConfiguration.preferences, ...args.preferences };
                 if (lazyConfiguredProjectsFromExternalProject && !this.hostConfiguration.preferences.lazyConfiguredProjectsFromExternalProject) {
                     // Load configured projects for external projects that are pending reload
-                    this.configuredProjects.forEach(project => {
-                        if (
-                            project.hasExternalProjectRef() &&
-                            project.pendingUpdateLevel === ProgramUpdateLevel.Full &&
-                            !this.pendingProjectUpdates.has(project.getProjectName())
-                        ) {
-                            project.updateGraph();
-                        }
-                    });
+                    this.externalProjectToConfiguredProjectMap.forEach(projects =>
+                        projects.forEach(project => {
+                            if (
+                                !project.isClosed() &&
+                                project.hasExternalProjectRef() &&
+                                project.pendingUpdateLevel === ProgramUpdateLevel.Full &&
+                                !this.pendingProjectUpdates.has(project.getProjectName())
+                            ) {
+                                project.updateGraph();
+                            }
+                        })
+                    );
                 }
                 if (includePackageJsonAutoImports !== args.preferences.includePackageJsonAutoImports) {
                     this.forEachProject(project => {
@@ -4188,15 +4191,13 @@ export class ProjectService {
         }
     }
 
-    private closeConfiguredProjectReferencedFromExternalProject(configFile: NormalizedPath) {
-        const configuredProject = this.findConfiguredProjectByProjectName(configFile);
-        if (configuredProject) {
-            configuredProject.deleteExternalProjectReference();
-            if (!configuredProject.hasOpenRef()) {
-                this.removeProject(configuredProject);
-                return;
+    private closeConfiguredProjectReferencedFromExternalProject(configuredProjects: Set<ConfiguredProject> | undefined) {
+        configuredProjects?.forEach(configuredProject => {
+            if (!configuredProject.isClosed()) {
+                configuredProject.deleteExternalProjectReference();
+                if (!configuredProject.hasOpenRef()) this.removeProject(configuredProject);
             }
-        }
+        });
     }
 
     closeExternalProject(uncheckedFileName: string): void;
@@ -4204,11 +4205,9 @@ export class ProjectService {
     closeExternalProject(uncheckedFileName: string, print: boolean): void;
     closeExternalProject(uncheckedFileName: string, print?: boolean): void {
         const fileName = toNormalizedPath(uncheckedFileName);
-        const configFiles = this.externalProjectToConfiguredProjectMap.get(fileName);
-        if (configFiles) {
-            for (const configFile of configFiles) {
-                this.closeConfiguredProjectReferencedFromExternalProject(configFile);
-            }
+        const configuredProjects = this.externalProjectToConfiguredProjectMap.get(fileName);
+        if (configuredProjects) {
+            this.closeConfiguredProjectReferencedFromExternalProject(configuredProjects);
             this.externalProjectToConfiguredProjectMap.delete(fileName);
         }
         else {
@@ -4253,20 +4252,21 @@ export class ProjectService {
     }
 
     applySafeList(proj: protocol.ExternalProject): NormalizedPath[] {
-        const { rootFiles } = proj;
         const typeAcquisition = proj.typeAcquisition!;
         Debug.assert(!!typeAcquisition, "proj.typeAcquisition should be set by now");
+        const result = this.applySafeListWorker(proj, proj.rootFiles, typeAcquisition);
+        return result?.excludedFiles ?? [];
+    }
 
+    private applySafeListWorker(proj: protocol.ExternalProject, rootFiles: protocol.ExternalFile[], typeAcquisition: TypeAcquisition) {
         if (typeAcquisition.enable === false || typeAcquisition.disableFilenameBasedTypeAcquisition) {
-            return [];
+            return undefined;
         }
 
         const typeAcqInclude = typeAcquisition.include || (typeAcquisition.include = []);
         const excludeRules: string[] = [];
 
         const normalizedNames = rootFiles.map(f => normalizeSlashes(f.fileName)) as NormalizedPath[];
-        const excludedFiles: NormalizedPath[] = [];
-
         for (const name of Object.keys(this.safelist)) {
             const rule = this.safelist[name];
             for (const root of normalizedNames) {
@@ -4320,13 +4320,13 @@ export class ProjectService {
         }
 
         const excludeRegexes = excludeRules.map(e => new RegExp(e, "i"));
-        const filesToKeep: protocol.ExternalFile[] = [];
-        for (let i = 0; i < proj.rootFiles.length; i++) {
+        let filesToKeep: protocol.ExternalFile[] | undefined;
+        let excludedFiles: NormalizedPath[] | undefined;
+        for (let i = 0; i < rootFiles.length; i++) {
             if (excludeRegexes.some(re => re.test(normalizedNames[i]))) {
-                excludedFiles.push(normalizedNames[i]);
+                addExcludedFile(i);
             }
             else {
-                let exclude = false;
                 if (typeAcquisition.enable) {
                     const baseName = getBaseFileName(toFileNameLowerCase(normalizedNames[i]));
                     if (fileExtensionIs(baseName, "js")) {
@@ -4335,52 +4335,68 @@ export class ProjectService {
                         const typeName = this.legacySafelist.get(cleanedTypingName);
                         if (typeName !== undefined) {
                             this.logger.info(`Excluded '${normalizedNames[i]}' because it matched ${cleanedTypingName} from the legacy safelist`);
-                            excludedFiles.push(normalizedNames[i]);
+                            addExcludedFile(i);
                             // *exclude* it from the project...
-                            exclude = true;
                             // ... but *include* it in the list of types to acquire
                             // Same best-effort dedupe as above
                             if (!typeAcqInclude.includes(typeName)) {
                                 typeAcqInclude.push(typeName);
                             }
+                            continue;
                         }
                     }
                 }
-                if (!exclude) {
-                    // Exclude any minified files that get this far
-                    if (/^.+[.-]min\.js$/.test(normalizedNames[i])) {
-                        excludedFiles.push(normalizedNames[i]);
-                    }
-                    else {
-                        filesToKeep.push(proj.rootFiles[i]);
-                    }
+                // Exclude any minified files that get this far
+                if (/^.+[.-]min\.js$/.test(normalizedNames[i])) {
+                    addExcludedFile(i);
+                }
+                else {
+                    filesToKeep?.push(rootFiles[i]);
                 }
             }
         }
-        proj.rootFiles = filesToKeep;
-        return excludedFiles;
+
+        return excludedFiles ? {
+            rootFiles: filesToKeep!,
+            excludedFiles,
+        } : undefined;
+
+        function addExcludedFile(index: number) {
+            if (!excludedFiles) {
+                Debug.assert(!filesToKeep);
+                filesToKeep = rootFiles.slice(0, index);
+                excludedFiles = [];
+            }
+            excludedFiles.push(normalizedNames[index]);
+        }
     }
 
     openExternalProject(proj: protocol.ExternalProject): void;
     /** @internal */
     openExternalProject(proj: protocol.ExternalProject, print: boolean): void;
     openExternalProject(proj: protocol.ExternalProject, print?: boolean): void {
-        proj.typeAcquisition = proj.typeAcquisition || {};
-        proj.typeAcquisition.include = proj.typeAcquisition.include || [];
-        proj.typeAcquisition.exclude = proj.typeAcquisition.exclude || [];
-        if (proj.typeAcquisition.enable === undefined) {
-            proj.typeAcquisition.enable = hasNoTypeScriptSource(proj.rootFiles.map(f => f.fileName));
-        }
+        const existingExternalProject = this.findExternalProjectByProjectName(proj.projectFileName);
+        const existingConfiguredProjects = this.externalProjectToConfiguredProjectMap.get(proj.projectFileName);
 
-        const excludedFiles = this.applySafeList(proj);
-
-        let tsConfigFiles: NormalizedPath[] | undefined;
-        const rootFiles: protocol.ExternalFile[] = [];
+        let configuredProjects: Set<ConfiguredProject> | undefined;
+        let rootFiles: protocol.ExternalFile[] = [];
         for (const file of proj.rootFiles) {
             const normalized = toNormalizedPath(file.fileName);
             if (getBaseConfigFileName(normalized)) {
                 if (this.serverMode === LanguageServiceMode.Semantic && this.host.fileExists(normalized)) {
-                    (tsConfigFiles || (tsConfigFiles = [])).push(normalized);
+                    let project = this.findConfiguredProjectByProjectName(normalized);
+                    if (!project) {
+                        // errors are stored in the project, do not need to update the graph
+                        project = this.getHostPreferences().lazyConfiguredProjectsFromExternalProject ?
+                            this.createConfiguredProjectWithDelayLoad(normalized, `Creating configured project in external project: ${proj.projectFileName}`) :
+                            this.createLoadAndUpdateConfiguredProject(normalized, `Creating configured project in external project: ${proj.projectFileName}`);
+                    }
+                    if (!existingConfiguredProjects?.has(project)) {
+                        // keep project alive even if no documents are opened - its lifetime is bound to the lifetime of containing external project
+                        project.addExternalProjectReference();
+                    }
+                    (configuredProjects ??= new Set()).add(project);
+                    existingConfiguredProjects?.delete(project);
                 }
             }
             else {
@@ -4388,96 +4404,52 @@ export class ProjectService {
             }
         }
 
-        // sort config files to simplify comparison later
-        if (tsConfigFiles) {
-            tsConfigFiles.sort();
-        }
-
-        const externalProject = this.findExternalProjectByProjectName(proj.projectFileName);
-        let exisingConfigFiles: string[] | undefined;
-        if (externalProject) {
-            externalProject.excludedFiles = excludedFiles;
-            if (!tsConfigFiles) {
-                const compilerOptions = convertCompilerOptions(proj.options);
-                const watchOptionsAndErrors = convertWatchOptions(proj.options, externalProject.getCurrentDirectory());
-                const lastFileExceededProgramSize = this.getFilenameForExceededTotalSizeLimitForNonTsFiles(proj.projectFileName, compilerOptions, proj.rootFiles, externalFilePropertyReader);
-                if (lastFileExceededProgramSize) {
-                    externalProject.disableLanguageService(lastFileExceededProgramSize);
-                }
-                else {
-                    externalProject.enableLanguageService();
-                }
-                externalProject.setProjectErrors(watchOptionsAndErrors?.errors);
-                // external project already exists and not config files were added - update the project and return;
-                // The graph update here isnt postponed since any file open operation needs all updated external projects
-                this.updateRootAndOptionsOfNonInferredProject(externalProject, proj.rootFiles, externalFilePropertyReader, compilerOptions, proj.typeAcquisition, proj.options.compileOnSave, watchOptionsAndErrors?.watchOptions);
-                externalProject.updateGraph();
-                if (print) this.printProjects();
-                return;
-            }
-            // some config files were added to external project (that previously were not there)
-            // close existing project and later we'll open a set of configured projects for these files
-            this.closeExternalProject(proj.projectFileName, /*print*/ false);
-        }
-        else if (this.externalProjectToConfiguredProjectMap.get(proj.projectFileName)) {
-            // this project used to include config files
-            if (!tsConfigFiles) {
-                // config files were removed from the project - close existing external project which in turn will close configured projects
-                this.closeExternalProject(proj.projectFileName, /*print*/ false);
-            }
-            else {
-                // project previously had some config files - compare them with new set of files and close all configured projects that correspond to unused files
-                const oldConfigFiles = this.externalProjectToConfiguredProjectMap.get(proj.projectFileName)!;
-                let iNew = 0;
-                let iOld = 0;
-                while (iNew < tsConfigFiles.length && iOld < oldConfigFiles.length) {
-                    const newConfig = tsConfigFiles[iNew];
-                    const oldConfig = oldConfigFiles[iOld];
-                    if (oldConfig < newConfig) {
-                        this.closeConfiguredProjectReferencedFromExternalProject(oldConfig);
-                        iOld++;
-                    }
-                    else if (oldConfig > newConfig) {
-                        iNew++;
-                    }
-                    else {
-                        // record existing config files so avoid extra add-refs
-                        (exisingConfigFiles || (exisingConfigFiles = [])).push(oldConfig);
-                        iOld++;
-                        iNew++;
-                    }
-                }
-                for (let i = iOld; i < oldConfigFiles.length; i++) {
-                    // projects for all remaining old config files should be closed
-                    this.closeConfiguredProjectReferencedFromExternalProject(oldConfigFiles[i]);
-                }
-            }
-        }
-        if (tsConfigFiles) {
+        if (configuredProjects) {
             // store the list of tsconfig files that belong to the external project
-            this.externalProjectToConfiguredProjectMap.set(proj.projectFileName, tsConfigFiles);
-            for (const tsconfigFile of tsConfigFiles) {
-                let project = this.findConfiguredProjectByProjectName(tsconfigFile);
-                if (!project) {
-                    // errors are stored in the project, do not need to update the graph
-                    project = this.getHostPreferences().lazyConfiguredProjectsFromExternalProject ?
-                        this.createConfiguredProjectWithDelayLoad(tsconfigFile, `Creating configured project in external project: ${proj.projectFileName}`) :
-                        this.createLoadAndUpdateConfiguredProject(tsconfigFile, `Creating configured project in external project: ${proj.projectFileName}`);
-                }
-                if (project && !contains(exisingConfigFiles, tsconfigFile)) {
-                    // keep project alive even if no documents are opened - its lifetime is bound to the lifetime of containing external project
-                    project.addExternalProjectReference();
-                }
-            }
+            this.externalProjectToConfiguredProjectMap.set(proj.projectFileName, configuredProjects);
+            // Close external project if present
+            if (existingExternalProject) this.removeProject(existingExternalProject);
         }
         else {
             // no config files - remove the item from the collection
-            // Create external project and update its graph, do not delay update since
-            // any file open operation needs all updated external projects
             this.externalProjectToConfiguredProjectMap.delete(proj.projectFileName);
-            const project = this.createExternalProject(proj.projectFileName, rootFiles, proj.options, proj.typeAcquisition, excludedFiles);
-            project.updateGraph();
+            const typeAcquisition = proj.typeAcquisition || {};
+            typeAcquisition.include = typeAcquisition.include || [];
+            typeAcquisition.exclude = typeAcquisition.exclude || [];
+            if (typeAcquisition.enable === undefined) {
+                typeAcquisition.enable = hasNoTypeScriptSource(rootFiles.map(f => f.fileName));
+            }
+            const excludeResult = this.applySafeListWorker(proj, rootFiles, typeAcquisition);
+            const excludedFiles = excludeResult?.excludedFiles ?? [];
+            rootFiles = excludeResult?.rootFiles ?? rootFiles;
+            if (existingExternalProject) {
+                existingExternalProject.excludedFiles = excludedFiles;
+                const compilerOptions = convertCompilerOptions(proj.options);
+                const watchOptionsAndErrors = convertWatchOptions(proj.options, existingExternalProject.getCurrentDirectory());
+                const lastFileExceededProgramSize = this.getFilenameForExceededTotalSizeLimitForNonTsFiles(proj.projectFileName, compilerOptions, rootFiles, externalFilePropertyReader);
+                if (lastFileExceededProgramSize) {
+                    existingExternalProject.disableLanguageService(lastFileExceededProgramSize);
+                }
+                else {
+                    existingExternalProject.enableLanguageService();
+                }
+                existingExternalProject.setProjectErrors(watchOptionsAndErrors?.errors);
+                // external project already exists and not config files were added - update the project and return;
+                // The graph update here isnt postponed since any file open operation needs all updated external projects
+                this.updateRootAndOptionsOfNonInferredProject(existingExternalProject, rootFiles, externalFilePropertyReader, compilerOptions, typeAcquisition, proj.options.compileOnSave, watchOptionsAndErrors?.watchOptions);
+                existingExternalProject.updateGraph();
+            }
+            else {
+                // Create external project and update its graph, do not delay update since
+                // any file open operation needs all updated external projects
+                const project = this.createExternalProject(proj.projectFileName, rootFiles, proj.options, typeAcquisition, excludedFiles);
+                project.updateGraph();
+            }
         }
+
+        // Remove unused configured projects
+        this.closeConfiguredProjectReferencedFromExternalProject(existingConfiguredProjects);
+
         if (print) this.printProjects();
     }
 

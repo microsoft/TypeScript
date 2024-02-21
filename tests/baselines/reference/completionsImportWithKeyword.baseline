@@ -142,6 +142,7 @@
 // | unknown
 // | interface URIError
 // | var URIError: URIErrorConstructor
+// | using
 // | var
 // | void
 // | while
@@ -289,6 +290,7 @@
 // | unknown
 // | interface URIError
 // | var URIError: URIErrorConstructor
+// | using
 // | var
 // | void
 // | while
@@ -435,6 +437,7 @@
 // | unknown
 // | interface URIError
 // | var URIError: URIErrorConstructor
+// | using
 // | var
 // | void
 // | while
@@ -582,6 +585,7 @@
 // | unknown
 // | interface URIError
 // | var URIError: URIErrorConstructor
+// | using
 // | var
 // | void
 // | while
@@ -729,6 +733,7 @@
 // | unknown
 // | interface URIError
 // | var URIError: URIErrorConstructor
+// | using
 // | var
 // | void
 // | while
@@ -875,6 +880,7 @@
 // | unknown
 // | interface URIError
 // | var URIError: URIErrorConstructor
+// | using
 // | var
 // | void
 // | while
@@ -998,6 +1004,7 @@
 // | var undefined
 // | interface URIError
 // | var URIError: URIErrorConstructor
+// | using
 // | var
 // | void
 // | while
@@ -4275,6 +4282,18 @@
             }
           ],
           "documentation": []
+        },
+        {
+          "name": "using",
+          "kind": "keyword",
+          "kindModifiers": "",
+          "sortText": "15",
+          "displayParts": [
+            {
+              "text": "using",
+              "kind": "keyword"
+            }
+          ]
         },
         {
           "name": "var",
@@ -7788,6 +7807,18 @@
           "documentation": []
         },
         {
+          "name": "using",
+          "kind": "keyword",
+          "kindModifiers": "",
+          "sortText": "15",
+          "displayParts": [
+            {
+              "text": "using",
+              "kind": "keyword"
+            }
+          ]
+        },
+        {
           "name": "var",
           "kind": "keyword",
           "kindModifiers": "",
@@ -11285,6 +11316,18 @@
             }
           ],
           "documentation": []
+        },
+        {
+          "name": "using",
+          "kind": "keyword",
+          "kindModifiers": "",
+          "sortText": "15",
+          "displayParts": [
+            {
+              "text": "using",
+              "kind": "keyword"
+            }
+          ]
         },
         {
           "name": "var",
@@ -14802,6 +14845,18 @@
           "documentation": []
         },
         {
+          "name": "using",
+          "kind": "keyword",
+          "kindModifiers": "",
+          "sortText": "15",
+          "displayParts": [
+            {
+              "text": "using",
+              "kind": "keyword"
+            }
+          ]
+        },
+        {
           "name": "var",
           "kind": "keyword",
           "kindModifiers": "",
@@ -18299,6 +18354,18 @@
             }
           ],
           "documentation": []
+        },
+        {
+          "name": "using",
+          "kind": "keyword",
+          "kindModifiers": "",
+          "sortText": "15",
+          "displayParts": [
+            {
+              "text": "using",
+              "kind": "keyword"
+            }
+          ]
         },
         {
           "name": "var",
@@ -21800,6 +21867,18 @@
           "documentation": []
         },
         {
+          "name": "using",
+          "kind": "keyword",
+          "kindModifiers": "",
+          "sortText": "15",
+          "displayParts": [
+            {
+              "text": "using",
+              "kind": "keyword"
+            }
+          ]
+        },
+        {
           "name": "var",
           "kind": "keyword",
           "kindModifiers": "",
@@ -24946,6 +25025,18 @@
             }
           ],
           "documentation": []
+        },
+        {
+          "name": "using",
+          "kind": "keyword",
+          "kindModifiers": "",
+          "sortText": "15",
+          "displayParts": [
+            {
+              "text": "using",
+              "kind": "keyword"
+            }
+          ]
         },
         {
           "name": "var",

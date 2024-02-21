@@ -317,8 +317,9 @@ ScriptInfos::
     containingProjects: 2 *changed*
         /dev/null/inferredProject1*
         /dev/null/auxiliaryProject1* *new*
-/user/users/projects/myproject/node_modules/@types/yargs/callback.d.ts
+/user/users/projects/myproject/node_modules/@types/yargs/callback.d.ts *changed*
     version: Text-1
+    sourceMapFilePath: false *changed*
     containingProjects: 1
         /dev/null/inferredProject1*
 /user/users/projects/myproject/node_modules/@types/yargs/index.d.ts

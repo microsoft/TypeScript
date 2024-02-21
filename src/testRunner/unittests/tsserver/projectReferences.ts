@@ -115,7 +115,14 @@ describe("unittests:: tsserver:: with project references and tsbuild", () => {
             };
             const files = [libFile, containerLibConfig, containerLibIndex, containerExecConfig, containerExecIndex, containerCompositeExecConfig, containerCompositeExecIndex, containerConfig];
             if (tempFile) files.push(tempFile);
-            const host = createHostWithSolutionBuild(files, [containerConfig.path]);
+
+            const rootNames = [containerConfig.path];
+            const host = createServerHost(files);
+            // Can't use createHostWithSolutionBuild. This test used to work,
+            // but no longer does since prepend isn't allowed in project references.
+            // We just baseline and assert nothing about the output.
+            solutionBuildWithBaseline(host, rootNames);
+
             const session = new TestSession(host);
             return { files, session, containerConfig, containerCompositeExecIndex };
         }

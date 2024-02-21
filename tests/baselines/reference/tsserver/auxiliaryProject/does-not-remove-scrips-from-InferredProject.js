@@ -154,8 +154,9 @@ ScriptInfos::
     containingProjects: 2 *changed*
         /dev/null/inferredProject1* *default*
         /dev/null/auxiliaryProject1* *new*
-/b.d.ts
+/b.d.ts *changed*
     version: Text-1
+    sourceMapFilePath: false *changed*
     containingProjects: 1
         /dev/null/inferredProject1*
 /b.js *new*
@@ -223,6 +224,7 @@ ScriptInfos::
         /dev/null/auxiliaryProject1*
 /b.d.ts
     version: Text-1
+    sourceMapFilePath: false
     containingProjects: 1
         /dev/null/inferredProject1*
 /b.js (Open) *changed*

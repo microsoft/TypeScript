@@ -186,6 +186,7 @@
 // | unknown
 // | interface URIError
 // | var URIError: URIErrorConstructor
+// | using
 // | var
 // | void
 // | while
@@ -3925,6 +3926,18 @@
             }
           ],
           "documentation": []
+        },
+        {
+          "name": "using",
+          "kind": "keyword",
+          "kindModifiers": "",
+          "sortText": "15",
+          "displayParts": [
+            {
+              "text": "using",
+              "kind": "keyword"
+            }
+          ]
         },
         {
           "name": "var",

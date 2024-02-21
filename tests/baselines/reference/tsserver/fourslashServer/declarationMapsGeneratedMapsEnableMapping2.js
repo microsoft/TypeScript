@@ -545,12 +545,17 @@ watchedFiles::
   {"pollingInterval":2000}
 
 ScriptInfos::
-/dist/index.d.ts
+/dist/index.d.ts *changed*
     version: Text-1
+    sourceMapFilePath: /dist/index.d.ts.map *changed*
     containingProjects: 1
         /dev/null/inferredProject2*
 /dist/index.d.ts.map *new*
     version: Text-1
+    declarationInfoPath: /dist/index.d.ts
+    sourceInfos: 1
+        /index.ts
+    documentPositionMapper: DocumentPositionMapper
     containingProjects: 0
 /index.ts (Open)
     version: Text-1

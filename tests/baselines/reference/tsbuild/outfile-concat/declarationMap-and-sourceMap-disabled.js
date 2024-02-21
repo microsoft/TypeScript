@@ -151,7 +151,32 @@ Output::
 
 [[90m12:00:46 AM[0m] Building project '/src/third/tsconfig.json'...
 
-exitCode:: ExitStatus.Success
+[96msrc/third/tsconfig.json[0m:[93m18[0m:[93m5[0m - [91merror[0m[90m TS5102: [0mOption 'prepend' has been removed. Please remove it from your configuration.
+
+[7m18[0m     {
+[7m  [0m [91m    ~[0m
+[7m19[0m       "path": "../first",
+[7m  [0m [91m~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+[7m20[0m       "prepend": true
+[7m  [0m [91m~~~~~~~~~~~~~~~~~~~~~[0m
+[7m21[0m     },
+[7m  [0m [91m~~~~~[0m
+
+[96msrc/third/tsconfig.json[0m:[93m22[0m:[93m5[0m - [91merror[0m[90m TS5102: [0mOption 'prepend' has been removed. Please remove it from your configuration.
+
+[7m22[0m     {
+[7m  [0m [91m    ~[0m
+[7m23[0m       "path": "../second",
+[7m  [0m [91m~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+[7m24[0m       "prepend": true
+[7m  [0m [91m~~~~~~~~~~~~~~~~~~~~~[0m
+[7m25[0m     }
+[7m  [0m [91m~~~~~[0m
+
+
+Found 2 errors.
+
+exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
 
 
 //// [/src/2/second-output.d.ts]
@@ -1053,46 +1078,4 @@ declare function f(): string;
   "version": "FakeTSVersion",
   "size": 2609
 }
-
-//// [/src/third/thirdjs/output/third-output.d.ts]
-interface TheFirst {
-    none: any;
-}
-declare const s = "Hello, world";
-interface NoJsForHereEither {
-    none: any;
-}
-declare function f(): string;
-declare namespace N {
-}
-declare namespace N {
-}
-declare class C {
-    doSomething(): void;
-}
-
-
-//// [/src/third/thirdjs/output/third-output.js]
-var s = "Hello, world";
-console.log(s);
-console.log(f());
-function f() {
-    return "JS does hoists";
-}
-var N;
-(function (N) {
-    function f() {
-        console.log('testing');
-    }
-    f();
-})(N || (N = {}));
-var C = (function () {
-    function C() {
-    }
-    C.prototype.doSomething = function () {
-        console.log("something got done");
-    };
-    return C;
-}());
-
 

@@ -769,12 +769,17 @@ Projects::
     projectProgramVersion: 1
 
 ScriptInfos::
-/a/index.d.ts
+/a/index.d.ts *changed*
     version: Text-1
+    sourceMapFilePath: /a/index.d.ts.map *changed*
     containingProjects: 1
         /b/tsconfig.json
 /a/index.d.ts.map *new*
     version: Text-1
+    declarationInfoPath: /a/index.d.ts
+    sourceInfos: 1
+        /a/index.ts
+    documentPositionMapper: DocumentPositionMapper
     containingProjects: 0
 /a/index.ts
     version: Text-1

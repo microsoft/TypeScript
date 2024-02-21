@@ -350,11 +350,11 @@ FsWatches::
 
 PendingInstalls callback:: count: 1
 1: #1 with arguments:: [
-  "@types/jquery@ts5.4",
-  "@types/moment@ts5.4",
-  "@types/lodash@ts5.4",
-  "@types/commander@ts5.4",
-  "@types/express@ts5.4"
+  "@types/jquery@ts5.5",
+  "@types/moment@ts5.5",
+  "@types/lodash@ts5.5",
+  "@types/commander@ts5.5",
+  "@types/express@ts5.5"
 ] *new*
 
 Projects::

@@ -5657,7 +5657,7 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
         const flags = (neverAsciiEscape ? GetLiteralTextFlags.NeverAsciiEscape : 0)
             | (jsxAttributeEscape ? GetLiteralTextFlags.JsxAttributeEscape : 0)
             | (printerOptions.terminateUnterminatedLiterals ? GetLiteralTextFlags.TerminateUnterminatedLiterals : 0)
-            | (printerOptions.target && printerOptions.target === ScriptTarget.ESNext ? GetLiteralTextFlags.AllowNumericSeparator : 0);
+            | (printerOptions.target && printerOptions.target >= ScriptTarget.ES2021 ? GetLiteralTextFlags.AllowNumericSeparator : 0);
 
         return getLiteralText(node, currentSourceFile, flags);
     }

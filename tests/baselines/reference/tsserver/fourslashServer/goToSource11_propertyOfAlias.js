@@ -260,8 +260,9 @@ Projects::
     noDtsResolutionProject: /dev/null/auxiliaryProject1* *changed*
 
 ScriptInfos::
-/a.d.ts
+/a.d.ts *changed*
     version: Text-1
+    sourceMapFilePath: false *changed*
     containingProjects: 1
         /dev/null/inferredProject2*
 /a.js (Open) *changed*
