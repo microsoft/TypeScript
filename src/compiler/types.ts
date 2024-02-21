@@ -5897,6 +5897,7 @@ export interface SymbolLinks {
     tupleLabelDeclaration?: NamedTupleMember | ParameterDeclaration; // Declaration associated with the tuple's label
     accessibleChainCache?: Map<string, Symbol[] | undefined>;
     filteredIndexSymbolCache?: Map<string, Symbol> //Symbol with applicable declarations
+    jsSyntheticRestParameterFunctionDeclaration?: FunctionLikeDeclaration; // function declaration to which the js synthetic rest parameter belongs to, its contextual signature might be looked up
 }
 
 /** @internal */

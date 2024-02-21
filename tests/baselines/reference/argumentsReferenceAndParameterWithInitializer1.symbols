@@ -1,0 +1,123 @@
+//// [tests/cases/compiler/argumentsReferenceAndParameterWithInitializer1.ts] ////
+
+=== index.js ===
+'use strict';
+
+// https://github.com/microsoft/TypeScript/issues/57435
+
+/** @type {globalThis['structuredClone']} */
+const structuredClone =
+>structuredClone : Symbol(structuredClone, Decl(index.js, 5, 5))
+
+  globalThis.structuredClone ??
+>globalThis.structuredClone : Symbol(structuredClone, Decl(lib.dom.d.ts, --, --))
+>globalThis : Symbol(globalThis)
+>structuredClone : Symbol(structuredClone, Decl(lib.dom.d.ts, --, --))
+
+  function structuredClone (value, options = undefined) {
+>structuredClone : Symbol(structuredClone, Decl(index.js, 6, 31))
+>value : Symbol(value, Decl(index.js, 7, 28))
+>options : Symbol(options, Decl(index.js, 7, 34))
+>undefined : Symbol(undefined)
+
+    if (arguments.length === 0) {
+>arguments.length : Symbol(IArguments.length, Decl(lib.es5.d.ts, --, --))
+>arguments : Symbol(arguments)
+>length : Symbol(IArguments.length, Decl(lib.es5.d.ts, --, --))
+
+      throw new TypeError('missing argument')
+>TypeError : Symbol(TypeError, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+    }
+    return value;
+>value : Symbol(value, Decl(index.js, 7, 28))
+  }
+
+/** @type {(a: number, b: boolean | undefined, ...rest: string[]) => void} */
+const test1 = function(value, options = undefined) {
+>test1 : Symbol(test1, Decl(index.js, 15, 5))
+>value : Symbol(value, Decl(index.js, 15, 23))
+>options : Symbol(options, Decl(index.js, 15, 29))
+>undefined : Symbol(undefined)
+
+  if (arguments.length === 0) {
+>arguments.length : Symbol(IArguments.length, Decl(lib.es5.d.ts, --, --))
+>arguments : Symbol(arguments)
+>length : Symbol(IArguments.length, Decl(lib.es5.d.ts, --, --))
+
+    throw new TypeError('missing argument')
+>TypeError : Symbol(TypeError, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+  }
+}
+
+/** @type {(a: number, b: boolean | undefined, ...rest: string[]) => void} */
+const test2 = function inner(value, options = undefined) {
+>test2 : Symbol(test2, Decl(index.js, 22, 5))
+>inner : Symbol(inner, Decl(index.js, 22, 13))
+>value : Symbol(value, Decl(index.js, 22, 29))
+>options : Symbol(options, Decl(index.js, 22, 35))
+>undefined : Symbol(undefined)
+
+  const args = [].slice.call(arguments);
+>args : Symbol(args, Decl(index.js, 23, 7))
+>[].slice.call : Symbol(CallableFunction.call, Decl(lib.es5.d.ts, --, --))
+>[].slice : Symbol(Array.slice, Decl(lib.es5.d.ts, --, --))
+>slice : Symbol(Array.slice, Decl(lib.es5.d.ts, --, --))
+>call : Symbol(CallableFunction.call, Decl(lib.es5.d.ts, --, --))
+>arguments : Symbol(arguments)
+
+  inner(1, true, 'hello', 'world');
+>inner : Symbol(inner, Decl(index.js, 22, 13))
+}
+
+/** @type {(a: number, b: boolean | undefined) => void} */
+const test3 = function inner(value, options = undefined) {
+>test3 : Symbol(test3, Decl(index.js, 29, 5))
+>inner : Symbol(inner, Decl(index.js, 29, 13))
+>value : Symbol(value, Decl(index.js, 29, 29))
+>options : Symbol(options, Decl(index.js, 29, 35))
+>undefined : Symbol(undefined)
+
+  const args = [].slice.call(arguments);
+>args : Symbol(args, Decl(index.js, 30, 7))
+>[].slice.call : Symbol(CallableFunction.call, Decl(lib.es5.d.ts, --, --))
+>[].slice : Symbol(Array.slice, Decl(lib.es5.d.ts, --, --))
+>slice : Symbol(Array.slice, Decl(lib.es5.d.ts, --, --))
+>call : Symbol(CallableFunction.call, Decl(lib.es5.d.ts, --, --))
+>arguments : Symbol(arguments)
+}
+
+/** @type {(a: number, b: boolean | undefined, ...rest: [string?, ...number[]]) => void} */
+const test4 = function inner(value, options = undefined) {
+>test4 : Symbol(test4, Decl(index.js, 34, 5))
+>inner : Symbol(inner, Decl(index.js, 34, 13))
+>value : Symbol(value, Decl(index.js, 34, 29))
+>options : Symbol(options, Decl(index.js, 34, 35))
+>undefined : Symbol(undefined)
+
+  const args = [].slice.call(arguments);
+>args : Symbol(args, Decl(index.js, 35, 7))
+>[].slice.call : Symbol(CallableFunction.call, Decl(lib.es5.d.ts, --, --))
+>[].slice : Symbol(Array.slice, Decl(lib.es5.d.ts, --, --))
+>slice : Symbol(Array.slice, Decl(lib.es5.d.ts, --, --))
+>call : Symbol(CallableFunction.call, Decl(lib.es5.d.ts, --, --))
+>arguments : Symbol(arguments)
+}
+
+/** @type {(a: number, b: boolean | undefined, ...rest: [string, ...number[]]) => void} */
+const test5 = function inner(value, options = undefined) {
+>test5 : Symbol(test5, Decl(index.js, 39, 5))
+>inner : Symbol(inner, Decl(index.js, 39, 13))
+>value : Symbol(value, Decl(index.js, 39, 29))
+>options : Symbol(options, Decl(index.js, 39, 35))
+>undefined : Symbol(undefined)
+
+  const args = [].slice.call(arguments);
+>args : Symbol(args, Decl(index.js, 40, 7))
+>[].slice.call : Symbol(CallableFunction.call, Decl(lib.es5.d.ts, --, --))
+>[].slice : Symbol(Array.slice, Decl(lib.es5.d.ts, --, --))
+>slice : Symbol(Array.slice, Decl(lib.es5.d.ts, --, --))
+>call : Symbol(CallableFunction.call, Decl(lib.es5.d.ts, --, --))
+>arguments : Symbol(arguments)
+}
+
+export {}

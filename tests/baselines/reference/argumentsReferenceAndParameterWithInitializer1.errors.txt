@@ -1,0 +1,59 @@
+index.js(24,9): error TS7005: Variable 'args' implicitly has an 'any[]' type.
+index.js(31,9): error TS7005: Variable 'args' implicitly has an 'any[]' type.
+index.js(36,9): error TS7005: Variable 'args' implicitly has an 'any[]' type.
+index.js(41,9): error TS7005: Variable 'args' implicitly has an 'any[]' type.
+
+
+==== index.js (4 errors) ====
+    'use strict';
+    
+    // https://github.com/microsoft/TypeScript/issues/57435
+    
+    /** @type {globalThis['structuredClone']} */
+    const structuredClone =
+      globalThis.structuredClone ??
+      function structuredClone (value, options = undefined) {
+        if (arguments.length === 0) {
+          throw new TypeError('missing argument')
+        }
+        return value;
+      }
+    
+    /** @type {(a: number, b: boolean | undefined, ...rest: string[]) => void} */
+    const test1 = function(value, options = undefined) {
+      if (arguments.length === 0) {
+        throw new TypeError('missing argument')
+      }
+    }
+    
+    /** @type {(a: number, b: boolean | undefined, ...rest: string[]) => void} */
+    const test2 = function inner(value, options = undefined) {
+      const args = [].slice.call(arguments);
+            ~~~~
+!!! error TS7005: Variable 'args' implicitly has an 'any[]' type.
+    
+      inner(1, true, 'hello', 'world');
+    }
+    
+    /** @type {(a: number, b: boolean | undefined) => void} */
+    const test3 = function inner(value, options = undefined) {
+      const args = [].slice.call(arguments);
+            ~~~~
+!!! error TS7005: Variable 'args' implicitly has an 'any[]' type.
+    }
+    
+    /** @type {(a: number, b: boolean | undefined, ...rest: [string?, ...number[]]) => void} */
+    const test4 = function inner(value, options = undefined) {
+      const args = [].slice.call(arguments);
+            ~~~~
+!!! error TS7005: Variable 'args' implicitly has an 'any[]' type.
+    }
+    
+    /** @type {(a: number, b: boolean | undefined, ...rest: [string, ...number[]]) => void} */
+    const test5 = function inner(value, options = undefined) {
+      const args = [].slice.call(arguments);
+            ~~~~
+!!! error TS7005: Variable 'args' implicitly has an 'any[]' type.
+    }
+    
+    export {}
