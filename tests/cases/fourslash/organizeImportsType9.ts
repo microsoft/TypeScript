@@ -40,10 +40,9 @@ console.log(a, b, A, B);`,
     /*mode*/ undefined,
     { organizeImportsIgnoreCase: true });
 
-// the imports are correctly sorted when ignoreCase=false and typeOrder=first
 edit.replaceLine(0, 'import { type a, type A, b, B } from "foo5";');
 verify.organizeImports(
-`import { type A, type a, B, b } from "foo5";
+`import { type A, B, type a, b } from "foo5";
 console.log(a, b, A, B);`,
     /*mode*/ undefined,
     { organizeImportsIgnoreCase: false });
