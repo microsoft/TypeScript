@@ -32,7 +32,6 @@ import {
     DocumentRegistry,
     DocumentRegistryBucketKeyWithMode,
     emptyOptions,
-    ensurePathIsNonModuleName,
     ensureTrailingDirectorySeparator,
     ExtendedConfigCacheEntry,
     FileExtensionInfo,
@@ -67,6 +66,7 @@ import {
     IncompleteCompletionsCache,
     IndentStyle,
     isArray,
+    isExternalModuleNameRelative,
     isIgnoredFileFromWildCardWatching,
     isInsideNodeModules,
     isJsonEqual,
@@ -90,7 +90,6 @@ import {
     ParsedCommandLine,
     parseJsonSourceFileConfigFileContent,
     parseJsonText,
-    parsePackageName,
     Path,
     PerformanceEvent,
     PluginImport,
@@ -4488,18 +4487,12 @@ export class ProjectService {
         }
 
         this.logger.info(`Enabling plugin ${pluginConfigEntry.name} from candidate paths: ${searchPaths.join(",")}`);
-        if (!pluginConfigEntry.name) {
-            this.logger.info(`Skipped loading plugin ${JSON.stringify(pluginConfigEntry)} because plugin name was not specified`);
-            return;
-        }
-
-        const parsedPackageName = parsePackageName(pluginConfigEntry.name);
         if (
-            !parsedPackageName.packageName ||
-            normalizePath(parsedPackageName.rest) !== parsedPackageName.rest ||
-            ensurePathIsNonModuleName(parsedPackageName.rest) === parsedPackageName.rest
+            !pluginConfigEntry.name ||
+            isExternalModuleNameRelative(pluginConfigEntry.name) ||
+            /[\\/]\.\.?($|[\\/])/.test(pluginConfigEntry.name)
         ) {
-            this.logger.info(`Skipped loading plugin ${pluginConfigEntry.name} because only package name is allowed plugin name`);
+            this.logger.info(`Skipped loading plugin ${pluginConfigEntry.name || JSON.stringify(pluginConfigEntry)} because only package name is allowed plugin name`);
             return;
         }
 
