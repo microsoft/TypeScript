@@ -85,7 +85,7 @@
 //         return curry(getStylingByKeys, 2)(mergedStyling, ...args);
 //                                                             ^^^^
 // | ----------------------------------------------------------------------
-// | (parameter) args: []
+// | (parameter) args: any
 // | ----------------------------------------------------------------------
 //     },
 //     3
@@ -135,12 +135,8 @@
           "kind": "space"
         },
         {
-          "text": "[",
-          "kind": "punctuation"
-        },
-        {
-          "text": "]",
-          "kind": "punctuation"
+          "text": "any",
+          "kind": "keyword"
         }
       ],
       "documentation": []
