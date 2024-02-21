@@ -12065,7 +12065,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         return getRestTypeAtPosition(contextualSignature, functionDecl.parameters.length);
                     }
                 }
-            } 
+            }
             links.type = links.deferralParent.flags & TypeFlags.Union ? getUnionType(links.deferralConstituents) : getIntersectionType(links.deferralConstituents);
         }
         return links.type;
