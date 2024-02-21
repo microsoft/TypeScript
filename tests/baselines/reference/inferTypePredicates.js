@@ -233,6 +233,15 @@ if (isStringFromUnknown(str)) {
   let t: never = str;  // should OK
 }
 
+// infer a union type
+function isNumOrStr(x: unknown) {
+  return (typeof x === "number" || typeof x === "string");
+}
+declare let unk: unknown;
+if (isNumOrStr(unk)) {
+  let t: number | string = unk;  // should ok
+}
+
 
 //// [inferTypePredicates.js]
 // https://github.com/microsoft/TypeScript/issues/16069
@@ -442,4 +451,11 @@ if (isStringFromUnknown(str)) {
 }
 else {
     var t = str; // should OK
+}
+// infer a union type
+function isNumOrStr(x) {
+    return (typeof x === "number" || typeof x === "string");
+}
+if (isNumOrStr(unk)) {
+    var t = unk; // should ok
 }

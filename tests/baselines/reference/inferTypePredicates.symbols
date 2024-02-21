@@ -659,3 +659,24 @@ if (isStringFromUnknown(str)) {
 >str : Symbol(str, Decl(inferTypePredicates.ts, 216, 11))
 }
 
+// infer a union type
+function isNumOrStr(x: unknown) {
+>isNumOrStr : Symbol(isNumOrStr, Decl(inferTypePredicates.ts, 230, 1))
+>x : Symbol(x, Decl(inferTypePredicates.ts, 233, 20))
+
+  return (typeof x === "number" || typeof x === "string");
+>x : Symbol(x, Decl(inferTypePredicates.ts, 233, 20))
+>x : Symbol(x, Decl(inferTypePredicates.ts, 233, 20))
+}
+declare let unk: unknown;
+>unk : Symbol(unk, Decl(inferTypePredicates.ts, 236, 11))
+
+if (isNumOrStr(unk)) {
+>isNumOrStr : Symbol(isNumOrStr, Decl(inferTypePredicates.ts, 230, 1))
+>unk : Symbol(unk, Decl(inferTypePredicates.ts, 236, 11))
+
+  let t: number | string = unk;  // should ok
+>t : Symbol(t, Decl(inferTypePredicates.ts, 238, 5))
+>unk : Symbol(unk, Decl(inferTypePredicates.ts, 236, 11))
+}
+

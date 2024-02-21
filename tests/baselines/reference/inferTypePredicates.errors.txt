@@ -276,3 +276,12 @@ inferTypePredicates.ts(205,7): error TS2741: Property 'z' is missing in type 'C1
       let t: never = str;  // should OK
     }
     
+    // infer a union type
+    function isNumOrStr(x: unknown) {
+      return (typeof x === "number" || typeof x === "string");
+    }
+    declare let unk: unknown;
+    if (isNumOrStr(unk)) {
+      let t: number | string = unk;  // should ok
+    }
+    
