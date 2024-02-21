@@ -15462,11 +15462,13 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     signature.resolvedTypePredicate = type && isTypePredicateNode(type) ?
                         createTypePredicateFromTypePredicateNode(type, signature) :
                         jsdocPredicate || noTypePredicate;
-                } else if (signature.declaration && isFunctionLikeDeclaration(signature.declaration) && (!signature.resolvedReturnType || signature.resolvedReturnType === booleanType)) {
-                    const {declaration} = signature;
-                    signature.resolvedTypePredicate = noTypePredicate;  // avoid infinite loop
+                }
+                else if (signature.declaration && isFunctionLikeDeclaration(signature.declaration) && (!signature.resolvedReturnType || signature.resolvedReturnType === booleanType)) {
+                    const { declaration } = signature;
+                    signature.resolvedTypePredicate = noTypePredicate; // avoid infinite loop
                     signature.resolvedTypePredicate = getTypePredicateFromBody(declaration, signature) || noTypePredicate;
-                } else {
+                }
+                else {
                     signature.resolvedTypePredicate = noTypePredicate;
                 }
             }
@@ -37405,7 +37407,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         let singleReturn: Expression | undefined;
         if (func.body && func.body.kind !== SyntaxKind.Block) {
             singleReturn = func.body; // arrow function
-        } else {
+        }
+        else {
             if (functionHasImplicitReturn(func)) return undefined;
 
             const bailedEarly = forEachReturnStatement(func.body as Block, returnStatement => {
@@ -37445,7 +37448,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
 
         function checkIfExpressionRefinesParameter(expr: Expression, param: ParameterDeclaration, initType: Type): Type | undefined {
-            const antecedent = (expr as Expression & {flowNode?: FlowNode}).flowNode ?? { flags: FlowFlags.Start };
+            const antecedent = (expr as Expression & { flowNode?: FlowNode; }).flowNode ?? { flags: FlowFlags.Start };
             const trueCondition: FlowCondition = {
                 flags: FlowFlags.TrueCondition,
                 node: expr,
@@ -37462,7 +37465,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             const falseCondition: FlowCondition = {
                 ...trueCondition,
                 flags: FlowFlags.FalseCondition,
-            }
+            };
             const falseType = getFlowTypeOfReference(param.name, initType, initType, func, falseCondition);
             const candidateFalse = filterType(initType, t => !isTypeSubtypeOf(t, trueType));
             if (isTypeIdenticalTo(candidateFalse, falseType)) {
