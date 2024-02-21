@@ -784,3 +784,73 @@ function doNotRefineDestructuredParam({x, y}: {x: number | null, y: number}) {
 >'number' : "number"
 }
 
+// The type predicate must remain valid when the function is called with subtypes.
+function isShortString(x: unknown) {
+>isShortString : (x: unknown) => boolean
+>x : unknown
+
+  return typeof x === "string" && x.length < 10;
+>typeof x === "string" && x.length < 10 : boolean
+>typeof x === "string" : boolean
+>typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>x : unknown
+>"string" : "string"
+>x.length < 10 : boolean
+>x.length : number
+>x : string
+>length : number
+>10 : 10
+}
+
+declare let str: string;
+>str : string
+
+if (isShortString(str)) {
+>isShortString(str) : boolean
+>isShortString : (x: unknown) => boolean
+>str : string
+
+  str.charAt(0);  // should ok
+>str.charAt(0) : string
+>str.charAt : (pos: number) => string
+>str : string
+>charAt : (pos: number) => string
+>0 : 0
+
+} else {
+  str.charAt(0);  // should ok
+>str.charAt(0) : string
+>str.charAt : (pos: number) => string
+>str : string
+>charAt : (pos: number) => string
+>0 : 0
+}
+
+function isStringFromUnknown(x: unknown) {
+>isStringFromUnknown : (x: unknown) => x is string
+>x : unknown
+
+  return typeof x === "string";
+>typeof x === "string" : boolean
+>typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>x : unknown
+>"string" : "string"
+}
+if (isStringFromUnknown(str)) {
+>isStringFromUnknown(str) : boolean
+>isStringFromUnknown : (x: unknown) => x is string
+>str : string
+
+  str.charAt(0);  // should OK
+>str.charAt(0) : string
+>str.charAt : (pos: number) => string
+>str : string
+>charAt : (pos: number) => string
+>0 : 0
+
+} else {
+  let t: never = str;  // should OK
+>t : never
+>str : never
+}
+

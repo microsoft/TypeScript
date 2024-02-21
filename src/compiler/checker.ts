@@ -37440,14 +37440,19 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     // Refining "x: boolean" to "x is true" or "x is false" isn't useful.
                     return;
                 }
-                const trueType = checkIfExpressionRefinesParameter(expr, param, initType);
+                const trueType = checkIfExpressionRefinesParameter(expr, param, initType, /*forceFullCheck*/ false);
                 if (trueType) {
-                    return [i, trueType];
+                    // A type predicate would be valid if the function were called with param of type initType.
+                    // The predicate must also be valid for all subtypes of initType. In particular, it must be valid when called with param of type trueType.
+                    const trueSubtype = checkIfExpressionRefinesParameter(expr, param, trueType, /*forceFullCheck*/ true);
+                    if (trueSubtype) {
+                        return [i, trueType];
+                    }
                 }
             });
         }
 
-        function checkIfExpressionRefinesParameter(expr: Expression, param: ParameterDeclaration, initType: Type): Type | undefined {
+        function checkIfExpressionRefinesParameter(expr: Expression, param: ParameterDeclaration, initType: Type, forceFullCheck: boolean): Type | undefined {
             const antecedent = (expr as Expression & { flowNode?: FlowNode; }).flowNode ?? { flags: FlowFlags.Start };
             const trueCondition: FlowCondition = {
                 flags: FlowFlags.TrueCondition,
@@ -37456,7 +37461,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             };
 
             const trueType = getFlowTypeOfReference(param.name, initType, initType, func, trueCondition);
-            if (trueType === initType) return undefined;
+            if (trueType === initType && !forceFullCheck) return undefined;
 
             // "x is T" means that x is T if and only if it returns true. If it returns false then x is not T.
             // However, TS may not be able to represent "not T", in which case we can be more lax.

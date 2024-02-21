@@ -212,6 +212,27 @@ function doNotRefineDestructuredParam({x, y}: {x: number | null, y: number}) {
   return typeof x === 'number';
 }
 
+// The type predicate must remain valid when the function is called with subtypes.
+function isShortString(x: unknown) {
+  return typeof x === "string" && x.length < 10;
+}
+
+declare let str: string;
+if (isShortString(str)) {
+  str.charAt(0);  // should ok
+} else {
+  str.charAt(0);  // should ok
+}
+
+function isStringFromUnknown(x: unknown) {
+  return typeof x === "string";
+}
+if (isStringFromUnknown(str)) {
+  str.charAt(0);  // should OK
+} else {
+  let t: never = str;  // should OK
+}
+
 
 //// [inferTypePredicates.js]
 // https://github.com/microsoft/TypeScript/issues/16069
@@ -402,4 +423,23 @@ if (c.isC2()) {
 function doNotRefineDestructuredParam(_a) {
     var x = _a.x, y = _a.y;
     return typeof x === 'number';
+}
+// The type predicate must remain valid when the function is called with subtypes.
+function isShortString(x) {
+    return typeof x === "string" && x.length < 10;
+}
+if (isShortString(str)) {
+    str.charAt(0); // should ok
+}
+else {
+    str.charAt(0); // should ok
+}
+function isStringFromUnknown(x) {
+    return typeof x === "string";
+}
+if (isStringFromUnknown(str)) {
+    str.charAt(0); // should OK
+}
+else {
+    var t = str; // should OK
 }

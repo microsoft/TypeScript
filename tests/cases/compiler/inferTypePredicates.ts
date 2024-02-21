@@ -209,3 +209,33 @@ if (c.isC2()) {
 function doNotRefineDestructuredParam({x, y}: {x: number | null, y: number}) {
   return typeof x === 'number';
 }
+
+// The type predicate must remain valid when the function is called with subtypes.
+function isShortString(x: unknown) {
+  return typeof x === "string" && x.length < 10;
+}
+
+declare let str: string;
+if (isShortString(str)) {
+  str.charAt(0);  // should ok
+} else {
+  str.charAt(0);  // should ok
+}
+
+function isStringFromUnknown(x: unknown) {
+  return typeof x === "string";
+}
+if (isStringFromUnknown(str)) {
+  str.charAt(0);  // should OK
+} else {
+  let t: never = str;  // should OK
+}
+
+// infer a union type
+function isNumOrStr(x: unknown) {
+  return (typeof x === "number" || typeof x === "string");
+}
+declare let unk: unknown;
+if (isNumOrStr(unk)) {
+  let t: number | string = unk;  // should ok
+}

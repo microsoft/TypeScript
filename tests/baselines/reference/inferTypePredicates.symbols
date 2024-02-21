@@ -606,3 +606,56 @@ function doNotRefineDestructuredParam({x, y}: {x: number | null, y: number}) {
 >x : Symbol(x, Decl(inferTypePredicates.ts, 207, 39))
 }
 
+// The type predicate must remain valid when the function is called with subtypes.
+function isShortString(x: unknown) {
+>isShortString : Symbol(isShortString, Decl(inferTypePredicates.ts, 209, 1))
+>x : Symbol(x, Decl(inferTypePredicates.ts, 212, 23))
+
+  return typeof x === "string" && x.length < 10;
+>x : Symbol(x, Decl(inferTypePredicates.ts, 212, 23))
+>x.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>x : Symbol(x, Decl(inferTypePredicates.ts, 212, 23))
+>length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+}
+
+declare let str: string;
+>str : Symbol(str, Decl(inferTypePredicates.ts, 216, 11))
+
+if (isShortString(str)) {
+>isShortString : Symbol(isShortString, Decl(inferTypePredicates.ts, 209, 1))
+>str : Symbol(str, Decl(inferTypePredicates.ts, 216, 11))
+
+  str.charAt(0);  // should ok
+>str.charAt : Symbol(String.charAt, Decl(lib.es5.d.ts, --, --))
+>str : Symbol(str, Decl(inferTypePredicates.ts, 216, 11))
+>charAt : Symbol(String.charAt, Decl(lib.es5.d.ts, --, --))
+
+} else {
+  str.charAt(0);  // should ok
+>str.charAt : Symbol(String.charAt, Decl(lib.es5.d.ts, --, --))
+>str : Symbol(str, Decl(inferTypePredicates.ts, 216, 11))
+>charAt : Symbol(String.charAt, Decl(lib.es5.d.ts, --, --))
+}
+
+function isStringFromUnknown(x: unknown) {
+>isStringFromUnknown : Symbol(isStringFromUnknown, Decl(inferTypePredicates.ts, 221, 1))
+>x : Symbol(x, Decl(inferTypePredicates.ts, 223, 29))
+
+  return typeof x === "string";
+>x : Symbol(x, Decl(inferTypePredicates.ts, 223, 29))
+}
+if (isStringFromUnknown(str)) {
+>isStringFromUnknown : Symbol(isStringFromUnknown, Decl(inferTypePredicates.ts, 221, 1))
+>str : Symbol(str, Decl(inferTypePredicates.ts, 216, 11))
+
+  str.charAt(0);  // should OK
+>str.charAt : Symbol(String.charAt, Decl(lib.es5.d.ts, --, --))
+>str : Symbol(str, Decl(inferTypePredicates.ts, 216, 11))
+>charAt : Symbol(String.charAt, Decl(lib.es5.d.ts, --, --))
+
+} else {
+  let t: never = str;  // should OK
+>t : Symbol(t, Decl(inferTypePredicates.ts, 229, 5))
+>str : Symbol(str, Decl(inferTypePredicates.ts, 216, 11))
+}
+
