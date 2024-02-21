@@ -124,8 +124,33 @@ Output::
 >> Screen clear
 [[90m12:00:32 AM[0m] File change detected. Starting incremental compilation...
 
-[[90m12:00:33 AM[0m] Found 0 errors. Watching for file changes.
+[96ma.ts[0m:[93m1[0m:[93m1[0m - [91merror[0m[90m TS1287: [0mA top-level 'export' modifier cannot be used on value declarations in a CommonJS module when 'verbatimModuleSyntax' is enabled.
 
+[7m1[0m export class C {}
+[7m [0m [91m~~~~~~[0m
+
+[96mb.ts[0m:[93m1[0m:[93m9[0m - [91merror[0m[90m TS1286: [0mESM syntax is not allowed in a CommonJS module when 'verbatimModuleSyntax' is enabled.
+
+[7m1[0m import {C} from './a';
+[7m [0m [91m        ~[0m
+
+[96mb.ts[0m:[93m2[0m:[93m1[0m - [91merror[0m[90m TS1287: [0mA top-level 'export' modifier cannot be used on value declarations in a CommonJS module when 'verbatimModuleSyntax' is enabled.
+
+[7m2[0m export function f(p: C) { return p; }
+[7m [0m [91m~~~~~~[0m
+
+[[90m12:00:39 AM[0m] Found 3 errors. Watching for file changes.
+
+
+
+//// [/user/username/projects/myproject/a.js] file written with same contents
+//// [/user/username/projects/myproject/b.js]
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.f = void 0;
+var a_1 = require("./a");
+function f(p) { return p; }
+exports.f = f;
 
 
 
@@ -146,6 +171,9 @@ Program files::
 /user/username/projects/myproject/b.ts
 
 Semantic diagnostics in builder refreshed for::
+/a/lib/lib.d.ts
+/user/username/projects/myproject/a.ts
+/user/username/projects/myproject/b.ts
 
 No shapes updated in the builder::
 
@@ -171,10 +199,19 @@ Before running Timeout callback:: count: 1
 After running Timeout callback:: count: 0
 Output::
 >> Screen clear
-[[90m12:00:37 AM[0m] File change detected. Starting incremental compilation...
+[[90m12:00:43 AM[0m] File change detected. Starting incremental compilation...
 
-[[90m12:00:38 AM[0m] Found 0 errors. Watching for file changes.
+[[90m12:00:50 AM[0m] Found 0 errors. Watching for file changes.
 
+
+
+//// [/user/username/projects/myproject/a.js] file written with same contents
+//// [/user/username/projects/myproject/b.js]
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.f = void 0;
+function f(p) { return p; }
+exports.f = f;
 
 
 
@@ -195,6 +232,9 @@ Program files::
 /user/username/projects/myproject/b.ts
 
 Semantic diagnostics in builder refreshed for::
+/a/lib/lib.d.ts
+/user/username/projects/myproject/a.ts
+/user/username/projects/myproject/b.ts
 
 No shapes updated in the builder::
 
