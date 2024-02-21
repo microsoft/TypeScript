@@ -199,7 +199,7 @@ FsWatches::
 
 PendingInstalls callback:: count: 1
 1: #1 with arguments:: [
-  "@types/node@ts5.5"
+  "@types/node@tsFakeMajor.Minor"
 ] *new*
 
 Projects::
