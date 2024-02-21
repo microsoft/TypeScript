@@ -2938,6 +2938,10 @@
         "category": "Error",
         "code": 2649
     },
+    "Non-abstract class expression is missing implementations for the following members of '{0}': {1} and {2} more.": {
+        "category": "Error",
+        "code": 2650
+    },
     "A member initializer in a enum declaration cannot reference members declared after it, including members defined in other enums.": {
         "category": "Error",
         "code": 2651
@@ -2950,13 +2954,17 @@
         "category": "Error",
         "code": 2653
     },
-    "Non-abstract class '{0}' does not implement inherited abstract members {1} from class '{2}'.": {
+    "Non-abstract class '{0}' is missing implementations for the following members of '{1}': {2}.": {
         "category": "Error",
         "code": 2654
     },
-    "Non-abstract class expression does not implement inherited abstract members {0} from class '{1}'.": {
+    "Non-abstract class '{0}' is missing implementations for the following members of '{1}': {2} and {3} more.": {
         "category": "Error",
         "code": 2655
+    },
+    "Non-abstract class expression is missing implementations for the following members of '{0}': {1}.": {
+        "category": "Error",
+        "code": 2656
     },
     "JSX expressions must have one parent element.": {
         "category": "Error",

@@ -45151,12 +45151,32 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
 
         for (const [errorNode, memberInfo] of notImplementedInfo) {
-            const missedProperties = map(memberInfo.missedProperties, prop => `'${prop}'`).join(", ");
-            if (isClassExpression(errorNode)) {
-                error(errorNode, length(memberInfo.missedProperties) > 1 ? Diagnostics.Non_abstract_class_expression_does_not_implement_inherited_abstract_members_0_from_class_1 : Diagnostics.Non_abstract_class_expression_does_not_implement_inherited_abstract_member_0_from_class_1, missedProperties, memberInfo.baseTypeName);
+            if (length(memberInfo.missedProperties) === 1) {
+                if (isClassExpression(errorNode)) {
+                    error(errorNode, Diagnostics.Non_abstract_class_expression_does_not_implement_inherited_abstract_member_0_from_class_1, first(memberInfo.missedProperties), memberInfo.baseTypeName);
+                }
+                else {
+                    error(errorNode, Diagnostics.Non_abstract_class_0_does_not_implement_inherited_abstract_member_1_from_class_2, memberInfo.typeName, first(memberInfo.missedProperties), memberInfo.baseTypeName);
+                }
+            }
+            else if (length(memberInfo.missedProperties) > 5) {
+                const missedProperties = map(memberInfo.missedProperties.slice(0, 4), prop => `'${prop}'`).join(", ");
+                const remainingMissedProperties = length(memberInfo.missedProperties) - 4;
+                if (isClassExpression(errorNode)) {
+                    error(errorNode, Diagnostics.Non_abstract_class_expression_is_missing_implementations_for_the_following_members_of_0_Colon_1_and_2_more, memberInfo.baseTypeName, missedProperties, remainingMissedProperties);
+                }
+                else {
+                    error(errorNode, Diagnostics.Non_abstract_class_0_is_missing_implementations_for_the_following_members_of_1_Colon_2_and_3_more, memberInfo.typeName, memberInfo.baseTypeName, missedProperties, remainingMissedProperties);
+                }
             }
             else {
-                error(errorNode, length(memberInfo.missedProperties) > 1 ? Diagnostics.Non_abstract_class_0_does_not_implement_inherited_abstract_members_1_from_class_2 : Diagnostics.Non_abstract_class_0_does_not_implement_inherited_abstract_member_1_from_class_2, memberInfo.typeName, missedProperties, memberInfo.baseTypeName);
+                const missedProperties = map(memberInfo.missedProperties, prop => `'${prop}'`).join(", ");
+                if (isClassExpression(errorNode)) {
+                    error(errorNode, Diagnostics.Non_abstract_class_expression_is_missing_implementations_for_the_following_members_of_0_Colon_1, memberInfo.baseTypeName, missedProperties);
+                }
+                else {
+                    error(errorNode, Diagnostics.Non_abstract_class_0_is_missing_implementations_for_the_following_members_of_1_Colon_2, memberInfo.typeName, memberInfo.baseTypeName, missedProperties);
+                }
             }
         }
     }
