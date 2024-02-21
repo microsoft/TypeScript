@@ -69,7 +69,8 @@ runs:
           let emoji = success ? "✅" : "❌";
 
           const toReplace = `<!--result-${DISTINCT_ID}-->`;
-          while (true) {
+          let success = false;
+          for (let i = 0; i < 5; i++) {
             // Get status comment contents
             const statusComment = await github.rest.issues.getComment({
               comment_id: +STATUS_COMMENT,
@@ -97,4 +98,8 @@ runs:
 
             // Repeat; someone may have edited the comment at the same time.
             await new Promise((resolve) => setTimeout(resolve, 1000));
+          }
+
+          if (!success) {
+            throw new Error("Failed to update status comment");
           }
