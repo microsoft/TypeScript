@@ -80,7 +80,6 @@ import {
     PackageId,
     packageIdToString,
     Path,
-    pathIsAbsolute,
     pathIsRelative,
     Pattern,
     patternText,
@@ -2532,9 +2531,6 @@ function extensionIsOk(extensions: Extensions, extension: string): boolean {
 
 /** @internal */
 export function parsePackageName(moduleName: string): { packageName: string; rest: string; } {
-    if (pathIsRelative(moduleName) || pathIsAbsolute(moduleName)) {
-        return { packageName: "", rest: moduleName };
-    }
     let idx = moduleName.indexOf(directorySeparator);
     if (moduleName[0] === "@") {
         idx = moduleName.indexOf(directorySeparator, idx + 1);
