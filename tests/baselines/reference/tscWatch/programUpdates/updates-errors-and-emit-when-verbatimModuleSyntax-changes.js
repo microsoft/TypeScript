@@ -102,13 +102,13 @@ Shape signatures in builder refreshed for::
 
 exitCode:: ExitStatus.undefined
 
-Change:: Set to "remove"
+Change:: Enable verbatimModuleSyntax
 
 Input::
 //// [/user/username/projects/myproject/tsconfig.json]
 {
   "compilerOptions": {
-    "importsNotUsedAsValues": "remove"
+    "verbatimModuleSyntax": true
   }
 }
 
@@ -124,12 +124,10 @@ Output::
 >> Screen clear
 [[90m12:00:32 AM[0m] File change detected. Starting incremental compilation...
 
-[[90m12:00:39 AM[0m] Found 0 errors. Watching for file changes.
+[[90m12:00:33 AM[0m] Found 0 errors. Watching for file changes.
 
 
 
-//// [/user/username/projects/myproject/a.js] file written with same contents
-//// [/user/username/projects/myproject/b.js] file written with same contents
 
 
 Program root files: [
@@ -137,7 +135,7 @@ Program root files: [
   "/user/username/projects/myproject/b.ts"
 ]
 Program options: {
-  "importsNotUsedAsValues": 0,
+  "verbatimModuleSyntax": true,
   "watch": true,
   "configFilePath": "/user/username/projects/myproject/tsconfig.json"
 }
@@ -148,21 +146,18 @@ Program files::
 /user/username/projects/myproject/b.ts
 
 Semantic diagnostics in builder refreshed for::
-/a/lib/lib.d.ts
-/user/username/projects/myproject/a.ts
-/user/username/projects/myproject/b.ts
 
 No shapes updated in the builder::
 
 exitCode:: ExitStatus.undefined
 
-Change:: Set to "error"
+Change:: Disable verbatimModuleSyntax
 
 Input::
 //// [/user/username/projects/myproject/tsconfig.json]
 {
   "compilerOptions": {
-    "importsNotUsedAsValues": "error"
+    "verbatimModuleSyntax": false
   }
 }
 
@@ -176,26 +171,10 @@ Before running Timeout callback:: count: 1
 After running Timeout callback:: count: 0
 Output::
 >> Screen clear
-[[90m12:00:43 AM[0m] File change detected. Starting incremental compilation...
+[[90m12:00:37 AM[0m] File change detected. Starting incremental compilation...
 
-[96mtsconfig.json[0m:[93m3[0m:[93m5[0m - [91merror[0m[90m TS5102: [0mOption 'importsNotUsedAsValues' has been removed. Please remove it from your configuration.
-  Use 'verbatimModuleSyntax' instead.
+[[90m12:00:38 AM[0m] Found 0 errors. Watching for file changes.
 
-[7m3[0m     "importsNotUsedAsValues": "error"
-[7m [0m [91m    ~~~~~~~~~~~~~~~~~~~~~~~~[0m
-
-[[90m12:00:50 AM[0m] Found 1 error. Watching for file changes.
-
-
-
-//// [/user/username/projects/myproject/a.js] file written with same contents
-//// [/user/username/projects/myproject/b.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.f = void 0;
-require("./a");
-function f(p) { return p; }
-exports.f = f;
 
 
 
@@ -205,7 +184,7 @@ Program root files: [
   "/user/username/projects/myproject/b.ts"
 ]
 Program options: {
-  "importsNotUsedAsValues": 2,
+  "verbatimModuleSyntax": false,
   "watch": true,
   "configFilePath": "/user/username/projects/myproject/tsconfig.json"
 }
@@ -215,64 +194,7 @@ Program files::
 /user/username/projects/myproject/a.ts
 /user/username/projects/myproject/b.ts
 
-No cached semantic diagnostics in the builder::
-
-No shapes updated in the builder::
-
-exitCode:: ExitStatus.undefined
-
-Change:: Set to "preserve"
-
-Input::
-//// [/user/username/projects/myproject/tsconfig.json]
-{
-  "compilerOptions": {
-    "importsNotUsedAsValues": "preserve"
-  }
-}
-
-
-Timeout callback:: count: 1
-3: timerToUpdateProgram *new*
-
-Before running Timeout callback:: count: 1
-3: timerToUpdateProgram
-
-After running Timeout callback:: count: 0
-Output::
->> Screen clear
-[[90m12:00:54 AM[0m] File change detected. Starting incremental compilation...
-
-[96mtsconfig.json[0m:[93m3[0m:[93m5[0m - [91merror[0m[90m TS5102: [0mOption 'importsNotUsedAsValues' has been removed. Please remove it from your configuration.
-  Use 'verbatimModuleSyntax' instead.
-
-[7m3[0m     "importsNotUsedAsValues": "preserve"
-[7m [0m [91m    ~~~~~~~~~~~~~~~~~~~~~~~~[0m
-
-[[90m12:01:01 AM[0m] Found 1 error. Watching for file changes.
-
-
-
-//// [/user/username/projects/myproject/a.js] file written with same contents
-//// [/user/username/projects/myproject/b.js] file written with same contents
-
-
-Program root files: [
-  "/user/username/projects/myproject/a.ts",
-  "/user/username/projects/myproject/b.ts"
-]
-Program options: {
-  "importsNotUsedAsValues": 1,
-  "watch": true,
-  "configFilePath": "/user/username/projects/myproject/tsconfig.json"
-}
-Program structureReused: Completely
-Program files::
-/a/lib/lib.d.ts
-/user/username/projects/myproject/a.ts
-/user/username/projects/myproject/b.ts
-
-No cached semantic diagnostics in the builder::
+Semantic diagnostics in builder refreshed for::
 
 No shapes updated in the builder::
 
