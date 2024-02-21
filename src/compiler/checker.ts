@@ -15632,16 +15632,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         );
     }
 
-    function getImplementationSignature(signature: Signature) {
-        return signature.typeParameters ?
-            signature.implementationSignatureCache ||= createImplementationSignature(signature) :
-            signature;
-    }
-
-    function createImplementationSignature(signature: Signature) {
-        return signature.typeParameters ? instantiateSignature(signature, createTypeMapper([], [])) : signature;
-    }
-
     function getBaseSignature(signature: Signature) {
         const typeParameters = signature.typeParameters;
         if (typeParameters) {
@@ -34256,6 +34246,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         checkMode: CheckMode,
         reportErrors: boolean,
         containingMessageChain: (() => DiagnosticMessageChain | undefined) | undefined,
+        inferenceContext: InferenceContext | undefined,
     ): readonly Diagnostic[] | undefined {
         const errorOutputContainer: { errors?: Diagnostic[]; skipLogging?: boolean; } = { errors: undefined, skipLogging: true };
         if (isJsxOpeningLikeElement(node)) {
@@ -34290,7 +34281,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 // If one or more arguments are still excluded (as indicated by CheckMode.SkipContextSensitive),
                 // we obtain the regular type of any object literal arguments because we may not have inferred complete
                 // parameter types yet and therefore excess property checks may yield false positives (see #17041).
-                const checkArgType = instantiateType(checkMode & CheckMode.SkipContextSensitive ? getRegularTypeOfObjectLiteral(argType) : argType, signature.mapper);
+                const regularArgType = checkMode & CheckMode.SkipContextSensitive ? getRegularTypeOfObjectLiteral(argType) : argType;
+                // If this was inferred under a given inference context, we may need to instantiate the expression type to finish resolving
+                // the type variables in the expression.
+                const checkArgType = inferenceContext ? instantiateType(regularArgType, inferenceContext.nonFixingMapper) : regularArgType;
                 const effectiveCheckArgumentNode = getEffectiveCheckNode(arg);
                 if (!checkTypeRelatedToAndOptionallyElaborate(checkArgType, paramType, relation, reportErrors ? effectiveCheckArgumentNode : undefined, effectiveCheckArgumentNode, headMessage, containingMessageChain, errorOutputContainer)) {
                     Debug.assert(!reportErrors || !!errorOutputContainer.errors, "parameter should have errors when reporting errors");
@@ -34754,7 +34748,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     if (headMessage) {
                         chain = chainDiagnosticMessages(chain, headMessage);
                     }
-                    const diags = getSignatureApplicabilityError(node, args, last, assignableRelation, CheckMode.Normal, /*reportErrors*/ true, () => chain);
+                    const diags = getSignatureApplicabilityError(node, args, last, assignableRelation, CheckMode.Normal, /*reportErrors*/ true, () => chain, /*inferenceContext*/ undefined);
                     if (diags) {
                         for (const d of diags) {
                             if (last.declaration && candidatesForArgumentError.length > 3) {
@@ -34776,7 +34770,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     let i = 0;
                     for (const c of candidatesForArgumentError) {
                         const chain = () => chainDiagnosticMessages(/*details*/ undefined, Diagnostics.Overload_0_of_1_2_gave_the_following_error, i + 1, candidates.length, signatureToString(c));
-                        const diags = getSignatureApplicabilityError(node, args, c, assignableRelation, CheckMode.Normal, /*reportErrors*/ true, chain);
+                        const diags = getSignatureApplicabilityError(node, args, c, assignableRelation, CheckMode.Normal, /*reportErrors*/ true, chain, /*inferenceContext*/ undefined);
                         if (diags) {
                             if (diags.length <= min) {
                                 min = diags.length;
@@ -34865,7 +34859,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 if (some(typeArguments) || !hasCorrectArity(node, args, candidate, signatureHelpTrailingComma)) {
                     return undefined;
                 }
-                if (getSignatureApplicabilityError(node, args, candidate, relation, CheckMode.Normal, /*reportErrors*/ false, /*containingMessageChain*/ undefined)) {
+                if (getSignatureApplicabilityError(node, args, candidate, relation, CheckMode.Normal, /*reportErrors*/ false, /*containingMessageChain*/ undefined, /*inferenceContext*/ undefined)) {
                     candidatesForArgumentError = [candidate];
                     return undefined;
                 }
@@ -34873,7 +34867,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             }
 
             for (let candidateIndex = 0; candidateIndex < candidates.length; candidateIndex++) {
-                let candidate = candidates[candidateIndex];
+                const candidate = candidates[candidateIndex];
                 if (!hasCorrectTypeArgumentArity(candidate, typeArguments) || !hasCorrectArity(node, args, candidate, signatureHelpTrailingComma)) {
                     continue;
                 }
@@ -34882,11 +34876,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 let inferenceContext: InferenceContext | undefined;
 
                 if (candidate.typeParameters) {
-                    // If we are *inside the body of candidate*, we need to create a clone of `candidate` with differing type parameter identities,
-                    // so our inference results for this call doesn't pollute expression types referencing the outer type parameter!
-                    if (candidate.declaration && findAncestor(node, a => a === candidate.declaration)) {
-                        candidate = getImplementationSignature(candidate);
-                    }
                     let typeArgumentTypes: readonly Type[] | undefined;
                     if (some(typeArguments)) {
                         typeArgumentTypes = checkTypeArguments(candidate, typeArguments, /*reportErrors*/ false);
@@ -34896,7 +34885,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         }
                     }
                     else {
-                        inferenceContext = createInferenceContext(candidate.typeParameters!, candidate, /*flags*/ isInJSFile(node) ? InferenceFlags.AnyDefault : InferenceFlags.None);
+                        inferenceContext = createInferenceContext(candidate.typeParameters, candidate, /*flags*/ isInJSFile(node) ? InferenceFlags.AnyDefault : InferenceFlags.None);
                         // The resulting type arguments are instantiated with the inference context mapper, as the inferred types may still contain references to the inference context's
                         //  type variables via contextual projection. These are kept generic until all inferences are locked in, so the dependencies expressed can pass constraint checks.
                         typeArgumentTypes = instantiateTypes(inferTypeArguments(node, candidate, args, argCheckMode | CheckMode.SkipGenericFunctions, inferenceContext), inferenceContext.nonFixingMapper);
@@ -34913,7 +34902,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 else {
                     checkCandidate = candidate;
                 }
-                if (getSignatureApplicabilityError(node, args, checkCandidate, relation, argCheckMode, /*reportErrors*/ false, /*containingMessageChain*/ undefined)) {
+                if (getSignatureApplicabilityError(node, args, checkCandidate, relation, argCheckMode, /*reportErrors*/ false, /*containingMessageChain*/ undefined, inferenceContext)) {
                     // Give preference to error candidates that have no rest parameters (as they are more specific)
                     (candidatesForArgumentError || (candidatesForArgumentError = [])).push(checkCandidate);
                     continue;
@@ -34933,7 +34922,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                             continue;
                         }
                     }
-                    if (getSignatureApplicabilityError(node, args, checkCandidate, relation, argCheckMode, /*reportErrors*/ false, /*containingMessageChain*/ undefined)) {
+                    if (getSignatureApplicabilityError(node, args, checkCandidate, relation, argCheckMode, /*reportErrors*/ false, /*containingMessageChain*/ undefined, inferenceContext)) {
                         // Give preference to error candidates that have no rest parameters (as they are more specific)
                         (candidatesForArgumentError || (candidatesForArgumentError = [])).push(checkCandidate);
                         continue;
