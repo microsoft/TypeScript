@@ -21946,7 +21946,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
          * - For all i, SourceDomainMatch(i)===true
          * - For all i, SourceRangeMatch(i)===true
          * - For all j,k, TargetDomainMatch(t[j][k])===true
-        */
+         */
         function checkOverloadsRelatedToIntersection(source: Type, target: Type, _reportErrors: boolean): { computed: boolean; ternary: Ternary; } {
             const sourceSignatures = getSignaturesOfType(source, SignatureKind.Call);
             const constructSignatureToString = (signature: Signature, forceReturnType?: Type) => {
