@@ -148,8 +148,8 @@ Info seq  [hh:mm:ss:mss] event:
               "line": 3,
               "offset": 10
             },
-            "text": "Option 'out' is deprecated and will stop functioning in TypeScript 5.5. Specify compilerOption '\"ignoreDeprecations\": \"5.0\"' to silence this error.\n  Use 'outFile' instead.",
-            "code": 5101,
+            "text": "Option 'out' has been removed. Please remove it from your configuration.\n  Use 'outFile' instead.",
+            "code": 5102,
             "category": "error",
             "fileName": "/users/username/projects/project/tsconfig.json"
           }

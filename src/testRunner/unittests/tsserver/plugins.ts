@@ -45,8 +45,20 @@ describe("unittests:: tsserver:: plugins:: loading", () => {
     }
 
     it("With local plugins", () => {
-        const expectedToLoad = ["@myscoped/plugin", "unscopedPlugin"];
-        const notToLoad = ["../myPlugin", "myPlugin/../malicious"];
+        const expectedToLoad = [
+            "@myscoped/plugin",
+            "@myscoped/plugin/subpath",
+            "@myscoped/plugin/sub/path",
+            "unscopedPlugin",
+            "unscopedPlugin/subpath",
+            "unscopedPlugin/sub/path",
+        ];
+        const notToLoad = [
+            "../myPlugin",
+            "@myscoped/plugin/../malicious",
+            "myPlugin/../malicious",
+            "myPlugin/subpath/../../malicious",
+        ];
         const aTs: File = { path: "/a.ts", content: `class c { prop = "hello"; foo() { return this.prop; } }` };
         const tsconfig: File = {
             path: "/tsconfig.json",
@@ -65,8 +77,20 @@ describe("unittests:: tsserver:: plugins:: loading", () => {
     });
 
     it("With global plugins", () => {
-        const expectedToLoad = ["@myscoped/plugin", "unscopedPlugin"];
-        const notToLoad = ["../myPlugin", "myPlugin/../malicious"];
+        const expectedToLoad = [
+            "@myscoped/plugin",
+            "@myscoped/plugin/subpath",
+            "@myscoped/plugin/sub/path",
+            "unscopedPlugin",
+            "unscopedPlugin/subpath",
+            "unscopedPlugin/sub/path",
+        ];
+        const notToLoad = [
+            "../myPlugin",
+            "@myscoped/plugin/../malicious",
+            "myPlugin/../malicious",
+            "myPlugin/subpath/../../malicious",
+        ];
         const aTs: File = { path: "/a.ts", content: `class c { prop = "hello"; foo() { return this.prop; } }` };
         const tsconfig: File = {
             path: "/tsconfig.json",
