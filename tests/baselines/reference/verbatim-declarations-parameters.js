@@ -54,28 +54,21 @@ exports.foo1 = foo1;
 
 
 //// [verbatim-declarations-parameters.d.ts]
+type Map = {} & {
+    [P in string]: any;
+};
+type MapOrUndefined = Map | undefined | "dummy";
 export declare class Foo {
-    reuseTypeNode?: {
-        [x: string]: any;
-    } | undefined;
-    reuseTypeNode2?: {
-        [x: string]: any;
-    } | undefined;
+    reuseTypeNode?: Map | undefined;
+    reuseTypeNode2?: Exclude<MapOrUndefined, "dummy">;
     resolveType?: {
         [x: string]: any;
     } | undefined;
-    constructor(reuseTypeNode?: {
-        [x: string]: any;
-    } | undefined, reuseTypeNode2?: {
-        [x: string]: any;
-    } | undefined, resolveType?: {
+    constructor(reuseTypeNode?: Map | undefined, reuseTypeNode2?: Exclude<MapOrUndefined, "dummy">, resolveType?: {
         [x: string]: any;
     } | undefined);
 }
-export declare function foo1(reuseTypeNode: {
-    [x: string]: any;
-} | undefined, reuseTypeNode2: {
-    [x: string]: any;
-} | undefined, resolveType: {
+export declare function foo1(reuseTypeNode: Map | undefined, reuseTypeNode2: Exclude<MapOrUndefined, "dummy">, resolveType: {
     [x: string]: any;
 } | undefined, requiredParam: number): void;
+export {};
