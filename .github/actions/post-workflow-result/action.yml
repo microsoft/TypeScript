@@ -69,7 +69,7 @@ runs:
           let emoji = success ? "✅" : "❌";
 
           const toReplace = `<!--result-${DISTINCT_ID}-->`;
-          let success = false;
+          let posted = false;
           for (let i = 0; i < 5; i++) {
             // Get status comment contents
             const statusComment = await github.rest.issues.getComment({
@@ -80,6 +80,7 @@ runs:
 
             const oldComment = statusComment.data.body;
             if (!oldComment.includes(toReplace)) {
+              posted = true
               break;
             }
 
@@ -100,6 +101,6 @@ runs:
             await new Promise((resolve) => setTimeout(resolve, 1000));
           }
 
-          if (!success) {
+          if (!posted) {
             throw new Error("Failed to update status comment");
           }
