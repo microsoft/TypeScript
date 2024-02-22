@@ -79,7 +79,7 @@ runs:
             });
 
             const oldComment = statusComment.data.body;
-            if (!oldComment.includes(toReplace)) {
+            if (!oldComment?.includes(toReplace)) {
               posted = true
               break;
             }
