@@ -109,9 +109,8 @@ export function patchServiceForStateBaseline(service: ProjectService) {
             (logs, project, data) => {
                 if (project.autoImportProviderHost) autoImportProviderProjects.push(project.autoImportProviderHost);
                 if (project.noDtsResolutionProject) auxiliaryProjects.push(project.noDtsResolutionProject);
-                const documentMappers = getSourceMapper(project)?.documentPositionMappers;
-                if (documentMappers) documentMappers.forEach(mapper => currentMappers.add(mapper));
                 let projectDiff = newOrDeleted(project, projects, data);
+                if (projectDiff !== Diff.Deleted) getSourceMapper(project)?.documentPositionMappers.forEach(mapper => currentMappers.add(mapper));
                 const projectPropertyLogs = [] as string[];
                 projectDiff = printProperty(PrintPropertyWhen.Always, data, "projectStateVersion", project.projectStateVersion, projectDiff, projectPropertyLogs);
                 projectDiff = printProperty(PrintPropertyWhen.Always, data, "projectProgramVersion", project.projectProgramVersion, projectDiff, projectPropertyLogs);
@@ -162,8 +161,8 @@ export function patchServiceForStateBaseline(service: ProjectService) {
             [service.filenameToScriptInfo],
             scriptInfos,
             (logs, info, data) => {
-                if (info.documentPositionMapper) currentMappers.add(info.documentPositionMapper);
                 let infoDiff = newOrDeleted(info, scriptInfos, data);
+                if (infoDiff !== Diff.Deleted && info.documentPositionMapper) currentMappers.add(info.documentPositionMapper);
                 const infoPropertyLogs = [] as string[];
                 const isOpen = info.isScriptOpen();
                 infoDiff = printProperty(PrintPropertyWhen.Changed, data, "open", isOpen, infoDiff, infoPropertyLogs);
