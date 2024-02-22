@@ -1,98 +1,44 @@
 -57087-101.ts(48,5): error TS2345: Argument of type '{ (x: 1): 1; (x: 2): 2; (x: 3): "3"; }' is not assignable to parameter of type '((x: 1 | 2) => 1 | 2) & ((x: 2 | 3) => "2" | "3")'.
-  Type '{ (x: 1): 1; (x: 2): 2; (x: 3): "3"; }' is not assignable to type '(x: 1 | 2) => 1 | 2'.
-    Types of parameters 'x' and 'x' are incompatible.
-      Type '1 | 2' is not assignable to type '1'.
-        Type '2' is not assignable to type '1'.
--57087-104.ts(76,6): error TS1360: Type '{ (x: 1): "1"; (x: 2): "2"; (x: 3): "3"; (x: number): number; }' does not satisfy the expected type 'A & B & C'.
-  Type '{ (x: 1): "1"; (x: 2): "2"; (x: 3): "3"; (x: number): number; }' is not assignable to type 'A'.
-    Type '"1"' is not assignable to type '"10"'.
--57087-104.ts(77,6): error TS1360: Type '{ (x: 1): "1"; (x: 2): "2"; (x: 3): "3"; (x: number): number; }' does not satisfy the expected type 'A & C & B'.
-  Type '{ (x: 1): "1"; (x: 2): "2"; (x: 3): "3"; (x: number): number; }' is not assignable to type 'A'.
--57087-104.ts(78,6): error TS1360: Type '{ (x: 1): "1"; (x: 2): "2"; (x: 3): "3"; (x: number): number; }' does not satisfy the expected type 'B & A & C'.
-  Type '{ (x: 1): "1"; (x: 2): "2"; (x: 3): "3"; (x: number): number; }' is not assignable to type 'B'.
-    Types of parameters 'x' and 'x' are incompatible.
-      Type '3' is not assignable to type '1'.
--57087-104.ts(79,6): error TS1360: Type '{ (x: 1): "1"; (x: 2): "2"; (x: 3): "3"; (x: number): number; }' does not satisfy the expected type 'B & C & A'.
-  Type '{ (x: 1): "1"; (x: 2): "2"; (x: 3): "3"; (x: number): number; }' is not assignable to type 'B'.
--57087-104.ts(80,6): error TS1360: Type '{ (x: 1): "1"; (x: 2): "2"; (x: 3): "3"; (x: number): number; }' does not satisfy the expected type 'C & A & B'.
-  Type '{ (x: 1): "1"; (x: 2): "2"; (x: 3): "3"; (x: number): number; }' is not assignable to type 'C'.
-    Types of parameters 'x' and 'x' are incompatible.
-      Type '2' is not assignable to type '1'.
--57087-104.ts(81,6): error TS1360: Type '{ (x: 1): "1"; (x: 2): "2"; (x: 3): "3"; (x: number): number; }' does not satisfy the expected type 'C & B & A'.
-  Type '{ (x: 1): "1"; (x: 2): "2"; (x: 3): "3"; (x: number): number; }' is not assignable to type 'C'.
--57087-104.ts(82,6): error TS1360: Type '{ (x: 1): "1"; (x: 2): "2"; (x: 3): "3"; (x: number): number; }' does not satisfy the expected type 'W'.
-  Type '{ (x: 1): "1"; (x: 2): "2"; (x: 3): "3"; (x: number): number; }' is not assignable to type 'A & B & C'.
+  Parameters of signature (x: 1) => 1 are not assignable to the parameters of any signature in type ((x: 1 | 2) => 1 | 2) & ((x: 2 | 3) => "2" | "3")
 -57087-104.ts(101,6): error TS1360: Type '{ (x: 2): "2"; (x: 3): "3"; (x: number): number; }' does not satisfy the expected type 'A & B & C'.
   Type '{ (x: 2): "2"; (x: 3): "3"; (x: number): number; }' is not assignable to type 'A'.
-    Types of parameters 'x' and 'x' are incompatible.
-      Type '1' is not assignable to type '2'.
+    There is no signature in type { (x: 2): "2"; (x: 3): "3"; (x: number): number; } such that its parameters are assignable to the parameters of signature (x: 1) => any
 -57087-104.ts(102,6): error TS1360: Type '{ (x: 2): "2"; (x: 3): "3"; (x: number): number; }' does not satisfy the expected type 'A & C & B'.
   Type '{ (x: 2): "2"; (x: 3): "3"; (x: number): number; }' is not assignable to type 'A'.
+    There is no signature in type { (x: 2): "2"; (x: 3): "3"; (x: number): number; } such that its parameters are assignable to the parameters of signature (x: 1) => any
 -57087-104.ts(103,6): error TS1360: Type '{ (x: 2): "2"; (x: 3): "3"; (x: number): number; }' does not satisfy the expected type 'B & A & C'.
-  Type '{ (x: 2): "2"; (x: 3): "3"; (x: number): number; }' is not assignable to type 'B'.
-    Types of parameters 'x' and 'x' are incompatible.
-      Type '3' is not assignable to type '2'.
+  Type '{ (x: 2): "2"; (x: 3): "3"; (x: number): number; }' is not assignable to type 'A'.
+    There is no signature in type { (x: 2): "2"; (x: 3): "3"; (x: number): number; } such that its parameters are assignable to the parameters of signature (x: 1) => any
 -57087-104.ts(104,6): error TS1360: Type '{ (x: 2): "2"; (x: 3): "3"; (x: number): number; }' does not satisfy the expected type 'B & C & A'.
-  Type '{ (x: 2): "2"; (x: 3): "3"; (x: number): number; }' is not assignable to type 'B'.
+  Type '{ (x: 2): "2"; (x: 3): "3"; (x: number): number; }' is not assignable to type 'C'.
+    There is no signature in type { (x: 2): "2"; (x: 3): "3"; (x: number): number; } such that its parameters are assignable to the parameters of signature (x: 1) => any
 -57087-104.ts(105,6): error TS1360: Type '{ (x: 2): "2"; (x: 3): "3"; (x: number): number; }' does not satisfy the expected type 'C & A & B'.
   Type '{ (x: 2): "2"; (x: 3): "3"; (x: number): number; }' is not assignable to type 'C'.
-    Types of parameters 'x' and 'x' are incompatible.
-      Type '1' is not assignable to type '2'.
+    There is no signature in type { (x: 2): "2"; (x: 3): "3"; (x: number): number; } such that its parameters are assignable to the parameters of signature (x: 1) => any
 -57087-104.ts(106,6): error TS1360: Type '{ (x: 2): "2"; (x: 3): "3"; (x: number): number; }' does not satisfy the expected type 'C & B & A'.
   Type '{ (x: 2): "2"; (x: 3): "3"; (x: number): number; }' is not assignable to type 'C'.
+    There is no signature in type { (x: 2): "2"; (x: 3): "3"; (x: number): number; } such that its parameters are assignable to the parameters of signature (x: 1) => any
 -57087-104.ts(109,6): error TS1360: Type '{ (x: 2): "2"; (x: 3): "3"; (x: number): number; }' does not satisfy the expected type 'W'.
   Type '{ (x: 2): "2"; (x: 3): "3"; (x: number): number; }' is not assignable to type 'A & B & C'.
--57087-105.ts(43,5): error TS2345: Argument of type '{ (x: A): string; (x: C): number; (x: B): 1; }' is not assignable to parameter of type '{ (x: A): string; (x: B): 1; } & { (x: C): number; (x: B): "1"; }'.
-  Type '{ (x: A): string; (x: C): number; (x: B): 1; }' is not assignable to type '{ (x: C): number; (x: B): "1"; }'.
-    Types of parameters 'x' and 'x' are incompatible.
-      Property 'a' is missing in type 'B' but required in type 'A'.
 -57087-105.ts(55,5): error TS2345: Argument of type '{ (x: A): string; (x: C): number; (x: B): string; }' is not assignable to parameter of type '{ (x: A): string; (x: B): 1; } & { (x: C): number; (x: B): "1"; }'.
-  Type '{ (x: A): string; (x: C): number; (x: B): string; }' is not assignable to type '{ (x: A): string; (x: B): 1; }'.
-    Types of parameters 'x' and 'x' are incompatible.
-      Type 'B' is not assignable to type 'A'.
+  Type '(x: B) => string' is not assignable to type '(x: B) => 1 | (x: B) => "1"'.
+    Type 'string' is not assignable to type '1 | "1"'.
 -57087-105.ts(68,5): error TS2345: Argument of type '{ (x: C): number; (x: B): 1; }' is not assignable to parameter of type '{ (x: A): string; (x: B): 1; } & { (x: C): number; (x: B): "1"; }'.
   Type '{ (x: C): number; (x: B): 1; }' is not assignable to type '{ (x: A): string; (x: B): 1; }'.
-    Types of parameters 'x' and 'x' are incompatible.
-      Property 'c' is missing in type 'A' but required in type 'C'.
+    There is no signature in type { (x: C): number; (x: B): 1; } such that its parameters are assignable to the parameters of signature (x: A) => any
 -57087-105.ts(81,5): error TS2345: Argument of type '{ (x: { a?: string | undefined; }): string; (x: C): number; (x: B): 1; }' is not assignable to parameter of type '{ (x: A): string; (x: B): 1; } & { (x: C): number; (x: B): "1"; }'.
-  Type '{ (x: { a?: string | undefined; }): string; (x: C): number; (x: B): 1; }' is not assignable to type '{ (x: C): number; (x: B): "1"; }'.
-    Type 'string' is not assignable to type '"1"'.
--57087-131.ts(21,6): error TS1360: Type '{ (): "01"; (x: 1, y: 1): "211"; (x: 2, y: 2): "222"; (x: 2, y: 1): "221"; }' does not satisfy the expected type 'Garg31A & Garg31B'.
-  Type '{ (): "01"; (x: 1, y: 1): "211"; (x: 2, y: 2): "222"; (x: 2, y: 1): "221"; }' is not assignable to type 'Garg31B'.
-    Type '"01"' is not assignable to type '"02"'.
+  Parameters of signature (x: { a?: string | undefined; }) => string are not assignable to the parameters of any signature in type { (x: A): string; (x: B): 1; } & { (x: C): number; (x: B): "1"; }
 -57087-131.ts(29,6): error TS1360: Type '{ (): "01"; (x: 1, y: 1): "211"; (x: 2, y: 2): "221"; (x: 2, y: 1): "221"; }' does not satisfy the expected type 'Garg31A & Garg31B'.
-  Type '{ (): "01"; (x: 1, y: 1): "211"; (x: 2, y: 2): "221"; (x: 2, y: 1): "221"; }' is not assignable to type 'Garg31B'.
-    Type '"01"' is not assignable to type '"02"'.
+  Type '(x: 2, y: 2) => "221"' is not assignable to type '(x: 2, y: 2) => "222"'.
+    Type '"221"' is not assignable to type '"222"'.
 -57087-131.ts(37,6): error TS1360: Type '{ (): "01"; (x: 1, y: 1): "211"; (x: 2, y: 2): "222"; (x: 2, y: 1): "221"; (x: 1, y: 2): "221"; }' does not satisfy the expected type 'Garg31A & Garg31B'.
-  Type '{ (): "01"; (x: 1, y: 1): "211"; (x: 2, y: 2): "222"; (x: 2, y: 1): "221"; (x: 1, y: 2): "221"; }' is not assignable to type 'Garg31B'.
-    Type '"01"' is not assignable to type '"02"'.
+  Parameters of signature (x: 1, y: 2) => "221" are not assignable to the parameters of any signature in type Garg31A & Garg31B
 -57087-131.ts(45,6): error TS1360: Type '{ (): "01"; (x?: 1 | undefined, y?: 1 | undefined): "211"; (x: 2, y: 2): "222"; (x: 2, y: 1): "221"; }' does not satisfy the expected type 'Garg31A & Garg31B'.
-  Type '{ (): "01"; (x?: 1 | undefined, y?: 1 | undefined): "211"; (x: 2, y: 2): "222"; (x: 2, y: 1): "221"; }' is not assignable to type 'Garg31B'.
-    Type '"01"' is not assignable to type '"02"'.
+  Type '(x?: 1 | undefined, y?: 1 | undefined) => "211"' is not assignable to type '() => "01" | () => "02"'.
+    Type '"211"' is not assignable to type '"01" | "02"'.
 -57087-131.ts(53,6): error TS1360: Type '{ (x: 1, y: 1): "211"; (x: 2, y: 2): "222"; (x: 2, y: 1): "221"; }' does not satisfy the expected type 'Garg31A & Garg31B'.
   Type '{ (x: 1, y: 1): "211"; (x: 2, y: 2): "222"; (x: 2, y: 1): "221"; }' is not assignable to type 'Garg31A'.
-    Target signature provides too few arguments. Expected 2 or more, but got 0.
--57087-133.ts(20,6): error TS1360: Type '{ (): "02"; (x: 1, y?: 1 | undefined): "211"; (...args: 1[]): "101"; (...args: 1[]): "201"; (x: 2, y?: any): "221"; }' does not satisfy the expected type 'Garg33A & Garg33B'.
-  Type '{ (): "02"; (x: 1, y?: 1 | undefined): "211"; (...args: 1[]): "101"; (...args: 1[]): "201"; (x: 2, y?: any): "221"; }' is not assignable to type 'Garg33A'.
-    Type '"02"' is not assignable to type '"01"'.
--57087-133.ts(31,6): error TS1360: Type '{ (): "02"; (x: 1, y?: 1 | undefined): "211"; (...args: 1[]): "101"; (...args: 1[]): "201"; (x: 2, y?: any): "221"; }' does not satisfy the expected type 'Garg33A & Garg33B'.
--57087-133.ts(40,6): error TS1360: Type '{ (x: 2, y?: any): "221"; (...args: 1[]): "201"; (...args: 1[]): "101"; (x: 1, y?: 1 | undefined): "211"; (): "02"; }' does not satisfy the expected type 'Garg33A & Garg33B'.
-  Type '{ (x: 2, y?: any): "221"; (...args: 1[]): "201"; (...args: 1[]): "101"; (x: 1, y?: 1 | undefined): "211"; (): "02"; }' is not assignable to type 'Garg33A'.
-    Target signature provides too few arguments. Expected 1 or more, but got 0.
--57087-135.ts(20,6): error TS1360: Type '{ ({ x, y }: { x?: 1 | undefined; y?: Garg35B | undefined; }): "A1"; ({ x, y }: { x: 2; y?: Garg35A | undefined; }): "B2"; ({ x, y }: { x?: 2 | undefined; y?: Garg35C | undefined; }): "A2"; }' does not satisfy the expected type 'Garg35A & Garg35B & Garg35C'.
-  Type '{ ({ x, y }: { x?: 1 | undefined; y?: Garg35B | undefined; }): "A1"; ({ x, y }: { x: 2; y?: Garg35A | undefined; }): "B2"; ({ x, y }: { x?: 2 | undefined; y?: Garg35C | undefined; }): "A2"; }' is not assignable to type 'Garg35B'.
-    Types of parameters '__0' and '__0' are incompatible.
-      Type '{ x?: 2 | undefined; y?: Garg35C | undefined; }' is not assignable to type '{ x?: 1 | undefined; y?: Garg35B | undefined; }'.
-        Types of property 'x' are incompatible.
-          Type '2 | undefined' is not assignable to type '1 | undefined'.
-            Type '2' is not assignable to type '1'.
--57087-135.ts(27,6): error TS1360: Type '{ ({ x, y }: { x: 2; y?: Garg35A | undefined; }): "C1"; ({ x, y }: { x?: 1 | undefined; y?: Garg35B | undefined; }): "C2"; ({ x, y }: { x?: 2 | undefined; y?: Garg35C | undefined; }): "B1"; }' does not satisfy the expected type '{ ({ x, y }: { x?: 1 | undefined; y?: Garg35B | undefined; }): "A1"; ({ x, y }: { x: 2; y?: Garg35A | undefined; }): "B2"; ({ x, y }: { x?: 2 | undefined; y?: Garg35C | undefined; }): "A2"; } & Garg35A & Garg35B & Garg35C'.
-  Type '{ ({ x, y }: { x: 2; y?: Garg35A | undefined; }): "C1"; ({ x, y }: { x?: 1 | undefined; y?: Garg35B | undefined; }): "C2"; ({ x, y }: { x?: 2 | undefined; y?: Garg35C | undefined; }): "B1"; }' is not assignable to type '{ ({ x, y }: { x?: 1 | undefined; y?: Garg35B | undefined; }): "A1"; ({ x, y }: { x: 2; y?: Garg35A | undefined; }): "B2"; ({ x, y }: { x?: 2 | undefined; y?: Garg35C | undefined; }): "A2"; }'.
-    Types of parameters '__0' and '__0' are incompatible.
-      Type '{ x?: 1 | undefined; y?: Garg35B | undefined; }' is not assignable to type '{ x: 2; y?: Garg35A | undefined; }'.
-        Types of property 'x' are incompatible.
-          Type '1 | undefined' is not assignable to type '2'.
-            Type 'undefined' is not assignable to type '2'.
+    There is no signature in type { (x: 1, y: 1): "211"; (x: 2, y: 2): "222"; (x: 2, y: 1): "221"; } such that its parameters are assignable to the parameters of signature () => any
 
 
 ==== -57087-101.ts (1 errors) ====
@@ -146,10 +92,7 @@
     x.g(ft1); // should be error
         ~~~
 !!! error TS2345: Argument of type '{ (x: 1): 1; (x: 2): 2; (x: 3): "3"; }' is not assignable to parameter of type '((x: 1 | 2) => 1 | 2) & ((x: 2 | 3) => "2" | "3")'.
-!!! error TS2345:   Type '{ (x: 1): 1; (x: 2): 2; (x: 3): "3"; }' is not assignable to type '(x: 1 | 2) => 1 | 2'.
-!!! error TS2345:     Types of parameters 'x' and 'x' are incompatible.
-!!! error TS2345:       Type '1 | 2' is not assignable to type '1'.
-!!! error TS2345:         Type '2' is not assignable to type '1'.
+!!! error TS2345:   Parameters of signature (x: 1) => 1 are not assignable to the parameters of any signature in type ((x: 1 | 2) => 1 | 2) & ((x: 2 | 3) => "2" | "3")
     
     
     }
@@ -211,7 +154,7 @@
     
     
     /**********************/
-==== -57087-104.ts (14 errors) ====
+==== -57087-104.ts (7 errors) ====
     namespace ns2 {
     interface C {
       (x:1):"1";
@@ -288,38 +231,12 @@
     
     // The `&`-intersection operator result should be independent of the order of it's operands.
     foo1 satisfies A & B & C; // should not error
-         ~~~~~~~~~
-!!! error TS1360: Type '{ (x: 1): "1"; (x: 2): "2"; (x: 3): "3"; (x: number): number; }' does not satisfy the expected type 'A & B & C'.
-!!! error TS1360:   Type '{ (x: 1): "1"; (x: 2): "2"; (x: 3): "3"; (x: number): number; }' is not assignable to type 'A'.
-!!! error TS1360:     Type '"1"' is not assignable to type '"10"'.
     foo1 satisfies A & C & B; // should not error
-         ~~~~~~~~~
-!!! error TS1360: Type '{ (x: 1): "1"; (x: 2): "2"; (x: 3): "3"; (x: number): number; }' does not satisfy the expected type 'A & C & B'.
-!!! error TS1360:   Type '{ (x: 1): "1"; (x: 2): "2"; (x: 3): "3"; (x: number): number; }' is not assignable to type 'A'.
     foo1 satisfies B & A & C; // should not error
-         ~~~~~~~~~
-!!! error TS1360: Type '{ (x: 1): "1"; (x: 2): "2"; (x: 3): "3"; (x: number): number; }' does not satisfy the expected type 'B & A & C'.
-!!! error TS1360:   Type '{ (x: 1): "1"; (x: 2): "2"; (x: 3): "3"; (x: number): number; }' is not assignable to type 'B'.
-!!! error TS1360:     Types of parameters 'x' and 'x' are incompatible.
-!!! error TS1360:       Type '3' is not assignable to type '1'.
     foo1 satisfies B & C & A; // should not error
-         ~~~~~~~~~
-!!! error TS1360: Type '{ (x: 1): "1"; (x: 2): "2"; (x: 3): "3"; (x: number): number; }' does not satisfy the expected type 'B & C & A'.
-!!! error TS1360:   Type '{ (x: 1): "1"; (x: 2): "2"; (x: 3): "3"; (x: number): number; }' is not assignable to type 'B'.
     foo1 satisfies C & A & B; // should not error
-         ~~~~~~~~~
-!!! error TS1360: Type '{ (x: 1): "1"; (x: 2): "2"; (x: 3): "3"; (x: number): number; }' does not satisfy the expected type 'C & A & B'.
-!!! error TS1360:   Type '{ (x: 1): "1"; (x: 2): "2"; (x: 3): "3"; (x: number): number; }' is not assignable to type 'C'.
-!!! error TS1360:     Types of parameters 'x' and 'x' are incompatible.
-!!! error TS1360:       Type '2' is not assignable to type '1'.
     foo1 satisfies C & B & A; // should not error
-         ~~~~~~~~~
-!!! error TS1360: Type '{ (x: 1): "1"; (x: 2): "2"; (x: 3): "3"; (x: number): number; }' does not satisfy the expected type 'C & B & A'.
-!!! error TS1360:   Type '{ (x: 1): "1"; (x: 2): "2"; (x: 3): "3"; (x: number): number; }' is not assignable to type 'C'.
     foo1 satisfies W; // should not error
-         ~~~~~~~~~
-!!! error TS1360: Type '{ (x: 1): "1"; (x: 2): "2"; (x: 3): "3"; (x: number): number; }' does not satisfy the expected type 'W'.
-!!! error TS1360:   Type '{ (x: 1): "1"; (x: 2): "2"; (x: 3): "3"; (x: number): number; }' is not assignable to type 'A & B & C'.
     
     /*
     */
@@ -342,32 +259,32 @@
          ~~~~~~~~~
 !!! error TS1360: Type '{ (x: 2): "2"; (x: 3): "3"; (x: number): number; }' does not satisfy the expected type 'A & B & C'.
 !!! error TS1360:   Type '{ (x: 2): "2"; (x: 3): "3"; (x: number): number; }' is not assignable to type 'A'.
-!!! error TS1360:     Types of parameters 'x' and 'x' are incompatible.
-!!! error TS1360:       Type '1' is not assignable to type '2'.
+!!! error TS1360:     There is no signature in type { (x: 2): "2"; (x: 3): "3"; (x: number): number; } such that its parameters are assignable to the parameters of signature (x: 1) => any
     foo3 satisfies A & C & B; // should be error
          ~~~~~~~~~
 !!! error TS1360: Type '{ (x: 2): "2"; (x: 3): "3"; (x: number): number; }' does not satisfy the expected type 'A & C & B'.
 !!! error TS1360:   Type '{ (x: 2): "2"; (x: 3): "3"; (x: number): number; }' is not assignable to type 'A'.
+!!! error TS1360:     There is no signature in type { (x: 2): "2"; (x: 3): "3"; (x: number): number; } such that its parameters are assignable to the parameters of signature (x: 1) => any
     foo3 satisfies B & A & C; // should be error
          ~~~~~~~~~
 !!! error TS1360: Type '{ (x: 2): "2"; (x: 3): "3"; (x: number): number; }' does not satisfy the expected type 'B & A & C'.
-!!! error TS1360:   Type '{ (x: 2): "2"; (x: 3): "3"; (x: number): number; }' is not assignable to type 'B'.
-!!! error TS1360:     Types of parameters 'x' and 'x' are incompatible.
-!!! error TS1360:       Type '3' is not assignable to type '2'.
+!!! error TS1360:   Type '{ (x: 2): "2"; (x: 3): "3"; (x: number): number; }' is not assignable to type 'A'.
+!!! error TS1360:     There is no signature in type { (x: 2): "2"; (x: 3): "3"; (x: number): number; } such that its parameters are assignable to the parameters of signature (x: 1) => any
     foo3 satisfies B & C & A; // should be error
          ~~~~~~~~~
 !!! error TS1360: Type '{ (x: 2): "2"; (x: 3): "3"; (x: number): number; }' does not satisfy the expected type 'B & C & A'.
-!!! error TS1360:   Type '{ (x: 2): "2"; (x: 3): "3"; (x: number): number; }' is not assignable to type 'B'.
+!!! error TS1360:   Type '{ (x: 2): "2"; (x: 3): "3"; (x: number): number; }' is not assignable to type 'C'.
+!!! error TS1360:     There is no signature in type { (x: 2): "2"; (x: 3): "3"; (x: number): number; } such that its parameters are assignable to the parameters of signature (x: 1) => any
     foo3 satisfies C & A & B; // should be error
          ~~~~~~~~~
 !!! error TS1360: Type '{ (x: 2): "2"; (x: 3): "3"; (x: number): number; }' does not satisfy the expected type 'C & A & B'.
 !!! error TS1360:   Type '{ (x: 2): "2"; (x: 3): "3"; (x: number): number; }' is not assignable to type 'C'.
-!!! error TS1360:     Types of parameters 'x' and 'x' are incompatible.
-!!! error TS1360:       Type '1' is not assignable to type '2'.
+!!! error TS1360:     There is no signature in type { (x: 2): "2"; (x: 3): "3"; (x: number): number; } such that its parameters are assignable to the parameters of signature (x: 1) => any
     foo3 satisfies C & B & A; // should be error
          ~~~~~~~~~
 !!! error TS1360: Type '{ (x: 2): "2"; (x: 3): "3"; (x: number): number; }' does not satisfy the expected type 'C & B & A'.
 !!! error TS1360:   Type '{ (x: 2): "2"; (x: 3): "3"; (x: number): number; }' is not assignable to type 'C'.
+!!! error TS1360:     There is no signature in type { (x: 2): "2"; (x: 3): "3"; (x: number): number; } such that its parameters are assignable to the parameters of signature (x: 1) => any
     
     
     foo3 satisfies W; // should be error
@@ -380,7 +297,7 @@
     
     
     /**********************/
-==== -57087-105.ts (4 errors) ====
+==== -57087-105.ts (3 errors) ====
     namespace ns3 {
     type A = { a: string };
     type B = { b: 1 };
@@ -424,12 +341,6 @@
     
     // The necessity of the argument cast is a separate issue!
     x.g(ftw,arg as any as any as ArgCastType); // should not be error
-        ~~~
-!!! error TS2345: Argument of type '{ (x: A): string; (x: C): number; (x: B): 1; }' is not assignable to parameter of type '{ (x: A): string; (x: B): 1; } & { (x: C): number; (x: B): "1"; }'.
-!!! error TS2345:   Type '{ (x: A): string; (x: C): number; (x: B): 1; }' is not assignable to type '{ (x: C): number; (x: B): "1"; }'.
-!!! error TS2345:     Types of parameters 'x' and 'x' are incompatible.
-!!! error TS2345:       Property 'a' is missing in type 'B' but required in type 'A'.
-!!! related TS2728 -57087-105.ts:2:12: 'a' is declared here.
     
     function ftx(x:A):string;
     function ftx(x:C):number;
@@ -444,9 +355,8 @@
     x.g(ftx,arg as any as any as ArgCastType); // should be error
         ~~~
 !!! error TS2345: Argument of type '{ (x: A): string; (x: C): number; (x: B): string; }' is not assignable to parameter of type '{ (x: A): string; (x: B): 1; } & { (x: C): number; (x: B): "1"; }'.
-!!! error TS2345:   Type '{ (x: A): string; (x: C): number; (x: B): string; }' is not assignable to type '{ (x: A): string; (x: B): 1; }'.
-!!! error TS2345:     Types of parameters 'x' and 'x' are incompatible.
-!!! error TS2345:       Type 'B' is not assignable to type 'A'.
+!!! error TS2345:   Type '(x: B) => string' is not assignable to type '(x: B) => 1 | (x: B) => "1"'.
+!!! error TS2345:     Type 'string' is not assignable to type '1 | "1"'.
     
     //function fty(x:A):string;  // should cause x.g(ft2) to error
     function fty(x:C):number;
@@ -463,9 +373,7 @@
         ~~~
 !!! error TS2345: Argument of type '{ (x: C): number; (x: B): 1; }' is not assignable to parameter of type '{ (x: A): string; (x: B): 1; } & { (x: C): number; (x: B): "1"; }'.
 !!! error TS2345:   Type '{ (x: C): number; (x: B): 1; }' is not assignable to type '{ (x: A): string; (x: B): 1; }'.
-!!! error TS2345:     Types of parameters 'x' and 'x' are incompatible.
-!!! error TS2345:       Property 'c' is missing in type 'A' but required in type 'C'.
-!!! related TS2728 -57087-105.ts:4:12: 'c' is declared here.
+!!! error TS2345:     There is no signature in type { (x: C): number; (x: B): 1; } such that its parameters are assignable to the parameters of signature (x: A) => any
     
     function ftz(x:{a?:string}):string;  // should cause x.g(ft2) to error
     function ftz(x:C):number;
@@ -481,14 +389,13 @@
     x.g(ftz,arg as any as any as ArgCastType); // should be error
         ~~~
 !!! error TS2345: Argument of type '{ (x: { a?: string | undefined; }): string; (x: C): number; (x: B): 1; }' is not assignable to parameter of type '{ (x: A): string; (x: B): 1; } & { (x: C): number; (x: B): "1"; }'.
-!!! error TS2345:   Type '{ (x: { a?: string | undefined; }): string; (x: C): number; (x: B): 1; }' is not assignable to type '{ (x: C): number; (x: B): "1"; }'.
-!!! error TS2345:     Type 'string' is not assignable to type '"1"'.
+!!! error TS2345:   Parameters of signature (x: { a?: string | undefined; }) => string are not assignable to the parameters of any signature in type { (x: A): string; (x: B): 1; } & { (x: C): number; (x: B): "1"; }
     
     }
     
     
     /**********************/
-==== -57087-131.ts (5 errors) ====
+==== -57087-131.ts (4 errors) ====
     namespace ns4 {
     interface Garg31A {
         (): "01";
@@ -510,10 +417,6 @@
         (x: 2, y: 1): "221";
     };
     f31a satisfies Garg31A & Garg31B; // should satisfy
-         ~~~~~~~~~
-!!! error TS1360: Type '{ (): "01"; (x: 1, y: 1): "211"; (x: 2, y: 2): "222"; (x: 2, y: 1): "221"; }' does not satisfy the expected type 'Garg31A & Garg31B'.
-!!! error TS1360:   Type '{ (): "01"; (x: 1, y: 1): "211"; (x: 2, y: 2): "222"; (x: 2, y: 1): "221"; }' is not assignable to type 'Garg31B'.
-!!! error TS1360:     Type '"01"' is not assignable to type '"02"'.
     
     declare const f31b: {
         (): "01";
@@ -524,8 +427,8 @@
     f31b satisfies Garg31A & Garg31B; // should not satisfy
          ~~~~~~~~~
 !!! error TS1360: Type '{ (): "01"; (x: 1, y: 1): "211"; (x: 2, y: 2): "221"; (x: 2, y: 1): "221"; }' does not satisfy the expected type 'Garg31A & Garg31B'.
-!!! error TS1360:   Type '{ (): "01"; (x: 1, y: 1): "211"; (x: 2, y: 2): "221"; (x: 2, y: 1): "221"; }' is not assignable to type 'Garg31B'.
-!!! error TS1360:     Type '"01"' is not assignable to type '"02"'.
+!!! error TS1360:   Type '(x: 2, y: 2) => "221"' is not assignable to type '(x: 2, y: 2) => "222"'.
+!!! error TS1360:     Type '"221"' is not assignable to type '"222"'.
     
     declare const f31c: {
         (): "01"; (x: 1, y: 1): "211";
@@ -536,8 +439,7 @@
     f31c satisfies Garg31A & Garg31B; // should not satisfy
          ~~~~~~~~~
 !!! error TS1360: Type '{ (): "01"; (x: 1, y: 1): "211"; (x: 2, y: 2): "222"; (x: 2, y: 1): "221"; (x: 1, y: 2): "221"; }' does not satisfy the expected type 'Garg31A & Garg31B'.
-!!! error TS1360:   Type '{ (): "01"; (x: 1, y: 1): "211"; (x: 2, y: 2): "222"; (x: 2, y: 1): "221"; (x: 1, y: 2): "221"; }' is not assignable to type 'Garg31B'.
-!!! error TS1360:     Type '"01"' is not assignable to type '"02"'.
+!!! error TS1360:   Parameters of signature (x: 1, y: 2) => "221" are not assignable to the parameters of any signature in type Garg31A & Garg31B
     
     declare const f31d:{
         (): "01";
@@ -548,8 +450,8 @@
     f31d satisfies Garg31A & Garg31B; // should not satisfy
          ~~~~~~~~~
 !!! error TS1360: Type '{ (): "01"; (x?: 1 | undefined, y?: 1 | undefined): "211"; (x: 2, y: 2): "222"; (x: 2, y: 1): "221"; }' does not satisfy the expected type 'Garg31A & Garg31B'.
-!!! error TS1360:   Type '{ (): "01"; (x?: 1 | undefined, y?: 1 | undefined): "211"; (x: 2, y: 2): "222"; (x: 2, y: 1): "221"; }' is not assignable to type 'Garg31B'.
-!!! error TS1360:     Type '"01"' is not assignable to type '"02"'.
+!!! error TS1360:   Type '(x?: 1 | undefined, y?: 1 | undefined) => "211"' is not assignable to type '() => "01" | () => "02"'.
+!!! error TS1360:     Type '"211"' is not assignable to type '"01" | "02"'.
     
     declare const f31f: {
         //(): "01"; // missing domain support cannot be detected at compiler time with final never
@@ -561,7 +463,7 @@
          ~~~~~~~~~
 !!! error TS1360: Type '{ (x: 1, y: 1): "211"; (x: 2, y: 2): "222"; (x: 2, y: 1): "221"; }' does not satisfy the expected type 'Garg31A & Garg31B'.
 !!! error TS1360:   Type '{ (x: 1, y: 1): "211"; (x: 2, y: 2): "222"; (x: 2, y: 1): "221"; }' is not assignable to type 'Garg31A'.
-!!! error TS1360:     Target signature provides too few arguments. Expected 2 or more, but got 0.
+!!! error TS1360:     There is no signature in type { (x: 1, y: 1): "211"; (x: 2, y: 2): "222"; (x: 2, y: 1): "221"; } such that its parameters are assignable to the parameters of signature () => any
     
     
     
@@ -569,7 +471,7 @@
     
     
     /**********************/
-==== -57087-133.ts (3 errors) ====
+==== -57087-133.ts (0 errors) ====
     namespace ns5 {
     interface Garg33A {
         (): "01";
@@ -590,10 +492,6 @@
         (x:2, y?:any): "221"
     }
     f33b satisfies Garg33A & Garg33B; // should  satisfy
-         ~~~~~~~~~
-!!! error TS1360: Type '{ (): "02"; (x: 1, y?: 1 | undefined): "211"; (...args: 1[]): "101"; (...args: 1[]): "201"; (x: 2, y?: any): "221"; }' does not satisfy the expected type 'Garg33A & Garg33B'.
-!!! error TS1360:   Type '{ (): "02"; (x: 1, y?: 1 | undefined): "211"; (...args: 1[]): "101"; (...args: 1[]): "201"; (x: 2, y?: any): "221"; }' is not assignable to type 'Garg33A'.
-!!! error TS1360:     Type '"02"' is not assignable to type '"01"'.
     // because (...args: [...1[]]):=>"101"  === (...args:1[]) => "201";
     
     
@@ -605,8 +503,6 @@
         (x:2, y?:any): "221"
     }
     f33b satisfies Garg33A & Garg33B; // should satisfy
-         ~~~~~~~~~
-!!! error TS1360: Type '{ (): "02"; (x: 1, y?: 1 | undefined): "211"; (...args: 1[]): "101"; (...args: 1[]): "201"; (x: 2, y?: any): "221"; }' does not satisfy the expected type 'Garg33A & Garg33B'.
     
     declare const f33c: {
         (x:2, y?:any): "221"
@@ -616,10 +512,6 @@
         (): "02";
     }
     f33c satisfies Garg33A & Garg33B; // should satisfy (even though reversed order of overloads)
-         ~~~~~~~~~
-!!! error TS1360: Type '{ (x: 2, y?: any): "221"; (...args: 1[]): "201"; (...args: 1[]): "101"; (x: 1, y?: 1 | undefined): "211"; (): "02"; }' does not satisfy the expected type 'Garg33A & Garg33B'.
-!!! error TS1360:   Type '{ (x: 2, y?: any): "221"; (...args: 1[]): "201"; (...args: 1[]): "101"; (x: 1, y?: 1 | undefined): "211"; (): "02"; }' is not assignable to type 'Garg33A'.
-!!! error TS1360:     Target signature provides too few arguments. Expected 1 or more, but got 0.
     
     
     
@@ -627,7 +519,7 @@
     
     
     /**********************/
-==== -57087-135.ts (2 errors) ====
+==== -57087-135.ts (0 errors) ====
     namespace ns6 {
     interface Garg35A {
         ({x,y}:{x?:1, y?:Garg35B}): "A1"
@@ -648,14 +540,6 @@
         ({x,y}:{x?:2, y?:Garg35C}): "A2"
     }
     f35a satisfies Garg35A & Garg35B & Garg35C; // should satisfy
-         ~~~~~~~~~
-!!! error TS1360: Type '{ ({ x, y }: { x?: 1 | undefined; y?: Garg35B | undefined; }): "A1"; ({ x, y }: { x: 2; y?: Garg35A | undefined; }): "B2"; ({ x, y }: { x?: 2 | undefined; y?: Garg35C | undefined; }): "A2"; }' does not satisfy the expected type 'Garg35A & Garg35B & Garg35C'.
-!!! error TS1360:   Type '{ ({ x, y }: { x?: 1 | undefined; y?: Garg35B | undefined; }): "A1"; ({ x, y }: { x: 2; y?: Garg35A | undefined; }): "B2"; ({ x, y }: { x?: 2 | undefined; y?: Garg35C | undefined; }): "A2"; }' is not assignable to type 'Garg35B'.
-!!! error TS1360:     Types of parameters '__0' and '__0' are incompatible.
-!!! error TS1360:       Type '{ x?: 2 | undefined; y?: Garg35C | undefined; }' is not assignable to type '{ x?: 1 | undefined; y?: Garg35B | undefined; }'.
-!!! error TS1360:         Types of property 'x' are incompatible.
-!!! error TS1360:           Type '2 | undefined' is not assignable to type '1 | undefined'.
-!!! error TS1360:             Type '2' is not assignable to type '1'.
     
     declare const f35b: {
         ({x,y}:{x:2, y?:Garg35A}): "C1";
@@ -663,14 +547,6 @@
         ({x,y}:{x?:2, y?:Garg35C}): "B1"
     }
     f35b satisfies typeof f35a & Garg35A & Garg35B & Garg35C; // should satisfy
-         ~~~~~~~~~
-!!! error TS1360: Type '{ ({ x, y }: { x: 2; y?: Garg35A | undefined; }): "C1"; ({ x, y }: { x?: 1 | undefined; y?: Garg35B | undefined; }): "C2"; ({ x, y }: { x?: 2 | undefined; y?: Garg35C | undefined; }): "B1"; }' does not satisfy the expected type '{ ({ x, y }: { x?: 1 | undefined; y?: Garg35B | undefined; }): "A1"; ({ x, y }: { x: 2; y?: Garg35A | undefined; }): "B2"; ({ x, y }: { x?: 2 | undefined; y?: Garg35C | undefined; }): "A2"; } & Garg35A & Garg35B & Garg35C'.
-!!! error TS1360:   Type '{ ({ x, y }: { x: 2; y?: Garg35A | undefined; }): "C1"; ({ x, y }: { x?: 1 | undefined; y?: Garg35B | undefined; }): "C2"; ({ x, y }: { x?: 2 | undefined; y?: Garg35C | undefined; }): "B1"; }' is not assignable to type '{ ({ x, y }: { x?: 1 | undefined; y?: Garg35B | undefined; }): "A1"; ({ x, y }: { x: 2; y?: Garg35A | undefined; }): "B2"; ({ x, y }: { x?: 2 | undefined; y?: Garg35C | undefined; }): "A2"; }'.
-!!! error TS1360:     Types of parameters '__0' and '__0' are incompatible.
-!!! error TS1360:       Type '{ x?: 1 | undefined; y?: Garg35B | undefined; }' is not assignable to type '{ x: 2; y?: Garg35A | undefined; }'.
-!!! error TS1360:         Types of property 'x' are incompatible.
-!!! error TS1360:           Type '1 | undefined' is not assignable to type '2'.
-!!! error TS1360:             Type 'undefined' is not assignable to type '2'.
     
     
     }
