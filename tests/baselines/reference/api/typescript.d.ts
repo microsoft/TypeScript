@@ -205,7 +205,7 @@ declare namespace ts {
             /**
              * Request to reload the project structure for all the opened files
              */
-            interface ReloadProjectsRequest extends Message {
+            interface ReloadProjectsRequest extends Request {
                 command: CommandTypes.ReloadProjects;
             }
             /**
@@ -3332,18 +3332,6 @@ declare namespace ts {
              * Last version that was reported.
              */
             private lastReportedVersion;
-            /**
-             * Current project's program version. (incremented everytime new program is created that is not complete reuse from the old one)
-             * This property is changed in 'updateGraph' based on the set of files in program
-             */
-            private projectProgramVersion;
-            /**
-             * Current version of the project state. It is changed when:
-             * - new root file was added/removed
-             * - edit happen in some file that is currently included in the project.
-             * This property is different from projectStructureVersion since in most cases edits don't affect set of files in the project
-             */
-            private projectStateVersion;
             protected projectErrors: Diagnostic[] | undefined;
             protected isInitialLoadPending: () => boolean;
             private readonly cancellationToken;
@@ -3918,6 +3906,7 @@ declare namespace ts {
             private static escapeFilenameForRegex;
             resetSafeList(): void;
             applySafeList(proj: protocol.ExternalProject): NormalizedPath[];
+            private applySafeListWorker;
             openExternalProject(proj: protocol.ExternalProject): void;
             hasDeferredExtension(): boolean;
             private enableRequestedPluginsAsync;
@@ -4150,7 +4139,7 @@ declare namespace ts {
             responseRequired?: boolean;
         }
     }
-    const versionMajorMinor = "5.4";
+    const versionMajorMinor = "5.5";
     /** The version of the TypeScript compiler release */
     const version: string;
     /**

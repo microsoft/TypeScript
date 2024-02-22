@@ -13,8 +13,6 @@
     "'package.json' does not have a 'typings' field.",
     "'package.json' does not have a 'types' field.",
     "'package.json' has 'main' field 'index.js' that references '/node_modules/lodash/index.js'.",
-    "File '/node_modules/lodash/index.js' does not exist.",
-    "Loading module as file / folder, candidate module location '/node_modules/lodash/index.js', target file types: TypeScript, Declaration.",
     "File name '/node_modules/lodash/index.js' has a '.js' extension - stripping it.",
     "File '/node_modules/lodash/index.ts' does not exist.",
     "File '/node_modules/lodash/index.tsx' does not exist.",

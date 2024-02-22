@@ -3,7 +3,6 @@ import {
     jsonToReadableText,
 } from "../helpers";
 import {
-    appendAllScriptInfos,
     baselineTsserverLogs,
     closeFilesForSession,
     openExternalProjectForSession,
@@ -241,7 +240,6 @@ describe("unittests:: tsserver:: projectErrors:: are reported as appropriate", (
                     projectRootPath: useProjectRoot ? folderPath : undefined,
                 },
             });
-            appendAllScriptInfos(session);
 
             // Since this is not js project so no typings are queued
             verifyGetErrRequest({ session, files: [untitledFile] });
@@ -583,8 +581,7 @@ describe("unittests:: tsserver:: projectErrors:: dont include overwrite emit err
         const session = new TestSession(host);
         openFilesForSession([f1], session);
 
-        const projectService = session.getProjectService();
-        const projectFileName = projectService.inferredProjects[0].getProjectName();
+        const projectFileName = session.getProjectService().inferredProjects[0].getProjectName();
         session.executeCommandSeq<ts.server.protocol.CompilerOptionsDiagnosticsRequest>({
             command: ts.server.protocol.CommandTypes.CompilerOptionsDiagnosticsFull,
             arguments: { projectFileName },

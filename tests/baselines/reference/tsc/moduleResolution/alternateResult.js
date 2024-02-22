@@ -269,8 +269,10 @@ File '/home/src/projects/project/node_modules/bar/package.json' exists according
 'package.json' does not have a 'typings' field.
 'package.json' does not have a 'types' field.
 'package.json' has 'main' field 'index.js' that references '/home/src/projects/project/node_modules/bar/index.js'.
-File '/home/src/projects/project/node_modules/bar/index.js' exists - use it as a name resolution result.
-File '/home/src/projects/project/node_modules/bar/index.js' has an unsupported extension, so skipping it.
+File name '/home/src/projects/project/node_modules/bar/index.js' has a '.js' extension - stripping it.
+File '/home/src/projects/project/node_modules/bar/index.ts' does not exist.
+File '/home/src/projects/project/node_modules/bar/index.tsx' does not exist.
+File '/home/src/projects/project/node_modules/bar/index.d.ts' does not exist.
 Loading module as file / folder, candidate module location '/home/src/projects/project/node_modules/bar/index.js', target file types: TypeScript, Declaration.
 File name '/home/src/projects/project/node_modules/bar/index.js' has a '.js' extension - stripping it.
 File '/home/src/projects/project/node_modules/bar/index.ts' does not exist.
@@ -574,8 +576,10 @@ File '/home/src/projects/project/node_modules/bar/package.json' exists according
 'package.json' does not have a 'typings' field.
 'package.json' does not have a 'types' field.
 'package.json' has 'main' field 'index.js' that references '/home/src/projects/project/node_modules/bar/index.js'.
-File '/home/src/projects/project/node_modules/bar/index.js' exists - use it as a name resolution result.
-File '/home/src/projects/project/node_modules/bar/index.js' has an unsupported extension, so skipping it.
+File name '/home/src/projects/project/node_modules/bar/index.js' has a '.js' extension - stripping it.
+File '/home/src/projects/project/node_modules/bar/index.ts' does not exist.
+File '/home/src/projects/project/node_modules/bar/index.tsx' does not exist.
+File '/home/src/projects/project/node_modules/bar/index.d.ts' does not exist.
 Loading module as file / folder, candidate module location '/home/src/projects/project/node_modules/bar/index.js', target file types: TypeScript, Declaration.
 File name '/home/src/projects/project/node_modules/bar/index.js' has a '.js' extension - stripping it.
 File '/home/src/projects/project/node_modules/bar/index.ts' does not exist.
@@ -811,8 +815,10 @@ File '/home/src/projects/project/node_modules/bar/package.json' exists according
 'package.json' does not have a 'typings' field.
 'package.json' does not have a 'types' field.
 'package.json' has 'main' field 'index.js' that references '/home/src/projects/project/node_modules/bar/index.js'.
-File '/home/src/projects/project/node_modules/bar/index.js' exists - use it as a name resolution result.
-File '/home/src/projects/project/node_modules/bar/index.js' has an unsupported extension, so skipping it.
+File name '/home/src/projects/project/node_modules/bar/index.js' has a '.js' extension - stripping it.
+File '/home/src/projects/project/node_modules/bar/index.ts' does not exist.
+File '/home/src/projects/project/node_modules/bar/index.tsx' does not exist.
+File '/home/src/projects/project/node_modules/bar/index.d.ts' does not exist.
 Loading module as file / folder, candidate module location '/home/src/projects/project/node_modules/bar/index.js', target file types: TypeScript, Declaration.
 File name '/home/src/projects/project/node_modules/bar/index.js' has a '.js' extension - stripping it.
 File '/home/src/projects/project/node_modules/bar/index.ts' does not exist.
@@ -1050,8 +1056,10 @@ File '/home/src/projects/project/node_modules/bar/package.json' exists according
 'package.json' does not have a 'typings' field.
 'package.json' does not have a 'types' field.
 'package.json' has 'main' field 'index.js' that references '/home/src/projects/project/node_modules/bar/index.js'.
-File '/home/src/projects/project/node_modules/bar/index.js' exists - use it as a name resolution result.
-File '/home/src/projects/project/node_modules/bar/index.js' has an unsupported extension, so skipping it.
+File name '/home/src/projects/project/node_modules/bar/index.js' has a '.js' extension - stripping it.
+File '/home/src/projects/project/node_modules/bar/index.ts' does not exist.
+File '/home/src/projects/project/node_modules/bar/index.tsx' does not exist.
+File '/home/src/projects/project/node_modules/bar/index.d.ts' does not exist.
 Loading module as file / folder, candidate module location '/home/src/projects/project/node_modules/bar/index.js', target file types: TypeScript, Declaration.
 File name '/home/src/projects/project/node_modules/bar/index.js' has a '.js' extension - stripping it.
 File '/home/src/projects/project/node_modules/bar/index.ts' does not exist.
@@ -1264,8 +1272,10 @@ File '/home/src/projects/project/node_modules/bar/package.json' exists according
 'package.json' does not have a 'typings' field.
 'package.json' does not have a 'types' field.
 'package.json' has 'main' field 'index.js' that references '/home/src/projects/project/node_modules/bar/index.js'.
-File '/home/src/projects/project/node_modules/bar/index.js' exists - use it as a name resolution result.
-File '/home/src/projects/project/node_modules/bar/index.js' has an unsupported extension, so skipping it.
+File name '/home/src/projects/project/node_modules/bar/index.js' has a '.js' extension - stripping it.
+File '/home/src/projects/project/node_modules/bar/index.ts' does not exist.
+File '/home/src/projects/project/node_modules/bar/index.tsx' does not exist.
+File '/home/src/projects/project/node_modules/bar/index.d.ts' does not exist.
 Loading module as file / folder, candidate module location '/home/src/projects/project/node_modules/bar/index.js', target file types: TypeScript, Declaration.
 File name '/home/src/projects/project/node_modules/bar/index.js' has a '.js' extension - stripping it.
 File '/home/src/projects/project/node_modules/bar/index.ts' does not exist.
@@ -2057,8 +2067,10 @@ File '/home/src/projects/project/node_modules/bar2/package.json' exists accordin
 'package.json' does not have a 'typings' field.
 'package.json' does not have a 'types' field.
 'package.json' has 'main' field 'index.js' that references '/home/src/projects/project/node_modules/bar2/index.js'.
-File '/home/src/projects/project/node_modules/bar2/index.js' exists - use it as a name resolution result.
-File '/home/src/projects/project/node_modules/bar2/index.js' has an unsupported extension, so skipping it.
+File name '/home/src/projects/project/node_modules/bar2/index.js' has a '.js' extension - stripping it.
+File '/home/src/projects/project/node_modules/bar2/index.ts' does not exist.
+File '/home/src/projects/project/node_modules/bar2/index.tsx' does not exist.
+File '/home/src/projects/project/node_modules/bar2/index.d.ts' does not exist.
 Loading module as file / folder, candidate module location '/home/src/projects/project/node_modules/bar2/index.js', target file types: TypeScript, Declaration.
 File name '/home/src/projects/project/node_modules/bar2/index.js' has a '.js' extension - stripping it.
 File '/home/src/projects/project/node_modules/bar2/index.ts' does not exist.
@@ -2378,8 +2390,10 @@ File '/home/src/projects/project/node_modules/bar2/package.json' exists accordin
 'package.json' does not have a 'typings' field.
 'package.json' does not have a 'types' field.
 'package.json' has 'main' field 'index.js' that references '/home/src/projects/project/node_modules/bar2/index.js'.
-File '/home/src/projects/project/node_modules/bar2/index.js' exists - use it as a name resolution result.
-File '/home/src/projects/project/node_modules/bar2/index.js' has an unsupported extension, so skipping it.
+File name '/home/src/projects/project/node_modules/bar2/index.js' has a '.js' extension - stripping it.
+File '/home/src/projects/project/node_modules/bar2/index.ts' does not exist.
+File '/home/src/projects/project/node_modules/bar2/index.tsx' does not exist.
+File '/home/src/projects/project/node_modules/bar2/index.d.ts' does not exist.
 Loading module as file / folder, candidate module location '/home/src/projects/project/node_modules/bar2/index.js', target file types: TypeScript, Declaration.
 File name '/home/src/projects/project/node_modules/bar2/index.js' has a '.js' extension - stripping it.
 File '/home/src/projects/project/node_modules/bar2/index.ts' does not exist.
@@ -2672,8 +2686,10 @@ File '/home/src/projects/project/node_modules/bar2/package.json' exists accordin
 'package.json' does not have a 'typings' field.
 'package.json' does not have a 'types' field.
 'package.json' has 'main' field 'index.js' that references '/home/src/projects/project/node_modules/bar2/index.js'.
-File '/home/src/projects/project/node_modules/bar2/index.js' exists - use it as a name resolution result.
-File '/home/src/projects/project/node_modules/bar2/index.js' has an unsupported extension, so skipping it.
+File name '/home/src/projects/project/node_modules/bar2/index.js' has a '.js' extension - stripping it.
+File '/home/src/projects/project/node_modules/bar2/index.ts' does not exist.
+File '/home/src/projects/project/node_modules/bar2/index.tsx' does not exist.
+File '/home/src/projects/project/node_modules/bar2/index.d.ts' does not exist.
 Loading module as file / folder, candidate module location '/home/src/projects/project/node_modules/bar2/index.js', target file types: TypeScript, Declaration.
 File name '/home/src/projects/project/node_modules/bar2/index.js' has a '.js' extension - stripping it.
 File '/home/src/projects/project/node_modules/bar2/index.ts' does not exist.
@@ -2909,8 +2925,10 @@ File '/home/src/projects/project/node_modules/bar2/package.json' exists accordin
 'package.json' does not have a 'typings' field.
 'package.json' does not have a 'types' field.
 'package.json' has 'main' field 'index.js' that references '/home/src/projects/project/node_modules/bar2/index.js'.
-File '/home/src/projects/project/node_modules/bar2/index.js' exists - use it as a name resolution result.
-File '/home/src/projects/project/node_modules/bar2/index.js' has an unsupported extension, so skipping it.
+File name '/home/src/projects/project/node_modules/bar2/index.js' has a '.js' extension - stripping it.
+File '/home/src/projects/project/node_modules/bar2/index.ts' does not exist.
+File '/home/src/projects/project/node_modules/bar2/index.tsx' does not exist.
+File '/home/src/projects/project/node_modules/bar2/index.d.ts' does not exist.
 Loading module as file / folder, candidate module location '/home/src/projects/project/node_modules/bar2/index.js', target file types: TypeScript, Declaration.
 File name '/home/src/projects/project/node_modules/bar2/index.js' has a '.js' extension - stripping it.
 File '/home/src/projects/project/node_modules/bar2/index.ts' does not exist.
@@ -3148,8 +3166,10 @@ File '/home/src/projects/project/node_modules/bar2/package.json' exists accordin
 'package.json' does not have a 'typings' field.
 'package.json' does not have a 'types' field.
 'package.json' has 'main' field 'index.js' that references '/home/src/projects/project/node_modules/bar2/index.js'.
-File '/home/src/projects/project/node_modules/bar2/index.js' exists - use it as a name resolution result.
-File '/home/src/projects/project/node_modules/bar2/index.js' has an unsupported extension, so skipping it.
+File name '/home/src/projects/project/node_modules/bar2/index.js' has a '.js' extension - stripping it.
+File '/home/src/projects/project/node_modules/bar2/index.ts' does not exist.
+File '/home/src/projects/project/node_modules/bar2/index.tsx' does not exist.
+File '/home/src/projects/project/node_modules/bar2/index.d.ts' does not exist.
 Loading module as file / folder, candidate module location '/home/src/projects/project/node_modules/bar2/index.js', target file types: TypeScript, Declaration.
 File name '/home/src/projects/project/node_modules/bar2/index.js' has a '.js' extension - stripping it.
 File '/home/src/projects/project/node_modules/bar2/index.ts' does not exist.
@@ -3362,8 +3382,10 @@ File '/home/src/projects/project/node_modules/bar2/package.json' exists accordin
 'package.json' does not have a 'typings' field.
 'package.json' does not have a 'types' field.
 'package.json' has 'main' field 'index.js' that references '/home/src/projects/project/node_modules/bar2/index.js'.
-File '/home/src/projects/project/node_modules/bar2/index.js' exists - use it as a name resolution result.
-File '/home/src/projects/project/node_modules/bar2/index.js' has an unsupported extension, so skipping it.
+File name '/home/src/projects/project/node_modules/bar2/index.js' has a '.js' extension - stripping it.
+File '/home/src/projects/project/node_modules/bar2/index.ts' does not exist.
+File '/home/src/projects/project/node_modules/bar2/index.tsx' does not exist.
+File '/home/src/projects/project/node_modules/bar2/index.d.ts' does not exist.
 Loading module as file / folder, candidate module location '/home/src/projects/project/node_modules/bar2/index.js', target file types: TypeScript, Declaration.
 File name '/home/src/projects/project/node_modules/bar2/index.js' has a '.js' extension - stripping it.
 File '/home/src/projects/project/node_modules/bar2/index.ts' does not exist.

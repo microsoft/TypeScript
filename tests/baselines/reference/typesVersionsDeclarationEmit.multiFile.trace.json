@@ -13,7 +13,6 @@
     "'package.json' has a 'typesVersions' entry '>=3.1.0-0' that matches compiler version '3.1.0-dev', looking for a pattern to match module name 'index'.",
     "Module name 'index', matched pattern '*'.",
     "Trying substitution 'ts3.1/*', candidate module location: 'ts3.1/index'.",
-    "File '/.src/node_modules/ext/ts3.1/index' does not exist.",
     "Loading module as file / folder, candidate module location '/.src/node_modules/ext/ts3.1/index', target file types: TypeScript, Declaration.",
     "File '/.src/node_modules/ext/ts3.1/index.ts' does not exist.",
     "File '/.src/node_modules/ext/ts3.1/index.tsx' does not exist.",
