@@ -1760,6 +1760,9 @@ function createCompletionEntry(
         const memberCompletionEntry = getEntryForMemberCompletion(host, program, options, preferences, name, symbol, location, position, contextToken, formatContext);
         if (memberCompletionEntry) {
             ({ insertText, filterText, isSnippet, importAdder } = memberCompletionEntry);
+            if (memberCompletionEntry.eraseRange) {
+                replacementSpan = createTextSpanFromBounds(memberCompletionEntry.eraseRange.pos, memberCompletionEntry.eraseRange.end);
+            }
             if (importAdder?.hasFixes()) {
                 hasAction = true;
                 source = CompletionSource.ClassMemberSnippet;

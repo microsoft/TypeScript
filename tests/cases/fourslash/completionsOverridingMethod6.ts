@@ -12,24 +12,24 @@
 ////     public abstract /*a*/
 //// }
 
-//// abstract class Ab extends Base {
-////     public abstract /*b*/
+//// abstract class Ab extends Base {[|
+////     public abstract /*b*/|]
 //// }
 
-//// class B extends Base {
-////     public override m/*c*/
+//// class B extends Base {[|
+////     public override m/*c*/|]
 //// }
 
-//// class C extends Base {
-////     override /*d*/
+//// class C extends Base {[|
+////     override /*d*/|]
 //// }
 
 //// class E extends Base {
-////     protected notamodifier override /*e*/
+////     protected notamodifier[| override /*e*/|]
 //// }
 
-//// class f extends Base {
-////     protected /*f*/
+//// class f extends Base {[|
+////     protected /*f*/|]
 //// }
 
 //// declare function decorator(...args: any[]): any;
@@ -42,8 +42,8 @@
 ////     }
 //// }
 
-//// class DecoratorSub extends DecoratorBase {
-////     @decorator protected /*g*/
+//// class DecoratorSub extends DecoratorBase {[|
+////     @decorator protected /*g*/|]
 //// }
 
 verify.completions(
@@ -71,14 +71,14 @@ verify.completions(
                 sortText: completion.SortText.LocationPriority,
                 insertText: "public abstract method(): void;",
                 filterText: "method",
-                replacementSpan: undefined,
+                replacementSpan: test.ranges()[0],
             },
             {
                 name: "prop",
                 sortText: completion.SortText.LocationPriority,
                 insertText: "public abstract prop: number;",
                 filterText: "prop",
-                replacementSpan: undefined,
+                replacementSpan: test.ranges()[0],
             },
         ],
     },
@@ -96,14 +96,14 @@ verify.completions(
                 sortText: completion.SortText.LocationPriority,
                 insertText: "public override method(): void {\n}",
                 filterText: "method",
-                replacementSpan: undefined,
+                replacementSpan: test.ranges()[1],
             },
             {
                 name: "prop",
                 sortText: completion.SortText.LocationPriority,
                 insertText: "public override prop: number;",
                 filterText: "prop",
-                replacementSpan: undefined,
+                replacementSpan: test.ranges()[1],
             },
         ]
     },
@@ -121,14 +121,14 @@ verify.completions(
                 sortText: completion.SortText.LocationPriority,
                 insertText: "override method(): void {\n}",
                 filterText: "method",
-                replacementSpan: undefined,
+                replacementSpan: test.ranges()[2],
             },
             {
                 name: "prop",
                 sortText: completion.SortText.LocationPriority,
                 insertText: "protected override prop: number;",
                 filterText: "prop",
-                replacementSpan: undefined,
+                replacementSpan: test.ranges()[2],
             },
         ]
     },
@@ -146,14 +146,14 @@ verify.completions(
                 sortText: completion.SortText.LocationPriority,
                 insertText: "override method(): void {\n}",
                 filterText: "method",
-                replacementSpan: undefined,
+                replacementSpan: test.ranges()[3],
             },
             {
                 name: "prop",
                 sortText: completion.SortText.LocationPriority,
                 insertText: "protected override prop: number;",
                 filterText: "prop",
-                replacementSpan: undefined,
+                replacementSpan: test.ranges()[3],
             },
         ]
     },
@@ -172,7 +172,7 @@ verify.completions(
                 sortText: completion.SortText.LocationPriority,
                 insertText: "protected prop: number;",
                 filterText: "prop",
-                replacementSpan: undefined,
+                replacementSpan: test.ranges()[4],
             },
         ]
     },
@@ -195,7 +195,7 @@ protected foo(a: number): number;
 protected foo(a: any) {
 }`,
                 filterText: "foo",
-                replacementSpan: undefined,
+                replacementSpan: test.ranges()[5],
             },
         ]
     },
