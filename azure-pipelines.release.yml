@@ -60,5 +60,5 @@ extends:
             templateContext:
               outputs:
                 - output: pipelineArtifact
-                  path: '$(Build.ArtifactStagingDirectory)'
-                  artifact: tgz
+                  targetPath: '$(Build.ArtifactStagingDirectory)'
+                  artifactName: tgz
