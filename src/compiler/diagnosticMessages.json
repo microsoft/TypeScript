@@ -7988,5 +7988,14 @@
     "'await using' statements cannot be used inside a class static block.": {
         "category": "Error",
         "code": 18054
+    },
+    "There is no signature in type {0} such that its parameters are assignable to the parameters of signature {1}": {
+        "category": "Error",
+        "code": 18055
+    },
+    "Parameters of signature {0} are not assignable to the parameters of any signature in type {1}": {
+        "category": "Error",
+        "code": 18056
     }
+
 }

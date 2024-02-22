@@ -21928,139 +21928,106 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
          * #57087
          */
         function checkFunctionRelatedToIntersection(source: Type, target: Type, _reportErrors: boolean): { computed: boolean; ternary: Ternary; } {
-            const origSourceSignatures = getSignaturesOfType(source, SignatureKind.Call);
-            Debug.assert(origSourceSignatures.length);
-            let sourceSignatures: readonly Signature[];
-            if (origSourceSignatures[0].compositeSignatures?.length && origSourceSignatures[0].compositeKind === TypeFlags.Intersection) {
-                if (origSourceSignatures.length !== 1) {
-                    Debug.assert(false, `origSourceSignatures.length!==1`);
-                    return { computed: false, ternary: Ternary.Unknown };
-                }
-                sourceSignatures = origSourceSignatures[0].compositeSignatures;
-                if ((target as IntersectionType).types.length !== sourceSignatures.length) {
-                    Debug.assert(false, `(target as IntersectionType).types.length!==sourceSignatures.length`);
-                    return { computed: false, ternary: Ternary.Unknown };
-                }
-                for (let si = 0; si < sourceSignatures.length; ++si) {
-                    const sourceSig = sourceSignatures[si];
-                    if (!!origSourceSignatures[0].resolvedReturnType && !sourceSig.resolvedReturnType) {
-                        Debug.assert(false, `!!origSourceSignatures[0].resolvedReturnType && !sourceSig.resolvedReturnType`);
-                    }
-                    const targetType = (target as IntersectionType).types[si];
-                    const targetSigs = getSignaturesOfType(targetType, SignatureKind.Call);
-                    Debug.assert(targetSigs.length === 1);
+            const sourceSignatures = getSignaturesOfType(source, SignatureKind.Call);
 
-                    const related = compareSignaturesRelated(sourceSig, targetSigs[0], SignatureCheckMode.None | SignatureCheckMode.IgnoreReturnTypes, /*reportErrors*/ false, /*errorReporter*/ undefined, /*incompatibleErrorReporter*/ undefined, compareTypesAssignable, /*reportUnreliableMarkers*/ undefined, /*compareTypesUnilaterally*/ true);
-                    if (related !== Ternary.True) {
-                        Debug.assert(related === Ternary.False, "related === Ternary.False");
-                        return { computed: true, ternary: Ternary.False };
-                    }
-                    const targetReturnType = getReturnTypeOfSignature(targetSigs[0]);
-                    const sourceReturnType = getReturnTypeOfSignature(sourceSig);
-                    if (targetReturnType !== voidType && !isTypeAssignableTo(sourceReturnType, targetReturnType)) {
-                        return { computed: true, ternary: Ternary.False };
-                    }
-                }
-                return { computed: true, ternary: Ternary.True };
-            }
-            else {
-                sourceSignatures = origSourceSignatures;
-            }
-
-            function compareOneSourceSigToOneTargetSig(tsig: Signature, ssig: Signature, accum: { hadMatch: boolean; gReturn: Type; gReturnAllVoid: boolean; }, _si: number, _tti: number, _ti: number): void {
+            function compareOneSourceSigToOneTargetSig(tsig: Signature, ssig: Signature, accum:{ hadMatch: boolean, gReturn: Type, gReturnAllVoid: boolean}, _si: number, _tti: number, _ti:number): boolean {
                 const targetReturnType = getReturnTypeOfSignature(tsig);
-                const sourceReturnType = getReturnTypeOfSignature(ssig);
-                const someAssignable = (src: Type, trg: Type) => {
-                    if (trg === voidType) return true; // because the source output can be ignored
-                    if (src.flags & TypeFlags.Union) {
-                        return (src as UnionType).types.some(srct => isTypeAssignableTo(srct, trg));
+                if (
+                    compareSignaturesRelated(
+                        ssig,
+                        tsig,
+                        SignatureCheckMode.None | SignatureCheckMode.IgnoreReturnTypes,
+                        /*reportErrors*/ false,
+                        /*errorReporter*/ undefined,
+                        /*incompatibleErrorReporter*/ undefined,
+                        compareTypesIdentical, //compareTypesAssignable,
+                        /*reportUnreliableMarkers*/ undefined,
+                        /*compareTypesUnilaterally*/ true,
+                    ) === Ternary.True
+                ) {
+                    accum.hadMatch = true;
+                    if (targetReturnType !== voidType) {
+                        accum.gReturn = getUnionType([accum.gReturn, targetReturnType]);
+                        accum.gReturnAllVoid = false;
                     }
-                    else return isTypeAssignableTo(src, trg);
-                };
-
-                if (someAssignable(sourceReturnType, targetReturnType)) {
-                    const compareTypes: TypeComparer = !onlyOneSourceSig
-                        ? compareTypesAssignable
-                        : (s: Type, t: Type, _reportErrors: boolean | undefined) => {
-                            return compareTypesAssignable(s, t) || compareTypesAssignable(t, s);
-                        };
-                    if (
-                        compareSignaturesRelated(
-                            ssig,
-                            tsig,
-                            SignatureCheckMode.None | SignatureCheckMode.IgnoreReturnTypes,
-                            /*reportErrors*/ false,
-                            /*errorReporter*/ undefined,
-                            /*incompatibleErrorReporter*/ undefined,
-                            compareTypes,
-                            /*reportUnreliableMarkers*/ undefined,
-                            /*compareTypesUnilaterally*/ true,
-                        ) === Ternary.True
-                    ) {
-                        accum.hadMatch = true;
-                        if (targetReturnType !== voidType) {
-                            accum.gReturn = getUnionType([accum.gReturn, targetReturnType]);
-                            accum.gReturnAllVoid = false;
-                        }
-                    }
+                    return true;
                 }
+                return false;
+            } // compareOneSourceSigToOneTargetSig
+
+            const constructSignatureToString = (signature: Signature, forceReturnType?: Type) => {
+                const origReturnType = signature.resolvedReturnType;
+                signature.resolvedReturnType = forceReturnType;
+                let str = signatureToString(signature, /*enclosingDeclaration*/ undefined, TypeFormatFlags.WriteArrowStyleSignature, SignatureKind.Call);
+                signature.resolvedReturnType = origReturnType;
+                return str;
             }
-            const onlyOneSourceSig = sourceSignatures.length === 1;
 
-            // For the record, this branch is never hit in runtests-parallel.  However, ff `typeRelatedToEachType` is called before `checkFunctionRelatedToIntersection` then it is hit, and it was tested like that.
-            // const enableOneToOneCheckFirst = true;
-            // if (enableOneToOneCheckFirst && !onlyOneSourceSig){
-            //     if ((target as IntersectionType).types.length===sourceSignatures.length && (target as IntersectionType).types.every((targetMember)=>{
-            //         getSignaturesOfType(targetMember, SignatureKind.Call).length===1;
-            //     })){
-            //         const failed11 = sourceSignatures.some((ssig,_si)=>{
-            //             const accum = {
-            //                 hadMatch: false,
-            //                 gReturn: neverType as Type,
-            //                 gReturnAllVoid: true
-            //             };
-            //             const tsig = getSignaturesOfType((target as IntersectionType).types[_si], SignatureKind.Call)[0];
-            //             compareOneSourceSigToOneTargetSig(tsig, ssig, accum, _si, _si, 0);
-
-            //             if (!accum.hadMatch) {
-            //                 return true; // failed { computed: true, ternary: Ternary.False };
-            //             }
-            //             else {
-            //                 const returnType = getReturnTypeOfSignature(ssig);
-            //                 if (!accum.gReturnAllVoid && !isTypeAssignableTo(returnType, accum.gReturn)) {
-            //                     return true; // failed { computed: true, ternary: Ternary.False };
-            //                 }
-            //             }
-            //         });
-            //         if (!failed11) {
-            //             Debug.assert(false,"findout out which, if any, tests hit this branch");
-            //             return { computed: true, ternary: Ternary.True };
-            //         }
-            //         // else fall through to sample x target comparison
-            //     }
-            // }
+            const mapAssignedToBy: Map</*tti*/number,Map</*ti*/number, /*some si*/true>> = new Map();
 
             const failed = sourceSignatures.some((ssig, _si) => {
+                if (getReturnTypeOfSignature(ssig)===neverType) return false;
                 const accum = {
                     hadMatch: false,
                     gReturn: neverType as Type,
                     gReturnAllVoid: true,
                 };
+                const matchedTargetSigs: Signature[] = [];
                 (target as IntersectionType).types.forEach((targetMember, _tti) => {
                     const targetSignatures = getSignaturesOfType(targetMember, SignatureKind.Call);
-                    targetSignatures.forEach((tsig, _ti) => compareOneSourceSigToOneTargetSig(tsig, ssig, accum, _si, _tti, _ti));
+                    targetSignatures.forEach((tsig, _ti) => {
+                        if (compareOneSourceSigToOneTargetSig(tsig, ssig, accum, _si, _tti, _ti)){
+                            matchedTargetSigs.push(tsig);
+                        }
+                    });
                 });
                 if (!accum.hadMatch) {
-                    return true; // failed { computed: true, ternary: Ternary.False };
+                    if (_reportErrors){
+                        //errorInfo = undefined; // clear it.
+                        resetErrorInfo({skipParentCounter:0} as ReturnType<typeof captureErrorCalculationState>);
+                        reportError(Diagnostics.Parameters_of_signature_0_are_not_assignable_to_the_parameters_of_any_signature_in_type_1,
+                            constructSignatureToString(ssig), typeToString(target));
+                        //reportError(Diagnostics.Type_0_is_not_assignable_to_type_1, typeToString(source), typeToString(target));
+                    }
+                    return true; // failed
                 }
                 else {
                     const returnType = getReturnTypeOfSignature(ssig);
                     if (!accum.gReturnAllVoid && !isTypeAssignableTo(returnType, accum.gReturn)) {
-                        return true; // failed { computed: true, ternary: Ternary.False };
+                        if (_reportErrors){
+                            // The more detailed error message goes first
+                            resetErrorInfo({skipParentCounter:0} as ReturnType<typeof captureErrorCalculationState>);
+                            reportError(Diagnostics.Type_0_is_not_assignable_to_type_1, typeToString(returnType), typeToString(accum.gReturn));
+                            const strset = new Set<string>();
+                            matchedTargetSigs.forEach((tsig)=>strset.add(constructSignatureToString(tsig)));
+                            const strarr: string[] = [];
+                            strset.forEach((tstr)=>strarr.push(tstr));
+                            reportError(Diagnostics.Type_0_is_not_assignable_to_type_1, constructSignatureToString(ssig), strarr.join(" | "));
+                        }
+                        return true; // failed
                     }
                 }
             });
             if (failed) return { computed: true, ternary: Ternary.False };
+
+            const failed2 = (target as IntersectionType).types.some((targetMember, _tti) => {
+                const mtti = mapAssignedToBy.get(_tti);
+                const targetSignatures = getSignaturesOfType(targetMember, SignatureKind.Call);
+                return targetSignatures.some((tsig, _ti) => {
+                    if (!mtti || !mtti.get(_ti)){
+                        if (_reportErrors){
+                            // The more detailed error message goes first
+                            resetErrorInfo({skipParentCounter:0} as ReturnType<typeof captureErrorCalculationState>);
+                            reportError(Diagnostics.There_is_no_signature_in_type_0_such_that_its_parameters_are_assignable_to_the_parameters_of_signature_1,
+                                typeToString(source), constructSignatureToString(tsig, anyType));
+                            reportError(Diagnostics.Type_0_is_not_assignable_to_type_1, typeToString(source), typeToString(targetMember));
+                        }
+                        return true;
+                    }
+                });
+            });
+            if (failed2) return { computed: true, ternary: Ternary.False };
+
             return { computed: true, ternary: Ternary.True };
         }
         function unionOrIntersectionRelatedTo(source: Type, target: Type, reportErrors: boolean, intersectionState: IntersectionState): Ternary {
@@ -22094,11 +22061,11 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             if (target.flags & TypeFlags.Intersection) {
                 const result1 = typeRelatedToEachType(source, target as IntersectionType, reportErrors, IntersectionState.Target);
 
-                if (!reportErrors && result1 !== Ternary.True) {
+                if (result1 === Ternary.False) {
                     /**
-                     * [cph] In the case of some target intersections of functions, follow #57087
+                     * [cph] Existing code checks that source supports target, but not that source fits within target.
                      */
-                    const target0 = (target as IntersectionType).types[0];
+                    //const target0 = (target as IntersectionType).types[0];
                     const sourceSignatures = getSignaturesOfType(source, SignatureKind.Call);
                     if (
                         sourceSignatures.every(sourceSig => {
@@ -22106,8 +22073,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         })
                     ) {
                         if (
-                            source.flags & TypeFlags.Object && getSignaturesOfType(source, SignatureKind.Call).length > 0
-                            && target0.flags & TypeFlags.Object && getSignaturesOfType(target0, SignatureKind.Call).length > 0
+                            source.flags & TypeFlags.Object && getSignaturesOfType(source, SignatureKind.Call).length > 1
+                            //&& target.flags & TypeFlags.Object && getSignaturesOfType(target0, SignatureKind.Call).length > 1 // already known to be intersection type
                         ) {
                             const { computed, ternary } = checkFunctionRelatedToIntersection(source, target as IntersectionType, reportErrors);
                             if (computed) {
