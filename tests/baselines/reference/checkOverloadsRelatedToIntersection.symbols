@@ -1,0 +1,1403 @@
+//// [tests/cases/compiler/checkOverloadsRelatedToIntersection.ts] ////
+
+=== -57087-101.ts ===
+/**********************/
+
+namespace ns0 {
+>ns0 : Symbol(ns0, Decl(-57087-101.ts, 0, 0))
+
+interface FMap<T,R> {
+>FMap : Symbol(FMap, Decl(-57087-101.ts, 2, 15))
+>T : Symbol(T, Decl(-57087-101.ts, 3, 15))
+>R : Symbol(R, Decl(-57087-101.ts, 3, 17))
+
+    f:(x:T)=>R
+>f : Symbol(FMap.f, Decl(-57087-101.ts, 3, 21))
+>x : Symbol(x, Decl(-57087-101.ts, 4, 7))
+>T : Symbol(T, Decl(-57087-101.ts, 3, 15))
+>R : Symbol(R, Decl(-57087-101.ts, 3, 17))
+
+    g(f:(x:T)=>R):R;
+>g : Symbol(FMap.g, Decl(-57087-101.ts, 4, 14))
+>f : Symbol(f, Decl(-57087-101.ts, 5, 6))
+>x : Symbol(x, Decl(-57087-101.ts, 5, 9))
+>T : Symbol(T, Decl(-57087-101.ts, 3, 15))
+>R : Symbol(R, Decl(-57087-101.ts, 3, 17))
+>R : Symbol(R, Decl(-57087-101.ts, 3, 17))
+}
+declare const x1: FMap<1|2,1|2>;
+>x1 : Symbol(x1, Decl(-57087-101.ts, 7, 13))
+>FMap : Symbol(FMap, Decl(-57087-101.ts, 2, 15))
+
+x1.g(x1.f); // no error
+>x1.g : Symbol(FMap.g, Decl(-57087-101.ts, 4, 14))
+>x1 : Symbol(x1, Decl(-57087-101.ts, 7, 13))
+>g : Symbol(FMap.g, Decl(-57087-101.ts, 4, 14))
+>x1.f : Symbol(FMap.f, Decl(-57087-101.ts, 3, 21))
+>x1 : Symbol(x1, Decl(-57087-101.ts, 7, 13))
+>f : Symbol(FMap.f, Decl(-57087-101.ts, 3, 21))
+
+declare const x2: FMap<2|3,"2"|"3">;
+>x2 : Symbol(x2, Decl(-57087-101.ts, 9, 13))
+>FMap : Symbol(FMap, Decl(-57087-101.ts, 2, 15))
+
+x2.g(x2.f); // no error
+>x2.g : Symbol(FMap.g, Decl(-57087-101.ts, 4, 14))
+>x2 : Symbol(x2, Decl(-57087-101.ts, 9, 13))
+>g : Symbol(FMap.g, Decl(-57087-101.ts, 4, 14))
+>x2.f : Symbol(FMap.f, Decl(-57087-101.ts, 3, 21))
+>x2 : Symbol(x2, Decl(-57087-101.ts, 9, 13))
+>f : Symbol(FMap.f, Decl(-57087-101.ts, 3, 21))
+
+const x = Math.random() < 0.5 ? x1 : x2;
+>x : Symbol(x, Decl(-57087-101.ts, 11, 5))
+>Math.random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
+>x1 : Symbol(x1, Decl(-57087-101.ts, 7, 13))
+>x2 : Symbol(x2, Decl(-57087-101.ts, 9, 13))
+
+x.g; // (method) FMap<T, R>.g(f: ((x: 1 | 2) => 1 | 2) & ((x: 2 | 3) => "2" | "3")): 1 | 2 | "2" | "3"
+>x.g : Symbol(FMap.g, Decl(-57087-101.ts, 4, 14), Decl(-57087-101.ts, 4, 14))
+>x : Symbol(x, Decl(-57087-101.ts, 11, 5))
+>g : Symbol(FMap.g, Decl(-57087-101.ts, 4, 14), Decl(-57087-101.ts, 4, 14))
+
+/*
+ * Exact expansion of x.g, with the intersection of the two function types expanded.
+ * Catch-all with "never" return is not required to pass the test.
+ */
+function ft0(x:1|2):1|2;
+>ft0 : Symbol(ft0, Decl(-57087-101.ts, 12, 4), Decl(-57087-101.ts, 18, 24), Decl(-57087-101.ts, 19, 28))
+>x : Symbol(x, Decl(-57087-101.ts, 18, 13))
+
+function ft0(x:2|3):"2"|"3";
+>ft0 : Symbol(ft0, Decl(-57087-101.ts, 12, 4), Decl(-57087-101.ts, 18, 24), Decl(-57087-101.ts, 19, 28))
+>x : Symbol(x, Decl(-57087-101.ts, 19, 13))
+
+function ft0(x:1|2|3){
+>ft0 : Symbol(ft0, Decl(-57087-101.ts, 12, 4), Decl(-57087-101.ts, 18, 24), Decl(-57087-101.ts, 19, 28))
+>x : Symbol(x, Decl(-57087-101.ts, 20, 13))
+
+    if (x!==3) return x1.f(x);
+>x : Symbol(x, Decl(-57087-101.ts, 20, 13))
+>x1.f : Symbol(FMap.f, Decl(-57087-101.ts, 3, 21))
+>x1 : Symbol(x1, Decl(-57087-101.ts, 7, 13))
+>f : Symbol(FMap.f, Decl(-57087-101.ts, 3, 21))
+>x : Symbol(x, Decl(-57087-101.ts, 20, 13))
+
+    else return x2.f(x);
+>x2.f : Symbol(FMap.f, Decl(-57087-101.ts, 3, 21))
+>x2 : Symbol(x2, Decl(-57087-101.ts, 9, 13))
+>f : Symbol(FMap.f, Decl(-57087-101.ts, 3, 21))
+>x : Symbol(x, Decl(-57087-101.ts, 20, 13))
+}
+x.g(ft0); // should not be error
+>x.g : Symbol(FMap.g, Decl(-57087-101.ts, 4, 14), Decl(-57087-101.ts, 4, 14))
+>x : Symbol(x, Decl(-57087-101.ts, 11, 5))
+>g : Symbol(FMap.g, Decl(-57087-101.ts, 4, 14), Decl(-57087-101.ts, 4, 14))
+>ft0 : Symbol(ft0, Decl(-57087-101.ts, 12, 4), Decl(-57087-101.ts, 18, 24), Decl(-57087-101.ts, 19, 28))
+
+/*
+ * Condtion for passing are:
+ * (a1) Every source overload is matches at least one target overload
+ * (a2) Every target overload is matched by at least one souce overload
+ * where "matching" is defined as
+ * (b1) the target result is void OR the target result and source result overlap // should be source result subset of target result ?
+ * (b2) the target and source parameters match identically up to the number of required source parameters.
+ * This test case fails because: source (x:1) is not identical to target (x:1|2) or (x:2|3)
+ */
+
+function ft1(x:1):1;
+>ft1 : Symbol(ft1, Decl(-57087-101.ts, 24, 9), Decl(-57087-101.ts, 36, 20), Decl(-57087-101.ts, 37, 20), Decl(-57087-101.ts, 38, 22))
+>x : Symbol(x, Decl(-57087-101.ts, 36, 13))
+
+function ft1(x:2):2;
+>ft1 : Symbol(ft1, Decl(-57087-101.ts, 24, 9), Decl(-57087-101.ts, 36, 20), Decl(-57087-101.ts, 37, 20), Decl(-57087-101.ts, 38, 22))
+>x : Symbol(x, Decl(-57087-101.ts, 37, 13))
+
+function ft1(x:3):"3";
+>ft1 : Symbol(ft1, Decl(-57087-101.ts, 24, 9), Decl(-57087-101.ts, 36, 20), Decl(-57087-101.ts, 37, 20), Decl(-57087-101.ts, 38, 22))
+>x : Symbol(x, Decl(-57087-101.ts, 38, 13))
+
+function ft1(x:1|2|3) {
+>ft1 : Symbol(ft1, Decl(-57087-101.ts, 24, 9), Decl(-57087-101.ts, 36, 20), Decl(-57087-101.ts, 37, 20), Decl(-57087-101.ts, 38, 22))
+>x : Symbol(x, Decl(-57087-101.ts, 39, 13))
+
+    switch (x) {
+>x : Symbol(x, Decl(-57087-101.ts, 39, 13))
+
+        case 1: return 1;
+        case 2: return 2;
+        case 3: return "3";
+    }
+    throw "unexpected error"
+}
+x.g(ft1); // should be error
+>x.g : Symbol(FMap.g, Decl(-57087-101.ts, 4, 14), Decl(-57087-101.ts, 4, 14))
+>x : Symbol(x, Decl(-57087-101.ts, 11, 5))
+>g : Symbol(FMap.g, Decl(-57087-101.ts, 4, 14), Decl(-57087-101.ts, 4, 14))
+>ft1 : Symbol(ft1, Decl(-57087-101.ts, 24, 9), Decl(-57087-101.ts, 36, 20), Decl(-57087-101.ts, 37, 20), Decl(-57087-101.ts, 38, 22))
+
+
+}
+
+
+/**********************/
+=== -57087-102.ts ===
+namespace ns1 {
+>ns1 : Symbol(ns1, Decl(-57087-102.ts, 0, 0))
+
+interface FMap<T,R> {
+>FMap : Symbol(FMap, Decl(-57087-102.ts, 0, 15))
+>T : Symbol(T, Decl(-57087-102.ts, 1, 15))
+>R : Symbol(R, Decl(-57087-102.ts, 1, 17))
+
+    f:(x:T)=>R
+>f : Symbol(FMap.f, Decl(-57087-102.ts, 1, 21))
+>x : Symbol(x, Decl(-57087-102.ts, 2, 7))
+>T : Symbol(T, Decl(-57087-102.ts, 1, 15))
+>R : Symbol(R, Decl(-57087-102.ts, 1, 17))
+
+    g(f:(x:T)=>R):R;
+>g : Symbol(FMap.g, Decl(-57087-102.ts, 2, 14))
+>f : Symbol(f, Decl(-57087-102.ts, 3, 6))
+>x : Symbol(x, Decl(-57087-102.ts, 3, 9))
+>T : Symbol(T, Decl(-57087-102.ts, 1, 15))
+>R : Symbol(R, Decl(-57087-102.ts, 1, 17))
+>R : Symbol(R, Decl(-57087-102.ts, 1, 17))
+}
+declare const x1: FMap<1|2,1|2>;
+>x1 : Symbol(x1, Decl(-57087-102.ts, 5, 13))
+>FMap : Symbol(FMap, Decl(-57087-102.ts, 0, 15))
+
+x1.g(x1.f); // no error
+>x1.g : Symbol(FMap.g, Decl(-57087-102.ts, 2, 14))
+>x1 : Symbol(x1, Decl(-57087-102.ts, 5, 13))
+>g : Symbol(FMap.g, Decl(-57087-102.ts, 2, 14))
+>x1.f : Symbol(FMap.f, Decl(-57087-102.ts, 1, 21))
+>x1 : Symbol(x1, Decl(-57087-102.ts, 5, 13))
+>f : Symbol(FMap.f, Decl(-57087-102.ts, 1, 21))
+
+declare const x2: FMap<2|3,"2"|"3">;
+>x2 : Symbol(x2, Decl(-57087-102.ts, 7, 13))
+>FMap : Symbol(FMap, Decl(-57087-102.ts, 0, 15))
+
+x2.g(x2.f); // no error
+>x2.g : Symbol(FMap.g, Decl(-57087-102.ts, 2, 14))
+>x2 : Symbol(x2, Decl(-57087-102.ts, 7, 13))
+>g : Symbol(FMap.g, Decl(-57087-102.ts, 2, 14))
+>x2.f : Symbol(FMap.f, Decl(-57087-102.ts, 1, 21))
+>x2 : Symbol(x2, Decl(-57087-102.ts, 7, 13))
+>f : Symbol(FMap.f, Decl(-57087-102.ts, 1, 21))
+
+const x = Math.random() < 0.5 ? x1 : x2;
+>x : Symbol(x, Decl(-57087-102.ts, 9, 5))
+>Math.random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
+>x1 : Symbol(x1, Decl(-57087-102.ts, 5, 13))
+>x2 : Symbol(x2, Decl(-57087-102.ts, 7, 13))
+
+x.g; // (method) FMap<T, R>.g(f: ((x: 1 | 2) => 1 | 2) & ((x: 2 | 3) => "2" | "3")): 1 | 2 | "2" | "3"
+>x.g : Symbol(FMap.g, Decl(-57087-102.ts, 2, 14), Decl(-57087-102.ts, 2, 14))
+>x : Symbol(x, Decl(-57087-102.ts, 9, 5))
+>g : Symbol(FMap.g, Decl(-57087-102.ts, 2, 14), Decl(-57087-102.ts, 2, 14))
+
+
+/**
+ * The following function ft3 should fail.  However, it currently does not
+ * The new code only handles cases that fail the in the original code.
+ * However, using such long overload chains is not desireable anyway - so we don't need to fix this?
+ * Maybe fail on when the number of source overloads is greater than the total number of target overloads?
+ */
+
+function ft3(x:1):"3"; // should cause x.g(ft3) to error
+>ft3 : Symbol(ft3, Decl(-57087-102.ts, 10, 4), Decl(-57087-102.ts, 20, 22), Decl(-57087-102.ts, 21, 22), Decl(-57087-102.ts, 22, 24), Decl(-57087-102.ts, 23, 24) ... and 1 more)
+>x : Symbol(x, Decl(-57087-102.ts, 20, 13))
+
+function ft3(x:3):"3";
+>ft3 : Symbol(ft3, Decl(-57087-102.ts, 10, 4), Decl(-57087-102.ts, 20, 22), Decl(-57087-102.ts, 21, 22), Decl(-57087-102.ts, 22, 24), Decl(-57087-102.ts, 23, 24) ... and 1 more)
+>x : Symbol(x, Decl(-57087-102.ts, 21, 13))
+
+function ft3(x:2):2|"2";
+>ft3 : Symbol(ft3, Decl(-57087-102.ts, 10, 4), Decl(-57087-102.ts, 20, 22), Decl(-57087-102.ts, 21, 22), Decl(-57087-102.ts, 22, 24), Decl(-57087-102.ts, 23, 24) ... and 1 more)
+>x : Symbol(x, Decl(-57087-102.ts, 22, 13))
+
+function ft3(x:1|2):1|2; // (4) identical to x1.f
+>ft3 : Symbol(ft3, Decl(-57087-102.ts, 10, 4), Decl(-57087-102.ts, 20, 22), Decl(-57087-102.ts, 21, 22), Decl(-57087-102.ts, 22, 24), Decl(-57087-102.ts, 23, 24) ... and 1 more)
+>x : Symbol(x, Decl(-57087-102.ts, 23, 13))
+
+function ft3(x:2|3):"2"|"3"; // (5) identical to x2.f
+>ft3 : Symbol(ft3, Decl(-57087-102.ts, 10, 4), Decl(-57087-102.ts, 20, 22), Decl(-57087-102.ts, 21, 22), Decl(-57087-102.ts, 22, 24), Decl(-57087-102.ts, 23, 24) ... and 1 more)
+>x : Symbol(x, Decl(-57087-102.ts, 24, 13))
+
+function ft3(x:1|2|3){
+>ft3 : Symbol(ft3, Decl(-57087-102.ts, 10, 4), Decl(-57087-102.ts, 20, 22), Decl(-57087-102.ts, 21, 22), Decl(-57087-102.ts, 22, 24), Decl(-57087-102.ts, 23, 24) ... and 1 more)
+>x : Symbol(x, Decl(-57087-102.ts, 25, 13))
+
+    if (x===1) return x1.f(x);
+>x : Symbol(x, Decl(-57087-102.ts, 25, 13))
+>x1.f : Symbol(FMap.f, Decl(-57087-102.ts, 1, 21))
+>x1 : Symbol(x1, Decl(-57087-102.ts, 5, 13))
+>f : Symbol(FMap.f, Decl(-57087-102.ts, 1, 21))
+>x : Symbol(x, Decl(-57087-102.ts, 25, 13))
+
+    if (x===3) return x2.f(x);
+>x : Symbol(x, Decl(-57087-102.ts, 25, 13))
+>x2.f : Symbol(FMap.f, Decl(-57087-102.ts, 1, 21))
+>x2 : Symbol(x2, Decl(-57087-102.ts, 7, 13))
+>f : Symbol(FMap.f, Decl(-57087-102.ts, 1, 21))
+>x : Symbol(x, Decl(-57087-102.ts, 25, 13))
+
+    return Math.random() < 0.5 ? x1.f(x) : x2.f(x);
+>Math.random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
+>x1.f : Symbol(FMap.f, Decl(-57087-102.ts, 1, 21))
+>x1 : Symbol(x1, Decl(-57087-102.ts, 5, 13))
+>f : Symbol(FMap.f, Decl(-57087-102.ts, 1, 21))
+>x : Symbol(x, Decl(-57087-102.ts, 25, 13))
+>x2.f : Symbol(FMap.f, Decl(-57087-102.ts, 1, 21))
+>x2 : Symbol(x2, Decl(-57087-102.ts, 7, 13))
+>f : Symbol(FMap.f, Decl(-57087-102.ts, 1, 21))
+>x : Symbol(x, Decl(-57087-102.ts, 25, 13))
+}
+x.g(ft3); // should error (but currently doesn't)
+>x.g : Symbol(FMap.g, Decl(-57087-102.ts, 2, 14), Decl(-57087-102.ts, 2, 14))
+>x : Symbol(x, Decl(-57087-102.ts, 9, 5))
+>g : Symbol(FMap.g, Decl(-57087-102.ts, 2, 14), Decl(-57087-102.ts, 2, 14))
+>ft3 : Symbol(ft3, Decl(-57087-102.ts, 10, 4), Decl(-57087-102.ts, 20, 22), Decl(-57087-102.ts, 21, 22), Decl(-57087-102.ts, 22, 24), Decl(-57087-102.ts, 23, 24) ... and 1 more)
+
+/**
+ * The following function ft4 should not fail, and it currently does not.
+ * However, using such long overload chains is not friendly anyway, so it is irrelevant.
+ */
+
+function ft4(x:1):1;
+>ft4 : Symbol(ft4, Decl(-57087-102.ts, 30, 9), Decl(-57087-102.ts, 37, 20), Decl(-57087-102.ts, 38, 22), Decl(-57087-102.ts, 39, 24), Decl(-57087-102.ts, 40, 24) ... and 1 more)
+>x : Symbol(x, Decl(-57087-102.ts, 37, 13))
+
+function ft4(x:3):"3";
+>ft4 : Symbol(ft4, Decl(-57087-102.ts, 30, 9), Decl(-57087-102.ts, 37, 20), Decl(-57087-102.ts, 38, 22), Decl(-57087-102.ts, 39, 24), Decl(-57087-102.ts, 40, 24) ... and 1 more)
+>x : Symbol(x, Decl(-57087-102.ts, 38, 13))
+
+function ft4(x:2):2|"2";
+>ft4 : Symbol(ft4, Decl(-57087-102.ts, 30, 9), Decl(-57087-102.ts, 37, 20), Decl(-57087-102.ts, 38, 22), Decl(-57087-102.ts, 39, 24), Decl(-57087-102.ts, 40, 24) ... and 1 more)
+>x : Symbol(x, Decl(-57087-102.ts, 39, 13))
+
+function ft4(x:1|2):1|2; // (4) identical to x1.f
+>ft4 : Symbol(ft4, Decl(-57087-102.ts, 30, 9), Decl(-57087-102.ts, 37, 20), Decl(-57087-102.ts, 38, 22), Decl(-57087-102.ts, 39, 24), Decl(-57087-102.ts, 40, 24) ... and 1 more)
+>x : Symbol(x, Decl(-57087-102.ts, 40, 13))
+
+function ft4(x:2|3):"2"|"3"; // (5) identical to x2.f
+>ft4 : Symbol(ft4, Decl(-57087-102.ts, 30, 9), Decl(-57087-102.ts, 37, 20), Decl(-57087-102.ts, 38, 22), Decl(-57087-102.ts, 39, 24), Decl(-57087-102.ts, 40, 24) ... and 1 more)
+>x : Symbol(x, Decl(-57087-102.ts, 41, 13))
+
+function ft4(x:1|2|3){
+>ft4 : Symbol(ft4, Decl(-57087-102.ts, 30, 9), Decl(-57087-102.ts, 37, 20), Decl(-57087-102.ts, 38, 22), Decl(-57087-102.ts, 39, 24), Decl(-57087-102.ts, 40, 24) ... and 1 more)
+>x : Symbol(x, Decl(-57087-102.ts, 42, 13))
+
+    if (x===1) return x1.f(x);
+>x : Symbol(x, Decl(-57087-102.ts, 42, 13))
+>x1.f : Symbol(FMap.f, Decl(-57087-102.ts, 1, 21))
+>x1 : Symbol(x1, Decl(-57087-102.ts, 5, 13))
+>f : Symbol(FMap.f, Decl(-57087-102.ts, 1, 21))
+>x : Symbol(x, Decl(-57087-102.ts, 42, 13))
+
+    if (x===3) return x2.f(x);
+>x : Symbol(x, Decl(-57087-102.ts, 42, 13))
+>x2.f : Symbol(FMap.f, Decl(-57087-102.ts, 1, 21))
+>x2 : Symbol(x2, Decl(-57087-102.ts, 7, 13))
+>f : Symbol(FMap.f, Decl(-57087-102.ts, 1, 21))
+>x : Symbol(x, Decl(-57087-102.ts, 42, 13))
+
+    return Math.random() < 0.5 ? x1.f(x) : x2.f(x);
+>Math.random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
+>x1.f : Symbol(FMap.f, Decl(-57087-102.ts, 1, 21))
+>x1 : Symbol(x1, Decl(-57087-102.ts, 5, 13))
+>f : Symbol(FMap.f, Decl(-57087-102.ts, 1, 21))
+>x : Symbol(x, Decl(-57087-102.ts, 42, 13))
+>x2.f : Symbol(FMap.f, Decl(-57087-102.ts, 1, 21))
+>x2 : Symbol(x2, Decl(-57087-102.ts, 7, 13))
+>f : Symbol(FMap.f, Decl(-57087-102.ts, 1, 21))
+>x : Symbol(x, Decl(-57087-102.ts, 42, 13))
+}
+x.g(ft4); // should not error
+>x.g : Symbol(FMap.g, Decl(-57087-102.ts, 2, 14), Decl(-57087-102.ts, 2, 14))
+>x : Symbol(x, Decl(-57087-102.ts, 9, 5))
+>g : Symbol(FMap.g, Decl(-57087-102.ts, 2, 14), Decl(-57087-102.ts, 2, 14))
+>ft4 : Symbol(ft4, Decl(-57087-102.ts, 30, 9), Decl(-57087-102.ts, 37, 20), Decl(-57087-102.ts, 38, 22), Decl(-57087-102.ts, 39, 24), Decl(-57087-102.ts, 40, 24) ... and 1 more)
+
+
+}
+
+
+/**********************/
+=== -57087-104.ts ===
+namespace ns2 {
+>ns2 : Symbol(ns2, Decl(-57087-104.ts, 0, 0))
+
+interface C {
+>C : Symbol(C, Decl(-57087-104.ts, 0, 15))
+
+  (x:1):"1";
+>x : Symbol(x, Decl(-57087-104.ts, 2, 3))
+
+  (x:2):"20";
+>x : Symbol(x, Decl(-57087-104.ts, 3, 3))
+
+  (x:number):number | "1" | "20";
+>x : Symbol(x, Decl(-57087-104.ts, 4, 3))
+
+};
+interface B {
+>B : Symbol(B, Decl(-57087-104.ts, 5, 2))
+
+  (x:2):"2"
+>x : Symbol(x, Decl(-57087-104.ts, 7, 3))
+
+  (x:3):"30"
+>x : Symbol(x, Decl(-57087-104.ts, 8, 3))
+
+  (x:number):number | "2" | "30";
+>x : Symbol(x, Decl(-57087-104.ts, 9, 3))
+
+};
+interface A {
+>A : Symbol(A, Decl(-57087-104.ts, 10, 2))
+
+  (x:3):"3"
+>x : Symbol(x, Decl(-57087-104.ts, 12, 3))
+
+  (x:1):"10"
+>x : Symbol(x, Decl(-57087-104.ts, 13, 3))
+
+  (x:number):number | "3" | "10";
+>x : Symbol(x, Decl(-57087-104.ts, 14, 3))
+
+};
+
+type W = (A & B & C)|(A & C & B)|(B & A & C)|(B & C & A)|(C & A & B)|(C & B & A);
+>W : Symbol(W, Decl(-57087-104.ts, 15, 2))
+>A : Symbol(A, Decl(-57087-104.ts, 10, 2))
+>B : Symbol(B, Decl(-57087-104.ts, 5, 2))
+>C : Symbol(C, Decl(-57087-104.ts, 0, 15))
+>A : Symbol(A, Decl(-57087-104.ts, 10, 2))
+>C : Symbol(C, Decl(-57087-104.ts, 0, 15))
+>B : Symbol(B, Decl(-57087-104.ts, 5, 2))
+>B : Symbol(B, Decl(-57087-104.ts, 5, 2))
+>A : Symbol(A, Decl(-57087-104.ts, 10, 2))
+>C : Symbol(C, Decl(-57087-104.ts, 0, 15))
+>B : Symbol(B, Decl(-57087-104.ts, 5, 2))
+>C : Symbol(C, Decl(-57087-104.ts, 0, 15))
+>A : Symbol(A, Decl(-57087-104.ts, 10, 2))
+>C : Symbol(C, Decl(-57087-104.ts, 0, 15))
+>A : Symbol(A, Decl(-57087-104.ts, 10, 2))
+>B : Symbol(B, Decl(-57087-104.ts, 5, 2))
+>C : Symbol(C, Decl(-57087-104.ts, 0, 15))
+>B : Symbol(B, Decl(-57087-104.ts, 5, 2))
+>A : Symbol(A, Decl(-57087-104.ts, 10, 2))
+
+/*
+* Scenario:
+* (1) Overloads: Usng fully expanded domain support for C & B & A, so that all errors are detected at compile time
+* (2) Implementation:
+*     - Note extra lines added to make the function signature compatible with the implementation
+* Disadvatage: More verbosity in number of overloads and in implementation.
+* Number of overloads could impact compile time, and makes life harder for downstream users of the function
+*/
+function foo2(x:1):"1";
+>foo2 : Symbol(foo2, Decl(-57087-104.ts, 17, 81), Decl(-57087-104.ts, 27, 23), Decl(-57087-104.ts, 28, 24), Decl(-57087-104.ts, 29, 31), Decl(-57087-104.ts, 30, 22) ... and 5 more)
+>x : Symbol(x, Decl(-57087-104.ts, 27, 14))
+
+function foo2(x:2):"20";
+>foo2 : Symbol(foo2, Decl(-57087-104.ts, 17, 81), Decl(-57087-104.ts, 27, 23), Decl(-57087-104.ts, 28, 24), Decl(-57087-104.ts, 29, 31), Decl(-57087-104.ts, 30, 22) ... and 5 more)
+>x : Symbol(x, Decl(-57087-104.ts, 28, 14))
+
+function foo2(x:number):number;
+>foo2 : Symbol(foo2, Decl(-57087-104.ts, 17, 81), Decl(-57087-104.ts, 27, 23), Decl(-57087-104.ts, 28, 24), Decl(-57087-104.ts, 29, 31), Decl(-57087-104.ts, 30, 22) ... and 5 more)
+>x : Symbol(x, Decl(-57087-104.ts, 29, 14))
+
+function foo2(x:2):"2"
+>foo2 : Symbol(foo2, Decl(-57087-104.ts, 17, 81), Decl(-57087-104.ts, 27, 23), Decl(-57087-104.ts, 28, 24), Decl(-57087-104.ts, 29, 31), Decl(-57087-104.ts, 30, 22) ... and 5 more)
+>x : Symbol(x, Decl(-57087-104.ts, 30, 14))
+
+function foo2(x:3):"30"
+>foo2 : Symbol(foo2, Decl(-57087-104.ts, 17, 81), Decl(-57087-104.ts, 27, 23), Decl(-57087-104.ts, 28, 24), Decl(-57087-104.ts, 29, 31), Decl(-57087-104.ts, 30, 22) ... and 5 more)
+>x : Symbol(x, Decl(-57087-104.ts, 31, 14))
+
+function foo2(x:number):number;
+>foo2 : Symbol(foo2, Decl(-57087-104.ts, 17, 81), Decl(-57087-104.ts, 27, 23), Decl(-57087-104.ts, 28, 24), Decl(-57087-104.ts, 29, 31), Decl(-57087-104.ts, 30, 22) ... and 5 more)
+>x : Symbol(x, Decl(-57087-104.ts, 32, 14))
+
+function foo2(x:3):"3"
+>foo2 : Symbol(foo2, Decl(-57087-104.ts, 17, 81), Decl(-57087-104.ts, 27, 23), Decl(-57087-104.ts, 28, 24), Decl(-57087-104.ts, 29, 31), Decl(-57087-104.ts, 30, 22) ... and 5 more)
+>x : Symbol(x, Decl(-57087-104.ts, 33, 14))
+
+function foo2(x:1):"10"
+>foo2 : Symbol(foo2, Decl(-57087-104.ts, 17, 81), Decl(-57087-104.ts, 27, 23), Decl(-57087-104.ts, 28, 24), Decl(-57087-104.ts, 29, 31), Decl(-57087-104.ts, 30, 22) ... and 5 more)
+>x : Symbol(x, Decl(-57087-104.ts, 34, 14))
+
+function foo2(x:number):number;
+>foo2 : Symbol(foo2, Decl(-57087-104.ts, 17, 81), Decl(-57087-104.ts, 27, 23), Decl(-57087-104.ts, 28, 24), Decl(-57087-104.ts, 29, 31), Decl(-57087-104.ts, 30, 22) ... and 5 more)
+>x : Symbol(x, Decl(-57087-104.ts, 35, 14))
+
+function foo2(x:number){
+>foo2 : Symbol(foo2, Decl(-57087-104.ts, 17, 81), Decl(-57087-104.ts, 27, 23), Decl(-57087-104.ts, 28, 24), Decl(-57087-104.ts, 29, 31), Decl(-57087-104.ts, 30, 22) ... and 5 more)
+>x : Symbol(x, Decl(-57087-104.ts, 36, 14))
+
+  if (x===1) return "1";
+>x : Symbol(x, Decl(-57087-104.ts, 36, 14))
+
+  if (x===2) return "2";
+>x : Symbol(x, Decl(-57087-104.ts, 36, 14))
+
+  if (x===3) return "3";
+>x : Symbol(x, Decl(-57087-104.ts, 36, 14))
+
+  // (*) These nonsense unused extra lines need to be added to make the function signature compatible with the implementation
+  if (x===1) return "10";
+>x : Symbol(x, Decl(-57087-104.ts, 36, 14))
+
+  if (x===2) return "20";
+>x : Symbol(x, Decl(-57087-104.ts, 36, 14))
+
+  if (x===3) return "30";
+>x : Symbol(x, Decl(-57087-104.ts, 36, 14))
+
+  return x;
+>x : Symbol(x, Decl(-57087-104.ts, 36, 14))
+}
+
+foo2 satisfies A & B & C; // should satisfy
+>foo2 : Symbol(foo2, Decl(-57087-104.ts, 17, 81), Decl(-57087-104.ts, 27, 23), Decl(-57087-104.ts, 28, 24), Decl(-57087-104.ts, 29, 31), Decl(-57087-104.ts, 30, 22) ... and 5 more)
+>A : Symbol(A, Decl(-57087-104.ts, 10, 2))
+>B : Symbol(B, Decl(-57087-104.ts, 5, 2))
+>C : Symbol(C, Decl(-57087-104.ts, 0, 15))
+
+foo2 satisfies A & C & B; // should satisfy
+>foo2 : Symbol(foo2, Decl(-57087-104.ts, 17, 81), Decl(-57087-104.ts, 27, 23), Decl(-57087-104.ts, 28, 24), Decl(-57087-104.ts, 29, 31), Decl(-57087-104.ts, 30, 22) ... and 5 more)
+>A : Symbol(A, Decl(-57087-104.ts, 10, 2))
+>C : Symbol(C, Decl(-57087-104.ts, 0, 15))
+>B : Symbol(B, Decl(-57087-104.ts, 5, 2))
+
+foo2 satisfies B & A & C; // should satisfy
+>foo2 : Symbol(foo2, Decl(-57087-104.ts, 17, 81), Decl(-57087-104.ts, 27, 23), Decl(-57087-104.ts, 28, 24), Decl(-57087-104.ts, 29, 31), Decl(-57087-104.ts, 30, 22) ... and 5 more)
+>B : Symbol(B, Decl(-57087-104.ts, 5, 2))
+>A : Symbol(A, Decl(-57087-104.ts, 10, 2))
+>C : Symbol(C, Decl(-57087-104.ts, 0, 15))
+
+foo2 satisfies B & C & A; // should satisfy
+>foo2 : Symbol(foo2, Decl(-57087-104.ts, 17, 81), Decl(-57087-104.ts, 27, 23), Decl(-57087-104.ts, 28, 24), Decl(-57087-104.ts, 29, 31), Decl(-57087-104.ts, 30, 22) ... and 5 more)
+>B : Symbol(B, Decl(-57087-104.ts, 5, 2))
+>C : Symbol(C, Decl(-57087-104.ts, 0, 15))
+>A : Symbol(A, Decl(-57087-104.ts, 10, 2))
+
+foo2 satisfies C & A & B; // should satisfy
+>foo2 : Symbol(foo2, Decl(-57087-104.ts, 17, 81), Decl(-57087-104.ts, 27, 23), Decl(-57087-104.ts, 28, 24), Decl(-57087-104.ts, 29, 31), Decl(-57087-104.ts, 30, 22) ... and 5 more)
+>C : Symbol(C, Decl(-57087-104.ts, 0, 15))
+>A : Symbol(A, Decl(-57087-104.ts, 10, 2))
+>B : Symbol(B, Decl(-57087-104.ts, 5, 2))
+
+foo2 satisfies C & B & A; // should satisfy
+>foo2 : Symbol(foo2, Decl(-57087-104.ts, 17, 81), Decl(-57087-104.ts, 27, 23), Decl(-57087-104.ts, 28, 24), Decl(-57087-104.ts, 29, 31), Decl(-57087-104.ts, 30, 22) ... and 5 more)
+>C : Symbol(C, Decl(-57087-104.ts, 0, 15))
+>B : Symbol(B, Decl(-57087-104.ts, 5, 2))
+>A : Symbol(A, Decl(-57087-104.ts, 10, 2))
+
+foo2 satisfies W; // should satisfy
+>foo2 : Symbol(foo2, Decl(-57087-104.ts, 17, 81), Decl(-57087-104.ts, 27, 23), Decl(-57087-104.ts, 28, 24), Decl(-57087-104.ts, 29, 31), Decl(-57087-104.ts, 30, 22) ... and 5 more)
+>W : Symbol(W, Decl(-57087-104.ts, 15, 2))
+
+
+/*
+* Scenario: Select some overloads from the orignal set of overloads.
+* Advantages:
+*     - Less verbosity in number of overloads
+*     - Less verbosity in implementation
+* Number of overloads could impact compile time, and makes life harder for downstream users of the function
+*/
+function foo1(x:1):"1";
+>foo1 : Symbol(foo1, Decl(-57087-104.ts, 53, 17), Decl(-57087-104.ts, 63, 23), Decl(-57087-104.ts, 64, 23), Decl(-57087-104.ts, 65, 23), Decl(-57087-104.ts, 66, 31))
+>x : Symbol(x, Decl(-57087-104.ts, 63, 14))
+
+function foo1(x:2):"2";
+>foo1 : Symbol(foo1, Decl(-57087-104.ts, 53, 17), Decl(-57087-104.ts, 63, 23), Decl(-57087-104.ts, 64, 23), Decl(-57087-104.ts, 65, 23), Decl(-57087-104.ts, 66, 31))
+>x : Symbol(x, Decl(-57087-104.ts, 64, 14))
+
+function foo1(x:3):"3";
+>foo1 : Symbol(foo1, Decl(-57087-104.ts, 53, 17), Decl(-57087-104.ts, 63, 23), Decl(-57087-104.ts, 64, 23), Decl(-57087-104.ts, 65, 23), Decl(-57087-104.ts, 66, 31))
+>x : Symbol(x, Decl(-57087-104.ts, 65, 14))
+
+function foo1(x:number):number;
+>foo1 : Symbol(foo1, Decl(-57087-104.ts, 53, 17), Decl(-57087-104.ts, 63, 23), Decl(-57087-104.ts, 64, 23), Decl(-57087-104.ts, 65, 23), Decl(-57087-104.ts, 66, 31))
+>x : Symbol(x, Decl(-57087-104.ts, 66, 14))
+
+function foo1(x:number){
+>foo1 : Symbol(foo1, Decl(-57087-104.ts, 53, 17), Decl(-57087-104.ts, 63, 23), Decl(-57087-104.ts, 64, 23), Decl(-57087-104.ts, 65, 23), Decl(-57087-104.ts, 66, 31))
+>x : Symbol(x, Decl(-57087-104.ts, 67, 14))
+
+  if (x===1) return "1";
+>x : Symbol(x, Decl(-57087-104.ts, 67, 14))
+
+  if (x===2) return "2";
+>x : Symbol(x, Decl(-57087-104.ts, 67, 14))
+
+  if (x===3) return "3";
+>x : Symbol(x, Decl(-57087-104.ts, 67, 14))
+
+  return x;
+>x : Symbol(x, Decl(-57087-104.ts, 67, 14))
+}
+
+// The `&`-intersection operator result should be independent of the order of it's operands.
+foo1 satisfies A & B & C; // should not error
+>foo1 : Symbol(foo1, Decl(-57087-104.ts, 53, 17), Decl(-57087-104.ts, 63, 23), Decl(-57087-104.ts, 64, 23), Decl(-57087-104.ts, 65, 23), Decl(-57087-104.ts, 66, 31))
+>A : Symbol(A, Decl(-57087-104.ts, 10, 2))
+>B : Symbol(B, Decl(-57087-104.ts, 5, 2))
+>C : Symbol(C, Decl(-57087-104.ts, 0, 15))
+
+foo1 satisfies A & C & B; // should not error
+>foo1 : Symbol(foo1, Decl(-57087-104.ts, 53, 17), Decl(-57087-104.ts, 63, 23), Decl(-57087-104.ts, 64, 23), Decl(-57087-104.ts, 65, 23), Decl(-57087-104.ts, 66, 31))
+>A : Symbol(A, Decl(-57087-104.ts, 10, 2))
+>C : Symbol(C, Decl(-57087-104.ts, 0, 15))
+>B : Symbol(B, Decl(-57087-104.ts, 5, 2))
+
+foo1 satisfies B & A & C; // should not error
+>foo1 : Symbol(foo1, Decl(-57087-104.ts, 53, 17), Decl(-57087-104.ts, 63, 23), Decl(-57087-104.ts, 64, 23), Decl(-57087-104.ts, 65, 23), Decl(-57087-104.ts, 66, 31))
+>B : Symbol(B, Decl(-57087-104.ts, 5, 2))
+>A : Symbol(A, Decl(-57087-104.ts, 10, 2))
+>C : Symbol(C, Decl(-57087-104.ts, 0, 15))
+
+foo1 satisfies B & C & A; // should not error
+>foo1 : Symbol(foo1, Decl(-57087-104.ts, 53, 17), Decl(-57087-104.ts, 63, 23), Decl(-57087-104.ts, 64, 23), Decl(-57087-104.ts, 65, 23), Decl(-57087-104.ts, 66, 31))
+>B : Symbol(B, Decl(-57087-104.ts, 5, 2))
+>C : Symbol(C, Decl(-57087-104.ts, 0, 15))
+>A : Symbol(A, Decl(-57087-104.ts, 10, 2))
+
+foo1 satisfies C & A & B; // should not error
+>foo1 : Symbol(foo1, Decl(-57087-104.ts, 53, 17), Decl(-57087-104.ts, 63, 23), Decl(-57087-104.ts, 64, 23), Decl(-57087-104.ts, 65, 23), Decl(-57087-104.ts, 66, 31))
+>C : Symbol(C, Decl(-57087-104.ts, 0, 15))
+>A : Symbol(A, Decl(-57087-104.ts, 10, 2))
+>B : Symbol(B, Decl(-57087-104.ts, 5, 2))
+
+foo1 satisfies C & B & A; // should not error
+>foo1 : Symbol(foo1, Decl(-57087-104.ts, 53, 17), Decl(-57087-104.ts, 63, 23), Decl(-57087-104.ts, 64, 23), Decl(-57087-104.ts, 65, 23), Decl(-57087-104.ts, 66, 31))
+>C : Symbol(C, Decl(-57087-104.ts, 0, 15))
+>B : Symbol(B, Decl(-57087-104.ts, 5, 2))
+>A : Symbol(A, Decl(-57087-104.ts, 10, 2))
+
+foo1 satisfies W; // should not error
+>foo1 : Symbol(foo1, Decl(-57087-104.ts, 53, 17), Decl(-57087-104.ts, 63, 23), Decl(-57087-104.ts, 64, 23), Decl(-57087-104.ts, 65, 23), Decl(-57087-104.ts, 66, 31))
+>W : Symbol(W, Decl(-57087-104.ts, 15, 2))
+
+/*
+*/
+
+//function foo3(x:1):"1"; //  Omitted domain support should cause satisfies error
+function foo3(x:2):"2";
+>foo3 : Symbol(foo3, Decl(-57087-104.ts, 81, 17), Decl(-57087-104.ts, 87, 23), Decl(-57087-104.ts, 88, 23), Decl(-57087-104.ts, 89, 31))
+>x : Symbol(x, Decl(-57087-104.ts, 87, 14))
+
+function foo3(x:3):"3";
+>foo3 : Symbol(foo3, Decl(-57087-104.ts, 81, 17), Decl(-57087-104.ts, 87, 23), Decl(-57087-104.ts, 88, 23), Decl(-57087-104.ts, 89, 31))
+>x : Symbol(x, Decl(-57087-104.ts, 88, 14))
+
+function foo3(x:number):number;
+>foo3 : Symbol(foo3, Decl(-57087-104.ts, 81, 17), Decl(-57087-104.ts, 87, 23), Decl(-57087-104.ts, 88, 23), Decl(-57087-104.ts, 89, 31))
+>x : Symbol(x, Decl(-57087-104.ts, 89, 14))
+
+function foo3(x:number): number | "1" | "2" | "3"{
+>foo3 : Symbol(foo3, Decl(-57087-104.ts, 81, 17), Decl(-57087-104.ts, 87, 23), Decl(-57087-104.ts, 88, 23), Decl(-57087-104.ts, 89, 31))
+>x : Symbol(x, Decl(-57087-104.ts, 90, 14))
+
+  //if (x===1) return "1";
+  if (x===2) return "2";
+>x : Symbol(x, Decl(-57087-104.ts, 90, 14))
+
+  if (x===3) return "3";
+>x : Symbol(x, Decl(-57087-104.ts, 90, 14))
+
+  return x;
+>x : Symbol(x, Decl(-57087-104.ts, 90, 14))
+
+  // In this case, a final throw "unexpected error" would never be reached anyway.
+  // if (typeof x === "number") return x; // pointless
+  // throw "unexpected error";
+}
+
+foo3 satisfies A & B & C; // should be error
+>foo3 : Symbol(foo3, Decl(-57087-104.ts, 81, 17), Decl(-57087-104.ts, 87, 23), Decl(-57087-104.ts, 88, 23), Decl(-57087-104.ts, 89, 31))
+>A : Symbol(A, Decl(-57087-104.ts, 10, 2))
+>B : Symbol(B, Decl(-57087-104.ts, 5, 2))
+>C : Symbol(C, Decl(-57087-104.ts, 0, 15))
+
+foo3 satisfies A & C & B; // should be error
+>foo3 : Symbol(foo3, Decl(-57087-104.ts, 81, 17), Decl(-57087-104.ts, 87, 23), Decl(-57087-104.ts, 88, 23), Decl(-57087-104.ts, 89, 31))
+>A : Symbol(A, Decl(-57087-104.ts, 10, 2))
+>C : Symbol(C, Decl(-57087-104.ts, 0, 15))
+>B : Symbol(B, Decl(-57087-104.ts, 5, 2))
+
+foo3 satisfies B & A & C; // should be error
+>foo3 : Symbol(foo3, Decl(-57087-104.ts, 81, 17), Decl(-57087-104.ts, 87, 23), Decl(-57087-104.ts, 88, 23), Decl(-57087-104.ts, 89, 31))
+>B : Symbol(B, Decl(-57087-104.ts, 5, 2))
+>A : Symbol(A, Decl(-57087-104.ts, 10, 2))
+>C : Symbol(C, Decl(-57087-104.ts, 0, 15))
+
+foo3 satisfies B & C & A; // should be error
+>foo3 : Symbol(foo3, Decl(-57087-104.ts, 81, 17), Decl(-57087-104.ts, 87, 23), Decl(-57087-104.ts, 88, 23), Decl(-57087-104.ts, 89, 31))
+>B : Symbol(B, Decl(-57087-104.ts, 5, 2))
+>C : Symbol(C, Decl(-57087-104.ts, 0, 15))
+>A : Symbol(A, Decl(-57087-104.ts, 10, 2))
+
+foo3 satisfies C & A & B; // should be error
+>foo3 : Symbol(foo3, Decl(-57087-104.ts, 81, 17), Decl(-57087-104.ts, 87, 23), Decl(-57087-104.ts, 88, 23), Decl(-57087-104.ts, 89, 31))
+>C : Symbol(C, Decl(-57087-104.ts, 0, 15))
+>A : Symbol(A, Decl(-57087-104.ts, 10, 2))
+>B : Symbol(B, Decl(-57087-104.ts, 5, 2))
+
+foo3 satisfies C & B & A; // should be error
+>foo3 : Symbol(foo3, Decl(-57087-104.ts, 81, 17), Decl(-57087-104.ts, 87, 23), Decl(-57087-104.ts, 88, 23), Decl(-57087-104.ts, 89, 31))
+>C : Symbol(C, Decl(-57087-104.ts, 0, 15))
+>B : Symbol(B, Decl(-57087-104.ts, 5, 2))
+>A : Symbol(A, Decl(-57087-104.ts, 10, 2))
+
+
+foo3 satisfies W; // should be error
+>foo3 : Symbol(foo3, Decl(-57087-104.ts, 81, 17), Decl(-57087-104.ts, 87, 23), Decl(-57087-104.ts, 88, 23), Decl(-57087-104.ts, 89, 31))
+>W : Symbol(W, Decl(-57087-104.ts, 15, 2))
+
+
+}
+
+
+/**********************/
+=== -57087-105.ts ===
+namespace ns3 {
+>ns3 : Symbol(ns3, Decl(-57087-105.ts, 0, 0))
+
+type A = { a: string };
+>A : Symbol(A, Decl(-57087-105.ts, 0, 15))
+>a : Symbol(a, Decl(-57087-105.ts, 1, 10))
+
+type B = { b: 1 };
+>B : Symbol(B, Decl(-57087-105.ts, 1, 23))
+>b : Symbol(b, Decl(-57087-105.ts, 2, 10))
+
+type C = { c: number };
+>C : Symbol(C, Decl(-57087-105.ts, 2, 18))
+>c : Symbol(c, Decl(-57087-105.ts, 3, 10))
+
+
+interface X1 {
+>X1 : Symbol(X1, Decl(-57087-105.ts, 3, 23))
+
+    f(x:A):string
+>f : Symbol(X1.f, Decl(-57087-105.ts, 6, 14), Decl(-57087-105.ts, 7, 17))
+>x : Symbol(x, Decl(-57087-105.ts, 7, 6))
+>A : Symbol(A, Decl(-57087-105.ts, 0, 15))
+
+    f(x:B):1
+>f : Symbol(X1.f, Decl(-57087-105.ts, 6, 14), Decl(-57087-105.ts, 7, 17))
+>x : Symbol(x, Decl(-57087-105.ts, 8, 6))
+>B : Symbol(B, Decl(-57087-105.ts, 1, 23))
+
+    g(f: X1["f"],arg:A|B):()=>ReturnType<X1["f"]>
+>g : Symbol(X1.g, Decl(-57087-105.ts, 8, 12))
+>f : Symbol(f, Decl(-57087-105.ts, 9, 6))
+>X1 : Symbol(X1, Decl(-57087-105.ts, 3, 23))
+>arg : Symbol(arg, Decl(-57087-105.ts, 9, 17))
+>A : Symbol(A, Decl(-57087-105.ts, 0, 15))
+>B : Symbol(B, Decl(-57087-105.ts, 1, 23))
+>ReturnType : Symbol(ReturnType, Decl(lib.es5.d.ts, --, --))
+>X1 : Symbol(X1, Decl(-57087-105.ts, 3, 23))
+}
+interface X2 {
+>X2 : Symbol(X2, Decl(-57087-105.ts, 10, 1))
+
+    f(x:C):number
+>f : Symbol(X2.f, Decl(-57087-105.ts, 11, 14), Decl(-57087-105.ts, 12, 17))
+>x : Symbol(x, Decl(-57087-105.ts, 12, 6))
+>C : Symbol(C, Decl(-57087-105.ts, 2, 18))
+
+    f(x:B):"1";
+>f : Symbol(X2.f, Decl(-57087-105.ts, 11, 14), Decl(-57087-105.ts, 12, 17))
+>x : Symbol(x, Decl(-57087-105.ts, 13, 6))
+>B : Symbol(B, Decl(-57087-105.ts, 1, 23))
+
+    g(f: X2["f"],arg:C|B):()=>ReturnType<X2["f"]>
+>g : Symbol(X2.g, Decl(-57087-105.ts, 13, 15))
+>f : Symbol(f, Decl(-57087-105.ts, 14, 6))
+>X2 : Symbol(X2, Decl(-57087-105.ts, 10, 1))
+>arg : Symbol(arg, Decl(-57087-105.ts, 14, 17))
+>C : Symbol(C, Decl(-57087-105.ts, 2, 18))
+>B : Symbol(B, Decl(-57087-105.ts, 1, 23))
+>ReturnType : Symbol(ReturnType, Decl(lib.es5.d.ts, --, --))
+>X2 : Symbol(X2, Decl(-57087-105.ts, 10, 1))
+}
+
+declare const x1: X1;
+>x1 : Symbol(x1, Decl(-57087-105.ts, 17, 13))
+>X1 : Symbol(X1, Decl(-57087-105.ts, 3, 23))
+
+declare const arg1: A|B;
+>arg1 : Symbol(arg1, Decl(-57087-105.ts, 18, 13))
+>A : Symbol(A, Decl(-57087-105.ts, 0, 15))
+>B : Symbol(B, Decl(-57087-105.ts, 1, 23))
+
+x1.g(x1.f,arg1); // should be no error
+>x1.g : Symbol(X1.g, Decl(-57087-105.ts, 8, 12))
+>x1 : Symbol(x1, Decl(-57087-105.ts, 17, 13))
+>g : Symbol(X1.g, Decl(-57087-105.ts, 8, 12))
+>x1.f : Symbol(X1.f, Decl(-57087-105.ts, 6, 14), Decl(-57087-105.ts, 7, 17))
+>x1 : Symbol(x1, Decl(-57087-105.ts, 17, 13))
+>f : Symbol(X1.f, Decl(-57087-105.ts, 6, 14), Decl(-57087-105.ts, 7, 17))
+>arg1 : Symbol(arg1, Decl(-57087-105.ts, 18, 13))
+
+declare const x2: X2;
+>x2 : Symbol(x2, Decl(-57087-105.ts, 20, 13))
+>X2 : Symbol(X2, Decl(-57087-105.ts, 10, 1))
+
+declare const arg2: C|B;
+>arg2 : Symbol(arg2, Decl(-57087-105.ts, 21, 13))
+>C : Symbol(C, Decl(-57087-105.ts, 2, 18))
+>B : Symbol(B, Decl(-57087-105.ts, 1, 23))
+
+x2.g(x2.f,arg2); // should be no error
+>x2.g : Symbol(X2.g, Decl(-57087-105.ts, 13, 15))
+>x2 : Symbol(x2, Decl(-57087-105.ts, 20, 13))
+>g : Symbol(X2.g, Decl(-57087-105.ts, 13, 15))
+>x2.f : Symbol(X2.f, Decl(-57087-105.ts, 11, 14), Decl(-57087-105.ts, 12, 17))
+>x2 : Symbol(x2, Decl(-57087-105.ts, 20, 13))
+>f : Symbol(X2.f, Decl(-57087-105.ts, 11, 14), Decl(-57087-105.ts, 12, 17))
+>arg2 : Symbol(arg2, Decl(-57087-105.ts, 21, 13))
+
+const x = Math.random() < 0.5 ? x1 : x2;
+>x : Symbol(x, Decl(-57087-105.ts, 23, 5))
+>Math.random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
+>x1 : Symbol(x1, Decl(-57087-105.ts, 17, 13))
+>x2 : Symbol(x2, Decl(-57087-105.ts, 20, 13))
+
+x.g;
+>x.g : Symbol(g, Decl(-57087-105.ts, 8, 12), Decl(-57087-105.ts, 13, 15))
+>x : Symbol(x, Decl(-57087-105.ts, 23, 5))
+>g : Symbol(g, Decl(-57087-105.ts, 8, 12), Decl(-57087-105.ts, 13, 15))
+
+const arg = Math.random() < 0.5 ? arg1 : arg2;
+>arg : Symbol(arg, Decl(-57087-105.ts, 25, 5))
+>Math.random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
+>arg1 : Symbol(arg1, Decl(-57087-105.ts, 18, 13))
+>arg2 : Symbol(arg2, Decl(-57087-105.ts, 21, 13))
+
+
+
+type ArgCastType = (A & C) | (A & B) | (B & C);
+>ArgCastType : Symbol(ArgCastType, Decl(-57087-105.ts, 25, 46))
+>A : Symbol(A, Decl(-57087-105.ts, 0, 15))
+>C : Symbol(C, Decl(-57087-105.ts, 2, 18))
+>A : Symbol(A, Decl(-57087-105.ts, 0, 15))
+>B : Symbol(B, Decl(-57087-105.ts, 1, 23))
+>B : Symbol(B, Decl(-57087-105.ts, 1, 23))
+>C : Symbol(C, Decl(-57087-105.ts, 2, 18))
+
+
+function ftw(x:A):string;
+>ftw : Symbol(ftw, Decl(-57087-105.ts, 29, 47), Decl(-57087-105.ts, 32, 25), Decl(-57087-105.ts, 33, 25), Decl(-57087-105.ts, 34, 20))
+>x : Symbol(x, Decl(-57087-105.ts, 32, 13))
+>A : Symbol(A, Decl(-57087-105.ts, 0, 15))
+
+function ftw(x:C):number;
+>ftw : Symbol(ftw, Decl(-57087-105.ts, 29, 47), Decl(-57087-105.ts, 32, 25), Decl(-57087-105.ts, 33, 25), Decl(-57087-105.ts, 34, 20))
+>x : Symbol(x, Decl(-57087-105.ts, 33, 13))
+>C : Symbol(C, Decl(-57087-105.ts, 2, 18))
+
+function ftw(x:B):1;
+>ftw : Symbol(ftw, Decl(-57087-105.ts, 29, 47), Decl(-57087-105.ts, 32, 25), Decl(-57087-105.ts, 33, 25), Decl(-57087-105.ts, 34, 20))
+>x : Symbol(x, Decl(-57087-105.ts, 34, 13))
+>B : Symbol(B, Decl(-57087-105.ts, 1, 23))
+
+function ftw(x: A|B|C) {
+>ftw : Symbol(ftw, Decl(-57087-105.ts, 29, 47), Decl(-57087-105.ts, 32, 25), Decl(-57087-105.ts, 33, 25), Decl(-57087-105.ts, 34, 20))
+>x : Symbol(x, Decl(-57087-105.ts, 35, 13))
+>A : Symbol(A, Decl(-57087-105.ts, 0, 15))
+>B : Symbol(B, Decl(-57087-105.ts, 1, 23))
+>C : Symbol(C, Decl(-57087-105.ts, 2, 18))
+
+    if ("a" in x) return x.a;
+>x : Symbol(x, Decl(-57087-105.ts, 35, 13))
+>x.a : Symbol(a, Decl(-57087-105.ts, 1, 10))
+>x : Symbol(x, Decl(-57087-105.ts, 35, 13))
+>a : Symbol(a, Decl(-57087-105.ts, 1, 10))
+
+    if ("c" in x) return x.c;
+>x : Symbol(x, Decl(-57087-105.ts, 35, 13))
+>x.c : Symbol(c, Decl(-57087-105.ts, 3, 10))
+>x : Symbol(x, Decl(-57087-105.ts, 35, 13))
+>c : Symbol(c, Decl(-57087-105.ts, 3, 10))
+
+    return 1;
+}
+
+// The necessity of the argument cast is a separate issue!
+x.g(ftw,arg as any as any as ArgCastType); // should not be error
+>x.g : Symbol(g, Decl(-57087-105.ts, 8, 12), Decl(-57087-105.ts, 13, 15))
+>x : Symbol(x, Decl(-57087-105.ts, 23, 5))
+>g : Symbol(g, Decl(-57087-105.ts, 8, 12), Decl(-57087-105.ts, 13, 15))
+>ftw : Symbol(ftw, Decl(-57087-105.ts, 29, 47), Decl(-57087-105.ts, 32, 25), Decl(-57087-105.ts, 33, 25), Decl(-57087-105.ts, 34, 20))
+>arg : Symbol(arg, Decl(-57087-105.ts, 25, 5))
+>ArgCastType : Symbol(ArgCastType, Decl(-57087-105.ts, 25, 46))
+
+function ftx(x:A):string;
+>ftx : Symbol(ftx, Decl(-57087-105.ts, 42, 42), Decl(-57087-105.ts, 44, 25), Decl(-57087-105.ts, 45, 25), Decl(-57087-105.ts, 46, 25))
+>x : Symbol(x, Decl(-57087-105.ts, 44, 13))
+>A : Symbol(A, Decl(-57087-105.ts, 0, 15))
+
+function ftx(x:C):number;
+>ftx : Symbol(ftx, Decl(-57087-105.ts, 42, 42), Decl(-57087-105.ts, 44, 25), Decl(-57087-105.ts, 45, 25), Decl(-57087-105.ts, 46, 25))
+>x : Symbol(x, Decl(-57087-105.ts, 45, 13))
+>C : Symbol(C, Decl(-57087-105.ts, 2, 18))
+
+function ftx(x:B):string; // should cause x.g(ft2) to error
+>ftx : Symbol(ftx, Decl(-57087-105.ts, 42, 42), Decl(-57087-105.ts, 44, 25), Decl(-57087-105.ts, 45, 25), Decl(-57087-105.ts, 46, 25))
+>x : Symbol(x, Decl(-57087-105.ts, 46, 13))
+>B : Symbol(B, Decl(-57087-105.ts, 1, 23))
+
+function ftx(x: A|B|C) {
+>ftx : Symbol(ftx, Decl(-57087-105.ts, 42, 42), Decl(-57087-105.ts, 44, 25), Decl(-57087-105.ts, 45, 25), Decl(-57087-105.ts, 46, 25))
+>x : Symbol(x, Decl(-57087-105.ts, 47, 13))
+>A : Symbol(A, Decl(-57087-105.ts, 0, 15))
+>B : Symbol(B, Decl(-57087-105.ts, 1, 23))
+>C : Symbol(C, Decl(-57087-105.ts, 2, 18))
+
+    if ("a" in x) return x.a;
+>x : Symbol(x, Decl(-57087-105.ts, 47, 13))
+>x.a : Symbol(a, Decl(-57087-105.ts, 1, 10))
+>x : Symbol(x, Decl(-57087-105.ts, 47, 13))
+>a : Symbol(a, Decl(-57087-105.ts, 1, 10))
+
+    if ("c" in x) return x.c;
+>x : Symbol(x, Decl(-57087-105.ts, 47, 13))
+>x.c : Symbol(c, Decl(-57087-105.ts, 3, 10))
+>x : Symbol(x, Decl(-57087-105.ts, 47, 13))
+>c : Symbol(c, Decl(-57087-105.ts, 3, 10))
+
+    return x.b;
+>x.b : Symbol(b, Decl(-57087-105.ts, 2, 10))
+>x : Symbol(x, Decl(-57087-105.ts, 47, 13))
+>b : Symbol(b, Decl(-57087-105.ts, 2, 10))
+}
+
+// The necessity of the argument cast is a separate issue!
+x.g(ftx,arg as any as any as ArgCastType); // should be error
+>x.g : Symbol(g, Decl(-57087-105.ts, 8, 12), Decl(-57087-105.ts, 13, 15))
+>x : Symbol(x, Decl(-57087-105.ts, 23, 5))
+>g : Symbol(g, Decl(-57087-105.ts, 8, 12), Decl(-57087-105.ts, 13, 15))
+>ftx : Symbol(ftx, Decl(-57087-105.ts, 42, 42), Decl(-57087-105.ts, 44, 25), Decl(-57087-105.ts, 45, 25), Decl(-57087-105.ts, 46, 25))
+>arg : Symbol(arg, Decl(-57087-105.ts, 25, 5))
+>ArgCastType : Symbol(ArgCastType, Decl(-57087-105.ts, 25, 46))
+
+//function fty(x:A):string;  // should cause x.g(ft2) to error
+function fty(x:C):number;
+>fty : Symbol(fty, Decl(-57087-105.ts, 54, 42), Decl(-57087-105.ts, 57, 25), Decl(-57087-105.ts, 58, 20))
+>x : Symbol(x, Decl(-57087-105.ts, 57, 13))
+>C : Symbol(C, Decl(-57087-105.ts, 2, 18))
+
+function fty(x:B):1;
+>fty : Symbol(fty, Decl(-57087-105.ts, 54, 42), Decl(-57087-105.ts, 57, 25), Decl(-57087-105.ts, 58, 20))
+>x : Symbol(x, Decl(-57087-105.ts, 58, 13))
+>B : Symbol(B, Decl(-57087-105.ts, 1, 23))
+
+function fty(x: {a?: string, c?: number, b?: 1|"1"}) {
+>fty : Symbol(fty, Decl(-57087-105.ts, 54, 42), Decl(-57087-105.ts, 57, 25), Decl(-57087-105.ts, 58, 20))
+>x : Symbol(x, Decl(-57087-105.ts, 59, 13))
+>a : Symbol(a, Decl(-57087-105.ts, 59, 17))
+>c : Symbol(c, Decl(-57087-105.ts, 59, 28))
+>b : Symbol(b, Decl(-57087-105.ts, 59, 40))
+
+    if (x.a) return x.a;
+>x.a : Symbol(a, Decl(-57087-105.ts, 59, 17))
+>x : Symbol(x, Decl(-57087-105.ts, 59, 13))
+>a : Symbol(a, Decl(-57087-105.ts, 59, 17))
+>x.a : Symbol(a, Decl(-57087-105.ts, 59, 17))
+>x : Symbol(x, Decl(-57087-105.ts, 59, 13))
+>a : Symbol(a, Decl(-57087-105.ts, 59, 17))
+
+    if (x.c) return x.c;
+>x.c : Symbol(c, Decl(-57087-105.ts, 59, 28))
+>x : Symbol(x, Decl(-57087-105.ts, 59, 13))
+>c : Symbol(c, Decl(-57087-105.ts, 59, 28))
+>x.c : Symbol(c, Decl(-57087-105.ts, 59, 28))
+>x : Symbol(x, Decl(-57087-105.ts, 59, 13))
+>c : Symbol(c, Decl(-57087-105.ts, 59, 28))
+
+    if (x.b) return x.b;
+>x.b : Symbol(b, Decl(-57087-105.ts, 59, 40))
+>x : Symbol(x, Decl(-57087-105.ts, 59, 13))
+>b : Symbol(b, Decl(-57087-105.ts, 59, 40))
+>x.b : Symbol(b, Decl(-57087-105.ts, 59, 40))
+>x : Symbol(x, Decl(-57087-105.ts, 59, 13))
+>b : Symbol(b, Decl(-57087-105.ts, 59, 40))
+
+    throw "unexpected error"
+}
+
+// The necessity of the argument cast is a separate issue!
+x.g(fty,arg as any as any as ArgCastType); // should be error
+>x.g : Symbol(g, Decl(-57087-105.ts, 8, 12), Decl(-57087-105.ts, 13, 15))
+>x : Symbol(x, Decl(-57087-105.ts, 23, 5))
+>g : Symbol(g, Decl(-57087-105.ts, 8, 12), Decl(-57087-105.ts, 13, 15))
+>fty : Symbol(fty, Decl(-57087-105.ts, 54, 42), Decl(-57087-105.ts, 57, 25), Decl(-57087-105.ts, 58, 20))
+>arg : Symbol(arg, Decl(-57087-105.ts, 25, 5))
+>ArgCastType : Symbol(ArgCastType, Decl(-57087-105.ts, 25, 46))
+
+function ftz(x:{a?:string}):string;  // should cause x.g(ft2) to error
+>ftz : Symbol(ftz, Decl(-57087-105.ts, 67, 42), Decl(-57087-105.ts, 69, 35), Decl(-57087-105.ts, 70, 25), Decl(-57087-105.ts, 71, 20))
+>x : Symbol(x, Decl(-57087-105.ts, 69, 13))
+>a : Symbol(a, Decl(-57087-105.ts, 69, 16))
+
+function ftz(x:C):number;
+>ftz : Symbol(ftz, Decl(-57087-105.ts, 67, 42), Decl(-57087-105.ts, 69, 35), Decl(-57087-105.ts, 70, 25), Decl(-57087-105.ts, 71, 20))
+>x : Symbol(x, Decl(-57087-105.ts, 70, 13))
+>C : Symbol(C, Decl(-57087-105.ts, 2, 18))
+
+function ftz(x:B):1;
+>ftz : Symbol(ftz, Decl(-57087-105.ts, 67, 42), Decl(-57087-105.ts, 69, 35), Decl(-57087-105.ts, 70, 25), Decl(-57087-105.ts, 71, 20))
+>x : Symbol(x, Decl(-57087-105.ts, 71, 13))
+>B : Symbol(B, Decl(-57087-105.ts, 1, 23))
+
+function ftz(x: {a?: string, c?: number, b?: 1|"1"}) {
+>ftz : Symbol(ftz, Decl(-57087-105.ts, 67, 42), Decl(-57087-105.ts, 69, 35), Decl(-57087-105.ts, 70, 25), Decl(-57087-105.ts, 71, 20))
+>x : Symbol(x, Decl(-57087-105.ts, 72, 13))
+>a : Symbol(a, Decl(-57087-105.ts, 72, 17))
+>c : Symbol(c, Decl(-57087-105.ts, 72, 28))
+>b : Symbol(b, Decl(-57087-105.ts, 72, 40))
+
+    if (x.a) return x.a;
+>x.a : Symbol(a, Decl(-57087-105.ts, 72, 17))
+>x : Symbol(x, Decl(-57087-105.ts, 72, 13))
+>a : Symbol(a, Decl(-57087-105.ts, 72, 17))
+>x.a : Symbol(a, Decl(-57087-105.ts, 72, 17))
+>x : Symbol(x, Decl(-57087-105.ts, 72, 13))
+>a : Symbol(a, Decl(-57087-105.ts, 72, 17))
+
+    if (x.c) return x.c;
+>x.c : Symbol(c, Decl(-57087-105.ts, 72, 28))
+>x : Symbol(x, Decl(-57087-105.ts, 72, 13))
+>c : Symbol(c, Decl(-57087-105.ts, 72, 28))
+>x.c : Symbol(c, Decl(-57087-105.ts, 72, 28))
+>x : Symbol(x, Decl(-57087-105.ts, 72, 13))
+>c : Symbol(c, Decl(-57087-105.ts, 72, 28))
+
+    if (x.b) return x.b;
+>x.b : Symbol(b, Decl(-57087-105.ts, 72, 40))
+>x : Symbol(x, Decl(-57087-105.ts, 72, 13))
+>b : Symbol(b, Decl(-57087-105.ts, 72, 40))
+>x.b : Symbol(b, Decl(-57087-105.ts, 72, 40))
+>x : Symbol(x, Decl(-57087-105.ts, 72, 13))
+>b : Symbol(b, Decl(-57087-105.ts, 72, 40))
+
+    throw "unexpected error"
+}
+
+// The necessity of the argument cast is a separate issue!
+x.g(ftz,arg as any as any as ArgCastType); // should be error
+>x.g : Symbol(g, Decl(-57087-105.ts, 8, 12), Decl(-57087-105.ts, 13, 15))
+>x : Symbol(x, Decl(-57087-105.ts, 23, 5))
+>g : Symbol(g, Decl(-57087-105.ts, 8, 12), Decl(-57087-105.ts, 13, 15))
+>ftz : Symbol(ftz, Decl(-57087-105.ts, 67, 42), Decl(-57087-105.ts, 69, 35), Decl(-57087-105.ts, 70, 25), Decl(-57087-105.ts, 71, 20))
+>arg : Symbol(arg, Decl(-57087-105.ts, 25, 5))
+>ArgCastType : Symbol(ArgCastType, Decl(-57087-105.ts, 25, 46))
+
+}
+
+
+/**********************/
+=== -57087-131.ts ===
+namespace ns4 {
+>ns4 : Symbol(ns4, Decl(-57087-131.ts, 0, 0))
+
+interface Garg31A {
+>Garg31A : Symbol(Garg31A, Decl(-57087-131.ts, 0, 15))
+
+    (): "01";
+    (x:1, y:1): "211"
+>x : Symbol(x, Decl(-57087-131.ts, 3, 5))
+>y : Symbol(y, Decl(-57087-131.ts, 3, 9))
+
+};
+declare const g31A: Garg31A;
+>g31A : Symbol(g31A, Decl(-57087-131.ts, 5, 13))
+>Garg31A : Symbol(Garg31A, Decl(-57087-131.ts, 0, 15))
+
+interface Garg31B {
+>Garg31B : Symbol(Garg31B, Decl(-57087-131.ts, 5, 28))
+
+    (): "02";
+    (x:2, y:2): "222";
+>x : Symbol(x, Decl(-57087-131.ts, 9, 5))
+>y : Symbol(y, Decl(-57087-131.ts, 9, 9))
+
+    (x:2, y:1): "221"
+>x : Symbol(x, Decl(-57087-131.ts, 10, 5))
+>y : Symbol(y, Decl(-57087-131.ts, 10, 9))
+
+};
+declare const g31B: Garg31B;
+>g31B : Symbol(g31B, Decl(-57087-131.ts, 12, 13))
+>Garg31B : Symbol(Garg31B, Decl(-57087-131.ts, 5, 28))
+
+declare const f31a: {
+>f31a : Symbol(f31a, Decl(-57087-131.ts, 14, 13))
+
+    (): "01";
+    (x: 1, y: 1): "211";
+>x : Symbol(x, Decl(-57087-131.ts, 16, 5))
+>y : Symbol(y, Decl(-57087-131.ts, 16, 10))
+
+    (x: 2, y: 2): "222";
+>x : Symbol(x, Decl(-57087-131.ts, 17, 5))
+>y : Symbol(y, Decl(-57087-131.ts, 17, 10))
+
+    (x: 2, y: 1): "221";
+>x : Symbol(x, Decl(-57087-131.ts, 18, 5))
+>y : Symbol(y, Decl(-57087-131.ts, 18, 10))
+
+};
+f31a satisfies Garg31A & Garg31B; // should satisfy
+>f31a : Symbol(f31a, Decl(-57087-131.ts, 14, 13))
+>Garg31A : Symbol(Garg31A, Decl(-57087-131.ts, 0, 15))
+>Garg31B : Symbol(Garg31B, Decl(-57087-131.ts, 5, 28))
+
+declare const f31b: {
+>f31b : Symbol(f31b, Decl(-57087-131.ts, 22, 13))
+
+    (): "01";
+    (x: 1, y: 1): "211";
+>x : Symbol(x, Decl(-57087-131.ts, 24, 5))
+>y : Symbol(y, Decl(-57087-131.ts, 24, 10))
+
+    (x: 2, y: 2): "221" /*should cause "f31b satisfies" to error */;
+>x : Symbol(x, Decl(-57087-131.ts, 25, 5))
+>y : Symbol(y, Decl(-57087-131.ts, 25, 10))
+
+    (x: 2, y: 1): "221";
+>x : Symbol(x, Decl(-57087-131.ts, 26, 5))
+>y : Symbol(y, Decl(-57087-131.ts, 26, 10))
+
+};
+f31b satisfies Garg31A & Garg31B; // should not satisfy
+>f31b : Symbol(f31b, Decl(-57087-131.ts, 22, 13))
+>Garg31A : Symbol(Garg31A, Decl(-57087-131.ts, 0, 15))
+>Garg31B : Symbol(Garg31B, Decl(-57087-131.ts, 5, 28))
+
+declare const f31c: {
+>f31c : Symbol(f31c, Decl(-57087-131.ts, 30, 13))
+
+    (): "01"; (x: 1, y: 1): "211";
+>x : Symbol(x, Decl(-57087-131.ts, 31, 15))
+>y : Symbol(y, Decl(-57087-131.ts, 31, 20))
+
+    (x: 2, y: 2): "222";
+>x : Symbol(x, Decl(-57087-131.ts, 32, 5))
+>y : Symbol(y, Decl(-57087-131.ts, 32, 10))
+
+    (x: 2, y: 1): "221";
+>x : Symbol(x, Decl(-57087-131.ts, 33, 5))
+>y : Symbol(y, Decl(-57087-131.ts, 33, 10))
+
+    (x: 1, y: 2): "221" /*should cause "f31c satisfies" to error */;
+>x : Symbol(x, Decl(-57087-131.ts, 34, 5))
+>y : Symbol(y, Decl(-57087-131.ts, 34, 10))
+
+};
+f31c satisfies Garg31A & Garg31B; // should not satisfy
+>f31c : Symbol(f31c, Decl(-57087-131.ts, 30, 13))
+>Garg31A : Symbol(Garg31A, Decl(-57087-131.ts, 0, 15))
+>Garg31B : Symbol(Garg31B, Decl(-57087-131.ts, 5, 28))
+
+declare const f31d:{
+>f31d : Symbol(f31d, Decl(-57087-131.ts, 38, 13))
+
+    (): "01";
+    (x?: 1, y?: 1): "211"; /*should cause "f31d satisfies" to error */
+>x : Symbol(x, Decl(-57087-131.ts, 40, 5))
+>y : Symbol(y, Decl(-57087-131.ts, 40, 11))
+
+    (x: 2, y: 2): "222";
+>x : Symbol(x, Decl(-57087-131.ts, 41, 5))
+>y : Symbol(y, Decl(-57087-131.ts, 41, 10))
+
+    (x: 2, y: 1): "221";
+>x : Symbol(x, Decl(-57087-131.ts, 42, 5))
+>y : Symbol(y, Decl(-57087-131.ts, 42, 10))
+
+};
+f31d satisfies Garg31A & Garg31B; // should not satisfy
+>f31d : Symbol(f31d, Decl(-57087-131.ts, 38, 13))
+>Garg31A : Symbol(Garg31A, Decl(-57087-131.ts, 0, 15))
+>Garg31B : Symbol(Garg31B, Decl(-57087-131.ts, 5, 28))
+
+declare const f31f: {
+>f31f : Symbol(f31f, Decl(-57087-131.ts, 46, 13))
+
+    //(): "01"; // missing domain support cannot be detected at compiler time with final never
+    (x: 1, y: 1): "211";
+>x : Symbol(x, Decl(-57087-131.ts, 48, 5))
+>y : Symbol(y, Decl(-57087-131.ts, 48, 10))
+
+    (x: 2, y: 2): "222";
+>x : Symbol(x, Decl(-57087-131.ts, 49, 5))
+>y : Symbol(y, Decl(-57087-131.ts, 49, 10))
+
+    (x: 2, y: 1): "221";
+>x : Symbol(x, Decl(-57087-131.ts, 50, 5))
+>y : Symbol(y, Decl(-57087-131.ts, 50, 10))
+}
+f31f satisfies Garg31A & Garg31B; // should not satisfy
+>f31f : Symbol(f31f, Decl(-57087-131.ts, 46, 13))
+>Garg31A : Symbol(Garg31A, Decl(-57087-131.ts, 0, 15))
+>Garg31B : Symbol(Garg31B, Decl(-57087-131.ts, 5, 28))
+
+
+
+}
+
+
+/**********************/
+=== -57087-133.ts ===
+namespace ns5 {
+>ns5 : Symbol(ns5, Decl(-57087-133.ts, 0, 0))
+
+interface Garg33A {
+>Garg33A : Symbol(Garg33A, Decl(-57087-133.ts, 0, 15))
+
+    (): "01";
+    (x:1, y?:1): "111";
+>x : Symbol(x, Decl(-57087-133.ts, 3, 5))
+>y : Symbol(y, Decl(-57087-133.ts, 3, 9))
+
+    (...args: [...1[]]): "101";
+>args : Symbol(args, Decl(-57087-133.ts, 4, 5))
+
+};
+interface Garg33B {
+>Garg33B : Symbol(Garg33B, Decl(-57087-133.ts, 5, 2))
+
+    (): "02";
+    (x:1, y?:1): "211";
+>x : Symbol(x, Decl(-57087-133.ts, 8, 5))
+>y : Symbol(y, Decl(-57087-133.ts, 8, 9))
+
+    (...args:1[]): "201";
+>args : Symbol(args, Decl(-57087-133.ts, 9, 5))
+
+    (x:2, y?:any): "221"
+>x : Symbol(x, Decl(-57087-133.ts, 10, 5))
+>y : Symbol(y, Decl(-57087-133.ts, 10, 9))
+
+};
+
+declare const f33a: {
+>f33a : Symbol(f33a, Decl(-57087-133.ts, 13, 13))
+
+    (): "02";
+    (x:1, y?:1): "211";
+>x : Symbol(x, Decl(-57087-133.ts, 15, 5))
+>y : Symbol(y, Decl(-57087-133.ts, 15, 9))
+
+    (...args:1[]): "201";
+>args : Symbol(args, Decl(-57087-133.ts, 16, 5))
+
+    (x:2, y?:any): "221"
+>x : Symbol(x, Decl(-57087-133.ts, 17, 5))
+>y : Symbol(y, Decl(-57087-133.ts, 17, 9))
+}
+f33b satisfies Garg33A & Garg33B; // should  satisfy
+>f33b : Symbol(f33b, Decl(-57087-133.ts, 23, 13))
+>Garg33A : Symbol(Garg33A, Decl(-57087-133.ts, 0, 15))
+>Garg33B : Symbol(Garg33B, Decl(-57087-133.ts, 5, 2))
+
+// because (...args: [...1[]]):=>"101"  === (...args:1[]) => "201";
+
+
+declare const f33b: {
+>f33b : Symbol(f33b, Decl(-57087-133.ts, 23, 13))
+
+    (): "02";
+    (x:1, y?:1): "211";
+>x : Symbol(x, Decl(-57087-133.ts, 25, 5))
+>y : Symbol(y, Decl(-57087-133.ts, 25, 9))
+
+    (...args: [...1[]]): "101";
+>args : Symbol(args, Decl(-57087-133.ts, 26, 5))
+
+    (...args:1[]): "201";
+>args : Symbol(args, Decl(-57087-133.ts, 27, 5))
+
+    (x:2, y?:any): "221"
+>x : Symbol(x, Decl(-57087-133.ts, 28, 5))
+>y : Symbol(y, Decl(-57087-133.ts, 28, 9))
+}
+f33b satisfies Garg33A & Garg33B; // should satisfy
+>f33b : Symbol(f33b, Decl(-57087-133.ts, 23, 13))
+>Garg33A : Symbol(Garg33A, Decl(-57087-133.ts, 0, 15))
+>Garg33B : Symbol(Garg33B, Decl(-57087-133.ts, 5, 2))
+
+declare const f33c: {
+>f33c : Symbol(f33c, Decl(-57087-133.ts, 32, 13))
+
+    (x:2, y?:any): "221"
+>x : Symbol(x, Decl(-57087-133.ts, 33, 5))
+>y : Symbol(y, Decl(-57087-133.ts, 33, 9))
+
+    (...args:1[]): "201";
+>args : Symbol(args, Decl(-57087-133.ts, 34, 5))
+
+    (...args: [...1[]]): "101";
+>args : Symbol(args, Decl(-57087-133.ts, 35, 5))
+
+    (x:1, y?:1): "211";
+>x : Symbol(x, Decl(-57087-133.ts, 36, 5))
+>y : Symbol(y, Decl(-57087-133.ts, 36, 9))
+
+    (): "02";
+}
+f33c satisfies Garg33A & Garg33B; // should satisfy (even though reversed order of overloads)
+>f33c : Symbol(f33c, Decl(-57087-133.ts, 32, 13))
+>Garg33A : Symbol(Garg33A, Decl(-57087-133.ts, 0, 15))
+>Garg33B : Symbol(Garg33B, Decl(-57087-133.ts, 5, 2))
+
+
+
+}
+
+
+/**********************/
+=== -57087-135.ts ===
+namespace ns6 {
+>ns6 : Symbol(ns6, Decl(-57087-135.ts, 0, 0))
+
+interface Garg35A {
+>Garg35A : Symbol(Garg35A, Decl(-57087-135.ts, 0, 15))
+
+    ({x,y}:{x?:1, y?:Garg35B}): "A1"
+>x : Symbol(x, Decl(-57087-135.ts, 2, 6))
+>y : Symbol(y, Decl(-57087-135.ts, 2, 8))
+>x : Symbol(x, Decl(-57087-135.ts, 2, 12))
+>y : Symbol(y, Decl(-57087-135.ts, 2, 17))
+>Garg35B : Symbol(Garg35B, Decl(-57087-135.ts, 4, 2))
+
+    ({x,y}:{x?:2, y?:Garg35C}): "A2"
+>x : Symbol(x, Decl(-57087-135.ts, 3, 6))
+>y : Symbol(y, Decl(-57087-135.ts, 3, 8))
+>x : Symbol(x, Decl(-57087-135.ts, 3, 12))
+>y : Symbol(y, Decl(-57087-135.ts, 3, 17))
+>Garg35C : Symbol(Garg35C, Decl(-57087-135.ts, 8, 2))
+
+};
+interface Garg35B {
+>Garg35B : Symbol(Garg35B, Decl(-57087-135.ts, 4, 2))
+
+    ({x,y}:{x?:2, y?:Garg35C}): "B1"
+>x : Symbol(x, Decl(-57087-135.ts, 6, 6))
+>y : Symbol(y, Decl(-57087-135.ts, 6, 8))
+>x : Symbol(x, Decl(-57087-135.ts, 6, 12))
+>y : Symbol(y, Decl(-57087-135.ts, 6, 17))
+>Garg35C : Symbol(Garg35C, Decl(-57087-135.ts, 8, 2))
+
+    ({x,y}:{x:2, y?:Garg35A}): "B2";
+>x : Symbol(x, Decl(-57087-135.ts, 7, 6))
+>y : Symbol(y, Decl(-57087-135.ts, 7, 8))
+>x : Symbol(x, Decl(-57087-135.ts, 7, 12))
+>y : Symbol(y, Decl(-57087-135.ts, 7, 16))
+>Garg35A : Symbol(Garg35A, Decl(-57087-135.ts, 0, 15))
+
+};
+interface Garg35C {
+>Garg35C : Symbol(Garg35C, Decl(-57087-135.ts, 8, 2))
+
+    ({x,y}:{x:2, y?:Garg35A}): "C1";
+>x : Symbol(x, Decl(-57087-135.ts, 10, 6))
+>y : Symbol(y, Decl(-57087-135.ts, 10, 8))
+>x : Symbol(x, Decl(-57087-135.ts, 10, 12))
+>y : Symbol(y, Decl(-57087-135.ts, 10, 16))
+>Garg35A : Symbol(Garg35A, Decl(-57087-135.ts, 0, 15))
+
+    ({x,y}:{x?:1, y?:Garg35B}): "C2"
+>x : Symbol(x, Decl(-57087-135.ts, 11, 6))
+>y : Symbol(y, Decl(-57087-135.ts, 11, 8))
+>x : Symbol(x, Decl(-57087-135.ts, 11, 12))
+>y : Symbol(y, Decl(-57087-135.ts, 11, 17))
+>Garg35B : Symbol(Garg35B, Decl(-57087-135.ts, 4, 2))
+
+};
+
+declare const f35a: {
+>f35a : Symbol(f35a, Decl(-57087-135.ts, 14, 13))
+
+    ({x,y}:{x?:1, y?:Garg35B}): "A1"
+>x : Symbol(x, Decl(-57087-135.ts, 15, 6))
+>y : Symbol(y, Decl(-57087-135.ts, 15, 8))
+>x : Symbol(x, Decl(-57087-135.ts, 15, 12))
+>y : Symbol(y, Decl(-57087-135.ts, 15, 17))
+>Garg35B : Symbol(Garg35B, Decl(-57087-135.ts, 4, 2))
+
+    ({x,y}:{x:2, y?:Garg35A}): "B2";
+>x : Symbol(x, Decl(-57087-135.ts, 16, 6))
+>y : Symbol(y, Decl(-57087-135.ts, 16, 8))
+>x : Symbol(x, Decl(-57087-135.ts, 16, 12))
+>y : Symbol(y, Decl(-57087-135.ts, 16, 16))
+>Garg35A : Symbol(Garg35A, Decl(-57087-135.ts, 0, 15))
+
+    ({x,y}:{x?:2, y?:Garg35C}): "A2"
+>x : Symbol(x, Decl(-57087-135.ts, 17, 6))
+>y : Symbol(y, Decl(-57087-135.ts, 17, 8))
+>x : Symbol(x, Decl(-57087-135.ts, 17, 12))
+>y : Symbol(y, Decl(-57087-135.ts, 17, 17))
+>Garg35C : Symbol(Garg35C, Decl(-57087-135.ts, 8, 2))
+}
+f35a satisfies Garg35A & Garg35B & Garg35C; // should satisfy
+>f35a : Symbol(f35a, Decl(-57087-135.ts, 14, 13))
+>Garg35A : Symbol(Garg35A, Decl(-57087-135.ts, 0, 15))
+>Garg35B : Symbol(Garg35B, Decl(-57087-135.ts, 4, 2))
+>Garg35C : Symbol(Garg35C, Decl(-57087-135.ts, 8, 2))
+
+declare const f35b: {
+>f35b : Symbol(f35b, Decl(-57087-135.ts, 21, 13))
+
+    ({x,y}:{x:2, y?:Garg35A}): "C1";
+>x : Symbol(x, Decl(-57087-135.ts, 22, 6))
+>y : Symbol(y, Decl(-57087-135.ts, 22, 8))
+>x : Symbol(x, Decl(-57087-135.ts, 22, 12))
+>y : Symbol(y, Decl(-57087-135.ts, 22, 16))
+>Garg35A : Symbol(Garg35A, Decl(-57087-135.ts, 0, 15))
+
+    ({x,y}:{x?:1, y?:Garg35B}): "C2"
+>x : Symbol(x, Decl(-57087-135.ts, 23, 6))
+>y : Symbol(y, Decl(-57087-135.ts, 23, 8))
+>x : Symbol(x, Decl(-57087-135.ts, 23, 12))
+>y : Symbol(y, Decl(-57087-135.ts, 23, 17))
+>Garg35B : Symbol(Garg35B, Decl(-57087-135.ts, 4, 2))
+
+    ({x,y}:{x?:2, y?:Garg35C}): "B1"
+>x : Symbol(x, Decl(-57087-135.ts, 24, 6))
+>y : Symbol(y, Decl(-57087-135.ts, 24, 8))
+>x : Symbol(x, Decl(-57087-135.ts, 24, 12))
+>y : Symbol(y, Decl(-57087-135.ts, 24, 17))
+>Garg35C : Symbol(Garg35C, Decl(-57087-135.ts, 8, 2))
+}
+f35b satisfies typeof f35a & Garg35A & Garg35B & Garg35C; // should satisfy
+>f35b : Symbol(f35b, Decl(-57087-135.ts, 21, 13))
+>f35a : Symbol(f35a, Decl(-57087-135.ts, 14, 13))
+>Garg35A : Symbol(Garg35A, Decl(-57087-135.ts, 0, 15))
+>Garg35B : Symbol(Garg35B, Decl(-57087-135.ts, 4, 2))
+>Garg35C : Symbol(Garg35C, Decl(-57087-135.ts, 8, 2))
+
+
+}

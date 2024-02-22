@@ -1,0 +1,1354 @@
+//// [tests/cases/compiler/checkOverloadsRelatedToIntersection.ts] ////
+
+=== -57087-101.ts ===
+/**********************/
+
+namespace ns0 {
+>ns0 : typeof ns0
+
+interface FMap<T,R> {
+    f:(x:T)=>R
+>f : (x: T) => R
+>x : T
+
+    g(f:(x:T)=>R):R;
+>g : (f: (x: T) => R) => R
+>f : (x: T) => R
+>x : T
+}
+declare const x1: FMap<1|2,1|2>;
+>x1 : FMap<1 | 2, 1 | 2>
+
+x1.g(x1.f); // no error
+>x1.g(x1.f) : 1 | 2
+>x1.g : (f: (x: 1 | 2) => 1 | 2) => 1 | 2
+>x1 : FMap<1 | 2, 1 | 2>
+>g : (f: (x: 1 | 2) => 1 | 2) => 1 | 2
+>x1.f : (x: 1 | 2) => 1 | 2
+>x1 : FMap<1 | 2, 1 | 2>
+>f : (x: 1 | 2) => 1 | 2
+
+declare const x2: FMap<2|3,"2"|"3">;
+>x2 : FMap<2 | 3, "2" | "3">
+
+x2.g(x2.f); // no error
+>x2.g(x2.f) : "2" | "3"
+>x2.g : (f: (x: 2 | 3) => "2" | "3") => "2" | "3"
+>x2 : FMap<2 | 3, "2" | "3">
+>g : (f: (x: 2 | 3) => "2" | "3") => "2" | "3"
+>x2.f : (x: 2 | 3) => "2" | "3"
+>x2 : FMap<2 | 3, "2" | "3">
+>f : (x: 2 | 3) => "2" | "3"
+
+const x = Math.random() < 0.5 ? x1 : x2;
+>x : FMap<1 | 2, 1 | 2> | FMap<2 | 3, "2" | "3">
+>Math.random() < 0.5 ? x1 : x2 : FMap<1 | 2, 1 | 2> | FMap<2 | 3, "2" | "3">
+>Math.random() < 0.5 : boolean
+>Math.random() : number
+>Math.random : () => number
+>Math : Math
+>random : () => number
+>0.5 : 0.5
+>x1 : FMap<1 | 2, 1 | 2>
+>x2 : FMap<2 | 3, "2" | "3">
+
+x.g; // (method) FMap<T, R>.g(f: ((x: 1 | 2) => 1 | 2) & ((x: 2 | 3) => "2" | "3")): 1 | 2 | "2" | "3"
+>x.g : ((f: (x: 1 | 2) => 1 | 2) => 1 | 2) | ((f: (x: 2 | 3) => "2" | "3") => "2" | "3")
+>x : FMap<1 | 2, 1 | 2> | FMap<2 | 3, "2" | "3">
+>g : ((f: (x: 1 | 2) => 1 | 2) => 1 | 2) | ((f: (x: 2 | 3) => "2" | "3") => "2" | "3")
+
+/*
+ * Exact expansion of x.g, with the intersection of the two function types expanded.
+ * Catch-all with "never" return is not required to pass the test.
+ */
+function ft0(x:1|2):1|2;
+>ft0 : { (x: 1 | 2): 1 | 2; (x: 2 | 3): "2" | "3"; }
+>x : 1 | 2
+
+function ft0(x:2|3):"2"|"3";
+>ft0 : { (x: 1 | 2): 1 | 2; (x: 2 | 3): "2" | "3"; }
+>x : 2 | 3
+
+function ft0(x:1|2|3){
+>ft0 : { (x: 1 | 2): 1 | 2; (x: 2 | 3): "2" | "3"; }
+>x : 1 | 2 | 3
+
+    if (x!==3) return x1.f(x);
+>x!==3 : boolean
+>x : 1 | 2 | 3
+>3 : 3
+>x1.f(x) : 1 | 2
+>x1.f : (x: 1 | 2) => 1 | 2
+>x1 : FMap<1 | 2, 1 | 2>
+>f : (x: 1 | 2) => 1 | 2
+>x : 1 | 2
+
+    else return x2.f(x);
+>x2.f(x) : "2" | "3"
+>x2.f : (x: 2 | 3) => "2" | "3"
+>x2 : FMap<2 | 3, "2" | "3">
+>f : (x: 2 | 3) => "2" | "3"
+>x : 3
+}
+x.g(ft0); // should not be error
+>x.g(ft0) : 1 | 2 | "2" | "3"
+>x.g : ((f: (x: 1 | 2) => 1 | 2) => 1 | 2) | ((f: (x: 2 | 3) => "2" | "3") => "2" | "3")
+>x : FMap<1 | 2, 1 | 2> | FMap<2 | 3, "2" | "3">
+>g : ((f: (x: 1 | 2) => 1 | 2) => 1 | 2) | ((f: (x: 2 | 3) => "2" | "3") => "2" | "3")
+>ft0 : { (x: 1 | 2): 1 | 2; (x: 2 | 3): "2" | "3"; }
+
+/*
+ * Condtion for passing are:
+ * (a1) Every source overload is matches at least one target overload
+ * (a2) Every target overload is matched by at least one souce overload
+ * where "matching" is defined as
+ * (b1) the target result is void OR the target result and source result overlap // should be source result subset of target result ?
+ * (b2) the target and source parameters match identically up to the number of required source parameters.
+ * This test case fails because: source (x:1) is not identical to target (x:1|2) or (x:2|3)
+ */
+
+function ft1(x:1):1;
+>ft1 : { (x: 1): 1; (x: 2): 2; (x: 3): "3"; }
+>x : 1
+
+function ft1(x:2):2;
+>ft1 : { (x: 1): 1; (x: 2): 2; (x: 3): "3"; }
+>x : 2
+
+function ft1(x:3):"3";
+>ft1 : { (x: 1): 1; (x: 2): 2; (x: 3): "3"; }
+>x : 3
+
+function ft1(x:1|2|3) {
+>ft1 : { (x: 1): 1; (x: 2): 2; (x: 3): "3"; }
+>x : 1 | 2 | 3
+
+    switch (x) {
+>x : 1 | 2 | 3
+
+        case 1: return 1;
+>1 : 1
+>1 : 1
+
+        case 2: return 2;
+>2 : 2
+>2 : 2
+
+        case 3: return "3";
+>3 : 3
+>"3" : "3"
+    }
+    throw "unexpected error"
+>"unexpected error" : "unexpected error"
+}
+x.g(ft1); // should be error
+>x.g(ft1) : 1 | 2 | "2" | "3"
+>x.g : ((f: (x: 1 | 2) => 1 | 2) => 1 | 2) | ((f: (x: 2 | 3) => "2" | "3") => "2" | "3")
+>x : FMap<1 | 2, 1 | 2> | FMap<2 | 3, "2" | "3">
+>g : ((f: (x: 1 | 2) => 1 | 2) => 1 | 2) | ((f: (x: 2 | 3) => "2" | "3") => "2" | "3")
+>ft1 : { (x: 1): 1; (x: 2): 2; (x: 3): "3"; }
+
+
+}
+
+
+/**********************/
+=== -57087-102.ts ===
+namespace ns1 {
+>ns1 : typeof ns1
+
+interface FMap<T,R> {
+    f:(x:T)=>R
+>f : (x: T) => R
+>x : T
+
+    g(f:(x:T)=>R):R;
+>g : (f: (x: T) => R) => R
+>f : (x: T) => R
+>x : T
+}
+declare const x1: FMap<1|2,1|2>;
+>x1 : FMap<1 | 2, 1 | 2>
+
+x1.g(x1.f); // no error
+>x1.g(x1.f) : 1 | 2
+>x1.g : (f: (x: 1 | 2) => 1 | 2) => 1 | 2
+>x1 : FMap<1 | 2, 1 | 2>
+>g : (f: (x: 1 | 2) => 1 | 2) => 1 | 2
+>x1.f : (x: 1 | 2) => 1 | 2
+>x1 : FMap<1 | 2, 1 | 2>
+>f : (x: 1 | 2) => 1 | 2
+
+declare const x2: FMap<2|3,"2"|"3">;
+>x2 : FMap<2 | 3, "2" | "3">
+
+x2.g(x2.f); // no error
+>x2.g(x2.f) : "2" | "3"
+>x2.g : (f: (x: 2 | 3) => "2" | "3") => "2" | "3"
+>x2 : FMap<2 | 3, "2" | "3">
+>g : (f: (x: 2 | 3) => "2" | "3") => "2" | "3"
+>x2.f : (x: 2 | 3) => "2" | "3"
+>x2 : FMap<2 | 3, "2" | "3">
+>f : (x: 2 | 3) => "2" | "3"
+
+const x = Math.random() < 0.5 ? x1 : x2;
+>x : FMap<1 | 2, 1 | 2> | FMap<2 | 3, "2" | "3">
+>Math.random() < 0.5 ? x1 : x2 : FMap<1 | 2, 1 | 2> | FMap<2 | 3, "2" | "3">
+>Math.random() < 0.5 : boolean
+>Math.random() : number
+>Math.random : () => number
+>Math : Math
+>random : () => number
+>0.5 : 0.5
+>x1 : FMap<1 | 2, 1 | 2>
+>x2 : FMap<2 | 3, "2" | "3">
+
+x.g; // (method) FMap<T, R>.g(f: ((x: 1 | 2) => 1 | 2) & ((x: 2 | 3) => "2" | "3")): 1 | 2 | "2" | "3"
+>x.g : ((f: (x: 1 | 2) => 1 | 2) => 1 | 2) | ((f: (x: 2 | 3) => "2" | "3") => "2" | "3")
+>x : FMap<1 | 2, 1 | 2> | FMap<2 | 3, "2" | "3">
+>g : ((f: (x: 1 | 2) => 1 | 2) => 1 | 2) | ((f: (x: 2 | 3) => "2" | "3") => "2" | "3")
+
+
+/**
+ * The following function ft3 should fail.  However, it currently does not
+ * The new code only handles cases that fail the in the original code.
+ * However, using such long overload chains is not desireable anyway - so we don't need to fix this?
+ * Maybe fail on when the number of source overloads is greater than the total number of target overloads?
+ */
+
+function ft3(x:1):"3"; // should cause x.g(ft3) to error
+>ft3 : { (x: 1): "3"; (x: 3): "3"; (x: 2): 2 | "2"; (x: 1 | 2): 1 | 2; (x: 2 | 3): "2" | "3"; }
+>x : 1
+
+function ft3(x:3):"3";
+>ft3 : { (x: 1): "3"; (x: 3): "3"; (x: 2): 2 | "2"; (x: 1 | 2): 1 | 2; (x: 2 | 3): "2" | "3"; }
+>x : 3
+
+function ft3(x:2):2|"2";
+>ft3 : { (x: 1): "3"; (x: 3): "3"; (x: 2): 2 | "2"; (x: 1 | 2): 1 | 2; (x: 2 | 3): "2" | "3"; }
+>x : 2
+
+function ft3(x:1|2):1|2; // (4) identical to x1.f
+>ft3 : { (x: 1): "3"; (x: 3): "3"; (x: 2): 2 | "2"; (x: 1 | 2): 1 | 2; (x: 2 | 3): "2" | "3"; }
+>x : 1 | 2
+
+function ft3(x:2|3):"2"|"3"; // (5) identical to x2.f
+>ft3 : { (x: 1): "3"; (x: 3): "3"; (x: 2): 2 | "2"; (x: 1 | 2): 1 | 2; (x: 2 | 3): "2" | "3"; }
+>x : 2 | 3
+
+function ft3(x:1|2|3){
+>ft3 : { (x: 1): "3"; (x: 3): "3"; (x: 2): 2 | "2"; (x: 1 | 2): 1 | 2; (x: 2 | 3): "2" | "3"; }
+>x : 1 | 2 | 3
+
+    if (x===1) return x1.f(x);
+>x===1 : boolean
+>x : 1 | 2 | 3
+>1 : 1
+>x1.f(x) : 1 | 2
+>x1.f : (x: 1 | 2) => 1 | 2
+>x1 : FMap<1 | 2, 1 | 2>
+>f : (x: 1 | 2) => 1 | 2
+>x : 1
+
+    if (x===3) return x2.f(x);
+>x===3 : boolean
+>x : 2 | 3
+>3 : 3
+>x2.f(x) : "2" | "3"
+>x2.f : (x: 2 | 3) => "2" | "3"
+>x2 : FMap<2 | 3, "2" | "3">
+>f : (x: 2 | 3) => "2" | "3"
+>x : 3
+
+    return Math.random() < 0.5 ? x1.f(x) : x2.f(x);
+>Math.random() < 0.5 ? x1.f(x) : x2.f(x) : 1 | 2 | "2" | "3"
+>Math.random() < 0.5 : boolean
+>Math.random() : number
+>Math.random : () => number
+>Math : Math
+>random : () => number
+>0.5 : 0.5
+>x1.f(x) : 1 | 2
+>x1.f : (x: 1 | 2) => 1 | 2
+>x1 : FMap<1 | 2, 1 | 2>
+>f : (x: 1 | 2) => 1 | 2
+>x : 2
+>x2.f(x) : "2" | "3"
+>x2.f : (x: 2 | 3) => "2" | "3"
+>x2 : FMap<2 | 3, "2" | "3">
+>f : (x: 2 | 3) => "2" | "3"
+>x : 2
+}
+x.g(ft3); // should error (but currently doesn't)
+>x.g(ft3) : 1 | 2 | "2" | "3"
+>x.g : ((f: (x: 1 | 2) => 1 | 2) => 1 | 2) | ((f: (x: 2 | 3) => "2" | "3") => "2" | "3")
+>x : FMap<1 | 2, 1 | 2> | FMap<2 | 3, "2" | "3">
+>g : ((f: (x: 1 | 2) => 1 | 2) => 1 | 2) | ((f: (x: 2 | 3) => "2" | "3") => "2" | "3")
+>ft3 : { (x: 1): "3"; (x: 3): "3"; (x: 2): 2 | "2"; (x: 1 | 2): 1 | 2; (x: 2 | 3): "2" | "3"; }
+
+/**
+ * The following function ft4 should not fail, and it currently does not.
+ * However, using such long overload chains is not friendly anyway, so it is irrelevant.
+ */
+
+function ft4(x:1):1;
+>ft4 : { (x: 1): 1; (x: 3): "3"; (x: 2): 2 | "2"; (x: 1 | 2): 1 | 2; (x: 2 | 3): "2" | "3"; }
+>x : 1
+
+function ft4(x:3):"3";
+>ft4 : { (x: 1): 1; (x: 3): "3"; (x: 2): 2 | "2"; (x: 1 | 2): 1 | 2; (x: 2 | 3): "2" | "3"; }
+>x : 3
+
+function ft4(x:2):2|"2";
+>ft4 : { (x: 1): 1; (x: 3): "3"; (x: 2): 2 | "2"; (x: 1 | 2): 1 | 2; (x: 2 | 3): "2" | "3"; }
+>x : 2
+
+function ft4(x:1|2):1|2; // (4) identical to x1.f
+>ft4 : { (x: 1): 1; (x: 3): "3"; (x: 2): 2 | "2"; (x: 1 | 2): 1 | 2; (x: 2 | 3): "2" | "3"; }
+>x : 1 | 2
+
+function ft4(x:2|3):"2"|"3"; // (5) identical to x2.f
+>ft4 : { (x: 1): 1; (x: 3): "3"; (x: 2): 2 | "2"; (x: 1 | 2): 1 | 2; (x: 2 | 3): "2" | "3"; }
+>x : 2 | 3
+
+function ft4(x:1|2|3){
+>ft4 : { (x: 1): 1; (x: 3): "3"; (x: 2): 2 | "2"; (x: 1 | 2): 1 | 2; (x: 2 | 3): "2" | "3"; }
+>x : 1 | 2 | 3
+
+    if (x===1) return x1.f(x);
+>x===1 : boolean
+>x : 1 | 2 | 3
+>1 : 1
+>x1.f(x) : 1 | 2
+>x1.f : (x: 1 | 2) => 1 | 2
+>x1 : FMap<1 | 2, 1 | 2>
+>f : (x: 1 | 2) => 1 | 2
+>x : 1
+
+    if (x===3) return x2.f(x);
+>x===3 : boolean
+>x : 2 | 3
+>3 : 3
+>x2.f(x) : "2" | "3"
+>x2.f : (x: 2 | 3) => "2" | "3"
+>x2 : FMap<2 | 3, "2" | "3">
+>f : (x: 2 | 3) => "2" | "3"
+>x : 3
+
+    return Math.random() < 0.5 ? x1.f(x) : x2.f(x);
+>Math.random() < 0.5 ? x1.f(x) : x2.f(x) : 1 | 2 | "2" | "3"
+>Math.random() < 0.5 : boolean
+>Math.random() : number
+>Math.random : () => number
+>Math : Math
+>random : () => number
+>0.5 : 0.5
+>x1.f(x) : 1 | 2
+>x1.f : (x: 1 | 2) => 1 | 2
+>x1 : FMap<1 | 2, 1 | 2>
+>f : (x: 1 | 2) => 1 | 2
+>x : 2
+>x2.f(x) : "2" | "3"
+>x2.f : (x: 2 | 3) => "2" | "3"
+>x2 : FMap<2 | 3, "2" | "3">
+>f : (x: 2 | 3) => "2" | "3"
+>x : 2
+}
+x.g(ft4); // should not error
+>x.g(ft4) : 1 | 2 | "2" | "3"
+>x.g : ((f: (x: 1 | 2) => 1 | 2) => 1 | 2) | ((f: (x: 2 | 3) => "2" | "3") => "2" | "3")
+>x : FMap<1 | 2, 1 | 2> | FMap<2 | 3, "2" | "3">
+>g : ((f: (x: 1 | 2) => 1 | 2) => 1 | 2) | ((f: (x: 2 | 3) => "2" | "3") => "2" | "3")
+>ft4 : { (x: 1): 1; (x: 3): "3"; (x: 2): 2 | "2"; (x: 1 | 2): 1 | 2; (x: 2 | 3): "2" | "3"; }
+
+
+}
+
+
+/**********************/
+=== -57087-104.ts ===
+namespace ns2 {
+>ns2 : typeof ns2
+
+interface C {
+  (x:1):"1";
+>x : 1
+
+  (x:2):"20";
+>x : 2
+
+  (x:number):number | "1" | "20";
+>x : number
+
+};
+interface B {
+  (x:2):"2"
+>x : 2
+
+  (x:3):"30"
+>x : 3
+
+  (x:number):number | "2" | "30";
+>x : number
+
+};
+interface A {
+  (x:3):"3"
+>x : 3
+
+  (x:1):"10"
+>x : 1
+
+  (x:number):number | "3" | "10";
+>x : number
+
+};
+
+type W = (A & B & C)|(A & C & B)|(B & A & C)|(B & C & A)|(C & A & B)|(C & B & A);
+>W : (A & B & C) | (A & C & B) | (B & A & C) | (B & C & A) | (C & A & B) | (C & B & A)
+
+/*
+* Scenario:
+* (1) Overloads: Usng fully expanded domain support for C & B & A, so that all errors are detected at compile time
+* (2) Implementation:
+*     - Note extra lines added to make the function signature compatible with the implementation
+* Disadvatage: More verbosity in number of overloads and in implementation.
+* Number of overloads could impact compile time, and makes life harder for downstream users of the function
+*/
+function foo2(x:1):"1";
+>foo2 : { (x: 1): "1"; (x: 2): "20"; (x: number): number; (x: 2): "2"; (x: 3): "30"; (x: number): number; (x: 3): "3"; (x: 1): "10"; (x: number): number; }
+>x : 1
+
+function foo2(x:2):"20";
+>foo2 : { (x: 1): "1"; (x: 2): "20"; (x: number): number; (x: 2): "2"; (x: 3): "30"; (x: number): number; (x: 3): "3"; (x: 1): "10"; (x: number): number; }
+>x : 2
+
+function foo2(x:number):number;
+>foo2 : { (x: 1): "1"; (x: 2): "20"; (x: number): number; (x: 2): "2"; (x: 3): "30"; (x: number): number; (x: 3): "3"; (x: 1): "10"; (x: number): number; }
+>x : number
+
+function foo2(x:2):"2"
+>foo2 : { (x: 1): "1"; (x: 2): "20"; (x: number): number; (x: 2): "2"; (x: 3): "30"; (x: number): number; (x: 3): "3"; (x: 1): "10"; (x: number): number; }
+>x : 2
+
+function foo2(x:3):"30"
+>foo2 : { (x: 1): "1"; (x: 2): "20"; (x: number): number; (x: 2): "2"; (x: 3): "30"; (x: number): number; (x: 3): "3"; (x: 1): "10"; (x: number): number; }
+>x : 3
+
+function foo2(x:number):number;
+>foo2 : { (x: 1): "1"; (x: 2): "20"; (x: number): number; (x: 2): "2"; (x: 3): "30"; (x: number): number; (x: 3): "3"; (x: 1): "10"; (x: number): number; }
+>x : number
+
+function foo2(x:3):"3"
+>foo2 : { (x: 1): "1"; (x: 2): "20"; (x: number): number; (x: 2): "2"; (x: 3): "30"; (x: number): number; (x: 3): "3"; (x: 1): "10"; (x: number): number; }
+>x : 3
+
+function foo2(x:1):"10"
+>foo2 : { (x: 1): "1"; (x: 2): "20"; (x: number): number; (x: 2): "2"; (x: 3): "30"; (x: number): number; (x: 3): "3"; (x: 1): "10"; (x: number): number; }
+>x : 1
+
+function foo2(x:number):number;
+>foo2 : { (x: 1): "1"; (x: 2): "20"; (x: number): number; (x: 2): "2"; (x: 3): "30"; (x: number): number; (x: 3): "3"; (x: 1): "10"; (x: number): number; }
+>x : number
+
+function foo2(x:number){
+>foo2 : { (x: 1): "1"; (x: 2): "20"; (x: number): number; (x: 2): "2"; (x: 3): "30"; (x: number): number; (x: 3): "3"; (x: 1): "10"; (x: number): number; }
+>x : number
+
+  if (x===1) return "1";
+>x===1 : boolean
+>x : number
+>1 : 1
+>"1" : "1"
+
+  if (x===2) return "2";
+>x===2 : boolean
+>x : number
+>2 : 2
+>"2" : "2"
+
+  if (x===3) return "3";
+>x===3 : boolean
+>x : number
+>3 : 3
+>"3" : "3"
+
+  // (*) These nonsense unused extra lines need to be added to make the function signature compatible with the implementation
+  if (x===1) return "10";
+>x===1 : boolean
+>x : number
+>1 : 1
+>"10" : "10"
+
+  if (x===2) return "20";
+>x===2 : boolean
+>x : number
+>2 : 2
+>"20" : "20"
+
+  if (x===3) return "30";
+>x===3 : boolean
+>x : number
+>3 : 3
+>"30" : "30"
+
+  return x;
+>x : number
+}
+
+foo2 satisfies A & B & C; // should satisfy
+>foo2 satisfies A & B & C : { (x: 1): "1"; (x: 2): "20"; (x: number): number; (x: 2): "2"; (x: 3): "30"; (x: number): number; (x: 3): "3"; (x: 1): "10"; (x: number): number; }
+>foo2 : { (x: 1): "1"; (x: 2): "20"; (x: number): number; (x: 2): "2"; (x: 3): "30"; (x: number): number; (x: 3): "3"; (x: 1): "10"; (x: number): number; }
+
+foo2 satisfies A & C & B; // should satisfy
+>foo2 satisfies A & C & B : { (x: 1): "1"; (x: 2): "20"; (x: number): number; (x: 2): "2"; (x: 3): "30"; (x: number): number; (x: 3): "3"; (x: 1): "10"; (x: number): number; }
+>foo2 : { (x: 1): "1"; (x: 2): "20"; (x: number): number; (x: 2): "2"; (x: 3): "30"; (x: number): number; (x: 3): "3"; (x: 1): "10"; (x: number): number; }
+
+foo2 satisfies B & A & C; // should satisfy
+>foo2 satisfies B & A & C : { (x: 1): "1"; (x: 2): "20"; (x: number): number; (x: 2): "2"; (x: 3): "30"; (x: number): number; (x: 3): "3"; (x: 1): "10"; (x: number): number; }
+>foo2 : { (x: 1): "1"; (x: 2): "20"; (x: number): number; (x: 2): "2"; (x: 3): "30"; (x: number): number; (x: 3): "3"; (x: 1): "10"; (x: number): number; }
+
+foo2 satisfies B & C & A; // should satisfy
+>foo2 satisfies B & C & A : { (x: 1): "1"; (x: 2): "20"; (x: number): number; (x: 2): "2"; (x: 3): "30"; (x: number): number; (x: 3): "3"; (x: 1): "10"; (x: number): number; }
+>foo2 : { (x: 1): "1"; (x: 2): "20"; (x: number): number; (x: 2): "2"; (x: 3): "30"; (x: number): number; (x: 3): "3"; (x: 1): "10"; (x: number): number; }
+
+foo2 satisfies C & A & B; // should satisfy
+>foo2 satisfies C & A & B : { (x: 1): "1"; (x: 2): "20"; (x: number): number; (x: 2): "2"; (x: 3): "30"; (x: number): number; (x: 3): "3"; (x: 1): "10"; (x: number): number; }
+>foo2 : { (x: 1): "1"; (x: 2): "20"; (x: number): number; (x: 2): "2"; (x: 3): "30"; (x: number): number; (x: 3): "3"; (x: 1): "10"; (x: number): number; }
+
+foo2 satisfies C & B & A; // should satisfy
+>foo2 satisfies C & B & A : { (x: 1): "1"; (x: 2): "20"; (x: number): number; (x: 2): "2"; (x: 3): "30"; (x: number): number; (x: 3): "3"; (x: 1): "10"; (x: number): number; }
+>foo2 : { (x: 1): "1"; (x: 2): "20"; (x: number): number; (x: 2): "2"; (x: 3): "30"; (x: number): number; (x: 3): "3"; (x: 1): "10"; (x: number): number; }
+
+foo2 satisfies W; // should satisfy
+>foo2 satisfies W : { (x: 1): "1"; (x: 2): "20"; (x: number): number; (x: 2): "2"; (x: 3): "30"; (x: number): number; (x: 3): "3"; (x: 1): "10"; (x: number): number; }
+>foo2 : { (x: 1): "1"; (x: 2): "20"; (x: number): number; (x: 2): "2"; (x: 3): "30"; (x: number): number; (x: 3): "3"; (x: 1): "10"; (x: number): number; }
+
+
+/*
+* Scenario: Select some overloads from the orignal set of overloads.
+* Advantages:
+*     - Less verbosity in number of overloads
+*     - Less verbosity in implementation
+* Number of overloads could impact compile time, and makes life harder for downstream users of the function
+*/
+function foo1(x:1):"1";
+>foo1 : { (x: 1): "1"; (x: 2): "2"; (x: 3): "3"; (x: number): number; }
+>x : 1
+
+function foo1(x:2):"2";
+>foo1 : { (x: 1): "1"; (x: 2): "2"; (x: 3): "3"; (x: number): number; }
+>x : 2
+
+function foo1(x:3):"3";
+>foo1 : { (x: 1): "1"; (x: 2): "2"; (x: 3): "3"; (x: number): number; }
+>x : 3
+
+function foo1(x:number):number;
+>foo1 : { (x: 1): "1"; (x: 2): "2"; (x: 3): "3"; (x: number): number; }
+>x : number
+
+function foo1(x:number){
+>foo1 : { (x: 1): "1"; (x: 2): "2"; (x: 3): "3"; (x: number): number; }
+>x : number
+
+  if (x===1) return "1";
+>x===1 : boolean
+>x : number
+>1 : 1
+>"1" : "1"
+
+  if (x===2) return "2";
+>x===2 : boolean
+>x : number
+>2 : 2
+>"2" : "2"
+
+  if (x===3) return "3";
+>x===3 : boolean
+>x : number
+>3 : 3
+>"3" : "3"
+
+  return x;
+>x : number
+}
+
+// The `&`-intersection operator result should be independent of the order of it's operands.
+foo1 satisfies A & B & C; // should not error
+>foo1 satisfies A & B & C : { (x: 1): "1"; (x: 2): "2"; (x: 3): "3"; (x: number): number; }
+>foo1 : { (x: 1): "1"; (x: 2): "2"; (x: 3): "3"; (x: number): number; }
+
+foo1 satisfies A & C & B; // should not error
+>foo1 satisfies A & C & B : { (x: 1): "1"; (x: 2): "2"; (x: 3): "3"; (x: number): number; }
+>foo1 : { (x: 1): "1"; (x: 2): "2"; (x: 3): "3"; (x: number): number; }
+
+foo1 satisfies B & A & C; // should not error
+>foo1 satisfies B & A & C : { (x: 1): "1"; (x: 2): "2"; (x: 3): "3"; (x: number): number; }
+>foo1 : { (x: 1): "1"; (x: 2): "2"; (x: 3): "3"; (x: number): number; }
+
+foo1 satisfies B & C & A; // should not error
+>foo1 satisfies B & C & A : { (x: 1): "1"; (x: 2): "2"; (x: 3): "3"; (x: number): number; }
+>foo1 : { (x: 1): "1"; (x: 2): "2"; (x: 3): "3"; (x: number): number; }
+
+foo1 satisfies C & A & B; // should not error
+>foo1 satisfies C & A & B : { (x: 1): "1"; (x: 2): "2"; (x: 3): "3"; (x: number): number; }
+>foo1 : { (x: 1): "1"; (x: 2): "2"; (x: 3): "3"; (x: number): number; }
+
+foo1 satisfies C & B & A; // should not error
+>foo1 satisfies C & B & A : { (x: 1): "1"; (x: 2): "2"; (x: 3): "3"; (x: number): number; }
+>foo1 : { (x: 1): "1"; (x: 2): "2"; (x: 3): "3"; (x: number): number; }
+
+foo1 satisfies W; // should not error
+>foo1 satisfies W : { (x: 1): "1"; (x: 2): "2"; (x: 3): "3"; (x: number): number; }
+>foo1 : { (x: 1): "1"; (x: 2): "2"; (x: 3): "3"; (x: number): number; }
+
+/*
+*/
+
+//function foo3(x:1):"1"; //  Omitted domain support should cause satisfies error
+function foo3(x:2):"2";
+>foo3 : { (x: 2): "2"; (x: 3): "3"; (x: number): number; }
+>x : 2
+
+function foo3(x:3):"3";
+>foo3 : { (x: 2): "2"; (x: 3): "3"; (x: number): number; }
+>x : 3
+
+function foo3(x:number):number;
+>foo3 : { (x: 2): "2"; (x: 3): "3"; (x: number): number; }
+>x : number
+
+function foo3(x:number): number | "1" | "2" | "3"{
+>foo3 : { (x: 2): "2"; (x: 3): "3"; (x: number): number; }
+>x : number
+
+  //if (x===1) return "1";
+  if (x===2) return "2";
+>x===2 : boolean
+>x : number
+>2 : 2
+>"2" : "2"
+
+  if (x===3) return "3";
+>x===3 : boolean
+>x : number
+>3 : 3
+>"3" : "3"
+
+  return x;
+>x : number
+
+  // In this case, a final throw "unexpected error" would never be reached anyway.
+  // if (typeof x === "number") return x; // pointless
+  // throw "unexpected error";
+}
+
+foo3 satisfies A & B & C; // should be error
+>foo3 satisfies A & B & C : { (x: 2): "2"; (x: 3): "3"; (x: number): number; }
+>foo3 : { (x: 2): "2"; (x: 3): "3"; (x: number): number; }
+
+foo3 satisfies A & C & B; // should be error
+>foo3 satisfies A & C & B : { (x: 2): "2"; (x: 3): "3"; (x: number): number; }
+>foo3 : { (x: 2): "2"; (x: 3): "3"; (x: number): number; }
+
+foo3 satisfies B & A & C; // should be error
+>foo3 satisfies B & A & C : { (x: 2): "2"; (x: 3): "3"; (x: number): number; }
+>foo3 : { (x: 2): "2"; (x: 3): "3"; (x: number): number; }
+
+foo3 satisfies B & C & A; // should be error
+>foo3 satisfies B & C & A : { (x: 2): "2"; (x: 3): "3"; (x: number): number; }
+>foo3 : { (x: 2): "2"; (x: 3): "3"; (x: number): number; }
+
+foo3 satisfies C & A & B; // should be error
+>foo3 satisfies C & A & B : { (x: 2): "2"; (x: 3): "3"; (x: number): number; }
+>foo3 : { (x: 2): "2"; (x: 3): "3"; (x: number): number; }
+
+foo3 satisfies C & B & A; // should be error
+>foo3 satisfies C & B & A : { (x: 2): "2"; (x: 3): "3"; (x: number): number; }
+>foo3 : { (x: 2): "2"; (x: 3): "3"; (x: number): number; }
+
+
+foo3 satisfies W; // should be error
+>foo3 satisfies W : { (x: 2): "2"; (x: 3): "3"; (x: number): number; }
+>foo3 : { (x: 2): "2"; (x: 3): "3"; (x: number): number; }
+
+
+}
+
+
+/**********************/
+=== -57087-105.ts ===
+namespace ns3 {
+>ns3 : typeof ns3
+
+type A = { a: string };
+>A : { a: string; }
+>a : string
+
+type B = { b: 1 };
+>B : { b: 1; }
+>b : 1
+
+type C = { c: number };
+>C : { c: number; }
+>c : number
+
+
+interface X1 {
+    f(x:A):string
+>f : { (x: A): string; (x: B): 1; }
+>x : A
+
+    f(x:B):1
+>f : { (x: A): string; (x: B): 1; }
+>x : B
+
+    g(f: X1["f"],arg:A|B):()=>ReturnType<X1["f"]>
+>g : (f: X1["f"], arg: A | B) => () => ReturnType<X1["f"]>
+>f : { (x: A): string; (x: B): 1; }
+>arg : A | B
+}
+interface X2 {
+    f(x:C):number
+>f : { (x: C): number; (x: B): "1"; }
+>x : C
+
+    f(x:B):"1";
+>f : { (x: C): number; (x: B): "1"; }
+>x : B
+
+    g(f: X2["f"],arg:C|B):()=>ReturnType<X2["f"]>
+>g : (f: X2["f"], arg: C | B) => () => ReturnType<X2["f"]>
+>f : { (x: C): number; (x: B): "1"; }
+>arg : B | C
+}
+
+declare const x1: X1;
+>x1 : X1
+
+declare const arg1: A|B;
+>arg1 : A | B
+
+x1.g(x1.f,arg1); // should be no error
+>x1.g(x1.f,arg1) : () => 1
+>x1.g : (f: { (x: A): string; (x: B): 1; }, arg: A | B) => () => 1
+>x1 : X1
+>g : (f: { (x: A): string; (x: B): 1; }, arg: A | B) => () => 1
+>x1.f : { (x: A): string; (x: B): 1; }
+>x1 : X1
+>f : { (x: A): string; (x: B): 1; }
+>arg1 : A | B
+
+declare const x2: X2;
+>x2 : X2
+
+declare const arg2: C|B;
+>arg2 : B | C
+
+x2.g(x2.f,arg2); // should be no error
+>x2.g(x2.f,arg2) : () => "1"
+>x2.g : (f: { (x: C): number; (x: B): "1"; }, arg: B | C) => () => "1"
+>x2 : X2
+>g : (f: { (x: C): number; (x: B): "1"; }, arg: B | C) => () => "1"
+>x2.f : { (x: C): number; (x: B): "1"; }
+>x2 : X2
+>f : { (x: C): number; (x: B): "1"; }
+>arg2 : B | C
+
+const x = Math.random() < 0.5 ? x1 : x2;
+>x : X1 | X2
+>Math.random() < 0.5 ? x1 : x2 : X1 | X2
+>Math.random() < 0.5 : boolean
+>Math.random() : number
+>Math.random : () => number
+>Math : Math
+>random : () => number
+>0.5 : 0.5
+>x1 : X1
+>x2 : X2
+
+x.g;
+>x.g : ((f: { (x: A): string; (x: B): 1; }, arg: A | B) => () => 1) | ((f: { (x: C): number; (x: B): "1"; }, arg: B | C) => () => "1")
+>x : X1 | X2
+>g : ((f: { (x: A): string; (x: B): 1; }, arg: A | B) => () => 1) | ((f: { (x: C): number; (x: B): "1"; }, arg: B | C) => () => "1")
+
+const arg = Math.random() < 0.5 ? arg1 : arg2;
+>arg : A | B | C
+>Math.random() < 0.5 ? arg1 : arg2 : A | B | C
+>Math.random() < 0.5 : boolean
+>Math.random() : number
+>Math.random : () => number
+>Math : Math
+>random : () => number
+>0.5 : 0.5
+>arg1 : A | B
+>arg2 : B | C
+
+
+
+type ArgCastType = (A & C) | (A & B) | (B & C);
+>ArgCastType : (A & C) | (A & B) | (B & C)
+
+
+function ftw(x:A):string;
+>ftw : { (x: A): string; (x: C): number; (x: B): 1; }
+>x : A
+
+function ftw(x:C):number;
+>ftw : { (x: A): string; (x: C): number; (x: B): 1; }
+>x : C
+
+function ftw(x:B):1;
+>ftw : { (x: A): string; (x: C): number; (x: B): 1; }
+>x : B
+
+function ftw(x: A|B|C) {
+>ftw : { (x: A): string; (x: C): number; (x: B): 1; }
+>x : A | B | C
+
+    if ("a" in x) return x.a;
+>"a" in x : boolean
+>"a" : "a"
+>x : A | B | C
+>x.a : string
+>x : A
+>a : string
+
+    if ("c" in x) return x.c;
+>"c" in x : boolean
+>"c" : "c"
+>x : B | C
+>x.c : number
+>x : C
+>c : number
+
+    return 1;
+>1 : 1
+}
+
+// The necessity of the argument cast is a separate issue!
+x.g(ftw,arg as any as any as ArgCastType); // should not be error
+>x.g(ftw,arg as any as any as ArgCastType) : (() => 1) | (() => "1")
+>x.g : ((f: { (x: A): string; (x: B): 1; }, arg: A | B) => () => 1) | ((f: { (x: C): number; (x: B): "1"; }, arg: B | C) => () => "1")
+>x : X1 | X2
+>g : ((f: { (x: A): string; (x: B): 1; }, arg: A | B) => () => 1) | ((f: { (x: C): number; (x: B): "1"; }, arg: B | C) => () => "1")
+>ftw : { (x: A): string; (x: C): number; (x: B): 1; }
+>arg as any as any as ArgCastType : ArgCastType
+>arg as any as any : any
+>arg as any : any
+>arg : A | B | C
+
+function ftx(x:A):string;
+>ftx : { (x: A): string; (x: C): number; (x: B): string; }
+>x : A
+
+function ftx(x:C):number;
+>ftx : { (x: A): string; (x: C): number; (x: B): string; }
+>x : C
+
+function ftx(x:B):string; // should cause x.g(ft2) to error
+>ftx : { (x: A): string; (x: C): number; (x: B): string; }
+>x : B
+
+function ftx(x: A|B|C) {
+>ftx : { (x: A): string; (x: C): number; (x: B): string; }
+>x : A | B | C
+
+    if ("a" in x) return x.a;
+>"a" in x : boolean
+>"a" : "a"
+>x : A | B | C
+>x.a : string
+>x : A
+>a : string
+
+    if ("c" in x) return x.c;
+>"c" in x : boolean
+>"c" : "c"
+>x : B | C
+>x.c : number
+>x : C
+>c : number
+
+    return x.b;
+>x.b : 1
+>x : B
+>b : 1
+}
+
+// The necessity of the argument cast is a separate issue!
+x.g(ftx,arg as any as any as ArgCastType); // should be error
+>x.g(ftx,arg as any as any as ArgCastType) : (() => 1) | (() => "1")
+>x.g : ((f: { (x: A): string; (x: B): 1; }, arg: A | B) => () => 1) | ((f: { (x: C): number; (x: B): "1"; }, arg: B | C) => () => "1")
+>x : X1 | X2
+>g : ((f: { (x: A): string; (x: B): 1; }, arg: A | B) => () => 1) | ((f: { (x: C): number; (x: B): "1"; }, arg: B | C) => () => "1")
+>ftx : { (x: A): string; (x: C): number; (x: B): string; }
+>arg as any as any as ArgCastType : ArgCastType
+>arg as any as any : any
+>arg as any : any
+>arg : A | B | C
+
+//function fty(x:A):string;  // should cause x.g(ft2) to error
+function fty(x:C):number;
+>fty : { (x: C): number; (x: B): 1; }
+>x : C
+
+function fty(x:B):1;
+>fty : { (x: C): number; (x: B): 1; }
+>x : B
+
+function fty(x: {a?: string, c?: number, b?: 1|"1"}) {
+>fty : { (x: C): number; (x: B): 1; }
+>x : { a?: string | undefined; c?: number | undefined; b?: 1 | "1" | undefined; }
+>a : string | undefined
+>c : number | undefined
+>b : 1 | "1" | undefined
+
+    if (x.a) return x.a;
+>x.a : string | undefined
+>x : { a?: string | undefined; c?: number | undefined; b?: 1 | "1" | undefined; }
+>a : string | undefined
+>x.a : string
+>x : { a?: string | undefined; c?: number | undefined; b?: 1 | "1" | undefined; }
+>a : string
+
+    if (x.c) return x.c;
+>x.c : number | undefined
+>x : { a?: string | undefined; c?: number | undefined; b?: 1 | "1" | undefined; }
+>c : number | undefined
+>x.c : number
+>x : { a?: string | undefined; c?: number | undefined; b?: 1 | "1" | undefined; }
+>c : number
+
+    if (x.b) return x.b;
+>x.b : 1 | "1" | undefined
+>x : { a?: string | undefined; c?: number | undefined; b?: 1 | "1" | undefined; }
+>b : 1 | "1" | undefined
+>x.b : 1 | "1"
+>x : { a?: string | undefined; c?: number | undefined; b?: 1 | "1" | undefined; }
+>b : 1 | "1"
+
+    throw "unexpected error"
+>"unexpected error" : "unexpected error"
+}
+
+// The necessity of the argument cast is a separate issue!
+x.g(fty,arg as any as any as ArgCastType); // should be error
+>x.g(fty,arg as any as any as ArgCastType) : (() => 1) | (() => "1")
+>x.g : ((f: { (x: A): string; (x: B): 1; }, arg: A | B) => () => 1) | ((f: { (x: C): number; (x: B): "1"; }, arg: B | C) => () => "1")
+>x : X1 | X2
+>g : ((f: { (x: A): string; (x: B): 1; }, arg: A | B) => () => 1) | ((f: { (x: C): number; (x: B): "1"; }, arg: B | C) => () => "1")
+>fty : { (x: C): number; (x: B): 1; }
+>arg as any as any as ArgCastType : ArgCastType
+>arg as any as any : any
+>arg as any : any
+>arg : A | B | C
+
+function ftz(x:{a?:string}):string;  // should cause x.g(ft2) to error
+>ftz : { (x: {    a?: string;}): string; (x: C): number; (x: B): 1; }
+>x : { a?: string | undefined; }
+>a : string | undefined
+
+function ftz(x:C):number;
+>ftz : { (x: { a?: string | undefined; }): string; (x: C): number; (x: B): 1; }
+>x : C
+
+function ftz(x:B):1;
+>ftz : { (x: { a?: string | undefined; }): string; (x: C): number; (x: B): 1; }
+>x : B
+
+function ftz(x: {a?: string, c?: number, b?: 1|"1"}) {
+>ftz : { (x: { a?: string | undefined; }): string; (x: C): number; (x: B): 1; }
+>x : { a?: string | undefined; c?: number | undefined; b?: 1 | "1" | undefined; }
+>a : string | undefined
+>c : number | undefined
+>b : 1 | "1" | undefined
+
+    if (x.a) return x.a;
+>x.a : string | undefined
+>x : { a?: string | undefined; c?: number | undefined; b?: 1 | "1" | undefined; }
+>a : string | undefined
+>x.a : string
+>x : { a?: string | undefined; c?: number | undefined; b?: 1 | "1" | undefined; }
+>a : string
+
+    if (x.c) return x.c;
+>x.c : number | undefined
+>x : { a?: string | undefined; c?: number | undefined; b?: 1 | "1" | undefined; }
+>c : number | undefined
+>x.c : number
+>x : { a?: string | undefined; c?: number | undefined; b?: 1 | "1" | undefined; }
+>c : number
+
+    if (x.b) return x.b;
+>x.b : 1 | "1" | undefined
+>x : { a?: string | undefined; c?: number | undefined; b?: 1 | "1" | undefined; }
+>b : 1 | "1" | undefined
+>x.b : 1 | "1"
+>x : { a?: string | undefined; c?: number | undefined; b?: 1 | "1" | undefined; }
+>b : 1 | "1"
+
+    throw "unexpected error"
+>"unexpected error" : "unexpected error"
+}
+
+// The necessity of the argument cast is a separate issue!
+x.g(ftz,arg as any as any as ArgCastType); // should be error
+>x.g(ftz,arg as any as any as ArgCastType) : (() => 1) | (() => "1")
+>x.g : ((f: { (x: A): string; (x: B): 1; }, arg: A | B) => () => 1) | ((f: { (x: C): number; (x: B): "1"; }, arg: B | C) => () => "1")
+>x : X1 | X2
+>g : ((f: { (x: A): string; (x: B): 1; }, arg: A | B) => () => 1) | ((f: { (x: C): number; (x: B): "1"; }, arg: B | C) => () => "1")
+>ftz : { (x: { a?: string | undefined; }): string; (x: C): number; (x: B): 1; }
+>arg as any as any as ArgCastType : ArgCastType
+>arg as any as any : any
+>arg as any : any
+>arg : A | B | C
+
+}
+
+
+/**********************/
+=== -57087-131.ts ===
+namespace ns4 {
+>ns4 : typeof ns4
+
+interface Garg31A {
+    (): "01";
+    (x:1, y:1): "211"
+>x : 1
+>y : 1
+
+};
+declare const g31A: Garg31A;
+>g31A : Garg31A
+
+interface Garg31B {
+    (): "02";
+    (x:2, y:2): "222";
+>x : 2
+>y : 2
+
+    (x:2, y:1): "221"
+>x : 2
+>y : 1
+
+};
+declare const g31B: Garg31B;
+>g31B : Garg31B
+
+declare const f31a: {
+>f31a : { (): "01"; (x: 1, y: 1): "211"; (x: 2, y: 2): "222"; (x: 2, y: 1): "221"; }
+
+    (): "01";
+    (x: 1, y: 1): "211";
+>x : 1
+>y : 1
+
+    (x: 2, y: 2): "222";
+>x : 2
+>y : 2
+
+    (x: 2, y: 1): "221";
+>x : 2
+>y : 1
+
+};
+f31a satisfies Garg31A & Garg31B; // should satisfy
+>f31a satisfies Garg31A & Garg31B : { (): "01"; (x: 1, y: 1): "211"; (x: 2, y: 2): "222"; (x: 2, y: 1): "221"; }
+>f31a : { (): "01"; (x: 1, y: 1): "211"; (x: 2, y: 2): "222"; (x: 2, y: 1): "221"; }
+
+declare const f31b: {
+>f31b : { (): "01"; (x: 1, y: 1): "211"; (x: 2, y: 2): "221"; (x: 2, y: 1): "221"; }
+
+    (): "01";
+    (x: 1, y: 1): "211";
+>x : 1
+>y : 1
+
+    (x: 2, y: 2): "221" /*should cause "f31b satisfies" to error */;
+>x : 2
+>y : 2
+
+    (x: 2, y: 1): "221";
+>x : 2
+>y : 1
+
+};
+f31b satisfies Garg31A & Garg31B; // should not satisfy
+>f31b satisfies Garg31A & Garg31B : { (): "01"; (x: 1, y: 1): "211"; (x: 2, y: 2): "221"; (x: 2, y: 1): "221"; }
+>f31b : { (): "01"; (x: 1, y: 1): "211"; (x: 2, y: 2): "221"; (x: 2, y: 1): "221"; }
+
+declare const f31c: {
+>f31c : { (): "01"; (x: 1, y: 1): "211"; (x: 2, y: 2): "222"; (x: 2, y: 1): "221"; (x: 1, y: 2): "221"; }
+
+    (): "01"; (x: 1, y: 1): "211";
+>x : 1
+>y : 1
+
+    (x: 2, y: 2): "222";
+>x : 2
+>y : 2
+
+    (x: 2, y: 1): "221";
+>x : 2
+>y : 1
+
+    (x: 1, y: 2): "221" /*should cause "f31c satisfies" to error */;
+>x : 1
+>y : 2
+
+};
+f31c satisfies Garg31A & Garg31B; // should not satisfy
+>f31c satisfies Garg31A & Garg31B : { (): "01"; (x: 1, y: 1): "211"; (x: 2, y: 2): "222"; (x: 2, y: 1): "221"; (x: 1, y: 2): "221"; }
+>f31c : { (): "01"; (x: 1, y: 1): "211"; (x: 2, y: 2): "222"; (x: 2, y: 1): "221"; (x: 1, y: 2): "221"; }
+
+declare const f31d:{
+>f31d : { (): "01"; (x?: 1, y?: 1): "211"; (x: 2, y: 2): "222"; (x: 2, y: 1): "221"; }
+
+    (): "01";
+    (x?: 1, y?: 1): "211"; /*should cause "f31d satisfies" to error */
+>x : 1 | undefined
+>y : 1 | undefined
+
+    (x: 2, y: 2): "222";
+>x : 2
+>y : 2
+
+    (x: 2, y: 1): "221";
+>x : 2
+>y : 1
+
+};
+f31d satisfies Garg31A & Garg31B; // should not satisfy
+>f31d satisfies Garg31A & Garg31B : { (): "01"; (x?: 1 | undefined, y?: 1 | undefined): "211"; (x: 2, y: 2): "222"; (x: 2, y: 1): "221"; }
+>f31d : { (): "01"; (x?: 1 | undefined, y?: 1 | undefined): "211"; (x: 2, y: 2): "222"; (x: 2, y: 1): "221"; }
+
+declare const f31f: {
+>f31f : { (x: 1, y: 1): "211"; (x: 2, y: 2): "222"; (x: 2, y: 1): "221"; }
+
+    //(): "01"; // missing domain support cannot be detected at compiler time with final never
+    (x: 1, y: 1): "211";
+>x : 1
+>y : 1
+
+    (x: 2, y: 2): "222";
+>x : 2
+>y : 2
+
+    (x: 2, y: 1): "221";
+>x : 2
+>y : 1
+}
+f31f satisfies Garg31A & Garg31B; // should not satisfy
+>f31f satisfies Garg31A & Garg31B : { (x: 1, y: 1): "211"; (x: 2, y: 2): "222"; (x: 2, y: 1): "221"; }
+>f31f : { (x: 1, y: 1): "211"; (x: 2, y: 2): "222"; (x: 2, y: 1): "221"; }
+
+
+
+}
+
+
+/**********************/
+=== -57087-133.ts ===
+namespace ns5 {
+>ns5 : typeof ns5
+
+interface Garg33A {
+    (): "01";
+    (x:1, y?:1): "111";
+>x : 1
+>y : 1 | undefined
+
+    (...args: [...1[]]): "101";
+>args : 1[]
+
+};
+interface Garg33B {
+    (): "02";
+    (x:1, y?:1): "211";
+>x : 1
+>y : 1 | undefined
+
+    (...args:1[]): "201";
+>args : 1[]
+
+    (x:2, y?:any): "221"
+>x : 2
+>y : any
+
+};
+
+declare const f33a: {
+>f33a : { (): "02"; (x: 1, y?: 1): "211"; (...args: 1[]): "201"; (x: 2, y?: any): "221"; }
+
+    (): "02";
+    (x:1, y?:1): "211";
+>x : 1
+>y : 1 | undefined
+
+    (...args:1[]): "201";
+>args : 1[]
+
+    (x:2, y?:any): "221"
+>x : 2
+>y : any
+}
+f33b satisfies Garg33A & Garg33B; // should  satisfy
+>f33b satisfies Garg33A & Garg33B : { (): "02"; (x: 1, y?: 1 | undefined): "211"; (...args: 1[]): "101"; (...args: 1[]): "201"; (x: 2, y?: any): "221"; }
+>f33b : { (): "02"; (x: 1, y?: 1 | undefined): "211"; (...args: 1[]): "101"; (...args: 1[]): "201"; (x: 2, y?: any): "221"; }
+
+// because (...args: [...1[]]):=>"101"  === (...args:1[]) => "201";
+
+
+declare const f33b: {
+>f33b : { (): "02"; (x: 1, y?: 1): "211"; (...args: [...1[]]): "101"; (...args: 1[]): "201"; (x: 2, y?: any): "221"; }
+
+    (): "02";
+    (x:1, y?:1): "211";
+>x : 1
+>y : 1 | undefined
+
+    (...args: [...1[]]): "101";
+>args : 1[]
+
+    (...args:1[]): "201";
+>args : 1[]
+
+    (x:2, y?:any): "221"
+>x : 2
+>y : any
+}
+f33b satisfies Garg33A & Garg33B; // should satisfy
+>f33b satisfies Garg33A & Garg33B : { (): "02"; (x: 1, y?: 1 | undefined): "211"; (...args: 1[]): "101"; (...args: 1[]): "201"; (x: 2, y?: any): "221"; }
+>f33b : { (): "02"; (x: 1, y?: 1 | undefined): "211"; (...args: 1[]): "101"; (...args: 1[]): "201"; (x: 2, y?: any): "221"; }
+
+declare const f33c: {
+>f33c : { (x: 2, y?: any): "221"; (...args: 1[]): "201"; (...args: [...1[]]): "101"; (x: 1, y?: 1): "211"; (): "02"; }
+
+    (x:2, y?:any): "221"
+>x : 2
+>y : any
+
+    (...args:1[]): "201";
+>args : 1[]
+
+    (...args: [...1[]]): "101";
+>args : 1[]
+
+    (x:1, y?:1): "211";
+>x : 1
+>y : 1 | undefined
+
+    (): "02";
+}
+f33c satisfies Garg33A & Garg33B; // should satisfy (even though reversed order of overloads)
+>f33c satisfies Garg33A & Garg33B : { (x: 2, y?: any): "221"; (...args: 1[]): "201"; (...args: 1[]): "101"; (x: 1, y?: 1 | undefined): "211"; (): "02"; }
+>f33c : { (x: 2, y?: any): "221"; (...args: 1[]): "201"; (...args: 1[]): "101"; (x: 1, y?: 1 | undefined): "211"; (): "02"; }
+
+
+
+}
+
+
+/**********************/
+=== -57087-135.ts ===
+namespace ns6 {
+>ns6 : typeof ns6
+
+interface Garg35A {
+    ({x,y}:{x?:1, y?:Garg35B}): "A1"
+>x : 1 | undefined
+>y : Garg35B | undefined
+>x : 1 | undefined
+>y : Garg35B | undefined
+
+    ({x,y}:{x?:2, y?:Garg35C}): "A2"
+>x : 2 | undefined
+>y : Garg35C | undefined
+>x : 2 | undefined
+>y : Garg35C | undefined
+
+};
+interface Garg35B {
+    ({x,y}:{x?:2, y?:Garg35C}): "B1"
+>x : 2 | undefined
+>y : Garg35C | undefined
+>x : 2 | undefined
+>y : Garg35C | undefined
+
+    ({x,y}:{x:2, y?:Garg35A}): "B2";
+>x : 2
+>y : Garg35A | undefined
+>x : 2
+>y : Garg35A | undefined
+
+};
+interface Garg35C {
+    ({x,y}:{x:2, y?:Garg35A}): "C1";
+>x : 2
+>y : Garg35A | undefined
+>x : 2
+>y : Garg35A | undefined
+
+    ({x,y}:{x?:1, y?:Garg35B}): "C2"
+>x : 1 | undefined
+>y : Garg35B | undefined
+>x : 1 | undefined
+>y : Garg35B | undefined
+
+};
+
+declare const f35a: {
+>f35a : { ({ x, y }: { x?: 1 | undefined; y?: Garg35B | undefined; }): "A1"; ({ x, y }: { x: 2; y?: Garg35A | undefined; }): "B2"; ({ x, y }: { x?: 2 | undefined; y?: Garg35C | undefined; }): "A2"; }
+
+    ({x,y}:{x?:1, y?:Garg35B}): "A1"
+>x : 1 | undefined
+>y : Garg35B | undefined
+>x : 1 | undefined
+>y : Garg35B | undefined
+
+    ({x,y}:{x:2, y?:Garg35A}): "B2";
+>x : 2
+>y : Garg35A | undefined
+>x : 2
+>y : Garg35A | undefined
+
+    ({x,y}:{x?:2, y?:Garg35C}): "A2"
+>x : 2 | undefined
+>y : Garg35C | undefined
+>x : 2 | undefined
+>y : Garg35C | undefined
+}
+f35a satisfies Garg35A & Garg35B & Garg35C; // should satisfy
+>f35a satisfies Garg35A & Garg35B & Garg35C : { ({ x, y }: { x?: 1 | undefined; y?: Garg35B | undefined; }): "A1"; ({ x, y }: { x: 2; y?: Garg35A | undefined; }): "B2"; ({ x, y }: { x?: 2 | undefined; y?: Garg35C | undefined; }): "A2"; }
+>f35a : { ({ x, y }: { x?: 1 | undefined; y?: Garg35B | undefined; }): "A1"; ({ x, y }: { x: 2; y?: Garg35A | undefined; }): "B2"; ({ x, y }: { x?: 2 | undefined; y?: Garg35C | undefined; }): "A2"; }
+
+declare const f35b: {
+>f35b : { ({ x, y }: { x: 2; y?: Garg35A | undefined; }): "C1"; ({ x, y }: { x?: 1 | undefined; y?: Garg35B | undefined; }): "C2"; ({ x, y }: { x?: 2 | undefined; y?: Garg35C | undefined; }): "B1"; }
+
+    ({x,y}:{x:2, y?:Garg35A}): "C1";
+>x : 2
+>y : Garg35A | undefined
+>x : 2
+>y : Garg35A | undefined
+
+    ({x,y}:{x?:1, y?:Garg35B}): "C2"
+>x : 1 | undefined
+>y : Garg35B | undefined
+>x : 1 | undefined
+>y : Garg35B | undefined
+
+    ({x,y}:{x?:2, y?:Garg35C}): "B1"
+>x : 2 | undefined
+>y : Garg35C | undefined
+>x : 2 | undefined
+>y : Garg35C | undefined
+}
+f35b satisfies typeof f35a & Garg35A & Garg35B & Garg35C; // should satisfy
+>f35b satisfies typeof f35a & Garg35A & Garg35B & Garg35C : { ({ x, y }: { x: 2; y?: Garg35A | undefined; }): "C1"; ({ x, y }: { x?: 1 | undefined; y?: Garg35B | undefined; }): "C2"; ({ x, y }: { x?: 2 | undefined; y?: Garg35C | undefined; }): "B1"; }
+>f35b : { ({ x, y }: { x: 2; y?: Garg35A | undefined; }): "C1"; ({ x, y }: { x?: 1 | undefined; y?: Garg35B | undefined; }): "C2"; ({ x, y }: { x?: 2 | undefined; y?: Garg35C | undefined; }): "B1"; }
+>f35a : { ({ x, y }: { x?: 1 | undefined; y?: Garg35B | undefined; }): "A1"; ({ x, y }: { x: 2; y?: Garg35A | undefined; }): "B2"; ({ x, y }: { x?: 2 | undefined; y?: Garg35C | undefined; }): "A2"; }
+
+
+}
