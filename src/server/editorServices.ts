@@ -66,6 +66,7 @@ import {
     IncompleteCompletionsCache,
     IndentStyle,
     isArray,
+    isExternalModuleNameRelative,
     isIgnoredFileFromWildCardWatching,
     isInsideNodeModules,
     isJsonEqual,
@@ -90,7 +91,6 @@ import {
     ParsedCommandLine,
     parseJsonSourceFileConfigFileContent,
     parseJsonText,
-    parsePackageName,
     Path,
     PerformanceEvent,
     PluginImport,
@@ -4474,7 +4474,11 @@ export class ProjectService {
         }
 
         this.logger.info(`Enabling plugin ${pluginConfigEntry.name} from candidate paths: ${searchPaths.join(",")}`);
-        if (!pluginConfigEntry.name || parsePackageName(pluginConfigEntry.name).rest) {
+        if (
+            !pluginConfigEntry.name ||
+            isExternalModuleNameRelative(pluginConfigEntry.name) ||
+            /[\\/]\.\.?($|[\\/])/.test(pluginConfigEntry.name)
+        ) {
             this.logger.info(`Skipped loading plugin ${pluginConfigEntry.name || JSON.stringify(pluginConfigEntry)} because only package name is allowed plugin name`);
             return;
         }

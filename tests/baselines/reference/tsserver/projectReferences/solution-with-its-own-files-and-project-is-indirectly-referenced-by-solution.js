@@ -2291,10 +2291,12 @@ Projects::
         /user/username/projects/myproject/tsconfig.json
         /user/username/projects/myproject/tsconfig-indirect1.json
         /user/username/projects/myproject/tsconfig-indirect2.json
-/user/username/projects/myproject/tsconfig-src.json (Configured)
+/user/username/projects/myproject/tsconfig-src.json (Configured) *changed*
     projectStateVersion: 2
     projectProgramVersion: 2
     noOpenRef: true
+    documentPositionMappers: 1 *changed*
+        /user/username/projects/myproject/target/src/helpers/functions.d.ts: DocumentPositionMapper1 *new*
 /user/username/projects/myproject/tsconfig.json (Configured) *changed*
     projectStateVersion: 2
     projectProgramVersion: 2
@@ -2352,8 +2354,11 @@ ScriptInfos::
     declarationInfoPath: /user/username/projects/myproject/target/src/helpers/functions.d.ts
     sourceInfos: 1
         /user/username/projects/myproject/src/helpers/functions.ts
-    documentPositionMapper: DocumentPositionMapper
+    documentPositionMapper: DocumentPositionMapper1
     containingProjects: 0
+
+DocumentPositionMappers::
+DocumentPositionMapper1 *new*
 
 Before request
 
@@ -2516,7 +2521,7 @@ ScriptInfos::
     declarationInfoPath: /user/username/projects/myproject/target/src/helpers/functions.d.ts
     sourceInfos: 1
         /user/username/projects/myproject/src/helpers/functions.ts
-    documentPositionMapper: DocumentPositionMapper
+    documentPositionMapper: DocumentPositionMapper1
     containingProjects: 0
 
 Before request
@@ -2682,7 +2687,7 @@ ScriptInfos::
     declarationInfoPath: /user/username/projects/myproject/target/src/helpers/functions.d.ts
     sourceInfos: 1
         /user/username/projects/myproject/src/helpers/functions.ts
-    documentPositionMapper: DocumentPositionMapper
+    documentPositionMapper: DocumentPositionMapper1
     containingProjects: 0
 
 Before request
@@ -3029,6 +3034,8 @@ Projects::
     projectProgramVersion: 2
     isClosed: true *changed*
     noOpenRef: true
+    documentPositionMappers: 0 *changed*
+        /user/username/projects/myproject/target/src/helpers/functions.d.ts: DocumentPositionMapper1 *deleted*
 /user/username/projects/myproject/tsconfig.json (Configured) *deleted*
     projectStateVersion: 2
     projectProgramVersion: 2
@@ -3093,7 +3100,7 @@ ScriptInfos::
     declarationInfoPath: /user/username/projects/myproject/target/src/helpers/functions.d.ts
     sourceInfos: 1
         /user/username/projects/myproject/src/helpers/functions.ts
-    documentPositionMapper: DocumentPositionMapper
+    documentPositionMapper: DocumentPositionMapper1
     containingProjects: 0
 /user/username/projects/myproject/target/src/main.d.ts *new*
     version: Text-1
@@ -3657,6 +3664,9 @@ Projects::
 /user/username/projects/myproject/indirect3/tsconfig.json (Configured) *changed*
     projectStateVersion: 1
     projectProgramVersion: 1
+    documentPositionMappers: 2 *changed*
+        /user/username/projects/myproject/target/src/main.d.ts: DocumentPositionMapper2 *new*
+        /user/username/projects/myproject/target/src/helpers/functions.d.ts: DocumentPositionMapper1 *new*
     originalConfiguredProjects: 2 *changed*
         /user/username/projects/myproject/tsconfig-src.json *new*
         /user/username/projects/myproject/tsconfig.json *new*
@@ -3740,7 +3750,7 @@ ScriptInfos::
     declarationInfoPath: /user/username/projects/myproject/target/src/helpers/functions.d.ts
     sourceInfos: 1
         /user/username/projects/myproject/src/helpers/functions.ts
-    documentPositionMapper: DocumentPositionMapper
+    documentPositionMapper: DocumentPositionMapper1
     containingProjects: 0
 /user/username/projects/myproject/target/src/main.d.ts *changed*
     version: Text-1
@@ -3752,5 +3762,9 @@ ScriptInfos::
     declarationInfoPath: /user/username/projects/myproject/target/src/main.d.ts
     sourceInfos: 1
         /user/username/projects/myproject/src/main.ts
-    documentPositionMapper: DocumentPositionMapper
+    documentPositionMapper: DocumentPositionMapper2
     containingProjects: 0
+
+DocumentPositionMappers::
+DocumentPositionMapper1
+DocumentPositionMapper2 *new*

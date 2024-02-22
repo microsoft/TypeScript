@@ -544,6 +544,19 @@ watchedFiles::
 /tsconfig.json:
   {"pollingInterval":2000}
 
+Projects::
+/dev/null/inferredProject1* (Inferred)
+    projectStateVersion: 1
+    projectProgramVersion: 1
+/dev/null/inferredProject2* (Inferred) *changed*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+    documentPositionMappers: 1 *changed*
+        /dist/index.d.ts: DocumentPositionMapper1 *new*
+/tsconfig.json (Configured)
+    projectStateVersion: 1
+    projectProgramVersion: 1
+
 ScriptInfos::
 /dist/index.d.ts *changed*
     version: Text-1
@@ -555,7 +568,7 @@ ScriptInfos::
     declarationInfoPath: /dist/index.d.ts
     sourceInfos: 1
         /index.ts
-    documentPositionMapper: DocumentPositionMapper
+    documentPositionMapper: DocumentPositionMapper1
     containingProjects: 0
 /index.ts (Open)
     version: Text-1
@@ -587,6 +600,9 @@ ScriptInfos::
     version: SVC-1-0
     containingProjects: 1
         /dev/null/inferredProject1* *default*
+
+DocumentPositionMappers::
+DocumentPositionMapper1 *new*
 
 Info seq  [hh:mm:ss:mss] request:
     {
