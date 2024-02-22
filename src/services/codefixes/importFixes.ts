@@ -97,7 +97,6 @@ import {
     mapDefined,
     memoizeOne,
     ModuleKind,
-    ModuleResolutionKind,
     moduleResolutionUsesNodeModules,
     moduleSpecifiers,
     MultiMap,
@@ -1054,13 +1053,11 @@ function compareModuleSpecifiers(
 // This is a simple heuristic to try to avoid creating an import cycle with a barrel re-export.
 // E.g., do not `import { Foo } from ".."` when you could `import { Foo } from "../Foo"`.
 // This can produce false positives or negatives if re-exports cross into sibling directories
-// (e.g. `export * from "../whatever"`) or are not named "index" (we don't even try to consider
-// this if we're in a resolution mode where you can't drop trailing "/index" from paths).
+// (e.g. `export * from "../whatever"`) or are not named "index".
 function isFixPossiblyReExportingImportingFile(fix: ImportFixWithModuleSpecifier, importingFile: SourceFile, compilerOptions: CompilerOptions, toPath: (fileName: string) => Path): boolean {
     if (
         fix.isReExport &&
         fix.exportInfo?.moduleFileName &&
-        getEmitModuleResolutionKind(compilerOptions) === ModuleResolutionKind.Node10 &&
         isIndexFileName(fix.exportInfo.moduleFileName)
     ) {
         const reExportDir = toPath(getDirectoryPath(fix.exportInfo.moduleFileName));

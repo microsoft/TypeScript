@@ -153,7 +153,32 @@ Output::
 
 [[90m12:00:43 AM[0m] Building project '/src/third/tsconfig.json'...
 
-exitCode:: ExitStatus.Success
+[96msrc/third/tsconfig.json[0m:[93m18[0m:[93m5[0m - [91merror[0m[90m TS5102: [0mOption 'prepend' has been removed. Please remove it from your configuration.
+
+[7m18[0m     {
+[7m  [0m [91m    ~[0m
+[7m19[0m       "path": "../first",
+[7m  [0m [91m~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+[7m20[0m       "prepend": true
+[7m  [0m [91m~~~~~~~~~~~~~~~~~~~~~[0m
+[7m21[0m     },
+[7m  [0m [91m~~~~~[0m
+
+[96msrc/third/tsconfig.json[0m:[93m22[0m:[93m5[0m - [91merror[0m[90m TS5102: [0mOption 'prepend' has been removed. Please remove it from your configuration.
+
+[7m22[0m     {
+[7m  [0m [91m    ~[0m
+[7m23[0m       "path": "../second",
+[7m  [0m [91m~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+[7m24[0m       "prepend": true
+[7m  [0m [91m~~~~~~~~~~~~~~~~~~~~~[0m
+[7m25[0m     }
+[7m  [0m [91m~~~~~[0m
+
+
+Found 2 errors.
+
+exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
 
 
 //// [/src/2/second-output.d.ts]
@@ -430,55 +455,4 @@ declare function f(): string;
   "version": "FakeTSVersion",
   "size": 2609
 }
-
-//// [/src/third/thirdjs/output/third-output.d.ts]
-interface TheFirst {
-    none: any;
-}
-declare const s = "Hello, world";
-interface NoJsForHereEither {
-    none: any;
-}
-declare function f(): string;
-declare namespace N {
-}
-declare namespace N {
-}
-declare class C {
-    doSomething(): void;
-}
-declare var c: C;
-//# sourceMappingURL=third-output.d.ts.map
-
-//// [/src/third/thirdjs/output/third-output.d.ts.map]
-{"version":3,"file":"third-output.d.ts","sourceRoot":"","sources":["../../../first/first_PART1.ts","../../../first/first_part3.ts","../../../second/second_part1.ts","../../../second/second_part2.ts","../../third_part1.ts"],"names":[],"mappings":"AAAA,UAAU,QAAQ;IACd,IAAI,EAAE,GAAG,CAAC;CACb;AAED,QAAA,MAAM,CAAC,iBAAiB,CAAC;AAEzB,UAAU,iBAAiB;IACvB,IAAI,EAAE,GAAG,CAAC;CACb;ACRD,iBAAS,CAAC,WAET;ACFD,kBAAU,CAAC,CAAC;CAEX;AAED,kBAAU,CAAC,CAAC;CAMX;ACVD,cAAM,CAAC;IACH,WAAW;CAGd;ACJD,QAAA,IAAI,CAAC,GAAU,CAAC"}
-
-//// [/src/third/thirdjs/output/third-output.js]
-var s = "Hello, world";
-console.log(s);
-console.log(f());
-function f() {
-    return "JS does hoists";
-}
-var N;
-(function (N) {
-    function f() {
-        console.log('testing');
-    }
-    f();
-})(N || (N = {}));
-var C = (function () {
-    function C() {
-    }
-    C.prototype.doSomething = function () {
-        console.log("something got done");
-    };
-    return C;
-}());
-var c = new C();
-c.doSomething();
-//# sourceMappingURL=third-output.js.map
-
-//// [/src/third/thirdjs/output/third-output.js.map]
-{"version":3,"file":"third-output.js","sourceRoot":"","sources":["../../../first/first_PART1.ts","../../../first/first_part2.ts","../../../first/first_part3.ts","../../../second/second_part1.ts","../../../second/second_part2.ts","../../third_part1.ts"],"names":[],"mappings":"AAIA,IAAM,CAAC,GAAG,cAAc,CAAC;AAMzB,OAAO,CAAC,GAAG,CAAC,CAAC,CAAC,CAAC;ACVf,OAAO,CAAC,GAAG,CAAC,CAAC,EAAE,CAAC,CAAC;ACAjB,SAAS,CAAC;IACN,OAAO,gBAAgB,CAAC;AAC5B,CAAC;ACED,IAAU,CAAC,CAMV;AAND,WAAU,CAAC;IACP,SAAS,CAAC;QACN,OAAO,CAAC,GAAG,CAAC,SAAS,CAAC,CAAC;IAC3B,CAAC;IAED,CAAC,EAAE,CAAC;AACR,CAAC,EANS,CAAC,KAAD,CAAC,QAMV;ACVD;IAAA;IAIA,CAAC;IAHG,uBAAW,GAAX;QACI,OAAO,CAAC,GAAG,CAAC,oBAAoB,CAAC,CAAC;IACtC,CAAC;IACL,QAAC;AAAD,CAAC,AAJD,IAIC;ACJD,IAAI,CAAC,GAAG,IAAI,CAAC,EAAE,CAAC;AAChB,CAAC,CAAC,WAAW,EAAE,CAAC"}
 

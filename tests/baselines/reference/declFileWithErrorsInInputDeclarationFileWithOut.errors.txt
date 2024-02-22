@@ -1,4 +1,4 @@
-error TS5101: Option 'out' is deprecated and will stop functioning in TypeScript 5.5. Specify compilerOption '"ignoreDeprecations": "5.0"' to silence this error.
+error TS5102: Option 'out' has been removed. Please remove it from your configuration.
   Use 'outFile' instead.
 declFile.d.ts(2,5): error TS1038: A 'declare' modifier cannot be used in an already ambient context.
 declFile.d.ts(3,5): error TS1038: A 'declare' modifier cannot be used in an already ambient context.
@@ -6,8 +6,8 @@ declFile.d.ts(5,5): error TS1038: A 'declare' modifier cannot be used in an alre
 declFile.d.ts(7,5): error TS1038: A 'declare' modifier cannot be used in an already ambient context.
 
 
-!!! error TS5101: Option 'out' is deprecated and will stop functioning in TypeScript 5.5. Specify compilerOption '"ignoreDeprecations": "5.0"' to silence this error.
-!!! error TS5101:   Use 'outFile' instead.
+!!! error TS5102: Option 'out' has been removed. Please remove it from your configuration.
+!!! error TS5102:   Use 'outFile' instead.
 ==== client.ts (0 errors) ====
     ///<reference path="declFile.d.ts"/>
     var x = new M.C(); // Declaration file wont get emitted because there are errors in declaration file

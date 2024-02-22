@@ -31,7 +31,7 @@ Info seq  [hh:mm:ss:mss] request:
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/b/app.d.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /a/b/proj.csproj
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined Project: /a/b/proj.csproj WatchType: Missing file
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /a/b/proj.csproj Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /a/b/proj.csproj projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/a/b/proj.csproj' (External)
 Info seq  [hh:mm:ss:mss] 	Files (2)
 	/a/b/app.d.ts Text-1 ""
@@ -53,6 +53,21 @@ PolledWatches::
 FsWatches::
 /a/b/app.d.ts: *new*
   {}
+
+Projects::
+/a/b/proj.csproj (External) *new*
+    projectStateVersion: 1
+    projectProgramVersion: 0
+
+ScriptInfos::
+/a/b/app.d.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /a/b/proj.csproj
+/a/b/app.html *new*
+    version: Text-1
+    containingProjects: 1
+        /a/b/proj.csproj
 
 TI:: [hh:mm:ss:mss] Global cache location '/a/data', safe file path '/safeList.json', types map path /typesMap.json
 TI:: [hh:mm:ss:mss] Processing cache location '/a/data'
@@ -193,6 +208,11 @@ Info seq  [hh:mm:ss:mss] event:
         }
       }
     }
+Info seq  [hh:mm:ss:mss] Project '/a/b/proj.csproj' (External)
+Info seq  [hh:mm:ss:mss] 	Files (2)
+
+Info seq  [hh:mm:ss:mss] -----------------------------------------------
+Info seq  [hh:mm:ss:mss] Open files: 
 Info seq  [hh:mm:ss:mss] response:
     {
       "response": true,
@@ -211,5 +231,10 @@ PolledWatches::
 FsWatches::
 /a/b/app.d.ts:
   {}
+
+Projects::
+/a/b/proj.csproj (External) *changed*
+    projectStateVersion: 1
+    projectProgramVersion: 1 *changed*
 
 Typine acquisition should be enabled: true

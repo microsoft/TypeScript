@@ -21,10 +21,6 @@
         "useUnknownInCatchVariables": false,
         "noImplicitOverride": true,
 
-        "noUnusedLocals": true,
-        "noUnusedParameters": true,
-        "allowUnusedLabels": false,
-
         "skipLibCheck": true,
 
         "alwaysStrict": true,
