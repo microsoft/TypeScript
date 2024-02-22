@@ -794,6 +794,9 @@ ScriptInfos::
     containingProjects: 1
         /user/username/projects/myproject/random/tsconfig.json *default*
 
+DocumentPositionMappers::
+DocumentPositionMapper1 *deleted*
+
 Info seq  [hh:mm:ss:mss] request:
     {
       "command": "rename",
@@ -917,9 +920,6 @@ ScriptInfos::
     version: SVC-1-0
     containingProjects: 1
         /user/username/projects/myproject/random/tsconfig.json *default*
-
-DocumentPositionMappers::
-DocumentPositionMapper1 *deleted*
 
 Before request
 
