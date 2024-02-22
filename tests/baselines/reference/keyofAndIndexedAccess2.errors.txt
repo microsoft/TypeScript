@@ -31,9 +31,10 @@ keyofAndIndexedAccess2.ts(68,3): error TS2322: Type 'number' is not assignable t
   'number' is assignable to the constraint of type 'T[K]', but 'T[K]' could be instantiated with a different subtype of constraint 'number'.
 keyofAndIndexedAccess2.ts(108,5): error TS2322: Type '123' is not assignable to type 'Type[K]'.
   Type 'number' is not assignable to type 'never'.
+keyofAndIndexedAccess2.ts(115,21): error TS2313: Type parameter 'Q' has a circular constraint.
 
 
-==== keyofAndIndexedAccess2.ts (23 errors) ====
+==== keyofAndIndexedAccess2.ts (24 errors) ====
     function f1(obj: { a: number, b: 0 | 1, c: string }, k0: 'a', k1: 'a' | 'b', k2: 'a' | 'b' | 'c') {
         obj[k0] = 1;
         obj[k0] = 2;
@@ -205,6 +206,9 @@ keyofAndIndexedAccess2.ts(108,5): error TS2322: Type '123' is not assignable to 
     type StrictExtract<T, U> = T extends U ? U extends T ? T : never : never;
     type StrictExclude<T, U> = T extends StrictExtract<T, U> ? never : T;
     type A<T> = { [Q in { [P in keyof T]: P; }[keyof T]]: T[Q]; };
+                        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2313: Type parameter 'Q' has a circular constraint.
+!!! related TS2751 keyofAndIndexedAccess2.ts:116:36: Circularity originates in type at this location.
     type B<T, V> = A<{ [Q in keyof T]: StrictExclude<B<T[Q], V>, {}>; }>;
     
     // Repros from #30938

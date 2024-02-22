@@ -18514,10 +18514,20 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return !!(getUnionType([intersectTypes(type1, type2), neverType]).flags & TypeFlags.Never);
     }
 
+    function hasOptionalModifiersProperty(mappedType: MappedType) {
+        const modifiersType = getApparentType(getModifiersTypeFromMappedType(mappedType));
+        if (!(modifiersType.flags & TypeFlags.Object)) {
+            return false;
+        }
+        const properties = resolveStructuredTypeMembers(modifiersType as ObjectType).properties;
+        return some(properties, p => !!(p.flags & SymbolFlags.Optional));
+    }
+
     function substituteIndexedMappedType(objectType: MappedType, index: Type) {
         const mapper = createTypeMapper([getTypeParameterFromMappedType(objectType)], [index]);
         const templateMapper = combineTypeMappers(objectType.mapper, mapper);
-        return instantiateType(getTemplateTypeFromMappedType(objectType.target as MappedType || objectType), templateMapper);
+        const type = instantiateType(getTemplateTypeFromMappedType(objectType.target as MappedType || objectType), templateMapper);
+        return addOptionality(type, /*isProperty*/ true, hasOptionalModifiersProperty(objectType));
     }
 
     function getIndexedAccessType(objectType: Type, indexType: Type, accessFlags = AccessFlags.None, accessNode?: ElementAccessExpression | IndexedAccessTypeNode | PropertyName | BindingName | SyntheticExpression, aliasSymbol?: Symbol, aliasTypeArguments?: readonly Type[]): Type {
