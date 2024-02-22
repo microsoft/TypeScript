@@ -255,18 +255,6 @@ Info seq  [hh:mm:ss:mss] 	Files (6)
 	/file3.ts Text-1 "export const r = 10;\nexport const s = 12;"
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
-Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /tsconfig.json
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /tsconfig.json projectStateVersion: 3 projectProgramVersion: 1 structureChanged: false structureIsReused:: Completely Elapsed:: *ms
-Info seq  [hh:mm:ss:mss] Project '/tsconfig.json' (Configured)
-Info seq  [hh:mm:ss:mss] 	Files (6)
-	/lib.d.ts Text-1 lib.d.ts-Text
-	/lib.decorators.d.ts Text-1 lib.decorators.d.ts-Text
-	/lib.decorators.legacy.d.ts Text-1 lib.decorators.legacy.d.ts-Text
-	/file1.ts Text-1 "export const p = 10;\nexport const q = 12;"
-	/target.ts SVC-1-2 "const a = 1;\n\nconst b = 2;\nconst c = 3;\n\nconst d = 4;"
-	/file3.ts Text-1 "export const r = 10;\nexport const s = 12;"
-
-Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] response:
     {
       "seq": 0,
@@ -325,6 +313,7 @@ Projects::
 /tsconfig.json (Configured) *changed*
     projectStateVersion: 3 *changed*
     projectProgramVersion: 1
+    dirty: true *changed*
 
 ScriptInfos::
 /file1.ts

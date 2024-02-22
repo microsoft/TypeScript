@@ -2225,7 +2225,6 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
         this.updateGraph();
         cb(this.program, originalProgram, (this.program?.getSourceFile(rootFile))!);
         this.getScriptInfo(rootFile)?.editContent(0, this.program.getSourceFile(rootFile)!.getText().length, originalText);
-        this.updateGraph();
     }
 
     /** @internal */

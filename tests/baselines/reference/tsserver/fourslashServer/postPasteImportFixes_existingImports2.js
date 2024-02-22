@@ -292,20 +292,6 @@ Info seq  [hh:mm:ss:mss] 	Files (8)
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] getExportInfoMap: cache miss or empty; calculating new results
 Info seq  [hh:mm:ss:mss] getExportInfoMap: done in * ms
-Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /tsconfig.json
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /tsconfig.json projectStateVersion: 3 projectProgramVersion: 1 structureChanged: false structureIsReused:: Completely Elapsed:: *ms
-Info seq  [hh:mm:ss:mss] Project '/tsconfig.json' (Configured)
-Info seq  [hh:mm:ss:mss] 	Files (8)
-	/lib.d.ts Text-1 lib.d.ts-Text
-	/lib.decorators.d.ts Text-1 lib.decorators.d.ts-Text
-	/lib.decorators.legacy.d.ts Text-1 lib.decorators.legacy.d.ts-Text
-	/other.ts Text-1 "export const t = 1;"
-	/other3.ts Text-1 "export const t3 = 1;"
-	/target.ts SVC-1-2 "import { t } from \"./other\";\nimport { t3 } from \"./other3\";\nconst a = t + 1;\nconst b = 10;\nconst c = 10;"
-	/other2.ts Text-1 "export const t2 = 1;"
-	/originalFile.ts Text-1 "import { t2 } from \"./other2\";\nimport { t3 } from \"./other3\";\nexport const n = 10;\nexport const m = t3 + t2 + n;"
-
-Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] response:
     {
       "seq": 0,
@@ -364,6 +350,7 @@ Projects::
 /tsconfig.json (Configured) *changed*
     projectStateVersion: 3 *changed*
     projectProgramVersion: 1
+    dirty: true *changed*
 
 ScriptInfos::
 /lib.d.ts
