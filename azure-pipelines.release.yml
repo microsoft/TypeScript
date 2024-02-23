@@ -33,7 +33,8 @@ extends:
             steps:
               - checkout: self
                 clean: true
-                persistCredentials: true
+                fetchDepth: 1
+                fetchTags: false
 
               - task: NodeTool@0
                 inputs:
