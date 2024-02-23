@@ -14,13 +14,13 @@ extends:
   template: v1/1ES.Official.PipelineTemplate.yml@1esPipelines
   parameters:
     pool:
-      name: AzurePipelines-EO
+      name: TypeScript-AzurePipelines-EO
       image: 1ESPT-Mariner2.0
       os: linux
 
     sdl:
       sourceAnalysisPool:
-        name: AzurePipelines-EO
+        name: TypeScript-AzurePipelines-EO
         image: 1ESPT-Windows2022
         os: windows
 
