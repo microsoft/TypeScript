@@ -28,7 +28,6 @@ import {
     isDeclarationWithTypeParameterChildren,
     isExpressionStatement,
     isFunctionDeclaration,
-    isFunctionLikeDeclaration,
     isIdentifier,
     isImportClause,
     isImportDeclaration,
