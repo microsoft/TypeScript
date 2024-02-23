@@ -15,7 +15,7 @@ extends:
   parameters:
     pool:
       name: TypeScript-AzurePipelines-EO
-      image: 1ESPT-Mariner2.0
+      image: 1ESPT-Ubuntu22.04
       os: linux
 
     sdl:
