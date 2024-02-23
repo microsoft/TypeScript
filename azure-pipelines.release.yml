@@ -15,7 +15,7 @@ extends:
   parameters:
     pool:
       name: TypeScript-AzurePipelines-EO
-      image: 1ESPT-Ubuntu22.04
+      image: 1ESPT-Mariner2.0
       os: linux
 
     sdl:
@@ -31,6 +31,11 @@ extends:
           - job: build
             displayName: Build
             steps:
+              - checkout: self
+                clean: true
+                fetchDepth: 1
+                fetchTags: false
+
               - task: NodeTool@0
                 inputs:
                   versionSpec: 20.x
