@@ -15466,7 +15466,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 else if (signature.declaration && isFunctionLikeDeclaration(signature.declaration) && (!signature.resolvedReturnType || signature.resolvedReturnType === booleanType)) {
                     const { declaration } = signature;
                     signature.resolvedTypePredicate = noTypePredicate; // avoid infinite loop
-                    signature.resolvedTypePredicate = getTypePredicateFromBody(declaration, signature) || noTypePredicate;
+                    signature.resolvedTypePredicate = getTypePredicateFromBody(declaration) || noTypePredicate;
                 }
                 else {
                     signature.resolvedTypePredicate = noTypePredicate;
@@ -37399,9 +37399,15 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
     }
 
-    function getTypePredicateFromBody(func: FunctionLikeDeclaration, _sig: Signature): TypePredicate | undefined {
+    function getTypePredicateFromBody(func: FunctionLikeDeclaration): TypePredicate | undefined {
+        switch (func.kind) {
+            case SyntaxKind.Constructor:
+            case SyntaxKind.GetAccessor:
+            case SyntaxKind.SetAccessor:
+                return undefined;
+        }
         const functionFlags = getFunctionFlags(func);
-        if (functionFlags !== FunctionFlags.Normal) return undefined;
+        if (functionFlags !== FunctionFlags.Normal || func.parameters.length === 0) return undefined;
 
         // Only attempt to infer a type predicate if there's exactly one return.
         let singleReturn: Expression | undefined;
@@ -37418,6 +37424,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             if (bailedEarly || !singleReturn) return undefined;
         }
 
+        if (isTriviallyNonBoolean(singleReturn)) return undefined;
+
         const predicate = checkIfExpressionRefinesAnyParameter(singleReturn);
         if (predicate) {
             const [i, type] = predicate;
@@ -37431,7 +37439,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
         function checkIfExpressionRefinesAnyParameter(expr: Expression): [number, Type] | undefined {
             expr = skipParentheses(expr, /*excludeJSDocTypeAssertions*/ true);
-            const type = checkExpressionCached(expr, CheckMode.TypeOnly);
+            const type = checkExpressionCached(expr); // , CheckMode.TypeOnly);
             if (type !== booleanType || !func.body) return undefined;
 
             return forEach(func.parameters, (param, i) => {
@@ -37476,6 +37484,21 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             if (isTypeIdenticalTo(candidateFalse, falseType)) {
                 return trueType;
             }
+        }
+
+        // This bypasses the call to checkExpression for expressions that are clearly not booleans.
+        // In addition to potentially saving work, this avoids some circularlity issues.
+        function isTriviallyNonBoolean(expr: Expression): boolean {
+            if (isLiteralExpression(expr) || isLiteralExpressionOfObject(expr)) {
+                return true;
+            }
+            if (isIdentifier(expr)) {
+                const sym = getResolvedSymbol(expr);
+                if (sym.flags & (SymbolFlags.Class | SymbolFlags.ObjectLiteral | SymbolFlags.Function | SymbolFlags.Enum | SymbolFlags.EnumMember)) {
+                    return true;
+                }
+            }
+            return false; // may or may not be boolean
         }
     }
 
