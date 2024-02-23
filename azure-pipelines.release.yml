@@ -18,6 +18,12 @@ extends:
       image: 1ESPT-Mariner2.0
       os: linux
 
+    sdl:
+      sourceAnalysisPool:
+        name: AzurePipelines-EO
+        image: 1ESPT-Windows2022
+        os: windows
+
     stages:
       - stage: buildStage
         displayName: Build Stage
