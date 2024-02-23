@@ -239,3 +239,18 @@ declare let unk: unknown;
 if (isNumOrStr(unk)) {
   let t: number | string = unk;  // should ok
 }
+
+// A function can be a type predicate even if it throws.
+function assertAndPredicate(x: string | number | Date) {
+  if (x instanceof Date) {
+    throw new Error();
+  }
+  return typeof x === 'string';
+}
+
+declare let snd: string | number | Date;
+if (assertAndPredicate(snd)) {
+  let t: string = snd; // should ok
+} else {
+  snd;  // type is number | Date
+}

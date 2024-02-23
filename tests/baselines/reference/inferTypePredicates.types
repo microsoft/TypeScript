@@ -884,3 +884,41 @@ if (isNumOrStr(unk)) {
 >unk : string | number
 }
 
+// A function can be a type predicate even if it throws.
+function assertAndPredicate(x: string | number | Date) {
+>assertAndPredicate : (x: string | number | Date) => x is string
+>x : string | number | Date
+
+  if (x instanceof Date) {
+>x instanceof Date : boolean
+>x : string | number | Date
+>Date : DateConstructor
+
+    throw new Error();
+>new Error() : Error
+>Error : ErrorConstructor
+  }
+  return typeof x === 'string';
+>typeof x === 'string' : boolean
+>typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>x : string | number
+>'string' : "string"
+}
+
+declare let snd: string | number | Date;
+>snd : string | number | Date
+
+if (assertAndPredicate(snd)) {
+>assertAndPredicate(snd) : boolean
+>assertAndPredicate : (x: string | number | Date) => x is string
+>snd : string | number | Date
+
+  let t: string = snd; // should ok
+>t : string
+>snd : string
+
+} else {
+  snd;  // type is number | Date
+>snd : number | Date
+}
+

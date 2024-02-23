@@ -680,3 +680,37 @@ if (isNumOrStr(unk)) {
 >unk : Symbol(unk, Decl(inferTypePredicates.ts, 236, 11))
 }
 
+// A function can be a type predicate even if it throws.
+function assertAndPredicate(x: string | number | Date) {
+>assertAndPredicate : Symbol(assertAndPredicate, Decl(inferTypePredicates.ts, 239, 1))
+>x : Symbol(x, Decl(inferTypePredicates.ts, 242, 28))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+
+  if (x instanceof Date) {
+>x : Symbol(x, Decl(inferTypePredicates.ts, 242, 28))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+
+    throw new Error();
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+  }
+  return typeof x === 'string';
+>x : Symbol(x, Decl(inferTypePredicates.ts, 242, 28))
+}
+
+declare let snd: string | number | Date;
+>snd : Symbol(snd, Decl(inferTypePredicates.ts, 249, 11))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+
+if (assertAndPredicate(snd)) {
+>assertAndPredicate : Symbol(assertAndPredicate, Decl(inferTypePredicates.ts, 239, 1))
+>snd : Symbol(snd, Decl(inferTypePredicates.ts, 249, 11))
+
+  let t: string = snd; // should ok
+>t : Symbol(t, Decl(inferTypePredicates.ts, 251, 5))
+>snd : Symbol(snd, Decl(inferTypePredicates.ts, 249, 11))
+
+} else {
+  snd;  // type is number | Date
+>snd : Symbol(snd, Decl(inferTypePredicates.ts, 249, 11))
+}
+
