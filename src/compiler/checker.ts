@@ -31520,7 +31520,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     function isValidSpreadType(type: Type): boolean {
         const t = removeDefinitelyFalsyTypes(mapType(type, getBaseConstraintOrType));
         return !!(t.flags & (TypeFlags.Any | TypeFlags.NonPrimitive | TypeFlags.Object | TypeFlags.InstantiableNonPrimitive) ||
-            t.flags & TypeFlags.UnionOrIntersection && every((t as UnionOrIntersectionType).types, isValidSpreadType));
+            t.flags & TypeFlags.UnionOrIntersection && every((t as UnionOrIntersectionType).types, isValidSpreadType)
+            || languageVersion >= ScriptTarget.ES2018 && (type.flags & (TypeFlags.Null | TypeFlags.Undefined)));
     }
 
     function checkJsxSelfClosingElementDeferred(node: JsxSelfClosingElement) {
