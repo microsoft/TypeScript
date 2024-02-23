@@ -37439,7 +37439,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
         function checkIfExpressionRefinesAnyParameter(expr: Expression): [number, Type] | undefined {
             expr = skipParentheses(expr, /*excludeJSDocTypeAssertions*/ true);
-            const type = checkExpressionCached(expr); // , CheckMode.TypeOnly);
+            const type = checkExpressionCached(expr, CheckMode.TypeOnly);
             if (type !== booleanType || !func.body) return undefined;
 
             return forEach(func.parameters, (param, i) => {
