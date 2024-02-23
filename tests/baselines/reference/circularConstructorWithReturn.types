@@ -4,7 +4,7 @@
 // This should not be a circularity error. See
 // https://github.com/microsoft/TypeScript/pull/57465#issuecomment-1960271216
 export type Client = ReturnType<typeof getPrismaClient> extends new () => infer T ? T : never
->Client : any
+>Client : PrismaClient
 >getPrismaClient : (options?: any) => typeof PrismaClient
 
 export function getPrismaClient(options?: any) {
@@ -15,19 +15,19 @@ export function getPrismaClient(options?: any) {
 >PrismaClient : PrismaClient
 
     self: Client;
->self : any
+>self : PrismaClient
 
     constructor(options?: any) {
 >options : any
 
       return (this.self = applyModelsAndClientExtensions(this));
->(this.self = applyModelsAndClientExtensions(this)) : any
->this.self = applyModelsAndClientExtensions(this) : any
->this.self : any
+>(this.self = applyModelsAndClientExtensions(this)) : PrismaClient
+>this.self = applyModelsAndClientExtensions(this) : PrismaClient
+>this.self : PrismaClient
 >this : this
->self : any
->applyModelsAndClientExtensions(this) : any
->applyModelsAndClientExtensions : (client: any) => any
+>self : PrismaClient
+>applyModelsAndClientExtensions(this) : PrismaClient
+>applyModelsAndClientExtensions : (client: PrismaClient) => PrismaClient
 >this : this
     }
   }
@@ -37,10 +37,10 @@ export function getPrismaClient(options?: any) {
 }
 
 export function applyModelsAndClientExtensions(client: Client) {
->applyModelsAndClientExtensions : (client: any) => any
->client : any
+>applyModelsAndClientExtensions : (client: Client) => PrismaClient
+>client : PrismaClient
 
   return client;
->client : any
+>client : PrismaClient
 }
 
