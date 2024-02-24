@@ -755,6 +755,8 @@ Projects::
 /b/tsconfig.json (Configured) *changed*
     projectStateVersion: 1
     projectProgramVersion: 1
+    documentPositionMappers: 1 *changed*
+        /a/index.d.ts: DocumentPositionMapper1 *new*
     originalConfiguredProjects: 1 *changed*
         /a/tsconfig.json *new*
 /c/tsconfig.json (Configured)
@@ -779,7 +781,7 @@ ScriptInfos::
     declarationInfoPath: /a/index.d.ts
     sourceInfos: 1
         /a/index.ts
-    documentPositionMapper: DocumentPositionMapper
+    documentPositionMapper: DocumentPositionMapper1
     containingProjects: 0
 /a/index.ts
     version: Text-1
@@ -819,3 +821,6 @@ ScriptInfos::
         /dev/null/inferredProject1*
         /c/tsconfig.json
         /b/tsconfig.json
+
+DocumentPositionMappers::
+DocumentPositionMapper1 *new*

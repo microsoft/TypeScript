@@ -266,6 +266,8 @@ Projects::
 /dev/null/inferredProject1* (Inferred) *changed*
     projectStateVersion: 1
     projectProgramVersion: 1
+    documentPositionMappers: 1 *changed*
+        /user/users/projects/myproject/node_modules/@types/yargs/callback.d.ts: identitySourceMapConsumer *new*
     noDtsResolutionProject: /dev/null/auxiliaryProject1* *changed*
 
 ScriptInfos::
@@ -376,6 +378,18 @@ Info seq  [hh:mm:ss:mss] response:
       "responseRequired": true
     }
 After request
+
+Projects::
+/dev/null/auxiliaryProject1* (Auxiliary)
+    projectStateVersion: 2
+    projectProgramVersion: 2
+/dev/null/inferredProject1* (Inferred) *changed*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+    documentPositionMappers: 2 *changed*
+        /user/users/projects/myproject/node_modules/@types/yargs/callback.d.ts: identitySourceMapConsumer
+        /user/users/projects/myproject/node_modules/@types/yargs/index.d.ts: identitySourceMapConsumer *new*
+    noDtsResolutionProject: /dev/null/auxiliaryProject1*
 
 ScriptInfos::
 /a/lib/lib.d.ts
