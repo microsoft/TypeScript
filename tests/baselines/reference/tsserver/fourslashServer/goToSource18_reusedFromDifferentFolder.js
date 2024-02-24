@@ -378,6 +378,8 @@ Projects::
 /dev/null/inferredProject2* (Inferred) *changed*
     projectStateVersion: 1
     projectProgramVersion: 1
+    documentPositionMappers: 1 *changed*
+        /node_modules/@types/yargs/callback.d.ts: identitySourceMapConsumer *new*
     noDtsResolutionProject: /dev/null/auxiliaryProject1* *changed*
 
 ScriptInfos::
@@ -401,8 +403,9 @@ ScriptInfos::
     containingProjects: 2
         /dev/null/inferredProject1*
         /dev/null/inferredProject2*
-/node_modules/@types/yargs/callback.d.ts
+/node_modules/@types/yargs/callback.d.ts *changed*
     version: Text-1
+    sourceMapFilePath: false *changed*
     containingProjects: 2
         /dev/null/inferredProject1*
         /dev/null/inferredProject2*

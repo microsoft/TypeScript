@@ -487,6 +487,8 @@ Projects::
 /user/username/projects/project/src/tsconfig.json (Configured) *new*
     projectStateVersion: 1
     projectProgramVersion: 0
+    dirty: true
+    noOpenRef: true
 
 ScriptInfos::
 /a/lib/lib.d.ts *new*
@@ -707,6 +709,8 @@ Projects::
 /user/username/projects/project/src/tsconfig.json (Configured) *changed*
     projectStateVersion: 1
     projectProgramVersion: 1 *changed*
+    dirty: false *changed*
+    noOpenRef: false *changed*
 
 ScriptInfos::
 /a/lib/lib.d.ts *changed*
@@ -744,10 +748,6 @@ Info seq  [hh:mm:ss:mss] request:
     }
 Info seq  [hh:mm:ss:mss] Finding references to /user/username/projects/project/src/common/input/keyboard.ts position 99 in project /user/username/projects/project/src/common/tsconfig.json
 Info seq  [hh:mm:ss:mss] Finding references to /user/username/projects/project/src/common/input/keyboard.ts position 99 in project /user/username/projects/project/src/tsconfig.json
-Info seq  [hh:mm:ss:mss] Search path: /user/username/projects/project/src/common/input
-Info seq  [hh:mm:ss:mss] For info: /user/username/projects/project/src/common/input/keyboard.ts :: Config file name: /user/username/projects/project/src/common/tsconfig.json
-Info seq  [hh:mm:ss:mss] Search path: /user/username/projects/project/src/common/input
-Info seq  [hh:mm:ss:mss] For info: /user/username/projects/project/src/common/input/keyboard.ts :: Config file name: /user/username/projects/project/src/common/tsconfig.json
 Info seq  [hh:mm:ss:mss] Search path: /user/username/projects/project/src/common/input
 Info seq  [hh:mm:ss:mss] For info: /user/username/projects/project/src/common/input/keyboard.test.ts :: Config file name: /user/username/projects/project/src/common/tsconfig.json
 Info seq  [hh:mm:ss:mss] Search path: /user/username/projects/project/src/common/input
@@ -860,3 +860,14 @@ Info seq  [hh:mm:ss:mss] response:
       "responseRequired": true
     }
 After request
+
+Projects::
+/user/username/projects/project/src/common/tsconfig.json (Configured)
+    projectStateVersion: 1
+    projectProgramVersion: 1
+/user/username/projects/project/src/tsconfig.json (Configured) *changed*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+    originalConfiguredProjects: 2 *changed*
+        /user/username/projects/project/src/common/tsconfig.json *new*
+        /user/username/projects/project/src/tsconfig.json *new*

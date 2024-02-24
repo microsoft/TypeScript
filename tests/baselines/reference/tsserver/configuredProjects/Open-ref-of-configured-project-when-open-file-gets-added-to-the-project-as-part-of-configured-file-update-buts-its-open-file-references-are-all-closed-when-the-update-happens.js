@@ -416,7 +416,6 @@ ScriptInfos::
     containingProjects: 1
         /dev/null/inferredProject1* *default*
 
-Configured project: /a/b/tsconfig.json hasOpenRef:: true isClosed: false
 Before request
 
 Info seq  [hh:mm:ss:mss] request:
@@ -518,6 +517,15 @@ FsWatches::
 /a/b/tsconfig.json:
   {}
 
+Projects::
+/a/b/tsconfig.json (Configured) *changed*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+    noOpenRef: true *changed*
+/dev/null/inferredProject1* (Inferred)
+    projectStateVersion: 1
+    projectProgramVersion: 1
+
 ScriptInfos::
 /a/b/file3.ts *changed*
     open: false *changed*
@@ -533,7 +541,6 @@ ScriptInfos::
     containingProjects: 1
         /dev/null/inferredProject1* *default*
 
-Configured project: /a/b/tsconfig.json hasOpenRef:: false isClosed: false
 Info seq  [hh:mm:ss:mss] FileWatcher:: Triggered with /a/b/tsconfig.json 1:: WatchInfo: /a/b/tsconfig.json 2000 undefined Project: /a/b/tsconfig.json WatchType: Config file
 Info seq  [hh:mm:ss:mss] Scheduled: /a/b/tsconfig.json
 Info seq  [hh:mm:ss:mss] Search path: /a/b/src
@@ -554,11 +561,12 @@ Projects::
 /a/b/tsconfig.json (Configured) *changed*
     projectStateVersion: 2 *changed*
     projectProgramVersion: 1
+    dirty: true *changed*
+    noOpenRef: false *changed*
 /dev/null/inferredProject1* (Inferred)
     projectStateVersion: 1
     projectProgramVersion: 1
 
-Configured project: /a/b/tsconfig.json hasOpenRef:: true isClosed: false
 Before request
 
 Info seq  [hh:mm:ss:mss] request:
@@ -611,6 +619,7 @@ Projects::
 /a/b/tsconfig.json (Configured)
     projectStateVersion: 2
     projectProgramVersion: 1
+    dirty: true
 /dev/null/inferredProject1* (Inferred)
     projectStateVersion: 1
     projectProgramVersion: 1
@@ -636,7 +645,6 @@ ScriptInfos::
     containingProjects: 1
         /dev/null/inferredProject2* *default*
 
-Configured project: /a/b/tsconfig.json hasOpenRef:: true isClosed: false
 Before running Timeout callback:: count: 2
 2: /a/b/tsconfig.json
 3: *ensureProjectForOpenFiles*
@@ -831,9 +839,11 @@ Projects::
 /a/b/tsconfig.json (Configured) *changed*
     projectStateVersion: 2
     projectProgramVersion: 2 *changed*
+    dirty: false *changed*
 /dev/null/inferredProject1* (Inferred) *changed*
     projectStateVersion: 2 *changed*
     projectProgramVersion: 2 *changed*
+    isOrphan: true *changed*
 /dev/null/inferredProject2* (Inferred)
     projectStateVersion: 1
     projectProgramVersion: 1
@@ -856,7 +866,3 @@ ScriptInfos::
     version: SVC-1-0
     containingProjects: 1
         /dev/null/inferredProject2* *default*
-
-Configured project: /a/b/tsconfig.json hasOpenRef:: true isClosed: false
-Inferred project: /dev/null/inferredProject1* isOrphan:: true isClosed: false
-Inferred project: /dev/null/inferredProject2* isOrphan:: false isClosed: false

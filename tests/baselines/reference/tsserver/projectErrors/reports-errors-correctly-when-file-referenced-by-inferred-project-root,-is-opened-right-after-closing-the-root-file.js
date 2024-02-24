@@ -712,6 +712,7 @@ Projects::
 /dev/null/inferredProject1* (Inferred) *changed*
     projectStateVersion: 3 *changed*
     projectProgramVersion: 2
+    dirty: true *changed*
 
 ScriptInfos::
 /a/lib/lib.d.ts
@@ -1041,6 +1042,7 @@ Projects::
 /dev/null/inferredProject1* (Inferred) *changed*
     projectStateVersion: 4 *changed*
     projectProgramVersion: 4 *changed*
+    dirty: false *changed*
 
 ScriptInfos::
 /a/lib/lib.d.ts

@@ -509,6 +509,7 @@ Projects::
 /user/username/projects/myproject/app1/tsconfig.json (Configured) *changed*
     projectStateVersion: 2 *changed*
     projectProgramVersion: 1
+    dirty: true *changed*
 /user/username/projects/myproject/app2/tsconfig.json (Configured)
     projectStateVersion: 1
     projectProgramVersion: 1
@@ -559,9 +560,11 @@ Projects::
 /user/username/projects/myproject/app1/tsconfig.json (Configured)
     projectStateVersion: 2
     projectProgramVersion: 1
+    dirty: true
 /user/username/projects/myproject/app2/tsconfig.json (Configured) *changed*
     projectStateVersion: 2 *changed*
     projectProgramVersion: 1
+    dirty: true *changed*
 
 ScriptInfos::
 /a/lib/lib.d.ts
@@ -583,8 +586,6 @@ ScriptInfos::
         /user/username/projects/myproject/app1/tsconfig.json *default*
         /user/username/projects/myproject/app2/tsconfig.json
 
-Project1 is dirty: true
-Project2 is dirty: true
 Before request
 
 Info seq  [hh:mm:ss:mss] request:
@@ -621,5 +622,12 @@ Info seq  [hh:mm:ss:mss] response:
     }
 After request
 
-Project1 is dirty: false
-Project2 is dirty: true
+Projects::
+/user/username/projects/myproject/app1/tsconfig.json (Configured) *changed*
+    projectStateVersion: 2
+    projectProgramVersion: 1
+    dirty: false *changed*
+/user/username/projects/myproject/app2/tsconfig.json (Configured)
+    projectStateVersion: 2
+    projectProgramVersion: 1
+    dirty: true

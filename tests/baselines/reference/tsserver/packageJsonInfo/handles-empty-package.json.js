@@ -145,6 +145,7 @@ Projects::
 /tsconfig.json (Configured) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
+    noOpenRef: true
 
 ScriptInfos::
 /tsconfig.json (Open) *new*
@@ -220,6 +221,8 @@ Projects::
 /tsconfig.json (Configured) *changed*
     projectStateVersion: 2 *changed*
     projectProgramVersion: 1
+    dirty: true *changed*
+    noOpenRef: false *changed*
 
 TI:: [hh:mm:ss:mss] Got install request
     {
@@ -361,6 +364,7 @@ Projects::
 /tsconfig.json (Configured)
     projectStateVersion: 2
     projectProgramVersion: 1
+    dirty: true
 
 getPackageJsonsVisibleToFile:: /src/whatever/blah.ts undefined
 

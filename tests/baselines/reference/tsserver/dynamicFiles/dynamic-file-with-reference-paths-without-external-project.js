@@ -66,7 +66,7 @@ ScriptInfos::
     version: Text-1
     containingProjects: 1
         /dev/null/inferredProject1*
-^walkThroughSnippet:/Users/UserName/projects/someProject/out/someFile#1.js (Open) *new*
+^walkThroughSnippet:/Users/UserName/projects/someProject/out/someFile#1.js (Dynamic) (Open) *new*
     version: SVC-1-0
     containingProjects: 1
         /dev/null/inferredProject1* *default*
@@ -224,5 +224,3 @@ Projects::
 /dev/null/inferredProject1* (Inferred) *changed*
     projectStateVersion: 1
     projectProgramVersion: 1 *changed*
-
-/^walkthroughsnippet:/users/username/projects/someproject/out/somefile#1.js isDynamic:: true

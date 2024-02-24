@@ -209,6 +209,7 @@ Projects::
 /user/username/projects/myproject/tsconfig.json (Configured) *changed*
     projectStateVersion: 2 *changed*
     projectProgramVersion: 1
+    dirty: true *changed*
 
 Info seq  [hh:mm:ss:mss] Running: /user/username/projects/myproject/tsconfig.json
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/unitTest1.ts 500 undefined WatchType: Closed Script info
@@ -290,6 +291,7 @@ Projects::
 /user/username/projects/myproject/tsconfig.json (Configured) *changed*
     projectStateVersion: 2
     projectProgramVersion: 2 *changed*
+    dirty: false *changed*
 
 ScriptInfos::
 /a/lib/lib.d.ts
@@ -526,6 +528,7 @@ Projects::
 /user/username/projects/myproject/tsconfig.json (Configured) *changed*
     projectStateVersion: 3 *changed*
     projectProgramVersion: 2
+    dirty: true *changed*
 
 ScriptInfos::
 /a/lib/lib.d.ts
@@ -622,6 +625,7 @@ Projects::
 /user/username/projects/myproject/tsconfig.json (Configured) *changed*
     projectStateVersion: 3
     projectProgramVersion: 3 *changed*
+    dirty: false *changed*
 
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Triggered with /user/username/projects/myproject/unitTest1.ts :: WatchInfo: /user/username/projects/myproject 1 undefined Config: /user/username/projects/myproject/tsconfig.json WatchType: Wild card directory
 Info seq  [hh:mm:ss:mss] Scheduled: /user/username/projects/myproject/tsconfig.json
@@ -651,6 +655,7 @@ Projects::
 /user/username/projects/myproject/tsconfig.json (Configured) *changed*
     projectStateVersion: 4 *changed*
     projectProgramVersion: 3
+    dirty: true *changed*
 
 Info seq  [hh:mm:ss:mss] Running: /user/username/projects/myproject/tsconfig.json
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/unitTest1.ts 500 undefined WatchType: Closed Script info
@@ -732,6 +737,7 @@ Projects::
 /user/username/projects/myproject/tsconfig.json (Configured) *changed*
     projectStateVersion: 4
     projectProgramVersion: 4 *changed*
+    dirty: false *changed*
 
 ScriptInfos::
 /a/lib/lib.d.ts

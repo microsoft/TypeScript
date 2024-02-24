@@ -207,7 +207,6 @@ Projects::
     projectStateVersion: 1
     projectProgramVersion: 1 *changed*
 
-Default Project for /node_modules/@angular/forms/forms.d.ts:: /dev/null/inferredProject1*
 Before request
 
 Info seq  [hh:mm:ss:mss] request:
@@ -436,5 +435,4 @@ ScriptInfos::
         /dev/null/inferredProject1*
         /tsconfig.json *default* *new*
 
-Default Project for /node_modules/@angular/forms/forms.d.ts:: /tsconfig.json
 After getAutoImportProvider

@@ -275,6 +275,7 @@ Projects::
 /project/tsconfig.json (Configured) *changed*
     projectStateVersion: 2 *changed*
     projectProgramVersion: 1
+    dirty: true *changed*
 
 ScriptInfos::
 /a/lib/lib.d.ts
@@ -300,6 +301,12 @@ Info seq  [hh:mm:ss:mss] 	Files (3)
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Before request
+
+Projects::
+/project/tsconfig.json (Configured) *changed*
+    projectStateVersion: 2
+    projectProgramVersion: 1
+    dirty: false *changed*
 
 Info seq  [hh:mm:ss:mss] request:
     {
@@ -373,6 +380,7 @@ Projects::
 /project/tsconfig.json (Configured) *changed*
     projectStateVersion: 3 *changed*
     projectProgramVersion: 1
+    dirty: true *changed*
 
 ScriptInfos::
 /a/lib/lib.d.ts
@@ -429,6 +437,12 @@ Info seq  [hh:mm:ss:mss] event:
       }
     }
 After running Timeout callback:: count: 0
+
+Projects::
+/project/tsconfig.json (Configured) *changed*
+    projectStateVersion: 3
+    projectProgramVersion: 1
+    dirty: false *changed*
 
 ScriptInfos::
 /a/lib/lib.d.ts

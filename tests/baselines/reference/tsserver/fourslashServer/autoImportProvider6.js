@@ -551,6 +551,7 @@ Projects::
 /tsconfig.json (Configured) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
+    noOpenRef: true
 
 ScriptInfos::
 /index.ts *new*
@@ -827,6 +828,15 @@ watchedFiles *deleted*::
 watchedDirectoriesRecursive::
 :
   {}
+
+Projects::
+/dev/null/inferredProject1* (Inferred)
+    projectStateVersion: 1
+    projectProgramVersion: 1
+/tsconfig.json (Configured) *changed*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+    noOpenRef: false *changed*
 
 ScriptInfos::
 /index.ts (Open) *changed*
@@ -1706,6 +1716,12 @@ Info seq  [hh:mm:ss:mss] response:
             "name": "URIError",
             "kind": "var",
             "kindModifiers": "declare",
+            "sortText": "15"
+          },
+          {
+            "name": "using",
+            "kind": "keyword",
+            "kindModifiers": "",
             "sortText": "15"
           },
           {

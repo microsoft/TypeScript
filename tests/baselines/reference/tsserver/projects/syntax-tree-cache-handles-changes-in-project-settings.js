@@ -152,6 +152,7 @@ Projects::
 /dev/null/inferredProject1* (Inferred) *changed*
     projectStateVersion: 2 *changed*
     projectProgramVersion: 1
+    dirty: true *changed*
 
 Before request
 
@@ -264,6 +265,13 @@ PolledWatches::
 FsWatches::
 /a/b/app.ts: *new*
   {}
+
+Projects::
+/dev/null/inferredProject1* (Inferred) *changed*
+    projectStateVersion: 2
+    projectProgramVersion: 1
+    dirty: true
+    isOrphan: true *changed*
 
 ScriptInfos::
 /a/b/app.ts *changed*

@@ -301,8 +301,8 @@ FsWatches::
 
 PendingInstalls callback:: count: 1
 1: #1 with arguments:: [
-  "@types/lodash@ts5.4",
-  "@types/react@ts5.4"
+  "@types/lodash@ts5.5",
+  "@types/react@ts5.5"
 ] *new*
 
 Projects::
@@ -416,6 +416,7 @@ Projects::
 /a/app/test.csproj (External) *changed*
     projectStateVersion: 2 *changed*
     projectProgramVersion: 1
+    dirty: true *changed*
 
 Before running Timeout callback:: count: 1
 1: /a/app/test.csproj
@@ -549,6 +550,7 @@ Projects::
 /a/app/test.csproj (External) *changed*
     projectStateVersion: 2
     projectProgramVersion: 2 *changed*
+    dirty: false *changed*
 
 ScriptInfos::
 /a/b/file2.jsx

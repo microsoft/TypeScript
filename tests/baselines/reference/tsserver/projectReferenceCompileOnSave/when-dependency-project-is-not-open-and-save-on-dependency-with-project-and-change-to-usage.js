@@ -314,6 +314,7 @@ Projects::
 /user/username/projects/myproject/usage/tsconfig.json (Configured) *changed*
     projectStateVersion: 2 *changed*
     projectProgramVersion: 1
+    dirty: true *changed*
 
 ScriptInfos::
 /a/lib/lib.d.ts
@@ -362,6 +363,12 @@ Info seq  [hh:mm:ss:mss] response:
       "responseRequired": true
     }
 After request
+
+Projects::
+/user/username/projects/myproject/usage/tsconfig.json (Configured) *changed*
+    projectStateVersion: 2
+    projectProgramVersion: 1
+    dirty: false *changed*
 
 Before request
 

@@ -905,6 +905,19 @@ FsWatchesRecursive::
 /user/username/projects/myproject/random:
   {}
 
+Projects::
+/user/username/projects/myproject/dependency/tsconfig.json (Configured)
+    projectStateVersion: 1
+    projectProgramVersion: 1
+/user/username/projects/myproject/main/tsconfig.json (Configured) *changed*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+    documentPositionMappers: 1 *changed*
+        /user/username/projects/myproject/decls/fns.d.ts: DocumentPositionMapper1 *new*
+/user/username/projects/myproject/random/tsconfig.json (Configured)
+    projectStateVersion: 1
+    projectProgramVersion: 1
+
 ScriptInfos::
 /a/lib/lib.d.ts
     version: Text-1
@@ -914,9 +927,14 @@ ScriptInfos::
         /user/username/projects/myproject/random/tsconfig.json
 /user/username/projects/myproject/decls/FnS.d.ts.map *new*
     version: Text-1
+    declarationInfoPath: /user/username/projects/myproject/decls/fns.d.ts
+    sourceInfos: 1
+        /user/username/projects/myproject/dependency/fns.ts
+    documentPositionMapper: DocumentPositionMapper1
     containingProjects: 0
-/user/username/projects/myproject/decls/fns.d.ts
+/user/username/projects/myproject/decls/fns.d.ts *changed*
     version: Text-1
+    sourceMapFilePath: /user/username/projects/myproject/decls/fns.d.ts.map *changed*
     containingProjects: 1
         /user/username/projects/myproject/main/tsconfig.json
 /user/username/projects/myproject/dependency/FnS.ts (Open)
@@ -931,6 +949,9 @@ ScriptInfos::
     version: SVC-1-0
     containingProjects: 1
         /user/username/projects/myproject/random/tsconfig.json *default*
+
+DocumentPositionMappers::
+DocumentPositionMapper1 *new*
 
 Before request
 
@@ -1153,8 +1174,6 @@ Info seq  [hh:mm:ss:mss] request:
       "seq": 9,
       "type": "request"
     }
-Info seq  [hh:mm:ss:mss] Search path: /user/username/projects/myproject/dependency
-Info seq  [hh:mm:ss:mss] For info: /user/username/projects/myproject/dependency/FnS.ts :: Config file name: /user/username/projects/myproject/dependency/tsconfig.json
 Info seq  [hh:mm:ss:mss] response:
     {
       "response": {
@@ -1238,6 +1257,21 @@ Info seq  [hh:mm:ss:mss] response:
     }
 After request
 
+Projects::
+/user/username/projects/myproject/dependency/tsconfig.json (Configured) *changed*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+    documentPositionMappers: 1 *changed*
+        /user/username/projects/myproject/decls/fns.d.ts: DocumentPositionMapper1 *new*
+/user/username/projects/myproject/main/tsconfig.json (Configured) *changed*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+    originalConfiguredProjects: 1 *changed*
+        /user/username/projects/myproject/dependency/tsconfig.json *new*
+/user/username/projects/myproject/random/tsconfig.json (Configured)
+    projectStateVersion: 1
+    projectProgramVersion: 1
+
 Before request
 
 Info seq  [hh:mm:ss:mss] request:
@@ -1251,8 +1285,6 @@ Info seq  [hh:mm:ss:mss] request:
       "seq": 10,
       "type": "request"
     }
-Info seq  [hh:mm:ss:mss] Search path: /user/username/projects/myproject/dependency
-Info seq  [hh:mm:ss:mss] For info: /user/username/projects/myproject/dependency/FnS.ts :: Config file name: /user/username/projects/myproject/dependency/tsconfig.json
 Info seq  [hh:mm:ss:mss] response:
     {
       "response": {
@@ -1349,8 +1381,6 @@ Info seq  [hh:mm:ss:mss] request:
       "seq": 11,
       "type": "request"
     }
-Info seq  [hh:mm:ss:mss] Search path: /user/username/projects/myproject/dependency
-Info seq  [hh:mm:ss:mss] For info: /user/username/projects/myproject/dependency/FnS.ts :: Config file name: /user/username/projects/myproject/dependency/tsconfig.json
 Info seq  [hh:mm:ss:mss] response:
     {
       "response": {
@@ -1447,8 +1477,6 @@ Info seq  [hh:mm:ss:mss] request:
       "seq": 12,
       "type": "request"
     }
-Info seq  [hh:mm:ss:mss] Search path: /user/username/projects/myproject/dependency
-Info seq  [hh:mm:ss:mss] For info: /user/username/projects/myproject/dependency/FnS.ts :: Config file name: /user/username/projects/myproject/dependency/tsconfig.json
 Info seq  [hh:mm:ss:mss] response:
     {
       "response": {
@@ -1545,8 +1573,6 @@ Info seq  [hh:mm:ss:mss] request:
       "seq": 13,
       "type": "request"
     }
-Info seq  [hh:mm:ss:mss] Search path: /user/username/projects/myproject/dependency
-Info seq  [hh:mm:ss:mss] For info: /user/username/projects/myproject/dependency/FnS.ts :: Config file name: /user/username/projects/myproject/dependency/tsconfig.json
 Info seq  [hh:mm:ss:mss] response:
     {
       "response": {
@@ -1703,6 +1729,20 @@ FsWatchesRecursive::
 /user/username/projects/myproject/random:
   {}
 
+Projects::
+/user/username/projects/myproject/dependency/tsconfig.json (Configured)
+    projectStateVersion: 1
+    projectProgramVersion: 1
+/user/username/projects/myproject/main/tsconfig.json (Configured)
+    projectStateVersion: 1
+    projectProgramVersion: 1
+    originalConfiguredProjects: 1
+        /user/username/projects/myproject/dependency/tsconfig.json
+/user/username/projects/myproject/random/tsconfig.json (Configured) *changed*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+    noOpenRef: true *changed*
+
 ScriptInfos::
 /a/lib/lib.d.ts
     version: Text-1
@@ -1712,9 +1752,14 @@ ScriptInfos::
         /user/username/projects/myproject/random/tsconfig.json
 /user/username/projects/myproject/decls/FnS.d.ts.map
     version: Text-1
+    declarationInfoPath: /user/username/projects/myproject/decls/fns.d.ts
+    sourceInfos: 1
+        /user/username/projects/myproject/dependency/fns.ts
+    documentPositionMapper: DocumentPositionMapper1
     containingProjects: 0
 /user/username/projects/myproject/decls/fns.d.ts
     version: Text-1
+    sourceMapFilePath: /user/username/projects/myproject/decls/fns.d.ts.map
     containingProjects: 1
         /user/username/projects/myproject/main/tsconfig.json
 /user/username/projects/myproject/dependency/FnS.ts (Open)
@@ -1810,6 +1855,20 @@ FsWatchesRecursive::
 /user/username/projects/myproject/random:
   {}
 
+Projects::
+/user/username/projects/myproject/dependency/tsconfig.json (Configured)
+    projectStateVersion: 1
+    projectProgramVersion: 1
+/user/username/projects/myproject/main/tsconfig.json (Configured)
+    projectStateVersion: 1
+    projectProgramVersion: 1
+    originalConfiguredProjects: 1
+        /user/username/projects/myproject/dependency/tsconfig.json
+/user/username/projects/myproject/random/tsconfig.json (Configured) *changed*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+    noOpenRef: false *changed*
+
 ScriptInfos::
 /a/lib/lib.d.ts
     version: Text-1
@@ -1819,9 +1878,14 @@ ScriptInfos::
         /user/username/projects/myproject/random/tsconfig.json
 /user/username/projects/myproject/decls/FnS.d.ts.map
     version: Text-1
+    declarationInfoPath: /user/username/projects/myproject/decls/fns.d.ts
+    sourceInfos: 1
+        /user/username/projects/myproject/dependency/fns.ts
+    documentPositionMapper: DocumentPositionMapper1
     containingProjects: 0
 /user/username/projects/myproject/decls/fns.d.ts
     version: Text-1
+    sourceMapFilePath: /user/username/projects/myproject/decls/fns.d.ts.map
     containingProjects: 1
         /user/username/projects/myproject/main/tsconfig.json
 /user/username/projects/myproject/dependency/FnS.ts (Open)
@@ -1911,6 +1975,20 @@ FsWatchesRecursive::
 /user/username/projects/myproject/random:
   {}
 
+Projects::
+/user/username/projects/myproject/dependency/tsconfig.json (Configured)
+    projectStateVersion: 1
+    projectProgramVersion: 1
+/user/username/projects/myproject/main/tsconfig.json (Configured) *changed*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+    noOpenRef: true *changed*
+    originalConfiguredProjects: 1
+        /user/username/projects/myproject/dependency/tsconfig.json
+/user/username/projects/myproject/random/tsconfig.json (Configured)
+    projectStateVersion: 1
+    projectProgramVersion: 1
+
 ScriptInfos::
 /a/lib/lib.d.ts
     version: Text-1
@@ -1920,9 +1998,14 @@ ScriptInfos::
         /user/username/projects/myproject/random/tsconfig.json
 /user/username/projects/myproject/decls/FnS.d.ts.map
     version: Text-1
+    declarationInfoPath: /user/username/projects/myproject/decls/fns.d.ts
+    sourceInfos: 1
+        /user/username/projects/myproject/dependency/fns.ts
+    documentPositionMapper: DocumentPositionMapper1
     containingProjects: 0
 /user/username/projects/myproject/decls/fns.d.ts
     version: Text-1
+    sourceMapFilePath: /user/username/projects/myproject/decls/fns.d.ts.map
     containingProjects: 1
         /user/username/projects/myproject/main/tsconfig.json
 /user/username/projects/myproject/dependency/FnS.ts (Open)
@@ -2012,6 +2095,21 @@ FsWatchesRecursive::
 /user/username/projects/myproject/random:
   {}
 
+Projects::
+/user/username/projects/myproject/dependency/tsconfig.json (Configured) *changed*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+    noOpenRef: true *changed*
+/user/username/projects/myproject/main/tsconfig.json (Configured)
+    projectStateVersion: 1
+    projectProgramVersion: 1
+    noOpenRef: true
+    originalConfiguredProjects: 1
+        /user/username/projects/myproject/dependency/tsconfig.json
+/user/username/projects/myproject/random/tsconfig.json (Configured)
+    projectStateVersion: 1
+    projectProgramVersion: 1
+
 ScriptInfos::
 /a/lib/lib.d.ts
     version: Text-1
@@ -2021,9 +2119,14 @@ ScriptInfos::
         /user/username/projects/myproject/random/tsconfig.json
 /user/username/projects/myproject/decls/FnS.d.ts.map
     version: Text-1
+    declarationInfoPath: /user/username/projects/myproject/decls/fns.d.ts
+    sourceInfos: 1
+        /user/username/projects/myproject/dependency/fns.ts
+    documentPositionMapper: DocumentPositionMapper1
     containingProjects: 0
 /user/username/projects/myproject/decls/fns.d.ts
     version: Text-1
+    sourceMapFilePath: /user/username/projects/myproject/decls/fns.d.ts.map
     containingProjects: 1
         /user/username/projects/myproject/main/tsconfig.json
 /user/username/projects/myproject/dependency/FnS.ts *changed*
@@ -2113,6 +2216,22 @@ FsWatchesRecursive::
 /user/username/projects/myproject/random:
   {}
 
+Projects::
+/user/username/projects/myproject/dependency/tsconfig.json (Configured)
+    projectStateVersion: 1
+    projectProgramVersion: 1
+    noOpenRef: true
+/user/username/projects/myproject/main/tsconfig.json (Configured)
+    projectStateVersion: 1
+    projectProgramVersion: 1
+    noOpenRef: true
+    originalConfiguredProjects: 1
+        /user/username/projects/myproject/dependency/tsconfig.json
+/user/username/projects/myproject/random/tsconfig.json (Configured) *changed*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+    noOpenRef: true *changed*
+
 ScriptInfos::
 /a/lib/lib.d.ts
     version: Text-1
@@ -2122,9 +2241,14 @@ ScriptInfos::
         /user/username/projects/myproject/random/tsconfig.json
 /user/username/projects/myproject/decls/FnS.d.ts.map
     version: Text-1
+    declarationInfoPath: /user/username/projects/myproject/decls/fns.d.ts
+    sourceInfos: 1
+        /user/username/projects/myproject/dependency/fns.ts
+    documentPositionMapper: DocumentPositionMapper1
     containingProjects: 0
 /user/username/projects/myproject/decls/fns.d.ts
     version: Text-1
+    sourceMapFilePath: /user/username/projects/myproject/decls/fns.d.ts.map
     containingProjects: 1
         /user/username/projects/myproject/main/tsconfig.json
 /user/username/projects/myproject/dependency/FnS.ts
@@ -2273,12 +2397,23 @@ Projects::
 /user/username/projects/myproject/dependency/tsconfig.json (Configured) *deleted*
     projectStateVersion: 1
     projectProgramVersion: 1
+    isClosed: true *changed*
+    noOpenRef: true
+    documentPositionMappers: 0 *changed*
+        /user/username/projects/myproject/decls/fns.d.ts: DocumentPositionMapper1 *deleted*
 /user/username/projects/myproject/main/tsconfig.json (Configured) *deleted*
     projectStateVersion: 1
     projectProgramVersion: 1
-/user/username/projects/myproject/random/tsconfig.json (Configured)
+    isClosed: true *changed*
+    noOpenRef: true
+    documentPositionMappers: 0 *changed*
+        /user/username/projects/myproject/decls/fns.d.ts: DocumentPositionMapper1 *deleted*
+    originalConfiguredProjects: 1
+        /user/username/projects/myproject/dependency/tsconfig.json
+/user/username/projects/myproject/random/tsconfig.json (Configured) *changed*
     projectStateVersion: 1
     projectProgramVersion: 1
+    noOpenRef: false *changed*
 
 ScriptInfos::
 /a/lib/lib.d.ts *changed*
@@ -2289,9 +2424,14 @@ ScriptInfos::
         /user/username/projects/myproject/dependency/tsconfig.json *deleted*
 /user/username/projects/myproject/decls/FnS.d.ts.map *deleted*
     version: Text-1
+    declarationInfoPath: /user/username/projects/myproject/decls/fns.d.ts
+    sourceInfos: 1
+        /user/username/projects/myproject/dependency/fns.ts
+    documentPositionMapper: DocumentPositionMapper1
     containingProjects: 0
 /user/username/projects/myproject/decls/fns.d.ts *deleted*
     version: Text-1
+    sourceMapFilePath: /user/username/projects/myproject/decls/fns.d.ts.map
     containingProjects: 0 *changed*
         /user/username/projects/myproject/main/tsconfig.json *deleted*
 /user/username/projects/myproject/dependency/FnS.ts *deleted*
@@ -2307,3 +2447,6 @@ ScriptInfos::
     version: SVC-1-0
     containingProjects: 1
         /user/username/projects/myproject/random/tsconfig.json *default*
+
+DocumentPositionMappers::
+DocumentPositionMapper1 *deleted*

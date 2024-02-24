@@ -340,6 +340,12 @@ FsWatchesRecursive::
 /a:
   {}
 
+Projects::
+/a/tsconfig.json (Configured) *changed*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+    noOpenRef: true *changed*
+
 ScriptInfos::
 /a/a.ts *changed*
     open: false *changed*
@@ -566,6 +572,8 @@ Projects::
 /a/tsconfig.json (Configured) *deleted*
     projectStateVersion: 1
     projectProgramVersion: 1
+    isClosed: true *changed*
+    noOpenRef: true
 /b/tsconfig.json (Configured) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
@@ -633,6 +641,12 @@ FsWatchesRecursive::
 /b:
   {}
 
+Projects::
+/b/tsconfig.json (Configured) *changed*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+    noOpenRef: true *changed*
+
 ScriptInfos::
 /b/b.ts *changed*
     open: false *changed*
@@ -673,6 +687,8 @@ Projects::
 /b/tsconfig.json (Configured) *changed*
     projectStateVersion: 2 *changed*
     projectProgramVersion: 1
+    dirty: true *changed*
+    noOpenRef: true
 
 ScriptInfos::
 /b/b.ts *deleted*
@@ -904,6 +920,8 @@ Projects::
 /b/tsconfig.json (Configured)
     projectStateVersion: 2
     projectProgramVersion: 1
+    dirty: true
+    noOpenRef: true
 /user/tsconfig.json (Configured) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
@@ -1020,6 +1038,17 @@ FsWatchesRecursive::
   {}
 /user:
   {}
+
+Projects::
+/b/tsconfig.json (Configured)
+    projectStateVersion: 2
+    projectProgramVersion: 1
+    dirty: true
+    noOpenRef: true
+/user/tsconfig.json (Configured) *changed*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+    noOpenRef: true *changed*
 
 ScriptInfos::
 /a/a.ts
@@ -1191,9 +1220,12 @@ Projects::
 /b/tsconfig.json (Configured)
     projectStateVersion: 2
     projectProgramVersion: 1
+    dirty: true
+    noOpenRef: true
 /user/tsconfig.json (Configured)
     projectStateVersion: 1
     projectProgramVersion: 1
+    noOpenRef: true
 
 ScriptInfos::
 /a/a.ts (Open) *changed*
@@ -1261,6 +1293,21 @@ FsWatchesRecursive::
   {}
 /user:
   {}
+
+Projects::
+/a/tsconfig.json (Configured) *changed*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+    noOpenRef: true *changed*
+/b/tsconfig.json (Configured)
+    projectStateVersion: 2
+    projectProgramVersion: 1
+    dirty: true
+    noOpenRef: true
+/user/tsconfig.json (Configured)
+    projectStateVersion: 1
+    projectProgramVersion: 1
+    noOpenRef: true
 
 ScriptInfos::
 /a/a.ts *changed*
@@ -1387,15 +1434,22 @@ Projects::
 /a/tsconfig.json (Configured) *deleted*
     projectStateVersion: 1
     projectProgramVersion: 1
+    isClosed: true *changed*
+    noOpenRef: true
 /b/tsconfig.json (Configured) *deleted*
     projectStateVersion: 2
     projectProgramVersion: 1
+    dirty: true
+    isClosed: true *changed*
+    noOpenRef: true
 /dev/null/inferredProject1* (Inferred) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
 /user/tsconfig.json (Configured) *deleted*
     projectStateVersion: 1
     projectProgramVersion: 1
+    isClosed: true *changed*
+    noOpenRef: true
 
 ScriptInfos::
 /a/a.ts *deleted*

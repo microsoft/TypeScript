@@ -346,6 +346,7 @@ Projects::
 /workspaces/somerepo/src/tsconfig.json (Configured) *changed*
     projectStateVersion: 2 *changed*
     projectProgramVersion: 1
+    dirty: true *changed*
 
 ScriptInfos::
 /a/lib/lib.d.ts
@@ -433,6 +434,7 @@ Projects::
 /workspaces/somerepo/src/tsconfig.json (Configured) *changed*
     projectStateVersion: 2
     projectProgramVersion: 2 *changed*
+    dirty: false *changed*
 
 Before running Immedidate callback:: count: 1
 3: semanticCheck
@@ -558,6 +560,7 @@ Projects::
 /workspaces/somerepo/src/tsconfig.json (Configured) *changed*
     projectStateVersion: 3 *changed*
     projectProgramVersion: 2
+    dirty: true *changed*
 
 Before request
 //// [/workspaces/somerepo/node_modules/@types/random-seed/index.d.ts] Inode:: 16
@@ -674,6 +677,7 @@ Projects::
 /workspaces/somerepo/src/tsconfig.json (Configured) *changed*
     projectStateVersion: 3
     projectProgramVersion: 3 *changed*
+    dirty: false *changed*
 
 ScriptInfos::
 /a/lib/lib.d.ts
@@ -782,3 +786,4 @@ Projects::
 /workspaces/somerepo/src/tsconfig.json (Configured) *changed*
     projectStateVersion: 4 *changed*
     projectProgramVersion: 3
+    dirty: true *changed*

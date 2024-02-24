@@ -148,8 +148,8 @@ Info seq  [hh:mm:ss:mss] event:
               "line": 3,
               "offset": 10
             },
-            "text": "Option 'out' is deprecated and will stop functioning in TypeScript 5.5. Specify compilerOption '\"ignoreDeprecations\": \"5.0\"' to silence this error.\n  Use 'outFile' instead.",
-            "code": 5101,
+            "text": "Option 'out' has been removed. Please remove it from your configuration.\n  Use 'outFile' instead.",
+            "code": 5102,
             "category": "error",
             "fileName": "/users/username/projects/project/tsconfig.json"
           }
@@ -219,6 +219,7 @@ Projects::
 /users/username/projects/project/tsconfig.json (Configured) *changed*
     projectStateVersion: 2 *changed*
     projectProgramVersion: 1
+    dirty: true *changed*
 
 Info seq  [hh:mm:ss:mss] Running: /users/username/projects/project/tsconfig.json
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /users/username/projects/project/b.ts 500 undefined WatchType: Closed Script info
@@ -296,6 +297,7 @@ Projects::
 /users/username/projects/project/tsconfig.json (Configured) *changed*
     projectStateVersion: 2
     projectProgramVersion: 2 *changed*
+    dirty: false *changed*
 
 ScriptInfos::
 /a/lib/lib.d.ts
@@ -332,6 +334,7 @@ Projects::
 /users/username/projects/project/tsconfig.json (Configured) *changed*
     projectStateVersion: 3 *changed*
     projectProgramVersion: 2
+    dirty: true *changed*
 
 ScriptInfos::
 /a/lib/lib.d.ts
@@ -404,6 +407,12 @@ Timeout callback:: count: 1
 6: checkOne *new*
 
 Immedidate callback:: count: 0
+
+Projects::
+/users/username/projects/project/tsconfig.json (Configured) *changed*
+    projectStateVersion: 3
+    projectProgramVersion: 2
+    dirty: false *changed*
 
 ScriptInfos::
 /a/lib/lib.d.ts

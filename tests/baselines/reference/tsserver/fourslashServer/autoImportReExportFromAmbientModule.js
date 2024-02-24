@@ -184,6 +184,7 @@ Projects::
 /tsconfig.json (Configured) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
+    noOpenRef: true
 
 ScriptInfos::
 /index.ts *new*
@@ -267,6 +268,15 @@ watchedFiles *deleted*::
 watchedDirectoriesRecursive::
 :
   {}
+
+Projects::
+/dev/null/inferredProject1* (Inferred)
+    projectStateVersion: 1
+    projectProgramVersion: 1
+/tsconfig.json (Configured) *changed*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+    noOpenRef: false *changed*
 
 ScriptInfos::
 /index.ts (Open) *changed*
@@ -977,6 +987,12 @@ Info seq  [hh:mm:ss:mss] response:
             "sortText": "15"
           },
           {
+            "name": "using",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
             "name": "var",
             "kind": "keyword",
             "kindModifiers": "",
@@ -1225,6 +1241,7 @@ Projects::
 /tsconfig.json (Configured) *changed*
     projectStateVersion: 2 *changed*
     projectProgramVersion: 1
+    dirty: true *changed*
 
 ScriptInfos::
 /index.ts (Open) *changed*
