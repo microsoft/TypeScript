@@ -3554,7 +3554,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 // try to resolve name in /*1*/ which is used in variable position,
                 // we want to check for block-scoped
                 if (
-                    errorLocation &&
+                    result && errorLocation &&
                     (meaning & SymbolFlags.BlockScopedVariable ||
                         ((meaning & SymbolFlags.Class || meaning & SymbolFlags.Enum) && (meaning & SymbolFlags.Value) === SymbolFlags.Value))
                 ) {
