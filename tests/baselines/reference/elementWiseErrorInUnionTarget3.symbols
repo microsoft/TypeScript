@@ -1,0 +1,150 @@
+//// [tests/cases/compiler/elementWiseErrorInUnionTarget3.ts] ////
+
+=== elementWiseErrorInUnionTarget3.ts ===
+const obj1: {
+>obj1 : Symbol(obj1, Decl(elementWiseErrorInUnionTarget3.ts, 0, 5))
+
+  prop:
+>prop : Symbol(prop, Decl(elementWiseErrorInUnionTarget3.ts, 0, 13))
+
+    | string
+    | {
+        a: string;
+>a : Symbol(a, Decl(elementWiseErrorInUnionTarget3.ts, 3, 7))
+      }
+    | [];
+} = {
+  prop: {
+>prop : Symbol(prop, Decl(elementWiseErrorInUnionTarget3.ts, 7, 5))
+
+    a: 1,
+>a : Symbol(a, Decl(elementWiseErrorInUnionTarget3.ts, 8, 9))
+
+  },
+};
+
+type WithCallSignature = {
+>WithCallSignature : Symbol(WithCallSignature, Decl(elementWiseErrorInUnionTarget3.ts, 11, 2))
+
+    (): void;
+    a: boolean;
+>a : Symbol(a, Decl(elementWiseErrorInUnionTarget3.ts, 14, 13))
+}
+
+const obj2: {
+>obj2 : Symbol(obj2, Decl(elementWiseErrorInUnionTarget3.ts, 18, 5))
+
+  prop:
+>prop : Symbol(prop, Decl(elementWiseErrorInUnionTarget3.ts, 18, 13))
+
+    | WithCallSignature
+>WithCallSignature : Symbol(WithCallSignature, Decl(elementWiseErrorInUnionTarget3.ts, 11, 2))
+
+    | {
+        a: string;
+>a : Symbol(a, Decl(elementWiseErrorInUnionTarget3.ts, 21, 7))
+
+      };
+} = {
+  prop: {
+>prop : Symbol(prop, Decl(elementWiseErrorInUnionTarget3.ts, 24, 5))
+
+    a: 1,
+>a : Symbol(a, Decl(elementWiseErrorInUnionTarget3.ts, 25, 9))
+
+  },
+};
+
+class ClsWithPrivateModifier {
+>ClsWithPrivateModifier : Symbol(ClsWithPrivateModifier, Decl(elementWiseErrorInUnionTarget3.ts, 28, 2))
+
+  a = true
+>a : Symbol(ClsWithPrivateModifier.a, Decl(elementWiseErrorInUnionTarget3.ts, 30, 30))
+
+  private b = 10;
+>b : Symbol(ClsWithPrivateModifier.b, Decl(elementWiseErrorInUnionTarget3.ts, 31, 10))
+}
+
+const obj3: {
+>obj3 : Symbol(obj3, Decl(elementWiseErrorInUnionTarget3.ts, 35, 5))
+
+  prop:
+>prop : Symbol(prop, Decl(elementWiseErrorInUnionTarget3.ts, 35, 13))
+
+    | ClsWithPrivateModifier
+>ClsWithPrivateModifier : Symbol(ClsWithPrivateModifier, Decl(elementWiseErrorInUnionTarget3.ts, 28, 2))
+
+    | {
+        a: string;
+>a : Symbol(a, Decl(elementWiseErrorInUnionTarget3.ts, 38, 7))
+
+      };
+} = {
+  prop: {
+>prop : Symbol(prop, Decl(elementWiseErrorInUnionTarget3.ts, 41, 5))
+
+    a: 1,
+>a : Symbol(a, Decl(elementWiseErrorInUnionTarget3.ts, 42, 9))
+
+  },
+};
+
+class ClsWithPrivateField {
+>ClsWithPrivateField : Symbol(ClsWithPrivateField, Decl(elementWiseErrorInUnionTarget3.ts, 45, 2))
+
+  a = true
+>a : Symbol(ClsWithPrivateField.a, Decl(elementWiseErrorInUnionTarget3.ts, 47, 27))
+
+  #b = 10;
+>#b : Symbol(ClsWithPrivateField.#b, Decl(elementWiseErrorInUnionTarget3.ts, 48, 10))
+}
+
+const obj4: {
+>obj4 : Symbol(obj4, Decl(elementWiseErrorInUnionTarget3.ts, 52, 5))
+
+  prop:
+>prop : Symbol(prop, Decl(elementWiseErrorInUnionTarget3.ts, 52, 13))
+
+    | ClsWithPrivateField
+>ClsWithPrivateField : Symbol(ClsWithPrivateField, Decl(elementWiseErrorInUnionTarget3.ts, 45, 2))
+
+    | {
+        a: string;
+>a : Symbol(a, Decl(elementWiseErrorInUnionTarget3.ts, 55, 7))
+
+      };
+} = {
+  prop: {
+>prop : Symbol(prop, Decl(elementWiseErrorInUnionTarget3.ts, 58, 5))
+
+    a: 1,
+>a : Symbol(a, Decl(elementWiseErrorInUnionTarget3.ts, 59, 9))
+
+  },
+};
+
+const obj5: {
+>obj5 : Symbol(obj5, Decl(elementWiseErrorInUnionTarget3.ts, 64, 5))
+
+  prop:
+>prop : Symbol(prop, Decl(elementWiseErrorInUnionTarget3.ts, 64, 13))
+
+    | (ClsWithPrivateField & { c: string })
+>ClsWithPrivateField : Symbol(ClsWithPrivateField, Decl(elementWiseErrorInUnionTarget3.ts, 45, 2))
+>c : Symbol(c, Decl(elementWiseErrorInUnionTarget3.ts, 66, 30))
+
+    | {
+        a: string;
+>a : Symbol(a, Decl(elementWiseErrorInUnionTarget3.ts, 67, 7))
+
+      };
+} = {
+  prop: {
+>prop : Symbol(prop, Decl(elementWiseErrorInUnionTarget3.ts, 70, 5))
+
+    a: 1,
+>a : Symbol(a, Decl(elementWiseErrorInUnionTarget3.ts, 71, 9))
+
+  },
+};
+

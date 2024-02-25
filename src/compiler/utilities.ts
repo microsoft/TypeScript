@@ -10671,3 +10671,10 @@ export function replaceFirstStar(s: string, replacement: string): string {
 export function getNameFromImportAttribute(node: ImportAttribute) {
     return isIdentifier(node.name) ? node.name.escapedText : escapeLeadingUnderscores(node.name.text);
 }
+
+/** @internal */
+export function containsNonPublicProperties(props: Symbol[]) {
+    return some(props, p =>
+        !!(getDeclarationModifierFlagsFromSymbol(p) & ModifierFlags.NonPublicAccessibilityModifier) ||
+        !!p.valueDeclaration && isNamedDeclaration(p.valueDeclaration) && isPrivateIdentifier(p.valueDeclaration.name));
+}

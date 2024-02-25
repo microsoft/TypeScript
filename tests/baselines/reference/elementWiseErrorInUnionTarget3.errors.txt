@@ -1,0 +1,98 @@
+elementWiseErrorInUnionTarget3.ts(10,5): error TS2322: Type 'number' is not assignable to type 'string'.
+elementWiseErrorInUnionTarget3.ts(27,5): error TS2322: Type 'number' is not assignable to type 'string | boolean'.
+elementWiseErrorInUnionTarget3.ts(44,5): error TS2322: Type 'number' is not assignable to type 'string | boolean'.
+elementWiseErrorInUnionTarget3.ts(61,5): error TS2322: Type 'number' is not assignable to type 'string | boolean'.
+elementWiseErrorInUnionTarget3.ts(73,5): error TS2322: Type 'number' is not assignable to type 'string | boolean'.
+
+
+==== elementWiseErrorInUnionTarget3.ts (5 errors) ====
+    const obj1: {
+      prop:
+        | string
+        | {
+            a: string;
+          }
+        | [];
+    } = {
+      prop: {
+        a: 1,
+        ~
+!!! error TS2322: Type 'number' is not assignable to type 'string'.
+      },
+    };
+    
+    type WithCallSignature = {
+        (): void;
+        a: boolean;
+    }
+    
+    const obj2: {
+      prop:
+        | WithCallSignature
+        | {
+            a: string;
+          };
+    } = {
+      prop: {
+        a: 1,
+        ~
+!!! error TS2322: Type 'number' is not assignable to type 'string | boolean'.
+!!! related TS6500 elementWiseErrorInUnionTarget3.ts:16:5: The expected type comes from property 'a' which is declared here on type 'WithCallSignature | { a: string; }'
+      },
+    };
+    
+    class ClsWithPrivateModifier {
+      a = true
+      private b = 10;
+    }
+    
+    const obj3: {
+      prop:
+        | ClsWithPrivateModifier
+        | {
+            a: string;
+          };
+    } = {
+      prop: {
+        a: 1,
+        ~
+!!! error TS2322: Type 'number' is not assignable to type 'string | boolean'.
+!!! related TS6500 elementWiseErrorInUnionTarget3.ts:32:3: The expected type comes from property 'a' which is declared here on type 'ClsWithPrivateModifier | { a: string; }'
+      },
+    };
+    
+    class ClsWithPrivateField {
+      a = true
+      #b = 10;
+    }
+    
+    const obj4: {
+      prop:
+        | ClsWithPrivateField
+        | {
+            a: string;
+          };
+    } = {
+      prop: {
+        a: 1,
+        ~
+!!! error TS2322: Type 'number' is not assignable to type 'string | boolean'.
+!!! related TS6500 elementWiseErrorInUnionTarget3.ts:49:3: The expected type comes from property 'a' which is declared here on type 'ClsWithPrivateField | { a: string; }'
+      },
+    };
+    
+    const obj5: {
+      prop:
+        | (ClsWithPrivateField & { c: string })
+        | {
+            a: string;
+          };
+    } = {
+      prop: {
+        a: 1,
+        ~
+!!! error TS2322: Type 'number' is not assignable to type 'string | boolean'.
+!!! related TS6500 elementWiseErrorInUnionTarget3.ts:49:3: The expected type comes from property 'a' which is declared here on type '(ClsWithPrivateField & { c: string; }) | { a: string; }'
+      },
+    };
+    
