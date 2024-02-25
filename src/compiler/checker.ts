@@ -50954,7 +50954,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 }
             }
         }
-        return bestMatches.length ? singleOverlappy ? bestMatches[0] : getUnionType(bestMatches) : undefined;
+        return bestMatches.length ? singleOverlappy ? last(bestMatches) : getUnionType(bestMatches) : undefined;
     }
 
     function filterPrimitivesIfContainsNonPrimitive(type: UnionType) {

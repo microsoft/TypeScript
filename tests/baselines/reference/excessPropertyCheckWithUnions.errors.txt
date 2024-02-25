@@ -6,7 +6,7 @@ excessPropertyCheckWithUnions.ts(33,28): error TS2353: Object literal may only s
 excessPropertyCheckWithUnions.ts(34,26): error TS2353: Object literal may only specify known properties, and 'extra' does not exist in type '{ tag: "A"; x: string; } | { tag: "A"; y: number; }'.
 excessPropertyCheckWithUnions.ts(37,1): error TS2322: Type '{ tag: "A"; }' is not assignable to type 'Ambiguous'.
   Type '{ tag: "A"; }' is not assignable to type '{ tag: "A"; x: string; } | { tag: "A"; y: number; }'.
-    Property 'x' is missing in type '{ tag: "A"; }' but required in type '{ tag: "A"; x: string; }'.
+    Property 'y' is missing in type '{ tag: "A"; }' but required in type '{ tag: "A"; y: number; }'.
 excessPropertyCheckWithUnions.ts(38,19): error TS2353: Object literal may only specify known properties, and 'z' does not exist in type '{ tag: "A"; x: string; } | { tag: "A"; y: number; }'.
 excessPropertyCheckWithUnions.ts(47,35): error TS2353: Object literal may only specify known properties, and 'second' does not exist in type '{ a: 1; b: 1; first: string; }'.
 excessPropertyCheckWithUnions.ts(48,35): error TS2353: Object literal may only specify known properties, and 'third' does not exist in type '{ a: 1; b: 1; first: string; }'.
@@ -70,8 +70,8 @@ excessPropertyCheckWithUnions.ts(112,63): error TS2322: Type 'string' is not ass
     ~~~
 !!! error TS2322: Type '{ tag: "A"; }' is not assignable to type 'Ambiguous'.
 !!! error TS2322:   Type '{ tag: "A"; }' is not assignable to type '{ tag: "A"; x: string; } | { tag: "A"; y: number; }'.
-!!! error TS2322:     Property 'x' is missing in type '{ tag: "A"; }' but required in type '{ tag: "A"; x: string; }'.
-!!! related TS2728 excessPropertyCheckWithUnions.ts:16:5: 'x' is declared here.
+!!! error TS2322:     Property 'y' is missing in type '{ tag: "A"; }' but required in type '{ tag: "A"; y: number; }'.
+!!! related TS2728 excessPropertyCheckWithUnions.ts:19:5: 'y' is declared here.
     amb = { tag: "A", z: true }
                       ~
 !!! error TS2353: Object literal may only specify known properties, and 'z' does not exist in type '{ tag: "A"; x: string; } | { tag: "A"; y: number; }'.
