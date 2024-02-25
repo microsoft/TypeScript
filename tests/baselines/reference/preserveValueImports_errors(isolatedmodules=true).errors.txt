@@ -1,13 +1,7 @@
 error TS5102: Option 'preserveValueImports' has been removed. Please remove it from your configuration.
   Use 'verbatimModuleSyntax' instead.
-c.ts(1,8): error TS1444: 'DefaultA' is a type and must be imported using a type-only import when 'preserveValueImports' and 'isolatedModules' are both enabled.
-c.ts(2,10): error TS1444: 'A' is a type and must be imported using a type-only import when 'preserveValueImports' and 'isolatedModules' are both enabled.
-c.ts(3,8): error TS1446: 'DefaultB' resolves to a type-only declaration and must be imported using a type-only import when 'preserveValueImports' and 'isolatedModules' are both enabled.
-c.ts(4,10): error TS1446: 'B' resolves to a type-only declaration and must be imported using a type-only import when 'preserveValueImports' and 'isolatedModules' are both enabled.
 d.ts(1,10): error TS1205: Re-exporting a type when 'isolatedModules' is enabled requires using 'export type'.
 d.ts(2,10): error TS1448: 'B' resolves to a type-only declaration and must be re-exported using a type-only re-export when 'isolatedModules' is enabled.
-e.ts(1,10): error TS1444: 'AA' is a type and must be imported using a type-only import when 'preserveValueImports' and 'isolatedModules' are both enabled.
-e.ts(1,14): error TS1446: 'BB' resolves to a type-only declaration and must be imported using a type-only import when 'preserveValueImports' and 'isolatedModules' are both enabled.
 
 
 !!! error TS5102: Option 'preserveValueImports' has been removed. Please remove it from your configuration.
@@ -20,21 +14,11 @@ e.ts(1,14): error TS1446: 'BB' resolves to a type-only declaration and must be i
     class B {};
     export type { B, B as default };
     
-==== c.ts (4 errors) ====
+==== c.ts (0 errors) ====
     import DefaultA from "./a";
-           ~~~~~~~~
-!!! error TS1444: 'DefaultA' is a type and must be imported using a type-only import when 'preserveValueImports' and 'isolatedModules' are both enabled.
     import { A } from "./a";
-             ~
-!!! error TS1444: 'A' is a type and must be imported using a type-only import when 'preserveValueImports' and 'isolatedModules' are both enabled.
     import DefaultB from "./b";
-           ~~~~~~~~
-!!! error TS1446: 'DefaultB' resolves to a type-only declaration and must be imported using a type-only import when 'preserveValueImports' and 'isolatedModules' are both enabled.
-!!! related TS1377 b.ts:2:18: 'DefaultB' was exported here.
     import { B } from "./b";
-             ~
-!!! error TS1446: 'B' resolves to a type-only declaration and must be imported using a type-only import when 'preserveValueImports' and 'isolatedModules' are both enabled.
-!!! related TS1377 b.ts:2:15: 'B' was exported here.
     
 ==== c.fixed.ts (0 errors) ====
     import type DefaultA from "./a";
@@ -55,13 +39,8 @@ e.ts(1,14): error TS1446: 'BB' resolves to a type-only declaration and must be i
     export type { A as AA } from "./a";
     export type { B as BB } from "./b";
     
-==== e.ts (2 errors) ====
+==== e.ts (0 errors) ====
     import { AA, BB } from "./d";
-             ~~
-!!! error TS1444: 'AA' is a type and must be imported using a type-only import when 'preserveValueImports' and 'isolatedModules' are both enabled.
-                 ~~
-!!! error TS1446: 'BB' resolves to a type-only declaration and must be imported using a type-only import when 'preserveValueImports' and 'isolatedModules' are both enabled.
-!!! related TS1377 b.ts:2:15: 'BB' was exported here.
     
 ==== e.fixed.ts (0 errors) ====
     import type { AA, BB } from "./d";

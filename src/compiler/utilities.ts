@@ -8885,7 +8885,7 @@ export function hasJsonModuleEmitEnabled(options: CompilerOptions) {
 
 /** @internal */
 export function importNameElisionDisabled(options: CompilerOptions) {
-    return options.verbatimModuleSyntax || options.isolatedModules && options.preserveValueImports;
+    return options.verbatimModuleSyntax;
 }
 
 /** @internal */

@@ -1468,14 +1468,6 @@
         "category": "Error",
         "code": 1443
     },
-    "'{0}' is a type and must be imported using a type-only import when 'preserveValueImports' and 'isolatedModules' are both enabled.": {
-        "category": "Error",
-        "code": 1444
-    },
-    "'{0}' resolves to a type-only declaration and must be imported using a type-only import when 'preserveValueImports' and 'isolatedModules' are both enabled.": {
-        "category": "Error",
-        "code": 1446
-    },
     "'{0}' resolves to a type-only declaration and must be re-exported using a type-only re-export when '{1}' is enabled.": {
         "category": "Error",
         "code": 1448

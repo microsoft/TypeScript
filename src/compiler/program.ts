@@ -4413,17 +4413,10 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
             }
         }
 
-        if (options.preserveValueImports && getEmitModuleKind(options) < ModuleKind.ES2015) {
-            createDiagnosticForOptionName(Diagnostics.Option_0_can_only_be_used_when_module_is_set_to_preserve_or_to_es2015_or_later, "preserveValueImports");
-        }
-
         const moduleKind = getEmitModuleKind(options);
         if (options.verbatimModuleSyntax) {
             if (moduleKind === ModuleKind.AMD || moduleKind === ModuleKind.UMD || moduleKind === ModuleKind.System) {
                 createDiagnosticForOptionName(Diagnostics.Option_verbatimModuleSyntax_cannot_be_used_when_module_is_set_to_UMD_AMD_or_System, "verbatimModuleSyntax");
-            }
-            if (options.preserveValueImports) {
-                createRedundantOptionDiagnostic("preserveValueImports", "verbatimModuleSyntax");
             }
         }
 
@@ -4901,26 +4894,6 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
             needsCompilerDiagnostic = true;
         }, key2);
         return needsCompilerDiagnostic;
-    }
-
-    /**
-     * Only creates a diagnostic on the option key specified by `errorOnOption`.
-     * If both options are specified in the program in separate config files via `extends`,
-     * a diagnostic is only created if `errorOnOption` is specified in the leaf config file.
-     * Useful if `redundantWithOption` represents a superset of the functionality of `errorOnOption`:
-     * if a user inherits `errorOnOption` from a base config file, it's still valid and useful to
-     * override it in the leaf config file.
-     */
-    function createRedundantOptionDiagnostic(errorOnOption: string, redundantWithOption: string) {
-        const compilerOptionsObjectLiteralSyntax = getCompilerOptionsObjectLiteralSyntax();
-        if (compilerOptionsObjectLiteralSyntax) {
-            // This is a no-op if `errorOnOption` isn't present in the leaf config file.
-            createOptionDiagnosticInObjectLiteralSyntax(compilerOptionsObjectLiteralSyntax, /*onKey*/ true, errorOnOption, /*key2*/ undefined, Diagnostics.Option_0_is_redundant_and_cannot_be_specified_with_option_1, errorOnOption, redundantWithOption);
-        }
-        else {
-            // There was no config file, so both options were specified on the command line.
-            createDiagnosticForOptionName(Diagnostics.Option_0_is_redundant_and_cannot_be_specified_with_option_1, errorOnOption, redundantWithOption);
-        }
     }
 
     function blockEmittingOfFile(emitFileName: string, diag: Diagnostic) {

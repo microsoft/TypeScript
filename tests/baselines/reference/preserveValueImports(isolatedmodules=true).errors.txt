@@ -1,6 +1,5 @@
 error TS5102: Option 'preserveValueImports' has been removed. Please remove it from your configuration.
   Use 'verbatimModuleSyntax' instead.
-b.ts(1,19): error TS1444: 'D' is a type and must be imported using a type-only import when 'preserveValueImports' and 'isolatedModules' are both enabled.
 d.ts(1,1): error TS1203: Export assignment cannot be used when targeting ECMAScript modules. Consider using 'export default' or another module format instead.
 e.ts(1,1): error TS1202: Import assignment cannot be used when targeting ECMAScript modules. Consider using 'import * as ns from "mod"', 'import {a} from "mod"', 'import d from "mod"', or another module format instead.
 e.ts(2,1): error TS1202: Import assignment cannot be used when targeting ECMAScript modules. Consider using 'import * as ns from "mod"', 'import {a} from "mod"', 'import d from "mod"', or another module format instead.
@@ -14,10 +13,8 @@ e.ts(2,1): error TS1202: Import assignment cannot be used when targeting ECMAScr
     export const c = 1;
     export interface D {}
     
-==== b.ts (1 errors) ====
+==== b.ts (0 errors) ====
     import a, { b, c, D } from "./a";
-                      ~
-!!! error TS1444: 'D' is a type and must be imported using a type-only import when 'preserveValueImports' and 'isolatedModules' are both enabled.
     
 ==== c.ts (0 errors) ====
     import * as a from "./a";

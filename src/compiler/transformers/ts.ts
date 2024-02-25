@@ -2742,9 +2742,6 @@ export function transformTypeScript(context: TransformationContext) {
     }
 
     function shouldEmitAliasDeclaration(node: Node): boolean {
-        return compilerOptions.verbatimModuleSyntax || isInJSFile(node) ||
-            (compilerOptions.preserveValueImports
-                ? resolver.isValueAliasDeclaration(node)
-                : resolver.isReferencedAliasDeclaration(node));
+        return compilerOptions.verbatimModuleSyntax || isInJSFile(node) || resolver.isReferencedAliasDeclaration(node);
     }
 }

@@ -7602,6 +7602,7 @@ declare namespace ts {
         preserveConstEnums?: boolean;
         noImplicitOverride?: boolean;
         preserveSymlinks?: boolean;
+        /** @deprecated */
         preserveValueImports?: boolean;
         project?: string;
         reactNamespace?: string;

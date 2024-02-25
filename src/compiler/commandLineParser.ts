@@ -1519,7 +1519,7 @@ const commandOptionsWithoutBuild: CommandLineOption[] = [
         type: "boolean",
         affectsEmit: true,
         affectsBuildInfo: true,
-        category: Diagnostics.Emit,
+        category: Diagnostics.Backwards_Compatibility,
         description: Diagnostics.Preserve_unused_imported_values_in_the_JavaScript_output_that_would_otherwise_be_removed,
         defaultValueDescription: false,
     },

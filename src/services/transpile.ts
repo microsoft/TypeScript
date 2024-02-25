@@ -47,7 +47,6 @@ export interface TranspileOutput {
 
 const optionsRedundantWithVerbatimModuleSyntax = new Set([
     "isolatedModules",
-    "preserveValueImports",
 ]);
 
 /*

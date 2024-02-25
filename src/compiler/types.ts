@@ -7238,6 +7238,7 @@ export interface CompilerOptions {
     preserveConstEnums?: boolean;
     noImplicitOverride?: boolean;
     preserveSymlinks?: boolean;
+    /** @deprecated */
     preserveValueImports?: boolean;
     /** @internal */ preserveWatchOutput?: boolean;
     project?: string;
