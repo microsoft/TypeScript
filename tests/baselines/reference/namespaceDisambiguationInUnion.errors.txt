@@ -1,4 +1,7 @@
 namespaceDisambiguationInUnion.ts(10,7): error TS2322: Type '{ type: string; }' is not assignable to type 'Foo.Yep | Bar.Yep'.
+  Type '{ type: string; }' is not assignable to type 'Yep'.
+    Types of property 'type' are incompatible.
+      Type 'string' is not assignable to type '"foo.yep"'.
 namespaceDisambiguationInUnion.ts(13,7): error TS2322: Type '{ type: string; }[]' is not assignable to type '[Foo.Yep, Bar.Yep]'.
   Target requires 2 element(s) but source may have fewer.
 
@@ -16,6 +19,9 @@ namespaceDisambiguationInUnion.ts(13,7): error TS2322: Type '{ type: string; }[]
     const val1: Foo.Yep | Bar.Yep = x;
           ~~~~
 !!! error TS2322: Type '{ type: string; }' is not assignable to type 'Foo.Yep | Bar.Yep'.
+!!! error TS2322:   Type '{ type: string; }' is not assignable to type 'Yep'.
+!!! error TS2322:     Types of property 'type' are incompatible.
+!!! error TS2322:       Type 'string' is not assignable to type '"foo.yep"'.
     
     const y = [{ type: "a" }, { type: "b" }];
     const val2: [Foo.Yep, Bar.Yep] = y;

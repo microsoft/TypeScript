@@ -1,7 +1,15 @@
 assignmentCompatWithDiscriminatedUnion.ts(44,5): error TS2322: Type 'S' is not assignable to type 'T'.
   Type 'S' is not assignable to type '{ a: 0; b: 4 | 1; } | { a: 1; b: 2 | 4; }'.
+    Type 'S' is not assignable to type '{ a: 0; b: 4 | 1; }'.
+      Types of property 'a' are incompatible.
+        Type '0 | 2' is not assignable to type '0'.
+          Type '2' is not assignable to type '0'.
 assignmentCompatWithDiscriminatedUnion.ts(58,5): error TS2322: Type 'S' is not assignable to type 'T'.
   Type 'S' is not assignable to type '{ a: 0; b: 4 | 1; } | { a: 2; b: 4 | 3; c: string; }'.
+    Type 'S' is not assignable to type '{ a: 0; b: 4 | 1; }'.
+      Types of property 'a' are incompatible.
+        Type '0 | 2' is not assignable to type '0'.
+          Type '2' is not assignable to type '0'.
 assignmentCompatWithDiscriminatedUnion.ts(82,5): error TS2322: Type 'S' is not assignable to type 'T'.
 
 
@@ -53,6 +61,10 @@ assignmentCompatWithDiscriminatedUnion.ts(82,5): error TS2322: Type 'S' is not a
         ~
 !!! error TS2322: Type 'S' is not assignable to type 'T'.
 !!! error TS2322:   Type 'S' is not assignable to type '{ a: 0; b: 4 | 1; } | { a: 1; b: 2 | 4; }'.
+!!! error TS2322:     Type 'S' is not assignable to type '{ a: 0; b: 4 | 1; }'.
+!!! error TS2322:       Types of property 'a' are incompatible.
+!!! error TS2322:         Type '0 | 2' is not assignable to type '0'.
+!!! error TS2322:           Type '2' is not assignable to type '0'.
     }
     
     // Unmatched non-discriminants
@@ -70,6 +82,10 @@ assignmentCompatWithDiscriminatedUnion.ts(82,5): error TS2322: Type 'S' is not a
         ~
 !!! error TS2322: Type 'S' is not assignable to type 'T'.
 !!! error TS2322:   Type 'S' is not assignable to type '{ a: 0; b: 4 | 1; } | { a: 2; b: 4 | 3; c: string; }'.
+!!! error TS2322:     Type 'S' is not assignable to type '{ a: 0; b: 4 | 1; }'.
+!!! error TS2322:       Types of property 'a' are incompatible.
+!!! error TS2322:         Type '0 | 2' is not assignable to type '0'.
+!!! error TS2322:           Type '2' is not assignable to type '0'.
     }
     
     // Maximum discriminant combinations

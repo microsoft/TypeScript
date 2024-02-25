@@ -21985,7 +21985,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             }
             if (reportErrors) {
                 // Elaborate only if we can find a best matching type in the target
-                const bestMatchingType = getBestMatchingType(source, target, isRelatedTo);
+                const bestMatchingType = getBestMatchingType(source, target, isRelatedTo, /*singleOverlappy*/ true);
                 if (bestMatchingType) {
                     isRelatedTo(source, bestMatchingType, RecursionFlags.Target, /*reportErrors*/ true, /*headMessage*/ undefined, intersectionState);
                 }
@@ -23712,11 +23712,11 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return getPropertiesOfType(type).filter(targetProp => containsMissingType(getTypeOfSymbol(targetProp)));
     }
 
-    function getBestMatchingType(source: Type, target: UnionOrIntersectionType, isRelatedTo = compareTypesAssignable) {
+    function getBestMatchingType(source: Type, target: UnionOrIntersectionType, isRelatedTo = compareTypesAssignable, singleOverlappy = false) {
         return findMatchingDiscriminantType(source, target, isRelatedTo) ||
             findMatchingTypeReferenceOrTypeAliasReference(source, target) ||
             findBestTypeForInvokable(source, target) ||
-            findMostOverlappyType(source, filterTypesForObjectLiteralMatch(source, target));
+            findMostOverlappyType(source, filterTypesForObjectLiteralMatch(source, target), singleOverlappy);
     }
 
     function discriminateTypeByDiscriminableItems(target: UnionType, discriminators: (readonly [() => Type, __String])[], related: (source: Type, target: Type) => boolean | Ternary) {
@@ -50924,7 +50924,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
     }
 
-    function findMostOverlappyType(source: Type, target: Type) {
+    function findMostOverlappyType(source: Type, target: Type, singleOverlappy: boolean) {
         if (!(target.flags & TypeFlags.UnionOrIntersection)) {
             return target;
         }
@@ -50954,7 +50954,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 }
             }
         }
-        return bestMatches.length ? getUnionType(bestMatches) : undefined;
+        return bestMatches.length ? singleOverlappy ? bestMatches[0] : getUnionType(bestMatches) : undefined;
     }
 
     function filterPrimitivesIfContainsNonPrimitive(type: UnionType) {
