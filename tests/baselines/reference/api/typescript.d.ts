@@ -3013,6 +3013,7 @@ declare namespace ts {
                 strictNullChecks?: boolean;
                 /** @deprecated */
                 suppressExcessPropertyErrors?: boolean;
+                /** @deprecated */
                 suppressImplicitAnyIndexErrors?: boolean;
                 useDefineForClassFields?: boolean;
                 target?: ScriptTarget | ts.ScriptTarget;
@@ -7621,6 +7622,7 @@ declare namespace ts {
         stripInternal?: boolean;
         /** @deprecated */
         suppressExcessPropertyErrors?: boolean;
+        /** @deprecated */
         suppressImplicitAnyIndexErrors?: boolean;
         target?: ScriptTarget;
         traceResolution?: boolean;

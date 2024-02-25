@@ -3726,6 +3726,7 @@ export interface CompilerOptions {
     strictNullChecks?: boolean;
     /** @deprecated */
     suppressExcessPropertyErrors?: boolean;
+    /** @deprecated */
     suppressImplicitAnyIndexErrors?: boolean;
     useDefineForClassFields?: boolean;
     target?: ScriptTarget | ts.ScriptTarget;

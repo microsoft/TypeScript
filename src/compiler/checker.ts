@@ -18255,7 +18255,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 if (objectType.symbol === globalThisSymbol && propName !== undefined && globalThisSymbol.exports!.has(propName) && (globalThisSymbol.exports!.get(propName)!.flags & SymbolFlags.BlockScoped)) {
                     error(accessExpression, Diagnostics.Property_0_does_not_exist_on_type_1, unescapeLeadingUnderscores(propName), typeToString(objectType));
                 }
-                else if (noImplicitAny && !compilerOptions.suppressImplicitAnyIndexErrors && !(accessFlags & AccessFlags.SuppressNoImplicitAnyError)) {
+                else if (noImplicitAny && !(accessFlags & AccessFlags.SuppressNoImplicitAnyError)) {
                     if (propName !== undefined && typeHasStaticProperty(propName, objectType)) {
                         const typeName = typeToString(objectType);
                         error(accessExpression, Diagnostics.Property_0_does_not_exist_on_type_1_Did_you_mean_to_access_the_static_member_2_instead, propName as string, typeName, typeName + "[" + getTextOfNode(accessExpression.argumentExpression) + "]");

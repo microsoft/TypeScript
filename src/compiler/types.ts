@@ -7262,6 +7262,7 @@ export interface CompilerOptions {
     stripInternal?: boolean;
     /** @deprecated */
     suppressExcessPropertyErrors?: boolean;
+    /** @deprecated */
     suppressImplicitAnyIndexErrors?: boolean;
     /** @internal */ suppressOutputPathCheck?: boolean;
     target?: ScriptTarget;
