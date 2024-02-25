@@ -259,7 +259,7 @@ export function transformModule(context: TransformationContext): (x: SourceFile 
         startLexicalEnvironment();
 
         const statements: Statement[] = [];
-        const ensureUseStrict = getStrictOptionValue(compilerOptions, "alwaysStrict") || (!compilerOptions.noImplicitUseStrict && isExternalModule(currentSourceFile));
+        const ensureUseStrict = getStrictOptionValue(compilerOptions, "alwaysStrict") || isExternalModule(currentSourceFile);
         const statementOffset = factory.copyPrologue(node.statements, statements, ensureUseStrict && !isJsonSourceFile(node), topLevelVisitor);
 
         if (shouldEmitUnderscoreUnderscoreESModule()) {
@@ -597,7 +597,7 @@ export function transformModule(context: TransformationContext): (x: SourceFile 
         startLexicalEnvironment();
 
         const statements: Statement[] = [];
-        const statementOffset = factory.copyPrologue(node.statements, statements, /*ensureUseStrict*/ !compilerOptions.noImplicitUseStrict, topLevelVisitor);
+        const statementOffset = factory.copyPrologue(node.statements, statements, /*ensureUseStrict*/ true, topLevelVisitor);
 
         if (shouldEmitUnderscoreUnderscoreESModule()) {
             append(statements, createUnderscoreUnderscoreESModule());

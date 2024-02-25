@@ -1878,12 +1878,8 @@ export function isEffectiveStrictModeSourceFile(node: SourceFile, compilerOption
         return true;
     }
     if (isExternalModule(node) || getIsolatedModules(compilerOptions)) {
-        // ECMAScript Modules are always strict.
-        if (getEmitModuleKind(compilerOptions) >= ModuleKind.ES2015) {
-            return true;
-        }
-        // Other modules are strict unless otherwise specified.
-        return !compilerOptions.noImplicitUseStrict;
+        // Modules are always strict.
+        return true;
     }
     return false;
 }

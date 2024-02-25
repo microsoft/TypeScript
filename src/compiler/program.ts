@@ -4307,10 +4307,6 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
             createDiagnosticForOptionName(Diagnostics.Option_0_cannot_be_specified_with_option_1, "lib", "noLib");
         }
 
-        if (options.noImplicitUseStrict && getStrictOptionValue(options, "alwaysStrict")) {
-            createDiagnosticForOptionName(Diagnostics.Option_0_cannot_be_specified_with_option_1, "noImplicitUseStrict", "alwaysStrict");
-        }
-
         const languageVersion = getEmitScriptTarget(options);
 
         const firstNonAmbientExternalModuleSourceFile = find(files, f => isExternalModule(f) && !f.isDeclarationFile);

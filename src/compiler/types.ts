@@ -7210,6 +7210,7 @@ export interface CompilerOptions {
     noStrictGenericChecks?: boolean;
     noUnusedLocals?: boolean;
     noUnusedParameters?: boolean;
+    /** @deprecated */
     noImplicitUseStrict?: boolean;
     noPropertyAccessFromIndexSignature?: boolean;
     assumeChangesOnlyAffectDirectDependencies?: boolean;

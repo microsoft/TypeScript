@@ -3701,6 +3701,7 @@ export interface CompilerOptions {
     noImplicitThis?: boolean;
     noUnusedLocals?: boolean;
     noUnusedParameters?: boolean;
+    /** @deprecated */
     noImplicitUseStrict?: boolean;
     noLib?: boolean;
     noResolve?: boolean;

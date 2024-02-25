@@ -2988,6 +2988,7 @@ declare namespace ts {
                 noImplicitThis?: boolean;
                 noUnusedLocals?: boolean;
                 noUnusedParameters?: boolean;
+                /** @deprecated */
                 noImplicitUseStrict?: boolean;
                 noLib?: boolean;
                 noResolve?: boolean;
@@ -7578,6 +7579,7 @@ declare namespace ts {
         noStrictGenericChecks?: boolean;
         noUnusedLocals?: boolean;
         noUnusedParameters?: boolean;
+        /** @deprecated */
         noImplicitUseStrict?: boolean;
         noPropertyAccessFromIndexSignature?: boolean;
         assumeChangesOnlyAffectDirectDependencies?: boolean;
