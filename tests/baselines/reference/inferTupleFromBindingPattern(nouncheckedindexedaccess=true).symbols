@@ -1,0 +1,116 @@
+//// [tests/cases/compiler/inferTupleFromBindingPattern.ts] ////
+
+=== inferTupleFromBindingPattern.ts ===
+declare function f<T>(cb: () => T): T;
+>f : Symbol(f, Decl(inferTupleFromBindingPattern.ts, 0, 0))
+>T : Symbol(T, Decl(inferTupleFromBindingPattern.ts, 0, 19))
+>cb : Symbol(cb, Decl(inferTupleFromBindingPattern.ts, 0, 22))
+>T : Symbol(T, Decl(inferTupleFromBindingPattern.ts, 0, 19))
+>T : Symbol(T, Decl(inferTupleFromBindingPattern.ts, 0, 19))
+
+const [e1, e2, e3] = f(() => [1, "hi", true]);
+>e1 : Symbol(e1, Decl(inferTupleFromBindingPattern.ts, 1, 7))
+>e2 : Symbol(e2, Decl(inferTupleFromBindingPattern.ts, 1, 10))
+>e3 : Symbol(e3, Decl(inferTupleFromBindingPattern.ts, 1, 14))
+>f : Symbol(f, Decl(inferTupleFromBindingPattern.ts, 0, 0))
+
+// repro from #42969
+declare const f2: <T extends string[]>(t: T) => [T, string[]];
+>f2 : Symbol(f2, Decl(inferTupleFromBindingPattern.ts, 4, 13))
+>T : Symbol(T, Decl(inferTupleFromBindingPattern.ts, 4, 19))
+>t : Symbol(t, Decl(inferTupleFromBindingPattern.ts, 4, 39))
+>T : Symbol(T, Decl(inferTupleFromBindingPattern.ts, 4, 19))
+>T : Symbol(T, Decl(inferTupleFromBindingPattern.ts, 4, 19))
+
+const [[f2e1]] = f2(['1']);
+>f2e1 : Symbol(f2e1, Decl(inferTupleFromBindingPattern.ts, 5, 8))
+>f2 : Symbol(f2, Decl(inferTupleFromBindingPattern.ts, 4, 13))
+
+f2e1.toLowerCase();
+>f2e1.toLowerCase : Symbol(String.toLowerCase, Decl(lib.es5.d.ts, --, --))
+>f2e1 : Symbol(f2e1, Decl(inferTupleFromBindingPattern.ts, 5, 8))
+>toLowerCase : Symbol(String.toLowerCase, Decl(lib.es5.d.ts, --, --))
+
+declare const f3: <T extends string[]>(t: T) => [[T, string[]]];
+>f3 : Symbol(f3, Decl(inferTupleFromBindingPattern.ts, 8, 13))
+>T : Symbol(T, Decl(inferTupleFromBindingPattern.ts, 8, 19))
+>t : Symbol(t, Decl(inferTupleFromBindingPattern.ts, 8, 39))
+>T : Symbol(T, Decl(inferTupleFromBindingPattern.ts, 8, 19))
+>T : Symbol(T, Decl(inferTupleFromBindingPattern.ts, 8, 19))
+
+const [[[f3e1]]] = f3(['1']);
+>f3e1 : Symbol(f3e1, Decl(inferTupleFromBindingPattern.ts, 9, 9))
+>f3 : Symbol(f3, Decl(inferTupleFromBindingPattern.ts, 8, 13))
+
+f3e1.toLowerCase();
+>f3e1.toLowerCase : Symbol(String.toLowerCase, Decl(lib.es5.d.ts, --, --))
+>f3e1 : Symbol(f3e1, Decl(inferTupleFromBindingPattern.ts, 9, 9))
+>toLowerCase : Symbol(String.toLowerCase, Decl(lib.es5.d.ts, --, --))
+
+declare const f4: <T extends string[]>(t: T) => [T, number, string[]];
+>f4 : Symbol(f4, Decl(inferTupleFromBindingPattern.ts, 12, 13))
+>T : Symbol(T, Decl(inferTupleFromBindingPattern.ts, 12, 19))
+>t : Symbol(t, Decl(inferTupleFromBindingPattern.ts, 12, 39))
+>T : Symbol(T, Decl(inferTupleFromBindingPattern.ts, 12, 19))
+>T : Symbol(T, Decl(inferTupleFromBindingPattern.ts, 12, 19))
+
+const [[f4e1], ...f4rest1] = f4(['1']);
+>f4e1 : Symbol(f4e1, Decl(inferTupleFromBindingPattern.ts, 13, 8))
+>f4rest1 : Symbol(f4rest1, Decl(inferTupleFromBindingPattern.ts, 13, 14))
+>f4 : Symbol(f4, Decl(inferTupleFromBindingPattern.ts, 12, 13))
+
+f4e1.toLowerCase();
+>f4e1.toLowerCase : Symbol(String.toLowerCase, Decl(lib.es5.d.ts, --, --))
+>f4e1 : Symbol(f4e1, Decl(inferTupleFromBindingPattern.ts, 13, 8))
+>toLowerCase : Symbol(String.toLowerCase, Decl(lib.es5.d.ts, --, --))
+
+declare const f5: <T extends string[]>(t: T) => [[T, number, string[]]];
+>f5 : Symbol(f5, Decl(inferTupleFromBindingPattern.ts, 16, 13))
+>T : Symbol(T, Decl(inferTupleFromBindingPattern.ts, 16, 19))
+>t : Symbol(t, Decl(inferTupleFromBindingPattern.ts, 16, 39))
+>T : Symbol(T, Decl(inferTupleFromBindingPattern.ts, 16, 19))
+>T : Symbol(T, Decl(inferTupleFromBindingPattern.ts, 16, 19))
+
+const [[[f5e1], ...f5rest1]] = f5(['1']);
+>f5e1 : Symbol(f5e1, Decl(inferTupleFromBindingPattern.ts, 17, 9))
+>f5rest1 : Symbol(f5rest1, Decl(inferTupleFromBindingPattern.ts, 17, 15))
+>f5 : Symbol(f5, Decl(inferTupleFromBindingPattern.ts, 16, 13))
+
+f5e1.toLowerCase();
+>f5e1.toLowerCase : Symbol(String.toLowerCase, Decl(lib.es5.d.ts, --, --))
+>f5e1 : Symbol(f5e1, Decl(inferTupleFromBindingPattern.ts, 17, 9))
+>toLowerCase : Symbol(String.toLowerCase, Decl(lib.es5.d.ts, --, --))
+
+declare const f6: <T extends string[]>(t: T) => [...T, number];
+>f6 : Symbol(f6, Decl(inferTupleFromBindingPattern.ts, 20, 13))
+>T : Symbol(T, Decl(inferTupleFromBindingPattern.ts, 20, 19))
+>t : Symbol(t, Decl(inferTupleFromBindingPattern.ts, 20, 39))
+>T : Symbol(T, Decl(inferTupleFromBindingPattern.ts, 20, 19))
+>T : Symbol(T, Decl(inferTupleFromBindingPattern.ts, 20, 19))
+
+const [f6e1] = f6(['1']);
+>f6e1 : Symbol(f6e1, Decl(inferTupleFromBindingPattern.ts, 21, 7))
+>f6 : Symbol(f6, Decl(inferTupleFromBindingPattern.ts, 20, 13))
+
+f6e1.toLowerCase();
+>f6e1.toLowerCase : Symbol(String.toLowerCase, Decl(lib.es5.d.ts, --, --))
+>f6e1 : Symbol(f6e1, Decl(inferTupleFromBindingPattern.ts, 21, 7))
+>toLowerCase : Symbol(String.toLowerCase, Decl(lib.es5.d.ts, --, --))
+
+declare const f7: <T extends string[]>(t: T) => [number, ...T];
+>f7 : Symbol(f7, Decl(inferTupleFromBindingPattern.ts, 24, 13))
+>T : Symbol(T, Decl(inferTupleFromBindingPattern.ts, 24, 19))
+>t : Symbol(t, Decl(inferTupleFromBindingPattern.ts, 24, 39))
+>T : Symbol(T, Decl(inferTupleFromBindingPattern.ts, 24, 19))
+>T : Symbol(T, Decl(inferTupleFromBindingPattern.ts, 24, 19))
+
+const [_, f7e1] = f7(['1']);
+>_ : Symbol(_, Decl(inferTupleFromBindingPattern.ts, 25, 7))
+>f7e1 : Symbol(f7e1, Decl(inferTupleFromBindingPattern.ts, 25, 9))
+>f7 : Symbol(f7, Decl(inferTupleFromBindingPattern.ts, 24, 13))
+
+f7e1.toLowerCase();
+>f7e1.toLowerCase : Symbol(String.toLowerCase, Decl(lib.es5.d.ts, --, --))
+>f7e1 : Symbol(f7e1, Decl(inferTupleFromBindingPattern.ts, 25, 9))
+>toLowerCase : Symbol(String.toLowerCase, Decl(lib.es5.d.ts, --, --))
+

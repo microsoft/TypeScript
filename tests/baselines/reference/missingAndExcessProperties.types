@@ -6,26 +6,26 @@ function f1() {
 >f1 : () => void
 
     var { x, y } = {};
->x : any
->y : any
->{} : { x: any; y: any; }
+>x : unknown
+>y : unknown
+>{} : { x: unknown; y: unknown; }
 
     var { x = 1, y } = {};
->x : any
+>x : unknown
 >1 : 1
->y : any
->{} : { x?: number; y: any; }
+>y : unknown
+>{} : { x?: number; y: unknown; }
 
     var { x, y = 1 } = {};
->x : any
->y : any
+>x : unknown
+>y : unknown
 >1 : 1
->{} : { x: any; y?: number; }
+>{} : { x: unknown; y?: number; }
 
     var { x = 1, y = 1 } = {};
->x : any
+>x : unknown
 >1 : 1
->y : any
+>y : unknown
 >1 : 1
 >{} : { x?: number; y?: number; }
 }

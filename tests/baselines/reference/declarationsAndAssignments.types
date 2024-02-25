@@ -299,13 +299,13 @@ function f10() {
 >f10 : () => void
 
     var { a, b } = {};  // Error
->a : any
->b : any
->{} : { a: any; b: any; }
+>a : unknown
+>b : unknown
+>{} : { a: unknown; b: unknown; }
 
     var { a, b } = [];  // Error
->a : any
->b : any
+>a : unknown
+>b : unknown
 >[] : undefined[]
 }
 

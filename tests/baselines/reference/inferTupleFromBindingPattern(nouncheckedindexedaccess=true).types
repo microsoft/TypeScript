@@ -1,0 +1,125 @@
+//// [tests/cases/compiler/inferTupleFromBindingPattern.ts] ////
+
+=== inferTupleFromBindingPattern.ts ===
+declare function f<T>(cb: () => T): T;
+>f : <T>(cb: () => T) => T
+>cb : () => T
+
+const [e1, e2, e3] = f(() => [1, "hi", true]);
+>e1 : number
+>e2 : string
+>e3 : boolean
+>f(() => [1, "hi", true]) : [number, string, boolean]
+>f : <T>(cb: () => T) => T
+>() => [1, "hi", true] : () => [number, string, boolean]
+>[1, "hi", true] : [number, string, true]
+>1 : 1
+>"hi" : "hi"
+>true : true
+
+// repro from #42969
+declare const f2: <T extends string[]>(t: T) => [T, string[]];
+>f2 : <T extends string[]>(t: T) => [T, string[]]
+>t : T
+
+const [[f2e1]] = f2(['1']);
+>f2e1 : string
+>f2(['1']) : [[string], string[]]
+>f2 : <T extends string[]>(t: T) => [T, string[]]
+>['1'] : [string]
+>'1' : "1"
+
+f2e1.toLowerCase();
+>f2e1.toLowerCase() : string
+>f2e1.toLowerCase : () => string
+>f2e1 : string
+>toLowerCase : () => string
+
+declare const f3: <T extends string[]>(t: T) => [[T, string[]]];
+>f3 : <T extends string[]>(t: T) => [[T, string[]]]
+>t : T
+
+const [[[f3e1]]] = f3(['1']);
+>f3e1 : string
+>f3(['1']) : [[[string], string[]]]
+>f3 : <T extends string[]>(t: T) => [[T, string[]]]
+>['1'] : [string]
+>'1' : "1"
+
+f3e1.toLowerCase();
+>f3e1.toLowerCase() : string
+>f3e1.toLowerCase : () => string
+>f3e1 : string
+>toLowerCase : () => string
+
+declare const f4: <T extends string[]>(t: T) => [T, number, string[]];
+>f4 : <T extends string[]>(t: T) => [T, number, string[]]
+>t : T
+
+const [[f4e1], ...f4rest1] = f4(['1']);
+>f4e1 : string
+>f4rest1 : [number, string[]]
+>f4(['1']) : [[string], number, string[]]
+>f4 : <T extends string[]>(t: T) => [T, number, string[]]
+>['1'] : [string]
+>'1' : "1"
+
+f4e1.toLowerCase();
+>f4e1.toLowerCase() : string
+>f4e1.toLowerCase : () => string
+>f4e1 : string
+>toLowerCase : () => string
+
+declare const f5: <T extends string[]>(t: T) => [[T, number, string[]]];
+>f5 : <T extends string[]>(t: T) => [[T, number, string[]]]
+>t : T
+
+const [[[f5e1], ...f5rest1]] = f5(['1']);
+>f5e1 : string
+>f5rest1 : [number, string[]]
+>f5(['1']) : [[[string], number, string[]]]
+>f5 : <T extends string[]>(t: T) => [[T, number, string[]]]
+>['1'] : [string]
+>'1' : "1"
+
+f5e1.toLowerCase();
+>f5e1.toLowerCase() : string
+>f5e1.toLowerCase : () => string
+>f5e1 : string
+>toLowerCase : () => string
+
+declare const f6: <T extends string[]>(t: T) => [...T, number];
+>f6 : <T extends string[]>(t: T) => [...T, number]
+>t : T
+
+const [f6e1] = f6(['1']);
+>f6e1 : string
+>f6(['1']) : [string, number]
+>f6 : <T extends string[]>(t: T) => [...T, number]
+>['1'] : [string]
+>'1' : "1"
+
+f6e1.toLowerCase();
+>f6e1.toLowerCase() : string
+>f6e1.toLowerCase : () => string
+>f6e1 : string
+>toLowerCase : () => string
+
+declare const f7: <T extends string[]>(t: T) => [number, ...T];
+>f7 : <T extends string[]>(t: T) => [number, ...T]
+>t : T
+
+const [_, f7e1] = f7(['1']);
+>_ : number
+>f7e1 : string
+>f7(['1']) : [number, string]
+>f7 : <T extends string[]>(t: T) => [number, ...T]
+>['1'] : [string]
+>'1' : "1"
+
+f7e1.toLowerCase();
+>f7e1.toLowerCase() : string
+>f7e1.toLowerCase : () => string
+>f7e1 : string
+>toLowerCase : () => string
+

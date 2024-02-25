@@ -1,0 +1,164 @@
+//// [tests/cases/compiler/bindingPatternContextualTypeDoesNotCauseWidening2.ts] ////
+
+=== bindingPatternContextualTypeDoesNotCauseWidening2.ts ===
+// https://github.com/microsoft/TypeScript/issues/56771
+
+declare function fn1<T extends { A: { a: "A"; } | null | undefined }>(t: T): T;
+>fn1 : Symbol(fn1, Decl(bindingPatternContextualTypeDoesNotCauseWidening2.ts, 0, 0))
+>T : Symbol(T, Decl(bindingPatternContextualTypeDoesNotCauseWidening2.ts, 2, 21))
+>A : Symbol(A, Decl(bindingPatternContextualTypeDoesNotCauseWidening2.ts, 2, 32))
+>a : Symbol(a, Decl(bindingPatternContextualTypeDoesNotCauseWidening2.ts, 2, 37))
+>t : Symbol(t, Decl(bindingPatternContextualTypeDoesNotCauseWidening2.ts, 2, 70))
+>T : Symbol(T, Decl(bindingPatternContextualTypeDoesNotCauseWidening2.ts, 2, 21))
+>T : Symbol(T, Decl(bindingPatternContextualTypeDoesNotCauseWidening2.ts, 2, 21))
+
+const { A } = fn1({ A: { a: "A" } });
+>A : Symbol(A, Decl(bindingPatternContextualTypeDoesNotCauseWidening2.ts, 3, 7))
+>fn1 : Symbol(fn1, Decl(bindingPatternContextualTypeDoesNotCauseWidening2.ts, 0, 0))
+>A : Symbol(A, Decl(bindingPatternContextualTypeDoesNotCauseWidening2.ts, 3, 19))
+>a : Symbol(a, Decl(bindingPatternContextualTypeDoesNotCauseWidening2.ts, 3, 24))
+
+A.a;
+>A.a : Symbol(a, Decl(bindingPatternContextualTypeDoesNotCauseWidening2.ts, 3, 24))
+>A : Symbol(A, Decl(bindingPatternContextualTypeDoesNotCauseWidening2.ts, 3, 7))
+>a : Symbol(a, Decl(bindingPatternContextualTypeDoesNotCauseWidening2.ts, 3, 24))
+
+declare function fn2<T extends { A: ["a" | "b"] }>(t: T): T;
+>fn2 : Symbol(fn2, Decl(bindingPatternContextualTypeDoesNotCauseWidening2.ts, 4, 4))
+>T : Symbol(T, Decl(bindingPatternContextualTypeDoesNotCauseWidening2.ts, 6, 21))
+>A : Symbol(A, Decl(bindingPatternContextualTypeDoesNotCauseWidening2.ts, 6, 32))
+>t : Symbol(t, Decl(bindingPatternContextualTypeDoesNotCauseWidening2.ts, 6, 51))
+>T : Symbol(T, Decl(bindingPatternContextualTypeDoesNotCauseWidening2.ts, 6, 21))
+>T : Symbol(T, Decl(bindingPatternContextualTypeDoesNotCauseWidening2.ts, 6, 21))
+
+const { A: [nested] } = fn2({ A: ["a"] });
+>A : Symbol(A, Decl(bindingPatternContextualTypeDoesNotCauseWidening2.ts, 7, 29))
+>nested : Symbol(nested, Decl(bindingPatternContextualTypeDoesNotCauseWidening2.ts, 7, 12))
+>fn2 : Symbol(fn2, Decl(bindingPatternContextualTypeDoesNotCauseWidening2.ts, 4, 4))
+>A : Symbol(A, Decl(bindingPatternContextualTypeDoesNotCauseWidening2.ts, 7, 29))
+
+declare function fn3<T extends { a: unknown; b: unknown }>(obj: T): T;
+>fn3 : Symbol(fn3, Decl(bindingPatternContextualTypeDoesNotCauseWidening2.ts, 7, 42))
+>T : Symbol(T, Decl(bindingPatternContextualTypeDoesNotCauseWidening2.ts, 9, 21))
+>a : Symbol(a, Decl(bindingPatternContextualTypeDoesNotCauseWidening2.ts, 9, 32))
+>b : Symbol(b, Decl(bindingPatternContextualTypeDoesNotCauseWidening2.ts, 9, 44))
+>obj : Symbol(obj, Decl(bindingPatternContextualTypeDoesNotCauseWidening2.ts, 9, 59))
+>T : Symbol(T, Decl(bindingPatternContextualTypeDoesNotCauseWidening2.ts, 9, 21))
+>T : Symbol(T, Decl(bindingPatternContextualTypeDoesNotCauseWidening2.ts, 9, 21))
+
+const { a: [a3] } = fn3({ a: [1, ""], b: "" });
+>a : Symbol(a, Decl(bindingPatternContextualTypeDoesNotCauseWidening2.ts, 10, 25))
+>a3 : Symbol(a3, Decl(bindingPatternContextualTypeDoesNotCauseWidening2.ts, 10, 12))
+>fn3 : Symbol(fn3, Decl(bindingPatternContextualTypeDoesNotCauseWidening2.ts, 7, 42))
+>a : Symbol(a, Decl(bindingPatternContextualTypeDoesNotCauseWidening2.ts, 10, 25))
+>b : Symbol(b, Decl(bindingPatternContextualTypeDoesNotCauseWidening2.ts, 10, 37))
+
+declare function fn4<T extends { a: unknown; b: unknown }[]>(obj: T): T;
+>fn4 : Symbol(fn4, Decl(bindingPatternContextualTypeDoesNotCauseWidening2.ts, 10, 47))
+>T : Symbol(T, Decl(bindingPatternContextualTypeDoesNotCauseWidening2.ts, 12, 21))
+>a : Symbol(a, Decl(bindingPatternContextualTypeDoesNotCauseWidening2.ts, 12, 32))
+>b : Symbol(b, Decl(bindingPatternContextualTypeDoesNotCauseWidening2.ts, 12, 44))
+>obj : Symbol(obj, Decl(bindingPatternContextualTypeDoesNotCauseWidening2.ts, 12, 61))
+>T : Symbol(T, Decl(bindingPatternContextualTypeDoesNotCauseWidening2.ts, 12, 21))
+>T : Symbol(T, Decl(bindingPatternContextualTypeDoesNotCauseWidening2.ts, 12, 21))
+
+const [{ a: a4 }] = fn4([{ a: "", b: 10 }, { a: true, b: "" }]);
+>a : Symbol(a, Decl(bindingPatternContextualTypeDoesNotCauseWidening2.ts, 13, 26))
+>a4 : Symbol(a4, Decl(bindingPatternContextualTypeDoesNotCauseWidening2.ts, 13, 8))
+>fn4 : Symbol(fn4, Decl(bindingPatternContextualTypeDoesNotCauseWidening2.ts, 10, 47))
+>a : Symbol(a, Decl(bindingPatternContextualTypeDoesNotCauseWidening2.ts, 13, 26))
+>b : Symbol(b, Decl(bindingPatternContextualTypeDoesNotCauseWidening2.ts, 13, 33))
+>a : Symbol(a, Decl(bindingPatternContextualTypeDoesNotCauseWidening2.ts, 13, 44))
+>b : Symbol(b, Decl(bindingPatternContextualTypeDoesNotCauseWidening2.ts, 13, 53))
+
+declare function fn5<
+>fn5 : Symbol(fn5, Decl(bindingPatternContextualTypeDoesNotCauseWidening2.ts, 13, 64))
+
+  O extends { a?: "a"; b?: "b1" | "b2"; c?: "c" }[],
+>O : Symbol(O, Decl(bindingPatternContextualTypeDoesNotCauseWidening2.ts, 15, 21))
+>a : Symbol(a, Decl(bindingPatternContextualTypeDoesNotCauseWidening2.ts, 16, 13))
+>b : Symbol(b, Decl(bindingPatternContextualTypeDoesNotCauseWidening2.ts, 16, 22))
+>c : Symbol(c, Decl(bindingPatternContextualTypeDoesNotCauseWidening2.ts, 16, 39))
+
+  T extends keyof O[number],
+>T : Symbol(T, Decl(bindingPatternContextualTypeDoesNotCauseWidening2.ts, 16, 52))
+>O : Symbol(O, Decl(bindingPatternContextualTypeDoesNotCauseWidening2.ts, 15, 21))
+
+>(
+  keys: T[],
+>keys : Symbol(keys, Decl(bindingPatternContextualTypeDoesNotCauseWidening2.ts, 18, 2))
+>T : Symbol(T, Decl(bindingPatternContextualTypeDoesNotCauseWidening2.ts, 16, 52))
+
+  obj?: O,
+>obj : Symbol(obj, Decl(bindingPatternContextualTypeDoesNotCauseWidening2.ts, 19, 12))
+>O : Symbol(O, Decl(bindingPatternContextualTypeDoesNotCauseWidening2.ts, 15, 21))
+
+): {
+  [K in keyof O]: Pick<O[K], T>;
+>K : Symbol(K, Decl(bindingPatternContextualTypeDoesNotCauseWidening2.ts, 22, 3))
+>O : Symbol(O, Decl(bindingPatternContextualTypeDoesNotCauseWidening2.ts, 15, 21))
+>Pick : Symbol(Pick, Decl(lib.es5.d.ts, --, --))
+>O : Symbol(O, Decl(bindingPatternContextualTypeDoesNotCauseWidening2.ts, 15, 21))
+>K : Symbol(K, Decl(bindingPatternContextualTypeDoesNotCauseWidening2.ts, 22, 3))
+>T : Symbol(T, Decl(bindingPatternContextualTypeDoesNotCauseWidening2.ts, 16, 52))
+}
+const [{ b: b5_1 }, { b: b5_2 }] = fn5(["b"], [{ a: "a", b: "b1" }, { b: "b2", c: "c" }]);
+>b : Symbol(b, Decl(bindingPatternContextualTypeDoesNotCauseWidening2.ts, 24, 56))
+>b5_1 : Symbol(b5_1, Decl(bindingPatternContextualTypeDoesNotCauseWidening2.ts, 24, 8))
+>b : Symbol(b, Decl(bindingPatternContextualTypeDoesNotCauseWidening2.ts, 24, 69))
+>b5_2 : Symbol(b5_2, Decl(bindingPatternContextualTypeDoesNotCauseWidening2.ts, 24, 21))
+>fn5 : Symbol(fn5, Decl(bindingPatternContextualTypeDoesNotCauseWidening2.ts, 13, 64))
+>a : Symbol(a, Decl(bindingPatternContextualTypeDoesNotCauseWidening2.ts, 24, 48))
+>b : Symbol(b, Decl(bindingPatternContextualTypeDoesNotCauseWidening2.ts, 24, 56))
+>b : Symbol(b, Decl(bindingPatternContextualTypeDoesNotCauseWidening2.ts, 24, 69))
+>c : Symbol(c, Decl(bindingPatternContextualTypeDoesNotCauseWidening2.ts, 24, 78))
+
+declare function fn6<
+>fn6 : Symbol(fn6, Decl(bindingPatternContextualTypeDoesNotCauseWidening2.ts, 24, 90))
+
+  O extends { a?: "valA", b?: "valB" | "valC" } | null,
+>O : Symbol(O, Decl(bindingPatternContextualTypeDoesNotCauseWidening2.ts, 26, 21))
+>a : Symbol(a, Decl(bindingPatternContextualTypeDoesNotCauseWidening2.ts, 27, 13))
+>b : Symbol(b, Decl(bindingPatternContextualTypeDoesNotCauseWidening2.ts, 27, 25))
+
+  T extends keyof O
+>T : Symbol(T, Decl(bindingPatternContextualTypeDoesNotCauseWidening2.ts, 27, 55))
+>O : Symbol(O, Decl(bindingPatternContextualTypeDoesNotCauseWidening2.ts, 26, 21))
+
+>(
+  keys: T[],
+>keys : Symbol(keys, Decl(bindingPatternContextualTypeDoesNotCauseWidening2.ts, 29, 2))
+>T : Symbol(T, Decl(bindingPatternContextualTypeDoesNotCauseWidening2.ts, 27, 55))
+
+  obj?: O,
+>obj : Symbol(obj, Decl(bindingPatternContextualTypeDoesNotCauseWidening2.ts, 30, 12))
+>O : Symbol(O, Decl(bindingPatternContextualTypeDoesNotCauseWidening2.ts, 26, 21))
+
+): Pick<O, T> & { pickedKeys: T };
+>Pick : Symbol(Pick, Decl(lib.es5.d.ts, --, --))
+>O : Symbol(O, Decl(bindingPatternContextualTypeDoesNotCauseWidening2.ts, 26, 21))
+>T : Symbol(T, Decl(bindingPatternContextualTypeDoesNotCauseWidening2.ts, 27, 55))
+>pickedKeys : Symbol(pickedKeys, Decl(bindingPatternContextualTypeDoesNotCauseWidening2.ts, 32, 17))
+>T : Symbol(T, Decl(bindingPatternContextualTypeDoesNotCauseWidening2.ts, 27, 55))
+
+const { b: b6, pickedKeys } = fn6(["b"], { a: "valA", b: "valB" });
+>b : Symbol(b, Decl(bindingPatternContextualTypeDoesNotCauseWidening2.ts, 33, 53))
+>b6 : Symbol(b6, Decl(bindingPatternContextualTypeDoesNotCauseWidening2.ts, 33, 7))
+>pickedKeys : Symbol(pickedKeys, Decl(bindingPatternContextualTypeDoesNotCauseWidening2.ts, 33, 14))
+>fn6 : Symbol(fn6, Decl(bindingPatternContextualTypeDoesNotCauseWidening2.ts, 24, 90))
+>a : Symbol(a, Decl(bindingPatternContextualTypeDoesNotCauseWidening2.ts, 33, 42))
+>b : Symbol(b, Decl(bindingPatternContextualTypeDoesNotCauseWidening2.ts, 33, 53))
+
+declare function fn7<T extends { [k: string]: 'a' | 'b' }>(obj: T): T
+>fn7 : Symbol(fn7, Decl(bindingPatternContextualTypeDoesNotCauseWidening2.ts, 33, 67))
+>T : Symbol(T, Decl(bindingPatternContextualTypeDoesNotCauseWidening2.ts, 35, 21))
+>k : Symbol(k, Decl(bindingPatternContextualTypeDoesNotCauseWidening2.ts, 35, 34))
+>obj : Symbol(obj, Decl(bindingPatternContextualTypeDoesNotCauseWidening2.ts, 35, 59))
+>T : Symbol(T, Decl(bindingPatternContextualTypeDoesNotCauseWidening2.ts, 35, 21))
+>T : Symbol(T, Decl(bindingPatternContextualTypeDoesNotCauseWidening2.ts, 35, 21))
+
+const { a7 } = fn7({ a7: 'a' })
+>a7 : Symbol(a7, Decl(bindingPatternContextualTypeDoesNotCauseWidening2.ts, 36, 7))
+>fn7 : Symbol(fn7, Decl(bindingPatternContextualTypeDoesNotCauseWidening2.ts, 33, 67))
+>a7 : Symbol(a7, Decl(bindingPatternContextualTypeDoesNotCauseWidening2.ts, 36, 20))
+

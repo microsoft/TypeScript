@@ -33,7 +33,7 @@ verify.codeFix({
     description: "Declare property 'foo'",
     index: 0,
     newFileContent: `class C {
-    foo: { many01: any; many02: any; many03: any; many04: any; many05: any; many06: any; many07: any; many08: any; many09: any; many10: any; many11: any; many12: any; many13: any; many14: any; many15: any; many16: any; many17: any; many18: any; many19: any; many20: any; many21: any; many22: any; };
+    foo: { many01: unknown; many02: unknown; many03: unknown; many04: unknown; many05: unknown; many06: unknown; many07: unknown; many08: unknown; many09: unknown; many10: unknown; many11: unknown; many12: unknown; many13: unknown; many14: unknown; many15: unknown; many16: unknown; many17: unknown; many18: unknown; many19: unknown; many20: unknown; many21: unknown; many22: unknown; };
     method() {
         const {
             many01,

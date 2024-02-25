@@ -51,8 +51,8 @@ const { c, d, e, f, g } = {
 >d : number
 >e : number
 >f : number
->g : any
->{  ...{    ...{      ...{        c: 0,      },      d: 0    },    e: 0  },  f: 0} : { f: number; g: any; e: number; d: number; c: number; }
+>g : unknown
+>{  ...{    ...{      ...{        c: 0,      },      d: 0    },    e: 0  },  f: 0} : { f: number; g: unknown; e: number; d: number; c: number; }
 
   ...{
 >{    ...{      ...{        c: 0,      },      d: 0    },    e: 0  } : { e: number; d: number; c: number; }
