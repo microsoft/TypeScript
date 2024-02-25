@@ -50928,7 +50928,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         if (!(target.flags & TypeFlags.UnionOrIntersection)) {
             return target;
         }
-        let bestMatch: Type | undefined;
+        let bestMatches: Type[] = [];
         if (!(source.flags & (TypeFlags.Primitive | TypeFlags.InstantiablePrimitive))) {
             let matchingCount = 0;
             for (const type of (target as UnionOrIntersectionType).types) {
@@ -50944,14 +50944,17 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         // needed to elaborate between two generic mapped types anyway.
                         const len = overlap.flags & TypeFlags.Union ? countWhere((overlap as UnionType).types, isUnitType) : 1;
                         if (len >= matchingCount) {
-                            bestMatch = type;
+                            if (len > matchingCount) {
+                                bestMatches.length = 0;    
+                            }
+                            bestMatches = append(bestMatches, type);
                             matchingCount = len;
                         }
                     }
                 }
             }
         }
-        return bestMatch;
+        return bestMatches.length ? getUnionType(bestMatches) : undefined;
     }
 
     function filterPrimitivesIfContainsNonPrimitive(type: UnionType) {
