@@ -7208,6 +7208,7 @@ export interface CompilerOptions {
     noImplicitAny?: boolean; // Always combine with strict property
     noImplicitReturns?: boolean;
     noImplicitThis?: boolean; // Always combine with strict property
+    /** @deprecated */
     noStrictGenericChecks?: boolean;
     noUnusedLocals?: boolean;
     noUnusedParameters?: boolean;
