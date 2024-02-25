@@ -50901,9 +50901,13 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
     }
 
-    function findBestTypeForObjectLiteral(source: Type, unionTarget: UnionOrIntersectionType) {
-        if (getObjectFlags(source) & ObjectFlags.ObjectLiteral && someType(unionTarget, isArrayLikeType)) {
-            return find(unionTarget.types, t => !isArrayLikeType(t));
+    function findBestTypeForObjectLiteral(source: Type, target: UnionOrIntersectionType) {
+        if (getObjectFlags(source) & ObjectFlags.ObjectLiteral) {
+            const filtered = filterType(target, t => !(t.flags & TypeFlags.Nullable) && !isArrayLikeType(t));
+            if (filtered === target || filtered.flags & TypeFlags.Never) {
+                return undefined;
+            }
+            return filtered.flags & TypeFlags.Union ? (filtered as UnionType).types[0] : filtered;
         }
     }
 
