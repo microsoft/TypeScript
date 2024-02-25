@@ -3054,6 +3054,7 @@ declare namespace ts {
                 Lf = "Lf",
             }
             enum ScriptTarget {
+                /** @deprecated */
                 ES3 = "ES3",
                 ES5 = "ES5",
                 ES6 = "ES6",
@@ -7695,6 +7696,7 @@ declare namespace ts {
         Deferred = 7,
     }
     enum ScriptTarget {
+        /** @deprecated */
         ES3 = 0,
         ES5 = 1,
         ES2015 = 2,

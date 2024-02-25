@@ -8622,7 +8622,8 @@ export const computedOptions = createComputedCompilerOptions({
     target: {
         dependencies: ["module"],
         computeValue: compilerOptions => {
-            return compilerOptions.target ??
+            const target = compilerOptions.target === ScriptTarget.ES3 ? undefined : compilerOptions.target;
+            return target ??
                 ((compilerOptions.module === ModuleKind.Node16 && ScriptTarget.ES2022) ||
                     (compilerOptions.module === ModuleKind.NodeNext && ScriptTarget.ESNext) ||
                     ScriptTarget.ES5);

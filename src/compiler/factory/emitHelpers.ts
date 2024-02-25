@@ -129,6 +129,7 @@ export interface EmitHelperFactory {
     // ES2015 Generator Helpers
     createGeneratorHelper(body: FunctionExpression): Expression;
     // ES Module Helpers
+    /** @deprecated */
     createCreateBindingHelper(module: Expression, inputName: Expression, outputName: Expression | undefined): Expression;
     createImportStarHelper(expression: Expression): Expression;
     createImportStarCallbackHelper(): Expression;

@@ -3772,6 +3772,7 @@ export const enum NewLineKind {
 }
 
 export const enum ScriptTarget {
+    /** @deprecated */
     ES3 = "ES3",
     ES5 = "ES5",
     ES6 = "ES6",

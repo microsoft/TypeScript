@@ -6042,7 +6042,7 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
         node.path = "" as Path;
         node.resolvedPath = "" as Path;
         node.originalFileName = "";
-        node.languageVersion = 0;
+        node.languageVersion = ScriptTarget.ES5;
         node.languageVariant = 0;
         node.scriptKind = 0;
         node.isDeclarationFile = false;
