@@ -396,14 +396,13 @@ export function createCompilerHost(options: CompilerOptions, setParentNodes?: bo
 /** @internal */
 export function createGetSourceFile(
     readFile: ProgramHost<any>["readFile"],
-    getCompilerOptions: () => CompilerOptions,
     setParentNodes: boolean | undefined,
 ): CompilerHost["getSourceFile"] {
     return (fileName, languageVersionOrOptions, onError) => {
         let text: string | undefined;
         try {
             performance.mark("beforeIORead");
-            text = readFile(fileName, getCompilerOptions().charset);
+            text = readFile(fileName);
             performance.mark("afterIORead");
             performance.measure("I/O Read", "beforeIORead", "afterIORead");
         }
@@ -476,7 +475,7 @@ export function createCompilerHostWorker(
     const newLine = getNewLineCharacter(options);
     const realpath = system.realpath && ((path: string) => system.realpath!(path));
     const compilerHost: CompilerHost = {
-        getSourceFile: createGetSourceFile(fileName => compilerHost.readFile(fileName), () => options, setParentNodes),
+        getSourceFile: createGetSourceFile(fileName => compilerHost.readFile(fileName), setParentNodes),
         getDefaultLibLocation,
         getDefaultLibFileName: options => combinePaths(getDefaultLibLocation(), getDefaultLibFileName(options)),
         writeFile: createWriteFileMeasuringIO(

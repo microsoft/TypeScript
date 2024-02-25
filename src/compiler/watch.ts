@@ -744,7 +744,6 @@ export function createCompilerHostFromProgramHost(host: ProgramHost<any>, getCom
     const compilerHost: CompilerHost = {
         getSourceFile: createGetSourceFile(
             (fileName, encoding) => !encoding ? compilerHost.readFile(fileName) : host.readFile(fileName, encoding),
-            getCompilerOptions,
             /*setParentNodes*/ undefined,
         ),
         getDefaultLibLocation: maybeBind(host, host.getDefaultLibLocation),

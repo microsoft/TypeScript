@@ -7147,6 +7147,7 @@ export interface CompilerOptions {
      * @internal
      */
     build?: boolean;
+    /** @deprecated */
     charset?: string;
     checkJs?: boolean;
     /** @internal */ configFilePath?: string;

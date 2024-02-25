@@ -3669,6 +3669,7 @@ export interface CompilerOptions {
     allowUnusedLabels?: boolean;
     alwaysStrict?: boolean;
     baseUrl?: string;
+    /** @deprecated */
     charset?: string;
     checkJs?: boolean;
     declaration?: boolean;
