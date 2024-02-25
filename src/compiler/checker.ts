@@ -1467,7 +1467,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     var noImplicitAny = getStrictOptionValue(compilerOptions, "noImplicitAny");
     var noImplicitThis = getStrictOptionValue(compilerOptions, "noImplicitThis");
     var useUnknownInCatchVariables = getStrictOptionValue(compilerOptions, "useUnknownInCatchVariables");
-    var freshObjectLiteralFlag = compilerOptions.suppressExcessPropertyErrors ? 0 : ObjectFlags.FreshLiteral;
     var exactOptionalPropertyTypes = compilerOptions.exactOptionalPropertyTypes;
 
     var checkBinaryExpression = createCheckBinaryExpression();
@@ -31553,7 +31552,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         const isInJavascript = isInJSFile(node) && !isInJsonFile(node);
         const enumTag = isInJavascript ? getJSDocEnumTag(node) : undefined;
         const isJSObjectLiteral = !contextualType && isInJavascript && !enumTag;
-        let objectFlags: ObjectFlags = freshObjectLiteralFlag;
+        let objectFlags: ObjectFlags = ObjectFlags.FreshLiteral;
         let patternWithComputedProperties = false;
         let hasComputedStringProperty = false;
         let hasComputedNumberProperty = false;
@@ -31619,7 +31618,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     if (impliedProp) {
                         prop.flags |= impliedProp.flags & SymbolFlags.Optional;
                     }
-                    else if (!compilerOptions.suppressExcessPropertyErrors && !getIndexInfoOfType(contextualType, stringType)) {
+                    else if (!getIndexInfoOfType(contextualType, stringType)) {
                         error(memberDecl.name, Diagnostics.Object_literal_may_only_specify_known_properties_and_0_does_not_exist_in_type_1, symbolToString(member), typeToString(contextualType));
                     }
                 }
@@ -31977,7 +31976,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
          * @param attributesTable a symbol table of attributes property
          */
         function createJsxAttributesType() {
-            objectFlags |= freshObjectLiteralFlag;
+            objectFlags |= ObjectFlags.FreshLiteral;
             const result = createAnonymousType(attributes.symbol, attributesTable, emptyArray, emptyArray, emptyArray);
             result.objectFlags |= objectFlags | ObjectFlags.ObjectLiteral | ObjectFlags.ContainsObjectOrArrayLiteral;
             return result;

@@ -3011,6 +3011,7 @@ declare namespace ts {
                 sourceRoot?: string;
                 strict?: boolean;
                 strictNullChecks?: boolean;
+                /** @deprecated */
                 suppressExcessPropertyErrors?: boolean;
                 suppressImplicitAnyIndexErrors?: boolean;
                 useDefineForClassFields?: boolean;
@@ -7618,6 +7619,7 @@ declare namespace ts {
         strictNullChecks?: boolean;
         strictPropertyInitialization?: boolean;
         stripInternal?: boolean;
+        /** @deprecated */
         suppressExcessPropertyErrors?: boolean;
         suppressImplicitAnyIndexErrors?: boolean;
         target?: ScriptTarget;

@@ -3724,6 +3724,7 @@ export interface CompilerOptions {
     sourceRoot?: string;
     strict?: boolean;
     strictNullChecks?: boolean;
+    /** @deprecated */
     suppressExcessPropertyErrors?: boolean;
     suppressImplicitAnyIndexErrors?: boolean;
     useDefineForClassFields?: boolean;
