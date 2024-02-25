@@ -20353,15 +20353,15 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function getBestMatchIndexedAccessTypeOrUndefined(source: Type, target: Type, nameType: Type) {
-        const idx = getIndexedAccessTypeOrUndefined(target, nameType);
-        if (idx) {
-            return idx;
-        }
         if (target.flags & TypeFlags.Union) {
             const best = getBestMatchingType(source, target as UnionType);
             if (best) {
                 return getIndexedAccessTypeOrUndefined(best, nameType);
             }
+        }
+        const idx = getIndexedAccessTypeOrUndefined(target, nameType);
+        if (idx) {
+            return idx;
         }
     }
 
