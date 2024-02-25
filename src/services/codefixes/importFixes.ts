@@ -62,7 +62,6 @@ import {
     importFromModuleSpecifier,
     ImportKind,
     importNameElisionDisabled,
-    ImportsNotUsedAsValues,
     insertImports,
     InternalSymbolName,
     isExternalModule,
@@ -714,10 +713,6 @@ function getAddAsTypeOnly(
     if (!isValidTypeOnlyUseSite) {
         // Can't use a type-only import if the usage is an emitting position
         return AddAsTypeOnly.NotAllowed;
-    }
-    if (isForNewImportDeclaration && compilerOptions.importsNotUsedAsValues === ImportsNotUsedAsValues.Error) {
-        // Not writing a (top-level) type-only import here would create an error because the runtime dependency is unnecessary
-        return AddAsTypeOnly.Required;
     }
     if (
         importNameElisionDisabled(compilerOptions) &&

@@ -69,7 +69,6 @@ import {
     ImportClause,
     ImportDeclaration,
     ImportEqualsDeclaration,
-    ImportsNotUsedAsValues,
     ImportSpecifier,
     InitializedVariableDeclaration,
     insertStatementsAfterStandardPrologue,
@@ -2276,9 +2275,7 @@ export function transformTypeScript(context: TransformationContext) {
 
         // Elide the declaration if the import clause was elided.
         const importClause = visitNode(node.importClause, visitImportClause, isImportClause);
-        return importClause ||
-                compilerOptions.importsNotUsedAsValues === ImportsNotUsedAsValues.Preserve ||
-                compilerOptions.importsNotUsedAsValues === ImportsNotUsedAsValues.Error
+        return importClause
             ? factory.updateImportDeclaration(
                 node,
                 /*modifiers*/ undefined,
@@ -2314,10 +2311,7 @@ export function transformTypeScript(context: TransformationContext) {
         }
         else {
             // Elide named imports if all of its import specifiers are elided and settings allow.
-            const allowEmpty = compilerOptions.verbatimModuleSyntax || compilerOptions.preserveValueImports && (
-                        compilerOptions.importsNotUsedAsValues === ImportsNotUsedAsValues.Preserve ||
-                        compilerOptions.importsNotUsedAsValues === ImportsNotUsedAsValues.Error
-                    );
+            const allowEmpty = compilerOptions.verbatimModuleSyntax;
             const elements = visitNodes(node.elements, visitImportSpecifier, isImportSpecifier);
             return allowEmpty || some(elements) ? factory.updateNamedImports(node, elements) : undefined;
         }
@@ -2363,10 +2357,7 @@ export function transformTypeScript(context: TransformationContext) {
         }
 
         // Elide the export declaration if all of its named exports are elided.
-        const allowEmpty = compilerOptions.verbatimModuleSyntax || !!node.moduleSpecifier && (
-                    compilerOptions.importsNotUsedAsValues === ImportsNotUsedAsValues.Preserve ||
-                    compilerOptions.importsNotUsedAsValues === ImportsNotUsedAsValues.Error
-                );
+        const allowEmpty = !!compilerOptions.verbatimModuleSyntax;
         const exportClause = visitNode(
             node.exportClause,
             (bindings: NamedExportBindings) => visitNamedExportBindings(bindings, allowEmpty),
@@ -2442,22 +2433,6 @@ export function transformTypeScript(context: TransformationContext) {
 
         if (isExternalModuleImportEqualsDeclaration(node)) {
             const isReferenced = shouldEmitAliasDeclaration(node);
-            // If the alias is unreferenced but we want to keep the import, replace with 'import "mod"'.
-            if (!isReferenced && compilerOptions.importsNotUsedAsValues === ImportsNotUsedAsValues.Preserve) {
-                return setOriginalNode(
-                    setTextRange(
-                        factory.createImportDeclaration(
-                            /*modifiers*/ undefined,
-                            /*importClause*/ undefined,
-                            node.moduleReference.expression,
-                            /*attributes*/ undefined,
-                        ),
-                        node,
-                    ),
-                    node,
-                );
-            }
-
             return isReferenced ? visitEachChild(node, visitor, context) : undefined;
         }
 

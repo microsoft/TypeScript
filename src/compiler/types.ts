@@ -7179,6 +7179,7 @@ export interface CompilerOptions {
     /** @internal */ help?: boolean;
     ignoreDeprecations?: string;
     importHelpers?: boolean;
+    /** @deprecated */
     importsNotUsedAsValues?: ImportsNotUsedAsValues;
     /** @internal */ init?: boolean;
     inlineSourceMap?: boolean;
@@ -7336,6 +7337,7 @@ export const enum JsxEmit {
     ReactJSXDev = 5,
 }
 
+/** @deprecated */
 export const enum ImportsNotUsedAsValues {
     Remove,
     Preserve,

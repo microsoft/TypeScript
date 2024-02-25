@@ -7558,6 +7558,7 @@ declare namespace ts {
         forceConsistentCasingInFileNames?: boolean;
         ignoreDeprecations?: string;
         importHelpers?: boolean;
+        /** @deprecated */
         importsNotUsedAsValues?: ImportsNotUsedAsValues;
         inlineSourceMap?: boolean;
         inlineSources?: boolean;
@@ -7679,6 +7680,7 @@ declare namespace ts {
         ReactJSX = 4,
         ReactJSXDev = 5,
     }
+    /** @deprecated */
     enum ImportsNotUsedAsValues {
         Remove = 0,
         Preserve = 1,

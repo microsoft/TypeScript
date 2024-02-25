@@ -3,7 +3,6 @@ error TS5102: Option 'importsNotUsedAsValues' has been removed. Please remove it
   Use 'verbatimModuleSyntax' instead.
 error TS5102: Option 'preserveValueImports' has been removed. Please remove it from your configuration.
   Use 'verbatimModuleSyntax' instead.
-error TS5104: Option 'importsNotUsedAsValues' is redundant and cannot be specified with option 'verbatimModuleSyntax'.
 error TS5104: Option 'preserveValueImports' is redundant and cannot be specified with option 'verbatimModuleSyntax'.
 error TS5105: Option 'verbatimModuleSyntax' cannot be used when 'module' is set to 'UMD', 'AMD', or 'System'.
 
@@ -13,7 +12,6 @@ error TS5105: Option 'verbatimModuleSyntax' cannot be used when 'module' is set 
 !!! error TS5102:   Use 'verbatimModuleSyntax' instead.
 !!! error TS5102: Option 'preserveValueImports' has been removed. Please remove it from your configuration.
 !!! error TS5102:   Use 'verbatimModuleSyntax' instead.
-!!! error TS5104: Option 'importsNotUsedAsValues' is redundant and cannot be specified with option 'verbatimModuleSyntax'.
 !!! error TS5104: Option 'preserveValueImports' is redundant and cannot be specified with option 'verbatimModuleSyntax'.
 !!! error TS5105: Option 'verbatimModuleSyntax' cannot be used when 'module' is set to 'UMD', 'AMD', or 'System'.
 ==== verbatimModuleSyntaxCompat.ts (0 errors) ====

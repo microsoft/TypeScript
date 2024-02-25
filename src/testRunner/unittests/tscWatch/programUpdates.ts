@@ -364,7 +364,7 @@ export class A {
             const tsconfig: File = {
                 path: "/tsconfig.json",
                 content: jsonToReadableText({
-                    compilerOptions: { target: "es6", importsNotUsedAsValues: "error" },
+                    compilerOptions: { target: "es6", verbatimModuleSyntax: true },
                 }),
             };
             return createWatchedSystem([libFile, aTs, bTs, tsconfig]);
@@ -376,7 +376,7 @@ export class A {
                     sys.modifyFile(
                         "/tsconfig.json",
                         jsonToReadableText({
-                            compilerOptions: { target: "es6", importsNotUsedAsValues: "error", experimentalDecorators: true },
+                            compilerOptions: { target: "es6", verbatimModuleSyntax: true, experimentalDecorators: true },
                         }),
                     ),
                 timeouts: sys => sys.runQueuedTimeoutCallbacks(),
@@ -387,7 +387,7 @@ export class A {
                     sys.modifyFile(
                         "/tsconfig.json",
                         jsonToReadableText({
-                            compilerOptions: { target: "es6", importsNotUsedAsValues: "error", experimentalDecorators: true, emitDecoratorMetadata: true },
+                            compilerOptions: { target: "es6", verbatimModuleSyntax: true, experimentalDecorators: true, emitDecoratorMetadata: true },
                         }),
                     ),
                 timeouts: sys => sys.runQueuedTimeoutCallbacks(),
@@ -1520,45 +1520,6 @@ class D extends C { prop = 1; }`,
             {
                 caption: "Enable useDefineForClassFields",
                 edit: sys => sys.writeFile(`/tsconfig.json`, jsonToReadableText({ compilerOptions: { target: "es6", useDefineForClassFields: true } })),
-                timeouts: sys => sys.runQueuedTimeoutCallbacks(),
-            },
-        ],
-    });
-
-    verifyTscWatch({
-        scenario,
-        subScenario: "updates errors and emit when importsNotUsedAsValues changes",
-        commandLineArgs: ["-w"],
-        sys: () => {
-            const aFile: File = {
-                path: `/user/username/projects/myproject/a.ts`,
-                content: `export class C {}`,
-            };
-            const bFile: File = {
-                path: `/user/username/projects/myproject/b.ts`,
-                content: `import {C} from './a';
-export function f(p: C) { return p; }`,
-            };
-            const config: File = {
-                path: `/user/username/projects/myproject/tsconfig.json`,
-                content: jsonToReadableText({ compilerOptions: {} }),
-            };
-            return createWatchedSystem([aFile, bFile, config, libFile], { currentDirectory: "/user/username/projects/myproject" });
-        },
-        edits: [
-            {
-                caption: 'Set to "remove"',
-                edit: sys => sys.writeFile(`/user/username/projects/myproject/tsconfig.json`, jsonToReadableText({ compilerOptions: { importsNotUsedAsValues: "remove" } })),
-                timeouts: sys => sys.runQueuedTimeoutCallbacks(),
-            },
-            {
-                caption: 'Set to "error"',
-                edit: sys => sys.writeFile(`/user/username/projects/myproject/tsconfig.json`, jsonToReadableText({ compilerOptions: { importsNotUsedAsValues: "error" } })),
-                timeouts: sys => sys.runQueuedTimeoutCallbacks(),
-            },
-            {
-                caption: 'Set to "preserve"',
-                edit: sys => sys.writeFile(`/user/username/projects/myproject/tsconfig.json`, jsonToReadableText({ compilerOptions: { importsNotUsedAsValues: "preserve" } })),
                 timeouts: sys => sys.runQueuedTimeoutCallbacks(),
             },
         ],

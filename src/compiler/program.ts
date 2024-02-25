@@ -4425,9 +4425,6 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
             if (options.preserveValueImports) {
                 createRedundantOptionDiagnostic("preserveValueImports", "verbatimModuleSyntax");
             }
-            if (options.importsNotUsedAsValues) {
-                createRedundantOptionDiagnostic("importsNotUsedAsValues", "verbatimModuleSyntax");
-            }
         }
 
         if (options.allowImportingTsExtensions && !(options.noEmit || options.emitDeclarationOnly)) {
