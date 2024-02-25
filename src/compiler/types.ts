@@ -7222,6 +7222,7 @@ export interface CompilerOptions {
     /** @internal */
     noDtsResolution?: boolean;
     noUncheckedIndexedAccess?: boolean;
+    /** @deprecated */
     out?: string;
     outDir?: string;
     outFile?: string;

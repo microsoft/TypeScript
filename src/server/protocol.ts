@@ -3706,6 +3706,7 @@ export interface CompilerOptions {
     noImplicitUseStrict?: boolean;
     noLib?: boolean;
     noResolve?: boolean;
+    /** @deprecated */
     out?: string;
     outDir?: string;
     outFile?: string;

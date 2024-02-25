@@ -2993,6 +2993,7 @@ declare namespace ts {
                 noImplicitUseStrict?: boolean;
                 noLib?: boolean;
                 noResolve?: boolean;
+                /** @deprecated */
                 out?: string;
                 outDir?: string;
                 outFile?: string;
@@ -7592,6 +7593,7 @@ declare namespace ts {
         noLib?: boolean;
         noResolve?: boolean;
         noUncheckedIndexedAccess?: boolean;
+        /** @deprecated */
         out?: string;
         outDir?: string;
         outFile?: string;

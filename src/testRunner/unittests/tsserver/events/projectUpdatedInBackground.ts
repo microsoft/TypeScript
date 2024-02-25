@@ -79,7 +79,6 @@ describe("unittests:: tsserver:: events:: ProjectsUpdatedInBackground", () => {
                 });
             }
             verifyEventWithOutSettings("when both options are not set");
-            verifyEventWithOutSettings("when --out is set", { out: "/a/out.js" });
             verifyEventWithOutSettings("when --outFile is set", { outFile: "/a/out.js" });
         });
 

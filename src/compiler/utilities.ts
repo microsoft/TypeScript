@@ -6298,7 +6298,7 @@ export function getPossibleOriginalInputExtensionForExtension(path: string) {
 
 /** @internal */
 export function outFile(options: CompilerOptions) {
-    return options.outFile || options.out;
+    return options.outFile;
 }
 
 /**

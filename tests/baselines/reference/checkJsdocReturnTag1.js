@@ -23,6 +23,7 @@ function f2() {
     return 5 || "hello";
 }
 
+
 //// [dummy.js]
 // @ts-check
 /**

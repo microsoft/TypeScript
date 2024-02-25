@@ -277,7 +277,7 @@ Info seq  [hh:mm:ss:mss] event:
               "line": 4,
               "offset": 14
             },
-            "text": "Option 'out' cannot be specified with option 'outFile'.",
+            "text": "Option 'declarationDir' cannot be specified with option 'outFile'.",
             "code": 5053,
             "category": "error",
             "fileName": "/tsconfig.json"
@@ -333,34 +333,6 @@ Info seq  [hh:mm:ss:mss] event:
               "line": 20,
               "offset": 10
             },
-            "text": "Option 'declarationDir' cannot be specified with option 'out'.",
-            "code": 5053,
-            "category": "error",
-            "fileName": "/tsconfig.json"
-          },
-          {
-            "start": {
-              "line": 20,
-              "offset": 5
-            },
-            "end": {
-              "line": 20,
-              "offset": 10
-            },
-            "text": "Option 'out' cannot be specified with option 'outFile'.",
-            "code": 5053,
-            "category": "error",
-            "fileName": "/tsconfig.json"
-          },
-          {
-            "start": {
-              "line": 20,
-              "offset": 5
-            },
-            "end": {
-              "line": 20,
-              "offset": 10
-            },
             "text": "Option 'out' has been removed. Please remove it from your configuration.\n  Use 'outFile' instead.",
             "code": 5102,
             "category": "error",
@@ -403,7 +375,7 @@ Info seq  [hh:mm:ss:mss] event:
               "line": 24,
               "offset": 21
             },
-            "text": "Option 'declarationDir' cannot be specified with option 'out'.",
+            "text": "Option 'declarationDir' cannot be specified with option 'outFile'.",
             "code": 5053,
             "category": "error",
             "fileName": "/tsconfig.json"

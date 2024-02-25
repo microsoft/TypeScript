@@ -1,11 +1,11 @@
 ===================================================================
-JsFile: c.js
-mapUrl: c.js.map
+JsFile: d.js
+mapUrl: d.js.map
 sourceRoot: 
 sources: a.ts,b.ts
 ===================================================================
 -------------------------------------------------------------------
-emittedFile:c.js
+emittedFile:d.js
 sourceFile:a.ts
 -------------------------------------------------------------------
 >>>// --out and --outFile error
@@ -64,7 +64,7 @@ sourceFile:a.ts
 4 >Emitted(6, 6) Source(3, 12) + SourceIndex(0)
 ---
 -------------------------------------------------------------------
-emittedFile:c.js
+emittedFile:d.js
 sourceFile:b.ts
 -------------------------------------------------------------------
 >>>var B = /** @class */ (function () {
@@ -111,4 +111,4 @@ sourceFile:b.ts
 3 >Emitted(11, 2) Source(1, 1) + SourceIndex(1)
 4 >Emitted(11, 6) Source(1, 12) + SourceIndex(1)
 ---
->>>//# sourceMappingURL=c.js.map
+>>>//# sourceMappingURL=d.js.map

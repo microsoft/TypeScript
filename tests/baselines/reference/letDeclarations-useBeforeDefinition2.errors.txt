@@ -1,10 +1,6 @@
-error TS5102: Option 'out' has been removed. Please remove it from your configuration.
-  Use 'outFile' instead.
 file1.ts(1,1): error TS2448: Block-scoped variable 'l' used before its declaration.
 
 
-!!! error TS5102: Option 'out' has been removed. Please remove it from your configuration.
-!!! error TS5102:   Use 'outFile' instead.
 ==== file1.ts (1 errors) ====
     l;
     ~
@@ -13,3 +9,4 @@ file1.ts(1,1): error TS2448: Block-scoped variable 'l' used before its declarati
     
 ==== file2.ts (0 errors) ====
     const l = 0;
+    

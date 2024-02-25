@@ -1,17 +1,14 @@
 error TS5053: Option 'mapRoot' cannot be specified with option 'inlineSourceMap'.
 error TS5053: Option 'sourceMap' cannot be specified with option 'inlineSourceMap'.
-error TS5102: Option 'out' has been removed. Please remove it from your configuration.
-  Use 'outFile' instead.
 error TS5108: Option 'target=ES3' has been removed. Please remove it from your configuration.
 
 
 !!! error TS5053: Option 'mapRoot' cannot be specified with option 'inlineSourceMap'.
 !!! error TS5053: Option 'sourceMap' cannot be specified with option 'inlineSourceMap'.
-!!! error TS5102: Option 'out' has been removed. Please remove it from your configuration.
-!!! error TS5102:   Use 'outFile' instead.
 !!! error TS5108: Option 'target=ES3' has been removed. Please remove it from your configuration.
 ==== inlineSourceMap2.ts (0 errors) ====
     // configuration errors
     
     var x = 0;
     console.log(x);
+    
