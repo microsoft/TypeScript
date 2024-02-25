@@ -7184,6 +7184,7 @@ export interface CompilerOptions {
     inlineSources?: boolean;
     isolatedModules?: boolean;
     jsx?: JsxEmit;
+    /** @deprecated */
     keyofStringsOnly?: boolean;
     lib?: string[];
     /** @internal */ listEmittedFiles?: boolean;
