@@ -172,8 +172,8 @@ function dunderguard(__x: number | string) {
 // could infer a type guard here but it doesn't seem that helpful.
 const booleanIdentity = (x: boolean) => x;
 
-// could infer "x is number | true" but don't; debateable whether that's helpful.
-const numOrBoolean = (x: number | boolean) => typeof x !== 'number' && x;
+// we infer "x is number | true" which is accurate of debatable utility.
+const numOrBoolean = (x: number | boolean) => typeof x === 'number' || x;
 
 // inferred guards in methods
 interface NumberInferrer {
@@ -250,7 +250,9 @@ function assertAndPredicate(x: string | number | Date) {
 
 declare let snd: string | number | Date;
 if (assertAndPredicate(snd)) {
-  let t: string = snd; // should ok
-} else {
-  snd;  // type is number | Date
+  let t: string = snd; // should error
+}
+
+function isNumberWithThis(this: Date, x: number | string) {
+  return typeof x === 'number';
 }

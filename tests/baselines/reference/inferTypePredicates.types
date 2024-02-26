@@ -678,13 +678,13 @@ const booleanIdentity = (x: boolean) => x;
 >x : boolean
 >x : boolean
 
-// could infer "x is number | true" but don't; debateable whether that's helpful.
-const numOrBoolean = (x: number | boolean) => typeof x !== 'number' && x;
->numOrBoolean : (x: number | boolean) => x is true
->(x: number | boolean) => typeof x !== 'number' && x : (x: number | boolean) => x is true
+// we infer "x is number | true" which is accurate of debatable utility.
+const numOrBoolean = (x: number | boolean) => typeof x === 'number' || x;
+>numOrBoolean : (x: number | boolean) => x is number | true
+>(x: number | boolean) => typeof x === 'number' || x : (x: number | boolean) => x is number | true
 >x : number | boolean
->typeof x !== 'number' && x : boolean
->typeof x !== 'number' : boolean
+>typeof x === 'number' || x : boolean
+>typeof x === 'number' : boolean
 >typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >x : number | boolean
 >'number' : "number"
@@ -886,7 +886,7 @@ if (isNumOrStr(unk)) {
 
 // A function can be a type predicate even if it throws.
 function assertAndPredicate(x: string | number | Date) {
->assertAndPredicate : (x: string | number | Date) => x is string
+>assertAndPredicate : (x: string | number | Date) => boolean
 >x : string | number | Date
 
   if (x instanceof Date) {
@@ -910,15 +910,23 @@ declare let snd: string | number | Date;
 
 if (assertAndPredicate(snd)) {
 >assertAndPredicate(snd) : boolean
->assertAndPredicate : (x: string | number | Date) => x is string
+>assertAndPredicate : (x: string | number | Date) => boolean
 >snd : string | number | Date
 
-  let t: string = snd; // should ok
+  let t: string = snd; // should error
 >t : string
->snd : string
+>snd : string | number | Date
+}
 
-} else {
-  snd;  // type is number | Date
->snd : number | Date
+function isNumberWithThis(this: Date, x: number | string) {
+>isNumberWithThis : (this: Date, x: number | string) => x is number
+>this : Date
+>x : string | number
+
+  return typeof x === 'number';
+>typeof x === 'number' : boolean
+>typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>x : string | number
+>'number' : "number"
 }
 

@@ -37411,6 +37411,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
         // Only attempt to infer a type predicate if there's exactly one return.
         let singleReturn: Expression | undefined;
+        let singleReturnStatement: ReturnStatement | undefined;
         if (func.body && func.body.kind !== SyntaxKind.Block) {
             singleReturn = func.body; // arrow function
         }
@@ -37419,12 +37420,11 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
             const bailedEarly = forEachReturnStatement(func.body as Block, returnStatement => {
                 if (singleReturn || !returnStatement.expression) return true;
+                singleReturnStatement = returnStatement;
                 singleReturn = returnStatement.expression;
             });
             if (bailedEarly || !singleReturn) return undefined;
         }
-
-        if (isTriviallyNonBoolean(singleReturn)) return undefined;
 
         const predicate = checkIfExpressionRefinesAnyParameter(singleReturn);
         if (predicate) {
@@ -37439,8 +37439,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
         function checkIfExpressionRefinesAnyParameter(expr: Expression): [number, Type] | undefined {
             expr = skipParentheses(expr, /*excludeJSDocTypeAssertions*/ true);
-            const type = checkExpressionCached(expr, CheckMode.TypeOnly);
-            if (type !== booleanType || !func.body) return undefined;
+            const type = checkExpressionCached(expr);
+            if (type !== booleanType) return undefined;
 
             return forEach(func.parameters, (param, i) => {
                 const initType = getSymbolLinks(param.symbol).type;
@@ -37448,19 +37448,14 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     // Refining "x: boolean" to "x is true" or "x is false" isn't useful.
                     return;
                 }
-                const trueType = checkIfExpressionRefinesParameter(expr, param, initType, /*forceFullCheck*/ false);
+                const trueType = checkIfExpressionRefinesParameter(expr, param, initType);
                 if (trueType) {
-                    // A type predicate would be valid if the function were called with param of type initType.
-                    // The predicate must also be valid for all subtypes of initType. In particular, it must be valid when called with param of type trueType.
-                    const trueSubtype = checkIfExpressionRefinesParameter(expr, param, trueType, /*forceFullCheck*/ true);
-                    if (trueSubtype) {
-                        return [i, trueType];
-                    }
+                    return [i, trueType];
                 }
             });
         }
 
-        function checkIfExpressionRefinesParameter(expr: Expression, param: ParameterDeclaration, initType: Type, forceFullCheck: boolean): Type | undefined {
+        function checkIfExpressionRefinesParameter(expr: Expression, param: ParameterDeclaration, initType: Type): Type | undefined {
             const antecedent = (expr as Expression & { flowNode?: FlowNode; }).flowNode ?? { flags: FlowFlags.Start };
             const trueCondition: FlowCondition = {
                 flags: FlowFlags.TrueCondition,
@@ -37469,36 +37464,28 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             };
 
             const trueType = getFlowTypeOfReference(param.name, initType, initType, func, trueCondition);
-            if (trueType === initType && !forceFullCheck) return undefined;
+            if (trueType === initType) return undefined;
 
             // "x is T" means that x is T if and only if it returns true. If it returns false then x is not T.
-            // However, TS may not be able to represent "not T", in which case we can be more lax.
-            // It's safe to infer a type guard if falseType = Exclude<initType, trueType>
-            // This matches what you'd get if you called the type guard in an if/else statement.
+            // This means that if the function is called with an argument of type trueType, there can't be anything left in the `else` branch. It must reduce to `never`.
             const falseCondition: FlowCondition = {
                 ...trueCondition,
                 flags: FlowFlags.FalseCondition,
             };
-            const falseType = getFlowTypeOfReference(param.name, initType, initType, func, falseCondition);
-            const candidateFalse = filterType(initType, t => !isTypeSubtypeOf(t, trueType));
-            if (isTypeIdenticalTo(candidateFalse, falseType)) {
-                return trueType;
-            }
-        }
+            const falseSubtype = getFlowTypeOfReference(param.name, trueType, trueType, func, falseCondition);
+            if (!isTypeIdenticalTo(falseSubtype, neverType)) return undefined;
 
-        // This bypasses the call to checkExpression for expressions that are clearly not booleans.
-        // In addition to potentially saving work, this avoids some circularlity issues.
-        function isTriviallyNonBoolean(expr: Expression): boolean {
-            if (isLiteralExpression(expr) || isLiteralExpressionOfObject(expr)) {
-                return true;
-            }
-            if (isIdentifier(expr)) {
-                const sym = getResolvedSymbol(expr);
-                if (sym.flags & (SymbolFlags.Class | SymbolFlags.ObjectLiteral | SymbolFlags.Function | SymbolFlags.Enum | SymbolFlags.EnumMember)) {
-                    return true;
+            // the parameter type may already have been narrowed due to an assertion.
+            // There's no precise way to represent an assertion that's also a predicate. Best not to try.
+            // We do this check last since it's unlikely to filter out many possible predicates.
+            if (singleReturnStatement?.flowNode) {
+                const typeAtReturn = getFlowTypeOfReference(param.name, initType, initType, func, singleReturnStatement?.flowNode);
+                if (typeAtReturn !== initType) {
+                    return undefined;
                 }
             }
-            return false; // may or may not be boolean
+
+            return trueType;
         }
     }
 

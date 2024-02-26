@@ -510,8 +510,8 @@ const booleanIdentity = (x: boolean) => x;
 >x : Symbol(x, Decl(inferTypePredicates.ts, 171, 25))
 >x : Symbol(x, Decl(inferTypePredicates.ts, 171, 25))
 
-// could infer "x is number | true" but don't; debateable whether that's helpful.
-const numOrBoolean = (x: number | boolean) => typeof x !== 'number' && x;
+// we infer "x is number | true" which is accurate of debatable utility.
+const numOrBoolean = (x: number | boolean) => typeof x === 'number' || x;
 >numOrBoolean : Symbol(numOrBoolean, Decl(inferTypePredicates.ts, 174, 5))
 >x : Symbol(x, Decl(inferTypePredicates.ts, 174, 22))
 >x : Symbol(x, Decl(inferTypePredicates.ts, 174, 22))
@@ -705,12 +705,18 @@ if (assertAndPredicate(snd)) {
 >assertAndPredicate : Symbol(assertAndPredicate, Decl(inferTypePredicates.ts, 239, 1))
 >snd : Symbol(snd, Decl(inferTypePredicates.ts, 249, 11))
 
-  let t: string = snd; // should ok
+  let t: string = snd; // should error
 >t : Symbol(t, Decl(inferTypePredicates.ts, 251, 5))
 >snd : Symbol(snd, Decl(inferTypePredicates.ts, 249, 11))
+}
 
-} else {
-  snd;  // type is number | Date
->snd : Symbol(snd, Decl(inferTypePredicates.ts, 249, 11))
+function isNumberWithThis(this: Date, x: number | string) {
+>isNumberWithThis : Symbol(isNumberWithThis, Decl(inferTypePredicates.ts, 252, 1))
+>this : Symbol(this, Decl(inferTypePredicates.ts, 254, 26))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+>x : Symbol(x, Decl(inferTypePredicates.ts, 254, 37))
+
+  return typeof x === 'number';
+>x : Symbol(x, Decl(inferTypePredicates.ts, 254, 37))
 }
 

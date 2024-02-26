@@ -14,9 +14,11 @@ inferTypePredicates.ts(113,7): error TS2322: Type 'string | number' is not assig
 inferTypePredicates.ts(115,7): error TS2322: Type 'string | number' is not assignable to type 'number'.
   Type 'string' is not assignable to type 'number'.
 inferTypePredicates.ts(205,7): error TS2741: Property 'z' is missing in type 'C1' but required in type 'C2'.
+inferTypePredicates.ts(252,7): error TS2322: Type 'string | number | Date' is not assignable to type 'string'.
+  Type 'number' is not assignable to type 'string'.
 
 
-==== inferTypePredicates.ts (10 errors) ====
+==== inferTypePredicates.ts (11 errors) ====
     // https://github.com/microsoft/TypeScript/issues/16069
     
     const numsOrNull = [1, 2, 3, 4, null];
@@ -214,8 +216,8 @@ inferTypePredicates.ts(205,7): error TS2741: Property 'z' is missing in type 'C1
     // could infer a type guard here but it doesn't seem that helpful.
     const booleanIdentity = (x: boolean) => x;
     
-    // could infer "x is number | true" but don't; debateable whether that's helpful.
-    const numOrBoolean = (x: number | boolean) => typeof x !== 'number' && x;
+    // we infer "x is number | true" which is accurate of debatable utility.
+    const numOrBoolean = (x: number | boolean) => typeof x === 'number' || x;
     
     // inferred guards in methods
     interface NumberInferrer {
@@ -295,8 +297,13 @@ inferTypePredicates.ts(205,7): error TS2741: Property 'z' is missing in type 'C1
     
     declare let snd: string | number | Date;
     if (assertAndPredicate(snd)) {
-      let t: string = snd; // should ok
-    } else {
-      snd;  // type is number | Date
+      let t: string = snd; // should error
+          ~
+!!! error TS2322: Type 'string | number | Date' is not assignable to type 'string'.
+!!! error TS2322:   Type 'number' is not assignable to type 'string'.
+    }
+    
+    function isNumberWithThis(this: Date, x: number | string) {
+      return typeof x === 'number';
     }
     
