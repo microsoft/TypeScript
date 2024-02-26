@@ -4322,6 +4322,7 @@ function getCompletionData(
      * @returns true if 'symbols' was successfully populated; false otherwise.
      */
     function tryGetObjectLikeCompletionSymbols(): GlobalsSearch | undefined {
+        if (contextToken.kind === SyntaxKind.DotDotDotToken) return GlobalsSearch.Continue;
         const symbolsStartIndex = symbols.length;
         const objectLikeContainer = tryGetObjectLikeCompletionContainer(contextToken, position, sourceFile);
         if (!objectLikeContainer) return GlobalsSearch.Continue;
