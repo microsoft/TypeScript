@@ -204,3 +204,42 @@ const obj6: {
   },
 };
 
+const obj7: {
+>obj7 : { prop: {    type: "foo";    prop: string;} | {    type: "bar";    prop: number;}; }
+
+  prop:
+>prop : { type: "foo"; prop: string; } | { type: "bar"; prop: number; }
+
+    | {
+        type: "foo";
+>type : "foo"
+
+        prop: string;
+>prop : string
+      }
+    | {
+        type: "bar";
+>type : "bar"
+
+        prop: number;
+>prop : number
+
+      };
+} = {
+>{  prop: {    type: "foo",    prop: 42,  },} : { prop: { type: "foo"; prop: number; }; }
+
+  prop: {
+>prop : { type: "foo"; prop: number; }
+>{    type: "foo",    prop: 42,  } : { type: "foo"; prop: number; }
+
+    type: "foo",
+>type : "foo"
+>"foo" : "foo"
+
+    prop: 42,
+>prop : number
+>42 : 42
+
+  },
+};
+

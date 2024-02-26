@@ -94,3 +94,20 @@ const obj6: {
     prop: true,
   },
 };
+
+const obj7: {
+  prop:
+    | {
+        type: "foo";
+        prop: string;
+      }
+    | {
+        type: "bar";
+        prop: number;
+      };
+} = {
+  prop: {
+    type: "foo",
+    prop: 42,
+  },
+};

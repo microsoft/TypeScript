@@ -4,9 +4,10 @@ elementWiseErrorInUnionTarget3.ts(44,5): error TS2322: Type 'number' is not assi
 elementWiseErrorInUnionTarget3.ts(61,5): error TS2322: Type 'number' is not assignable to type 'string'.
 elementWiseErrorInUnionTarget3.ts(73,5): error TS2322: Type 'number' is not assignable to type 'string'.
 elementWiseErrorInUnionTarget3.ts(90,5): error TS2322: Type 'boolean' is not assignable to type 'string'.
+elementWiseErrorInUnionTarget3.ts(107,5): error TS2322: Type 'number' is not assignable to type 'string'.
 
 
-==== elementWiseErrorInUnionTarget3.ts (6 errors) ====
+==== elementWiseErrorInUnionTarget3.ts (7 errors) ====
     const obj1: {
       prop:
         | string
@@ -114,6 +115,26 @@ elementWiseErrorInUnionTarget3.ts(90,5): error TS2322: Type 'boolean' is not ass
         ~~~~
 !!! error TS2322: Type 'boolean' is not assignable to type 'string'.
 !!! related TS6500 elementWiseErrorInUnionTarget3.ts:81:9: The expected type comes from property 'prop' which is declared here on type '{ type: "foo"; prop: string; } | { type: "bar"; prop: number; }'
+      },
+    };
+    
+    const obj7: {
+      prop:
+        | {
+            type: "foo";
+            prop: string;
+          }
+        | {
+            type: "bar";
+            prop: number;
+          };
+    } = {
+      prop: {
+        type: "foo",
+        prop: 42,
+        ~~~~
+!!! error TS2322: Type 'number' is not assignable to type 'string'.
+!!! related TS6500 elementWiseErrorInUnionTarget3.ts:98:9: The expected type comes from property 'prop' which is declared here on type '{ type: "foo"; prop: string; } | { type: "bar"; prop: number; }'
       },
     };
     

@@ -182,3 +182,37 @@ const obj6: {
   },
 };
 
+const obj7: {
+>obj7 : Symbol(obj7, Decl(elementWiseErrorInUnionTarget3.ts, 93, 5))
+
+  prop:
+>prop : Symbol(prop, Decl(elementWiseErrorInUnionTarget3.ts, 93, 13))
+
+    | {
+        type: "foo";
+>type : Symbol(type, Decl(elementWiseErrorInUnionTarget3.ts, 95, 7))
+
+        prop: string;
+>prop : Symbol(prop, Decl(elementWiseErrorInUnionTarget3.ts, 96, 20))
+      }
+    | {
+        type: "bar";
+>type : Symbol(type, Decl(elementWiseErrorInUnionTarget3.ts, 99, 7))
+
+        prop: number;
+>prop : Symbol(prop, Decl(elementWiseErrorInUnionTarget3.ts, 100, 20))
+
+      };
+} = {
+  prop: {
+>prop : Symbol(prop, Decl(elementWiseErrorInUnionTarget3.ts, 103, 5))
+
+    type: "foo",
+>type : Symbol(type, Decl(elementWiseErrorInUnionTarget3.ts, 104, 9))
+
+    prop: 42,
+>prop : Symbol(prop, Decl(elementWiseErrorInUnionTarget3.ts, 105, 16))
+
+  },
+};
+
