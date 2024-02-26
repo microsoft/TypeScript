@@ -37404,11 +37404,12 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             return undefined;
         }
 
-        // Only a single-argument function can be inferred to be a type predicate
-        if (func.parameters.length !== 1) return undefined;
-
         // The body must be an expression, or a block containing a lone return statement
         if (!func.body) return undefined;
+
+        const functionFlags = getFunctionFlags(func);
+        // Only a normal single-argument function can be inferred to be a type predicate
+        if (functionFlags !== FunctionFlags.Normal || func.parameters.length !== 1) return undefined;
 
         let returnExpression: Expression | undefined;
         if (func.body.kind === SyntaxKind.Block) {
@@ -37420,9 +37421,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             returnExpression = func.body;
         }
         if (!returnExpression) return undefined;
-
-        const functionFlags = getFunctionFlags(func);
-        if (functionFlags !== FunctionFlags.Normal) return undefined;
 
         const predicate = checkIfExpressionRefinesAnyParameter(returnExpression);
         if (predicate) {
