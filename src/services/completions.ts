@@ -5900,5 +5900,7 @@ function isContextualKeywordInAutoImportableExpressionSpace(keyword: string) {
         keyword === "declare" ||
         keyword === "module" ||
         keyword === "namespace" ||
-        keyword === "type";
+        keyword === "type" ||
+        keyword === "satisfies" ||
+        keyword === "as";
 }
