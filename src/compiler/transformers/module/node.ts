@@ -2,6 +2,7 @@ import {
     Bundle,
     Debug,
     EmitHint,
+    impliedNodeFormatForEmit,
     isSourceFile,
     map,
     ModuleKind,
@@ -30,6 +31,7 @@ export function transformNodeModule(context: TransformationContext) {
 
     const cjsOnSubstituteNode = context.onSubstituteNode;
     const cjsOnEmitNode = context.onEmitNode;
+    const compilerOptions = context.getEmitHost().getCompilerOptions();
 
     context.onSubstituteNode = onSubstituteNode;
     context.onEmitNode = onEmitNode;
@@ -51,7 +53,7 @@ export function transformNodeModule(context: TransformationContext) {
             if (!currentSourceFile) {
                 return previousOnSubstituteNode(hint, node);
             }
-            if (currentSourceFile.impliedNodeFormat === ModuleKind.ESNext) {
+            if (impliedNodeFormatForEmit(currentSourceFile, compilerOptions) === ModuleKind.ESNext) {
                 return esmOnSubstituteNode(hint, node);
             }
             return cjsOnSubstituteNode(hint, node);
@@ -65,14 +67,14 @@ export function transformNodeModule(context: TransformationContext) {
         if (!currentSourceFile) {
             return previousOnEmitNode(hint, node, emitCallback);
         }
-        if (currentSourceFile.impliedNodeFormat === ModuleKind.ESNext) {
+        if (impliedNodeFormatForEmit(currentSourceFile, compilerOptions) === ModuleKind.ESNext) {
             return esmOnEmitNode(hint, node, emitCallback);
         }
         return cjsOnEmitNode(hint, node, emitCallback);
     }
 
     function getModuleTransformForFile(file: SourceFile): typeof esmTransform {
-        return file.impliedNodeFormat === ModuleKind.ESNext ? esmTransform : cjsTransform;
+        return impliedNodeFormatForEmit(file, compilerOptions) === ModuleKind.ESNext ? esmTransform : cjsTransform;
     }
 
     function transformSourceFile(node: SourceFile) {

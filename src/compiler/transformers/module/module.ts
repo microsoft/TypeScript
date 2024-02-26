@@ -62,6 +62,7 @@ import {
     IdentifierNameMap,
     idText,
     IfStatement,
+    impliedNodeFormatForEmit,
     ImportCall,
     ImportDeclaration,
     ImportEqualsDeclaration,
@@ -775,7 +776,7 @@ export function transformModule(context: TransformationContext): (x: SourceFile 
             case SyntaxKind.PartiallyEmittedExpression:
                 return visitPartiallyEmittedExpression(node as PartiallyEmittedExpression, valueIsDiscarded);
             case SyntaxKind.CallExpression:
-                if (isImportCall(node) && currentSourceFile.impliedNodeFormat === undefined) {
+                if (isImportCall(node) && impliedNodeFormatForEmit(currentSourceFile, compilerOptions) === undefined) {
                     return visitImportCallExpression(node);
                 }
                 break;

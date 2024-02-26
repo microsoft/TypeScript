@@ -124,6 +124,7 @@ import {
     identity,
     idText,
     IfStatement,
+    impliedNodeFormatAffectsEmit,
     ImportClause,
     ImportDeclaration,
     ImportSpecifier,
@@ -4242,7 +4243,10 @@ export function fileShouldUseJavaScriptRequire(file: SourceFile | string, progra
     }
     const compilerOptions = program.getCompilerOptions();
     const moduleKind = getEmitModuleKind(compilerOptions);
-    const impliedNodeFormat = typeof file === "string"
+    // TODO: consider removing `impliedNodeFormatAffectsEmit` check
+    const impliedNodeFormat = !impliedNodeFormatAffectsEmit(compilerOptions)
+        ? undefined
+        : typeof file === "string"
         ? getImpliedNodeFormatForFile(toPath(file, host.getCurrentDirectory(), hostGetCanonicalFileName(host)), program.getPackageJsonInfoCache?.(), host, compilerOptions)
         : file.impliedNodeFormat;
 

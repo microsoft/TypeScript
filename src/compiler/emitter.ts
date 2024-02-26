@@ -130,6 +130,7 @@ import {
     getEmitFlags,
     getEmitHelpers,
     getEmitModuleKind,
+    getEmitModuleResolutionKind,
     getEmitScriptTarget,
     getExternalModuleName,
     getIdentifierTypeArguments,
@@ -174,6 +175,7 @@ import {
     Identifier,
     idText,
     IfStatement,
+    impliedNodeFormatForModuleResolution,
     ImportAttribute,
     ImportAttributes,
     ImportClause,
@@ -799,6 +801,7 @@ export function emitFiles(resolver: EmitResolver, host: EmitHost, targetSourceFi
             newLine: compilerOptions.newLine,
             noEmitHelpers: compilerOptions.noEmitHelpers,
             module: getEmitModuleKind(compilerOptions),
+            moduleResolution: getEmitModuleResolutionKind(compilerOptions),
             target: getEmitScriptTarget(compilerOptions),
             sourceMap: compilerOptions.sourceMap,
             inlineSourceMap: compilerOptions.inlineSourceMap,
@@ -866,6 +869,7 @@ export function emitFiles(resolver: EmitResolver, host: EmitHost, targetSourceFi
                 newLine: compilerOptions.newLine,
                 noEmitHelpers: true,
                 module: compilerOptions.module,
+                moduleResolution: compilerOptions.moduleResolution,
                 target: compilerOptions.target,
                 sourceMap: !forceDtsEmit && compilerOptions.declarationMap,
                 inlineSourceMap: compilerOptions.inlineSourceMap,
@@ -1163,6 +1167,7 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
     var omitBraceSourcePositions = !!printerOptions.omitBraceSourceMapPositions;
     var newLine = getNewLineCharacter(printerOptions);
     var moduleKind = getEmitModuleKind(printerOptions);
+    var moduleResolution = getEmitModuleResolutionKind(printerOptions);
     var bundledHelpers = new Map<string, boolean>();
 
     var currentSourceFile: SourceFile | undefined;
@@ -4190,7 +4195,7 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
             writeLine();
         }
         for (const directive of types) {
-            const resolutionMode = directive.resolutionMode && directive.resolutionMode !== currentSourceFile?.impliedNodeFormat
+            const resolutionMode = directive.resolutionMode && directive.resolutionMode !== (currentSourceFile && impliedNodeFormatForModuleResolution(currentSourceFile, { moduleResolution }))
                 ? `resolution-mode="${directive.resolutionMode === ModuleKind.ESNext ? "import" : "require"}"`
                 : "";
             writeComment(`/// <reference types="${directive.fileName}" ${resolutionMode}/>`);
