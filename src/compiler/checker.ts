@@ -4324,7 +4324,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     combineValueAndTypeSymbols(symbolFromVariable, symbolFromModule) :
                     symbolFromModule || symbolFromVariable;
                 if (!symbol) {
-                    errorNoModuleMemberSymbol(moduleSymbol, targetSymbol, node, name);
+                    errorNoModuleMemberSymbol(moduleSymbol, targetSymbol, getSourceFileOfNode(node), name);
                 }
                 return symbol;
             }
@@ -6375,7 +6375,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
         function symbolToStringWorker(writer: EmitTextWriter) {
             const entity = builder(symbol, meaning!, enclosingDeclaration, nodeFlags)!; // TODO: GH#18217
-            // add neverAsciiEscape for GH#39027
             const printer = enclosingDeclaration?.kind === SyntaxKind.SourceFile
                 ? createPrinterWithRemoveCommentsNeverAsciiEscape()
                 : createPrinterWithRemoveComments();
