@@ -389,12 +389,6 @@ export const enum SyntaxKind {
 
     // Enum
     EnumMember,
-    // Unparsed
-    /** @deprecated */ UnparsedPrologue,
-    /** @deprecated */ UnparsedPrepend,
-    /** @deprecated */ UnparsedText,
-    /** @deprecated */ UnparsedInternalText,
-    /** @deprecated */ UnparsedSyntheticReference,
 
     // Top-level nodes
     SourceFile,
@@ -7008,10 +7002,7 @@ export interface ProjectReference {
     path: string;
     /** The path as the user originally wrote it */
     originalPath?: string;
-    /**
-     * Only present for deprecate notification
-     * @internal
-     */
+    /** @deprecated */
     prepend?: boolean;
     /** True if it is intended that this reference form a circularity */
     circular?: boolean;
