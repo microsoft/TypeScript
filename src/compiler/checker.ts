@@ -14453,6 +14453,21 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     undefined;
             }
             if (t.flags & TypeFlags.Index) {
+                if ((t as IndexType).type.flags & TypeFlags.IndexedAccess) {
+                    const indexedAccess = (t as IndexType).type as IndexedAccessType;
+                    // generic objects can always be instantiated with more keys so we can't narrow down those cases
+                    if (!isGenericObjectType(indexedAccess.objectType)) {
+                        const baseIndexType = getBaseConstraint(indexedAccess.indexType);
+                        const indexedAccessType = baseIndexType && getIndexedAccessTypeOrUndefined(indexedAccess.objectType, baseIndexType);
+                        const mappedIndexTypeOfIndexedAccess = indexedAccessType && mapType(indexedAccessType, getIndexType);
+                        const narrowed = mappedIndexTypeOfIndexedAccess && filterType(keyofConstraintType, t => {
+                            return !(getIntersectionType([t, mappedIndexTypeOfIndexedAccess]).flags & TypeFlags.Never);
+                        });
+                        if (narrowed) {
+                            return narrowed;
+                        }
+                    }
+                }
                 return keyofConstraintType;
             }
             if (t.flags & TypeFlags.TemplateLiteral) {

@@ -1,0 +1,33 @@
+keyofAndGenericIndexedAccessNarrowableConstraint.ts(15,15): error TS2731: Implicit conversion of a 'symbol' to a 'string' will fail at runtime. Consider wrapping this expression in 'String(...)'.
+keyofAndGenericIndexedAccessNarrowableConstraint.ts(15,20): error TS2731: Implicit conversion of a 'symbol' to a 'string' will fail at runtime. Consider wrapping this expression in 'String(...)'.
+keyofAndGenericIndexedAccessNarrowableConstraint.ts(19,16): error TS2731: Implicit conversion of a 'symbol' to a 'string' will fail at runtime. Consider wrapping this expression in 'String(...)'.
+
+
+==== keyofAndGenericIndexedAccessNarrowableConstraint.ts (3 errors) ====
+    export type Context = {
+        V1: { a: string },
+        V2: { b: string },
+    }
+    
+    export function path<V extends keyof Context, K extends keyof Context[V]>(v: V, k: K)  {
+        return `${v}.${k}` // ok
+    }
+    
+    export function path2<K extends keyof Context[keyof Context]>(k: K)  {
+        return `.${k}` // ok
+    }
+    
+    export function path3<O extends Context, V extends keyof O, K extends keyof O[V]>(v: V, k: K)  {
+        return `${v}.${k}` // error
+                  ~
+!!! error TS2731: Implicit conversion of a 'symbol' to a 'string' will fail at runtime. Consider wrapping this expression in 'String(...)'.
+                       ~
+!!! error TS2731: Implicit conversion of a 'symbol' to a 'string' will fail at runtime. Consider wrapping this expression in 'String(...)'.
+    }
+    
+    export function path4<O extends Context[keyof Context], K extends keyof O>(k: K)  {
+        return `.${k}` // error
+                   ~
+!!! error TS2731: Implicit conversion of a 'symbol' to a 'string' will fail at runtime. Consider wrapping this expression in 'String(...)'.
+    }
+    

@@ -1,0 +1,55 @@
+//// [tests/cases/conformance/types/keyof/keyofAndGenericIndexedAccessNarrowableConstraint.ts] ////
+
+=== keyofAndGenericIndexedAccessNarrowableConstraint.ts ===
+export type Context = {
+>Context : { V1: {    a: string;}; V2: {    b: string;}; }
+
+    V1: { a: string },
+>V1 : { a: string; }
+>a : string
+
+    V2: { b: string },
+>V2 : { b: string; }
+>b : string
+}
+
+export function path<V extends keyof Context, K extends keyof Context[V]>(v: V, k: K)  {
+>path : <V extends keyof Context, K extends keyof Context[V]>(v: V, k: K) => string
+>v : V
+>k : K
+
+    return `${v}.${k}` // ok
+>`${v}.${k}` : string
+>v : V
+>k : K
+}
+
+export function path2<K extends keyof Context[keyof Context]>(k: K)  {
+>path2 : <K extends never>(k: K) => string
+>k : K
+
+    return `.${k}` // ok
+>`.${k}` : string
+>k : K
+}
+
+export function path3<O extends Context, V extends keyof O, K extends keyof O[V]>(v: V, k: K)  {
+>path3 : <O extends Context, V extends keyof O, K extends keyof O[V]>(v: V, k: K) => string
+>v : V
+>k : K
+
+    return `${v}.${k}` // error
+>`${v}.${k}` : string
+>v : V
+>k : K
+}
+
+export function path4<O extends Context[keyof Context], K extends keyof O>(k: K)  {
+>path4 : <O extends { a: string; } | { b: string; }, K extends keyof O>(k: K) => string
+>k : K
+
+    return `.${k}` // error
+>`.${k}` : string
+>k : K
+}
+

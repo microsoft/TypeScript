@@ -1,0 +1,77 @@
+//// [tests/cases/conformance/types/keyof/keyofAndGenericIndexedAccessNarrowableConstraint.ts] ////
+
+=== keyofAndGenericIndexedAccessNarrowableConstraint.ts ===
+export type Context = {
+>Context : Symbol(Context, Decl(keyofAndGenericIndexedAccessNarrowableConstraint.ts, 0, 0))
+
+    V1: { a: string },
+>V1 : Symbol(V1, Decl(keyofAndGenericIndexedAccessNarrowableConstraint.ts, 0, 23))
+>a : Symbol(a, Decl(keyofAndGenericIndexedAccessNarrowableConstraint.ts, 1, 9))
+
+    V2: { b: string },
+>V2 : Symbol(V2, Decl(keyofAndGenericIndexedAccessNarrowableConstraint.ts, 1, 22))
+>b : Symbol(b, Decl(keyofAndGenericIndexedAccessNarrowableConstraint.ts, 2, 9))
+}
+
+export function path<V extends keyof Context, K extends keyof Context[V]>(v: V, k: K)  {
+>path : Symbol(path, Decl(keyofAndGenericIndexedAccessNarrowableConstraint.ts, 3, 1))
+>V : Symbol(V, Decl(keyofAndGenericIndexedAccessNarrowableConstraint.ts, 5, 21))
+>Context : Symbol(Context, Decl(keyofAndGenericIndexedAccessNarrowableConstraint.ts, 0, 0))
+>K : Symbol(K, Decl(keyofAndGenericIndexedAccessNarrowableConstraint.ts, 5, 45))
+>Context : Symbol(Context, Decl(keyofAndGenericIndexedAccessNarrowableConstraint.ts, 0, 0))
+>V : Symbol(V, Decl(keyofAndGenericIndexedAccessNarrowableConstraint.ts, 5, 21))
+>v : Symbol(v, Decl(keyofAndGenericIndexedAccessNarrowableConstraint.ts, 5, 74))
+>V : Symbol(V, Decl(keyofAndGenericIndexedAccessNarrowableConstraint.ts, 5, 21))
+>k : Symbol(k, Decl(keyofAndGenericIndexedAccessNarrowableConstraint.ts, 5, 79))
+>K : Symbol(K, Decl(keyofAndGenericIndexedAccessNarrowableConstraint.ts, 5, 45))
+
+    return `${v}.${k}` // ok
+>v : Symbol(v, Decl(keyofAndGenericIndexedAccessNarrowableConstraint.ts, 5, 74))
+>k : Symbol(k, Decl(keyofAndGenericIndexedAccessNarrowableConstraint.ts, 5, 79))
+}
+
+export function path2<K extends keyof Context[keyof Context]>(k: K)  {
+>path2 : Symbol(path2, Decl(keyofAndGenericIndexedAccessNarrowableConstraint.ts, 7, 1))
+>K : Symbol(K, Decl(keyofAndGenericIndexedAccessNarrowableConstraint.ts, 9, 22))
+>Context : Symbol(Context, Decl(keyofAndGenericIndexedAccessNarrowableConstraint.ts, 0, 0))
+>Context : Symbol(Context, Decl(keyofAndGenericIndexedAccessNarrowableConstraint.ts, 0, 0))
+>k : Symbol(k, Decl(keyofAndGenericIndexedAccessNarrowableConstraint.ts, 9, 62))
+>K : Symbol(K, Decl(keyofAndGenericIndexedAccessNarrowableConstraint.ts, 9, 22))
+
+    return `.${k}` // ok
+>k : Symbol(k, Decl(keyofAndGenericIndexedAccessNarrowableConstraint.ts, 9, 62))
+}
+
+export function path3<O extends Context, V extends keyof O, K extends keyof O[V]>(v: V, k: K)  {
+>path3 : Symbol(path3, Decl(keyofAndGenericIndexedAccessNarrowableConstraint.ts, 11, 1))
+>O : Symbol(O, Decl(keyofAndGenericIndexedAccessNarrowableConstraint.ts, 13, 22))
+>Context : Symbol(Context, Decl(keyofAndGenericIndexedAccessNarrowableConstraint.ts, 0, 0))
+>V : Symbol(V, Decl(keyofAndGenericIndexedAccessNarrowableConstraint.ts, 13, 40))
+>O : Symbol(O, Decl(keyofAndGenericIndexedAccessNarrowableConstraint.ts, 13, 22))
+>K : Symbol(K, Decl(keyofAndGenericIndexedAccessNarrowableConstraint.ts, 13, 59))
+>O : Symbol(O, Decl(keyofAndGenericIndexedAccessNarrowableConstraint.ts, 13, 22))
+>V : Symbol(V, Decl(keyofAndGenericIndexedAccessNarrowableConstraint.ts, 13, 40))
+>v : Symbol(v, Decl(keyofAndGenericIndexedAccessNarrowableConstraint.ts, 13, 82))
+>V : Symbol(V, Decl(keyofAndGenericIndexedAccessNarrowableConstraint.ts, 13, 40))
+>k : Symbol(k, Decl(keyofAndGenericIndexedAccessNarrowableConstraint.ts, 13, 87))
+>K : Symbol(K, Decl(keyofAndGenericIndexedAccessNarrowableConstraint.ts, 13, 59))
+
+    return `${v}.${k}` // error
+>v : Symbol(v, Decl(keyofAndGenericIndexedAccessNarrowableConstraint.ts, 13, 82))
+>k : Symbol(k, Decl(keyofAndGenericIndexedAccessNarrowableConstraint.ts, 13, 87))
+}
+
+export function path4<O extends Context[keyof Context], K extends keyof O>(k: K)  {
+>path4 : Symbol(path4, Decl(keyofAndGenericIndexedAccessNarrowableConstraint.ts, 15, 1))
+>O : Symbol(O, Decl(keyofAndGenericIndexedAccessNarrowableConstraint.ts, 17, 22))
+>Context : Symbol(Context, Decl(keyofAndGenericIndexedAccessNarrowableConstraint.ts, 0, 0))
+>Context : Symbol(Context, Decl(keyofAndGenericIndexedAccessNarrowableConstraint.ts, 0, 0))
+>K : Symbol(K, Decl(keyofAndGenericIndexedAccessNarrowableConstraint.ts, 17, 55))
+>O : Symbol(O, Decl(keyofAndGenericIndexedAccessNarrowableConstraint.ts, 17, 22))
+>k : Symbol(k, Decl(keyofAndGenericIndexedAccessNarrowableConstraint.ts, 17, 75))
+>K : Symbol(K, Decl(keyofAndGenericIndexedAccessNarrowableConstraint.ts, 17, 55))
+
+    return `.${k}` // error
+>k : Symbol(k, Decl(keyofAndGenericIndexedAccessNarrowableConstraint.ts, 17, 75))
+}
+
