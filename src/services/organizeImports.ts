@@ -93,44 +93,57 @@ export function organizeImports(
     // shouldCombine vs shouldSort is not supported in diff-detection, diff-detection always assumes sorting will combine/deduplicate
     const shouldCombine = shouldSort;
     const shouldRemove = mode === OrganizeImportsMode.RemoveUnused || mode === OrganizeImportsMode.All;
+
     // All of the old ImportDeclarations in the file, in syntactic order.
-    const topLevelImportGroupDecls = groupByNewlineContiguous(sourceFile, sourceFile.statements.filter(isImportDeclaration));
+    const topLevelImportDecls = sourceFile.statements.filter(isImportDeclaration);
+    const topLevelImportGroupDecls = groupByNewlineContiguous(sourceFile, topLevelImportDecls);
 
     const DefaultComparer = getOrganizeImportsComparer(preferences, /*ignoreCase*/ typeof preferences.organizeImportsIgnoreCase === "boolean" ? preferences.organizeImportsIgnoreCase : true);
 
-    // if case sensitivity is specified (true/false), then use the same setting for both.
-    let detectedModuleCaseComparer: Comparer<string> | undefined = typeof preferences.organizeImportsIgnoreCase === "boolean" ? DefaultComparer : undefined;
-    let detectedNamedImportCaseComparer: Comparer<string> | undefined = detectedModuleCaseComparer;
+    const comparer = {
+        moduleSpecifierComparer: typeof preferences.organizeImportsIgnoreCase === "boolean" ? DefaultComparer : undefined,
+        namedImportComparer: typeof preferences.organizeImportsIgnoreCase === "boolean" ? DefaultComparer : undefined,
+        typeOrder: preferences.organizeImportsTypeOrder,
+    };
 
-    let detectedTypeOrder: typeof preferences.organizeImportsTypeOrder = preferences.organizeImportsTypeOrder;
+    const {comparersToTest, typeOrdersToTest} = getOrdersToDetect(preferences);
+    if (typeof preferences.organizeImportsIgnoreCase === "boolean") {
+        // if case sensitivity is specified (true/false), then use the same setting for both.
 
-    if (!detectedModuleCaseComparer || !detectedNamedImportCaseComparer || !detectedTypeOrder) {
-        const { moduleSpecifierComparer, namedImportComparer, typeOrder } = getDetectionBySort(topLevelImportGroupDecls, preferences);
-
-        detectedModuleCaseComparer = detectedModuleCaseComparer ?? moduleSpecifierComparer ?? DefaultComparer;
-        detectedNamedImportCaseComparer = detectedNamedImportCaseComparer ?? namedImportComparer ?? DefaultComparer;
-        detectedTypeOrder = detectedTypeOrder ?? typeOrder;
-        // TODO return unset comparer
+        // both moduleSpecifier and namedImport comparer to the correct case-sensitivity.
+        // does not yet exit because we still need to detect for type order
+        comparer.moduleSpecifierComparer = getOrganizeImportsComparer(preferences, preferences.organizeImportsIgnoreCase);
+        comparer.namedImportComparer = comparer.moduleSpecifierComparer;
+    }
+    else {
+        // otherwise, we must test for both case-sensitivity and later, type order
+        comparer.moduleSpecifierComparer = detectModuleSpecifierCaseBySort(topLevelImportGroupDecls, comparersToTest);
     }
 
-    topLevelImportGroupDecls.forEach(importGroupDecl => organizeImportsWorker(importGroupDecl));
+    const namedImportSort = detectNamedImportOrganizationBySort(topLevelImportDecls, comparersToTest, typeOrdersToTest);
+    if (namedImportSort) {
+        const { namedImportComparer, typeOrder } = namedImportSort;
+        comparer.namedImportComparer = namedImportComparer;
+        comparer.typeOrder = comparer.typeOrder ?? typeOrder;
+    }
+    topLevelImportGroupDecls.forEach(importGroupDecl => organizeImportsWorker(importGroupDecl, comparer));
 
     // Exports are always used
     if (mode !== OrganizeImportsMode.RemoveUnused) {
         // All of the old ExportDeclarations in the file, in syntactic order.
-        getTopLevelExportGroups(sourceFile).forEach(exportGroupDecl => organizeExportsWorker(exportGroupDecl, detectedNamedImportCaseComparer));
+        getTopLevelExportGroups(sourceFile).forEach(exportGroupDecl => organizeExportsWorker(exportGroupDecl, comparer.namedImportComparer));
     }
 
     for (const ambientModule of sourceFile.statements.filter(isAmbientModule)) {
         if (!ambientModule.body) continue;
 
         const ambientModuleImportGroupDecls = groupByNewlineContiguous(sourceFile, ambientModule.body.statements.filter(isImportDeclaration));
-        ambientModuleImportGroupDecls.forEach(importGroupDecl => organizeImportsWorker(importGroupDecl));
+        ambientModuleImportGroupDecls.forEach(importGroupDecl => organizeImportsWorker(importGroupDecl, comparer));
 
         // Exports are always used
         if (mode !== OrganizeImportsMode.RemoveUnused) {
             const ambientModuleExportDecls = ambientModule.body.statements.filter(isExportDeclaration);
-            organizeExportsWorker(ambientModuleExportDecls, detectedNamedImportCaseComparer);
+            organizeExportsWorker(ambientModuleExportDecls, comparer.namedImportComparer);
         }
     }
 
@@ -155,7 +168,7 @@ export function organizeImports(
             ? group(oldImportDecls, importDecl => getExternalModuleName(importDecl.moduleSpecifier)!)
             : [oldImportDecls];
         const sortedImportGroups = shouldSort
-            ? stableSort(oldImportGroups, (group1, group2) => compareModuleSpecifiersWorker(group1[0].moduleSpecifier, group2[0].moduleSpecifier, detectedModuleCaseComparer ?? DefaultComparer))
+            ? stableSort(oldImportGroups, (group1, group2) => compareModuleSpecifiersWorker(group1[0].moduleSpecifier, group2[0].moduleSpecifier, comparer.moduleSpecifierComparer ?? DefaultComparer))
             : oldImportGroups;
         const newImportDecls = flatMap(sortedImportGroups, importGroup =>
             getExternalModuleName(importGroup[0].moduleSpecifier) || importGroup[0].moduleSpecifier === undefined
@@ -186,17 +199,20 @@ export function organizeImports(
         }
     }
 
-    function organizeImportsWorker(oldImportDecls: readonly ImportDeclaration[]) {
-        const specifierComparer = getOrganizeImportsSpecifierComparer({ organizeImportsTypeOrder: detectedTypeOrder ?? preferences.organizeImportsTypeOrder }, detectedNamedImportCaseComparer);
+    function organizeImportsWorker(oldImportDecls: readonly ImportDeclaration[], comparer: { moduleSpecifierComparer?: Comparer<string>; namedImportComparer?: Comparer<string>; typeOrder?: TypeOrder; }) {
+        const detectedModuleCaseComparer = comparer.moduleSpecifierComparer ?? DefaultComparer;
+        const detectedNamedImportCaseComparer = comparer.namedImportComparer ?? DefaultComparer;
+        const detectedTypeOrder = comparer.typeOrder ?? "last";
+
+        const specifierComparer = getOrganizeImportsSpecifierComparer({ organizeImportsTypeOrder: detectedTypeOrder }, detectedNamedImportCaseComparer);
         const processImportsOfSameModuleSpecifier = (importGroup: readonly ImportDeclaration[]) => {
             if (shouldRemove) importGroup = removeUnusedImports(importGroup, sourceFile, program);
-            if (shouldCombine) importGroup = coalesceImportsWorker(importGroup, detectedModuleCaseComparer ?? DefaultComparer, specifierComparer, sourceFile);
-            if (shouldSort) importGroup = stableSort(importGroup, (s1, s2) => compareImportsOrRequireStatements(s1, s2, detectedModuleCaseComparer ?? DefaultComparer));
+            if (shouldCombine) importGroup = coalesceImportsWorker(importGroup, detectedModuleCaseComparer, specifierComparer, sourceFile);
+            if (shouldSort) importGroup = stableSort(importGroup, (s1, s2) => compareImportsOrRequireStatements(s1, s2, detectedModuleCaseComparer));
             return importGroup;
         };
 
         organizeDeclsWorker(oldImportDecls, processImportsOfSameModuleSpecifier);
-        // return { moduleSpecifierComparer, namedImportComparer, typeOrder };
     }
 
     function organizeExportsWorker(oldExportDecls: readonly ExportDeclaration[], specifierCaseComparer?: Comparer<string>) {
@@ -646,7 +662,8 @@ export function compareImportOrExportSpecifiers<T extends ImportOrExportSpecifie
     }
 }
 
-function getOrganizeImportsSpecifierComparer<T extends ImportOrExportSpecifier>(preferences: UserPreferences, comparer?: Comparer<string>): Comparer<T> {
+/** @internal */
+export function getOrganizeImportsSpecifierComparer<T extends ImportOrExportSpecifier>(preferences: UserPreferences, comparer?: Comparer<string>): Comparer<T> {
     const stringComparer = comparer ?? getOrganizeImportsOrdinalStringComparer(!!preferences.organizeImportsIgnoreCase);
     return (s1, s2) => compareImportOrExportSpecifiers(s1, s2, stringComparer, preferences);
 }
@@ -965,47 +982,7 @@ function getTopLevelExportGroups(sourceFile: SourceFile) {
 }
 
 /** @internal */
-export function getDetectionBySort(importDeclsByGroup: ImportDeclaration[][], preferences: UserPreferences) {
-    // attempts to detect an independent sortkind for each of module specifiers, named imports, and named type imports
-    // comparers should be ordered by default priority (case-insensitive first)
-    const comparer: {
-        moduleSpecifierComparer: Comparer<string>;
-        namedImportComparer?: Comparer<string>;
-        typeOrder?: "first" | "last" | "inline";
-    } = {
-        moduleSpecifierComparer: getOrganizeImportsComparer(preferences, typeof preferences.organizeImportsIgnoreCase === "boolean" ? preferences.organizeImportsIgnoreCase : true),
-        typeOrder: preferences.organizeImportsTypeOrder,
-    };
-
-    let comparersToTest: Comparer<string>[];
-    if (typeof preferences.organizeImportsIgnoreCase === "boolean") {
-        // both moduleSpecifier and namedImport comparer to the correct case-sensitivity.
-        // does not yet exit because we still need to detect for type order
-        comparer.moduleSpecifierComparer = getOrganizeImportsComparer(preferences, preferences.organizeImportsIgnoreCase);
-        comparer.namedImportComparer = comparer.moduleSpecifierComparer;
-        comparersToTest = [comparer.moduleSpecifierComparer];
-    }
-    else {
-        // otherwise, we must test for both case-sensitivity and later, type order
-        const CASE_INSENSITIVE_COMPARER = getOrganizeImportsComparer(preferences, /*ignoreCase*/ true);
-        const CASE_SENSITIVE_COMPARER = getOrganizeImportsComparer(preferences, /*ignoreCase*/ false);
-        comparersToTest = [CASE_INSENSITIVE_COMPARER, CASE_SENSITIVE_COMPARER];
-        comparer.moduleSpecifierComparer = detectModuleSpecifierCaseBySort(importDeclsByGroup, comparersToTest);
-    }
-
-    const typesToTest: TypeOrder[] = preferences.organizeImportsTypeOrder ? [preferences.organizeImportsTypeOrder] : ["first", "last", "inline"];
-    const namedImportSort = detectNamedImportOrganizationBySort(importDeclsByGroup.flat(), comparersToTest, typesToTest);
-    if (!namedImportSort) {
-        return comparer;
-    }
-    const { namedImportComparer, typeOrder } = namedImportSort;
-    comparer.namedImportComparer = namedImportComparer;
-    comparer.typeOrder = comparer.typeOrder ?? typeOrder;
-
-    return comparer;
-}
-
-function detectModuleSpecifierCaseBySort(importDeclsByGroup: ImportDeclaration[][], comparersToTest: Comparer<string>[]) {
+export function detectModuleSpecifierCaseBySort(importDeclsByGroup: ImportDeclaration[][], comparersToTest: Comparer<string>[]) {
     const moduleSpecifiersByGroup: string[][] = [];
     importDeclsByGroup.forEach(importGroup => {
         //  turns importdeclbygroup into string[][] of module specifiers by group to detect sorting on module specifiers
@@ -1014,8 +991,11 @@ function detectModuleSpecifierCaseBySort(importDeclsByGroup: ImportDeclaration[]
     return detectCaseSensitivityBySort(moduleSpecifiersByGroup, comparersToTest);
 }
 
-type TypeOrder = "first" | "last" | "inline";
-function detectNamedImportOrganizationBySort(originalGroups: ImportDeclaration[], comparersToTest: Comparer<string>[], typesToTest: TypeOrder[]): { namedImportComparer: Comparer<string>; typeOrder?: "first" | "last" | "inline"; } | undefined {
+/** @internal */
+export type TypeOrder = "first" | "last" | "inline";
+
+/** @internal */
+export function detectNamedImportOrganizationBySort(originalGroups: ImportDeclaration[], comparersToTest: Comparer<string>[], typesToTest: TypeOrder[]): { namedImportComparer: Comparer<string>; typeOrder?: "first" | "last" | "inline"; } | undefined {
     // filter for import declarations with named imports. Will be a flat array of import declarations without separations by group
     let bothNamedImports = false;
     const importDeclsWithNamed = originalGroups.filter(i => {
@@ -1071,6 +1051,16 @@ function detectNamedImportOrganizationBySort(originalGroups: ImportDeclaration[]
 
     // default; hopefully never hit.....
     return { namedImportComparer: bestComparer.last, typeOrder: "last" };
+}
+
+/** @internal */
+export function getOrdersToDetect(preferences: UserPreferences): { comparersToTest: Comparer<string>[]; typeOrdersToTest: TypeOrder[]; } {
+    return {
+        comparersToTest: typeof preferences.organizeImportsIgnoreCase === "boolean"
+            ? [getOrganizeImportsComparer(preferences, preferences.organizeImportsIgnoreCase)]
+            : [getOrganizeImportsComparer(preferences, /*ignoreCase*/ true), getOrganizeImportsComparer(preferences, /*ignoreCase*/ false)],
+            typeOrdersToTest: preferences.organizeImportsTypeOrder ? [preferences.organizeImportsTypeOrder] : ["last", "inline", "first"],
+    }
 }
 
 function getSortedMeasure<T>(arr: readonly T[], comparer: Comparer<T>) {

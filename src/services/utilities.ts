@@ -2629,14 +2629,14 @@ export function insertImports(changes: textChanges.ChangeTracker, sourceFile: So
         : isArray(imports)
         ? [imports as ImportDeclaration[]]
         : [[imports as ImportDeclaration]];
-    const comparers = OrganizeImports.getDetectionBySort(moduleSpecifiersToDetect, preferences);
-    const sortedNewImports = isArray(imports) ? stableSort(imports, (a, b) => OrganizeImports.compareImportsOrRequireStatements(a, b, comparers.moduleSpecifierComparer)) : [imports];
+    const comparer = OrganizeImports.detectModuleSpecifierCaseBySort(moduleSpecifiersToDetect, OrganizeImports.getOrdersToDetect(preferences).comparersToTest);
+    const sortedNewImports = isArray(imports) ? stableSort(imports, (a, b) => OrganizeImports.compareImportsOrRequireStatements(a, b, comparer)) : [imports];
     if (!existingImportStatements.length) {
         changes.insertNodesAtTopOfFile(sourceFile, sortedNewImports, blankLineBetween);
     }
-    else if (existingImportStatements && arrayIsSorted(existingImportStatements, (s1, s2) => OrganizeImports.compareImportsOrRequireStatements(s1, s2, comparers.moduleSpecifierComparer))) {
+    else if (existingImportStatements && arrayIsSorted(existingImportStatements, (s1, s2) => OrganizeImports.compareImportsOrRequireStatements(s1, s2, comparer))) {
         for (const newImport of sortedNewImports) {
-            const insertionIndex = OrganizeImports.getImportDeclarationInsertionIndex(existingImportStatements, newImport, comparers.moduleSpecifierComparer);
+            const insertionIndex = OrganizeImports.getImportDeclarationInsertionIndex(existingImportStatements, newImport, comparer);
             if (insertionIndex === 0) {
                 // If the first import is top-of-file, insert after the leading comment which is likely the header.
                 const options = existingImportStatements[0] === sourceFile.statements[0] ?

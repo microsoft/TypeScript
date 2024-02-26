@@ -66,6 +66,7 @@ import {
     ImportKind,
     importNameElisionDisabled,
     ImportsNotUsedAsValues,
+    ImportSpecifier,
     insertImports,
     InternalSymbolName,
     isExternalModule,
@@ -1408,9 +1409,19 @@ function promoteFromTypeOnly(
             if (aliasDeclaration.isTypeOnly) {
                 if (aliasDeclaration.parent.elements.length > 1) {
                     const newSpecifier = factory.updateImportSpecifier(aliasDeclaration, /*isTypeOnly*/ false, aliasDeclaration.propertyName, aliasDeclaration.name);
-                    const moduleSpecifiersByGroup: ImportDeclaration[][] = [[aliasDeclaration.parent.parent.parent]];
-                    const comparers = OrganizeImports.getDetectionBySort(moduleSpecifiersByGroup, preferences);
-                    const insertionIndex = OrganizeImports.getImportSpecifierInsertionIndex(aliasDeclaration.parent.elements, newSpecifier, comparers.namedImportComparer ?? comparers.moduleSpecifierComparer, { organizeImportsTypeOrder: comparers.typeOrder });
+                    const { comparersToTest, typeOrdersToTest } = OrganizeImports.getOrdersToDetect(preferences);
+                    let namedImportComparer = comparersToTest[0];
+                    let typeOrder: OrganizeImports.TypeOrder | undefined = typeOrdersToTest[0];
+
+                    if (typeof preferences.organizeImportsIgnoreCase !== "boolean" || !preferences.organizeImportsTypeOrder) {
+                        const importDecl: ImportDeclaration[] = [aliasDeclaration.parent.parent.parent];
+                        const namedImportSort = OrganizeImports.detectNamedImportOrganizationBySort(importDecl, comparersToTest, typeOrdersToTest);
+                        if (namedImportSort) {
+                            ({ namedImportComparer, typeOrder } = namedImportSort);
+                        }
+                    }
+
+                    const insertionIndex = OrganizeImports.getImportSpecifierInsertionIndex(aliasDeclaration.parent.elements, newSpecifier, namedImportComparer, { organizeImportsTypeOrder: typeOrder });
                     if (insertionIndex !== aliasDeclaration.parent.elements.indexOf(aliasDeclaration)) {
                         changes.delete(sourceFile, aliasDeclaration);
                         changes.insertImportSpecifierAtIndex(sourceFile, newSpecifier, aliasDeclaration.parent, insertionIndex);
@@ -1504,37 +1515,20 @@ function doAddExistingFix(
         // - otherwise, if there are enough existing import specifiers in this import to detect unambiguously, use that
         // - otherwise, detect from other imports in the file
         // let ignoreCaseForSorting: boolean | undefined;
-        let comparers: {
-            moduleSpecifierComparer: Comparer<string>;
-            namedImportComparer?: Comparer<string>;
-            typeOrder?: "first" | "last" | "inline";
-        } = { moduleSpecifierComparer: OrganizeImports.getOrganizeImportsComparer(preferences, typeof preferences.organizeImportsIgnoreCase === "boolean" ? preferences.organizeImportsIgnoreCase : true) };
+        let specifierComparer: Comparer<ImportSpecifier> = OrganizeImports.getOrganizeImportsSpecifierComparer(preferences);
+        const { comparersToTest, typeOrdersToTest } = OrganizeImports.getOrdersToDetect(preferences);
+        let namedImportComparer = comparersToTest[0];
+        let typeOrder: OrganizeImports.TypeOrder | undefined = typeOrdersToTest[0];
 
-        if (typeof preferences.organizeImportsIgnoreCase === "boolean") {
-            comparers.namedImportComparer = comparers.moduleSpecifierComparer;
+        if (existingSpecifiers && (typeof preferences.organizeImportsIgnoreCase !== "boolean" || !preferences.organizeImportsTypeOrder)) {
+            const moduleSpecifiersDecl: ImportDeclaration[] = [clause.parent];
+            const namedImportSort = OrganizeImports.detectNamedImportOrganizationBySort(moduleSpecifiersDecl, comparersToTest, typeOrdersToTest);
+            if (namedImportSort) {
+                ({ namedImportComparer, typeOrder } = namedImportSort);
+                specifierComparer = OrganizeImports.getOrganizeImportsSpecifierComparer({ organizeImportsTypeOrder: typeOrder }, namedImportComparer);
+            }
         }
-        if (preferences.organizeImportsTypeOrder) {
-            comparers.typeOrder = preferences.organizeImportsTypeOrder;
-        }
-        else if (existingSpecifiers && typeof preferences.organizeImportsIgnoreCase !== "boolean" && !preferences.organizeImportsTypeOrder) {
-            // const targetImportSorting = OrganizeImports.detectImportSpecifierSorting(existingSpecifiers, preferences);
-            // if (targetImportSorting !== SortKind.Both) {
-            //     ignoreCaseForSorting = targetImportSorting === SortKind.CaseInsensitive;
-            // }
-            const moduleSpecifiersByGroup: ImportDeclaration[][] = [[clause.parent]];
-            comparers = OrganizeImports.getDetectionBySort(moduleSpecifiersByGroup, preferences);
-        }
-        // if (ignoreCaseForSorting === undefined) {
-        //     ignoreCaseForSorting = OrganizeImports.detectSorting(sourceFile, preferences) === SortKind.CaseInsensitive;
-        // }
 
-        // const newSpecifier = factory.updateImportSpecifier(aliasDeclaration, /*isTypeOnly*/ false, aliasDeclaration.propertyName, aliasDeclaration.name);
-        //             const moduleSpecifiersByGroup: ImportDeclaration[][] = [[aliasDeclaration.parent.parent.parent]];
-        //             const comparers = OrganizeImports.getDetectionByDiff(moduleSpecifiersByGroup, preferences);
-        //             // const comparer = OrganizeImports.getOrganizeImportsComparer(preferences, sortKind === SortKind.CaseInsensitive);
-        //             const insertionIndex = OrganizeImports.getImportSpecifierInsertionIndex(aliasDeclaration.parent.elements, newSpecifier, comparers.namedImportComparer ?? comparers.moduleSpecifierComparer, { organizeImportsTypeOrder: comparers.typeOrder });
-
-        // const comparer = OrganizeImports.getOrganizeImportsComparer(preferences, ignoreCaseForSorting);
         const newSpecifiers = stableSort(
             namedImports.map(namedImport =>
                 factory.createImportSpecifier(
@@ -1543,7 +1537,7 @@ function doAddExistingFix(
                     factory.createIdentifier(namedImport.name),
                 )
             ),
-            (s1, s2) => OrganizeImports.compareImportOrExportSpecifiers(s1, s2, comparers.namedImportComparer ?? comparers.moduleSpecifierComparer, { organizeImportsTypeOrder: comparers.typeOrder }),
+            specifierComparer,
         );
 
         // The sorting preference computed earlier may or may not have validated that these particular
@@ -1554,9 +1548,9 @@ function doAddExistingFix(
         // const specifierSort = existingSpecifiers?.length && OrganizeImports.detectImportSpecifierSorting(existingSpecifiers, preferences);
 
         // changed to check if existing specifiers are sorted
-        if (existingSpecifiers?.length && arrayIsSorted(existingSpecifiers, (s1, s2) => OrganizeImports.compareImportOrExportSpecifiers(s1, s2, comparers.namedImportComparer ?? comparers.moduleSpecifierComparer, { organizeImportsTypeOrder: comparers.typeOrder }))) {
+        if (existingSpecifiers?.length && arrayIsSorted(existingSpecifiers, specifierComparer)) {
             for (const spec of newSpecifiers) {
-                const insertionIndex = OrganizeImports.getImportSpecifierInsertionIndex(existingSpecifiers, spec, comparers.namedImportComparer ?? comparers.moduleSpecifierComparer, preferences);
+                const insertionIndex = OrganizeImports.getImportSpecifierInsertionIndex(existingSpecifiers, spec, namedImportComparer, { organizeImportsTypeOrder: typeOrder });
                 changes.insertImportSpecifierAtIndex(sourceFile, spec, clause.namedBindings as NamedImports, insertionIndex);
             }
         }
