@@ -2623,7 +2623,7 @@ export function insertImports(changes: textChanges.ChangeTracker, sourceFile: So
     const decl = isArray(imports) ? imports[0] : imports;
     const importKindPredicate: (node: Node) => node is AnyImportOrRequireStatement = decl.kind === SyntaxKind.VariableStatement ? isRequireVariableStatement : isAnyImportSyntax;
     const existingImportStatements = filter(sourceFile.statements, importKindPredicate);
-    //todo remove typecasts
+    // todo remove typecasts
     const moduleSpecifiersToDetect: ImportDeclaration[][] = existingImportStatements.length > 1
         ? [existingImportStatements as ImportDeclaration[]]
         : isArray(imports)
