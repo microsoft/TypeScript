@@ -15,7 +15,7 @@ export function CustomSelect2<Option,>(x: Props<Option> & {}) {}
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.CustomSelect2 = exports.CustomSelect1 = void 0;
-var CustomSelect1 = function (x) { };
+const CustomSelect1 = (x) => { };
 exports.CustomSelect1 = CustomSelect1;
 function CustomSelect2(x) { }
 exports.CustomSelect2 = CustomSelect2;

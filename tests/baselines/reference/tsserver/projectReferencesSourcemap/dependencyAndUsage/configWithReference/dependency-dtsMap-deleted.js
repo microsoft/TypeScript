@@ -1168,6 +1168,9 @@ ScriptInfos::
     containingProjects: 1
         /user/username/projects/myproject/random/tsconfig.json *default*
 
+DocumentPositionMappers::
+DocumentPositionMapper1 *deleted*
+
 Info seq  [hh:mm:ss:mss] request:
     {
       "command": "definitionAndBoundSpan",
@@ -1236,9 +1239,6 @@ Projects::
 /user/username/projects/myproject/random/tsconfig.json (Configured)
     projectStateVersion: 1
     projectProgramVersion: 1
-
-DocumentPositionMappers::
-DocumentPositionMapper1 *deleted*
 
 Before request
 

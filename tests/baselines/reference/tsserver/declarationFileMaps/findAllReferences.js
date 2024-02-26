@@ -1192,3 +1192,6 @@ ScriptInfos::
 /user/user.ts *deleted*
     version: SVC-1-0
     containingProjects: 0
+
+DocumentPositionMappers::
+DocumentPositionMapper1 *deleted*

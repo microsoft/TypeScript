@@ -1338,10 +1338,10 @@ ScriptInfos::
     containingProjects: 1
         /user/username/projects/myproject/random/tsconfig.json *default*
 
-Before request
-
 DocumentPositionMappers::
 DocumentPositionMapper1 *deleted*
+
+Before request
 
 Info seq  [hh:mm:ss:mss] request:
     {
