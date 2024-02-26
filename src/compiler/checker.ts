@@ -37400,33 +37400,30 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function getTypePredicateFromBody(func: FunctionLikeDeclaration): TypePredicate | undefined {
-        switch (func.kind) {
-            case SyntaxKind.Constructor:
-            case SyntaxKind.GetAccessor:
-            case SyntaxKind.SetAccessor:
-                return undefined;
+        if (func.kind === SyntaxKind.Constructor || func.kind === SyntaxKind.SetAccessor) {
+            return undefined;
         }
+
+        // Only a single-argument function can be inferred to be a type predicate
+        if (func.parameters.length !== 1) return undefined;
+
+        // The body must be an expression, or a block containing a lone return statement
+        if (!func.body) return undefined;
+
+        let returnExpression: Expression | undefined;
+        if (func.body.kind === SyntaxKind.Block) {
+            const body = func.body as Block;
+            if ((body.statements.length !== 1) || (body.statements[0].kind !== SyntaxKind.ReturnStatement)) return undefined;
+            returnExpression = (body.statements[0] as ReturnStatement).expression;
+        } else {
+            returnExpression = func.body;
+        }
+        if (!returnExpression) return undefined;
+
         const functionFlags = getFunctionFlags(func);
-        if (functionFlags !== FunctionFlags.Normal || func.parameters.length === 0) return undefined;
+        if (functionFlags !== FunctionFlags.Normal) return undefined;
 
-        // Only attempt to infer a type predicate if there's exactly one return.
-        let singleReturn: Expression | undefined;
-        let singleReturnStatement: ReturnStatement | undefined;
-        if (func.body && func.body.kind !== SyntaxKind.Block) {
-            singleReturn = func.body; // arrow function
-        }
-        else {
-            if (functionHasImplicitReturn(func)) return undefined;
-
-            const bailedEarly = forEachReturnStatement(func.body as Block, returnStatement => {
-                if (singleReturn || !returnStatement.expression) return true;
-                singleReturnStatement = returnStatement;
-                singleReturn = returnStatement.expression;
-            });
-            if (bailedEarly || !singleReturn) return undefined;
-        }
-
-        const predicate = checkIfExpressionRefinesAnyParameter(singleReturn);
+        const predicate = checkIfExpressionRefinesAnyParameter(returnExpression);
         if (predicate) {
             const [i, type] = predicate;
             const param = func.parameters[i];
@@ -37474,17 +37471,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             };
             const falseSubtype = getFlowTypeOfReference(param.name, trueType, trueType, func, falseCondition);
             if (!isTypeIdenticalTo(falseSubtype, neverType)) return undefined;
-
-            // the parameter type may already have been narrowed due to an assertion.
-            // There's no precise way to represent an assertion that's also a predicate. Best not to try.
-            // We do this check last since it's unlikely to filter out many possible predicates.
-            if (singleReturnStatement?.flowNode) {
-                const typeAtReturn = getFlowTypeOfReference(param.name, initType, initType, func, singleReturnStatement?.flowNode);
-                if (typeAtReturn !== initType) {
-                    return undefined;
-                }
-            }
-
             return trueType;
         }
     }

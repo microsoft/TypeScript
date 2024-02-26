@@ -156,7 +156,7 @@ function isNonNull(x: number | null) {
 
 // factoring out a boolean works thanks to aliased discriminants
 function isNonNullVar(x: number | null) {
->isNonNullVar : (x: number | null) => x is number
+>isNonNullVar : (x: number | null) => boolean
 >x : number | null
 
   const ok = x !== null;
@@ -647,7 +647,7 @@ function doubleReturn(x: string|number) {
 }
 
 function guardsOneButNotOthers(a: string|number, b: string|number, c: string|number) {
->guardsOneButNotOthers : (a: string | number, b: string | number, c: string | number) => b is string
+>guardsOneButNotOthers : (a: string | number, b: string | number, c: string | number) => boolean
 >a : string | number
 >b : string | number
 >c : string | number
@@ -919,7 +919,7 @@ if (assertAndPredicate(snd)) {
 }
 
 function isNumberWithThis(this: Date, x: number | string) {
->isNumberWithThis : (this: Date, x: number | string) => x is number
+>isNumberWithThis : (this: Date, x: number | string) => boolean
 >this : Date
 >x : string | number
 
