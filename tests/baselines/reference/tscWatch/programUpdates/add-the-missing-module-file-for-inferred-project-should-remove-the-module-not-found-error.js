@@ -39,6 +39,12 @@ T.bar();
 
 
 
+PolledWatches::
+/users/username/projects/package.json: *new*
+  {"pollingInterval":2000}
+/users/username/projects/project/package.json: *new*
+  {"pollingInterval":2000}
+
 FsWatches::
 /a/lib/lib.d.ts: *new*
   {}
@@ -109,6 +115,12 @@ function bar() { }
 exports.bar = bar;
 
 
+
+PolledWatches::
+/users/username/projects/package.json:
+  {"pollingInterval":2000}
+/users/username/projects/project/package.json:
+  {"pollingInterval":2000}
 
 FsWatches::
 /a/lib/lib.d.ts:

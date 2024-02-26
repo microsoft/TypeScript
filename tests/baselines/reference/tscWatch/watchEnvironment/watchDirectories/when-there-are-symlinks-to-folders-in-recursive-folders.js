@@ -40,6 +40,12 @@ Synchronizing program
 CreatingProgramWith::
   roots: ["/home/user/projects/myproject/src/file.ts"]
   options: {"extendedDiagnostics":true,"traceResolution":true,"watch":true,"configFilePath":"/home/user/projects/myproject/tsconfig.json"}
+File '/home/user/projects/myproject/src/package.json' does not exist.
+File '/home/user/projects/myproject/package.json' does not exist.
+File '/home/user/projects/package.json' does not exist.
+File '/home/user/package.json' does not exist.
+File '/home/package.json' does not exist.
+File '/package.json' does not exist.
 FileWatcher:: Added:: WatchInfo: /home/user/projects/myproject/src/file.ts 250 undefined Source file
 ======== Resolving module 'a' from '/home/user/projects/myproject/src/file.ts'. ========
 Module resolution kind is not specified, using 'Node10'.
@@ -55,12 +61,27 @@ File '/home/user/projects/myproject/node_modules/a/index.tsx' does not exist.
 File '/home/user/projects/myproject/node_modules/a/index.d.ts' exists - use it as a name resolution result.
 Resolving real path for '/home/user/projects/myproject/node_modules/a/index.d.ts', result '/home/user/projects/myproject/node_modules/reala/index.d.ts'.
 ======== Module name 'a' was successfully resolved to '/home/user/projects/myproject/node_modules/reala/index.d.ts'. ========
+File '/home/user/projects/myproject/node_modules/reala/package.json' does not exist.
+File '/home/user/projects/myproject/node_modules/package.json' does not exist.
+File '/home/user/projects/myproject/package.json' does not exist according to earlier cached lookups.
+File '/home/user/projects/package.json' does not exist according to earlier cached lookups.
+File '/home/user/package.json' does not exist according to earlier cached lookups.
+File '/home/package.json' does not exist according to earlier cached lookups.
+File '/package.json' does not exist according to earlier cached lookups.
 FileWatcher:: Added:: WatchInfo: /home/user/projects/myproject/node_modules/reala/index.d.ts 250 undefined Source file
+File '/a/lib/package.json' does not exist.
+File '/a/package.json' does not exist.
+File '/package.json' does not exist according to earlier cached lookups.
 FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 250 undefined Source file
 DirectoryWatcher:: Added:: WatchInfo: /home/user/projects/myproject/src 1 undefined Failed Lookup Locations
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/user/projects/myproject/src 1 undefined Failed Lookup Locations
 DirectoryWatcher:: Added:: WatchInfo: /home/user/projects/myproject/node_modules 1 undefined Failed Lookup Locations
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/user/projects/myproject/node_modules 1 undefined Failed Lookup Locations
+FileWatcher:: Added:: WatchInfo: /home/user/projects/myproject/node_modules/reala/package.json 2000 undefined File location affecting resolution
+FileWatcher:: Added:: WatchInfo: /home/user/projects/myproject/node_modules/package.json 2000 undefined File location affecting resolution
+FileWatcher:: Added:: WatchInfo: /home/user/projects/myproject/package.json 2000 undefined File location affecting resolution
+FileWatcher:: Added:: WatchInfo: /home/user/projects/package.json 2000 undefined File location affecting resolution
+FileWatcher:: Added:: WatchInfo: /home/user/projects/myproject/src/package.json 2000 undefined File location affecting resolution
 DirectoryWatcher:: Added:: WatchInfo: /home/user/projects/myproject/node_modules/@types 1 undefined Type roots
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/user/projects/myproject/node_modules/@types 1 undefined Type roots
 DirectoryWatcher:: Added:: WatchInfo: /home/user/projects/node_modules/@types 1 undefined Type roots
@@ -80,8 +101,18 @@ Object.defineProperty(exports, "__esModule", { value: true });
 PolledWatches::
 /home/user/projects/myproject/node_modules/@types: *new*
   {"pollingInterval":500}
+/home/user/projects/myproject/node_modules/package.json: *new*
+  {"pollingInterval":2000}
+/home/user/projects/myproject/node_modules/reala/package.json: *new*
+  {"pollingInterval":2000}
+/home/user/projects/myproject/package.json: *new*
+  {"pollingInterval":2000}
+/home/user/projects/myproject/src/package.json: *new*
+  {"pollingInterval":2000}
 /home/user/projects/node_modules/@types: *new*
   {"pollingInterval":500}
+/home/user/projects/package.json: *new*
+  {"pollingInterval":2000}
 
 FsWatches::
 /a/lib/lib.d.ts: *new*

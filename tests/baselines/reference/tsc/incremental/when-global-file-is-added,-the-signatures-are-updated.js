@@ -122,7 +122,7 @@ function main() { }
 
 
 //// [/src/project/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../lib/lib.d.ts","./src/filepresent.ts","./src/anotherfilewithsamereferenes.ts","./src/main.ts","./src/filenotfound.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"-12346563362-function something() { return 10; }","signature":"-4903250974-declare function something(): number;\n","affectsGlobalScope":true},{"version":"-28237004260-/// <reference path=\"./filePresent.ts\"/>\n/// <reference path=\"./fileNotFound.ts\"/>\nfunction anotherFileWithSameReferenes() { }\n","signature":"4626929588-/// <reference path=\"filePresent.d.ts\" />\ndeclare function anotherFileWithSameReferenes(): void;\n","affectsGlobalScope":true},{"version":"-21256825585-/// <reference path=\"./filePresent.ts\"/>\n/// <reference path=\"./fileNotFound.ts\"/>\nfunction main() { }\n","signature":"6884835015-/// <reference path=\"filePresent.d.ts\" />\ndeclare function main(): void;\n","affectsGlobalScope":true}],"root":[[2,4]],"options":{"composite":true},"fileIdsList":[[2,5]],"referencedMap":[[3,1],[4,1]],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,3,2,4],"latestChangedDtsFile":"./src/main.d.ts"},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../lib/lib.d.ts","./src/filepresent.ts","./src/anotherfilewithsamereferenes.ts","./src/main.ts","./src/filenotfound.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedFormat":1},{"version":"-12346563362-function something() { return 10; }","signature":"-4903250974-declare function something(): number;\n","affectsGlobalScope":true,"impliedFormat":1},{"version":"-28237004260-/// <reference path=\"./filePresent.ts\"/>\n/// <reference path=\"./fileNotFound.ts\"/>\nfunction anotherFileWithSameReferenes() { }\n","signature":"4626929588-/// <reference path=\"filePresent.d.ts\" />\ndeclare function anotherFileWithSameReferenes(): void;\n","affectsGlobalScope":true,"impliedFormat":1},{"version":"-21256825585-/// <reference path=\"./filePresent.ts\"/>\n/// <reference path=\"./fileNotFound.ts\"/>\nfunction main() { }\n","signature":"6884835015-/// <reference path=\"filePresent.d.ts\" />\ndeclare function main(): void;\n","affectsGlobalScope":true,"impliedFormat":1}],"root":[[2,4]],"options":{"composite":true},"fileIdsList":[[2,5]],"referencedMap":[[3,1],[4,1]],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,3,2,4],"latestChangedDtsFile":"./src/main.d.ts"},"version":"FakeTSVersion"}
 
 //// [/src/project/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -144,41 +144,49 @@ function main() { }
       "../../lib/lib.d.ts": {
         "original": {
           "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-          "affectsGlobalScope": true
+          "affectsGlobalScope": true,
+          "impliedFormat": 1
         },
         "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "signature": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-        "affectsGlobalScope": true
+        "affectsGlobalScope": true,
+        "impliedFormat": "commonjs"
       },
       "./src/filepresent.ts": {
         "original": {
           "version": "-12346563362-function something() { return 10; }",
           "signature": "-4903250974-declare function something(): number;\n",
-          "affectsGlobalScope": true
+          "affectsGlobalScope": true,
+          "impliedFormat": 1
         },
         "version": "-12346563362-function something() { return 10; }",
         "signature": "-4903250974-declare function something(): number;\n",
-        "affectsGlobalScope": true
+        "affectsGlobalScope": true,
+        "impliedFormat": "commonjs"
       },
       "./src/anotherfilewithsamereferenes.ts": {
         "original": {
           "version": "-28237004260-/// <reference path=\"./filePresent.ts\"/>\n/// <reference path=\"./fileNotFound.ts\"/>\nfunction anotherFileWithSameReferenes() { }\n",
           "signature": "4626929588-/// <reference path=\"filePresent.d.ts\" />\ndeclare function anotherFileWithSameReferenes(): void;\n",
-          "affectsGlobalScope": true
+          "affectsGlobalScope": true,
+          "impliedFormat": 1
         },
         "version": "-28237004260-/// <reference path=\"./filePresent.ts\"/>\n/// <reference path=\"./fileNotFound.ts\"/>\nfunction anotherFileWithSameReferenes() { }\n",
         "signature": "4626929588-/// <reference path=\"filePresent.d.ts\" />\ndeclare function anotherFileWithSameReferenes(): void;\n",
-        "affectsGlobalScope": true
+        "affectsGlobalScope": true,
+        "impliedFormat": "commonjs"
       },
       "./src/main.ts": {
         "original": {
           "version": "-21256825585-/// <reference path=\"./filePresent.ts\"/>\n/// <reference path=\"./fileNotFound.ts\"/>\nfunction main() { }\n",
           "signature": "6884835015-/// <reference path=\"filePresent.d.ts\" />\ndeclare function main(): void;\n",
-          "affectsGlobalScope": true
+          "affectsGlobalScope": true,
+          "impliedFormat": 1
         },
         "version": "-21256825585-/// <reference path=\"./filePresent.ts\"/>\n/// <reference path=\"./fileNotFound.ts\"/>\nfunction main() { }\n",
         "signature": "6884835015-/// <reference path=\"filePresent.d.ts\" />\ndeclare function main(): void;\n",
-        "affectsGlobalScope": true
+        "affectsGlobalScope": true,
+        "impliedFormat": "commonjs"
       }
     },
     "root": [
@@ -217,7 +225,7 @@ function main() { }
     "latestChangedDtsFile": "./src/main.d.ts"
   },
   "version": "FakeTSVersion",
-  "size": 1607
+  "size": 1679
 }
 
 
@@ -330,7 +338,7 @@ something();
 
 
 //// [/src/project/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../lib/lib.d.ts","./src/filepresent.ts","./src/anotherfilewithsamereferenes.ts","./src/main.ts","./src/filenotfound.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"-12346563362-function something() { return 10; }","signature":"-4903250974-declare function something(): number;\n","affectsGlobalScope":true},{"version":"-28237004260-/// <reference path=\"./filePresent.ts\"/>\n/// <reference path=\"./fileNotFound.ts\"/>\nfunction anotherFileWithSameReferenes() { }\n","signature":"4626929588-/// <reference path=\"filePresent.d.ts\" />\ndeclare function anotherFileWithSameReferenes(): void;\n","affectsGlobalScope":true},{"version":"-24702349751-/// <reference path=\"./filePresent.ts\"/>\n/// <reference path=\"./fileNotFound.ts\"/>\nfunction main() { }\nsomething();","signature":"6884835015-/// <reference path=\"filePresent.d.ts\" />\ndeclare function main(): void;\n","affectsGlobalScope":true}],"root":[[2,4]],"options":{"composite":true},"fileIdsList":[[2,5]],"referencedMap":[[3,1],[4,1]],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,3,2,4],"latestChangedDtsFile":"./src/main.d.ts"},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../lib/lib.d.ts","./src/filepresent.ts","./src/anotherfilewithsamereferenes.ts","./src/main.ts","./src/filenotfound.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedFormat":1},{"version":"-12346563362-function something() { return 10; }","signature":"-4903250974-declare function something(): number;\n","affectsGlobalScope":true,"impliedFormat":1},{"version":"-28237004260-/// <reference path=\"./filePresent.ts\"/>\n/// <reference path=\"./fileNotFound.ts\"/>\nfunction anotherFileWithSameReferenes() { }\n","signature":"4626929588-/// <reference path=\"filePresent.d.ts\" />\ndeclare function anotherFileWithSameReferenes(): void;\n","affectsGlobalScope":true,"impliedFormat":1},{"version":"-24702349751-/// <reference path=\"./filePresent.ts\"/>\n/// <reference path=\"./fileNotFound.ts\"/>\nfunction main() { }\nsomething();","signature":"6884835015-/// <reference path=\"filePresent.d.ts\" />\ndeclare function main(): void;\n","affectsGlobalScope":true,"impliedFormat":1}],"root":[[2,4]],"options":{"composite":true},"fileIdsList":[[2,5]],"referencedMap":[[3,1],[4,1]],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,3,2,4],"latestChangedDtsFile":"./src/main.d.ts"},"version":"FakeTSVersion"}
 
 //// [/src/project/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -352,41 +360,49 @@ something();
       "../../lib/lib.d.ts": {
         "original": {
           "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-          "affectsGlobalScope": true
+          "affectsGlobalScope": true,
+          "impliedFormat": 1
         },
         "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "signature": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-        "affectsGlobalScope": true
+        "affectsGlobalScope": true,
+        "impliedFormat": "commonjs"
       },
       "./src/filepresent.ts": {
         "original": {
           "version": "-12346563362-function something() { return 10; }",
           "signature": "-4903250974-declare function something(): number;\n",
-          "affectsGlobalScope": true
+          "affectsGlobalScope": true,
+          "impliedFormat": 1
         },
         "version": "-12346563362-function something() { return 10; }",
         "signature": "-4903250974-declare function something(): number;\n",
-        "affectsGlobalScope": true
+        "affectsGlobalScope": true,
+        "impliedFormat": "commonjs"
       },
       "./src/anotherfilewithsamereferenes.ts": {
         "original": {
           "version": "-28237004260-/// <reference path=\"./filePresent.ts\"/>\n/// <reference path=\"./fileNotFound.ts\"/>\nfunction anotherFileWithSameReferenes() { }\n",
           "signature": "4626929588-/// <reference path=\"filePresent.d.ts\" />\ndeclare function anotherFileWithSameReferenes(): void;\n",
-          "affectsGlobalScope": true
+          "affectsGlobalScope": true,
+          "impliedFormat": 1
         },
         "version": "-28237004260-/// <reference path=\"./filePresent.ts\"/>\n/// <reference path=\"./fileNotFound.ts\"/>\nfunction anotherFileWithSameReferenes() { }\n",
         "signature": "4626929588-/// <reference path=\"filePresent.d.ts\" />\ndeclare function anotherFileWithSameReferenes(): void;\n",
-        "affectsGlobalScope": true
+        "affectsGlobalScope": true,
+        "impliedFormat": "commonjs"
       },
       "./src/main.ts": {
         "original": {
           "version": "-24702349751-/// <reference path=\"./filePresent.ts\"/>\n/// <reference path=\"./fileNotFound.ts\"/>\nfunction main() { }\nsomething();",
           "signature": "6884835015-/// <reference path=\"filePresent.d.ts\" />\ndeclare function main(): void;\n",
-          "affectsGlobalScope": true
+          "affectsGlobalScope": true,
+          "impliedFormat": 1
         },
         "version": "-24702349751-/// <reference path=\"./filePresent.ts\"/>\n/// <reference path=\"./fileNotFound.ts\"/>\nfunction main() { }\nsomething();",
         "signature": "6884835015-/// <reference path=\"filePresent.d.ts\" />\ndeclare function main(): void;\n",
-        "affectsGlobalScope": true
+        "affectsGlobalScope": true,
+        "impliedFormat": "commonjs"
       }
     },
     "root": [
@@ -425,7 +441,7 @@ something();
     "latestChangedDtsFile": "./src/main.d.ts"
   },
   "version": "FakeTSVersion",
-  "size": 1619
+  "size": 1691
 }
 
 
@@ -492,7 +508,7 @@ something();
 
 
 //// [/src/project/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../lib/lib.d.ts","./src/filepresent.ts","./src/anotherfilewithsamereferenes.ts","./src/main.ts","./src/filenotfound.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"-12346563362-function something() { return 10; }","signature":"-4903250974-declare function something(): number;\n","affectsGlobalScope":true},{"version":"-28237004260-/// <reference path=\"./filePresent.ts\"/>\n/// <reference path=\"./fileNotFound.ts\"/>\nfunction anotherFileWithSameReferenes() { }\n","signature":"4626929588-/// <reference path=\"filePresent.d.ts\" />\ndeclare function anotherFileWithSameReferenes(): void;\n","affectsGlobalScope":true},{"version":"-20086051197-/// <reference path=\"./filePresent.ts\"/>\n/// <reference path=\"./fileNotFound.ts\"/>\nfunction main() { }\nsomething();something();","signature":"6884835015-/// <reference path=\"filePresent.d.ts\" />\ndeclare function main(): void;\n","affectsGlobalScope":true}],"root":[[2,4]],"options":{"composite":true},"fileIdsList":[[2,5]],"referencedMap":[[3,1],[4,1]],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,3,2,4],"latestChangedDtsFile":"./src/main.d.ts"},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../lib/lib.d.ts","./src/filepresent.ts","./src/anotherfilewithsamereferenes.ts","./src/main.ts","./src/filenotfound.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedFormat":1},{"version":"-12346563362-function something() { return 10; }","signature":"-4903250974-declare function something(): number;\n","affectsGlobalScope":true,"impliedFormat":1},{"version":"-28237004260-/// <reference path=\"./filePresent.ts\"/>\n/// <reference path=\"./fileNotFound.ts\"/>\nfunction anotherFileWithSameReferenes() { }\n","signature":"4626929588-/// <reference path=\"filePresent.d.ts\" />\ndeclare function anotherFileWithSameReferenes(): void;\n","affectsGlobalScope":true,"impliedFormat":1},{"version":"-20086051197-/// <reference path=\"./filePresent.ts\"/>\n/// <reference path=\"./fileNotFound.ts\"/>\nfunction main() { }\nsomething();something();","signature":"6884835015-/// <reference path=\"filePresent.d.ts\" />\ndeclare function main(): void;\n","affectsGlobalScope":true,"impliedFormat":1}],"root":[[2,4]],"options":{"composite":true},"fileIdsList":[[2,5]],"referencedMap":[[3,1],[4,1]],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,3,2,4],"latestChangedDtsFile":"./src/main.d.ts"},"version":"FakeTSVersion"}
 
 //// [/src/project/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -514,41 +530,49 @@ something();
       "../../lib/lib.d.ts": {
         "original": {
           "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-          "affectsGlobalScope": true
+          "affectsGlobalScope": true,
+          "impliedFormat": 1
         },
         "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "signature": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-        "affectsGlobalScope": true
+        "affectsGlobalScope": true,
+        "impliedFormat": "commonjs"
       },
       "./src/filepresent.ts": {
         "original": {
           "version": "-12346563362-function something() { return 10; }",
           "signature": "-4903250974-declare function something(): number;\n",
-          "affectsGlobalScope": true
+          "affectsGlobalScope": true,
+          "impliedFormat": 1
         },
         "version": "-12346563362-function something() { return 10; }",
         "signature": "-4903250974-declare function something(): number;\n",
-        "affectsGlobalScope": true
+        "affectsGlobalScope": true,
+        "impliedFormat": "commonjs"
       },
       "./src/anotherfilewithsamereferenes.ts": {
         "original": {
           "version": "-28237004260-/// <reference path=\"./filePresent.ts\"/>\n/// <reference path=\"./fileNotFound.ts\"/>\nfunction anotherFileWithSameReferenes() { }\n",
           "signature": "4626929588-/// <reference path=\"filePresent.d.ts\" />\ndeclare function anotherFileWithSameReferenes(): void;\n",
-          "affectsGlobalScope": true
+          "affectsGlobalScope": true,
+          "impliedFormat": 1
         },
         "version": "-28237004260-/// <reference path=\"./filePresent.ts\"/>\n/// <reference path=\"./fileNotFound.ts\"/>\nfunction anotherFileWithSameReferenes() { }\n",
         "signature": "4626929588-/// <reference path=\"filePresent.d.ts\" />\ndeclare function anotherFileWithSameReferenes(): void;\n",
-        "affectsGlobalScope": true
+        "affectsGlobalScope": true,
+        "impliedFormat": "commonjs"
       },
       "./src/main.ts": {
         "original": {
           "version": "-20086051197-/// <reference path=\"./filePresent.ts\"/>\n/// <reference path=\"./fileNotFound.ts\"/>\nfunction main() { }\nsomething();something();",
           "signature": "6884835015-/// <reference path=\"filePresent.d.ts\" />\ndeclare function main(): void;\n",
-          "affectsGlobalScope": true
+          "affectsGlobalScope": true,
+          "impliedFormat": 1
         },
         "version": "-20086051197-/// <reference path=\"./filePresent.ts\"/>\n/// <reference path=\"./fileNotFound.ts\"/>\nfunction main() { }\nsomething();something();",
         "signature": "6884835015-/// <reference path=\"filePresent.d.ts\" />\ndeclare function main(): void;\n",
-        "affectsGlobalScope": true
+        "affectsGlobalScope": true,
+        "impliedFormat": "commonjs"
       }
     },
     "root": [
@@ -587,7 +611,7 @@ something();
     "latestChangedDtsFile": "./src/main.d.ts"
   },
   "version": "FakeTSVersion",
-  "size": 1631
+  "size": 1703
 }
 
 
@@ -685,7 +709,7 @@ function foo() { return 20; }
 
 
 //// [/src/project/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../lib/lib.d.ts","./src/filepresent.ts","./src/anotherfilewithsamereferenes.ts","./src/newfile.ts","./src/main.ts","./src/filenotfound.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"-12346563362-function something() { return 10; }","signature":"-4903250974-declare function something(): number;\n","affectsGlobalScope":true},{"version":"-28237004260-/// <reference path=\"./filePresent.ts\"/>\n/// <reference path=\"./fileNotFound.ts\"/>\nfunction anotherFileWithSameReferenes() { }\n","signature":"4626929588-/// <reference path=\"filePresent.d.ts\" />\ndeclare function anotherFileWithSameReferenes(): void;\n","affectsGlobalScope":true},{"version":"5451387573-function foo() { return 20; }","signature":"517738360-declare function foo(): number;\n","affectsGlobalScope":true},{"version":"-3581559188-/// <reference path=\"./newFile.ts\"/>\n/// <reference path=\"./filePresent.ts\"/>\n/// <reference path=\"./fileNotFound.ts\"/>\nfunction main() { }\nsomething();something();foo();","signature":"-1842835947-/// <reference path=\"newFile.d.ts\" />\n/// <reference path=\"filePresent.d.ts\" />\ndeclare function main(): void;\n","affectsGlobalScope":true}],"root":[[2,5]],"options":{"composite":true},"fileIdsList":[[2,6],[2,4,6]],"referencedMap":[[3,1],[5,2]],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,3,2,5,4],"latestChangedDtsFile":"./src/main.d.ts"},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../lib/lib.d.ts","./src/filepresent.ts","./src/anotherfilewithsamereferenes.ts","./src/newfile.ts","./src/main.ts","./src/filenotfound.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedFormat":1},{"version":"-12346563362-function something() { return 10; }","signature":"-4903250974-declare function something(): number;\n","affectsGlobalScope":true,"impliedFormat":1},{"version":"-28237004260-/// <reference path=\"./filePresent.ts\"/>\n/// <reference path=\"./fileNotFound.ts\"/>\nfunction anotherFileWithSameReferenes() { }\n","signature":"4626929588-/// <reference path=\"filePresent.d.ts\" />\ndeclare function anotherFileWithSameReferenes(): void;\n","affectsGlobalScope":true,"impliedFormat":1},{"version":"5451387573-function foo() { return 20; }","signature":"517738360-declare function foo(): number;\n","affectsGlobalScope":true,"impliedFormat":1},{"version":"-3581559188-/// <reference path=\"./newFile.ts\"/>\n/// <reference path=\"./filePresent.ts\"/>\n/// <reference path=\"./fileNotFound.ts\"/>\nfunction main() { }\nsomething();something();foo();","signature":"-1842835947-/// <reference path=\"newFile.d.ts\" />\n/// <reference path=\"filePresent.d.ts\" />\ndeclare function main(): void;\n","affectsGlobalScope":true,"impliedFormat":1}],"root":[[2,5]],"options":{"composite":true},"fileIdsList":[[2,6],[2,4,6]],"referencedMap":[[3,1],[5,2]],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,3,2,5,4],"latestChangedDtsFile":"./src/main.d.ts"},"version":"FakeTSVersion"}
 
 //// [/src/project/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -713,51 +737,61 @@ function foo() { return 20; }
       "../../lib/lib.d.ts": {
         "original": {
           "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-          "affectsGlobalScope": true
+          "affectsGlobalScope": true,
+          "impliedFormat": 1
         },
         "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "signature": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-        "affectsGlobalScope": true
+        "affectsGlobalScope": true,
+        "impliedFormat": "commonjs"
       },
       "./src/filepresent.ts": {
         "original": {
           "version": "-12346563362-function something() { return 10; }",
           "signature": "-4903250974-declare function something(): number;\n",
-          "affectsGlobalScope": true
+          "affectsGlobalScope": true,
+          "impliedFormat": 1
         },
         "version": "-12346563362-function something() { return 10; }",
         "signature": "-4903250974-declare function something(): number;\n",
-        "affectsGlobalScope": true
+        "affectsGlobalScope": true,
+        "impliedFormat": "commonjs"
       },
       "./src/anotherfilewithsamereferenes.ts": {
         "original": {
           "version": "-28237004260-/// <reference path=\"./filePresent.ts\"/>\n/// <reference path=\"./fileNotFound.ts\"/>\nfunction anotherFileWithSameReferenes() { }\n",
           "signature": "4626929588-/// <reference path=\"filePresent.d.ts\" />\ndeclare function anotherFileWithSameReferenes(): void;\n",
-          "affectsGlobalScope": true
+          "affectsGlobalScope": true,
+          "impliedFormat": 1
         },
         "version": "-28237004260-/// <reference path=\"./filePresent.ts\"/>\n/// <reference path=\"./fileNotFound.ts\"/>\nfunction anotherFileWithSameReferenes() { }\n",
         "signature": "4626929588-/// <reference path=\"filePresent.d.ts\" />\ndeclare function anotherFileWithSameReferenes(): void;\n",
-        "affectsGlobalScope": true
+        "affectsGlobalScope": true,
+        "impliedFormat": "commonjs"
       },
       "./src/newfile.ts": {
         "original": {
           "version": "5451387573-function foo() { return 20; }",
           "signature": "517738360-declare function foo(): number;\n",
-          "affectsGlobalScope": true
+          "affectsGlobalScope": true,
+          "impliedFormat": 1
         },
         "version": "5451387573-function foo() { return 20; }",
         "signature": "517738360-declare function foo(): number;\n",
-        "affectsGlobalScope": true
+        "affectsGlobalScope": true,
+        "impliedFormat": "commonjs"
       },
       "./src/main.ts": {
         "original": {
           "version": "-3581559188-/// <reference path=\"./newFile.ts\"/>\n/// <reference path=\"./filePresent.ts\"/>\n/// <reference path=\"./fileNotFound.ts\"/>\nfunction main() { }\nsomething();something();foo();",
           "signature": "-1842835947-/// <reference path=\"newFile.d.ts\" />\n/// <reference path=\"filePresent.d.ts\" />\ndeclare function main(): void;\n",
-          "affectsGlobalScope": true
+          "affectsGlobalScope": true,
+          "impliedFormat": 1
         },
         "version": "-3581559188-/// <reference path=\"./newFile.ts\"/>\n/// <reference path=\"./filePresent.ts\"/>\n/// <reference path=\"./fileNotFound.ts\"/>\nfunction main() { }\nsomething();something();foo();",
         "signature": "-1842835947-/// <reference path=\"newFile.d.ts\" />\n/// <reference path=\"filePresent.d.ts\" />\ndeclare function main(): void;\n",
-        "affectsGlobalScope": true
+        "affectsGlobalScope": true,
+        "impliedFormat": "commonjs"
       }
     },
     "root": [
@@ -799,7 +833,7 @@ function foo() { return 20; }
     "latestChangedDtsFile": "./src/main.d.ts"
   },
   "version": "FakeTSVersion",
-  "size": 1886
+  "size": 1976
 }
 
 
@@ -877,7 +911,7 @@ declare function main(): void;
 //// [/src/project/src/main.js] file written with same contents
 //// [/src/project/src/newFile.js] file written with same contents
 //// [/src/project/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../lib/lib.d.ts","./src/filepresent.ts","./src/filenotfound.ts","./src/anotherfilewithsamereferenes.ts","./src/newfile.ts","./src/main.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"-12346563362-function something() { return 10; }","signature":"-4903250974-declare function something(): number;\n","affectsGlobalScope":true},{"version":"-9011934479-function something2() { return 20; }","signature":"-11412869068-declare function something2(): number;\n","affectsGlobalScope":true},{"version":"-28237004260-/// <reference path=\"./filePresent.ts\"/>\n/// <reference path=\"./fileNotFound.ts\"/>\nfunction anotherFileWithSameReferenes() { }\n","signature":"-18213659-/// <reference path=\"filePresent.d.ts\" />\n/// <reference path=\"fileNotFound.d.ts\" />\ndeclare function anotherFileWithSameReferenes(): void;\n","affectsGlobalScope":true},{"version":"5451387573-function foo() { return 20; }","signature":"517738360-declare function foo(): number;\n","affectsGlobalScope":true},{"version":"-3581559188-/// <reference path=\"./newFile.ts\"/>\n/// <reference path=\"./filePresent.ts\"/>\n/// <reference path=\"./fileNotFound.ts\"/>\nfunction main() { }\nsomething();something();foo();","signature":"5698040710-/// <reference path=\"newFile.d.ts\" />\n/// <reference path=\"filePresent.d.ts\" />\n/// <reference path=\"fileNotFound.d.ts\" />\ndeclare function main(): void;\n","affectsGlobalScope":true}],"root":[[2,6]],"options":{"composite":true},"fileIdsList":[[2,3],[2,3,5]],"referencedMap":[[4,1],[6,2]],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,4,3,2,6,5],"latestChangedDtsFile":"./src/main.d.ts"},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../lib/lib.d.ts","./src/filepresent.ts","./src/filenotfound.ts","./src/anotherfilewithsamereferenes.ts","./src/newfile.ts","./src/main.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedFormat":1},{"version":"-12346563362-function something() { return 10; }","signature":"-4903250974-declare function something(): number;\n","affectsGlobalScope":true,"impliedFormat":1},{"version":"-9011934479-function something2() { return 20; }","signature":"-11412869068-declare function something2(): number;\n","affectsGlobalScope":true,"impliedFormat":1},{"version":"-28237004260-/// <reference path=\"./filePresent.ts\"/>\n/// <reference path=\"./fileNotFound.ts\"/>\nfunction anotherFileWithSameReferenes() { }\n","signature":"-18213659-/// <reference path=\"filePresent.d.ts\" />\n/// <reference path=\"fileNotFound.d.ts\" />\ndeclare function anotherFileWithSameReferenes(): void;\n","affectsGlobalScope":true,"impliedFormat":1},{"version":"5451387573-function foo() { return 20; }","signature":"517738360-declare function foo(): number;\n","affectsGlobalScope":true,"impliedFormat":1},{"version":"-3581559188-/// <reference path=\"./newFile.ts\"/>\n/// <reference path=\"./filePresent.ts\"/>\n/// <reference path=\"./fileNotFound.ts\"/>\nfunction main() { }\nsomething();something();foo();","signature":"5698040710-/// <reference path=\"newFile.d.ts\" />\n/// <reference path=\"filePresent.d.ts\" />\n/// <reference path=\"fileNotFound.d.ts\" />\ndeclare function main(): void;\n","affectsGlobalScope":true,"impliedFormat":1}],"root":[[2,6]],"options":{"composite":true},"fileIdsList":[[2,3],[2,3,5]],"referencedMap":[[4,1],[6,2]],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,4,3,2,6,5],"latestChangedDtsFile":"./src/main.d.ts"},"version":"FakeTSVersion"}
 
 //// [/src/project/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -905,61 +939,73 @@ declare function main(): void;
       "../../lib/lib.d.ts": {
         "original": {
           "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-          "affectsGlobalScope": true
+          "affectsGlobalScope": true,
+          "impliedFormat": 1
         },
         "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "signature": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-        "affectsGlobalScope": true
+        "affectsGlobalScope": true,
+        "impliedFormat": "commonjs"
       },
       "./src/filepresent.ts": {
         "original": {
           "version": "-12346563362-function something() { return 10; }",
           "signature": "-4903250974-declare function something(): number;\n",
-          "affectsGlobalScope": true
+          "affectsGlobalScope": true,
+          "impliedFormat": 1
         },
         "version": "-12346563362-function something() { return 10; }",
         "signature": "-4903250974-declare function something(): number;\n",
-        "affectsGlobalScope": true
+        "affectsGlobalScope": true,
+        "impliedFormat": "commonjs"
       },
       "./src/filenotfound.ts": {
         "original": {
           "version": "-9011934479-function something2() { return 20; }",
           "signature": "-11412869068-declare function something2(): number;\n",
-          "affectsGlobalScope": true
+          "affectsGlobalScope": true,
+          "impliedFormat": 1
         },
         "version": "-9011934479-function something2() { return 20; }",
         "signature": "-11412869068-declare function something2(): number;\n",
-        "affectsGlobalScope": true
+        "affectsGlobalScope": true,
+        "impliedFormat": "commonjs"
       },
       "./src/anotherfilewithsamereferenes.ts": {
         "original": {
           "version": "-28237004260-/// <reference path=\"./filePresent.ts\"/>\n/// <reference path=\"./fileNotFound.ts\"/>\nfunction anotherFileWithSameReferenes() { }\n",
           "signature": "-18213659-/// <reference path=\"filePresent.d.ts\" />\n/// <reference path=\"fileNotFound.d.ts\" />\ndeclare function anotherFileWithSameReferenes(): void;\n",
-          "affectsGlobalScope": true
+          "affectsGlobalScope": true,
+          "impliedFormat": 1
         },
         "version": "-28237004260-/// <reference path=\"./filePresent.ts\"/>\n/// <reference path=\"./fileNotFound.ts\"/>\nfunction anotherFileWithSameReferenes() { }\n",
         "signature": "-18213659-/// <reference path=\"filePresent.d.ts\" />\n/// <reference path=\"fileNotFound.d.ts\" />\ndeclare function anotherFileWithSameReferenes(): void;\n",
-        "affectsGlobalScope": true
+        "affectsGlobalScope": true,
+        "impliedFormat": "commonjs"
       },
       "./src/newfile.ts": {
         "original": {
           "version": "5451387573-function foo() { return 20; }",
           "signature": "517738360-declare function foo(): number;\n",
-          "affectsGlobalScope": true
+          "affectsGlobalScope": true,
+          "impliedFormat": 1
         },
         "version": "5451387573-function foo() { return 20; }",
         "signature": "517738360-declare function foo(): number;\n",
-        "affectsGlobalScope": true
+        "affectsGlobalScope": true,
+        "impliedFormat": "commonjs"
       },
       "./src/main.ts": {
         "original": {
           "version": "-3581559188-/// <reference path=\"./newFile.ts\"/>\n/// <reference path=\"./filePresent.ts\"/>\n/// <reference path=\"./fileNotFound.ts\"/>\nfunction main() { }\nsomething();something();foo();",
           "signature": "5698040710-/// <reference path=\"newFile.d.ts\" />\n/// <reference path=\"filePresent.d.ts\" />\n/// <reference path=\"fileNotFound.d.ts\" />\ndeclare function main(): void;\n",
-          "affectsGlobalScope": true
+          "affectsGlobalScope": true,
+          "impliedFormat": 1
         },
         "version": "-3581559188-/// <reference path=\"./newFile.ts\"/>\n/// <reference path=\"./filePresent.ts\"/>\n/// <reference path=\"./fileNotFound.ts\"/>\nfunction main() { }\nsomething();something();foo();",
         "signature": "5698040710-/// <reference path=\"newFile.d.ts\" />\n/// <reference path=\"filePresent.d.ts\" />\n/// <reference path=\"fileNotFound.d.ts\" />\ndeclare function main(): void;\n",
-        "affectsGlobalScope": true
+        "affectsGlobalScope": true,
+        "impliedFormat": "commonjs"
       }
     },
     "root": [
@@ -1003,7 +1049,7 @@ declare function main(): void;
     "latestChangedDtsFile": "./src/main.d.ts"
   },
   "version": "FakeTSVersion",
-  "size": 2135
+  "size": 2243
 }
 
 
@@ -1062,7 +1108,7 @@ something();
 
 
 //// [/src/project/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../lib/lib.d.ts","./src/filepresent.ts","./src/filenotfound.ts","./src/anotherfilewithsamereferenes.ts","./src/newfile.ts","./src/main.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"-12346563362-function something() { return 10; }","signature":"-4903250974-declare function something(): number;\n","affectsGlobalScope":true},{"version":"-9011934479-function something2() { return 20; }","signature":"-11412869068-declare function something2(): number;\n","affectsGlobalScope":true},{"version":"-28237004260-/// <reference path=\"./filePresent.ts\"/>\n/// <reference path=\"./fileNotFound.ts\"/>\nfunction anotherFileWithSameReferenes() { }\n","signature":"-18213659-/// <reference path=\"filePresent.d.ts\" />\n/// <reference path=\"fileNotFound.d.ts\" />\ndeclare function anotherFileWithSameReferenes(): void;\n","affectsGlobalScope":true},{"version":"5451387573-function foo() { return 20; }","signature":"517738360-declare function foo(): number;\n","affectsGlobalScope":true},{"version":"3987942182-/// <reference path=\"./newFile.ts\"/>\n/// <reference path=\"./filePresent.ts\"/>\n/// <reference path=\"./fileNotFound.ts\"/>\nfunction main() { }\nsomething();something();foo();something();","signature":"5698040710-/// <reference path=\"newFile.d.ts\" />\n/// <reference path=\"filePresent.d.ts\" />\n/// <reference path=\"fileNotFound.d.ts\" />\ndeclare function main(): void;\n","affectsGlobalScope":true}],"root":[[2,6]],"options":{"composite":true},"fileIdsList":[[2,3],[2,3,5]],"referencedMap":[[4,1],[6,2]],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,4,3,2,6,5],"latestChangedDtsFile":"./src/main.d.ts"},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../lib/lib.d.ts","./src/filepresent.ts","./src/filenotfound.ts","./src/anotherfilewithsamereferenes.ts","./src/newfile.ts","./src/main.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedFormat":1},{"version":"-12346563362-function something() { return 10; }","signature":"-4903250974-declare function something(): number;\n","affectsGlobalScope":true,"impliedFormat":1},{"version":"-9011934479-function something2() { return 20; }","signature":"-11412869068-declare function something2(): number;\n","affectsGlobalScope":true,"impliedFormat":1},{"version":"-28237004260-/// <reference path=\"./filePresent.ts\"/>\n/// <reference path=\"./fileNotFound.ts\"/>\nfunction anotherFileWithSameReferenes() { }\n","signature":"-18213659-/// <reference path=\"filePresent.d.ts\" />\n/// <reference path=\"fileNotFound.d.ts\" />\ndeclare function anotherFileWithSameReferenes(): void;\n","affectsGlobalScope":true,"impliedFormat":1},{"version":"5451387573-function foo() { return 20; }","signature":"517738360-declare function foo(): number;\n","affectsGlobalScope":true,"impliedFormat":1},{"version":"3987942182-/// <reference path=\"./newFile.ts\"/>\n/// <reference path=\"./filePresent.ts\"/>\n/// <reference path=\"./fileNotFound.ts\"/>\nfunction main() { }\nsomething();something();foo();something();","signature":"5698040710-/// <reference path=\"newFile.d.ts\" />\n/// <reference path=\"filePresent.d.ts\" />\n/// <reference path=\"fileNotFound.d.ts\" />\ndeclare function main(): void;\n","affectsGlobalScope":true,"impliedFormat":1}],"root":[[2,6]],"options":{"composite":true},"fileIdsList":[[2,3],[2,3,5]],"referencedMap":[[4,1],[6,2]],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,4,3,2,6,5],"latestChangedDtsFile":"./src/main.d.ts"},"version":"FakeTSVersion"}
 
 //// [/src/project/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -1090,61 +1136,73 @@ something();
       "../../lib/lib.d.ts": {
         "original": {
           "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-          "affectsGlobalScope": true
+          "affectsGlobalScope": true,
+          "impliedFormat": 1
         },
         "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "signature": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-        "affectsGlobalScope": true
+        "affectsGlobalScope": true,
+        "impliedFormat": "commonjs"
       },
       "./src/filepresent.ts": {
         "original": {
           "version": "-12346563362-function something() { return 10; }",
           "signature": "-4903250974-declare function something(): number;\n",
-          "affectsGlobalScope": true
+          "affectsGlobalScope": true,
+          "impliedFormat": 1
         },
         "version": "-12346563362-function something() { return 10; }",
         "signature": "-4903250974-declare function something(): number;\n",
-        "affectsGlobalScope": true
+        "affectsGlobalScope": true,
+        "impliedFormat": "commonjs"
       },
       "./src/filenotfound.ts": {
         "original": {
           "version": "-9011934479-function something2() { return 20; }",
           "signature": "-11412869068-declare function something2(): number;\n",
-          "affectsGlobalScope": true
+          "affectsGlobalScope": true,
+          "impliedFormat": 1
         },
         "version": "-9011934479-function something2() { return 20; }",
         "signature": "-11412869068-declare function something2(): number;\n",
-        "affectsGlobalScope": true
+        "affectsGlobalScope": true,
+        "impliedFormat": "commonjs"
       },
       "./src/anotherfilewithsamereferenes.ts": {
         "original": {
           "version": "-28237004260-/// <reference path=\"./filePresent.ts\"/>\n/// <reference path=\"./fileNotFound.ts\"/>\nfunction anotherFileWithSameReferenes() { }\n",
           "signature": "-18213659-/// <reference path=\"filePresent.d.ts\" />\n/// <reference path=\"fileNotFound.d.ts\" />\ndeclare function anotherFileWithSameReferenes(): void;\n",
-          "affectsGlobalScope": true
+          "affectsGlobalScope": true,
+          "impliedFormat": 1
         },
         "version": "-28237004260-/// <reference path=\"./filePresent.ts\"/>\n/// <reference path=\"./fileNotFound.ts\"/>\nfunction anotherFileWithSameReferenes() { }\n",
         "signature": "-18213659-/// <reference path=\"filePresent.d.ts\" />\n/// <reference path=\"fileNotFound.d.ts\" />\ndeclare function anotherFileWithSameReferenes(): void;\n",
-        "affectsGlobalScope": true
+        "affectsGlobalScope": true,
+        "impliedFormat": "commonjs"
       },
       "./src/newfile.ts": {
         "original": {
           "version": "5451387573-function foo() { return 20; }",
           "signature": "517738360-declare function foo(): number;\n",
-          "affectsGlobalScope": true
+          "affectsGlobalScope": true,
+          "impliedFormat": 1
         },
         "version": "5451387573-function foo() { return 20; }",
         "signature": "517738360-declare function foo(): number;\n",
-        "affectsGlobalScope": true
+        "affectsGlobalScope": true,
+        "impliedFormat": "commonjs"
       },
       "./src/main.ts": {
         "original": {
           "version": "3987942182-/// <reference path=\"./newFile.ts\"/>\n/// <reference path=\"./filePresent.ts\"/>\n/// <reference path=\"./fileNotFound.ts\"/>\nfunction main() { }\nsomething();something();foo();something();",
           "signature": "5698040710-/// <reference path=\"newFile.d.ts\" />\n/// <reference path=\"filePresent.d.ts\" />\n/// <reference path=\"fileNotFound.d.ts\" />\ndeclare function main(): void;\n",
-          "affectsGlobalScope": true
+          "affectsGlobalScope": true,
+          "impliedFormat": 1
         },
         "version": "3987942182-/// <reference path=\"./newFile.ts\"/>\n/// <reference path=\"./filePresent.ts\"/>\n/// <reference path=\"./fileNotFound.ts\"/>\nfunction main() { }\nsomething();something();foo();something();",
         "signature": "5698040710-/// <reference path=\"newFile.d.ts\" />\n/// <reference path=\"filePresent.d.ts\" />\n/// <reference path=\"fileNotFound.d.ts\" />\ndeclare function main(): void;\n",
-        "affectsGlobalScope": true
+        "affectsGlobalScope": true,
+        "impliedFormat": "commonjs"
       }
     },
     "root": [
@@ -1188,6 +1246,6 @@ something();
     "latestChangedDtsFile": "./src/main.d.ts"
   },
   "version": "FakeTSVersion",
-  "size": 2146
+  "size": 2254
 }
 

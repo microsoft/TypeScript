@@ -47,6 +47,22 @@ Output::
 
 
 
+PolledWatches::
+/a/lib/package.json: *new*
+  {"pollingInterval":2000}
+/a/package.json: *new*
+  {"pollingInterval":2000}
+/package.json: *new*
+  {"pollingInterval":2000}
+/user/package.json: *new*
+  {"pollingInterval":2000}
+/user/username/package.json: *new*
+  {"pollingInterval":2000}
+/user/username/projects/myproject/package.json: *new*
+  {"pollingInterval":2000}
+/user/username/projects/package.json: *new*
+  {"pollingInterval":2000}
+
 FsWatches::
 /user/username/projects/myproject/a.js: *new*
   {}
