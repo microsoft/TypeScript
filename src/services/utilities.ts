@@ -4,6 +4,7 @@ import {
     addSyntheticLeadingComment,
     addSyntheticTrailingComment,
     AnyImportOrRequireStatement,
+    arrayIsSorted,
     assertType,
     AssignmentDeclarationKind,
     BinaryExpression,
@@ -326,7 +327,6 @@ import {
     skipOuterExpressions,
     skipParentheses,
     some,
-    SortKind,
     SourceFile,
     SourceFileLike,
     SourceMapper,
@@ -2623,16 +2623,20 @@ export function insertImports(changes: textChanges.ChangeTracker, sourceFile: So
     const decl = isArray(imports) ? imports[0] : imports;
     const importKindPredicate: (node: Node) => node is AnyImportOrRequireStatement = decl.kind === SyntaxKind.VariableStatement ? isRequireVariableStatement : isAnyImportSyntax;
     const existingImportStatements = filter(sourceFile.statements, importKindPredicate);
-    let sortKind = isArray(imports) ? OrganizeImports.detectImportDeclarationSorting(imports, preferences) : SortKind.Both;
-    const comparer = OrganizeImports.getOrganizeImportsComparer(preferences, sortKind === SortKind.CaseInsensitive);
-    const sortedNewImports = isArray(imports) ? stableSort(imports, (a, b) => OrganizeImports.compareImportsOrRequireStatements(a, b, comparer)) : [imports];
+    //todo remove typecasts
+    const moduleSpecifiersToDetect: ImportDeclaration[][] = existingImportStatements.length > 1
+        ? [existingImportStatements as ImportDeclaration[]]
+        : isArray(imports)
+        ? [imports as ImportDeclaration[]]
+        : [[imports as ImportDeclaration]];
+    const comparers = OrganizeImports.getDetectionBySort(moduleSpecifiersToDetect, preferences);
+    const sortedNewImports = isArray(imports) ? stableSort(imports, (a, b) => OrganizeImports.compareImportsOrRequireStatements(a, b, comparers.moduleSpecifierComparer)) : [imports];
     if (!existingImportStatements.length) {
         changes.insertNodesAtTopOfFile(sourceFile, sortedNewImports, blankLineBetween);
     }
-    else if (existingImportStatements && (sortKind = OrganizeImports.detectImportDeclarationSorting(existingImportStatements, preferences))) {
-        const comparer = OrganizeImports.getOrganizeImportsComparer(preferences, sortKind === SortKind.CaseInsensitive);
+    else if (existingImportStatements && arrayIsSorted(existingImportStatements, (s1, s2) => OrganizeImports.compareImportsOrRequireStatements(s1, s2, comparers.moduleSpecifierComparer))) {
         for (const newImport of sortedNewImports) {
-            const insertionIndex = OrganizeImports.getImportDeclarationInsertionIndex(existingImportStatements, newImport, comparer);
+            const insertionIndex = OrganizeImports.getImportDeclarationInsertionIndex(existingImportStatements, newImport, comparers.moduleSpecifierComparer);
             if (insertionIndex === 0) {
                 // If the first import is top-of-file, insert after the leading comment which is likely the header.
                 const options = existingImportStatements[0] === sourceFile.statements[0] ?

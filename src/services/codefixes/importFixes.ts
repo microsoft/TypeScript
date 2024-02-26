@@ -1409,8 +1409,7 @@ function promoteFromTypeOnly(
                 if (aliasDeclaration.parent.elements.length > 1) {
                     const newSpecifier = factory.updateImportSpecifier(aliasDeclaration, /*isTypeOnly*/ false, aliasDeclaration.propertyName, aliasDeclaration.name);
                     const moduleSpecifiersByGroup: ImportDeclaration[][] = [[aliasDeclaration.parent.parent.parent]];
-                    const comparers = OrganizeImports.getDetectionByDiff(moduleSpecifiersByGroup, preferences);
-                    // const comparer = OrganizeImports.getOrganizeImportsComparer(preferences, sortKind === SortKind.CaseInsensitive);
+                    const comparers = OrganizeImports.getDetectionBySort(moduleSpecifiersByGroup, preferences);
                     const insertionIndex = OrganizeImports.getImportSpecifierInsertionIndex(aliasDeclaration.parent.elements, newSpecifier, comparers.namedImportComparer ?? comparers.moduleSpecifierComparer, { organizeImportsTypeOrder: comparers.typeOrder });
                     if (insertionIndex !== aliasDeclaration.parent.elements.indexOf(aliasDeclaration)) {
                         changes.delete(sourceFile, aliasDeclaration);
@@ -1523,7 +1522,7 @@ function doAddExistingFix(
             //     ignoreCaseForSorting = targetImportSorting === SortKind.CaseInsensitive;
             // }
             const moduleSpecifiersByGroup: ImportDeclaration[][] = [[clause.parent]];
-            comparers = OrganizeImports.getDetectionByDiff(moduleSpecifiersByGroup, preferences);
+            comparers = OrganizeImports.getDetectionBySort(moduleSpecifiersByGroup, preferences);
         }
         // if (ignoreCaseForSorting === undefined) {
         //     ignoreCaseForSorting = OrganizeImports.detectSorting(sourceFile, preferences) === SortKind.CaseInsensitive;
