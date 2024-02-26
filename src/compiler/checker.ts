@@ -37415,7 +37415,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             const body = func.body as Block;
             if ((body.statements.length !== 1) || (body.statements[0].kind !== SyntaxKind.ReturnStatement)) return undefined;
             returnExpression = (body.statements[0] as ReturnStatement).expression;
-        } else {
+        }
+        else {
             returnExpression = func.body;
         }
         if (!returnExpression) return undefined;
