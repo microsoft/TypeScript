@@ -1,8 +1,6 @@
-error TS5108: Option 'target=ES3' has been removed. Please remove it from your configuration.
 error TS6046: Argument for '--module' option must be: 'none', 'commonjs', 'amd', 'system', 'umd', 'es6', 'es2015', 'es2020', 'es2022', 'esnext', 'node16', 'nodenext', 'preserve'.
 
 
-!!! error TS5108: Option 'target=ES3' has been removed. Please remove it from your configuration.
 !!! error TS6046: Argument for '--module' option must be: 'none', 'commonjs', 'amd', 'system', 'umd', 'es6', 'es2015', 'es2020', 'es2022', 'esnext', 'node16', 'nodenext', 'preserve'.
 ==== file.ts (0 errors) ====
     

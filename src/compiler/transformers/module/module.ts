@@ -1598,39 +1598,24 @@ export function transformModule(context: TransformationContext): (x: SourceFile 
                 );
             }
             for (const specifier of node.exportClause.elements) {
-                if (languageVersion === ScriptTarget.ES3) {
-                    statements.push(
-                        setOriginalNode(
-                            setTextRange(
-                                factory.createExpressionStatement(
-                                    emitHelpers().createCreateBindingHelper(generatedName, factory.createStringLiteralFromNode(specifier.propertyName || specifier.name), specifier.propertyName ? factory.createStringLiteralFromNode(specifier.name) : undefined),
-                                ),
-                                specifier,
+                const exportNeedsImportDefault = !!getESModuleInterop(compilerOptions) &&
+                    !(getInternalEmitFlags(node) & InternalEmitFlags.NeverApplyImportHelper) &&
+                    idText(specifier.propertyName || specifier.name) === "default";
+                const exportedValue = factory.createPropertyAccessExpression(
+                    exportNeedsImportDefault ? emitHelpers().createImportDefaultHelper(generatedName) : generatedName,
+                    specifier.propertyName || specifier.name,
+                );
+                statements.push(
+                    setOriginalNode(
+                        setTextRange(
+                            factory.createExpressionStatement(
+                                createExportExpression(factory.getExportName(specifier), exportedValue, /*location*/ undefined, /*liveBinding*/ true),
                             ),
                             specifier,
                         ),
-                    );
-                }
-                else {
-                    const exportNeedsImportDefault = !!getESModuleInterop(compilerOptions) &&
-                        !(getInternalEmitFlags(node) & InternalEmitFlags.NeverApplyImportHelper) &&
-                        idText(specifier.propertyName || specifier.name) === "default";
-                    const exportedValue = factory.createPropertyAccessExpression(
-                        exportNeedsImportDefault ? emitHelpers().createImportDefaultHelper(generatedName) : generatedName,
-                        specifier.propertyName || specifier.name,
-                    );
-                    statements.push(
-                        setOriginalNode(
-                            setTextRange(
-                                factory.createExpressionStatement(
-                                    createExportExpression(factory.getExportName(specifier), exportedValue, /*location*/ undefined, /*liveBinding*/ true),
-                                ),
-                                specifier,
-                            ),
-                            specifier,
-                        ),
-                    );
-                }
+                        specifier,
+                    ),
+                );
             }
 
             return singleOrMany(statements);
@@ -2085,30 +2070,19 @@ export function transformModule(context: TransformationContext): (x: SourceFile 
     }
 
     function createUnderscoreUnderscoreESModule() {
-        let statement: Statement;
-        if (languageVersion === ScriptTarget.ES3) {
-            statement = factory.createExpressionStatement(
-                createExportExpression(
-                    factory.createIdentifier("__esModule"),
-                    factory.createTrue(),
-                ),
-            );
-        }
-        else {
-            statement = factory.createExpressionStatement(
-                factory.createCallExpression(
-                    factory.createPropertyAccessExpression(factory.createIdentifier("Object"), "defineProperty"),
-                    /*typeArguments*/ undefined,
-                    [
-                        factory.createIdentifier("exports"),
-                        factory.createStringLiteral("__esModule"),
-                        factory.createObjectLiteralExpression([
-                            factory.createPropertyAssignment("value", factory.createTrue()),
-                        ]),
-                    ],
-                ),
-            );
-        }
+        const statement = factory.createExpressionStatement(
+            factory.createCallExpression(
+                factory.createPropertyAccessExpression(factory.createIdentifier("Object"), "defineProperty"),
+                /*typeArguments*/ undefined,
+                [
+                    factory.createIdentifier("exports"),
+                    factory.createStringLiteral("__esModule"),
+                    factory.createObjectLiteralExpression([
+                        factory.createPropertyAssignment("value", factory.createTrue()),
+                    ]),
+                ],
+            ),
+        );
         setEmitFlags(statement, EmitFlags.CustomPrologue);
         return statement;
     }
@@ -2140,7 +2114,7 @@ export function transformModule(context: TransformationContext): (x: SourceFile 
      */
     function createExportExpression(name: Identifier, value: Expression, location?: TextRange, liveBinding?: boolean) {
         return setTextRange(
-            liveBinding && languageVersion !== ScriptTarget.ES3 ? factory.createCallExpression(
+            liveBinding ? factory.createCallExpression(
                 factory.createPropertyAccessExpression(
                     factory.createIdentifier("Object"),
                     "defineProperty",

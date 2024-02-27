@@ -163,7 +163,7 @@
         "category": "Error",
         "code": 1054
     },
-    "Type '{0}' is not a valid async function return type in ES5/ES3 because it does not refer to a Promise-compatible constructor value.": {
+    "Type '{0}' is not a valid async function return type in ES5 because it does not refer to a Promise-compatible constructor value.": {
         "category": "Error",
         "code": 1055
     },
@@ -799,15 +799,15 @@
         "category": "Error",
         "code": 1249
     },
-    "Function declarations are not allowed inside blocks in strict mode when targeting 'ES3' or 'ES5'.": {
+    "Function declarations are not allowed inside blocks in strict mode when targeting 'ES5'.": {
         "category": "Error",
         "code": 1250
     },
-    "Function declarations are not allowed inside blocks in strict mode when targeting 'ES3' or 'ES5'. Class definitions are automatically in strict mode.": {
+    "Function declarations are not allowed inside blocks in strict mode when targeting 'ES5'. Class definitions are automatically in strict mode.": {
         "category": "Error",
         "code": 1251
     },
-    "Function declarations are not allowed inside blocks in strict mode when targeting 'ES3' or 'ES5'. Modules are automatically in strict mode.": {
+    "Function declarations are not allowed inside blocks in strict mode when targeting 'ES5'. Modules are automatically in strict mode.": {
         "category": "Error",
         "code": 1252
     },
@@ -2420,7 +2420,7 @@
         "category": "Error",
         "code": 2495
     },
-    "The 'arguments' object cannot be referenced in an arrow function in ES3 and ES5. Consider using a standard function expression.": {
+    "The 'arguments' object cannot be referenced in an arrow function in ES5. Consider using a standard function expression.": {
         "category": "Error",
         "code": 2496
     },
@@ -2520,7 +2520,7 @@
         "category": "Error",
         "code": 2520
     },
-    "The 'arguments' object cannot be referenced in an async function or method in ES3 and ES5. Consider using a standard function or method.": {
+    "The 'arguments' object cannot be referenced in an async function or method in ES5. Consider using a standard function or method.": {
         "category": "Error",
         "code": 2522
     },
@@ -3135,7 +3135,7 @@
         "category": "Error",
         "code": 2704
     },
-    "An async function or method in ES5/ES3 requires the 'Promise' constructor.  Make sure you have a declaration for the 'Promise' constructor or include 'ES2015' in your '--lib' option.": {
+    "An async function or method in ES5 requires the 'Promise' constructor.  Make sure you have a declaration for the 'Promise' constructor or include 'ES2015' in your '--lib' option.": {
         "category": "Error",
         "code": 2705
     },
@@ -3163,7 +3163,7 @@
         "category": "Error",
         "code": 2711
     },
-    "A dynamic import call in ES5/ES3 requires the 'Promise' constructor.  Make sure you have a declaration for the 'Promise' constructor or include 'ES2015' in your '--lib' option.": {
+    "A dynamic import call in ES5 requires the 'Promise' constructor.  Make sure you have a declaration for the 'Promise' constructor or include 'ES2015' in your '--lib' option.": {
         "category": "Error",
         "code": 2712
     },
@@ -4229,10 +4229,6 @@
         "category": "Error",
         "code": 5047
     },
-    "Option '{0}' cannot be specified when option 'target' is 'ES3'.": {
-        "category": "Error",
-        "code": 5048
-    },
     "Option '{0} can only be used when either option '--inlineSourceMap' or option '--sourceMap' is provided.": {
         "category": "Error",
         "code": 5051
@@ -5065,7 +5061,7 @@
         "category": "Message",
         "code": 6171
     },
-    "Provide full support for iterables in 'for-of', spread, and destructuring when targeting 'ES5' or 'ES3'.": {
+    "Provide full support for iterables in 'for-of', spread, and destructuring when targeting 'ES5'.": {
         "category": "Message",
         "code": 6179
     },
