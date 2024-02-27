@@ -39,6 +39,7 @@ import {
     EmitOutput,
     equateValues,
     FileTextChanges,
+    FileWithRanges,
     filter,
     find,
     FindAllReferences,
@@ -1277,6 +1278,12 @@ export class Session<TMessage = string> implements EventSender {
         tracing?.pop();
     }
 
+    private regionSemanticCheck(file: NormalizedPath, project: Project, ranges: TextRange[]) {
+        tracing?.push(tracing.Phase.Session, "regionSemanticCheck", { file, configFilePath: (project as ConfiguredProject).canonicalConfigFilePath }); // undefined is fine if the cast fails
+        this.sendDiagnosticsEvent(file, project, project.getLanguageService().getRegionSemanticDiagnostics(file, ranges), "regionSemanticDiag");
+        tracing?.pop();
+    }
+
     private sendDiagnosticsEvent(file: NormalizedPath, project: Project, diagnostics: readonly Diagnostic[], kind: protocol.DiagnosticEventKind): void {
         try {
             this.event<protocol.DiagnosticEventBody>({ file, diagnostics: diagnostics.map(diag => formatDiag(file, project, diag)) }, kind);
@@ -1287,11 +1294,30 @@ export class Session<TMessage = string> implements EventSender {
     }
 
     /** It is the caller's responsibility to verify that `!this.suppressDiagnosticEvents`. */
-    private updateErrorCheck(next: NextStep, checkList: readonly string[] | readonly PendingErrorCheck[], ms: number, requireOpen = true) {
+    private updateErrorCheck(
+        next: NextStep,
+        checkList: readonly (string | FileWithRanges)[] | readonly PendingErrorCheck[],
+        ms: number,
+        requireOpen = true) {
         Debug.assert(!this.suppressDiagnosticEvents); // Caller's responsibility
 
         const seq = this.changeSeq;
         const followMs = Math.min(ms, 200);
+        
+        if (checkList.length === 0) {
+            return;
+        }
+
+        const first: string | PendingErrorCheck | FileWithRanges = checkList[0];
+        if (isString(first) || (first as FileWithRanges).ranges) {
+            // checkList is not of pending error checks
+            const filesWithRanges = (checkList as (string | FileWithRanges)[]).filter(item => !isString(item));
+            const files = (checkList as (string | FileWithRanges)[]).filter(isString);
+            if (filesWithRanges.length) {
+                return this.updateErrorCheckWithRanges(next, { filesWithRanges, files }, ms, requireOpen);
+            }
+        }
+        // const checkList = 
 
         let index = 0;
         const goNext = () => {
@@ -1352,6 +1378,91 @@ export class Session<TMessage = string> implements EventSender {
         };
 
         if (checkList.length > index && this.changeSeq === seq) {
+            next.delay("checkOne", ms, checkOne);
+        }
+    }
+
+
+    private updateErrorCheckWithRanges(
+        next: NextStep,
+        checkList: { filesWithRanges: (FileWithRanges & { ranges: TextRange[] })[], files: string[] },
+        ms: number,
+        requireOpen: boolean): void {
+        const seq = this.changeSeq;
+        const followMs = Math.min(ms, 200);
+
+        const rangesLength = checkList.filesWithRanges.length;
+        const filesLength = checkList.files.length;
+        const totalLength = rangesLength + filesLength;
+
+        let index = 0;
+        const goNext = () => {
+            index++;
+            if (totalLength > index) {
+                next.delay("checkOne", followMs, checkOne);
+            }
+        };
+
+        const checkOne = () => {
+            if (this.changeSeq !== seq) {
+                return;
+            }
+
+            const item: FileWithRanges =
+                index > rangesLength ? { fileName: checkList.files[index - rangesLength] } : checkList.filesWithRanges[index];
+            // Find out project for the file name
+            const pendingCheck = this.toPendingErrorCheck(item.fileName);
+            if (!pendingCheck) {
+                // Ignore file if there is no project for the file
+                goNext();
+                return;
+            }
+
+            const { fileName, project } = pendingCheck;
+
+            // Ensure the project is up to date before checking if this file is present in the project.
+            updateProjectIfDirty(project);
+            if (!project.containsFile(fileName, requireOpen)) {
+                return;
+            }
+
+            this.syntacticCheck(fileName, project);
+            if (this.changeSeq !== seq) {
+                return;
+            }
+
+            // Don't provide semantic diagnostics unless we're in full semantic mode.
+            if (project.projectService.serverMode !== LanguageServiceMode.Semantic) {
+                goNext();
+                return;
+            }
+
+            next.immediate("regionSemanticCheck", () => {
+                if (item.ranges) {
+                    // do stuff
+                    this.regionSemanticCheck(fileName, project, item.ranges);
+                }
+                // do semantic check like below
+            });
+
+            next.immediate("semanticCheck", () => {
+                this.semanticCheck(fileName, project);
+                if (this.changeSeq !== seq) {
+                    return;
+                }
+
+                if (this.getPreferences(fileName).disableSuggestions) {
+                    goNext();
+                    return;
+                }
+                next.immediate("suggestionCheck", () => {
+                    this.suggestionCheck(fileName, project);
+                    goNext();
+                });
+            });
+        };
+
+        if (checkList.filesWithRanges.length + checkList.files.length > index && this.changeSeq === seq) {
             next.delay("checkOne", ms, checkOne);
         }
     }
@@ -2484,13 +2595,28 @@ export class Session<TMessage = string> implements EventSender {
         return project && { fileName, project };
     }
 
-    private getDiagnostics(next: NextStep, delay: number, fileNames: string[]): void {
+    private getDiagnostics(next: NextStep, delay: number, files: (string | protocol.FileRangesRequestArgs)[]): void {
         if (this.suppressDiagnosticEvents) {
             return;
         }
 
-        if (fileNames.length > 0) {
-            this.updateErrorCheck(next, fileNames, delay);
+        if (files.length > 0) {
+            const newFiles = mapDefined(files, arg => {
+                if (isString(arg)) {
+                    return arg;
+                }
+                const { file: filePath, languageService } = this.getFileAndLanguageServiceForSyntacticOperation(arg);
+                const scriptInfo = this.projectService.getScriptInfo(filePath);
+                if (!scriptInfo) {
+                    return undefined;
+                }
+                const ranges = arg.ranges.map(range => this.getRange({ file: arg.file, ...range }, scriptInfo));
+                return {
+                    file: arg.file,
+                    ranges
+                };
+            });
+            this.updateErrorCheck(next, newFiles, delay);
         }
     }
 

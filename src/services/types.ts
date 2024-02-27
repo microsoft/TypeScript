@@ -498,6 +498,11 @@ export interface LanguageService {
      */
     getSuggestionDiagnostics(fileName: string): DiagnosticWithLocation[];
 
+    /**
+     * TODO
+     */
+    getRegionSemanticDiagnostics(fileName: string, ranges: TextRange[]): Diagnostic[];
+
     // TODO: Rename this to getProgramDiagnostics to better indicate that these are any
     // diagnostics present for the program level, and not just 'options' diagnostics.
 
@@ -1844,4 +1849,9 @@ export interface InlayHintsContext {
     host: LanguageServiceHost;
     span: TextSpan;
     preferences: UserPreferences;
+}
+
+export interface FileWithRanges {
+    fileName: string,
+    ranges?: TextRange[],
 }

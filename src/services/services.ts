@@ -2001,6 +2001,26 @@ export function createLanguageService(
         return [...semanticDiagnostics, ...declarationDiagnostics];
     }
 
+    // TODO:
+    // same as `getSemanticDiagnostics`. Maybe should be a single function that takes an optional ranges arg. We'll see.
+    function getRegionSemanticDiagnostics(fileName: string, ranges: TextRange[]): Diagnostic[] {
+        synchronizeHostData();
+
+        const targetSourceFile = getValidSourceFile(fileName);
+
+        // Only perform the action per file regardless of '-out' flag as LanguageServiceHost is expected to call this function per file.
+        // Therefore only get diagnostics for given file.
+
+        const semanticDiagnostics = program.getSemanticDiagnostics(targetSourceFile, cancellationToken);
+        if (!getEmitDeclarations(program.getCompilerOptions())) {
+            return semanticDiagnostics.slice();
+        }
+
+        // If '-d' is enabled, check for emitter error. One example of emitter error is export class implements non-export interface
+        const declarationDiagnostics = program.getDeclarationDiagnostics(targetSourceFile, cancellationToken);
+        return [...semanticDiagnostics, ...declarationDiagnostics];
+    }
+
     function getSuggestionDiagnostics(fileName: string): DiagnosticWithLocation[] {
         synchronizeHostData();
         return computeSuggestionDiagnostics(getValidSourceFile(fileName), program, cancellationToken);

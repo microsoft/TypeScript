@@ -4731,6 +4731,7 @@ export interface Program extends ScriptReferenceHost {
     getSyntacticDiagnostics(sourceFile?: SourceFile, cancellationToken?: CancellationToken): readonly DiagnosticWithLocation[];
     /** The first time this is called, it will return global diagnostics (no location). */
     getSemanticDiagnostics(sourceFile?: SourceFile, cancellationToken?: CancellationToken): readonly Diagnostic[];
+    getRegionSemanticDiagnostics(sourceFile: SourceFile, ranges: TextRange[], cancellationToken?: CancellationToken): readonly Diagnostic[];
     getDeclarationDiagnostics(sourceFile?: SourceFile, cancellationToken?: CancellationToken): readonly DiagnosticWithLocation[];
     getConfigFileParsingDiagnostics(): readonly Diagnostic[];
     /** @internal */ getSuggestionDiagnostics(sourceFile: SourceFile, cancellationToken?: CancellationToken): readonly DiagnosticWithLocation[];

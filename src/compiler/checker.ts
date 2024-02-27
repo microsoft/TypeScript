@@ -46941,7 +46941,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         tracing?.pop();
     }
 
-    function checkSourceFile(node: SourceFile) {
+    function checkSourceFile(node: SourceFile) { // >> TODO: change here?
         tracing?.push(tracing.Phase.Check, "checkSourceFile", { path: node.path }, /*separateBeginAndEnd*/ true);
         performance.mark("beforeCheck");
         checkSourceFileWorker(node);
@@ -46994,6 +46994,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 registerForUnusedIdentifiersCheck(node);
             }
 
+            // >> TODO: probably skip for region??? unused would require checking potentially outside region to be sure, otherwise will most likely be wrong?
             addLazyDiagnostic(() => {
                 // This relies on the results of other lazy diagnostics, so must be computed after them
                 if (!node.isDeclarationFile && (compilerOptions.noUnusedLocals || compilerOptions.noUnusedParameters)) {
@@ -47008,6 +47009,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 }
             });
 
+            // >> TODO: region?? this one goes through all statements in file, maybe it's ok
             if (
                 compilerOptions.importsNotUsedAsValues === ImportsNotUsedAsValues.Error &&
                 !node.isDeclarationFile &&
@@ -47016,30 +47018,36 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 checkImportsForTypeOnlyConversion(node);
             }
 
+            // >> TODO: skip region?? this one may require checking the whole file to have reliable information
             if (isExternalOrCommonJsModule(node)) {
                 checkExternalModuleExports(node);
             }
 
+            // >> TODO: skip region?? unreliable info
             if (potentialThisCollisions.length) {
                 forEach(potentialThisCollisions, checkIfThisIsCapturedInEnclosingScope);
                 clear(potentialThisCollisions);
             }
 
+            // >> TODO: skip region?? unreliable info
             if (potentialNewTargetCollisions.length) {
                 forEach(potentialNewTargetCollisions, checkIfNewTargetIsCapturedInEnclosingScope);
                 clear(potentialNewTargetCollisions);
             }
 
+            // >> TODO: skip region?? unreliable info
             if (potentialWeakMapSetCollisions.length) {
                 forEach(potentialWeakMapSetCollisions, checkWeakMapSetCollision);
                 clear(potentialWeakMapSetCollisions);
             }
 
+            // >> TODO: skip region?? unreliable info
             if (potentialReflectCollisions.length) {
                 forEach(potentialReflectCollisions, checkReflectCollision);
                 clear(potentialReflectCollisions);
             }
 
+            // >> TODO: also don't set this
             links.flags |= NodeCheckFlags.TypeChecked;
         }
     }
@@ -47087,7 +47095,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             const previousGlobalDiagnostics = diagnostics.getGlobalDiagnostics();
             const previousGlobalDiagnosticsSize = previousGlobalDiagnostics.length;
 
-            checkSourceFileWithEagerDiagnostics(sourceFile);
+            checkSourceFileWithEagerDiagnostics(sourceFile); // >> TODO: change this
 
             const semanticDiagnostics = diagnostics.getDiagnostics(sourceFile.fileName);
             const currentGlobalDiagnostics = diagnostics.getGlobalDiagnostics();

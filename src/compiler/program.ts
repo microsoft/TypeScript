@@ -327,6 +327,7 @@ import {
     WriteFileCallback,
     WriteFileCallbackData,
     writeFileEnsuringDirectories,
+    TextRange,
 } from "./_namespaces/ts";
 import * as performance from "./_namespaces/ts.performance";
 
@@ -2822,6 +2823,13 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
         return getDiagnosticsHelper(sourceFile, getSemanticDiagnosticsForFile, cancellationToken);
     }
 
+    function getRegionSemanticDiagnostics(sourceFile: SourceFile, ranges: TextRange[], cancellationToken?: CancellationToken): readonly Diagnostic[] {
+        return getDiagnosticsHelper(
+            sourceFile,
+            (sourceFile, cancellationToken) => getRegionSemanticDiagnosticsForFile(sourceFile, ranges, cancellationToken),
+            cancellationToken);
+    }
+
     function getCachedSemanticDiagnostics(sourceFile?: SourceFile): readonly Diagnostic[] | undefined {
         return sourceFile
             ? cachedBindAndCheckDiagnosticsForFile.perFile?.get(sourceFile.path)
@@ -2888,6 +2896,45 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
             filterSemanticDiagnostics(getBindAndCheckDiagnosticsForFile(sourceFile, cancellationToken), options),
             getProgramDiagnostics(sourceFile),
         );
+    }
+
+    function getRegionSemanticDiagnosticsForFile(sourceFile: SourceFile, ranges: TextRange[], cancellationToken: CancellationToken | undefined): readonly Diagnostic[] {
+        return filterSemanticDiagnostics(getBindAndCheckDiagnosticsForFileRegion(sourceFile, cancellationToken), options);
+        // >> TODO: what the hell is `getProgramDiagnostics` doing??? it does something related to directives/comments...
+    }
+
+    // TODO: similar to `getBindAndCheckDiagnosticsForFileNoCache`
+    function getBindAndCheckDiagnosticsForFileRegion(sourceFile: SourceFile, ranges: TextRange[], cancellationToken: CancellationToken | undefined): readonly Diagnostic[] {
+        // >> TODO: we should cache/avoid re-doing the binding diagnostics
+        return runWithCancellationToken(() => {
+            if (skipTypeChecking(sourceFile, options, program)) {
+                return emptyArray;
+            }
+
+            const typeChecker = getTypeChecker();
+
+            Debug.assert(!!sourceFile.bindDiagnostics);
+
+            const isJs = sourceFile.scriptKind === ScriptKind.JS || sourceFile.scriptKind === ScriptKind.JSX;
+            const isCheckJs = isJs && isCheckJsEnabledForFile(sourceFile, options);
+            const isPlainJs = isPlainJsFile(sourceFile, options.checkJs);
+            const isTsNoCheck = !!sourceFile.checkJsDirective && sourceFile.checkJsDirective.enabled === false;
+
+            // By default, only type-check .ts, .tsx, Deferred, plain JS, checked JS and External
+            // - plain JS: .js files with no // ts-check and checkJs: undefined
+            // - check JS: .js files with either // ts-check or checkJs: true
+            // - external: files that are added by plugins
+            const includeBindAndCheckDiagnostics = !isTsNoCheck && (sourceFile.scriptKind === ScriptKind.TS || sourceFile.scriptKind === ScriptKind.TSX
+                || sourceFile.scriptKind === ScriptKind.External || isPlainJs || isCheckJs || sourceFile.scriptKind === ScriptKind.Deferred);
+            let bindDiagnostics: readonly Diagnostic[] = includeBindAndCheckDiagnostics ? sourceFile.bindDiagnostics : emptyArray;
+            let checkDiagnostics = includeBindAndCheckDiagnostics ? typeChecker.getDiagnostics(sourceFile, cancellationToken) : emptyArray;
+            if (isPlainJs) {
+                bindDiagnostics = filter(bindDiagnostics, d => plainJSErrors.has(d.code));
+                checkDiagnostics = filter(checkDiagnostics, d => plainJSErrors.has(d.code));
+            }
+            // skip ts-expect-error errors in plain JS files, and skip JSDoc errors except in checked JS
+            return getMergedBindAndCheckDiagnostics(sourceFile, includeBindAndCheckDiagnostics && !isPlainJs, bindDiagnostics, checkDiagnostics, isCheckJs ? sourceFile.jsDocDiagnostics : undefined);
+        });
     }
 
     function getBindAndCheckDiagnosticsForFile(sourceFile: SourceFile, cancellationToken: CancellationToken | undefined): readonly Diagnostic[] {
