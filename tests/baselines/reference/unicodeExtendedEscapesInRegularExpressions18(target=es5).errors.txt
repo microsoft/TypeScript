@@ -1,0 +1,8 @@
+unicodeExtendedEscapesInRegularExpressions18.ts(1,24): error TS1499: This regular expression flag is only available when targeting 'ES2015' or later.
+
+
+==== unicodeExtendedEscapesInRegularExpressions18.ts (1 errors) ====
+    var x = /\u{65}\u{65}/gu;
+                           ~
+!!! error TS1499: This regular expression flag is only available when targeting 'ES2015' or later.
+    
