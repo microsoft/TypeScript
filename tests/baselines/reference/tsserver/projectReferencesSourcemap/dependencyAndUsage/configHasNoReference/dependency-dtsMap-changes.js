@@ -905,6 +905,19 @@ FsWatchesRecursive::
 /user/username/projects/myproject/random:
   {}
 
+Projects::
+/user/username/projects/myproject/dependency/tsconfig.json (Configured)
+    projectStateVersion: 1
+    projectProgramVersion: 1
+/user/username/projects/myproject/main/tsconfig.json (Configured) *changed*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+    documentPositionMappers: 1 *changed*
+        /user/username/projects/myproject/decls/fns.d.ts: DocumentPositionMapper1 *new*
+/user/username/projects/myproject/random/tsconfig.json (Configured)
+    projectStateVersion: 1
+    projectProgramVersion: 1
+
 ScriptInfos::
 /a/lib/lib.d.ts
     version: Text-1
@@ -917,7 +930,7 @@ ScriptInfos::
     declarationInfoPath: /user/username/projects/myproject/decls/fns.d.ts
     sourceInfos: 1
         /user/username/projects/myproject/dependency/fns.ts
-    documentPositionMapper: DocumentPositionMapper
+    documentPositionMapper: DocumentPositionMapper1
     containingProjects: 0
 /user/username/projects/myproject/decls/fns.d.ts *changed*
     version: Text-1
@@ -936,6 +949,9 @@ ScriptInfos::
     version: SVC-1-0
     containingProjects: 1
         /user/username/projects/myproject/random/tsconfig.json *default*
+
+DocumentPositionMappers::
+DocumentPositionMapper1 *new*
 
 Before request
 
@@ -1034,9 +1050,11 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 Projects::
-/user/username/projects/myproject/dependency/tsconfig.json (Configured)
+/user/username/projects/myproject/dependency/tsconfig.json (Configured) *changed*
     projectStateVersion: 1
     projectProgramVersion: 1
+    documentPositionMappers: 1 *changed*
+        /user/username/projects/myproject/decls/fns.d.ts: DocumentPositionMapper1 *new*
 /user/username/projects/myproject/main/tsconfig.json (Configured) *changed*
     projectStateVersion: 1
     projectProgramVersion: 1
@@ -1076,10 +1094,14 @@ Projects::
     projectStateVersion: 2 *changed*
     projectProgramVersion: 1
     dirty: true *changed*
+    documentPositionMappers: 0 *changed*
+        /user/username/projects/myproject/decls/fns.d.ts: DocumentPositionMapper1 *deleted*
 /user/username/projects/myproject/main/tsconfig.json (Configured) *changed*
     projectStateVersion: 2 *changed*
     projectProgramVersion: 1
     dirty: true *changed*
+    documentPositionMappers: 0 *changed*
+        /user/username/projects/myproject/decls/fns.d.ts: DocumentPositionMapper1 *deleted*
     originalConfiguredProjects: 1
         /user/username/projects/myproject/dependency/tsconfig.json
 /user/username/projects/myproject/random/tsconfig.json (Configured)
@@ -1099,7 +1121,7 @@ ScriptInfos::
     declarationInfoPath: /user/username/projects/myproject/decls/fns.d.ts
     sourceInfos: 1
         /user/username/projects/myproject/dependency/fns.ts
-    documentPositionMapper: DocumentPositionMapper
+    documentPositionMapper: DocumentPositionMapper1
     containingProjects: 0
 /user/username/projects/myproject/decls/fns.d.ts
     version: Text-1
@@ -1181,6 +1203,8 @@ Projects::
     projectStateVersion: 2
     projectProgramVersion: 1
     dirty: false *changed*
+    documentPositionMappers: 1 *changed*
+        /user/username/projects/myproject/decls/fns.d.ts: DocumentPositionMapper2 *new*
     originalConfiguredProjects: 1
         /user/username/projects/myproject/dependency/tsconfig.json
 /user/username/projects/myproject/random/tsconfig.json (Configured)
@@ -1200,7 +1224,7 @@ ScriptInfos::
     declarationInfoPath: /user/username/projects/myproject/decls/fns.d.ts
     sourceInfos: 1
         /user/username/projects/myproject/dependency/fns.ts
-    documentPositionMapper: DocumentPositionMapper *changed*
+    documentPositionMapper: DocumentPositionMapper2 *changed*
     containingProjects: 0
 /user/username/projects/myproject/decls/fns.d.ts
     version: Text-1
@@ -1219,6 +1243,10 @@ ScriptInfos::
     version: SVC-1-0
     containingProjects: 1
         /user/username/projects/myproject/random/tsconfig.json *default*
+
+DocumentPositionMappers::
+DocumentPositionMapper1 *deleted*
+DocumentPositionMapper2 *new*
 
 Before request
 
@@ -1532,6 +1560,8 @@ Projects::
     projectStateVersion: 2
     projectProgramVersion: 1
     dirty: false *changed*
+    documentPositionMappers: 1 *changed*
+        /user/username/projects/myproject/decls/fns.d.ts: DocumentPositionMapper2 *new*
 /user/username/projects/myproject/main/tsconfig.json (Configured)
     projectStateVersion: 2
     projectProgramVersion: 1

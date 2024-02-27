@@ -451,7 +451,7 @@ FsWatchesRecursive::
 
 PendingInstalls callback:: count: 1
 1: #1 with arguments:: [
-  "@types/zkat__cacache@ts5.4"
+  "@types/zkat__cacache@ts5.5"
 ] *new*
 
 Projects::

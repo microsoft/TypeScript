@@ -1,9 +1,13 @@
+error TS5102: Option 'importsNotUsedAsValues' has been removed. Please remove it from your configuration.
+  Use 'verbatimModuleSyntax' instead.
 error TS5104: Option 'importsNotUsedAsValues' is redundant and cannot be specified with option 'verbatimModuleSyntax'.
 file.ts(1,1): error TS1287: A top-level 'export' modifier cannot be used on value declarations in a CommonJS module when 'verbatimModuleSyntax' is enabled.
 index.ts(1,1): error TS1371: This import is never used as a value and must use 'import type' because 'importsNotUsedAsValues' is set to 'error'.
 index.ts(1,9): error TS1286: ESM syntax is not allowed in a CommonJS module when 'verbatimModuleSyntax' is enabled.
 
 
+!!! error TS5102: Option 'importsNotUsedAsValues' has been removed. Please remove it from your configuration.
+!!! error TS5102:   Use 'verbatimModuleSyntax' instead.
 !!! error TS5104: Option 'importsNotUsedAsValues' is redundant and cannot be specified with option 'verbatimModuleSyntax'.
 ==== file.ts (1 errors) ====
     export class A {}

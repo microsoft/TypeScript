@@ -479,6 +479,20 @@ Info seq  [hh:mm:ss:mss] response:
       ]
     }
 After Request
+Projects::
+/dev/null/auxiliaryProject1* (Auxiliary)
+    projectStateVersion: 1
+    projectProgramVersion: 1
+/dev/null/inferredProject1* (Inferred)
+    projectStateVersion: 1
+    projectProgramVersion: 1
+/dev/null/inferredProject2* (Inferred) *changed*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+    documentPositionMappers: 1 *changed*
+        /node_modules/@types/lodash/index.d.ts: identitySourceMapConsumer *new*
+    noDtsResolutionProject: /dev/null/auxiliaryProject1*
+
 ScriptInfos::
 /index.ts (Open)
     version: SVC-1-0

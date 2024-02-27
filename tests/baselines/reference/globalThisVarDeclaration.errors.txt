@@ -1,4 +1,4 @@
-error TS5101: Option 'out' is deprecated and will stop functioning in TypeScript 5.5. Specify compilerOption '"ignoreDeprecations": "5.0"' to silence this error.
+error TS5102: Option 'out' has been removed. Please remove it from your configuration.
   Use 'outFile' instead.
 actual.ts(12,5): error TS2339: Property 'a' does not exist on type 'Window'.
 actual.ts(13,5): error TS2339: Property 'b' does not exist on type 'Window'.
@@ -6,8 +6,8 @@ b.js(12,5): error TS2339: Property 'a' does not exist on type 'Window'.
 b.js(13,5): error TS2339: Property 'b' does not exist on type 'Window'.
 
 
-!!! error TS5101: Option 'out' is deprecated and will stop functioning in TypeScript 5.5. Specify compilerOption '"ignoreDeprecations": "5.0"' to silence this error.
-!!! error TS5101:   Use 'outFile' instead.
+!!! error TS5102: Option 'out' has been removed. Please remove it from your configuration.
+!!! error TS5102:   Use 'outFile' instead.
 ==== b.js (2 errors) ====
     var a = 10;
     this.a;

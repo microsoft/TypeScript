@@ -380,7 +380,6 @@ export namespace Compiler {
         symlinks?: vfs.FileSet,
     ): compiler.CompilationResult {
         const options: ts.CompilerOptions & HarnessOptions = compilerOptions ? ts.cloneCompilerOptions(compilerOptions) : { noResolve: false };
-        options.target = ts.getEmitScriptTarget(options);
         options.newLine = options.newLine || ts.NewLineKind.CarriageReturnLineFeed;
         options.noErrorTruncation = true;
         options.skipDefaultLibCheck = typeof options.skipDefaultLibCheck === "undefined" ? true : options.skipDefaultLibCheck;

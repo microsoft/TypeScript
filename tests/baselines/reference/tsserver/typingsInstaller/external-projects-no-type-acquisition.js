@@ -301,8 +301,8 @@ FsWatches::
 
 PendingInstalls callback:: count: 1
 1: #1 with arguments:: [
-  "@types/lodash@ts5.4",
-  "@types/react@ts5.4"
+  "@types/lodash@ts5.5",
+  "@types/react@ts5.5"
 ] *new*
 
 Projects::

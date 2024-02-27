@@ -122,7 +122,7 @@ Output::
 
 [[90m12:00:45 AM[0m] Building project '/user/username/projects/sample1/tests/tsconfig.json'...
 
-[91merror[0m[90m TS5107: [0mOption 'target=ES3' is deprecated and will stop functioning in TypeScript 5.5. Specify compilerOption '"ignoreDeprecations": "5.0"' to silence this error.
+[91merror[0m[90m TS5108: [0mOption 'target=ES3' has been removed. Please remove it from your configuration.
 
 
 Found 1 error.
