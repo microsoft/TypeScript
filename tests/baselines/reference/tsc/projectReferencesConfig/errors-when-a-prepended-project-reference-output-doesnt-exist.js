@@ -64,6 +64,17 @@ Output::
     [7m  [0m [96m~~~~~[0m
     File is output from referenced project specified here.
 
+[96mprimary/tsconfig.json[0m:[93m7[0m:[93m5[0m - [91merror[0m[90m TS5102: [0mOption 'prepend' has been removed. Please remove it from your configuration.
+
+[7m 7[0m     {
+[7m  [0m [91m    ~[0m
+[7m 8[0m       "path": "../someProj",
+[7m  [0m [91m~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+[7m 9[0m       "prepend": true
+[7m  [0m [91m~~~~~~~~~~~~~~~~~~~~~[0m
+[7m10[0m     }
+[7m  [0m [91m~~~~~[0m
+
 [96mprimary/tsconfig.json[0m:[93m7[0m:[93m5[0m - [91merror[0m[90m TS6309: [0mOutput file '/someProj/foo.js' from project '/someProj' does not exist
 
 [7m 7[0m     {
@@ -76,7 +87,7 @@ Output::
 [7m  [0m [91m~~~~~[0m
 
 
-Found 2 errors in the same file, starting at: primary/tsconfig.json[90m:7[0m
+Found 3 errors in the same file, starting at: primary/tsconfig.json[90m:7[0m
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
 

@@ -1,4 +1,4 @@
-DifferentNamesNotSpecified/tsconfig.json(2,24): error TS5101: Option 'out' is deprecated and will stop functioning in TypeScript 5.5. Specify compilerOption '"ignoreDeprecations": "5.0"' to silence this error.
+DifferentNamesNotSpecified/tsconfig.json(2,24): error TS5102: Option 'out' has been removed. Please remove it from your configuration.
   Use 'outFile' instead.
 
 
@@ -6,8 +6,8 @@ DifferentNamesNotSpecified/tsconfig.json(2,24): error TS5101: Option 'out' is de
     {
       "compilerOptions": { "out": "test.js" }
                            ~~~~~
-!!! error TS5101: Option 'out' is deprecated and will stop functioning in TypeScript 5.5. Specify compilerOption '"ignoreDeprecations": "5.0"' to silence this error.
-!!! error TS5101:   Use 'outFile' instead.
+!!! error TS5102: Option 'out' has been removed. Please remove it from your configuration.
+!!! error TS5102:   Use 'outFile' instead.
     }
 ==== DifferentNamesNotSpecified/a.ts (0 errors) ====
     var test = 10;

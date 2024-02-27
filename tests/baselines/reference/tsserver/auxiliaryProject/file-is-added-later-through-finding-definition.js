@@ -266,6 +266,8 @@ Projects::
 /dev/null/inferredProject1* (Inferred) *changed*
     projectStateVersion: 1
     projectProgramVersion: 1
+    documentPositionMappers: 1 *changed*
+        /user/users/projects/myproject/node_modules/@types/yargs/callback.d.ts: identitySourceMapConsumer *new*
     noDtsResolutionProject: /dev/null/auxiliaryProject1* *changed*
 
 ScriptInfos::
@@ -278,8 +280,9 @@ ScriptInfos::
     containingProjects: 2 *changed*
         /dev/null/inferredProject1* *default*
         /dev/null/auxiliaryProject1* *new*
-/user/users/projects/myproject/node_modules/@types/yargs/callback.d.ts
+/user/users/projects/myproject/node_modules/@types/yargs/callback.d.ts *changed*
     version: Text-1
+    sourceMapFilePath: false *changed*
     containingProjects: 1
         /dev/null/inferredProject1*
 /user/users/projects/myproject/node_modules/@types/yargs/index.d.ts
@@ -375,3 +378,44 @@ Info seq  [hh:mm:ss:mss] response:
       "responseRequired": true
     }
 After request
+
+Projects::
+/dev/null/auxiliaryProject1* (Auxiliary)
+    projectStateVersion: 2
+    projectProgramVersion: 2
+/dev/null/inferredProject1* (Inferred) *changed*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+    documentPositionMappers: 2 *changed*
+        /user/users/projects/myproject/node_modules/@types/yargs/callback.d.ts: identitySourceMapConsumer
+        /user/users/projects/myproject/node_modules/@types/yargs/index.d.ts: identitySourceMapConsumer *new*
+    noDtsResolutionProject: /dev/null/auxiliaryProject1*
+
+ScriptInfos::
+/a/lib/lib.d.ts
+    version: Text-1
+    containingProjects: 1
+        /dev/null/inferredProject1*
+/user/users/projects/myproject/index.ts (Open)
+    version: SVC-1-0
+    containingProjects: 2
+        /dev/null/inferredProject1* *default*
+        /dev/null/auxiliaryProject1*
+/user/users/projects/myproject/node_modules/@types/yargs/callback.d.ts
+    version: Text-1
+    sourceMapFilePath: false
+    containingProjects: 1
+        /dev/null/inferredProject1*
+/user/users/projects/myproject/node_modules/@types/yargs/index.d.ts *changed*
+    version: Text-1
+    sourceMapFilePath: false *changed*
+    containingProjects: 1
+        /dev/null/inferredProject1*
+/user/users/projects/myproject/node_modules/yargs/callback.js
+    version: Text-1
+    containingProjects: 1
+        /dev/null/auxiliaryProject1*
+/user/users/projects/myproject/node_modules/yargs/index.js
+    version: Text-1
+    containingProjects: 1
+        /dev/null/auxiliaryProject1*

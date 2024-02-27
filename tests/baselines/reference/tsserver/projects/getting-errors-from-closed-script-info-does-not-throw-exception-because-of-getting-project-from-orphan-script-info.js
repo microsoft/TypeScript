@@ -205,6 +205,12 @@ FsWatchesRecursive::
 /a/b:
   {}
 
+Projects::
+/a/b/tsconfig.json (Configured) *changed*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+    noOpenRef: true *changed*
+
 ScriptInfos::
 /a/b/app.ts *changed*
     open: false *changed*

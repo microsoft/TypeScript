@@ -365,7 +365,7 @@ FsWatchesRecursive::
 
 PendingInstalls callback:: count: 1
 1: #1 with arguments:: [
-  "@types/jquery@ts5.4"
+  "@types/jquery@ts5.5"
 ] *new*
 
 Projects::
@@ -466,6 +466,7 @@ Projects::
 /user/username/projects/project/tsconfig.json (Configured) *changed*
     projectStateVersion: 2 *changed*
     projectProgramVersion: 1
+    dirty: true *changed*
 
 Before running Timeout callback:: count: 2
 1: /user/username/projects/project/tsconfig.json
@@ -610,6 +611,7 @@ Projects::
 /user/username/projects/project/tsconfig.json (Configured) *changed*
     projectStateVersion: 2
     projectProgramVersion: 2 *changed*
+    dirty: false *changed*
 
 ScriptInfos::
 /a/data/node_modules/@types/jquery/index.d.ts *new*
@@ -671,6 +673,12 @@ FsWatches::
 FsWatchesRecursive::
 /user/username/projects/project:
   {}
+
+Projects::
+/user/username/projects/project/tsconfig.json (Configured) *changed*
+    projectStateVersion: 2
+    projectProgramVersion: 2
+    noOpenRef: true *changed*
 
 ScriptInfos::
 /a/data/node_modules/@types/jquery/index.d.ts
@@ -978,13 +986,15 @@ FsWatchesRecursive *deleted*::
 
 PendingInstalls callback:: count: 1
 2: #2 with arguments:: [
-  "@types/commander@ts5.4"
+  "@types/commander@ts5.5"
 ] *new*
 
 Projects::
 /user/username/projects/project/tsconfig.json (Configured) *deleted*
     projectStateVersion: 2
     projectProgramVersion: 2
+    isClosed: true *changed*
+    noOpenRef: true
 /user/username/projects/project2/tsconfig.json (Configured) *new*
     projectStateVersion: 1
     projectProgramVersion: 1

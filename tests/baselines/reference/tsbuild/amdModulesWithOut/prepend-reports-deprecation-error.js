@@ -90,7 +90,7 @@ Output::
 
 [[90m12:00:29 AM[0m] Building project '/src/app/tsconfig.json'...
 
-[96msrc/app/tsconfig.json[0m:[93m16[0m:[93m5[0m - [91merror[0m[90m TS5101: [0mOption 'prepend' is deprecated and will stop functioning in TypeScript 5.5. Specify compilerOption '"ignoreDeprecations": "5.0"' to silence this error.
+[96msrc/app/tsconfig.json[0m:[93m16[0m:[93m5[0m - [91merror[0m[90m TS5102: [0mOption 'prepend' has been removed. Please remove it from your configuration.
 
 [7m16[0m     {
 [7m  [0m [91m    ~[0m
@@ -514,7 +514,7 @@ Output::
 
 [[90m12:00:44 AM[0m] Building project '/src/app/tsconfig.json'...
 
-[96msrc/app/tsconfig.json[0m:[93m16[0m:[93m5[0m - [91merror[0m[90m TS5101: [0mOption 'prepend' is deprecated and will stop functioning in TypeScript 5.5. Specify compilerOption '"ignoreDeprecations": "5.0"' to silence this error.
+[96msrc/app/tsconfig.json[0m:[93m16[0m:[93m5[0m - [91merror[0m[90m TS5102: [0mOption 'prepend' has been removed. Please remove it from your configuration.
 
 [7m16[0m     {
 [7m  [0m [91m    ~[0m

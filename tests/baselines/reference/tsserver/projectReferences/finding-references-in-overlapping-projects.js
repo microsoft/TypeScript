@@ -319,6 +319,8 @@ Projects::
 /user/username/projects/solution/tsconfig.json (Configured) *new*
     projectStateVersion: 1
     projectProgramVersion: 0
+    dirty: true
+    noOpenRef: true
 
 ScriptInfos::
 /a/lib/lib.d.ts *new*
@@ -780,23 +782,11 @@ Info seq  [hh:mm:ss:mss] Search path: /user/username/projects/solution/a
 Info seq  [hh:mm:ss:mss] For info: /user/username/projects/solution/a/index.ts :: Config file name: /user/username/projects/solution/a/tsconfig.json
 Info seq  [hh:mm:ss:mss] Search path: /user/username/projects/solution/a
 Info seq  [hh:mm:ss:mss] For info: /user/username/projects/solution/a/index.ts :: Config file name: /user/username/projects/solution/a/tsconfig.json
-Info seq  [hh:mm:ss:mss] Search path: /user/username/projects/solution/b
-Info seq  [hh:mm:ss:mss] For info: /user/username/projects/solution/b/index.ts :: Config file name: /user/username/projects/solution/b/tsconfig.json
-Info seq  [hh:mm:ss:mss] Search path: /user/username/projects/solution/b
-Info seq  [hh:mm:ss:mss] For info: /user/username/projects/solution/b/index.ts :: Config file name: /user/username/projects/solution/b/tsconfig.json
-Info seq  [hh:mm:ss:mss] Search path: /user/username/projects/solution/b
-Info seq  [hh:mm:ss:mss] For info: /user/username/projects/solution/b/index.ts :: Config file name: /user/username/projects/solution/b/tsconfig.json
 Info seq  [hh:mm:ss:mss] Finding references to /user/username/projects/solution/a/index.ts position 34 in project /user/username/projects/solution/d/tsconfig.json
 Info seq  [hh:mm:ss:mss] Search path: /user/username/projects/solution/a
 Info seq  [hh:mm:ss:mss] For info: /user/username/projects/solution/a/index.ts :: Config file name: /user/username/projects/solution/a/tsconfig.json
 Info seq  [hh:mm:ss:mss] Search path: /user/username/projects/solution/a
 Info seq  [hh:mm:ss:mss] For info: /user/username/projects/solution/a/index.ts :: Config file name: /user/username/projects/solution/a/tsconfig.json
-Info seq  [hh:mm:ss:mss] Search path: /user/username/projects/solution/b
-Info seq  [hh:mm:ss:mss] For info: /user/username/projects/solution/b/index.ts :: Config file name: /user/username/projects/solution/b/tsconfig.json
-Info seq  [hh:mm:ss:mss] Search path: /user/username/projects/solution/b
-Info seq  [hh:mm:ss:mss] For info: /user/username/projects/solution/b/index.ts :: Config file name: /user/username/projects/solution/b/tsconfig.json
-Info seq  [hh:mm:ss:mss] Search path: /user/username/projects/solution/b
-Info seq  [hh:mm:ss:mss] For info: /user/username/projects/solution/b/index.ts :: Config file name: /user/username/projects/solution/b/tsconfig.json
 Info seq  [hh:mm:ss:mss] Search path: /user/username/projects/solution/c
 Info seq  [hh:mm:ss:mss] For info: /user/username/projects/solution/c/index.ts :: Config file name: /user/username/projects/solution/c/tsconfig.json
 Info seq  [hh:mm:ss:mss] Search path: /user/username/projects/solution/c
@@ -987,18 +977,36 @@ Projects::
 /user/username/projects/solution/a/tsconfig.json (Configured) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
-/user/username/projects/solution/b/tsconfig.json (Configured)
+    noOpenRef: true
+/user/username/projects/solution/b/tsconfig.json (Configured) *changed*
     projectStateVersion: 1
     projectProgramVersion: 1
+    originalConfiguredProjects: 2 *changed*
+        /user/username/projects/solution/a/tsconfig.json *new*
+        /user/username/projects/solution/b/tsconfig.json *new*
 /user/username/projects/solution/c/tsconfig.json (Configured) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
+    noOpenRef: true
+    originalConfiguredProjects: 4
+        /user/username/projects/solution/a/tsconfig.json
+        /user/username/projects/solution/b/tsconfig.json
+        /user/username/projects/solution/c/tsconfig.json
+        /user/username/projects/solution/d/tsconfig.json
 /user/username/projects/solution/d/tsconfig.json (Configured) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
+    noOpenRef: true
+    originalConfiguredProjects: 4
+        /user/username/projects/solution/a/tsconfig.json
+        /user/username/projects/solution/b/tsconfig.json
+        /user/username/projects/solution/c/tsconfig.json
+        /user/username/projects/solution/d/tsconfig.json
 /user/username/projects/solution/tsconfig.json (Configured) *changed*
     projectStateVersion: 1
     projectProgramVersion: 1 *changed*
+    dirty: false *changed*
+    noOpenRef: true
 
 ScriptInfos::
 /a/lib/lib.d.ts *changed*
@@ -1050,23 +1058,11 @@ Info seq  [hh:mm:ss:mss] For info: /user/username/projects/solution/a/index.ts :
 Info seq  [hh:mm:ss:mss] Search path: /user/username/projects/solution/a
 Info seq  [hh:mm:ss:mss] For info: /user/username/projects/solution/a/index.ts :: Config file name: /user/username/projects/solution/a/tsconfig.json
 Info seq  [hh:mm:ss:mss] Finding references to /user/username/projects/solution/b/index.ts position 86 in project /user/username/projects/solution/c/tsconfig.json
-Info seq  [hh:mm:ss:mss] Search path: /user/username/projects/solution/b
-Info seq  [hh:mm:ss:mss] For info: /user/username/projects/solution/b/index.ts :: Config file name: /user/username/projects/solution/b/tsconfig.json
-Info seq  [hh:mm:ss:mss] Search path: /user/username/projects/solution/b
-Info seq  [hh:mm:ss:mss] For info: /user/username/projects/solution/b/index.ts :: Config file name: /user/username/projects/solution/b/tsconfig.json
-Info seq  [hh:mm:ss:mss] Search path: /user/username/projects/solution/b
-Info seq  [hh:mm:ss:mss] For info: /user/username/projects/solution/b/index.ts :: Config file name: /user/username/projects/solution/b/tsconfig.json
 Info seq  [hh:mm:ss:mss] Search path: /user/username/projects/solution/a
 Info seq  [hh:mm:ss:mss] For info: /user/username/projects/solution/a/index.ts :: Config file name: /user/username/projects/solution/a/tsconfig.json
 Info seq  [hh:mm:ss:mss] Search path: /user/username/projects/solution/a
 Info seq  [hh:mm:ss:mss] For info: /user/username/projects/solution/a/index.ts :: Config file name: /user/username/projects/solution/a/tsconfig.json
 Info seq  [hh:mm:ss:mss] Finding references to /user/username/projects/solution/b/index.ts position 86 in project /user/username/projects/solution/d/tsconfig.json
-Info seq  [hh:mm:ss:mss] Search path: /user/username/projects/solution/b
-Info seq  [hh:mm:ss:mss] For info: /user/username/projects/solution/b/index.ts :: Config file name: /user/username/projects/solution/b/tsconfig.json
-Info seq  [hh:mm:ss:mss] Search path: /user/username/projects/solution/b
-Info seq  [hh:mm:ss:mss] For info: /user/username/projects/solution/b/index.ts :: Config file name: /user/username/projects/solution/b/tsconfig.json
-Info seq  [hh:mm:ss:mss] Search path: /user/username/projects/solution/b
-Info seq  [hh:mm:ss:mss] For info: /user/username/projects/solution/b/index.ts :: Config file name: /user/username/projects/solution/b/tsconfig.json
 Info seq  [hh:mm:ss:mss] Search path: /user/username/projects/solution/a
 Info seq  [hh:mm:ss:mss] For info: /user/username/projects/solution/a/index.ts :: Config file name: /user/username/projects/solution/a/tsconfig.json
 Info seq  [hh:mm:ss:mss] Search path: /user/username/projects/solution/a
@@ -1213,3 +1209,39 @@ Info seq  [hh:mm:ss:mss] response:
       "responseRequired": true
     }
 After request
+
+Projects::
+/user/username/projects/solution/a/tsconfig.json (Configured)
+    projectStateVersion: 1
+    projectProgramVersion: 1
+    noOpenRef: true
+/user/username/projects/solution/b/tsconfig.json (Configured) *changed*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+    originalConfiguredProjects: 4 *changed*
+        /user/username/projects/solution/a/tsconfig.json
+        /user/username/projects/solution/b/tsconfig.json
+        /user/username/projects/solution/c/tsconfig.json *new*
+        /user/username/projects/solution/d/tsconfig.json *new*
+/user/username/projects/solution/c/tsconfig.json (Configured)
+    projectStateVersion: 1
+    projectProgramVersion: 1
+    noOpenRef: true
+    originalConfiguredProjects: 4
+        /user/username/projects/solution/a/tsconfig.json
+        /user/username/projects/solution/b/tsconfig.json
+        /user/username/projects/solution/c/tsconfig.json
+        /user/username/projects/solution/d/tsconfig.json
+/user/username/projects/solution/d/tsconfig.json (Configured)
+    projectStateVersion: 1
+    projectProgramVersion: 1
+    noOpenRef: true
+    originalConfiguredProjects: 4
+        /user/username/projects/solution/a/tsconfig.json
+        /user/username/projects/solution/b/tsconfig.json
+        /user/username/projects/solution/c/tsconfig.json
+        /user/username/projects/solution/d/tsconfig.json
+/user/username/projects/solution/tsconfig.json (Configured)
+    projectStateVersion: 1
+    projectProgramVersion: 1
+    noOpenRef: true

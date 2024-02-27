@@ -192,7 +192,7 @@ PolledWatches::
 
 PendingInstalls callback:: count: 1
 1: #1 with arguments:: [
-  "@types/foo@ts5.4"
+  "@types/foo@ts5.5"
 ] *new*
 
 Projects::

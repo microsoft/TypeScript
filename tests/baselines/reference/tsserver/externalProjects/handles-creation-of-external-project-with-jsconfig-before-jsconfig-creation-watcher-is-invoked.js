@@ -705,6 +705,8 @@ Projects::
 /dev/null/inferredProject1* (Inferred) *changed*
     projectStateVersion: 2 *changed*
     projectProgramVersion: 1
+    dirty: true *changed*
+    isOrphan: true *changed*
 /user/username/projects/myproject/jsconfig.json (Configured) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
@@ -723,5 +725,3 @@ ScriptInfos::
     containingProjects: 1 *changed*
         /user/username/projects/myproject/jsconfig.json *default* *new*
         /dev/null/inferredProject1* *deleted*
-
-Inferred project: /dev/null/inferredProject1* isOrphan:: true isClosed: false

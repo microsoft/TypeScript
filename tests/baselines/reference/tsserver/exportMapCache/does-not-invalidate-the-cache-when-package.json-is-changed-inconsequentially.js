@@ -438,6 +438,7 @@ Projects::
 /dev/null/autoImportProviderProject1* (AutoImportProvider) *changed*
     projectStateVersion: 2 *changed*
     projectProgramVersion: 1
+    dirty: true *changed*
 /tsconfig.json (Configured)
     projectStateVersion: 1
     projectProgramVersion: 1
@@ -450,3 +451,13 @@ Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/autoImpo
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/autoImportProviderProject1* projectStateVersion: 2 projectProgramVersion: 1 structureChanged: false structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Same program as before
 After getPackageJsonAutoImportProvider
+
+Projects::
+/dev/null/autoImportProviderProject1* (AutoImportProvider) *changed*
+    projectStateVersion: 2
+    projectProgramVersion: 1
+    dirty: false *changed*
+/tsconfig.json (Configured)
+    projectStateVersion: 1
+    projectProgramVersion: 1
+    autoImportProviderHost: /dev/null/autoImportProviderProject1*

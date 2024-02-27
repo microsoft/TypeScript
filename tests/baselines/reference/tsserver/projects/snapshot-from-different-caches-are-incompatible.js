@@ -266,6 +266,7 @@ Projects::
 /a/b/proj.csproj (External) *changed*
     projectStateVersion: 3 *changed*
     projectProgramVersion: 1
+    dirty: true *changed*
 
 ScriptInfos::
 /a/b/app.ts *changed*
@@ -314,6 +315,12 @@ PolledWatches::
 FsWatches *deleted*::
 /a/b/app.ts:
   {}
+
+Projects::
+/a/b/proj.csproj (External) *changed*
+    projectStateVersion: 3
+    projectProgramVersion: 1
+    dirty: false *changed*
 
 ScriptInfos::
 /a/b/app.ts (Open) *changed*

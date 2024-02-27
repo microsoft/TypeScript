@@ -3769,6 +3769,7 @@ Projects::
 /tsconfig.json (Configured) *changed*
     projectStateVersion: 2 *changed*
     projectProgramVersion: 1
+    dirty: true *changed*
 
 ScriptInfos::
 /index.ts (Open) *changed*
@@ -5437,6 +5438,12 @@ Info seq  [hh:mm:ss:mss] response:
           },
           {
             "name": "unknown",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "using",
             "kind": "keyword",
             "kindModifiers": "",
             "sortText": "15"
@@ -9427,6 +9434,12 @@ Info seq  [hh:mm:ss:mss] response:
     }
 After request
 
+Projects::
+/tsconfig.json (Configured) *changed*
+    projectStateVersion: 2
+    projectProgramVersion: 1
+    dirty: false *changed*
+
 Before request
 
 Info seq  [hh:mm:ss:mss] request:
@@ -9466,6 +9479,7 @@ Projects::
 /tsconfig.json (Configured) *changed*
     projectStateVersion: 3 *changed*
     projectProgramVersion: 1
+    dirty: true *changed*
 
 ScriptInfos::
 /index.ts (Open) *changed*
@@ -11129,6 +11143,12 @@ Info seq  [hh:mm:ss:mss] response:
           },
           {
             "name": "unknown",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "using",
             "kind": "keyword",
             "kindModifiers": "",
             "sortText": "15"
@@ -15819,6 +15839,12 @@ Info seq  [hh:mm:ss:mss] response:
     }
 After request
 
+Projects::
+/tsconfig.json (Configured) *changed*
+    projectStateVersion: 3
+    projectProgramVersion: 1
+    dirty: false *changed*
+
 Before request
 
 Info seq  [hh:mm:ss:mss] request:
@@ -15858,6 +15884,7 @@ Projects::
 /tsconfig.json (Configured) *changed*
     projectStateVersion: 4 *changed*
     projectProgramVersion: 1
+    dirty: true *changed*
 
 ScriptInfos::
 /index.ts (Open) *changed*
@@ -17520,6 +17547,12 @@ Info seq  [hh:mm:ss:mss] response:
           },
           {
             "name": "unknown",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "using",
             "kind": "keyword",
             "kindModifiers": "",
             "sortText": "15"
@@ -22559,3 +22592,9 @@ Info seq  [hh:mm:ss:mss] response:
       "responseRequired": true
     }
 After request
+
+Projects::
+/tsconfig.json (Configured) *changed*
+    projectStateVersion: 4
+    projectProgramVersion: 1
+    dirty: false *changed*

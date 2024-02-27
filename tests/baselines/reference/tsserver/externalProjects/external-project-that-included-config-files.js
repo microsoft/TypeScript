@@ -393,7 +393,6 @@ ScriptInfos::
     containingProjects: 1
         /dev/null/inferredProject1* *default*
 
-Inferred project: /dev/null/inferredProject1* isOrphan:: false isClosed: false
 Before request
 
 Info seq  [hh:mm:ss:mss] request:
@@ -458,6 +457,8 @@ Projects::
 /a/c/tsconfig.json (Configured) *deleted*
     projectStateVersion: 1
     projectProgramVersion: 1
+    isClosed: true *changed*
+    noOpenRef: true *changed*
 /dev/null/inferredProject1* (Inferred)
     projectStateVersion: 1
     projectProgramVersion: 1
@@ -476,7 +477,6 @@ ScriptInfos::
     containingProjects: 1
         /dev/null/inferredProject1* *default*
 
-Inferred project: /dev/null/inferredProject1* isOrphan:: false isClosed: false
 Before request
 
 Info seq  [hh:mm:ss:mss] request:
@@ -525,6 +525,8 @@ Projects::
 /dev/null/inferredProject1* (Inferred) *changed*
     projectStateVersion: 2 *changed*
     projectProgramVersion: 1
+    dirty: true *changed*
+    isOrphan: true *changed*
 
 ScriptInfos::
 /a/b/f1.ts (Open)
@@ -540,7 +542,6 @@ ScriptInfos::
     containingProjects: 0 *changed*
         /dev/null/inferredProject1* *deleted*
 
-Inferred project: /dev/null/inferredProject1* isOrphan:: true isClosed: false
 Before request
 
 Info seq  [hh:mm:ss:mss] request:
@@ -582,6 +583,17 @@ FsWatches::
 /a/d/f3.ts:
   {}
 
+Projects::
+/a/b/tsconfig.json (Configured) *changed*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+    noOpenRef: true *changed*
+/dev/null/inferredProject1* (Inferred)
+    projectStateVersion: 2
+    projectProgramVersion: 1
+    dirty: true
+    isOrphan: true
+
 ScriptInfos::
 /a/b/f1.ts *changed*
     open: false *changed*
@@ -595,7 +607,6 @@ ScriptInfos::
     version: SVC-1-0
     containingProjects: 0
 
-Inferred project: /dev/null/inferredProject1* isOrphan:: true isClosed: false
 Before request
 
 Info seq  [hh:mm:ss:mss] request:
@@ -768,12 +779,17 @@ Projects::
 /a/b/tsconfig.json (Configured) *deleted*
     projectStateVersion: 1
     projectProgramVersion: 1
+    isClosed: true *changed*
+    noOpenRef: true
 /a/c/tsconfig.json (Configured) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
 /dev/null/inferredProject1* (Inferred) *deleted*
     projectStateVersion: 2
     projectProgramVersion: 1
+    dirty: true
+    isClosed: true *changed*
+    isOrphan: true
 
 ScriptInfos::
 /a/b/f1.ts *deleted*

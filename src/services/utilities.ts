@@ -10,6 +10,7 @@ import {
     BinaryExpression,
     binarySearchKey,
     BindingElement,
+    BlockLike,
     BreakOrContinueStatement,
     CallExpression,
     canHaveModifiers,
@@ -4304,5 +4305,18 @@ export function getDiffNum<T>(s1: T[], s2: T[]): number {
             }
         }
         return diffTable[0][0];
+    }
+}
+
+/** @internal */
+export function isBlockLike(node: Node): node is BlockLike {
+    switch (node.kind) {
+        case SyntaxKind.Block:
+        case SyntaxKind.SourceFile:
+        case SyntaxKind.ModuleBlock:
+        case SyntaxKind.CaseClause:
+            return true;
+        default:
+            return false;
     }
 }

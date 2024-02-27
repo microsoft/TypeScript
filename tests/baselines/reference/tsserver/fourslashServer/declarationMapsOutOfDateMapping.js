@@ -196,6 +196,9 @@ Projects::
 /dev/null/inferredProject1* (Inferred) *deleted*
     projectStateVersion: 2 *changed*
     projectProgramVersion: 1
+    dirty: true *changed*
+    isClosed: true *changed*
+    isOrphan: true *changed*
 /dev/null/inferredProject2* (Inferred) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
@@ -281,6 +284,13 @@ watchedFiles::
 /node_modules/a/src/index.ts: *new*
   {"pollingInterval":500}
 
+Projects::
+/dev/null/inferredProject2* (Inferred) *changed*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+    documentPositionMappers: 1 *changed*
+        /node_modules/a/dist/index.d.ts: DocumentPositionMapper1 *new*
+
 ScriptInfos::
 /index.ts (Open)
     version: SVC-1-0
@@ -298,13 +308,21 @@ ScriptInfos::
     version: Text-1
     containingProjects: 1
         /dev/null/inferredProject2*
-/node_modules/a/dist/index.d.ts (Open)
+/node_modules/a/dist/index.d.ts (Open) *changed*
     version: SVC-1-0
+    sourceMapFilePath: /node_modules/a/dist/index.d.ts.map *changed*
     containingProjects: 1
         /dev/null/inferredProject2* *default*
 /node_modules/a/dist/index.d.ts.map *new*
     version: Text-1
+    declarationInfoPath: /node_modules/a/dist/index.d.ts
+    sourceInfos: 1
+        /node_modules/a/src/index.ts
+    documentPositionMapper: DocumentPositionMapper1
     containingProjects: 0
 /node_modules/a/src/index.ts *new*
     version: Text-1
     containingProjects: 0
+
+DocumentPositionMappers::
+DocumentPositionMapper1 *new*

@@ -325,6 +325,12 @@ FsWatchesRecursive::
 /a:
   {}
 
+Projects::
+/a/tsconfig.json (Configured) *changed*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+    noOpenRef: true *changed*
+
 ScriptInfos::
 /a/a.ts *changed*
     open: false *changed*
@@ -551,6 +557,8 @@ Projects::
 /a/tsconfig.json (Configured) *deleted*
     projectStateVersion: 1
     projectProgramVersion: 1
+    isClosed: true *changed*
+    noOpenRef: true
 /b/tsconfig.json (Configured) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
@@ -618,6 +626,12 @@ FsWatchesRecursive::
 /b:
   {}
 
+Projects::
+/b/tsconfig.json (Configured) *changed*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+    noOpenRef: true *changed*
+
 ScriptInfos::
 /b/b.ts *changed*
     open: false *changed*
@@ -658,6 +672,8 @@ Projects::
 /b/tsconfig.json (Configured) *changed*
     projectStateVersion: 2 *changed*
     projectProgramVersion: 1
+    dirty: true *changed*
+    noOpenRef: true
 
 ScriptInfos::
 /b/b.ts *deleted*
@@ -745,6 +761,9 @@ Projects::
 /b/tsconfig.json (Configured) *deleted*
     projectStateVersion: 2
     projectProgramVersion: 1
+    dirty: true
+    isClosed: true *changed*
+    noOpenRef: true
 /dev/null/inferredProject1* (Inferred) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
@@ -902,21 +921,31 @@ Projects::
 /a/tsconfig.json (Configured) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
-/dev/null/inferredProject1* (Inferred)
+    noOpenRef: true
+/dev/null/inferredProject1* (Inferred) *changed*
     projectStateVersion: 1
     projectProgramVersion: 1
+    documentPositionMappers: 1 *changed*
+        /a/bin/a.d.ts: DocumentPositionMapper1 *new*
+    originalConfiguredProjects: 1 *changed*
+        /a/tsconfig.json *new*
 
 ScriptInfos::
 /a/a.ts *new*
     version: Text-2
     containingProjects: 1
         /a/tsconfig.json
-/a/bin/a.d.ts
+/a/bin/a.d.ts *changed*
     version: Text-1
+    sourceMapFilePath: /a/bin/a.d.ts.map *changed*
     containingProjects: 1
         /dev/null/inferredProject1*
 /a/bin/a.d.ts.map *new*
     version: Text-1
+    declarationInfoPath: /a/bin/a.d.ts
+    sourceInfos: 1
+        /a/a.ts
+    documentPositionMapper: DocumentPositionMapper1
     containingProjects: 0
 /b/bin/b.d.ts
     version: Text-1
@@ -926,6 +955,9 @@ ScriptInfos::
     version: SVC-1-0
     containingProjects: 1
         /dev/null/inferredProject1* *default*
+
+DocumentPositionMappers::
+DocumentPositionMapper1 *new*
 
 Before request
 
@@ -980,9 +1012,14 @@ Projects::
 /a/tsconfig.json (Configured)
     projectStateVersion: 1
     projectProgramVersion: 1
+    noOpenRef: true
 /dev/null/inferredProject1* (Inferred) *changed*
     projectStateVersion: 2 *changed*
     projectProgramVersion: 1
+    dirty: true *changed*
+    isOrphan: true *changed*
+    originalConfiguredProjects: 1
+        /a/tsconfig.json
 
 ScriptInfos::
 /a/a.ts
@@ -991,10 +1028,15 @@ ScriptInfos::
         /a/tsconfig.json
 /a/bin/a.d.ts
     version: Text-1
+    sourceMapFilePath: /a/bin/a.d.ts.map
     containingProjects: 1
         /dev/null/inferredProject1*
 /a/bin/a.d.ts.map
     version: Text-1
+    declarationInfoPath: /a/bin/a.d.ts
+    sourceInfos: 1
+        /a/a.ts
+    documentPositionMapper: DocumentPositionMapper1
     containingProjects: 0
 /b/bin/b.d.ts
     version: Text-1
@@ -1106,9 +1148,18 @@ Projects::
 /a/tsconfig.json (Configured) *deleted*
     projectStateVersion: 1
     projectProgramVersion: 1
+    isClosed: true *changed*
+    noOpenRef: true
 /dev/null/inferredProject1* (Inferred) *deleted*
     projectStateVersion: 2
     projectProgramVersion: 1
+    dirty: true
+    isClosed: true *changed*
+    isOrphan: true
+    documentPositionMappers: 0 *changed*
+        /a/bin/a.d.ts: DocumentPositionMapper1 *deleted*
+    originalConfiguredProjects: 1
+        /a/tsconfig.json
 /dev/null/inferredProject2* (Inferred) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
@@ -1120,10 +1171,15 @@ ScriptInfos::
         /a/tsconfig.json *deleted*
 /a/bin/a.d.ts *deleted*
     version: Text-1
+    sourceMapFilePath: /a/bin/a.d.ts.map
     containingProjects: 0 *changed*
         /dev/null/inferredProject1* *deleted*
 /a/bin/a.d.ts.map *deleted*
     version: Text-1
+    declarationInfoPath: /a/bin/a.d.ts
+    sourceInfos: 1
+        /a/a.ts
+    documentPositionMapper: DocumentPositionMapper1
     containingProjects: 0
 /b/bin/b.d.ts *deleted*
     version: Text-1
@@ -1136,3 +1192,6 @@ ScriptInfos::
 /user/user.ts *deleted*
     version: SVC-1-0
     containingProjects: 0
+
+DocumentPositionMappers::
+DocumentPositionMapper1 *deleted*

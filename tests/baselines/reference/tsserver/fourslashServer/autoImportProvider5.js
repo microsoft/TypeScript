@@ -468,6 +468,7 @@ Projects::
 /dev/null/inferredProject2* (Inferred) *changed*
     projectStateVersion: 2 *changed*
     projectProgramVersion: 1
+    dirty: true *changed*
     autoImportProviderHost: /dev/null/autoImportProviderProject2*
 
 ScriptInfos::

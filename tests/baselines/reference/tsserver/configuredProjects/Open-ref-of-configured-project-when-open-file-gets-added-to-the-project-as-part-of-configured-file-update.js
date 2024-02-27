@@ -497,7 +497,6 @@ ScriptInfos::
     containingProjects: 1
         /dev/null/inferredProject2* *default*
 
-Configured project: /a/b/tsconfig.json hasOpenRef:: true isClosed: false
 Info seq  [hh:mm:ss:mss] FileWatcher:: Triggered with /a/b/tsconfig.json 1:: WatchInfo: /a/b/tsconfig.json 2000 undefined Project: /a/b/tsconfig.json WatchType: Config file
 Info seq  [hh:mm:ss:mss] Scheduled: /a/b/tsconfig.json
 Info seq  [hh:mm:ss:mss] Search path: /a/b/src
@@ -520,6 +519,7 @@ Projects::
 /a/b/tsconfig.json (Configured) *changed*
     projectStateVersion: 2 *changed*
     projectProgramVersion: 1
+    dirty: true *changed*
 /dev/null/inferredProject1* (Inferred)
     projectStateVersion: 1
     projectProgramVersion: 1
@@ -723,9 +723,11 @@ Projects::
 /a/b/tsconfig.json (Configured) *changed*
     projectStateVersion: 2
     projectProgramVersion: 2 *changed*
+    dirty: false *changed*
 /dev/null/inferredProject1* (Inferred) *changed*
     projectStateVersion: 2 *changed*
     projectProgramVersion: 2 *changed*
+    isOrphan: true *changed*
 /dev/null/inferredProject2* (Inferred)
     projectStateVersion: 1
     projectProgramVersion: 1
@@ -749,9 +751,6 @@ ScriptInfos::
     containingProjects: 1
         /dev/null/inferredProject2* *default*
 
-Configured project: /a/b/tsconfig.json hasOpenRef:: true isClosed: false
-Inferred project: /dev/null/inferredProject1* isOrphan:: true isClosed: false
-Inferred project: /dev/null/inferredProject2* isOrphan:: false isClosed: false
 Before request
 
 Info seq  [hh:mm:ss:mss] request:
@@ -956,9 +955,12 @@ Projects::
 /dev/null/inferredProject1* (Inferred)
     projectStateVersion: 2
     projectProgramVersion: 2
+    isOrphan: true
 /dev/null/inferredProject2* (Inferred) *changed*
     projectStateVersion: 2 *changed*
     projectProgramVersion: 1
+    dirty: true *changed*
+    isOrphan: true *changed*
 
 ScriptInfos::
 /a/b/file3.ts (Open)
@@ -979,9 +981,6 @@ ScriptInfos::
     containingProjects: 0 *changed*
         /dev/null/inferredProject2* *deleted*
 
-Configured project: /a/b/tsconfig.json hasOpenRef:: true isClosed: false
-Inferred project: /dev/null/inferredProject1* isOrphan:: true isClosed: false
-Inferred project: /dev/null/inferredProject2* isOrphan:: true isClosed: false
 Before request
 
 Info seq  [hh:mm:ss:mss] request:
@@ -1058,9 +1057,13 @@ Projects::
 /dev/null/inferredProject1* (Inferred) *deleted*
     projectStateVersion: 2
     projectProgramVersion: 2
-/dev/null/inferredProject2* (Inferred)
+    isClosed: true *changed*
+    isOrphan: true
+/dev/null/inferredProject2* (Inferred) *changed*
     projectStateVersion: 2
     projectProgramVersion: 1
+    dirty: false *changed*
+    isOrphan: false *changed*
 
 ScriptInfos::
 /a/b/file3.ts (Open)
@@ -1081,7 +1084,6 @@ ScriptInfos::
     containingProjects: 1 *changed*
         /dev/null/inferredProject2* *default* *new*
 
-Configured project: /a/b/tsconfig.json hasOpenRef:: true isClosed: false
 Before request
 
 Info seq  [hh:mm:ss:mss] request:
@@ -1129,6 +1131,15 @@ FsWatchesRecursive::
 /a/b:
   {}
 
+Projects::
+/a/b/tsconfig.json (Configured) *changed*
+    projectStateVersion: 2
+    projectProgramVersion: 2
+    noOpenRef: true *changed*
+/dev/null/inferredProject2* (Inferred)
+    projectStateVersion: 2
+    projectProgramVersion: 1
+
 ScriptInfos::
 /a/b/file3.ts *changed*
     open: false *changed*
@@ -1148,7 +1159,6 @@ ScriptInfos::
     containingProjects: 1
         /dev/null/inferredProject2* *default*
 
-Configured project: /a/b/tsconfig.json hasOpenRef:: false isClosed: false
 File5 written
 //// [/file5.ts]
 let zz = 1;
@@ -1243,6 +1253,8 @@ Projects::
 /a/b/tsconfig.json (Configured) *deleted*
     projectStateVersion: 2
     projectProgramVersion: 2
+    isClosed: true *changed*
+    noOpenRef: true
 /dev/null/inferredProject2* (Inferred)
     projectStateVersion: 2
     projectProgramVersion: 1

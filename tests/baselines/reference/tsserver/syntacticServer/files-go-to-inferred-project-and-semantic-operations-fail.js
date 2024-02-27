@@ -322,6 +322,7 @@ Projects::
 /dev/null/inferredProject1* (Inferred) *changed*
     projectStateVersion: 5 *changed*
     projectProgramVersion: 0
+    dirty: true *changed*
 
 ScriptInfos::
 /user/username/projects/myproject/a.ts (Open)

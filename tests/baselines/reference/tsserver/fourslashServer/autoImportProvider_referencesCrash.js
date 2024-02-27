@@ -179,6 +179,7 @@ Projects::
 /a/tsconfig.json (Configured) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
+    noOpenRef: true
 /dev/null/inferredProject1* (Inferred) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
@@ -379,6 +380,7 @@ Projects::
 /a/tsconfig.json (Configured)
     projectStateVersion: 1
     projectProgramVersion: 1
+    noOpenRef: true
 /c/tsconfig.json (Configured) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
@@ -584,6 +586,7 @@ Projects::
 /a/tsconfig.json (Configured)
     projectStateVersion: 1
     projectProgramVersion: 1
+    noOpenRef: true
 /b/tsconfig.json (Configured) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
@@ -744,13 +747,41 @@ watchedDirectoriesRecursive::
 /c:
   {}
 
+Projects::
+/a/tsconfig.json (Configured)
+    projectStateVersion: 1
+    projectProgramVersion: 1
+    noOpenRef: true
+/b/tsconfig.json (Configured) *changed*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+    documentPositionMappers: 1 *changed*
+        /a/index.d.ts: DocumentPositionMapper1 *new*
+    originalConfiguredProjects: 1 *changed*
+        /a/tsconfig.json *new*
+/c/tsconfig.json (Configured)
+    projectStateVersion: 1
+    projectProgramVersion: 1
+    autoImportProviderHost: /dev/null/autoImportProviderProject1*
+/dev/null/autoImportProviderProject1* (AutoImportProvider)
+    projectStateVersion: 1
+    projectProgramVersion: 1
+/dev/null/inferredProject1* (Inferred)
+    projectStateVersion: 1
+    projectProgramVersion: 1
+
 ScriptInfos::
-/a/index.d.ts
+/a/index.d.ts *changed*
     version: Text-1
+    sourceMapFilePath: /a/index.d.ts.map *changed*
     containingProjects: 1
         /b/tsconfig.json
 /a/index.d.ts.map *new*
     version: Text-1
+    declarationInfoPath: /a/index.d.ts
+    sourceInfos: 1
+        /a/index.ts
+    documentPositionMapper: DocumentPositionMapper1
     containingProjects: 0
 /a/index.ts
     version: Text-1
@@ -790,3 +821,6 @@ ScriptInfos::
         /dev/null/inferredProject1*
         /c/tsconfig.json
         /b/tsconfig.json
+
+DocumentPositionMappers::
+DocumentPositionMapper1 *new*

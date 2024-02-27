@@ -808,6 +808,7 @@ Projects::
 /dev/null/inferredProject1* (Inferred) *changed*
     projectStateVersion: 3 *changed*
     projectProgramVersion: 2
+    dirty: true *changed*
 /dev/null/inferredProject2* (Inferred)
     projectStateVersion: 1
     projectProgramVersion: 1
@@ -894,6 +895,19 @@ FsWatches::
 /a/file1.ts:
   {}
 
+Projects::
+/dev/null/inferredProject1* (Inferred) *changed*
+    projectStateVersion: 3
+    projectProgramVersion: 2
+    dirty: true
+    isOrphan: true *changed*
+/dev/null/inferredProject2* (Inferred)
+    projectStateVersion: 1
+    projectProgramVersion: 1
+/dev/null/inferredProject3* (Inferred)
+    projectStateVersion: 1
+    projectProgramVersion: 1
+
 ScriptInfos::
 /A/file2.ts *changed*
     open: false *changed*
@@ -977,9 +991,13 @@ Projects::
 /dev/null/inferredProject1* (Inferred)
     projectStateVersion: 3
     projectProgramVersion: 2
+    dirty: true
+    isOrphan: true
 /dev/null/inferredProject2* (Inferred) *changed*
     projectStateVersion: 2 *changed*
     projectProgramVersion: 1
+    dirty: true *changed*
+    isOrphan: true *changed*
 /dev/null/inferredProject3* (Inferred)
     projectStateVersion: 1
     projectProgramVersion: 1
@@ -1067,12 +1085,18 @@ Projects::
 /dev/null/inferredProject1* (Inferred)
     projectStateVersion: 3
     projectProgramVersion: 2
+    dirty: true
+    isOrphan: true
 /dev/null/inferredProject2* (Inferred)
     projectStateVersion: 2
     projectProgramVersion: 1
+    dirty: true
+    isOrphan: true
 /dev/null/inferredProject3* (Inferred) *changed*
     projectStateVersion: 2 *changed*
     projectProgramVersion: 1
+    dirty: true *changed*
+    isOrphan: true *changed*
 
 ScriptInfos::
 /A/file2.ts
@@ -1300,12 +1324,20 @@ Projects::
 /dev/null/inferredProject1* (Inferred) *changed*
     projectStateVersion: 3
     projectProgramVersion: 3 *changed*
+    dirty: false *changed*
+    isOrphan: false *changed*
 /dev/null/inferredProject2* (Inferred) *deleted*
     projectStateVersion: 2
     projectProgramVersion: 1
+    dirty: true
+    isClosed: true *changed*
+    isOrphan: true
 /dev/null/inferredProject3* (Inferred) *deleted*
     projectStateVersion: 2
     projectProgramVersion: 1
+    dirty: true
+    isClosed: true *changed*
+    isOrphan: true
 
 ScriptInfos::
 /A/file2.ts *deleted*
@@ -1955,6 +1987,8 @@ Projects::
 /dev/null/inferredProject1* (Inferred) *changed*
     projectStateVersion: 4 *changed*
     projectProgramVersion: 3
+    dirty: true *changed*
+    isOrphan: true *changed*
 /dev/null/inferredProject4* (Inferred)
     projectStateVersion: 1
     projectProgramVersion: 1
@@ -2056,9 +2090,13 @@ Projects::
 /dev/null/inferredProject1* (Inferred)
     projectStateVersion: 4
     projectProgramVersion: 3
+    dirty: true
+    isOrphan: true
 /dev/null/inferredProject4* (Inferred) *changed*
     projectStateVersion: 2 *changed*
     projectProgramVersion: 1
+    dirty: true *changed*
+    isOrphan: true *changed*
 /dev/null/inferredProject5* (Inferred)
     projectStateVersion: 1
     projectProgramVersion: 1
@@ -2157,12 +2195,18 @@ Projects::
 /dev/null/inferredProject1* (Inferred)
     projectStateVersion: 4
     projectProgramVersion: 3
+    dirty: true
+    isOrphan: true
 /dev/null/inferredProject4* (Inferred)
     projectStateVersion: 2
     projectProgramVersion: 1
+    dirty: true
+    isOrphan: true
 /dev/null/inferredProject5* (Inferred) *changed*
     projectStateVersion: 2 *changed*
     projectProgramVersion: 1
+    dirty: true *changed*
+    isOrphan: true *changed*
 /dev/null/inferredProject6* (Inferred)
     projectStateVersion: 1
     projectProgramVersion: 1
@@ -2258,15 +2302,23 @@ Projects::
 /dev/null/inferredProject1* (Inferred)
     projectStateVersion: 4
     projectProgramVersion: 3
+    dirty: true
+    isOrphan: true
 /dev/null/inferredProject4* (Inferred)
     projectStateVersion: 2
     projectProgramVersion: 1
+    dirty: true
+    isOrphan: true
 /dev/null/inferredProject5* (Inferred)
     projectStateVersion: 2
     projectProgramVersion: 1
+    dirty: true
+    isOrphan: true
 /dev/null/inferredProject6* (Inferred) *changed*
     projectStateVersion: 2 *changed*
     projectProgramVersion: 1
+    dirty: true *changed*
+    isOrphan: true *changed*
 
 ScriptInfos::
 /A/file2.ts
@@ -2536,18 +2588,29 @@ FsWatches *deleted*::
   {}
 
 Projects::
-/dev/null/inferredProject1* (Inferred)
+/dev/null/inferredProject1* (Inferred) *changed*
     projectStateVersion: 4
     projectProgramVersion: 3
+    dirty: false *changed*
+    isOrphan: false *changed*
 /dev/null/inferredProject4* (Inferred) *deleted*
     projectStateVersion: 2
     projectProgramVersion: 1
+    dirty: true
+    isClosed: true *changed*
+    isOrphan: true
 /dev/null/inferredProject5* (Inferred) *deleted*
     projectStateVersion: 2
     projectProgramVersion: 1
+    dirty: true
+    isClosed: true *changed*
+    isOrphan: true
 /dev/null/inferredProject6* (Inferred) *deleted*
     projectStateVersion: 2
     projectProgramVersion: 1
+    dirty: true
+    isClosed: true *changed*
+    isOrphan: true
 
 ScriptInfos::
 /A/file2.ts *deleted*
@@ -3141,6 +3204,7 @@ Projects::
 /dev/null/inferredProject1* (Inferred) *changed*
     projectStateVersion: 6 *changed*
     projectProgramVersion: 4
+    dirty: true *changed*
 /dev/null/inferredProject7* (Inferred)
     projectStateVersion: 1
     projectProgramVersion: 1
@@ -3227,6 +3291,19 @@ FsWatches::
 /a/file1.ts:
   {}
 
+Projects::
+/dev/null/inferredProject1* (Inferred) *changed*
+    projectStateVersion: 6
+    projectProgramVersion: 4
+    dirty: true
+    isOrphan: true *changed*
+/dev/null/inferredProject7* (Inferred)
+    projectStateVersion: 1
+    projectProgramVersion: 1
+/dev/null/inferredProject8* (Inferred)
+    projectStateVersion: 1
+    projectProgramVersion: 1
+
 ScriptInfos::
 /A/file2.ts *changed*
     open: false *changed*
@@ -3310,9 +3387,13 @@ Projects::
 /dev/null/inferredProject1* (Inferred)
     projectStateVersion: 6
     projectProgramVersion: 4
+    dirty: true
+    isOrphan: true
 /dev/null/inferredProject7* (Inferred) *changed*
     projectStateVersion: 2 *changed*
     projectProgramVersion: 1
+    dirty: true *changed*
+    isOrphan: true *changed*
 /dev/null/inferredProject8* (Inferred)
     projectStateVersion: 1
     projectProgramVersion: 1
@@ -3400,12 +3481,18 @@ Projects::
 /dev/null/inferredProject1* (Inferred)
     projectStateVersion: 6
     projectProgramVersion: 4
+    dirty: true
+    isOrphan: true
 /dev/null/inferredProject7* (Inferred)
     projectStateVersion: 2
     projectProgramVersion: 1
+    dirty: true
+    isOrphan: true
 /dev/null/inferredProject8* (Inferred) *changed*
     projectStateVersion: 2 *changed*
     projectProgramVersion: 1
+    dirty: true *changed*
+    isOrphan: true *changed*
 
 ScriptInfos::
 /A/file2.ts
@@ -3633,12 +3720,20 @@ Projects::
 /dev/null/inferredProject1* (Inferred) *changed*
     projectStateVersion: 6
     projectProgramVersion: 5 *changed*
+    dirty: false *changed*
+    isOrphan: false *changed*
 /dev/null/inferredProject7* (Inferred) *deleted*
     projectStateVersion: 2
     projectProgramVersion: 1
+    dirty: true
+    isClosed: true *changed*
+    isOrphan: true
 /dev/null/inferredProject8* (Inferred) *deleted*
     projectStateVersion: 2
     projectProgramVersion: 1
+    dirty: true
+    isClosed: true *changed*
+    isOrphan: true
 
 ScriptInfos::
 /A/file2.ts *deleted*
@@ -4294,6 +4389,8 @@ Projects::
 /dev/null/inferredProject1* (Inferred) *changed*
     projectStateVersion: 7 *changed*
     projectProgramVersion: 5
+    dirty: true *changed*
+    isOrphan: true *changed*
 /dev/null/inferredProject10* (Inferred)
     projectStateVersion: 1
     projectProgramVersion: 1
@@ -4397,6 +4494,8 @@ Projects::
 /dev/null/inferredProject1* (Inferred)
     projectStateVersion: 7
     projectProgramVersion: 5
+    dirty: true
+    isOrphan: true
 /dev/null/inferredProject10* (Inferred)
     projectStateVersion: 1
     projectProgramVersion: 1
@@ -4406,6 +4505,8 @@ Projects::
 /dev/null/inferredProject9* (Inferred) *changed*
     projectStateVersion: 2 *changed*
     projectProgramVersion: 1
+    dirty: true *changed*
+    isOrphan: true *changed*
 
 ScriptInfos::
 /A/file2.ts *changed*
@@ -4500,15 +4601,21 @@ Projects::
 /dev/null/inferredProject1* (Inferred)
     projectStateVersion: 7
     projectProgramVersion: 5
+    dirty: true
+    isOrphan: true
 /dev/null/inferredProject10* (Inferred) *changed*
     projectStateVersion: 2 *changed*
     projectProgramVersion: 1
+    dirty: true *changed*
+    isOrphan: true *changed*
 /dev/null/inferredProject11* (Inferred)
     projectStateVersion: 1
     projectProgramVersion: 1
 /dev/null/inferredProject9* (Inferred)
     projectStateVersion: 2
     projectProgramVersion: 1
+    dirty: true
+    isOrphan: true
 
 ScriptInfos::
 /A/file2.ts
@@ -4603,15 +4710,23 @@ Projects::
 /dev/null/inferredProject1* (Inferred)
     projectStateVersion: 7
     projectProgramVersion: 5
+    dirty: true
+    isOrphan: true
 /dev/null/inferredProject10* (Inferred)
     projectStateVersion: 2
     projectProgramVersion: 1
+    dirty: true
+    isOrphan: true
 /dev/null/inferredProject11* (Inferred) *changed*
     projectStateVersion: 2 *changed*
     projectProgramVersion: 1
+    dirty: true *changed*
+    isOrphan: true *changed*
 /dev/null/inferredProject9* (Inferred)
     projectStateVersion: 2
     projectProgramVersion: 1
+    dirty: true
+    isOrphan: true
 
 ScriptInfos::
 /A/file2.ts
