@@ -48222,7 +48222,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     function declaredParameterTypeContainsUndefined(parameter: ParameterDeclaration) {
         if (!parameter.type) return false;
         const type = getTypeFromTypeNode(parameter.type);
-        return type === undefinedType || !!(type.flags & TypeFlags.Union) && !!((type as UnionType).types[0].flags & TypeFlags.Undefined);
+        return containsUndefinedType(type);
     }
     function requiresAddingImplicitUndefined(parameter: ParameterDeclaration) {
         return (isRequiredInitializedParameter(parameter) || isOptionalUninitializedParameterProperty(parameter)) && !declaredParameterTypeContainsUndefined(parameter);
