@@ -2939,7 +2939,7 @@ declare namespace ts {
                  *
                  * Default: `last`
                  */
-                readonly organizeImportsTypeOrder?: "last" | "first" | "inline";
+                readonly organizeImportsTypeOrder?: ts.OrganizeImportsTypeOrder;
                 /**
                  * Indicates whether {@link ReferencesResponseItem.lineText} is supported.
                  */
@@ -8808,9 +8808,10 @@ declare namespace ts {
         readonly organizeImportsNumericCollation?: boolean;
         readonly organizeImportsAccentCollation?: boolean;
         readonly organizeImportsCaseFirst?: "upper" | "lower" | false;
-        readonly organizeImportsTypeOrder?: "first" | "last" | "inline";
+        readonly organizeImportsTypeOrder?: OrganizeImportsTypeOrder;
         readonly excludeLibrarySymbolsInNavTo?: boolean;
     }
+    type OrganizeImportsTypeOrder = "first" | "last" | "inline";
     /** Represents a bigint literal value without requiring bigint support */
     interface PseudoBigInt {
         negative: boolean;

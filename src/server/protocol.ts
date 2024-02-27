@@ -3649,7 +3649,7 @@ export interface UserPreferences {
      *
      * Default: `last`
      */
-    readonly organizeImportsTypeOrder?: "last" | "first" | "inline";
+    readonly organizeImportsTypeOrder?: ts.OrganizeImportsTypeOrder;
 
     /**
      * Indicates whether {@link ReferencesResponseItem.lineText} is supported.

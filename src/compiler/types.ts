@@ -10094,9 +10094,11 @@ export interface UserPreferences {
     readonly organizeImportsNumericCollation?: boolean;
     readonly organizeImportsAccentCollation?: boolean;
     readonly organizeImportsCaseFirst?: "upper" | "lower" | false;
-    readonly organizeImportsTypeOrder?: "first" | "last" | "inline";
+    readonly organizeImportsTypeOrder?: OrganizeImportsTypeOrder;
     readonly excludeLibrarySymbolsInNavTo?: boolean;
 }
+
+export type OrganizeImportsTypeOrder = "first" | "last" | "inline";
 
 /** Represents a bigint literal value without requiring bigint support */
 export interface PseudoBigInt {

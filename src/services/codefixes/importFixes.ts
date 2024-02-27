@@ -111,6 +111,7 @@ import {
     nodeIsMissing,
     ObjectBindingPattern,
     OrganizeImports,
+    OrganizeImportsTypeOrder,
     PackageJsonImportFilter,
     Path,
     pathContainsNodeModules,
@@ -127,7 +128,6 @@ import {
     skipAlias,
     some,
     sort,
-    // SortKind,
     SourceFile,
     stableSort,
     startsWith,
@@ -1517,15 +1517,19 @@ function doAddExistingFix(
         let specifierComparer: Comparer<ImportSpecifier> = OrganizeImports.getOrganizeImportsSpecifierComparer(preferences);
         const { comparersToTest, typeOrdersToTest } = OrganizeImports.getDetectionLists(preferences);
         let namedImportComparer = comparersToTest[0];
-        let typeOrder: OrganizeImports.TypeOrder | undefined = typeOrdersToTest[0];
+        let typeOrder: OrganizeImportsTypeOrder | undefined = typeOrdersToTest[0];
+        let isSorted: boolean | undefined;
 
         if (existingSpecifiers && (typeof preferences.organizeImportsIgnoreCase !== "boolean" || !preferences.organizeImportsTypeOrder)) {
             const moduleSpecifiersDecl: ImportDeclaration[] = [clause.parent];
             const namedImportSort = OrganizeImports.detectNamedImportOrganizationBySort(moduleSpecifiersDecl, comparersToTest, typeOrdersToTest);
             if (namedImportSort) {
-                ({ namedImportComparer, typeOrder } = namedImportSort);
+                ({ namedImportComparer, typeOrder, isSorted } = namedImportSort);
                 specifierComparer = OrganizeImports.getOrganizeImportsSpecifierComparer({ organizeImportsTypeOrder: typeOrder }, namedImportComparer);
             }
+        }
+        else {
+            isSorted = existingSpecifiers ? arrayIsSorted(existingSpecifiers, specifierComparer) : true;
         }
 
         const newSpecifiers = stableSort(
@@ -1544,10 +1548,9 @@ function doAddExistingFix(
         // nonsense. So if there are existing specifiers, even if we know the sorting preference, we
         // need to ensure that the existing specifiers are sorted according to the preference in order
         // to do a sorted insertion.
-        // const specifierSort = existingSpecifiers?.length && OrganizeImports.detectImportSpecifierSorting(existingSpecifiers, preferences);
 
         // changed to check if existing specifiers are sorted
-        if (existingSpecifiers?.length && arrayIsSorted(existingSpecifiers, specifierComparer)) {
+        if (existingSpecifiers?.length && isSorted) {
             for (const spec of newSpecifiers) {
                 const insertionIndex = OrganizeImports.getImportSpecifierInsertionIndex(existingSpecifiers, spec, specifierComparer);
                 changes.insertImportSpecifierAtIndex(sourceFile, spec, clause.namedBindings as NamedImports, insertionIndex);
