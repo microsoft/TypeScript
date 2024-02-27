@@ -64,6 +64,5 @@ verify.quickInfos({
     5: "(method) GuardInterface.isLeader(): this is LeadGuard",
     7: "(method) GuardInterface.isFollower(): this is FollowerGuard",
     13: "let leaderStatus: boolean",
-    14: "let checkedLeaderStatus: boolean",
-    15: "function isLeaderGuard(g: RoyalGuard): g is LeadGuard"
+    14: "let checkedLeaderStatus: boolean"
 });
