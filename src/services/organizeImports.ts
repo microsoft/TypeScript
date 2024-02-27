@@ -101,21 +101,24 @@ export function organizeImports(
 
     const { comparersToTest, typeOrdersToTest } = getDetectionLists(preferences);
     if (typeof preferences.organizeImportsIgnoreCase === "boolean") {
-        // if case sensitivity is specified (true/false), then use the same setting for both.
+        // If case sensitivity is specified (true/false), then use the same setting for both.
         comparer.moduleSpecifierComparer = getOrganizeImportsComparer(preferences, preferences.organizeImportsIgnoreCase);
         comparer.namedImportComparer = comparer.moduleSpecifierComparer;
     }
     else {
-        // otherwise, we must test for both case-sensitivity and later, type order
+        // Otherwise, we must test for case-sensitivity. Named import case sensitivity will be tested with type order
         ({ comparer: comparer.moduleSpecifierComparer } = detectModuleSpecifierCaseBySort(topLevelImportGroupDecls, comparersToTest));
     }
 
-    const namedImportSort = detectNamedImportOrganizationBySort(topLevelImportDecls, comparersToTest, typeOrdersToTest);
-    if (namedImportSort) {
-        const { namedImportComparer, typeOrder } = namedImportSort;
-        comparer.namedImportComparer = comparer.namedImportComparer ?? namedImportComparer;
-        comparer.typeOrder = comparer.typeOrder ?? typeOrder;
+    if (!comparer.typeOrder) {
+        const namedImportSort = detectNamedImportOrganizationBySort(topLevelImportDecls, comparersToTest, typeOrdersToTest);
+        if (namedImportSort) {
+            const { namedImportComparer, typeOrder } = namedImportSort;
+            comparer.namedImportComparer = comparer.namedImportComparer ?? namedImportComparer;
+            comparer.typeOrder = comparer.typeOrder ?? typeOrder;
+        }
     }
+
     topLevelImportGroupDecls.forEach(importGroupDecl => organizeImportsWorker(importGroupDecl, comparer));
 
     // Exports are always used
@@ -209,6 +212,17 @@ export function organizeImports(
         const useComparer = getOrganizeImportsSpecifierComparer(preferences, specifierCaseComparer);
         organizeDeclsWorker(oldExportDecls, group => coalesceExportsWorker(group, useComparer));
     }
+}
+
+/** @internal */
+export function getDetectionLists(preferences: UserPreferences): { comparersToTest: Comparer<string>[]; typeOrdersToTest: TypeOrder[]; } {
+    // Returns the possible detection outcomes, given the user's preferences. The earlier in the list, the higher the priority.
+    return {
+        comparersToTest: typeof preferences.organizeImportsIgnoreCase === "boolean"
+            ? [getOrganizeImportsComparer(preferences, preferences.organizeImportsIgnoreCase)]
+            : [getOrganizeImportsComparer(preferences, /*ignoreCase*/ true), getOrganizeImportsComparer(preferences, /*ignoreCase*/ false)],
+        typeOrdersToTest: preferences.organizeImportsTypeOrder ? [preferences.organizeImportsTypeOrder] : ["last", "inline", "first"],
+    };
 }
 
 function groupByNewlineContiguous<T extends ImportDeclaration | ExportDeclaration>(sourceFile: SourceFile, decls: T[]): T[][] {
@@ -672,6 +686,10 @@ function compareModuleSpecifiersWorker(m1: Expression | undefined, m2: Expressio
         comparer(name1!, name2!);
 }
 
+function getModuleNamesFromDecls(decls: readonly AnyImportOrRequireStatement[]): string[] {
+    return decls.map(s => getExternalModuleName(getModuleSpecifierExpression(s)) || "");
+}
+
 function getModuleSpecifierExpression(declaration: AnyImportOrRequireStatement): Expression | undefined {
     switch (declaration.kind) {
         case SyntaxKind.ImportEqualsDeclaration:
@@ -813,15 +831,11 @@ function getTopLevelExportGroups(sourceFile: SourceFile) {
     return flatMap(topLevelExportGroups, exportGroupDecls => groupByNewlineContiguous(sourceFile, exportGroupDecls));
 }
 
-function getModuleNamesFromDecls(decls: readonly AnyImportOrRequireStatement[]): string[] {
-    return decls.map(s => getExternalModuleName(getModuleSpecifierExpression(s)) || "");
-}
-
 /** @internal */
 export function detectModuleSpecifierCaseBySort(importDeclsByGroup: (readonly AnyImportOrRequireStatement[])[], comparersToTest: Comparer<string>[]) {
     const moduleSpecifiersByGroup: string[][] = [];
     importDeclsByGroup.forEach(importGroup => {
-        //  turns importDeclsByGroup into string[][] of module specifiers by group to detect sorting on module specifiers
+        // Turns importDeclsByGroup into string[][] of module specifiers by group to detect sorting on module specifiers
         moduleSpecifiersByGroup.push(getModuleNamesFromDecls(importGroup));
     });
     return detectCaseSensitivityBySort(moduleSpecifiersByGroup, comparersToTest);
@@ -832,27 +846,26 @@ export type TypeOrder = "first" | "last" | "inline";
 
 /** @internal */
 export function detectNamedImportOrganizationBySort(originalGroups: readonly ImportDeclaration[], comparersToTest: Comparer<string>[], typesToTest: TypeOrder[]): { namedImportComparer: Comparer<string>; typeOrder?: "first" | "last" | "inline"; isSorted: boolean; } | undefined {
-    // filter for import declarations with named imports. Will be a flat array of import declarations without separations by group
+    // Filter for import declarations with named imports. Will be a flat array of import declarations without separations by group
     let bothNamedImports = false;
     const importDeclsWithNamed = originalGroups.filter(i => {
         const namedImports = tryCast(i.importClause?.namedBindings, isNamedImports)?.elements;
         if (!namedImports?.length) return false;
         if (!bothNamedImports && namedImports.some(n => n.isTypeOnly) && namedImports.some(n => !n.isTypeOnly)) {
-            // todo:improve check
             bothNamedImports = true;
         }
         return true;
     });
 
-    // no need for more detection if no named imports
+    // No need for more detection, if no named imports
     if (importDeclsWithNamed.length === 0) return;
 
-    // formats the code into lists of named imports, grouped by declaration
+    // Formats into lists of named imports, grouped by declaration
     const namedImportsByDecl = importDeclsWithNamed.map(importDecl => {
         return tryCast(importDecl.importClause?.namedBindings, isNamedImports)?.elements;
     }).filter(elements => elements !== undefined) as any as ImportSpecifier[][];
 
-    // if we don't have any import statements with both named regular and type imports, we do not need to detect a type ordering
+    // If we don't have any import statements with both named regular and type imports, we do not need to detect a type ordering
     if (!bothNamedImports || typesToTest.length === 0) {
         const sortState = detectCaseSensitivityBySort(namedImportsByDecl.map(i => i.map(n => n.name.text)), comparersToTest);
         return { namedImportComparer: sortState.comparer, isSorted: sortState.isSorted };
@@ -886,18 +899,8 @@ export function detectNamedImportOrganizationBySort(originalGroups: readonly Imp
         return { namedImportComparer: bestComparer[bestTypeOrder], typeOrder: bestTypeOrder, isSorted: bestDiff[bestTypeOrder] === 0 };
     }
 
-    // default; hopefully never hit.....
+    // Default behavior. It shouldn't be hit if typesToTest.length > 0
     return { namedImportComparer: bestComparer.last, typeOrder: "last", isSorted: bestDiff.last === 0 };
-}
-
-/** @internal */
-export function getDetectionLists(preferences: UserPreferences): { comparersToTest: Comparer<string>[]; typeOrdersToTest: TypeOrder[]; } {
-    return {
-        comparersToTest: typeof preferences.organizeImportsIgnoreCase === "boolean"
-            ? [getOrganizeImportsComparer(preferences, preferences.organizeImportsIgnoreCase)]
-            : [getOrganizeImportsComparer(preferences, /*ignoreCase*/ true), getOrganizeImportsComparer(preferences, /*ignoreCase*/ false)],
-        typeOrdersToTest: preferences.organizeImportsTypeOrder ? [preferences.organizeImportsTypeOrder] : ["last", "inline", "first"],
-    };
 }
 
 function getSortedMeasure<T>(arr: readonly T[], comparer: Comparer<T>) {
@@ -909,9 +912,10 @@ function getSortedMeasure<T>(arr: readonly T[], comparer: Comparer<T>) {
     }
     return i;
 }
+
 function detectCaseSensitivityBySort(originalGroups: string[][], comparersToTest: Comparer<string>[]): { comparer: Comparer<string>; isSorted: boolean; } {
-    // each entry in originalGroups will be sorted and compared against the original entry.
-    // the total diff of each comparison is the sum of the diffs of all groups
+    // Each entry in originalGroups will be sorted and compared against the original entry.
+    // The total diff of each comparison is the sum of the diffs over all groups
     let bestComparer;
     let bestDiff = Infinity;
 
@@ -923,8 +927,6 @@ function detectCaseSensitivityBySort(originalGroups: string[][], comparersToTest
 
         for (const listToSort of originalGroups) {
             if (listToSort.length <= 1) continue;
-
-            // const sortedList = sort(listToSort, curComparer) as any as string[];
             const diff = getSortedMeasure(listToSort, curComparer);
             diffOfCurrentComparer += diff;
         }
