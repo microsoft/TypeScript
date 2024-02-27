@@ -2628,8 +2628,8 @@ export function insertImports(changes: textChanges.ChangeTracker, sourceFile: So
         ? [existingImportStatements as ImportDeclaration[]]
         : isArray(imports)
         ? [imports as ImportDeclaration[]]
-        : [[imports as ImportDeclaration]];
-    const comparer = OrganizeImports.detectModuleSpecifierCaseBySort(moduleSpecifiersToDetect, OrganizeImports.getOrdersToDetect(preferences).comparersToTest);
+        : [existingImportStatements as ImportDeclaration[]];
+    const { comparer } = OrganizeImports.detectModuleSpecifierCaseBySort(moduleSpecifiersToDetect, OrganizeImports.getDetectionLists(preferences).comparersToTest);
     const sortedNewImports = isArray(imports) ? stableSort(imports, (a, b) => OrganizeImports.compareImportsOrRequireStatements(a, b, comparer)) : [imports];
     if (!existingImportStatements.length) {
         changes.insertNodesAtTopOfFile(sourceFile, sortedNewImports, blankLineBetween);
