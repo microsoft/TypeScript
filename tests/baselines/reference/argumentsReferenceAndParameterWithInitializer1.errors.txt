@@ -2,9 +2,31 @@ index.js(24,9): error TS7005: Variable 'args' implicitly has an 'any[]' type.
 index.js(31,9): error TS7005: Variable 'args' implicitly has an 'any[]' type.
 index.js(36,9): error TS7005: Variable 'args' implicitly has an 'any[]' type.
 index.js(41,9): error TS7005: Variable 'args' implicitly has an 'any[]' type.
+index.js(46,9): error TS7005: Variable 'args' implicitly has an 'any[]' type.
+index.js(51,9): error TS7005: Variable 'args' implicitly has an 'any[]' type.
+index.js(56,9): error TS7005: Variable 'args' implicitly has an 'any[]' type.
+index.js(61,9): error TS7005: Variable 'args' implicitly has an 'any[]' type.
+index.js(66,9): error TS7005: Variable 'args' implicitly has an 'any[]' type.
+index.js(71,9): error TS7005: Variable 'args' implicitly has an 'any[]' type.
+index.js(76,9): error TS7005: Variable 'args' implicitly has an 'any[]' type.
+index.js(81,9): error TS7005: Variable 'args' implicitly has an 'any[]' type.
+index.js(86,9): error TS7005: Variable 'args' implicitly has an 'any[]' type.
+index.js(91,9): error TS7005: Variable 'args' implicitly has an 'any[]' type.
+index.js(96,9): error TS7005: Variable 'args' implicitly has an 'any[]' type.
+index.js(101,9): error TS7005: Variable 'args' implicitly has an 'any[]' type.
+index.js(104,31): error TS7006: Parameter 'value' implicitly has an 'any' type.
+index.js(105,9): error TS7005: Variable 'args' implicitly has an 'any[]' type.
+index.js(108,31): error TS7006: Parameter 'value' implicitly has an 'any' type.
+index.js(108,59): error TS7006: Parameter 'third' implicitly has an 'any' type.
+index.js(109,9): error TS7005: Variable 'args' implicitly has an 'any[]' type.
+index.js(115,17): error TS7006: Parameter 'a' implicitly has an 'any' type.
+index.js(115,28): error TS1016: A required parameter cannot follow an optional parameter.
+index.js(115,28): error TS7006: Parameter 'c' implicitly has an 'any' type.
+index.js(116,9): error TS7005: Variable 'args' implicitly has an 'any[]' type.
+index.js(121,9): error TS7005: Variable 'args' implicitly has an 'any[]' type.
 
 
-==== index.js (4 errors) ====
+==== index.js (26 errors) ====
     'use strict';
     
     // https://github.com/microsoft/TypeScript/issues/57435
@@ -56,4 +78,129 @@ index.js(41,9): error TS7005: Variable 'args' implicitly has an 'any[]' type.
 !!! error TS7005: Variable 'args' implicitly has an 'any[]' type.
     }
     
+    /** @type {(a: number, b: boolean | undefined, ...rest: [string, ...number[]]) => void} */
+    const test6 = function inner(value, options = undefined, third) {
+      const args = [].slice.call(arguments);
+            ~~~~
+!!! error TS7005: Variable 'args' implicitly has an 'any[]' type.
+    }
+    
+    /** @type {(a: number, b: boolean | undefined, ...rest: number[]) => void} */
+    const test7 = function inner(value, options = undefined, third) {
+      const args = [].slice.call(arguments);
+            ~~~~
+!!! error TS7005: Variable 'args' implicitly has an 'any[]' type.
+    }
+    
+    /** @type {(a: number, b?: boolean, ...rest: string[]) => void} */
+    const test8 = function inner(value, options = undefined) {
+      const args = [].slice.call(arguments);
+            ~~~~
+!!! error TS7005: Variable 'args' implicitly has an 'any[]' type.
+    }
+    
+    /** @type {(a: number, b?: boolean, ...rest: string[]) => void} */
+    const test9 = function inner(value, options = undefined, third) {
+      const args = [].slice.call(arguments);
+            ~~~~
+!!! error TS7005: Variable 'args' implicitly has an 'any[]' type.
+    }
+    
+    /** @type {(a: number, b?: boolean, ...rest: [string, ...number[]]) => void} */
+    const test10 = function inner(value, options = undefined) {
+      const args = [].slice.call(arguments);
+            ~~~~
+!!! error TS7005: Variable 'args' implicitly has an 'any[]' type.
+    }
+    
+    /** @type {(a: number, b?: boolean, ...rest: [string?, ...number[]]) => void} */
+    const test11 = function inner(value, options = undefined) {
+      const args = [].slice.call(arguments);
+            ~~~~
+!!! error TS7005: Variable 'args' implicitly has an 'any[]' type.
+    }
+    
+    /** @type {(a: number, b?: boolean, ...rest: [string, ...number[]]) => void} */
+    const test12 = function inner(value, options = undefined, third) {
+      const args = [].slice.call(arguments);
+            ~~~~
+!!! error TS7005: Variable 'args' implicitly has an 'any[]' type.
+    }
+    
+    /** @type {(a: number, b?: boolean, ...rest: [string?, ...number[]]) => void} */
+    const test13 = function inner(value, options = undefined, third) {
+      const args = [].slice.call(arguments);
+            ~~~~
+!!! error TS7005: Variable 'args' implicitly has an 'any[]' type.
+    }
+    
+    /** @type {(a: number, b?: boolean, ...rest: [string?, string?]) => void} */
+    const test14 = function inner(value, options = undefined) {
+      const args = [].slice.call(arguments);
+            ~~~~
+!!! error TS7005: Variable 'args' implicitly has an 'any[]' type.
+    }
+    
+    /** @type {(a: number, b?: boolean, ...rest: [string?, string?]) => void} */
+    const test15 = function inner(value, options = undefined, third) {
+      const args = [].slice.call(arguments);
+            ~~~~
+!!! error TS7005: Variable 'args' implicitly has an 'any[]' type.
+    }
+    
+    /** @type {(a: number, b?: boolean, ...rest: [string, string]) => void} */
+    const test16 = function inner(value, options = undefined) {
+      const args = [].slice.call(arguments);
+            ~~~~
+!!! error TS7005: Variable 'args' implicitly has an 'any[]' type.
+    }
+    
+    /** @type {(a: number, b?: boolean, ...rest: [string, string]) => void} */
+    const test17 = function inner(value, options = undefined, third) {
+      const args = [].slice.call(arguments);
+            ~~~~
+!!! error TS7005: Variable 'args' implicitly has an 'any[]' type.
+    }
+    
+    const test18 = function inner(value, options = undefined) {
+                                  ~~~~~
+!!! error TS7006: Parameter 'value' implicitly has an 'any' type.
+      const args = [].slice.call(arguments);
+            ~~~~
+!!! error TS7005: Variable 'args' implicitly has an 'any[]' type.
+    }
+    
+    const test19 = function inner(value, options = undefined, third) {
+                                  ~~~~~
+!!! error TS7006: Parameter 'value' implicitly has an 'any' type.
+                                                              ~~~~~
+!!! error TS7006: Parameter 'third' implicitly has an 'any' type.
+      const args = [].slice.call(arguments);
+            ~~~~
+!!! error TS7005: Variable 'args' implicitly has an 'any[]' type.
+    }
+    
+    /**
+     * @param {number} [b]
+     */
+    function test20(a, b = 10, c) {
+                    ~
+!!! error TS7006: Parameter 'a' implicitly has an 'any' type.
+                               ~
+!!! error TS1016: A required parameter cannot follow an optional parameter.
+                               ~
+!!! error TS7006: Parameter 'c' implicitly has an 'any' type.
+      const args = [].slice.call(arguments);
+            ~~~~
+!!! error TS7005: Variable 'args' implicitly has an 'any[]' type.
+    }
+    
+    /** @type {(a: number, b?: boolean, ...rest: [string, string]) => void} */
+    function test21(a, b = true, c) {
+      const args = [].slice.call(arguments);
+            ~~~~
+!!! error TS7005: Variable 'args' implicitly has an 'any[]' type.
+    }
+    
     export {}
+    
