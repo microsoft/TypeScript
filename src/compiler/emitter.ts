@@ -144,6 +144,7 @@ import {
     getEmitFlags,
     getEmitHelpers,
     getEmitModuleKind,
+    getEmitScriptTarget,
     getExternalHelpersModuleName,
     getExternalModuleName,
     getIdentifierTypeArguments,
@@ -856,8 +857,8 @@ export function emitFiles(resolver: EmitResolver, host: EmitHost, targetSourceFi
             removeComments: compilerOptions.removeComments,
             newLine: compilerOptions.newLine,
             noEmitHelpers: compilerOptions.noEmitHelpers,
-            module: compilerOptions.module,
-            target: compilerOptions.target,
+            module: getEmitModuleKind(compilerOptions),
+            target: getEmitScriptTarget(compilerOptions),
             sourceMap: compilerOptions.sourceMap,
             inlineSourceMap: compilerOptions.inlineSourceMap,
             inlineSources: compilerOptions.inlineSources,
@@ -4131,6 +4132,7 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
         writeSpace();
         nextPos = emitTokenWithComment(SyntaxKind.AsKeyword, nextPos, writeKeyword, node);
         writeSpace();
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
         nextPos = emitTokenWithComment(SyntaxKind.NamespaceKeyword, nextPos, writeKeyword, node);
         writeSpace();
         emit(node.name);
@@ -5656,7 +5658,7 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
         const flags = (neverAsciiEscape ? GetLiteralTextFlags.NeverAsciiEscape : 0)
             | (jsxAttributeEscape ? GetLiteralTextFlags.JsxAttributeEscape : 0)
             | (printerOptions.terminateUnterminatedLiterals ? GetLiteralTextFlags.TerminateUnterminatedLiterals : 0)
-            | (printerOptions.target && printerOptions.target === ScriptTarget.ESNext ? GetLiteralTextFlags.AllowNumericSeparator : 0);
+            | (printerOptions.target && printerOptions.target >= ScriptTarget.ES2021 ? GetLiteralTextFlags.AllowNumericSeparator : 0);
 
         return getLiteralText(node, currentSourceFile, flags);
     }

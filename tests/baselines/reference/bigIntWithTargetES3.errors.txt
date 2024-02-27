@@ -1,11 +1,11 @@
-error TS5107: Option 'target=ES3' is deprecated and will stop functioning in TypeScript 5.5. Specify compilerOption '"ignoreDeprecations": "5.0"' to silence this error.
+error TS5108: Option 'target=ES3' has been removed. Please remove it from your configuration.
 bigIntWithTargetES3.ts(5,22): error TS2737: BigInt literals are not available when targeting lower than ES2020.
 bigIntWithTargetES3.ts(5,29): error TS2737: BigInt literals are not available when targeting lower than ES2020.
 bigIntWithTargetES3.ts(5,39): error TS2737: BigInt literals are not available when targeting lower than ES2020.
 bigIntWithTargetES3.ts(5,48): error TS2737: BigInt literals are not available when targeting lower than ES2020.
 
 
-!!! error TS5107: Option 'target=ES3' is deprecated and will stop functioning in TypeScript 5.5. Specify compilerOption '"ignoreDeprecations": "5.0"' to silence this error.
+!!! error TS5108: Option 'target=ES3' has been removed. Please remove it from your configuration.
 ==== bigIntWithTargetES3.ts (4 errors) ====
     const normalNumber = 123; // should not error
     let bigintType: bigint; // should not error

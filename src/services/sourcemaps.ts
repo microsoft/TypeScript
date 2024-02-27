@@ -36,6 +36,7 @@ export interface SourceMapper {
     tryGetSourcePosition(info: DocumentPosition): DocumentPosition | undefined;
     tryGetGeneratedPosition(info: DocumentPosition): DocumentPosition | undefined;
     clearCache(): void;
+    documentPositionMappers: Map<string, DocumentPositionMapper>;
 }
 
 /** @internal */
@@ -56,7 +57,13 @@ export function getSourceMapper(host: SourceMapperHost): SourceMapper {
     const currentDirectory = host.getCurrentDirectory();
     const sourceFileLike = new Map<string, SourceFileLike | false>();
     const documentPositionMappers = new Map<string, DocumentPositionMapper>();
-    return { tryGetSourcePosition, tryGetGeneratedPosition, toLineColumnOffset, clearCache };
+    return {
+        tryGetSourcePosition,
+        tryGetGeneratedPosition,
+        toLineColumnOffset,
+        clearCache,
+        documentPositionMappers,
+    };
 
     function toPath(fileName: string) {
         return ts_toPath(fileName, currentDirectory, getCanonicalFileName);

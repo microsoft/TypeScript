@@ -50,7 +50,18 @@ Output::
 >> Screen clear
 [[90m12:00:29 AM[0m] Starting compilation in watch mode...
 
-[[90m12:00:52 AM[0m] Found 0 errors. Watching for file changes.
+[96msample1/logic/tsconfig.json[0m:[93m9[0m:[93m5[0m - [91merror[0m[90m TS5102: [0mOption 'prepend' has been removed. Please remove it from your configuration.
+
+[7m 9[0m     {
+[7m  [0m [91m    ~[0m
+[7m10[0m       "path": "../core",
+[7m  [0m [91m~~~~~~~~~~~~~~~~~~~~~~~~[0m
+[7m11[0m       "prepend": true
+[7m  [0m [91m~~~~~~~~~~~~~~~~~~~~~[0m
+[7m12[0m     }
+[7m  [0m [91m~~~~~[0m
+
+[[90m12:00:41 AM[0m] Found 1 error. Watching for file changes.
 
 
 
@@ -136,132 +147,6 @@ declare function foo(): number;
 
 ======================================================================
 
-//// [/user/username/projects/sample1/logic/index.js]
-function foo() { return 10; }
-function bar() { return foo() + 1; }
-;
-
-
-//// [/user/username/projects/sample1/logic/index.d.ts]
-declare function foo(): number;
-declare function bar(): number;
-
-
-//// [/user/username/projects/sample1/logic/index.tsbuildinfo]
-{"bundle":{"commonSourceDirectory":"./","sourceFiles":["./index.ts"],"js":{"sections":[{"pos":0,"end":30,"kind":"prepend","data":"../core/index.js","texts":[{"pos":0,"end":30,"kind":"text"}]},{"pos":30,"end":69,"kind":"text"}],"hash":"9692417533-function foo() { return 10; }\nfunction bar() { return foo() + 1; }\n;\n"},"dts":{"sections":[{"pos":0,"end":32,"kind":"prepend","data":"../core/index.d.ts","texts":[{"pos":0,"end":32,"kind":"text"}]},{"pos":32,"end":64,"kind":"text"}],"hash":"9641219228-declare function foo(): number;\ndeclare function bar(): number;\n"}},"program":{"fileNames":["../../../../../a/lib/lib.d.ts","../core/index.d.ts","./index.ts"],"fileInfos":["-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","517738360-declare function foo(): number;\n","5542925109-function bar() { return foo() + 1 };"],"root":[3],"options":{"composite":true,"declaration":true,"outFile":"./index.js"},"outSignature":"9641219228-declare function foo(): number;\ndeclare function bar(): number;\n","latestChangedDtsFile":"./index.d.ts"},"version":"FakeTSVersion"}
-
-//// [/user/username/projects/sample1/logic/index.tsbuildinfo.readable.baseline.txt]
-{
-  "bundle": {
-    "commonSourceDirectory": "./",
-    "sourceFiles": [
-      "./index.ts"
-    ],
-    "js": {
-      "sections": [
-        {
-          "pos": 0,
-          "end": 30,
-          "kind": "prepend",
-          "data": "../core/index.js",
-          "texts": [
-            {
-              "pos": 0,
-              "end": 30,
-              "kind": "text"
-            }
-          ]
-        },
-        {
-          "pos": 30,
-          "end": 69,
-          "kind": "text"
-        }
-      ],
-      "hash": "9692417533-function foo() { return 10; }\nfunction bar() { return foo() + 1; }\n;\n"
-    },
-    "dts": {
-      "sections": [
-        {
-          "pos": 0,
-          "end": 32,
-          "kind": "prepend",
-          "data": "../core/index.d.ts",
-          "texts": [
-            {
-              "pos": 0,
-              "end": 32,
-              "kind": "text"
-            }
-          ]
-        },
-        {
-          "pos": 32,
-          "end": 64,
-          "kind": "text"
-        }
-      ],
-      "hash": "9641219228-declare function foo(): number;\ndeclare function bar(): number;\n"
-    }
-  },
-  "program": {
-    "fileNames": [
-      "../../../../../a/lib/lib.d.ts",
-      "../core/index.d.ts",
-      "./index.ts"
-    ],
-    "fileInfos": {
-      "../../../../../a/lib/lib.d.ts": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
-      "../core/index.d.ts": "517738360-declare function foo(): number;\n",
-      "./index.ts": "5542925109-function bar() { return foo() + 1 };"
-    },
-    "root": [
-      [
-        3,
-        "./index.ts"
-      ]
-    ],
-    "options": {
-      "composite": true,
-      "declaration": true,
-      "outFile": "./index.js"
-    },
-    "outSignature": "9641219228-declare function foo(): number;\ndeclare function bar(): number;\n",
-    "latestChangedDtsFile": "./index.d.ts"
-  },
-  "version": "FakeTSVersion",
-  "size": 1375
-}
-
-//// [/user/username/projects/sample1/logic/index.tsbuildinfo.baseline.txt]
-======================================================================
-File:: /user/username/projects/sample1/logic/index.js
-----------------------------------------------------------------------
-prepend: (0-30):: ../core/index.js texts:: 1
->>--------------------------------------------------------------------
-text: (0-30)
-function foo() { return 10; }
-
-----------------------------------------------------------------------
-text: (30-69)
-function bar() { return foo() + 1; }
-;
-
-======================================================================
-======================================================================
-File:: /user/username/projects/sample1/logic/index.d.ts
-----------------------------------------------------------------------
-prepend: (0-32):: ../core/index.d.ts texts:: 1
->>--------------------------------------------------------------------
-text: (0-32)
-declare function foo(): number;
-
-----------------------------------------------------------------------
-text: (32-64)
-declare function bar(): number;
-
-======================================================================
-
 
 FsWatches::
 /user/username/projects/sample1/core/index.ts: *new*
@@ -338,7 +223,7 @@ Before running Timeout callback:: count: 1
 After running Timeout callback:: count: 1
 Output::
 >> Screen clear
-[[90m12:00:55 AM[0m] File change detected. Starting incremental compilation...
+[[90m12:00:44 AM[0m] File change detected. Starting incremental compilation...
 
 
 
@@ -463,139 +348,20 @@ Before running Timeout callback:: count: 1
 
 After running Timeout callback:: count: 0
 Output::
-[[90m12:01:28 AM[0m] Found 0 errors. Watching for file changes.
+[96msample1/logic/tsconfig.json[0m:[93m9[0m:[93m5[0m - [91merror[0m[90m TS5102: [0mOption 'prepend' has been removed. Please remove it from your configuration.
+
+[7m 9[0m     {
+[7m  [0m [91m    ~[0m
+[7m10[0m       "path": "../core",
+[7m  [0m [91m~~~~~~~~~~~~~~~~~~~~~~~~[0m
+[7m11[0m       "prepend": true
+[7m  [0m [91m~~~~~~~~~~~~~~~~~~~~~[0m
+[7m12[0m     }
+[7m  [0m [91m~~~~~[0m
+
+[[90m12:01:01 AM[0m] Found 1 error. Watching for file changes.
 
 
-
-//// [/user/username/projects/sample1/logic/index.js]
-function foo() { return 10; }
-function myFunc() { return 10; }
-function bar() { return foo() + 1; }
-;
-
-
-//// [/user/username/projects/sample1/logic/index.d.ts]
-declare function foo(): number;
-declare function myFunc(): number;
-declare function bar(): number;
-
-
-//// [/user/username/projects/sample1/logic/index.tsbuildinfo]
-{"bundle":{"commonSourceDirectory":"./","sourceFiles":["./index.ts"],"js":{"sections":[{"pos":0,"end":63,"kind":"prepend","data":"../core/index.js","texts":[{"pos":0,"end":63,"kind":"text"}]},{"pos":63,"end":102,"kind":"text"}],"hash":"-12608297404-function foo() { return 10; }\nfunction myFunc() { return 10; }\nfunction bar() { return foo() + 1; }\n;\n"},"dts":{"sections":[{"pos":0,"end":67,"kind":"prepend","data":"../core/index.d.ts","texts":[{"pos":0,"end":67,"kind":"text"}]},{"pos":67,"end":99,"kind":"text"}],"hash":"-2581247747-declare function foo(): number;\ndeclare function myFunc(): number;\ndeclare function bar(): number;\n"}},"program":{"fileNames":["../../../../../a/lib/lib.d.ts","../core/index.d.ts","./index.ts"],"fileInfos":["-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","2172043225-declare function foo(): number;\ndeclare function myFunc(): number;\n","5542925109-function bar() { return foo() + 1 };"],"root":[3],"options":{"composite":true,"declaration":true,"outFile":"./index.js"},"outSignature":"-2581247747-declare function foo(): number;\ndeclare function myFunc(): number;\ndeclare function bar(): number;\n","latestChangedDtsFile":"./index.d.ts"},"version":"FakeTSVersion"}
-
-//// [/user/username/projects/sample1/logic/index.tsbuildinfo.readable.baseline.txt]
-{
-  "bundle": {
-    "commonSourceDirectory": "./",
-    "sourceFiles": [
-      "./index.ts"
-    ],
-    "js": {
-      "sections": [
-        {
-          "pos": 0,
-          "end": 63,
-          "kind": "prepend",
-          "data": "../core/index.js",
-          "texts": [
-            {
-              "pos": 0,
-              "end": 63,
-              "kind": "text"
-            }
-          ]
-        },
-        {
-          "pos": 63,
-          "end": 102,
-          "kind": "text"
-        }
-      ],
-      "hash": "-12608297404-function foo() { return 10; }\nfunction myFunc() { return 10; }\nfunction bar() { return foo() + 1; }\n;\n"
-    },
-    "dts": {
-      "sections": [
-        {
-          "pos": 0,
-          "end": 67,
-          "kind": "prepend",
-          "data": "../core/index.d.ts",
-          "texts": [
-            {
-              "pos": 0,
-              "end": 67,
-              "kind": "text"
-            }
-          ]
-        },
-        {
-          "pos": 67,
-          "end": 99,
-          "kind": "text"
-        }
-      ],
-      "hash": "-2581247747-declare function foo(): number;\ndeclare function myFunc(): number;\ndeclare function bar(): number;\n"
-    }
-  },
-  "program": {
-    "fileNames": [
-      "../../../../../a/lib/lib.d.ts",
-      "../core/index.d.ts",
-      "./index.ts"
-    ],
-    "fileInfos": {
-      "../../../../../a/lib/lib.d.ts": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
-      "../core/index.d.ts": "2172043225-declare function foo(): number;\ndeclare function myFunc(): number;\n",
-      "./index.ts": "5542925109-function bar() { return foo() + 1 };"
-    },
-    "root": [
-      [
-        3,
-        "./index.ts"
-      ]
-    ],
-    "options": {
-      "composite": true,
-      "declaration": true,
-      "outFile": "./index.js"
-    },
-    "outSignature": "-2581247747-declare function foo(): number;\ndeclare function myFunc(): number;\ndeclare function bar(): number;\n",
-    "latestChangedDtsFile": "./index.d.ts"
-  },
-  "version": "FakeTSVersion",
-  "size": 1523
-}
-
-//// [/user/username/projects/sample1/logic/index.tsbuildinfo.baseline.txt]
-======================================================================
-File:: /user/username/projects/sample1/logic/index.js
-----------------------------------------------------------------------
-prepend: (0-63):: ../core/index.js texts:: 1
->>--------------------------------------------------------------------
-text: (0-63)
-function foo() { return 10; }
-function myFunc() { return 10; }
-
-----------------------------------------------------------------------
-text: (63-102)
-function bar() { return foo() + 1; }
-;
-
-======================================================================
-======================================================================
-File:: /user/username/projects/sample1/logic/index.d.ts
-----------------------------------------------------------------------
-prepend: (0-67):: ../core/index.d.ts texts:: 1
->>--------------------------------------------------------------------
-text: (0-67)
-declare function foo(): number;
-declare function myFunc(): number;
-
-----------------------------------------------------------------------
-text: (67-99)
-declare function bar(): number;
-
-======================================================================
 
 
 
@@ -639,7 +405,7 @@ Before running Timeout callback:: count: 1
 After running Timeout callback:: count: 1
 Output::
 >> Screen clear
-[[90m12:01:32 AM[0m] File change detected. Starting incremental compilation...
+[[90m12:01:05 AM[0m] File change detected. Starting incremental compilation...
 
 
 
@@ -759,134 +525,42 @@ Before running Timeout callback:: count: 1
 
 After running Timeout callback:: count: 0
 Output::
-[[90m12:01:59 AM[0m] Found 0 errors. Watching for file changes.
+[96msample1/logic/tsconfig.json[0m:[93m9[0m:[93m5[0m - [91merror[0m[90m TS5102: [0mOption 'prepend' has been removed. Please remove it from your configuration.
+
+[7m 9[0m     {
+[7m  [0m [91m    ~[0m
+[7m10[0m       "path": "../core",
+[7m  [0m [91m~~~~~~~~~~~~~~~~~~~~~~~~[0m
+[7m11[0m       "prepend": true
+[7m  [0m [91m~~~~~~~~~~~~~~~~~~~~~[0m
+[7m12[0m     }
+[7m  [0m [91m~~~~~[0m
+
+[[90m12:01:19 AM[0m] Found 1 error. Watching for file changes.
 
 
 
-//// [/user/username/projects/sample1/logic/index.js]
-function foo() { return 10; }
-function myFunc() { return 100; }
-function bar() { return foo() + 1; }
-;
 
 
-//// [/user/username/projects/sample1/logic/index.tsbuildinfo]
-{"bundle":{"commonSourceDirectory":"./","sourceFiles":["./index.ts"],"js":{"sections":[{"pos":0,"end":64,"kind":"prepend","data":"../core/index.js","texts":[{"pos":0,"end":64,"kind":"text"}]},{"pos":64,"end":103,"kind":"text"}],"hash":"-1300839212-function foo() { return 10; }\nfunction myFunc() { return 100; }\nfunction bar() { return foo() + 1; }\n;\n"},"dts":{"sections":[{"pos":0,"end":67,"kind":"prepend","data":"../core/index.d.ts","texts":[{"pos":0,"end":67,"kind":"text"}]},{"pos":67,"end":99,"kind":"text"}],"hash":"-2581247747-declare function foo(): number;\ndeclare function myFunc(): number;\ndeclare function bar(): number;\n"}},"program":{"fileNames":["../../../../../a/lib/lib.d.ts","../core/index.d.ts","./index.ts"],"fileInfos":["-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","2172043225-declare function foo(): number;\ndeclare function myFunc(): number;\n","5542925109-function bar() { return foo() + 1 };"],"root":[3],"options":{"composite":true,"declaration":true,"outFile":"./index.js"},"outSignature":"-2581247747-declare function foo(): number;\ndeclare function myFunc(): number;\ndeclare function bar(): number;\n","latestChangedDtsFile":"./index.d.ts"},"version":"FakeTSVersion"}
-
-//// [/user/username/projects/sample1/logic/index.tsbuildinfo.readable.baseline.txt]
-{
-  "bundle": {
-    "commonSourceDirectory": "./",
-    "sourceFiles": [
-      "./index.ts"
-    ],
-    "js": {
-      "sections": [
-        {
-          "pos": 0,
-          "end": 64,
-          "kind": "prepend",
-          "data": "../core/index.js",
-          "texts": [
-            {
-              "pos": 0,
-              "end": 64,
-              "kind": "text"
-            }
-          ]
-        },
-        {
-          "pos": 64,
-          "end": 103,
-          "kind": "text"
-        }
-      ],
-      "hash": "-1300839212-function foo() { return 10; }\nfunction myFunc() { return 100; }\nfunction bar() { return foo() + 1; }\n;\n"
-    },
-    "dts": {
-      "sections": [
-        {
-          "pos": 0,
-          "end": 67,
-          "kind": "prepend",
-          "data": "../core/index.d.ts",
-          "texts": [
-            {
-              "pos": 0,
-              "end": 67,
-              "kind": "text"
-            }
-          ]
-        },
-        {
-          "pos": 67,
-          "end": 99,
-          "kind": "text"
-        }
-      ],
-      "hash": "-2581247747-declare function foo(): number;\ndeclare function myFunc(): number;\ndeclare function bar(): number;\n"
-    }
-  },
-  "program": {
-    "fileNames": [
-      "../../../../../a/lib/lib.d.ts",
-      "../core/index.d.ts",
-      "./index.ts"
-    ],
-    "fileInfos": {
-      "../../../../../a/lib/lib.d.ts": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
-      "../core/index.d.ts": "2172043225-declare function foo(): number;\ndeclare function myFunc(): number;\n",
-      "./index.ts": "5542925109-function bar() { return foo() + 1 };"
-    },
-    "root": [
-      [
-        3,
-        "./index.ts"
-      ]
-    ],
-    "options": {
-      "composite": true,
-      "declaration": true,
-      "outFile": "./index.js"
-    },
-    "outSignature": "-2581247747-declare function foo(): number;\ndeclare function myFunc(): number;\ndeclare function bar(): number;\n",
-    "latestChangedDtsFile": "./index.d.ts"
-  },
-  "version": "FakeTSVersion",
-  "size": 1523
+Program root files: [
+  "/user/username/projects/sample1/logic/index.ts"
+]
+Program options: {
+  "ignoreDeprecations": "5.0",
+  "composite": true,
+  "declaration": true,
+  "outFile": "/user/username/projects/sample1/logic/index.js",
+  "watch": true,
+  "configFilePath": "/user/username/projects/sample1/logic/tsconfig.json"
 }
+Program structureReused: Not
+Program files::
+/a/lib/lib.d.ts
+/user/username/projects/sample1/core/index.d.ts
+/user/username/projects/sample1/logic/index.ts
 
-//// [/user/username/projects/sample1/logic/index.tsbuildinfo.baseline.txt]
-======================================================================
-File:: /user/username/projects/sample1/logic/index.js
-----------------------------------------------------------------------
-prepend: (0-64):: ../core/index.js texts:: 1
->>--------------------------------------------------------------------
-text: (0-64)
-function foo() { return 10; }
-function myFunc() { return 100; }
+No cached semantic diagnostics in the builder::
 
-----------------------------------------------------------------------
-text: (64-103)
-function bar() { return foo() + 1; }
-;
-
-======================================================================
-======================================================================
-File:: /user/username/projects/sample1/logic/index.d.ts
-----------------------------------------------------------------------
-prepend: (0-67):: ../core/index.d.ts texts:: 1
->>--------------------------------------------------------------------
-text: (0-67)
-declare function foo(): number;
-declare function myFunc(): number;
-
-----------------------------------------------------------------------
-text: (67-99)
-declare function bar(): number;
-
-======================================================================
-
-
+No shapes updated in the builder::
 
 exitCode:: ExitStatus.undefined
