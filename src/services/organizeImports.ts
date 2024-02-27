@@ -813,12 +813,16 @@ function getTopLevelExportGroups(sourceFile: SourceFile) {
     return flatMap(topLevelExportGroups, exportGroupDecls => groupByNewlineContiguous(sourceFile, exportGroupDecls));
 }
 
+function getModuleNamesFromDecls(decls: readonly AnyImportOrRequireStatement[]): string[] {
+    return decls.map(s => getExternalModuleName(getModuleSpecifierExpression(s)) || "");
+}
+
 /** @internal */
-export function detectModuleSpecifierCaseBySort(importDeclsByGroup: ImportDeclaration[][], comparersToTest: Comparer<string>[]) {
+export function detectModuleSpecifierCaseBySort(importDeclsByGroup: (readonly AnyImportOrRequireStatement[])[], comparersToTest: Comparer<string>[]) {
     const moduleSpecifiersByGroup: string[][] = [];
     importDeclsByGroup.forEach(importGroup => {
-        //  turns importdeclbygroup into string[][] of module specifiers by group to detect sorting on module specifiers
-        moduleSpecifiersByGroup.push(importGroup.map(i => getExternalModuleName(i.moduleSpecifier)!));
+        //  turns importDeclsByGroup into string[][] of module specifiers by group to detect sorting on module specifiers
+        moduleSpecifiersByGroup.push(getModuleNamesFromDecls(importGroup));
     });
     return detectCaseSensitivityBySort(moduleSpecifiersByGroup, comparersToTest);
 }
