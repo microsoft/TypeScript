@@ -1,8 +1,9 @@
+quickinfoTypeAtReturnPositionsInaccurate.ts(17,20): error TS99999: Annotated function was also inferred to be a type guard
 quickinfoTypeAtReturnPositionsInaccurate.ts(33,15): error TS2339: Property 'numExclusive' does not exist on type 'NumClass<number> | StrClass<string>'.
   Property 'numExclusive' does not exist on type 'StrClass<string>'.
 
 
-==== quickinfoTypeAtReturnPositionsInaccurate.ts (1 errors) ====
+==== quickinfoTypeAtReturnPositionsInaccurate.ts (2 errors) ====
     class NumClass<T extends number> {
         private value!: T;
         public get(): T {
@@ -20,8 +21,12 @@ quickinfoTypeAtReturnPositionsInaccurate.ts(33,15): error TS2339: Property 'numE
     }
     
     const isNumClass = <Item extends NumClass<number> | StrClass<string>> (
+                       ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
             item: Item
+    ~~~~~~~~~~~~~~~~~~
         ): item is Extract<Item, NumClass<any>> => {
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS99999: Annotated function was also inferred to be a type guard
             return (item instanceof NumClass);
         }
     

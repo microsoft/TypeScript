@@ -1,0 +1,21 @@
+stringLiteralCheckedInIf02.ts(4,10): error TS99999: Annotated function was also inferred to be a type guard
+
+
+==== stringLiteralCheckedInIf02.ts (1 errors) ====
+    type S = "a" | "b";
+    type T = S[] | S;
+    
+    function isS(t: T): t is S {
+             ~~~
+!!! error TS99999: Annotated function was also inferred to be a type guard
+        return t === "a" || t === "b";
+    }
+    
+    function f(foo: T) {
+        if (isS(foo)) {
+            return foo;
+        }
+        else { 
+            return foo[0];
+        }
+    }

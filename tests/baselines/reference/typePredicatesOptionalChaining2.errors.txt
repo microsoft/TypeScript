@@ -1,0 +1,20 @@
+typePredicatesOptionalChaining2.ts(7,18): error TS99999: Annotated function was also inferred to be a type guard
+
+
+==== typePredicatesOptionalChaining2.ts (1 errors) ====
+    type Person = { name: string; }
+    
+    const getName1 = (person?: Person): string => {
+      return typeof person?.name === 'string' ? person?.name : '';
+    };
+    
+    const isString = (value: any): value is string => {
+                     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS99999: Annotated function was also inferred to be a type guard
+      return typeof value === 'string';
+    };
+    
+    const getName2 = (person?: Person): string => {
+      return isString(person?.name) ? person?.name : '';
+    };
+    

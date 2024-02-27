@@ -22,9 +22,10 @@ controlFlowAliasing.ts(233,13): error TS2322: Type 'string | number' is not assi
   Type 'number' is not assignable to type 'string'.
 controlFlowAliasing.ts(280,5): error TS2448: Block-scoped variable 'a' used before its declaration.
 controlFlowAliasing.ts(280,5): error TS2454: Variable 'a' is used before being assigned.
+controlFlowAliasing.ts(286,10): error TS99999: Annotated function was also inferred to be a type guard
 
 
-==== controlFlowAliasing.ts (13 errors) ====
+==== controlFlowAliasing.ts (14 errors) ====
     // Narrowing by aliased conditional expressions
     
     function f10(x: string | number) {
@@ -349,6 +350,8 @@ controlFlowAliasing.ts(280,5): error TS2454: Variable 'a' is used before being a
     // repro from https://github.com/microsoft/TypeScript/issues/53267
     class Utils {
       static isDefined<T>(value: T): value is NonNullable<T> {
+             ~~~~~~~~~
+!!! error TS99999: Annotated function was also inferred to be a type guard
         return value != null;
       }
     }

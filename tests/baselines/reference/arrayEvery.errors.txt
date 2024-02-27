@@ -1,0 +1,14 @@
+arrayEvery.ts(3,18): error TS99999: Annotated function was also inferred to be a type guard
+
+
+==== arrayEvery.ts (1 errors) ====
+    const foo: (number | string)[] = ['aaa'];
+    
+    const isString = (x: unknown): x is string => typeof x === 'string';
+                     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS99999: Annotated function was also inferred to be a type guard
+    
+    if (foo.every(isString)) {
+      foo[0].slice(0);
+    }
+    

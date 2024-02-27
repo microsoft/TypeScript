@@ -94,7 +94,7 @@ class PersonMixin extends Function {
 >Function : Function
 
     public check(o: any) {
->check : (o: any) => o is Person
+>check : (o: any) => boolean
 >o : any
 
         return typeof o === "object" && o !== null && o instanceof Person;

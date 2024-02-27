@@ -1,0 +1,9 @@
+declarationEmitIdentifierPredicates01.ts(1,17): error TS99999: Annotated function was also inferred to be a type guard
+
+
+==== declarationEmitIdentifierPredicates01.ts (1 errors) ====
+    export function f(x: any): x is number {
+                    ~
+!!! error TS99999: Annotated function was also inferred to be a type guard
+        return typeof x === "number";
+    }

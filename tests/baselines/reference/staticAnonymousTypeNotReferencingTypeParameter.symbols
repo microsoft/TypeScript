@@ -291,9 +291,7 @@ class ListWrapper {
 >t.toString : Symbol(Object.toString, Decl(lib.es5.d.ts, --, --))
 >t : Symbol(t, Decl(staticAnonymousTypeNotReferencingTypeParameter.ts, 66, 33))
 >toString : Symbol(Object.toString, Decl(lib.es5.d.ts, --, --))
->a.reverse : Symbol(Array.reverse, Decl(lib.es5.d.ts, --, --))
 >a : Symbol(a, Decl(staticAnonymousTypeNotReferencingTypeParameter.ts, 63, 7))
->reverse : Symbol(Array.reverse, Decl(lib.es5.d.ts, --, --))
 >a : Symbol(a, Decl(staticAnonymousTypeNotReferencingTypeParameter.ts, 63, 7))
   }
   static concat(dit: typeof ListWrapper, a: any[], b: any[]): any[] { return a.concat(b); }

@@ -1,7 +1,10 @@
+instanceofWithStructurallyIdenticalTypes.ts(20,10): error TS99999: Annotated function was also inferred to be a type guard
+instanceofWithStructurallyIdenticalTypes.ts(21,10): error TS99999: Annotated function was also inferred to be a type guard
+instanceofWithStructurallyIdenticalTypes.ts(22,10): error TS99999: Annotated function was also inferred to be a type guard
 instanceofWithStructurallyIdenticalTypes.ts(32,18): error TS2339: Property 'item' does not exist on type 'never'.
 
 
-==== instanceofWithStructurallyIdenticalTypes.ts (1 errors) ====
+==== instanceofWithStructurallyIdenticalTypes.ts (4 errors) ====
     // Repro from #7271
     
     class C1 { item: string }
@@ -22,8 +25,14 @@ instanceofWithStructurallyIdenticalTypes.ts(32,18): error TS2339: Property 'item
     }
     
     function isC1(c: C1 | C2 | C3): c is C1 { return c instanceof C1 }
+             ~~~~
+!!! error TS99999: Annotated function was also inferred to be a type guard
     function isC2(c: C1 | C2 | C3): c is C2 { return c instanceof C2 }
+             ~~~~
+!!! error TS99999: Annotated function was also inferred to be a type guard
     function isC3(c: C1 | C2 | C3): c is C3 { return c instanceof C3 }
+             ~~~~
+!!! error TS99999: Annotated function was also inferred to be a type guard
     
     function foo2(x: C1 | C2 | C3): string {
         if (isC1(x)) {

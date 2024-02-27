@@ -47,7 +47,7 @@ class ListWrapper2 {
 >array : T[]
 
     var a = ListWrapper2.clone(dit, array);
->a : T[]
+>a : any
 >ListWrapper2.clone(dit, array) : T[]
 >ListWrapper2.clone : <T_1>(dit: typeof ListWrapper2, array: T_1[]) => T_1[]
 >ListWrapper2 : typeof ListWrapper2
@@ -56,7 +56,7 @@ class ListWrapper2 {
 >array : T[]
 
     return a;
->a : T[]
+>a : any
   }
 }
 namespace tessst {
@@ -260,7 +260,7 @@ class ListWrapper {
 >array : T[]
 
     var a = ListWrapper.clone(dit, array);
->a : T[]
+>a : any
 >ListWrapper.clone(dit, array) : T[]
 >ListWrapper.clone : <T_1>(dit: typeof ListWrapper, array: T_1[]) => T_1[]
 >ListWrapper : typeof ListWrapper
@@ -281,7 +281,7 @@ class ListWrapper {
 >() => {  } : () => void
 
     return tessst.funkyFor(array, t => t.toString()) ? a.reverse() : a;
->tessst.funkyFor(array, t => t.toString()) ? a.reverse() : a : T[]
+>tessst.funkyFor(array, t => t.toString()) ? a.reverse() : a : any
 >tessst.funkyFor(array, t => t.toString()) : string
 >tessst.funkyFor : <T_1, U>(array: T_1[], callback: (element: T_1, index: number) => U) => U
 >tessst : typeof tessst
@@ -293,11 +293,11 @@ class ListWrapper {
 >t.toString : () => string
 >t : T
 >toString : () => string
->a.reverse() : T[]
->a.reverse : () => T[]
->a : T[]
->reverse : () => T[]
->a : T[]
+>a.reverse() : any
+>a.reverse : any
+>a : any
+>reverse : any
+>a : any
   }
   static concat(dit: typeof ListWrapper, a: any[], b: any[]): any[] { return a.concat(b); }
 >concat : (dit: typeof ListWrapper, a: any[], b: any[]) => any[]
