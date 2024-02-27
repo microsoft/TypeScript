@@ -1,0 +1,236 @@
+//// [tests/cases/compiler/verbatim-declarations-assertions.ts] ////
+
+=== assertToTypeReferences.ts ===
+type P = { } & { name: string }
+>P : { name: string; }
+>name : string
+
+export let vLet = null! as P
+>vLet : { name: string; }
+>null! as P : { name: string; }
+>null! : null
+
+export const vConst = null! as P
+>vConst : { name: string; }
+>null! as P : { name: string; }
+>null! : null
+
+export function fn(p = null! as P) {}
+>fn : (p?: { name: string; }) => void
+>p : { name: string; }
+>null! as P : { name: string; }
+>null! : null
+
+export function fnWithRequiredDefaultParam(p = null! as P, req: number) {}
+>fnWithRequiredDefaultParam : (p: { name: string; }, req: number) => void
+>p : { name: string; }
+>null! as P : { name: string; }
+>null! : null
+>req : number
+
+export class C {
+>C : C
+
+    field = null! as P
+>field : { name: string; }
+>null! as P : { name: string; }
+>null! : null
+
+    readonly roFiled = null! as P;
+>roFiled : { name: string; }
+>null! as P : { name: string; }
+>null! : null
+
+    method(p = null! as P) {}
+>method : (p?: { name: string; }) => void
+>p : { name: string; }
+>null! as P : { name: string; }
+>null! : null
+
+    methodWithRequiredDefault(p = null! as P, req: number) {}
+>methodWithRequiredDefault : (p: { name: string; }, req: number) => void
+>p : { name: string; }
+>null! as P : { name: string; }
+>null! : null
+>req : number
+
+    methodWithRequiredDefault2(p = null! as P, req: number) {}
+>methodWithRequiredDefault2 : (p: { name: string; }, req: number) => void
+>p : { name: string; }
+>null! as P : { name: string; }
+>null! : null
+>req : number
+
+    constructor(public ctorField = null! as P) {}
+>ctorField : { name: string; }
+>null! as P : { name: string; }
+>null! : null
+}
+
+export default null! as P;
+>null! as P : { name: string; }
+>null! : null
+
+=== assertToTypeLiteral.ts ===
+export let vLet = null! as {} & { name: string }
+>vLet : { name: string; }
+>null! as {} & { name: string } : { name: string; }
+>null! : null
+>name : string
+
+export const vConst = null! as {} & { name: string }
+>vConst : { name: string; }
+>null! as {} & { name: string } : { name: string; }
+>null! : null
+>name : string
+
+export function fn(p = null! as {} & { name: string }) {}
+>fn : (p?: { name: string; }) => void
+>p : { name: string; }
+>null! as {} & { name: string } : { name: string; }
+>null! : null
+>name : string
+
+export function fnWithRequiredDefaultParam(p = null! as {} & { name: string }, req: number) {}
+>fnWithRequiredDefaultParam : (p: { name: string; }, req: number) => void
+>p : { name: string; }
+>null! as {} & { name: string } : { name: string; }
+>null! : null
+>name : string
+>req : number
+
+export class C {
+>C : C
+
+    field = null! as {} & { name: string }
+>field : { name: string; }
+>null! as {} & { name: string } : { name: string; }
+>null! : null
+>name : string
+
+    readonly roFiled = null! as {} & { name: string };
+>roFiled : { name: string; }
+>null! as {} & { name: string } : { name: string; }
+>null! : null
+>name : string
+
+    method(p = null! as {} & { name: string }) {}
+>method : (p?: { name: string; }) => void
+>p : { name: string; }
+>null! as {} & { name: string } : { name: string; }
+>null! : null
+>name : string
+
+    methodWithRequiredDefault(p = null! as {} & { name: string }, req: number) {}
+>methodWithRequiredDefault : (p: { name: string; }, req: number) => void
+>p : { name: string; }
+>null! as {} & { name: string } : { name: string; }
+>null! : null
+>name : string
+>req : number
+
+    constructor(public ctorField = null! as {} & { name: string }) {}
+>ctorField : { name: string; }
+>null! as {} & { name: string } : { name: string; }
+>null! : null
+>name : string
+
+    get x() { return null! as {} & { name: string } }
+>x : { name: string; }
+>null! as {} & { name: string } : { name: string; }
+>null! : null
+>name : string
+
+    set x(v) { }
+>x : { name: string; }
+>v : { name: string; }
+}
+
+export default null! as {} & { name: string }
+>null! as {} & { name: string } : { name: string; }
+>null! : null
+>name : string
+
+
+=== assertToOtherTypes.ts ===
+export const vNumberLiteral = null! as 1 | 1
+>vNumberLiteral : 1
+>null! as 1 | 1 : 1
+>null! : null
+
+export const vStringLiteral = null! as "1" | "1"
+>vStringLiteral : "1"
+>null! as "1" | "1" : "1"
+>null! : null
+
+export const vLiteral = null! as "1" | "1"
+>vLiteral : "1"
+>null! as "1" | "1" : "1"
+>null! : null
+
+type R = { foo: string }
+>R : { foo: string; }
+>foo : string
+
+export class C {
+>C : C
+
+    // Can't know if references contain undefined, fall back to inference
+    tsResolve? = null! as R | R;
+>tsResolve : R
+>null! as R | R : R
+>null! : null
+
+    tsResolve2? = null! as R | R | string;
+>tsResolve2 : string | R
+>null! as R | R | string : string | R
+>null! : null
+
+    // Simple type. we can add undefined
+    reuseType? = null! as ((p: R) => void) | string | string;
+>reuseType : string | ((p: R) => void)
+>null! as ((p: R) => void) | string | string : string | ((p: R) => void)
+>null! : null
+>p : R
+
+    reuseType2? = null! as (new (p: R) => R) | string | string;
+>reuseType2 : string | (new (p: R) => R)
+>null! as (new (p: R) => R) | string | string : string | (new (p: R) => R)
+>null! : null
+>p : R
+
+    reuseType3? = null! as string | number | bigint | symbol | unknown | any | never | symbol;
+>reuseType3 : any
+>null! as string | number | bigint | symbol | unknown | any | never | symbol : any
+>null! : null
+
+    reuseType4? = null! as [R, R, R] | [R, R, R];
+>reuseType4 : [R, R, R]
+>null! as [R, R, R] | [R, R, R] : [R, R, R]
+>null! : null
+
+    reuseType5? = null! as R[] | R[];
+>reuseType5 : R[]
+>null! as R[] | R[] : R[]
+>null! : null
+
+    reuseType6? = null! as 1 | "2" | 1n | 1n;
+>reuseType6 : 1 | "2" | 1n
+>null! as 1 | "2" | 1n | 1n : 1 | "2" | 1n
+>null! : null
+
+    reuseType7? = null! as `A` | `A`;
+>reuseType7 : "A"
+>null! as `A` | `A` : "A"
+>null! : null
+
+    reuseType8? = null! as `${string}-ok` | `${string}-ok`;
+>reuseType8 : `${string}-ok`
+>null! as `${string}-ok` | `${string}-ok` : `${string}-ok`
+>null! : null
+
+    reuseType9? = null! as this | this;
+>reuseType9 : this
+>null! as this | this : this
+>null! : null
+}

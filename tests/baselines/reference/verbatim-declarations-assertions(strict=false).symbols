@@ -1,0 +1,190 @@
+//// [tests/cases/compiler/verbatim-declarations-assertions.ts] ////
+
+=== assertToTypeReferences.ts ===
+type P = { } & { name: string }
+>P : Symbol(P, Decl(assertToTypeReferences.ts, 0, 0))
+>name : Symbol(name, Decl(assertToTypeReferences.ts, 0, 16))
+
+export let vLet = null! as P
+>vLet : Symbol(vLet, Decl(assertToTypeReferences.ts, 2, 10))
+>P : Symbol(P, Decl(assertToTypeReferences.ts, 0, 0))
+
+export const vConst = null! as P
+>vConst : Symbol(vConst, Decl(assertToTypeReferences.ts, 3, 12))
+>P : Symbol(P, Decl(assertToTypeReferences.ts, 0, 0))
+
+export function fn(p = null! as P) {}
+>fn : Symbol(fn, Decl(assertToTypeReferences.ts, 3, 32))
+>p : Symbol(p, Decl(assertToTypeReferences.ts, 5, 19))
+>P : Symbol(P, Decl(assertToTypeReferences.ts, 0, 0))
+
+export function fnWithRequiredDefaultParam(p = null! as P, req: number) {}
+>fnWithRequiredDefaultParam : Symbol(fnWithRequiredDefaultParam, Decl(assertToTypeReferences.ts, 5, 37))
+>p : Symbol(p, Decl(assertToTypeReferences.ts, 7, 43))
+>P : Symbol(P, Decl(assertToTypeReferences.ts, 0, 0))
+>req : Symbol(req, Decl(assertToTypeReferences.ts, 7, 58))
+
+export class C {
+>C : Symbol(C, Decl(assertToTypeReferences.ts, 7, 74))
+
+    field = null! as P
+>field : Symbol(C.field, Decl(assertToTypeReferences.ts, 9, 16))
+>P : Symbol(P, Decl(assertToTypeReferences.ts, 0, 0))
+
+    readonly roFiled = null! as P;
+>roFiled : Symbol(C.roFiled, Decl(assertToTypeReferences.ts, 10, 22))
+>P : Symbol(P, Decl(assertToTypeReferences.ts, 0, 0))
+
+    method(p = null! as P) {}
+>method : Symbol(C.method, Decl(assertToTypeReferences.ts, 11, 34))
+>p : Symbol(p, Decl(assertToTypeReferences.ts, 12, 11))
+>P : Symbol(P, Decl(assertToTypeReferences.ts, 0, 0))
+
+    methodWithRequiredDefault(p = null! as P, req: number) {}
+>methodWithRequiredDefault : Symbol(C.methodWithRequiredDefault, Decl(assertToTypeReferences.ts, 12, 29))
+>p : Symbol(p, Decl(assertToTypeReferences.ts, 13, 30))
+>P : Symbol(P, Decl(assertToTypeReferences.ts, 0, 0))
+>req : Symbol(req, Decl(assertToTypeReferences.ts, 13, 45))
+
+    methodWithRequiredDefault2(p = null! as P, req: number) {}
+>methodWithRequiredDefault2 : Symbol(C.methodWithRequiredDefault2, Decl(assertToTypeReferences.ts, 13, 61))
+>p : Symbol(p, Decl(assertToTypeReferences.ts, 14, 31))
+>P : Symbol(P, Decl(assertToTypeReferences.ts, 0, 0))
+>req : Symbol(req, Decl(assertToTypeReferences.ts, 14, 46))
+
+    constructor(public ctorField = null! as P) {}
+>ctorField : Symbol(C.ctorField, Decl(assertToTypeReferences.ts, 16, 16))
+>P : Symbol(P, Decl(assertToTypeReferences.ts, 0, 0))
+}
+
+export default null! as P;
+>P : Symbol(P, Decl(assertToTypeReferences.ts, 0, 0))
+
+=== assertToTypeLiteral.ts ===
+export let vLet = null! as {} & { name: string }
+>vLet : Symbol(vLet, Decl(assertToTypeLiteral.ts, 0, 10))
+>name : Symbol(name, Decl(assertToTypeLiteral.ts, 0, 33))
+
+export const vConst = null! as {} & { name: string }
+>vConst : Symbol(vConst, Decl(assertToTypeLiteral.ts, 1, 12))
+>name : Symbol(name, Decl(assertToTypeLiteral.ts, 1, 37))
+
+export function fn(p = null! as {} & { name: string }) {}
+>fn : Symbol(fn, Decl(assertToTypeLiteral.ts, 1, 52))
+>p : Symbol(p, Decl(assertToTypeLiteral.ts, 3, 19))
+>name : Symbol(name, Decl(assertToTypeLiteral.ts, 3, 38))
+
+export function fnWithRequiredDefaultParam(p = null! as {} & { name: string }, req: number) {}
+>fnWithRequiredDefaultParam : Symbol(fnWithRequiredDefaultParam, Decl(assertToTypeLiteral.ts, 3, 57))
+>p : Symbol(p, Decl(assertToTypeLiteral.ts, 5, 43))
+>name : Symbol(name, Decl(assertToTypeLiteral.ts, 5, 62))
+>req : Symbol(req, Decl(assertToTypeLiteral.ts, 5, 78))
+
+export class C {
+>C : Symbol(C, Decl(assertToTypeLiteral.ts, 5, 94))
+
+    field = null! as {} & { name: string }
+>field : Symbol(C.field, Decl(assertToTypeLiteral.ts, 7, 16))
+>name : Symbol(name, Decl(assertToTypeLiteral.ts, 8, 27))
+
+    readonly roFiled = null! as {} & { name: string };
+>roFiled : Symbol(C.roFiled, Decl(assertToTypeLiteral.ts, 8, 42))
+>name : Symbol(name, Decl(assertToTypeLiteral.ts, 9, 38))
+
+    method(p = null! as {} & { name: string }) {}
+>method : Symbol(C.method, Decl(assertToTypeLiteral.ts, 9, 54))
+>p : Symbol(p, Decl(assertToTypeLiteral.ts, 10, 11))
+>name : Symbol(name, Decl(assertToTypeLiteral.ts, 10, 30))
+
+    methodWithRequiredDefault(p = null! as {} & { name: string }, req: number) {}
+>methodWithRequiredDefault : Symbol(C.methodWithRequiredDefault, Decl(assertToTypeLiteral.ts, 10, 49))
+>p : Symbol(p, Decl(assertToTypeLiteral.ts, 11, 30))
+>name : Symbol(name, Decl(assertToTypeLiteral.ts, 11, 49))
+>req : Symbol(req, Decl(assertToTypeLiteral.ts, 11, 65))
+
+    constructor(public ctorField = null! as {} & { name: string }) {}
+>ctorField : Symbol(C.ctorField, Decl(assertToTypeLiteral.ts, 13, 16))
+>name : Symbol(name, Decl(assertToTypeLiteral.ts, 13, 50))
+
+    get x() { return null! as {} & { name: string } }
+>x : Symbol(C.x, Decl(assertToTypeLiteral.ts, 13, 69), Decl(assertToTypeLiteral.ts, 15, 53))
+>name : Symbol(name, Decl(assertToTypeLiteral.ts, 15, 36))
+
+    set x(v) { }
+>x : Symbol(C.x, Decl(assertToTypeLiteral.ts, 13, 69), Decl(assertToTypeLiteral.ts, 15, 53))
+>v : Symbol(v, Decl(assertToTypeLiteral.ts, 16, 10))
+}
+
+export default null! as {} & { name: string }
+>name : Symbol(name, Decl(assertToTypeLiteral.ts, 19, 30))
+
+
+=== assertToOtherTypes.ts ===
+export const vNumberLiteral = null! as 1 | 1
+>vNumberLiteral : Symbol(vNumberLiteral, Decl(assertToOtherTypes.ts, 0, 12))
+
+export const vStringLiteral = null! as "1" | "1"
+>vStringLiteral : Symbol(vStringLiteral, Decl(assertToOtherTypes.ts, 1, 12))
+
+export const vLiteral = null! as "1" | "1"
+>vLiteral : Symbol(vLiteral, Decl(assertToOtherTypes.ts, 2, 12))
+
+type R = { foo: string }
+>R : Symbol(R, Decl(assertToOtherTypes.ts, 2, 42))
+>foo : Symbol(foo, Decl(assertToOtherTypes.ts, 4, 10))
+
+export class C {
+>C : Symbol(C, Decl(assertToOtherTypes.ts, 4, 24))
+
+    // Can't know if references contain undefined, fall back to inference
+    tsResolve? = null! as R | R;
+>tsResolve : Symbol(C.tsResolve, Decl(assertToOtherTypes.ts, 6, 16))
+>R : Symbol(R, Decl(assertToOtherTypes.ts, 2, 42))
+>R : Symbol(R, Decl(assertToOtherTypes.ts, 2, 42))
+
+    tsResolve2? = null! as R | R | string;
+>tsResolve2 : Symbol(C.tsResolve2, Decl(assertToOtherTypes.ts, 8, 32))
+>R : Symbol(R, Decl(assertToOtherTypes.ts, 2, 42))
+>R : Symbol(R, Decl(assertToOtherTypes.ts, 2, 42))
+
+    // Simple type. we can add undefined
+    reuseType? = null! as ((p: R) => void) | string | string;
+>reuseType : Symbol(C.reuseType, Decl(assertToOtherTypes.ts, 9, 42))
+>p : Symbol(p, Decl(assertToOtherTypes.ts, 11, 28))
+>R : Symbol(R, Decl(assertToOtherTypes.ts, 2, 42))
+
+    reuseType2? = null! as (new (p: R) => R) | string | string;
+>reuseType2 : Symbol(C.reuseType2, Decl(assertToOtherTypes.ts, 11, 61))
+>p : Symbol(p, Decl(assertToOtherTypes.ts, 12, 33))
+>R : Symbol(R, Decl(assertToOtherTypes.ts, 2, 42))
+>R : Symbol(R, Decl(assertToOtherTypes.ts, 2, 42))
+
+    reuseType3? = null! as string | number | bigint | symbol | unknown | any | never | symbol;
+>reuseType3 : Symbol(C.reuseType3, Decl(assertToOtherTypes.ts, 12, 63))
+
+    reuseType4? = null! as [R, R, R] | [R, R, R];
+>reuseType4 : Symbol(C.reuseType4, Decl(assertToOtherTypes.ts, 13, 94))
+>R : Symbol(R, Decl(assertToOtherTypes.ts, 2, 42))
+>R : Symbol(R, Decl(assertToOtherTypes.ts, 2, 42))
+>R : Symbol(R, Decl(assertToOtherTypes.ts, 2, 42))
+>R : Symbol(R, Decl(assertToOtherTypes.ts, 2, 42))
+>R : Symbol(R, Decl(assertToOtherTypes.ts, 2, 42))
+>R : Symbol(R, Decl(assertToOtherTypes.ts, 2, 42))
+
+    reuseType5? = null! as R[] | R[];
+>reuseType5 : Symbol(C.reuseType5, Decl(assertToOtherTypes.ts, 14, 49))
+>R : Symbol(R, Decl(assertToOtherTypes.ts, 2, 42))
+>R : Symbol(R, Decl(assertToOtherTypes.ts, 2, 42))
+
+    reuseType6? = null! as 1 | "2" | 1n | 1n;
+>reuseType6 : Symbol(C.reuseType6, Decl(assertToOtherTypes.ts, 15, 37))
+
+    reuseType7? = null! as `A` | `A`;
+>reuseType7 : Symbol(C.reuseType7, Decl(assertToOtherTypes.ts, 16, 45))
+
+    reuseType8? = null! as `${string}-ok` | `${string}-ok`;
+>reuseType8 : Symbol(C.reuseType8, Decl(assertToOtherTypes.ts, 17, 37))
+
+    reuseType9? = null! as this | this;
+>reuseType9 : Symbol(C.reuseType9, Decl(assertToOtherTypes.ts, 18, 59))
+}
