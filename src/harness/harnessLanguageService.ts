@@ -15,6 +15,9 @@ import {
     incrementalVerifier,
 } from "./incrementalUtils";
 import {
+    patchServiceForStateBaseline,
+} from "./projectServiceStateLogger";
+import {
     createLoggerWithInMemoryLogs,
     HarnessLSCouldNotResolveModule,
     LoggerWithInMemoryLogs,
@@ -595,6 +598,7 @@ class SessionServerHost implements ts.server.ServerHost {
 class FourslashSession extends ts.server.Session {
     constructor(opts: ts.server.SessionOptions, readonly baselineHost: (when: string) => void) {
         super(opts);
+        patchServiceForStateBaseline(this.projectService);
     }
     getText(fileName: string) {
         return ts.getSnapshotText(this.projectService.getDefaultProjectForFile(ts.server.toNormalizedPath(fileName), /*ensureProject*/ true)!.getScriptSnapshot(fileName)!);
@@ -608,6 +612,10 @@ class FourslashSession extends ts.server.Session {
         this.baselineHost("Before Request");
         super.onMessage(message);
         this.baselineHost("After Request");
+    }
+
+    getProjectService() {
+        return this.projectService;
     }
 }
 
@@ -642,6 +650,10 @@ export class ServerLanguageServiceAdapter implements LanguageServiceAdapter {
             if (baseline.length) {
                 this.logger.log(when);
                 baseline.forEach(s => this.logger.log(s));
+                this.server.getProjectService().baseline();
+            }
+            else {
+                this.server.getProjectService().baseline(when);
             }
         });
 

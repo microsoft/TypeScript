@@ -160,13 +160,15 @@ export const cleanSrc = task({
     run: () => cleanProject("src"),
 });
 
+const dtsBundlerPath = "./scripts/dtsBundler.mjs";
+
 /**
  * @param {string} entrypoint
  * @param {string} output
  */
 async function runDtsBundler(entrypoint, output) {
     await exec(process.execPath, [
-        "./scripts/dtsBundler.mjs",
+        dtsBundlerPath,
         "--entrypoint",
         entrypoint,
         "--output",
@@ -403,7 +405,7 @@ export const dtsServices = task({
     description: "Bundles typescript.d.ts",
     dependencies: [buildServices],
     run: async () => {
-        if (needsUpdate("./built/local/typescript/tsconfig.tsbuildinfo", ["./built/local/typescript.d.ts", "./built/local/typescript.internal.d.ts"])) {
+        if (needsUpdate(["./built/local/typescript/tsconfig.tsbuildinfo", dtsBundlerPath], ["./built/local/typescript.d.ts", "./built/local/typescript.internal.d.ts"])) {
             await runDtsBundler("./built/local/typescript/typescript.d.ts", "./built/local/typescript.d.ts");
         }
     },
@@ -526,6 +528,7 @@ export const lint = task({
             `${folder}/.eslintcache`,
             "--format",
             formatter,
+            "--report-unused-disable-directives",
         ];
 
         if (cmdLineOptions.fix) {
