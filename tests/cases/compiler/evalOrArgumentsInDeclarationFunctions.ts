@@ -5,4 +5,8 @@ declare global {
         export function arguments(): void;
     }
 }
+
+declare function eval(): void;
+declare function arguments(): void;
+
 export {}

@@ -14,5 +14,12 @@ declare global {
 >arguments : Symbol(arguments, Decl(a.d.ts, 2, 37))
     }
 }
+
+declare function eval(): void;
+>eval : Symbol(eval, Decl(a.d.ts, 5, 1))
+
+declare function arguments(): void;
+>arguments : Symbol(arguments, Decl(a.d.ts, 7, 30))
+
 export {}
 

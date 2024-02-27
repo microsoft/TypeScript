@@ -14,5 +14,12 @@ declare global {
 >arguments : () => void
     }
 }
+
+declare function eval(): void;
+>eval : () => void
+
+declare function arguments(): void;
+>arguments : () => void
+
 export {}
 
