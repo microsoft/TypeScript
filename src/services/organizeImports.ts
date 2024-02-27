@@ -83,7 +83,6 @@ export function organizeImports(
     const shouldSort = mode === OrganizeImportsMode.SortAndCombine || mode === OrganizeImportsMode.All;
 
     // These are currently inseparable, but I draw a distinction for clarity and in case we add modes in the future.
-    // shouldCombine vs shouldSort is not supported in diff-detection, diff-detection always assumes sorting will combine/deduplicate
     const shouldCombine = shouldSort;
     const shouldRemove = mode === OrganizeImportsMode.RemoveUnused || mode === OrganizeImportsMode.All;
 
