@@ -1,5 +1,5 @@
-typePredicateWithThisParameter.ts(10,10): error TS99999: Annotated function was also inferred to be a type guard
-typePredicateWithThisParameter.ts(14,10): error TS99999: Annotated function was also inferred to be a type guard
+typePredicateWithThisParameter.ts(10,10): error TS99999: Function was inferred to be a type guard
+typePredicateWithThisParameter.ts(14,10): error TS99999: Function was inferred to be a type guard
 
 
 ==== typePredicateWithThisParameter.ts (2 errors) ====
@@ -14,13 +14,13 @@ typePredicateWithThisParameter.ts(14,10): error TS99999: Annotated function was 
     
     function isFoo1(object: {}): object is Foo {
              ~~~~~~
-!!! error TS99999: Annotated function was also inferred to be a type guard
+!!! error TS99999: Function was inferred to be a type guard
         return 'foo' in object;
     }
     
     function isFoo2(this: void, object: {}): object is Foo {
              ~~~~~~
-!!! error TS99999: Annotated function was also inferred to be a type guard
+!!! error TS99999: Function was inferred to be a type guard
         return 'foo' in object;
     }
     

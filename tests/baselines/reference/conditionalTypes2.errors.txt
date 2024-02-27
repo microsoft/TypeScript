@@ -24,7 +24,7 @@ conditionalTypes2.ts(25,5): error TS2322: Type 'Invariant<A>' is not assignable 
         Type 'A' is not assignable to type 'B extends string ? keyof B : B'.
           Type 'A' is not assignable to type 'B'.
             'B' could be instantiated with an arbitrary type which could be unrelated to 'A'.
-conditionalTypes2.ts(29,10): error TS99999: Annotated function was also inferred to be a type guard
+conditionalTypes2.ts(29,10): error TS99999: Function was inferred to be a type guard
 conditionalTypes2.ts(73,12): error TS2345: Argument of type 'Extract<Extract<T, Foo>, Bar>' is not assignable to parameter of type '{ foo: string; bat: string; }'.
   Type 'Extract<T, Bar>' is not assignable to type '{ foo: string; bat: string; }'.
     Property 'bat' is missing in type 'Bar & Foo' but required in type '{ foo: string; bat: string; }'.
@@ -100,7 +100,7 @@ conditionalTypes2.ts(75,12): error TS2345: Argument of type 'Extract2<T, Foo, Ba
     // Extract<T, Function> is a T that is known to be a Function
     function isFunction<T>(value: T): value is Extract<T, Function> {
              ~~~~~~~~~~
-!!! error TS99999: Annotated function was also inferred to be a type guard
+!!! error TS99999: Function was inferred to be a type guard
         return typeof value === "function";
     }
     

@@ -1,4 +1,4 @@
-typePredicatesOptionalChaining2.ts(7,18): error TS99999: Annotated function was also inferred to be a type guard
+typePredicatesOptionalChaining2.ts(7,18): error TS99999: Function was inferred to be a type guard
 
 
 ==== typePredicatesOptionalChaining2.ts (1 errors) ====
@@ -10,7 +10,7 @@ typePredicatesOptionalChaining2.ts(7,18): error TS99999: Annotated function was 
     
     const isString = (value: any): value is string => {
                      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS99999: Annotated function was also inferred to be a type guard
+!!! error TS99999: Function was inferred to be a type guard
       return typeof value === 'string';
     };
     

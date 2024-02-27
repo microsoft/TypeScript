@@ -1,11 +1,11 @@
-arrayFind.ts(2,10): error TS99999: Annotated function was also inferred to be a type guard
+arrayFind.ts(2,10): error TS99999: Function was inferred to be a type guard
 
 
 ==== arrayFind.ts (1 errors) ====
     // test fix for #18112, type guard predicates should narrow returned element
     function isNumber(x: any): x is number {
              ~~~~~~~~
-!!! error TS99999: Annotated function was also inferred to be a type guard
+!!! error TS99999: Function was inferred to be a type guard
       return typeof x === "number";
     }
     

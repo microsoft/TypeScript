@@ -1,9 +1,9 @@
-thisTypeInTypePredicate.ts(2,32): error TS99999: Annotated function was also inferred to be a type guard
+thisTypeInTypePredicate.ts(2,32): error TS99999: Function was inferred to be a type guard
 
 
 ==== thisTypeInTypePredicate.ts (1 errors) ====
     declare function filter<S>(f: (this: void, x: any) => x is S): S[];
     const numbers = filter<number>((x): x is number => 'number' == typeof x)
                                    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS99999: Annotated function was also inferred to be a type guard
+!!! error TS99999: Function was inferred to be a type guard
     

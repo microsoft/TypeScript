@@ -1,4 +1,4 @@
-typePredicateFreshLiteralWidening.ts(14,19): error TS99999: Annotated function was also inferred to be a type guard
+typePredicateFreshLiteralWidening.ts(14,19): error TS99999: Function was inferred to be a type guard
 
 
 ==== typePredicateFreshLiteralWidening.ts (1 errors) ====
@@ -17,7 +17,7 @@ typePredicateFreshLiteralWidening.ts(14,19): error TS99999: Annotated function w
     
     const isNotNull = <T,>(value: T | null): value is T => value !== null;
                       ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS99999: Annotated function was also inferred to be a type guard
+!!! error TS99999: Function was inferred to be a type guard
     
     type Item = { value: string | null };
     

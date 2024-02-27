@@ -1,4 +1,4 @@
-genericCapturingFunctionNarrowing.ts(10,14): error TS99999: Annotated function was also inferred to be a type guard
+genericCapturingFunctionNarrowing.ts(10,14): error TS99999: Function was inferred to be a type guard
 
 
 ==== genericCapturingFunctionNarrowing.ts (1 errors) ====
@@ -13,7 +13,7 @@ genericCapturingFunctionNarrowing.ts(10,14): error TS99999: Annotated function w
     
         function hasAFoo(value: First | Second): value is First {
                  ~~~~~~~
-!!! error TS99999: Annotated function was also inferred to be a type guard
+!!! error TS99999: Function was inferred to be a type guard
             return "foo" in value;
         }
     }

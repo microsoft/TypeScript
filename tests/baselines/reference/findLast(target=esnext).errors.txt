@@ -1,0 +1,64 @@
+findLast.ts(1,53): error TS99999: Function was inferred to be a type guard
+findLast.ts(2,60): error TS99999: Function was inferred to be a type guard
+findLast.ts(3,26): error TS99999: Function was inferred to be a type guard
+findLast.ts(4,27): error TS99999: Function was inferred to be a type guard
+findLast.ts(5,34): error TS99999: Function was inferred to be a type guard
+findLast.ts(6,27): error TS99999: Function was inferred to be a type guard
+findLast.ts(7,28): error TS99999: Function was inferred to be a type guard
+findLast.ts(8,27): error TS99999: Function was inferred to be a type guard
+findLast.ts(9,28): error TS99999: Function was inferred to be a type guard
+findLast.ts(10,29): error TS99999: Function was inferred to be a type guard
+findLast.ts(11,29): error TS99999: Function was inferred to be a type guard
+
+
+==== findLast.ts (11 errors) ====
+    const itemNumber: number | undefined = [0].findLast((item) => item === 0);
+                                                        ~~~~~~~~~~~~~~~~~~~~
+!!! error TS99999: Function was inferred to be a type guard
+    const itemString: string | undefined = ["string"].findLast((item) => item === "string");
+                                                               ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS99999: Function was inferred to be a type guard
+    new Int8Array().findLast((item) => item === 0);
+                             ~~~~~~~~~~~~~~~~~~~~
+!!! error TS99999: Function was inferred to be a type guard
+    new Uint8Array().findLast((item) => item === 0);
+                              ~~~~~~~~~~~~~~~~~~~~
+!!! error TS99999: Function was inferred to be a type guard
+    new Uint8ClampedArray().findLast((item) => item === 0);
+                                     ~~~~~~~~~~~~~~~~~~~~
+!!! error TS99999: Function was inferred to be a type guard
+    new Int16Array().findLast((item) => item === 0);
+                              ~~~~~~~~~~~~~~~~~~~~
+!!! error TS99999: Function was inferred to be a type guard
+    new Uint16Array().findLast((item) => item === 0);
+                               ~~~~~~~~~~~~~~~~~~~~
+!!! error TS99999: Function was inferred to be a type guard
+    new Int32Array().findLast((item) => item === 0);
+                              ~~~~~~~~~~~~~~~~~~~~
+!!! error TS99999: Function was inferred to be a type guard
+    new Uint32Array().findLast((item) => item === 0);
+                               ~~~~~~~~~~~~~~~~~~~~
+!!! error TS99999: Function was inferred to be a type guard
+    new Float32Array().findLast((item) => item === 0);
+                                ~~~~~~~~~~~~~~~~~~~~
+!!! error TS99999: Function was inferred to be a type guard
+    new Float64Array().findLast((item) => item === 0);
+                                ~~~~~~~~~~~~~~~~~~~~
+!!! error TS99999: Function was inferred to be a type guard
+    new BigInt64Array().findLast((item) => item === BigInt(0));
+    new BigUint64Array().findLast((item) => item === BigInt(0));
+    
+    const indexNumber: number = [0].findLastIndex((item) => item === 0);
+    const indexString: number = ["string"].findLastIndex((item) => item === "string");
+    new Int8Array().findLastIndex((item) => item === 0);
+    new Uint8Array().findLastIndex((item) => item === 0);
+    new Uint8ClampedArray().findLastIndex((item) => item === 0);
+    new Int16Array().findLastIndex((item) => item === 0);
+    new Uint16Array().findLastIndex((item) => item === 0);
+    new Int32Array().findLastIndex((item) => item === 0);
+    new Uint32Array().findLastIndex((item) => item === 0);
+    new Float32Array().findLastIndex((item) => item === 0);
+    new Float64Array().findLastIndex((item) => item === 0);
+    new BigInt64Array().findLastIndex((item) => item === BigInt(0));
+    new BigUint64Array().findLastIndex((item) => item === BigInt(0));
+    

@@ -3,7 +3,7 @@ intraExpressionInferences.ts(131,5): error TS2322: Type '(inputs: Unwrap<{ num: 
     The types of 'str' are incompatible between these types.
       Type 'number' is not assignable to type 'string'.
 intraExpressionInferences.ts(133,26): error TS2339: Property 'nonexistent' does not exist on type 'Unwrap<{ num: Wrapper<number>; str: Wrapper<string>; }>'.
-intraExpressionInferences.ts(194,7): error TS99999: Annotated function was also inferred to be a type guard
+intraExpressionInferences.ts(194,7): error TS99999: Function was inferred to be a type guard
 
 
 ==== intraExpressionInferences.ts (3 errors) ====
@@ -210,7 +210,7 @@ intraExpressionInferences.ts(194,7): error TS99999: Annotated function was also 
       test: x,
       if: (t): t is "a" => t === "a",
           ~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS99999: Annotated function was also inferred to be a type guard
+!!! error TS99999: Function was inferred to be a type guard
       then: u => {
         let test1: "a" = u
       }

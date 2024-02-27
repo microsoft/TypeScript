@@ -15459,8 +15459,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 }
 
                 const type = signature.declaration && getEffectiveReturnTypeNode(signature.declaration);
-                if (type && inferredTypePredicate) {
-                    error(signature.declaration, Diagnostics.Annotated_function_was_also_inferred_to_be_a_type_guard);
+                if (inferredTypePredicate) {
+                    error(signature.declaration, Diagnostics.Function_was_inferred_to_be_a_type_guard);
                 }
 
                 let jsdocPredicate: TypePredicate | undefined;

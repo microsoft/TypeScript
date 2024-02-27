@@ -2,12 +2,15 @@ inferTypePredicates.ts(4,7): error TS2322: Type '(number | null)[]' is not assig
   Type 'number | null' is not assignable to type 'number'.
     Type 'null' is not assignable to type 'number'.
 inferTypePredicates.ts(5,7): error TS2322: Type '(number | null)[]' is not assignable to type 'number[]'.
+inferTypePredicates.ts(5,60): error TS99999: Function was inferred to be a type guard
 inferTypePredicates.ts(7,7): error TS2322: Type '(number | null)[]' is not assignable to type 'number[]'.
 inferTypePredicates.ts(14,7): error TS2322: Type '(number | null)[]' is not assignable to type 'number[]'.
 inferTypePredicates.ts(19,7): error TS2322: Type '(number | null)[]' is not assignable to type 'number[]'.
+inferTypePredicates.ts(22,13): error TS99999: Function was inferred to be a type guard
 inferTypePredicates.ts(52,17): error TS18048: 'arr' is possibly 'undefined'.
 inferTypePredicates.ts(54,28): error TS2345: Argument of type 'string | undefined' is not assignable to parameter of type 'string'.
   Type 'undefined' is not assignable to type 'string'.
+inferTypePredicates.ts(59,11): error TS99999: Function was inferred to be a type guard
 inferTypePredicates.ts(60,18): error TS18048: 'arr' is possibly 'undefined'.
 inferTypePredicates.ts(61,17): error TS18048: 'arr' is possibly 'undefined'.
 inferTypePredicates.ts(65,28): error TS2345: Argument of type 'string | undefined' is not assignable to parameter of type 'string'.
@@ -16,9 +19,13 @@ inferTypePredicates.ts(77,7): error TS2322: Type '(Foo | Bar)[]' is not assignab
   Type 'Foo | Bar' is not assignable to type 'Bar'.
     Type 'Foo' is not assignable to type 'Bar'.
       Property 'bar' is missing in type 'Foo' but required in type '{ bar: string; }'.
+inferTypePredicates.ts(77,39): error TS99999: Function was inferred to be a type guard
+inferTypePredicates.ts(79,10): error TS99999: Function was inferred to be a type guard
 inferTypePredicates.ts(84,9): error TS2322: Type 'Foo | Bar' is not assignable to type 'Bar'.
   Type 'Foo' is not assignable to type 'Bar'.
-inferTypePredicates.ts(93,10): error TS99999: Annotated function was also inferred to be a type guard
+inferTypePredicates.ts(89,39): error TS99999: Function was inferred to be a type guard
+inferTypePredicates.ts(93,10): error TS99999: Function was inferred to be a type guard
+inferTypePredicates.ts(98,10): error TS99999: Function was inferred to be a type guard
 inferTypePredicates.ts(104,7): error TS2322: Type 'string | number' is not assignable to type 'string'.
   Type 'number' is not assignable to type 'string'.
 inferTypePredicates.ts(106,7): error TS2322: Type 'string | number' is not assignable to type 'number'.
@@ -27,23 +34,26 @@ inferTypePredicates.ts(113,7): error TS2322: Type 'string | number' is not assig
   Type 'number' is not assignable to type 'string'.
 inferTypePredicates.ts(115,7): error TS2322: Type 'string | number' is not assignable to type 'number'.
   Type 'string' is not assignable to type 'number'.
-inferTypePredicates.ts(118,10): error TS99999: Annotated function was also inferred to be a type guard
-inferTypePredicates.ts(121,10): error TS99999: Annotated function was also inferred to be a type guard
+inferTypePredicates.ts(118,10): error TS99999: Function was inferred to be a type guard
+inferTypePredicates.ts(121,10): error TS99999: Function was inferred to be a type guard
 inferTypePredicates.ts(182,3): error TS2416: Property 'isNumber' in type 'Inferrer' is not assignable to the same property in base type 'NumberInferrer'.
   Type '(x: string | number) => boolean' is not assignable to type '(x: string | number) => x is number'.
     Signature '(x: string | number): boolean' must be a type predicate.
+inferTypePredicates.ts(182,3): error TS99999: Function was inferred to be a type guard
 inferTypePredicates.ts(189,7): error TS2322: Type 'string | number' is not assignable to type 'number'.
   Type 'string' is not assignable to type 'number'.
 inferTypePredicates.ts(191,7): error TS2322: Type 'string | number' is not assignable to type 'string'.
   Type 'number' is not assignable to type 'string'.
 inferTypePredicates.ts(205,7): error TS2741: Property 'z' is missing in type 'C1' but required in type 'C2'.
+inferTypePredicates.ts(224,10): error TS99999: Function was inferred to be a type guard
 inferTypePredicates.ts(230,7): error TS2322: Type 'string' is not assignable to type 'never'.
+inferTypePredicates.ts(234,10): error TS99999: Function was inferred to be a type guard
 inferTypePredicates.ts(239,7): error TS2322: Type 'unknown' is not assignable to type 'string | number'.
 inferTypePredicates.ts(252,7): error TS2322: Type 'string | number | Date' is not assignable to type 'string'.
   Type 'number' is not assignable to type 'string'.
 
 
-==== inferTypePredicates.ts (26 errors) ====
+==== inferTypePredicates.ts (36 errors) ====
     // https://github.com/microsoft/TypeScript/issues/16069
     
     const numsOrNull = [1, 2, 3, 4, null];
@@ -55,6 +65,8 @@ inferTypePredicates.ts(252,7): error TS2322: Type 'string | number | Date' is no
     const filteredNumsNonNullish: number[] = numsOrNull.filter(x => x !== null);  // should ok
           ~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS2322: Type '(number | null)[]' is not assignable to type 'number[]'.
+                                                               ~~~~~~~~~~~~~~~
+!!! error TS99999: Function was inferred to be a type guard
     
     const evenSquaresInline: number[] =  // should error
           ~~~~~~~~~~~~~~~~~
@@ -78,6 +90,8 @@ inferTypePredicates.ts(252,7): error TS2322: Type 'string | number | Date' is no
         [1, 2, 3, 4]
         .map(x => x % 2 === 0 ? x * x : null)
         .filter(x => x !== null);
+                ~~~~~~~~~~~~~~~
+!!! error TS99999: Function was inferred to be a type guard
     
     function isNonNull(x: number | null) {
       return x !== null;
@@ -120,6 +134,8 @@ inferTypePredicates.ts(252,7): error TS2322: Type 'string | number | Date' is no
     const result2 = myArray
       .map((arr) => arr.list)
       .filter((arr) => !!arr)
+              ~~~~~~~~~~~~~~
+!!! error TS99999: Function was inferred to be a type guard
       .filter(arr => arr.length)
                      ~~~
 !!! error TS18048: 'arr' is possibly 'undefined'.
@@ -151,8 +167,12 @@ inferTypePredicates.ts(252,7): error TS2322: Type 'string | number | Date' is no
 !!! error TS2322:     Type 'Foo' is not assignable to type 'Bar'.
 !!! error TS2322:       Property 'bar' is missing in type 'Foo' but required in type '{ bar: string; }'.
 !!! related TS2728 inferTypePredicates.ts:73:3: 'bar' is declared here.
+                                          ~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS99999: Function was inferred to be a type guard
     
     function isBarNonNull(x: Foo | Bar | null) {
+             ~~~~~~~~~~~~
+!!! error TS99999: Function was inferred to be a type guard
       return ('bar' in x!);
     }
     const fooOrBar = list[0];
@@ -166,17 +186,21 @@ inferTypePredicates.ts(252,7): error TS2322: Type 'string | number | Date' is no
     // https://github.com/microsoft/TypeScript/issues/38390#issuecomment-626019466
     // Ryan's example (currently legal):
     const a = [1, "foo", 2, "bar"].filter(x => typeof x === "string");
+                                          ~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS99999: Function was inferred to be a type guard
     a.push(10);
     
     // Defer to explicit type guards, even when they're incorrect.
     function backwardsGuard(x: number|string): x is number {
              ~~~~~~~~~~~~~~
-!!! error TS99999: Annotated function was also inferred to be a type guard
+!!! error TS99999: Function was inferred to be a type guard
       return typeof x === 'string';
     }
     
     // Partition tests. The "false" case matters.
     function isString(x: string | number) {
+             ~~~~~~~~
+!!! error TS99999: Function was inferred to be a type guard
       return typeof x === 'string';
     }
     
@@ -210,12 +234,12 @@ inferTypePredicates.ts(252,7): error TS2322: Type 'string | number | Date' is no
     
     function isDate(x: object): x is Date {
              ~~~~~~
-!!! error TS99999: Annotated function was also inferred to be a type guard
+!!! error TS99999: Function was inferred to be a type guard
       return x instanceof Date;
     }
     function flakyIsDate(x: object): x is Date {
              ~~~~~~~~~~~
-!!! error TS99999: Annotated function was also inferred to be a type guard
+!!! error TS99999: Function was inferred to be a type guard
       return x instanceof Date;
     }
     
@@ -281,6 +305,8 @@ inferTypePredicates.ts(252,7): error TS2322: Type 'string | number | Date' is no
 !!! error TS2416: Property 'isNumber' in type 'Inferrer' is not assignable to the same property in base type 'NumberInferrer'.
 !!! error TS2416:   Type '(x: string | number) => boolean' is not assignable to type '(x: string | number) => x is number'.
 !!! error TS2416:     Signature '(x: string | number): boolean' must be a type predicate.
+      ~~~~~~~~
+!!! error TS99999: Function was inferred to be a type guard
         return typeof x === 'number';
       }
     }
@@ -332,6 +358,8 @@ inferTypePredicates.ts(252,7): error TS2322: Type 'string | number | Date' is no
     }
     
     function isStringFromUnknown(x: unknown) {
+             ~~~~~~~~~~~~~~~~~~~
+!!! error TS99999: Function was inferred to be a type guard
       return typeof x === "string";
     }
     if (isStringFromUnknown(str)) {
@@ -344,6 +372,8 @@ inferTypePredicates.ts(252,7): error TS2322: Type 'string | number | Date' is no
     
     // infer a union type
     function isNumOrStr(x: unknown) {
+             ~~~~~~~~~~
+!!! error TS99999: Function was inferred to be a type guard
       return (typeof x === "number" || typeof x === "string");
     }
     declare let unk: unknown;

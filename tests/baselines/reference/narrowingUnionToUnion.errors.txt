@@ -1,6 +1,6 @@
-narrowingUnionToUnion.ts(160,10): error TS99999: Annotated function was also inferred to be a type guard
-narrowingUnionToUnion.ts(181,10): error TS99999: Annotated function was also inferred to be a type guard
-narrowingUnionToUnion.ts(185,10): error TS99999: Annotated function was also inferred to be a type guard
+narrowingUnionToUnion.ts(160,10): error TS99999: Function was inferred to be a type guard
+narrowingUnionToUnion.ts(181,10): error TS99999: Function was inferred to be a type guard
+narrowingUnionToUnion.ts(185,10): error TS99999: Function was inferred to be a type guard
 
 
 ==== narrowingUnionToUnion.ts (3 errors) ====
@@ -165,7 +165,7 @@ narrowingUnionToUnion.ts(185,10): error TS99999: Annotated function was also inf
     
     function isEmpty(value: string | EmptyString): value is EmptyString {
              ~~~~~~~
-!!! error TS99999: Annotated function was also inferred to be a type guard
+!!! error TS99999: Function was inferred to be a type guard
         return value === '' || value === null || value === undefined;
     }
     
@@ -188,13 +188,13 @@ narrowingUnionToUnion.ts(185,10): error TS99999: Annotated function was also inf
     
     function check1(x: unknown): x is (string | 0) {
              ~~~~~~
-!!! error TS99999: Annotated function was also inferred to be a type guard
+!!! error TS99999: Function was inferred to be a type guard
     	return typeof x === "string" || x === 0;
     }
     
     function check2(x: unknown): x is ("hello" | 0) {
              ~~~~~~
-!!! error TS99999: Annotated function was also inferred to be a type guard
+!!! error TS99999: Function was inferred to be a type guard
     	return x === "hello" || x === 0;
     }
     

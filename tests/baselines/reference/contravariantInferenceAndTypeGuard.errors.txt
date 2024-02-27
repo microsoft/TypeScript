@@ -1,4 +1,4 @@
-contravariantInferenceAndTypeGuard.ts(19,30): error TS99999: Annotated function was also inferred to be a type guard
+contravariantInferenceAndTypeGuard.ts(19,30): error TS99999: Function was inferred to be a type guard
 
 
 ==== contravariantInferenceAndTypeGuard.ts (1 errors) ====
@@ -22,7 +22,7 @@ contravariantInferenceAndTypeGuard.ts(19,30): error TS99999: Annotated function 
     const list2 = new List<Test | null>();
     const filter1 = list2.filter(function(item, node, list): item is Test {
                                  ~~~~~~~~
-!!! error TS99999: Annotated function was also inferred to be a type guard
+!!! error TS99999: Function was inferred to be a type guard
         this.b; // $ExpectType string
         item; // $ExpectType Test | null
         node; // $ExpectType ListItem<Test | null>

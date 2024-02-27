@@ -1,4 +1,4 @@
-narrowByBooleanComparison.ts(99,10): error TS99999: Annotated function was also inferred to be a type guard
+narrowByBooleanComparison.ts(99,10): error TS99999: Function was inferred to be a type guard
 
 
 ==== narrowByBooleanComparison.ts (1 errors) ====
@@ -102,7 +102,7 @@ narrowByBooleanComparison.ts(99,10): error TS99999: Annotated function was also 
     // https://github.com/microsoft/TypeScript/issues/53005
     function isFunction(x: unknown): x is Function {
              ~~~~~~~~~~
-!!! error TS99999: Annotated function was also inferred to be a type guard
+!!! error TS99999: Function was inferred to be a type guard
         return typeof x === "function";
     }
     

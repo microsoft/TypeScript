@@ -1,4 +1,4 @@
-stringLiteralCheckedInIf02.ts(4,10): error TS99999: Annotated function was also inferred to be a type guard
+stringLiteralCheckedInIf02.ts(4,10): error TS99999: Function was inferred to be a type guard
 
 
 ==== stringLiteralCheckedInIf02.ts (1 errors) ====
@@ -7,7 +7,7 @@ stringLiteralCheckedInIf02.ts(4,10): error TS99999: Annotated function was also 
     
     function isS(t: T): t is S {
              ~~~
-!!! error TS99999: Annotated function was also inferred to be a type guard
+!!! error TS99999: Function was inferred to be a type guard
         return t === "a" || t === "b";
     }
     

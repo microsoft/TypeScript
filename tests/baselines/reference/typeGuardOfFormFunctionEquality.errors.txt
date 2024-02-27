@@ -1,4 +1,4 @@
-typeGuardOfFormFunctionEquality.ts(12,10): error TS99999: Annotated function was also inferred to be a type guard
+typeGuardOfFormFunctionEquality.ts(12,10): error TS99999: Function was inferred to be a type guard
 
 
 ==== typeGuardOfFormFunctionEquality.ts (1 errors) ====
@@ -15,7 +15,7 @@ typeGuardOfFormFunctionEquality.ts(12,10): error TS99999: Annotated function was
     
     function isString3(a: number, b: number, c: Object): c is string {
              ~~~~~~~~~
-!!! error TS99999: Annotated function was also inferred to be a type guard
+!!! error TS99999: Function was inferred to be a type guard
         return isString1(0, c);
     }
     

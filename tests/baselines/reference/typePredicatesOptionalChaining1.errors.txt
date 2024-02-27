@@ -1,4 +1,4 @@
-typePredicatesOptionalChaining1.ts(10,10): error TS99999: Annotated function was also inferred to be a type guard
+typePredicatesOptionalChaining1.ts(10,10): error TS99999: Function was inferred to be a type guard
 
 
 ==== typePredicatesOptionalChaining1.ts (1 errors) ====
@@ -13,7 +13,7 @@ typePredicatesOptionalChaining1.ts(10,10): error TS99999: Annotated function was
     // type guard
     function isNotNull<A>(x: A): x is NonNullable<A> {
              ~~~~~~~~~
-!!! error TS99999: Annotated function was also inferred to be a type guard
+!!! error TS99999: Function was inferred to be a type guard
       return x !== null && x !== undefined;
     }
     // function which I want to call in the result of the expression

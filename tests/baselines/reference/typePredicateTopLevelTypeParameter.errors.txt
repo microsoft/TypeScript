@@ -1,4 +1,4 @@
-typePredicateTopLevelTypeParameter.ts(10,10): error TS99999: Annotated function was also inferred to be a type guard
+typePredicateTopLevelTypeParameter.ts(10,10): error TS99999: Function was inferred to be a type guard
 
 
 ==== typePredicateTopLevelTypeParameter.ts (1 errors) ====
@@ -13,7 +13,7 @@ typePredicateTopLevelTypeParameter.ts(10,10): error TS99999: Annotated function 
     
     function isDefined<T>(a: T | undefined): a is T {
              ~~~~~~~~~
-!!! error TS99999: Annotated function was also inferred to be a type guard
+!!! error TS99999: Function was inferred to be a type guard
         return a !== undefined;
     }
     

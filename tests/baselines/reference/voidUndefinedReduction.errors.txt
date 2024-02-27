@@ -1,4 +1,4 @@
-voidUndefinedReduction.ts(3,10): error TS99999: Annotated function was also inferred to be a type guard
+voidUndefinedReduction.ts(3,10): error TS99999: Function was inferred to be a type guard
 
 
 ==== voidUndefinedReduction.ts (1 errors) ====
@@ -6,7 +6,7 @@ voidUndefinedReduction.ts(3,10): error TS99999: Annotated function was also infe
     
     function isDefined<T>(value: T | undefined | null | void): value is T {
              ~~~~~~~~~
-!!! error TS99999: Annotated function was also inferred to be a type guard
+!!! error TS99999: Function was inferred to be a type guard
       return value !== undefined && value !== null;
     }
     

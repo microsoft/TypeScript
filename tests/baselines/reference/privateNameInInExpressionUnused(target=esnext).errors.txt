@@ -1,5 +1,5 @@
 privateNameInInExpressionUnused.ts(2,5): error TS6133: '#unused' is declared but its value is never read.
-privateNameInInExpressionUnused.ts(5,5): error TS99999: Annotated function was also inferred to be a type guard
+privateNameInInExpressionUnused.ts(5,5): error TS99999: Function was inferred to be a type guard
 
 
 ==== privateNameInInExpressionUnused.ts (2 errors) ====
@@ -11,7 +11,7 @@ privateNameInInExpressionUnused.ts(5,5): error TS99999: Annotated function was a
     
         isFoo(v: any): v is Foo {
         ~~~~~
-!!! error TS99999: Annotated function was also inferred to be a type guard
+!!! error TS99999: Function was inferred to be a type guard
             // This should count as using/reading '#brand'
             return #brand in v;
         }

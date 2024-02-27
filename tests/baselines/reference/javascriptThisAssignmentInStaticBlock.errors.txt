@@ -2,9 +2,10 @@
   Types of property 'isArray' are incompatible.
     Type '(arg: any) => boolean' is not assignable to type '(arg: any) => arg is any[]'.
       Signature '(arg: any): boolean' must be a type predicate.
+/src/a.js(13,31): error TS99999: Function was inferred to be a type guard
 
 
-==== /src/a.js (1 errors) ====
+==== /src/a.js (2 errors) ====
     class Thing {
         static {
             this.doSomething = () => {};
@@ -23,6 +24,8 @@
         static {
             const superisArray = super.isArray;
             const customIsArray = (arg)=> superisArray(arg);
+                                  ~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS99999: Function was inferred to be a type guard
             this.isArray = customIsArray;
         }
     }

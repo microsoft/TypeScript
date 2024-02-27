@@ -7985,7 +7985,7 @@
         "category": "Error",
         "code": 18054
     },
-    "Annotated function was also inferred to be a type guard": {
+    "Function was inferred to be a type guard": {
         "category": "Error",
         "code": 99999
     }

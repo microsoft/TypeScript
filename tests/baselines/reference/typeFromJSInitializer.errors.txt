@@ -8,7 +8,7 @@ a.js(30,5): error TS2322: Type 'true' is not assignable to type 'null'.
 a.js(31,5): error TS2322: Type '{}' is not assignable to type 'null'.
 a.js(32,5): error TS2322: Type '"ok"' is not assignable to type 'null'.
 a.js(37,5): error TS2322: Type 'string' is not assignable to type 'number'.
-a.js(56,17): error TS99999: Annotated function was also inferred to be a type guard
+a.js(56,17): error TS99999: Function was inferred to be a type guard
 
 
 ==== a.js (11 errors) ====
@@ -89,7 +89,7 @@ a.js(56,17): error TS99999: Annotated function was also inferred to be a type gu
     /** @type {(v: unknown) => v is undefined} */
     const isUndef = v => v === undefined;
                     ~~~~~~~~~~~~~~~~~~~~
-!!! error TS99999: Annotated function was also inferred to be a type guard
+!!! error TS99999: Function was inferred to be a type guard
     const e = [1, undefined];
     
     // should be undefined[]

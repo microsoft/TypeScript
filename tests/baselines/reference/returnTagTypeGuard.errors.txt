@@ -1,4 +1,4 @@
-bug25127.js(35,10): error TS99999: Annotated function was also inferred to be a type guard
+bug25127.js(35,10): error TS99999: Function was inferred to be a type guard
 
 
 ==== bug25127.js (1 errors) ====
@@ -38,7 +38,7 @@ bug25127.js(35,10): error TS99999: Annotated function was also inferred to be a 
      */
     function isBoolean(value) {
              ~~~~~~~~~
-!!! error TS99999: Annotated function was also inferred to be a type guard
+!!! error TS99999: Function was inferred to be a type guard
         return typeof value === "boolean";
     }
     
