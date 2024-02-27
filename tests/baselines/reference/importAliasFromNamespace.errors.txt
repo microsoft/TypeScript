@@ -1,0 +1,25 @@
+usage.ts(2,1): error TS18056: Declaration file contains synthesized file reference directives: '"internal.d.ts"'
+
+
+==== usage.ts (1 errors) ====
+    /// <reference path="./internal.ts" />
+    namespace SomeOther.Thing {
+    ~~~~~~~~~
+!!! error TS18056: Declaration file contains synthesized file reference directives: '"internal.d.ts"'
+        import Internal = My.Internal;
+        export class Foo {
+            private _which: Internal.WhichThing;
+            constructor() {
+                Internal.getThing();
+                Internal.WhichThing.A ? "foo" : "bar";
+            }
+        }
+    }
+==== internal.ts (0 errors) ====
+    namespace My.Internal {
+        export function getThing(): void {}
+        export const enum WhichThing {
+            A, B, C
+        }
+    }
+    

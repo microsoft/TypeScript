@@ -42,11 +42,3 @@ declare module "SubModule" {
     }
     export = SubModule;
 }
-//// [missingImportAfterModuleImport_1.d.ts]
-/// <reference path="missingImportAfterModuleImport_0.d.ts" />
-import SubModule = require('SubModule');
-declare class MainModule {
-    SubModule: SubModule;
-    constructor();
-}
-export = MainModule;

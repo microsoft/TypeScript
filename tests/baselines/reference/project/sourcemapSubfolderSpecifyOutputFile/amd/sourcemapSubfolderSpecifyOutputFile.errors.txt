@@ -1,5 +1,6 @@
 error TS5102: Option 'out' has been removed. Please remove it from your configuration.
   Use 'outFile' instead.
+test.ts(2,1): error TS18056: Declaration file contains synthesized file reference directives: '"ref/m1.d.ts"'
 
 
 !!! error TS5102: Option 'out' has been removed. Please remove it from your configuration.
@@ -14,9 +15,11 @@ error TS5102: Option 'out' has been removed. Please remove it from your configur
     function m1_f1() {
         return m1_instance1;
     }
-==== test.ts (0 errors) ====
+==== test.ts (1 errors) ====
     /// <reference path='ref/m1.ts'/>
     var a1 = 10;
+    ~~~
+!!! error TS18056: Declaration file contains synthesized file reference directives: '"ref/m1.d.ts"'
     class c1 {
         public p1: number;
     }

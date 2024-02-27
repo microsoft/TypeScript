@@ -1,12 +1,15 @@
+privacyTopLevelAmbientExternalModuleImportWithoutExport_core.ts(4,1): error TS18056: Declaration file contains synthesized file reference directives: '"privacyTopLevelAmbientExternalModuleImportWithoutExport_require2.d.ts", "privacyTopLevelAmbientExternalModuleImportWithoutExport_require3.d.ts"'
 privacyTopLevelAmbientExternalModuleImportWithoutExport_core.ts(15,12): error TS2323: Cannot redeclare exported variable 'publicUse_im_private_mi_public'.
 privacyTopLevelAmbientExternalModuleImportWithoutExport_core.ts(17,12): error TS2323: Cannot redeclare exported variable 'publicUse_im_private_mi_public'.
 
 
-==== privacyTopLevelAmbientExternalModuleImportWithoutExport_core.ts (2 errors) ====
+==== privacyTopLevelAmbientExternalModuleImportWithoutExport_core.ts (3 errors) ====
     ///<reference path='privacyTopLevelAmbientExternalModuleImportWithoutExport_require2.ts'/>
     ///<reference path='privacyTopLevelAmbientExternalModuleImportWithoutExport_require3.ts'/>
     // Privacy errors - importing private elements
     import im_private_mi_private = require("m");
+    ~~~~~~
+!!! error TS18056: Declaration file contains synthesized file reference directives: '"privacyTopLevelAmbientExternalModuleImportWithoutExport_require2.d.ts", "privacyTopLevelAmbientExternalModuleImportWithoutExport_require3.d.ts"'
     import im_private_mu_private = require("m2");
     import im_private_mi_public = require("privacyTopLevelAmbientExternalModuleImportWithoutExport_require");
     import im_private_mu_public = require("privacyTopLevelAmbientExternalModuleImportWithoutExport_require1");

@@ -15,8 +15,6 @@
     ],
     "emittedFiles": [
         "../../../bar/bar.js",
-        "../../../bar/bar.d.ts",
-        "../../../src/ts/foo/foo.js",
-        "../../../src/ts/foo/foo.d.ts"
+        "../../../src/ts/foo/foo.js"
     ]
 }

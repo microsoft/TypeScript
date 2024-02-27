@@ -1,0 +1,32 @@
+/index.ts(1,1): error TS18055: Declaration file contains synthesized type reference directives: '"pkg"'
+
+
+==== /index.ts (1 errors) ====
+    import obj from "./uses.js"
+    ~~~~~~
+!!! error TS18055: Declaration file contains synthesized type reference directives: '"pkg"'
+    export default (obj as typeof obj);
+==== /node_modules/pkg/package.json (0 errors) ====
+    {
+        "name": "pkg",
+        "version": "0.0.1",
+        "exports": {
+            "import": "./import.js",
+            "require": "./require.js"
+        }
+    }
+==== /node_modules/pkg/import.d.ts (0 errors) ====
+    export {};
+    declare global {
+        interface ImportInterface {}
+        function getInterI(): ImportInterface;
+    }
+==== /node_modules/pkg/require.d.ts (0 errors) ====
+    export {};
+    declare global {
+        interface RequireInterface {}
+        function getInterR(): RequireInterface;
+    }
+==== /uses.ts (0 errors) ====
+    /// <reference types="pkg" />
+    export default getInterR();

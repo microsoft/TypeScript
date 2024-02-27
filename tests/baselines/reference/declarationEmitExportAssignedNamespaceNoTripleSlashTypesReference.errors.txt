@@ -1,0 +1,41 @@
+src/inferred-comp-export.ts(1,1): error TS18055: Declaration file contains synthesized type reference directives: '"react"'
+
+
+==== node_modules/@types/react/index.d.ts (0 errors) ====
+    export = React;
+    
+    declare namespace React {
+        export type Component<T = any, U = {}, V = {}> = { x: T, y: U, z: V };
+        export interface DOMAttributes<T> { }
+    }
+==== node_modules/@emotion/core/index.d.ts (0 errors) ====
+    import {
+        Component
+    } from 'react'
+    export {};
+    
+    declare module 'react' {
+        interface DOMAttributes<T> {
+            css?: any
+        }
+    }
+    
+==== src/get-comp.ts (0 errors) ====
+    import {Component} from 'react';
+    
+    export function getComp(): Component {
+        return {} as any as Component
+    }
+==== src/inferred-comp-export.ts (1 errors) ====
+    import { getComp } from "./get-comp";
+    ~~~~~~
+!!! error TS18055: Declaration file contains synthesized type reference directives: '"react"'
+    
+    // this shouldn't need any triple-slash references - it should have a direct import to `react` and that's it
+    // This issue (#35343) _only_ reproduces in the test harness when the file in question is in a subfolder
+    export const obj = {
+        comp: getComp()
+    }
+==== src/some-other-file.ts (0 errors) ====
+    export * from '@emotion/core';
+    

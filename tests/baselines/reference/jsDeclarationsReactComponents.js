@@ -197,14 +197,6 @@ declare namespace TabbedShowLayout {
     }
 }
 import PropTypes from "prop-types";
-//// [jsDeclarationsReactComponents2.d.ts]
-/// <reference path="../..react16.d.ts" />
-export default TabbedShowLayout;
-/**
- * @type {React.SFC}
- */
-declare const TabbedShowLayout: React.SFC;
-import React from "react";
 //// [jsDeclarationsReactComponents3.d.ts]
 export default TabbedShowLayout;
 /**
@@ -227,20 +219,3 @@ declare namespace TabbedShowLayout {
         let tabs: string;
     }
 }
-//// [jsDeclarationsReactComponents5.d.ts]
-/// <reference path="../..react16.d.ts" />
-export default Tree;
-declare function Tree({ allowDropOnRoot }: {
-    allowDropOnRoot: any;
-}): JSX.Element;
-declare namespace Tree {
-    namespace propTypes {
-        let classes: PropTypes.Requireable<object>;
-    }
-    namespace defaultProps {
-        let classes_1: {};
-        export { classes_1 as classes };
-        export let parentSource: string;
-    }
-}
-import PropTypes from 'prop-types';

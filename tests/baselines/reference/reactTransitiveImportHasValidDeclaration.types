@@ -9,12 +9,12 @@ export = React;
 >React : any
 
 export as namespace React;
->React : error
+>React : any
 
 === node_modules/create-emotion-styled/types/react/index.d.ts ===
 /// <reference types="react" />
 declare module 'react' { // augment
->'react' : error
+>'react' : any
 
     interface HTMLAttributes<T> {
         css?: unknown;

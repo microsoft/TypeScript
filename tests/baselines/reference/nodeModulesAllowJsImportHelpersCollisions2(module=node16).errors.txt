@@ -1,18 +1,24 @@
+index.js(2,1): error TS18056: Declaration file contains synthesized file reference directives: '"../types.d.ts"'
+subfolder/index.ts(2,1): error TS18056: Declaration file contains synthesized file reference directives: '"../../types.d.ts"'
 subfolder/index.ts(2,1): error TS2343: This syntax requires an imported helper named '__exportStar' which does not exist in 'tslib'. Consider upgrading your version of 'tslib'.
 subfolder/index.ts(3,1): error TS2343: This syntax requires an imported helper named '__importStar' which does not exist in 'tslib'. Consider upgrading your version of 'tslib'.
 
 
-==== subfolder/index.ts (2 errors) ====
+==== subfolder/index.ts (3 errors) ====
     // cjs format file
     export * from "fs";
+    ~~~~~~
+!!! error TS18056: Declaration file contains synthesized file reference directives: '"../../types.d.ts"'
     ~~~~~~~~~~~~~~~~~~~
 !!! error TS2343: This syntax requires an imported helper named '__exportStar' which does not exist in 'tslib'. Consider upgrading your version of 'tslib'.
     export * as fs from "fs";
     ~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS2343: This syntax requires an imported helper named '__importStar' which does not exist in 'tslib'. Consider upgrading your version of 'tslib'.
-==== index.js (0 errors) ====
+==== index.js (1 errors) ====
     // esm format file
     export * from "fs";
+    ~~~~~~
+!!! error TS18056: Declaration file contains synthesized file reference directives: '"../types.d.ts"'
     export * as fs from "fs";
 ==== package.json (0 errors) ====
     {

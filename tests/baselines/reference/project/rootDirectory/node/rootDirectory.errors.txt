@@ -1,0 +1,18 @@
+FolderA/FolderB/fileB.ts(2,1): error TS18056: Declaration file contains synthesized file reference directives: '"FolderC/fileC.d.ts"'
+FolderA/FolderB/fileB.ts(2,1): error TS18056: Declaration file contains synthesized file reference directives: '"FolderC/fileC.d.ts"'
+
+
+==== FolderA/FolderB/FolderC/fileC.ts (0 errors) ====
+    class C {
+    }
+    
+==== FolderA/FolderB/fileB.ts (2 errors) ====
+    /// <reference path='FolderC/fileC.ts'/>
+    class B {
+    ~~~~~
+!!! error TS18056: Declaration file contains synthesized file reference directives: '"FolderC/fileC.d.ts"'
+    ~~~~~
+!!! error TS18056: Declaration file contains synthesized file reference directives: '"FolderC/fileC.d.ts"'
+        public c: C;
+    }
+    

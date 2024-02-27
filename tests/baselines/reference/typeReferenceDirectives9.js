@@ -73,10 +73,3 @@ declare module "./main" {
     }
 }
 export {};
-//// [mod2.d.ts]
-/// <reference types="lib" />
-import { Cls } from "./main";
-import "./mod1";
-export declare const cls: typeof Cls;
-export declare const foo: Lib;
-export declare const bar: Lib;

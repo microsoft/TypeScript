@@ -1,0 +1,16 @@
+B.ts(2,1): error TS18056: Declaration file contains synthesized file reference directives: '"A.d.ts"'
+
+
+==== B.ts (1 errors) ====
+    ///<reference path="A.ts" />
+    module A { ; }
+    ~~~~~~
+!!! error TS18056: Declaration file contains synthesized file reference directives: '"A.d.ts"'
+    module B {
+    	export function f(): A.I { return null; }
+    }
+    
+    
+==== A.ts (0 errors) ====
+    module A { export interface I {} }
+    

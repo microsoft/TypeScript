@@ -16,7 +16,6 @@
     "emittedFiles": [
         "li'b/class'A.js",
         "li'b/class'A.d.ts",
-        "m'ain.js",
-        "m'ain.d.ts"
+        "m'ain.js"
     ]
 }

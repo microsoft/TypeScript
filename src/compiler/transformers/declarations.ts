@@ -53,6 +53,7 @@ import {
     FunctionTypeNode,
     GeneratedIdentifierFlags,
     GetAccessorDeclaration,
+    getBaseFileName,
     getCommentRange,
     getDirectoryPath,
     getEffectiveBaseTypeNode,
@@ -63,6 +64,7 @@ import {
     getLineAndCharacterOfPosition,
     getNameOfDeclaration,
     getNormalizedAbsolutePath,
+    getNormalizedAbsolutePathWithoutRoot,
     getOriginalNodeId,
     getOutputPathsFor,
     getParseTreeNode,
@@ -547,7 +549,16 @@ export function transformDeclarations(context: TransformationContext) {
                 combinedStatements = setTextRange(factory.createNodeArray([...combinedStatements, createEmptyExports(factory)]), combinedStatements);
             }
         }
-        const updated = factory.updateSourceFile(node, combinedStatements, /*isDeclarationFile*/ true, references, getFileReferencesForUsedTypeReferences(), node.hasNoDefaultLib, getLibReferences());
+        const typeReferences = getFileReferencesForUsedTypeReferences();
+        const updated = factory.updateSourceFile(node, combinedStatements, /*isDeclarationFile*/ true, references, typeReferences, node.hasNoDefaultLib, getLibReferences());
+        const synthesizedTypeReferences = typeReferences.filter(ref => !node.typeReferenceDirectives.some(d => d.fileName === ref.fileName));
+        const synthesizedFileReferences = references.filter(ref => !node.referencedFiles.some(d => getNormalizedAbsolutePathWithoutRoot(getBaseFileName(d.fileName), "") === getNormalizedAbsolutePathWithoutRoot(getBaseFileName(ref.fileName), "")));
+        if (synthesizedTypeReferences.length) {
+            context.addDiagnostic(createDiagnosticForNode(node, Diagnostics.Declaration_file_contains_synthesized_type_reference_directives_Colon_0, synthesizedTypeReferences.map(ref => `"${ref.fileName}"`).join(", ")));
+        }
+        if (synthesizedFileReferences.length) {
+            context.addDiagnostic(createDiagnosticForNode(node, Diagnostics.Declaration_file_contains_synthesized_file_reference_directives_Colon_0, synthesizedFileReferences.map(ref => `"${ref.fileName}"`).join(", ")));
+        }
         updated.exportedModulesFromDeclarationEmit = exportedModulesFromDeclarationEmit;
         return updated;
 

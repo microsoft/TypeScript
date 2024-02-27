@@ -25,7 +25,6 @@
         "outdir/simple/ref/m2.js",
         "outdir/simple/ref/m2.d.ts",
         "outdir/simple/test.js.map",
-        "outdir/simple/test.js",
-        "outdir/simple/test.d.ts"
+        "outdir/simple/test.js"
     ]
 }

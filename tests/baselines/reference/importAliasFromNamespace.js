@@ -58,11 +58,3 @@ declare namespace My.Internal {
         C = 2
     }
 }
-//// [usage.d.ts]
-/// <reference path="internal.d.ts" />
-declare namespace SomeOther.Thing {
-    class Foo {
-        private _which;
-        constructor();
-    }
-}

@@ -113,14 +113,3 @@ export declare class c_public {
 export declare class c_public {
     bar: string;
 }
-//// [privacyTopLevelAmbientExternalModuleImportWithExport_core.d.ts]
-/// <reference path="privacyTopLevelAmbientExternalModuleImportWithExport_require2.d.ts" />
-/// <reference path="privacyTopLevelAmbientExternalModuleImportWithExport_require3.d.ts" />
-export import im_public_mi_private = require("./privacyTopLevelAmbientExternalModuleImportWithExport_require");
-export import im_public_mu_private = require("./privacyTopLevelAmbientExternalModuleImportWithExport_require1");
-export import im_public_mi_public = require("m");
-export import im_public_mu_public = require("m2");
-export declare var publicUse_im_public_mi_private: im_public_mi_private.c_public;
-export declare var publicUse_im_public_mu_private: im_public_mu_private.c_public;
-export declare var publicUse_im_public_mi_public: im_public_mi_public.c_private;
-export declare var publicUse_im_public_mi_public: im_public_mi_public.c_private;

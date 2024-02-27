@@ -47,7 +47,3 @@ exports.default = uses_js_1.default;
 /// <reference types="pkg" />
 declare const _default: RequireInterface;
 export default _default;
-//// [index.d.ts]
-/// <reference types="pkg" />
-declare const _default: RequireInterface;
-export default _default;

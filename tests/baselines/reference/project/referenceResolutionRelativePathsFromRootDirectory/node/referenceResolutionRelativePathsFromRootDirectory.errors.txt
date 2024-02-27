@@ -1,0 +1,24 @@
+bar/bar.ts(3,1): error TS18056: Declaration file contains synthesized file reference directives: '"../src/ts/foo/foo.d.ts"'
+bar/bar.ts(3,1): error TS18056: Declaration file contains synthesized file reference directives: '"../src/ts/foo/foo.d.ts"'
+src/ts/foo/foo.ts(3,1): error TS18056: Declaration file contains synthesized file reference directives: '"../../../bar/bar.d.ts"'
+src/ts/foo/foo.ts(3,1): error TS18056: Declaration file contains synthesized file reference directives: '"../../../bar/bar.d.ts"'
+
+
+==== bar/bar.ts (2 errors) ====
+    /// <reference path="../src/ts/foo/foo.ts" />
+    // This is bar.ts
+    class bar {
+    ~~~~~
+!!! error TS18056: Declaration file contains synthesized file reference directives: '"../src/ts/foo/foo.d.ts"'
+    ~~~~~
+!!! error TS18056: Declaration file contains synthesized file reference directives: '"../src/ts/foo/foo.d.ts"'
+    }
+==== src/ts/foo/foo.ts (2 errors) ====
+    /// <reference path="../../../bar/bar.ts" />
+    
+    class foo {
+    ~~~~~
+!!! error TS18056: Declaration file contains synthesized file reference directives: '"../../../bar/bar.d.ts"'
+    ~~~~~
+!!! error TS18056: Declaration file contains synthesized file reference directives: '"../../../bar/bar.d.ts"'
+    }

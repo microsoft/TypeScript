@@ -1,0 +1,28 @@
+/usage1.ts(1,1): error TS18055: Declaration file contains synthesized type reference directives: '"node"'
+/usage2.ts(1,1): error TS18055: Declaration file contains synthesized type reference directives: '"node"'
+/usage3.ts(1,1): error TS18055: Declaration file contains synthesized type reference directives: '"node"'
+
+
+==== /node_modules/@types/node/index.d.ts (0 errors) ====
+    declare module "url" {
+      export class Url {}
+      export function parse(): Url; 
+    }
+    
+==== /usage1.ts (1 errors) ====
+    export { parse } from "url";
+    ~~~~~~
+!!! error TS18055: Declaration file contains synthesized type reference directives: '"node"'
+    
+==== /usage2.ts (1 errors) ====
+    import { parse } from "url";
+    ~~~~~~
+!!! error TS18055: Declaration file contains synthesized type reference directives: '"node"'
+    export const thing: import("url").Url = parse(); 
+    
+==== /usage3.ts (1 errors) ====
+    import { parse } from "url";
+    ~~~~~~
+!!! error TS18055: Declaration file contains synthesized type reference directives: '"node"'
+    export const thing = parse();
+    

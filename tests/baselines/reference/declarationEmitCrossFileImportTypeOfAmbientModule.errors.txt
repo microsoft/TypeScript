@@ -1,0 +1,16 @@
+packages/secondpackage/index.ts(1,1): error TS18056: Declaration file contains synthesized file reference directives: '"../../types/component.d.ts"'
+
+
+==== types/component.d.ts (0 errors) ====
+    declare module '@namespace/component' {
+        export class Foo {}
+    }
+==== packages/somepackage/index.d.ts (0 errors) ====
+    import { Foo } from "@namespace/component";
+    export declare const item: typeof Foo;
+==== packages/secondpackage/index.ts (1 errors) ====
+    import { item } from "../somepackage";
+    ~~~~~~
+!!! error TS18056: Declaration file contains synthesized file reference directives: '"../../types/component.d.ts"'
+    export const reeexported = item;
+    

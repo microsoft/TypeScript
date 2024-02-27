@@ -1,5 +1,6 @@
 error TS5102: Option 'out' has been removed. Please remove it from your configuration.
   Use 'outFile' instead.
+b.ts(2,1): error TS18056: Declaration file contains synthesized file reference directives: '"c.d.ts"'
 
 
 !!! error TS5102: Option 'out' has been removed. Please remove it from your configuration.
@@ -8,9 +9,11 @@ error TS5102: Option 'out' has been removed. Please remove it from your configur
     class c {
     }
     
-==== b.ts (0 errors) ====
+==== b.ts (1 errors) ====
     /// <reference path="c.js"/>
     function foo() {
+    ~~~~~~~~
+!!! error TS18056: Declaration file contains synthesized file reference directives: '"c.d.ts"'
     }
     
 ==== c.js (0 errors) ====

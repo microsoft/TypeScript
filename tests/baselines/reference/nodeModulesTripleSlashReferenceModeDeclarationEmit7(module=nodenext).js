@@ -71,8 +71,3 @@ export default _default;
 /// <reference types="pkg" />
 declare const _default: RequireInterface;
 export default _default;
-//// [index.d.ts]
-/// <reference types="pkg" />
-/// <reference types="pkg" resolution-mode="require"/>
-declare const _default: readonly [ImportInterface, RequireInterface];
-export default _default;

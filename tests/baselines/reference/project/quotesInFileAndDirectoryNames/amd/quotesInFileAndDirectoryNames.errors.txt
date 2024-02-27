@@ -1,0 +1,20 @@
+m'ain.ts(3,1): error TS18056: Declaration file contains synthesized file reference directives: '"li'b/class'A.d.ts"'
+m'ain.ts(3,1): error TS18056: Declaration file contains synthesized file reference directives: '"li'b/class'A.d.ts"'
+
+
+==== li'b/class'A.ts (0 errors) ====
+    module test {
+        export class ClassA
+        {
+            public method() { }
+        }
+    }
+==== m'ain.ts (2 errors) ====
+    /// <reference path="li'b/class'A.ts" />
+    
+    class ClassC extends test.ClassA {
+    ~~~~~
+!!! error TS18056: Declaration file contains synthesized file reference directives: '"li'b/class'A.d.ts"'
+    ~~~~~
+!!! error TS18056: Declaration file contains synthesized file reference directives: '"li'b/class'A.d.ts"'
+    }

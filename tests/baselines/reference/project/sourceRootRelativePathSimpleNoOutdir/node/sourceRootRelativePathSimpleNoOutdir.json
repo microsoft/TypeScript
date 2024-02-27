@@ -20,7 +20,6 @@
         "m1.js",
         "m1.d.ts",
         "test.js.map",
-        "test.js",
-        "test.d.ts"
+        "test.js"
     ]
 }

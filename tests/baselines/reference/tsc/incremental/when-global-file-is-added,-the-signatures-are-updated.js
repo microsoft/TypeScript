@@ -49,18 +49,28 @@ Output::
 [7m2[0m /// <reference path="./fileNotFound.ts"/>
 [7m [0m [91m                     ~~~~~~~~~~~~~~~~~[0m
 
+[96msrc/project/src/anotherFileWithSameReferenes.ts[0m:[93m3[0m:[93m1[0m - [91merror[0m[90m TS18056: [0mDeclaration file contains synthesized file reference directives: '"filePresent.d.ts"'
+
+[7m3[0m function anotherFileWithSameReferenes() { }
+[7m [0m [91m~~~~~~~~[0m
+
 [96msrc/project/src/main.ts[0m:[93m2[0m:[93m22[0m - [91merror[0m[90m TS6053: [0mFile '/src/project/src/fileNotFound.ts' not found.
 
 [7m2[0m /// <reference path="./fileNotFound.ts"/>
 [7m [0m [91m                     ~~~~~~~~~~~~~~~~~[0m
 
+[96msrc/project/src/main.ts[0m:[93m3[0m:[93m1[0m - [91merror[0m[90m TS18056: [0mDeclaration file contains synthesized file reference directives: '"filePresent.d.ts"'
 
-Found 2 errors in 2 files.
+[7m3[0m function main() { }
+[7m [0m [91m~~~~~~~~[0m
+
+
+Found 4 errors in 2 files.
 
 Errors  Files
-     1  src/project/src/anotherFileWithSameReferenes.ts[90m:2[0m
-     1  src/project/src/main.ts[90m:2[0m
-exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
+     2  src/project/src/anotherFileWithSameReferenes.ts[90m:2[0m
+     2  src/project/src/main.ts[90m:2[0m
+exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
 Program root files: [
   "/src/project/src/anotherFileWithSameReferenes.ts",
   "/src/project/src/filePresent.ts",
@@ -87,13 +97,8 @@ Semantic diagnostics in builder refreshed for::
 Shape signatures in builder refreshed for::
 /lib/lib.d.ts (used version)
 /src/project/src/filepresent.ts (computed .d.ts during emit)
-/src/project/src/anotherfilewithsamereferenes.ts (computed .d.ts during emit)
-/src/project/src/main.ts (computed .d.ts during emit)
-
-
-//// [/src/project/src/anotherFileWithSameReferenes.d.ts]
-/// <reference path="filePresent.d.ts" />
-declare function anotherFileWithSameReferenes(): void;
+/src/project/src/anotherfilewithsamereferenes.ts (used version)
+/src/project/src/main.ts (used version)
 
 
 //// [/src/project/src/anotherFileWithSameReferenes.js]
@@ -110,11 +115,6 @@ declare function something(): number;
 function something() { return 10; }
 
 
-//// [/src/project/src/main.d.ts]
-/// <reference path="filePresent.d.ts" />
-declare function main(): void;
-
-
 //// [/src/project/src/main.js]
 /// <reference path="./filePresent.ts"/>
 /// <reference path="./fileNotFound.ts"/>
@@ -122,7 +122,7 @@ function main() { }
 
 
 //// [/src/project/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../lib/lib.d.ts","./src/filepresent.ts","./src/anotherfilewithsamereferenes.ts","./src/main.ts","./src/filenotfound.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"-12346563362-function something() { return 10; }","signature":"-4903250974-declare function something(): number;\n","affectsGlobalScope":true},{"version":"-28237004260-/// <reference path=\"./filePresent.ts\"/>\n/// <reference path=\"./fileNotFound.ts\"/>\nfunction anotherFileWithSameReferenes() { }\n","signature":"4626929588-/// <reference path=\"filePresent.d.ts\" />\ndeclare function anotherFileWithSameReferenes(): void;\n","affectsGlobalScope":true},{"version":"-21256825585-/// <reference path=\"./filePresent.ts\"/>\n/// <reference path=\"./fileNotFound.ts\"/>\nfunction main() { }\n","signature":"6884835015-/// <reference path=\"filePresent.d.ts\" />\ndeclare function main(): void;\n","affectsGlobalScope":true}],"root":[[2,4]],"options":{"composite":true},"fileIdsList":[[2,5]],"referencedMap":[[3,1],[4,1]],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,3,2,4],"latestChangedDtsFile":"./src/main.d.ts"},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../lib/lib.d.ts","./src/filepresent.ts","./src/anotherfilewithsamereferenes.ts","./src/main.ts","./src/filenotfound.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"-12346563362-function something() { return 10; }","signature":"-4903250974-declare function something(): number;\n","affectsGlobalScope":true},{"version":"-28237004260-/// <reference path=\"./filePresent.ts\"/>\n/// <reference path=\"./fileNotFound.ts\"/>\nfunction anotherFileWithSameReferenes() { }\n","affectsGlobalScope":true},{"version":"-21256825585-/// <reference path=\"./filePresent.ts\"/>\n/// <reference path=\"./fileNotFound.ts\"/>\nfunction main() { }\n","affectsGlobalScope":true}],"root":[[2,4]],"options":{"composite":true},"fileIdsList":[[2,5]],"referencedMap":[[3,1],[4,1]],"exportedModulesMap":[[3,1],[4,1]],"semanticDiagnosticsPerFile":[1,3,2,4],"emitDiagnosticsPerFile":[[3,[{"file":"./src/anotherfilewithsamereferenes.ts","start":83,"length":8,"messageText":"Declaration file contains synthesized file reference directives: '\"filePresent.d.ts\"'","category":1,"code":18056}]],[4,[{"file":"./src/main.ts","start":83,"length":8,"messageText":"Declaration file contains synthesized file reference directives: '\"filePresent.d.ts\"'","category":1,"code":18056}]]],"emitSignatures":[3,4],"latestChangedDtsFile":"./src/filePresent.d.ts"},"version":"FakeTSVersion"}
 
 //// [/src/project/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -163,21 +163,19 @@ function main() { }
       "./src/anotherfilewithsamereferenes.ts": {
         "original": {
           "version": "-28237004260-/// <reference path=\"./filePresent.ts\"/>\n/// <reference path=\"./fileNotFound.ts\"/>\nfunction anotherFileWithSameReferenes() { }\n",
-          "signature": "4626929588-/// <reference path=\"filePresent.d.ts\" />\ndeclare function anotherFileWithSameReferenes(): void;\n",
           "affectsGlobalScope": true
         },
         "version": "-28237004260-/// <reference path=\"./filePresent.ts\"/>\n/// <reference path=\"./fileNotFound.ts\"/>\nfunction anotherFileWithSameReferenes() { }\n",
-        "signature": "4626929588-/// <reference path=\"filePresent.d.ts\" />\ndeclare function anotherFileWithSameReferenes(): void;\n",
+        "signature": "-28237004260-/// <reference path=\"./filePresent.ts\"/>\n/// <reference path=\"./fileNotFound.ts\"/>\nfunction anotherFileWithSameReferenes() { }\n",
         "affectsGlobalScope": true
       },
       "./src/main.ts": {
         "original": {
           "version": "-21256825585-/// <reference path=\"./filePresent.ts\"/>\n/// <reference path=\"./fileNotFound.ts\"/>\nfunction main() { }\n",
-          "signature": "6884835015-/// <reference path=\"filePresent.d.ts\" />\ndeclare function main(): void;\n",
           "affectsGlobalScope": true
         },
         "version": "-21256825585-/// <reference path=\"./filePresent.ts\"/>\n/// <reference path=\"./fileNotFound.ts\"/>\nfunction main() { }\n",
-        "signature": "6884835015-/// <reference path=\"filePresent.d.ts\" />\ndeclare function main(): void;\n",
+        "signature": "-21256825585-/// <reference path=\"./filePresent.ts\"/>\n/// <reference path=\"./fileNotFound.ts\"/>\nfunction main() { }\n",
         "affectsGlobalScope": true
       }
     },
@@ -207,17 +205,58 @@ function main() { }
         "./src/filenotfound.ts"
       ]
     },
-    "exportedModulesMap": {},
+    "exportedModulesMap": {
+      "./src/anotherfilewithsamereferenes.ts": [
+        "./src/filepresent.ts",
+        "./src/filenotfound.ts"
+      ],
+      "./src/main.ts": [
+        "./src/filepresent.ts",
+        "./src/filenotfound.ts"
+      ]
+    },
     "semanticDiagnosticsPerFile": [
       "../../lib/lib.d.ts",
       "./src/anotherfilewithsamereferenes.ts",
       "./src/filepresent.ts",
       "./src/main.ts"
     ],
-    "latestChangedDtsFile": "./src/main.d.ts"
+    "emitDiagnosticsPerFile": [
+      [
+        "./src/anotherfilewithsamereferenes.ts",
+        [
+          {
+            "file": "./src/anotherfilewithsamereferenes.ts",
+            "start": 83,
+            "length": 8,
+            "messageText": "Declaration file contains synthesized file reference directives: '\"filePresent.d.ts\"'",
+            "category": 1,
+            "code": 18056
+          }
+        ]
+      ],
+      [
+        "./src/main.ts",
+        [
+          {
+            "file": "./src/main.ts",
+            "start": 83,
+            "length": 8,
+            "messageText": "Declaration file contains synthesized file reference directives: '\"filePresent.d.ts\"'",
+            "category": 1,
+            "code": 18056
+          }
+        ]
+      ]
+    ],
+    "emitSignatures": [
+      "./src/anotherfilewithsamereferenes.ts",
+      "./src/main.ts"
+    ],
+    "latestChangedDtsFile": "./src/filePresent.d.ts"
   },
   "version": "FakeTSVersion",
-  "size": 1607
+  "size": 1835
 }
 
 
@@ -233,18 +272,28 @@ Output::
 [7m2[0m /// <reference path="./fileNotFound.ts"/>
 [7m [0m [91m                     ~~~~~~~~~~~~~~~~~[0m
 
+[96msrc/project/src/anotherFileWithSameReferenes.ts[0m:[93m3[0m:[93m1[0m - [91merror[0m[90m TS18056: [0mDeclaration file contains synthesized file reference directives: '"filePresent.d.ts"'
+
+[7m3[0m function anotherFileWithSameReferenes() { }
+[7m [0m [91m~~~~~~~~[0m
+
 [96msrc/project/src/main.ts[0m:[93m2[0m:[93m22[0m - [91merror[0m[90m TS6053: [0mFile '/src/project/src/fileNotFound.ts' not found.
 
 [7m2[0m /// <reference path="./fileNotFound.ts"/>
 [7m [0m [91m                     ~~~~~~~~~~~~~~~~~[0m
 
+[96msrc/project/src/main.ts[0m:[93m3[0m:[93m1[0m - [91merror[0m[90m TS18056: [0mDeclaration file contains synthesized file reference directives: '"filePresent.d.ts"'
 
-Found 2 errors in 2 files.
+[7m3[0m function main() { }
+[7m [0m [91m~~~~~~~~[0m
+
+
+Found 4 errors in 2 files.
 
 Errors  Files
-     1  src/project/src/anotherFileWithSameReferenes.ts[90m:2[0m
-     1  src/project/src/main.ts[90m:2[0m
-exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
+     2  src/project/src/anotherFileWithSameReferenes.ts[90m:2[0m
+     2  src/project/src/main.ts[90m:2[0m
+exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
 Program root files: [
   "/src/project/src/anotherFileWithSameReferenes.ts",
   "/src/project/src/filePresent.ts",
@@ -286,18 +335,28 @@ Output::
 [7m2[0m /// <reference path="./fileNotFound.ts"/>
 [7m [0m [91m                     ~~~~~~~~~~~~~~~~~[0m
 
+[96msrc/project/src/anotherFileWithSameReferenes.ts[0m:[93m3[0m:[93m1[0m - [91merror[0m[90m TS18056: [0mDeclaration file contains synthesized file reference directives: '"filePresent.d.ts"'
+
+[7m3[0m function anotherFileWithSameReferenes() { }
+[7m [0m [91m~~~~~~~~[0m
+
 [96msrc/project/src/main.ts[0m:[93m2[0m:[93m22[0m - [91merror[0m[90m TS6053: [0mFile '/src/project/src/fileNotFound.ts' not found.
 
 [7m2[0m /// <reference path="./fileNotFound.ts"/>
 [7m [0m [91m                     ~~~~~~~~~~~~~~~~~[0m
 
+[96msrc/project/src/main.ts[0m:[93m3[0m:[93m1[0m - [91merror[0m[90m TS18056: [0mDeclaration file contains synthesized file reference directives: '"filePresent.d.ts"'
 
-Found 2 errors in 2 files.
+[7m3[0m function main() { }
+[7m [0m [91m~~~~~~~~[0m
+
+
+Found 4 errors in 2 files.
 
 Errors  Files
-     1  src/project/src/anotherFileWithSameReferenes.ts[90m:2[0m
-     1  src/project/src/main.ts[90m:2[0m
-exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
+     2  src/project/src/anotherFileWithSameReferenes.ts[90m:2[0m
+     2  src/project/src/main.ts[90m:2[0m
+exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
 Program root files: [
   "/src/project/src/anotherFileWithSameReferenes.ts",
   "/src/project/src/filePresent.ts",
@@ -316,12 +375,19 @@ Program files::
 /src/project/src/main.ts
 
 Semantic diagnostics in builder refreshed for::
+/lib/lib.d.ts
+/src/project/src/filePresent.ts
+/src/project/src/anotherFileWithSameReferenes.ts
 /src/project/src/main.ts
 
 Shape signatures in builder refreshed for::
 /src/project/src/main.ts (computed .d.ts)
+/src/project/src/filepresent.ts (computed .d.ts)
+/src/project/src/anotherfilewithsamereferenes.ts (computed .d.ts)
 
 
+//// [/src/project/src/anotherFileWithSameReferenes.js] file written with same contents
+//// [/src/project/src/filePresent.js] file written with same contents
 //// [/src/project/src/main.js]
 /// <reference path="./filePresent.ts"/>
 /// <reference path="./fileNotFound.ts"/>
@@ -330,7 +396,7 @@ something();
 
 
 //// [/src/project/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../lib/lib.d.ts","./src/filepresent.ts","./src/anotherfilewithsamereferenes.ts","./src/main.ts","./src/filenotfound.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"-12346563362-function something() { return 10; }","signature":"-4903250974-declare function something(): number;\n","affectsGlobalScope":true},{"version":"-28237004260-/// <reference path=\"./filePresent.ts\"/>\n/// <reference path=\"./fileNotFound.ts\"/>\nfunction anotherFileWithSameReferenes() { }\n","signature":"4626929588-/// <reference path=\"filePresent.d.ts\" />\ndeclare function anotherFileWithSameReferenes(): void;\n","affectsGlobalScope":true},{"version":"-24702349751-/// <reference path=\"./filePresent.ts\"/>\n/// <reference path=\"./fileNotFound.ts\"/>\nfunction main() { }\nsomething();","signature":"6884835015-/// <reference path=\"filePresent.d.ts\" />\ndeclare function main(): void;\n","affectsGlobalScope":true}],"root":[[2,4]],"options":{"composite":true},"fileIdsList":[[2,5]],"referencedMap":[[3,1],[4,1]],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,3,2,4],"latestChangedDtsFile":"./src/main.d.ts"},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../lib/lib.d.ts","./src/filepresent.ts","./src/anotherfilewithsamereferenes.ts","./src/main.ts","./src/filenotfound.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"-12346563362-function something() { return 10; }","signature":"-4903250974-declare function something(): number;\n","affectsGlobalScope":true},{"version":"-28237004260-/// <reference path=\"./filePresent.ts\"/>\n/// <reference path=\"./fileNotFound.ts\"/>\nfunction anotherFileWithSameReferenes() { }\n","signature":"19965656560-/// <reference path=\"filePresent.d.ts\" />\ndeclare function anotherFileWithSameReferenes(): void;\n(83,8)Error18056: Declaration file contains synthesized file reference directives: '\"filePresent.d.ts\"'","affectsGlobalScope":true},{"version":"-24702349751-/// <reference path=\"./filePresent.ts\"/>\n/// <reference path=\"./fileNotFound.ts\"/>\nfunction main() { }\nsomething();","signature":"20858779043-/// <reference path=\"filePresent.d.ts\" />\ndeclare function main(): void;\n(83,8)Error18056: Declaration file contains synthesized file reference directives: '\"filePresent.d.ts\"'","affectsGlobalScope":true}],"root":[[2,4]],"options":{"composite":true},"fileIdsList":[[2,5]],"referencedMap":[[3,1],[4,1]],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,3,2,4],"emitDiagnosticsPerFile":[[3,[{"file":"./src/anotherfilewithsamereferenes.ts","start":83,"length":8,"messageText":"Declaration file contains synthesized file reference directives: '\"filePresent.d.ts\"'","category":1,"code":18056}]],[4,[{"file":"./src/main.ts","start":83,"length":8,"messageText":"Declaration file contains synthesized file reference directives: '\"filePresent.d.ts\"'","category":1,"code":18056}]]],"emitSignatures":[3,4],"latestChangedDtsFile":"./src/filePresent.d.ts"},"version":"FakeTSVersion"}
 
 //// [/src/project/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -371,21 +437,21 @@ something();
       "./src/anotherfilewithsamereferenes.ts": {
         "original": {
           "version": "-28237004260-/// <reference path=\"./filePresent.ts\"/>\n/// <reference path=\"./fileNotFound.ts\"/>\nfunction anotherFileWithSameReferenes() { }\n",
-          "signature": "4626929588-/// <reference path=\"filePresent.d.ts\" />\ndeclare function anotherFileWithSameReferenes(): void;\n",
+          "signature": "19965656560-/// <reference path=\"filePresent.d.ts\" />\ndeclare function anotherFileWithSameReferenes(): void;\n(83,8)Error18056: Declaration file contains synthesized file reference directives: '\"filePresent.d.ts\"'",
           "affectsGlobalScope": true
         },
         "version": "-28237004260-/// <reference path=\"./filePresent.ts\"/>\n/// <reference path=\"./fileNotFound.ts\"/>\nfunction anotherFileWithSameReferenes() { }\n",
-        "signature": "4626929588-/// <reference path=\"filePresent.d.ts\" />\ndeclare function anotherFileWithSameReferenes(): void;\n",
+        "signature": "19965656560-/// <reference path=\"filePresent.d.ts\" />\ndeclare function anotherFileWithSameReferenes(): void;\n(83,8)Error18056: Declaration file contains synthesized file reference directives: '\"filePresent.d.ts\"'",
         "affectsGlobalScope": true
       },
       "./src/main.ts": {
         "original": {
           "version": "-24702349751-/// <reference path=\"./filePresent.ts\"/>\n/// <reference path=\"./fileNotFound.ts\"/>\nfunction main() { }\nsomething();",
-          "signature": "6884835015-/// <reference path=\"filePresent.d.ts\" />\ndeclare function main(): void;\n",
+          "signature": "20858779043-/// <reference path=\"filePresent.d.ts\" />\ndeclare function main(): void;\n(83,8)Error18056: Declaration file contains synthesized file reference directives: '\"filePresent.d.ts\"'",
           "affectsGlobalScope": true
         },
         "version": "-24702349751-/// <reference path=\"./filePresent.ts\"/>\n/// <reference path=\"./fileNotFound.ts\"/>\nfunction main() { }\nsomething();",
-        "signature": "6884835015-/// <reference path=\"filePresent.d.ts\" />\ndeclare function main(): void;\n",
+        "signature": "20858779043-/// <reference path=\"filePresent.d.ts\" />\ndeclare function main(): void;\n(83,8)Error18056: Declaration file contains synthesized file reference directives: '\"filePresent.d.ts\"'",
         "affectsGlobalScope": true
       }
     },
@@ -422,10 +488,42 @@ something();
       "./src/filepresent.ts",
       "./src/main.ts"
     ],
-    "latestChangedDtsFile": "./src/main.d.ts"
+    "emitDiagnosticsPerFile": [
+      [
+        "./src/anotherfilewithsamereferenes.ts",
+        [
+          {
+            "file": "./src/anotherfilewithsamereferenes.ts",
+            "start": 83,
+            "length": 8,
+            "messageText": "Declaration file contains synthesized file reference directives: '\"filePresent.d.ts\"'",
+            "category": 1,
+            "code": 18056
+          }
+        ]
+      ],
+      [
+        "./src/main.ts",
+        [
+          {
+            "file": "./src/main.ts",
+            "start": 83,
+            "length": 8,
+            "messageText": "Declaration file contains synthesized file reference directives: '\"filePresent.d.ts\"'",
+            "category": 1,
+            "code": 18056
+          }
+        ]
+      ]
+    ],
+    "emitSignatures": [
+      "./src/anotherfilewithsamereferenes.ts",
+      "./src/main.ts"
+    ],
+    "latestChangedDtsFile": "./src/filePresent.d.ts"
   },
   "version": "FakeTSVersion",
-  "size": 1619
+  "size": 2278
 }
 
 
@@ -447,18 +545,28 @@ Output::
 [7m2[0m /// <reference path="./fileNotFound.ts"/>
 [7m [0m [91m                     ~~~~~~~~~~~~~~~~~[0m
 
+[96msrc/project/src/anotherFileWithSameReferenes.ts[0m:[93m3[0m:[93m1[0m - [91merror[0m[90m TS18056: [0mDeclaration file contains synthesized file reference directives: '"filePresent.d.ts"'
+
+[7m3[0m function anotherFileWithSameReferenes() { }
+[7m [0m [91m~~~~~~~~[0m
+
 [96msrc/project/src/main.ts[0m:[93m2[0m:[93m22[0m - [91merror[0m[90m TS6053: [0mFile '/src/project/src/fileNotFound.ts' not found.
 
 [7m2[0m /// <reference path="./fileNotFound.ts"/>
 [7m [0m [91m                     ~~~~~~~~~~~~~~~~~[0m
 
+[96msrc/project/src/main.ts[0m:[93m3[0m:[93m1[0m - [91merror[0m[90m TS18056: [0mDeclaration file contains synthesized file reference directives: '"filePresent.d.ts"'
 
-Found 2 errors in 2 files.
+[7m3[0m function main() { }
+[7m [0m [91m~~~~~~~~[0m
+
+
+Found 4 errors in 2 files.
 
 Errors  Files
-     1  src/project/src/anotherFileWithSameReferenes.ts[90m:2[0m
-     1  src/project/src/main.ts[90m:2[0m
-exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
+     2  src/project/src/anotherFileWithSameReferenes.ts[90m:2[0m
+     2  src/project/src/main.ts[90m:2[0m
+exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
 Program root files: [
   "/src/project/src/anotherFileWithSameReferenes.ts",
   "/src/project/src/filePresent.ts",
@@ -492,7 +600,7 @@ something();
 
 
 //// [/src/project/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../lib/lib.d.ts","./src/filepresent.ts","./src/anotherfilewithsamereferenes.ts","./src/main.ts","./src/filenotfound.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"-12346563362-function something() { return 10; }","signature":"-4903250974-declare function something(): number;\n","affectsGlobalScope":true},{"version":"-28237004260-/// <reference path=\"./filePresent.ts\"/>\n/// <reference path=\"./fileNotFound.ts\"/>\nfunction anotherFileWithSameReferenes() { }\n","signature":"4626929588-/// <reference path=\"filePresent.d.ts\" />\ndeclare function anotherFileWithSameReferenes(): void;\n","affectsGlobalScope":true},{"version":"-20086051197-/// <reference path=\"./filePresent.ts\"/>\n/// <reference path=\"./fileNotFound.ts\"/>\nfunction main() { }\nsomething();something();","signature":"6884835015-/// <reference path=\"filePresent.d.ts\" />\ndeclare function main(): void;\n","affectsGlobalScope":true}],"root":[[2,4]],"options":{"composite":true},"fileIdsList":[[2,5]],"referencedMap":[[3,1],[4,1]],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,3,2,4],"latestChangedDtsFile":"./src/main.d.ts"},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../lib/lib.d.ts","./src/filepresent.ts","./src/anotherfilewithsamereferenes.ts","./src/main.ts","./src/filenotfound.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"-12346563362-function something() { return 10; }","signature":"-4903250974-declare function something(): number;\n","affectsGlobalScope":true},{"version":"-28237004260-/// <reference path=\"./filePresent.ts\"/>\n/// <reference path=\"./fileNotFound.ts\"/>\nfunction anotherFileWithSameReferenes() { }\n","signature":"19965656560-/// <reference path=\"filePresent.d.ts\" />\ndeclare function anotherFileWithSameReferenes(): void;\n(83,8)Error18056: Declaration file contains synthesized file reference directives: '\"filePresent.d.ts\"'","affectsGlobalScope":true},{"version":"-20086051197-/// <reference path=\"./filePresent.ts\"/>\n/// <reference path=\"./fileNotFound.ts\"/>\nfunction main() { }\nsomething();something();","signature":"20858779043-/// <reference path=\"filePresent.d.ts\" />\ndeclare function main(): void;\n(83,8)Error18056: Declaration file contains synthesized file reference directives: '\"filePresent.d.ts\"'","affectsGlobalScope":true}],"root":[[2,4]],"options":{"composite":true},"fileIdsList":[[2,5]],"referencedMap":[[3,1],[4,1]],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,3,2,4],"emitDiagnosticsPerFile":[[3,[{"file":"./src/anotherfilewithsamereferenes.ts","start":83,"length":8,"messageText":"Declaration file contains synthesized file reference directives: '\"filePresent.d.ts\"'","category":1,"code":18056}]],[4,[{"file":"./src/main.ts","start":83,"length":8,"messageText":"Declaration file contains synthesized file reference directives: '\"filePresent.d.ts\"'","category":1,"code":18056}]]],"emitSignatures":[3,4],"latestChangedDtsFile":"./src/filePresent.d.ts"},"version":"FakeTSVersion"}
 
 //// [/src/project/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -533,21 +641,21 @@ something();
       "./src/anotherfilewithsamereferenes.ts": {
         "original": {
           "version": "-28237004260-/// <reference path=\"./filePresent.ts\"/>\n/// <reference path=\"./fileNotFound.ts\"/>\nfunction anotherFileWithSameReferenes() { }\n",
-          "signature": "4626929588-/// <reference path=\"filePresent.d.ts\" />\ndeclare function anotherFileWithSameReferenes(): void;\n",
+          "signature": "19965656560-/// <reference path=\"filePresent.d.ts\" />\ndeclare function anotherFileWithSameReferenes(): void;\n(83,8)Error18056: Declaration file contains synthesized file reference directives: '\"filePresent.d.ts\"'",
           "affectsGlobalScope": true
         },
         "version": "-28237004260-/// <reference path=\"./filePresent.ts\"/>\n/// <reference path=\"./fileNotFound.ts\"/>\nfunction anotherFileWithSameReferenes() { }\n",
-        "signature": "4626929588-/// <reference path=\"filePresent.d.ts\" />\ndeclare function anotherFileWithSameReferenes(): void;\n",
+        "signature": "19965656560-/// <reference path=\"filePresent.d.ts\" />\ndeclare function anotherFileWithSameReferenes(): void;\n(83,8)Error18056: Declaration file contains synthesized file reference directives: '\"filePresent.d.ts\"'",
         "affectsGlobalScope": true
       },
       "./src/main.ts": {
         "original": {
           "version": "-20086051197-/// <reference path=\"./filePresent.ts\"/>\n/// <reference path=\"./fileNotFound.ts\"/>\nfunction main() { }\nsomething();something();",
-          "signature": "6884835015-/// <reference path=\"filePresent.d.ts\" />\ndeclare function main(): void;\n",
+          "signature": "20858779043-/// <reference path=\"filePresent.d.ts\" />\ndeclare function main(): void;\n(83,8)Error18056: Declaration file contains synthesized file reference directives: '\"filePresent.d.ts\"'",
           "affectsGlobalScope": true
         },
         "version": "-20086051197-/// <reference path=\"./filePresent.ts\"/>\n/// <reference path=\"./fileNotFound.ts\"/>\nfunction main() { }\nsomething();something();",
-        "signature": "6884835015-/// <reference path=\"filePresent.d.ts\" />\ndeclare function main(): void;\n",
+        "signature": "20858779043-/// <reference path=\"filePresent.d.ts\" />\ndeclare function main(): void;\n(83,8)Error18056: Declaration file contains synthesized file reference directives: '\"filePresent.d.ts\"'",
         "affectsGlobalScope": true
       }
     },
@@ -584,10 +692,42 @@ something();
       "./src/filepresent.ts",
       "./src/main.ts"
     ],
-    "latestChangedDtsFile": "./src/main.d.ts"
+    "emitDiagnosticsPerFile": [
+      [
+        "./src/anotherfilewithsamereferenes.ts",
+        [
+          {
+            "file": "./src/anotherfilewithsamereferenes.ts",
+            "start": 83,
+            "length": 8,
+            "messageText": "Declaration file contains synthesized file reference directives: '\"filePresent.d.ts\"'",
+            "category": 1,
+            "code": 18056
+          }
+        ]
+      ],
+      [
+        "./src/main.ts",
+        [
+          {
+            "file": "./src/main.ts",
+            "start": 83,
+            "length": 8,
+            "messageText": "Declaration file contains synthesized file reference directives: '\"filePresent.d.ts\"'",
+            "category": 1,
+            "code": 18056
+          }
+        ]
+      ]
+    ],
+    "emitSignatures": [
+      "./src/anotherfilewithsamereferenes.ts",
+      "./src/main.ts"
+    ],
+    "latestChangedDtsFile": "./src/filePresent.d.ts"
   },
   "version": "FakeTSVersion",
-  "size": 1631
+  "size": 2290
 }
 
 
@@ -613,18 +753,28 @@ Output::
 [7m2[0m /// <reference path="./fileNotFound.ts"/>
 [7m [0m [91m                     ~~~~~~~~~~~~~~~~~[0m
 
+[96msrc/project/src/anotherFileWithSameReferenes.ts[0m:[93m3[0m:[93m1[0m - [91merror[0m[90m TS18056: [0mDeclaration file contains synthesized file reference directives: '"filePresent.d.ts"'
+
+[7m3[0m function anotherFileWithSameReferenes() { }
+[7m [0m [91m~~~~~~~~[0m
+
 [96msrc/project/src/main.ts[0m:[93m3[0m:[93m22[0m - [91merror[0m[90m TS6053: [0mFile '/src/project/src/fileNotFound.ts' not found.
 
 [7m3[0m /// <reference path="./fileNotFound.ts"/>
 [7m [0m [91m                     ~~~~~~~~~~~~~~~~~[0m
 
+[96msrc/project/src/main.ts[0m:[93m4[0m:[93m1[0m - [91merror[0m[90m TS18056: [0mDeclaration file contains synthesized file reference directives: '"newFile.d.ts", "filePresent.d.ts"'
 
-Found 2 errors in 2 files.
+[7m4[0m function main() { }
+[7m [0m [91m~~~~~~~~[0m
+
+
+Found 4 errors in 2 files.
 
 Errors  Files
-     1  src/project/src/anotherFileWithSameReferenes.ts[90m:2[0m
-     1  src/project/src/main.ts[90m:3[0m
-exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
+     2  src/project/src/anotherFileWithSameReferenes.ts[90m:2[0m
+     2  src/project/src/main.ts[90m:3[0m
+exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
 Program root files: [
   "/src/project/src/anotherFileWithSameReferenes.ts",
   "/src/project/src/filePresent.ts",
@@ -660,12 +810,6 @@ Shape signatures in builder refreshed for::
 
 //// [/src/project/src/anotherFileWithSameReferenes.js] file written with same contents
 //// [/src/project/src/filePresent.js] file written with same contents
-//// [/src/project/src/main.d.ts]
-/// <reference path="newFile.d.ts" />
-/// <reference path="filePresent.d.ts" />
-declare function main(): void;
-
-
 //// [/src/project/src/main.js]
 /// <reference path="./newFile.ts"/>
 /// <reference path="./filePresent.ts"/>
@@ -685,7 +829,7 @@ function foo() { return 20; }
 
 
 //// [/src/project/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../lib/lib.d.ts","./src/filepresent.ts","./src/anotherfilewithsamereferenes.ts","./src/newfile.ts","./src/main.ts","./src/filenotfound.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"-12346563362-function something() { return 10; }","signature":"-4903250974-declare function something(): number;\n","affectsGlobalScope":true},{"version":"-28237004260-/// <reference path=\"./filePresent.ts\"/>\n/// <reference path=\"./fileNotFound.ts\"/>\nfunction anotherFileWithSameReferenes() { }\n","signature":"4626929588-/// <reference path=\"filePresent.d.ts\" />\ndeclare function anotherFileWithSameReferenes(): void;\n","affectsGlobalScope":true},{"version":"5451387573-function foo() { return 20; }","signature":"517738360-declare function foo(): number;\n","affectsGlobalScope":true},{"version":"-3581559188-/// <reference path=\"./newFile.ts\"/>\n/// <reference path=\"./filePresent.ts\"/>\n/// <reference path=\"./fileNotFound.ts\"/>\nfunction main() { }\nsomething();something();foo();","signature":"-1842835947-/// <reference path=\"newFile.d.ts\" />\n/// <reference path=\"filePresent.d.ts\" />\ndeclare function main(): void;\n","affectsGlobalScope":true}],"root":[[2,5]],"options":{"composite":true},"fileIdsList":[[2,6],[2,4,6]],"referencedMap":[[3,1],[5,2]],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,3,2,5,4],"latestChangedDtsFile":"./src/main.d.ts"},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../lib/lib.d.ts","./src/filepresent.ts","./src/anotherfilewithsamereferenes.ts","./src/newfile.ts","./src/main.ts","./src/filenotfound.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"-12346563362-function something() { return 10; }","signature":"-4903250974-declare function something(): number;\n","affectsGlobalScope":true},{"version":"-28237004260-/// <reference path=\"./filePresent.ts\"/>\n/// <reference path=\"./fileNotFound.ts\"/>\nfunction anotherFileWithSameReferenes() { }\n","signature":"19965656560-/// <reference path=\"filePresent.d.ts\" />\ndeclare function anotherFileWithSameReferenes(): void;\n(83,8)Error18056: Declaration file contains synthesized file reference directives: '\"filePresent.d.ts\"'","affectsGlobalScope":true},{"version":"5451387573-function foo() { return 20; }","signature":"517738360-declare function foo(): number;\n","affectsGlobalScope":true},{"version":"-3581559188-/// <reference path=\"./newFile.ts\"/>\n/// <reference path=\"./filePresent.ts\"/>\n/// <reference path=\"./fileNotFound.ts\"/>\nfunction main() { }\nsomething();something();foo();","signature":"-5534159910-/// <reference path=\"newFile.d.ts\" />\n/// <reference path=\"filePresent.d.ts\" />\ndeclare function main(): void;\n(120,8)Error18056: Declaration file contains synthesized file reference directives: '\"newFile.d.ts\", \"filePresent.d.ts\"'","affectsGlobalScope":true}],"root":[[2,5]],"options":{"composite":true},"fileIdsList":[[2,6],[2,4,6]],"referencedMap":[[3,1],[5,2]],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,3,2,5,4],"emitDiagnosticsPerFile":[[3,[{"file":"./src/anotherfilewithsamereferenes.ts","start":83,"length":8,"messageText":"Declaration file contains synthesized file reference directives: '\"filePresent.d.ts\"'","category":1,"code":18056}]],[5,[{"file":"./src/main.ts","start":120,"length":8,"messageText":"Declaration file contains synthesized file reference directives: '\"newFile.d.ts\", \"filePresent.d.ts\"'","category":1,"code":18056}]]],"emitSignatures":[3,5],"latestChangedDtsFile":"./src/newFile.d.ts"},"version":"FakeTSVersion"}
 
 //// [/src/project/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -732,11 +876,11 @@ function foo() { return 20; }
       "./src/anotherfilewithsamereferenes.ts": {
         "original": {
           "version": "-28237004260-/// <reference path=\"./filePresent.ts\"/>\n/// <reference path=\"./fileNotFound.ts\"/>\nfunction anotherFileWithSameReferenes() { }\n",
-          "signature": "4626929588-/// <reference path=\"filePresent.d.ts\" />\ndeclare function anotherFileWithSameReferenes(): void;\n",
+          "signature": "19965656560-/// <reference path=\"filePresent.d.ts\" />\ndeclare function anotherFileWithSameReferenes(): void;\n(83,8)Error18056: Declaration file contains synthesized file reference directives: '\"filePresent.d.ts\"'",
           "affectsGlobalScope": true
         },
         "version": "-28237004260-/// <reference path=\"./filePresent.ts\"/>\n/// <reference path=\"./fileNotFound.ts\"/>\nfunction anotherFileWithSameReferenes() { }\n",
-        "signature": "4626929588-/// <reference path=\"filePresent.d.ts\" />\ndeclare function anotherFileWithSameReferenes(): void;\n",
+        "signature": "19965656560-/// <reference path=\"filePresent.d.ts\" />\ndeclare function anotherFileWithSameReferenes(): void;\n(83,8)Error18056: Declaration file contains synthesized file reference directives: '\"filePresent.d.ts\"'",
         "affectsGlobalScope": true
       },
       "./src/newfile.ts": {
@@ -752,11 +896,11 @@ function foo() { return 20; }
       "./src/main.ts": {
         "original": {
           "version": "-3581559188-/// <reference path=\"./newFile.ts\"/>\n/// <reference path=\"./filePresent.ts\"/>\n/// <reference path=\"./fileNotFound.ts\"/>\nfunction main() { }\nsomething();something();foo();",
-          "signature": "-1842835947-/// <reference path=\"newFile.d.ts\" />\n/// <reference path=\"filePresent.d.ts\" />\ndeclare function main(): void;\n",
+          "signature": "-5534159910-/// <reference path=\"newFile.d.ts\" />\n/// <reference path=\"filePresent.d.ts\" />\ndeclare function main(): void;\n(120,8)Error18056: Declaration file contains synthesized file reference directives: '\"newFile.d.ts\", \"filePresent.d.ts\"'",
           "affectsGlobalScope": true
         },
         "version": "-3581559188-/// <reference path=\"./newFile.ts\"/>\n/// <reference path=\"./filePresent.ts\"/>\n/// <reference path=\"./fileNotFound.ts\"/>\nfunction main() { }\nsomething();something();foo();",
-        "signature": "-1842835947-/// <reference path=\"newFile.d.ts\" />\n/// <reference path=\"filePresent.d.ts\" />\ndeclare function main(): void;\n",
+        "signature": "-5534159910-/// <reference path=\"newFile.d.ts\" />\n/// <reference path=\"filePresent.d.ts\" />\ndeclare function main(): void;\n(120,8)Error18056: Declaration file contains synthesized file reference directives: '\"newFile.d.ts\", \"filePresent.d.ts\"'",
         "affectsGlobalScope": true
       }
     },
@@ -796,10 +940,42 @@ function foo() { return 20; }
       "./src/main.ts",
       "./src/newfile.ts"
     ],
-    "latestChangedDtsFile": "./src/main.d.ts"
+    "emitDiagnosticsPerFile": [
+      [
+        "./src/anotherfilewithsamereferenes.ts",
+        [
+          {
+            "file": "./src/anotherfilewithsamereferenes.ts",
+            "start": 83,
+            "length": 8,
+            "messageText": "Declaration file contains synthesized file reference directives: '\"filePresent.d.ts\"'",
+            "category": 1,
+            "code": 18056
+          }
+        ]
+      ],
+      [
+        "./src/main.ts",
+        [
+          {
+            "file": "./src/main.ts",
+            "start": 120,
+            "length": 8,
+            "messageText": "Declaration file contains synthesized file reference directives: '\"newFile.d.ts\", \"filePresent.d.ts\"'",
+            "category": 1,
+            "code": 18056
+          }
+        ]
+      ]
+    ],
+    "emitSignatures": [
+      "./src/anotherfilewithsamereferenes.ts",
+      "./src/main.ts"
+    ],
+    "latestChangedDtsFile": "./src/newFile.d.ts"
   },
   "version": "FakeTSVersion",
-  "size": 1886
+  "size": 2578
 }
 
 
@@ -813,7 +989,23 @@ function something2() { return 20; }
 
 Output::
 /lib/tsc --p src/project
-exitCode:: ExitStatus.Success
+[96msrc/project/src/anotherFileWithSameReferenes.ts[0m:[93m3[0m:[93m1[0m - [91merror[0m[90m TS18056: [0mDeclaration file contains synthesized file reference directives: '"filePresent.d.ts", "fileNotFound.d.ts"'
+
+[7m3[0m function anotherFileWithSameReferenes() { }
+[7m [0m [91m~~~~~~~~[0m
+
+[96msrc/project/src/main.ts[0m:[93m4[0m:[93m1[0m - [91merror[0m[90m TS18056: [0mDeclaration file contains synthesized file reference directives: '"newFile.d.ts", "filePresent.d.ts", "fileNotFound.d.ts"'
+
+[7m4[0m function main() { }
+[7m [0m [91m~~~~~~~~[0m
+
+
+Found 2 errors in 2 files.
+
+Errors  Files
+     1  src/project/src/anotherFileWithSameReferenes.ts[90m:3[0m
+     1  src/project/src/main.ts[90m:4[0m
+exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
 Program root files: [
   "/src/project/src/anotherFileWithSameReferenes.ts",
   "/src/project/src/fileNotFound.ts",
@@ -851,12 +1043,6 @@ Shape signatures in builder refreshed for::
 /src/project/src/main.ts (computed .d.ts)
 
 
-//// [/src/project/src/anotherFileWithSameReferenes.d.ts]
-/// <reference path="filePresent.d.ts" />
-/// <reference path="fileNotFound.d.ts" />
-declare function anotherFileWithSameReferenes(): void;
-
-
 //// [/src/project/src/anotherFileWithSameReferenes.js] file written with same contents
 //// [/src/project/src/fileNotFound.d.ts]
 declare function something2(): number;
@@ -867,17 +1053,10 @@ function something2() { return 20; }
 
 
 //// [/src/project/src/filePresent.js] file written with same contents
-//// [/src/project/src/main.d.ts]
-/// <reference path="newFile.d.ts" />
-/// <reference path="filePresent.d.ts" />
-/// <reference path="fileNotFound.d.ts" />
-declare function main(): void;
-
-
 //// [/src/project/src/main.js] file written with same contents
 //// [/src/project/src/newFile.js] file written with same contents
 //// [/src/project/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../lib/lib.d.ts","./src/filepresent.ts","./src/filenotfound.ts","./src/anotherfilewithsamereferenes.ts","./src/newfile.ts","./src/main.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"-12346563362-function something() { return 10; }","signature":"-4903250974-declare function something(): number;\n","affectsGlobalScope":true},{"version":"-9011934479-function something2() { return 20; }","signature":"-11412869068-declare function something2(): number;\n","affectsGlobalScope":true},{"version":"-28237004260-/// <reference path=\"./filePresent.ts\"/>\n/// <reference path=\"./fileNotFound.ts\"/>\nfunction anotherFileWithSameReferenes() { }\n","signature":"-18213659-/// <reference path=\"filePresent.d.ts\" />\n/// <reference path=\"fileNotFound.d.ts\" />\ndeclare function anotherFileWithSameReferenes(): void;\n","affectsGlobalScope":true},{"version":"5451387573-function foo() { return 20; }","signature":"517738360-declare function foo(): number;\n","affectsGlobalScope":true},{"version":"-3581559188-/// <reference path=\"./newFile.ts\"/>\n/// <reference path=\"./filePresent.ts\"/>\n/// <reference path=\"./fileNotFound.ts\"/>\nfunction main() { }\nsomething();something();foo();","signature":"5698040710-/// <reference path=\"newFile.d.ts\" />\n/// <reference path=\"filePresent.d.ts\" />\n/// <reference path=\"fileNotFound.d.ts\" />\ndeclare function main(): void;\n","affectsGlobalScope":true}],"root":[[2,6]],"options":{"composite":true},"fileIdsList":[[2,3],[2,3,5]],"referencedMap":[[4,1],[6,2]],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,4,3,2,6,5],"latestChangedDtsFile":"./src/main.d.ts"},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../lib/lib.d.ts","./src/filepresent.ts","./src/filenotfound.ts","./src/anotherfilewithsamereferenes.ts","./src/newfile.ts","./src/main.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"-12346563362-function something() { return 10; }","signature":"-4903250974-declare function something(): number;\n","affectsGlobalScope":true},{"version":"-9011934479-function something2() { return 20; }","signature":"-11412869068-declare function something2(): number;\n","affectsGlobalScope":true},{"version":"-28237004260-/// <reference path=\"./filePresent.ts\"/>\n/// <reference path=\"./fileNotFound.ts\"/>\nfunction anotherFileWithSameReferenes() { }\n","signature":"-17669273851-/// <reference path=\"filePresent.d.ts\" />\n/// <reference path=\"fileNotFound.d.ts\" />\ndeclare function anotherFileWithSameReferenes(): void;\n(83,8)Error18056: Declaration file contains synthesized file reference directives: '\"filePresent.d.ts\", \"fileNotFound.d.ts\"'","affectsGlobalScope":true},{"version":"5451387573-function foo() { return 20; }","signature":"517738360-declare function foo(): number;\n","affectsGlobalScope":true},{"version":"-3581559188-/// <reference path=\"./newFile.ts\"/>\n/// <reference path=\"./filePresent.ts\"/>\n/// <reference path=\"./fileNotFound.ts\"/>\nfunction main() { }\nsomething();something();foo();","signature":"1320858511-/// <reference path=\"newFile.d.ts\" />\n/// <reference path=\"filePresent.d.ts\" />\n/// <reference path=\"fileNotFound.d.ts\" />\ndeclare function main(): void;\n(120,8)Error18056: Declaration file contains synthesized file reference directives: '\"newFile.d.ts\", \"filePresent.d.ts\", \"fileNotFound.d.ts\"'","affectsGlobalScope":true}],"root":[[2,6]],"options":{"composite":true},"fileIdsList":[[2,3],[2,3,5]],"referencedMap":[[4,1],[6,2]],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,4,3,2,6,5],"emitDiagnosticsPerFile":[[4,[{"file":"./src/anotherfilewithsamereferenes.ts","start":83,"length":8,"messageText":"Declaration file contains synthesized file reference directives: '\"filePresent.d.ts\", \"fileNotFound.d.ts\"'","category":1,"code":18056}]],[6,[{"file":"./src/main.ts","start":120,"length":8,"messageText":"Declaration file contains synthesized file reference directives: '\"newFile.d.ts\", \"filePresent.d.ts\", \"fileNotFound.d.ts\"'","category":1,"code":18056}]]],"emitSignatures":[4,6],"latestChangedDtsFile":"./src/fileNotFound.d.ts"},"version":"FakeTSVersion"}
 
 //// [/src/project/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -934,11 +1113,11 @@ declare function main(): void;
       "./src/anotherfilewithsamereferenes.ts": {
         "original": {
           "version": "-28237004260-/// <reference path=\"./filePresent.ts\"/>\n/// <reference path=\"./fileNotFound.ts\"/>\nfunction anotherFileWithSameReferenes() { }\n",
-          "signature": "-18213659-/// <reference path=\"filePresent.d.ts\" />\n/// <reference path=\"fileNotFound.d.ts\" />\ndeclare function anotherFileWithSameReferenes(): void;\n",
+          "signature": "-17669273851-/// <reference path=\"filePresent.d.ts\" />\n/// <reference path=\"fileNotFound.d.ts\" />\ndeclare function anotherFileWithSameReferenes(): void;\n(83,8)Error18056: Declaration file contains synthesized file reference directives: '\"filePresent.d.ts\", \"fileNotFound.d.ts\"'",
           "affectsGlobalScope": true
         },
         "version": "-28237004260-/// <reference path=\"./filePresent.ts\"/>\n/// <reference path=\"./fileNotFound.ts\"/>\nfunction anotherFileWithSameReferenes() { }\n",
-        "signature": "-18213659-/// <reference path=\"filePresent.d.ts\" />\n/// <reference path=\"fileNotFound.d.ts\" />\ndeclare function anotherFileWithSameReferenes(): void;\n",
+        "signature": "-17669273851-/// <reference path=\"filePresent.d.ts\" />\n/// <reference path=\"fileNotFound.d.ts\" />\ndeclare function anotherFileWithSameReferenes(): void;\n(83,8)Error18056: Declaration file contains synthesized file reference directives: '\"filePresent.d.ts\", \"fileNotFound.d.ts\"'",
         "affectsGlobalScope": true
       },
       "./src/newfile.ts": {
@@ -954,11 +1133,11 @@ declare function main(): void;
       "./src/main.ts": {
         "original": {
           "version": "-3581559188-/// <reference path=\"./newFile.ts\"/>\n/// <reference path=\"./filePresent.ts\"/>\n/// <reference path=\"./fileNotFound.ts\"/>\nfunction main() { }\nsomething();something();foo();",
-          "signature": "5698040710-/// <reference path=\"newFile.d.ts\" />\n/// <reference path=\"filePresent.d.ts\" />\n/// <reference path=\"fileNotFound.d.ts\" />\ndeclare function main(): void;\n",
+          "signature": "1320858511-/// <reference path=\"newFile.d.ts\" />\n/// <reference path=\"filePresent.d.ts\" />\n/// <reference path=\"fileNotFound.d.ts\" />\ndeclare function main(): void;\n(120,8)Error18056: Declaration file contains synthesized file reference directives: '\"newFile.d.ts\", \"filePresent.d.ts\", \"fileNotFound.d.ts\"'",
           "affectsGlobalScope": true
         },
         "version": "-3581559188-/// <reference path=\"./newFile.ts\"/>\n/// <reference path=\"./filePresent.ts\"/>\n/// <reference path=\"./fileNotFound.ts\"/>\nfunction main() { }\nsomething();something();foo();",
-        "signature": "5698040710-/// <reference path=\"newFile.d.ts\" />\n/// <reference path=\"filePresent.d.ts\" />\n/// <reference path=\"fileNotFound.d.ts\" />\ndeclare function main(): void;\n",
+        "signature": "1320858511-/// <reference path=\"newFile.d.ts\" />\n/// <reference path=\"filePresent.d.ts\" />\n/// <reference path=\"fileNotFound.d.ts\" />\ndeclare function main(): void;\n(120,8)Error18056: Declaration file contains synthesized file reference directives: '\"newFile.d.ts\", \"filePresent.d.ts\", \"fileNotFound.d.ts\"'",
         "affectsGlobalScope": true
       }
     },
@@ -1000,10 +1179,42 @@ declare function main(): void;
       "./src/main.ts",
       "./src/newfile.ts"
     ],
-    "latestChangedDtsFile": "./src/main.d.ts"
+    "emitDiagnosticsPerFile": [
+      [
+        "./src/anotherfilewithsamereferenes.ts",
+        [
+          {
+            "file": "./src/anotherfilewithsamereferenes.ts",
+            "start": 83,
+            "length": 8,
+            "messageText": "Declaration file contains synthesized file reference directives: '\"filePresent.d.ts\", \"fileNotFound.d.ts\"'",
+            "category": 1,
+            "code": 18056
+          }
+        ]
+      ],
+      [
+        "./src/main.ts",
+        [
+          {
+            "file": "./src/main.ts",
+            "start": 120,
+            "length": 8,
+            "messageText": "Declaration file contains synthesized file reference directives: '\"newFile.d.ts\", \"filePresent.d.ts\", \"fileNotFound.d.ts\"'",
+            "category": 1,
+            "code": 18056
+          }
+        ]
+      ]
+    ],
+    "emitSignatures": [
+      "./src/anotherfilewithsamereferenes.ts",
+      "./src/main.ts"
+    ],
+    "latestChangedDtsFile": "./src/fileNotFound.d.ts"
   },
   "version": "FakeTSVersion",
-  "size": 2135
+  "size": 2926
 }
 
 
@@ -1021,7 +1232,23 @@ something();something();foo();something();
 
 Output::
 /lib/tsc --p src/project
-exitCode:: ExitStatus.Success
+[96msrc/project/src/anotherFileWithSameReferenes.ts[0m:[93m3[0m:[93m1[0m - [91merror[0m[90m TS18056: [0mDeclaration file contains synthesized file reference directives: '"filePresent.d.ts", "fileNotFound.d.ts"'
+
+[7m3[0m function anotherFileWithSameReferenes() { }
+[7m [0m [91m~~~~~~~~[0m
+
+[96msrc/project/src/main.ts[0m:[93m4[0m:[93m1[0m - [91merror[0m[90m TS18056: [0mDeclaration file contains synthesized file reference directives: '"newFile.d.ts", "filePresent.d.ts", "fileNotFound.d.ts"'
+
+[7m4[0m function main() { }
+[7m [0m [91m~~~~~~~~[0m
+
+
+Found 2 errors in 2 files.
+
+Errors  Files
+     1  src/project/src/anotherFileWithSameReferenes.ts[90m:3[0m
+     1  src/project/src/main.ts[90m:4[0m
+exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
 Program root files: [
   "/src/project/src/anotherFileWithSameReferenes.ts",
   "/src/project/src/fileNotFound.ts",
@@ -1062,7 +1289,7 @@ something();
 
 
 //// [/src/project/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../lib/lib.d.ts","./src/filepresent.ts","./src/filenotfound.ts","./src/anotherfilewithsamereferenes.ts","./src/newfile.ts","./src/main.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"-12346563362-function something() { return 10; }","signature":"-4903250974-declare function something(): number;\n","affectsGlobalScope":true},{"version":"-9011934479-function something2() { return 20; }","signature":"-11412869068-declare function something2(): number;\n","affectsGlobalScope":true},{"version":"-28237004260-/// <reference path=\"./filePresent.ts\"/>\n/// <reference path=\"./fileNotFound.ts\"/>\nfunction anotherFileWithSameReferenes() { }\n","signature":"-18213659-/// <reference path=\"filePresent.d.ts\" />\n/// <reference path=\"fileNotFound.d.ts\" />\ndeclare function anotherFileWithSameReferenes(): void;\n","affectsGlobalScope":true},{"version":"5451387573-function foo() { return 20; }","signature":"517738360-declare function foo(): number;\n","affectsGlobalScope":true},{"version":"3987942182-/// <reference path=\"./newFile.ts\"/>\n/// <reference path=\"./filePresent.ts\"/>\n/// <reference path=\"./fileNotFound.ts\"/>\nfunction main() { }\nsomething();something();foo();something();","signature":"5698040710-/// <reference path=\"newFile.d.ts\" />\n/// <reference path=\"filePresent.d.ts\" />\n/// <reference path=\"fileNotFound.d.ts\" />\ndeclare function main(): void;\n","affectsGlobalScope":true}],"root":[[2,6]],"options":{"composite":true},"fileIdsList":[[2,3],[2,3,5]],"referencedMap":[[4,1],[6,2]],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,4,3,2,6,5],"latestChangedDtsFile":"./src/main.d.ts"},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../lib/lib.d.ts","./src/filepresent.ts","./src/filenotfound.ts","./src/anotherfilewithsamereferenes.ts","./src/newfile.ts","./src/main.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"-12346563362-function something() { return 10; }","signature":"-4903250974-declare function something(): number;\n","affectsGlobalScope":true},{"version":"-9011934479-function something2() { return 20; }","signature":"-11412869068-declare function something2(): number;\n","affectsGlobalScope":true},{"version":"-28237004260-/// <reference path=\"./filePresent.ts\"/>\n/// <reference path=\"./fileNotFound.ts\"/>\nfunction anotherFileWithSameReferenes() { }\n","signature":"-17669273851-/// <reference path=\"filePresent.d.ts\" />\n/// <reference path=\"fileNotFound.d.ts\" />\ndeclare function anotherFileWithSameReferenes(): void;\n(83,8)Error18056: Declaration file contains synthesized file reference directives: '\"filePresent.d.ts\", \"fileNotFound.d.ts\"'","affectsGlobalScope":true},{"version":"5451387573-function foo() { return 20; }","signature":"517738360-declare function foo(): number;\n","affectsGlobalScope":true},{"version":"3987942182-/// <reference path=\"./newFile.ts\"/>\n/// <reference path=\"./filePresent.ts\"/>\n/// <reference path=\"./fileNotFound.ts\"/>\nfunction main() { }\nsomething();something();foo();something();","signature":"1320858511-/// <reference path=\"newFile.d.ts\" />\n/// <reference path=\"filePresent.d.ts\" />\n/// <reference path=\"fileNotFound.d.ts\" />\ndeclare function main(): void;\n(120,8)Error18056: Declaration file contains synthesized file reference directives: '\"newFile.d.ts\", \"filePresent.d.ts\", \"fileNotFound.d.ts\"'","affectsGlobalScope":true}],"root":[[2,6]],"options":{"composite":true},"fileIdsList":[[2,3],[2,3,5]],"referencedMap":[[4,1],[6,2]],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,4,3,2,6,5],"emitDiagnosticsPerFile":[[4,[{"file":"./src/anotherfilewithsamereferenes.ts","start":83,"length":8,"messageText":"Declaration file contains synthesized file reference directives: '\"filePresent.d.ts\", \"fileNotFound.d.ts\"'","category":1,"code":18056}]],[6,[{"file":"./src/main.ts","start":120,"length":8,"messageText":"Declaration file contains synthesized file reference directives: '\"newFile.d.ts\", \"filePresent.d.ts\", \"fileNotFound.d.ts\"'","category":1,"code":18056}]]],"emitSignatures":[4,6],"latestChangedDtsFile":"./src/fileNotFound.d.ts"},"version":"FakeTSVersion"}
 
 //// [/src/project/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -1119,11 +1346,11 @@ something();
       "./src/anotherfilewithsamereferenes.ts": {
         "original": {
           "version": "-28237004260-/// <reference path=\"./filePresent.ts\"/>\n/// <reference path=\"./fileNotFound.ts\"/>\nfunction anotherFileWithSameReferenes() { }\n",
-          "signature": "-18213659-/// <reference path=\"filePresent.d.ts\" />\n/// <reference path=\"fileNotFound.d.ts\" />\ndeclare function anotherFileWithSameReferenes(): void;\n",
+          "signature": "-17669273851-/// <reference path=\"filePresent.d.ts\" />\n/// <reference path=\"fileNotFound.d.ts\" />\ndeclare function anotherFileWithSameReferenes(): void;\n(83,8)Error18056: Declaration file contains synthesized file reference directives: '\"filePresent.d.ts\", \"fileNotFound.d.ts\"'",
           "affectsGlobalScope": true
         },
         "version": "-28237004260-/// <reference path=\"./filePresent.ts\"/>\n/// <reference path=\"./fileNotFound.ts\"/>\nfunction anotherFileWithSameReferenes() { }\n",
-        "signature": "-18213659-/// <reference path=\"filePresent.d.ts\" />\n/// <reference path=\"fileNotFound.d.ts\" />\ndeclare function anotherFileWithSameReferenes(): void;\n",
+        "signature": "-17669273851-/// <reference path=\"filePresent.d.ts\" />\n/// <reference path=\"fileNotFound.d.ts\" />\ndeclare function anotherFileWithSameReferenes(): void;\n(83,8)Error18056: Declaration file contains synthesized file reference directives: '\"filePresent.d.ts\", \"fileNotFound.d.ts\"'",
         "affectsGlobalScope": true
       },
       "./src/newfile.ts": {
@@ -1139,11 +1366,11 @@ something();
       "./src/main.ts": {
         "original": {
           "version": "3987942182-/// <reference path=\"./newFile.ts\"/>\n/// <reference path=\"./filePresent.ts\"/>\n/// <reference path=\"./fileNotFound.ts\"/>\nfunction main() { }\nsomething();something();foo();something();",
-          "signature": "5698040710-/// <reference path=\"newFile.d.ts\" />\n/// <reference path=\"filePresent.d.ts\" />\n/// <reference path=\"fileNotFound.d.ts\" />\ndeclare function main(): void;\n",
+          "signature": "1320858511-/// <reference path=\"newFile.d.ts\" />\n/// <reference path=\"filePresent.d.ts\" />\n/// <reference path=\"fileNotFound.d.ts\" />\ndeclare function main(): void;\n(120,8)Error18056: Declaration file contains synthesized file reference directives: '\"newFile.d.ts\", \"filePresent.d.ts\", \"fileNotFound.d.ts\"'",
           "affectsGlobalScope": true
         },
         "version": "3987942182-/// <reference path=\"./newFile.ts\"/>\n/// <reference path=\"./filePresent.ts\"/>\n/// <reference path=\"./fileNotFound.ts\"/>\nfunction main() { }\nsomething();something();foo();something();",
-        "signature": "5698040710-/// <reference path=\"newFile.d.ts\" />\n/// <reference path=\"filePresent.d.ts\" />\n/// <reference path=\"fileNotFound.d.ts\" />\ndeclare function main(): void;\n",
+        "signature": "1320858511-/// <reference path=\"newFile.d.ts\" />\n/// <reference path=\"filePresent.d.ts\" />\n/// <reference path=\"fileNotFound.d.ts\" />\ndeclare function main(): void;\n(120,8)Error18056: Declaration file contains synthesized file reference directives: '\"newFile.d.ts\", \"filePresent.d.ts\", \"fileNotFound.d.ts\"'",
         "affectsGlobalScope": true
       }
     },
@@ -1185,9 +1412,41 @@ something();
       "./src/main.ts",
       "./src/newfile.ts"
     ],
-    "latestChangedDtsFile": "./src/main.d.ts"
+    "emitDiagnosticsPerFile": [
+      [
+        "./src/anotherfilewithsamereferenes.ts",
+        [
+          {
+            "file": "./src/anotherfilewithsamereferenes.ts",
+            "start": 83,
+            "length": 8,
+            "messageText": "Declaration file contains synthesized file reference directives: '\"filePresent.d.ts\", \"fileNotFound.d.ts\"'",
+            "category": 1,
+            "code": 18056
+          }
+        ]
+      ],
+      [
+        "./src/main.ts",
+        [
+          {
+            "file": "./src/main.ts",
+            "start": 120,
+            "length": 8,
+            "messageText": "Declaration file contains synthesized file reference directives: '\"newFile.d.ts\", \"filePresent.d.ts\", \"fileNotFound.d.ts\"'",
+            "category": 1,
+            "code": 18056
+          }
+        ]
+      ]
+    ],
+    "emitSignatures": [
+      "./src/anotherfilewithsamereferenes.ts",
+      "./src/main.ts"
+    ],
+    "latestChangedDtsFile": "./src/fileNotFound.d.ts"
   },
   "version": "FakeTSVersion",
-  "size": 2146
+  "size": 2937
 }
 

@@ -1,6 +1,8 @@
 error TS6059: File 'FolderA/FolderB/fileB.ts' is not under 'rootDir' 'FolderA/FolderB/FolderC'. 'rootDir' is expected to contain all source files.
   The file is in the program because:
     Root file specified for compilation
+FolderA/FolderB/fileB.ts(2,1): error TS18056: Declaration file contains synthesized file reference directives: '"../../outdir/simple/fileC.d.ts"'
+FolderA/FolderB/fileB.ts(2,1): error TS18056: Declaration file contains synthesized file reference directives: '"../../outdir/simple/fileC.d.ts"'
 
 
 !!! error TS6059: File 'FolderA/FolderB/fileB.ts' is not under 'rootDir' 'FolderA/FolderB/FolderC'. 'rootDir' is expected to contain all source files.
@@ -10,9 +12,13 @@ error TS6059: File 'FolderA/FolderB/fileB.ts' is not under 'rootDir' 'FolderA/Fo
     class C {
     }
     
-==== FolderA/FolderB/fileB.ts (0 errors) ====
+==== FolderA/FolderB/fileB.ts (2 errors) ====
     /// <reference path='FolderC/fileC.ts'/>
     class B {
+    ~~~~~
+!!! error TS18056: Declaration file contains synthesized file reference directives: '"../../outdir/simple/fileC.d.ts"'
+    ~~~~~
+!!! error TS18056: Declaration file contains synthesized file reference directives: '"../../outdir/simple/fileC.d.ts"'
         public c: C;
     }
     

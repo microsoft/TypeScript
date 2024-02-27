@@ -1,0 +1,33 @@
+ref/a.ts(2,1): error TS18056: Declaration file contains synthesized file reference directives: '"b.d.ts"'
+
+
+==== ref/a.ts (1 errors) ====
+    /// <reference path="./b.ts" />
+    export class A {
+    ~~~~~~
+!!! error TS18056: Declaration file contains synthesized file reference directives: '"b.d.ts"'
+    	member: typeof GlobalFoo;
+    }
+    
+==== ref/b.ts (0 errors) ====
+    /// <reference path="./c.d.ts" />
+    class Foo {
+    	member: Bar;
+    }
+    declare var GlobalFoo: Foo;
+    
+==== ref/c.d.ts (0 errors) ====
+    /// <reference path="./d.d.ts" />
+    declare class Bar {
+    	member: Baz;
+    }
+    
+==== ref/d.d.ts (0 errors) ====
+    declare class Baz {
+    	member: number;
+    }
+    
+==== b.ts (0 errors) ====
+    import {A} from "./ref/a";
+    export class B extends A { }
+    

@@ -20,7 +20,6 @@
         "outdir/simple/outputdir_multifolder/ref/m1.d.ts",
         "outdir/simple/outputdir_multifolder_ref/m2.js",
         "outdir/simple/outputdir_multifolder_ref/m2.d.ts",
-        "outdir/simple/outputdir_multifolder/test.js",
-        "outdir/simple/outputdir_multifolder/test.d.ts"
+        "outdir/simple/outputdir_multifolder/test.js"
     ]
 }

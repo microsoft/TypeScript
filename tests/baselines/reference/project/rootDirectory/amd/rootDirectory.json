@@ -21,7 +21,6 @@
         "outdir/simple/FolderB/FolderC/fileC.js",
         "outdir/simple/FolderB/FolderC/fileC.d.ts",
         "outdir/simple/FolderB/fileB.js.map",
-        "outdir/simple/FolderB/fileB.js",
-        "outdir/simple/FolderB/fileB.d.ts"
+        "outdir/simple/FolderB/fileB.js"
     ]
 }

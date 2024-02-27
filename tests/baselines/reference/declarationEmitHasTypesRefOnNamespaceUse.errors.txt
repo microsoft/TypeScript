@@ -1,0 +1,17 @@
+/src/index.ts(1,1): error TS18055: Declaration file contains synthesized type reference directives: '"dep"'
+
+
+==== /src/index.ts (1 errors) ====
+    class Src implements NS.Dep { }
+    ~~~~~
+!!! error TS18055: Declaration file contains synthesized type reference directives: '"dep"'
+    
+==== /deps/dep/dep.d.ts (0 errors) ====
+    declare namespace NS {
+        interface Dep {
+        }
+    }
+==== /deps/dep/package.json (0 errors) ====
+    {
+        "typings": "dep.d.ts"
+    }
