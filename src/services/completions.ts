@@ -2807,7 +2807,7 @@ export function getCompletionEntryDetails(
 
     const { previousToken, contextToken } = getRelevantTokens(position, sourceFile);
     if (isInString(sourceFile, position, previousToken)) {
-        return StringCompletions.getStringLiteralCompletionDetails(name, sourceFile, position, previousToken, typeChecker, compilerOptions, host, cancellationToken, preferences);
+        return StringCompletions.getStringLiteralCompletionDetails(name, sourceFile, position, previousToken, program, host, cancellationToken, preferences);
     }
 
     // Compute all the completion symbols again.
@@ -5335,6 +5335,7 @@ function isClassMemberCompletionKeyword(kind: SyntaxKind) {
 function isFunctionLikeBodyKeyword(kind: SyntaxKind) {
     return kind === SyntaxKind.AsyncKeyword
         || kind === SyntaxKind.AwaitKeyword
+        || kind === SyntaxKind.UsingKeyword
         || kind === SyntaxKind.AsKeyword
         || kind === SyntaxKind.SatisfiesKeyword
         || kind === SyntaxKind.TypeKeyword
@@ -5899,5 +5900,7 @@ function isContextualKeywordInAutoImportableExpressionSpace(keyword: string) {
         keyword === "declare" ||
         keyword === "module" ||
         keyword === "namespace" ||
-        keyword === "type";
+        keyword === "type" ||
+        keyword === "satisfies" ||
+        keyword === "as";
 }

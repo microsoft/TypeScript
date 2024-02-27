@@ -1,4 +1,4 @@
-error TS5107: Option 'target=ES3' is deprecated and will stop functioning in TypeScript 5.5. Specify compilerOption '"ignoreDeprecations": "5.0"' to silence this error.
+error TS5108: Option 'target=ES3' has been removed. Please remove it from your configuration.
 fileJs.js(1,1): error TS2304: Cannot find name 'a'.
 fileJs.js(1,5): error TS2304: Cannot find name 'b'.
 fileJs.js(1,15): error TS2304: Cannot find name 'd'.
@@ -10,7 +10,7 @@ fileTs.ts(1,15): error TS2304: Cannot find name 'd'.
 fileTs.ts(1,20): error TS2304: Cannot find name 'e'.
 
 
-!!! error TS5107: Option 'target=ES3' is deprecated and will stop functioning in TypeScript 5.5. Specify compilerOption '"ignoreDeprecations": "5.0"' to silence this error.
+!!! error TS5108: Option 'target=ES3' has been removed. Please remove it from your configuration.
 ==== fileJs.js (5 errors) ====
     a ? b : (c) : d => e // Not legal JS; "Unexpected token ':'" at last colon
     ~

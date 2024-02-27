@@ -1220,7 +1220,7 @@
         "category": "Message",
         "code": 1377
     },
-    "Top-level 'await' expressions are only allowed when the 'module' option is set to 'es2022', 'esnext', 'system', 'node16', or 'nodenext', and the 'target' option is set to 'es2017' or higher.": {
+    "Top-level 'await' expressions are only allowed when the 'module' option is set to 'es2022', 'esnext', 'system', 'node16', 'nodenext', or 'preserve', and the 'target' option is set to 'es2017' or higher.": {
         "category": "Error",
         "code": 1378
     },
@@ -1424,7 +1424,7 @@
         "category": "Error",
         "code": 1431
     },
-    "Top-level 'for await' loops are only allowed when the 'module' option is set to 'es2022', 'esnext', 'system', 'node16', or 'nodenext', and the 'target' option is set to 'es2017' or higher.": {
+    "Top-level 'for await' loops are only allowed when the 'module' option is set to 'es2022', 'esnext', 'system', 'node16', 'nodenext', or 'preserve', and the 'target' option is set to 'es2017' or higher.": {
         "category": "Error",
         "code": 1432
     },
@@ -3595,7 +3595,7 @@
         "category": "Error",
         "code": 2820
     },
-    "Import assertions are only supported when the '--module' option is set to 'esnext' or 'nodenext'.": {
+    "Import assertions are only supported when the '--module' option is set to 'esnext', 'nodenext', or 'preserve'.": {
         "category": "Error",
         "code": 2821
     },
@@ -3603,7 +3603,7 @@
         "category": "Error",
         "code": 2822
     },
-    "Import attributes are only supported when the '--module' option is set to 'esnext' or 'nodenext'.": {
+    "Import attributes are only supported when the '--module' option is set to 'esnext', 'nodenext', or 'preserve'.": {
         "category": "Error",
         "code": 2823
     },
@@ -3683,7 +3683,7 @@
         "category": "Error",
         "code": 2853
     },
-    "Top-level 'await using' statements are only allowed when the 'module' option is set to 'es2022', 'esnext', 'system', 'node16', or 'nodenext', and the 'target' option is set to 'es2017' or higher.": {
+    "Top-level 'await using' statements are only allowed when the 'module' option is set to 'es2022', 'esnext', 'system', 'node16', 'nodenext', or 'preserve', and the 'target' option is set to 'es2017' or higher.": {
         "category": "Error",
         "code": 2854
     },
@@ -4309,7 +4309,7 @@
         "category": "Error",
         "code": 5070
     },
-    "Option '--resolveJsonModule' can only be specified when module code generation is 'commonjs', 'amd', 'es2015' or 'esNext'.": {
+    "Option '--resolveJsonModule' cannot be specified when 'module' is set to 'none', 'system', or 'umd'.": {
         "category": "Error",
         "code": 5071
     },
@@ -4401,7 +4401,7 @@
         "category": "Error",
         "code": 5094
     },
-    "Option '{0}' can only be used when 'module' is set to 'es2015' or later.": {
+    "Option '{0}' can only be used when 'module' is set to 'preserve' or to 'es2015' or later.": {
         "category": "Error",
         "code": 5095
     },
@@ -4722,10 +4722,6 @@
     "Specify JSX code generation.": {
         "category": "Message",
         "code": 6080
-    },
-    "File '{0}' has an unsupported extension, so skipping it.": {
-        "category": "Message",
-        "code": 6081
     },
     "Only 'amd' and 'system' modules are supported alongside --{0}.": {
         "category": "Error",

@@ -37,7 +37,7 @@ Output::
 >> Screen clear
 [[90m12:00:15 AM[0m] Starting compilation in watch mode...
 
-[96mtsconfig.json[0m:[93m4[0m:[93m5[0m - [91merror[0m[90m TS5101: [0mOption 'importsNotUsedAsValues' is deprecated and will stop functioning in TypeScript 5.5. Specify compilerOption '"ignoreDeprecations": "5.0"' to silence this error.
+[96mtsconfig.json[0m:[93m4[0m:[93m5[0m - [91merror[0m[90m TS5102: [0mOption 'importsNotUsedAsValues' has been removed. Please remove it from your configuration.
   Use 'verbatimModuleSyntax' instead.
 
 [7m4[0m     "importsNotUsedAsValues": "error"
@@ -178,7 +178,7 @@ Output::
 >> Screen clear
 [[90m12:00:23 AM[0m] File change detected. Starting incremental compilation...
 
-[96mtsconfig.json[0m:[93m4[0m:[93m5[0m - [91merror[0m[90m TS5101: [0mOption 'importsNotUsedAsValues' is deprecated and will stop functioning in TypeScript 5.5. Specify compilerOption '"ignoreDeprecations": "5.0"' to silence this error.
+[96mtsconfig.json[0m:[93m4[0m:[93m5[0m - [91merror[0m[90m TS5102: [0mOption 'importsNotUsedAsValues' has been removed. Please remove it from your configuration.
   Use 'verbatimModuleSyntax' instead.
 
 [7m4[0m     "importsNotUsedAsValues": "error",
@@ -257,7 +257,7 @@ Output::
 >> Screen clear
 [[90m12:00:33 AM[0m] File change detected. Starting incremental compilation...
 
-[96mtsconfig.json[0m:[93m4[0m:[93m5[0m - [91merror[0m[90m TS5101: [0mOption 'importsNotUsedAsValues' is deprecated and will stop functioning in TypeScript 5.5. Specify compilerOption '"ignoreDeprecations": "5.0"' to silence this error.
+[96mtsconfig.json[0m:[93m4[0m:[93m5[0m - [91merror[0m[90m TS5102: [0mOption 'importsNotUsedAsValues' has been removed. Please remove it from your configuration.
   Use 'verbatimModuleSyntax' instead.
 
 [7m4[0m     "importsNotUsedAsValues": "error",
