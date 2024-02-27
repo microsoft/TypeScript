@@ -287,8 +287,10 @@ Info seq  [hh:mm:ss:mss] 'package.json' does not have a 'typesVersions' field.
 Info seq  [hh:mm:ss:mss] 'package.json' does not have a 'typings' field.
 Info seq  [hh:mm:ss:mss] 'package.json' does not have a 'types' field.
 Info seq  [hh:mm:ss:mss] 'package.json' has 'main' field 'index.js' that references '/home/src/projects/project/node_modules/bar/index.js'.
-Info seq  [hh:mm:ss:mss] File '/home/src/projects/project/node_modules/bar/index.js' exists - use it as a name resolution result.
-Info seq  [hh:mm:ss:mss] File '/home/src/projects/project/node_modules/bar/index.js' has an unsupported extension, so skipping it.
+Info seq  [hh:mm:ss:mss] File name '/home/src/projects/project/node_modules/bar/index.js' has a '.js' extension - stripping it.
+Info seq  [hh:mm:ss:mss] File '/home/src/projects/project/node_modules/bar/index.ts' does not exist.
+Info seq  [hh:mm:ss:mss] File '/home/src/projects/project/node_modules/bar/index.tsx' does not exist.
+Info seq  [hh:mm:ss:mss] File '/home/src/projects/project/node_modules/bar/index.d.ts' does not exist.
 Info seq  [hh:mm:ss:mss] Loading module as file / folder, candidate module location '/home/src/projects/project/node_modules/bar/index.js', target file types: TypeScript, Declaration.
 Info seq  [hh:mm:ss:mss] File name '/home/src/projects/project/node_modules/bar/index.js' has a '.js' extension - stripping it.
 Info seq  [hh:mm:ss:mss] File '/home/src/projects/project/node_modules/bar/index.ts' does not exist.
@@ -375,7 +377,7 @@ Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/projects/pro
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/projects/project/node_modules/foo2/package.json 2000 undefined Project: /home/src/projects/project/tsconfig.json WatchType: File location affecting resolution
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/projects/project/node_modules/bar2/package.json 2000 undefined Project: /home/src/projects/project/tsconfig.json WatchType: File location affecting resolution
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/projects/project/node_modules/@types/bar2/package.json 2000 undefined Project: /home/src/projects/project/tsconfig.json WatchType: File location affecting resolution
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /home/src/projects/project/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /home/src/projects/project/tsconfig.json projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/home/src/projects/project/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (4)
 	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
@@ -511,6 +513,29 @@ FsWatches::
 FsWatchesRecursive::
 /home/src/projects/project/node_modules: *new*
   {}
+
+Projects::
+/home/src/projects/project/tsconfig.json (Configured) *new*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+
+ScriptInfos::
+/a/lib/lib.d.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /home/src/projects/project/tsconfig.json
+/home/src/projects/project/index.mts (Open) *new*
+    version: SVC-1-0
+    containingProjects: 1
+        /home/src/projects/project/tsconfig.json *default*
+/home/src/projects/project/node_modules/@types/bar2/index.d.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /home/src/projects/project/tsconfig.json
+/home/src/projects/project/node_modules/foo2/index.d.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /home/src/projects/project/tsconfig.json
 
 Before request
 
@@ -700,6 +725,11 @@ Timeout callback:: count: 2
 3: /home/src/projects/project/tsconfig.json *new*
 4: *ensureProjectForOpenFiles* *new*
 
+Projects::
+/home/src/projects/project/tsconfig.json (Configured) *changed*
+    projectStateVersion: 2 *changed*
+    projectProgramVersion: 1
+
 Before running Immedidate callback:: count: 0
 
 After running Immedidate callback:: count: 0
@@ -791,8 +821,10 @@ Info seq  [hh:mm:ss:mss] File '/home/src/projects/project/node_modules/bar/packa
 Info seq  [hh:mm:ss:mss] 'package.json' does not have a 'typings' field.
 Info seq  [hh:mm:ss:mss] 'package.json' does not have a 'types' field.
 Info seq  [hh:mm:ss:mss] 'package.json' has 'main' field 'index.js' that references '/home/src/projects/project/node_modules/bar/index.js'.
-Info seq  [hh:mm:ss:mss] File '/home/src/projects/project/node_modules/bar/index.js' exists - use it as a name resolution result.
-Info seq  [hh:mm:ss:mss] File '/home/src/projects/project/node_modules/bar/index.js' has an unsupported extension, so skipping it.
+Info seq  [hh:mm:ss:mss] File name '/home/src/projects/project/node_modules/bar/index.js' has a '.js' extension - stripping it.
+Info seq  [hh:mm:ss:mss] File '/home/src/projects/project/node_modules/bar/index.ts' does not exist.
+Info seq  [hh:mm:ss:mss] File '/home/src/projects/project/node_modules/bar/index.tsx' does not exist.
+Info seq  [hh:mm:ss:mss] File '/home/src/projects/project/node_modules/bar/index.d.ts' does not exist.
 Info seq  [hh:mm:ss:mss] Loading module as file / folder, candidate module location '/home/src/projects/project/node_modules/bar/index.js', target file types: TypeScript, Declaration.
 Info seq  [hh:mm:ss:mss] File name '/home/src/projects/project/node_modules/bar/index.js' has a '.js' extension - stripping it.
 Info seq  [hh:mm:ss:mss] File '/home/src/projects/project/node_modules/bar/index.ts' does not exist.
@@ -829,7 +861,7 @@ Info seq  [hh:mm:ss:mss] File '/home/src/projects/project/node_modules/@types/ba
 Info seq  [hh:mm:ss:mss] File '/a/lib/package.json' does not exist according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] File '/a/package.json' does not exist according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] File '/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /home/src/projects/project/tsconfig.json Version: 2 structureChanged: true structureIsReused:: SafeModules Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /home/src/projects/project/tsconfig.json projectStateVersion: 2 projectProgramVersion: 1 structureChanged: true structureIsReused:: SafeModules Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/home/src/projects/project/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (4)
 	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
@@ -881,6 +913,11 @@ After running Timeout callback:: count: 0
 
 Immedidate callback:: count: 1
 3: semanticCheck *new*
+
+Projects::
+/home/src/projects/project/tsconfig.json (Configured) *changed*
+    projectStateVersion: 2
+    projectProgramVersion: 2 *changed*
 
 Before running Immedidate callback:: count: 1
 3: semanticCheck
@@ -1029,6 +1066,11 @@ Timeout callback:: count: 2
 7: /home/src/projects/project/tsconfig.json *new*
 8: *ensureProjectForOpenFiles* *new*
 
+Projects::
+/home/src/projects/project/tsconfig.json (Configured) *changed*
+    projectStateVersion: 3 *changed*
+    projectProgramVersion: 2
+
 Before running Immedidate callback:: count: 0
 
 After running Immedidate callback:: count: 0
@@ -1139,7 +1181,7 @@ Info seq  [hh:mm:ss:mss] File '/home/src/projects/project/node_modules/@types/ba
 Info seq  [hh:mm:ss:mss] File '/a/lib/package.json' does not exist according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] File '/a/package.json' does not exist according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] File '/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /home/src/projects/project/tsconfig.json Version: 3 structureChanged: true structureIsReused:: SafeModules Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /home/src/projects/project/tsconfig.json projectStateVersion: 3 projectProgramVersion: 2 structureChanged: true structureIsReused:: SafeModules Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/home/src/projects/project/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (4)
 	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
@@ -1191,6 +1233,11 @@ After running Timeout callback:: count: 0
 
 Immedidate callback:: count: 1
 5: semanticCheck *new*
+
+Projects::
+/home/src/projects/project/tsconfig.json (Configured) *changed*
+    projectStateVersion: 3
+    projectProgramVersion: 3 *changed*
 
 Before running Immedidate callback:: count: 1
 5: semanticCheck
@@ -1341,6 +1388,11 @@ Timeout callback:: count: 2
 11: /home/src/projects/project/tsconfig.json *new*
 12: *ensureProjectForOpenFiles* *new*
 
+Projects::
+/home/src/projects/project/tsconfig.json (Configured) *changed*
+    projectStateVersion: 4 *changed*
+    projectProgramVersion: 3
+
 Before running Immedidate callback:: count: 0
 
 After running Immedidate callback:: count: 0
@@ -1432,8 +1484,10 @@ Info seq  [hh:mm:ss:mss] File '/home/src/projects/project/node_modules/bar/packa
 Info seq  [hh:mm:ss:mss] 'package.json' does not have a 'typings' field.
 Info seq  [hh:mm:ss:mss] 'package.json' does not have a 'types' field.
 Info seq  [hh:mm:ss:mss] 'package.json' has 'main' field 'index.js' that references '/home/src/projects/project/node_modules/bar/index.js'.
-Info seq  [hh:mm:ss:mss] File '/home/src/projects/project/node_modules/bar/index.js' exists - use it as a name resolution result.
-Info seq  [hh:mm:ss:mss] File '/home/src/projects/project/node_modules/bar/index.js' has an unsupported extension, so skipping it.
+Info seq  [hh:mm:ss:mss] File name '/home/src/projects/project/node_modules/bar/index.js' has a '.js' extension - stripping it.
+Info seq  [hh:mm:ss:mss] File '/home/src/projects/project/node_modules/bar/index.ts' does not exist.
+Info seq  [hh:mm:ss:mss] File '/home/src/projects/project/node_modules/bar/index.tsx' does not exist.
+Info seq  [hh:mm:ss:mss] File '/home/src/projects/project/node_modules/bar/index.d.ts' does not exist.
 Info seq  [hh:mm:ss:mss] Loading module as file / folder, candidate module location '/home/src/projects/project/node_modules/bar/index.js', target file types: TypeScript, Declaration.
 Info seq  [hh:mm:ss:mss] File name '/home/src/projects/project/node_modules/bar/index.js' has a '.js' extension - stripping it.
 Info seq  [hh:mm:ss:mss] File '/home/src/projects/project/node_modules/bar/index.ts' does not exist.
@@ -1457,7 +1511,7 @@ Info seq  [hh:mm:ss:mss] File '/home/src/projects/project/node_modules/@types/ba
 Info seq  [hh:mm:ss:mss] File '/a/lib/package.json' does not exist according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] File '/a/package.json' does not exist according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] File '/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /home/src/projects/project/tsconfig.json Version: 4 structureChanged: true structureIsReused:: SafeModules Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /home/src/projects/project/tsconfig.json projectStateVersion: 4 projectProgramVersion: 3 structureChanged: true structureIsReused:: SafeModules Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/home/src/projects/project/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (4)
 	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
@@ -1509,6 +1563,11 @@ After running Timeout callback:: count: 0
 
 Immedidate callback:: count: 1
 7: semanticCheck *new*
+
+Projects::
+/home/src/projects/project/tsconfig.json (Configured) *changed*
+    projectStateVersion: 4
+    projectProgramVersion: 4 *changed*
 
 Before running Immedidate callback:: count: 1
 7: semanticCheck
@@ -1659,6 +1718,11 @@ Timeout callback:: count: 2
 15: /home/src/projects/project/tsconfig.json *new*
 16: *ensureProjectForOpenFiles* *new*
 
+Projects::
+/home/src/projects/project/tsconfig.json (Configured) *changed*
+    projectStateVersion: 5 *changed*
+    projectProgramVersion: 4
+
 Before running Immedidate callback:: count: 0
 
 After running Immedidate callback:: count: 0
@@ -1756,7 +1820,7 @@ Info seq  [hh:mm:ss:mss] File '/home/src/projects/project/node_modules/@types/ba
 Info seq  [hh:mm:ss:mss] File '/a/lib/package.json' does not exist according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] File '/a/package.json' does not exist according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] File '/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /home/src/projects/project/tsconfig.json Version: 5 structureChanged: true structureIsReused:: SafeModules Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /home/src/projects/project/tsconfig.json projectStateVersion: 5 projectProgramVersion: 4 structureChanged: true structureIsReused:: SafeModules Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/home/src/projects/project/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (4)
 	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
@@ -1808,6 +1872,11 @@ After running Timeout callback:: count: 0
 
 Immedidate callback:: count: 1
 9: semanticCheck *new*
+
+Projects::
+/home/src/projects/project/tsconfig.json (Configured) *changed*
+    projectStateVersion: 5
+    projectProgramVersion: 5 *changed*
 
 Before running Immedidate callback:: count: 1
 9: semanticCheck
@@ -1966,6 +2035,11 @@ Timeout callback:: count: 2
 19: /home/src/projects/project/tsconfig.json *new*
 20: *ensureProjectForOpenFiles* *new*
 
+Projects::
+/home/src/projects/project/tsconfig.json (Configured) *changed*
+    projectStateVersion: 6 *changed*
+    projectProgramVersion: 5
+
 Before running Immedidate callback:: count: 0
 
 After running Immedidate callback:: count: 0
@@ -2045,7 +2119,7 @@ Info seq  [hh:mm:ss:mss] File '/home/src/projects/project/node_modules/@types/ba
 Info seq  [hh:mm:ss:mss] File '/a/lib/package.json' does not exist according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] File '/a/package.json' does not exist according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] File '/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /home/src/projects/project/tsconfig.json Version: 6 structureChanged: true structureIsReused:: SafeModules Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /home/src/projects/project/tsconfig.json projectStateVersion: 6 projectProgramVersion: 5 structureChanged: true structureIsReused:: SafeModules Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/home/src/projects/project/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (5)
 	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
@@ -2113,6 +2187,33 @@ After running Timeout callback:: count: 0
 
 Immedidate callback:: count: 1
 11: semanticCheck *new*
+
+Projects::
+/home/src/projects/project/tsconfig.json (Configured) *changed*
+    projectStateVersion: 6
+    projectProgramVersion: 6 *changed*
+
+ScriptInfos::
+/a/lib/lib.d.ts
+    version: Text-1
+    containingProjects: 1
+        /home/src/projects/project/tsconfig.json
+/home/src/projects/project/index.mts (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /home/src/projects/project/tsconfig.json *default*
+/home/src/projects/project/node_modules/@types/bar/index.d.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /home/src/projects/project/tsconfig.json
+/home/src/projects/project/node_modules/@types/bar2/index.d.ts
+    version: Text-1
+    containingProjects: 1
+        /home/src/projects/project/tsconfig.json
+/home/src/projects/project/node_modules/foo2/index.d.ts
+    version: Text-1
+    containingProjects: 1
+        /home/src/projects/project/tsconfig.json
 
 Before running Immedidate callback:: count: 1
 11: semanticCheck
@@ -2260,6 +2361,11 @@ Timeout callback:: count: 2
 23: /home/src/projects/project/tsconfig.json *new*
 24: *ensureProjectForOpenFiles* *new*
 
+Projects::
+/home/src/projects/project/tsconfig.json (Configured) *changed*
+    projectStateVersion: 7 *changed*
+    projectProgramVersion: 6
+
 Before running Immedidate callback:: count: 0
 
 After running Immedidate callback:: count: 0
@@ -2333,7 +2439,7 @@ Info seq  [hh:mm:ss:mss] File '/a/package.json' does not exist according to earl
 Info seq  [hh:mm:ss:mss] File '/package.json' does not exist according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Close:: WatchInfo: /home/src/projects/node_modules 1 undefined Project: /home/src/projects/project/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /home/src/projects/node_modules 1 undefined Project: /home/src/projects/project/tsconfig.json WatchType: Failed Lookup Locations
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /home/src/projects/project/tsconfig.json Version: 7 structureChanged: true structureIsReused:: SafeModules Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /home/src/projects/project/tsconfig.json projectStateVersion: 7 projectProgramVersion: 6 structureChanged: true structureIsReused:: SafeModules Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/home/src/projects/project/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (6)
 	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
@@ -2435,6 +2541,37 @@ FsWatchesRecursive::
 
 Immedidate callback:: count: 1
 13: semanticCheck *new*
+
+Projects::
+/home/src/projects/project/tsconfig.json (Configured) *changed*
+    projectStateVersion: 7
+    projectProgramVersion: 7 *changed*
+
+ScriptInfos::
+/a/lib/lib.d.ts
+    version: Text-1
+    containingProjects: 1
+        /home/src/projects/project/tsconfig.json
+/home/src/projects/project/index.mts (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /home/src/projects/project/tsconfig.json *default*
+/home/src/projects/project/node_modules/@types/bar/index.d.ts
+    version: Text-1
+    containingProjects: 1
+        /home/src/projects/project/tsconfig.json
+/home/src/projects/project/node_modules/@types/bar2/index.d.ts
+    version: Text-1
+    containingProjects: 1
+        /home/src/projects/project/tsconfig.json
+/home/src/projects/project/node_modules/foo/index.d.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /home/src/projects/project/tsconfig.json
+/home/src/projects/project/node_modules/foo2/index.d.ts
+    version: Text-1
+    containingProjects: 1
+        /home/src/projects/project/tsconfig.json
 
 Before running Immedidate callback:: count: 1
 13: semanticCheck
@@ -2565,6 +2702,11 @@ Timeout callback:: count: 2
 27: /home/src/projects/project/tsconfig.json *new*
 28: *ensureProjectForOpenFiles* *new*
 
+Projects::
+/home/src/projects/project/tsconfig.json (Configured) *changed*
+    projectStateVersion: 8 *changed*
+    projectProgramVersion: 7
+
 Before running Immedidate callback:: count: 0
 
 After running Immedidate callback:: count: 0
@@ -2661,8 +2803,10 @@ Info seq  [hh:mm:ss:mss] 'package.json' does not have a 'typesVersions' field.
 Info seq  [hh:mm:ss:mss] 'package.json' does not have a 'typings' field.
 Info seq  [hh:mm:ss:mss] 'package.json' does not have a 'types' field.
 Info seq  [hh:mm:ss:mss] 'package.json' has 'main' field 'index.js' that references '/home/src/projects/project/node_modules/bar2/index.js'.
-Info seq  [hh:mm:ss:mss] File '/home/src/projects/project/node_modules/bar2/index.js' exists - use it as a name resolution result.
-Info seq  [hh:mm:ss:mss] File '/home/src/projects/project/node_modules/bar2/index.js' has an unsupported extension, so skipping it.
+Info seq  [hh:mm:ss:mss] File name '/home/src/projects/project/node_modules/bar2/index.js' has a '.js' extension - stripping it.
+Info seq  [hh:mm:ss:mss] File '/home/src/projects/project/node_modules/bar2/index.ts' does not exist.
+Info seq  [hh:mm:ss:mss] File '/home/src/projects/project/node_modules/bar2/index.tsx' does not exist.
+Info seq  [hh:mm:ss:mss] File '/home/src/projects/project/node_modules/bar2/index.d.ts' does not exist.
 Info seq  [hh:mm:ss:mss] Loading module as file / folder, candidate module location '/home/src/projects/project/node_modules/bar2/index.js', target file types: TypeScript, Declaration.
 Info seq  [hh:mm:ss:mss] File name '/home/src/projects/project/node_modules/bar2/index.js' has a '.js' extension - stripping it.
 Info seq  [hh:mm:ss:mss] File '/home/src/projects/project/node_modules/bar2/index.ts' does not exist.
@@ -2687,7 +2831,7 @@ Info seq  [hh:mm:ss:mss] File '/a/package.json' does not exist according to earl
 Info seq  [hh:mm:ss:mss] File '/package.json' does not exist according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/node_modules 1 undefined Project: /home/src/projects/project/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/node_modules 1 undefined Project: /home/src/projects/project/tsconfig.json WatchType: Failed Lookup Locations
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /home/src/projects/project/tsconfig.json Version: 8 structureChanged: true structureIsReused:: SafeModules Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /home/src/projects/project/tsconfig.json projectStateVersion: 8 projectProgramVersion: 7 structureChanged: true structureIsReused:: SafeModules Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/home/src/projects/project/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (5)
 	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
@@ -2785,6 +2929,37 @@ FsWatchesRecursive::
 
 Immedidate callback:: count: 1
 15: semanticCheck *new*
+
+Projects::
+/home/src/projects/project/tsconfig.json (Configured) *changed*
+    projectStateVersion: 8
+    projectProgramVersion: 8 *changed*
+
+ScriptInfos::
+/a/lib/lib.d.ts
+    version: Text-1
+    containingProjects: 1
+        /home/src/projects/project/tsconfig.json
+/home/src/projects/project/index.mts (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /home/src/projects/project/tsconfig.json *default*
+/home/src/projects/project/node_modules/@types/bar/index.d.ts
+    version: Text-1
+    containingProjects: 1
+        /home/src/projects/project/tsconfig.json
+/home/src/projects/project/node_modules/@types/bar2/index.d.ts *changed*
+    version: Text-1
+    containingProjects: 0 *changed*
+        /home/src/projects/project/tsconfig.json *deleted*
+/home/src/projects/project/node_modules/foo/index.d.ts
+    version: Text-1
+    containingProjects: 1
+        /home/src/projects/project/tsconfig.json
+/home/src/projects/project/node_modules/foo2/index.d.ts
+    version: Text-1
+    containingProjects: 1
+        /home/src/projects/project/tsconfig.json
 
 Before running Immedidate callback:: count: 1
 15: semanticCheck
@@ -2931,6 +3106,11 @@ Timeout callback:: count: 2
 31: /home/src/projects/project/tsconfig.json *new*
 32: *ensureProjectForOpenFiles* *new*
 
+Projects::
+/home/src/projects/project/tsconfig.json (Configured) *changed*
+    projectStateVersion: 9 *changed*
+    projectProgramVersion: 8
+
 Before running Immedidate callback:: count: 0
 
 After running Immedidate callback:: count: 0
@@ -3029,7 +3209,7 @@ Info seq  [hh:mm:ss:mss] File '/home/src/projects/project/node_modules/@types/ba
 Info seq  [hh:mm:ss:mss] File '/a/lib/package.json' does not exist according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] File '/a/package.json' does not exist according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] File '/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /home/src/projects/project/tsconfig.json Version: 9 structureChanged: true structureIsReused:: SafeModules Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /home/src/projects/project/tsconfig.json projectStateVersion: 9 projectProgramVersion: 8 structureChanged: true structureIsReused:: SafeModules Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/home/src/projects/project/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (4)
 	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
@@ -3093,6 +3273,36 @@ After running Timeout callback:: count: 0
 
 Immedidate callback:: count: 1
 17: semanticCheck *new*
+
+Projects::
+/home/src/projects/project/tsconfig.json (Configured) *changed*
+    projectStateVersion: 9
+    projectProgramVersion: 9 *changed*
+
+ScriptInfos::
+/a/lib/lib.d.ts
+    version: Text-1
+    containingProjects: 1
+        /home/src/projects/project/tsconfig.json
+/home/src/projects/project/index.mts (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /home/src/projects/project/tsconfig.json *default*
+/home/src/projects/project/node_modules/@types/bar/index.d.ts
+    version: Text-1
+    containingProjects: 1
+        /home/src/projects/project/tsconfig.json
+/home/src/projects/project/node_modules/@types/bar2/index.d.ts
+    version: Text-1
+    containingProjects: 0
+/home/src/projects/project/node_modules/foo/index.d.ts
+    version: Text-1
+    containingProjects: 1
+        /home/src/projects/project/tsconfig.json
+/home/src/projects/project/node_modules/foo2/index.d.ts *changed*
+    version: Text-1
+    containingProjects: 0 *changed*
+        /home/src/projects/project/tsconfig.json *deleted*
 
 Before running Immedidate callback:: count: 1
 17: semanticCheck
@@ -3232,6 +3442,30 @@ Before running Timeout callback:: count: 1
 Timeout callback:: count: 1
 34: /home/src/projects/project/tsconfig.jsonFailedLookupInvalidation *new*
 
+ScriptInfos::
+/a/lib/lib.d.ts
+    version: Text-1
+    containingProjects: 1
+        /home/src/projects/project/tsconfig.json
+/home/src/projects/project/index.mts (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /home/src/projects/project/tsconfig.json *default*
+/home/src/projects/project/node_modules/@types/bar/index.d.ts
+    version: Text-1
+    containingProjects: 1
+        /home/src/projects/project/tsconfig.json
+/home/src/projects/project/node_modules/@types/bar2/index.d.ts *deleted*
+    version: Text-1
+    containingProjects: 0
+/home/src/projects/project/node_modules/foo/index.d.ts
+    version: Text-1
+    containingProjects: 1
+        /home/src/projects/project/tsconfig.json
+/home/src/projects/project/node_modules/foo2/index.d.ts
+    version: Text-1
+    containingProjects: 0
+
 Info seq  [hh:mm:ss:mss] Running: /home/src/projects/project/tsconfig.jsonFailedLookupInvalidation
 Info seq  [hh:mm:ss:mss] Scheduled: /home/src/projects/project/tsconfig.json
 Info seq  [hh:mm:ss:mss] Scheduled: *ensureProjectForOpenFiles*
@@ -3240,6 +3474,11 @@ After running Timeout callback:: count: 2
 Timeout callback:: count: 2
 35: /home/src/projects/project/tsconfig.json *new*
 36: *ensureProjectForOpenFiles* *new*
+
+Projects::
+/home/src/projects/project/tsconfig.json (Configured) *changed*
+    projectStateVersion: 10 *changed*
+    projectProgramVersion: 9
 
 Before running Immedidate callback:: count: 0
 
@@ -3334,8 +3573,10 @@ Info seq  [hh:mm:ss:mss] File '/home/src/projects/project/node_modules/bar2/pack
 Info seq  [hh:mm:ss:mss] 'package.json' does not have a 'typings' field.
 Info seq  [hh:mm:ss:mss] 'package.json' does not have a 'types' field.
 Info seq  [hh:mm:ss:mss] 'package.json' has 'main' field 'index.js' that references '/home/src/projects/project/node_modules/bar2/index.js'.
-Info seq  [hh:mm:ss:mss] File '/home/src/projects/project/node_modules/bar2/index.js' exists - use it as a name resolution result.
-Info seq  [hh:mm:ss:mss] File '/home/src/projects/project/node_modules/bar2/index.js' has an unsupported extension, so skipping it.
+Info seq  [hh:mm:ss:mss] File name '/home/src/projects/project/node_modules/bar2/index.js' has a '.js' extension - stripping it.
+Info seq  [hh:mm:ss:mss] File '/home/src/projects/project/node_modules/bar2/index.ts' does not exist.
+Info seq  [hh:mm:ss:mss] File '/home/src/projects/project/node_modules/bar2/index.tsx' does not exist.
+Info seq  [hh:mm:ss:mss] File '/home/src/projects/project/node_modules/bar2/index.d.ts' does not exist.
 Info seq  [hh:mm:ss:mss] Loading module as file / folder, candidate module location '/home/src/projects/project/node_modules/bar2/index.js', target file types: TypeScript, Declaration.
 Info seq  [hh:mm:ss:mss] File name '/home/src/projects/project/node_modules/bar2/index.js' has a '.js' extension - stripping it.
 Info seq  [hh:mm:ss:mss] File '/home/src/projects/project/node_modules/bar2/index.ts' does not exist.
@@ -3370,7 +3611,7 @@ Info seq  [hh:mm:ss:mss] File '/home/src/projects/project/node_modules/@types/ba
 Info seq  [hh:mm:ss:mss] File '/a/lib/package.json' does not exist according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] File '/a/package.json' does not exist according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] File '/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /home/src/projects/project/tsconfig.json Version: 10 structureChanged: true structureIsReused:: SafeModules Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /home/src/projects/project/tsconfig.json projectStateVersion: 10 projectProgramVersion: 9 structureChanged: true structureIsReused:: SafeModules Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/home/src/projects/project/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (4)
 	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
@@ -3422,6 +3663,11 @@ After running Timeout callback:: count: 0
 
 Immedidate callback:: count: 1
 19: semanticCheck *new*
+
+Projects::
+/home/src/projects/project/tsconfig.json (Configured) *changed*
+    projectStateVersion: 10
+    projectProgramVersion: 10 *changed*
 
 Before running Immedidate callback:: count: 1
 19: semanticCheck
@@ -3561,6 +3807,27 @@ Before running Timeout callback:: count: 1
 Timeout callback:: count: 1
 38: /home/src/projects/project/tsconfig.jsonFailedLookupInvalidation *new*
 
+ScriptInfos::
+/a/lib/lib.d.ts
+    version: Text-1
+    containingProjects: 1
+        /home/src/projects/project/tsconfig.json
+/home/src/projects/project/index.mts (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /home/src/projects/project/tsconfig.json *default*
+/home/src/projects/project/node_modules/@types/bar/index.d.ts
+    version: Text-1
+    containingProjects: 1
+        /home/src/projects/project/tsconfig.json
+/home/src/projects/project/node_modules/foo/index.d.ts
+    version: Text-1
+    containingProjects: 1
+        /home/src/projects/project/tsconfig.json
+/home/src/projects/project/node_modules/foo2/index.d.ts *deleted*
+    version: Text-1
+    containingProjects: 0
+
 Info seq  [hh:mm:ss:mss] Running: /home/src/projects/project/tsconfig.jsonFailedLookupInvalidation
 Info seq  [hh:mm:ss:mss] Scheduled: /home/src/projects/project/tsconfig.json
 Info seq  [hh:mm:ss:mss] Scheduled: *ensureProjectForOpenFiles*
@@ -3569,6 +3836,11 @@ After running Timeout callback:: count: 2
 Timeout callback:: count: 2
 39: /home/src/projects/project/tsconfig.json *new*
 40: *ensureProjectForOpenFiles* *new*
+
+Projects::
+/home/src/projects/project/tsconfig.json (Configured) *changed*
+    projectStateVersion: 11 *changed*
+    projectProgramVersion: 10
 
 Before running Immedidate callback:: count: 0
 
@@ -3680,7 +3952,7 @@ Info seq  [hh:mm:ss:mss] File '/home/src/projects/project/node_modules/@types/ba
 Info seq  [hh:mm:ss:mss] File '/a/lib/package.json' does not exist according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] File '/a/package.json' does not exist according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] File '/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /home/src/projects/project/tsconfig.json Version: 11 structureChanged: true structureIsReused:: SafeModules Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /home/src/projects/project/tsconfig.json projectStateVersion: 11 projectProgramVersion: 10 structureChanged: true structureIsReused:: SafeModules Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/home/src/projects/project/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (4)
 	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
@@ -3732,6 +4004,11 @@ After running Timeout callback:: count: 0
 
 Immedidate callback:: count: 1
 21: semanticCheck *new*
+
+Projects::
+/home/src/projects/project/tsconfig.json (Configured) *changed*
+    projectStateVersion: 11
+    projectProgramVersion: 11 *changed*
 
 Before running Immedidate callback:: count: 1
 21: semanticCheck
@@ -3882,6 +4159,11 @@ Timeout callback:: count: 2
 43: /home/src/projects/project/tsconfig.json *new*
 44: *ensureProjectForOpenFiles* *new*
 
+Projects::
+/home/src/projects/project/tsconfig.json (Configured) *changed*
+    projectStateVersion: 12 *changed*
+    projectProgramVersion: 11
+
 Before running Immedidate callback:: count: 0
 
 After running Immedidate callback:: count: 0
@@ -3975,8 +4257,10 @@ Info seq  [hh:mm:ss:mss] File '/home/src/projects/project/node_modules/bar2/pack
 Info seq  [hh:mm:ss:mss] 'package.json' does not have a 'typings' field.
 Info seq  [hh:mm:ss:mss] 'package.json' does not have a 'types' field.
 Info seq  [hh:mm:ss:mss] 'package.json' has 'main' field 'index.js' that references '/home/src/projects/project/node_modules/bar2/index.js'.
-Info seq  [hh:mm:ss:mss] File '/home/src/projects/project/node_modules/bar2/index.js' exists - use it as a name resolution result.
-Info seq  [hh:mm:ss:mss] File '/home/src/projects/project/node_modules/bar2/index.js' has an unsupported extension, so skipping it.
+Info seq  [hh:mm:ss:mss] File name '/home/src/projects/project/node_modules/bar2/index.js' has a '.js' extension - stripping it.
+Info seq  [hh:mm:ss:mss] File '/home/src/projects/project/node_modules/bar2/index.ts' does not exist.
+Info seq  [hh:mm:ss:mss] File '/home/src/projects/project/node_modules/bar2/index.tsx' does not exist.
+Info seq  [hh:mm:ss:mss] File '/home/src/projects/project/node_modules/bar2/index.d.ts' does not exist.
 Info seq  [hh:mm:ss:mss] Loading module as file / folder, candidate module location '/home/src/projects/project/node_modules/bar2/index.js', target file types: TypeScript, Declaration.
 Info seq  [hh:mm:ss:mss] File name '/home/src/projects/project/node_modules/bar2/index.js' has a '.js' extension - stripping it.
 Info seq  [hh:mm:ss:mss] File '/home/src/projects/project/node_modules/bar2/index.ts' does not exist.
@@ -3998,7 +4282,7 @@ Info seq  [hh:mm:ss:mss] File '/home/src/projects/project/node_modules/@types/ba
 Info seq  [hh:mm:ss:mss] File '/a/lib/package.json' does not exist according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] File '/a/package.json' does not exist according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] File '/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /home/src/projects/project/tsconfig.json Version: 12 structureChanged: true structureIsReused:: SafeModules Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /home/src/projects/project/tsconfig.json projectStateVersion: 12 projectProgramVersion: 11 structureChanged: true structureIsReused:: SafeModules Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/home/src/projects/project/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (4)
 	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
@@ -4050,6 +4334,11 @@ After running Timeout callback:: count: 0
 
 Immedidate callback:: count: 1
 23: semanticCheck *new*
+
+Projects::
+/home/src/projects/project/tsconfig.json (Configured) *changed*
+    projectStateVersion: 12
+    projectProgramVersion: 12 *changed*
 
 Before running Immedidate callback:: count: 1
 23: semanticCheck
@@ -4200,6 +4489,11 @@ Timeout callback:: count: 2
 47: /home/src/projects/project/tsconfig.json *new*
 48: *ensureProjectForOpenFiles* *new*
 
+Projects::
+/home/src/projects/project/tsconfig.json (Configured) *changed*
+    projectStateVersion: 13 *changed*
+    projectProgramVersion: 12
+
 Before running Immedidate callback:: count: 0
 
 After running Immedidate callback:: count: 0
@@ -4297,7 +4591,7 @@ Info seq  [hh:mm:ss:mss] File '/home/src/projects/project/node_modules/@types/ba
 Info seq  [hh:mm:ss:mss] File '/a/lib/package.json' does not exist according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] File '/a/package.json' does not exist according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] File '/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /home/src/projects/project/tsconfig.json Version: 13 structureChanged: true structureIsReused:: SafeModules Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /home/src/projects/project/tsconfig.json projectStateVersion: 13 projectProgramVersion: 12 structureChanged: true structureIsReused:: SafeModules Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/home/src/projects/project/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (4)
 	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
@@ -4349,6 +4643,11 @@ After running Timeout callback:: count: 0
 
 Immedidate callback:: count: 1
 25: semanticCheck *new*
+
+Projects::
+/home/src/projects/project/tsconfig.json (Configured) *changed*
+    projectStateVersion: 13
+    projectProgramVersion: 13 *changed*
 
 Before running Immedidate callback:: count: 1
 25: semanticCheck

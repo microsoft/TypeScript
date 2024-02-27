@@ -64,7 +64,7 @@ Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib.decorators.d.ts 5
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib.decorators.legacy.d.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /tsconfig.json
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /node_modules/bar/index.d.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /tsconfig.json projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (5)
 	/lib.decorators.d.ts Text-1 lib.decorators.d.ts-Text
@@ -131,6 +131,33 @@ watchedFiles::
 watchedDirectoriesRecursive::
 : *new*
   {}
+
+Projects::
+/tsconfig.json (Configured) *new*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+
+ScriptInfos::
+/index.ts (Open) *new*
+    version: SVC-1-0
+    containingProjects: 1
+        /tsconfig.json *default*
+/lib.d.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib.decorators.d.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib.decorators.legacy.d.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/node_modules/bar/index.d.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
 
 Info seq  [hh:mm:ss:mss] request:
     {

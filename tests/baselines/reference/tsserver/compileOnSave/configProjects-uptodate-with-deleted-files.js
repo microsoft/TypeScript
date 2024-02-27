@@ -78,7 +78,7 @@ Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/b/globalFile3.ts 50
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/b/moduleFile2.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /a/b/tsconfig.json
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /a/b/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /a/b/tsconfig.json projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/a/b/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (6)
 	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
@@ -197,6 +197,37 @@ FsWatchesRecursive::
 /a/b: *new*
   {}
 
+Projects::
+/a/b/tsconfig.json (Configured) *new*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+
+ScriptInfos::
+/a/b/file1Consumer1.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /a/b/tsconfig.json
+/a/b/file1Consumer2.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /a/b/tsconfig.json
+/a/b/globalFile3.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /a/b/tsconfig.json
+/a/b/moduleFile1.ts (Open) *new*
+    version: SVC-1-0
+    containingProjects: 1
+        /a/b/tsconfig.json *default*
+/a/b/moduleFile2.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /a/b/tsconfig.json
+/a/lib/lib.d.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /a/b/tsconfig.json
+
 Before request
 
 Info seq  [hh:mm:ss:mss] request:
@@ -248,6 +279,37 @@ Info seq  [hh:mm:ss:mss] response:
     }
 After request
 
+Projects::
+/a/b/tsconfig.json (Configured) *changed*
+    projectStateVersion: 2 *changed*
+    projectProgramVersion: 1
+
+ScriptInfos::
+/a/b/file1Consumer1.ts
+    version: Text-1
+    containingProjects: 1
+        /a/b/tsconfig.json
+/a/b/file1Consumer2.ts
+    version: Text-1
+    containingProjects: 1
+        /a/b/tsconfig.json
+/a/b/globalFile3.ts
+    version: Text-1
+    containingProjects: 1
+        /a/b/tsconfig.json
+/a/b/moduleFile1.ts (Open) *changed*
+    version: SVC-1-1 *changed*
+    containingProjects: 1
+        /a/b/tsconfig.json *default*
+/a/b/moduleFile2.ts
+    version: Text-1
+    containingProjects: 1
+        /a/b/tsconfig.json
+/a/lib/lib.d.ts
+    version: Text-1
+    containingProjects: 1
+        /a/b/tsconfig.json
+
 Info seq  [hh:mm:ss:mss] FileWatcher:: Triggered with /a/b/file1Consumer2.ts 2:: WatchInfo: /a/b/file1Consumer2.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /a/b/file1Consumer2.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] Scheduled: /a/b/tsconfig.json
@@ -284,6 +346,32 @@ Timeout callback:: count: 2
 3: /a/b/tsconfig.json *new*
 4: *ensureProjectForOpenFiles* *new*
 
+ScriptInfos::
+/a/b/file1Consumer1.ts
+    version: Text-1
+    containingProjects: 1
+        /a/b/tsconfig.json
+/a/b/file1Consumer2.ts *deleted*
+    version: Text-1
+    containingProjects: 0 *changed*
+        /a/b/tsconfig.json *deleted*
+/a/b/globalFile3.ts
+    version: Text-1
+    containingProjects: 1
+        /a/b/tsconfig.json
+/a/b/moduleFile1.ts (Open)
+    version: SVC-1-1
+    containingProjects: 1
+        /a/b/tsconfig.json *default*
+/a/b/moduleFile2.ts
+    version: Text-1
+    containingProjects: 1
+        /a/b/tsconfig.json
+/a/lib/lib.d.ts
+    version: Text-1
+    containingProjects: 1
+        /a/b/tsconfig.json
+
 Info seq  [hh:mm:ss:mss] request:
     {
       "command": "compileOnSaveAffectedFileList",
@@ -295,7 +383,7 @@ Info seq  [hh:mm:ss:mss] request:
       "type": "request"
     }
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /a/b/tsconfig.json
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /a/b/tsconfig.json Version: 2 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /a/b/tsconfig.json projectStateVersion: 2 projectProgramVersion: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/a/b/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (5)
 	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
@@ -333,3 +421,8 @@ Info seq  [hh:mm:ss:mss] response:
       "responseRequired": true
     }
 After request
+
+Projects::
+/a/b/tsconfig.json (Configured) *changed*
+    projectStateVersion: 2
+    projectProgramVersion: 2 *changed*

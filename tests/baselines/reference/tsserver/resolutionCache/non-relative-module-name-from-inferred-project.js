@@ -184,7 +184,7 @@ Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/pr
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject1*' (Inferred)
 Info seq  [hh:mm:ss:mss] 	Files (7)
 	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
@@ -277,6 +277,41 @@ FsWatchesRecursive::
 /user/username/projects/myproject/product/src/feature: *new*
   {}
 
+Projects::
+/dev/null/inferredProject1* (Inferred) *new*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+
+ScriptInfos::
+/a/lib/lib.d.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /dev/null/inferredProject1*
+/user/username/projects/myproject/node_modules/module2/index.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /dev/null/inferredProject1*
+/user/username/projects/myproject/product/node_modules/module1/index.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /dev/null/inferredProject1*
+/user/username/projects/myproject/product/src/feature/file2.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /dev/null/inferredProject1*
+/user/username/projects/myproject/product/src/file1.ts (Open) *new*
+    version: SVC-1-0
+    containingProjects: 1
+        /dev/null/inferredProject1* *default*
+/user/username/projects/myproject/product/test/file4.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /dev/null/inferredProject1*
+/user/username/projects/myproject/product/test/src/file3.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /dev/null/inferredProject1*
+
 Info seq  [hh:mm:ss:mss] FileWatcher:: Triggered with /user/username/projects/myproject/product/src/feature/file2.ts 1:: WatchInfo: /user/username/projects/myproject/product/src/feature/file2.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] Scheduled: /dev/null/inferredProject1*
 Info seq  [hh:mm:ss:mss] Scheduled: *ensureProjectForOpenFiles*
@@ -306,6 +341,44 @@ Timeout callback:: count: 2
 5: /dev/null/inferredProject1* *new*
 6: *ensureProjectForOpenFiles* *new*
 
+Projects::
+/dev/null/inferredProject1* (Inferred) *changed*
+    projectStateVersion: 2 *changed*
+    projectProgramVersion: 1
+
+ScriptInfos::
+/a/lib/lib.d.ts
+    version: Text-1
+    containingProjects: 1
+        /dev/null/inferredProject1*
+/user/username/projects/myproject/node_modules/module2/index.ts
+    version: Text-1
+    containingProjects: 1
+        /dev/null/inferredProject1*
+/user/username/projects/myproject/product/node_modules/module1/index.ts
+    version: Text-1
+    containingProjects: 1
+        /dev/null/inferredProject1*
+/user/username/projects/myproject/product/src/feature/file2.ts *changed*
+    version: Text-1
+    pendingReloadFromDisk: true *changed*
+    containingProjects: 1
+        /dev/null/inferredProject1*
+/user/username/projects/myproject/product/src/file1.ts (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /dev/null/inferredProject1* *default*
+/user/username/projects/myproject/product/test/file4.ts *changed*
+    version: Text-1
+    pendingReloadFromDisk: true *changed*
+    containingProjects: 1
+        /dev/null/inferredProject1*
+/user/username/projects/myproject/product/test/src/file3.ts *changed*
+    version: Text-1
+    pendingReloadFromDisk: true *changed*
+    containingProjects: 1
+        /dev/null/inferredProject1*
+
 Info seq  [hh:mm:ss:mss] Running: /dev/null/inferredProject1*
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
 Info seq  [hh:mm:ss:mss] Reusing resolution of module './feature/file2' from '/user/username/projects/myproject/product/src/file1.ts' of old program, it was successfully resolved to '/user/username/projects/myproject/product/src/feature/file2.ts'.
@@ -319,7 +392,7 @@ Info seq  [hh:mm:ss:mss] Reusing resolution of module 'module1' from '/user/user
 Info seq  [hh:mm:ss:mss] Reusing resolution of module 'module2' from '/user/username/projects/myproject/product/test/file4.ts' of old program, it was successfully resolved to '/user/username/projects/myproject/node_modules/module2/index.ts'.
 Info seq  [hh:mm:ss:mss] Reusing resolution of module 'module1' from '/user/username/projects/myproject/product/test/src/file3.ts' of old program, it was successfully resolved to '/user/username/projects/myproject/product/node_modules/module1/index.ts'.
 Info seq  [hh:mm:ss:mss] Reusing resolution of module 'module2' from '/user/username/projects/myproject/product/test/src/file3.ts' of old program, it was successfully resolved to '/user/username/projects/myproject/node_modules/module2/index.ts'.
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* Version: 2 structureChanged: true structureIsReused:: SafeModules Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* projectStateVersion: 2 projectProgramVersion: 1 structureChanged: true structureIsReused:: SafeModules Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject1*' (Inferred)
 Info seq  [hh:mm:ss:mss] 	Files (7)
 	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
@@ -361,3 +434,41 @@ Info seq  [hh:mm:ss:mss] event:
       }
     }
 After running Timeout callback:: count: 0
+
+Projects::
+/dev/null/inferredProject1* (Inferred) *changed*
+    projectStateVersion: 2
+    projectProgramVersion: 2 *changed*
+
+ScriptInfos::
+/a/lib/lib.d.ts
+    version: Text-1
+    containingProjects: 1
+        /dev/null/inferredProject1*
+/user/username/projects/myproject/node_modules/module2/index.ts
+    version: Text-1
+    containingProjects: 1
+        /dev/null/inferredProject1*
+/user/username/projects/myproject/product/node_modules/module1/index.ts
+    version: Text-1
+    containingProjects: 1
+        /dev/null/inferredProject1*
+/user/username/projects/myproject/product/src/feature/file2.ts *changed*
+    version: Text-2 *changed*
+    pendingReloadFromDisk: false *changed*
+    containingProjects: 1
+        /dev/null/inferredProject1*
+/user/username/projects/myproject/product/src/file1.ts (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /dev/null/inferredProject1* *default*
+/user/username/projects/myproject/product/test/file4.ts *changed*
+    version: Text-2 *changed*
+    pendingReloadFromDisk: false *changed*
+    containingProjects: 1
+        /dev/null/inferredProject1*
+/user/username/projects/myproject/product/test/src/file3.ts *changed*
+    version: Text-2 *changed*
+    pendingReloadFromDisk: false *changed*
+    containingProjects: 1
+        /dev/null/inferredProject1*

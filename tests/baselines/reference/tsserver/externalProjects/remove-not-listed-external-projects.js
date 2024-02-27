@@ -42,7 +42,7 @@ Info seq  [hh:mm:ss:mss] request:
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/app.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /a/app.ts.csproj
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined Project: /a/app.ts.csproj WatchType: Missing file
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /a/app.ts.csproj Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /a/app.ts.csproj projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/a/app.ts.csproj' (External)
 Info seq  [hh:mm:ss:mss] 	Files (1)
 	/a/app.ts Text-1 "let x = 1"
@@ -92,7 +92,7 @@ Info seq  [hh:mm:ss:mss] event:
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /b/app.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /b/app.ts.csproj
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined Project: /b/app.ts.csproj WatchType: Missing file
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /b/app.ts.csproj Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /b/app.ts.csproj projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/b/app.ts.csproj' (External)
 Info seq  [hh:mm:ss:mss] 	Files (1)
 	/b/app.ts Text-1 "let x = 1"
@@ -139,6 +139,15 @@ Info seq  [hh:mm:ss:mss] event:
         }
       }
     }
+Info seq  [hh:mm:ss:mss] Project '/a/app.ts.csproj' (External)
+Info seq  [hh:mm:ss:mss] 	Files (1)
+
+Info seq  [hh:mm:ss:mss] -----------------------------------------------
+Info seq  [hh:mm:ss:mss] Project '/b/app.ts.csproj' (External)
+Info seq  [hh:mm:ss:mss] 	Files (1)
+
+Info seq  [hh:mm:ss:mss] -----------------------------------------------
+Info seq  [hh:mm:ss:mss] Open files: 
 Info seq  [hh:mm:ss:mss] response:
     {
       "response": true,
@@ -155,6 +164,24 @@ FsWatches::
   {}
 /b/app.ts: *new*
   {}
+
+Projects::
+/a/app.ts.csproj (External) *new*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+/b/app.ts.csproj (External) *new*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+
+ScriptInfos::
+/a/app.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /a/app.ts.csproj
+/b/app.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /b/app.ts.csproj
 
 Before request
 
@@ -195,12 +222,12 @@ Info seq  [hh:mm:ss:mss] request:
       "type": "request"
     }
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /a/app.ts.csproj
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /a/app.ts.csproj Version: 2 structureChanged: false structureIsReused:: Not Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /a/app.ts.csproj projectStateVersion: 2 projectProgramVersion: 1 structureChanged: false structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Same program as before
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /c/app.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /c/app.ts.csproj
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined Project: /c/app.ts.csproj WatchType: Missing file
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /c/app.ts.csproj Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /c/app.ts.csproj projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/c/app.ts.csproj' (External)
 Info seq  [hh:mm:ss:mss] 	Files (1)
 	/c/app.ts Text-1 "let x = 1"
@@ -258,6 +285,15 @@ Info seq  [hh:mm:ss:mss] 	Files (1)
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /a/lib/lib.d.ts 500 undefined Project: /b/app.ts.csproj WatchType: Missing file
+Info seq  [hh:mm:ss:mss] Project '/a/app.ts.csproj' (External)
+Info seq  [hh:mm:ss:mss] 	Files (1)
+
+Info seq  [hh:mm:ss:mss] -----------------------------------------------
+Info seq  [hh:mm:ss:mss] Project '/c/app.ts.csproj' (External)
+Info seq  [hh:mm:ss:mss] 	Files (1)
+
+Info seq  [hh:mm:ss:mss] -----------------------------------------------
+Info seq  [hh:mm:ss:mss] Open files: 
 Info seq  [hh:mm:ss:mss] response:
     {
       "response": true,
@@ -276,6 +312,31 @@ FsWatches::
   {}
 /c/app.ts: *new*
   {}
+
+Projects::
+/a/app.ts.csproj (External) *changed*
+    projectStateVersion: 2 *changed*
+    projectProgramVersion: 1
+/b/app.ts.csproj (External) *deleted*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+/c/app.ts.csproj (External) *new*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+
+ScriptInfos::
+/a/app.ts
+    version: Text-1
+    containingProjects: 1
+        /a/app.ts.csproj
+/b/app.ts *changed*
+    version: Text-1
+    containingProjects: 0 *changed*
+        /b/app.ts.csproj *deleted*
+/c/app.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /c/app.ts.csproj
 
 Before request
 
@@ -310,6 +371,7 @@ Info seq  [hh:mm:ss:mss] 	Files (1)
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /a/lib/lib.d.ts 500 undefined Project: /c/app.ts.csproj WatchType: Missing file
+Info seq  [hh:mm:ss:mss] Open files: 
 Info seq  [hh:mm:ss:mss] response:
     {
       "response": true,
@@ -328,6 +390,27 @@ FsWatches::
   {}
 /c/app.ts:
   {}
+
+Projects::
+/a/app.ts.csproj (External) *deleted*
+    projectStateVersion: 2
+    projectProgramVersion: 1
+/c/app.ts.csproj (External) *deleted*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+
+ScriptInfos::
+/a/app.ts *changed*
+    version: Text-1
+    containingProjects: 0 *changed*
+        /a/app.ts.csproj *deleted*
+/b/app.ts
+    version: Text-1
+    containingProjects: 0
+/c/app.ts *changed*
+    version: Text-1
+    containingProjects: 0 *changed*
+        /c/app.ts.csproj *deleted*
 
 Before request
 
@@ -360,7 +443,7 @@ Info seq  [hh:mm:ss:mss] request:
     }
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /b/app.ts.csproj
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined Project: /b/app.ts.csproj WatchType: Missing file
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /b/app.ts.csproj Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /b/app.ts.csproj projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/b/app.ts.csproj' (External)
 Info seq  [hh:mm:ss:mss] 	Files (1)
 	/b/app.ts Text-1 "let x = 1"
@@ -370,6 +453,11 @@ Info seq  [hh:mm:ss:mss] 	Files (1)
 	  Root file specified for compilation
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
+Info seq  [hh:mm:ss:mss] Project '/b/app.ts.csproj' (External)
+Info seq  [hh:mm:ss:mss] 	Files (1)
+
+Info seq  [hh:mm:ss:mss] -----------------------------------------------
+Info seq  [hh:mm:ss:mss] Open files: 
 Info seq  [hh:mm:ss:mss] response:
     {
       "response": true,
@@ -388,3 +476,20 @@ FsWatches::
   {}
 /c/app.ts:
   {}
+
+Projects::
+/b/app.ts.csproj (External) *new*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+
+ScriptInfos::
+/a/app.ts
+    version: Text-1
+    containingProjects: 0
+/b/app.ts *changed*
+    version: Text-1
+    containingProjects: 1 *changed*
+        /b/app.ts.csproj *new*
+/c/app.ts
+    version: Text-1
+    containingProjects: 0

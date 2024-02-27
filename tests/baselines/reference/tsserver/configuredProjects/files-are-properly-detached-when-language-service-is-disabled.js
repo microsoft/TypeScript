@@ -67,7 +67,7 @@ Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/largefile.js 500 un
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/lib.js 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /a/tsconfig.json
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined Project: /a/tsconfig.json WatchType: Missing file
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /a/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /a/tsconfig.json projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/a/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (1)
 	/a/app.js SVC-1-0 "var x = 1"
@@ -228,6 +228,25 @@ FsWatches::
 /a/tsconfig.json: *new*
   {}
 
+Projects::
+/a/tsconfig.json (Configured) *new*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+
+ScriptInfos::
+/a/app.js (Open) *new*
+    version: SVC-1-0
+    containingProjects: 1
+        /a/tsconfig.json *default*
+/a/largefile.js *new*
+    version: Text-1
+    containingProjects: 1
+        /a/tsconfig.json
+/a/lib.js *new*
+    version: Text-1
+    containingProjects: 1
+        /a/tsconfig.json
+
 Configured project: /a/tsconfig.json hasOpenRef:: true isClosed: false
 Before request
 
@@ -266,6 +285,26 @@ FsWatches::
 /a/tsconfig.json:
   {}
 
+Projects::
+/a/tsconfig.json (Configured) *changed*
+    projectStateVersion: 2 *changed*
+    projectProgramVersion: 1
+
+ScriptInfos::
+/a/app.js *changed*
+    open: false *changed*
+    version: SVC-1-0
+    containingProjects: 1
+        /a/tsconfig.json
+/a/largefile.js
+    version: Text-1
+    containingProjects: 1
+        /a/tsconfig.json
+/a/lib.js
+    version: Text-1
+    containingProjects: 1
+        /a/tsconfig.json
+
 Configured project: /a/tsconfig.json hasOpenRef:: false isClosed: false
 Containing projects for /a/app.js:: /a/tsconfig.json
 Containing projects for /a/largefile.js:: /a/tsconfig.json
@@ -288,7 +327,7 @@ Info seq  [hh:mm:ss:mss] Search path: /
 Info seq  [hh:mm:ss:mss] For info: /aa.js :: No config files found.
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined Project: /dev/null/inferredProject1* WatchType: Missing file
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject1*' (Inferred)
 Info seq  [hh:mm:ss:mss] 	Files (1)
 	/aa.js SVC-1-0 "var x = 1"
@@ -299,6 +338,32 @@ Info seq  [hh:mm:ss:mss] 	Files (1)
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 TI:: Creating typing installer
+
+Projects::
+/a/tsconfig.json (Configured)
+    projectStateVersion: 2
+    projectProgramVersion: 1
+/dev/null/inferredProject1* (Inferred) *new*
+    projectStateVersion: 1
+    projectProgramVersion: 0
+
+ScriptInfos::
+/a/app.js
+    version: SVC-1-0
+    containingProjects: 1
+        /a/tsconfig.json
+/a/largefile.js
+    version: Text-1
+    containingProjects: 1
+        /a/tsconfig.json
+/a/lib.js
+    version: Text-1
+    containingProjects: 1
+        /a/tsconfig.json
+/aa.js (Open) *new*
+    version: SVC-1-0
+    containingProjects: 1
+        /dev/null/inferredProject1* *default*
 
 TI:: [hh:mm:ss:mss] Global cache location '/a/data', safe file path '/safeList.json', types map path /typesMap.json
 TI:: [hh:mm:ss:mss] Processing cache location '/a/data'
@@ -458,3 +523,29 @@ FsWatches *deleted*::
   {}
 /a/tsconfig.json:
   {}
+
+Projects::
+/a/tsconfig.json (Configured) *deleted*
+    projectStateVersion: 2
+    projectProgramVersion: 1
+/dev/null/inferredProject1* (Inferred) *changed*
+    projectStateVersion: 1
+    projectProgramVersion: 1 *changed*
+
+ScriptInfos::
+/a/app.js *deleted*
+    version: SVC-1-0
+    containingProjects: 0 *changed*
+        /a/tsconfig.json *deleted*
+/a/largefile.js *deleted*
+    version: Text-1
+    containingProjects: 0 *changed*
+        /a/tsconfig.json *deleted*
+/a/lib.js *deleted*
+    version: Text-1
+    containingProjects: 0 *changed*
+        /a/tsconfig.json *deleted*
+/aa.js (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /dev/null/inferredProject1* *default*

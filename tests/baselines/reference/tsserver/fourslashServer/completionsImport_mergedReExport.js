@@ -83,7 +83,7 @@ Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib.d.ts 500 undefine
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib.decorators.d.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib.decorators.legacy.d.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /tsconfig.json
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /tsconfig.json projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (4)
 	/lib.decorators.d.ts Text-1 lib.decorators.d.ts-Text
@@ -125,7 +125,7 @@ Info seq  [hh:mm:ss:mss] event:
       }
     }
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject1*' (Inferred)
 Info seq  [hh:mm:ss:mss] 	Files (4)
 	/lib.d.ts Text-1 lib.d.ts-Text
@@ -150,7 +150,7 @@ Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /node_modules/@jest/ty
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/autoImportProviderProject1*
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /node_modules/@jest/types/package.json 2000 undefined Project: /dev/null/autoImportProviderProject1* WatchType: File location affecting resolution
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /node_modules/@jest/types/Config.d.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/autoImportProviderProject1* Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/autoImportProviderProject1* projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/dev/null/autoImportProviderProject1*' (AutoImportProvider)
 Info seq  [hh:mm:ss:mss] 	Files (2)
 	/node_modules/@jest/types/Config.d.ts Text-1 "export interface ConfigGlobals {\n    [K: string]: unknown;\n}"
@@ -202,6 +202,51 @@ watchedFiles::
 watchedDirectoriesRecursive::
 : *new*
   {}
+
+Projects::
+/dev/null/autoImportProviderProject1* (AutoImportProvider) *new*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+/dev/null/inferredProject1* (Inferred) *new*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+    autoImportProviderHost: /dev/null/autoImportProviderProject1*
+/tsconfig.json (Configured) *new*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+
+ScriptInfos::
+/index.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib.d.ts *new*
+    version: Text-1
+    containingProjects: 2
+        /tsconfig.json
+        /dev/null/inferredProject1*
+/lib.decorators.d.ts *new*
+    version: Text-1
+    containingProjects: 2
+        /tsconfig.json
+        /dev/null/inferredProject1*
+/lib.decorators.legacy.d.ts *new*
+    version: Text-1
+    containingProjects: 2
+        /tsconfig.json
+        /dev/null/inferredProject1*
+/node_modules/@jest/types/Config.d.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /dev/null/autoImportProviderProject1*
+/node_modules/@jest/types/index.d.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /dev/null/autoImportProviderProject1*
+/tsconfig.json (Open) *new*
+    version: SVC-1-0
+    containingProjects: 1
+        /dev/null/inferredProject1* *default*
 
 Info seq  [hh:mm:ss:mss] request:
     {
@@ -259,6 +304,40 @@ watchedDirectoriesRecursive::
 :
   {}
 
+ScriptInfos::
+/index.ts (Open) *changed*
+    open: true *changed*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json *default*
+/lib.d.ts
+    version: Text-1
+    containingProjects: 2
+        /tsconfig.json
+        /dev/null/inferredProject1*
+/lib.decorators.d.ts
+    version: Text-1
+    containingProjects: 2
+        /tsconfig.json
+        /dev/null/inferredProject1*
+/lib.decorators.legacy.d.ts
+    version: Text-1
+    containingProjects: 2
+        /tsconfig.json
+        /dev/null/inferredProject1*
+/node_modules/@jest/types/Config.d.ts
+    version: Text-1
+    containingProjects: 1
+        /dev/null/autoImportProviderProject1*
+/node_modules/@jest/types/index.d.ts
+    version: Text-1
+    containingProjects: 1
+        /dev/null/autoImportProviderProject1*
+/tsconfig.json (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /dev/null/inferredProject1* *default*
+
 Info seq  [hh:mm:ss:mss] request:
     {
       "seq": 2,
@@ -295,7 +374,7 @@ Info seq  [hh:mm:ss:mss] getCompletionData: Get previous token: *
 Info seq  [hh:mm:ss:mss] AutoImportProviderProject: found 1 root files in 1 dependencies in * ms
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/autoImportProviderProject2*
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /node_modules/@jest/types/package.json 2000 undefined Project: /dev/null/autoImportProviderProject2* WatchType: File location affecting resolution
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/autoImportProviderProject2* Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/autoImportProviderProject2* projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/dev/null/autoImportProviderProject2*' (AutoImportProvider)
 Info seq  [hh:mm:ss:mss] 	Files (2)
 	/node_modules/@jest/types/Config.d.ts Text-1 "export interface ConfigGlobals {\n    [K: string]: unknown;\n}"
@@ -1033,6 +1112,57 @@ watchedDirectoriesRecursive::
 :
   {}
 
+Projects::
+/dev/null/autoImportProviderProject1* (AutoImportProvider)
+    projectStateVersion: 1
+    projectProgramVersion: 1
+/dev/null/autoImportProviderProject2* (AutoImportProvider) *new*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+/dev/null/inferredProject1* (Inferred)
+    projectStateVersion: 1
+    projectProgramVersion: 1
+    autoImportProviderHost: /dev/null/autoImportProviderProject1*
+/tsconfig.json (Configured) *changed*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+    autoImportProviderHost: /dev/null/autoImportProviderProject2* *changed*
+
+ScriptInfos::
+/index.ts (Open)
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json *default*
+/lib.d.ts
+    version: Text-1
+    containingProjects: 2
+        /tsconfig.json
+        /dev/null/inferredProject1*
+/lib.decorators.d.ts
+    version: Text-1
+    containingProjects: 2
+        /tsconfig.json
+        /dev/null/inferredProject1*
+/lib.decorators.legacy.d.ts
+    version: Text-1
+    containingProjects: 2
+        /tsconfig.json
+        /dev/null/inferredProject1*
+/node_modules/@jest/types/Config.d.ts *changed*
+    version: Text-1
+    containingProjects: 2 *changed*
+        /dev/null/autoImportProviderProject1*
+        /dev/null/autoImportProviderProject2* *new*
+/node_modules/@jest/types/index.d.ts *changed*
+    version: Text-1
+    containingProjects: 2 *changed*
+        /dev/null/autoImportProviderProject1*
+        /dev/null/autoImportProviderProject2* *new*
+/tsconfig.json (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /dev/null/inferredProject1* *default*
+
 Info seq  [hh:mm:ss:mss] request:
     {
       "seq": 4,
@@ -1047,6 +1177,58 @@ Info seq  [hh:mm:ss:mss] request:
       },
       "command": "change"
     }
+After Request
+Projects::
+/dev/null/autoImportProviderProject1* (AutoImportProvider)
+    projectStateVersion: 1
+    projectProgramVersion: 1
+/dev/null/autoImportProviderProject2* (AutoImportProvider)
+    projectStateVersion: 1
+    projectProgramVersion: 1
+/dev/null/inferredProject1* (Inferred)
+    projectStateVersion: 1
+    projectProgramVersion: 1
+    autoImportProviderHost: /dev/null/autoImportProviderProject1*
+/tsconfig.json (Configured) *changed*
+    projectStateVersion: 2 *changed*
+    projectProgramVersion: 1
+    autoImportProviderHost: /dev/null/autoImportProviderProject2*
+
+ScriptInfos::
+/index.ts (Open) *changed*
+    version: SVC-2-1 *changed*
+    containingProjects: 1
+        /tsconfig.json *default*
+/lib.d.ts
+    version: Text-1
+    containingProjects: 2
+        /tsconfig.json
+        /dev/null/inferredProject1*
+/lib.decorators.d.ts
+    version: Text-1
+    containingProjects: 2
+        /tsconfig.json
+        /dev/null/inferredProject1*
+/lib.decorators.legacy.d.ts
+    version: Text-1
+    containingProjects: 2
+        /tsconfig.json
+        /dev/null/inferredProject1*
+/node_modules/@jest/types/Config.d.ts
+    version: Text-1
+    containingProjects: 2
+        /dev/null/autoImportProviderProject1*
+        /dev/null/autoImportProviderProject2*
+/node_modules/@jest/types/index.d.ts
+    version: Text-1
+    containingProjects: 2
+        /dev/null/autoImportProviderProject1*
+        /dev/null/autoImportProviderProject2*
+/tsconfig.json (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /dev/null/inferredProject1* *default*
+
 Info seq  [hh:mm:ss:mss] request:
     {
       "seq": 5,
@@ -1061,6 +1243,42 @@ Info seq  [hh:mm:ss:mss] request:
       },
       "command": "change"
     }
+After Request
+ScriptInfos::
+/index.ts (Open) *changed*
+    version: SVC-2-2 *changed*
+    containingProjects: 1
+        /tsconfig.json *default*
+/lib.d.ts
+    version: Text-1
+    containingProjects: 2
+        /tsconfig.json
+        /dev/null/inferredProject1*
+/lib.decorators.d.ts
+    version: Text-1
+    containingProjects: 2
+        /tsconfig.json
+        /dev/null/inferredProject1*
+/lib.decorators.legacy.d.ts
+    version: Text-1
+    containingProjects: 2
+        /tsconfig.json
+        /dev/null/inferredProject1*
+/node_modules/@jest/types/Config.d.ts
+    version: Text-1
+    containingProjects: 2
+        /dev/null/autoImportProviderProject1*
+        /dev/null/autoImportProviderProject2*
+/node_modules/@jest/types/index.d.ts
+    version: Text-1
+    containingProjects: 2
+        /dev/null/autoImportProviderProject1*
+        /dev/null/autoImportProviderProject2*
+/tsconfig.json (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /dev/null/inferredProject1* *default*
+
 Info seq  [hh:mm:ss:mss] request:
     {
       "seq": 6,
@@ -1114,7 +1332,7 @@ Info seq  [hh:mm:ss:mss] request:
       "command": "completionInfo"
     }
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /tsconfig.json
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /tsconfig.json Version: 2 structureChanged: false structureIsReused:: Completely Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /tsconfig.json projectStateVersion: 2 projectProgramVersion: 1 structureChanged: false structureIsReused:: Completely Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (4)
 	/lib.decorators.d.ts Text-1 lib.decorators.d.ts-Text

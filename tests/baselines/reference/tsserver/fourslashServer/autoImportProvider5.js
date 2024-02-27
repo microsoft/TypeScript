@@ -40,7 +40,7 @@ Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/inferred
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib.d.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib.decorators.d.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib.decorators.legacy.d.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject1*' (Inferred)
 Info seq  [hh:mm:ss:mss] 	Files (4)
 	/lib.d.ts Text-1 lib.d.ts-Text
@@ -64,7 +64,7 @@ Info seq  [hh:mm:ss:mss] AutoImportProviderProject: found 1 root files in 1 depe
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /node_modules/react-hook-form/dist/index.d.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/autoImportProviderProject1*
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /node_modules/react-hook-form/dist/useForm.d.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/autoImportProviderProject1* Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/autoImportProviderProject1* projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/dev/null/autoImportProviderProject1*' (AutoImportProvider)
 Info seq  [hh:mm:ss:mss] 	Files (2)
 	/node_modules/react-hook-form/dist/useForm.d.ts Text-1 "export declare function useForm(): void;"
@@ -103,6 +103,41 @@ watchedFiles::
 /package.json: *new*
   {"pollingInterval":250}
 
+Projects::
+/dev/null/autoImportProviderProject1* (AutoImportProvider) *new*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+/dev/null/inferredProject1* (Inferred) *new*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+    autoImportProviderHost: /dev/null/autoImportProviderProject1*
+
+ScriptInfos::
+/lib.d.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /dev/null/inferredProject1*
+/lib.decorators.d.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /dev/null/inferredProject1*
+/lib.decorators.legacy.d.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /dev/null/inferredProject1*
+/node_modules/react-hook-form/dist/index.d.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /dev/null/autoImportProviderProject1*
+/node_modules/react-hook-form/dist/useForm.d.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /dev/null/autoImportProviderProject1*
+/package.json (Open) *new*
+    version: SVC-1-0
+    containingProjects: 1
+        /dev/null/inferredProject1* *default*
+
 Info seq  [hh:mm:ss:mss] request:
     {
       "seq": 1,
@@ -115,7 +150,7 @@ Info seq  [hh:mm:ss:mss] request:
 Info seq  [hh:mm:ss:mss] Search path: /
 Info seq  [hh:mm:ss:mss] For info: /index.ts :: No config files found.
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/inferredProject2*
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/inferredProject2* Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/inferredProject2* projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject2*' (Inferred)
 Info seq  [hh:mm:ss:mss] 	Files (4)
 	/lib.d.ts Text-1 lib.d.ts-Text
@@ -136,7 +171,7 @@ Info seq  [hh:mm:ss:mss] 	Files (4)
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] AutoImportProviderProject: found 1 root files in 1 dependencies in * ms
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/autoImportProviderProject2*
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/autoImportProviderProject2* Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/autoImportProviderProject2* projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/dev/null/autoImportProviderProject2*' (AutoImportProvider)
 Info seq  [hh:mm:ss:mss] 	Files (2)
 	/node_modules/react-hook-form/dist/useForm.d.ts Text-1 "export declare function useForm(): void;"
@@ -170,6 +205,58 @@ Info seq  [hh:mm:ss:mss] 	FileName: /package.json ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /dev/null/inferredProject1*
 Info seq  [hh:mm:ss:mss] 	FileName: /index.ts ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /dev/null/inferredProject2*
+After Request
+Projects::
+/dev/null/autoImportProviderProject1* (AutoImportProvider)
+    projectStateVersion: 1
+    projectProgramVersion: 1
+/dev/null/autoImportProviderProject2* (AutoImportProvider) *new*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+/dev/null/inferredProject1* (Inferred)
+    projectStateVersion: 1
+    projectProgramVersion: 1
+    autoImportProviderHost: /dev/null/autoImportProviderProject1*
+/dev/null/inferredProject2* (Inferred) *new*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+    autoImportProviderHost: /dev/null/autoImportProviderProject2*
+
+ScriptInfos::
+/index.ts (Open) *new*
+    version: SVC-1-0
+    containingProjects: 1
+        /dev/null/inferredProject2* *default*
+/lib.d.ts *changed*
+    version: Text-1
+    containingProjects: 2 *changed*
+        /dev/null/inferredProject1*
+        /dev/null/inferredProject2* *new*
+/lib.decorators.d.ts *changed*
+    version: Text-1
+    containingProjects: 2 *changed*
+        /dev/null/inferredProject1*
+        /dev/null/inferredProject2* *new*
+/lib.decorators.legacy.d.ts *changed*
+    version: Text-1
+    containingProjects: 2 *changed*
+        /dev/null/inferredProject1*
+        /dev/null/inferredProject2* *new*
+/node_modules/react-hook-form/dist/index.d.ts *changed*
+    version: Text-1
+    containingProjects: 2 *changed*
+        /dev/null/autoImportProviderProject1*
+        /dev/null/autoImportProviderProject2* *new*
+/node_modules/react-hook-form/dist/useForm.d.ts *changed*
+    version: Text-1
+    containingProjects: 2 *changed*
+        /dev/null/autoImportProviderProject1*
+        /dev/null/autoImportProviderProject2* *new*
+/package.json (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /dev/null/inferredProject1* *default*
+
 Info seq  [hh:mm:ss:mss] request:
     {
       "seq": 2,
@@ -366,6 +453,58 @@ Info seq  [hh:mm:ss:mss] request:
       },
       "command": "change"
     }
+After Request
+Projects::
+/dev/null/autoImportProviderProject1* (AutoImportProvider)
+    projectStateVersion: 1
+    projectProgramVersion: 1
+/dev/null/autoImportProviderProject2* (AutoImportProvider)
+    projectStateVersion: 1
+    projectProgramVersion: 1
+/dev/null/inferredProject1* (Inferred)
+    projectStateVersion: 1
+    projectProgramVersion: 1
+    autoImportProviderHost: /dev/null/autoImportProviderProject1*
+/dev/null/inferredProject2* (Inferred) *changed*
+    projectStateVersion: 2 *changed*
+    projectProgramVersion: 1
+    autoImportProviderHost: /dev/null/autoImportProviderProject2*
+
+ScriptInfos::
+/index.ts (Open) *changed*
+    version: SVC-1-1 *changed*
+    containingProjects: 1
+        /dev/null/inferredProject2* *default*
+/lib.d.ts
+    version: Text-1
+    containingProjects: 2
+        /dev/null/inferredProject1*
+        /dev/null/inferredProject2*
+/lib.decorators.d.ts
+    version: Text-1
+    containingProjects: 2
+        /dev/null/inferredProject1*
+        /dev/null/inferredProject2*
+/lib.decorators.legacy.d.ts
+    version: Text-1
+    containingProjects: 2
+        /dev/null/inferredProject1*
+        /dev/null/inferredProject2*
+/node_modules/react-hook-form/dist/index.d.ts
+    version: Text-1
+    containingProjects: 2
+        /dev/null/autoImportProviderProject1*
+        /dev/null/autoImportProviderProject2*
+/node_modules/react-hook-form/dist/useForm.d.ts
+    version: Text-1
+    containingProjects: 2
+        /dev/null/autoImportProviderProject1*
+        /dev/null/autoImportProviderProject2*
+/package.json (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /dev/null/inferredProject1* *default*
+
 Info seq  [hh:mm:ss:mss] request:
     {
       "seq": 8,
@@ -380,6 +519,42 @@ Info seq  [hh:mm:ss:mss] request:
       },
       "command": "change"
     }
+After Request
+ScriptInfos::
+/index.ts (Open) *changed*
+    version: SVC-1-2 *changed*
+    containingProjects: 1
+        /dev/null/inferredProject2* *default*
+/lib.d.ts
+    version: Text-1
+    containingProjects: 2
+        /dev/null/inferredProject1*
+        /dev/null/inferredProject2*
+/lib.decorators.d.ts
+    version: Text-1
+    containingProjects: 2
+        /dev/null/inferredProject1*
+        /dev/null/inferredProject2*
+/lib.decorators.legacy.d.ts
+    version: Text-1
+    containingProjects: 2
+        /dev/null/inferredProject1*
+        /dev/null/inferredProject2*
+/node_modules/react-hook-form/dist/index.d.ts
+    version: Text-1
+    containingProjects: 2
+        /dev/null/autoImportProviderProject1*
+        /dev/null/autoImportProviderProject2*
+/node_modules/react-hook-form/dist/useForm.d.ts
+    version: Text-1
+    containingProjects: 2
+        /dev/null/autoImportProviderProject1*
+        /dev/null/autoImportProviderProject2*
+/package.json (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /dev/null/inferredProject1* *default*
+
 Info seq  [hh:mm:ss:mss] request:
     {
       "seq": 9,
@@ -394,6 +569,42 @@ Info seq  [hh:mm:ss:mss] request:
       },
       "command": "change"
     }
+After Request
+ScriptInfos::
+/index.ts (Open) *changed*
+    version: SVC-1-3 *changed*
+    containingProjects: 1
+        /dev/null/inferredProject2* *default*
+/lib.d.ts
+    version: Text-1
+    containingProjects: 2
+        /dev/null/inferredProject1*
+        /dev/null/inferredProject2*
+/lib.decorators.d.ts
+    version: Text-1
+    containingProjects: 2
+        /dev/null/inferredProject1*
+        /dev/null/inferredProject2*
+/lib.decorators.legacy.d.ts
+    version: Text-1
+    containingProjects: 2
+        /dev/null/inferredProject1*
+        /dev/null/inferredProject2*
+/node_modules/react-hook-form/dist/index.d.ts
+    version: Text-1
+    containingProjects: 2
+        /dev/null/autoImportProviderProject1*
+        /dev/null/autoImportProviderProject2*
+/node_modules/react-hook-form/dist/useForm.d.ts
+    version: Text-1
+    containingProjects: 2
+        /dev/null/autoImportProviderProject1*
+        /dev/null/autoImportProviderProject2*
+/package.json (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /dev/null/inferredProject1* *default*
+
 Info seq  [hh:mm:ss:mss] request:
     {
       "seq": 10,
@@ -408,3 +619,38 @@ Info seq  [hh:mm:ss:mss] request:
       },
       "command": "change"
     }
+After Request
+ScriptInfos::
+/index.ts (Open) *changed*
+    version: SVC-1-4 *changed*
+    containingProjects: 1
+        /dev/null/inferredProject2* *default*
+/lib.d.ts
+    version: Text-1
+    containingProjects: 2
+        /dev/null/inferredProject1*
+        /dev/null/inferredProject2*
+/lib.decorators.d.ts
+    version: Text-1
+    containingProjects: 2
+        /dev/null/inferredProject1*
+        /dev/null/inferredProject2*
+/lib.decorators.legacy.d.ts
+    version: Text-1
+    containingProjects: 2
+        /dev/null/inferredProject1*
+        /dev/null/inferredProject2*
+/node_modules/react-hook-form/dist/index.d.ts
+    version: Text-1
+    containingProjects: 2
+        /dev/null/autoImportProviderProject1*
+        /dev/null/autoImportProviderProject2*
+/node_modules/react-hook-form/dist/useForm.d.ts
+    version: Text-1
+    containingProjects: 2
+        /dev/null/autoImportProviderProject1*
+        /dev/null/autoImportProviderProject2*
+/package.json (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /dev/null/inferredProject1* *default*

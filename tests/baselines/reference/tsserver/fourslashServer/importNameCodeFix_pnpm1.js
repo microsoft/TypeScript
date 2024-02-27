@@ -60,7 +60,7 @@ Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /project/node_modules/
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib.d.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib.decorators.d.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib.decorators.legacy.d.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /project/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /project/tsconfig.json projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/project/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (5)
 	/lib.d.ts Text-1 lib.d.ts-Text
@@ -103,7 +103,7 @@ Info seq  [hh:mm:ss:mss] event:
       }
     }
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject1*' (Inferred)
 Info seq  [hh:mm:ss:mss] 	Files (5)
 	/lib.d.ts Text-1 lib.d.ts-Text
@@ -155,6 +155,44 @@ watchedDirectoriesRecursive::
 /project: *new*
   {}
 
+Projects::
+/dev/null/inferredProject1* (Inferred) *new*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+/project/tsconfig.json (Configured) *new*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+
+ScriptInfos::
+/lib.d.ts *new*
+    version: Text-1
+    containingProjects: 2
+        /project/tsconfig.json
+        /dev/null/inferredProject1*
+/lib.decorators.d.ts *new*
+    version: Text-1
+    containingProjects: 2
+        /project/tsconfig.json
+        /dev/null/inferredProject1*
+/lib.decorators.legacy.d.ts *new*
+    version: Text-1
+    containingProjects: 2
+        /project/tsconfig.json
+        /dev/null/inferredProject1*
+/project/index.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /project/tsconfig.json
+/project/node_modules/.pnpm/@types+react@17.0.7/node_modules/@types/react/index.d.ts *new*
+    version: Text-1
+    containingProjects: 2
+        /project/tsconfig.json
+        /dev/null/inferredProject1*
+/project/tsconfig.json (Open) *new*
+    version: SVC-1-0
+    containingProjects: 1
+        /dev/null/inferredProject1* *default*
+
 Info seq  [hh:mm:ss:mss] request:
     {
       "seq": 1,
@@ -200,6 +238,37 @@ watchedFiles *deleted*::
 watchedDirectoriesRecursive::
 /project:
   {}
+
+ScriptInfos::
+/lib.d.ts
+    version: Text-1
+    containingProjects: 2
+        /project/tsconfig.json
+        /dev/null/inferredProject1*
+/lib.decorators.d.ts
+    version: Text-1
+    containingProjects: 2
+        /project/tsconfig.json
+        /dev/null/inferredProject1*
+/lib.decorators.legacy.d.ts
+    version: Text-1
+    containingProjects: 2
+        /project/tsconfig.json
+        /dev/null/inferredProject1*
+/project/index.ts (Open) *changed*
+    open: true *changed*
+    version: Text-1
+    containingProjects: 1
+        /project/tsconfig.json *default*
+/project/node_modules/.pnpm/@types+react@17.0.7/node_modules/@types/react/index.d.ts
+    version: Text-1
+    containingProjects: 2
+        /project/tsconfig.json
+        /dev/null/inferredProject1*
+/project/tsconfig.json (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /dev/null/inferredProject1* *default*
 
 Info seq  [hh:mm:ss:mss] request:
     {
@@ -374,6 +443,45 @@ Info seq  [hh:mm:ss:mss] request:
       },
       "command": "change"
     }
+After Request
+Projects::
+/dev/null/inferredProject1* (Inferred)
+    projectStateVersion: 1
+    projectProgramVersion: 1
+/project/tsconfig.json (Configured) *changed*
+    projectStateVersion: 2 *changed*
+    projectProgramVersion: 1
+
+ScriptInfos::
+/lib.d.ts
+    version: Text-1
+    containingProjects: 2
+        /project/tsconfig.json
+        /dev/null/inferredProject1*
+/lib.decorators.d.ts
+    version: Text-1
+    containingProjects: 2
+        /project/tsconfig.json
+        /dev/null/inferredProject1*
+/lib.decorators.legacy.d.ts
+    version: Text-1
+    containingProjects: 2
+        /project/tsconfig.json
+        /dev/null/inferredProject1*
+/project/index.ts (Open) *changed*
+    version: SVC-2-1 *changed*
+    containingProjects: 1
+        /project/tsconfig.json *default*
+/project/node_modules/.pnpm/@types+react@17.0.7/node_modules/@types/react/index.d.ts
+    version: Text-1
+    containingProjects: 2
+        /project/tsconfig.json
+        /dev/null/inferredProject1*
+/project/tsconfig.json (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /dev/null/inferredProject1* *default*
+
 Info seq  [hh:mm:ss:mss] request:
     {
       "seq": 8,
@@ -388,3 +496,33 @@ Info seq  [hh:mm:ss:mss] request:
       },
       "command": "change"
     }
+After Request
+ScriptInfos::
+/lib.d.ts
+    version: Text-1
+    containingProjects: 2
+        /project/tsconfig.json
+        /dev/null/inferredProject1*
+/lib.decorators.d.ts
+    version: Text-1
+    containingProjects: 2
+        /project/tsconfig.json
+        /dev/null/inferredProject1*
+/lib.decorators.legacy.d.ts
+    version: Text-1
+    containingProjects: 2
+        /project/tsconfig.json
+        /dev/null/inferredProject1*
+/project/index.ts (Open) *changed*
+    version: SVC-2-2 *changed*
+    containingProjects: 1
+        /project/tsconfig.json *default*
+/project/node_modules/.pnpm/@types+react@17.0.7/node_modules/@types/react/index.d.ts
+    version: Text-1
+    containingProjects: 2
+        /project/tsconfig.json
+        /dev/null/inferredProject1*
+/project/tsconfig.json (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /dev/null/inferredProject1* *default*
