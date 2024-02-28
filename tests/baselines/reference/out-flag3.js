@@ -1,8 +1,6 @@
 //// [tests/cases/compiler/out-flag3.ts] ////
 
 //// [a.ts]
-// --out and --outFile error
-
 class A { }
 
 //// [b.ts]
@@ -10,7 +8,6 @@ class B { }
 
 
 //// [c.js]
-// --out and --outFile error
 var A = /** @class */ (function () {
     function A() {
     }

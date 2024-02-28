@@ -9,8 +9,6 @@ error TS6082: Only 'amd' and 'system' modules are supported alongside --out.
 !!! error TS5102:   Use 'outFile' instead.
 !!! error TS6082: Only 'amd' and 'system' modules are supported alongside --out.
 ==== a.ts (0 errors) ====
-    // --out and --outFile error
-    
     class A { }
     
 ==== b.ts (0 errors) ====
