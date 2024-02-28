@@ -243,7 +243,6 @@ import {
     ObjectLiteralExpression,
     OperationCanceledException,
     optionsHaveChanges,
-    outFile,
     PackageId,
     packageIdToPackageName,
     packageIdToString,
@@ -1744,7 +1743,7 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
             if (rootNames.length) {
                 resolvedProjectReferences?.forEach((parsedRef, index) => {
                     if (!parsedRef) return;
-                    const out = outFile(parsedRef.commandLine.options);
+                    const out = parsedRef.commandLine.options.outFile;
                     if (useSourceOfProjectReferenceRedirect) {
                         if (out || getEmitModuleKind(parsedRef.commandLine.options) === ModuleKind.None) {
                             for (const fileName of parsedRef.commandLine.fileNames) {
@@ -2097,7 +2096,7 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
         if (!source) return undefined;
         // Output of .d.ts file so return resolved ref that matches the out file name
         return forEachResolvedProjectReference(resolvedRef => {
-            const out = outFile(resolvedRef.commandLine.options);
+            const out = resolvedRef.commandLine.options.outFile;
             if (!out) return undefined;
             return toPath(out) === filePath ? resolvedRef : undefined;
         });
@@ -2674,7 +2673,7 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
     }
 
     function emitBuildInfo(writeFileCallback?: WriteFileCallback): EmitResult {
-        Debug.assert(!outFile(options));
+        Debug.assert(!options.outFile);
         tracing?.push(tracing.Phase.Emit, "emitBuildInfo", {}, /*separateBeginAndEnd*/ true);
         performance.mark("beforeEmit");
         const emitResult = emitFiles(
@@ -2770,7 +2769,7 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
         // This is because in the -out scenario all files need to be emitted, and therefore all
         // files need to be type checked. And the way to specify that all files need to be type
         // checked is to not pass the file to getEmitResolver.
-        const emitResolver = getTypeChecker().getEmitResolver(outFile(options) ? undefined : sourceFile, cancellationToken);
+        const emitResolver = getTypeChecker().getEmitResolver(options.outFile ? undefined : sourceFile, cancellationToken);
 
         performance.mark("beforeEmit");
 
@@ -2847,7 +2846,7 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
     function getDeclarationDiagnostics(sourceFile?: SourceFile, cancellationToken?: CancellationToken): readonly DiagnosticWithLocation[] {
         const options = program.getCompilerOptions();
         // collect diagnostics from the program only once if either no source file was specified or out/outFile is set (bundled emit)
-        if (!sourceFile || outFile(options)) {
+        if (!sourceFile || options.outFile) {
             return getDeclarationDiagnosticsWorker(sourceFile, cancellationToken);
         }
         else {
@@ -3661,7 +3660,7 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
         if (isReferencedFile(reason) && !useSourceOfProjectReferenceRedirect) {
             const redirectProject = getProjectReferenceRedirectProject(fileName);
             if (redirectProject) {
-                if (outFile(redirectProject.commandLine.options)) {
+                if (redirectProject.commandLine.options.outFile) {
                     // Shouldnt create many to 1 mapping file in --out scenario
                     return undefined;
                 }
@@ -3788,7 +3787,7 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
     }
 
     function getProjectReferenceOutputName(referencedProject: ResolvedProjectReference, fileName: string) {
-        const out = outFile(referencedProject.commandLine.options);
+        const out = referencedProject.commandLine.options.outFile;
         return out ?
             changeExtension(out, Extension.Dts) :
             getOutputDeclarationFileName(fileName, referencedProject.commandLine, !host.useCaseSensitiveFileNames());
@@ -3823,7 +3822,7 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
         if (mapFromToProjectReferenceRedirectSource === undefined) {
             mapFromToProjectReferenceRedirectSource = new Map();
             forEachResolvedProjectReference(resolvedRef => {
-                const out = outFile(resolvedRef.commandLine.options);
+                const out = resolvedRef.commandLine.options.outFile;
                 if (out) {
                     // Dont know which source file it means so return true?
                     const outputDts = changeExtension(out, Extension.Dts);
@@ -4204,7 +4203,7 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
             }
         }
 
-        const outputFile = outFile(options);
+        const outputFile = options.outFile;
         if (options.tsBuildInfoFile) {
             if (!isIncrementalCompilation(options)) {
                 createDiagnosticForOptionName(Diagnostics.Option_0_cannot_be_specified_without_specifying_option_1_or_option_2, "tsBuildInfoFile", "incremental", "composite");
@@ -4756,7 +4755,7 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
                 }
             }
             if (ref.prepend) {
-                const out = outFile(options);
+                const out = options.outFile;
                 if (out) {
                     if (!host.fileExists(out)) {
                         createDiagnosticForReference(parentFile, index, Diagnostics.Output_file_0_from_project_1_does_not_exist, out, ref.path);
@@ -4913,7 +4912,7 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
         }
 
         // If options have --outFile or --out just check that
-        const out = outFile(options);
+        const out = options.outFile;
         if (out) {
             return isSameFile(filePath, out) || isSameFile(filePath, removeFileExtension(out) + Extension.Dts);
         }
@@ -5001,7 +5000,7 @@ function updateHostForUseSourceOfProjectReferenceRedirect(host: HostForUseSource
             if (!setOfDeclarationDirectories) {
                 setOfDeclarationDirectories = new Set();
                 host.forEachResolvedProjectReference(ref => {
-                    const out = outFile(ref.commandLine.options);
+                    const out = ref.commandLine.options.outFile;
                     if (out) {
                         setOfDeclarationDirectories!.add(getDirectoryPath(host.toPath(out)));
                     }
@@ -5152,7 +5151,7 @@ export function handleNoEmitOptions<T extends BuilderProgram>(
     if (options.noEmit) {
         // Cache the semantic diagnostics
         program.getSemanticDiagnostics(sourceFile, cancellationToken);
-        return sourceFile || outFile(options) ?
+        return sourceFile || options.outFile ?
             emitSkippedWithNoDiagnostics :
             program.emitBuildInfo(writeFile, cancellationToken);
     }
@@ -5174,7 +5173,7 @@ export function handleNoEmitOptions<T extends BuilderProgram>(
 
     if (!diagnostics.length) return undefined;
     let emittedFiles: string[] | undefined;
-    if (!sourceFile && !outFile(options)) {
+    if (!sourceFile && !options.outFile) {
         const emitResult = program.emitBuildInfo(writeFile, cancellationToken);
         if (emitResult.diagnostics) diagnostics = [...diagnostics, ...emitResult.diagnostics];
         emittedFiles = emitResult.emittedFiles;
@@ -5222,7 +5221,7 @@ export function createPrependNodes(
         const ref = projectReferences[i];
         const resolvedRefOpts = getCommandLine(ref, i);
         if (ref.prepend && resolvedRefOpts && resolvedRefOpts.options) {
-            const out = outFile(resolvedRefOpts.options);
+            const out = resolvedRefOpts.options.outFile;
             // Upstream project didn't have outFile set -- skip (error will have been issued earlier)
             if (!out) continue;
 

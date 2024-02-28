@@ -6296,11 +6296,6 @@ export function getPossibleOriginalInputExtensionForExtension(path: string) {
         [Extension.Tsx, Extension.Ts, Extension.Jsx, Extension.Js];
 }
 
-/** @internal */
-export function outFile(options: CompilerOptions) {
-    return options.outFile;
-}
-
 /**
  * Returns 'undefined' if and only if 'options.paths' is undefined.
  *
@@ -6333,7 +6328,7 @@ export interface EmitFileNames {
  */
 export function getSourceFilesToEmit(host: EmitHost, targetSourceFile?: SourceFile, forceDtsEmit?: boolean): readonly SourceFile[] {
     const options = host.getCompilerOptions();
-    if (outFile(options)) {
+    if (options.outFile) {
         const moduleKind = getEmitModuleKind(options);
         const moduleEmitEnabled = options.emitDeclarationOnly || moduleKind === ModuleKind.AMD || moduleKind === ModuleKind.System;
         // Can emit only sources that are not declaration file and are either non module code or module with --module or --target es6 specified
@@ -6375,7 +6370,7 @@ export function sourceFileMayBeEmitted(sourceFile: SourceFile, host: SourceFileM
     if (!isJsonSourceFile(sourceFile)) return true;
     if (host.getResolvedProjectReferenceToRedirect(sourceFile.fileName)) return false;
     // Emit json file if outFile is specified
-    if (outFile(options)) return true;
+    if (options.outFile) return true;
     // Json file is not emitted if outDir is not specified
     if (!options.outDir) return false;
     // Otherwise if rootDir or composite config file, we know common sourceDir and can check if file would be emitted in same location

@@ -77,7 +77,6 @@ import {
     ModuleKind,
     noop,
     normalizePath,
-    outFile,
     packageIdToString,
     ParseConfigFileHost,
     ParsedCommandLine,
@@ -515,7 +514,7 @@ export function fileIncludeReasonToDiagnostics(program: Program, reason: FileInc
             const referencedResolvedRef = Debug.checkDefined(program.getResolvedProjectReferences()?.[reason.index]);
             return chainDiagnosticMessages(
                 /*details*/ undefined,
-                outFile(options) ?
+                options.outFile ?
                     isOutput ?
                         Diagnostics.Output_from_referenced_project_0_included_because_1_specified :
                         Diagnostics.Source_from_referenced_project_0_included_because_1_specified :

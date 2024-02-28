@@ -96,7 +96,6 @@ import {
     Node,
     NodeFlags,
     ObjectLiteralElementLike,
-    outFile,
     ParenthesizedExpression,
     PartiallyEmittedExpression,
     PostfixUnaryExpression,
@@ -251,7 +250,7 @@ export function transformSystemModule(context: TransformationContext): (x: Sourc
             EmitFlags.NoTrailingComments,
         );
 
-        if (!outFile(compilerOptions)) {
+        if (!compilerOptions.outFile) {
             moveEmitHelpers(updated, moduleBodyBlock, helper => !helper.scoped);
         }
 

@@ -348,7 +348,6 @@ import {
     ObjectBindingPattern,
     ObjectLiteralExpression,
     OptionalTypeNode,
-    outFile,
     OutputFile,
     ParameterDeclaration,
     ParenthesizedExpression,
@@ -493,7 +492,7 @@ export function forEachEmittedFile<T>(
 ) {
     const sourceFiles = isArray(sourceFilesOrTargetSourceFile) ? sourceFilesOrTargetSourceFile : getSourceFilesToEmit(host, sourceFilesOrTargetSourceFile, forceDtsEmit);
     const options = host.getCompilerOptions();
-    if (outFile(options)) {
+    if (options.outFile) {
         const prepends = host.getPrependNodes();
         if (sourceFiles.length || prepends.length) {
             const bundle = factory.createBundle(sourceFiles, prepends);
@@ -523,7 +522,7 @@ export function getTsBuildInfoEmitOutputFilePath(options: CompilerOptions) {
     const configFile = options.configFilePath;
     if (!isIncrementalCompilation(options)) return undefined;
     if (options.tsBuildInfoFile) return options.tsBuildInfoFile;
-    const outPath = outFile(options);
+    const outPath = options.outFile;
     let buildInfoExtensionLess: string;
     if (outPath) {
         buildInfoExtensionLess = removeFileExtension(outPath);
@@ -542,7 +541,7 @@ export function getTsBuildInfoEmitOutputFilePath(options: CompilerOptions) {
 
 /** @internal */
 export function getOutputPathsForBundle(options: CompilerOptions, forceDtsPaths: boolean): EmitFileNames {
-    const outPath = outFile(options)!;
+    const outPath = options.outFile!;
     const jsFilePath = options.emitDeclarationOnly ? undefined : outPath;
     const sourceMapFilePath = jsFilePath && getSourceMapFilePath(jsFilePath, options);
     const declarationFilePath = (forceDtsPaths || getEmitDeclarations(options)) ? removeFileExtension(outPath) + Extension.Dts : undefined;
@@ -712,7 +711,7 @@ export function getCommonSourceDirectoryOfConfig({ options, fileNames }: ParsedC
 /** @internal */
 export function getAllProjectOutputs(configFile: ParsedCommandLine, ignoreCase: boolean): readonly string[] {
     const { addOutput, getOutputs } = createAddOutput();
-    if (outFile(configFile.options)) {
+    if (configFile.options.outFile) {
         getSingleOutputFileNames(configFile, addOutput);
     }
     else {
@@ -729,7 +728,7 @@ export function getOutputFileNames(commandLine: ParsedCommandLine, inputFileName
     inputFileName = normalizePath(inputFileName);
     Debug.assert(contains(commandLine.fileNames, inputFileName), `Expected fileName to be present in command line`);
     const { addOutput, getOutputs } = createAddOutput();
-    if (outFile(commandLine.options)) {
+    if (commandLine.options.outFile) {
         getSingleOutputFileNames(commandLine, addOutput);
     }
     else {
@@ -740,7 +739,7 @@ export function getOutputFileNames(commandLine: ParsedCommandLine, inputFileName
 
 /** @internal */
 export function getFirstProjectOutput(configFile: ParsedCommandLine, ignoreCase: boolean): string {
-    if (outFile(configFile.options)) {
+    if (configFile.options.outFile) {
         const { jsFilePath, declarationFilePath } = getOutputPathsForBundle(configFile.options, /*forceDtsPaths*/ false);
         return Debug.checkDefined(jsFilePath || declarationFilePath, `project ${configFile.options.configFilePath} expected to have at least one output`);
     }
@@ -907,7 +906,7 @@ export function emitFiles(resolver: EmitResolver, host: EmitHost, targetSourceFi
         const sourceFiles = isSourceFile(sourceFileOrBundle) ? [sourceFileOrBundle] : sourceFileOrBundle.sourceFiles;
         const filesForEmit = forceDtsEmit ? sourceFiles : filter(sourceFiles, isSourceFileNotJson);
         // Setup and perform the transformation to retrieve declarations from the input files
-        const inputListOrBundle = outFile(compilerOptions) ? [factory.createBundle(filesForEmit, !isSourceFile(sourceFileOrBundle) ? sourceFileOrBundle.prepends : undefined)] : filesForEmit;
+        const inputListOrBundle = compilerOptions.outFile ? [factory.createBundle(filesForEmit, !isSourceFile(sourceFileOrBundle) ? sourceFileOrBundle.prepends : undefined)] : filesForEmit;
         if (emitOnly && !getEmitDeclarations(compilerOptions)) {
             // Checker wont collect the linked aliases since thats only done when declaration is enabled.
             // Do that here when emitting only dts files

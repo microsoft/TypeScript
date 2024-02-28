@@ -887,7 +887,6 @@ import {
     or,
     orderedRemoveItemAt,
     OuterExpressionKinds,
-    outFile,
     ParameterDeclaration,
     parameterIsThisKeyword,
     ParameterPropertyDeclaration,
@@ -2800,7 +2799,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         if (declarationFile !== useFile) {
             if (
                 (moduleKind && (declarationFile.externalModuleIndicator || useFile.externalModuleIndicator)) ||
-                (!outFile(compilerOptions)) ||
+                (!compilerOptions.outFile) ||
                 isInTypeQuery(usage) ||
                 declaration.flags & NodeFlags.Ambient
             ) {
@@ -8032,7 +8031,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             const links = getSymbolLinks(symbol);
             let specifier = links.specifierCache && links.specifierCache.get(cacheKey);
             if (!specifier) {
-                const isBundle = !!outFile(compilerOptions);
+                const isBundle = !!compilerOptions.outFile;
                 // For declaration bundles, we need to generate absolute paths relative to the common source dir for imports,
                 // just like how the declaration emitter does for the ambient module declarations - we can easily accomplish this
                 // using the `baseUrl` compiler option (which we would otherwise never use in declaration emit) and a non-relative

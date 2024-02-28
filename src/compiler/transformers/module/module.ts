@@ -125,7 +125,6 @@ import {
     NodeArray,
     NodeFlags,
     ObjectLiteralElementLike,
-    outFile,
     ParameterDeclaration,
     ParenthesizedExpression,
     PartiallyEmittedExpression,
@@ -225,7 +224,7 @@ export function transformModule(context: TransformationContext): (x: SourceFile 
             node.isDeclarationFile ||
             !(isEffectiveExternalModule(node, compilerOptions) ||
                 node.transformFlags & TransformFlags.ContainsDynamicImport ||
-                (isJsonSourceFile(node) && hasJsonModuleEmitEnabled(compilerOptions) && outFile(compilerOptions)))
+                (isJsonSourceFile(node) && hasJsonModuleEmitEnabled(compilerOptions) && compilerOptions.outFile))
         ) {
             return node;
         }

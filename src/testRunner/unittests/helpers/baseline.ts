@@ -202,7 +202,7 @@ export type ReadableProgramBundleEmitBuildInfo = Omit<ts.ProgramBundleEmitBuildI
 export type ReadableProgramBuildInfo = ReadableProgramMultiFileEmitBuildInfo | ReadableProgramBundleEmitBuildInfo;
 
 export function isReadableProgramBundleEmitBuildInfo(info: ReadableProgramBuildInfo | undefined): info is ReadableProgramBundleEmitBuildInfo {
-    return !!info && !!ts.outFile(info.options || {});
+    return !!info && !!info.options?.outFile;
 }
 export type ReadableBuildInfo = Omit<ts.BuildInfo, "program"> & { program: ReadableProgramBuildInfo | undefined; size: number; };
 function generateBuildInfoProgramBaseline(sys: ts.System, buildInfoPath: string, buildInfo: ts.BuildInfo) {
@@ -359,7 +359,7 @@ export function baselineBuildInfo(
     if (!buildInfo) return sys.writeFile(`${buildInfoPath}.baseline.txt`, "Error reading valid buildinfo file");
     generateBuildInfoProgramBaseline(sys, buildInfoPath, buildInfo);
 
-    if (!ts.outFile(options)) return;
+    if (!options.outFile) return;
     const { jsFilePath, declarationFilePath } = ts.getOutputPathsForBundle(options, /*forceDtsPaths*/ false);
     const bundle = buildInfo.bundle;
     if (!bundle || (!ts.length(bundle.js && bundle.js.sections) && !ts.length(bundle.dts && bundle.dts.sections))) return;
