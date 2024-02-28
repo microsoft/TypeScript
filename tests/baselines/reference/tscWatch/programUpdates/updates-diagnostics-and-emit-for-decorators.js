@@ -27,7 +27,7 @@ export class B {}
 {
   "compilerOptions": {
     "target": "es6",
-    "importsNotUsedAsValues": "error"
+    "verbatimModuleSyntax": true
   }
 }
 
@@ -37,13 +37,15 @@ Output::
 >> Screen clear
 [[90m12:00:15 AM[0m] Starting compilation in watch mode...
 
-[96mtsconfig.json[0m:[93m4[0m:[93m5[0m - [91merror[0m[90m TS5102: [0mOption 'importsNotUsedAsValues' has been removed. Please remove it from your configuration.
-  Use 'verbatimModuleSyntax' instead.
+[91merror[0m[90m TS2318: [0mCannot find global type 'ClassDecoratorContext'.
 
-[7m4[0m     "importsNotUsedAsValues": "error"
-[7m [0m [91m    ~~~~~~~~~~~~~~~~~~~~~~~~[0m
+[96ma.ts[0m:[93m2[0m:[93m2[0m - [91merror[0m[90m TS1238: [0mUnable to resolve signature of class decorator when called as an expression.
+  The runtime will invoke the decorator with 2 arguments, but the decorator expects 1.
 
-[[90m12:00:20 AM[0m] Found 1 error. Watching for file changes.
+[7m2[0m @((_) => {})
+[7m [0m [91m ~~~~~~~~~~~[0m
+
+[[90m12:00:20 AM[0m] Found 2 errors. Watching for file changes.
 
 
 
@@ -91,7 +93,7 @@ var __setFunctionName = (this && this.__setFunctionName) || function (f, name, p
     if (typeof name === "symbol") name = name.description ? "[".concat(name.description, "]") : "";
     return Object.defineProperty(f, "name", { configurable: true, value: prefix ? "".concat(prefix, " ", name) : name });
 };
-import './b';
+import { B } from './b';
 let A = (() => {
     let _classDecorators = [((_) => { })];
     let _classDescriptor;
@@ -135,7 +137,7 @@ Program root files: [
 ]
 Program options: {
   "target": 2,
-  "importsNotUsedAsValues": 2,
+  "verbatimModuleSyntax": true,
   "watch": true,
   "configFilePath": "/tsconfig.json"
 }
@@ -145,7 +147,10 @@ Program files::
 /a.ts
 /a/lib/lib.d.ts
 
-No cached semantic diagnostics in the builder::
+Semantic diagnostics in builder refreshed for::
+/b.ts
+/a.ts
+/a/lib/lib.d.ts
 
 Shape signatures in builder refreshed for::
 /b.ts (used version)
@@ -161,7 +166,7 @@ Input::
 {
   "compilerOptions": {
     "target": "es6",
-    "importsNotUsedAsValues": "error",
+    "verbatimModuleSyntax": true,
     "experimentalDecorators": true
   }
 }
@@ -178,13 +183,7 @@ Output::
 >> Screen clear
 [[90m12:00:23 AM[0m] File change detected. Starting incremental compilation...
 
-[96mtsconfig.json[0m:[93m4[0m:[93m5[0m - [91merror[0m[90m TS5102: [0mOption 'importsNotUsedAsValues' has been removed. Please remove it from your configuration.
-  Use 'verbatimModuleSyntax' instead.
-
-[7m4[0m     "importsNotUsedAsValues": "error",
-[7m [0m [91m    ~~~~~~~~~~~~~~~~~~~~~~~~[0m
-
-[[90m12:00:30 AM[0m] Found 1 error. Watching for file changes.
+[[90m12:00:30 AM[0m] Found 0 errors. Watching for file changes.
 
 
 
@@ -196,7 +195,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
-import './b';
+import { B } from './b';
 let A = class A {
     constructor(p) { }
 };
@@ -215,7 +214,7 @@ Program root files: [
 ]
 Program options: {
   "target": 2,
-  "importsNotUsedAsValues": 2,
+  "verbatimModuleSyntax": true,
   "experimentalDecorators": true,
   "watch": true,
   "configFilePath": "/tsconfig.json"
@@ -226,7 +225,10 @@ Program files::
 /a.ts
 /a/lib/lib.d.ts
 
-No cached semantic diagnostics in the builder::
+Semantic diagnostics in builder refreshed for::
+/b.ts
+/a.ts
+/a/lib/lib.d.ts
 
 No shapes updated in the builder::
 
@@ -239,7 +241,7 @@ Input::
 {
   "compilerOptions": {
     "target": "es6",
-    "importsNotUsedAsValues": "error",
+    "verbatimModuleSyntax": true,
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true
   }
@@ -257,13 +259,7 @@ Output::
 >> Screen clear
 [[90m12:00:33 AM[0m] File change detected. Starting incremental compilation...
 
-[96mtsconfig.json[0m:[93m4[0m:[93m5[0m - [91merror[0m[90m TS5102: [0mOption 'importsNotUsedAsValues' has been removed. Please remove it from your configuration.
-  Use 'verbatimModuleSyntax' instead.
-
-[7m4[0m     "importsNotUsedAsValues": "error",
-[7m [0m [91m    ~~~~~~~~~~~~~~~~~~~~~~~~[0m
-
-[[90m12:00:40 AM[0m] Found 1 error. Watching for file changes.
+[[90m12:00:40 AM[0m] Found 0 errors. Watching for file changes.
 
 
 
@@ -298,7 +294,7 @@ Program root files: [
 ]
 Program options: {
   "target": 2,
-  "importsNotUsedAsValues": 2,
+  "verbatimModuleSyntax": true,
   "experimentalDecorators": true,
   "emitDecoratorMetadata": true,
   "watch": true,
@@ -310,7 +306,10 @@ Program files::
 /a.ts
 /a/lib/lib.d.ts
 
-No cached semantic diagnostics in the builder::
+Semantic diagnostics in builder refreshed for::
+/b.ts
+/a.ts
+/a/lib/lib.d.ts
 
 No shapes updated in the builder::
 

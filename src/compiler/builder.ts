@@ -7,7 +7,6 @@ import {
     BuilderProgramHost,
     BuilderState,
     BuildInfo,
-    BundleBuildInfo,
     CancellationToken,
     CommandLineOption,
     compareStringsCaseSensitive,
@@ -76,7 +75,6 @@ import {
     sameMap,
     SemanticDiagnosticsBuilderProgram,
     skipTypeChecking,
-    some,
     SourceFile,
     sourceFileMayBeEmitted,
     SourceMapEmitResult,
@@ -171,11 +169,6 @@ export interface ReusableBuilderProgramState extends BuilderState {
      * Name of the file whose dts was the latest to change
      */
     latestChangedDtsFile: string | undefined;
-    /**
-     * @deprecated
-     * Bundle information either from oldState or current one so it can be used to complete the information in buildInfo when emitting only js or dts files
-     */
-    bundle?: BundleBuildInfo;
 }
 
 // dprint-ignore
@@ -461,12 +454,6 @@ function createBuilderProgramState(newProgram: Program, oldState: Readonly<Reusa
                     pendingEmitKind;
             }
         }
-    }
-    if (outFilePath && !state.changedFilesSet.size) {
-        // Copy the bundle information from old state so we can patch it later if we are doing partial emit
-        if (useOldState) state.bundle = oldState!.bundle;
-        // If this program has prepend references, always emit since we wont know if files on disk are correct unless we check file hash for correctness
-        if (some(newProgram.getProjectReferences(), ref => !!ref.prepend)) state.programEmitPending = getBuilderFileEmit(compilerOptions);
     }
     return state;
 }
@@ -1070,7 +1057,7 @@ export function isProgramBundleEmitBuildInfo(info: ProgramBuildInfo): info is Pr
 /**
  * Gets the program information to be emitted in buildInfo so that we can use it to create new program
  */
-function getBuildInfo(state: BuilderProgramState, bundle: BundleBuildInfo | undefined): BuildInfo {
+function getBuildInfo(state: BuilderProgramState): BuildInfo {
     const currentDirectory = Debug.checkDefined(state.program).getCurrentDirectory();
     const buildInfoDirectory = getDirectoryPath(getNormalizedAbsolutePath(getTsBuildInfoEmitOutputFilePath(state.compilerOptions)!, currentDirectory));
     // Convert the file name to Path here if we set the fileName instead to optimize multiple d.ts file emits and having to compute Canonical path
@@ -1102,15 +1089,7 @@ function getBuildInfo(state: BuilderProgramState, bundle: BundleBuildInfo | unde
                 false : // Pending emit is same as deteremined by compilerOptions
                 state.programEmitPending, // Actual value
         };
-        // Complete the bundle information if we are doing partial emit (only js or only dts)
-        const { js, dts, commonSourceDirectory, sourceFiles } = bundle!;
-        state.bundle = bundle = {
-            commonSourceDirectory,
-            sourceFiles,
-            js: js || (!state.compilerOptions.emitDeclarationOnly ? state.bundle?.js : undefined),
-            dts: dts || (getEmitDeclarations(state.compilerOptions) ? state.bundle?.dts : undefined),
-        };
-        return createBuildInfo(program, bundle);
+        return createBuildInfo(program);
     }
 
     let fileIdsList: (readonly ProgramBuildInfoFileId[])[] | undefined;
@@ -1215,7 +1194,7 @@ function getBuildInfo(state: BuilderProgramState, bundle: BundleBuildInfo | unde
         emitSignatures,
         latestChangedDtsFile,
     };
-    return createBuildInfo(program, bundle);
+    return createBuildInfo(program);
 
     function relativeToBuildInfoEnsuringAbsolutePath(path: string) {
         return relativeToBuildInfo(getNormalizedAbsolutePath(path, currentDirectory));
@@ -1478,7 +1457,7 @@ export function createBuilderProgram(kind: BuilderProgramKind, { newProgram, hos
     }
 
     const state = createBuilderProgramState(newProgram, oldState);
-    newProgram.getBuildInfo = bundle => getBuildInfo(state, bundle);
+    newProgram.getBuildInfo = () => getBuildInfo(state);
 
     // To ensure that we arent storing any references to old program or new program without state
     newProgram = undefined!; // TODO: GH#18217
@@ -1854,7 +1833,6 @@ export function createBuilderProgramUsingProgramBuildInfo(buildInfo: BuildInfo, 
             latestChangedDtsFile,
             outSignature: program.outSignature,
             programEmitPending: program.pendingEmit === undefined ? undefined : toProgramEmitPending(program.pendingEmit, program.options),
-            bundle: buildInfo.bundle,
         };
     }
     else {

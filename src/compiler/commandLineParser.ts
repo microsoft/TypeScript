@@ -813,6 +813,9 @@ const commandOptionsWithoutBuild: CommandLineOption[] = [
     {
         name: "verbatimModuleSyntax",
         type: "boolean",
+        affectsEmit: true,
+        affectsSemanticDiagnostics: true,
+        affectsBuildInfo: true,
         category: Diagnostics.Interop_Constraints,
         description: Diagnostics.Do_not_transform_or_elide_any_imports_or_exports_not_marked_as_type_only_ensuring_they_are_written_in_the_output_file_s_format_based_on_the_module_setting,
         defaultValueDescription: false,
