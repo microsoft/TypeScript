@@ -6,6 +6,7 @@ import type {
     HighlightSpanKind,
     InteractiveRefactorArguments,
     MapLike,
+    OrganizeImportsTypeOrder,
     OutliningSpanKind,
     OutputFile,
     PluginImport,
@@ -3649,7 +3650,7 @@ export interface UserPreferences {
      *
      * Default: `last`
      */
-    readonly organizeImportsTypeOrder?: ts.OrganizeImportsTypeOrder;
+    readonly organizeImportsTypeOrder?: OrganizeImportsTypeOrder;
 
     /**
      * Indicates whether {@link ReferencesResponseItem.lineText} is supported.

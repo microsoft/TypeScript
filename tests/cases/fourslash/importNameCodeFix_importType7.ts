@@ -34,22 +34,21 @@ new SomePig`],
 /*errorCode*/ undefined,
 { organizeImportsTypeOrder: "last" });
 
-//TODO: bugged cases
-// verify.importFixAtPosition([
-// `import {
-//     type SomeInterface,
-//     SomePig,
-// } from "./exports.js";
-// new SomePig`],
-//     /*errorCode*/ undefined,
-//     { organizeImportsTypeOrder: "inline" }
-// );
+verify.importFixAtPosition([
+`import {
+    type SomeInterface,
+    SomePig,
+} from "./exports.js";
+new SomePig`],
+    /*errorCode*/ undefined,
+    { organizeImportsTypeOrder: "inline" }
+);
 
-// verify.importFixAtPosition([
-// `import {
-//     type SomeInterface,
-//     SomePig,
-// } from "./exports.js";
-// new SomePig`],
-// /*errorCode*/ undefined,
-// { organizeImportsTypeOrder: "first" });
+verify.importFixAtPosition([
+`import {
+    type SomeInterface,
+    SomePig,
+} from "./exports.js";
+new SomePig`],
+/*errorCode*/ undefined,
+{ organizeImportsTypeOrder: "first" });

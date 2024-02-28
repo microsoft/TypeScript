@@ -2939,7 +2939,7 @@ declare namespace ts {
                  *
                  * Default: `last`
                  */
-                readonly organizeImportsTypeOrder?: ts.OrganizeImportsTypeOrder;
+                readonly organizeImportsTypeOrder?: OrganizeImportsTypeOrder;
                 /**
                  * Indicates whether {@link ReferencesResponseItem.lineText} is supported.
                  */

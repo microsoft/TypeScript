@@ -841,7 +841,7 @@ export function detectModuleSpecifierCaseBySort(importDeclsByGroup: (readonly An
 }
 
 /** @internal */
-export function detectNamedImportOrganizationBySort(originalGroups: readonly ImportDeclaration[], comparersToTest: Comparer<string>[], typesToTest: OrganizeImportsTypeOrder[]): { namedImportComparer: Comparer<string>; typeOrder?: OrganizeImportsTypeOrder; isSorted: boolean; } | undefined {
+export function detectNamedImportOrganizationBySort(originalGroups: readonly ImportDeclaration[], comparersToTest: Comparer<string>[], typesToTest: OrganizeImportsTypeOrder[]): { namedImportComparer: Comparer<string>; typeOrder: OrganizeImportsTypeOrder | undefined; isSorted: boolean; } | undefined {
     // Filter for import declarations with named imports. Will be a flat array of import declarations without separations by group
     let bothNamedImports = false;
     const importDeclsWithNamed = originalGroups.filter(i => {
@@ -864,7 +864,11 @@ export function detectNamedImportOrganizationBySort(originalGroups: readonly Imp
     // If we don't have any import statements with both named regular and type imports, we do not need to detect a type ordering
     if (!bothNamedImports || typesToTest.length === 0) {
         const sortState = detectCaseSensitivityBySort(namedImportsByDecl.map(i => i.map(n => n.name.text)), comparersToTest);
-        return { namedImportComparer: sortState.comparer, isSorted: sortState.isSorted };
+        return {
+            namedImportComparer: sortState.comparer,
+            typeOrder: typesToTest.length === 1 ? typesToTest[0] : undefined,
+            isSorted: sortState.isSorted,
+        };
     }
 
     const bestDiff = { first: Infinity, last: Infinity, inline: Infinity };
