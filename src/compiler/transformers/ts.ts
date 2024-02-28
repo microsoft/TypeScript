@@ -25,7 +25,6 @@ import {
     createRange,
     createRuntimeTypeSerializer,
     createTokenRange,
-    createUnparsedSourceFile,
     Debug,
     Declaration,
     Decorator,
@@ -292,12 +291,6 @@ export function transformTypeScript(context: TransformationContext) {
     function transformBundle(node: Bundle) {
         return factory.createBundle(
             node.sourceFiles.map(transformSourceFile),
-            mapDefined(node.prepends, prepend => {
-                if (prepend.kind === SyntaxKind.InputFiles) {
-                    return createUnparsedSourceFile(prepend, "js");
-                }
-                return prepend;
-            }),
         );
     }
 

@@ -1527,6 +1527,52 @@ class D extends C { prop = 1; }`,
 
     verifyTscWatch({
         scenario,
+        subScenario: "updates errors and emit when verbatimModuleSyntax changes",
+        commandLineArgs: ["-w"],
+        sys: () => {
+            const aFile: File = {
+                path: `/user/username/projects/myproject/a.ts`,
+                content: `export class C {}`,
+            };
+            const bFile: File = {
+                path: `/user/username/projects/myproject/b.ts`,
+                content: `import {C} from './a';
+export function f(p: C) { return p; }`,
+            };
+            const config: File = {
+                path: `/user/username/projects/myproject/tsconfig.json`,
+                content: jsonToReadableText({ compilerOptions: {} }),
+            };
+            return createWatchedSystem([aFile, bFile, config, libFile], { currentDirectory: "/user/username/projects/myproject" });
+        },
+        edits: [
+            {
+                caption: "Enable verbatimModuleSyntax",
+                edit: sys =>
+                    sys.writeFile(
+                        `/user/username/projects/myproject/tsconfig.json`,
+                        jsonToReadableText({
+                            compilerOptions: { verbatimModuleSyntax: true },
+                        }),
+                    ),
+                timeouts: sys => sys.runQueuedTimeoutCallbacks(),
+            },
+            {
+                caption: "Disable verbatimModuleSyntax",
+                edit: sys =>
+                    sys.writeFile(
+                        `/user/username/projects/myproject/tsconfig.json`,
+                        jsonToReadableText({
+                            compilerOptions: { verbatimModuleSyntax: false },
+                        }),
+                    ),
+                timeouts: sys => sys.runQueuedTimeoutCallbacks(),
+            },
+        ],
+    });
+
+    verifyTscWatch({
+        scenario,
         subScenario: "updates errors when forceConsistentCasingInFileNames changes",
         commandLineArgs: ["-w"],
         sys: () => {

@@ -39,7 +39,6 @@ import {
     createFileDiagnostic,
     createFileDiagnosticFromMessageChain,
     createGetCanonicalFileName,
-    createInputFilesWithFilePaths,
     createModeAwareCache,
     createModeAwareCacheKey,
     createModuleResolutionCache,
@@ -132,7 +131,6 @@ import {
     getNormalizedAbsolutePathWithoutRoot,
     getNormalizedPathComponents,
     getOutputDeclarationFileName,
-    getOutputPathsForBundle,
     getPackageScopeForPath,
     getPathFromPathComponents,
     getPositionOfLineAndCharacter,
@@ -170,7 +168,6 @@ import {
     ImportClause,
     ImportDeclaration,
     ImportOrExportSpecifier,
-    InputFiles,
     InternalEmitFlags,
     inverseJsxOptionMap,
     isAmbientModule,
@@ -317,7 +314,6 @@ import {
     TypeChecker,
     typeDirectiveIsEqualTo,
     TypeReferenceDirectiveResolutionCache,
-    UnparsedSource,
     VariableDeclaration,
     VariableStatement,
     Version,
@@ -2627,7 +2623,6 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
 
     function getEmitHost(writeFileCallback?: WriteFileCallback): EmitHost {
         return {
-            getPrependNodes,
             getCanonicalFileName,
             getCommonSourceDirectory: program.getCommonSourceDirectory,
             getCompilerOptions: program.getCompilerOptions,
@@ -2653,7 +2648,7 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
                 return host.fileExists(f);
             },
             useCaseSensitiveFileNames: () => host.useCaseSensitiveFileNames(),
-            getBuildInfo: bundle => program.getBuildInfo?.(bundle),
+            getBuildInfo: () => program.getBuildInfo?.(),
             getSourceFileFromReference: (file, ref) => program.getSourceFileFromReference(file, ref),
             redirectTargetsMap,
             getFileIncludeReasons: program.getFileIncludeReasons,
@@ -2697,19 +2692,6 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
 
     function getProjectReferences() {
         return projectReferences;
-    }
-
-    function getPrependNodes() {
-        return createPrependNodes(
-            projectReferences,
-            (_ref, index) => resolvedProjectReferences![index]?.commandLine,
-            fileName => {
-                const path = toPath(fileName);
-                const sourceFile = getSourceFileByPath(path);
-                return sourceFile ? sourceFile.text : filesByName.has(path) ? undefined : host.readFile(path);
-            },
-            host,
-        );
     }
 
     function isSourceFileFromExternalLibrary(file: SourceFile): boolean {
@@ -3467,7 +3449,7 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
     }
 
     /** This should have similar behavior to 'processSourceFile' without diagnostics or mutation. */
-    function getSourceFileFromReference(referencingFile: SourceFile | UnparsedSource, ref: FileReference): SourceFile | undefined {
+    function getSourceFileFromReference(referencingFile: SourceFile, ref: FileReference): SourceFile | undefined {
         return getSourceFileFromReferenceWorker(resolveTripleslashReference(ref.fileName, referencingFile.fileName), getSourceFile);
     }
 
@@ -4754,17 +4736,6 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
                     if (options.noEmit) createDiagnosticForReference(parentFile, index, Diagnostics.Referenced_project_0_may_not_disable_emit, ref.path);
                 }
             }
-            if (ref.prepend) {
-                const out = options.outFile;
-                if (out) {
-                    if (!host.fileExists(out)) {
-                        createDiagnosticForReference(parentFile, index, Diagnostics.Output_file_0_from_project_1_does_not_exist, out, ref.path);
-                    }
-                }
-                else {
-                    createDiagnosticForReference(parentFile, index, Diagnostics.Cannot_prepend_project_0_because_it_does_not_have_outFile_set, ref.path);
-                }
-            }
             if (!parent && buildInfoPath && buildInfoPath === getTsBuildInfoEmitOutputFilePath(options)) {
                 createDiagnosticForReference(parentFile, index, Diagnostics.Cannot_write_file_0_because_it_will_overwrite_tsbuildinfo_file_generated_by_referenced_project_1, buildInfoPath, ref.path);
                 hasEmitBlockingDiagnostics.set(toPath(buildInfoPath), true);
@@ -5208,30 +5179,6 @@ export function parseConfigHostFromCompilerHostLike<T extends BuilderProgram>(
     };
 }
 
-/** @deprecated @internal */
-export function createPrependNodes(
-    projectReferences: readonly ProjectReference[] | undefined,
-    getCommandLine: (ref: ProjectReference, index: number) => ParsedCommandLine | undefined,
-    readFile: (path: string) => string | undefined,
-    host: CompilerHost,
-) {
-    if (!projectReferences) return emptyArray;
-    let nodes: InputFiles[] | undefined;
-    for (let i = 0; i < projectReferences.length; i++) {
-        const ref = projectReferences[i];
-        const resolvedRefOpts = getCommandLine(ref, i);
-        if (ref.prepend && resolvedRefOpts && resolvedRefOpts.options) {
-            const out = resolvedRefOpts.options.outFile;
-            // Upstream project didn't have outFile set -- skip (error will have been issued earlier)
-            if (!out) continue;
-
-            const { jsFilePath, sourceMapFilePath, declarationFilePath, declarationMapPath, buildInfoPath } = getOutputPathsForBundle(resolvedRefOpts.options, /*forceDtsPaths*/ true);
-            const node = createInputFilesWithFilePaths(readFile, jsFilePath!, sourceMapFilePath, declarationFilePath!, declarationMapPath, buildInfoPath, host, resolvedRefOpts.options);
-            (nodes || (nodes = [])).push(node);
-        }
-    }
-    return nodes || emptyArray;
-}
 /**
  * Returns the target config filename of a project reference.
  * Note: The file might not exist.
