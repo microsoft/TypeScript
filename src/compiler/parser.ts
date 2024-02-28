@@ -8107,7 +8107,7 @@ namespace Parser {
 
         // We don't parse the name here in await context, instead we will report a grammar error in the checker.
         const name = parseNameOfClassDeclarationOrExpression();
-        if (name?.escapedText === "undefined") {
+        if (name) {
             parseErrorForDeclarationNamedUndefined(name);
         }
         const typeParameters = parseTypeParameters();
