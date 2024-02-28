@@ -2419,6 +2419,13 @@ namespace Parser {
         }
     }
 
+    function parseErrorForDeclarationNamedUndefined(name: Identifier) {
+        if (name.escapedText === "undefined") {
+            const pos = skipTrivia(sourceText, name.pos);
+            parseErrorAt(pos, name.end, Diagnostics.Declaration_name_conflicts_with_built_in_global_identifier_0, "undefined");
+        }
+    }
+
     function getSpaceSuggestion(expressionText: string) {
         for (const keyword of viableKeywordSuggestions) {
             if (expressionText.length > keyword.length + 2 && startsWith(expressionText, keyword)) {
@@ -3923,6 +3930,9 @@ namespace Parser {
         const pos = getNodePos();
         const modifiers = parseModifiers(/*allowDecorators*/ false, /*permitConstAsModifier*/ true);
         const name = parseIdentifier();
+        if (name.escapedText === "undefined") {
+            parseErrorForDeclarationNamedUndefined(name);
+        }
         let constraint: TypeNode | undefined;
         let expression: Expression | undefined;
         if (parseOptional(SyntaxKind.ExtendsKeyword)) {
@@ -4369,6 +4379,9 @@ namespace Parser {
     function parseMappedTypeParameter() {
         const pos = getNodePos();
         const name = parseIdentifierName();
+        if (name.escapedText === "undefined") {
+            parseErrorForDeclarationNamedUndefined(name);
+        }
         parseExpected(SyntaxKind.InKeyword);
         const type = parseType();
         return finishNode(factory.createTypeParameterDeclaration(/*modifiers*/ undefined, name, type, /*defaultType*/ undefined), pos);
@@ -4733,6 +4746,9 @@ namespace Parser {
     function parseTypeParameterOfInferType(): TypeParameterDeclaration {
         const pos = getNodePos();
         const name = parseIdentifier();
+        if (name.escapedText === "undefined") {
+            parseErrorForDeclarationNamedUndefined(name);
+        }
         const constraint = tryParse(tryParseConstraintOfInferType);
         const node = factory.createTypeParameterDeclaration(/*modifiers*/ undefined, name, constraint);
         return finishNode(node, pos);
@@ -8097,6 +8113,9 @@ namespace Parser {
 
         // We don't parse the name here in await context, instead we will report a grammar error in the checker.
         const name = parseNameOfClassDeclarationOrExpression();
+        if (name?.escapedText === "undefined") {
+            parseErrorForDeclarationNamedUndefined(name);
+        }
         const typeParameters = parseTypeParameters();
         if (some(modifiers, isExportModifier)) setAwaitContext(/*value*/ true);
         const heritageClauses = parseHeritageClauses();
@@ -8179,6 +8198,9 @@ namespace Parser {
     function parseInterfaceDeclaration(pos: number, hasJSDoc: boolean, modifiers: NodeArray<ModifierLike> | undefined): InterfaceDeclaration {
         parseExpected(SyntaxKind.InterfaceKeyword);
         const name = parseIdentifier();
+        if (name.escapedText === "undefined") {
+            parseErrorForDeclarationNamedUndefined(name);
+        }
         const typeParameters = parseTypeParameters();
         const heritageClauses = parseHeritageClauses();
         const members = parseObjectTypeMembers();
@@ -8192,6 +8214,9 @@ namespace Parser {
             parseErrorAtCurrentToken(Diagnostics.Line_break_not_permitted_here);
         }
         const name = parseIdentifier();
+        if (name.escapedText === "undefined") {
+            parseErrorForDeclarationNamedUndefined(name);
+        }
         const typeParameters = parseTypeParameters();
         parseExpected(SyntaxKind.EqualsToken);
         const type = token() === SyntaxKind.IntrinsicKeyword && tryParse(parseKeywordAndNoDot) || parseType();
@@ -8215,6 +8240,9 @@ namespace Parser {
     function parseEnumDeclaration(pos: number, hasJSDoc: boolean, modifiers: NodeArray<ModifierLike> | undefined): EnumDeclaration {
         parseExpected(SyntaxKind.EnumKeyword);
         const name = parseIdentifier();
+        if (name.escapedText === "undefined") {
+            parseErrorForDeclarationNamedUndefined(name);
+        }
         let members;
         if (parseExpected(SyntaxKind.OpenBraceToken)) {
             members = doOutsideOfYieldAndAwaitContext(() => parseDelimitedList(ParsingContext.EnumMembers, parseEnumMember));
@@ -8245,6 +8273,9 @@ namespace Parser {
         // propagate the 'Namespace' flag across the names if set.
         const namespaceFlag = flags & NodeFlags.Namespace;
         const name = flags & NodeFlags.NestedNamespace ? parseIdentifierName() : parseIdentifier();
+        if (name.escapedText === "undefined") {
+            parseErrorForDeclarationNamedUndefined(name);
+        }
         const body = parseOptional(SyntaxKind.DotToken)
             ? parseModuleOrNamespaceDeclaration(getNodePos(), /*hasJSDoc*/ false, /*modifiers*/ undefined, NodeFlags.NestedNamespace | namespaceFlag) as NamespaceDeclaration
             : parseModuleBlock();

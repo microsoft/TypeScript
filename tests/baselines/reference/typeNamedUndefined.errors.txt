@@ -1,0 +1,23 @@
+typeNamedUndefined.ts(3,17): error TS2397: Declaration name conflicts with built-in global identifier 'undefined'.
+typeNamedUndefined.ts(13,13): error TS2397: Declaration name conflicts with built-in global identifier 'undefined'.
+
+
+==== typeNamedUndefined.ts (2 errors) ====
+    export namespace ns {
+        const s = Symbol();
+        export type undefined = typeof s;
+                    ~~~~~~~~~
+!!! error TS2397: Declaration name conflicts with built-in global identifier 'undefined'.
+        export function x(p: undefined): undefined { // global undefined
+            return p;
+        }
+    }
+    
+    export function x(p: ns.undefined) { // undefined from the namespace
+        return p;
+    }
+    
+    export type undefined = "";
+                ~~~~~~~~~
+!!! error TS2397: Declaration name conflicts with built-in global identifier 'undefined'.
+    
