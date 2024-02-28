@@ -58,6 +58,7 @@
 // | module
 // | name
 // | namespace
+// | nonnull
 // | overload
 // | override
 // | package
@@ -154,6 +155,7 @@
 // | @module
 // | @name
 // | @namespace
+// | @nonnull
 // | @overload
 // | @override
 // | @package
@@ -247,6 +249,7 @@
 // | module
 // | name
 // | namespace
+// | nonnull
 // | overload
 // | override
 // | package
@@ -345,6 +348,7 @@
 // | module
 // | name
 // | namespace
+// | nonnull
 // | overload
 // | override
 // | package
@@ -445,6 +449,7 @@
 // | module
 // | name
 // | namespace
+// | nonnull
 // | overload
 // | override
 // | package
@@ -540,6 +545,7 @@
 // | module
 // | name
 // | namespace
+// | nonnull
 // | overload
 // | override
 // | package
@@ -636,6 +642,7 @@
 // | module
 // | name
 // | namespace
+// | nonnull
 // | overload
 // | override
 // | package
@@ -732,6 +739,7 @@
 // | module
 // | name
 // | namespace
+// | nonnull
 // | overload
 // | override
 // | package
@@ -827,6 +835,7 @@
 // | module
 // | name
 // | namespace
+// | nonnull
 // | overload
 // | override
 // | package
@@ -923,6 +932,7 @@
 // | module
 // | name
 // | namespace
+// | nonnull
 // | overload
 // | override
 // | package
@@ -1016,6 +1026,7 @@
 // | module
 // | name
 // | namespace
+// | nonnull
 // | overload
 // | override
 // | package
@@ -1110,6 +1121,7 @@
 // | module
 // | name
 // | namespace
+// | nonnull
 // | overload
 // | override
 // | package
@@ -1204,6 +1216,7 @@
 // | module
 // | name
 // | namespace
+// | nonnull
 // | overload
 // | override
 // | package
@@ -1297,6 +1310,7 @@
 // | module
 // | name
 // | namespace
+// | nonnull
 // | overload
 // | override
 // | package
@@ -1392,6 +1406,7 @@
 // | @module
 // | @name
 // | @namespace
+// | @nonnull
 // | @overload
 // | @override
 // | @package
@@ -1485,6 +1500,7 @@
 // | module
 // | name
 // | namespace
+// | nonnull
 // | overload
 // | override
 // | package
@@ -1580,6 +1596,7 @@
 // | module
 // | name
 // | namespace
+// | nonnull
 // | overload
 // | override
 // | package
@@ -2325,6 +2342,19 @@
           "displayParts": [
             {
               "text": "namespace",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "nonnull",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "nonnull",
               "kind": "text"
             }
           ],
@@ -3450,6 +3480,19 @@
           "documentation": []
         },
         {
+          "name": "nonnull",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "nonnull",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
           "name": "overload",
           "kind": "",
           "kindModifiers": "",
@@ -4569,6 +4612,19 @@
           "documentation": []
         },
         {
+          "name": "@nonnull",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "@nonnull",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
           "name": "@overload",
           "kind": "",
           "kindModifiers": "",
@@ -5669,6 +5725,19 @@
           "displayParts": [
             {
               "text": "namespace",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "nonnull",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "nonnull",
               "kind": "text"
             }
           ],
@@ -6781,6 +6850,19 @@
           "documentation": []
         },
         {
+          "name": "nonnull",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "nonnull",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
           "name": "overload",
           "kind": "",
           "kindModifiers": "",
@@ -7881,6 +7963,19 @@
           "displayParts": [
             {
               "text": "namespace",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "nonnull",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "nonnull",
               "kind": "text"
             }
           ],
@@ -9006,6 +9101,19 @@
           "documentation": []
         },
         {
+          "name": "@nonnull",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "@nonnull",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
           "name": "@overload",
           "kind": "",
           "kindModifiers": "",
@@ -10106,6 +10214,19 @@
           "displayParts": [
             {
               "text": "namespace",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "nonnull",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "nonnull",
               "kind": "text"
             }
           ],
@@ -11218,6 +11339,19 @@
           "documentation": []
         },
         {
+          "name": "nonnull",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "nonnull",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
           "name": "overload",
           "kind": "",
           "kindModifiers": "",
@@ -12318,6 +12452,19 @@
           "displayParts": [
             {
               "text": "namespace",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "nonnull",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "nonnull",
               "kind": "text"
             }
           ],
@@ -13430,6 +13577,19 @@
           "documentation": []
         },
         {
+          "name": "nonnull",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "nonnull",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
           "name": "overload",
           "kind": "",
           "kindModifiers": "",
@@ -14530,6 +14690,19 @@
           "displayParts": [
             {
               "text": "namespace",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "nonnull",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "nonnull",
               "kind": "text"
             }
           ],
@@ -15642,6 +15815,19 @@
           "documentation": []
         },
         {
+          "name": "nonnull",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "nonnull",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
           "name": "overload",
           "kind": "",
           "kindModifiers": "",
@@ -16742,6 +16928,19 @@
           "displayParts": [
             {
               "text": "namespace",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "nonnull",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "nonnull",
               "kind": "text"
             }
           ],
@@ -17867,6 +18066,19 @@
           "documentation": []
         },
         {
+          "name": "nonnull",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "nonnull",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
           "name": "overload",
           "kind": "",
           "kindModifiers": "",
@@ -18973,6 +19185,19 @@
           "documentation": []
         },
         {
+          "name": "nonnull",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "nonnull",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
           "name": "overload",
           "kind": "",
           "kindModifiers": "",
@@ -20073,6 +20298,19 @@
           "displayParts": [
             {
               "text": "namespace",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "nonnull",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "nonnull",
               "kind": "text"
             }
           ],

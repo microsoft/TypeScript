@@ -246,6 +246,7 @@ import {
     JSDocNameReference,
     JSDocNamespaceDeclaration,
     JSDocNonNullableType,
+    JSDocNonNullTag,
     JSDocNullableType,
     JSDocOptionalType,
     JSDocOverloadTag,
@@ -964,6 +965,12 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
         },
         get updateJSDocThrowsTag() {
             return getJSDocTypeLikeTagUpdateFunction<JSDocThrowsTag>(SyntaxKind.JSDocThrowsTag);
+        },
+        get createJSDocNonNullTag() {
+            return getJSDocSimpleTagCreateFunction<JSDocNonNullTag>(SyntaxKind.JSDocNonNullTag);
+        },
+        get updateJSDocNonNullTag() {
+            return getJSDocSimpleTagUpdateFunction<JSDocNonNullTag>(SyntaxKind.JSDocNonNullTag);
         },
         get createJSDocSatisfiesTag() {
             return getJSDocTypeLikeTagCreateFunction<JSDocSatisfiesTag>(SyntaxKind.JSDocSatisfiesTag);

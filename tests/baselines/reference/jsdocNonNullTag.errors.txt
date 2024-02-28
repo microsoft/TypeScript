@@ -1,0 +1,127 @@
+file5.js(5,14): error TS1155: 'const' declarations must be initialized.
+file5.js(10,5): error TS2588: Cannot assign to 'var5' because it is a constant.
+file6.js(5,14): error TS1155: 'const' declarations must be initialized.
+file6.js(10,5): error TS2588: Cannot assign to 'var6' because it is a constant.
+file6.js(13,12): error TS2304: Cannot find name 'var5'.
+
+
+==== file1.js (0 errors) ====
+    /** @type {(x: string | null | undefined) => string} */
+    export function fn1(x) {
+        const nonNulledX = /** @nonnull */ (x);
+        return nonNulledX.toUpperCase();
+    }
+    
+    
+==== file2.js (0 errors) ====
+    /** @type {(x: string | null | undefined) => string} */
+    export function fn2(x) {
+        return (/** @nonnull */ (x)).toUpperCase();
+    }
+    
+    
+==== file3.js (0 errors) ====
+    /** @type {(x: string | null) => string} */
+    export function fn3(x) {
+        return (/** @nonnull */ (x)).toUpperCase();
+    }
+    
+    
+==== file4.js (0 errors) ====
+    /** @type {(x: string | undefined) => string} */
+    export function fn4(x) {
+        return (/** @nonnull */ (x)).toUpperCase();
+    }
+    
+    
+==== file5.js (2 errors) ====
+    /**
+     * @nonnull
+     * @type {string}
+     */
+    export const var5;
+                 ~~~~
+!!! error TS1155: 'const' declarations must be initialized.
+    
+    const p5 = Promise.resolve(true);
+    
+    p5.then(() => {
+        var5 = "hello!";
+        ~~~~
+!!! error TS2588: Cannot assign to 'var5' because it is a constant.
+    });
+    p5.then(() => {
+        return var5.toUpperCase();
+    });
+    
+    
+==== file6.js (3 errors) ====
+    /**
+     * @nonnull
+     * @type {string | undefined}
+     */
+    export const var6;
+                 ~~~~
+!!! error TS1155: 'const' declarations must be initialized.
+    
+    const p6 = Promise.resolve(true);
+    
+    p6.then(() => {
+        var6 = "hello!";
+        ~~~~
+!!! error TS2588: Cannot assign to 'var6' because it is a constant.
+    });
+    p6.then(() => {
+        return var5.toUpperCase();
+               ~~~~
+!!! error TS2304: Cannot find name 'var5'.
+    });
+    
+    
+==== file7.js (0 errors) ====
+    /**
+     * @nonnull
+     * @type {string | undefined}
+     */
+    export class Class7 {
+        /**
+         * @nonnull
+         * @type {string}
+         */
+        abc;
+    
+        /**
+         * @param {string} abc
+         */
+        constructor(abc) {
+            this.abc = abc;
+        }
+    }
+    
+    
+==== file8.js (0 errors) ====
+    /**
+     * @nonnull
+     * @type {string | undefined}
+     */
+    export class Class8 {
+        /**
+         * @param {string} abc
+         */
+        constructor(abc) {
+            /** @private */
+            this.abc = abc;
+        }
+    }
+    
+    
+==== file9.js (0 errors) ====
+    /** @type {() => string | null} */
+    export const tryGetString9 = () => {
+        throw "Not implemented!";
+    }
+    
+    /** @nonull */
+    export const someString9 = tryGetString9();
+    
+    
