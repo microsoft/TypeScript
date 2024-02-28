@@ -29071,6 +29071,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return parent.kind === SyntaxKind.PropertyAccessExpression ||
             parent.kind === SyntaxKind.QualifiedName ||
             parent.kind === SyntaxKind.CallExpression && (parent as CallExpression).expression === node ||
+            parent.kind === SyntaxKind.NewExpression && (parent as NewExpression).expression === node ||
             parent.kind === SyntaxKind.ElementAccessExpression && (parent as ElementAccessExpression).expression === node &&
                 !(someType(type, isGenericTypeWithoutNullableConstraint) && isGenericIndexType(getTypeOfExpression((parent as ElementAccessExpression).argumentExpression)));
     }
