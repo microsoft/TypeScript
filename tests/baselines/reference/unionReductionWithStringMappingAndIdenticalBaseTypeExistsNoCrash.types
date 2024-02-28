@@ -1,9 +1,6 @@
 //// [tests/cases/compiler/unionReductionWithStringMappingAndIdenticalBaseTypeExistsNoCrash.tsx] ////
 
 === node_modules/@types/react/index.d.ts ===
-// https://github.com/microsoft/TypeScript/issues/56688
-
-
 export = React;
 >React : typeof React
 
