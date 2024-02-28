@@ -1,6 +1,9 @@
 //// [tests/cases/compiler/mappedTypeIndexedAccessConstraint.ts] ////
 
 === mappedTypeIndexedAccessConstraint.ts ===
+type Identity<T> = { [K in keyof T]: T[K] };
+>Identity : Identity<T>
+
 type M0 = { a: 1, b: 2 };
 >M0 : { a: 1; b: 2; }
 >a : 1
@@ -12,10 +15,14 @@ type M1 = { [K in keyof Partial<M0>]: M0[K] };
 type M2 = { [K in keyof Required<M1>]: M1[K] };
 >M2 : { a: 1 | undefined; b: 2 | undefined; }
 
-function foo<K extends keyof M0>(m1: M1[K], m2: M2[K]) {
->foo : <K extends keyof M0>(m1: M1[K], m2: M2[K]) => void
+type M3 = { [K in keyof Identity<Partial<M0>>]: M0[K] };
+>M3 : { a?: 1 | undefined; b?: 2 | undefined; }
+
+function foo<K extends keyof M0>(m1: M1[K], m2: M2[K], m3: M3[K]) {
+>foo : <K extends keyof M0>(m1: M1[K], m2: M2[K], m3: M3[K]) => void
 >m1 : M1[K]
 >m2 : M2[K]
+>m3 : M3[K]
 
     m1.toString();  // Error
 >m1.toString() : string
@@ -39,6 +46,18 @@ function foo<K extends keyof M0>(m1: M1[K], m2: M2[K]) {
 >m2?.toString() : string | undefined
 >m2?.toString : ((radix?: number | undefined) => string) | undefined
 >m2 : 1 | 2 | undefined
+>toString : ((radix?: number | undefined) => string) | undefined
+
+    m3.toString();  // Error
+>m3.toString() : string
+>m3.toString : (radix?: number | undefined) => string
+>m3 : 1 | 2 | undefined
+>toString : (radix?: number | undefined) => string
+
+    m3?.toString();
+>m3?.toString() : string | undefined
+>m3?.toString : ((radix?: number | undefined) => string) | undefined
+>m3 : 1 | 2 | undefined
 >toString : ((radix?: number | undefined) => string) | undefined
 }
 

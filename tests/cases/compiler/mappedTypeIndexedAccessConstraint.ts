@@ -1,17 +1,23 @@
 // @strict: true
 // @noEmit: true
 
+type Identity<T> = { [K in keyof T]: T[K] };
+
 type M0 = { a: 1, b: 2 };
 
 type M1 = { [K in keyof Partial<M0>]: M0[K] };
 
 type M2 = { [K in keyof Required<M1>]: M1[K] };
 
-function foo<K extends keyof M0>(m1: M1[K], m2: M2[K]) {
+type M3 = { [K in keyof Identity<Partial<M0>>]: M0[K] };
+
+function foo<K extends keyof M0>(m1: M1[K], m2: M2[K], m3: M3[K]) {
     m1.toString();  // Error
     m1?.toString();
     m2.toString();  // Error
     m2?.toString();
+    m3.toString();  // Error
+    m3?.toString();
 }
 
 // Repro from #57487
