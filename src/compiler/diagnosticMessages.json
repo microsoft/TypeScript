@@ -1204,10 +1204,6 @@
         "category": "Message",
         "code": 1369
     },
-    "This import is never used as a value and must use 'import type' because 'importsNotUsedAsValues' is set to 'error'.": {
-        "category": "Error",
-        "code": 1371
-    },
     "'await' expressions are only allowed at the top level of a file when that file is a module, but this file has no imports or exports. Consider adding an empty 'export {}' to make this file a module.": {
         "category": "Error",
         "code": 1375
@@ -1471,14 +1467,6 @@
     "Module declaration names may only use ' or \" quoted strings.": {
         "category": "Error",
         "code": 1443
-    },
-    "'{0}' is a type and must be imported using a type-only import when 'preserveValueImports' and 'isolatedModules' are both enabled.": {
-        "category": "Error",
-        "code": 1444
-    },
-    "'{0}' resolves to a type-only declaration and must be imported using a type-only import when 'preserveValueImports' and 'isolatedModules' are both enabled.": {
-        "category": "Error",
-        "code": 1446
     },
     "'{0}' resolves to a type-only declaration and must be re-exported using a type-only re-export when '{1}' is enabled.": {
         "category": "Error",

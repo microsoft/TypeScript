@@ -7,7 +7,7 @@ class A { }
 class B { }
 
 
-//// [c.js]
+//// [d.js]
 var A = /** @class */ (function () {
     function A() {
     }
@@ -18,9 +18,9 @@ var B = /** @class */ (function () {
     }
     return B;
 }());
-//# sourceMappingURL=c.js.map
+//# sourceMappingURL=d.js.map
 
-//// [c.d.ts]
+//// [d.d.ts]
 declare class A {
 }
 declare class B {

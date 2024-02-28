@@ -7051,6 +7051,7 @@ export interface CompilerOptions {
      * @internal
      */
     build?: boolean;
+    /** @deprecated */
     charset?: string;
     checkJs?: boolean;
     /** @internal */ configFilePath?: string;
@@ -7082,12 +7083,14 @@ export interface CompilerOptions {
     /** @internal */ help?: boolean;
     ignoreDeprecations?: string;
     importHelpers?: boolean;
+    /** @deprecated */
     importsNotUsedAsValues?: ImportsNotUsedAsValues;
     /** @internal */ init?: boolean;
     inlineSourceMap?: boolean;
     inlineSources?: boolean;
     isolatedModules?: boolean;
     jsx?: JsxEmit;
+    /** @deprecated */
     keyofStringsOnly?: boolean;
     lib?: string[];
     /** @internal */ listEmittedFiles?: boolean;
@@ -7111,9 +7114,11 @@ export interface CompilerOptions {
     noImplicitAny?: boolean; // Always combine with strict property
     noImplicitReturns?: boolean;
     noImplicitThis?: boolean; // Always combine with strict property
+    /** @deprecated */
     noStrictGenericChecks?: boolean;
     noUnusedLocals?: boolean;
     noUnusedParameters?: boolean;
+    /** @deprecated */
     noImplicitUseStrict?: boolean;
     noPropertyAccessFromIndexSignature?: boolean;
     assumeChangesOnlyAffectDirectDependencies?: boolean;
@@ -7122,6 +7127,7 @@ export interface CompilerOptions {
     /** @internal */
     noDtsResolution?: boolean;
     noUncheckedIndexedAccess?: boolean;
+    /** @deprecated */
     out?: string;
     outDir?: string;
     outFile?: string;
@@ -7136,6 +7142,7 @@ export interface CompilerOptions {
     preserveConstEnums?: boolean;
     noImplicitOverride?: boolean;
     preserveSymlinks?: boolean;
+    /** @deprecated */
     preserveValueImports?: boolean;
     /** @internal */ preserveWatchOutput?: boolean;
     project?: string;
@@ -7162,7 +7169,9 @@ export interface CompilerOptions {
     strictNullChecks?: boolean; // Always combine with strict property
     strictPropertyInitialization?: boolean; // Always combine with strict property
     stripInternal?: boolean;
+    /** @deprecated */
     suppressExcessPropertyErrors?: boolean;
+    /** @deprecated */
     suppressImplicitAnyIndexErrors?: boolean;
     /** @internal */ suppressOutputPathCheck?: boolean;
     target?: ScriptTarget;
@@ -7233,6 +7242,7 @@ export const enum JsxEmit {
     ReactJSXDev = 5,
 }
 
+/** @deprecated */
 export const enum ImportsNotUsedAsValues {
     Remove,
     Preserve,

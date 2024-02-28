@@ -82,7 +82,6 @@ import {
     mutateMap,
     mutateMapSkippingNewValues,
     noop,
-    outFile,
     OutputFile,
     ParseConfigFileHost,
     parseConfigHostFromCompilerHostLike,
@@ -1462,7 +1461,7 @@ function buildErrors<T extends BuilderProgram>(
     errorType: string,
 ) {
     // Since buildinfo has changeset and diagnostics when doing multi file emit, only --out cannot emit buildinfo if it has errors
-    const canEmitBuildInfo = program && !outFile(program.getCompilerOptions());
+    const canEmitBuildInfo = program && !program.getCompilerOptions().outFile;
 
     reportAndStoreErrors(state, resolvedPath, diagnostics);
     state.projectStatus.set(resolvedPath, { type: UpToDateStatusType.Unbuildable, reason: `${errorType} errors` });

@@ -1,20 +1,16 @@
-DifferentNamesNotSpecifiedWithAllowJs/tsconfig.json(3,5): error TS5102: Option 'out' has been removed. Please remove it from your configuration.
-  Use 'outFile' instead.
-DifferentNamesNotSpecifiedWithAllowJs/tsconfig.json(3,5): error TS6082: Only 'amd' and 'system' modules are supported alongside --out.
+DifferentNamesNotSpecifiedWithAllowJs/tsconfig.json(3,5): error TS6082: Only 'amd' and 'system' modules are supported alongside --outFile.
 
 
-==== DifferentNamesNotSpecifiedWithAllowJs/tsconfig.json (2 errors) ====
+==== DifferentNamesNotSpecifiedWithAllowJs/tsconfig.json (1 errors) ====
     {
       "compilerOptions": {
-        "out": "test.js",
-        ~~~~~
-!!! error TS5102: Option 'out' has been removed. Please remove it from your configuration.
-!!! error TS5102:   Use 'outFile' instead.
-        ~~~~~
-!!! error TS6082: Only 'amd' and 'system' modules are supported alongside --out.
+        "outFile": "test.js",
+        ~~~~~~~~~
+!!! error TS6082: Only 'amd' and 'system' modules are supported alongside --outFile.
         "allowJs": true
       }
     }
+    
 ==== DifferentNamesNotSpecifiedWithAllowJs/a.ts (0 errors) ====
     var test = 10;
 ==== DifferentNamesNotSpecifiedWithAllowJs/b.js (0 errors) ====

@@ -2956,6 +2956,7 @@ declare namespace ts {
                 allowUnusedLabels?: boolean;
                 alwaysStrict?: boolean;
                 baseUrl?: string;
+                /** @deprecated */
                 charset?: string;
                 checkJs?: boolean;
                 declaration?: boolean;
@@ -2988,9 +2989,11 @@ declare namespace ts {
                 noImplicitThis?: boolean;
                 noUnusedLocals?: boolean;
                 noUnusedParameters?: boolean;
+                /** @deprecated */
                 noImplicitUseStrict?: boolean;
                 noLib?: boolean;
                 noResolve?: boolean;
+                /** @deprecated */
                 out?: string;
                 outDir?: string;
                 outFile?: string;
@@ -3010,7 +3013,9 @@ declare namespace ts {
                 sourceRoot?: string;
                 strict?: boolean;
                 strictNullChecks?: boolean;
+                /** @deprecated */
                 suppressExcessPropertyErrors?: boolean;
+                /** @deprecated */
                 suppressImplicitAnyIndexErrors?: boolean;
                 useDefineForClassFields?: boolean;
                 target?: ScriptTarget | ts.ScriptTarget;
@@ -7464,6 +7469,7 @@ declare namespace ts {
         allowUnusedLabels?: boolean;
         alwaysStrict?: boolean;
         baseUrl?: string;
+        /** @deprecated */
         charset?: string;
         checkJs?: boolean;
         customConditions?: string[];
@@ -7483,11 +7489,13 @@ declare namespace ts {
         forceConsistentCasingInFileNames?: boolean;
         ignoreDeprecations?: string;
         importHelpers?: boolean;
+        /** @deprecated */
         importsNotUsedAsValues?: ImportsNotUsedAsValues;
         inlineSourceMap?: boolean;
         inlineSources?: boolean;
         isolatedModules?: boolean;
         jsx?: JsxEmit;
+        /** @deprecated */
         keyofStringsOnly?: boolean;
         lib?: string[];
         locale?: string;
@@ -7506,15 +7514,18 @@ declare namespace ts {
         noImplicitAny?: boolean;
         noImplicitReturns?: boolean;
         noImplicitThis?: boolean;
+        /** @deprecated */
         noStrictGenericChecks?: boolean;
         noUnusedLocals?: boolean;
         noUnusedParameters?: boolean;
+        /** @deprecated */
         noImplicitUseStrict?: boolean;
         noPropertyAccessFromIndexSignature?: boolean;
         assumeChangesOnlyAffectDirectDependencies?: boolean;
         noLib?: boolean;
         noResolve?: boolean;
         noUncheckedIndexedAccess?: boolean;
+        /** @deprecated */
         out?: string;
         outDir?: string;
         outFile?: string;
@@ -7522,6 +7533,7 @@ declare namespace ts {
         preserveConstEnums?: boolean;
         noImplicitOverride?: boolean;
         preserveSymlinks?: boolean;
+        /** @deprecated */
         preserveValueImports?: boolean;
         project?: string;
         reactNamespace?: string;
@@ -7546,7 +7558,9 @@ declare namespace ts {
         strictNullChecks?: boolean;
         strictPropertyInitialization?: boolean;
         stripInternal?: boolean;
+        /** @deprecated */
         suppressExcessPropertyErrors?: boolean;
+        /** @deprecated */
         suppressImplicitAnyIndexErrors?: boolean;
         target?: ScriptTarget;
         traceResolution?: boolean;
@@ -7598,6 +7612,7 @@ declare namespace ts {
         ReactJSX = 4,
         ReactJSXDev = 5,
     }
+    /** @deprecated */
     enum ImportsNotUsedAsValues {
         Remove = 0,
         Preserve = 1,

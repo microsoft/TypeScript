@@ -1,11 +1,11 @@
 ===================================================================
-JsFile: c.js
-mapUrl: c.js.map
+JsFile: d.js
+mapUrl: d.js.map
 sourceRoot: 
 sources: a.ts,b.ts
 ===================================================================
 -------------------------------------------------------------------
-emittedFile:c.js
+emittedFile:d.js
 sourceFile:a.ts
 -------------------------------------------------------------------
 >>>var A = /** @class */ (function () {
@@ -53,7 +53,7 @@ sourceFile:a.ts
 4 >Emitted(5, 6) Source(1, 12) + SourceIndex(0)
 ---
 -------------------------------------------------------------------
-emittedFile:c.js
+emittedFile:d.js
 sourceFile:b.ts
 -------------------------------------------------------------------
 >>>var B = /** @class */ (function () {
@@ -100,4 +100,4 @@ sourceFile:b.ts
 3 >Emitted(10, 2) Source(1, 1) + SourceIndex(1)
 4 >Emitted(10, 6) Source(1, 12) + SourceIndex(1)
 ---
->>>//# sourceMappingURL=c.js.map
+>>>//# sourceMappingURL=d.js.map
