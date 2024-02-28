@@ -1232,6 +1232,10 @@ export namespace TestCaseParser {
                 else {
                     // First metadata marker in the file
                     currentFileName = testMetaData[2].trim();
+                    if (currentFileContent && ts.skipTrivia(currentFileContent, 0, /*stopAfterLineBreak*/ false, /*stopAtComments*/ false) !== currentFileContent.length) {
+                        throw new Error("Non-comment test content appears before the first '// @Filename' directive");
+                    }
+                    currentFileContent = "";
                 }
             }
             else {
