@@ -8879,11 +8879,6 @@ export function hasJsonModuleEmitEnabled(options: CompilerOptions) {
 }
 
 /** @internal */
-export function importNameElisionDisabled(options: CompilerOptions) {
-    return options.verbatimModuleSyntax;
-}
-
-/** @internal */
 export function unreachableCodeIsError(options: CompilerOptions): boolean {
     return options.allowUnreachableCode === false;
 }

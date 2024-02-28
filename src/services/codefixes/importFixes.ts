@@ -61,7 +61,6 @@ import {
     ImportEqualsDeclaration,
     importFromModuleSpecifier,
     ImportKind,
-    importNameElisionDisabled,
     insertImports,
     InternalSymbolName,
     isExternalModule,
@@ -715,7 +714,7 @@ function getAddAsTypeOnly(
         return AddAsTypeOnly.NotAllowed;
     }
     if (
-        importNameElisionDisabled(compilerOptions) &&
+        compilerOptions.verbatimModuleSyntax &&
         (!(targetFlags & SymbolFlags.Value) || !!checker.getTypeOnlyAliasDeclaration(symbol))
     ) {
         // A type-only import is required for this symbol if under these settings if the symbol will
@@ -1391,7 +1390,7 @@ function promoteFromTypeOnly(
 ) {
     const compilerOptions = program.getCompilerOptions();
     // See comment in `doAddExistingFix` on constant with the same name.
-    const convertExistingToTypeOnly = importNameElisionDisabled(compilerOptions);
+    const convertExistingToTypeOnly = compilerOptions.verbatimModuleSyntax;
     switch (aliasDeclaration.kind) {
         case SyntaxKind.ImportSpecifier:
             if (aliasDeclaration.isTypeOnly) {
