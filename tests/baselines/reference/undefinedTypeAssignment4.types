@@ -22,6 +22,6 @@ var x: undefined;
 >x : undefined
 
 var y: typeof undefined;
->y : typeof undefined
->undefined : typeof undefined
+>y : any
+>undefined : undefined
 
