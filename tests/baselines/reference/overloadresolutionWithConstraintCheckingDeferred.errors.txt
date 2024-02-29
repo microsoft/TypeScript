@@ -3,6 +3,7 @@ overloadresolutionWithConstraintCheckingDeferred.ts(14,37): error TS2345: Argume
   Property 'x' is missing in type 'C' but required in type 'A'.
 overloadresolutionWithConstraintCheckingDeferred.ts(16,5): error TS2322: Type 'string' is not assignable to type 'number'.
 overloadresolutionWithConstraintCheckingDeferred.ts(16,38): error TS2344: Type 'C' does not satisfy the constraint 'A'.
+  Property 'x' is missing in type 'C' but required in type 'A'.
 overloadresolutionWithConstraintCheckingDeferred.ts(19,14): error TS2344: Type 'C' does not satisfy the constraint 'A'.
 
 
@@ -33,6 +34,8 @@ overloadresolutionWithConstraintCheckingDeferred.ts(19,14): error TS2344: Type '
 !!! error TS2322: Type 'string' is not assignable to type 'number'.
                                          ~~~~~~~~
 !!! error TS2344: Type 'C' does not satisfy the constraint 'A'.
+!!! error TS2344:   Property 'x' is missing in type 'C' but required in type 'A'.
+!!! related TS2728 overloadresolutionWithConstraintCheckingDeferred.ts:1:15: 'x' is declared here.
     
     var result3: string = foo(x => { // x has type D
         var y: G<typeof x>; // error that D does not satisfy constraint, y is of type G<D>, entire call to foo is an error

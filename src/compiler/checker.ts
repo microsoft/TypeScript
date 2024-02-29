@@ -905,6 +905,7 @@ import {
     PatternAmbientModule,
     PlusToken,
     PostfixUnaryExpression,
+    prefixDiagnosticWithMessageChain,
     PrefixUnaryExpression,
     PrivateIdentifier,
     Program,
@@ -35001,6 +35002,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         //     foo<number>(0);
         //
         let candidatesForArgumentError: Signature[] | undefined;
+        let candidateArgumentErrors: (readonly Diagnostic[])[] | undefined;
         let candidateForArgumentArityError: Signature | undefined;
         let candidateForTypeArgumentError: Signature | undefined;
         let result: Signature | undefined;
@@ -35061,9 +35063,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     if (headMessage) {
                         chain = chainDiagnosticMessages(chain, headMessage);
                     }
-                    const diags = getSignatureApplicabilityError(node, args, last, assignableRelation, CheckMode.Normal, /*reportErrors*/ true, () => chain);
+                    const diags = candidateArgumentErrors![candidateArgumentErrors!.length - 1];
                     if (diags) {
-                        for (const d of diags) {
+                        for (let d of diags) {
+                            d = prefixDiagnosticWithMessageChain(d, chain);
                             if (last.declaration && candidatesForArgumentError.length > 3) {
                                 addRelatedInfo(d, createDiagnosticForNode(last.declaration, Diagnostics.The_last_overload_is_declared_here));
                             }
@@ -35083,14 +35086,14 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     let i = 0;
                     for (const c of candidatesForArgumentError) {
                         const chain = () => chainDiagnosticMessages(/*details*/ undefined, Diagnostics.Overload_0_of_1_2_gave_the_following_error, i + 1, candidates.length, signatureToString(c));
-                        const diags = getSignatureApplicabilityError(node, args, c, assignableRelation, CheckMode.Normal, /*reportErrors*/ true, chain);
+                        const diags = candidateArgumentErrors![i];
                         if (diags) {
                             if (diags.length <= min) {
                                 min = diags.length;
                                 minIndex = i;
                             }
                             max = Math.max(max, diags.length);
-                            allDiagnostics.push(diags);
+                            allDiagnostics.push(map(diags, d => prefixDiagnosticWithMessageChain(d, chain())));
                         }
                         else {
                             Debug.fail("No error for 3 or fewer overload signatures");
@@ -35143,6 +35146,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
         function addImplementationSuccessElaboration(failed: Signature, diagnostic: Diagnostic) {
             const oldCandidatesForArgumentError = candidatesForArgumentError;
+            const oldCandidateArgumentErrors = candidateArgumentErrors;
             const oldCandidateForArgumentArityError = candidateForArgumentArityError;
             const oldCandidateForTypeArgumentError = candidateForTypeArgumentError;
 
@@ -35158,12 +35162,14 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             }
 
             candidatesForArgumentError = oldCandidatesForArgumentError;
+            candidateArgumentErrors = oldCandidateArgumentErrors;
             candidateForArgumentArityError = oldCandidateForArgumentArityError;
             candidateForTypeArgumentError = oldCandidateForTypeArgumentError;
         }
 
         function chooseOverload(candidates: Signature[], relation: Map<string, RelationComparisonResult>, isSingleNonGenericCandidate: boolean, signatureHelpTrailingComma = false) {
             candidatesForArgumentError = undefined;
+            candidateArgumentErrors = undefined;
             candidateForArgumentArityError = undefined;
             candidateForTypeArgumentError = undefined;
 
@@ -35172,8 +35178,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 if (some(typeArguments) || !hasCorrectArity(node, args, candidate, signatureHelpTrailingComma)) {
                     return undefined;
                 }
-                if (getSignatureApplicabilityError(node, args, candidate, relation, CheckMode.Normal, /*reportErrors*/ false, /*containingMessageChain*/ undefined)) {
+                let diags: readonly Diagnostic[] | undefined;
+                if (diags = getSignatureApplicabilityError(node, args, candidate, relation, CheckMode.Normal, /*reportErrors*/ true, /*containingMessageChain*/ undefined)) {
                     candidatesForArgumentError = [candidate];
+                    candidateArgumentErrors = [diags];
                     return undefined;
                 }
                 return candidate;
@@ -35213,9 +35221,11 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     else {
                         checkCandidate = candidate;
                     }
-                    if (getSignatureApplicabilityError(node, args, checkCandidate, relation, argCheckMode, /*reportErrors*/ false, /*containingMessageChain*/ undefined)) {
+                    let diags: readonly Diagnostic[] | undefined;
+                    if (diags = getSignatureApplicabilityError(node, args, checkCandidate, relation, argCheckMode, /*reportErrors*/ true, /*containingMessageChain*/ undefined)) {
                         // Give preference to error candidates that have no rest parameters (as they are more specific)
                         (candidatesForArgumentError || (candidatesForArgumentError = [])).push(checkCandidate);
+                        (candidateArgumentErrors ||= []).push(diags);
                         return false;
                     }
                     if (argCheckMode) {
@@ -35233,9 +35243,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                                 return false;
                             }
                         }
-                        if (getSignatureApplicabilityError(node, args, checkCandidate, relation, argCheckMode, /*reportErrors*/ false, /*containingMessageChain*/ undefined)) {
+                        if (diags = getSignatureApplicabilityError(node, args, checkCandidate, relation, argCheckMode, /*reportErrors*/ true, /*containingMessageChain*/ undefined)) {
                             // Give preference to error candidates that have no rest parameters (as they are more specific)
                             (candidatesForArgumentError || (candidatesForArgumentError = [])).push(checkCandidate);
+                            (candidateArgumentErrors ||= []).push(diags);
                             return false;
                         }
                     }

@@ -2,10 +2,9 @@ intraExpressionInferences.ts(131,5): error TS2322: Type '(inputs: Unwrap<{ num: 
   Call signature return types '{ bool: any; str: number; }' and 'Unwrap<{ bool: Wrapper<boolean>; str: Wrapper<string>; }>' are incompatible.
     The types of 'str' are incompatible between these types.
       Type 'number' is not assignable to type 'string'.
-intraExpressionInferences.ts(133,26): error TS2339: Property 'nonexistent' does not exist on type 'Unwrap<{ num: Wrapper<number>; str: Wrapper<string>; }>'.
 
 
-==== intraExpressionInferences.ts (2 errors) ====
+==== intraExpressionInferences.ts (1 errors) ====
     // Repros from #47599
     
     declare function callIt<T>(obj: {
@@ -145,8 +144,6 @@ intraExpressionInferences.ts(133,26): error TS2339: Property 'nonexistent' does 
 !!! related TS6500 intraExpressionInferences.ts:113:5: The expected type comes from property 'map' which is declared here on type 'MappingComponent<{ num: Wrapper<number>; str: Wrapper<string>; }, { bool: Wrapper<boolean>; str: Wrapper<string>; }>'
             return {
                 bool: inputs.nonexistent,
-                             ~~~~~~~~~~~
-!!! error TS2339: Property 'nonexistent' does not exist on type 'Unwrap<{ num: Wrapper<number>; str: Wrapper<string>; }>'.
                 str: inputs.num,  // Causes error
             }
         }

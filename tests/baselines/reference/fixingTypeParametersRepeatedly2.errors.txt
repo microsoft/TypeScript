@@ -1,9 +1,9 @@
 fixingTypeParametersRepeatedly2.ts(11,32): error TS2741: Property 'toBase' is missing in type 'Base' but required in type 'Derived'.
 fixingTypeParametersRepeatedly2.ts(17,32): error TS2769: No overload matches this call.
   Overload 1 of 2, '(x: Derived, func: (p: Derived) => Derived): Derived', gave the following error.
-    Type 'Base' is not assignable to type 'Derived'.
+    Property 'toBase' is missing in type 'Base' but required in type 'Derived'.
   Overload 2 of 2, '(x: Derived, func: (p: Derived) => Derived): Derived', gave the following error.
-    Type 'Base' is not assignable to type 'Derived'.
+    Property 'toBase' is missing in type 'Base' but required in type 'Derived'.
 
 
 ==== fixingTypeParametersRepeatedly2.ts (2 errors) ====
@@ -31,8 +31,10 @@ fixingTypeParametersRepeatedly2.ts(17,32): error TS2769: No overload matches thi
                                    ~~~~~~~~~~
 !!! error TS2769: No overload matches this call.
 !!! error TS2769:   Overload 1 of 2, '(x: Derived, func: (p: Derived) => Derived): Derived', gave the following error.
-!!! error TS2769:     Type 'Base' is not assignable to type 'Derived'.
+!!! error TS2769:     Property 'toBase' is missing in type 'Base' but required in type 'Derived'.
 !!! error TS2769:   Overload 2 of 2, '(x: Derived, func: (p: Derived) => Derived): Derived', gave the following error.
-!!! error TS2769:     Type 'Base' is not assignable to type 'Derived'.
+!!! error TS2769:     Property 'toBase' is missing in type 'Base' but required in type 'Derived'.
+!!! related TS2728 fixingTypeParametersRepeatedly2.ts:5:5: 'toBase' is declared here.
 !!! related TS6502 fixingTypeParametersRepeatedly2.ts:15:37: The expected type comes from the return type of this signature.
+!!! related TS2728 fixingTypeParametersRepeatedly2.ts:5:5: 'toBase' is declared here.
 !!! related TS6502 fixingTypeParametersRepeatedly2.ts:16:37: The expected type comes from the return type of this signature.

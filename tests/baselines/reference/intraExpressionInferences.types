@@ -361,7 +361,7 @@ declare function createMappingComponent<I extends WrappedMap, O extends WrappedM
 createMappingComponent({
 >createMappingComponent({    setup() {        return {            inputs: {                num: new Wrapper<number>(),                str: new Wrapper<string>()            },            outputs: {                bool: new Wrapper<boolean>(),                str: new Wrapper<string>()            }        };    },    map(inputs) {        return {            bool: inputs.nonexistent,            str: inputs.num,  // Causes error        }    }}) : void
 >createMappingComponent : <I extends WrappedMap, O extends WrappedMap>(def: MappingComponent<I, O>) => void
->{    setup() {        return {            inputs: {                num: new Wrapper<number>(),                str: new Wrapper<string>()            },            outputs: {                bool: new Wrapper<boolean>(),                str: new Wrapper<string>()            }        };    },    map(inputs) {        return {            bool: inputs.nonexistent,            str: inputs.num,  // Causes error        }    }} : { setup(): { inputs: { num: Wrapper<number>; str: Wrapper<string>; }; outputs: { bool: Wrapper<boolean>; str: Wrapper<string>; }; }; map(inputs: Unwrap<{ num: Wrapper<number>; str: Wrapper<string>; }>): { bool: any; str: number; }; }
+>{    setup() {        return {            inputs: {                num: new Wrapper<number>(),                str: new Wrapper<string>()            },            outputs: {                bool: new Wrapper<boolean>(),                str: new Wrapper<string>()            }        };    },    map(inputs) {        return {            bool: inputs.nonexistent,            str: inputs.num,  // Causes error        }    }} : { setup(): { inputs: { num: Wrapper<number>; str: Wrapper<string>; }; outputs: { bool: Wrapper<boolean>; str: Wrapper<string>; }; }; map(inputs: Unwrap<WrappedMap>): { bool: any; str: any; }; }
 
     setup() {
 >setup : () => { inputs: { num: Wrapper<number>; str: Wrapper<string>; }; outputs: { bool: Wrapper<boolean>; str: Wrapper<string>; }; }
@@ -401,23 +401,23 @@ createMappingComponent({
         };
     },
     map(inputs) {
->map : (inputs: Unwrap<{ num: Wrapper<number>; str: Wrapper<string>; }>) => { bool: any; str: number; }
->inputs : Unwrap<{ num: Wrapper<number>; str: Wrapper<string>; }>
+>map : (inputs: Unwrap<WrappedMap>) => { bool: any; str: any; }
+>inputs : Unwrap<WrappedMap>
 
         return {
->{            bool: inputs.nonexistent,            str: inputs.num,  // Causes error        } : { bool: any; str: number; }
+>{            bool: inputs.nonexistent,            str: inputs.num,  // Causes error        } : { bool: any; str: any; }
 
             bool: inputs.nonexistent,
 >bool : any
 >inputs.nonexistent : any
->inputs : Unwrap<{ num: Wrapper<number>; str: Wrapper<string>; }>
+>inputs : Unwrap<WrappedMap>
 >nonexistent : any
 
             str: inputs.num,  // Causes error
->str : number
->inputs.num : number
->inputs : Unwrap<{ num: Wrapper<number>; str: Wrapper<string>; }>
->num : number
+>str : any
+>inputs.num : any
+>inputs : Unwrap<WrappedMap>
+>num : any
         }
     }
 });

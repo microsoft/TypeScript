@@ -18,8 +18,8 @@ var func: {
 func(s => ({})); // Error for no applicable overload (object type is missing a and b)
 >func(s => ({})) : never
 >func : { (s: string): number; (lambda: (s: string) => { a: number; b: number; }): string; }
->s => ({}) : (s: any) => {}
->s : any
+>s => ({}) : (s: string) => {}
+>s : string
 >({}) : {}
 >{} : {}
 
@@ -38,8 +38,8 @@ func(s => ({ a: blah, b: 3 })); // Only error inside the function, but not outsi
 func(s => ({ a: blah })); // Two errors here, one for blah not being defined, and one for the overload since it would not be applicable anyway
 >func(s => ({ a: blah })) : never
 >func : { (s: string): number; (lambda: (s: string) => { a: number; b: number; }): string; }
->s => ({ a: blah }) : (s: any) => { a: any; }
->s : any
+>s => ({ a: blah }) : (s: string) => { a: any; }
+>s : string
 >({ a: blah }) : { a: any; }
 >{ a: blah } : { a: any; }
 >a : any

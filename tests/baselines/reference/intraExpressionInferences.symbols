@@ -397,9 +397,7 @@ createMappingComponent({
 
             str: inputs.num,  // Causes error
 >str : Symbol(str, Decl(intraExpressionInferences.ts, 132, 37))
->inputs.num : Symbol(num, Decl(intraExpressionInferences.ts, 120, 21))
 >inputs : Symbol(inputs, Decl(intraExpressionInferences.ts, 130, 8))
->num : Symbol(num, Decl(intraExpressionInferences.ts, 120, 21))
         }
     }
 });

@@ -8481,6 +8481,18 @@ export function createCompilerDiagnosticFromMessageChain(chain: DiagnosticMessag
 }
 
 /** @internal */
+export function prefixDiagnosticWithMessageChain(base: Diagnostic, chain: DiagnosticMessageChain | undefined): Diagnostic {
+    if (!chain) return base;
+    concatenateDiagnosticMessageChains(chain, createDiagnosticMessageChainFromDiagnostic(base)); // Mutates `chain` to continue with `base`'s message chain
+    return {
+        ...base,
+        code: chain.code,
+        category: chain.category,
+        messageText: chain.next ? chain : chain.messageText,
+    };
+}
+
+/** @internal */
 export function chainDiagnosticMessages(details: DiagnosticMessageChain | DiagnosticMessageChain[] | undefined, message: DiagnosticMessage, ...args: DiagnosticArguments): DiagnosticMessageChain {
     let text = getLocaleSpecificMessage(message);
 
