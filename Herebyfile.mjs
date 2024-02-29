@@ -209,7 +209,7 @@ function createBundler(entrypoint, outfile, taskOptions = {}) {
         };
 
         if (taskOptions.exportIsTsObject) {
-            options.footer = { js: `})(typeof module !== "undefined" && module.exports ? module : { exports: ts });` };
+            options.footer = { js: `})(typeof module !== "undefined" && module.exports ? (ts = module.exports, module) : { exports: ts });` };
 
             // esbuild converts calls to "require" to "__require"; this function
             // calls the real require if it exists, or throws if it does not (rather than
