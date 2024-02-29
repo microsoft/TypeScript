@@ -2733,7 +2733,11 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         });
 
         function addDeclarationDiagnostic(id: string, message: DiagnosticMessage) {
-            return (declaration: Declaration) => diagnostics.add(createDiagnosticForNode(declaration, message, id));
+            return (declaration: Declaration) => {
+                if (isInExpressionContext(declaration)) {
+                    diagnostics.add(createDiagnosticForNode(declaration, message, id));
+                }
+            };
         }
     }
 
