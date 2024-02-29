@@ -683,6 +683,8 @@ export interface LanguageService {
 
     getSupportedCodeFixes(fileName?: string): readonly string[];
 
+    /** @internal */ mapCode(mappings: MapCodeDocumentMapping[], formatOptions: FormatCodeSettings, preferences: UserPreferences, updates?: FileTextChanges[]): FileTextChanges[];
+
     dispose(): void;
 }
 
@@ -1499,6 +1501,13 @@ export interface OutliningSpan {
      * Classification of the contents of the span
      */
     kind: OutliningSpanKind;
+}
+
+/** @internal */
+export interface MapCodeDocumentMapping {
+    fileName?: string;
+    focusLocations?: TextSpan[][];
+    contents: string[];
 }
 
 export const enum OutliningSpanKind {
