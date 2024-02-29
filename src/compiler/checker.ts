@@ -1473,7 +1473,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     var globals = createSymbolTable();
     var undefinedSymbol = createSymbol(SymbolFlags.Property, "undefined" as __String);
     undefinedSymbol.declarations = [];
-    globals.set(undefinedSymbol.escapedName, undefinedSymbol);
 
     var globalThisSymbol = createSymbol(SymbolFlags.Module, "globalThis" as __String, CheckFlags.Readonly);
     globalThisSymbol.exports = globals;
@@ -2256,6 +2255,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     var identityRelation = new Map<string, RelationComparisonResult>();
     var enumRelation = new Map<string, RelationComparisonResult>();
 
+    var builtinGlobals = createSymbolTable();
+    builtinGlobals.set(undefinedSymbol.escapedName, undefinedSymbol);
+
     // Extensions suggested for path imports when module resolution is node16 or higher.
     // The first element of each tuple is the extension a file has.
     // The second element of each tuple is the extension that should be used in a path import.
@@ -2715,6 +2717,23 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 // moduleName will be a StringLiteral since this is not `declare global`.
                 error(moduleName, Diagnostics.Cannot_augment_module_0_because_it_resolves_to_a_non_module_entity, (moduleName as StringLiteral).text);
             }
+        }
+    }
+
+    function addToSymbolTable(target: SymbolTable, source: SymbolTable, message: DiagnosticMessage) {
+        source.forEach((sourceSymbol, id) => {
+            const targetSymbol = target.get(id);
+            if (targetSymbol) {
+                // Error on redeclarations
+                forEach(targetSymbol.declarations, addDeclarationDiagnostic(unescapeLeadingUnderscores(id), message));
+            }
+            else {
+                target.set(id, sourceSymbol);
+            }
+        });
+
+        function addDeclarationDiagnostic(id: string, message: DiagnosticMessage) {
+            return (declaration: Declaration) => diagnostics.add(createDiagnosticForNode(declaration, message, id));
         }
     }
 
@@ -48776,6 +48795,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 }
             }
         }
+
+        // Setup global builtins
+        addToSymbolTable(globals, builtinGlobals, Diagnostics.Declaration_name_conflicts_with_built_in_global_identifier_0);
 
         getSymbolLinks(undefinedSymbol).type = undefinedWideningType;
         getSymbolLinks(argumentsSymbol).type = getGlobalType("IArguments" as __String, /*arity*/ 0, /*reportErrors*/ true);
