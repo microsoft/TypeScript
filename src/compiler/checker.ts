@@ -43214,7 +43214,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     function getIteratedTypeOrElementType(use: IterationUse, inputType: Type, sentType: Type, errorNode: Node | undefined, checkAssignability: boolean): Type | undefined {
         const allowAsyncIterables = (use & IterationUse.AllowsAsyncIterablesFlag) !== 0;
         if (inputType === neverType) {
-            reportTypeNotIterableError(errorNode!, inputType, allowAsyncIterables); // TODO: GH#18217
+            if (errorNode) {
+                reportTypeNotIterableError(errorNode, inputType, allowAsyncIterables);
+            }
             return undefined;
         }
 
