@@ -1,6 +1,6 @@
-//// [tests/cases/compiler/typeNamedUndefined.ts] ////
+//// [tests/cases/compiler/typeNamedUndefined1.ts] ////
 
-//// [typeNamedUndefined.ts]
+//// [typeNamedUndefined1.ts]
 export namespace ns {
     const s = Symbol();
     export type undefined = typeof s;
@@ -16,7 +16,7 @@ export function x(p: ns.undefined) { // undefined from the namespace
 export type undefined = "";
 
 
-//// [typeNamedUndefined.js]
+//// [typeNamedUndefined1.js]
 export var ns;
 (function (ns) {
     const s = Symbol();
