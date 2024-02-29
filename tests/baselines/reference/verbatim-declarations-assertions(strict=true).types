@@ -151,3 +151,88 @@ export default null! as {} & { name: string }
 >null! : never
 >name : string
 
+
+=== assertToOtherTypes.ts ===
+export const vNumberLiteral = null! as 1 | 1
+>vNumberLiteral : 1
+>null! as 1 | 1 : 1
+>null! : never
+
+export const vStringLiteral = null! as "1" | "1"
+>vStringLiteral : "1"
+>null! as "1" | "1" : "1"
+>null! : never
+
+export const vLiteral = null! as "1" | "1"
+>vLiteral : "1"
+>null! as "1" | "1" : "1"
+>null! : never
+
+type R = { foo: string }
+>R : { foo: string; }
+>foo : string
+
+export class C {
+>C : C
+
+    // under !strictNullChecks all types can be reused from the assertion
+    // under strictNullChecks we need to add undefined, and we can't always know we can
+    // Can't know if references contain undefined, fall back to inference
+    tsResolve? = null! as R | R;
+>tsResolve : R | undefined
+>null! as R | R : R
+>null! : never
+
+    tsResolve2? = null! as R | R | string;
+>tsResolve2 : string | R | undefined
+>null! as R | R | string : string | R
+>null! : never
+
+    // Simple type. we can add undefined
+    reuseType? = null! as ((p: R) => void) | string | string;
+>reuseType : string | ((p: R) => void) | undefined
+>null! as ((p: R) => void) | string | string : string | ((p: R) => void)
+>null! : never
+>p : R
+
+    reuseType2? = null! as (new (p: R) => R) | string | string;
+>reuseType2 : string | (new (p: R) => R) | undefined
+>null! as (new (p: R) => R) | string | string : string | (new (p: R) => R)
+>null! : never
+>p : R
+
+    reuseType3? = null! as string | number | bigint | symbol | unknown | any | never | symbol;
+>reuseType3 : any
+>null! as string | number | bigint | symbol | unknown | any | never | symbol : any
+>null! : never
+
+    reuseType4? = null! as [R, R, R] | [R, R, R];
+>reuseType4 : [R, R, R] | undefined
+>null! as [R, R, R] | [R, R, R] : [R, R, R]
+>null! : never
+
+    reuseType5? = null! as R[] | R[];
+>reuseType5 : R[] | undefined
+>null! as R[] | R[] : R[]
+>null! : never
+
+    reuseType6? = null! as 1 | "2" | 1n | 1n;
+>reuseType6 : 1 | "2" | 1n | undefined
+>null! as 1 | "2" | 1n | 1n : 1 | "2" | 1n
+>null! : never
+
+    reuseType7? = null! as `A` | `A`;
+>reuseType7 : "A" | undefined
+>null! as `A` | `A` : "A"
+>null! : never
+
+    reuseType8? = null! as `${string}-ok` | `${string}-ok`;
+>reuseType8 : `${string}-ok` | undefined
+>null! as `${string}-ok` | `${string}-ok` : `${string}-ok`
+>null! : never
+
+    reuseType9? = null! as this | this;
+>reuseType9 : this | undefined
+>null! as this | this : this
+>null! : never
+}

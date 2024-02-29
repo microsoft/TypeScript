@@ -53,6 +53,8 @@ export const vLiteral = null! as "1" | "1"
 type R = { foo: string }
 
 export class C {
+    // under !strictNullChecks all types can be reused from the assertion
+    // under strictNullChecks we need to add undefined, and we can't always know we can
     // Can't know if references contain undefined, fall back to inference
     tsResolve? = null! as R | R;
     tsResolve2? = null! as R | R | string;
@@ -148,6 +150,8 @@ exports.vStringLiteral = null;
 exports.vLiteral = null;
 var C = /** @class */ (function () {
     function C() {
+        // under !strictNullChecks all types can be reused from the assertion
+        // under strictNullChecks we need to add undefined, and we can't always know we can
         // Can't know if references contain undefined, fall back to inference
         this.tsResolve = null;
         this.tsResolve2 = null;
@@ -168,75 +172,62 @@ exports.C = C;
 
 
 //// [assertToTypeReferences.d.ts]
-export declare let vLet: {
+type P = {} & {
     name: string;
 };
-export declare const vConst: {
-    name: string;
-};
-export declare function fn(p?: {
-    name: string;
-}): void;
+export declare let vLet: P;
+export declare const vConst: P;
+export declare function fn(p?: P): void;
 export declare function fnWithRequiredDefaultParam(p: {
     name: string;
 } | undefined, req: number): void;
 export declare class C {
-    ctorField: {
-        name: string;
-    };
-    field: {
-        name: string;
-    };
-    readonly roFiled: {
-        name: string;
-    };
-    method(p?: {
-        name: string;
-    }): void;
+    ctorField: P;
+    field: P;
+    readonly roFiled: P;
+    method(p?: P): void;
     methodWithRequiredDefault(p: {
         name: string;
     } | undefined, req: number): void;
     methodWithRequiredDefault2(p: {
         name: string;
     } | undefined, req: number): void;
-    constructor(ctorField?: {
-        name: string;
-    });
+    constructor(ctorField?: P);
 }
 declare const _default: {
     name: string;
 };
 export default _default;
 //// [assertToTypeLiteral.d.ts]
-export declare let vLet: {
+export declare let vLet: {} & {
     name: string;
 };
-export declare const vConst: {
+export declare const vConst: {} & {
     name: string;
 };
-export declare function fn(p?: {
+export declare function fn(p?: {} & {
     name: string;
 }): void;
 export declare function fnWithRequiredDefaultParam(p: {
     name: string;
 } | undefined, req: number): void;
 export declare class C {
-    ctorField: {
+    ctorField: {} & {
         name: string;
     };
-    field: {
+    field: {} & {
         name: string;
     };
-    readonly roFiled: {
+    readonly roFiled: {} & {
         name: string;
     };
-    method(p?: {
+    method(p?: {} & {
         name: string;
     }): void;
     methodWithRequiredDefault(p: {
         name: string;
     } | undefined, req: number): void;
-    constructor(ctorField?: {
+    constructor(ctorField?: {} & {
         name: string;
     });
     get x(): {
@@ -251,23 +242,23 @@ declare const _default: {
 };
 export default _default;
 //// [assertToOtherTypes.d.ts]
-export declare const vNumberLiteral: 1;
-export declare const vStringLiteral: "1";
-export declare const vLiteral: "1";
+export declare const vNumberLiteral: 1 | 1;
+export declare const vStringLiteral: "1" | "1";
+export declare const vLiteral: "1" | "1";
 type R = {
     foo: string;
 };
 export declare class C {
     tsResolve?: R | undefined;
     tsResolve2?: string | R | undefined;
-    reuseType?: string | ((p: R) => void) | undefined;
-    reuseType2?: string | (new (p: R) => R) | undefined;
-    reuseType3?: any;
-    reuseType4?: [R, R, R] | undefined;
-    reuseType5?: R[] | undefined;
-    reuseType6?: 1 | "2" | 1n | undefined;
-    reuseType7?: "A" | undefined;
-    reuseType8?: `${string}-ok` | undefined;
-    reuseType9?: this | undefined;
+    reuseType?: ((p: R) => void) | string | string | undefined;
+    reuseType2?: (new (p: R) => R) | string | string | undefined;
+    reuseType3?: string | number | bigint | symbol | unknown | any | never | symbol | undefined;
+    reuseType4?: [R, R, R] | [R, R, R] | undefined;
+    reuseType5?: R[] | R[] | undefined;
+    reuseType6?: 1 | "2" | 1n | 1n | undefined;
+    reuseType7?: `A` | `A` | undefined;
+    reuseType8?: `${string}-ok` | `${string}-ok` | undefined;
+    reuseType9?: this | this | undefined;
 }
 export {};

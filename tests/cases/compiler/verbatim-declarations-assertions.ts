@@ -55,6 +55,8 @@ export const vLiteral = null! as "1" | "1"
 type R = { foo: string }
 
 export class C {
+    // under !strictNullChecks all types can be reused from the assertion
+    // under strictNullChecks we need to add undefined, and we can't always know we can
     // Can't know if references contain undefined, fall back to inference
     tsResolve? = null! as R | R;
     tsResolve2? = null! as R | R | string;
