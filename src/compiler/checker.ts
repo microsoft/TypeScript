@@ -15632,6 +15632,16 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         );
     }
 
+    function getImplementationSignature(signature: Signature) {
+        return signature.typeParameters ?
+            signature.implementationSignatureCache ||= createImplementationSignature(signature) :
+            signature;
+    }
+
+    function createImplementationSignature(signature: Signature) {
+        return signature.typeParameters ? instantiateSignature(signature, createTypeMapper([], [])) : signature;
+    }
+
     function getBaseSignature(signature: Signature) {
         const typeParameters = signature.typeParameters;
         if (typeParameters) {
@@ -26364,9 +26374,11 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     // inference error only occurs when there are *conflicting* candidates, i.e.
                     // candidates with no common supertype.
                     const defaultType = getDefaultFromTypeParameter(inference.typeParameter);
-                    // Instantiate the default type. Any forward reference to a type
-                    // parameter should be instantiated to the empty object type.
-                    inferredType = instantiateType(defaultType, mergeTypeMappers(createBackreferenceMapper(context, index), context.nonFixingMapper));
+                    if (defaultType) {
+                        // Instantiate the default type. Any forward reference to a type
+                        // parameter should be instantiated to the empty object type.
+                        inferredType = instantiateType(defaultType, mergeTypeMappers(createBackreferenceMapper(context, index), context.nonFixingMapper));
+                    }
                 }
             }
             else {
@@ -34867,7 +34879,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             }
 
             for (let candidateIndex = 0; candidateIndex < candidates.length; candidateIndex++) {
-                const candidate = candidates[candidateIndex];
+                let candidate = candidates[candidateIndex];
                 if (!hasCorrectTypeArgumentArity(candidate, typeArguments) || !hasCorrectArity(node, args, candidate, signatureHelpTrailingComma)) {
                     continue;
                 }
@@ -34876,6 +34888,11 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 let inferenceContext: InferenceContext | undefined;
 
                 if (candidate.typeParameters) {
+                    // If we are *inside the body of candidate*, we need to create a clone of `candidate` with differing type parameter identities,
+                    // so our inference results for this call doesn't pollute expression types referencing the outer type parameter!
+                    if (candidate.declaration && findAncestor(node, a => a === candidate.declaration)) {
+                        candidate = getImplementationSignature(candidate);
+                    }
                     let typeArgumentTypes: readonly Type[] | undefined;
                     if (some(typeArguments)) {
                         typeArgumentTypes = checkTypeArguments(candidate, typeArguments, /*reportErrors*/ false);
@@ -34885,7 +34902,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         }
                     }
                     else {
-                        inferenceContext = createInferenceContext(candidate.typeParameters, candidate, /*flags*/ isInJSFile(node) ? InferenceFlags.AnyDefault : InferenceFlags.None);
+                        inferenceContext = createInferenceContext(candidate.typeParameters!, candidate, /*flags*/ isInJSFile(node) ? InferenceFlags.AnyDefault : InferenceFlags.None);
                         // The resulting type arguments are instantiated with the inference context mapper, as the inferred types may still contain references to the inference context's
                         //  type variables via contextual projection. These are kept generic until all inferences are locked in, so the dependencies expressed can pass constraint checks.
                         typeArgumentTypes = instantiateTypes(inferTypeArguments(node, candidate, args, argCheckMode | CheckMode.SkipGenericFunctions, inferenceContext), inferenceContext.nonFixingMapper);

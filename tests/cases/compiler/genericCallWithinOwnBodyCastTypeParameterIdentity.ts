@@ -20,7 +20,7 @@ const toThenableInferred = <Result, Input>(fn: (input: Input) => Result | Thenab
         const result = fn(input)
         return {
             then(onFulfilled) {
-                return toThenable(onFulfilled)(result as Result)
+                return toThenableInferred(onFulfilled)(result as Result)
             }
         };
     }

@@ -93,8 +93,8 @@ const toThenableInferred = <Result, Input>(fn: (input: Input) => Result | Thenab
 >then : Symbol(then, Decl(genericCallWithinOwnBodyCastTypeParameterIdentity.ts, 19, 16))
 >onFulfilled : Symbol(onFulfilled, Decl(genericCallWithinOwnBodyCastTypeParameterIdentity.ts, 20, 17))
 
-                return toThenable(onFulfilled)(result as Result)
->toThenable : Symbol(toThenable, Decl(genericCallWithinOwnBodyCastTypeParameterIdentity.ts, 6, 5))
+                return toThenableInferred(onFulfilled)(result as Result)
+>toThenableInferred : Symbol(toThenableInferred, Decl(genericCallWithinOwnBodyCastTypeParameterIdentity.ts, 16, 5))
 >onFulfilled : Symbol(onFulfilled, Decl(genericCallWithinOwnBodyCastTypeParameterIdentity.ts, 20, 17))
 >result : Symbol(result, Decl(genericCallWithinOwnBodyCastTypeParameterIdentity.ts, 18, 13))
 >Result : Symbol(Result, Decl(genericCallWithinOwnBodyCastTypeParameterIdentity.ts, 16, 28))
