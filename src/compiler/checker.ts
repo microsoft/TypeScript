@@ -44263,11 +44263,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             if (isGeneratorMethod || isIteratorMethod) {
                 const globalType = isGeneratorMethod ? globalGeneratorType : globalIteratorType;
                 const { mapper } = methodType as AnonymousType;
-                const [yieldType, returnType, nextType] = globalType.typeParameters!;
                 return createIterationTypes(
-                    mapper ? getMappedType(yieldType, mapper) : yieldType,
-                    mapper ? getMappedType(returnType, mapper) : returnType,
-                    methodName === "next" ? mapper ? getMappedType(nextType, mapper) : nextType : undefined,
+                    getMappedType(globalType.typeParameters![0], mapper!),
+                    getMappedType(globalType.typeParameters![1], mapper!),
+                    methodName === "next" ? getMappedType(globalType.typeParameters![2], mapper!) : undefined,
                 );
             }
         }
