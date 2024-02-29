@@ -209,6 +209,9 @@ function createBundler(entrypoint, outfile, taskOptions = {}) {
         };
 
         if (taskOptions.exportIsTsObject) {
+            // Monaco bundles us as ESM by wrapping our code with something that defines `module.exports`
+            // but then does not use it, instead using the `ts` variable. Ensure that if we think we're CJS
+            // that we still set `ts` to the module.exports object.
             options.footer = { js: `})(typeof module !== "undefined" && module.exports ? (ts = module.exports, module) : { exports: ts });` };
 
             // esbuild converts calls to "require" to "__require"; this function
