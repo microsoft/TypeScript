@@ -1,0 +1,7 @@
+primitiveTypeAsmoduleName.ts(1,8): error TS2819: Namespace name cannot be 'string'.
+
+
+==== primitiveTypeAsmoduleName.ts (1 errors) ====
+    module string {}
+           ~~~~~~
+!!! error TS2819: Namespace name cannot be 'string'.
