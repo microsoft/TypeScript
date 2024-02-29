@@ -3669,6 +3669,7 @@ export interface CompilerOptions {
     allowUnusedLabels?: boolean;
     alwaysStrict?: boolean;
     baseUrl?: string;
+    /** @deprecated */
     charset?: string;
     checkJs?: boolean;
     declaration?: boolean;
@@ -3701,9 +3702,11 @@ export interface CompilerOptions {
     noImplicitThis?: boolean;
     noUnusedLocals?: boolean;
     noUnusedParameters?: boolean;
+    /** @deprecated */
     noImplicitUseStrict?: boolean;
     noLib?: boolean;
     noResolve?: boolean;
+    /** @deprecated */
     out?: string;
     outDir?: string;
     outFile?: string;
@@ -3723,7 +3726,9 @@ export interface CompilerOptions {
     sourceRoot?: string;
     strict?: boolean;
     strictNullChecks?: boolean;
+    /** @deprecated */
     suppressExcessPropertyErrors?: boolean;
+    /** @deprecated */
     suppressImplicitAnyIndexErrors?: boolean;
     useDefineForClassFields?: boolean;
     target?: ScriptTarget | ts.ScriptTarget;
@@ -3772,6 +3777,7 @@ export const enum NewLineKind {
 }
 
 export const enum ScriptTarget {
+    /** @deprecated */
     ES3 = "ES3",
     ES5 = "ES5",
     ES6 = "ES6",

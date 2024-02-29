@@ -1,7 +1,7 @@
 // @target: ES3
 // @sourcemap: true
 // @inlinesources: true
-// @out: out.js
+// @outFile: out.js
 
 // @filename: a.ts
 var a = 0;

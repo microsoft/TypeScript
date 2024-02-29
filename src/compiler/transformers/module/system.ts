@@ -96,7 +96,6 @@ import {
     Node,
     NodeFlags,
     ObjectLiteralElementLike,
-    outFile,
     ParenthesizedExpression,
     PartiallyEmittedExpression,
     PostfixUnaryExpression,
@@ -251,7 +250,7 @@ export function transformSystemModule(context: TransformationContext): (x: Sourc
             EmitFlags.NoTrailingComments,
         );
 
-        if (!outFile(compilerOptions)) {
+        if (!compilerOptions.outFile) {
             moveEmitHelpers(updated, moduleBodyBlock, helper => !helper.scoped);
         }
 
@@ -355,7 +354,7 @@ export function transformSystemModule(context: TransformationContext): (x: Sourc
         startLexicalEnvironment();
 
         // Add any prologue directives.
-        const ensureUseStrict = getStrictOptionValue(compilerOptions, "alwaysStrict") || (!compilerOptions.noImplicitUseStrict && isExternalModule(currentSourceFile));
+        const ensureUseStrict = getStrictOptionValue(compilerOptions, "alwaysStrict") || isExternalModule(currentSourceFile);
         const statementOffset = factory.copyPrologue(node.statements, statements, ensureUseStrict, topLevelVisitor);
 
         // var __moduleName = context_1 && context_1.id;

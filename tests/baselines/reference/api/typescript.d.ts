@@ -2956,6 +2956,7 @@ declare namespace ts {
                 allowUnusedLabels?: boolean;
                 alwaysStrict?: boolean;
                 baseUrl?: string;
+                /** @deprecated */
                 charset?: string;
                 checkJs?: boolean;
                 declaration?: boolean;
@@ -2988,9 +2989,11 @@ declare namespace ts {
                 noImplicitThis?: boolean;
                 noUnusedLocals?: boolean;
                 noUnusedParameters?: boolean;
+                /** @deprecated */
                 noImplicitUseStrict?: boolean;
                 noLib?: boolean;
                 noResolve?: boolean;
+                /** @deprecated */
                 out?: string;
                 outDir?: string;
                 outFile?: string;
@@ -3010,7 +3013,9 @@ declare namespace ts {
                 sourceRoot?: string;
                 strict?: boolean;
                 strictNullChecks?: boolean;
+                /** @deprecated */
                 suppressExcessPropertyErrors?: boolean;
+                /** @deprecated */
                 suppressImplicitAnyIndexErrors?: boolean;
                 useDefineForClassFields?: boolean;
                 target?: ScriptTarget | ts.ScriptTarget;
@@ -3054,6 +3059,7 @@ declare namespace ts {
                 Lf = "Lf",
             }
             enum ScriptTarget {
+                /** @deprecated */
                 ES3 = "ES3",
                 ES5 = "ES5",
                 ES6 = "ES6",
@@ -4478,65 +4484,58 @@ declare namespace ts {
         ShorthandPropertyAssignment = 304,
         SpreadAssignment = 305,
         EnumMember = 306,
-        /** @deprecated */ UnparsedPrologue = 307,
-        /** @deprecated */ UnparsedPrepend = 308,
-        /** @deprecated */ UnparsedText = 309,
-        /** @deprecated */ UnparsedInternalText = 310,
-        /** @deprecated */ UnparsedSyntheticReference = 311,
-        SourceFile = 312,
-        Bundle = 313,
-        /** @deprecated */ UnparsedSource = 314,
-        /** @deprecated */ InputFiles = 315,
-        JSDocTypeExpression = 316,
-        JSDocNameReference = 317,
-        JSDocMemberName = 318,
-        JSDocAllType = 319,
-        JSDocUnknownType = 320,
-        JSDocNullableType = 321,
-        JSDocNonNullableType = 322,
-        JSDocOptionalType = 323,
-        JSDocFunctionType = 324,
-        JSDocVariadicType = 325,
-        JSDocNamepathType = 326,
-        JSDoc = 327,
+        SourceFile = 307,
+        Bundle = 308,
+        JSDocTypeExpression = 309,
+        JSDocNameReference = 310,
+        JSDocMemberName = 311,
+        JSDocAllType = 312,
+        JSDocUnknownType = 313,
+        JSDocNullableType = 314,
+        JSDocNonNullableType = 315,
+        JSDocOptionalType = 316,
+        JSDocFunctionType = 317,
+        JSDocVariadicType = 318,
+        JSDocNamepathType = 319,
+        JSDoc = 320,
         /** @deprecated Use SyntaxKind.JSDoc */
-        JSDocComment = 327,
-        JSDocText = 328,
-        JSDocTypeLiteral = 329,
-        JSDocSignature = 330,
-        JSDocLink = 331,
-        JSDocLinkCode = 332,
-        JSDocLinkPlain = 333,
-        JSDocTag = 334,
-        JSDocAugmentsTag = 335,
-        JSDocImplementsTag = 336,
-        JSDocAuthorTag = 337,
-        JSDocDeprecatedTag = 338,
-        JSDocClassTag = 339,
-        JSDocPublicTag = 340,
-        JSDocPrivateTag = 341,
-        JSDocProtectedTag = 342,
-        JSDocReadonlyTag = 343,
-        JSDocOverrideTag = 344,
-        JSDocCallbackTag = 345,
-        JSDocOverloadTag = 346,
-        JSDocEnumTag = 347,
-        JSDocParameterTag = 348,
-        JSDocReturnTag = 349,
-        JSDocThisTag = 350,
-        JSDocTypeTag = 351,
-        JSDocTemplateTag = 352,
-        JSDocTypedefTag = 353,
-        JSDocSeeTag = 354,
-        JSDocPropertyTag = 355,
-        JSDocThrowsTag = 356,
-        JSDocSatisfiesTag = 357,
-        SyntaxList = 358,
-        NotEmittedStatement = 359,
-        PartiallyEmittedExpression = 360,
-        CommaListExpression = 361,
-        SyntheticReferenceExpression = 362,
-        Count = 363,
+        JSDocComment = 320,
+        JSDocText = 321,
+        JSDocTypeLiteral = 322,
+        JSDocSignature = 323,
+        JSDocLink = 324,
+        JSDocLinkCode = 325,
+        JSDocLinkPlain = 326,
+        JSDocTag = 327,
+        JSDocAugmentsTag = 328,
+        JSDocImplementsTag = 329,
+        JSDocAuthorTag = 330,
+        JSDocDeprecatedTag = 331,
+        JSDocClassTag = 332,
+        JSDocPublicTag = 333,
+        JSDocPrivateTag = 334,
+        JSDocProtectedTag = 335,
+        JSDocReadonlyTag = 336,
+        JSDocOverrideTag = 337,
+        JSDocCallbackTag = 338,
+        JSDocOverloadTag = 339,
+        JSDocEnumTag = 340,
+        JSDocParameterTag = 341,
+        JSDocReturnTag = 342,
+        JSDocThisTag = 343,
+        JSDocTypeTag = 344,
+        JSDocTemplateTag = 345,
+        JSDocTypedefTag = 346,
+        JSDocSeeTag = 347,
+        JSDocPropertyTag = 348,
+        JSDocThrowsTag = 349,
+        JSDocSatisfiesTag = 350,
+        SyntaxList = 351,
+        NotEmittedStatement = 352,
+        PartiallyEmittedExpression = 353,
+        CommaListExpression = 354,
+        SyntheticReferenceExpression = 355,
+        Count = 356,
         FirstAssignment = 64,
         LastAssignment = 79,
         FirstCompoundAssignment = 65,
@@ -4564,10 +4563,10 @@ declare namespace ts {
         FirstStatement = 243,
         LastStatement = 259,
         FirstNode = 166,
-        FirstJSDocNode = 316,
-        LastJSDocNode = 357,
-        FirstJSDocTagNode = 334,
-        LastJSDocTagNode = 357,
+        FirstJSDocNode = 309,
+        LastJSDocNode = 350,
+        FirstJSDocTagNode = 327,
+        LastJSDocTagNode = 350,
     }
     type TriviaSyntaxKind = SyntaxKind.SingleLineCommentTrivia | SyntaxKind.MultiLineCommentTrivia | SyntaxKind.NewLineTrivia | SyntaxKind.WhitespaceTrivia | SyntaxKind.ShebangTrivia | SyntaxKind.ConflictMarkerTrivia;
     type LiteralSyntaxKind = SyntaxKind.NumericLiteral | SyntaxKind.BigIntLiteral | SyntaxKind.StringLiteral | SyntaxKind.JsxText | SyntaxKind.JsxTextAllWhiteSpaces | SyntaxKind.RegularExpressionLiteral | SyntaxKind.NoSubstitutionTemplateLiteral;
@@ -6498,69 +6497,7 @@ declare namespace ts {
     }
     interface Bundle extends Node {
         readonly kind: SyntaxKind.Bundle;
-        /** @deprecated */ readonly prepends: readonly (InputFiles | UnparsedSource)[];
         readonly sourceFiles: readonly SourceFile[];
-    }
-    /** @deprecated */
-    interface InputFiles extends Node {
-        readonly kind: SyntaxKind.InputFiles;
-        javascriptPath?: string;
-        javascriptText: string;
-        javascriptMapPath?: string;
-        javascriptMapText?: string;
-        declarationPath?: string;
-        declarationText: string;
-        declarationMapPath?: string;
-        declarationMapText?: string;
-    }
-    /** @deprecated */
-    interface UnparsedSource extends Node {
-        readonly kind: SyntaxKind.UnparsedSource;
-        fileName: string;
-        text: string;
-        readonly prologues: readonly UnparsedPrologue[];
-        helpers: readonly UnscopedEmitHelper[] | undefined;
-        referencedFiles: readonly FileReference[];
-        typeReferenceDirectives: readonly FileReference[] | undefined;
-        libReferenceDirectives: readonly FileReference[];
-        hasNoDefaultLib?: boolean;
-        sourceMapPath?: string;
-        sourceMapText?: string;
-        readonly syntheticReferences?: readonly UnparsedSyntheticReference[];
-        readonly texts: readonly UnparsedSourceText[];
-    }
-    /** @deprecated */
-    type UnparsedSourceText = UnparsedPrepend | UnparsedTextLike;
-    /** @deprecated */
-    type UnparsedNode = UnparsedPrologue | UnparsedSourceText | UnparsedSyntheticReference;
-    /** @deprecated */
-    interface UnparsedSection extends Node {
-        readonly kind: SyntaxKind;
-        readonly parent: UnparsedSource;
-        readonly data?: string;
-    }
-    /** @deprecated */
-    interface UnparsedPrologue extends UnparsedSection {
-        readonly kind: SyntaxKind.UnparsedPrologue;
-        readonly parent: UnparsedSource;
-        readonly data: string;
-    }
-    /** @deprecated */
-    interface UnparsedPrepend extends UnparsedSection {
-        readonly kind: SyntaxKind.UnparsedPrepend;
-        readonly parent: UnparsedSource;
-        readonly data: string;
-        readonly texts: readonly UnparsedTextLike[];
-    }
-    /** @deprecated */
-    interface UnparsedTextLike extends UnparsedSection {
-        readonly kind: SyntaxKind.UnparsedText | SyntaxKind.UnparsedInternalText;
-        readonly parent: UnparsedSource;
-    }
-    /** @deprecated */
-    interface UnparsedSyntheticReference extends UnparsedSection {
-        readonly kind: SyntaxKind.UnparsedSyntheticReference;
-        readonly parent: UnparsedSource;
     }
     interface JsonSourceFile extends SourceFile {
         readonly statements: NodeArray<JsonObjectExpressionStatement>;
@@ -7496,7 +7433,7 @@ declare namespace ts {
         path: string;
         /** The path as the user originally wrote it */
         originalPath?: string;
-        /** True if the output of this reference should be prepended to the output of this project. Only valid for --outFile compilations */
+        /** @deprecated */
         prepend?: boolean;
         /** True if it is intended that this reference form a circularity */
         circular?: boolean;
@@ -7532,6 +7469,7 @@ declare namespace ts {
         allowUnusedLabels?: boolean;
         alwaysStrict?: boolean;
         baseUrl?: string;
+        /** @deprecated */
         charset?: string;
         checkJs?: boolean;
         customConditions?: string[];
@@ -7551,11 +7489,13 @@ declare namespace ts {
         forceConsistentCasingInFileNames?: boolean;
         ignoreDeprecations?: string;
         importHelpers?: boolean;
+        /** @deprecated */
         importsNotUsedAsValues?: ImportsNotUsedAsValues;
         inlineSourceMap?: boolean;
         inlineSources?: boolean;
         isolatedModules?: boolean;
         jsx?: JsxEmit;
+        /** @deprecated */
         keyofStringsOnly?: boolean;
         lib?: string[];
         locale?: string;
@@ -7574,15 +7514,18 @@ declare namespace ts {
         noImplicitAny?: boolean;
         noImplicitReturns?: boolean;
         noImplicitThis?: boolean;
+        /** @deprecated */
         noStrictGenericChecks?: boolean;
         noUnusedLocals?: boolean;
         noUnusedParameters?: boolean;
+        /** @deprecated */
         noImplicitUseStrict?: boolean;
         noPropertyAccessFromIndexSignature?: boolean;
         assumeChangesOnlyAffectDirectDependencies?: boolean;
         noLib?: boolean;
         noResolve?: boolean;
         noUncheckedIndexedAccess?: boolean;
+        /** @deprecated */
         out?: string;
         outDir?: string;
         outFile?: string;
@@ -7590,6 +7533,7 @@ declare namespace ts {
         preserveConstEnums?: boolean;
         noImplicitOverride?: boolean;
         preserveSymlinks?: boolean;
+        /** @deprecated */
         preserveValueImports?: boolean;
         project?: string;
         reactNamespace?: string;
@@ -7614,7 +7558,9 @@ declare namespace ts {
         strictNullChecks?: boolean;
         strictPropertyInitialization?: boolean;
         stripInternal?: boolean;
+        /** @deprecated */
         suppressExcessPropertyErrors?: boolean;
+        /** @deprecated */
         suppressImplicitAnyIndexErrors?: boolean;
         target?: ScriptTarget;
         traceResolution?: boolean;
@@ -7666,6 +7612,7 @@ declare namespace ts {
         ReactJSX = 4,
         ReactJSXDev = 5,
     }
+    /** @deprecated */
     enum ImportsNotUsedAsValues {
         Remove = 0,
         Preserve = 1,
@@ -7695,6 +7642,7 @@ declare namespace ts {
         Deferred = 7,
     }
     enum ScriptTarget {
+        /** @deprecated */
         ES3 = 0,
         ES5 = 1,
         ES2015 = 2,
@@ -8389,9 +8337,7 @@ declare namespace ts {
         createCommaListExpression(elements: readonly Expression[]): CommaListExpression;
         updateCommaListExpression(node: CommaListExpression, elements: readonly Expression[]): CommaListExpression;
         createBundle(sourceFiles: readonly SourceFile[]): Bundle;
-        /** @deprecated*/ createBundle(sourceFiles: readonly SourceFile[], prepends?: readonly (UnparsedSource | InputFiles)[]): Bundle;
         updateBundle(node: Bundle, sourceFiles: readonly SourceFile[]): Bundle;
-        /** @deprecated*/ updateBundle(node: Bundle, sourceFiles: readonly SourceFile[], prepends?: readonly (UnparsedSource | InputFiles)[]): Bundle;
         createComma(left: Expression, right: Expression): BinaryExpression;
         createAssignment(left: ObjectLiteralExpression | ArrayLiteralExpression, right: Expression): DestructuringAssignment;
         createAssignment(left: Expression, right: Expression): AssignmentExpression<EqualsToken>;
@@ -9150,10 +9096,6 @@ declare namespace ts {
     function isNonNullChain(node: Node): node is NonNullChain;
     function isBreakOrContinueStatement(node: Node): node is BreakOrContinueStatement;
     function isNamedExportBindings(node: Node): node is NamedExportBindings;
-    /** @deprecated */
-    function isUnparsedTextLike(node: Node): node is UnparsedTextLike;
-    /** @deprecated */
-    function isUnparsedNode(node: Node): node is UnparsedNode;
     function isJSDocPropertyLikeTag(node: Node): node is JSDocPropertyLikeTag;
     /**
      * True if kind is of some token syntax kind.
@@ -9261,18 +9203,6 @@ declare namespace ts {
      * ```
      */
     function getJSDocCommentsAndTags(hostNode: Node): readonly (JSDoc | JSDocTag)[];
-    /** @deprecated */
-    function createUnparsedSourceFile(text: string): UnparsedSource;
-    /** @deprecated */
-    function createUnparsedSourceFile(inputFile: InputFiles, type: "js" | "dts", stripInternal?: boolean): UnparsedSource;
-    /** @deprecated */
-    function createUnparsedSourceFile(text: string, mapPath: string | undefined, map: string | undefined): UnparsedSource;
-    /** @deprecated */
-    function createInputFiles(javascriptText: string, declarationText: string): InputFiles;
-    /** @deprecated */
-    function createInputFiles(javascriptText: string, declarationText: string, javascriptMapPath: string | undefined, javascriptMapText: string | undefined, declarationMapPath: string | undefined, declarationMapText: string | undefined): InputFiles;
-    /** @deprecated */
-    function createInputFiles(readFileText: (path: string) => string | undefined, javascriptPath: string, javascriptMapPath: string | undefined, declarationPath: string, declarationMapPath: string | undefined, buildInfoPath: string | undefined): InputFiles;
     /**
      * Create an external source map source file reference
      */
@@ -9517,12 +9447,8 @@ declare namespace ts {
     function isShorthandPropertyAssignment(node: Node): node is ShorthandPropertyAssignment;
     function isSpreadAssignment(node: Node): node is SpreadAssignment;
     function isEnumMember(node: Node): node is EnumMember;
-    /** @deprecated */
-    function isUnparsedPrepend(node: Node): node is UnparsedPrepend;
     function isSourceFile(node: Node): node is SourceFile;
     function isBundle(node: Node): node is Bundle;
-    /** @deprecated */
-    function isUnparsedSource(node: Node): node is UnparsedSource;
     function isJSDocTypeExpression(node: Node): node is JSDocTypeExpression;
     function isJSDocNameReference(node: Node): node is JSDocNameReference;
     function isJSDocMemberName(node: Node): node is JSDocMemberName;
@@ -10341,8 +10267,7 @@ declare namespace ts {
     }
     enum InvalidatedProjectKind {
         Build = 0,
-        /** @deprecated */ UpdateBundle = 1,
-        UpdateOutputFileStamps = 2,
+        UpdateOutputFileStamps = 1,
     }
     interface InvalidatedProjectBase {
         readonly kind: InvalidatedProjectKind;
@@ -10373,12 +10298,7 @@ declare namespace ts {
         getSemanticDiagnosticsOfNextAffectedFile(cancellationToken?: CancellationToken, ignoreSourceFile?: (sourceFile: SourceFile) => boolean): AffectedFileResult<readonly Diagnostic[]>;
         emit(targetSourceFile?: SourceFile, writeFile?: WriteFileCallback, cancellationToken?: CancellationToken, emitOnlyDtsFiles?: boolean, customTransformers?: CustomTransformers): EmitResult | undefined;
     }
-    /** @deprecated */
-    interface UpdateBundleProject<T extends BuilderProgram> extends InvalidatedProjectBase {
-        readonly kind: InvalidatedProjectKind.UpdateBundle;
-        emit(writeFile?: WriteFileCallback, customTransformers?: CustomTransformers): EmitResult | BuildInvalidedProject<T> | undefined;
-    }
-    type InvalidatedProject<T extends BuilderProgram> = UpdateOutputFileStampsProject | BuildInvalidedProject<T> | UpdateBundleProject<T>;
+    type InvalidatedProject<T extends BuilderProgram> = UpdateOutputFileStampsProject | BuildInvalidedProject<T>;
     namespace JsTyping {
         interface TypingResolutionHost {
             directoryExists(path: string): boolean;

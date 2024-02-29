@@ -1,11 +1,7 @@
-error TS5102: Option 'out' has been removed. Please remove it from your configuration.
-  Use 'outFile' instead.
 uniqueSymbolsDeclarationsInJsErrors.js(5,12): error TS1331: A property of a class whose type is a 'unique symbol' type must be both 'static' and 'readonly'.
 uniqueSymbolsDeclarationsInJsErrors.js(14,12): error TS1331: A property of a class whose type is a 'unique symbol' type must be both 'static' and 'readonly'.
 
 
-!!! error TS5102: Option 'out' has been removed. Please remove it from your configuration.
-!!! error TS5102:   Use 'outFile' instead.
 ==== uniqueSymbolsDeclarationsInJsErrors.js (2 errors) ====
     class C {
         /**
@@ -26,3 +22,4 @@ uniqueSymbolsDeclarationsInJsErrors.js(14,12): error TS1331: A property of a cla
                ~~~~~~~~~~~~~
 !!! error TS1331: A property of a class whose type is a 'unique symbol' type must be both 'static' and 'readonly'.
     }
+    

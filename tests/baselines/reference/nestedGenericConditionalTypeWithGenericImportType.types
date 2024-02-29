@@ -1,8 +1,6 @@
 //// [tests/cases/compiler/nestedGenericConditionalTypeWithGenericImportType.ts] ////
 
 === name.ts ===
-// #31824
-
 export type Name<T> = any;
 >Name : any
 
