@@ -1,9 +1,6 @@
-error TS5107: Option 'target=ES3' is deprecated and will stop functioning in TypeScript 5.5. Specify compilerOption '"ignoreDeprecations": "5.0"' to silence this error.
-ES3For-ofTypeCheck1.ts(1,15): error TS2494: Using a string in a 'for...of' statement is only supported in ECMAScript 5 and higher.
+error TS5108: Option 'target=ES3' has been removed. Please remove it from your configuration.
 
 
-!!! error TS5107: Option 'target=ES3' is deprecated and will stop functioning in TypeScript 5.5. Specify compilerOption '"ignoreDeprecations": "5.0"' to silence this error.
-==== ES3For-ofTypeCheck1.ts (1 errors) ====
+!!! error TS5108: Option 'target=ES3' has been removed. Please remove it from your configuration.
+==== ES3For-ofTypeCheck1.ts (0 errors) ====
     for (var v of "") { }
-                  ~~
-!!! error TS2494: Using a string in a 'for...of' statement is only supported in ECMAScript 5 and higher.

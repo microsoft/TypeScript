@@ -115,7 +115,7 @@ Info seq  [hh:mm:ss:mss] Config: /tsconfig.json : {
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /tsconfig.json
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/lib/lib.es2015.d.ts 500 undefined Project: /tsconfig.json WatchType: Missing file
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/lib/lib.dom.d.ts 500 undefined Project: /tsconfig.json WatchType: Missing file
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /tsconfig.json projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (1)
 	/a.ts SVC-1-0 ""
@@ -277,7 +277,7 @@ Info seq  [hh:mm:ss:mss] event:
               "line": 4,
               "offset": 14
             },
-            "text": "Option 'out' cannot be specified with option 'outFile'.",
+            "text": "Option 'declarationDir' cannot be specified with option 'outFile'.",
             "code": 5053,
             "category": "error",
             "fileName": "/tsconfig.json"
@@ -333,36 +333,8 @@ Info seq  [hh:mm:ss:mss] event:
               "line": 20,
               "offset": 10
             },
-            "text": "Option 'declarationDir' cannot be specified with option 'out'.",
-            "code": 5053,
-            "category": "error",
-            "fileName": "/tsconfig.json"
-          },
-          {
-            "start": {
-              "line": 20,
-              "offset": 5
-            },
-            "end": {
-              "line": 20,
-              "offset": 10
-            },
-            "text": "Option 'out' cannot be specified with option 'outFile'.",
-            "code": 5053,
-            "category": "error",
-            "fileName": "/tsconfig.json"
-          },
-          {
-            "start": {
-              "line": 20,
-              "offset": 5
-            },
-            "end": {
-              "line": 20,
-              "offset": 10
-            },
-            "text": "Option 'out' is deprecated and will stop functioning in TypeScript 5.5. Specify compilerOption '\"ignoreDeprecations\": \"5.0\"' to silence this error.\n  Use 'outFile' instead.",
-            "code": 5101,
+            "text": "Option 'out' has been removed. Please remove it from your configuration.\n  Use 'outFile' instead.",
+            "code": 5102,
             "category": "error",
             "fileName": "/tsconfig.json"
           },
@@ -389,8 +361,8 @@ Info seq  [hh:mm:ss:mss] event:
               "line": 22,
               "offset": 14
             },
-            "text": "Option 'charset' is deprecated and will stop functioning in TypeScript 5.5. Specify compilerOption '\"ignoreDeprecations\": \"5.0\"' to silence this error.",
-            "code": 5101,
+            "text": "Option 'charset' has been removed. Please remove it from your configuration.",
+            "code": 5102,
             "category": "error",
             "fileName": "/tsconfig.json"
           },
@@ -403,7 +375,7 @@ Info seq  [hh:mm:ss:mss] event:
               "line": 24,
               "offset": 21
             },
-            "text": "Option 'declarationDir' cannot be specified with option 'out'.",
+            "text": "Option 'declarationDir' cannot be specified with option 'outFile'.",
             "code": 5053,
             "category": "error",
             "fileName": "/tsconfig.json"
@@ -529,3 +501,14 @@ PolledWatches::
 FsWatches::
 /tsconfig.json: *new*
   {}
+
+Projects::
+/tsconfig.json (Configured) *new*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+
+ScriptInfos::
+/a.ts (Open) *new*
+    version: SVC-1-0
+    containingProjects: 1
+        /tsconfig.json *default*

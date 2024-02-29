@@ -205,7 +205,7 @@ declare namespace ts {
             /**
              * Request to reload the project structure for all the opened files
              */
-            interface ReloadProjectsRequest extends Message {
+            interface ReloadProjectsRequest extends Request {
                 command: CommandTypes.ReloadProjects;
             }
             /**
@@ -2956,6 +2956,7 @@ declare namespace ts {
                 allowUnusedLabels?: boolean;
                 alwaysStrict?: boolean;
                 baseUrl?: string;
+                /** @deprecated */
                 charset?: string;
                 checkJs?: boolean;
                 declaration?: boolean;
@@ -2988,9 +2989,11 @@ declare namespace ts {
                 noImplicitThis?: boolean;
                 noUnusedLocals?: boolean;
                 noUnusedParameters?: boolean;
+                /** @deprecated */
                 noImplicitUseStrict?: boolean;
                 noLib?: boolean;
                 noResolve?: boolean;
+                /** @deprecated */
                 out?: string;
                 outDir?: string;
                 outFile?: string;
@@ -3010,7 +3013,9 @@ declare namespace ts {
                 sourceRoot?: string;
                 strict?: boolean;
                 strictNullChecks?: boolean;
+                /** @deprecated */
                 suppressExcessPropertyErrors?: boolean;
+                /** @deprecated */
                 suppressImplicitAnyIndexErrors?: boolean;
                 useDefineForClassFields?: boolean;
                 target?: ScriptTarget | ts.ScriptTarget;
@@ -3036,16 +3041,25 @@ declare namespace ts {
                 ES6 = "ES6",
                 ES2015 = "ES2015",
                 ESNext = "ESNext",
+                Node16 = "Node16",
+                NodeNext = "NodeNext",
+                Preserve = "Preserve",
             }
             enum ModuleResolutionKind {
                 Classic = "Classic",
+                /** @deprecated Renamed to `Node10` */
                 Node = "Node",
+                Node10 = "Node10",
+                Node16 = "Node16",
+                NodeNext = "NodeNext",
+                Bundler = "Bundler",
             }
             enum NewLineKind {
                 Crlf = "Crlf",
                 Lf = "Lf",
             }
             enum ScriptTarget {
+                /** @deprecated */
                 ES3 = "ES3",
                 ES5 = "ES5",
                 ES6 = "ES6",
@@ -3324,18 +3338,6 @@ declare namespace ts {
              * Last version that was reported.
              */
             private lastReportedVersion;
-            /**
-             * Current project's program version. (incremented everytime new program is created that is not complete reuse from the old one)
-             * This property is changed in 'updateGraph' based on the set of files in program
-             */
-            private projectProgramVersion;
-            /**
-             * Current version of the project state. It is changed when:
-             * - new root file was added/removed
-             * - edit happen in some file that is currently included in the project.
-             * This property is different from projectStructureVersion since in most cases edits don't affect set of files in the project
-             */
-            private projectStateVersion;
             protected projectErrors: Diagnostic[] | undefined;
             protected isInitialLoadPending: () => boolean;
             private readonly cancellationToken;
@@ -3910,6 +3912,7 @@ declare namespace ts {
             private static escapeFilenameForRegex;
             resetSafeList(): void;
             applySafeList(proj: protocol.ExternalProject): NormalizedPath[];
+            private applySafeListWorker;
             openExternalProject(proj: protocol.ExternalProject): void;
             hasDeferredExtension(): boolean;
             private enableRequestedPluginsAsync;
@@ -4142,7 +4145,7 @@ declare namespace ts {
             responseRequired?: boolean;
         }
     }
-    const versionMajorMinor = "5.4";
+    const versionMajorMinor = "5.5";
     /** The version of the TypeScript compiler release */
     const version: string;
     /**
@@ -4481,65 +4484,58 @@ declare namespace ts {
         ShorthandPropertyAssignment = 304,
         SpreadAssignment = 305,
         EnumMember = 306,
-        /** @deprecated */ UnparsedPrologue = 307,
-        /** @deprecated */ UnparsedPrepend = 308,
-        /** @deprecated */ UnparsedText = 309,
-        /** @deprecated */ UnparsedInternalText = 310,
-        /** @deprecated */ UnparsedSyntheticReference = 311,
-        SourceFile = 312,
-        Bundle = 313,
-        /** @deprecated */ UnparsedSource = 314,
-        /** @deprecated */ InputFiles = 315,
-        JSDocTypeExpression = 316,
-        JSDocNameReference = 317,
-        JSDocMemberName = 318,
-        JSDocAllType = 319,
-        JSDocUnknownType = 320,
-        JSDocNullableType = 321,
-        JSDocNonNullableType = 322,
-        JSDocOptionalType = 323,
-        JSDocFunctionType = 324,
-        JSDocVariadicType = 325,
-        JSDocNamepathType = 326,
-        JSDoc = 327,
+        SourceFile = 307,
+        Bundle = 308,
+        JSDocTypeExpression = 309,
+        JSDocNameReference = 310,
+        JSDocMemberName = 311,
+        JSDocAllType = 312,
+        JSDocUnknownType = 313,
+        JSDocNullableType = 314,
+        JSDocNonNullableType = 315,
+        JSDocOptionalType = 316,
+        JSDocFunctionType = 317,
+        JSDocVariadicType = 318,
+        JSDocNamepathType = 319,
+        JSDoc = 320,
         /** @deprecated Use SyntaxKind.JSDoc */
-        JSDocComment = 327,
-        JSDocText = 328,
-        JSDocTypeLiteral = 329,
-        JSDocSignature = 330,
-        JSDocLink = 331,
-        JSDocLinkCode = 332,
-        JSDocLinkPlain = 333,
-        JSDocTag = 334,
-        JSDocAugmentsTag = 335,
-        JSDocImplementsTag = 336,
-        JSDocAuthorTag = 337,
-        JSDocDeprecatedTag = 338,
-        JSDocClassTag = 339,
-        JSDocPublicTag = 340,
-        JSDocPrivateTag = 341,
-        JSDocProtectedTag = 342,
-        JSDocReadonlyTag = 343,
-        JSDocOverrideTag = 344,
-        JSDocCallbackTag = 345,
-        JSDocOverloadTag = 346,
-        JSDocEnumTag = 347,
-        JSDocParameterTag = 348,
-        JSDocReturnTag = 349,
-        JSDocThisTag = 350,
-        JSDocTypeTag = 351,
-        JSDocTemplateTag = 352,
-        JSDocTypedefTag = 353,
-        JSDocSeeTag = 354,
-        JSDocPropertyTag = 355,
-        JSDocThrowsTag = 356,
-        JSDocSatisfiesTag = 357,
-        SyntaxList = 358,
-        NotEmittedStatement = 359,
-        PartiallyEmittedExpression = 360,
-        CommaListExpression = 361,
-        SyntheticReferenceExpression = 362,
-        Count = 363,
+        JSDocComment = 320,
+        JSDocText = 321,
+        JSDocTypeLiteral = 322,
+        JSDocSignature = 323,
+        JSDocLink = 324,
+        JSDocLinkCode = 325,
+        JSDocLinkPlain = 326,
+        JSDocTag = 327,
+        JSDocAugmentsTag = 328,
+        JSDocImplementsTag = 329,
+        JSDocAuthorTag = 330,
+        JSDocDeprecatedTag = 331,
+        JSDocClassTag = 332,
+        JSDocPublicTag = 333,
+        JSDocPrivateTag = 334,
+        JSDocProtectedTag = 335,
+        JSDocReadonlyTag = 336,
+        JSDocOverrideTag = 337,
+        JSDocCallbackTag = 338,
+        JSDocOverloadTag = 339,
+        JSDocEnumTag = 340,
+        JSDocParameterTag = 341,
+        JSDocReturnTag = 342,
+        JSDocThisTag = 343,
+        JSDocTypeTag = 344,
+        JSDocTemplateTag = 345,
+        JSDocTypedefTag = 346,
+        JSDocSeeTag = 347,
+        JSDocPropertyTag = 348,
+        JSDocThrowsTag = 349,
+        JSDocSatisfiesTag = 350,
+        SyntaxList = 351,
+        NotEmittedStatement = 352,
+        PartiallyEmittedExpression = 353,
+        CommaListExpression = 354,
+        SyntheticReferenceExpression = 355,
+        Count = 356,
         FirstAssignment = 64,
         LastAssignment = 79,
         FirstCompoundAssignment = 65,
@@ -4567,10 +4563,10 @@ declare namespace ts {
         FirstStatement = 243,
         LastStatement = 259,
         FirstNode = 166,
-        FirstJSDocNode = 316,
-        LastJSDocNode = 357,
-        FirstJSDocTagNode = 334,
-        LastJSDocTagNode = 357,
+        FirstJSDocNode = 309,
+        LastJSDocNode = 350,
+        FirstJSDocTagNode = 327,
+        LastJSDocTagNode = 350,
     }
     type TriviaSyntaxKind = SyntaxKind.SingleLineCommentTrivia | SyntaxKind.MultiLineCommentTrivia | SyntaxKind.NewLineTrivia | SyntaxKind.WhitespaceTrivia | SyntaxKind.ShebangTrivia | SyntaxKind.ConflictMarkerTrivia;
     type LiteralSyntaxKind = SyntaxKind.NumericLiteral | SyntaxKind.BigIntLiteral | SyntaxKind.StringLiteral | SyntaxKind.JsxText | SyntaxKind.JsxTextAllWhiteSpaces | SyntaxKind.RegularExpressionLiteral | SyntaxKind.NoSubstitutionTemplateLiteral;
@@ -6501,69 +6497,7 @@ declare namespace ts {
     }
     interface Bundle extends Node {
         readonly kind: SyntaxKind.Bundle;
-        /** @deprecated */ readonly prepends: readonly (InputFiles | UnparsedSource)[];
         readonly sourceFiles: readonly SourceFile[];
-    }
-    /** @deprecated */
-    interface InputFiles extends Node {
-        readonly kind: SyntaxKind.InputFiles;
-        javascriptPath?: string;
-        javascriptText: string;
-        javascriptMapPath?: string;
-        javascriptMapText?: string;
-        declarationPath?: string;
-        declarationText: string;
-        declarationMapPath?: string;
-        declarationMapText?: string;
-    }
-    /** @deprecated */
-    interface UnparsedSource extends Node {
-        readonly kind: SyntaxKind.UnparsedSource;
-        fileName: string;
-        text: string;
-        readonly prologues: readonly UnparsedPrologue[];
-        helpers: readonly UnscopedEmitHelper[] | undefined;
-        referencedFiles: readonly FileReference[];
-        typeReferenceDirectives: readonly FileReference[] | undefined;
-        libReferenceDirectives: readonly FileReference[];
-        hasNoDefaultLib?: boolean;
-        sourceMapPath?: string;
-        sourceMapText?: string;
-        readonly syntheticReferences?: readonly UnparsedSyntheticReference[];
-        readonly texts: readonly UnparsedSourceText[];
-    }
-    /** @deprecated */
-    type UnparsedSourceText = UnparsedPrepend | UnparsedTextLike;
-    /** @deprecated */
-    type UnparsedNode = UnparsedPrologue | UnparsedSourceText | UnparsedSyntheticReference;
-    /** @deprecated */
-    interface UnparsedSection extends Node {
-        readonly kind: SyntaxKind;
-        readonly parent: UnparsedSource;
-        readonly data?: string;
-    }
-    /** @deprecated */
-    interface UnparsedPrologue extends UnparsedSection {
-        readonly kind: SyntaxKind.UnparsedPrologue;
-        readonly parent: UnparsedSource;
-        readonly data: string;
-    }
-    /** @deprecated */
-    interface UnparsedPrepend extends UnparsedSection {
-        readonly kind: SyntaxKind.UnparsedPrepend;
-        readonly parent: UnparsedSource;
-        readonly data: string;
-        readonly texts: readonly UnparsedTextLike[];
-    }
-    /** @deprecated */
-    interface UnparsedTextLike extends UnparsedSection {
-        readonly kind: SyntaxKind.UnparsedText | SyntaxKind.UnparsedInternalText;
-        readonly parent: UnparsedSource;
-    }
-    /** @deprecated */
-    interface UnparsedSyntheticReference extends UnparsedSection {
-        readonly kind: SyntaxKind.UnparsedSyntheticReference;
-        readonly parent: UnparsedSource;
     }
     interface JsonSourceFile extends SourceFile {
         readonly statements: NodeArray<JsonObjectExpressionStatement>;
@@ -6660,6 +6594,22 @@ declare namespace ts {
         };
         isSourceFileFromExternalLibrary(file: SourceFile): boolean;
         isSourceFileDefaultLibrary(file: SourceFile): boolean;
+        /**
+         * Calculates the final resolution mode for a given module reference node. This is the resolution mode explicitly provided via import
+         * attributes, if present, or the syntax the usage would have if emitted to JavaScript. In `--module node16` or `nodenext`, this may
+         * depend on the file's `impliedNodeFormat`. In `--module preserve`, it depends only on the input syntax of the reference. In other
+         * `module` modes, when overriding import attributes are not provided, this function returns `undefined`, as the result would have no
+         * impact on module resolution, emit, or type checking.
+         */
+        getModeForUsageLocation(file: SourceFile, usage: StringLiteralLike): ResolutionMode;
+        /**
+         * Calculates the final resolution mode for an import at some index within a file's `imports` list. This is the resolution mode
+         * explicitly provided via import attributes, if present, or the syntax the usage would have if emitted to JavaScript. In
+         * `--module node16` or `nodenext`, this may depend on the file's `impliedNodeFormat`. In `--module preserve`, it depends only on the
+         * input syntax of the reference. In other `module` modes, when overriding import attributes are not provided, this function returns
+         * `undefined`, as the result would have no impact on module resolution, emit, or type checking.
+         */
+        getModeForResolutionAtIndex(file: SourceFile, index: number): ResolutionMode;
         getProjectReferences(): readonly ProjectReference[] | undefined;
         getResolvedProjectReferences(): readonly (ResolvedProjectReference | undefined)[] | undefined;
     }
@@ -6868,6 +6818,7 @@ declare namespace ts {
          * True if this type is assignable to `ReadonlyArray<any>`.
          */
         isArrayLikeType(type: Type): boolean;
+        resolveName(name: string, location: Node | undefined, meaning: SymbolFlags, excludeGlobals: boolean): Symbol | undefined;
         getTypePredicateOfSignature(signature: Signature): TypePredicate | undefined;
         /**
          * Depending on the operation performed, it may be appropriate to throw away the checker
@@ -7007,6 +6958,7 @@ declare namespace ts {
         Transient = 33554432,
         Assignment = 67108864,
         ModuleExports = 134217728,
+        All = -1,
         Enum = 384,
         Variable = 3,
         Value = 111551,
@@ -7481,7 +7433,7 @@ declare namespace ts {
         path: string;
         /** The path as the user originally wrote it */
         originalPath?: string;
-        /** True if the output of this reference should be prepended to the output of this project. Only valid for --outFile compilations */
+        /** @deprecated */
         prepend?: boolean;
         /** True if it is intended that this reference form a circularity */
         circular?: boolean;
@@ -7517,6 +7469,7 @@ declare namespace ts {
         allowUnusedLabels?: boolean;
         alwaysStrict?: boolean;
         baseUrl?: string;
+        /** @deprecated */
         charset?: string;
         checkJs?: boolean;
         customConditions?: string[];
@@ -7536,11 +7489,13 @@ declare namespace ts {
         forceConsistentCasingInFileNames?: boolean;
         ignoreDeprecations?: string;
         importHelpers?: boolean;
+        /** @deprecated */
         importsNotUsedAsValues?: ImportsNotUsedAsValues;
         inlineSourceMap?: boolean;
         inlineSources?: boolean;
         isolatedModules?: boolean;
         jsx?: JsxEmit;
+        /** @deprecated */
         keyofStringsOnly?: boolean;
         lib?: string[];
         locale?: string;
@@ -7559,15 +7514,18 @@ declare namespace ts {
         noImplicitAny?: boolean;
         noImplicitReturns?: boolean;
         noImplicitThis?: boolean;
+        /** @deprecated */
         noStrictGenericChecks?: boolean;
         noUnusedLocals?: boolean;
         noUnusedParameters?: boolean;
+        /** @deprecated */
         noImplicitUseStrict?: boolean;
         noPropertyAccessFromIndexSignature?: boolean;
         assumeChangesOnlyAffectDirectDependencies?: boolean;
         noLib?: boolean;
         noResolve?: boolean;
         noUncheckedIndexedAccess?: boolean;
+        /** @deprecated */
         out?: string;
         outDir?: string;
         outFile?: string;
@@ -7575,6 +7533,7 @@ declare namespace ts {
         preserveConstEnums?: boolean;
         noImplicitOverride?: boolean;
         preserveSymlinks?: boolean;
+        /** @deprecated */
         preserveValueImports?: boolean;
         project?: string;
         reactNamespace?: string;
@@ -7599,7 +7558,9 @@ declare namespace ts {
         strictNullChecks?: boolean;
         strictPropertyInitialization?: boolean;
         stripInternal?: boolean;
+        /** @deprecated */
         suppressExcessPropertyErrors?: boolean;
+        /** @deprecated */
         suppressImplicitAnyIndexErrors?: boolean;
         target?: ScriptTarget;
         traceResolution?: boolean;
@@ -7641,6 +7602,7 @@ declare namespace ts {
         ESNext = 99,
         Node16 = 100,
         NodeNext = 199,
+        Preserve = 200,
     }
     enum JsxEmit {
         None = 0,
@@ -7650,6 +7612,7 @@ declare namespace ts {
         ReactJSX = 4,
         ReactJSXDev = 5,
     }
+    /** @deprecated */
     enum ImportsNotUsedAsValues {
         Remove = 0,
         Preserve = 1,
@@ -7679,6 +7642,7 @@ declare namespace ts {
         Deferred = 7,
     }
     enum ScriptTarget {
+        /** @deprecated */
         ES3 = 0,
         ES5 = 1,
         ES2015 = 2,
@@ -8373,9 +8337,7 @@ declare namespace ts {
         createCommaListExpression(elements: readonly Expression[]): CommaListExpression;
         updateCommaListExpression(node: CommaListExpression, elements: readonly Expression[]): CommaListExpression;
         createBundle(sourceFiles: readonly SourceFile[]): Bundle;
-        /** @deprecated*/ createBundle(sourceFiles: readonly SourceFile[], prepends?: readonly (UnparsedSource | InputFiles)[]): Bundle;
         updateBundle(node: Bundle, sourceFiles: readonly SourceFile[]): Bundle;
-        /** @deprecated*/ updateBundle(node: Bundle, sourceFiles: readonly SourceFile[], prepends?: readonly (UnparsedSource | InputFiles)[]): Bundle;
         createComma(left: Expression, right: Expression): BinaryExpression;
         createAssignment(left: ObjectLiteralExpression | ArrayLiteralExpression, right: Expression): DestructuringAssignment;
         createAssignment(left: Expression, right: Expression): AssignmentExpression<EqualsToken>;
@@ -9134,10 +9096,6 @@ declare namespace ts {
     function isNonNullChain(node: Node): node is NonNullChain;
     function isBreakOrContinueStatement(node: Node): node is BreakOrContinueStatement;
     function isNamedExportBindings(node: Node): node is NamedExportBindings;
-    /** @deprecated */
-    function isUnparsedTextLike(node: Node): node is UnparsedTextLike;
-    /** @deprecated */
-    function isUnparsedNode(node: Node): node is UnparsedNode;
     function isJSDocPropertyLikeTag(node: Node): node is JSDocPropertyLikeTag;
     /**
      * True if kind is of some token syntax kind.
@@ -9245,18 +9203,6 @@ declare namespace ts {
      * ```
      */
     function getJSDocCommentsAndTags(hostNode: Node): readonly (JSDoc | JSDocTag)[];
-    /** @deprecated */
-    function createUnparsedSourceFile(text: string): UnparsedSource;
-    /** @deprecated */
-    function createUnparsedSourceFile(inputFile: InputFiles, type: "js" | "dts", stripInternal?: boolean): UnparsedSource;
-    /** @deprecated */
-    function createUnparsedSourceFile(text: string, mapPath: string | undefined, map: string | undefined): UnparsedSource;
-    /** @deprecated */
-    function createInputFiles(javascriptText: string, declarationText: string): InputFiles;
-    /** @deprecated */
-    function createInputFiles(javascriptText: string, declarationText: string, javascriptMapPath: string | undefined, javascriptMapText: string | undefined, declarationMapPath: string | undefined, declarationMapText: string | undefined): InputFiles;
-    /** @deprecated */
-    function createInputFiles(readFileText: (path: string) => string | undefined, javascriptPath: string, javascriptMapPath: string | undefined, declarationPath: string, declarationMapPath: string | undefined, buildInfoPath: string | undefined): InputFiles;
     /**
      * Create an external source map source file reference
      */
@@ -9501,12 +9447,8 @@ declare namespace ts {
     function isShorthandPropertyAssignment(node: Node): node is ShorthandPropertyAssignment;
     function isSpreadAssignment(node: Node): node is SpreadAssignment;
     function isEnumMember(node: Node): node is EnumMember;
-    /** @deprecated */
-    function isUnparsedPrepend(node: Node): node is UnparsedPrepend;
     function isSourceFile(node: Node): node is SourceFile;
     function isBundle(node: Node): node is Bundle;
-    /** @deprecated */
-    function isUnparsedSource(node: Node): node is UnparsedSource;
     function isJSDocTypeExpression(node: Node): node is JSDocTypeExpression;
     function isJSDocNameReference(node: Node): node is JSDocNameReference;
     function isJSDocMemberName(node: Node): node is JSDocMemberName;
@@ -9902,25 +9844,38 @@ declare namespace ts {
      */
     function getModeForFileReference(ref: FileReference | string, containingFileMode: ResolutionMode): ResolutionMode;
     /**
-     * Calculates the final resolution mode for an import at some index within a file's imports list. This is generally the explicitly
-     * defined mode of the import if provided, or, if not, the mode of the containing file (with some exceptions: import=require is always commonjs, dynamic import is always esm).
-     * If you have an actual import node, prefer using getModeForUsageLocation on the reference string node.
+     * Use `program.getModeForResolutionAtIndex`, which retrieves the correct `compilerOptions`, instead of this function whenever possible.
+     * Calculates the final resolution mode for an import at some index within a file's `imports` list. This is the resolution mode
+     * explicitly provided via import attributes, if present, or the syntax the usage would have if emitted to JavaScript. In
+     * `--module node16` or `nodenext`, this may depend on the file's `impliedNodeFormat`. In `--module preserve`, it depends only on the
+     * input syntax of the reference. In other `module` modes, when overriding import attributes are not provided, this function returns
+     * `undefined`, as the result would have no impact on module resolution, emit, or type checking.
      * @param file File to fetch the resolution mode within
      * @param index Index into the file's complete resolution list to get the resolution of - this is a concatenation of the file's imports and module augmentations
+     * @param compilerOptions The compiler options for the program that owns the file. If the file belongs to a referenced project, the compiler options
+     * should be the options of the referenced project, not the referencing project.
      */
-    function getModeForResolutionAtIndex(file: SourceFile, index: number): ResolutionMode;
+    function getModeForResolutionAtIndex(file: SourceFile, index: number, compilerOptions: CompilerOptions): ResolutionMode;
     /**
-     * Calculates the final resolution mode for a given module reference node. This is generally the explicitly provided resolution mode, if
-     * one exists, or the mode of the containing source file. (Excepting import=require, which is always commonjs, and dynamic import, which is always esm).
-     * Notably, this function always returns `undefined` if the containing file has an `undefined` `impliedNodeFormat` - this field is only set when
-     * `moduleResolution` is `node16`+.
+     * Use `program.getModeForUsageLocation`, which retrieves the correct `compilerOptions`, instead of this function whenever possible.
+     * Calculates the final resolution mode for a given module reference node. This is the resolution mode explicitly provided via import
+     * attributes, if present, or the syntax the usage would have if emitted to JavaScript. In `--module node16` or `nodenext`, this may
+     * depend on the file's `impliedNodeFormat`. In `--module preserve`, it depends only on the input syntax of the reference. In other
+     * `module` modes, when overriding import attributes are not provided, this function returns `undefined`, as the result would have no
+     * impact on module resolution, emit, or type checking.
      * @param file The file the import or import-like reference is contained within
      * @param usage The module reference string
+     * @param compilerOptions The compiler options for the program that owns the file. If the file belongs to a referenced project, the compiler options
+     * should be the options of the referenced project, not the referencing project.
      * @returns The final resolution mode of the import
      */
-    function getModeForUsageLocation(file: {
-        impliedNodeFormat?: ResolutionMode;
-    }, usage: StringLiteralLike): ModuleKind.CommonJS | ModuleKind.ESNext | undefined;
+    function getModeForUsageLocation(
+        file: {
+            impliedNodeFormat?: ResolutionMode;
+        },
+        usage: StringLiteralLike,
+        compilerOptions: CompilerOptions,
+    ): ModuleKind.CommonJS | ModuleKind.ESNext | undefined;
     function getConfigFileParsingDiagnostics(configFileParseResult: ParsedCommandLine): readonly Diagnostic[];
     /**
      * A function for determining if a given file is esm or cjs format, assuming modern node module resolution rules, as configured by the
@@ -10312,8 +10267,7 @@ declare namespace ts {
     }
     enum InvalidatedProjectKind {
         Build = 0,
-        /** @deprecated */ UpdateBundle = 1,
-        UpdateOutputFileStamps = 2,
+        UpdateOutputFileStamps = 1,
     }
     interface InvalidatedProjectBase {
         readonly kind: InvalidatedProjectKind;
@@ -10344,12 +10298,7 @@ declare namespace ts {
         getSemanticDiagnosticsOfNextAffectedFile(cancellationToken?: CancellationToken, ignoreSourceFile?: (sourceFile: SourceFile) => boolean): AffectedFileResult<readonly Diagnostic[]>;
         emit(targetSourceFile?: SourceFile, writeFile?: WriteFileCallback, cancellationToken?: CancellationToken, emitOnlyDtsFiles?: boolean, customTransformers?: CustomTransformers): EmitResult | undefined;
     }
-    /** @deprecated */
-    interface UpdateBundleProject<T extends BuilderProgram> extends InvalidatedProjectBase {
-        readonly kind: InvalidatedProjectKind.UpdateBundle;
-        emit(writeFile?: WriteFileCallback, customTransformers?: CustomTransformers): EmitResult | BuildInvalidedProject<T> | undefined;
-    }
-    type InvalidatedProject<T extends BuilderProgram> = UpdateOutputFileStampsProject | BuildInvalidedProject<T> | UpdateBundleProject<T>;
+    type InvalidatedProject<T extends BuilderProgram> = UpdateOutputFileStampsProject | BuildInvalidedProject<T>;
     namespace JsTyping {
         interface TypingResolutionHost {
             directoryExists(path: string): boolean;

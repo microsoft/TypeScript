@@ -6,8 +6,8 @@
         "pretty": true,
         "lib": ["es2021"],
         "target": "es2021",
-        "module": "CommonJS",
-        "moduleResolution": "node",
+        "module": "NodeNext",
+        "moduleResolution": "NodeNext",
         "experimentalDecorators": true,
 
         "declaration": true,
@@ -21,10 +21,6 @@
         "strictBindCallApply": false,
         "useUnknownInCatchVariables": false,
         "noImplicitOverride": true,
-
-        "noUnusedLocals": true,
-        "noUnusedParameters": true,
-        "allowUnusedLabels": false,
 
         "skipLibCheck": true,
 

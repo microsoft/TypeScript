@@ -1,4 +1,4 @@
-// @module: commonjs
+// @module: commonjs, preserve
 // @allowJs: true
 // @outDir: ./out/
 

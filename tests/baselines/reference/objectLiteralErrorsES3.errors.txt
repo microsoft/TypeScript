@@ -1,22 +1,10 @@
-error TS5107: Option 'target=ES3' is deprecated and will stop functioning in TypeScript 5.5. Specify compilerOption '"ignoreDeprecations": "5.0"' to silence this error.
-objectLiteralErrorsES3.ts(1,16): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
-objectLiteralErrorsES3.ts(2,16): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
-objectLiteralErrorsES3.ts(3,16): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
-objectLiteralErrorsES3.ts(3,40): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+error TS5108: Option 'target=ES3' has been removed. Please remove it from your configuration.
 
 
-!!! error TS5107: Option 'target=ES3' is deprecated and will stop functioning in TypeScript 5.5. Specify compilerOption '"ignoreDeprecations": "5.0"' to silence this error.
-==== objectLiteralErrorsES3.ts (4 errors) ====
+!!! error TS5108: Option 'target=ES3' has been removed. Please remove it from your configuration.
+==== objectLiteralErrorsES3.ts (0 errors) ====
     var e1 = { get a() { return 4; } };
-                   ~
-!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
     var e2 = { set a(n) { } };
-                   ~
-!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
     var e3 = { get a() { return ''; }, set a(n) { } };
-                   ~
-!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
-                                           ~
-!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
     
     

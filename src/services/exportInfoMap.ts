@@ -21,8 +21,8 @@ import {
     getNamesForExportedSymbol,
     getNodeModulePathParts,
     getPackageNameFromTypesPackageName,
-    getPatternFromSpec,
     getRegexFromPattern,
+    getSubPatternFromSpec,
     getSymbolId,
     hostGetCanonicalFileName,
     hostUsesCaseSensitiveFileNames,
@@ -425,7 +425,7 @@ export function forEachExternalModuleToImportFrom(
     const excludePatterns = preferences.autoImportFileExcludePatterns && mapDefined(preferences.autoImportFileExcludePatterns, spec => {
         // The client is expected to send rooted path specs since we don't know
         // what directory a relative path is relative to.
-        const pattern = getPatternFromSpec(spec, "", "exclude");
+        const pattern = getSubPatternFromSpec(spec, "", "exclude");
         return pattern ? getRegexFromPattern(pattern, useCaseSensitiveFileNames) : undefined;
     });
 

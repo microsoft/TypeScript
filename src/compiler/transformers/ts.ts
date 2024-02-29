@@ -25,7 +25,6 @@ import {
     createRange,
     createRuntimeTypeSerializer,
     createTokenRange,
-    createUnparsedSourceFile,
     Debug,
     Declaration,
     Decorator,
@@ -69,7 +68,6 @@ import {
     ImportClause,
     ImportDeclaration,
     ImportEqualsDeclaration,
-    ImportsNotUsedAsValues,
     ImportSpecifier,
     InitializedVariableDeclaration,
     insertStatementsAfterStandardPrologue,
@@ -86,7 +84,10 @@ import {
     isComputedPropertyName,
     isDecorator,
     isElementAccessExpression,
+    isEntityName,
     isEnumConst,
+    isExportAssignment,
+    isExportDeclaration,
     isExportOrDefaultModifier,
     isExportSpecifier,
     isExpression,
@@ -96,6 +97,8 @@ import {
     isHeritageClause,
     isIdentifier,
     isImportClause,
+    isImportDeclaration,
+    isImportEqualsDeclaration,
     isImportSpecifier,
     isInJSFile,
     isInstantiatedModule,
@@ -288,12 +291,6 @@ export function transformTypeScript(context: TransformationContext) {
     function transformBundle(node: Bundle) {
         return factory.createBundle(
             node.sourceFiles.map(transformSourceFile),
-            mapDefined(node.prepends, prepend => {
-                if (prepend.kind === SyntaxKind.InputFiles) {
-                    return createUnparsedSourceFile(prepend, "js");
-                }
-                return prepend;
-            }),
         );
     }
 
@@ -425,13 +422,65 @@ export function transformTypeScript(context: TransformationContext) {
         }
     }
 
-    function visitElidableStatement(node: ImportDeclaration | ImportEqualsDeclaration | ExportAssignment | ExportDeclaration): VisitResult<Node | undefined> {
+    /**
+     * Determines whether import/export elision is blocked for this statement.
+     *
+     * @description
+     * We generally block import/export elision if the statement was modified by a `before` custom
+     * transform, although we will continue to allow it if the statement hasn't replaced a node of a different kind and
+     * as long as the local bindings for the declarations are unchanged.
+     */
+    function isElisionBlocked(node: ImportDeclaration | ImportEqualsDeclaration | ExportAssignment | ExportDeclaration) {
         const parsed = getParseTreeNode(node);
-        if (parsed !== node) {
-            // If the node has been transformed by a `before` transformer, perform no ellision on it
-            // As the type information we would attempt to lookup to perform ellision is potentially unavailable for the synthesized nodes
-            // We do not reuse `visitorWorker`, as the ellidable statement syntax kinds are technically unrecognized by the switch-case in `visitTypeScript`,
-            // and will trigger debug failures when debug verbosity is turned up
+        if (parsed === node || isExportAssignment(node)) {
+            return false;
+        }
+
+        if (!parsed || parsed.kind !== node.kind) {
+            // no longer safe to elide as the declaration was replaced with a node of a different kind
+            return true;
+        }
+
+        switch (node.kind) {
+            case SyntaxKind.ImportDeclaration:
+                Debug.assertNode(parsed, isImportDeclaration);
+                if (node.importClause !== parsed.importClause) {
+                    return true; // no longer safe to elide as the import clause has changed
+                }
+                if (node.attributes !== parsed.attributes) {
+                    return true; // no longer safe to elide as the import attributes have changed
+                }
+                break;
+            case SyntaxKind.ImportEqualsDeclaration:
+                Debug.assertNode(parsed, isImportEqualsDeclaration);
+                if (node.name !== parsed.name) {
+                    return true; // no longer safe to elide as local binding has changed
+                }
+                if (node.isTypeOnly !== parsed.isTypeOnly) {
+                    return true; // no longer safe to elide as `type` modifier has changed
+                }
+                if (node.moduleReference !== parsed.moduleReference && (isEntityName(node.moduleReference) || isEntityName(parsed.moduleReference))) {
+                    return true; // no longer safe to elide as EntityName reference has changed.
+                }
+                break;
+            case SyntaxKind.ExportDeclaration:
+                Debug.assertNode(parsed, isExportDeclaration);
+                if (node.exportClause !== parsed.exportClause) {
+                    return true; // no longer safe to elide as the export clause has changed
+                }
+                if (node.attributes !== parsed.attributes) {
+                    return true; // no longer safe to elide as the export attributes have changed
+                }
+                break;
+        }
+
+        return false;
+    }
+
+    function visitElidableStatement(node: ImportDeclaration | ImportEqualsDeclaration | ExportAssignment | ExportDeclaration): VisitResult<Node | undefined> {
+        if (isElisionBlocked(node)) {
+            // We do not reuse `visitorWorker`, as the ellidable statement syntax kinds are technically unrecognized by
+            // the switch-case in `visitTypeScript`, and will trigger debug failures when debug verbosity is turned up.
             if (node.transformFlags & TransformFlags.ContainsTypeScript) {
                 // This node contains TypeScript, so we should visit its children.
                 return visitEachChild(node, visitor, context);
@@ -2219,9 +2268,7 @@ export function transformTypeScript(context: TransformationContext) {
 
         // Elide the declaration if the import clause was elided.
         const importClause = visitNode(node.importClause, visitImportClause, isImportClause);
-        return importClause ||
-                compilerOptions.importsNotUsedAsValues === ImportsNotUsedAsValues.Preserve ||
-                compilerOptions.importsNotUsedAsValues === ImportsNotUsedAsValues.Error
+        return importClause
             ? factory.updateImportDeclaration(
                 node,
                 /*modifiers*/ undefined,
@@ -2257,10 +2304,7 @@ export function transformTypeScript(context: TransformationContext) {
         }
         else {
             // Elide named imports if all of its import specifiers are elided and settings allow.
-            const allowEmpty = compilerOptions.verbatimModuleSyntax || compilerOptions.preserveValueImports && (
-                        compilerOptions.importsNotUsedAsValues === ImportsNotUsedAsValues.Preserve ||
-                        compilerOptions.importsNotUsedAsValues === ImportsNotUsedAsValues.Error
-                    );
+            const allowEmpty = compilerOptions.verbatimModuleSyntax;
             const elements = visitNodes(node.elements, visitImportSpecifier, isImportSpecifier);
             return allowEmpty || some(elements) ? factory.updateNamedImports(node, elements) : undefined;
         }
@@ -2306,10 +2350,7 @@ export function transformTypeScript(context: TransformationContext) {
         }
 
         // Elide the export declaration if all of its named exports are elided.
-        const allowEmpty = compilerOptions.verbatimModuleSyntax || !!node.moduleSpecifier && (
-                    compilerOptions.importsNotUsedAsValues === ImportsNotUsedAsValues.Preserve ||
-                    compilerOptions.importsNotUsedAsValues === ImportsNotUsedAsValues.Error
-                );
+        const allowEmpty = !!compilerOptions.verbatimModuleSyntax;
         const exportClause = visitNode(
             node.exportClause,
             (bindings: NamedExportBindings) => visitNamedExportBindings(bindings, allowEmpty),
@@ -2385,22 +2426,6 @@ export function transformTypeScript(context: TransformationContext) {
 
         if (isExternalModuleImportEqualsDeclaration(node)) {
             const isReferenced = shouldEmitAliasDeclaration(node);
-            // If the alias is unreferenced but we want to keep the import, replace with 'import "mod"'.
-            if (!isReferenced && compilerOptions.importsNotUsedAsValues === ImportsNotUsedAsValues.Preserve) {
-                return setOriginalNode(
-                    setTextRange(
-                        factory.createImportDeclaration(
-                            /*modifiers*/ undefined,
-                            /*importClause*/ undefined,
-                            node.moduleReference.expression,
-                            /*attributes*/ undefined,
-                        ),
-                        node,
-                    ),
-                    node,
-                );
-            }
-
             return isReferenced ? visitEachChild(node, visitor, context) : undefined;
         }
 
@@ -2710,9 +2735,6 @@ export function transformTypeScript(context: TransformationContext) {
     }
 
     function shouldEmitAliasDeclaration(node: Node): boolean {
-        return compilerOptions.verbatimModuleSyntax || isInJSFile(node) ||
-            (compilerOptions.preserveValueImports
-                ? resolver.isValueAliasDeclaration(node)
-                : resolver.isReferencedAliasDeclaration(node));
+        return compilerOptions.verbatimModuleSyntax || isInJSFile(node) || resolver.isReferencedAliasDeclaration(node);
     }
 }

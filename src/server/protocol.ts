@@ -211,7 +211,7 @@ export interface Request extends Message {
 /**
  * Request to reload the project structure for all the opened files
  */
-export interface ReloadProjectsRequest extends Message {
+export interface ReloadProjectsRequest extends Request {
     command: CommandTypes.ReloadProjects;
 }
 
@@ -3669,6 +3669,7 @@ export interface CompilerOptions {
     allowUnusedLabels?: boolean;
     alwaysStrict?: boolean;
     baseUrl?: string;
+    /** @deprecated */
     charset?: string;
     checkJs?: boolean;
     declaration?: boolean;
@@ -3701,9 +3702,11 @@ export interface CompilerOptions {
     noImplicitThis?: boolean;
     noUnusedLocals?: boolean;
     noUnusedParameters?: boolean;
+    /** @deprecated */
     noImplicitUseStrict?: boolean;
     noLib?: boolean;
     noResolve?: boolean;
+    /** @deprecated */
     out?: string;
     outDir?: string;
     outFile?: string;
@@ -3723,7 +3726,9 @@ export interface CompilerOptions {
     sourceRoot?: string;
     strict?: boolean;
     strictNullChecks?: boolean;
+    /** @deprecated */
     suppressExcessPropertyErrors?: boolean;
+    /** @deprecated */
     suppressImplicitAnyIndexErrors?: boolean;
     useDefineForClassFields?: boolean;
     target?: ScriptTarget | ts.ScriptTarget;
@@ -3751,11 +3756,19 @@ export const enum ModuleKind {
     ES6 = "ES6",
     ES2015 = "ES2015",
     ESNext = "ESNext",
+    Node16 = "Node16",
+    NodeNext = "NodeNext",
+    Preserve = "Preserve",
 }
 
 export const enum ModuleResolutionKind {
     Classic = "Classic",
+    /** @deprecated Renamed to `Node10` */
     Node = "Node",
+    Node10 = "Node10",
+    Node16 = "Node16",
+    NodeNext = "NodeNext",
+    Bundler = "Bundler",
 }
 
 export const enum NewLineKind {
@@ -3764,6 +3777,7 @@ export const enum NewLineKind {
 }
 
 export const enum ScriptTarget {
+    /** @deprecated */
     ES3 = "ES3",
     ES5 = "ES5",
     ES6 = "ES6",
