@@ -1378,20 +1378,19 @@ export interface SpeculationHost {
 
 /**
  * Marks an auto accessor as a cache whose value can be rewound by the checker speculation helper.
- * 
+ *
  * This is implemented by keeping a record of the speculative "epoch" writes are performed at, and
  * returning the result for the highest epoch that hasn't (yet) been marked as "discarded".
  * Values stored in discarded epochs are lazily discarded when a read is later performed.
- * 
+ *
  * This is designed to be compatible with both `experimentalDecorators` and the final decorators spec,
  * so it can be used both in downlevel targets and natively.
  */
 const SpeculatableCache = <T extends SpeculatableLinks, V>(
     valueOrTarget: ClassAccessorDecoratorTarget<T, V> | any,
     _contextOrPropertyKey: ClassAccessorDecoratorContext<T, V> | string,
-    descriptor?: PropertyDescriptor
+    descriptor?: PropertyDescriptor,
 ): /*ClassAccessorDecoratorResult<T, V> | void*/ any => {
-
     const baseGet = (descriptor ? descriptor.get! : (valueOrTarget as ClassAccessorDecoratorTarget<T, V>).get) as (this: T) => V;
     const baseSet = (descriptor ? descriptor.set! : (valueOrTarget as ClassAccessorDecoratorTarget<T, V>).set) as (this: T, v: V) => V;
 
@@ -1407,17 +1406,17 @@ const SpeculatableCache = <T extends SpeculatableLinks, V>(
             values[epoch] = v;
             return {
                 values,
-                writtenEpochs
+                writtenEpochs,
             };
-        }
+        },
     };
 
     function readValue(this: T) {
         const internals = baseGet.call(this);
-        if (!internals) { return undefined! }
+        if (!internals) return undefined!;
         const {
             values,
-            writtenEpochs
+            writtenEpochs,
         } = internals;
 
         const discardedSpeculativeEpochs = this.host.getDiscardedSpeculativeEpochs();
@@ -1456,21 +1455,20 @@ const SpeculatableCache = <T extends SpeculatableLinks, V>(
         }
         const {
             values,
-            writtenEpochs
+            writtenEpochs,
         } = internals;
         writtenEpochs.push(currentSpeculativeEpoch);
         // Store the new value at the desired speculative depth
         values[currentSpeculativeEpoch] = value!;
         return value!;
     }
-}
+};
 
 /** @internal */
 export const enum EnumKind {
     Numeric, // Numeric enum (each member has a TypeFlags.Enum type)
     Literal, // Literal enum (each member has a TypeFlags.EnumLiteral type)
 }
-
 
 /** @internal */
 export class SpeculatableLinks {
@@ -1733,7 +1731,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     var speculativeCaches: (any[] | Map<any, any> | Set<any> | DiagnosticCollection)[] = [];
     /**
      * The id of the current speculative execution environment - used by speculation helpers to avoid eagerly doing work.
-     * 
+     *
      * This is monotonically increasing, and basically represents a slice of execution time within the checker that we want to
      * be able to uniquely refer to.
      */
@@ -1742,9 +1740,13 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     var discardedSpeculativeEpochs = new Set<number>();
     // The speculation host object used by symbol and node links to associate their speculation state with this checker's speculation state
     var speculationHost: SpeculationHost = {
-        getCurrentSpeculativeEpoch() { return currentSpeculativeEpoch; },
-        getDiscardedSpeculativeEpochs() { return discardedSpeculativeEpochs; },
-    }
+        getCurrentSpeculativeEpoch() {
+            return currentSpeculativeEpoch;
+        },
+        getDiscardedSpeculativeEpochs() {
+            return discardedSpeculativeEpochs;
+        },
+    };
 
     var deferredDiagnosticsCallbacks: (() => void)[] = registerSpeculativeCache([]);
 
@@ -44261,7 +44263,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             if (isGeneratorMethod || isIteratorMethod) {
                 const globalType = isGeneratorMethod ? globalGeneratorType : globalIteratorType;
                 const { mapper } = methodType as AnonymousType;
-                const [ yieldType, returnType, nextType ] = globalType.typeParameters!;
+                const [yieldType, returnType, nextType] = globalType.typeParameters!;
                 return createIterationTypes(
                     mapper ? getMappedType(yieldType, mapper) : yieldType,
                     mapper ? getMappedType(returnType, mapper) : returnType,
@@ -49131,7 +49133,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         // TODO: Override error reporting functions to just defer work until speculation
         // helper is confirmed as locked-in, to avoid the work of building diagnostics until
         // we know we're actually going to use them.
-        
+
         function save(cache: (typeof speculativeCaches)[number]): () => void {
             if (Array.isArray(cache)) {
                 return saveArray(cache);
@@ -49160,9 +49162,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
 
         function saveMap(cache: Map<any, unknown>) {
-            const original = arrayFrom(cache.entries())
+            const original = arrayFrom(cache.entries());
             return () => {
-                cache.clear()
+                cache.clear();
                 for (const [k, v] of original) {
                     cache.set(k, v);
                 }
@@ -49183,7 +49185,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             const c = cache.checkpoint();
             return () => {
                 cache.revert(c);
-            }
+            };
         }
     }
 

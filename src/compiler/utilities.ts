@@ -5782,7 +5782,7 @@ export function createDiagnosticCollection(): DiagnosticCollection {
         getGlobalDiagnostics,
         getDiagnostics,
         checkpoint,
-        revert
+        revert,
     };
 
     // TODO: Copying the state at time of checkpoint is slow to checkpoint and memory intensive (but fast to restore)
@@ -5792,7 +5792,7 @@ export function createDiagnosticCollection(): DiagnosticCollection {
             nonFileDiagnostics: nonFileDiagnostics.slice() as SortedArray<Diagnostic>,
             filesWithDiagnostics: filesWithDiagnostics.slice() as SortedArray<string>,
             fileDiagnostics: new Map(map(arrayFrom(fileDiagnostics.entries()), ([k, v]) => [k, v.slice() as SortedArray<DiagnosticWithLocation>] as const)),
-            hasReadNonFileDiagnostics
+            hasReadNonFileDiagnostics,
         };
         return c as DiagnosticCollectionCheckpoint;
     }
