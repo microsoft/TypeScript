@@ -164,7 +164,7 @@ function guardsOneButNotOthers(a: string|number, b: string|number, c: string|num
   return typeof b === 'string';
 }
 
-// String escaping issue (please help!)
+// Checks that there are no string escaping issues
 function dunderguard(__x: number | string) {
   return typeof __x  === 'string';
 }

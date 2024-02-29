@@ -495,7 +495,7 @@ function guardsOneButNotOthers(a: string|number, b: string|number, c: string|num
 >b : Symbol(b, Decl(inferTypePredicates.ts, 161, 48))
 }
 
-// String escaping issue (please help!)
+// Checks that there are no string escaping issues
 function dunderguard(__x: number | string) {
 >dunderguard : Symbol(dunderguard, Decl(inferTypePredicates.ts, 163, 1))
 >__x : Symbol(__x, Decl(inferTypePredicates.ts, 166, 21))

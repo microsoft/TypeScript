@@ -208,7 +208,7 @@ inferTypePredicates.ts(252,7): error TS2322: Type 'string | number | Date' is no
       return typeof b === 'string';
     }
     
-    // String escaping issue (please help!)
+    // Checks that there are no string escaping issues
     function dunderguard(__x: number | string) {
       return typeof __x  === 'string';
     }

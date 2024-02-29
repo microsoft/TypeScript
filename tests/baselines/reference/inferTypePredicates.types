@@ -659,9 +659,9 @@ function guardsOneButNotOthers(a: string|number, b: string|number, c: string|num
 >'string' : "string"
 }
 
-// String escaping issue (please help!)
+// Checks that there are no string escaping issues
 function dunderguard(__x: number | string) {
->dunderguard : (__x: number | string) => ___x is string
+>dunderguard : (__x: number | string) => __x is string
 >__x : string | number
 
   return typeof __x  === 'string';
