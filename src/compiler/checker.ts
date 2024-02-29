@@ -2734,7 +2734,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
         function addDeclarationDiagnostic(id: string, message: DiagnosticMessage) {
             return (declaration: Declaration) => {
-                if (isInExpressionContext(declaration)) {
+                if (!isTypeDeclaration(declaration) && declaration.kind !== SyntaxKind.ClassDeclaration) {
                     diagnostics.add(createDiagnosticForNode(declaration, message, id));
                 }
             };

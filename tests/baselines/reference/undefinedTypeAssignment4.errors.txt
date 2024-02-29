@@ -1,8 +1,9 @@
 undefinedTypeAssignment4.ts(1,7): error TS2414: Class name cannot be 'undefined'.
 undefinedTypeAssignment4.ts(4,11): error TS2427: Interface name cannot be 'undefined'.
+undefinedTypeAssignment4.ts(7,11): error TS2397: Declaration name conflicts with built-in global identifier 'undefined'.
 
 
-==== undefinedTypeAssignment4.ts (2 errors) ====
+==== undefinedTypeAssignment4.ts (3 errors) ====
     class undefined {
           ~~~~~~~~~
 !!! error TS2414: Class name cannot be 'undefined'.
@@ -14,6 +15,8 @@ undefinedTypeAssignment4.ts(4,11): error TS2427: Interface name cannot be 'undef
     	member: number;
     }
     namespace undefined {
+              ~~~~~~~~~
+!!! error TS2397: Declaration name conflicts with built-in global identifier 'undefined'.
     	export var x = 42;
     }
     var x: undefined;
