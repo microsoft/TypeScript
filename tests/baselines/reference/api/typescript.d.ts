@@ -14,7 +14,2457 @@ and limitations under the License.
 ***************************************************************************** */
 
 declare namespace ts {
-    namespace server {
+    export namespace server {
+        namespace protocol {
+            export import ApplicableRefactorInfo = ts.ApplicableRefactorInfo;
+            export import ClassificationType = ts.ClassificationType;
+            export import CompletionsTriggerCharacter = ts.CompletionsTriggerCharacter;
+            export import CompletionTriggerKind = ts.CompletionTriggerKind;
+            export import OrganizeImportsMode = ts.OrganizeImportsMode;
+            export import RefactorTriggerReason = ts.RefactorTriggerReason;
+            export import RenameInfoFailure = ts.RenameInfoFailure;
+            export import SemicolonPreference = ts.SemicolonPreference;
+            export import SignatureHelpTriggerReason = ts.SignatureHelpTriggerReason;
+            export import SymbolDisplayPart = ts.SymbolDisplayPart;
+            export import UserPreferences = ts.UserPreferences;
+            type ChangePropertyTypes<
+                T,
+                Substitutions extends {
+                    [K in keyof T]?: any;
+                },
+            > = {
+                [K in keyof T]: K extends keyof Substitutions ? Substitutions[K] : T[K];
+            };
+            type ChangeStringIndexSignature<T, NewStringIndexSignatureType> = {
+                [K in keyof T]: string extends K ? NewStringIndexSignatureType : T[K];
+            };
+            export enum CommandTypes {
+                JsxClosingTag = "jsxClosingTag",
+                LinkedEditingRange = "linkedEditingRange",
+                Brace = "brace",
+                BraceCompletion = "braceCompletion",
+                GetSpanOfEnclosingComment = "getSpanOfEnclosingComment",
+                Change = "change",
+                Close = "close",
+                /** @deprecated Prefer CompletionInfo -- see comment on CompletionsResponse */
+                Completions = "completions",
+                CompletionInfo = "completionInfo",
+                CompletionDetails = "completionEntryDetails",
+                CompileOnSaveAffectedFileList = "compileOnSaveAffectedFileList",
+                CompileOnSaveEmitFile = "compileOnSaveEmitFile",
+                Configure = "configure",
+                Definition = "definition",
+                DefinitionAndBoundSpan = "definitionAndBoundSpan",
+                Implementation = "implementation",
+                Exit = "exit",
+                FileReferences = "fileReferences",
+                Format = "format",
+                Formatonkey = "formatonkey",
+                Geterr = "geterr",
+                GeterrForProject = "geterrForProject",
+                SemanticDiagnosticsSync = "semanticDiagnosticsSync",
+                SyntacticDiagnosticsSync = "syntacticDiagnosticsSync",
+                SuggestionDiagnosticsSync = "suggestionDiagnosticsSync",
+                NavBar = "navbar",
+                Navto = "navto",
+                NavTree = "navtree",
+                NavTreeFull = "navtree-full",
+                DocumentHighlights = "documentHighlights",
+                Open = "open",
+                Quickinfo = "quickinfo",
+                References = "references",
+                Reload = "reload",
+                Rename = "rename",
+                Saveto = "saveto",
+                SignatureHelp = "signatureHelp",
+                FindSourceDefinition = "findSourceDefinition",
+                Status = "status",
+                TypeDefinition = "typeDefinition",
+                ProjectInfo = "projectInfo",
+                ReloadProjects = "reloadProjects",
+                Unknown = "unknown",
+                OpenExternalProject = "openExternalProject",
+                OpenExternalProjects = "openExternalProjects",
+                CloseExternalProject = "closeExternalProject",
+                UpdateOpen = "updateOpen",
+                GetOutliningSpans = "getOutliningSpans",
+                TodoComments = "todoComments",
+                Indentation = "indentation",
+                DocCommentTemplate = "docCommentTemplate",
+                CompilerOptionsForInferredProjects = "compilerOptionsForInferredProjects",
+                GetCodeFixes = "getCodeFixes",
+                GetCombinedCodeFix = "getCombinedCodeFix",
+                ApplyCodeActionCommand = "applyCodeActionCommand",
+                GetSupportedCodeFixes = "getSupportedCodeFixes",
+                GetApplicableRefactors = "getApplicableRefactors",
+                GetEditsForRefactor = "getEditsForRefactor",
+                GetMoveToRefactoringFileSuggestions = "getMoveToRefactoringFileSuggestions",
+                OrganizeImports = "organizeImports",
+                GetEditsForFileRename = "getEditsForFileRename",
+                ConfigurePlugin = "configurePlugin",
+                SelectionRange = "selectionRange",
+                ToggleLineComment = "toggleLineComment",
+                ToggleMultilineComment = "toggleMultilineComment",
+                CommentSelection = "commentSelection",
+                UncommentSelection = "uncommentSelection",
+                PrepareCallHierarchy = "prepareCallHierarchy",
+                ProvideCallHierarchyIncomingCalls = "provideCallHierarchyIncomingCalls",
+                ProvideCallHierarchyOutgoingCalls = "provideCallHierarchyOutgoingCalls",
+                ProvideInlayHints = "provideInlayHints",
+                WatchChange = "watchChange",
+            }
+            /**
+             * A TypeScript Server message
+             */
+            export interface Message {
+                /**
+                 * Sequence number of the message
+                 */
+                seq: number;
+                /**
+                 * One of "request", "response", or "event"
+                 */
+                type: "request" | "response" | "event";
+            }
+            /**
+             * Client-initiated request message
+             */
+            export interface Request extends Message {
+                type: "request";
+                /**
+                 * The command to execute
+                 */
+                command: string;
+                /**
+                 * Object containing arguments for the command
+                 */
+                arguments?: any;
+            }
+            /**
+             * Request to reload the project structure for all the opened files
+             */
+            export interface ReloadProjectsRequest extends Request {
+                command: CommandTypes.ReloadProjects;
+            }
+            /**
+             * Server-initiated event message
+             */
+            export interface Event extends Message {
+                type: "event";
+                /**
+                 * Name of event
+                 */
+                event: string;
+                /**
+                 * Event-specific information
+                 */
+                body?: any;
+            }
+            /**
+             * Response by server to client request message.
+             */
+            export interface Response extends Message {
+                type: "response";
+                /**
+                 * Sequence number of the request message.
+                 */
+                request_seq: number;
+                /**
+                 * Outcome of the request.
+                 */
+                success: boolean;
+                /**
+                 * The command requested.
+                 */
+                command: string;
+                /**
+                 * If success === false, this should always be provided.
+                 * Otherwise, may (or may not) contain a success message.
+                 */
+                message?: string;
+                /**
+                 * Contains message body if success === true.
+                 */
+                body?: any;
+                /**
+                 * Contains extra information that plugin can include to be passed on
+                 */
+                metadata?: unknown;
+                /**
+                 * Exposes information about the performance of this request-response pair.
+                 */
+                performanceData?: PerformanceData;
+            }
+            export interface PerformanceData {
+                /**
+                 * Time spent updating the program graph, in milliseconds.
+                 */
+                updateGraphDurationMs?: number;
+                /**
+                 * The time spent creating or updating the auto-import program, in milliseconds.
+                 */
+                createAutoImportProviderProgramDurationMs?: number;
+            }
+            /**
+             * Arguments for FileRequest messages.
+             */
+            export interface FileRequestArgs {
+                /**
+                 * The file for the request (absolute pathname required).
+                 */
+                file: string;
+                projectFileName?: string;
+            }
+            export interface StatusRequest extends Request {
+                command: CommandTypes.Status;
+            }
+            export interface StatusResponseBody {
+                /**
+                 * The TypeScript version (`ts.version`).
+                 */
+                version: string;
+            }
+            /**
+             * Response to StatusRequest
+             */
+            export interface StatusResponse extends Response {
+                body: StatusResponseBody;
+            }
+            /**
+             * Requests a JS Doc comment template for a given position
+             */
+            export interface DocCommentTemplateRequest extends FileLocationRequest {
+                command: CommandTypes.DocCommentTemplate;
+            }
+            /**
+             * Response to DocCommentTemplateRequest
+             */
+            export interface DocCommandTemplateResponse extends Response {
+                body?: TextInsertion;
+            }
+            /**
+             * A request to get TODO comments from the file
+             */
+            export interface TodoCommentRequest extends FileRequest {
+                command: CommandTypes.TodoComments;
+                arguments: TodoCommentRequestArgs;
+            }
+            /**
+             * Arguments for TodoCommentRequest request.
+             */
+            export interface TodoCommentRequestArgs extends FileRequestArgs {
+                /**
+                 * Array of target TodoCommentDescriptors that describes TODO comments to be found
+                 */
+                descriptors: TodoCommentDescriptor[];
+            }
+            /**
+             * Response for TodoCommentRequest request.
+             */
+            export interface TodoCommentsResponse extends Response {
+                body?: TodoComment[];
+            }
+            /**
+             * A request to determine if the caret is inside a comment.
+             */
+            export interface SpanOfEnclosingCommentRequest extends FileLocationRequest {
+                command: CommandTypes.GetSpanOfEnclosingComment;
+                arguments: SpanOfEnclosingCommentRequestArgs;
+            }
+            export interface SpanOfEnclosingCommentRequestArgs extends FileLocationRequestArgs {
+                /**
+                 * Requires that the enclosing span be a multi-line comment, or else the request returns undefined.
+                 */
+                onlyMultiLine: boolean;
+            }
+            /**
+             * Request to obtain outlining spans in file.
+             */
+            export interface OutliningSpansRequest extends FileRequest {
+                command: CommandTypes.GetOutliningSpans;
+            }
+            export type OutliningSpan = ChangePropertyTypes<ts.OutliningSpan, {
+                textSpan: TextSpan;
+                hintSpan: TextSpan;
+            }>;
+            /**
+             * Response to OutliningSpansRequest request.
+             */
+            export interface OutliningSpansResponse extends Response {
+                body?: OutliningSpan[];
+            }
+            /**
+             * A request to get indentation for a location in file
+             */
+            export interface IndentationRequest extends FileLocationRequest {
+                command: CommandTypes.Indentation;
+                arguments: IndentationRequestArgs;
+            }
+            /**
+             * Response for IndentationRequest request.
+             */
+            export interface IndentationResponse extends Response {
+                body?: IndentationResult;
+            }
+            /**
+             * Indentation result representing where indentation should be placed
+             */
+            export interface IndentationResult {
+                /**
+                 * The base position in the document that the indent should be relative to
+                 */
+                position: number;
+                /**
+                 * The number of columns the indent should be at relative to the position's column.
+                 */
+                indentation: number;
+            }
+            /**
+             * Arguments for IndentationRequest request.
+             */
+            export interface IndentationRequestArgs extends FileLocationRequestArgs {
+                /**
+                 * An optional set of settings to be used when computing indentation.
+                 * If argument is omitted - then it will use settings for file that were previously set via 'configure' request or global settings.
+                 */
+                options?: EditorSettings;
+            }
+            /**
+             * Arguments for ProjectInfoRequest request.
+             */
+            export interface ProjectInfoRequestArgs extends FileRequestArgs {
+                /**
+                 * Indicate if the file name list of the project is needed
+                 */
+                needFileNameList: boolean;
+            }
+            /**
+             * A request to get the project information of the current file.
+             */
+            export interface ProjectInfoRequest extends Request {
+                command: CommandTypes.ProjectInfo;
+                arguments: ProjectInfoRequestArgs;
+            }
+            /**
+             * A request to retrieve compiler options diagnostics for a project
+             */
+            export interface CompilerOptionsDiagnosticsRequest extends Request {
+                arguments: CompilerOptionsDiagnosticsRequestArgs;
+            }
+            /**
+             * Arguments for CompilerOptionsDiagnosticsRequest request.
+             */
+            export interface CompilerOptionsDiagnosticsRequestArgs {
+                /**
+                 * Name of the project to retrieve compiler options diagnostics.
+                 */
+                projectFileName: string;
+            }
+            /**
+             * Response message body for "projectInfo" request
+             */
+            export interface ProjectInfo {
+                /**
+                 * For configured project, this is the normalized path of the 'tsconfig.json' file
+                 * For inferred project, this is undefined
+                 */
+                configFileName: string;
+                /**
+                 * The list of normalized file name in the project, including 'lib.d.ts'
+                 */
+                fileNames?: string[];
+                /**
+                 * Indicates if the project has a active language service instance
+                 */
+                languageServiceDisabled?: boolean;
+            }
+            /**
+             * Represents diagnostic info that includes location of diagnostic in two forms
+             * - start position and length of the error span
+             * - startLocation and endLocation - a pair of Location objects that store start/end line and offset of the error span.
+             */
+            export interface DiagnosticWithLinePosition {
+                message: string;
+                start: number;
+                length: number;
+                startLocation: Location;
+                endLocation: Location;
+                category: string;
+                code: number;
+                /** May store more in future. For now, this will simply be `true` to indicate when a diagnostic is an unused-identifier diagnostic. */
+                reportsUnnecessary?: {};
+                reportsDeprecated?: {};
+                relatedInformation?: DiagnosticRelatedInformation[];
+            }
+            /**
+             * Response message for "projectInfo" request
+             */
+            export interface ProjectInfoResponse extends Response {
+                body?: ProjectInfo;
+            }
+            /**
+             * Request whose sole parameter is a file name.
+             */
+            export interface FileRequest extends Request {
+                arguments: FileRequestArgs;
+            }
+            /**
+             * Instances of this interface specify a location in a source file:
+             * (file, line, character offset), where line and character offset are 1-based.
+             */
+            export interface FileLocationRequestArgs extends FileRequestArgs {
+                /**
+                 * The line number for the request (1-based).
+                 */
+                line: number;
+                /**
+                 * The character offset (on the line) for the request (1-based).
+                 */
+                offset: number;
+            }
+            export type FileLocationOrRangeRequestArgs = FileLocationRequestArgs | FileRangeRequestArgs;
+            /**
+             * Request refactorings at a given position or selection area.
+             */
+            export interface GetApplicableRefactorsRequest extends Request {
+                command: CommandTypes.GetApplicableRefactors;
+                arguments: GetApplicableRefactorsRequestArgs;
+            }
+            export type GetApplicableRefactorsRequestArgs = FileLocationOrRangeRequestArgs & {
+                triggerReason?: RefactorTriggerReason;
+                kind?: string;
+                /**
+                 * Include refactor actions that require additional arguments to be passed when
+                 * calling 'GetEditsForRefactor'. When true, clients should inspect the
+                 * `isInteractive` property of each returned `RefactorActionInfo`
+                 * and ensure they are able to collect the appropriate arguments for any
+                 * interactive refactor before offering it.
+                 */
+                includeInteractiveActions?: boolean;
+            };
+            /**
+             * Response is a list of available refactorings.
+             * Each refactoring exposes one or more "Actions"; a user selects one action to invoke a refactoring
+             */
+            export interface GetApplicableRefactorsResponse extends Response {
+                body?: ApplicableRefactorInfo[];
+            }
+            /**
+             * Request refactorings at a given position or selection area to move to an existing file.
+             */
+            export interface GetMoveToRefactoringFileSuggestionsRequest extends Request {
+                command: CommandTypes.GetMoveToRefactoringFileSuggestions;
+                arguments: GetMoveToRefactoringFileSuggestionsRequestArgs;
+            }
+            export type GetMoveToRefactoringFileSuggestionsRequestArgs = FileLocationOrRangeRequestArgs & {
+                kind?: string;
+            };
+            /**
+             * Response is a list of available files.
+             * Each refactoring exposes one or more "Actions"; a user selects one action to invoke a refactoring
+             */
+            export interface GetMoveToRefactoringFileSuggestions extends Response {
+                body: {
+                    newFileName: string;
+                    files: string[];
+                };
+            }
+            export interface GetEditsForRefactorRequest extends Request {
+                command: CommandTypes.GetEditsForRefactor;
+                arguments: GetEditsForRefactorRequestArgs;
+            }
+            /**
+             * Request the edits that a particular refactoring action produces.
+             * Callers must specify the name of the refactor and the name of the action.
+             */
+            export type GetEditsForRefactorRequestArgs = FileLocationOrRangeRequestArgs & {
+                refactor: string;
+                action: string;
+                interactiveRefactorArguments?: InteractiveRefactorArguments;
+            };
+            export interface GetEditsForRefactorResponse extends Response {
+                body?: RefactorEditInfo;
+            }
+            export interface RefactorEditInfo {
+                edits: FileCodeEdits[];
+                /**
+                 * An optional location where the editor should start a rename operation once
+                 * the refactoring edits have been applied
+                 */
+                renameLocation?: Location;
+                renameFilename?: string;
+                notApplicableReason?: string;
+            }
+            /**
+             * Organize imports by:
+             *   1) Removing unused imports
+             *   2) Coalescing imports from the same module
+             *   3) Sorting imports
+             */
+            export interface OrganizeImportsRequest extends Request {
+                command: CommandTypes.OrganizeImports;
+                arguments: OrganizeImportsRequestArgs;
+            }
+            export type OrganizeImportsScope = GetCombinedCodeFixScope;
+            export interface OrganizeImportsRequestArgs {
+                scope: OrganizeImportsScope;
+                /** @deprecated Use `mode` instead */
+                skipDestructiveCodeActions?: boolean;
+                mode?: OrganizeImportsMode;
+            }
+            export interface OrganizeImportsResponse extends Response {
+                body: readonly FileCodeEdits[];
+            }
+            export interface GetEditsForFileRenameRequest extends Request {
+                command: CommandTypes.GetEditsForFileRename;
+                arguments: GetEditsForFileRenameRequestArgs;
+            }
+            /** Note: Paths may also be directories. */
+            export interface GetEditsForFileRenameRequestArgs {
+                readonly oldFilePath: string;
+                readonly newFilePath: string;
+            }
+            export interface GetEditsForFileRenameResponse extends Response {
+                body: readonly FileCodeEdits[];
+            }
+            /**
+             * Request for the available codefixes at a specific position.
+             */
+            export interface CodeFixRequest extends Request {
+                command: CommandTypes.GetCodeFixes;
+                arguments: CodeFixRequestArgs;
+            }
+            export interface GetCombinedCodeFixRequest extends Request {
+                command: CommandTypes.GetCombinedCodeFix;
+                arguments: GetCombinedCodeFixRequestArgs;
+            }
+            export interface GetCombinedCodeFixResponse extends Response {
+                body: CombinedCodeActions;
+            }
+            export interface ApplyCodeActionCommandRequest extends Request {
+                command: CommandTypes.ApplyCodeActionCommand;
+                arguments: ApplyCodeActionCommandRequestArgs;
+            }
+            export interface ApplyCodeActionCommandResponse extends Response {
+            }
+            export interface FileRangeRequestArgs extends FileRequestArgs {
+                /**
+                 * The line number for the request (1-based).
+                 */
+                startLine: number;
+                /**
+                 * The character offset (on the line) for the request (1-based).
+                 */
+                startOffset: number;
+                /**
+                 * The line number for the request (1-based).
+                 */
+                endLine: number;
+                /**
+                 * The character offset (on the line) for the request (1-based).
+                 */
+                endOffset: number;
+            }
+            /**
+             * Instances of this interface specify errorcodes on a specific location in a sourcefile.
+             */
+            export interface CodeFixRequestArgs extends FileRangeRequestArgs {
+                /**
+                 * Errorcodes we want to get the fixes for.
+                 */
+                errorCodes: readonly number[];
+            }
+            export interface GetCombinedCodeFixRequestArgs {
+                scope: GetCombinedCodeFixScope;
+                fixId: {};
+            }
+            export interface GetCombinedCodeFixScope {
+                type: "file";
+                args: FileRequestArgs;
+            }
+            export interface ApplyCodeActionCommandRequestArgs {
+                /** May also be an array of commands. */
+                command: {};
+            }
+            /**
+             * Response for GetCodeFixes request.
+             */
+            export interface GetCodeFixesResponse extends Response {
+                body?: CodeAction[];
+            }
+            /**
+             * A request whose arguments specify a file location (file, line, col).
+             */
+            export interface FileLocationRequest extends FileRequest {
+                arguments: FileLocationRequestArgs;
+            }
+            /**
+             * A request to get codes of supported code fixes.
+             */
+            export interface GetSupportedCodeFixesRequest extends Request {
+                command: CommandTypes.GetSupportedCodeFixes;
+                arguments?: Partial<FileRequestArgs>;
+            }
+            /**
+             * A response for GetSupportedCodeFixesRequest request.
+             */
+            export interface GetSupportedCodeFixesResponse extends Response {
+                /**
+                 * List of error codes supported by the server.
+                 */
+                body?: string[];
+            }
+            /**
+             * A request to get encoded semantic classifications for a span in the file
+             */
+            export interface EncodedSemanticClassificationsRequest extends FileRequest {
+                arguments: EncodedSemanticClassificationsRequestArgs;
+            }
+            /**
+             * Arguments for EncodedSemanticClassificationsRequest request.
+             */
+            export interface EncodedSemanticClassificationsRequestArgs extends FileRequestArgs {
+                /**
+                 * Start position of the span.
+                 */
+                start: number;
+                /**
+                 * Length of the span.
+                 */
+                length: number;
+                /**
+                 * Optional parameter for the semantic highlighting response, if absent it
+                 * defaults to "original".
+                 */
+                format?: "original" | "2020";
+            }
+            /** The response for a EncodedSemanticClassificationsRequest */
+            export interface EncodedSemanticClassificationsResponse extends Response {
+                body?: EncodedSemanticClassificationsResponseBody;
+            }
+            /**
+             * Implementation response message. Gives series of text spans depending on the format ar.
+             */
+            export interface EncodedSemanticClassificationsResponseBody {
+                endOfLineState: EndOfLineState;
+                spans: number[];
+            }
+            /**
+             * Arguments in document highlight request; include: filesToSearch, file,
+             * line, offset.
+             */
+            export interface DocumentHighlightsRequestArgs extends FileLocationRequestArgs {
+                /**
+                 * List of files to search for document highlights.
+                 */
+                filesToSearch: string[];
+            }
+            /**
+             * Go to definition request; value of command field is
+             * "definition". Return response giving the file locations that
+             * define the symbol found in file at location line, col.
+             */
+            export interface DefinitionRequest extends FileLocationRequest {
+                command: CommandTypes.Definition;
+            }
+            export interface DefinitionAndBoundSpanRequest extends FileLocationRequest {
+                readonly command: CommandTypes.DefinitionAndBoundSpan;
+            }
+            export interface FindSourceDefinitionRequest extends FileLocationRequest {
+                readonly command: CommandTypes.FindSourceDefinition;
+            }
+            export interface DefinitionAndBoundSpanResponse extends Response {
+                readonly body: DefinitionInfoAndBoundSpan;
+            }
+            /**
+             * Go to type request; value of command field is
+             * "typeDefinition". Return response giving the file locations that
+             * define the type for the symbol found in file at location line, col.
+             */
+            export interface TypeDefinitionRequest extends FileLocationRequest {
+                command: CommandTypes.TypeDefinition;
+            }
+            /**
+             * Go to implementation request; value of command field is
+             * "implementation". Return response giving the file locations that
+             * implement the symbol found in file at location line, col.
+             */
+            export interface ImplementationRequest extends FileLocationRequest {
+                command: CommandTypes.Implementation;
+            }
+            /**
+             * Location in source code expressed as (one-based) line and (one-based) column offset.
+             */
+            export interface Location {
+                line: number;
+                offset: number;
+            }
+            /**
+             * Object found in response messages defining a span of text in source code.
+             */
+            export interface TextSpan {
+                /**
+                 * First character of the definition.
+                 */
+                start: Location;
+                /**
+                 * One character past last character of the definition.
+                 */
+                end: Location;
+            }
+            /**
+             * Object found in response messages defining a span of text in a specific source file.
+             */
+            export interface FileSpan extends TextSpan {
+                /**
+                 * File containing text span.
+                 */
+                file: string;
+            }
+            export interface JSDocTagInfo {
+                /** Name of the JSDoc tag */
+                name: string;
+                /**
+                 * Comment text after the JSDoc tag -- the text after the tag name until the next tag or end of comment
+                 * Display parts when UserPreferences.displayPartsForJSDoc is true, flattened to string otherwise.
+                 */
+                text?: string | SymbolDisplayPart[];
+            }
+            export interface TextSpanWithContext extends TextSpan {
+                contextStart?: Location;
+                contextEnd?: Location;
+            }
+            export interface FileSpanWithContext extends FileSpan, TextSpanWithContext {
+            }
+            export interface DefinitionInfo extends FileSpanWithContext {
+                /**
+                 * When true, the file may or may not exist.
+                 */
+                unverified?: boolean;
+            }
+            export interface DefinitionInfoAndBoundSpan {
+                definitions: readonly DefinitionInfo[];
+                textSpan: TextSpan;
+            }
+            /**
+             * Definition response message.  Gives text range for definition.
+             */
+            export interface DefinitionResponse extends Response {
+                body?: DefinitionInfo[];
+            }
+            export interface DefinitionInfoAndBoundSpanResponse extends Response {
+                body?: DefinitionInfoAndBoundSpan;
+            }
+            /** @deprecated Use `DefinitionInfoAndBoundSpanResponse` instead. */
+            export type DefinitionInfoAndBoundSpanReponse = DefinitionInfoAndBoundSpanResponse;
+            /**
+             * Definition response message.  Gives text range for definition.
+             */
+            export interface TypeDefinitionResponse extends Response {
+                body?: FileSpanWithContext[];
+            }
+            /**
+             * Implementation response message.  Gives text range for implementations.
+             */
+            export interface ImplementationResponse extends Response {
+                body?: FileSpanWithContext[];
+            }
+            /**
+             * Request to get brace completion for a location in the file.
+             */
+            export interface BraceCompletionRequest extends FileLocationRequest {
+                command: CommandTypes.BraceCompletion;
+                arguments: BraceCompletionRequestArgs;
+            }
+            /**
+             * Argument for BraceCompletionRequest request.
+             */
+            export interface BraceCompletionRequestArgs extends FileLocationRequestArgs {
+                /**
+                 * Kind of opening brace
+                 */
+                openingBrace: string;
+            }
+            export interface JsxClosingTagRequest extends FileLocationRequest {
+                readonly command: CommandTypes.JsxClosingTag;
+                readonly arguments: JsxClosingTagRequestArgs;
+            }
+            export interface JsxClosingTagRequestArgs extends FileLocationRequestArgs {
+            }
+            export interface JsxClosingTagResponse extends Response {
+                readonly body: TextInsertion;
+            }
+            export interface LinkedEditingRangeRequest extends FileLocationRequest {
+                readonly command: CommandTypes.LinkedEditingRange;
+            }
+            export interface LinkedEditingRangesBody {
+                ranges: TextSpan[];
+                wordPattern?: string;
+            }
+            export interface LinkedEditingRangeResponse extends Response {
+                readonly body: LinkedEditingRangesBody;
+            }
+            /**
+             * Get document highlights request; value of command field is
+             * "documentHighlights". Return response giving spans that are relevant
+             * in the file at a given line and column.
+             */
+            export interface DocumentHighlightsRequest extends FileLocationRequest {
+                command: CommandTypes.DocumentHighlights;
+                arguments: DocumentHighlightsRequestArgs;
+            }
+            /**
+             * Span augmented with extra information that denotes the kind of the highlighting to be used for span.
+             */
+            export interface HighlightSpan extends TextSpanWithContext {
+                kind: HighlightSpanKind;
+            }
+            /**
+             * Represents a set of highligh spans for a give name
+             */
+            export interface DocumentHighlightsItem {
+                /**
+                 * File containing highlight spans.
+                 */
+                file: string;
+                /**
+                 * Spans to highlight in file.
+                 */
+                highlightSpans: HighlightSpan[];
+            }
+            /**
+             * Response for a DocumentHighlightsRequest request.
+             */
+            export interface DocumentHighlightsResponse extends Response {
+                body?: DocumentHighlightsItem[];
+            }
+            /**
+             * Find references request; value of command field is
+             * "references". Return response giving the file locations that
+             * reference the symbol found in file at location line, col.
+             */
+            export interface ReferencesRequest extends FileLocationRequest {
+                command: CommandTypes.References;
+            }
+            export interface ReferencesResponseItem extends FileSpanWithContext {
+                /**
+                 * Text of line containing the reference. Including this
+                 * with the response avoids latency of editor loading files
+                 * to show text of reference line (the server already has loaded the referencing files).
+                 *
+                 * If {@link UserPreferences.disableLineTextInReferences} is enabled, the property won't be filled
+                 */
+                lineText?: string;
+                /**
+                 * True if reference is a write location, false otherwise.
+                 */
+                isWriteAccess: boolean;
+                /**
+                 * Present only if the search was triggered from a declaration.
+                 * True indicates that the references refers to the same symbol
+                 * (i.e. has the same meaning) as the declaration that began the
+                 * search.
+                 */
+                isDefinition?: boolean;
+            }
+            /**
+             * The body of a "references" response message.
+             */
+            export interface ReferencesResponseBody {
+                /**
+                 * The file locations referencing the symbol.
+                 */
+                refs: readonly ReferencesResponseItem[];
+                /**
+                 * The name of the symbol.
+                 */
+                symbolName: string;
+                /**
+                 * The start character offset of the symbol (on the line provided by the references request).
+                 */
+                symbolStartOffset: number;
+                /**
+                 * The full display name of the symbol.
+                 */
+                symbolDisplayString: string;
+            }
+            /**
+             * Response to "references" request.
+             */
+            export interface ReferencesResponse extends Response {
+                body?: ReferencesResponseBody;
+            }
+            export interface FileReferencesRequest extends FileRequest {
+                command: CommandTypes.FileReferences;
+            }
+            export interface FileReferencesResponseBody {
+                /**
+                 * The file locations referencing the symbol.
+                 */
+                refs: readonly ReferencesResponseItem[];
+                /**
+                 * The name of the symbol.
+                 */
+                symbolName: string;
+            }
+            export interface FileReferencesResponse extends Response {
+                body?: FileReferencesResponseBody;
+            }
+            /**
+             * Argument for RenameRequest request.
+             */
+            export interface RenameRequestArgs extends FileLocationRequestArgs {
+                /**
+                 * Should text at specified location be found/changed in comments?
+                 */
+                findInComments?: boolean;
+                /**
+                 * Should text at specified location be found/changed in strings?
+                 */
+                findInStrings?: boolean;
+            }
+            /**
+             * Rename request; value of command field is "rename". Return
+             * response giving the file locations that reference the symbol
+             * found in file at location line, col. Also return full display
+             * name of the symbol so that client can print it unambiguously.
+             */
+            export interface RenameRequest extends FileLocationRequest {
+                command: CommandTypes.Rename;
+                arguments: RenameRequestArgs;
+            }
+            /**
+             * Information about the item to be renamed.
+             */
+            export type RenameInfo = RenameInfoSuccess | RenameInfoFailure;
+            export type RenameInfoSuccess = ChangePropertyTypes<ts.RenameInfoSuccess, {
+                triggerSpan: TextSpan;
+            }>;
+            /**
+             *  A group of text spans, all in 'file'.
+             */
+            export interface SpanGroup {
+                /** The file to which the spans apply */
+                file: string;
+                /** The text spans in this group */
+                locs: RenameTextSpan[];
+            }
+            export interface RenameTextSpan extends TextSpanWithContext {
+                readonly prefixText?: string;
+                readonly suffixText?: string;
+            }
+            export interface RenameResponseBody {
+                /**
+                 * Information about the item to be renamed.
+                 */
+                info: RenameInfo;
+                /**
+                 * An array of span groups (one per file) that refer to the item to be renamed.
+                 */
+                locs: readonly SpanGroup[];
+            }
+            /**
+             * Rename response message.
+             */
+            export interface RenameResponse extends Response {
+                body?: RenameResponseBody;
+            }
+            /**
+             * Represents a file in external project.
+             * External project is project whose set of files, compilation options and open\close state
+             * is maintained by the client (i.e. if all this data come from .csproj file in Visual Studio).
+             * External project will exist even if all files in it are closed and should be closed explicitly.
+             * If external project includes one or more tsconfig.json/jsconfig.json files then tsserver will
+             * create configured project for every config file but will maintain a link that these projects were created
+             * as a result of opening external project so they should be removed once external project is closed.
+             */
+            export interface ExternalFile {
+                /**
+                 * Name of file file
+                 */
+                fileName: string;
+                /**
+                 * Script kind of the file
+                 */
+                scriptKind?: ScriptKindName | ScriptKind;
+                /**
+                 * Whether file has mixed content (i.e. .cshtml file that combines html markup with C#/JavaScript)
+                 */
+                hasMixedContent?: boolean;
+                /**
+                 * Content of the file
+                 */
+                content?: string;
+            }
+            /**
+             * Represent an external project
+             */
+            export interface ExternalProject {
+                /**
+                 * Project name
+                 */
+                projectFileName: string;
+                /**
+                 * List of root files in project
+                 */
+                rootFiles: ExternalFile[];
+                /**
+                 * Compiler options for the project
+                 */
+                options: ExternalProjectCompilerOptions;
+                /**
+                 * Explicitly specified type acquisition for the project
+                 */
+                typeAcquisition?: TypeAcquisition;
+            }
+            export interface CompileOnSaveMixin {
+                /**
+                 * If compile on save is enabled for the project
+                 */
+                compileOnSave?: boolean;
+            }
+            /**
+             * For external projects, some of the project settings are sent together with
+             * compiler settings.
+             */
+            export type ExternalProjectCompilerOptions = CompilerOptions & CompileOnSaveMixin & WatchOptions;
+            export interface FileWithProjectReferenceRedirectInfo {
+                /**
+                 * Name of file
+                 */
+                fileName: string;
+                /**
+                 * True if the file is primarily included in a referenced project
+                 */
+                isSourceOfProjectReferenceRedirect: boolean;
+            }
+            /**
+             * Represents a set of changes that happen in project
+             */
+            export interface ProjectChanges {
+                /**
+                 * List of added files
+                 */
+                added: string[] | FileWithProjectReferenceRedirectInfo[];
+                /**
+                 * List of removed files
+                 */
+                removed: string[] | FileWithProjectReferenceRedirectInfo[];
+                /**
+                 * List of updated files
+                 */
+                updated: string[] | FileWithProjectReferenceRedirectInfo[];
+                /**
+                 * List of files that have had their project reference redirect status updated
+                 * Only provided when the synchronizeProjectList request has includeProjectReferenceRedirectInfo set to true
+                 */
+                updatedRedirects?: FileWithProjectReferenceRedirectInfo[];
+            }
+            /**
+             * Information found in a configure request.
+             */
+            export interface ConfigureRequestArguments {
+                /**
+                 * Information about the host, for example 'Emacs 24.4' or
+                 * 'Sublime Text version 3075'
+                 */
+                hostInfo?: string;
+                /**
+                 * If present, tab settings apply only to this file.
+                 */
+                file?: string;
+                /**
+                 * The format options to use during formatting and other code editing features.
+                 */
+                formatOptions?: FormatCodeSettings;
+                preferences?: UserPreferences;
+                /**
+                 * The host's additional supported .js file extensions
+                 */
+                extraFileExtensions?: FileExtensionInfo[];
+                watchOptions?: WatchOptions;
+            }
+            export enum WatchFileKind {
+                FixedPollingInterval = "FixedPollingInterval",
+                PriorityPollingInterval = "PriorityPollingInterval",
+                DynamicPriorityPolling = "DynamicPriorityPolling",
+                FixedChunkSizePolling = "FixedChunkSizePolling",
+                UseFsEvents = "UseFsEvents",
+                UseFsEventsOnParentDirectory = "UseFsEventsOnParentDirectory",
+            }
+            export enum WatchDirectoryKind {
+                UseFsEvents = "UseFsEvents",
+                FixedPollingInterval = "FixedPollingInterval",
+                DynamicPriorityPolling = "DynamicPriorityPolling",
+                FixedChunkSizePolling = "FixedChunkSizePolling",
+            }
+            export enum PollingWatchKind {
+                FixedInterval = "FixedInterval",
+                PriorityInterval = "PriorityInterval",
+                DynamicPriority = "DynamicPriority",
+                FixedChunkSize = "FixedChunkSize",
+            }
+            export interface WatchOptions {
+                watchFile?: WatchFileKind | ts.WatchFileKind;
+                watchDirectory?: WatchDirectoryKind | ts.WatchDirectoryKind;
+                fallbackPolling?: PollingWatchKind | ts.PollingWatchKind;
+                synchronousWatchDirectory?: boolean;
+                excludeDirectories?: string[];
+                excludeFiles?: string[];
+                [option: string]: CompilerOptionsValue | undefined;
+            }
+            /**
+             *  Configure request; value of command field is "configure".  Specifies
+             *  host information, such as host type, tab size, and indent size.
+             */
+            export interface ConfigureRequest extends Request {
+                command: CommandTypes.Configure;
+                arguments: ConfigureRequestArguments;
+            }
+            /**
+             * Response to "configure" request.  This is just an acknowledgement, so
+             * no body field is required.
+             */
+            export interface ConfigureResponse extends Response {
+            }
+            export interface ConfigurePluginRequestArguments {
+                pluginName: string;
+                configuration: any;
+            }
+            export interface ConfigurePluginRequest extends Request {
+                command: CommandTypes.ConfigurePlugin;
+                arguments: ConfigurePluginRequestArguments;
+            }
+            export interface ConfigurePluginResponse extends Response {
+            }
+            export interface SelectionRangeRequest extends FileRequest {
+                command: CommandTypes.SelectionRange;
+                arguments: SelectionRangeRequestArgs;
+            }
+            export interface SelectionRangeRequestArgs extends FileRequestArgs {
+                locations: Location[];
+            }
+            export interface SelectionRangeResponse extends Response {
+                body?: SelectionRange[];
+            }
+            export interface SelectionRange {
+                textSpan: TextSpan;
+                parent?: SelectionRange;
+            }
+            export interface ToggleLineCommentRequest extends FileRequest {
+                command: CommandTypes.ToggleLineComment;
+                arguments: FileRangeRequestArgs;
+            }
+            export interface ToggleMultilineCommentRequest extends FileRequest {
+                command: CommandTypes.ToggleMultilineComment;
+                arguments: FileRangeRequestArgs;
+            }
+            export interface CommentSelectionRequest extends FileRequest {
+                command: CommandTypes.CommentSelection;
+                arguments: FileRangeRequestArgs;
+            }
+            export interface UncommentSelectionRequest extends FileRequest {
+                command: CommandTypes.UncommentSelection;
+                arguments: FileRangeRequestArgs;
+            }
+            /**
+             *  Information found in an "open" request.
+             */
+            export interface OpenRequestArgs extends FileRequestArgs {
+                /**
+                 * Used when a version of the file content is known to be more up to date than the one on disk.
+                 * Then the known content will be used upon opening instead of the disk copy
+                 */
+                fileContent?: string;
+                /**
+                 * Used to specify the script kind of the file explicitly. It could be one of the following:
+                 *      "TS", "JS", "TSX", "JSX"
+                 */
+                scriptKindName?: ScriptKindName;
+                /**
+                 * Used to limit the searching for project config file. If given the searching will stop at this
+                 * root path; otherwise it will go all the way up to the dist root path.
+                 */
+                projectRootPath?: string;
+            }
+            export type ScriptKindName = "TS" | "JS" | "TSX" | "JSX";
+            /**
+             * Open request; value of command field is "open". Notify the
+             * server that the client has file open.  The server will not
+             * monitor the filesystem for changes in this file and will assume
+             * that the client is updating the server (using the change and/or
+             * reload messages) when the file changes. Server does not currently
+             * send a response to an open request.
+             */
+            export interface OpenRequest extends Request {
+                command: CommandTypes.Open;
+                arguments: OpenRequestArgs;
+            }
+            /**
+             * Request to open or update external project
+             */
+            export interface OpenExternalProjectRequest extends Request {
+                command: CommandTypes.OpenExternalProject;
+                arguments: OpenExternalProjectArgs;
+            }
+            /**
+             * Arguments to OpenExternalProjectRequest request
+             */
+            export type OpenExternalProjectArgs = ExternalProject;
+            /**
+             * Request to open multiple external projects
+             */
+            export interface OpenExternalProjectsRequest extends Request {
+                command: CommandTypes.OpenExternalProjects;
+                arguments: OpenExternalProjectsArgs;
+            }
+            /**
+             * Arguments to OpenExternalProjectsRequest
+             */
+            export interface OpenExternalProjectsArgs {
+                /**
+                 * List of external projects to open or update
+                 */
+                projects: ExternalProject[];
+            }
+            /**
+             * Response to OpenExternalProjectRequest request. This is just an acknowledgement, so
+             * no body field is required.
+             */
+            export interface OpenExternalProjectResponse extends Response {
+            }
+            /**
+             * Response to OpenExternalProjectsRequest request. This is just an acknowledgement, so
+             * no body field is required.
+             */
+            export interface OpenExternalProjectsResponse extends Response {
+            }
+            /**
+             * Request to close external project.
+             */
+            export interface CloseExternalProjectRequest extends Request {
+                command: CommandTypes.CloseExternalProject;
+                arguments: CloseExternalProjectRequestArgs;
+            }
+            /**
+             * Arguments to CloseExternalProjectRequest request
+             */
+            export interface CloseExternalProjectRequestArgs {
+                /**
+                 * Name of the project to close
+                 */
+                projectFileName: string;
+            }
+            /**
+             * Response to CloseExternalProjectRequest request. This is just an acknowledgement, so
+             * no body field is required.
+             */
+            export interface CloseExternalProjectResponse extends Response {
+            }
+            /**
+             * Request to synchronize list of open files with the client
+             */
+            export interface UpdateOpenRequest extends Request {
+                command: CommandTypes.UpdateOpen;
+                arguments: UpdateOpenRequestArgs;
+            }
+            /**
+             * Arguments to UpdateOpenRequest
+             */
+            export interface UpdateOpenRequestArgs {
+                /**
+                 * List of newly open files
+                 */
+                openFiles?: OpenRequestArgs[];
+                /**
+                 * List of open files files that were changes
+                 */
+                changedFiles?: FileCodeEdits[];
+                /**
+                 * List of files that were closed
+                 */
+                closedFiles?: string[];
+            }
+            /**
+             * External projects have a typeAcquisition option so they need to be added separately to compiler options for inferred projects.
+             */
+            export type InferredProjectCompilerOptions = ExternalProjectCompilerOptions & TypeAcquisition;
+            /**
+             * Request to set compiler options for inferred projects.
+             * External projects are opened / closed explicitly.
+             * Configured projects are opened when user opens loose file that has 'tsconfig.json' or 'jsconfig.json' anywhere in one of containing folders.
+             * This configuration file will be used to obtain a list of files and configuration settings for the project.
+             * Inferred projects are created when user opens a loose file that is not the part of external project
+             * or configured project and will contain only open file and transitive closure of referenced files if 'useOneInferredProject' is false,
+             * or all open loose files and its transitive closure of referenced files if 'useOneInferredProject' is true.
+             */
+            export interface SetCompilerOptionsForInferredProjectsRequest extends Request {
+                command: CommandTypes.CompilerOptionsForInferredProjects;
+                arguments: SetCompilerOptionsForInferredProjectsArgs;
+            }
+            /**
+             * Argument for SetCompilerOptionsForInferredProjectsRequest request.
+             */
+            export interface SetCompilerOptionsForInferredProjectsArgs {
+                /**
+                 * Compiler options to be used with inferred projects.
+                 */
+                options: InferredProjectCompilerOptions;
+                /**
+                 * Specifies the project root path used to scope compiler options.
+                 * It is an error to provide this property if the server has not been started with
+                 * `useInferredProjectPerProjectRoot` enabled.
+                 */
+                projectRootPath?: string;
+            }
+            /**
+             * Response to SetCompilerOptionsForInferredProjectsResponse request. This is just an acknowledgement, so
+             * no body field is required.
+             */
+            export interface SetCompilerOptionsForInferredProjectsResponse extends Response {
+            }
+            /**
+             *  Exit request; value of command field is "exit".  Ask the server process
+             *  to exit.
+             */
+            export interface ExitRequest extends Request {
+                command: CommandTypes.Exit;
+            }
+            /**
+             * Close request; value of command field is "close". Notify the
+             * server that the client has closed a previously open file.  If
+             * file is still referenced by open files, the server will resume
+             * monitoring the filesystem for changes to file.  Server does not
+             * currently send a response to a close request.
+             */
+            export interface CloseRequest extends FileRequest {
+                command: CommandTypes.Close;
+            }
+            export interface WatchChangeRequest extends Request {
+                command: CommandTypes.WatchChange;
+                arguments: WatchChangeRequestArgs;
+            }
+            export interface WatchChangeRequestArgs {
+                id: number;
+                path: string;
+                eventType: "create" | "delete" | "update";
+            }
+            /**
+             * Request to obtain the list of files that should be regenerated if target file is recompiled.
+             * NOTE: this us query-only operation and does not generate any output on disk.
+             */
+            export interface CompileOnSaveAffectedFileListRequest extends FileRequest {
+                command: CommandTypes.CompileOnSaveAffectedFileList;
+            }
+            /**
+             * Contains a list of files that should be regenerated in a project
+             */
+            export interface CompileOnSaveAffectedFileListSingleProject {
+                /**
+                 * Project name
+                 */
+                projectFileName: string;
+                /**
+                 * List of files names that should be recompiled
+                 */
+                fileNames: string[];
+                /**
+                 * true if project uses outFile or out compiler option
+                 */
+                projectUsesOutFile: boolean;
+            }
+            /**
+             * Response for CompileOnSaveAffectedFileListRequest request;
+             */
+            export interface CompileOnSaveAffectedFileListResponse extends Response {
+                body: CompileOnSaveAffectedFileListSingleProject[];
+            }
+            /**
+             * Request to recompile the file. All generated outputs (.js, .d.ts or .js.map files) is written on disk.
+             */
+            export interface CompileOnSaveEmitFileRequest extends FileRequest {
+                command: CommandTypes.CompileOnSaveEmitFile;
+                arguments: CompileOnSaveEmitFileRequestArgs;
+            }
+            /**
+             * Arguments for CompileOnSaveEmitFileRequest
+             */
+            export interface CompileOnSaveEmitFileRequestArgs extends FileRequestArgs {
+                /**
+                 * if true - then file should be recompiled even if it does not have any changes.
+                 */
+                forced?: boolean;
+                includeLinePosition?: boolean;
+                /** if true - return response as object with emitSkipped and diagnostics */
+                richResponse?: boolean;
+            }
+            export interface CompileOnSaveEmitFileResponse extends Response {
+                body: boolean | EmitResult;
+            }
+            export interface EmitResult {
+                emitSkipped: boolean;
+                diagnostics: Diagnostic[] | DiagnosticWithLinePosition[];
+            }
+            /**
+             * Quickinfo request; value of command field is
+             * "quickinfo". Return response giving a quick type and
+             * documentation string for the symbol found in file at location
+             * line, col.
+             */
+            export interface QuickInfoRequest extends FileLocationRequest {
+                command: CommandTypes.Quickinfo;
+                arguments: FileLocationRequestArgs;
+            }
+            /**
+             * Body of QuickInfoResponse.
+             */
+            export interface QuickInfoResponseBody {
+                /**
+                 * The symbol's kind (such as 'className' or 'parameterName' or plain 'text').
+                 */
+                kind: ScriptElementKind;
+                /**
+                 * Optional modifiers for the kind (such as 'public').
+                 */
+                kindModifiers: string;
+                /**
+                 * Starting file location of symbol.
+                 */
+                start: Location;
+                /**
+                 * One past last character of symbol.
+                 */
+                end: Location;
+                /**
+                 * Type and kind of symbol.
+                 */
+                displayString: string;
+                /**
+                 * Documentation associated with symbol.
+                 * Display parts when UserPreferences.displayPartsForJSDoc is true, flattened to string otherwise.
+                 */
+                documentation: string | SymbolDisplayPart[];
+                /**
+                 * JSDoc tags associated with symbol.
+                 */
+                tags: JSDocTagInfo[];
+            }
+            /**
+             * Quickinfo response message.
+             */
+            export interface QuickInfoResponse extends Response {
+                body?: QuickInfoResponseBody;
+            }
+            /**
+             * Arguments for format messages.
+             */
+            export interface FormatRequestArgs extends FileLocationRequestArgs {
+                /**
+                 * Last line of range for which to format text in file.
+                 */
+                endLine: number;
+                /**
+                 * Character offset on last line of range for which to format text in file.
+                 */
+                endOffset: number;
+                /**
+                 * Format options to be used.
+                 */
+                options?: FormatCodeSettings;
+            }
+            /**
+             * Format request; value of command field is "format".  Return
+             * response giving zero or more edit instructions.  The edit
+             * instructions will be sorted in file order.  Applying the edit
+             * instructions in reverse to file will result in correctly
+             * reformatted text.
+             */
+            export interface FormatRequest extends FileLocationRequest {
+                command: CommandTypes.Format;
+                arguments: FormatRequestArgs;
+            }
+            /**
+             * Object found in response messages defining an editing
+             * instruction for a span of text in source code.  The effect of
+             * this instruction is to replace the text starting at start and
+             * ending one character before end with newText. For an insertion,
+             * the text span is empty.  For a deletion, newText is empty.
+             */
+            export interface CodeEdit {
+                /**
+                 * First character of the text span to edit.
+                 */
+                start: Location;
+                /**
+                 * One character past last character of the text span to edit.
+                 */
+                end: Location;
+                /**
+                 * Replace the span defined above with this string (may be
+                 * the empty string).
+                 */
+                newText: string;
+            }
+            export interface FileCodeEdits {
+                fileName: string;
+                textChanges: CodeEdit[];
+            }
+            export interface CodeFixResponse extends Response {
+                /** The code actions that are available */
+                body?: CodeFixAction[];
+            }
+            export interface CodeAction {
+                /** Description of the code action to display in the UI of the editor */
+                description: string;
+                /** Text changes to apply to each file as part of the code action */
+                changes: FileCodeEdits[];
+                /** A command is an opaque object that should be passed to `ApplyCodeActionCommandRequestArgs` without modification.  */
+                commands?: {}[];
+            }
+            export interface CombinedCodeActions {
+                changes: readonly FileCodeEdits[];
+                commands?: readonly {}[];
+            }
+            export interface CodeFixAction extends CodeAction {
+                /** Short name to identify the fix, for use by telemetry. */
+                fixName: string;
+                /**
+                 * If present, one may call 'getCombinedCodeFix' with this fixId.
+                 * This may be omitted to indicate that the code fix can't be applied in a group.
+                 */
+                fixId?: {};
+                /** Should be present if and only if 'fixId' is. */
+                fixAllDescription?: string;
+            }
+            /**
+             * Format and format on key response message.
+             */
+            export interface FormatResponse extends Response {
+                body?: CodeEdit[];
+            }
+            /**
+             * Arguments for format on key messages.
+             */
+            export interface FormatOnKeyRequestArgs extends FileLocationRequestArgs {
+                /**
+                 * Key pressed (';', '\n', or '}').
+                 */
+                key: string;
+                options?: FormatCodeSettings;
+            }
+            /**
+             * Format on key request; value of command field is
+             * "formatonkey". Given file location and key typed (as string),
+             * return response giving zero or more edit instructions.  The
+             * edit instructions will be sorted in file order.  Applying the
+             * edit instructions in reverse to file will result in correctly
+             * reformatted text.
+             */
+            export interface FormatOnKeyRequest extends FileLocationRequest {
+                command: CommandTypes.Formatonkey;
+                arguments: FormatOnKeyRequestArgs;
+            }
+            /**
+             * Arguments for completions messages.
+             */
+            export interface CompletionsRequestArgs extends FileLocationRequestArgs {
+                /**
+                 * Optional prefix to apply to possible completions.
+                 */
+                prefix?: string;
+                /**
+                 * Character that was responsible for triggering completion.
+                 * Should be `undefined` if a user manually requested completion.
+                 */
+                triggerCharacter?: CompletionsTriggerCharacter;
+                triggerKind?: CompletionTriggerKind;
+                /**
+                 * @deprecated Use UserPreferences.includeCompletionsForModuleExports
+                 */
+                includeExternalModuleExports?: boolean;
+                /**
+                 * @deprecated Use UserPreferences.includeCompletionsWithInsertText
+                 */
+                includeInsertTextCompletions?: boolean;
+            }
+            /**
+             * Completions request; value of command field is "completions".
+             * Given a file location (file, line, col) and a prefix (which may
+             * be the empty string), return the possible completions that
+             * begin with prefix.
+             */
+            export interface CompletionsRequest extends FileLocationRequest {
+                command: CommandTypes.Completions | CommandTypes.CompletionInfo;
+                arguments: CompletionsRequestArgs;
+            }
+            /**
+             * Arguments for completion details request.
+             */
+            export interface CompletionDetailsRequestArgs extends FileLocationRequestArgs {
+                /**
+                 * Names of one or more entries for which to obtain details.
+                 */
+                entryNames: (string | CompletionEntryIdentifier)[];
+            }
+            export interface CompletionEntryIdentifier {
+                name: string;
+                source?: string;
+                data?: unknown;
+            }
+            /**
+             * Completion entry details request; value of command field is
+             * "completionEntryDetails".  Given a file location (file, line,
+             * col) and an array of completion entry names return more
+             * detailed information for each completion entry.
+             */
+            export interface CompletionDetailsRequest extends FileLocationRequest {
+                command: CommandTypes.CompletionDetails;
+                arguments: CompletionDetailsRequestArgs;
+            }
+            /** A part of a symbol description that links from a jsdoc @link tag to a declaration */
+            export interface JSDocLinkDisplayPart extends SymbolDisplayPart {
+                /** The location of the declaration that the @link tag links to. */
+                target: FileSpan;
+            }
+            export type CompletionEntry = ChangePropertyTypes<Omit<ts.CompletionEntry, "symbol">, {
+                replacementSpan: TextSpan;
+                data: unknown;
+            }>;
+            /**
+             * Additional completion entry details, available on demand
+             */
+            export type CompletionEntryDetails = ChangePropertyTypes<ts.CompletionEntryDetails, {
+                tags: JSDocTagInfo[];
+                codeActions: CodeAction[];
+            }>;
+            /** @deprecated Prefer CompletionInfoResponse, which supports several top-level fields in addition to the array of entries. */
+            export interface CompletionsResponse extends Response {
+                body?: CompletionEntry[];
+            }
+            export interface CompletionInfoResponse extends Response {
+                body?: CompletionInfo;
+            }
+            export type CompletionInfo = ChangePropertyTypes<ts.CompletionInfo, {
+                entries: readonly CompletionEntry[];
+                optionalReplacementSpan: TextSpan;
+            }>;
+            export interface CompletionDetailsResponse extends Response {
+                body?: CompletionEntryDetails[];
+            }
+            /**
+             * Represents a single signature to show in signature help.
+             */
+            export type SignatureHelpItem = ChangePropertyTypes<ts.SignatureHelpItem, {
+                tags: JSDocTagInfo[];
+            }>;
+            /**
+             * Signature help items found in the response of a signature help request.
+             */
+            export interface SignatureHelpItems {
+                /**
+                 * The signature help items.
+                 */
+                items: SignatureHelpItem[];
+                /**
+                 * The span for which signature help should appear on a signature
+                 */
+                applicableSpan: TextSpan;
+                /**
+                 * The item selected in the set of available help items.
+                 */
+                selectedItemIndex: number;
+                /**
+                 * The argument selected in the set of parameters.
+                 */
+                argumentIndex: number;
+                /**
+                 * The argument count
+                 */
+                argumentCount: number;
+            }
+            /**
+             * Arguments of a signature help request.
+             */
+            export interface SignatureHelpRequestArgs extends FileLocationRequestArgs {
+                /**
+                 * Reason why signature help was invoked.
+                 * See each individual possible
+                 */
+                triggerReason?: SignatureHelpTriggerReason;
+            }
+            /**
+             * Signature help request; value of command field is "signatureHelp".
+             * Given a file location (file, line, col), return the signature
+             * help.
+             */
+            export interface SignatureHelpRequest extends FileLocationRequest {
+                command: CommandTypes.SignatureHelp;
+                arguments: SignatureHelpRequestArgs;
+            }
+            /**
+             * Response object for a SignatureHelpRequest.
+             */
+            export interface SignatureHelpResponse extends Response {
+                body?: SignatureHelpItems;
+            }
+            export interface InlayHintsRequestArgs extends FileRequestArgs {
+                /**
+                 * Start position of the span.
+                 */
+                start: number;
+                /**
+                 * Length of the span.
+                 */
+                length: number;
+            }
+            export interface InlayHintsRequest extends Request {
+                command: CommandTypes.ProvideInlayHints;
+                arguments: InlayHintsRequestArgs;
+            }
+            export type InlayHintItem = ChangePropertyTypes<ts.InlayHint, {
+                position: Location;
+                displayParts: InlayHintItemDisplayPart[];
+            }>;
+            export interface InlayHintItemDisplayPart {
+                text: string;
+                span?: FileSpan;
+            }
+            export interface InlayHintsResponse extends Response {
+                body?: InlayHintItem[];
+            }
+            /**
+             * Synchronous request for semantic diagnostics of one file.
+             */
+            export interface SemanticDiagnosticsSyncRequest extends FileRequest {
+                command: CommandTypes.SemanticDiagnosticsSync;
+                arguments: SemanticDiagnosticsSyncRequestArgs;
+            }
+            export interface SemanticDiagnosticsSyncRequestArgs extends FileRequestArgs {
+                includeLinePosition?: boolean;
+            }
+            /**
+             * Response object for synchronous sematic diagnostics request.
+             */
+            export interface SemanticDiagnosticsSyncResponse extends Response {
+                body?: Diagnostic[] | DiagnosticWithLinePosition[];
+            }
+            export interface SuggestionDiagnosticsSyncRequest extends FileRequest {
+                command: CommandTypes.SuggestionDiagnosticsSync;
+                arguments: SuggestionDiagnosticsSyncRequestArgs;
+            }
+            export type SuggestionDiagnosticsSyncRequestArgs = SemanticDiagnosticsSyncRequestArgs;
+            export type SuggestionDiagnosticsSyncResponse = SemanticDiagnosticsSyncResponse;
+            /**
+             * Synchronous request for syntactic diagnostics of one file.
+             */
+            export interface SyntacticDiagnosticsSyncRequest extends FileRequest {
+                command: CommandTypes.SyntacticDiagnosticsSync;
+                arguments: SyntacticDiagnosticsSyncRequestArgs;
+            }
+            export interface SyntacticDiagnosticsSyncRequestArgs extends FileRequestArgs {
+                includeLinePosition?: boolean;
+            }
+            /**
+             * Response object for synchronous syntactic diagnostics request.
+             */
+            export interface SyntacticDiagnosticsSyncResponse extends Response {
+                body?: Diagnostic[] | DiagnosticWithLinePosition[];
+            }
+            /**
+             * Arguments for GeterrForProject request.
+             */
+            export interface GeterrForProjectRequestArgs {
+                /**
+                 * the file requesting project error list
+                 */
+                file: string;
+                /**
+                 * Delay in milliseconds to wait before starting to compute
+                 * errors for the files in the file list
+                 */
+                delay: number;
+            }
+            /**
+             * GeterrForProjectRequest request; value of command field is
+             * "geterrForProject". It works similarly with 'Geterr', only
+             * it request for every file in this project.
+             */
+            export interface GeterrForProjectRequest extends Request {
+                command: CommandTypes.GeterrForProject;
+                arguments: GeterrForProjectRequestArgs;
+            }
+            /**
+             * Arguments for geterr messages.
+             */
+            export interface GeterrRequestArgs {
+                /**
+                 * List of file names for which to compute compiler errors.
+                 * The files will be checked in list order.
+                 */
+                files: string[];
+                /**
+                 * Delay in milliseconds to wait before starting to compute
+                 * errors for the files in the file list
+                 */
+                delay: number;
+            }
+            /**
+             * Geterr request; value of command field is "geterr". Wait for
+             * delay milliseconds and then, if during the wait no change or
+             * reload messages have arrived for the first file in the files
+             * list, get the syntactic errors for the file, field requests,
+             * and then get the semantic errors for the file.  Repeat with a
+             * smaller delay for each subsequent file on the files list.  Best
+             * practice for an editor is to send a file list containing each
+             * file that is currently visible, in most-recently-used order.
+             */
+            export interface GeterrRequest extends Request {
+                command: CommandTypes.Geterr;
+                arguments: GeterrRequestArgs;
+            }
+            export type RequestCompletedEventName = "requestCompleted";
+            /**
+             * Event that is sent when server have finished processing request with specified id.
+             */
+            export interface RequestCompletedEvent extends Event {
+                event: RequestCompletedEventName;
+                body: RequestCompletedEventBody;
+            }
+            export interface RequestCompletedEventBody {
+                request_seq: number;
+            }
+            /**
+             * Item of diagnostic information found in a DiagnosticEvent message.
+             */
+            export interface Diagnostic {
+                /**
+                 * Starting file location at which text applies.
+                 */
+                start: Location;
+                /**
+                 * The last file location at which the text applies.
+                 */
+                end: Location;
+                /**
+                 * Text of diagnostic message.
+                 */
+                text: string;
+                /**
+                 * The category of the diagnostic message, e.g. "error", "warning", or "suggestion".
+                 */
+                category: string;
+                reportsUnnecessary?: {};
+                reportsDeprecated?: {};
+                /**
+                 * Any related spans the diagnostic may have, such as other locations relevant to an error, such as declarartion sites
+                 */
+                relatedInformation?: DiagnosticRelatedInformation[];
+                /**
+                 * The error code of the diagnostic message.
+                 */
+                code?: number;
+                /**
+                 * The name of the plugin reporting the message.
+                 */
+                source?: string;
+            }
+            export interface DiagnosticWithFileName extends Diagnostic {
+                /**
+                 * Name of the file the diagnostic is in
+                 */
+                fileName: string;
+            }
+            /**
+             * Represents additional spans returned with a diagnostic which are relevant to it
+             */
+            export interface DiagnosticRelatedInformation {
+                /**
+                 * The category of the related information message, e.g. "error", "warning", or "suggestion".
+                 */
+                category: string;
+                /**
+                 * The code used ot identify the related information
+                 */
+                code: number;
+                /**
+                 * Text of related or additional information.
+                 */
+                message: string;
+                /**
+                 * Associated location
+                 */
+                span?: FileSpan;
+            }
+            export interface DiagnosticEventBody {
+                /**
+                 * The file for which diagnostic information is reported.
+                 */
+                file: string;
+                /**
+                 * An array of diagnostic information items.
+                 */
+                diagnostics: Diagnostic[];
+            }
+            export type DiagnosticEventKind = "semanticDiag" | "syntaxDiag" | "suggestionDiag";
+            /**
+             * Event message for DiagnosticEventKind event types.
+             * These events provide syntactic and semantic errors for a file.
+             */
+            export interface DiagnosticEvent extends Event {
+                body?: DiagnosticEventBody;
+                event: DiagnosticEventKind;
+            }
+            export interface ConfigFileDiagnosticEventBody {
+                /**
+                 * The file which trigged the searching and error-checking of the config file
+                 */
+                triggerFile: string;
+                /**
+                 * The name of the found config file.
+                 */
+                configFile: string;
+                /**
+                 * An arry of diagnostic information items for the found config file.
+                 */
+                diagnostics: DiagnosticWithFileName[];
+            }
+            /**
+             * Event message for "configFileDiag" event type.
+             * This event provides errors for a found config file.
+             */
+            export interface ConfigFileDiagnosticEvent extends Event {
+                body?: ConfigFileDiagnosticEventBody;
+                event: "configFileDiag";
+            }
+            export type ProjectLanguageServiceStateEventName = "projectLanguageServiceState";
+            export interface ProjectLanguageServiceStateEvent extends Event {
+                event: ProjectLanguageServiceStateEventName;
+                body?: ProjectLanguageServiceStateEventBody;
+            }
+            export interface ProjectLanguageServiceStateEventBody {
+                /**
+                 * Project name that has changes in the state of language service.
+                 * For configured projects this will be the config file path.
+                 * For external projects this will be the name of the projects specified when project was open.
+                 * For inferred projects this event is not raised.
+                 */
+                projectName: string;
+                /**
+                 * True if language service state switched from disabled to enabled
+                 * and false otherwise.
+                 */
+                languageServiceEnabled: boolean;
+            }
+            export type ProjectsUpdatedInBackgroundEventName = "projectsUpdatedInBackground";
+            export interface ProjectsUpdatedInBackgroundEvent extends Event {
+                event: ProjectsUpdatedInBackgroundEventName;
+                body: ProjectsUpdatedInBackgroundEventBody;
+            }
+            export interface ProjectsUpdatedInBackgroundEventBody {
+                /**
+                 * Current set of open files
+                 */
+                openFiles: string[];
+            }
+            export type ProjectLoadingStartEventName = "projectLoadingStart";
+            export interface ProjectLoadingStartEvent extends Event {
+                event: ProjectLoadingStartEventName;
+                body: ProjectLoadingStartEventBody;
+            }
+            export interface ProjectLoadingStartEventBody {
+                /** name of the project */
+                projectName: string;
+                /** reason for loading */
+                reason: string;
+            }
+            export type ProjectLoadingFinishEventName = "projectLoadingFinish";
+            export interface ProjectLoadingFinishEvent extends Event {
+                event: ProjectLoadingFinishEventName;
+                body: ProjectLoadingFinishEventBody;
+            }
+            export interface ProjectLoadingFinishEventBody {
+                /** name of the project */
+                projectName: string;
+            }
+            export type SurveyReadyEventName = "surveyReady";
+            export interface SurveyReadyEvent extends Event {
+                event: SurveyReadyEventName;
+                body: SurveyReadyEventBody;
+            }
+            export interface SurveyReadyEventBody {
+                /** Name of the survey. This is an internal machine- and programmer-friendly name */
+                surveyId: string;
+            }
+            export type LargeFileReferencedEventName = "largeFileReferenced";
+            export interface LargeFileReferencedEvent extends Event {
+                event: LargeFileReferencedEventName;
+                body: LargeFileReferencedEventBody;
+            }
+            export interface LargeFileReferencedEventBody {
+                /**
+                 * name of the large file being loaded
+                 */
+                file: string;
+                /**
+                 * size of the file
+                 */
+                fileSize: number;
+                /**
+                 * max file size allowed on the server
+                 */
+                maxFileSize: number;
+            }
+            export type CreateFileWatcherEventName = "createFileWatcher";
+            export interface CreateFileWatcherEvent extends Event {
+                readonly event: CreateFileWatcherEventName;
+                readonly body: CreateFileWatcherEventBody;
+            }
+            export interface CreateFileWatcherEventBody {
+                readonly id: number;
+                readonly path: string;
+            }
+            export type CreateDirectoryWatcherEventName = "createDirectoryWatcher";
+            export interface CreateDirectoryWatcherEvent extends Event {
+                readonly event: CreateDirectoryWatcherEventName;
+                readonly body: CreateDirectoryWatcherEventBody;
+            }
+            export interface CreateDirectoryWatcherEventBody {
+                readonly id: number;
+                readonly path: string;
+                readonly recursive: boolean;
+            }
+            export type CloseFileWatcherEventName = "closeFileWatcher";
+            export interface CloseFileWatcherEvent extends Event {
+                readonly event: CloseFileWatcherEventName;
+                readonly body: CloseFileWatcherEventBody;
+            }
+            export interface CloseFileWatcherEventBody {
+                readonly id: number;
+            }
+            /**
+             * Arguments for reload request.
+             */
+            export interface ReloadRequestArgs extends FileRequestArgs {
+                /**
+                 * Name of temporary file from which to reload file
+                 * contents. May be same as file.
+                 */
+                tmpfile: string;
+            }
+            /**
+             * Reload request message; value of command field is "reload".
+             * Reload contents of file with name given by the 'file' argument
+             * from temporary file with name given by the 'tmpfile' argument.
+             * The two names can be identical.
+             */
+            export interface ReloadRequest extends FileRequest {
+                command: CommandTypes.Reload;
+                arguments: ReloadRequestArgs;
+            }
+            /**
+             * Response to "reload" request. This is just an acknowledgement, so
+             * no body field is required.
+             */
+            export interface ReloadResponse extends Response {
+            }
+            /**
+             * Arguments for saveto request.
+             */
+            export interface SavetoRequestArgs extends FileRequestArgs {
+                /**
+                 * Name of temporary file into which to save server's view of
+                 * file contents.
+                 */
+                tmpfile: string;
+            }
+            /**
+             * Saveto request message; value of command field is "saveto".
+             * For debugging purposes, save to a temporaryfile (named by
+             * argument 'tmpfile') the contents of file named by argument
+             * 'file'.  The server does not currently send a response to a
+             * "saveto" request.
+             */
+            export interface SavetoRequest extends FileRequest {
+                command: CommandTypes.Saveto;
+                arguments: SavetoRequestArgs;
+            }
+            /**
+             * Arguments for navto request message.
+             */
+            export interface NavtoRequestArgs {
+                /**
+                 * Search term to navigate to from current location; term can
+                 * be '.*' or an identifier prefix.
+                 */
+                searchValue: string;
+                /**
+                 *  Optional limit on the number of items to return.
+                 */
+                maxResultCount?: number;
+                /**
+                 * The file for the request (absolute pathname required).
+                 */
+                file?: string;
+                /**
+                 * Optional flag to indicate we want results for just the current file
+                 * or the entire project.
+                 */
+                currentFileOnly?: boolean;
+                projectFileName?: string;
+            }
+            /**
+             * Navto request message; value of command field is "navto".
+             * Return list of objects giving file locations and symbols that
+             * match the search term given in argument 'searchTerm'.  The
+             * context for the search is given by the named file.
+             */
+            export interface NavtoRequest extends Request {
+                command: CommandTypes.Navto;
+                arguments: NavtoRequestArgs;
+            }
+            /**
+             * An item found in a navto response.
+             */
+            export interface NavtoItem extends FileSpan {
+                /**
+                 * The symbol's name.
+                 */
+                name: string;
+                /**
+                 * The symbol's kind (such as 'className' or 'parameterName').
+                 */
+                kind: ScriptElementKind;
+                /**
+                 * exact, substring, or prefix.
+                 */
+                matchKind: string;
+                /**
+                 * If this was a case sensitive or insensitive match.
+                 */
+                isCaseSensitive: boolean;
+                /**
+                 * Optional modifiers for the kind (such as 'public').
+                 */
+                kindModifiers?: string;
+                /**
+                 * Name of symbol's container symbol (if any); for example,
+                 * the class name if symbol is a class member.
+                 */
+                containerName?: string;
+                /**
+                 * Kind of symbol's container symbol (if any).
+                 */
+                containerKind?: ScriptElementKind;
+            }
+            /**
+             * Navto response message. Body is an array of navto items.  Each
+             * item gives a symbol that matched the search term.
+             */
+            export interface NavtoResponse extends Response {
+                body?: NavtoItem[];
+            }
+            /**
+             * Arguments for change request message.
+             */
+            export interface ChangeRequestArgs extends FormatRequestArgs {
+                /**
+                 * Optional string to insert at location (file, line, offset).
+                 */
+                insertString?: string;
+            }
+            /**
+             * Change request message; value of command field is "change".
+             * Update the server's view of the file named by argument 'file'.
+             * Server does not currently send a response to a change request.
+             */
+            export interface ChangeRequest extends FileLocationRequest {
+                command: CommandTypes.Change;
+                arguments: ChangeRequestArgs;
+            }
+            /**
+             * Response to "brace" request.
+             */
+            export interface BraceResponse extends Response {
+                body?: TextSpan[];
+            }
+            /**
+             * Brace matching request; value of command field is "brace".
+             * Return response giving the file locations of matching braces
+             * found in file at location line, offset.
+             */
+            export interface BraceRequest extends FileLocationRequest {
+                command: CommandTypes.Brace;
+            }
+            /**
+             * NavBar items request; value of command field is "navbar".
+             * Return response giving the list of navigation bar entries
+             * extracted from the requested file.
+             */
+            export interface NavBarRequest extends FileRequest {
+                command: CommandTypes.NavBar;
+            }
+            /**
+             * NavTree request; value of command field is "navtree".
+             * Return response giving the navigation tree of the requested file.
+             */
+            export interface NavTreeRequest extends FileRequest {
+                command: CommandTypes.NavTree;
+            }
+            export interface NavigationBarItem {
+                /**
+                 * The item's display text.
+                 */
+                text: string;
+                /**
+                 * The symbol's kind (such as 'className' or 'parameterName').
+                 */
+                kind: ScriptElementKind;
+                /**
+                 * Optional modifiers for the kind (such as 'public').
+                 */
+                kindModifiers?: string;
+                /**
+                 * The definition locations of the item.
+                 */
+                spans: TextSpan[];
+                /**
+                 * Optional children.
+                 */
+                childItems?: NavigationBarItem[];
+                /**
+                 * Number of levels deep this item should appear.
+                 */
+                indent: number;
+            }
+            /** protocol.NavigationTree is identical to ts.NavigationTree, except using protocol.TextSpan instead of ts.TextSpan */
+            export interface NavigationTree {
+                text: string;
+                kind: ScriptElementKind;
+                kindModifiers: string;
+                spans: TextSpan[];
+                nameSpan: TextSpan | undefined;
+                childItems?: NavigationTree[];
+            }
+            export type TelemetryEventName = "telemetry";
+            export interface TelemetryEvent extends Event {
+                event: TelemetryEventName;
+                body: TelemetryEventBody;
+            }
+            export interface TelemetryEventBody {
+                telemetryEventName: string;
+                payload: any;
+            }
+            export type TypesInstallerInitializationFailedEventName = "typesInstallerInitializationFailed";
+            export interface TypesInstallerInitializationFailedEvent extends Event {
+                event: TypesInstallerInitializationFailedEventName;
+                body: TypesInstallerInitializationFailedEventBody;
+            }
+            export interface TypesInstallerInitializationFailedEventBody {
+                message: string;
+            }
+            export type TypingsInstalledTelemetryEventName = "typingsInstalled";
+            export interface TypingsInstalledTelemetryEventBody extends TelemetryEventBody {
+                telemetryEventName: TypingsInstalledTelemetryEventName;
+                payload: TypingsInstalledTelemetryEventPayload;
+            }
+            export interface TypingsInstalledTelemetryEventPayload {
+                /**
+                 * Comma separated list of installed typing packages
+                 */
+                installedPackages: string;
+                /**
+                 * true if install request succeeded, otherwise - false
+                 */
+                installSuccess: boolean;
+                /**
+                 * version of typings installer
+                 */
+                typingsInstallerVersion: string;
+            }
+            export type BeginInstallTypesEventName = "beginInstallTypes";
+            export type EndInstallTypesEventName = "endInstallTypes";
+            export interface BeginInstallTypesEvent extends Event {
+                event: BeginInstallTypesEventName;
+                body: BeginInstallTypesEventBody;
+            }
+            export interface EndInstallTypesEvent extends Event {
+                event: EndInstallTypesEventName;
+                body: EndInstallTypesEventBody;
+            }
+            export interface InstallTypesEventBody {
+                /**
+                 * correlation id to match begin and end events
+                 */
+                eventId: number;
+                /**
+                 * list of packages to install
+                 */
+                packages: readonly string[];
+            }
+            export interface BeginInstallTypesEventBody extends InstallTypesEventBody {
+            }
+            export interface EndInstallTypesEventBody extends InstallTypesEventBody {
+                /**
+                 * true if installation succeeded, otherwise false
+                 */
+                success: boolean;
+            }
+            export interface NavBarResponse extends Response {
+                body?: NavigationBarItem[];
+            }
+            export interface NavTreeResponse extends Response {
+                body?: NavigationTree;
+            }
+            export type CallHierarchyItem = ChangePropertyTypes<ts.CallHierarchyItem, {
+                span: TextSpan;
+                selectionSpan: TextSpan;
+            }>;
+            export interface CallHierarchyIncomingCall {
+                from: CallHierarchyItem;
+                fromSpans: TextSpan[];
+            }
+            export interface CallHierarchyOutgoingCall {
+                to: CallHierarchyItem;
+                fromSpans: TextSpan[];
+            }
+            export interface PrepareCallHierarchyRequest extends FileLocationRequest {
+                command: CommandTypes.PrepareCallHierarchy;
+            }
+            export interface PrepareCallHierarchyResponse extends Response {
+                readonly body: CallHierarchyItem | CallHierarchyItem[];
+            }
+            export interface ProvideCallHierarchyIncomingCallsRequest extends FileLocationRequest {
+                command: CommandTypes.ProvideCallHierarchyIncomingCalls;
+            }
+            export interface ProvideCallHierarchyIncomingCallsResponse extends Response {
+                readonly body: CallHierarchyIncomingCall[];
+            }
+            export interface ProvideCallHierarchyOutgoingCallsRequest extends FileLocationRequest {
+                command: CommandTypes.ProvideCallHierarchyOutgoingCalls;
+            }
+            export interface ProvideCallHierarchyOutgoingCallsResponse extends Response {
+                readonly body: CallHierarchyOutgoingCall[];
+            }
+            export enum IndentStyle {
+                None = "None",
+                Block = "Block",
+                Smart = "Smart",
+            }
+            export type EditorSettings = ChangePropertyTypes<ts.EditorSettings, {
+                indentStyle: IndentStyle | ts.IndentStyle;
+            }>;
+            export type FormatCodeSettings = ChangePropertyTypes<ts.FormatCodeSettings, {
+                indentStyle: IndentStyle | ts.IndentStyle;
+            }>;
+            export type CompilerOptions = ChangePropertyTypes<ChangeStringIndexSignature<ts.CompilerOptions, CompilerOptionsValue>, {
+                jsx: JsxEmit | ts.JsxEmit;
+                module: ModuleKind | ts.ModuleKind;
+                moduleResolution: ModuleResolutionKind | ts.ModuleResolutionKind;
+                newLine: NewLineKind | ts.NewLineKind;
+                target: ScriptTarget | ts.ScriptTarget;
+            }>;
+            export enum JsxEmit {
+                None = "none",
+                Preserve = "preserve",
+                ReactNative = "react-native",
+                React = "react",
+                ReactJSX = "react-jsx",
+                ReactJSXDev = "react-jsxdev",
+            }
+            export enum ModuleKind {
+                None = "none",
+                CommonJS = "commonjs",
+                AMD = "amd",
+                UMD = "umd",
+                System = "system",
+                ES6 = "es6",
+                ES2015 = "es2015",
+                ES2020 = "es2020",
+                ES2022 = "es2022",
+                ESNext = "esnext",
+                Node16 = "node16",
+                NodeNext = "nodenext",
+                Preserve = "preserve",
+            }
+            export enum ModuleResolutionKind {
+                Classic = "classic",
+                /** @deprecated Renamed to `Node10` */
+                Node = "node",
+                /** @deprecated Renamed to `Node10` */
+                NodeJs = "node",
+                Node10 = "node10",
+                Node16 = "node16",
+                NodeNext = "nodenext",
+                Bundler = "bundler",
+            }
+            export enum NewLineKind {
+                Crlf = "Crlf",
+                Lf = "Lf",
+            }
+            export enum ScriptTarget {
+                /** @deprecated */
+                ES3 = "es3",
+                ES5 = "es5",
+                ES6 = "es6",
+                ES2015 = "es2015",
+                ES2016 = "es2016",
+                ES2017 = "es2017",
+                ES2018 = "es2018",
+                ES2019 = "es2019",
+                ES2020 = "es2020",
+                ES2021 = "es2021",
+                ES2022 = "es2022",
+                ESNext = "esnext",
+                JSON = "json",
+                Latest = "esnext",
+            }
+        }
+        namespace typingsInstaller {
+            interface Log {
+                isEnabled(): boolean;
+                writeLine(text: string): void;
+            }
+            type RequestCompletedAction = (success: boolean) => void;
+            interface PendingRequest {
+                requestId: number;
+                packageNames: string[];
+                cwd: string;
+                onRequestCompleted: RequestCompletedAction;
+            }
+            abstract class TypingsInstaller {
+                protected readonly installTypingHost: InstallTypingHost;
+                private readonly globalCachePath;
+                private readonly safeListPath;
+                private readonly typesMapLocation;
+                private readonly throttleLimit;
+                protected readonly log: Log;
+                private readonly packageNameToTypingLocation;
+                private readonly missingTypingsSet;
+                private readonly knownCachesSet;
+                private readonly projectWatchers;
+                private safeList;
+                private installRunCount;
+                private inFlightRequestCount;
+                abstract readonly typesRegistry: Map<string, MapLike<string>>;
+                constructor(installTypingHost: InstallTypingHost, globalCachePath: string, safeListPath: Path, typesMapLocation: Path, throttleLimit: number, log?: Log);
+                closeProject(req: CloseProject): void;
+                private closeWatchers;
+                install(req: DiscoverTypings): void;
+                private initializeSafeList;
+                private processCacheLocation;
+                private filterTypings;
+                protected ensurePackageDirectoryExists(directory: string): void;
+                private installTypings;
+                private ensureDirectoryExists;
+                private watchFiles;
+                private createSetTypings;
+                private installTypingsAsync;
+                private executeWithThrottling;
+                protected abstract installWorker(requestId: number, packageNames: string[], cwd: string, onRequestCompleted: RequestCompletedAction): void;
+                protected abstract sendResponse(response: SetTypings | InvalidateCachedTypings | BeginInstallTypes | EndInstallTypes | WatchTypingLocations): void;
+                protected readonly latestDistTag = "latest";
+            }
+        }
         type ActionSet = "action::set";
         type ActionInvalidate = "action::invalidate";
         type ActionPackageInstalled = "action::packageInstalled";
@@ -98,2741 +2548,6 @@ declare namespace ts {
             /** if files is undefined, retain same set of watchers */
             readonly files: readonly string[] | undefined;
             readonly kind: ActionWatchTypingLocations;
-        }
-        namespace protocol {
-            export import ApplicableRefactorInfo = ts.ApplicableRefactorInfo;
-            export import ClassificationType = ts.ClassificationType;
-            export import CompletionsTriggerCharacter = ts.CompletionsTriggerCharacter;
-            export import CompletionTriggerKind = ts.CompletionTriggerKind;
-            export import OrganizeImportsMode = ts.OrganizeImportsMode;
-            export import RefactorTriggerReason = ts.RefactorTriggerReason;
-            export import RenameInfoFailure = ts.RenameInfoFailure;
-            export import SemicolonPreference = ts.SemicolonPreference;
-            export import SignatureHelpTriggerReason = ts.SignatureHelpTriggerReason;
-            export import SymbolDisplayPart = ts.SymbolDisplayPart;
-            export import UserPreferences = ts.UserPreferences;
-            enum CommandTypes {
-                JsxClosingTag = "jsxClosingTag",
-                LinkedEditingRange = "linkedEditingRange",
-                Brace = "brace",
-                BraceCompletion = "braceCompletion",
-                GetSpanOfEnclosingComment = "getSpanOfEnclosingComment",
-                Change = "change",
-                Close = "close",
-                /** @deprecated Prefer CompletionInfo -- see comment on CompletionsResponse */
-                Completions = "completions",
-                CompletionInfo = "completionInfo",
-                CompletionDetails = "completionEntryDetails",
-                CompileOnSaveAffectedFileList = "compileOnSaveAffectedFileList",
-                CompileOnSaveEmitFile = "compileOnSaveEmitFile",
-                Configure = "configure",
-                Definition = "definition",
-                DefinitionAndBoundSpan = "definitionAndBoundSpan",
-                Implementation = "implementation",
-                Exit = "exit",
-                FileReferences = "fileReferences",
-                Format = "format",
-                Formatonkey = "formatonkey",
-                Geterr = "geterr",
-                GeterrForProject = "geterrForProject",
-                SemanticDiagnosticsSync = "semanticDiagnosticsSync",
-                SyntacticDiagnosticsSync = "syntacticDiagnosticsSync",
-                SuggestionDiagnosticsSync = "suggestionDiagnosticsSync",
-                NavBar = "navbar",
-                Navto = "navto",
-                NavTree = "navtree",
-                NavTreeFull = "navtree-full",
-                DocumentHighlights = "documentHighlights",
-                Open = "open",
-                Quickinfo = "quickinfo",
-                References = "references",
-                Reload = "reload",
-                Rename = "rename",
-                Saveto = "saveto",
-                SignatureHelp = "signatureHelp",
-                FindSourceDefinition = "findSourceDefinition",
-                Status = "status",
-                TypeDefinition = "typeDefinition",
-                ProjectInfo = "projectInfo",
-                ReloadProjects = "reloadProjects",
-                Unknown = "unknown",
-                OpenExternalProject = "openExternalProject",
-                OpenExternalProjects = "openExternalProjects",
-                CloseExternalProject = "closeExternalProject",
-                UpdateOpen = "updateOpen",
-                GetOutliningSpans = "getOutliningSpans",
-                TodoComments = "todoComments",
-                Indentation = "indentation",
-                DocCommentTemplate = "docCommentTemplate",
-                CompilerOptionsForInferredProjects = "compilerOptionsForInferredProjects",
-                GetCodeFixes = "getCodeFixes",
-                GetCombinedCodeFix = "getCombinedCodeFix",
-                ApplyCodeActionCommand = "applyCodeActionCommand",
-                GetSupportedCodeFixes = "getSupportedCodeFixes",
-                GetApplicableRefactors = "getApplicableRefactors",
-                GetEditsForRefactor = "getEditsForRefactor",
-                GetMoveToRefactoringFileSuggestions = "getMoveToRefactoringFileSuggestions",
-                OrganizeImports = "organizeImports",
-                GetEditsForFileRename = "getEditsForFileRename",
-                ConfigurePlugin = "configurePlugin",
-                SelectionRange = "selectionRange",
-                ToggleLineComment = "toggleLineComment",
-                ToggleMultilineComment = "toggleMultilineComment",
-                CommentSelection = "commentSelection",
-                UncommentSelection = "uncommentSelection",
-                PrepareCallHierarchy = "prepareCallHierarchy",
-                ProvideCallHierarchyIncomingCalls = "provideCallHierarchyIncomingCalls",
-                ProvideCallHierarchyOutgoingCalls = "provideCallHierarchyOutgoingCalls",
-                ProvideInlayHints = "provideInlayHints",
-                WatchChange = "watchChange",
-            }
-            /**
-             * A TypeScript Server message
-             */
-            interface Message {
-                /**
-                 * Sequence number of the message
-                 */
-                seq: number;
-                /**
-                 * One of "request", "response", or "event"
-                 */
-                type: "request" | "response" | "event";
-            }
-            /**
-             * Client-initiated request message
-             */
-            interface Request extends Message {
-                type: "request";
-                /**
-                 * The command to execute
-                 */
-                command: string;
-                /**
-                 * Object containing arguments for the command
-                 */
-                arguments?: any;
-            }
-            /**
-             * Request to reload the project structure for all the opened files
-             */
-            interface ReloadProjectsRequest extends Request {
-                command: CommandTypes.ReloadProjects;
-            }
-            /**
-             * Server-initiated event message
-             */
-            interface Event extends Message {
-                type: "event";
-                /**
-                 * Name of event
-                 */
-                event: string;
-                /**
-                 * Event-specific information
-                 */
-                body?: any;
-            }
-            /**
-             * Response by server to client request message.
-             */
-            interface Response extends Message {
-                type: "response";
-                /**
-                 * Sequence number of the request message.
-                 */
-                request_seq: number;
-                /**
-                 * Outcome of the request.
-                 */
-                success: boolean;
-                /**
-                 * The command requested.
-                 */
-                command: string;
-                /**
-                 * If success === false, this should always be provided.
-                 * Otherwise, may (or may not) contain a success message.
-                 */
-                message?: string;
-                /**
-                 * Contains message body if success === true.
-                 */
-                body?: any;
-                /**
-                 * Contains extra information that plugin can include to be passed on
-                 */
-                metadata?: unknown;
-                /**
-                 * Exposes information about the performance of this request-response pair.
-                 */
-                performanceData?: PerformanceData;
-            }
-            interface PerformanceData {
-                /**
-                 * Time spent updating the program graph, in milliseconds.
-                 */
-                updateGraphDurationMs?: number;
-                /**
-                 * The time spent creating or updating the auto-import program, in milliseconds.
-                 */
-                createAutoImportProviderProgramDurationMs?: number;
-            }
-            /**
-             * Arguments for FileRequest messages.
-             */
-            interface FileRequestArgs {
-                /**
-                 * The file for the request (absolute pathname required).
-                 */
-                file: string;
-                projectFileName?: string;
-            }
-            interface StatusRequest extends Request {
-                command: CommandTypes.Status;
-            }
-            interface StatusResponseBody {
-                /**
-                 * The TypeScript version (`ts.version`).
-                 */
-                version: string;
-            }
-            /**
-             * Response to StatusRequest
-             */
-            interface StatusResponse extends Response {
-                body: StatusResponseBody;
-            }
-            /**
-             * Requests a JS Doc comment template for a given position
-             */
-            interface DocCommentTemplateRequest extends FileLocationRequest {
-                command: CommandTypes.DocCommentTemplate;
-            }
-            /**
-             * Response to DocCommentTemplateRequest
-             */
-            interface DocCommandTemplateResponse extends Response {
-                body?: TextInsertion;
-            }
-            /**
-             * A request to get TODO comments from the file
-             */
-            interface TodoCommentRequest extends FileRequest {
-                command: CommandTypes.TodoComments;
-                arguments: TodoCommentRequestArgs;
-            }
-            /**
-             * Arguments for TodoCommentRequest request.
-             */
-            interface TodoCommentRequestArgs extends FileRequestArgs {
-                /**
-                 * Array of target TodoCommentDescriptors that describes TODO comments to be found
-                 */
-                descriptors: TodoCommentDescriptor[];
-            }
-            /**
-             * Response for TodoCommentRequest request.
-             */
-            interface TodoCommentsResponse extends Response {
-                body?: TodoComment[];
-            }
-            /**
-             * A request to determine if the caret is inside a comment.
-             */
-            interface SpanOfEnclosingCommentRequest extends FileLocationRequest {
-                command: CommandTypes.GetSpanOfEnclosingComment;
-                arguments: SpanOfEnclosingCommentRequestArgs;
-            }
-            interface SpanOfEnclosingCommentRequestArgs extends FileLocationRequestArgs {
-                /**
-                 * Requires that the enclosing span be a multi-line comment, or else the request returns undefined.
-                 */
-                onlyMultiLine: boolean;
-            }
-            /**
-             * Request to obtain outlining spans in file.
-             */
-            interface OutliningSpansRequest extends FileRequest {
-                command: CommandTypes.GetOutliningSpans;
-            }
-            type OutliningSpan = ChangePropertyTypes<ts.OutliningSpan, {
-                textSpan: TextSpan;
-                hintSpan: TextSpan;
-            }>;
-            /**
-             * Response to OutliningSpansRequest request.
-             */
-            interface OutliningSpansResponse extends Response {
-                body?: OutliningSpan[];
-            }
-            /**
-             * A request to get indentation for a location in file
-             */
-            interface IndentationRequest extends FileLocationRequest {
-                command: CommandTypes.Indentation;
-                arguments: IndentationRequestArgs;
-            }
-            /**
-             * Response for IndentationRequest request.
-             */
-            interface IndentationResponse extends Response {
-                body?: IndentationResult;
-            }
-            /**
-             * Indentation result representing where indentation should be placed
-             */
-            interface IndentationResult {
-                /**
-                 * The base position in the document that the indent should be relative to
-                 */
-                position: number;
-                /**
-                 * The number of columns the indent should be at relative to the position's column.
-                 */
-                indentation: number;
-            }
-            /**
-             * Arguments for IndentationRequest request.
-             */
-            interface IndentationRequestArgs extends FileLocationRequestArgs {
-                /**
-                 * An optional set of settings to be used when computing indentation.
-                 * If argument is omitted - then it will use settings for file that were previously set via 'configure' request or global settings.
-                 */
-                options?: EditorSettings;
-            }
-            /**
-             * Arguments for ProjectInfoRequest request.
-             */
-            interface ProjectInfoRequestArgs extends FileRequestArgs {
-                /**
-                 * Indicate if the file name list of the project is needed
-                 */
-                needFileNameList: boolean;
-            }
-            /**
-             * A request to get the project information of the current file.
-             */
-            interface ProjectInfoRequest extends Request {
-                command: CommandTypes.ProjectInfo;
-                arguments: ProjectInfoRequestArgs;
-            }
-            /**
-             * A request to retrieve compiler options diagnostics for a project
-             */
-            interface CompilerOptionsDiagnosticsRequest extends Request {
-                arguments: CompilerOptionsDiagnosticsRequestArgs;
-            }
-            /**
-             * Arguments for CompilerOptionsDiagnosticsRequest request.
-             */
-            interface CompilerOptionsDiagnosticsRequestArgs {
-                /**
-                 * Name of the project to retrieve compiler options diagnostics.
-                 */
-                projectFileName: string;
-            }
-            /**
-             * Response message body for "projectInfo" request
-             */
-            interface ProjectInfo {
-                /**
-                 * For configured project, this is the normalized path of the 'tsconfig.json' file
-                 * For inferred project, this is undefined
-                 */
-                configFileName: string;
-                /**
-                 * The list of normalized file name in the project, including 'lib.d.ts'
-                 */
-                fileNames?: string[];
-                /**
-                 * Indicates if the project has a active language service instance
-                 */
-                languageServiceDisabled?: boolean;
-            }
-            /**
-             * Represents diagnostic info that includes location of diagnostic in two forms
-             * - start position and length of the error span
-             * - startLocation and endLocation - a pair of Location objects that store start/end line and offset of the error span.
-             */
-            interface DiagnosticWithLinePosition {
-                message: string;
-                start: number;
-                length: number;
-                startLocation: Location;
-                endLocation: Location;
-                category: string;
-                code: number;
-                /** May store more in future. For now, this will simply be `true` to indicate when a diagnostic is an unused-identifier diagnostic. */
-                reportsUnnecessary?: {};
-                reportsDeprecated?: {};
-                relatedInformation?: DiagnosticRelatedInformation[];
-            }
-            /**
-             * Response message for "projectInfo" request
-             */
-            interface ProjectInfoResponse extends Response {
-                body?: ProjectInfo;
-            }
-            /**
-             * Request whose sole parameter is a file name.
-             */
-            interface FileRequest extends Request {
-                arguments: FileRequestArgs;
-            }
-            /**
-             * Instances of this interface specify a location in a source file:
-             * (file, line, character offset), where line and character offset are 1-based.
-             */
-            interface FileLocationRequestArgs extends FileRequestArgs {
-                /**
-                 * The line number for the request (1-based).
-                 */
-                line: number;
-                /**
-                 * The character offset (on the line) for the request (1-based).
-                 */
-                offset: number;
-            }
-            type FileLocationOrRangeRequestArgs = FileLocationRequestArgs | FileRangeRequestArgs;
-            /**
-             * Request refactorings at a given position or selection area.
-             */
-            interface GetApplicableRefactorsRequest extends Request {
-                command: CommandTypes.GetApplicableRefactors;
-                arguments: GetApplicableRefactorsRequestArgs;
-            }
-            type GetApplicableRefactorsRequestArgs = FileLocationOrRangeRequestArgs & {
-                triggerReason?: RefactorTriggerReason;
-                kind?: string;
-                /**
-                 * Include refactor actions that require additional arguments to be passed when
-                 * calling 'GetEditsForRefactor'. When true, clients should inspect the
-                 * `isInteractive` property of each returned `RefactorActionInfo`
-                 * and ensure they are able to collect the appropriate arguments for any
-                 * interactive refactor before offering it.
-                 */
-                includeInteractiveActions?: boolean;
-            };
-            /**
-             * Response is a list of available refactorings.
-             * Each refactoring exposes one or more "Actions"; a user selects one action to invoke a refactoring
-             */
-            interface GetApplicableRefactorsResponse extends Response {
-                body?: ApplicableRefactorInfo[];
-            }
-            /**
-             * Request refactorings at a given position or selection area to move to an existing file.
-             */
-            interface GetMoveToRefactoringFileSuggestionsRequest extends Request {
-                command: CommandTypes.GetMoveToRefactoringFileSuggestions;
-                arguments: GetMoveToRefactoringFileSuggestionsRequestArgs;
-            }
-            type GetMoveToRefactoringFileSuggestionsRequestArgs = FileLocationOrRangeRequestArgs & {
-                kind?: string;
-            };
-            /**
-             * Response is a list of available files.
-             * Each refactoring exposes one or more "Actions"; a user selects one action to invoke a refactoring
-             */
-            interface GetMoveToRefactoringFileSuggestions extends Response {
-                body: {
-                    newFileName: string;
-                    files: string[];
-                };
-            }
-            interface GetEditsForRefactorRequest extends Request {
-                command: CommandTypes.GetEditsForRefactor;
-                arguments: GetEditsForRefactorRequestArgs;
-            }
-            /**
-             * Request the edits that a particular refactoring action produces.
-             * Callers must specify the name of the refactor and the name of the action.
-             */
-            type GetEditsForRefactorRequestArgs = FileLocationOrRangeRequestArgs & {
-                refactor: string;
-                action: string;
-                interactiveRefactorArguments?: InteractiveRefactorArguments;
-            };
-            interface GetEditsForRefactorResponse extends Response {
-                body?: RefactorEditInfo;
-            }
-            interface RefactorEditInfo {
-                edits: FileCodeEdits[];
-                /**
-                 * An optional location where the editor should start a rename operation once
-                 * the refactoring edits have been applied
-                 */
-                renameLocation?: Location;
-                renameFilename?: string;
-                notApplicableReason?: string;
-            }
-            /**
-             * Organize imports by:
-             *   1) Removing unused imports
-             *   2) Coalescing imports from the same module
-             *   3) Sorting imports
-             */
-            interface OrganizeImportsRequest extends Request {
-                command: CommandTypes.OrganizeImports;
-                arguments: OrganizeImportsRequestArgs;
-            }
-            type OrganizeImportsScope = GetCombinedCodeFixScope;
-            interface OrganizeImportsRequestArgs {
-                scope: OrganizeImportsScope;
-                /** @deprecated Use `mode` instead */
-                skipDestructiveCodeActions?: boolean;
-                mode?: OrganizeImportsMode;
-            }
-            interface OrganizeImportsResponse extends Response {
-                body: readonly FileCodeEdits[];
-            }
-            interface GetEditsForFileRenameRequest extends Request {
-                command: CommandTypes.GetEditsForFileRename;
-                arguments: GetEditsForFileRenameRequestArgs;
-            }
-            /** Note: Paths may also be directories. */
-            interface GetEditsForFileRenameRequestArgs {
-                readonly oldFilePath: string;
-                readonly newFilePath: string;
-            }
-            interface GetEditsForFileRenameResponse extends Response {
-                body: readonly FileCodeEdits[];
-            }
-            /**
-             * Request for the available codefixes at a specific position.
-             */
-            interface CodeFixRequest extends Request {
-                command: CommandTypes.GetCodeFixes;
-                arguments: CodeFixRequestArgs;
-            }
-            interface GetCombinedCodeFixRequest extends Request {
-                command: CommandTypes.GetCombinedCodeFix;
-                arguments: GetCombinedCodeFixRequestArgs;
-            }
-            interface GetCombinedCodeFixResponse extends Response {
-                body: CombinedCodeActions;
-            }
-            interface ApplyCodeActionCommandRequest extends Request {
-                command: CommandTypes.ApplyCodeActionCommand;
-                arguments: ApplyCodeActionCommandRequestArgs;
-            }
-            interface ApplyCodeActionCommandResponse extends Response {
-            }
-            interface FileRangeRequestArgs extends FileRequestArgs {
-                /**
-                 * The line number for the request (1-based).
-                 */
-                startLine: number;
-                /**
-                 * The character offset (on the line) for the request (1-based).
-                 */
-                startOffset: number;
-                /**
-                 * The line number for the request (1-based).
-                 */
-                endLine: number;
-                /**
-                 * The character offset (on the line) for the request (1-based).
-                 */
-                endOffset: number;
-            }
-            /**
-             * Instances of this interface specify errorcodes on a specific location in a sourcefile.
-             */
-            interface CodeFixRequestArgs extends FileRangeRequestArgs {
-                /**
-                 * Errorcodes we want to get the fixes for.
-                 */
-                errorCodes: readonly number[];
-            }
-            interface GetCombinedCodeFixRequestArgs {
-                scope: GetCombinedCodeFixScope;
-                fixId: {};
-            }
-            interface GetCombinedCodeFixScope {
-                type: "file";
-                args: FileRequestArgs;
-            }
-            interface ApplyCodeActionCommandRequestArgs {
-                /** May also be an array of commands. */
-                command: {};
-            }
-            /**
-             * Response for GetCodeFixes request.
-             */
-            interface GetCodeFixesResponse extends Response {
-                body?: CodeAction[];
-            }
-            /**
-             * A request whose arguments specify a file location (file, line, col).
-             */
-            interface FileLocationRequest extends FileRequest {
-                arguments: FileLocationRequestArgs;
-            }
-            /**
-             * A request to get codes of supported code fixes.
-             */
-            interface GetSupportedCodeFixesRequest extends Request {
-                command: CommandTypes.GetSupportedCodeFixes;
-                arguments?: Partial<FileRequestArgs>;
-            }
-            /**
-             * A response for GetSupportedCodeFixesRequest request.
-             */
-            interface GetSupportedCodeFixesResponse extends Response {
-                /**
-                 * List of error codes supported by the server.
-                 */
-                body?: string[];
-            }
-            /**
-             * A request to get encoded semantic classifications for a span in the file
-             */
-            interface EncodedSemanticClassificationsRequest extends FileRequest {
-                arguments: EncodedSemanticClassificationsRequestArgs;
-            }
-            /**
-             * Arguments for EncodedSemanticClassificationsRequest request.
-             */
-            interface EncodedSemanticClassificationsRequestArgs extends FileRequestArgs {
-                /**
-                 * Start position of the span.
-                 */
-                start: number;
-                /**
-                 * Length of the span.
-                 */
-                length: number;
-                /**
-                 * Optional parameter for the semantic highlighting response, if absent it
-                 * defaults to "original".
-                 */
-                format?: "original" | "2020";
-            }
-            /** The response for a EncodedSemanticClassificationsRequest */
-            interface EncodedSemanticClassificationsResponse extends Response {
-                body?: EncodedSemanticClassificationsResponseBody;
-            }
-            /**
-             * Implementation response message. Gives series of text spans depending on the format ar.
-             */
-            interface EncodedSemanticClassificationsResponseBody {
-                endOfLineState: EndOfLineState;
-                spans: number[];
-            }
-            /**
-             * Arguments in document highlight request; include: filesToSearch, file,
-             * line, offset.
-             */
-            interface DocumentHighlightsRequestArgs extends FileLocationRequestArgs {
-                /**
-                 * List of files to search for document highlights.
-                 */
-                filesToSearch: string[];
-            }
-            /**
-             * Go to definition request; value of command field is
-             * "definition". Return response giving the file locations that
-             * define the symbol found in file at location line, col.
-             */
-            interface DefinitionRequest extends FileLocationRequest {
-                command: CommandTypes.Definition;
-            }
-            interface DefinitionAndBoundSpanRequest extends FileLocationRequest {
-                readonly command: CommandTypes.DefinitionAndBoundSpan;
-            }
-            interface FindSourceDefinitionRequest extends FileLocationRequest {
-                readonly command: CommandTypes.FindSourceDefinition;
-            }
-            interface DefinitionAndBoundSpanResponse extends Response {
-                readonly body: DefinitionInfoAndBoundSpan;
-            }
-            /**
-             * Go to type request; value of command field is
-             * "typeDefinition". Return response giving the file locations that
-             * define the type for the symbol found in file at location line, col.
-             */
-            interface TypeDefinitionRequest extends FileLocationRequest {
-                command: CommandTypes.TypeDefinition;
-            }
-            /**
-             * Go to implementation request; value of command field is
-             * "implementation". Return response giving the file locations that
-             * implement the symbol found in file at location line, col.
-             */
-            interface ImplementationRequest extends FileLocationRequest {
-                command: CommandTypes.Implementation;
-            }
-            /**
-             * Location in source code expressed as (one-based) line and (one-based) column offset.
-             */
-            interface Location {
-                line: number;
-                offset: number;
-            }
-            /**
-             * Object found in response messages defining a span of text in source code.
-             */
-            interface TextSpan {
-                /**
-                 * First character of the definition.
-                 */
-                start: Location;
-                /**
-                 * One character past last character of the definition.
-                 */
-                end: Location;
-            }
-            /**
-             * Object found in response messages defining a span of text in a specific source file.
-             */
-            interface FileSpan extends TextSpan {
-                /**
-                 * File containing text span.
-                 */
-                file: string;
-            }
-            interface JSDocTagInfo {
-                /** Name of the JSDoc tag */
-                name: string;
-                /**
-                 * Comment text after the JSDoc tag -- the text after the tag name until the next tag or end of comment
-                 * Display parts when UserPreferences.displayPartsForJSDoc is true, flattened to string otherwise.
-                 */
-                text?: string | SymbolDisplayPart[];
-            }
-            interface TextSpanWithContext extends TextSpan {
-                contextStart?: Location;
-                contextEnd?: Location;
-            }
-            interface FileSpanWithContext extends FileSpan, TextSpanWithContext {
-            }
-            interface DefinitionInfo extends FileSpanWithContext {
-                /**
-                 * When true, the file may or may not exist.
-                 */
-                unverified?: boolean;
-            }
-            interface DefinitionInfoAndBoundSpan {
-                definitions: readonly DefinitionInfo[];
-                textSpan: TextSpan;
-            }
-            /**
-             * Definition response message.  Gives text range for definition.
-             */
-            interface DefinitionResponse extends Response {
-                body?: DefinitionInfo[];
-            }
-            interface DefinitionInfoAndBoundSpanResponse extends Response {
-                body?: DefinitionInfoAndBoundSpan;
-            }
-            /** @deprecated Use `DefinitionInfoAndBoundSpanResponse` instead. */
-            type DefinitionInfoAndBoundSpanReponse = DefinitionInfoAndBoundSpanResponse;
-            /**
-             * Definition response message.  Gives text range for definition.
-             */
-            interface TypeDefinitionResponse extends Response {
-                body?: FileSpanWithContext[];
-            }
-            /**
-             * Implementation response message.  Gives text range for implementations.
-             */
-            interface ImplementationResponse extends Response {
-                body?: FileSpanWithContext[];
-            }
-            /**
-             * Request to get brace completion for a location in the file.
-             */
-            interface BraceCompletionRequest extends FileLocationRequest {
-                command: CommandTypes.BraceCompletion;
-                arguments: BraceCompletionRequestArgs;
-            }
-            /**
-             * Argument for BraceCompletionRequest request.
-             */
-            interface BraceCompletionRequestArgs extends FileLocationRequestArgs {
-                /**
-                 * Kind of opening brace
-                 */
-                openingBrace: string;
-            }
-            interface JsxClosingTagRequest extends FileLocationRequest {
-                readonly command: CommandTypes.JsxClosingTag;
-                readonly arguments: JsxClosingTagRequestArgs;
-            }
-            interface JsxClosingTagRequestArgs extends FileLocationRequestArgs {
-            }
-            interface JsxClosingTagResponse extends Response {
-                readonly body: TextInsertion;
-            }
-            interface LinkedEditingRangeRequest extends FileLocationRequest {
-                readonly command: CommandTypes.LinkedEditingRange;
-            }
-            interface LinkedEditingRangesBody {
-                ranges: TextSpan[];
-                wordPattern?: string;
-            }
-            interface LinkedEditingRangeResponse extends Response {
-                readonly body: LinkedEditingRangesBody;
-            }
-            /**
-             * Get document highlights request; value of command field is
-             * "documentHighlights". Return response giving spans that are relevant
-             * in the file at a given line and column.
-             */
-            interface DocumentHighlightsRequest extends FileLocationRequest {
-                command: CommandTypes.DocumentHighlights;
-                arguments: DocumentHighlightsRequestArgs;
-            }
-            /**
-             * Span augmented with extra information that denotes the kind of the highlighting to be used for span.
-             */
-            interface HighlightSpan extends TextSpanWithContext {
-                kind: HighlightSpanKind;
-            }
-            /**
-             * Represents a set of highligh spans for a give name
-             */
-            interface DocumentHighlightsItem {
-                /**
-                 * File containing highlight spans.
-                 */
-                file: string;
-                /**
-                 * Spans to highlight in file.
-                 */
-                highlightSpans: HighlightSpan[];
-            }
-            /**
-             * Response for a DocumentHighlightsRequest request.
-             */
-            interface DocumentHighlightsResponse extends Response {
-                body?: DocumentHighlightsItem[];
-            }
-            /**
-             * Find references request; value of command field is
-             * "references". Return response giving the file locations that
-             * reference the symbol found in file at location line, col.
-             */
-            interface ReferencesRequest extends FileLocationRequest {
-                command: CommandTypes.References;
-            }
-            interface ReferencesResponseItem extends FileSpanWithContext {
-                /**
-                 * Text of line containing the reference. Including this
-                 * with the response avoids latency of editor loading files
-                 * to show text of reference line (the server already has loaded the referencing files).
-                 *
-                 * If {@link UserPreferences.disableLineTextInReferences} is enabled, the property won't be filled
-                 */
-                lineText?: string;
-                /**
-                 * True if reference is a write location, false otherwise.
-                 */
-                isWriteAccess: boolean;
-                /**
-                 * Present only if the search was triggered from a declaration.
-                 * True indicates that the references refers to the same symbol
-                 * (i.e. has the same meaning) as the declaration that began the
-                 * search.
-                 */
-                isDefinition?: boolean;
-            }
-            /**
-             * The body of a "references" response message.
-             */
-            interface ReferencesResponseBody {
-                /**
-                 * The file locations referencing the symbol.
-                 */
-                refs: readonly ReferencesResponseItem[];
-                /**
-                 * The name of the symbol.
-                 */
-                symbolName: string;
-                /**
-                 * The start character offset of the symbol (on the line provided by the references request).
-                 */
-                symbolStartOffset: number;
-                /**
-                 * The full display name of the symbol.
-                 */
-                symbolDisplayString: string;
-            }
-            /**
-             * Response to "references" request.
-             */
-            interface ReferencesResponse extends Response {
-                body?: ReferencesResponseBody;
-            }
-            interface FileReferencesRequest extends FileRequest {
-                command: CommandTypes.FileReferences;
-            }
-            interface FileReferencesResponseBody {
-                /**
-                 * The file locations referencing the symbol.
-                 */
-                refs: readonly ReferencesResponseItem[];
-                /**
-                 * The name of the symbol.
-                 */
-                symbolName: string;
-            }
-            interface FileReferencesResponse extends Response {
-                body?: FileReferencesResponseBody;
-            }
-            /**
-             * Argument for RenameRequest request.
-             */
-            interface RenameRequestArgs extends FileLocationRequestArgs {
-                /**
-                 * Should text at specified location be found/changed in comments?
-                 */
-                findInComments?: boolean;
-                /**
-                 * Should text at specified location be found/changed in strings?
-                 */
-                findInStrings?: boolean;
-            }
-            /**
-             * Rename request; value of command field is "rename". Return
-             * response giving the file locations that reference the symbol
-             * found in file at location line, col. Also return full display
-             * name of the symbol so that client can print it unambiguously.
-             */
-            interface RenameRequest extends FileLocationRequest {
-                command: CommandTypes.Rename;
-                arguments: RenameRequestArgs;
-            }
-            /**
-             * Information about the item to be renamed.
-             */
-            type RenameInfo = RenameInfoSuccess | RenameInfoFailure;
-            type RenameInfoSuccess = ChangePropertyTypes<ts.RenameInfoSuccess, {
-                triggerSpan: TextSpan;
-            }>;
-            /**
-             *  A group of text spans, all in 'file'.
-             */
-            interface SpanGroup {
-                /** The file to which the spans apply */
-                file: string;
-                /** The text spans in this group */
-                locs: RenameTextSpan[];
-            }
-            interface RenameTextSpan extends TextSpanWithContext {
-                readonly prefixText?: string;
-                readonly suffixText?: string;
-            }
-            interface RenameResponseBody {
-                /**
-                 * Information about the item to be renamed.
-                 */
-                info: RenameInfo;
-                /**
-                 * An array of span groups (one per file) that refer to the item to be renamed.
-                 */
-                locs: readonly SpanGroup[];
-            }
-            /**
-             * Rename response message.
-             */
-            interface RenameResponse extends Response {
-                body?: RenameResponseBody;
-            }
-            /**
-             * Represents a file in external project.
-             * External project is project whose set of files, compilation options and open\close state
-             * is maintained by the client (i.e. if all this data come from .csproj file in Visual Studio).
-             * External project will exist even if all files in it are closed and should be closed explicitly.
-             * If external project includes one or more tsconfig.json/jsconfig.json files then tsserver will
-             * create configured project for every config file but will maintain a link that these projects were created
-             * as a result of opening external project so they should be removed once external project is closed.
-             */
-            interface ExternalFile {
-                /**
-                 * Name of file file
-                 */
-                fileName: string;
-                /**
-                 * Script kind of the file
-                 */
-                scriptKind?: ScriptKindName | ScriptKind;
-                /**
-                 * Whether file has mixed content (i.e. .cshtml file that combines html markup with C#/JavaScript)
-                 */
-                hasMixedContent?: boolean;
-                /**
-                 * Content of the file
-                 */
-                content?: string;
-            }
-            /**
-             * Represent an external project
-             */
-            interface ExternalProject {
-                /**
-                 * Project name
-                 */
-                projectFileName: string;
-                /**
-                 * List of root files in project
-                 */
-                rootFiles: ExternalFile[];
-                /**
-                 * Compiler options for the project
-                 */
-                options: ExternalProjectCompilerOptions;
-                /**
-                 * Explicitly specified type acquisition for the project
-                 */
-                typeAcquisition?: TypeAcquisition;
-            }
-            interface CompileOnSaveMixin {
-                /**
-                 * If compile on save is enabled for the project
-                 */
-                compileOnSave?: boolean;
-            }
-            /**
-             * For external projects, some of the project settings are sent together with
-             * compiler settings.
-             */
-            type ExternalProjectCompilerOptions = CompilerOptions & CompileOnSaveMixin & WatchOptions;
-            interface FileWithProjectReferenceRedirectInfo {
-                /**
-                 * Name of file
-                 */
-                fileName: string;
-                /**
-                 * True if the file is primarily included in a referenced project
-                 */
-                isSourceOfProjectReferenceRedirect: boolean;
-            }
-            /**
-             * Represents a set of changes that happen in project
-             */
-            interface ProjectChanges {
-                /**
-                 * List of added files
-                 */
-                added: string[] | FileWithProjectReferenceRedirectInfo[];
-                /**
-                 * List of removed files
-                 */
-                removed: string[] | FileWithProjectReferenceRedirectInfo[];
-                /**
-                 * List of updated files
-                 */
-                updated: string[] | FileWithProjectReferenceRedirectInfo[];
-                /**
-                 * List of files that have had their project reference redirect status updated
-                 * Only provided when the synchronizeProjectList request has includeProjectReferenceRedirectInfo set to true
-                 */
-                updatedRedirects?: FileWithProjectReferenceRedirectInfo[];
-            }
-            /**
-             * Information found in a configure request.
-             */
-            interface ConfigureRequestArguments {
-                /**
-                 * Information about the host, for example 'Emacs 24.4' or
-                 * 'Sublime Text version 3075'
-                 */
-                hostInfo?: string;
-                /**
-                 * If present, tab settings apply only to this file.
-                 */
-                file?: string;
-                /**
-                 * The format options to use during formatting and other code editing features.
-                 */
-                formatOptions?: FormatCodeSettings;
-                preferences?: UserPreferences;
-                /**
-                 * The host's additional supported .js file extensions
-                 */
-                extraFileExtensions?: FileExtensionInfo[];
-                watchOptions?: WatchOptions;
-            }
-            enum WatchFileKind {
-                FixedPollingInterval = "FixedPollingInterval",
-                PriorityPollingInterval = "PriorityPollingInterval",
-                DynamicPriorityPolling = "DynamicPriorityPolling",
-                FixedChunkSizePolling = "FixedChunkSizePolling",
-                UseFsEvents = "UseFsEvents",
-                UseFsEventsOnParentDirectory = "UseFsEventsOnParentDirectory",
-            }
-            enum WatchDirectoryKind {
-                UseFsEvents = "UseFsEvents",
-                FixedPollingInterval = "FixedPollingInterval",
-                DynamicPriorityPolling = "DynamicPriorityPolling",
-                FixedChunkSizePolling = "FixedChunkSizePolling",
-            }
-            enum PollingWatchKind {
-                FixedInterval = "FixedInterval",
-                PriorityInterval = "PriorityInterval",
-                DynamicPriority = "DynamicPriority",
-                FixedChunkSize = "FixedChunkSize",
-            }
-            interface WatchOptions {
-                watchFile?: WatchFileKind | ts.WatchFileKind;
-                watchDirectory?: WatchDirectoryKind | ts.WatchDirectoryKind;
-                fallbackPolling?: PollingWatchKind | ts.PollingWatchKind;
-                synchronousWatchDirectory?: boolean;
-                excludeDirectories?: string[];
-                excludeFiles?: string[];
-                [option: string]: CompilerOptionsValue | undefined;
-            }
-            /**
-             *  Configure request; value of command field is "configure".  Specifies
-             *  host information, such as host type, tab size, and indent size.
-             */
-            interface ConfigureRequest extends Request {
-                command: CommandTypes.Configure;
-                arguments: ConfigureRequestArguments;
-            }
-            /**
-             * Response to "configure" request.  This is just an acknowledgement, so
-             * no body field is required.
-             */
-            interface ConfigureResponse extends Response {
-            }
-            interface ConfigurePluginRequestArguments {
-                pluginName: string;
-                configuration: any;
-            }
-            interface ConfigurePluginRequest extends Request {
-                command: CommandTypes.ConfigurePlugin;
-                arguments: ConfigurePluginRequestArguments;
-            }
-            interface ConfigurePluginResponse extends Response {
-            }
-            interface SelectionRangeRequest extends FileRequest {
-                command: CommandTypes.SelectionRange;
-                arguments: SelectionRangeRequestArgs;
-            }
-            interface SelectionRangeRequestArgs extends FileRequestArgs {
-                locations: Location[];
-            }
-            interface SelectionRangeResponse extends Response {
-                body?: SelectionRange[];
-            }
-            interface SelectionRange {
-                textSpan: TextSpan;
-                parent?: SelectionRange;
-            }
-            interface ToggleLineCommentRequest extends FileRequest {
-                command: CommandTypes.ToggleLineComment;
-                arguments: FileRangeRequestArgs;
-            }
-            interface ToggleMultilineCommentRequest extends FileRequest {
-                command: CommandTypes.ToggleMultilineComment;
-                arguments: FileRangeRequestArgs;
-            }
-            interface CommentSelectionRequest extends FileRequest {
-                command: CommandTypes.CommentSelection;
-                arguments: FileRangeRequestArgs;
-            }
-            interface UncommentSelectionRequest extends FileRequest {
-                command: CommandTypes.UncommentSelection;
-                arguments: FileRangeRequestArgs;
-            }
-            /**
-             *  Information found in an "open" request.
-             */
-            interface OpenRequestArgs extends FileRequestArgs {
-                /**
-                 * Used when a version of the file content is known to be more up to date than the one on disk.
-                 * Then the known content will be used upon opening instead of the disk copy
-                 */
-                fileContent?: string;
-                /**
-                 * Used to specify the script kind of the file explicitly. It could be one of the following:
-                 *      "TS", "JS", "TSX", "JSX"
-                 */
-                scriptKindName?: ScriptKindName;
-                /**
-                 * Used to limit the searching for project config file. If given the searching will stop at this
-                 * root path; otherwise it will go all the way up to the dist root path.
-                 */
-                projectRootPath?: string;
-            }
-            type ScriptKindName = "TS" | "JS" | "TSX" | "JSX";
-            /**
-             * Open request; value of command field is "open". Notify the
-             * server that the client has file open.  The server will not
-             * monitor the filesystem for changes in this file and will assume
-             * that the client is updating the server (using the change and/or
-             * reload messages) when the file changes. Server does not currently
-             * send a response to an open request.
-             */
-            interface OpenRequest extends Request {
-                command: CommandTypes.Open;
-                arguments: OpenRequestArgs;
-            }
-            /**
-             * Request to open or update external project
-             */
-            interface OpenExternalProjectRequest extends Request {
-                command: CommandTypes.OpenExternalProject;
-                arguments: OpenExternalProjectArgs;
-            }
-            /**
-             * Arguments to OpenExternalProjectRequest request
-             */
-            type OpenExternalProjectArgs = ExternalProject;
-            /**
-             * Request to open multiple external projects
-             */
-            interface OpenExternalProjectsRequest extends Request {
-                command: CommandTypes.OpenExternalProjects;
-                arguments: OpenExternalProjectsArgs;
-            }
-            /**
-             * Arguments to OpenExternalProjectsRequest
-             */
-            interface OpenExternalProjectsArgs {
-                /**
-                 * List of external projects to open or update
-                 */
-                projects: ExternalProject[];
-            }
-            /**
-             * Response to OpenExternalProjectRequest request. This is just an acknowledgement, so
-             * no body field is required.
-             */
-            interface OpenExternalProjectResponse extends Response {
-            }
-            /**
-             * Response to OpenExternalProjectsRequest request. This is just an acknowledgement, so
-             * no body field is required.
-             */
-            interface OpenExternalProjectsResponse extends Response {
-            }
-            /**
-             * Request to close external project.
-             */
-            interface CloseExternalProjectRequest extends Request {
-                command: CommandTypes.CloseExternalProject;
-                arguments: CloseExternalProjectRequestArgs;
-            }
-            /**
-             * Arguments to CloseExternalProjectRequest request
-             */
-            interface CloseExternalProjectRequestArgs {
-                /**
-                 * Name of the project to close
-                 */
-                projectFileName: string;
-            }
-            /**
-             * Response to CloseExternalProjectRequest request. This is just an acknowledgement, so
-             * no body field is required.
-             */
-            interface CloseExternalProjectResponse extends Response {
-            }
-            /**
-             * Request to synchronize list of open files with the client
-             */
-            interface UpdateOpenRequest extends Request {
-                command: CommandTypes.UpdateOpen;
-                arguments: UpdateOpenRequestArgs;
-            }
-            /**
-             * Arguments to UpdateOpenRequest
-             */
-            interface UpdateOpenRequestArgs {
-                /**
-                 * List of newly open files
-                 */
-                openFiles?: OpenRequestArgs[];
-                /**
-                 * List of open files files that were changes
-                 */
-                changedFiles?: FileCodeEdits[];
-                /**
-                 * List of files that were closed
-                 */
-                closedFiles?: string[];
-            }
-            /**
-             * External projects have a typeAcquisition option so they need to be added separately to compiler options for inferred projects.
-             */
-            type InferredProjectCompilerOptions = ExternalProjectCompilerOptions & TypeAcquisition;
-            /**
-             * Request to set compiler options for inferred projects.
-             * External projects are opened / closed explicitly.
-             * Configured projects are opened when user opens loose file that has 'tsconfig.json' or 'jsconfig.json' anywhere in one of containing folders.
-             * This configuration file will be used to obtain a list of files and configuration settings for the project.
-             * Inferred projects are created when user opens a loose file that is not the part of external project
-             * or configured project and will contain only open file and transitive closure of referenced files if 'useOneInferredProject' is false,
-             * or all open loose files and its transitive closure of referenced files if 'useOneInferredProject' is true.
-             */
-            interface SetCompilerOptionsForInferredProjectsRequest extends Request {
-                command: CommandTypes.CompilerOptionsForInferredProjects;
-                arguments: SetCompilerOptionsForInferredProjectsArgs;
-            }
-            /**
-             * Argument for SetCompilerOptionsForInferredProjectsRequest request.
-             */
-            interface SetCompilerOptionsForInferredProjectsArgs {
-                /**
-                 * Compiler options to be used with inferred projects.
-                 */
-                options: InferredProjectCompilerOptions;
-                /**
-                 * Specifies the project root path used to scope compiler options.
-                 * It is an error to provide this property if the server has not been started with
-                 * `useInferredProjectPerProjectRoot` enabled.
-                 */
-                projectRootPath?: string;
-            }
-            /**
-             * Response to SetCompilerOptionsForInferredProjectsResponse request. This is just an acknowledgement, so
-             * no body field is required.
-             */
-            interface SetCompilerOptionsForInferredProjectsResponse extends Response {
-            }
-            /**
-             *  Exit request; value of command field is "exit".  Ask the server process
-             *  to exit.
-             */
-            interface ExitRequest extends Request {
-                command: CommandTypes.Exit;
-            }
-            /**
-             * Close request; value of command field is "close". Notify the
-             * server that the client has closed a previously open file.  If
-             * file is still referenced by open files, the server will resume
-             * monitoring the filesystem for changes to file.  Server does not
-             * currently send a response to a close request.
-             */
-            interface CloseRequest extends FileRequest {
-                command: CommandTypes.Close;
-            }
-            interface WatchChangeRequest extends Request {
-                command: CommandTypes.WatchChange;
-                arguments: WatchChangeRequestArgs;
-            }
-            interface WatchChangeRequestArgs {
-                id: number;
-                path: string;
-                eventType: "create" | "delete" | "update";
-            }
-            /**
-             * Request to obtain the list of files that should be regenerated if target file is recompiled.
-             * NOTE: this us query-only operation and does not generate any output on disk.
-             */
-            interface CompileOnSaveAffectedFileListRequest extends FileRequest {
-                command: CommandTypes.CompileOnSaveAffectedFileList;
-            }
-            /**
-             * Contains a list of files that should be regenerated in a project
-             */
-            interface CompileOnSaveAffectedFileListSingleProject {
-                /**
-                 * Project name
-                 */
-                projectFileName: string;
-                /**
-                 * List of files names that should be recompiled
-                 */
-                fileNames: string[];
-                /**
-                 * true if project uses outFile or out compiler option
-                 */
-                projectUsesOutFile: boolean;
-            }
-            /**
-             * Response for CompileOnSaveAffectedFileListRequest request;
-             */
-            interface CompileOnSaveAffectedFileListResponse extends Response {
-                body: CompileOnSaveAffectedFileListSingleProject[];
-            }
-            /**
-             * Request to recompile the file. All generated outputs (.js, .d.ts or .js.map files) is written on disk.
-             */
-            interface CompileOnSaveEmitFileRequest extends FileRequest {
-                command: CommandTypes.CompileOnSaveEmitFile;
-                arguments: CompileOnSaveEmitFileRequestArgs;
-            }
-            /**
-             * Arguments for CompileOnSaveEmitFileRequest
-             */
-            interface CompileOnSaveEmitFileRequestArgs extends FileRequestArgs {
-                /**
-                 * if true - then file should be recompiled even if it does not have any changes.
-                 */
-                forced?: boolean;
-                includeLinePosition?: boolean;
-                /** if true - return response as object with emitSkipped and diagnostics */
-                richResponse?: boolean;
-            }
-            interface CompileOnSaveEmitFileResponse extends Response {
-                body: boolean | EmitResult;
-            }
-            interface EmitResult {
-                emitSkipped: boolean;
-                diagnostics: Diagnostic[] | DiagnosticWithLinePosition[];
-            }
-            /**
-             * Quickinfo request; value of command field is
-             * "quickinfo". Return response giving a quick type and
-             * documentation string for the symbol found in file at location
-             * line, col.
-             */
-            interface QuickInfoRequest extends FileLocationRequest {
-                command: CommandTypes.Quickinfo;
-                arguments: FileLocationRequestArgs;
-            }
-            /**
-             * Body of QuickInfoResponse.
-             */
-            interface QuickInfoResponseBody {
-                /**
-                 * The symbol's kind (such as 'className' or 'parameterName' or plain 'text').
-                 */
-                kind: ScriptElementKind;
-                /**
-                 * Optional modifiers for the kind (such as 'public').
-                 */
-                kindModifiers: string;
-                /**
-                 * Starting file location of symbol.
-                 */
-                start: Location;
-                /**
-                 * One past last character of symbol.
-                 */
-                end: Location;
-                /**
-                 * Type and kind of symbol.
-                 */
-                displayString: string;
-                /**
-                 * Documentation associated with symbol.
-                 * Display parts when UserPreferences.displayPartsForJSDoc is true, flattened to string otherwise.
-                 */
-                documentation: string | SymbolDisplayPart[];
-                /**
-                 * JSDoc tags associated with symbol.
-                 */
-                tags: JSDocTagInfo[];
-            }
-            /**
-             * Quickinfo response message.
-             */
-            interface QuickInfoResponse extends Response {
-                body?: QuickInfoResponseBody;
-            }
-            /**
-             * Arguments for format messages.
-             */
-            interface FormatRequestArgs extends FileLocationRequestArgs {
-                /**
-                 * Last line of range for which to format text in file.
-                 */
-                endLine: number;
-                /**
-                 * Character offset on last line of range for which to format text in file.
-                 */
-                endOffset: number;
-                /**
-                 * Format options to be used.
-                 */
-                options?: FormatCodeSettings;
-            }
-            /**
-             * Format request; value of command field is "format".  Return
-             * response giving zero or more edit instructions.  The edit
-             * instructions will be sorted in file order.  Applying the edit
-             * instructions in reverse to file will result in correctly
-             * reformatted text.
-             */
-            interface FormatRequest extends FileLocationRequest {
-                command: CommandTypes.Format;
-                arguments: FormatRequestArgs;
-            }
-            /**
-             * Object found in response messages defining an editing
-             * instruction for a span of text in source code.  The effect of
-             * this instruction is to replace the text starting at start and
-             * ending one character before end with newText. For an insertion,
-             * the text span is empty.  For a deletion, newText is empty.
-             */
-            interface CodeEdit {
-                /**
-                 * First character of the text span to edit.
-                 */
-                start: Location;
-                /**
-                 * One character past last character of the text span to edit.
-                 */
-                end: Location;
-                /**
-                 * Replace the span defined above with this string (may be
-                 * the empty string).
-                 */
-                newText: string;
-            }
-            interface FileCodeEdits {
-                fileName: string;
-                textChanges: CodeEdit[];
-            }
-            interface CodeFixResponse extends Response {
-                /** The code actions that are available */
-                body?: CodeFixAction[];
-            }
-            interface CodeAction {
-                /** Description of the code action to display in the UI of the editor */
-                description: string;
-                /** Text changes to apply to each file as part of the code action */
-                changes: FileCodeEdits[];
-                /** A command is an opaque object that should be passed to `ApplyCodeActionCommandRequestArgs` without modification.  */
-                commands?: {}[];
-            }
-            interface CombinedCodeActions {
-                changes: readonly FileCodeEdits[];
-                commands?: readonly {}[];
-            }
-            interface CodeFixAction extends CodeAction {
-                /** Short name to identify the fix, for use by telemetry. */
-                fixName: string;
-                /**
-                 * If present, one may call 'getCombinedCodeFix' with this fixId.
-                 * This may be omitted to indicate that the code fix can't be applied in a group.
-                 */
-                fixId?: {};
-                /** Should be present if and only if 'fixId' is. */
-                fixAllDescription?: string;
-            }
-            /**
-             * Format and format on key response message.
-             */
-            interface FormatResponse extends Response {
-                body?: CodeEdit[];
-            }
-            /**
-             * Arguments for format on key messages.
-             */
-            interface FormatOnKeyRequestArgs extends FileLocationRequestArgs {
-                /**
-                 * Key pressed (';', '\n', or '}').
-                 */
-                key: string;
-                options?: FormatCodeSettings;
-            }
-            /**
-             * Format on key request; value of command field is
-             * "formatonkey". Given file location and key typed (as string),
-             * return response giving zero or more edit instructions.  The
-             * edit instructions will be sorted in file order.  Applying the
-             * edit instructions in reverse to file will result in correctly
-             * reformatted text.
-             */
-            interface FormatOnKeyRequest extends FileLocationRequest {
-                command: CommandTypes.Formatonkey;
-                arguments: FormatOnKeyRequestArgs;
-            }
-            /**
-             * Arguments for completions messages.
-             */
-            interface CompletionsRequestArgs extends FileLocationRequestArgs {
-                /**
-                 * Optional prefix to apply to possible completions.
-                 */
-                prefix?: string;
-                /**
-                 * Character that was responsible for triggering completion.
-                 * Should be `undefined` if a user manually requested completion.
-                 */
-                triggerCharacter?: CompletionsTriggerCharacter;
-                triggerKind?: CompletionTriggerKind;
-                /**
-                 * @deprecated Use UserPreferences.includeCompletionsForModuleExports
-                 */
-                includeExternalModuleExports?: boolean;
-                /**
-                 * @deprecated Use UserPreferences.includeCompletionsWithInsertText
-                 */
-                includeInsertTextCompletions?: boolean;
-            }
-            /**
-             * Completions request; value of command field is "completions".
-             * Given a file location (file, line, col) and a prefix (which may
-             * be the empty string), return the possible completions that
-             * begin with prefix.
-             */
-            interface CompletionsRequest extends FileLocationRequest {
-                command: CommandTypes.Completions | CommandTypes.CompletionInfo;
-                arguments: CompletionsRequestArgs;
-            }
-            /**
-             * Arguments for completion details request.
-             */
-            interface CompletionDetailsRequestArgs extends FileLocationRequestArgs {
-                /**
-                 * Names of one or more entries for which to obtain details.
-                 */
-                entryNames: (string | CompletionEntryIdentifier)[];
-            }
-            interface CompletionEntryIdentifier {
-                name: string;
-                source?: string;
-                data?: unknown;
-            }
-            /**
-             * Completion entry details request; value of command field is
-             * "completionEntryDetails".  Given a file location (file, line,
-             * col) and an array of completion entry names return more
-             * detailed information for each completion entry.
-             */
-            interface CompletionDetailsRequest extends FileLocationRequest {
-                command: CommandTypes.CompletionDetails;
-                arguments: CompletionDetailsRequestArgs;
-            }
-            /** A part of a symbol description that links from a jsdoc @link tag to a declaration */
-            interface JSDocLinkDisplayPart extends SymbolDisplayPart {
-                /** The location of the declaration that the @link tag links to. */
-                target: FileSpan;
-            }
-            type CompletionEntry = ChangePropertyTypes<Omit<ts.CompletionEntry, "symbol">, {
-                replacementSpan: TextSpan;
-                data: unknown;
-            }>;
-            /**
-             * Additional completion entry details, available on demand
-             */
-            type CompletionEntryDetails = ChangePropertyTypes<ts.CompletionEntryDetails, {
-                tags: JSDocTagInfo[];
-                codeActions: CodeAction[];
-            }>;
-            /** @deprecated Prefer CompletionInfoResponse, which supports several top-level fields in addition to the array of entries. */
-            interface CompletionsResponse extends Response {
-                body?: CompletionEntry[];
-            }
-            interface CompletionInfoResponse extends Response {
-                body?: CompletionInfo;
-            }
-            type CompletionInfo = ChangePropertyTypes<ts.CompletionInfo, {
-                entries: readonly CompletionEntry[];
-                optionalReplacementSpan: TextSpan;
-            }>;
-            interface CompletionDetailsResponse extends Response {
-                body?: CompletionEntryDetails[];
-            }
-            /**
-             * Represents a single signature to show in signature help.
-             */
-            type SignatureHelpItem = ChangePropertyTypes<ts.SignatureHelpItem, {
-                tags: JSDocTagInfo[];
-            }>;
-            /**
-             * Signature help items found in the response of a signature help request.
-             */
-            interface SignatureHelpItems {
-                /**
-                 * The signature help items.
-                 */
-                items: SignatureHelpItem[];
-                /**
-                 * The span for which signature help should appear on a signature
-                 */
-                applicableSpan: TextSpan;
-                /**
-                 * The item selected in the set of available help items.
-                 */
-                selectedItemIndex: number;
-                /**
-                 * The argument selected in the set of parameters.
-                 */
-                argumentIndex: number;
-                /**
-                 * The argument count
-                 */
-                argumentCount: number;
-            }
-            /**
-             * Arguments of a signature help request.
-             */
-            interface SignatureHelpRequestArgs extends FileLocationRequestArgs {
-                /**
-                 * Reason why signature help was invoked.
-                 * See each individual possible
-                 */
-                triggerReason?: SignatureHelpTriggerReason;
-            }
-            /**
-             * Signature help request; value of command field is "signatureHelp".
-             * Given a file location (file, line, col), return the signature
-             * help.
-             */
-            interface SignatureHelpRequest extends FileLocationRequest {
-                command: CommandTypes.SignatureHelp;
-                arguments: SignatureHelpRequestArgs;
-            }
-            /**
-             * Response object for a SignatureHelpRequest.
-             */
-            interface SignatureHelpResponse extends Response {
-                body?: SignatureHelpItems;
-            }
-            interface InlayHintsRequestArgs extends FileRequestArgs {
-                /**
-                 * Start position of the span.
-                 */
-                start: number;
-                /**
-                 * Length of the span.
-                 */
-                length: number;
-            }
-            interface InlayHintsRequest extends Request {
-                command: CommandTypes.ProvideInlayHints;
-                arguments: InlayHintsRequestArgs;
-            }
-            type InlayHintItem = ChangePropertyTypes<ts.InlayHint, {
-                position: Location;
-                displayParts: InlayHintItemDisplayPart[];
-            }>;
-            interface InlayHintItemDisplayPart {
-                text: string;
-                span?: FileSpan;
-            }
-            interface InlayHintsResponse extends Response {
-                body?: InlayHintItem[];
-            }
-            /**
-             * Synchronous request for semantic diagnostics of one file.
-             */
-            interface SemanticDiagnosticsSyncRequest extends FileRequest {
-                command: CommandTypes.SemanticDiagnosticsSync;
-                arguments: SemanticDiagnosticsSyncRequestArgs;
-            }
-            interface SemanticDiagnosticsSyncRequestArgs extends FileRequestArgs {
-                includeLinePosition?: boolean;
-            }
-            /**
-             * Response object for synchronous sematic diagnostics request.
-             */
-            interface SemanticDiagnosticsSyncResponse extends Response {
-                body?: Diagnostic[] | DiagnosticWithLinePosition[];
-            }
-            interface SuggestionDiagnosticsSyncRequest extends FileRequest {
-                command: CommandTypes.SuggestionDiagnosticsSync;
-                arguments: SuggestionDiagnosticsSyncRequestArgs;
-            }
-            type SuggestionDiagnosticsSyncRequestArgs = SemanticDiagnosticsSyncRequestArgs;
-            type SuggestionDiagnosticsSyncResponse = SemanticDiagnosticsSyncResponse;
-            /**
-             * Synchronous request for syntactic diagnostics of one file.
-             */
-            interface SyntacticDiagnosticsSyncRequest extends FileRequest {
-                command: CommandTypes.SyntacticDiagnosticsSync;
-                arguments: SyntacticDiagnosticsSyncRequestArgs;
-            }
-            interface SyntacticDiagnosticsSyncRequestArgs extends FileRequestArgs {
-                includeLinePosition?: boolean;
-            }
-            /**
-             * Response object for synchronous syntactic diagnostics request.
-             */
-            interface SyntacticDiagnosticsSyncResponse extends Response {
-                body?: Diagnostic[] | DiagnosticWithLinePosition[];
-            }
-            /**
-             * Arguments for GeterrForProject request.
-             */
-            interface GeterrForProjectRequestArgs {
-                /**
-                 * the file requesting project error list
-                 */
-                file: string;
-                /**
-                 * Delay in milliseconds to wait before starting to compute
-                 * errors for the files in the file list
-                 */
-                delay: number;
-            }
-            /**
-             * GeterrForProjectRequest request; value of command field is
-             * "geterrForProject". It works similarly with 'Geterr', only
-             * it request for every file in this project.
-             */
-            interface GeterrForProjectRequest extends Request {
-                command: CommandTypes.GeterrForProject;
-                arguments: GeterrForProjectRequestArgs;
-            }
-            /**
-             * Arguments for geterr messages.
-             */
-            interface GeterrRequestArgs {
-                /**
-                 * List of file names for which to compute compiler errors.
-                 * The files will be checked in list order.
-                 */
-                files: string[];
-                /**
-                 * Delay in milliseconds to wait before starting to compute
-                 * errors for the files in the file list
-                 */
-                delay: number;
-            }
-            /**
-             * Geterr request; value of command field is "geterr". Wait for
-             * delay milliseconds and then, if during the wait no change or
-             * reload messages have arrived for the first file in the files
-             * list, get the syntactic errors for the file, field requests,
-             * and then get the semantic errors for the file.  Repeat with a
-             * smaller delay for each subsequent file on the files list.  Best
-             * practice for an editor is to send a file list containing each
-             * file that is currently visible, in most-recently-used order.
-             */
-            interface GeterrRequest extends Request {
-                command: CommandTypes.Geterr;
-                arguments: GeterrRequestArgs;
-            }
-            type RequestCompletedEventName = "requestCompleted";
-            /**
-             * Event that is sent when server have finished processing request with specified id.
-             */
-            interface RequestCompletedEvent extends Event {
-                event: RequestCompletedEventName;
-                body: RequestCompletedEventBody;
-            }
-            interface RequestCompletedEventBody {
-                request_seq: number;
-            }
-            /**
-             * Item of diagnostic information found in a DiagnosticEvent message.
-             */
-            interface Diagnostic {
-                /**
-                 * Starting file location at which text applies.
-                 */
-                start: Location;
-                /**
-                 * The last file location at which the text applies.
-                 */
-                end: Location;
-                /**
-                 * Text of diagnostic message.
-                 */
-                text: string;
-                /**
-                 * The category of the diagnostic message, e.g. "error", "warning", or "suggestion".
-                 */
-                category: string;
-                reportsUnnecessary?: {};
-                reportsDeprecated?: {};
-                /**
-                 * Any related spans the diagnostic may have, such as other locations relevant to an error, such as declarartion sites
-                 */
-                relatedInformation?: DiagnosticRelatedInformation[];
-                /**
-                 * The error code of the diagnostic message.
-                 */
-                code?: number;
-                /**
-                 * The name of the plugin reporting the message.
-                 */
-                source?: string;
-            }
-            interface DiagnosticWithFileName extends Diagnostic {
-                /**
-                 * Name of the file the diagnostic is in
-                 */
-                fileName: string;
-            }
-            /**
-             * Represents additional spans returned with a diagnostic which are relevant to it
-             */
-            interface DiagnosticRelatedInformation {
-                /**
-                 * The category of the related information message, e.g. "error", "warning", or "suggestion".
-                 */
-                category: string;
-                /**
-                 * The code used ot identify the related information
-                 */
-                code: number;
-                /**
-                 * Text of related or additional information.
-                 */
-                message: string;
-                /**
-                 * Associated location
-                 */
-                span?: FileSpan;
-            }
-            interface DiagnosticEventBody {
-                /**
-                 * The file for which diagnostic information is reported.
-                 */
-                file: string;
-                /**
-                 * An array of diagnostic information items.
-                 */
-                diagnostics: Diagnostic[];
-            }
-            type DiagnosticEventKind = "semanticDiag" | "syntaxDiag" | "suggestionDiag";
-            /**
-             * Event message for DiagnosticEventKind event types.
-             * These events provide syntactic and semantic errors for a file.
-             */
-            interface DiagnosticEvent extends Event {
-                body?: DiagnosticEventBody;
-                event: DiagnosticEventKind;
-            }
-            interface ConfigFileDiagnosticEventBody {
-                /**
-                 * The file which trigged the searching and error-checking of the config file
-                 */
-                triggerFile: string;
-                /**
-                 * The name of the found config file.
-                 */
-                configFile: string;
-                /**
-                 * An arry of diagnostic information items for the found config file.
-                 */
-                diagnostics: DiagnosticWithFileName[];
-            }
-            /**
-             * Event message for "configFileDiag" event type.
-             * This event provides errors for a found config file.
-             */
-            interface ConfigFileDiagnosticEvent extends Event {
-                body?: ConfigFileDiagnosticEventBody;
-                event: "configFileDiag";
-            }
-            type ProjectLanguageServiceStateEventName = "projectLanguageServiceState";
-            interface ProjectLanguageServiceStateEvent extends Event {
-                event: ProjectLanguageServiceStateEventName;
-                body?: ProjectLanguageServiceStateEventBody;
-            }
-            interface ProjectLanguageServiceStateEventBody {
-                /**
-                 * Project name that has changes in the state of language service.
-                 * For configured projects this will be the config file path.
-                 * For external projects this will be the name of the projects specified when project was open.
-                 * For inferred projects this event is not raised.
-                 */
-                projectName: string;
-                /**
-                 * True if language service state switched from disabled to enabled
-                 * and false otherwise.
-                 */
-                languageServiceEnabled: boolean;
-            }
-            type ProjectsUpdatedInBackgroundEventName = "projectsUpdatedInBackground";
-            interface ProjectsUpdatedInBackgroundEvent extends Event {
-                event: ProjectsUpdatedInBackgroundEventName;
-                body: ProjectsUpdatedInBackgroundEventBody;
-            }
-            interface ProjectsUpdatedInBackgroundEventBody {
-                /**
-                 * Current set of open files
-                 */
-                openFiles: string[];
-            }
-            type ProjectLoadingStartEventName = "projectLoadingStart";
-            interface ProjectLoadingStartEvent extends Event {
-                event: ProjectLoadingStartEventName;
-                body: ProjectLoadingStartEventBody;
-            }
-            interface ProjectLoadingStartEventBody {
-                /** name of the project */
-                projectName: string;
-                /** reason for loading */
-                reason: string;
-            }
-            type ProjectLoadingFinishEventName = "projectLoadingFinish";
-            interface ProjectLoadingFinishEvent extends Event {
-                event: ProjectLoadingFinishEventName;
-                body: ProjectLoadingFinishEventBody;
-            }
-            interface ProjectLoadingFinishEventBody {
-                /** name of the project */
-                projectName: string;
-            }
-            type SurveyReadyEventName = "surveyReady";
-            interface SurveyReadyEvent extends Event {
-                event: SurveyReadyEventName;
-                body: SurveyReadyEventBody;
-            }
-            interface SurveyReadyEventBody {
-                /** Name of the survey. This is an internal machine- and programmer-friendly name */
-                surveyId: string;
-            }
-            type LargeFileReferencedEventName = "largeFileReferenced";
-            interface LargeFileReferencedEvent extends Event {
-                event: LargeFileReferencedEventName;
-                body: LargeFileReferencedEventBody;
-            }
-            interface LargeFileReferencedEventBody {
-                /**
-                 * name of the large file being loaded
-                 */
-                file: string;
-                /**
-                 * size of the file
-                 */
-                fileSize: number;
-                /**
-                 * max file size allowed on the server
-                 */
-                maxFileSize: number;
-            }
-            type CreateFileWatcherEventName = "createFileWatcher";
-            interface CreateFileWatcherEvent extends Event {
-                readonly event: CreateFileWatcherEventName;
-                readonly body: CreateFileWatcherEventBody;
-            }
-            interface CreateFileWatcherEventBody {
-                readonly id: number;
-                readonly path: string;
-            }
-            type CreateDirectoryWatcherEventName = "createDirectoryWatcher";
-            interface CreateDirectoryWatcherEvent extends Event {
-                readonly event: CreateDirectoryWatcherEventName;
-                readonly body: CreateDirectoryWatcherEventBody;
-            }
-            interface CreateDirectoryWatcherEventBody {
-                readonly id: number;
-                readonly path: string;
-                readonly recursive: boolean;
-            }
-            type CloseFileWatcherEventName = "closeFileWatcher";
-            interface CloseFileWatcherEvent extends Event {
-                readonly event: CloseFileWatcherEventName;
-                readonly body: CloseFileWatcherEventBody;
-            }
-            interface CloseFileWatcherEventBody {
-                readonly id: number;
-            }
-            /**
-             * Arguments for reload request.
-             */
-            interface ReloadRequestArgs extends FileRequestArgs {
-                /**
-                 * Name of temporary file from which to reload file
-                 * contents. May be same as file.
-                 */
-                tmpfile: string;
-            }
-            /**
-             * Reload request message; value of command field is "reload".
-             * Reload contents of file with name given by the 'file' argument
-             * from temporary file with name given by the 'tmpfile' argument.
-             * The two names can be identical.
-             */
-            interface ReloadRequest extends FileRequest {
-                command: CommandTypes.Reload;
-                arguments: ReloadRequestArgs;
-            }
-            /**
-             * Response to "reload" request. This is just an acknowledgement, so
-             * no body field is required.
-             */
-            interface ReloadResponse extends Response {
-            }
-            /**
-             * Arguments for saveto request.
-             */
-            interface SavetoRequestArgs extends FileRequestArgs {
-                /**
-                 * Name of temporary file into which to save server's view of
-                 * file contents.
-                 */
-                tmpfile: string;
-            }
-            /**
-             * Saveto request message; value of command field is "saveto".
-             * For debugging purposes, save to a temporaryfile (named by
-             * argument 'tmpfile') the contents of file named by argument
-             * 'file'.  The server does not currently send a response to a
-             * "saveto" request.
-             */
-            interface SavetoRequest extends FileRequest {
-                command: CommandTypes.Saveto;
-                arguments: SavetoRequestArgs;
-            }
-            /**
-             * Arguments for navto request message.
-             */
-            interface NavtoRequestArgs {
-                /**
-                 * Search term to navigate to from current location; term can
-                 * be '.*' or an identifier prefix.
-                 */
-                searchValue: string;
-                /**
-                 *  Optional limit on the number of items to return.
-                 */
-                maxResultCount?: number;
-                /**
-                 * The file for the request (absolute pathname required).
-                 */
-                file?: string;
-                /**
-                 * Optional flag to indicate we want results for just the current file
-                 * or the entire project.
-                 */
-                currentFileOnly?: boolean;
-                projectFileName?: string;
-            }
-            /**
-             * Navto request message; value of command field is "navto".
-             * Return list of objects giving file locations and symbols that
-             * match the search term given in argument 'searchTerm'.  The
-             * context for the search is given by the named file.
-             */
-            interface NavtoRequest extends Request {
-                command: CommandTypes.Navto;
-                arguments: NavtoRequestArgs;
-            }
-            /**
-             * An item found in a navto response.
-             */
-            interface NavtoItem extends FileSpan {
-                /**
-                 * The symbol's name.
-                 */
-                name: string;
-                /**
-                 * The symbol's kind (such as 'className' or 'parameterName').
-                 */
-                kind: ScriptElementKind;
-                /**
-                 * exact, substring, or prefix.
-                 */
-                matchKind: string;
-                /**
-                 * If this was a case sensitive or insensitive match.
-                 */
-                isCaseSensitive: boolean;
-                /**
-                 * Optional modifiers for the kind (such as 'public').
-                 */
-                kindModifiers?: string;
-                /**
-                 * Name of symbol's container symbol (if any); for example,
-                 * the class name if symbol is a class member.
-                 */
-                containerName?: string;
-                /**
-                 * Kind of symbol's container symbol (if any).
-                 */
-                containerKind?: ScriptElementKind;
-            }
-            /**
-             * Navto response message. Body is an array of navto items.  Each
-             * item gives a symbol that matched the search term.
-             */
-            interface NavtoResponse extends Response {
-                body?: NavtoItem[];
-            }
-            /**
-             * Arguments for change request message.
-             */
-            interface ChangeRequestArgs extends FormatRequestArgs {
-                /**
-                 * Optional string to insert at location (file, line, offset).
-                 */
-                insertString?: string;
-            }
-            /**
-             * Change request message; value of command field is "change".
-             * Update the server's view of the file named by argument 'file'.
-             * Server does not currently send a response to a change request.
-             */
-            interface ChangeRequest extends FileLocationRequest {
-                command: CommandTypes.Change;
-                arguments: ChangeRequestArgs;
-            }
-            /**
-             * Response to "brace" request.
-             */
-            interface BraceResponse extends Response {
-                body?: TextSpan[];
-            }
-            /**
-             * Brace matching request; value of command field is "brace".
-             * Return response giving the file locations of matching braces
-             * found in file at location line, offset.
-             */
-            interface BraceRequest extends FileLocationRequest {
-                command: CommandTypes.Brace;
-            }
-            /**
-             * NavBar items request; value of command field is "navbar".
-             * Return response giving the list of navigation bar entries
-             * extracted from the requested file.
-             */
-            interface NavBarRequest extends FileRequest {
-                command: CommandTypes.NavBar;
-            }
-            /**
-             * NavTree request; value of command field is "navtree".
-             * Return response giving the navigation tree of the requested file.
-             */
-            interface NavTreeRequest extends FileRequest {
-                command: CommandTypes.NavTree;
-            }
-            interface NavigationBarItem {
-                /**
-                 * The item's display text.
-                 */
-                text: string;
-                /**
-                 * The symbol's kind (such as 'className' or 'parameterName').
-                 */
-                kind: ScriptElementKind;
-                /**
-                 * Optional modifiers for the kind (such as 'public').
-                 */
-                kindModifiers?: string;
-                /**
-                 * The definition locations of the item.
-                 */
-                spans: TextSpan[];
-                /**
-                 * Optional children.
-                 */
-                childItems?: NavigationBarItem[];
-                /**
-                 * Number of levels deep this item should appear.
-                 */
-                indent: number;
-            }
-            /** protocol.NavigationTree is identical to ts.NavigationTree, except using protocol.TextSpan instead of ts.TextSpan */
-            interface NavigationTree {
-                text: string;
-                kind: ScriptElementKind;
-                kindModifiers: string;
-                spans: TextSpan[];
-                nameSpan: TextSpan | undefined;
-                childItems?: NavigationTree[];
-            }
-            type TelemetryEventName = "telemetry";
-            interface TelemetryEvent extends Event {
-                event: TelemetryEventName;
-                body: TelemetryEventBody;
-            }
-            interface TelemetryEventBody {
-                telemetryEventName: string;
-                payload: any;
-            }
-            type TypesInstallerInitializationFailedEventName = "typesInstallerInitializationFailed";
-            interface TypesInstallerInitializationFailedEvent extends Event {
-                event: TypesInstallerInitializationFailedEventName;
-                body: TypesInstallerInitializationFailedEventBody;
-            }
-            interface TypesInstallerInitializationFailedEventBody {
-                message: string;
-            }
-            type TypingsInstalledTelemetryEventName = "typingsInstalled";
-            interface TypingsInstalledTelemetryEventBody extends TelemetryEventBody {
-                telemetryEventName: TypingsInstalledTelemetryEventName;
-                payload: TypingsInstalledTelemetryEventPayload;
-            }
-            interface TypingsInstalledTelemetryEventPayload {
-                /**
-                 * Comma separated list of installed typing packages
-                 */
-                installedPackages: string;
-                /**
-                 * true if install request succeeded, otherwise - false
-                 */
-                installSuccess: boolean;
-                /**
-                 * version of typings installer
-                 */
-                typingsInstallerVersion: string;
-            }
-            type BeginInstallTypesEventName = "beginInstallTypes";
-            type EndInstallTypesEventName = "endInstallTypes";
-            interface BeginInstallTypesEvent extends Event {
-                event: BeginInstallTypesEventName;
-                body: BeginInstallTypesEventBody;
-            }
-            interface EndInstallTypesEvent extends Event {
-                event: EndInstallTypesEventName;
-                body: EndInstallTypesEventBody;
-            }
-            interface InstallTypesEventBody {
-                /**
-                 * correlation id to match begin and end events
-                 */
-                eventId: number;
-                /**
-                 * list of packages to install
-                 */
-                packages: readonly string[];
-            }
-            interface BeginInstallTypesEventBody extends InstallTypesEventBody {
-            }
-            interface EndInstallTypesEventBody extends InstallTypesEventBody {
-                /**
-                 * true if installation succeeded, otherwise false
-                 */
-                success: boolean;
-            }
-            interface NavBarResponse extends Response {
-                body?: NavigationBarItem[];
-            }
-            interface NavTreeResponse extends Response {
-                body?: NavigationTree;
-            }
-            type CallHierarchyItem = ChangePropertyTypes<ts.CallHierarchyItem, {
-                span: TextSpan;
-                selectionSpan: TextSpan;
-            }>;
-            interface CallHierarchyIncomingCall {
-                from: CallHierarchyItem;
-                fromSpans: TextSpan[];
-            }
-            interface CallHierarchyOutgoingCall {
-                to: CallHierarchyItem;
-                fromSpans: TextSpan[];
-            }
-            interface PrepareCallHierarchyRequest extends FileLocationRequest {
-                command: CommandTypes.PrepareCallHierarchy;
-            }
-            interface PrepareCallHierarchyResponse extends Response {
-                readonly body: CallHierarchyItem | CallHierarchyItem[];
-            }
-            interface ProvideCallHierarchyIncomingCallsRequest extends FileLocationRequest {
-                command: CommandTypes.ProvideCallHierarchyIncomingCalls;
-            }
-            interface ProvideCallHierarchyIncomingCallsResponse extends Response {
-                readonly body: CallHierarchyIncomingCall[];
-            }
-            interface ProvideCallHierarchyOutgoingCallsRequest extends FileLocationRequest {
-                command: CommandTypes.ProvideCallHierarchyOutgoingCalls;
-            }
-            interface ProvideCallHierarchyOutgoingCallsResponse extends Response {
-                readonly body: CallHierarchyOutgoingCall[];
-            }
-            enum IndentStyle {
-                None = "None",
-                Block = "Block",
-                Smart = "Smart",
-            }
-<<<<<<< HEAD
-            type EditorSettings = ChangePropertyTypes<ts.EditorSettings, {
-                indentStyle: IndentStyle | ts.IndentStyle;
-            }>;
-            type FormatCodeSettings = ChangePropertyTypes<ts.FormatCodeSettings, {
-                indentStyle: IndentStyle | ts.IndentStyle;
-            }>;
-            type CompilerOptions = ChangePropertyTypes<ChangeStringIndexSignature<ts.CompilerOptions, CompilerOptionsValue>, {
-                jsx: JsxEmit | ts.JsxEmit;
-                module: ModuleKind | ts.ModuleKind;
-                moduleResolution: ModuleResolutionKind | ts.ModuleResolutionKind;
-                newLine: NewLineKind | ts.NewLineKind;
-                target: ScriptTarget | ts.ScriptTarget;
-            }>;
-=======
-            enum SemicolonPreference {
-                Ignore = "ignore",
-                Insert = "insert",
-                Remove = "remove",
-            }
-            interface EditorSettings {
-                baseIndentSize?: number;
-                indentSize?: number;
-                tabSize?: number;
-                newLineCharacter?: string;
-                convertTabsToSpaces?: boolean;
-                indentStyle?: IndentStyle | ts.IndentStyle;
-                trimTrailingWhitespace?: boolean;
-            }
-            interface FormatCodeSettings extends EditorSettings {
-                insertSpaceAfterCommaDelimiter?: boolean;
-                insertSpaceAfterSemicolonInForStatements?: boolean;
-                insertSpaceBeforeAndAfterBinaryOperators?: boolean;
-                insertSpaceAfterConstructor?: boolean;
-                insertSpaceAfterKeywordsInControlFlowStatements?: boolean;
-                insertSpaceAfterFunctionKeywordForAnonymousFunctions?: boolean;
-                insertSpaceAfterOpeningAndBeforeClosingEmptyBraces?: boolean;
-                insertSpaceAfterOpeningAndBeforeClosingNonemptyParenthesis?: boolean;
-                insertSpaceAfterOpeningAndBeforeClosingNonemptyBrackets?: boolean;
-                insertSpaceAfterOpeningAndBeforeClosingNonemptyBraces?: boolean;
-                insertSpaceAfterOpeningAndBeforeClosingTemplateStringBraces?: boolean;
-                insertSpaceAfterOpeningAndBeforeClosingJsxExpressionBraces?: boolean;
-                insertSpaceAfterTypeAssertion?: boolean;
-                insertSpaceBeforeFunctionParenthesis?: boolean;
-                placeOpenBraceOnNewLineForFunctions?: boolean;
-                placeOpenBraceOnNewLineForControlBlocks?: boolean;
-                insertSpaceBeforeTypeAnnotation?: boolean;
-                semicolons?: SemicolonPreference;
-                indentSwitchCase?: boolean;
-            }
-            interface UserPreferences {
-                readonly disableSuggestions?: boolean;
-                readonly quotePreference?: "auto" | "double" | "single";
-                /**
-                 * If enabled, TypeScript will search through all external modules' exports and add them to the completions list.
-                 * This affects lone identifier completions but not completions on the right hand side of `obj.`.
-                 */
-                readonly includeCompletionsForModuleExports?: boolean;
-                /**
-                 * Enables auto-import-style completions on partially-typed import statements. E.g., allows
-                 * `import write|` to be completed to `import { writeFile } from "fs"`.
-                 */
-                readonly includeCompletionsForImportStatements?: boolean;
-                /**
-                 * Allows completions to be formatted with snippet text, indicated by `CompletionItem["isSnippet"]`.
-                 */
-                readonly includeCompletionsWithSnippetText?: boolean;
-                /**
-                 * If enabled, the completion list will include completions with invalid identifier names.
-                 * For those entries, The `insertText` and `replacementSpan` properties will be set to change from `.x` property access to `["x"]`.
-                 */
-                readonly includeCompletionsWithInsertText?: boolean;
-                /**
-                 * Unless this option is `false`, or `includeCompletionsWithInsertText` is not enabled,
-                 * member completion lists triggered with `.` will include entries on potentially-null and potentially-undefined
-                 * values, with insertion text to replace preceding `.` tokens with `?.`.
-                 */
-                readonly includeAutomaticOptionalChainCompletions?: boolean;
-                /**
-                 * If enabled, completions for class members (e.g. methods and properties) will include
-                 * a whole declaration for the member.
-                 * E.g., `class A { f| }` could be completed to `class A { foo(): number {} }`, instead of
-                 * `class A { foo }`.
-                 */
-                readonly includeCompletionsWithClassMemberSnippets?: boolean;
-                /**
-                 * If enabled, object literal methods will have a method declaration completion entry in addition
-                 * to the regular completion entry containing just the method name.
-                 * E.g., `const objectLiteral: T = { f| }` could be completed to `const objectLiteral: T = { foo(): void {} }`,
-                 * in addition to `const objectLiteral: T = { foo }`.
-                 */
-                readonly includeCompletionsWithObjectLiteralMethodSnippets?: boolean;
-                /**
-                 * Indicates whether {@link CompletionEntry.labelDetails completion entry label details} are supported.
-                 * If not, contents of `labelDetails` may be included in the {@link CompletionEntry.name} property.
-                 */
-                readonly useLabelDetailsInCompletionEntries?: boolean;
-                readonly allowIncompleteCompletions?: boolean;
-                readonly importModuleSpecifierPreference?: "shortest" | "project-relative" | "relative" | "non-relative";
-                /** Determines whether we import `foo/index.ts` as "foo", "foo/index", or "foo/index.js" */
-                readonly importModuleSpecifierEnding?: "auto" | "minimal" | "index" | "js";
-                readonly allowTextChangesInNewFiles?: boolean;
-                readonly lazyConfiguredProjectsFromExternalProject?: boolean;
-                readonly providePrefixAndSuffixTextForRename?: boolean;
-                readonly provideRefactorNotApplicableReason?: boolean;
-                readonly allowRenameOfImportPath?: boolean;
-                readonly includePackageJsonAutoImports?: "auto" | "on" | "off";
-                readonly jsxAttributeCompletionStyle?: "auto" | "braces" | "none";
-                readonly displayPartsForJSDoc?: boolean;
-                readonly generateReturnInDocTemplate?: boolean;
-                readonly includeInlayParameterNameHints?: "none" | "literals" | "all";
-                readonly includeInlayParameterNameHintsWhenArgumentMatchesName?: boolean;
-                readonly includeInlayFunctionParameterTypeHints?: boolean;
-                readonly includeInlayVariableTypeHints?: boolean;
-                readonly includeInlayVariableTypeHintsWhenTypeMatchesName?: boolean;
-                readonly includeInlayPropertyDeclarationTypeHints?: boolean;
-                readonly includeInlayFunctionLikeReturnTypeHints?: boolean;
-                readonly includeInlayEnumMemberValueHints?: boolean;
-                readonly interactiveInlayHints?: boolean;
-                readonly autoImportFileExcludePatterns?: string[];
-                /**
-                 * Indicates whether imports should be organized in a case-insensitive manner.
-                 */
-                readonly organizeImportsIgnoreCase?: "auto" | boolean;
-                /**
-                 * Indicates whether imports should be organized via an "ordinal" (binary) comparison using the numeric value
-                 * of their code points, or via "unicode" collation (via the
-                 * [Unicode Collation Algorithm](https://unicode.org/reports/tr10/#Scope)) using rules associated with the locale
-                 * specified in {@link organizeImportsCollationLocale}.
-                 *
-                 * Default: `"ordinal"`.
-                 */
-                readonly organizeImportsCollation?: "ordinal" | "unicode";
-                /**
-                 * Indicates the locale to use for "unicode" collation. If not specified, the locale `"en"` is used as an invariant
-                 * for the sake of consistent sorting. Use `"auto"` to use the detected UI locale.
-                 *
-                 * This preference is ignored if {@link organizeImportsCollation} is not `"unicode"`.
-                 *
-                 * Default: `"en"`
-                 */
-                readonly organizeImportsCollationLocale?: string;
-                /**
-                 * Indicates whether numeric collation should be used for digit sequences in strings. When `true`, will collate
-                 * strings such that `a1z < a2z < a100z`. When `false`, will collate strings such that `a1z < a100z < a2z`.
-                 *
-                 * This preference is ignored if {@link organizeImportsCollation} is not `"unicode"`.
-                 *
-                 * Default: `false`
-                 */
-                readonly organizeImportsNumericCollation?: boolean;
-                /**
-                 * Indicates whether accents and other diacritic marks are considered unequal for the purpose of collation. When
-                 * `true`, characters with accents and other diacritics will be collated in the order defined by the locale specified
-                 * in {@link organizeImportsCollationLocale}.
-                 *
-                 * This preference is ignored if {@link organizeImportsCollation} is not `"unicode"`.
-                 *
-                 * Default: `true`
-                 */
-                readonly organizeImportsAccentCollation?: boolean;
-                /**
-                 * Indicates whether upper case or lower case should sort first. When `false`, the default order for the locale
-                 * specified in {@link organizeImportsCollationLocale} is used.
-                 *
-                 * This preference is ignored if {@link organizeImportsCollation} is not `"unicode"`. This preference is also
-                 * ignored if we are using case-insensitive sorting, which occurs when {@link organizeImportsIgnoreCase} is `true`,
-                 * or if {@link organizeImportsIgnoreCase} is `"auto"` and the auto-detected case sensitivity is determined to be
-                 * case-insensitive.
-                 *
-                 * Default: `false`
-                 */
-                readonly organizeImportsCaseFirst?: "upper" | "lower" | false;
-                /**
-                 * Indicates where named type-only imports should sort. "inline" sorts named imports without regard to if the import is
-                 * type-only.
-                 *
-                 * Default: `last`
-                 */
-                readonly organizeImportsTypeOrder?: "last" | "first" | "inline";
-                /**
-                 * Indicates whether {@link ReferencesResponseItem.lineText} is supported.
-                 */
-                readonly disableLineTextInReferences?: boolean;
-                /**
-                 * Indicates whether to exclude standard library and node_modules file symbols from navTo results.
-                 */
-                readonly excludeLibrarySymbolsInNavTo?: boolean;
-            }
-            interface CompilerOptions {
-                allowJs?: boolean;
-                allowSyntheticDefaultImports?: boolean;
-                allowUnreachableCode?: boolean;
-                allowUnusedLabels?: boolean;
-                alwaysStrict?: boolean;
-                baseUrl?: string;
-                /** @deprecated */
-                charset?: string;
-                checkJs?: boolean;
-                declaration?: boolean;
-                declarationDir?: string;
-                disableSizeLimit?: boolean;
-                downlevelIteration?: boolean;
-                emitBOM?: boolean;
-                emitDecoratorMetadata?: boolean;
-                experimentalDecorators?: boolean;
-                forceConsistentCasingInFileNames?: boolean;
-                importHelpers?: boolean;
-                inlineSourceMap?: boolean;
-                inlineSources?: boolean;
-                isolatedModules?: boolean;
-                jsx?: JsxEmit | ts.JsxEmit;
-                lib?: string[];
-                locale?: string;
-                mapRoot?: string;
-                maxNodeModuleJsDepth?: number;
-                module?: ModuleKind | ts.ModuleKind;
-                moduleResolution?: ModuleResolutionKind | ts.ModuleResolutionKind;
-                newLine?: NewLineKind | ts.NewLineKind;
-                noEmit?: boolean;
-                noEmitHelpers?: boolean;
-                noEmitOnError?: boolean;
-                noErrorTruncation?: boolean;
-                noFallthroughCasesInSwitch?: boolean;
-                noImplicitAny?: boolean;
-                noImplicitReturns?: boolean;
-                noImplicitThis?: boolean;
-                noUnusedLocals?: boolean;
-                noUnusedParameters?: boolean;
-                /** @deprecated */
-                noImplicitUseStrict?: boolean;
-                noLib?: boolean;
-                noResolve?: boolean;
-                /** @deprecated */
-                out?: string;
-                outDir?: string;
-                outFile?: string;
-                paths?: MapLike<string[]>;
-                plugins?: PluginImport[];
-                preserveConstEnums?: boolean;
-                preserveSymlinks?: boolean;
-                project?: string;
-                reactNamespace?: string;
-                removeComments?: boolean;
-                references?: ProjectReference[];
-                rootDir?: string;
-                rootDirs?: string[];
-                skipLibCheck?: boolean;
-                skipDefaultLibCheck?: boolean;
-                sourceMap?: boolean;
-                sourceRoot?: string;
-                strict?: boolean;
-                strictNullChecks?: boolean;
-                /** @deprecated */
-                suppressExcessPropertyErrors?: boolean;
-                /** @deprecated */
-                suppressImplicitAnyIndexErrors?: boolean;
-                useDefineForClassFields?: boolean;
-                target?: ScriptTarget | ts.ScriptTarget;
-                traceResolution?: boolean;
-                resolveJsonModule?: boolean;
-                types?: string[];
-                /** Paths used to used to compute primary types search locations */
-                typeRoots?: string[];
-                [option: string]: CompilerOptionsValue | undefined;
-            }
->>>>>>> @{-1}
-            enum JsxEmit {
-                None = "none",
-                Preserve = "preserve",
-                ReactNative = "react-native",
-                React = "react",
-                ReactJSX = "react-jsx",
-                ReactJSXDev = "react-jsxdev",
-            }
-            enum ModuleKind {
-                None = "none",
-                CommonJS = "commonjs",
-                AMD = "amd",
-                UMD = "umd",
-                System = "system",
-                ES6 = "es6",
-                ES2015 = "es2015",
-                ES2020 = "es2020",
-                ES2022 = "es2022",
-                ESNext = "esnext",
-                Node16 = "node16",
-                NodeNext = "nodenext",
-                Preserve = "preserve",
-            }
-            enum ModuleResolutionKind {
-                Classic = "classic",
-                /** @deprecated Renamed to `Node10` */
-                Node = "node",
-                /** @deprecated Renamed to `Node10` */
-                NodeJs = "node",
-                Node10 = "node10",
-                Node16 = "node16",
-                NodeNext = "nodenext",
-                Bundler = "bundler",
-            }
-            enum NewLineKind {
-                Crlf = "Crlf",
-                Lf = "Lf",
-            }
-            enum ScriptTarget {
-<<<<<<< HEAD
-                ES3 = "es3",
-                ES5 = "es5",
-                ES6 = "es6",
-                ES2015 = "es2015",
-                ES2016 = "es2016",
-                ES2017 = "es2017",
-                ES2018 = "es2018",
-                ES2019 = "es2019",
-                ES2020 = "es2020",
-                ES2021 = "es2021",
-                ES2022 = "es2022",
-                ESNext = "esnext",
-                JSON = "json",
-                Latest = "esnext",
-=======
-                /** @deprecated */
-                ES3 = "ES3",
-                ES5 = "ES5",
-                ES6 = "ES6",
-                ES2015 = "ES2015",
-                ES2016 = "ES2016",
-                ES2017 = "ES2017",
-                ES2018 = "ES2018",
-                ES2019 = "ES2019",
-                ES2020 = "ES2020",
-                ES2021 = "ES2021",
-                ES2022 = "ES2022",
-                ESNext = "ESNext",
-            }
-            enum ClassificationType {
-                comment = 1,
-                identifier = 2,
-                keyword = 3,
-                numericLiteral = 4,
-                operator = 5,
-                stringLiteral = 6,
-                regularExpressionLiteral = 7,
-                whiteSpace = 8,
-                text = 9,
-                punctuation = 10,
-                className = 11,
-                enumName = 12,
-                interfaceName = 13,
-                moduleName = 14,
-                typeParameterName = 15,
-                typeAliasName = 16,
-                parameterName = 17,
-                docCommentTagName = 18,
-                jsxOpenTagName = 19,
-                jsxCloseTagName = 20,
-                jsxSelfClosingTagName = 21,
-                jsxAttribute = 22,
-                jsxText = 23,
-                jsxAttributeStringLiteralValue = 24,
-                bigintLiteral = 25,
->>>>>>> @{-1}
-            }
-        }
-        namespace typingsInstaller {
-            interface Log {
-                isEnabled(): boolean;
-                writeLine(text: string): void;
-            }
-            type RequestCompletedAction = (success: boolean) => void;
-            interface PendingRequest {
-                requestId: number;
-                packageNames: string[];
-                cwd: string;
-                onRequestCompleted: RequestCompletedAction;
-            }
-            abstract class TypingsInstaller {
-                protected readonly installTypingHost: InstallTypingHost;
-                private readonly globalCachePath;
-                private readonly safeListPath;
-                private readonly typesMapLocation;
-                private readonly throttleLimit;
-                protected readonly log: Log;
-                private readonly packageNameToTypingLocation;
-                private readonly missingTypingsSet;
-                private readonly knownCachesSet;
-                private readonly projectWatchers;
-                private safeList;
-                private installRunCount;
-                private inFlightRequestCount;
-                abstract readonly typesRegistry: Map<string, MapLike<string>>;
-                constructor(installTypingHost: InstallTypingHost, globalCachePath: string, safeListPath: Path, typesMapLocation: Path, throttleLimit: number, log?: Log);
-                closeProject(req: CloseProject): void;
-                private closeWatchers;
-                install(req: DiscoverTypings): void;
-                private initializeSafeList;
-                private processCacheLocation;
-                private filterTypings;
-                protected ensurePackageDirectoryExists(directory: string): void;
-                private installTypings;
-                private ensureDirectoryExists;
-                private watchFiles;
-                private createSetTypings;
-                private installTypingsAsync;
-                private executeWithThrottling;
-                protected abstract installWorker(requestId: number, packageNames: string[], cwd: string, onRequestCompleted: RequestCompletedAction): void;
-                protected abstract sendResponse(response: SetTypings | InvalidateCachedTypings | BeginInstallTypes | EndInstallTypes | WatchTypingLocations): void;
-                protected readonly latestDistTag = "latest";
-            }
         }
         interface CompressedData {
             length: number;
@@ -3832,35 +3547,43 @@ declare namespace ts {
             responseRequired?: boolean;
         }
     }
-    const versionMajorMinor = "5.5";
+    export namespace JsTyping {
+        interface TypingResolutionHost {
+            directoryExists(path: string): boolean;
+            fileExists(fileName: string): boolean;
+            readFile(path: string, encoding?: string): string | undefined;
+            readDirectory(rootDir: string, extensions: readonly string[], excludes: readonly string[] | undefined, includes: readonly string[] | undefined, depth?: number): string[];
+        }
+    }
+    export const versionMajorMinor = "5.5";
     /** The version of the TypeScript compiler release */
-    const version: string;
+    export const version: string;
     /**
      * Type of objects whose values are all of the same type.
      * The `in` and `for-in` operators can *not* be safely used,
      * since `Object.prototype` may be modified by outside code.
      */
-    interface MapLike<T> {
+    export interface MapLike<T> {
         [index: string]: T;
     }
-    interface SortedReadonlyArray<T> extends ReadonlyArray<T> {
+    export interface SortedReadonlyArray<T> extends ReadonlyArray<T> {
         " __sortedArrayBrand": any;
     }
-    interface SortedArray<T> extends Array<T> {
+    export interface SortedArray<T> extends Array<T> {
         " __sortedArrayBrand": any;
     }
-    type Path = string & {
+    export type Path = string & {
         __pathBrand: any;
     };
-    interface TextRange {
+    export interface TextRange {
         pos: number;
         end: number;
     }
-    interface ReadonlyTextRange {
+    export interface ReadonlyTextRange {
         readonly pos: number;
         readonly end: number;
     }
-    enum SyntaxKind {
+    export enum SyntaxKind {
         Unknown = 0,
         EndOfFileToken = 1,
         SingleLineCommentTrivia = 2,
@@ -4255,10 +3978,10 @@ declare namespace ts {
         FirstJSDocTagNode = 327,
         LastJSDocTagNode = 350,
     }
-    type TriviaSyntaxKind = SyntaxKind.SingleLineCommentTrivia | SyntaxKind.MultiLineCommentTrivia | SyntaxKind.NewLineTrivia | SyntaxKind.WhitespaceTrivia | SyntaxKind.ShebangTrivia | SyntaxKind.ConflictMarkerTrivia;
-    type LiteralSyntaxKind = SyntaxKind.NumericLiteral | SyntaxKind.BigIntLiteral | SyntaxKind.StringLiteral | SyntaxKind.JsxText | SyntaxKind.JsxTextAllWhiteSpaces | SyntaxKind.RegularExpressionLiteral | SyntaxKind.NoSubstitutionTemplateLiteral;
-    type PseudoLiteralSyntaxKind = SyntaxKind.TemplateHead | SyntaxKind.TemplateMiddle | SyntaxKind.TemplateTail;
-    type PunctuationSyntaxKind =
+    export type TriviaSyntaxKind = SyntaxKind.SingleLineCommentTrivia | SyntaxKind.MultiLineCommentTrivia | SyntaxKind.NewLineTrivia | SyntaxKind.WhitespaceTrivia | SyntaxKind.ShebangTrivia | SyntaxKind.ConflictMarkerTrivia;
+    export type LiteralSyntaxKind = SyntaxKind.NumericLiteral | SyntaxKind.BigIntLiteral | SyntaxKind.StringLiteral | SyntaxKind.JsxText | SyntaxKind.JsxTextAllWhiteSpaces | SyntaxKind.RegularExpressionLiteral | SyntaxKind.NoSubstitutionTemplateLiteral;
+    export type PseudoLiteralSyntaxKind = SyntaxKind.TemplateHead | SyntaxKind.TemplateMiddle | SyntaxKind.TemplateTail;
+    export type PunctuationSyntaxKind =
         | SyntaxKind.OpenBraceToken
         | SyntaxKind.CloseBraceToken
         | SyntaxKind.OpenParenToken
@@ -4320,7 +4043,7 @@ declare namespace ts {
         | SyntaxKind.AmpersandEqualsToken
         | SyntaxKind.BarEqualsToken
         | SyntaxKind.CaretEqualsToken;
-    type KeywordSyntaxKind =
+    export type KeywordSyntaxKind =
         | SyntaxKind.AbstractKeyword
         | SyntaxKind.AccessorKeyword
         | SyntaxKind.AnyKeyword
@@ -4404,12 +4127,12 @@ declare namespace ts {
         | SyntaxKind.WhileKeyword
         | SyntaxKind.WithKeyword
         | SyntaxKind.YieldKeyword;
-    type ModifierSyntaxKind = SyntaxKind.AbstractKeyword | SyntaxKind.AccessorKeyword | SyntaxKind.AsyncKeyword | SyntaxKind.ConstKeyword | SyntaxKind.DeclareKeyword | SyntaxKind.DefaultKeyword | SyntaxKind.ExportKeyword | SyntaxKind.InKeyword | SyntaxKind.PrivateKeyword | SyntaxKind.ProtectedKeyword | SyntaxKind.PublicKeyword | SyntaxKind.ReadonlyKeyword | SyntaxKind.OutKeyword | SyntaxKind.OverrideKeyword | SyntaxKind.StaticKeyword;
-    type KeywordTypeSyntaxKind = SyntaxKind.AnyKeyword | SyntaxKind.BigIntKeyword | SyntaxKind.BooleanKeyword | SyntaxKind.IntrinsicKeyword | SyntaxKind.NeverKeyword | SyntaxKind.NumberKeyword | SyntaxKind.ObjectKeyword | SyntaxKind.StringKeyword | SyntaxKind.SymbolKeyword | SyntaxKind.UndefinedKeyword | SyntaxKind.UnknownKeyword | SyntaxKind.VoidKeyword;
-    type TokenSyntaxKind = SyntaxKind.Unknown | SyntaxKind.EndOfFileToken | TriviaSyntaxKind | LiteralSyntaxKind | PseudoLiteralSyntaxKind | PunctuationSyntaxKind | SyntaxKind.Identifier | KeywordSyntaxKind;
-    type JsxTokenSyntaxKind = SyntaxKind.LessThanSlashToken | SyntaxKind.EndOfFileToken | SyntaxKind.ConflictMarkerTrivia | SyntaxKind.JsxText | SyntaxKind.JsxTextAllWhiteSpaces | SyntaxKind.OpenBraceToken | SyntaxKind.LessThanToken;
-    type JSDocSyntaxKind = SyntaxKind.EndOfFileToken | SyntaxKind.WhitespaceTrivia | SyntaxKind.AtToken | SyntaxKind.NewLineTrivia | SyntaxKind.AsteriskToken | SyntaxKind.OpenBraceToken | SyntaxKind.CloseBraceToken | SyntaxKind.LessThanToken | SyntaxKind.GreaterThanToken | SyntaxKind.OpenBracketToken | SyntaxKind.CloseBracketToken | SyntaxKind.EqualsToken | SyntaxKind.CommaToken | SyntaxKind.DotToken | SyntaxKind.Identifier | SyntaxKind.BacktickToken | SyntaxKind.HashToken | SyntaxKind.Unknown | KeywordSyntaxKind;
-    enum NodeFlags {
+    export type ModifierSyntaxKind = SyntaxKind.AbstractKeyword | SyntaxKind.AccessorKeyword | SyntaxKind.AsyncKeyword | SyntaxKind.ConstKeyword | SyntaxKind.DeclareKeyword | SyntaxKind.DefaultKeyword | SyntaxKind.ExportKeyword | SyntaxKind.InKeyword | SyntaxKind.PrivateKeyword | SyntaxKind.ProtectedKeyword | SyntaxKind.PublicKeyword | SyntaxKind.ReadonlyKeyword | SyntaxKind.OutKeyword | SyntaxKind.OverrideKeyword | SyntaxKind.StaticKeyword;
+    export type KeywordTypeSyntaxKind = SyntaxKind.AnyKeyword | SyntaxKind.BigIntKeyword | SyntaxKind.BooleanKeyword | SyntaxKind.IntrinsicKeyword | SyntaxKind.NeverKeyword | SyntaxKind.NumberKeyword | SyntaxKind.ObjectKeyword | SyntaxKind.StringKeyword | SyntaxKind.SymbolKeyword | SyntaxKind.UndefinedKeyword | SyntaxKind.UnknownKeyword | SyntaxKind.VoidKeyword;
+    export type TokenSyntaxKind = SyntaxKind.Unknown | SyntaxKind.EndOfFileToken | TriviaSyntaxKind | LiteralSyntaxKind | PseudoLiteralSyntaxKind | PunctuationSyntaxKind | SyntaxKind.Identifier | KeywordSyntaxKind;
+    export type JsxTokenSyntaxKind = SyntaxKind.LessThanSlashToken | SyntaxKind.EndOfFileToken | SyntaxKind.ConflictMarkerTrivia | SyntaxKind.JsxText | SyntaxKind.JsxTextAllWhiteSpaces | SyntaxKind.OpenBraceToken | SyntaxKind.LessThanToken;
+    export type JSDocSyntaxKind = SyntaxKind.EndOfFileToken | SyntaxKind.WhitespaceTrivia | SyntaxKind.AtToken | SyntaxKind.NewLineTrivia | SyntaxKind.AsteriskToken | SyntaxKind.OpenBraceToken | SyntaxKind.CloseBraceToken | SyntaxKind.LessThanToken | SyntaxKind.GreaterThanToken | SyntaxKind.OpenBracketToken | SyntaxKind.CloseBracketToken | SyntaxKind.EqualsToken | SyntaxKind.CommaToken | SyntaxKind.DotToken | SyntaxKind.Identifier | SyntaxKind.BacktickToken | SyntaxKind.HashToken | SyntaxKind.Unknown | KeywordSyntaxKind;
+    export enum NodeFlags {
         None = 0,
         Let = 1,
         Const = 2,
@@ -4443,7 +4166,7 @@ declare namespace ts {
         ContextFlags = 101441536,
         TypeExcludesFlags = 81920,
     }
-    enum ModifierFlags {
+    export enum ModifierFlags {
         None = 0,
         Public = 1,
         Private = 2,
@@ -4472,7 +4195,7 @@ declare namespace ts {
         All = 131071,
         Modifier = 98303,
     }
-    enum JsxFlags {
+    export enum JsxFlags {
         None = 0,
         /** An element from a named property of the JSX.IntrinsicElements interface */
         IntrinsicNamedElement = 1,
@@ -4480,12 +4203,12 @@ declare namespace ts {
         IntrinsicIndexedElement = 2,
         IntrinsicElement = 3,
     }
-    interface Node extends ReadonlyTextRange {
+    export interface Node extends ReadonlyTextRange {
         readonly kind: SyntaxKind;
         readonly flags: NodeFlags;
         readonly parent: Node;
     }
-    interface Node {
+    export interface Node {
         getSourceFile(): SourceFile;
         getChildCount(sourceFile?: SourceFile): number;
         getChildAt(index: number, sourceFile?: SourceFile): Node;
@@ -4502,16 +4225,16 @@ declare namespace ts {
         getLastToken(sourceFile?: SourceFile): Node | undefined;
         forEachChild<T>(cbNode: (node: Node) => T | undefined, cbNodeArray?: (nodes: NodeArray<Node>) => T | undefined): T | undefined;
     }
-    interface JSDocContainer extends Node {
+    export interface JSDocContainer extends Node {
         _jsdocContainerBrand: any;
     }
-    interface LocalsContainer extends Node {
+    export interface LocalsContainer extends Node {
         _localsContainerBrand: any;
     }
-    interface FlowContainer extends Node {
+    export interface FlowContainer extends Node {
         _flowContainerBrand: any;
     }
-    type HasJSDoc =
+    export type HasJSDoc =
         | AccessorDeclaration
         | ArrowFunction
         | BinaryExpression
@@ -4576,72 +4299,72 @@ declare namespace ts {
         | VariableStatement
         | WhileStatement
         | WithStatement;
-    type HasType = SignatureDeclaration | VariableDeclaration | ParameterDeclaration | PropertySignature | PropertyDeclaration | TypePredicateNode | ParenthesizedTypeNode | TypeOperatorNode | MappedTypeNode | AssertionExpression | TypeAliasDeclaration | JSDocTypeExpression | JSDocNonNullableType | JSDocNullableType | JSDocOptionalType | JSDocVariadicType;
-    type HasTypeArguments = CallExpression | NewExpression | TaggedTemplateExpression | JsxOpeningElement | JsxSelfClosingElement;
-    type HasInitializer = HasExpressionInitializer | ForStatement | ForInStatement | ForOfStatement | JsxAttribute;
-    type HasExpressionInitializer = VariableDeclaration | ParameterDeclaration | BindingElement | PropertyDeclaration | PropertyAssignment | EnumMember;
-    type HasDecorators = ParameterDeclaration | PropertyDeclaration | MethodDeclaration | GetAccessorDeclaration | SetAccessorDeclaration | ClassExpression | ClassDeclaration;
-    type HasModifiers = TypeParameterDeclaration | ParameterDeclaration | ConstructorTypeNode | PropertySignature | PropertyDeclaration | MethodSignature | MethodDeclaration | ConstructorDeclaration | GetAccessorDeclaration | SetAccessorDeclaration | IndexSignatureDeclaration | FunctionExpression | ArrowFunction | ClassExpression | VariableStatement | FunctionDeclaration | ClassDeclaration | InterfaceDeclaration | TypeAliasDeclaration | EnumDeclaration | ModuleDeclaration | ImportEqualsDeclaration | ImportDeclaration | ExportAssignment | ExportDeclaration;
-    interface NodeArray<T extends Node> extends ReadonlyArray<T>, ReadonlyTextRange {
+    export type HasType = SignatureDeclaration | VariableDeclaration | ParameterDeclaration | PropertySignature | PropertyDeclaration | TypePredicateNode | ParenthesizedTypeNode | TypeOperatorNode | MappedTypeNode | AssertionExpression | TypeAliasDeclaration | JSDocTypeExpression | JSDocNonNullableType | JSDocNullableType | JSDocOptionalType | JSDocVariadicType;
+    export type HasTypeArguments = CallExpression | NewExpression | TaggedTemplateExpression | JsxOpeningElement | JsxSelfClosingElement;
+    export type HasInitializer = HasExpressionInitializer | ForStatement | ForInStatement | ForOfStatement | JsxAttribute;
+    export type HasExpressionInitializer = VariableDeclaration | ParameterDeclaration | BindingElement | PropertyDeclaration | PropertyAssignment | EnumMember;
+    export type HasDecorators = ParameterDeclaration | PropertyDeclaration | MethodDeclaration | GetAccessorDeclaration | SetAccessorDeclaration | ClassExpression | ClassDeclaration;
+    export type HasModifiers = TypeParameterDeclaration | ParameterDeclaration | ConstructorTypeNode | PropertySignature | PropertyDeclaration | MethodSignature | MethodDeclaration | ConstructorDeclaration | GetAccessorDeclaration | SetAccessorDeclaration | IndexSignatureDeclaration | FunctionExpression | ArrowFunction | ClassExpression | VariableStatement | FunctionDeclaration | ClassDeclaration | InterfaceDeclaration | TypeAliasDeclaration | EnumDeclaration | ModuleDeclaration | ImportEqualsDeclaration | ImportDeclaration | ExportAssignment | ExportDeclaration;
+    export interface NodeArray<T extends Node> extends ReadonlyArray<T>, ReadonlyTextRange {
         readonly hasTrailingComma: boolean;
     }
-    interface Token<TKind extends SyntaxKind> extends Node {
+    export interface Token<TKind extends SyntaxKind> extends Node {
         readonly kind: TKind;
     }
-    type EndOfFileToken = Token<SyntaxKind.EndOfFileToken> & JSDocContainer;
-    interface PunctuationToken<TKind extends PunctuationSyntaxKind> extends Token<TKind> {
+    export type EndOfFileToken = Token<SyntaxKind.EndOfFileToken> & JSDocContainer;
+    export interface PunctuationToken<TKind extends PunctuationSyntaxKind> extends Token<TKind> {
     }
-    type DotToken = PunctuationToken<SyntaxKind.DotToken>;
-    type DotDotDotToken = PunctuationToken<SyntaxKind.DotDotDotToken>;
-    type QuestionToken = PunctuationToken<SyntaxKind.QuestionToken>;
-    type ExclamationToken = PunctuationToken<SyntaxKind.ExclamationToken>;
-    type ColonToken = PunctuationToken<SyntaxKind.ColonToken>;
-    type EqualsToken = PunctuationToken<SyntaxKind.EqualsToken>;
-    type AmpersandAmpersandEqualsToken = PunctuationToken<SyntaxKind.AmpersandAmpersandEqualsToken>;
-    type BarBarEqualsToken = PunctuationToken<SyntaxKind.BarBarEqualsToken>;
-    type QuestionQuestionEqualsToken = PunctuationToken<SyntaxKind.QuestionQuestionEqualsToken>;
-    type AsteriskToken = PunctuationToken<SyntaxKind.AsteriskToken>;
-    type EqualsGreaterThanToken = PunctuationToken<SyntaxKind.EqualsGreaterThanToken>;
-    type PlusToken = PunctuationToken<SyntaxKind.PlusToken>;
-    type MinusToken = PunctuationToken<SyntaxKind.MinusToken>;
-    type QuestionDotToken = PunctuationToken<SyntaxKind.QuestionDotToken>;
-    interface KeywordToken<TKind extends KeywordSyntaxKind> extends Token<TKind> {
+    export type DotToken = PunctuationToken<SyntaxKind.DotToken>;
+    export type DotDotDotToken = PunctuationToken<SyntaxKind.DotDotDotToken>;
+    export type QuestionToken = PunctuationToken<SyntaxKind.QuestionToken>;
+    export type ExclamationToken = PunctuationToken<SyntaxKind.ExclamationToken>;
+    export type ColonToken = PunctuationToken<SyntaxKind.ColonToken>;
+    export type EqualsToken = PunctuationToken<SyntaxKind.EqualsToken>;
+    export type AmpersandAmpersandEqualsToken = PunctuationToken<SyntaxKind.AmpersandAmpersandEqualsToken>;
+    export type BarBarEqualsToken = PunctuationToken<SyntaxKind.BarBarEqualsToken>;
+    export type QuestionQuestionEqualsToken = PunctuationToken<SyntaxKind.QuestionQuestionEqualsToken>;
+    export type AsteriskToken = PunctuationToken<SyntaxKind.AsteriskToken>;
+    export type EqualsGreaterThanToken = PunctuationToken<SyntaxKind.EqualsGreaterThanToken>;
+    export type PlusToken = PunctuationToken<SyntaxKind.PlusToken>;
+    export type MinusToken = PunctuationToken<SyntaxKind.MinusToken>;
+    export type QuestionDotToken = PunctuationToken<SyntaxKind.QuestionDotToken>;
+    export interface KeywordToken<TKind extends KeywordSyntaxKind> extends Token<TKind> {
     }
-    type AssertsKeyword = KeywordToken<SyntaxKind.AssertsKeyword>;
-    type AssertKeyword = KeywordToken<SyntaxKind.AssertKeyword>;
-    type AwaitKeyword = KeywordToken<SyntaxKind.AwaitKeyword>;
-    type CaseKeyword = KeywordToken<SyntaxKind.CaseKeyword>;
-    interface ModifierToken<TKind extends ModifierSyntaxKind> extends KeywordToken<TKind> {
+    export type AssertsKeyword = KeywordToken<SyntaxKind.AssertsKeyword>;
+    export type AssertKeyword = KeywordToken<SyntaxKind.AssertKeyword>;
+    export type AwaitKeyword = KeywordToken<SyntaxKind.AwaitKeyword>;
+    export type CaseKeyword = KeywordToken<SyntaxKind.CaseKeyword>;
+    export interface ModifierToken<TKind extends ModifierSyntaxKind> extends KeywordToken<TKind> {
     }
-    type AbstractKeyword = ModifierToken<SyntaxKind.AbstractKeyword>;
-    type AccessorKeyword = ModifierToken<SyntaxKind.AccessorKeyword>;
-    type AsyncKeyword = ModifierToken<SyntaxKind.AsyncKeyword>;
-    type ConstKeyword = ModifierToken<SyntaxKind.ConstKeyword>;
-    type DeclareKeyword = ModifierToken<SyntaxKind.DeclareKeyword>;
-    type DefaultKeyword = ModifierToken<SyntaxKind.DefaultKeyword>;
-    type ExportKeyword = ModifierToken<SyntaxKind.ExportKeyword>;
-    type InKeyword = ModifierToken<SyntaxKind.InKeyword>;
-    type PrivateKeyword = ModifierToken<SyntaxKind.PrivateKeyword>;
-    type ProtectedKeyword = ModifierToken<SyntaxKind.ProtectedKeyword>;
-    type PublicKeyword = ModifierToken<SyntaxKind.PublicKeyword>;
-    type ReadonlyKeyword = ModifierToken<SyntaxKind.ReadonlyKeyword>;
-    type OutKeyword = ModifierToken<SyntaxKind.OutKeyword>;
-    type OverrideKeyword = ModifierToken<SyntaxKind.OverrideKeyword>;
-    type StaticKeyword = ModifierToken<SyntaxKind.StaticKeyword>;
-    type Modifier = AbstractKeyword | AccessorKeyword | AsyncKeyword | ConstKeyword | DeclareKeyword | DefaultKeyword | ExportKeyword | InKeyword | PrivateKeyword | ProtectedKeyword | PublicKeyword | OutKeyword | OverrideKeyword | ReadonlyKeyword | StaticKeyword;
-    type ModifierLike = Modifier | Decorator;
-    type AccessibilityModifier = PublicKeyword | PrivateKeyword | ProtectedKeyword;
-    type ParameterPropertyModifier = AccessibilityModifier | ReadonlyKeyword;
-    type ClassMemberModifier = AccessibilityModifier | ReadonlyKeyword | StaticKeyword | AccessorKeyword;
-    type ModifiersArray = NodeArray<Modifier>;
-    enum GeneratedIdentifierFlags {
+    export type AbstractKeyword = ModifierToken<SyntaxKind.AbstractKeyword>;
+    export type AccessorKeyword = ModifierToken<SyntaxKind.AccessorKeyword>;
+    export type AsyncKeyword = ModifierToken<SyntaxKind.AsyncKeyword>;
+    export type ConstKeyword = ModifierToken<SyntaxKind.ConstKeyword>;
+    export type DeclareKeyword = ModifierToken<SyntaxKind.DeclareKeyword>;
+    export type DefaultKeyword = ModifierToken<SyntaxKind.DefaultKeyword>;
+    export type ExportKeyword = ModifierToken<SyntaxKind.ExportKeyword>;
+    export type InKeyword = ModifierToken<SyntaxKind.InKeyword>;
+    export type PrivateKeyword = ModifierToken<SyntaxKind.PrivateKeyword>;
+    export type ProtectedKeyword = ModifierToken<SyntaxKind.ProtectedKeyword>;
+    export type PublicKeyword = ModifierToken<SyntaxKind.PublicKeyword>;
+    export type ReadonlyKeyword = ModifierToken<SyntaxKind.ReadonlyKeyword>;
+    export type OutKeyword = ModifierToken<SyntaxKind.OutKeyword>;
+    export type OverrideKeyword = ModifierToken<SyntaxKind.OverrideKeyword>;
+    export type StaticKeyword = ModifierToken<SyntaxKind.StaticKeyword>;
+    export type Modifier = AbstractKeyword | AccessorKeyword | AsyncKeyword | ConstKeyword | DeclareKeyword | DefaultKeyword | ExportKeyword | InKeyword | PrivateKeyword | ProtectedKeyword | PublicKeyword | OutKeyword | OverrideKeyword | ReadonlyKeyword | StaticKeyword;
+    export type ModifierLike = Modifier | Decorator;
+    export type AccessibilityModifier = PublicKeyword | PrivateKeyword | ProtectedKeyword;
+    export type ParameterPropertyModifier = AccessibilityModifier | ReadonlyKeyword;
+    export type ClassMemberModifier = AccessibilityModifier | ReadonlyKeyword | StaticKeyword | AccessorKeyword;
+    export type ModifiersArray = NodeArray<Modifier>;
+    export enum GeneratedIdentifierFlags {
         None = 0,
         ReservedInNestedScopes = 8,
         Optimistic = 16,
         FileLevel = 32,
         AllowNameSubstitution = 64,
     }
-    interface Identifier extends PrimaryExpression, Declaration, JSDocContainer, FlowContainer {
+    export interface Identifier extends PrimaryExpression, Declaration, JSDocContainer, FlowContainer {
         readonly kind: SyntaxKind.Identifier;
         /**
          * Prefer to use `id.unescapedText`. (Note: This is available only in services, not internally to the TypeScript compiler.)
@@ -4649,54 +4372,54 @@ declare namespace ts {
          */
         readonly escapedText: __String;
     }
-    interface Identifier {
+    export interface Identifier {
         readonly text: string;
     }
-    interface Identifier {
+    export interface Identifier {
         /** @deprecated Use `idKeyword(identifier)` instead. */
         readonly originalKeywordKind?: SyntaxKind;
         /** @deprecated Use `.parent` or the surrounding context to determine this instead. */
         readonly isInJSDocNamespace?: boolean;
     }
-    interface TransientIdentifier extends Identifier {
+    export interface TransientIdentifier extends Identifier {
         resolvedSymbol: Symbol;
     }
-    interface QualifiedName extends Node, FlowContainer {
+    export interface QualifiedName extends Node, FlowContainer {
         readonly kind: SyntaxKind.QualifiedName;
         readonly left: EntityName;
         readonly right: Identifier;
     }
-    type EntityName = Identifier | QualifiedName;
-    type PropertyName = Identifier | StringLiteral | NoSubstitutionTemplateLiteral | NumericLiteral | ComputedPropertyName | PrivateIdentifier;
-    type MemberName = Identifier | PrivateIdentifier;
-    type DeclarationName = PropertyName | JsxAttributeName | StringLiteralLike | ElementAccessExpression | BindingPattern | EntityNameExpression;
-    interface Declaration extends Node {
+    export type EntityName = Identifier | QualifiedName;
+    export type PropertyName = Identifier | StringLiteral | NoSubstitutionTemplateLiteral | NumericLiteral | ComputedPropertyName | PrivateIdentifier;
+    export type MemberName = Identifier | PrivateIdentifier;
+    export type DeclarationName = PropertyName | JsxAttributeName | StringLiteralLike | ElementAccessExpression | BindingPattern | EntityNameExpression;
+    export interface Declaration extends Node {
         _declarationBrand: any;
     }
-    interface NamedDeclaration extends Declaration {
+    export interface NamedDeclaration extends Declaration {
         readonly name?: DeclarationName;
     }
-    interface DeclarationStatement extends NamedDeclaration, Statement {
+    export interface DeclarationStatement extends NamedDeclaration, Statement {
         readonly name?: Identifier | StringLiteral | NumericLiteral;
     }
-    interface ComputedPropertyName extends Node {
+    export interface ComputedPropertyName extends Node {
         readonly kind: SyntaxKind.ComputedPropertyName;
         readonly parent: Declaration;
         readonly expression: Expression;
     }
-    interface PrivateIdentifier extends PrimaryExpression {
+    export interface PrivateIdentifier extends PrimaryExpression {
         readonly kind: SyntaxKind.PrivateIdentifier;
         readonly escapedText: __String;
     }
-    interface PrivateIdentifier {
+    export interface PrivateIdentifier {
         readonly text: string;
     }
-    interface Decorator extends Node {
+    export interface Decorator extends Node {
         readonly kind: SyntaxKind.Decorator;
         readonly parent: NamedDeclaration;
         readonly expression: LeftHandSideExpression;
     }
-    interface TypeParameterDeclaration extends NamedDeclaration, JSDocContainer {
+    export interface TypeParameterDeclaration extends NamedDeclaration, JSDocContainer {
         readonly kind: SyntaxKind.TypeParameter;
         readonly parent: DeclarationWithTypeParameterChildren | InferTypeNode;
         readonly modifiers?: NodeArray<Modifier>;
@@ -4706,22 +4429,22 @@ declare namespace ts {
         readonly default?: TypeNode;
         expression?: Expression;
     }
-    interface SignatureDeclarationBase extends NamedDeclaration, JSDocContainer {
+    export interface SignatureDeclarationBase extends NamedDeclaration, JSDocContainer {
         readonly kind: SignatureDeclaration["kind"];
         readonly name?: PropertyName;
         readonly typeParameters?: NodeArray<TypeParameterDeclaration> | undefined;
         readonly parameters: NodeArray<ParameterDeclaration>;
         readonly type?: TypeNode | undefined;
     }
-    type SignatureDeclaration = CallSignatureDeclaration | ConstructSignatureDeclaration | MethodSignature | IndexSignatureDeclaration | FunctionTypeNode | ConstructorTypeNode | JSDocFunctionType | FunctionDeclaration | MethodDeclaration | ConstructorDeclaration | AccessorDeclaration | FunctionExpression | ArrowFunction;
-    interface CallSignatureDeclaration extends SignatureDeclarationBase, TypeElement, LocalsContainer {
+    export type SignatureDeclaration = CallSignatureDeclaration | ConstructSignatureDeclaration | MethodSignature | IndexSignatureDeclaration | FunctionTypeNode | ConstructorTypeNode | JSDocFunctionType | FunctionDeclaration | MethodDeclaration | ConstructorDeclaration | AccessorDeclaration | FunctionExpression | ArrowFunction;
+    export interface CallSignatureDeclaration extends SignatureDeclarationBase, TypeElement, LocalsContainer {
         readonly kind: SyntaxKind.CallSignature;
     }
-    interface ConstructSignatureDeclaration extends SignatureDeclarationBase, TypeElement, LocalsContainer {
+    export interface ConstructSignatureDeclaration extends SignatureDeclarationBase, TypeElement, LocalsContainer {
         readonly kind: SyntaxKind.ConstructSignature;
     }
-    type BindingName = Identifier | BindingPattern;
-    interface VariableDeclaration extends NamedDeclaration, JSDocContainer {
+    export type BindingName = Identifier | BindingPattern;
+    export interface VariableDeclaration extends NamedDeclaration, JSDocContainer {
         readonly kind: SyntaxKind.VariableDeclaration;
         readonly parent: VariableDeclarationList | CatchClause;
         readonly name: BindingName;
@@ -4729,12 +4452,12 @@ declare namespace ts {
         readonly type?: TypeNode;
         readonly initializer?: Expression;
     }
-    interface VariableDeclarationList extends Node {
+    export interface VariableDeclarationList extends Node {
         readonly kind: SyntaxKind.VariableDeclarationList;
         readonly parent: VariableStatement | ForStatement | ForOfStatement | ForInStatement;
         readonly declarations: NodeArray<VariableDeclaration>;
     }
-    interface ParameterDeclaration extends NamedDeclaration, JSDocContainer {
+    export interface ParameterDeclaration extends NamedDeclaration, JSDocContainer {
         readonly kind: SyntaxKind.Parameter;
         readonly parent: SignatureDeclaration;
         readonly modifiers?: NodeArray<ModifierLike>;
@@ -4744,7 +4467,7 @@ declare namespace ts {
         readonly type?: TypeNode;
         readonly initializer?: Expression;
     }
-    interface BindingElement extends NamedDeclaration, FlowContainer {
+    export interface BindingElement extends NamedDeclaration, FlowContainer {
         readonly kind: SyntaxKind.BindingElement;
         readonly parent: BindingPattern;
         readonly propertyName?: PropertyName;
@@ -4752,7 +4475,7 @@ declare namespace ts {
         readonly name: BindingName;
         readonly initializer?: Expression;
     }
-    interface PropertySignature extends TypeElement, JSDocContainer {
+    export interface PropertySignature extends TypeElement, JSDocContainer {
         readonly kind: SyntaxKind.PropertySignature;
         readonly parent: TypeLiteralNode | InterfaceDeclaration;
         readonly modifiers?: NodeArray<Modifier>;
@@ -4760,7 +4483,7 @@ declare namespace ts {
         readonly questionToken?: QuestionToken;
         readonly type?: TypeNode;
     }
-    interface PropertyDeclaration extends ClassElement, JSDocContainer {
+    export interface PropertyDeclaration extends ClassElement, JSDocContainer {
         readonly kind: SyntaxKind.PropertyDeclaration;
         readonly parent: ClassLikeDeclaration;
         readonly modifiers?: NodeArray<ModifierLike>;
@@ -4770,46 +4493,46 @@ declare namespace ts {
         readonly type?: TypeNode;
         readonly initializer?: Expression;
     }
-    interface AutoAccessorPropertyDeclaration extends PropertyDeclaration {
+    export interface AutoAccessorPropertyDeclaration extends PropertyDeclaration {
         _autoAccessorBrand: any;
     }
-    interface ObjectLiteralElement extends NamedDeclaration {
+    export interface ObjectLiteralElement extends NamedDeclaration {
         _objectLiteralBrand: any;
         readonly name?: PropertyName;
     }
     /** Unlike ObjectLiteralElement, excludes JSXAttribute and JSXSpreadAttribute. */
-    type ObjectLiteralElementLike = PropertyAssignment | ShorthandPropertyAssignment | SpreadAssignment | MethodDeclaration | AccessorDeclaration;
-    interface PropertyAssignment extends ObjectLiteralElement, JSDocContainer {
+    export type ObjectLiteralElementLike = PropertyAssignment | ShorthandPropertyAssignment | SpreadAssignment | MethodDeclaration | AccessorDeclaration;
+    export interface PropertyAssignment extends ObjectLiteralElement, JSDocContainer {
         readonly kind: SyntaxKind.PropertyAssignment;
         readonly parent: ObjectLiteralExpression;
         readonly name: PropertyName;
         readonly initializer: Expression;
     }
-    interface ShorthandPropertyAssignment extends ObjectLiteralElement, JSDocContainer {
+    export interface ShorthandPropertyAssignment extends ObjectLiteralElement, JSDocContainer {
         readonly kind: SyntaxKind.ShorthandPropertyAssignment;
         readonly parent: ObjectLiteralExpression;
         readonly name: Identifier;
         readonly equalsToken?: EqualsToken;
         readonly objectAssignmentInitializer?: Expression;
     }
-    interface SpreadAssignment extends ObjectLiteralElement, JSDocContainer {
+    export interface SpreadAssignment extends ObjectLiteralElement, JSDocContainer {
         readonly kind: SyntaxKind.SpreadAssignment;
         readonly parent: ObjectLiteralExpression;
         readonly expression: Expression;
     }
-    type VariableLikeDeclaration = VariableDeclaration | ParameterDeclaration | BindingElement | PropertyDeclaration | PropertyAssignment | PropertySignature | JsxAttribute | ShorthandPropertyAssignment | EnumMember | JSDocPropertyTag | JSDocParameterTag;
-    interface ObjectBindingPattern extends Node {
+    export type VariableLikeDeclaration = VariableDeclaration | ParameterDeclaration | BindingElement | PropertyDeclaration | PropertyAssignment | PropertySignature | JsxAttribute | ShorthandPropertyAssignment | EnumMember | JSDocPropertyTag | JSDocParameterTag;
+    export interface ObjectBindingPattern extends Node {
         readonly kind: SyntaxKind.ObjectBindingPattern;
         readonly parent: VariableDeclaration | ParameterDeclaration | BindingElement;
         readonly elements: NodeArray<BindingElement>;
     }
-    interface ArrayBindingPattern extends Node {
+    export interface ArrayBindingPattern extends Node {
         readonly kind: SyntaxKind.ArrayBindingPattern;
         readonly parent: VariableDeclaration | ParameterDeclaration | BindingElement;
         readonly elements: NodeArray<ArrayBindingElement>;
     }
-    type BindingPattern = ObjectBindingPattern | ArrayBindingPattern;
-    type ArrayBindingElement = BindingElement | OmittedExpression;
+    export type BindingPattern = ObjectBindingPattern | ArrayBindingPattern;
+    export type ArrayBindingElement = BindingElement | OmittedExpression;
     /**
      * Several node kinds share function-like features such as a signature,
      * a name, and a body. These nodes should extend FunctionLikeDeclarationBase.
@@ -4818,86 +4541,86 @@ declare namespace ts {
      * - MethodDeclaration
      * - AccessorDeclaration
      */
-    interface FunctionLikeDeclarationBase extends SignatureDeclarationBase {
+    export interface FunctionLikeDeclarationBase extends SignatureDeclarationBase {
         _functionLikeDeclarationBrand: any;
         readonly asteriskToken?: AsteriskToken | undefined;
         readonly questionToken?: QuestionToken | undefined;
         readonly exclamationToken?: ExclamationToken | undefined;
         readonly body?: Block | Expression | undefined;
     }
-    type FunctionLikeDeclaration = FunctionDeclaration | MethodDeclaration | GetAccessorDeclaration | SetAccessorDeclaration | ConstructorDeclaration | FunctionExpression | ArrowFunction;
+    export type FunctionLikeDeclaration = FunctionDeclaration | MethodDeclaration | GetAccessorDeclaration | SetAccessorDeclaration | ConstructorDeclaration | FunctionExpression | ArrowFunction;
     /** @deprecated Use SignatureDeclaration */
-    type FunctionLike = SignatureDeclaration;
-    interface FunctionDeclaration extends FunctionLikeDeclarationBase, DeclarationStatement, LocalsContainer {
+    export type FunctionLike = SignatureDeclaration;
+    export interface FunctionDeclaration extends FunctionLikeDeclarationBase, DeclarationStatement, LocalsContainer {
         readonly kind: SyntaxKind.FunctionDeclaration;
         readonly modifiers?: NodeArray<ModifierLike>;
         readonly name?: Identifier;
         readonly body?: FunctionBody;
     }
-    interface MethodSignature extends SignatureDeclarationBase, TypeElement, LocalsContainer {
+    export interface MethodSignature extends SignatureDeclarationBase, TypeElement, LocalsContainer {
         readonly kind: SyntaxKind.MethodSignature;
         readonly parent: TypeLiteralNode | InterfaceDeclaration;
         readonly modifiers?: NodeArray<Modifier>;
         readonly name: PropertyName;
     }
-    interface MethodDeclaration extends FunctionLikeDeclarationBase, ClassElement, ObjectLiteralElement, JSDocContainer, LocalsContainer, FlowContainer {
+    export interface MethodDeclaration extends FunctionLikeDeclarationBase, ClassElement, ObjectLiteralElement, JSDocContainer, LocalsContainer, FlowContainer {
         readonly kind: SyntaxKind.MethodDeclaration;
         readonly parent: ClassLikeDeclaration | ObjectLiteralExpression;
         readonly modifiers?: NodeArray<ModifierLike> | undefined;
         readonly name: PropertyName;
         readonly body?: FunctionBody | undefined;
     }
-    interface ConstructorDeclaration extends FunctionLikeDeclarationBase, ClassElement, JSDocContainer, LocalsContainer {
+    export interface ConstructorDeclaration extends FunctionLikeDeclarationBase, ClassElement, JSDocContainer, LocalsContainer {
         readonly kind: SyntaxKind.Constructor;
         readonly parent: ClassLikeDeclaration;
         readonly modifiers?: NodeArray<ModifierLike> | undefined;
         readonly body?: FunctionBody | undefined;
     }
     /** For when we encounter a semicolon in a class declaration. ES6 allows these as class elements. */
-    interface SemicolonClassElement extends ClassElement, JSDocContainer {
+    export interface SemicolonClassElement extends ClassElement, JSDocContainer {
         readonly kind: SyntaxKind.SemicolonClassElement;
         readonly parent: ClassLikeDeclaration;
     }
-    interface GetAccessorDeclaration extends FunctionLikeDeclarationBase, ClassElement, TypeElement, ObjectLiteralElement, JSDocContainer, LocalsContainer, FlowContainer {
+    export interface GetAccessorDeclaration extends FunctionLikeDeclarationBase, ClassElement, TypeElement, ObjectLiteralElement, JSDocContainer, LocalsContainer, FlowContainer {
         readonly kind: SyntaxKind.GetAccessor;
         readonly parent: ClassLikeDeclaration | ObjectLiteralExpression | TypeLiteralNode | InterfaceDeclaration;
         readonly modifiers?: NodeArray<ModifierLike>;
         readonly name: PropertyName;
         readonly body?: FunctionBody;
     }
-    interface SetAccessorDeclaration extends FunctionLikeDeclarationBase, ClassElement, TypeElement, ObjectLiteralElement, JSDocContainer, LocalsContainer, FlowContainer {
+    export interface SetAccessorDeclaration extends FunctionLikeDeclarationBase, ClassElement, TypeElement, ObjectLiteralElement, JSDocContainer, LocalsContainer, FlowContainer {
         readonly kind: SyntaxKind.SetAccessor;
         readonly parent: ClassLikeDeclaration | ObjectLiteralExpression | TypeLiteralNode | InterfaceDeclaration;
         readonly modifiers?: NodeArray<ModifierLike>;
         readonly name: PropertyName;
         readonly body?: FunctionBody;
     }
-    type AccessorDeclaration = GetAccessorDeclaration | SetAccessorDeclaration;
-    interface IndexSignatureDeclaration extends SignatureDeclarationBase, ClassElement, TypeElement, LocalsContainer {
+    export type AccessorDeclaration = GetAccessorDeclaration | SetAccessorDeclaration;
+    export interface IndexSignatureDeclaration extends SignatureDeclarationBase, ClassElement, TypeElement, LocalsContainer {
         readonly kind: SyntaxKind.IndexSignature;
         readonly parent: ObjectTypeDeclaration;
         readonly modifiers?: NodeArray<ModifierLike>;
         readonly type: TypeNode;
     }
-    interface ClassStaticBlockDeclaration extends ClassElement, JSDocContainer, LocalsContainer {
+    export interface ClassStaticBlockDeclaration extends ClassElement, JSDocContainer, LocalsContainer {
         readonly kind: SyntaxKind.ClassStaticBlockDeclaration;
         readonly parent: ClassDeclaration | ClassExpression;
         readonly body: Block;
     }
-    interface TypeNode extends Node {
+    export interface TypeNode extends Node {
         _typeNodeBrand: any;
     }
-    interface KeywordTypeNode<TKind extends KeywordTypeSyntaxKind = KeywordTypeSyntaxKind> extends KeywordToken<TKind>, TypeNode {
+    export interface KeywordTypeNode<TKind extends KeywordTypeSyntaxKind = KeywordTypeSyntaxKind> extends KeywordToken<TKind>, TypeNode {
         readonly kind: TKind;
     }
     /** @deprecated */
-    interface ImportTypeAssertionContainer extends Node {
+    export interface ImportTypeAssertionContainer extends Node {
         readonly kind: SyntaxKind.ImportTypeAssertionContainer;
         readonly parent: ImportTypeNode;
         /** @deprecated */ readonly assertClause: AssertClause;
         readonly multiLine?: boolean;
     }
-    interface ImportTypeNode extends NodeWithTypeArguments {
+    export interface ImportTypeNode extends NodeWithTypeArguments {
         readonly kind: SyntaxKind.ImportType;
         readonly isTypeOf: boolean;
         readonly argument: TypeNode;
@@ -4905,102 +4628,102 @@ declare namespace ts {
         readonly attributes?: ImportAttributes;
         readonly qualifier?: EntityName;
     }
-    interface ThisTypeNode extends TypeNode {
+    export interface ThisTypeNode extends TypeNode {
         readonly kind: SyntaxKind.ThisType;
     }
-    type FunctionOrConstructorTypeNode = FunctionTypeNode | ConstructorTypeNode;
-    interface FunctionOrConstructorTypeNodeBase extends TypeNode, SignatureDeclarationBase {
+    export type FunctionOrConstructorTypeNode = FunctionTypeNode | ConstructorTypeNode;
+    export interface FunctionOrConstructorTypeNodeBase extends TypeNode, SignatureDeclarationBase {
         readonly kind: SyntaxKind.FunctionType | SyntaxKind.ConstructorType;
         readonly type: TypeNode;
     }
-    interface FunctionTypeNode extends FunctionOrConstructorTypeNodeBase, LocalsContainer {
+    export interface FunctionTypeNode extends FunctionOrConstructorTypeNodeBase, LocalsContainer {
         readonly kind: SyntaxKind.FunctionType;
     }
-    interface ConstructorTypeNode extends FunctionOrConstructorTypeNodeBase, LocalsContainer {
+    export interface ConstructorTypeNode extends FunctionOrConstructorTypeNodeBase, LocalsContainer {
         readonly kind: SyntaxKind.ConstructorType;
         readonly modifiers?: NodeArray<Modifier>;
     }
-    interface NodeWithTypeArguments extends TypeNode {
+    export interface NodeWithTypeArguments extends TypeNode {
         readonly typeArguments?: NodeArray<TypeNode>;
     }
-    type TypeReferenceType = TypeReferenceNode | ExpressionWithTypeArguments;
-    interface TypeReferenceNode extends NodeWithTypeArguments {
+    export type TypeReferenceType = TypeReferenceNode | ExpressionWithTypeArguments;
+    export interface TypeReferenceNode extends NodeWithTypeArguments {
         readonly kind: SyntaxKind.TypeReference;
         readonly typeName: EntityName;
     }
-    interface TypePredicateNode extends TypeNode {
+    export interface TypePredicateNode extends TypeNode {
         readonly kind: SyntaxKind.TypePredicate;
         readonly parent: SignatureDeclaration | JSDocTypeExpression;
         readonly assertsModifier?: AssertsKeyword;
         readonly parameterName: Identifier | ThisTypeNode;
         readonly type?: TypeNode;
     }
-    interface TypeQueryNode extends NodeWithTypeArguments {
+    export interface TypeQueryNode extends NodeWithTypeArguments {
         readonly kind: SyntaxKind.TypeQuery;
         readonly exprName: EntityName;
     }
-    interface TypeLiteralNode extends TypeNode, Declaration {
+    export interface TypeLiteralNode extends TypeNode, Declaration {
         readonly kind: SyntaxKind.TypeLiteral;
         readonly members: NodeArray<TypeElement>;
     }
-    interface ArrayTypeNode extends TypeNode {
+    export interface ArrayTypeNode extends TypeNode {
         readonly kind: SyntaxKind.ArrayType;
         readonly elementType: TypeNode;
     }
-    interface TupleTypeNode extends TypeNode {
+    export interface TupleTypeNode extends TypeNode {
         readonly kind: SyntaxKind.TupleType;
         readonly elements: NodeArray<TypeNode | NamedTupleMember>;
     }
-    interface NamedTupleMember extends TypeNode, Declaration, JSDocContainer {
+    export interface NamedTupleMember extends TypeNode, Declaration, JSDocContainer {
         readonly kind: SyntaxKind.NamedTupleMember;
         readonly dotDotDotToken?: Token<SyntaxKind.DotDotDotToken>;
         readonly name: Identifier;
         readonly questionToken?: Token<SyntaxKind.QuestionToken>;
         readonly type: TypeNode;
     }
-    interface OptionalTypeNode extends TypeNode {
+    export interface OptionalTypeNode extends TypeNode {
         readonly kind: SyntaxKind.OptionalType;
         readonly type: TypeNode;
     }
-    interface RestTypeNode extends TypeNode {
+    export interface RestTypeNode extends TypeNode {
         readonly kind: SyntaxKind.RestType;
         readonly type: TypeNode;
     }
-    type UnionOrIntersectionTypeNode = UnionTypeNode | IntersectionTypeNode;
-    interface UnionTypeNode extends TypeNode {
+    export type UnionOrIntersectionTypeNode = UnionTypeNode | IntersectionTypeNode;
+    export interface UnionTypeNode extends TypeNode {
         readonly kind: SyntaxKind.UnionType;
         readonly types: NodeArray<TypeNode>;
     }
-    interface IntersectionTypeNode extends TypeNode {
+    export interface IntersectionTypeNode extends TypeNode {
         readonly kind: SyntaxKind.IntersectionType;
         readonly types: NodeArray<TypeNode>;
     }
-    interface ConditionalTypeNode extends TypeNode, LocalsContainer {
+    export interface ConditionalTypeNode extends TypeNode, LocalsContainer {
         readonly kind: SyntaxKind.ConditionalType;
         readonly checkType: TypeNode;
         readonly extendsType: TypeNode;
         readonly trueType: TypeNode;
         readonly falseType: TypeNode;
     }
-    interface InferTypeNode extends TypeNode {
+    export interface InferTypeNode extends TypeNode {
         readonly kind: SyntaxKind.InferType;
         readonly typeParameter: TypeParameterDeclaration;
     }
-    interface ParenthesizedTypeNode extends TypeNode {
+    export interface ParenthesizedTypeNode extends TypeNode {
         readonly kind: SyntaxKind.ParenthesizedType;
         readonly type: TypeNode;
     }
-    interface TypeOperatorNode extends TypeNode {
+    export interface TypeOperatorNode extends TypeNode {
         readonly kind: SyntaxKind.TypeOperator;
         readonly operator: SyntaxKind.KeyOfKeyword | SyntaxKind.UniqueKeyword | SyntaxKind.ReadonlyKeyword;
         readonly type: TypeNode;
     }
-    interface IndexedAccessTypeNode extends TypeNode {
+    export interface IndexedAccessTypeNode extends TypeNode {
         readonly kind: SyntaxKind.IndexedAccessType;
         readonly objectType: TypeNode;
         readonly indexType: TypeNode;
     }
-    interface MappedTypeNode extends TypeNode, Declaration, LocalsContainer {
+    export interface MappedTypeNode extends TypeNode, Declaration, LocalsContainer {
         readonly kind: SyntaxKind.MappedType;
         readonly readonlyToken?: ReadonlyKeyword | PlusToken | MinusToken;
         readonly typeParameter: TypeParameterDeclaration;
@@ -5010,160 +4733,160 @@ declare namespace ts {
         /** Used only to produce grammar errors */
         readonly members?: NodeArray<TypeElement>;
     }
-    interface LiteralTypeNode extends TypeNode {
+    export interface LiteralTypeNode extends TypeNode {
         readonly kind: SyntaxKind.LiteralType;
         readonly literal: NullLiteral | BooleanLiteral | LiteralExpression | PrefixUnaryExpression;
     }
-    interface StringLiteral extends LiteralExpression, Declaration {
+    export interface StringLiteral extends LiteralExpression, Declaration {
         readonly kind: SyntaxKind.StringLiteral;
     }
-    type StringLiteralLike = StringLiteral | NoSubstitutionTemplateLiteral;
-    type PropertyNameLiteral = Identifier | StringLiteralLike | NumericLiteral | JsxNamespacedName;
-    interface TemplateLiteralTypeNode extends TypeNode {
+    export type StringLiteralLike = StringLiteral | NoSubstitutionTemplateLiteral;
+    export type PropertyNameLiteral = Identifier | StringLiteralLike | NumericLiteral | JsxNamespacedName;
+    export interface TemplateLiteralTypeNode extends TypeNode {
         kind: SyntaxKind.TemplateLiteralType;
         readonly head: TemplateHead;
         readonly templateSpans: NodeArray<TemplateLiteralTypeSpan>;
     }
-    interface TemplateLiteralTypeSpan extends TypeNode {
+    export interface TemplateLiteralTypeSpan extends TypeNode {
         readonly kind: SyntaxKind.TemplateLiteralTypeSpan;
         readonly parent: TemplateLiteralTypeNode;
         readonly type: TypeNode;
         readonly literal: TemplateMiddle | TemplateTail;
     }
-    interface Expression extends Node {
+    export interface Expression extends Node {
         _expressionBrand: any;
     }
-    interface OmittedExpression extends Expression {
+    export interface OmittedExpression extends Expression {
         readonly kind: SyntaxKind.OmittedExpression;
     }
-    interface PartiallyEmittedExpression extends LeftHandSideExpression {
+    export interface PartiallyEmittedExpression extends LeftHandSideExpression {
         readonly kind: SyntaxKind.PartiallyEmittedExpression;
         readonly expression: Expression;
     }
-    interface UnaryExpression extends Expression {
+    export interface UnaryExpression extends Expression {
         _unaryExpressionBrand: any;
     }
     /** Deprecated, please use UpdateExpression */
-    type IncrementExpression = UpdateExpression;
-    interface UpdateExpression extends UnaryExpression {
+    export type IncrementExpression = UpdateExpression;
+    export interface UpdateExpression extends UnaryExpression {
         _updateExpressionBrand: any;
     }
-    type PrefixUnaryOperator = SyntaxKind.PlusPlusToken | SyntaxKind.MinusMinusToken | SyntaxKind.PlusToken | SyntaxKind.MinusToken | SyntaxKind.TildeToken | SyntaxKind.ExclamationToken;
-    interface PrefixUnaryExpression extends UpdateExpression {
+    export type PrefixUnaryOperator = SyntaxKind.PlusPlusToken | SyntaxKind.MinusMinusToken | SyntaxKind.PlusToken | SyntaxKind.MinusToken | SyntaxKind.TildeToken | SyntaxKind.ExclamationToken;
+    export interface PrefixUnaryExpression extends UpdateExpression {
         readonly kind: SyntaxKind.PrefixUnaryExpression;
         readonly operator: PrefixUnaryOperator;
         readonly operand: UnaryExpression;
     }
-    type PostfixUnaryOperator = SyntaxKind.PlusPlusToken | SyntaxKind.MinusMinusToken;
-    interface PostfixUnaryExpression extends UpdateExpression {
+    export type PostfixUnaryOperator = SyntaxKind.PlusPlusToken | SyntaxKind.MinusMinusToken;
+    export interface PostfixUnaryExpression extends UpdateExpression {
         readonly kind: SyntaxKind.PostfixUnaryExpression;
         readonly operand: LeftHandSideExpression;
         readonly operator: PostfixUnaryOperator;
     }
-    interface LeftHandSideExpression extends UpdateExpression {
+    export interface LeftHandSideExpression extends UpdateExpression {
         _leftHandSideExpressionBrand: any;
     }
-    interface MemberExpression extends LeftHandSideExpression {
+    export interface MemberExpression extends LeftHandSideExpression {
         _memberExpressionBrand: any;
     }
-    interface PrimaryExpression extends MemberExpression {
+    export interface PrimaryExpression extends MemberExpression {
         _primaryExpressionBrand: any;
     }
-    interface NullLiteral extends PrimaryExpression {
+    export interface NullLiteral extends PrimaryExpression {
         readonly kind: SyntaxKind.NullKeyword;
     }
-    interface TrueLiteral extends PrimaryExpression {
+    export interface TrueLiteral extends PrimaryExpression {
         readonly kind: SyntaxKind.TrueKeyword;
     }
-    interface FalseLiteral extends PrimaryExpression {
+    export interface FalseLiteral extends PrimaryExpression {
         readonly kind: SyntaxKind.FalseKeyword;
     }
-    type BooleanLiteral = TrueLiteral | FalseLiteral;
-    interface ThisExpression extends PrimaryExpression, FlowContainer {
+    export type BooleanLiteral = TrueLiteral | FalseLiteral;
+    export interface ThisExpression extends PrimaryExpression, FlowContainer {
         readonly kind: SyntaxKind.ThisKeyword;
     }
-    interface SuperExpression extends PrimaryExpression, FlowContainer {
+    export interface SuperExpression extends PrimaryExpression, FlowContainer {
         readonly kind: SyntaxKind.SuperKeyword;
     }
-    interface ImportExpression extends PrimaryExpression {
+    export interface ImportExpression extends PrimaryExpression {
         readonly kind: SyntaxKind.ImportKeyword;
     }
-    interface DeleteExpression extends UnaryExpression {
+    export interface DeleteExpression extends UnaryExpression {
         readonly kind: SyntaxKind.DeleteExpression;
         readonly expression: UnaryExpression;
     }
-    interface TypeOfExpression extends UnaryExpression {
+    export interface TypeOfExpression extends UnaryExpression {
         readonly kind: SyntaxKind.TypeOfExpression;
         readonly expression: UnaryExpression;
     }
-    interface VoidExpression extends UnaryExpression {
+    export interface VoidExpression extends UnaryExpression {
         readonly kind: SyntaxKind.VoidExpression;
         readonly expression: UnaryExpression;
     }
-    interface AwaitExpression extends UnaryExpression {
+    export interface AwaitExpression extends UnaryExpression {
         readonly kind: SyntaxKind.AwaitExpression;
         readonly expression: UnaryExpression;
     }
-    interface YieldExpression extends Expression {
+    export interface YieldExpression extends Expression {
         readonly kind: SyntaxKind.YieldExpression;
         readonly asteriskToken?: AsteriskToken;
         readonly expression?: Expression;
     }
-    interface SyntheticExpression extends Expression {
+    export interface SyntheticExpression extends Expression {
         readonly kind: SyntaxKind.SyntheticExpression;
         readonly isSpread: boolean;
         readonly type: Type;
         readonly tupleNameSource?: ParameterDeclaration | NamedTupleMember;
     }
-    type ExponentiationOperator = SyntaxKind.AsteriskAsteriskToken;
-    type MultiplicativeOperator = SyntaxKind.AsteriskToken | SyntaxKind.SlashToken | SyntaxKind.PercentToken;
-    type MultiplicativeOperatorOrHigher = ExponentiationOperator | MultiplicativeOperator;
-    type AdditiveOperator = SyntaxKind.PlusToken | SyntaxKind.MinusToken;
-    type AdditiveOperatorOrHigher = MultiplicativeOperatorOrHigher | AdditiveOperator;
-    type ShiftOperator = SyntaxKind.LessThanLessThanToken | SyntaxKind.GreaterThanGreaterThanToken | SyntaxKind.GreaterThanGreaterThanGreaterThanToken;
-    type ShiftOperatorOrHigher = AdditiveOperatorOrHigher | ShiftOperator;
-    type RelationalOperator = SyntaxKind.LessThanToken | SyntaxKind.LessThanEqualsToken | SyntaxKind.GreaterThanToken | SyntaxKind.GreaterThanEqualsToken | SyntaxKind.InstanceOfKeyword | SyntaxKind.InKeyword;
-    type RelationalOperatorOrHigher = ShiftOperatorOrHigher | RelationalOperator;
-    type EqualityOperator = SyntaxKind.EqualsEqualsToken | SyntaxKind.EqualsEqualsEqualsToken | SyntaxKind.ExclamationEqualsEqualsToken | SyntaxKind.ExclamationEqualsToken;
-    type EqualityOperatorOrHigher = RelationalOperatorOrHigher | EqualityOperator;
-    type BitwiseOperator = SyntaxKind.AmpersandToken | SyntaxKind.BarToken | SyntaxKind.CaretToken;
-    type BitwiseOperatorOrHigher = EqualityOperatorOrHigher | BitwiseOperator;
-    type LogicalOperator = SyntaxKind.AmpersandAmpersandToken | SyntaxKind.BarBarToken;
-    type LogicalOperatorOrHigher = BitwiseOperatorOrHigher | LogicalOperator;
-    type CompoundAssignmentOperator = SyntaxKind.PlusEqualsToken | SyntaxKind.MinusEqualsToken | SyntaxKind.AsteriskAsteriskEqualsToken | SyntaxKind.AsteriskEqualsToken | SyntaxKind.SlashEqualsToken | SyntaxKind.PercentEqualsToken | SyntaxKind.AmpersandEqualsToken | SyntaxKind.BarEqualsToken | SyntaxKind.CaretEqualsToken | SyntaxKind.LessThanLessThanEqualsToken | SyntaxKind.GreaterThanGreaterThanGreaterThanEqualsToken | SyntaxKind.GreaterThanGreaterThanEqualsToken | SyntaxKind.BarBarEqualsToken | SyntaxKind.AmpersandAmpersandEqualsToken | SyntaxKind.QuestionQuestionEqualsToken;
-    type AssignmentOperator = SyntaxKind.EqualsToken | CompoundAssignmentOperator;
-    type AssignmentOperatorOrHigher = SyntaxKind.QuestionQuestionToken | LogicalOperatorOrHigher | AssignmentOperator;
-    type BinaryOperator = AssignmentOperatorOrHigher | SyntaxKind.CommaToken;
-    type LogicalOrCoalescingAssignmentOperator = SyntaxKind.AmpersandAmpersandEqualsToken | SyntaxKind.BarBarEqualsToken | SyntaxKind.QuestionQuestionEqualsToken;
-    type BinaryOperatorToken = Token<BinaryOperator>;
-    interface BinaryExpression extends Expression, Declaration, JSDocContainer {
+    export type ExponentiationOperator = SyntaxKind.AsteriskAsteriskToken;
+    export type MultiplicativeOperator = SyntaxKind.AsteriskToken | SyntaxKind.SlashToken | SyntaxKind.PercentToken;
+    export type MultiplicativeOperatorOrHigher = ExponentiationOperator | MultiplicativeOperator;
+    export type AdditiveOperator = SyntaxKind.PlusToken | SyntaxKind.MinusToken;
+    export type AdditiveOperatorOrHigher = MultiplicativeOperatorOrHigher | AdditiveOperator;
+    export type ShiftOperator = SyntaxKind.LessThanLessThanToken | SyntaxKind.GreaterThanGreaterThanToken | SyntaxKind.GreaterThanGreaterThanGreaterThanToken;
+    export type ShiftOperatorOrHigher = AdditiveOperatorOrHigher | ShiftOperator;
+    export type RelationalOperator = SyntaxKind.LessThanToken | SyntaxKind.LessThanEqualsToken | SyntaxKind.GreaterThanToken | SyntaxKind.GreaterThanEqualsToken | SyntaxKind.InstanceOfKeyword | SyntaxKind.InKeyword;
+    export type RelationalOperatorOrHigher = ShiftOperatorOrHigher | RelationalOperator;
+    export type EqualityOperator = SyntaxKind.EqualsEqualsToken | SyntaxKind.EqualsEqualsEqualsToken | SyntaxKind.ExclamationEqualsEqualsToken | SyntaxKind.ExclamationEqualsToken;
+    export type EqualityOperatorOrHigher = RelationalOperatorOrHigher | EqualityOperator;
+    export type BitwiseOperator = SyntaxKind.AmpersandToken | SyntaxKind.BarToken | SyntaxKind.CaretToken;
+    export type BitwiseOperatorOrHigher = EqualityOperatorOrHigher | BitwiseOperator;
+    export type LogicalOperator = SyntaxKind.AmpersandAmpersandToken | SyntaxKind.BarBarToken;
+    export type LogicalOperatorOrHigher = BitwiseOperatorOrHigher | LogicalOperator;
+    export type CompoundAssignmentOperator = SyntaxKind.PlusEqualsToken | SyntaxKind.MinusEqualsToken | SyntaxKind.AsteriskAsteriskEqualsToken | SyntaxKind.AsteriskEqualsToken | SyntaxKind.SlashEqualsToken | SyntaxKind.PercentEqualsToken | SyntaxKind.AmpersandEqualsToken | SyntaxKind.BarEqualsToken | SyntaxKind.CaretEqualsToken | SyntaxKind.LessThanLessThanEqualsToken | SyntaxKind.GreaterThanGreaterThanGreaterThanEqualsToken | SyntaxKind.GreaterThanGreaterThanEqualsToken | SyntaxKind.BarBarEqualsToken | SyntaxKind.AmpersandAmpersandEqualsToken | SyntaxKind.QuestionQuestionEqualsToken;
+    export type AssignmentOperator = SyntaxKind.EqualsToken | CompoundAssignmentOperator;
+    export type AssignmentOperatorOrHigher = SyntaxKind.QuestionQuestionToken | LogicalOperatorOrHigher | AssignmentOperator;
+    export type BinaryOperator = AssignmentOperatorOrHigher | SyntaxKind.CommaToken;
+    export type LogicalOrCoalescingAssignmentOperator = SyntaxKind.AmpersandAmpersandEqualsToken | SyntaxKind.BarBarEqualsToken | SyntaxKind.QuestionQuestionEqualsToken;
+    export type BinaryOperatorToken = Token<BinaryOperator>;
+    export interface BinaryExpression extends Expression, Declaration, JSDocContainer {
         readonly kind: SyntaxKind.BinaryExpression;
         readonly left: Expression;
         readonly operatorToken: BinaryOperatorToken;
         readonly right: Expression;
     }
-    type AssignmentOperatorToken = Token<AssignmentOperator>;
-    interface AssignmentExpression<TOperator extends AssignmentOperatorToken> extends BinaryExpression {
+    export type AssignmentOperatorToken = Token<AssignmentOperator>;
+    export interface AssignmentExpression<TOperator extends AssignmentOperatorToken> extends BinaryExpression {
         readonly left: LeftHandSideExpression;
         readonly operatorToken: TOperator;
     }
-    interface ObjectDestructuringAssignment extends AssignmentExpression<EqualsToken> {
+    export interface ObjectDestructuringAssignment extends AssignmentExpression<EqualsToken> {
         readonly left: ObjectLiteralExpression;
     }
-    interface ArrayDestructuringAssignment extends AssignmentExpression<EqualsToken> {
+    export interface ArrayDestructuringAssignment extends AssignmentExpression<EqualsToken> {
         readonly left: ArrayLiteralExpression;
     }
-    type DestructuringAssignment = ObjectDestructuringAssignment | ArrayDestructuringAssignment;
-    type BindingOrAssignmentElement = VariableDeclaration | ParameterDeclaration | ObjectBindingOrAssignmentElement | ArrayBindingOrAssignmentElement;
-    type ObjectBindingOrAssignmentElement = BindingElement | PropertyAssignment | ShorthandPropertyAssignment | SpreadAssignment;
-    type ArrayBindingOrAssignmentElement = BindingElement | OmittedExpression | SpreadElement | ArrayLiteralExpression | ObjectLiteralExpression | AssignmentExpression<EqualsToken> | Identifier | PropertyAccessExpression | ElementAccessExpression;
-    type BindingOrAssignmentElementRestIndicator = DotDotDotToken | SpreadElement | SpreadAssignment;
-    type BindingOrAssignmentElementTarget = BindingOrAssignmentPattern | Identifier | PropertyAccessExpression | ElementAccessExpression | OmittedExpression;
-    type ObjectBindingOrAssignmentPattern = ObjectBindingPattern | ObjectLiteralExpression;
-    type ArrayBindingOrAssignmentPattern = ArrayBindingPattern | ArrayLiteralExpression;
-    type AssignmentPattern = ObjectLiteralExpression | ArrayLiteralExpression;
-    type BindingOrAssignmentPattern = ObjectBindingOrAssignmentPattern | ArrayBindingOrAssignmentPattern;
-    interface ConditionalExpression extends Expression {
+    export type DestructuringAssignment = ObjectDestructuringAssignment | ArrayDestructuringAssignment;
+    export type BindingOrAssignmentElement = VariableDeclaration | ParameterDeclaration | ObjectBindingOrAssignmentElement | ArrayBindingOrAssignmentElement;
+    export type ObjectBindingOrAssignmentElement = BindingElement | PropertyAssignment | ShorthandPropertyAssignment | SpreadAssignment;
+    export type ArrayBindingOrAssignmentElement = BindingElement | OmittedExpression | SpreadElement | ArrayLiteralExpression | ObjectLiteralExpression | AssignmentExpression<EqualsToken> | Identifier | PropertyAccessExpression | ElementAccessExpression;
+    export type BindingOrAssignmentElementRestIndicator = DotDotDotToken | SpreadElement | SpreadAssignment;
+    export type BindingOrAssignmentElementTarget = BindingOrAssignmentPattern | Identifier | PropertyAccessExpression | ElementAccessExpression | OmittedExpression;
+    export type ObjectBindingOrAssignmentPattern = ObjectBindingPattern | ObjectLiteralExpression;
+    export type ArrayBindingOrAssignmentPattern = ArrayBindingPattern | ArrayLiteralExpression;
+    export type AssignmentPattern = ObjectLiteralExpression | ArrayLiteralExpression;
+    export type BindingOrAssignmentPattern = ObjectBindingOrAssignmentPattern | ArrayBindingOrAssignmentPattern;
+    export interface ConditionalExpression extends Expression {
         readonly kind: SyntaxKind.ConditionalExpression;
         readonly condition: Expression;
         readonly questionToken: QuestionToken;
@@ -5171,39 +4894,39 @@ declare namespace ts {
         readonly colonToken: ColonToken;
         readonly whenFalse: Expression;
     }
-    type FunctionBody = Block;
-    type ConciseBody = FunctionBody | Expression;
-    interface FunctionExpression extends PrimaryExpression, FunctionLikeDeclarationBase, JSDocContainer, LocalsContainer, FlowContainer {
+    export type FunctionBody = Block;
+    export type ConciseBody = FunctionBody | Expression;
+    export interface FunctionExpression extends PrimaryExpression, FunctionLikeDeclarationBase, JSDocContainer, LocalsContainer, FlowContainer {
         readonly kind: SyntaxKind.FunctionExpression;
         readonly modifiers?: NodeArray<Modifier>;
         readonly name?: Identifier;
         readonly body: FunctionBody;
     }
-    interface ArrowFunction extends Expression, FunctionLikeDeclarationBase, JSDocContainer, LocalsContainer, FlowContainer {
+    export interface ArrowFunction extends Expression, FunctionLikeDeclarationBase, JSDocContainer, LocalsContainer, FlowContainer {
         readonly kind: SyntaxKind.ArrowFunction;
         readonly modifiers?: NodeArray<Modifier>;
         readonly equalsGreaterThanToken: EqualsGreaterThanToken;
         readonly body: ConciseBody;
         readonly name: never;
     }
-    interface LiteralLikeNode extends Node {
+    export interface LiteralLikeNode extends Node {
         text: string;
         isUnterminated?: boolean;
         hasExtendedUnicodeEscape?: boolean;
     }
-    interface TemplateLiteralLikeNode extends LiteralLikeNode {
+    export interface TemplateLiteralLikeNode extends LiteralLikeNode {
         rawText?: string;
     }
-    interface LiteralExpression extends LiteralLikeNode, PrimaryExpression {
+    export interface LiteralExpression extends LiteralLikeNode, PrimaryExpression {
         _literalExpressionBrand: any;
     }
-    interface RegularExpressionLiteral extends LiteralExpression {
+    export interface RegularExpressionLiteral extends LiteralExpression {
         readonly kind: SyntaxKind.RegularExpressionLiteral;
     }
-    interface NoSubstitutionTemplateLiteral extends LiteralExpression, TemplateLiteralLikeNode, Declaration {
+    export interface NoSubstitutionTemplateLiteral extends LiteralExpression, TemplateLiteralLikeNode, Declaration {
         readonly kind: SyntaxKind.NoSubstitutionTemplateLiteral;
     }
-    enum TokenFlags {
+    export enum TokenFlags {
         None = 0,
         Scientific = 16,
         Octal = 32,
@@ -5211,48 +4934,48 @@ declare namespace ts {
         BinarySpecifier = 128,
         OctalSpecifier = 256,
     }
-    interface NumericLiteral extends LiteralExpression, Declaration {
+    export interface NumericLiteral extends LiteralExpression, Declaration {
         readonly kind: SyntaxKind.NumericLiteral;
     }
-    interface BigIntLiteral extends LiteralExpression {
+    export interface BigIntLiteral extends LiteralExpression {
         readonly kind: SyntaxKind.BigIntLiteral;
     }
-    type LiteralToken = NumericLiteral | BigIntLiteral | StringLiteral | JsxText | RegularExpressionLiteral | NoSubstitutionTemplateLiteral;
-    interface TemplateHead extends TemplateLiteralLikeNode {
+    export type LiteralToken = NumericLiteral | BigIntLiteral | StringLiteral | JsxText | RegularExpressionLiteral | NoSubstitutionTemplateLiteral;
+    export interface TemplateHead extends TemplateLiteralLikeNode {
         readonly kind: SyntaxKind.TemplateHead;
         readonly parent: TemplateExpression | TemplateLiteralTypeNode;
     }
-    interface TemplateMiddle extends TemplateLiteralLikeNode {
+    export interface TemplateMiddle extends TemplateLiteralLikeNode {
         readonly kind: SyntaxKind.TemplateMiddle;
         readonly parent: TemplateSpan | TemplateLiteralTypeSpan;
     }
-    interface TemplateTail extends TemplateLiteralLikeNode {
+    export interface TemplateTail extends TemplateLiteralLikeNode {
         readonly kind: SyntaxKind.TemplateTail;
         readonly parent: TemplateSpan | TemplateLiteralTypeSpan;
     }
-    type PseudoLiteralToken = TemplateHead | TemplateMiddle | TemplateTail;
-    type TemplateLiteralToken = NoSubstitutionTemplateLiteral | PseudoLiteralToken;
-    interface TemplateExpression extends PrimaryExpression {
+    export type PseudoLiteralToken = TemplateHead | TemplateMiddle | TemplateTail;
+    export type TemplateLiteralToken = NoSubstitutionTemplateLiteral | PseudoLiteralToken;
+    export interface TemplateExpression extends PrimaryExpression {
         readonly kind: SyntaxKind.TemplateExpression;
         readonly head: TemplateHead;
         readonly templateSpans: NodeArray<TemplateSpan>;
     }
-    type TemplateLiteral = TemplateExpression | NoSubstitutionTemplateLiteral;
-    interface TemplateSpan extends Node {
+    export type TemplateLiteral = TemplateExpression | NoSubstitutionTemplateLiteral;
+    export interface TemplateSpan extends Node {
         readonly kind: SyntaxKind.TemplateSpan;
         readonly parent: TemplateExpression;
         readonly expression: Expression;
         readonly literal: TemplateMiddle | TemplateTail;
     }
-    interface ParenthesizedExpression extends PrimaryExpression, JSDocContainer {
+    export interface ParenthesizedExpression extends PrimaryExpression, JSDocContainer {
         readonly kind: SyntaxKind.ParenthesizedExpression;
         readonly expression: Expression;
     }
-    interface ArrayLiteralExpression extends PrimaryExpression {
+    export interface ArrayLiteralExpression extends PrimaryExpression {
         readonly kind: SyntaxKind.ArrayLiteralExpression;
         readonly elements: NodeArray<Expression>;
     }
-    interface SpreadElement extends Expression {
+    export interface SpreadElement extends Expression {
         readonly kind: SyntaxKind.SpreadElement;
         readonly parent: ArrayLiteralExpression | CallExpression | NewExpression;
         readonly expression: Expression;
@@ -5263,357 +4986,357 @@ declare namespace ts {
      * JSXAttribute or JSXSpreadAttribute. ObjectLiteralExpression, on the other hand, can only have properties of type
      * ObjectLiteralElement (e.g. PropertyAssignment, ShorthandPropertyAssignment etc.)
      */
-    interface ObjectLiteralExpressionBase<T extends ObjectLiteralElement> extends PrimaryExpression, Declaration {
+    export interface ObjectLiteralExpressionBase<T extends ObjectLiteralElement> extends PrimaryExpression, Declaration {
         readonly properties: NodeArray<T>;
     }
-    interface ObjectLiteralExpression extends ObjectLiteralExpressionBase<ObjectLiteralElementLike>, JSDocContainer {
+    export interface ObjectLiteralExpression extends ObjectLiteralExpressionBase<ObjectLiteralElementLike>, JSDocContainer {
         readonly kind: SyntaxKind.ObjectLiteralExpression;
     }
-    type EntityNameExpression = Identifier | PropertyAccessEntityNameExpression;
-    type EntityNameOrEntityNameExpression = EntityName | EntityNameExpression;
-    type AccessExpression = PropertyAccessExpression | ElementAccessExpression;
-    interface PropertyAccessExpression extends MemberExpression, NamedDeclaration, JSDocContainer, FlowContainer {
+    export type EntityNameExpression = Identifier | PropertyAccessEntityNameExpression;
+    export type EntityNameOrEntityNameExpression = EntityName | EntityNameExpression;
+    export type AccessExpression = PropertyAccessExpression | ElementAccessExpression;
+    export interface PropertyAccessExpression extends MemberExpression, NamedDeclaration, JSDocContainer, FlowContainer {
         readonly kind: SyntaxKind.PropertyAccessExpression;
         readonly expression: LeftHandSideExpression;
         readonly questionDotToken?: QuestionDotToken;
         readonly name: MemberName;
     }
-    interface PropertyAccessChain extends PropertyAccessExpression {
+    export interface PropertyAccessChain extends PropertyAccessExpression {
         _optionalChainBrand: any;
         readonly name: MemberName;
     }
-    interface SuperPropertyAccessExpression extends PropertyAccessExpression {
+    export interface SuperPropertyAccessExpression extends PropertyAccessExpression {
         readonly expression: SuperExpression;
     }
     /** Brand for a PropertyAccessExpression which, like a QualifiedName, consists of a sequence of identifiers separated by dots. */
-    interface PropertyAccessEntityNameExpression extends PropertyAccessExpression {
+    export interface PropertyAccessEntityNameExpression extends PropertyAccessExpression {
         _propertyAccessExpressionLikeQualifiedNameBrand?: any;
         readonly expression: EntityNameExpression;
         readonly name: Identifier;
     }
-    interface ElementAccessExpression extends MemberExpression, Declaration, JSDocContainer, FlowContainer {
+    export interface ElementAccessExpression extends MemberExpression, Declaration, JSDocContainer, FlowContainer {
         readonly kind: SyntaxKind.ElementAccessExpression;
         readonly expression: LeftHandSideExpression;
         readonly questionDotToken?: QuestionDotToken;
         readonly argumentExpression: Expression;
     }
-    interface ElementAccessChain extends ElementAccessExpression {
+    export interface ElementAccessChain extends ElementAccessExpression {
         _optionalChainBrand: any;
     }
-    interface SuperElementAccessExpression extends ElementAccessExpression {
+    export interface SuperElementAccessExpression extends ElementAccessExpression {
         readonly expression: SuperExpression;
     }
-    type SuperProperty = SuperPropertyAccessExpression | SuperElementAccessExpression;
-    interface CallExpression extends LeftHandSideExpression, Declaration {
+    export type SuperProperty = SuperPropertyAccessExpression | SuperElementAccessExpression;
+    export interface CallExpression extends LeftHandSideExpression, Declaration {
         readonly kind: SyntaxKind.CallExpression;
         readonly expression: LeftHandSideExpression;
         readonly questionDotToken?: QuestionDotToken;
         readonly typeArguments?: NodeArray<TypeNode>;
         readonly arguments: NodeArray<Expression>;
     }
-    interface CallChain extends CallExpression {
+    export interface CallChain extends CallExpression {
         _optionalChainBrand: any;
     }
-    type OptionalChain = PropertyAccessChain | ElementAccessChain | CallChain | NonNullChain;
-    interface SuperCall extends CallExpression {
+    export type OptionalChain = PropertyAccessChain | ElementAccessChain | CallChain | NonNullChain;
+    export interface SuperCall extends CallExpression {
         readonly expression: SuperExpression;
     }
-    interface ImportCall extends CallExpression {
+    export interface ImportCall extends CallExpression {
         readonly expression: ImportExpression;
     }
-    interface ExpressionWithTypeArguments extends MemberExpression, NodeWithTypeArguments {
+    export interface ExpressionWithTypeArguments extends MemberExpression, NodeWithTypeArguments {
         readonly kind: SyntaxKind.ExpressionWithTypeArguments;
         readonly expression: LeftHandSideExpression;
     }
-    interface NewExpression extends PrimaryExpression, Declaration {
+    export interface NewExpression extends PrimaryExpression, Declaration {
         readonly kind: SyntaxKind.NewExpression;
         readonly expression: LeftHandSideExpression;
         readonly typeArguments?: NodeArray<TypeNode>;
         readonly arguments?: NodeArray<Expression>;
     }
-    interface TaggedTemplateExpression extends MemberExpression {
+    export interface TaggedTemplateExpression extends MemberExpression {
         readonly kind: SyntaxKind.TaggedTemplateExpression;
         readonly tag: LeftHandSideExpression;
         readonly typeArguments?: NodeArray<TypeNode>;
         readonly template: TemplateLiteral;
     }
-    interface InstanceofExpression extends BinaryExpression {
+    export interface InstanceofExpression extends BinaryExpression {
         readonly operatorToken: Token<SyntaxKind.InstanceOfKeyword>;
     }
-    type CallLikeExpression = CallExpression | NewExpression | TaggedTemplateExpression | Decorator | JsxOpeningLikeElement | InstanceofExpression;
-    interface AsExpression extends Expression {
+    export type CallLikeExpression = CallExpression | NewExpression | TaggedTemplateExpression | Decorator | JsxOpeningLikeElement | InstanceofExpression;
+    export interface AsExpression extends Expression {
         readonly kind: SyntaxKind.AsExpression;
         readonly expression: Expression;
         readonly type: TypeNode;
     }
-    interface TypeAssertion extends UnaryExpression {
+    export interface TypeAssertion extends UnaryExpression {
         readonly kind: SyntaxKind.TypeAssertionExpression;
         readonly type: TypeNode;
         readonly expression: UnaryExpression;
     }
-    interface SatisfiesExpression extends Expression {
+    export interface SatisfiesExpression extends Expression {
         readonly kind: SyntaxKind.SatisfiesExpression;
         readonly expression: Expression;
         readonly type: TypeNode;
     }
-    type AssertionExpression = TypeAssertion | AsExpression;
-    interface NonNullExpression extends LeftHandSideExpression {
+    export type AssertionExpression = TypeAssertion | AsExpression;
+    export interface NonNullExpression extends LeftHandSideExpression {
         readonly kind: SyntaxKind.NonNullExpression;
         readonly expression: Expression;
     }
-    interface NonNullChain extends NonNullExpression {
+    export interface NonNullChain extends NonNullExpression {
         _optionalChainBrand: any;
     }
-    interface MetaProperty extends PrimaryExpression, FlowContainer {
+    export interface MetaProperty extends PrimaryExpression, FlowContainer {
         readonly kind: SyntaxKind.MetaProperty;
         readonly keywordToken: SyntaxKind.NewKeyword | SyntaxKind.ImportKeyword;
         readonly name: Identifier;
     }
-    interface JsxElement extends PrimaryExpression {
+    export interface JsxElement extends PrimaryExpression {
         readonly kind: SyntaxKind.JsxElement;
         readonly openingElement: JsxOpeningElement;
         readonly children: NodeArray<JsxChild>;
         readonly closingElement: JsxClosingElement;
     }
-    type JsxOpeningLikeElement = JsxSelfClosingElement | JsxOpeningElement;
-    type JsxAttributeLike = JsxAttribute | JsxSpreadAttribute;
-    type JsxAttributeName = Identifier | JsxNamespacedName;
-    type JsxTagNameExpression = Identifier | ThisExpression | JsxTagNamePropertyAccess | JsxNamespacedName;
-    interface JsxTagNamePropertyAccess extends PropertyAccessExpression {
+    export type JsxOpeningLikeElement = JsxSelfClosingElement | JsxOpeningElement;
+    export type JsxAttributeLike = JsxAttribute | JsxSpreadAttribute;
+    export type JsxAttributeName = Identifier | JsxNamespacedName;
+    export type JsxTagNameExpression = Identifier | ThisExpression | JsxTagNamePropertyAccess | JsxNamespacedName;
+    export interface JsxTagNamePropertyAccess extends PropertyAccessExpression {
         readonly expression: Identifier | ThisExpression | JsxTagNamePropertyAccess;
     }
-    interface JsxAttributes extends PrimaryExpression, Declaration {
+    export interface JsxAttributes extends PrimaryExpression, Declaration {
         readonly properties: NodeArray<JsxAttributeLike>;
         readonly kind: SyntaxKind.JsxAttributes;
         readonly parent: JsxOpeningLikeElement;
     }
-    interface JsxNamespacedName extends Node {
+    export interface JsxNamespacedName extends Node {
         readonly kind: SyntaxKind.JsxNamespacedName;
         readonly name: Identifier;
         readonly namespace: Identifier;
     }
-    interface JsxOpeningElement extends Expression {
+    export interface JsxOpeningElement extends Expression {
         readonly kind: SyntaxKind.JsxOpeningElement;
         readonly parent: JsxElement;
         readonly tagName: JsxTagNameExpression;
         readonly typeArguments?: NodeArray<TypeNode>;
         readonly attributes: JsxAttributes;
     }
-    interface JsxSelfClosingElement extends PrimaryExpression {
+    export interface JsxSelfClosingElement extends PrimaryExpression {
         readonly kind: SyntaxKind.JsxSelfClosingElement;
         readonly tagName: JsxTagNameExpression;
         readonly typeArguments?: NodeArray<TypeNode>;
         readonly attributes: JsxAttributes;
     }
-    interface JsxFragment extends PrimaryExpression {
+    export interface JsxFragment extends PrimaryExpression {
         readonly kind: SyntaxKind.JsxFragment;
         readonly openingFragment: JsxOpeningFragment;
         readonly children: NodeArray<JsxChild>;
         readonly closingFragment: JsxClosingFragment;
     }
-    interface JsxOpeningFragment extends Expression {
+    export interface JsxOpeningFragment extends Expression {
         readonly kind: SyntaxKind.JsxOpeningFragment;
         readonly parent: JsxFragment;
     }
-    interface JsxClosingFragment extends Expression {
+    export interface JsxClosingFragment extends Expression {
         readonly kind: SyntaxKind.JsxClosingFragment;
         readonly parent: JsxFragment;
     }
-    interface JsxAttribute extends Declaration {
+    export interface JsxAttribute extends Declaration {
         readonly kind: SyntaxKind.JsxAttribute;
         readonly parent: JsxAttributes;
         readonly name: JsxAttributeName;
         readonly initializer?: JsxAttributeValue;
     }
-    type JsxAttributeValue = StringLiteral | JsxExpression | JsxElement | JsxSelfClosingElement | JsxFragment;
-    interface JsxSpreadAttribute extends ObjectLiteralElement {
+    export type JsxAttributeValue = StringLiteral | JsxExpression | JsxElement | JsxSelfClosingElement | JsxFragment;
+    export interface JsxSpreadAttribute extends ObjectLiteralElement {
         readonly kind: SyntaxKind.JsxSpreadAttribute;
         readonly parent: JsxAttributes;
         readonly expression: Expression;
     }
-    interface JsxClosingElement extends Node {
+    export interface JsxClosingElement extends Node {
         readonly kind: SyntaxKind.JsxClosingElement;
         readonly parent: JsxElement;
         readonly tagName: JsxTagNameExpression;
     }
-    interface JsxExpression extends Expression {
+    export interface JsxExpression extends Expression {
         readonly kind: SyntaxKind.JsxExpression;
         readonly parent: JsxElement | JsxFragment | JsxAttributeLike;
         readonly dotDotDotToken?: Token<SyntaxKind.DotDotDotToken>;
         readonly expression?: Expression;
     }
-    interface JsxText extends LiteralLikeNode {
+    export interface JsxText extends LiteralLikeNode {
         readonly kind: SyntaxKind.JsxText;
         readonly parent: JsxElement | JsxFragment;
         readonly containsOnlyTriviaWhiteSpaces: boolean;
     }
-    type JsxChild = JsxText | JsxExpression | JsxElement | JsxSelfClosingElement | JsxFragment;
-    interface Statement extends Node, JSDocContainer {
+    export type JsxChild = JsxText | JsxExpression | JsxElement | JsxSelfClosingElement | JsxFragment;
+    export interface Statement extends Node, JSDocContainer {
         _statementBrand: any;
     }
-    interface NotEmittedStatement extends Statement {
+    export interface NotEmittedStatement extends Statement {
         readonly kind: SyntaxKind.NotEmittedStatement;
     }
     /**
      * A list of comma-separated expressions. This node is only created by transformations.
      */
-    interface CommaListExpression extends Expression {
+    export interface CommaListExpression extends Expression {
         readonly kind: SyntaxKind.CommaListExpression;
         readonly elements: NodeArray<Expression>;
     }
-    interface EmptyStatement extends Statement {
+    export interface EmptyStatement extends Statement {
         readonly kind: SyntaxKind.EmptyStatement;
     }
-    interface DebuggerStatement extends Statement, FlowContainer {
+    export interface DebuggerStatement extends Statement, FlowContainer {
         readonly kind: SyntaxKind.DebuggerStatement;
     }
-    interface MissingDeclaration extends DeclarationStatement, PrimaryExpression {
+    export interface MissingDeclaration extends DeclarationStatement, PrimaryExpression {
         readonly kind: SyntaxKind.MissingDeclaration;
         readonly name?: Identifier;
     }
-    type BlockLike = SourceFile | Block | ModuleBlock | CaseOrDefaultClause;
-    interface Block extends Statement, LocalsContainer {
+    export type BlockLike = SourceFile | Block | ModuleBlock | CaseOrDefaultClause;
+    export interface Block extends Statement, LocalsContainer {
         readonly kind: SyntaxKind.Block;
         readonly statements: NodeArray<Statement>;
     }
-    interface VariableStatement extends Statement, FlowContainer {
+    export interface VariableStatement extends Statement, FlowContainer {
         readonly kind: SyntaxKind.VariableStatement;
         readonly modifiers?: NodeArray<ModifierLike>;
         readonly declarationList: VariableDeclarationList;
     }
-    interface ExpressionStatement extends Statement, FlowContainer {
+    export interface ExpressionStatement extends Statement, FlowContainer {
         readonly kind: SyntaxKind.ExpressionStatement;
         readonly expression: Expression;
     }
-    interface IfStatement extends Statement, FlowContainer {
+    export interface IfStatement extends Statement, FlowContainer {
         readonly kind: SyntaxKind.IfStatement;
         readonly expression: Expression;
         readonly thenStatement: Statement;
         readonly elseStatement?: Statement;
     }
-    interface IterationStatement extends Statement {
+    export interface IterationStatement extends Statement {
         readonly statement: Statement;
     }
-    interface DoStatement extends IterationStatement, FlowContainer {
+    export interface DoStatement extends IterationStatement, FlowContainer {
         readonly kind: SyntaxKind.DoStatement;
         readonly expression: Expression;
     }
-    interface WhileStatement extends IterationStatement, FlowContainer {
+    export interface WhileStatement extends IterationStatement, FlowContainer {
         readonly kind: SyntaxKind.WhileStatement;
         readonly expression: Expression;
     }
-    type ForInitializer = VariableDeclarationList | Expression;
-    interface ForStatement extends IterationStatement, LocalsContainer, FlowContainer {
+    export type ForInitializer = VariableDeclarationList | Expression;
+    export interface ForStatement extends IterationStatement, LocalsContainer, FlowContainer {
         readonly kind: SyntaxKind.ForStatement;
         readonly initializer?: ForInitializer;
         readonly condition?: Expression;
         readonly incrementor?: Expression;
     }
-    type ForInOrOfStatement = ForInStatement | ForOfStatement;
-    interface ForInStatement extends IterationStatement, LocalsContainer, FlowContainer {
+    export type ForInOrOfStatement = ForInStatement | ForOfStatement;
+    export interface ForInStatement extends IterationStatement, LocalsContainer, FlowContainer {
         readonly kind: SyntaxKind.ForInStatement;
         readonly initializer: ForInitializer;
         readonly expression: Expression;
     }
-    interface ForOfStatement extends IterationStatement, LocalsContainer, FlowContainer {
+    export interface ForOfStatement extends IterationStatement, LocalsContainer, FlowContainer {
         readonly kind: SyntaxKind.ForOfStatement;
         readonly awaitModifier?: AwaitKeyword;
         readonly initializer: ForInitializer;
         readonly expression: Expression;
     }
-    interface BreakStatement extends Statement, FlowContainer {
+    export interface BreakStatement extends Statement, FlowContainer {
         readonly kind: SyntaxKind.BreakStatement;
         readonly label?: Identifier;
     }
-    interface ContinueStatement extends Statement, FlowContainer {
+    export interface ContinueStatement extends Statement, FlowContainer {
         readonly kind: SyntaxKind.ContinueStatement;
         readonly label?: Identifier;
     }
-    type BreakOrContinueStatement = BreakStatement | ContinueStatement;
-    interface ReturnStatement extends Statement, FlowContainer {
+    export type BreakOrContinueStatement = BreakStatement | ContinueStatement;
+    export interface ReturnStatement extends Statement, FlowContainer {
         readonly kind: SyntaxKind.ReturnStatement;
         readonly expression?: Expression;
     }
-    interface WithStatement extends Statement, FlowContainer {
+    export interface WithStatement extends Statement, FlowContainer {
         readonly kind: SyntaxKind.WithStatement;
         readonly expression: Expression;
         readonly statement: Statement;
     }
-    interface SwitchStatement extends Statement, FlowContainer {
+    export interface SwitchStatement extends Statement, FlowContainer {
         readonly kind: SyntaxKind.SwitchStatement;
         readonly expression: Expression;
         readonly caseBlock: CaseBlock;
         possiblyExhaustive?: boolean;
     }
-    interface CaseBlock extends Node, LocalsContainer {
+    export interface CaseBlock extends Node, LocalsContainer {
         readonly kind: SyntaxKind.CaseBlock;
         readonly parent: SwitchStatement;
         readonly clauses: NodeArray<CaseOrDefaultClause>;
     }
-    interface CaseClause extends Node, JSDocContainer {
+    export interface CaseClause extends Node, JSDocContainer {
         readonly kind: SyntaxKind.CaseClause;
         readonly parent: CaseBlock;
         readonly expression: Expression;
         readonly statements: NodeArray<Statement>;
     }
-    interface DefaultClause extends Node {
+    export interface DefaultClause extends Node {
         readonly kind: SyntaxKind.DefaultClause;
         readonly parent: CaseBlock;
         readonly statements: NodeArray<Statement>;
     }
-    type CaseOrDefaultClause = CaseClause | DefaultClause;
-    interface LabeledStatement extends Statement, FlowContainer {
+    export type CaseOrDefaultClause = CaseClause | DefaultClause;
+    export interface LabeledStatement extends Statement, FlowContainer {
         readonly kind: SyntaxKind.LabeledStatement;
         readonly label: Identifier;
         readonly statement: Statement;
     }
-    interface ThrowStatement extends Statement, FlowContainer {
+    export interface ThrowStatement extends Statement, FlowContainer {
         readonly kind: SyntaxKind.ThrowStatement;
         readonly expression: Expression;
     }
-    interface TryStatement extends Statement, FlowContainer {
+    export interface TryStatement extends Statement, FlowContainer {
         readonly kind: SyntaxKind.TryStatement;
         readonly tryBlock: Block;
         readonly catchClause?: CatchClause;
         readonly finallyBlock?: Block;
     }
-    interface CatchClause extends Node, LocalsContainer {
+    export interface CatchClause extends Node, LocalsContainer {
         readonly kind: SyntaxKind.CatchClause;
         readonly parent: TryStatement;
         readonly variableDeclaration?: VariableDeclaration;
         readonly block: Block;
     }
-    type ObjectTypeDeclaration = ClassLikeDeclaration | InterfaceDeclaration | TypeLiteralNode;
-    type DeclarationWithTypeParameters = DeclarationWithTypeParameterChildren | JSDocTypedefTag | JSDocCallbackTag | JSDocSignature;
-    type DeclarationWithTypeParameterChildren = SignatureDeclaration | ClassLikeDeclaration | InterfaceDeclaration | TypeAliasDeclaration | JSDocTemplateTag;
-    interface ClassLikeDeclarationBase extends NamedDeclaration, JSDocContainer {
+    export type ObjectTypeDeclaration = ClassLikeDeclaration | InterfaceDeclaration | TypeLiteralNode;
+    export type DeclarationWithTypeParameters = DeclarationWithTypeParameterChildren | JSDocTypedefTag | JSDocCallbackTag | JSDocSignature;
+    export type DeclarationWithTypeParameterChildren = SignatureDeclaration | ClassLikeDeclaration | InterfaceDeclaration | TypeAliasDeclaration | JSDocTemplateTag;
+    export interface ClassLikeDeclarationBase extends NamedDeclaration, JSDocContainer {
         readonly kind: SyntaxKind.ClassDeclaration | SyntaxKind.ClassExpression;
         readonly name?: Identifier;
         readonly typeParameters?: NodeArray<TypeParameterDeclaration>;
         readonly heritageClauses?: NodeArray<HeritageClause>;
         readonly members: NodeArray<ClassElement>;
     }
-    interface ClassDeclaration extends ClassLikeDeclarationBase, DeclarationStatement {
+    export interface ClassDeclaration extends ClassLikeDeclarationBase, DeclarationStatement {
         readonly kind: SyntaxKind.ClassDeclaration;
         readonly modifiers?: NodeArray<ModifierLike>;
         /** May be undefined in `export default class { ... }`. */
         readonly name?: Identifier;
     }
-    interface ClassExpression extends ClassLikeDeclarationBase, PrimaryExpression {
+    export interface ClassExpression extends ClassLikeDeclarationBase, PrimaryExpression {
         readonly kind: SyntaxKind.ClassExpression;
         readonly modifiers?: NodeArray<ModifierLike>;
     }
-    type ClassLikeDeclaration = ClassDeclaration | ClassExpression;
-    interface ClassElement extends NamedDeclaration {
+    export type ClassLikeDeclaration = ClassDeclaration | ClassExpression;
+    export interface ClassElement extends NamedDeclaration {
         _classElementBrand: any;
         readonly name?: PropertyName;
     }
-    interface TypeElement extends NamedDeclaration {
+    export interface TypeElement extends NamedDeclaration {
         _typeElementBrand: any;
         readonly name?: PropertyName;
         readonly questionToken?: QuestionToken | undefined;
     }
-    interface InterfaceDeclaration extends DeclarationStatement, JSDocContainer {
+    export interface InterfaceDeclaration extends DeclarationStatement, JSDocContainer {
         readonly kind: SyntaxKind.InterfaceDeclaration;
         readonly modifiers?: NodeArray<ModifierLike>;
         readonly name: Identifier;
@@ -5621,62 +5344,62 @@ declare namespace ts {
         readonly heritageClauses?: NodeArray<HeritageClause>;
         readonly members: NodeArray<TypeElement>;
     }
-    interface HeritageClause extends Node {
+    export interface HeritageClause extends Node {
         readonly kind: SyntaxKind.HeritageClause;
         readonly parent: InterfaceDeclaration | ClassLikeDeclaration;
         readonly token: SyntaxKind.ExtendsKeyword | SyntaxKind.ImplementsKeyword;
         readonly types: NodeArray<ExpressionWithTypeArguments>;
     }
-    interface TypeAliasDeclaration extends DeclarationStatement, JSDocContainer, LocalsContainer {
+    export interface TypeAliasDeclaration extends DeclarationStatement, JSDocContainer, LocalsContainer {
         readonly kind: SyntaxKind.TypeAliasDeclaration;
         readonly modifiers?: NodeArray<ModifierLike>;
         readonly name: Identifier;
         readonly typeParameters?: NodeArray<TypeParameterDeclaration>;
         readonly type: TypeNode;
     }
-    interface EnumMember extends NamedDeclaration, JSDocContainer {
+    export interface EnumMember extends NamedDeclaration, JSDocContainer {
         readonly kind: SyntaxKind.EnumMember;
         readonly parent: EnumDeclaration;
         readonly name: PropertyName;
         readonly initializer?: Expression;
     }
-    interface EnumDeclaration extends DeclarationStatement, JSDocContainer {
+    export interface EnumDeclaration extends DeclarationStatement, JSDocContainer {
         readonly kind: SyntaxKind.EnumDeclaration;
         readonly modifiers?: NodeArray<ModifierLike>;
         readonly name: Identifier;
         readonly members: NodeArray<EnumMember>;
     }
-    type ModuleName = Identifier | StringLiteral;
-    type ModuleBody = NamespaceBody | JSDocNamespaceBody;
-    interface ModuleDeclaration extends DeclarationStatement, JSDocContainer, LocalsContainer {
+    export type ModuleName = Identifier | StringLiteral;
+    export type ModuleBody = NamespaceBody | JSDocNamespaceBody;
+    export interface ModuleDeclaration extends DeclarationStatement, JSDocContainer, LocalsContainer {
         readonly kind: SyntaxKind.ModuleDeclaration;
         readonly parent: ModuleBody | SourceFile;
         readonly modifiers?: NodeArray<ModifierLike>;
         readonly name: ModuleName;
         readonly body?: ModuleBody | JSDocNamespaceDeclaration;
     }
-    type NamespaceBody = ModuleBlock | NamespaceDeclaration;
-    interface NamespaceDeclaration extends ModuleDeclaration {
+    export type NamespaceBody = ModuleBlock | NamespaceDeclaration;
+    export interface NamespaceDeclaration extends ModuleDeclaration {
         readonly name: Identifier;
         readonly body: NamespaceBody;
     }
-    type JSDocNamespaceBody = Identifier | JSDocNamespaceDeclaration;
-    interface JSDocNamespaceDeclaration extends ModuleDeclaration {
+    export type JSDocNamespaceBody = Identifier | JSDocNamespaceDeclaration;
+    export interface JSDocNamespaceDeclaration extends ModuleDeclaration {
         readonly name: Identifier;
         readonly body?: JSDocNamespaceBody;
     }
-    interface ModuleBlock extends Node, Statement {
+    export interface ModuleBlock extends Node, Statement {
         readonly kind: SyntaxKind.ModuleBlock;
         readonly parent: ModuleDeclaration;
         readonly statements: NodeArray<Statement>;
     }
-    type ModuleReference = EntityName | ExternalModuleReference;
+    export type ModuleReference = EntityName | ExternalModuleReference;
     /**
      * One of:
      * - import x = require("mod");
      * - import x = M.x;
      */
-    interface ImportEqualsDeclaration extends DeclarationStatement, JSDocContainer {
+    export interface ImportEqualsDeclaration extends DeclarationStatement, JSDocContainer {
         readonly kind: SyntaxKind.ImportEqualsDeclaration;
         readonly parent: SourceFile | ModuleBlock;
         readonly modifiers?: NodeArray<ModifierLike>;
@@ -5684,12 +5407,12 @@ declare namespace ts {
         readonly isTypeOnly: boolean;
         readonly moduleReference: ModuleReference;
     }
-    interface ExternalModuleReference extends Node {
+    export interface ExternalModuleReference extends Node {
         readonly kind: SyntaxKind.ExternalModuleReference;
         readonly parent: ImportEqualsDeclaration;
         readonly expression: Expression;
     }
-    interface ImportDeclaration extends Statement {
+    export interface ImportDeclaration extends Statement {
         readonly kind: SyntaxKind.ImportDeclaration;
         readonly parent: SourceFile | ModuleBlock;
         readonly modifiers?: NodeArray<ModifierLike>;
@@ -5699,9 +5422,9 @@ declare namespace ts {
         /** @deprecated */ readonly assertClause?: AssertClause;
         readonly attributes?: ImportAttributes;
     }
-    type NamedImportBindings = NamespaceImport | NamedImports;
-    type NamedExportBindings = NamespaceExport | NamedExports;
-    interface ImportClause extends NamedDeclaration {
+    export type NamedImportBindings = NamespaceImport | NamedImports;
+    export type NamedExportBindings = NamespaceExport | NamedExports;
+    export interface ImportClause extends NamedDeclaration {
         readonly kind: SyntaxKind.ImportClause;
         readonly parent: ImportDeclaration;
         readonly isTypeOnly: boolean;
@@ -5709,42 +5432,42 @@ declare namespace ts {
         readonly namedBindings?: NamedImportBindings;
     }
     /** @deprecated */
-    type AssertionKey = ImportAttributeName;
+    export type AssertionKey = ImportAttributeName;
     /** @deprecated */
-    interface AssertEntry extends ImportAttribute {
+    export interface AssertEntry extends ImportAttribute {
     }
     /** @deprecated */
-    interface AssertClause extends ImportAttributes {
+    export interface AssertClause extends ImportAttributes {
     }
-    type ImportAttributeName = Identifier | StringLiteral;
-    interface ImportAttribute extends Node {
+    export type ImportAttributeName = Identifier | StringLiteral;
+    export interface ImportAttribute extends Node {
         readonly kind: SyntaxKind.ImportAttribute;
         readonly parent: ImportAttributes;
         readonly name: ImportAttributeName;
         readonly value: Expression;
     }
-    interface ImportAttributes extends Node {
+    export interface ImportAttributes extends Node {
         readonly token: SyntaxKind.WithKeyword | SyntaxKind.AssertKeyword;
         readonly kind: SyntaxKind.ImportAttributes;
         readonly parent: ImportDeclaration | ExportDeclaration;
         readonly elements: NodeArray<ImportAttribute>;
         readonly multiLine?: boolean;
     }
-    interface NamespaceImport extends NamedDeclaration {
+    export interface NamespaceImport extends NamedDeclaration {
         readonly kind: SyntaxKind.NamespaceImport;
         readonly parent: ImportClause;
         readonly name: Identifier;
     }
-    interface NamespaceExport extends NamedDeclaration {
+    export interface NamespaceExport extends NamedDeclaration {
         readonly kind: SyntaxKind.NamespaceExport;
         readonly parent: ExportDeclaration;
         readonly name: Identifier;
     }
-    interface NamespaceExportDeclaration extends DeclarationStatement, JSDocContainer {
+    export interface NamespaceExportDeclaration extends DeclarationStatement, JSDocContainer {
         readonly kind: SyntaxKind.NamespaceExportDeclaration;
         readonly name: Identifier;
     }
-    interface ExportDeclaration extends DeclarationStatement, JSDocContainer {
+    export interface ExportDeclaration extends DeclarationStatement, JSDocContainer {
         readonly kind: SyntaxKind.ExportDeclaration;
         readonly parent: SourceFile | ModuleBlock;
         readonly modifiers?: NodeArray<ModifierLike>;
@@ -5756,34 +5479,34 @@ declare namespace ts {
         /** @deprecated */ readonly assertClause?: AssertClause;
         readonly attributes?: ImportAttributes;
     }
-    interface NamedImports extends Node {
+    export interface NamedImports extends Node {
         readonly kind: SyntaxKind.NamedImports;
         readonly parent: ImportClause;
         readonly elements: NodeArray<ImportSpecifier>;
     }
-    interface NamedExports extends Node {
+    export interface NamedExports extends Node {
         readonly kind: SyntaxKind.NamedExports;
         readonly parent: ExportDeclaration;
         readonly elements: NodeArray<ExportSpecifier>;
     }
-    type NamedImportsOrExports = NamedImports | NamedExports;
-    interface ImportSpecifier extends NamedDeclaration {
+    export type NamedImportsOrExports = NamedImports | NamedExports;
+    export interface ImportSpecifier extends NamedDeclaration {
         readonly kind: SyntaxKind.ImportSpecifier;
         readonly parent: NamedImports;
         readonly propertyName?: Identifier;
         readonly name: Identifier;
         readonly isTypeOnly: boolean;
     }
-    interface ExportSpecifier extends NamedDeclaration, JSDocContainer {
+    export interface ExportSpecifier extends NamedDeclaration, JSDocContainer {
         readonly kind: SyntaxKind.ExportSpecifier;
         readonly parent: NamedExports;
         readonly isTypeOnly: boolean;
         readonly propertyName?: Identifier;
         readonly name: Identifier;
     }
-    type ImportOrExportSpecifier = ImportSpecifier | ExportSpecifier;
-    type TypeOnlyCompatibleAliasDeclaration = ImportClause | ImportEqualsDeclaration | NamespaceImport | ImportOrExportSpecifier | ExportDeclaration | NamespaceExport;
-    type TypeOnlyImportDeclaration =
+    export type ImportOrExportSpecifier = ImportSpecifier | ExportSpecifier;
+    export type TypeOnlyCompatibleAliasDeclaration = ImportClause | ImportEqualsDeclaration | NamespaceImport | ImportOrExportSpecifier | ExportDeclaration | NamespaceExport;
+    export type TypeOnlyImportDeclaration =
         | ImportClause & {
             readonly isTypeOnly: true;
             readonly name: Identifier;
@@ -5806,7 +5529,7 @@ declare namespace ts {
                     };
                 };
             });
-    type TypeOnlyExportDeclaration =
+    export type TypeOnlyExportDeclaration =
         | ExportSpecifier
             & ({
                 readonly isTypeOnly: true;
@@ -5827,215 +5550,215 @@ declare namespace ts {
                 readonly moduleSpecifier: Expression;
             };
         };
-    type TypeOnlyAliasDeclaration = TypeOnlyImportDeclaration | TypeOnlyExportDeclaration;
+    export type TypeOnlyAliasDeclaration = TypeOnlyImportDeclaration | TypeOnlyExportDeclaration;
     /**
      * This is either an `export =` or an `export default` declaration.
      * Unless `isExportEquals` is set, this node was parsed as an `export default`.
      */
-    interface ExportAssignment extends DeclarationStatement, JSDocContainer {
+    export interface ExportAssignment extends DeclarationStatement, JSDocContainer {
         readonly kind: SyntaxKind.ExportAssignment;
         readonly parent: SourceFile;
         readonly modifiers?: NodeArray<ModifierLike>;
         readonly isExportEquals?: boolean;
         readonly expression: Expression;
     }
-    interface FileReference extends TextRange {
+    export interface FileReference extends TextRange {
         fileName: string;
         resolutionMode?: ResolutionMode;
     }
-    interface CheckJsDirective extends TextRange {
+    export interface CheckJsDirective extends TextRange {
         enabled: boolean;
     }
-    type CommentKind = SyntaxKind.SingleLineCommentTrivia | SyntaxKind.MultiLineCommentTrivia;
-    interface CommentRange extends TextRange {
+    export type CommentKind = SyntaxKind.SingleLineCommentTrivia | SyntaxKind.MultiLineCommentTrivia;
+    export interface CommentRange extends TextRange {
         hasTrailingNewLine?: boolean;
         kind: CommentKind;
     }
-    interface SynthesizedComment extends CommentRange {
+    export interface SynthesizedComment extends CommentRange {
         text: string;
         pos: -1;
         end: -1;
         hasLeadingNewline?: boolean;
     }
-    interface JSDocTypeExpression extends TypeNode {
+    export interface JSDocTypeExpression extends TypeNode {
         readonly kind: SyntaxKind.JSDocTypeExpression;
         readonly type: TypeNode;
     }
-    interface JSDocNameReference extends Node {
+    export interface JSDocNameReference extends Node {
         readonly kind: SyntaxKind.JSDocNameReference;
         readonly name: EntityName | JSDocMemberName;
     }
     /** Class#method reference in JSDoc */
-    interface JSDocMemberName extends Node {
+    export interface JSDocMemberName extends Node {
         readonly kind: SyntaxKind.JSDocMemberName;
         readonly left: EntityName | JSDocMemberName;
         readonly right: Identifier;
     }
-    interface JSDocType extends TypeNode {
+    export interface JSDocType extends TypeNode {
         _jsDocTypeBrand: any;
     }
-    interface JSDocAllType extends JSDocType {
+    export interface JSDocAllType extends JSDocType {
         readonly kind: SyntaxKind.JSDocAllType;
     }
-    interface JSDocUnknownType extends JSDocType {
+    export interface JSDocUnknownType extends JSDocType {
         readonly kind: SyntaxKind.JSDocUnknownType;
     }
-    interface JSDocNonNullableType extends JSDocType {
+    export interface JSDocNonNullableType extends JSDocType {
         readonly kind: SyntaxKind.JSDocNonNullableType;
         readonly type: TypeNode;
         readonly postfix: boolean;
     }
-    interface JSDocNullableType extends JSDocType {
+    export interface JSDocNullableType extends JSDocType {
         readonly kind: SyntaxKind.JSDocNullableType;
         readonly type: TypeNode;
         readonly postfix: boolean;
     }
-    interface JSDocOptionalType extends JSDocType {
+    export interface JSDocOptionalType extends JSDocType {
         readonly kind: SyntaxKind.JSDocOptionalType;
         readonly type: TypeNode;
     }
-    interface JSDocFunctionType extends JSDocType, SignatureDeclarationBase, LocalsContainer {
+    export interface JSDocFunctionType extends JSDocType, SignatureDeclarationBase, LocalsContainer {
         readonly kind: SyntaxKind.JSDocFunctionType;
     }
-    interface JSDocVariadicType extends JSDocType {
+    export interface JSDocVariadicType extends JSDocType {
         readonly kind: SyntaxKind.JSDocVariadicType;
         readonly type: TypeNode;
     }
-    interface JSDocNamepathType extends JSDocType {
+    export interface JSDocNamepathType extends JSDocType {
         readonly kind: SyntaxKind.JSDocNamepathType;
         readonly type: TypeNode;
     }
-    type JSDocTypeReferencingNode = JSDocVariadicType | JSDocOptionalType | JSDocNullableType | JSDocNonNullableType;
-    interface JSDoc extends Node {
+    export type JSDocTypeReferencingNode = JSDocVariadicType | JSDocOptionalType | JSDocNullableType | JSDocNonNullableType;
+    export interface JSDoc extends Node {
         readonly kind: SyntaxKind.JSDoc;
         readonly parent: HasJSDoc;
         readonly tags?: NodeArray<JSDocTag>;
         readonly comment?: string | NodeArray<JSDocComment>;
     }
-    interface JSDocTag extends Node {
+    export interface JSDocTag extends Node {
         readonly parent: JSDoc | JSDocTypeLiteral;
         readonly tagName: Identifier;
         readonly comment?: string | NodeArray<JSDocComment>;
     }
-    interface JSDocLink extends Node {
+    export interface JSDocLink extends Node {
         readonly kind: SyntaxKind.JSDocLink;
         readonly name?: EntityName | JSDocMemberName;
         text: string;
     }
-    interface JSDocLinkCode extends Node {
+    export interface JSDocLinkCode extends Node {
         readonly kind: SyntaxKind.JSDocLinkCode;
         readonly name?: EntityName | JSDocMemberName;
         text: string;
     }
-    interface JSDocLinkPlain extends Node {
+    export interface JSDocLinkPlain extends Node {
         readonly kind: SyntaxKind.JSDocLinkPlain;
         readonly name?: EntityName | JSDocMemberName;
         text: string;
     }
-    type JSDocComment = JSDocText | JSDocLink | JSDocLinkCode | JSDocLinkPlain;
-    interface JSDocText extends Node {
+    export type JSDocComment = JSDocText | JSDocLink | JSDocLinkCode | JSDocLinkPlain;
+    export interface JSDocText extends Node {
         readonly kind: SyntaxKind.JSDocText;
         text: string;
     }
-    interface JSDocUnknownTag extends JSDocTag {
+    export interface JSDocUnknownTag extends JSDocTag {
         readonly kind: SyntaxKind.JSDocTag;
     }
     /**
      * Note that `@extends` is a synonym of `@augments`.
      * Both tags are represented by this interface.
      */
-    interface JSDocAugmentsTag extends JSDocTag {
+    export interface JSDocAugmentsTag extends JSDocTag {
         readonly kind: SyntaxKind.JSDocAugmentsTag;
         readonly class: ExpressionWithTypeArguments & {
             readonly expression: Identifier | PropertyAccessEntityNameExpression;
         };
     }
-    interface JSDocImplementsTag extends JSDocTag {
+    export interface JSDocImplementsTag extends JSDocTag {
         readonly kind: SyntaxKind.JSDocImplementsTag;
         readonly class: ExpressionWithTypeArguments & {
             readonly expression: Identifier | PropertyAccessEntityNameExpression;
         };
     }
-    interface JSDocAuthorTag extends JSDocTag {
+    export interface JSDocAuthorTag extends JSDocTag {
         readonly kind: SyntaxKind.JSDocAuthorTag;
     }
-    interface JSDocDeprecatedTag extends JSDocTag {
+    export interface JSDocDeprecatedTag extends JSDocTag {
         kind: SyntaxKind.JSDocDeprecatedTag;
     }
-    interface JSDocClassTag extends JSDocTag {
+    export interface JSDocClassTag extends JSDocTag {
         readonly kind: SyntaxKind.JSDocClassTag;
     }
-    interface JSDocPublicTag extends JSDocTag {
+    export interface JSDocPublicTag extends JSDocTag {
         readonly kind: SyntaxKind.JSDocPublicTag;
     }
-    interface JSDocPrivateTag extends JSDocTag {
+    export interface JSDocPrivateTag extends JSDocTag {
         readonly kind: SyntaxKind.JSDocPrivateTag;
     }
-    interface JSDocProtectedTag extends JSDocTag {
+    export interface JSDocProtectedTag extends JSDocTag {
         readonly kind: SyntaxKind.JSDocProtectedTag;
     }
-    interface JSDocReadonlyTag extends JSDocTag {
+    export interface JSDocReadonlyTag extends JSDocTag {
         readonly kind: SyntaxKind.JSDocReadonlyTag;
     }
-    interface JSDocOverrideTag extends JSDocTag {
+    export interface JSDocOverrideTag extends JSDocTag {
         readonly kind: SyntaxKind.JSDocOverrideTag;
     }
-    interface JSDocEnumTag extends JSDocTag, Declaration, LocalsContainer {
+    export interface JSDocEnumTag extends JSDocTag, Declaration, LocalsContainer {
         readonly kind: SyntaxKind.JSDocEnumTag;
         readonly parent: JSDoc;
         readonly typeExpression: JSDocTypeExpression;
     }
-    interface JSDocThisTag extends JSDocTag {
+    export interface JSDocThisTag extends JSDocTag {
         readonly kind: SyntaxKind.JSDocThisTag;
         readonly typeExpression: JSDocTypeExpression;
     }
-    interface JSDocTemplateTag extends JSDocTag {
+    export interface JSDocTemplateTag extends JSDocTag {
         readonly kind: SyntaxKind.JSDocTemplateTag;
         readonly constraint: JSDocTypeExpression | undefined;
         readonly typeParameters: NodeArray<TypeParameterDeclaration>;
     }
-    interface JSDocSeeTag extends JSDocTag {
+    export interface JSDocSeeTag extends JSDocTag {
         readonly kind: SyntaxKind.JSDocSeeTag;
         readonly name?: JSDocNameReference;
     }
-    interface JSDocReturnTag extends JSDocTag {
+    export interface JSDocReturnTag extends JSDocTag {
         readonly kind: SyntaxKind.JSDocReturnTag;
         readonly typeExpression?: JSDocTypeExpression;
     }
-    interface JSDocTypeTag extends JSDocTag {
+    export interface JSDocTypeTag extends JSDocTag {
         readonly kind: SyntaxKind.JSDocTypeTag;
         readonly typeExpression: JSDocTypeExpression;
     }
-    interface JSDocTypedefTag extends JSDocTag, NamedDeclaration, LocalsContainer {
+    export interface JSDocTypedefTag extends JSDocTag, NamedDeclaration, LocalsContainer {
         readonly kind: SyntaxKind.JSDocTypedefTag;
         readonly parent: JSDoc;
         readonly fullName?: JSDocNamespaceDeclaration | Identifier;
         readonly name?: Identifier;
         readonly typeExpression?: JSDocTypeExpression | JSDocTypeLiteral;
     }
-    interface JSDocCallbackTag extends JSDocTag, NamedDeclaration, LocalsContainer {
+    export interface JSDocCallbackTag extends JSDocTag, NamedDeclaration, LocalsContainer {
         readonly kind: SyntaxKind.JSDocCallbackTag;
         readonly parent: JSDoc;
         readonly fullName?: JSDocNamespaceDeclaration | Identifier;
         readonly name?: Identifier;
         readonly typeExpression: JSDocSignature;
     }
-    interface JSDocOverloadTag extends JSDocTag {
+    export interface JSDocOverloadTag extends JSDocTag {
         readonly kind: SyntaxKind.JSDocOverloadTag;
         readonly parent: JSDoc;
         readonly typeExpression: JSDocSignature;
     }
-    interface JSDocThrowsTag extends JSDocTag {
+    export interface JSDocThrowsTag extends JSDocTag {
         readonly kind: SyntaxKind.JSDocThrowsTag;
         readonly typeExpression?: JSDocTypeExpression;
     }
-    interface JSDocSignature extends JSDocType, Declaration, JSDocContainer, LocalsContainer {
+    export interface JSDocSignature extends JSDocType, Declaration, JSDocContainer, LocalsContainer {
         readonly kind: SyntaxKind.JSDocSignature;
         readonly typeParameters?: readonly JSDocTemplateTag[];
         readonly parameters: readonly JSDocParameterTag[];
         readonly type: JSDocReturnTag | undefined;
     }
-    interface JSDocPropertyLikeTag extends JSDocTag, Declaration {
+    export interface JSDocPropertyLikeTag extends JSDocTag, Declaration {
         readonly parent: JSDoc;
         readonly name: EntityName;
         readonly typeExpression?: JSDocTypeExpression;
@@ -6043,23 +5766,23 @@ declare namespace ts {
         readonly isNameFirst: boolean;
         readonly isBracketed: boolean;
     }
-    interface JSDocPropertyTag extends JSDocPropertyLikeTag {
+    export interface JSDocPropertyTag extends JSDocPropertyLikeTag {
         readonly kind: SyntaxKind.JSDocPropertyTag;
     }
-    interface JSDocParameterTag extends JSDocPropertyLikeTag {
+    export interface JSDocParameterTag extends JSDocPropertyLikeTag {
         readonly kind: SyntaxKind.JSDocParameterTag;
     }
-    interface JSDocTypeLiteral extends JSDocType, Declaration {
+    export interface JSDocTypeLiteral extends JSDocType, Declaration {
         readonly kind: SyntaxKind.JSDocTypeLiteral;
         readonly jsDocPropertyTags?: readonly JSDocPropertyLikeTag[];
         /** If true, then this type literal represents an *array* of its type. */
         readonly isArrayType: boolean;
     }
-    interface JSDocSatisfiesTag extends JSDocTag {
+    export interface JSDocSatisfiesTag extends JSDocTag {
         readonly kind: SyntaxKind.JSDocSatisfiesTag;
         readonly typeExpression: JSDocTypeExpression;
     }
-    enum FlowFlags {
+    export enum FlowFlags {
         Unreachable = 1,
         Start = 2,
         BranchLabel = 4,
@@ -6076,64 +5799,64 @@ declare namespace ts {
         Label = 12,
         Condition = 96,
     }
-    type FlowNode = FlowStart | FlowLabel | FlowAssignment | FlowCondition | FlowSwitchClause | FlowArrayMutation | FlowCall | FlowReduceLabel;
-    interface FlowNodeBase {
+    export type FlowNode = FlowStart | FlowLabel | FlowAssignment | FlowCondition | FlowSwitchClause | FlowArrayMutation | FlowCall | FlowReduceLabel;
+    export interface FlowNodeBase {
         flags: FlowFlags;
         id?: number;
     }
-    interface FlowStart extends FlowNodeBase {
+    export interface FlowStart extends FlowNodeBase {
         node?: FunctionExpression | ArrowFunction | MethodDeclaration | GetAccessorDeclaration | SetAccessorDeclaration;
     }
-    interface FlowLabel extends FlowNodeBase {
+    export interface FlowLabel extends FlowNodeBase {
         antecedents: FlowNode[] | undefined;
     }
-    interface FlowAssignment extends FlowNodeBase {
+    export interface FlowAssignment extends FlowNodeBase {
         node: Expression | VariableDeclaration | BindingElement;
         antecedent: FlowNode;
     }
-    interface FlowCall extends FlowNodeBase {
+    export interface FlowCall extends FlowNodeBase {
         node: CallExpression;
         antecedent: FlowNode;
     }
-    interface FlowCondition extends FlowNodeBase {
+    export interface FlowCondition extends FlowNodeBase {
         node: Expression;
         antecedent: FlowNode;
     }
-    interface FlowSwitchClause extends FlowNodeBase {
+    export interface FlowSwitchClause extends FlowNodeBase {
         switchStatement: SwitchStatement;
         clauseStart: number;
         clauseEnd: number;
         antecedent: FlowNode;
     }
-    interface FlowArrayMutation extends FlowNodeBase {
+    export interface FlowArrayMutation extends FlowNodeBase {
         node: CallExpression | BinaryExpression;
         antecedent: FlowNode;
     }
-    interface FlowReduceLabel extends FlowNodeBase {
+    export interface FlowReduceLabel extends FlowNodeBase {
         target: FlowLabel;
         antecedents: FlowNode[];
         antecedent: FlowNode;
     }
-    type FlowType = Type | IncompleteType;
-    interface IncompleteType {
+    export type FlowType = Type | IncompleteType;
+    export interface IncompleteType {
         flags: TypeFlags | 0;
         type: Type;
     }
-    interface AmdDependency {
+    export interface AmdDependency {
         path: string;
         name?: string;
     }
     /**
      * Subset of properties from SourceFile that are used in multiple utility functions
      */
-    interface SourceFileLike {
+    export interface SourceFileLike {
         readonly text: string;
     }
-    interface SourceFileLike {
+    export interface SourceFileLike {
         getLineAndCharacterOfPosition(pos: number): LineAndCharacter;
     }
-    type ResolutionMode = ModuleKind.ESNext | ModuleKind.CommonJS | undefined;
-    interface SourceFile extends Declaration, LocalsContainer {
+    export type ResolutionMode = ModuleKind.ESNext | ModuleKind.CommonJS | undefined;
+    export interface SourceFile extends Declaration, LocalsContainer {
         readonly kind: SyntaxKind.SourceFile;
         readonly statements: NodeArray<Statement>;
         readonly endOfFileToken: Token<SyntaxKind.EndOfFileToken>;
@@ -6175,39 +5898,39 @@ declare namespace ts {
          */
         impliedNodeFormat?: ResolutionMode;
     }
-    interface SourceFile {
+    export interface SourceFile {
         getLineAndCharacterOfPosition(pos: number): LineAndCharacter;
         getLineEndOfPosition(pos: number): number;
         getLineStarts(): readonly number[];
         getPositionOfLineAndCharacter(line: number, character: number): number;
         update(newText: string, textChangeRange: TextChangeRange): SourceFile;
     }
-    interface Bundle extends Node {
+    export interface Bundle extends Node {
         readonly kind: SyntaxKind.Bundle;
         readonly sourceFiles: readonly SourceFile[];
     }
-    interface JsonSourceFile extends SourceFile {
+    export interface JsonSourceFile extends SourceFile {
         readonly statements: NodeArray<JsonObjectExpressionStatement>;
     }
-    interface TsConfigSourceFile extends JsonSourceFile {
+    export interface TsConfigSourceFile extends JsonSourceFile {
         extendedSourceFiles?: string[];
     }
-    interface JsonMinusNumericLiteral extends PrefixUnaryExpression {
+    export interface JsonMinusNumericLiteral extends PrefixUnaryExpression {
         readonly kind: SyntaxKind.PrefixUnaryExpression;
         readonly operator: SyntaxKind.MinusToken;
         readonly operand: NumericLiteral;
     }
-    type JsonObjectExpression = ObjectLiteralExpression | ArrayLiteralExpression | JsonMinusNumericLiteral | NumericLiteral | StringLiteral | BooleanLiteral | NullLiteral;
-    interface JsonObjectExpressionStatement extends ExpressionStatement {
+    export type JsonObjectExpression = ObjectLiteralExpression | ArrayLiteralExpression | JsonMinusNumericLiteral | NumericLiteral | StringLiteral | BooleanLiteral | NullLiteral;
+    export interface JsonObjectExpressionStatement extends ExpressionStatement {
         readonly expression: JsonObjectExpression;
     }
-    interface ScriptReferenceHost {
+    export interface ScriptReferenceHost {
         getCompilerOptions(): CompilerOptions;
         getSourceFile(fileName: string): SourceFile | undefined;
         getSourceFileByPath(path: Path): SourceFile | undefined;
         getCurrentDirectory(): string;
     }
-    interface ParseConfigHost extends ModuleResolutionHost {
+    export interface ParseConfigHost extends ModuleResolutionHost {
         useCaseSensitiveFileNames: boolean;
         readDirectory(rootDir: string, extensions: readonly string[], excludes: readonly string[] | undefined, includes: readonly string[], depth?: number): readonly string[];
         /**
@@ -6223,20 +5946,20 @@ declare namespace ts {
      * specified like "./blah" to an absolute path to an actual
      * tsconfig file, e.g. "/root/blah/tsconfig.json"
      */
-    type ResolvedConfigFileName = string & {
+    export type ResolvedConfigFileName = string & {
         _isResolvedConfigFileName: never;
     };
-    interface WriteFileCallbackData {
+    export interface WriteFileCallbackData {
     }
-    type WriteFileCallback = (fileName: string, text: string, writeByteOrderMark: boolean, onError?: (message: string) => void, sourceFiles?: readonly SourceFile[], data?: WriteFileCallbackData) => void;
-    class OperationCanceledException {
+    export type WriteFileCallback = (fileName: string, text: string, writeByteOrderMark: boolean, onError?: (message: string) => void, sourceFiles?: readonly SourceFile[], data?: WriteFileCallbackData) => void;
+    export class OperationCanceledException {
     }
-    interface CancellationToken {
+    export interface CancellationToken {
         isCancellationRequested(): boolean;
         /** @throws OperationCanceledException if isCancellationRequested is true */
         throwIfCancellationRequested(): void;
     }
-    interface Program extends ScriptReferenceHost {
+    export interface Program extends ScriptReferenceHost {
         getCurrentDirectory(): string;
         /**
          * Get a list of root file names that were passed to a 'createProgram'
@@ -6300,17 +6023,17 @@ declare namespace ts {
         getProjectReferences(): readonly ProjectReference[] | undefined;
         getResolvedProjectReferences(): readonly (ResolvedProjectReference | undefined)[] | undefined;
     }
-    interface ResolvedProjectReference {
+    export interface ResolvedProjectReference {
         commandLine: ParsedCommandLine;
         sourceFile: SourceFile;
         references?: readonly (ResolvedProjectReference | undefined)[];
     }
-    type CustomTransformerFactory = (context: TransformationContext) => CustomTransformer;
-    interface CustomTransformer {
+    export type CustomTransformerFactory = (context: TransformationContext) => CustomTransformer;
+    export interface CustomTransformer {
         transformSourceFile(node: SourceFile): SourceFile;
         transformBundle(node: Bundle): Bundle;
     }
-    interface CustomTransformers {
+    export interface CustomTransformers {
         /** Custom transformers to evaluate before built-in .js transformations. */
         before?: (TransformerFactory<SourceFile> | CustomTransformerFactory)[];
         /** Custom transformers to evaluate after built-in .js transformations. */
@@ -6318,7 +6041,7 @@ declare namespace ts {
         /** Custom transformers to evaluate after built-in .d.ts transformations. */
         afterDeclarations?: (TransformerFactory<Bundle | SourceFile> | CustomTransformerFactory)[];
     }
-    interface SourceMapSpan {
+    export interface SourceMapSpan {
         /** Line number in the .js file. */
         emittedLine: number;
         /** Column number in the .js file. */
@@ -6333,20 +6056,20 @@ declare namespace ts {
         sourceIndex: number;
     }
     /** Return code used by getEmitOutput function to indicate status of the function */
-    enum ExitStatus {
+    export enum ExitStatus {
         Success = 0,
         DiagnosticsPresent_OutputsSkipped = 1,
         DiagnosticsPresent_OutputsGenerated = 2,
         InvalidProject_OutputsSkipped = 3,
         ProjectReferenceCycle_OutputsSkipped = 4,
     }
-    interface EmitResult {
+    export interface EmitResult {
         emitSkipped: boolean;
         /** Contains declaration emit diagnostics */
         diagnostics: readonly Diagnostic[];
         emittedFiles?: string[];
     }
-    interface TypeChecker {
+    export interface TypeChecker {
         getTypeOfSymbolAtLocation(symbol: Symbol, node: Node): Type;
         getTypeOfSymbol(symbol: Symbol): Type;
         getDeclaredTypeOfSymbol(symbol: Symbol): Type;
@@ -6514,7 +6237,7 @@ declare namespace ts {
          */
         runWithCancellationToken<T>(token: CancellationToken, cb: (checker: TypeChecker) => T): T;
     }
-    enum NodeBuilderFlags {
+    export enum NodeBuilderFlags {
         None = 0,
         NoTruncation = 1,
         WriteArrayAsGenericType = 2,
@@ -6547,7 +6270,7 @@ declare namespace ts {
         InTypeAlias = 8388608,
         InInitialEntityName = 16777216,
     }
-    enum TypeFormatFlags {
+    export enum TypeFormatFlags {
         None = 0,
         NoTruncation = 1,
         WriteArrayAsGenericType = 2,
@@ -6573,49 +6296,49 @@ declare namespace ts {
         InTypeAlias = 8388608,
         NodeBuilderFlagsMask = 848330095,
     }
-    enum SymbolFormatFlags {
+    export enum SymbolFormatFlags {
         None = 0,
         WriteTypeParametersOrArguments = 1,
         UseOnlyExternalAliasing = 2,
         AllowAnyNodeKind = 4,
         UseAliasDefinedOutsideCurrentScope = 8,
     }
-    enum TypePredicateKind {
+    export enum TypePredicateKind {
         This = 0,
         Identifier = 1,
         AssertsThis = 2,
         AssertsIdentifier = 3,
     }
-    interface TypePredicateBase {
+    export interface TypePredicateBase {
         kind: TypePredicateKind;
         type: Type | undefined;
     }
-    interface ThisTypePredicate extends TypePredicateBase {
+    export interface ThisTypePredicate extends TypePredicateBase {
         kind: TypePredicateKind.This;
         parameterName: undefined;
         parameterIndex: undefined;
         type: Type;
     }
-    interface IdentifierTypePredicate extends TypePredicateBase {
+    export interface IdentifierTypePredicate extends TypePredicateBase {
         kind: TypePredicateKind.Identifier;
         parameterName: string;
         parameterIndex: number;
         type: Type;
     }
-    interface AssertsThisTypePredicate extends TypePredicateBase {
+    export interface AssertsThisTypePredicate extends TypePredicateBase {
         kind: TypePredicateKind.AssertsThis;
         parameterName: undefined;
         parameterIndex: undefined;
         type: Type | undefined;
     }
-    interface AssertsIdentifierTypePredicate extends TypePredicateBase {
+    export interface AssertsIdentifierTypePredicate extends TypePredicateBase {
         kind: TypePredicateKind.AssertsIdentifier;
         parameterName: string;
         parameterIndex: number;
         type: Type | undefined;
     }
-    type TypePredicate = ThisTypePredicate | IdentifierTypePredicate | AssertsThisTypePredicate | AssertsIdentifierTypePredicate;
-    enum SymbolFlags {
+    export type TypePredicate = ThisTypePredicate | IdentifierTypePredicate | AssertsThisTypePredicate | AssertsIdentifierTypePredicate;
+    export enum SymbolFlags {
         None = 0,
         FunctionScopedVariable = 1,
         BlockScopedVariable = 2,
@@ -6678,7 +6401,7 @@ declare namespace ts {
         PropertyOrAccessor = 98308,
         ClassMember = 106500,
     }
-    interface Symbol {
+    export interface Symbol {
         flags: SymbolFlags;
         escapedName: __String;
         declarations?: Declaration[];
@@ -6687,7 +6410,7 @@ declare namespace ts {
         exports?: SymbolTable;
         globalExports?: SymbolTable;
     }
-    interface Symbol {
+    export interface Symbol {
         readonly name: string;
         getFlags(): SymbolFlags;
         getEscapedName(): __String;
@@ -6696,7 +6419,7 @@ declare namespace ts {
         getDocumentationComment(typeChecker: TypeChecker | undefined): SymbolDisplayPart[];
         getJsDocTags(checker?: TypeChecker): JSDocTagInfo[];
     }
-    enum InternalSymbolName {
+    export enum InternalSymbolName {
         Call = "__call",
         Constructor = "__constructor",
         New = "__new",
@@ -6725,7 +6448,7 @@ declare namespace ts {
      * with a normal string (which is good, it cannot be misused on assignment or on usage),
      * while still being comparable with a normal string via === (also good) and castable from a string.
      */
-    type __String =
+    export type __String =
         | (string & {
             __escapedIdentifier: void;
         })
@@ -6734,12 +6457,12 @@ declare namespace ts {
         })
         | InternalSymbolName;
     /** @deprecated Use ReadonlyMap<__String, T> instead. */
-    type ReadonlyUnderscoreEscapedMap<T> = ReadonlyMap<__String, T>;
+    export type ReadonlyUnderscoreEscapedMap<T> = ReadonlyMap<__String, T>;
     /** @deprecated Use Map<__String, T> instead. */
-    type UnderscoreEscapedMap<T> = Map<__String, T>;
+    export type UnderscoreEscapedMap<T> = Map<__String, T>;
     /** SymbolTable based on ES6 Map interface. */
-    type SymbolTable = Map<__String, Symbol>;
-    enum TypeFlags {
+    export type SymbolTable = Map<__String, Symbol>;
+    export enum TypeFlags {
         Any = 1,
         Unknown = 2,
         String = 4,
@@ -6790,15 +6513,15 @@ declare namespace ts {
         StructuredOrInstantiable = 469499904,
         Narrowable = 536624127,
     }
-    type DestructuringPattern = BindingPattern | ObjectLiteralExpression | ArrayLiteralExpression;
-    interface Type {
+    export type DestructuringPattern = BindingPattern | ObjectLiteralExpression | ArrayLiteralExpression;
+    export interface Type {
         flags: TypeFlags;
         symbol: Symbol;
         pattern?: DestructuringPattern;
         aliasSymbol?: Symbol;
         aliasTypeArguments?: readonly Type[];
     }
-    interface Type {
+    export interface Type {
         getFlags(): TypeFlags;
         getSymbol(): Symbol | undefined;
         getProperties(): Symbol[];
@@ -6823,29 +6546,29 @@ declare namespace ts {
         isClass(): this is InterfaceType;
         isIndexType(): this is IndexType;
     }
-    interface FreshableType extends Type {
+    export interface FreshableType extends Type {
         freshType: FreshableType;
         regularType: FreshableType;
     }
-    interface LiteralType extends FreshableType {
+    export interface LiteralType extends FreshableType {
         value: string | number | PseudoBigInt;
     }
-    interface UniqueESSymbolType extends Type {
+    export interface UniqueESSymbolType extends Type {
         symbol: Symbol;
         escapedName: __String;
     }
-    interface StringLiteralType extends LiteralType {
+    export interface StringLiteralType extends LiteralType {
         value: string;
     }
-    interface NumberLiteralType extends LiteralType {
+    export interface NumberLiteralType extends LiteralType {
         value: number;
     }
-    interface BigIntLiteralType extends LiteralType {
+    export interface BigIntLiteralType extends LiteralType {
         value: PseudoBigInt;
     }
-    interface EnumType extends FreshableType {
+    export interface EnumType extends FreshableType {
     }
-    enum ObjectFlags {
+    export enum ObjectFlags {
         None = 0,
         Class = 1,
         Interface = 2,
@@ -6867,18 +6590,18 @@ declare namespace ts {
         ObjectRestType = 4194304,
         InstantiationExpressionType = 8388608,
     }
-    interface ObjectType extends Type {
+    export interface ObjectType extends Type {
         objectFlags: ObjectFlags;
     }
     /** Class and interface types (ObjectFlags.Class and ObjectFlags.Interface). */
-    interface InterfaceType extends ObjectType {
+    export interface InterfaceType extends ObjectType {
         typeParameters: TypeParameter[] | undefined;
         outerTypeParameters: TypeParameter[] | undefined;
         localTypeParameters: TypeParameter[] | undefined;
         thisType: TypeParameter | undefined;
     }
-    type BaseType = ObjectType | IntersectionType | TypeVariable;
-    interface InterfaceTypeWithDeclaredMembers extends InterfaceType {
+    export type BaseType = ObjectType | IntersectionType | TypeVariable;
+    export interface InterfaceTypeWithDeclaredMembers extends InterfaceType {
         declaredProperties: Symbol[];
         declaredCallSignatures: Signature[];
         declaredConstructSignatures: Signature[];
@@ -6894,18 +6617,18 @@ declare namespace ts {
      * if the class or interface has no type parameters and the reference isn't specifying an
      * explicit "this" argument.
      */
-    interface TypeReference extends ObjectType {
+    export interface TypeReference extends ObjectType {
         target: GenericType;
         node?: TypeReferenceNode | ArrayTypeNode | TupleTypeNode;
     }
-    interface TypeReference {
+    export interface TypeReference {
         typeArguments?: readonly Type[];
     }
-    interface DeferredTypeReference extends TypeReference {
+    export interface DeferredTypeReference extends TypeReference {
     }
-    interface GenericType extends InterfaceType, TypeReference {
+    export interface GenericType extends InterfaceType, TypeReference {
     }
-    enum ElementFlags {
+    export enum ElementFlags {
         Required = 1,
         Optional = 2,
         Rest = 4,
@@ -6915,7 +6638,7 @@ declare namespace ts {
         NonRequired = 14,
         NonRest = 11,
     }
-    interface TupleType extends GenericType {
+    export interface TupleType extends GenericType {
         elementFlags: readonly ElementFlags[];
         /** Number of required or variadic elements */
         minLength: number;
@@ -6927,37 +6650,37 @@ declare namespace ts {
         readonly: boolean;
         labeledElementDeclarations?: readonly (NamedTupleMember | ParameterDeclaration | undefined)[];
     }
-    interface TupleTypeReference extends TypeReference {
+    export interface TupleTypeReference extends TypeReference {
         target: TupleType;
     }
-    interface UnionOrIntersectionType extends Type {
+    export interface UnionOrIntersectionType extends Type {
         types: Type[];
     }
-    interface UnionType extends UnionOrIntersectionType {
+    export interface UnionType extends UnionOrIntersectionType {
     }
-    interface IntersectionType extends UnionOrIntersectionType {
+    export interface IntersectionType extends UnionOrIntersectionType {
     }
-    type StructuredType = ObjectType | UnionType | IntersectionType;
-    interface EvolvingArrayType extends ObjectType {
+    export type StructuredType = ObjectType | UnionType | IntersectionType;
+    export interface EvolvingArrayType extends ObjectType {
         elementType: Type;
         finalArrayType?: Type;
     }
-    interface InstantiableType extends Type {
+    export interface InstantiableType extends Type {
     }
-    interface TypeParameter extends InstantiableType {
+    export interface TypeParameter extends InstantiableType {
     }
-    interface IndexedAccessType extends InstantiableType {
+    export interface IndexedAccessType extends InstantiableType {
         objectType: Type;
         indexType: Type;
         constraint?: Type;
         simplifiedForReading?: Type;
         simplifiedForWriting?: Type;
     }
-    type TypeVariable = TypeParameter | IndexedAccessType;
-    interface IndexType extends InstantiableType {
+    export type TypeVariable = TypeParameter | IndexedAccessType;
+    export interface IndexType extends InstantiableType {
         type: InstantiableType | UnionOrIntersectionType;
     }
-    interface ConditionalRoot {
+    export interface ConditionalRoot {
         node: ConditionalTypeNode;
         checkType: Type;
         extendsType: Type;
@@ -6968,37 +6691,37 @@ declare namespace ts {
         aliasSymbol?: Symbol;
         aliasTypeArguments?: Type[];
     }
-    interface ConditionalType extends InstantiableType {
+    export interface ConditionalType extends InstantiableType {
         root: ConditionalRoot;
         checkType: Type;
         extendsType: Type;
         resolvedTrueType?: Type;
         resolvedFalseType?: Type;
     }
-    interface TemplateLiteralType extends InstantiableType {
+    export interface TemplateLiteralType extends InstantiableType {
         texts: readonly string[];
         types: readonly Type[];
     }
-    interface StringMappingType extends InstantiableType {
+    export interface StringMappingType extends InstantiableType {
         symbol: Symbol;
         type: Type;
     }
-    interface SubstitutionType extends InstantiableType {
+    export interface SubstitutionType extends InstantiableType {
         objectFlags: ObjectFlags;
         baseType: Type;
         constraint: Type;
     }
-    enum SignatureKind {
+    export enum SignatureKind {
         Call = 0,
         Construct = 1,
     }
-    interface Signature {
+    export interface Signature {
         declaration?: SignatureDeclaration | JSDocSignature;
         typeParameters?: readonly TypeParameter[];
         parameters: readonly Symbol[];
         thisParameter?: Symbol;
     }
-    interface Signature {
+    export interface Signature {
         getDeclaration(): SignatureDeclaration;
         getTypeParameters(): TypeParameter[] | undefined;
         getParameters(): Symbol[];
@@ -7007,17 +6730,17 @@ declare namespace ts {
         getDocumentationComment(typeChecker: TypeChecker | undefined): SymbolDisplayPart[];
         getJsDocTags(): JSDocTagInfo[];
     }
-    enum IndexKind {
+    export enum IndexKind {
         String = 0,
         Number = 1,
     }
-    interface IndexInfo {
+    export interface IndexInfo {
         keyType: Type;
         type: Type;
         isReadonly: boolean;
         declaration?: IndexSignatureDeclaration;
     }
-    enum InferencePriority {
+    export enum InferencePriority {
         None = 0,
         NakedTypeVariable = 1,
         SpeculativeTuple = 2,
@@ -7034,12 +6757,12 @@ declare namespace ts {
         PriorityImpliesCombination = 416,
         Circularity = -1,
     }
-    interface FileExtensionInfo {
+    export interface FileExtensionInfo {
         extension: string;
         isMixedContent: boolean;
         scriptKind?: ScriptKind;
     }
-    interface DiagnosticMessage {
+    export interface DiagnosticMessage {
         key: string;
         category: DiagnosticCategory;
         code: number;
@@ -7053,20 +6776,20 @@ declare namespace ts {
      * While it seems that DiagnosticMessageChain is structurally similar to DiagnosticMessage,
      * the difference is that messages are all preformatted in DMC.
      */
-    interface DiagnosticMessageChain {
+    export interface DiagnosticMessageChain {
         messageText: string;
         category: DiagnosticCategory;
         code: number;
         next?: DiagnosticMessageChain[];
     }
-    interface Diagnostic extends DiagnosticRelatedInformation {
+    export interface Diagnostic extends DiagnosticRelatedInformation {
         /** May store more in future. For now, this will simply be `true` to indicate when a diagnostic is an unused-identifier diagnostic. */
         reportsUnnecessary?: {};
         reportsDeprecated?: {};
         source?: string;
         relatedInformation?: DiagnosticRelatedInformation[];
     }
-    interface DiagnosticRelatedInformation {
+    export interface DiagnosticRelatedInformation {
         category: DiagnosticCategory;
         code: number;
         file: SourceFile | undefined;
@@ -7074,18 +6797,18 @@ declare namespace ts {
         length: number | undefined;
         messageText: string | DiagnosticMessageChain;
     }
-    interface DiagnosticWithLocation extends Diagnostic {
+    export interface DiagnosticWithLocation extends Diagnostic {
         file: SourceFile;
         start: number;
         length: number;
     }
-    enum DiagnosticCategory {
+    export enum DiagnosticCategory {
         Warning = 0,
         Error = 1,
         Suggestion = 2,
         Message = 3,
     }
-    enum ModuleResolutionKind {
+    export enum ModuleResolutionKind {
         Classic = 1,
         /**
          * @deprecated
@@ -7098,7 +6821,7 @@ declare namespace ts {
         NodeNext = 99,
         Bundler = 100,
     }
-    enum ModuleDetectionKind {
+    export enum ModuleDetectionKind {
         /**
          * Files with imports, exports and/or import.meta are considered modules
          */
@@ -7112,10 +6835,10 @@ declare namespace ts {
          */
         Force = 3,
     }
-    interface PluginImport {
+    export interface PluginImport {
         name: string;
     }
-    interface ProjectReference {
+    export interface ProjectReference {
         /** A normalized path on disk */
         path: string;
         /** The path as the user originally wrote it */
@@ -7125,7 +6848,7 @@ declare namespace ts {
         /** True if it is intended that this reference form a circularity */
         circular?: boolean;
     }
-    enum WatchFileKind {
+    export enum WatchFileKind {
         FixedPollingInterval = 0,
         PriorityPollingInterval = 1,
         DynamicPriorityPolling = 2,
@@ -7133,20 +6856,20 @@ declare namespace ts {
         UseFsEvents = 4,
         UseFsEventsOnParentDirectory = 5,
     }
-    enum WatchDirectoryKind {
+    export enum WatchDirectoryKind {
         UseFsEvents = 0,
         FixedPollingInterval = 1,
         DynamicPriorityPolling = 2,
         FixedChunkSizePolling = 3,
     }
-    enum PollingWatchKind {
+    export enum PollingWatchKind {
         FixedInterval = 0,
         PriorityInterval = 1,
         DynamicPriority = 2,
         FixedChunkSize = 3,
     }
-    type CompilerOptionsValue = string | number | boolean | (string | number)[] | string[] | MapLike<string[]> | PluginImport[] | ProjectReference[] | null | undefined;
-    interface CompilerOptions {
+    export type CompilerOptionsValue = string | number | boolean | (string | number)[] | string[] | MapLike<string[]> | PluginImport[] | ProjectReference[] | null | undefined;
+    export interface CompilerOptions {
         allowImportingTsExtensions?: boolean;
         allowJs?: boolean;
         allowArbitraryExtensions?: boolean;
@@ -7261,7 +6984,7 @@ declare namespace ts {
         useDefineForClassFields?: boolean;
         [option: string]: CompilerOptionsValue | TsConfigSourceFile | undefined;
     }
-    interface WatchOptions {
+    export interface WatchOptions {
         watchFile?: WatchFileKind;
         watchDirectory?: WatchDirectoryKind;
         fallbackPolling?: PollingWatchKind;
@@ -7270,14 +6993,14 @@ declare namespace ts {
         excludeFiles?: string[];
         [option: string]: CompilerOptionsValue | undefined;
     }
-    interface TypeAcquisition {
+    export interface TypeAcquisition {
         enable?: boolean;
         include?: string[];
         exclude?: string[];
         disableFilenameBasedTypeAcquisition?: boolean;
         [option: string]: CompilerOptionsValue | undefined;
     }
-    enum ModuleKind {
+    export enum ModuleKind {
         None = 0,
         CommonJS = 1,
         AMD = 2,
@@ -7291,7 +7014,7 @@ declare namespace ts {
         NodeNext = 199,
         Preserve = 200,
     }
-    enum JsxEmit {
+    export enum JsxEmit {
         None = 0,
         Preserve = 1,
         React = 2,
@@ -7300,21 +7023,21 @@ declare namespace ts {
         ReactJSXDev = 5,
     }
     /** @deprecated */
-    enum ImportsNotUsedAsValues {
+    export enum ImportsNotUsedAsValues {
         Remove = 0,
         Preserve = 1,
         Error = 2,
     }
-    enum NewLineKind {
+    export enum NewLineKind {
         CarriageReturnLineFeed = 0,
         LineFeed = 1,
     }
-    interface LineAndCharacter {
+    export interface LineAndCharacter {
         /** 0-based. */
         line: number;
         character: number;
     }
-    enum ScriptKind {
+    export enum ScriptKind {
         Unknown = 0,
         JS = 1,
         JSX = 2,
@@ -7328,7 +7051,7 @@ declare namespace ts {
          */
         Deferred = 7,
     }
-    enum ScriptTarget {
+    export enum ScriptTarget {
         /** @deprecated */
         ES3 = 0,
         ES5 = 1,
@@ -7344,12 +7067,12 @@ declare namespace ts {
         JSON = 100,
         Latest = 99,
     }
-    enum LanguageVariant {
+    export enum LanguageVariant {
         Standard = 0,
         JSX = 1,
     }
     /** Either a parsed command line or a parsed tsconfig.json */
-    interface ParsedCommandLine {
+    export interface ParsedCommandLine {
         options: CompilerOptions;
         typeAcquisition?: TypeAcquisition;
         fileNames: string[];
@@ -7360,11 +7083,11 @@ declare namespace ts {
         wildcardDirectories?: MapLike<WatchDirectoryFlags>;
         compileOnSave?: boolean;
     }
-    enum WatchDirectoryFlags {
+    export enum WatchDirectoryFlags {
         None = 0,
         Recursive = 1,
     }
-    interface CreateProgramOptions {
+    export interface CreateProgramOptions {
         rootNames: readonly string[];
         options: CompilerOptions;
         projectReferences?: readonly ProjectReference[];
@@ -7372,7 +7095,7 @@ declare namespace ts {
         oldProgram?: Program;
         configFileParsingDiagnostics?: readonly Diagnostic[];
     }
-    interface ModuleResolutionHost {
+    export interface ModuleResolutionHost {
         fileExists(fileName: string): boolean;
         readFile(fileName: string): string | undefined;
         trace?(s: string): void;
@@ -7389,7 +7112,7 @@ declare namespace ts {
     /**
      * Used by services to specify the minimum host area required to set up source files under any compilation settings
      */
-    interface MinimalResolutionCacheHost extends ModuleResolutionHost {
+    export interface MinimalResolutionCacheHost extends ModuleResolutionHost {
         getCompilationSettings(): CompilerOptions;
         getCompilerHost?(): CompilerHost | undefined;
     }
@@ -7400,7 +7123,7 @@ declare namespace ts {
      *
      * Prefer to return a `ResolvedModuleFull` so that the file type does not have to be inferred.
      */
-    interface ResolvedModule {
+    export interface ResolvedModule {
         /** Path of the file the module was resolved to. */
         resolvedFileName: string;
         /** True if `resolvedFileName` comes from `node_modules`. */
@@ -7416,7 +7139,7 @@ declare namespace ts {
      * Prefer this over `ResolvedModule`.
      * If changing this, remember to change `moduleResolutionIsEqualTo`.
      */
-    interface ResolvedModuleFull extends ResolvedModule {
+    export interface ResolvedModuleFull extends ResolvedModule {
         /**
          * Extension of resolvedFileName. This must match what's at the end of resolvedFileName.
          * This is optional for backwards-compatibility, but will be added if not provided.
@@ -7428,7 +7151,7 @@ declare namespace ts {
      * Unique identifier with a package name and version.
      * If changing this, remember to change `packageIdIsEqual`.
      */
-    interface PackageId {
+    export interface PackageId {
         /**
          * Name of the package.
          * Should not include `@types`.
@@ -7443,7 +7166,7 @@ declare namespace ts {
         /** Version of the package, e.g. "1.2.3" */
         version: string;
     }
-    enum Extension {
+    export enum Extension {
         Ts = ".ts",
         Tsx = ".tsx",
         Dts = ".d.ts",
@@ -7458,20 +7181,20 @@ declare namespace ts {
         Cts = ".cts",
         Dcts = ".d.cts",
     }
-    interface ResolvedModuleWithFailedLookupLocations {
+    export interface ResolvedModuleWithFailedLookupLocations {
         readonly resolvedModule: ResolvedModuleFull | undefined;
     }
-    interface ResolvedTypeReferenceDirective {
+    export interface ResolvedTypeReferenceDirective {
         primary: boolean;
         resolvedFileName: string | undefined;
         packageId?: PackageId;
         /** True if `resolvedFileName` comes from `node_modules`. */
         isExternalLibraryImport?: boolean;
     }
-    interface ResolvedTypeReferenceDirectiveWithFailedLookupLocations {
+    export interface ResolvedTypeReferenceDirectiveWithFailedLookupLocations {
         readonly resolvedTypeReferenceDirective: ResolvedTypeReferenceDirective | undefined;
     }
-    interface CompilerHost extends ModuleResolutionHost {
+    export interface CompilerHost extends ModuleResolutionHost {
         getSourceFile(fileName: string, languageVersionOrOptions: ScriptTarget | CreateSourceFileOptions, onError?: (message: string) => void, shouldCreateNewSourceFile?: boolean): SourceFile | undefined;
         getSourceFileByPath?(fileName: string, path: Path, languageVersionOrOptions: ScriptTarget | CreateSourceFileOptions, onError?: (message: string) => void, shouldCreateNewSourceFile?: boolean): SourceFile | undefined;
         getCancellationToken?(): CancellationToken;
@@ -7504,18 +7227,18 @@ declare namespace ts {
         getParsedCommandLine?(fileName: string): ParsedCommandLine | undefined;
         jsDocParsingMode?: JSDocParsingMode;
     }
-    interface SourceMapRange extends TextRange {
+    export interface SourceMapRange extends TextRange {
         source?: SourceMapSource;
     }
-    interface SourceMapSource {
+    export interface SourceMapSource {
         fileName: string;
         text: string;
         skipTrivia?: (pos: number) => number;
     }
-    interface SourceMapSource {
+    export interface SourceMapSource {
         getLineAndCharacterOfPosition(pos: number): LineAndCharacter;
     }
-    enum EmitFlags {
+    export enum EmitFlags {
         None = 0,
         SingleLine = 1,
         MultiLine = 2,
@@ -7546,23 +7269,23 @@ declare namespace ts {
         Iterator = 8388608,
         NoAsciiEscaping = 16777216,
     }
-    interface EmitHelperBase {
+    export interface EmitHelperBase {
         readonly name: string;
         readonly scoped: boolean;
         readonly text: string | ((node: EmitHelperUniqueNameCallback) => string);
         readonly priority?: number;
         readonly dependencies?: EmitHelper[];
     }
-    interface ScopedEmitHelper extends EmitHelperBase {
+    export interface ScopedEmitHelper extends EmitHelperBase {
         readonly scoped: true;
     }
-    interface UnscopedEmitHelper extends EmitHelperBase {
+    export interface UnscopedEmitHelper extends EmitHelperBase {
         readonly scoped: false;
         readonly text: string;
     }
-    type EmitHelper = ScopedEmitHelper | UnscopedEmitHelper;
-    type EmitHelperUniqueNameCallback = (name: string) => string;
-    enum EmitHint {
+    export type EmitHelper = ScopedEmitHelper | UnscopedEmitHelper;
+    export type EmitHelperUniqueNameCallback = (name: string) => string;
+    export enum EmitHint {
         SourceFile = 0,
         Expression = 1,
         IdentifierName = 2,
@@ -7572,7 +7295,7 @@ declare namespace ts {
         JsxAttributeValue = 6,
         ImportTypeNodeAttributes = 7,
     }
-    enum OuterExpressionKinds {
+    export enum OuterExpressionKinds {
         Parentheses = 1,
         TypeAssertions = 2,
         NonNullAssertions = 4,
@@ -7581,15 +7304,15 @@ declare namespace ts {
         All = 15,
         ExcludeJSDocTypeAssertion = 16,
     }
-    type ImmediatelyInvokedFunctionExpression = CallExpression & {
+    export type ImmediatelyInvokedFunctionExpression = CallExpression & {
         readonly expression: FunctionExpression;
     };
-    type ImmediatelyInvokedArrowFunction = CallExpression & {
+    export type ImmediatelyInvokedArrowFunction = CallExpression & {
         readonly expression: ParenthesizedExpression & {
             readonly expression: ArrowFunction;
         };
     };
-    interface NodeFactory {
+    export interface NodeFactory {
         createNodeArray<T extends Node>(elements?: readonly T[], hasTrailingComma?: boolean): NodeArray<T>;
         createNumericLiteral(value: string | number, numericLiteralFlags?: TokenFlags): NumericLiteral;
         createBigIntLiteral(value: string | PseudoBigInt): BigIntLiteral;
@@ -8079,7 +7802,7 @@ declare namespace ts {
          */
         replacePropertyName<T extends AccessorDeclaration | MethodDeclaration | MethodSignature | PropertyDeclaration | PropertySignature | PropertyAssignment>(node: T, name: T["name"]): T;
     }
-    interface CoreTransformationContext {
+    export interface CoreTransformationContext {
         readonly factory: NodeFactory;
         /** Gets the compiler options supplied to the transformer. */
         getCompilerOptions(): CompilerOptions;
@@ -8096,7 +7819,7 @@ declare namespace ts {
         /** Hoists a variable declaration to the containing scope. */
         hoistVariableDeclaration(node: Identifier): void;
     }
-    interface TransformationContext extends CoreTransformationContext {
+    export interface TransformationContext extends CoreTransformationContext {
         /** Records a request for a non-scoped emit helper in the current context. */
         requestEmitHelper(helper: EmitHelper): void;
         /** Gets and resets the requested non-scoped emit helpers. */
@@ -8132,7 +7855,7 @@ declare namespace ts {
          */
         onEmitNode: (hint: EmitHint, node: Node, emitCallback: (hint: EmitHint, node: Node) => void) => void;
     }
-    interface TransformationResult<T extends Node> {
+    export interface TransformationResult<T extends Node> {
         /** Gets the transformed source files. */
         transformed: T[];
         /** Gets diagnostics for the transformation. */
@@ -8167,15 +7890,15 @@ declare namespace ts {
      * A function that is used to initialize and return a `Transformer` callback, which in turn
      * will be used to transform one or more nodes.
      */
-    type TransformerFactory<T extends Node> = (context: TransformationContext) => Transformer<T>;
+    export type TransformerFactory<T extends Node> = (context: TransformationContext) => Transformer<T>;
     /**
      * A function that transforms a node.
      */
-    type Transformer<T extends Node> = (node: T) => T;
+    export type Transformer<T extends Node> = (node: T) => T;
     /**
      * A function that accepts and possibly transforms a node.
      */
-    type Visitor<TIn extends Node = Node, TOut extends Node | undefined = TIn | undefined> = (node: TIn) => VisitResult<TOut>;
+    export type Visitor<TIn extends Node = Node, TOut extends Node | undefined = TIn | undefined> = (node: TIn) => VisitResult<TOut>;
     /**
      * A function that walks a node using the given visitor, lifting node arrays into single nodes,
      * returning an node which satisfies the test.
@@ -8188,7 +7911,7 @@ declare namespace ts {
      *
      * For the canonical implementation of this type, @see {visitNode}.
      */
-    interface NodeVisitor {
+    export interface NodeVisitor {
         <TIn extends Node | undefined, TVisited extends Node | undefined, TOut extends Node>(node: TIn, visitor: Visitor<NonNullable<TIn>, TVisited>, test: (node: Node) => node is TOut, lift?: (node: readonly Node[]) => Node): TOut | (TIn & undefined) | (TVisited & undefined);
         <TIn extends Node | undefined, TVisited extends Node | undefined>(node: TIn, visitor: Visitor<NonNullable<TIn>, TVisited>, test?: (node: Node) => boolean, lift?: (node: readonly Node[]) => Node): Node | (TIn & undefined) | (TVisited & undefined);
     }
@@ -8203,12 +7926,12 @@ declare namespace ts {
      *
      * For the canonical implementation of this type, @see {visitNodes}.
      */
-    interface NodesVisitor {
+    export interface NodesVisitor {
         <TIn extends Node, TInArray extends NodeArray<TIn> | undefined, TOut extends Node>(nodes: TInArray, visitor: Visitor<TIn, Node | undefined>, test: (node: Node) => node is TOut, start?: number, count?: number): NodeArray<TOut> | (TInArray & undefined);
         <TIn extends Node, TInArray extends NodeArray<TIn> | undefined>(nodes: TInArray, visitor: Visitor<TIn, Node | undefined>, test?: (node: Node) => boolean, start?: number, count?: number): NodeArray<Node> | (TInArray & undefined);
     }
-    type VisitResult<T extends Node | undefined> = T | readonly Node[];
-    interface Printer {
+    export type VisitResult<T extends Node | undefined> = T | readonly Node[];
+    export interface Printer {
         /**
          * Print a node and its subtree as-is, without any emit transformations.
          * @param hint A value indicating the purpose of a node. This is primarily used to
@@ -8236,7 +7959,7 @@ declare namespace ts {
          */
         printBundle(bundle: Bundle): string;
     }
-    interface PrintHandlers {
+    export interface PrintHandlers {
         /**
          * A hook used by the Printer when generating unique names to avoid collisions with
          * globally defined names that exist outside of the current source file.
@@ -8284,28 +8007,28 @@ declare namespace ts {
          */
         substituteNode?(hint: EmitHint, node: Node): Node;
     }
-    interface PrinterOptions {
+    export interface PrinterOptions {
         removeComments?: boolean;
         newLine?: NewLineKind;
         omitTrailingSemicolon?: boolean;
         noEmitHelpers?: boolean;
     }
-    interface GetEffectiveTypeRootsHost {
+    export interface GetEffectiveTypeRootsHost {
         getCurrentDirectory?(): string;
     }
-    interface TextSpan {
+    export interface TextSpan {
         start: number;
         length: number;
     }
-    interface TextChangeRange {
+    export interface TextChangeRange {
         span: TextSpan;
         newLength: number;
     }
-    interface SyntaxList extends Node {
+    export interface SyntaxList extends Node {
         kind: SyntaxKind.SyntaxList;
         _children: Node[];
     }
-    enum ListFormat {
+    export enum ListFormat {
         None = 0,
         SingleLine = 0,
         MultiLine = 1,
@@ -8376,7 +8099,7 @@ declare namespace ts {
         IndexSignatureParameters = 8848,
         JSDocComment = 33,
     }
-    enum JSDocParsingMode {
+    export enum JSDocParsingMode {
         /**
          * Always parse JSDoc comments and include them in the AST.
          *
@@ -8403,7 +8126,7 @@ declare namespace ts {
          */
         ParseForTypeInfo = 3,
     }
-    interface UserPreferences {
+    export interface UserPreferences {
         readonly disableSuggestions?: boolean;
         readonly quotePreference?: "auto" | "double" | "single";
         /**
@@ -8541,19 +8264,19 @@ declare namespace ts {
         readonly disableLineTextInReferences?: boolean;
     }
     /** Represents a bigint literal value without requiring bigint support */
-    interface PseudoBigInt {
+    export interface PseudoBigInt {
         negative: boolean;
         base10Value: string;
     }
-    enum FileWatcherEventKind {
+    export enum FileWatcherEventKind {
         Created = 0,
         Changed = 1,
         Deleted = 2,
     }
-    type FileWatcherCallback = (fileName: string, eventKind: FileWatcherEventKind, modifiedTime?: Date) => void;
-    type DirectoryWatcherCallback = (fileName: string) => void;
-    type BufferEncoding = "ascii" | "utf8" | "utf-8" | "utf16le" | "ucs2" | "ucs-2" | "base64" | "latin1" | "binary" | "hex";
-    interface System {
+    export type FileWatcherCallback = (fileName: string, eventKind: FileWatcherEventKind, modifiedTime?: Date) => void;
+    export type DirectoryWatcherCallback = (fileName: string) => void;
+    export type BufferEncoding = "ascii" | "utf8" | "utf-8" | "utf16le" | "ucs2" | "ucs-2" | "base64" | "latin1" | "binary" | "hex";
+    export interface System {
         args: string[];
         newLine: string;
         useCaseSensitiveFileNames: boolean;
@@ -8595,33 +8318,33 @@ declare namespace ts {
         base64decode?(input: string): string;
         base64encode?(input: string): string;
     }
-    interface FileWatcher {
+    export interface FileWatcher {
         close(): void;
     }
-    let sys: System;
-    function tokenToString(t: SyntaxKind): string | undefined;
-    function getPositionOfLineAndCharacter(sourceFile: SourceFileLike, line: number, character: number): number;
-    function getLineAndCharacterOfPosition(sourceFile: SourceFileLike, position: number): LineAndCharacter;
-    function isWhiteSpaceLike(ch: number): boolean;
+    export let sys: System;
+    export function tokenToString(t: SyntaxKind): string | undefined;
+    export function getPositionOfLineAndCharacter(sourceFile: SourceFileLike, line: number, character: number): number;
+    export function getLineAndCharacterOfPosition(sourceFile: SourceFileLike, position: number): LineAndCharacter;
+    export function isWhiteSpaceLike(ch: number): boolean;
     /** Does not include line breaks. For that, see isWhiteSpaceLike. */
-    function isWhiteSpaceSingleLine(ch: number): boolean;
-    function isLineBreak(ch: number): boolean;
-    function couldStartTrivia(text: string, pos: number): boolean;
-    function forEachLeadingCommentRange<U>(text: string, pos: number, cb: (pos: number, end: number, kind: CommentKind, hasTrailingNewLine: boolean) => U): U | undefined;
-    function forEachLeadingCommentRange<T, U>(text: string, pos: number, cb: (pos: number, end: number, kind: CommentKind, hasTrailingNewLine: boolean, state: T) => U, state: T): U | undefined;
-    function forEachTrailingCommentRange<U>(text: string, pos: number, cb: (pos: number, end: number, kind: CommentKind, hasTrailingNewLine: boolean) => U): U | undefined;
-    function forEachTrailingCommentRange<T, U>(text: string, pos: number, cb: (pos: number, end: number, kind: CommentKind, hasTrailingNewLine: boolean, state: T) => U, state: T): U | undefined;
-    function reduceEachLeadingCommentRange<T, U>(text: string, pos: number, cb: (pos: number, end: number, kind: CommentKind, hasTrailingNewLine: boolean, state: T) => U, state: T, initial: U): U | undefined;
-    function reduceEachTrailingCommentRange<T, U>(text: string, pos: number, cb: (pos: number, end: number, kind: CommentKind, hasTrailingNewLine: boolean, state: T) => U, state: T, initial: U): U | undefined;
-    function getLeadingCommentRanges(text: string, pos: number): CommentRange[] | undefined;
-    function getTrailingCommentRanges(text: string, pos: number): CommentRange[] | undefined;
+    export function isWhiteSpaceSingleLine(ch: number): boolean;
+    export function isLineBreak(ch: number): boolean;
+    export function couldStartTrivia(text: string, pos: number): boolean;
+    export function forEachLeadingCommentRange<U>(text: string, pos: number, cb: (pos: number, end: number, kind: CommentKind, hasTrailingNewLine: boolean) => U): U | undefined;
+    export function forEachLeadingCommentRange<T, U>(text: string, pos: number, cb: (pos: number, end: number, kind: CommentKind, hasTrailingNewLine: boolean, state: T) => U, state: T): U | undefined;
+    export function forEachTrailingCommentRange<U>(text: string, pos: number, cb: (pos: number, end: number, kind: CommentKind, hasTrailingNewLine: boolean) => U): U | undefined;
+    export function forEachTrailingCommentRange<T, U>(text: string, pos: number, cb: (pos: number, end: number, kind: CommentKind, hasTrailingNewLine: boolean, state: T) => U, state: T): U | undefined;
+    export function reduceEachLeadingCommentRange<T, U>(text: string, pos: number, cb: (pos: number, end: number, kind: CommentKind, hasTrailingNewLine: boolean, state: T) => U, state: T, initial: U): U | undefined;
+    export function reduceEachTrailingCommentRange<T, U>(text: string, pos: number, cb: (pos: number, end: number, kind: CommentKind, hasTrailingNewLine: boolean, state: T) => U, state: T, initial: U): U | undefined;
+    export function getLeadingCommentRanges(text: string, pos: number): CommentRange[] | undefined;
+    export function getTrailingCommentRanges(text: string, pos: number): CommentRange[] | undefined;
     /** Optionally, get the shebang */
-    function getShebang(text: string): string | undefined;
-    function isIdentifierStart(ch: number, languageVersion: ScriptTarget | undefined): boolean;
-    function isIdentifierPart(ch: number, languageVersion: ScriptTarget | undefined, identifierVariant?: LanguageVariant): boolean;
-    function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean, languageVariant?: LanguageVariant, textInitial?: string, onError?: ErrorCallback, start?: number, length?: number): Scanner;
-    type ErrorCallback = (message: DiagnosticMessage, length: number, arg0?: any) => void;
-    interface Scanner {
+    export function getShebang(text: string): string | undefined;
+    export function isIdentifierStart(ch: number, languageVersion: ScriptTarget | undefined): boolean;
+    export function isIdentifierPart(ch: number, languageVersion: ScriptTarget | undefined, identifierVariant?: LanguageVariant): boolean;
+    export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean, languageVariant?: LanguageVariant, textInitial?: string, onError?: ErrorCallback, start?: number, length?: number): Scanner;
+    export type ErrorCallback = (message: DiagnosticMessage, length: number, arg0?: any) => void;
+    export interface Scanner {
         /** @deprecated use {@link getTokenFullStart} */
         getStartPos(): number;
         getToken(): SyntaxKind;
@@ -8671,25 +8394,25 @@ declare namespace ts {
         scanRange<T>(start: number, length: number, callback: () => T): T;
         tryScan<T>(callback: () => T): T;
     }
-    function isExternalModuleNameRelative(moduleName: string): boolean;
-    function sortAndDeduplicateDiagnostics<T extends Diagnostic>(diagnostics: readonly T[]): SortedReadonlyArray<T>;
-    function getDefaultLibFileName(options: CompilerOptions): string;
-    function textSpanEnd(span: TextSpan): number;
-    function textSpanIsEmpty(span: TextSpan): boolean;
-    function textSpanContainsPosition(span: TextSpan, position: number): boolean;
-    function textSpanContainsTextSpan(span: TextSpan, other: TextSpan): boolean;
-    function textSpanOverlapsWith(span: TextSpan, other: TextSpan): boolean;
-    function textSpanOverlap(span1: TextSpan, span2: TextSpan): TextSpan | undefined;
-    function textSpanIntersectsWithTextSpan(span: TextSpan, other: TextSpan): boolean;
-    function textSpanIntersectsWith(span: TextSpan, start: number, length: number): boolean;
-    function decodedTextSpanIntersectsWith(start1: number, length1: number, start2: number, length2: number): boolean;
-    function textSpanIntersectsWithPosition(span: TextSpan, position: number): boolean;
-    function textSpanIntersection(span1: TextSpan, span2: TextSpan): TextSpan | undefined;
-    function createTextSpan(start: number, length: number): TextSpan;
-    function createTextSpanFromBounds(start: number, end: number): TextSpan;
-    function textChangeRangeNewSpan(range: TextChangeRange): TextSpan;
-    function textChangeRangeIsUnchanged(range: TextChangeRange): boolean;
-    function createTextChangeRange(span: TextSpan, newLength: number): TextChangeRange;
+    export function isExternalModuleNameRelative(moduleName: string): boolean;
+    export function sortAndDeduplicateDiagnostics<T extends Diagnostic>(diagnostics: readonly T[]): SortedReadonlyArray<T>;
+    export function getDefaultLibFileName(options: CompilerOptions): string;
+    export function textSpanEnd(span: TextSpan): number;
+    export function textSpanIsEmpty(span: TextSpan): boolean;
+    export function textSpanContainsPosition(span: TextSpan, position: number): boolean;
+    export function textSpanContainsTextSpan(span: TextSpan, other: TextSpan): boolean;
+    export function textSpanOverlapsWith(span: TextSpan, other: TextSpan): boolean;
+    export function textSpanOverlap(span1: TextSpan, span2: TextSpan): TextSpan | undefined;
+    export function textSpanIntersectsWithTextSpan(span: TextSpan, other: TextSpan): boolean;
+    export function textSpanIntersectsWith(span: TextSpan, start: number, length: number): boolean;
+    export function decodedTextSpanIntersectsWith(start1: number, length1: number, start2: number, length2: number): boolean;
+    export function textSpanIntersectsWithPosition(span: TextSpan, position: number): boolean;
+    export function textSpanIntersection(span1: TextSpan, span2: TextSpan): TextSpan | undefined;
+    export function createTextSpan(start: number, length: number): TextSpan;
+    export function createTextSpanFromBounds(start: number, end: number): TextSpan;
+    export function textChangeRangeNewSpan(range: TextChangeRange): TextSpan;
+    export function textChangeRangeIsUnchanged(range: TextChangeRange): boolean;
+    export function createTextChangeRange(span: TextSpan, newLength: number): TextChangeRange;
     /**
      * Called to merge all the changes that occurred across several versions of a script snapshot
      * into a single change.  i.e. if a user keeps making successive edits to a script we will
@@ -8698,49 +8421,49 @@ declare namespace ts {
      * This function will then merge those changes into a single change range valid between V1 and
      * Vn.
      */
-    function collapseTextChangeRangesAcrossMultipleVersions(changes: readonly TextChangeRange[]): TextChangeRange;
-    function getTypeParameterOwner(d: Declaration): Declaration | undefined;
-    function isParameterPropertyDeclaration(node: Node, parent: Node): node is ParameterPropertyDeclaration;
-    function isEmptyBindingPattern(node: BindingName): node is BindingPattern;
-    function isEmptyBindingElement(node: BindingElement | ArrayBindingElement): boolean;
-    function walkUpBindingElementsAndPatterns(binding: BindingElement): VariableDeclaration | ParameterDeclaration;
-    function getCombinedModifierFlags(node: Declaration): ModifierFlags;
-    function getCombinedNodeFlags(node: Node): NodeFlags;
+    export function collapseTextChangeRangesAcrossMultipleVersions(changes: readonly TextChangeRange[]): TextChangeRange;
+    export function getTypeParameterOwner(d: Declaration): Declaration | undefined;
+    export function isParameterPropertyDeclaration(node: Node, parent: Node): node is ParameterPropertyDeclaration;
+    export function isEmptyBindingPattern(node: BindingName): node is BindingPattern;
+    export function isEmptyBindingElement(node: BindingElement | ArrayBindingElement): boolean;
+    export function walkUpBindingElementsAndPatterns(binding: BindingElement): VariableDeclaration | ParameterDeclaration;
+    export function getCombinedModifierFlags(node: Declaration): ModifierFlags;
+    export function getCombinedNodeFlags(node: Node): NodeFlags;
     /**
      * Checks to see if the locale is in the appropriate format,
      * and if it is, attempts to set the appropriate language.
      */
-    function validateLocaleAndSetLanguage(locale: string, sys: {
+    export function validateLocaleAndSetLanguage(locale: string, sys: {
         getExecutingFilePath(): string;
         resolvePath(path: string): string;
         fileExists(fileName: string): boolean;
         readFile(fileName: string): string | undefined;
     }, errors?: Diagnostic[]): void;
-    function getOriginalNode(node: Node): Node;
-    function getOriginalNode<T extends Node>(node: Node, nodeTest: (node: Node) => node is T): T;
-    function getOriginalNode(node: Node | undefined): Node | undefined;
-    function getOriginalNode<T extends Node>(node: Node | undefined, nodeTest: (node: Node) => node is T): T | undefined;
+    export function getOriginalNode(node: Node): Node;
+    export function getOriginalNode<T extends Node>(node: Node, nodeTest: (node: Node) => node is T): T;
+    export function getOriginalNode(node: Node | undefined): Node | undefined;
+    export function getOriginalNode<T extends Node>(node: Node | undefined, nodeTest: (node: Node) => node is T): T | undefined;
     /**
      * Iterates through the parent chain of a node and performs the callback on each parent until the callback
      * returns a truthy value, then returns that value.
      * If no such value is found, it applies the callback until the parent pointer is undefined or the callback returns "quit"
      * At that point findAncestor returns undefined.
      */
-    function findAncestor<T extends Node>(node: Node | undefined, callback: (element: Node) => element is T): T | undefined;
-    function findAncestor(node: Node | undefined, callback: (element: Node) => boolean | "quit"): Node | undefined;
+    export function findAncestor<T extends Node>(node: Node | undefined, callback: (element: Node) => element is T): T | undefined;
+    export function findAncestor(node: Node | undefined, callback: (element: Node) => boolean | "quit"): Node | undefined;
     /**
      * Gets a value indicating whether a node originated in the parse tree.
      *
      * @param node The node to test.
      */
-    function isParseTreeNode(node: Node): boolean;
+    export function isParseTreeNode(node: Node): boolean;
     /**
      * Gets the original parse tree node for a node.
      *
      * @param node The original node.
      * @returns The original parse tree node if found; otherwise, undefined.
      */
-    function getParseTreeNode(node: Node | undefined): Node | undefined;
+    export function getParseTreeNode(node: Node | undefined): Node | undefined;
     /**
      * Gets the original parse tree node for a node.
      *
@@ -8748,27 +8471,27 @@ declare namespace ts {
      * @param nodeTest A callback used to ensure the correct type of parse tree node is returned.
      * @returns The original parse tree node if found; otherwise, undefined.
      */
-    function getParseTreeNode<T extends Node>(node: T | undefined, nodeTest?: (node: Node) => node is T): T | undefined;
+    export function getParseTreeNode<T extends Node>(node: T | undefined, nodeTest?: (node: Node) => node is T): T | undefined;
     /** Add an extra underscore to identifiers that start with two underscores to avoid issues with magic names like '__proto__' */
-    function escapeLeadingUnderscores(identifier: string): __String;
+    export function escapeLeadingUnderscores(identifier: string): __String;
     /**
      * Remove extra underscore from escaped identifier text content.
      *
      * @param identifier The escaped identifier text.
      * @returns The unescaped identifier text.
      */
-    function unescapeLeadingUnderscores(identifier: __String): string;
-    function idText(identifierOrPrivateName: Identifier | PrivateIdentifier): string;
+    export function unescapeLeadingUnderscores(identifier: __String): string;
+    export function idText(identifierOrPrivateName: Identifier | PrivateIdentifier): string;
     /**
      * If the text of an Identifier matches a keyword (including contextual and TypeScript-specific keywords), returns the
      * SyntaxKind for the matching keyword.
      */
-    function identifierToKeywordKind(node: Identifier): KeywordSyntaxKind | undefined;
-    function symbolName(symbol: Symbol): string;
-    function getNameOfJSDocTypedef(declaration: JSDocTypedefTag): Identifier | PrivateIdentifier | undefined;
-    function getNameOfDeclaration(declaration: Declaration | Expression | undefined): DeclarationName | undefined;
-    function getDecorators(node: HasDecorators): readonly Decorator[] | undefined;
-    function getModifiers(node: HasModifiers): readonly Modifier[] | undefined;
+    export function identifierToKeywordKind(node: Identifier): KeywordSyntaxKind | undefined;
+    export function symbolName(symbol: Symbol): string;
+    export function getNameOfJSDocTypedef(declaration: JSDocTypedefTag): Identifier | PrivateIdentifier | undefined;
+    export function getNameOfDeclaration(declaration: Declaration | Expression | undefined): DeclarationName | undefined;
+    export function getDecorators(node: HasDecorators): readonly Decorator[] | undefined;
+    export function getModifiers(node: HasModifiers): readonly Modifier[] | undefined;
     /**
      * Gets the JSDoc parameter tags for the node if present.
      *
@@ -8781,7 +8504,7 @@ declare namespace ts {
      *
      * For binding patterns, parameter tags are matched by position.
      */
-    function getJSDocParameterTags(param: ParameterDeclaration): readonly JSDocParameterTag[];
+    export function getJSDocParameterTags(param: ParameterDeclaration): readonly JSDocParameterTag[];
     /**
      * Gets the JSDoc type parameter tags for the node if present.
      *
@@ -8792,42 +8515,42 @@ declare namespace ts {
      * node are returned first, so in the previous example, the template
      * tag on the containing function expression would be first.
      */
-    function getJSDocTypeParameterTags(param: TypeParameterDeclaration): readonly JSDocTemplateTag[];
+    export function getJSDocTypeParameterTags(param: TypeParameterDeclaration): readonly JSDocTemplateTag[];
     /**
      * Return true if the node has JSDoc parameter tags.
      *
      * @remarks Includes parameter tags that are not directly on the node,
      * for example on a variable declaration whose initializer is a function expression.
      */
-    function hasJSDocParameterTags(node: FunctionLikeDeclaration | SignatureDeclaration): boolean;
+    export function hasJSDocParameterTags(node: FunctionLikeDeclaration | SignatureDeclaration): boolean;
     /** Gets the JSDoc augments tag for the node if present */
-    function getJSDocAugmentsTag(node: Node): JSDocAugmentsTag | undefined;
+    export function getJSDocAugmentsTag(node: Node): JSDocAugmentsTag | undefined;
     /** Gets the JSDoc implements tags for the node if present */
-    function getJSDocImplementsTags(node: Node): readonly JSDocImplementsTag[];
+    export function getJSDocImplementsTags(node: Node): readonly JSDocImplementsTag[];
     /** Gets the JSDoc class tag for the node if present */
-    function getJSDocClassTag(node: Node): JSDocClassTag | undefined;
+    export function getJSDocClassTag(node: Node): JSDocClassTag | undefined;
     /** Gets the JSDoc public tag for the node if present */
-    function getJSDocPublicTag(node: Node): JSDocPublicTag | undefined;
+    export function getJSDocPublicTag(node: Node): JSDocPublicTag | undefined;
     /** Gets the JSDoc private tag for the node if present */
-    function getJSDocPrivateTag(node: Node): JSDocPrivateTag | undefined;
+    export function getJSDocPrivateTag(node: Node): JSDocPrivateTag | undefined;
     /** Gets the JSDoc protected tag for the node if present */
-    function getJSDocProtectedTag(node: Node): JSDocProtectedTag | undefined;
+    export function getJSDocProtectedTag(node: Node): JSDocProtectedTag | undefined;
     /** Gets the JSDoc protected tag for the node if present */
-    function getJSDocReadonlyTag(node: Node): JSDocReadonlyTag | undefined;
-    function getJSDocOverrideTagNoCache(node: Node): JSDocOverrideTag | undefined;
+    export function getJSDocReadonlyTag(node: Node): JSDocReadonlyTag | undefined;
+    export function getJSDocOverrideTagNoCache(node: Node): JSDocOverrideTag | undefined;
     /** Gets the JSDoc deprecated tag for the node if present */
-    function getJSDocDeprecatedTag(node: Node): JSDocDeprecatedTag | undefined;
+    export function getJSDocDeprecatedTag(node: Node): JSDocDeprecatedTag | undefined;
     /** Gets the JSDoc enum tag for the node if present */
-    function getJSDocEnumTag(node: Node): JSDocEnumTag | undefined;
+    export function getJSDocEnumTag(node: Node): JSDocEnumTag | undefined;
     /** Gets the JSDoc this tag for the node if present */
-    function getJSDocThisTag(node: Node): JSDocThisTag | undefined;
+    export function getJSDocThisTag(node: Node): JSDocThisTag | undefined;
     /** Gets the JSDoc return tag for the node if present */
-    function getJSDocReturnTag(node: Node): JSDocReturnTag | undefined;
+    export function getJSDocReturnTag(node: Node): JSDocReturnTag | undefined;
     /** Gets the JSDoc template tag for the node if present */
-    function getJSDocTemplateTag(node: Node): JSDocTemplateTag | undefined;
-    function getJSDocSatisfiesTag(node: Node): JSDocSatisfiesTag | undefined;
+    export function getJSDocTemplateTag(node: Node): JSDocTemplateTag | undefined;
+    export function getJSDocSatisfiesTag(node: Node): JSDocSatisfiesTag | undefined;
     /** Gets the JSDoc type tag for the node if present and valid */
-    function getJSDocTypeTag(node: Node): JSDocTypeTag | undefined;
+    export function getJSDocTypeTag(node: Node): JSDocTypeTag | undefined;
     /**
      * Gets the type node for the node if provided via JSDoc.
      *
@@ -8839,22 +8562,22 @@ declare namespace ts {
      * node are examined first, so in the previous example, the type
      * tag directly on the node would be returned.
      */
-    function getJSDocType(node: Node): TypeNode | undefined;
+    export function getJSDocType(node: Node): TypeNode | undefined;
     /**
      * Gets the return type node for the node if provided via JSDoc return tag or type tag.
      *
      * @remarks `getJSDocReturnTag` just gets the whole JSDoc tag. This function
      * gets the type from inside the braces, after the fat arrow, etc.
      */
-    function getJSDocReturnType(node: Node): TypeNode | undefined;
+    export function getJSDocReturnType(node: Node): TypeNode | undefined;
     /** Get all JSDoc tags related to a node, including those on parent nodes. */
-    function getJSDocTags(node: Node): readonly JSDocTag[];
+    export function getJSDocTags(node: Node): readonly JSDocTag[];
     /** Gets all JSDoc tags that match a specified predicate */
-    function getAllJSDocTags<T extends JSDocTag>(node: Node, predicate: (tag: JSDocTag) => tag is T): readonly T[];
+    export function getAllJSDocTags<T extends JSDocTag>(node: Node, predicate: (tag: JSDocTag) => tag is T): readonly T[];
     /** Gets all JSDoc tags of a specified kind */
-    function getAllJSDocTagsOfKind(node: Node, kind: SyntaxKind): readonly JSDocTag[];
+    export function getAllJSDocTagsOfKind(node: Node, kind: SyntaxKind): readonly JSDocTag[];
     /** Gets the text of a jsdoc comment, flattening links to their text. */
-    function getTextOfJSDocComment(comment?: string | NodeArray<JSDocComment>): string | undefined;
+    export function getTextOfJSDocComment(comment?: string | NodeArray<JSDocComment>): string | undefined;
     /**
      * Gets the effective type parameters. If the node was parsed in a
      * JavaScript file, gets the type parameters from the `@template` tag from JSDoc.
@@ -8865,107 +8588,107 @@ declare namespace ts {
      * /** @type {Id} /
      * function id(x) { return x }
      */
-    function getEffectiveTypeParameterDeclarations(node: DeclarationWithTypeParameters): readonly TypeParameterDeclaration[];
-    function getEffectiveConstraintOfTypeParameter(node: TypeParameterDeclaration): TypeNode | undefined;
-    function isMemberName(node: Node): node is MemberName;
-    function isPropertyAccessChain(node: Node): node is PropertyAccessChain;
-    function isElementAccessChain(node: Node): node is ElementAccessChain;
-    function isCallChain(node: Node): node is CallChain;
-    function isOptionalChain(node: Node): node is PropertyAccessChain | ElementAccessChain | CallChain | NonNullChain;
-    function isNullishCoalesce(node: Node): boolean;
-    function isConstTypeReference(node: Node): boolean;
-    function skipPartiallyEmittedExpressions(node: Expression): Expression;
-    function skipPartiallyEmittedExpressions(node: Node): Node;
-    function isNonNullChain(node: Node): node is NonNullChain;
-    function isBreakOrContinueStatement(node: Node): node is BreakOrContinueStatement;
-    function isNamedExportBindings(node: Node): node is NamedExportBindings;
-    function isJSDocPropertyLikeTag(node: Node): node is JSDocPropertyLikeTag;
+    export function getEffectiveTypeParameterDeclarations(node: DeclarationWithTypeParameters): readonly TypeParameterDeclaration[];
+    export function getEffectiveConstraintOfTypeParameter(node: TypeParameterDeclaration): TypeNode | undefined;
+    export function isMemberName(node: Node): node is MemberName;
+    export function isPropertyAccessChain(node: Node): node is PropertyAccessChain;
+    export function isElementAccessChain(node: Node): node is ElementAccessChain;
+    export function isCallChain(node: Node): node is CallChain;
+    export function isOptionalChain(node: Node): node is PropertyAccessChain | ElementAccessChain | CallChain | NonNullChain;
+    export function isNullishCoalesce(node: Node): boolean;
+    export function isConstTypeReference(node: Node): boolean;
+    export function skipPartiallyEmittedExpressions(node: Expression): Expression;
+    export function skipPartiallyEmittedExpressions(node: Node): Node;
+    export function isNonNullChain(node: Node): node is NonNullChain;
+    export function isBreakOrContinueStatement(node: Node): node is BreakOrContinueStatement;
+    export function isNamedExportBindings(node: Node): node is NamedExportBindings;
+    export function isJSDocPropertyLikeTag(node: Node): node is JSDocPropertyLikeTag;
     /**
      * True if kind is of some token syntax kind.
      * For example, this is true for an IfKeyword but not for an IfStatement.
      * Literals are considered tokens, except TemplateLiteral, but does include TemplateHead/Middle/Tail.
      */
-    function isTokenKind(kind: SyntaxKind): boolean;
+    export function isTokenKind(kind: SyntaxKind): boolean;
     /**
      * True if node is of some token syntax kind.
      * For example, this is true for an IfKeyword but not for an IfStatement.
      * Literals are considered tokens, except TemplateLiteral, but does include TemplateHead/Middle/Tail.
      */
-    function isToken(n: Node): boolean;
-    function isLiteralExpression(node: Node): node is LiteralExpression;
-    function isTemplateLiteralToken(node: Node): node is TemplateLiteralToken;
-    function isTemplateMiddleOrTemplateTail(node: Node): node is TemplateMiddle | TemplateTail;
-    function isImportOrExportSpecifier(node: Node): node is ImportSpecifier | ExportSpecifier;
-    function isTypeOnlyImportDeclaration(node: Node): node is TypeOnlyImportDeclaration;
-    function isTypeOnlyExportDeclaration(node: Node): node is TypeOnlyExportDeclaration;
-    function isTypeOnlyImportOrExportDeclaration(node: Node): node is TypeOnlyAliasDeclaration;
-    function isStringTextContainingNode(node: Node): node is StringLiteral | TemplateLiteralToken;
-    function isImportAttributeName(node: Node): node is ImportAttributeName;
-    function isModifier(node: Node): node is Modifier;
-    function isEntityName(node: Node): node is EntityName;
-    function isPropertyName(node: Node): node is PropertyName;
-    function isBindingName(node: Node): node is BindingName;
-    function isFunctionLike(node: Node | undefined): node is SignatureDeclaration;
-    function isClassElement(node: Node): node is ClassElement;
-    function isClassLike(node: Node): node is ClassLikeDeclaration;
-    function isAccessor(node: Node): node is AccessorDeclaration;
-    function isAutoAccessorPropertyDeclaration(node: Node): node is AutoAccessorPropertyDeclaration;
-    function isModifierLike(node: Node): node is ModifierLike;
-    function isTypeElement(node: Node): node is TypeElement;
-    function isClassOrTypeElement(node: Node): node is ClassElement | TypeElement;
-    function isObjectLiteralElementLike(node: Node): node is ObjectLiteralElementLike;
+    export function isToken(n: Node): boolean;
+    export function isLiteralExpression(node: Node): node is LiteralExpression;
+    export function isTemplateLiteralToken(node: Node): node is TemplateLiteralToken;
+    export function isTemplateMiddleOrTemplateTail(node: Node): node is TemplateMiddle | TemplateTail;
+    export function isImportOrExportSpecifier(node: Node): node is ImportSpecifier | ExportSpecifier;
+    export function isTypeOnlyImportDeclaration(node: Node): node is TypeOnlyImportDeclaration;
+    export function isTypeOnlyExportDeclaration(node: Node): node is TypeOnlyExportDeclaration;
+    export function isTypeOnlyImportOrExportDeclaration(node: Node): node is TypeOnlyAliasDeclaration;
+    export function isStringTextContainingNode(node: Node): node is StringLiteral | TemplateLiteralToken;
+    export function isImportAttributeName(node: Node): node is ImportAttributeName;
+    export function isModifier(node: Node): node is Modifier;
+    export function isEntityName(node: Node): node is EntityName;
+    export function isPropertyName(node: Node): node is PropertyName;
+    export function isBindingName(node: Node): node is BindingName;
+    export function isFunctionLike(node: Node | undefined): node is SignatureDeclaration;
+    export function isClassElement(node: Node): node is ClassElement;
+    export function isClassLike(node: Node): node is ClassLikeDeclaration;
+    export function isAccessor(node: Node): node is AccessorDeclaration;
+    export function isAutoAccessorPropertyDeclaration(node: Node): node is AutoAccessorPropertyDeclaration;
+    export function isModifierLike(node: Node): node is ModifierLike;
+    export function isTypeElement(node: Node): node is TypeElement;
+    export function isClassOrTypeElement(node: Node): node is ClassElement | TypeElement;
+    export function isObjectLiteralElementLike(node: Node): node is ObjectLiteralElementLike;
     /**
      * Node test that determines whether a node is a valid type node.
      * This differs from the `isPartOfTypeNode` function which determines whether a node is *part*
      * of a TypeNode.
      */
-    function isTypeNode(node: Node): node is TypeNode;
-    function isFunctionOrConstructorTypeNode(node: Node): node is FunctionTypeNode | ConstructorTypeNode;
-    function isArrayBindingElement(node: Node): node is ArrayBindingElement;
-    function isPropertyAccessOrQualifiedName(node: Node): node is PropertyAccessExpression | QualifiedName;
-    function isCallLikeExpression(node: Node): node is CallLikeExpression;
-    function isCallOrNewExpression(node: Node): node is CallExpression | NewExpression;
-    function isTemplateLiteral(node: Node): node is TemplateLiteral;
-    function isLeftHandSideExpression(node: Node): node is LeftHandSideExpression;
-    function isLiteralTypeLiteral(node: Node): node is NullLiteral | BooleanLiteral | LiteralExpression | PrefixUnaryExpression;
+    export function isTypeNode(node: Node): node is TypeNode;
+    export function isFunctionOrConstructorTypeNode(node: Node): node is FunctionTypeNode | ConstructorTypeNode;
+    export function isArrayBindingElement(node: Node): node is ArrayBindingElement;
+    export function isPropertyAccessOrQualifiedName(node: Node): node is PropertyAccessExpression | QualifiedName;
+    export function isCallLikeExpression(node: Node): node is CallLikeExpression;
+    export function isCallOrNewExpression(node: Node): node is CallExpression | NewExpression;
+    export function isTemplateLiteral(node: Node): node is TemplateLiteral;
+    export function isLeftHandSideExpression(node: Node): node is LeftHandSideExpression;
+    export function isLiteralTypeLiteral(node: Node): node is NullLiteral | BooleanLiteral | LiteralExpression | PrefixUnaryExpression;
     /**
      * Determines whether a node is an expression based only on its kind.
      */
-    function isExpression(node: Node): node is Expression;
-    function isAssertionExpression(node: Node): node is AssertionExpression;
-    function isIterationStatement(node: Node, lookInLabeledStatements: false): node is IterationStatement;
-    function isIterationStatement(node: Node, lookInLabeledStatements: boolean): node is IterationStatement | LabeledStatement;
-    function isConciseBody(node: Node): node is ConciseBody;
-    function isForInitializer(node: Node): node is ForInitializer;
-    function isModuleBody(node: Node): node is ModuleBody;
-    function isNamedImportBindings(node: Node): node is NamedImportBindings;
-    function isDeclarationStatement(node: Node): node is DeclarationStatement;
-    function isStatement(node: Node): node is Statement;
-    function isModuleReference(node: Node): node is ModuleReference;
-    function isJsxTagNameExpression(node: Node): node is JsxTagNameExpression;
-    function isJsxChild(node: Node): node is JsxChild;
-    function isJsxAttributeLike(node: Node): node is JsxAttributeLike;
-    function isStringLiteralOrJsxExpression(node: Node): node is StringLiteral | JsxExpression;
-    function isJsxOpeningLikeElement(node: Node): node is JsxOpeningLikeElement;
-    function isCaseOrDefaultClause(node: Node): node is CaseOrDefaultClause;
+    export function isExpression(node: Node): node is Expression;
+    export function isAssertionExpression(node: Node): node is AssertionExpression;
+    export function isIterationStatement(node: Node, lookInLabeledStatements: false): node is IterationStatement;
+    export function isIterationStatement(node: Node, lookInLabeledStatements: boolean): node is IterationStatement | LabeledStatement;
+    export function isConciseBody(node: Node): node is ConciseBody;
+    export function isForInitializer(node: Node): node is ForInitializer;
+    export function isModuleBody(node: Node): node is ModuleBody;
+    export function isNamedImportBindings(node: Node): node is NamedImportBindings;
+    export function isDeclarationStatement(node: Node): node is DeclarationStatement;
+    export function isStatement(node: Node): node is Statement;
+    export function isModuleReference(node: Node): node is ModuleReference;
+    export function isJsxTagNameExpression(node: Node): node is JsxTagNameExpression;
+    export function isJsxChild(node: Node): node is JsxChild;
+    export function isJsxAttributeLike(node: Node): node is JsxAttributeLike;
+    export function isStringLiteralOrJsxExpression(node: Node): node is StringLiteral | JsxExpression;
+    export function isJsxOpeningLikeElement(node: Node): node is JsxOpeningLikeElement;
+    export function isCaseOrDefaultClause(node: Node): node is CaseOrDefaultClause;
     /** True if node is of a kind that may contain comment text. */
-    function isJSDocCommentContainingNode(node: Node): boolean;
-    function isSetAccessor(node: Node): node is SetAccessorDeclaration;
-    function isGetAccessor(node: Node): node is GetAccessorDeclaration;
+    export function isJSDocCommentContainingNode(node: Node): boolean;
+    export function isSetAccessor(node: Node): node is SetAccessorDeclaration;
+    export function isGetAccessor(node: Node): node is GetAccessorDeclaration;
     /** True if has initializer node attached to it. */
-    function hasOnlyExpressionInitializer(node: Node): node is HasExpressionInitializer;
-    function isObjectLiteralElement(node: Node): node is ObjectLiteralElement;
-    function isStringLiteralLike(node: Node | FileReference): node is StringLiteralLike;
-    function isJSDocLinkLike(node: Node): node is JSDocLink | JSDocLinkCode | JSDocLinkPlain;
-    function hasRestParameter(s: SignatureDeclaration | JSDocSignature): boolean;
-    function isRestParameter(node: ParameterDeclaration | JSDocParameterTag): boolean;
-    function isInternalDeclaration(node: Node, sourceFile?: SourceFile): boolean;
-    const unchangedTextChangeRange: TextChangeRange;
-    type ParameterPropertyDeclaration = ParameterDeclaration & {
+    export function hasOnlyExpressionInitializer(node: Node): node is HasExpressionInitializer;
+    export function isObjectLiteralElement(node: Node): node is ObjectLiteralElement;
+    export function isStringLiteralLike(node: Node | FileReference): node is StringLiteralLike;
+    export function isJSDocLinkLike(node: Node): node is JSDocLink | JSDocLinkCode | JSDocLinkPlain;
+    export function hasRestParameter(s: SignatureDeclaration | JSDocSignature): boolean;
+    export function isRestParameter(node: ParameterDeclaration | JSDocParameterTag): boolean;
+    export function isInternalDeclaration(node: Node, sourceFile?: SourceFile): boolean;
+    export const unchangedTextChangeRange: TextChangeRange;
+    export type ParameterPropertyDeclaration = ParameterDeclaration & {
         parent: ConstructorDeclaration;
         name: Identifier;
     };
-    function isPartOfTypeNode(node: Node): boolean;
+    export function isPartOfTypeNode(node: Node): boolean;
     /**
      * This function checks multiple locations for JSDoc comments that apply to a host node.
      * At each location, the whole comment may apply to the node, or only a specific tag in
@@ -8985,303 +8708,303 @@ declare namespace ts {
      * function b(/** JSDoc will be returned for `c` *\/ c) {}
      * ```
      */
-    function getJSDocCommentsAndTags(hostNode: Node): readonly (JSDoc | JSDocTag)[];
+    export function getJSDocCommentsAndTags(hostNode: Node): readonly (JSDoc | JSDocTag)[];
     /**
      * Create an external source map source file reference
      */
-    function createSourceMapSource(fileName: string, text: string, skipTrivia?: (pos: number) => number): SourceMapSource;
-    function setOriginalNode<T extends Node>(node: T, original: Node | undefined): T;
-    const factory: NodeFactory;
+    export function createSourceMapSource(fileName: string, text: string, skipTrivia?: (pos: number) => number): SourceMapSource;
+    export function setOriginalNode<T extends Node>(node: T, original: Node | undefined): T;
+    export const factory: NodeFactory;
     /**
      * Clears any `EmitNode` entries from parse-tree nodes.
      * @param sourceFile A source file.
      */
-    function disposeEmitNodes(sourceFile: SourceFile | undefined): void;
+    export function disposeEmitNodes(sourceFile: SourceFile | undefined): void;
     /**
      * Sets flags that control emit behavior of a node.
      */
-    function setEmitFlags<T extends Node>(node: T, emitFlags: EmitFlags): T;
+    export function setEmitFlags<T extends Node>(node: T, emitFlags: EmitFlags): T;
     /**
      * Gets a custom text range to use when emitting source maps.
      */
-    function getSourceMapRange(node: Node): SourceMapRange;
+    export function getSourceMapRange(node: Node): SourceMapRange;
     /**
      * Sets a custom text range to use when emitting source maps.
      */
-    function setSourceMapRange<T extends Node>(node: T, range: SourceMapRange | undefined): T;
+    export function setSourceMapRange<T extends Node>(node: T, range: SourceMapRange | undefined): T;
     /**
      * Gets the TextRange to use for source maps for a token of a node.
      */
-    function getTokenSourceMapRange(node: Node, token: SyntaxKind): SourceMapRange | undefined;
+    export function getTokenSourceMapRange(node: Node, token: SyntaxKind): SourceMapRange | undefined;
     /**
      * Sets the TextRange to use for source maps for a token of a node.
      */
-    function setTokenSourceMapRange<T extends Node>(node: T, token: SyntaxKind, range: SourceMapRange | undefined): T;
+    export function setTokenSourceMapRange<T extends Node>(node: T, token: SyntaxKind, range: SourceMapRange | undefined): T;
     /**
      * Gets a custom text range to use when emitting comments.
      */
-    function getCommentRange(node: Node): TextRange;
+    export function getCommentRange(node: Node): TextRange;
     /**
      * Sets a custom text range to use when emitting comments.
      */
-    function setCommentRange<T extends Node>(node: T, range: TextRange): T;
-    function getSyntheticLeadingComments(node: Node): SynthesizedComment[] | undefined;
-    function setSyntheticLeadingComments<T extends Node>(node: T, comments: SynthesizedComment[] | undefined): T;
-    function addSyntheticLeadingComment<T extends Node>(node: T, kind: SyntaxKind.SingleLineCommentTrivia | SyntaxKind.MultiLineCommentTrivia, text: string, hasTrailingNewLine?: boolean): T;
-    function getSyntheticTrailingComments(node: Node): SynthesizedComment[] | undefined;
-    function setSyntheticTrailingComments<T extends Node>(node: T, comments: SynthesizedComment[] | undefined): T;
-    function addSyntheticTrailingComment<T extends Node>(node: T, kind: SyntaxKind.SingleLineCommentTrivia | SyntaxKind.MultiLineCommentTrivia, text: string, hasTrailingNewLine?: boolean): T;
-    function moveSyntheticComments<T extends Node>(node: T, original: Node): T;
+    export function setCommentRange<T extends Node>(node: T, range: TextRange): T;
+    export function getSyntheticLeadingComments(node: Node): SynthesizedComment[] | undefined;
+    export function setSyntheticLeadingComments<T extends Node>(node: T, comments: SynthesizedComment[] | undefined): T;
+    export function addSyntheticLeadingComment<T extends Node>(node: T, kind: SyntaxKind.SingleLineCommentTrivia | SyntaxKind.MultiLineCommentTrivia, text: string, hasTrailingNewLine?: boolean): T;
+    export function getSyntheticTrailingComments(node: Node): SynthesizedComment[] | undefined;
+    export function setSyntheticTrailingComments<T extends Node>(node: T, comments: SynthesizedComment[] | undefined): T;
+    export function addSyntheticTrailingComment<T extends Node>(node: T, kind: SyntaxKind.SingleLineCommentTrivia | SyntaxKind.MultiLineCommentTrivia, text: string, hasTrailingNewLine?: boolean): T;
+    export function moveSyntheticComments<T extends Node>(node: T, original: Node): T;
     /**
      * Gets the constant value to emit for an expression representing an enum.
      */
-    function getConstantValue(node: AccessExpression): string | number | undefined;
+    export function getConstantValue(node: AccessExpression): string | number | undefined;
     /**
      * Sets the constant value to emit for an expression.
      */
-    function setConstantValue(node: AccessExpression, value: string | number): AccessExpression;
+    export function setConstantValue(node: AccessExpression, value: string | number): AccessExpression;
     /**
      * Adds an EmitHelper to a node.
      */
-    function addEmitHelper<T extends Node>(node: T, helper: EmitHelper): T;
+    export function addEmitHelper<T extends Node>(node: T, helper: EmitHelper): T;
     /**
      * Add EmitHelpers to a node.
      */
-    function addEmitHelpers<T extends Node>(node: T, helpers: EmitHelper[] | undefined): T;
+    export function addEmitHelpers<T extends Node>(node: T, helpers: EmitHelper[] | undefined): T;
     /**
      * Removes an EmitHelper from a node.
      */
-    function removeEmitHelper(node: Node, helper: EmitHelper): boolean;
+    export function removeEmitHelper(node: Node, helper: EmitHelper): boolean;
     /**
      * Gets the EmitHelpers of a node.
      */
-    function getEmitHelpers(node: Node): EmitHelper[] | undefined;
+    export function getEmitHelpers(node: Node): EmitHelper[] | undefined;
     /**
      * Moves matching emit helpers from a source node to a target node.
      */
-    function moveEmitHelpers(source: Node, target: Node, predicate: (helper: EmitHelper) => boolean): void;
-    function isNumericLiteral(node: Node): node is NumericLiteral;
-    function isBigIntLiteral(node: Node): node is BigIntLiteral;
-    function isStringLiteral(node: Node): node is StringLiteral;
-    function isJsxText(node: Node): node is JsxText;
-    function isRegularExpressionLiteral(node: Node): node is RegularExpressionLiteral;
-    function isNoSubstitutionTemplateLiteral(node: Node): node is NoSubstitutionTemplateLiteral;
-    function isTemplateHead(node: Node): node is TemplateHead;
-    function isTemplateMiddle(node: Node): node is TemplateMiddle;
-    function isTemplateTail(node: Node): node is TemplateTail;
-    function isDotDotDotToken(node: Node): node is DotDotDotToken;
-    function isPlusToken(node: Node): node is PlusToken;
-    function isMinusToken(node: Node): node is MinusToken;
-    function isAsteriskToken(node: Node): node is AsteriskToken;
-    function isExclamationToken(node: Node): node is ExclamationToken;
-    function isQuestionToken(node: Node): node is QuestionToken;
-    function isColonToken(node: Node): node is ColonToken;
-    function isQuestionDotToken(node: Node): node is QuestionDotToken;
-    function isEqualsGreaterThanToken(node: Node): node is EqualsGreaterThanToken;
-    function isIdentifier(node: Node): node is Identifier;
-    function isPrivateIdentifier(node: Node): node is PrivateIdentifier;
-    function isAssertsKeyword(node: Node): node is AssertsKeyword;
-    function isAwaitKeyword(node: Node): node is AwaitKeyword;
-    function isQualifiedName(node: Node): node is QualifiedName;
-    function isComputedPropertyName(node: Node): node is ComputedPropertyName;
-    function isTypeParameterDeclaration(node: Node): node is TypeParameterDeclaration;
-    function isParameter(node: Node): node is ParameterDeclaration;
-    function isDecorator(node: Node): node is Decorator;
-    function isPropertySignature(node: Node): node is PropertySignature;
-    function isPropertyDeclaration(node: Node): node is PropertyDeclaration;
-    function isMethodSignature(node: Node): node is MethodSignature;
-    function isMethodDeclaration(node: Node): node is MethodDeclaration;
-    function isClassStaticBlockDeclaration(node: Node): node is ClassStaticBlockDeclaration;
-    function isConstructorDeclaration(node: Node): node is ConstructorDeclaration;
-    function isGetAccessorDeclaration(node: Node): node is GetAccessorDeclaration;
-    function isSetAccessorDeclaration(node: Node): node is SetAccessorDeclaration;
-    function isCallSignatureDeclaration(node: Node): node is CallSignatureDeclaration;
-    function isConstructSignatureDeclaration(node: Node): node is ConstructSignatureDeclaration;
-    function isIndexSignatureDeclaration(node: Node): node is IndexSignatureDeclaration;
-    function isTypePredicateNode(node: Node): node is TypePredicateNode;
-    function isTypeReferenceNode(node: Node): node is TypeReferenceNode;
-    function isFunctionTypeNode(node: Node): node is FunctionTypeNode;
-    function isConstructorTypeNode(node: Node): node is ConstructorTypeNode;
-    function isTypeQueryNode(node: Node): node is TypeQueryNode;
-    function isTypeLiteralNode(node: Node): node is TypeLiteralNode;
-    function isArrayTypeNode(node: Node): node is ArrayTypeNode;
-    function isTupleTypeNode(node: Node): node is TupleTypeNode;
-    function isNamedTupleMember(node: Node): node is NamedTupleMember;
-    function isOptionalTypeNode(node: Node): node is OptionalTypeNode;
-    function isRestTypeNode(node: Node): node is RestTypeNode;
-    function isUnionTypeNode(node: Node): node is UnionTypeNode;
-    function isIntersectionTypeNode(node: Node): node is IntersectionTypeNode;
-    function isConditionalTypeNode(node: Node): node is ConditionalTypeNode;
-    function isInferTypeNode(node: Node): node is InferTypeNode;
-    function isParenthesizedTypeNode(node: Node): node is ParenthesizedTypeNode;
-    function isThisTypeNode(node: Node): node is ThisTypeNode;
-    function isTypeOperatorNode(node: Node): node is TypeOperatorNode;
-    function isIndexedAccessTypeNode(node: Node): node is IndexedAccessTypeNode;
-    function isMappedTypeNode(node: Node): node is MappedTypeNode;
-    function isLiteralTypeNode(node: Node): node is LiteralTypeNode;
-    function isImportTypeNode(node: Node): node is ImportTypeNode;
-    function isTemplateLiteralTypeSpan(node: Node): node is TemplateLiteralTypeSpan;
-    function isTemplateLiteralTypeNode(node: Node): node is TemplateLiteralTypeNode;
-    function isObjectBindingPattern(node: Node): node is ObjectBindingPattern;
-    function isArrayBindingPattern(node: Node): node is ArrayBindingPattern;
-    function isBindingElement(node: Node): node is BindingElement;
-    function isArrayLiteralExpression(node: Node): node is ArrayLiteralExpression;
-    function isObjectLiteralExpression(node: Node): node is ObjectLiteralExpression;
-    function isPropertyAccessExpression(node: Node): node is PropertyAccessExpression;
-    function isElementAccessExpression(node: Node): node is ElementAccessExpression;
-    function isCallExpression(node: Node): node is CallExpression;
-    function isNewExpression(node: Node): node is NewExpression;
-    function isTaggedTemplateExpression(node: Node): node is TaggedTemplateExpression;
-    function isTypeAssertionExpression(node: Node): node is TypeAssertion;
-    function isParenthesizedExpression(node: Node): node is ParenthesizedExpression;
-    function isFunctionExpression(node: Node): node is FunctionExpression;
-    function isArrowFunction(node: Node): node is ArrowFunction;
-    function isDeleteExpression(node: Node): node is DeleteExpression;
-    function isTypeOfExpression(node: Node): node is TypeOfExpression;
-    function isVoidExpression(node: Node): node is VoidExpression;
-    function isAwaitExpression(node: Node): node is AwaitExpression;
-    function isPrefixUnaryExpression(node: Node): node is PrefixUnaryExpression;
-    function isPostfixUnaryExpression(node: Node): node is PostfixUnaryExpression;
-    function isBinaryExpression(node: Node): node is BinaryExpression;
-    function isConditionalExpression(node: Node): node is ConditionalExpression;
-    function isTemplateExpression(node: Node): node is TemplateExpression;
-    function isYieldExpression(node: Node): node is YieldExpression;
-    function isSpreadElement(node: Node): node is SpreadElement;
-    function isClassExpression(node: Node): node is ClassExpression;
-    function isOmittedExpression(node: Node): node is OmittedExpression;
-    function isExpressionWithTypeArguments(node: Node): node is ExpressionWithTypeArguments;
-    function isAsExpression(node: Node): node is AsExpression;
-    function isSatisfiesExpression(node: Node): node is SatisfiesExpression;
-    function isNonNullExpression(node: Node): node is NonNullExpression;
-    function isMetaProperty(node: Node): node is MetaProperty;
-    function isSyntheticExpression(node: Node): node is SyntheticExpression;
-    function isPartiallyEmittedExpression(node: Node): node is PartiallyEmittedExpression;
-    function isCommaListExpression(node: Node): node is CommaListExpression;
-    function isTemplateSpan(node: Node): node is TemplateSpan;
-    function isSemicolonClassElement(node: Node): node is SemicolonClassElement;
-    function isBlock(node: Node): node is Block;
-    function isVariableStatement(node: Node): node is VariableStatement;
-    function isEmptyStatement(node: Node): node is EmptyStatement;
-    function isExpressionStatement(node: Node): node is ExpressionStatement;
-    function isIfStatement(node: Node): node is IfStatement;
-    function isDoStatement(node: Node): node is DoStatement;
-    function isWhileStatement(node: Node): node is WhileStatement;
-    function isForStatement(node: Node): node is ForStatement;
-    function isForInStatement(node: Node): node is ForInStatement;
-    function isForOfStatement(node: Node): node is ForOfStatement;
-    function isContinueStatement(node: Node): node is ContinueStatement;
-    function isBreakStatement(node: Node): node is BreakStatement;
-    function isReturnStatement(node: Node): node is ReturnStatement;
-    function isWithStatement(node: Node): node is WithStatement;
-    function isSwitchStatement(node: Node): node is SwitchStatement;
-    function isLabeledStatement(node: Node): node is LabeledStatement;
-    function isThrowStatement(node: Node): node is ThrowStatement;
-    function isTryStatement(node: Node): node is TryStatement;
-    function isDebuggerStatement(node: Node): node is DebuggerStatement;
-    function isVariableDeclaration(node: Node): node is VariableDeclaration;
-    function isVariableDeclarationList(node: Node): node is VariableDeclarationList;
-    function isFunctionDeclaration(node: Node): node is FunctionDeclaration;
-    function isClassDeclaration(node: Node): node is ClassDeclaration;
-    function isInterfaceDeclaration(node: Node): node is InterfaceDeclaration;
-    function isTypeAliasDeclaration(node: Node): node is TypeAliasDeclaration;
-    function isEnumDeclaration(node: Node): node is EnumDeclaration;
-    function isModuleDeclaration(node: Node): node is ModuleDeclaration;
-    function isModuleBlock(node: Node): node is ModuleBlock;
-    function isCaseBlock(node: Node): node is CaseBlock;
-    function isNamespaceExportDeclaration(node: Node): node is NamespaceExportDeclaration;
-    function isImportEqualsDeclaration(node: Node): node is ImportEqualsDeclaration;
-    function isImportDeclaration(node: Node): node is ImportDeclaration;
-    function isImportClause(node: Node): node is ImportClause;
-    function isImportTypeAssertionContainer(node: Node): node is ImportTypeAssertionContainer;
+    export function moveEmitHelpers(source: Node, target: Node, predicate: (helper: EmitHelper) => boolean): void;
+    export function isNumericLiteral(node: Node): node is NumericLiteral;
+    export function isBigIntLiteral(node: Node): node is BigIntLiteral;
+    export function isStringLiteral(node: Node): node is StringLiteral;
+    export function isJsxText(node: Node): node is JsxText;
+    export function isRegularExpressionLiteral(node: Node): node is RegularExpressionLiteral;
+    export function isNoSubstitutionTemplateLiteral(node: Node): node is NoSubstitutionTemplateLiteral;
+    export function isTemplateHead(node: Node): node is TemplateHead;
+    export function isTemplateMiddle(node: Node): node is TemplateMiddle;
+    export function isTemplateTail(node: Node): node is TemplateTail;
+    export function isDotDotDotToken(node: Node): node is DotDotDotToken;
+    export function isPlusToken(node: Node): node is PlusToken;
+    export function isMinusToken(node: Node): node is MinusToken;
+    export function isAsteriskToken(node: Node): node is AsteriskToken;
+    export function isExclamationToken(node: Node): node is ExclamationToken;
+    export function isQuestionToken(node: Node): node is QuestionToken;
+    export function isColonToken(node: Node): node is ColonToken;
+    export function isQuestionDotToken(node: Node): node is QuestionDotToken;
+    export function isEqualsGreaterThanToken(node: Node): node is EqualsGreaterThanToken;
+    export function isIdentifier(node: Node): node is Identifier;
+    export function isPrivateIdentifier(node: Node): node is PrivateIdentifier;
+    export function isAssertsKeyword(node: Node): node is AssertsKeyword;
+    export function isAwaitKeyword(node: Node): node is AwaitKeyword;
+    export function isQualifiedName(node: Node): node is QualifiedName;
+    export function isComputedPropertyName(node: Node): node is ComputedPropertyName;
+    export function isTypeParameterDeclaration(node: Node): node is TypeParameterDeclaration;
+    export function isParameter(node: Node): node is ParameterDeclaration;
+    export function isDecorator(node: Node): node is Decorator;
+    export function isPropertySignature(node: Node): node is PropertySignature;
+    export function isPropertyDeclaration(node: Node): node is PropertyDeclaration;
+    export function isMethodSignature(node: Node): node is MethodSignature;
+    export function isMethodDeclaration(node: Node): node is MethodDeclaration;
+    export function isClassStaticBlockDeclaration(node: Node): node is ClassStaticBlockDeclaration;
+    export function isConstructorDeclaration(node: Node): node is ConstructorDeclaration;
+    export function isGetAccessorDeclaration(node: Node): node is GetAccessorDeclaration;
+    export function isSetAccessorDeclaration(node: Node): node is SetAccessorDeclaration;
+    export function isCallSignatureDeclaration(node: Node): node is CallSignatureDeclaration;
+    export function isConstructSignatureDeclaration(node: Node): node is ConstructSignatureDeclaration;
+    export function isIndexSignatureDeclaration(node: Node): node is IndexSignatureDeclaration;
+    export function isTypePredicateNode(node: Node): node is TypePredicateNode;
+    export function isTypeReferenceNode(node: Node): node is TypeReferenceNode;
+    export function isFunctionTypeNode(node: Node): node is FunctionTypeNode;
+    export function isConstructorTypeNode(node: Node): node is ConstructorTypeNode;
+    export function isTypeQueryNode(node: Node): node is TypeQueryNode;
+    export function isTypeLiteralNode(node: Node): node is TypeLiteralNode;
+    export function isArrayTypeNode(node: Node): node is ArrayTypeNode;
+    export function isTupleTypeNode(node: Node): node is TupleTypeNode;
+    export function isNamedTupleMember(node: Node): node is NamedTupleMember;
+    export function isOptionalTypeNode(node: Node): node is OptionalTypeNode;
+    export function isRestTypeNode(node: Node): node is RestTypeNode;
+    export function isUnionTypeNode(node: Node): node is UnionTypeNode;
+    export function isIntersectionTypeNode(node: Node): node is IntersectionTypeNode;
+    export function isConditionalTypeNode(node: Node): node is ConditionalTypeNode;
+    export function isInferTypeNode(node: Node): node is InferTypeNode;
+    export function isParenthesizedTypeNode(node: Node): node is ParenthesizedTypeNode;
+    export function isThisTypeNode(node: Node): node is ThisTypeNode;
+    export function isTypeOperatorNode(node: Node): node is TypeOperatorNode;
+    export function isIndexedAccessTypeNode(node: Node): node is IndexedAccessTypeNode;
+    export function isMappedTypeNode(node: Node): node is MappedTypeNode;
+    export function isLiteralTypeNode(node: Node): node is LiteralTypeNode;
+    export function isImportTypeNode(node: Node): node is ImportTypeNode;
+    export function isTemplateLiteralTypeSpan(node: Node): node is TemplateLiteralTypeSpan;
+    export function isTemplateLiteralTypeNode(node: Node): node is TemplateLiteralTypeNode;
+    export function isObjectBindingPattern(node: Node): node is ObjectBindingPattern;
+    export function isArrayBindingPattern(node: Node): node is ArrayBindingPattern;
+    export function isBindingElement(node: Node): node is BindingElement;
+    export function isArrayLiteralExpression(node: Node): node is ArrayLiteralExpression;
+    export function isObjectLiteralExpression(node: Node): node is ObjectLiteralExpression;
+    export function isPropertyAccessExpression(node: Node): node is PropertyAccessExpression;
+    export function isElementAccessExpression(node: Node): node is ElementAccessExpression;
+    export function isCallExpression(node: Node): node is CallExpression;
+    export function isNewExpression(node: Node): node is NewExpression;
+    export function isTaggedTemplateExpression(node: Node): node is TaggedTemplateExpression;
+    export function isTypeAssertionExpression(node: Node): node is TypeAssertion;
+    export function isParenthesizedExpression(node: Node): node is ParenthesizedExpression;
+    export function isFunctionExpression(node: Node): node is FunctionExpression;
+    export function isArrowFunction(node: Node): node is ArrowFunction;
+    export function isDeleteExpression(node: Node): node is DeleteExpression;
+    export function isTypeOfExpression(node: Node): node is TypeOfExpression;
+    export function isVoidExpression(node: Node): node is VoidExpression;
+    export function isAwaitExpression(node: Node): node is AwaitExpression;
+    export function isPrefixUnaryExpression(node: Node): node is PrefixUnaryExpression;
+    export function isPostfixUnaryExpression(node: Node): node is PostfixUnaryExpression;
+    export function isBinaryExpression(node: Node): node is BinaryExpression;
+    export function isConditionalExpression(node: Node): node is ConditionalExpression;
+    export function isTemplateExpression(node: Node): node is TemplateExpression;
+    export function isYieldExpression(node: Node): node is YieldExpression;
+    export function isSpreadElement(node: Node): node is SpreadElement;
+    export function isClassExpression(node: Node): node is ClassExpression;
+    export function isOmittedExpression(node: Node): node is OmittedExpression;
+    export function isExpressionWithTypeArguments(node: Node): node is ExpressionWithTypeArguments;
+    export function isAsExpression(node: Node): node is AsExpression;
+    export function isSatisfiesExpression(node: Node): node is SatisfiesExpression;
+    export function isNonNullExpression(node: Node): node is NonNullExpression;
+    export function isMetaProperty(node: Node): node is MetaProperty;
+    export function isSyntheticExpression(node: Node): node is SyntheticExpression;
+    export function isPartiallyEmittedExpression(node: Node): node is PartiallyEmittedExpression;
+    export function isCommaListExpression(node: Node): node is CommaListExpression;
+    export function isTemplateSpan(node: Node): node is TemplateSpan;
+    export function isSemicolonClassElement(node: Node): node is SemicolonClassElement;
+    export function isBlock(node: Node): node is Block;
+    export function isVariableStatement(node: Node): node is VariableStatement;
+    export function isEmptyStatement(node: Node): node is EmptyStatement;
+    export function isExpressionStatement(node: Node): node is ExpressionStatement;
+    export function isIfStatement(node: Node): node is IfStatement;
+    export function isDoStatement(node: Node): node is DoStatement;
+    export function isWhileStatement(node: Node): node is WhileStatement;
+    export function isForStatement(node: Node): node is ForStatement;
+    export function isForInStatement(node: Node): node is ForInStatement;
+    export function isForOfStatement(node: Node): node is ForOfStatement;
+    export function isContinueStatement(node: Node): node is ContinueStatement;
+    export function isBreakStatement(node: Node): node is BreakStatement;
+    export function isReturnStatement(node: Node): node is ReturnStatement;
+    export function isWithStatement(node: Node): node is WithStatement;
+    export function isSwitchStatement(node: Node): node is SwitchStatement;
+    export function isLabeledStatement(node: Node): node is LabeledStatement;
+    export function isThrowStatement(node: Node): node is ThrowStatement;
+    export function isTryStatement(node: Node): node is TryStatement;
+    export function isDebuggerStatement(node: Node): node is DebuggerStatement;
+    export function isVariableDeclaration(node: Node): node is VariableDeclaration;
+    export function isVariableDeclarationList(node: Node): node is VariableDeclarationList;
+    export function isFunctionDeclaration(node: Node): node is FunctionDeclaration;
+    export function isClassDeclaration(node: Node): node is ClassDeclaration;
+    export function isInterfaceDeclaration(node: Node): node is InterfaceDeclaration;
+    export function isTypeAliasDeclaration(node: Node): node is TypeAliasDeclaration;
+    export function isEnumDeclaration(node: Node): node is EnumDeclaration;
+    export function isModuleDeclaration(node: Node): node is ModuleDeclaration;
+    export function isModuleBlock(node: Node): node is ModuleBlock;
+    export function isCaseBlock(node: Node): node is CaseBlock;
+    export function isNamespaceExportDeclaration(node: Node): node is NamespaceExportDeclaration;
+    export function isImportEqualsDeclaration(node: Node): node is ImportEqualsDeclaration;
+    export function isImportDeclaration(node: Node): node is ImportDeclaration;
+    export function isImportClause(node: Node): node is ImportClause;
+    export function isImportTypeAssertionContainer(node: Node): node is ImportTypeAssertionContainer;
     /** @deprecated */
-    function isAssertClause(node: Node): node is AssertClause;
+    export function isAssertClause(node: Node): node is AssertClause;
     /** @deprecated */
-    function isAssertEntry(node: Node): node is AssertEntry;
-    function isImportAttributes(node: Node): node is ImportAttributes;
-    function isImportAttribute(node: Node): node is ImportAttribute;
-    function isNamespaceImport(node: Node): node is NamespaceImport;
-    function isNamespaceExport(node: Node): node is NamespaceExport;
-    function isNamedImports(node: Node): node is NamedImports;
-    function isImportSpecifier(node: Node): node is ImportSpecifier;
-    function isExportAssignment(node: Node): node is ExportAssignment;
-    function isExportDeclaration(node: Node): node is ExportDeclaration;
-    function isNamedExports(node: Node): node is NamedExports;
-    function isExportSpecifier(node: Node): node is ExportSpecifier;
-    function isMissingDeclaration(node: Node): node is MissingDeclaration;
-    function isNotEmittedStatement(node: Node): node is NotEmittedStatement;
-    function isExternalModuleReference(node: Node): node is ExternalModuleReference;
-    function isJsxElement(node: Node): node is JsxElement;
-    function isJsxSelfClosingElement(node: Node): node is JsxSelfClosingElement;
-    function isJsxOpeningElement(node: Node): node is JsxOpeningElement;
-    function isJsxClosingElement(node: Node): node is JsxClosingElement;
-    function isJsxFragment(node: Node): node is JsxFragment;
-    function isJsxOpeningFragment(node: Node): node is JsxOpeningFragment;
-    function isJsxClosingFragment(node: Node): node is JsxClosingFragment;
-    function isJsxAttribute(node: Node): node is JsxAttribute;
-    function isJsxAttributes(node: Node): node is JsxAttributes;
-    function isJsxSpreadAttribute(node: Node): node is JsxSpreadAttribute;
-    function isJsxExpression(node: Node): node is JsxExpression;
-    function isJsxNamespacedName(node: Node): node is JsxNamespacedName;
-    function isCaseClause(node: Node): node is CaseClause;
-    function isDefaultClause(node: Node): node is DefaultClause;
-    function isHeritageClause(node: Node): node is HeritageClause;
-    function isCatchClause(node: Node): node is CatchClause;
-    function isPropertyAssignment(node: Node): node is PropertyAssignment;
-    function isShorthandPropertyAssignment(node: Node): node is ShorthandPropertyAssignment;
-    function isSpreadAssignment(node: Node): node is SpreadAssignment;
-    function isEnumMember(node: Node): node is EnumMember;
-    function isSourceFile(node: Node): node is SourceFile;
-    function isBundle(node: Node): node is Bundle;
-    function isJSDocTypeExpression(node: Node): node is JSDocTypeExpression;
-    function isJSDocNameReference(node: Node): node is JSDocNameReference;
-    function isJSDocMemberName(node: Node): node is JSDocMemberName;
-    function isJSDocLink(node: Node): node is JSDocLink;
-    function isJSDocLinkCode(node: Node): node is JSDocLinkCode;
-    function isJSDocLinkPlain(node: Node): node is JSDocLinkPlain;
-    function isJSDocAllType(node: Node): node is JSDocAllType;
-    function isJSDocUnknownType(node: Node): node is JSDocUnknownType;
-    function isJSDocNullableType(node: Node): node is JSDocNullableType;
-    function isJSDocNonNullableType(node: Node): node is JSDocNonNullableType;
-    function isJSDocOptionalType(node: Node): node is JSDocOptionalType;
-    function isJSDocFunctionType(node: Node): node is JSDocFunctionType;
-    function isJSDocVariadicType(node: Node): node is JSDocVariadicType;
-    function isJSDocNamepathType(node: Node): node is JSDocNamepathType;
-    function isJSDoc(node: Node): node is JSDoc;
-    function isJSDocTypeLiteral(node: Node): node is JSDocTypeLiteral;
-    function isJSDocSignature(node: Node): node is JSDocSignature;
-    function isJSDocAugmentsTag(node: Node): node is JSDocAugmentsTag;
-    function isJSDocAuthorTag(node: Node): node is JSDocAuthorTag;
-    function isJSDocClassTag(node: Node): node is JSDocClassTag;
-    function isJSDocCallbackTag(node: Node): node is JSDocCallbackTag;
-    function isJSDocPublicTag(node: Node): node is JSDocPublicTag;
-    function isJSDocPrivateTag(node: Node): node is JSDocPrivateTag;
-    function isJSDocProtectedTag(node: Node): node is JSDocProtectedTag;
-    function isJSDocReadonlyTag(node: Node): node is JSDocReadonlyTag;
-    function isJSDocOverrideTag(node: Node): node is JSDocOverrideTag;
-    function isJSDocOverloadTag(node: Node): node is JSDocOverloadTag;
-    function isJSDocDeprecatedTag(node: Node): node is JSDocDeprecatedTag;
-    function isJSDocSeeTag(node: Node): node is JSDocSeeTag;
-    function isJSDocEnumTag(node: Node): node is JSDocEnumTag;
-    function isJSDocParameterTag(node: Node): node is JSDocParameterTag;
-    function isJSDocReturnTag(node: Node): node is JSDocReturnTag;
-    function isJSDocThisTag(node: Node): node is JSDocThisTag;
-    function isJSDocTypeTag(node: Node): node is JSDocTypeTag;
-    function isJSDocTemplateTag(node: Node): node is JSDocTemplateTag;
-    function isJSDocTypedefTag(node: Node): node is JSDocTypedefTag;
-    function isJSDocUnknownTag(node: Node): node is JSDocUnknownTag;
-    function isJSDocPropertyTag(node: Node): node is JSDocPropertyTag;
-    function isJSDocImplementsTag(node: Node): node is JSDocImplementsTag;
-    function isJSDocSatisfiesTag(node: Node): node is JSDocSatisfiesTag;
-    function isJSDocThrowsTag(node: Node): node is JSDocThrowsTag;
-    function isQuestionOrExclamationToken(node: Node): node is QuestionToken | ExclamationToken;
-    function isIdentifierOrThisTypeNode(node: Node): node is Identifier | ThisTypeNode;
-    function isReadonlyKeywordOrPlusOrMinusToken(node: Node): node is ReadonlyKeyword | PlusToken | MinusToken;
-    function isQuestionOrPlusOrMinusToken(node: Node): node is QuestionToken | PlusToken | MinusToken;
-    function isModuleName(node: Node): node is ModuleName;
-    function isBinaryOperatorToken(node: Node): node is BinaryOperatorToken;
-    function setTextRange<T extends TextRange>(range: T, location: TextRange | undefined): T;
-    function canHaveModifiers(node: Node): node is HasModifiers;
-    function canHaveDecorators(node: Node): node is HasDecorators;
+    export function isAssertEntry(node: Node): node is AssertEntry;
+    export function isImportAttributes(node: Node): node is ImportAttributes;
+    export function isImportAttribute(node: Node): node is ImportAttribute;
+    export function isNamespaceImport(node: Node): node is NamespaceImport;
+    export function isNamespaceExport(node: Node): node is NamespaceExport;
+    export function isNamedImports(node: Node): node is NamedImports;
+    export function isImportSpecifier(node: Node): node is ImportSpecifier;
+    export function isExportAssignment(node: Node): node is ExportAssignment;
+    export function isExportDeclaration(node: Node): node is ExportDeclaration;
+    export function isNamedExports(node: Node): node is NamedExports;
+    export function isExportSpecifier(node: Node): node is ExportSpecifier;
+    export function isMissingDeclaration(node: Node): node is MissingDeclaration;
+    export function isNotEmittedStatement(node: Node): node is NotEmittedStatement;
+    export function isExternalModuleReference(node: Node): node is ExternalModuleReference;
+    export function isJsxElement(node: Node): node is JsxElement;
+    export function isJsxSelfClosingElement(node: Node): node is JsxSelfClosingElement;
+    export function isJsxOpeningElement(node: Node): node is JsxOpeningElement;
+    export function isJsxClosingElement(node: Node): node is JsxClosingElement;
+    export function isJsxFragment(node: Node): node is JsxFragment;
+    export function isJsxOpeningFragment(node: Node): node is JsxOpeningFragment;
+    export function isJsxClosingFragment(node: Node): node is JsxClosingFragment;
+    export function isJsxAttribute(node: Node): node is JsxAttribute;
+    export function isJsxAttributes(node: Node): node is JsxAttributes;
+    export function isJsxSpreadAttribute(node: Node): node is JsxSpreadAttribute;
+    export function isJsxExpression(node: Node): node is JsxExpression;
+    export function isJsxNamespacedName(node: Node): node is JsxNamespacedName;
+    export function isCaseClause(node: Node): node is CaseClause;
+    export function isDefaultClause(node: Node): node is DefaultClause;
+    export function isHeritageClause(node: Node): node is HeritageClause;
+    export function isCatchClause(node: Node): node is CatchClause;
+    export function isPropertyAssignment(node: Node): node is PropertyAssignment;
+    export function isShorthandPropertyAssignment(node: Node): node is ShorthandPropertyAssignment;
+    export function isSpreadAssignment(node: Node): node is SpreadAssignment;
+    export function isEnumMember(node: Node): node is EnumMember;
+    export function isSourceFile(node: Node): node is SourceFile;
+    export function isBundle(node: Node): node is Bundle;
+    export function isJSDocTypeExpression(node: Node): node is JSDocTypeExpression;
+    export function isJSDocNameReference(node: Node): node is JSDocNameReference;
+    export function isJSDocMemberName(node: Node): node is JSDocMemberName;
+    export function isJSDocLink(node: Node): node is JSDocLink;
+    export function isJSDocLinkCode(node: Node): node is JSDocLinkCode;
+    export function isJSDocLinkPlain(node: Node): node is JSDocLinkPlain;
+    export function isJSDocAllType(node: Node): node is JSDocAllType;
+    export function isJSDocUnknownType(node: Node): node is JSDocUnknownType;
+    export function isJSDocNullableType(node: Node): node is JSDocNullableType;
+    export function isJSDocNonNullableType(node: Node): node is JSDocNonNullableType;
+    export function isJSDocOptionalType(node: Node): node is JSDocOptionalType;
+    export function isJSDocFunctionType(node: Node): node is JSDocFunctionType;
+    export function isJSDocVariadicType(node: Node): node is JSDocVariadicType;
+    export function isJSDocNamepathType(node: Node): node is JSDocNamepathType;
+    export function isJSDoc(node: Node): node is JSDoc;
+    export function isJSDocTypeLiteral(node: Node): node is JSDocTypeLiteral;
+    export function isJSDocSignature(node: Node): node is JSDocSignature;
+    export function isJSDocAugmentsTag(node: Node): node is JSDocAugmentsTag;
+    export function isJSDocAuthorTag(node: Node): node is JSDocAuthorTag;
+    export function isJSDocClassTag(node: Node): node is JSDocClassTag;
+    export function isJSDocCallbackTag(node: Node): node is JSDocCallbackTag;
+    export function isJSDocPublicTag(node: Node): node is JSDocPublicTag;
+    export function isJSDocPrivateTag(node: Node): node is JSDocPrivateTag;
+    export function isJSDocProtectedTag(node: Node): node is JSDocProtectedTag;
+    export function isJSDocReadonlyTag(node: Node): node is JSDocReadonlyTag;
+    export function isJSDocOverrideTag(node: Node): node is JSDocOverrideTag;
+    export function isJSDocOverloadTag(node: Node): node is JSDocOverloadTag;
+    export function isJSDocDeprecatedTag(node: Node): node is JSDocDeprecatedTag;
+    export function isJSDocSeeTag(node: Node): node is JSDocSeeTag;
+    export function isJSDocEnumTag(node: Node): node is JSDocEnumTag;
+    export function isJSDocParameterTag(node: Node): node is JSDocParameterTag;
+    export function isJSDocReturnTag(node: Node): node is JSDocReturnTag;
+    export function isJSDocThisTag(node: Node): node is JSDocThisTag;
+    export function isJSDocTypeTag(node: Node): node is JSDocTypeTag;
+    export function isJSDocTemplateTag(node: Node): node is JSDocTemplateTag;
+    export function isJSDocTypedefTag(node: Node): node is JSDocTypedefTag;
+    export function isJSDocUnknownTag(node: Node): node is JSDocUnknownTag;
+    export function isJSDocPropertyTag(node: Node): node is JSDocPropertyTag;
+    export function isJSDocImplementsTag(node: Node): node is JSDocImplementsTag;
+    export function isJSDocSatisfiesTag(node: Node): node is JSDocSatisfiesTag;
+    export function isJSDocThrowsTag(node: Node): node is JSDocThrowsTag;
+    export function isQuestionOrExclamationToken(node: Node): node is QuestionToken | ExclamationToken;
+    export function isIdentifierOrThisTypeNode(node: Node): node is Identifier | ThisTypeNode;
+    export function isReadonlyKeywordOrPlusOrMinusToken(node: Node): node is ReadonlyKeyword | PlusToken | MinusToken;
+    export function isQuestionOrPlusOrMinusToken(node: Node): node is QuestionToken | PlusToken | MinusToken;
+    export function isModuleName(node: Node): node is ModuleName;
+    export function isBinaryOperatorToken(node: Node): node is BinaryOperatorToken;
+    export function setTextRange<T extends TextRange>(range: T, location: TextRange | undefined): T;
+    export function canHaveModifiers(node: Node): node is HasModifiers;
+    export function canHaveDecorators(node: Node): node is HasDecorators;
     /**
      * Invokes a callback for each child of the given node. The 'cbNode' callback is invoked for all child nodes
      * stored in properties. If a 'cbNodes' callback is specified, it is invoked for embedded arrays; otherwise,
@@ -9295,18 +9018,18 @@ declare namespace ts {
      * @remarks `forEachChild` must visit the children of a node in the order
      * that they appear in the source code. The language service depends on this property to locate nodes by position.
      */
-    function forEachChild<T>(node: Node, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined;
-    function createSourceFile(fileName: string, sourceText: string, languageVersionOrOptions: ScriptTarget | CreateSourceFileOptions, setParentNodes?: boolean, scriptKind?: ScriptKind): SourceFile;
-    function parseIsolatedEntityName(text: string, languageVersion: ScriptTarget): EntityName | undefined;
+    export function forEachChild<T>(node: Node, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined;
+    export function createSourceFile(fileName: string, sourceText: string, languageVersionOrOptions: ScriptTarget | CreateSourceFileOptions, setParentNodes?: boolean, scriptKind?: ScriptKind): SourceFile;
+    export function parseIsolatedEntityName(text: string, languageVersion: ScriptTarget): EntityName | undefined;
     /**
      * Parse json text into SyntaxTree and return node and parse errors if any
      * @param fileName
      * @param sourceText
      */
-    function parseJsonText(fileName: string, sourceText: string): JsonSourceFile;
-    function isExternalModule(file: SourceFile): boolean;
-    function updateSourceFile(sourceFile: SourceFile, newText: string, textChangeRange: TextChangeRange, aggressiveChecks?: boolean): SourceFile;
-    interface CreateSourceFileOptions {
+    export function parseJsonText(fileName: string, sourceText: string): JsonSourceFile;
+    export function isExternalModule(file: SourceFile): boolean;
+    export function updateSourceFile(sourceFile: SourceFile, newText: string, textChangeRange: TextChangeRange, aggressiveChecks?: boolean): SourceFile;
+    export interface CreateSourceFileOptions {
         languageVersion: ScriptTarget;
         /**
          * Controls the format the file is detected as - this can be derived from only the path
@@ -9322,16 +9045,16 @@ declare namespace ts {
         setExternalModuleIndicator?: (file: SourceFile) => void;
         jsDocParsingMode?: JSDocParsingMode;
     }
-    function parseCommandLine(commandLine: readonly string[], readFile?: (path: string) => string | undefined): ParsedCommandLine;
+    export function parseCommandLine(commandLine: readonly string[], readFile?: (path: string) => string | undefined): ParsedCommandLine;
     /**
      * Reads the config file, reports errors if any and exits if the config file cannot be found
      */
-    function getParsedCommandLineOfConfigFile(configFileName: string, optionsToExtend: CompilerOptions | undefined, host: ParseConfigFileHost, extendedConfigCache?: Map<string, ExtendedConfigCacheEntry>, watchOptionsToExtend?: WatchOptions, extraFileExtensions?: readonly FileExtensionInfo[]): ParsedCommandLine | undefined;
+    export function getParsedCommandLineOfConfigFile(configFileName: string, optionsToExtend: CompilerOptions | undefined, host: ParseConfigFileHost, extendedConfigCache?: Map<string, ExtendedConfigCacheEntry>, watchOptionsToExtend?: WatchOptions, extraFileExtensions?: readonly FileExtensionInfo[]): ParsedCommandLine | undefined;
     /**
      * Read tsconfig.json file
      * @param fileName The path to the config file
      */
-    function readConfigFile(fileName: string, readFile: (path: string) => string | undefined): {
+    export function readConfigFile(fileName: string, readFile: (path: string) => string | undefined): {
         config?: any;
         error?: Diagnostic;
     };
@@ -9340,7 +9063,7 @@ declare namespace ts {
      * @param fileName The path to the config file
      * @param jsonText The text of the config file
      */
-    function parseConfigFileTextToJson(fileName: string, jsonText: string): {
+    export function parseConfigFileTextToJson(fileName: string, jsonText: string): {
         config?: any;
         error?: Diagnostic;
     };
@@ -9348,11 +9071,11 @@ declare namespace ts {
      * Read tsconfig.json file
      * @param fileName The path to the config file
      */
-    function readJsonConfigFile(fileName: string, readFile: (path: string) => string | undefined): TsConfigSourceFile;
+    export function readJsonConfigFile(fileName: string, readFile: (path: string) => string | undefined): TsConfigSourceFile;
     /**
      * Convert the json syntax tree into the json value
      */
-    function convertToObject(sourceFile: JsonSourceFile, errors: Diagnostic[]): any;
+    export function convertToObject(sourceFile: JsonSourceFile, errors: Diagnostic[]): any;
     /**
      * Parse the contents of a config file (tsconfig.json).
      * @param json The contents of the config file to parse
@@ -9360,7 +9083,7 @@ declare namespace ts {
      * @param basePath A root directory to resolve relative path entries in the config
      *    file to. e.g. outDir
      */
-    function parseJsonConfigFileContent(json: any, host: ParseConfigHost, basePath: string, existingOptions?: CompilerOptions, configFileName?: string, resolutionStack?: Path[], extraFileExtensions?: readonly FileExtensionInfo[], extendedConfigCache?: Map<string, ExtendedConfigCacheEntry>, existingWatchOptions?: WatchOptions): ParsedCommandLine;
+    export function parseJsonConfigFileContent(json: any, host: ParseConfigHost, basePath: string, existingOptions?: CompilerOptions, configFileName?: string, resolutionStack?: Path[], extraFileExtensions?: readonly FileExtensionInfo[], extendedConfigCache?: Map<string, ExtendedConfigCacheEntry>, existingWatchOptions?: WatchOptions): ParsedCommandLine;
     /**
      * Parse the contents of a config file (tsconfig.json).
      * @param jsonNode The contents of the config file to parse
@@ -9368,20 +9091,20 @@ declare namespace ts {
      * @param basePath A root directory to resolve relative path entries in the config
      *    file to. e.g. outDir
      */
-    function parseJsonSourceFileConfigFileContent(sourceFile: TsConfigSourceFile, host: ParseConfigHost, basePath: string, existingOptions?: CompilerOptions, configFileName?: string, resolutionStack?: Path[], extraFileExtensions?: readonly FileExtensionInfo[], extendedConfigCache?: Map<string, ExtendedConfigCacheEntry>, existingWatchOptions?: WatchOptions): ParsedCommandLine;
-    function convertCompilerOptionsFromJson(jsonOptions: any, basePath: string, configFileName?: string): {
+    export function parseJsonSourceFileConfigFileContent(sourceFile: TsConfigSourceFile, host: ParseConfigHost, basePath: string, existingOptions?: CompilerOptions, configFileName?: string, resolutionStack?: Path[], extraFileExtensions?: readonly FileExtensionInfo[], extendedConfigCache?: Map<string, ExtendedConfigCacheEntry>, existingWatchOptions?: WatchOptions): ParsedCommandLine;
+    export function convertCompilerOptionsFromJson(jsonOptions: any, basePath: string, configFileName?: string): {
         options: CompilerOptions;
         errors: Diagnostic[];
     };
-    function convertTypeAcquisitionFromJson(jsonOptions: any, basePath: string, configFileName?: string): {
+    export function convertTypeAcquisitionFromJson(jsonOptions: any, basePath: string, configFileName?: string): {
         options: TypeAcquisition;
         errors: Diagnostic[];
     };
-    type DiagnosticReporter = (diagnostic: Diagnostic) => void;
+    export type DiagnosticReporter = (diagnostic: Diagnostic) => void;
     /**
      * Reports config file diagnostics
      */
-    interface ConfigFileDiagnosticsReporter {
+    export interface ConfigFileDiagnosticsReporter {
         /**
          * Reports unrecoverable error when parsing config file
          */
@@ -9390,10 +9113,10 @@ declare namespace ts {
     /**
      * Interface extending ParseConfigHost to support ParseConfigFile that reads config file and reports errors
      */
-    interface ParseConfigFileHost extends ParseConfigHost, ConfigFileDiagnosticsReporter {
+    export interface ParseConfigFileHost extends ParseConfigHost, ConfigFileDiagnosticsReporter {
         getCurrentDirectory(): string;
     }
-    interface ParsedTsconfig {
+    export interface ParsedTsconfig {
         raw: any;
         options?: CompilerOptions;
         watchOptions?: WatchOptions;
@@ -9403,17 +9126,17 @@ declare namespace ts {
          */
         extendedConfigPath?: string | string[];
     }
-    interface ExtendedConfigCacheEntry {
+    export interface ExtendedConfigCacheEntry {
         extendedResult: TsConfigSourceFile;
         extendedConfig: ParsedTsconfig | undefined;
     }
-    function getEffectiveTypeRoots(options: CompilerOptions, host: GetEffectiveTypeRootsHost): string[] | undefined;
+    export function getEffectiveTypeRoots(options: CompilerOptions, host: GetEffectiveTypeRootsHost): string[] | undefined;
     /**
      * @param {string | undefined} containingFile - file that contains type reference directive, can be undefined if containing file is unknown.
      * This is possible in case if resolution is performed for directives specified via 'types' parameter. In this case initial path for secondary lookups
      * is assumed to be the same as root directory of the project.
      */
-    function resolveTypeReferenceDirective(typeReferenceDirectiveName: string, containingFile: string | undefined, options: CompilerOptions, host: ModuleResolutionHost, redirectedReference?: ResolvedProjectReference, cache?: TypeReferenceDirectiveResolutionCache, resolutionMode?: ResolutionMode): ResolvedTypeReferenceDirectiveWithFailedLookupLocations;
+    export function resolveTypeReferenceDirective(typeReferenceDirectiveName: string, containingFile: string | undefined, options: CompilerOptions, host: ModuleResolutionHost, redirectedReference?: ResolvedProjectReference, cache?: TypeReferenceDirectiveResolutionCache, resolutionMode?: ResolutionMode): ResolvedTypeReferenceDirectiveWithFailedLookupLocations;
     /**
      * Given a set of options, returns the set of type directive names
      *   that should be included for this program automatically.
@@ -9422,17 +9145,17 @@ declare namespace ts {
      * More type directives might appear in the program later as a result of loading actual source files;
      *   this list is only the set of defaults that are implicitly included.
      */
-    function getAutomaticTypeDirectiveNames(options: CompilerOptions, host: ModuleResolutionHost): string[];
-    function createModuleResolutionCache(currentDirectory: string, getCanonicalFileName: (s: string) => string, options?: CompilerOptions, packageJsonInfoCache?: PackageJsonInfoCache): ModuleResolutionCache;
-    function createTypeReferenceDirectiveResolutionCache(currentDirectory: string, getCanonicalFileName: (s: string) => string, options?: CompilerOptions, packageJsonInfoCache?: PackageJsonInfoCache): TypeReferenceDirectiveResolutionCache;
-    function resolveModuleNameFromCache(moduleName: string, containingFile: string, cache: ModuleResolutionCache, mode?: ResolutionMode): ResolvedModuleWithFailedLookupLocations | undefined;
-    function resolveModuleName(moduleName: string, containingFile: string, compilerOptions: CompilerOptions, host: ModuleResolutionHost, cache?: ModuleResolutionCache, redirectedReference?: ResolvedProjectReference, resolutionMode?: ResolutionMode): ResolvedModuleWithFailedLookupLocations;
-    function bundlerModuleNameResolver(moduleName: string, containingFile: string, compilerOptions: CompilerOptions, host: ModuleResolutionHost, cache?: ModuleResolutionCache, redirectedReference?: ResolvedProjectReference): ResolvedModuleWithFailedLookupLocations;
-    function nodeModuleNameResolver(moduleName: string, containingFile: string, compilerOptions: CompilerOptions, host: ModuleResolutionHost, cache?: ModuleResolutionCache, redirectedReference?: ResolvedProjectReference): ResolvedModuleWithFailedLookupLocations;
-    function classicNameResolver(moduleName: string, containingFile: string, compilerOptions: CompilerOptions, host: ModuleResolutionHost, cache?: NonRelativeModuleNameResolutionCache, redirectedReference?: ResolvedProjectReference): ResolvedModuleWithFailedLookupLocations;
-    interface TypeReferenceDirectiveResolutionCache extends PerDirectoryResolutionCache<ResolvedTypeReferenceDirectiveWithFailedLookupLocations>, NonRelativeNameResolutionCache<ResolvedTypeReferenceDirectiveWithFailedLookupLocations>, PackageJsonInfoCache {
+    export function getAutomaticTypeDirectiveNames(options: CompilerOptions, host: ModuleResolutionHost): string[];
+    export function createModuleResolutionCache(currentDirectory: string, getCanonicalFileName: (s: string) => string, options?: CompilerOptions, packageJsonInfoCache?: PackageJsonInfoCache): ModuleResolutionCache;
+    export function createTypeReferenceDirectiveResolutionCache(currentDirectory: string, getCanonicalFileName: (s: string) => string, options?: CompilerOptions, packageJsonInfoCache?: PackageJsonInfoCache): TypeReferenceDirectiveResolutionCache;
+    export function resolveModuleNameFromCache(moduleName: string, containingFile: string, cache: ModuleResolutionCache, mode?: ResolutionMode): ResolvedModuleWithFailedLookupLocations | undefined;
+    export function resolveModuleName(moduleName: string, containingFile: string, compilerOptions: CompilerOptions, host: ModuleResolutionHost, cache?: ModuleResolutionCache, redirectedReference?: ResolvedProjectReference, resolutionMode?: ResolutionMode): ResolvedModuleWithFailedLookupLocations;
+    export function bundlerModuleNameResolver(moduleName: string, containingFile: string, compilerOptions: CompilerOptions, host: ModuleResolutionHost, cache?: ModuleResolutionCache, redirectedReference?: ResolvedProjectReference): ResolvedModuleWithFailedLookupLocations;
+    export function nodeModuleNameResolver(moduleName: string, containingFile: string, compilerOptions: CompilerOptions, host: ModuleResolutionHost, cache?: ModuleResolutionCache, redirectedReference?: ResolvedProjectReference): ResolvedModuleWithFailedLookupLocations;
+    export function classicNameResolver(moduleName: string, containingFile: string, compilerOptions: CompilerOptions, host: ModuleResolutionHost, cache?: NonRelativeModuleNameResolutionCache, redirectedReference?: ResolvedProjectReference): ResolvedModuleWithFailedLookupLocations;
+    export interface TypeReferenceDirectiveResolutionCache extends PerDirectoryResolutionCache<ResolvedTypeReferenceDirectiveWithFailedLookupLocations>, NonRelativeNameResolutionCache<ResolvedTypeReferenceDirectiveWithFailedLookupLocations>, PackageJsonInfoCache {
     }
-    interface ModeAwareCache<T> {
+    export interface ModeAwareCache<T> {
         get(key: string, mode: ResolutionMode): T | undefined;
         set(key: string, mode: ResolutionMode, value: T): this;
         delete(key: string, mode: ResolutionMode): this;
@@ -9444,7 +9167,7 @@ declare namespace ts {
      * Cached resolutions per containing directory.
      * This assumes that any module id will have the same resolution for sibling files located in the same folder.
      */
-    interface PerDirectoryResolutionCache<T> {
+    export interface PerDirectoryResolutionCache<T> {
         getFromDirectoryCache(name: string, mode: ResolutionMode, directoryName: string, redirectedReference: ResolvedProjectReference | undefined): T | undefined;
         getOrCreateCacheForDirectory(directoryName: string, redirectedReference?: ResolvedProjectReference): ModeAwareCache<T>;
         clear(): void;
@@ -9454,7 +9177,7 @@ declare namespace ts {
          */
         update(options: CompilerOptions): void;
     }
-    interface NonRelativeNameResolutionCache<T> {
+    export interface NonRelativeNameResolutionCache<T> {
         getFromNonRelativeNameCache(nonRelativeName: string, mode: ResolutionMode, directoryName: string, redirectedReference: ResolvedProjectReference | undefined): T | undefined;
         getOrCreateCacheForNonRelativeName(nonRelativeName: string, mode: ResolutionMode, redirectedReference?: ResolvedProjectReference): PerNonRelativeNameCache<T>;
         clear(): void;
@@ -9464,25 +9187,25 @@ declare namespace ts {
          */
         update(options: CompilerOptions): void;
     }
-    interface PerNonRelativeNameCache<T> {
+    export interface PerNonRelativeNameCache<T> {
         get(directory: string): T | undefined;
         set(directory: string, result: T): void;
     }
-    interface ModuleResolutionCache extends PerDirectoryResolutionCache<ResolvedModuleWithFailedLookupLocations>, NonRelativeModuleNameResolutionCache, PackageJsonInfoCache {
+    export interface ModuleResolutionCache extends PerDirectoryResolutionCache<ResolvedModuleWithFailedLookupLocations>, NonRelativeModuleNameResolutionCache, PackageJsonInfoCache {
         getPackageJsonInfoCache(): PackageJsonInfoCache;
     }
     /**
      * Stored map from non-relative module name to a table: directory -> result of module lookup in this directory
      * We support only non-relative module names because resolution of relative module names is usually more deterministic and thus less expensive.
      */
-    interface NonRelativeModuleNameResolutionCache extends NonRelativeNameResolutionCache<ResolvedModuleWithFailedLookupLocations>, PackageJsonInfoCache {
+    export interface NonRelativeModuleNameResolutionCache extends NonRelativeNameResolutionCache<ResolvedModuleWithFailedLookupLocations>, PackageJsonInfoCache {
         /** @deprecated Use getOrCreateCacheForNonRelativeName */
         getOrCreateCacheForModuleName(nonRelativeModuleName: string, mode: ResolutionMode, redirectedReference?: ResolvedProjectReference): PerModuleNameCache;
     }
-    interface PackageJsonInfoCache {
+    export interface PackageJsonInfoCache {
         clear(): void;
     }
-    type PerModuleNameCache = PerNonRelativeNameCache<ResolvedModuleWithFailedLookupLocations>;
+    export type PerModuleNameCache = PerNonRelativeNameCache<ResolvedModuleWithFailedLookupLocations>;
     /**
      * Visits a Node using the supplied visitor, possibly returning a new Node in its place.
      *
@@ -9497,7 +9220,7 @@ declare namespace ts {
      * @param test A callback to execute to verify the Node is valid.
      * @param lift An optional callback to execute to lift a NodeArray into a valid Node.
      */
-    function visitNode<TIn extends Node | undefined, TVisited extends Node | undefined, TOut extends Node>(node: TIn, visitor: Visitor<NonNullable<TIn>, TVisited>, test: (node: Node) => node is TOut, lift?: (node: readonly Node[]) => Node): TOut | (TIn & undefined) | (TVisited & undefined);
+    export function visitNode<TIn extends Node | undefined, TVisited extends Node | undefined, TOut extends Node>(node: TIn, visitor: Visitor<NonNullable<TIn>, TVisited>, test: (node: Node) => node is TOut, lift?: (node: readonly Node[]) => Node): TOut | (TIn & undefined) | (TVisited & undefined);
     /**
      * Visits a Node using the supplied visitor, possibly returning a new Node in its place.
      *
@@ -9512,7 +9235,7 @@ declare namespace ts {
      * @param test A callback to execute to verify the Node is valid.
      * @param lift An optional callback to execute to lift a NodeArray into a valid Node.
      */
-    function visitNode<TIn extends Node | undefined, TVisited extends Node | undefined>(node: TIn, visitor: Visitor<NonNullable<TIn>, TVisited>, test?: (node: Node) => boolean, lift?: (node: readonly Node[]) => Node): Node | (TIn & undefined) | (TVisited & undefined);
+    export function visitNode<TIn extends Node | undefined, TVisited extends Node | undefined>(node: TIn, visitor: Visitor<NonNullable<TIn>, TVisited>, test?: (node: Node) => boolean, lift?: (node: readonly Node[]) => Node): Node | (TIn & undefined) | (TVisited & undefined);
     /**
      * Visits a NodeArray using the supplied visitor, possibly returning a new NodeArray in its place.
      *
@@ -9528,7 +9251,7 @@ declare namespace ts {
      * @param start An optional value indicating the starting offset at which to start visiting.
      * @param count An optional value indicating the maximum number of nodes to visit.
      */
-    function visitNodes<TIn extends Node, TInArray extends NodeArray<TIn> | undefined, TOut extends Node>(nodes: TInArray, visitor: Visitor<TIn, Node | undefined>, test: (node: Node) => node is TOut, start?: number, count?: number): NodeArray<TOut> | (TInArray & undefined);
+    export function visitNodes<TIn extends Node, TInArray extends NodeArray<TIn> | undefined, TOut extends Node>(nodes: TInArray, visitor: Visitor<TIn, Node | undefined>, test: (node: Node) => node is TOut, start?: number, count?: number): NodeArray<TOut> | (TInArray & undefined);
     /**
      * Visits a NodeArray using the supplied visitor, possibly returning a new NodeArray in its place.
      *
@@ -9544,43 +9267,43 @@ declare namespace ts {
      * @param start An optional value indicating the starting offset at which to start visiting.
      * @param count An optional value indicating the maximum number of nodes to visit.
      */
-    function visitNodes<TIn extends Node, TInArray extends NodeArray<TIn> | undefined>(nodes: TInArray, visitor: Visitor<TIn, Node | undefined>, test?: (node: Node) => boolean, start?: number, count?: number): NodeArray<Node> | (TInArray & undefined);
+    export function visitNodes<TIn extends Node, TInArray extends NodeArray<TIn> | undefined>(nodes: TInArray, visitor: Visitor<TIn, Node | undefined>, test?: (node: Node) => boolean, start?: number, count?: number): NodeArray<Node> | (TInArray & undefined);
     /**
      * Starts a new lexical environment and visits a statement list, ending the lexical environment
      * and merging hoisted declarations upon completion.
      */
-    function visitLexicalEnvironment(statements: NodeArray<Statement>, visitor: Visitor, context: TransformationContext, start?: number, ensureUseStrict?: boolean, nodesVisitor?: NodesVisitor): NodeArray<Statement>;
+    export function visitLexicalEnvironment(statements: NodeArray<Statement>, visitor: Visitor, context: TransformationContext, start?: number, ensureUseStrict?: boolean, nodesVisitor?: NodesVisitor): NodeArray<Statement>;
     /**
      * Starts a new lexical environment and visits a parameter list, suspending the lexical
      * environment upon completion.
      */
-    function visitParameterList(nodes: NodeArray<ParameterDeclaration>, visitor: Visitor, context: TransformationContext, nodesVisitor?: NodesVisitor): NodeArray<ParameterDeclaration>;
-    function visitParameterList(nodes: NodeArray<ParameterDeclaration> | undefined, visitor: Visitor, context: TransformationContext, nodesVisitor?: NodesVisitor): NodeArray<ParameterDeclaration> | undefined;
+    export function visitParameterList(nodes: NodeArray<ParameterDeclaration>, visitor: Visitor, context: TransformationContext, nodesVisitor?: NodesVisitor): NodeArray<ParameterDeclaration>;
+    export function visitParameterList(nodes: NodeArray<ParameterDeclaration> | undefined, visitor: Visitor, context: TransformationContext, nodesVisitor?: NodesVisitor): NodeArray<ParameterDeclaration> | undefined;
     /**
      * Resumes a suspended lexical environment and visits a function body, ending the lexical
      * environment and merging hoisted declarations upon completion.
      */
-    function visitFunctionBody(node: FunctionBody, visitor: Visitor, context: TransformationContext): FunctionBody;
+    export function visitFunctionBody(node: FunctionBody, visitor: Visitor, context: TransformationContext): FunctionBody;
     /**
      * Resumes a suspended lexical environment and visits a function body, ending the lexical
      * environment and merging hoisted declarations upon completion.
      */
-    function visitFunctionBody(node: FunctionBody | undefined, visitor: Visitor, context: TransformationContext): FunctionBody | undefined;
+    export function visitFunctionBody(node: FunctionBody | undefined, visitor: Visitor, context: TransformationContext): FunctionBody | undefined;
     /**
      * Resumes a suspended lexical environment and visits a concise body, ending the lexical
      * environment and merging hoisted declarations upon completion.
      */
-    function visitFunctionBody(node: ConciseBody, visitor: Visitor, context: TransformationContext): ConciseBody;
+    export function visitFunctionBody(node: ConciseBody, visitor: Visitor, context: TransformationContext): ConciseBody;
     /**
      * Visits an iteration body, adding any block-scoped variables required by the transformation.
      */
-    function visitIterationBody(body: Statement, visitor: Visitor, context: TransformationContext): Statement;
+    export function visitIterationBody(body: Statement, visitor: Visitor, context: TransformationContext): Statement;
     /**
      * Visits the elements of a {@link CommaListExpression}.
      * @param visitor The visitor to use when visiting expressions whose result will not be discarded at runtime.
      * @param discardVisitor The visitor to use when visiting expressions whose result will be discarded at runtime. Defaults to {@link visitor}.
      */
-    function visitCommaListElements(elements: NodeArray<Expression>, visitor: Visitor, discardVisitor?: Visitor): NodeArray<Expression>;
+    export function visitCommaListElements(elements: NodeArray<Expression>, visitor: Visitor, discardVisitor?: Visitor): NodeArray<Expression>;
     /**
      * Visits each child of a Node using the supplied visitor, possibly returning a new Node of the same kind in its place.
      *
@@ -9588,7 +9311,7 @@ declare namespace ts {
      * @param visitor The callback used to visit each child.
      * @param context A lexical environment context for the visitor.
      */
-    function visitEachChild<T extends Node>(node: T, visitor: Visitor, context: TransformationContext | undefined): T;
+    export function visitEachChild<T extends Node>(node: T, visitor: Visitor, context: TransformationContext | undefined): T;
     /**
      * Visits each child of a Node using the supplied visitor, possibly returning a new Node of the same kind in its place.
      *
@@ -9596,11 +9319,11 @@ declare namespace ts {
      * @param visitor The callback used to visit each child.
      * @param context A lexical environment context for the visitor.
      */
-    function visitEachChild<T extends Node>(node: T | undefined, visitor: Visitor, context: TransformationContext | undefined, nodesVisitor?: typeof visitNodes, tokenVisitor?: Visitor): T | undefined;
-    function getTsBuildInfoEmitOutputFilePath(options: CompilerOptions): string | undefined;
-    function getOutputFileNames(commandLine: ParsedCommandLine, inputFileName: string, ignoreCase: boolean): readonly string[];
-    function createPrinter(printerOptions?: PrinterOptions, handlers?: PrintHandlers): Printer;
-    enum ProgramUpdateLevel {
+    export function visitEachChild<T extends Node>(node: T | undefined, visitor: Visitor, context: TransformationContext | undefined, nodesVisitor?: typeof visitNodes, tokenVisitor?: Visitor): T | undefined;
+    export function getTsBuildInfoEmitOutputFilePath(options: CompilerOptions): string | undefined;
+    export function getOutputFileNames(commandLine: ParsedCommandLine, inputFileName: string, ignoreCase: boolean): readonly string[];
+    export function createPrinter(printerOptions?: PrinterOptions, handlers?: PrintHandlers): Printer;
+    export enum ProgramUpdateLevel {
         /** Program is updated with same root file names and options */
         Update = 0,
         /** Loads program after updating root file names from the disk */
@@ -9613,19 +9336,19 @@ declare namespace ts {
          */
         Full = 2,
     }
-    function findConfigFile(searchPath: string, fileExists: (fileName: string) => boolean, configName?: string): string | undefined;
-    function resolveTripleslashReference(moduleName: string, containingFile: string): string;
-    function createCompilerHost(options: CompilerOptions, setParentNodes?: boolean): CompilerHost;
-    function getPreEmitDiagnostics(program: Program, sourceFile?: SourceFile, cancellationToken?: CancellationToken): readonly Diagnostic[];
-    function formatDiagnostics(diagnostics: readonly Diagnostic[], host: FormatDiagnosticsHost): string;
-    function formatDiagnostic(diagnostic: Diagnostic, host: FormatDiagnosticsHost): string;
-    function formatDiagnosticsWithColorAndContext(diagnostics: readonly Diagnostic[], host: FormatDiagnosticsHost): string;
-    function flattenDiagnosticMessageText(diag: string | DiagnosticMessageChain | undefined, newLine: string, indent?: number): string;
+    export function findConfigFile(searchPath: string, fileExists: (fileName: string) => boolean, configName?: string): string | undefined;
+    export function resolveTripleslashReference(moduleName: string, containingFile: string): string;
+    export function createCompilerHost(options: CompilerOptions, setParentNodes?: boolean): CompilerHost;
+    export function getPreEmitDiagnostics(program: Program, sourceFile?: SourceFile, cancellationToken?: CancellationToken): readonly Diagnostic[];
+    export function formatDiagnostics(diagnostics: readonly Diagnostic[], host: FormatDiagnosticsHost): string;
+    export function formatDiagnostic(diagnostic: Diagnostic, host: FormatDiagnosticsHost): string;
+    export function formatDiagnosticsWithColorAndContext(diagnostics: readonly Diagnostic[], host: FormatDiagnosticsHost): string;
+    export function flattenDiagnosticMessageText(diag: string | DiagnosticMessageChain | undefined, newLine: string, indent?: number): string;
     /**
      * Calculates the resulting resolution mode for some reference in some file - this is generally the explicitly
      * provided resolution mode in the reference, unless one is not present, in which case it is the mode of the containing file.
      */
-    function getModeForFileReference(ref: FileReference | string, containingFileMode: ResolutionMode): ResolutionMode;
+    export function getModeForFileReference(ref: FileReference | string, containingFileMode: ResolutionMode): ResolutionMode;
     /**
      * Use `program.getModeForResolutionAtIndex`, which retrieves the correct `compilerOptions`, instead of this function whenever possible.
      * Calculates the final resolution mode for an import at some index within a file's `imports` list. This is the resolution mode
@@ -9638,7 +9361,7 @@ declare namespace ts {
      * @param compilerOptions The compiler options for the program that owns the file. If the file belongs to a referenced project, the compiler options
      * should be the options of the referenced project, not the referencing project.
      */
-    function getModeForResolutionAtIndex(file: SourceFile, index: number, compilerOptions: CompilerOptions): ResolutionMode;
+    export function getModeForResolutionAtIndex(file: SourceFile, index: number, compilerOptions: CompilerOptions): ResolutionMode;
     /**
      * Use `program.getModeForUsageLocation`, which retrieves the correct `compilerOptions`, instead of this function whenever possible.
      * Calculates the final resolution mode for a given module reference node. This is the resolution mode explicitly provided via import
@@ -9652,14 +9375,14 @@ declare namespace ts {
      * should be the options of the referenced project, not the referencing project.
      * @returns The final resolution mode of the import
      */
-    function getModeForUsageLocation(
+    export function getModeForUsageLocation(
         file: {
             impliedNodeFormat?: ResolutionMode;
         },
         usage: StringLiteralLike,
         compilerOptions: CompilerOptions,
     ): ModuleKind.CommonJS | ModuleKind.ESNext | undefined;
-    function getConfigFileParsingDiagnostics(configFileParseResult: ParsedCommandLine): readonly Diagnostic[];
+    export function getConfigFileParsingDiagnostics(configFileParseResult: ParsedCommandLine): readonly Diagnostic[];
     /**
      * A function for determining if a given file is esm or cjs format, assuming modern node module resolution rules, as configured by the
      * `options` parameter.
@@ -9670,7 +9393,7 @@ declare namespace ts {
      * @param options The compiler options to perform the analysis under - relevant options are `moduleResolution` and `traceResolution`
      * @returns `undefined` if the path has no relevant implied format, `ModuleKind.ESNext` for esm format, and `ModuleKind.CommonJS` for cjs format
      */
-    function getImpliedNodeFormatForFile(fileName: string, packageJsonInfoCache: PackageJsonInfoCache | undefined, host: ModuleResolutionHost, options: CompilerOptions): ResolutionMode;
+    export function getImpliedNodeFormatForFile(fileName: string, packageJsonInfoCache: PackageJsonInfoCache | undefined, host: ModuleResolutionHost, options: CompilerOptions): ResolutionMode;
     /**
      * Create a new 'Program' instance. A Program is an immutable collection of 'SourceFile's and a 'CompilerOptions'
      * that represent a compilation unit.
@@ -9681,7 +9404,7 @@ declare namespace ts {
      * @param createProgramOptions - The options for creating a program.
      * @returns A 'Program' object.
      */
-    function createProgram(createProgramOptions: CreateProgramOptions): Program;
+    export function createProgram(createProgramOptions: CreateProgramOptions): Program;
     /**
      * Create a new 'Program' instance. A Program is an immutable collection of 'SourceFile's and a 'CompilerOptions'
      * that represent a compilation unit.
@@ -9696,22 +9419,22 @@ declare namespace ts {
      * @param configFileParsingDiagnostics - error during config file parsing
      * @returns A 'Program' object.
      */
-    function createProgram(rootNames: readonly string[], options: CompilerOptions, host?: CompilerHost, oldProgram?: Program, configFileParsingDiagnostics?: readonly Diagnostic[]): Program;
+    export function createProgram(rootNames: readonly string[], options: CompilerOptions, host?: CompilerHost, oldProgram?: Program, configFileParsingDiagnostics?: readonly Diagnostic[]): Program;
     /**
      * Returns the target config filename of a project reference.
      * Note: The file might not exist.
      */
-    function resolveProjectReferencePath(ref: ProjectReference): ResolvedConfigFileName;
-    interface FormatDiagnosticsHost {
+    export function resolveProjectReferencePath(ref: ProjectReference): ResolvedConfigFileName;
+    export interface FormatDiagnosticsHost {
         getCurrentDirectory(): string;
         getCanonicalFileName(fileName: string): string;
         getNewLine(): string;
     }
-    interface EmitOutput {
+    export interface EmitOutput {
         outputFiles: OutputFile[];
         emitSkipped: boolean;
     }
-    interface OutputFile {
+    export interface OutputFile {
         name: string;
         writeByteOrderMark: boolean;
         text: string;
@@ -9719,24 +9442,24 @@ declare namespace ts {
     /**
      * Create the builder to manage semantic diagnostics and cache them
      */
-    function createSemanticDiagnosticsBuilderProgram(newProgram: Program, host: BuilderProgramHost, oldProgram?: SemanticDiagnosticsBuilderProgram, configFileParsingDiagnostics?: readonly Diagnostic[]): SemanticDiagnosticsBuilderProgram;
-    function createSemanticDiagnosticsBuilderProgram(rootNames: readonly string[] | undefined, options: CompilerOptions | undefined, host?: CompilerHost, oldProgram?: SemanticDiagnosticsBuilderProgram, configFileParsingDiagnostics?: readonly Diagnostic[], projectReferences?: readonly ProjectReference[]): SemanticDiagnosticsBuilderProgram;
+    export function createSemanticDiagnosticsBuilderProgram(newProgram: Program, host: BuilderProgramHost, oldProgram?: SemanticDiagnosticsBuilderProgram, configFileParsingDiagnostics?: readonly Diagnostic[]): SemanticDiagnosticsBuilderProgram;
+    export function createSemanticDiagnosticsBuilderProgram(rootNames: readonly string[] | undefined, options: CompilerOptions | undefined, host?: CompilerHost, oldProgram?: SemanticDiagnosticsBuilderProgram, configFileParsingDiagnostics?: readonly Diagnostic[], projectReferences?: readonly ProjectReference[]): SemanticDiagnosticsBuilderProgram;
     /**
      * Create the builder that can handle the changes in program and iterate through changed files
      * to emit the those files and manage semantic diagnostics cache as well
      */
-    function createEmitAndSemanticDiagnosticsBuilderProgram(newProgram: Program, host: BuilderProgramHost, oldProgram?: EmitAndSemanticDiagnosticsBuilderProgram, configFileParsingDiagnostics?: readonly Diagnostic[]): EmitAndSemanticDiagnosticsBuilderProgram;
-    function createEmitAndSemanticDiagnosticsBuilderProgram(rootNames: readonly string[] | undefined, options: CompilerOptions | undefined, host?: CompilerHost, oldProgram?: EmitAndSemanticDiagnosticsBuilderProgram, configFileParsingDiagnostics?: readonly Diagnostic[], projectReferences?: readonly ProjectReference[]): EmitAndSemanticDiagnosticsBuilderProgram;
+    export function createEmitAndSemanticDiagnosticsBuilderProgram(newProgram: Program, host: BuilderProgramHost, oldProgram?: EmitAndSemanticDiagnosticsBuilderProgram, configFileParsingDiagnostics?: readonly Diagnostic[]): EmitAndSemanticDiagnosticsBuilderProgram;
+    export function createEmitAndSemanticDiagnosticsBuilderProgram(rootNames: readonly string[] | undefined, options: CompilerOptions | undefined, host?: CompilerHost, oldProgram?: EmitAndSemanticDiagnosticsBuilderProgram, configFileParsingDiagnostics?: readonly Diagnostic[], projectReferences?: readonly ProjectReference[]): EmitAndSemanticDiagnosticsBuilderProgram;
     /**
      * Creates a builder thats just abstraction over program and can be used with watch
      */
-    function createAbstractBuilder(newProgram: Program, host: BuilderProgramHost, oldProgram?: BuilderProgram, configFileParsingDiagnostics?: readonly Diagnostic[]): BuilderProgram;
-    function createAbstractBuilder(rootNames: readonly string[] | undefined, options: CompilerOptions | undefined, host?: CompilerHost, oldProgram?: BuilderProgram, configFileParsingDiagnostics?: readonly Diagnostic[], projectReferences?: readonly ProjectReference[]): BuilderProgram;
-    type AffectedFileResult<T> = {
+    export function createAbstractBuilder(newProgram: Program, host: BuilderProgramHost, oldProgram?: BuilderProgram, configFileParsingDiagnostics?: readonly Diagnostic[]): BuilderProgram;
+    export function createAbstractBuilder(rootNames: readonly string[] | undefined, options: CompilerOptions | undefined, host?: CompilerHost, oldProgram?: BuilderProgram, configFileParsingDiagnostics?: readonly Diagnostic[], projectReferences?: readonly ProjectReference[]): BuilderProgram;
+    export type AffectedFileResult<T> = {
         result: T;
         affected: SourceFile | Program;
     } | undefined;
-    interface BuilderProgramHost {
+    export interface BuilderProgramHost {
         /**
          * If provided this would be used this hash instead of actual file shape text for detecting changes
          */
@@ -9750,7 +9473,7 @@ declare namespace ts {
     /**
      * Builder to manage the program state changes
      */
-    interface BuilderProgram {
+    export interface BuilderProgram {
         /**
          * Returns current program
          */
@@ -9820,7 +9543,7 @@ declare namespace ts {
     /**
      * The builder that caches the semantic diagnostics for the program and handles the changed files and affected files
      */
-    interface SemanticDiagnosticsBuilderProgram extends BuilderProgram {
+    export interface SemanticDiagnosticsBuilderProgram extends BuilderProgram {
         /**
          * Gets the semantic diagnostics from the program for the next affected file and caches it
          * Returns undefined if the iteration is complete
@@ -9831,7 +9554,7 @@ declare namespace ts {
      * The builder that can handle the changes in program and iterate through changed file to emit the files
      * The semantic diagnostics are cached per file and managed by clearing for the changed/affected files
      */
-    interface EmitAndSemanticDiagnosticsBuilderProgram extends SemanticDiagnosticsBuilderProgram {
+    export interface EmitAndSemanticDiagnosticsBuilderProgram extends SemanticDiagnosticsBuilderProgram {
         /**
          * Emits the next affected file's emit result (EmitResult and sourceFiles emitted) or returns undefined if iteration is complete
          * The first of writeFile if provided, writeFile of BuilderProgramHost if provided, writeFile of compiler host
@@ -9839,28 +9562,28 @@ declare namespace ts {
          */
         emitNextAffectedFile(writeFile?: WriteFileCallback, cancellationToken?: CancellationToken, emitOnlyDtsFiles?: boolean, customTransformers?: CustomTransformers): AffectedFileResult<EmitResult>;
     }
-    function readBuilderProgram(compilerOptions: CompilerOptions, host: ReadBuildProgramHost): EmitAndSemanticDiagnosticsBuilderProgram | undefined;
-    function createIncrementalCompilerHost(options: CompilerOptions, system?: System): CompilerHost;
-    function createIncrementalProgram<T extends BuilderProgram = EmitAndSemanticDiagnosticsBuilderProgram>({ rootNames, options, configFileParsingDiagnostics, projectReferences, host, createProgram }: IncrementalProgramOptions<T>): T;
+    export function readBuilderProgram(compilerOptions: CompilerOptions, host: ReadBuildProgramHost): EmitAndSemanticDiagnosticsBuilderProgram | undefined;
+    export function createIncrementalCompilerHost(options: CompilerOptions, system?: System): CompilerHost;
+    export function createIncrementalProgram<T extends BuilderProgram = EmitAndSemanticDiagnosticsBuilderProgram>({ rootNames, options, configFileParsingDiagnostics, projectReferences, host, createProgram }: IncrementalProgramOptions<T>): T;
     /**
      * Create the watch compiler host for either configFile or fileNames and its options
      */
-    function createWatchCompilerHost<T extends BuilderProgram>(configFileName: string, optionsToExtend: CompilerOptions | undefined, system: System, createProgram?: CreateProgram<T>, reportDiagnostic?: DiagnosticReporter, reportWatchStatus?: WatchStatusReporter, watchOptionsToExtend?: WatchOptions, extraFileExtensions?: readonly FileExtensionInfo[]): WatchCompilerHostOfConfigFile<T>;
-    function createWatchCompilerHost<T extends BuilderProgram>(rootFiles: string[], options: CompilerOptions, system: System, createProgram?: CreateProgram<T>, reportDiagnostic?: DiagnosticReporter, reportWatchStatus?: WatchStatusReporter, projectReferences?: readonly ProjectReference[], watchOptions?: WatchOptions): WatchCompilerHostOfFilesAndCompilerOptions<T>;
+    export function createWatchCompilerHost<T extends BuilderProgram>(configFileName: string, optionsToExtend: CompilerOptions | undefined, system: System, createProgram?: CreateProgram<T>, reportDiagnostic?: DiagnosticReporter, reportWatchStatus?: WatchStatusReporter, watchOptionsToExtend?: WatchOptions, extraFileExtensions?: readonly FileExtensionInfo[]): WatchCompilerHostOfConfigFile<T>;
+    export function createWatchCompilerHost<T extends BuilderProgram>(rootFiles: string[], options: CompilerOptions, system: System, createProgram?: CreateProgram<T>, reportDiagnostic?: DiagnosticReporter, reportWatchStatus?: WatchStatusReporter, projectReferences?: readonly ProjectReference[], watchOptions?: WatchOptions): WatchCompilerHostOfFilesAndCompilerOptions<T>;
     /**
      * Creates the watch from the host for root files and compiler options
      */
-    function createWatchProgram<T extends BuilderProgram>(host: WatchCompilerHostOfFilesAndCompilerOptions<T>): WatchOfFilesAndCompilerOptions<T>;
+    export function createWatchProgram<T extends BuilderProgram>(host: WatchCompilerHostOfFilesAndCompilerOptions<T>): WatchOfFilesAndCompilerOptions<T>;
     /**
      * Creates the watch from the host for config file
      */
-    function createWatchProgram<T extends BuilderProgram>(host: WatchCompilerHostOfConfigFile<T>): WatchOfConfigFile<T>;
-    interface ReadBuildProgramHost {
+    export function createWatchProgram<T extends BuilderProgram>(host: WatchCompilerHostOfConfigFile<T>): WatchOfConfigFile<T>;
+    export interface ReadBuildProgramHost {
         useCaseSensitiveFileNames(): boolean;
         getCurrentDirectory(): string;
         readFile(fileName: string): string | undefined;
     }
-    interface IncrementalProgramOptions<T extends BuilderProgram> {
+    export interface IncrementalProgramOptions<T extends BuilderProgram> {
         rootNames: readonly string[];
         options: CompilerOptions;
         configFileParsingDiagnostics?: readonly Diagnostic[];
@@ -9868,11 +9591,11 @@ declare namespace ts {
         host?: CompilerHost;
         createProgram?: CreateProgram<T>;
     }
-    type WatchStatusReporter = (diagnostic: Diagnostic, newLine: string, options: CompilerOptions, errorCount?: number) => void;
+    export type WatchStatusReporter = (diagnostic: Diagnostic, newLine: string, options: CompilerOptions, errorCount?: number) => void;
     /** Create the program with rootNames and options, if they are undefined, oldProgram and new configFile diagnostics create new program */
-    type CreateProgram<T extends BuilderProgram> = (rootNames: readonly string[] | undefined, options: CompilerOptions | undefined, host?: CompilerHost, oldProgram?: T, configFileParsingDiagnostics?: readonly Diagnostic[], projectReferences?: readonly ProjectReference[] | undefined) => T;
+    export type CreateProgram<T extends BuilderProgram> = (rootNames: readonly string[] | undefined, options: CompilerOptions | undefined, host?: CompilerHost, oldProgram?: T, configFileParsingDiagnostics?: readonly Diagnostic[], projectReferences?: readonly ProjectReference[] | undefined) => T;
     /** Host that has watch functionality used in --watch mode */
-    interface WatchHost {
+    export interface WatchHost {
         /** If provided, called with Diagnostic message that informs about change in watch status */
         onWatchStatusChange?(diagnostic: Diagnostic, newLine: string, options: CompilerOptions, errorCount?: number): void;
         /** Used to watch changes in source files, missing files needed to update the program or config file */
@@ -9884,7 +9607,7 @@ declare namespace ts {
         /** If provided, will be used to reset existing delayed compilation */
         clearTimeout?(timeoutId: any): void;
     }
-    interface ProgramHost<T extends BuilderProgram> {
+    export interface ProgramHost<T extends BuilderProgram> {
         /**
          * Used to create the program when need for program creation or recreation detected
          */
@@ -9939,7 +9662,7 @@ declare namespace ts {
         getModuleResolutionCache?(): ModuleResolutionCache | undefined;
         jsDocParsingMode?: JSDocParsingMode;
     }
-    interface WatchCompilerHost<T extends BuilderProgram> extends ProgramHost<T>, WatchHost {
+    export interface WatchCompilerHost<T extends BuilderProgram> extends ProgramHost<T>, WatchHost {
         /** Instead of using output d.ts file from project reference, use its source file */
         useSourceOfProjectReferenceRedirect?(): boolean;
         /** If provided, use this method to get parsed command lines for referenced projects */
@@ -9950,7 +9673,7 @@ declare namespace ts {
     /**
      * Host to create watch with root files and options
      */
-    interface WatchCompilerHostOfFilesAndCompilerOptions<T extends BuilderProgram> extends WatchCompilerHost<T> {
+    export interface WatchCompilerHostOfFilesAndCompilerOptions<T extends BuilderProgram> extends WatchCompilerHost<T> {
         /** root files to use to generate program */
         rootFiles: string[];
         /** Compiler options */
@@ -9962,7 +9685,7 @@ declare namespace ts {
     /**
      * Host to create watch with config file
      */
-    interface WatchCompilerHostOfConfigFile<T extends BuilderProgram> extends WatchCompilerHost<T>, ConfigFileDiagnosticsReporter {
+    export interface WatchCompilerHostOfConfigFile<T extends BuilderProgram> extends WatchCompilerHost<T>, ConfigFileDiagnosticsReporter {
         /** Name of the config file to compile */
         configFileName: string;
         /** Options to extend */
@@ -9975,7 +9698,7 @@ declare namespace ts {
          */
         readDirectory(path: string, extensions?: readonly string[], exclude?: readonly string[], include?: readonly string[], depth?: number): string[];
     }
-    interface Watch<T> {
+    export interface Watch<T> {
         /** Synchronize with host and get updated program */
         getProgram(): T;
         /** Closes the watch */
@@ -9984,24 +9707,24 @@ declare namespace ts {
     /**
      * Creates the watch what generates program using the config file
      */
-    interface WatchOfConfigFile<T> extends Watch<T> {
+    export interface WatchOfConfigFile<T> extends Watch<T> {
     }
     /**
      * Creates the watch that generates program using the root files and compiler options
      */
-    interface WatchOfFilesAndCompilerOptions<T> extends Watch<T> {
+    export interface WatchOfFilesAndCompilerOptions<T> extends Watch<T> {
         /** Updates the root files in the program, only if this is not config file compilation */
         updateRootFileNames(fileNames: string[]): void;
     }
     /**
      * Create a function that reports watch status by writing to the system and handles the formating of the diagnostic
      */
-    function createBuilderStatusReporter(system: System, pretty?: boolean): DiagnosticReporter;
-    function createSolutionBuilderHost<T extends BuilderProgram = EmitAndSemanticDiagnosticsBuilderProgram>(system?: System, createProgram?: CreateProgram<T>, reportDiagnostic?: DiagnosticReporter, reportSolutionBuilderStatus?: DiagnosticReporter, reportErrorSummary?: ReportEmitErrorSummary): SolutionBuilderHost<T>;
-    function createSolutionBuilderWithWatchHost<T extends BuilderProgram = EmitAndSemanticDiagnosticsBuilderProgram>(system?: System, createProgram?: CreateProgram<T>, reportDiagnostic?: DiagnosticReporter, reportSolutionBuilderStatus?: DiagnosticReporter, reportWatchStatus?: WatchStatusReporter): SolutionBuilderWithWatchHost<T>;
-    function createSolutionBuilder<T extends BuilderProgram>(host: SolutionBuilderHost<T>, rootNames: readonly string[], defaultOptions: BuildOptions): SolutionBuilder<T>;
-    function createSolutionBuilderWithWatch<T extends BuilderProgram>(host: SolutionBuilderWithWatchHost<T>, rootNames: readonly string[], defaultOptions: BuildOptions, baseWatchOptions?: WatchOptions): SolutionBuilder<T>;
-    interface BuildOptions {
+    export function createBuilderStatusReporter(system: System, pretty?: boolean): DiagnosticReporter;
+    export function createSolutionBuilderHost<T extends BuilderProgram = EmitAndSemanticDiagnosticsBuilderProgram>(system?: System, createProgram?: CreateProgram<T>, reportDiagnostic?: DiagnosticReporter, reportSolutionBuilderStatus?: DiagnosticReporter, reportErrorSummary?: ReportEmitErrorSummary): SolutionBuilderHost<T>;
+    export function createSolutionBuilderWithWatchHost<T extends BuilderProgram = EmitAndSemanticDiagnosticsBuilderProgram>(system?: System, createProgram?: CreateProgram<T>, reportDiagnostic?: DiagnosticReporter, reportSolutionBuilderStatus?: DiagnosticReporter, reportWatchStatus?: WatchStatusReporter): SolutionBuilderWithWatchHost<T>;
+    export function createSolutionBuilder<T extends BuilderProgram>(host: SolutionBuilderHost<T>, rootNames: readonly string[], defaultOptions: BuildOptions): SolutionBuilder<T>;
+    export function createSolutionBuilderWithWatch<T extends BuilderProgram>(host: SolutionBuilderWithWatchHost<T>, rootNames: readonly string[], defaultOptions: BuildOptions, baseWatchOptions?: WatchOptions): SolutionBuilder<T>;
+    export interface BuildOptions {
         dry?: boolean;
         force?: boolean;
         verbose?: boolean;
@@ -10015,12 +9738,12 @@ declare namespace ts {
         traceResolution?: boolean;
         [option: string]: CompilerOptionsValue | undefined;
     }
-    type ReportEmitErrorSummary = (errorCount: number, filesInError: (ReportFileInError | undefined)[]) => void;
-    interface ReportFileInError {
+    export type ReportEmitErrorSummary = (errorCount: number, filesInError: (ReportFileInError | undefined)[]) => void;
+    export interface ReportFileInError {
         fileName: string;
         line: number;
     }
-    interface SolutionBuilderHostBase<T extends BuilderProgram> extends ProgramHost<T> {
+    export interface SolutionBuilderHostBase<T extends BuilderProgram> extends ProgramHost<T> {
         createDirectory?(path: string): void;
         /**
          * Should provide create directory and writeFile if done of invalidatedProjects is not invoked with
@@ -10036,23 +9759,23 @@ declare namespace ts {
         reportSolutionBuilderStatus: DiagnosticReporter;
         afterProgramEmitAndDiagnostics?(program: T): void;
     }
-    interface SolutionBuilderHost<T extends BuilderProgram> extends SolutionBuilderHostBase<T> {
+    export interface SolutionBuilderHost<T extends BuilderProgram> extends SolutionBuilderHostBase<T> {
         reportErrorSummary?: ReportEmitErrorSummary;
     }
-    interface SolutionBuilderWithWatchHost<T extends BuilderProgram> extends SolutionBuilderHostBase<T>, WatchHost {
+    export interface SolutionBuilderWithWatchHost<T extends BuilderProgram> extends SolutionBuilderHostBase<T>, WatchHost {
     }
-    interface SolutionBuilder<T extends BuilderProgram> {
+    export interface SolutionBuilder<T extends BuilderProgram> {
         build(project?: string, cancellationToken?: CancellationToken, writeFile?: WriteFileCallback, getCustomTransformers?: (project: string) => CustomTransformers): ExitStatus;
         clean(project?: string): ExitStatus;
         buildReferences(project: string, cancellationToken?: CancellationToken, writeFile?: WriteFileCallback, getCustomTransformers?: (project: string) => CustomTransformers): ExitStatus;
         cleanReferences(project?: string): ExitStatus;
         getNextInvalidatedProject(cancellationToken?: CancellationToken): InvalidatedProject<T> | undefined;
     }
-    enum InvalidatedProjectKind {
+    export enum InvalidatedProjectKind {
         Build = 0,
         UpdateOutputFileStamps = 1,
     }
-    interface InvalidatedProjectBase {
+    export interface InvalidatedProjectBase {
         readonly kind: InvalidatedProjectKind;
         readonly project: ResolvedConfigFileName;
         /**
@@ -10062,11 +9785,11 @@ declare namespace ts {
         getCompilerOptions(): CompilerOptions;
         getCurrentDirectory(): string;
     }
-    interface UpdateOutputFileStampsProject extends InvalidatedProjectBase {
+    export interface UpdateOutputFileStampsProject extends InvalidatedProjectBase {
         readonly kind: InvalidatedProjectKind.UpdateOutputFileStamps;
         updateOutputFileStatmps(): void;
     }
-    interface BuildInvalidedProject<T extends BuilderProgram> extends InvalidatedProjectBase {
+    export interface BuildInvalidedProject<T extends BuilderProgram> extends InvalidatedProjectBase {
         readonly kind: InvalidatedProjectKind.Build;
         getBuilderProgram(): T | undefined;
         getProgram(): Program | undefined;
@@ -10081,22 +9804,14 @@ declare namespace ts {
         getSemanticDiagnosticsOfNextAffectedFile(cancellationToken?: CancellationToken, ignoreSourceFile?: (sourceFile: SourceFile) => boolean): AffectedFileResult<readonly Diagnostic[]>;
         emit(targetSourceFile?: SourceFile, writeFile?: WriteFileCallback, cancellationToken?: CancellationToken, emitOnlyDtsFiles?: boolean, customTransformers?: CustomTransformers): EmitResult | undefined;
     }
-    type InvalidatedProject<T extends BuilderProgram> = UpdateOutputFileStampsProject | BuildInvalidedProject<T>;
-    namespace JsTyping {
-        interface TypingResolutionHost {
-            directoryExists(path: string): boolean;
-            fileExists(fileName: string): boolean;
-            readFile(path: string, encoding?: string): string | undefined;
-            readDirectory(rootDir: string, extensions: readonly string[], excludes: readonly string[] | undefined, includes: readonly string[] | undefined, depth?: number): string[];
-        }
-    }
-    function getDefaultFormatCodeSettings(newLineCharacter?: string): FormatCodeSettings;
+    export type InvalidatedProject<T extends BuilderProgram> = UpdateOutputFileStampsProject | BuildInvalidedProject<T>;
+    export function getDefaultFormatCodeSettings(newLineCharacter?: string): FormatCodeSettings;
     /**
      * Represents an immutable snapshot of a script at a specified time.Once acquired, the
      * snapshot is observably immutable. i.e. the same calls with the same parameters will return
      * the same values.
      */
-    interface IScriptSnapshot {
+    export interface IScriptSnapshot {
         /** Gets a portion of the script snapshot specified by [start, end). */
         getText(start: number, end: number): string;
         /** Gets the length of this script snapshot. */
@@ -10112,10 +9827,10 @@ declare namespace ts {
         /** Releases all resources held by this script snapshot */
         dispose?(): void;
     }
-    namespace ScriptSnapshot {
+    export namespace ScriptSnapshot {
         function fromString(text: string): IScriptSnapshot;
     }
-    interface PreProcessedFileInfo {
+    export interface PreProcessedFileInfo {
         referencedFiles: FileReference[];
         typeReferenceDirectives: FileReference[];
         libReferenceDirectives: FileReference[];
@@ -10123,28 +9838,28 @@ declare namespace ts {
         ambientExternalModules?: string[];
         isLibFile: boolean;
     }
-    interface HostCancellationToken {
+    export interface HostCancellationToken {
         isCancellationRequested(): boolean;
     }
-    interface InstallPackageOptions {
+    export interface InstallPackageOptions {
         fileName: Path;
         packageName: string;
     }
-    interface PerformanceEvent {
+    export interface PerformanceEvent {
         kind: "UpdateGraph" | "CreatePackageJsonAutoImportProvider";
         durationMs: number;
     }
-    enum LanguageServiceMode {
+    export enum LanguageServiceMode {
         Semantic = 0,
         PartialSemantic = 1,
         Syntactic = 2,
     }
-    interface IncompleteCompletionsCache {
+    export interface IncompleteCompletionsCache {
         get(): CompletionInfo | undefined;
         set(response: CompletionInfo): void;
         clear(): void;
     }
-    interface LanguageServiceHost extends GetEffectiveTypeRootsHost, MinimalResolutionCacheHost {
+    export interface LanguageServiceHost extends GetEffectiveTypeRootsHost, MinimalResolutionCacheHost {
         getCompilationSettings(): CompilerOptions;
         getNewLine?(): string;
         getProjectVersion?(): string;
@@ -10184,14 +9899,14 @@ declare namespace ts {
         getParsedCommandLine?(fileName: string): ParsedCommandLine | undefined;
         jsDocParsingMode?: JSDocParsingMode | undefined;
     }
-    type WithMetadata<T> = T & {
+    export type WithMetadata<T> = T & {
         metadata?: unknown;
     };
-    enum SemanticClassificationFormat {
+    export enum SemanticClassificationFormat {
         Original = "original",
         TwentyTwenty = "2020",
     }
-    interface LanguageService {
+    export interface LanguageService {
         /** This is used as a part of restarting the language service. */
         cleanupSemanticCache(): void;
         /**
@@ -10365,29 +10080,29 @@ declare namespace ts {
         getSupportedCodeFixes(fileName?: string): readonly string[];
         dispose(): void;
     }
-    interface JsxClosingTagInfo {
+    export interface JsxClosingTagInfo {
         readonly newText: string;
     }
-    interface LinkedEditingInfo {
+    export interface LinkedEditingInfo {
         readonly ranges: TextSpan[];
         wordPattern?: string;
     }
-    interface CombinedCodeFixScope {
+    export interface CombinedCodeFixScope {
         type: "file";
         fileName: string;
     }
-    enum OrganizeImportsMode {
+    export enum OrganizeImportsMode {
         All = "All",
         SortAndCombine = "SortAndCombine",
         RemoveUnused = "RemoveUnused",
     }
-    interface OrganizeImportsArgs extends CombinedCodeFixScope {
+    export interface OrganizeImportsArgs extends CombinedCodeFixScope {
         /** @deprecated Use `mode` instead */
         skipDestructiveCodeActions?: boolean;
         mode?: OrganizeImportsMode;
     }
-    type CompletionsTriggerCharacter = "." | '"' | "'" | "`" | "/" | "@" | "<" | "#" | " ";
-    enum CompletionTriggerKind {
+    export type CompletionsTriggerCharacter = "." | '"' | "'" | "`" | "/" | "@" | "<" | "#" | " ";
+    export enum CompletionTriggerKind {
         /** Completion was triggered by typing an identifier, manual invocation (e.g Ctrl+Space) or via API. */
         Invoked = 1,
         /** Completion was triggered by a trigger character. */
@@ -10395,7 +10110,7 @@ declare namespace ts {
         /** Completion was re-triggered as the current completion list is incomplete. */
         TriggerForIncompleteCompletions = 3,
     }
-    interface GetCompletionsAtPositionOptions extends UserPreferences {
+    export interface GetCompletionsAtPositionOptions extends UserPreferences {
         /**
          * If the editor is asking for completions because a certain character was typed
          * (as opposed to when the user explicitly requested them) this should be set.
@@ -10414,17 +10129,17 @@ declare namespace ts {
         /** @deprecated Use includeCompletionsWithInsertText */
         includeInsertTextCompletions?: boolean;
     }
-    type SignatureHelpTriggerCharacter = "," | "(" | "<";
-    type SignatureHelpRetriggerCharacter = SignatureHelpTriggerCharacter | ")";
-    interface SignatureHelpItemsOptions {
+    export type SignatureHelpTriggerCharacter = "," | "(" | "<";
+    export type SignatureHelpRetriggerCharacter = SignatureHelpTriggerCharacter | ")";
+    export interface SignatureHelpItemsOptions {
         triggerReason?: SignatureHelpTriggerReason;
     }
-    type SignatureHelpTriggerReason = SignatureHelpInvokedReason | SignatureHelpCharacterTypedReason | SignatureHelpRetriggeredReason;
+    export type SignatureHelpTriggerReason = SignatureHelpInvokedReason | SignatureHelpCharacterTypedReason | SignatureHelpRetriggeredReason;
     /**
      * Signals that the user manually requested signature help.
      * The language service will unconditionally attempt to provide a result.
      */
-    interface SignatureHelpInvokedReason {
+    export interface SignatureHelpInvokedReason {
         kind: "invoked";
         triggerCharacter?: undefined;
     }
@@ -10432,7 +10147,7 @@ declare namespace ts {
      * Signals that the signature help request came from a user typing a character.
      * Depending on the character and the syntactic context, the request may or may not be served a result.
      */
-    interface SignatureHelpCharacterTypedReason {
+    export interface SignatureHelpCharacterTypedReason {
         kind: "characterTyped";
         /**
          * Character that was responsible for triggering signature help.
@@ -10445,25 +10160,25 @@ declare namespace ts {
      * The language service will unconditionally attempt to provide a result.
      * `triggerCharacter` can be `undefined` for a retrigger caused by a cursor move.
      */
-    interface SignatureHelpRetriggeredReason {
+    export interface SignatureHelpRetriggeredReason {
         kind: "retrigger";
         /**
          * Character that was responsible for triggering signature help.
          */
         triggerCharacter?: SignatureHelpRetriggerCharacter;
     }
-    interface ApplyCodeActionCommandResult {
+    export interface ApplyCodeActionCommandResult {
         successMessage: string;
     }
-    interface Classifications {
+    export interface Classifications {
         spans: number[];
         endOfLineState: EndOfLineState;
     }
-    interface ClassifiedSpan {
+    export interface ClassifiedSpan {
         textSpan: TextSpan;
         classificationType: ClassificationTypeNames;
     }
-    interface ClassifiedSpan2020 {
+    export interface ClassifiedSpan2020 {
         textSpan: TextSpan;
         classificationType: number;
     }
@@ -10473,7 +10188,7 @@ declare namespace ts {
      * The navbar is returned as a list of top-level items, each of which has a list of child items.
      * Child items always have an empty array for their `childItems`.
      */
-    interface NavigationBarItem {
+    export interface NavigationBarItem {
         text: string;
         kind: ScriptElementKind;
         kindModifiers: string;
@@ -10487,7 +10202,7 @@ declare namespace ts {
      * Node in a tree of nested declarations in a file.
      * The top node is always a script or module node.
      */
-    interface NavigationTree {
+    export interface NavigationTree {
         /** Name of the declaration, or a short description, e.g. "<class>". */
         text: string;
         kind: ScriptElementKind;
@@ -10502,7 +10217,7 @@ declare namespace ts {
         /** Present if non-empty */
         childItems?: NavigationTree[];
     }
-    interface CallHierarchyItem {
+    export interface CallHierarchyItem {
         name: string;
         kind: ScriptElementKind;
         kindModifiers?: string;
@@ -10511,20 +10226,20 @@ declare namespace ts {
         selectionSpan: TextSpan;
         containerName?: string;
     }
-    interface CallHierarchyIncomingCall {
+    export interface CallHierarchyIncomingCall {
         from: CallHierarchyItem;
         fromSpans: TextSpan[];
     }
-    interface CallHierarchyOutgoingCall {
+    export interface CallHierarchyOutgoingCall {
         to: CallHierarchyItem;
         fromSpans: TextSpan[];
     }
-    enum InlayHintKind {
+    export enum InlayHintKind {
         Type = "Type",
         Parameter = "Parameter",
         Enum = "Enum",
     }
-    interface InlayHint {
+    export interface InlayHint {
         /** This property will be the empty string when displayParts is set. */
         text: string;
         position: number;
@@ -10533,30 +10248,30 @@ declare namespace ts {
         whitespaceAfter?: boolean;
         displayParts?: InlayHintDisplayPart[];
     }
-    interface InlayHintDisplayPart {
+    export interface InlayHintDisplayPart {
         text: string;
         span?: TextSpan;
         file?: string;
     }
-    interface TodoCommentDescriptor {
+    export interface TodoCommentDescriptor {
         text: string;
         priority: number;
     }
-    interface TodoComment {
+    export interface TodoComment {
         descriptor: TodoCommentDescriptor;
         message: string;
         position: number;
     }
-    interface TextChange {
+    export interface TextChange {
         span: TextSpan;
         newText: string;
     }
-    interface FileTextChanges {
+    export interface FileTextChanges {
         fileName: string;
         textChanges: readonly TextChange[];
         isNewFile?: boolean;
     }
-    interface CodeAction {
+    export interface CodeAction {
         /** Description of the code action to display in the UI of the editor */
         description: string;
         /** Text changes to apply to each file as part of the code action */
@@ -10567,7 +10282,7 @@ declare namespace ts {
          */
         commands?: CodeActionCommand[];
     }
-    interface CodeFixAction extends CodeAction {
+    export interface CodeFixAction extends CodeAction {
         /** Short name to identify the fix, for use by telemetry. */
         fixName: string;
         /**
@@ -10577,17 +10292,17 @@ declare namespace ts {
         fixId?: {};
         fixAllDescription?: string;
     }
-    interface CombinedCodeActions {
+    export interface CombinedCodeActions {
         changes: readonly FileTextChanges[];
         commands?: readonly CodeActionCommand[];
     }
-    type CodeActionCommand = InstallPackageAction;
-    interface InstallPackageAction {
+    export type CodeActionCommand = InstallPackageAction;
+    export interface InstallPackageAction {
     }
     /**
      * A set of one or more available refactoring actions, grouped under a parent refactoring.
      */
-    interface ApplicableRefactorInfo {
+    export interface ApplicableRefactorInfo {
         /**
          * The programmatic name of the refactoring
          */
@@ -10611,7 +10326,7 @@ declare namespace ts {
      * Represents a single refactoring action - for example, the "Extract Method..." refactor might
      * offer several actions, each corresponding to a surround class or closure to extract into.
      */
-    interface RefactorActionInfo {
+    export interface RefactorActionInfo {
         /**
          * The programmatic name of the refactoring action
          */
@@ -10641,20 +10356,20 @@ declare namespace ts {
      * A set of edits to make in response to a refactor action, plus an optional
      * location where renaming should be invoked from
      */
-    interface RefactorEditInfo {
+    export interface RefactorEditInfo {
         edits: FileTextChanges[];
         renameFilename?: string;
         renameLocation?: number;
         commands?: CodeActionCommand[];
         notApplicableReason?: string;
     }
-    type RefactorTriggerReason = "implicit" | "invoked";
-    interface TextInsertion {
+    export type RefactorTriggerReason = "implicit" | "invoked";
+    export interface TextInsertion {
         newText: string;
         /** The position in newText the caret should point to after the insertion. */
         caretOffset: number;
     }
-    interface DocumentSpan {
+    export interface DocumentSpan {
         textSpan: TextSpan;
         fileName: string;
         /**
@@ -10670,32 +10385,32 @@ declare namespace ts {
         contextSpan?: TextSpan;
         originalContextSpan?: TextSpan;
     }
-    interface RenameLocation extends DocumentSpan {
+    export interface RenameLocation extends DocumentSpan {
         readonly prefixText?: string;
         readonly suffixText?: string;
     }
-    interface ReferenceEntry extends DocumentSpan {
+    export interface ReferenceEntry extends DocumentSpan {
         isWriteAccess: boolean;
         isInString?: true;
     }
-    interface ImplementationLocation extends DocumentSpan {
+    export interface ImplementationLocation extends DocumentSpan {
         kind: ScriptElementKind;
         displayParts: SymbolDisplayPart[];
     }
-    enum HighlightSpanKind {
+    export enum HighlightSpanKind {
         none = "none",
         definition = "definition",
         reference = "reference",
         writtenReference = "writtenReference",
     }
-    interface HighlightSpan {
+    export interface HighlightSpan {
         fileName?: string;
         isInString?: true;
         textSpan: TextSpan;
         contextSpan?: TextSpan;
         kind: HighlightSpanKind;
     }
-    interface NavigateToItem {
+    export interface NavigateToItem {
         name: string;
         kind: ScriptElementKind;
         kindModifiers: string;
@@ -10706,18 +10421,18 @@ declare namespace ts {
         containerName: string;
         containerKind: ScriptElementKind;
     }
-    enum IndentStyle {
+    export enum IndentStyle {
         None = 0,
         Block = 1,
         Smart = 2,
     }
-    enum SemicolonPreference {
+    export enum SemicolonPreference {
         Ignore = "ignore",
         Insert = "insert",
         Remove = "remove",
     }
     /** @deprecated - consider using EditorSettings instead */
-    interface EditorOptions {
+    export interface EditorOptions {
         BaseIndentSize?: number;
         IndentSize: number;
         TabSize: number;
@@ -10725,7 +10440,7 @@ declare namespace ts {
         ConvertTabsToSpaces: boolean;
         IndentStyle: IndentStyle;
     }
-    interface EditorSettings {
+    export interface EditorSettings {
         baseIndentSize?: number;
         indentSize?: number;
         tabSize?: number;
@@ -10735,7 +10450,7 @@ declare namespace ts {
         trimTrailingWhitespace?: boolean;
     }
     /** @deprecated - consider using FormatCodeSettings instead */
-    interface FormatCodeOptions extends EditorOptions {
+    export interface FormatCodeOptions extends EditorOptions {
         InsertSpaceAfterCommaDelimiter: boolean;
         InsertSpaceAfterSemicolonInForStatements: boolean;
         InsertSpaceBeforeAndAfterBinaryOperators: boolean;
@@ -10753,7 +10468,7 @@ declare namespace ts {
         PlaceOpenBraceOnNewLineForControlBlocks: boolean;
         insertSpaceBeforeTypeAnnotation?: boolean;
     }
-    interface FormatCodeSettings extends EditorSettings {
+    export interface FormatCodeSettings extends EditorSettings {
         readonly insertSpaceAfterCommaDelimiter?: boolean;
         readonly insertSpaceAfterSemicolonInForStatements?: boolean;
         readonly insertSpaceBeforeAndAfterBinaryOperators?: boolean;
@@ -10775,28 +10490,28 @@ declare namespace ts {
         readonly semicolons?: SemicolonPreference;
         readonly indentSwitchCase?: boolean;
     }
-    interface DefinitionInfo extends DocumentSpan {
+    export interface DefinitionInfo extends DocumentSpan {
         kind: ScriptElementKind;
         name: string;
         containerKind: ScriptElementKind;
         containerName: string;
         unverified?: boolean;
     }
-    interface DefinitionInfoAndBoundSpan {
+    export interface DefinitionInfoAndBoundSpan {
         definitions?: readonly DefinitionInfo[];
         textSpan: TextSpan;
     }
-    interface ReferencedSymbolDefinitionInfo extends DefinitionInfo {
+    export interface ReferencedSymbolDefinitionInfo extends DefinitionInfo {
         displayParts: SymbolDisplayPart[];
     }
-    interface ReferencedSymbol {
+    export interface ReferencedSymbol {
         definition: ReferencedSymbolDefinitionInfo;
         references: ReferencedSymbolEntry[];
     }
-    interface ReferencedSymbolEntry extends ReferenceEntry {
+    export interface ReferencedSymbolEntry extends ReferenceEntry {
         isDefinition?: boolean;
     }
-    enum SymbolDisplayPartKind {
+    export enum SymbolDisplayPartKind {
         aliasName = 0,
         className = 1,
         enumName = 2,
@@ -10823,7 +10538,7 @@ declare namespace ts {
         linkName = 23,
         linkText = 24,
     }
-    interface SymbolDisplayPart {
+    export interface SymbolDisplayPart {
         /**
          * Text of an item describing the symbol.
          */
@@ -10833,14 +10548,14 @@ declare namespace ts {
          */
         kind: string;
     }
-    interface JSDocLinkDisplayPart extends SymbolDisplayPart {
+    export interface JSDocLinkDisplayPart extends SymbolDisplayPart {
         target: DocumentSpan;
     }
-    interface JSDocTagInfo {
+    export interface JSDocTagInfo {
         name: string;
         text?: SymbolDisplayPart[];
     }
-    interface QuickInfo {
+    export interface QuickInfo {
         kind: ScriptElementKind;
         kindModifiers: string;
         textSpan: TextSpan;
@@ -10848,8 +10563,8 @@ declare namespace ts {
         documentation?: SymbolDisplayPart[];
         tags?: JSDocTagInfo[];
     }
-    type RenameInfo = RenameInfoSuccess | RenameInfoFailure;
-    interface RenameInfoSuccess {
+    export type RenameInfo = RenameInfoSuccess | RenameInfoFailure;
+    export interface RenameInfoSuccess {
         canRename: true;
         /**
          * File or directory to rename.
@@ -10866,33 +10581,33 @@ declare namespace ts {
         kindModifiers: string;
         triggerSpan: TextSpan;
     }
-    interface RenameInfoFailure {
+    export interface RenameInfoFailure {
         canRename: false;
         localizedErrorMessage: string;
     }
     /**
      * @deprecated Use `UserPreferences` instead.
      */
-    interface RenameInfoOptions {
+    export interface RenameInfoOptions {
         readonly allowRenameOfImportPath?: boolean;
     }
-    interface DocCommentTemplateOptions {
+    export interface DocCommentTemplateOptions {
         readonly generateReturnInDocTemplate?: boolean;
     }
-    interface InteractiveRefactorArguments {
+    export interface InteractiveRefactorArguments {
         targetFile: string;
     }
     /**
      * Signature help information for a single parameter
      */
-    interface SignatureHelpParameter {
+    export interface SignatureHelpParameter {
         name: string;
         documentation: SymbolDisplayPart[];
         displayParts: SymbolDisplayPart[];
         isOptional: boolean;
         isRest?: boolean;
     }
-    interface SelectionRange {
+    export interface SelectionRange {
         textSpan: TextSpan;
         parent?: SelectionRange;
     }
@@ -10903,7 +10618,7 @@ declare namespace ts {
      * an edit has happened, while signature help is still active, the host can ask important
      * questions like 'what parameter is the user currently contained within?'.
      */
-    interface SignatureHelpItem {
+    export interface SignatureHelpItem {
         isVariadic: boolean;
         prefixDisplayParts: SymbolDisplayPart[];
         suffixDisplayParts: SymbolDisplayPart[];
@@ -10915,14 +10630,14 @@ declare namespace ts {
     /**
      * Represents a set of signature help items, and the preferred item that should be selected.
      */
-    interface SignatureHelpItems {
+    export interface SignatureHelpItems {
         items: SignatureHelpItem[];
         applicableSpan: TextSpan;
         selectedItemIndex: number;
         argumentIndex: number;
         argumentCount: number;
     }
-    enum CompletionInfoFlags {
+    export enum CompletionInfoFlags {
         None = 0,
         MayIncludeAutoImports = 1,
         IsImportStatementCompletion = 2,
@@ -10931,7 +10646,7 @@ declare namespace ts {
         ResolvedModuleSpecifiersBeyondLimit = 16,
         MayIncludeMethodSnippets = 32,
     }
-    interface CompletionInfo {
+    export interface CompletionInfo {
         /** For performance telemetry. */
         flags?: CompletionInfoFlags;
         /** Not true for all global completions. This will be true if the enclosing scope matches a few syntax kinds. See `isSnippetScope`. */
@@ -10953,7 +10668,7 @@ declare namespace ts {
         isIncomplete?: true;
         entries: CompletionEntry[];
     }
-    interface CompletionEntryDataAutoImport {
+    export interface CompletionEntryDataAutoImport {
         /**
          * The name of the property or export in the module's symbol table. Differs from the completion name
          * in the case of InternalSymbolName.ExportEquals and InternalSymbolName.Default.
@@ -10968,14 +10683,14 @@ declare namespace ts {
         /** True if the export was found in the package.json AutoImportProvider */
         isPackageJsonImport?: true;
     }
-    interface CompletionEntryDataUnresolved extends CompletionEntryDataAutoImport {
+    export interface CompletionEntryDataUnresolved extends CompletionEntryDataAutoImport {
         exportMapKey: ExportMapInfoKey;
     }
-    interface CompletionEntryDataResolved extends CompletionEntryDataAutoImport {
+    export interface CompletionEntryDataResolved extends CompletionEntryDataAutoImport {
         moduleSpecifier: string;
     }
-    type CompletionEntryData = CompletionEntryDataUnresolved | CompletionEntryDataResolved;
-    interface CompletionEntry {
+    export type CompletionEntryData = CompletionEntryDataUnresolved | CompletionEntryDataResolved;
+    export interface CompletionEntry {
         name: string;
         kind: ScriptElementKind;
         kindModifiers?: string;
@@ -11059,7 +10774,7 @@ declare namespace ts {
          */
         data?: CompletionEntryData;
     }
-    interface CompletionEntryLabelDetails {
+    export interface CompletionEntryLabelDetails {
         /**
          * An optional string which is rendered less prominently directly after
          * {@link CompletionEntry.name name}, without any spacing. Should be
@@ -11073,7 +10788,7 @@ declare namespace ts {
          */
         description?: string;
     }
-    interface CompletionEntryDetails {
+    export interface CompletionEntryDetails {
         name: string;
         kind: ScriptElementKind;
         kindModifiers: string;
@@ -11085,7 +10800,7 @@ declare namespace ts {
         source?: SymbolDisplayPart[];
         sourceDisplay?: SymbolDisplayPart[];
     }
-    interface OutliningSpan {
+    export interface OutliningSpan {
         /** The span of the document to actually collapse. */
         textSpan: TextSpan;
         /** The span of the document to display when the user hovers over the collapsed span. */
@@ -11102,7 +10817,7 @@ declare namespace ts {
          */
         kind: OutliningSpanKind;
     }
-    enum OutliningSpanKind {
+    export enum OutliningSpanKind {
         /** Single or multi-line comments */
         Comment = "comment",
         /** Sections marked by '// #region' and '// #endregion' comments */
@@ -11112,12 +10827,12 @@ declare namespace ts {
         /** Contiguous blocks of import declarations */
         Imports = "imports",
     }
-    enum OutputFileType {
+    export enum OutputFileType {
         JavaScript = 0,
         SourceMap = 1,
         Declaration = 2,
     }
-    enum EndOfLineState {
+    export enum EndOfLineState {
         None = 0,
         InMultiLineCommentTrivia = 1,
         InSingleQuoteStringLiteral = 2,
@@ -11126,7 +10841,7 @@ declare namespace ts {
         InTemplateMiddleOrTail = 5,
         InTemplateSubstitutionPosition = 6,
     }
-    enum TokenClass {
+    export enum TokenClass {
         Punctuation = 0,
         Keyword = 1,
         Operator = 2,
@@ -11138,15 +10853,15 @@ declare namespace ts {
         StringLiteral = 8,
         RegExpLiteral = 9,
     }
-    interface ClassificationResult {
+    export interface ClassificationResult {
         finalLexState: EndOfLineState;
         entries: ClassificationInfo[];
     }
-    interface ClassificationInfo {
+    export interface ClassificationInfo {
         length: number;
         classification: TokenClass;
     }
-    interface Classifier {
+    export interface Classifier {
         /**
          * Gives lexical classifications of tokens on a line without any syntactic context.
          * For instance, a token consisting of the text 'string' can be either an identifier
@@ -11170,7 +10885,7 @@ declare namespace ts {
         getClassificationsForLine(text: string, lexState: EndOfLineState, syntacticClassifierAbsent: boolean): ClassificationResult;
         getEncodedLexicalClassifications(text: string, endOfLineState: EndOfLineState, syntacticClassifierAbsent: boolean): Classifications;
     }
-    enum ScriptElementKind {
+    export enum ScriptElementKind {
         unknown = "",
         warning = "warning",
         /** predefined type (void) or keyword (class) */
@@ -11255,7 +10970,7 @@ declare namespace ts {
         /** Jsdoc @link: in `{@link C link text}`, the link text "link text" */
         linkText = "link text",
     }
-    enum ScriptElementKindModifier {
+    export enum ScriptElementKindModifier {
         none = "",
         publicMemberModifier = "public",
         privateMemberModifier = "private",
@@ -11279,7 +10994,7 @@ declare namespace ts {
         ctsModifier = ".cts",
         cjsModifier = ".cjs",
     }
-    enum ClassificationTypeNames {
+    export enum ClassificationTypeNames {
         comment = "comment",
         identifier = "identifier",
         keyword = "keyword",
@@ -11305,7 +11020,7 @@ declare namespace ts {
         jsxText = "jsx text",
         jsxAttributeStringLiteralValue = "jsx attribute string literal value",
     }
-    enum ClassificationType {
+    export enum ClassificationType {
         comment = 1,
         identifier = 2,
         keyword = 3,
@@ -11332,7 +11047,7 @@ declare namespace ts {
         jsxAttributeStringLiteralValue = 24,
         bigintLiteral = 25,
     }
-    interface InlayHintsContext {
+    export interface InlayHintsContext {
         file: SourceFile;
         program: Program;
         cancellationToken: CancellationToken;
@@ -11340,16 +11055,16 @@ declare namespace ts {
         span: TextSpan;
         preferences: UserPreferences;
     }
-    type ExportMapInfoKey = string & {
+    export type ExportMapInfoKey = string & {
         __exportInfoKey: void;
     };
     /** The classifier is used for syntactic highlighting in editors via the TSServer */
-    function createClassifier(): Classifier;
-    interface DocumentHighlights {
+    export function createClassifier(): Classifier;
+    export interface DocumentHighlights {
         fileName: string;
         highlightSpans: HighlightSpan[];
     }
-    function createDocumentRegistry(useCaseSensitiveFileNames?: boolean, currentDirectory?: string, jsDocParsingMode?: JSDocParsingMode): DocumentRegistry;
+    export function createDocumentRegistry(useCaseSensitiveFileNames?: boolean, currentDirectory?: string, jsDocParsingMode?: JSDocParsingMode): DocumentRegistry;
     /**
      * The document registry represents a store of SourceFile objects that can be shared between
      * multiple LanguageService instances. A LanguageService instance holds on the SourceFile (AST)
@@ -11365,7 +11080,7 @@ declare namespace ts {
      * To create a default DocumentRegistry, use createDocumentRegistry to create one, and pass it
      * to all subsequent createLanguageService calls.
      */
-    interface DocumentRegistry {
+    export interface DocumentRegistry {
         /**
          * Request a stored SourceFile with a given fileName and compilationSettings.
          * The first call to acquire will call createLanguageServiceSourceFile to generate
@@ -11434,13 +11149,13 @@ declare namespace ts {
         releaseDocumentWithKey(path: Path, key: DocumentRegistryBucketKey, scriptKind: ScriptKind, impliedNodeFormat: ResolutionMode): void;
         reportStats(): string;
     }
-    type DocumentRegistryBucketKey = string & {
+    export type DocumentRegistryBucketKey = string & {
         __bucketKey: any;
     };
-    function preProcessFile(sourceText: string, readImportFiles?: boolean, detectJavaScriptImports?: boolean): PreProcessedFileInfo;
-    function transpileModule(input: string, transpileOptions: TranspileOptions): TranspileOutput;
-    function transpile(input: string, compilerOptions?: CompilerOptions, fileName?: string, diagnostics?: Diagnostic[], moduleName?: string): string;
-    interface TranspileOptions {
+    export function preProcessFile(sourceText: string, readImportFiles?: boolean, detectJavaScriptImports?: boolean): PreProcessedFileInfo;
+    export function transpileModule(input: string, transpileOptions: TranspileOptions): TranspileOutput;
+    export function transpile(input: string, compilerOptions?: CompilerOptions, fileName?: string, diagnostics?: Diagnostic[], moduleName?: string): string;
+    export interface TranspileOptions {
         compilerOptions?: CompilerOptions;
         fileName?: string;
         reportDiagnostics?: boolean;
@@ -11449,32 +11164,32 @@ declare namespace ts {
         transformers?: CustomTransformers;
         jsDocParsingMode?: JSDocParsingMode;
     }
-    interface TranspileOutput {
+    export interface TranspileOutput {
         outputText: string;
         diagnostics?: Diagnostic[];
         sourceMapText?: string;
     }
-    function toEditorSettings(options: EditorOptions | EditorSettings): EditorSettings;
-    function displayPartsToString(displayParts: SymbolDisplayPart[] | undefined): string;
-    function getDefaultCompilerOptions(): CompilerOptions;
-    function getSupportedCodeFixes(): readonly string[];
-    function createLanguageServiceSourceFile(fileName: string, scriptSnapshot: IScriptSnapshot, scriptTargetOrOptions: ScriptTarget | CreateSourceFileOptions, version: string, setNodeParents: boolean, scriptKind?: ScriptKind): SourceFile;
-    function updateLanguageServiceSourceFile(sourceFile: SourceFile, scriptSnapshot: IScriptSnapshot, version: string, textChangeRange: TextChangeRange | undefined, aggressiveChecks?: boolean): SourceFile;
-    function createLanguageService(host: LanguageServiceHost, documentRegistry?: DocumentRegistry, syntaxOnlyOrLanguageServiceMode?: boolean | LanguageServiceMode): LanguageService;
+    export function toEditorSettings(options: EditorOptions | EditorSettings): EditorSettings;
+    export function displayPartsToString(displayParts: SymbolDisplayPart[] | undefined): string;
+    export function getDefaultCompilerOptions(): CompilerOptions;
+    export function getSupportedCodeFixes(): readonly string[];
+    export function createLanguageServiceSourceFile(fileName: string, scriptSnapshot: IScriptSnapshot, scriptTargetOrOptions: ScriptTarget | CreateSourceFileOptions, version: string, setNodeParents: boolean, scriptKind?: ScriptKind): SourceFile;
+    export function updateLanguageServiceSourceFile(sourceFile: SourceFile, scriptSnapshot: IScriptSnapshot, version: string, textChangeRange: TextChangeRange | undefined, aggressiveChecks?: boolean): SourceFile;
+    export function createLanguageService(host: LanguageServiceHost, documentRegistry?: DocumentRegistry, syntaxOnlyOrLanguageServiceMode?: boolean | LanguageServiceMode): LanguageService;
     /**
      * Get the path of the default library files (lib.d.ts) as distributed with the typescript
      * node package.
      * The functionality is not supported if the ts module is consumed outside of a node module.
      */
-    function getDefaultLibFilePath(options: CompilerOptions): string;
+    export function getDefaultLibFilePath(options: CompilerOptions): string;
     /** The version of the language service API */
-    const servicesVersion = "0.8";
+    export const servicesVersion = "0.8";
     /**
      * Transform one or more nodes using the supplied transformers.
      * @param source A single `Node` or an array of `Node` objects.
      * @param transformers An array of `TransformerFactory` callbacks used to process the transformation.
      * @param compilerOptions Optional compiler options.
      */
-    function transform<T extends Node>(source: T | T[], transformers: TransformerFactory<T>[], compilerOptions?: CompilerOptions): TransformationResult<T>;
+    export function transform<T extends Node>(source: T | T[], transformers: TransformerFactory<T>[], compilerOptions?: CompilerOptions): TransformationResult<T>;
 }
 export = ts;
