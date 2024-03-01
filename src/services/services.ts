@@ -319,6 +319,13 @@ import {
     updateSourceFile,
     UserPreferences,
     VariableDeclaration,
+    normalizeSpans,
+    findTokenOnLeftOfPosition,
+    textSpanContainsTextSpan,
+    textRangeContainsTextSpan as textSpanContainsTextRange,
+    textSpanOverlapsWith,
+    textSpanIntersectsWithTextSpan,
+    textRangeIntersectsWithTextSpan,
 } from "./_namespaces/ts";
 import * as NavigateTo from "./_namespaces/ts.NavigateTo";
 import * as NavigationBar from "./_namespaces/ts.NavigationBar";
@@ -2010,16 +2017,47 @@ export function createLanguageService(
 
         // Only perform the action per file regardless of '-out' flag as LanguageServiceHost is expected to call this function per file.
         // Therefore only get diagnostics for given file.
-
-        const semanticDiagnostics = program.getSemanticDiagnostics(targetSourceFile, cancellationToken);
+        const nodes = getNodesForRanges(targetSourceFile, ranges);
+        const semanticDiagnostics = program.getSemanticDiagnostics(targetSourceFile, cancellationToken, nodes);
         if (!getEmitDeclarations(program.getCompilerOptions())) {
             return semanticDiagnostics.slice();
         }
 
+        // >> TODO: check if we need to update this too?
         // If '-d' is enabled, check for emitter error. One example of emitter error is export class implements non-export interface
         const declarationDiagnostics = program.getDeclarationDiagnostics(targetSourceFile, cancellationToken);
         return [...semanticDiagnostics, ...declarationDiagnostics];
     }
+
+    function getNodesForRanges(file: SourceFile, ranges: TextRange[]): Node[] | undefined {
+        const nodes: Node[] = [];
+        const spans = normalizeSpans(ranges.map(range => createTextSpanFromRange(range)));
+        for (const span of spans) {
+            const nodesForSpan = getNodesForSpan(file, span);
+            if (!nodesForSpan) {
+                return undefined;
+            }
+            nodes.push(...nodesForSpan);
+        }
+        return nodes;
+    }
+
+    function getNodesForSpan(file: SourceFile, span: TextSpan): Node[] | undefined {
+        // Span is the whole file
+        if (textSpanContainsTextRange(span, file)) {
+            return undefined;
+        }
+
+        const endToken = findTokenOnLeftOfPosition(file, textSpanEnd(span)) || file;
+        const enclosingNode = findAncestor(endToken, node => textSpanContainsTextRange(node, span))!;
+
+        let nodes = enclosingNode === file ? file.statements.filter(s => textRangeIntersectsWithTextSpan(s, span)) : [enclosingNode];
+        if (file.end === span.start + span.length) {
+            nodes.push(file.endOfFileToken);
+        }
+        return nodes;
+    }
+
 
     function getSuggestionDiagnostics(fileName: string): DiagnosticWithLocation[] {
         synchronizeHostData();

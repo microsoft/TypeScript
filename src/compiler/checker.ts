@@ -47047,18 +47047,43 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 clear(potentialReflectCollisions);
             }
 
-            // >> TODO: also don't set this
+            // >> TODO: region: also don't set this
             links.flags |= NodeCheckFlags.TypeChecked;
         }
     }
 
-    function getDiagnostics(sourceFile: SourceFile, ct: CancellationToken): Diagnostic[] {
+    function checkSourceFileRanges(node: SourceFile, nodes: readonly Node[]) {
+        const links = getNodeLinks(node);
+        if (!(links.flags & NodeCheckFlags.TypeChecked)) {
+            if (skipTypeChecking(node, compilerOptions, host)) {
+                return;
+            }
+
+            // >> TODO: skip this? do this?
+            // Grammar checking
+            checkGrammarSourceFile(node);
+
+            // >> TODO: filter nodes that touch the ranges somehow
+            // >> TODO: consolidate ranges?
+            
+
+            forEach(node.statements, checkSourceElement);
+            checkSourceElement(node.endOfFileToken);
+
+            // >> TODO: what about this?
+            checkDeferredNodes(node);
+        }
+
+        
+    }
+
+    function getDiagnostics(sourceFile: SourceFile, ct: CancellationToken, nodesToCheck: Node[] | undefined): Diagnostic[] {
         try {
             // Record the cancellation token so it can be checked later on during checkSourceElement.
             // Do this in a finally block so we can ensure that it gets reset back to nothing after
             // this call is done.
             cancellationToken = ct;
-            return getDiagnosticsWorker(sourceFile);
+            return getDiagnosticsWorker(sourceFile, nodesToCheck);
         }
         finally {
             cancellationToken = undefined;
@@ -47086,7 +47111,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         addLazyDiagnostic = oldAddLazyDiagnostics;
     }
 
-    function getDiagnosticsWorker(sourceFile: SourceFile): Diagnostic[] {
+    function getDiagnosticsWorker(sourceFile: SourceFile, nodesToCheck: Node[] | undefined): Diagnostic[] {
         if (sourceFile) {
             ensurePendingDiagnosticWorkComplete();
             // Some global diagnostics are deferred until they are needed and
