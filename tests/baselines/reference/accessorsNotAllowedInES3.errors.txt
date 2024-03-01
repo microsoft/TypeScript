@@ -1,16 +1,10 @@
-error TS5107: Option 'target=ES3' is deprecated and will stop functioning in TypeScript 5.5. Specify compilerOption '"ignoreDeprecations": "5.0"' to silence this error.
-accessorsNotAllowedInES3.ts(2,9): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
-accessorsNotAllowedInES3.ts(4,15): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+error TS5108: Option 'target=ES3' has been removed. Please remove it from your configuration.
 
 
-!!! error TS5107: Option 'target=ES3' is deprecated and will stop functioning in TypeScript 5.5. Specify compilerOption '"ignoreDeprecations": "5.0"' to silence this error.
-==== accessorsNotAllowedInES3.ts (2 errors) ====
+!!! error TS5108: Option 'target=ES3' has been removed. Please remove it from your configuration.
+==== accessorsNotAllowedInES3.ts (0 errors) ====
     class C {
         get x(): number { return 1; }
-            ~
-!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
     }
     var y = { get foo() { return 3; } };
-                  ~~~
-!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
     

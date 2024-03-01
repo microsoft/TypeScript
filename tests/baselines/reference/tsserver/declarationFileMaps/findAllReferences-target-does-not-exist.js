@@ -856,22 +856,35 @@ FsWatches::
 /b/bin/b.d.ts.map: *new*
   {}
 
+Projects::
+/dev/null/inferredProject1* (Inferred) *changed*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+    documentPositionMappers: 1 *changed*
+        /b/bin/b.d.ts: DocumentPositionMapper1 *new*
+
 ScriptInfos::
 /a/bin/a.d.ts
     version: Text-1
     containingProjects: 1
         /dev/null/inferredProject1*
-/b/bin/b.d.ts
+/b/bin/b.d.ts *changed*
     version: Text-1
+    sourceMapFilePath: /b/bin/b.d.ts.map *changed*
     containingProjects: 1
         /dev/null/inferredProject1*
 /b/bin/b.d.ts.map *new*
     version: Text-1
+    declarationInfoPath: /b/bin/b.d.ts
+    documentPositionMapper: DocumentPositionMapper1
     containingProjects: 0
 /user/user.ts (Open)
     version: SVC-1-0
     containingProjects: 1
         /dev/null/inferredProject1* *default*
+
+DocumentPositionMappers::
+DocumentPositionMapper1 *new*
 
 Before request
 
@@ -924,10 +937,13 @@ ScriptInfos::
         /dev/null/inferredProject1*
 /b/bin/b.d.ts
     version: Text-1
+    sourceMapFilePath: /b/bin/b.d.ts.map
     containingProjects: 1
         /dev/null/inferredProject1*
 /b/bin/b.d.ts.map
     version: Text-1
+    declarationInfoPath: /b/bin/b.d.ts
+    documentPositionMapper: DocumentPositionMapper1
     containingProjects: 0
 /user/user.ts *changed*
     open: false *changed*
@@ -1015,6 +1031,8 @@ Projects::
     dirty: true
     isClosed: true *changed*
     isOrphan: true
+    documentPositionMappers: 0 *changed*
+        /b/bin/b.d.ts: DocumentPositionMapper1 *deleted*
 /dev/null/inferredProject2* (Inferred) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
@@ -1026,10 +1044,13 @@ ScriptInfos::
         /dev/null/inferredProject1* *deleted*
 /b/bin/b.d.ts *deleted*
     version: Text-1
+    sourceMapFilePath: /b/bin/b.d.ts.map
     containingProjects: 0 *changed*
         /dev/null/inferredProject1* *deleted*
 /b/bin/b.d.ts.map *deleted*
     version: Text-1
+    declarationInfoPath: /b/bin/b.d.ts
+    documentPositionMapper: DocumentPositionMapper1
     containingProjects: 0
 /dummy/dummy.ts (Open) *new*
     version: SVC-1-0
@@ -1038,3 +1059,6 @@ ScriptInfos::
 /user/user.ts *deleted*
     version: SVC-1-0
     containingProjects: 0
+
+DocumentPositionMappers::
+DocumentPositionMapper1 *deleted*

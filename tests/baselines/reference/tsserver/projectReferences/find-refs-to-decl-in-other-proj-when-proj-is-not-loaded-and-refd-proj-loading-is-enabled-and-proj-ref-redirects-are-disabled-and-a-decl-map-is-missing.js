@@ -413,3 +413,10 @@ FsWatchesRecursive::
   {}
 /user/username/projects/myproject/b:
   {}
+
+Projects::
+/user/username/projects/myproject/a/tsconfig.json (Configured) *changed*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+    documentPositionMappers: 1 *changed*
+        /user/username/projects/myproject/b/lib/index.d.ts: identitySourceMapConsumer *new*

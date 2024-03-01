@@ -1,4 +1,4 @@
-blockScopedFunctionDeclarationInStrictModule.ts(2,14): error TS1252: Function declarations are not allowed inside blocks in strict mode when targeting 'ES3' or 'ES5'. Modules are automatically in strict mode.
+blockScopedFunctionDeclarationInStrictModule.ts(2,14): error TS1252: Function declarations are not allowed inside blocks in strict mode when targeting 'ES5'. Modules are automatically in strict mode.
 blockScopedFunctionDeclarationInStrictModule.ts(6,10): error TS2304: Cannot find name 'foo'.
 
 
@@ -6,7 +6,7 @@ blockScopedFunctionDeclarationInStrictModule.ts(6,10): error TS2304: Cannot find
     if (true) {
         function foo() { }
                  ~~~
-!!! error TS1252: Function declarations are not allowed inside blocks in strict mode when targeting 'ES3' or 'ES5'. Modules are automatically in strict mode.
+!!! error TS1252: Function declarations are not allowed inside blocks in strict mode when targeting 'ES5'. Modules are automatically in strict mode.
         foo(); // ok
     }
     

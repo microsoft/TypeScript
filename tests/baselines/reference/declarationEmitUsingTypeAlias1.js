@@ -31,11 +31,11 @@ export const bar = (thing: SomeType) => {
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.bar = exports.foo = void 0;
-var foo = function (thing) {
+const foo = (thing) => {
     return thing;
 };
 exports.foo = foo;
-var bar = function (thing) {
+const bar = (thing) => {
     return thing.arg;
 };
 exports.bar = bar;

@@ -39,6 +39,7 @@ import {
     filter,
     find,
     FindAllReferences,
+    findAncestor,
     findIndex,
     findLast,
     firstDefined,
@@ -58,6 +59,7 @@ import {
     getRelativePathFromFile,
     getSourceFileOfNode,
     getSynthesizedDeepClone,
+    getTokenAtPosition,
     getUniqueName,
     hasJSFileExtension,
     hasSyntacticModifier,
@@ -73,6 +75,7 @@ import {
     isArrayLiteralExpression,
     isBinaryExpression,
     isBindingElement,
+    isBlockLike,
     isDeclarationName,
     isExportDeclaration,
     isExportSpecifier,
@@ -164,6 +167,16 @@ registerRefactor(refactorNameForMoveToFile, {
         const statements = getStatementsToMove(context);
         if (!interactiveRefactorArguments) {
             return emptyArray;
+        }
+        /** If the start/end nodes of the selection are inside a block like node do not show the `Move to file` code action
+         *  This condition is used in order to show less often the `Move to file` code action */
+        if (context.endPosition !== undefined) {
+            const file = context.file;
+            const startNodeAncestor = findAncestor(getTokenAtPosition(file, context.startPosition), isBlockLike);
+            const endNodeAncestor = findAncestor(getTokenAtPosition(file, context.endPosition), isBlockLike);
+            if (startNodeAncestor && !isSourceFile(startNodeAncestor) && endNodeAncestor && !isSourceFile(endNodeAncestor)) {
+                return emptyArray;
+            }
         }
         if (context.preferences.allowTextChangesInNewFiles && statements) {
             return [{ name: refactorNameForMoveToFile, description, actions: [moveToFileAction] }];
@@ -893,12 +906,10 @@ export interface TopLevelVariableDeclaration extends VariableDeclaration {
 export type TopLevelDeclaration = NonVariableTopLevelDeclaration | TopLevelVariableDeclaration | BindingElement;
 
 /** @internal */
-export function createNewFileName(oldFile: SourceFile, program: Program, context: RefactorContext, host: LanguageServiceHost): string {
+export function createNewFileName(oldFile: SourceFile, program: Program, host: LanguageServiceHost, toMove: ToMove | undefined): string {
     const checker = program.getTypeChecker();
-    const toMove = getStatementsToMove(context);
-    let usage;
     if (toMove) {
-        usage = getUsageInfo(oldFile, toMove.all, checker);
+        const usage = getUsageInfo(oldFile, toMove.all, checker);
         const currentDirectory = getDirectoryPath(oldFile.fileName);
         const extension = extensionFromPath(oldFile.fileName);
         const newFileName = combinePaths(
@@ -974,6 +985,11 @@ export function getStatementsToMove(context: RefactorContext): ToMove | undefine
     return all.length === 0 ? undefined : { all, ranges };
 }
 
+/** @internal */
+export function containsJsx(statements: readonly Statement[] | undefined) {
+    return find(statements, statement => !!(statement.transformFlags & TransformFlags.ContainsJsx));
+}
+
 function isAllowedStatementToMove(statement: Statement): boolean {
     // Filters imports and prologue directives out of the range of statements to move.
     // Imports will be copied to the new file anyway, and may still be needed in the old file.
@@ -1000,8 +1016,7 @@ export function getUsageInfo(oldFile: SourceFile, toMove: readonly Statement[], 
     const oldImportsNeededByTargetFile = new Map<Symbol, /*isValidTypeOnlyUseSite*/ boolean>();
     const targetFileImportsFromOldFile = new Set<Symbol>();
 
-    const containsJsx = find(toMove, statement => !!(statement.transformFlags & TransformFlags.ContainsJsx));
-    const jsxNamespaceSymbol = getJsxNamespaceSymbol(containsJsx);
+    const jsxNamespaceSymbol = getJsxNamespaceSymbol(containsJsx(toMove));
 
     if (jsxNamespaceSymbol) { // Might not exist (e.g. in non-compiling code)
         oldImportsNeededByTargetFile.set(jsxNamespaceSymbol, false);

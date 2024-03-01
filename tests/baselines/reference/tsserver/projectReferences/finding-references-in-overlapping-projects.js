@@ -782,23 +782,11 @@ Info seq  [hh:mm:ss:mss] Search path: /user/username/projects/solution/a
 Info seq  [hh:mm:ss:mss] For info: /user/username/projects/solution/a/index.ts :: Config file name: /user/username/projects/solution/a/tsconfig.json
 Info seq  [hh:mm:ss:mss] Search path: /user/username/projects/solution/a
 Info seq  [hh:mm:ss:mss] For info: /user/username/projects/solution/a/index.ts :: Config file name: /user/username/projects/solution/a/tsconfig.json
-Info seq  [hh:mm:ss:mss] Search path: /user/username/projects/solution/b
-Info seq  [hh:mm:ss:mss] For info: /user/username/projects/solution/b/index.ts :: Config file name: /user/username/projects/solution/b/tsconfig.json
-Info seq  [hh:mm:ss:mss] Search path: /user/username/projects/solution/b
-Info seq  [hh:mm:ss:mss] For info: /user/username/projects/solution/b/index.ts :: Config file name: /user/username/projects/solution/b/tsconfig.json
-Info seq  [hh:mm:ss:mss] Search path: /user/username/projects/solution/b
-Info seq  [hh:mm:ss:mss] For info: /user/username/projects/solution/b/index.ts :: Config file name: /user/username/projects/solution/b/tsconfig.json
 Info seq  [hh:mm:ss:mss] Finding references to /user/username/projects/solution/a/index.ts position 34 in project /user/username/projects/solution/d/tsconfig.json
 Info seq  [hh:mm:ss:mss] Search path: /user/username/projects/solution/a
 Info seq  [hh:mm:ss:mss] For info: /user/username/projects/solution/a/index.ts :: Config file name: /user/username/projects/solution/a/tsconfig.json
 Info seq  [hh:mm:ss:mss] Search path: /user/username/projects/solution/a
 Info seq  [hh:mm:ss:mss] For info: /user/username/projects/solution/a/index.ts :: Config file name: /user/username/projects/solution/a/tsconfig.json
-Info seq  [hh:mm:ss:mss] Search path: /user/username/projects/solution/b
-Info seq  [hh:mm:ss:mss] For info: /user/username/projects/solution/b/index.ts :: Config file name: /user/username/projects/solution/b/tsconfig.json
-Info seq  [hh:mm:ss:mss] Search path: /user/username/projects/solution/b
-Info seq  [hh:mm:ss:mss] For info: /user/username/projects/solution/b/index.ts :: Config file name: /user/username/projects/solution/b/tsconfig.json
-Info seq  [hh:mm:ss:mss] Search path: /user/username/projects/solution/b
-Info seq  [hh:mm:ss:mss] For info: /user/username/projects/solution/b/index.ts :: Config file name: /user/username/projects/solution/b/tsconfig.json
 Info seq  [hh:mm:ss:mss] Search path: /user/username/projects/solution/c
 Info seq  [hh:mm:ss:mss] For info: /user/username/projects/solution/c/index.ts :: Config file name: /user/username/projects/solution/c/tsconfig.json
 Info seq  [hh:mm:ss:mss] Search path: /user/username/projects/solution/c
@@ -1070,23 +1058,11 @@ Info seq  [hh:mm:ss:mss] For info: /user/username/projects/solution/a/index.ts :
 Info seq  [hh:mm:ss:mss] Search path: /user/username/projects/solution/a
 Info seq  [hh:mm:ss:mss] For info: /user/username/projects/solution/a/index.ts :: Config file name: /user/username/projects/solution/a/tsconfig.json
 Info seq  [hh:mm:ss:mss] Finding references to /user/username/projects/solution/b/index.ts position 86 in project /user/username/projects/solution/c/tsconfig.json
-Info seq  [hh:mm:ss:mss] Search path: /user/username/projects/solution/b
-Info seq  [hh:mm:ss:mss] For info: /user/username/projects/solution/b/index.ts :: Config file name: /user/username/projects/solution/b/tsconfig.json
-Info seq  [hh:mm:ss:mss] Search path: /user/username/projects/solution/b
-Info seq  [hh:mm:ss:mss] For info: /user/username/projects/solution/b/index.ts :: Config file name: /user/username/projects/solution/b/tsconfig.json
-Info seq  [hh:mm:ss:mss] Search path: /user/username/projects/solution/b
-Info seq  [hh:mm:ss:mss] For info: /user/username/projects/solution/b/index.ts :: Config file name: /user/username/projects/solution/b/tsconfig.json
 Info seq  [hh:mm:ss:mss] Search path: /user/username/projects/solution/a
 Info seq  [hh:mm:ss:mss] For info: /user/username/projects/solution/a/index.ts :: Config file name: /user/username/projects/solution/a/tsconfig.json
 Info seq  [hh:mm:ss:mss] Search path: /user/username/projects/solution/a
 Info seq  [hh:mm:ss:mss] For info: /user/username/projects/solution/a/index.ts :: Config file name: /user/username/projects/solution/a/tsconfig.json
 Info seq  [hh:mm:ss:mss] Finding references to /user/username/projects/solution/b/index.ts position 86 in project /user/username/projects/solution/d/tsconfig.json
-Info seq  [hh:mm:ss:mss] Search path: /user/username/projects/solution/b
-Info seq  [hh:mm:ss:mss] For info: /user/username/projects/solution/b/index.ts :: Config file name: /user/username/projects/solution/b/tsconfig.json
-Info seq  [hh:mm:ss:mss] Search path: /user/username/projects/solution/b
-Info seq  [hh:mm:ss:mss] For info: /user/username/projects/solution/b/index.ts :: Config file name: /user/username/projects/solution/b/tsconfig.json
-Info seq  [hh:mm:ss:mss] Search path: /user/username/projects/solution/b
-Info seq  [hh:mm:ss:mss] For info: /user/username/projects/solution/b/index.ts :: Config file name: /user/username/projects/solution/b/tsconfig.json
 Info seq  [hh:mm:ss:mss] Search path: /user/username/projects/solution/a
 Info seq  [hh:mm:ss:mss] For info: /user/username/projects/solution/a/index.ts :: Config file name: /user/username/projects/solution/a/tsconfig.json
 Info seq  [hh:mm:ss:mss] Search path: /user/username/projects/solution/a

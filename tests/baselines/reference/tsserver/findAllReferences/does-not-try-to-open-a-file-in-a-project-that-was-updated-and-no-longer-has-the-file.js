@@ -759,9 +759,11 @@ Projects::
     projectStateVersion: 2
     projectProgramVersion: 2 *changed*
     dirty: false *changed*
-/packages/core/tsconfig.json (Configured)
+/packages/core/tsconfig.json (Configured) *changed*
     projectStateVersion: 1
     projectProgramVersion: 1
+    documentPositionMappers: 1 *changed*
+        /packages/core/dist/loading-indicator.d.ts: identitySourceMapConsumer *new*
 
 ScriptInfos::
 /packages/babel-loader/src/index.ts (Open)

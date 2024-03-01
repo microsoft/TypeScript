@@ -364,7 +364,7 @@ export class A {
             const tsconfig: File = {
                 path: "/tsconfig.json",
                 content: jsonToReadableText({
-                    compilerOptions: { target: "es6", importsNotUsedAsValues: "error" },
+                    compilerOptions: { target: "es6", verbatimModuleSyntax: true },
                 }),
             };
             return createWatchedSystem([libFile, aTs, bTs, tsconfig]);
@@ -376,7 +376,7 @@ export class A {
                     sys.modifyFile(
                         "/tsconfig.json",
                         jsonToReadableText({
-                            compilerOptions: { target: "es6", importsNotUsedAsValues: "error", experimentalDecorators: true },
+                            compilerOptions: { target: "es6", verbatimModuleSyntax: true, experimentalDecorators: true },
                         }),
                     ),
                 timeouts: sys => sys.runQueuedTimeoutCallbacks(),
@@ -387,7 +387,7 @@ export class A {
                     sys.modifyFile(
                         "/tsconfig.json",
                         jsonToReadableText({
-                            compilerOptions: { target: "es6", importsNotUsedAsValues: "error", experimentalDecorators: true, emitDecoratorMetadata: true },
+                            compilerOptions: { target: "es6", verbatimModuleSyntax: true, experimentalDecorators: true, emitDecoratorMetadata: true },
                         }),
                     ),
                 timeouts: sys => sys.runQueuedTimeoutCallbacks(),
@@ -1527,7 +1527,7 @@ class D extends C { prop = 1; }`,
 
     verifyTscWatch({
         scenario,
-        subScenario: "updates errors and emit when importsNotUsedAsValues changes",
+        subScenario: "updates errors and emit when verbatimModuleSyntax changes",
         commandLineArgs: ["-w"],
         sys: () => {
             const aFile: File = {
@@ -1547,18 +1547,25 @@ export function f(p: C) { return p; }`,
         },
         edits: [
             {
-                caption: 'Set to "remove"',
-                edit: sys => sys.writeFile(`/user/username/projects/myproject/tsconfig.json`, jsonToReadableText({ compilerOptions: { importsNotUsedAsValues: "remove" } })),
+                caption: "Enable verbatimModuleSyntax",
+                edit: sys =>
+                    sys.writeFile(
+                        `/user/username/projects/myproject/tsconfig.json`,
+                        jsonToReadableText({
+                            compilerOptions: { verbatimModuleSyntax: true },
+                        }),
+                    ),
                 timeouts: sys => sys.runQueuedTimeoutCallbacks(),
             },
             {
-                caption: 'Set to "error"',
-                edit: sys => sys.writeFile(`/user/username/projects/myproject/tsconfig.json`, jsonToReadableText({ compilerOptions: { importsNotUsedAsValues: "error" } })),
-                timeouts: sys => sys.runQueuedTimeoutCallbacks(),
-            },
-            {
-                caption: 'Set to "preserve"',
-                edit: sys => sys.writeFile(`/user/username/projects/myproject/tsconfig.json`, jsonToReadableText({ compilerOptions: { importsNotUsedAsValues: "preserve" } })),
+                caption: "Disable verbatimModuleSyntax",
+                edit: sys =>
+                    sys.writeFile(
+                        `/user/username/projects/myproject/tsconfig.json`,
+                        jsonToReadableText({
+                            compilerOptions: { verbatimModuleSyntax: false },
+                        }),
+                    ),
                 timeouts: sys => sys.runQueuedTimeoutCallbacks(),
             },
         ],
