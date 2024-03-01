@@ -37424,30 +37424,22 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             if (bailedEarly || !singleReturn) return undefined;
         }
 
-        const predicate = checkIfExpressionRefinesAnyParameter(singleReturn);
-        if (predicate) {
-            const [i, type] = predicate;
-            const param = func.parameters[i];
-            if (isIdentifier(param.name)) {
-                return createTypePredicate(TypePredicateKind.Identifier, unescapeLeadingUnderscores(param.name.escapedText), i, type);
-            }
-        }
-        return undefined;
+        return checkIfExpressionRefinesAnyParameter(singleReturn);
 
-        function checkIfExpressionRefinesAnyParameter(expr: Expression): [number, Type] | undefined {
+        function checkIfExpressionRefinesAnyParameter(expr: Expression): TypePredicate | undefined {
             expr = skipParentheses(expr, /*excludeJSDocTypeAssertions*/ true);
-            const type = checkExpressionCached(expr);
-            if (!(type.flags & TypeFlags.Boolean)) return undefined;
+            const returnType = checkExpressionCached(expr);
+            if (!(returnType.flags & TypeFlags.Boolean)) return undefined;
 
             return forEach(func.parameters, (param, i) => {
                 const initType = getTypeOfSymbol(param.symbol);
-                if (!initType || initType.flags & TypeFlags.Boolean || isSymbolAssigned(param.symbol)) {
+                if (!initType || initType.flags & TypeFlags.Boolean || !isIdentifier(param.name) || isSymbolAssigned(param.symbol)) {
                     // Refining "x: boolean" to "x is true" or "x is false" isn't useful.
                     return;
                 }
                 const trueType = checkIfExpressionRefinesParameter(expr, param, initType);
                 if (trueType) {
-                    return [i, trueType];
+                    return createTypePredicate(TypePredicateKind.Identifier, unescapeLeadingUnderscores(param.name.escapedText), i, trueType);
                 }
             });
         }
