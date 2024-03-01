@@ -881,7 +881,10 @@ export function transformDeclarations(context: TransformationContext) {
         function typeFromAccessor(node: AccessorDeclaration) {
             const accessorDeclarations = resolver.getAllAccessorDeclarations(node);
             const accessorType = getTypeAnnotationFromAllAccessorDeclarations(node, accessorDeclarations);
-            return accessorType ?? inferAccessorType(accessorDeclarations.getAccessor ?? node);
+            if (accessorType) {
+                return visitTypeNode(accessorType);
+            }
+            return inferAccessorType(accessorDeclarations.getAccessor ?? node);
         }
         function typeFromVariable(node: VariableDeclaration) {
             const declaredType = node.type;
