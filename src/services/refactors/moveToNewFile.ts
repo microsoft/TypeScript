@@ -14,6 +14,7 @@ import {
     insertImports,
     isPrologueDirective,
     LanguageServiceHost,
+    last,
     ModifierFlags,
     nodeSeenTracker,
     Program,
@@ -64,7 +65,8 @@ registerRefactor(refactorName, {
     getAvailableActions: function getRefactorActionsToMoveToNewFile(context): readonly ApplicableRefactorInfo[] {
         const statements = getStatementsToMove(context);
         if (context.preferences.allowTextChangesInNewFiles && statements) {
-            return [{ name: refactorName, description, actions: [moveToNewFileAction] }];
+            const affectedTextRange = { start: statements.all[0].pos, length: statements.all.length > 1 ? last(statements.all).end - statements.all[0].pos : statements.all[0].end - statements.all[0].pos };
+            return [{ name: refactorName, description, actions: [{ ...moveToNewFileAction, range: affectedTextRange }] }];
         }
         if (context.preferences.provideRefactorNotApplicableReason) {
             return [{ name: refactorName, description, actions: [{ ...moveToNewFileAction, notApplicableReason: getLocaleSpecificMessage(Diagnostics.Selection_is_not_a_valid_statement_or_statements) }] }];

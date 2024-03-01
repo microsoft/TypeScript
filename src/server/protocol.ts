@@ -712,6 +712,11 @@ export interface RefactorActionInfo {
      * when calling 'GetEditsForRefactor'.
      */
     isInteractive?: boolean;
+
+    /**
+     * Range of code the refactoring will be applied to.
+     */
+    range?: TextSpan;
 }
 
 export interface GetEditsForRefactorRequest extends Request {
