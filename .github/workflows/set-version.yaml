@@ -87,7 +87,7 @@ jobs:
           git commit -m 'Bump version to ${{ inputs.package_version }} and LKG'
           git push
 
-      - uses: microsoft/TypeScript/.github/actions/post-workflow-result@main
+      - uses: microsoft/typescript-bot-test-triggerer/.github/actions/post-workflow-result@master
         if: ${{ !cancelled() && inputs.distinct_id }}
         with:
           success_comment: "I've set the version of ${{ inputs.branch_name }} to ${{ inputs.package_version }} for you."
