@@ -15463,7 +15463,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         createTypePredicateFromTypePredicateNode(type, signature) :
                         jsdocPredicate || noTypePredicate;
                 }
-                else if (signature.declaration && isFunctionLikeDeclaration(signature.declaration) && (!signature.resolvedReturnType || signature.resolvedReturnType === booleanType)) {
+                else if (signature.declaration && isFunctionLikeDeclaration(signature.declaration) && (!signature.resolvedReturnType || signature.resolvedReturnType.flags & TypeFlags.Boolean)) {
                     const { declaration } = signature;
                     signature.resolvedTypePredicate = noTypePredicate; // avoid infinite loop
                     signature.resolvedTypePredicate = getTypePredicateFromBody(declaration) || noTypePredicate;
@@ -37411,7 +37411,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
         // Only attempt to infer a type predicate if there's exactly one return.
         let singleReturn: Expression | undefined;
-        let singleReturnStatement: ReturnStatement | undefined;
         if (func.body && func.body.kind !== SyntaxKind.Block) {
             singleReturn = func.body; // arrow function
         }
@@ -37420,7 +37419,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
             const bailedEarly = forEachReturnStatement(func.body as Block, returnStatement => {
                 if (singleReturn || !returnStatement.expression) return true;
-                singleReturnStatement = returnStatement;
                 singleReturn = returnStatement.expression;
             });
             if (bailedEarly || !singleReturn) return undefined;
@@ -37431,8 +37429,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             const [i, type] = predicate;
             const param = func.parameters[i];
             if (isIdentifier(param.name)) {
-                // TODO: is there an alternative to the "as string" here? (It's __String)
-                return createTypePredicate(TypePredicateKind.Identifier, param.name.escapedText as string, i, type);
+                return createTypePredicate(TypePredicateKind.Identifier, unescapeLeadingUnderscores(param.name.escapedText), i, type);
             }
         }
         return undefined;
@@ -37440,11 +37437,11 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         function checkIfExpressionRefinesAnyParameter(expr: Expression): [number, Type] | undefined {
             expr = skipParentheses(expr, /*excludeJSDocTypeAssertions*/ true);
             const type = checkExpressionCached(expr);
-            if (type !== booleanType) return undefined;
+            if (!(type.flags & TypeFlags.Boolean)) return undefined;
 
             return forEach(func.parameters, (param, i) => {
-                const initType = getSymbolLinks(param.symbol).type;
-                if (!initType || initType === booleanType || isSymbolAssigned(param.symbol)) {
+                const initType = getTypeOfSymbol(param.symbol);
+                if (!initType || initType.flags & TypeFlags.Boolean || isSymbolAssigned(param.symbol)) {
                     // Refining "x: boolean" to "x is true" or "x is false" isn't useful.
                     return;
                 }
@@ -37456,7 +37453,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
 
         function checkIfExpressionRefinesParameter(expr: Expression, param: ParameterDeclaration, initType: Type): Type | undefined {
-            const antecedent = (expr as Expression & { flowNode?: FlowNode; }).flowNode ?? { flags: FlowFlags.Start };
+            const antecedent = (expr as Expression & { flowNode?: FlowNode; }).flowNode ||
+                expr.parent.kind === SyntaxKind.ReturnStatement && (expr.parent as ReturnStatement).flowNode ||
+                { flags: FlowFlags.Start };
             const trueCondition: FlowCondition = {
                 flags: FlowFlags.TrueCondition,
                 node: expr,
@@ -37473,19 +37472,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 flags: FlowFlags.FalseCondition,
             };
             const falseSubtype = getFlowTypeOfReference(param.name, trueType, trueType, func, falseCondition);
-            if (!isTypeIdenticalTo(falseSubtype, neverType)) return undefined;
-
-            // the parameter type may already have been narrowed due to an assertion.
-            // There's no precise way to represent an assertion that's also a predicate. Best not to try.
-            // We do this check last since it's unlikely to filter out many possible predicates.
-            if (singleReturnStatement?.flowNode) {
-                const typeAtReturn = getFlowTypeOfReference(param.name, initType, initType, func, singleReturnStatement?.flowNode);
-                if (typeAtReturn !== initType) {
-                    return undefined;
-                }
-            }
-
-            return trueType;
+            return falseSubtype.flags & TypeFlags.Never ? trueType : undefined;
         }
     }
 
