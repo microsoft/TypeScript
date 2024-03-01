@@ -38,11 +38,24 @@ interface Array<T> { length: number; [n: number]: T; }
 }
 
 
-/a/lib/tsc.js --w --p . --explainFiles
+/a/lib/tsc.js --w --p . --explainFiles --extendedDiagnostics
 Output::
->> Screen clear
 [[90mHH:MM:SS AM[0m] Starting compilation in watch mode...
 
+Current directory: /user/username/projects/myproject CaseSensitiveFileNames: false
+FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/tsconfig.json 2000 undefined Config file
+Synchronizing program
+CreatingProgramWith::
+  roots: ["/user/username/projects/myproject/b.ts","/user/username/projects/myproject/XY/a.ts"]
+  options: {"forceConsistentCasingInFileNames":true,"outFile":"/user/username/projects/myproject/out.js","module":4,"watch":true,"project":"/user/username/projects/myproject","explainFiles":true,"extendedDiagnostics":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
+FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/b.ts 250 undefined Source file
+FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/Xy/a.ts 250 undefined Source file
+FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/link/a.ts 250 undefined Source file
+FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 250 undefined Source file
+DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 undefined Type roots
+Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 undefined Type roots
+DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/node_modules/@types 1 undefined Type roots
+Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/node_modules/@types 1 undefined Type roots
 [96mb.ts[0m:[93m2[0m:[93m19[0m - [91merror[0m[90m TS1261: [0mAlready included file name '/user/username/projects/myproject/Xy/a.ts' differs from file name '/user/username/projects/myproject/XY/a.ts' only in casing.
   The file is in the program because:
     Imported via "./Xy/a" from file '/user/username/projects/myproject/b.ts'
@@ -62,6 +75,8 @@ b.ts
   Matched by default include pattern '**/*'
 [[90mHH:MM:SS AM[0m] Found 1 error. Watching for file changes.
 
+DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject 1 undefined Wild card directory
+Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject 1 undefined Wild card directory
 
 
 //// [/user/username/projects/myproject/out.js]
@@ -144,6 +159,7 @@ Program options: {
   "watch": true,
   "project": "/user/username/projects/myproject",
   "explainFiles": true,
+  "extendedDiagnostics": true,
   "configFilePath": "/user/username/projects/myproject/tsconfig.json"
 }
 Program structureReused: Not
@@ -170,17 +186,29 @@ export const b = 2;
 
 
 
+Output::
+FileWatcher:: Triggered with /user/username/projects/myproject/Xy/a.ts 1:: WatchInfo: /user/username/projects/myproject/Xy/a.ts 250 undefined Source file
+Scheduling update
+Elapsed:: *ms FileWatcher:: Triggered with /user/username/projects/myproject/Xy/a.ts 1:: WatchInfo: /user/username/projects/myproject/Xy/a.ts 250 undefined Source file
+FileWatcher:: Triggered with /user/username/projects/myproject/link/a.ts 1:: WatchInfo: /user/username/projects/myproject/link/a.ts 250 undefined Source file
+Scheduling update
+Elapsed:: *ms FileWatcher:: Triggered with /user/username/projects/myproject/link/a.ts 1:: WatchInfo: /user/username/projects/myproject/link/a.ts 250 undefined Source file
+
+
 Timeout callback:: count: 1
-1: timerToUpdateProgram *new*
+2: timerToUpdateProgram *new*
 
 Before running Timeout callback:: count: 1
-1: timerToUpdateProgram
+2: timerToUpdateProgram
 
 After running Timeout callback:: count: 0
 Output::
->> Screen clear
+Synchronizing program
 [[90mHH:MM:SS AM[0m] File change detected. Starting incremental compilation...
 
+CreatingProgramWith::
+  roots: ["/user/username/projects/myproject/b.ts","/user/username/projects/myproject/XY/a.ts"]
+  options: {"forceConsistentCasingInFileNames":true,"outFile":"/user/username/projects/myproject/out.js","module":4,"watch":true,"project":"/user/username/projects/myproject","explainFiles":true,"extendedDiagnostics":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
 [96mb.ts[0m:[93m2[0m:[93m19[0m - [91merror[0m[90m TS1261: [0mAlready included file name '/user/username/projects/myproject/Xy/a.ts' differs from file name '/user/username/projects/myproject/XY/a.ts' only in casing.
   The file is in the program because:
     Imported via "./Xy/a" from file '/user/username/projects/myproject/b.ts'
@@ -216,13 +244,14 @@ System.register("Xy/a", [], function (exports_1, context_1) {
         }
     };
 });
+// some comment
 System.register("link/a", [], function (exports_2, context_2) {
     "use strict";
     var a, b;
     var __moduleName = context_2 && context_2.id;
     return {
         setters: [],
-        execute: function () {
+        execute: function () {// some comment
             exports_2("a", a = 1);
             exports_2("b", b = 2);
         }
@@ -262,6 +291,7 @@ Program options: {
   "watch": true,
   "project": "/user/username/projects/myproject",
   "explainFiles": true,
+  "extendedDiagnostics": true,
   "configFilePath": "/user/username/projects/myproject/tsconfig.json"
 }
 Program structureReused: Completely

@@ -85,7 +85,7 @@ describe("unittests:: tsserver:: moduleResolution", () => {
                 }),
                 { ignoreWatches: true },
             );
-            host.invokeFsWatches(packageFile.path, "rename", /*modifiedTime*/ undefined, /*useTildeSuffix*/ undefined); // Create event instead of change
+            host.invokeFsWatches(packageFile.path, "rename", packageFile.path, /*useTildeSuffix*/ undefined); // Create event instead of change
             host.runQueuedTimeoutCallbacks(); // Failed lookup updates
             host.runQueuedTimeoutCallbacks(); // Actual update
             verifyErr();

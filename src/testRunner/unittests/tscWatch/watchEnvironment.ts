@@ -710,7 +710,7 @@ describe("unittests:: tsc-watch:: watchEnvironment:: tsc-watch with different po
                 edits: [
                     {
                         caption: "emulate access",
-                        edit: sys => sys.invokeFsWatches("/user/username/projects/myproject/main.ts", "change", /*modifiedTime*/ undefined, /*useTildeSuffix*/ undefined),
+                        edit: sys => sys.invokeFsWatches("/user/username/projects/myproject/main.ts", "change", "/user/username/projects/myproject/main.ts", /*useTildeSuffix*/ undefined),
                         timeouts: sys => sys.runQueuedTimeoutCallbacks(),
                     },
                     {
@@ -744,7 +744,7 @@ describe("unittests:: tsc-watch:: watchEnvironment:: tsc-watch with different po
             },
             {
                 caption: "receive another change event without modifying the file",
-                edit: sys => sys.invokeFsWatches("/user/username/projects/project/main.ts", "change", /*modifiedTime*/ undefined, /*useTildeSuffix*/ undefined),
+                edit: sys => sys.invokeFsWatches("/user/username/projects/project/main.ts", "change", "/user/username/projects/project/main.ts", /*useTildeSuffix*/ undefined),
                 timeouts: sys => sys.runQueuedTimeoutCallbacks(),
             },
             {
@@ -754,7 +754,7 @@ describe("unittests:: tsc-watch:: watchEnvironment:: tsc-watch with different po
             },
             {
                 caption: "receive another change event without modifying the file",
-                edit: sys => sys.invokeFsWatches("/user/username/projects/project/main.ts", "change", /*modifiedTime*/ undefined, /*useTildeSuffix*/ undefined),
+                edit: sys => sys.invokeFsWatches("/user/username/projects/project/main.ts", "change", "/user/username/projects/project/main.ts", /*useTildeSuffix*/ undefined),
                 timeouts: sys => sys.runQueuedTimeoutCallbacks(),
             },
         ],

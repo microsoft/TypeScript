@@ -43,6 +43,7 @@ describe("unittests:: tsserver:: events:: watchEvents", () => {
                 "Custom WatchedFiles",
                 "Custom WatchedDirectories",
                 host.getCanonicalFileName,
+                host,
             ),
             watchFile,
             watchDirectory,
