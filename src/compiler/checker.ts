@@ -2734,7 +2734,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
         function addDeclarationDiagnostic(id: string, message: DiagnosticMessage) {
             return (declaration: Declaration) => {
-                if (!isTypeDeclaration(declaration) && declaration.kind !== SyntaxKind.ClassDeclaration && declaration.kind !== SyntaxKind.ModuleDeclaration) {
+                if (!isTypeDeclaration(declaration) && declaration.kind !== SyntaxKind.ClassDeclaration) {
                     diagnostics.add(createDiagnosticForNode(declaration, message, id));
                 }
             };
@@ -45639,10 +45639,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             if (!isGlobalScopeAugmentation(node)) {
                 registerForUnusedIdentifiersCheck(node);
             }
-        }
-
-        if (node.name.kind === SyntaxKind.Identifier) {
-            checkTypeNameIsReserved(node.name, Diagnostics.Namespace_name_cannot_be_0);
         }
 
         addLazyDiagnostic(checkModuleDeclarationDiagnostics);

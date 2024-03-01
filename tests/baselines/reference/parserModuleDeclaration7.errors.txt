@@ -1,8 +1,0 @@
-parserModuleDeclaration7.ts(1,8): error TS2819: Namespace name cannot be 'number'.
-
-
-==== parserModuleDeclaration7.ts (1 errors) ====
-    module number.a {
-           ~~~~~~
-!!! error TS2819: Namespace name cannot be 'number'.
-    }

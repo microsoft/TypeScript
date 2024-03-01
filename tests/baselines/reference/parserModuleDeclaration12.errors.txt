@@ -1,8 +1,0 @@
-parserModuleDeclaration12.ts(1,10): error TS2819: Namespace name cannot be 'string'.
-
-
-==== parserModuleDeclaration12.ts (1 errors) ====
-    module A.string {
-             ~~~~~~
-!!! error TS2819: Namespace name cannot be 'string'.
-    }
