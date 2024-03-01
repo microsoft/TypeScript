@@ -65,6 +65,7 @@ jobs:
         with:
           retries: 3
           github-token: ${{ secrets.TS_BOT_GITHUB_TOKEN }}
+          result-encoding: string
           script: |
             const {
               PR,
@@ -134,12 +135,12 @@ jobs:
               commentBody = `I've updated #${existing.number} for you.`;
             }
 
-            core.setOutput("comment_body", commentBody);
+            return commentBody;
 
       - uses: microsoft/typescript-bot-test-triggerer/.github/actions/post-workflow-result@master
         if: ${{ !cancelled() && inputs.distinct_id }}
         with:
-          success_comment: ${{ steps.open-pr.outputs.comment_body }}
+          success_comment: ${{ steps.open-pr.outputs.result }}
           failure_comment: 'I was unable to cherry-pick this PR.'
           github_token: ${{ secrets.TS_BOT_GITHUB_TOKEN }}
           distinct_id: ${{ inputs.distinct_id }}
