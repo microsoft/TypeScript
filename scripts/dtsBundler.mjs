@@ -413,7 +413,9 @@ function emitAsNamespace(name, parent, moduleSymbol, needExportModifier) {
             }
 
             const isInternal = ts.isInternalDeclaration(statement);
-            verifyMatchingSymbols(statement, isInternal);
+            if (!ts.isModuleDeclaration(decl)) {
+                verifyMatchingSymbols(statement, isInternal);
+            }
 
             if (!isInternal) {
                 const publicStatement = ts.visitEachChild(statement, node => {
