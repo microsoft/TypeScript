@@ -13,4 +13,3 @@ function f(a) {}
 >f : (a: I) => void
 >a : I
 
-

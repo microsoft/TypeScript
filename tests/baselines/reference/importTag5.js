@@ -29,4 +29,5 @@ export interface Foo {
 /**
  * @param { Foo } foo
  */
-declare function f(foo: import("./types").Foo): void;
+declare function f(foo: Foo): void;
+import { Foo } from "./types";

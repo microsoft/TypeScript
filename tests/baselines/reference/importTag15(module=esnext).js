@@ -13,7 +13,6 @@ function f(a) {}
 
 
 
-
 //// [0.d.ts]
 export interface I {
 }
@@ -21,4 +20,6 @@ export interface I {
 /** @import { I } from './0' with { type: "json" } */
 /** @import * as foo from './0' with { type: "json" } */
 /** @param {I} a */
-declare function f(a: import("./0").I): void;
+declare function f(a: I): void;
+import { I } from './0' with { type: "json" };
+import * as foo from './0';

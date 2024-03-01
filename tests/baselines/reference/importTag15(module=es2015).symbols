@@ -13,4 +13,3 @@ function f(a) {}
 >f : Symbol(f, Decl(1.js, 0, 0))
 >a : Symbol(a, Decl(1.js, 4, 11))
 
-

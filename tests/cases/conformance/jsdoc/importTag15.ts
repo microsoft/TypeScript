@@ -13,4 +13,3 @@ export interface I { }
 
 /** @param {I} a */
 function f(a) {}
-

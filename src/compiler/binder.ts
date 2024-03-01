@@ -94,6 +94,7 @@ import {
     getExpandoInitializer,
     getHostSignatureFromJSDoc,
     getImmediatelyInvokedFunctionExpression,
+    getJSDocHost,
     getJSDocTypeTag,
     getLeftmostAccessExpression,
     getNameOfDeclaration,
@@ -229,6 +230,7 @@ import {
     JSDocClassTag,
     JSDocEnumTag,
     JSDocFunctionType,
+    JSDocImportTag,
     JSDocOverloadTag,
     JSDocParameterTag,
     JSDocPropertyLikeTag,
@@ -525,6 +527,7 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
     var lastContainer: HasLocals;
     var delayedTypeAliases: (JSDocTypedefTag | JSDocCallbackTag | JSDocEnumTag)[];
     var seenThisKeyword: boolean;
+    var jsDocImports: JSDocImportTag[];
 
     // state used by control flow analysis
     var currentFlow: FlowNode;
@@ -592,6 +595,7 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
             file.symbolCount = symbolCount;
             file.classifiableNames = classifiableNames;
             delayedBindJSDocTypedefTag();
+            bindJSDocImports();
         }
 
         file = undefined!;
@@ -603,6 +607,7 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
         blockScopeContainer = undefined!;
         lastContainer = undefined!;
         delayedTypeAliases = undefined!;
+        jsDocImports = undefined!;
         seenThisKeyword = false;
         currentFlow = undefined!;
         currentBreakTarget = undefined;
@@ -1181,6 +1186,9 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
                 bindJSDocTypeAlias(node as JSDocTypedefTag | JSDocCallbackTag | JSDocEnumTag);
                 break;
             // In source files and blocks, bind functions first to match hoisting that occurs at runtime
+            case SyntaxKind.JSDocImportTag:
+                bindJSDocImportTag(node as JSDocImportTag);
+                break;
             case SyntaxKind.SourceFile: {
                 bindEachFunctionsFirst((node as SourceFile).statements);
                 bind((node as SourceFile).endOfFileToken);
@@ -2065,6 +2073,14 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
         }
     }
 
+    function bindJSDocImportTag(node: JSDocImportTag) {
+        bind(node.tagName);
+
+        if (typeof node.comment !== "string") {
+            bindEach(node.comment);
+        }
+    }
+
     function bindOptionalExpression(node: Expression, trueTarget: FlowLabel, falseTarget: FlowLabel) {
         doWithConditionalBranches(bind, node, trueTarget, falseTarget);
         if (!isOptionalChain(node) || isOutermostOptionalChain(node)) {
@@ -2436,6 +2452,35 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
                 bind(typeAlias.fullName);
             }
         }
+        container = saveContainer;
+        lastContainer = saveLastContainer;
+        blockScopeContainer = saveBlockScopeContainer;
+        parent = saveParent;
+        currentFlow = saveCurrentFlow;
+    }
+
+    function bindJSDocImports() {
+        if (jsDocImports === undefined) {
+            return;
+        }
+
+        const saveContainer = container;
+        const saveLastContainer = lastContainer;
+        const saveBlockScopeContainer = blockScopeContainer;
+        const saveParent = parent;
+        const saveCurrentFlow = currentFlow;
+
+        for (const jsDocImportTag of jsDocImports) {
+            const host = getJSDocHost(jsDocImportTag);
+            const enclosingContainer = host ? getEnclosingContainer(host) as IsContainer | undefined : undefined;
+            const enclosingBlockScopeContainer = host ? getEnclosingBlockScopeContainer(host) as IsBlockScopedContainer | undefined : undefined;
+            container = enclosingContainer || file;
+            blockScopeContainer = enclosingBlockScopeContainer || file;
+            currentFlow = initFlowNode({ flags: FlowFlags.Start });
+            parent = jsDocImportTag;
+            bind(jsDocImportTag.importClause);
+        }
+
         container = saveContainer;
         lastContainer = saveLastContainer;
         blockScopeContainer = saveBlockScopeContainer;
@@ -2995,6 +3040,8 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
                 return (delayedTypeAliases || (delayedTypeAliases = [])).push(node as JSDocTypedefTag | JSDocCallbackTag | JSDocEnumTag);
             case SyntaxKind.JSDocOverloadTag:
                 return bind((node as JSDocOverloadTag).typeExpression);
+            case SyntaxKind.JSDocImportTag:
+                return (jsDocImports || (jsDocImports = [])).push(node as JSDocImportTag);
         }
     }
 
