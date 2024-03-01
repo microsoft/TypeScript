@@ -892,7 +892,7 @@ Info seq  [hh:mm:ss:mss] 		Projects: /dev/null/inferredProject1*
 Info seq  [hh:mm:ss:mss] 	FileName: /user/username/projects/myproject/jsFile1.js ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /dev/null/inferredProject2*
 Info seq  [hh:mm:ss:mss] 	FileName: /a/lib/lib.d.ts ProjectRootPath: undefined
-Info seq  [hh:mm:ss:mss] 		Projects: /dev/null/inferredProject2*,/dev/null/inferredProject1*
+Info seq  [hh:mm:ss:mss] 		Projects: /dev/null/inferredProject1*,/dev/null/inferredProject2*
 Info seq  [hh:mm:ss:mss] response:
     {
       "responseRequired": false
@@ -943,8 +943,8 @@ ScriptInfos::
     open: true *changed*
     version: Text-1
     containingProjects: 2 *changed*
-        /dev/null/inferredProject2* *default*
-        /dev/null/inferredProject1*
+        /dev/null/inferredProject1* *default*
+        /dev/null/inferredProject2*
         /user/username/projects/myproject/tsconfig.json *deleted*
 /user/username/projects/myproject/app.ts *deleted*
     version: Text-1

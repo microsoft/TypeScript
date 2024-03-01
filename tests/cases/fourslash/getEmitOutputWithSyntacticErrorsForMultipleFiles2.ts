@@ -1,7 +1,7 @@
 /// <reference path="fourslash.ts" />
 
 // @BaselineFile: getEmitOutputWithSyntacticErrorsForMultipleFiles2.baseline
-// @out: out.js
+// @outFile: out.js
 
 // @Filename: inputFile1.ts
 // @emitThisFile: true

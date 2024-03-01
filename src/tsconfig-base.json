@@ -6,8 +6,8 @@
         "pretty": true,
         "lib": ["es2020"],
         "target": "es2020",
-        "module": "CommonJS",
-        "moduleResolution": "node",
+        "module": "NodeNext",
+        "moduleResolution": "NodeNext",
 
         "declaration": true,
         "declarationMap": true,

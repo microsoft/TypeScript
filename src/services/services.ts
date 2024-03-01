@@ -323,7 +323,9 @@ import {
 import * as NavigateTo from "./_namespaces/ts.NavigateTo";
 import * as NavigationBar from "./_namespaces/ts.NavigationBar";
 import {
+    containsJsx,
     createNewFileName,
+    getStatementsToMove,
 } from "./_namespaces/ts.refactor";
 import * as classifier from "./classifier";
 import * as classifier2020 from "./classifier2020";
@@ -3030,13 +3032,20 @@ export function createLanguageService(
         const sourceFile = getValidSourceFile(fileName);
         const allFiles = Debug.checkDefined(program.getSourceFiles());
         const extension = extensionFromPath(fileName);
-        const files = mapDefined(allFiles, file =>
-            !program?.isSourceFileFromExternalLibrary(sourceFile) &&
-                !(sourceFile === getValidSourceFile(file.fileName) || extension === Extension.Ts && extensionFromPath(file.fileName) === Extension.Dts || extension === Extension.Dts && startsWith(getBaseFileName(file.fileName), "lib.") && extensionFromPath(file.fileName) === Extension.Dts)
-                && extension === extensionFromPath(file.fileName) ? file.fileName : undefined);
+        const toMove = getStatementsToMove(getRefactorContext(sourceFile, positionOrRange, preferences, emptyOptions));
+        const toMoveContainsJsx = containsJsx(toMove?.all);
 
-        const newFileName = createNewFileName(sourceFile, program, getRefactorContext(sourceFile, positionOrRange, preferences, emptyOptions), host);
-        return { newFileName, files };
+        const files = mapDefined(allFiles, file => {
+            const fileNameExtension = extensionFromPath(file.fileName);
+            const isValidSourceFile = !program?.isSourceFileFromExternalLibrary(sourceFile) && !(
+                sourceFile === getValidSourceFile(file.fileName) ||
+                extension === Extension.Ts && fileNameExtension === Extension.Dts ||
+                extension === Extension.Dts && startsWith(getBaseFileName(file.fileName), "lib.") && fileNameExtension === Extension.Dts
+            );
+            return isValidSourceFile && (extension === fileNameExtension || (extension === Extension.Tsx && fileNameExtension === Extension.Ts || extension === Extension.Jsx && fileNameExtension === Extension.Js) && !toMoveContainsJsx) ? file.fileName : undefined;
+        });
+
+        return { newFileName: createNewFileName(sourceFile, program, host, toMove), files };
     }
 
     function getEditsForRefactor(

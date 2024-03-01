@@ -1,5 +1,3 @@
-index.ts(2,11): error TS1378: Top-level 'await' expressions are only allowed when the 'module' option is set to 'es2022', 'esnext', 'system', 'node16', 'nodenext', or 'preserve', and the 'target' option is set to 'es2017' or higher.
-index.ts(4,5): error TS1432: Top-level 'for await' loops are only allowed when the 'module' option is set to 'es2022', 'esnext', 'system', 'node16', 'nodenext', or 'preserve', and the 'target' option is set to 'es2017' or higher.
 subfolder/index.ts(2,11): error TS1309: The current file is a CommonJS module and cannot use 'await' at the top level.
 subfolder/index.ts(4,5): error TS1309: The current file is a CommonJS module and cannot use 'await' at the top level.
 
@@ -13,15 +11,11 @@ subfolder/index.ts(4,5): error TS1309: The current file is a CommonJS module and
     for await (const y of []) {}
         ~~~~~
 !!! error TS1309: The current file is a CommonJS module and cannot use 'await' at the top level.
-==== index.ts (2 errors) ====
+==== index.ts (0 errors) ====
     // esm format file
     const x = await 1;
-              ~~~~~
-!!! error TS1378: Top-level 'await' expressions are only allowed when the 'module' option is set to 'es2022', 'esnext', 'system', 'node16', 'nodenext', or 'preserve', and the 'target' option is set to 'es2017' or higher.
     export {x};
     for await (const y of []) {}
-        ~~~~~
-!!! error TS1432: Top-level 'for await' loops are only allowed when the 'module' option is set to 'es2022', 'esnext', 'system', 'node16', 'nodenext', or 'preserve', and the 'target' option is set to 'es2017' or higher.
 ==== package.json (0 errors) ====
     {
         "name": "package",

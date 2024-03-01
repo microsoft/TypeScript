@@ -1884,12 +1884,6 @@ Info seq  [hh:mm:ss:mss] request:
     }
 Info seq  [hh:mm:ss:mss] Finding references to /user/username/projects/myproject/src/main.ts position 50 in project /user/username/projects/myproject/tsconfig-src.json
 Info seq  [hh:mm:ss:mss] Finding references to /user/username/projects/myproject/src/main.ts position 50 in project /user/username/projects/myproject/tsconfig.json
-Info seq  [hh:mm:ss:mss] Search path: /user/username/projects/myproject/src
-Info seq  [hh:mm:ss:mss] For info: /user/username/projects/myproject/src/main.ts :: Config file name: /user/username/projects/myproject/tsconfig.json
-Info seq  [hh:mm:ss:mss] Search path: /user/username/projects/myproject/src
-Info seq  [hh:mm:ss:mss] For info: /user/username/projects/myproject/src/main.ts :: Config file name: /user/username/projects/myproject/tsconfig.json
-Info seq  [hh:mm:ss:mss] Search path: /user/username/projects/myproject/src
-Info seq  [hh:mm:ss:mss] For info: /user/username/projects/myproject/src/main.ts :: Config file name: /user/username/projects/myproject/tsconfig.json
 Info seq  [hh:mm:ss:mss] Search path: /user/username/projects/myproject/src/helpers
 Info seq  [hh:mm:ss:mss] For info: /user/username/projects/myproject/src/helpers/functions.ts :: Config file name: /user/username/projects/myproject/tsconfig.json
 Info seq  [hh:mm:ss:mss] Search path: /user/username/projects/myproject/src/helpers
@@ -1990,12 +1984,6 @@ Info seq  [hh:mm:ss:mss] For info: /user/username/projects/myproject/indirect1/m
 Info seq  [hh:mm:ss:mss] Search path: /user/username/projects/myproject/indirect1
 Info seq  [hh:mm:ss:mss] For info: /user/username/projects/myproject/indirect1/main.ts :: Config file name: /user/username/projects/myproject/tsconfig.json
 Info seq  [hh:mm:ss:mss] Finding references to /user/username/projects/myproject/indirect1/main.ts position 9 in project /user/username/projects/myproject/tsconfig-indirect1.json
-Info seq  [hh:mm:ss:mss] Search path: /user/username/projects/myproject/src
-Info seq  [hh:mm:ss:mss] For info: /user/username/projects/myproject/src/main.ts :: Config file name: /user/username/projects/myproject/tsconfig.json
-Info seq  [hh:mm:ss:mss] Search path: /user/username/projects/myproject/src
-Info seq  [hh:mm:ss:mss] For info: /user/username/projects/myproject/src/main.ts :: Config file name: /user/username/projects/myproject/tsconfig.json
-Info seq  [hh:mm:ss:mss] Search path: /user/username/projects/myproject/src
-Info seq  [hh:mm:ss:mss] For info: /user/username/projects/myproject/src/main.ts :: Config file name: /user/username/projects/myproject/tsconfig.json
 Info seq  [hh:mm:ss:mss] Search path: /user/username/projects/myproject/src/helpers
 Info seq  [hh:mm:ss:mss] For info: /user/username/projects/myproject/src/helpers/functions.ts :: Config file name: /user/username/projects/myproject/tsconfig.json
 Info seq  [hh:mm:ss:mss] Search path: /user/username/projects/myproject/src/helpers
@@ -2097,12 +2085,6 @@ Info seq  [hh:mm:ss:mss] Search path: /user/username/projects/myproject/src/help
 Info seq  [hh:mm:ss:mss] For info: /user/username/projects/myproject/src/helpers/functions.ts :: Config file name: /user/username/projects/myproject/tsconfig.json
 Info seq  [hh:mm:ss:mss] Search path: /user/username/projects/myproject/src/helpers
 Info seq  [hh:mm:ss:mss] For info: /user/username/projects/myproject/src/helpers/functions.ts :: Config file name: /user/username/projects/myproject/tsconfig.json
-Info seq  [hh:mm:ss:mss] Search path: /user/username/projects/myproject/src
-Info seq  [hh:mm:ss:mss] For info: /user/username/projects/myproject/src/main.ts :: Config file name: /user/username/projects/myproject/tsconfig.json
-Info seq  [hh:mm:ss:mss] Search path: /user/username/projects/myproject/src
-Info seq  [hh:mm:ss:mss] For info: /user/username/projects/myproject/src/main.ts :: Config file name: /user/username/projects/myproject/tsconfig.json
-Info seq  [hh:mm:ss:mss] Search path: /user/username/projects/myproject/src
-Info seq  [hh:mm:ss:mss] For info: /user/username/projects/myproject/src/main.ts :: Config file name: /user/username/projects/myproject/tsconfig.json
 Info seq  [hh:mm:ss:mss] response:
     {
       "response": {
@@ -2309,10 +2291,12 @@ Projects::
         /user/username/projects/myproject/tsconfig.json
         /user/username/projects/myproject/tsconfig-indirect1.json
         /user/username/projects/myproject/tsconfig-indirect2.json
-/user/username/projects/myproject/tsconfig-src.json (Configured)
+/user/username/projects/myproject/tsconfig-src.json (Configured) *changed*
     projectStateVersion: 2
     projectProgramVersion: 2
     noOpenRef: true
+    documentPositionMappers: 1 *changed*
+        /user/username/projects/myproject/target/src/helpers/functions.d.ts: DocumentPositionMapper1 *new*
 /user/username/projects/myproject/tsconfig.json (Configured) *changed*
     projectStateVersion: 2
     projectProgramVersion: 2
@@ -2325,8 +2309,8 @@ ScriptInfos::
 /a/lib/lib.d.ts *changed*
     version: Text-1
     containingProjects: 5 *changed*
-        /user/username/projects/myproject/tsconfig-src.json
         /user/username/projects/myproject/tsconfig.json
+        /user/username/projects/myproject/tsconfig-src.json
         /dev/null/inferredProject1*
         /user/username/projects/myproject/tsconfig-indirect1.json *new*
         /user/username/projects/myproject/tsconfig-indirect2.json *new*
@@ -2363,10 +2347,18 @@ ScriptInfos::
         /user/username/projects/myproject/tsconfig-indirect2.json *new*
 /user/username/projects/myproject/target/src/helpers/functions.d.ts *new*
     version: Text-1
+    sourceMapFilePath: /user/username/projects/myproject/target/src/helpers/functions.d.ts.map
     containingProjects: 0
 /user/username/projects/myproject/target/src/helpers/functions.d.ts.map *new*
     version: Text-1
+    declarationInfoPath: /user/username/projects/myproject/target/src/helpers/functions.d.ts
+    sourceInfos: 1
+        /user/username/projects/myproject/src/helpers/functions.ts
+    documentPositionMapper: DocumentPositionMapper1
     containingProjects: 0
+
+DocumentPositionMappers::
+DocumentPositionMapper1 *new*
 
 Before request
 
@@ -2483,8 +2475,8 @@ ScriptInfos::
 /a/lib/lib.d.ts
     version: Text-1
     containingProjects: 5
-        /user/username/projects/myproject/tsconfig-src.json
         /user/username/projects/myproject/tsconfig.json
+        /user/username/projects/myproject/tsconfig-src.json
         /dev/null/inferredProject1*
         /user/username/projects/myproject/tsconfig-indirect1.json
         /user/username/projects/myproject/tsconfig-indirect2.json
@@ -2522,9 +2514,14 @@ ScriptInfos::
         /user/username/projects/myproject/tsconfig-indirect2.json
 /user/username/projects/myproject/target/src/helpers/functions.d.ts
     version: Text-1
+    sourceMapFilePath: /user/username/projects/myproject/target/src/helpers/functions.d.ts.map
     containingProjects: 0
 /user/username/projects/myproject/target/src/helpers/functions.d.ts.map
     version: Text-1
+    declarationInfoPath: /user/username/projects/myproject/target/src/helpers/functions.d.ts
+    sourceInfos: 1
+        /user/username/projects/myproject/src/helpers/functions.ts
+    documentPositionMapper: DocumentPositionMapper1
     containingProjects: 0
 
 Before request
@@ -2644,8 +2641,8 @@ ScriptInfos::
 /a/lib/lib.d.ts
     version: Text-1
     containingProjects: 5
-        /user/username/projects/myproject/tsconfig-src.json
         /user/username/projects/myproject/tsconfig.json
+        /user/username/projects/myproject/tsconfig-src.json
         /dev/null/inferredProject1*
         /user/username/projects/myproject/tsconfig-indirect1.json
         /user/username/projects/myproject/tsconfig-indirect2.json
@@ -2683,9 +2680,14 @@ ScriptInfos::
         /user/username/projects/myproject/tsconfig-indirect2.json
 /user/username/projects/myproject/target/src/helpers/functions.d.ts
     version: Text-1
+    sourceMapFilePath: /user/username/projects/myproject/target/src/helpers/functions.d.ts.map
     containingProjects: 0
 /user/username/projects/myproject/target/src/helpers/functions.d.ts.map
     version: Text-1
+    declarationInfoPath: /user/username/projects/myproject/target/src/helpers/functions.d.ts
+    sourceInfos: 1
+        /user/username/projects/myproject/src/helpers/functions.ts
+    documentPositionMapper: DocumentPositionMapper1
     containingProjects: 0
 
 Before request
@@ -3032,6 +3034,8 @@ Projects::
     projectProgramVersion: 2
     isClosed: true *changed*
     noOpenRef: true
+    documentPositionMappers: 0 *changed*
+        /user/username/projects/myproject/target/src/helpers/functions.d.ts: DocumentPositionMapper1 *deleted*
 /user/username/projects/myproject/tsconfig.json (Configured) *deleted*
     projectStateVersion: 2
     projectProgramVersion: 2
@@ -3047,8 +3051,8 @@ ScriptInfos::
     version: Text-1
     containingProjects: 1 *changed*
         /user/username/projects/myproject/indirect3/tsconfig.json *new*
-        /user/username/projects/myproject/tsconfig-src.json *deleted*
         /user/username/projects/myproject/tsconfig.json *deleted*
+        /user/username/projects/myproject/tsconfig-src.json *deleted*
         /dev/null/inferredProject1* *deleted*
         /user/username/projects/myproject/tsconfig-indirect1.json *deleted*
         /user/username/projects/myproject/tsconfig-indirect2.json *deleted*
@@ -3088,10 +3092,15 @@ ScriptInfos::
         /user/username/projects/myproject/tsconfig-indirect2.json *deleted*
 /user/username/projects/myproject/target/src/helpers/functions.d.ts *changed*
     version: Text-1
+    sourceMapFilePath: /user/username/projects/myproject/target/src/helpers/functions.d.ts.map
     containingProjects: 1 *changed*
         /user/username/projects/myproject/indirect3/tsconfig.json *new*
 /user/username/projects/myproject/target/src/helpers/functions.d.ts.map
     version: Text-1
+    declarationInfoPath: /user/username/projects/myproject/target/src/helpers/functions.d.ts
+    sourceInfos: 1
+        /user/username/projects/myproject/src/helpers/functions.ts
+    documentPositionMapper: DocumentPositionMapper1
     containingProjects: 0
 /user/username/projects/myproject/target/src/main.d.ts *new*
     version: Text-1
@@ -3655,6 +3664,9 @@ Projects::
 /user/username/projects/myproject/indirect3/tsconfig.json (Configured) *changed*
     projectStateVersion: 1
     projectProgramVersion: 1
+    documentPositionMappers: 2 *changed*
+        /user/username/projects/myproject/target/src/main.d.ts: DocumentPositionMapper2 *new*
+        /user/username/projects/myproject/target/src/helpers/functions.d.ts: DocumentPositionMapper1 *new*
     originalConfiguredProjects: 2 *changed*
         /user/username/projects/myproject/tsconfig-src.json *new*
         /user/username/projects/myproject/tsconfig.json *new*
@@ -3730,15 +3742,29 @@ ScriptInfos::
         /user/username/projects/myproject/tsconfig-indirect2.json
 /user/username/projects/myproject/target/src/helpers/functions.d.ts
     version: Text-1
+    sourceMapFilePath: /user/username/projects/myproject/target/src/helpers/functions.d.ts.map
     containingProjects: 1
         /user/username/projects/myproject/indirect3/tsconfig.json
 /user/username/projects/myproject/target/src/helpers/functions.d.ts.map
     version: Text-1
+    declarationInfoPath: /user/username/projects/myproject/target/src/helpers/functions.d.ts
+    sourceInfos: 1
+        /user/username/projects/myproject/src/helpers/functions.ts
+    documentPositionMapper: DocumentPositionMapper1
     containingProjects: 0
-/user/username/projects/myproject/target/src/main.d.ts
+/user/username/projects/myproject/target/src/main.d.ts *changed*
     version: Text-1
+    sourceMapFilePath: /user/username/projects/myproject/target/src/main.d.ts.map *changed*
     containingProjects: 1
         /user/username/projects/myproject/indirect3/tsconfig.json
 /user/username/projects/myproject/target/src/main.d.ts.map *new*
     version: Text-1
+    declarationInfoPath: /user/username/projects/myproject/target/src/main.d.ts
+    sourceInfos: 1
+        /user/username/projects/myproject/src/main.ts
+    documentPositionMapper: DocumentPositionMapper2
     containingProjects: 0
+
+DocumentPositionMappers::
+DocumentPositionMapper1
+DocumentPositionMapper2 *new*

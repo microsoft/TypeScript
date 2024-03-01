@@ -111,9 +111,9 @@ var __importStar = (this && this.__importStar) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 // cjs format file
-var cjsi = __importStar(require("inner/cjs/exclude/index"));
-var mjsi = __importStar(require("inner/mjs/exclude/index"));
-var typei = __importStar(require("inner/js/exclude/index"));
+const cjsi = __importStar(require("inner/cjs/exclude/index"));
+const mjsi = __importStar(require("inner/mjs/exclude/index"));
+const typei = __importStar(require("inner/js/exclude/index"));
 cjsi;
 mjsi;
 typei;

@@ -490,6 +490,13 @@ watchedDirectoriesRecursive::
 /tests/cases/fourslash/server/node_modules/@types:
   {}
 
+Projects::
+/tests/cases/fourslash/server/buttonClass/tsconfig.json (Configured) *changed*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+    documentPositionMappers: 1 *changed*
+        /tests/cases/fourslash/server/baseclass/source.d.ts: DocumentPositionMapper1 *new*
+
 ScriptInfos::
 /lib.d.ts
     version: Text-1
@@ -503,12 +510,17 @@ ScriptInfos::
     version: Text-1
     containingProjects: 1
         /tests/cases/fourslash/server/buttonClass/tsconfig.json
-/tests/cases/fourslash/server/BaseClass/Source.d.ts (Open)
+/tests/cases/fourslash/server/BaseClass/Source.d.ts (Open) *changed*
     version: SVC-1-0
+    sourceMapFilePath: /tests/cases/fourslash/server/baseclass/source.d.ts.map *changed*
     containingProjects: 1
         /tests/cases/fourslash/server/buttonClass/tsconfig.json *default*
 /tests/cases/fourslash/server/BaseClass/Source.d.ts.map *new*
     version: Text-1
+    declarationInfoPath: /tests/cases/fourslash/server/baseclass/source.d.ts
+    sourceInfos: 1
+        /tests/cases/fourslash/server/baseclass/source.ts
+    documentPositionMapper: DocumentPositionMapper1
     containingProjects: 0
 /tests/cases/fourslash/server/BaseClass/Source.ts *new*
     version: Text-1
@@ -517,6 +529,9 @@ ScriptInfos::
     version: SVC-1-0
     containingProjects: 1
         /tests/cases/fourslash/server/buttonClass/tsconfig.json *default*
+
+DocumentPositionMappers::
+DocumentPositionMapper1 *new*
 
 Info seq  [hh:mm:ss:mss] request:
     {

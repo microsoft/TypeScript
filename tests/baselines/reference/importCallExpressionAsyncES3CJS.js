@@ -68,7 +68,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.l = exports.cl2 = exports.obj = exports.cl1 = exports.fn = void 0;
 function fn() {
     return __awaiter(this, void 0, void 0, function () {

@@ -200,11 +200,6 @@ Info seq  [hh:mm:ss:mss] request:
             "options": {
               "allowNonTsExtensions": true,
               "noEmitForJsFiles": true
-            },
-            "typeAcquisition": {
-              "include": [],
-              "exclude": [],
-              "enable": false
             }
           },
           {
@@ -432,11 +427,6 @@ Info seq  [hh:mm:ss:mss] request:
             "options": {
               "allowNonTsExtensions": true,
               "noEmitForJsFiles": true
-            },
-            "typeAcquisition": {
-              "include": [],
-              "exclude": [],
-              "enable": false
             }
           }
         ]

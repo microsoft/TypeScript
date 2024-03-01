@@ -211,6 +211,37 @@ Info seq  [hh:mm:ss:mss] response:
         }
       ]
     }
+After Request
+Projects::
+/tsconfig.json (Configured) *changed*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+    documentPositionMappers: 1 *changed*
+        /node_modules/bar/index.d.ts: identitySourceMapConsumer *new*
+
+ScriptInfos::
+/index.ts (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /tsconfig.json *default*
+/lib.d.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib.decorators.d.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib.decorators.legacy.d.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/node_modules/bar/index.d.ts *changed*
+    version: Text-1
+    sourceMapFilePath: false *changed*
+    containingProjects: 1
+        /tsconfig.json
+
 Info seq  [hh:mm:ss:mss] request:
     {
       "seq": 2,

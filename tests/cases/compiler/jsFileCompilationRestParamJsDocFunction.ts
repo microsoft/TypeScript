@@ -1,5 +1,5 @@
 // @allowJs: true
-// @out: apply.js
+// @outFile: apply.js
 // @module: amd
 
 // @filename: _apply.js
