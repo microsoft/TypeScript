@@ -886,7 +886,7 @@ if (isNumOrStr(unk)) {
 
 // A function can be a type predicate even if it throws.
 function assertAndPredicate(x: string | number | Date) {
->assertAndPredicate : (x: string | number | Date) => boolean
+>assertAndPredicate : (x: string | number | Date) => x is string
 >x : string | number | Date
 
   if (x instanceof Date) {
@@ -910,12 +910,12 @@ declare let snd: string | number | Date;
 
 if (assertAndPredicate(snd)) {
 >assertAndPredicate(snd) : boolean
->assertAndPredicate : (x: string | number | Date) => boolean
+>assertAndPredicate : (x: string | number | Date) => x is string
 >snd : string | number | Date
 
   let t: string = snd; // should error
 >t : string
->snd : string | number | Date
+>snd : string
 }
 
 function isNumberWithThis(this: Date, x: number | string) {
