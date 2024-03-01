@@ -28,7 +28,9 @@ declare namespace Intl {
     }
 
     interface NumberFormat {
-        formatRange(start: number | bigint, end: number | bigint): string;
-        formatRangeToParts(start: number | bigint, end: number | bigint): NumberRangeFormatPart[];
+        format(value: number | bigint | `${number}`): string;
+        formatToParts(value: number | bigint | `${number}`): NumberFormatPart[];
+        formatRange(start: number | bigint | `${number}`, end: number | bigint | `${number}`): string;
+        formatRangeToParts(start: number | bigint | `${number}`, end: number | bigint | `${number}`): NumberRangeFormatPart[];
     }
 }
