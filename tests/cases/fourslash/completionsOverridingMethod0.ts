@@ -266,7 +266,7 @@ verify.completions({
             name: "met",
             sortText: completion.SortText.LocationPriority,
             insertText: "static met(n: number): number {\n}",
-            filterText: "met",
+            filterText: "static met",
         }
     ],
 });

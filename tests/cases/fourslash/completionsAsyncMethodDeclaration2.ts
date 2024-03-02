@@ -5,8 +5,8 @@
 ////   abstract bar(): Promise<void>;
 //// }
 ////
-//// class Foo extends AFoo {[|
-////   async b/*1*/|]
+//// class Foo extends AFoo {
+////   [|async b/*1*/|]
 //// }
 
 verify.completions({
@@ -14,7 +14,7 @@ verify.completions({
     includes: {
         name: "bar",
         insertText: "async bar(): Promise<void> {\n}",
-        filterText: "bar",
+        filterText: "async bar",
         replacementSpan: test.ranges()[0]
     },
     isNewIdentifierLocation: true,
