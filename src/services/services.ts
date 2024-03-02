@@ -75,6 +75,7 @@ import {
     findAncestor,
     findChildOfKind,
     findPrecedingToken,
+    findTokenOnLeftOfPosition,
     first,
     firstDefined,
     firstOrOnly,
@@ -223,6 +224,7 @@ import {
     NodeFlags,
     noop,
     normalizePath,
+    normalizeSpans,
     NumberLiteralType,
     NumericLiteral,
     ObjectAllocator,
@@ -297,7 +299,10 @@ import {
     TextChangeRange,
     TextInsertion,
     TextRange,
+    textRangeContainsTextSpan,
+    textRangeIntersectsWithTextSpan,
     TextSpan,
+    textSpanContainsTextRange,
     textSpanEnd,
     timestamp,
     TodoComment,
@@ -319,11 +324,6 @@ import {
     updateSourceFile,
     UserPreferences,
     VariableDeclaration,
-    normalizeSpans,
-    findTokenOnLeftOfPosition,
-    textRangeIntersectsWithTextSpan,
-    textSpanContainsTextRange,
-    textRangeContainsTextSpan,
 } from "./_namespaces/ts";
 import * as NavigateTo from "./_namespaces/ts.NavigateTo";
 import * as NavigationBar from "./_namespaces/ts.NavigationBar";
@@ -2021,7 +2021,7 @@ export function createLanguageService(
         const nodes = getNodesForRanges(targetSourceFile, ranges);
         const semanticDiagnostics = program.getSemanticDiagnostics(targetSourceFile, cancellationToken, nodes);
         // if (!getEmitDeclarations(program.getCompilerOptions())) {
-            return semanticDiagnostics.slice();
+        return semanticDiagnostics.slice();
         // }
 
         // >> TODO: check if we need to update this too?
@@ -2055,13 +2055,12 @@ export function createLanguageService(
         const endToken = findTokenOnLeftOfPosition(file, textSpanEnd(span)) || file;
         const enclosingNode = findAncestor(endToken, node => textRangeContainsTextSpan(node, span))!;
 
-        let nodes = enclosingNode === file ? file.statements.filter(s => textRangeIntersectsWithTextSpan(s, span)) : [enclosingNode];
+        const nodes = enclosingNode === file ? file.statements.filter(s => textRangeIntersectsWithTextSpan(s, span)) : [enclosingNode];
         if (file.end === span.start + span.length) {
             nodes.push(file.endOfFileToken);
         }
         return nodes;
     }
-
 
     function getSuggestionDiagnostics(fileName: string): DiagnosticWithLocation[] {
         synchronizeHostData();

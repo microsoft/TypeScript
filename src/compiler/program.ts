@@ -327,7 +327,6 @@ import {
     WriteFileCallback,
     WriteFileCallbackData,
     writeFileEnsuringDirectories,
-    TextRange,
 } from "./_namespaces/ts";
 import * as performance from "./_namespaces/ts.performance";
 
@@ -2823,7 +2822,8 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
         return getDiagnosticsHelper(
             sourceFile,
             (sourceFile, cancellationToken) => getSemanticDiagnosticsForFile(sourceFile, cancellationToken, nodesToCheck), // >> TODO: this is slightly sketchy because relies on this function only being called with the same sourcefile that originated the nodesToCheck
-            cancellationToken);
+            cancellationToken,
+        );
     }
 
     function getCachedSemanticDiagnostics(sourceFile?: SourceFile): readonly Diagnostic[] | undefined {
@@ -2890,7 +2890,8 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
     function getSemanticDiagnosticsForFile(
         sourceFile: SourceFile,
         cancellationToken: CancellationToken | undefined,
-        nodesToCheck: Node[] | undefined): readonly Diagnostic[] {
+        nodesToCheck: Node[] | undefined,
+    ): readonly Diagnostic[] {
         // >> TODO: what the hell is `getProgramDiagnostics` doing??? it does something related to directives/comments...
         return concatenate(
             filterSemanticDiagnostics(getBindAndCheckDiagnosticsForFile(sourceFile, cancellationToken, nodesToCheck), options),
@@ -2901,7 +2902,8 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
     function getBindAndCheckDiagnosticsForFile(
         sourceFile: SourceFile,
         cancellationToken: CancellationToken | undefined,
-        nodesToCheck: Node[] | undefined): readonly Diagnostic[] {
+        nodesToCheck: Node[] | undefined,
+    ): readonly Diagnostic[] {
         // >> TODO: we might not want to cache if `nodesToCheck` is provided??
         if (nodesToCheck) {
             return getBindAndCheckDiagnosticsForFileNoCache(sourceFile, cancellationToken, nodesToCheck);
@@ -2912,7 +2914,8 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
     function getBindAndCheckDiagnosticsForFileNoCache(
         sourceFile: SourceFile,
         cancellationToken: CancellationToken | undefined,
-        nodesToCheck?: Node[]): readonly Diagnostic[] {
+        nodesToCheck?: Node[],
+    ): readonly Diagnostic[] {
         return runWithCancellationToken(() => {
             if (skipTypeChecking(sourceFile, options, program)) {
                 return emptyArray;

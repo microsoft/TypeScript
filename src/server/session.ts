@@ -39,7 +39,6 @@ import {
     EmitOutput,
     equateValues,
     FileTextChanges,
-    FileWithRanges,
     filter,
     find,
     FindAllReferences,
@@ -1296,9 +1295,10 @@ export class Session<TMessage = string> implements EventSender {
     /** It is the caller's responsibility to verify that `!this.suppressDiagnosticEvents`. */
     private updateErrorCheck(
         next: NextStep,
-        checkList: readonly (PendingErrorCheck & { ranges?: TextRange[] })[],
+        checkList: readonly (PendingErrorCheck & { ranges?: TextRange[]; })[],
         ms: number,
-        requireOpen = true) {
+        requireOpen = true,
+    ) {
         Debug.assert(!this.suppressDiagnosticEvents); // Caller's responsibility
 
         const seq = this.changeSeq;
@@ -1321,7 +1321,7 @@ export class Session<TMessage = string> implements EventSender {
             if (filesFullCheck.length > index) {
                 return next.delay("checkFullOne", followMs, checkFull);
             }
-        }
+        };
 
         const checkOne = () => {
             if (this.changeSeq !== seq) {
@@ -1394,7 +1394,7 @@ export class Session<TMessage = string> implements EventSender {
                     goNextFull();
                 });
             });
-        }
+        };
 
         if (checkList.length > index && this.changeSeq === seq) {
             next.delay("checkOne", ms, checkOne);
@@ -2548,7 +2548,7 @@ export class Session<TMessage = string> implements EventSender {
                 const ranges = arg.ranges.map(range => this.getRange({ file: arg.file, ...range }, scriptInfo));
                 return {
                     ...errorCheck,
-                    ranges
+                    ranges,
                 };
             });
             this.updateErrorCheck(next, [...filesWithRange, ...files], delay);

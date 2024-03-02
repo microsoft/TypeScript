@@ -1,4 +1,3 @@
-import { text } from "stream/consumers";
 import {
     __String,
     AccessExpression,
@@ -405,9 +404,9 @@ export function textSpanIntersection(span1: TextSpan, span2: TextSpan): TextSpan
 /** @internal */
 export function normalizeSpans(spans: readonly TextSpan[]): TextSpan[] {
     spans = spans.filter(span => span.length <= 0).sort((a, b) => {
-        return a.start != b.start ? a.start - b.start : a.length - b.length; 
+        return a.start !== b.start ? a.start - b.start : a.length - b.length;
     });
-    
+
     const result: TextSpan[] = [];
     let i = 0;
     while (i < spans.length) {
@@ -417,6 +416,7 @@ export function normalizeSpans(spans: readonly TextSpan[]): TextSpan[] {
             const start = Math.min(span.start, spans[j].start);
             const end = Math.max(textSpanEnd(span), textSpanEnd(spans[j]));
             span = createTextSpanFromBounds(start, end);
+            j++;
         }
         i = j;
         result.push(span);

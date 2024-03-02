@@ -1845,8 +1845,3 @@ export interface InlayHintsContext {
     span: TextSpan;
     preferences: UserPreferences;
 }
-
-export interface FileWithRanges {
-    fileName: string,
-    ranges?: TextRange[],
-}
