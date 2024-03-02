@@ -321,11 +321,9 @@ import {
     VariableDeclaration,
     normalizeSpans,
     findTokenOnLeftOfPosition,
-    textSpanContainsTextSpan,
-    textRangeContainsTextSpan as textSpanContainsTextRange,
-    textSpanOverlapsWith,
-    textSpanIntersectsWithTextSpan,
     textRangeIntersectsWithTextSpan,
+    textSpanContainsTextRange,
+    textRangeContainsTextSpan,
 } from "./_namespaces/ts";
 import * as NavigateTo from "./_namespaces/ts.NavigateTo";
 import * as NavigationBar from "./_namespaces/ts.NavigationBar";
@@ -1990,7 +1988,10 @@ export function createLanguageService(
      * getSemanticDiagnostics return array of Diagnostics. If '-d' is not enabled, only report semantic errors
      * If '-d' enabled, report both semantic and emitter errors
      */
-    function getSemanticDiagnostics(fileName: string): Diagnostic[] {
+    function getSemanticDiagnostics(fileName: string, ranges?: TextRange[]): Diagnostic[] {
+        if (ranges) {
+            return getRegionSemanticDiagnostics(fileName, ranges);
+        }
         synchronizeHostData();
 
         const targetSourceFile = getValidSourceFile(fileName);
@@ -2019,14 +2020,14 @@ export function createLanguageService(
         // Therefore only get diagnostics for given file.
         const nodes = getNodesForRanges(targetSourceFile, ranges);
         const semanticDiagnostics = program.getSemanticDiagnostics(targetSourceFile, cancellationToken, nodes);
-        if (!getEmitDeclarations(program.getCompilerOptions())) {
+        // if (!getEmitDeclarations(program.getCompilerOptions())) {
             return semanticDiagnostics.slice();
-        }
+        // }
 
         // >> TODO: check if we need to update this too?
         // If '-d' is enabled, check for emitter error. One example of emitter error is export class implements non-export interface
-        const declarationDiagnostics = program.getDeclarationDiagnostics(targetSourceFile, cancellationToken);
-        return [...semanticDiagnostics, ...declarationDiagnostics];
+        // const declarationDiagnostics = program.getDeclarationDiagnostics(targetSourceFile, cancellationToken);
+        // return [...semanticDiagnostics, ...declarationDiagnostics];
     }
 
     function getNodesForRanges(file: SourceFile, ranges: TextRange[]): Node[] | undefined {
@@ -2039,6 +2040,9 @@ export function createLanguageService(
             }
             nodes.push(...nodesForSpan);
         }
+        if (!nodes.length) {
+            return undefined;
+        }
         return nodes;
     }
 
@@ -2049,7 +2053,7 @@ export function createLanguageService(
         }
 
         const endToken = findTokenOnLeftOfPosition(file, textSpanEnd(span)) || file;
-        const enclosingNode = findAncestor(endToken, node => textSpanContainsTextRange(node, span))!;
+        const enclosingNode = findAncestor(endToken, node => textRangeContainsTextSpan(node, span))!;
 
         let nodes = enclosingNode === file ? file.statements.filter(s => textRangeIntersectsWithTextSpan(s, span)) : [enclosingNode];
         if (file.end === span.start + span.length) {

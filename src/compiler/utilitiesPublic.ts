@@ -361,6 +361,10 @@ export function textSpanContainsTextRange(span: TextSpan, range: TextRange) {
     return range.pos >= span.start && range.end <= textSpanEnd(span);
 }
 
+export function textRangeContainsTextSpan(range: TextRange, span: TextSpan) {
+    return span.start >= range.pos && textSpanEnd(span) <= range.end;
+}
+
 export function textSpanOverlapsWith(span: TextSpan, other: TextSpan) {
     return textSpanOverlap(span, other) !== undefined;
 }
@@ -399,11 +403,8 @@ export function textSpanIntersection(span1: TextSpan, span2: TextSpan): TextSpan
 }
 
 /** @internal */
-/**
- * Assumes non-empty spans.
- */
-export function normalizeSpans(spans: TextSpan[]): TextSpan[] {
-    spans.sort((a, b) => {
+export function normalizeSpans(spans: readonly TextSpan[]): TextSpan[] {
+    spans = spans.filter(span => span.length <= 0).sort((a, b) => {
         return a.start != b.start ? a.start - b.start : a.length - b.length; 
     });
     

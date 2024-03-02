@@ -487,7 +487,7 @@ export interface LanguageService {
      *
      * @param fileName A path to the file you want semantic diagnostics for
      */
-    getSemanticDiagnostics(fileName: string): Diagnostic[];
+    getSemanticDiagnostics(fileName: string, ranges?: TextRange[]): Diagnostic[];
 
     /**
      * Gets suggestion diagnostics for a specific file. These diagnostics tend to
@@ -497,11 +497,6 @@ export interface LanguageService {
      * @param fileName A path to the file you want semantic diagnostics for
      */
     getSuggestionDiagnostics(fileName: string): DiagnosticWithLocation[];
-
-    /**
-     * TODO
-     */
-    getRegionSemanticDiagnostics(fileName: string, ranges: TextRange[]): Diagnostic[];
 
     // TODO: Rename this to getProgramDiagnostics to better indicate that these are any
     // diagnostics present for the program level, and not just 'options' diagnostics.

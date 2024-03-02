@@ -46941,12 +46941,14 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         tracing?.pop();
     }
 
-    function checkSourceFile(node: SourceFile) { // >> TODO: change here?
-        tracing?.push(tracing.Phase.Check, "checkSourceFile", { path: node.path }, /*separateBeginAndEnd*/ true);
-        performance.mark("beforeCheck");
-        checkSourceFileWorker(node);
-        performance.mark("afterCheck");
-        performance.measure("Check", "beforeCheck", "afterCheck");
+    function checkSourceFile(node: SourceFile, nodesToCheck: Node[] | undefined) { // >> TODO: change here?
+        tracing?.push(tracing.Phase.Check, nodesToCheck ? "checkSourceFileNodes" : "checkSourceFile", { path: node.path }, /*separateBeginAndEnd*/ true);
+        const beforeMark = nodesToCheck ? "beforeCheckNodes" : "beforeCheck";
+        const afterMark = nodesToCheck ? "afterCheckNodes" : "afterCheck";
+        performance.mark(beforeMark);
+        nodesToCheck ? checkSourceFileNodesWorker(node, nodesToCheck) : checkSourceFileWorker(node);
+        performance.mark(afterMark);
+        performance.measure("Check", beforeMark, afterMark);
         tracing?.pop();
     }
 
@@ -46994,7 +46996,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 registerForUnusedIdentifiersCheck(node);
             }
 
-            // >> TODO: probably skip for region??? unused would require checking potentially outside region to be sure, otherwise will most likely be wrong?
             addLazyDiagnostic(() => {
                 // This relies on the results of other lazy diagnostics, so must be computed after them
                 if (!node.isDeclarationFile && (compilerOptions.noUnusedLocals || compilerOptions.noUnusedParameters)) {
@@ -47009,7 +47010,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 }
             });
 
-            // >> TODO: region?? this one goes through all statements in file, maybe it's ok
             if (
                 compilerOptions.importsNotUsedAsValues === ImportsNotUsedAsValues.Error &&
                 !node.isDeclarationFile &&
@@ -47018,66 +47018,54 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 checkImportsForTypeOnlyConversion(node);
             }
 
-            // >> TODO: skip region?? this one may require checking the whole file to have reliable information
             if (isExternalOrCommonJsModule(node)) {
                 checkExternalModuleExports(node);
             }
 
-            // >> TODO: skip region?? unreliable info
             if (potentialThisCollisions.length) {
                 forEach(potentialThisCollisions, checkIfThisIsCapturedInEnclosingScope);
                 clear(potentialThisCollisions);
             }
 
-            // >> TODO: skip region?? unreliable info
             if (potentialNewTargetCollisions.length) {
                 forEach(potentialNewTargetCollisions, checkIfNewTargetIsCapturedInEnclosingScope);
                 clear(potentialNewTargetCollisions);
             }
 
-            // >> TODO: skip region?? unreliable info
             if (potentialWeakMapSetCollisions.length) {
                 forEach(potentialWeakMapSetCollisions, checkWeakMapSetCollision);
                 clear(potentialWeakMapSetCollisions);
             }
 
-            // >> TODO: skip region?? unreliable info
             if (potentialReflectCollisions.length) {
                 forEach(potentialReflectCollisions, checkReflectCollision);
                 clear(potentialReflectCollisions);
             }
 
-            // >> TODO: region: also don't set this
             links.flags |= NodeCheckFlags.TypeChecked;
         }
     }
 
-    function checkSourceFileRanges(node: SourceFile, nodes: readonly Node[]) {
-        const links = getNodeLinks(node);
+    function checkSourceFileNodesWorker(file: SourceFile, nodes: readonly Node[]) {
+        const links = getNodeLinks(file);
         if (!(links.flags & NodeCheckFlags.TypeChecked)) {
-            if (skipTypeChecking(node, compilerOptions, host)) {
+            if (skipTypeChecking(file, compilerOptions, host)) {
                 return;
             }
 
             // >> TODO: skip this? do this?
             // Grammar checking
-            checkGrammarSourceFile(node);
+            checkGrammarSourceFile(file);
 
-            // >> TODO: filter nodes that touch the ranges somehow
-            // >> TODO: consolidate ranges?
-            
+            forEach(nodes, checkSourceElement);
 
-            forEach(node.statements, checkSourceElement);
-            checkSourceElement(node.endOfFileToken);
+            checkDeferredNodes(file);
 
-            // >> TODO: what about this?
-            checkDeferredNodes(node);
+            // >> TODO: do `checkPotentialUncheckedRenamedBindingElementsInTypes`?
         }
-
-        
     }
 
-    function getDiagnostics(sourceFile: SourceFile, ct: CancellationToken, nodesToCheck: Node[] | undefined): Diagnostic[] {
+    function getDiagnostics(sourceFile: SourceFile, ct: CancellationToken, nodesToCheck?: Node[]): Diagnostic[] {
         try {
             // Record the cancellation token so it can be checked later on during checkSourceElement.
             // Do this in a finally block so we can ensure that it gets reset back to nothing after
@@ -47098,7 +47086,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         deferredDiagnosticsCallbacks = [];
     }
 
-    function checkSourceFileWithEagerDiagnostics(sourceFile: SourceFile) {
+    function checkSourceFileWithEagerDiagnostics(sourceFile: SourceFile, nodesToCheck?: Node[]) {
         ensurePendingDiagnosticWorkComplete();
         // then setup diagnostics for immediate invocation (as we are about to collect them, and
         // this avoids the overhead of longer-lived callbacks we don't need to allocate)
@@ -47107,7 +47095,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         // thus much more likely retaining the same union ordering as before we had lazy diagnostics)
         const oldAddLazyDiagnostics = addLazyDiagnostic;
         addLazyDiagnostic = cb => cb();
-        checkSourceFile(sourceFile);
+        checkSourceFile(sourceFile, nodesToCheck);
         addLazyDiagnostic = oldAddLazyDiagnostics;
     }
 
@@ -47120,8 +47108,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             const previousGlobalDiagnostics = diagnostics.getGlobalDiagnostics();
             const previousGlobalDiagnosticsSize = previousGlobalDiagnostics.length;
 
-            checkSourceFileWithEagerDiagnostics(sourceFile); // >> TODO: change this
-
+            checkSourceFileWithEagerDiagnostics(sourceFile, nodesToCheck); // >> TODO: change this
+            // >> TODO: where do we clean up the diagnostics?
             const semanticDiagnostics = diagnostics.getDiagnostics(sourceFile.fileName);
             const currentGlobalDiagnostics = diagnostics.getGlobalDiagnostics();
             if (currentGlobalDiagnostics !== previousGlobalDiagnostics) {
@@ -47141,7 +47129,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
         // Global diagnostics are always added when a file is not provided to
         // getDiagnostics
-        forEach(host.getSourceFiles(), checkSourceFileWithEagerDiagnostics);
+        forEach(host.getSourceFiles(), file => checkSourceFileWithEagerDiagnostics(file));
         return diagnostics.getDiagnostics();
     }
 
