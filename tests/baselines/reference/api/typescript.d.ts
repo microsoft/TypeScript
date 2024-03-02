@@ -597,6 +597,10 @@ declare namespace ts {
                  * when calling 'GetEditsForRefactor'.
                  */
                 isInteractive?: boolean;
+                /**
+                 * Range of code the refactoring will be applied to.
+                 */
+                range?: TextSpan;
             }
             interface GetEditsForRefactorRequest extends Request {
                 command: CommandTypes.GetEditsForRefactor;
@@ -10853,6 +10857,10 @@ declare namespace ts {
          * when calling `getEditsForRefactor`.
          */
         isInteractive?: boolean;
+        /**
+         * Range of code the refactoring will be applied to.
+         */
+        range?: TextSpan;
     }
     /**
      * A set of edits to make in response to a refactor action, plus an optional

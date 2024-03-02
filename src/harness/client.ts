@@ -834,7 +834,11 @@ export class SessionClient implements LanguageService {
         if (preferences) { // Restore preferences
             this.configure(oldPreferences || {});
         }
-        return response.body!; // TODO: GH#18217
+        // TODO: GH#18217
+        return response.body!.map(result => ({
+            ...result,
+            actions: result.actions.map(entry => ({ ...entry, range: entry.range ? createTextSpanFromBounds(this.lineOffsetToPosition(fileName, entry.range.start), this.lineOffsetToPosition(fileName, entry.range.end)) : undefined })),
+        }));
     }
 
     getMoveToRefactoringFileSuggestions(fileName: string, positionOrRange: number | TextRange): { newFileName: string; files: string[]; } {

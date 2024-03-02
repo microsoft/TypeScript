@@ -179,7 +179,8 @@ registerRefactor(refactorNameForMoveToFile, {
             }
         }
         if (context.preferences.allowTextChangesInNewFiles && statements) {
-            return [{ name: refactorNameForMoveToFile, description, actions: [moveToFileAction] }];
+            const affectedTextRange = { start: statements.all[0].pos, length: statements.all.length > 1 ? last(statements.all).end - statements.all[0].pos : statements.all[0].end - statements.all[0].pos };
+            return [{ name: refactorNameForMoveToFile, description, actions: [{ ...moveToFileAction, range: affectedTextRange }] }];
         }
         if (context.preferences.provideRefactorNotApplicableReason) {
             return [{ name: refactorNameForMoveToFile, description, actions: [{ ...moveToFileAction, notApplicableReason: getLocaleSpecificMessage(Diagnostics.Selection_is_not_a_valid_statement_or_statements) }] }];
