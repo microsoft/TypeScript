@@ -6,7 +6,7 @@ on:
       branch_name:
         description: Release branch name to create
         required: true
-        type: number
+        type: string
 
       # Inputs provided by the bot
       distinct_id:

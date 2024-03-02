@@ -6,7 +6,7 @@ on:
       branch_name:
         description: Release branch name to create
         required: true
-        type: number
+        type: string
       package_version:
         description: Release package version
         required: true
