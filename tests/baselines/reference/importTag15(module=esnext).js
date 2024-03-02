@@ -21,5 +21,5 @@ export interface I {
 /** @import * as foo from './0' with { type: "json" } */
 /** @param {I} a */
 declare function f(a: I): void;
-import { I } from './0' with { type: "json" };
-import * as foo from './0';
+import type { I } from './0' with { type: "json" };
+import type * as foo from './0';

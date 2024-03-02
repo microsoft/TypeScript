@@ -30,4 +30,4 @@ export interface Foo {
  * @param { Foo } foo
  */
 declare function f(foo: Foo): void;
-import { Foo } from "./types";
+import type { Foo } from "./types";
