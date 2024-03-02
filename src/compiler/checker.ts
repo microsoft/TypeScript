@@ -2264,9 +2264,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     var identityRelation = new Map<string, RelationComparisonResult>();
     var enumRelation = new Map<string, RelationComparisonResult>();
 
-    var builtinGlobals = createSymbolTable();
-    builtinGlobals.set(undefinedSymbol.escapedName, undefinedSymbol);
-
     // Extensions suggested for path imports when module resolution is node16 or higher.
     // The first element of each tuple is the extension a file has.
     // The second element of each tuple is the extension that should be used in a path import.
@@ -2729,20 +2726,19 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
     }
 
-    function addToSymbolTable(target: SymbolTable, source: SymbolTable, message: DiagnosticMessage) {
-        source.forEach((sourceSymbol, id) => {
-            const targetSymbol = target.get(id);
-            if (targetSymbol) {
-                // Error on redeclarations
-                forEach(targetSymbol.declarations, addDeclarationDiagnostic(unescapeLeadingUnderscores(id), message));
-            }
-            else {
-                target.set(id, sourceSymbol);
-            }
-        });
-
-        function addDeclarationDiagnostic(id: string, message: DiagnosticMessage) {
-            return (declaration: Declaration) => diagnostics.add(createDiagnosticForNode(declaration, message, id));
+    function addUndefinedToGlobalsOrErrorOnRedeclaration() {
+        const name = undefinedSymbol.escapedName;
+        const targetSymbol = globals.get(name);
+        if (targetSymbol) {
+            forEach(targetSymbol.declarations, declaration => {
+                // checkTypeNameIsReserved will have added better diagnostics for undefined.
+                if (!isTypeDeclaration(declaration)) {
+                    diagnostics.add(createDiagnosticForNode(declaration, Diagnostics.Declaration_name_conflicts_with_built_in_global_identifier_0, unescapeLeadingUnderscores(name)));
+                }
+            });
+        }
+        else {
+            globals.set(name, undefinedSymbol);
         }
     }
 
@@ -44347,6 +44343,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             case "symbol":
             case "void":
             case "object":
+            case "undefined":
                 error(name, message, name.escapedText as string);
         }
     }
@@ -48836,7 +48833,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             }
             if (!isExternalOrCommonJsModule(file)) {
                 // It is an error for a non-external-module (i.e. script) to declare its own `globalThis`.
-                // We can't use `builtinGlobals` for this due to synthetic expando-namespace generation in JS files.
                 const fileGlobalThisSymbol = file.locals!.get("globalThis" as __String);
                 if (fileGlobalThisSymbol?.declarations) {
                     for (const declaration of fileGlobalThisSymbol.declarations) {
@@ -48882,8 +48878,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             }
         }
 
-        // Setup global builtins
-        addToSymbolTable(globals, builtinGlobals, Diagnostics.Declaration_name_conflicts_with_built_in_global_identifier_0);
+        addUndefinedToGlobalsOrErrorOnRedeclaration();
 
         getSymbolLinks(undefinedSymbol).type = undefinedWideningType;
         getSymbolLinks(argumentsSymbol).type = getGlobalType("IArguments" as __String, /*arity*/ 0, /*reportErrors*/ true);
