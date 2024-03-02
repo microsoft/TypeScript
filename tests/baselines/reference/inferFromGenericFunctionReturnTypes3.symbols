@@ -116,11 +116,11 @@ a = [1, 2, 3, 4, 5].map(v => ({ type: 'folder' }));
 
 let arr: Array<[number, number]> = [[1, 2]]
 >arr : Symbol(arr, Decl(inferFromGenericFunctionReturnTypes3.ts, 47, 3))
->Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.array.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --) ... and 1 more)
 
 let mappedArr: Array<[number, number]> = arr.map(([x, y]) => {
 >mappedArr : Symbol(mappedArr, Decl(inferFromGenericFunctionReturnTypes3.ts, 49, 3))
->Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.array.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --) ... and 1 more)
 >arr.map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))
 >arr : Symbol(arr, Decl(inferFromGenericFunctionReturnTypes3.ts, 47, 3))
 >map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))
@@ -375,7 +375,7 @@ type Player = {
 type F = () => Promise<Array<Player>>;
 >F : Symbol(F, Decl(inferFromGenericFunctionReturnTypes3.ts, 153, 2))
 >Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
->Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.array.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --) ... and 1 more)
 >Player : Symbol(Player, Decl(inferFromGenericFunctionReturnTypes3.ts, 145, 3))
  
 const f1: F = () => {

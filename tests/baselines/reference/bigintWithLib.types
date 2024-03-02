@@ -68,41 +68,41 @@ stringVal = bigintVal.toLocaleString();
 >stringVal = bigintVal.toLocaleString() : string
 >stringVal : string
 >bigintVal.toLocaleString() : string
->bigintVal.toLocaleString : (locales?: Intl.LocalesArgument, options?: BigIntToLocaleStringOptions) => string
+>bigintVal.toLocaleString : (locales?: Intl.LocalesArgument, options?: Intl.NumberFormatOptions) => string
 >bigintVal : bigint
->toLocaleString : (locales?: Intl.LocalesArgument, options?: BigIntToLocaleStringOptions) => string
+>toLocaleString : (locales?: Intl.LocalesArgument, options?: Intl.NumberFormatOptions) => string
 
 stringVal = bigintVal.toLocaleString('de-DE');
 >stringVal = bigintVal.toLocaleString('de-DE') : string
 >stringVal : string
 >bigintVal.toLocaleString('de-DE') : string
->bigintVal.toLocaleString : (locales?: Intl.LocalesArgument, options?: BigIntToLocaleStringOptions) => string
+>bigintVal.toLocaleString : (locales?: Intl.LocalesArgument, options?: Intl.NumberFormatOptions) => string
 >bigintVal : bigint
->toLocaleString : (locales?: Intl.LocalesArgument, options?: BigIntToLocaleStringOptions) => string
+>toLocaleString : (locales?: Intl.LocalesArgument, options?: Intl.NumberFormatOptions) => string
 >'de-DE' : "de-DE"
 
 stringVal = bigintVal.toLocaleString('de-DE', { style: 'currency' });
 >stringVal = bigintVal.toLocaleString('de-DE', { style: 'currency' }) : string
 >stringVal : string
 >bigintVal.toLocaleString('de-DE', { style: 'currency' }) : string
->bigintVal.toLocaleString : (locales?: Intl.LocalesArgument, options?: BigIntToLocaleStringOptions) => string
+>bigintVal.toLocaleString : (locales?: Intl.LocalesArgument, options?: Intl.NumberFormatOptions) => string
 >bigintVal : bigint
->toLocaleString : (locales?: Intl.LocalesArgument, options?: BigIntToLocaleStringOptions) => string
+>toLocaleString : (locales?: Intl.LocalesArgument, options?: Intl.NumberFormatOptions) => string
 >'de-DE' : "de-DE"
->{ style: 'currency' } : { style: string; }
->style : string
+>{ style: 'currency' } : { style: "currency"; }
+>style : "currency"
 >'currency' : "currency"
 
 stringVal = bigintVal.toLocaleString('de-DE', { style: 'currency', currency: 'EUR' })
 >stringVal = bigintVal.toLocaleString('de-DE', { style: 'currency', currency: 'EUR' }) : string
 >stringVal : string
 >bigintVal.toLocaleString('de-DE', { style: 'currency', currency: 'EUR' }) : string
->bigintVal.toLocaleString : (locales?: Intl.LocalesArgument, options?: BigIntToLocaleStringOptions) => string
+>bigintVal.toLocaleString : (locales?: Intl.LocalesArgument, options?: Intl.NumberFormatOptions) => string
 >bigintVal : bigint
->toLocaleString : (locales?: Intl.LocalesArgument, options?: BigIntToLocaleStringOptions) => string
+>toLocaleString : (locales?: Intl.LocalesArgument, options?: Intl.NumberFormatOptions) => string
 >'de-DE' : "de-DE"
->{ style: 'currency', currency: 'EUR' } : { style: string; currency: string; }
->style : string
+>{ style: 'currency', currency: 'EUR' } : { style: "currency"; currency: string; }
+>style : "currency"
 >'currency' : "currency"
 >currency : string
 >'EUR' : "EUR"

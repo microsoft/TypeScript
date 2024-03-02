@@ -102,28 +102,28 @@ bigint.toLocaleString([deDE, jaJP]);
 >jaJP : Symbol(jaJP, Decl(localesObjectArgument.ts, 2, 5))
 
 str.toLocaleLowerCase(enUS);
->str.toLocaleLowerCase : Symbol(String.toLocaleLowerCase, Decl(lib.es5.d.ts, --, --), Decl(lib.es2020.string.d.ts, --, --))
+>str.toLocaleLowerCase : Symbol(String.toLocaleLowerCase, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.string.d.ts, --, --), Decl(lib.es2020.string.d.ts, --, --))
 >str : Symbol(str, Decl(localesObjectArgument.ts, 7, 5))
->toLocaleLowerCase : Symbol(String.toLocaleLowerCase, Decl(lib.es5.d.ts, --, --), Decl(lib.es2020.string.d.ts, --, --))
+>toLocaleLowerCase : Symbol(String.toLocaleLowerCase, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.string.d.ts, --, --), Decl(lib.es2020.string.d.ts, --, --))
 >enUS : Symbol(enUS, Decl(localesObjectArgument.ts, 0, 5))
 
 str.toLocaleLowerCase([deDE, jaJP]);
->str.toLocaleLowerCase : Symbol(String.toLocaleLowerCase, Decl(lib.es5.d.ts, --, --), Decl(lib.es2020.string.d.ts, --, --))
+>str.toLocaleLowerCase : Symbol(String.toLocaleLowerCase, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.string.d.ts, --, --), Decl(lib.es2020.string.d.ts, --, --))
 >str : Symbol(str, Decl(localesObjectArgument.ts, 7, 5))
->toLocaleLowerCase : Symbol(String.toLocaleLowerCase, Decl(lib.es5.d.ts, --, --), Decl(lib.es2020.string.d.ts, --, --))
+>toLocaleLowerCase : Symbol(String.toLocaleLowerCase, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.string.d.ts, --, --), Decl(lib.es2020.string.d.ts, --, --))
 >deDE : Symbol(deDE, Decl(localesObjectArgument.ts, 1, 5))
 >jaJP : Symbol(jaJP, Decl(localesObjectArgument.ts, 2, 5))
 
 str.toLocaleUpperCase(enUS);
->str.toLocaleUpperCase : Symbol(String.toLocaleUpperCase, Decl(lib.es5.d.ts, --, --), Decl(lib.es2020.string.d.ts, --, --))
+>str.toLocaleUpperCase : Symbol(String.toLocaleUpperCase, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.string.d.ts, --, --), Decl(lib.es2020.string.d.ts, --, --))
 >str : Symbol(str, Decl(localesObjectArgument.ts, 7, 5))
->toLocaleUpperCase : Symbol(String.toLocaleUpperCase, Decl(lib.es5.d.ts, --, --), Decl(lib.es2020.string.d.ts, --, --))
+>toLocaleUpperCase : Symbol(String.toLocaleUpperCase, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.string.d.ts, --, --), Decl(lib.es2020.string.d.ts, --, --))
 >enUS : Symbol(enUS, Decl(localesObjectArgument.ts, 0, 5))
 
 str.toLocaleUpperCase([deDE, jaJP]);
->str.toLocaleUpperCase : Symbol(String.toLocaleUpperCase, Decl(lib.es5.d.ts, --, --), Decl(lib.es2020.string.d.ts, --, --))
+>str.toLocaleUpperCase : Symbol(String.toLocaleUpperCase, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.string.d.ts, --, --), Decl(lib.es2020.string.d.ts, --, --))
 >str : Symbol(str, Decl(localesObjectArgument.ts, 7, 5))
->toLocaleUpperCase : Symbol(String.toLocaleUpperCase, Decl(lib.es5.d.ts, --, --), Decl(lib.es2020.string.d.ts, --, --))
+>toLocaleUpperCase : Symbol(String.toLocaleUpperCase, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.string.d.ts, --, --), Decl(lib.es2020.string.d.ts, --, --))
 >deDE : Symbol(deDE, Decl(localesObjectArgument.ts, 1, 5))
 >jaJP : Symbol(jaJP, Decl(localesObjectArgument.ts, 2, 5))
 

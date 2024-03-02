@@ -4489,7 +4489,7 @@
           ],
           "documentation": [
             {
-              "text": "Returns a string representation of an array. The elements are converted to string using their toLocaleString methods.",
+              "text": "Returns a string representation of an array.\nEach element is converted to a string using its `toLocaleString` method, then concatenated using a locale-specific list separator.",
               "kind": "text"
             }
           ]

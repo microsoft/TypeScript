@@ -114,48 +114,48 @@ num.toLocaleString([deDE, jaJP]);
 
 bigint.toLocaleString(enUS);
 >bigint.toLocaleString(enUS) : string
->bigint.toLocaleString : (locales?: Intl.LocalesArgument, options?: BigIntToLocaleStringOptions) => string
+>bigint.toLocaleString : (locales?: Intl.LocalesArgument, options?: Intl.NumberFormatOptions) => string
 >bigint : 123456789123456789n
->toLocaleString : (locales?: Intl.LocalesArgument, options?: BigIntToLocaleStringOptions) => string
+>toLocaleString : (locales?: Intl.LocalesArgument, options?: Intl.NumberFormatOptions) => string
 >enUS : Intl.Locale
 
 bigint.toLocaleString([deDE, jaJP]);
 >bigint.toLocaleString([deDE, jaJP]) : string
->bigint.toLocaleString : (locales?: Intl.LocalesArgument, options?: BigIntToLocaleStringOptions) => string
+>bigint.toLocaleString : (locales?: Intl.LocalesArgument, options?: Intl.NumberFormatOptions) => string
 >bigint : 123456789123456789n
->toLocaleString : (locales?: Intl.LocalesArgument, options?: BigIntToLocaleStringOptions) => string
+>toLocaleString : (locales?: Intl.LocalesArgument, options?: Intl.NumberFormatOptions) => string
 >[deDE, jaJP] : Intl.Locale[]
 >deDE : Intl.Locale
 >jaJP : Intl.Locale
 
 str.toLocaleLowerCase(enUS);
 >str.toLocaleLowerCase(enUS) : string
->str.toLocaleLowerCase : { (locales?: string | string[]): string; (locales?: Intl.LocalesArgument): string; }
+>str.toLocaleLowerCase : { (): string; (locales?: string | string[]): string; (locales?: Intl.LocalesArgument): string; }
 >str : ""
->toLocaleLowerCase : { (locales?: string | string[]): string; (locales?: Intl.LocalesArgument): string; }
+>toLocaleLowerCase : { (): string; (locales?: string | string[]): string; (locales?: Intl.LocalesArgument): string; }
 >enUS : Intl.Locale
 
 str.toLocaleLowerCase([deDE, jaJP]);
 >str.toLocaleLowerCase([deDE, jaJP]) : string
->str.toLocaleLowerCase : { (locales?: string | string[]): string; (locales?: Intl.LocalesArgument): string; }
+>str.toLocaleLowerCase : { (): string; (locales?: string | string[]): string; (locales?: Intl.LocalesArgument): string; }
 >str : ""
->toLocaleLowerCase : { (locales?: string | string[]): string; (locales?: Intl.LocalesArgument): string; }
+>toLocaleLowerCase : { (): string; (locales?: string | string[]): string; (locales?: Intl.LocalesArgument): string; }
 >[deDE, jaJP] : Intl.Locale[]
 >deDE : Intl.Locale
 >jaJP : Intl.Locale
 
 str.toLocaleUpperCase(enUS);
 >str.toLocaleUpperCase(enUS) : string
->str.toLocaleUpperCase : { (locales?: string | string[]): string; (locales?: Intl.LocalesArgument): string; }
+>str.toLocaleUpperCase : { (): string; (locales?: string | string[]): string; (locales?: Intl.LocalesArgument): string; }
 >str : ""
->toLocaleUpperCase : { (locales?: string | string[]): string; (locales?: Intl.LocalesArgument): string; }
+>toLocaleUpperCase : { (): string; (locales?: string | string[]): string; (locales?: Intl.LocalesArgument): string; }
 >enUS : Intl.Locale
 
 str.toLocaleUpperCase([deDE, jaJP]);
 >str.toLocaleUpperCase([deDE, jaJP]) : string
->str.toLocaleUpperCase : { (locales?: string | string[]): string; (locales?: Intl.LocalesArgument): string; }
+>str.toLocaleUpperCase : { (): string; (locales?: string | string[]): string; (locales?: Intl.LocalesArgument): string; }
 >str : ""
->toLocaleUpperCase : { (locales?: string | string[]): string; (locales?: Intl.LocalesArgument): string; }
+>toLocaleUpperCase : { (): string; (locales?: string | string[]): string; (locales?: Intl.LocalesArgument): string; }
 >[deDE, jaJP] : Intl.Locale[]
 >deDE : Intl.Locale
 >jaJP : Intl.Locale
