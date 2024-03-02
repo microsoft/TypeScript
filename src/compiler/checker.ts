@@ -37408,10 +37408,11 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
         const functionFlags = getFunctionFlags(func);
         if (functionFlags !== FunctionFlags.Normal || func.parameters.length === 0) return undefined;
-
         // Only attempt to infer a type predicate if there's exactly one return.
         let singleReturn: Expression | undefined;
         if (func.body && func.body.kind !== SyntaxKind.Block) {
+            const contextualSignature = getContextualSignature(func as ArrowFunction);
+            if (contextualSignature && !getTypePredicateOfSignature(contextualSignature)) return undefined;
             singleReturn = func.body; // arrow function
         }
         else {
@@ -37421,17 +37422,13 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             });
             if (bailedEarly || !singleReturn || functionHasImplicitReturn(func)) return undefined;
         }
-        return checkIfExpressionRefinesAnyParameter(func, singleReturn);
-    }
-
-    function checkIfExpressionRefinesAnyParameter(func: FunctionLikeDeclaration, expr: Expression): TypePredicate | undefined {
-        expr = skipParentheses(expr, /*excludeJSDocTypeAssertions*/ true);
+        const expr = skipParentheses(singleReturn, /*excludeJSDocTypeAssertions*/ true);
         const returnType = checkExpressionCached(expr);
         if (!(returnType.flags & TypeFlags.Boolean)) return undefined;
-
-        return forEach(func.parameters, (param, i) => {
+        for (let i = 0; i < func.parameters.length; i++) {
+            const param = func.parameters[i];
             const initType = getTypeOfSymbol(param.symbol);
-            if (!initType || initType.flags & TypeFlags.Boolean || !isIdentifier(param.name) || isSymbolAssigned(param.symbol)) {
+            if (initType.flags & TypeFlags.Boolean || !isIdentifier(param.name) || isSymbolAssigned(param.symbol)) {
                 // Refining "x: boolean" to "x is true" or "x is false" isn't useful.
                 return;
             }
@@ -37439,7 +37436,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             if (trueType) {
                 return createTypePredicate(TypePredicateKind.Identifier, unescapeLeadingUnderscores(param.name.escapedText), i, trueType);
             }
-        });
+        }
     }
 
     function checkIfExpressionRefinesParameter(func: FunctionLikeDeclaration, expr: Expression, param: ParameterDeclaration, initType: Type): Type | undefined {
@@ -37451,10 +37448,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             node: expr,
             antecedent,
         };
-
         const trueType = getFlowTypeOfReference(param.name, initType, initType, func, trueCondition);
         if (trueType === initType) return undefined;
-
         // "x is T" means that x is T if and only if it returns true. If it returns false then x is not T.
         // This means that if the function is called with an argument of type trueType, there can't be anything left in the `else` branch. It must reduce to `never`.
         const falseCondition: FlowCondition = {
