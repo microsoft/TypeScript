@@ -37415,13 +37415,11 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             singleReturn = func.body; // arrow function
         }
         else {
-            if (functionHasImplicitReturn(func)) return undefined;
-
             const bailedEarly = forEachReturnStatement(func.body as Block, returnStatement => {
                 if (singleReturn || !returnStatement.expression) return true;
                 singleReturn = returnStatement.expression;
             });
-            if (bailedEarly || !singleReturn) return undefined;
+            if (bailedEarly || !singleReturn || functionHasImplicitReturn(func)) return undefined;
         }
 
         return checkIfExpressionRefinesAnyParameter(singleReturn);
