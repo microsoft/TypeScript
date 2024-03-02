@@ -259,6 +259,10 @@ function isNumberWithThis(this: Date, x: number | string) {
   return typeof x === 'number';
 }
 
+function narrowFromAny(x: any) {
+  return typeof x === 'number';
+}
+
 
 //// [inferTypePredicates.js]
 // https://github.com/microsoft/TypeScript/issues/16069
@@ -487,5 +491,8 @@ if (assertAndPredicate(snd)) {
     var t = snd; // should error
 }
 function isNumberWithThis(x) {
+    return typeof x === 'number';
+}
+function narrowFromAny(x) {
     return typeof x === 'number';
 }

@@ -930,3 +930,14 @@ function isNumberWithThis(this: Date, x: number | string) {
 >'number' : "number"
 }
 
+function narrowFromAny(x: any) {
+>narrowFromAny : (x: any) => x is number
+>x : any
+
+  return typeof x === 'number';
+>typeof x === 'number' : boolean
+>typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>x : any
+>'number' : "number"
+}
+

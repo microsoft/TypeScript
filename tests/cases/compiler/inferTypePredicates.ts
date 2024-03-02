@@ -256,3 +256,7 @@ if (assertAndPredicate(snd)) {
 function isNumberWithThis(this: Date, x: number | string) {
   return typeof x === 'number';
 }
+
+function narrowFromAny(x: any) {
+  return typeof x === 'number';
+}

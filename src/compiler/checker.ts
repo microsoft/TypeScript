@@ -37455,7 +37455,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             };
 
             const trueType = getFlowTypeOfReference(param.name, initType, initType, func, trueCondition);
-            if (trueType === initType) return undefined;
+            // Since trueType is a subtype of initType, isTypeAssignableTo(initType, trueType) is a test for equivalence (modulo any types).
+            if (trueType === initType || ((initType.flags & TypeFlags.Any) ? (trueType.flags & TypeFlags.Any) : isTypeAssignableTo(initType, trueType))) {
+                return undefined;
+            }
 
             // "x is T" means that x is T if and only if it returns true. If it returns false then x is not T.
             // This means that if the function is called with an argument of type trueType, there can't be anything left in the `else` branch. It must reduce to `never`.

@@ -720,3 +720,11 @@ function isNumberWithThis(this: Date, x: number | string) {
 >x : Symbol(x, Decl(inferTypePredicates.ts, 254, 37))
 }
 
+function narrowFromAny(x: any) {
+>narrowFromAny : Symbol(narrowFromAny, Decl(inferTypePredicates.ts, 256, 1))
+>x : Symbol(x, Decl(inferTypePredicates.ts, 258, 23))
+
+  return typeof x === 'number';
+>x : Symbol(x, Decl(inferTypePredicates.ts, 258, 23))
+}
+
