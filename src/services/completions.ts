@@ -1760,7 +1760,10 @@ function createCompletionEntry(
         const memberCompletionEntry = getEntryForMemberCompletion(host, program, options, preferences, name, symbol, location, position, contextToken, formatContext);
         if (memberCompletionEntry) {
             ({ insertText, filterText, isSnippet, importAdder } = memberCompletionEntry);
-            if (importAdder?.hasFixes() || memberCompletionEntry.eraseRange) {
+            if (memberCompletionEntry.eraseRange) {
+                replacementSpan = createTextSpanFromBounds(memberCompletionEntry.eraseRange.pos, memberCompletionEntry.eraseRange.end);
+            }
+            if (importAdder?.hasFixes()) {
                 hasAction = true;
                 source = CompletionSource.ClassMemberSnippet;
             }
@@ -2960,7 +2963,7 @@ function getCompletionEntryCodeActionsAndSourceDisplay(
                 sourceDisplay: undefined,
                 codeActions: [{
                     changes,
-                    description: importAdder ? diagnosticToString([Diagnostics.Includes_imports_of_types_referenced_by_0, name]) : '',
+                    description: diagnosticToString([Diagnostics.Includes_imports_of_types_referenced_by_0, name]),
                 }],
             };
         }
