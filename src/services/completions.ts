@@ -2090,13 +2090,16 @@ function getPresentModifiers(
     if (isPropertyDeclaration(contextToken.parent) && contextToken.parent.modifiers) {
         modifiers |= modifiersToFlags(contextToken.parent.modifiers) & ModifierFlags.Modifier;
         decorators = contextToken.parent.modifiers.filter(isDecorator) || [];
-        range.pos = Math.min(range.pos, contextToken.parent.modifiers.pos);
+        const firstModifier = first(contextToken.parent.modifiers);
+        if (firstModifier) {
+            range.pos = Math.min(range.pos, firstModifier.getStart(sourceFile));
+        }
     }
     if (contextMod = isModifierLike(contextToken)) {
         const contextModifierFlag = modifierToFlag(contextMod);
         if (!(modifiers & contextModifierFlag)) {
             modifiers |= contextModifierFlag;
-            range.pos = Math.min(range.pos, contextToken.pos);
+            range.pos = Math.min(range.pos, contextToken.getStart(sourceFile));
         }
     }
     return { modifiers, decorators, range: range.pos !== position ? range : undefined };
