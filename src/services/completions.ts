@@ -1759,7 +1759,10 @@ function createCompletionEntry(
         let importAdder;
         const memberCompletionEntry = getEntryForMemberCompletion(host, program, options, preferences, name, symbol, location, position, contextToken, formatContext);
         if (memberCompletionEntry) {
-            ({ insertText, filterText, isSnippet, importAdder, replacementSpan } = memberCompletionEntry);
+            ({ insertText, filterText, isSnippet, importAdder } = memberCompletionEntry);
+            if (memberCompletionEntry.eraseRange) {
+                replacementSpan = createTextSpanFromBounds(memberCompletionEntry.eraseRange.pos, memberCompletionEntry.eraseRange.end);
+            }
             if (importAdder?.hasFixes()) {
                 hasAction = true;
                 source = CompletionSource.ClassMemberSnippet;
@@ -1916,7 +1919,7 @@ function getEntryForMemberCompletion(
     position: number,
     contextToken: Node | undefined,
     formatContext: formatting.FormatContext | undefined,
-): { insertText: string; filterText?: string; isSnippet?: true; importAdder?: codefix.ImportAdder; replacementSpan?: TextSpan; } | undefined {
+): { insertText: string; filterText?: string; isSnippet?: true; importAdder?: codefix.ImportAdder; eraseRange?: TextRange; } | undefined {
     const classLikeDeclaration = findAncestor(location, isClassLike);
     if (!classLikeDeclaration) {
         return undefined; // This should never happen.
@@ -2049,7 +2052,7 @@ function getEntryForMemberCompletion(
         }
     }
 
-    return { insertText, filterText, isSnippet, importAdder, replacementSpan: eraseRange && createTextSpanFromBounds(eraseRange.pos, eraseRange.end) };
+    return { insertText, filterText, isSnippet, importAdder, eraseRange };
 }
 
 function getPresentModifiers(
@@ -2929,7 +2932,7 @@ function getCompletionEntryCodeActionsAndSourceDisplay(
     }
 
     if (source === CompletionSource.ClassMemberSnippet) {
-        const { importAdder, replacementSpan } = getEntryForMemberCompletion(
+        const { importAdder, eraseRange } = getEntryForMemberCompletion(
             host,
             program,
             compilerOptions,
@@ -2941,15 +2944,15 @@ function getCompletionEntryCodeActionsAndSourceDisplay(
             contextToken,
             formatContext,
         )!;
-        if (importAdder || replacementSpan) {
+        if (importAdder || eraseRange) {
             const changes = textChanges.ChangeTracker.with(
                 { host, formatContext, preferences },
                 tracker => {
                     if (importAdder) {
                         importAdder.writeFixes(tracker);
                     }
-                    if (replacementSpan) {
-                        tracker.deleteRange(sourceFile, { pos: replacementSpan.start, end: replacementSpan.start + replacementSpan.length });
+                    if (eraseRange) {
+                        tracker.deleteRange(sourceFile, eraseRange);
                     }
                 },
             );
