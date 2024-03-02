@@ -109,7 +109,7 @@ interface Object {
     /** Returns a string representation of an object. */
     toString(): string;
 
-    /** Returns a date converted to a string using the current locale. */
+    /** Returns a locale-specific string representation of an object. Intended to be overridden by derived objects. */
     toLocaleString(): string;
 
     /** Returns the primitive value of the specified object. */
@@ -483,14 +483,14 @@ interface String {
     /** Converts all the alphabetic characters in a string to lowercase. */
     toLowerCase(): string;
 
-    /** Converts all alphabetic characters to lowercase, taking into account the host environment's current locale. */
-    toLocaleLowerCase(locales?: string | string[]): string;
+    /** Converts all the alphabetic characters in a string to lowercase, using the current locale's case mappings. */
+    toLocaleLowerCase(): string;
 
     /** Converts all the alphabetic characters in a string to uppercase. */
     toUpperCase(): string;
 
-    /** Returns a string where all alphabetic characters have been converted to uppercase, taking into account the host environment's current locale. */
-    toLocaleUpperCase(locales?: string | string[]): string;
+    /** Converts all the alphabetic characters in a string to uppercase, using the current locale's case mappings. */
+    toLocaleUpperCase(): string;
 
     /** Removes the leading and trailing white space and line terminator characters from a string. */
     trim(): string;
@@ -758,11 +758,11 @@ interface Date {
     toDateString(): string;
     /** Returns a time as a string value. */
     toTimeString(): string;
-    /** Returns a value as a string value appropriate to the host environment's current locale. */
+    /** Returns a value as a string value according to the host environment's current locale. */
     toLocaleString(): string;
-    /** Returns a date as a string value appropriate to the host environment's current locale. */
+    /** Returns a date as a string value according to the host environment's current locale. */
     toLocaleDateString(): string;
-    /** Returns a time as a string value appropriate to the host environment's current locale. */
+    /** Returns a time as a string value according to the host environment's current locale. */
     toLocaleTimeString(): string;
     /** Returns the stored time value in milliseconds since midnight, January 1, 1970 UTC. */
     valueOf(): number;
@@ -1177,7 +1177,8 @@ interface ReadonlyArray<T> {
      */
     toString(): string;
     /**
-     * Returns a string representation of an array. The elements are converted to string using their toLocaleString methods.
+     * Returns a string representation of an array.
+     * Each element is converted to a string using its `toLocaleString` method, then concatenated using a locale-specific list separator.
      */
     toLocaleString(): string;
     /**
@@ -1311,7 +1312,8 @@ interface Array<T> {
      */
     toString(): string;
     /**
-     * Returns a string representation of an array. The elements are converted to string using their toLocaleString methods.
+     * Returns a string representation of an array.
+     * Each element is converted to a string using its `toLocaleString` method, then concatenated using a locale-specific list separator.
      */
     toLocaleString(): string;
     /**
@@ -2085,7 +2087,7 @@ interface Int8Array {
     subarray(begin?: number, end?: number): Int8Array;
 
     /**
-     * Converts a number to a string by using the current locale.
+     * Converts a number to a string according to the host environment's current locale.
      */
     toLocaleString(): string;
 
@@ -2365,7 +2367,7 @@ interface Uint8Array {
     subarray(begin?: number, end?: number): Uint8Array;
 
     /**
-     * Converts a number to a string by using the current locale.
+     * Converts a number to a string according to the host environment's current locale.
      */
     toLocaleString(): string;
 
@@ -2646,7 +2648,7 @@ interface Uint8ClampedArray {
     subarray(begin?: number, end?: number): Uint8ClampedArray;
 
     /**
-     * Converts a number to a string by using the current locale.
+     * Converts a number to a string according to the host environment's current locale.
      */
     toLocaleString(): string;
 
@@ -2926,7 +2928,7 @@ interface Int16Array {
     subarray(begin?: number, end?: number): Int16Array;
 
     /**
-     * Converts a number to a string by using the current locale.
+     * Converts a number to a string according to the host environment's current locale.
      */
     toLocaleString(): string;
 
@@ -3207,7 +3209,7 @@ interface Uint16Array {
     subarray(begin?: number, end?: number): Uint16Array;
 
     /**
-     * Converts a number to a string by using the current locale.
+     * Converts a number to a string according to the host environment's current locale.
      */
     toLocaleString(): string;
 
@@ -3487,7 +3489,7 @@ interface Int32Array {
     subarray(begin?: number, end?: number): Int32Array;
 
     /**
-     * Converts a number to a string by using the current locale.
+     * Converts a number to a string according to the host environment's current locale.
      */
     toLocaleString(): string;
 
@@ -3767,7 +3769,7 @@ interface Uint32Array {
     subarray(begin?: number, end?: number): Uint32Array;
 
     /**
-     * Converts a number to a string by using the current locale.
+     * Converts a number to a string according to the host environment's current locale.
      */
     toLocaleString(): string;
 
@@ -4048,7 +4050,7 @@ interface Float32Array {
     subarray(begin?: number, end?: number): Float32Array;
 
     /**
-     * Converts a number to a string by using the current locale.
+     * Converts a number to a string according to the host environment's current locale.
      */
     toLocaleString(): string;
 
@@ -4329,7 +4331,7 @@ interface Float64Array {
     subarray(begin?: number, end?: number): Float64Array;
 
     /**
-     * Converts a number to a string by using the current locale.
+     * Converts a number to a string according to the host environment's current locale.
      */
     toLocaleString(): string;
 
@@ -4533,41 +4535,41 @@ declare namespace Intl {
 
 interface String {
     /**
-     * Determines whether two strings are equivalent in the current or specified locale.
-     * @param that String to compare to target string
-     * @param locales A locale string or array of locale strings that contain one or more language or locale tags. If you include more than one locale string, list them in descending order of priority so that the first entry is the preferred locale. If you omit this parameter, the default locale of the JavaScript runtime is used. This parameter must conform to BCP 47 standards; see the Intl.Collator object for details.
-     * @param options An object that contains one or more properties that specify comparison options. see the Intl.Collator object for details.
+     * Determines whether two strings are equivalent, according to the specified locale.
+     * @param that String to compare to the target string.
+     * @param locales A BCP 47 language tag, or list of tags, specifying the preferred locale to use for the comparison. If omitted, the default locale is used.
+     * @param options Corresponds to the `options` parameter of the `Intl.Collator` constructor.
      */
     localeCompare(that: string, locales?: string | string[], options?: Intl.CollatorOptions): number;
 }
 
 interface Number {
     /**
-     * Converts a number to a string by using the current or specified locale.
-     * @param locales A locale string or array of locale strings that contain one or more language or locale tags. If you include more than one locale string, list them in descending order of priority so that the first entry is the preferred locale. If you omit this parameter, the default locale of the JavaScript runtime is used.
-     * @param options An object that contains one or more properties that specify comparison options.
+     * Converts a number to a string, according to the current or specified locale.
+     * @param locales A BCP 47 language tag, or list of tags, specifying the preferred locale to use for the conversion. If omitted, the default locale is used.
+     * @param options Corresponds to the `options` parameter of the `Intl.NumberFormat` constructor.
      */
     toLocaleString(locales?: string | string[], options?: Intl.NumberFormatOptions): string;
 }
 
 interface Date {
     /**
-     * Converts a date and time to a string by using the current or specified locale.
-     * @param locales A locale string or array of locale strings that contain one or more language or locale tags. If you include more than one locale string, list them in descending order of priority so that the first entry is the preferred locale. If you omit this parameter, the default locale of the JavaScript runtime is used.
-     * @param options An object that contains one or more properties that specify comparison options.
+     * Converts a date and time to a string, according to the specified locale.
+     * @param locales A BCP 47 language tag, or list of tags, specifying the preferred locale to use for the conversion. If omitted, the default locale is used.
+     * @param options Corresponds to the `options` parameter of the `Intl.DateTimeFormat` constructor.
      */
     toLocaleString(locales?: string | string[], options?: Intl.DateTimeFormatOptions): string;
     /**
-     * Converts a date to a string by using the current or specified locale.
-     * @param locales A locale string or array of locale strings that contain one or more language or locale tags. If you include more than one locale string, list them in descending order of priority so that the first entry is the preferred locale. If you omit this parameter, the default locale of the JavaScript runtime is used.
-     * @param options An object that contains one or more properties that specify comparison options.
+     * Converts a date to a string, according to the specified locale.
+     * @param locales A BCP 47 language tag, or list of tags, specifying the preferred locale to use for the conversion. If omitted, the default locale is used.
+     * @param options Corresponds to the `options` parameter of the `Intl.DateTimeFormat` constructor.
      */
     toLocaleDateString(locales?: string | string[], options?: Intl.DateTimeFormatOptions): string;
 
     /**
-     * Converts a time to a string by using the current or specified locale.
-     * @param locales A locale string or array of locale strings that contain one or more language or locale tags. If you include more than one locale string, list them in descending order of priority so that the first entry is the preferred locale. If you omit this parameter, the default locale of the JavaScript runtime is used.
-     * @param options An object that contains one or more properties that specify comparison options.
+     * Converts a time to a string, according to the specified locale.
+     * @param locales A BCP 47 language tag, or list of tags, specifying the preferred locale to use for the conversion. If omitted, the default locale is used.
+     * @param options Corresponds to the `options` parameter of the `Intl.DateTimeFormat` constructor.
      */
     toLocaleTimeString(locales?: string | string[], options?: Intl.DateTimeFormatOptions): string;
 }
