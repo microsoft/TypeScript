@@ -36,9 +36,9 @@ declare const tmp: Test<A> | Test<B>;
 >B : Symbol(B, Decl(unionOfClassCalls.ts, 6, 22))
 
 switch (tmp.get('t')) {
->tmp.get : Symbol(Test.get, Decl(unionOfClassCalls.ts, 2, 11), Decl(unionOfClassCalls.ts, 2, 11))
+>tmp.get : Symbol(get)
 >tmp : Symbol(tmp, Decl(unionOfClassCalls.ts, 9, 13))
->get : Symbol(Test.get, Decl(unionOfClassCalls.ts, 2, 11), Decl(unionOfClassCalls.ts, 2, 11))
+>get : Symbol(get)
 
     case 'A': break;
     case 'B': break;
@@ -56,9 +56,9 @@ const arr2:  string[] = [];
 >arr2 : Symbol(arr2, Decl(unionOfClassCalls.ts, 20, 5))
 
 arr.map((a: number | string, index: number) => { 
->arr.map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>arr.map : Symbol(map)
 >arr : Symbol(arr, Decl(unionOfClassCalls.ts, 18, 5))
->map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>map : Symbol(map)
 >a : Symbol(a, Decl(unionOfClassCalls.ts, 22, 9))
 >index : Symbol(index, Decl(unionOfClassCalls.ts, 22, 28))
 
@@ -69,9 +69,9 @@ arr.map((a: number | string, index: number) => {
 
 // This case still doesn't work because `reduce` has multiple overloads :(
 arr.reduce((acc: Array<string>, a: number | string, index: number) => { 
->arr.reduce : Symbol(Array.reduce, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --) ... and 1 more)
+>arr.reduce : Symbol(reduce)
 >arr : Symbol(arr, Decl(unionOfClassCalls.ts, 18, 5))
->reduce : Symbol(Array.reduce, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --) ... and 1 more)
+>reduce : Symbol(reduce)
 >acc : Symbol(acc, Decl(unionOfClassCalls.ts, 27, 12))
 >Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >a : Symbol(a, Decl(unionOfClassCalls.ts, 27, 31))
@@ -81,9 +81,9 @@ arr.reduce((acc: Array<string>, a: number | string, index: number) => {
 }, [])
 
 arr.forEach((a: number | string, index: number) => { 
->arr.forEach : Symbol(Array.forEach, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>arr.forEach : Symbol(forEach)
 >arr : Symbol(arr, Decl(unionOfClassCalls.ts, 18, 5))
->forEach : Symbol(Array.forEach, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>forEach : Symbol(forEach)
 >a : Symbol(a, Decl(unionOfClassCalls.ts, 31, 13))
 >index : Symbol(index, Decl(unionOfClassCalls.ts, 31, 32))
 
@@ -195,11 +195,11 @@ declare var a: Bar | Baz;
 
 // note, you must annotate `result` for now
 a.doThing().then((result: Bar | Baz) => {
->a.doThing().then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
->a.doThing : Symbol(Foo.doThing, Decl(unionOfClassCalls.ts, 60, 19), Decl(unionOfClassCalls.ts, 60, 19))
+>a.doThing().then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --))
+>a.doThing : Symbol(doThing)
 >a : Symbol(a, Decl(unionOfClassCalls.ts, 71, 11))
->doThing : Symbol(Foo.doThing, Decl(unionOfClassCalls.ts, 60, 19), Decl(unionOfClassCalls.ts, 60, 19))
->then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>doThing : Symbol(doThing)
+>then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --))
 >result : Symbol(result, Decl(unionOfClassCalls.ts, 73, 18))
 >Bar : Symbol(Bar, Decl(unionOfClassCalls.ts, 62, 1))
 >Baz : Symbol(Baz, Decl(unionOfClassCalls.ts, 66, 1))

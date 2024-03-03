@@ -5,10 +5,10 @@ var arr: string[] | number[];
 >arr : string[] | number[]
 
 arr.splice(1, 1);
->arr.splice(1, 1) : string[] | number[]
->arr.splice : { (start: number, deleteCount?: number): string[]; (start: number, deleteCount: number, ...items: string[]): string[]; } | { (start: number, deleteCount?: number): number[]; (start: number, deleteCount: number, ...items: number[]): number[]; }
+>arr.splice(1, 1) : (string | number)[]
+>arr.splice : { (start: number, deleteCount?: number): (string | number)[]; (start: number, deleteCount: number, ...items: (string | number)[]): (string | number)[]; }
 >arr : string[] | number[]
->splice : { (start: number, deleteCount?: number): string[]; (start: number, deleteCount: number, ...items: string[]): string[]; } | { (start: number, deleteCount?: number): number[]; (start: number, deleteCount: number, ...items: number[]): number[]; }
+>splice : { (start: number, deleteCount?: number): (string | number)[]; (start: number, deleteCount: number, ...items: (string | number)[]): (string | number)[]; }
 >1 : 1
 >1 : 1
 

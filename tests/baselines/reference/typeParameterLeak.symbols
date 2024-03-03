@@ -47,11 +47,11 @@ declare const f: BoxFactoryFactory<BoxTypes>;
 
 const b = f({ x: "", y: "" })?.getBox();
 >b : Symbol(b, Decl(typeParameterLeak.ts, 14, 5))
->f({ x: "", y: "" })?.getBox : Symbol(BoxFactory.getBox, Decl(typeParameterLeak.ts, 9, 25), Decl(typeParameterLeak.ts, 9, 25))
+>f({ x: "", y: "" })?.getBox : Symbol(getBox)
 >f : Symbol(f, Decl(typeParameterLeak.ts, 13, 13))
 >x : Symbol(x, Decl(typeParameterLeak.ts, 14, 13))
 >y : Symbol(y, Decl(typeParameterLeak.ts, 14, 20))
->getBox : Symbol(BoxFactory.getBox, Decl(typeParameterLeak.ts, 9, 25), Decl(typeParameterLeak.ts, 9, 25))
+>getBox : Symbol(getBox)
 
 if (b) {
 >b : Symbol(b, Decl(typeParameterLeak.ts, 14, 5))

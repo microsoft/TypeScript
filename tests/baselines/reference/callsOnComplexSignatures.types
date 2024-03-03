@@ -99,9 +99,9 @@ function test3(items: string[] | number[]) {
 
     items.forEach(item => console.log(item));
 >items.forEach(item => console.log(item)) : void
->items.forEach : ((callbackfn: (value: string, index: number, array: string[]) => void, thisArg?: any) => void) | ((callbackfn: (value: number, index: number, array: number[]) => void, thisArg?: any) => void)
+>items.forEach : (callbackfn: (value: string | number, index: number, array: (string | number)[]) => void, thisArg?: any) => void
 >items : string[] | number[]
->forEach : ((callbackfn: (value: string, index: number, array: string[]) => void, thisArg?: any) => void) | ((callbackfn: (value: number, index: number, array: number[]) => void, thisArg?: any) => void)
+>forEach : (callbackfn: (value: string | number, index: number, array: (string | number)[]) => void, thisArg?: any) => void
 >item => console.log(item) : (item: string | number) => void
 >item : string | number
 >console.log(item) : void
