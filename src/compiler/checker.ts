@@ -13255,23 +13255,68 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return result;
     }
 
+    function getFallbackExpandedLabels(restType: TupleTypeReference, restDeclaration: Declaration | undefined) {
+        if (!restDeclaration) {
+            return;
+        }
+        Debug.assert(isParameter(restDeclaration));
+        if (restDeclaration.name.kind !== SyntaxKind.ArrayBindingPattern) {
+            return;
+        }
+        const nameElements = restDeclaration.name.elements;
+        const elementFlags = restType.target.elementFlags;
+        const length = Math.min(nameElements.length, elementFlags.length);
+        const result: (__String | undefined)[] = [];
+        for (let i = 0; i < length; i++) {
+            const nameElement = nameElements[i];
+
+            if (elementFlags[i] & ElementFlags.Variable) {
+                if (nameElement.kind === SyntaxKind.BindingElement && nameElement.dotDotDotToken && nameElement.name.kind === SyntaxKind.Identifier) {
+                    result.push(nameElement.name.escapedText);
+                }
+                break;
+            }
+            if (nameElement.kind !== SyntaxKind.BindingElement) {
+                result.push(undefined);
+                continue;
+            }
+            if (nameElement.dotDotDotToken) {
+                break;
+            }
+            if (nameElement.name.kind !== SyntaxKind.Identifier) {
+                result.push(undefined);
+                continue;
+            }
+            result.push(nameElement.name.escapedText);
+        }
+        // fill the rest of the labels with undefined
+        // it makes it easier to consume the fallback labels later
+        // since they will have the same length as the labeledElementDeclarations etc
+        for (let i = result.length; i < elementFlags.length; i++) {
+            result.push(undefined);
+        }
+        return result;
+    }
+
     function getExpandedParameters(sig: Signature, skipUnionExpanding?: boolean): readonly (readonly Symbol[])[] {
         if (signatureHasRestParameter(sig)) {
             const restIndex = sig.parameters.length - 1;
             const restName = sig.parameters[restIndex].escapedName;
             const restType = getTypeOfSymbol(sig.parameters[restIndex]);
+            const restDeclaration = sig.parameters[restIndex].valueDeclaration;
+
             if (isTupleType(restType)) {
-                return [expandSignatureParametersWithTupleMembers(restType, restIndex, restName)];
+                return [expandSignatureParametersWithTupleMembers(restType, restIndex, restName, getFallbackExpandedLabels(restType, restDeclaration))];
             }
             else if (!skipUnionExpanding && restType.flags & TypeFlags.Union && every((restType as UnionType).types, isTupleType)) {
-                return map((restType as UnionType).types, t => expandSignatureParametersWithTupleMembers(t as TupleTypeReference, restIndex, restName));
+                return map((restType as UnionType).types, t => expandSignatureParametersWithTupleMembers(t as TupleTypeReference, restIndex, restName, getFallbackExpandedLabels(t as TupleTypeReference, restDeclaration)));
             }
         }
         return [sig.parameters];
 
-        function expandSignatureParametersWithTupleMembers(restType: TupleTypeReference, restIndex: number, restName: __String) {
+        function expandSignatureParametersWithTupleMembers(restType: TupleTypeReference, restIndex: number, restName: __String, fallbackLabels: (__String | undefined)[] | undefined) {
             const elementTypes = getTypeArguments(restType);
-            const associatedNames = getUniqAssociatedNamesFromTupleType(restType, restName);
+            const associatedNames = getUniqAssociatedNamesFromTupleType(restType, restName, fallbackLabels);
             const restParams = map(elementTypes, (t, i) => {
                 // Lookup the label from the individual tuple passed in before falling back to the signature `rest` parameter name
                 const name = associatedNames && associatedNames[i] ? associatedNames[i] :
@@ -13286,10 +13331,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             return concatenate(sig.parameters.slice(0, restIndex), restParams);
         }
 
-        function getUniqAssociatedNamesFromTupleType(type: TupleTypeReference, restName: __String) {
+        function getUniqAssociatedNamesFromTupleType(type: TupleTypeReference, restName: __String, fallbackLabels: (__String | undefined)[] | undefined) {
             const associatedNamesMap = new Map<__String, number>();
             return map(type.target.labeledElementDeclarations, (labeledElement, i) => {
-                const name = getTupleElementLabel(labeledElement, i, restName);
+                const name = getTupleElementLabel(labeledElement, i, restName, fallbackLabels?.[i]);
                 const prevCounter = associatedNamesMap.get(name);
                 if (prevCounter === undefined) {
                     associatedNamesMap.set(name, 1);
@@ -36298,10 +36343,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function getTupleElementLabel(d: ParameterDeclaration | NamedTupleMember): __String;
-    function getTupleElementLabel(d: ParameterDeclaration | NamedTupleMember | undefined, index: number, restParameterName?: __String): __String;
-    function getTupleElementLabel(d: ParameterDeclaration | NamedTupleMember | undefined, index?: number, restParameterName = "arg" as __String) {
+    function getTupleElementLabel(d: ParameterDeclaration | NamedTupleMember | undefined, index: number, restParameterName?: __String, fallbackLabel?: __String): __String;
+    function getTupleElementLabel(d: ParameterDeclaration | NamedTupleMember | undefined, index?: number, restParameterName = "arg" as __String, fallbackLabel?: __String) {
         if (!d) {
-            return `${restParameterName}_${index}` as __String;
+            return fallbackLabel ?? `${restParameterName}_${index}` as __String;
         }
         Debug.assert(isIdentifier(d.name)); // Parameter declarations could be binding patterns, but we only allow identifier names
         return d.name.escapedText;
