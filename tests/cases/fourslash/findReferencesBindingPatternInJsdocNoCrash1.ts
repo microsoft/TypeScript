@@ -12,7 +12,7 @@
 ////  data: string[];
 ////};
 
-// @Filename: node_modules/use-query/package.json
+// @Filename: node_modules/other/package.json
 ////{
 ////  "name": "other",
 ////  "types": "index.d.ts"
