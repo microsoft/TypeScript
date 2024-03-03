@@ -37411,8 +37411,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         // Only attempt to infer a type predicate if there's exactly one return.
         let singleReturn: Expression | undefined;
         if (func.body && func.body.kind !== SyntaxKind.Block) {
-            const contextualSignature = getContextualSignature(func as ArrowFunction);
-            if (contextualSignature && !getTypePredicateOfSignature(contextualSignature)) return undefined;
             singleReturn = func.body; // arrow function
         }
         else {
