@@ -37445,13 +37445,14 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
 
         function checkIfExpressionRefinesParameter(expr: Expression, param: ParameterDeclaration, initType: Type): Type | undefined {
-            const antecedent = (expr as Expression & { flowNode?: FlowNode; }).flowNode ||
+            const baseAntecedent = (expr as Expression & { flowNode?: FlowNode; }).flowNode ||
                 expr.parent.kind === SyntaxKind.ReturnStatement && (expr.parent as ReturnStatement).flowNode ||
                 { flags: FlowFlags.Start };
+            const sharedAntecedent = { ...baseAntecedent, flags: baseAntecedent.flags & FlowFlags.Shared };
             const trueCondition: FlowCondition = {
                 flags: FlowFlags.TrueCondition,
                 node: expr,
-                antecedent,
+                antecedent: sharedAntecedent,
             };
 
             const trueType = getFlowTypeOfReference(param.name, initType, initType, func, trueCondition);
