@@ -14596,30 +14596,13 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     /**
      *
      * @param mappers
-     *    All mappers should share the same sources
-     *    There are some assumptions that must be satisified for calculation to proceed.
+     *    All mappers should share the same sources, but may/should have difference targets.
+     *    The union over the targets of the mappers is union'ed to create a single mapper.
      * @returns
-     *    undefined -> rejected because of unsatisfed assumptions
-     *    TypeMapper -> the union over the targets of the mappers is union'ed to create a single mapper.
      */
-    function createCoverOfMappersMapper(mappers: readonly TypeMapper[], rejectIfHasUnresolvedTarget=true): TypeMapper | undefined {
+    function createCoverOfMappersMapper(mappers: readonly TypeMapper[]): TypeMapper | undefined {
 
-        function isUnresolved(source: Type, target: Type): boolean { return source===target; /*  !!(target.flags & TypeFlags.TypeParameter); */ }
-        function targetIsTypeParameter(target: Type): boolean {
-            return !!(target.flags & TypeFlags.TypeParameter)
-                || !!(target.flags & TypeFlags.Intersection && (target as IntersectionType).types.some(t=>targetIsTypeParameter(t)));
-        }
-        function targetContainsTypeParameter(target: Type): boolean {
-            if (targetIsTypeParameter(target)) return true;
-            if (target.flags & TypeFlags.Union){
-                return (target as UnionType).types.some(t=>targetIsTypeParameter(t));
-            }
-            return false;
-        }
-        function rejectCondition(/*source:Type,*/target:Type) {
-            /*!isUnresolved(source,target) &&*/ return targetContainsTypeParameter(target);
-        }
-
+        function isUnresolved(target: Type): boolean { return !!(target.flags & TypeFlags.TypeParameter); }
         type TypeMapperSimple = { kind: TypeMapKind.Simple; source: Type; target: Type; };
         type TypeMapperArray = { kind: TypeMapKind.Array; sources: readonly Type[]; targets: readonly Type[] | undefined; };
         type TypeMapperDouble = { kind: TypeMapKind.Composite | TypeMapKind.Merged; mapper1: TypeMapper; mapper2: TypeMapper; };
@@ -14634,58 +14617,35 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
 
         if (mapper0.kind===TypeMapKind.Simple) {
-            let unresolved = isUnresolved(mapper0.source, mapper0.target);
-            const reject = mappers.every(m=> {
-                const {source,target} = m as TypeMapperSimple;
-                const mUnresolved = isUnresolved(source,target)
-                return mUnresolved!==unresolved || (!unresolved && rejectCondition(target));
-            });
+            let unresolved = isUnresolved(mapper0.target);
             if (testAssumptions){
-                Debug.assert(!reject, "assumption !reject is false (TypeMapKind.Simple)");
+                Debug.assert(mappers.every(m=>isUnresolved((m as TypeMapperSimple).target)===unresolved));
             }
-            if (reject) return undefined;
-            if (unresolved) return rejectIfHasUnresolvedTarget ? undefined : mapper0;
+            if (unresolved) return mapper0; //createTypeMapper([mapper0.source], [mapper0.target]);
             return createTypeMapper([mapper0.source], [getUnionType(mappers.map(m=>(m as TypeMapperSimple).target!))]);
         }
         else if (mapper0.kind===TypeMapKind.Array) {
+            let unresolved = !mapper0.targets;
             if (testAssumptions){
-                Debug.assert(mapper0.targets);
-                Debug.assert(mappers.every(m=> (m as TypeMapperArray).targets));
-                Debug.assert(mappers.every(m=> (m as TypeMapperArray).targets!.length===mapper0.targets!.length));
+                Debug.assert(mappers.every(m=> (m as TypeMapperArray).targets===undefined)===unresolved);
             }
-            if (!mapper0.targets) return undefined;
+            if (unresolved) return mapper0;
+
+            unresolved = isUnresolved(mapper0.targets![0]);
+            // if (testAssumptions){
+            //     Debug.assert(mappers.every(m=> {
+            //         return isUnresolved((m as TypeMapperArray).targets![0])===unresolved
+            //         && (m as TypeMapperArray).targets!.every(t=>isUnresolved(t)===unresolved);
+            //     }));
+            // }
+            if (unresolved) return mapper0;
 
             const length = mapper0.sources.length;
             const unionTargets: Type[] = [];
-            let someIndexRejected = false;
-            let everyIndexUnresolved = true;
             for (let sourceIndex = 0; sourceIndex < length; sourceIndex++) {
-                let unresolved = isUnresolved(mapper0.sources[sourceIndex], mapper0.targets![sourceIndex]);
-                const reject = mappers.every(mm=>{
-                    const source = (mm as TypeMapperArray).sources[sourceIndex];
-                    const target = (mm as TypeMapperArray).targets![sourceIndex];
-                    //const {sources,targets} = mm as TypeMapperArray;
-                    const mUnresolved = isUnresolved(source,target)
-                    return mUnresolved!==unresolved || (!unresolved && rejectCondition(target));
-                });
-                // if (testAssumptions){
-                //     // causes tests/cases/compiler/complexRecursiveCollections.ts to fail
-                //     Debug.assert(!reject, "assumption !reject is false (TypeMapKind.Array)");
-                // }
-                if (reject || (rejectIfHasUnresolvedTarget && unresolved)) {
-                    someIndexRejected = true;
-                    break;
-                }
-                if (unresolved) {
-                    unionTargets.push(mapper0.targets![sourceIndex]);
-                }
-                else everyIndexUnresolved = false;
-                // if (unresolved) unionTargets.push(mapper0.targets![sourceIndex]);
-                // else unionTargets.push(getUnionType(mappers.map(m=>(m as TypeMapperArray).targets![sourceIndex])));
+                const source = mapper0.sources[sourceIndex];
+                unionTargets.push(getUnionType(mappers.map(m=>(m as TypeMapperArray).targets![sourceIndex])));
             }
-            if (someIndexRejected) return undefined;
-            if (everyIndexUnresolved) return mapper0;
-            /** Beware: case of only some index unresolved gets here - is it safe? */
             return createTypeMapper(mapper0.sources, unionTargets);
         }
         else if (mapper0.kind===TypeMapKind.Composite){
@@ -14695,9 +14655,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             const unionOfMapper2 = createCoverOfMappersMapper(mappers.map(mapper=>(mapper as TypeMapperDouble).mapper2));
             if (!unionOfMapper2) return undefined;
             if (testAssumptions) {
-                const mapper1 = createCoverOfMappersMapper([mapper0.mapper1 as TypeMapperSimple | TypeMapperArray], /*rejectIfHasUnresolvedTarget*/ false);
-                Debug.assert(mapper1 === mapper0.mapper1, "assumption that mapper is strictly unresolved is false, (TypeMapKind.Composite)");
-                //Debug.assert(unionOfMapper2 !== mapper0.mapper2) // means it is resolved.
+                const mapper1 = createCoverOfMappersMapper([mapper0.mapper1 as TypeMapperSimple | TypeMapperArray]);
+                Debug.assert(mapper1 === mapper0.mapper1); // means it is unresolved.
+                Debug.assert(unionOfMapper2 !== mapper0.mapper2) // means it is resolved.
             }
             return {
                 kind: TypeMapKind.Composite,
@@ -14888,14 +14848,25 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             const unionMapper = createCoverOfMappersMapper(mappers);
             if (!unionMapper) return undefined;
             const symbol = createSymbol(SymbolFlags.Property | props[0].flags, name, syntheticFlag | checkFlags);
-            const typeOfSymbolId = createType(propTypes[0].flags).id;
-            const typeOfSymbol =
-            {
-                ...propTypes[0], // mostly a copy
-                mapper: unionMapper,
-                id: typeOfSymbolId
-            };
-            Debug.assert("flags" in typeOfSymbol);
+            // function createObjectType(objectFlags: ObjectFlags, symbol?: Symbol): ObjectType {
+            //     const type = createTypeWithSymbol(TypeFlags.Object, symbol!) as ObjectType;
+            //     type.objectFlags = objectFlags;
+            //     type.members = undefined;
+            //     type.properties = undefined;
+            //     type.callSignatures = undefined;
+            //     type.constructSignatures = undefined;
+            //     type.indexInfos = undefined;
+            //     return type;
+            // }
+            const typeOfSymbol = createObjectType((propTypes[0] as ObjectType).objectFlags,symbol);
+            typeOfSymbol.flags = (propTypes[0] as ObjectType).flags;
+            (typeOfSymbol as MappedType).mapper = unionMapper;
+            (typeOfSymbol as MappedType).target = (propTypes[0] as MappedType).target;
+            // typeOfSymbol.target = (propTypes[0] as ObjectType).target; is this necessary ??
+            // const typeOfSymbol = {
+            //     ...propTypes[0], // yikes!
+            //     mapper: unionMapper,
+            // };
             symbol.links.containingType = containingType // if it is referenced, it cannot be garbage collected, but it's used by
             //symbol.links.type = createObjectType((propTypes[0] as ObjectType).objectFlags, symbol); doesn't work
             symbol.links.type = typeOfSymbol;
