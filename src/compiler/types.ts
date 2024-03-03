@@ -5841,6 +5841,10 @@ export const enum CheckFlags {
 /** @internal */
 export interface TransientSymbolLinks extends SymbolLinks {
     checkFlags: CheckFlags;
+    composite?: {
+        mappers: readonly TypeMapper[];
+        kind: TypeFlags.Union | TypeFlags.Intersection;
+    }
 }
 
 /** @internal */

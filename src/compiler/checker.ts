@@ -14593,6 +14593,89 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return getReducedType(getApparentType(getReducedType(type)));
     }
 
+    /**
+     *
+     * @param mappers
+     *    All mappers should share the same sources, but may/should have difference targets.
+     *    The union over the targets of the mappers is union'ed to create a single mapper.
+     * @returns
+     */
+    function createCoverOfMappersMapper(mappers: readonly TypeMapper[]): TypeMapper | undefined {
+
+        function isUnresolved(target: Type): boolean { return !!(target.flags & TypeFlags.TypeParameter); }
+        type TypeMapperSimple = { kind: TypeMapKind.Simple; source: Type; target: Type; };
+        type TypeMapperArray = { kind: TypeMapKind.Array; sources: readonly Type[]; targets: readonly Type[] | undefined; };
+        type TypeMapperDouble = { kind: TypeMapKind.Composite | TypeMapKind.Merged; mapper1: TypeMapper; mapper2: TypeMapper; };
+
+        const testAssumptions = true;
+
+        const mapper0 = mappers[0];
+
+        if (testAssumptions){
+            Debug.assert([TypeMapKind.Simple,TypeMapKind.Array,TypeMapKind.Merged,TypeMapKind.Composite].includes(mapper0.kind));
+            Debug.assert(mappers.every(m=>m.kind===mapper0.kind));
+        }
+
+        if (mapper0.kind===TypeMapKind.Simple) {
+            let unresolved = isUnresolved(mapper0.target);
+            if (testAssumptions){
+                Debug.assert(mappers.every(m=>isUnresolved((m as TypeMapperSimple).target)===unresolved));
+            }
+            if (unresolved) return mapper0; //createTypeMapper([mapper0.source], [mapper0.target]);
+            return createTypeMapper([mapper0.source], [getUnionType(mappers.map(m=>(m as TypeMapperSimple).target!))]);
+        }
+        else if (mapper0.kind===TypeMapKind.Array) {
+            let unresolved = !mapper0.targets;
+            if (testAssumptions){
+                Debug.assert(mappers.every(m=> (m as TypeMapperArray).targets===undefined)===unresolved);
+            }
+            if (unresolved) return mapper0;
+
+            unresolved = isUnresolved(mapper0.targets![0]);
+            // if (testAssumptions){
+            //     Debug.assert(mappers.every(m=> {
+            //         return isUnresolved((m as TypeMapperArray).targets![0])===unresolved
+            //         && (m as TypeMapperArray).targets!.every(t=>isUnresolved(t)===unresolved);
+            //     }));
+            // }
+            if (unresolved) return mapper0;
+
+            const length = mapper0.sources.length;
+            const unionTargets: Type[] = [];
+            for (let sourceIndex = 0; sourceIndex < length; sourceIndex++) {
+                const source = mapper0.sources[sourceIndex];
+                unionTargets.push(getUnionType(mappers.map(m=>(m as TypeMapperArray).targets![sourceIndex])));
+            }
+            return createTypeMapper(mapper0.sources, unionTargets);
+        }
+        else if (mapper0.kind===TypeMapKind.Composite){
+            /**
+             * We are assuming that mapper1 is strictly unresolved and mapper2 is strictly resolved.
+             */
+            const unionOfMapper2 = createCoverOfMappersMapper(mappers.map(mapper=>(mapper as TypeMapperDouble).mapper2));
+            if (!unionOfMapper2) return undefined;
+            if (testAssumptions) {
+                const mapper1 = createCoverOfMappersMapper([mapper0.mapper1 as TypeMapperSimple | TypeMapperArray]);
+                Debug.assert(mapper1 === mapper0.mapper1); // means it is unresolved.
+                Debug.assert(unionOfMapper2 !== mapper0.mapper2) // means it is resolved.
+            }
+            return {
+                kind: TypeMapKind.Composite,
+                mapper1: mapper0.mapper1,
+                mapper2: unionOfMapper2!
+            }
+
+        }
+        else if (mapper0.kind===TypeMapKind.Merged){
+            if (testAssumptions) {
+                Debug.assert(false, "not yet implemented, mapper0.kind===TypeMapKind.Merged");
+            }
+        }
+        else if (testAssumptions) Debug.assert(false, "cannot handle mapper0.kind");
+        return undefined;
+    }
+
+
     function createUnionOrIntersectionProperty(containingType: UnionOrIntersectionType, name: __String, skipObjectFunctionPropertyAugment?: boolean): Symbol | undefined {
         let singleProp: Symbol | undefined;
         let propSet: Map<SymbolId, Symbol> | undefined;
@@ -14737,6 +14820,50 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             }
             propTypes.push(type);
         }
+        /**
+         * This is a good place to handle union of shared-generic-parent methods with differing parameters.
+         * Adding the processing in `getUnionType` would be a special case that should only be exercised when called from here
+         * anyway.  We can also take advantage of the shared declarations using a declaration-to-property map.
+         */
+        let enableMergedGenericMethodProcessingProp = true;
+        const mergedMethodResult = (() => {
+            if (!enableMergedGenericMethodProcessingProp || !isUnion || skipObjectFunctionPropertyAugment) return undefined;
+            const links0 = getSymbolLinks(props[0]);
+            const commonTargetSymbol = links0.mapper && links0.target!;
+            const mappers: TypeMapper[] = [];
+            if (!commonTargetSymbol || !props.every((prop,propIndex)=> {
+                if (!(prop.flags & SymbolFlags.Method)) return false;
+                if (propIndex===0) {
+                    mappers.push(links0.mapper!);
+                    return true;
+                }
+                const links = getSymbolLinks(prop);
+                if (links.mapper && links.target === commonTargetSymbol){
+                    mappers.push(links.mapper);
+                    return true;
+                }
+                return false;
+            })) return undefined;
+
+            const unionMapper = createCoverOfMappersMapper(mappers);
+            if (!unionMapper) return undefined;
+            const symbol = createSymbol(SymbolFlags.Property | props[0].flags, name, syntheticFlag | checkFlags);
+            const typeOfSymbol = {
+                ...propTypes[0], // yikes!
+                mapper: unionMapper,
+            };
+            symbol.links.containingType = containingType // if it is referenced, it cannot be garbage collected, but it's used by
+            //symbol.links.type = createObjectType((propTypes[0] as ObjectType).objectFlags, symbol); doesn't work
+            symbol.links.type = typeOfSymbol;
+            symbol.links.target = commonTargetSymbol;
+            symbol.links.mapper = unionMapper
+            symbol.links.composite = {
+                mappers,
+                kind: TypeFlags.Union,
+            }
+            return symbol;
+        })();
+        if (mergedMethodResult) return mergedMethodResult;
         addRange(propTypes, indexTypes);
         const result = createSymbol(SymbolFlags.Property | (optionalFlag ?? 0), name, syntheticFlag | checkFlags);
         result.links.containingType = containingType;
