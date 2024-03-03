@@ -2062,7 +2062,7 @@ function getPresentModifiers(
     contextToken: Node | undefined,
     sourceFile: SourceFile,
     position: number,
-): { modifiers: ModifierFlags; decorators?: Decorator[]; range?: TextRange; filterText?: string } {
+): { modifiers: ModifierFlags; decorators?: Decorator[]; range?: TextRange; filterText?: string; } {
     if (
         !contextToken ||
         getLineAndCharacterOfPosition(sourceFile, position).line
