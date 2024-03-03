@@ -1,71 +1,75 @@
 variadicTuples2.ts(7,34): error TS1265: A rest element cannot follow another rest element.
 variadicTuples2.ts(8,34): error TS1266: An optional element cannot follow a rest element.
 variadicTuples2.ts(9,30): error TS1257: A required element cannot follow an optional element.
-variadicTuples2.ts(42,1): error TS2322: Type '[string, string, number, number]' is not assignable to type '[...string[], number]'.
+variadicTuples2.ts(11,26): error TS1265: A rest element cannot follow another rest element.
+variadicTuples2.ts(12,26): error TS1265: A rest element cannot follow another rest element.
+variadicTuples2.ts(13,31): error TS1265: A rest element cannot follow another rest element.
+variadicTuples2.ts(14,31): error TS1265: A rest element cannot follow another rest element.
+variadicTuples2.ts(47,1): error TS2322: Type '[string, string, number, number]' is not assignable to type '[...string[], number]'.
   Type at positions 0 through 2 in source is not compatible with type at position 0 in target.
     Type 'number' is not assignable to type 'string'.
-variadicTuples2.ts(48,5): error TS2345: Argument of type '["abc", "def", 5, 6]' is not assignable to parameter of type '[...strs: string[], num: number]'.
+variadicTuples2.ts(53,5): error TS2345: Argument of type '["abc", "def", 5, 6]' is not assignable to parameter of type '[...strs: string[], num: number]'.
   Type at positions 0 through 2 in source is not compatible with type at position 0 in target.
     Type 'number' is not assignable to type 'string'.
-variadicTuples2.ts(51,1): error TS2322: Type '[number]' is not assignable to type '[number, ...string[], number]'.
+variadicTuples2.ts(56,1): error TS2322: Type '[number]' is not assignable to type '[number, ...string[], number]'.
   Source has 1 element(s) but target requires 2.
-variadicTuples2.ts(53,1): error TS2322: Type '[number, number, number]' is not assignable to type '[number, ...string[], number]'.
+variadicTuples2.ts(58,1): error TS2322: Type '[number, number, number]' is not assignable to type '[number, ...string[], number]'.
   Type at position 1 in source is not compatible with type at position 1 in target.
     Type 'number' is not assignable to type 'string'.
-variadicTuples2.ts(56,1): error TS2322: Type '[number, string, number, string]' is not assignable to type '[number, ...string[], number]'.
+variadicTuples2.ts(61,1): error TS2322: Type '[number, string, number, string]' is not assignable to type '[number, ...string[], number]'.
   Type at positions 1 through 2 in source is not compatible with type at position 1 in target.
     Type 'number' is not assignable to type 'string'.
-variadicTuples2.ts(57,8): error TS2322: Type 'boolean' is not assignable to type 'number'.
-variadicTuples2.ts(58,1): error TS2322: Type '[number, string, string, boolean]' is not assignable to type '[number, ...string[], number]'.
+variadicTuples2.ts(62,8): error TS2322: Type 'boolean' is not assignable to type 'number'.
+variadicTuples2.ts(63,1): error TS2322: Type '[number, string, string, boolean]' is not assignable to type '[number, ...string[], number]'.
   Type at position 3 in source is not compatible with type at position 2 in target.
     Type 'boolean' is not assignable to type 'number'.
-variadicTuples2.ts(61,1): error TS2345: Argument of type '[]' is not assignable to parameter of type '[...strs: string[], n2: number]'.
+variadicTuples2.ts(66,1): error TS2345: Argument of type '[]' is not assignable to parameter of type '[...strs: string[], n2: number]'.
   Source has 0 element(s) but target requires 1.
-variadicTuples2.ts(63,8): error TS2345: Argument of type '[1, 2]' is not assignable to parameter of type '[...strs: string[], n2: number]'.
+variadicTuples2.ts(68,8): error TS2345: Argument of type '[1, 2]' is not assignable to parameter of type '[...strs: string[], n2: number]'.
   Type at position 0 in source is not compatible with type at position 0 in target.
     Type 'number' is not assignable to type 'string'.
-variadicTuples2.ts(66,8): error TS2345: Argument of type '["abc", 1, "def"]' is not assignable to parameter of type '[...strs: string[], n2: number]'.
+variadicTuples2.ts(71,8): error TS2345: Argument of type '["abc", 1, "def"]' is not assignable to parameter of type '[...strs: string[], n2: number]'.
   Type at positions 0 through 1 in source is not compatible with type at position 0 in target.
     Type 'number' is not assignable to type 'string'.
-variadicTuples2.ts(67,5): error TS2345: Argument of type 'boolean' is not assignable to parameter of type 'number'.
-variadicTuples2.ts(68,8): error TS2345: Argument of type '["abc", "def", true]' is not assignable to parameter of type '[...strs: string[], n2: number]'.
+variadicTuples2.ts(72,5): error TS2345: Argument of type 'boolean' is not assignable to parameter of type 'number'.
+variadicTuples2.ts(73,8): error TS2345: Argument of type '["abc", "def", true]' is not assignable to parameter of type '[...strs: string[], n2: number]'.
   Type at position 2 in source is not compatible with type at position 1 in target.
     Type 'boolean' is not assignable to type 'number'.
-variadicTuples2.ts(71,5): error TS2322: Type '[number, number]' is not assignable to type '[number, ...T]'.
+variadicTuples2.ts(76,5): error TS2322: Type '[number, number]' is not assignable to type '[number, ...T]'.
   Source provides no match for variadic element at position 1 in target.
-variadicTuples2.ts(72,5): error TS2322: Type '[number, ...number[]]' is not assignable to type '[number, ...T]'.
+variadicTuples2.ts(77,5): error TS2322: Type '[number, ...number[]]' is not assignable to type '[number, ...T]'.
   Target requires 2 element(s) but source may have fewer.
-variadicTuples2.ts(73,5): error TS2322: Type '[number, ...T]' is not assignable to type '[number, number]'.
+variadicTuples2.ts(78,5): error TS2322: Type '[number, ...T]' is not assignable to type '[number, number]'.
   Type '[number, ...unknown[]]' is not assignable to type '[number, number]'.
     Target requires 2 element(s) but source may have fewer.
-variadicTuples2.ts(74,5): error TS2322: Type '[number, ...T]' is not assignable to type '[number, ...number[]]'.
+variadicTuples2.ts(79,5): error TS2322: Type '[number, ...T]' is not assignable to type '[number, ...number[]]'.
   Type '[number, ...unknown[]]' is not assignable to type '[number, ...number[]]'.
     Type at position 1 in source is not compatible with type at position 1 in target.
       Type 'unknown' is not assignable to type 'number'.
-variadicTuples2.ts(79,5): error TS2322: Type '[number, string, ...any[]]' is not assignable to type '[number, ...number[]]'.
+variadicTuples2.ts(84,5): error TS2322: Type '[number, string, ...any[]]' is not assignable to type '[number, ...number[]]'.
   Type at positions 1 through 2 in source is not compatible with type at position 1 in target.
     Type 'string' is not assignable to type 'number'.
-variadicTuples2.ts(111,16): error TS2345: Argument of type '[1, 2, 3, number]' is not assignable to parameter of type '[...number[], (...values: number[]) => void]'.
+variadicTuples2.ts(116,16): error TS2345: Argument of type '[1, 2, 3, number]' is not assignable to parameter of type '[...number[], (...values: number[]) => void]'.
   Type at position 3 in source is not compatible with type at position 1 in target.
     Type 'number' is not assignable to type '(...values: number[]) => void'.
-variadicTuples2.ts(112,6): error TS2345: Argument of type 'string[]' is not assignable to parameter of type '[...string[], (...values: string[]) => void]'.
+variadicTuples2.ts(117,6): error TS2345: Argument of type 'string[]' is not assignable to parameter of type '[...string[], (...values: string[]) => void]'.
   Source provides no match for required element at position 1 in target.
-variadicTuples2.ts(115,5): error TS2345: Argument of type '[]' is not assignable to parameter of type '[...unknown[], unknown, unknown]'.
+variadicTuples2.ts(120,5): error TS2345: Argument of type '[]' is not assignable to parameter of type '[...unknown[], unknown, unknown]'.
   Source has 0 element(s) but target requires 2.
-variadicTuples2.ts(116,5): error TS2345: Argument of type '[number]' is not assignable to parameter of type '[...unknown[], unknown, unknown]'.
+variadicTuples2.ts(121,5): error TS2345: Argument of type '[number]' is not assignable to parameter of type '[...unknown[], unknown, unknown]'.
   Source has 1 element(s) but target requires 2.
-variadicTuples2.ts(121,5): error TS2345: Argument of type '[]' is not assignable to parameter of type '[unknown, ...unknown[], unknown]'.
+variadicTuples2.ts(126,5): error TS2345: Argument of type '[]' is not assignable to parameter of type '[unknown, ...unknown[], unknown]'.
   Source has 0 element(s) but target requires 2.
-variadicTuples2.ts(122,5): error TS2345: Argument of type '[number]' is not assignable to parameter of type '[unknown, ...unknown[], unknown]'.
+variadicTuples2.ts(127,5): error TS2345: Argument of type '[number]' is not assignable to parameter of type '[unknown, ...unknown[], unknown]'.
   Source has 1 element(s) but target requires 2.
-variadicTuples2.ts(132,16): error TS2345: Argument of type 'number' is not assignable to parameter of type 'string'.
-variadicTuples2.ts(133,16): error TS2345: Argument of type 'number' is not assignable to parameter of type 'string'.
-variadicTuples2.ts(134,25): error TS2345: Argument of type '["blah2", 1, 2, 3]' is not assignable to parameter of type '[...string[], number]'.
+variadicTuples2.ts(137,16): error TS2345: Argument of type 'number' is not assignable to parameter of type 'string'.
+variadicTuples2.ts(138,16): error TS2345: Argument of type 'number' is not assignable to parameter of type 'string'.
+variadicTuples2.ts(139,25): error TS2345: Argument of type '["blah2", 1, 2, 3]' is not assignable to parameter of type '[...string[], number]'.
   Type at positions 0 through 2 in source is not compatible with type at position 0 in target.
     Type 'number' is not assignable to type 'string'.
 
 
-==== variadicTuples2.ts (29 errors) ====
+==== variadicTuples2.ts (33 errors) ====
     // Declarations
     
     type V00 = [number, ...string[]];
@@ -81,6 +85,19 @@ variadicTuples2.ts(134,25): error TS2345: Argument of type '["blah2", 1, 2, 3]' 
     type V12 = [number, string?, boolean];  // Error
                                  ~~~~~~~
 !!! error TS1257: A required element cannot follow an optional element.
+    
+    type V15 = [...string[], ...number[]];  // Error
+                             ~~~~~~~~~~~
+!!! error TS1265: A rest element cannot follow another rest element.
+    type V16 = [...string[], ...Array<number>];  // Error
+                             ~~~~~~~~~~~~~~~~
+!!! error TS1265: A rest element cannot follow another rest element.
+    type V17 = [...Array<string>, ...number[]];  // Error
+                                  ~~~~~~~~~~~
+!!! error TS1265: A rest element cannot follow another rest element.
+    type V18 = [...Array<string>, ...Array<number>];  // Error
+                                  ~~~~~~~~~~~~~~~~
+!!! error TS1265: A rest element cannot follow another rest element.
     
     // Normalization
     

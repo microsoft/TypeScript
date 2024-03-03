@@ -275,7 +275,7 @@ Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/pr
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 undefined Project: /user/username/projects/myproject/dependency/tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/node_modules/@types 1 undefined Project: /user/username/projects/myproject/dependency/tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/node_modules/@types 1 undefined Project: /user/username/projects/myproject/dependency/tsconfig.json WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /user/username/projects/myproject/dependency/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /user/username/projects/myproject/dependency/tsconfig.json projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/user/username/projects/myproject/dependency/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (2)
 	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
@@ -386,6 +386,21 @@ FsWatchesRecursive::
 /user/username/projects/myproject/dependency: *new*
   {}
 
+Projects::
+/user/username/projects/myproject/dependency/tsconfig.json (Configured) *new*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+
+ScriptInfos::
+/a/lib/lib.d.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /user/username/projects/myproject/dependency/tsconfig.json
+/user/username/projects/myproject/dependency/FnS.ts (Open) *new*
+    version: SVC-1-0
+    containingProjects: 1
+        /user/username/projects/myproject/dependency/tsconfig.json *default*
+
 Before request
 
 Info seq  [hh:mm:ss:mss] request:
@@ -428,7 +443,7 @@ Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/pr
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 undefined Project: /user/username/projects/myproject/random/tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/node_modules/@types 1 undefined Project: /user/username/projects/myproject/random/tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/node_modules/@types 1 undefined Project: /user/username/projects/myproject/random/tsconfig.json WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /user/username/projects/myproject/random/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /user/username/projects/myproject/random/tsconfig.json projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/user/username/projects/myproject/random/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (2)
 	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
@@ -545,6 +560,29 @@ FsWatchesRecursive::
 /user/username/projects/myproject/random: *new*
   {}
 
+Projects::
+/user/username/projects/myproject/dependency/tsconfig.json (Configured)
+    projectStateVersion: 1
+    projectProgramVersion: 1
+/user/username/projects/myproject/random/tsconfig.json (Configured) *new*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+
+ScriptInfos::
+/a/lib/lib.d.ts *changed*
+    version: Text-1
+    containingProjects: 2 *changed*
+        /user/username/projects/myproject/dependency/tsconfig.json
+        /user/username/projects/myproject/random/tsconfig.json *new*
+/user/username/projects/myproject/dependency/FnS.ts (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /user/username/projects/myproject/dependency/tsconfig.json *default*
+/user/username/projects/myproject/random/random.ts (Open) *new*
+    version: SVC-1-0
+    containingProjects: 1
+        /user/username/projects/myproject/random/tsconfig.json *default*
+
 Before request
 
 Info seq  [hh:mm:ss:mss] request:
@@ -638,6 +676,45 @@ FsWatchesRecursive::
 /user/username/projects/myproject/random:
   {}
 
+Projects::
+/user/username/projects/myproject/dependency/tsconfig.json (Configured) *changed*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+    documentPositionMappers: 1 *changed*
+        /user/username/projects/myproject/decls/fns.d.ts: DocumentPositionMapper1 *new*
+/user/username/projects/myproject/random/tsconfig.json (Configured)
+    projectStateVersion: 1
+    projectProgramVersion: 1
+
+ScriptInfos::
+/a/lib/lib.d.ts
+    version: Text-1
+    containingProjects: 2
+        /user/username/projects/myproject/dependency/tsconfig.json
+        /user/username/projects/myproject/random/tsconfig.json
+/user/username/projects/myproject/decls/FnS.d.ts *new*
+    version: Text-1
+    sourceMapFilePath: /user/username/projects/myproject/decls/fns.d.ts.map
+    containingProjects: 0
+/user/username/projects/myproject/decls/FnS.d.ts.map *new*
+    version: Text-1
+    declarationInfoPath: /user/username/projects/myproject/decls/fns.d.ts
+    sourceInfos: 1
+        /user/username/projects/myproject/dependency/fns.ts
+    documentPositionMapper: DocumentPositionMapper1
+    containingProjects: 0
+/user/username/projects/myproject/dependency/FnS.ts (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /user/username/projects/myproject/dependency/tsconfig.json *default*
+/user/username/projects/myproject/random/random.ts (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /user/username/projects/myproject/random/tsconfig.json *default*
+
+DocumentPositionMappers::
+DocumentPositionMapper1 *new*
+
 Info seq  [hh:mm:ss:mss] FileWatcher:: Triggered with /user/username/projects/myproject/decls/FnS.d.ts.map 2:: WatchInfo: /user/username/projects/myproject/decls/FnS.d.ts.map 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /user/username/projects/myproject/decls/FnS.d.ts.map 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] Scheduled: /user/username/projects/myproject/dependency/tsconfig.json
@@ -680,6 +757,46 @@ Timeout callback:: count: 2
 1: /user/username/projects/myproject/dependency/tsconfig.json *new*
 2: *ensureProjectForOpenFiles* *new*
 
+Projects::
+/user/username/projects/myproject/dependency/tsconfig.json (Configured) *changed*
+    projectStateVersion: 2 *changed*
+    projectProgramVersion: 1
+    dirty: true *changed*
+    documentPositionMappers: 0 *changed*
+        /user/username/projects/myproject/decls/fns.d.ts: DocumentPositionMapper1 *deleted*
+/user/username/projects/myproject/random/tsconfig.json (Configured)
+    projectStateVersion: 1
+    projectProgramVersion: 1
+
+ScriptInfos::
+/a/lib/lib.d.ts
+    version: Text-1
+    containingProjects: 2
+        /user/username/projects/myproject/dependency/tsconfig.json
+        /user/username/projects/myproject/random/tsconfig.json
+/user/username/projects/myproject/decls/FnS.d.ts *changed*
+    version: Text-1
+    sourceMapFilePath: undefined *changed*
+    containingProjects: 0
+/user/username/projects/myproject/decls/FnS.d.ts.map *deleted*
+    version: Text-1
+    declarationInfoPath: /user/username/projects/myproject/decls/fns.d.ts
+    sourceInfos: 1
+        /user/username/projects/myproject/dependency/fns.ts
+    documentPositionMapper: DocumentPositionMapper1
+    containingProjects: 0
+/user/username/projects/myproject/dependency/FnS.ts (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /user/username/projects/myproject/dependency/tsconfig.json *default*
+/user/username/projects/myproject/random/random.ts (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /user/username/projects/myproject/random/tsconfig.json *default*
+
+DocumentPositionMappers::
+DocumentPositionMapper1 *deleted*
+
 Info seq  [hh:mm:ss:mss] request:
     {
       "command": "rename",
@@ -692,7 +809,7 @@ Info seq  [hh:mm:ss:mss] request:
       "type": "request"
     }
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /user/username/projects/myproject/dependency/tsconfig.json
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /user/username/projects/myproject/dependency/tsconfig.json Version: 2 structureChanged: false structureIsReused:: Not Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /user/username/projects/myproject/dependency/tsconfig.json projectStateVersion: 2 projectProgramVersion: 1 structureChanged: false structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Same program as before
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/decls/FnS.d.ts.map 2000 undefined WatchType: Missing source map file
 Info seq  [hh:mm:ss:mss] response:
@@ -772,6 +889,37 @@ FsWatchesRecursive::
   {}
 /user/username/projects/myproject/random:
   {}
+
+Projects::
+/user/username/projects/myproject/dependency/tsconfig.json (Configured) *changed*
+    projectStateVersion: 2
+    projectProgramVersion: 1
+    dirty: false *changed*
+    documentPositionMappers: 1 *changed*
+        /user/username/projects/myproject/decls/fns.d.ts: identitySourceMapConsumer *new*
+/user/username/projects/myproject/random/tsconfig.json (Configured)
+    projectStateVersion: 1
+    projectProgramVersion: 1
+
+ScriptInfos::
+/a/lib/lib.d.ts
+    version: Text-1
+    containingProjects: 2
+        /user/username/projects/myproject/dependency/tsconfig.json
+        /user/username/projects/myproject/random/tsconfig.json
+/user/username/projects/myproject/decls/FnS.d.ts *changed*
+    version: Text-1
+    sourceMapFilePath sourceInfos: 1 *changed*
+        /user/username/projects/myproject/dependency/fns.ts *new*
+    containingProjects: 0
+/user/username/projects/myproject/dependency/FnS.ts (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /user/username/projects/myproject/dependency/tsconfig.json *default*
+/user/username/projects/myproject/random/random.ts (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /user/username/projects/myproject/random/tsconfig.json *default*
 
 Before request
 
@@ -1084,6 +1232,36 @@ FsWatchesRecursive::
 /user/username/projects/myproject/random:
   {}
 
+Projects::
+/user/username/projects/myproject/dependency/tsconfig.json (Configured)
+    projectStateVersion: 2
+    projectProgramVersion: 1
+/user/username/projects/myproject/random/tsconfig.json (Configured) *changed*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+    noOpenRef: true *changed*
+
+ScriptInfos::
+/a/lib/lib.d.ts
+    version: Text-1
+    containingProjects: 2
+        /user/username/projects/myproject/dependency/tsconfig.json
+        /user/username/projects/myproject/random/tsconfig.json
+/user/username/projects/myproject/decls/FnS.d.ts
+    version: Text-1
+    sourceMapFilePath sourceInfos: 1
+        /user/username/projects/myproject/dependency/fns.ts
+    containingProjects: 0
+/user/username/projects/myproject/dependency/FnS.ts (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /user/username/projects/myproject/dependency/tsconfig.json *default*
+/user/username/projects/myproject/random/random.ts *changed*
+    open: false *changed*
+    version: SVC-1-0
+    containingProjects: 1
+        /user/username/projects/myproject/random/tsconfig.json
+
 Before request
 
 Info seq  [hh:mm:ss:mss] request:
@@ -1149,6 +1327,36 @@ FsWatchesRecursive::
 /user/username/projects/myproject/random:
   {}
 
+Projects::
+/user/username/projects/myproject/dependency/tsconfig.json (Configured)
+    projectStateVersion: 2
+    projectProgramVersion: 1
+/user/username/projects/myproject/random/tsconfig.json (Configured) *changed*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+    noOpenRef: false *changed*
+
+ScriptInfos::
+/a/lib/lib.d.ts
+    version: Text-1
+    containingProjects: 2
+        /user/username/projects/myproject/dependency/tsconfig.json
+        /user/username/projects/myproject/random/tsconfig.json
+/user/username/projects/myproject/decls/FnS.d.ts
+    version: Text-1
+    sourceMapFilePath sourceInfos: 1
+        /user/username/projects/myproject/dependency/fns.ts
+    containingProjects: 0
+/user/username/projects/myproject/dependency/FnS.ts (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /user/username/projects/myproject/dependency/tsconfig.json *default*
+/user/username/projects/myproject/random/random.ts (Open) *changed*
+    open: true *changed*
+    version: SVC-1-0
+    containingProjects: 1
+        /user/username/projects/myproject/random/tsconfig.json *default*
+
 Before request
 
 Info seq  [hh:mm:ss:mss] request:
@@ -1208,6 +1416,36 @@ FsWatchesRecursive::
 /user/username/projects/myproject/random:
   {}
 
+Projects::
+/user/username/projects/myproject/dependency/tsconfig.json (Configured) *changed*
+    projectStateVersion: 2
+    projectProgramVersion: 1
+    noOpenRef: true *changed*
+/user/username/projects/myproject/random/tsconfig.json (Configured)
+    projectStateVersion: 1
+    projectProgramVersion: 1
+
+ScriptInfos::
+/a/lib/lib.d.ts
+    version: Text-1
+    containingProjects: 2
+        /user/username/projects/myproject/dependency/tsconfig.json
+        /user/username/projects/myproject/random/tsconfig.json
+/user/username/projects/myproject/decls/FnS.d.ts
+    version: Text-1
+    sourceMapFilePath sourceInfos: 1
+        /user/username/projects/myproject/dependency/fns.ts
+    containingProjects: 0
+/user/username/projects/myproject/dependency/FnS.ts *changed*
+    open: false *changed*
+    version: SVC-1-0
+    containingProjects: 1
+        /user/username/projects/myproject/dependency/tsconfig.json
+/user/username/projects/myproject/random/random.ts (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /user/username/projects/myproject/random/tsconfig.json *default*
+
 Before request
 
 Info seq  [hh:mm:ss:mss] request:
@@ -1266,6 +1504,37 @@ FsWatchesRecursive::
   {}
 /user/username/projects/myproject/random:
   {}
+
+Projects::
+/user/username/projects/myproject/dependency/tsconfig.json (Configured)
+    projectStateVersion: 2
+    projectProgramVersion: 1
+    noOpenRef: true
+/user/username/projects/myproject/random/tsconfig.json (Configured) *changed*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+    noOpenRef: true *changed*
+
+ScriptInfos::
+/a/lib/lib.d.ts
+    version: Text-1
+    containingProjects: 2
+        /user/username/projects/myproject/dependency/tsconfig.json
+        /user/username/projects/myproject/random/tsconfig.json
+/user/username/projects/myproject/decls/FnS.d.ts
+    version: Text-1
+    sourceMapFilePath sourceInfos: 1
+        /user/username/projects/myproject/dependency/fns.ts
+    containingProjects: 0
+/user/username/projects/myproject/dependency/FnS.ts
+    version: SVC-1-0
+    containingProjects: 1
+        /user/username/projects/myproject/dependency/tsconfig.json
+/user/username/projects/myproject/random/random.ts *changed*
+    open: false *changed*
+    version: SVC-1-0
+    containingProjects: 1
+        /user/username/projects/myproject/random/tsconfig.json
 
 Before request
 
@@ -1356,3 +1625,36 @@ FsWatchesRecursive::
 FsWatchesRecursive *deleted*::
 /user/username/projects/myproject/dependency:
   {}
+
+Projects::
+/user/username/projects/myproject/dependency/tsconfig.json (Configured) *deleted*
+    projectStateVersion: 2
+    projectProgramVersion: 1
+    isClosed: true *changed*
+    noOpenRef: true
+    documentPositionMappers: 0 *changed*
+        /user/username/projects/myproject/decls/fns.d.ts: identitySourceMapConsumer *deleted*
+/user/username/projects/myproject/random/tsconfig.json (Configured) *changed*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+    noOpenRef: false *changed*
+
+ScriptInfos::
+/a/lib/lib.d.ts *changed*
+    version: Text-1
+    containingProjects: 1 *changed*
+        /user/username/projects/myproject/random/tsconfig.json
+        /user/username/projects/myproject/dependency/tsconfig.json *deleted*
+/user/username/projects/myproject/decls/FnS.d.ts *deleted*
+    version: Text-1
+    sourceMapFilePath: undefined *changed*
+    containingProjects: 0
+/user/username/projects/myproject/dependency/FnS.ts *deleted*
+    version: SVC-1-0
+    containingProjects: 0 *changed*
+        /user/username/projects/myproject/dependency/tsconfig.json *deleted*
+/user/username/projects/myproject/random/random.ts (Open) *changed*
+    open: true *changed*
+    version: SVC-1-0
+    containingProjects: 1
+        /user/username/projects/myproject/random/tsconfig.json *default*

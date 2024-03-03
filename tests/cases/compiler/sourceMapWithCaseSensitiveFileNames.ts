@@ -1,4 +1,4 @@
-// @out: testfiles/fooResult.js
+// @outFile: testfiles/fooResult.js
 // @sourcemap: true
 // @useCaseSensitiveFileNames: true
 // @Filename: testFiles/app.ts

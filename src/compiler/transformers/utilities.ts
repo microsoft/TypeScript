@@ -127,7 +127,7 @@ export function chainBundle(context: CoreTransformationContext, transformSourceF
     }
 
     function transformBundle(node: Bundle) {
-        return context.factory.createBundle(map(node.sourceFiles, transformSourceFile), node.prepends);
+        return context.factory.createBundle(map(node.sourceFiles, transformSourceFile));
     }
 }
 

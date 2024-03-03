@@ -2807,7 +2807,7 @@ export function getCompletionEntryDetails(
 
     const { previousToken, contextToken } = getRelevantTokens(position, sourceFile);
     if (isInString(sourceFile, position, previousToken)) {
-        return StringCompletions.getStringLiteralCompletionDetails(name, sourceFile, position, previousToken, typeChecker, compilerOptions, host, cancellationToken, preferences);
+        return StringCompletions.getStringLiteralCompletionDetails(name, sourceFile, position, previousToken, program, host, cancellationToken, preferences);
     }
 
     // Compute all the completion symbols again.
@@ -4322,6 +4322,7 @@ function getCompletionData(
      * @returns true if 'symbols' was successfully populated; false otherwise.
      */
     function tryGetObjectLikeCompletionSymbols(): GlobalsSearch | undefined {
+        if (contextToken?.kind === SyntaxKind.DotDotDotToken) return GlobalsSearch.Continue;
         const symbolsStartIndex = symbols.length;
         const objectLikeContainer = tryGetObjectLikeCompletionContainer(contextToken, position, sourceFile);
         if (!objectLikeContainer) return GlobalsSearch.Continue;
@@ -5335,6 +5336,7 @@ function isClassMemberCompletionKeyword(kind: SyntaxKind) {
 function isFunctionLikeBodyKeyword(kind: SyntaxKind) {
     return kind === SyntaxKind.AsyncKeyword
         || kind === SyntaxKind.AwaitKeyword
+        || kind === SyntaxKind.UsingKeyword
         || kind === SyntaxKind.AsKeyword
         || kind === SyntaxKind.SatisfiesKeyword
         || kind === SyntaxKind.TypeKeyword
@@ -5899,5 +5901,7 @@ function isContextualKeywordInAutoImportableExpressionSpace(keyword: string) {
         keyword === "declare" ||
         keyword === "module" ||
         keyword === "namespace" ||
-        keyword === "type";
+        keyword === "type" ||
+        keyword === "satisfies" ||
+        keyword === "as";
 }

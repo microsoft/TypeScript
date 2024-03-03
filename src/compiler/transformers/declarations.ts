@@ -26,7 +26,6 @@ import {
     createGetSymbolAccessibilityDiagnosticForNode,
     createGetSymbolAccessibilityDiagnosticForNodeName,
     createSymbolTable,
-    createUnparsedSourceFile,
     Debug,
     Declaration,
     DeclarationDiagnosticProducing,
@@ -128,7 +127,6 @@ import {
     isModuleDeclaration,
     isOmittedExpression,
     isPrivateIdentifier,
-    isPropertySignature,
     isSemicolonClassElement,
     isSetAccessorDeclaration,
     isSourceFile,
@@ -144,7 +142,6 @@ import {
     isTypeNode,
     isTypeParameterDeclaration,
     isTypeQueryNode,
-    isUnparsedSource,
     isVarAwaitUsing,
     isVariableDeclaration,
     isVarUsing,
@@ -210,7 +207,6 @@ import {
     TypeParameterDeclaration,
     TypeReferenceNode,
     unescapeLeadingUnderscores,
-    UnparsedSource,
     VariableDeclaration,
     VariableDeclarationList,
     VariableStatement,
@@ -492,17 +488,6 @@ export function transformDeclarations(context: TransformationContext) {
                     const updated = isSourceFileJS(sourceFile) ? factory.createNodeArray(transformDeclarationsForJS(sourceFile)) : visitNodes(sourceFile.statements, visitDeclarationStatements, isStatement);
                     return factory.updateSourceFile(sourceFile, transformAndReplaceLatePaintedStatements(updated), /*isDeclarationFile*/ true, /*referencedFiles*/ [], /*typeReferences*/ [], /*hasNoDefaultLib*/ false, /*libReferences*/ []);
                 }),
-                mapDefined(node.prepends, prepend => {
-                    if (prepend.kind === SyntaxKind.InputFiles) {
-                        const sourceFile = createUnparsedSourceFile(prepend, "dts", stripInternal);
-                        hasNoDefaultLib = hasNoDefaultLib || !!sourceFile.hasNoDefaultLib;
-                        collectReferences(sourceFile, refs);
-                        recordTypeReferenceDirectivesIfNecessary(map(sourceFile.typeReferenceDirectives, ref => [ref.fileName, ref.resolutionMode]));
-                        collectLibs(sourceFile, libs);
-                        return sourceFile;
-                    }
-                    return prepend;
-                }),
             );
             bundle.syntheticFileReferences = [];
             bundle.syntheticTypeReferences = getFileReferencesForUsedTypeReferences();
@@ -633,8 +618,8 @@ export function transformDeclarations(context: TransformationContext) {
         }
     }
 
-    function collectReferences(sourceFile: SourceFile | UnparsedSource, ret: Map<NodeId, SourceFile>) {
-        if (noResolve || (!isUnparsedSource(sourceFile) && isSourceFileJS(sourceFile))) return ret;
+    function collectReferences(sourceFile: SourceFile, ret: Map<NodeId, SourceFile>) {
+        if (noResolve || isSourceFileJS(sourceFile)) return ret;
         forEach(sourceFile.referencedFiles, f => {
             const elem = host.getSourceFileFromReference(sourceFile, f);
             if (elem) {
@@ -644,7 +629,7 @@ export function transformDeclarations(context: TransformationContext) {
         return ret;
     }
 
-    function collectLibs(sourceFile: SourceFile | UnparsedSource, ret: Map<string, boolean>) {
+    function collectLibs(sourceFile: SourceFile, ret: Map<string, boolean>) {
         forEach(sourceFile.libReferenceDirectives, ref => {
             const lib = host.getLibFileFromReference(ref);
             if (lib) {
@@ -722,7 +707,6 @@ export function transformDeclarations(context: TransformationContext) {
         | FunctionDeclaration
         | MethodDeclaration
         | GetAccessorDeclaration
-        | SetAccessorDeclaration
         | BindingElement
         | ConstructSignatureDeclaration
         | VariableDeclaration
@@ -741,46 +725,43 @@ export function transformDeclarations(context: TransformationContext) {
             // Literal const declarations will have an initializer ensured rather than a type
             return;
         }
-        const shouldUseResolverType = node.kind === SyntaxKind.Parameter &&
-            (resolver.isRequiredInitializedParameter(node) ||
-                resolver.isOptionalUninitializedParameterProperty(node));
-        if (type && !shouldUseResolverType) {
+        const shouldAddImplicitUndefined = node.kind === SyntaxKind.Parameter && resolver.requiresAddingImplicitUndefined(node);
+        if (type && !shouldAddImplicitUndefined) {
             return visitNode(type, visitDeclarationSubtree, isTypeNode);
         }
-        if (!getParseTreeNode(node)) {
-            return type ? visitNode(type, visitDeclarationSubtree, isTypeNode) : factory.createKeywordTypeNode(SyntaxKind.AnyKeyword);
-        }
-        if (node.kind === SyntaxKind.SetAccessor) {
-            // Set accessors with no associated type node (from it's param or get accessor return) are `any` since they are never contextually typed right now
-            // (The inferred type here will be void, but the old declaration emitter printed `any`, so this replicates that)
-            return factory.createKeywordTypeNode(SyntaxKind.AnyKeyword);
-        }
+
         errorNameNode = node.name;
         let oldDiag: typeof getSymbolAccessibilityDiagnostic;
         if (!suppressNewDiagnosticContexts) {
             oldDiag = getSymbolAccessibilityDiagnostic;
             getSymbolAccessibilityDiagnostic = createGetSymbolAccessibilityDiagnosticForNode(node);
         }
-        if (node.kind === SyntaxKind.VariableDeclaration || node.kind === SyntaxKind.BindingElement) {
-            return cleanup(resolver.createTypeOfDeclaration(node, enclosingDeclaration, declarationEmitNodeBuilderFlags, symbolTracker));
+        let typeNode;
+        switch (node.kind) {
+            case SyntaxKind.Parameter:
+            case SyntaxKind.PropertySignature:
+            case SyntaxKind.PropertyDeclaration:
+            case SyntaxKind.BindingElement:
+            case SyntaxKind.VariableDeclaration:
+                typeNode = resolver.createTypeOfDeclaration(node, enclosingDeclaration, declarationEmitNodeBuilderFlags, symbolTracker, shouldAddImplicitUndefined);
+                break;
+            case SyntaxKind.FunctionDeclaration:
+            case SyntaxKind.ConstructSignature:
+            case SyntaxKind.MethodSignature:
+            case SyntaxKind.MethodDeclaration:
+            case SyntaxKind.GetAccessor:
+            case SyntaxKind.CallSignature:
+                typeNode = resolver.createReturnTypeOfSignatureDeclaration(node, enclosingDeclaration, declarationEmitNodeBuilderFlags, symbolTracker);
+                break;
+            default:
+                Debug.assertNever(node);
         }
-        if (
-            node.kind === SyntaxKind.Parameter
-            || node.kind === SyntaxKind.PropertyDeclaration
-            || node.kind === SyntaxKind.PropertySignature
-        ) {
-            if (isPropertySignature(node) || !node.initializer) return cleanup(resolver.createTypeOfDeclaration(node, enclosingDeclaration, declarationEmitNodeBuilderFlags, symbolTracker, shouldUseResolverType));
-            return cleanup(resolver.createTypeOfDeclaration(node, enclosingDeclaration, declarationEmitNodeBuilderFlags, symbolTracker, shouldUseResolverType) || resolver.createTypeOfExpression(node.initializer, enclosingDeclaration, declarationEmitNodeBuilderFlags, symbolTracker));
-        }
-        return cleanup(resolver.createReturnTypeOfSignatureDeclaration(node, enclosingDeclaration, declarationEmitNodeBuilderFlags, symbolTracker));
 
-        function cleanup(returnValue: TypeNode | undefined) {
-            errorNameNode = undefined;
-            if (!suppressNewDiagnosticContexts) {
-                getSymbolAccessibilityDiagnostic = oldDiag;
-            }
-            return returnValue || factory.createKeywordTypeNode(SyntaxKind.AnyKeyword);
+        errorNameNode = undefined;
+        if (!suppressNewDiagnosticContexts) {
+            getSymbolAccessibilityDiagnostic = oldDiag!;
         }
+        return typeNode ?? factory.createKeywordTypeNode(SyntaxKind.AnyKeyword);
     }
 
     function isDeclarationAndNotVisible(node: NamedDeclaration) {

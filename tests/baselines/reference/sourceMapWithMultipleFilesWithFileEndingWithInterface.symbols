@@ -35,3 +35,4 @@ module m1 {
 >c1 : Symbol(c1, Decl(b.ts, 0, 11))
     }
 }
+

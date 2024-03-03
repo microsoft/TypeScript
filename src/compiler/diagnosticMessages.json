@@ -163,7 +163,7 @@
         "category": "Error",
         "code": 1054
     },
-    "Type '{0}' is not a valid async function return type in ES5/ES3 because it does not refer to a Promise-compatible constructor value.": {
+    "Type '{0}' is not a valid async function return type in ES5 because it does not refer to a Promise-compatible constructor value.": {
         "category": "Error",
         "code": 1055
     },
@@ -799,15 +799,15 @@
         "category": "Error",
         "code": 1249
     },
-    "Function declarations are not allowed inside blocks in strict mode when targeting 'ES3' or 'ES5'.": {
+    "Function declarations are not allowed inside blocks in strict mode when targeting 'ES5'.": {
         "category": "Error",
         "code": 1250
     },
-    "Function declarations are not allowed inside blocks in strict mode when targeting 'ES3' or 'ES5'. Class definitions are automatically in strict mode.": {
+    "Function declarations are not allowed inside blocks in strict mode when targeting 'ES5'. Class definitions are automatically in strict mode.": {
         "category": "Error",
         "code": 1251
     },
-    "Function declarations are not allowed inside blocks in strict mode when targeting 'ES3' or 'ES5'. Modules are automatically in strict mode.": {
+    "Function declarations are not allowed inside blocks in strict mode when targeting 'ES5'. Modules are automatically in strict mode.": {
         "category": "Error",
         "code": 1252
     },
@@ -1204,10 +1204,6 @@
         "category": "Message",
         "code": 1369
     },
-    "This import is never used as a value and must use 'import type' because 'importsNotUsedAsValues' is set to 'error'.": {
-        "category": "Error",
-        "code": 1371
-    },
     "'await' expressions are only allowed at the top level of a file when that file is a module, but this file has no imports or exports. Consider adding an empty 'export {}' to make this file a module.": {
         "category": "Error",
         "code": 1375
@@ -1220,7 +1216,7 @@
         "category": "Message",
         "code": 1377
     },
-    "Top-level 'await' expressions are only allowed when the 'module' option is set to 'es2022', 'esnext', 'system', 'node16', or 'nodenext', and the 'target' option is set to 'es2017' or higher.": {
+    "Top-level 'await' expressions are only allowed when the 'module' option is set to 'es2022', 'esnext', 'system', 'node16', 'nodenext', or 'preserve', and the 'target' option is set to 'es2017' or higher.": {
         "category": "Error",
         "code": 1378
     },
@@ -1424,7 +1420,7 @@
         "category": "Error",
         "code": 1431
     },
-    "Top-level 'for await' loops are only allowed when the 'module' option is set to 'es2022', 'esnext', 'system', 'node16', or 'nodenext', and the 'target' option is set to 'es2017' or higher.": {
+    "Top-level 'for await' loops are only allowed when the 'module' option is set to 'es2022', 'esnext', 'system', 'node16', 'nodenext', or 'preserve', and the 'target' option is set to 'es2017' or higher.": {
         "category": "Error",
         "code": 1432
     },
@@ -1471,14 +1467,6 @@
     "Module declaration names may only use ' or \" quoted strings.": {
         "category": "Error",
         "code": 1443
-    },
-    "'{0}' is a type and must be imported using a type-only import when 'preserveValueImports' and 'isolatedModules' are both enabled.": {
-        "category": "Error",
-        "code": 1444
-    },
-    "'{0}' resolves to a type-only declaration and must be imported using a type-only import when 'preserveValueImports' and 'isolatedModules' are both enabled.": {
-        "category": "Error",
-        "code": 1446
     },
     "'{0}' resolves to a type-only declaration and must be re-exported using a type-only re-export when '{1}' is enabled.": {
         "category": "Error",
@@ -2420,7 +2408,7 @@
         "category": "Error",
         "code": 2495
     },
-    "The 'arguments' object cannot be referenced in an arrow function in ES3 and ES5. Consider using a standard function expression.": {
+    "The 'arguments' object cannot be referenced in an arrow function in ES5. Consider using a standard function expression.": {
         "category": "Error",
         "code": 2496
     },
@@ -2520,7 +2508,7 @@
         "category": "Error",
         "code": 2520
     },
-    "The 'arguments' object cannot be referenced in an async function or method in ES3 and ES5. Consider using a standard function or method.": {
+    "The 'arguments' object cannot be referenced in an async function or method in ES5. Consider using a standard function or method.": {
         "category": "Error",
         "code": 2522
     },
@@ -3135,7 +3123,7 @@
         "category": "Error",
         "code": 2704
     },
-    "An async function or method in ES5/ES3 requires the 'Promise' constructor.  Make sure you have a declaration for the 'Promise' constructor or include 'ES2015' in your '--lib' option.": {
+    "An async function or method in ES5 requires the 'Promise' constructor.  Make sure you have a declaration for the 'Promise' constructor or include 'ES2015' in your '--lib' option.": {
         "category": "Error",
         "code": 2705
     },
@@ -3163,7 +3151,7 @@
         "category": "Error",
         "code": 2711
     },
-    "A dynamic import call in ES5/ES3 requires the 'Promise' constructor.  Make sure you have a declaration for the 'Promise' constructor or include 'ES2015' in your '--lib' option.": {
+    "A dynamic import call in ES5 requires the 'Promise' constructor.  Make sure you have a declaration for the 'Promise' constructor or include 'ES2015' in your '--lib' option.": {
         "category": "Error",
         "code": 2712
     },
@@ -3595,7 +3583,7 @@
         "category": "Error",
         "code": 2820
     },
-    "Import assertions are only supported when the '--module' option is set to 'esnext' or 'nodenext'.": {
+    "Import assertions are only supported when the '--module' option is set to 'esnext', 'nodenext', or 'preserve'.": {
         "category": "Error",
         "code": 2821
     },
@@ -3603,7 +3591,7 @@
         "category": "Error",
         "code": 2822
     },
-    "Import attributes are only supported when the '--module' option is set to 'esnext' or 'nodenext'.": {
+    "Import attributes are only supported when the '--module' option is set to 'esnext', 'nodenext', or 'preserve'.": {
         "category": "Error",
         "code": 2823
     },
@@ -3683,7 +3671,7 @@
         "category": "Error",
         "code": 2853
     },
-    "Top-level 'await using' statements are only allowed when the 'module' option is set to 'es2022', 'esnext', 'system', 'node16', or 'nodenext', and the 'target' option is set to 'es2017' or higher.": {
+    "Top-level 'await using' statements are only allowed when the 'module' option is set to 'es2022', 'esnext', 'system', 'node16', 'nodenext', or 'preserve', and the 'target' option is set to 'es2017' or higher.": {
         "category": "Error",
         "code": 2854
     },
@@ -4229,10 +4217,6 @@
         "category": "Error",
         "code": 5047
     },
-    "Option '{0}' cannot be specified when option 'target' is 'ES3'.": {
-        "category": "Error",
-        "code": 5048
-    },
     "Option '{0} can only be used when either option '--inlineSourceMap' or option '--sourceMap' is provided.": {
         "category": "Error",
         "code": 5051
@@ -4309,7 +4293,7 @@
         "category": "Error",
         "code": 5070
     },
-    "Option '--resolveJsonModule' can only be specified when module code generation is 'commonjs', 'amd', 'es2015' or 'esNext'.": {
+    "Option '--resolveJsonModule' cannot be specified when 'module' is set to 'none', 'system', or 'umd'.": {
         "category": "Error",
         "code": 5071
     },
@@ -4401,7 +4385,7 @@
         "category": "Error",
         "code": 5094
     },
-    "Option '{0}' can only be used when 'module' is set to 'es2015' or later.": {
+    "Option '{0}' can only be used when 'module' is set to 'preserve' or to 'es2015' or later.": {
         "category": "Error",
         "code": 5095
     },
@@ -4722,10 +4706,6 @@
     "Specify JSX code generation.": {
         "category": "Message",
         "code": 6080
-    },
-    "File '{0}' has an unsupported extension, so skipping it.": {
-        "category": "Message",
-        "code": 6081
     },
     "Only 'amd' and 'system' modules are supported alongside --{0}.": {
         "category": "Error",
@@ -5069,7 +5049,7 @@
         "category": "Message",
         "code": 6171
     },
-    "Provide full support for iterables in 'for-of', spread, and destructuring when targeting 'ES5' or 'ES3'.": {
+    "Provide full support for iterables in 'for-of', spread, and destructuring when targeting 'ES5'.": {
         "category": "Message",
         "code": 6179
     },
@@ -5476,14 +5456,6 @@
         "category": "Error",
         "code": 6307
     },
-    "Cannot prepend project '{0}' because it does not have 'outFile' set": {
-        "category": "Error",
-        "code": 6308
-    },
-    "Output file '{0}' from project '{1}' does not exist": {
-        "category": "Error",
-        "code": 6309
-    },
     "Referenced project '{0}' may not disable emit.": {
         "category": "Error",
         "code": 6310
@@ -5564,25 +5536,9 @@
         "category": "Message",
         "code": 6371
     },
-    "Project '{0}' is out of date because output of its dependency '{1}' has changed": {
-        "category": "Message",
-        "code": 6372
-    },
-    "Updating output of project '{0}'...": {
-        "category": "Message",
-        "code": 6373
-    },
     "A non-dry build would update timestamps for output of project '{0}'": {
         "category": "Message",
         "code": 6374
-    },
-    "A non-dry build would update output of project '{0}'": {
-        "category": "Message",
-        "code": 6375
-    },
-    "Cannot update output of project '{0}' because there was error reading file '{1}'": {
-        "category": "Message",
-        "code": 6376
     },
     "Cannot write file '{0}' because it will overwrite '.tsbuildinfo' file generated by referenced project '{1}'": {
         "category": "Error",
@@ -7791,6 +7747,30 @@
     "Add missing comma for object member completion '{0}'.": {
         "category": "Message",
         "code": 95187
+    },
+    "Add missing parameter to '{0}'": {
+        "category": "Message",
+        "code": 95188
+    },
+    "Add missing parameters to '{0}'": {
+        "category": "Message",
+        "code": 95189
+    },
+    "Add all missing parameters": {
+        "category": "Message",
+        "code": 95190
+    },
+    "Add optional parameter to '{0}'": {
+        "category": "Message",
+        "code": 95191
+    },
+    "Add optional parameters to '{0}'": {
+        "category": "Message",
+        "code": 95192
+    },
+    "Add all optional parameters": {
+        "category": "Message",
+        "code": 95193
     },
 
     "No value exists in scope for the shorthand property '{0}'. Either declare one or provide an initializer.": {

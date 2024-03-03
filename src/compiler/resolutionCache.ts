@@ -822,7 +822,7 @@ export function createResolutionCache(resolutionHost: ResolutionCacheHost, rootD
         const seenNamesInFile = createModeAwareCache<true>();
         for (const entry of entries) {
             const name = loader.nameAndMode.getName(entry);
-            const mode = loader.nameAndMode.getMode(entry, containingSourceFile);
+            const mode = loader.nameAndMode.getMode(entry, containingSourceFile, redirectedReference?.commandLine.options || options);
             let resolution = resolutionsInFile.get(name, mode);
             // Resolution is valid if it is present and not invalidated
             if (
@@ -881,7 +881,7 @@ export function createResolutionCache(resolutionHost: ResolutionCacheHost, rootD
         reusedNames?.forEach(entry =>
             seenNamesInFile.set(
                 loader.nameAndMode.getName(entry),
-                loader.nameAndMode.getMode(entry, containingSourceFile),
+                loader.nameAndMode.getMode(entry, containingSourceFile, redirectedReference?.commandLine.options || options),
                 true,
             )
         );

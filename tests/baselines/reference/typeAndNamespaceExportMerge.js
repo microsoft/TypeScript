@@ -1,8 +1,6 @@
 //// [tests/cases/conformance/externalModules/typeAndNamespaceExportMerge.ts] ////
 
 //// [constants.ts]
-// @strict
-
 export const COFFEE = 0;
 export const TEA = 1;
 
@@ -20,7 +18,6 @@ const x: Drink = Drink.TEA;
 
 //// [constants.js]
 "use strict";
-// @strict
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.TEA = exports.COFFEE = void 0;
 exports.COFFEE = 0;

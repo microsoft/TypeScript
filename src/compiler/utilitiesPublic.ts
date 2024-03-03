@@ -293,8 +293,6 @@ import {
     TypeParameterDeclaration,
     TypeReferenceType,
     UnaryExpression,
-    UnparsedNode,
-    UnparsedTextLike,
     VariableDeclaration,
 } from "./_namespaces/ts";
 
@@ -1395,24 +1393,6 @@ export function isBreakOrContinueStatement(node: Node): node is BreakOrContinueS
 
 export function isNamedExportBindings(node: Node): node is NamedExportBindings {
     return node.kind === SyntaxKind.NamespaceExport || node.kind === SyntaxKind.NamedExports;
-}
-
-/** @deprecated */
-export function isUnparsedTextLike(node: Node): node is UnparsedTextLike {
-    switch (node.kind) {
-        case SyntaxKind.UnparsedText:
-        case SyntaxKind.UnparsedInternalText:
-            return true;
-        default:
-            return false;
-    }
-}
-
-/** @deprecated */
-export function isUnparsedNode(node: Node): node is UnparsedNode {
-    return isUnparsedTextLike(node) ||
-        node.kind === SyntaxKind.UnparsedPrologue ||
-        node.kind === SyntaxKind.UnparsedSyntheticReference;
 }
 
 export function isJSDocPropertyLikeTag(node: Node): node is JSDocPropertyLikeTag {
@@ -2641,6 +2621,6 @@ export function isInternalDeclaration(node: Node, sourceFile?: SourceFile) {
     }
     const leadingCommentRanges = parseTreeNode && getLeadingCommentRangesOfNode(parseTreeNode, sourceFile);
     return !!forEach(leadingCommentRanges, range => {
-        return hasInternalAnnotation(range, sourceFile!);
+        return hasInternalAnnotation(range, sourceFile);
     });
 }
