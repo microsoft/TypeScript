@@ -1,0 +1,138 @@
+//// [tests/cases/compiler/mergeSameGenericParentMethodPropUnions-100.ts] ////
+
+=== -incompasig-200.ts ===
+namespace ns4 {
+>ns4 : Symbol(ns4, Decl(-incompasig-200.ts, 0, 0))
+
+declare var y: Array<string>|Array<number>;
+>y : Symbol(y, Decl(-incompasig-200.ts, 2, 11))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --) ... and 4 more)
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --) ... and 4 more)
+
+declare const a: number|string;
+>a : Symbol(a, Decl(-incompasig-200.ts, 4, 13))
+
+y.indexOf(a);
+>y.indexOf : Symbol(Array.indexOf, Decl(lib.es5.d.ts, --, --))
+>y : Symbol(y, Decl(-incompasig-200.ts, 2, 11))
+>indexOf : Symbol(Array.indexOf, Decl(lib.es5.d.ts, --, --))
+>a : Symbol(a, Decl(-incompasig-200.ts, 4, 13))
+
+y.push(a);
+>y.push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+>y : Symbol(y, Decl(-incompasig-200.ts, 2, 11))
+>push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+>a : Symbol(a, Decl(-incompasig-200.ts, 4, 13))
+
+y.unshift(a);
+>y.unshift : Symbol(Array.unshift, Decl(lib.es5.d.ts, --, --))
+>y : Symbol(y, Decl(-incompasig-200.ts, 2, 11))
+>unshift : Symbol(Array.unshift, Decl(lib.es5.d.ts, --, --))
+>a : Symbol(a, Decl(-incompasig-200.ts, 4, 13))
+
+y.splice(1,1,a);
+>y.splice : Symbol(Array.splice, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>y : Symbol(y, Decl(-incompasig-200.ts, 2, 11))
+>splice : Symbol(Array.splice, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>a : Symbol(a, Decl(-incompasig-200.ts, 4, 13))
+
+}
+
+
+/**********************/
+=== -incompasig-110.ts ===
+namespace ns0 {
+>ns0 : Symbol(ns0, Decl(-incompasig-110.ts, 0, 0))
+
+interface Test110<T> {
+>Test110 : Symbol(Test110, Decl(-incompasig-110.ts, 0, 15))
+>T : Symbol(T, Decl(-incompasig-110.ts, 2, 18))
+
+    f(cb:(x:T)=>T):T[];
+>f : Symbol(Test110.f, Decl(-incompasig-110.ts, 2, 22), Decl(-incompasig-110.ts, 3, 23))
+>cb : Symbol(cb, Decl(-incompasig-110.ts, 3, 6))
+>x : Symbol(x, Decl(-incompasig-110.ts, 3, 10))
+>T : Symbol(T, Decl(-incompasig-110.ts, 2, 18))
+>T : Symbol(T, Decl(-incompasig-110.ts, 2, 18))
+>T : Symbol(T, Decl(-incompasig-110.ts, 2, 18))
+
+    f<U>(cb:(x:T)=>U):U[];
+>f : Symbol(Test110.f, Decl(-incompasig-110.ts, 2, 22), Decl(-incompasig-110.ts, 3, 23))
+>U : Symbol(U, Decl(-incompasig-110.ts, 4, 6))
+>cb : Symbol(cb, Decl(-incompasig-110.ts, 4, 9))
+>x : Symbol(x, Decl(-incompasig-110.ts, 4, 13))
+>T : Symbol(T, Decl(-incompasig-110.ts, 2, 18))
+>U : Symbol(U, Decl(-incompasig-110.ts, 4, 6))
+>U : Symbol(U, Decl(-incompasig-110.ts, 4, 6))
+}
+
+declare const arr: Test110<number> | Test110<string>;
+>arr : Symbol(arr, Decl(-incompasig-110.ts, 7, 13))
+>Test110 : Symbol(Test110, Decl(-incompasig-110.ts, 0, 15))
+>Test110 : Symbol(Test110, Decl(-incompasig-110.ts, 0, 15))
+
+const result = arr.f(x => x);
+>result : Symbol(result, Decl(-incompasig-110.ts, 8, 5))
+>arr.f : Symbol(Test110.f, Decl(-incompasig-110.ts, 2, 22), Decl(-incompasig-110.ts, 3, 23))
+>arr : Symbol(arr, Decl(-incompasig-110.ts, 7, 13))
+>f : Symbol(Test110.f, Decl(-incompasig-110.ts, 2, 22), Decl(-incompasig-110.ts, 3, 23))
+>x : Symbol(x, Decl(-incompasig-110.ts, 8, 21))
+>x : Symbol(x, Decl(-incompasig-110.ts, 8, 21))
+
+}
+
+
+/**********************/
+=== -incompasig-111.ts ===
+namespace ns1 {
+>ns1 : Symbol(ns1, Decl(-incompasig-111.ts, 0, 0))
+
+interface Test111<T> {
+>Test111 : Symbol(Test111, Decl(-incompasig-111.ts, 0, 15))
+>T : Symbol(T, Decl(-incompasig-111.ts, 2, 18))
+
+    f(cb:(a:T, x:T)=>T):T[];
+>f : Symbol(Test111.f, Decl(-incompasig-111.ts, 2, 22), Decl(-incompasig-111.ts, 3, 28))
+>cb : Symbol(cb, Decl(-incompasig-111.ts, 3, 6))
+>a : Symbol(a, Decl(-incompasig-111.ts, 3, 10))
+>T : Symbol(T, Decl(-incompasig-111.ts, 2, 18))
+>x : Symbol(x, Decl(-incompasig-111.ts, 3, 14))
+>T : Symbol(T, Decl(-incompasig-111.ts, 2, 18))
+>T : Symbol(T, Decl(-incompasig-111.ts, 2, 18))
+>T : Symbol(T, Decl(-incompasig-111.ts, 2, 18))
+
+    f<U>(cb:(a:U, x:T)=>U,init:U):U[];
+>f : Symbol(Test111.f, Decl(-incompasig-111.ts, 2, 22), Decl(-incompasig-111.ts, 3, 28))
+>U : Symbol(U, Decl(-incompasig-111.ts, 4, 6))
+>cb : Symbol(cb, Decl(-incompasig-111.ts, 4, 9))
+>a : Symbol(a, Decl(-incompasig-111.ts, 4, 13))
+>U : Symbol(U, Decl(-incompasig-111.ts, 4, 6))
+>x : Symbol(x, Decl(-incompasig-111.ts, 4, 17))
+>T : Symbol(T, Decl(-incompasig-111.ts, 2, 18))
+>U : Symbol(U, Decl(-incompasig-111.ts, 4, 6))
+>init : Symbol(init, Decl(-incompasig-111.ts, 4, 26))
+>U : Symbol(U, Decl(-incompasig-111.ts, 4, 6))
+>U : Symbol(U, Decl(-incompasig-111.ts, 4, 6))
+}
+
+declare const arr: Test111<number> | Test111<bigint>;
+>arr : Symbol(arr, Decl(-incompasig-111.ts, 7, 13))
+>Test111 : Symbol(Test111, Decl(-incompasig-111.ts, 0, 15))
+>Test111 : Symbol(Test111, Decl(-incompasig-111.ts, 0, 15))
+
+const result = arr.f((a:bigint, x) => a * BigInt(x), 1n);
+>result : Symbol(result, Decl(-incompasig-111.ts, 8, 5))
+>arr.f : Symbol(Test111.f, Decl(-incompasig-111.ts, 2, 22), Decl(-incompasig-111.ts, 3, 28))
+>arr : Symbol(arr, Decl(-incompasig-111.ts, 7, 13))
+>f : Symbol(Test111.f, Decl(-incompasig-111.ts, 2, 22), Decl(-incompasig-111.ts, 3, 28))
+>a : Symbol(a, Decl(-incompasig-111.ts, 8, 22))
+>x : Symbol(x, Decl(-incompasig-111.ts, 8, 31))
+>a : Symbol(a, Decl(-incompasig-111.ts, 8, 22))
+>BigInt : Symbol(BigInt, Decl(lib.es2020.bigint.d.ts, --, --), Decl(lib.es2020.bigint.d.ts, --, --))
+>x : Symbol(x, Decl(-incompasig-111.ts, 8, 31))
+
+}
+
+
+
+

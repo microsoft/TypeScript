@@ -1,0 +1,122 @@
+//// [tests/cases/compiler/mergeSameGenericParentMethodPropUnions-100.ts] ////
+
+=== -incompasig-200.ts ===
+namespace ns4 {
+>ns4 : typeof ns4
+
+declare var y: Array<string>|Array<number>;
+>y : string[] | number[]
+
+declare const a: number|string;
+>a : string | number
+
+y.indexOf(a);
+>y.indexOf(a) : number
+>y.indexOf : (searchElement: string | number, fromIndex?: number | undefined) => number
+>y : string[] | number[]
+>indexOf : (searchElement: string | number, fromIndex?: number | undefined) => number
+>a : string | number
+
+y.push(a);
+>y.push(a) : number
+>y.push : (...items: (string | number)[]) => number
+>y : string[] | number[]
+>push : (...items: (string | number)[]) => number
+>a : string | number
+
+y.unshift(a);
+>y.unshift(a) : number
+>y.unshift : (...items: (string | number)[]) => number
+>y : string[] | number[]
+>unshift : (...items: (string | number)[]) => number
+>a : string | number
+
+y.splice(1,1,a);
+>y.splice(1,1,a) : (string | number)[]
+>y.splice : { (start: number, deleteCount?: number | undefined): (string | number)[]; (start: number, deleteCount: number, ...items: (string | number)[]): (string | number)[]; }
+>y : string[] | number[]
+>splice : { (start: number, deleteCount?: number | undefined): (string | number)[]; (start: number, deleteCount: number, ...items: (string | number)[]): (string | number)[]; }
+>1 : 1
+>1 : 1
+>a : string | number
+
+}
+
+
+/**********************/
+=== -incompasig-110.ts ===
+namespace ns0 {
+>ns0 : typeof ns0
+
+interface Test110<T> {
+    f(cb:(x:T)=>T):T[];
+>f : { (cb: (x: T) => T): T[]; <U>(cb: (x: T) => U): U[]; }
+>cb : (x: T) => T
+>x : T
+
+    f<U>(cb:(x:T)=>U):U[];
+>f : { (cb: (x: T) => T): T[]; <U>(cb: (x: T) => U): U[]; }
+>cb : (x: T) => U
+>x : T
+}
+
+declare const arr: Test110<number> | Test110<string>;
+>arr : Test110<number> | Test110<string>
+
+const result = arr.f(x => x);
+>result : (string | number)[]
+>arr.f(x => x) : (string | number)[]
+>arr.f : { (cb: (x: string | number) => string | number): (string | number)[]; <U>(cb: (x: string | number) => U): U[]; }
+>arr : Test110<number> | Test110<string>
+>f : { (cb: (x: string | number) => string | number): (string | number)[]; <U>(cb: (x: string | number) => U): U[]; }
+>x => x : (x: string | number) => string | number
+>x : string | number
+>x : string | number
+
+}
+
+
+/**********************/
+=== -incompasig-111.ts ===
+namespace ns1 {
+>ns1 : typeof ns1
+
+interface Test111<T> {
+    f(cb:(a:T, x:T)=>T):T[];
+>f : { (cb: (a: T, x: T) => T): T[]; <U>(cb: (a: U, x: T) => U, init: U): U[]; }
+>cb : (a: T, x: T) => T
+>a : T
+>x : T
+
+    f<U>(cb:(a:U, x:T)=>U,init:U):U[];
+>f : { (cb: (a: T, x: T) => T): T[]; <U>(cb: (a: U, x: T) => U, init: U): U[]; }
+>cb : (a: U, x: T) => U
+>a : U
+>x : T
+>init : U
+}
+
+declare const arr: Test111<number> | Test111<bigint>;
+>arr : Test111<number> | Test111<bigint>
+
+const result = arr.f((a:bigint, x) => a * BigInt(x), 1n);
+>result : bigint[]
+>arr.f((a:bigint, x) => a * BigInt(x), 1n) : bigint[]
+>arr.f : { (cb: (a: number | bigint, x: number | bigint) => number | bigint): (number | bigint)[]; <U>(cb: (a: U, x: number | bigint) => U, init: U): U[]; }
+>arr : Test111<number> | Test111<bigint>
+>f : { (cb: (a: number | bigint, x: number | bigint) => number | bigint): (number | bigint)[]; <U>(cb: (a: U, x: number | bigint) => U, init: U): U[]; }
+>(a:bigint, x) => a * BigInt(x) : (a: bigint, x: number | bigint) => bigint
+>a : bigint
+>x : number | bigint
+>a * BigInt(x) : bigint
+>a : bigint
+>BigInt(x) : bigint
+>BigInt : BigIntConstructor
+>x : number | bigint
+>1n : 1n
+
+}
+
+
+
+
