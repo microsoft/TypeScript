@@ -37,9 +37,9 @@ Info seq  [hh:mm:ss:mss] request:
       "command": "compilerOptionsForInferredProjects",
       "arguments": {
         "options": {
-          "module": "CommonJS",
-          "target": "ES2016",
-          "jsx": "Preserve",
+          "module": "commonjs",
+          "target": "es2016",
+          "jsx": "preserve",
           "experimentalDecorators": true,
           "allowJs": true,
           "allowSyntheticDefaultImports": true,

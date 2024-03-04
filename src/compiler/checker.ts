@@ -37974,11 +37974,13 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
      */
     function getSymbolHasInstanceMethodOfObjectType(type: Type) {
         const hasInstancePropertyName = getPropertyNameForKnownSymbolName("hasInstance");
-        const hasInstanceProperty = getPropertyOfObjectType(type, hasInstancePropertyName);
-        if (hasInstanceProperty) {
-            const hasInstancePropertyType = getTypeOfSymbol(hasInstanceProperty);
-            if (hasInstancePropertyType && getSignaturesOfType(hasInstancePropertyType, SignatureKind.Call).length !== 0) {
-                return hasInstancePropertyType;
+        if (allTypesAssignableToKind(type, TypeFlags.NonPrimitive)) {
+            const hasInstanceProperty = getPropertyOfType(type, hasInstancePropertyName);
+            if (hasInstanceProperty) {
+                const hasInstancePropertyType = getTypeOfSymbol(hasInstanceProperty);
+                if (hasInstancePropertyType && getSignaturesOfType(hasInstancePropertyType, SignatureKind.Call).length !== 0) {
+                    return hasInstancePropertyType;
+                }
             }
         }
     }
