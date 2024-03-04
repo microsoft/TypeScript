@@ -493,7 +493,7 @@ function getArgumentIndex(argumentsList: Node, node: Node, checker: TypeChecker)
     // arg index.
     const args = argumentsList.getChildren();
     let argumentIndex = 0;
-    let skipComma = false
+    let skipComma = false;
     for (let pos = 0; pos < length(args); pos++) {
         const child = args[pos];
         if (child === node) {
@@ -505,7 +505,7 @@ function getArgumentIndex(argumentsList: Node, node: Node, checker: TypeChecker)
         if (isSpreadElement(child)) {
             argumentIndex += getSpreadElementCount(child, checker);
             skipComma = true;
-            continue
+            continue;
         }
         if (child.kind !== SyntaxKind.CommaToken) {
             argumentIndex++;
@@ -543,13 +543,13 @@ function getArgumentCount(argumentsList: Node, checker: TypeChecker) {
     // arg count by one to compensate.
     const args = argumentsList.getChildren();
     let argumentCount = 0;
-    let skipComma = false
+    let skipComma = false;
     for (let pos = 0; pos < length(args); pos++) {
         const child = args[pos];
         if (isSpreadElement(child)) {
             argumentCount += getSpreadElementCount(child, checker);
             skipComma = true;
-            continue
+            continue;
         }
         if (child.kind !== SyntaxKind.CommaToken) {
             argumentCount++;
