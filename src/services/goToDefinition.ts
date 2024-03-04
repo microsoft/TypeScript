@@ -9,7 +9,6 @@ import {
     createTextSpanFromBounds,
     createTextSpanFromNode,
     createTextSpanFromRange,
-    Debug,
     Declaration,
     DefinitionInfo,
     DefinitionInfoAndBoundSpan,
