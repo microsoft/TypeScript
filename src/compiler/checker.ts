@@ -37415,57 +37415,54 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             singleReturn = func.body; // arrow function
         }
         else {
-            if (functionHasImplicitReturn(func)) return undefined;
-
             const bailedEarly = forEachReturnStatement(func.body as Block, returnStatement => {
                 if (singleReturn || !returnStatement.expression) return true;
                 singleReturn = returnStatement.expression;
             });
-            if (bailedEarly || !singleReturn) return undefined;
+            if (bailedEarly || !singleReturn || functionHasImplicitReturn(func)) return undefined;
         }
+        return checkIfExpressionRefinesAnyParameter(func, singleReturn);
+    }
 
-        return checkIfExpressionRefinesAnyParameter(singleReturn);
+    function checkIfExpressionRefinesAnyParameter(func: FunctionLikeDeclaration, expr: Expression): TypePredicate | undefined {
+        expr = skipParentheses(expr, /*excludeJSDocTypeAssertions*/ true);
+        const returnType = checkExpressionCached(expr);
+        if (!(returnType.flags & TypeFlags.Boolean)) return undefined;
 
-        function checkIfExpressionRefinesAnyParameter(expr: Expression): TypePredicate | undefined {
-            expr = skipParentheses(expr, /*excludeJSDocTypeAssertions*/ true);
-            const returnType = checkExpressionCached(expr);
-            if (!(returnType.flags & TypeFlags.Boolean)) return undefined;
+        return forEach(func.parameters, (param, i) => {
+            const initType = getTypeOfSymbol(param.symbol);
+            if (!initType || initType.flags & TypeFlags.Boolean || !isIdentifier(param.name) || isSymbolAssigned(param.symbol)) {
+                // Refining "x: boolean" to "x is true" or "x is false" isn't useful.
+                return;
+            }
+            const trueType = checkIfExpressionRefinesParameter(func, expr, param, initType);
+            if (trueType) {
+                return createTypePredicate(TypePredicateKind.Identifier, unescapeLeadingUnderscores(param.name.escapedText), i, trueType);
+            }
+        });
+    }
 
-            return forEach(func.parameters, (param, i) => {
-                const initType = getTypeOfSymbol(param.symbol);
-                if (!initType || initType.flags & TypeFlags.Boolean || !isIdentifier(param.name) || isSymbolAssigned(param.symbol)) {
-                    // Refining "x: boolean" to "x is true" or "x is false" isn't useful.
-                    return;
-                }
-                const trueType = checkIfExpressionRefinesParameter(expr, param, initType);
-                if (trueType) {
-                    return createTypePredicate(TypePredicateKind.Identifier, unescapeLeadingUnderscores(param.name.escapedText), i, trueType);
-                }
-            });
-        }
+    function checkIfExpressionRefinesParameter(func: FunctionLikeDeclaration, expr: Expression, param: ParameterDeclaration, initType: Type): Type | undefined {
+        const antecedent = (expr as Expression & { flowNode?: FlowNode; }).flowNode ||
+            expr.parent.kind === SyntaxKind.ReturnStatement && (expr.parent as ReturnStatement).flowNode ||
+            { flags: FlowFlags.Start };
+        const trueCondition: FlowCondition = {
+            flags: FlowFlags.TrueCondition,
+            node: expr,
+            antecedent,
+        };
 
-        function checkIfExpressionRefinesParameter(expr: Expression, param: ParameterDeclaration, initType: Type): Type | undefined {
-            const antecedent = (expr as Expression & { flowNode?: FlowNode; }).flowNode ||
-                expr.parent.kind === SyntaxKind.ReturnStatement && (expr.parent as ReturnStatement).flowNode ||
-                { flags: FlowFlags.Start };
-            const trueCondition: FlowCondition = {
-                flags: FlowFlags.TrueCondition,
-                node: expr,
-                antecedent,
-            };
+        const trueType = getFlowTypeOfReference(param.name, initType, initType, func, trueCondition);
+        if (trueType === initType) return undefined;
 
-            const trueType = getFlowTypeOfReference(param.name, initType, initType, func, trueCondition);
-            if (trueType === initType) return undefined;
-
-            // "x is T" means that x is T if and only if it returns true. If it returns false then x is not T.
-            // This means that if the function is called with an argument of type trueType, there can't be anything left in the `else` branch. It must reduce to `never`.
-            const falseCondition: FlowCondition = {
-                ...trueCondition,
-                flags: FlowFlags.FalseCondition,
-            };
-            const falseSubtype = getFlowTypeOfReference(param.name, trueType, trueType, func, falseCondition);
-            return falseSubtype.flags & TypeFlags.Never ? trueType : undefined;
-        }
+        // "x is T" means that x is T if and only if it returns true. If it returns false then x is not T.
+        // This means that if the function is called with an argument of type trueType, there can't be anything left in the `else` branch. It must reduce to `never`.
+        const falseCondition: FlowCondition = {
+            ...trueCondition,
+            flags: FlowFlags.FalseCondition,
+        };
+        const falseSubtype = getFlowTypeOfReference(param.name, trueType, trueType, func, falseCondition);
+        return falseSubtype.flags & TypeFlags.Never ? trueType : undefined;
     }
 
     /**
