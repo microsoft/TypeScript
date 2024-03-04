@@ -7,6 +7,7 @@ import {
     baselineTsserverLogs,
     openFilesForSession,
     TestSession,
+    verifyGetErrRequest,
 } from "../helpers/tsserver";
 import {
     createServerHost,
@@ -282,6 +283,35 @@ describe("unittests:: tsserver:: plugins:: overriding getSupportedCodeFixes", ()
 });
 
 describe("unittests:: tsserver:: plugins:: supportedExtensions::", () => {
+    function createGetExternalFiles(getSession: () => TestSession) {
+        const externalFiles = new Map<ts.server.Project, string[]>();
+        return (project: ts.server.Project, updateLevel: ts.ProgramUpdateLevel) => {
+            if (project.projectKind !== ts.server.ProjectKind.Configured) return [];
+            if (updateLevel === ts.ProgramUpdateLevel.Update) {
+                const existing = externalFiles.get(project);
+                if (existing) {
+                    getSession().logger.log(`getExternalFiles:: Returning cached .vue files`);
+                    return existing;
+                }
+            }
+            getSession().logger.log(`getExternalFiles:: Getting new list of .vue files`);
+            const configFile = project.getProjectName();
+            const config = ts.readJsonConfigFile(configFile, project.readFile.bind(project));
+            const parseHost: ts.ParseConfigHost = {
+                useCaseSensitiveFileNames: project.useCaseSensitiveFileNames(),
+                fileExists: project.fileExists.bind(project),
+                readFile: project.readFile.bind(project),
+                readDirectory: (...args) => {
+                    args[1] = [".vue"];
+                    return project.readDirectory(...args);
+                },
+            };
+            const parsed = ts.parseJsonSourceFileConfigFileContent(config, parseHost, project.getCurrentDirectory());
+            externalFiles.set(project, parsed.fileNames);
+            return parsed.fileNames;
+        };
+    }
+
     it("new files with non ts extensions and wildcard matching", () => {
         const aTs: File = {
             path: "/user/username/projects/myproject/a.ts",
@@ -303,7 +333,6 @@ describe("unittests:: tsserver:: plugins:: supportedExtensions::", () => {
             }),
         };
         const host = createServerHost([aTs, dTs, bVue, config, libFile]);
-        const externalFiles = new Map<ts.server.Project, string[]>();
         host.require = () => {
             return {
                 module: () => ({
@@ -321,31 +350,7 @@ describe("unittests:: tsserver:: plugins:: supportedExtensions::", () => {
                                 originalGetScriptSnapshot(fileName);
                         return proxy;
                     },
-                    getExternalFiles: (project: ts.server.Project, updateLevel: ts.ProgramUpdateLevel) => {
-                        if (project.projectKind !== ts.server.ProjectKind.Configured) return [];
-                        if (updateLevel === ts.ProgramUpdateLevel.Update) {
-                            const existing = externalFiles.get(project);
-                            if (existing) {
-                                session.logger.log(`getExternalFiles:: Returning cached .vue files`);
-                                return existing;
-                            }
-                        }
-                        session.logger.log(`getExternalFiles:: Getting new list of .vue files`);
-                        const configFile = project.getProjectName();
-                        const config = ts.readJsonConfigFile(configFile, project.readFile.bind(project));
-                        const parseHost: ts.ParseConfigHost = {
-                            useCaseSensitiveFileNames: project.useCaseSensitiveFileNames(),
-                            fileExists: project.fileExists.bind(project),
-                            readFile: project.readFile.bind(project),
-                            readDirectory: (...args) => {
-                                args[1] = [".vue"];
-                                return project.readDirectory(...args);
-                            },
-                        };
-                        const parsed = ts.parseJsonSourceFileConfigFileContent(config, parseHost, project.getCurrentDirectory());
-                        externalFiles.set(project, parsed.fileNames);
-                        return parsed.fileNames;
-                    },
+                    getExternalFiles: createGetExternalFiles(() => session),
                 }),
                 error: undefined,
             };
@@ -360,5 +365,68 @@ describe("unittests:: tsserver:: plugins:: supportedExtensions::", () => {
         host.runQueuedTimeoutCallbacks();
 
         baselineTsserverLogs("plugins", "new files with non ts extensions with wildcard matching", session);
+    });
+
+    it("when scriptKind changes for the external file", () => {
+        const aTs: File = {
+            path: "/user/username/projects/myproject/a.ts",
+            content: `export const a = 10;`,
+        };
+        const bVue: File = {
+            path: "/user/username/projects/myproject/b.vue",
+            content: "bVueFile",
+        };
+        const config: File = {
+            path: "/user/username/projects/myproject/tsconfig.json",
+            content: jsonToReadableText({
+                compilerOptions: { composite: true },
+                include: ["*.ts", "*.vue"],
+            }),
+        };
+        const host = createServerHost([aTs, bVue, config, libFile]);
+        let currentVueScriptKind = ts.ScriptKind.TS;
+        host.require = () => {
+            return {
+                module: () => ({
+                    create(info: ts.server.PluginCreateInfo) {
+                        const proxy = Harness.LanguageService.makeDefaultProxy(info);
+                        const originalScriptKind = info.languageServiceHost.getScriptKind!.bind(info.languageServiceHost);
+                        info.languageServiceHost.getScriptKind = fileName =>
+                            fileName === bVue.path ?
+                                currentVueScriptKind :
+                                originalScriptKind(fileName);
+                        const originalGetScriptSnapshot = info.languageServiceHost.getScriptSnapshot.bind(info.languageServiceHost);
+                        info.languageServiceHost.getScriptSnapshot = fileName =>
+                            fileName === bVue.path ?
+                                ts.ScriptSnapshot.fromString(`import { y } from "${bVue.content}";`) : // Change the text so that imports change and we need to reconstruct program
+                                originalGetScriptSnapshot(fileName);
+                        return proxy;
+                    },
+                    getExternalFiles: createGetExternalFiles(() => session),
+                }),
+                error: undefined,
+            };
+        };
+        const session = new TestSession({ host, globalPlugins: ["myplugin"] });
+        openFilesForSession([bVue], session);
+
+        session.executeCommandSeq<ts.server.protocol.UpdateOpenRequest>({
+            command: ts.server.protocol.CommandTypes.UpdateOpen,
+            arguments: {
+                changedFiles: [{
+                    fileName: bVue.path,
+                    textChanges: [{
+                        start: { line: 1, offset: bVue.content.length + 1 },
+                        end: { line: 1, offset: bVue.content.length + 1 },
+                        newText: "Updated",
+                    }],
+                }],
+            },
+        });
+        bVue.content += "Updated";
+        currentVueScriptKind = ts.ScriptKind.JS;
+
+        verifyGetErrRequest({ session, files: [bVue] });
+        baselineTsserverLogs("plugins", "when scriptKind changes for the external file", session);
     });
 });
