@@ -1299,6 +1299,9 @@ export class Session<TMessage = string> implements EventSender {
         ms: number,
         requireOpen = true,
     ) {
+        if (checkList.length === 0) {
+            return;
+        }
         Debug.assert(!this.suppressDiagnosticEvents); // Caller's responsibility
 
         const seq = this.changeSeq;

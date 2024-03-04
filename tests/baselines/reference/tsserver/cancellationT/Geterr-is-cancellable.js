@@ -215,20 +215,6 @@ Info seq  [hh:mm:ss:mss] request:
       "type": "request"
     }
 TestServerCancellationToken:: Cancellation Request id:: 2
-TestServerCancellationToken:: resetRequest:: 2 is as expected
-Info seq  [hh:mm:ss:mss] response:
-    {
-      "responseRequired": false
-    }
-After request
-
-Timeout callback:: count: 1
-1: checkOne *new*
-
-Before running Timeout callback:: count: 1
-1: checkOne
-
-TestServerCancellationToken:: Cancellation Request id:: 2
 Info seq  [hh:mm:ss:mss] event:
     {
       "seq": 0,
@@ -239,6 +225,14 @@ Info seq  [hh:mm:ss:mss] event:
       }
     }
 TestServerCancellationToken:: resetRequest:: 2 is as expected
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "responseRequired": false
+    }
+After request
+
+Before running Timeout callback:: count: 0
+
 After running Timeout callback:: count: 0
 
 Before request
@@ -264,7 +258,7 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 Timeout callback:: count: 1
-2: checkOne *new*
+1: checkOne *new*
 
 Before request
 
@@ -292,7 +286,7 @@ After request
 
 TestServerCancellationToken:: Setting request to cancel:: 3
 Before running Timeout callback:: count: 1
-2: checkOne
+1: checkOne
 
 TestServerCancellationToken:: Cancellation Request id:: 3
 TestServerCancellationToken:: Cancellation is requested
@@ -331,10 +325,10 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 Timeout callback:: count: 1
-3: checkOne *new*
+2: checkOne *new*
 
 Before running Timeout callback:: count: 1
-3: checkOne
+2: checkOne
 
 TestServerCancellationToken:: Cancellation Request id:: 5
 Info seq  [hh:mm:ss:mss] event:
@@ -394,10 +388,10 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 Timeout callback:: count: 1
-4: checkOne *new*
+3: checkOne *new*
 
 Before running Timeout callback:: count: 1
-4: checkOne
+3: checkOne
 
 TestServerCancellationToken:: Cancellation Request id:: 6
 Info seq  [hh:mm:ss:mss] event:
@@ -485,10 +479,10 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 Timeout callback:: count: 1
-5: checkOne *new*
+4: checkOne *new*
 
 Before running Timeout callback:: count: 1
-5: checkOne
+4: checkOne
 
 TestServerCancellationToken:: Cancellation Request id:: 7
 Info seq  [hh:mm:ss:mss] event:
@@ -539,7 +533,7 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 Timeout callback:: count: 1
-6: checkOne *new*
+5: checkOne *new*
 
 Immedidate callback:: count: 0
 4: semanticCheck *deleted*
