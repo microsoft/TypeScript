@@ -21,7 +21,7 @@
 
 const range = test.ranges();
 format.setOption("insertSpaceAfterSemicolonInForStatements", true);
-verify.postPasteImportFixes({
+verify.pasteEdits({
     copies: [{
         text: `const g = p + q;
 function e();

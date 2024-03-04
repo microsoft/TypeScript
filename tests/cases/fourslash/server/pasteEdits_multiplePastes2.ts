@@ -23,7 +23,7 @@
 
 const range = test.ranges();
 format.setOption("insertSpaceAfterSemicolonInForStatements", true);
-verify.postPasteImportFixes({
+verify.pasteEdits({
     copies: [{
         text: `export const t = aa + bb + r + s;
 const u = 1;`,

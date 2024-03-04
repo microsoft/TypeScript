@@ -444,7 +444,7 @@ declare namespace FourSlashInterface {
         toggleMultilineComment(newFileContent: string): void;
         commentSelection(newFileContent: string): void;
         uncommentSelection(newFileContent: string): void;
-        postPasteImportFixes(options: {
+        pasteEdits(options: {
             newFileContents: { readonly [fileName: string]: string };
             copies: { text: string; copyRange?: { file: string; range: { pos: number, end: number };} }[],
             pastes: { pos: number, end: number }[],

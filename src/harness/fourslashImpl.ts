@@ -3562,8 +3562,8 @@ export class TestState {
         assert.deepEqual(actualModuleSpecifiers, moduleSpecifiers);
     }
 
-    public verifyPostPasteImportFixes(options: FourSlashInterface.PostPasteImportFixOptions): void {
-        const editInfo = this.languageService.getPostPasteImportFixes(this.activeFile.fileName, options.copies, options.pastes, options.preferences, this.formatCodeSettings);
+    public verifyPasteEdits(options: FourSlashInterface.PasteEditsOptions): void {
+        const editInfo = this.languageService.getPasteEdits(this.activeFile.fileName, options.copies, options.pastes, options.preferences, this.formatCodeSettings);
         this.verifyNewContent({ newFileContent: options.newFileContents }, editInfo.edits);
     }
 

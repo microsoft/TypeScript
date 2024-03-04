@@ -238,11 +238,11 @@ import {
     ParseConfigFileHost,
     ParsedCommandLine,
     parseJsonSourceFileConfigFileContent,
+    PasteEdits,
+    pasteEdits,
     Path,
     positionIsSynthesized,
     PossibleProgramFileInfo,
-    PostPasteImportFixes,
-    postPasteImportFixes,
     PragmaMap,
     PrivateIdentifier,
     Program,
@@ -2093,15 +2093,15 @@ export function createLanguageService(
         };
     }
 
-    function getPostPasteImportFixes(
+    function getPasteEdits(
         targetFile: string,
         copies: { text: string; copyRange?: { file: string; range: TextRange; }; }[],
         pastes: TextRange[],
         preferences: UserPreferences,
         formatOptions: FormatCodeSettings,
-    ): PostPasteImportFixes {
+    ): PasteEdits {
         synchronizeHostData();
-        return postPasteImportFixes.postPasteImportFixesProvider(
+        return pasteEdits.pasteEditsProvider(
             getValidSourceFile(targetFile),
             copies.map(({ text, copyRange }) => ({ text, copyRange: copyRange ? { file: getValidSourceFile(copyRange.file), range: copyRange.range } : undefined })),
             pastes,
@@ -3190,7 +3190,7 @@ export function createLanguageService(
         uncommentSelection,
         provideInlayHints,
         getSupportedCodeFixes,
-        getPostPasteImportFixes,
+        getPasteEdits,
     };
 
     switch (languageServiceMode) {

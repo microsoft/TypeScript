@@ -20,7 +20,7 @@
 const range = test.ranges();
 const t = range[0];
 format.setOption("insertSpaceAfterSemicolonInForStatements", true);
-verify.postPasteImportFixes({
+verify.pasteEdits({
     copies: [{ 
         text: `const c = a + b;
 const t = 9;`,

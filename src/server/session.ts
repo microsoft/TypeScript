@@ -101,11 +101,11 @@ import {
     OperationCanceledException,
     OrganizeImportsMode,
     OutliningSpan,
+    PasteEdits,
     Path,
     perfLogger,
     PerformanceEvent,
     PossibleProgramFileInfo,
-    PostPasteImportFixes,
     Program,
     QuickInfo,
     RefactorEditInfo,
@@ -2796,10 +2796,10 @@ export class Session<TMessage = string> implements EventSender {
         return project.getLanguageService().getMoveToRefactoringFileSuggestions(file, this.extractPositionOrRange(args, scriptInfo), this.getPreferences(file));
     }
 
-    private getPostPasteImportFixes(args: protocol.GetPostPasteImportFixesRequestArgs): protocol.PostPasteImportAction | undefined {
+    private getPasteEdits(args: protocol.GetPasteEditsRequestArgs): protocol.PasteEditsAction | undefined {
         const { file, project } = this.getFileAndProject(args);
         const copyFile = args.copies[0].range ? args.copies[0].range.file : undefined;
-        const result = project.getLanguageService().getPostPasteImportFixes(
+        const result = project.getLanguageService().getPasteEdits(
             file,
             args.copies.map(copy => ({
                 text: copy.text,
@@ -2813,7 +2813,7 @@ export class Session<TMessage = string> implements EventSender {
         if (result === undefined) {
             return undefined;
         }
-        return this.mapPostPasteAction(result);
+        return this.mapPasteEditsAction(result);
     }
 
     private organizeImports(args: protocol.OrganizeImportsRequestArgs, simplifiedResult: boolean): readonly protocol.FileCodeEdits[] | readonly FileTextChanges[] {
@@ -2948,7 +2948,7 @@ export class Session<TMessage = string> implements EventSender {
         return { fixName, description, changes: this.mapTextChangesToCodeEdits(changes), commands, fixId, fixAllDescription };
     }
 
-    private mapPostPasteAction({ edits }: PostPasteImportFixes): protocol.PostPasteImportAction {
+    private mapPasteEditsAction({ edits }: PasteEdits): protocol.PasteEditsAction {
         return { edits: this.mapTextChangesToCodeEdits(edits) };
     }
 
@@ -3545,8 +3545,8 @@ export class Session<TMessage = string> implements EventSender {
         [protocol.CommandTypes.GetMoveToRefactoringFileSuggestions]: (request: protocol.GetMoveToRefactoringFileSuggestionsRequest) => {
             return this.requiredResponse(this.getMoveToRefactoringFileSuggestions(request.arguments));
         },
-        [protocol.CommandTypes.GetPostPasteImportFixes]: (request: protocol.GetPostPasteImportFixesRequest) => {
-            return this.requiredResponse(this.getPostPasteImportFixes(request.arguments));
+        [protocol.CommandTypes.GetPasteEdits]: (request: protocol.GetPasteEditsRequest) => {
+            return this.requiredResponse(this.getPasteEdits(request.arguments));
         },
         [protocol.CommandTypes.GetEditsForRefactorFull]: (request: protocol.GetEditsForRefactorRequest) => {
             return this.requiredResponse(this.getEditsForRefactor(request.arguments, /*simplifiedResult*/ false));

@@ -621,8 +621,8 @@ export class Verify extends VerifyNegatable {
         this.state.verifyOrganizeImports(newContent, mode, preferences);
     }
 
-    public postPasteImportFixes(options: PostPasteImportFixOptions): void {
-        this.state.verifyPostPasteImportFixes(options);
+    public pasteEdits(options: PasteEditsOptions): void {
+        this.state.verifyPasteEdits(options);
     }
 }
 
@@ -1887,7 +1887,7 @@ export interface VerifyCodeFixAllOptions {
     preferences?: ts.UserPreferences;
 }
 
-export interface VerifyPostPasteImportFix {
+export interface VerifyPasteEdits {
     targetFile: string;
     pastes: { text: string; range: ts.TextRange; }[];
     copySpan?: { file: string; range: ts.TextRange; };
@@ -1934,7 +1934,7 @@ export interface MoveToFileOptions {
     readonly preferences?: ts.UserPreferences;
 }
 
-export interface PostPasteImportFixOptions {
+export interface PasteEditsOptions {
     readonly newFileContents: { readonly [fileName: string]: string; };
     readonly copies: { text: string; copyRange?: { file: string; range: ts.TextRange; }; }[];
     readonly pastes: ts.TextRange[];

@@ -161,7 +161,7 @@ declare namespace ts {
                 GetApplicableRefactors = "getApplicableRefactors",
                 GetEditsForRefactor = "getEditsForRefactor",
                 GetMoveToRefactoringFileSuggestions = "getMoveToRefactoringFileSuggestions",
-                GetPostPasteImportFixes = "getPostPasteImportFixes",
+                GetPasteEdits = "GetPasteEdits",
                 OrganizeImports = "organizeImports",
                 GetEditsForFileRename = "getEditsForFileRename",
                 ConfigurePlugin = "configurePlugin",
@@ -549,21 +549,21 @@ declare namespace ts {
             /**
              * Request refactorings at a given position post pasting text from some other location.
              */
-            interface GetPostPasteImportFixesRequest extends Request {
-                command: CommandTypes.GetPostPasteImportFixes;
-                arguments: GetPostPasteImportFixesRequestArgs;
+            interface GetPasteEditsRequest extends Request {
+                command: CommandTypes.GetPasteEdits;
+                arguments: GetPasteEditsRequestArgs;
             }
-            type GetPostPasteImportFixesRequestArgs = FileRequestArgs & {
+            type GetPasteEditsRequestArgs = FileRequestArgs & {
                 copies: {
                     text: string;
                     range?: FileSpan;
                 }[];
                 pastes: TextSpan[];
             };
-            interface GetPostPasteImportFixesResponse extends Response {
-                body: PostPasteImportAction;
+            interface GetPasteEditsResponse extends Response {
+                body: PasteEditsAction;
             }
-            interface PostPasteImportAction {
+            interface PasteEditsAction {
                 edits: FileCodeEdits[];
             }
             /**
@@ -4116,7 +4116,7 @@ declare namespace ts {
             private getApplicableRefactors;
             private getEditsForRefactor;
             private getMoveToRefactoringFileSuggestions;
-            private getPostPasteImportFixes;
+            private getPasteEdits;
             private organizeImports;
             private getEditsForFileRename;
             private getCodeFixes;
@@ -4125,7 +4125,7 @@ declare namespace ts {
             private getStartAndEndPosition;
             private mapCodeAction;
             private mapCodeFixAction;
-            private mapPostPasteAction;
+            private mapPasteEditsAction;
             private mapTextChangesToCodeEdits;
             private mapTextChangeToCodeEdit;
             private convertTextChangeToCodeEdit;
@@ -10604,7 +10604,7 @@ declare namespace ts {
         uncommentSelection(fileName: string, textRange: TextRange): TextChange[];
         getSupportedCodeFixes(fileName?: string): readonly string[];
         dispose(): void;
-        getPostPasteImportFixes(
+        getPasteEdits(
             targetFile: string,
             copies: {
                 text: string;
@@ -10616,7 +10616,7 @@ declare namespace ts {
             pastes: TextRange[],
             preferences: UserPreferences,
             formatOptions: FormatCodeSettings,
-        ): PostPasteImportFixes;
+        ): PasteEdits;
     }
     interface JsxClosingTagInfo {
         readonly newText: string;
@@ -10634,7 +10634,7 @@ declare namespace ts {
         SortAndCombine = "SortAndCombine",
         RemoveUnused = "RemoveUnused",
     }
-    interface PostPasteImportFixes {
+    interface PasteEdits {
         edits: readonly FileTextChanges[];
     }
     interface OrganizeImportsArgs extends CombinedCodeFixScope {

@@ -16,7 +16,7 @@
 
 const range = test.ranges();
 format.setOption("insertSpaceAfterSemicolonInForStatements", true);
-verify.postPasteImportFixes({
+verify.pasteEdits({
     copies: [{ 
         text: `interface Testing {
             test1: Test1;

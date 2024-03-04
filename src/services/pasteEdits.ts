@@ -31,11 +31,11 @@ import {
     CodeFixContextBase,
     FileTextChanges,
     LanguageServiceHost,
-    PostPasteImportFixes,
+    PasteEdits,
 } from "./types";
 
 /** @internal */
-export function postPasteImportFixesProvider(
+export function pasteEditsProvider(
     targetFile: SourceFile,
     copies: { text: string; copyRange?: { file: SourceFile; range: TextRange; }; }[],
     pastes: TextRange[],
@@ -43,12 +43,12 @@ export function postPasteImportFixesProvider(
     preferences: UserPreferences,
     formatContext: formatting.FormatContext,
     cancellationToken: CancellationToken,
-): PostPasteImportFixes {
-    const changes: FileTextChanges[] = textChanges.ChangeTracker.with({ host, formatContext, preferences }, changeTracker => postPasteFixes(targetFile, copies, pastes, host, preferences, formatContext, cancellationToken, changeTracker));
+): PasteEdits {
+    const changes: FileTextChanges[] = textChanges.ChangeTracker.with({ host, formatContext, preferences }, changeTracker => pasteEdits(targetFile, copies, pastes, host, preferences, formatContext, cancellationToken, changeTracker));
     return { edits: changes };
 }
 
-function postPasteFixes(
+function pasteEdits(
     targetFile: SourceFile,
     copies: { text: string; copyRange?: { file: SourceFile; range: TextRange; }; }[],
     pastes: TextRange[],

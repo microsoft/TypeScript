@@ -684,13 +684,13 @@ export interface LanguageService {
     getSupportedCodeFixes(fileName?: string): readonly string[];
 
     dispose(): void;
-    getPostPasteImportFixes(
+    getPasteEdits(
         targetFile: string,
         copies: { text: string; range?: { file: string; range: TextRange; }; }[],
         pastes: TextRange[],
         preferences: UserPreferences,
         formatOptions: FormatCodeSettings,
-    ): PostPasteImportFixes;
+    ): PasteEdits;
 }
 
 export interface JsxClosingTagInfo {
@@ -713,7 +713,7 @@ export const enum OrganizeImportsMode {
     RemoveUnused = "RemoveUnused",
 }
 
-export interface PostPasteImportFixes {
+export interface PasteEdits {
     edits: readonly FileTextChanges[];
 }
 
