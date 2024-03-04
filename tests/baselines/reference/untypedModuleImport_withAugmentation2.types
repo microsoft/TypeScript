@@ -5,8 +5,6 @@
 import { } from "augmenter";
 
 === /node_modules/augmenter/index.d.ts ===
-// This tests that augmenting an untyped module is forbidden even in an ambient context. Contrast with `moduleAugmentationInDependency.ts`.
-
 declare module "js" {
 >"js" : typeof import("js")
 

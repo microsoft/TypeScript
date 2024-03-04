@@ -195,7 +195,7 @@ FsWatches::
 
 PendingInstalls callback:: count: 1
 1: #1 with arguments:: [
-  "@types/commander@ts5.4"
+  "@types/commander@tsFakeMajor.Minor"
 ] *new*
 
 Projects::

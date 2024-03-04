@@ -517,6 +517,7 @@ export const lint = task({
             `${folder}/.eslintcache`,
             "--format",
             formatter,
+            "--report-unused-disable-directives",
         ];
 
         if (cmdLineOptions.fix) {

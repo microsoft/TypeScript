@@ -1,7 +1,7 @@
 /// <reference path="fourslash.ts" />
 
 // @BaselineFile: getEmitOutputOut.baseline
-// @out: out.js
+// @outFile: out.js
 
 // @Filename: my.d.ts
 // @emitThisFile: false

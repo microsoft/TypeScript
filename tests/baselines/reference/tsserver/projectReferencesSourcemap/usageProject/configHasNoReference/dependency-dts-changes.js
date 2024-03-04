@@ -683,6 +683,16 @@ FsWatchesRecursive::
 /user/username/projects/myproject/random:
   {}
 
+Projects::
+/user/username/projects/myproject/main/tsconfig.json (Configured) *changed*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+    documentPositionMappers: 1 *changed*
+        /user/username/projects/myproject/decls/fns.d.ts: DocumentPositionMapper1 *new*
+/user/username/projects/myproject/random/tsconfig.json (Configured)
+    projectStateVersion: 1
+    projectProgramVersion: 1
+
 ScriptInfos::
 /a/lib/lib.d.ts
     version: Text-1
@@ -694,7 +704,7 @@ ScriptInfos::
     declarationInfoPath: /user/username/projects/myproject/decls/fns.d.ts
     sourceInfos: 1
         /user/username/projects/myproject/dependency/fns.ts
-    documentPositionMapper: DocumentPositionMapper
+    documentPositionMapper: DocumentPositionMapper1
     containingProjects: 0
 /user/username/projects/myproject/decls/fns.d.ts *changed*
     version: Text-1
@@ -712,6 +722,9 @@ ScriptInfos::
     version: SVC-1-0
     containingProjects: 1
         /user/username/projects/myproject/random/tsconfig.json *default*
+
+DocumentPositionMappers::
+DocumentPositionMapper1 *new*
 
 Info seq  [hh:mm:ss:mss] FileWatcher:: Triggered with /user/username/projects/myproject/decls/fns.d.ts 1:: WatchInfo: /user/username/projects/myproject/decls/fns.d.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] Scheduled: /user/username/projects/myproject/main/tsconfig.json
@@ -752,7 +765,7 @@ ScriptInfos::
     declarationInfoPath: /user/username/projects/myproject/decls/fns.d.ts
     sourceInfos: 1
         /user/username/projects/myproject/dependency/fns.ts
-    documentPositionMapper: DocumentPositionMapper
+    documentPositionMapper: DocumentPositionMapper1
     containingProjects: 0
 /user/username/projects/myproject/decls/fns.d.ts *changed*
     version: Text-1
@@ -851,7 +864,7 @@ ScriptInfos::
     declarationInfoPath: /user/username/projects/myproject/decls/fns.d.ts
     sourceInfos: 1
         /user/username/projects/myproject/dependency/fns.ts
-    documentPositionMapper: DocumentPositionMapper
+    documentPositionMapper: DocumentPositionMapper1
     containingProjects: 0
 /user/username/projects/myproject/decls/fns.d.ts *changed*
     version: Text-2 *changed*

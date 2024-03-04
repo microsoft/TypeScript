@@ -196,7 +196,7 @@ FsWatchesRecursive::
 
 PendingInstalls callback:: count: 1
 1: #1 with arguments:: [
-  "@types/foo@ts5.4"
+  "@types/foo@tsFakeMajor.Minor"
 ] *new*
 
 Projects::

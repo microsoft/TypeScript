@@ -1,8 +1,6 @@
 //// [tests/cases/compiler/exportDefaultProperty2.ts] ////
 
 === a.ts ===
-// This test is just like exportEqualsProperty2, but with `export default`.
-
 class C {
 >C : C
 
