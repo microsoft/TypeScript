@@ -302,7 +302,8 @@ export function formatDiagnosticToProtocol(diag: Diagnostic, includeFileName: bo
 
 export interface PendingErrorCheck {
     fileName: NormalizedPath;
-    project: Project;
+    ranges?: TextRange[];
+    project?: Project;
 }
 
 function allEditsBeforePos(edits: readonly TextChange[], pos: number): boolean {
@@ -1139,7 +1140,7 @@ export class Session<TMessage = string> implements EventSender {
             if (!this.suppressDiagnosticEvents && !this.noGetErrOnBackgroundUpdate) {
                 this.projectService.logger.info(`Queueing diagnostics update for ${openFiles}`);
                 // For now only queue error checking for open files. We can change this to include non open files as well
-                this.errorCheck.startNew(next => this.updateErrorCheck(next, mapDefined(openFiles, fileName => this.toPendingErrorCheck(fileName)), 100, /*requireOpen*/ true));
+                this.errorCheck.startNew(next => this.updateErrorCheck(next, mapDefined(openFiles, file => ({ fileName: toNormalizedPath(file) })), 100, /*requireOpen*/ true));
             }
 
             // Send project changed event
@@ -1295,7 +1296,7 @@ export class Session<TMessage = string> implements EventSender {
     /** It is the caller's responsibility to verify that `!this.suppressDiagnosticEvents`. */
     private updateErrorCheck(
         next: NextStep,
-        checkList: readonly (PendingErrorCheck & { ranges?: TextRange[]; })[],
+        checkList: PendingErrorCheck[],
         ms: number,
         requireOpen = true,
     ) {
@@ -1331,8 +1332,10 @@ export class Session<TMessage = string> implements EventSender {
                 return;
             }
 
-            const item = checkList[index];
-            const { fileName, project } = item;
+            const { fileName, project = this.projectService.tryGetDefaultProjectForFile(fileName), ranges } = checkList[index];
+            if (!project) {
+                return;
+            }
 
             // Ensure the project is up to date before checking if this file is present in the project.
             updateProjectIfDirty(project);
@@ -1351,9 +1354,9 @@ export class Session<TMessage = string> implements EventSender {
                 return;
             }
 
-            if (item.ranges) {
+            if (ranges) {
                 return next.immediate("regionSemanticCheck", () => {
-                    this.regionSemanticCheck(fileName, project, item.ranges!);
+                    this.regionSemanticCheck(fileName, project, ranges);
                     filesFullCheck.push({ fileName, project });
                     goNext();
                 });
@@ -2526,31 +2529,22 @@ export class Session<TMessage = string> implements EventSender {
         }
     }
 
-    private toPendingErrorCheck(uncheckedFileName: string): PendingErrorCheck | undefined {
-        const fileName = toNormalizedPath(uncheckedFileName);
-        const project = this.projectService.tryGetDefaultProjectForFile(fileName);
-        return project && { fileName, project };
-    }
-
     private getDiagnostics(next: NextStep, delay: number, fileArgs: (string | protocol.FileRangesRequestArgs)[]): void {
         if (this.suppressDiagnosticEvents) {
             return;
         }
 
         if (fileArgs.length > 0) {
-            const files = mapDefined(fileArgs.filter(isString), fileName => this.toPendingErrorCheck(fileName));
+            const files = mapDefined(fileArgs.filter(isString), file => ({ fileName: toNormalizedPath(file) }));
             const filesWithRange = mapDefined(fileArgs.filter((arg): arg is protocol.FileRangesRequestArgs => !isString(arg)), arg => {
-                const errorCheck = this.toPendingErrorCheck(arg.file);
-                if (!errorCheck) {
-                    return undefined;
-                }
-                const scriptInfo = this.projectService.getScriptInfo(errorCheck.fileName);
+                const fileName = toNormalizedPath(arg.file);
+                const scriptInfo = this.projectService.getScriptInfo(fileName);
                 if (!scriptInfo) {
                     return undefined;
                 }
                 const ranges = arg.ranges.map(range => this.getRange({ file: arg.file, ...range }, scriptInfo));
                 return {
-                    ...errorCheck,
+                    fileName,
                     ranges,
                 };
             });
