@@ -1,0 +1,44 @@
+//// [tests/cases/compiler/functionIndirectSelfCallInferedReturn.ts] ////
+
+=== functionIndirectSelfCallInferedReturn.ts ===
+interface Type {
+    flags: number;
+>flags : number
+
+    x: any;
+>x : any
+}
+
+declare function mapType(type: Type, mapper: (t: Type) => Type, noReductions?: boolean): Type;
+>mapType : { (type: Type, mapper: (t: Type) => Type, noReductions?: boolean): Type; (type: Type, mapper: (t: Type) => Type | undefined, noReductions?: boolean | undefined): Type | undefined; }
+>type : Type
+>mapper : (t: Type) => Type
+>t : Type
+>noReductions : boolean | undefined
+
+declare function mapType(type: Type, mapper: (t: Type) => Type | undefined, noReductions?: boolean): Type | undefined;
+>mapType : { (type: Type, mapper: (t: Type) => Type, noReductions?: boolean | undefined): Type; (type: Type, mapper: (t: Type) => Type | undefined, noReductions?: boolean): Type | undefined; }
+>type : Type
+>mapper : (t: Type) => Type | undefined
+>t : Type
+>noReductions : boolean | undefined
+
+function unwrapAwaitedType(type: Type) {
+>unwrapAwaitedType : (type: Type) => Type
+>type : Type
+
+    return type.flags & 1 ? mapType(type, unwrapAwaitedType) :
+>type.flags & 1 ? mapType(type, unwrapAwaitedType) :        type : Type
+>type.flags & 1 : number
+>type.flags : number
+>type : Type
+>flags : number
+>1 : 1
+>mapType(type, unwrapAwaitedType) : Type
+>mapType : { (type: Type, mapper: (t: Type) => Type, noReductions?: boolean | undefined): Type; (type: Type, mapper: (t: Type) => Type | undefined, noReductions?: boolean | undefined): Type | undefined; }
+>type : Type
+>unwrapAwaitedType : (type: Type) => Type
+
+        type;
+>type : Type
+}

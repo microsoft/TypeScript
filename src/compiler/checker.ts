@@ -35165,7 +35165,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     return undefined;
                 }
                 let diags: readonly Diagnostic[] | undefined;
-                if (diags = getSignatureApplicabilityError(node, args, candidate, relation, CheckMode.Normal, /*reportErrors*/ true, /*containingMessageChain*/ undefined)) {
+                if (diags = getSignatureApplicabilityError(node, args, candidate, relation, CheckMode.Normal, /*reportErrors*/ relation === assignableRelation, /*containingMessageChain*/ undefined)) {
                     candidatesForArgumentError = [candidate];
                     candidateArgumentErrors = [diags];
                     return undefined;
@@ -35208,7 +35208,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         checkCandidate = candidate;
                     }
                     let diags: readonly Diagnostic[] | undefined;
-                    if (diags = getSignatureApplicabilityError(node, args, checkCandidate, relation, argCheckMode, /*reportErrors*/ true, /*containingMessageChain*/ undefined)) {
+                    if (diags = getSignatureApplicabilityError(node, args, checkCandidate, relation, argCheckMode, /*reportErrors*/ relation === assignableRelation, /*containingMessageChain*/ undefined)) {
                         // Give preference to error candidates that have no rest parameters (as they are more specific)
                         (candidatesForArgumentError || (candidatesForArgumentError = [])).push(checkCandidate);
                         (candidateArgumentErrors ||= []).push(diags);
@@ -35229,7 +35229,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                                 return false;
                             }
                         }
-                        if (diags = getSignatureApplicabilityError(node, args, checkCandidate, relation, argCheckMode, /*reportErrors*/ true, /*containingMessageChain*/ undefined)) {
+
+                        if (diags = getSignatureApplicabilityError(node, args, checkCandidate, relation, argCheckMode, /*reportErrors*/ relation === assignableRelation, /*containingMessageChain*/ undefined)) {
                             // Give preference to error candidates that have no rest parameters (as they are more specific)
                             (candidatesForArgumentError || (candidatesForArgumentError = [])).push(checkCandidate);
                             (candidateArgumentErrors ||= []).push(diags);
