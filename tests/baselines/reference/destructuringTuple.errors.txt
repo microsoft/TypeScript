@@ -1,8 +1,14 @@
-destructuringTuple.ts(11,7): error TS2461: Type 'unknown' is not an array type.
-destructuringTuple.ts(11,48): error TS18046: 'accu' is of type 'unknown'.
+destructuringTuple.ts(11,7): error TS2461: Type 'number' is not an array type.
+destructuringTuple.ts(11,27): error TS2769: No overload matches this call.
+  Overload 1 of 3, '(callbackfn: (previousValue: number, currentValue: number, currentIndex: number, array: number[]) => number, initialValue: number): number', gave the following error.
+    Argument of type 'never[]' is not assignable to parameter of type 'number'.
+  Overload 2 of 3, '(callbackfn: (previousValue: [], currentValue: number, currentIndex: number, array: number[]) => [], initialValue: []): []', gave the following error.
+    Type 'never[]' is not assignable to type '[]'.
+      Target allows only 0 element(s) but source may have more.
+destructuringTuple.ts(11,53): error TS2339: Property 'concat' does not exist on type 'number'.
 
 
-==== destructuringTuple.ts (2 errors) ====
+==== destructuringTuple.ts (3 errors) ====
     declare var tuple: [boolean, number, ...string[]];
     
     const [a, b, c, ...rest] = tuple;
@@ -15,9 +21,17 @@ destructuringTuple.ts(11,48): error TS18046: 'accu' is of type 'unknown'.
     
     const [oops1] = [1, 2, 3].reduce((accu, el) => accu.concat(el), []);
           ~~~~~~~
-!!! error TS2461: Type 'unknown' is not an array type.
-                                                   ~~~~
-!!! error TS18046: 'accu' is of type 'unknown'.
+!!! error TS2461: Type 'number' is not an array type.
+                              ~~~~~~
+!!! error TS2769: No overload matches this call.
+!!! error TS2769:   Overload 1 of 3, '(callbackfn: (previousValue: number, currentValue: number, currentIndex: number, array: number[]) => number, initialValue: number): number', gave the following error.
+!!! error TS2769:     Argument of type 'never[]' is not assignable to parameter of type 'number'.
+!!! error TS2769:   Overload 2 of 3, '(callbackfn: (previousValue: [], currentValue: number, currentIndex: number, array: number[]) => [], initialValue: []): []', gave the following error.
+!!! error TS2769:     Type 'never[]' is not assignable to type '[]'.
+!!! error TS2769:       Target allows only 0 element(s) but source may have more.
+!!! related TS6502 lib.es5.d.ts:--:--: The expected type comes from the return type of this signature.
+                                                        ~~~~~~
+!!! error TS2339: Property 'concat' does not exist on type 'number'.
     
     const [oops2] = [1, 2, 3].reduce((acc: number[], e) => acc.concat(e), []);
     

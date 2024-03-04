@@ -26,19 +26,19 @@ declare var receiver: typeof tuple;
 
 const [oops1] = [1, 2, 3].reduce((accu, el) => accu.concat(el), []);
 >oops1 : any
->[1, 2, 3].reduce((accu, el) => accu.concat(el), []) : unknown
+>[1, 2, 3].reduce((accu, el) => accu.concat(el), []) : number
 >[1, 2, 3].reduce : { (callbackfn: (previousValue: number, currentValue: number, currentIndex: number, array: number[]) => number): number; (callbackfn: (previousValue: number, currentValue: number, currentIndex: number, array: number[]) => number, initialValue: number): number; <U>(callbackfn: (previousValue: U, currentValue: number, currentIndex: number, array: number[]) => U, initialValue: U): U; }
 >[1, 2, 3] : number[]
 >1 : 1
 >2 : 2
 >3 : 3
 >reduce : { (callbackfn: (previousValue: number, currentValue: number, currentIndex: number, array: number[]) => number): number; (callbackfn: (previousValue: number, currentValue: number, currentIndex: number, array: number[]) => number, initialValue: number): number; <U>(callbackfn: (previousValue: U, currentValue: number, currentIndex: number, array: number[]) => U, initialValue: U): U; }
->(accu, el) => accu.concat(el) : (accu: unknown, el: number) => any
->accu : unknown
+>(accu, el) => accu.concat(el) : (accu: number, el: number) => any
+>accu : number
 >el : number
 >accu.concat(el) : any
 >accu.concat : any
->accu : unknown
+>accu : number
 >concat : any
 >el : number
 >[] : never[]

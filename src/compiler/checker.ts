@@ -34964,7 +34964,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         // For a decorator, no arguments are susceptible to contextual typing due to the fact
         // decorators are applied to a declaration by the emitter, and not to an expression.
         const isSingleNonGenericCandidate = candidates.length === 1 && !candidates[0].typeParameters;
-        let argCheckMode = !isDecorator && !isSingleNonGenericCandidate && some(args, isContextSensitive) ? CheckMode.SkipContextSensitive : CheckMode.Normal;
 
         // The following variables are captured and modified by calls to chooseOverload.
         // If overload resolution or type argument inference fails, we want to report the
@@ -35173,12 +35172,14 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 return candidate;
             }
 
+            const initialCheckMode = !isDecorator && !isSingleNonGenericCandidate && some(args, isContextSensitive) ? CheckMode.SkipContextSensitive : CheckMode.Normal;
             for (let candidateIndex = 0; candidateIndex < candidates.length; candidateIndex++) {
                 const candidate = candidates[candidateIndex];
                 if (!hasCorrectTypeArgumentArity(candidate, typeArguments) || !hasCorrectArity(node, args, candidate, signatureHelpTrailingComma)) {
                     continue;
                 }
                 const result = speculate(() => {
+                    let argCheckMode = initialCheckMode;
                     let checkCandidate: Signature;
                     let inferenceContext: InferenceContext | undefined;
 
