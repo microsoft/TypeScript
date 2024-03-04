@@ -14035,6 +14035,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             (declaration.questionToken ? declaration.questionToken.kind === SyntaxKind.MinusToken ? MappedTypeModifiers.ExcludeOptional : MappedTypeModifiers.IncludeOptional : 0);
     }
 
+    // Return -1, 0, or 1, where -1 means optionality is stripped (i.e. -?), 0 means optionality is unchanged, and 1 means
+    // optionality is added (i.e. +?).
     function getMappedTypeOptionality(type: MappedType): number {
         const modifiers = getMappedTypeModifiers(type);
         return modifiers & MappedTypeModifiers.ExcludeOptional ? -1 : modifiers & MappedTypeModifiers.IncludeOptional ? 1 : 0;
@@ -14046,6 +14048,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             0;
     }
 
+    // Return -1, 0, or 1, for stripped, unchanged, or added optionality respectively. When a homomorphic mapped type doesn't
+    // modify optionality, recursively consult the optionality of the type being mapped over to see if it strips or adds optionality.
     function getCombinedMappedTypeOptionality(type: MappedType): number {
         return getMappedTypeOptionality(type) || getModifiersTypeOptionality(getModifiersTypeFromMappedType(type));
     }
