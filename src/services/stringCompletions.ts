@@ -236,6 +236,7 @@ function convertStringLiteralCompletions(
                 entries,
                 contextToken,
                 contextToken,
+                contextToken,
                 sourceFile,
                 position,
                 sourceFile,

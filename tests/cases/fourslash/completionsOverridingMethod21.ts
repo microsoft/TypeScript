@@ -5,12 +5,12 @@
 //// abstract class AFoo {
 ////     abstract bar(): Promise<void>;
 //// }
-//// class Foo extends AFoo {
-////     async b/*a*/
+//// class BFoo extends AFoo {
+////     async /*b*/
 //// }
 
 verify.completions({
-    marker: "a",
+    marker: "b",
     isNewIdentifierLocation: true,
     preferences: {
         includeCompletionsWithInsertText: true,
@@ -29,8 +29,7 @@ verify.completions({
         },
     ]
 });
-
-verify.applyCodeActionFromCompletion("a", {
+verify.applyCodeActionFromCompletion("b", {
     preferences: {
       includeCompletionsWithInsertText: true,
       includeCompletionsWithSnippetText: false,
@@ -43,7 +42,7 @@ verify.applyCodeActionFromCompletion("a", {
 `abstract class AFoo {
     abstract bar(): Promise<void>;
 }
-class Foo extends AFoo {
-    b
+class BFoo extends AFoo {
+    
 }`
 });

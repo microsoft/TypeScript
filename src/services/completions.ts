@@ -1246,6 +1246,7 @@ function completionInfoFromData(
     const {
         symbols,
         contextToken,
+        previousToken,
         completionKind,
         isInSnippetScope,
         isNewIdentifierLocation,
@@ -1305,6 +1306,7 @@ function completionInfoFromData(
         entries,
         /*replacementToken*/ undefined,
         contextToken,
+        previousToken,
         location,
         position,
         sourceFile,
@@ -1634,6 +1636,7 @@ function createCompletionEntry(
     sortText: SortText,
     replacementToken: Node | undefined,
     contextToken: Node | undefined,
+    previousToken: Node | undefined,
     location: Node,
     position: number,
     sourceFile: SourceFile,
@@ -1757,7 +1760,19 @@ function createCompletionEntry(
         isClassLikeMemberCompletion(symbol, location, sourceFile)
     ) {
         let importAdder;
-        const memberCompletionEntry = getEntryForMemberCompletion(host, program, options, preferences, name, symbol, location, position, contextToken, formatContext);
+        const memberCompletionEntry = getEntryForMemberCompletion(
+            host,
+            program,
+            options,
+            preferences,
+            name,
+            symbol,
+            location,
+            position,
+            contextToken,
+            previousToken,
+            formatContext,
+        );
         if (memberCompletionEntry) {
             ({ insertText, filterText, isSnippet, importAdder } = memberCompletionEntry);
             if (importAdder?.hasFixes() || memberCompletionEntry.eraseRange) {
@@ -1915,6 +1930,7 @@ function getEntryForMemberCompletion(
     location: Node,
     position: number,
     contextToken: Node | undefined,
+    previousToken: Node | undefined,
     formatContext: formatting.FormatContext | undefined,
 ): { insertText: string; filterText?: string; isSnippet?: true; importAdder?: codefix.ImportAdder; eraseRange?: TextRange; } | undefined {
     const classLikeDeclaration = findAncestor(location, isClassLike);
@@ -1953,7 +1969,7 @@ function getEntryForMemberCompletion(
     }
 
     let modifiers = ModifierFlags.None;
-    const { modifiers: presentModifiers, range: eraseRange, decorators: presentDecorators } = getPresentModifiers(contextToken, sourceFile, position);
+    const { modifiers: presentModifiers, range: eraseRange, decorators: presentDecorators } = getPresentModifiers(contextToken, previousToken, sourceFile, position);
     // Whether the suggested member should be abstract.
     // e.g. in `abstract class C { abstract | }`, we should offer abstract method signatures at position `|`.
     const isAbstract = presentModifiers & ModifierFlags.Abstract && classLikeDeclaration.modifierFlagsCache & ModifierFlags.Abstract;
@@ -2054,11 +2070,13 @@ function getEntryForMemberCompletion(
 
 function getPresentModifiers(
     contextToken: Node | undefined,
+    previousToken: Node | undefined,
     sourceFile: SourceFile,
     position: number,
 ): { modifiers: ModifierFlags; decorators?: Decorator[]; range?: TextRange; } {
     if (
         !contextToken ||
+        !previousToken ||
         getLineAndCharacterOfPosition(sourceFile, position).line
             > getLineAndCharacterOfPosition(sourceFile, contextToken.getEnd()).line
     ) {
@@ -2067,7 +2085,24 @@ function getPresentModifiers(
     let modifiers = ModifierFlags.None;
     let decorators: Decorator[] | undefined;
     let contextMod;
-    const range: TextRange = { pos: position, end: position };
+    /*
+    We have two cases:
+    1.
+    `class C {
+        someToken otherToken |
+    }`
+    `contextToken` is `otherToken`,
+    `previousToken` is `otherToken`
+    and
+    2.
+    `class C {
+        someToken otherToken|
+    }`
+    `contextToken` is `someToken`,
+    `previousToken` is `otherToken`
+    */
+    const startPos = contextToken === previousToken ? position : previousToken.getStart(sourceFile);
+    const range: TextRange = { pos: startPos, end: startPos };
     /*
     Cases supported:
     In
@@ -2083,23 +2118,21 @@ function getPresentModifiers(
     }`
         `contextToken` is ``override`` (as a keyword),
     `contextToken.parent` is property declaration,
-    `location` is identifier ``m``,
-    `location.parent` is property declaration ``protected override m``,
-    `location.parent.parent` is class declaration ``class C { ... }``.
+    `location` is identifier ``m``.
     */
-    if (isPropertyDeclaration(contextToken.parent) && contextToken.parent.modifiers) {
-        modifiers |= modifiersToFlags(contextToken.parent.modifiers) & ModifierFlags.Modifier;
-        decorators = contextToken.parent.modifiers.filter(isDecorator) || [];
-        range.pos = Math.min(range.pos, Math.min(...contextToken.parent.modifiers.map(n => n.getStart(sourceFile))));
-    }
     if (contextMod = isModifierLike(contextToken)) {
+        if (isPropertyDeclaration(contextToken.parent) && contextToken.parent.modifiers) {
+            modifiers |= modifiersToFlags(contextToken.parent.modifiers) & ModifierFlags.Modifier;
+            decorators = contextToken.parent.modifiers.filter(isDecorator) || [];
+            range.pos = Math.min(...contextToken.parent.modifiers.map(n => n.getStart(sourceFile)));
+        }
         const contextModifierFlag = modifierToFlag(contextMod);
         if (!(modifiers & contextModifierFlag)) {
             modifiers |= contextModifierFlag;
             range.pos = Math.min(range.pos, contextToken.getStart(sourceFile));
         }
     }
-    return { modifiers, decorators, range: range.pos !== position ? range : undefined };
+    return { modifiers, decorators, range: range.pos < range.end ? range : undefined };
 }
 
 function isModifierLike(node: Node): ModifierSyntaxKind | undefined {
@@ -2512,6 +2545,7 @@ export function getCompletionEntriesFromSymbols(
     entries: SortedArray<CompletionEntry>,
     replacementToken: Node | undefined,
     contextToken: Node | undefined,
+    previousToken: Node | undefined,
     location: Node,
     position: number,
     sourceFile: SourceFile,
@@ -2565,6 +2599,7 @@ export function getCompletionEntriesFromSymbols(
             sortText,
             replacementToken,
             contextToken,
+            previousToken,
             location,
             position,
             sourceFile,
@@ -2939,6 +2974,7 @@ function getCompletionEntryCodeActionsAndSourceDisplay(
             location,
             position,
             contextToken,
+            previousToken,
             formatContext,
         )!;
         if (importAdder?.hasFixes() || eraseRange) {
