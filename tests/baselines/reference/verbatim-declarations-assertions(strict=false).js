@@ -234,9 +234,7 @@ export declare class C {
     methodWithRequiredDefault(p: P, req: number): void;
     constructor(ctorField?: P);
 }
-declare const _default: {
-    name: string;
-};
+declare const _default: P;
 export default _default;
 //// [assertToTypeLiteral.d.ts]
 export declare let vLet: {} & {
@@ -277,7 +275,7 @@ export declare class C {
         name: string;
     });
 }
-declare const _default: {
+declare const _default: {} & {
     name: string;
 };
 export default _default;
