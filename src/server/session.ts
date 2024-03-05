@@ -2751,9 +2751,7 @@ export class Session<TMessage = string> implements EventSender {
         const { file, project } = this.getFileAndProject(args);
         const scriptInfo = project.getScriptInfoForNormalizedPath(file)!;
         const result = project.getLanguageService().getApplicableRefactors(file, this.extractPositionOrRange(args, scriptInfo), this.getPreferences(file), args.triggerReason, args.kind, args.includeInteractiveActions);
-        return result.map(result => ({ ...result, 
-            actions: result.actions.map(action => ({ ...action,
-                range: action.range ? { start: convertToLocation( { line: action.range.start.line, character: action.range.start.offset }), end: convertToLocation( { line: action.range.end.line, character: action.range.end.offset }) } : undefined })) }));
+        return result.map(result => ({ ...result, actions: result.actions.map(action => ({ ...action, range: action.range ? { start: convertToLocation({ line: action.range.start.line, character: action.range.start.offset }), end: convertToLocation({ line: action.range.end.line, character: action.range.end.offset }) } : undefined })) }));
     }
 
     private getEditsForRefactor(args: protocol.GetEditsForRefactorRequestArgs, simplifiedResult: boolean): RefactorEditInfo | protocol.RefactorEditInfo {

@@ -111,10 +111,14 @@ registerRefactor(refactorName, {
             }];
             return refactorInfo.map(info => ({
                 ...info,
-                actions: info.actions.map(action => ({ ...action, range: affectedTextRange ? { 
-                    start: { line: getLineAndCharacterOfPosition(context.file, affectedTextRange.pos).line, offset: getLineAndCharacterOfPosition(context.file, affectedTextRange.pos).character }, 
-                    end: { line: getLineAndCharacterOfPosition(context.file, affectedTextRange.end).line, offset: getLineAndCharacterOfPosition(context.file, affectedTextRange.end).character } } 
-                    : undefined })),
+                actions: info.actions.map(action => ({
+                    ...action,
+                    range: affectedTextRange ? {
+                        start: { line: getLineAndCharacterOfPosition(context.file, affectedTextRange.pos).line, offset: getLineAndCharacterOfPosition(context.file, affectedTextRange.pos).character },
+                        end: { line: getLineAndCharacterOfPosition(context.file, affectedTextRange.end).line, offset: getLineAndCharacterOfPosition(context.file, affectedTextRange.end).character },
+                    }
+                        : undefined,
+                })),
             }));
         }
 
