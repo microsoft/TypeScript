@@ -111,7 +111,10 @@ registerRefactor(refactorName, {
             }];
             return refactorInfo.map(info => ({
                 ...info,
-                actions: info.actions.map(action => ({ ...action, range: affectedTextRange ? { start: affectedTextRange.pos, length: affectedTextRange.end - affectedTextRange.pos } : undefined })),
+                actions: info.actions.map(action => ({ ...action, range: affectedTextRange ? { 
+                    start: { line: getLineAndCharacterOfPosition(context.file, affectedTextRange.pos).line, offset: getLineAndCharacterOfPosition(context.file, affectedTextRange.pos).character }, 
+                    end: { line: getLineAndCharacterOfPosition(context.file, affectedTextRange.end).line, offset: getLineAndCharacterOfPosition(context.file, affectedTextRange.end).character } } 
+                    : undefined })),
             }));
         }
 
@@ -267,7 +270,7 @@ function rangeContainsSkipTrivia(r1: TextRange, node: TextRange, file: SourceFil
 function collectTypeParameters(checker: TypeChecker, selection: TypeNode | TypeNode[], enclosingNode: Node, file: SourceFile): { typeParameters: TypeParameterDeclaration[] | undefined; affectedTextRange: TextRange | undefined; } {
     const result: TypeParameterDeclaration[] = [];
     const selectionArray = toArray(selection);
-    const selectionRange = { pos: selectionArray[0].pos, end: selectionArray[selectionArray.length - 1].end };
+    const selectionRange = { pos: selectionArray[0].getStart(file), end: selectionArray[selectionArray.length - 1].end };
     for (const t of selectionArray) {
         if (visitor(t)) return { typeParameters: undefined, affectedTextRange: undefined };
     }

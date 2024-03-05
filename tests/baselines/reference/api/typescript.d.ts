@@ -10354,7 +10354,16 @@ declare namespace ts {
         /**
          * Range of code the refactoring will be applied to.
          */
-        range?: TextSpan;
+        range?: {
+            start: {
+                line: number;
+                offset: number;
+            };
+            end: {
+                line: number;
+                offset: number;
+            };
+        };
     }
     /**
      * A set of edits to make in response to a refactor action, plus an optional

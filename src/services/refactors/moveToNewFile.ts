@@ -6,6 +6,7 @@ import {
     emptyArray,
     fileShouldUseJavaScriptRequire,
     getBaseFileName,
+    getLineAndCharacterOfPosition,
     getLocaleSpecificMessage,
     getQuotePreference,
     hasSyntacticModifier,
@@ -65,7 +66,10 @@ registerRefactor(refactorName, {
     getAvailableActions: function getRefactorActionsToMoveToNewFile(context): readonly ApplicableRefactorInfo[] {
         const statements = getStatementsToMove(context);
         if (context.preferences.allowTextChangesInNewFiles && statements) {
-            const affectedTextRange = { start: statements.all[0].pos, length: statements.all.length > 1 ? last(statements.all).end - statements.all[0].pos : statements.all[0].end - statements.all[0].pos };
+            const file = context.file;
+            const affectedTextRange = { 
+                start: { line: getLineAndCharacterOfPosition(file, statements.all[0].getStart(file)).line, offset: getLineAndCharacterOfPosition(file, statements.all[0].getStart(file)).character }, 
+                end: { line: getLineAndCharacterOfPosition(file, last(statements.all).end).line, offset: getLineAndCharacterOfPosition(file, last(statements.all).end).character } }
             return [{ name: refactorName, description, actions: [{ ...moveToNewFileAction, range: affectedTextRange }] }];
         }
         if (context.preferences.provideRefactorNotApplicableReason) {

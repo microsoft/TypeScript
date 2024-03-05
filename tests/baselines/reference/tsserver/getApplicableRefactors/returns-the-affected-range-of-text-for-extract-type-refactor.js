@@ -85,7 +85,7 @@ Info seq  [hh:mm:ss:mss] response:
               "range": {
                 "start": {
                   "line": 1,
-                  "offset": 22
+                  "offset": 23
                 },
                 "end": {
                   "line": 1,
