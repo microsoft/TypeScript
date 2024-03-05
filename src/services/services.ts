@@ -246,6 +246,7 @@ import {
     PrivateIdentifier,
     Program,
     PropertyName,
+    PropertySignature,
     QuickInfo,
     refactor,
     RefactorContext,
@@ -2068,10 +2069,6 @@ export function createLanguageService(
         const typeChecker = program.getTypeChecker();
         const nodeForQuickInfo = getNodeForQuickInfo(node);
         const symbol = getSymbolAtLocationForQuickInfo(nodeForQuickInfo, typeChecker);
-        if (!symbol && nodeForQuickInfo.flags & NodeFlags.JSDoc && !isInJSFile(nodeForQuickInfo)) {
-            // avoid requesting type from JSDoc comment in TS files at locations without symbols
-            return undefined;
-        }
         if (!symbol || typeChecker.isUnknownSymbol(symbol)) {
             const type = shouldGetType(sourceFile, nodeForQuickInfo, position) ? typeChecker.getTypeAtLocation(nodeForQuickInfo) : undefined;
             return type && {
@@ -2114,6 +2111,14 @@ export function createLanguageService(
     function shouldGetType(sourceFile: SourceFile, node: Node, position: number): boolean {
         switch (node.kind) {
             case SyntaxKind.Identifier:
+                if (
+                    node.flags & NodeFlags.JSDoc && !isInJSFile(node) &&
+                    ((node.parent.kind === SyntaxKind.PropertySignature && (node.parent as PropertySignature).name === node) ||
+                        findAncestor(node, (n) => n.kind === SyntaxKind.Parameter))
+                    ) {
+                    // if we'd request type at those locations we'd get `errorType` that displays confusingly as `any`
+                    return false;
+                }
                 return !isLabelName(node) && !isTagName(node) && !isConstTypeReference(node.parent);
             case SyntaxKind.PropertyAccessExpression:
             case SyntaxKind.QualifiedName:
