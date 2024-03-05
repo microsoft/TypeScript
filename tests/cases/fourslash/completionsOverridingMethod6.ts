@@ -24,10 +24,6 @@
 ////     override /*d*/
 //// }
 
-//// class E extends Base {
-////     protected notamodifier override /*e*/
-//// }
-
 //// class f extends Base {
 ////     protected /*f*/
 //// }
@@ -72,6 +68,8 @@ verify.completions(
                 insertText: "public abstract method(): void;",
                 filterText: "method",
                 replacementSpan: undefined,
+                hasAction: true,
+                source: completion.CompletionSource.ClassMemberSnippet,
             },
             {
                 name: "prop",
@@ -79,6 +77,8 @@ verify.completions(
                 insertText: "public abstract prop: number;",
                 filterText: "prop",
                 replacementSpan: undefined,
+                hasAction: true,
+                source: completion.CompletionSource.ClassMemberSnippet,
             },
         ],
     },
@@ -97,6 +97,8 @@ verify.completions(
                 insertText: "public override method(): void {\n}",
                 filterText: "method",
                 replacementSpan: undefined,
+                hasAction: true,
+                source: completion.CompletionSource.ClassMemberSnippet,
             },
             {
                 name: "prop",
@@ -104,6 +106,8 @@ verify.completions(
                 insertText: "public override prop: number;",
                 filterText: "prop",
                 replacementSpan: undefined,
+                hasAction: true,
+                source: completion.CompletionSource.ClassMemberSnippet,
             },
         ]
     },
@@ -122,6 +126,8 @@ verify.completions(
                 insertText: "override method(): void {\n}",
                 filterText: "method",
                 replacementSpan: undefined,
+                hasAction: true,
+                source: completion.CompletionSource.ClassMemberSnippet,
             },
             {
                 name: "prop",
@@ -129,31 +135,8 @@ verify.completions(
                 insertText: "protected override prop: number;",
                 filterText: "prop",
                 replacementSpan: undefined,
-            },
-        ]
-    },
-    {
-        marker: "e",
-        isNewIdentifierLocation: true,
-        preferences: {
-            includeCompletionsWithInsertText: true,
-            includeCompletionsWithSnippetText: false,
-            includeCompletionsWithClassMemberSnippets: true,
-        },
-        includes: [
-            {
-                name: "method",
-                sortText: completion.SortText.LocationPriority,
-                insertText: "override method(): void {\n}",
-                filterText: "method",
-                replacementSpan: undefined,
-            },
-            {
-                name: "prop",
-                sortText: completion.SortText.LocationPriority,
-                insertText: "protected override prop: number;",
-                filterText: "prop",
-                replacementSpan: undefined,
+                hasAction: true,
+                source: completion.CompletionSource.ClassMemberSnippet,
             },
         ]
     },
@@ -173,6 +156,8 @@ verify.completions(
                 insertText: "protected prop: number;",
                 filterText: "prop",
                 replacementSpan: undefined,
+                hasAction: true,
+                source: completion.CompletionSource.ClassMemberSnippet,
             },
         ]
     },
@@ -196,8 +181,9 @@ protected foo(a: any) {
 }`,
                 filterText: "foo",
                 replacementSpan: undefined,
+                hasAction: true,
+                source: completion.CompletionSource.ClassMemberSnippet,
             },
         ]
     },
 );
-

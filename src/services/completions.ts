@@ -1760,7 +1760,7 @@ function createCompletionEntry(
         const memberCompletionEntry = getEntryForMemberCompletion(host, program, options, preferences, name, symbol, location, position, contextToken, formatContext);
         if (memberCompletionEntry) {
             ({ insertText, filterText, isSnippet, importAdder } = memberCompletionEntry);
-            if (importAdder?.hasFixes()) {
+            if (importAdder?.hasFixes() || memberCompletionEntry.eraseRange ) {
                 hasAction = true;
                 source = CompletionSource.ClassMemberSnippet;
             }
@@ -2090,13 +2090,13 @@ function getPresentModifiers(
     if (isPropertyDeclaration(contextToken.parent) && contextToken.parent.modifiers) {
         modifiers |= modifiersToFlags(contextToken.parent.modifiers) & ModifierFlags.Modifier;
         decorators = contextToken.parent.modifiers.filter(isDecorator) || [];
-        range.pos = Math.min(range.pos, contextToken.parent.modifiers.pos);
+        range.pos = Math.min(range.pos, Math.min(...contextToken.parent.modifiers.map(n => n.getStart(sourceFile))));
     }
     if (contextMod = isModifierLike(contextToken)) {
         const contextModifierFlag = modifierToFlag(contextMod);
         if (!(modifiers & contextModifierFlag)) {
             modifiers |= contextModifierFlag;
-            range.pos = Math.min(range.pos, contextToken.pos);
+            range.pos = Math.min(range.pos, contextToken.getStart(sourceFile));
         }
     }
     return { modifiers, decorators, range: range.pos !== position ? range : undefined };
@@ -2941,7 +2941,7 @@ function getCompletionEntryCodeActionsAndSourceDisplay(
             contextToken,
             formatContext,
         )!;
-        if (importAdder || eraseRange) {
+        if (importAdder?.hasFixes() || eraseRange) {
             const changes = textChanges.ChangeTracker.with(
                 { host, formatContext, preferences },
                 tracker => {
@@ -2957,7 +2957,9 @@ function getCompletionEntryCodeActionsAndSourceDisplay(
                 sourceDisplay: undefined,
                 codeActions: [{
                     changes,
-                    description: diagnosticToString([Diagnostics.Includes_imports_of_types_referenced_by_0, name]),
+                    description: importAdder?.hasFixes() ?
+                        diagnosticToString([Diagnostics.Includes_imports_of_types_referenced_by_0, name]) :
+                        diagnosticToString([Diagnostics.Update_modifiers_of_0, name]),
                 }],
             };
         }
