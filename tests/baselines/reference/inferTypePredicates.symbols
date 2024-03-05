@@ -728,3 +728,21 @@ function narrowFromAny(x: any) {
 >x : Symbol(x, Decl(inferTypePredicates.ts, 258, 23))
 }
 
+// test fast path for '===' (which is usually not a type predicate)
+declare let needle: string | number | boolean;
+>needle : Symbol(needle, Decl(inferTypePredicates.ts, 263, 11))
+
+declare let haystack: (string | number | Date | RegExp)[];
+>haystack : Symbol(haystack, Decl(inferTypePredicates.ts, 264, 11))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+>RegExp : Symbol(RegExp, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+const finds = haystack.filter(n => n === needle);
+>finds : Symbol(finds, Decl(inferTypePredicates.ts, 265, 5))
+>haystack.filter : Symbol(Array.filter, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>haystack : Symbol(haystack, Decl(inferTypePredicates.ts, 264, 11))
+>filter : Symbol(Array.filter, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>n : Symbol(n, Decl(inferTypePredicates.ts, 265, 30))
+>n : Symbol(n, Decl(inferTypePredicates.ts, 265, 30))
+>needle : Symbol(needle, Decl(inferTypePredicates.ts, 263, 11))
+

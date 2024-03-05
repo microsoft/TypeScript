@@ -263,6 +263,11 @@ function narrowFromAny(x: any) {
   return typeof x === 'number';
 }
 
+// test fast path for '===' (which is usually not a type predicate)
+declare let needle: string | number | boolean;
+declare let haystack: (string | number | Date | RegExp)[];
+const finds = haystack.filter(n => n === needle);
+
 
 //// [inferTypePredicates.js]
 // https://github.com/microsoft/TypeScript/issues/16069
@@ -496,3 +501,4 @@ function isNumberWithThis(x) {
 function narrowFromAny(x) {
     return typeof x === 'number';
 }
+var finds = haystack.filter(function (n) { return n === needle; });

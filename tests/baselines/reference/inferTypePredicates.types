@@ -941,3 +941,22 @@ function narrowFromAny(x: any) {
 >'number' : "number"
 }
 
+// test fast path for '===' (which is usually not a type predicate)
+declare let needle: string | number | boolean;
+>needle : string | number | boolean
+
+declare let haystack: (string | number | Date | RegExp)[];
+>haystack : (string | number | RegExp | Date)[]
+
+const finds = haystack.filter(n => n === needle);
+>finds : (string | number | RegExp | Date)[]
+>haystack.filter(n => n === needle) : (string | number | RegExp | Date)[]
+>haystack.filter : { <S extends string | number | RegExp | Date>(predicate: (value: string | number | RegExp | Date, index: number, array: (string | number | RegExp | Date)[]) => value is S, thisArg?: any): S[]; (predicate: (value: string | number | RegExp | Date, index: number, array: (string | number | RegExp | Date)[]) => unknown, thisArg?: any): (string | number | RegExp | Date)[]; }
+>haystack : (string | number | RegExp | Date)[]
+>filter : { <S extends string | number | RegExp | Date>(predicate: (value: string | number | RegExp | Date, index: number, array: (string | number | RegExp | Date)[]) => value is S, thisArg?: any): S[]; (predicate: (value: string | number | RegExp | Date, index: number, array: (string | number | RegExp | Date)[]) => unknown, thisArg?: any): (string | number | RegExp | Date)[]; }
+>n => n === needle : (n: string | number | RegExp | Date) => boolean
+>n : string | number | RegExp | Date
+>n === needle : boolean
+>n : string | number | RegExp | Date
+>needle : string | number | boolean
+

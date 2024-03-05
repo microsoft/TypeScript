@@ -306,3 +306,8 @@ inferTypePredicates.ts(205,7): error TS2741: Property 'z' is missing in type 'C1
       return typeof x === 'number';
     }
     
+    // test fast path for '===' (which is usually not a type predicate)
+    declare let needle: string | number | boolean;
+    declare let haystack: (string | number | Date | RegExp)[];
+    const finds = haystack.filter(n => n === needle);
+    

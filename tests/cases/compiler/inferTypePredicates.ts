@@ -260,3 +260,8 @@ function isNumberWithThis(this: Date, x: number | string) {
 function narrowFromAny(x: any) {
   return typeof x === 'number';
 }
+
+// test fast path for '===' (which is usually not a type predicate)
+declare let needle: string | number | boolean;
+declare let haystack: (string | number | Date | RegExp)[];
+const finds = haystack.filter(n => n === needle);
