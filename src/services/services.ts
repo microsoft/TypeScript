@@ -2067,11 +2067,11 @@ export function createLanguageService(
 
         const typeChecker = program.getTypeChecker();
         const nodeForQuickInfo = getNodeForQuickInfo(node);
-        if (!nodeForQuickInfo) {
+        const symbol = getSymbolAtLocationForQuickInfo(nodeForQuickInfo, typeChecker);
+        if (!symbol && nodeForQuickInfo.flags & NodeFlags.JSDoc && !isInJSFile(nodeForQuickInfo)) {
+            // avoid requesting type from JSDoc comment in TS files at locations without symbols
             return undefined;
         }
-        const symbol = getSymbolAtLocationForQuickInfo(nodeForQuickInfo, typeChecker);
-
         if (!symbol || typeChecker.isUnknownSymbol(symbol)) {
             const type = shouldGetType(sourceFile, nodeForQuickInfo, position) ? typeChecker.getTypeAtLocation(nodeForQuickInfo) : undefined;
             return type && {
@@ -2095,7 +2095,7 @@ export function createLanguageService(
         };
     }
 
-    function getNodeForQuickInfo(node: Node): Node | undefined {
+    function getNodeForQuickInfo(node: Node): Node {
         if (isNewExpression(node.parent) && node.pos === node.parent.pos) {
             return node.parent.expression;
         }
@@ -2107,9 +2107,6 @@ export function createLanguageService(
         }
         if (isJsxNamespacedName(node.parent)) {
             return node.parent;
-        }
-        if (node.flags & NodeFlags.JSDoc && !isInJSFile(node)) {
-            return undefined;
         }
         return node;
     }
