@@ -20,7 +20,7 @@ Info seq  [hh:mm:ss:mss] request:
       "command": "compilerOptionsForInferredProjects",
       "arguments": {
         "options": {
-          "module": "CommonJS",
+          "module": "commonjs",
           "allowJs": true,
           "allowSyntheticDefaultImports": true,
           "allowNonTsExtensions": true
