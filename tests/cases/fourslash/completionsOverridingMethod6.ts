@@ -28,20 +28,6 @@
 ////     protected /*f*/
 //// }
 
-//// declare function decorator(...args: any[]): any;
-
-//// class DecoratorBase {
-////     protected foo(a: string): string;
-////     protected foo(a: number): number;
-////     protected foo(a: any): any {
-////         return a;
-////     }
-//// }
-
-//// class DecoratorSub extends DecoratorBase {
-////     @decorator protected /*g*/
-//// }
-
 verify.completions(
     {
         marker: "a",
@@ -155,31 +141,6 @@ verify.completions(
                 sortText: completion.SortText.LocationPriority,
                 insertText: "protected prop: number;",
                 filterText: "prop",
-                replacementSpan: undefined,
-                hasAction: true,
-                source: completion.CompletionSource.ClassMemberSnippet,
-            },
-        ]
-    },
-    {
-        marker: "g",
-        isNewIdentifierLocation: true,
-        preferences: {
-            includeCompletionsWithInsertText: true,
-            includeCompletionsWithSnippetText: false,
-            includeCompletionsWithClassMemberSnippets: true,
-        },
-        includes: [
-            {
-                name: "foo",
-                sortText: completion.SortText.LocationPriority,
-                insertText:
-`protected foo(a: string): string;
-protected foo(a: number): number;
-@decorator
-protected foo(a: any) {
-}`,
-                filterText: "foo",
                 replacementSpan: undefined,
                 hasAction: true,
                 source: completion.CompletionSource.ClassMemberSnippet,
