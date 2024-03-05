@@ -2,19 +2,11 @@
 
 // @Filename: a.ts
 // @newline: LF
-
-//// declare function decorator(...args: any[]): any;
-
-//// class DecoratorBase {
-////     protected foo(a: string): string;
-////     protected foo(a: number): number;
-////     protected foo(a: any): any {
-////         return a;
-////     }
+//// abstract class AFoo {
+////     abstract bar(): Promise<void>;
 //// }
-
-//// class DecoratorSub extends DecoratorBase {
-////     @decorator protected /**/
+//// class Foo extends AFoo {
+////     async b/**/
 //// }
 
 verify.completions({
@@ -27,21 +19,16 @@ verify.completions({
     },
     includes: [
         {
-            name: "foo",
+            name: "bar",
             sortText: completion.SortText.LocationPriority,
-            insertText:
-`protected foo(a: string): string;
-protected foo(a: number): number;
-@decorator
-protected foo(a: any) {
-}`,
-            filterText: "foo",
+            insertText: "async bar(): void {\n}",
+            filterText: "bar",
             replacementSpan: undefined,
             hasAction: true,
             source: completion.CompletionSource.ClassMemberSnippet,
         },
     ]
-});
+},);
 
 verify.applyCodeActionFromCompletion("", {
     preferences: {
@@ -49,19 +36,14 @@ verify.applyCodeActionFromCompletion("", {
       includeCompletionsWithSnippetText: false,
       includeCompletionsWithClassMemberSnippets: true,
     },
-    name: "foo",
+    name: "bar",
     source: completion.CompletionSource.ClassMemberSnippet,
-    description: "Update modifiers of 'foo'",
+    description: "Update modifiers of 'bar'",
     newFileContent:
-`declare function decorator(...args: any[]): any;
-class DecoratorBase {
-    protected foo(a: string): string;
-    protected foo(a: number): number;
-    protected foo(a: any): any {
-        return a;
-    }
+`abstract class AFoo {
+    abstract bar(): Promise<void>;
 }
-class DecoratorSub extends DecoratorBase {
-    
+class Foo extends AFoo {
+    b
 }`
 });
