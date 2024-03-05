@@ -1760,7 +1760,7 @@ function createCompletionEntry(
         const memberCompletionEntry = getEntryForMemberCompletion(host, program, options, preferences, name, symbol, location, position, contextToken, formatContext);
         if (memberCompletionEntry) {
             ({ insertText, filterText, isSnippet, importAdder } = memberCompletionEntry);
-            if (importAdder?.hasFixes() || memberCompletionEntry.eraseRange ) {
+            if (importAdder?.hasFixes() || memberCompletionEntry.eraseRange) {
                 hasAction = true;
                 source = CompletionSource.ClassMemberSnippet;
             }
