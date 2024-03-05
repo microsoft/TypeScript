@@ -248,7 +248,10 @@ export function getRefactorActionsToExtractSymbol(context: RefactorContext): rea
                         description,
                         name: `function_scope_${i}`,
                         kind: extractFunctionAction.kind,
-                        range: { start: { line: getLineAndCharacterOfPosition(context.file, affectedTextRange.pos).line, offset: getLineAndCharacterOfPosition(context.file, affectedTextRange.pos).character }, end: { line: getLineAndCharacterOfPosition(context.file, affectedTextRange.end).line, offset: getLineAndCharacterOfPosition(context.file, affectedTextRange.end).character } },
+                        range: {
+                            start: { line: getLineAndCharacterOfPosition(context.file, affectedTextRange.pos).line, offset: getLineAndCharacterOfPosition(context.file, affectedTextRange.pos).character },
+                            end: { line: getLineAndCharacterOfPosition(context.file, affectedTextRange.end).line, offset: getLineAndCharacterOfPosition(context.file, affectedTextRange.end).character },
+                        },
                     });
                 }
             }
@@ -274,7 +277,10 @@ export function getRefactorActionsToExtractSymbol(context: RefactorContext): rea
                         description,
                         name: `constant_scope_${i}`,
                         kind: extractConstantAction.kind,
-                        range: { start: { line: getLineAndCharacterOfPosition(context.file, affectedTextRange.pos).line, offset: getLineAndCharacterOfPosition(context.file, affectedTextRange.pos).character }, end: { line: getLineAndCharacterOfPosition(context.file, affectedTextRange.end).line, offset: getLineAndCharacterOfPosition(context.file, affectedTextRange.end).character } },
+                        range: {
+                            start: { line: getLineAndCharacterOfPosition(context.file, affectedTextRange.pos).line, offset: getLineAndCharacterOfPosition(context.file, affectedTextRange.pos).character },
+                            end: { line: getLineAndCharacterOfPosition(context.file, affectedTextRange.end).line, offset: getLineAndCharacterOfPosition(context.file, affectedTextRange.end).character },
+                        },
                     });
                 }
             }
