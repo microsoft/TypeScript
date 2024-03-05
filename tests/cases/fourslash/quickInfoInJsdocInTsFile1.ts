@@ -29,6 +29,9 @@
 //// declare const stuff: { quantity: number };
 //// /** @see {doStuffWithStuff/*7*/} */
 //// if (stuff.quantity) {}
+////
+//// /** @type {(a/*8*/: string) => void} */
+//// function test2(a: string) {}
 
 verify.quickInfoAt("1", "");
 verify.quickInfoAt("2", "");
@@ -56,3 +59,4 @@ verify.quickInfoAt(
     quantity: number;
 }): void`,
 );
+verify.quickInfoAt("8", "");
