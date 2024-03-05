@@ -37461,8 +37461,23 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             ...trueCondition,
             flags: FlowFlags.FalseCondition,
         };
-        const falseSubtype = getFlowTypeOfReference(param.name, trueType, trueType, func, falseCondition);
-        return falseSubtype.flags & TypeFlags.Never ? trueType : undefined;
+
+        let isNever: boolean;
+        if (trueType.flags & TypeFlags.Union) {
+            isNever = true;
+            mapType(trueType, t => {
+                if (!isNever) return neverType;
+                const falseSubT = getFlowTypeOfReference(param.name, t, t, func, falseCondition);
+                if (!(falseSubT.flags & TypeFlags.Never)) {
+                    isNever = false;
+                }
+                return neverType;
+            });
+        } else {
+            const falseSubtype = getFlowTypeOfReference(param.name, trueType, trueType, func, falseCondition);
+            isNever = !!(falseSubtype.flags & TypeFlags.Never);
+        }
+        return isNever ? trueType : undefined;
     }
 
     /**
