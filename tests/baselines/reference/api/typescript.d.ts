@@ -3925,10 +3925,6 @@ declare namespace ts {
             resetRequest(requestId: number): void;
         }
         const nullCancellationToken: ServerCancellationToken;
-        interface PendingErrorCheck {
-            fileName: NormalizedPath;
-            project: Project;
-        }
         /** @deprecated use ts.server.protocol.CommandTypes */
         type CommandNames = protocol.CommandTypes;
         /** @deprecated use ts.server.protocol.CommandTypes */
@@ -4076,7 +4072,6 @@ declare namespace ts {
             private getCompileOnSaveAffectedFileList;
             private emitFile;
             private getSignatureHelpItems;
-            private toPendingErrorCheck;
             private getDiagnostics;
             private change;
             private reload;

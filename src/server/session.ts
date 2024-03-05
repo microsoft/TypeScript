@@ -300,7 +300,7 @@ export function formatDiagnosticToProtocol(diag: Diagnostic, includeFileName: bo
         : common;
 }
 
-export interface PendingErrorCheck {
+interface PendingErrorCheck {
     fileName: NormalizedPath;
     ranges?: TextRange[];
     project?: Project;
@@ -1386,7 +1386,7 @@ export class Session<TMessage = string> implements EventSender {
 
             const { fileName, project } = filesFullCheck[index];
             next.immediate("semanticCheck", () => {
-                this.semanticCheck(fileName, project);
+                this.semanticCheck(fileName, project!);
                 if (this.changeSeq !== seq) {
                     return;
                 }
@@ -1396,7 +1396,7 @@ export class Session<TMessage = string> implements EventSender {
                     return;
                 }
                 next.immediate("suggestionCheck", () => {
-                    this.suggestionCheck(fileName, project);
+                    this.suggestionCheck(fileName, project!);
                     goNextFull();
                 });
             });
