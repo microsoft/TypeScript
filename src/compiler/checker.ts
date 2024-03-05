@@ -37452,6 +37452,30 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             antecedent,
         };
 
+        if (isBinaryExpression(expr)) {
+            const {operatorToken} = expr;
+            const operator = operatorToken.kind;
+            let target;
+            switch (operator) {
+                case SyntaxKind.EqualsEqualsToken:
+                case SyntaxKind.ExclamationEqualsToken:
+                case SyntaxKind.EqualsEqualsEqualsToken:
+                case SyntaxKind.ExclamationEqualsEqualsToken:
+                    const {left, right} = expr;
+                    if (isMatchingReference(param.name, left)) {
+                        target = right;
+                    } else if (isMatchingReference(param.name, right)) {
+                        target = left;
+                    }
+            }
+            if (target) {
+                const targetType = getTypeOfExpression(target);
+                if (!isUnitType(targetType)) {
+                    return undefined;
+                }
+            }
+        }
+
         const trueType = getFlowTypeOfReference(param.name, initType, initType, func, trueCondition);
         if (trueType === initType) return undefined;
 
