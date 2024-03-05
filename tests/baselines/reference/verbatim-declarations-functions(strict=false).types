@@ -1,0 +1,286 @@
+//// [tests/cases/compiler/verbatim-declarations-functions.ts] ////
+
+=== arrowFunctionPlacement.ts ===
+type P = { name: string }
+>P : { name: string; }
+>name : string
+
+export let vLet = (/* param */p: P, p2: typeof p):P => null!;
+>vLet : (p: P, p2: P) => P
+>(/* param */p: P, p2: typeof p):P => null! : (p: P, p2: P) => P
+>p : P
+>p2 : P
+>p : P
+>null! : null
+
+export const vConst = (/* param */p: P, p2: typeof p):P => null!;
+>vConst : (p: P, p2: P) => P
+>(/* param */p: P, p2: typeof p):P => null! : (p: P, p2: P) => P
+>p : P
+>p2 : P
+>p : P
+>null! : null
+
+export function fn(p = (/* param */p: P, p2: typeof p):P => null!) {}
+>fn : (p?: (p: P, p2: P) => P) => void
+>p : (p: P, p2: P) => P
+>(/* param */p: P, p2: typeof p):P => null! : (p: P, p2: P) => P
+>p : P
+>p2 : P
+>p : P
+>null! : null
+
+export function fnTypeFromBinding({ foo }: { foo: number }, p = (/* param */p: P, p2: typeof p, p3: typeof foo):P => null!) {}
+>fnTypeFromBinding : ({ foo }: {    foo: number;}, p?: (p: P, p2: P, p3: typeof foo) => P) => void
+>foo : number
+>foo : number
+>p : (p: P, p2: P, p3: typeof foo) => P
+>(/* param */p: P, p2: typeof p, p3: typeof foo):P => null! : (p: P, p2: P, p3: typeof foo) => P
+>p : P
+>p2 : P
+>p : P
+>p3 : number
+>foo : number
+>null! : null
+
+/** p wil be resolved by the checker (requires | undefined)  */
+export function fnWithRequiredDefaultParam(p = (/* param */p: P, p2: typeof p):P => null!, req: number) {}
+>fnWithRequiredDefaultParam : (p: (p: P, p2: P) => P, req: number) => void
+>p : (p: P, p2: P) => P
+>(/* param */p: P, p2: typeof p):P => null! : (p: P, p2: P) => P
+>p : P
+>p2 : P
+>p : P
+>null! : null
+>req : number
+
+/** p wil be resolved by the checker (requires | undefined)  */
+export const exprWithRequiredDefaultParam = (p = function (/* param */p: P, p2: typeof p): P { return null!; }, req: number) => {
+>exprWithRequiredDefaultParam : (p: (p: P, p2: P) => P, req: number) => void
+>(p = function (/* param */p: P, p2: typeof p): P { return null!; }, req: number) => {} : (p: (p: P, p2: P) => P, req: number) => void
+>p : (p: P, p2: P) => P
+>function (/* param */p: P, p2: typeof p): P { return null!; } : (p: P, p2: P) => P
+>p : P
+>p2 : P
+>p : P
+>null! : null
+>req : number
+
+}
+
+export class C {
+>C : C
+
+    field = (/* param */p: P, p2: typeof p):P => null!;
+>field : (p: P, p2: P) => P
+>(/* param */p: P, p2: typeof p):P => null! : (p: P, p2: P) => P
+>p : P
+>p2 : P
+>p : P
+>null! : null
+
+    readonly roFiled = (/* param */p: P, p2: typeof p):P => null!;
+>roFiled : (p: P, p2: P) => P
+>(/* param */p: P, p2: typeof p):P => null! : (p: P, p2: P) => P
+>p : P
+>p2 : P
+>p : P
+>null! : null
+
+    method(p = (/* param */p: P, p2: typeof p):P => null!) {}
+>method : (p?: (p: P, p2: P) => P) => void
+>p : (p: P, p2: P) => P
+>(/* param */p: P, p2: typeof p):P => null! : (p: P, p2: P) => P
+>p : P
+>p2 : P
+>p : P
+>null! : null
+
+    /** p wil be resolved by the checker (requires | undefined)  */
+    methodWithRequiredDefault(p = (/* param */p: P, p2: typeof p):P => null!, req: number) {}
+>methodWithRequiredDefault : (p: (p: P, p2: P) => P, req: number) => void
+>p : (p: P, p2: P) => P
+>(/* param */p: P, p2: typeof p):P => null! : (p: P, p2: P) => P
+>p : P
+>p2 : P
+>p : P
+>null! : null
+>req : number
+
+    thisType =  (): this  => this;
+>thisType : () => this
+>(): this  => this : () => this
+>this : this
+
+    constructor(public ctorField = (/* param */p: P, p2: typeof p):P => null!) {}
+>ctorField : (p: P, p2: P) => P
+>(/* param */p: P, p2: typeof p):P => null! : (p: P, p2: P) => P
+>p : P
+>p2 : P
+>p : P
+>null! : null
+}
+
+export default (/* param */p: P, p2: typeof p):P => null!;
+>(/* param */p: P, p2: typeof p):P => null! : (p: P, p2: P) => P
+>p : P
+>p2 : P
+>p : P
+>null! : null
+
+=== functionExpressionPlacement.ts ===
+type P = { name: string }
+>P : { name: string; }
+>name : string
+
+export let vLet = function (/* param */p: P, p2: typeof p): P { return null!; };
+>vLet : (p: P, p2: P) => P
+>function (/* param */p: P, p2: typeof p): P { return null!; } : (p: P, p2: P) => P
+>p : P
+>p2 : P
+>p : P
+>null! : null
+
+export const vConst = function (/* param */p: P, p2: typeof p): P { return null!; };
+>vConst : (p: P, p2: P) => P
+>function (/* param */p: P, p2: typeof p): P { return null!; } : (p: P, p2: P) => P
+>p : P
+>p2 : P
+>p : P
+>null! : null
+
+export function fn(p = function (/* param */p: P, p2: typeof p): P { return null!; }) {}
+>fn : (p?: (p: P, p2: P) => P) => void
+>p : (p: P, p2: P) => P
+>function (/* param */p: P, p2: typeof p): P { return null!; } : (p: P, p2: P) => P
+>p : P
+>p2 : P
+>p : P
+>null! : null
+
+/** p wil be resolved by the checker (requires | undefined)  */
+export function fnWithRequiredDefaultParam(p = function (/* param */p: P, p2: typeof p): P { return null!; }, req: number) {}
+>fnWithRequiredDefaultParam : (p: (p: P, p2: P) => P, req: number) => void
+>p : (p: P, p2: P) => P
+>function (/* param */p: P, p2: typeof p): P { return null!; } : (p: P, p2: P) => P
+>p : P
+>p2 : P
+>p : P
+>null! : null
+>req : number
+
+export class C {
+>C : C
+
+    field = function (/* param */p: P, p2: typeof p): P { return null!; };
+>field : (p: P, p2: P) => P
+>function (/* param */p: P, p2: typeof p): P { return null!; } : (p: P, p2: P) => P
+>p : P
+>p2 : P
+>p : P
+>null! : null
+
+    readonly roFiled = function (/* param */p: P, p2: typeof p): P { return null!; };
+>roFiled : (p: P, p2: P) => P
+>function (/* param */p: P, p2: typeof p): P { return null!; } : (p: P, p2: P) => P
+>p : P
+>p2 : P
+>p : P
+>null! : null
+
+    method(p = function (/* param */p: P, p2: typeof p): P { return null!; }) {}
+>method : (p?: (p: P, p2: P) => P) => void
+>p : (p: P, p2: P) => P
+>function (/* param */p: P, p2: typeof p): P { return null!; } : (p: P, p2: P) => P
+>p : P
+>p2 : P
+>p : P
+>null! : null
+
+    /** p wil be resolved by the checker (requires | undefined)  */
+    methodWithRequiredDefault(p = function (/* param */p: P, p2: typeof p): P { return null!; }, req: number) {}
+>methodWithRequiredDefault : (p: (p: P, p2: P) => P, req: number) => void
+>p : (p: P, p2: P) => P
+>function (/* param */p: P, p2: typeof p): P { return null!; } : (p: P, p2: P) => P
+>p : P
+>p2 : P
+>p : P
+>null! : null
+>req : number
+
+    constructor(public ctorField = function (/* param */p: P, p2: typeof p): P { return null!; }) {}
+>ctorField : (p: P, p2: P) => P
+>function (/* param */p: P, p2: typeof p): P { return null!; } : (p: P, p2: P) => P
+>p : P
+>p2 : P
+>p : P
+>null! : null
+}
+
+export default function (/* param */p: P, p2: typeof p): P { return null!; };
+>p : P
+>p2 : P
+>p : P
+>null! : null
+
+
+=== returnTypes.ts ===
+type P = { name: string }
+>P : { name: string; }
+>name : string
+
+export let fromAnnotation  = (p: P):typeof p[keyof typeof p] => null!;
+>fromAnnotation : (p: P) => string
+>(p: P):typeof p[keyof typeof p] => null! : (p: P) => string
+>p : P
+>p : P
+>p : P
+>null! : null
+
+export let fromInference  = (p: P) => null! as typeof p[keyof typeof p];
+>fromInference : (p: P) => string
+>(p: P) => null! as typeof p[keyof typeof p] : (p: P) => string
+>p : P
+>null! as typeof p[keyof typeof p] : string
+>null! : null
+>p : P
+>p : P
+
+=== genericFunctions.ts ===
+type G1 = { name: string }
+>G1 : { name: string; }
+>name : string
+
+export let g1 = function<T extends keyof G1>(/* param */p: T){};
+>g1 : <T extends "name">(p: T) => void
+>function<T extends keyof G1>(/* param */p: T){} : <T extends "name">(p: T) => void
+>p : T
+
+
+// unused
+type G2 = { name: string }
+>G2 : { name: string; }
+>name : string
+
+export let g2 = <G2 extends keyof G1>(): G2 => { return null!};
+>g2 : <G2 extends "name">() => G2
+><G2 extends keyof G1>(): G2 => { return null!} : <G2 extends "name">() => G2
+>null! : null
+
+export const createClient = <D>(
+>createClient : <D>(clientDef: D) => D extends new (...args: any[]) => infer D_1 ? D_1 extends { d: infer D_2; } ? D_2 : never : never
+><D>(  clientDef: D): D extends new (...args: any[]) => infer D ?     (D extends { d: infer D } ? D: never):    never => {  return null! } : <D>(clientDef: D) => D extends new (...args: any[]) => infer D_1 ? D_1 extends { d: infer D_2; } ? D_2 : never : never
+
+  clientDef: D
+>clientDef : D
+
+): D extends new (...args: any[]) => infer D ? 
+>args : any[]
+
+    (D extends { d: infer D } ? D: never):
+>d : D_1
+
+    never => {
+  return null! 
+>null! : null
+}

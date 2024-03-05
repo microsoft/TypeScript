@@ -1,0 +1,290 @@
+//// [tests/cases/compiler/verbatim-declarations-functions.ts] ////
+
+=== arrowFunctionPlacement.ts ===
+type P = { name: string }
+>P : Symbol(P, Decl(arrowFunctionPlacement.ts, 0, 0))
+>name : Symbol(name, Decl(arrowFunctionPlacement.ts, 0, 10))
+
+export let vLet = (/* param */p: P, p2: typeof p):P => null!;
+>vLet : Symbol(vLet, Decl(arrowFunctionPlacement.ts, 2, 10))
+>p : Symbol(p, Decl(arrowFunctionPlacement.ts, 2, 19))
+>P : Symbol(P, Decl(arrowFunctionPlacement.ts, 0, 0))
+>p2 : Symbol(p2, Decl(arrowFunctionPlacement.ts, 2, 35))
+>p : Symbol(p, Decl(arrowFunctionPlacement.ts, 2, 19))
+>P : Symbol(P, Decl(arrowFunctionPlacement.ts, 0, 0))
+
+export const vConst = (/* param */p: P, p2: typeof p):P => null!;
+>vConst : Symbol(vConst, Decl(arrowFunctionPlacement.ts, 3, 12))
+>p : Symbol(p, Decl(arrowFunctionPlacement.ts, 3, 23))
+>P : Symbol(P, Decl(arrowFunctionPlacement.ts, 0, 0))
+>p2 : Symbol(p2, Decl(arrowFunctionPlacement.ts, 3, 39))
+>p : Symbol(p, Decl(arrowFunctionPlacement.ts, 3, 23))
+>P : Symbol(P, Decl(arrowFunctionPlacement.ts, 0, 0))
+
+export function fn(p = (/* param */p: P, p2: typeof p):P => null!) {}
+>fn : Symbol(fn, Decl(arrowFunctionPlacement.ts, 3, 65))
+>p : Symbol(p, Decl(arrowFunctionPlacement.ts, 5, 19))
+>p : Symbol(p, Decl(arrowFunctionPlacement.ts, 5, 24))
+>P : Symbol(P, Decl(arrowFunctionPlacement.ts, 0, 0))
+>p2 : Symbol(p2, Decl(arrowFunctionPlacement.ts, 5, 40))
+>p : Symbol(p, Decl(arrowFunctionPlacement.ts, 5, 24))
+>P : Symbol(P, Decl(arrowFunctionPlacement.ts, 0, 0))
+
+export function fnTypeFromBinding({ foo }: { foo: number }, p = (/* param */p: P, p2: typeof p, p3: typeof foo):P => null!) {}
+>fnTypeFromBinding : Symbol(fnTypeFromBinding, Decl(arrowFunctionPlacement.ts, 5, 69))
+>foo : Symbol(foo, Decl(arrowFunctionPlacement.ts, 7, 35))
+>foo : Symbol(foo, Decl(arrowFunctionPlacement.ts, 7, 44))
+>p : Symbol(p, Decl(arrowFunctionPlacement.ts, 7, 59))
+>p : Symbol(p, Decl(arrowFunctionPlacement.ts, 7, 65))
+>P : Symbol(P, Decl(arrowFunctionPlacement.ts, 0, 0))
+>p2 : Symbol(p2, Decl(arrowFunctionPlacement.ts, 7, 81))
+>p : Symbol(p, Decl(arrowFunctionPlacement.ts, 7, 65))
+>p3 : Symbol(p3, Decl(arrowFunctionPlacement.ts, 7, 95))
+>foo : Symbol(foo, Decl(arrowFunctionPlacement.ts, 7, 35))
+>P : Symbol(P, Decl(arrowFunctionPlacement.ts, 0, 0))
+
+/** p wil be resolved by the checker (requires | undefined)  */
+export function fnWithRequiredDefaultParam(p = (/* param */p: P, p2: typeof p):P => null!, req: number) {}
+>fnWithRequiredDefaultParam : Symbol(fnWithRequiredDefaultParam, Decl(arrowFunctionPlacement.ts, 7, 126))
+>p : Symbol(p, Decl(arrowFunctionPlacement.ts, 10, 43))
+>p : Symbol(p, Decl(arrowFunctionPlacement.ts, 10, 48))
+>P : Symbol(P, Decl(arrowFunctionPlacement.ts, 0, 0))
+>p2 : Symbol(p2, Decl(arrowFunctionPlacement.ts, 10, 64))
+>p : Symbol(p, Decl(arrowFunctionPlacement.ts, 10, 48))
+>P : Symbol(P, Decl(arrowFunctionPlacement.ts, 0, 0))
+>req : Symbol(req, Decl(arrowFunctionPlacement.ts, 10, 90))
+
+/** p wil be resolved by the checker (requires | undefined)  */
+export const exprWithRequiredDefaultParam = (p = function (/* param */p: P, p2: typeof p): P { return null!; }, req: number) => {
+>exprWithRequiredDefaultParam : Symbol(exprWithRequiredDefaultParam, Decl(arrowFunctionPlacement.ts, 13, 12))
+>p : Symbol(p, Decl(arrowFunctionPlacement.ts, 13, 45))
+>p : Symbol(p, Decl(arrowFunctionPlacement.ts, 13, 59))
+>P : Symbol(P, Decl(arrowFunctionPlacement.ts, 0, 0))
+>p2 : Symbol(p2, Decl(arrowFunctionPlacement.ts, 13, 75))
+>p : Symbol(p, Decl(arrowFunctionPlacement.ts, 13, 59))
+>P : Symbol(P, Decl(arrowFunctionPlacement.ts, 0, 0))
+>req : Symbol(req, Decl(arrowFunctionPlacement.ts, 13, 111))
+
+}
+
+export class C {
+>C : Symbol(C, Decl(arrowFunctionPlacement.ts, 15, 1))
+
+    field = (/* param */p: P, p2: typeof p):P => null!;
+>field : Symbol(C.field, Decl(arrowFunctionPlacement.ts, 17, 16))
+>p : Symbol(p, Decl(arrowFunctionPlacement.ts, 18, 13))
+>P : Symbol(P, Decl(arrowFunctionPlacement.ts, 0, 0))
+>p2 : Symbol(p2, Decl(arrowFunctionPlacement.ts, 18, 29))
+>p : Symbol(p, Decl(arrowFunctionPlacement.ts, 18, 13))
+>P : Symbol(P, Decl(arrowFunctionPlacement.ts, 0, 0))
+
+    readonly roFiled = (/* param */p: P, p2: typeof p):P => null!;
+>roFiled : Symbol(C.roFiled, Decl(arrowFunctionPlacement.ts, 18, 55))
+>p : Symbol(p, Decl(arrowFunctionPlacement.ts, 19, 24))
+>P : Symbol(P, Decl(arrowFunctionPlacement.ts, 0, 0))
+>p2 : Symbol(p2, Decl(arrowFunctionPlacement.ts, 19, 40))
+>p : Symbol(p, Decl(arrowFunctionPlacement.ts, 19, 24))
+>P : Symbol(P, Decl(arrowFunctionPlacement.ts, 0, 0))
+
+    method(p = (/* param */p: P, p2: typeof p):P => null!) {}
+>method : Symbol(C.method, Decl(arrowFunctionPlacement.ts, 19, 66))
+>p : Symbol(p, Decl(arrowFunctionPlacement.ts, 20, 11))
+>p : Symbol(p, Decl(arrowFunctionPlacement.ts, 20, 16))
+>P : Symbol(P, Decl(arrowFunctionPlacement.ts, 0, 0))
+>p2 : Symbol(p2, Decl(arrowFunctionPlacement.ts, 20, 32))
+>p : Symbol(p, Decl(arrowFunctionPlacement.ts, 20, 16))
+>P : Symbol(P, Decl(arrowFunctionPlacement.ts, 0, 0))
+
+    /** p wil be resolved by the checker (requires | undefined)  */
+    methodWithRequiredDefault(p = (/* param */p: P, p2: typeof p):P => null!, req: number) {}
+>methodWithRequiredDefault : Symbol(C.methodWithRequiredDefault, Decl(arrowFunctionPlacement.ts, 20, 61))
+>p : Symbol(p, Decl(arrowFunctionPlacement.ts, 22, 30))
+>p : Symbol(p, Decl(arrowFunctionPlacement.ts, 22, 35))
+>P : Symbol(P, Decl(arrowFunctionPlacement.ts, 0, 0))
+>p2 : Symbol(p2, Decl(arrowFunctionPlacement.ts, 22, 51))
+>p : Symbol(p, Decl(arrowFunctionPlacement.ts, 22, 35))
+>P : Symbol(P, Decl(arrowFunctionPlacement.ts, 0, 0))
+>req : Symbol(req, Decl(arrowFunctionPlacement.ts, 22, 77))
+
+    thisType =  (): this  => this;
+>thisType : Symbol(C.thisType, Decl(arrowFunctionPlacement.ts, 22, 93))
+>this : Symbol(C, Decl(arrowFunctionPlacement.ts, 15, 1))
+
+    constructor(public ctorField = (/* param */p: P, p2: typeof p):P => null!) {}
+>ctorField : Symbol(C.ctorField, Decl(arrowFunctionPlacement.ts, 25, 16))
+>p : Symbol(p, Decl(arrowFunctionPlacement.ts, 25, 36))
+>P : Symbol(P, Decl(arrowFunctionPlacement.ts, 0, 0))
+>p2 : Symbol(p2, Decl(arrowFunctionPlacement.ts, 25, 52))
+>p : Symbol(p, Decl(arrowFunctionPlacement.ts, 25, 36))
+>P : Symbol(P, Decl(arrowFunctionPlacement.ts, 0, 0))
+}
+
+export default (/* param */p: P, p2: typeof p):P => null!;
+>p : Symbol(p, Decl(arrowFunctionPlacement.ts, 28, 16))
+>P : Symbol(P, Decl(arrowFunctionPlacement.ts, 0, 0))
+>p2 : Symbol(p2, Decl(arrowFunctionPlacement.ts, 28, 32))
+>p : Symbol(p, Decl(arrowFunctionPlacement.ts, 28, 16))
+>P : Symbol(P, Decl(arrowFunctionPlacement.ts, 0, 0))
+
+=== functionExpressionPlacement.ts ===
+type P = { name: string }
+>P : Symbol(P, Decl(functionExpressionPlacement.ts, 0, 0))
+>name : Symbol(name, Decl(functionExpressionPlacement.ts, 0, 10))
+
+export let vLet = function (/* param */p: P, p2: typeof p): P { return null!; };
+>vLet : Symbol(vLet, Decl(functionExpressionPlacement.ts, 2, 10))
+>p : Symbol(p, Decl(functionExpressionPlacement.ts, 2, 28))
+>P : Symbol(P, Decl(functionExpressionPlacement.ts, 0, 0))
+>p2 : Symbol(p2, Decl(functionExpressionPlacement.ts, 2, 44))
+>p : Symbol(p, Decl(functionExpressionPlacement.ts, 2, 28))
+>P : Symbol(P, Decl(functionExpressionPlacement.ts, 0, 0))
+
+export const vConst = function (/* param */p: P, p2: typeof p): P { return null!; };
+>vConst : Symbol(vConst, Decl(functionExpressionPlacement.ts, 3, 12))
+>p : Symbol(p, Decl(functionExpressionPlacement.ts, 3, 32))
+>P : Symbol(P, Decl(functionExpressionPlacement.ts, 0, 0))
+>p2 : Symbol(p2, Decl(functionExpressionPlacement.ts, 3, 48))
+>p : Symbol(p, Decl(functionExpressionPlacement.ts, 3, 32))
+>P : Symbol(P, Decl(functionExpressionPlacement.ts, 0, 0))
+
+export function fn(p = function (/* param */p: P, p2: typeof p): P { return null!; }) {}
+>fn : Symbol(fn, Decl(functionExpressionPlacement.ts, 3, 84))
+>p : Symbol(p, Decl(functionExpressionPlacement.ts, 5, 19))
+>p : Symbol(p, Decl(functionExpressionPlacement.ts, 5, 33))
+>P : Symbol(P, Decl(functionExpressionPlacement.ts, 0, 0))
+>p2 : Symbol(p2, Decl(functionExpressionPlacement.ts, 5, 49))
+>p : Symbol(p, Decl(functionExpressionPlacement.ts, 5, 33))
+>P : Symbol(P, Decl(functionExpressionPlacement.ts, 0, 0))
+
+/** p wil be resolved by the checker (requires | undefined)  */
+export function fnWithRequiredDefaultParam(p = function (/* param */p: P, p2: typeof p): P { return null!; }, req: number) {}
+>fnWithRequiredDefaultParam : Symbol(fnWithRequiredDefaultParam, Decl(functionExpressionPlacement.ts, 5, 88))
+>p : Symbol(p, Decl(functionExpressionPlacement.ts, 8, 43))
+>p : Symbol(p, Decl(functionExpressionPlacement.ts, 8, 57))
+>P : Symbol(P, Decl(functionExpressionPlacement.ts, 0, 0))
+>p2 : Symbol(p2, Decl(functionExpressionPlacement.ts, 8, 73))
+>p : Symbol(p, Decl(functionExpressionPlacement.ts, 8, 57))
+>P : Symbol(P, Decl(functionExpressionPlacement.ts, 0, 0))
+>req : Symbol(req, Decl(functionExpressionPlacement.ts, 8, 109))
+
+export class C {
+>C : Symbol(C, Decl(functionExpressionPlacement.ts, 8, 125))
+
+    field = function (/* param */p: P, p2: typeof p): P { return null!; };
+>field : Symbol(C.field, Decl(functionExpressionPlacement.ts, 10, 16))
+>p : Symbol(p, Decl(functionExpressionPlacement.ts, 11, 22))
+>P : Symbol(P, Decl(functionExpressionPlacement.ts, 0, 0))
+>p2 : Symbol(p2, Decl(functionExpressionPlacement.ts, 11, 38))
+>p : Symbol(p, Decl(functionExpressionPlacement.ts, 11, 22))
+>P : Symbol(P, Decl(functionExpressionPlacement.ts, 0, 0))
+
+    readonly roFiled = function (/* param */p: P, p2: typeof p): P { return null!; };
+>roFiled : Symbol(C.roFiled, Decl(functionExpressionPlacement.ts, 11, 74))
+>p : Symbol(p, Decl(functionExpressionPlacement.ts, 12, 33))
+>P : Symbol(P, Decl(functionExpressionPlacement.ts, 0, 0))
+>p2 : Symbol(p2, Decl(functionExpressionPlacement.ts, 12, 49))
+>p : Symbol(p, Decl(functionExpressionPlacement.ts, 12, 33))
+>P : Symbol(P, Decl(functionExpressionPlacement.ts, 0, 0))
+
+    method(p = function (/* param */p: P, p2: typeof p): P { return null!; }) {}
+>method : Symbol(C.method, Decl(functionExpressionPlacement.ts, 12, 85))
+>p : Symbol(p, Decl(functionExpressionPlacement.ts, 13, 11))
+>p : Symbol(p, Decl(functionExpressionPlacement.ts, 13, 25))
+>P : Symbol(P, Decl(functionExpressionPlacement.ts, 0, 0))
+>p2 : Symbol(p2, Decl(functionExpressionPlacement.ts, 13, 41))
+>p : Symbol(p, Decl(functionExpressionPlacement.ts, 13, 25))
+>P : Symbol(P, Decl(functionExpressionPlacement.ts, 0, 0))
+
+    /** p wil be resolved by the checker (requires | undefined)  */
+    methodWithRequiredDefault(p = function (/* param */p: P, p2: typeof p): P { return null!; }, req: number) {}
+>methodWithRequiredDefault : Symbol(C.methodWithRequiredDefault, Decl(functionExpressionPlacement.ts, 13, 80))
+>p : Symbol(p, Decl(functionExpressionPlacement.ts, 16, 30))
+>p : Symbol(p, Decl(functionExpressionPlacement.ts, 16, 44))
+>P : Symbol(P, Decl(functionExpressionPlacement.ts, 0, 0))
+>p2 : Symbol(p2, Decl(functionExpressionPlacement.ts, 16, 60))
+>p : Symbol(p, Decl(functionExpressionPlacement.ts, 16, 44))
+>P : Symbol(P, Decl(functionExpressionPlacement.ts, 0, 0))
+>req : Symbol(req, Decl(functionExpressionPlacement.ts, 16, 96))
+
+    constructor(public ctorField = function (/* param */p: P, p2: typeof p): P { return null!; }) {}
+>ctorField : Symbol(C.ctorField, Decl(functionExpressionPlacement.ts, 18, 16))
+>p : Symbol(p, Decl(functionExpressionPlacement.ts, 18, 45))
+>P : Symbol(P, Decl(functionExpressionPlacement.ts, 0, 0))
+>p2 : Symbol(p2, Decl(functionExpressionPlacement.ts, 18, 61))
+>p : Symbol(p, Decl(functionExpressionPlacement.ts, 18, 45))
+>P : Symbol(P, Decl(functionExpressionPlacement.ts, 0, 0))
+}
+
+export default function (/* param */p: P, p2: typeof p): P { return null!; };
+>p : Symbol(p, Decl(functionExpressionPlacement.ts, 21, 25))
+>P : Symbol(P, Decl(functionExpressionPlacement.ts, 0, 0))
+>p2 : Symbol(p2, Decl(functionExpressionPlacement.ts, 21, 41))
+>p : Symbol(p, Decl(functionExpressionPlacement.ts, 21, 25))
+>P : Symbol(P, Decl(functionExpressionPlacement.ts, 0, 0))
+
+
+=== returnTypes.ts ===
+type P = { name: string }
+>P : Symbol(P, Decl(returnTypes.ts, 0, 0))
+>name : Symbol(name, Decl(returnTypes.ts, 0, 10))
+
+export let fromAnnotation  = (p: P):typeof p[keyof typeof p] => null!;
+>fromAnnotation : Symbol(fromAnnotation, Decl(returnTypes.ts, 1, 10))
+>p : Symbol(p, Decl(returnTypes.ts, 1, 30))
+>P : Symbol(P, Decl(returnTypes.ts, 0, 0))
+>p : Symbol(p, Decl(returnTypes.ts, 1, 30))
+>p : Symbol(p, Decl(returnTypes.ts, 1, 30))
+
+export let fromInference  = (p: P) => null! as typeof p[keyof typeof p];
+>fromInference : Symbol(fromInference, Decl(returnTypes.ts, 2, 10))
+>p : Symbol(p, Decl(returnTypes.ts, 2, 29))
+>P : Symbol(P, Decl(returnTypes.ts, 0, 0))
+>p : Symbol(p, Decl(returnTypes.ts, 2, 29))
+>p : Symbol(p, Decl(returnTypes.ts, 2, 29))
+
+=== genericFunctions.ts ===
+type G1 = { name: string }
+>G1 : Symbol(G1, Decl(genericFunctions.ts, 0, 0))
+>name : Symbol(name, Decl(genericFunctions.ts, 0, 11))
+
+export let g1 = function<T extends keyof G1>(/* param */p: T){};
+>g1 : Symbol(g1, Decl(genericFunctions.ts, 1, 10))
+>T : Symbol(T, Decl(genericFunctions.ts, 1, 25))
+>G1 : Symbol(G1, Decl(genericFunctions.ts, 0, 0))
+>p : Symbol(p, Decl(genericFunctions.ts, 1, 45))
+>T : Symbol(T, Decl(genericFunctions.ts, 1, 25))
+
+
+// unused
+type G2 = { name: string }
+>G2 : Symbol(G2, Decl(genericFunctions.ts, 1, 64))
+>name : Symbol(name, Decl(genericFunctions.ts, 5, 11))
+
+export let g2 = <G2 extends keyof G1>(): G2 => { return null!};
+>g2 : Symbol(g2, Decl(genericFunctions.ts, 6, 10))
+>G2 : Symbol(G2, Decl(genericFunctions.ts, 6, 17))
+>G1 : Symbol(G1, Decl(genericFunctions.ts, 0, 0))
+>G2 : Symbol(G2, Decl(genericFunctions.ts, 6, 17))
+
+export const createClient = <D>(
+>createClient : Symbol(createClient, Decl(genericFunctions.ts, 8, 12))
+>D : Symbol(D, Decl(genericFunctions.ts, 8, 29))
+
+  clientDef: D
+>clientDef : Symbol(clientDef, Decl(genericFunctions.ts, 8, 32))
+>D : Symbol(D, Decl(genericFunctions.ts, 8, 29))
+
+): D extends new (...args: any[]) => infer D ? 
+>D : Symbol(D, Decl(genericFunctions.ts, 8, 29))
+>args : Symbol(args, Decl(genericFunctions.ts, 10, 18))
+>D : Symbol(D, Decl(genericFunctions.ts, 10, 42))
+
+    (D extends { d: infer D } ? D: never):
+>D : Symbol(D, Decl(genericFunctions.ts, 10, 42))
+>d : Symbol(d, Decl(genericFunctions.ts, 11, 16))
+>D : Symbol(D, Decl(genericFunctions.ts, 11, 25))
+>D : Symbol(D, Decl(genericFunctions.ts, 11, 25))
+
+    never => {
+  return null! 
+}

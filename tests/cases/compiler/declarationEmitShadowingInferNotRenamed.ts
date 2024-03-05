@@ -11,12 +11,12 @@ export const createClient = <
     | Record<string, new (...args: any[]) => Client> // or map of classes
 >(
   clientDef: D
-): D extends new (...args: any[]) => infer C
+) => {
+  return null! as D extends new (...args: any[]) => infer C
   ? UpdatedClient<C> // return instance
   : {
       [K in keyof D]: D[K] extends new (...args: any[]) => infer C // or map of instances respectively
         ? UpdatedClient<C>
         : never
-    } => {
-  return null as any
+    }
 }
