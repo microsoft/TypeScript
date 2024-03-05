@@ -7982,11 +7982,11 @@
         "code": 18054
     },
 
-    "Declaration file contains synthesized type reference directives: '{0}'": {
+    "Declaration file contains hand-written type reference directives: {0}": {
         "category": "Error",
         "code": 18055
     },
-    "Declaration file contains synthesized file reference directives: '{0}'": {
+    "Declaration file contains hand-written file reference directives: {0}": {
         "category": "Error",
         "code": 18056
     }
