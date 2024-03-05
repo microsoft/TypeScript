@@ -15,7 +15,6 @@ export class C {
     readonly roFiled = null! as P;
     method(p = null! as P) {}
     methodWithRequiredDefault(p = null! as P, req: number) {}
-    methodWithRequiredDefault2(p = null! as P, req: number) {}
 
     constructor(public ctorField = null! as P) {}
 }
@@ -70,6 +69,26 @@ export class C {
     reuseType9? = null! as this | this;
 }
 
+//// [angularAssertionToTypeReferences.ts]
+type P = { } & { name: string }
+
+export let vLet = <P>null!
+export const vConst = <P>null!
+
+export function fn(p = <P>null!) {}
+
+export function fnWithRequiredDefaultParam(p = <P>null!, req: number) {}
+
+export class C {
+    field = <P>null!
+    optField? = <P>null!
+    readonly roFiled = <P>null!;
+    method(p = <P>null!) {}
+    methodWithRequiredDefault(p = <P>null!, req: number) {}
+
+    constructor(public ctorField = <P>null!) {}
+}
+
 //// [assertToTypeReferences.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
@@ -95,9 +114,6 @@ var C = /** @class */ (function () {
         if (p === void 0) { p = null; }
     };
     C.prototype.methodWithRequiredDefault = function (p, req) {
-        if (p === void 0) { p = null; }
-    };
-    C.prototype.methodWithRequiredDefault2 = function (p, req) {
         if (p === void 0) { p = null; }
     };
     return C;
@@ -169,6 +185,37 @@ var C = /** @class */ (function () {
     return C;
 }());
 exports.C = C;
+//// [angularAssertionToTypeReferences.js]
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.C = exports.fnWithRequiredDefaultParam = exports.fn = exports.vConst = exports.vLet = void 0;
+exports.vLet = null;
+exports.vConst = null;
+function fn(p) {
+    if (p === void 0) { p = null; }
+}
+exports.fn = fn;
+function fnWithRequiredDefaultParam(p, req) {
+    if (p === void 0) { p = null; }
+}
+exports.fnWithRequiredDefaultParam = fnWithRequiredDefaultParam;
+var C = /** @class */ (function () {
+    function C(ctorField) {
+        if (ctorField === void 0) { ctorField = null; }
+        this.ctorField = ctorField;
+        this.field = null;
+        this.optField = null;
+        this.roFiled = null;
+    }
+    C.prototype.method = function (p) {
+        if (p === void 0) { p = null; }
+    };
+    C.prototype.methodWithRequiredDefault = function (p, req) {
+        if (p === void 0) { p = null; }
+    };
+    return C;
+}());
+exports.C = C;
 
 
 //// [assertToTypeReferences.d.ts]
@@ -187,9 +234,6 @@ export declare class C {
     readonly roFiled: P;
     method(p?: P): void;
     methodWithRequiredDefault(p: {
-        name: string;
-    } | undefined, req: number): void;
-    methodWithRequiredDefault2(p: {
         name: string;
     } | undefined, req: number): void;
     constructor(ctorField?: P);
@@ -260,5 +304,29 @@ export declare class C {
     reuseType7?: `A` | `A` | undefined;
     reuseType8?: `${string}-ok` | `${string}-ok` | undefined;
     reuseType9?: this | this | undefined;
+}
+export {};
+//// [angularAssertionToTypeReferences.d.ts]
+type P = {} & {
+    name: string;
+};
+export declare let vLet: P;
+export declare const vConst: P;
+export declare function fn(p?: P): void;
+export declare function fnWithRequiredDefaultParam(p: {
+    name: string;
+} | undefined, req: number): void;
+export declare class C {
+    ctorField: P;
+    field: P;
+    optField?: {
+        name: string;
+    } | undefined;
+    readonly roFiled: P;
+    method(p?: P): void;
+    methodWithRequiredDefault(p: {
+        name: string;
+    } | undefined, req: number): void;
+    constructor(ctorField?: P);
 }
 export {};

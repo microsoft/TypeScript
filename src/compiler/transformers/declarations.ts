@@ -742,196 +742,196 @@ export function transformDeclarations(context: TransformationContext) {
             return;
         }
         return typeFromDeclaration(node);
+    }
+    function inferVariableLikeType<T extends VariableLikeDeclaration>(node: T, addUndefined?: boolean) {
+        const flags = node.kind === SyntaxKind.PropertyAssignment ? NodeBuilderFlags.InObjectTypeLiteral : NodeBuilderFlags.None;
+        return resolver.createTypeOfDeclaration(node, enclosingDeclaration, declarationEmitNodeBuilderFlags | flags, symbolTracker, addUndefined) ?? factory.createKeywordTypeNode(SyntaxKind.AnyKeyword);
+    }
 
-        function inferVariableLikeType<T extends VariableLikeDeclaration>(node: T, addUndefined?: boolean) {
-            const flags = node.kind === SyntaxKind.PropertyAssignment ? NodeBuilderFlags.InObjectTypeLiteral : NodeBuilderFlags.None;
-            return resolver.createTypeOfDeclaration(node, enclosingDeclaration, declarationEmitNodeBuilderFlags | flags, symbolTracker, addUndefined) ?? factory.createKeywordTypeNode(SyntaxKind.AnyKeyword);
+    function inferExpressionType<T extends Expression>(node: T) {
+        return resolver.createTypeOfExpression(node, enclosingDeclaration, declarationEmitNodeBuilderFlags, symbolTracker) ?? factory.createKeywordTypeNode(SyntaxKind.AnyKeyword);
+    }
+
+    function inferReturnTypeOfSignatureSignature<T extends SignatureDeclaration>(node: T) {
+        return resolver.createReturnTypeOfSignatureDeclaration(node, enclosingDeclaration, declarationEmitNodeBuilderFlags, symbolTracker) ?? factory.createKeywordTypeNode(SyntaxKind.AnyKeyword);
+    }
+    function inferAccessorType(node: GetAccessorDeclaration | SetAccessorDeclaration) {
+        if (node.kind === SyntaxKind.GetAccessor) {
+            return inferReturnTypeOfSignatureSignature(node);
         }
-
-        function inferExpressionType<T extends Expression>(node: T) {
-            return resolver.createTypeOfExpression(node, enclosingDeclaration, declarationEmitNodeBuilderFlags, symbolTracker) ?? factory.createKeywordTypeNode(SyntaxKind.AnyKeyword);
+        else {
+            return factory.createKeywordTypeNode(SyntaxKind.AnyKeyword);
         }
+    }
+    function typeFromDeclaration(node: HasInferredType | ExportAssignment) {
+        const savedErrorNameNode = errorNameNode;
+        const savedErrorFallbackNode = errorFallbackNode;
 
-        function inferReturnTypeOfSignatureSignature<T extends SignatureDeclaration>(node: T) {
-            return resolver.createReturnTypeOfSignatureDeclaration(node, enclosingDeclaration, declarationEmitNodeBuilderFlags, symbolTracker) ?? factory.createKeywordTypeNode(SyntaxKind.AnyKeyword);
+        errorNameNode = node.name;
+        errorFallbackNode = node;
+        let oldDiag;
+        if (!suppressNewDiagnosticContexts) {
+            oldDiag = getSymbolAccessibilityDiagnostic;
+            getSymbolAccessibilityDiagnostic = createGetSymbolAccessibilityDiagnosticForNode(node);
         }
-        function inferAccessorType(node: GetAccessorDeclaration | SetAccessorDeclaration) {
-            if (node.kind === SyntaxKind.GetAccessor) {
-                return inferReturnTypeOfSignatureSignature(node);
-            }
-            else {
-                return factory.createKeywordTypeNode(SyntaxKind.AnyKeyword);
-            }
+        let typeNode: TypeNode | undefined;
+        switch (node.kind) {
+            case SyntaxKind.Parameter:
+                typeNode = typeFromParameter(node);
+                break;
+            case SyntaxKind.VariableDeclaration:
+                typeNode = typeFromVariable(node);
+                break;
+            case SyntaxKind.PropertyDeclaration:
+                typeNode = typeFromProperty(node);
+                break;
+            case SyntaxKind.GetAccessor:
+                typeNode = typeFromAccessor(node);
+                break;
+            case SyntaxKind.BindingElement:
+                typeNode = inferVariableLikeType(node);
+                break;
+            case SyntaxKind.ConstructSignature:
+            case SyntaxKind.PropertySignature:
+            case SyntaxKind.MethodSignature:
+            case SyntaxKind.CallSignature:
+                typeNode = visitTypeNode(node.type) ?? factory.createKeywordTypeNode(SyntaxKind.AnyKeyword);
+                break;
+            case SyntaxKind.MethodDeclaration:
+            case SyntaxKind.FunctionDeclaration:
+                typeNode = visitTypeNode(node.type) ?? inferReturnTypeOfSignatureSignature(node);
+                break;
+            case SyntaxKind.ExportAssignment:
+                typeNode = typeFromExpression(node.expression) ?? inferExpressionType(node.expression);
+                break;
+            default:
+                Debug.assertNever(node, `Node needs to be an inferrable node, found ${Debug.formatSyntaxKind((node as Node).kind)}`);
         }
-        function typeFromDeclaration(node: HasInferredType | ExportAssignment) {
-            const savedErrorNameNode = errorNameNode;
-            const savedErrorFallbackNode = errorFallbackNode;
+        errorNameNode = savedErrorNameNode;
+        errorFallbackNode = savedErrorFallbackNode;
 
-            errorNameNode = node.name;
-            errorFallbackNode = node;
-            let oldDiag;
-            if (!suppressNewDiagnosticContexts) {
-                oldDiag = getSymbolAccessibilityDiagnostic;
-                getSymbolAccessibilityDiagnostic = createGetSymbolAccessibilityDiagnosticForNode(node);
-            }
-            let typeNode: TypeNode | undefined;
-            let declaredType: TypeNode | undefined;
-            switch (node.kind) {
-                case SyntaxKind.Parameter:
-                    typeNode = typeFromParameter(node);
-                    break;
-                case SyntaxKind.VariableDeclaration:
-                    typeNode = typeFromVariable(node);
-                    break;
-                case SyntaxKind.PropertyDeclaration:
-                    typeNode = typeFromProperty(node);
-                    break;
-                case SyntaxKind.GetAccessor:
-                    typeNode = typeFromAccessor(node);
-                    break;
-                case SyntaxKind.BindingElement:
-                    typeNode = inferVariableLikeType(node);
-                    break;
-                case SyntaxKind.ConstructSignature:
-                case SyntaxKind.PropertySignature:
-                case SyntaxKind.MethodSignature:
-                case SyntaxKind.CallSignature:
-                    declaredType = node.type;
-                    typeNode = declaredType ? visitTypeNode(declaredType) : factory.createKeywordTypeNode(SyntaxKind.AnyKeyword);
-                    break;
-                case SyntaxKind.MethodDeclaration:
-                case SyntaxKind.FunctionDeclaration:
-                    declaredType = node.type;
-                    typeNode = declaredType ? visitTypeNode(declaredType) : inferReturnTypeOfSignatureSignature(node);
-                    break;
-                case SyntaxKind.ExportAssignment:
-                    typeNode = typeFromExpression(node.expression) ?? inferExpressionType(node.expression);
-                    break;
-                default:
-                    Debug.assertNever(node, `Node needs to be an inferrable node, found ${Debug.formatSyntaxKind((node as Node).kind)}`);
-            }
-            errorNameNode = savedErrorNameNode;
-            errorFallbackNode = savedErrorFallbackNode;
-
-            if (!suppressNewDiagnosticContexts) {
-                getSymbolAccessibilityDiagnostic = oldDiag!;
-            }
-            return typeNode;
+        if (!suppressNewDiagnosticContexts) {
+            getSymbolAccessibilityDiagnostic = oldDiag!;
         }
+        return typeNode;
+    }
 
-        function visitTypeNode(type: TypeNode) {
-            return visitNode(type, visitDeclarationSubtree, isTypeNode)!;
-        }
+    function visitTypeNode(type: TypeNode): TypeNode;
+    function visitTypeNode(type: TypeNode | undefined): TypeNode | undefined;
+    function visitTypeNode(type: TypeNode | undefined) {
+        return visitNode(type, visitDeclarationSubtree, isTypeNode);
+    }
 
-        function addUndefinedInUnion(type: TypeNode) {
-            if (!strictNullChecks) return type;
-            if (isUnionTypeNode(type)) {
-                const hasUndefined = type.types.some(p => p.kind === SyntaxKind.UndefinedKeyword);
-                if (hasUndefined) return type;
+    function addUndefinedInUnion(type: TypeNode) {
+        if (!strictNullChecks) return type;
+        if (isUnionTypeNode(type)) {
+            const hasUndefined = type.types.some(p => p.kind === SyntaxKind.UndefinedKeyword);
+            if (hasUndefined) return type;
 
-                return factory.createUnionTypeNode([
-                    ...type.types,
-                    factory.createKeywordTypeNode(SyntaxKind.UndefinedKeyword),
-                ]);
-            }
             return factory.createUnionTypeNode([
-                type,
+                ...type.types,
                 factory.createKeywordTypeNode(SyntaxKind.UndefinedKeyword),
             ]);
         }
+        return factory.createUnionTypeNode([
+            type,
+            factory.createKeywordTypeNode(SyntaxKind.UndefinedKeyword),
+        ]);
+    }
 
-        function canAddUndefined(node: TypeNode): boolean {
-            if (!strictNullChecks) return true;
-            if (
-                isKeyword(node.kind)
-                || node.kind === SyntaxKind.LiteralType
-                || node.kind === SyntaxKind.FunctionType
-                || node.kind === SyntaxKind.ConstructorType
-                || node.kind === SyntaxKind.ArrayType
-                || node.kind === SyntaxKind.TupleType
-                || node.kind === SyntaxKind.TypeLiteral
-                || node.kind === SyntaxKind.TemplateLiteralType
-                || node.kind === SyntaxKind.ThisType
-            ) {
-                return true;
-            }
-            if (node.kind === SyntaxKind.ParenthesizedType) {
-                return canAddUndefined((node as ParenthesizedTypeNode).type);
-            }
-            if (node.kind === SyntaxKind.UnionType || node.kind === SyntaxKind.IntersectionType) {
-                return (node as UnionTypeNode | IntersectionTypeNode).types.every(canAddUndefined);
-            }
-            return false;
+    function canAddUndefined(node: TypeNode): boolean {
+        if (!strictNullChecks) return true;
+        if (
+            isKeyword(node.kind)
+            || node.kind === SyntaxKind.LiteralType
+            || node.kind === SyntaxKind.FunctionType
+            || node.kind === SyntaxKind.ConstructorType
+            || node.kind === SyntaxKind.ArrayType
+            || node.kind === SyntaxKind.TupleType
+            || node.kind === SyntaxKind.TypeLiteral
+            || node.kind === SyntaxKind.TemplateLiteralType
+            || node.kind === SyntaxKind.ThisType
+        ) {
+            return true;
         }
-        function typeFromExpression(node: Expression, requiresUndefined?: boolean): TypeNode | undefined {
-            switch (node.kind) {
-                case SyntaxKind.AsExpression:
-                    const asExpression = node as AsExpression | TypeAssertion;
-                    const type = asExpression.type;
-                    if (isConstTypeReference(asExpression.type) || (requiresUndefined && !canAddUndefined(type))) {
-                        return undefined;
-                    }
-                    else {
-                        return visitTypeNode(type);
-                    }
-            }
-            return undefined;
+        if (node.kind === SyntaxKind.ParenthesizedType) {
+            return canAddUndefined((node as ParenthesizedTypeNode).type);
         }
+        if (node.kind === SyntaxKind.UnionType || node.kind === SyntaxKind.IntersectionType) {
+            return (node as UnionTypeNode | IntersectionTypeNode).types.every(canAddUndefined);
+        }
+        return false;
+    }
+    function typeFromExpression(node: Expression, requiresUndefined?: boolean): TypeNode | undefined {
+        switch (node.kind) {
+            case SyntaxKind.TypeAssertionExpression:
+            case SyntaxKind.AsExpression:
+                const asExpression = node as AsExpression | TypeAssertion;
+                const type = asExpression.type;
+                if (isConstTypeReference(asExpression.type) || (requiresUndefined && !canAddUndefined(type))) {
+                    return undefined;
+                }
+                else {
+                    return visitTypeNode(type);
+                }
+        }
+        return undefined;
+    }
 
-        function typeFromAccessor(node: AccessorDeclaration) {
-            const accessorDeclarations = resolver.getAllAccessorDeclarations(node);
-            const accessorType = getTypeAnnotationFromAllAccessorDeclarations(node, accessorDeclarations);
-            if (accessorType) {
-                return visitTypeNode(accessorType);
-            }
-            return inferAccessorType(accessorDeclarations.getAccessor ?? node);
+    function typeFromAccessor(node: AccessorDeclaration) {
+        const accessorDeclarations = resolver.getAllAccessorDeclarations(node);
+        const accessorType = getTypeAnnotationFromAllAccessorDeclarations(node, accessorDeclarations);
+        if (accessorType) {
+            return visitTypeNode(accessorType);
         }
-        function typeFromVariable(node: VariableDeclaration) {
-            const declaredType = node.type;
-            if (declaredType) {
-                return visitNode(declaredType, visitDeclarationSubtree, isTypeNode)!;
-            }
-            let resultType;
-            if (node.initializer) {
-                resultType = typeFromExpression(node.initializer);
-            }
-            return resultType ?? inferVariableLikeType(node);
+        return inferAccessorType(accessorDeclarations.getAccessor ?? node);
+    }
+    function typeFromVariable(node: VariableDeclaration) {
+        const declaredType = node.type;
+        if (declaredType) {
+            return visitNode(declaredType, visitDeclarationSubtree, isTypeNode)!;
         }
-        function typeFromParameter(node: ParameterDeclaration) {
-            const parent = node.parent;
-            if (parent.kind === SyntaxKind.SetAccessor) {
-                return typeFromAccessor(parent);
-            }
-            const declaredType = node.type;
-            const addUndefined = resolver.requiresAddingImplicitUndefined(node);
-            let resultType;
-            if (!addUndefined) {
-                if (declaredType) {
-                    return visitTypeNode(declaredType);
-                }
-                if (node.initializer && isIdentifier(node.name)) {
-                    resultType = typeFromExpression(node.initializer);
-                }
-            }
-            return resultType ?? inferVariableLikeType(node, addUndefined);
+        let resultType;
+        if (node.initializer) {
+            resultType = typeFromExpression(node.initializer);
         }
-        function typeFromProperty(node: PropertyDeclaration) {
-            const declaredType = node.type;
+        return resultType ?? inferVariableLikeType(node);
+    }
+    function typeFromParameter(node: ParameterDeclaration) {
+        const parent = node.parent;
+        if (parent.kind === SyntaxKind.SetAccessor) {
+            return typeFromAccessor(parent);
+        }
+        const declaredType = node.type;
+        const addUndefined = resolver.requiresAddingImplicitUndefined(node);
+        let resultType;
+        if (!addUndefined) {
             if (declaredType) {
                 return visitTypeNode(declaredType);
             }
-
-            let resultType;
-            if (node.initializer) {
-                const isOptional = isOptionalDeclaration(node);
-                resultType = typeFromExpression(node.initializer, isOptional);
-                if (isOptional && resultType) {
-                    return addUndefinedInUnion(resultType);
-                }
+            if (node.initializer && isIdentifier(node.name)) {
+                resultType = typeFromExpression(node.initializer);
             }
-            return resultType ?? inferVariableLikeType(node);
         }
+        return resultType ?? inferVariableLikeType(node, addUndefined);
     }
+    function typeFromProperty(node: PropertyDeclaration) {
+        const declaredType = node.type;
+        if (declaredType) {
+            return visitTypeNode(declaredType);
+        }
+
+        let resultType;
+        if (node.initializer) {
+            const isOptional = isOptionalDeclaration(node);
+            resultType = typeFromExpression(node.initializer, isOptional);
+            if (isOptional && resultType) {
+                return addUndefinedInUnion(resultType);
+            }
+        }
+        return resultType ?? inferVariableLikeType(node);
+    }
+
     function isDeclarationAndNotVisible(node: NamedDeclaration) {
         node = getParseTreeNode(node) as NamedDeclaration;
         switch (node.kind) {

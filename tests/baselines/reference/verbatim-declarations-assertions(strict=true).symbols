@@ -46,14 +46,8 @@ export class C {
 >P : Symbol(P, Decl(assertToTypeReferences.ts, 0, 0))
 >req : Symbol(req, Decl(assertToTypeReferences.ts, 13, 45))
 
-    methodWithRequiredDefault2(p = null! as P, req: number) {}
->methodWithRequiredDefault2 : Symbol(C.methodWithRequiredDefault2, Decl(assertToTypeReferences.ts, 13, 61))
->p : Symbol(p, Decl(assertToTypeReferences.ts, 14, 31))
->P : Symbol(P, Decl(assertToTypeReferences.ts, 0, 0))
->req : Symbol(req, Decl(assertToTypeReferences.ts, 14, 46))
-
     constructor(public ctorField = null! as P) {}
->ctorField : Symbol(C.ctorField, Decl(assertToTypeReferences.ts, 16, 16))
+>ctorField : Symbol(C.ctorField, Decl(assertToTypeReferences.ts, 15, 16))
 >P : Symbol(P, Decl(assertToTypeReferences.ts, 0, 0))
 }
 
@@ -189,4 +183,59 @@ export class C {
 
     reuseType9? = null! as this | this;
 >reuseType9 : Symbol(C.reuseType9, Decl(assertToOtherTypes.ts, 20, 59))
+}
+
+=== angularAssertionToTypeReferences.ts ===
+type P = { } & { name: string }
+>P : Symbol(P, Decl(angularAssertionToTypeReferences.ts, 0, 0))
+>name : Symbol(name, Decl(angularAssertionToTypeReferences.ts, 0, 16))
+
+export let vLet = <P>null!
+>vLet : Symbol(vLet, Decl(angularAssertionToTypeReferences.ts, 2, 10))
+>P : Symbol(P, Decl(angularAssertionToTypeReferences.ts, 0, 0))
+
+export const vConst = <P>null!
+>vConst : Symbol(vConst, Decl(angularAssertionToTypeReferences.ts, 3, 12))
+>P : Symbol(P, Decl(angularAssertionToTypeReferences.ts, 0, 0))
+
+export function fn(p = <P>null!) {}
+>fn : Symbol(fn, Decl(angularAssertionToTypeReferences.ts, 3, 30))
+>p : Symbol(p, Decl(angularAssertionToTypeReferences.ts, 5, 19))
+>P : Symbol(P, Decl(angularAssertionToTypeReferences.ts, 0, 0))
+
+export function fnWithRequiredDefaultParam(p = <P>null!, req: number) {}
+>fnWithRequiredDefaultParam : Symbol(fnWithRequiredDefaultParam, Decl(angularAssertionToTypeReferences.ts, 5, 35))
+>p : Symbol(p, Decl(angularAssertionToTypeReferences.ts, 7, 43))
+>P : Symbol(P, Decl(angularAssertionToTypeReferences.ts, 0, 0))
+>req : Symbol(req, Decl(angularAssertionToTypeReferences.ts, 7, 56))
+
+export class C {
+>C : Symbol(C, Decl(angularAssertionToTypeReferences.ts, 7, 72))
+
+    field = <P>null!
+>field : Symbol(C.field, Decl(angularAssertionToTypeReferences.ts, 9, 16))
+>P : Symbol(P, Decl(angularAssertionToTypeReferences.ts, 0, 0))
+
+    optField? = <P>null!
+>optField : Symbol(C.optField, Decl(angularAssertionToTypeReferences.ts, 10, 20))
+>P : Symbol(P, Decl(angularAssertionToTypeReferences.ts, 0, 0))
+
+    readonly roFiled = <P>null!;
+>roFiled : Symbol(C.roFiled, Decl(angularAssertionToTypeReferences.ts, 11, 24))
+>P : Symbol(P, Decl(angularAssertionToTypeReferences.ts, 0, 0))
+
+    method(p = <P>null!) {}
+>method : Symbol(C.method, Decl(angularAssertionToTypeReferences.ts, 12, 32))
+>p : Symbol(p, Decl(angularAssertionToTypeReferences.ts, 13, 11))
+>P : Symbol(P, Decl(angularAssertionToTypeReferences.ts, 0, 0))
+
+    methodWithRequiredDefault(p = <P>null!, req: number) {}
+>methodWithRequiredDefault : Symbol(C.methodWithRequiredDefault, Decl(angularAssertionToTypeReferences.ts, 13, 27))
+>p : Symbol(p, Decl(angularAssertionToTypeReferences.ts, 14, 30))
+>P : Symbol(P, Decl(angularAssertionToTypeReferences.ts, 0, 0))
+>req : Symbol(req, Decl(angularAssertionToTypeReferences.ts, 14, 43))
+
+    constructor(public ctorField = <P>null!) {}
+>ctorField : Symbol(C.ctorField, Decl(angularAssertionToTypeReferences.ts, 16, 16))
+>P : Symbol(P, Decl(angularAssertionToTypeReferences.ts, 0, 0))
 }

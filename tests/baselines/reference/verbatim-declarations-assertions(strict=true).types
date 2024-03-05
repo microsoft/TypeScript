@@ -54,13 +54,6 @@ export class C {
 >null! : never
 >req : number
 
-    methodWithRequiredDefault2(p = null! as P, req: number) {}
->methodWithRequiredDefault2 : (p: { name: string; } | undefined, req: number) => void
->p : { name: string; }
->null! as P : { name: string; }
->null! : never
->req : number
-
     constructor(public ctorField = null! as P) {}
 >ctorField : { name: string; }
 >null! as P : { name: string; }
@@ -234,5 +227,70 @@ export class C {
     reuseType9? = null! as this | this;
 >reuseType9 : this | undefined
 >null! as this | this : this
+>null! : never
+}
+
+=== angularAssertionToTypeReferences.ts ===
+type P = { } & { name: string }
+>P : { name: string; }
+>name : string
+
+export let vLet = <P>null!
+>vLet : { name: string; }
+><P>null! : { name: string; }
+>null! : never
+
+export const vConst = <P>null!
+>vConst : { name: string; }
+><P>null! : { name: string; }
+>null! : never
+
+export function fn(p = <P>null!) {}
+>fn : (p?: { name: string; }) => void
+>p : { name: string; }
+><P>null! : { name: string; }
+>null! : never
+
+export function fnWithRequiredDefaultParam(p = <P>null!, req: number) {}
+>fnWithRequiredDefaultParam : (p: { name: string; } | undefined, req: number) => void
+>p : { name: string; }
+><P>null! : { name: string; }
+>null! : never
+>req : number
+
+export class C {
+>C : C
+
+    field = <P>null!
+>field : { name: string; }
+><P>null! : { name: string; }
+>null! : never
+
+    optField? = <P>null!
+>optField : { name: string; } | undefined
+><P>null! : { name: string; }
+>null! : never
+
+    readonly roFiled = <P>null!;
+>roFiled : { name: string; }
+><P>null! : { name: string; }
+>null! : never
+
+    method(p = <P>null!) {}
+>method : (p?: { name: string; }) => void
+>p : { name: string; }
+><P>null! : { name: string; }
+>null! : never
+
+    methodWithRequiredDefault(p = <P>null!, req: number) {}
+>methodWithRequiredDefault : (p: { name: string; } | undefined, req: number) => void
+>p : { name: string; }
+><P>null! : { name: string; }
+>null! : never
+>req : number
+
+    constructor(public ctorField = <P>null!) {}
+>ctorField : { name: string; }
+><P>null! : { name: string; }
 >null! : never
 }

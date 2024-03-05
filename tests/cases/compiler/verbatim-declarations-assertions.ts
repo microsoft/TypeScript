@@ -16,7 +16,6 @@ export class C {
     readonly roFiled = null! as P;
     method(p = null! as P) {}
     methodWithRequiredDefault(p = null! as P, req: number) {}
-    methodWithRequiredDefault2(p = null! as P, req: number) {}
 
     constructor(public ctorField = null! as P) {}
 }
@@ -70,4 +69,24 @@ export class C {
     reuseType7? = null! as `A` | `A`;
     reuseType8? = null! as `${string}-ok` | `${string}-ok`;
     reuseType9? = null! as this | this;
+}
+
+// @fileName: angularAssertionToTypeReferences.ts
+type P = { } & { name: string }
+
+export let vLet = <P>null!
+export const vConst = <P>null!
+
+export function fn(p = <P>null!) {}
+
+export function fnWithRequiredDefaultParam(p = <P>null!, req: number) {}
+
+export class C {
+    field = <P>null!
+    optField? = <P>null!
+    readonly roFiled = <P>null!;
+    method(p = <P>null!) {}
+    methodWithRequiredDefault(p = <P>null!, req: number) {}
+
+    constructor(public ctorField = <P>null!) {}
 }
