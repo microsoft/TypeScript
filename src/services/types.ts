@@ -431,7 +431,7 @@ export interface LanguageServiceHost extends GetEffectiveTypeRootsHost, MinimalR
     getParsedCommandLine?(fileName: string): ParsedCommandLine | undefined;
     /** @internal */ onReleaseParsedCommandLine?(configFileName: string, oldResolvedRef: ResolvedProjectReference | undefined, optionOptions: CompilerOptions): void;
     /** @internal */ getIncompleteCompletionsCache?(): IncompleteCompletionsCache;
-    /** @internal */ runWithTemporaryFileUpdate?(rootFile: string, pastedText: string, cb: (updatedProgram: Program | undefined, originalProgram: Program | undefined, updatedPastedText: SourceFile) => void): void;
+    /** @internal */ runWithTemporaryFileUpdate?(rootFile: string, updatedText: string, cb: (updatedProgram: Program | undefined, originalProgram: Program | undefined, updatedPastedText: SourceFile) => void): void;
     jsDocParsingMode?: JSDocParsingMode | undefined;
 }
 

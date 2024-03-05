@@ -1887,13 +1887,6 @@ export interface VerifyCodeFixAllOptions {
     preferences?: ts.UserPreferences;
 }
 
-export interface VerifyPasteEdits {
-    targetFile: string;
-    pastes: { text: string; range: ts.TextRange; }[];
-    copySpan?: { file: string; range: ts.TextRange; };
-    preferences: ts.UserPreferences;
-}
-
 export interface VerifyRefactorOptions {
     name: string;
     actionName: string;
