@@ -9,9 +9,8 @@ export function base() {}
 //// [foo.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.base = void 0;
-function base() { }
 exports.base = base;
+function base() { }
 //// [index.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });

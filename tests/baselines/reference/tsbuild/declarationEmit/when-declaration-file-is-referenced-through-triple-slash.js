@@ -339,14 +339,13 @@ export {};
 //// [/src/solution/lib/src/subProject2/index.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getVar = void 0;
+exports.getVar = getVar;
 var variable = {
     key: 'value',
 };
 function getVar() {
     return 'key';
 }
-exports.getVar = getVar;
 
 
 //// [/src/solution/lib/src/subProject2/tsconfig.tsbuildinfo]

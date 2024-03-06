@@ -16,7 +16,7 @@ export function Foo() {
 //// [index.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.Foo = void 0;
+exports.Foo = Foo;
 var jsx_dev_runtime_1 = require("react/jsx-dev-runtime");
 var _jsxFileName = "index.tsx";
 function Bar() {
@@ -25,4 +25,3 @@ function Bar() {
 function Foo() {
     return (0, jsx_dev_runtime_1.jsxDEV)(Bar, {}, void 0, false, { fileName: _jsxFileName, lineNumber: 10, columnNumber: 9 }, this);
 }
-exports.Foo = Foo;

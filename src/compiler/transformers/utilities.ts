@@ -103,7 +103,8 @@ export interface ExternalModuleInfo {
     externalHelpersImportDeclaration: ImportDeclaration | undefined; // import of external helpers
     exportSpecifiers: IdentifierNameMap<ExportSpecifier[]>; // file-local export specifiers by name (no reexports)
     exportedBindings: Identifier[][]; // exported names of local declarations
-    exportedNames: Identifier[] | undefined; // all exported names in the module, both local and reexported
+    exportedNames: Identifier[] | undefined; // all exported names in the module, both local and reexported, excluding the names of locally exported function declarations
+    exportedFunctions: FunctionDeclaration[] | undefined; // all of the top-level exported function declarations
     exportEquals: ExportAssignment | undefined; // an export= declaration if one was present
     hasExportStarsToExportValues: boolean; // whether this module contains export*
 }
@@ -171,6 +172,7 @@ export function collectExternalModuleInfo(context: TransformationContext, source
     const exportedBindings: Identifier[][] = [];
     const uniqueExports = new Map<string, boolean>();
     let exportedNames: Identifier[] | undefined;
+    let exportedFunctions: FunctionDeclaration[] | undefined;
     let hasExportDefault = false;
     let exportEquals: ExportAssignment | undefined;
     let hasExportStarsToExportValues = false;
@@ -250,6 +252,7 @@ export function collectExternalModuleInfo(context: TransformationContext, source
 
             case SyntaxKind.FunctionDeclaration:
                 if (hasSyntacticModifier(node, ModifierFlags.Export)) {
+                    exportedFunctions = append(exportedFunctions, node as FunctionDeclaration);
                     if (hasSyntacticModifier(node, ModifierFlags.Default)) {
                         // export default function() { }
                         if (!hasExportDefault) {
@@ -263,7 +266,6 @@ export function collectExternalModuleInfo(context: TransformationContext, source
                         if (!uniqueExports.get(idText(name))) {
                             multiMapSparseArrayAdd(exportedBindings, getOriginalNodeId(node), name);
                             uniqueExports.set(idText(name), true);
-                            exportedNames = append(exportedNames, name);
                         }
                     }
                 }
@@ -297,7 +299,7 @@ export function collectExternalModuleInfo(context: TransformationContext, source
         externalImports.unshift(externalHelpersImportDeclaration);
     }
 
-    return { externalImports, exportSpecifiers, exportEquals, hasExportStarsToExportValues, exportedBindings, exportedNames, externalHelpersImportDeclaration };
+    return { externalImports, exportSpecifiers, exportEquals, hasExportStarsToExportValues, exportedBindings, exportedNames, exportedFunctions, externalHelpersImportDeclaration };
 
     function addExportedNamesForExportDeclaration(node: ExportDeclaration) {
         for (const specifier of cast(node.exportClause, isNamedExports).elements) {
