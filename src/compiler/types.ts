@@ -8035,6 +8035,62 @@ export type UniqueNameHandler = (baseName: string, checkFn?: (name: string) => b
 
 export type EmitHelperUniqueNameCallback = (name: string) => string;
 
+/**
+ * Indicates the minimum `ScriptTarget` (inclusive) after which a specific language feature is no longer transpiled.
+ *
+ * @internal
+ */
+export namespace LanguageFeatureMinimumTarget {
+    // ES2015 Features
+    export const Classes = ScriptTarget.ES2015;
+    export const ForOf = ScriptTarget.ES2015;
+    export const Generators = ScriptTarget.ES2015;
+    export const Iteration = ScriptTarget.ES2015;
+    export const SpreadElements = ScriptTarget.ES2015;
+    export const RestElements = ScriptTarget.ES2015;
+    export const TaggedTemplates = ScriptTarget.ES2015;
+    export const DestructuringAssignment = ScriptTarget.ES2015;
+    export const BindingPatterns = ScriptTarget.ES2015;
+    export const ArrowFunctions = ScriptTarget.ES2015;
+    export const BlockScopedVariables = ScriptTarget.ES2015;
+    export const ObjectAssign = ScriptTarget.ES2015;
+
+    // ES2016 Features
+    export const Exponentiation = ScriptTarget.ES2016; // `x ** y`
+
+    // ES2017 Features
+    export const AsyncFunctions = ScriptTarget.ES2017; // `async function f() {}`
+
+    // ES2018 Features
+    export const ForAwaitOf = ScriptTarget.ES2018; // `for await (const x of y)`
+    export const AsyncGenerators = ScriptTarget.ES2018; // `async function * f() { }`
+    export const AsyncIteration = ScriptTarget.ES2018; // `Symbol.asyncIterator`
+    export const ObjectSpreadRest = ScriptTarget.ES2018; // `{ ...obj }`
+
+    // ES2019 Features
+    export const BindinglessCatch = ScriptTarget.ES2019; // `try { } catch { }`
+
+    // ES2020 Features
+    export const BigInt = ScriptTarget.ES2020; // `0n`
+    export const NullishCoalesce = ScriptTarget.ES2020; // `a ?? b`
+    export const OptionalChaining = ScriptTarget.ES2020; // `a?.b`
+
+    // ES2021 Features
+    export const LogicalAssignment = ScriptTarget.ES2021; // `a ||= b`, `a &&= b`, `a ??= b`
+
+    // ES2022 Features
+    export const TopLevelAwait = ScriptTarget.ES2022;
+    export const ClassFields = ScriptTarget.ES2022;
+    export const PrivateNamesAndClassStaticBlocks = ScriptTarget.ES2022; // `class C { static {} #x = y, #m() {} }`, `#x in y`
+
+    // ES2023 Features
+    export const ShebangComments = ScriptTarget.ESNext;
+
+    // Upcoming Features
+    export const UsingAndAwaitUsing = ScriptTarget.ESNext; // `using x = y`, `await using x = y`
+    export const ClassAndClassElementDecorators = ScriptTarget.ESNext; // `@dec class C {}`, `class C { @dec m() {} }`
+}
+
 // dprint-ignore
 /**
  * Used by the checker, this enum keeps track of external emit helpers that should be type
