@@ -37472,8 +37472,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     }
             }
             if (target) {
-                // Should this be checkExpressionCached?
-                const targetType = getTypeOfExpression(target);
+                const targetType = checkExpressionCached(target);
                 if (!isUnitType(targetType)) {
                     return undefined;
                 }
