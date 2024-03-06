@@ -37464,11 +37464,13 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     const {left, right} = expr;
                     if (isMatchingReference(param.name, left)) {
                         target = right;
-                    } else if (isMatchingReference(param.name, right)) {
+                    }
+                    else if (isMatchingReference(param.name, right)) {
                         target = left;
                     }
             }
             if (target) {
+                // Should this be checkExpressionCached?
                 const targetType = getTypeOfExpression(target);
                 if (!isUnitType(targetType)) {
                     return undefined;
@@ -37486,22 +37488,24 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             flags: FlowFlags.FalseCondition,
         };
 
-        let isNever: boolean;
-        if (trueType.flags & TypeFlags.Union) {
-            isNever = true;
-            mapType(trueType, t => {
-                if (!isNever) return neverType;
-                const falseSubT = getFlowTypeOfReference(param.name, t, t, func, falseCondition);
-                if (!(falseSubT.flags & TypeFlags.Never)) {
-                    isNever = false;
-                }
-                return neverType;
-            });
+        if ((trueType.flags & TypeFlags.Union) && (trueType as UnionType).types.length >= 20) {
+            const unionType = trueType as UnionType;
+            const head: UnionType = {...unionType, types: unionType.types.slice(0, 10)};
+            const falseSubTypeHead = getFlowTypeOfReference(param.name, head, head, func, falseCondition);
+            if (!(falseSubTypeHead.flags & TypeFlags.Never)) {
+                return undefined;
+            }
+            const rest: UnionType = {...unionType, types: unionType.types.slice(10)};
+            const falseSubTypeRest = getFlowTypeOfReference(param.name, rest, rest, func, falseCondition);
+            if (!(falseSubTypeRest.flags & TypeFlags.Never)) {
+                return undefined;
+            }
+            return trueType;
         } else {
             const falseSubtype = getFlowTypeOfReference(param.name, trueType, trueType, func, falseCondition);
-            isNever = !!(falseSubtype.flags & TypeFlags.Never);
+            const isNever = !!(falseSubtype.flags & TypeFlags.Never);
+            return isNever ? trueType : undefined;
         }
-        return isNever ? trueType : undefined;
     }
 
     /**
