@@ -48,7 +48,10 @@ interface ScriptInfoData {
     open: ReturnType<ScriptInfo["isScriptOpen"]>;
     version: ReturnType<TextStorage["getVersion"]>;
     pendingReloadFromDisk: TextStorage["pendingReloadFromDisk"];
-    sourceMapFilePath: Exclude<ScriptInfo["sourceMapFilePath"], SourceMapFileWatcher> | SourceMapFileWatcherData | undefined;
+    sourceMapFilePath:
+        | Exclude<ScriptInfo["sourceMapFilePath"], SourceMapFileWatcher>
+        | SourceMapFileWatcherData
+        | undefined;
     declarationInfoPath: ScriptInfo["declarationInfoPath"];
     sourceInfos: ScriptInfo["sourceInfos"];
     documentPositionMapper: ScriptInfo["documentPositionMapper"];
@@ -184,7 +187,8 @@ export function patchServiceForStateBaseline(service: ProjectService) {
                     project.autoImportProviderHost,
                     projectDiff,
                     projectPropertyLogs,
-                    project.autoImportProviderHost ? project.autoImportProviderHost.projectName : project.autoImportProviderHost,
+                    project.autoImportProviderHost ? project.autoImportProviderHost.projectName
+                        : project.autoImportProviderHost,
                 );
                 projectDiff = printProperty(
                     PrintPropertyWhen.DefinedOrChangedOrNew,
@@ -193,7 +197,8 @@ export function patchServiceForStateBaseline(service: ProjectService) {
                     project.noDtsResolutionProject,
                     projectDiff,
                     projectPropertyLogs,
-                    project.noDtsResolutionProject ? project.noDtsResolutionProject.projectName : project.noDtsResolutionProject,
+                    project.noDtsResolutionProject ? project.noDtsResolutionProject.projectName
+                        : project.noDtsResolutionProject,
                 );
                 return printSetPropertyAndCreateStatementLog(
                     logs,
@@ -216,7 +221,8 @@ export function patchServiceForStateBaseline(service: ProjectService) {
                 noOpenRef: isConfiguredProject(project) && !project.hasOpenRef(),
                 autoImportProviderHost: project.autoImportProviderHost,
                 noDtsResolutionProject: project.noDtsResolutionProject,
-                originalConfiguredProjects: project.originalConfiguredProjects && new Set(project.originalConfiguredProjects),
+                originalConfiguredProjects: project.originalConfiguredProjects &&
+                    new Set(project.originalConfiguredProjects),
                 documentPositionMappers: new Map(getSourceMapper(project)?.documentPositionMappers),
             }),
         );
@@ -228,7 +234,9 @@ export function patchServiceForStateBaseline(service: ProjectService) {
             scriptInfos,
             (logs, info, data) => {
                 let infoDiff = newOrDeleted(info, scriptInfos, data);
-                if (infoDiff !== Diff.Deleted && info.documentPositionMapper) currentMappers.add(info.documentPositionMapper);
+                if (infoDiff !== Diff.Deleted && info.documentPositionMapper) {
+                    currentMappers.add(info.documentPositionMapper);
+                }
                 const infoPropertyLogs = [] as string[];
                 const isOpen = info.isScriptOpen();
                 infoDiff = printProperty(PrintPropertyWhen.Changed, data, "open", isOpen, infoDiff, infoPropertyLogs);
@@ -273,7 +281,8 @@ export function patchServiceForStateBaseline(service: ProjectService) {
                     info.documentPositionMapper,
                     infoDiff,
                     infoPropertyLogs,
-                    info.documentPositionMapper ? toStringDocumentPostionMapper(info.documentPositionMapper) : undefined,
+                    info.documentPositionMapper ? toStringDocumentPostionMapper(info.documentPositionMapper)
+                        : undefined,
                 );
                 let defaultProject: Project | undefined;
                 try {
@@ -547,7 +556,8 @@ export function patchServiceForStateBaseline(service: ProjectService) {
             ) :
             printSetPropertyValueWorker(
                 PrintPropertyWhen.DefinedOrChangedOrNew,
-                data?.sourceMapFilePath && !isString(data?.sourceMapFilePath) ? data.sourceMapFilePath.sourceInfos : undefined,
+                data?.sourceMapFilePath && !isString(data?.sourceMapFilePath) ? data.sourceMapFilePath.sourceInfos
+                    : undefined,
                 "sourceMapFilePath sourceInfos",
                 info.sourceMapFilePath.sourceInfos,
                 infoDiff,

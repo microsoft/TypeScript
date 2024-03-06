@@ -124,7 +124,10 @@ export function Component(x: Config): any;`,
 
             // Change other
             projectVersion = "2";
-            files.set("/project/other.ts", { version: "2", text: `export function foo() { } export function bar() { }` });
+            files.set("/project/other.ts", {
+                version: "2",
+                text: `export function foo() { } export function bar() { }`,
+            });
             const program3 = ls.getProgram()!;
             assert.notStrictEqual(program2, program3);
             verifyProgramFiles(program3);
@@ -246,7 +249,10 @@ export function Component(x: Config): any;`,
             });
             assert.strictEqual(ls.getProgram(), program);
             // Add output from new class to referenced project
-            system.writeFile(`/user/username/projects/myproject/projects/project1/class3.d.ts`, `declare class class3 {}`);
+            system.writeFile(
+                `/user/username/projects/myproject/projects/project1/class3.d.ts`,
+                `declare class class3 {}`,
+            );
             assert.strictEqual(ls.getProgram(), program);
         });
 

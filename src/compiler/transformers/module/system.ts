@@ -180,7 +180,8 @@ export function transformSystemModule(context: TransformationContext): (x: Sourc
     function transformSourceFile(node: SourceFile) {
         if (
             node.isDeclarationFile ||
-            !(isEffectiveExternalModule(node, compilerOptions) || node.transformFlags & TransformFlags.ContainsDynamicImport)
+            !(isEffectiveExternalModule(node, compilerOptions) ||
+                node.transformFlags & TransformFlags.ContainsDynamicImport)
         ) {
             return node;
         }
@@ -220,8 +221,16 @@ export function transformSystemModule(context: TransformationContext): (x: Sourc
             /*name*/ undefined,
             /*typeParameters*/ undefined,
             [
-                factory.createParameterDeclaration(/*modifiers*/ undefined, /*dotDotDotToken*/ undefined, exportFunction),
-                factory.createParameterDeclaration(/*modifiers*/ undefined, /*dotDotDotToken*/ undefined, contextObject),
+                factory.createParameterDeclaration(
+                    /*modifiers*/ undefined,
+                    /*dotDotDotToken*/ undefined,
+                    exportFunction,
+                ),
+                factory.createParameterDeclaration(
+                    /*modifiers*/ undefined,
+                    /*dotDotDotToken*/ undefined,
+                    contextObject,
+                ),
             ],
             /*type*/ undefined,
             moduleBodyBlock,
@@ -231,7 +240,9 @@ export function transformSystemModule(context: TransformationContext): (x: Sourc
         // Clear the emit-helpers flag for later passes since we'll have already used it in the module body
         // So the helper will be emit at the correct position instead of at the top of the source-file
         const moduleName = tryGetModuleNameFromFile(factory, node, host, compilerOptions);
-        const dependencies = factory.createArrayLiteralExpression(map(dependencyGroups, dependencyGroup => dependencyGroup.name));
+        const dependencies = factory.createArrayLiteralExpression(
+            map(dependencyGroups, dependencyGroup => dependencyGroup.name),
+        );
         const updated = setEmitFlags(
             factory.updateSourceFile(
                 node,
@@ -276,7 +287,9 @@ export function transformSystemModule(context: TransformationContext): (x: Sourc
      *
      * @param externalImports The imports for the file.
      */
-    function collectDependencyGroups(externalImports: (ImportDeclaration | ImportEqualsDeclaration | ExportDeclaration)[]) {
+    function collectDependencyGroups(
+        externalImports: (ImportDeclaration | ImportEqualsDeclaration | ExportDeclaration)[],
+    ) {
         const groupIndices = new Map<string, number>();
         const dependencyGroups: DependencyGroup[] = [];
         for (const externalImport of externalImports) {
@@ -364,7 +377,8 @@ export function transformSystemModule(context: TransformationContext): (x: Sourc
         startLexicalEnvironment();
 
         // Add any prologue directives.
-        const ensureUseStrict = getStrictOptionValue(compilerOptions, "alwaysStrict") || isExternalModule(currentSourceFile);
+        const ensureUseStrict = getStrictOptionValue(compilerOptions, "alwaysStrict") ||
+            isExternalModule(currentSourceFile);
         const statementOffset = factory.copyPrologue(node.statements, statements, ensureUseStrict, topLevelVisitor);
 
         // var __moduleName = context_1 && context_1.id;
@@ -585,7 +599,10 @@ export function transformSystemModule(context: TransformationContext): (x: Sourc
         const setters: Expression[] = [];
         for (const group of dependencyGroups) {
             // derive a unique name for parameter from the first named entry in the group
-            const localName = forEach(group.externalImports, i => getLocalNameForExternalImport(factory, i, currentSourceFile));
+            const localName = forEach(
+                group.externalImports,
+                i => getLocalNameForExternalImport(factory, i, currentSourceFile),
+            );
             const parameterName = localName ? factory.getGeneratedNameForNode(localName) : factory.createUniqueName("");
             const statements: Statement[] = [];
             for (const entry of group.externalImports) {
@@ -699,7 +716,11 @@ export function transformSystemModule(context: TransformationContext): (x: Sourc
                     /*asteriskToken*/ undefined,
                     /*name*/ undefined,
                     /*typeParameters*/ undefined,
-                    [factory.createParameterDeclaration(/*modifiers*/ undefined, /*dotDotDotToken*/ undefined, parameterName)],
+                    [factory.createParameterDeclaration(
+                        /*modifiers*/ undefined,
+                        /*dotDotDotToken*/ undefined,
+                        parameterName,
+                    )],
                     /*type*/ undefined,
                     factory.createBlock(statements, /*multiLine*/ true),
                 ),
@@ -949,7 +970,8 @@ export function transformSystemModule(context: TransformationContext): (x: Sourc
      * @param isExportedDeclaration A value indicating whether the variable is exported.
      */
     function transformInitializedVariable(node: VariableDeclaration, isExportedDeclaration: boolean): Expression {
-        const createAssignment = isExportedDeclaration ? createExportedVariableAssignment : createNonExportedVariableAssignment;
+        const createAssignment = isExportedDeclaration ? createExportedVariableAssignment
+            : createNonExportedVariableAssignment;
         return isBindingPattern(node.name)
             ? flattenDestructuringAssignment(
                 node,
@@ -959,7 +981,8 @@ export function transformSystemModule(context: TransformationContext): (x: Sourc
                 /*needsValue*/ false,
                 createAssignment,
             )
-            : node.initializer ? createAssignment(node.name, visitNode(node.initializer, visitor, isExpression)) : node.name;
+            : node.initializer ? createAssignment(node.name, visitNode(node.initializer, visitor, isExpression))
+            : node.name;
     }
 
     /**
@@ -1000,7 +1023,10 @@ export function transformSystemModule(context: TransformationContext): (x: Sourc
     ) {
         hoistVariableDeclaration(factory.cloneNode(name));
         return isExportedDeclaration
-            ? createExportExpression(name, preventSubstitution(setTextRange(factory.createAssignment(name, value), location)))
+            ? createExportExpression(
+                name,
+                preventSubstitution(setTextRange(factory.createAssignment(name, value), location)),
+            )
             : preventSubstitution(setTextRange(factory.createAssignment(name, value), location));
     }
 
@@ -1153,7 +1179,8 @@ export function transformSystemModule(context: TransformationContext): (x: Sourc
 
         let excludeName: string | undefined;
         if (hasSyntacticModifier(decl, ModifierFlags.Export)) {
-            const exportName = hasSyntacticModifier(decl, ModifierFlags.Default) ? factory.createStringLiteral("default")
+            const exportName = hasSyntacticModifier(decl, ModifierFlags.Default) ?
+                factory.createStringLiteral("default")
                 : decl.name!;
             statements = appendExportStatement(statements, exportName, factory.getLocalName(decl));
             excludeName = getTextOfIdentifierOrLiteral(exportName);
@@ -1401,7 +1428,10 @@ export function transformSystemModule(context: TransformationContext): (x: Sourc
         if (shouldHoistForInitializer(node)) {
             let expressions: Expression[] | undefined;
             for (const variable of node.declarations) {
-                expressions = append(expressions, transformInitializedVariable(variable, /*isExportedDeclaration*/ false));
+                expressions = append(
+                    expressions,
+                    transformInitializedVariable(variable, /*isExportedDeclaration*/ false),
+                );
                 if (!variable.initializer) {
                     hoistBindingElement(variable);
                 }
@@ -1693,7 +1723,10 @@ export function transformSystemModule(context: TransformationContext): (x: Sourc
      *
      * @param node The node to visit.
      */
-    function visitDestructuringAssignment(node: DestructuringAssignment, valueIsDiscarded: boolean): VisitResult<Expression> {
+    function visitDestructuringAssignment(
+        node: DestructuringAssignment,
+        valueIsDiscarded: boolean,
+    ): VisitResult<Expression> {
         if (hasExportedReferenceInDestructuringTarget(node.left)) {
             return flattenDestructuringAssignment(
                 node,
@@ -1914,7 +1947,9 @@ export function transformSystemModule(context: TransformationContext): (x: Sourc
                         factory.createPropertyAssignment(
                             factory.cloneNode(name),
                             factory.createPropertyAccessExpression(
-                                factory.getGeneratedNameForNode(importDeclaration.parent?.parent?.parent || importDeclaration),
+                                factory.getGeneratedNameForNode(
+                                    importDeclaration.parent?.parent?.parent || importDeclaration,
+                                ),
                                 factory.cloneNode(importDeclaration.propertyName || importDeclaration.name),
                             ),
                         ),
@@ -1980,7 +2015,9 @@ export function transformSystemModule(context: TransformationContext): (x: Sourc
                 else if (isImportSpecifier(importDeclaration)) {
                     return setTextRange(
                         factory.createPropertyAccessExpression(
-                            factory.getGeneratedNameForNode(importDeclaration.parent?.parent?.parent || importDeclaration),
+                            factory.getGeneratedNameForNode(
+                                importDeclaration.parent?.parent?.parent || importDeclaration,
+                            ),
                             factory.cloneNode(importDeclaration.propertyName || importDeclaration.name),
                         ),
                         /*location*/ node,
@@ -2067,14 +2104,18 @@ export function transformSystemModule(context: TransformationContext): (x: Sourc
             if (importDeclaration) return importDeclaration;
 
             const valueDeclaration = resolver.getReferencedValueDeclaration(name);
-            if (valueDeclaration && moduleInfo?.exportedBindings[getOriginalNodeId(valueDeclaration)]) return valueDeclaration;
+            if (valueDeclaration && moduleInfo?.exportedBindings[getOriginalNodeId(valueDeclaration)]) {
+                return valueDeclaration;
+            }
 
             // An exported namespace or enum may merge with an ambient declaration, which won't show up in
             // .js emit. When that happens, try to find bindings associated with a non-ambient declaration.
             const declarations = resolver.getReferencedValueDeclarations(name);
             if (declarations) {
                 for (const declaration of declarations) {
-                    if (declaration !== valueDeclaration && moduleInfo?.exportedBindings[getOriginalNodeId(declaration)]) {
+                    if (
+                        declaration !== valueDeclaration && moduleInfo?.exportedBindings[getOriginalNodeId(declaration)]
+                    ) {
                         return declaration;
                     }
                 }

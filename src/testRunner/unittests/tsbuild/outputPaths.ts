@@ -36,11 +36,20 @@ describe("unittests:: tsbuild - output file paths", () => {
         });
 
         it("verify getOutputFileNames", () => {
-            const sys = new fakes.System(input.fs().makeReadonly(), { executingFilePath: "/lib/tsc" }) as TscCompileSystem;
+            const sys = new fakes.System(input.fs().makeReadonly(), {
+                executingFilePath: "/lib/tsc",
+            }) as TscCompileSystem;
 
             assert.deepEqual(
                 ts.getOutputFileNames(
-                    ts.parseConfigFileWithSystem("/src/tsconfig.json", {}, /*extendedConfigCache*/ undefined, {}, sys, ts.noop)!,
+                    ts.parseConfigFileWithSystem(
+                        "/src/tsconfig.json",
+                        {},
+                        /*extendedConfigCache*/ undefined,
+                        {},
+                        sys,
+                        ts.noop,
+                    )!,
                     "/src/src/index.ts",
                     /*ignoreCase*/ false,
                 ),

@@ -110,7 +110,12 @@ export function getPathUpdater(
 }
 
 // Relative path from a0 to b0 should be same as relative path from a1 to b1. Returns b1.
-function makeCorrespondingRelativeChange(a0: string, b0: string, a1: string, getCanonicalFileName: GetCanonicalFileName): string {
+function makeCorrespondingRelativeChange(
+    a0: string,
+    b0: string,
+    a1: string,
+    getCanonicalFileName: GetCanonicalFileName,
+): string {
     const rel = getRelativePathFromFile(a0, b0, getCanonicalFileName);
     return combinePathsSafe(getDirectoryPath(a1), rel);
 }
@@ -137,8 +142,13 @@ function updateTsconfigFiles(
             case "include":
             case "exclude": {
                 const foundExactMatch = updatePaths(property);
-                if (foundExactMatch || propertyName !== "include" || !isArrayLiteralExpression(property.initializer)) return;
-                const includes = mapDefined(property.initializer.elements, e => isStringLiteral(e) ? e.text : undefined);
+                if (foundExactMatch || propertyName !== "include" || !isArrayLiteralExpression(property.initializer)) {
+                    return;
+                }
+                const includes = mapDefined(
+                    property.initializer.elements,
+                    e => isStringLiteral(e) ? e.text : undefined,
+                );
                 if (includes.length === 0) return;
                 const matchers = getFileMatcherPatterns(
                     configDir,
@@ -149,12 +159,14 @@ function updateTsconfigFiles(
                 );
                 // If there isn't some include for this, add a new one.
                 if (
-                    getRegexFromPattern(Debug.checkDefined(matchers.includeFilePattern), useCaseSensitiveFileNames).test(
-                        oldFileOrDirPath,
-                    ) &&
-                    !getRegexFromPattern(Debug.checkDefined(matchers.includeFilePattern), useCaseSensitiveFileNames).test(
-                        newFileOrDirPath,
-                    )
+                    getRegexFromPattern(Debug.checkDefined(matchers.includeFilePattern), useCaseSensitiveFileNames)
+                        .test(
+                            oldFileOrDirPath,
+                        ) &&
+                    !getRegexFromPattern(Debug.checkDefined(matchers.includeFilePattern), useCaseSensitiveFileNames)
+                        .test(
+                            newFileOrDirPath,
+                        )
                 ) {
                     changeTracker.insertNodeAfter(
                         configFile,
@@ -185,7 +197,8 @@ function updateTsconfigFiles(
     });
 
     function updatePaths(property: PropertyAssignment): boolean {
-        const elements = isArrayLiteralExpression(property.initializer) ? property.initializer.elements : [property.initializer];
+        const elements = isArrayLiteralExpression(property.initializer) ? property.initializer.elements
+            : [property.initializer];
         let foundExactMatch = false;
         for (const element of elements) {
             foundExactMatch = tryUpdateString(element) || foundExactMatch;
@@ -199,7 +212,11 @@ function updateTsconfigFiles(
 
         const updated = oldToNew(elementFileName);
         if (updated !== undefined) {
-            changeTracker.replaceRangeWithText(configFile!, createStringRange(element, configFile!), relativePath(updated));
+            changeTracker.replaceRangeWithText(
+                configFile!,
+                createStringRange(element, configFile!),
+                relativePath(updated),
+            );
             return true;
         }
         return false;
@@ -301,14 +318,19 @@ function getSourceFileToImport(
         // `find` should succeed because we checked for ambient modules before calling this function.
         const oldFileName = find(importedModuleSymbol.declarations, isSourceFile)!.fileName;
         const newFileName = oldToNew(oldFileName);
-        return newFileName === undefined ? { newFileName: oldFileName, updated: false } : { newFileName, updated: true };
+        return newFileName === undefined ? { newFileName: oldFileName, updated: false }
+            : { newFileName, updated: true };
     }
     else {
         const mode = program.getModeForUsageLocation(importingSourceFile, importLiteral);
         const resolved = host.resolveModuleNameLiterals || !host.resolveModuleNames ?
             program.getResolvedModuleFromModuleSpecifier(importLiteral) :
             host.getResolvedModuleWithFailedLookupLocationsFromCache &&
-            host.getResolvedModuleWithFailedLookupLocationsFromCache(importLiteral.text, importingSourceFile.fileName, mode);
+            host.getResolvedModuleWithFailedLookupLocationsFromCache(
+                importLiteral.text,
+                importingSourceFile.fileName,
+                mode,
+            );
         return getSourceFileToImportFromResolved(importLiteral, resolved, oldToNew, program.getSourceFiles());
     }
 }
@@ -333,7 +355,8 @@ function getSourceFileToImportFromResolved(
     const result = forEach(resolved.failedLookupLocations, tryChangeWithIgnoringPackageJsonExisting)
         // Then failed lookups except package.json since we dont want to touch them (only included ts/js files).
         // At this point, the confidence level of this fix being correct is too low to change bare specifiers or absolute paths.
-        || pathIsRelative(importLiteral.text) && forEach(resolved.failedLookupLocations, tryChangeWithIgnoringPackageJson);
+        || pathIsRelative(importLiteral.text) &&
+            forEach(resolved.failedLookupLocations, tryChangeWithIgnoringPackageJson);
     if (result) return result;
 
     // If nothing changed, then result is resolved module file thats not updated

@@ -62,7 +62,8 @@ export function extractTest(source: string): Test {
     while (pos < source.length) {
         if (
             source.charCodeAt(pos) === ts.CharacterCodes.openBracket &&
-            (source.charCodeAt(pos + 1) === ts.CharacterCodes.hash || source.charCodeAt(pos + 1) === ts.CharacterCodes.$)
+            (source.charCodeAt(pos + 1) === ts.CharacterCodes.hash ||
+                source.charCodeAt(pos + 1) === ts.CharacterCodes.$)
         ) {
             const saved = pos;
             pos += 2;
@@ -84,7 +85,8 @@ export function extractTest(source: string): Test {
             }
         }
         else if (
-            source.charCodeAt(pos) === ts.CharacterCodes.bar && source.charCodeAt(pos + 1) === ts.CharacterCodes.closeBracket
+            source.charCodeAt(pos) === ts.CharacterCodes.bar &&
+            source.charCodeAt(pos + 1) === ts.CharacterCodes.closeBracket
         ) {
             text += source.substring(lastPos, pos);
             activeRanges[activeRanges.length - 1].end = text.length;
@@ -135,7 +137,9 @@ export function testExtractSymbol(
         throw new Error(`Test ${caption} does not specify selection range`);
     }
 
-    [ts.Extension.Ts, ts.Extension.Js].forEach(extension => it(`${caption} [${extension}]`, () => runBaseline(extension)));
+    [ts.Extension.Ts, ts.Extension.Js].forEach(extension =>
+        it(`${caption} [${extension}]`, () => runBaseline(extension))
+    );
 
     function runBaseline(extension: ts.Extension) {
         const path = "/a" + extension;
@@ -174,7 +178,10 @@ export function testExtractSymbol(
         data.push(`// ==ORIGINAL==`);
         data.push(text.replace("[#|", "/*[#|*/").replace("|]", "/*|]*/"));
         for (const action of actions) {
-            const { renameLocation, edits } = ts.refactor.extractSymbol.getRefactorEditsToExtractSymbol(context, action.name)!;
+            const { renameLocation, edits } = ts.refactor.extractSymbol.getRefactorEditsToExtractSymbol(
+                context,
+                action.name,
+            )!;
             assert.lengthOf(edits, 1);
             data.push(`// ==SCOPE::${action.description}==`);
             const newText = ts.textChanges.applyChanges(sourceFile.text, edits[0].textChanges);

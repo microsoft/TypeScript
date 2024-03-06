@@ -109,7 +109,9 @@ export function generateAccessorFromProperty(
             fieldModifiers = modifiers;
         }
         else {
-            accessorModifiers = factory.createModifiersFromModifierFlags(prepareModifierFlagsForAccessor(modifierFlags));
+            accessorModifiers = factory.createModifiersFromModifierFlags(
+                prepareModifierFlagsForAccessor(modifierFlags),
+            );
             fieldModifiers = factory.createModifiersFromModifierFlags(prepareModifierFlagsForField(modifierFlags));
         }
         if (canHaveDecorators(declaration)) {
@@ -127,7 +129,13 @@ export function generateAccessorFromProperty(
         // readonly modifier only existed in classLikeDeclaration
         const constructor = getFirstConstructorWithBody(container as ClassLikeDeclaration);
         if (constructor) {
-            updateReadonlyPropertyInitializerStatementConstructor(changeTracker, file, constructor, fieldName.text, originalName);
+            updateReadonlyPropertyInitializerStatementConstructor(
+                changeTracker,
+                file,
+                constructor,
+                fieldName.text,
+                originalName,
+            );
         }
     }
     else {
@@ -144,14 +152,19 @@ function isConvertibleName(name: DeclarationName): name is AcceptedNameType {
 }
 
 function isAcceptedDeclaration(node: Node): node is AcceptedDeclaration {
-    return isParameterPropertyDeclaration(node, node.parent) || isPropertyDeclaration(node) || isPropertyAssignment(node);
+    return isParameterPropertyDeclaration(node, node.parent) || isPropertyDeclaration(node) ||
+        isPropertyAssignment(node);
 }
 
 function createPropertyName(name: string, originalName: AcceptedNameType) {
     return isIdentifier(originalName) ? factory.createIdentifier(name) : factory.createStringLiteral(name);
 }
 
-function createAccessorAccessExpression(fieldName: AcceptedNameType, isStatic: boolean, container: ContainerDeclaration) {
+function createAccessorAccessExpression(
+    fieldName: AcceptedNameType,
+    isStatic: boolean,
+    container: ContainerDeclaration,
+) {
     const leftHead = isStatic ? (container as ClassLikeDeclaration).name! : factory.createThis(); // TODO: GH#18217
     return isIdentifier(fieldName) ? factory.createPropertyAccessExpression(leftHead, fieldName)
         : factory.createElementAccessExpression(leftHead, factory.createStringLiteralFromNode(fieldName));
@@ -209,7 +222,10 @@ export function getAccessorConvertiblePropertyAtPosition(
 
     const name = declaration.name.text;
     const startWithUnderscore = startsWithUnderscore(name);
-    const fieldName = createPropertyName(startWithUnderscore ? name : getUniqueName(`_${name}`, file), declaration.name);
+    const fieldName = createPropertyName(
+        startWithUnderscore ? name : getUniqueName(`_${name}`, file),
+        declaration.name,
+    );
     const accessorName = createPropertyName(
         startWithUnderscore ? getUniqueName(name.substring(1), file) : name,
         declaration.name,

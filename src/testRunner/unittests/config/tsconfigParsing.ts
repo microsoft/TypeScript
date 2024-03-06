@@ -46,7 +46,10 @@ describe("unittests:: config:: tsconfigParsing:: parseConfigFileTextToJson", () 
             input: () =>
                 scenario().map(({ jsonText, configFileName, basePath, allFileList }) => ({
                     createHost: () => {
-                        const files = allFileList.reduce((files, value) => (files[value] = "", files), {} as vfs.FileSet);
+                        const files = allFileList.reduce(
+                            (files, value) => (files[value] = "", files),
+                            {} as vfs.FileSet,
+                        );
                         files[ts.combinePaths(basePath, configFileName)] = jsonText;
                         return new fakes.ParseConfigHost(
                             new vfs.FileSystem(

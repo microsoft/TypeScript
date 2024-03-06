@@ -66,7 +66,9 @@ function loadTypesRegistryFile(
     }
     catch (e) {
         log.writeLine(
-            `Error when loading types registry file '${typesRegistryFilePath}': ${(e as Error).message}, ${(e as Error).stack}`,
+            `Error when loading types registry file '${typesRegistryFilePath}': ${(e as Error).message}, ${
+                (e as Error).stack
+            }`,
         );
         return new Map<string, ts.MapLike<string>>();
     }
@@ -219,7 +221,8 @@ export class TestTypingsInstallerAdapter extends ts.server.TypingsInstallerAdapt
     readonly throttledRequests: number | undefined;
 
     constructor(options: TestTypingsInstallerOptions) {
-        const globalTypingsCacheLocation = options.globalTypingsCacheLocation || options.host.getHostSpecificPath("/a/data");
+        const globalTypingsCacheLocation = options.globalTypingsCacheLocation ||
+            options.host.getHostSpecificPath("/a/data");
         super(
             /*telemetryEnabled*/ false,
             options.throttledRequests === undefined ?

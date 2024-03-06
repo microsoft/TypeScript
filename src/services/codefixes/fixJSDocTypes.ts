@@ -69,7 +69,10 @@ registerCodeFix({
         return actions;
 
         function fix(type: Type, fixId: string, fixAllDescription: DiagnosticMessage): CodeFixAction {
-            const changes = textChanges.ChangeTracker.with(context, t => doChange(t, sourceFile, typeNode, type, checker));
+            const changes = textChanges.ChangeTracker.with(
+                context,
+                t => doChange(t, sourceFile, typeNode, type, checker),
+            );
             return createCodeFixAction(
                 "jdocTypes",
                 changes,

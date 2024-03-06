@@ -102,7 +102,8 @@ function createTemplateCooked(
     factory: NodeFactory,
     template: TemplateHead | TemplateMiddle | TemplateTail | NoSubstitutionTemplateLiteral,
 ) {
-    return template.templateFlags! & TokenFlags.IsInvalid ? factory.createVoidZero() : factory.createStringLiteral(template.text);
+    return template.templateFlags! & TokenFlags.IsInvalid ? factory.createVoidZero()
+        : factory.createStringLiteral(template.text);
 }
 
 /**

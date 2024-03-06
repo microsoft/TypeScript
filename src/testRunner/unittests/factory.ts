@@ -47,7 +47,9 @@ describe("unittests:: FactoryAPI", () => {
                 ts.factory.createBlock([]),
             );
             checkExpression(func);
-            checkExpression(ts.factory.createCallExpression(func, /*typeArguments*/ undefined, /*argumentsArray*/ undefined));
+            checkExpression(
+                ts.factory.createCallExpression(func, /*typeArguments*/ undefined, /*argumentsArray*/ undefined),
+            );
             checkExpression(
                 ts.factory.createTaggedTemplateExpression(
                     func,
@@ -64,7 +66,10 @@ describe("unittests:: FactoryAPI", () => {
                 ),
             );
             checkExpression(
-                ts.factory.createCommaListExpression([ts.factory.createStringLiteral("a"), ts.factory.createStringLiteral("b")]),
+                ts.factory.createCommaListExpression([
+                    ts.factory.createStringLiteral("a"),
+                    ts.factory.createStringLiteral("b"),
+                ]),
             );
         });
     });
@@ -97,7 +102,10 @@ describe("unittests:: FactoryAPI", () => {
                 ),
             );
             checkBody(
-                ts.factory.createCommaListExpression([ts.factory.createStringLiteral("a"), ts.factory.createStringLiteral("b")]),
+                ts.factory.createCommaListExpression([
+                    ts.factory.createStringLiteral("a"),
+                    ts.factory.createStringLiteral("b"),
+                ]),
             );
             checkBody(
                 ts.factory.createBinaryExpression(
@@ -122,7 +130,10 @@ describe("unittests:: FactoryAPI", () => {
             );
             function checkRhs(operator: ts.BinaryOperator, expectParens: boolean) {
                 const node = ts.factory.createBinaryExpression(lhs, operator, rhs);
-                assertSyntaxKind(node.right, expectParens ? ts.SyntaxKind.ParenthesizedExpression : ts.SyntaxKind.ArrowFunction);
+                assertSyntaxKind(
+                    node.right,
+                    expectParens ? ts.SyntaxKind.ParenthesizedExpression : ts.SyntaxKind.ArrowFunction,
+                );
             }
 
             checkRhs(ts.SyntaxKind.CommaToken, /*expectParens*/ false);

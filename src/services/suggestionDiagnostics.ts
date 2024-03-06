@@ -140,12 +140,20 @@ export function computeSuggestionDiagnostics(
             const jsdocTypedefNodes = codefix.getJSDocTypedefNodes(node);
             for (const jsdocTypedefNode of jsdocTypedefNodes) {
                 diags.push(
-                    createDiagnosticForNode(jsdocTypedefNode, Diagnostics.JSDoc_typedef_may_be_converted_to_TypeScript_type),
+                    createDiagnosticForNode(
+                        jsdocTypedefNode,
+                        Diagnostics.JSDoc_typedef_may_be_converted_to_TypeScript_type,
+                    ),
                 );
             }
 
             if (codefix.parameterShouldGetTypeFromJSDoc(node)) {
-                diags.push(createDiagnosticForNode(node.name || node, Diagnostics.JSDoc_types_may_be_moved_to_TypeScript_types));
+                diags.push(
+                    createDiagnosticForNode(
+                        node.name || node,
+                        Diagnostics.JSDoc_types_may_be_moved_to_TypeScript_types,
+                    ),
+                );
             }
         }
 
@@ -163,13 +171,19 @@ function containsTopLevelCommonjs(sourceFile: SourceFile): boolean {
             case SyntaxKind.VariableStatement:
                 return (statement as VariableStatement).declarationList.declarations.some(decl =>
                     !!decl.initializer &&
-                    isRequireCall(propertyAccessLeftHandSide(decl.initializer), /*requireStringLiteralLikeArgument*/ true)
+                    isRequireCall(
+                        propertyAccessLeftHandSide(decl.initializer),
+                        /*requireStringLiteralLikeArgument*/ true,
+                    )
                 );
             case SyntaxKind.ExpressionStatement: {
                 const { expression } = statement as ExpressionStatement;
-                if (!isBinaryExpression(expression)) return isRequireCall(expression, /*requireStringLiteralLikeArgument*/ true);
+                if (!isBinaryExpression(expression)) {
+                    return isRequireCall(expression, /*requireStringLiteralLikeArgument*/ true);
+                }
                 const kind = getAssignmentDeclarationKind(expression);
-                return kind === AssignmentDeclarationKind.ExportsProperty || kind === AssignmentDeclarationKind.ModuleExports;
+                return kind === AssignmentDeclarationKind.ExportsProperty ||
+                    kind === AssignmentDeclarationKind.ModuleExports;
             }
             default:
                 return false;
@@ -205,7 +219,8 @@ function addConvertToAsyncFunctionDiagnostics(
     // need to check function before checking map so that deeper levels of nested callbacks are checked
     if (isConvertibleFunction(node, checker) && !visitedNestedConvertibleFunctions.has(getKeyFromNode(node))) {
         diags.push(createDiagnosticForNode(
-            !node.name && isVariableDeclaration(node.parent) && isIdentifier(node.parent.name) ? node.parent.name : node,
+            !node.name && isVariableDeclaration(node.parent) && isIdentifier(node.parent.name) ? node.parent.name
+                : node,
             Diagnostics.This_may_be_converted_to_an_async_function,
         ));
     }

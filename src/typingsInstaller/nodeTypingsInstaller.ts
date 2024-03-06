@@ -50,7 +50,11 @@ class FileLog implements Log {
 }
 
 /** Used if `--npmLocation` is not passed. */
-function getDefaultNPMLocation(processName: string, validateDefaultNpmLocation: boolean, host: InstallTypingHost): string {
+function getDefaultNPMLocation(
+    processName: string,
+    validateDefaultNpmLocation: boolean,
+    host: InstallTypingHost,
+): string {
     if (path.basename(processName).indexOf("node") === 0) {
         const npmPath = path.join(path.dirname(process.argv[0]), "npm");
         if (!validateDefaultNpmLocation) {
@@ -67,7 +71,11 @@ interface TypesRegistryFile {
     entries: MapLike<MapLike<string>>;
 }
 
-function loadTypesRegistryFile(typesRegistryFilePath: string, host: InstallTypingHost, log: Log): Map<string, MapLike<string>> {
+function loadTypesRegistryFile(
+    typesRegistryFilePath: string,
+    host: InstallTypingHost,
+    log: Log,
+): Map<string, MapLike<string>> {
     if (!host.fileExists(typesRegistryFilePath)) {
         if (log.isEnabled()) {
             log.writeLine(`Types registry file '${typesRegistryFilePath}' does not exist`);
@@ -92,7 +100,10 @@ function loadTypesRegistryFile(typesRegistryFilePath: string, host: InstallTypin
 
 const typesRegistryPackageName = "types-registry";
 function getTypesRegistryFileLocation(globalTypingsCacheLocation: string): string {
-    return combinePaths(normalizeSlashes(globalTypingsCacheLocation), `node_modules/${typesRegistryPackageName}/index.json`);
+    return combinePaths(
+        normalizeSlashes(globalTypingsCacheLocation),
+        `node_modules/${typesRegistryPackageName}/index.json`,
+    );
 }
 
 interface ExecSyncOptions {
@@ -121,8 +132,13 @@ export class NodeTypingsInstaller extends TypingsInstaller {
         super(
             sys,
             globalTypingsCacheLocation,
-            typingSafeListLocation ? toPath(typingSafeListLocation, "", createGetCanonicalFileName(sys.useCaseSensitiveFileNames))
-                : toPath("typingSafeList.json", libDirectory, createGetCanonicalFileName(sys.useCaseSensitiveFileNames)),
+            typingSafeListLocation ?
+                toPath(typingSafeListLocation, "", createGetCanonicalFileName(sys.useCaseSensitiveFileNames))
+                : toPath(
+                    "typingSafeList.json",
+                    libDirectory,
+                    createGetCanonicalFileName(sys.useCaseSensitiveFileNames),
+                ),
             typesMapLocation ? toPath(typesMapLocation, "", createGetCanonicalFileName(sys.useCaseSensitiveFileNames))
                 : toPath("typesMap.json", libDirectory, createGetCanonicalFileName(sys.useCaseSensitiveFileNames)),
             throttleLimit,
@@ -152,9 +168,12 @@ export class NodeTypingsInstaller extends TypingsInstaller {
             if (this.log.isEnabled()) {
                 this.log.writeLine(`Updating ${typesRegistryPackageName} npm package...`);
             }
-            this.execSyncAndLog(`${this.npmPath} install --ignore-scripts ${typesRegistryPackageName}@${this.latestDistTag}`, {
-                cwd: globalTypingsCacheLocation,
-            });
+            this.execSyncAndLog(
+                `${this.npmPath} install --ignore-scripts ${typesRegistryPackageName}@${this.latestDistTag}`,
+                {
+                    cwd: globalTypingsCacheLocation,
+                },
+            );
             if (this.log.isEnabled()) {
                 this.log.writeLine(`Updated ${typesRegistryPackageName} npm package`);
             }
@@ -234,7 +253,9 @@ export class NodeTypingsInstaller extends TypingsInstaller {
         catch (error) {
             const { stdout, stderr } = error;
             this.log.writeLine(
-                `    Failed. stdout:${indent(sys.newLine, stdout)}${sys.newLine}    stderr:${indent(sys.newLine, stderr)}`,
+                `    Failed. stdout:${indent(sys.newLine, stdout)}${sys.newLine}    stderr:${
+                    indent(sys.newLine, stderr)
+                }`,
             );
             return true;
         }

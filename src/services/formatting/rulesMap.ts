@@ -160,6 +160,9 @@ function getInsertionIndex(indexBitmap: number, maskPosition: RulesPosition) {
 
 function increaseInsertionIndex(indexBitmap: number, maskPosition: RulesPosition): number {
     const value = ((indexBitmap >> maskPosition) & mask) + 1;
-    Debug.assert((value & mask) === value, "Adding more rules into the sub-bucket than allowed. Maximum allowed is 32 rules.");
+    Debug.assert(
+        (value & mask) === value,
+        "Adding more rules into the sub-bucket than allowed. Maximum allowed is 32 rules.",
+    );
     return (indexBitmap & ~(mask << maskPosition)) | (value << maskPosition);
 }

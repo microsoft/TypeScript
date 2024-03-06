@@ -29,7 +29,10 @@ registerCodeFix({
     getCodeActions(context) {
         const { sourceFile, span, preferences } = context;
         const property = getPropertyAccessExpression(sourceFile, span.start);
-        const changes = textChanges.ChangeTracker.with(context, t => doChange(t, context.sourceFile, property, preferences));
+        const changes = textChanges.ChangeTracker.with(
+            context,
+            t => doChange(t, context.sourceFile, property, preferences),
+        );
         return [
             createCodeFixAction(
                 fixId,

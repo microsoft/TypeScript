@@ -30,7 +30,9 @@ describe("unittests:: tsc:: declarationEmit::", () => {
             { path: testPath(file.path) ? replacePath(file.path) : file.path, symLink: replacePath(file.symLink) };
     }
 
-    function verifyDeclarationEmit({ subScenario, files, rootProject, changeCaseFileTestPath }: VerifyDeclarationEmitInput) {
+    function verifyDeclarationEmit(
+        { subScenario, files, rootProject, changeCaseFileTestPath }: VerifyDeclarationEmitInput,
+    ) {
         describe(subScenario, () => {
             verifyTscWatch({
                 scenario: "declarationEmit",
@@ -47,7 +49,9 @@ describe("unittests:: tsc:: declarationEmit::", () => {
                 subScenario: caseChangeScenario,
                 sys: () =>
                     createWatchedSystem(
-                        files.map(f => changeCaseFile(f, changeCaseFileTestPath, str => str.replace("myproject", "myProject"))),
+                        files.map(f =>
+                            changeCaseFile(f, changeCaseFileTestPath, str => str.replace("myproject", "myProject"))
+                        ),
                         { currentDirectory: "/user/username/projects/myproject" },
                     ),
                 commandLineArgs: ["-p", rootProject, "--explainFiles"],
@@ -156,7 +160,8 @@ describe("unittests:: tsc:: declarationEmit::", () => {
         });
 
         verifyDeclarationEmit({
-            subScenario: "when same version is referenced through source and another symlinked package with indirect link",
+            subScenario:
+                "when same version is referenced through source and another symlinked package with indirect link",
             rootProject: "plugin-one",
             files: [
                 {
@@ -167,7 +172,10 @@ describe("unittests:: tsc:: declarationEmit::", () => {
                         main: "dist/commonjs/index.js",
                     }),
                 },
-                { path: `/user/username/projects/myproject/plugin-two/dist/commonjs/index.d.ts`, content: pluginTwoDts() },
+                {
+                    path: `/user/username/projects/myproject/plugin-two/dist/commonjs/index.d.ts`,
+                    content: pluginTwoDts(),
+                },
                 {
                     path: `/user/username/projects/myproject/plugin-two/node_modules/typescript-fsa/package.json`,
                     content: fsaPackageJson(),

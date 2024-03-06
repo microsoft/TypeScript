@@ -73,7 +73,8 @@ registerCodeFix({
 
                 const { exportName, node, moduleSourceFile } = info;
                 if (
-                    tryGetExportDeclaration(moduleSourceFile, exportName.isTypeOnly) === undefined && canHaveExportModifier(node)
+                    tryGetExportDeclaration(moduleSourceFile, exportName.isTypeOnly) === undefined &&
+                    canHaveExportModifier(node)
                 ) {
                     changes.insertExportModifier(moduleSourceFile, node);
                 }
@@ -230,7 +231,12 @@ function updateExport(
     );
 }
 
-function createExport(changes: textChanges.ChangeTracker, program: Program, sourceFile: SourceFile, names: ExportName[]) {
+function createExport(
+    changes: textChanges.ChangeTracker,
+    program: Program,
+    sourceFile: SourceFile,
+    names: ExportName[],
+) {
     changes.insertNodeAtEndOfScope(
         sourceFile,
         sourceFile,
@@ -248,7 +254,10 @@ function createExport(changes: textChanges.ChangeTracker, program: Program, sour
 
 function createExportSpecifiers(names: ExportName[], allowTypeModifier: boolean) {
     return factory.createNodeArray(
-        map(names, n => factory.createExportSpecifier(allowTypeModifier && n.isTypeOnly, /*propertyName*/ undefined, n.node)),
+        map(
+            names,
+            n => factory.createExportSpecifier(allowTypeModifier && n.isTypeOnly, /*propertyName*/ undefined, n.node),
+        ),
     );
 }
 
@@ -257,7 +266,9 @@ function getNodeOfSymbol(symbol: Symbol) {
         return firstOrUndefined(symbol.declarations);
     }
     const declaration = symbol.valueDeclaration;
-    const variableStatement = isVariableDeclaration(declaration) ? tryCast(declaration.parent.parent, isVariableStatement)
+    const variableStatement = isVariableDeclaration(declaration) ?
+        tryCast(declaration.parent.parent, isVariableStatement)
         : undefined;
-    return variableStatement && length(variableStatement.declarationList.declarations) === 1 ? variableStatement : declaration;
+    return variableStatement && length(variableStatement.declarationList.declarations) === 1 ? variableStatement
+        : declaration;
 }

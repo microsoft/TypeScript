@@ -74,7 +74,9 @@ describe("unittests:: tsbuild:: commandLine::", () => {
         }
         function fs(options: ts.CompilerOptions) {
             return loadProjectFromFiles({
-                "/src/project/tsconfig.json": jsonToReadableText({ compilerOptions: compilerOptionsToConfigJson(options) }),
+                "/src/project/tsconfig.json": jsonToReadableText({
+                    compilerOptions: compilerOptionsToConfigJson(options),
+                }),
                 "/src/project/a.ts": `export const a = 10;const aLocal = 10;`,
                 "/src/project/b.ts": `export const b = 10;const bLocal = 10;`,
                 "/src/project/c.ts": `import { a } from "./a";export const c = a;`,
@@ -117,7 +119,9 @@ describe("unittests:: tsbuild:: commandLine::", () => {
                 noChangeRun,
                 withOptionChange("with declaration and declarationMap", "--declaration", "--declarationMap"),
                 noChangeWithSubscenario("should re-emit only dts so they dont contain sourcemap"),
-                withEmitDeclarationOnlyChangeAndDiscrepancyExplanation("with emitDeclarationOnly should not emit anything"),
+                withEmitDeclarationOnlyChangeAndDiscrepancyExplanation(
+                    "with emitDeclarationOnly should not emit anything",
+                ),
                 noChangeRun,
                 localChange(),
                 withOptionChangeAndDiscrepancyExplanation("with declaration should not emit anything", "--declaration"),
@@ -144,7 +148,11 @@ describe("unittests:: tsbuild:: commandLine::", () => {
                 withOptionChange("with sourceMap", "--sourceMap"),
                 noChangeWithSubscenario("emit js files"),
                 withOptionChange("with declaration and declarationMap", "--declaration", "--declarationMap"),
-                withOptionChange("with declaration and declarationMap, should not re-emit", "--declaration", "--declarationMap"),
+                withOptionChange(
+                    "with declaration and declarationMap, should not re-emit",
+                    "--declaration",
+                    "--declarationMap",
+                ),
             ],
             baselinePrograms: true,
         });
@@ -166,7 +174,11 @@ describe("unittests:: tsbuild:: commandLine::", () => {
                 withOptionChange("with sourceMap", "--sourceMap"),
                 noChangeWithSubscenario("emit js files"),
                 withOptionChange("with declaration and declarationMap", "--declaration", "--declarationMap"),
-                withOptionChange("with declaration and declarationMap, should not re-emit", "--declaration", "--declarationMap"),
+                withOptionChange(
+                    "with declaration and declarationMap, should not re-emit",
+                    "--declaration",
+                    "--declarationMap",
+                ),
             ],
             baselinePrograms: true,
         });
@@ -293,7 +305,12 @@ describe("unittests:: tsbuild:: commandLine::", () => {
         verifyWithIncremental({ composite: true });
         verifyWithIncremental({ incremental: true, declaration: true });
         verifyWithIncremental({ composite: true, outFile: "../outFile.js", module: ts.ModuleKind.AMD });
-        verifyWithIncremental({ incremental: true, declaration: true, outFile: "../outFile.js", module: ts.ModuleKind.AMD });
+        verifyWithIncremental({
+            incremental: true,
+            declaration: true,
+            outFile: "../outFile.js",
+            module: ts.ModuleKind.AMD,
+        });
 
         verifyTsc({
             scenario: "commandLine",
@@ -415,7 +432,13 @@ describe("unittests:: tsbuild:: commandLine::", () => {
         verifyTsc({
             scenario: "commandLine",
             subScenario: "emitDeclarationOnly false on commandline with declaration with outFile",
-            fs: () => fs({ declaration: true, emitDeclarationOnly: true, outFile: "../outFile.js", module: ts.ModuleKind.AMD }),
+            fs: () =>
+                fs({
+                    declaration: true,
+                    emitDeclarationOnly: true,
+                    outFile: "../outFile.js",
+                    module: ts.ModuleKind.AMD,
+                }),
             commandLineArgs: ["--b", "/src/project2/src", "--verbose"],
             edits: [
                 noChangeRun,

@@ -85,7 +85,9 @@ import {
 } from "../_namespaces/ts";
 
 /** @internal */
-export function transformLegacyDecorators(context: TransformationContext): (x: SourceFile | Bundle) => SourceFile | Bundle {
+export function transformLegacyDecorators(
+    context: TransformationContext,
+): (x: SourceFile | Bundle) => SourceFile | Bundle {
     const {
         factory,
         getEmitHelperFactory: emitHelpers,
@@ -169,7 +171,9 @@ export function transformLegacyDecorators(context: TransformationContext): (x: S
         return !!(decorator.transformFlags & TransformFlags.ContainsPrivateIdentifierInExpression);
     }
 
-    function parameterDecoratorsContainPrivateIdentifierInExpression(parameterDecorators: readonly Decorator[] | undefined) {
+    function parameterDecoratorsContainPrivateIdentifierInExpression(
+        parameterDecorators: readonly Decorator[] | undefined,
+    ) {
         return some(parameterDecorators, decoratorContainsPrivateIdentifierInExpression);
     }
 
@@ -353,9 +357,12 @@ export function transformLegacyDecorators(context: TransformationContext): (x: S
         // static initializers are evaluated.
         const assignClassAliasInStaticBlock = languageVersion >= ScriptTarget.ES2022 &&
             !!classAlias &&
-            some(members, member =>
-                isPropertyDeclaration(member) && hasSyntacticModifier(member, ModifierFlags.Static) ||
-                isClassStaticBlockDeclaration(member));
+            some(
+                members,
+                member =>
+                    isPropertyDeclaration(member) && hasSyntacticModifier(member, ModifierFlags.Static) ||
+                    isClassStaticBlockDeclaration(member),
+            );
         if (assignClassAliasInStaticBlock) {
             members = setTextRange(
                 factory.createNodeArray([
@@ -568,7 +575,10 @@ export function transformLegacyDecorators(context: TransformationContext): (x: S
     function addClassElementDecorationStatements(statements: Statement[], node: ClassDeclaration, isStatic: boolean) {
         addRange(
             statements,
-            map(generateClassElementDecorationExpressions(node, isStatic), expr => factory.createExpressionStatement(expr)),
+            map(
+                generateClassElementDecorationExpressions(node, isStatic),
+                expr => factory.createExpressionStatement(expr),
+            ),
         );
     }
 
@@ -591,7 +601,10 @@ export function transformLegacyDecorators(context: TransformationContext): (x: S
      * @param isStatic A value indicating whether to retrieve static or instance members of
      *                 the class.
      */
-    function getDecoratedClassElements(node: ClassExpression | ClassDeclaration, isStatic: boolean): readonly ClassElement[] {
+    function getDecoratedClassElements(
+        node: ClassExpression | ClassDeclaration,
+        isStatic: boolean,
+    ): readonly ClassElement[] {
         return filter(node.members, m => isDecoratedClassElement(m, isStatic, node));
     }
 

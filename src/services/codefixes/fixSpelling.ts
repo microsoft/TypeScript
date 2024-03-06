@@ -53,7 +53,9 @@ const errorCodes = [
     Diagnostics.Cannot_find_name_0_Did_you_mean_the_instance_member_this_0.code,
     Diagnostics.Cannot_find_name_0_Did_you_mean_the_static_member_1_0.code,
     Diagnostics._0_has_no_exported_member_named_1_Did_you_mean_2.code,
-    Diagnostics.This_member_cannot_have_an_override_modifier_because_it_is_not_declared_in_the_base_class_0_Did_you_mean_1.code,
+    Diagnostics
+        .This_member_cannot_have_an_override_modifier_because_it_is_not_declared_in_the_base_class_0_Did_you_mean_1
+        .code,
     Diagnostics
         .This_member_cannot_have_a_JSDoc_comment_with_an_override_tag_because_it_is_not_declared_in_the_base_class_0_Did_you_mean_1
         .code,
@@ -70,7 +72,10 @@ registerCodeFix({
         if (!info) return undefined;
         const { node, suggestedSymbol } = info;
         const target = getEmitScriptTarget(context.host.getCompilationSettings());
-        const changes = textChanges.ChangeTracker.with(context, t => doChange(t, sourceFile, node, suggestedSymbol, target));
+        const changes = textChanges.ChangeTracker.with(
+            context,
+            t => doChange(t, sourceFile, node, suggestedSymbol, target),
+        );
         return [
             createCodeFixAction(
                 "spelling",

@@ -210,7 +210,10 @@ class CompilerTest {
         }
 
         if (configurationOverrides) {
-            testCaseContent = { ...testCaseContent, settings: { ...testCaseContent.settings, ...configurationOverrides } };
+            testCaseContent = {
+                ...testCaseContent,
+                settings: { ...testCaseContent.settings, ...configurationOverrides },
+            };
         }
 
         const units = testCaseContent.testUnitData;
@@ -224,7 +227,11 @@ class CompilerTest {
             tsConfigOptions = ts.cloneCompilerOptions(testCaseContent.tsConfig.options);
             this.tsConfigFiles.push(this.createHarnessTestFile(testCaseContent.tsConfigFileUnitData!));
             for (const unit of units) {
-                if (testCaseContent.tsConfig.fileNames.includes(ts.getNormalizedAbsolutePath(unit.name, absoluteRootDir))) {
+                if (
+                    testCaseContent.tsConfig.fileNames.includes(
+                        ts.getNormalizedAbsolutePath(unit.name, absoluteRootDir),
+                    )
+                ) {
                     this.toBeCompiled.push(this.createHarnessTestFile(unit));
                 }
                 else {
@@ -307,10 +314,11 @@ class CompilerTest {
     public verifySourceMapRecord() {
         if (this.options.sourceMap || this.options.inlineSourceMap || this.options.declarationMap) {
             const record = Utils.removeTestPathPrefixes(this.result.getSourceMapRecord()!);
-            const baseline = (this.options.noEmitOnError && this.result.diagnostics.length !== 0) || record === undefined
-                // Because of the noEmitOnError option no files are created. We need to return null because baselining isn't required.
-                ? null // eslint-disable-line no-null/no-null
-                : record;
+            const baseline =
+                (this.options.noEmitOnError && this.result.diagnostics.length !== 0) || record === undefined
+                    // Because of the noEmitOnError option no files are created. We need to return null because baselining isn't required.
+                    ? null // eslint-disable-line no-null/no-null
+                    : record;
             Baseline.runBaseline(this.configuredName.replace(/\.tsx?$/, ".sourcemap.txt"), baseline);
         }
     }
@@ -354,7 +362,9 @@ class CompilerTest {
             this.configuredName,
             this.fileName,
             this.result.program!,
-            this.toBeCompiled.concat(this.otherFiles).filter(file => !!this.result.program!.getSourceFile(file.unitName)),
+            this.toBeCompiled.concat(this.otherFiles).filter(file =>
+                !!this.result.program!.getSourceFile(file.unitName)
+            ),
             /*opts*/ undefined,
             /*multifile*/ undefined,
             /*skipTypeBaselines*/ undefined,

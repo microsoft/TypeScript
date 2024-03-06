@@ -51,7 +51,11 @@ describe("unittests:: tsserver:: completions", () => {
             command: ts.server.protocol.CommandTypes.CompletionDetails,
             arguments: {
                 ...requestLocation,
-                entryNames: [{ name: "foo", source: "/a", data: { exportName: "foo", fileName: "/a.ts", exportMapKey } }],
+                entryNames: [{
+                    name: "foo",
+                    source: "/a",
+                    data: { exportName: "foo", fileName: "/a.ts", exportMapKey },
+                }],
             },
         });
 
@@ -63,7 +67,11 @@ describe("unittests:: tsserver:: completions", () => {
             command: ts.server.protocol.CommandTypes.CompletionDetailsFull,
             arguments: {
                 ...requestLocation,
-                entryNames: [{ name: "foo", source: "/a", data: { exportName: "foo", fileName: "/a.ts", exportMapKey } }],
+                entryNames: [{
+                    name: "foo",
+                    source: "/a",
+                    data: { exportName: "foo", fileName: "/a.ts", exportMapKey },
+                }],
             },
         });
         baselineTsserverLogs("completions", "works", session);

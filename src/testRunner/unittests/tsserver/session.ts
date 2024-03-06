@@ -218,7 +218,9 @@ describe("unittests:: tsserver:: Session:: General functionality", () => {
     });
 
     describe("onMessage", () => {
-        const allCommandNames: ts.server.protocol.CommandTypes[] = Object.values((ts.server.protocol as any).CommandTypes);
+        const allCommandNames: ts.server.protocol.CommandTypes[] = Object.values(
+            (ts.server.protocol as any).CommandTypes,
+        );
 
         it("should not throw when commands are executed with invalid arguments", () => {
             let i = 0;
@@ -391,7 +393,9 @@ describe("unittests:: tsserver:: Session:: exceptions", () => {
     const command = "testhandler";
     class TestSession extends ts.server.Session {
         lastSent: ts.server.protocol.Message | undefined;
-        private exceptionRaisingHandler(_request: ts.server.protocol.Request): { response?: any; responseRequired: boolean; } {
+        private exceptionRaisingHandler(
+            _request: ts.server.protocol.Request,
+        ): { response?: any; responseRequired: boolean; } {
             f1();
             return ts.Debug.fail(); // unreachable, throw to make compiler happy
             function f1() {

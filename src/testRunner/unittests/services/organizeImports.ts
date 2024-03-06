@@ -1014,11 +1014,17 @@ export * from "lib";
         ) {
             it(
                 testName,
-                () => runBaseline(`organizeImports/${testName}.ts`, skipDestructiveCodeActions, testFile, ...otherFiles),
+                () =>
+                    runBaseline(`organizeImports/${testName}.ts`, skipDestructiveCodeActions, testFile, ...otherFiles),
             );
         }
 
-        function runBaseline(baselinePath: string, skipDestructiveCodeActions: boolean, testFile: File, ...otherFiles: File[]) {
+        function runBaseline(
+            baselinePath: string,
+            skipDestructiveCodeActions: boolean,
+            testFile: File,
+            ...otherFiles: File[]
+        ) {
             const { path: testPath, content: testContent } = testFile;
             const languageService = makeLanguageService(testFile, ...otherFiles);
             const changes = languageService.organizeImports(

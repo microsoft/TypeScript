@@ -101,7 +101,9 @@ export type TestSessionPartialOptionsAndHost =
 export type TestSessionConstructorOptions = TestServerHost | TestSessionPartialOptionsAndHost;
 export type TestSessionRequest<T extends ts.server.protocol.Request> = Pick<T, "command" | "arguments">;
 
-function getTestSessionPartialOptionsAndHost(optsOrHost: TestSessionConstructorOptions): TestSessionPartialOptionsAndHost {
+function getTestSessionPartialOptionsAndHost(
+    optsOrHost: TestSessionConstructorOptions,
+): TestSessionPartialOptionsAndHost {
     // eslint-disable-next-line local/no-in-operator
     return "host" in optsOrHost ?
         optsOrHost :
@@ -117,7 +119,8 @@ export class TestSession extends ts.server.Session {
     constructor(optsOrHost: TestSessionConstructorOptions) {
         const opts = getTestSessionPartialOptionsAndHost(optsOrHost);
         opts.logger = opts.logger || createLoggerWithInMemoryLogs(opts.host);
-        const typingsInstaller = !opts.disableAutomaticTypingAcquisition ? new TestTypingsInstallerAdapter(opts) : undefined;
+        const typingsInstaller = !opts.disableAutomaticTypingAcquisition ? new TestTypingsInstallerAdapter(opts)
+            : undefined;
         const cancellationToken = opts.useCancellationToken ?
             new TestServerCancellationToken(
                 opts.logger,
@@ -169,7 +172,8 @@ export class TestSession extends ts.server.Session {
             this.logger.info(
                 `response:${
                     ts.server.stringifyIndented(
-                        response.response === ts.getSupportedCodeFixes() ? { ...response, response: "ts.getSupportedCodeFixes()" }
+                        response.response === ts.getSupportedCodeFixes() ?
+                            { ...response, response: "ts.getSupportedCodeFixes()" }
                             : response,
                     )
                 }`,
@@ -327,7 +331,8 @@ export class TestServerCancellationToken implements ts.server.ServerCancellation
         // If the request id is the request to cancel and isCancellationRequestedCount
         // has been met then cancel the request. Ex: cancel the request if it is a
         // nav bar request & isCancellationRequested() has already been called three times.
-        const result = this.requestToCancel === this.currentId && this.isCancellationRequestedCount >= this.cancelAfterRequest;
+        const result = this.requestToCancel === this.currentId &&
+            this.isCancellationRequestedCount >= this.cancelAfterRequest;
         if (result) this.logger.log(`TestServerCancellationToken:: Cancellation is requested`);
         return result;
     }
@@ -389,7 +394,9 @@ export function openExternalProjectsForSession(projects: ts.server.protocol.Exte
 }
 
 export function setCompilerOptionsForInferredProjectsRequestForSession(
-    options: ts.server.protocol.InferredProjectCompilerOptions | ts.server.protocol.SetCompilerOptionsForInferredProjectsArgs,
+    options:
+        | ts.server.protocol.InferredProjectCompilerOptions
+        | ts.server.protocol.SetCompilerOptionsForInferredProjectsArgs,
     session: TestSession,
 ) {
     session.executeCommandSeq<ts.server.protocol.SetCompilerOptionsForInferredProjectsRequest>({
@@ -476,7 +483,9 @@ function verifyErrorsUsingGeterrForProject(
     });
 }
 
-function verifyErrorsUsingSyncMethods({ scenario, subScenario, allFiles, openFiles, syncDiagnostics }: VerifyGetErrScenario) {
+function verifyErrorsUsingSyncMethods(
+    { scenario, subScenario, allFiles, openFiles, syncDiagnostics }: VerifyGetErrScenario,
+) {
     it("verifies the errors using sync commands", () => {
         const host = createServerHost([...allFiles(), libFile]);
         const session = new TestSession(host);

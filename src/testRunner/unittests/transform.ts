@@ -42,7 +42,9 @@ describe("unittests:: TransformAPI", () => {
         return (file: ts.SourceFile) => ts.visitNode(file, visitor, ts.isSourceFile);
     }
 
-    function replaceIdentifiersNamedOldNameWithNewName<T extends ts.SourceFile | ts.Bundle>(context: ts.TransformationContext) {
+    function replaceIdentifiersNamedOldNameWithNewName<T extends ts.SourceFile | ts.Bundle>(
+        context: ts.TransformationContext,
+    ) {
         const previousOnSubstituteNode = context.onSubstituteNode;
         context.enableSubstitution(ts.SyntaxKind.Identifier);
         context.onSubstituteNode = (hint, node) => {
@@ -79,7 +81,10 @@ describe("unittests:: TransformAPI", () => {
     }
 
     function transformSourceFile(sourceText: string, transformers: ts.TransformerFactory<ts.SourceFile>[]) {
-        const transformed = ts.transform(ts.createSourceFile("source.ts", sourceText, ts.ScriptTarget.ES2015), transformers);
+        const transformed = ts.transform(
+            ts.createSourceFile("source.ts", sourceText, ts.ScriptTarget.ES2015),
+            transformers,
+        );
         const printer = ts.createPrinter({ newLine: ts.NewLineKind.CarriageReturnLineFeed }, {
             onEmitNode: transformed.emitNodeWithNotification,
             substituteNode: transformed.substituteNode,

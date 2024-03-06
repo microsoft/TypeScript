@@ -100,7 +100,10 @@ declare module "../compiler/types" {
         getDeclarations(): Declaration[] | undefined;
         getDocumentationComment(typeChecker: TypeChecker | undefined): SymbolDisplayPart[];
         /** @internal */
-        getContextualDocumentationComment(context: Node | undefined, checker: TypeChecker | undefined): SymbolDisplayPart[];
+        getContextualDocumentationComment(
+            context: Node | undefined,
+            checker: TypeChecker | undefined,
+        ): SymbolDisplayPart[];
         getJsDocTags(checker?: TypeChecker): JSDocTagInfo[];
         /** @internal */
         getContextualJsDocTags(context: Node | undefined, checker: TypeChecker | undefined): JSDocTagInfo[];
@@ -448,7 +451,10 @@ export interface LanguageServiceHost extends GetEffectiveTypeRootsHost, MinimalR
         sourceFileName?: string,
     ): DocumentPositionMapper | undefined;
     /** @internal */ getSourceFileLike?(fileName: string): SourceFileLike | undefined;
-    /** @internal */ getPackageJsonsVisibleToFile?(fileName: string, rootDir?: string): readonly ProjectPackageJsonInfo[];
+    /** @internal */ getPackageJsonsVisibleToFile?(
+        fileName: string,
+        rootDir?: string,
+    ): readonly ProjectPackageJsonInfo[];
     /** @internal */ getNearestAncestorDirectoryWithPackageJson?(fileName: string): string | undefined;
     /** @internal */ getPackageJsonsForAutoImport?(rootDir?: string): readonly ProjectPackageJsonInfo[];
     /** @internal */ getCachedExportInfoMap?(): ExportInfoMap;
@@ -567,7 +573,11 @@ export interface LanguageService {
      * @param format Which format to use, defaults to "original"
      * @returns a number array encoded as triples of [start, length, ClassificationType, ...].
      */
-    getEncodedSemanticClassifications(fileName: string, span: TextSpan, format?: SemanticClassificationFormat): Classifications;
+    getEncodedSemanticClassifications(
+        fileName: string,
+        span: TextSpan,
+        format?: SemanticClassificationFormat,
+    ): Classifications;
 
     /**
      * Gets completion entries at a particular position in a file.
@@ -606,7 +616,12 @@ export interface LanguageService {
         data: CompletionEntryData | undefined,
     ): CompletionEntryDetails | undefined;
 
-    getCompletionEntrySymbol(fileName: string, position: number, name: string, source: string | undefined): Symbol | undefined;
+    getCompletionEntrySymbol(
+        fileName: string,
+        position: number,
+        name: string,
+        source: string | undefined,
+    ): Symbol | undefined;
 
     /**
      * Gets semantic information about the identifier at a particular position in a
@@ -670,7 +685,11 @@ export interface LanguageService {
 
     getReferencesAtPosition(fileName: string, position: number): ReferenceEntry[] | undefined;
     findReferences(fileName: string, position: number): ReferencedSymbol[] | undefined;
-    getDocumentHighlights(fileName: string, position: number, filesToSearch: string[]): DocumentHighlights[] | undefined;
+    getDocumentHighlights(
+        fileName: string,
+        position: number,
+        filesToSearch: string[],
+    ): DocumentHighlights[] | undefined;
     getFileReferences(fileName: string): ReferenceEntry[];
 
     getNavigateToItems(
@@ -746,7 +765,10 @@ export interface LanguageService {
         preferences: UserPreferences,
     ): CombinedCodeActions;
 
-    applyCodeActionCommand(action: CodeActionCommand, formatSettings?: FormatCodeSettings): Promise<ApplyCodeActionCommandResult>;
+    applyCodeActionCommand(
+        action: CodeActionCommand,
+        formatSettings?: FormatCodeSettings,
+    ): Promise<ApplyCodeActionCommandResult>;
     applyCodeActionCommand(
         action: CodeActionCommand[],
         formatSettings?: FormatCodeSettings,
@@ -1787,7 +1809,11 @@ export interface Classifier {
      *                                  subsume the classification.
      * @deprecated Use getLexicalClassifications instead.
      */
-    getClassificationsForLine(text: string, lexState: EndOfLineState, syntacticClassifierAbsent: boolean): ClassificationResult;
+    getClassificationsForLine(
+        text: string,
+        lexState: EndOfLineState,
+        syntacticClassifierAbsent: boolean,
+    ): ClassificationResult;
     getEncodedLexicalClassifications(
         text: string,
         endOfLineState: EndOfLineState,

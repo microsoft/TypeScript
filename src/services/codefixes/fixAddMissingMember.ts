@@ -289,7 +289,10 @@ registerCodeFix({
                         );
                     }
                     else {
-                        if (isJSFile && !isInterfaceDeclaration(parentDeclaration) && !isTypeLiteralNode(parentDeclaration)) {
+                        if (
+                            isJSFile && !isInterfaceDeclaration(parentDeclaration) &&
+                            !isTypeLiteralNode(parentDeclaration)
+                        ) {
                             addMissingMemberInJs(
                                 changes,
                                 declSourceFile,
@@ -381,7 +384,10 @@ function getInfo(
     const parent = token.parent;
 
     if (errorCode === Diagnostics.Argument_of_type_0_is_not_assignable_to_parameter_of_type_1.code) {
-        if (!(token.kind === SyntaxKind.OpenBraceToken && isObjectLiteralExpression(parent) && isCallExpression(parent.parent))) {
+        if (
+            !(token.kind === SyntaxKind.OpenBraceToken && isObjectLiteralExpression(parent) &&
+                isCallExpression(parent.parent))
+        ) {
             return undefined;
         }
 
@@ -432,7 +438,10 @@ function getInfo(
 
     if (!isMemberName(token)) return undefined;
 
-    if (isIdentifier(token) && hasInitializer(parent) && parent.initializer && isObjectLiteralExpression(parent.initializer)) {
+    if (
+        isIdentifier(token) && hasInitializer(parent) && parent.initializer &&
+        isObjectLiteralExpression(parent.initializer)
+    ) {
         const targetType = checker.getContextualType(token) || checker.getTypeAtLocation(token);
         const properties = arrayFrom(
             checker.getUnmatchedProperties(
@@ -444,7 +453,13 @@ function getInfo(
         );
         if (!length(properties)) return undefined;
 
-        return { kind: InfoKind.ObjectLiteral, token, identifier: token.text, properties, parentDeclaration: parent.initializer };
+        return {
+            kind: InfoKind.ObjectLiteral,
+            token,
+            identifier: token.text,
+            properties,
+            parentDeclaration: parent.initializer,
+        };
     }
 
     if (isIdentifier(token) && isJsxOpeningLikeElement(token.parent)) {
@@ -482,7 +497,10 @@ function getInfo(
     if (isIdentifier(token) && isCallExpression(parent.parent)) {
         const moduleDeclaration = find(symbol.declarations, isModuleDeclaration);
         const moduleDeclarationSourceFile = moduleDeclaration?.getSourceFile();
-        if (moduleDeclaration && moduleDeclarationSourceFile && !isSourceFileFromLibrary(program, moduleDeclarationSourceFile)) {
+        if (
+            moduleDeclaration && moduleDeclarationSourceFile &&
+            !isSourceFileFromLibrary(program, moduleDeclarationSourceFile)
+        ) {
             return {
                 kind: InfoKind.Function,
                 token,
@@ -520,7 +538,8 @@ function getInfo(
             | undefined;
     if (declaration && !isSourceFileFromLibrary(program, declaration.getSourceFile())) {
         const makeStatic = !isTypeLiteralNode(declaration) &&
-            ((leftExpressionType as TypeReference).target || leftExpressionType) !== checker.getDeclaredTypeOfSymbol(symbol);
+            ((leftExpressionType as TypeReference).target || leftExpressionType) !==
+                checker.getDeclaredTypeOfSymbol(symbol);
         if (makeStatic && (isPrivateIdentifier(token) || isInterfaceDeclaration(declaration))) return undefined;
 
         const declSourceFile = declaration.getSourceFile();
@@ -569,7 +588,13 @@ function createActionForAddMissingMemberInJavascriptFile(
 
     const changes = textChanges.ChangeTracker.with(
         context,
-        t => addMissingMemberInJs(t, declSourceFile, parentDeclaration, token, !!(modifierFlags & ModifierFlags.Static)),
+        t => addMissingMemberInJs(
+            t,
+            declSourceFile,
+            parentDeclaration,
+            token,
+            !!(modifierFlags & ModifierFlags.Static),
+        ),
     );
     if (changes.length === 0) {
         return undefined;
@@ -676,12 +701,18 @@ function createActionsForAddMissingMemberInTypeScriptFile(
     return actions;
 }
 
-function getTypeNode(checker: TypeChecker, node: ClassLikeDeclaration | InterfaceDeclaration | TypeLiteralNode, token: Node) {
+function getTypeNode(
+    checker: TypeChecker,
+    node: ClassLikeDeclaration | InterfaceDeclaration | TypeLiteralNode,
+    token: Node,
+) {
     let typeNode: TypeNode | undefined;
     if (token.parent.parent.kind === SyntaxKind.BinaryExpression) {
         const binaryExpression = token.parent.parent as BinaryExpression;
         const otherExpression = token.parent === binaryExpression.left ? binaryExpression.right : binaryExpression.left;
-        const widenedType = checker.getWidenedType(checker.getBaseTypeOfLiteralType(checker.getTypeAtLocation(otherExpression)));
+        const widenedType = checker.getWidenedType(
+            checker.getBaseTypeOfLiteralType(checker.getTypeAtLocation(otherExpression)),
+        );
         typeNode = checker.typeToTypeNode(widenedType, node, NodeBuilderFlags.NoTruncation);
     }
     else {
@@ -758,7 +789,10 @@ function createAddIndexSignatureAction(
         typeNode,
     );
 
-    const changes = textChanges.ChangeTracker.with(context, t => t.insertMemberAtStart(sourceFile, node, indexSignature));
+    const changes = textChanges.ChangeTracker.with(
+        context,
+        t => t.insertMemberAtStart(sourceFile, node, indexSignature),
+    );
     // No fixId here because code-fix-all currently only works on adding individual named properties.
     return createCodeFixActionWithoutFixAll(fixMissingMember, changes, [
         Diagnostics.Add_index_signature_for_property_0,
@@ -786,7 +820,8 @@ function getActionsForMissingMethodDeclaration(
             fixMissingMember,
             addMethodDeclarationChanges(modifierFlags & ModifierFlags.Static),
             [
-                modifierFlags & ModifierFlags.Static ? Diagnostics.Declare_static_method_0 : Diagnostics.Declare_method_0,
+                modifierFlags & ModifierFlags.Static ? Diagnostics.Declare_static_method_0
+                    : Diagnostics.Declare_method_0,
                 methodName,
             ],
             fixMissingMember,
@@ -896,7 +931,12 @@ function addFunctionDeclaration(
     }
 
     isReturnStatement(info.parentDeclaration)
-        ? changes.insertNodeBefore(info.sourceFile, info.parentDeclaration, functionDeclaration, /*blankLineBetween*/ true)
+        ? changes.insertNodeBefore(
+            info.sourceFile,
+            info.parentDeclaration,
+            functionDeclaration,
+            /*blankLineBetween*/ true,
+        )
         : changes.insertNodeAtEndOfScope(info.sourceFile, info.parentDeclaration, functionDeclaration);
     importAdder.writeFixes(changes);
 }
@@ -917,7 +957,10 @@ function addJsxAttributes(changes: textChanges.ChangeTracker, context: CodeFixCo
             info.parentDeclaration,
         );
         const name = factory.createIdentifier(attr.name);
-        const jsxAttribute = factory.createJsxAttribute(name, factory.createJsxExpression(/*dotDotDotToken*/ undefined, value));
+        const jsxAttribute = factory.createJsxAttribute(
+            name,
+            factory.createJsxExpression(/*dotDotDotToken*/ undefined, value),
+        );
         // formattingScanner requires the Identifier to have a context for scanning attributes with "-" (data-foo).
         setParent(name, jsxAttribute);
         return jsxAttribute;
@@ -930,7 +973,11 @@ function addJsxAttributes(changes: textChanges.ChangeTracker, context: CodeFixCo
     importAdder.writeFixes(changes);
 }
 
-function addObjectLiteralProperties(changes: textChanges.ChangeTracker, context: CodeFixContextBase, info: ObjectLiteralInfo) {
+function addObjectLiteralProperties(
+    changes: textChanges.ChangeTracker,
+    context: CodeFixContextBase,
+    info: ObjectLiteralInfo,
+) {
     const importAdder = createImportAdder(context.sourceFile, context.program, context.preferences, context.host);
     const quotePreference = getQuotePreference(context.sourceFile, context.preferences);
     const target = getEmitScriptTarget(context.program.getCompilerOptions());
@@ -1010,7 +1057,8 @@ function tryGetValueFromType(
         );
     }
     if (type.flags & TypeFlags.BooleanLiteral) {
-        return (type === checker.getFalseType() || type === checker.getFalseType(/*fresh*/ true)) ? factory.createFalse()
+        return (type === checker.getFalseType() || type === checker.getFalseType(/*fresh*/ true)) ?
+            factory.createFalse()
             : factory.createTrue();
     }
     if (type.flags & TypeFlags.Null) {
@@ -1041,7 +1089,10 @@ function tryGetValueFromType(
         return factory.createObjectLiteralExpression(props, /*multiLine*/ true);
     }
     if (getObjectFlags(type) & ObjectFlags.Anonymous) {
-        const decl = find(type.symbol.declarations || emptyArray, or(isFunctionTypeNode, isMethodSignature, isMethodDeclaration));
+        const decl = find(
+            type.symbol.declarations || emptyArray,
+            or(isFunctionTypeNode, isMethodSignature, isMethodDeclaration),
+        );
         if (decl === undefined) return createUndefined();
 
         const signature = checker.getSignaturesOfType(type, SignatureKind.Call);

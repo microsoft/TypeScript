@@ -109,7 +109,10 @@ export function transformJsx(context: TransformationContext): (x: SourceFile | B
             return currentFileState.filenameDeclaration.name;
         }
         const declaration = factory.createVariableDeclaration(
-            factory.createUniqueName("_jsxFileName", GeneratedIdentifierFlags.Optimistic | GeneratedIdentifierFlags.FileLevel),
+            factory.createUniqueName(
+                "_jsxFileName",
+                GeneratedIdentifierFlags.Optimistic | GeneratedIdentifierFlags.FileLevel,
+            ),
             /*exclamationToken*/ undefined,
             /*type*/ undefined,
             factory.createStringLiteral(currentSourceFile.fileName),
@@ -152,7 +155,11 @@ export function transformJsx(context: TransformationContext): (x: SourceFile | B
             GeneratedIdentifierFlags.Optimistic | GeneratedIdentifierFlags.FileLevel |
                 GeneratedIdentifierFlags.AllowNameSubstitution,
         );
-        const specifier = factory.createImportSpecifier(/*isTypeOnly*/ false, factory.createIdentifier(name), generatedName);
+        const specifier = factory.createImportSpecifier(
+            /*isTypeOnly*/ false,
+            factory.createIdentifier(name),
+            generatedName,
+        );
         setIdentifierGeneratedImportReference(generatedName, specifier);
         specifierSourceImports.set(name, specifier);
         return generatedName;
@@ -185,7 +192,9 @@ export function transformJsx(context: TransformationContext): (x: SourceFile | B
         }
         if (currentFileState.utilizedImplicitRuntimeImports) {
             for (
-                const [importSource, importSpecifiersMap] of arrayFrom(currentFileState.utilizedImplicitRuntimeImports.entries())
+                const [importSource, importSpecifiersMap] of arrayFrom(
+                    currentFileState.utilizedImplicitRuntimeImports.entries(),
+                )
             ) {
                 if (isExternalModule(node)) {
                     // Add `import` statement
@@ -211,14 +220,22 @@ export function transformJsx(context: TransformationContext): (x: SourceFile | B
                                 factory.createObjectBindingPattern(
                                     arrayFrom(
                                         importSpecifiersMap.values(),
-                                        s => factory.createBindingElement(/*dotDotDotToken*/ undefined, s.propertyName, s.name),
+                                        s => factory.createBindingElement(
+                                            /*dotDotDotToken*/ undefined,
+                                            s.propertyName,
+                                            s.name,
+                                        ),
                                     ),
                                 ),
                                 /*exclamationToken*/ undefined,
                                 /*type*/ undefined,
-                                factory.createCallExpression(factory.createIdentifier("require"), /*typeArguments*/ undefined, [
-                                    factory.createStringLiteral(importSource),
-                                ]),
+                                factory.createCallExpression(
+                                    factory.createIdentifier("require"),
+                                    /*typeArguments*/ undefined,
+                                    [
+                                        factory.createStringLiteral(importSource),
+                                    ],
+                                ),
                             ),
                         ], NodeFlags.Const),
                     );
@@ -290,7 +307,8 @@ export function transformJsx(context: TransformationContext): (x: SourceFile | B
     function hasProto(obj: ObjectLiteralExpression) {
         return obj.properties.some(p =>
             isPropertyAssignment(p) &&
-            (isIdentifier(p.name) && idText(p.name) === "__proto__" || isStringLiteral(p.name) && p.name.text === "__proto__")
+            (isIdentifier(p.name) && idText(p.name) === "__proto__" ||
+                isStringLiteral(p.name) && p.name.text === "__proto__")
         );
     }
 
@@ -347,7 +365,8 @@ export function transformJsx(context: TransformationContext): (x: SourceFile | B
             return result && factory.createPropertyAssignment("children", result);
         }
         const result = mapDefined(children, transformJsxChildToExpression);
-        return length(result) ? factory.createPropertyAssignment("children", factory.createArrayLiteralExpression(result))
+        return length(result) ?
+            factory.createPropertyAssignment("children", factory.createArrayLiteralExpression(result))
             : undefined;
     }
 
@@ -358,8 +377,12 @@ export function transformJsx(context: TransformationContext): (x: SourceFile | B
         location: TextRange,
     ) {
         const tagName = getTagName(node);
-        const childrenProp = children && children.length ? convertJsxChildrenToChildrenPropAssignment(children) : undefined;
-        const keyAttr = find(node.attributes.properties, p => !!p.name && isIdentifier(p.name) && p.name.escapedText === "key") as
+        const childrenProp = children && children.length ? convertJsxChildrenToChildrenPropAssignment(children)
+            : undefined;
+        const keyAttr = find(
+            node.attributes.properties,
+            p => !!p.name && isIdentifier(p.name) && p.name.escapedText === "key",
+        ) as
             | JsxAttribute
             | undefined;
         const attrs = keyAttr ? filter(node.attributes.properties, p => p !== keyAttr) : node.attributes.properties;
@@ -406,7 +429,10 @@ export function transformJsx(context: TransformationContext): (x: SourceFile | B
                 args.push(factory.createObjectLiteralExpression([
                     factory.createPropertyAssignment("fileName", getCurrentFileNameExpression()),
                     factory.createPropertyAssignment("lineNumber", factory.createNumericLiteral(lineCol.line + 1)),
-                    factory.createPropertyAssignment("columnNumber", factory.createNumericLiteral(lineCol.character + 1)),
+                    factory.createPropertyAssignment(
+                        "columnNumber",
+                        factory.createNumericLiteral(lineCol.character + 1),
+                    ),
                 ]));
                 // __self development flag
                 args.push(factory.createThis());
@@ -527,7 +553,10 @@ export function transformJsx(context: TransformationContext): (x: SourceFile | B
             transformJsxAttributesToExpression(attrs, children);
     }
 
-    function transformJsxAttributesToProps(attrs: readonly (JsxSpreadAttribute | JsxAttribute)[], children?: PropertyAssignment) {
+    function transformJsxAttributesToProps(
+        attrs: readonly (JsxSpreadAttribute | JsxAttribute)[],
+        children?: PropertyAssignment,
+    ) {
         const props = flatten(
             spanMap(
                 attrs,
@@ -670,7 +699,10 @@ export function transformJsx(context: TransformationContext): (x: SourceFile | B
                 // If we've seen any non-whitespace characters on this line, add the 'trim' of the line.
                 // (lastNonWhitespace === -1 is a special flag to detect whether the first line is all whitespace.)
                 if (firstNonWhitespace !== -1 && lastNonWhitespace !== -1) {
-                    acc = addLineOfJsxText(acc, text.substr(firstNonWhitespace, lastNonWhitespace - firstNonWhitespace + 1));
+                    acc = addLineOfJsxText(
+                        acc,
+                        text.substr(firstNonWhitespace, lastNonWhitespace - firstNonWhitespace + 1),
+                    );
                 }
 
                 // Reset firstNonWhitespace for the next line.
@@ -704,19 +736,22 @@ export function transformJsx(context: TransformationContext): (x: SourceFile | B
      * See https://en.wikipedia.org/wiki/List_of_XML_and_HTML_character_entity_references
      */
     function decodeEntities(text: string): string {
-        return text.replace(/&((#((\d+)|x([\da-fA-F]+)))|(\w+));/g, (match, _all, _number, _digits, decimal, hex, word) => {
-            if (decimal) {
-                return utf16EncodeAsString(parseInt(decimal, 10));
-            }
-            else if (hex) {
-                return utf16EncodeAsString(parseInt(hex, 16));
-            }
-            else {
-                const ch = entities.get(word);
-                // If this is not a valid entity, then just use `match` (replace it with itself, i.e. don't replace)
-                return ch ? utf16EncodeAsString(ch) : match;
-            }
-        });
+        return text.replace(
+            /&((#((\d+)|x([\da-fA-F]+)))|(\w+));/g,
+            (match, _all, _number, _digits, decimal, hex, word) => {
+                if (decimal) {
+                    return utf16EncodeAsString(parseInt(decimal, 10));
+                }
+                else if (hex) {
+                    return utf16EncodeAsString(parseInt(hex, 16));
+                }
+                else {
+                    const ch = entities.get(word);
+                    // If this is not a valid entity, then just use `match` (replace it with itself, i.e. don't replace)
+                    return ch ? utf16EncodeAsString(ch) : match;
+                }
+            },
+        );
     }
 
     /** Like `decodeEntities` but returns `undefined` if there were no entities to decode. */

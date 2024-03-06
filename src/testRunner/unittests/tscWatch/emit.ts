@@ -53,11 +53,13 @@ describe("unittests:: tsc-watch:: emit with outFile or out setting", () => {
             sys: () => {
                 const file1: File = {
                     path: "/a/b/output/AnotherDependency/file1.d.ts",
-                    content: "declare namespace Common.SomeComponent.DynamicMenu { enum Z { Full = 0,  Min = 1, Average = 2, } }",
+                    content:
+                        "declare namespace Common.SomeComponent.DynamicMenu { enum Z { Full = 0,  Min = 1, Average = 2, } }",
                 };
                 const file2: File = {
                     path: "/a/b/dependencies/file2.d.ts",
-                    content: "declare namespace Dependencies.SomeComponent { export class SomeClass { version: string; } }",
+                    content:
+                        "declare namespace Dependencies.SomeComponent { export class SomeClass { version: string; } }",
                 };
                 const file3: File = {
                     path: "/a/b/project/src/main.ts",
@@ -180,7 +182,11 @@ describe("unittests:: tsc-watch:: emit for configured projects", () => {
             {
                 caption:
                     "Change the content of moduleFile1 to `export var T: number;export function Foo() { console.log('hi'); };`",
-                edit: sys => sys.writeFile(moduleFile1Path, `export var T: number;export function Foo() { console.log('hi'); };`),
+                edit: sys =>
+                    sys.writeFile(
+                        moduleFile1Path,
+                        `export var T: number;export function Foo() { console.log('hi'); };`,
+                    ),
                 timeouts: sys => sys.runQueuedTimeoutCallbacks(),
             },
         ],
@@ -467,7 +473,8 @@ describe("unittests:: tsc-watch:: emit file content", () => {
         edits: [
             {
                 caption: "Append content to file3",
-                edit: sys => sys.appendFile("/user/someone/projects/myproject/file3.ts", "function foo2() { return 2; }"),
+                edit: sys =>
+                    sys.appendFile("/user/someone/projects/myproject/file3.ts", "function foo2() { return 2; }"),
                 timeouts: sys => sys.runQueuedTimeoutCallbacks(),
             },
         ],
@@ -510,7 +517,8 @@ describe("unittests:: tsc-watch:: emit file content", () => {
 describe("unittests:: tsc-watch:: emit with when module emit is specified as node", () => {
     verifyTscWatch({
         scenario,
-        subScenario: "when module emit is specified as node/when instead of filechanged recursive directory watcher is invoked",
+        subScenario:
+            "when module emit is specified as node/when instead of filechanged recursive directory watcher is invoked",
         commandLineArgs: ["--w", "--p", "/a/rootFolder/project/tsconfig.json"],
         sys: () => {
             const configFile: File = {

@@ -56,7 +56,11 @@ describe("unittests:: tsc:: moduleResolution::", () => {
                 edit: fs =>
                     fs.writeFileSync(
                         "/home/src/projects/project/node_modules/foo/package.json",
-                        getFsContentsForAlternateResultPackageJson("foo", /*addTypes*/ true, /*addTypesCondition*/ true),
+                        getFsContentsForAlternateResultPackageJson(
+                            "foo",
+                            /*addTypes*/ true,
+                            /*addTypesCondition*/ true,
+                        ),
                     ),
             },
             {
@@ -72,7 +76,11 @@ describe("unittests:: tsc:: moduleResolution::", () => {
                 edit: fs =>
                     fs.writeFileSync(
                         "/home/src/projects/project/node_modules/foo2/package.json",
-                        getFsContentsForAlternateResultPackageJson("foo2", /*addTypes*/ true, /*addTypesCondition*/ false),
+                        getFsContentsForAlternateResultPackageJson(
+                            "foo2",
+                            /*addTypes*/ true,
+                            /*addTypesCondition*/ false,
+                        ),
                     ),
             },
             {

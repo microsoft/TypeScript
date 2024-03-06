@@ -16,7 +16,10 @@ describe("unittests:: tsc-watch:: libraryResolution", () => {
         return ["-w", ...getCommandLineArgsForLibResolution(withoutConfig), "--extendedDiagnostics"];
     }
 
-    function editOptions(withoutConfig: true | undefined, changeLib: (sys: TscWatchSystem) => void): TscWatchCompileChange[] {
+    function editOptions(
+        withoutConfig: true | undefined,
+        changeLib: (sys: TscWatchSystem) => void,
+    ): TscWatchCompileChange[] {
         return withoutConfig ? [] : [
             {
                 caption: "change program options to update module resolution",

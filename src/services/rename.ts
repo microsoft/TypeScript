@@ -92,7 +92,14 @@ function getRenameInfoForNode(
         }
         else if (isLabelName(node)) {
             const name = getTextOfNode(node);
-            return getRenameInfoSuccess(name, name, ScriptElementKind.label, ScriptElementKindModifier.none, node, sourceFile);
+            return getRenameInfoSuccess(
+                name,
+                name,
+                ScriptElementKind.label,
+                ScriptElementKindModifier.none,
+                node,
+                sourceFile,
+            );
         }
         return undefined;
     }
@@ -102,11 +109,16 @@ function getRenameInfoForNode(
 
     // Disallow rename for elements that are defined in the standard TypeScript library.
     if (declarations.some(declaration => isDefinedInLibraryFile(program, declaration))) {
-        return getRenameInfoError(Diagnostics.You_cannot_rename_elements_that_are_defined_in_the_standard_TypeScript_library);
+        return getRenameInfoError(
+            Diagnostics.You_cannot_rename_elements_that_are_defined_in_the_standard_TypeScript_library,
+        );
     }
 
     // Cannot rename `default` as in `import { default as foo } from "./someModule";
-    if (isIdentifier(node) && node.escapedText === "default" && symbol.parent && symbol.parent.flags & SymbolFlags.Module) {
+    if (
+        isIdentifier(node) && node.escapedText === "default" && symbol.parent &&
+        symbol.parent.flags & SymbolFlags.Module
+    ) {
         return undefined;
     }
 
@@ -191,7 +203,11 @@ function getPackagePathComponents(filePath: Path): string[] | undefined {
     return components.slice(0, nodeModulesIdx + 2);
 }
 
-function getRenameInfoForModule(node: StringLiteralLike, sourceFile: SourceFile, moduleSymbol: Symbol): RenameInfo | undefined {
+function getRenameInfoForModule(
+    node: StringLiteralLike,
+    sourceFile: SourceFile,
+    moduleSymbol: Symbol,
+): RenameInfo | undefined {
     if (!isExternalModuleNameRelative(node.text)) {
         return getRenameInfoError(Diagnostics.You_cannot_rename_a_module_via_a_global_import);
     }

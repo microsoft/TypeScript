@@ -63,7 +63,11 @@ export function collectElements(sourceFile: SourceFile, cancellationToken: Cance
     return res.sort((span1, span2) => span1.textSpan.start - span2.textSpan.start);
 }
 
-function addNodeOutliningSpans(sourceFile: SourceFile, cancellationToken: CancellationToken, out: OutliningSpan[]): void {
+function addNodeOutliningSpans(
+    sourceFile: SourceFile,
+    cancellationToken: CancellationToken,
+    out: OutliningSpan[],
+): void {
     let depthRemaining = 40;
     let current = 0;
     // Includes the EOF Token so that comments which aren't attached to statements are included
@@ -84,7 +88,9 @@ function addNodeOutliningSpans(sourceFile: SourceFile, cancellationToken: Cancel
         if (lastImport !== firstImport) {
             out.push(
                 createOutliningSpanFromBounds(
-                    findChildOfKind(statements[firstImport], SyntaxKind.ImportKeyword, sourceFile)!.getStart(sourceFile),
+                    findChildOfKind(statements[firstImport], SyntaxKind.ImportKeyword, sourceFile)!.getStart(
+                        sourceFile,
+                    ),
                     statements[lastImport].getEnd(),
                     OutliningSpanKind.Imports,
                 ),
@@ -155,7 +161,13 @@ function addRegionOutliningSpans(sourceFile: SourceFile, out: OutliningSpan[]): 
         if (!result[1]) {
             const span = createTextSpanFromBounds(sourceFile.text.indexOf("//", currentLineStart), lineEnd);
             regions.push(
-                createOutliningSpan(span, OutliningSpanKind.Region, span, /*autoCollapse*/ false, result[2] || "#region"),
+                createOutliningSpan(
+                    span,
+                    OutliningSpanKind.Region,
+                    span,
+                    /*autoCollapse*/ false,
+                    result[2] || "#region",
+                ),
             );
         }
         else {
@@ -229,7 +241,11 @@ function addOutliningForLeadingCommentsForPos(
         // Only outline spans of two or more consecutive single line comments
         if (singleLineCommentCount > 1) {
             out.push(
-                createOutliningSpanFromBounds(firstSingleLineCommentStart, lastSingleLineCommentEnd, OutliningSpanKind.Comment),
+                createOutliningSpanFromBounds(
+                    firstSingleLineCommentStart,
+                    lastSingleLineCommentEnd,
+                    OutliningSpanKind.Comment,
+                ),
             );
         }
     }
@@ -347,7 +363,14 @@ function getOutliningSpanForNode(n: Node, sourceFile: SourceFile): OutliningSpan
             return undefined;
         }
 
-        return spanBetweenTokens(openToken, closeToken, node, sourceFile, /*autoCollapse*/ false, /*useFullStart*/ false);
+        return spanBetweenTokens(
+            openToken,
+            closeToken,
+            node,
+            sourceFile,
+            /*autoCollapse*/ false,
+            /*useFullStart*/ false,
+        );
     }
 
     function spanForCallExpression(node: CallExpression): OutliningSpan | undefined {
@@ -360,7 +383,14 @@ function getOutliningSpanForNode(n: Node, sourceFile: SourceFile): OutliningSpan
             return undefined;
         }
 
-        return spanBetweenTokens(openToken, closeToken, node, sourceFile, /*autoCollapse*/ false, /*useFullStart*/ true);
+        return spanBetweenTokens(
+            openToken,
+            closeToken,
+            node,
+            sourceFile,
+            /*autoCollapse*/ false,
+            /*useFullStart*/ true,
+        );
     }
 
     function spanForArrowFunction(node: ArrowFunction): OutliningSpan | undefined {
@@ -375,14 +405,20 @@ function getOutliningSpanForNode(n: Node, sourceFile: SourceFile): OutliningSpan
     }
 
     function spanForJSXElement(node: JsxElement): OutliningSpan | undefined {
-        const textSpan = createTextSpanFromBounds(node.openingElement.getStart(sourceFile), node.closingElement.getEnd());
+        const textSpan = createTextSpanFromBounds(
+            node.openingElement.getStart(sourceFile),
+            node.closingElement.getEnd(),
+        );
         const tagName = node.openingElement.tagName.getText(sourceFile);
         const bannerText = "<" + tagName + ">...</" + tagName + ">";
         return createOutliningSpan(textSpan, OutliningSpanKind.Code, textSpan, /*autoCollapse*/ false, bannerText);
     }
 
     function spanForJSXFragment(node: JsxFragment): OutliningSpan | undefined {
-        const textSpan = createTextSpanFromBounds(node.openingFragment.getStart(sourceFile), node.closingFragment.getEnd());
+        const textSpan = createTextSpanFromBounds(
+            node.openingFragment.getStart(sourceFile),
+            node.closingFragment.getEnd(),
+        );
         const bannerText = "<>...</>";
         return createOutliningSpan(textSpan, OutliningSpanKind.Code, textSpan, /*autoCollapse*/ false, bannerText);
     }
@@ -422,7 +458,8 @@ function getOutliningSpanForNode(n: Node, sourceFile: SourceFile): OutliningSpan
         autoCollapse = false,
         useFullStart = true,
         open: SyntaxKind.OpenBraceToken | SyntaxKind.OpenBracketToken = SyntaxKind.OpenBraceToken,
-        close: SyntaxKind = open === SyntaxKind.OpenBraceToken ? SyntaxKind.CloseBraceToken : SyntaxKind.CloseBracketToken,
+        close: SyntaxKind = open === SyntaxKind.OpenBraceToken ? SyntaxKind.CloseBraceToken
+            : SyntaxKind.CloseBracketToken,
     ): OutliningSpan | undefined {
         const openToken = findChildOfKind(n, open, sourceFile);
         const closeToken = findChildOfKind(n, close, sourceFile);
@@ -431,7 +468,8 @@ function getOutliningSpanForNode(n: Node, sourceFile: SourceFile): OutliningSpan
     }
 
     function spanForNodeArray(nodeArray: NodeArray<Node>): OutliningSpan | undefined {
-        return nodeArray.length ? createOutliningSpan(createTextSpanFromRange(nodeArray), OutliningSpanKind.Code) : undefined;
+        return nodeArray.length ? createOutliningSpan(createTextSpanFromRange(nodeArray), OutliningSpanKind.Code)
+            : undefined;
     }
 
     function spanForParenthesizedExpression(node: ParenthesizedExpression): OutliningSpan | undefined {
@@ -445,7 +483,13 @@ function functionSpan(node: SignatureDeclaration, body: Block, sourceFile: Sourc
     const openToken = tryGetFunctionOpenToken(node, body, sourceFile);
     const closeToken = findChildOfKind(body, SyntaxKind.CloseBraceToken, sourceFile);
     return openToken && closeToken &&
-        spanBetweenTokens(openToken, closeToken, node, sourceFile, /*autoCollapse*/ node.kind !== SyntaxKind.ArrowFunction);
+        spanBetweenTokens(
+            openToken,
+            closeToken,
+            node,
+            sourceFile,
+            /*autoCollapse*/ node.kind !== SyntaxKind.ArrowFunction,
+        );
 }
 
 function spanBetweenTokens(
@@ -460,7 +504,12 @@ function spanBetweenTokens(
         useFullStart ? openToken.getFullStart() : openToken.getStart(sourceFile),
         closeToken.getEnd(),
     );
-    return createOutliningSpan(textSpan, OutliningSpanKind.Code, createTextSpanFromNode(hintSpanNode, sourceFile), autoCollapse);
+    return createOutliningSpan(
+        textSpan,
+        OutliningSpanKind.Code,
+        createTextSpanFromNode(hintSpanNode, sourceFile),
+        autoCollapse,
+    );
 }
 
 function createOutliningSpan(

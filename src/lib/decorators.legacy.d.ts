@@ -5,4 +5,8 @@ declare type MethodDecorator = <T>(
     propertyKey: string | symbol,
     descriptor: TypedPropertyDescriptor<T>,
 ) => TypedPropertyDescriptor<T> | void;
-declare type ParameterDecorator = (target: Object, propertyKey: string | symbol | undefined, parameterIndex: number) => void;
+declare type ParameterDecorator = (
+    target: Object,
+    propertyKey: string | symbol | undefined,
+    parameterIndex: number,
+) => void;

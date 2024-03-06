@@ -53,7 +53,11 @@ describe("unittests:: services:: Colorization", () => {
         // TODO: GH#18217
         return { value, classification: undefined!, position: 0 };
     }
-    function createClassification(value: string, classification: ts.TokenClass, position?: number): ClassificationEntry {
+    function createClassification(
+        value: string,
+        classification: ts.TokenClass,
+        position?: number,
+    ): ClassificationEntry {
         return { value, classification, position };
     }
 
@@ -62,34 +66,48 @@ describe("unittests:: services:: Colorization", () => {
         initialEndOfLineState: ts.EndOfLineState,
         ...expectedEntries: ClassificationEntry[]
     ): void {
-        const result = classifier.getClassificationsForLine(text, initialEndOfLineState, /*syntacticClassifierAbsent*/ false);
+        const result = classifier.getClassificationsForLine(
+            text,
+            initialEndOfLineState,
+            /*syntacticClassifierAbsent*/ false,
+        );
 
         for (const expectedEntry of expectedEntries) {
             if (expectedEntry.classification === undefined) {
-                assert.equal(result.finalLexState, expectedEntry.value, "final endOfLineState does not match expected.");
+                assert.equal(
+                    result.finalLexState,
+                    expectedEntry.value,
+                    "final endOfLineState does not match expected.",
+                );
             }
             else {
                 const actualEntryPosition = expectedEntry.position !== undefined ? expectedEntry.position
                     : text.indexOf(expectedEntry.value);
-                assert(actualEntryPosition >= 0, "token: '" + expectedEntry.value + "' does not exit in text: '" + text + "'.");
+                assert(
+                    actualEntryPosition >= 0,
+                    "token: '" + expectedEntry.value + "' does not exit in text: '" + text + "'.",
+                );
 
                 const actualEntry = getEntryAtPosition(result, actualEntryPosition)!;
 
                 assert(
                     actualEntry,
-                    "Could not find classification entry for '" + expectedEntry.value + "' at position: " + actualEntryPosition,
+                    "Could not find classification entry for '" + expectedEntry.value + "' at position: " +
+                        actualEntryPosition,
                 );
                 assert.equal(
                     actualEntry.classification,
                     expectedEntry.classification,
-                    "Classification class does not match expected. Expected: " + ts.TokenClass[expectedEntry.classification] +
+                    "Classification class does not match expected. Expected: " +
+                        ts.TokenClass[expectedEntry.classification] +
                         ", Actual: " +
                         ts.TokenClass[actualEntry.classification],
                 );
                 assert.equal(
                     actualEntry.length,
                     expectedEntry.value.length,
-                    "Classification length does not match expected. Expected: " + ts.TokenClass[expectedEntry.value.length] +
+                    "Classification length does not match expected. Expected: " +
+                        ts.TokenClass[expectedEntry.value.length] +
                         ", Actual: " +
                         ts.TokenClass[actualEntry.length],
                 );
@@ -311,7 +329,12 @@ describe("unittests:: services:: Colorization", () => {
         });
 
         it("classifies a keyword after a dot on previous line", () => {
-            testLexicalClassification("var", ts.EndOfLineState.None, keyword("var"), finalEndOfLineState(ts.EndOfLineState.None));
+            testLexicalClassification(
+                "var",
+                ts.EndOfLineState.None,
+                keyword("var"),
+                finalEndOfLineState(ts.EndOfLineState.None),
+            );
         });
 
         it("classifies multiple keywords properly", () => {

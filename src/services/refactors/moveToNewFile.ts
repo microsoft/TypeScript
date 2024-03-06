@@ -72,7 +72,9 @@ registerRefactor(refactorName, {
                 description,
                 actions: [{
                     ...moveToNewFileAction,
-                    notApplicableReason: getLocaleSpecificMessage(Diagnostics.Selection_is_not_a_valid_statement_or_statements),
+                    notApplicableReason: getLocaleSpecificMessage(
+                        Diagnostics.Selection_is_not_a_valid_statement_or_statements,
+                    ),
                 }],
             }];
         }
@@ -131,7 +133,12 @@ function getNewStatementsAndRemoveFromOldFile(
         return [...prologueDirectives, ...toMove.all];
     }
 
-    const useEsModuleSyntax = !fileShouldUseJavaScriptRequire(newFilename, program, host, !!oldFile.commonJsModuleIndicator);
+    const useEsModuleSyntax = !fileShouldUseJavaScriptRequire(
+        newFilename,
+        program,
+        host,
+        !!oldFile.commonJsModuleIndicator,
+    );
     const quotePreference = getQuotePreference(oldFile, preferences);
     const importsFromNewFile = createOldFileImportsFromTargetFile(
         oldFile,
@@ -194,7 +201,11 @@ function getNewFileImportsAndAddExportInOldFile(
         forEachImportInStatement(oldStatement, i => {
             append(
                 copiedOldImports,
-                filterImport(i, moduleSpecifierFromImport(i), name => importsToCopy.has(checker.getSymbolAtLocation(name)!)),
+                filterImport(
+                    i,
+                    moduleSpecifierFromImport(i),
+                    name => importsToCopy.has(checker.getSymbolAtLocation(name)!),
+                ),
             );
         });
     }

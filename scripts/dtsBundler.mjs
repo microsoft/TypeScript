@@ -46,8 +46,14 @@ const newLine = newLineKind === ts.NewLineKind.LineFeed ? "\n" : "\r\n";
  */
 function getParentVariableStatement(node) {
     const declarationList = node.parent;
-    assert(ts.isVariableDeclarationList(declarationList), `expected VariableDeclarationList at ${nodeToLocation(node)}`);
-    assert(declarationList.declarations.length === 1, `expected VariableDeclarationList of length 1 at ${nodeToLocation(node)}`);
+    assert(
+        ts.isVariableDeclarationList(declarationList),
+        `expected VariableDeclarationList at ${nodeToLocation(node)}`,
+    );
+    assert(
+        declarationList.declarations.length === 1,
+        `expected VariableDeclarationList of length 1 at ${nodeToLocation(node)}`,
+    );
     const variableStatement = declarationList.parent;
     assert(ts.isVariableStatement(variableStatement), `expected VariableStatement at ${nodeToLocation(node)}`);
     return variableStatement;
@@ -320,7 +326,9 @@ function verifyMatchingSymbols(decl, isInternal) {
             const symbolInScope = findInScope(symbolOfNode.name);
             if (!symbolInScope) {
                 if (
-                    symbolOfNode.declarations?.every(d => isLocalDeclaration(d) && d.getSourceFile() === decl.getSourceFile()) &&
+                    symbolOfNode.declarations?.every(d =>
+                        isLocalDeclaration(d) && d.getSourceFile() === decl.getSourceFile()
+                    ) &&
                     !isSelfReference(node, symbolOfNode)
                 ) {
                     // The symbol is a local that needs to be copied into the scope.
@@ -411,7 +419,10 @@ function emitAsNamespace(name, parent, moduleSymbol, needExportModifier) {
             }
             else {
                 const namespaceName = symbolToNamespace.get(resolved);
-                assert(namespaceName, `Failed to find namespace for ${me.name} at ${nodeToLocation(me.declarations[0])}`);
+                assert(
+                    namespaceName,
+                    `Failed to find namespace for ${me.name} at ${nodeToLocation(me.declarations[0])}`,
+                );
                 write(`export import ${me.name} = ${namespaceName}.${me.name}`, target);
             }
             continue;

@@ -100,7 +100,8 @@ function makeChange(
         const typeArgument = typeArguments[0];
         const needsParens = !isUnionTypeNode(typeArgument) && !isParenthesizedTypeNode(typeArgument) &&
             isParenthesizedTypeNode(
-                factory.createUnionTypeNode([typeArgument, factory.createKeywordTypeNode(SyntaxKind.VoidKeyword)]).types[0],
+                factory.createUnionTypeNode([typeArgument, factory.createKeywordTypeNode(SyntaxKind.VoidKeyword)])
+                    .types[0],
             );
         if (needsParens) {
             changes.insertText(sourceFile, typeArgument.pos, "(");

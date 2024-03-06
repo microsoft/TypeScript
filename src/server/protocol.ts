@@ -3090,15 +3090,21 @@ export const enum IndentStyle {
 
 export type EditorSettings = ChangePropertyTypes<ts.EditorSettings, { indentStyle: IndentStyle | ts.IndentStyle; }>;
 
-export type FormatCodeSettings = ChangePropertyTypes<ts.FormatCodeSettings, { indentStyle: IndentStyle | ts.IndentStyle; }>;
+export type FormatCodeSettings = ChangePropertyTypes<
+    ts.FormatCodeSettings,
+    { indentStyle: IndentStyle | ts.IndentStyle; }
+>;
 
-export type CompilerOptions = ChangePropertyTypes<ChangeStringIndexSignature<ts.CompilerOptions, CompilerOptionsValue>, {
-    jsx: JsxEmit | ts.JsxEmit;
-    module: ModuleKind | ts.ModuleKind;
-    moduleResolution: ModuleResolutionKind | ts.ModuleResolutionKind;
-    newLine: NewLineKind | ts.NewLineKind;
-    target: ScriptTarget | ts.ScriptTarget;
-}>;
+export type CompilerOptions = ChangePropertyTypes<
+    ChangeStringIndexSignature<ts.CompilerOptions, CompilerOptionsValue>,
+    {
+        jsx: JsxEmit | ts.JsxEmit;
+        module: ModuleKind | ts.ModuleKind;
+        moduleResolution: ModuleResolutionKind | ts.ModuleResolutionKind;
+        newLine: NewLineKind | ts.NewLineKind;
+        target: ScriptTarget | ts.ScriptTarget;
+    }
+>;
 
 export const enum JsxEmit {
     None = "none",

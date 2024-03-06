@@ -71,7 +71,8 @@ export class ProjectRunner extends Harness.RunnerBase {
                     });
                     it(`Correct module resolution tracing for ${testCaseFileName}`, () =>
                         projectTestCase && projectTestCase.verifyResolution());
-                    it(`Correct errors for ${testCaseFileName}`, () => projectTestCase && projectTestCase.verifyDiagnostics());
+                    it(`Correct errors for ${testCaseFileName}`, () =>
+                        projectTestCase && projectTestCase.verifyDiagnostics());
                     it(`Correct JS output for ${testCaseFileName}`, () =>
                         projectTestCase && projectTestCase.verifyJavaScriptOutput());
                     // NOTE: This check was commented out in previous code. Leaving this here to eventually be restored if needed.
@@ -294,7 +295,9 @@ class ProjectTestCase {
         resolutionInfo.emittedFiles = this.compilerResult.outputFiles!
             .map(output => output.meta.get("fileName") || output.file)
             .map(output =>
-                Utils.removeTestPathPrefixes(vpath.isAbsolute(output) ? vpath.relative(cwd, output, ignoreCase) : output)
+                Utils.removeTestPathPrefixes(
+                    vpath.isAbsolute(output) ? vpath.relative(cwd, output, ignoreCase) : output,
+                )
             );
 
         const content = JSON.stringify(resolutionInfo, undefined, "    ");
@@ -322,7 +325,8 @@ class ProjectTestCase {
                     // convert file name to rooted name
                     // if filename is not rooted - concat it with project root and then expand project root relative to current directory
                     const fileName = output.meta.get("fileName") || output.file;
-                    const diskFileName = vpath.isAbsolute(fileName) ? fileName : vpath.resolve(this.vfs.cwd(), fileName);
+                    const diskFileName = vpath.isAbsolute(fileName) ? fileName
+                        : vpath.resolve(this.vfs.cwd(), fileName);
 
                     // compute file name relative to current directory (expanded project root)
                     let diskRelativeName = vpath.relative(this.vfs.cwd(), diskFileName, this.vfs.ignoreCase);
@@ -336,7 +340,10 @@ class ProjectTestCase {
                         nonSubfolderDiskFiles++;
                     }
 
-                    const content = Utils.removeTestPathPrefixes(output.text, /*retainTrailingDirectorySeparator*/ true);
+                    const content = Utils.removeTestPathPrefixes(
+                        output.text,
+                        /*retainTrailingDirectorySeparator*/ true,
+                    );
                     Harness.Baseline.runBaseline(
                         this.getBaselineFolder(this.compilerResult.moduleKind) + diskRelativeName,
                         content as string | null,

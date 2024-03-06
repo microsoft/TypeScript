@@ -83,7 +83,12 @@ describe("unittests:: tsbuild:: outFile:: on amd modules with --out", () => {
     describe("when the module resolution finds original source file", () => {
         function modifyFs(fs: vfs.FileSystem) {
             // Make lib to output to parent dir
-            replaceText(fs, "/src/lib/tsconfig.json", `"outFile": "module.js"`, `"outFile": "../module.js", "rootDir": "../"`);
+            replaceText(
+                fs,
+                "/src/lib/tsconfig.json",
+                `"outFile": "module.js"`,
+                `"outFile": "../module.js", "rootDir": "../"`,
+            );
             // Change reference to file1 module to resolve to lib/file1
             replaceText(fs, "/src/app/file3.ts", "file1", "lib/file1");
         }

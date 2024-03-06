@@ -111,7 +111,10 @@ function getInfo(program: Program, sourceFile: SourceFile, span: TextSpan): Info
         diag.relatedInformation,
         related => related.code === Diagnostics.This_type_parameter_might_need_an_extends_0_constraint.code,
     );
-    if (related === undefined || related.file === undefined || related.start === undefined || related.length === undefined) {
+    if (
+        related === undefined || related.file === undefined || related.start === undefined ||
+        related.length === undefined
+    ) {
         return;
     }
 
@@ -128,7 +131,8 @@ function getInfo(program: Program, sourceFile: SourceFile, span: TextSpan): Info
 
         const token = getTokenAtPosition(sourceFile, span.start);
         const checker = program.getTypeChecker();
-        const constraint = tryGetConstraintType(checker, token) || tryGetConstraintFromDiagnosticMessage(related.messageText);
+        const constraint = tryGetConstraintType(checker, token) ||
+            tryGetConstraintFromDiagnosticMessage(related.messageText);
 
         return { constraint, declaration, token };
     }

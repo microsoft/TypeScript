@@ -70,7 +70,8 @@ describe("unittests:: tsbuildWatch:: watchMode:: with reexport when referenced p
             },
             {
                 caption: "Fix error",
-                edit: sys => sys.replaceFileText(`/user/username/projects/reexport/src/pure/session.ts`, "bar: ", "// bar: "),
+                edit: sys =>
+                    sys.replaceFileText(`/user/username/projects/reexport/src/pure/session.ts`, "bar: ", "// bar: "),
                 timeouts: sys => {
                     sys.runQueuedTimeoutCallbacks(); // build src/pure
                     sys.runQueuedTimeoutCallbacks(); // build src/main and src

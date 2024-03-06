@@ -17,7 +17,12 @@ describe("unittests:: config:: convertCompilerOptionsFromJson", () => {
         );
     }
 
-    function baselineCompilerOptionsJsonText(subScenario: string, jsonText: string, configFileName: string, skipJson = true) {
+    function baselineCompilerOptionsJsonText(
+        subScenario: string,
+        jsonText: string,
+        configFileName: string,
+        skipJson = true,
+    ) {
         baselineParseConfig({
             scenario: "convertCompilerOptionsFromJson",
             subScenario,
@@ -39,7 +44,8 @@ describe("unittests:: config:: convertCompilerOptionsFromJson", () => {
                 jsonText,
                 configFileName,
                 basePath: "/apath",
-                baselineParsed: (baseline, parsed) => baseline.push("CompilerOptions::", jsonToReadableText(parsed.options)),
+                baselineParsed: (baseline, parsed) =>
+                    baseline.push("CompilerOptions::", jsonToReadableText(parsed.options)),
             }],
             skipJson,
         });

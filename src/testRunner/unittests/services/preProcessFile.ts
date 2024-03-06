@@ -15,12 +15,17 @@ describe("unittests:: services:: PreProcessFile:", () => {
         assert.equal(
             resultPreProcess.isLibFile,
             expectedPreProcess.isLibFile,
-            "Pre-processed file has different value for isLibFile. Expected: " + expectedPreProcess.isLibFile + ". Actual: " +
+            "Pre-processed file has different value for isLibFile. Expected: " + expectedPreProcess.isLibFile +
+                ". Actual: " +
                 resultPreProcess.isLibFile,
         );
 
         checkFileReferenceList("Imported files", expectedPreProcess.importedFiles, resultPreProcess.importedFiles);
-        checkFileReferenceList("Referenced files", expectedPreProcess.referencedFiles, resultPreProcess.referencedFiles);
+        checkFileReferenceList(
+            "Referenced files",
+            expectedPreProcess.referencedFiles,
+            resultPreProcess.referencedFiles,
+        );
         checkFileReferenceList(
             "Type reference directives",
             expectedPreProcess.typeReferenceDirectives,
@@ -940,17 +945,22 @@ describe("unittests:: services:: PreProcessFile:", () => {
         });
 
         it("Correctly handles dependency lists in define(modName, [deplist]) calls with template literals in JS files", () => {
-            test("define(`mod`, [`mod1`, `mod2`], (m1, m2) => {});", /*readImportFile*/ true, /*detectJavaScriptImports*/ true, {
-                referencedFiles: [],
-                typeReferenceDirectives: [],
-                libReferenceDirectives: [],
-                importedFiles: [
-                    { fileName: "mod1", pos: 15, end: 19 },
-                    { fileName: "mod2", pos: 23, end: 27 },
-                ],
-                ambientExternalModules: undefined,
-                isLibFile: false,
-            });
+            test(
+                "define(`mod`, [`mod1`, `mod2`], (m1, m2) => {});",
+                /*readImportFile*/ true,
+                /*detectJavaScriptImports*/ true,
+                {
+                    referencedFiles: [],
+                    typeReferenceDirectives: [],
+                    libReferenceDirectives: [],
+                    importedFiles: [
+                        { fileName: "mod1", pos: 15, end: 19 },
+                        { fileName: "mod2", pos: 23, end: 27 },
+                    ],
+                    ambientExternalModules: undefined,
+                    isLibFile: false,
+                },
+            );
         });
     });
 });

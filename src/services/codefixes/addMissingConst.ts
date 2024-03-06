@@ -68,14 +68,18 @@ function makeChange(
     fixedNodes?: Set<Node>,
 ) {
     const token = getTokenAtPosition(sourceFile, pos);
-    const forInitializer = findAncestor(token, node =>
-        isForInOrOfStatement(node.parent) ? node.parent.initializer === node :
-            isPossiblyPartOfDestructuring(node) ? false : "quit");
+    const forInitializer = findAncestor(
+        token,
+        node =>
+            isForInOrOfStatement(node.parent) ? node.parent.initializer === node :
+                isPossiblyPartOfDestructuring(node) ? false : "quit",
+    );
     if (forInitializer) return applyChange(changeTracker, forInitializer, sourceFile, fixedNodes);
 
     const parent = token.parent;
     if (
-        isBinaryExpression(parent) && parent.operatorToken.kind === SyntaxKind.EqualsToken && isExpressionStatement(parent.parent)
+        isBinaryExpression(parent) && parent.operatorToken.kind === SyntaxKind.EqualsToken &&
+        isExpressionStatement(parent.parent)
     ) {
         return applyChange(changeTracker, token, sourceFile, fixedNodes);
     }

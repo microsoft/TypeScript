@@ -181,7 +181,11 @@ class Callbacks {
     private hasChanges = false;
     private serializedKeys = new Map<number, any>();
 
-    constructor(private host: TestServerHost, readonly callbackType: string, private readonly swallowExitException?: boolean) {
+    constructor(
+        private host: TestServerHost,
+        readonly callbackType: string,
+        private readonly swallowExitException?: boolean,
+    ) {
     }
 
     getNextId() {
@@ -205,7 +209,9 @@ class Callbacks {
     log(logChanges?: boolean) {
         const details: string[] = [];
         this.map.forEach(({ args }, timeoutId) => {
-            details.push(`${timeoutId}: ${args[0]}${!logChanges || this.serializedKeys.has(timeoutId) ? "" : " *new*"}`);
+            details.push(
+                `${timeoutId}: ${args[0]}${!logChanges || this.serializedKeys.has(timeoutId) ? "" : " *new*"}`,
+            );
             if (logChanges) this.serializedKeys.set(timeoutId, args[0]);
         });
         const deleted: string[] = [];
@@ -262,7 +268,9 @@ class Callbacks {
             this.host.serializeState(logger.logs, serializeOutputOrder);
             if (invokeKey !== undefined) {
                 logger.log(
-                    `Invoking ${this.callbackType} callback:: timeoutId:: ${invokeKey}:: ${this.map.get(invokeKey)!.args[0]}`,
+                    `Invoking ${this.callbackType} callback:: timeoutId:: ${invokeKey}:: ${
+                        this.map.get(invokeKey)!.args[0]
+                    }`,
                 );
             }
             this.invokeWorker(invokeKey);
@@ -771,7 +779,9 @@ export class TestServerHost implements server.ServerHost, FormatDiagnosticsHost,
         recursive: boolean,
         cb: FsWatchCallback,
     ) {
-        if (this.runWithFallbackPolling) throw new Error("Need to use fallback polling instead of file system native watching");
+        if (this.runWithFallbackPolling) {
+            throw new Error("Need to use fallback polling instead of file system native watching");
+        }
         const path = this.toPath(fileOrDirectory);
         // Error if the path does not exist
         if (this.inodeWatching && !this.inodes?.has(path)) throw new Error();
@@ -805,7 +815,9 @@ export class TestServerHost implements server.ServerHost, FormatDiagnosticsHost,
             // TODO::
             if (this.inodeWatching && inode !== undefined && inode !== currentInode) return;
             let relativeFileName = entryFullPath ? this.getRelativePathToDirectory(fullPath, entryFullPath) : "";
-            if (useTildeSuffix) relativeFileName = (relativeFileName ? relativeFileName : getBaseFileName(fullPath)) + "~";
+            if (useTildeSuffix) {
+                relativeFileName = (relativeFileName ? relativeFileName : getBaseFileName(fullPath)) + "~";
+            }
             cb(eventName, relativeFileName, modifiedTime);
         });
     }
@@ -817,7 +829,14 @@ export class TestServerHost implements server.ServerHost, FormatDiagnosticsHost,
         entryFullPath?: string,
         useTildeSuffix?: boolean,
     ) {
-        this.fsWatchCallback(this.watchUtils.fsWatches, fullPath, eventName, modifiedTime, entryFullPath, useTildeSuffix);
+        this.fsWatchCallback(
+            this.watchUtils.fsWatches,
+            fullPath,
+            eventName,
+            modifiedTime,
+            entryFullPath,
+            useTildeSuffix,
+        );
     }
 
     invokeFsWatchesRecursiveCallbacks(
@@ -1004,7 +1023,10 @@ export class TestServerHost implements server.ServerHost, FormatDiagnosticsHost,
         const path = this.toFullPath(s);
         const folder = this.getRealFolder(path);
         if (folder) {
-            return mapDefined(folder.entries, entry => this.isFsFolder(entry) ? getBaseFileName(entry.fullPath) : undefined);
+            return mapDefined(
+                folder.entries,
+                entry => this.isFsFolder(entry) ? getBaseFileName(entry.fullPath) : undefined,
+            );
         }
         Debug.fail(folder ? "getDirectories called on file" : "getDirectories called on missing folder");
         return [];
@@ -1269,7 +1291,9 @@ function diffFsEntry(
             }
             else if (oldFsEntry.modifiedTime !== newFsEntry.modifiedTime) {
                 if (oldFsEntry.fullPath !== newFsEntry.fullPath) {
-                    baseline.push(`//// [${file}] file was renamed from file ${oldFsEntry.fullPath}${inodeString(newInode)}`);
+                    baseline.push(
+                        `//// [${file}] file was renamed from file ${oldFsEntry.fullPath}${inodeString(newInode)}`,
+                    );
                 }
                 else if (writtenFiles && !writtenFiles.has(newFsEntry.path)) {
                     baseline.push(`//// [${file}] file changed its modified time${inodeString(newInode)}`);
@@ -1294,7 +1318,9 @@ function diffFsEntry(
             else if (oldFsEntry.modifiedTime !== newFsEntry.modifiedTime) {
                 if (oldFsEntry.fullPath !== newFsEntry.fullPath) {
                     baseline.push(
-                        `//// [${file}] symlink was renamed from symlink ${oldFsEntry.fullPath}${inodeString(newInode)}`,
+                        `//// [${file}] symlink was renamed from symlink ${oldFsEntry.fullPath}${
+                            inodeString(newInode)
+                        }`,
                     );
                 }
                 else if (writtenFiles && !writtenFiles.has(newFsEntry.path)) {

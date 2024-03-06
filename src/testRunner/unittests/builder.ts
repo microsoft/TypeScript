@@ -134,7 +134,11 @@ function makeAssertChangesWithCancellationToken(
     };
 }
 
-function updateProgramFile(program: ProgramWithSourceTexts, fileName: string, fileContent: string): ProgramWithSourceTexts {
+function updateProgramFile(
+    program: ProgramWithSourceTexts,
+    fileName: string,
+    fileContent: string,
+): ProgramWithSourceTexts {
     return updateProgram(program, program.getRootFileNames(), program.getCompilerOptions(), files => {
         updateProgramText(files, fileName, fileContent);
     });

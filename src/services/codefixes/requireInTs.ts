@@ -95,7 +95,8 @@ function getInfo(sourceFile: SourceFile, program: Program, pos: number): Info | 
 
     const decl = cast(parent.parent, isVariableDeclaration);
     const defaultImportName = tryCast(decl.name, isIdentifier);
-    const namedImports = isObjectBindingPattern(decl.name) ? tryCreateNamedImportsFromObjectBindingPattern(decl.name) : undefined;
+    const namedImports = isObjectBindingPattern(decl.name) ? tryCreateNamedImportsFromObjectBindingPattern(decl.name)
+        : undefined;
     if (defaultImportName || namedImports) {
         return {
             allowSyntheticDefaults: getAllowSyntheticDefaultImports(program.getCompilerOptions()),
@@ -114,7 +115,11 @@ function tryCreateNamedImportsFromObjectBindingPattern(node: ObjectBindingPatter
             return undefined;
         }
         importSpecifiers.push(
-            factory.createImportSpecifier(/*isTypeOnly*/ false, tryCast(element.propertyName, isIdentifier), element.name),
+            factory.createImportSpecifier(
+                /*isTypeOnly*/ false,
+                tryCast(element.propertyName, isIdentifier),
+                element.name,
+            ),
         );
     }
 

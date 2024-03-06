@@ -32,7 +32,9 @@ export function fn5() { }
     };
     const dependencyConfig: File = {
         path: `${dependecyLocation}/tsconfig.json`,
-        content: jsonToReadableText({ compilerOptions: { composite: true, declarationMap: true, declarationDir: "../decls" } }),
+        content: jsonToReadableText({
+            compilerOptions: { composite: true, declarationMap: true, declarationDir: "../decls" },
+        }),
     };
 
     const mainTs: File = {

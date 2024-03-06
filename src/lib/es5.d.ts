@@ -207,7 +207,10 @@ interface ObjectConstructor {
      * Prevents the modification of existing property attributes and values, and prevents the addition of new properties.
      * @param o Object on which to lock the attributes.
      */
-    freeze<T extends { [idx: string]: U | null | undefined | object; }, U extends string | bigint | number | boolean | symbol>(
+    freeze<
+        T extends { [idx: string]: U | null | undefined | object; },
+        U extends string | bigint | number | boolean | symbol,
+    >(
         o: T,
     ): Readonly<T>;
 
@@ -929,7 +932,15 @@ interface DateConstructor {
      * @param seconds Must be supplied if milliseconds is supplied. A number from 0 to 59 that specifies the seconds.
      * @param ms A number from 0 to 999 that specifies the milliseconds.
      */
-    new (year: number, monthIndex: number, date?: number, hours?: number, minutes?: number, seconds?: number, ms?: number): Date;
+    new (
+        year: number,
+        monthIndex: number,
+        date?: number,
+        hours?: number,
+        minutes?: number,
+        seconds?: number,
+        ms?: number,
+    ): Date;
     (): string;
     readonly prototype: Date;
     /**
@@ -947,7 +958,15 @@ interface DateConstructor {
      * @param seconds Must be supplied if milliseconds is supplied. A number from 0 to 59 that specifies the seconds.
      * @param ms A number from 0 to 999 that specifies the milliseconds.
      */
-    UTC(year: number, monthIndex: number, date?: number, hours?: number, minutes?: number, seconds?: number, ms?: number): number;
+    UTC(
+        year: number,
+        monthIndex: number,
+        date?: number,
+        hours?: number,
+        minutes?: number,
+        seconds?: number,
+        ms?: number,
+    ): number;
     /** Returns the number of milliseconds elapsed since midnight, January 1, 1970 Universal Coordinated Time (UTC). */
     now(): number;
 }
@@ -1285,7 +1304,10 @@ interface ReadonlyArray<T> {
      * @param initialValue If initialValue is specified, it is used as the initial value to start the accumulation. The first call to the callbackfn function provides this value as an argument instead of an array value.
      */
     reduce(callbackfn: (previousValue: T, currentValue: T, currentIndex: number, array: readonly T[]) => T): T;
-    reduce(callbackfn: (previousValue: T, currentValue: T, currentIndex: number, array: readonly T[]) => T, initialValue: T): T;
+    reduce(
+        callbackfn: (previousValue: T, currentValue: T, currentIndex: number, array: readonly T[]) => T,
+        initialValue: T,
+    ): T;
     /**
      * Calls the specified callback function for all the elements in an array. The return value of the callback function is the accumulated result, and is provided as an argument in the next call to the callback function.
      * @param callbackfn A function that accepts up to four arguments. The reduce method calls the callbackfn function one time for each element in the array.
@@ -1491,20 +1513,29 @@ interface Array<T> {
      * @param callbackfn A function that accepts up to four arguments. The reduce method calls the callbackfn function one time for each element in the array.
      * @param initialValue If initialValue is specified, it is used as the initial value to start the accumulation. The first call to the callbackfn function provides this value as an argument instead of an array value.
      */
-    reduce<U>(callbackfn: (previousValue: U, currentValue: T, currentIndex: number, array: T[]) => U, initialValue: U): U;
+    reduce<U>(
+        callbackfn: (previousValue: U, currentValue: T, currentIndex: number, array: T[]) => U,
+        initialValue: U,
+    ): U;
     /**
      * Calls the specified callback function for all the elements in an array, in descending order. The return value of the callback function is the accumulated result, and is provided as an argument in the next call to the callback function.
      * @param callbackfn A function that accepts up to four arguments. The reduceRight method calls the callbackfn function one time for each element in the array.
      * @param initialValue If initialValue is specified, it is used as the initial value to start the accumulation. The first call to the callbackfn function provides this value as an argument instead of an array value.
      */
     reduceRight(callbackfn: (previousValue: T, currentValue: T, currentIndex: number, array: T[]) => T): T;
-    reduceRight(callbackfn: (previousValue: T, currentValue: T, currentIndex: number, array: T[]) => T, initialValue: T): T;
+    reduceRight(
+        callbackfn: (previousValue: T, currentValue: T, currentIndex: number, array: T[]) => T,
+        initialValue: T,
+    ): T;
     /**
      * Calls the specified callback function for all the elements in an array, in descending order. The return value of the callback function is the accumulated result, and is provided as an argument in the next call to the callback function.
      * @param callbackfn A function that accepts up to four arguments. The reduceRight method calls the callbackfn function one time for each element in the array.
      * @param initialValue If initialValue is specified, it is used as the initial value to start the accumulation. The first call to the callbackfn function provides this value as an argument instead of an array value.
      */
-    reduceRight<U>(callbackfn: (previousValue: U, currentValue: T, currentIndex: number, array: T[]) => U, initialValue: U): U;
+    reduceRight<U>(
+        callbackfn: (previousValue: U, currentValue: T, currentIndex: number, array: T[]) => U,
+        initialValue: U,
+    ): U;
 
     [n: number]: T;
 }
@@ -1651,7 +1682,8 @@ type Parameters<T extends (...args: any) => any> = T extends (...args: infer P) 
 /**
  * Obtain the parameters of a constructor function type in a tuple
  */
-type ConstructorParameters<T extends abstract new (...args: any) => any> = T extends abstract new (...args: infer P) => any ? P
+type ConstructorParameters<T extends abstract new (...args: any) => any> = T extends
+    abstract new (...args: infer P) => any ? P
     : never;
 
 /**
@@ -1662,7 +1694,8 @@ type ReturnType<T extends (...args: any) => any> = T extends (...args: any) => i
 /**
  * Obtain the return type of a constructor function type
  */
-type InstanceType<T extends abstract new (...args: any) => any> = T extends abstract new (...args: any) => infer R ? R : any;
+type InstanceType<T extends abstract new (...args: any) => any> = T extends abstract new (...args: any) => infer R ? R
+    : any;
 
 /**
  * Convert string literal type to uppercase
@@ -2031,7 +2064,9 @@ interface Int8Array {
      * the accumulation. The first call to the callbackfn function provides this value as an argument
      * instead of an array value.
      */
-    reduce(callbackfn: (previousValue: number, currentValue: number, currentIndex: number, array: Int8Array) => number): number;
+    reduce(
+        callbackfn: (previousValue: number, currentValue: number, currentIndex: number, array: Int8Array) => number,
+    ): number;
     reduce(
         callbackfn: (previousValue: number, currentValue: number, currentIndex: number, array: Int8Array) => number,
         initialValue: number,
@@ -2325,7 +2360,9 @@ interface Uint8Array {
      * the accumulation. The first call to the callbackfn function provides this value as an argument
      * instead of an array value.
      */
-    reduce(callbackfn: (previousValue: number, currentValue: number, currentIndex: number, array: Uint8Array) => number): number;
+    reduce(
+        callbackfn: (previousValue: number, currentValue: number, currentIndex: number, array: Uint8Array) => number,
+    ): number;
     reduce(
         callbackfn: (previousValue: number, currentValue: number, currentIndex: number, array: Uint8Array) => number,
         initialValue: number,
@@ -2539,7 +2576,10 @@ interface Uint8ClampedArray {
      * @param thisArg An object to which the this keyword can refer in the predicate function.
      * If thisArg is omitted, undefined is used as the this value.
      */
-    filter(predicate: (value: number, index: number, array: Uint8ClampedArray) => any, thisArg?: any): Uint8ClampedArray;
+    filter(
+        predicate: (value: number, index: number, array: Uint8ClampedArray) => any,
+        thisArg?: any,
+    ): Uint8ClampedArray;
 
     /**
      * Returns the value of the first element in the array where predicate is true, and undefined
@@ -2550,7 +2590,10 @@ interface Uint8ClampedArray {
      * @param thisArg If provided, it will be used as the this value for each invocation of
      * predicate. If it is not provided, undefined is used instead.
      */
-    find(predicate: (value: number, index: number, obj: Uint8ClampedArray) => boolean, thisArg?: any): number | undefined;
+    find(
+        predicate: (value: number, index: number, obj: Uint8ClampedArray) => boolean,
+        thisArg?: any,
+    ): number | undefined;
 
     /**
      * Returns the index of the first element in the array where predicate is true, and -1
@@ -2608,7 +2651,10 @@ interface Uint8ClampedArray {
      * @param thisArg An object to which the this keyword can refer in the callbackfn function.
      * If thisArg is omitted, undefined is used as the this value.
      */
-    map(callbackfn: (value: number, index: number, array: Uint8ClampedArray) => number, thisArg?: any): Uint8ClampedArray;
+    map(
+        callbackfn: (value: number, index: number, array: Uint8ClampedArray) => number,
+        thisArg?: any,
+    ): Uint8ClampedArray;
 
     /**
      * Calls the specified callback function for all the elements in an array. The return value of
@@ -2621,10 +2667,20 @@ interface Uint8ClampedArray {
      * instead of an array value.
      */
     reduce(
-        callbackfn: (previousValue: number, currentValue: number, currentIndex: number, array: Uint8ClampedArray) => number,
+        callbackfn: (
+            previousValue: number,
+            currentValue: number,
+            currentIndex: number,
+            array: Uint8ClampedArray,
+        ) => number,
     ): number;
     reduce(
-        callbackfn: (previousValue: number, currentValue: number, currentIndex: number, array: Uint8ClampedArray) => number,
+        callbackfn: (
+            previousValue: number,
+            currentValue: number,
+            currentIndex: number,
+            array: Uint8ClampedArray,
+        ) => number,
         initialValue: number,
     ): number;
 
@@ -2654,10 +2710,20 @@ interface Uint8ClampedArray {
      * argument instead of an array value.
      */
     reduceRight(
-        callbackfn: (previousValue: number, currentValue: number, currentIndex: number, array: Uint8ClampedArray) => number,
+        callbackfn: (
+            previousValue: number,
+            currentValue: number,
+            currentIndex: number,
+            array: Uint8ClampedArray,
+        ) => number,
     ): number;
     reduceRight(
-        callbackfn: (previousValue: number, currentValue: number, currentIndex: number, array: Uint8ClampedArray) => number,
+        callbackfn: (
+            previousValue: number,
+            currentValue: number,
+            currentIndex: number,
+            array: Uint8ClampedArray,
+        ) => number,
         initialValue: number,
     ): number;
 
@@ -2916,7 +2982,9 @@ interface Int16Array {
      * the accumulation. The first call to the callbackfn function provides this value as an argument
      * instead of an array value.
      */
-    reduce(callbackfn: (previousValue: number, currentValue: number, currentIndex: number, array: Int16Array) => number): number;
+    reduce(
+        callbackfn: (previousValue: number, currentValue: number, currentIndex: number, array: Int16Array) => number,
+    ): number;
     reduce(
         callbackfn: (previousValue: number, currentValue: number, currentIndex: number, array: Int16Array) => number,
         initialValue: number,
@@ -3211,7 +3279,9 @@ interface Uint16Array {
      * the accumulation. The first call to the callbackfn function provides this value as an argument
      * instead of an array value.
      */
-    reduce(callbackfn: (previousValue: number, currentValue: number, currentIndex: number, array: Uint16Array) => number): number;
+    reduce(
+        callbackfn: (previousValue: number, currentValue: number, currentIndex: number, array: Uint16Array) => number,
+    ): number;
     reduce(
         callbackfn: (previousValue: number, currentValue: number, currentIndex: number, array: Uint16Array) => number,
         initialValue: number,
@@ -3505,7 +3575,9 @@ interface Int32Array {
      * the accumulation. The first call to the callbackfn function provides this value as an argument
      * instead of an array value.
      */
-    reduce(callbackfn: (previousValue: number, currentValue: number, currentIndex: number, array: Int32Array) => number): number;
+    reduce(
+        callbackfn: (previousValue: number, currentValue: number, currentIndex: number, array: Int32Array) => number,
+    ): number;
     reduce(
         callbackfn: (previousValue: number, currentValue: number, currentIndex: number, array: Int32Array) => number,
         initialValue: number,
@@ -3799,7 +3871,9 @@ interface Uint32Array {
      * the accumulation. The first call to the callbackfn function provides this value as an argument
      * instead of an array value.
      */
-    reduce(callbackfn: (previousValue: number, currentValue: number, currentIndex: number, array: Uint32Array) => number): number;
+    reduce(
+        callbackfn: (previousValue: number, currentValue: number, currentIndex: number, array: Uint32Array) => number,
+    ): number;
     reduce(
         callbackfn: (previousValue: number, currentValue: number, currentIndex: number, array: Uint32Array) => number,
         initialValue: number,

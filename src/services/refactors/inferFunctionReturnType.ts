@@ -116,7 +116,8 @@ function getInfo(context: RefactorContext): FunctionInfo | RefactorErrorInfo | u
     const declaration = findAncestor(
         token,
         n => isBlock(n) ||
-                n.parent && isArrowFunction(n.parent) && (n.kind === SyntaxKind.EqualsGreaterThanToken || n.parent.body === n) ?
+                n.parent && isArrowFunction(n.parent) &&
+                    (n.kind === SyntaxKind.EqualsGreaterThanToken || n.parent.body === n) ?
             "quit" :
             isConvertibleDeclaration(n),
     ) as ConvertibleDeclaration | undefined;

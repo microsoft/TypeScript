@@ -120,7 +120,10 @@ export interface DocumentRegistry {
 
     getKeyForCompilationSettings(settings: CompilerOptions): DocumentRegistryBucketKey;
     /** @internal */
-    getDocumentRegistryBucketKeyWithMode(key: DocumentRegistryBucketKey, mode: ResolutionMode): DocumentRegistryBucketKeyWithMode;
+    getDocumentRegistryBucketKeyWithMode(
+        key: DocumentRegistryBucketKey,
+        mode: ResolutionMode,
+    ): DocumentRegistryBucketKeyWithMode;
     /**
      * Informs the DocumentRegistry that a file is not needed any longer.
      *
@@ -364,9 +367,11 @@ export function createDocumentRegistryInternal(
     ): SourceFile {
         scriptKind = ensureScriptKind(fileName, scriptKind);
         const compilationSettings = getCompilationSettings(compilationSettingsOrHost);
-        const host: MinimalResolutionCacheHost | undefined = compilationSettingsOrHost === compilationSettings ? undefined
+        const host: MinimalResolutionCacheHost | undefined = compilationSettingsOrHost === compilationSettings ?
+            undefined
             : compilationSettingsOrHost as MinimalResolutionCacheHost;
-        const scriptTarget = scriptKind === ScriptKind.JSON ? ScriptTarget.JSON : getEmitScriptTarget(compilationSettings);
+        const scriptTarget = scriptKind === ScriptKind.JSON ? ScriptTarget.JSON
+            : getEmitScriptTarget(compilationSettings);
         const sourceFileOptions: CreateSourceFileOptions = typeof languageVersionOrOptions === "object" ?
             languageVersionOrOptions :
             {
@@ -401,7 +406,10 @@ export function createDocumentRegistryInternal(
             // If this occurs unexpectedly, the fix is likely to synchronize the project settings.
             // Skip .d.ts files to reduce noise (should also cover most of node_modules).
             const otherBucketKey = !isDeclarationFileName(path) &&
-                forEachEntry(buckets, (bucket, bucketKey) => bucketKey !== keyWithMode && bucket.has(path) && bucketKey);
+                forEachEntry(
+                    buckets,
+                    (bucket, bucketKey) => bucketKey !== keyWithMode && bucket.has(path) && bucketKey,
+                );
             if (otherBucketKey) {
                 tracing.instant(tracing.Phase.Session, "documentRegistryBucketOverlap", {
                     path,
@@ -415,7 +423,10 @@ export function createDocumentRegistryInternal(
         let entry = bucketEntry && getDocumentRegistryEntry(bucketEntry, scriptKind);
         if (!entry && externalCache) {
             const sourceFile = externalCache.getDocument(keyWithMode, path);
-            if (sourceFile && sourceFile.scriptKind === scriptKind && sourceFile.text === getSnapshotText(scriptSnapshot)) {
+            if (
+                sourceFile && sourceFile.scriptKind === scriptKind &&
+                sourceFile.text === getSnapshotText(scriptSnapshot)
+            ) {
                 Debug.assert(acquiring);
                 entry = {
                     sourceFile,

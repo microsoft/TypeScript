@@ -26,7 +26,10 @@ const errorCodes = [Diagnostics.Parameter_has_a_name_but_no_type_Did_you_mean_0_
 registerCodeFix({
     errorCodes,
     getCodeActions: function getCodeActionsToAddNameToNamelessParameter(context) {
-        const changes = textChanges.ChangeTracker.with(context, t => makeChange(t, context.sourceFile, context.span.start));
+        const changes = textChanges.ChangeTracker.with(
+            context,
+            t => makeChange(t, context.sourceFile, context.span.start),
+        );
         return [
             createCodeFixAction(
                 fixId,
@@ -38,7 +41,8 @@ registerCodeFix({
         ];
     },
     fixIds: [fixId],
-    getAllCodeActions: context => codeFixAll(context, errorCodes, (changes, diag) => makeChange(changes, diag.file, diag.start)),
+    getAllCodeActions: context =>
+        codeFixAll(context, errorCodes, (changes, diag) => makeChange(changes, diag.file, diag.start)),
 });
 
 function makeChange(changeTracker: textChanges.ChangeTracker, sourceFile: SourceFile, start: number) {

@@ -207,8 +207,12 @@ export function createParenthesizerRules(factory: NodeFactory): ParenthesizerRul
                         //  "a"+(1+2)       => "a"+(1+2)
                         //  "a"+("b"+"c")   => "a"+"b"+"c"
                         if (binaryOperator === SyntaxKind.PlusToken) {
-                            const leftKind = leftOperand ? getLiteralKindOfBinaryPlusOperand(leftOperand) : SyntaxKind.Unknown;
-                            if (isLiteralKind(leftKind) && leftKind === getLiteralKindOfBinaryPlusOperand(emittedOperand)) {
+                            const leftKind = leftOperand ? getLiteralKindOfBinaryPlusOperand(leftOperand)
+                                : SyntaxKind.Unknown;
+                            if (
+                                isLiteralKind(leftKind) &&
+                                leftKind === getLiteralKindOfBinaryPlusOperand(emittedOperand)
+                            ) {
                                 return false;
                             }
                         }
@@ -264,7 +268,10 @@ export function createParenthesizerRules(factory: NodeFactory): ParenthesizerRul
             return node.kind;
         }
 
-        if (node.kind === SyntaxKind.BinaryExpression && (node as BinaryExpression).operatorToken.kind === SyntaxKind.PlusToken) {
+        if (
+            node.kind === SyntaxKind.BinaryExpression &&
+            (node as BinaryExpression).operatorToken.kind === SyntaxKind.PlusToken
+        ) {
             if ((node as BinaryPlusExpression).cachedLiteralKind !== undefined) {
                 return (node as BinaryPlusExpression).cachedLiteralKind;
             }
@@ -421,7 +428,8 @@ export function createParenthesizerRules(factory: NodeFactory): ParenthesizerRul
 
     function parenthesizeOperandOfPrefixUnary(operand: Expression): UnaryExpression {
         // TODO(rbuckton): Verifiy whether `setTextRange` is needed.
-        return isUnaryExpression(operand) ? operand : setTextRange(factory.createParenthesizedExpression(operand), operand);
+        return isUnaryExpression(operand) ? operand
+            : setTextRange(factory.createParenthesizedExpression(operand), operand);
     }
 
     function parenthesizeExpressionsOfCommaDelimitedList(elements: NodeArray<Expression>): NodeArray<Expression> {
@@ -451,7 +459,11 @@ export function createParenthesizerRules(factory: NodeFactory): ParenthesizerRul
                     emittedExpression.typeArguments,
                     emittedExpression.arguments,
                 );
-                return factory.restoreOuterExpressions(expression, updated, OuterExpressionKinds.PartiallyEmittedExpressions);
+                return factory.restoreOuterExpressions(
+                    expression,
+                    updated,
+                    OuterExpressionKinds.PartiallyEmittedExpressions,
+                );
             }
         }
 
@@ -473,7 +485,8 @@ export function createParenthesizerRules(factory: NodeFactory): ParenthesizerRul
         if (
             !isBlock(body) &&
             (isCommaSequence(body) ||
-                getLeftmostExpression(body, /*stopAtCallExpressions*/ false).kind === SyntaxKind.ObjectLiteralExpression)
+                getLeftmostExpression(body, /*stopAtCallExpressions*/ false).kind ===
+                    SyntaxKind.ObjectLiteralExpression)
         ) {
             // TODO(rbuckton): Verifiy whether `setTextRange` is needed.
             return setTextRange(factory.createParenthesizedExpression(body), body);
@@ -674,14 +687,17 @@ export function createParenthesizerRules(factory: NodeFactory): ParenthesizerRul
     // }
 
     function parenthesizeLeadingTypeArgument(node: TypeNode) {
-        return isFunctionOrConstructorTypeNode(node) && node.typeParameters ? factory.createParenthesizedType(node) : node;
+        return isFunctionOrConstructorTypeNode(node) && node.typeParameters ? factory.createParenthesizedType(node)
+            : node;
     }
 
     function parenthesizeOrdinalTypeArgument(node: TypeNode, i: number) {
         return i === 0 ? parenthesizeLeadingTypeArgument(node) : node;
     }
 
-    function parenthesizeTypeArguments(typeArguments: NodeArray<TypeNode> | undefined): NodeArray<TypeNode> | undefined {
+    function parenthesizeTypeArguments(
+        typeArguments: NodeArray<TypeNode> | undefined,
+    ): NodeArray<TypeNode> | undefined {
         if (some(typeArguments)) {
             return factory.createNodeArray(sameMap(typeArguments, parenthesizeOrdinalTypeArgument));
         }

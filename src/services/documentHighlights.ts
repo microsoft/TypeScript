@@ -100,7 +100,8 @@ export namespace DocumentHighlights {
         const node = getTouchingPropertyName(sourceFile, position);
 
         if (
-            node.parent && (isJsxOpeningElement(node.parent) && node.parent.tagName === node || isJsxClosingElement(node.parent))
+            node.parent &&
+            (isJsxOpeningElement(node.parent) && node.parent.tagName === node || isJsxClosingElement(node.parent))
         ) {
             // For a JSX element, just highlight the matching tag, not all references.
             const { openingElement, closingElement } = node.parent.parent;
@@ -140,11 +141,19 @@ export namespace DocumentHighlights {
             sourceFilesSet,
         );
         if (!referenceEntries) return undefined;
-        const map = arrayToMultiMap(referenceEntries.map(FindAllReferences.toHighlightSpan), e => e.fileName, e => e.span);
+        const map = arrayToMultiMap(
+            referenceEntries.map(FindAllReferences.toHighlightSpan),
+            e => e.fileName,
+            e => e.span,
+        );
         const getCanonicalFileName = createGetCanonicalFileName(program.useCaseSensitiveFileNames());
         return arrayFrom(mapDefinedIterator(map.entries(), ([fileName, highlightSpans]) => {
             if (!sourceFilesSet.has(fileName)) {
-                if (!program.redirectTargetsMap.has(toPath(fileName, program.getCurrentDirectory(), getCanonicalFileName))) {
+                if (
+                    !program.redirectTargetsMap.has(
+                        toPath(fileName, program.getCurrentDirectory(), getCanonicalFileName),
+                    )
+                ) {
                     return undefined;
                 }
                 const redirectTarget = program.getSourceFile(fileName);
@@ -444,7 +453,9 @@ export namespace DocumentHighlights {
         return keywords;
     }
 
-    function getBreakOrContinueStatementOccurrences(breakOrContinueStatement: BreakOrContinueStatement): Node[] | undefined {
+    function getBreakOrContinueStatementOccurrences(
+        breakOrContinueStatement: BreakOrContinueStatement,
+    ): Node[] | undefined {
         const owner = getBreakOrContinueOwner(breakOrContinueStatement);
 
         if (owner) {
@@ -590,7 +601,8 @@ export namespace DocumentHighlights {
     function traverseWithoutCrossingFunction(node: Node, cb: (node: Node) => void) {
         cb(node);
         if (
-            !isFunctionLike(node) && !isClassLike(node) && !isInterfaceDeclaration(node) && !isModuleDeclaration(node) &&
+            !isFunctionLike(node) && !isClassLike(node) && !isInterfaceDeclaration(node) &&
+            !isModuleDeclaration(node) &&
             !isTypeAliasDeclaration(node) &&
             !isTypeNode(node)
         ) {
@@ -672,6 +684,9 @@ export namespace DocumentHighlights {
      * Note: 'node' cannot be a SourceFile.
      */
     function isLabeledBy(node: Node, labelName: __String): boolean {
-        return !!findAncestor(node.parent, owner => !isLabeledStatement(owner) ? "quit" : owner.label.escapedText === labelName);
+        return !!findAncestor(
+            node.parent,
+            owner => !isLabeledStatement(owner) ? "quit" : owner.label.escapedText === labelName,
+        );
     }
 }

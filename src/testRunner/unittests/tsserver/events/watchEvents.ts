@@ -144,7 +144,10 @@ describe("unittests:: tsserver:: events:: watchEvents", () => {
 
     it("canUseWatchEvents", () => {
         const { host, logger } = setup();
-        const session = createSessionWithCustomEventHandler({ host, canUseWatchEvents: true, logger }, handleWatchEvents);
+        const session = createSessionWithCustomEventHandler(
+            { host, canUseWatchEvents: true, logger },
+            handleWatchEvents,
+        );
         openFilesForSession(["/user/username/projects/myproject/a.ts"], session);
 
         // Directory watcher

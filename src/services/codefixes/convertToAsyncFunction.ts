@@ -167,7 +167,10 @@ function convertToAsyncFunction(
         functionToConvert = tokenAtPosition.parent.initializer;
     }
     else {
-        functionToConvert = tryCast(getContainingFunction(getTokenAtPosition(sourceFile, position)), canBeConvertedToAsync);
+        functionToConvert = tryCast(
+            getContainingFunction(getTokenAtPosition(sourceFile, position)),
+            canBeConvertedToAsync,
+        );
     }
 
     if (!functionToConvert) {
@@ -358,7 +361,8 @@ function renameCollidingVarNames(
             }
             // We only care about identifiers that are parameters, variable declarations, or binding elements
             else if (
-                node.parent && (isParameter(node.parent) || isVariableDeclaration(node.parent) || isBindingElement(node.parent))
+                node.parent &&
+                (isParameter(node.parent) || isVariableDeclaration(node.parent) || isBindingElement(node.parent))
             ) {
                 const originalName = node.text;
                 const collidingSymbols = collidingSymbolMap.get(originalName);
@@ -447,7 +451,13 @@ function transformExpression(
         return transformFinally(node, elementAt(node.arguments, 0), transformer, hasContinuation, continuationArgName);
     }
     if (isPropertyAccessExpression(node)) {
-        return transformExpression(returnContextNode, node.expression, transformer, hasContinuation, continuationArgName);
+        return transformExpression(
+            returnContextNode,
+            node.expression,
+            transformer,
+            hasContinuation,
+            continuationArgName,
+        );
     }
 
     const nodeType = transformer.checker.getTypeAtLocation(node);
@@ -535,7 +545,9 @@ function finishCatchOrFinallyTransform(
         const unionType = transformer.checker.getUnionType(typeArray, UnionReduction.Subtype);
         const unionTypeNode = transformer.isInJSFile ? undefined
             : transformer.checker.typeToTypeNode(unionType, /*enclosingDeclaration*/ undefined, /*flags*/ undefined);
-        const varDecl = [factory.createVariableDeclaration(varDeclIdentifier, /*exclamationToken*/ undefined, unionTypeNode)];
+        const varDecl = [
+            factory.createVariableDeclaration(varDeclIdentifier, /*exclamationToken*/ undefined, unionTypeNode),
+        ];
         const varDeclList = factory.createVariableStatement(
             /*modifiers*/ undefined,
             factory.createVariableDeclarationList(varDecl, NodeFlags.Let),
@@ -758,7 +770,10 @@ function createVariableOrAssignmentOrExpressionStatement(
         // if the variable has already been declared, we don't need "let" or "const"
         return [
             factory.createExpressionStatement(
-                factory.createAssignment(getSynthesizedDeepClone(referenceSynthIdentifier(variableName)), rightHandSide),
+                factory.createAssignment(
+                    getSynthesizedDeepClone(referenceSynthIdentifier(variableName)),
+                    rightHandSide,
+                ),
             ),
         ];
     }
@@ -778,11 +793,18 @@ function createVariableOrAssignmentOrExpressionStatement(
     ];
 }
 
-function maybeAnnotateAndReturn(expressionToReturn: Expression | undefined, typeAnnotation: TypeNode | undefined): Statement[] {
+function maybeAnnotateAndReturn(
+    expressionToReturn: Expression | undefined,
+    typeAnnotation: TypeNode | undefined,
+): Statement[] {
     if (typeAnnotation && expressionToReturn) {
         const name = factory.createUniqueName("result", GeneratedIdentifierFlags.Optimistic);
         return [
-            ...createVariableOrAssignmentOrExpressionStatement(createSynthIdentifier(name), expressionToReturn, typeAnnotation),
+            ...createVariableOrAssignmentOrExpressionStatement(
+                createSynthIdentifier(name),
+                expressionToReturn,
+                typeAnnotation,
+            ),
             factory.createReturnStatement(name),
         ];
     }
@@ -874,7 +896,11 @@ function transformCallbackArgument(
                             refactoredStmts.push(
                                 ...maybeAnnotateAndReturn(
                                     possiblyAwaitedRightHandSide,
-                                    getExplicitPromisedTypeOfPromiseReturningCallExpression(parent, func, transformer.checker),
+                                    getExplicitPromisedTypeOfPromiseReturningCallExpression(
+                                        parent,
+                                        func,
+                                        transformer.checker,
+                                    ),
                                 ),
                             );
                         }
@@ -961,7 +987,9 @@ function transformCallbackArgument(
                             /*typeAnnotation*/ undefined,
                         );
                         if (continuationArgName) {
-                            continuationArgName.types.push(transformer.checker.getAwaitedType(returnType) || returnType);
+                            continuationArgName.types.push(
+                                transformer.checker.getAwaitedType(returnType) || returnType,
+                            );
                         }
                         return transformedStatement;
                     }
@@ -984,7 +1012,11 @@ function transformCallbackArgument(
     return emptyArray;
 }
 
-function getPossiblyAwaitedRightHandSide(checker: TypeChecker, type: Type, expr: Expression): AwaitExpression | Expression {
+function getPossiblyAwaitedRightHandSide(
+    checker: TypeChecker,
+    type: Type,
+    expr: Expression,
+): AwaitExpression | Expression {
     const rightHandSide = getSynthesizedDeepClone(expr);
     return !!checker.getPromisedTypeOfPromise(type) ? factory.createAwaitExpression(rightHandSide) : rightHandSide;
 }
@@ -1154,7 +1186,13 @@ function isEmptyBindingName(bindingName: SynthBindingName | undefined): boolean 
 }
 
 function createSynthIdentifier(identifier: Identifier, types: Type[] = []): SynthIdentifier {
-    return { kind: SynthBindingNameKind.Identifier, identifier, types, hasBeenDeclared: false, hasBeenReferenced: false };
+    return {
+        kind: SynthBindingNameKind.Identifier,
+        identifier,
+        types,
+        hasBeenDeclared: false,
+        hasBeenReferenced: false,
+    };
 }
 
 function createSynthBindingPattern(

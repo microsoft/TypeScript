@@ -237,7 +237,13 @@ export class ParseConfigHost implements ts.ParseConfigHost {
         return this.sys.readFile(path);
     }
 
-    public readDirectory(path: string, extensions: string[], excludes: string[], includes: string[], depth: number): string[] {
+    public readDirectory(
+        path: string,
+        extensions: string[],
+        excludes: string[],
+        includes: string[],
+        depth: number,
+    ): string[] {
         return this.sys.readDirectory(path, extensions, excludes, includes, depth);
     }
 
@@ -518,7 +524,9 @@ function expectedDiagnosticMessageChainToText({ message, next }: ExpectedDiagnos
     return text;
 }
 
-function expectedDiagnosticRelatedInformationToText({ location, ...diagnosticMessage }: ExpectedDiagnosticRelatedInformation) {
+function expectedDiagnosticRelatedInformationToText(
+    { location, ...diagnosticMessage }: ExpectedDiagnosticRelatedInformation,
+) {
     const text = expectedDiagnosticMessageChainToText(diagnosticMessage);
     if (location) {
         const { file, start, length } = location;
@@ -527,7 +535,9 @@ function expectedDiagnosticRelatedInformationToText({ location, ...diagnosticMes
     return text;
 }
 
-function expectedErrorDiagnosticToText({ relatedInformation, ...diagnosticRelatedInformation }: ExpectedErrorDiagnostic) {
+function expectedErrorDiagnosticToText(
+    { relatedInformation, ...diagnosticRelatedInformation }: ExpectedErrorDiagnostic,
+) {
     let text = `${DiagnosticKind.Error}!: ${expectedDiagnosticRelatedInformationToText(diagnosticRelatedInformation)}`;
     if (relatedInformation) {
         for (const kid of relatedInformation) {

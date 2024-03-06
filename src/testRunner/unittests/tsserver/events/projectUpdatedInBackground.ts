@@ -16,7 +16,10 @@ import {
 } from "../../helpers/virtualFileSystemWithWatch";
 
 describe("unittests:: tsserver:: events:: ProjectsUpdatedInBackground", () => {
-    function verifyProjectsUpdatedInBackgroundEvent(scenario: string, createSession: (host: TestServerHost) => TestSession) {
+    function verifyProjectsUpdatedInBackgroundEvent(
+        scenario: string,
+        createSession: (host: TestServerHost) => TestSession,
+    ) {
         it("when adding new file", () => {
             const commonFile1: File = {
                 path: "/users/username/projects/project/file1.ts",
@@ -75,7 +78,11 @@ describe("unittests:: tsserver:: events:: ProjectsUpdatedInBackground", () => {
 
                     host.writeFile(f2.path, "export let x = 11");
                     host.runQueuedTimeoutCallbacks();
-                    baselineTsserverLogs("events/projectUpdatedInBackground", `${scenario} and ${subScenario}`, session);
+                    baselineTsserverLogs(
+                        "events/projectUpdatedInBackground",
+                        `${scenario} and ${subScenario}`,
+                        session,
+                    );
                 });
             }
             verifyEventWithOutSettings("when both options are not set");
@@ -139,7 +146,8 @@ describe("unittests:: tsserver:: events:: ProjectsUpdatedInBackground", () => {
                     configFile,
                 ];
 
-                const filesToReload = firstReloadFileList?.map(fileName => ts.find(files, file => file.path === fileName)!) ||
+                const filesToReload =
+                    firstReloadFileList?.map(fileName => ts.find(files, file => file.path === fileName)!) ||
                     files;
                 const host = createServerHost([filesToReload[0], configFile]);
 
@@ -189,7 +197,11 @@ describe("unittests:: tsserver:: events:: ProjectsUpdatedInBackground", () => {
                 // Change the content of moduleFile1 to `export var T: number;export function Foo() { console.log('hi'); };`
                 host.writeFile(moduleFile1.path, `export var T: number;export function Foo() { console.log('hi'); };`);
                 host.runQueuedTimeoutCallbacks();
-                baselineTsserverLogs("events/projectUpdatedInBackground", `${scenario} and should contains only itself`, session);
+                baselineTsserverLogs(
+                    "events/projectUpdatedInBackground",
+                    `${scenario} and should contains only itself`,
+                    session,
+                );
             });
 
             it("should be up-to-date with the reference map changes", () => {
@@ -208,7 +220,10 @@ describe("unittests:: tsserver:: events:: ProjectsUpdatedInBackground", () => {
                 host.runQueuedTimeoutCallbacks();
 
                 // Change the content of moduleFile1 to `export var T: number;export var T2: string;export function Foo() { };`
-                host.writeFile(moduleFile1.path, `export var T: number;export var T2: string;export function Foo() { };`);
+                host.writeFile(
+                    moduleFile1.path,
+                    `export var T: number;export var T2: string;export function Foo() { };`,
+                );
                 host.runQueuedTimeoutCallbacks();
 
                 // Multiple file edits in one go:
@@ -418,9 +433,13 @@ describe("unittests:: tsserver:: events:: ProjectsUpdatedInBackground", () => {
         });
 
         describe("resolution when resolution cache size", () => {
-            function verifyWithMaxCacheLimit(subScenario: string, useSlashRootAsSomeNotRootFolderInUserDirectory: boolean) {
+            function verifyWithMaxCacheLimit(
+                subScenario: string,
+                useSlashRootAsSomeNotRootFolderInUserDirectory: boolean,
+            ) {
                 it(subScenario, () => {
-                    const rootFolder = useSlashRootAsSomeNotRootFolderInUserDirectory ? "/user/username/rootfolder/otherfolder/"
+                    const rootFolder = useSlashRootAsSomeNotRootFolderInUserDirectory ?
+                        "/user/username/rootfolder/otherfolder/"
                         : "/";
                     const file1: File = {
                         path: rootFolder + "a/b/project/file1.ts",
@@ -451,16 +470,29 @@ describe("unittests:: tsserver:: events:: ProjectsUpdatedInBackground", () => {
                     host.runQueuedTimeoutCallbacks(); // For invalidation
                     host.runQueuedTimeoutCallbacks(); // For actual update
 
-                    baselineTsserverLogs("events/projectUpdatedInBackground", `${scenario} and ${subScenario}`, session);
+                    baselineTsserverLogs(
+                        "events/projectUpdatedInBackground",
+                        `${scenario} and ${subScenario}`,
+                        session,
+                    );
                 });
             }
-            verifyWithMaxCacheLimit("project is not at root level", /*useSlashRootAsSomeNotRootFolderInUserDirectory*/ true);
-            verifyWithMaxCacheLimit("project is at root level", /*useSlashRootAsSomeNotRootFolderInUserDirectory*/ false);
+            verifyWithMaxCacheLimit(
+                "project is not at root level",
+                /*useSlashRootAsSomeNotRootFolderInUserDirectory*/ true,
+            );
+            verifyWithMaxCacheLimit(
+                "project is at root level",
+                /*useSlashRootAsSomeNotRootFolderInUserDirectory*/ false,
+            );
         });
     }
 
     describe("when event handler is set in the session", () => {
-        verifyProjectsUpdatedInBackgroundEvent("when event handler is set in the session", createSessionWithCustomEventHandler);
+        verifyProjectsUpdatedInBackgroundEvent(
+            "when event handler is set in the session",
+            createSessionWithCustomEventHandler,
+        );
     });
 
     describe("when event handler is not set but session is created with canUseEvents = true", () => {

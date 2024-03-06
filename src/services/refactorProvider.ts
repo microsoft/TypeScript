@@ -25,7 +25,10 @@ export function registerRefactor(name: string, refactor: Refactor) {
 }
 
 /** @internal */
-export function getApplicableRefactors(context: RefactorContext, includeInteractiveActions?: boolean): ApplicableRefactorInfo[] {
+export function getApplicableRefactors(
+    context: RefactorContext,
+    includeInteractiveActions?: boolean,
+): ApplicableRefactorInfo[] {
     return arrayFrom(
         flatMapIterator(
             refactors.values(),

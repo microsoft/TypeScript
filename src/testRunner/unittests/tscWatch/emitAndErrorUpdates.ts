@@ -304,24 +304,34 @@ export class Data {
         function verifyTransitiveExports(subScenario: string, files: readonly File[]) {
             verifyEmitAndErrorUpdates({
                 subScenario: `transitive exports/${subScenario}`,
-                files: () => [lib1ToolsInterface, lib1ToolsPublic, app, lib2Public, lib1Public, ...files, config, libFile],
+                files:
+                    () => [lib1ToolsInterface, lib1ToolsPublic, app, lib2Public, lib1Public, ...files, config, libFile],
                 changes: [
                     {
                         caption: "Rename property title to title2 of interface ITest to initialize signatures",
                         edit: sys =>
-                            sys.writeFile(lib1ToolsInterface.path, lib1ToolsInterface.content.replace("title", "title2")),
+                            sys.writeFile(
+                                lib1ToolsInterface.path,
+                                lib1ToolsInterface.content.replace("title", "title2"),
+                            ),
                         timeouts: sys => sys.runQueuedTimeoutCallbacks(),
                     },
                     {
                         caption: "Rename property title2 to title of interface ITest to revert back to original text",
                         edit: sys =>
-                            sys.writeFile(lib1ToolsInterface.path, lib1ToolsInterface.content.replace("title2", "title")),
+                            sys.writeFile(
+                                lib1ToolsInterface.path,
+                                lib1ToolsInterface.content.replace("title2", "title"),
+                            ),
                         timeouts: sys => sys.runQueuedTimeoutCallbacks(),
                     },
                     {
                         caption: "Rename property title to title2 of interface ITest",
                         edit: sys =>
-                            sys.writeFile(lib1ToolsInterface.path, lib1ToolsInterface.content.replace("title", "title2")),
+                            sys.writeFile(
+                                lib1ToolsInterface.path,
+                                lib1ToolsInterface.content.replace("title", "title2"),
+                            ),
                         timeouts: sys => sys.runQueuedTimeoutCallbacks(),
                     },
                 ],

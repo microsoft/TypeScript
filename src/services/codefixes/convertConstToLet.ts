@@ -74,7 +74,11 @@ function getInfo(sourceFile: SourceFile, pos: number, program: Program): Info | 
     const declaration = tryCast(symbol?.valueDeclaration?.parent, isVariableDeclarationList);
     if (declaration === undefined) return;
 
-    const constToken = findChildOfKind<Token<SyntaxKind.ConstKeyword>>(declaration, SyntaxKind.ConstKeyword, sourceFile);
+    const constToken = findChildOfKind<Token<SyntaxKind.ConstKeyword>>(
+        declaration,
+        SyntaxKind.ConstKeyword,
+        sourceFile,
+    );
     if (constToken === undefined) return;
 
     return { symbol, token: constToken };

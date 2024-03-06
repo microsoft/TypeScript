@@ -125,7 +125,8 @@ export function createPatternMatcher(pattern: string): PatternMatcher | undefine
     // The pattern is an empty string, and it matches everything.
     if (dotSeparatedSegments.length === 1 && dotSeparatedSegments[0].totalTextChunk.text === "") {
         return {
-            getMatchForLastSegmentOfPattern: () => createPatternMatch(PatternMatchKind.substring, /*isCaseSensitive*/ true),
+            getMatchForLastSegmentOfPattern: () =>
+                createPatternMatch(PatternMatchKind.substring, /*isCaseSensitive*/ true),
             getFullMatch: () => createPatternMatch(PatternMatchKind.substring, /*isCaseSensitive*/ true),
             patternContainsDots: false,
         };
@@ -134,8 +135,10 @@ export function createPatternMatcher(pattern: string): PatternMatcher | undefine
     if (dotSeparatedSegments.some(segment => !segment.subWordTextChunks.length)) return undefined;
 
     return {
-        getFullMatch: (containers, candidate) => getFullMatch(containers, candidate, dotSeparatedSegments, stringToWordSpans),
-        getMatchForLastSegmentOfPattern: candidate => matchSegment(candidate, last(dotSeparatedSegments), stringToWordSpans),
+        getFullMatch: (containers, candidate) =>
+            getFullMatch(containers, candidate, dotSeparatedSegments, stringToWordSpans),
+        getMatchForLastSegmentOfPattern: candidate =>
+            matchSegment(candidate, last(dotSeparatedSegments), stringToWordSpans),
         patternContainsDots: dotSeparatedSegments.length > 1,
     };
 }
@@ -164,7 +167,10 @@ function getFullMatch(
 
     let bestMatch: PatternMatch | undefined;
     for (let i = dotSeparatedSegments.length - 2, j = candidateContainers.length - 1; i >= 0; i -= 1, j -= 1) {
-        bestMatch = betterMatch(bestMatch, matchSegment(candidateContainers[j], dotSeparatedSegments[i], stringToWordSpans));
+        bestMatch = betterMatch(
+            bestMatch,
+            matchSegment(candidateContainers[j], dotSeparatedSegments[i], stringToWordSpans),
+        );
     }
     return bestMatch;
 }
@@ -239,7 +245,11 @@ function matchTextChunk(
     }
 }
 
-function matchSegment(candidate: string, segment: Segment, stringToWordSpans: Map<string, TextSpan[]>): PatternMatch | undefined {
+function matchSegment(
+    candidate: string,
+    segment: Segment,
+    stringToWordSpans: Map<string, TextSpan[]>,
+): PatternMatch | undefined {
     // First check if the segment matches as is.  This is also useful if the segment contains
     // characters we would normally strip when splitting into parts that we also may want to
     // match in the candidate.  For example if the segment is "@int" and the candidate is
@@ -315,7 +325,11 @@ function partStartsWith(
         && everyInRange(
             0,
             patternSpan.length,
-            i => equalChars(pattern.charCodeAt(patternSpan.start + i), candidate.charCodeAt(candidateSpan.start + i), ignoreCase),
+            i => equalChars(
+                pattern.charCodeAt(patternSpan.start + i),
+                candidate.charCodeAt(candidateSpan.start + i),
+                ignoreCase,
+            ),
         );
 }
 
@@ -323,7 +337,12 @@ function equalChars(ch1: number, ch2: number, ignoreCase: boolean): boolean {
     return ignoreCase ? toLowerCase(ch1) === toLowerCase(ch2) : ch1 === ch2;
 }
 
-function tryCamelCaseMatch(candidate: string, candidateParts: TextSpan[], chunk: TextChunk, ignoreCase: boolean): boolean {
+function tryCamelCaseMatch(
+    candidate: string,
+    candidateParts: TextSpan[],
+    chunk: TextChunk,
+    ignoreCase: boolean,
+): boolean {
     const chunkCharacterSpans = chunk.characterSpans;
 
     // Note: we may have more pattern parts than candidate parts.  This is because multiple
@@ -472,7 +491,8 @@ function isDigit(ch: number) {
 }
 
 function isWordChar(ch: number) {
-    return isUpperCaseLetter(ch) || isLowerCaseLetter(ch) || isDigit(ch) || ch === CharacterCodes._ || ch === CharacterCodes.$;
+    return isUpperCaseLetter(ch) || isLowerCaseLetter(ch) || isDigit(ch) || ch === CharacterCodes._ ||
+        ch === CharacterCodes.$;
 }
 
 function breakPatternIntoTextChunks(pattern: string): TextChunk[] {

@@ -139,7 +139,11 @@ export function transformES2020(context: TransformationContext): (x: SourceFile 
 
         expression = node.kind === SyntaxKind.PropertyAccessExpression
             ? factory.updatePropertyAccessExpression(node, expression, visitNode(node.name, visitor, isIdentifier))
-            : factory.updateElementAccessExpression(node, expression, visitNode(node.argumentExpression, visitor, isExpression));
+            : factory.updateElementAccessExpression(
+                node,
+                expression,
+                visitNode(node.argumentExpression, visitor, isExpression),
+            );
         return thisArg ? factory.createSyntheticReferenceExpression(expression, thisArg) : expression;
     }
 
@@ -157,7 +161,10 @@ export function transformES2020(context: TransformationContext): (x: SourceFile 
             );
             const args = visitNodes(node.arguments, visitor, isExpression);
             if (isSyntheticReference(expression)) {
-                return setTextRange(factory.createFunctionCallCall(expression.expression, expression.thisArg, args), node);
+                return setTextRange(
+                    factory.createFunctionCallCall(expression.expression, expression.thisArg, args),
+                    node,
+                );
             }
             return factory.updateCallExpression(node, expression, /*typeArguments*/ undefined, args);
         }
@@ -167,10 +174,18 @@ export function transformES2020(context: TransformationContext): (x: SourceFile 
     function visitNonOptionalExpression(node: Expression, captureThisArg: boolean, isDelete: boolean): Expression {
         switch (node.kind) {
             case SyntaxKind.ParenthesizedExpression:
-                return visitNonOptionalParenthesizedExpression(node as ParenthesizedExpression, captureThisArg, isDelete);
+                return visitNonOptionalParenthesizedExpression(
+                    node as ParenthesizedExpression,
+                    captureThisArg,
+                    isDelete,
+                );
             case SyntaxKind.PropertyAccessExpression:
             case SyntaxKind.ElementAccessExpression:
-                return visitNonOptionalPropertyOrElementAccessExpression(node as AccessExpression, captureThisArg, isDelete);
+                return visitNonOptionalPropertyOrElementAccessExpression(
+                    node as AccessExpression,
+                    captureThisArg,
+                    isDelete,
+                );
             case SyntaxKind.CallExpression:
                 return visitNonOptionalCallExpression(node as CallExpression, captureThisArg);
             default:
@@ -213,7 +228,10 @@ export function transformES2020(context: TransformationContext): (x: SourceFile 
                         }
                     }
                     rightExpression = segment.kind === SyntaxKind.PropertyAccessExpression
-                        ? factory.createPropertyAccessExpression(rightExpression, visitNode(segment.name, visitor, isIdentifier))
+                        ? factory.createPropertyAccessExpression(
+                            rightExpression,
+                            visitNode(segment.name, visitor, isIdentifier),
+                        )
                         : factory.createElementAccessExpression(
                             rightExpression,
                             visitNode(segment.argumentExpression, visitor, isExpression),
@@ -266,13 +284,17 @@ export function transformES2020(context: TransformationContext): (x: SourceFile 
         return factory.createBinaryExpression(
             factory.createBinaryExpression(
                 left,
-                factory.createToken(invert ? SyntaxKind.EqualsEqualsEqualsToken : SyntaxKind.ExclamationEqualsEqualsToken),
+                factory.createToken(
+                    invert ? SyntaxKind.EqualsEqualsEqualsToken : SyntaxKind.ExclamationEqualsEqualsToken,
+                ),
                 factory.createNull(),
             ),
             factory.createToken(invert ? SyntaxKind.BarBarToken : SyntaxKind.AmpersandAmpersandToken),
             factory.createBinaryExpression(
                 right,
-                factory.createToken(invert ? SyntaxKind.EqualsEqualsEqualsToken : SyntaxKind.ExclamationEqualsEqualsToken),
+                factory.createToken(
+                    invert ? SyntaxKind.EqualsEqualsEqualsToken : SyntaxKind.ExclamationEqualsEqualsToken,
+                ),
                 factory.createVoidZero(),
             ),
         );
@@ -299,7 +321,10 @@ export function transformES2020(context: TransformationContext): (x: SourceFile 
 
     function visitDeleteExpression(node: DeleteExpression) {
         return isOptionalChain(skipParentheses(node.expression))
-            ? setOriginalNode(visitNonOptionalExpression(node.expression, /*captureThisArg*/ false, /*isDelete*/ true), node)
+            ? setOriginalNode(
+                visitNonOptionalExpression(node.expression, /*captureThisArg*/ false, /*isDelete*/ true),
+                node,
+            )
             : factory.updateDeleteExpression(node, visitNode(node.expression, visitor, isExpression));
     }
 }

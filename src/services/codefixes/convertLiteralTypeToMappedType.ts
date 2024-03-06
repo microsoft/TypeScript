@@ -18,7 +18,9 @@ import {
 } from "../_namespaces/ts.codefix";
 
 const fixId = "convertLiteralTypeToMappedType";
-const errorCodes = [Diagnostics._0_only_refers_to_a_type_but_is_being_used_as_a_value_here_Did_you_mean_to_use_1_in_0.code];
+const errorCodes = [
+    Diagnostics._0_only_refers_to_a_type_but_is_being_used_as_a_value_here_Did_you_mean_to_use_1_in_0.code,
+];
 
 registerCodeFix({
     errorCodes,
@@ -82,7 +84,11 @@ function doChange(
         container,
         factory.createMappedTypeNode(
             /*readonlyToken*/ undefined,
-            factory.createTypeParameterDeclaration(/*modifiers*/ undefined, name, factory.createTypeReferenceNode(constraint)),
+            factory.createTypeParameterDeclaration(
+                /*modifiers*/ undefined,
+                name,
+                factory.createTypeReferenceNode(constraint),
+            ),
             /*nameType*/ undefined,
             /*questionToken*/ undefined,
             typeNode,

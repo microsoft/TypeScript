@@ -52,7 +52,9 @@ function createNodeModulesPackage(
             content: exportingFiles
                 .map(f =>
                     `export * from "./${
-                        ts.removeFileExtension(ts.convertToRelativePath(f.path, `/node_modules/${packageName}/`, ts.identity))
+                        ts.removeFileExtension(
+                            ts.convertToRelativePath(f.path, `/node_modules/${packageName}/`, ts.identity),
+                        )
                     }";`
                 )
                 .join("\n") + `\nexport default function main(): void;`,
@@ -98,7 +100,10 @@ describe("unittests:: tsserver:: completionsIncomplete", () => {
                 completions.entries.filter(entry => entry.source && !(entry.data as any)?.moduleSpecifier),
                 excessFileCount,
             );
-            assert.deepEqual(completions.optionalReplacementSpan, { start: { line: 1, offset: 1 }, end: { line: 1, offset: 2 } });
+            assert.deepEqual(completions.optionalReplacementSpan, {
+                start: { line: 1, offset: 1 },
+                end: { line: 1, offset: 2 },
+            });
         })
             .continueTyping("a", completions => {
                 assert(completions.isIncomplete);
@@ -113,7 +118,10 @@ describe("unittests:: tsserver:: completionsIncomplete", () => {
             })
             .continueTyping("_", completions => {
                 assert(!completions.isIncomplete);
-                assert.lengthOf(completions.entries.filter(entry => (entry.data as any)?.moduleSpecifier), exportingFiles.length);
+                assert.lengthOf(
+                    completions.entries.filter(entry => (entry.data as any)?.moduleSpecifier),
+                    exportingFiles.length,
+                );
             });
         baselineTsserverLogs("completionsIncomplete", "works", session);
     });
@@ -126,7 +134,11 @@ describe("unittests:: tsserver:: completionsIncomplete", () => {
         typeToTriggerCompletions(indexFile.path, "a", completions => {
             assert(!completions.isIncomplete);
         });
-        baselineTsserverLogs("completionsIncomplete", "resolves more when available from module specifier cache (1)", session);
+        baselineTsserverLogs(
+            "completionsIncomplete",
+            "resolves more when available from module specifier cache (1)",
+            session,
+        );
     });
 
     it("resolves more when available from module specifier cache (2)", () => {
@@ -143,7 +155,11 @@ describe("unittests:: tsserver:: completionsIncomplete", () => {
         typeToTriggerCompletions(indexFile.path, "a", completions => assert(completions.isIncomplete))
             .backspace()
             .type("a", completions => assert(!completions.isIncomplete));
-        baselineTsserverLogs("completionsIncomplete", "resolves more when available from module specifier cache (2)", session);
+        baselineTsserverLogs(
+            "completionsIncomplete",
+            "resolves more when available from module specifier cache (2)",
+            session,
+        );
     });
 
     it("ambient module specifier resolutions do not count against the resolution limit", () => {
@@ -158,7 +174,12 @@ describe("unittests:: tsserver:: completionsIncomplete", () => {
             5,
             i => `aa_${i}_`,
         );
-        const { typeToTriggerCompletions, session } = setup([tsconfigFile, indexFile, ...ambientFiles, ...exportingFiles]);
+        const { typeToTriggerCompletions, session } = setup([
+            tsconfigFile,
+            indexFile,
+            ...ambientFiles,
+            ...exportingFiles,
+        ]);
         openFilesForSession([indexFile], session);
 
         typeToTriggerCompletions(indexFile.path, "a", completions => {
@@ -261,7 +282,10 @@ function setup(files: File[]) {
         typedCharacters: string,
         cb?: (completions: ts.server.protocol.CompletionInfo) => void,
     ) {
-        const project = projectService.getDefaultProjectForFile(ts.server.toNormalizedPath(fileName), /*ensureProject*/ true)!;
+        const project = projectService.getDefaultProjectForFile(
+            ts.server.toNormalizedPath(fileName),
+            /*ensureProject*/ true,
+        )!;
         return type(typedCharacters, cb, /*isIncompleteContinuation*/ false);
 
         function type(
@@ -303,7 +327,10 @@ function setup(files: File[]) {
             cb?.(ts.Debug.checkDefined(response));
             return {
                 backspace,
-                continueTyping: (typedCharacters: string, cb: (completions: ts.server.protocol.CompletionInfo) => void) => {
+                continueTyping: (
+                    typedCharacters: string,
+                    cb: (completions: ts.server.protocol.CompletionInfo) => void,
+                ) => {
                     return type(typedCharacters, cb, !!response.isIncomplete);
                 },
             };
@@ -315,7 +342,10 @@ function setup(files: File[]) {
             );
             const startLineCharacter = ts.getLineAndCharacterOfPosition(file, file.text.length - n);
             const endLineCharacter = ts.getLineAndCharacterOfPosition(file, file.text.length);
-            const oneBasedStartPosition = { line: startLineCharacter.line + 1, offset: startLineCharacter.character + 1 };
+            const oneBasedStartPosition = {
+                line: startLineCharacter.line + 1,
+                offset: startLineCharacter.character + 1,
+            };
             const oneBasedEndPosition = { line: endLineCharacter.line + 1, offset: endLineCharacter.character + 1 };
             session.executeCommandSeq<ts.server.protocol.UpdateOpenRequest>({
                 command: ts.server.protocol.CommandTypes.UpdateOpen,
@@ -341,7 +371,10 @@ function setup(files: File[]) {
     }
 
     function assertCompletionDetailsOk(fileName: string, entry: ts.server.protocol.CompletionEntry) {
-        const project = projectService.getDefaultProjectForFile(ts.server.toNormalizedPath(fileName), /*ensureProject*/ true)!;
+        const project = projectService.getDefaultProjectForFile(
+            ts.server.toNormalizedPath(fileName),
+            /*ensureProject*/ true,
+        )!;
         const file = ts.Debug.checkDefined(
             project.getLanguageService(/*ensureSynchronized*/ true).getProgram()?.getSourceFile(fileName),
         );
@@ -362,7 +395,11 @@ function setup(files: File[]) {
 
         assert(details[0]);
         assert(details[0].codeActions);
-        assert(details[0].codeActions[0].changes[0].textChanges[0].newText.includes(`"${(entry.data as any).moduleSpecifier}"`));
+        assert(
+            details[0].codeActions[0].changes[0].textChanges[0].newText.includes(
+                `"${(entry.data as any).moduleSpecifier}"`,
+            ),
+        );
         return details;
     }
 }

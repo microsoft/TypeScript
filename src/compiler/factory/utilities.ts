@@ -320,7 +320,12 @@ export function createExpressionForJsxFragment(
     parentElement: JsxOpeningFragment,
     location: TextRange,
 ): LeftHandSideExpression {
-    const tagName = createJsxFragmentFactoryExpression(factory, jsxFragmentFactoryEntity, reactNamespace, parentElement);
+    const tagName = createJsxFragmentFactoryExpression(
+        factory,
+        jsxFragmentFactoryEntity,
+        reactNamespace,
+        parentElement,
+    );
     const argumentsList = [tagName, factory.createNull()];
 
     if (children && children.length > 0) {
@@ -348,7 +353,11 @@ export function createExpressionForJsxFragment(
 // Utilities
 
 /** @internal */
-export function createForOfBindingStatement(factory: NodeFactory, node: ForInitializer, boundValue: Expression): Statement {
+export function createForOfBindingStatement(
+    factory: NodeFactory,
+    node: ForInitializer,
+    boundValue: Expression,
+): Statement {
     if (isVariableDeclarationList(node)) {
         const firstDeclaration = first(node.declarations);
         const updatedDeclaration = factory.updateVariableDeclaration(
@@ -375,7 +384,10 @@ export function createForOfBindingStatement(factory: NodeFactory, node: ForIniti
 /** @internal */
 export function insertLeadingStatement(factory: NodeFactory, dest: Statement, source: Statement): Block {
     if (isBlock(dest)) {
-        return factory.updateBlock(dest, setTextRange(factory.createNodeArray([source, ...dest.statements]), dest.statements));
+        return factory.updateBlock(
+            dest,
+            setTextRange(factory.createNodeArray([source, ...dest.statements]), dest.statements),
+        );
     }
     else {
         return factory.createBlock(factory.createNodeArray([dest, source]), /*multiLine*/ true);
@@ -472,7 +484,11 @@ function createExpressionForAccessorDeclaration(
     return undefined;
 }
 
-function createExpressionForPropertyAssignment(factory: NodeFactory, property: PropertyAssignment, receiver: Expression) {
+function createExpressionForPropertyAssignment(
+    factory: NodeFactory,
+    property: PropertyAssignment,
+    receiver: Expression,
+) {
     return setOriginalNode(
         setTextRange(
             factory.createAssignment(
@@ -686,8 +702,11 @@ export function startsWithUseStrict(statements: readonly Statement[]) {
 }
 
 /** @internal */
-export function isCommaExpression(node: Expression): node is BinaryExpression & { operatorToken: Token<SyntaxKind.CommaToken>; } {
-    return node.kind === SyntaxKind.BinaryExpression && (node as BinaryExpression).operatorToken.kind === SyntaxKind.CommaToken;
+export function isCommaExpression(
+    node: Expression,
+): node is BinaryExpression & { operatorToken: Token<SyntaxKind.CommaToken>; } {
+    return node.kind === SyntaxKind.BinaryExpression &&
+        (node as BinaryExpression).operatorToken.kind === SyntaxKind.CommaToken;
 }
 
 /** @internal */
@@ -878,7 +897,8 @@ export function getOrCreateExternalHelpersModuleNameIfNeeded(
         }
 
         const moduleKind = getEmitModuleKind(compilerOptions);
-        let create = (hasExportStarsToExportValues || (getESModuleInterop(compilerOptions) && hasImportStarOrImportDefault))
+        let create =
+            (hasExportStarsToExportValues || (getESModuleInterop(compilerOptions) && hasImportStarOrImportDefault))
             && moduleKind !== ModuleKind.System
             && (moduleKind < ModuleKind.ES2015 || node.impliedNodeFormat === ModuleKind.CommonJS);
         if (!create) {
@@ -998,7 +1018,12 @@ function tryGetModuleNameFromDeclaration(
     resolver: EmitResolver,
     compilerOptions: CompilerOptions,
 ) {
-    return tryGetModuleNameFromFile(factory, resolver.getExternalModuleFileFromDeclaration(declaration), host, compilerOptions);
+    return tryGetModuleNameFromFile(
+        factory,
+        resolver.getExternalModuleFileFromDeclaration(declaration),
+        host,
+        compilerOptions,
+    );
 }
 
 /**
@@ -1006,7 +1031,9 @@ function tryGetModuleNameFromDeclaration(
  *
  * @internal
  */
-export function getInitializerOfBindingOrAssignmentElement(bindingElement: BindingOrAssignmentElement): Expression | undefined {
+export function getInitializerOfBindingOrAssignmentElement(
+    bindingElement: BindingOrAssignmentElement,
+): Expression | undefined {
     if (isDeclarationBindingElement(bindingElement)) {
         // `1` in `let { a = 1 } = ...`
         // `1` in `let { a: b = 1 } = ...`
@@ -1225,7 +1252,9 @@ function isStringOrNumericLiteral(node: Node): node is StringLiteral | NumericLi
  *
  * @internal
  */
-export function getElementsOfBindingOrAssignmentPattern(name: BindingOrAssignmentPattern): readonly BindingOrAssignmentElement[] {
+export function getElementsOfBindingOrAssignmentPattern(
+    name: BindingOrAssignmentPattern,
+): readonly BindingOrAssignmentElement[] {
     switch (name.kind) {
         case SyntaxKind.ObjectBindingPattern:
         case SyntaxKind.ArrayBindingPattern:
@@ -1531,7 +1560,11 @@ namespace BinaryExpressionState {
         Debug.assertEqual(stateStack[stackIndex], right);
         Debug.assertIsDefined(machine.onRight);
         stateStack[stackIndex] = nextState(machine, right);
-        const nextNode = machine.onRight(nodeStack[stackIndex].right, userStateStack[stackIndex], nodeStack[stackIndex]);
+        const nextNode = machine.onRight(
+            nodeStack[stackIndex].right,
+            userStateStack[stackIndex],
+            nodeStack[stackIndex],
+        );
         if (nextNode) {
             checkCircularity(stackIndex, nodeStack, nextNode);
             return pushStack(stackIndex, stateStack, nodeStack, userStateStack, nextNode);
@@ -1642,11 +1675,15 @@ namespace BinaryExpressionState {
 class BinaryExpressionStateMachine<TOuterState, TState, TResult> {
     constructor(
         readonly onEnter: (node: BinaryExpression, prev: TState | undefined, outerState: TOuterState) => TState,
-        readonly onLeft: ((left: Expression, userState: TState, node: BinaryExpression) => BinaryExpression | void) | undefined,
+        readonly onLeft:
+            | ((left: Expression, userState: TState, node: BinaryExpression) => BinaryExpression | void)
+            | undefined,
         readonly onOperator:
             | ((operatorToken: BinaryOperatorToken, userState: TState, node: BinaryExpression) => void)
             | undefined,
-        readonly onRight: ((right: Expression, userState: TState, node: BinaryExpression) => BinaryExpression | void) | undefined,
+        readonly onRight:
+            | ((right: Expression, userState: TState, node: BinaryExpression) => BinaryExpression | void)
+            | undefined,
         readonly onExit: (node: BinaryExpression, userState: TState) => TResult,
         readonly foldState: ((userState: TState, result: TResult, side: "left" | "right") => TState) | undefined,
     ) {
@@ -1747,9 +1784,15 @@ export function isNonExportDefaultModifier(node: Node): node is Exclude<Modifier
  */
 export function elideNodes<T extends Node>(factory: NodeFactory, nodes: NodeArray<T>): NodeArray<T>;
 /** @internal */
-export function elideNodes<T extends Node>(factory: NodeFactory, nodes: NodeArray<T> | undefined): NodeArray<T> | undefined;
+export function elideNodes<T extends Node>(
+    factory: NodeFactory,
+    nodes: NodeArray<T> | undefined,
+): NodeArray<T> | undefined;
 /** @internal */
-export function elideNodes<T extends Node>(factory: NodeFactory, nodes: NodeArray<T> | undefined): NodeArray<T> | undefined {
+export function elideNodes<T extends Node>(
+    factory: NodeFactory,
+    nodes: NodeArray<T> | undefined,
+): NodeArray<T> | undefined {
     if (nodes === undefined) return undefined;
     if (nodes.length === 0) return nodes;
     return setTextRange(factory.createNodeArray([], nodes.hasTrailingComma), nodes);
@@ -1810,7 +1853,8 @@ export function formatGeneratedNamePart(
 ): string {
     return typeof part === "object" ?
         formatGeneratedName(/*privateName*/ false, part.prefix, part.node, part.suffix, generateName!) :
-        typeof part === "string" ? part.length > 0 && part.charCodeAt(0) === CharacterCodes.hash ? part.slice(1) : part :
+        typeof part === "string" ?
+        part.length > 0 && part.charCodeAt(0) === CharacterCodes.hash ? part.slice(1) : part :
         "";
 }
 

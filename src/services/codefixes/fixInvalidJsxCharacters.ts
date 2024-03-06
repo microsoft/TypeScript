@@ -56,7 +56,13 @@ registerCodeFix({
             context,
             errorCodes,
             (changes, diagnostic) =>
-                doChange(changes, context.preferences, diagnostic.file, diagnostic.start, context.fixId === fixIdHtmlEntity),
+                doChange(
+                    changes,
+                    context.preferences,
+                    diagnostic.file,
+                    diagnostic.start,
+                    context.fixId === fixIdHtmlEntity,
+                ),
         );
     },
 });

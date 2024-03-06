@@ -338,7 +338,11 @@ const enum ClassFacts {
     WillHoistInitializersToConstructor = 1 << 4,
 }
 
-type LexicalEnv = LexicalEnvironment<ClassLexicalEnvironment | undefined, PrivateEnvironmentData, PrivateIdentifierInfo>;
+type LexicalEnv = LexicalEnvironment<
+    ClassLexicalEnvironment | undefined,
+    PrivateEnvironmentData,
+    PrivateIdentifierInfo
+>;
 type PrivateEnv = PrivateEnvironment<PrivateEnvironmentData, PrivateIdentifierInfo>;
 
 /**
@@ -527,7 +531,11 @@ export function transformClassFields(context: TransformationContext): (x: Source
             case SyntaxKind.SetAccessor: {
                 // If we are descending into a class element, set the class element
                 return setCurrentClassElementAnd(
-                    node as ConstructorDeclaration | MethodDeclaration | GetAccessorDeclaration | SetAccessorDeclaration,
+                    node as
+                        | ConstructorDeclaration
+                        | MethodDeclaration
+                        | GetAccessorDeclaration
+                        | SetAccessorDeclaration,
                     fallbackVisitor,
                     node,
                 );
@@ -818,7 +826,10 @@ export function transformClassFields(context: TransformationContext): (x: Source
         if (some(pendingExpressions)) {
             if (isParenthesizedExpression(expression)) {
                 pendingExpressions.push(expression.expression);
-                expression = factory.updateParenthesizedExpression(expression, factory.inlineExpressions(pendingExpressions));
+                expression = factory.updateParenthesizedExpression(
+                    expression,
+                    factory.inlineExpressions(pendingExpressions),
+                );
             }
             else {
                 pendingExpressions.push(expression);
@@ -842,10 +853,15 @@ export function transformClassFields(context: TransformationContext): (x: Source
     }
 
     function shouldTransformClassElementToWeakMap(
-        node: PrivateIdentifierMethodDeclaration | PrivateIdentifierAccessorDeclaration | PrivateIdentifierPropertyDeclaration,
+        node:
+            | PrivateIdentifierMethodDeclaration
+            | PrivateIdentifierAccessorDeclaration
+            | PrivateIdentifierPropertyDeclaration,
     ) {
         if (shouldTransformPrivateElementsOrClassStaticBlocks) return true;
-        if (hasStaticModifier(node) && getInternalEmitFlags(node) & InternalEmitFlags.TransformPrivateStaticElements) return true;
+        if (hasStaticModifier(node) && getInternalEmitFlags(node) & InternalEmitFlags.TransformPrivateStaticElements) {
+            return true;
+        }
         return false;
     }
 
@@ -947,7 +963,10 @@ export function transformClassFields(context: TransformationContext): (x: Source
         if (isComputedPropertyName(name) && !isSimpleInlineableExpression(name.expression)) {
             const cacheAssignment = findComputedPropertyNameCacheAssignment(name);
             if (cacheAssignment) {
-                getterName = factory.updateComputedPropertyName(name, visitNode(name.expression, visitor, isExpression));
+                getterName = factory.updateComputedPropertyName(
+                    name,
+                    visitNode(name.expression, visitor, isExpression),
+                );
                 setterName = factory.updateComputedPropertyName(name, cacheAssignment.left);
             }
             else {
@@ -1000,7 +1019,9 @@ export function transformClassFields(context: TransformationContext): (x: Source
                 // TODO: fix
                 const statement = transformPropertyOrClassStaticBlock(node, factory.createThis());
                 if (statement) {
-                    return factory.createClassStaticBlockDeclaration(factory.createBlock([statement], /*multiLine*/ true));
+                    return factory.createClassStaticBlockDeclaration(
+                        factory.createBlock([statement], /*multiLine*/ true),
+                    );
                 }
             }
 
@@ -1095,7 +1116,8 @@ export function transformClassFields(context: TransformationContext): (x: Source
     function shouldTransformAutoAccessorsInCurrentClass() {
         return shouldTransformAutoAccessors === Ternary.True ||
             shouldTransformAutoAccessors === Ternary.Maybe &&
-                !!lexicalEnvironment?.data && !!(lexicalEnvironment.data.facts & ClassFacts.WillHoistInitializersToConstructor);
+                !!lexicalEnvironment?.data &&
+                !!(lexicalEnvironment.data.facts & ClassFacts.WillHoistInitializersToConstructor);
     }
 
     function visitPropertyDeclaration(node: PropertyDeclaration) {
@@ -1103,7 +1125,8 @@ export function transformClassFields(context: TransformationContext): (x: Source
         // will in turn call `transformFieldInitializer` as needed.
         if (
             isAutoAccessorPropertyDeclaration(node) && (shouldTransformAutoAccessorsInCurrentClass() ||
-                hasStaticModifier(node) && getInternalEmitFlags(node) & InternalEmitFlags.TransformPrivateStaticElements)
+                hasStaticModifier(node) &&
+                    getInternalEmitFlags(node) & InternalEmitFlags.TransformPrivateStaticElements)
         ) {
             return transformAutoAccessor(node);
         }
@@ -1239,7 +1262,10 @@ export function transformClassFields(context: TransformationContext): (x: Source
         return visitEachChild(node, visitor, context);
     }
 
-    function visitPreOrPostfixUnaryExpression(node: PrefixUnaryExpression | PostfixUnaryExpression, discarded: boolean) {
+    function visitPreOrPostfixUnaryExpression(
+        node: PrefixUnaryExpression | PostfixUnaryExpression,
+        discarded: boolean,
+    ) {
         if (
             node.operator === SyntaxKind.PlusPlusToken ||
             node.operator === SyntaxKind.MinusMinusToken
@@ -1336,7 +1362,12 @@ export function transformClassFields(context: TransformationContext): (x: Source
                             hoistVariableDeclaration,
                             temp,
                         );
-                        expression = factory.createReflectSetCall(superClassReference, setterName, expression, classConstructor);
+                        expression = factory.createReflectSetCall(
+                            superClassReference,
+                            setterName,
+                            expression,
+                            classConstructor,
+                        );
                         setOriginalNode(expression, node);
                         setTextRange(expression, node);
                         if (temp) {
@@ -1391,11 +1422,19 @@ export function transformClassFields(context: TransformationContext): (x: Source
             // obj.#x()
 
             // Transform call expressions of private names to properly bind the `this` parameter.
-            const { thisArg, target } = factory.createCallBinding(node.expression, hoistVariableDeclaration, languageVersion);
+            const { thisArg, target } = factory.createCallBinding(
+                node.expression,
+                hoistVariableDeclaration,
+                languageVersion,
+            );
             if (isCallChain(node)) {
                 return factory.updateCallChain(
                     node,
-                    factory.createPropertyAccessChain(visitNode(target, visitor, isExpression), node.questionDotToken, "call"),
+                    factory.createPropertyAccessChain(
+                        visitNode(target, visitor, isExpression),
+                        node.questionDotToken,
+                        "call",
+                    ),
                     /*questionDotToken*/ undefined,
                     /*typeArguments*/ undefined,
                     [visitNode(thisArg, visitor, isExpression), ...visitNodes(node.arguments, visitor, isExpression)],
@@ -1595,7 +1634,12 @@ export function transformClassFields(context: TransformationContext): (x: Source
                 if (info) {
                     return setTextRange(
                         setOriginalNode(
-                            createPrivateIdentifierAssignment(info, left.expression, node.right, node.operatorToken.kind),
+                            createPrivateIdentifierAssignment(
+                                info,
+                                left.expression,
+                                node.right,
+                                node.operatorToken.kind,
+                            ),
                             node,
                         ),
                         node,
@@ -1790,19 +1834,26 @@ export function transformClassFields(context: TransformationContext): (x: Source
                     facts |= ClassFacts.NeedsClassConstructorReference;
                 }
                 else if (
-                    isAutoAccessorPropertyDeclaration(member) && shouldTransformAutoAccessors === Ternary.True && !node.name &&
+                    isAutoAccessorPropertyDeclaration(member) && shouldTransformAutoAccessors === Ternary.True &&
+                    !node.name &&
                     !node.emitNode?.classThis
                 ) {
                     facts |= ClassFacts.NeedsClassConstructorReference;
                 }
                 if (isPropertyDeclaration(member) || isClassStaticBlockDeclaration(member)) {
-                    if (shouldTransformThisInStaticInitializers && member.transformFlags & TransformFlags.ContainsLexicalThis) {
+                    if (
+                        shouldTransformThisInStaticInitializers &&
+                        member.transformFlags & TransformFlags.ContainsLexicalThis
+                    ) {
                         facts |= ClassFacts.NeedsSubstitutionForThisInClassStaticField;
                         if (!(facts & ClassFacts.ClassWasDecorated)) {
                             facts |= ClassFacts.NeedsClassConstructorReference;
                         }
                     }
-                    if (shouldTransformSuperInStaticInitializers && member.transformFlags & TransformFlags.ContainsLexicalSuper) {
+                    if (
+                        shouldTransformSuperInStaticInitializers &&
+                        member.transformFlags & TransformFlags.ContainsLexicalSuper
+                    ) {
                         if (!(facts & ClassFacts.ClassWasDecorated)) {
                             facts |= ClassFacts.NeedsClassConstructorReference | ClassFacts.NeedsClassSuperReference;
                         }
@@ -1827,7 +1878,8 @@ export function transformClassFields(context: TransformationContext): (x: Source
             }
         }
 
-        const willHoistInitializersToConstructor = shouldTransformInitializersUsingDefine && containsPublicInstanceFields ||
+        const willHoistInitializersToConstructor =
+            shouldTransformInitializersUsingDefine && containsPublicInstanceFields ||
             shouldTransformInitializersUsingSet && containsInitializedPublicInstanceFields ||
             shouldTransformPrivateElementsOrClassStaticBlocks && containsInstancePrivateElements ||
             shouldTransformPrivateElementsOrClassStaticBlocks && containsInstanceAutoAccessors &&
@@ -1958,7 +2010,8 @@ export function transformClassFields(context: TransformationContext): (x: Source
             getClassLexicalEnvironment().classThis = node.emitNode.classThis;
         }
 
-        const isClassWithConstructorReference = resolver.getNodeCheckFlags(node) & NodeCheckFlags.ContainsConstructorReference;
+        const isClassWithConstructorReference = resolver.getNodeCheckFlags(node) &
+            NodeCheckFlags.ContainsConstructorReference;
         const isExport = hasSyntacticModifier(node, ModifierFlags.Export);
         const isDefault = hasSyntacticModifier(node, ModifierFlags.Default);
         let modifiers = visitNodes(node.modifiers, modifierVisitor, isModifier);
@@ -2193,7 +2246,11 @@ export function transformClassFields(context: TransformationContext): (x: Source
             for (const member of node.members) {
                 if (isPrivateIdentifierClassElementDeclaration(member)) {
                     if (shouldTransformClassElementToWeakMap(member)) {
-                        addPrivateIdentifierToEnvironment(member, member.name, addPrivateIdentifierClassElementToEnvironment);
+                        addPrivateIdentifierToEnvironment(
+                            member,
+                            member.name,
+                            addPrivateIdentifierClassElementToEnvironment,
+                        );
                     }
                     else {
                         const privateEnv = getPrivateIdentifierEnvironment();
@@ -2287,7 +2344,10 @@ export function transformClassFields(context: TransformationContext): (x: Source
             membersArray = append(membersArray, syntheticConstructor);
             membersArray = append(membersArray, syntheticStaticBlock);
             const remainingMembers = classThisAssignmentBlock || classNamedEvaluationHelperBlock ?
-                filter(members, member => member !== classThisAssignmentBlock && member !== classNamedEvaluationHelperBlock) :
+                filter(
+                    members,
+                    member => member !== classThisAssignmentBlock && member !== classNamedEvaluationHelperBlock,
+                ) :
                 members;
             membersArray = addRange(membersArray, remainingMembers);
             members = setTextRange(factory.createNodeArray(membersArray), /*location*/ node.members);
@@ -2317,13 +2377,16 @@ export function transformClassFields(context: TransformationContext): (x: Source
         container: ClassDeclaration | ClassExpression,
     ) {
         constructor = visitNode(constructor, visitor, isConstructorDeclaration);
-        if (!lexicalEnvironment?.data || !(lexicalEnvironment.data.facts & ClassFacts.WillHoistInitializersToConstructor)) {
+        if (
+            !lexicalEnvironment?.data ||
+            !(lexicalEnvironment.data.facts & ClassFacts.WillHoistInitializersToConstructor)
+        ) {
             return constructor;
         }
 
         const extendsClauseElement = getEffectiveBaseTypeNode(container);
-        const isDerivedClass =
-            !!(extendsClauseElement && skipOuterExpressions(extendsClauseElement.expression).kind !== SyntaxKind.NullKeyword);
+        const isDerivedClass = !!(extendsClauseElement &&
+            skipOuterExpressions(extendsClauseElement.expression).kind !== SyntaxKind.NullKeyword);
         const parameters = visitParameterList(constructor ? constructor.parameters : undefined, visitor, context);
         const body = transformConstructorBody(container, constructor, isDerivedClass);
         if (!body) {
@@ -2433,7 +2496,8 @@ export function transformClassFields(context: TransformationContext): (x: Source
         if (!useDefineForClassFields) {
             properties = filter(
                 properties,
-                property => !!property.initializer || isPrivateIdentifier(property.name) || hasAccessorModifier(property),
+                property =>
+                    !!property.initializer || isPrivateIdentifier(property.name) || hasAccessorModifier(property),
             );
         }
 
@@ -2483,7 +2547,12 @@ export function transformClassFields(context: TransformationContext): (x: Source
         }
 
         if (constructor?.body) {
-            statementOffset = factory.copyPrologue(constructor.body.statements, statements, /*ensureUseStrict*/ false, visitor);
+            statementOffset = factory.copyPrologue(
+                constructor.body.statements,
+                statements,
+                /*ensureUseStrict*/ false,
+                visitor,
+            );
             const superStatementIndices = findSuperStatementIndexPath(constructor.body.statements, statementOffset);
             if (superStatementIndices.length) {
                 transformConstructorBodyWorker(
@@ -2727,7 +2796,10 @@ export function transformClassFields(context: TransformationContext): (x: Source
         }
 
         let initializer = visitNode(property.initializer, visitor, isExpression);
-        if (isParameterPropertyDeclaration(propertyOriginalNode, propertyOriginalNode.parent) && isIdentifier(propertyName)) {
+        if (
+            isParameterPropertyDeclaration(propertyOriginalNode, propertyOriginalNode.parent) &&
+            isIdentifier(propertyName)
+        ) {
             // A parameter-property declaration always overrides the initializer. The only time a parameter-property
             // declaration *should* have an initializer is when decorators have added initializers that need to run before
             // any other initializer
@@ -2757,14 +2829,20 @@ export function transformClassFields(context: TransformationContext): (x: Source
         }
 
         if (emitAssignment || isPrivateIdentifier(propertyName)) {
-            const memberAccess = createMemberAccessForPropertyName(factory, receiver, propertyName, /*location*/ propertyName);
+            const memberAccess = createMemberAccessForPropertyName(
+                factory,
+                receiver,
+                propertyName,
+                /*location*/ propertyName,
+            );
             addEmitFlags(memberAccess, EmitFlags.NoLeadingComments);
             const expression = factory.createAssignment(memberAccess, initializer);
             return expression;
         }
         else {
             const name = isComputedPropertyName(propertyName) ? propertyName.expression
-                : isIdentifier(propertyName) ? factory.createStringLiteral(unescapeLeadingUnderscores(propertyName.escapedText))
+                : isIdentifier(propertyName) ?
+                factory.createStringLiteral(unescapeLeadingUnderscores(propertyName.escapedText))
                 : propertyName;
             const descriptor = factory.createPropertyDescriptor({
                 value: initializer,
@@ -2924,16 +3002,48 @@ export function transformClassFields(context: TransformationContext): (x: Source
             );
         }
         else if (isPropertyDeclaration(node)) {
-            addPrivateIdentifierPropertyDeclarationToEnvironment(node, name, lex, privateEnv, isStatic, isValid, previousInfo);
+            addPrivateIdentifierPropertyDeclarationToEnvironment(
+                node,
+                name,
+                lex,
+                privateEnv,
+                isStatic,
+                isValid,
+                previousInfo,
+            );
         }
         else if (isMethodDeclaration(node)) {
-            addPrivateIdentifierMethodDeclarationToEnvironment(node, name, lex, privateEnv, isStatic, isValid, previousInfo);
+            addPrivateIdentifierMethodDeclarationToEnvironment(
+                node,
+                name,
+                lex,
+                privateEnv,
+                isStatic,
+                isValid,
+                previousInfo,
+            );
         }
         else if (isGetAccessorDeclaration(node)) {
-            addPrivateIdentifierGetAccessorDeclarationToEnvironment(node, name, lex, privateEnv, isStatic, isValid, previousInfo);
+            addPrivateIdentifierGetAccessorDeclarationToEnvironment(
+                node,
+                name,
+                lex,
+                privateEnv,
+                isStatic,
+                isValid,
+                previousInfo,
+            );
         }
         else if (isSetAccessorDeclaration(node)) {
-            addPrivateIdentifierSetAccessorDeclarationToEnvironment(node, name, lex, privateEnv, isStatic, isValid, previousInfo);
+            addPrivateIdentifierSetAccessorDeclarationToEnvironment(
+                node,
+                name,
+                lex,
+                privateEnv,
+                isStatic,
+                isValid,
+                previousInfo,
+            );
         }
     }
 
@@ -2997,7 +3107,10 @@ export function transformClassFields(context: TransformationContext): (x: Source
                 lex.classThis ?? lex.classConstructor,
                 "classConstructor should be set in private identifier environment",
             ) :
-            Debug.checkDefined(privateEnv.data.weakSetName, "weakSetName should be set in private identifier environment");
+            Debug.checkDefined(
+                privateEnv.data.weakSetName,
+                "weakSetName should be set in private identifier environment",
+            );
 
         setPrivateIdentifier(privateEnv, name, {
             kind: PrivateIdentifierKind.Method,
@@ -3023,7 +3136,10 @@ export function transformClassFields(context: TransformationContext): (x: Source
                 lex.classThis ?? lex.classConstructor,
                 "classConstructor should be set in private identifier environment",
             ) :
-            Debug.checkDefined(privateEnv.data.weakSetName, "weakSetName should be set in private identifier environment");
+            Debug.checkDefined(
+                privateEnv.data.weakSetName,
+                "weakSetName should be set in private identifier environment",
+            );
 
         if (
             previousInfo?.kind === PrivateIdentifierKind.Accessor && previousInfo.isStatic === isStatic &&
@@ -3058,7 +3174,10 @@ export function transformClassFields(context: TransformationContext): (x: Source
                 lex.classThis ?? lex.classConstructor,
                 "classConstructor should be set in private identifier environment",
             ) :
-            Debug.checkDefined(privateEnv.data.weakSetName, "weakSetName should be set in private identifier environment");
+            Debug.checkDefined(
+                privateEnv.data.weakSetName,
+                "weakSetName should be set in private identifier environment",
+            );
 
         if (
             previousInfo?.kind === PrivateIdentifierKind.Accessor &&
@@ -3094,7 +3213,10 @@ export function transformClassFields(context: TransformationContext): (x: Source
                 lex.classThis ?? lex.classConstructor,
                 "classConstructor should be set in private identifier environment",
             ) :
-            Debug.checkDefined(privateEnv.data.weakSetName, "weakSetName should be set in private identifier environment");
+            Debug.checkDefined(
+                privateEnv.data.weakSetName,
+                "weakSetName should be set in private identifier environment",
+            );
 
         setPrivateIdentifier(privateEnv, name, {
             kind: PrivateIdentifierKind.Accessor,
@@ -3143,8 +3265,14 @@ export function transformClassFields(context: TransformationContext): (x: Source
                 prefix,
                 suffix,
             ) :
-            typeof name === "string" ? factory.createUniqueName(name, GeneratedIdentifierFlags.Optimistic, prefix, suffix) :
-            factory.createTempVariable(/*recordTempVariable*/ undefined, /*reservedInNestedScopes*/ true, prefix, suffix);
+            typeof name === "string" ?
+            factory.createUniqueName(name, GeneratedIdentifierFlags.Optimistic, prefix, suffix) :
+            factory.createTempVariable(
+                /*recordTempVariable*/ undefined,
+                /*reservedInNestedScopes*/ true,
+                prefix,
+                suffix,
+            );
 
         if (resolver.getNodeCheckFlags(node) & NodeCheckFlags.BlockScopedBindingInLoop) {
             addBlockScopedVariable(identifier);
@@ -3221,7 +3349,8 @@ export function transformClassFields(context: TransformationContext): (x: Source
                 return visitInvalidSuperProperty(node);
             }
             else if (classConstructor && superClassReference) {
-                const name = isElementAccessExpression(node) ? visitNode(node.argumentExpression, visitor, isExpression) :
+                const name = isElementAccessExpression(node) ?
+                    visitNode(node.argumentExpression, visitor, isExpression) :
                     isIdentifier(node.name) ? factory.createStringLiteralFromNode(node.name) :
                     undefined;
                 if (name) {
@@ -3258,7 +3387,9 @@ export function transformClassFields(context: TransformationContext): (x: Source
         if (isAssignmentExpression(node, /*excludeCompoundAssignment*/ true)) {
             const left = visitDestructuringAssignmentTarget(node.left);
             const right = visitNode(node.right, visitor, isExpression);
-            return factory.updateBinaryExpression(node, left, node.operatorToken, right) as AssignmentExpression<EqualsToken>;
+            return factory.updateBinaryExpression(node, left, node.operatorToken, right) as AssignmentExpression<
+                EqualsToken
+            >;
         }
         return visitDestructuringAssignmentTarget(node) as ArrayAssignmentElement;
     }
@@ -3539,7 +3670,11 @@ function createPrivateInstanceFieldInitializer(
     );
 }
 
-function createPrivateInstanceMethodInitializer(factory: NodeFactory, receiver: LeftHandSideExpression, weakSetName: Identifier) {
+function createPrivateInstanceMethodInitializer(
+    factory: NodeFactory,
+    receiver: LeftHandSideExpression,
+    weakSetName: Identifier,
+) {
     return factory.createCallExpression(
         factory.createPropertyAccessExpression(weakSetName, "add"),
         /*typeArguments*/ undefined,
@@ -3551,7 +3686,10 @@ function isReservedPrivateName(node: PrivateIdentifier) {
     return !isGeneratedPrivateIdentifier(node) && node.escapedText === "#constructor";
 }
 
-type PrivateIdentifierInExpression = BinaryExpression & { readonly left: PrivateIdentifier; readonly token: InKeyword; };
+type PrivateIdentifierInExpression = BinaryExpression & {
+    readonly left: PrivateIdentifier;
+    readonly token: InKeyword;
+};
 
 function isPrivateIdentifierInExpression(node: BinaryExpression): node is PrivateIdentifierInExpression {
     return isPrivateIdentifier(node.left)
@@ -3562,6 +3700,8 @@ function isStaticPropertyDeclaration(node: Node): node is PropertyDeclaration {
     return isPropertyDeclaration(node) && hasStaticModifier(node);
 }
 
-function isStaticPropertyDeclarationOrClassStaticBlock(node: Node): node is ClassStaticBlockDeclaration | PropertyDeclaration {
+function isStaticPropertyDeclarationOrClassStaticBlock(
+    node: Node,
+): node is ClassStaticBlockDeclaration | PropertyDeclaration {
     return isClassStaticBlockDeclaration(node) || isStaticPropertyDeclaration(node);
 }

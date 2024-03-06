@@ -107,7 +107,8 @@ registerRefactor(refactorName, {
                 name: refactorName,
                 description: getLocaleSpecificMessage(Diagnostics.Extract_type),
                 actions: info.isJS ?
-                    [extractToTypeDefAction] : append([extractToTypeAliasAction], info.typeElements && extractToInterfaceAction),
+                    [extractToTypeDefAction] :
+                    append([extractToTypeAliasAction], info.typeElements && extractToInterfaceAction),
             }];
         }
 
@@ -171,7 +172,10 @@ interface InterfaceInfo {
 
 type ExtractInfo = TypeAliasInfo | InterfaceInfo;
 
-function getRangeToExtract(context: RefactorContext, considerEmptySpans = true): ExtractInfo | RefactorErrorInfo | undefined {
+function getRangeToExtract(
+    context: RefactorContext,
+    considerEmptySpans = true,
+): ExtractInfo | RefactorErrorInfo | undefined {
     const { file, startPosition } = context;
     const isJS = isSourceFileJS(file);
     const range = createTextRangeFromSpan(getRefactorContextSpan(context));
@@ -208,13 +212,20 @@ function getRangeToExtract(context: RefactorContext, considerEmptySpans = true):
     const selection = typeList.length > 1 ? typeList : expandedFirstType;
 
     const typeParameters = collectTypeParameters(checker, selection, enclosingNode, file);
-    if (!typeParameters) return { error: getLocaleSpecificMessage(Diagnostics.No_type_could_be_extracted_from_this_type_node) };
+    if (!typeParameters) {
+        return { error: getLocaleSpecificMessage(Diagnostics.No_type_could_be_extracted_from_this_type_node) };
+    }
 
     const typeElements = flattenTypeLiteralNodeReference(checker, selection);
     return { isJS, selection, enclosingNode, typeParameters, typeElements };
 }
 
-function getFirstTypeAt(file: SourceFile, startPosition: number, range: TextRange, isCursorRequest: boolean): Node | undefined {
+function getFirstTypeAt(
+    file: SourceFile,
+    startPosition: number,
+    range: TextRange,
+    isCursorRequest: boolean,
+): Node | undefined {
     const currentNodes = [
         () => getTokenAtPosition(file, startPosition),
         () => getTouchingToken(file, startPosition, () => true),
@@ -256,7 +267,9 @@ function flattenTypeLiteralNodeReference(
             const flattenedTypeMembers = flattenTypeLiteralNodeReference(checker, type);
             if (
                 !flattenedTypeMembers ||
-                !flattenedTypeMembers.every(type => type.name && addToSeen(seen, getNameFromPropertyName(type.name) as string))
+                !flattenedTypeMembers.every(type =>
+                    type.name && addToSeen(seen, getNameFromPropertyName(type.name) as string)
+                )
             ) {
                 return undefined;
             }
@@ -296,13 +309,19 @@ function collectTypeParameters(
         if (isTypeReferenceNode(node)) {
             if (isIdentifier(node.typeName)) {
                 const typeName = node.typeName;
-                const symbol = checker.resolveName(typeName.text, typeName, SymbolFlags.TypeParameter, /*excludeGlobals*/ true);
+                const symbol = checker.resolveName(
+                    typeName.text,
+                    typeName,
+                    SymbolFlags.TypeParameter,
+                    /*excludeGlobals*/ true,
+                );
                 for (const decl of symbol?.declarations || emptyArray) {
                     if (isTypeParameterDeclaration(decl) && decl.getSourceFile() === file) {
                         // skip extraction if the type node is in the range of the type parameter declaration.
                         // function foo<T extends { a?: /**/T }>(): void;
                         if (
-                            decl.name.escapedText === typeName.escapedText && rangeContainsSkipTrivia(decl, selectionRange, file)
+                            decl.name.escapedText === typeName.escapedText &&
+                            rangeContainsSkipTrivia(decl, selectionRange, file)
                         ) {
                             return true;
                         }
@@ -330,7 +349,8 @@ function collectTypeParameters(
         else if ((isTypePredicateNode(node) || isThisTypeNode(node))) {
             const functionLikeNode = findAncestor(node.parent, isFunctionLike);
             if (
-                functionLikeNode && functionLikeNode.type && rangeContainsSkipTrivia(functionLikeNode.type, node, file) &&
+                functionLikeNode && functionLikeNode.type &&
+                rangeContainsSkipTrivia(functionLikeNode.type, node, file) &&
                 !rangeContainsSkipTrivia(selectionRange, functionLikeNode, file)
             ) {
                 return true;
@@ -352,7 +372,9 @@ function collectTypeParameters(
                 }
             }
             else {
-                if (isThisIdentifier(node.exprName.left) && !rangeContainsSkipTrivia(selectionRange, node.parent, file)) {
+                if (
+                    isThisIdentifier(node.exprName.left) && !rangeContainsSkipTrivia(selectionRange, node.parent, file)
+                ) {
                     return true;
                 }
             }

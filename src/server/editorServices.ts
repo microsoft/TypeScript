@@ -366,7 +366,9 @@ export interface SafeList {
     [name: string]: { match: RegExp; exclude?: (string | number)[][]; types?: string[]; };
 }
 
-function prepareConvertersForEnumLikeCompilerOptions(commandLineOptions: CommandLineOption[]): Map<string, Map<string, number>> {
+function prepareConvertersForEnumLikeCompilerOptions(
+    commandLineOptions: CommandLineOption[],
+): Map<string, Map<string, number>> {
     const map = new Map<string, Map<string, number>>();
     for (const option of commandLineOptions) {
         if (typeof option.type === "object") {
@@ -479,7 +481,9 @@ export function convertWatchOptions(
     return watchOptions && { watchOptions, errors };
 }
 
-export function convertTypeAcquisition(protocolOptions: protocol.InferredProjectCompilerOptions): TypeAcquisition | undefined {
+export function convertTypeAcquisition(
+    protocolOptions: protocol.InferredProjectCompilerOptions,
+): TypeAcquisition | undefined {
     let result: TypeAcquisition | undefined;
     typeAcquisitionDeclarations.forEach(option => {
         const propertyValue = protocolOptions[option.name];
@@ -643,7 +647,9 @@ interface AncestorConfigFileInfo {
 type OpenScriptInfoOrClosedFileInfo = ScriptInfo | OriginalFileInfo;
 type OpenScriptInfoOrClosedOrConfigFileInfo = OpenScriptInfoOrClosedFileInfo | AncestorConfigFileInfo;
 
-function isOpenScriptInfo(infoOrFileNameOrConfig: OpenScriptInfoOrClosedOrConfigFileInfo): infoOrFileNameOrConfig is ScriptInfo {
+function isOpenScriptInfo(
+    infoOrFileNameOrConfig: OpenScriptInfoOrClosedOrConfigFileInfo,
+): infoOrFileNameOrConfig is ScriptInfo {
     return !!(infoOrFileNameOrConfig as ScriptInfo).containingProjects;
 }
 
@@ -1144,7 +1150,10 @@ export class ProjectService {
     readonly watchFactory: WatchFactory<WatchType, Project | NormalizedPath>;
 
     /** @internal */
-    private readonly sharedExtendedConfigFileWatchers = new Map<Path, SharedExtendedConfigFileWatcher<NormalizedPath>>();
+    private readonly sharedExtendedConfigFileWatchers = new Map<
+        Path,
+        SharedExtendedConfigFileWatcher<NormalizedPath>
+    >();
     /** @internal */
     private readonly extendedConfigCache = new Map<string, ExtendedConfigCacheEntry>();
 
@@ -1270,7 +1279,8 @@ export class ProjectService {
     /** @internal */
     getDocument(key: DocumentRegistryBucketKeyWithMode, path: Path): SourceFile | undefined {
         const info = this.getScriptInfoForPath(path);
-        return info && info.cacheSourceFile && info.cacheSourceFile.key === key ? info.cacheSourceFile.sourceFile : undefined;
+        return info && info.cacheSourceFile && info.cacheSourceFile.key === key ? info.cacheSourceFile.sourceFile
+            : undefined;
     }
 
     /** @internal */
@@ -1575,7 +1585,8 @@ export class ProjectService {
 
     /** @internal */
     ensureDefaultProjectForFile(fileNameOrScriptInfo: NormalizedPath | ScriptInfo): Project {
-        return this.tryGetDefaultProjectForFile(fileNameOrScriptInfo) || this.doEnsureDefaultProjectForFile(fileNameOrScriptInfo);
+        return this.tryGetDefaultProjectForFile(fileNameOrScriptInfo) ||
+            this.doEnsureDefaultProjectForFile(fileNameOrScriptInfo);
     }
 
     private doEnsureDefaultProjectForFile(fileNameOrScriptInfo: NormalizedPath | ScriptInfo): Project {
@@ -1725,7 +1736,8 @@ export class ProjectService {
                     fileOrDirectoryPath,
                 );
                 if (
-                    getBaseFileName(fileOrDirectoryPath) === "package.json" && !isInsideNodeModules(fileOrDirectoryPath) &&
+                    getBaseFileName(fileOrDirectoryPath) === "package.json" &&
+                    !isInsideNodeModules(fileOrDirectoryPath) &&
                     (fsResult && fsResult.fileExists || !fsResult && this.host.fileExists(fileOrDirectory))
                 ) {
                     const file = this.getNormalizedAbsolutePath(fileOrDirectory);
@@ -1755,7 +1767,9 @@ export class ProjectService {
                 ) return;
 
                 // Reload is pending, do the reload
-                if (config.updateLevel !== ProgramUpdateLevel.Full) config.updateLevel = ProgramUpdateLevel.RootNamesAndUpdate;
+                if (config.updateLevel !== ProgramUpdateLevel.Full) {
+                    config.updateLevel = ProgramUpdateLevel.RootNamesAndUpdate;
+                }
                 config.projects.forEach((watchWildcardDirectories, projectCanonicalPath) => {
                     if (!watchWildcardDirectories) return;
                     const project = this.getConfiguredProjectByCanonicalConfigFilePath(projectCanonicalPath);
@@ -1812,7 +1826,10 @@ export class ProjectService {
     }
 
     /** @internal */
-    private delayUpdateProjectsFromParsedConfigOnConfigFileChange(canonicalConfigFilePath: NormalizedPath, loadReason: string) {
+    private delayUpdateProjectsFromParsedConfigOnConfigFileChange(
+        canonicalConfigFilePath: NormalizedPath,
+        loadReason: string,
+    ) {
         const configFileExistenceInfo = this.configFileExistenceInfoCache.get(canonicalConfigFilePath);
         if (!configFileExistenceInfo?.config) return false;
         let scheduledAnyProjectUpdate = false;
@@ -1833,7 +1850,9 @@ export class ProjectService {
             }
             else {
                 // Change in referenced project config file
-                project.resolutionCache.removeResolutionsFromProjectReferenceRedirects(this.toPath(canonicalConfigFilePath));
+                project.resolutionCache.removeResolutionsFromProjectReferenceRedirects(
+                    this.toPath(canonicalConfigFilePath),
+                );
                 this.delayUpdateProjectGraph(project);
             }
         });
@@ -1861,7 +1880,10 @@ export class ProjectService {
         }
 
         // Update projects watching config
-        this.delayUpdateProjectsFromParsedConfigOnConfigFileChange(canonicalConfigFilePath, "Change in config file detected");
+        this.delayUpdateProjectsFromParsedConfigOnConfigFileChange(
+            canonicalConfigFilePath,
+            "Change in config file detected",
+        );
 
         // Reload the configured projects for the open files in the map as they are affected by this config file
         // If the configured project was deleted, we want to reload projects for all the open files including files
@@ -1883,7 +1905,11 @@ export class ProjectService {
 
     private removeProject(project: Project) {
         this.logger.info("`remove Project::");
-        project.print(/*writeProjectFileNames*/ true, /*writeFileExplaination*/ true, /*writeFileVersionAndText*/ false);
+        project.print(
+            /*writeProjectFileNames*/ true,
+            /*writeFileExplaination*/ true,
+            /*writeFileVersionAndText*/ false,
+        );
 
         project.close();
         if (Debug.shouldAssert(AssertionLevel.Normal)) {
@@ -2137,7 +2163,9 @@ export class ProjectService {
                 configFileName,
                 (_fileName, eventKind) => this.onConfigFileChanged(canonicalConfigFilePath, eventKind),
                 PollingInterval.High,
-                this.getWatchOptionsFromProjectWatchOptions(configFileExistenceInfo?.config?.parsedCommandLine?.watchOptions),
+                this.getWatchOptionsFromProjectWatchOptions(
+                    configFileExistenceInfo?.config?.parsedCommandLine?.watchOptions,
+                ),
                 WatchType.ConfigFile,
                 forProject,
             );
@@ -2216,7 +2244,9 @@ export class ProjectService {
         this.forEachConfigFileLocation(info, canonicalConfigFilePath => {
             const configFileExistenceInfo = this.configFileExistenceInfoCache.get(canonicalConfigFilePath);
             if (configFileExistenceInfo) {
-                const infoIsRootOfInferredProject = configFileExistenceInfo.openFilesImpactedByConfigFile?.get(info.path);
+                const infoIsRootOfInferredProject = configFileExistenceInfo.openFilesImpactedByConfigFile?.get(
+                    info.path,
+                );
 
                 // Delete the info from map, since this file is no more open
                 configFileExistenceInfo.openFilesImpactedByConfigFile?.delete(info.path);
@@ -2326,9 +2356,16 @@ export class ProjectService {
         let searchInDirectory = !isAncestorConfigFileInfo(info);
         do {
             if (searchInDirectory) {
-                const canonicalSearchPath = normalizedPathToPath(searchPath, this.currentDirectory, this.toCanonicalFileName);
+                const canonicalSearchPath = normalizedPathToPath(
+                    searchPath,
+                    this.currentDirectory,
+                    this.toCanonicalFileName,
+                );
                 const tsconfigFileName = asNormalizedPath(combinePaths(searchPath, "tsconfig.json"));
-                let result = action(combinePaths(canonicalSearchPath, "tsconfig.json") as NormalizedPath, tsconfigFileName);
+                let result = action(
+                    combinePaths(canonicalSearchPath, "tsconfig.json") as NormalizedPath,
+                    tsconfigFileName,
+                );
                 if (result) return tsconfigFileName;
 
                 const jsconfigFileName = asNormalizedPath(combinePaths(searchPath, "jsconfig.json"));
@@ -2383,7 +2420,8 @@ export class ProjectService {
         this.logger.info(`Search path: ${getDirectoryPath(info.fileName)}`);
         const configFileName = this.forEachConfigFileLocation(
             info,
-            (canonicalConfigFilePath, configFileName) => this.configFileExists(configFileName, canonicalConfigFilePath, info),
+            (canonicalConfigFilePath, configFileName) =>
+                this.configFileExists(configFileName, canonicalConfigFilePath, info),
         );
         if (configFileName) {
             this.logger.info(`For info: ${info.fileName} :: Config file name: ${configFileName}`);
@@ -2425,7 +2463,9 @@ export class ProjectService {
         return this.getConfiguredProjectByCanonicalConfigFilePath(canonicalConfigFilePath);
     }
 
-    private getConfiguredProjectByCanonicalConfigFilePath(canonicalConfigFilePath: string): ConfiguredProject | undefined {
+    private getConfiguredProjectByCanonicalConfigFilePath(
+        canonicalConfigFilePath: string,
+    ): ConfiguredProject | undefined {
         return this.configuredProjects.get(canonicalConfigFilePath);
     }
 
@@ -2634,7 +2674,9 @@ export class ProjectService {
      * @internal
      */
     private loadConfiguredProject(project: ConfiguredProject, reason: string) {
-        tracing?.push(tracing.Phase.Session, "loadConfiguredProject", { configFilePath: project.canonicalConfigFilePath });
+        tracing?.push(tracing.Phase.Session, "loadConfiguredProject", {
+            configFilePath: project.canonicalConfigFilePath,
+        });
         this.sendProjectLoadingStartEvent(project, reason);
 
         // Read updated contents from disk
@@ -2710,7 +2752,11 @@ export class ProjectService {
 
         // Parse the config file and ensure its cached
         const cachedDirectoryStructureHost = configFileExistenceInfo.config?.cachedDirectoryStructureHost ||
-            createCachedDirectoryStructureHost(this.host, this.host.getCurrentDirectory(), this.host.useCaseSensitiveFileNames)!;
+            createCachedDirectoryStructureHost(
+                this.host,
+                this.host.getCurrentDirectory(),
+                this.host.useCaseSensitiveFileNames,
+            )!;
 
         // Read updated contents from disk
         const configFileContent = tryReadFile(configFilename, fileName => this.host.readFile(fileName));
@@ -2791,13 +2837,15 @@ export class ProjectService {
                         );
                         // Update projects
                         let ensureProjectsForOpenFiles = false;
-                        this.sharedExtendedConfigFileWatchers.get(extendedConfigFilePath)?.projects.forEach(canonicalPath => {
-                            ensureProjectsForOpenFiles = this.delayUpdateProjectsFromParsedConfigOnConfigFileChange(
-                                canonicalPath,
-                                `Change in extended config file ${extendedConfigFileName} detected`,
-                            ) ||
-                                ensureProjectsForOpenFiles;
-                        });
+                        this.sharedExtendedConfigFileWatchers.get(extendedConfigFilePath)?.projects.forEach(
+                            canonicalPath => {
+                                ensureProjectsForOpenFiles = this.delayUpdateProjectsFromParsedConfigOnConfigFileChange(
+                                    canonicalPath,
+                                    `Change in extended config file ${extendedConfigFileName} detected`,
+                                ) ||
+                                    ensureProjectsForOpenFiles;
+                            },
+                        );
                         if (ensureProjectsForOpenFiles) this.delayEnsureProjectForOpenFiles();
                     },
                     PollingInterval.High,
@@ -2811,7 +2859,11 @@ export class ProjectService {
     }
 
     /** @internal */
-    watchWildcards(configFileName: NormalizedPath, { exists, config }: ConfigFileExistenceInfo, forProject: ConfiguredProject) {
+    watchWildcards(
+        configFileName: NormalizedPath,
+        { exists, config }: ConfigFileExistenceInfo,
+        forProject: ConfiguredProject,
+    ) {
         config!.projects.set(forProject.canonicalConfigFilePath, true);
         if (exists) {
             if (config!.watchedDirectories && !config!.watchedDirectoriesStale) return;
@@ -2852,7 +2904,11 @@ export class ProjectService {
         configFileExistenceInfo.config.watchedDirectoriesStale = undefined;
     }
 
-    private updateNonInferredProjectFiles<T>(project: Project, files: readonly T[], propertyReader: FilePropertyReader<T>) {
+    private updateNonInferredProjectFiles<T>(
+        project: Project,
+        files: readonly T[],
+        propertyReader: FilePropertyReader<T>,
+    ) {
         const projectRootFilesMap = project.getRootFilesMap();
         const newRootScriptInfoMap = new Map<string, true>();
 
@@ -2911,7 +2967,11 @@ export class ProjectService {
             projectRootFilesMap.forEach((value, path) => {
                 if (!newRootScriptInfoMap.has(path)) {
                     if (value.info) {
-                        project.removeFile(value.info, project.fileExists(value.info.fileName), /*detachFromProject*/ true);
+                        project.removeFile(
+                            value.info,
+                            project.fileExists(value.info.fileName),
+                            /*detachFromProject*/ true,
+                        );
                     }
                     else {
                         projectRootFilesMap.delete(path);
@@ -2989,7 +3049,12 @@ export class ProjectService {
      *
      * @internal
      */
-    reloadConfiguredProject(project: ConfiguredProject, reason: string, isInitialLoad: boolean, clearSemanticCache: boolean) {
+    reloadConfiguredProject(
+        project: ConfiguredProject,
+        reason: string,
+        isInitialLoad: boolean,
+        clearSemanticCache: boolean,
+    ) {
         // At this point, there is no reason to not have configFile in the host
         const host = project.getCachedDirectoryStructureHost();
         if (clearSemanticCache) this.clearSemanticCache(project);
@@ -3121,7 +3186,8 @@ export class ProjectService {
         isSingleInferredProject?: boolean,
         projectRootPath?: NormalizedPath,
     ): InferredProject {
-        const compilerOptions = projectRootPath && this.compilerOptionsForInferredProjectsPerProjectRoot.get(projectRootPath) ||
+        const compilerOptions =
+            projectRootPath && this.compilerOptionsForInferredProjectsPerProjectRoot.get(projectRootPath) ||
             this.compilerOptionsForInferredProjects!; // TODO: GH#18217
         let watchOptionsAndErrors: WatchOptionsAndErrors | false | undefined;
         let typeAcquisition: TypeAcquisition | undefined;
@@ -3189,7 +3255,10 @@ export class ProjectService {
             this.filenameToScriptInfo.entries(),
             ([path, scriptInfo]) => ({ path, fileName: scriptInfo.fileName }),
         );
-        this.logger.msg(`Could not find file ${JSON.stringify(fileName)}.\nAll files are: ${JSON.stringify(names)}`, Msg.Err);
+        this.logger.msg(
+            `Could not find file ${JSON.stringify(fileName)}.\nAll files are: ${JSON.stringify(names)}`,
+            Msg.Err,
+        );
     }
 
     /**
@@ -3225,7 +3294,10 @@ export class ProjectService {
                             projects.add(toAddInfo.path, project);
                         }
                         else if (
-                            !forEachEntry(projects, (projs, path) => path === toAddInfo.path ? false : contains(projs, project))
+                            !forEachEntry(
+                                projects,
+                                (projs, path) => path === toAddInfo.path ? false : contains(projs, project),
+                            )
                         ) {
                             projects.add(toAddInfo.path, project);
                         }
@@ -3256,7 +3328,9 @@ export class ProjectService {
             }
             else {
                 info.mTime = this.getModifiedTime(info);
-                info.fileWatcher = this.watchClosedScriptInfoInNodeModules(info.fileName.substring(0, indexOfNodeModules));
+                info.fileWatcher = this.watchClosedScriptInfoInNodeModules(
+                    info.fileName.substring(0, indexOfNodeModules),
+                );
             }
         }
     }
@@ -3308,7 +3382,9 @@ export class ProjectService {
             refreshScriptInfoRefCount: 0,
             affectedModuleSpecifierCacheProjects: undefined,
             close: () => {
-                if (watcher && !result.refreshScriptInfoRefCount && !result.affectedModuleSpecifierCacheProjects?.size) {
+                if (
+                    watcher && !result.refreshScriptInfoRefCount && !result.affectedModuleSpecifierCacheProjects?.size
+                ) {
                     watcher.close();
                     watcher = undefined;
                     this.nodeModulesWatchers.delete(dirPath);
@@ -3337,7 +3413,8 @@ export class ProjectService {
     private watchClosedScriptInfoInNodeModules(dir: string): FileWatcher {
         const watchDir = dir + "/node_modules";
         const watchDirPath = this.toPath(watchDir);
-        const watcher = this.nodeModulesWatchers.get(watchDirPath) || this.createNodeModulesWatcher(watchDir, watchDirPath);
+        const watcher = this.nodeModulesWatchers.get(watchDirPath) ||
+            this.createNodeModulesWatcher(watchDir, watchDirPath);
         watcher.refreshScriptInfoRefCount++;
 
         return {
@@ -3539,7 +3616,8 @@ export class ProjectService {
      * This gets the script info for the normalized path. If the path is not rooted disk path then the open script info with project root context is preferred
      */
     getScriptInfoForNormalizedPath(fileName: NormalizedPath) {
-        return !isRootedDiskPath(fileName) && this.openFilesWithNonRootedDiskPath.get(this.toCanonicalFileName(fileName)) ||
+        return !isRootedDiskPath(fileName) &&
+                this.openFilesWithNonRootedDiskPath.get(this.toCanonicalFileName(fileName)) ||
             this.getScriptInfoForPath(normalizedPathToPath(fileName, this.currentDirectory, this.toCanonicalFileName));
     }
 
@@ -3580,7 +3658,8 @@ export class ProjectService {
                         project,
                         sourceMapFileInfo.sourceInfos,
                     );
-                    return sourceMapFileInfo.documentPositionMapper ? sourceMapFileInfo.documentPositionMapper : undefined;
+                    return sourceMapFileInfo.documentPositionMapper ? sourceMapFileInfo.documentPositionMapper
+                        : undefined;
                 }
             }
             declarationInfo.sourceMapFilePath = undefined;
@@ -3603,7 +3682,11 @@ export class ProjectService {
         let mapFileNameFromDeclarationInfo: string | undefined;
 
         let readMapFile: ReadMapFile | undefined = (mapFileName, mapFileNameFromDts) => {
-            const mapInfo = this.getOrCreateScriptInfoNotOpenedByClient(mapFileName, project.currentDirectory, this.host);
+            const mapInfo = this.getOrCreateScriptInfoNotOpenedByClient(
+                mapFileName,
+                project.currentDirectory,
+                this.host,
+            );
             if (!mapInfo) {
                 mapFileNameFromDeclarationInfo = mapFileNameFromDts;
                 return undefined;
@@ -3629,7 +3712,11 @@ export class ProjectService {
             declarationInfo.sourceMapFilePath = sourceMapFileInfo.path;
             sourceMapFileInfo.declarationInfoPath = declarationInfo.path;
             sourceMapFileInfo.documentPositionMapper = documentPositionMapper || false;
-            sourceMapFileInfo.sourceInfos = this.addSourceInfoToSourceMap(sourceFileName, project, sourceMapFileInfo.sourceInfos);
+            sourceMapFileInfo.sourceInfos = this.addSourceInfoToSourceMap(
+                sourceFileName,
+                project,
+                sourceMapFileInfo.sourceInfos,
+            );
         }
         else if (mapFileNameFromDeclarationInfo) {
             declarationInfo.sourceMapFilePath = {
@@ -3666,7 +3753,9 @@ export class ProjectService {
             mapFileName,
             () => {
                 const declarationInfo = this.getScriptInfoForPath(declarationInfoPath);
-                if (declarationInfo && declarationInfo.sourceMapFilePath && !isString(declarationInfo.sourceMapFilePath)) {
+                if (
+                    declarationInfo && declarationInfo.sourceMapFilePath && !isString(declarationInfo.sourceMapFilePath)
+                ) {
                     // Update declaration and source projects
                     this.delayUpdateProjectGraphs(declarationInfo.containingProjects, /*clearSourceMapperCache*/ true);
                     this.delayUpdateSourceInfoProjects(declarationInfo.sourceMapFilePath.sourceInfos);
@@ -4034,7 +4123,10 @@ export class ProjectService {
     }
 
     /** @internal */
-    getOriginalLocationEnsuringConfiguredProject(project: Project, location: DocumentPosition): DocumentPosition | undefined {
+    getOriginalLocationEnsuringConfiguredProject(
+        project: Project,
+        location: DocumentPosition,
+    ): DocumentPosition | undefined {
         const isSourceOfProjectReferenceRedirect = project.isSourceOfProjectReferenceRedirect(location.fileName);
         const originalLocation = isSourceOfProjectReferenceRedirect ?
             location :
@@ -4045,7 +4137,10 @@ export class ProjectService {
         const scriptInfo = this.getScriptInfo(fileName);
         if (!scriptInfo && !this.host.fileExists(fileName)) return undefined;
 
-        const originalFileInfo: OriginalFileInfo = { fileName: toNormalizedPath(fileName), path: this.toPath(fileName) };
+        const originalFileInfo: OriginalFileInfo = {
+            fileName: toNormalizedPath(fileName),
+            path: this.toPath(fileName),
+        };
         const configFileName = this.getConfigFileNameForFile(originalFileInfo);
         if (!configFileName) return undefined;
 
@@ -4154,7 +4249,9 @@ export class ProjectService {
     private assignProjectToOpenedScriptInfo(info: ScriptInfo): AssignProjectResult {
         let configFileName: NormalizedPath | undefined;
         let configFileErrors: readonly Diagnostic[] | undefined;
-        let project: ConfiguredProject | ExternalProject | undefined = this.findExternalProjectContainingOpenScriptInfo(info);
+        let project: ConfiguredProject | ExternalProject | undefined = this.findExternalProjectContainingOpenScriptInfo(
+            info,
+        );
         let retainProjects: ConfiguredProject[] | ConfiguredProject | undefined;
         let projectForConfigFileDiag: ConfiguredProject | undefined;
         let defaultConfigProjectIsCreated = false;
@@ -4344,7 +4441,9 @@ export class ProjectService {
         }
     }
 
-    private cleanupAfterOpeningFile(toRetainConfigProjects: readonly ConfiguredProject[] | ConfiguredProject | undefined) {
+    private cleanupAfterOpeningFile(
+        toRetainConfigProjects: readonly ConfiguredProject[] | ConfiguredProject | undefined,
+    ) {
         // This was postponed from closeOpenFile to after opening next file,
         // so that we can reuse the project if we need to right away
         this.removeOrphanConfiguredProjects(toRetainConfigProjects);
@@ -4371,7 +4470,13 @@ export class ProjectService {
         hasMixedContent?: boolean,
         projectRootPath?: NormalizedPath,
     ): OpenConfiguredProjectResult {
-        const info = this.getOrCreateOpenScriptInfo(fileName, fileContent, scriptKind, hasMixedContent, projectRootPath);
+        const info = this.getOrCreateOpenScriptInfo(
+            fileName,
+            fileContent,
+            scriptKind,
+            hasMixedContent,
+            projectRootPath,
+        );
         const { retainProjects, ...result } = this.assignProjectToOpenedScriptInfo(info);
         this.cleanupAfterOpeningFile(retainProjects);
         this.telemetryOnOpenFile(info);
@@ -4531,7 +4636,9 @@ export class ProjectService {
     ): void {
         for (const proj of currentProjects) {
             const knownProject = find(lastKnownProjectVersions, p => p.projectName === proj.getProjectName());
-            result.push(proj.getChangesSinceVersion(knownProject && knownProject.version, includeProjectReferenceRedirectInfo));
+            result.push(
+                proj.getChangesSinceVersion(knownProject && knownProject.version, includeProjectReferenceRedirectInfo),
+            );
         }
     }
 
@@ -4542,7 +4649,12 @@ export class ProjectService {
     ): ProjectFilesWithTSDiagnostics[] {
         const files: ProjectFilesWithTSDiagnostics[] = [];
         this.collectChanges(knownProjects, this.externalProjects, includeProjectReferenceRedirectInfo, files);
-        this.collectChanges(knownProjects, this.configuredProjects.values(), includeProjectReferenceRedirectInfo, files);
+        this.collectChanges(
+            knownProjects,
+            this.configuredProjects.values(),
+            includeProjectReferenceRedirectInfo,
+            files,
+        );
         this.collectChanges(knownProjects, this.inferredProjects, includeProjectReferenceRedirectInfo, files);
         return files;
     }
@@ -4590,7 +4702,10 @@ export class ProjectService {
         // All the script infos now exist, so ok to go update projects for open files
         let retainProjects: readonly ConfiguredProject[] | undefined;
         if (openScriptInfos) {
-            retainProjects = flatMap(openScriptInfos, info => this.assignProjectToOpenedScriptInfo(info).retainProjects);
+            retainProjects = flatMap(
+                openScriptInfos,
+                info => this.assignProjectToOpenedScriptInfo(info).retainProjects,
+            );
         }
 
         // While closing files there could be open files that needed assigning new inferred projects, do it now
@@ -4617,7 +4732,9 @@ export class ProjectService {
         }
     }
 
-    private closeConfiguredProjectReferencedFromExternalProject(configuredProjects: Set<ConfiguredProject> | undefined) {
+    private closeConfiguredProjectReferencedFromExternalProject(
+        configuredProjects: Set<ConfiguredProject> | undefined,
+    ) {
         configuredProjects?.forEach(configuredProject => {
             if (!configuredProject.isClosed()) {
                 configuredProject.deleteExternalProjectReference();
@@ -4867,7 +4984,10 @@ export class ProjectService {
             if (existingExternalProject) {
                 existingExternalProject.excludedFiles = excludedFiles;
                 const compilerOptions = convertCompilerOptions(proj.options);
-                const watchOptionsAndErrors = convertWatchOptions(proj.options, existingExternalProject.getCurrentDirectory());
+                const watchOptionsAndErrors = convertWatchOptions(
+                    proj.options,
+                    existingExternalProject.getCurrentDirectory(),
+                );
                 const lastFileExceededProgramSize = this.getFilenameForExceededTotalSizeLimitForNonTsFiles(
                     proj.projectFileName,
                     compilerOptions,
@@ -4981,7 +5101,10 @@ export class ProjectService {
      * Performs the remaining steps of enabling a plugin after its module has been instantiated.
      * @internal
      */
-    private endEnablePlugin(project: Project, { pluginConfigEntry, resolvedModule, errorLogs }: BeginEnablePluginResult) {
+    private endEnablePlugin(
+        project: Project,
+        { pluginConfigEntry, resolvedModule, errorLogs }: BeginEnablePluginResult,
+    ) {
         if (resolvedModule) {
             const configurationOverride = this.currentPluginConfigOverrides?.get(pluginConfigEntry.name);
             if (configurationOverride) {
@@ -5066,7 +5189,10 @@ export class ProjectService {
         this.sendProjectsUpdatedInBackgroundEvent();
     }
 
-    private async enableRequestedPluginsForProjectAsync(project: Project, promises: Promise<BeginEnablePluginResult>[]) {
+    private async enableRequestedPluginsForProjectAsync(
+        project: Project,
+        promises: Promise<BeginEnablePluginResult>[],
+    ) {
         // Await all pending plugin imports. This ensures all requested plugin modules are fully loaded
         // prior to patching the language service, and that any promise rejections are observed.
         const results = await Promise.all(promises);
@@ -5085,7 +5211,9 @@ export class ProjectService {
 
     configurePlugin(args: protocol.ConfigurePluginRequestArguments) {
         // For any projects that already have the plugin loaded, configure the plugin
-        this.forEachEnabledProject(project => project.onPluginConfigurationChanged(args.pluginName, args.configuration));
+        this.forEachEnabledProject(project =>
+            project.onPluginConfigurationChanged(args.pluginName, args.configuration)
+        );
 
         // Also save the current configuration to pass on to any projects that are yet to be loaded.
         // If a plugin is configured twice, only the latest configuration will be remembered.
@@ -5094,7 +5222,11 @@ export class ProjectService {
     }
 
     /** @internal */
-    getPackageJsonsVisibleToFile(fileName: string, project: Project, rootDir?: string): readonly ProjectPackageJsonInfo[] {
+    getPackageJsonsVisibleToFile(
+        fileName: string,
+        project: Project,
+        rootDir?: string,
+    ): readonly ProjectPackageJsonInfo[] {
         const packageJsonCache = this.packageJsonCache;
         const rootPath = rootDir && this.toPath(rootDir);
         const result: ProjectPackageJsonInfo[] = [];

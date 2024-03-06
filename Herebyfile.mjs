@@ -371,14 +371,18 @@ function entrypointBuildTask(options) {
     const watch = task({
         name: `watch-${options.name}`,
         hiddenFromTaskList: true, // This is best effort.
-        dependencies: (options.buildDeps ?? []).concat(options.mainDeps ?? []).concat(cmdLineOptions.bundle ? [] : [shim]),
+        dependencies: (options.buildDeps ?? []).concat(options.mainDeps ?? []).concat(
+            cmdLineOptions.bundle ? [] : [shim],
+        ),
         run: () => {
             // These watch functions return promises that resolve once watch mode has started,
             // allowing them to operate as regular tasks, while creating unresolved promises
             // in the background that keep the process running after all tasks have exited.
             if (!printedWatchWarning) {
                 console.error(
-                    chalk.yellowBright("Warning: watch mode is incomplete and may not work as expected. Use at your own risk."),
+                    chalk.yellowBright(
+                        "Warning: watch mode is incomplete and may not work as expected. Use at your own risk.",
+                    ),
                 );
                 printedWatchWarning = true;
             }
@@ -883,7 +887,10 @@ export const updateSublime = task({
     dependencies: [tsserver],
     run: async () => {
         for (const file of ["built/local/tsserver.js", "built/local/tsserver.js.map"]) {
-            await fs.promises.copyFile(file, path.resolve("../TypeScript-Sublime-Plugin/tsserver/", path.basename(file)));
+            await fs.promises.copyFile(
+                file,
+                path.resolve("../TypeScript-Sublime-Plugin/tsserver/", path.basename(file)),
+            );
         }
     },
 });
@@ -943,21 +950,37 @@ export const clean = task({
 export const configureNightly = task({
     name: "configure-nightly",
     description: "Runs scripts/configurePrerelease.mjs to prepare a build for nightly publishing",
-    run: () => exec(process.execPath, ["scripts/configurePrerelease.mjs", "dev", "package.json", "src/compiler/corePublic.ts"]),
+    run: () =>
+        exec(process.execPath, [
+            "scripts/configurePrerelease.mjs",
+            "dev",
+            "package.json",
+            "src/compiler/corePublic.ts",
+        ]),
 });
 
 export const configureInsiders = task({
     name: "configure-insiders",
     description: "Runs scripts/configurePrerelease.mjs to prepare a build for insiders publishing",
     run: () =>
-        exec(process.execPath, ["scripts/configurePrerelease.mjs", "insiders", "package.json", "src/compiler/corePublic.ts"]),
+        exec(process.execPath, [
+            "scripts/configurePrerelease.mjs",
+            "insiders",
+            "package.json",
+            "src/compiler/corePublic.ts",
+        ]),
 });
 
 export const configureExperimental = task({
     name: "configure-experimental",
     description: "Runs scripts/configurePrerelease.mjs to prepare a build for experimental publishing",
     run: () =>
-        exec(process.execPath, ["scripts/configurePrerelease.mjs", "experimental", "package.json", "src/compiler/corePublic.ts"]),
+        exec(process.execPath, [
+            "scripts/configurePrerelease.mjs",
+            "experimental",
+            "package.json",
+            "src/compiler/corePublic.ts",
+        ]),
 });
 
 export const help = task({

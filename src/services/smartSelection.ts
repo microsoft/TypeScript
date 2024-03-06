@@ -110,7 +110,8 @@ export function getSmartSelectionRange(pos: number, sourceFile: SourceFile): Sel
 
                 // Blocks with braces, brackets, parens, or JSX tags on separate lines should be
                 // selected from open to close, including whitespace but not including the braces/etc. themselves.
-                const isBetweenMultiLineBookends = isSyntaxList(node) && isListOpener(prevNode) && isListCloser(nextNode)
+                const isBetweenMultiLineBookends = isSyntaxList(node) && isListOpener(prevNode) &&
+                    isListCloser(nextNode)
                     && !positionsAreOnSameLine(prevNode.getStart(), nextNode.getStart(), sourceFile);
                 let start = isBetweenMultiLineBookends ? prevNode.getEnd() : node.getStart();
                 const end = isBetweenMultiLineBookends ? nextNode.getStart() : getEndPos(sourceFile, node);
@@ -127,7 +128,8 @@ export function getSmartSelectionRange(pos: number, sourceFile: SourceFile): Sel
                 if (isSyntaxList(node)) {
                     const firstChild = node.getChildren()[0];
                     if (
-                        firstChild && hasJSDocNodes(firstChild) && firstChild.jsDoc?.length && firstChild.getStart() !== node.pos
+                        firstChild && hasJSDocNodes(firstChild) && firstChild.jsDoc?.length &&
+                        firstChild.getStart() !== node.pos
                     ) {
                         start = Math.min(start, first(firstChild.jsDoc).getStart());
                     }
@@ -262,7 +264,10 @@ function getSelectionChildren(node: Node): readonly Node[] {
 
     // Group modifiers and property name, then pivot on `:`.
     if (isPropertySignature(node)) {
-        const children = groupChildren(node.getChildren(), child => child === node.name || contains(node.modifiers, child));
+        const children = groupChildren(
+            node.getChildren(),
+            child => child === node.name || contains(node.modifiers, child),
+        );
         const firstJSDocChild = children[0]?.kind === SyntaxKind.JSDoc ? children[0] : undefined;
         const withJSDocSeparated = firstJSDocChild ? children.slice(1) : children;
         const splittedChildren = splitChildren(withJSDocSeparated, ({ kind }) => kind === SyntaxKind.ColonToken);

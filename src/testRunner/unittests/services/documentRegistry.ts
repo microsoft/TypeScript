@@ -106,7 +106,8 @@ describe("unittests:: services:: DocumentRegistry", () => {
         const snapshot = ts.ScriptSnapshot.fromString(contents);
 
         // Always treat any change as a full change.
-        snapshot.getChangeRange = () => ts.createTextChangeRange(ts.createTextSpan(0, contents.length), contents.length);
+        snapshot.getChangeRange = () =>
+            ts.createTextChangeRange(ts.createTextSpan(0, contents.length), contents.length);
 
         // Simulate one LS getting the document.
         documentRegistry.acquireDocument("file1.ts", defaultCompilerOptions, snapshot, /* version */ "1");

@@ -382,7 +382,10 @@ export function transformES2018(context: TransformationContext): (x: SourceFile 
                 }
                 return visitEachChild(node, visitor, context);
             case SyntaxKind.ElementAccessExpression:
-                if (capturedSuperProperties && (node as ElementAccessExpression).expression.kind === SyntaxKind.SuperKeyword) {
+                if (
+                    capturedSuperProperties &&
+                    (node as ElementAccessExpression).expression.kind === SyntaxKind.SuperKeyword
+                ) {
                     hasSuperElementAccess = true;
                 }
                 return visitEachChild(node, visitor, context);
@@ -591,7 +594,10 @@ export function transformES2018(context: TransformationContext): (x: SourceFile 
                 ),
             ],
         );
-        const result = factory.updateSourceFile(visited, setTextRange(factory.createNodeArray(statement), node.statements));
+        const result = factory.updateSourceFile(
+            visited,
+            setTextRange(factory.createNodeArray(statement), node.statements),
+        );
         exitSubtree(ancestorFacts);
         return result;
     }
@@ -629,7 +635,11 @@ export function transformES2018(context: TransformationContext): (x: SourceFile 
                 node,
                 visitNode(node.left, visitorWithUnusedExpressionResult, isExpression),
                 node.operatorToken,
-                visitNode(node.right, expressionResultIsUnused ? visitorWithUnusedExpressionResult : visitor, isExpression),
+                visitNode(
+                    node.right,
+                    expressionResultIsUnused ? visitorWithUnusedExpressionResult : visitor,
+                    isExpression,
+                ),
             );
         }
         return visitEachChild(node, visitor, context);
@@ -765,7 +775,10 @@ export function transformES2018(context: TransformationContext): (x: SourceFile 
         node: ForOfStatement,
         outermostLabeledStatement: LabeledStatement | undefined,
     ): VisitResult<Statement> {
-        const ancestorFacts = enterSubtree(HierarchyFacts.IterationStatementExcludes, HierarchyFacts.IterationStatementIncludes);
+        const ancestorFacts = enterSubtree(
+            HierarchyFacts.IterationStatementExcludes,
+            HierarchyFacts.IterationStatementIncludes,
+        );
         if (
             node.initializer.transformFlags & TransformFlags.ContainsObjectRestOrSpread ||
             isAssignmentPattern(node.initializer) && containsObjectRestOrSpread(node.initializer)
@@ -1227,7 +1240,8 @@ export function transformES2018(context: TransformationContext): (x: SourceFile 
     function transformAsyncGeneratorFunctionBody(
         node: MethodDeclaration | AccessorDeclaration | FunctionDeclaration | FunctionExpression,
     ): FunctionBody {
-        const innerParameters = !isSimpleParameterList(node.parameters) ? visitParameterList(node.parameters, visitor, context)
+        const innerParameters = !isSimpleParameterList(node.parameters) ?
+            visitParameterList(node.parameters, visitor, context)
             : undefined;
         resumeLexicalEnvironment();
 
@@ -1265,10 +1279,16 @@ export function transformES2018(context: TransformationContext): (x: SourceFile 
         // This step isn't needed if we eventually transform this to ES5.
         const emitSuperHelpers = languageVersion >= ScriptTarget.ES2015 &&
             resolver.getNodeCheckFlags(node) &
-                (NodeCheckFlags.MethodWithSuperPropertyAssignmentInAsync | NodeCheckFlags.MethodWithSuperPropertyAccessInAsync);
+                (NodeCheckFlags.MethodWithSuperPropertyAssignmentInAsync |
+                    NodeCheckFlags.MethodWithSuperPropertyAccessInAsync);
         if (emitSuperHelpers) {
             enableSubstitutionForAsyncMethodsWithSuper();
-            const variableStatement = createSuperAccessVariableStatement(factory, resolver, node, capturedSuperProperties);
+            const variableStatement = createSuperAccessVariableStatement(
+                factory,
+                resolver,
+                node,
+                capturedSuperProperties,
+            );
             substitutedSuperAccessors[getNodeId(variableStatement)] = true;
             insertStatementsAfterStandardPrologue(outerStatements, [variableStatement]);
         }
@@ -1292,7 +1312,12 @@ export function transformES2018(context: TransformationContext): (x: SourceFile 
     }
 
     function transformFunctionBody(
-        node: FunctionDeclaration | FunctionExpression | ConstructorDeclaration | MethodDeclaration | AccessorDeclaration,
+        node:
+            | FunctionDeclaration
+            | FunctionExpression
+            | ConstructorDeclaration
+            | MethodDeclaration
+            | AccessorDeclaration,
     ): FunctionBody;
     function transformFunctionBody(node: ArrowFunction): ConciseBody;
     function transformFunctionBody(node: FunctionLikeDeclaration): ConciseBody {
@@ -1378,7 +1403,8 @@ export function transformES2018(context: TransformationContext): (x: SourceFile 
                     setTextRange(block, parameter);
                     setEmitFlags(
                         block,
-                        EmitFlags.SingleLine | EmitFlags.NoTrailingSourceMap | EmitFlags.NoTokenSourceMaps | EmitFlags.NoComments,
+                        EmitFlags.SingleLine | EmitFlags.NoTrailingSourceMap | EmitFlags.NoTokenSourceMaps |
+                            EmitFlags.NoComments,
                     );
 
                     const typeCheck = factory.createTypeCheck(factory.cloneNode(parameter.name), "undefined");
@@ -1448,7 +1474,8 @@ export function transformES2018(context: TransformationContext): (x: SourceFile 
         // we should track it here.
         if (enabledSubstitutions & ESNextSubstitutionFlags.AsyncMethodsWithSuper && isSuperContainer(node)) {
             const superContainerFlags = resolver.getNodeCheckFlags(node) &
-                (NodeCheckFlags.MethodWithSuperPropertyAccessInAsync | NodeCheckFlags.MethodWithSuperPropertyAssignmentInAsync);
+                (NodeCheckFlags.MethodWithSuperPropertyAccessInAsync |
+                    NodeCheckFlags.MethodWithSuperPropertyAssignmentInAsync);
             if (superContainerFlags !== enclosingSuperContainerFlags) {
                 const savedEnclosingSuperContainerFlags = enclosingSuperContainerFlags;
                 enclosingSuperContainerFlags = superContainerFlags;
@@ -1499,7 +1526,10 @@ export function transformES2018(context: TransformationContext): (x: SourceFile 
         if (node.expression.kind === SyntaxKind.SuperKeyword) {
             return setTextRange(
                 factory.createPropertyAccessExpression(
-                    factory.createUniqueName("_super", GeneratedIdentifierFlags.Optimistic | GeneratedIdentifierFlags.FileLevel),
+                    factory.createUniqueName(
+                        "_super",
+                        GeneratedIdentifierFlags.Optimistic | GeneratedIdentifierFlags.FileLevel,
+                    ),
                     node.name,
                 ),
                 node,
@@ -1545,7 +1575,10 @@ export function transformES2018(context: TransformationContext): (x: SourceFile 
             || kind === SyntaxKind.SetAccessor;
     }
 
-    function createSuperElementAccessInAsyncMethod(argumentExpression: Expression, location: TextRange): LeftHandSideExpression {
+    function createSuperElementAccessInAsyncMethod(
+        argumentExpression: Expression,
+        location: TextRange,
+    ): LeftHandSideExpression {
         if (enclosingSuperContainerFlags & NodeCheckFlags.MethodWithSuperPropertyAssignmentInAsync) {
             return setTextRange(
                 factory.createPropertyAccessExpression(

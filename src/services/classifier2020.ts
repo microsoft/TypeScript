@@ -295,7 +295,8 @@ function isLocalDeclaration(decl: Declaration, sourceFile: SourceFile): boolean 
         decl = getDeclarationForBindingElement(decl);
     }
     if (isVariableDeclaration(decl)) {
-        return (!isSourceFile(decl.parent.parent.parent) || isCatchClause(decl.parent)) && decl.getSourceFile() === sourceFile;
+        return (!isSourceFile(decl.parent.parent.parent) || isCatchClause(decl.parent)) &&
+            decl.getSourceFile() === sourceFile;
     }
     else if (isFunctionDeclaration(decl)) {
         return !isSourceFile(decl.parent) && decl.getSourceFile() === sourceFile;

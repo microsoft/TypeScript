@@ -54,14 +54,25 @@ registerCodeFix({
         }),
 });
 
-function doChange(file: SourceFile, start: number, length: number, code: number, context: CodeFixContext | CodeFixAllContext) {
+function doChange(
+    file: SourceFile,
+    start: number,
+    length: number,
+    code: number,
+    context: CodeFixContext | CodeFixAllContext,
+) {
     let startPosition: number;
     let endPosition: number;
-    if (code === Diagnostics._0_is_defined_as_an_accessor_in_class_1_but_is_overridden_here_in_2_as_an_instance_property.code) {
+    if (
+        code ===
+            Diagnostics._0_is_defined_as_an_accessor_in_class_1_but_is_overridden_here_in_2_as_an_instance_property.code
+    ) {
         startPosition = start;
         endPosition = start + length;
     }
-    else if (code === Diagnostics._0_is_defined_as_a_property_in_class_1_but_is_overridden_here_in_2_as_an_accessor.code) {
+    else if (
+        code === Diagnostics._0_is_defined_as_a_property_in_class_1_but_is_overridden_here_in_2_as_an_accessor.code
+    ) {
         const checker = context.program.getTypeChecker();
         const node = getTokenAtPosition(file, start).parent;
         Debug.assert(isAccessor(node), "error span of fixPropertyOverrideAccessor should only be on an accessor");

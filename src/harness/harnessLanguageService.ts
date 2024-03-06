@@ -257,7 +257,11 @@ export abstract class LanguageServiceAdapterHost {
     public lineAndCharacterToPosition(fileName: string, lineAndCharacter: ts.LineAndCharacter): number {
         const script: ScriptInfo = this.getScriptInfo(fileName)!;
         assert.isOk(script);
-        return ts.computePositionOfLineAndCharacter(script.getLineMap(), lineAndCharacter.line, lineAndCharacter.character);
+        return ts.computePositionOfLineAndCharacter(
+            script.getLineMap(),
+            lineAndCharacter.line,
+            lineAndCharacter.character,
+        );
     }
 
     useCaseSensitiveFileNames() {
@@ -266,7 +270,9 @@ export abstract class LanguageServiceAdapterHost {
 }
 
 /// Native adapter
-class NativeLanguageServiceHost extends LanguageServiceAdapterHost implements ts.LanguageServiceHost, LanguageServiceAdapterHost {
+class NativeLanguageServiceHost extends LanguageServiceAdapterHost
+    implements ts.LanguageServiceHost, LanguageServiceAdapterHost
+{
     isKnownTypesPackageName(name: string): boolean {
         return !!this.typesRegistry && this.typesRegistry.has(name);
     }
@@ -675,7 +681,10 @@ export class ServerLanguageServiceAdapter implements LanguageServiceAdapter {
             cancellationToken: ts.server.nullCancellationToken,
             useSingleInferredProject: false,
             useInferredProjectPerProjectRoot: false,
-            typingsInstaller: { ...ts.server.nullTypingsInstaller, globalTypingsCacheLocation: "/Library/Caches/typescript" },
+            typingsInstaller: {
+                ...ts.server.nullTypingsInstaller,
+                globalTypingsCacheLocation: "/Library/Caches/typescript",
+            },
             byteLength: Buffer.byteLength,
             hrtime: process.hrtime,
             logger: this.logger,

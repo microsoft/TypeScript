@@ -119,7 +119,10 @@ function doChange(
     compilerOptions: CompilerOptions,
 ): void {
     const ctorSymbol = checker.getSymbolAtLocation(getTokenAtPosition(sourceFile, position))!;
-    if (!ctorSymbol || !ctorSymbol.valueDeclaration || !(ctorSymbol.flags & (SymbolFlags.Function | SymbolFlags.Variable))) {
+    if (
+        !ctorSymbol || !ctorSymbol.valueDeclaration ||
+        !(ctorSymbol.flags & (SymbolFlags.Function | SymbolFlags.Variable))
+    ) {
         // Bad input
         return undefined;
     }
@@ -207,7 +210,9 @@ function doChange(
                     // a() {}
                     if (isMethodDeclaration(property) || isGetOrSetAccessorDeclaration(property)) return true;
                     // a: function() {}
-                    if (isPropertyAssignment(property) && isFunctionExpression(property.initializer) && !!property.name) {
+                    if (
+                        isPropertyAssignment(property) && isFunctionExpression(property.initializer) && !!property.name
+                    ) {
                         return true;
                     }
                     // x.prototype.constructor = fn
@@ -244,9 +249,9 @@ function doChange(
             }
 
             // delete the entire statement if this expression is the sole expression to take care of the semicolon at the end
-            const nodeToDelete =
-                assignmentBinaryExpression.parent && assignmentBinaryExpression.parent.kind === SyntaxKind.ExpressionStatement
-                    ? assignmentBinaryExpression.parent : assignmentBinaryExpression;
+            const nodeToDelete = assignmentBinaryExpression.parent &&
+                    assignmentBinaryExpression.parent.kind === SyntaxKind.ExpressionStatement
+                ? assignmentBinaryExpression.parent : assignmentBinaryExpression;
             changes.delete(sourceFile, nodeToDelete);
 
             if (!assignmentExpr) {
@@ -264,7 +269,8 @@ function doChange(
 
             // f.x = expr
             if (
-                isAccessExpression(memberDeclaration) && (isFunctionExpression(assignmentExpr) || isArrowFunction(assignmentExpr))
+                isAccessExpression(memberDeclaration) &&
+                (isFunctionExpression(assignmentExpr) || isArrowFunction(assignmentExpr))
             ) {
                 const quotePreference = getQuotePreference(sourceFile, preferences);
                 const name = tryGetPropertyName(memberDeclaration, compilerOptions, quotePreference);
@@ -357,7 +363,10 @@ function doChange(
                 else {
                     bodyBlock = factory.createBlock([factory.createReturnStatement(arrowFunctionBody)]);
                 }
-                const fullModifiers = concatenate(modifiers, getModifierKindFromSource(arrowFunction, SyntaxKind.AsyncKeyword));
+                const fullModifiers = concatenate(
+                    modifiers,
+                    getModifierKindFromSource(arrowFunction, SyntaxKind.AsyncKeyword),
+                );
                 const method = factory.createMethodDeclaration(
                     fullModifiers,
                     /*asteriskToken*/ undefined,
@@ -402,7 +411,9 @@ function doChange(
     function createClassFromFunction(node: FunctionDeclaration | FunctionExpression): ClassDeclaration {
         const memberElements = createClassElementsFromSymbol(ctorSymbol);
         if (node.body) {
-            memberElements.unshift(factory.createConstructorDeclaration(/*modifiers*/ undefined, node.parameters, node.body));
+            memberElements.unshift(
+                factory.createConstructorDeclaration(/*modifiers*/ undefined, node.parameters, node.body),
+            );
         }
 
         const modifiers = getModifierKindFromSource(node, SyntaxKind.ExportKeyword);
@@ -419,7 +430,8 @@ function doChange(
 }
 
 function getModifierKindFromSource(source: Node, kind: Modifier["kind"]): readonly Modifier[] | undefined {
-    return canHaveModifiers(source) ? filter(source.modifiers, (modifier): modifier is Modifier => modifier.kind === kind)
+    return canHaveModifiers(source) ?
+        filter(source.modifiers, (modifier): modifier is Modifier => modifier.kind === kind)
         : undefined;
 }
 
@@ -444,7 +456,8 @@ function tryGetPropertyName(
     }
 
     if (isStringLiteralLike(propName)) {
-        return isIdentifierText(propName.text, getEmitScriptTarget(compilerOptions)) ? factory.createIdentifier(propName.text)
+        return isIdentifierText(propName.text, getEmitScriptTarget(compilerOptions)) ?
+            factory.createIdentifier(propName.text)
             : isNoSubstitutionTemplateLiteral(propName) ?
             factory.createStringLiteral(propName.text, quotePreference === QuotePreference.Single)
             : propName;

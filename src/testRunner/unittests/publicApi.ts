@@ -63,7 +63,12 @@ describe("unittests:: Public APIs:: JSDoc newlines", () => {
 */
 function test() {}`;
 
-        const testSourceFile = ts.createSourceFile(testFilePath, testFileText, ts.ScriptTarget.Latest, /*setParentNodes*/ true);
+        const testSourceFile = ts.createSourceFile(
+            testFilePath,
+            testFileText,
+            ts.ScriptTarget.Latest,
+            /*setParentNodes*/ true,
+        );
         const funcDec = testSourceFile.statements.find(ts.isFunctionDeclaration)!;
         const tags = ts.getJSDocTags(funcDec);
         assert.isDefined(tags[0].comment);
@@ -191,7 +196,9 @@ describe("unittests:: Public APIs:: validateLocaleAndSetLanguage", () => {
                 fileExists: fileName => {
                     assert.isTrue(
                         expectedToReadFile,
-                        `Locale : ${locale} ${expectedToReadFile ? "should" : "should not"} check if ${fileName} exists.`,
+                        `Locale : ${locale} ${
+                            expectedToReadFile ? "should" : "should not"
+                        } check if ${fileName} exists.`,
                     );
                     return expectedToReadFile;
                 },

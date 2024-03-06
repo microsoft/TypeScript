@@ -341,7 +341,9 @@ export namespace tracingEnabled {
                 recursionId: recursionToken,
                 isTuple: objectFlags & ObjectFlags.Tuple ? true : undefined,
                 unionTypes: (type.flags & TypeFlags.Union) ? (type as UnionType).types?.map(t => t.id) : undefined,
-                intersectionTypes: (type.flags & TypeFlags.Intersection) ? (type as IntersectionType).types.map(t => t.id)
+                intersectionTypes: (type.flags & TypeFlags.Intersection) ? (type as IntersectionType).types.map(t =>
+                    t.id
+                )
                     : undefined,
                 aliasTypeArguments: type.aliasTypeArguments?.map(t => t.id),
                 keyofType: (type.flags & TypeFlags.Index) ? (type as IndexType).type?.id : undefined,

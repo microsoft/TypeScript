@@ -29,7 +29,10 @@ describe("unittests:: config:: commandLineParsing:: parseCommandLine", () => {
                 getCanonicalFileName: ts.identity,
                 getNewLine: () => "\n",
             }));
-            Harness.Baseline.runBaseline(`config/commandLineParsing/parseCommandLine/${subScenario}.js`, baseline.join("\n"));
+            Harness.Baseline.runBaseline(
+                `config/commandLineParsing/parseCommandLine/${subScenario}.js`,
+                baseline.join("\n"),
+            );
         });
     }
 
@@ -251,15 +254,28 @@ describe("unittests:: config:: commandLineParsing:: parseBuildOptions", () => {
                 getCanonicalFileName: ts.identity,
                 getNewLine: () => "\n",
             }));
-            Harness.Baseline.runBaseline(`config/commandLineParsing/parseBuildOptions/${subScenario}.js`, baseline.join("\n"));
+            Harness.Baseline.runBaseline(
+                `config/commandLineParsing/parseBuildOptions/${subScenario}.js`,
+                baseline.join("\n"),
+            );
         });
     }
     assertParseResult("parse build without any options ", []);
     assertParseResult("Parse multiple options", ["--verbose", "--force", "tests"]);
     assertParseResult("Parse option with invalid option", ["--verbose", "--invalidOption"]);
     assertParseResult("Parse multiple flags with input projects at the end", ["--force", "--verbose", "src", "tests"]);
-    assertParseResult("Parse multiple flags with input projects in the middle", ["--force", "src", "tests", "--verbose"]);
-    assertParseResult("Parse multiple flags with input projects in the beginning", ["src", "tests", "--force", "--verbose"]);
+    assertParseResult("Parse multiple flags with input projects in the middle", [
+        "--force",
+        "src",
+        "tests",
+        "--verbose",
+    ]);
+    assertParseResult("Parse multiple flags with input projects in the beginning", [
+        "src",
+        "tests",
+        "--force",
+        "--verbose",
+    ]);
     assertParseResult("parse build with --incremental", ["--incremental", "tests"]);
     assertParseResult("parse build with --locale en-us", ["--locale", "en-us", "src"]);
     assertParseResult("parse build with --tsBuildInfoFile", ["--tsBuildInfoFile", "build.tsbuildinfo", "tests"]);

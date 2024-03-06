@@ -117,7 +117,10 @@ describe("unittests:: tsc-watch:: watchAPI:: tsc-watch with custom module resolu
                         {
                             caption: "change other file",
                             edit: sys =>
-                                sys.appendFile(`/user/username/projects/myproject/other.d.ts`, "export function bar(): void;"),
+                                sys.appendFile(
+                                    `/user/username/projects/myproject/other.d.ts`,
+                                    "export function bar(): void;",
+                                ),
                             timeouts: sys => sys.runQueuedTimeoutCallbacks(),
                         },
                         {
@@ -133,7 +136,10 @@ describe("unittests:: tsc-watch:: watchAPI:: tsc-watch with custom module resolu
                 });
             });
         }
-        verifyWatch("host implements does not implement hasInvalidatedResolutions", /*implementHasInvalidatedResolution*/ false);
+        verifyWatch(
+            "host implements does not implement hasInvalidatedResolutions",
+            /*implementHasInvalidatedResolution*/ false,
+        );
         verifyWatch("host implements hasInvalidatedResolutions", /*implementHasInvalidatedResolution*/ true);
     });
 });
@@ -319,7 +325,9 @@ describe("unittests:: tsc-watch:: watchAPI:: when watchHost uses createSemanticD
                 `/user/username/projects/myproject/tsconfig.tsbuildinfo`,
             ]
         ) {
-            baseline.push(`Output file text for ${output} is same:: ${sys.readFile(output) === emitSys.readFile(output)}`);
+            baseline.push(
+                `Output file text for ${output} is same:: ${sys.readFile(output) === emitSys.readFile(output)}`,
+            );
         }
         baseline.push("");
     }
@@ -395,12 +403,27 @@ describe("unittests:: tsc-watch:: watchAPI:: when watchHost uses createSemanticD
             const { sys, config, mainFile, emitSys } = result;
 
             // No Emit
-            verifyBuilder(baseline, emitBaseline, config, sys, emitSys, ts.createEmitAndSemanticDiagnosticsBuilderProgram, {
-                noEmit: true,
-            });
+            verifyBuilder(
+                baseline,
+                emitBaseline,
+                config,
+                sys,
+                emitSys,
+                ts.createEmitAndSemanticDiagnosticsBuilderProgram,
+                {
+                    noEmit: true,
+                },
+            );
 
             // Emit on both sys should result in same output
-            verifyBuilder(baseline, emitBaseline, config, sys, emitSys, ts.createEmitAndSemanticDiagnosticsBuilderProgram);
+            verifyBuilder(
+                baseline,
+                emitBaseline,
+                config,
+                sys,
+                emitSys,
+                ts.createEmitAndSemanticDiagnosticsBuilderProgram,
+            );
 
             // Change file
             applyChangeForBuilderTest(
@@ -418,7 +441,14 @@ describe("unittests:: tsc-watch:: watchAPI:: when watchHost uses createSemanticD
             });
 
             // Emit on both sys should result in same output
-            verifyBuilder(baseline, emitBaseline, config, sys, emitSys, ts.createEmitAndSemanticDiagnosticsBuilderProgram);
+            verifyBuilder(
+                baseline,
+                emitBaseline,
+                config,
+                sys,
+                emitSys,
+                ts.createEmitAndSemanticDiagnosticsBuilderProgram,
+            );
 
             // Change file
             applyChangeForBuilderTest(
@@ -539,7 +569,10 @@ describe("unittests:: tsc-watch:: watchAPI:: when watchHost uses createSemanticD
                 /*emitOnlyDtsFiles*/ true,
             );
             reportWatchStatus(
-                ts.createCompilerDiagnostic(ts.getWatchErrorSummaryDiagnosticMessage(diagnostics.length), diagnostics.length),
+                ts.createCompilerDiagnostic(
+                    ts.getWatchErrorSummaryDiagnosticMessage(diagnostics.length),
+                    diagnostics.length,
+                ),
                 sys.newLine,
                 program.getCompilerOptions(),
                 diagnostics.length,
@@ -632,7 +665,10 @@ describe("unittests:: tsc-watch:: watchAPI:: when getParsedCommandLine is implem
                     caption: "Add class3 to project1",
                     edit: sys => {
                         calledGetParsedCommandLine.clear();
-                        sys.writeFile(`/user/username/projects/myproject/projects/project1/class3.ts`, `class class3 {}`);
+                        sys.writeFile(
+                            `/user/username/projects/myproject/projects/project1/class3.ts`,
+                            `class class3 {}`,
+                        );
                     },
                     timeouts: sys => sys.runQueuedTimeoutCallbacks(),
                 },
@@ -673,7 +709,10 @@ describe("unittests:: tsc-watch:: watchAPI:: when getParsedCommandLine is implem
                     caption: "Add class3 to project1",
                     edit: sys => {
                         calledGetParsedCommandLine.clear();
-                        sys.writeFile(`/user/username/projects/myproject/projects/project1/class3.ts`, `class class3 {}`);
+                        sys.writeFile(
+                            `/user/username/projects/myproject/projects/project1/class3.ts`,
+                            `class class3 {}`,
+                        );
                     },
                     timeouts: sys => sys.runQueuedTimeoutCallbacks(),
                 },

@@ -90,12 +90,18 @@ describe("unittests:: services:: Transpile", () => {
                 /* eslint-enable no-null/no-null */
 
                 it("Correct output for " + justName, () => {
-                    Harness.Baseline.runBaseline(justName.replace(/\.tsx?$/, ts.Extension.Js), transpileResult.outputText);
+                    Harness.Baseline.runBaseline(
+                        justName.replace(/\.tsx?$/, ts.Extension.Js),
+                        transpileResult.outputText,
+                    );
                 });
 
                 if (canUseOldTranspile) {
                     it("Correct output (old transpile) for " + justName, () => {
-                        Harness.Baseline.runBaseline(justName.replace(/\.tsx?$/, ".oldTranspile.js"), oldTranspileResult);
+                        Harness.Baseline.runBaseline(
+                            justName.replace(/\.tsx?$/, ".oldTranspile.js"),
+                            oldTranspileResult,
+                        );
                     });
                 }
             });
@@ -299,7 +305,11 @@ var x = 0;`,
     });
 
     transpilesCorrectly("Supports setting 'allowSyntheticDefaultImports'", "x;", {
-        options: { compilerOptions: { allowSyntheticDefaultImports: true }, fileName: "input.js", reportDiagnostics: true },
+        options: {
+            compilerOptions: { allowSyntheticDefaultImports: true },
+            fileName: "input.js",
+            reportDiagnostics: true,
+        },
         testVerbatimModuleSyntax: true,
     });
 
@@ -334,7 +344,11 @@ var x = 0;`,
     });
 
     transpilesCorrectly("Supports setting 'declarationDir'", "x;", {
-        options: { compilerOptions: { declarationDir: "out/declarations" }, fileName: "input.js", reportDiagnostics: true },
+        options: {
+            compilerOptions: { declarationDir: "out/declarations" },
+            fileName: "input.js",
+            reportDiagnostics: true,
+        },
         testVerbatimModuleSyntax: true,
     });
 
@@ -358,7 +372,11 @@ var x = 0;`,
     });
 
     transpilesCorrectly("Supports setting 'forceConsistentCasingInFileNames'", "x;", {
-        options: { compilerOptions: { forceConsistentCasingInFileNames: true }, fileName: "input.js", reportDiagnostics: true },
+        options: {
+            compilerOptions: { forceConsistentCasingInFileNames: true },
+            fileName: "input.js",
+            reportDiagnostics: true,
+        },
         testVerbatimModuleSyntax: true,
     });
 
@@ -430,7 +448,11 @@ var x = 0;`,
     });
 
     transpilesCorrectly("Supports setting 'noFallthroughCasesInSwitch'", "x;", {
-        options: { compilerOptions: { noFallthroughCasesInSwitch: true }, fileName: "input.js", reportDiagnostics: true },
+        options: {
+            compilerOptions: { noFallthroughCasesInSwitch: true },
+            fileName: "input.js",
+            reportDiagnostics: true,
+        },
         testVerbatimModuleSyntax: true,
     });
 
@@ -480,7 +502,11 @@ var x = 0;`,
     });
 
     transpilesCorrectly("Supports setting 'paths'", "x;", {
-        options: { compilerOptions: { paths: { "*": ["./generated*"] } }, fileName: "input.js", reportDiagnostics: true },
+        options: {
+            compilerOptions: { paths: { "*": ["./generated*"] } },
+            fileName: "input.js",
+            reportDiagnostics: true,
+        },
         testVerbatimModuleSyntax: true,
     });
 
@@ -544,12 +570,20 @@ var x = 0;`,
     });
 
     transpilesCorrectly("Supports setting 'suppressExcessPropertyErrors'", "x;", {
-        options: { compilerOptions: { suppressExcessPropertyErrors: true }, fileName: "input.js", reportDiagnostics: true },
+        options: {
+            compilerOptions: { suppressExcessPropertyErrors: true },
+            fileName: "input.js",
+            reportDiagnostics: true,
+        },
         testVerbatimModuleSyntax: true,
     });
 
     transpilesCorrectly("Supports setting 'suppressImplicitAnyIndexErrors'", "x;", {
-        options: { compilerOptions: { suppressImplicitAnyIndexErrors: true }, fileName: "input.js", reportDiagnostics: true },
+        options: {
+            compilerOptions: { suppressImplicitAnyIndexErrors: true },
+            fileName: "input.js",
+            reportDiagnostics: true,
+        },
         testVerbatimModuleSyntax: true,
     });
 
@@ -701,12 +735,20 @@ export * as alias from './file';`,
         testVerbatimModuleSyntax: true,
     });
 
-    transpilesCorrectly("Ignores `allowImportingTsExtensions` without `noEmit` error", `import { foo } from "./foo.ts";`, {
-        options: {
-            compilerOptions: { module: ts.ModuleKind.ESNext, allowImportingTsExtensions: true, target: ts.ScriptTarget.ESNext },
+    transpilesCorrectly(
+        "Ignores `allowImportingTsExtensions` without `noEmit` error",
+        `import { foo } from "./foo.ts";`,
+        {
+            options: {
+                compilerOptions: {
+                    module: ts.ModuleKind.ESNext,
+                    allowImportingTsExtensions: true,
+                    target: ts.ScriptTarget.ESNext,
+                },
+            },
+            testVerbatimModuleSyntax: true,
         },
-        testVerbatimModuleSyntax: true,
-    });
+    );
 
     transpilesCorrectly(
         "Preserves exported const merged with type-only import",

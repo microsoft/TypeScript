@@ -41,11 +41,15 @@ describe("unittests:: services:: hostNewLineSupport", () => {
             `Expected output file name input.js, but got ${result.outputFiles[0].name}`,
         );
         assert(
-            result.outputFiles[0].text.match(options.newLine === ts.NewLineKind.CarriageReturnLineFeed ? /\r\n/ : /[^\r]\n/),
+            result.outputFiles[0].text.match(
+                options.newLine === ts.NewLineKind.CarriageReturnLineFeed ? /\r\n/ : /[^\r]\n/,
+            ),
             "expected to find appropriate newlines",
         );
         assert(
-            !result.outputFiles[0].text.match(options.newLine === ts.NewLineKind.CarriageReturnLineFeed ? /[^\r]\n/ : /\r\n/),
+            !result.outputFiles[0].text.match(
+                options.newLine === ts.NewLineKind.CarriageReturnLineFeed ? /[^\r]\n/ : /\r\n/,
+            ),
             "expected not to find inappropriate newlines",
         );
     }
@@ -68,7 +72,9 @@ describe("unittests:: services:: hostNewLineSupport", () => {
             "expected to find appropriate newlines",
         );
         assert(
-            !textAfterSpanCollapse.match(options.newLine === ts.NewLineKind.CarriageReturnLineFeed ? /[^\r]\n/ : /\r\n/),
+            !textAfterSpanCollapse.match(
+                options.newLine === ts.NewLineKind.CarriageReturnLineFeed ? /[^\r]\n/ : /\r\n/,
+            ),
             "expected not to find inappropriate newlines",
         );
     }
@@ -91,8 +97,11 @@ describe("unittests:: services:: hostNewLineSupport", () => {
     });
 
     it("should respect LF line endings around outlining spans", () => {
-        verifyOutliningSpanNewLines('// comment not included\n// #region name\nlet x: string = "x";\n// #endregion name\n\n', {
-            newLine: ts.NewLineKind.LineFeed,
-        });
+        verifyOutliningSpanNewLines(
+            '// comment not included\n// #region name\nlet x: string = "x";\n// #endregion name\n\n',
+            {
+                newLine: ts.NewLineKind.LineFeed,
+            },
+        );
     });
 });

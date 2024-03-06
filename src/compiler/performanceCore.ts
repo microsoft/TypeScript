@@ -56,7 +56,10 @@ declare const performance: Performance | undefined;
 declare const PerformanceObserver: PerformanceObserverConstructor | undefined;
 
 // eslint-disable-next-line @typescript-eslint/naming-convention
-function hasRequiredAPI(performance: Performance | undefined, PerformanceObserver: PerformanceObserverConstructor | undefined) {
+function hasRequiredAPI(
+    performance: Performance | undefined,
+    PerformanceObserver: PerformanceObserverConstructor | undefined,
+) {
     return typeof performance === "object" &&
         typeof performance.timeOrigin === "number" &&
         typeof performance.mark === "function" &&

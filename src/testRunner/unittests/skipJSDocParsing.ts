@@ -30,7 +30,10 @@ describe("unittests:: skipJSDocParsing", () => {
                         languageVersion: ts.ScriptTarget.ESNext,
                         jsDocParsingMode,
                     });
-                    assert.isTrue(sourceFileSkipped && sourceFileSkipped.parseDiagnostics.length === 0, "no errors issued");
+                    assert.isTrue(
+                        sourceFileSkipped && sourceFileSkipped.parseDiagnostics.length === 0,
+                        "no errors issued",
+                    );
 
                     const patch = Diff.createTwoFilesPatch(
                         "default",

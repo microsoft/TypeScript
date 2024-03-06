@@ -54,14 +54,22 @@ describe("unittests:: tsserver:: Text storage", () => {
             const { start: start1, length: length1 } = ts1.lineToTextSpan(line);
             const { start: start2, length: length2 } = ts2.lineToTextSpan(line);
             assert.strictEqual(start1, start2, `lineToTextSpan ${line}::start:: expected ${start1} to equal ${start2}`);
-            assert.strictEqual(length1, length2, `lineToTextSpan ${line}::length:: expected ${length1} to equal ${length2}`);
+            assert.strictEqual(
+                length1,
+                length2,
+                `lineToTextSpan ${line}::length:: expected ${length1} to equal ${length2}`,
+            );
         }
 
         for (let pos = 0; pos < f.content.length; pos++) {
             const { line: line1, offset: offset1 } = ts1.positionToLineOffset(pos);
             const { line: line2, offset: offset2 } = ts2.positionToLineOffset(pos);
             assert.strictEqual(line1, line2, `positionToLineOffset ${pos}::line:: expected ${line1} to equal ${line2}`);
-            assert.strictEqual(offset1, offset2, `positionToLineOffset ${pos}::offset:: expected ${offset1} to equal ${offset2}`);
+            assert.strictEqual(
+                offset1,
+                offset2,
+                `positionToLineOffset ${pos}::offset:: expected ${offset1} to equal ${offset2}`,
+            );
         }
     });
 

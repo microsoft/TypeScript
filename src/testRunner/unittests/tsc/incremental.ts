@@ -134,7 +134,11 @@ describe("unittests:: tsc:: incremental::", () => {
             projFs = undefined!;
         });
 
-        function verifyNoEmitOnError(subScenario: string, fixModifyFs: TestTscEdit["edit"], modifyFs?: TestTscEdit["edit"]) {
+        function verifyNoEmitOnError(
+            subScenario: string,
+            fixModifyFs: TestTscEdit["edit"],
+            modifyFs?: TestTscEdit["edit"],
+        ) {
             verifyTsc({
                 scenario: "incremental",
                 subScenario,
@@ -360,7 +364,8 @@ const a: string = 10;`,
             },
             {
                 caption: "Write file that could not be resolved",
-                edit: fs => fs.writeFileSync(`/src/project/src/fileNotFound.ts`, "function something2() { return 20; }"),
+                edit: fs =>
+                    fs.writeFileSync(`/src/project/src/fileNotFound.ts`, "function something2() { return 20; }"),
             },
             {
                 caption: "Modify main file",
@@ -395,7 +400,12 @@ declare global {
                     "/src/project/node_modules/@types/react/index.d.ts": getJsxLibraryContent(), // doesn't contain a jsx-runtime definition
                     "/src/project/src/index.tsx": `export const App = () => <div propA={true}></div>;`,
                     "/src/project/tsconfig.json": jsonToReadableText({
-                        compilerOptions: { module: "commonjs", jsx: "react-jsx", incremental: true, jsxImportSource: "react" },
+                        compilerOptions: {
+                            module: "commonjs",
+                            jsx: "react-jsx",
+                            incremental: true,
+                            jsxImportSource: "react",
+                        },
                     }),
                 }),
             commandLineArgs: ["--p", "src/project"],
@@ -410,7 +420,12 @@ declare global {
                     "/src/project/node_modules/@types/react/index.d.ts": getJsxLibraryContent(), // doesn't contain a jsx-runtime definition
                     "/src/project/src/index.tsx": `export const App = () => <div propA={true}></div>;`,
                     "/src/project/tsconfig.json": jsonToReadableText({
-                        compilerOptions: { module: "commonjs", jsx: "react-jsx", incremental: true, jsxImportSource: "react" },
+                        compilerOptions: {
+                            module: "commonjs",
+                            jsx: "react-jsx",
+                            incremental: true,
+                            jsxImportSource: "react",
+                        },
                     }),
                 }),
             commandLineArgs: ["--p", "src/project", "--strict"],
@@ -600,7 +615,9 @@ console.log(a);`,
     function verifyModifierChange(declaration: boolean) {
         verifyTsc({
             scenario: "incremental",
-            subScenario: `change to modifier of class expression field${declaration ? " with declaration emit enabled" : ""}`,
+            subScenario: `change to modifier of class expression field${
+                declaration ? " with declaration emit enabled" : ""
+            }`,
             commandLineArgs: ["-p", "src/project", "--incremental"],
             fs: () =>
                 loadProjectFromFiles({
@@ -769,7 +786,9 @@ console.log(a);`,
         }
         function fs(options: ts.CompilerOptions) {
             return loadProjectFromFiles({
-                "/src/project/tsconfig.json": jsonToReadableText({ compilerOptions: compilerOptionsToConfigJson(options) }),
+                "/src/project/tsconfig.json": jsonToReadableText({
+                    compilerOptions: compilerOptionsToConfigJson(options),
+                }),
                 "/src/project/a.ts": `export const a = 10;const aLocal = 10;`,
                 "/src/project/b.ts": `export const b = 10;const bLocal = 10;`,
                 "/src/project/c.ts": `import { a } from "./a";export const c = a;`,
@@ -824,7 +843,9 @@ console.log(a);`,
                 noChangeRun,
                 withOptionChange("with declaration and declarationMap", "--declaration", "--declarationMap"),
                 noChangeWithSubscenario("should re-emit only dts so they dont contain sourcemap"),
-                withEmitDeclarationOnlyChangeAndDiscrepancyExplanation("with emitDeclarationOnly should not emit anything"),
+                withEmitDeclarationOnlyChangeAndDiscrepancyExplanation(
+                    "with emitDeclarationOnly should not emit anything",
+                ),
                 noChangeRun,
                 localChange(),
                 withOptionChangeAndDiscrepancyExplanation("with declaration should not emit anything", "--declaration"),
@@ -853,7 +874,11 @@ console.log(a);`,
                 withOptionChange("with sourceMap", "--sourceMap"),
                 noChangeWithSubscenario("emit js files"),
                 withOptionChange("with declaration and declarationMap", "--declaration", "--declarationMap"),
-                withOptionChange("with declaration and declarationMap, should not re-emit", "--declaration", "--declarationMap"),
+                withOptionChange(
+                    "with declaration and declarationMap, should not re-emit",
+                    "--declaration",
+                    "--declarationMap",
+                ),
             ],
             baselinePrograms: true,
         });
@@ -875,7 +900,11 @@ console.log(a);`,
                 withOptionChange("with sourceMap", "--sourceMap"),
                 noChangeWithSubscenario("emit js files"),
                 withOptionChange("with declaration and declarationMap", "--declaration", "--declarationMap"),
-                withOptionChange("with declaration and declarationMap, should not re-emit", "--declaration", "--declarationMap"),
+                withOptionChange(
+                    "with declaration and declarationMap, should not re-emit",
+                    "--declaration",
+                    "--declarationMap",
+                ),
             ],
             baselinePrograms: true,
         });

@@ -25,7 +25,11 @@ export function getFsConentsForAlternateResultAtTypesPackageJson(packageName: st
     });
 }
 
-export function getFsContentsForAlternateResultPackageJson(packageName: string, addTypes: boolean, addTypesCondition: boolean) {
+export function getFsContentsForAlternateResultPackageJson(
+    packageName: string,
+    addTypes: boolean,
+    addTypesCondition: boolean,
+) {
     return jsonToReadableText({
         name: packageName,
         version: "1.0.0",
@@ -55,10 +59,11 @@ function mjs(packageName: string) {
 
 export function getFsContentsForAlternateResult(): FsContents {
     return {
-        "/home/src/projects/project/node_modules/@types/bar/package.json": getFsConentsForAlternateResultAtTypesPackageJson(
-            "bar",
-            /*addTypesCondition*/ false,
-        ),
+        "/home/src/projects/project/node_modules/@types/bar/package.json":
+            getFsConentsForAlternateResultAtTypesPackageJson(
+                "bar",
+                /*addTypesCondition*/ false,
+            ),
         "/home/src/projects/project/node_modules/@types/bar/index.d.ts": getFsContentsForAlternateResultDts("bar"),
         "/home/src/projects/project/node_modules/bar/package.json": getFsContentsForAlternateResultPackageJson(
             "bar",
@@ -75,10 +80,11 @@ export function getFsContentsForAlternateResult(): FsContents {
         "/home/src/projects/project/node_modules/foo/index.js": js("foo"),
         "/home/src/projects/project/node_modules/foo/index.mjs": mjs("foo"),
         "/home/src/projects/project/node_modules/foo/index.d.ts": getFsContentsForAlternateResultDts("foo"),
-        "/home/src/projects/project/node_modules/@types/bar2/package.json": getFsConentsForAlternateResultAtTypesPackageJson(
-            "bar2",
-            /*addTypesCondition*/ true,
-        ),
+        "/home/src/projects/project/node_modules/@types/bar2/package.json":
+            getFsConentsForAlternateResultAtTypesPackageJson(
+                "bar2",
+                /*addTypesCondition*/ true,
+            ),
         "/home/src/projects/project/node_modules/@types/bar2/index.d.ts": getFsContentsForAlternateResultDts("bar2"),
         "/home/src/projects/project/node_modules/bar2/package.json": getFsContentsForAlternateResultPackageJson(
             "bar2",

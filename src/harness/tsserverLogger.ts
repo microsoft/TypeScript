@@ -81,7 +81,9 @@ function handleLoggerGroup(logger: Logger, host: ts.server.ServerHost, sanitizeL
     return logger;
 
     function log(...args: string[]) {
-        args.forEach(s => originaPush.call(logger.logs, (sanitizeLibs ? sanitizeLibFileText : ts.identity)(sanitizeLog(s))));
+        args.forEach(s =>
+            originaPush.call(logger.logs, (sanitizeLibs ? sanitizeLibFileText : ts.identity)(sanitizeLog(s)))
+        );
         return 0;
     }
 

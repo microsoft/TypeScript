@@ -76,7 +76,9 @@ function getRefactorActionsToConvertToTemplateString(context: RefactorContext): 
     else if (context.preferences.provideRefactorNotApplicableReason) {
         refactorInfo.actions.push({
             ...convertStringAction,
-            notApplicableReason: getLocaleSpecificMessage(Diagnostics.Can_only_convert_string_concatenations_and_string_literals),
+            notApplicableReason: getLocaleSpecificMessage(
+                Diagnostics.Can_only_convert_string_concatenations_and_string_literals,
+            ),
         });
         return [refactorInfo];
     }
@@ -98,7 +100,10 @@ function getNodeOrParentOfParentheses(file: SourceFile, startPosition: number) {
     return node;
 }
 
-function getRefactorEditsToConvertToTemplateString(context: RefactorContext, actionName: string): RefactorEditInfo | undefined {
+function getRefactorEditsToConvertToTemplateString(
+    context: RefactorContext,
+    actionName: string,
+): RefactorEditInfo | undefined {
     const { file, startPosition } = context;
     const node = getNodeOrParentOfParentheses(file, startPosition);
 
@@ -134,7 +139,8 @@ function getEditsForToTemplateLiteral(context: RefactorContext, node: Node) {
 }
 
 function isNotEqualsOperator(node: BinaryExpression) {
-    return !(node.operatorToken.kind === SyntaxKind.EqualsToken || node.operatorToken.kind === SyntaxKind.PlusEqualsToken);
+    return !(node.operatorToken.kind === SyntaxKind.EqualsToken ||
+        node.operatorToken.kind === SyntaxKind.PlusEqualsToken);
 }
 
 function getParentBinaryExpression(expr: Node) {
@@ -206,7 +212,13 @@ const copyCommentFromMultiNode =
     (indexes: number[], targetNode: Node) => {
         while (indexes.length > 0) {
             const index = indexes.shift()!;
-            copyTrailingComments(nodes[index], targetNode, file, SyntaxKind.MultiLineCommentTrivia, /*hasTrailingNewLine*/ false);
+            copyTrailingComments(
+                nodes[index],
+                targetNode,
+                file,
+                SyntaxKind.MultiLineCommentTrivia,
+                /*hasTrailingNewLine*/ false,
+            );
             copyOperatorComments(index, targetNode);
         }
     };

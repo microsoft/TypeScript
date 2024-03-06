@@ -74,7 +74,10 @@ function getReturnType(expr: FunctionDeclaration | MethodDeclaration | FunctionE
     }
 }
 
-function getNodes(sourceFile: SourceFile, start: number): { insertBefore: Node; returnType: TypeNode | undefined; } | undefined {
+function getNodes(
+    sourceFile: SourceFile,
+    start: number,
+): { insertBefore: Node; returnType: TypeNode | undefined; } | undefined {
     const token = getTokenAtPosition(sourceFile, start);
     const containingFunction = getContainingFunction(token);
     if (!containingFunction) {
@@ -92,7 +95,8 @@ function getNodes(sourceFile: SourceFile, start: number): { insertBefore: Node; 
             break;
         case SyntaxKind.ArrowFunction:
             const kind = containingFunction.typeParameters ? SyntaxKind.LessThanToken : SyntaxKind.OpenParenToken;
-            insertBefore = findChildOfKind(containingFunction, kind, sourceFile) || first(containingFunction.parameters);
+            insertBefore = findChildOfKind(containingFunction, kind, sourceFile) ||
+                first(containingFunction.parameters);
             break;
         default:
             return;

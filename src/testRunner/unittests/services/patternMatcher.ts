@@ -135,7 +135,10 @@ describe("unittests:: services:: PatternMatcher", () => {
         });
 
         it("TwoUppercaseCharacters", () => {
-            assertSegmentMatch("SimpleUIElement", "SiUI", { kind: ts.PatternMatchKind.camelCase, isCaseSensitive: true });
+            assertSegmentMatch("SimpleUIElement", "SiUI", {
+                kind: ts.PatternMatchKind.camelCase,
+                isCaseSensitive: true,
+            });
         });
 
         it("PreferCaseSensitiveLowercasePattern", () => {
@@ -207,7 +210,10 @@ describe("unittests:: services:: PatternMatcher", () => {
         });
 
         it("SingleLowercasedSearchWord1", () => {
-            assertSegmentMatch("AddMetadataReference", "add", { kind: ts.PatternMatchKind.prefix, isCaseSensitive: false });
+            assertSegmentMatch("AddMetadataReference", "add", {
+                kind: ts.PatternMatchKind.prefix,
+                isCaseSensitive: false,
+            });
         });
 
         it("SingleLowercasedSearchWord2", () => {
@@ -218,7 +224,10 @@ describe("unittests:: services:: PatternMatcher", () => {
         });
 
         it("SingleUppercaseSearchWord1", () => {
-            assertSegmentMatch("AddMetadataReference", "Add", { kind: ts.PatternMatchKind.prefix, isCaseSensitive: true });
+            assertSegmentMatch("AddMetadataReference", "Add", {
+                kind: ts.PatternMatchKind.prefix,
+                isCaseSensitive: true,
+            });
         });
 
         it("SingleUppercaseSearchWord2", () => {
@@ -229,11 +238,17 @@ describe("unittests:: services:: PatternMatcher", () => {
         });
 
         it("SingleUppercaseSearchLetter1", () => {
-            assertSegmentMatch("AddMetadataReference", "A", { kind: ts.PatternMatchKind.prefix, isCaseSensitive: true });
+            assertSegmentMatch("AddMetadataReference", "A", {
+                kind: ts.PatternMatchKind.prefix,
+                isCaseSensitive: true,
+            });
         });
 
         it("SingleUppercaseSearchLetter2", () => {
-            assertSegmentMatch("AddMetadataReference", "M", { kind: ts.PatternMatchKind.substring, isCaseSensitive: true });
+            assertSegmentMatch("AddMetadataReference", "M", {
+                kind: ts.PatternMatchKind.substring,
+                isCaseSensitive: true,
+            });
         });
 
         it("TwoLowercaseWords0", () => {
@@ -244,11 +259,17 @@ describe("unittests:: services:: PatternMatcher", () => {
         });
 
         it("TwoLowercaseWords1", () => {
-            assertSegmentMatch("AddMetadataReference", "A M", { kind: ts.PatternMatchKind.prefix, isCaseSensitive: true });
+            assertSegmentMatch("AddMetadataReference", "A M", {
+                kind: ts.PatternMatchKind.prefix,
+                isCaseSensitive: true,
+            });
         });
 
         it("TwoLowercaseWords2", () => {
-            assertSegmentMatch("AddMetadataReference", "AM", { kind: ts.PatternMatchKind.camelCase, isCaseSensitive: true });
+            assertSegmentMatch("AddMetadataReference", "AM", {
+                kind: ts.PatternMatchKind.camelCase,
+                isCaseSensitive: true,
+            });
         });
 
         it("TwoLowercaseWords3", () => {
@@ -259,23 +280,38 @@ describe("unittests:: services:: PatternMatcher", () => {
         });
 
         it("TwoLowercaseWords4", () => {
-            assertSegmentMatch("AddMetadataReference", "ref M", { kind: ts.PatternMatchKind.substring, isCaseSensitive: true });
+            assertSegmentMatch("AddMetadataReference", "ref M", {
+                kind: ts.PatternMatchKind.substring,
+                isCaseSensitive: true,
+            });
         });
 
         it("MixedCamelCase", () => {
-            assertSegmentMatch("AddMetadataReference", "AMRe", { kind: ts.PatternMatchKind.camelCase, isCaseSensitive: true });
+            assertSegmentMatch("AddMetadataReference", "AMRe", {
+                kind: ts.PatternMatchKind.camelCase,
+                isCaseSensitive: true,
+            });
         });
 
         it("EachWordSeparately1", () => {
-            assertSegmentMatch("AddMetadataReference", "add Meta", { kind: ts.PatternMatchKind.prefix, isCaseSensitive: false });
+            assertSegmentMatch("AddMetadataReference", "add Meta", {
+                kind: ts.PatternMatchKind.prefix,
+                isCaseSensitive: false,
+            });
         });
 
         it("EachWordSeparately2", () => {
-            assertSegmentMatch("AddMetadataReference", "Add meta", { kind: ts.PatternMatchKind.prefix, isCaseSensitive: true });
+            assertSegmentMatch("AddMetadataReference", "Add meta", {
+                kind: ts.PatternMatchKind.prefix,
+                isCaseSensitive: true,
+            });
         });
 
         it("EachWordSeparately3", () => {
-            assertSegmentMatch("AddMetadataReference", "Add Meta", { kind: ts.PatternMatchKind.prefix, isCaseSensitive: true });
+            assertSegmentMatch("AddMetadataReference", "Add Meta", {
+                kind: ts.PatternMatchKind.prefix,
+                isCaseSensitive: true,
+            });
         });
 
         it("MixedCasing", () => {
@@ -309,15 +345,24 @@ describe("unittests:: services:: PatternMatcher", () => {
         });
 
         it("DottedPattern3", () => {
-            assertFullMatch("Foo.Bar.Baz", "Quux", "B.B.Q", { kind: ts.PatternMatchKind.prefix, isCaseSensitive: true });
+            assertFullMatch("Foo.Bar.Baz", "Quux", "B.B.Q", {
+                kind: ts.PatternMatchKind.prefix,
+                isCaseSensitive: true,
+            });
         });
 
         it("DottedPattern4", () => {
-            assertFullMatch("Foo.Bar.Baz", "Quux", "Baz.Quux", { kind: ts.PatternMatchKind.exact, isCaseSensitive: true });
+            assertFullMatch("Foo.Bar.Baz", "Quux", "Baz.Quux", {
+                kind: ts.PatternMatchKind.exact,
+                isCaseSensitive: true,
+            });
         });
 
         it("DottedPattern5", () => {
-            assertFullMatch("Foo.Bar.Baz", "Quux", "F.B.B.Quux", { kind: ts.PatternMatchKind.prefix, isCaseSensitive: true });
+            assertFullMatch("Foo.Bar.Baz", "Quux", "F.B.B.Quux", {
+                kind: ts.PatternMatchKind.prefix,
+                isCaseSensitive: true,
+            });
         });
 
         it("DottedPattern6", () => {
@@ -340,7 +385,10 @@ describe("unittests:: services:: PatternMatcher", () => {
         pattern: string,
         expected: ts.PatternMatch | undefined,
     ): void {
-        assert.deepEqual(ts.createPatternMatcher(pattern)!.getFullMatch(dottedContainer.split("."), candidate), expected);
+        assert.deepEqual(
+            ts.createPatternMatcher(pattern)!.getFullMatch(dottedContainer.split("."), candidate),
+            expected,
+        );
     }
 
     function spanListToSubstrings(identifier: string, spans: ts.TextSpan[]) {

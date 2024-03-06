@@ -76,7 +76,11 @@ describe("unittests:: PrinterAPI", () => {
             {},
             printer =>
                 printer.printFile(
-                    ts.createSourceFile("source.ts", "let greeting = `Hi ${name}, how are you?`;", ts.ScriptTarget.ES2017),
+                    ts.createSourceFile(
+                        "source.ts",
+                        "let greeting = `Hi ${name}, how are you?`;",
+                        ts.ScriptTarget.ES2017,
+                    ),
                 ),
         );
 
@@ -84,14 +88,16 @@ describe("unittests:: PrinterAPI", () => {
         printsCorrectly(
             "regularExpressionLiteral",
             {},
-            printer => printer.printFile(ts.createSourceFile("source.ts", "let regex = /abc/;", ts.ScriptTarget.ES2017)),
+            printer =>
+                printer.printFile(ts.createSourceFile("source.ts", "let regex = /abc/;", ts.ScriptTarget.ES2017)),
         );
 
         // https://github.com/microsoft/TypeScript/issues/22239
         printsCorrectly(
             "importStatementRemoveComments",
             { removeComments: true },
-            printer => printer.printFile(ts.createSourceFile("source.ts", "import {foo} from 'foo';", ts.ScriptTarget.ESNext)),
+            printer =>
+                printer.printFile(ts.createSourceFile("source.ts", "import {foo} from 'foo';", ts.ScriptTarget.ESNext)),
         );
         printsCorrectly("classHeritageClauses", {}, printer =>
             printer.printFile(ts.createSourceFile(
@@ -143,7 +149,8 @@ describe("unittests:: PrinterAPI", () => {
             const host = new fakes.CompilerHost(
                 new vfs.FileSystem(/*ignoreCase*/ true, {
                     files: {
-                        "/test.d.ts": `/// <reference types="node" />\n/// <reference path="./src/test.d.ts />\nvar a: number;\n`,
+                        "/test.d.ts":
+                            `/// <reference types="node" />\n/// <reference path="./src/test.d.ts />\nvar a: number;\n`,
                     },
                 }),
             );

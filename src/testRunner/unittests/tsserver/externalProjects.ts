@@ -415,7 +415,11 @@ describe("unittests:: tsserver:: externalProjects", () => {
             options: { moduleResolution: ts.ModuleResolutionKind.Classic },
             rootFiles: toExternalFiles([file1.path, file2.path]),
         }, session);
-        baselineTsserverLogs("externalProjects", "can update external project when set of root files was not changed", session);
+        baselineTsserverLogs(
+            "externalProjects",
+            "can update external project when set of root files was not changed",
+            session,
+        );
     });
 
     it("language service disabled state is updated in external projects", () => {
@@ -464,7 +468,11 @@ describe("unittests:: tsserver:: externalProjects", () => {
             session.getProjectService().externalProjects[0].languageServiceEnabled,
             "language service should be disabled - 2",
         );
-        baselineTsserverLogs("externalProjects", "language service disabled state is updated in external projects", session);
+        baselineTsserverLogs(
+            "externalProjects",
+            "language service disabled state is updated in external projects",
+            session,
+        );
     });
 
     describe("deleting config file opened from the external project works", () => {
@@ -733,7 +741,9 @@ describe("unittests:: tsserver:: externalProjects", () => {
                 },
             ),
         };
-        const host = createServerHost([libES5, libES2015Promise, app, config1], { executingFilePath: "/compiler/tsc.js" });
+        const host = createServerHost([libES5, libES2015Promise, app, config1], {
+            executingFilePath: "/compiler/tsc.js",
+        });
         const session = new TestSession(host);
         openFilesForSession([app], session);
 

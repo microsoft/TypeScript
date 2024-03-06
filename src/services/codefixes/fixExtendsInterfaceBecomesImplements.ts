@@ -25,7 +25,10 @@ registerCodeFix({
         const nodes = getNodes(sourceFile, context.span.start);
         if (!nodes) return undefined;
         const { extendsToken, heritageClauses } = nodes;
-        const changes = textChanges.ChangeTracker.with(context, t => doChanges(t, sourceFile, extendsToken, heritageClauses));
+        const changes = textChanges.ChangeTracker.with(
+            context,
+            t => doChanges(t, sourceFile, extendsToken, heritageClauses),
+        );
         return [
             createCodeFixAction(
                 fixId,

@@ -511,7 +511,8 @@ function getMeaningFromRightHandSideOfImportEquals(node: Node): SemanticMeaning 
     //     import a = |b.c|.d; // Namespace
     const name = node.kind === SyntaxKind.QualifiedName ? node
         : isQualifiedName(node.parent) && node.parent.right === node ? node.parent : undefined;
-    return name && name.parent.kind === SyntaxKind.ImportEqualsDeclaration ? SemanticMeaning.All : SemanticMeaning.Namespace;
+    return name && name.parent.kind === SyntaxKind.ImportEqualsDeclaration ? SemanticMeaning.All
+        : SemanticMeaning.Namespace;
 }
 
 /** @internal */
@@ -590,7 +591,11 @@ function isTypeReference(node: Node): boolean {
 }
 
 /** @internal */
-export function isCallExpressionTarget(node: Node, includeElementAccess = false, skipPastOuterExpressions = false): boolean {
+export function isCallExpressionTarget(
+    node: Node,
+    includeElementAccess = false,
+    skipPastOuterExpressions = false,
+): boolean {
     return isCalleeWorker(
         node,
         isCallExpression,
@@ -601,7 +606,11 @@ export function isCallExpressionTarget(node: Node, includeElementAccess = false,
 }
 
 /** @internal */
-export function isNewExpressionTarget(node: Node, includeElementAccess = false, skipPastOuterExpressions = false): boolean {
+export function isNewExpressionTarget(
+    node: Node,
+    includeElementAccess = false,
+    skipPastOuterExpressions = false,
+): boolean {
     return isCalleeWorker(
         node,
         isNewExpression,
@@ -612,7 +621,11 @@ export function isNewExpressionTarget(node: Node, includeElementAccess = false, 
 }
 
 /** @internal */
-export function isCallOrNewExpressionTarget(node: Node, includeElementAccess = false, skipPastOuterExpressions = false): boolean {
+export function isCallOrNewExpressionTarget(
+    node: Node,
+    includeElementAccess = false,
+    skipPastOuterExpressions = false,
+): boolean {
     return isCalleeWorker(
         node,
         isCallOrNewExpression,
@@ -623,7 +636,11 @@ export function isCallOrNewExpressionTarget(node: Node, includeElementAccess = f
 }
 
 /** @internal */
-export function isTaggedTemplateTag(node: Node, includeElementAccess = false, skipPastOuterExpressions = false): boolean {
+export function isTaggedTemplateTag(
+    node: Node,
+    includeElementAccess = false,
+    skipPastOuterExpressions = false,
+): boolean {
     return isCalleeWorker(
         node,
         isTaggedTemplateExpression,
@@ -671,7 +688,9 @@ function selectTagNameOfJsxOpeningLikeElement(node: JsxOpeningLikeElement) {
     return node.tagName;
 }
 
-function isCalleeWorker<T extends CallExpression | NewExpression | TaggedTemplateExpression | Decorator | JsxOpeningLikeElement>(
+function isCalleeWorker<
+    T extends CallExpression | NewExpression | TaggedTemplateExpression | Decorator | JsxOpeningLikeElement,
+>(
     node: Node,
     pred: (node: Node) => node is T,
     calleeSelector: (node: T) => Expression | JsxTagNameExpression,
@@ -830,7 +849,8 @@ export function getContainerNode(node: Node): Declaration | undefined {
 export function getNodeKind(node: Node): ScriptElementKind {
     switch (node.kind) {
         case SyntaxKind.SourceFile:
-            return isExternalModule(node as SourceFile) ? ScriptElementKind.moduleElement : ScriptElementKind.scriptElement;
+            return isExternalModule(node as SourceFile) ? ScriptElementKind.moduleElement
+                : ScriptElementKind.scriptElement;
         case SyntaxKind.ModuleDeclaration:
             return ScriptElementKind.moduleElement;
         case SyntaxKind.ClassDeclaration:
@@ -882,7 +902,8 @@ export function getNodeKind(node: Node): ScriptElementKind {
         case SyntaxKind.EnumMember:
             return ScriptElementKind.enumMemberElement;
         case SyntaxKind.Parameter:
-            return hasSyntacticModifier(node, ModifierFlags.ParameterPropertyModifier) ? ScriptElementKind.memberVariableElement
+            return hasSyntacticModifier(node, ModifierFlags.ParameterPropertyModifier) ?
+                ScriptElementKind.memberVariableElement
                 : ScriptElementKind.parameterElement;
         case SyntaxKind.ImportEqualsDeclaration:
         case SyntaxKind.ImportSpecifier:
@@ -1216,7 +1237,10 @@ export function findContainingList(node: Node): SyntaxList | undefined {
     // be parented by the container of the SyntaxList, not the SyntaxList itself.
     // In order to find the list item index, we first need to locate SyntaxList itself and then search
     // for the position of the relevant node (or comma).
-    const syntaxList = find(node.parent.getChildren(), (c): c is SyntaxList => isSyntaxList(c) && rangeContainsRange(c, node));
+    const syntaxList = find(
+        node.parent.getChildren(),
+        (c): c is SyntaxList => isSyntaxList(c) && rangeContainsRange(c, node),
+    );
     // Either we didn't find an appropriate list, or the list must contain us.
     Debug.assert(!syntaxList || contains(syntaxList.getChildren(), node));
     return syntaxList;
@@ -1280,7 +1304,10 @@ function getAncestorTypeNode(node: Node) {
 }
 
 /** @internal */
-export function getContextualTypeFromParentOrAncestorTypeNode(node: Expression, checker: TypeChecker): Type | undefined {
+export function getContextualTypeFromParentOrAncestorTypeNode(
+    node: Expression,
+    checker: TypeChecker,
+): Type | undefined {
     if (node.flags & (NodeFlags.JSDoc & ~NodeFlags.JavaScriptFile)) return undefined;
 
     const contextualType = getContextualTypeFromParent(node, checker);
@@ -1404,7 +1431,8 @@ function getAdjustedLocation(node: Node, forRename: boolean): Node {
             node.kind === SyntaxKind.InterfaceKeyword ? isInterfaceDeclaration(parent) :
             node.kind === SyntaxKind.EnumKeyword ? isEnumDeclaration(parent) :
             node.kind === SyntaxKind.TypeKeyword ? isTypeAliasDeclaration(parent) :
-            node.kind === SyntaxKind.NamespaceKeyword || node.kind === SyntaxKind.ModuleKeyword ? isModuleDeclaration(parent) :
+            node.kind === SyntaxKind.NamespaceKeyword || node.kind === SyntaxKind.ModuleKeyword ?
+            isModuleDeclaration(parent) :
             node.kind === SyntaxKind.ImportKeyword ? isImportEqualsDeclaration(parent) :
             node.kind === SyntaxKind.GetKeyword ? isGetAccessorDeclaration(parent) :
             node.kind === SyntaxKind.SetKeyword && isSetAccessorDeclaration(parent)
@@ -1416,7 +1444,8 @@ function getAdjustedLocation(node: Node, forRename: boolean): Node {
     }
     // /**/<var|let|const> [|name|] ...
     if (
-        (node.kind === SyntaxKind.VarKeyword || node.kind === SyntaxKind.ConstKeyword || node.kind === SyntaxKind.LetKeyword) &&
+        (node.kind === SyntaxKind.VarKeyword || node.kind === SyntaxKind.ConstKeyword ||
+            node.kind === SyntaxKind.LetKeyword) &&
         isVariableDeclarationList(parent) && parent.declarations.length === 1
     ) {
         const decl = parent.declarations[0];
@@ -1510,7 +1539,8 @@ function getAdjustedLocation(node: Node, forRename: boolean): Node {
     // interface ... /**/extends [|name|] ...
     // interface ... /**/extends name1, name2 ...
     if (
-        (node.kind === SyntaxKind.ExtendsKeyword || node.kind === SyntaxKind.ImplementsKeyword) && isHeritageClause(parent) &&
+        (node.kind === SyntaxKind.ExtendsKeyword || node.kind === SyntaxKind.ImplementsKeyword) &&
+        isHeritageClause(parent) &&
         parent.token === node.kind
     ) {
         const location = getAdjustedLocationForHeritageClause(parent);
@@ -1538,7 +1568,8 @@ function getAdjustedLocation(node: Node, forRename: boolean): Node {
     }
     // /**/keyof [|T|]
     if (
-        node.kind === SyntaxKind.KeyOfKeyword && isTypeOperatorNode(parent) && parent.operator === SyntaxKind.KeyOfKeyword &&
+        node.kind === SyntaxKind.KeyOfKeyword && isTypeOperatorNode(parent) &&
+        parent.operator === SyntaxKind.KeyOfKeyword &&
         isTypeReferenceNode(parent.type)
     ) {
         return parent.type.typeName;
@@ -1577,7 +1608,8 @@ function getAdjustedLocation(node: Node, forRename: boolean): Node {
         // left /**/in [|name|]
         // left /**/instanceof [|name|]
         if (
-            (node.kind === SyntaxKind.InKeyword || node.kind === SyntaxKind.InstanceOfKeyword) && isBinaryExpression(parent) &&
+            (node.kind === SyntaxKind.InKeyword || node.kind === SyntaxKind.InstanceOfKeyword) &&
+            isBinaryExpression(parent) &&
             parent.operatorToken === node
         ) {
             return skipOuterExpressions(parent.right);
@@ -1624,7 +1656,11 @@ export function getAdjustedRenameLocation(node: Node): Node {
  * @internal
  */
 export function getTouchingPropertyName(sourceFile: SourceFile, position: number): Node {
-    return getTouchingToken(sourceFile, position, n => isPropertyNameLiteral(n) || isKeyword(n.kind) || isPrivateIdentifier(n));
+    return getTouchingToken(
+        sourceFile,
+        position,
+        n => isPropertyNameLiteral(n) || isKeyword(n.kind) || isPrivateIdentifier(n),
+    );
 }
 
 /**
@@ -1750,7 +1786,8 @@ function getTokenAtPositionWorker(
         if (end < position) {
             return false;
         }
-        start ??= allowPositionInLeadingTrivia ? node.getFullStart() : node.getStart(sourceFile, /*includeJsDocComment*/ true);
+        start ??= allowPositionInLeadingTrivia ? node.getFullStart()
+            : node.getStart(sourceFile, /*includeJsDocComment*/ true);
         if (start > position) {
             // If this child begins after position, then all subsequent children will as well.
             return false;
@@ -1899,7 +1936,8 @@ export function findPrecedingToken(
                     if (candidate) {
                         // Ensure we recurse into JSDoc nodes with children.
                         if (
-                            !excludeJsdoc && isJSDocCommentContainingNode(candidate) && candidate.getChildren(sourceFile).length
+                            !excludeJsdoc && isJSDocCommentContainingNode(candidate) &&
+                            candidate.getChildren(sourceFile).length
                         ) {
                             return find(candidate);
                         }
@@ -1947,7 +1985,12 @@ function findRightmostToken(n: Node, sourceFile: SourceFileLike): Node | undefin
         return n;
     }
 
-    const candidate = findRightmostChildNodeWithTokens(children, /*exclusiveStartPosition*/ children.length, sourceFile, n.kind);
+    const candidate = findRightmostChildNodeWithTokens(
+        children,
+        /*exclusiveStartPosition*/ children.length,
+        sourceFile,
+        n.kind,
+    );
     return candidate && findRightmostToken(candidate, sourceFile);
 }
 
@@ -2055,10 +2098,15 @@ export function isInJSXText(sourceFile: SourceFile, position: number) {
     if (isJsxText(token)) {
         return true;
     }
-    if (token.kind === SyntaxKind.OpenBraceToken && isJsxExpression(token.parent) && isJsxElement(token.parent.parent)) {
+    if (
+        token.kind === SyntaxKind.OpenBraceToken && isJsxExpression(token.parent) && isJsxElement(token.parent.parent)
+    ) {
         return true;
     }
-    if (token.kind === SyntaxKind.LessThanToken && isJsxOpeningLikeElement(token.parent) && isJsxElement(token.parent.parent)) {
+    if (
+        token.kind === SyntaxKind.LessThanToken && isJsxOpeningLikeElement(token.parent) &&
+        isJsxElement(token.parent.parent)
+    ) {
         return true;
     }
     return false;
@@ -2167,7 +2215,9 @@ export function getPossibleGenericSignatures(
     }
 
     const signatures = isNewExpression(called.parent) ? type.getConstructSignatures() : type.getCallSignatures();
-    return signatures.filter(candidate => !!candidate.typeParameters && candidate.typeParameters.length >= typeArgumentCount);
+    return signatures.filter(candidate =>
+        !!candidate.typeParameters && candidate.typeParameters.length >= typeArgumentCount
+    );
 }
 
 /** @internal */
@@ -2296,7 +2346,11 @@ export function getPossibleTypeArgumentsInfo(
  *
  * @internal
  */
-export function isInComment(sourceFile: SourceFile, position: number, tokenAtPosition?: Node): CommentRange | undefined {
+export function isInComment(
+    sourceFile: SourceFile,
+    position: number,
+    tokenAtPosition?: Node,
+): CommentRange | undefined {
     return formatting.getRangeOfEnclosingComment(sourceFile, position, /*precedingToken*/ undefined, tokenAtPosition);
 }
 
@@ -2340,7 +2394,10 @@ export function getTypeArgumentOrTypeParameterList(node: Node): NodeArray<Node> 
         return (node as CallExpression).typeArguments;
     }
 
-    if (isFunctionLike(node) || node.kind === SyntaxKind.ClassDeclaration || node.kind === SyntaxKind.InterfaceDeclaration) {
+    if (
+        isFunctionLike(node) || node.kind === SyntaxKind.ClassDeclaration ||
+        node.kind === SyntaxKind.InterfaceDeclaration
+    ) {
         return (node as FunctionLikeDeclaration).typeParameters;
     }
 
@@ -2383,7 +2440,8 @@ export function isStringAndEmptyAnonymousObjectIntersection(type: Type) {
 /** @internal */
 export function isInsideTemplateLiteral(node: TemplateLiteralToken, position: number, sourceFile: SourceFile): boolean {
     return isTemplateLiteralKind(node.kind)
-            && (node.getStart(sourceFile) < position && position < node.end) || (!!node.isUnterminated && position === node.end);
+            && (node.getStart(sourceFile) < position && position < node.end) ||
+        (!!node.isUnterminated && position === node.end);
 }
 
 /** @internal */
@@ -2458,7 +2516,8 @@ export function isInNonReferenceComment(sourceFile: SourceFile, position: number
 
 function isInReferenceCommentWorker(sourceFile: SourceFile, position: number, shouldBeReference: boolean): boolean {
     const range = isInComment(sourceFile, position, /*tokenAtPosition*/ undefined);
-    return !!range && shouldBeReference === tripleSlashDirectivePrefixRegex.test(sourceFile.text.substring(range.pos, range.end));
+    return !!range &&
+        shouldBeReference === tripleSlashDirectivePrefixRegex.test(sourceFile.text.substring(range.pos, range.end));
 }
 
 /** @internal */
@@ -2555,7 +2614,8 @@ export function isTypeKeywordTokenOrIdentifier(node: Node) {
  * @internal
  */
 export function isExternalModuleSymbol(moduleSymbol: Symbol): boolean {
-    return !!(moduleSymbol.flags & SymbolFlags.Module) && moduleSymbol.name.charCodeAt(0) === CharacterCodes.doubleQuote;
+    return !!(moduleSymbol.flags & SymbolFlags.Module) &&
+        moduleSymbol.name.charCodeAt(0) === CharacterCodes.doubleQuote;
 }
 
 /**
@@ -2616,11 +2676,15 @@ export function programContainsEsModules(program: Program): boolean {
 // TODO: this function is, at best, poorly named. Use sites are pretty suspicious.
 /** @internal */
 export function compilerOptionsIndicateEsModules(compilerOptions: CompilerOptions): boolean {
-    return !!compilerOptions.module || getEmitScriptTarget(compilerOptions) >= ScriptTarget.ES2015 || !!compilerOptions.noEmit;
+    return !!compilerOptions.module || getEmitScriptTarget(compilerOptions) >= ScriptTarget.ES2015 ||
+        !!compilerOptions.noEmit;
 }
 
 /** @internal */
-export function createModuleSpecifierResolutionHost(program: Program, host: LanguageServiceHost): ModuleSpecifierResolutionHost {
+export function createModuleSpecifierResolutionHost(
+    program: Program,
+    host: LanguageServiceHost,
+): ModuleSpecifierResolutionHost {
     // Mix in `getSymlinkCache` from Program when host doesn't have it
     // in order for non-Project hosts to have a symlinks cache.
     return {
@@ -2642,7 +2706,10 @@ export function createModuleSpecifierResolutionHost(program: Program, host: Lang
 }
 
 /** @internal */
-export function getModuleSpecifierResolverHost(program: Program, host: LanguageServiceHost): SymbolTracker["moduleResolverHost"] {
+export function getModuleSpecifierResolverHost(
+    program: Program,
+    host: LanguageServiceHost,
+): SymbolTracker["moduleResolverHost"] {
     return {
         ...createModuleSpecifierResolutionHost(program, host),
         getCommonSourceDirectory: () => program.getCommonSourceDirectory(),
@@ -2715,7 +2782,8 @@ export function getQuotePreference(sourceFile: SourceFile, preferences: UserPref
         // ignore synthetic import added when importHelpers: true
         const firstModuleSpecifier = sourceFile.imports &&
             find(sourceFile.imports, n => isStringLiteral(n) && !nodeIsSynthesized(n.parent)) as StringLiteral;
-        return firstModuleSpecifier ? quotePreferenceFromString(firstModuleSpecifier, sourceFile) : QuotePreference.Double;
+        return firstModuleSpecifier ? quotePreferenceFromString(firstModuleSpecifier, sourceFile)
+            : QuotePreference.Double;
     }
 }
 
@@ -2813,11 +2881,13 @@ export function insertImports(
     preferences: UserPreferences,
 ): void {
     const decl = isArray(imports) ? imports[0] : imports;
-    const importKindPredicate: (node: Node) => node is AnyImportOrRequireStatement = decl.kind === SyntaxKind.VariableStatement ?
-        isRequireVariableStatement
-        : isAnyImportSyntax;
+    const importKindPredicate: (node: Node) => node is AnyImportOrRequireStatement =
+        decl.kind === SyntaxKind.VariableStatement ?
+            isRequireVariableStatement
+            : isAnyImportSyntax;
     const existingImportStatements = filter(sourceFile.statements, importKindPredicate);
-    let sortKind = isArray(imports) ? OrganizeImports.detectImportDeclarationSorting(imports, preferences) : SortKind.Both;
+    let sortKind = isArray(imports) ? OrganizeImports.detectImportDeclarationSorting(imports, preferences)
+        : SortKind.Both;
     const comparer = OrganizeImports.getOrganizeImportsComparer(preferences, sortKind === SortKind.CaseInsensitive);
     const sortedNewImports = isArray(imports) ?
         stableSort(imports, (a, b) => OrganizeImports.compareImportsOrRequireStatements(a, b, comparer))
@@ -2840,7 +2910,13 @@ export function insertImports(
                 // If the first import is top-of-file, insert after the leading comment which is likely the header.
                 const options = existingImportStatements[0] === sourceFile.statements[0] ?
                     { leadingTriviaOption: textChanges.LeadingTriviaOption.Exclude } : {};
-                changes.insertNodeBefore(sourceFile, existingImportStatements[0], newImport, /*blankLineBetween*/ false, options);
+                changes.insertNodeBefore(
+                    sourceFile,
+                    existingImportStatements[0],
+                    newImport,
+                    /*blankLineBetween*/ false,
+                    options,
+                );
             }
             else {
                 const prevImport = existingImportStatements[insertionIndex - 1];
@@ -2874,7 +2950,10 @@ export function textSpansEqual(a: TextSpan | undefined, b: TextSpan | undefined)
 }
 /** @internal */
 export function documentSpansEqual(a: DocumentSpan, b: DocumentSpan, useCaseSensitiveFileNames: boolean): boolean {
-    return (useCaseSensitiveFileNames ? equateStringsCaseSensitive : equateStringsCaseInsensitive)(a.fileName, b.fileName) &&
+    return (useCaseSensitiveFileNames ? equateStringsCaseSensitive : equateStringsCaseInsensitive)(
+        a.fileName,
+        b.fileName,
+    ) &&
         textSpansEqual(a.textSpan, b.textSpan);
 }
 
@@ -2890,7 +2969,10 @@ export function getDocumentSpansEqualityComparer(useCaseSensitiveFileNames: bool
  *
  * @internal
  */
-export function forEachUnique<T, U>(array: readonly T[] | undefined, callback: (element: T, index: number) => U): U | undefined {
+export function forEachUnique<T, U>(
+    array: readonly T[] | undefined,
+    callback: (element: T, index: number) => U,
+): U | undefined {
     if (array) {
         for (let i = 0; i < array.length; i++) {
             if (array.indexOf(array[i]) === i) {
@@ -2934,7 +3016,11 @@ export function getMappedDocumentSpan(
     const { fileName, textSpan } = documentSpan;
     const newPosition = getMappedLocation({ fileName, pos: textSpan.start }, sourceMapper, fileExists);
     if (!newPosition) return undefined;
-    const newEndPosition = getMappedLocation({ fileName, pos: textSpan.start + textSpan.length }, sourceMapper, fileExists);
+    const newEndPosition = getMappedLocation(
+        { fileName, pos: textSpan.start + textSpan.length },
+        sourceMapper,
+        fileExists,
+    );
     const newLength = newEndPosition
         ? newEndPosition.pos - newPosition.pos
         : textSpan.length; // This shouldn't happen
@@ -3189,7 +3275,10 @@ export function linkPart(text: string) {
 }
 
 /** @internal */
-export function buildLinkParts(link: JSDocLink | JSDocLinkCode | JSDocLinkPlain, checker?: TypeChecker): SymbolDisplayPart[] {
+export function buildLinkParts(
+    link: JSDocLink | JSDocLinkCode | JSDocLinkPlain,
+    checker?: TypeChecker,
+): SymbolDisplayPart[] {
     const prefix = isJSDocLink(link) ? "link"
         : isJSDocLinkCode(link) ? "linkcode"
         : "linkplain";
@@ -3434,7 +3523,8 @@ function getSynthesizedDeepCloneWorker<T extends Node>(node: T, replaceNode?: (n
 
     if (visited === node) {
         // This only happens for leaf nodes - internal nodes always see their children change.
-        const clone = isStringLiteral(node) ? setOriginalNode(factory.createStringLiteralFromNode(node), node) as Node as T :
+        const clone = isStringLiteral(node) ?
+            setOriginalNode(factory.createStringLiteralFromNode(node), node) as Node as T :
             isNumericLiteral(node) ?
             setOriginalNode(factory.createNumericLiteral(node.text, node.numericLiteralFlags), node) as Node as T :
             factory.cloneNode(node);
@@ -3461,7 +3551,10 @@ export function getSynthesizedDeepClones<T extends Node>(
     includeTrivia = true,
 ): NodeArray<T> | undefined {
     if (nodes) {
-        const cloned = factory.createNodeArray(nodes.map(n => getSynthesizedDeepClone(n, includeTrivia)), nodes.hasTrailingComma);
+        const cloned = factory.createNodeArray(
+            nodes.map(n => getSynthesizedDeepClone(n, includeTrivia)),
+            nodes.hasTrailingComma,
+        );
         setTextRange(cloned, nodes);
         return cloned;
     }
@@ -3680,7 +3773,8 @@ function indexInTextChange(change: string, name: string): number {
 export function needsParentheses(expression: Expression): boolean {
     return isBinaryExpression(expression) && expression.operatorToken.kind === SyntaxKind.CommaToken
         || isObjectLiteralExpression(expression)
-        || (isAsExpression(expression) || isSatisfiesExpression(expression)) && isObjectLiteralExpression(expression.expression);
+        || (isAsExpression(expression) || isSatisfiesExpression(expression)) &&
+            isObjectLiteralExpression(expression.expression);
 }
 
 /** @internal */
@@ -3711,7 +3805,8 @@ export function quote(sourceFile: SourceFile, preferences: UserPreferences, text
     // Editors can pass in undefined or empty string - we want to infer the preference in those cases.
     const quotePreference = getQuotePreference(sourceFile, preferences);
     const quoted = JSON.stringify(text);
-    return quotePreference === QuotePreference.Single ? `'${stripQuotes(quoted).replace(/'/g, () => "\\'").replace(/\\"/g, '"')}'`
+    return quotePreference === QuotePreference.Single ?
+        `'${stripQuotes(quoted).replace(/'/g, () => "\\'").replace(/\\"/g, '"')}'`
         : quoted;
 }
 
@@ -3729,7 +3824,9 @@ export function isEqualityOperatorKind(kind: SyntaxKind): kind is EqualityOperat
 }
 
 /** @internal */
-export function isStringLiteralOrTemplate(node: Node): node is StringLiteralLike | TemplateExpression | TaggedTemplateExpression {
+export function isStringLiteralOrTemplate(
+    node: Node,
+): node is StringLiteralLike | TemplateExpression | TaggedTemplateExpression {
     switch (node.kind) {
         case SyntaxKind.StringLiteral:
         case SyntaxKind.NoSubstitutionTemplateLiteral:
@@ -3905,7 +4002,8 @@ export function probablyUsesSemicolons(sourceFile: SourceFile): boolean {
             else if (lastToken && lastToken.kind !== SyntaxKind.CommaToken) {
                 const lastTokenLine = getLineAndCharacterOfPosition(sourceFile, lastToken.getStart(sourceFile)).line;
                 const nextTokenLine =
-                    getLineAndCharacterOfPosition(sourceFile, getSpanOfTokenAtPosition(sourceFile, lastToken.end).start).line;
+                    getLineAndCharacterOfPosition(sourceFile, getSpanOfTokenAtPosition(sourceFile, lastToken.end).start)
+                        .line;
                 // Avoid counting missing semicolon in single-line objects:
                 // `function f(p: { x: string /*no semicolon here is insignificant*/ }) {`
                 if (lastTokenLine !== nextTokenLine) {
@@ -4005,7 +4103,10 @@ export function findPackageJson(directory: string, host: LanguageServiceHost): s
 }
 
 /** @internal */
-export function getPackageJsonsVisibleToFile(fileName: string, host: LanguageServiceHost): readonly ProjectPackageJsonInfo[] {
+export function getPackageJsonsVisibleToFile(
+    fileName: string,
+    host: LanguageServiceHost,
+): readonly ProjectPackageJsonInfo[] {
     if (!host.fileExists) {
         return [];
     }
@@ -4083,8 +4184,14 @@ export function createPackageJsonInfo(
 
 /** @internal */
 export interface PackageJsonImportFilter {
-    allowsImportingAmbientModule: (moduleSymbol: Symbol, moduleSpecifierResolutionHost: ModuleSpecifierResolutionHost) => boolean;
-    allowsImportingSourceFile: (sourceFile: SourceFile, moduleSpecifierResolutionHost: ModuleSpecifierResolutionHost) => boolean;
+    allowsImportingAmbientModule: (
+        moduleSymbol: Symbol,
+        moduleSpecifierResolutionHost: ModuleSpecifierResolutionHost,
+    ) => boolean;
+    allowsImportingSourceFile: (
+        sourceFile: SourceFile,
+        moduleSpecifierResolutionHost: ModuleSpecifierResolutionHost,
+    ) => boolean;
     /**
      * Use for a specific module specifier that has already been resolved.
      * Use `allowsImportingAmbientModule` or `allowsImportingSourceFile` to resolve
@@ -4181,7 +4288,10 @@ export function createPackageJsonImportFilter(
             }
         }
 
-        const moduleSpecifier = getNodeModulesPackageNameFromFileName(sourceFile.fileName, moduleSpecifierResolutionHost);
+        const moduleSpecifier = getNodeModulesPackageNameFromFileName(
+            sourceFile.fileName,
+            moduleSpecifierResolutionHost,
+        );
         if (!moduleSpecifier) {
             sourceFileCache.set(sourceFile, true);
             return true;
@@ -4344,9 +4454,16 @@ export function getFixableErrorSpanExpression(sourceFile: SourceFile, span: Text
  */
 export function mapOneOrMany<T, U>(valueOrArray: T | readonly T[], f: (x: T, i: number) => U): U | U[];
 /** @internal */
-export function mapOneOrMany<T, U>(valueOrArray: T | readonly T[] | undefined, f: (x: T, i: number) => U): U | U[] | undefined;
+export function mapOneOrMany<T, U>(
+    valueOrArray: T | readonly T[] | undefined,
+    f: (x: T, i: number) => U,
+): U | U[] | undefined;
 /** @internal */
-export function mapOneOrMany<T, U>(valueOrArray: T | readonly T[], f: (x: T, i: number) => U, resultSelector: (x: U[]) => U): U;
+export function mapOneOrMany<T, U>(
+    valueOrArray: T | readonly T[],
+    f: (x: T, i: number) => U,
+    resultSelector: (x: U[]) => U,
+): U;
 /** @internal */
 export function mapOneOrMany<T, U>(
     valueOrArray: T | readonly T[] | undefined,
@@ -4396,7 +4513,11 @@ export function getNamesForExportedSymbol(
 }
 
 /** @internal */
-export function getNameForExportedSymbol(symbol: Symbol, scriptTarget: ScriptTarget | undefined, preferCapitalized?: boolean) {
+export function getNameForExportedSymbol(
+    symbol: Symbol,
+    scriptTarget: ScriptTarget | undefined,
+    preferCapitalized?: boolean,
+) {
     if (needsNameFromDeclaration(symbol)) {
         // Names for default exports:
         // - export default foo => foo
@@ -4493,7 +4614,8 @@ export function isNonGlobalDeclaration(declaration: Declaration) {
         return false;
     }
     // If the file is a module written in TypeScript, it still might be in a `declare global` augmentation
-    return isInJSFile(declaration) || !findAncestor(declaration, d => isModuleDeclaration(d) && isGlobalScopeAugmentation(d));
+    return isInJSFile(declaration) ||
+        !findAncestor(declaration, d => isModuleDeclaration(d) && isGlobalScopeAugmentation(d));
 }
 
 /** @internal */
@@ -4534,7 +4656,8 @@ export function getFormatCodeSettingsForWriting(
     { options }: formatting.FormatContext,
     sourceFile: SourceFile,
 ): FormatCodeSettings {
-    const shouldAutoDetectSemicolonPreference = !options.semicolons || options.semicolons === SemicolonPreference.Ignore;
+    const shouldAutoDetectSemicolonPreference = !options.semicolons ||
+        options.semicolons === SemicolonPreference.Ignore;
     const shouldRemoveSemicolons = options.semicolons === SemicolonPreference.Remove ||
         shouldAutoDetectSemicolonPreference && !probablyUsesSemicolons(sourceFile);
     return {
@@ -4560,7 +4683,10 @@ export interface CaseClauseTracker {
 }
 
 /** @internal */
-export function newCaseClauseTracker(checker: TypeChecker, clauses: readonly (CaseClause | DefaultClause)[]): CaseClauseTracker {
+export function newCaseClauseTracker(
+    checker: TypeChecker,
+    clauses: readonly (CaseClause | DefaultClause)[],
+): CaseClauseTracker {
     const existingStrings = new Set<string>();
     const existingNumbers = new Set<number>();
     const existingBigInts = new Set<string>();

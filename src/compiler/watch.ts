@@ -139,7 +139,11 @@ export function createDiagnosticReporter(system: System, pretty?: boolean): Diag
 /**
  * @returns Whether the screen was cleared.
  */
-function clearScreenIfNotWatchingForFileChanges(system: System, diagnostic: Diagnostic, options: CompilerOptions): boolean {
+function clearScreenIfNotWatchingForFileChanges(
+    system: System,
+    diagnostic: Diagnostic,
+    options: CompilerOptions,
+): boolean {
     if (
         system.clearScreen &&
         !options.preserveWatchOutput &&
@@ -225,7 +229,8 @@ export function parseConfigFileWithSystem(
     reportDiagnostic: DiagnosticReporter,
 ): ParsedCommandLine | undefined {
     const host: ParseConfigFileHost = system as any;
-    host.onUnRecoverableConfigFileDiagnostic = diagnostic => reportUnrecoverableDiagnostic(system, reportDiagnostic, diagnostic);
+    host.onUnRecoverableConfigFileDiagnostic = diagnostic =>
+        reportUnrecoverableDiagnostic(system, reportDiagnostic, diagnostic);
     const result = getParsedCommandLineOfConfigFile(
         configFileName,
         optionsToExtend,
@@ -499,7 +504,8 @@ export function fileIncludeReasonToDiagnostics(
                 }
                 else {
                     message = referenceLocation.packageId ?
-                        Diagnostics.Imported_via_0_from_file_1_with_packageId_2_to_import_jsx_and_jsxs_factory_functions :
+                        Diagnostics
+                            .Imported_via_0_from_file_1_with_packageId_2_to_import_jsx_and_jsxs_factory_functions :
                         Diagnostics.Imported_via_0_from_file_1_to_import_jsx_and_jsxs_factory_functions;
                 }
                 break;
@@ -532,7 +538,10 @@ export function fileIncludeReasonToDiagnostics(
             if (!options.configFile?.configFileSpecs) {
                 return chainDiagnosticMessages(/*details*/ undefined, Diagnostics.Root_file_specified_for_compilation);
             }
-            const fileName = getNormalizedAbsolutePath(program.getRootFileNames()[reason.index], program.getCurrentDirectory());
+            const fileName = getNormalizedAbsolutePath(
+                program.getRootFileNames()[reason.index],
+                program.getCurrentDirectory(),
+            );
             const matchedByFiles = getMatchedFileSpec(program, fileName);
             if (matchedByFiles) {
                 return chainDiagnosticMessages(/*details*/ undefined, Diagnostics.Part_of_files_list_in_tsconfig_json);
@@ -655,7 +664,13 @@ export function emitFilesAndReportErrors<T extends BuilderProgram>(
     // Emit and report any errors we ran into.
     const emitResult = isListFilesOnly
         ? { emitSkipped: true, diagnostics: emptyArray }
-        : program.emit(/*targetSourceFile*/ undefined, writeFile, cancellationToken, emitOnlyDtsFiles, customTransformers);
+        : program.emit(
+            /*targetSourceFile*/ undefined,
+            writeFile,
+            cancellationToken,
+            emitOnlyDtsFiles,
+            customTransformers,
+        );
     const { emittedFiles, diagnostics: emitDiagnostics } = emitResult;
     addRange(allDiagnostics, emitDiagnostics);
 
@@ -796,7 +811,8 @@ export function createWatchFactory<Y = undefined>(
     options: { extendedDiagnostics?: boolean; diagnostics?: boolean; },
 ) {
     const watchLogLevel = host.trace ?
-        options.extendedDiagnostics ? WatchLogLevel.Verbose : options.diagnostics ? WatchLogLevel.TriggerOnly : WatchLogLevel.None
+        options.extendedDiagnostics ? WatchLogLevel.Verbose
+            : options.diagnostics ? WatchLogLevel.TriggerOnly : WatchLogLevel.None
         : WatchLogLevel.None;
     const writeLog: (s: string) => void = watchLogLevel !== WatchLogLevel.None ? (s => host.trace!(s)) : noop;
     const result = getWatchFactory<WatchType, Y>(host, watchLogLevel, writeLog) as WatchFactoryWithLog<WatchType, Y>;
@@ -976,7 +992,9 @@ export interface CreateWatchCompilerHostInput<T extends BuilderProgram> {
 }
 
 /** @internal */
-export interface CreateWatchCompilerHostOfConfigFileInput<T extends BuilderProgram> extends CreateWatchCompilerHostInput<T> {
+export interface CreateWatchCompilerHostOfConfigFileInput<T extends BuilderProgram>
+    extends CreateWatchCompilerHostInput<T>
+{
     configFileName: string;
     optionsToExtend?: CompilerOptions;
     watchOptionsToExtend?: WatchOptions;
@@ -987,7 +1005,9 @@ export interface CreateWatchCompilerHostOfConfigFileInput<T extends BuilderProgr
  *
  * @internal
  */
-export function createWatchCompilerHostOfConfigFile<T extends BuilderProgram = EmitAndSemanticDiagnosticsBuilderProgram>({
+export function createWatchCompilerHostOfConfigFile<
+    T extends BuilderProgram = EmitAndSemanticDiagnosticsBuilderProgram,
+>({
     configFileName,
     optionsToExtend,
     watchOptionsToExtend,
@@ -1074,7 +1094,8 @@ export function performIncrementalCompilation(input: IncrementalCompilationOptio
         input.reportDiagnostic || createDiagnosticReporter(system),
         s => host.trace && host.trace(s),
         input.reportErrorSummary || input.options.pretty ?
-            (errorCount, filesInError) => system.write(getErrorSummaryText(errorCount, filesInError, system.newLine, host))
+            (errorCount, filesInError) =>
+                system.write(getErrorSummaryText(errorCount, filesInError, system.newLine, host))
             : undefined,
     );
     if (input.afterProgramEmitAndDiagnostics) input.afterProgramEmitAndDiagnostics(builderProgram);

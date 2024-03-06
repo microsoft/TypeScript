@@ -123,7 +123,9 @@ registerRefactor(refactorName, {
     getAvailableActions: getRefactorActionsToConvertParametersToDestructuredObject,
 });
 
-function getRefactorActionsToConvertParametersToDestructuredObject(context: RefactorContext): readonly ApplicableRefactorInfo[] {
+function getRefactorActionsToConvertParametersToDestructuredObject(
+    context: RefactorContext,
+): readonly ApplicableRefactorInfo[] {
     const { file, startPosition } = context;
     const isJSFile = isSourceFileJS(file);
     if (isJSFile) return emptyArray; // TODO: GH#30113
@@ -173,12 +175,18 @@ function doChange(
     );
 
     if (signature) {
-        const newSignatureParams = map(createNewParameters(signature, program, host), param => getSynthesizedDeepClone(param));
+        const newSignatureParams = map(
+            createNewParameters(signature, program, host),
+            param => getSynthesizedDeepClone(param),
+        );
         replaceParameters(signature, newSignatureParams);
     }
     replaceParameters(functionDeclaration, newFunctionDeclarationParams);
 
-    const functionCalls = sortAndDeduplicate(groupedReferences.functionCalls, /*comparer*/ (a, b) => compareValues(a.pos, b.pos));
+    const functionCalls = sortAndDeduplicate(
+        groupedReferences.functionCalls,
+        /*comparer*/ (a, b) => compareValues(a.pos, b.pos),
+    );
     for (const call of functionCalls) {
         if (call.arguments && call.arguments.length) {
             const newArgument = getSynthesizedDeepClone(
@@ -231,7 +239,13 @@ function getGroupedReferences(
     const references = flatMap(
         names,
         /*mapfn*/ name =>
-            FindAllReferences.getReferenceEntriesForNode(-1, name, program, program.getSourceFiles(), cancellationToken),
+            FindAllReferences.getReferenceEntriesForNode(
+                -1,
+                name,
+                program,
+                program.getSourceFiles(),
+                cancellationToken,
+            ),
     );
     const groupedReferences = groupReferences(references);
 
@@ -243,7 +257,12 @@ function getGroupedReferences(
 
     function groupReferences(referenceEntries: readonly FindAllReferences.Entry[]): GroupedReferences {
         const classReferences: ClassReferences = { accessExpressions: [], typeUsages: [] };
-        const groupedReferences: GroupedReferences = { functionCalls: [], declarations: [], classReferences, valid: true };
+        const groupedReferences: GroupedReferences = {
+            functionCalls: [],
+            declarations: [],
+            classReferences,
+            valid: true,
+        };
         const functionSymbols = map(functionNames, getSymbolTargetAtLocation);
         const classSymbols = map(classNames, getSymbolTargetAtLocation);
         const isConstructor = isConstructorDeclaration(functionDeclaration);
@@ -517,12 +536,14 @@ function isValidFunctionDeclaration(
             if (isObjectLiteralExpression(functionDeclaration.parent)) {
                 const contextualSymbol = getSymbolForContextualType(functionDeclaration.name, checker);
                 // don't offer the refactor when there are multiple signatures since we won't know which ones the user wants to change
-                return contextualSymbol?.declarations?.length === 1 && isSingleImplementation(functionDeclaration, checker);
+                return contextualSymbol?.declarations?.length === 1 &&
+                    isSingleImplementation(functionDeclaration, checker);
             }
             return isSingleImplementation(functionDeclaration, checker);
         case SyntaxKind.Constructor:
             if (isClassDeclaration(functionDeclaration.parent)) {
-                return hasNameOrDefault(functionDeclaration.parent) && isSingleImplementation(functionDeclaration, checker);
+                return hasNameOrDefault(functionDeclaration.parent) &&
+                    isSingleImplementation(functionDeclaration, checker);
             }
             else {
                 return isValidVariableDeclaration(functionDeclaration.parent.parent)
@@ -581,7 +602,9 @@ function getRefactorableParametersLength(parameters: NodeArray<ParameterDeclarat
     return parameters.length;
 }
 
-function getRefactorableParameters(parameters: NodeArray<ValidParameterDeclaration>): NodeArray<ValidParameterDeclaration> {
+function getRefactorableParameters(
+    parameters: NodeArray<ValidParameterDeclaration>,
+): NodeArray<ValidParameterDeclaration> {
     if (hasThisParameter(parameters)) {
         parameters = factory.createNodeArray(parameters.slice(1), parameters.hasTrailingComma);
     }
@@ -675,7 +698,9 @@ function createNewParameters(
     }
     return factory.createNodeArray([objectParameter]);
 
-    function createBindingElementFromParameterDeclaration(parameterDeclaration: ValidParameterDeclaration): BindingElement {
+    function createBindingElementFromParameterDeclaration(
+        parameterDeclaration: ValidParameterDeclaration,
+    ): BindingElement {
         const element = factory.createBindingElement(
             /*dotDotDotToken*/ undefined,
             /*propertyName*/ undefined,
@@ -698,7 +723,9 @@ function createNewParameters(
         return typeNode;
     }
 
-    function createPropertySignatureFromParameterDeclaration(parameterDeclaration: ValidParameterDeclaration): PropertySignature {
+    function createPropertySignatureFromParameterDeclaration(
+        parameterDeclaration: ValidParameterDeclaration,
+    ): PropertySignature {
         let parameterType = parameterDeclaration.type;
         if (!parameterType && (parameterDeclaration.initializer || isRestParameter(parameterDeclaration))) {
             parameterType = getTypeNode(parameterDeclaration);
@@ -775,7 +802,11 @@ function getFunctionNames(functionDeclaration: ValidFunctionDeclaration): Node[]
             return [functionDeclaration.name];
         case SyntaxKind.Constructor:
             const ctrKeyword = Debug.checkDefined(
-                findChildOfKind(functionDeclaration, SyntaxKind.ConstructorKeyword, functionDeclaration.getSourceFile()),
+                findChildOfKind(
+                    functionDeclaration,
+                    SyntaxKind.ConstructorKeyword,
+                    functionDeclaration.getSourceFile(),
+                ),
                 "Constructor declaration should have constructor keyword",
             );
             if (functionDeclaration.parent.kind === SyntaxKind.ClassExpression) {
@@ -833,7 +864,12 @@ interface ValidMethodSignature extends MethodSignature {
     parameters: NodeArray<ValidParameterDeclaration>;
 }
 
-type ValidFunctionDeclaration = ValidConstructor | ValidFunction | ValidMethod | ValidArrowFunction | ValidFunctionExpression;
+type ValidFunctionDeclaration =
+    | ValidConstructor
+    | ValidFunction
+    | ValidMethod
+    | ValidArrowFunction
+    | ValidFunctionExpression;
 
 interface ValidParameterDeclaration extends ParameterDeclaration {
     name: Identifier;

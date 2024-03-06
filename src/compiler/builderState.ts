@@ -209,7 +209,10 @@ export namespace BuilderState {
     /**
      * Get the module source file and all augmenting files from the import name node from file
      */
-    function getReferencedFilesFromImportLiteral(checker: TypeChecker, importName: StringLiteralLike): Path[] | undefined {
+    function getReferencedFilesFromImportLiteral(
+        checker: TypeChecker,
+        importName: StringLiteralLike,
+    ): Path[] | undefined {
         const symbol = checker.getSymbolAtLocation(importName);
         return symbol && getReferencedFilesFromImportedModuleSymbol(symbol);
     }
@@ -223,7 +226,11 @@ export namespace BuilderState {
         sourceFileDirectory: Path,
         getCanonicalFileName: GetCanonicalFileName,
     ): Path {
-        return toPath(program.getProjectReferenceRedirect(fileName) || fileName, sourceFileDirectory, getCanonicalFileName);
+        return toPath(
+            program.getProjectReferenceRedirect(fileName) || fileName,
+            sourceFileDirectory,
+            getCanonicalFileName,
+        );
     }
 
     /**
@@ -268,7 +275,12 @@ export namespace BuilderState {
             }
 
             const fileName = resolvedTypeReferenceDirective.resolvedFileName!; // TODO: GH#18217
-            const typeFilePath = getReferencedFileFromFileName(program, fileName, sourceFileDirectory, getCanonicalFileName);
+            const typeFilePath = getReferencedFileFromFileName(
+                program,
+                fileName,
+                sourceFileDirectory,
+                getCanonicalFileName,
+            );
             addReferencedFile(typeFilePath);
         }, sourceFile);
 
@@ -350,7 +362,8 @@ export namespace BuilderState {
                 sourceFile.version,
                 "Program intended to be used with Builder should have source files with versions set",
             );
-            const oldUncommittedSignature = useOldState ? oldState!.oldSignatures?.get(sourceFile.resolvedPath) : undefined;
+            const oldUncommittedSignature = useOldState ? oldState!.oldSignatures?.get(sourceFile.resolvedPath)
+                : undefined;
             const signature = oldUncommittedSignature === undefined ?
                 useOldState ? oldState!.fileInfos.get(sourceFile.resolvedPath)?.signature : undefined :
                 oldUncommittedSignature || undefined;
@@ -514,7 +527,8 @@ export namespace BuilderState {
                     state.exportedModulesMap.getValues(sourceFile.resolvedPath) || false,
                 );
                 // All the references in this file are exported
-                const references = state.referencedMap ? state.referencedMap.getValues(sourceFile.resolvedPath) : undefined;
+                const references = state.referencedMap ? state.referencedMap.getValues(sourceFile.resolvedPath)
+                    : undefined;
                 if (references) {
                     state.exportedModulesMap.set(sourceFile.resolvedPath, references);
                 }
@@ -551,7 +565,9 @@ export namespace BuilderState {
         }
     }
 
-    export function getExportedModules(exportedModulesFromDeclarationEmit: ExportedModulesFromDeclarationEmit | undefined) {
+    export function getExportedModules(
+        exportedModulesFromDeclarationEmit: ExportedModulesFromDeclarationEmit | undefined,
+    ) {
         let exportedModules: Set<Path> | undefined;
         exportedModulesFromDeclarationEmit?.forEach(
             symbol =>
@@ -652,7 +668,8 @@ export namespace BuilderState {
      */
     function isFileAffectingGlobalScope(sourceFile: SourceFile) {
         return containsGlobalScopeAugmentation(sourceFile) ||
-            !isExternalOrCommonJsModule(sourceFile) && !isJsonSourceFile(sourceFile) && !containsOnlyAmbientModules(sourceFile);
+            !isExternalOrCommonJsModule(sourceFile) && !isJsonSourceFile(sourceFile) &&
+                !containsOnlyAmbientModules(sourceFile);
     }
 
     /**

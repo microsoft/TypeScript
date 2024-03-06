@@ -267,7 +267,12 @@ function getInfo(checker: TypeChecker, sourceFile: SourceFile, position: number,
             if (!declaration || !declaration.body || !declaration.type || !rangeContainsRange(declaration.type, node)) {
                 return undefined;
             }
-            return getFixInfo(checker, declaration, checker.getTypeFromTypeNode(declaration.type), /*isFunctionType*/ false);
+            return getFixInfo(
+                checker,
+                declaration,
+                checker.getTypeFromTypeNode(declaration.type),
+                /*isFunctionType*/ false,
+            );
         case Diagnostics.Argument_of_type_0_is_not_assignable_to_parameter_of_type_1.code:
             if (!declaration || !isCallExpression(declaration.parent) || !declaration.body) return undefined;
             const pos = declaration.parent.arguments.indexOf(declaration as Expression);
@@ -276,7 +281,9 @@ function getInfo(checker: TypeChecker, sourceFile: SourceFile, position: number,
             if (!type) return undefined;
             return getFixInfo(checker, declaration, type, /*isFunctionType*/ true);
         case Diagnostics.Type_0_is_not_assignable_to_type_1.code:
-            if (!isDeclarationName(node) || !isVariableLike(node.parent) && !isJsxAttribute(node.parent)) return undefined;
+            if (!isDeclarationName(node) || !isVariableLike(node.parent) && !isJsxAttribute(node.parent)) {
+                return undefined;
+            }
             const initializer = getVariableLikeInitializer(node.parent);
             if (!initializer || !isFunctionLikeDeclaration(initializer) || !initializer.body) return undefined;
             return getFixInfo(checker, initializer, checker.getTypeAtLocation(node.parent), /*isFunctionType*/ true);
@@ -327,7 +334,8 @@ function removeBlockBodyBrace(
     commentSource: Node,
     withParen: boolean,
 ) {
-    const newBody = (withParen || needsParentheses(expression)) ? factory.createParenthesizedExpression(expression) : expression;
+    const newBody = (withParen || needsParentheses(expression)) ? factory.createParenthesizedExpression(expression)
+        : expression;
     suppressLeadingAndTrailingTrivia(commentSource);
     copyComments(commentSource, newBody);
 
@@ -376,7 +384,11 @@ function getActionForFixRemoveBracesFromArrowFunctionBody(
     );
 }
 
-function getActionForfixWrapTheBlockWithParen(context: CodeFixContext, declaration: ArrowFunction, expression: Expression) {
+function getActionForfixWrapTheBlockWithParen(
+    context: CodeFixContext,
+    declaration: ArrowFunction,
+    expression: Expression,
+) {
     const changes = textChanges.ChangeTracker.with(
         context,
         t => wrapBlockWithParen(t, context.sourceFile, declaration, expression),

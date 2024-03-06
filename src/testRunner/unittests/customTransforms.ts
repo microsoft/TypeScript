@@ -69,7 +69,12 @@ describe("unittests:: customTransforms", () => {
             }
         }
         function visitFunction(node: ts.FunctionDeclaration) {
-            ts.addSyntheticLeadingComment(node, ts.SyntaxKind.MultiLineCommentTrivia, "@before", /*hasTrailingNewLine*/ true);
+            ts.addSyntheticLeadingComment(
+                node,
+                ts.SyntaxKind.MultiLineCommentTrivia,
+                "@before",
+                /*hasTrailingNewLine*/ true,
+            );
             return node;
         }
     };
@@ -106,7 +111,9 @@ describe("unittests:: customTransforms", () => {
         before: [
             context => node =>
                 ts.visitNode(node, function visitor(node: ts.Node): ts.Node {
-                    if (ts.isStringLiteral(node) && node.text === "change") return ts.factory.createStringLiteral("changed");
+                    if (ts.isStringLiteral(node) && node.text === "change") {
+                        return ts.factory.createStringLiteral("changed");
+                    }
                     return ts.visitEachChild(node, visitor, context);
                 }, ts.isSourceFile),
         ],
@@ -139,7 +146,8 @@ describe("unittests:: customTransforms", () => {
                                 text,
                                 fileName: "another.html",
                                 lineMap,
-                                getLineAndCharacterOfPosition: pos => ts.computeLineAndCharacterOfPosition(lineMap, pos),
+                                getLineAndCharacterOfPosition: pos =>
+                                    ts.computeLineAndCharacterOfPosition(lineMap, pos),
                             },
                         });
                         return node;
@@ -206,7 +214,9 @@ describe("unittests:: customTransforms", () => {
                         );
                     }
 
-                    if (ts.isExportDeclaration(node) && node.moduleSpecifier && ts.isStringLiteral(node.moduleSpecifier)) {
+                    if (
+                        ts.isExportDeclaration(node) && node.moduleSpecifier && ts.isStringLiteral(node.moduleSpecifier)
+                    ) {
                         return factory.updateExportDeclaration(
                             node,
                             node.modifiers,

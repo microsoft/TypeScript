@@ -210,7 +210,8 @@ export function getDocumentPositionMapper(
         possibleMapLocations.push(mapFileName);
     }
     possibleMapLocations.push(generatedFileName + ".map");
-    const originalMapFileName = mapFileName && getNormalizedAbsolutePath(mapFileName, getDirectoryPath(generatedFileName));
+    const originalMapFileName = mapFileName &&
+        getNormalizedAbsolutePath(mapFileName, getDirectoryPath(generatedFileName));
     for (const location of possibleMapLocations) {
         const mapFileName = getNormalizedAbsolutePath(location, getDirectoryPath(generatedFileName));
         const mapFileContents = readMapFile(mapFileName, originalMapFileName);

@@ -129,7 +129,8 @@ const leadingParameterNameCommentRegexFactory = (name: string) => {
 };
 
 function shouldShowParameterNameHints(preferences: UserPreferences) {
-    return preferences.includeInlayParameterNameHints === "literals" || preferences.includeInlayParameterNameHints === "all";
+    return preferences.includeInlayParameterNameHints === "literals" ||
+        preferences.includeInlayParameterNameHints === "all";
 }
 
 function shouldShowLiteralParameterNameHintsOnly(preferences: UserPreferences) {
@@ -207,11 +208,17 @@ export function provideInlayHints(context: InlayHintsContext): InlayHint[] {
     function isSignatureSupportingReturnAnnotation(
         node: Node,
     ): node is FunctionDeclaration | ArrowFunction | FunctionExpression | MethodDeclaration | GetAccessorDeclaration {
-        return isArrowFunction(node) || isFunctionExpression(node) || isFunctionDeclaration(node) || isMethodDeclaration(node) ||
+        return isArrowFunction(node) || isFunctionExpression(node) || isFunctionDeclaration(node) ||
+            isMethodDeclaration(node) ||
             isGetAccessorDeclaration(node);
     }
 
-    function addParameterHints(text: string, parameter: Identifier, position: number, isFirstVariadicArgument: boolean) {
+    function addParameterHints(
+        text: string,
+        parameter: Identifier,
+        position: number,
+        isFirstVariadicArgument: boolean,
+    ) {
         let hintText = `${isFirstVariadicArgument ? "..." : ""}${text}`;
         let displayParts: InlayHintDisplayPart[] | undefined;
         if (shouldUseInteractiveInlayHints(preferences)) {
@@ -266,7 +273,10 @@ export function provideInlayHints(context: InlayHintsContext): InlayHint[] {
     }
 
     function visitVariableLikeDeclaration(decl: VariableDeclaration | PropertyDeclaration) {
-        if (!decl.initializer || isBindingPattern(decl.name) || isVariableDeclaration(decl) && !isHintableDeclaration(decl)) {
+        if (
+            !decl.initializer || isBindingPattern(decl.name) ||
+            isVariableDeclaration(decl) && !isHintableDeclaration(decl)
+        ) {
             return;
         }
 
@@ -332,7 +342,8 @@ export function provideInlayHints(context: InlayHintsContext): InlayHint[] {
             signatureParamPos = signatureParamPos + (spreadArgs || 1);
             if (identifierInfo) {
                 const { parameter, parameterName, isRestParameter: isFirstVariadicArgument } = identifierInfo;
-                const isParameterNameNotSameAsArgument = preferences.includeInlayParameterNameHintsWhenArgumentMatchesName ||
+                const isParameterNameNotSameAsArgument =
+                    preferences.includeInlayParameterNameHintsWhenArgumentMatchesName ||
                     !identifierOrAccessExpressionPostfixMatchesParameterName(arg, parameterName);
                 if (!isParameterNameNotSameAsArgument && !isFirstVariadicArgument) {
                     continue;
@@ -376,7 +387,8 @@ export function provideInlayHints(context: InlayHintsContext): InlayHint[] {
         switch (node.kind) {
             case SyntaxKind.PrefixUnaryExpression: {
                 const operand = (node as PrefixUnaryExpression).operand;
-                return isLiteralExpression(operand) || isIdentifier(operand) && isInfinityOrNaNString(operand.escapedText);
+                return isLiteralExpression(operand) ||
+                    isIdentifier(operand) && isInfinityOrNaNString(operand.escapedText);
             }
             case SyntaxKind.TrueKeyword:
             case SyntaxKind.FalseKeyword:
@@ -886,7 +898,8 @@ export function provideInlayHints(context: InlayHintsContext): InlayHint[] {
         function getLiteralText(node: LiteralLikeNode) {
             switch (node.kind) {
                 case SyntaxKind.StringLiteral:
-                    return quotePreference === QuotePreference.Single ? `'${escapeString(node.text, CharacterCodes.singleQuote)}'`
+                    return quotePreference === QuotePreference.Single ?
+                        `'${escapeString(node.text, CharacterCodes.singleQuote)}'`
                         : `"${escapeString(node.text, CharacterCodes.doubleQuote)}"`;
                 case SyntaxKind.TemplateHead:
                 case SyntaxKind.TemplateMiddle:
@@ -914,7 +927,8 @@ export function provideInlayHints(context: InlayHintsContext): InlayHint[] {
     function isHintableDeclaration(node: VariableDeclaration | ParameterDeclaration) {
         if ((isParameterDeclaration(node) || isVariableDeclaration(node) && isVarConst(node)) && node.initializer) {
             const initializer = skipParentheses(node.initializer);
-            return !(isHintableLiteral(initializer) || isNewExpression(initializer) || isObjectLiteralExpression(initializer) ||
+            return !(isHintableLiteral(initializer) || isNewExpression(initializer) ||
+                isObjectLiteralExpression(initializer) ||
                 isAssertionExpression(initializer));
         }
         return true;

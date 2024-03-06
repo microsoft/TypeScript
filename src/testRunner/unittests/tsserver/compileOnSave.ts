@@ -469,7 +469,14 @@ describe("unittests:: tsserver:: compileOnSave:: affected list", () => {
                     }`,
             };
 
-            const host = createServerHost([moduleFile1, file1Consumer1, file1Consumer2, configFile2, configFile, libFile]);
+            const host = createServerHost([
+                moduleFile1,
+                file1Consumer1,
+                file1Consumer2,
+                configFile2,
+                configFile,
+                libFile,
+            ]);
             const session = new TestSession(host);
 
             openFilesForSession([moduleFile1, file1Consumer1], session);
@@ -689,7 +696,12 @@ describe("unittests:: tsserver:: compileOnSave:: affected list", () => {
     });
 
     describe("for changes in declaration files", () => {
-        function testDTS(subScenario: string, dtsFileContents: string, tsFileContents: string, opts: ts.CompilerOptions) {
+        function testDTS(
+            subScenario: string,
+            dtsFileContents: string,
+            tsFileContents: string,
+            opts: ts.CompilerOptions,
+        ) {
             it(subScenario, () => {
                 const dtsFile = {
                     path: "/a/runtime/a.d.ts",
@@ -787,7 +799,9 @@ describe("unittests:: tsserver:: compileOnSave:: affected list", () => {
             });
         }
         test("compileOnSaveAffectedFileList projectUsesOutFile should not be returned if not set", {});
-        test("compileOnSaveAffectedFileList projectUsesOutFile should be true if outFile is set", { outFile: "/a/out.js" });
+        test("compileOnSaveAffectedFileList projectUsesOutFile should be true if outFile is set", {
+            outFile: "/a/out.js",
+        });
     });
 });
 

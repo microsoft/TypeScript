@@ -265,7 +265,11 @@ describe("unittests:: tsserver:: resolutionCache:: tsserverProjectSystem rename 
             command: ts.server.protocol.CommandTypes.SemanticDiagnosticsSync,
             arguments: { file: file1.path },
         });
-        baselineTsserverLogs("resolutionCache", "renaming module should restore the states for inferred projects", session);
+        baselineTsserverLogs(
+            "resolutionCache",
+            "renaming module should restore the states for inferred projects",
+            session,
+        );
     });
 
     it("should restore the states for configured projects", () => {
@@ -304,7 +308,11 @@ describe("unittests:: tsserver:: resolutionCache:: tsserverProjectSystem rename 
             command: ts.server.protocol.CommandTypes.SemanticDiagnosticsSync,
             arguments: { file: file1.path },
         });
-        baselineTsserverLogs("resolutionCache", "renaming module should restore the states for configured projects", session);
+        baselineTsserverLogs(
+            "resolutionCache",
+            "renaming module should restore the states for configured projects",
+            session,
+        );
     });
 
     it("should property handle missing config files", () => {
@@ -501,7 +509,11 @@ describe("unittests:: tsserver:: resolutionCache:: tsserverProjectSystem module 
             host.writeFile(file3.path, file3.content + fileContent);
             host.writeFile(file4.path, file4.content + fileContent);
             host.runQueuedTimeoutCallbacks();
-            baselineTsserverLogs("resolutionCache", "non relative module name from files in different folders", session);
+            baselineTsserverLogs(
+                "resolutionCache",
+                "non relative module name from files in different folders",
+                session,
+            );
         });
 
         it("non relative module name from inferred project", () => {
@@ -510,7 +522,8 @@ describe("unittests:: tsserver:: resolutionCache:: tsserverProjectSystem module 
             const file2Name = "./feature/file2";
             const file3Name = "../test/src/file3";
             const file4Name = "../test/file4";
-            const importModuleContent = `import { module1 } from "${module1Name}";import { module2 } from "${module2Name}";`;
+            const importModuleContent =
+                `import { module1 } from "${module1Name}";import { module2 } from "${module2Name}";`;
             const { file1, file2, file3, file4 } = getFiles(
                 `import "${file2Name}"; import "${file4Name}"; import "${file3Name}"; ${importModuleContent}`,
                 importModuleContent,
@@ -579,7 +592,14 @@ export const x = 10;`,
                     }),
                 };
 
-                const files = [...(useNodeFile ? [nodeFile] : []), electronFile, srcFile, moduleFile, configFile, libFile];
+                const files = [
+                    ...(useNodeFile ? [nodeFile] : []),
+                    electronFile,
+                    srcFile,
+                    moduleFile,
+                    configFile,
+                    libFile,
+                ];
                 const host = createServerHost(files);
                 const session = new TestSession(host);
                 openFilesForSession(
@@ -600,7 +620,8 @@ export const x = 10;`,
 
     describe("ignores files/folder changes in node_modules that start with '.'", () => {
         const npmCacheFile: File = {
-            path: `/user/username/projects/myproject/node_modules/.cache/babel-loader/89c02171edab901b9926470ba6d5677e.ts`,
+            path:
+                `/user/username/projects/myproject/node_modules/.cache/babel-loader/89c02171edab901b9926470ba6d5677e.ts`,
             content: jsonToReadableText({ something: 10 }),
         };
         const file1: File = {

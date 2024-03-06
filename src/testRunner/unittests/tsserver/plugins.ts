@@ -197,7 +197,9 @@ describe("unittests:: tsserver:: plugins:: loading", () => {
         openFilesForSession([aTs], session);
         session.logger.log(
             `ExternalFiles:: ${
-                jsonToReadableText(session.getProjectService().configuredProjects.get(tsconfig.path)!.getExternalFiles())
+                jsonToReadableText(
+                    session.getProjectService().configuredProjects.get(tsconfig.path)!.getExternalFiles(),
+                )
             }`,
         );
 
@@ -212,7 +214,9 @@ describe("unittests:: tsserver:: plugins:: loading", () => {
         host.runQueuedTimeoutCallbacks();
         session.logger.log(
             `ExternalFiles:: ${
-                jsonToReadableText(session.getProjectService().configuredProjects.get(tsconfig.path)!.getExternalFiles())
+                jsonToReadableText(
+                    session.getProjectService().configuredProjects.get(tsconfig.path)!.getExternalFiles(),
+                )
             }`,
         );
 
@@ -346,7 +350,9 @@ describe("unittests:: tsserver:: plugins:: supportedExtensions::", () => {
                 module: () => ({
                     create(info: ts.server.PluginCreateInfo) {
                         const proxy = Harness.LanguageService.makeDefaultProxy(info);
-                        const originalScriptKind = info.languageServiceHost.getScriptKind!.bind(info.languageServiceHost);
+                        const originalScriptKind = info.languageServiceHost.getScriptKind!.bind(
+                            info.languageServiceHost,
+                        );
                         info.languageServiceHost.getScriptKind = fileName =>
                             ts.fileExtensionIs(fileName, ".vue") ?
                                 ts.ScriptKind.TS :
@@ -402,7 +408,9 @@ describe("unittests:: tsserver:: plugins:: supportedExtensions::", () => {
                 module: () => ({
                     create(info: ts.server.PluginCreateInfo) {
                         const proxy = Harness.LanguageService.makeDefaultProxy(info);
-                        const originalScriptKind = info.languageServiceHost.getScriptKind!.bind(info.languageServiceHost);
+                        const originalScriptKind = info.languageServiceHost.getScriptKind!.bind(
+                            info.languageServiceHost,
+                        );
                         info.languageServiceHost.getScriptKind = fileName =>
                             fileName === bVue.path ?
                                 currentVueScriptKind :

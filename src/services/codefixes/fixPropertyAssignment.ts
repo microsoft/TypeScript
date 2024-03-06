@@ -38,7 +38,11 @@ registerCodeFix({
         ];
     },
     getAllCodeActions: context =>
-        codeFixAll(context, errorCodes, (changes, diag) => doChange(changes, diag.file, getProperty(diag.file, diag.start))),
+        codeFixAll(
+            context,
+            errorCodes,
+            (changes, diag) => doChange(changes, diag.file, getProperty(diag.file, diag.start)),
+        ),
 });
 
 function doChange(changes: textChanges.ChangeTracker, sourceFile: SourceFile, node: ShorthandPropertyAssignment): void {

@@ -25,7 +25,10 @@ const errorCodes = [Diagnostics.Unreachable_code_detected.code];
 registerCodeFix({
     errorCodes,
     getCodeActions(context) {
-        const syntacticDiagnostics = context.program.getSyntacticDiagnostics(context.sourceFile, context.cancellationToken);
+        const syntacticDiagnostics = context.program.getSyntacticDiagnostics(
+            context.sourceFile,
+            context.cancellationToken,
+        );
         if (syntacticDiagnostics.length) return;
         const changes = textChanges.ChangeTracker.with(
             context,
@@ -43,7 +46,11 @@ registerCodeFix({
     },
     fixIds: [fixId],
     getAllCodeActions: context =>
-        codeFixAll(context, errorCodes, (changes, diag) => doChange(changes, diag.file, diag.start, diag.length, diag.code)),
+        codeFixAll(
+            context,
+            errorCodes,
+            (changes, diag) => doChange(changes, diag.file, diag.start, diag.length, diag.code),
+        ),
 });
 
 function doChange(

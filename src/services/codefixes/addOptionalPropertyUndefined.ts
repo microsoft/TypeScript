@@ -95,7 +95,10 @@ function shouldUseParentTypeOfProperty(
  * Find the source and target of the incorrect assignment.
  * The call is recursive for property assignments.
  */
-function getSourceTarget(errorNode: Node | undefined, checker: TypeChecker): { source: Node; target: Node; } | undefined {
+function getSourceTarget(
+    errorNode: Node | undefined,
+    checker: TypeChecker,
+): { source: Node; target: Node; } | undefined {
     if (!errorNode) {
         return undefined;
     }

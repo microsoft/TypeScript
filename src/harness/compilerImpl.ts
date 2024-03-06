@@ -26,7 +26,8 @@ export function readProject(
     }
     else {
         [project] = host.vfs.scanSync(".", "ancestors-or-self", {
-            accept: (path, stats) => stats.isFile() && host.vfs.stringComparer(vpath.basename(path), "tsconfig.json") === 0,
+            accept: (path, stats) =>
+                stats.isFile() && host.vfs.stringComparer(vpath.basename(path), "tsconfig.json") === 0,
         });
     }
 
@@ -245,10 +246,10 @@ export class CompilationResult {
         }
         else {
             path = vpath.resolve(this.vfs.cwd(), path);
-            const outDir =
-                ext === ".d.ts" || ext === ".d.mts" || ext === ".d.cts" || (ext.endsWith(".ts") || ext.includes(".d.")) ?
-                    this.options.declarationDir || this.options.outDir
-                    : this.options.outDir;
+            const outDir = ext === ".d.ts" || ext === ".d.mts" || ext === ".d.cts" ||
+                    (ext.endsWith(".ts") || ext.includes(".d.")) ?
+                this.options.declarationDir || this.options.outDir
+                : this.options.outDir;
             if (outDir) {
                 const common = this.commonSourceDirectory;
                 if (common) {
@@ -286,7 +287,13 @@ export function compileFiles(
         const project = readProject(host.parseConfigHost, compilerOptions.project, compilerOptions);
         if (project) {
             if (project.errors && project.errors.length > 0) {
-                return new CompilationResult(host, compilerOptions, /*program*/ undefined, /*result*/ undefined, project.errors);
+                return new CompilationResult(
+                    host,
+                    compilerOptions,
+                    /*program*/ undefined,
+                    /*result*/ undefined,
+                    project.errors,
+                );
             }
             if (project.config) {
                 rootFiles = project.config.fileNames;
@@ -303,7 +310,8 @@ export function compileFiles(
 
     // pre-emit/post-emit error comparison requires declaration emit twice, which can be slow. If it's unlikely to flag any error consistency issues
     // and if the test is running `skipLibCheck` - an indicator that we want the tets to run quickly - skip the before/after error comparison, too
-    const skipErrorComparison = ts.length(rootFiles) >= 100 || (!!compilerOptions.skipLibCheck && !!compilerOptions.declaration);
+    const skipErrorComparison = ts.length(rootFiles) >= 100 ||
+        (!!compilerOptions.skipLibCheck && !!compilerOptions.declaration);
     const preProgram = !skipErrorComparison ?
         ts.createProgram({
             rootNames: rootFiles || [],

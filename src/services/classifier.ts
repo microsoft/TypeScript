@@ -86,7 +86,10 @@ export function createClassifier(): Classifier {
         lexState: EndOfLineState,
         syntacticClassifierAbsent: boolean,
     ): ClassificationResult {
-        return convertClassificationsToResult(getEncodedLexicalClassifications(text, lexState, syntacticClassifierAbsent), text);
+        return convertClassificationsToResult(
+            getEncodedLexicalClassifications(text, lexState, syntacticClassifierAbsent),
+            text,
+        );
     }
 
     // If there is a syntactic classifier ('syntacticClassifierAbsent' is false),
@@ -175,7 +178,10 @@ export function createClassifier(): Classifier {
             switch (token) {
                 case SyntaxKind.SlashToken:
                 case SyntaxKind.SlashEqualsToken:
-                    if (!noRegexTable[lastNonTriviaToken] && scanner.reScanSlashToken() === SyntaxKind.RegularExpressionLiteral) {
+                    if (
+                        !noRegexTable[lastNonTriviaToken] &&
+                        scanner.reScanSlashToken() === SyntaxKind.RegularExpressionLiteral
+                    ) {
                         token = SyntaxKind.RegularExpressionLiteral;
                     }
                     break;
@@ -229,7 +235,11 @@ export function createClassifier(): Classifier {
                                 templateStack.pop();
                             }
                             else {
-                                Debug.assertEqual(token, SyntaxKind.TemplateMiddle, "Should have been a template middle.");
+                                Debug.assertEqual(
+                                    token,
+                                    SyntaxKind.TemplateMiddle,
+                                    "Should have been a template middle.",
+                                );
                             }
                         }
                         else {
@@ -250,7 +260,9 @@ export function createClassifier(): Classifier {
                     if (lastNonTriviaToken === SyntaxKind.DotToken) {
                         token = SyntaxKind.Identifier;
                     }
-                    else if (isKeyword(lastNonTriviaToken) && isKeyword(token) && !canFollow(lastNonTriviaToken, token)) {
+                    else if (
+                        isKeyword(lastNonTriviaToken) && isKeyword(token) && !canFollow(lastNonTriviaToken, token)
+                    ) {
                         // We have two keywords in a row.  Only treat the second as a keyword if
                         // it's a sequence that could legally occur in the language.  Otherwise
                         // treat it as an identifier.  This way, if someone writes "private var"
@@ -332,7 +344,8 @@ function getNewEndOfLineState(
                         );
                 }
             }
-            return lastOnTemplateStack === SyntaxKind.TemplateHead ? EndOfLineState.InTemplateSubstitutionPosition : undefined;
+            return lastOnTemplateStack === SyntaxKind.TemplateHead ? EndOfLineState.InTemplateSubstitutionPosition
+                : undefined;
     }
 }
 
@@ -690,7 +703,8 @@ function hasValueSideModule(symbol: Symbol): boolean {
     return some(
         symbol.declarations,
         declaration =>
-            isModuleDeclaration(declaration) && getModuleInstanceState(declaration) === ModuleInstanceState.Instantiated,
+            isModuleDeclaration(declaration) &&
+            getModuleInstanceState(declaration) === ModuleInstanceState.Instantiated,
     );
 }
 
@@ -782,7 +796,12 @@ export function getEncodedSyntacticClassifications(
     const spanLength = span.length;
 
     // Make a scanner we can get trivia from.
-    const triviaScanner = createScanner(ScriptTarget.Latest, /*skipTrivia*/ false, sourceFile.languageVariant, sourceFile.text);
+    const triviaScanner = createScanner(
+        ScriptTarget.Latest,
+        /*skipTrivia*/ false,
+        sourceFile.languageVariant,
+        sourceFile.text,
+    );
     const mergeConflictScanner = createScanner(
         ScriptTarget.Latest,
         /*skipTrivia*/ false,
@@ -901,7 +920,11 @@ export function getEncodedSyntacticClassifications(
                 }
 
                 pushClassification(tag.pos, 1, ClassificationType.punctuation); // "@"
-                pushClassification(tag.tagName.pos, tag.tagName.end - tag.tagName.pos, ClassificationType.docCommentTagName); // e.g. "param"
+                pushClassification(
+                    tag.tagName.pos,
+                    tag.tagName.end - tag.tagName.pos,
+                    ClassificationType.docCommentTagName,
+                ); // e.g. "param"
 
                 pos = tag.tagName.end;
                 let commentStart = tag.tagName.end;
@@ -923,7 +946,8 @@ export function getEncodedSyntacticClassifications(
                         break;
                     case SyntaxKind.JSDocTypedefTag:
                         const type = tag as JSDocTypedefTag;
-                        commentStart = type.typeExpression?.kind === SyntaxKind.JSDocTypeExpression && type.fullName?.end ||
+                        commentStart =
+                            type.typeExpression?.kind === SyntaxKind.JSDocTypeExpression && type.fullName?.end ||
                             type.typeExpression?.end ||
                             commentStart;
                         break;
@@ -1221,7 +1245,8 @@ export function getEncodedSyntacticClassifications(
             return ClassificationType.bigintLiteral;
         }
         else if (tokenKind === SyntaxKind.StringLiteral) {
-            return token && token.parent.kind === SyntaxKind.JsxAttribute ? ClassificationType.jsxAttributeStringLiteralValue
+            return token && token.parent.kind === SyntaxKind.JsxAttribute ?
+                ClassificationType.jsxAttributeStringLiteralValue
                 : ClassificationType.stringLiteral;
         }
         else if (tokenKind === SyntaxKind.RegularExpressionLiteral) {
@@ -1265,7 +1290,8 @@ export function getEncodedSyntacticClassifications(
                         return;
                     case SyntaxKind.Parameter:
                         if ((token.parent as ParameterDeclaration).name === token) {
-                            return isThisIdentifier(token) ? ClassificationType.keyword : ClassificationType.parameterName;
+                            return isThisIdentifier(token) ? ClassificationType.keyword
+                                : ClassificationType.parameterName;
                         }
                         return;
                 }

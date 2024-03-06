@@ -143,7 +143,11 @@ function parseServerMode(): LanguageServiceMode | string | undefined {
 export function initializeNodeSystem(): StartInput {
     const sys = Debug.checkDefined(ts.sys) as ServerHost;
     const childProcess: {
-        execFileSync(file: string, args: string[], options: { stdio: "ignore"; env: MapLike<string>; }): string | Buffer;
+        execFileSync(
+            file: string,
+            args: string[],
+            options: { stdio: "ignore"; env: MapLike<string>; },
+        ): string | Buffer;
     } = require("child_process");
 
     interface Stats {
@@ -311,7 +315,10 @@ export function initializeNodeSystem(): StartInput {
                     if (logger.hasLevel(LogLevel.verbose)) {
                         logger.info(`Starting ${process.execPath} with args:${stringifyIndented(args)}`);
                     }
-                    childProcess.execFileSync(process.execPath, args, { stdio: "ignore", env: { ELECTRON_RUN_AS_NODE: "1" } });
+                    childProcess.execFileSync(process.execPath, args, {
+                        stdio: "ignore",
+                        env: { ELECTRON_RUN_AS_NODE: "1" },
+                    });
                     status = true;
                     if (logger.hasLevel(LogLevel.verbose)) {
                         logger.info(`WatchGuard for path ${path} returned: OK`);
@@ -479,7 +486,11 @@ function parseEventPort(eventPortStr: string | undefined) {
 }
 function startNodeSession(options: StartSessionOptions, logger: Logger, cancellationToken: ServerCancellationToken) {
     const childProcess: {
-        fork(modulePath: string, args: string[], options?: { execArgv: string[]; env?: MapLike<string>; }): NodeChildProcess;
+        fork(
+            modulePath: string,
+            args: string[],
+            options?: { execArgv: string[]; env?: MapLike<string>; },
+        ): NodeChildProcess;
     } = require("child_process");
 
     const os: {
@@ -543,7 +554,10 @@ function startNodeSession(options: StartSessionOptions, logger: Logger, cancella
             if (this.logger.loggingEnabled() && this.logger.getLogFileName()) {
                 args.push(
                     Arguments.LogFile,
-                    combinePaths(getDirectoryPath(normalizeSlashes(this.logger.getLogFileName()!)), `ti-${process.pid}.log`),
+                    combinePaths(
+                        getDirectoryPath(normalizeSlashes(this.logger.getLogFileName()!)),
+                        `ti-${process.pid}.log`,
+                    ),
                 );
             }
             if (this.typingSafeListLocation) {
@@ -648,7 +662,10 @@ function startNodeSession(options: StartSessionOptions, logger: Logger, cancella
         }
 
         override event<T extends object>(body: T, eventName: string): void {
-            Debug.assert(!!this.constructed, "Should only call `IOSession.prototype.event` on an initialized IOSession");
+            Debug.assert(
+                !!this.constructed,
+                "Should only call `IOSession.prototype.event` on an initialized IOSession",
+            );
 
             if (this.canUseEvents && this.eventPort) {
                 if (!this.eventSocket) {
@@ -760,7 +777,10 @@ function startNodeSession(options: StartSessionOptions, logger: Logger, cancella
                     (process.env.HOMEDRIVE && process.env.HOMEPATH &&
                         normalizeSlashes(process.env.HOMEDRIVE + process.env.HOMEPATH)) ||
                     os.tmpdir();
-                return combinePaths(combinePaths(normalizeSlashes(basePath), "Microsoft/TypeScript"), versionMajorMinor);
+                return combinePaths(
+                    combinePaths(normalizeSlashes(basePath), "Microsoft/TypeScript"),
+                    versionMajorMinor,
+                );
             }
             case "openbsd":
             case "freebsd":

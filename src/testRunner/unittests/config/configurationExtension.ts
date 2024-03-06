@@ -245,7 +245,12 @@ function createFileSystem(ignoreCase: boolean, cwd: string, root: string) {
                     files: ["../main.ts"],
                 }),
                 "dev/configs/extendsArrayFifth.json": jsonToReadableText({
-                    extends: ["./extendsArrayFirst", "./extendsArraySecond", "./extendsArrayThird", "./extendsArrayFourth"],
+                    extends: [
+                        "./extendsArrayFirst",
+                        "./extendsArraySecond",
+                        "./extendsArrayThird",
+                        "./extendsArrayFourth",
+                    ],
                     files: [],
                 }),
                 "dev/extendsArrayFails.json": jsonToReadableText({
@@ -261,7 +266,9 @@ function createFileSystem(ignoreCase: boolean, cwd: string, root: string) {
 }
 
 const caseInsensitiveBasePath = "c:/dev/";
-const caseInsensitiveHost = new fakes.ParseConfigHost(createFileSystem(/*ignoreCase*/ true, caseInsensitiveBasePath, "c:/"));
+const caseInsensitiveHost = new fakes.ParseConfigHost(
+    createFileSystem(/*ignoreCase*/ true, caseInsensitiveBasePath, "c:/"),
+);
 
 const caseSensitiveBasePath = "/dev/";
 const caseSensitiveHost = new fakes.ParseConfigHost(createFileSystem(/*ignoreCase*/ false, caseSensitiveBasePath, "/"));
@@ -292,8 +299,14 @@ describe("unittests:: config:: configurationExtension", () => {
         baselineParsedCommandLine("can overwrite top-level files using extended []", "configs/fifth.json");
         baselineParsedCommandLine("can lookup via tsconfig field", "tsconfig.extendsBox.json");
         baselineParsedCommandLine("can lookup via package-relative path", "tsconfig.extendsStrict.json");
-        baselineParsedCommandLine("can lookup via non-redirected-to package-relative path", "tsconfig.extendsUnStrict.json");
-        baselineParsedCommandLine("can lookup via package-relative path with extension", "tsconfig.extendsStrictExtension.json");
+        baselineParsedCommandLine(
+            "can lookup via non-redirected-to package-relative path",
+            "tsconfig.extendsUnStrict.json",
+        );
+        baselineParsedCommandLine(
+            "can lookup via package-relative path with extension",
+            "tsconfig.extendsStrictExtension.json",
+        );
         baselineParsedCommandLine("can lookup via an implicit tsconfig", "tsconfig.extendsBoxImplied.json");
         baselineParsedCommandLine(
             "can lookup via an implicit tsconfig in a package-relative directory",
@@ -349,7 +362,10 @@ describe("unittests:: config:: configurationExtension", () => {
                 baseline.push("ExtendedSourceFiles::", ...sourceFile.extendedSourceFiles!);
                 ts.parseJsonSourceFileConfigFileContent(sourceFile, host, dir, {}, ts.getBaseFileName(entry));
                 baseline.push("After reusing sourceFile ExtendedSourceFiles::", ...sourceFile.extendedSourceFiles!);
-                Harness.Baseline.runBaseline(`config/configurationExtension/${name} ${testName}.js`, baseline.join("\n"));
+                Harness.Baseline.runBaseline(
+                    `config/configurationExtension/${name} ${testName}.js`,
+                    baseline.join("\n"),
+                );
             });
         }
     });

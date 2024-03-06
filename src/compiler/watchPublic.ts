@@ -125,7 +125,10 @@ export function createIncrementalCompilerHost(options: CompilerOptions, system =
     host.createHash = maybeBind(system, system.createHash);
     host.storeFilesChangingSignatureDuringEmit = system.storeFilesChangingSignatureDuringEmit;
     setGetSourceFileAsHashVersioned(host);
-    changeCompilerHostLikeToUseCache(host, fileName => toPath(fileName, host.getCurrentDirectory(), host.getCanonicalFileName));
+    changeCompilerHostLikeToUseCache(
+        host,
+        fileName => toPath(fileName, host.getCurrentDirectory(), host.getCanonicalFileName),
+    );
     return host;
 }
 
@@ -174,9 +177,19 @@ export interface WatchHost {
     onWatchStatusChange?(diagnostic: Diagnostic, newLine: string, options: CompilerOptions, errorCount?: number): void;
 
     /** Used to watch changes in source files, missing files needed to update the program or config file */
-    watchFile(path: string, callback: FileWatcherCallback, pollingInterval?: number, options?: WatchOptions): FileWatcher;
+    watchFile(
+        path: string,
+        callback: FileWatcherCallback,
+        pollingInterval?: number,
+        options?: WatchOptions,
+    ): FileWatcher;
     /** Used to watch resolved module's failed lookup locations, config file specs, type roots where auto type reference directives are added */
-    watchDirectory(path: string, callback: DirectoryWatcherCallback, recursive?: boolean, options?: WatchOptions): FileWatcher;
+    watchDirectory(
+        path: string,
+        callback: DirectoryWatcherCallback,
+        recursive?: boolean,
+        options?: WatchOptions,
+    ): FileWatcher;
     /** If provided, will be used to set delayed compilation, so that multiple changes in short span are compiled together */
     setTimeout?(callback: (...args: any[]) => void, ms: number, ...args: any[]): any;
     /** If provided, will be used to reset existing delayed compilation */
@@ -483,7 +496,9 @@ export function createWatchProgram<T extends BuilderProgram>(
 /**
  * Creates the watch from the host for config file
  */
-export function createWatchProgram<T extends BuilderProgram>(host: WatchCompilerHostOfConfigFile<T>): WatchOfConfigFile<T>;
+export function createWatchProgram<T extends BuilderProgram>(
+    host: WatchCompilerHostOfConfigFile<T>,
+): WatchOfConfigFile<T>;
 export function createWatchProgram<T extends BuilderProgram>(
     host: WatchCompilerHostOfFilesAndCompilerOptionsOrConfigFile<T>,
 ): WatchOfFilesAndCompilerOptions<T> | WatchOfConfigFile<T> {
@@ -573,7 +588,8 @@ export function createWatchProgram<T extends BuilderProgram>(
     setGetSourceFileAsHashVersioned(compilerHost);
     // Members for CompilerHost
     const getNewSourceFile = compilerHost.getSourceFile;
-    compilerHost.getSourceFile = (fileName, ...args) => getVersionedSourceFileByPath(fileName, toPath(fileName), ...args);
+    compilerHost.getSourceFile = (fileName, ...args) =>
+        getVersionedSourceFileByPath(fileName, toPath(fileName), ...args);
     compilerHost.getSourceFileByPath = getVersionedSourceFileByPath;
     compilerHost.getNewLine = () => newLine;
     compilerHost.fileExists = fileExists;
@@ -587,9 +603,11 @@ export function createWatchProgram<T extends BuilderProgram>(
         watchDirectory(dir, cb, flags, watchOptions, WatchType.FailedLookupLocations);
     compilerHost.watchAffectingFileLocation = (file, cb) =>
         watchFile(file, cb, PollingInterval.High, watchOptions, WatchType.AffectingFileLocation);
-    compilerHost.watchTypeRootsDirectory = (dir, cb, flags) => watchDirectory(dir, cb, flags, watchOptions, WatchType.TypeRoots);
+    compilerHost.watchTypeRootsDirectory = (dir, cb, flags) =>
+        watchDirectory(dir, cb, flags, watchOptions, WatchType.TypeRoots);
     compilerHost.getCachedDirectoryStructureHost = () => cachedDirectoryStructureHost;
-    compilerHost.scheduleInvalidateResolutionsOfFailedLookupLocations = scheduleInvalidateResolutionsOfFailedLookupLocations;
+    compilerHost.scheduleInvalidateResolutionsOfFailedLookupLocations =
+        scheduleInvalidateResolutionsOfFailedLookupLocations;
     compilerHost.onInvalidatedResolution = scheduleProgramUpdate;
     compilerHost.onChangedAutomaticTypeDirectiveNames = scheduleProgramUpdate;
     compilerHost.fileIsOpen = returnFalse;
@@ -611,12 +629,16 @@ export function createWatchProgram<T extends BuilderProgram>(
     if (!compilerHost.resolveModuleNameLiterals && !compilerHost.resolveModuleNames) {
         compilerHost.resolveModuleNameLiterals = resolutionCache.resolveModuleNameLiterals.bind(resolutionCache);
     }
-    compilerHost.resolveTypeReferenceDirectiveReferences = maybeBind(host, host.resolveTypeReferenceDirectiveReferences);
+    compilerHost.resolveTypeReferenceDirectiveReferences = maybeBind(
+        host,
+        host.resolveTypeReferenceDirectiveReferences,
+    );
     compilerHost.resolveTypeReferenceDirectives = maybeBind(host, host.resolveTypeReferenceDirectives);
     if (!compilerHost.resolveTypeReferenceDirectiveReferences && !compilerHost.resolveTypeReferenceDirectives) {
-        compilerHost.resolveTypeReferenceDirectiveReferences = resolutionCache.resolveTypeReferenceDirectiveReferences.bind(
-            resolutionCache,
-        );
+        compilerHost.resolveTypeReferenceDirectiveReferences = resolutionCache.resolveTypeReferenceDirectiveReferences
+            .bind(
+                resolutionCache,
+            );
     }
     compilerHost.resolveLibrary = !host.resolveLibrary ?
         resolutionCache.resolveLibrary.bind(resolutionCache) :
@@ -642,7 +664,12 @@ export function createWatchProgram<T extends BuilderProgram>(
 
     // Update extended config file watch
     if (configFileName) {
-        updateExtendedConfigFilesWatches(toPath(configFileName), compilerOptions, watchOptions, WatchType.ExtendedConfigFile);
+        updateExtendedConfigFilesWatches(
+            toPath(configFileName),
+            compilerOptions,
+            watchOptions,
+            WatchType.ExtendedConfigFile,
+        );
     }
 
     return configFileName ?
@@ -721,10 +748,11 @@ export function createWatchProgram<T extends BuilderProgram>(
             }
         }
 
-        const { hasInvalidatedResolutions, hasInvalidatedLibResolutions } = resolutionCache.createHasInvalidatedResolutions(
-            customHasInvalidatedResolutions,
-            customHasInvalidLibResolutions,
-        );
+        const { hasInvalidatedResolutions, hasInvalidatedLibResolutions } = resolutionCache
+            .createHasInvalidatedResolutions(
+                customHasInvalidatedResolutions,
+                customHasInvalidLibResolutions,
+            );
         const {
             originalReadFile,
             originalFileExists,
@@ -854,7 +882,9 @@ export function createWatchProgram<T extends BuilderProgram>(
         return typeof hostSourceFile === "boolean";
     }
 
-    function isFilePresenceUnknownOnHost(hostSourceFile: FileMayBePresentOnHost): hostSourceFile is FilePresenceUnknownOnHost {
+    function isFilePresenceUnknownOnHost(
+        hostSourceFile: FileMayBePresentOnHost,
+    ): hostSourceFile is FilePresenceUnknownOnHost {
         return typeof (hostSourceFile as FilePresenceUnknownOnHost).version === "boolean";
     }
 
@@ -883,7 +913,8 @@ export function createWatchProgram<T extends BuilderProgram>(
         }
 
         // Create new source file if requested or the versions dont match
-        const impliedNodeFormat = typeof languageVersionOrOptions === "object" ? languageVersionOrOptions.impliedNodeFormat
+        const impliedNodeFormat = typeof languageVersionOrOptions === "object" ?
+            languageVersionOrOptions.impliedNodeFormat
             : undefined;
         if (
             hostSourceFile === undefined || shouldCreateNewSourceFile || isFilePresenceUnknownOnHost(hostSourceFile) ||
@@ -957,7 +988,11 @@ export function createWatchProgram<T extends BuilderProgram>(
         return text !== undefined ? getSourceFileVersionAsHashFromText(compilerHost, text) : undefined;
     }
 
-    function onReleaseOldSourceFile(oldSourceFile: SourceFile, _oldOptions: CompilerOptions, hasSourceFileByPath: boolean) {
+    function onReleaseOldSourceFile(
+        oldSourceFile: SourceFile,
+        _oldOptions: CompilerOptions,
+        hasSourceFileByPath: boolean,
+    ) {
         const hostSourceFileInfo = sourceFilesCache.get(oldSourceFile.resolvedPath);
         // If this is the source file thats in the cache and new program doesnt need it,
         // remove the cached entry.
@@ -966,7 +1001,9 @@ export function createWatchProgram<T extends BuilderProgram>(
         if (hostSourceFileInfo !== undefined) {
             // record the missing file paths so they can be removed later if watchers arent tracking them
             if (isFileMissingOnHost(hostSourceFileInfo)) {
-                (missingFilePathsRequestedForRelease || (missingFilePathsRequestedForRelease = [])).push(oldSourceFile.path);
+                (missingFilePathsRequestedForRelease || (missingFilePathsRequestedForRelease = [])).push(
+                    oldSourceFile.path,
+                );
             }
             else if ((hostSourceFileInfo as FilePresentOnHost).sourceFile === oldSourceFile) {
                 if (hostSourceFileInfo.fileWatcher) {
@@ -982,7 +1019,11 @@ export function createWatchProgram<T extends BuilderProgram>(
 
     function reportWatchDiagnostic(message: DiagnosticMessage) {
         if (host.onWatchStatusChange) {
-            host.onWatchStatusChange(createCompilerDiagnostic(message), newLine, compilerOptions || optionsToExtendForConfigFile);
+            host.onWatchStatusChange(
+                createCompilerDiagnostic(message),
+                newLine,
+                compilerOptions || optionsToExtendForConfigFile,
+            );
         }
     }
 
@@ -1109,7 +1150,12 @@ export function createWatchProgram<T extends BuilderProgram>(
         watchConfigFileWildCardDirectories();
 
         // Update extended config file watch
-        updateExtendedConfigFilesWatches(toPath(configFileName), compilerOptions, watchOptions, WatchType.ExtendedConfigFile);
+        updateExtendedConfigFilesWatches(
+            toPath(configFileName),
+            compilerOptions,
+            watchOptions,
+            WatchType.ExtendedConfigFile,
+        );
     }
 
     function parseConfigFile() {
@@ -1210,7 +1256,13 @@ export function createWatchProgram<T extends BuilderProgram>(
         options: WatchOptions | undefined,
         watchType: WatchType,
     ): FileWatcher {
-        return watchFile(file, (fileName, eventKind) => callback(fileName, eventKind, path), pollingInterval, options, watchType);
+        return watchFile(
+            file,
+            (fileName, eventKind) => callback(fileName, eventKind, path),
+            pollingInterval,
+            options,
+            watchType,
+        );
     }
 
     function onSourceFileChange(fileName: string, eventKind: FileWatcherEventKind, path: Path) {
@@ -1330,7 +1382,13 @@ export function createWatchProgram<T extends BuilderProgram>(
                     (_fileName, eventKind) => {
                         updateCachedSystemWithFile(extendedConfigFileName, extendedConfigFilePath, eventKind);
                         // Update extended config cache
-                        if (extendedConfigCache) cleanExtendedConfigCache(extendedConfigCache, extendedConfigFilePath, toPath);
+                        if (extendedConfigCache) {
+                            cleanExtendedConfigCache(
+                                extendedConfigCache,
+                                extendedConfigFilePath,
+                                toPath,
+                            );
+                        }
                         // Update projects
                         const projects = sharedExtendedConfigFileWatchers.get(extendedConfigFilePath)?.projects;
                         // If there are no referenced projects this extended config file watcher depend on ignore
@@ -1383,7 +1441,10 @@ export function createWatchProgram<T extends BuilderProgram>(
                         const fileOrDirectoryPath = toPath(fileOrDirectory);
                         // Since the file existence changed, update the sourceFiles cache
                         if (cachedDirectoryStructureHost) {
-                            cachedDirectoryStructureHost.addOrDeleteFileOrDirectory(fileOrDirectory, fileOrDirectoryPath);
+                            cachedDirectoryStructureHost.addOrDeleteFileOrDirectory(
+                                fileOrDirectory,
+                                fileOrDirectoryPath,
+                            );
                         }
                         nextSourceFileVersion(fileOrDirectoryPath);
 

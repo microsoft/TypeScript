@@ -282,7 +282,11 @@ export namespace Debug {
         }
     }
 
-    export function checkEachDefined<T, A extends readonly T[]>(value: A, message?: string, stackCrawlMark?: AnyFunction): A {
+    export function checkEachDefined<T, A extends readonly T[]>(
+        value: A,
+        message?: string,
+        stackCrawlMark?: AnyFunction,
+    ): A {
         assertEachIsDefined(value, message, stackCrawlMark || checkEachDefined);
         return value;
     }
@@ -763,7 +767,8 @@ export namespace Debug {
                 value(this: Type) {
                     const typeHeader = this.flags & TypeFlags.Intrinsic ?
                         `IntrinsicType ${(this as IntrinsicType).intrinsicName}${
-                            (this as IntrinsicType).debugIntrinsicName ? ` (${(this as IntrinsicType).debugIntrinsicName})` : ""
+                            (this as IntrinsicType).debugIntrinsicName
+                                ? ` (${(this as IntrinsicType).debugIntrinsicName})` : ""
                         }` :
                         this.flags & TypeFlags.Nullable ? "NullableType" :
                         this.flags & TypeFlags.StringOrNumberLiteral ?
@@ -929,7 +934,8 @@ export namespace Debug {
                             if (text === undefined) {
                                 const parseNode = getParseTreeNode(this);
                                 const sourceFile = parseNode && getSourceFileOfNode(parseNode);
-                                text = sourceFile ? getSourceTextOfNodeFromSourceFile(sourceFile, parseNode, includeTrivia) : "";
+                                text = sourceFile
+                                    ? getSourceTextOfNodeFromSourceFile(sourceFile, parseNode, includeTrivia) : "";
                                 weakNodeTextMap.set(this, text);
                             }
                             return text;
@@ -974,17 +980,21 @@ export namespace Debug {
                     return zipWith<DebugType, DebugType | string, unknown>(
                         this.sources as readonly DebugType[],
                         this.targets as readonly DebugType[] || map(this.sources, () => "any"),
-                        (s, t) => `${s.__debugTypeToString()} -> ${typeof t === "string" ? t : t.__debugTypeToString()}`,
+                        (s, t) =>
+                            `${s.__debugTypeToString()} -> ${typeof t === "string" ? t : t.__debugTypeToString()}`,
                     ).join(", ");
                 case TypeMapKind.Deferred:
                     return zipWith(
                         this.sources,
                         this.targets,
-                        (s, t) => `${(s as DebugType).__debugTypeToString()} -> ${(t() as DebugType).__debugTypeToString()}`,
+                        (s, t) =>
+                            `${(s as DebugType).__debugTypeToString()} -> ${(t() as DebugType).__debugTypeToString()}`,
                     ).join(", ");
                 case TypeMapKind.Merged:
                 case TypeMapKind.Composite:
-                    return `m1: ${(this.mapper1 as unknown as DebugTypeMapper).__debugToString().split("\n").join("\n    ")}
+                    return `m1: ${
+                        (this.mapper1 as unknown as DebugTypeMapper).__debugToString().split("\n").join("\n    ")
+                    }
 m2: ${(this.mapper2 as unknown as DebugTypeMapper).__debugToString().split("\n").join("\n    ")}`;
                 default:
                     return assertNever(this);
@@ -1149,7 +1159,16 @@ m2: ${(this.mapper2 as unknown as DebugTypeMapper).__debugToString().split("\n")
             }
             seen.add(flowNode);
             if (!graphNode) {
-                links[id] = graphNode = { id, flowNode, edges: [], text: "", lane: -1, endLane: -1, level: -1, circular: false };
+                links[id] = graphNode = {
+                    id,
+                    flowNode,
+                    edges: [],
+                    text: "",
+                    lane: -1,
+                    endLane: -1,
+                    level: -1,
+                    circular: false,
+                };
                 nodes.push(graphNode);
                 if (hasAntecedents(flowNode)) {
                     for (const antecedent of flowNode.antecedents) {
@@ -1328,7 +1347,8 @@ m2: ${(this.mapper2 as unknown as DebugTypeMapper).__debugToString().split("\n")
                     writeLane(lane, getBoxCharacter(connector));
                     writeLane(
                         lane,
-                        connector & Connection.Right && column < columnCount - 1 && !grid[column + 1][lane] ? BoxCharacter.lr
+                        connector & Connection.Right && column < columnCount - 1 && !grid[column + 1][lane] ?
+                            BoxCharacter.lr
                             : " ",
                     );
                 }

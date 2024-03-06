@@ -10,7 +10,11 @@ interface File {
     symlinks?: string[];
 }
 
-function createModuleResolutionHost(baselines: string[], hasDirectoryExists: boolean, ...files: File[]): ts.ModuleResolutionHost {
+function createModuleResolutionHost(
+    baselines: string[],
+    hasDirectoryExists: boolean,
+    ...files: File[]
+): ts.ModuleResolutionHost {
     const map = new Map<string, File>();
     for (const file of files) {
         map.set(file.name, file);
@@ -80,7 +84,12 @@ describe("unittests:: moduleResolution:: Node module resolution - relative paths
 
     it("load as file", () => {
         const baselines: string[] = [];
-        testLoadAsFile("load as file with relative name in current directory", "/foo/bar/baz.ts", "/foo/bar/foo", "./foo");
+        testLoadAsFile(
+            "load as file with relative name in current directory",
+            "/foo/bar/baz.ts",
+            "/foo/bar/foo",
+            "./foo",
+        );
         testLoadAsFile("load as file with relative name in parent directory", "/foo/bar/baz.ts", "/foo/foo", "../foo");
         testLoadAsFile("load as file with name starting with directory seperator", "/foo/bar/baz.ts", "/foo", "/foo");
         testLoadAsFile("load as file with name starting with window root", "c:/foo/bar/baz.ts", "c:/foo", "c:/foo");
@@ -119,7 +128,13 @@ describe("unittests:: moduleResolution:: Node module resolution - relative paths
 
     it("module name as directory - load from 'typings'", () => {
         const baselines: string[] = [];
-        testLoadingFromPackageJson("/a/b/c/d.ts", "/a/b/c/bar/package.json", "c/d/e.d.ts", "/a/b/c/bar/c/d/e.d.ts", "./bar");
+        testLoadingFromPackageJson(
+            "/a/b/c/d.ts",
+            "/a/b/c/bar/package.json",
+            "c/d/e.d.ts",
+            "/a/b/c/bar/c/d/e.d.ts",
+            "./bar",
+        );
         testLoadingFromPackageJson("/a/b/c/d.ts", "/a/bar/package.json", "e.d.ts", "/a/bar/e.d.ts", "../../bar");
         testLoadingFromPackageJson("/a/b/c/d.ts", "/bar/package.json", "e.d.ts", "/bar/e.d.ts", "/bar");
         testLoadingFromPackageJson("c:/a/b/c/d.ts", "c:/bar/package.json", "e.d.ts", "c:/bar/e.d.ts", "c:/bar");
@@ -185,7 +200,14 @@ describe("unittests:: moduleResolution:: Node module resolution - relative paths
                     "b",
                     containingFile.name,
                     {},
-                    createModuleResolutionHost(baselines, hasDirectoryExists, containingFile, packageJson, moduleFile, indexFile),
+                    createModuleResolutionHost(
+                        baselines,
+                        hasDirectoryExists,
+                        containingFile,
+                        packageJson,
+                        moduleFile,
+                        indexFile,
+                    ),
                 );
                 baselines.push(`Resolution:: ${jsonToReadableText(resolution)}`);
                 baselines.push("");
@@ -452,7 +474,10 @@ describe("unittests:: moduleResolution:: Node module resolution - non-relative p
             baselines,
             /*hasDirectoryExists*/ true,
             { name: "/linked/index.d.ts", symlinks: ["/app/node_modules/linked/index.d.ts"] },
-            { name: "/app/node_modules/linked/package.json", content: jsonToReadableText({ version: "0.0.0", main: "./index" }) },
+            {
+                name: "/app/node_modules/linked/package.json",
+                content: jsonToReadableText({ version: "0.0.0", main: "./index" }),
+            },
         );
         const cache = ts.createModuleResolutionCache("/", f => f);
         const compilerOptions: ts.CompilerOptions = { moduleResolution: ts.ModuleResolutionKind.Node10 };
@@ -514,7 +539,9 @@ describe("unittests:: moduleResolution:: Relative imports", () => {
 
             // try to get file using a relative name
             for (const relativeFileName of relativeNamesToCheck) {
-                baselines.push(`getSourceFile by ${relativeFileName}: ${program.getSourceFile(relativeFileName)?.fileName}`);
+                baselines.push(
+                    `getSourceFile by ${relativeFileName}: ${program.getSourceFile(relativeFileName)?.fileName}`,
+                );
             }
 
             runBaseline(scenario, baselines);
@@ -798,7 +825,10 @@ describe("unittests:: moduleResolution:: baseUrl augmented module resolution", (
             const main: File = { name: "/root/a/b/main.ts" };
             const m1: File = { name: "/root/m1.ts" }; // load file as module
             const m2: File = { name: "/root/m2/index.d.ts" }; // load folder as module
-            const m3: File = { name: "/root/m3/package.json", content: jsonToReadableText({ typings: "dist/typings.d.ts" }) };
+            const m3: File = {
+                name: "/root/m3/package.json",
+                content: jsonToReadableText({ typings: "dist/typings.d.ts" }),
+            };
             const m3Typings: File = { name: "/root/m3/dist/typings.d.ts" };
             const m4: File = { name: "/root/node_modules/m4.ts" }; // fallback to node
 
@@ -1088,7 +1118,9 @@ describe("unittests:: moduleResolution:: ModuleResolutionHost.directoryExists", 
             directoryExists: _ => false,
         };
 
-        const result = ts.resolveModuleName("someName", "/a/b/c/d", { moduleResolution: ts.ModuleResolutionKind.Node10 }, host);
+        const result = ts.resolveModuleName("someName", "/a/b/c/d", {
+            moduleResolution: ts.ModuleResolutionKind.Node10,
+        }, host);
         assert(!result.resolvedModule);
     });
 });
@@ -1109,9 +1141,9 @@ describe("unittests:: moduleResolution:: Type reference directive resolution: ",
             ...[initialFile, targetFile].concat(...otherFiles),
         );
         baselines.push(
-            `Resolving "${typeDirective}" from ${initialFile.name} typesRoots: ${typesRoot ? `[${typesRoot}]` : undefined}${
-                hasDirectoryExists ? "" : " with host that doesnt have directoryExists"
-            }`,
+            `Resolving "${typeDirective}" from ${initialFile.name} typesRoots: ${
+                typesRoot ? `[${typesRoot}]` : undefined
+            }${hasDirectoryExists ? "" : " with host that doesnt have directoryExists"}`,
         );
         const result = ts.resolveTypeReferenceDirective(
             typeDirective,
@@ -1131,7 +1163,15 @@ describe("unittests:: moduleResolution:: Type reference directive resolution: ",
         targetFile: File,
         ...otherFiles: File[]
     ) {
-        testWorker(baselines, /*hasDirectoryExists*/ false, typesRoot, typeDirective, initialFile, targetFile, ...otherFiles);
+        testWorker(
+            baselines,
+            /*hasDirectoryExists*/ false,
+            typesRoot,
+            typeDirective,
+            initialFile,
+            targetFile,
+            ...otherFiles,
+        );
     }
 
     it("Can be resolved from primary location", () => {

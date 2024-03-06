@@ -109,7 +109,9 @@ export namespace SmartIndenter {
 
         // no indentation in string \regex\template literals
         const precedingTokenIsLiteral = isStringOrRegularExpressionOrTemplateLiteral(precedingToken.kind);
-        if (precedingTokenIsLiteral && precedingToken.getStart(sourceFile) <= position && position < precedingToken.end) {
+        if (
+            precedingTokenIsLiteral && precedingToken.getStart(sourceFile) <= position && position < precedingToken.end
+        ) {
             return 0;
         }
 
@@ -145,7 +147,9 @@ export namespace SmartIndenter {
             return getBlockIndent(sourceFile, position, options);
         }
 
-        if (precedingToken.kind === SyntaxKind.CommaToken && precedingToken.parent.kind !== SyntaxKind.BinaryExpression) {
+        if (
+            precedingToken.kind === SyntaxKind.CommaToken && precedingToken.parent.kind !== SyntaxKind.BinaryExpression
+        ) {
             // previous token is comma that separates items in list - find the previous item and try to derive indentation from it
             const actualIndentation = getActualIndentationForListItemBeforeComma(precedingToken, sourceFile, options);
             if (actualIndentation !== Value.Unknown) {
@@ -163,7 +167,14 @@ export namespace SmartIndenter {
             return getActualIndentationForListStartLine(containerList, sourceFile, options) + indentSize; // TODO: GH#18217
         }
 
-        return getSmartIndent(sourceFile, position, precedingToken, lineAtPosition, assumeNewLineBeforeCloseBrace, options);
+        return getSmartIndent(
+            sourceFile,
+            position,
+            precedingToken,
+            lineAtPosition,
+            assumeNewLineBeforeCloseBrace,
+            options,
+        );
     }
 
     function getCommentIndent(
@@ -245,7 +256,8 @@ export namespace SmartIndenter {
                 );
                 const indentationDelta = nextTokenKind !== NextTokenKind.Unknown
                     // handle cases when codefix is about to be inserted before the close brace
-                    ? assumeNewLineBeforeCloseBrace && nextTokenKind === NextTokenKind.CloseBrace ? options.indentSize : 0
+                    ? assumeNewLineBeforeCloseBrace && nextTokenKind === NextTokenKind.CloseBrace ? options.indentSize
+                        : 0
                     : lineAtPosition !== currentStart.line ? options.indentSize : 0;
                 return getIndentationForNodeWorker(
                     current,
@@ -262,7 +274,12 @@ export namespace SmartIndenter {
             // do not consider parent-child line sharing yet:
             // function foo(a
             //    | preceding node 'a' does share line with its parent but indentation is expected
-            const actualIndentation = getActualIndentationForListItem(current, sourceFile, options, /*listIndentsChild*/ true);
+            const actualIndentation = getActualIndentationForListItem(
+                current,
+                sourceFile,
+                options,
+                /*listIndentsChild*/ true,
+            );
             if (actualIndentation !== Value.Unknown) {
                 return actualIndentation;
             }
@@ -314,7 +331,8 @@ export namespace SmartIndenter {
             let useActualIndentation = true;
             if (ignoreActualIndentationRange) {
                 const start = current.getStart(sourceFile);
-                useActualIndentation = start < ignoreActualIndentationRange.pos || start > ignoreActualIndentationRange.end;
+                useActualIndentation = start < ignoreActualIndentationRange.pos ||
+                    start > ignoreActualIndentationRange.end;
             }
 
             const containingListOrParentStart = getContainingListOrParentStart(parent, current, sourceFile);
@@ -498,7 +516,8 @@ export namespace SmartIndenter {
         }
 
         const expressionOfCallExpressionEnd = parent.expression.getEnd();
-        const expressionOfCallExpressionEndLine = getLineAndCharacterOfPosition(sourceFile, expressionOfCallExpressionEnd).line;
+        const expressionOfCallExpressionEndLine =
+            getLineAndCharacterOfPosition(sourceFile, expressionOfCallExpressionEnd).line;
         return expressionOfCallExpressionEndLine === childStartLine;
     }
 
@@ -600,7 +619,12 @@ export namespace SmartIndenter {
         return node && getListByRange(pos, pos, node, sourceFile);
     }
 
-    function getListByRange(start: number, end: number, node: Node, sourceFile: SourceFile): NodeArray<Node> | undefined {
+    function getListByRange(
+        start: number,
+        end: number,
+        node: Node,
+        sourceFile: SourceFile,
+    ): NodeArray<Node> | undefined {
         switch (node.kind) {
             case SyntaxKind.TypeReference:
                 return getList((node as TypeReferenceNode).typeArguments);
@@ -629,7 +653,12 @@ export namespace SmartIndenter {
             case SyntaxKind.TypeAliasDeclaration:
             case SyntaxKind.JSDocTemplateTag:
                 return getList(
-                    (node as ClassDeclaration | ClassExpression | InterfaceDeclaration | TypeAliasDeclaration | JSDocTemplateTag)
+                    (node as
+                        | ClassDeclaration
+                        | ClassExpression
+                        | InterfaceDeclaration
+                        | TypeAliasDeclaration
+                        | JSDocTemplateTag)
                         .typeParameters,
                 );
             case SyntaxKind.NewExpression:
@@ -646,7 +675,8 @@ export namespace SmartIndenter {
         }
 
         function getList(list: NodeArray<Node> | undefined): NodeArray<Node> | undefined {
-            return list && rangeContainsStartEnd(getVisualListRange(node, list, sourceFile), start, end) ? list : undefined;
+            return list && rangeContainsStartEnd(getVisualListRange(node, list, sourceFile), start, end) ? list
+                : undefined;
         }
     }
 
@@ -843,10 +873,14 @@ export namespace SmartIndenter {
                 ) { // TODO: GH#18217
                     return rangeIsOnOneLine(sourceFile, child!);
                 }
-                if (parent.kind === SyntaxKind.BinaryExpression && sourceFile && child && childKind === SyntaxKind.JsxElement) {
+                if (
+                    parent.kind === SyntaxKind.BinaryExpression && sourceFile && child &&
+                    childKind === SyntaxKind.JsxElement
+                ) {
                     const parentStartLine =
                         sourceFile.getLineAndCharacterOfPosition(skipTrivia(sourceFile.text, parent.pos)).line;
-                    const childStartLine = sourceFile.getLineAndCharacterOfPosition(skipTrivia(sourceFile.text, child.pos)).line;
+                    const childStartLine =
+                        sourceFile.getLineAndCharacterOfPosition(skipTrivia(sourceFile.text, child.pos)).line;
                     return parentStartLine !== childStartLine;
                 }
                 if (parent.kind !== SyntaxKind.BinaryExpression) {

@@ -51,7 +51,9 @@ describe("unittests:: tsc-watch:: emit file --incremental", () => {
         { subScenario, files, optionsToExtend, modifyFs }: VerifyIncrementalWatchEmitInput,
         incremental: boolean,
     ) {
-        const { sys, baseline, cb, getPrograms } = createBaseline(createWatchedSystem(files(), { currentDirectory: project }));
+        const { sys, baseline, cb, getPrograms } = createBaseline(
+            createWatchedSystem(files(), { currentDirectory: project }),
+        );
         if (incremental) sys.exit = exitCode => sys.exitCode = exitCode;
         const argsToPass = [incremental ? "-i" : "-w", ...(optionsToExtend || ts.emptyArray)];
         baseline.push(`${sys.getExecutingFilePath()} ${argsToPass.join(" ")}`);
@@ -64,9 +66,9 @@ describe("unittests:: tsc-watch:: emit file --incremental", () => {
         }
 
         Harness.Baseline.runBaseline(
-            `${ts.isBuild(argsToPass) ? "tsbuild/watchMode" : "tscWatch"}/incremental/${subScenario.split(" ").join("-")}-${
-                incremental ? "incremental" : "watch"
-            }.js`,
+            `${ts.isBuild(argsToPass) ? "tsbuild/watchMode" : "tscWatch"}/incremental/${
+                subScenario.split(" ").join("-")
+            }-${incremental ? "incremental" : "watch"}.js`,
             baseline.join("\r\n"),
         );
 
@@ -160,7 +162,9 @@ describe("unittests:: tsc-watch:: emit file --incremental", () => {
             });
 
             it("verify that state is read correctly", () => {
-                const system = createWatchedSystem([libFile, file1, fileModified, config], { currentDirectory: project });
+                const system = createWatchedSystem([libFile, file1, fileModified, config], {
+                    currentDirectory: project,
+                });
                 const reportDiagnostic = ts.createDiagnosticReporter(system);
                 const parsedConfig = ts.parseConfigFileWithSystem(
                     "tsconfig.json",
@@ -249,7 +253,9 @@ describe("unittests:: tsc-watch:: emit file --incremental", () => {
         verifyIncrementalWatchEmit({
             files: () => [libFile, file1, file2, {
                 path: configFile.path,
-                content: jsonToReadableText({ compilerOptions: { incremental: true, module: "amd", outFile: "out.js" } }),
+                content: jsonToReadableText({
+                    compilerOptions: { incremental: true, module: "amd", outFile: "out.js" },
+                }),
             }],
             subScenario: "module compilation/with --out",
         });
@@ -327,7 +333,12 @@ export interface A {
     });
 
     describe("with option jsxImportSource", () => {
-        const jsxImportSourceOptions = { module: "commonjs", jsx: "react-jsx", incremental: true, jsxImportSource: "react" };
+        const jsxImportSourceOptions = {
+            module: "commonjs",
+            jsx: "react-jsx",
+            incremental: true,
+            jsxImportSource: "react",
+        };
         const jsxLibraryContent = `export namespace JSX {
     interface Element {}
     interface IntrinsicElements {
@@ -410,7 +421,10 @@ export const Fragment: unique symbol;
             subScenario: "importHelpers backing types removed",
             files: () => [
                 { path: libFile.path, content: libContent },
-                { path: `${project}/node_modules/tslib/index.d.ts`, content: "export function __assign(...args: any[]): any;" },
+                {
+                    path: `${project}/node_modules/tslib/index.d.ts`,
+                    content: "export function __assign(...args: any[]): any;",
+                },
                 {
                     path: `${project}/node_modules/tslib/package.json`,
                     content: jsonToReadableText({ name: "tslib", version: "0.0.1" }),

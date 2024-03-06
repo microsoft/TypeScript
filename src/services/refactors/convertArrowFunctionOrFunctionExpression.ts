@@ -214,7 +214,9 @@ function getFunctionInfo(file: SourceFile, startPosition: number, program: Progr
         !containingThis(maybeFunc.body) &&
         !typeChecker.containsArgumentsReference(maybeFunc)
     ) {
-        if (isFunctionExpression(maybeFunc) && isFunctionReferencedInFile(file, typeChecker, maybeFunc)) return undefined;
+        if (isFunctionExpression(maybeFunc) && isFunctionReferencedInFile(file, typeChecker, maybeFunc)) {
+            return undefined;
+        }
         return { selectedVariableDeclaration: false, func: maybeFunc };
     }
 
@@ -251,7 +253,13 @@ function convertToBlock(body: ConciseBody): Block {
         const file = body.getSourceFile();
         setTextRange(returnStatement, body);
         suppressLeadingAndTrailingTrivia(returnStatement);
-        copyTrailingAsLeadingComments(body, returnStatement, file, /*commentKind*/ undefined, /*hasTrailingNewLine*/ true);
+        copyTrailingAsLeadingComments(
+            body,
+            returnStatement,
+            file,
+            /*commentKind*/ undefined,
+            /*hasTrailingNewLine*/ true,
+        );
         return factory.createBlock([returnStatement], /*multiLine*/ true);
     }
     else {
@@ -360,6 +368,10 @@ function canBeConvertedToExpression(body: Block, head: Statement): head is Retur
     return body.statements.length === 1 && (isReturnStatement(head) && !!head.expression);
 }
 
-function isFunctionReferencedInFile(sourceFile: SourceFile, typeChecker: TypeChecker, node: FunctionExpression): boolean {
+function isFunctionReferencedInFile(
+    sourceFile: SourceFile,
+    typeChecker: TypeChecker,
+    node: FunctionExpression,
+): boolean {
     return !!node.name && FindAllReferences.Core.isSymbolReferencedInFile(node.name, typeChecker, sourceFile);
 }

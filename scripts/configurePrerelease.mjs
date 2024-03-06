@@ -79,7 +79,10 @@ function main() {
 function updateTsFile(tsFilePath, tsFileContents, majorMinor, patch, nightlyPatch) {
     const majorMinorRgx = /export const versionMajorMinor = "(\d+\.\d+)"/;
     const majorMinorMatch = majorMinorRgx.exec(tsFileContents);
-    assert(majorMinorMatch !== null, `The file '${tsFilePath}' seems to no longer have a string matching '${majorMinorRgx}'.`);
+    assert(
+        majorMinorMatch !== null,
+        `The file '${tsFilePath}' seems to no longer have a string matching '${majorMinorRgx}'.`,
+    );
     const parsedMajorMinor = majorMinorMatch[1];
     assert(
         parsedMajorMinor === majorMinor,
@@ -88,13 +91,19 @@ function updateTsFile(tsFilePath, tsFileContents, majorMinor, patch, nightlyPatc
 
     const versionRgx = /export const version(?:: string)? = `\$\{versionMajorMinor\}\.(\d)(-\w+)?`;/;
     const patchMatch = versionRgx.exec(tsFileContents);
-    assert(patchMatch !== null, `The file '${tsFilePath}' seems to no longer have a string matching '${versionRgx.toString()}'.`);
+    assert(
+        patchMatch !== null,
+        `The file '${tsFilePath}' seems to no longer have a string matching '${versionRgx.toString()}'.`,
+    );
     const parsedPatch = patchMatch[1];
     if (parsedPatch !== patch) {
         throw new Error(`patch does not match. ${tsFilePath}: '${parsedPatch}; package.json: '${patch}'`);
     }
 
-    return tsFileContents.replace(versionRgx, `export const version: string = \`\${versionMajorMinor}.${nightlyPatch}\`;`);
+    return tsFileContents.replace(
+        versionRgx,
+        `export const version: string = \`\${versionMajorMinor}.${nightlyPatch}\`;`,
+    );
 }
 
 /**

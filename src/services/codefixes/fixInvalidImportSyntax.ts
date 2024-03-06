@@ -89,7 +89,8 @@ registerCodeFix({
 
 function getActionsForUsageOfInvalidImport(context: CodeFixContext): CodeFixAction[] | undefined {
     const sourceFile = context.sourceFile;
-    const targetKind = Diagnostics.This_expression_is_not_callable.code === context.errorCode ? SyntaxKind.CallExpression
+    const targetKind = Diagnostics.This_expression_is_not_callable.code === context.errorCode ?
+        SyntaxKind.CallExpression
         : SyntaxKind.NewExpression;
     const node = findAncestor(getTokenAtPosition(sourceFile, context.span.start), a => a.kind === targetKind) as
         | CallExpression
@@ -107,7 +108,8 @@ registerCodeFix({
         Diagnostics.Argument_of_type_0_is_not_assignable_to_parameter_of_type_1.code,
         Diagnostics.Type_0_does_not_satisfy_the_constraint_1.code,
         Diagnostics.Type_0_is_not_assignable_to_type_1.code,
-        Diagnostics.Type_0_is_not_assignable_to_type_1_Two_different_types_with_this_name_exist_but_they_are_unrelated.code,
+        Diagnostics.Type_0_is_not_assignable_to_type_1_Two_different_types_with_this_name_exist_but_they_are_unrelated
+            .code,
         Diagnostics.Type_predicate_0_is_not_assignable_to_1.code,
         Diagnostics.Property_0_of_type_1_is_not_assignable_to_2_index_type_3.code,
         Diagnostics._0_index_type_1_is_not_assignable_to_2_index_type_3.code,

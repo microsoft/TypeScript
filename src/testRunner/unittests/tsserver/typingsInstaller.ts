@@ -604,7 +604,11 @@ describe("unittests:: tsserver:: typingsInstaller:: General functionality", () =
             openExternalProjectForSession({
                 projectFileName: projectFileName1,
                 options: { allowJS: true, moduleResolution: ts.ModuleResolutionKind.Node10 },
-                rootFiles: [toExternalFile(lodashJs.path), toExternalFile(commanderJs.path), toExternalFile(file3.path)],
+                rootFiles: [
+                    toExternalFile(lodashJs.path),
+                    toExternalFile(commanderJs.path),
+                    toExternalFile(file3.path),
+                ],
                 typeAcquisition: { include: ["jquery", "cordova"] },
             }, session);
 
@@ -636,7 +640,11 @@ describe("unittests:: tsserver:: typingsInstaller:: General functionality", () =
             openExternalProjectForSession({
                 projectFileName: projectFileName1,
                 options: { allowJS: true, moduleResolution: ts.ModuleResolutionKind.Node10 },
-                rootFiles: [toExternalFile(lodashJs.path), toExternalFile(commanderJs.path), toExternalFile(file3.path)],
+                rootFiles: [
+                    toExternalFile(lodashJs.path),
+                    toExternalFile(commanderJs.path),
+                    toExternalFile(file3.path),
+                ],
                 typeAcquisition: { include: ["jquery", "cordova"] },
             }, session);
 
@@ -654,7 +662,11 @@ describe("unittests:: tsserver:: typingsInstaller:: General functionality", () =
 
             host.runQueuedTimeoutCallbacks(id); // Send the request to worker for project2
             host.runPendingInstalls(); // Actual install for project2
-            baselineTsserverLogs("typingsInstaller", "throttle scheduled run install requests without reaching limit", session);
+            baselineTsserverLogs(
+                "typingsInstaller",
+                "throttle scheduled run install requests without reaching limit",
+                session,
+            );
         });
 
         it("Throttle - scheduled run install requests with defer", () => {
@@ -670,7 +682,11 @@ describe("unittests:: tsserver:: typingsInstaller:: General functionality", () =
             openExternalProjectForSession({
                 projectFileName: projectFileName1,
                 options: { allowJS: true, moduleResolution: ts.ModuleResolutionKind.Node10 },
-                rootFiles: [toExternalFile(lodashJs.path), toExternalFile(commanderJs.path), toExternalFile(file3.path)],
+                rootFiles: [
+                    toExternalFile(lodashJs.path),
+                    toExternalFile(commanderJs.path),
+                    toExternalFile(file3.path),
+                ],
                 typeAcquisition: { include: ["jquery", "cordova"] },
             }, session);
 
@@ -729,7 +745,11 @@ describe("unittests:: tsserver:: typingsInstaller:: General functionality", () =
 
             host.runQueuedTimeoutCallbacks(id); // Send the request to worker for project2
             host.runPendingInstalls(); // Actual install for project2
-            baselineTsserverLogs("typingsInstaller", "throttle scheduled run install requests with defer refreshed", session);
+            baselineTsserverLogs(
+                "typingsInstaller",
+                "throttle scheduled run install requests with defer refreshed",
+                session,
+            );
         });
 
         it("Throttle - scheduled run install requests with defer while queuing again", () => {
@@ -1553,7 +1573,9 @@ describe("unittests:: tsserver:: typingsInstaller:: discover typings", () => {
         };
         const { discoverTypings, baseline } = setup([f, node]);
         const cache = new Map(
-            Object.entries<ts.JsTyping.CachedTyping>({ node: { typingLocation: node.path, version: new ts.Version("1.3.0") } }),
+            Object.entries<ts.JsTyping.CachedTyping>({
+                node: { typingLocation: node.path, version: new ts.Version("1.3.0") },
+            }),
         );
         const registry = createTypesRegistry("node");
         discoverTypings(
@@ -1580,7 +1602,9 @@ describe("unittests:: tsserver:: typingsInstaller:: discover typings", () => {
         };
         const { discoverTypings, baseline } = setup([f, node]);
         const cache = new Map(
-            Object.entries<ts.JsTyping.CachedTyping>({ node: { typingLocation: node.path, version: new ts.Version("1.3.0") } }),
+            Object.entries<ts.JsTyping.CachedTyping>({
+                node: { typingLocation: node.path, version: new ts.Version("1.3.0") },
+            }),
         );
         discoverTypings(
             [f.path],
@@ -2393,7 +2417,8 @@ describe("unittests:: tsserver:: typingsInstaller:: npm installation command", (
         "@types/react-content-loader@ts2.8",
     ];
     const expectedCommands = [
-        ts.server.typingsInstaller.getNpmCommandForInstallation(npmPath, tsVersion, packageNames, packageNames.length).command,
+        ts.server.typingsInstaller.getNpmCommandForInstallation(npmPath, tsVersion, packageNames, packageNames.length)
+            .command,
         ts.server.typingsInstaller.getNpmCommandForInstallation(
             npmPath,
             tsVersion,
@@ -2431,7 +2456,9 @@ describe("unittests:: tsserver:: typingsInstaller:: recomputing resolutions of u
         const program = project.getLanguageService().getProgram()!;
         const sourceFile = program.getSourceFileByPath(appPath)!;
         const foooResolution = program.getResolvedModule(sourceFile, "fooo", /*mode*/ undefined)!.resolvedModule!;
-        project.writeLog(`Resolution from : ${sourceFile.fileName} for "fooo" goes to: ${jsonToReadableText(foooResolution)}`);
+        project.writeLog(
+            `Resolution from : ${sourceFile.fileName} for "fooo" goes to: ${jsonToReadableText(foooResolution)}`,
+        );
         return foooResolution;
     }
 

@@ -52,7 +52,9 @@ import {
 } from "../../_namespaces/ts";
 
 /** @internal */
-export function transformECMAScriptModule(context: TransformationContext): (x: SourceFile | Bundle) => SourceFile | Bundle {
+export function transformECMAScriptModule(
+    context: TransformationContext,
+): (x: SourceFile | Bundle) => SourceFile | Bundle {
     const {
         factory,
         getEmitHelperFactory: emitHelpers,
@@ -102,7 +104,10 @@ export function transformECMAScriptModule(context: TransformationContext): (x: S
             }
             return factory.updateSourceFile(
                 result,
-                setTextRange(factory.createNodeArray([...result.statements, createEmptyExports(factory)]), result.statements),
+                setTextRange(
+                    factory.createNodeArray([...result.statements, createEmptyExports(factory)]),
+                    result.statements,
+                ),
             );
         }
 
@@ -206,12 +211,19 @@ export function transformECMAScriptModule(context: TransformationContext): (x: S
                             requireHelperName,
                             /*exclamationToken*/ undefined,
                             /*type*/ undefined,
-                            factory.createCallExpression(factory.cloneNode(createRequireName), /*typeArguments*/ undefined, [
-                                factory.createPropertyAccessExpression(
-                                    factory.createMetaProperty(SyntaxKind.ImportKeyword, factory.createIdentifier("meta")),
-                                    factory.createIdentifier("url"),
-                                ),
-                            ]),
+                            factory.createCallExpression(
+                                factory.cloneNode(createRequireName),
+                                /*typeArguments*/ undefined,
+                                [
+                                    factory.createPropertyAccessExpression(
+                                        factory.createMetaProperty(
+                                            SyntaxKind.ImportKeyword,
+                                            factory.createIdentifier("meta"),
+                                        ),
+                                        factory.createIdentifier("url"),
+                                    ),
+                                ],
+                            ),
                         ),
                     ],
                     /*flags*/ languageVersion >= ScriptTarget.ES2015 ? NodeFlags.Const : NodeFlags.None,
@@ -266,7 +278,10 @@ export function transformECMAScriptModule(context: TransformationContext): (x: S
         return singleOrMany(statements);
     }
 
-    function appendExportsOfImportEqualsDeclaration(statements: Statement[] | undefined, node: ImportEqualsDeclaration) {
+    function appendExportsOfImportEqualsDeclaration(
+        statements: Statement[] | undefined,
+        node: ImportEqualsDeclaration,
+    ) {
         if (hasSyntacticModifier(node, ModifierFlags.Export)) {
             statements = append(
                 statements,
@@ -274,7 +289,11 @@ export function transformECMAScriptModule(context: TransformationContext): (x: S
                     /*modifiers*/ undefined,
                     node.isTypeOnly,
                     factory.createNamedExports([
-                        factory.createExportSpecifier(/*isTypeOnly*/ false, /*propertyName*/ undefined, idText(node.name)),
+                        factory.createExportSpecifier(
+                            /*isTypeOnly*/ false,
+                            /*propertyName*/ undefined,
+                            idText(node.name),
+                        ),
                     ]),
                 ),
             );
@@ -282,7 +301,9 @@ export function transformECMAScriptModule(context: TransformationContext): (x: S
         return statements;
     }
 
-    function visitExportAssignment(node: ExportAssignment): VisitResult<ExportAssignment | ExpressionStatement | undefined> {
+    function visitExportAssignment(
+        node: ExportAssignment,
+    ): VisitResult<ExportAssignment | ExpressionStatement | undefined> {
         if (node.isExportEquals) {
             if (getEmitModuleKind(compilerOptions) === ModuleKind.Preserve) {
                 const statement = setOriginalNode(
@@ -336,7 +357,9 @@ export function transformECMAScriptModule(context: TransformationContext): (x: S
             factory.createExportDeclaration(
                 /*modifiers*/ undefined,
                 /*isTypeOnly*/ false,
-                factory.createNamedExports([factory.createExportSpecifier(/*isTypeOnly*/ false, synthName, oldIdentifier)]),
+                factory.createNamedExports([
+                    factory.createExportSpecifier(/*isTypeOnly*/ false, synthName, oldIdentifier),
+                ]),
             );
         setOriginalNode(exportDecl, node);
 

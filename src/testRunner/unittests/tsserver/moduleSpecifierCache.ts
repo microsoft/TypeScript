@@ -55,7 +55,8 @@ describe("unittests:: tsserver:: moduleSpecifierCache", () => {
         const { session, moduleSpecifierCache } = setup();
         session.logger.info(
             `importability: ${
-                moduleSpecifierCache.get(bTs.path as ts.Path, aTs.path as ts.Path, {}, {})?.isBlockedByPackageJsonDependencies
+                moduleSpecifierCache.get(bTs.path as ts.Path, aTs.path as ts.Path, {}, {})
+                    ?.isBlockedByPackageJsonDependencies
             }`,
         );
         baselineTsserverLogs("moduleSpecifierCache", "caches importability within a file", session);
@@ -66,7 +67,9 @@ describe("unittests:: tsserver:: moduleSpecifierCache", () => {
         // Completion at an import statement will calculate and cache module specifiers
         triggerCompletions({ file: cTs.path, line: 1, offset: cTs.content.length + 1 });
         session.logger.info(
-            `mobxCache: ${jsonToReadableText(moduleSpecifierCache.get(cTs.path as ts.Path, mobxDts.path as ts.Path, {}, {}))}`,
+            `mobxCache: ${
+                jsonToReadableText(moduleSpecifierCache.get(cTs.path as ts.Path, mobxDts.path as ts.Path, {}, {}))
+            }`,
         );
         baselineTsserverLogs("moduleSpecifierCache", "caches module specifiers within a file", session);
     });
@@ -91,7 +94,8 @@ describe("unittests:: tsserver:: moduleSpecifierCache", () => {
         host.runQueuedTimeoutCallbacks();
         session.logger.info(
             `importability: ${
-                moduleSpecifierCache.get(bTs.path as ts.Path, aTs.path as ts.Path, {}, {})?.isBlockedByPackageJsonDependencies
+                moduleSpecifierCache.get(bTs.path as ts.Path, aTs.path as ts.Path, {}, {})
+                    ?.isBlockedByPackageJsonDependencies
             }`,
         );
         baselineTsserverLogs("moduleSpecifierCache", "does not invalidate the cache when new files are added", session);
@@ -102,7 +106,11 @@ describe("unittests:: tsserver:: moduleSpecifierCache", () => {
         host.renameFile(bSymlink.path, "/src/b-link2.ts");
         host.runQueuedTimeoutCallbacks();
         session.logger.info(`moduleSpecifierCache count: ${moduleSpecifierCache.count()}`);
-        baselineTsserverLogs("moduleSpecifierCache", "invalidates the cache when symlinks are added or removed", session);
+        baselineTsserverLogs(
+            "moduleSpecifierCache",
+            "invalidates the cache when symlinks are added or removed",
+            session,
+        );
     });
 
     it("invalidates the cache when local package.json changes", () => {
@@ -118,7 +126,11 @@ describe("unittests:: tsserver:: moduleSpecifierCache", () => {
         host.writeFile(tsconfig.path, `{ "compilerOptions": { "moduleResolution": "classic" }, "include": ["src"] }`);
         host.runQueuedTimeoutCallbacks();
         session.logger.info(`moduleSpecifierCache count: ${moduleSpecifierCache.count()}`);
-        baselineTsserverLogs("moduleSpecifierCache", "invalidates the cache when module resolution settings change", session);
+        baselineTsserverLogs(
+            "moduleSpecifierCache",
+            "invalidates the cache when module resolution settings change",
+            session,
+        );
     });
 
     it("invalidates the cache when user preferences change", () => {
@@ -150,7 +162,9 @@ describe("unittests:: tsserver:: moduleSpecifierCache", () => {
         function getWithPreferences(preferences: ts.UserPreferences) {
             session.logger.info(
                 `moduleSpecifierCache for ${jsonToReadableText(preferences)} (${bTs.path} -> ${aTs.path}) ${
-                    jsonToReadableText(moduleSpecifierCache.get(bTs.path as ts.Path, aTs.path as ts.Path, preferences, {}))
+                    jsonToReadableText(
+                        moduleSpecifierCache.get(bTs.path as ts.Path, aTs.path as ts.Path, preferences, {}),
+                    )
                 }`,
             );
         }
@@ -158,7 +172,17 @@ describe("unittests:: tsserver:: moduleSpecifierCache", () => {
 });
 
 function setup() {
-    const host = createServerHost([aTs, bTs, cTs, bSymlink, ambientDeclaration, tsconfig, packageJson, mobxPackageJson, mobxDts]);
+    const host = createServerHost([
+        aTs,
+        bTs,
+        cTs,
+        bSymlink,
+        ambientDeclaration,
+        tsconfig,
+        packageJson,
+        mobxPackageJson,
+        mobxDts,
+    ]);
     const session = new TestSession(host);
     openFilesForSession([aTs, bTs, cTs], session);
     const project = session.getProjectService().configuredProjects.get(tsconfig.path)!;

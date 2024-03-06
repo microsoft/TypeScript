@@ -31,7 +31,10 @@ describe("unittests:: tsserver:: events:: ProjectLoadingStart and ProjectLoading
     const configBPath = `/user/username/projects/b/tsconfig.json`;
     const files = [libFile, aTs, configA];
 
-    function verifyProjectLoadingStartAndFinish(sessionType: string, createSession: (host: TestServerHost) => TestSession) {
+    function verifyProjectLoadingStartAndFinish(
+        sessionType: string,
+        createSession: (host: TestServerHost) => TestSession,
+    ) {
         describe(sessionType, () => {
             it("when project is created by open file", () => {
                 const bTs: File = {
@@ -46,7 +49,11 @@ describe("unittests:: tsserver:: events:: ProjectLoadingStart and ProjectLoading
                 const session = createSession(host);
                 openFilesForSession([aTs], session);
                 openFilesForSession([bTs], session);
-                baselineTsserverLogs("events/projectLoading", `project is created by open file ${sessionType}`, session);
+                baselineTsserverLogs(
+                    "events/projectLoading",
+                    `project is created by open file ${sessionType}`,
+                    session,
+                );
             });
 
             it("when change is detected in the config file", () => {
@@ -56,7 +63,11 @@ describe("unittests:: tsserver:: events:: ProjectLoadingStart and ProjectLoading
 
                 host.writeFile(configA.path, configA.content);
                 host.runQueuedTimeoutCallbacks();
-                baselineTsserverLogs("events/projectLoading", `change is detected in the config file ${sessionType}`, session);
+                baselineTsserverLogs(
+                    "events/projectLoading",
+                    `change is detected in the config file ${sessionType}`,
+                    session,
+                );
             });
 
             it("when change is detected in an extended config file", () => {

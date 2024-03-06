@@ -75,7 +75,9 @@ export class TypeWriterWalker {
     }
 
     private isImportStatementName(node: ts.Node) {
-        if (ts.isImportSpecifier(node.parent) && (node.parent.name === node || node.parent.propertyName === node)) return true;
+        if (ts.isImportSpecifier(node.parent) && (node.parent.name === node || node.parent.propertyName === node)) {
+            return true;
+        }
         if (ts.isImportClause(node.parent) && node.parent.name === node) return true;
         if (ts.isImportEqualsDeclaration(node.parent) && node.parent.name === node) return true;
         return false;
@@ -83,7 +85,9 @@ export class TypeWriterWalker {
 
     private isExportStatementName(node: ts.Node) {
         if (ts.isExportAssignment(node.parent) && node.parent.expression === node) return true;
-        if (ts.isExportSpecifier(node.parent) && (node.parent.name === node || node.parent.propertyName === node)) return true;
+        if (ts.isExportSpecifier(node.parent) && (node.parent.name === node || node.parent.propertyName === node)) {
+            return true;
+        }
         return false;
     }
 
@@ -153,7 +157,11 @@ export class TypeWriterWalker {
                 ) {
                     // for a complex type alias `type T = ...`, showing "T : T" isn't very helpful for type tests. When the type produced is the same as
                     // the name of the type alias, recreate the type string without reusing the alias name
-                    typeString = this.checker.typeToString(type, node.parent, typeFormatFlags | ts.TypeFormatFlags.InTypeAlias);
+                    typeString = this.checker.typeToString(
+                        type,
+                        node.parent,
+                        typeFormatFlags | ts.TypeFormatFlags.InTypeAlias,
+                    );
                 }
             }
             return {

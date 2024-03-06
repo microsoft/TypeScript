@@ -48,7 +48,9 @@ import {
 } from "../_namespaces/ts.refactor";
 
 const refactorName = "Convert to optional chain expression";
-const convertToOptionalChainExpressionMessage = getLocaleSpecificMessage(Diagnostics.Convert_to_optional_chain_expression);
+const convertToOptionalChainExpressionMessage = getLocaleSpecificMessage(
+    Diagnostics.Convert_to_optional_chain_expression,
+);
 
 const toOptionalChainAction = {
     name: refactorName,
@@ -83,7 +85,10 @@ function getRefactorActionsToConvertToOptionalChain(context: RefactorContext): r
     return emptyArray;
 }
 
-function getRefactorEditsToConvertToOptionalChain(context: RefactorContext, actionName: string): RefactorEditInfo | undefined {
+function getRefactorEditsToConvertToOptionalChain(
+    context: RefactorContext,
+    actionName: string,
+): RefactorEditInfo | undefined {
     const info = getInfo(context);
     Debug.assert(info && !isRefactorErrorInfo(info), "Expected applicable refactor info");
     const edits = textChanges.ChangeTracker.with(
@@ -125,7 +130,10 @@ function isValidExpressionOrStatement(node: Node): node is ValidExpressionOrStat
     return isValidExpression(node) || isValidStatement(node);
 }
 
-function getInfo(context: RefactorContext, considerEmptySpans = true): OptionalChainInfo | RefactorErrorInfo | undefined {
+function getInfo(
+    context: RefactorContext,
+    considerEmptySpans = true,
+): OptionalChainInfo | RefactorErrorInfo | undefined {
     const { file, program } = context;
     const span = getRefactorContextSpan(context);
 
@@ -143,7 +151,9 @@ function getInfo(context: RefactorContext, considerEmptySpans = true): OptionalC
     const parent = forEmptySpan ? getValidParentNodeOfEmptySpan(startToken)
         : getValidParentNodeContainingSpan(startToken, adjustedSpan);
     const expression = parent && isValidExpressionOrStatement(parent) ? getExpression(parent) : undefined;
-    if (!expression) return { error: getLocaleSpecificMessage(Diagnostics.Could_not_find_convertible_access_expression) };
+    if (!expression) {
+        return { error: getLocaleSpecificMessage(Diagnostics.Could_not_find_convertible_access_expression) };
+    }
 
     const checker = program.getTypeChecker();
     return isConditionalExpression(expression) ? getConditionalInfo(expression, checker) : getBinaryInfo(expression);
@@ -179,7 +189,9 @@ function getBinaryInfo(expression: BinaryExpression): OptionalChainInfo | Refact
     }
     const finalExpression = getFinalExpressionInChain(expression.right);
 
-    if (!finalExpression) return { error: getLocaleSpecificMessage(Diagnostics.Could_not_find_convertible_access_expression) };
+    if (!finalExpression) {
+        return { error: getLocaleSpecificMessage(Diagnostics.Could_not_find_convertible_access_expression) };
+    }
 
     const occurrences = getOccurrencesInExpression(finalExpression.expression, expression.left);
     return occurrences ? { finalExpression, occurrences, expression } :
@@ -313,7 +325,8 @@ function getFinalExpressionInChain(
     }
     // foo && |foo.bar()()| - nested calls are treated like further accesses.
     else if (
-        (isPropertyAccessExpression(node) || isElementAccessExpression(node) || isCallExpression(node)) && !isOptionalChain(node)
+        (isPropertyAccessExpression(node) || isElementAccessExpression(node) || isCallExpression(node)) &&
+        !isOptionalChain(node)
     ) {
         return node;
     }
@@ -337,11 +350,20 @@ function convertOccurrences(checker: TypeChecker, toConvert: Expression, occurre
                     toConvert.typeArguments,
                     toConvert.arguments,
                 ) :
-                factory.createCallChain(chain, toConvert.questionDotToken, toConvert.typeArguments, toConvert.arguments);
+                factory.createCallChain(
+                    chain,
+                    toConvert.questionDotToken,
+                    toConvert.typeArguments,
+                    toConvert.arguments,
+                );
         }
         else if (isPropertyAccessExpression(toConvert)) {
             return isOccurrence ?
-                factory.createPropertyAccessChain(chain, factory.createToken(SyntaxKind.QuestionDotToken), toConvert.name) :
+                factory.createPropertyAccessChain(
+                    chain,
+                    factory.createToken(SyntaxKind.QuestionDotToken),
+                    toConvert.name,
+                ) :
                 factory.createPropertyAccessChain(chain, toConvert.questionDotToken, toConvert.name);
         }
         else if (isElementAccessExpression(toConvert)) {

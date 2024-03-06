@@ -66,11 +66,21 @@ export function createModuleSpecifierCache(host: ModuleSpecifierResolutionCacheH
             else {
                 cache.set(
                     toFileName,
-                    createInfo(modulePaths, /*moduleSpecifiers*/ undefined, /*isBlockedByPackageJsonDependencies*/ undefined),
+                    createInfo(
+                        modulePaths,
+                        /*moduleSpecifiers*/ undefined,
+                        /*isBlockedByPackageJsonDependencies*/ undefined,
+                    ),
                 );
             }
         },
-        setBlockedByPackageJsonDependencies(fromFileName, toFileName, preferences, options, isBlockedByPackageJsonDependencies) {
+        setBlockedByPackageJsonDependencies(
+            fromFileName,
+            toFileName,
+            preferences,
+            options,
+            isBlockedByPackageJsonDependencies,
+        ) {
             const cache = ensureCache(fromFileName, preferences, options);
             const info = cache.get(toFileName);
             if (info) {
@@ -79,7 +89,11 @@ export function createModuleSpecifierCache(host: ModuleSpecifierResolutionCacheH
             else {
                 cache.set(
                     toFileName,
-                    createInfo(/*modulePaths*/ undefined, /*moduleSpecifiers*/ undefined, isBlockedByPackageJsonDependencies),
+                    createInfo(
+                        /*modulePaths*/ undefined,
+                        /*moduleSpecifiers*/ undefined,
+                        isBlockedByPackageJsonDependencies,
+                    ),
                 );
             }
         },

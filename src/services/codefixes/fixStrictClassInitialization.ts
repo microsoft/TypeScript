@@ -94,7 +94,10 @@ function getInfo(sourceFile: SourceFile, pos: number): Info | undefined {
     return undefined;
 }
 
-function getActionForAddMissingDefiniteAssignmentAssertion(context: CodeFixContext, info: Info): CodeFixAction | undefined {
+function getActionForAddMissingDefiniteAssignmentAssertion(
+    context: CodeFixContext,
+    info: Info,
+): CodeFixAction | undefined {
     if (info.isJs) return undefined;
     const changes = textChanges.ChangeTracker.with(
         context,
@@ -139,7 +142,8 @@ function getActionForAddMissingUndefinedType(context: CodeFixContext, info: Info
 
 function addUndefinedType(changeTracker: textChanges.ChangeTracker, sourceFile: SourceFile, info: Info): void {
     const undefinedTypeNode = factory.createKeywordTypeNode(SyntaxKind.UndefinedKeyword);
-    const types = isUnionTypeNode(info.type) ? info.type.types.concat(undefinedTypeNode) : [info.type, undefinedTypeNode];
+    const types = isUnionTypeNode(info.type) ? info.type.types.concat(undefinedTypeNode)
+        : [info.type, undefinedTypeNode];
     const unionTypeNode = factory.createUnionTypeNode(types);
     if (info.isJs) {
         changeTracker.addJSDocTags(sourceFile, info.prop, [
@@ -158,7 +162,10 @@ function getActionForAddMissingInitializer(context: CodeFixContext, info: Info):
     const initializer = getInitializer(checker, info.prop);
     if (!initializer) return undefined;
 
-    const changes = textChanges.ChangeTracker.with(context, t => addInitializer(t, context.sourceFile, info.prop, initializer));
+    const changes = textChanges.ChangeTracker.with(
+        context,
+        t => addInitializer(t, context.sourceFile, info.prop, initializer),
+    );
     return createCodeFixAction(
         fixName,
         changes,
@@ -192,7 +199,8 @@ function getInitializer(checker: TypeChecker, propertyDeclaration: PropertyDecla
 
 function getDefaultValueFromType(checker: TypeChecker, type: Type): Expression | undefined {
     if (type.flags & TypeFlags.BooleanLiteral) {
-        return (type === checker.getFalseType() || type === checker.getFalseType(/*fresh*/ true)) ? factory.createFalse()
+        return (type === checker.getFalseType() || type === checker.getFalseType(/*fresh*/ true)) ?
+            factory.createFalse()
             : factory.createTrue();
     }
     else if (type.isStringLiteral()) {

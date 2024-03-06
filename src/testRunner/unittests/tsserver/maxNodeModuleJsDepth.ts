@@ -37,7 +37,10 @@ describe("unittests:: tsserver:: maxNodeModuleJsDepth for inferred projects", ()
         );
 
         // Assert the option sticks
-        setCompilerOptionsForInferredProjectsRequestForSession({ target: ts.server.protocol.ScriptTarget.ES2016 }, session);
+        setCompilerOptionsForInferredProjectsRequestForSession(
+            { target: ts.server.protocol.ScriptTarget.ES2016 },
+            session,
+        );
         session.logger.log(
             `maxNodeModuleJsDepth: ${
                 session.getProjectService().inferredProjects[0].getCompilationSettings().maxNodeModuleJsDepth

@@ -174,7 +174,8 @@ export abstract class TypingsInstallerAdapter implements ITypingsInstaller {
                 const body: protocol.TypesInstallerInitializationFailedEventBody = {
                     message: response.message,
                 };
-                const eventName: protocol.TypesInstallerInitializationFailedEventName = "typesInstallerInitializationFailed";
+                const eventName: protocol.TypesInstallerInitializationFailedEventName =
+                    "typesInstallerInitializationFailed";
                 this.event(body, eventName);
                 break;
             }

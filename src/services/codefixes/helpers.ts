@@ -236,9 +236,15 @@ export function addNewNodeForMemberSymbol(
     switch (kind) {
         case SyntaxKind.PropertySignature:
         case SyntaxKind.PropertyDeclaration:
-            const flags = quotePreference === QuotePreference.Single ? NodeBuilderFlags.UseSingleQuotesForStringLiteralType
+            const flags = quotePreference === QuotePreference.Single ?
+                NodeBuilderFlags.UseSingleQuotesForStringLiteralType
                 : undefined;
-            let typeNode = checker.typeToTypeNode(type, enclosingDeclaration, flags, getNoopSymbolTrackerWithResolver(context));
+            let typeNode = checker.typeToTypeNode(
+                type,
+                enclosingDeclaration,
+                flags,
+                getNoopSymbolTrackerWithResolver(context),
+            );
             if (importAdder) {
                 const importableReference = tryGetAutoImportableReferenceFromTypeNode(typeNode, scriptTarget);
                 if (importableReference) {
@@ -249,7 +255,8 @@ export function addNewNodeForMemberSymbol(
             addClassElement(factory.createPropertyDeclaration(
                 modifiers,
                 declaration ? createName(declarationName) : symbol.getName(),
-                optional && (preserveOptional & PreserveOptionalFlags.Property) ? factory.createToken(SyntaxKind.QuestionToken)
+                optional && (preserveOptional & PreserveOptionalFlags.Property) ?
+                    factory.createToken(SyntaxKind.QuestionToken)
                     : undefined,
                 typeNode,
                 /*initializer*/ undefined,
@@ -286,9 +293,14 @@ export function addNewNodeForMemberSymbol(
                     ));
                 }
                 else {
-                    Debug.assertNode(accessor, isSetAccessorDeclaration, "The counterpart to a getter should be a setter");
+                    Debug.assertNode(
+                        accessor,
+                        isSetAccessorDeclaration,
+                        "The counterpart to a getter should be a setter",
+                    );
                     const parameter = getSetAccessorValueParameter(accessor);
-                    const parameterName = parameter && isIdentifier(parameter.name) ? idText(parameter.name) : undefined;
+                    const parameterName = parameter && isIdentifier(parameter.name) ? idText(parameter.name)
+                        : undefined;
                     addClassElement(factory.createSetAccessorDeclaration(
                         modifiers,
                         createName(declarationName),
@@ -309,7 +321,8 @@ export function addNewNodeForMemberSymbol(
             // (eg: an abstract method or interface declaration), there is a 1-1
             // correspondence of declarations and signatures.
             Debug.assertIsDefined(declarations);
-            const signatures = type.isUnion() ? flatMap(type.types, t => t.getCallSignatures()) : type.getCallSignatures();
+            const signatures = type.isUnion() ? flatMap(type.types, t => t.getCallSignatures())
+                : type.getCallSignatures();
             if (!some(signatures)) {
                 break;
             }
@@ -346,7 +359,10 @@ export function addNewNodeForMemberSymbol(
                     );
                 }
                 else {
-                    Debug.assert(declarations.length === signatures.length, "Declarations and signatures should match count");
+                    Debug.assert(
+                        declarations.length === signatures.length,
+                        "Declarations and signatures should match count",
+                    );
                     addClassElement(
                         createMethodImplementingSignatures(
                             checker,
@@ -402,7 +418,8 @@ export function addNewNodeForMemberSymbol(
     }
 
     function shouldAddOverrideKeyword(): boolean {
-        return !!(context.program.getCompilerOptions().noImplicitOverride && declaration && hasAbstractModifier(declaration));
+        return !!(context.program.getCompilerOptions().noImplicitOverride && declaration &&
+            hasAbstractModifier(declaration));
     }
 
     function createName(node: PropertyName) {
@@ -617,7 +634,8 @@ export function createSignatureDeclarationFromCallExpression(
     const names = map(
         args,
         arg =>
-            isIdentifier(arg) ? arg.text : isPropertyAccessExpression(arg) && isIdentifier(arg.name) ? arg.name.text : undefined,
+            isIdentifier(arg) ? arg.text
+                : isPropertyAccessExpression(arg) && isIdentifier(arg.name) ? arg.name.text : undefined,
     );
     const instanceTypes = isJs ? [] : map(args, arg => checker.getTypeAtLocation(arg));
     const { argumentTypeNodes, argumentTypeParameters } = getArgumentTypesAndTypeParameters(
@@ -636,8 +654,15 @@ export function createSignatureDeclarationFromCallExpression(
     const asteriskToken = isYieldExpression(parent)
         ? factory.createToken(SyntaxKind.AsteriskToken)
         : undefined;
-    const typeParameters = isJs ? undefined : createTypeParametersForArguments(checker, argumentTypeParameters, typeArguments);
-    const parameters = createDummyParameters(args.length, names, argumentTypeNodes, /*minArgumentCount*/ undefined, isJs);
+    const typeParameters = isJs ? undefined
+        : createTypeParametersForArguments(checker, argumentTypeParameters, typeArguments);
+    const parameters = createDummyParameters(
+        args.length,
+        names,
+        argumentTypeNodes,
+        /*minArgumentCount*/ undefined,
+        isJs,
+    );
     const type = isJs || contextualType === undefined
         ? undefined
         : checker.typeToTypeNode(contextualType, contextNode, /*flags*/ undefined, tracker);
@@ -828,21 +853,24 @@ export function getArgumentTypesAndTypeParameters(
         //    function added<T>(value: T) { ... }
         // We instead want to output:
         //    function added<T extends string>(value: T) { ... }
-        const instanceTypeConstraint =
-            instanceType.isTypeParameter() && instanceType.constraint && !isAnonymousObjectConstraintType(instanceType.constraint)
-                ? typeToAutoImportableTypeNode(
-                    checker,
-                    importAdder,
-                    instanceType.constraint,
-                    contextNode,
-                    scriptTarget,
-                    flags,
-                    tracker,
-                )
-                : undefined;
+        const instanceTypeConstraint = instanceType.isTypeParameter() && instanceType.constraint &&
+                !isAnonymousObjectConstraintType(instanceType.constraint)
+            ? typeToAutoImportableTypeNode(
+                checker,
+                importAdder,
+                instanceType.constraint,
+                contextNode,
+                scriptTarget,
+                flags,
+                tracker,
+            )
+            : undefined;
 
         if (argumentTypeParameter) {
-            argumentTypeParameters.set(argumentTypeParameter, { argumentType: instanceType, constraint: instanceTypeConstraint });
+            argumentTypeParameters.set(argumentTypeParameter, {
+                argumentType: instanceType,
+                constraint: instanceTypeConstraint,
+            });
         }
     }
 
@@ -942,7 +970,8 @@ function createMethodImplementingSignatures(
             /*modifiers*/ undefined,
             factory.createToken(SyntaxKind.DotDotDotToken),
             maxArgsParameterSymbolNames[maxNonRestArgs] || "rest",
-            /*questionToken*/ maxNonRestArgs >= minArgumentCount ? factory.createToken(SyntaxKind.QuestionToken) : undefined,
+            /*questionToken*/ maxNonRestArgs >= minArgumentCount ? factory.createToken(SyntaxKind.QuestionToken)
+                : undefined,
             factory.createArrayTypeNode(factory.createKeywordTypeNode(SyntaxKind.UnknownKeyword)),
             /*initializer*/ undefined,
         );
@@ -1083,7 +1112,8 @@ export function createJsonPropertyAssignment(name: string, initializer: Expressi
 export function findJsonProperty(obj: ObjectLiteralExpression, name: string): PropertyAssignment | undefined {
     return find(
         obj.properties,
-        (p): p is PropertyAssignment => isPropertyAssignment(p) && !!p.name && isStringLiteral(p.name) && p.name.text === name,
+        (p): p is PropertyAssignment =>
+            isPropertyAssignment(p) && !!p.name && isStringLiteral(p.name) && p.name.text === name,
     );
 }
 
@@ -1094,7 +1124,10 @@ export function findJsonProperty(obj: ObjectLiteralExpression, name: string): Pr
  *
  * @internal
  */
-export function tryGetAutoImportableReferenceFromTypeNode(importTypeNode: TypeNode | undefined, scriptTarget: ScriptTarget) {
+export function tryGetAutoImportableReferenceFromTypeNode(
+    importTypeNode: TypeNode | undefined,
+    scriptTarget: ScriptTarget,
+) {
     let symbols: Symbol[] | undefined;
     const typeNode = visitNode(importTypeNode, visit, isTypeNode);
     if (symbols && typeNode) {

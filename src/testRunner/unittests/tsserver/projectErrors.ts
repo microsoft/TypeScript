@@ -273,7 +273,10 @@ describe("unittests:: tsserver:: projectErrors:: are reported as appropriate", (
         };
         const configFile: File = {
             path: `${projectDir}/tsconfig.json`,
-            content: jsonToReadableText({ compilerOptions: { module: "none", targer: "es5" }, exclude: ["node_modules"] }),
+            content: jsonToReadableText({
+                compilerOptions: { module: "none", targer: "es5" },
+                exclude: ["node_modules"],
+            }),
         };
         const host = createServerHost([app, foo, configFile]);
         const session = new TestSession(host);
@@ -330,7 +333,10 @@ describe("unittests:: tsserver:: projectErrors:: are reported as appropriate", (
         openFilesForSession([{ file: backendTest, projectRootPath: "/user/username/projects/myproject" }], session);
         verifyGetErrRequest({ session, files: [backendTest.path, app.path] });
         closeFilesForSession([backendTest], session);
-        openFilesForSession([{ file: serverUtilities.path, projectRootPath: "/user/username/projects/myproject" }], session);
+        openFilesForSession(
+            [{ file: serverUtilities.path, projectRootPath: "/user/username/projects/myproject" }],
+            session,
+        );
         verifyGetErrRequest({ session, files: [serverUtilities.path, app.path] });
         baselineTsserverLogs(
             "projectErrors",
@@ -488,7 +494,11 @@ describe("unittests:: tsserver:: Project Errors for Configure file diagnostics e
             }`;
         host.writeFile(configFile.path, configFile.content);
         host.runQueuedTimeoutCallbacks();
-        baselineTsserverLogs("projectErrors", "configFileDiagnostic events are generated when the config file changes", session);
+        baselineTsserverLogs(
+            "projectErrors",
+            "configFileDiagnostic events are generated when the config file changes",
+            session,
+        );
     });
 
     it("are not generated when the config file does not include file opened and config file has errors", () => {
@@ -601,7 +611,11 @@ describe("unittests:: tsserver:: Project Errors for Configure file diagnostics e
         const host = createServerHost([file, libFile, configFile]);
         const session = new TestSession(host);
         openFilesForSession([file], session);
-        baselineTsserverLogs("projectErrors", "configFileDiagnostic events contains the project reference errors", session);
+        baselineTsserverLogs(
+            "projectErrors",
+            "configFileDiagnostic events contains the project reference errors",
+            session,
+        );
     });
 });
 
@@ -621,7 +635,10 @@ describe("unittests:: tsserver:: projectErrors:: dont include overwrite emit err
             arguments: { projectFileName },
         });
 
-        setCompilerOptionsForInferredProjectsRequestForSession({ module: ts.server.protocol.ModuleKind.CommonJS }, session);
+        setCompilerOptionsForInferredProjectsRequestForSession(
+            { module: ts.server.protocol.ModuleKind.CommonJS },
+            session,
+        );
         session.executeCommandSeq<ts.server.protocol.CompilerOptionsDiagnosticsRequest>({
             command: ts.server.protocol.CommandTypes.CompilerOptionsDiagnosticsFull,
             arguments: { projectFileName },
@@ -707,7 +724,8 @@ describe("unittests:: tsserver:: projectErrors:: reports Options Diagnostic loca
 describe("unittests:: tsserver:: projectErrors:: with config file change", () => {
     it("Updates diagnostics when '--noUnusedLabels' changes", () => {
         const aTs: File = { path: "/a.ts", content: "label: while (1) {}" };
-        const options = (allowUnusedLabels: boolean) => `{ "compilerOptions": { "allowUnusedLabels": ${allowUnusedLabels} } }`;
+        const options = (allowUnusedLabels: boolean) =>
+            `{ "compilerOptions": { "allowUnusedLabels": ${allowUnusedLabels} } }`;
         const tsconfig: File = { path: "/tsconfig.json", content: options(/*allowUnusedLabels*/ true) };
 
         const host = createServerHost([aTs, tsconfig]);
@@ -772,7 +790,11 @@ console.log(blabla);`,
             include: ["./src/*.ts"],
         });
         verifyGetErrRequest({ session, files: [test] });
-        baselineTsserverLogs("projectErrors", `should report error when json is not root file found by tsconfig`, session);
+        baselineTsserverLogs(
+            "projectErrors",
+            `should report error when json is not root file found by tsconfig`,
+            session,
+        );
     });
 });
 
@@ -810,9 +832,13 @@ describe("unittests:: tsserver:: projectErrors:: with npm install when", () => {
         verifyWhileNpmInstall();
 
         filesAndFoldersToAdd = [
-            { path: `/user/username/projects/myproject/node_modules/.staging/@angular/platform-browser-dynamic-5efaaa1a` },
             {
-                path: `/user/username/projects/myproject/node_modules/.staging/@angular/cli-c1e44b05/models/analytics.d.ts`,
+                path:
+                    `/user/username/projects/myproject/node_modules/.staging/@angular/platform-browser-dynamic-5efaaa1a`,
+            },
+            {
+                path:
+                    `/user/username/projects/myproject/node_modules/.staging/@angular/cli-c1e44b05/models/analytics.d.ts`,
                 content: `export const x = 10;`,
             },
             {
@@ -824,7 +850,11 @@ describe("unittests:: tsserver:: projectErrors:: with npm install when", () => {
         verifyWhileNpmInstall();
 
         filesAndFoldersToAdd = [];
-        host.ensureFileOrFolder(moduleFile, /*ignoreWatchInvokedWithTriggerAsFileCreate*/ true, /*ignoreParentWatch*/ true);
+        host.ensureFileOrFolder(
+            moduleFile,
+            /*ignoreWatchInvokedWithTriggerAsFileCreate*/ true,
+            /*ignoreParentWatch*/ true,
+        );
         // Since we added/removed in .staging no timeout
         verifyWhileNpmInstall();
 

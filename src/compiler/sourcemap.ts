@@ -260,11 +260,19 @@ export function createSourceMapGenerator(
 
             const rawGeneratedLine = raw.generatedLine - (start ? start.line : 0);
             const newGeneratedLine = rawGeneratedLine + generatedLine;
-            const rawGeneratedCharacter = start && start.line === raw.generatedLine ? raw.generatedCharacter - start.character
+            const rawGeneratedCharacter = start && start.line === raw.generatedLine ?
+                raw.generatedCharacter - start.character
                 : raw.generatedCharacter;
             const newGeneratedCharacter = rawGeneratedLine === 0 ? rawGeneratedCharacter + generatedCharacter
                 : rawGeneratedCharacter;
-            addMapping(newGeneratedLine, newGeneratedCharacter, newSourceIndex, newSourceLine, newSourceCharacter, newNameIndex);
+            addMapping(
+                newGeneratedLine,
+                newGeneratedCharacter,
+                newSourceIndex,
+                newSourceLine,
+                newSourceCharacter,
+                newNameIndex,
+            );
         }
         exit();
     }
@@ -626,7 +634,9 @@ export function decodeMappings(mappings: string): MappingsDecoder {
         let value = 0;
 
         for (; moreDigits; pos++) {
-            if (pos >= mappings.length) return setError("Error in decoding base64VLQFormatDecode, past the mapping string"), -1;
+            if (pos >= mappings.length) {
+                return setError("Error in decoding base64VLQFormatDecode, past the mapping string"), -1;
+            }
 
             // 6 digit number
             const currentByte = base64FormatDecode(mappings.charCodeAt(pos));
@@ -746,7 +756,9 @@ export function createDocumentPositionMapper(
     const generatedAbsoluteFilePath = getNormalizedAbsolutePath(map.file, mapDirectory);
     const generatedFile = host.getSourceFileLike(generatedAbsoluteFilePath);
     const sourceFileAbsolutePaths = map.sources.map(source => getNormalizedAbsolutePath(source, sourceRoot));
-    const sourceToSourceIndexMap = new Map(sourceFileAbsolutePaths.map((source, i) => [host.getCanonicalFileName(source), i]));
+    const sourceToSourceIndexMap = new Map(
+        sourceFileAbsolutePaths.map((source, i) => [host.getCanonicalFileName(source), i]),
+    );
     let decodedMappings: readonly MappedPosition[] | undefined;
     let generatedMappings: SortedReadonlyArray<MappedPosition> | undefined;
     let sourceMappings: readonly SortedReadonlyArray<SourceMappedPosition>[] | undefined;
@@ -758,7 +770,12 @@ export function createDocumentPositionMapper(
 
     function processMapping(mapping: Mapping): MappedPosition {
         const generatedPosition = generatedFile !== undefined
-            ? getPositionOfLineAndCharacter(generatedFile, mapping.generatedLine, mapping.generatedCharacter, /*allowEdits*/ true)
+            ? getPositionOfLineAndCharacter(
+                generatedFile,
+                mapping.generatedLine,
+                mapping.generatedCharacter,
+                /*allowEdits*/ true,
+            )
             : -1;
         let source: string | undefined;
         let sourcePosition: number | undefined;
@@ -766,7 +783,12 @@ export function createDocumentPositionMapper(
             const sourceFile = host.getSourceFileLike(sourceFileAbsolutePaths[mapping.sourceIndex]);
             source = map.sources[mapping.sourceIndex];
             sourcePosition = sourceFile !== undefined
-                ? getPositionOfLineAndCharacter(sourceFile, mapping.sourceLine, mapping.sourceCharacter, /*allowEdits*/ true)
+                ? getPositionOfLineAndCharacter(
+                    sourceFile,
+                    mapping.sourceLine,
+                    mapping.sourceCharacter,
+                    /*allowEdits*/ true,
+                )
                 : -1;
         }
         return {

@@ -221,12 +221,18 @@ registerCodeFix({
             if (deletion.length) {
                 const name = isComputedPropertyName(token.parent) ? token.parent : token;
                 result.push(
-                    createDeleteFix(deletion, [Diagnostics.Remove_unused_declaration_for_Colon_0, name.getText(sourceFile)]),
+                    createDeleteFix(deletion, [
+                        Diagnostics.Remove_unused_declaration_for_Colon_0,
+                        name.getText(sourceFile),
+                    ]),
                 );
             }
         }
 
-        const prefix = textChanges.ChangeTracker.with(context, t => tryPrefixDeclaration(t, errorCode, sourceFile, token));
+        const prefix = textChanges.ChangeTracker.with(
+            context,
+            t => tryPrefixDeclaration(t, errorCode, sourceFile, token),
+        );
         if (prefix.length) {
             result.push(
                 createCodeFixAction(
@@ -286,7 +292,8 @@ registerCodeFix({
                             break;
                         }
                         else if (
-                            !isParameter(token.parent.parent) || isNotProvidedArguments(token.parent.parent, checker, sourceFiles)
+                            !isParameter(token.parent.parent) ||
+                            isNotProvidedArguments(token.parent.parent, checker, sourceFiles)
                         ) {
                             changes.delete(sourceFile, token.parent.parent);
                         }
@@ -399,7 +406,12 @@ function deleteDestructuring(
     }
 }
 
-function tryPrefixDeclaration(changes: textChanges.ChangeTracker, errorCode: number, sourceFile: SourceFile, token: Node): void {
+function tryPrefixDeclaration(
+    changes: textChanges.ChangeTracker,
+    errorCode: number,
+    sourceFile: SourceFile,
+    token: Node,
+): void {
     // Don't offer to prefix a property.
     if (errorCode === Diagnostics.Property_0_is_declared_but_its_value_is_never_read.code) return;
     if (token.kind === SyntaxKind.InferKeyword) {
@@ -469,7 +481,10 @@ function tryDeleteDeclarationWorker(
     if (isParameter(parent)) {
         tryDeleteParameter(changes, sourceFile, parent, checker, sourceFiles, program, cancellationToken, isFixAll);
     }
-    else if (!(isFixAll && isIdentifier(token) && FindAllReferences.Core.isSymbolReferencedInFile(token, checker, sourceFile))) {
+    else if (
+        !(isFixAll && isIdentifier(token) &&
+            FindAllReferences.Core.isSymbolReferencedInFile(token, checker, sourceFile))
+    ) {
         const node = isImportClause(parent) ? token : isComputedPropertyName(parent) ? parent.parent : parent;
         Debug.assert(node !== sourceFile, "should not delete whole source file");
         changes.delete(sourceFile, node);
@@ -504,7 +519,11 @@ function tryDeleteParameter(
     }
 }
 
-function isNotProvidedArguments(parameter: ParameterDeclaration, checker: TypeChecker, sourceFiles: readonly SourceFile[]) {
+function isNotProvidedArguments(
+    parameter: ParameterDeclaration,
+    checker: TypeChecker,
+    sourceFiles: readonly SourceFile[],
+) {
     const index = parameter.parent.parameters.indexOf(parameter);
     // Just in case the call didn't provide enough arguments.
     return !FindAllReferences.Core.someSignatureUsage(
@@ -591,7 +610,8 @@ function isCallbackLike(checker: TypeChecker, sourceFile: SourceFile, name: Iden
         checker,
         sourceFile,
         reference =>
-            isIdentifier(reference) && isCallExpression(reference.parent) && reference.parent.arguments.includes(reference),
+            isIdentifier(reference) && isCallExpression(reference.parent) &&
+            reference.parent.arguments.includes(reference),
     );
 }
 
@@ -606,6 +626,7 @@ function isLastParameter(func: FunctionLikeDeclaration, parameter: ParameterDecl
 
 function mayDeleteExpression(node: Node) {
     return ((isBinaryExpression(node.parent) && node.parent.left === node) ||
-        ((isPostfixUnaryExpression(node.parent) || isPrefixUnaryExpression(node.parent)) && node.parent.operand === node)) &&
+        ((isPostfixUnaryExpression(node.parent) || isPrefixUnaryExpression(node.parent)) &&
+            node.parent.operand === node)) &&
         isExpressionStatement(node.parent.parent);
 }

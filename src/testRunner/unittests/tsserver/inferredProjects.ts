@@ -71,7 +71,11 @@ describe("unittests:: tsserver:: inferredProjects", () => {
 
         host.writeFile(configFile.path, configFile.content);
         host.runQueuedTimeoutCallbacks(); // load configured project from disk + ensureProjectsForOpenFiles
-        baselineTsserverLogs("inferredProjects", "should use only one inferred project if useOneInferredProject is set", session);
+        baselineTsserverLogs(
+            "inferredProjects",
+            "should use only one inferred project if useOneInferredProject is set",
+            session,
+        );
     });
 
     it("disable inferred project", () => {
@@ -81,11 +85,17 @@ describe("unittests:: tsserver:: inferredProjects", () => {
         };
 
         const host = createServerHost([file1]);
-        const session = new TestSession({ host, useSingleInferredProject: true, serverMode: ts.LanguageServiceMode.Syntactic });
+        const session = new TestSession({
+            host,
+            useSingleInferredProject: true,
+            serverMode: ts.LanguageServiceMode.Syntactic,
+        });
 
         openFilesForSession([file1], session);
 
-        session.logger.log(`LanguageServiceEnabled:: ${session.getProjectService().inferredProjects[0].languageServiceEnabled}`);
+        session.logger.log(
+            `LanguageServiceEnabled:: ${session.getProjectService().inferredProjects[0].languageServiceEnabled}`,
+        );
         baselineTsserverLogs("inferredProjects", "disable inferred project", session);
     });
 
@@ -183,7 +193,11 @@ describe("unittests:: tsserver:: inferredProjects", () => {
                 { path: "/c/file3.ts", content: "let z = 4;" },
             ];
             const host = createServerHost(files, { useCaseSensitiveFileNames });
-            const session = new TestSession({ host, useSingleInferredProject: true, useInferredProjectPerProjectRoot: true });
+            const session = new TestSession({
+                host,
+                useSingleInferredProject: true,
+                useInferredProjectPerProjectRoot: true,
+            });
             setCompilerOptionsForInferredProjectsRequestForSession({
                 allowJs: true,
                 target: ts.server.protocol.ScriptTarget.ESNext,
@@ -222,7 +236,12 @@ describe("unittests:: tsserver:: inferredProjects", () => {
             ) {
                 files.forEach((file, index) =>
                     openFilesForSession(
-                        [{ file: file.path, content: file.content, scriptKindName: "JS", projectRootPath: projectRoots[index] }],
+                        [{
+                            file: file.path,
+                            content: file.content,
+                            scriptKindName: "JS",
+                            projectRootPath: projectRoots[index],
+                        }],
                         session,
                     )
                 );

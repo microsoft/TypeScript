@@ -212,7 +212,9 @@ function getImportersForExport(
                         }
                         if (!isAvailableThroughGlobal) {
                             const parent = direct.parent;
-                            if (exportKind === ExportKind.ExportEquals && parent.kind === SyntaxKind.VariableDeclaration) {
+                            if (
+                                exportKind === ExportKind.ExportEquals && parent.kind === SyntaxKind.VariableDeclaration
+                            ) {
                                 const { name } = parent as VariableDeclaration;
                                 if (name.kind === SyntaxKind.Identifier) {
                                     directImports.push(name);
@@ -238,7 +240,12 @@ function getImportersForExport(
                         directImports.push(direct);
                         const namedBindings = direct.importClause && direct.importClause.namedBindings;
                         if (namedBindings && namedBindings.kind === SyntaxKind.NamespaceImport) {
-                            handleNamespaceImport(direct, namedBindings.name, /*isReExport*/ false, /*alreadyAddedDirect*/ true);
+                            handleNamespaceImport(
+                                direct,
+                                namedBindings.name,
+                                /*isReExport*/ false,
+                                /*alreadyAddedDirect*/ true,
+                            );
                         }
                         else if (!isAvailableThroughGlobal && isDefaultImport(direct)) {
                             addIndirectUser(getSourceFileLikeForImportDeclaration(direct)); // Add a check for indirect uses to handle synthetic default imports
@@ -252,7 +259,10 @@ function getImportersForExport(
                         }
                         else if (direct.exportClause.kind === SyntaxKind.NamespaceExport) {
                             // `export * as foo from "foo"` add to indirect uses
-                            addIndirectUser(getSourceFileLikeForImportDeclaration(direct), /*addTransitiveDependencies*/ true);
+                            addIndirectUser(
+                                getSourceFileLikeForImportDeclaration(direct),
+                                /*addTransitiveDependencies*/ true,
+                            );
                         }
                         else {
                             // This is `export { foo } from "foo"` and creates an alias symbol, so recursive search will get handle re-exports.
@@ -299,7 +309,9 @@ function getImportersForExport(
         }
         else if (!isAvailableThroughGlobal) {
             const sourceFileLike = getSourceFileLikeForImportDeclaration(importDeclaration);
-            Debug.assert(sourceFileLike.kind === SyntaxKind.SourceFile || sourceFileLike.kind === SyntaxKind.ModuleDeclaration);
+            Debug.assert(
+                sourceFileLike.kind === SyntaxKind.SourceFile || sourceFileLike.kind === SyntaxKind.ModuleDeclaration,
+            );
             if (isReExport || findNamespaceReExports(sourceFileLike, name, checker)) {
                 addIndirectUser(sourceFileLike, /*addTransitiveDependencies*/ true);
             }
@@ -324,7 +336,10 @@ function getImportersForExport(
         if (directImports) {
             for (const directImport of directImports) {
                 if (!isImportTypeNode(directImport)) {
-                    addIndirectUser(getSourceFileLikeForImportDeclaration(directImport), /*addTransitiveDependencies*/ true);
+                    addIndirectUser(
+                        getSourceFileLikeForImportDeclaration(directImport),
+                        /*addTransitiveDependencies*/ true,
+                    );
                 }
             }
         }
@@ -473,7 +488,8 @@ function getSearchesFromDirectImports(
 
     function isNameMatch(name: __String): boolean {
         // Use name of "default" even in `export =` case because we may have allowSyntheticDefaultImports
-        return name === exportSymbol.escapedName || exportKind !== ExportKind.Named && name === InternalSymbolName.Default;
+        return name === exportSymbol.escapedName ||
+            exportKind !== ExportKind.Named && name === InternalSymbolName.Default;
     }
 }
 
@@ -485,7 +501,9 @@ function findNamespaceReExports(sourceFileLike: SourceFileLike, name: Identifier
         if (!isExportDeclaration(statement)) return;
         const { exportClause, moduleSpecifier } = statement;
         return !moduleSpecifier && exportClause && isNamedExports(exportClause) &&
-            exportClause.elements.some(element => checker.getExportSpecifierLocalTargetSymbol(element) === namespaceImportSymbol);
+            exportClause.elements.some(element =>
+                checker.getExportSpecifierLocalTargetSymbol(element) === namespaceImportSymbol
+            );
     });
 }
 
@@ -520,7 +538,10 @@ export function findModuleReferences(
                     ref.resolutionMode || referencingFile.impliedNodeFormat,
                 )
                     ?.resolvedTypeReferenceDirective;
-                if (referenced !== undefined && referenced.resolvedFileName === (searchSourceFile as SourceFile).fileName) {
+                if (
+                    referenced !== undefined &&
+                    referenced.resolvedFileName === (searchSourceFile as SourceFile).fileName
+                ) {
                     refs.push({ kind: "reference", referencingFile, ref });
                 }
             }
@@ -566,7 +587,10 @@ function getDirectImportsMap(
 }
 
 /** Iterates over all statements at the top level or in module declarations. Returns the first truthy result. */
-function forEachPossibleImportOrExportStatement<T>(sourceFileLike: SourceFileLike, action: (statement: Statement) => T) {
+function forEachPossibleImportOrExportStatement<T>(
+    sourceFileLike: SourceFileLike,
+    action: (statement: Statement) => T,
+) {
     return forEach(
         sourceFileLike.kind === SyntaxKind.SourceFile ? sourceFileLike.statements : sourceFileLike.body!.statements,
         statement =>
@@ -697,7 +721,11 @@ export function getImportOrExportSymbol(
             // Get the symbol for the `export =` node; its parent is the module it's the export of.
             if (!ex.symbol.parent) return undefined;
             const exportKind = ex.isExportEquals ? ExportKind.ExportEquals : ExportKind.Default;
-            return { kind: ImportExport.Export, symbol, exportInfo: { exportingModuleSymbol: ex.symbol.parent, exportKind } };
+            return {
+                kind: ImportExport.Export,
+                symbol,
+                exportInfo: { exportingModuleSymbol: ex.symbol.parent, exportKind },
+            };
         }
 
         function getSpecialPropertyExport(node: BinaryExpression, useLhsSymbol: boolean): ExportedSymbol | undefined {
@@ -713,7 +741,8 @@ export function getImportOrExportSymbol(
                     return undefined;
             }
 
-            const sym = useLhsSymbol ? checker.getSymbolAtLocation(getNameOfAccessExpression(cast(node.left, isAccessExpression)))
+            const sym = useLhsSymbol ?
+                checker.getSymbolAtLocation(getNameOfAccessExpression(cast(node.left, isAccessExpression)))
                 : symbol;
             return sym && exportInfo(sym, kind);
         }
@@ -740,7 +769,10 @@ export function getImportOrExportSymbol(
         // If `importedName` is undefined, do continue searching as the export is anonymous.
         // (All imports returned from this function will be ignored anyway if we are in rename and this is a not a named export.)
         const importedName = symbolEscapedNameNoDefault(importedSymbol);
-        if (importedName === undefined || importedName === InternalSymbolName.Default || importedName === symbol.escapedName) {
+        if (
+            importedName === undefined || importedName === InternalSymbolName.Default ||
+            importedName === symbol.escapedName
+        ) {
             return { kind: ImportExport.Import, symbol: importedSymbol };
         }
     }
@@ -810,7 +842,11 @@ function isNodeImport(node: Node): boolean {
 }
 
 /** @internal */
-export function getExportInfo(exportSymbol: Symbol, exportKind: ExportKind, checker: TypeChecker): ExportInfo | undefined {
+export function getExportInfo(
+    exportSymbol: Symbol,
+    exportKind: ExportKind,
+    checker: TypeChecker,
+): ExportInfo | undefined {
     const moduleSymbol = exportSymbol.parent;
     if (!moduleSymbol) return undefined; // This can happen if an `export` is not at the top-level (which is a compile error).
     const exportingModuleSymbol = checker.getMergedSymbol(moduleSymbol); // Need to get merged symbol in case there's an augmentation.
@@ -823,7 +859,10 @@ function skipExportSpecifierSymbol(symbol: Symbol, checker: TypeChecker): Symbol
     // For `export { foo } from './bar", there's nothing to skip, because it does not create a new alias. But `export { foo } does.
     if (symbol.declarations) {
         for (const declaration of symbol.declarations) {
-            if (isExportSpecifier(declaration) && !declaration.propertyName && !declaration.parent.parent.moduleSpecifier) {
+            if (
+                isExportSpecifier(declaration) && !declaration.propertyName &&
+                !declaration.parent.parent.moduleSpecifier
+            ) {
                 return checker.getExportSpecifierLocalTargetSymbol(declaration) || symbol;
             }
             else if (
@@ -863,7 +902,8 @@ function getSourceFileLikeForImportDeclaration(node: ImporterOrCallExpression): 
 }
 
 function isAmbientModuleDeclaration(node: Node): node is AmbientModuleDeclaration {
-    return node.kind === SyntaxKind.ModuleDeclaration && (node as ModuleDeclaration).name.kind === SyntaxKind.StringLiteral;
+    return node.kind === SyntaxKind.ModuleDeclaration &&
+        (node as ModuleDeclaration).name.kind === SyntaxKind.StringLiteral;
 }
 
 function isExternalModuleImportEquals(

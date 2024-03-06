@@ -105,13 +105,21 @@ function doChange(changes: textChanges.ChangeTracker, sourceFile: SourceFile, de
         }
         const needParens = isArrowFunction(decl) && !findChildOfKind(decl, SyntaxKind.OpenParenToken, sourceFile);
         if (needParens) {
-            changes.insertNodeBefore(sourceFile, first(decl.parameters), factory.createToken(SyntaxKind.OpenParenToken));
+            changes.insertNodeBefore(
+                sourceFile,
+                first(decl.parameters),
+                factory.createToken(SyntaxKind.OpenParenToken),
+            );
         }
         for (const param of decl.parameters) {
             if (!param.type) {
                 const paramType = getJSDocType(param);
                 if (paramType) {
-                    changes.tryInsertTypeAnnotation(sourceFile, param, visitNode(paramType, transformJSDocType, isTypeNode));
+                    changes.tryInsertTypeAnnotation(
+                        sourceFile,
+                        param,
+                        visitNode(paramType, transformJSDocType, isTypeNode),
+                    );
                 }
             }
         }
@@ -121,7 +129,11 @@ function doChange(changes: textChanges.ChangeTracker, sourceFile: SourceFile, de
         if (!decl.type) {
             const returnType = getJSDocReturnType(decl);
             if (returnType) {
-                changes.tryInsertTypeAnnotation(sourceFile, decl, visitNode(returnType, transformJSDocType, isTypeNode));
+                changes.tryInsertTypeAnnotation(
+                    sourceFile,
+                    decl,
+                    visitNode(returnType, transformJSDocType, isTypeNode),
+                );
             }
         }
     }
@@ -259,7 +271,10 @@ function transformJSDocIndexSignature(node: TypeReferenceNode) {
         /*dotDotDotToken*/ undefined,
         node.typeArguments![0].kind === SyntaxKind.NumberKeyword ? "n" : "s",
         /*questionToken*/ undefined,
-        factory.createTypeReferenceNode(node.typeArguments![0].kind === SyntaxKind.NumberKeyword ? "number" : "string", []),
+        factory.createTypeReferenceNode(
+            node.typeArguments![0].kind === SyntaxKind.NumberKeyword ? "number" : "string",
+            [],
+        ),
         /*initializer*/ undefined,
     );
     const indexSignature = factory.createTypeLiteralNode([

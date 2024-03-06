@@ -66,7 +66,8 @@ export interface CachedTyping {
 /** @internal */
 export function isTypingUpToDate(cachedTyping: CachedTyping, availableTypingVersions: MapLike<string>) {
     const availableVersion = new Version(
-        getProperty(availableTypingVersions, `ts${versionMajorMinor}`) || getProperty(availableTypingVersions, "latest")!,
+        getProperty(availableTypingVersions, `ts${versionMajorMinor}`) ||
+            getProperty(availableTypingVersions, "latest")!,
     );
     return availableVersion.compareTo(cachedTyping.version) <= 0;
 }
@@ -231,7 +232,10 @@ export function discoverTypings(
     // Add the cached typing locations for inferred typings that are already installed
     packageNameToTypingLocation.forEach((typing, name) => {
         const registryEntry = typesRegistry.get(name);
-        if (inferredTypings.get(name) === false && registryEntry !== undefined && isTypingUpToDate(typing, registryEntry)) {
+        if (
+            inferredTypings.get(name) === false && registryEntry !== undefined &&
+            isTypingUpToDate(typing, registryEntry)
+        ) {
             inferredTypings.set(name, typing.typingLocation);
         }
     });
@@ -268,7 +272,12 @@ export function discoverTypings(
      * @param modulesDirName is the directory name for modules (node_modules or bower_components). Should be lowercase!
      * @param filesToWatch are the files to watch for changes. We will push things into this array.
      */
-    function getTypingNames(projectRootPath: string, manifestName: string, modulesDirName: string, filesToWatch: string[]): void {
+    function getTypingNames(
+        projectRootPath: string,
+        manifestName: string,
+        modulesDirName: string,
+        filesToWatch: string[],
+    ): void {
         // First, we check the manifests themselves. They're not
         // _required_, but they allow us to do some filtering when dealing
         // with big flat dep directories.
@@ -279,7 +288,12 @@ export function discoverTypings(
             filesToWatch.push(manifestPath);
             manifest = readConfigFile(manifestPath, path => host.readFile(path)).config;
             manifestTypingNames = flatMap(
-                [manifest.dependencies, manifest.devDependencies, manifest.optionalDependencies, manifest.peerDependencies],
+                [
+                    manifest.dependencies,
+                    manifest.devDependencies,
+                    manifest.optionalDependencies,
+                    manifest.peerDependencies,
+                ],
                 getOwnKeys,
             );
             addInferredTypings(manifestTypingNames, `Typing names in '${manifestPath}' dependencies`);
@@ -332,12 +346,15 @@ export function discoverTypings(
                     // packages. So that needs this dance here.
                     const pathComponents = getPathComponents(normalizePath(manifestPath));
                     const isScoped = pathComponents[pathComponents.length - 3][0] === "@";
-                    return isScoped && toFileNameLowerCase(pathComponents[pathComponents.length - 4]) === modulesDirName || // `node_modules/@foo/bar`
+                    return isScoped &&
+                            toFileNameLowerCase(pathComponents[pathComponents.length - 4]) === modulesDirName || // `node_modules/@foo/bar`
                         !isScoped && toFileNameLowerCase(pathComponents[pathComponents.length - 3]) === modulesDirName; // `node_modules/foo`
                 });
 
         if (log) {
-            log(`Searching for typing names in ${packagesFolderPath}; all files: ${JSON.stringify(dependencyManifestNames)}`);
+            log(`Searching for typing names in ${packagesFolderPath}; all files: ${
+                JSON.stringify(dependencyManifestNames)
+            }`);
         }
 
         // Once we have the names of things to look up, we iterate over

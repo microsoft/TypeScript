@@ -140,7 +140,8 @@ export function assertInvariants(node: ts.Node | undefined, parent: ts.Node | un
                 if (isNodeOrArray(child)) {
                     assert.isFalse(
                         !childNodesAndArrays.includes(child),
-                        "Missing child when forEach'ing over node: " + ts.Debug.formatSyntaxKind(node.kind) + "-" + childName,
+                        "Missing child when forEach'ing over node: " + ts.Debug.formatSyntaxKind(node.kind) + "-" +
+                            childName,
                     );
                 }
             }

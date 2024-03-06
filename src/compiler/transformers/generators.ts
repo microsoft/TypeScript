@@ -233,7 +233,10 @@ const enum OpCode {
     Endfinally,              // Marks the end of a `finally` block
 }
 
-type OperationArguments = [Label] | [Label, Expression] | [Statement] | [Expression | undefined] | [Expression, Expression];
+type OperationArguments = [Label] | [Label, Expression] | [Statement] | [Expression | undefined] | [
+    Expression,
+    Expression,
+];
 
 // whether a generated code block is opening or closing at the current operation for a FunctionBuilder
 const enum BlockAction {
@@ -802,7 +805,11 @@ export function transformGenerators(context: TransformationContext): (x: SourceF
                         left as PropertyAccessExpression,
                         cacheExpression(
                             Debug.checkDefined(
-                                visitNode((left as PropertyAccessExpression).expression, visitor, isLeftHandSideExpression),
+                                visitNode(
+                                    (left as PropertyAccessExpression).expression,
+                                    visitor,
+                                    isLeftHandSideExpression,
+                                ),
                             ),
                         ),
                         (left as PropertyAccessExpression).name,
@@ -825,7 +832,11 @@ export function transformGenerators(context: TransformationContext): (x: SourceF
                         left as ElementAccessExpression,
                         cacheExpression(
                             Debug.checkDefined(
-                                visitNode((left as ElementAccessExpression).expression, visitor, isLeftHandSideExpression),
+                                visitNode(
+                                    (left as ElementAccessExpression).expression,
+                                    visitor,
+                                    isLeftHandSideExpression,
+                                ),
                             ),
                         ),
                         cacheExpression(
@@ -1001,7 +1012,11 @@ export function transformGenerators(context: TransformationContext): (x: SourceF
         const resultLabel = defineLabel();
         const resultLocal = declareLocal();
 
-        emitAssignment(resultLocal, Debug.checkDefined(visitNode(node.left, visitor, isExpression)), /*location*/ node.left);
+        emitAssignment(
+            resultLocal,
+            Debug.checkDefined(visitNode(node.left, visitor, isExpression)),
+            /*location*/ node.left,
+        );
         if (node.operatorToken.kind === SyntaxKind.AmpersandAmpersandToken) {
             // Logical `&&` shortcuts when the left-hand operand is falsey.
             emitBreakWhenFalse(resultLabel, resultLocal, /*location*/ node.left);
@@ -1011,7 +1026,11 @@ export function transformGenerators(context: TransformationContext): (x: SourceF
             emitBreakWhenTrue(resultLabel, resultLocal, /*location*/ node.left);
         }
 
-        emitAssignment(resultLocal, Debug.checkDefined(visitNode(node.right, visitor, isExpression)), /*location*/ node.right);
+        emitAssignment(
+            resultLocal,
+            Debug.checkDefined(visitNode(node.right, visitor, isExpression)),
+            /*location*/ node.right,
+        );
         markLabel(resultLabel);
         return resultLocal;
     }
@@ -1152,7 +1171,10 @@ export function transformGenerators(context: TransformationContext): (x: SourceF
         return temp
             ? factory.createArrayConcatCall(temp, [factory.createArrayLiteralExpression(expressions, multiLine)])
             : setTextRange(
-                factory.createArrayLiteralExpression(leadingElement ? [leadingElement, ...expressions] : expressions, multiLine),
+                factory.createArrayLiteralExpression(
+                    leadingElement ? [leadingElement, ...expressions] : expressions,
+                    multiLine,
+                ),
                 location,
             );
 
@@ -1218,7 +1240,9 @@ export function transformGenerators(context: TransformationContext): (x: SourceF
 
         const expressions = reduceLeft(properties, reduceProperty, [] as Expression[], numInitialProperties);
         // TODO(rbuckton): Does this need to be parented?
-        expressions.push(multiLine ? startOnNewLine(setParent(setTextRange(factory.cloneNode(temp), temp), temp.parent)) : temp);
+        expressions.push(
+            multiLine ? startOnNewLine(setParent(setTextRange(factory.cloneNode(temp), temp), temp.parent)) : temp,
+        );
         return factory.inlineExpressions(expressions);
 
         function reduceProperty(expressions: Expression[], property: ObjectLiteralElementLike) {
@@ -1415,7 +1439,9 @@ export function transformGenerators(context: TransformationContext): (x: SourceF
         emitStatement(visitNode(node, visitor, isStatement));
     }
 
-    function transformAndEmitVariableDeclarationList(node: VariableDeclarationList): VariableDeclarationList | undefined {
+    function transformAndEmitVariableDeclarationList(
+        node: VariableDeclarationList,
+    ): VariableDeclarationList | undefined {
         for (const variable of node.declarations) {
             const name = factory.cloneNode(variable.name as Identifier);
             setCommentRange(name, variable.name);
@@ -2334,7 +2360,11 @@ export function transformGenerators(context: TransformationContext): (x: SourceF
 
         emitAssignment(
             name,
-            factory.createCallExpression(factory.createPropertyAccessExpression(state, "sent"), /*typeArguments*/ undefined, []),
+            factory.createCallExpression(
+                factory.createPropertyAccessExpression(state, "sent"),
+                /*typeArguments*/ undefined,
+                [],
+            ),
         );
         emitNop();
     }
@@ -2966,7 +2996,10 @@ export function transformGenerators(context: TransformationContext): (x: SourceF
                 statements.unshift(
                     factory.createExpressionStatement(
                         factory.createCallExpression(
-                            factory.createPropertyAccessExpression(factory.createPropertyAccessExpression(state, "trys"), "push"),
+                            factory.createPropertyAccessExpression(
+                                factory.createPropertyAccessExpression(state, "trys"),
+                                "push",
+                            ),
                             /*typeArguments*/ undefined,
                             [
                                 factory.createArrayLiteralExpression([
@@ -3171,7 +3204,9 @@ export function transformGenerators(context: TransformationContext): (x: SourceF
      * @param operationLocation The source map location for the operation.
      */
     function writeAssign(left: Expression, right: Expression, operationLocation: TextRange | undefined): void {
-        writeStatement(setTextRange(factory.createExpressionStatement(factory.createAssignment(left, right)), operationLocation));
+        writeStatement(
+            setTextRange(factory.createExpressionStatement(factory.createAssignment(left, right)), operationLocation),
+        );
     }
 
     /**

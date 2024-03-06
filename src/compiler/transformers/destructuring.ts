@@ -76,7 +76,9 @@ interface FlattenContext {
         original: Node | undefined,
     ) => void;
     createArrayBindingOrAssignmentPattern: (elements: BindingOrAssignmentElement[]) => ArrayBindingOrAssignmentPattern;
-    createObjectBindingOrAssignmentPattern: (elements: BindingOrAssignmentElement[]) => ObjectBindingOrAssignmentPattern;
+    createObjectBindingOrAssignmentPattern: (
+        elements: BindingOrAssignmentElement[],
+    ) => ObjectBindingOrAssignmentPattern;
     createArrayBindingOrAssignmentElement: (node: Identifier) => BindingOrAssignmentElement;
     visitor: (node: Node) => VisitResult<Node | undefined>;
 }
@@ -169,7 +171,13 @@ export function flattenDestructuringAssignment(
         }
     }
 
-    flattenBindingOrAssignmentElement(flattenContext, node, value, location, /*skipInitializer*/ isDestructuringAssignment(node));
+    flattenBindingOrAssignmentElement(
+        flattenContext,
+        node,
+        value,
+        location,
+        /*skipInitializer*/ isDestructuringAssignment(node),
+    );
 
     if (value && needsValue) {
         if (!some(expressions)) {
@@ -233,11 +241,15 @@ function bindingOrAssignmentElementContainsNonLiteralComputedName(element: Bindi
         return true;
     }
     const target = getTargetOfBindingOrAssignmentElement(element);
-    return !!target && isBindingOrAssignmentPattern(target) && bindingOrAssignmentPatternContainsNonLiteralComputedName(target);
+    return !!target && isBindingOrAssignmentPattern(target) &&
+        bindingOrAssignmentPatternContainsNonLiteralComputedName(target);
 }
 
 function bindingOrAssignmentPatternContainsNonLiteralComputedName(pattern: BindingOrAssignmentPattern): boolean {
-    return !!forEach(getElementsOfBindingOrAssignmentPattern(pattern), bindingOrAssignmentElementContainsNonLiteralComputedName);
+    return !!forEach(
+        getElementsOfBindingOrAssignmentPattern(pattern),
+        bindingOrAssignmentElementContainsNonLiteralComputedName,
+    );
 }
 
 /**
@@ -287,7 +299,8 @@ export function flattenDestructuringBinding(
     if (isVariableDeclaration(node)) {
         let initializer = getInitializerOfBindingOrAssignmentElement(node);
         if (
-            initializer && (isIdentifier(initializer) && bindingOrAssignmentElementAssignsToName(node, initializer.escapedText) ||
+            initializer &&
+            (isIdentifier(initializer) && bindingOrAssignmentElementAssignsToName(node, initializer.escapedText) ||
                 bindingOrAssignmentElementContainsNonLiteralComputedName(node))
         ) {
             // If the right-hand value of the assignment is also an assignment target then
@@ -378,7 +391,11 @@ function flattenBindingOrAssignmentElement(
 ) {
     const bindingTarget = getTargetOfBindingOrAssignmentElement(element)!; // TODO: GH#18217
     if (!skipInitializer) {
-        const initializer = visitNode(getInitializerOfBindingOrAssignmentElement(element), flattenContext.visitor, isExpression);
+        const initializer = visitNode(
+            getInitializerOfBindingOrAssignmentElement(element),
+            flattenContext.visitor,
+            isExpression,
+        );
         if (initializer) {
             // Combine value and initializer
             if (value) {
@@ -442,7 +459,8 @@ function flattenObjectBindingOrAssignmentPattern(
             const propertyName = getPropertyNameOfBindingOrAssignmentElement(element)!;
             if (
                 flattenContext.level >= FlattenLevel.ObjectRest
-                && !(element.transformFlags & (TransformFlags.ContainsRestOrSpread | TransformFlags.ContainsObjectRestOrSpread))
+                && !(element.transformFlags &
+                    (TransformFlags.ContainsRestOrSpread | TransformFlags.ContainsObjectRestOrSpread))
                 && !(getTargetOfBindingOrAssignmentElement(element)!.transformFlags &
                     (TransformFlags.ContainsRestOrSpread | TransformFlags.ContainsObjectRestOrSpread))
                 && !isComputedPropertyName(propertyName)
@@ -699,7 +717,9 @@ function ensureIdentifier(
         const temp = flattenContext.context.factory.createTempVariable(/*recordTempVariable*/ undefined);
         if (flattenContext.hoistTempVariables) {
             flattenContext.context.hoistVariableDeclaration(temp);
-            flattenContext.emitExpression(setTextRange(flattenContext.context.factory.createAssignment(temp, value), location));
+            flattenContext.emitExpression(
+                setTextRange(flattenContext.context.factory.createAssignment(temp, value), location),
+            );
         }
         else {
             flattenContext.emitBindingOrAssignment(temp, value, location, /*original*/ undefined);

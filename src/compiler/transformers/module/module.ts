@@ -258,7 +258,8 @@ export function transformModule(context: TransformationContext): (x: SourceFile 
         startLexicalEnvironment();
 
         const statements: Statement[] = [];
-        const ensureUseStrict = getStrictOptionValue(compilerOptions, "alwaysStrict") || isExternalModule(currentSourceFile);
+        const ensureUseStrict = getStrictOptionValue(compilerOptions, "alwaysStrict") ||
+            isExternalModule(currentSourceFile);
         const statementOffset = factory.copyPrologue(
             node.statements,
             statements,
@@ -297,7 +298,10 @@ export function transformModule(context: TransformationContext): (x: SourceFile 
         addExportEqualsIfNeeded(statements, /*emitAsReturn*/ false);
         insertStatementsAfterStandardPrologue(statements, endLexicalEnvironment());
 
-        const updated = factory.updateSourceFile(node, setTextRange(factory.createNodeArray(statements), node.statements));
+        const updated = factory.updateSourceFile(
+            node,
+            setTextRange(factory.createNodeArray(statements), node.statements),
+        );
         addEmitHelpers(updated, context.readEmitHelpers());
         return updated;
     }
@@ -429,7 +433,10 @@ export function transformModule(context: TransformationContext): (x: SourceFile 
                             factory.createLogicalAnd(
                                 factory.createTypeCheck(factory.createIdentifier("module"), "object"),
                                 factory.createTypeCheck(
-                                    factory.createPropertyAccessExpression(factory.createIdentifier("module"), "exports"),
+                                    factory.createPropertyAccessExpression(
+                                        factory.createIdentifier("module"),
+                                        "exports",
+                                    ),
                                     "object",
                                 ),
                             ),
@@ -567,7 +574,10 @@ export function transformModule(context: TransformationContext): (x: SourceFile 
      * @param node The source file.
      * @param includeNonAmdDependencies A value indicating whether to include non-AMD dependencies.
      */
-    function collectAsynchronousDependencies(node: SourceFile, includeNonAmdDependencies: boolean): AsynchronousDependencies {
+    function collectAsynchronousDependencies(
+        node: SourceFile,
+        includeNonAmdDependencies: boolean,
+    ): AsynchronousDependencies {
         // names of modules with corresponding parameter in the factory function
         const aliasedModuleNames: Expression[] = [];
 
@@ -584,7 +594,11 @@ export function transformModule(context: TransformationContext): (x: SourceFile 
             if (amdDependency.name) {
                 aliasedModuleNames.push(factory.createStringLiteral(amdDependency.path));
                 importAliasNames.push(
-                    factory.createParameterDeclaration(/*modifiers*/ undefined, /*dotDotDotToken*/ undefined, amdDependency.name),
+                    factory.createParameterDeclaration(
+                        /*modifiers*/ undefined,
+                        /*dotDotDotToken*/ undefined,
+                        amdDependency.name,
+                    ),
                 );
             }
             else {
@@ -655,7 +669,12 @@ export function transformModule(context: TransformationContext): (x: SourceFile 
         startLexicalEnvironment();
 
         const statements: Statement[] = [];
-        const statementOffset = factory.copyPrologue(node.statements, statements, /*ensureUseStrict*/ true, topLevelVisitor);
+        const statementOffset = factory.copyPrologue(
+            node.statements,
+            statements,
+            /*ensureUseStrict*/ true,
+            topLevelVisitor,
+        );
 
         if (shouldEmitUnderscoreUnderscoreESModule()) {
             append(statements, createUnderscoreUnderscoreESModule());
@@ -865,7 +884,10 @@ export function transformModule(context: TransformationContext): (x: SourceFile 
                 break;
             case SyntaxKind.PrefixUnaryExpression:
             case SyntaxKind.PostfixUnaryExpression:
-                return visitPreOrPostfixUnaryExpression(node as PrefixUnaryExpression | PostfixUnaryExpression, valueIsDiscarded);
+                return visitPreOrPostfixUnaryExpression(
+                    node as PrefixUnaryExpression | PostfixUnaryExpression,
+                    valueIsDiscarded,
+                );
         }
 
         return visitEachChild(node, visitor, context);
@@ -960,7 +982,9 @@ export function transformModule(context: TransformationContext): (x: SourceFile 
                 const condition = visitNode(node.condition, visitor, isExpression);
                 const incrementor = visitNode(node.incrementor, discardedValueVisitor, isExpression);
                 const body = visitIterationBody(node.statement, isTopLevel ? topLevelNestedVisitor : visitor, context);
-                statements.push(factory.updateForStatement(node, /*initializer*/ undefined, condition, incrementor, body));
+                statements.push(
+                    factory.updateForStatement(node, /*initializer*/ undefined, condition, incrementor, body),
+                );
                 return statements;
             }
         }
@@ -1200,7 +1224,10 @@ export function transformModule(context: TransformationContext): (x: SourceFile 
         );
     }
 
-    function visitPreOrPostfixUnaryExpression(node: PrefixUnaryExpression | PostfixUnaryExpression, valueIsDiscarded: boolean) {
+    function visitPreOrPostfixUnaryExpression(
+        node: PrefixUnaryExpression | PostfixUnaryExpression,
+        valueIsDiscarded: boolean,
+    ) {
         // When we see a prefix or postfix increment expression whose operand is an exported
         // symbol, we should ensure all exports of that symbol are updated with the correct
         // value.
@@ -1377,7 +1404,9 @@ export function transformModule(context: TransformationContext): (x: SourceFile 
             }
         }
 
-        const promise = factory.createNewExpression(factory.createIdentifier("Promise"), /*typeArguments*/ undefined, [func]);
+        const promise = factory.createNewExpression(factory.createIdentifier("Promise"), /*typeArguments*/ undefined, [
+            func,
+        ]);
         if (getESModuleInterop(compilerOptions)) {
             return factory.createCallExpression(
                 factory.createPropertyAccessExpression(promise, factory.createIdentifier("then")),
@@ -1472,7 +1501,10 @@ export function transformModule(context: TransformationContext): (x: SourceFile 
     }
 
     function getHelperExpressionForExport(node: ExportDeclaration, innerExpr: Expression) {
-        if (!getESModuleInterop(compilerOptions) || getInternalEmitFlags(node) & InternalEmitFlags.NeverApplyImportHelper) {
+        if (
+            !getESModuleInterop(compilerOptions) ||
+            getInternalEmitFlags(node) & InternalEmitFlags.NeverApplyImportHelper
+        ) {
             return innerExpr;
         }
         if (getExportNeedsImportStarHelper(node)) {
@@ -1482,7 +1514,10 @@ export function transformModule(context: TransformationContext): (x: SourceFile 
     }
 
     function getHelperExpressionForImport(node: ImportDeclaration, innerExpr: Expression) {
-        if (!getESModuleInterop(compilerOptions) || getInternalEmitFlags(node) & InternalEmitFlags.NeverApplyImportHelper) {
+        if (
+            !getESModuleInterop(compilerOptions) ||
+            getInternalEmitFlags(node) & InternalEmitFlags.NeverApplyImportHelper
+        ) {
             return innerExpr;
         }
         if (getImportNeedsImportStarHelper(node)) {
@@ -1505,7 +1540,10 @@ export function transformModule(context: TransformationContext): (x: SourceFile 
         if (moduleKind !== ModuleKind.AMD) {
             if (!node.importClause) {
                 // import "mod";
-                return setOriginalNode(setTextRange(factory.createExpressionStatement(createRequireCall(node)), node), node);
+                return setOriginalNode(
+                    setTextRange(factory.createExpressionStatement(createRequireCall(node)), node),
+                    node,
+                );
             }
             else {
                 const variables: VariableDeclaration[] = [];
@@ -1601,7 +1639,14 @@ export function transformModule(context: TransformationContext): (x: SourceFile 
      * @param importNode The declararation to import.
      */
     function createRequireCall(importNode: ImportDeclaration | ImportEqualsDeclaration | ExportDeclaration) {
-        const moduleName = getExternalModuleNameLiteral(factory, importNode, currentSourceFile, host, resolver, compilerOptions);
+        const moduleName = getExternalModuleNameLiteral(
+            factory,
+            importNode,
+            currentSourceFile,
+            host,
+            resolver,
+            compilerOptions,
+        );
         const args: Expression[] = [];
         if (moduleName) {
             args.push(moduleName);
@@ -2117,7 +2162,11 @@ export function transformModule(context: TransformationContext): (x: SourceFile 
         statements: Statement[] | undefined,
         node: VariableStatement,
     ): Statement[] | undefined {
-        return appendExportsOfVariableDeclarationList(statements, node.declarationList, /*isForInOrOfInitializer*/ false);
+        return appendExportsOfVariableDeclarationList(
+            statements,
+            node.declarationList,
+            /*isForInOrOfInitializer*/ false,
+        );
     }
 
     /**
@@ -2171,7 +2220,8 @@ export function transformModule(context: TransformationContext): (x: SourceFile 
             }
         }
         else if (
-            !isGeneratedIdentifier(decl.name) && (!isVariableDeclaration(decl) || decl.initializer || isForInOrOfInitializer)
+            !isGeneratedIdentifier(decl.name) &&
+            (!isVariableDeclaration(decl) || decl.initializer || isForInOrOfInitializer)
         ) {
             statements = appendExportsOfDeclaration(statements, new IdentifierNameMap(), decl);
         }
@@ -2200,7 +2250,13 @@ export function transformModule(context: TransformationContext): (x: SourceFile 
         if (hasSyntacticModifier(decl, ModifierFlags.Export)) {
             const exportName = hasSyntacticModifier(decl, ModifierFlags.Default) ? factory.createIdentifier("default")
                 : factory.getDeclarationName(decl);
-            statements = appendExportStatement(statements, seen, exportName, factory.getLocalName(decl), /*location*/ decl);
+            statements = appendExportStatement(
+                statements,
+                seen,
+                exportName,
+                factory.getLocalName(decl),
+                /*location*/ decl,
+            );
         }
 
         if (decl.name) {
@@ -2265,7 +2321,10 @@ export function transformModule(context: TransformationContext): (x: SourceFile 
     ): Statement[] | undefined {
         if (!seen.has(exportName)) {
             seen.set(exportName, true);
-            statements = append(statements, createExportStatement(exportName, expression, location, allowComments, liveBinding));
+            statements = append(
+                statements,
+                createExportStatement(exportName, expression, location, allowComments, liveBinding),
+            );
         }
         return statements;
     }
@@ -2545,7 +2604,9 @@ export function transformModule(context: TransformationContext): (x: SourceFile 
                     const name = importDeclaration.propertyName || importDeclaration.name;
                     return setTextRange(
                         factory.createPropertyAccessExpression(
-                            factory.getGeneratedNameForNode(importDeclaration.parent?.parent?.parent || importDeclaration),
+                            factory.getGeneratedNameForNode(
+                                importDeclaration.parent?.parent?.parent || importDeclaration,
+                            ),
                             factory.cloneNode(name),
                         ),
                         /*location*/ node,

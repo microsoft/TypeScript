@@ -145,11 +145,13 @@ const errorCodes = [
     Diagnostics.Rest_parameter_0_implicitly_has_an_any_type_but_a_better_type_may_be_inferred_from_usage.code,
 
     // Get Accessor declarations
-    Diagnostics.Property_0_implicitly_has_type_any_but_a_better_type_for_its_get_accessor_may_be_inferred_from_usage.code,
+    Diagnostics.Property_0_implicitly_has_type_any_but_a_better_type_for_its_get_accessor_may_be_inferred_from_usage
+        .code,
     Diagnostics._0_implicitly_has_an_1_return_type_but_a_better_type_may_be_inferred_from_usage.code,
 
     // Set Accessor declarations
-    Diagnostics.Property_0_implicitly_has_type_any_but_a_better_type_for_its_set_accessor_may_be_inferred_from_usage.code,
+    Diagnostics.Property_0_implicitly_has_type_any_but_a_better_type_for_its_set_accessor_may_be_inferred_from_usage
+        .code,
 
     // Property declarations
     Diagnostics.Member_0_implicitly_has_an_1_type_but_a_better_type_may_be_inferred_from_usage.code,
@@ -226,22 +228,28 @@ function getDiagnostic(errorCode: number, token: Node): DiagnosticMessage {
 /** Map suggestion code to error code */
 function mapSuggestionDiagnostic(errorCode: number) {
     switch (errorCode) {
-        case Diagnostics.Variable_0_implicitly_has_type_1_in_some_locations_but_a_better_type_may_be_inferred_from_usage.code:
-            return Diagnostics.Variable_0_implicitly_has_type_1_in_some_locations_where_its_type_cannot_be_determined.code;
+        case Diagnostics.Variable_0_implicitly_has_type_1_in_some_locations_but_a_better_type_may_be_inferred_from_usage
+            .code:
+            return Diagnostics.Variable_0_implicitly_has_type_1_in_some_locations_where_its_type_cannot_be_determined
+                .code;
         case Diagnostics.Variable_0_implicitly_has_an_1_type_but_a_better_type_may_be_inferred_from_usage.code:
             return Diagnostics.Variable_0_implicitly_has_an_1_type.code;
         case Diagnostics.Parameter_0_implicitly_has_an_1_type_but_a_better_type_may_be_inferred_from_usage.code:
             return Diagnostics.Parameter_0_implicitly_has_an_1_type.code;
         case Diagnostics.Rest_parameter_0_implicitly_has_an_any_type_but_a_better_type_may_be_inferred_from_usage.code:
             return Diagnostics.Rest_parameter_0_implicitly_has_an_any_type.code;
-        case Diagnostics.Property_0_implicitly_has_type_any_but_a_better_type_for_its_get_accessor_may_be_inferred_from_usage
+        case Diagnostics
+            .Property_0_implicitly_has_type_any_but_a_better_type_for_its_get_accessor_may_be_inferred_from_usage
             .code:
-            return Diagnostics.Property_0_implicitly_has_type_any_because_its_get_accessor_lacks_a_return_type_annotation.code;
+            return Diagnostics
+                .Property_0_implicitly_has_type_any_because_its_get_accessor_lacks_a_return_type_annotation.code;
         case Diagnostics._0_implicitly_has_an_1_return_type_but_a_better_type_may_be_inferred_from_usage.code:
             return Diagnostics._0_which_lacks_return_type_annotation_implicitly_has_an_1_return_type.code;
-        case Diagnostics.Property_0_implicitly_has_type_any_but_a_better_type_for_its_set_accessor_may_be_inferred_from_usage
+        case Diagnostics
+            .Property_0_implicitly_has_type_any_but_a_better_type_for_its_set_accessor_may_be_inferred_from_usage
             .code:
-            return Diagnostics.Property_0_implicitly_has_type_any_because_its_set_accessor_lacks_a_parameter_type_annotation.code;
+            return Diagnostics
+                .Property_0_implicitly_has_type_any_because_its_set_accessor_lacks_a_parameter_type_annotation.code;
         case Diagnostics.Member_0_implicitly_has_an_1_type_but_a_better_type_may_be_inferred_from_usage.code:
             return Diagnostics.Member_0_implicitly_has_an_1_type.code;
     }
@@ -331,7 +339,15 @@ function doChange(
         // Parameter declarations
         case Diagnostics.Parameter_0_implicitly_has_an_1_type.code:
             if (isSetAccessorDeclaration(containingFunction)) {
-                annotateSetAccessor(changes, importAdder, sourceFile, containingFunction, program, host, cancellationToken);
+                annotateSetAccessor(
+                    changes,
+                    importAdder,
+                    sourceFile,
+                    containingFunction,
+                    program,
+                    host,
+                    cancellationToken,
+                );
                 declaration = containingFunction;
                 break;
             }
@@ -339,13 +355,23 @@ function doChange(
         case Diagnostics.Rest_parameter_0_implicitly_has_an_any_type.code:
             if (markSeen(containingFunction)) {
                 const param = cast(parent, isParameter);
-                annotateParameters(changes, importAdder, sourceFile, param, containingFunction, program, host, cancellationToken);
+                annotateParameters(
+                    changes,
+                    importAdder,
+                    sourceFile,
+                    param,
+                    containingFunction,
+                    program,
+                    host,
+                    cancellationToken,
+                );
                 declaration = param;
             }
             break;
 
         // Get Accessor declarations
-        case Diagnostics.Property_0_implicitly_has_type_any_because_its_get_accessor_lacks_a_return_type_annotation.code:
+        case Diagnostics.Property_0_implicitly_has_type_any_because_its_get_accessor_lacks_a_return_type_annotation
+            .code:
         case Diagnostics._0_which_lacks_return_type_annotation_implicitly_has_an_1_return_type.code:
             if (isGetAccessorDeclaration(containingFunction) && isIdentifier(containingFunction.name)) {
                 annotate(
@@ -362,9 +388,18 @@ function doChange(
             break;
 
         // Set Accessor declarations
-        case Diagnostics.Property_0_implicitly_has_type_any_because_its_set_accessor_lacks_a_parameter_type_annotation.code:
+        case Diagnostics.Property_0_implicitly_has_type_any_because_its_set_accessor_lacks_a_parameter_type_annotation
+            .code:
             if (isSetAccessorDeclaration(containingFunction)) {
-                annotateSetAccessor(changes, importAdder, sourceFile, containingFunction, program, host, cancellationToken);
+                annotateSetAccessor(
+                    changes,
+                    importAdder,
+                    sourceFile,
+                    containingFunction,
+                    program,
+                    host,
+                    cancellationToken,
+                );
                 declaration = containingFunction;
             }
             break;
@@ -421,7 +456,12 @@ function annotateParameters(
         return;
     }
 
-    const parameterInferences = inferTypeForParametersFromUsage(containingFunction, sourceFile, program, cancellationToken);
+    const parameterInferences = inferTypeForParametersFromUsage(
+        containingFunction,
+        sourceFile,
+        program,
+        cancellationToken,
+    );
     Debug.assert(
         containingFunction.parameters.length === parameterInferences.length,
         "Parameter count and inference count should match",
@@ -564,7 +604,10 @@ function tryReplaceImportTypeNodeWithAutoImport(
 ): boolean {
     const importableReference = tryGetAutoImportableReferenceFromTypeNode(typeNode, scriptTarget);
     if (importableReference && changes.tryInsertTypeAnnotation(sourceFile, declaration, importableReference.typeNode)) {
-        forEach(importableReference.symbols, s => importAdder.addImportFromExportedSymbol(s, /*isValidTypeOnlyUseSite*/ true));
+        forEach(
+            importableReference.symbols,
+            s => importAdder.addImportFromExportedSymbol(s, /*isValidTypeOnlyUseSite*/ true),
+        );
         return true;
     }
     return false;
@@ -601,19 +644,31 @@ function annotateJSDocParameters(
     }
 
     if (isArrowFunction(signature) || isFunctionExpression(signature)) {
-        const needParens = isArrowFunction(signature) && !findChildOfKind(signature, SyntaxKind.OpenParenToken, sourceFile);
+        const needParens = isArrowFunction(signature) &&
+            !findChildOfKind(signature, SyntaxKind.OpenParenToken, sourceFile);
         if (needParens) {
-            changes.insertNodeBefore(sourceFile, first(signature.parameters), factory.createToken(SyntaxKind.OpenParenToken));
+            changes.insertNodeBefore(
+                sourceFile,
+                first(signature.parameters),
+                factory.createToken(SyntaxKind.OpenParenToken),
+            );
         }
 
         forEach(inferences, ({ typeNode, param }) => {
-            const typeTag = factory.createJSDocTypeTag(/*tagName*/ undefined, factory.createJSDocTypeExpression(typeNode));
+            const typeTag = factory.createJSDocTypeTag(
+                /*tagName*/ undefined,
+                factory.createJSDocTypeExpression(typeNode),
+            );
             const jsDoc = factory.createJSDocComment(/*comment*/ undefined, [typeTag]);
             changes.insertNodeAt(sourceFile, param.getStart(sourceFile), jsDoc, { suffix: " " });
         });
 
         if (needParens) {
-            changes.insertNodeAfter(sourceFile, last(signature.parameters), factory.createToken(SyntaxKind.CloseParenToken));
+            changes.insertNodeAfter(
+                sourceFile,
+                last(signature.parameters),
+                factory.createToken(SyntaxKind.CloseParenToken),
+            );
         }
     }
     else {
@@ -687,9 +742,10 @@ function getFunctionReferences(
         case SyntaxKind.ArrowFunction:
         case SyntaxKind.FunctionExpression:
             const parent = containingFunction.parent;
-            searchToken = (isVariableDeclaration(parent) || isPropertyDeclaration(parent)) && isIdentifier(parent.name) ?
-                parent.name :
-                containingFunction.name;
+            searchToken =
+                (isVariableDeclaration(parent) || isPropertyDeclaration(parent)) && isIdentifier(parent.name) ?
+                    parent.name :
+                    containingFunction.name;
             break;
         case SyntaxKind.FunctionDeclaration:
         case SyntaxKind.MethodDeclaration:
@@ -711,7 +767,11 @@ interface ParameterInference {
     readonly isOptional?: boolean;
 }
 
-function inferTypeFromReferences(program: Program, references: readonly Identifier[], cancellationToken: CancellationToken) {
+function inferTypeFromReferences(
+    program: Program,
+    references: readonly Identifier[],
+    cancellationToken: CancellationToken,
+) {
     const checker = program.getTypeChecker();
     const builtinConstructors: { [s: string]: (t: Type) => Type; } = {
         string: () => checker.getStringType(),
@@ -834,7 +894,9 @@ function inferTypeFromReferences(program: Program, references: readonly Identifi
                 }
             }
             if (isIdentifier(parameter.name)) {
-                const inferred = inferTypesFromReferencesSingle(getReferences(parameter.name, program, cancellationToken));
+                const inferred = inferTypesFromReferencesSingle(
+                    getReferences(parameter.name, program, cancellationToken),
+                );
                 types.push(...(isRest ? mapDefined(inferred, checker.getElementTypeOfArrayType) : inferred));
             }
             const type = combineTypes(types);
@@ -1103,7 +1165,11 @@ function inferTypeFromReferences(program: Program, references: readonly Identifi
         usage.properties.set(name, propertyUsage);
     }
 
-    function inferTypeFromPropertyElementExpression(parent: ElementAccessExpression, node: Expression, usage: Usage): void {
+    function inferTypeFromPropertyElementExpression(
+        parent: ElementAccessExpression,
+        node: Expression,
+        usage: Usage,
+    ): void {
         if (node === parent.argumentExpression) {
             usage.isNumberOrString = true;
             return;
@@ -1121,7 +1187,10 @@ function inferTypeFromReferences(program: Program, references: readonly Identifi
         }
     }
 
-    function inferTypeFromPropertyAssignment(assignment: PropertyAssignment | ShorthandPropertyAssignment, usage: Usage) {
+    function inferTypeFromPropertyAssignment(
+        assignment: PropertyAssignment | ShorthandPropertyAssignment,
+        usage: Usage,
+    ) {
         const nodeWithRealType = isVariableDeclaration(assignment.parent.parent) ?
             assignment.parent.parent :
             assignment.parent;
@@ -1183,7 +1252,9 @@ function inferTypeFromReferences(program: Program, references: readonly Identifi
             good = good.filter(i => !(getObjectFlags(i) & ObjectFlags.Anonymous));
             good.push(combineAnonymousTypes(anons));
         }
-        return checker.getWidenedType(checker.getUnionType(good.map(checker.getBaseTypeOfLiteralType), UnionReduction.Subtype));
+        return checker.getWidenedType(
+            checker.getUnionType(good.map(checker.getBaseTypeOfLiteralType), UnionReduction.Subtype),
+        );
     }
 
     function combineAnonymousTypes(anons: AnonymousType[]) {
@@ -1201,7 +1272,8 @@ function inferTypeFromReferences(program: Program, references: readonly Identifi
             for (const p of checker.getPropertiesOfType(anon)) {
                 props.add(
                     p.escapedName,
-                    p.valueDeclaration ? checker.getTypeOfSymbolAtLocation(p, p.valueDeclaration) : checker.getAnyType(),
+                    p.valueDeclaration ? checker.getTypeOfSymbolAtLocation(p, p.valueDeclaration)
+                        : checker.getAnyType(),
                 );
             }
             calls.push(...checker.getSignaturesOfType(anon, SignatureKind.Call));
@@ -1226,12 +1298,20 @@ function inferTypeFromReferences(program: Program, references: readonly Identifi
         const indexInfos = [];
         if (stringIndices.length) {
             indexInfos.push(
-                checker.createIndexInfo(checker.getStringType(), checker.getUnionType(stringIndices), stringIndexReadonly),
+                checker.createIndexInfo(
+                    checker.getStringType(),
+                    checker.getUnionType(stringIndices),
+                    stringIndexReadonly,
+                ),
             );
         }
         if (numberIndices.length) {
             indexInfos.push(
-                checker.createIndexInfo(checker.getNumberType(), checker.getUnionType(numberIndices), numberIndexReadonly),
+                checker.createIndexInfo(
+                    checker.getNumberType(),
+                    checker.getUnionType(numberIndices),
+                    numberIndexReadonly,
+                ),
             );
         }
         return checker.createAnonymousType(
@@ -1292,9 +1372,19 @@ function inferTypeFromReferences(program: Program, references: readonly Identifi
         const callSignatures: Signature[] = usage.calls ? [getSignatureFromCalls(usage.calls)] : [];
         const constructSignatures: Signature[] = usage.constructs ? [getSignatureFromCalls(usage.constructs)] : [];
         const indexInfos = usage.stringIndex ?
-            [checker.createIndexInfo(checker.getStringType(), combineFromUsage(usage.stringIndex), /*isReadonly*/ false)]
+            [checker.createIndexInfo(
+                checker.getStringType(),
+                combineFromUsage(usage.stringIndex),
+                /*isReadonly*/ false,
+            )]
             : [];
-        return checker.createAnonymousType(/*symbol*/ undefined, members, callSignatures, constructSignatures, indexInfos);
+        return checker.createAnonymousType(
+            /*symbol*/ undefined,
+            members,
+            callSignatures,
+            constructSignatures,
+            indexInfos,
+        );
     }
 
     function inferNamedTypesFromProperties(usage: Usage): Type[] {
@@ -1350,9 +1440,14 @@ function inferTypeFromReferences(program: Program, references: readonly Identifi
             return [usageType];
         }
         else if (genericType.flags & TypeFlags.UnionOrIntersection) {
-            return flatMap((genericType as UnionOrIntersectionType).types, t => inferTypeParameters(t, usageType, typeParameter));
+            return flatMap(
+                (genericType as UnionOrIntersectionType).types,
+                t => inferTypeParameters(t, usageType, typeParameter),
+            );
         }
-        else if (getObjectFlags(genericType) & ObjectFlags.Reference && getObjectFlags(usageType) & ObjectFlags.Reference) {
+        else if (
+            getObjectFlags(genericType) & ObjectFlags.Reference && getObjectFlags(usageType) & ObjectFlags.Reference
+        ) {
             // this is wrong because we need a reference to the targetType to, so we can check that it's also a reference
             const genericArgs = checker.getTypeArguments(genericType as TypeReference);
             const usageArgs = checker.getTypeArguments(usageType as TypeReference);
@@ -1391,7 +1486,8 @@ function inferTypeFromReferences(program: Program, references: readonly Identifi
                 genericParamType = elementType;
             }
             const targetType = tryCast(usageParam, isTransientSymbol)?.links.type
-                || (usageParam.valueDeclaration ? checker.getTypeOfSymbolAtLocation(usageParam, usageParam.valueDeclaration)
+                || (usageParam.valueDeclaration ?
+                    checker.getTypeOfSymbolAtLocation(usageParam, usageParam.valueDeclaration)
                     : checker.getAnyType());
             types.push(...inferTypeParameters(genericParamType, targetType, typeParameter));
         }
@@ -1415,7 +1511,10 @@ function inferTypeFromReferences(program: Program, references: readonly Identifi
         const parameters: Symbol[] = [];
         const length = Math.max(...calls.map(c => c.argumentTypes.length));
         for (let i = 0; i < length; i++) {
-            const symbol = checker.createSymbol(SymbolFlags.FunctionScopedVariable, escapeLeadingUnderscores(`arg${i}`));
+            const symbol = checker.createSymbol(
+                SymbolFlags.FunctionScopedVariable,
+                escapeLeadingUnderscores(`arg${i}`),
+            );
             symbol.links.type = combineTypes(calls.map(call => call.argumentTypes[i] || checker.getUndefinedType()));
             if (calls.some(call => call.argumentTypes[i] === undefined)) {
                 symbol.flags |= SymbolFlags.Optional;

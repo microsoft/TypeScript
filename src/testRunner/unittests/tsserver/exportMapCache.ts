@@ -235,7 +235,11 @@ describe("unittests:: tsserver:: exportMapCache", () => {
             },
         });
 
-        baselineTsserverLogs("exportMapCache", "invalidates the cache when a file is opened with different contents", session);
+        baselineTsserverLogs(
+            "exportMapCache",
+            "invalidates the cache when a file is opened with different contents",
+            session,
+        );
     });
 });
 

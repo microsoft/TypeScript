@@ -371,7 +371,10 @@ describe("unittests:: tsserver:: watchEnvironment:: handles watch compiler optio
         function setup(configureHost?: boolean) {
             const configFile: File = {
                 path: `/user/username/projects/myproject/tsconfig.json`,
-                content: jsonToReadableText({ include: ["src"], watchOptions: { excludeDirectories: ["node_modules"] } }),
+                content: jsonToReadableText({
+                    include: ["src"],
+                    watchOptions: { excludeDirectories: ["node_modules"] },
+                }),
             };
             const { main, bar, foo } = setupFiles();
             const files = [libFile, main, bar, foo, configFile];
@@ -560,7 +563,10 @@ describe("unittests:: tsserver:: watchEnvironment:: perVolumeCasing", () => {
         host.getCanonicalFileName = s => ts.startsWith(s, "/Volumes/") ? s : ts.toFileNameLowerCase(s);
         host.ensureFileOrFolder({ path: "/Volumes/git/projects/project/foo.ts", content: `export const foo = "foo";` });
         host.writeFile("/Volumes/git/projects/project/tsconfig.json", "{ }");
-        host.writeFile("/Volumes/git/projects/project/package.json", jsonToReadableText({ name: "project", version: "1.0.0" }));
+        host.writeFile(
+            "/Volumes/git/projects/project/package.json",
+            jsonToReadableText({ name: "project", version: "1.0.0" }),
+        );
         const session = new TestSession(host);
         openFilesForSession(["/Volumes/git/projects/project/foo.ts"], session);
         host.writeFile("/Volumes/git/projects/project/Bar.ts", `export const bar = "bar";`);

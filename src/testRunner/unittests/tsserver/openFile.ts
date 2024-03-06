@@ -117,7 +117,10 @@ describe("unittests:: tsserver:: Open-file", () => {
         const host = createServerHost(files);
         const session = new TestSession(host);
         openFilesForSession([{ file: aFile, content: aFile.content, projectRootPath }], session);
-        openFilesForSession([{ file: aFile, content: `${aFile.content}export const y = 10;`, projectRootPath }], session);
+        openFilesForSession(
+            [{ file: aFile, content: `${aFile.content}export const y = 10;`, projectRootPath }],
+            session,
+        );
         baselineTsserverLogs("openfile", "can open same file again", session);
     });
 

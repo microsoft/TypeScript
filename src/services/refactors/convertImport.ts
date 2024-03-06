@@ -93,7 +93,10 @@ registerRefactor(refactorName, {
 
         return emptyArray;
     },
-    getEditsForAction: function getRefactorEditsToConvertBetweenNamedAndNamespacedImports(context, actionName): RefactorEditInfo {
+    getEditsForAction: function getRefactorEditsToConvertBetweenNamedAndNamespacedImports(
+        context,
+        actionName,
+    ): RefactorEditInfo {
         Debug.assert(some(getOwnValues(actions), action => action.name === actionName), "Unexpected action name");
         const info = getImportConversionInfo(context);
         Debug.assert(info && !isRefactorErrorInfo(info), "Expected applicable refactor info");
@@ -115,7 +118,8 @@ function getImportConversionInfo(
     const { file } = context;
     const span = getRefactorContextSpan(context);
     const token = getTokenAtPosition(file, span.start);
-    const importDecl = considerPartialSpans ? findAncestor(token, isImportDeclaration) : getParentNodeInSpan(token, file, span);
+    const importDecl = considerPartialSpans ? findAncestor(token, isImportDeclaration)
+        : getParentNodeInSpan(token, file, span);
     if (!importDecl || !isImportDeclaration(importDecl)) return { error: "Selection is not an import declaration." };
 
     const end = span.start + span.length;
@@ -163,7 +167,13 @@ function doChange(
         );
     }
     else {
-        doChangeNamedToNamespaceOrDefault(sourceFile, program, changes, info.import, info.convertTo === ImportKind.Default);
+        doChangeNamedToNamespaceOrDefault(
+            sourceFile,
+            program,
+            changes,
+            info.import,
+            info.convertTo === ImportKind.Default,
+        );
     }
 }
 
@@ -241,12 +251,16 @@ function doChangeNamespaceToNamed(
     }
 }
 
-function getRightOfPropertyAccessOrQualifiedName(propertyAccessOrQualifiedName: PropertyAccessExpression | QualifiedName) {
+function getRightOfPropertyAccessOrQualifiedName(
+    propertyAccessOrQualifiedName: PropertyAccessExpression | QualifiedName,
+) {
     return isPropertyAccessExpression(propertyAccessOrQualifiedName) ? propertyAccessOrQualifiedName.name
         : propertyAccessOrQualifiedName.right;
 }
 
-function getLeftOfPropertyAccessOrQualifiedName(propertyAccessOrQualifiedName: PropertyAccessExpression | QualifiedName) {
+function getLeftOfPropertyAccessOrQualifiedName(
+    propertyAccessOrQualifiedName: PropertyAccessExpression | QualifiedName,
+) {
     return isPropertyAccessExpression(propertyAccessOrQualifiedName) ? propertyAccessOrQualifiedName.expression
         : propertyAccessOrQualifiedName.left;
 }
@@ -299,7 +313,10 @@ export function doChangeNamedToNamespaceOrDefault(
     for (const element of toConvert.elements) {
         const propertyName = (element.propertyName || element.name).text;
         FindAllReferences.Core.eachSymbolReferenceInFile(element.name, checker, sourceFile, id => {
-            const access = factory.createPropertyAccessExpression(factory.createIdentifier(namespaceImportName), propertyName);
+            const access = factory.createPropertyAccessExpression(
+                factory.createIdentifier(namespaceImportName),
+                propertyName,
+            );
             if (isShorthandPropertyAssignment(id.parent)) {
                 changes.replaceNode(sourceFile, id.parent, factory.createPropertyAssignment(id.text, access));
             }

@@ -300,7 +300,10 @@ export function getPendingEmitKind(
     return result;
 }
 
-function hasSameKeys(map1: ReadonlyCollection<string> | undefined, map2: ReadonlyCollection<string> | undefined): boolean {
+function hasSameKeys(
+    map1: ReadonlyCollection<string> | undefined,
+    map2: ReadonlyCollection<string> | undefined,
+): boolean {
     // Has same size and every key is present in both maps
     return map1 === map2 ||
         map1 !== undefined && map2 !== undefined && map1.size === map2.size && !forEachKey(map1, key => !map2.has(key));
@@ -313,7 +316,11 @@ function createBuilderProgramState(
     newProgram: Program,
     oldState: Readonly<ReusableBuilderProgramState> | undefined,
 ): BuilderProgramState {
-    const state = BuilderState.create(newProgram, oldState, /*disableUseFileVersionAsSignature*/ false) as BuilderProgramState;
+    const state = BuilderState.create(
+        newProgram,
+        oldState,
+        /*disableUseFileVersionAsSignature*/ false,
+    ) as BuilderProgramState;
     state.program = newProgram;
     const compilerOptions = newProgram.getCompilerOptions();
     state.compilerOptions = compilerOptions;
@@ -384,7 +391,8 @@ function createBuilderProgramState(
                 oldReferencedMap && oldReferencedMap.getValues(sourceFilePath),
             ) ||
             // Referenced file was deleted in the new program
-            newReferences && forEachKey(newReferences, path => !state.fileInfos.has(path) && oldState!.fileInfos.has(path))
+            newReferences &&
+                forEachKey(newReferences, path => !state.fileInfos.has(path) && oldState!.fileInfos.has(path))
         ) {
             // Register file as changed file and do not copy semantic diagnostics, since all changed files need to be re-evaluated
             addFileToChangeSet(state, sourceFilePath);
@@ -530,27 +538,46 @@ function convertOrRepopulateDiagnosticMessageChain<T extends DiagnosticMessageCh
                 info.mode,
                 info.packageName || info.moduleReference,
             ),
-            next: convertOrRepopulateDiagnosticMessageChainArray(chain.next as T[], sourceFile, newProgram, repopulateInfo),
+            next: convertOrRepopulateDiagnosticMessageChainArray(
+                chain.next as T[],
+                sourceFile,
+                newProgram,
+                repopulateInfo,
+            ),
         };
     }
-    const next = convertOrRepopulateDiagnosticMessageChainArray(chain.next as T[], sourceFile, newProgram, repopulateInfo);
+    const next = convertOrRepopulateDiagnosticMessageChainArray(
+        chain.next as T[],
+        sourceFile,
+        newProgram,
+        repopulateInfo,
+    );
     return next === chain.next ? chain as DiagnosticMessageChain : { ...chain as DiagnosticMessageChain, next };
 }
 
-function convertOrRepopulateDiagnosticMessageChainArray<T extends DiagnosticMessageChain | ReusableDiagnosticMessageChain>(
+function convertOrRepopulateDiagnosticMessageChainArray<
+    T extends DiagnosticMessageChain | ReusableDiagnosticMessageChain,
+>(
     array: T[] | undefined,
     sourceFile: SourceFile | undefined,
     newProgram: Program,
     repopulateInfo: (chain: T) => RepopulateDiagnosticChainInfo | undefined,
 ): DiagnosticMessageChain[] | undefined {
-    return sameMap(array, chain => convertOrRepopulateDiagnosticMessageChain(chain, sourceFile, newProgram, repopulateInfo));
+    return sameMap(
+        array,
+        chain => convertOrRepopulateDiagnosticMessageChain(chain, sourceFile, newProgram, repopulateInfo),
+    );
 }
 
 function convertToDiagnostics(diagnostics: readonly ReusableDiagnostic[], newProgram: Program): readonly Diagnostic[] {
     if (!diagnostics.length) return emptyArray;
     let buildInfoDirectory: string | undefined;
     return diagnostics.map(diagnostic => {
-        const result: Diagnostic = convertToDiagnosticRelatedInformation(diagnostic, newProgram, toPathInBuildInfoDirectory);
+        const result: Diagnostic = convertToDiagnosticRelatedInformation(
+            diagnostic,
+            newProgram,
+            toPathInBuildInfoDirectory,
+        );
         result.reportsUnnecessary = diagnostic.reportsUnnecessary;
         result.reportsDeprecated = diagnostic.reportDeprecated;
         result.source = diagnostic.source;
@@ -558,7 +585,9 @@ function convertToDiagnostics(diagnostics: readonly ReusableDiagnostic[], newPro
         const { relatedInformation } = diagnostic;
         result.relatedInformation = relatedInformation ?
             relatedInformation.length ?
-                relatedInformation.map(r => convertToDiagnosticRelatedInformation(r, newProgram, toPathInBuildInfoDirectory)) :
+                relatedInformation.map(r =>
+                    convertToDiagnosticRelatedInformation(r, newProgram, toPathInBuildInfoDirectory)
+                ) :
                 [] :
             undefined;
         return result;
@@ -666,7 +695,11 @@ function getNextAffectedFile(
                 if (!seenAffectedFiles.has(affectedFile.resolvedPath)) {
                     // Set the next affected file as seen and remove the cached semantic diagnostics
                     state.affectedFilesIndex = affectedFilesIndex;
-                    addToAffectedFilesPendingEmit(state, affectedFile.resolvedPath, getBuilderFileEmit(state.compilerOptions));
+                    addToAffectedFilesPendingEmit(
+                        state,
+                        affectedFile.resolvedPath,
+                        getBuilderFileEmit(state.compilerOptions),
+                    );
                     handleDtsMayChangeOfAffectedFile(
                         state,
                         affectedFile,
@@ -1041,7 +1074,10 @@ export type ProgramBuilderInfoFilePendingEmit = ProgramBuildInfoFileId | [fileId
     emitKind: BuilderFileEmit,
 ];
 /** @internal */
-export type ProgramBuildInfoReferencedMap = [fileId: ProgramBuildInfoFileId, fileIdListId: ProgramBuildInfoFileIdListId][];
+export type ProgramBuildInfoReferencedMap = [
+    fileId: ProgramBuildInfoFileId,
+    fileIdListId: ProgramBuildInfoFileIdListId,
+][];
 /** @internal */
 export type ProgramMultiFileEmitBuildInfoBuilderStateFileInfo = Omit<BuilderState.FileInfo, "signature"> & {
     /**
@@ -1133,7 +1169,8 @@ function getBuildInfo(state: BuilderProgramState): BuildInfo {
         getNormalizedAbsolutePath(getTsBuildInfoEmitOutputFilePath(state.compilerOptions)!, currentDirectory),
     );
     // Convert the file name to Path here if we set the fileName instead to optimize multiple d.ts file emits and having to compute Canonical path
-    const latestChangedDtsFile = state.latestChangedDtsFile ? relativeToBuildInfoEnsuringAbsolutePath(state.latestChangedDtsFile)
+    const latestChangedDtsFile = state.latestChangedDtsFile ?
+        relativeToBuildInfoEnsuringAbsolutePath(state.latestChangedDtsFile)
         : undefined;
     const fileNames: string[] = [];
     const fileNameToFileId = new Map<string, ProgramBuildInfoFileId>();
@@ -1239,13 +1276,20 @@ function getBuildInfo(state: BuilderProgramState): BuildInfo {
 
     let exportedModulesMap: ProgramBuildInfoReferencedMap | undefined;
     if (state.exportedModulesMap) {
-        exportedModulesMap = mapDefined(arrayFrom(state.exportedModulesMap.keys()).sort(compareStringsCaseSensitive), key => {
-            const oldValue = state.oldExportedModulesMap?.get(key);
-            // Not in temporary cache, use existing value
-            if (oldValue === undefined) return [toFileId(key), toFileIdListId(state.exportedModulesMap!.getValues(key)!)];
-            if (oldValue) return [toFileId(key), toFileIdListId(oldValue)];
-            return undefined;
-        });
+        exportedModulesMap = mapDefined(
+            arrayFrom(state.exportedModulesMap.keys()).sort(compareStringsCaseSensitive),
+            key => {
+                const oldValue = state.oldExportedModulesMap?.get(key);
+                // Not in temporary cache, use existing value
+                if (oldValue === undefined) {
+                    return [toFileId(key), toFileIdListId(state.exportedModulesMap!.getValues(key)!)];
+                }
+                if (oldValue) {
+                    return [toFileId(key), toFileIdListId(oldValue)];
+                }
+                return undefined;
+            },
+        );
     }
 
     const semanticDiagnosticsPerFile = convertToProgramBuildInfoDiagnostics(state.semanticDiagnosticsPerFile);
@@ -1318,14 +1362,19 @@ function getBuildInfo(state: BuilderProgramState): BuildInfo {
         let fileIdListId = fileNamesToFileIdListId?.get(key);
         if (fileIdListId === undefined) {
             (fileIdsList ||= []).push(fileIds);
-            (fileNamesToFileIdListId ||= new Map()).set(key, fileIdListId = fileIdsList.length as ProgramBuildInfoFileIdListId);
+            (fileNamesToFileIdListId ||= new Map()).set(
+                key,
+                fileIdListId = fileIdsList.length as ProgramBuildInfoFileIdListId,
+            );
         }
         return fileIdListId;
     }
 
     function tryAddRoot(path: Path, fileId: ProgramBuildInfoFileId) {
         const file = state.program!.getSourceFile(path)!;
-        if (!state.program!.getFileIncludeReasons().get(file.path)!.some(r => r.kind === FileIncludeKind.RootFile)) return;
+        if (!state.program!.getFileIncludeReasons().get(file.path)!.some(r => r.kind === FileIncludeKind.RootFile)) {
+            return;
+        }
         // First fileId as is
         if (!root.length) return root.push(fileId);
         const last = root[root.length - 1];
@@ -1541,7 +1590,9 @@ export function computeSignatureWithDiagnostics(
     }
 
     function locationInfo(diagnostic: DiagnosticWithLocation) {
-        if (diagnostic.file.resolvedPath === sourceFile.resolvedPath) return `(${diagnostic.start},${diagnostic.length})`;
+        if (diagnostic.file.resolvedPath === sourceFile.resolvedPath) {
+            return `(${diagnostic.start},${diagnostic.length})`;
+        }
         if (sourceFileDirectory === undefined) sourceFileDirectory = getDirectoryPath(sourceFile.resolvedPath);
         return `${
             ensurePathIsNonModuleName(getRelativePathFromDirectory(
@@ -1665,7 +1716,10 @@ export function createBuilderProgram(
                     // Emit buildinfo if pending
                     if (!state.buildInfoEmitPending) return undefined;
                     const affected = state.program!;
-                    const result = affected.emitBuildInfo(writeFile || maybeBind(host, host.writeFile), cancellationToken);
+                    const result = affected.emitBuildInfo(
+                        writeFile || maybeBind(host, host.writeFile),
+                        cancellationToken,
+                    );
                     state.buildInfoEmitPending = false;
                     return { result, affected };
                 }
@@ -1711,9 +1765,12 @@ export function createBuilderProgram(
             // Update the pendingEmit for the file
             const existing = state.seenEmittedFiles?.get(affectedSourceFile.resolvedPath) || BuilderFileEmit.None;
             (state.seenEmittedFiles ??= new Map()).set(affectedSourceFile.resolvedPath, emitKind | existing);
-            const existingPending = state.affectedFilesPendingEmit?.get(affectedSourceFile.resolvedPath) || programEmitKind;
+            const existingPending = state.affectedFilesPendingEmit?.get(affectedSourceFile.resolvedPath) ||
+                programEmitKind;
             const pendingKind = getPendingEmitKind(existingPending, emitKind | existing);
-            if (pendingKind) (state.affectedFilesPendingEmit ??= new Map()).set(affectedSourceFile.resolvedPath, pendingKind);
+            if (pendingKind) {
+                (state.affectedFilesPendingEmit ??= new Map()).set(affectedSourceFile.resolvedPath, pendingKind);
+            }
             else state.affectedFilesPendingEmit?.delete(affectedSourceFile.resolvedPath);
             if (result.diagnostics.length) {
                 (state.emitDiagnosticsPerFile ??= new Map()).set(affectedSourceFile.resolvedPath, result.diagnostics);
@@ -1754,13 +1811,20 @@ export function createBuilderProgram(
                                     (state.filesChangingSignature ??= new Set()).add(file.resolvedPath);
                                 }
                                 if (state.exportedModulesMap) {
-                                    BuilderState.updateExportedModules(state, file, file.exportedModulesFromDeclarationEmit);
+                                    BuilderState.updateExportedModules(
+                                        state,
+                                        file,
+                                        file.exportedModulesFromDeclarationEmit,
+                                    );
                                 }
                                 if (state.affectedFiles) {
                                     // Keep old signature so we know what to undo if cancellation happens
                                     const existing = state.oldSignatures?.get(file.resolvedPath);
                                     if (existing === undefined) {
-                                        (state.oldSignatures ??= new Map()).set(file.resolvedPath, info.signature || false);
+                                        (state.oldSignatures ??= new Map()).set(
+                                            file.resolvedPath,
+                                            info.signature || false,
+                                        );
                                     }
                                     info.signature = signature;
                                 }
@@ -1797,7 +1861,10 @@ export function createBuilderProgram(
              * Compare to existing computed signature and store it or handle the changes in d.ts map option from before
              * returning undefined means that, we dont need to emit this d.ts file since its contents didnt change
              */
-            function handleNewSignature(oldSignatureFormat: EmitSignature | undefined, newSignature: string | undefined) {
+            function handleNewSignature(
+                oldSignatureFormat: EmitSignature | undefined,
+                newSignature: string | undefined,
+            ) {
                 const oldSignature = !oldSignatureFormat || isString(oldSignatureFormat) ? oldSignatureFormat
                     : oldSignatureFormat[0];
                 newSignature ??= computeSignature(text, host, data);
@@ -1854,7 +1921,12 @@ export function createBuilderProgram(
 
                 let affectedEmitResult: AffectedFileResult<EmitResult>;
                 while (
-                    affectedEmitResult = emitNextAffectedFile(writeFile, cancellationToken, emitOnlyDtsFiles, customTransformers)
+                    affectedEmitResult = emitNextAffectedFile(
+                        writeFile,
+                        cancellationToken,
+                        emitOnlyDtsFiles,
+                        customTransformers,
+                    )
                 ) {
                     emitSkipped = emitSkipped || affectedEmitResult.result.emitSkipped;
                     diagnostics = addRange(diagnostics, affectedEmitResult.result.diagnostics);
@@ -1924,7 +1996,10 @@ export function createBuilderProgram(
      * In case of SemanticDiagnosticsBuilderProgram if the source file is not provided,
      * it will iterate through all the affected files, to ensure that cache stays valid and yet provide a way to get all semantic diagnostics
      */
-    function getSemanticDiagnostics(sourceFile?: SourceFile, cancellationToken?: CancellationToken): readonly Diagnostic[] {
+    function getSemanticDiagnostics(
+        sourceFile?: SourceFile,
+        cancellationToken?: CancellationToken,
+    ): readonly Diagnostic[] {
         assertSourceFileOkWithoutNextAffectedCall(state, sourceFile);
         const compilerOptions = Debug.checkDefined(state.program).getCompilerOptions();
         if (compilerOptions.outFile) {
@@ -1951,14 +2026,20 @@ export function createBuilderProgram(
     }
 }
 
-function addToAffectedFilesPendingEmit(state: BuilderProgramState, affectedFilePendingEmit: Path, kind: BuilderFileEmit) {
+function addToAffectedFilesPendingEmit(
+    state: BuilderProgramState,
+    affectedFilePendingEmit: Path,
+    kind: BuilderFileEmit,
+) {
     const existingKind = state.affectedFilesPendingEmit?.get(affectedFilePendingEmit) || BuilderFileEmit.None;
     (state.affectedFilesPendingEmit ??= new Map()).set(affectedFilePendingEmit, existingKind | kind);
     state.emitDiagnosticsPerFile?.delete(affectedFilePendingEmit);
 }
 
 /** @internal */
-export function toBuilderStateFileInfoForMultiEmit(fileInfo: ProgramMultiFileEmitBuildInfoFileInfo): BuilderState.FileInfo {
+export function toBuilderStateFileInfoForMultiEmit(
+    fileInfo: ProgramMultiFileEmitBuildInfoFileInfo,
+): BuilderState.FileInfo {
     return isString(fileInfo) ?
         { version: fileInfo, signature: fileInfo, affectsGlobalScope: undefined, impliedFormat: undefined } :
         isString(fileInfo.signature) ?
@@ -2000,7 +2081,8 @@ export function createBuilderProgramUsingProgramBuildInfo(
     let state: ReusableBuilderProgramState;
     const filePaths = program.fileNames?.map(toPathInBuildInfoDirectory);
     let filePathsSetList: Set<Path>[] | undefined;
-    const latestChangedDtsFile = program.latestChangedDtsFile ? toAbsolutePath(program.latestChangedDtsFile) : undefined;
+    const latestChangedDtsFile = program.latestChangedDtsFile ? toAbsolutePath(program.latestChangedDtsFile)
+        : undefined;
     if (isProgramBundleEmitBuildInfo(program)) {
         const fileInfos = new Map<Path, BuilderState.FileInfo>();
         program.fileInfos.forEach((fileInfo, index) => {
@@ -2045,7 +2127,8 @@ export function createBuilderProgramUsingProgramBuildInfo(
                 );
             }
         });
-        const fullEmitForOptions = program.affectedFilesPendingEmit ? getBuilderFileEmit(program.options || {}) : undefined;
+        const fullEmitForOptions = program.affectedFilesPendingEmit ? getBuilderFileEmit(program.options || {})
+            : undefined;
         state = {
             fileInfos,
             compilerOptions: program.options ? convertToOptionsWithAbsolutePaths(program.options, toAbsolutePath) : {},

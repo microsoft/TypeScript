@@ -64,10 +64,18 @@ export function createBaseNodeFactory(): BaseNodeFactory {
     }
 
     function createBaseTokenNode(kind: SyntaxKind): Node {
-        return new (TokenConstructor || (TokenConstructor = objectAllocator.getTokenConstructor()))(kind, /*pos*/ -1, /*end*/ -1);
+        return new (TokenConstructor || (TokenConstructor = objectAllocator.getTokenConstructor()))(
+            kind,
+            /*pos*/ -1,
+            /*end*/ -1,
+        );
     }
 
     function createBaseNode(kind: SyntaxKind): Node {
-        return new (NodeConstructor || (NodeConstructor = objectAllocator.getNodeConstructor()))(kind, /*pos*/ -1, /*end*/ -1);
+        return new (NodeConstructor || (NodeConstructor = objectAllocator.getNodeConstructor()))(
+            kind,
+            /*pos*/ -1,
+            /*end*/ -1,
+        );
     }
 }

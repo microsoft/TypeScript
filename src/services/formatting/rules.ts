@@ -824,21 +824,30 @@ export function getAllRules(): RuleSpec[] {
             "SpaceAfterOpenParen",
             SyntaxKind.OpenParenToken,
             anyToken,
-            [isOptionEnabled("insertSpaceAfterOpeningAndBeforeClosingNonemptyParenthesis"), isNonJsxSameLineTokenContext],
+            [
+                isOptionEnabled("insertSpaceAfterOpeningAndBeforeClosingNonemptyParenthesis"),
+                isNonJsxSameLineTokenContext,
+            ],
             RuleAction.InsertSpace,
         ),
         rule(
             "SpaceBeforeCloseParen",
             anyToken,
             SyntaxKind.CloseParenToken,
-            [isOptionEnabled("insertSpaceAfterOpeningAndBeforeClosingNonemptyParenthesis"), isNonJsxSameLineTokenContext],
+            [
+                isOptionEnabled("insertSpaceAfterOpeningAndBeforeClosingNonemptyParenthesis"),
+                isNonJsxSameLineTokenContext,
+            ],
             RuleAction.InsertSpace,
         ),
         rule(
             "SpaceBetweenOpenParens",
             SyntaxKind.OpenParenToken,
             SyntaxKind.OpenParenToken,
-            [isOptionEnabled("insertSpaceAfterOpeningAndBeforeClosingNonemptyParenthesis"), isNonJsxSameLineTokenContext],
+            [
+                isOptionEnabled("insertSpaceAfterOpeningAndBeforeClosingNonemptyParenthesis"),
+                isNonJsxSameLineTokenContext,
+            ],
             RuleAction.InsertSpace,
         ),
         rule(
@@ -917,14 +926,20 @@ export function getAllRules(): RuleSpec[] {
             "SpaceAfterOpenBrace",
             SyntaxKind.OpenBraceToken,
             anyToken,
-            [isOptionEnabledOrUndefined("insertSpaceAfterOpeningAndBeforeClosingNonemptyBraces"), isBraceWrappedContext],
+            [
+                isOptionEnabledOrUndefined("insertSpaceAfterOpeningAndBeforeClosingNonemptyBraces"),
+                isBraceWrappedContext,
+            ],
             RuleAction.InsertSpace,
         ),
         rule(
             "SpaceBeforeCloseBrace",
             anyToken,
             SyntaxKind.CloseBraceToken,
-            [isOptionEnabledOrUndefined("insertSpaceAfterOpeningAndBeforeClosingNonemptyBraces"), isBraceWrappedContext],
+            [
+                isOptionEnabledOrUndefined("insertSpaceAfterOpeningAndBeforeClosingNonemptyBraces"),
+                isBraceWrappedContext,
+            ],
             RuleAction.InsertSpace,
         ),
         rule(
@@ -978,14 +993,20 @@ export function getAllRules(): RuleSpec[] {
             "SpaceBeforeTemplateMiddleAndTail",
             anyToken,
             [SyntaxKind.TemplateMiddle, SyntaxKind.TemplateTail],
-            [isOptionEnabled("insertSpaceAfterOpeningAndBeforeClosingTemplateStringBraces"), isNonJsxSameLineTokenContext],
+            [
+                isOptionEnabled("insertSpaceAfterOpeningAndBeforeClosingTemplateStringBraces"),
+                isNonJsxSameLineTokenContext,
+            ],
             RuleAction.InsertSpace,
         ),
         rule(
             "NoSpaceAfterTemplateHeadAndMiddle",
             [SyntaxKind.TemplateHead, SyntaxKind.TemplateMiddle],
             anyToken,
-            [isOptionDisabledOrUndefined("insertSpaceAfterOpeningAndBeforeClosingTemplateStringBraces"), isNonJsxTextContext],
+            [
+                isOptionDisabledOrUndefined("insertSpaceAfterOpeningAndBeforeClosingTemplateStringBraces"),
+                isNonJsxTextContext,
+            ],
             RuleAction.DeleteSpace,
             RuleFlags.CanDeleteNewLines,
         ),
@@ -1058,7 +1079,11 @@ export function getAllRules(): RuleSpec[] {
             "NoSpaceAfterSemicolonInFor",
             SyntaxKind.SemicolonToken,
             anyToken,
-            [isOptionDisabledOrUndefined("insertSpaceAfterSemicolonInForStatements"), isNonJsxSameLineTokenContext, isForContext],
+            [
+                isOptionDisabledOrUndefined("insertSpaceAfterSemicolonInForStatements"),
+                isNonJsxSameLineTokenContext,
+                isForContext,
+            ],
             RuleAction.DeleteSpace,
         ),
 
@@ -1067,14 +1092,22 @@ export function getAllRules(): RuleSpec[] {
             "SpaceBeforeBinaryOperator",
             anyToken,
             binaryOperators,
-            [isOptionEnabled("insertSpaceBeforeAndAfterBinaryOperators"), isNonJsxSameLineTokenContext, isBinaryOpContext],
+            [
+                isOptionEnabled("insertSpaceBeforeAndAfterBinaryOperators"),
+                isNonJsxSameLineTokenContext,
+                isBinaryOpContext,
+            ],
             RuleAction.InsertSpace,
         ),
         rule(
             "SpaceAfterBinaryOperator",
             binaryOperators,
             anyToken,
-            [isOptionEnabled("insertSpaceBeforeAndAfterBinaryOperators"), isNonJsxSameLineTokenContext, isBinaryOpContext],
+            [
+                isOptionEnabled("insertSpaceBeforeAndAfterBinaryOperators"),
+                isNonJsxSameLineTokenContext,
+                isBinaryOpContext,
+            ],
             RuleAction.InsertSpace,
         ),
         rule(
@@ -1104,7 +1137,11 @@ export function getAllRules(): RuleSpec[] {
             "SpaceBeforeOpenParenInFuncDecl",
             anyToken,
             SyntaxKind.OpenParenToken,
-            [isOptionEnabled("insertSpaceBeforeFunctionParenthesis"), isNonJsxSameLineTokenContext, isFunctionDeclContext],
+            [
+                isOptionEnabled("insertSpaceBeforeFunctionParenthesis"),
+                isNonJsxSameLineTokenContext,
+                isFunctionDeclContext,
+            ],
             RuleAction.InsertSpace,
         ),
         rule(
@@ -1124,7 +1161,11 @@ export function getAllRules(): RuleSpec[] {
             "NewLineBeforeOpenBraceInControl",
             controlOpenBraceLeftTokenRange,
             SyntaxKind.OpenBraceToken,
-            [isOptionEnabled("placeOpenBraceOnNewLineForControlBlocks"), isControlDeclContext, isBeforeMultilineBlockContext],
+            [
+                isOptionEnabled("placeOpenBraceOnNewLineForControlBlocks"),
+                isControlDeclContext,
+                isBeforeMultilineBlockContext,
+            ],
             RuleAction.InsertNewLine,
             RuleFlags.CanDeleteNewLines,
         ),
@@ -1135,7 +1176,11 @@ export function getAllRules(): RuleSpec[] {
             "NewLineBeforeOpenBraceInFunction",
             functionOpenBraceLeftTokenRange,
             SyntaxKind.OpenBraceToken,
-            [isOptionEnabled("placeOpenBraceOnNewLineForFunctions"), isFunctionDeclContext, isBeforeMultilineBlockContext],
+            [
+                isOptionEnabled("placeOpenBraceOnNewLineForFunctions"),
+                isFunctionDeclContext,
+                isBeforeMultilineBlockContext,
+            ],
             RuleAction.InsertNewLine,
             RuleFlags.CanDeleteNewLines,
         ),
@@ -1164,7 +1209,11 @@ export function getAllRules(): RuleSpec[] {
             "NoSpaceAfterTypeAssertion",
             SyntaxKind.GreaterThanToken,
             anyToken,
-            [isOptionDisabledOrUndefined("insertSpaceAfterTypeAssertion"), isNonJsxSameLineTokenContext, isTypeAssertionContext],
+            [
+                isOptionDisabledOrUndefined("insertSpaceAfterTypeAssertion"),
+                isNonJsxSameLineTokenContext,
+                isTypeAssertionContext,
+            ],
             RuleAction.DeleteSpace,
         ),
 
@@ -1255,7 +1304,13 @@ export function getAllRules(): RuleSpec[] {
             RuleFlags.CanDeleteNewLines,
         ),
 
-        rule("NoSpaceBeforeComma", anyToken, SyntaxKind.CommaToken, [isNonJsxSameLineTokenContext], RuleAction.DeleteSpace),
+        rule(
+            "NoSpaceBeforeComma",
+            anyToken,
+            SyntaxKind.CommaToken,
+            [isNonJsxSameLineTokenContext],
+            RuleAction.DeleteSpace,
+        ),
 
         // No space before and after indexer `x[]`
         rule(
@@ -1272,7 +1327,13 @@ export function getAllRules(): RuleSpec[] {
             [isNonJsxSameLineTokenContext, isNotBeforeBlockInFunctionDeclarationContext],
             RuleAction.DeleteSpace,
         ),
-        rule("SpaceAfterSemicolon", SyntaxKind.SemicolonToken, anyToken, [isNonJsxSameLineTokenContext], RuleAction.InsertSpace),
+        rule(
+            "SpaceAfterSemicolon",
+            SyntaxKind.SemicolonToken,
+            anyToken,
+            [isNonJsxSameLineTokenContext],
+            RuleAction.InsertSpace,
+        ),
 
         // Remove extra space between for and await
         rule(
@@ -1454,7 +1515,8 @@ function isBinaryOpContext(context: FormattingContext): boolean {
                 context.nextTokenSpan.kind === SyntaxKind.EqualsToken;
         // Technically, "of" is not a binary operator, but format it the same way as "in"
         case SyntaxKind.ForOfStatement:
-            return context.currentTokenSpan.kind === SyntaxKind.OfKeyword || context.nextTokenSpan.kind === SyntaxKind.OfKeyword;
+            return context.currentTokenSpan.kind === SyntaxKind.OfKeyword ||
+                context.nextTokenSpan.kind === SyntaxKind.OfKeyword;
     }
     return false;
 }
@@ -1689,7 +1751,8 @@ function isNonJsxElementOrFragmentContext(context: FormattingContext): boolean {
 }
 
 function isJsxExpressionContext(context: FormattingContext): boolean {
-    return context.contextNode.kind === SyntaxKind.JsxExpression || context.contextNode.kind === SyntaxKind.JsxSpreadAttribute;
+    return context.contextNode.kind === SyntaxKind.JsxExpression ||
+        context.contextNode.kind === SyntaxKind.JsxSpreadAttribute;
 }
 
 function isNextTokenParentJsxAttribute(context: FormattingContext): boolean {

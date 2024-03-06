@@ -29,7 +29,9 @@ describe("unittests:: tsc-watch:: forceConsistentCasingInFileNames", () => {
         }),
     };
 
-    function verifyConsistentFileNames({ subScenario, changes }: { subScenario: string; changes: TscWatchCompileChange[]; }) {
+    function verifyConsistentFileNames(
+        { subScenario, changes }: { subScenario: string; changes: TscWatchCompileChange[]; },
+    ) {
         verifyTscWatch({
             scenario: "forceConsistentCasingInFileNames",
             subScenario,
@@ -133,7 +135,11 @@ export const Fragment: unique symbol;
                 {
                     path: `/user/username/projects/myproject/tsconfig.json`,
                     content: jsonToReadableText({
-                        compilerOptions: { jsx: "react-jsx", jsxImportSource: "react", forceConsistentCasingInFileNames: true },
+                        compilerOptions: {
+                            jsx: "react-jsx",
+                            jsxImportSource: "react",
+                            forceConsistentCasingInFileNames: true,
+                        },
                         files: ["node_modules/react/Jsx-Runtime/index.d.ts", "index.tsx"],
                     }),
                 },
@@ -300,7 +306,11 @@ a;b;
                     path: `/user/username/projects/myproject/tsconfig.json`,
                     // Use outFile because otherwise the real and linked files will have the same output path
                     content: jsonToReadableText({
-                        compilerOptions: { forceConsistentCasingInFileNames: true, outFile: "out.js", module: "system" },
+                        compilerOptions: {
+                            forceConsistentCasingInFileNames: true,
+                            outFile: "out.js",
+                            module: "system",
+                        },
                     }),
                 };
                 return createWatchedSystem([moduleA, symlinkA, moduleB, libFile, tsconfig], {

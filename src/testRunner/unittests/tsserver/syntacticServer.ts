@@ -40,11 +40,18 @@ import { something } from "something";
             content: "{}",
         };
         const host = createServerHost([file1, file2, file3, something, libFile, configFile]);
-        const session = new TestSession({ host, serverMode: ts.LanguageServiceMode.Syntactic, useSingleInferredProject: true });
+        const session = new TestSession({
+            host,
+            serverMode: ts.LanguageServiceMode.Syntactic,
+            useSingleInferredProject: true,
+        });
         return { host, session, file1, file2, file3, something, configFile };
     }
 
-    function verifySessionException<T extends ts.server.protocol.Request>(session: TestSession, request: TestSessionRequest<T>) {
+    function verifySessionException<T extends ts.server.protocol.Request>(
+        session: TestSession,
+        request: TestSessionRequest<T>,
+    ) {
         try {
             session.executeCommandSeq(request);
         }
@@ -151,7 +158,11 @@ function fooB() { }`,
             content: "{}",
         };
         const host = createServerHost([file1, file2, file3, something, libFile, configFile]);
-        const session = new TestSession({ host, serverMode: ts.LanguageServiceMode.Syntactic, useSingleInferredProject: true });
+        const session = new TestSession({
+            host,
+            serverMode: ts.LanguageServiceMode.Syntactic,
+            useSingleInferredProject: true,
+        });
         const service = session.getProjectService();
         openFilesForSession([file1], session);
         const project = service.inferredProjects[0];

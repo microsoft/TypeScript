@@ -629,7 +629,21 @@ function getNodeFlags(node: Node) {
 }
 
 /** @internal */
-export const supportedLocaleDirectories = ["cs", "de", "es", "fr", "it", "ja", "ko", "pl", "pt-br", "ru", "tr", "zh-cn", "zh-tw"];
+export const supportedLocaleDirectories = [
+    "cs",
+    "de",
+    "es",
+    "fr",
+    "it",
+    "ja",
+    "ko",
+    "pl",
+    "pt-br",
+    "ru",
+    "tr",
+    "zh-cn",
+    "zh-tw",
+];
 
 /**
  * Checks to see if the locale is in the appropriate format,
@@ -666,14 +680,21 @@ export function validateLocaleAndSetLanguage(
 
     // First try the entire locale, then fall back to just language if that's all we have.
     // Either ways do not fail, and fallback to the English diagnostic strings.
-    if (contains(supportedLocaleDirectories, lowerCaseLocale) && !trySetLanguageAndTerritory(language, territory, errors)) {
+    if (
+        contains(supportedLocaleDirectories, lowerCaseLocale) &&
+        !trySetLanguageAndTerritory(language, territory, errors)
+    ) {
         trySetLanguageAndTerritory(language, /*territory*/ undefined, errors);
     }
 
     // Set the UI locale for string collation
     setUILocale(locale);
 
-    function trySetLanguageAndTerritory(language: string, territory: string | undefined, errors?: Diagnostic[]): boolean {
+    function trySetLanguageAndTerritory(
+        language: string,
+        territory: string | undefined,
+        errors?: Diagnostic[],
+    ): boolean {
         const compilerFilePath = normalizePath(sys.getExecutingFilePath());
         const containingDirectoryPath = getDirectoryPath(compilerFilePath);
 
@@ -718,8 +739,14 @@ export function validateLocaleAndSetLanguage(
 export function getOriginalNode(node: Node): Node;
 export function getOriginalNode<T extends Node>(node: Node, nodeTest: (node: Node) => node is T): T;
 export function getOriginalNode(node: Node | undefined): Node | undefined;
-export function getOriginalNode<T extends Node>(node: Node | undefined, nodeTest: (node: Node) => node is T): T | undefined;
-export function getOriginalNode<T extends Node>(node: Node | undefined, nodeTest?: (node: Node) => node is T): T | undefined {
+export function getOriginalNode<T extends Node>(
+    node: Node | undefined,
+    nodeTest: (node: Node) => node is T,
+): T | undefined;
+export function getOriginalNode<T extends Node>(
+    node: Node | undefined,
+    nodeTest?: (node: Node) => node is T,
+): T | undefined {
     if (node) {
         while (node.original !== undefined) {
             node = node.original;
@@ -739,7 +766,10 @@ export function getOriginalNode<T extends Node>(node: Node | undefined, nodeTest
  * If no such value is found, it applies the callback until the parent pointer is undefined or the callback returns "quit"
  * At that point findAncestor returns undefined.
  */
-export function findAncestor<T extends Node>(node: Node | undefined, callback: (element: Node) => element is T): T | undefined;
+export function findAncestor<T extends Node>(
+    node: Node | undefined,
+    callback: (element: Node) => element is T,
+): T | undefined;
 export function findAncestor(node: Node | undefined, callback: (element: Node) => boolean | "quit"): Node | undefined;
 export function findAncestor(node: Node | undefined, callback: (element: Node) => boolean | "quit"): Node | undefined {
     while (node) {
@@ -779,7 +809,10 @@ export function getParseTreeNode(node: Node | undefined): Node | undefined;
  * @param nodeTest A callback used to ensure the correct type of parse tree node is returned.
  * @returns The original parse tree node if found; otherwise, undefined.
  */
-export function getParseTreeNode<T extends Node>(node: T | undefined, nodeTest?: (node: Node) => node is T): T | undefined;
+export function getParseTreeNode<T extends Node>(
+    node: T | undefined,
+    nodeTest?: (node: Node) => node is T,
+): T | undefined;
 export function getParseTreeNode(node: Node | undefined, nodeTest?: (node: Node) => boolean): Node | undefined {
     if (node === undefined || isParseTreeNode(node)) {
         return node;
@@ -840,7 +873,9 @@ export function symbolName(symbol: Symbol): string {
  * attempt to draw the name from the node the declaration is on (as that declaration is what its' symbol
  * will be merged with)
  */
-function nameForNamelessJSDocTypedef(declaration: JSDocTypedefTag | JSDocEnumTag): Identifier | PrivateIdentifier | undefined {
+function nameForNamelessJSDocTypedef(
+    declaration: JSDocTypedefTag | JSDocEnumTag,
+): Identifier | PrivateIdentifier | undefined {
     const hostNode = declaration.parent.parent;
     if (!hostNode) {
         return undefined;
@@ -893,7 +928,10 @@ function getDeclarationIdentifier(node: Declaration | Expression): Identifier | 
 
 /** @internal */
 export function nodeHasName(statement: Node, name: Identifier) {
-    if (isNamedDeclaration(statement) && isIdentifier(statement.name) && idText(statement.name as Identifier) === idText(name)) {
+    if (
+        isNamedDeclaration(statement) && isIdentifier(statement.name) &&
+        idText(statement.name as Identifier) === idText(name)
+    ) {
         return true;
     }
     if (isVariableStatement(statement) && some(statement.declarationList.declarations, d => nodeHasName(d, name))) {
@@ -1043,7 +1081,10 @@ export function getJSDocParameterTagsNoCache(param: ParameterDeclaration): reado
     return getJSDocParameterTagsWorker(param, /*noCache*/ true);
 }
 
-function getJSDocTypeParameterTagsWorker(param: TypeParameterDeclaration, noCache?: boolean): readonly JSDocTemplateTag[] {
+function getJSDocTypeParameterTagsWorker(
+    param: TypeParameterDeclaration,
+    noCache?: boolean,
+): readonly JSDocTemplateTag[] {
     const name = param.name.escapedText;
     return getJSDocTagsWorker(param.parent, noCache).filter((tag): tag is JSDocTemplateTag =>
         isJSDocTemplateTag(tag) && tag.typeParameters.some(tp => tp.name.escapedText === name)
@@ -1296,7 +1337,9 @@ function formatJSDocLink(link: JSDocLink | JSDocLinkCode | JSDocLinkPlain) {
  * /** @type {Id} /
  * function id(x) { return x }
  */
-export function getEffectiveTypeParameterDeclarations(node: DeclarationWithTypeParameters): readonly TypeParameterDeclaration[] {
+export function getEffectiveTypeParameterDeclarations(
+    node: DeclarationWithTypeParameters,
+): readonly TypeParameterDeclaration[] {
     if (isJSDocSignature(node)) {
         if (isJSDocOverloadTag(node.parent)) {
             const jsDoc = getJSDocRoot(node.parent);
@@ -1358,7 +1401,9 @@ export function isCallChain(node: Node): node is CallChain {
     return isCallExpression(node) && !!(node.flags & NodeFlags.OptionalChain);
 }
 
-export function isOptionalChain(node: Node): node is PropertyAccessChain | ElementAccessChain | CallChain | NonNullChain {
+export function isOptionalChain(
+    node: Node,
+): node is PropertyAccessChain | ElementAccessChain | CallChain | NonNullChain {
     const kind = node.kind;
     return !!(node.flags & NodeFlags.OptionalChain) &&
         (kind === SyntaxKind.PropertyAccessExpression
@@ -1584,7 +1629,9 @@ export function isPrivateIdentifierClassElementDeclaration(node: Node): node is 
 }
 
 /** @internal */
-export function isPrivateIdentifierPropertyAccessExpression(node: Node): node is PrivateIdentifierPropertyAccessExpression {
+export function isPrivateIdentifierPropertyAccessExpression(
+    node: Node,
+): node is PrivateIdentifierPropertyAccessExpression {
     return isPropertyAccessExpression(node) && isPrivateIdentifier(node.name);
 }
 
@@ -1880,7 +1927,9 @@ export function isBindingOrAssignmentElement(node: Node): node is BindingOrAssig
  *
  * @internal
  */
-export function isBindingOrAssignmentPattern(node: BindingOrAssignmentElementTarget): node is BindingOrAssignmentPattern {
+export function isBindingOrAssignmentPattern(
+    node: BindingOrAssignmentElementTarget,
+): node is BindingOrAssignmentPattern {
     return isObjectBindingOrAssignmentPattern(node)
         || isArrayBindingOrAssignmentPattern(node);
 }
@@ -1966,7 +2015,9 @@ export function isPropertyAccessOrQualifiedName(node: Node): node is PropertyAcc
 }
 
 /** @internal */
-export function isCallLikeOrFunctionLikeExpression(node: Node): node is CallLikeExpression | FunctionExpression | ArrowFunction {
+export function isCallLikeOrFunctionLikeExpression(
+    node: Node,
+): node is CallLikeExpression | FunctionExpression | ArrowFunction {
     return isCallLikeExpression(node) || isFunctionExpressionOrArrowFunction(node);
 }
 
@@ -2116,7 +2167,9 @@ export function isAssertionExpression(node: Node): node is AssertionExpression {
 }
 
 /** @internal */
-export function isNotEmittedOrPartiallyEmittedNode(node: Node): node is NotEmittedStatement | PartiallyEmittedExpression {
+export function isNotEmittedOrPartiallyEmittedNode(
+    node: Node,
+): node is NotEmittedStatement | PartiallyEmittedExpression {
     return isNotEmittedStatement(node)
         || isPartiallyEmittedExpression(node);
 }
@@ -2124,7 +2177,10 @@ export function isNotEmittedOrPartiallyEmittedNode(node: Node): node is NotEmitt
 // Statement
 
 export function isIterationStatement(node: Node, lookInLabeledStatements: false): node is IterationStatement;
-export function isIterationStatement(node: Node, lookInLabeledStatements: boolean): node is IterationStatement | LabeledStatement;
+export function isIterationStatement(
+    node: Node,
+    lookInLabeledStatements: boolean,
+): node is IterationStatement | LabeledStatement;
 export function isIterationStatement(node: Node, lookInLabeledStatements: boolean): node is IterationStatement {
     switch (node.kind) {
         case SyntaxKind.ForStatement:
@@ -2134,7 +2190,8 @@ export function isIterationStatement(node: Node, lookInLabeledStatements: boolea
         case SyntaxKind.WhileStatement:
             return true;
         case SyntaxKind.LabeledStatement:
-            return lookInLabeledStatements && isIterationStatement((node as LabeledStatement).statement, lookInLabeledStatements);
+            return lookInLabeledStatements &&
+                isIterationStatement((node as LabeledStatement).statement, lookInLabeledStatements);
     }
 
     return false;
@@ -2152,14 +2209,16 @@ export function hasScopeMarker(statements: readonly Statement[]) {
 
 /** @internal */
 export function needsScopeMarker(result: Statement) {
-    return !isAnyImportOrReExport(result) && !isExportAssignment(result) && !hasSyntacticModifier(result, ModifierFlags.Export) &&
+    return !isAnyImportOrReExport(result) && !isExportAssignment(result) &&
+        !hasSyntacticModifier(result, ModifierFlags.Export) &&
         !isAmbientModule(result);
 }
 
 /** @internal */
 export function isExternalModuleIndicator(result: Statement) {
     // Exported top-level member indicates moduleness
-    return isAnyImportOrReExport(result) || isExportAssignment(result) || hasSyntacticModifier(result, ModifierFlags.Export);
+    return isAnyImportOrReExport(result) || isExportAssignment(result) ||
+        hasSyntacticModifier(result, ModifierFlags.Export);
 }
 
 /** @internal */
@@ -2628,7 +2687,8 @@ export function guessIndentation(lines: string[]) {
 }
 
 export function isStringLiteralLike(node: Node | FileReference): node is StringLiteralLike {
-    return (node as Node).kind === SyntaxKind.StringLiteral || (node as Node).kind === SyntaxKind.NoSubstitutionTemplateLiteral;
+    return (node as Node).kind === SyntaxKind.StringLiteral ||
+        (node as Node).kind === SyntaxKind.NoSubstitutionTemplateLiteral;
 }
 
 export function isJSDocLinkLike(node: Node): node is JSDocLink | JSDocLinkCode | JSDocLinkPlain {
@@ -2643,7 +2703,8 @@ export function hasRestParameter(s: SignatureDeclaration | JSDocSignature): bool
 
 export function isRestParameter(node: ParameterDeclaration | JSDocParameterTag): boolean {
     const type = isJSDocParameterTag(node) ? (node.typeExpression && node.typeExpression.type) : node.type;
-    return (node as ParameterDeclaration).dotDotDotToken !== undefined || !!type && type.kind === SyntaxKind.JSDocVariadicType;
+    return (node as ParameterDeclaration).dotDotDotToken !== undefined ||
+        !!type && type.kind === SyntaxKind.JSDocVariadicType;
 }
 
 function hasInternalAnnotation(range: CommentRange, sourceFile: SourceFile) {
@@ -2655,7 +2716,9 @@ export function isInternalDeclaration(node: Node, sourceFile?: SourceFile) {
     sourceFile ??= getSourceFileOfNode(node);
     const parseTreeNode = getParseTreeNode(node);
     if (parseTreeNode && parseTreeNode.kind === SyntaxKind.Parameter) {
-        const paramIdx = (parseTreeNode.parent as SignatureDeclaration).parameters.indexOf(parseTreeNode as ParameterDeclaration);
+        const paramIdx = (parseTreeNode.parent as SignatureDeclaration).parameters.indexOf(
+            parseTreeNode as ParameterDeclaration,
+        );
         const previousSibling = paramIdx > 0 ? (parseTreeNode.parent as SignatureDeclaration).parameters[paramIdx - 1]
             : undefined;
         const text = sourceFile.text;
@@ -2670,7 +2733,10 @@ export function isInternalDeclaration(node: Node, sourceFile?: SourceFile) {
                 ),
                 getLeadingCommentRanges(text, node.pos),
             )
-            : getTrailingCommentRanges(text, skipTrivia(text, node.pos, /*stopAfterLineBreak*/ false, /*stopAtComments*/ true));
+            : getTrailingCommentRanges(
+                text,
+                skipTrivia(text, node.pos, /*stopAfterLineBreak*/ false, /*stopAtComments*/ true),
+            );
         return some(commentRanges) && hasInternalAnnotation(last(commentRanges), sourceFile);
     }
     const leadingCommentRanges = parseTreeNode && getLeadingCommentRangesOfNode(parseTreeNode, sourceFile);

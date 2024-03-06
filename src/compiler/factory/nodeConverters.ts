@@ -127,7 +127,8 @@ export function createNodeConverters(factory: NodeFactory): NodeConverters {
                     setTextRange(
                         factory.createPropertyAssignment(
                             element.propertyName,
-                            element.initializer ? factory.createAssignment(expression, element.initializer) : expression,
+                            element.initializer ? factory.createAssignment(expression, element.initializer)
+                                : expression,
                         ),
                         element,
                     ),

@@ -17,7 +17,10 @@ import {
 function checkDeclarationFiles(file: File, session: TestSession): void {
     openFilesForSession([file], session);
     const project = ts.Debug.checkDefined(
-        session.getProjectService().getDefaultProjectForFile(file.path as ts.server.NormalizedPath, /*ensureProject*/ false),
+        session.getProjectService().getDefaultProjectForFile(
+            file.path as ts.server.NormalizedPath,
+            /*ensureProject*/ false,
+        ),
     );
     const program = project.getCurrentProgram()!;
     const output = ts.getFileEmitOutput(
@@ -290,11 +293,19 @@ describe("unittests:: tsserver:: with declaration file maps:: project references
         const aTs: File = { path: "/a/a.ts", content: `function f() {}` };
         const aTsconfig: File = {
             path: "/a/tsconfig.json",
-            content: jsonToReadableText({ compilerOptions: { declaration: true, declarationMap: true, outFile: "../bin/a.js" } }),
+            content: jsonToReadableText({
+                compilerOptions: { declaration: true, declarationMap: true, outFile: "../bin/a.js" },
+            }),
         };
         const bTs: File = { path: "/b/b.ts", content: `f();` };
-        const bTsconfig: File = { path: "/b/tsconfig.json", content: jsonToReadableText({ references: [{ path: "../a" }] }) };
-        const aDts: File = { path: "/bin/a.d.ts", content: `declare function f(): void;\n//# sourceMappingURL=a.d.ts.map` };
+        const bTsconfig: File = {
+            path: "/b/tsconfig.json",
+            content: jsonToReadableText({ references: [{ path: "../a" }] }),
+        };
+        const aDts: File = {
+            path: "/bin/a.d.ts",
+            content: `declare function f(): void;\n//# sourceMappingURL=a.d.ts.map`,
+        };
         const aDtsMap: File = {
             path: "/bin/a.d.ts.map",
             content: jsonToReadableText({

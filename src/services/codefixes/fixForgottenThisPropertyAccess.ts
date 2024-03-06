@@ -61,7 +61,10 @@ interface Info {
 function getInfo(sourceFile: SourceFile, pos: number, diagCode: number): Info | undefined {
     const node = getTokenAtPosition(sourceFile, pos);
     if (isIdentifier(node) || isPrivateIdentifier(node)) {
-        return { node, className: diagCode === didYouMeanStaticMemberCode ? getContainingClass(node)!.name!.text : undefined };
+        return {
+            node,
+            className: diagCode === didYouMeanStaticMemberCode ? getContainingClass(node)!.name!.text : undefined,
+        };
     }
 }
 
@@ -71,6 +74,9 @@ function doChange(changes: textChanges.ChangeTracker, sourceFile: SourceFile, { 
     changes.replaceNode(
         sourceFile,
         node,
-        factory.createPropertyAccessExpression(className ? factory.createIdentifier(className) : factory.createThis(), node),
+        factory.createPropertyAccessExpression(
+            className ? factory.createIdentifier(className) : factory.createThis(),
+            node,
+        ),
     );
 }

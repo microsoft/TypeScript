@@ -357,7 +357,10 @@ function getModuleInstanceStateCached(node: Node, visited = new Map<number, Modu
     return result;
 }
 
-function getModuleInstanceStateWorker(node: Node, visited: Map<number, ModuleInstanceState | undefined>): ModuleInstanceState {
+function getModuleInstanceStateWorker(
+    node: Node,
+    visited: Map<number, ModuleInstanceState | undefined>,
+): ModuleInstanceState {
     // A module is uninstantiated if it contains only
     switch (node.kind) {
         // 1. interface declarations, type alias declarations
@@ -432,7 +435,10 @@ function getModuleInstanceStateWorker(node: Node, visited: Map<number, ModuleIns
     return ModuleInstanceState.Instantiated;
 }
 
-function getModuleInstanceStateForAliasTarget(specifier: ExportSpecifier, visited: Map<number, ModuleInstanceState | undefined>) {
+function getModuleInstanceStateForAliasTarget(
+    specifier: ExportSpecifier,
+    visited: Map<number, ModuleInstanceState | undefined>,
+) {
     const name = specifier.propertyName || specifier.name;
     let p: Node | undefined = specifier.parent;
     while (p) {
@@ -648,19 +654,26 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
         node.symbol = symbol;
         symbol.declarations = appendIfUnique(symbol.declarations, node);
 
-        if (symbolFlags & (SymbolFlags.Class | SymbolFlags.Enum | SymbolFlags.Module | SymbolFlags.Variable) && !symbol.exports) {
+        if (
+            symbolFlags & (SymbolFlags.Class | SymbolFlags.Enum | SymbolFlags.Module | SymbolFlags.Variable) &&
+            !symbol.exports
+        ) {
             symbol.exports = createSymbolTable();
         }
 
         if (
-            symbolFlags & (SymbolFlags.Class | SymbolFlags.Interface | SymbolFlags.TypeLiteral | SymbolFlags.ObjectLiteral) &&
+            symbolFlags &
+                (SymbolFlags.Class | SymbolFlags.Interface | SymbolFlags.TypeLiteral | SymbolFlags.ObjectLiteral) &&
             !symbol.members
         ) {
             symbol.members = createSymbolTable();
         }
 
         // On merge of const enum module with class or function, reset const enum only flag (namespaces will already recalculate)
-        if (symbol.constEnumOnlyModule && (symbol.flags & (SymbolFlags.Function | SymbolFlags.Class | SymbolFlags.RegularEnum))) {
+        if (
+            symbol.constEnumOnlyModule &&
+            (symbol.flags & (SymbolFlags.Function | SymbolFlags.Class | SymbolFlags.RegularEnum))
+        ) {
             symbol.constEnumOnlyModule = false;
         }
 
@@ -673,14 +686,16 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
     // unless it is a well known Symbol.
     function getDeclarationName(node: Declaration): __String | undefined {
         if (node.kind === SyntaxKind.ExportAssignment) {
-            return (node as ExportAssignment).isExportEquals ? InternalSymbolName.ExportEquals : InternalSymbolName.Default;
+            return (node as ExportAssignment).isExportEquals ? InternalSymbolName.ExportEquals
+                : InternalSymbolName.Default;
         }
 
         const name = getNameOfDeclaration(node);
         if (name) {
             if (isAmbientModule(node)) {
                 const moduleName = getTextOfIdentifierOrLiteral(name as Identifier | StringLiteral);
-                return (isGlobalScopeAugmentation(node as ModuleDeclaration) ? "__global" : `"${moduleName}"`) as __String;
+                return (isGlobalScopeAugmentation(node as ModuleDeclaration) ? "__global"
+                    : `"${moduleName}"`) as __String;
             }
             if (name.kind === SyntaxKind.ComputedPropertyName) {
                 const nameExpression = name.expression;
@@ -729,7 +744,9 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
                 // module.exports = ...
                 return InternalSymbolName.ExportEquals;
             case SyntaxKind.BinaryExpression:
-                if (getAssignmentDeclarationKind(node as BinaryExpression) === AssignmentDeclarationKind.ModuleExports) {
+                if (
+                    getAssignmentDeclarationKind(node as BinaryExpression) === AssignmentDeclarationKind.ModuleExports
+                ) {
                     // module.exports = ...
                     return InternalSymbolName.ExportEquals;
                 }
@@ -844,7 +861,8 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
                     let messageNeedsName = true;
 
                     if (symbol.flags & SymbolFlags.Enum || includes & SymbolFlags.Enum) {
-                        message = Diagnostics.Enum_declarations_can_only_merge_with_namespace_or_other_enum_declarations;
+                        message =
+                            Diagnostics.Enum_declarations_can_only_merge_with_namespace_or_other_enum_declarations;
                         messageNeedsName = false;
                     }
 
@@ -865,7 +883,8 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
                             // 2. multiple export default of export assignment. This one doesn't have NodeFlags.Default on (as export default doesn't considered as modifiers)
                             if (
                                 symbol.declarations && symbol.declarations.length &&
-                                (node.kind === SyntaxKind.ExportAssignment && !(node as ExportAssignment).isExportEquals)
+                                (node.kind === SyntaxKind.ExportAssignment &&
+                                    !(node as ExportAssignment).isExportEquals)
                             ) {
                                 message = Diagnostics.A_module_cannot_have_multiple_default_exports;
                                 messageNeedsName = false;
@@ -893,7 +912,8 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
                     const declarationName = getNameOfDeclaration(node) || node;
                     forEach(symbol.declarations, (declaration, index) => {
                         const decl = getNameOfDeclaration(declaration) || declaration;
-                        const diag = messageNeedsName ? createDiagnosticForNode(decl, message, getDisplayName(declaration))
+                        const diag = messageNeedsName ?
+                            createDiagnosticForNode(decl, message, getDisplayName(declaration))
                             : createDiagnosticForNode(decl, message);
                         file.bindDiagnostics.push(
                             multipleDefaultExports ?
@@ -907,11 +927,14 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
                                 : diag,
                         );
                         if (multipleDefaultExports) {
-                            relatedInformation.push(createDiagnosticForNode(decl, Diagnostics.The_first_export_default_is_here));
+                            relatedInformation.push(
+                                createDiagnosticForNode(decl, Diagnostics.The_first_export_default_is_here),
+                            );
                         }
                     });
 
-                    const diag = messageNeedsName ? createDiagnosticForNode(declarationName, message, getDisplayName(node))
+                    const diag = messageNeedsName ?
+                        createDiagnosticForNode(declarationName, message, getDisplayName(node))
                         : createDiagnosticForNode(declarationName, message);
                     file.bindDiagnostics.push(addRelatedInfo(diag, ...relatedInformation));
 
@@ -932,7 +955,8 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
     }
 
     function declareModuleMember(node: Declaration, symbolFlags: SymbolFlags, symbolExcludes: SymbolFlags): Symbol {
-        const hasExportModifier = !!(getCombinedModifierFlags(node) & ModifierFlags.Export) || jsdocTreatAsExported(node);
+        const hasExportModifier = !!(getCombinedModifierFlags(node) & ModifierFlags.Export) ||
+            jsdocTreatAsExported(node);
         if (symbolFlags & SymbolFlags.Alias) {
             if (
                 node.kind === SyntaxKind.ExportSpecifier ||
@@ -967,7 +991,13 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
                     !canHaveLocals(container) || !container.locals ||
                     (hasSyntacticModifier(node, ModifierFlags.Default) && !getDeclarationName(node))
                 ) {
-                    return declareSymbol(container.symbol.exports!, container.symbol, node, symbolFlags, symbolExcludes); // No local symbol for an unnamed default!
+                    return declareSymbol(
+                        container.symbol.exports!,
+                        container.symbol,
+                        node,
+                        symbolFlags,
+                        symbolExcludes,
+                    ); // No local symbol for an unnamed default!
                 }
                 const exportKind = symbolFlags & SymbolFlags.Value ? SymbolFlags.ExportValue : 0;
                 const local = declareSymbol(container.locals, /*parent*/ undefined, node, exportKind, symbolExcludes);
@@ -999,8 +1029,12 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
         // 2. The thing a nameless typedef pulls its name from is implicitly a direct export (either by assignment or actual export flag).
         const declName = getNameOfDeclaration(node);
         if (!declName) return false;
-        if (isPropertyAccessEntityNameExpression(declName.parent) && isTopLevelNamespaceAssignment(declName.parent)) return true;
-        if (isDeclaration(declName.parent) && getCombinedModifierFlags(declName.parent) & ModifierFlags.Export) return true;
+        if (isPropertyAccessEntityNameExpression(declName.parent) && isTopLevelNamespaceAssignment(declName.parent)) {
+            return true;
+        }
+        if (isDeclaration(declName.parent) && getCombinedModifierFlags(declName.parent) & ModifierFlags.Export) {
+            return true;
+        }
         // This could potentially be simplified by having `delayedBindJSDocTypedefTag` pass in an override for `hasExportModifier`, since it should
         // already have calculated and branched on most of this.
         return false;
@@ -1070,7 +1104,8 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
                 currentFlow = initFlowNode({ flags: FlowFlags.Start });
                 if (
                     containerFlags &
-                    (ContainerFlags.IsFunctionExpression | ContainerFlags.IsObjectLiteralOrClassExpressionMethodOrAccessor)
+                    (ContainerFlags.IsFunctionExpression |
+                        ContainerFlags.IsObjectLiteralOrClassExpressionMethodOrAccessor)
                 ) {
                     currentFlow.node = node as
                         | FunctionExpression
@@ -1172,7 +1207,10 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
             inAssignmentPattern = saveInAssignmentPattern;
             return;
         }
-        if (node.kind >= SyntaxKind.FirstStatement && node.kind <= SyntaxKind.LastStatement && !options.allowUnreachableCode) {
+        if (
+            node.kind >= SyntaxKind.FirstStatement && node.kind <= SyntaxKind.LastStatement &&
+            !options.allowUnreachableCode
+        ) {
             (node as HasFlowNode).flowNode = currentFlow;
         }
         switch (node.kind) {
@@ -1322,9 +1360,11 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
         return isDottedName(expr)
             || (isPropertyAccessExpression(expr) || isNonNullExpression(expr) || isParenthesizedExpression(expr)) &&
                 isNarrowableReference(expr.expression)
-            || isBinaryExpression(expr) && expr.operatorToken.kind === SyntaxKind.CommaToken && isNarrowableReference(expr.right)
+            || isBinaryExpression(expr) && expr.operatorToken.kind === SyntaxKind.CommaToken &&
+                isNarrowableReference(expr.right)
             || isElementAccessExpression(expr) &&
-                (isStringOrNumericLiteralLike(expr.argumentExpression) || isEntityNameExpression(expr.argumentExpression)) &&
+                (isStringOrNumericLiteralLike(expr.argumentExpression) ||
+                    isEntityNameExpression(expr.argumentExpression)) &&
                 isNarrowableReference(expr.expression)
             || isAssignmentExpression(expr) && isNarrowableReference(expr.left);
     }
@@ -1366,7 +1406,8 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
             case SyntaxKind.EqualsEqualsEqualsToken:
             case SyntaxKind.ExclamationEqualsEqualsToken:
                 return isNarrowableOperand(expr.left) || isNarrowableOperand(expr.right) ||
-                    isNarrowingTypeofOperands(expr.right, expr.left) || isNarrowingTypeofOperands(expr.left, expr.right) ||
+                    isNarrowingTypeofOperands(expr.right, expr.left) ||
+                    isNarrowingTypeofOperands(expr.left, expr.right) ||
                     (isBooleanLiteral(expr.right) && isNarrowingExpression(expr.left) ||
                         isBooleanLiteral(expr.left) && isNarrowingExpression(expr.right));
             case SyntaxKind.InstanceOfKeyword:
@@ -1525,7 +1566,12 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
             !(isOptionalChain(node.parent) && node.parent.expression === node);
     }
 
-    function doWithConditionalBranches<T>(action: (value: T) => void, value: T, trueTarget: FlowLabel, falseTarget: FlowLabel) {
+    function doWithConditionalBranches<T>(
+        action: (value: T) => void,
+        value: T,
+        trueTarget: FlowLabel,
+        falseTarget: FlowLabel,
+    ) {
         const savedTrueTarget = currentTrueTarget;
         const savedFalseTarget = currentFalseTarget;
         currentTrueTarget = trueTarget;
@@ -1750,7 +1796,10 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
                 // If we have an IIFE return target and return statements in the try or catch blocks, add a control
                 // flow that goes back through the finally block and back through only the return statements.
                 if (currentReturnTarget && returnLabel.antecedents) {
-                    addAntecedent(currentReturnTarget, createReduceLabel(finallyLabel, returnLabel.antecedents, currentFlow));
+                    addAntecedent(
+                        currentReturnTarget,
+                        createReduceLabel(finallyLabel, returnLabel.antecedents, currentFlow),
+                    );
                 }
                 // If we have an outer exception target (i.e. a containing try-finally or try-catch-finally), add a
                 // control flow that goes back through the finally blok and back through each possible exception source.
@@ -1821,7 +1870,10 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
             const clause = clauses[i];
             bind(clause);
             fallthroughFlow = currentFlow;
-            if (!(currentFlow.flags & FlowFlags.Unreachable) && i !== clauses.length - 1 && options.noFallthroughCasesInSwitch) {
+            if (
+                !(currentFlow.flags & FlowFlags.Unreachable) && i !== clauses.length - 1 &&
+                options.noFallthroughCasesInSwitch
+            ) {
                 clause.fallthroughFlowNode = currentFlow;
             }
         }
@@ -1872,7 +1924,8 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
 
     function bindDestructuringTargetFlow(node: Expression) {
         if (
-            node.kind === SyntaxKind.BinaryExpression && (node as BinaryExpression).operatorToken.kind === SyntaxKind.EqualsToken
+            node.kind === SyntaxKind.BinaryExpression &&
+            (node as BinaryExpression).operatorToken.kind === SyntaxKind.EqualsToken
         ) {
             bindAssignmentTargetFlow((node as BinaryExpression).left);
         }
@@ -2416,11 +2469,19 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
                     const { text } = node.name;
                     pattern = tryParsePattern(text);
                     if (pattern === undefined) {
-                        errorOnFirstToken(node.name, Diagnostics.Pattern_0_can_have_at_most_one_Asterisk_character, text);
+                        errorOnFirstToken(
+                            node.name,
+                            Diagnostics.Pattern_0_can_have_at_most_one_Asterisk_character,
+                            text,
+                        );
                     }
                 }
 
-                const symbol = declareSymbolAndAddToSymbolTable(node, SymbolFlags.ValueModule, SymbolFlags.ValueModuleExcludes)!;
+                const symbol = declareSymbolAndAddToSymbolTable(
+                    node,
+                    SymbolFlags.ValueModule,
+                    SymbolFlags.ValueModuleExcludes,
+                )!;
                 file.patternAmbientModules = append<PatternAmbientModule>(
                     file.patternAmbientModules,
                     pattern && !isString(pattern) ? { pattern, symbol } : undefined,
@@ -2539,7 +2600,10 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
                         file.symbol,
                         declName.parent,
                         isTopLevel,
-                        !!findAncestor(declName, d => isPropertyAccessExpression(d) && d.name.escapedText === "prototype"),
+                        !!findAncestor(
+                            declName,
+                            d => isPropertyAccessExpression(d) && d.name.escapedText === "prototype",
+                        ),
                         /*containerIsClass*/ false,
                     );
                     const oldContainer = container;
@@ -2561,7 +2625,8 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
                             break;
                         case AssignmentDeclarationKind.Property:
                             container = isExportsOrModuleExportsOrAlias(file, declName.parent.expression) ? file
-                                : isPropertyAccessExpression(declName.parent.expression) ? declName.parent.expression.name
+                                : isPropertyAccessExpression(declName.parent.expression) ?
+                                declName.parent.expression.name
                                 : declName.parent.expression;
                             break;
                         case AssignmentDeclarationKind.None:
@@ -2573,7 +2638,9 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
                     container = oldContainer;
                 }
             }
-            else if (isJSDocEnumTag(typeAlias) || !typeAlias.fullName || typeAlias.fullName.kind === SyntaxKind.Identifier) {
+            else if (
+                isJSDocEnumTag(typeAlias) || !typeAlias.fullName || typeAlias.fullName.kind === SyntaxKind.Identifier
+            ) {
                 parent = typeAlias.parent;
                 bindBlockScopedDeclaration(typeAlias, SymbolFlags.TypeAlias, SymbolFlags.TypeAliasExcludes);
             }
@@ -2655,7 +2722,8 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
         }
 
         if (file.externalModuleIndicator) {
-            return Diagnostics.Identifier_expected_0_is_a_reserved_word_in_strict_mode_Modules_are_automatically_in_strict_mode;
+            return Diagnostics
+                .Identifier_expected_0_is_a_reserved_word_in_strict_mode_Modules_are_automatically_in_strict_mode;
         }
 
         return Diagnostics.Identifier_expected_0_is_a_reserved_word_in_strict_mode;
@@ -2668,7 +2736,11 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
             // Report error only if there are no parse errors in file
             if (!file.parseDiagnostics.length) {
                 file.bindDiagnostics.push(
-                    createDiagnosticForNode(node, Diagnostics.constructor_is_a_reserved_word, declarationNameToString(node)),
+                    createDiagnosticForNode(
+                        node,
+                        Diagnostics.constructor_is_a_reserved_word,
+                        declarationNameToString(node),
+                    ),
                 );
             }
         }
@@ -2836,7 +2908,12 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
         errorOrSuggestionOnRange(isError, node, node, message);
     }
 
-    function errorOrSuggestionOnRange(isError: boolean, startNode: Node, endNode: Node, message: DiagnosticMessage): void {
+    function errorOrSuggestionOnRange(
+        isError: boolean,
+        startNode: Node,
+        endNode: Node,
+        message: DiagnosticMessage,
+    ): void {
         addErrorOrSuggestionDiagnostic(isError, { pos: getTokenPosOfNode(startNode, file), end: endNode.end }, message);
     }
 
@@ -2960,7 +3037,11 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
                     while (parentNode && !isJSDocTypeAlias(parentNode)) {
                         parentNode = parentNode.parent;
                     }
-                    bindBlockScopedDeclaration(parentNode as Declaration, SymbolFlags.TypeAlias, SymbolFlags.TypeAliasExcludes);
+                    bindBlockScopedDeclaration(
+                        parentNode as Declaration,
+                        SymbolFlags.TypeAlias,
+                        SymbolFlags.TypeAliasExcludes,
+                    );
                     break;
                 }
                 // falls through
@@ -3016,7 +3097,10 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
                         bindModuleExportsAssignment(node as BindablePropertyAssignmentExpression);
                         break;
                     case AssignmentDeclarationKind.PrototypeProperty:
-                        bindPrototypePropertyAssignment((node as BindableStaticPropertyAssignmentExpression).left, node);
+                        bindPrototypePropertyAssignment(
+                            (node as BindableStaticPropertyAssignmentExpression).left,
+                            node,
+                        );
                         break;
                     case AssignmentDeclarationKind.Prototype:
                         bindPrototypeAssignment(node as BindableStaticPropertyAssignmentExpression);
@@ -3073,7 +3157,11 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
                 return bindPropertyWorker(node as PropertyDeclaration | PropertySignature);
             case SyntaxKind.PropertyAssignment:
             case SyntaxKind.ShorthandPropertyAssignment:
-                return bindPropertyOrMethodOrAccessor(node as Declaration, SymbolFlags.Property, SymbolFlags.PropertyExcludes);
+                return bindPropertyOrMethodOrAccessor(
+                    node as Declaration,
+                    SymbolFlags.Property,
+                    SymbolFlags.PropertyExcludes,
+                );
             case SyntaxKind.EnumMember:
                 return bindPropertyOrMethodOrAccessor(
                     node as Declaration,
@@ -3093,7 +3181,8 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
                 // name.
                 return bindPropertyOrMethodOrAccessor(
                     node as Declaration,
-                    SymbolFlags.Method | ((node as MethodDeclaration).questionToken ? SymbolFlags.Optional : SymbolFlags.None),
+                    SymbolFlags.Method |
+                        ((node as MethodDeclaration).questionToken ? SymbolFlags.Optional : SymbolFlags.None),
                     isObjectLiteralMethod(node) ? SymbolFlags.PropertyExcludes : SymbolFlags.MethodExcludes,
                 );
             case SyntaxKind.FunctionDeclaration:
@@ -3159,9 +3248,17 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
                 inStrictMode = true;
                 return bindClassLikeDeclaration(node as ClassLikeDeclaration);
             case SyntaxKind.InterfaceDeclaration:
-                return bindBlockScopedDeclaration(node as Declaration, SymbolFlags.Interface, SymbolFlags.InterfaceExcludes);
+                return bindBlockScopedDeclaration(
+                    node as Declaration,
+                    SymbolFlags.Interface,
+                    SymbolFlags.InterfaceExcludes,
+                );
             case SyntaxKind.TypeAliasDeclaration:
-                return bindBlockScopedDeclaration(node as Declaration, SymbolFlags.TypeAlias, SymbolFlags.TypeAliasExcludes);
+                return bindBlockScopedDeclaration(
+                    node as Declaration,
+                    SymbolFlags.TypeAlias,
+                    SymbolFlags.TypeAliasExcludes,
+                );
             case SyntaxKind.EnumDeclaration:
                 return bindEnumDeclaration(node as EnumDeclaration);
             case SyntaxKind.ModuleDeclaration:
@@ -3177,7 +3274,11 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
             case SyntaxKind.NamespaceImport:
             case SyntaxKind.ImportSpecifier:
             case SyntaxKind.ExportSpecifier:
-                return declareSymbolAndAddToSymbolTable(node as Declaration, SymbolFlags.Alias, SymbolFlags.AliasExcludes);
+                return declareSymbolAndAddToSymbolTable(
+                    node as Declaration,
+                    SymbolFlags.Alias,
+                    SymbolFlags.AliasExcludes,
+                );
             case SyntaxKind.NamespaceExportDeclaration:
                 return bindNamespaceExportDeclaration(node as NamespaceExportDeclaration);
             case SyntaxKind.ImportClause:
@@ -3391,7 +3492,8 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
         }
 
         if (
-            isObjectLiteralExpression(assignedExpression) && every(assignedExpression.properties, isShorthandPropertyAssignment)
+            isObjectLiteralExpression(assignedExpression) &&
+            every(assignedExpression.properties, isShorthandPropertyAssignment)
         ) {
             forEach(assignedExpression.properties, bindExportAssignedObjectMemberAlias);
             return;
@@ -3401,12 +3503,24 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
         const flags = exportAssignmentIsAlias(node)
             ? SymbolFlags.Alias // An export= with an EntityNameExpression or a ClassExpression exports all meanings of that identifier or class
             : SymbolFlags.Property | SymbolFlags.ExportValue | SymbolFlags.ValueModule;
-        const symbol = declareSymbol(file.symbol.exports!, file.symbol, node, flags | SymbolFlags.Assignment, SymbolFlags.None);
+        const symbol = declareSymbol(
+            file.symbol.exports!,
+            file.symbol,
+            node,
+            flags | SymbolFlags.Assignment,
+            SymbolFlags.None,
+        );
         setValueDeclaration(symbol, node);
     }
 
     function bindExportAssignedObjectMemberAlias(node: ShorthandPropertyAssignment) {
-        declareSymbol(file.symbol.exports!, file.symbol, node, SymbolFlags.Alias | SymbolFlags.Assignment, SymbolFlags.None);
+        declareSymbol(
+            file.symbol.exports!,
+            file.symbol,
+            node,
+            SymbolFlags.Alias | SymbolFlags.Assignment,
+            SymbolFlags.None,
+        );
     }
 
     function bindThisPropertyAssignment(
@@ -3420,14 +3534,19 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
         if (hasPrivateIdentifier) {
             return;
         }
-        const thisContainer = getThisContainer(node, /*includeArrowFunctions*/ false, /*includeClassComputedPropertyName*/ false);
+        const thisContainer = getThisContainer(
+            node,
+            /*includeArrowFunctions*/ false,
+            /*includeClassComputedPropertyName*/ false,
+        );
         switch (thisContainer.kind) {
             case SyntaxKind.FunctionDeclaration:
             case SyntaxKind.FunctionExpression:
                 let constructorSymbol: Symbol | undefined = thisContainer.symbol;
                 // For `f.prototype.m = function() { this.x = 0; }`, `this.x = 0` should modify `f`'s members, not the function expression.
                 if (
-                    isBinaryExpression(thisContainer.parent) && thisContainer.parent.operatorToken.kind === SyntaxKind.EqualsToken
+                    isBinaryExpression(thisContainer.parent) &&
+                    thisContainer.parent.operatorToken.kind === SyntaxKind.EqualsToken
                 ) {
                     const l = thisContainer.parent.left;
                     if (isBindableStaticAccessExpression(l) && isPrototypeAccess(l.expression)) {
@@ -3464,7 +3583,8 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
                 // this.foo assignment in a JavaScript class
                 // Bind this property to the containing class
                 const containingClass = thisContainer.parent;
-                const symbolTable = isStatic(thisContainer) ? containingClass.symbol.exports! : containingClass.symbol.members!;
+                const symbolTable = isStatic(thisContainer) ? containingClass.symbol.exports!
+                    : containingClass.symbol.members!;
                 if (hasDynamicName(node)) {
                     bindDynamicallyNamedThisPropertyAssignment(node, containingClass.symbol, symbolTable);
                 }
@@ -3531,7 +3651,10 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
         symbol: Symbol | undefined,
     ) {
         if (symbol) {
-            (symbol.assignmentDeclarationMembers || (symbol.assignmentDeclarationMembers = new Map())).set(getNodeId(node), node);
+            (symbol.assignmentDeclarationMembers || (symbol.assignmentDeclarationMembers = new Map())).set(
+                getNodeId(node),
+                node,
+            );
         }
     }
 
@@ -3553,7 +3676,12 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
     function bindPrototypeAssignment(node: BindableStaticPropertyAssignmentExpression) {
         setParent(node.left, node);
         setParent(node.right, node);
-        bindPropertyAssignment(node.left.expression, node.left, /*isPrototypeProperty*/ false, /*containerIsClass*/ true);
+        bindPropertyAssignment(
+            node.left.expression,
+            node.left,
+            /*isPrototypeProperty*/ false,
+            /*containerIsClass*/ true,
+        );
     }
 
     function bindObjectDefinePrototypeProperty(node: BindableObjectDefinePropertyCall) {
@@ -3606,7 +3734,9 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
             return;
         }
         const rootExpr = getLeftmostAccessExpression(node.left);
-        if (isIdentifier(rootExpr) && lookupSymbolForName(container, rootExpr.escapedText)?.flags! & SymbolFlags.Alias) {
+        if (
+            isIdentifier(rootExpr) && lookupSymbolForName(container, rootExpr.escapedText)?.flags! & SymbolFlags.Alias
+        ) {
             return;
         }
         // Fix up parent pointers since we're going to use these nodes before we bind into them
@@ -3917,7 +4047,11 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
                 declareSymbolAndAddToSymbolTable(node as Declaration, SymbolFlags.Alias, SymbolFlags.AliasExcludes);
             }
             else if (isBlockOrCatchScoped(node)) {
-                bindBlockScopedDeclaration(node, SymbolFlags.BlockScopedVariable, SymbolFlags.BlockScopedVariableExcludes);
+                bindBlockScopedDeclaration(
+                    node,
+                    SymbolFlags.BlockScopedVariable,
+                    SymbolFlags.BlockScopedVariableExcludes,
+                );
             }
             else if (isParameterDeclaration(node)) {
                 // It is safe to walk up parent chain to find whether the node is a destructuring parameter declaration
@@ -3929,7 +4063,11 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
                 //      function foo([a,a]) {} // Duplicate Identifier error
                 //      function bar(a,a) {}   // Duplicate Identifier error, parameter declaration in this case is handled in bindParameter
                 //                             // which correctly set excluded symbols
-                declareSymbolAndAddToSymbolTable(node, SymbolFlags.FunctionScopedVariable, SymbolFlags.ParameterExcludes);
+                declareSymbolAndAddToSymbolTable(
+                    node,
+                    SymbolFlags.FunctionScopedVariable,
+                    SymbolFlags.ParameterExcludes,
+                );
             }
             else {
                 declareSymbolAndAddToSymbolTable(
@@ -3955,7 +4093,8 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
             bindAnonymousDeclaration(
                 node,
                 SymbolFlags.FunctionScopedVariable,
-                "__" + (node as ParameterDeclaration).parent.parameters.indexOf(node as ParameterDeclaration) as __String,
+                "__" +
+                (node as ParameterDeclaration).parent.parameters.indexOf(node as ParameterDeclaration) as __String,
             );
         }
         else {
@@ -4022,7 +4161,10 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
     }
 
     function getInferTypeContainer(node: Node): ConditionalTypeNode | undefined {
-        const extendsType = findAncestor(node, n => n.parent && isConditionalTypeNode(n.parent) && n.parent.extendsType === n);
+        const extendsType = findAncestor(
+            node,
+            n => n.parent && isConditionalTypeNode(n.parent) && n.parent.extendsType === n,
+        );
         return extendsType && extendsType.parent as ConditionalTypeNode;
     }
 
@@ -4085,7 +4227,8 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
                 // report error on class declarations
                 node.kind === SyntaxKind.ClassDeclaration ||
                 // report error on instantiated modules or const-enums only modules if preserveConstEnums is set
-                (node.kind === SyntaxKind.ModuleDeclaration && shouldReportErrorOnModuleDeclaration(node as ModuleDeclaration));
+                (node.kind === SyntaxKind.ModuleDeclaration &&
+                    shouldReportErrorOnModuleDeclaration(node as ModuleDeclaration));
 
             if (reportError) {
                 currentFlow = reportedUnreachableFlow;
@@ -4110,7 +4253,8 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
 
                     eachUnreachableRange(
                         node,
-                        (start, end) => errorOrSuggestionOnRange(isError, start, end, Diagnostics.Unreachable_code_detected),
+                        (start, end) =>
+                            errorOrSuggestionOnRange(isError, start, end, Diagnostics.Unreachable_code_detected),
                     );
                 }
             }

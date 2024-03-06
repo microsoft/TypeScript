@@ -56,7 +56,11 @@ function getQualifiedName(sourceFile: SourceFile, pos: number): QualifiedName & 
     return isIdentifier(qualifiedName.left) ? qualifiedName as QualifiedName & { left: Identifier; } : undefined;
 }
 
-function doChange(changeTracker: textChanges.ChangeTracker, sourceFile: SourceFile, qualifiedName: QualifiedName): void {
+function doChange(
+    changeTracker: textChanges.ChangeTracker,
+    sourceFile: SourceFile,
+    qualifiedName: QualifiedName,
+): void {
     const rightText = qualifiedName.right.text;
     const replacement = factory.createIndexedAccessTypeNode(
         factory.createTypeReferenceNode(qualifiedName.left, /*typeArguments*/ undefined),

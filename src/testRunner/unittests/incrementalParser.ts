@@ -33,7 +33,13 @@ function withDelete(
 }
 
 function createTree(text: ts.IScriptSnapshot, version: string) {
-    return ts.createLanguageServiceSourceFile(/*fileName:*/ "", text, ts.ScriptTarget.Latest, version, /*setNodeParents*/ true);
+    return ts.createLanguageServiceSourceFile(
+        /*fileName:*/ "",
+        text,
+        ts.ScriptTarget.Latest,
+        version,
+        /*setNodeParents*/ true,
+    );
 }
 
 function assertSameDiagnostics(file1: ts.SourceFile, file2: ts.SourceFile) {
@@ -75,7 +81,12 @@ function compareTrees(
     Utils.assertInvariants(newTree, /*parent:*/ undefined);
 
     // Create a tree for the new text, in an incremental fashion.
-    const incrementalNewTree = ts.updateLanguageServiceSourceFile(oldTree, newText, oldTree.version + ".", textChangeRange);
+    const incrementalNewTree = ts.updateLanguageServiceSourceFile(
+        oldTree,
+        newText,
+        oldTree.version + ".",
+        textChangeRange,
+    );
     Utils.assertInvariants(incrementalNewTree, /*parent:*/ undefined);
 
     // We should get the same tree when doign a full or incremental parse.
@@ -122,8 +133,8 @@ function deleteCode(source: string, index: number, toDelete: string) {
     for (let i = 0; i < repeat; i++) {
         const oldText = ts.ScriptSnapshot.fromString(source);
         const newTextAndChange = withDelete(oldText, index, 1);
-        const newTree =
-            compareTrees(oldText, newTextAndChange.text, newTextAndChange.textChangeRange, -1, oldTree).incrementalNewTree;
+        const newTree = compareTrees(oldText, newTextAndChange.text, newTextAndChange.textChangeRange, -1, oldTree)
+            .incrementalNewTree;
 
         source = ts.getSnapshotText(newTextAndChange.text);
         oldTree = newTree;
@@ -136,8 +147,8 @@ function insertCode(source: string, index: number, toInsert: string) {
     for (let i = 0; i < repeat; i++) {
         const oldText = ts.ScriptSnapshot.fromString(source);
         const newTextAndChange = withInsert(oldText, index + i, toInsert.charAt(i));
-        const newTree =
-            compareTrees(oldText, newTextAndChange.text, newTextAndChange.textChangeRange, -1, oldTree).incrementalNewTree;
+        const newTree = compareTrees(oldText, newTextAndChange.text, newTextAndChange.textChangeRange, -1, oldTree)
+            .incrementalNewTree;
 
         source = ts.getSnapshotText(newTextAndChange.text);
         oldTree = newTree;
@@ -772,7 +783,8 @@ module m3 { }\
     });
 
     it("Moving index signatures from interface to class", () => {
-        const source = "interface C { public [a: number]: string; public [a: number]: string; public [a: number]: string }";
+        const source =
+            "interface C { public [a: number]: string; public [a: number]: string; public [a: number]: string }";
 
         const oldText = ts.ScriptSnapshot.fromString(source);
         const newTextAndChange = withChange(oldText, 0, "interface".length, "class");
@@ -949,7 +961,9 @@ module m3 { }\
 
             function verifyDelete(atIndex: number, singleIgnore?: true) {
                 const index = getIndexOfTsIgnoreComment(atIndex);
-                const oldText = ts.ScriptSnapshot.fromString(textWithIgnoreCommentFrom(textWithIgnoreComment, singleIgnore));
+                const oldText = ts.ScriptSnapshot.fromString(
+                    textWithIgnoreCommentFrom(textWithIgnoreComment, singleIgnore),
+                );
                 const newTextAndChange = withDelete(oldText, index, tsIgnoreComment.length);
                 verifyCommentDirectives(oldText, newTextAndChange);
             }
@@ -967,7 +981,9 @@ module m3 { }\
 
             function verifyChangeToBlah(atIndex: number, singleIgnore?: true) {
                 const index = getIndexOfTsIgnoreComment(atIndex) + tsIgnoreComment.indexOf("@");
-                const oldText = ts.ScriptSnapshot.fromString(textWithIgnoreCommentFrom(textWithIgnoreComment, singleIgnore));
+                const oldText = ts.ScriptSnapshot.fromString(
+                    textWithIgnoreCommentFrom(textWithIgnoreComment, singleIgnore),
+                );
                 const newTextAndChange = withChange(oldText, index, 1, "blah ");
                 verifyCommentDirectives(oldText, newTextAndChange);
             }
@@ -997,7 +1013,9 @@ module m3 { }\
 
             function verifyChangeDirectiveType(atIndex: number, singleIgnore?: true) {
                 const index = getIndexOfTsIgnoreComment(atIndex) + tsIgnoreComment.indexOf("ignore");
-                const oldText = ts.ScriptSnapshot.fromString(textWithIgnoreCommentFrom(textWithIgnoreComment, singleIgnore));
+                const oldText = ts.ScriptSnapshot.fromString(
+                    textWithIgnoreCommentFrom(textWithIgnoreComment, singleIgnore),
+                );
                 const newTextAndChange = withChange(oldText, index, "ignore".length, "expect-error");
                 verifyCommentDirectives(oldText, newTextAndChange);
             }

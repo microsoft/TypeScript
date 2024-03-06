@@ -193,7 +193,9 @@ function isValidCallHierarchyDeclaration(node: Node): node is CallHierarchyDecla
 }
 
 /** Gets the node that can be used as a reference to a call hierarchy declaration. */
-function getCallHierarchyDeclarationReferenceNode(node: Exclude<CallHierarchyDeclaration, ClassStaticBlockDeclaration>) {
+function getCallHierarchyDeclarationReferenceNode(
+    node: Exclude<CallHierarchyDeclaration, ClassStaticBlockDeclaration>,
+) {
     if (isSourceFile(node)) return node;
     if (isNamedDeclaration(node)) return node.name;
     if (isAssignedExpression(node)) return node.parent.name;
@@ -214,7 +216,10 @@ function getSymbolOfCallHierarchyDeclaration(
 }
 
 /** Gets the text and range for the name of a call hierarchy declaration. */
-function getCallHierarchyItemName(program: Program, node: CallHierarchyDeclaration): { text: string; pos: number; end: number; } {
+function getCallHierarchyItemName(
+    program: Program,
+    node: CallHierarchyDeclaration,
+): { text: string; pos: number; end: number; } {
     if (isSourceFile(node)) {
         return { text: node.fileName, pos: 0, end: 0 };
     }
@@ -255,7 +260,9 @@ function getCallHierarchyItemName(program: Program, node: CallHierarchyDeclarati
     if (text === undefined) {
         // get the text from printing the node on a single line without comments...
         const printer = createPrinterWithRemoveCommentsOmitTrailingSemicolon();
-        text = usingSingleLineStringWriter(writer => printer.writeNode(EmitHint.Unspecified, node, node.getSourceFile(), writer));
+        text = usingSingleLineStringWriter(writer =>
+            printer.writeNode(EmitHint.Unspecified, node, node.getSourceFile(), writer)
+        );
     }
     return { text, pos: declName.getStart(), end: declName.getEnd() };
 }
@@ -266,7 +273,10 @@ function getCallHierarchItemContainerName(node: CallHierarchyDeclaration): strin
             return isClassExpression(node.parent.parent) ? getAssignedName(node.parent.parent)?.getText()
                 : node.parent.parent.name?.getText();
         }
-        if (isModuleBlock(node.parent.parent.parent.parent) && isIdentifier(node.parent.parent.parent.parent.parent.name)) {
+        if (
+            isModuleBlock(node.parent.parent.parent.parent) &&
+            isIdentifier(node.parent.parent.parent.parent.parent.name)
+        ) {
             return node.parent.parent.parent.parent.parent.name.getText();
         }
         return;
@@ -294,8 +304,14 @@ function findImplementation(
     typeChecker: TypeChecker,
     node: Extract<CallHierarchyDeclaration, FunctionLikeDeclaration>,
 ): Extract<CallHierarchyDeclaration, FunctionLikeDeclaration> | undefined;
-function findImplementation(typeChecker: TypeChecker, node: FunctionLikeDeclaration): FunctionLikeDeclaration | undefined;
-function findImplementation(typeChecker: TypeChecker, node: FunctionLikeDeclaration): FunctionLikeDeclaration | undefined {
+function findImplementation(
+    typeChecker: TypeChecker,
+    node: FunctionLikeDeclaration,
+): FunctionLikeDeclaration | undefined;
+function findImplementation(
+    typeChecker: TypeChecker,
+    node: FunctionLikeDeclaration,
+): FunctionLikeDeclaration | undefined {
     if (node.body) {
         return node;
     }
@@ -523,7 +539,8 @@ export function getIncomingCalls(
         ),
         isDefined,
     );
-    return calls ? group(calls, getCallSiteGroupKey, entries => convertCallSiteGroupToIncomingCall(program, entries)) : [];
+    return calls ? group(calls, getCallSiteGroupKey, entries => convertCallSiteGroupToIncomingCall(program, entries))
+        : [];
 }
 
 function createCallSiteCollector(program: Program, callSites: CallSite[]): (node: Node | undefined) => void {

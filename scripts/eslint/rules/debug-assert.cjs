@@ -9,7 +9,8 @@ module.exports = createRule({
         },
         messages: {
             secondArgumentDebugAssertError: `Second argument to 'Debug.assert' should be a string literal`,
-            thirdArgumentDebugAssertError: `Third argument to 'Debug.assert' should be a string literal or arrow function`,
+            thirdArgumentDebugAssertError:
+                `Third argument to 'Debug.assert' should be a string literal or arrow function`,
         },
         schema: [],
         type: "problem",

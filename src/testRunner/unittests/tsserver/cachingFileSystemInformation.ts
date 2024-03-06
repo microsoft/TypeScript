@@ -346,7 +346,9 @@ describe("unittests:: tsserver:: CachingFileSystemInformation:: tsserverProjectS
                 logCacheAndClear(session.logger);
                 baselineTsserverLogs(
                     "cachingFileSystemInformation",
-                    `watchDirectories for config file with case ${useCaseSensitiveFileNames ? "" : "in"}sensitive file system`,
+                    `watchDirectories for config file with case ${
+                        useCaseSensitiveFileNames ? "" : "in"
+                    }sensitive file system`,
                     session,
                 );
             });
@@ -512,7 +514,10 @@ describe("unittests:: tsserver:: CachingFileSystemInformation:: tsserverProjectS
                     content:
                         '{\n    "name": "@types/lodash",\n    "version": "4.14.74",\n    "description": "TypeScript definitions for Lo-Dash",\n    "license": "MIT",\n    "contributors": [\n        {\n            "name": "Brian Zengel",\n            "url": "https://github.com/bczengel"\n        },\n        {\n            "name": "Ilya Mochalov",\n            "url": "https://github.com/chrootsu"\n        },\n        {\n            "name": "Stepan Mikhaylyuk",\n            "url": "https://github.com/stepancar"\n        },\n        {\n            "name": "Eric L Anderson",\n            "url": "https://github.com/ericanderson"\n        },\n        {\n            "name": "AJ Richardson",\n            "url": "https://github.com/aj-r"\n        },\n        {\n            "name": "Junyoung Clare Jang",\n            "url": "https://github.com/ailrun"\n        }\n    ],\n    "main": "",\n    "repository": {\n        "type": "git",\n        "url": "https://www.github.com/DefinitelyTyped/DefinitelyTyped.git"\n    },\n    "scripts": {},\n    "dependencies": {},\n    "typesPublisherContentHash": "12af578ffaf8d86d2df37e591857906a86b983fa9258414326544a0fe6af0de8",\n    "typeScriptVersion": "2.2"\n}',
                 },
-                { path: "/a/b/node_modules/.staging/lodash-b0733faa/index.js", content: "module.exports = require('./lodash');" },
+                {
+                    path: "/a/b/node_modules/.staging/lodash-b0733faa/index.js",
+                    content: "module.exports = require('./lodash');",
+                },
                 { path: "/a/b/node_modules/.staging/typescript-8493ea5d/package.json.3017591594", content: "" },
             ].map(getRootedFileOrFolder));
             // Since we added/removed in .staging no timeout

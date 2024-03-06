@@ -286,7 +286,9 @@ type WithSkipAndOnly<T extends any[]> = ((...args: T) => void) & {
     only: (...args: T) => void;
 };
 
-function createTestWrapper<T extends any[]>(fn: (it: Mocha.PendingTestFunction, ...args: T) => void): WithSkipAndOnly<T> {
+function createTestWrapper<T extends any[]>(
+    fn: (it: Mocha.PendingTestFunction, ...args: T) => void,
+): WithSkipAndOnly<T> {
     wrapped.skip = (...args: T) => fn(it.skip, ...args);
     wrapped.only = (...args: T) => fn(it.only, ...args);
     return wrapped;
@@ -374,7 +376,10 @@ function testConvertToAsyncFunction(
                 diagnostic.start === context.span.start && diagnostic.length === context.span.length,
         );
         const actions = ts.codefix.getFixes(context);
-        const action = ts.find(actions, action => action.description === ts.Diagnostics.Convert_to_async_function.message);
+        const action = ts.find(
+            actions,
+            action => action.description === ts.Diagnostics.Convert_to_async_function.message,
+        );
 
         let outputText: string | null;
         if (action?.changes.length) {
@@ -388,7 +393,8 @@ function testConvertToAsyncFunction(
             const newText = ts.textChanges.applyChanges(sourceFile.text, changes[0].textChanges);
             data.push(newText);
 
-            const diagProgram = makeLanguageService({ path, content: newText }, includeLib, includeModule).getProgram()!;
+            const diagProgram = makeLanguageService({ path, content: newText }, includeLib, includeModule)
+                .getProgram()!;
             assert.isFalse(hasSyntacticDiagnostics(diagProgram));
             outputText = data.join(newLineCharacter);
         }
@@ -484,7 +490,8 @@ const _testConvertToAsyncFunctionWithModule = createTestWrapper((it, caption: st
         caption,
         text,
         "convertToAsyncFunction",
-        ConvertToAsyncTestFlags.IncludeLib | ConvertToAsyncTestFlags.IncludeModule | ConvertToAsyncTestFlags.ExpectSuccess,
+        ConvertToAsyncTestFlags.IncludeLib | ConvertToAsyncTestFlags.IncludeModule |
+            ConvertToAsyncTestFlags.ExpectSuccess,
     );
 });
 

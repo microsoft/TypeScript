@@ -144,7 +144,8 @@ new C();`,
 
         function verifyModuleResolution(withPathMapping: boolean) {
             describe(
-                withPathMapping ? "when tsconfig file contains path mapping" : "when tsconfig does not contain path mapping",
+                withPathMapping ? "when tsconfig file contains path mapping"
+                    : "when tsconfig does not contain path mapping",
                 () => {
                     const filesWithSources = [
                         libFile,
@@ -180,7 +181,9 @@ new C();`,
 
                         baselineTsserverLogs(
                             "symLinks",
-                            `module resolution${withPathMapping ? " with path mapping" : ""} when project compiles from sources`,
+                            `module resolution${
+                                withPathMapping ? " with path mapping" : ""
+                            } when project compiles from sources`,
                             session,
                         );
                     });

@@ -100,7 +100,10 @@ export interface BuilderProgram {
     /**
      * Get the declaration diagnostics, for all source files if source file is not supplied
      */
-    getDeclarationDiagnostics(sourceFile?: SourceFile, cancellationToken?: CancellationToken): readonly DiagnosticWithLocation[];
+    getDeclarationDiagnostics(
+        sourceFile?: SourceFile,
+        cancellationToken?: CancellationToken,
+    ): readonly DiagnosticWithLocation[];
     /**
      * Get all the dependencies of the file
      */

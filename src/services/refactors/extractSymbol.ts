@@ -193,7 +193,11 @@ registerRefactor(refactorName, {
  */
 export function getRefactorActionsToExtractSymbol(context: RefactorContext): readonly ApplicableRefactorInfo[] {
     const requestedRefactor = context.kind;
-    const rangeToExtract = getRangeToExtract(context.file, getRefactorContextSpan(context), context.triggerReason === "invoked");
+    const rangeToExtract = getRangeToExtract(
+        context.file,
+        getRefactorContextSpan(context),
+        context.triggerReason === "invoked",
+    );
     const targetRange = rangeToExtract.targetRange;
 
     if (targetRange === undefined) {
@@ -341,7 +345,10 @@ export function getRefactorActionsToExtractSymbol(context: RefactorContext): rea
  *
  * @internal
  */
-export function getRefactorEditsToExtractSymbol(context: RefactorContext, actionName: string): RefactorEditInfo | undefined {
+export function getRefactorEditsToExtractSymbol(
+    context: RefactorContext,
+    actionName: string,
+): RefactorEditInfo | undefined {
     const rangeToExtract = getRangeToExtract(context.file, getRefactorContextSpan(context));
     const targetRange = rangeToExtract.targetRange!; // TODO:GH#18217
 
@@ -383,19 +390,21 @@ export namespace Messages {
     export const cannotExtractRangeContainingConditionalReturnStatement: DiagnosticMessage = createMessage(
         "Cannot extract range containing conditional return statement.",
     );
-    export const cannotExtractRangeContainingLabeledBreakOrContinueStatementWithTargetOutsideOfTheRange: DiagnosticMessage =
-        createMessage(
+    export const cannotExtractRangeContainingLabeledBreakOrContinueStatementWithTargetOutsideOfTheRange:
+        DiagnosticMessage = createMessage(
             "Cannot extract range containing labeled break or continue with target outside of the range.",
         );
-    export const cannotExtractRangeThatContainsWritesToReferencesLocatedOutsideOfTheTargetRangeInGenerators: DiagnosticMessage =
-        createMessage(
+    export const cannotExtractRangeThatContainsWritesToReferencesLocatedOutsideOfTheTargetRangeInGenerators:
+        DiagnosticMessage = createMessage(
             "Cannot extract range containing writes to references located outside of the target range in generators.",
         );
     export const typeWillNotBeVisibleInTheNewScope = createMessage("Type will not visible in the new scope.");
     export const functionWillNotBeVisibleInTheNewScope = createMessage("Function will not visible in the new scope.");
     export const cannotExtractIdentifier = createMessage("Select more than a single identifier.");
     export const cannotExtractExportedEntity = createMessage("Cannot extract exported declaration");
-    export const cannotWriteInExpression = createMessage("Cannot write back side-effects when extracting an expression");
+    export const cannotWriteInExpression = createMessage(
+        "Cannot write back side-effects when extracting an expression",
+    );
     export const cannotExtractReadonlyPropertyInitializerOutsideConstructor = createMessage(
         "Cannot move initialization of read-only class property outside of the constructor",
     );
@@ -477,11 +486,13 @@ export function getRangeToExtract(sourceFile: SourceFile, span: TextSpan, invoke
     /* If the refactoring command is invoked through a keyboard action it's safe to assume that the user is actively looking for
     refactoring actions at the span location. As they may not know the exact range that will trigger a refactoring, we expand the
     searched span to cover a real node range making it more likely that something useful will show up. */
-    const adjustedSpan = startToken && endToken && invoked ? getAdjustedSpanFromNodes(startToken, endToken, sourceFile) : span;
+    const adjustedSpan = startToken && endToken && invoked ? getAdjustedSpanFromNodes(startToken, endToken, sourceFile)
+        : span;
 
     // Walk up starting from the the start position until we find a non-SourceFile node that subsumes the selected span.
     // This may fail (e.g. you select two statements in the root of a source file)
-    const start = cursorRequest ? getExtractableParent(startToken) : getParentNodeInSpan(startToken, sourceFile, adjustedSpan);
+    const start = cursorRequest ? getExtractableParent(startToken)
+        : getParentNodeInSpan(startToken, sourceFile, adjustedSpan);
 
     // Do the same for the ending position
     const end = cursorRequest ? start : getParentNodeInSpan(endToken, sourceFile, adjustedSpan);
@@ -741,7 +752,9 @@ export function getRangeToExtract(sourceFile: SourceFile, span: TextSpan, invoke
                 case SyntaxKind.FunctionDeclaration:
                     if (isSourceFile(node.parent) && node.parent.externalModuleIndicator === undefined) {
                         // You cannot extract global declarations
-                        (errors ||= []).push(createDiagnosticForNode(node, Messages.functionWillNotBeVisibleInTheNewScope));
+                        (errors ||= []).push(
+                            createDiagnosticForNode(node, Messages.functionWillNotBeVisibleInTheNewScope),
+                        );
                     }
                     // falls through
                 case SyntaxKind.ClassExpression:
@@ -816,7 +829,8 @@ export function getRangeToExtract(sourceFile: SourceFile, span: TextSpan, invoke
                     else {
                         if (
                             !(permittedJumps &
-                                (node.kind === SyntaxKind.BreakStatement ? PermittedJumps.Break : PermittedJumps.Continue))
+                                (node.kind === SyntaxKind.BreakStatement ? PermittedJumps.Break
+                                    : PermittedJumps.Continue))
                         ) {
                             // attempt to break or continue in a forbidden context
                             (errors ||= []).push(
@@ -841,7 +855,10 @@ export function getRangeToExtract(sourceFile: SourceFile, span: TextSpan, invoke
                     }
                     else {
                         (errors ||= []).push(
-                            createDiagnosticForNode(node, Messages.cannotExtractRangeContainingConditionalReturnStatement),
+                            createDiagnosticForNode(
+                                node,
+                                Messages.cannotExtractRangeContainingConditionalReturnStatement,
+                            ),
                         );
                     }
                     break;
@@ -996,7 +1013,10 @@ interface ScopeExtractions {
  * Each returned ExtractResultForScope corresponds to a possible target scope and is either a set of changes
  * or an error explaining why we can't extract into that scope.
  */
-function getPossibleExtractions(targetRange: TargetRange, context: RefactorContext): readonly ScopeExtractions[] | undefined {
+function getPossibleExtractions(
+    targetRange: TargetRange,
+    context: RefactorContext,
+): readonly ScopeExtractions[] | undefined {
     const { scopes, readsAndWrites: { functionErrorsPerScope, constantErrorsPerScope } } = getPossibleExtractionsWorker(
         targetRange,
         context,
@@ -1047,9 +1067,12 @@ function getPossibleExtractions(targetRange: TargetRange, context: RefactorConte
 
         // Customize the phrasing for the innermost scope to increase clarity.
         if (i === 0 && !isClassLike(scope)) {
-            constantDescription = formatStringFromArgs(getLocaleSpecificMessage(Diagnostics.Extract_to_0_in_enclosing_scope), [
-                constantDescriptionPart,
-            ]);
+            constantDescription = formatStringFromArgs(
+                getLocaleSpecificMessage(Diagnostics.Extract_to_0_in_enclosing_scope),
+                [
+                    constantDescriptionPart,
+                ],
+            );
         }
 
         return {
@@ -1197,9 +1220,13 @@ function extractFunctionInScope(
     );
     const sortedTypeParametersAndDeclarations = typeParametersAndDeclarations.sort(compareTypesByDeclarationOrder);
 
-    const typeParameters: readonly TypeParameterDeclaration[] | undefined = sortedTypeParametersAndDeclarations.length === 0
-        ? undefined
-        : mapDefined(sortedTypeParametersAndDeclarations, ({ declaration }) => declaration as TypeParameterDeclaration);
+    const typeParameters: readonly TypeParameterDeclaration[] | undefined =
+        sortedTypeParametersAndDeclarations.length === 0
+            ? undefined
+            : mapDefined(
+                sortedTypeParametersAndDeclarations,
+                ({ declaration }) => declaration as TypeParameterDeclaration,
+            );
 
     // Strictly speaking, we should check whether each name actually binds to the appropriate type
     // parameter.  In cases of shadowing, they may not.
@@ -1366,7 +1393,8 @@ function extractFunctionInScope(
                 commonNodeFlags = commonNodeFlags & variableDeclaration.parent.flags;
             }
 
-            const typeLiteral: TypeLiteralNode | undefined = sawExplicitType ? factory.createTypeLiteralNode(typeElements)
+            const typeLiteral: TypeLiteralNode | undefined = sawExplicitType ?
+                factory.createTypeLiteralNode(typeElements)
                 : undefined;
             if (typeLiteral) {
                 setEmitFlags(typeLiteral, EmitFlags.SingleLine);
@@ -1706,7 +1734,10 @@ function extractConstantInScope(
                 const firstParameter = firstOrUndefined(parameters);
                 // If the function signature has a this parameter and if the first defined parameter is not the this parameter, we must add it
                 // Note: If this parameter was already there, it would have been previously updated with the type if not type was present
-                if ((!firstParameter || (isIdentifier(firstParameter.name) && firstParameter.name.escapedText !== "this"))) {
+                if (
+                    (!firstParameter ||
+                        (isIdentifier(firstParameter.name) && firstParameter.name.escapedText !== "this"))
+                ) {
                     const thisType = checker.getTypeOfSymbolAtLocation(functionSignature.thisParameter, node);
                     parameters.splice(
                         0,
@@ -1760,7 +1791,9 @@ function getFirstDeclarationBeforePosition(type: Type, position: number): Declar
     const symbol = type.symbol;
     if (symbol && symbol.declarations) {
         for (const declaration of symbol.declarations) {
-            if ((firstDeclaration === undefined || declaration.pos < firstDeclaration.pos) && declaration.pos < position) {
+            if (
+                (firstDeclaration === undefined || declaration.pos < firstDeclaration.pos) && declaration.pos < position
+            ) {
                 firstDeclaration = declaration;
             }
         }
@@ -1784,7 +1817,8 @@ function compareTypesByDeclarationOrder(
 function getCalledExpression(scope: Node, range: TargetRange, functionNameText: string): Expression {
     const functionReference = factory.createIdentifier(functionNameText);
     if (isClassLike(scope)) {
-        const lhs = range.facts & RangeFacts.InStaticRegion ? factory.createIdentifier(scope.name!.text) : factory.createThis(); // TODO: GH#18217
+        const lhs = range.facts & RangeFacts.InStaticRegion ? factory.createIdentifier(scope.name!.text)
+            : factory.createThis(); // TODO: GH#18217
         return factory.createPropertyAccessExpression(lhs, functionReference);
     }
     else {
@@ -1816,12 +1850,17 @@ function transformFunctionBody(
         if (hasWritesOrVariableDeclarations && !hasReturn && isStatement(body)) {
             // add return at the end to propagate writes back in case if control flow falls out of the function body
             // it is ok to know that range has at least one return since it we only allow unconditional returns
-            const assignments = getPropertyAssignmentsForWritesAndVariableDeclarations(exposedVariableDeclarations, writes);
+            const assignments = getPropertyAssignmentsForWritesAndVariableDeclarations(
+                exposedVariableDeclarations,
+                writes,
+            );
             if (assignments.length === 1) {
                 rewrittenStatements.push(factory.createReturnStatement(assignments[0].name));
             }
             else {
-                rewrittenStatements.push(factory.createReturnStatement(factory.createObjectLiteralExpression(assignments)));
+                rewrittenStatements.push(
+                    factory.createReturnStatement(factory.createObjectLiteralExpression(assignments)),
+                );
             }
         }
         return { body: factory.createBlock(rewrittenStatements, /*multiLine*/ true), returnValueProperty };
@@ -1841,7 +1880,10 @@ function transformFunctionBody(
                     returnValueProperty = "__return";
                 }
                 assignments.unshift(
-                    factory.createPropertyAssignment(returnValueProperty, visitNode(node.expression, visitor, isExpression)),
+                    factory.createPropertyAssignment(
+                        returnValueProperty,
+                        visitNode(node.expression, visitor, isExpression),
+                    ),
                 );
             }
             if (assignments.length === 1) {
@@ -1870,7 +1912,8 @@ function transformConstantInitializer(initializer: Expression, substitutions: Re
 
     function visitor(node: Node): VisitResult<Node> {
         const substitution = substitutions.get(getNodeId(node).toString());
-        return substitution ? getSynthesizedDeepClone(substitution) : visitEachChild(node, visitor, /*context*/ undefined);
+        return substitution ? getSynthesizedDeepClone(substitution)
+            : visitEachChild(node, visitor, /*context*/ undefined);
     }
 }
 
@@ -1969,7 +2012,10 @@ function getPropertyAssignmentsForWritesAndVariableDeclarations(
     exposedVariableDeclarations: readonly VariableDeclaration[],
     writes: readonly UsageEntry[] | undefined,
 ): ShorthandPropertyAssignment[] {
-    const variableAssignments = map(exposedVariableDeclarations, v => factory.createShorthandPropertyAssignment(v.symbol.name));
+    const variableAssignments = map(
+        exposedVariableDeclarations,
+        v => factory.createShorthandPropertyAssignment(v.symbol.name),
+    );
     const writeAssignments = map(writes, w => factory.createShorthandPropertyAssignment(w.symbol.name));
 
     // TODO: GH#18217 `variableAssignments` not possibly undefined!
@@ -2148,7 +2194,9 @@ function collectReadsAndWrites(
         // local will actually be declared at the same level as the extracted expression).
         if (i > 0 && (scopeUsages.usages.size > 0 || scopeUsages.typeParameterUsages.size > 0)) {
             const errorNode = isReadonlyArray(targetRange.range) ? targetRange.range[0] : targetRange.range;
-            constantErrorsPerScope[i].push(createDiagnosticForNode(errorNode, Messages.cannotAccessVariablesFromNestedScopes));
+            constantErrorsPerScope[i].push(
+                createDiagnosticForNode(errorNode, Messages.cannotAccessVariablesFromNestedScopes),
+            );
         }
 
         if (targetRange.facts & RangeFacts.UsesThisInFunction && isClassLike(scopes[i])) {
@@ -2192,7 +2240,10 @@ function collectReadsAndWrites(
             constantErrorsPerScope[i].push(diag);
         }
         else if (firstExposedNonVariableDeclaration) {
-            const diag = createDiagnosticForNode(firstExposedNonVariableDeclaration, Messages.cannotExtractExportedEntity);
+            const diag = createDiagnosticForNode(
+                firstExposedNonVariableDeclaration,
+                Messages.cannotExtractExportedEntity,
+            );
             functionErrorsPerScope[i].push(diag);
             constantErrorsPerScope[i].push(diag);
         }
@@ -2361,7 +2412,10 @@ function collectReadsAndWrites(
 
     function checkForUsedDeclarations(node: Node) {
         // If this node is entirely within the original extraction range, we don't need to do anything.
-        if (node === targetRange.range || (isReadonlyArray(targetRange.range) && targetRange.range.includes(node as Statement))) {
+        if (
+            node === targetRange.range ||
+            (isReadonlyArray(targetRange.range) && targetRange.range.includes(node as Statement))
+        ) {
             return;
         }
 
@@ -2396,7 +2450,8 @@ function collectReadsAndWrites(
     function getSymbolReferencedByIdentifier(identifier: Identifier) {
         // If the identifier is both a property name and its value, we're only interested in its value
         // (since the name is a declaration and will be included in the extracted range).
-        return identifier.parent && isShorthandPropertyAssignment(identifier.parent) && identifier.parent.name === identifier
+        return identifier.parent && isShorthandPropertyAssignment(identifier.parent) &&
+                identifier.parent.name === identifier
             ? checker.getShorthandAssignmentValueSymbol(identifier.parent)
             : checker.getSymbolAtLocation(identifier);
     }

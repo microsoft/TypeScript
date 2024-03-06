@@ -54,11 +54,18 @@ registerCodeFix({
         if (namespaceChanges.length) {
             actions = append(
                 actions,
-                createCodeFixActionWithoutFixAll(fixId, namespaceChanges, Diagnostics.Convert_named_imports_to_namespace_import),
+                createCodeFixActionWithoutFixAll(
+                    fixId,
+                    namespaceChanges,
+                    Diagnostics.Convert_named_imports_to_namespace_import,
+                ),
             );
         }
         if (typeOnlyChanges.length) {
-            actions = append(actions, createCodeFixActionWithoutFixAll(fixId, typeOnlyChanges, Diagnostics.Use_import_type));
+            actions = append(
+                actions,
+                createCodeFixActionWithoutFixAll(fixId, typeOnlyChanges, Diagnostics.Use_import_type),
+            );
         }
         return actions;
     },
@@ -99,7 +106,8 @@ function doTypeOnlyImportChange(
         return;
     }
 
-    const importClause = importDeclaration.kind === SyntaxKind.ImportClause ? importDeclaration : importDeclaration.parent.parent;
+    const importClause = importDeclaration.kind === SyntaxKind.ImportClause ? importDeclaration
+        : importDeclaration.parent.parent;
     if (importClause.name && importClause.namedBindings) {
         // Cannot convert an import with a default import and named bindings to type-only
         // (it's a grammar error).

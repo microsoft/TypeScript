@@ -2,7 +2,11 @@ import * as Harness from "../../../_namespaces/Harness";
 import * as ts from "../../../_namespaces/ts";
 
 describe("unittests:: services:: extract:: Symbol Walker", () => {
-    function test(description: string, source: string, verifier: (file: ts.SourceFile, checker: ts.TypeChecker) => void) {
+    function test(
+        description: string,
+        source: string,
+        verifier: (file: ts.SourceFile, checker: ts.TypeChecker) => void,
+    ) {
         it(description, () => {
             const result = Harness.Compiler.compileFiles(
                 [{

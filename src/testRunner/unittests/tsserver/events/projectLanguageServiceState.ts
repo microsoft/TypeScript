@@ -51,7 +51,11 @@ describe("unittests:: tsserver:: events:: ProjectLanguageServiceStateEvent", () 
                 session.getProjectService().configuredProjects.get(config.path)!.languageServiceEnabled
             }`,
         );
-        baselineTsserverLogs("events/projectLanguageServiceState", "language service disabled events are triggered", session);
+        baselineTsserverLogs(
+            "events/projectLanguageServiceState",
+            "language service disabled events are triggered",
+            session,
+        );
     });
 
     it("Large file size is determined correctly", () => {

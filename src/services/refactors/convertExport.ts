@@ -101,7 +101,10 @@ registerRefactor(refactorName, {
 
         return emptyArray;
     },
-    getEditsForAction: function getRefactorEditsToConvertBetweenNamedAndDefaultExports(context, actionName): RefactorEditInfo {
+    getEditsForAction: function getRefactorEditsToConvertBetweenNamedAndDefaultExports(
+        context,
+        actionName,
+    ): RefactorEditInfo {
         Debug.assert(
             actionName === defaultToNamedAction.name || actionName === namedToDefaultAction.name,
             "Unexpected action name",
@@ -143,7 +146,8 @@ function getInfo(context: RefactorContext, considerPartialSpans = true): ExportI
             : getParentNodeInSpan(token, file, span);
     if (
         !exportNode ||
-        (!isSourceFile(exportNode.parent) && !(isModuleBlock(exportNode.parent) && isAmbientModule(exportNode.parent.parent)))
+        (!isSourceFile(exportNode.parent) &&
+            !(isModuleBlock(exportNode.parent) && isAmbientModule(exportNode.parent.parent)))
     ) {
         return { error: getLocaleSpecificMessage(Diagnostics.Could_not_find_export_statement) };
     }
@@ -151,11 +155,14 @@ function getInfo(context: RefactorContext, considerPartialSpans = true): ExportI
     const checker = program.getTypeChecker();
     const exportingModuleSymbol = getExportingModuleSymbol(exportNode.parent, checker);
     const flags = getSyntacticModifierFlags(exportNode) ||
-        ((isExportAssignment(exportNode) && !exportNode.isExportEquals) ? ModifierFlags.ExportDefault : ModifierFlags.None);
+        ((isExportAssignment(exportNode) && !exportNode.isExportEquals) ? ModifierFlags.ExportDefault
+            : ModifierFlags.None);
 
     const wasDefault = !!(flags & ModifierFlags.Default);
     // If source file already has a default export, don't offer refactor.
-    if (!(flags & ModifierFlags.Export) || !wasDefault && exportingModuleSymbol.exports!.has(InternalSymbolName.Default)) {
+    if (
+        !(flags & ModifierFlags.Export) || !wasDefault && exportingModuleSymbol.exports!.has(InternalSymbolName.Default)
+    ) {
         return { error: getLocaleSpecificMessage(Diagnostics.This_file_already_has_a_default_export) };
     }
 
@@ -254,12 +261,19 @@ function changeExport(
             case SyntaxKind.FunctionDeclaration:
             case SyntaxKind.ClassDeclaration:
             case SyntaxKind.InterfaceDeclaration:
-                changes.insertNodeAfter(exportingSourceFile, exportKeyword, factory.createToken(SyntaxKind.DefaultKeyword));
+                changes.insertNodeAfter(
+                    exportingSourceFile,
+                    exportKeyword,
+                    factory.createToken(SyntaxKind.DefaultKeyword),
+                );
                 break;
             case SyntaxKind.VariableStatement:
                 // If 'x' isn't used in this file and doesn't have type definition, `export const x = 0;` --> `export default 0;`
                 const decl = first(exportNode.declarationList.declarations);
-                if (!FindAllReferences.Core.isSymbolReferencedInFile(exportName, checker, exportingSourceFile) && !decl.type) {
+                if (
+                    !FindAllReferences.Core.isSymbolReferencedInFile(exportName, checker, exportingSourceFile) &&
+                    !decl.type
+                ) {
                     // We checked in `getInfo` that an initializer exists.
                     changes.replaceNode(
                         exportingSourceFile,
@@ -295,7 +309,10 @@ function changeImports(
     cancellationToken: CancellationToken | undefined,
 ): void {
     const checker = program.getTypeChecker();
-    const exportSymbol = Debug.checkDefined(checker.getSymbolAtLocation(exportName), "Export name should resolve to a symbol");
+    const exportSymbol = Debug.checkDefined(
+        checker.getSymbolAtLocation(exportName),
+        "Export name should resolve to a symbol",
+    );
     FindAllReferences.Core.eachExportReference(
         program.getSourceFiles(),
         checker,
@@ -388,7 +405,11 @@ function changeDefaultToNamedImport(
     }
 }
 
-function changeNamedToDefaultImport(importingSourceFile: SourceFile, ref: Identifier, changes: textChanges.ChangeTracker): void {
+function changeNamedToDefaultImport(
+    importingSourceFile: SourceFile,
+    ref: Identifier,
+    changes: textChanges.ChangeTracker,
+): void {
     const parent = ref.parent as PropertyAccessExpression | ImportSpecifier | ExportSpecifier;
     switch (parent.kind) {
         case SyntaxKind.PropertyAccessExpression:

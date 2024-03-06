@@ -85,7 +85,11 @@ export function getNavigateToItems(
  * Exclude 'node_modules/' files and standard library files if 'excludeLibFiles' is true.
  * If we're in current file only mode, we don't exclude the current file, even if it is a library file.
  */
-function shouldExcludeFile(file: SourceFile, excludeLibFiles: boolean, singleCurrentFile: SourceFile | undefined): boolean {
+function shouldExcludeFile(
+    file: SourceFile,
+    excludeLibFiles: boolean,
+    singleCurrentFile: SourceFile | undefined,
+): boolean {
     return file !== singleCurrentFile && excludeLibFiles && (isInsideNodeModules(file.path) || file.hasNoDefaultLib);
 }
 
@@ -123,7 +127,13 @@ function getItemsFromNamedDeclaration(
             }
         }
         else {
-            rawItems.push({ name, fileName, matchKind: match.kind, isCaseSensitive: match.isCaseSensitive, declaration });
+            rawItems.push({
+                name,
+                fileName,
+                matchKind: match.kind,
+                isCaseSensitive: match.isCaseSensitive,
+                declaration,
+            });
         }
     }
 }
@@ -143,7 +153,9 @@ function shouldKeepItem(
             )!; // TODO: GH#18217
             const imported = checker.getAliasedSymbol(importer);
             return importer.escapedName !== imported.escapedName
-                && !imported.declarations?.every(d => shouldExcludeFile(d.getSourceFile(), excludeLibFiles, singleCurrentFile));
+                && !imported.declarations?.every(d =>
+                    shouldExcludeFile(d.getSourceFile(), excludeLibFiles, singleCurrentFile)
+                );
         default:
             return true;
     }
@@ -175,7 +187,10 @@ function getContainers(declaration: Declaration): readonly string[] {
     // First, if we started with a computed property name, then add all but the last
     // portion into the container array.
     const name = getNameOfDeclaration(declaration);
-    if (name && name.kind === SyntaxKind.ComputedPropertyName && !tryAddComputedPropertyName(name.expression, containers)) {
+    if (
+        name && name.kind === SyntaxKind.ComputedPropertyName &&
+        !tryAddComputedPropertyName(name.expression, containers)
+    ) {
         return emptyArray;
     }
     // Don't include the last portion.

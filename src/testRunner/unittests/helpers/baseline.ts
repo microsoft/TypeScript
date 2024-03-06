@@ -17,7 +17,9 @@ export interface CommandLineCallbacks {
     getPrograms: () => readonly CommandLineProgram[];
 }
 
-function isAnyProgram(program: ts.Program | ts.BuilderProgram | ts.ParsedCommandLine): program is ts.Program | ts.BuilderProgram {
+function isAnyProgram(
+    program: ts.Program | ts.BuilderProgram | ts.ParsedCommandLine,
+): program is ts.Program | ts.BuilderProgram {
     return !!(program as ts.Program | ts.BuilderProgram).getCompilerOptions;
 }
 export function commandLineCallbacks(
@@ -145,7 +147,10 @@ export function generateSourceMapBaselineFiles(sys: ts.System & { writtenFiles: 
 
 export type ReadableProgramBuildInfoDiagnostic = string | [string, readonly ts.ReusableDiagnostic[]];
 export type ReadableBuilderFileEmit = string & { __readableBuilderFileEmit: any; };
-export type ReadableProgramBuilderInfoFilePendingEmit = [original: string | [string], emitKind: ReadableBuilderFileEmit];
+export type ReadableProgramBuilderInfoFilePendingEmit = [
+    original: string | [string],
+    emitKind: ReadableBuilderFileEmit,
+];
 export type ReadableProgramBuildInfoEmitSignature = string | [string, ts.EmitSignature | []];
 export type ReadableProgramBuildInfoFileInfo<T> = Omit<ts.BuilderState.FileInfo, "impliedFormat"> & {
     impliedFormat: string | undefined;
@@ -184,11 +189,13 @@ export type ReadableProgramBuildInfoBundlePendingEmit = [
     emitKind: ReadableBuilderFileEmit,
     original: ts.ProgramBuildInfoBundlePendingEmit,
 ];
-export type ReadableProgramBundleEmitBuildInfo = Omit<ts.ProgramBundleEmitBuildInfo, "fileInfos" | "root" | "pendingEmit"> & {
-    fileInfos: ts.MapLike<string | ReadableProgramBuildInfoFileInfo<ts.BuilderState.FileInfo>>;
-    root: readonly ReadableProgramBuildInfoRoot[];
-    pendingEmit: ReadableProgramBuildInfoBundlePendingEmit | undefined;
-};
+export type ReadableProgramBundleEmitBuildInfo =
+    & Omit<ts.ProgramBundleEmitBuildInfo, "fileInfos" | "root" | "pendingEmit">
+    & {
+        fileInfos: ts.MapLike<string | ReadableProgramBuildInfoFileInfo<ts.BuilderState.FileInfo>>;
+        root: readonly ReadableProgramBuildInfoRoot[];
+        pendingEmit: ReadableProgramBuildInfoBundlePendingEmit | undefined;
+    };
 
 export type ReadableProgramBuildInfo = ReadableProgramMultiFileEmitBuildInfo | ReadableProgramBundleEmitBuildInfo;
 
@@ -197,7 +204,10 @@ export function isReadableProgramBundleEmitBuildInfo(
 ): info is ReadableProgramBundleEmitBuildInfo {
     return !!info && !!info.options?.outFile;
 }
-export type ReadableBuildInfo = Omit<ts.BuildInfo, "program"> & { program: ReadableProgramBuildInfo | undefined; size: number; };
+export type ReadableBuildInfo = Omit<ts.BuildInfo, "program"> & {
+    program: ReadableProgramBuildInfo | undefined;
+    size: number;
+};
 function generateBuildInfoProgramBaseline(sys: ts.System, buildInfoPath: string, buildInfo: ts.BuildInfo) {
     let program: ReadableProgramBuildInfo | undefined;
     let fileNamesList: string[][] | undefined;
@@ -244,7 +254,9 @@ function generateBuildInfoProgramBaseline(sys: ts.System, buildInfoPath: string,
             semanticDiagnosticsPerFile: toReadableProgramBuildInfoDiagnosticsPerFile(
                 buildInfo.program.semanticDiagnosticsPerFile,
             ),
-            emitDiagnosticsPerFile: toReadableProgramBuildInfoDiagnosticsPerFile(buildInfo.program.emitDiagnosticsPerFile),
+            emitDiagnosticsPerFile: toReadableProgramBuildInfoDiagnosticsPerFile(
+                buildInfo.program.emitDiagnosticsPerFile,
+            ),
             affectedFilesPendingEmit: buildInfo.program.affectedFilesPendingEmit?.map(value =>
                 toReadableProgramBuilderInfoFilePendingEmit(value, fullEmitForOptions!)
             ),
@@ -294,7 +306,9 @@ function generateBuildInfoProgramBaseline(sys: ts.System, buildInfoPath: string,
         return [original, readable];
     }
 
-    function toMapOfReferencedSet(referenceMap: ts.ProgramBuildInfoReferencedMap | undefined): ts.MapLike<string[]> | undefined {
+    function toMapOfReferencedSet(
+        referenceMap: ts.ProgramBuildInfoReferencedMap | undefined,
+    ): ts.MapLike<string[]> | undefined {
         if (!referenceMap) return undefined;
         const result: ts.MapLike<string[]> = {};
         for (const [fileNamesKey, fileNamesListKey] of referenceMap) {
@@ -352,7 +366,10 @@ export function baselineBuildInfo(
     if (!buildInfoPath || !sys.writtenFiles!.has(toPathWithSystem(sys, buildInfoPath))) return;
     if (!sys.fileExists(buildInfoPath)) return;
 
-    const buildInfo = ts.getBuildInfo(buildInfoPath, (originalReadCall || sys.readFile).call(sys, buildInfoPath, "utf8"));
+    const buildInfo = ts.getBuildInfo(
+        buildInfoPath,
+        (originalReadCall || sys.readFile).call(sys, buildInfoPath, "utf8"),
+    );
     if (!buildInfo) return sys.writeFile(`${buildInfoPath}.baseline.txt`, "Error reading valid buildinfo file");
     generateBuildInfoProgramBaseline(sys, buildInfoPath, buildInfo);
 }

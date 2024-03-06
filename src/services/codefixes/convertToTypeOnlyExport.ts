@@ -31,7 +31,11 @@ registerCodeFix({
     getCodeActions: function getCodeActionsToConvertToTypeOnlyExport(context) {
         const changes = textChanges.ChangeTracker.with(
             context,
-            t => fixSingleExportDeclaration(t, getExportSpecifierForDiagnosticSpan(context.span, context.sourceFile), context),
+            t => fixSingleExportDeclaration(
+                t,
+                getExportSpecifierForDiagnosticSpan(context.span, context.sourceFile),
+                context,
+            ),
         );
         if (changes.length) {
             return [
@@ -81,7 +85,10 @@ function fixSingleExportDeclaration(
             exportDeclaration,
             exportDeclaration.modifiers,
             /*isTypeOnly*/ false,
-            factory.updateNamedExports(exportClause, filter(exportClause.elements, e => !contains(typeExportSpecifiers, e))),
+            factory.updateNamedExports(
+                exportClause,
+                filter(exportClause.elements, e => !contains(typeExportSpecifiers, e)),
+            ),
             exportDeclaration.moduleSpecifier,
             /*attributes*/ undefined,
         );

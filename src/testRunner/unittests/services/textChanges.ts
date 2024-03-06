@@ -25,7 +25,8 @@ describe("unittests:: services:: textChanges", () => {
 
     function getRuleProvider(placeOpenBraceOnNewLineForFunctions: boolean): ts.formatting.FormatContext {
         return ts.formatting.getFormatContext(
-            placeOpenBraceOnNewLineForFunctions ? { ...ts.testFormatSettings, placeOpenBraceOnNewLineForFunctions: true }
+            placeOpenBraceOnNewLineForFunctions ?
+                { ...ts.testFormatSettings, placeOpenBraceOnNewLineForFunctions: true }
                 : ts.testFormatSettings,
             notImplementedHost,
         );
@@ -147,7 +148,10 @@ function bar() {
             text,
             /*validateNodes*/ false,
             (sourceFile, changeTracker) => {
-                changeTracker.deleteRange(sourceFile, { pos: text.indexOf("function foo"), end: text.indexOf("function bar") });
+                changeTracker.deleteRange(sourceFile, {
+                    pos: text.indexOf("function foo"),
+                    end: text.indexOf("function bar"),
+                });
             },
         );
     }
@@ -424,9 +428,14 @@ var a = 4; // comment 7`;
             text,
             /*validateNodes*/ true,
             (sourceFile, changeTracker) => {
-                changeTracker.replaceNode(sourceFile, findVariableStatementContaining("y", sourceFile), createTestClass(), {
-                    suffix: newLineCharacter,
-                });
+                changeTracker.replaceNode(
+                    sourceFile,
+                    findVariableStatementContaining("y", sourceFile),
+                    createTestClass(),
+                    {
+                        suffix: newLineCharacter,
+                    },
+                );
             },
         );
         runSingleFileTest(
@@ -435,11 +444,16 @@ var a = 4; // comment 7`;
             text,
             /*validateNodes*/ true,
             (sourceFile, changeTracker) => {
-                changeTracker.replaceNode(sourceFile, findVariableStatementContaining("y", sourceFile), createTestClass(), {
-                    leadingTriviaOption: ts.textChanges.LeadingTriviaOption.Exclude,
-                    suffix: newLineCharacter,
-                    prefix: newLineCharacter,
-                });
+                changeTracker.replaceNode(
+                    sourceFile,
+                    findVariableStatementContaining("y", sourceFile),
+                    createTestClass(),
+                    {
+                        leadingTriviaOption: ts.textChanges.LeadingTriviaOption.Exclude,
+                        suffix: newLineCharacter,
+                        prefix: newLineCharacter,
+                    },
+                );
             },
         );
         runSingleFileTest(
@@ -448,10 +462,15 @@ var a = 4; // comment 7`;
             text,
             /*validateNodes*/ true,
             (sourceFile, changeTracker) => {
-                changeTracker.replaceNode(sourceFile, findVariableStatementContaining("y", sourceFile), createTestClass(), {
-                    trailingTriviaOption: ts.textChanges.TrailingTriviaOption.Exclude,
-                    suffix: newLineCharacter,
-                });
+                changeTracker.replaceNode(
+                    sourceFile,
+                    findVariableStatementContaining("y", sourceFile),
+                    createTestClass(),
+                    {
+                        trailingTriviaOption: ts.textChanges.TrailingTriviaOption.Exclude,
+                        suffix: newLineCharacter,
+                    },
+                );
             },
         );
         runSingleFileTest(
@@ -460,10 +479,15 @@ var a = 4; // comment 7`;
             text,
             /*validateNodes*/ true,
             (sourceFile, changeTracker) => {
-                changeTracker.replaceNode(sourceFile, findVariableStatementContaining("y", sourceFile), createTestClass(), {
-                    leadingTriviaOption: ts.textChanges.LeadingTriviaOption.Exclude,
-                    trailingTriviaOption: ts.textChanges.TrailingTriviaOption.Exclude,
-                });
+                changeTracker.replaceNode(
+                    sourceFile,
+                    findVariableStatementContaining("y", sourceFile),
+                    createTestClass(),
+                    {
+                        leadingTriviaOption: ts.textChanges.LeadingTriviaOption.Exclude,
+                        trailingTriviaOption: ts.textChanges.TrailingTriviaOption.Exclude,
+                    },
+                );
             },
         );
         runSingleFileTest(
@@ -472,10 +496,15 @@ var a = 4; // comment 7`;
             text,
             /*validateNodes*/ true,
             (sourceFile, changeTracker) => {
-                changeTracker.replaceNode(sourceFile, findVariableStatementContaining("x", sourceFile), createTestClass(), {
-                    leadingTriviaOption: ts.textChanges.LeadingTriviaOption.Exclude,
-                    trailingTriviaOption: ts.textChanges.TrailingTriviaOption.Exclude,
-                });
+                changeTracker.replaceNode(
+                    sourceFile,
+                    findVariableStatementContaining("x", sourceFile),
+                    createTestClass(),
+                    {
+                        leadingTriviaOption: ts.textChanges.LeadingTriviaOption.Exclude,
+                        trailingTriviaOption: ts.textChanges.TrailingTriviaOption.Exclude,
+                    },
+                );
             },
         );
     }
@@ -576,7 +605,11 @@ var a = 4; // comment 7`;
             text,
             /*validateNodes*/ true,
             (sourceFile, changeTracker) => {
-                changeTracker.insertNodeBefore(sourceFile, findVariableStatementContaining("y", sourceFile), createTestClass());
+                changeTracker.insertNodeBefore(
+                    sourceFile,
+                    findVariableStatementContaining("y", sourceFile),
+                    createTestClass(),
+                );
             },
         );
         runSingleFileTest(
@@ -610,7 +643,11 @@ namespace M {
             text,
             /*validateNodes*/ true,
             (sourceFile, changeTracker) => {
-                changeTracker.insertNodeBefore(sourceFile, findVariableStatementContaining("y", sourceFile), createTestClass());
+                changeTracker.insertNodeBefore(
+                    sourceFile,
+                    findVariableStatementContaining("y", sourceFile),
+                    createTestClass(),
+                );
             },
         );
         runSingleFileTest(
@@ -628,7 +665,11 @@ namespace M {
             text,
             /*validateNodes*/ true,
             (sourceFile, changeTracker) => {
-                changeTracker.insertNodeAfter(sourceFile, findVariableStatementContaining("y", sourceFile), createTestClass());
+                changeTracker.insertNodeAfter(
+                    sourceFile,
+                    findVariableStatementContaining("y", sourceFile),
+                    createTestClass(),
+                );
             },
         );
         runSingleFileTest(
@@ -644,7 +685,10 @@ namespace M {
 
     function findConstructor(sourceFile: ts.SourceFile): ts.ConstructorDeclaration {
         const classDecl = sourceFile.statements[0] as ts.ClassDeclaration;
-        return ts.find(classDecl.members, (m): m is ts.ConstructorDeclaration => ts.isConstructorDeclaration(m) && !!m.body)!;
+        return ts.find(
+            classDecl.members,
+            (m): m is ts.ConstructorDeclaration => ts.isConstructorDeclaration(m) && !!m.body,
+        )!;
     }
     function createTestSuperCall() {
         const superCall = ts.factory.createCallExpression(
@@ -668,7 +712,11 @@ class A {
             text1,
             /*validateNodes*/ false,
             (sourceFile, changeTracker) => {
-                changeTracker.insertNodeAtConstructorStart(sourceFile, findConstructor(sourceFile), createTestSuperCall());
+                changeTracker.insertNodeAtConstructorStart(
+                    sourceFile,
+                    findConstructor(sourceFile),
+                    createTestSuperCall(),
+                );
             },
         );
         const text2 = `
@@ -704,7 +752,11 @@ class A {
             text3,
             /*validateNodes*/ false,
             (sourceFile, changeTracker) => {
-                changeTracker.insertNodeAtConstructorStart(sourceFile, findConstructor(sourceFile), createTestSuperCall());
+                changeTracker.insertNodeAtConstructorStart(
+                    sourceFile,
+                    findConstructor(sourceFile),
+                    createTestSuperCall(),
+                );
             },
         );
     }

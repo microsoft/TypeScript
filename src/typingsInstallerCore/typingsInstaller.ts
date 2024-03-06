@@ -99,12 +99,18 @@ export function installNpmPackages(
 }
 
 /** @internal */
-export function getNpmCommandForInstallation(npmPath: string, tsVersion: string, packageNames: string[], remaining: number) {
+export function getNpmCommandForInstallation(
+    npmPath: string,
+    tsVersion: string,
+    packageNames: string[],
+    remaining: number,
+) {
     const sliceStart = packageNames.length - remaining;
     let command: string, toSlice = remaining;
     while (true) {
         command = `${npmPath} install --ignore-scripts ${
-            (toSlice === packageNames.length ? packageNames : packageNames.slice(sliceStart, sliceStart + toSlice)).join(" ")
+            (toSlice === packageNames.length ? packageNames : packageNames.slice(sliceStart, sliceStart + toSlice))
+                .join(" ")
         } --save-dev --user-agent="typesInstaller/${tsVersion}"`;
         if (command.length < 8000) {
             break;
@@ -363,7 +369,10 @@ export abstract class TypingsInstaller {
                         continue;
                     }
 
-                    const newTyping: JsTyping.CachedTyping = { typingLocation: typingFile, version: new Version(version) };
+                    const newTyping: JsTyping.CachedTyping = {
+                        typingLocation: typingFile,
+                        version: new Version(version),
+                    };
                     this.packageNameToTypingLocation.set(packageName, newTyping);
                 }
             }
@@ -402,7 +411,10 @@ export abstract class TypingsInstaller {
             }
             if (
                 this.packageNameToTypingLocation.get(typingKey) &&
-                JsTyping.isTypingUpToDate(this.packageNameToTypingLocation.get(typingKey)!, this.typesRegistry.get(typingKey)!)
+                JsTyping.isTypingUpToDate(
+                    this.packageNameToTypingLocation.get(typingKey)!,
+                    this.typesRegistry.get(typingKey)!,
+                )
             ) {
                 if (this.log.isEnabled()) {
                     this.log.writeLine(`'${typing}':: '${typingKey}' already has an up-to-date typing - skipping...`);

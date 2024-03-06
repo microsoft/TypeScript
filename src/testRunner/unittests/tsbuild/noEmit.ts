@@ -36,7 +36,12 @@ describe("unittests:: tsbuild:: noEmit", () => {
 
     function verifyNoEmit(subScenario: string, aTsContent: string) {
         verifyNoEmitWorker(subScenario, aTsContent, ["--b", "/src/tsconfig.json", "-v"]);
-        verifyNoEmitWorker(`${subScenario} with incremental`, aTsContent, ["--b", "/src/tsconfig.json", "-v", "--incremental"]);
+        verifyNoEmitWorker(`${subScenario} with incremental`, aTsContent, [
+            "--b",
+            "/src/tsconfig.json",
+            "-v",
+            "--incremental",
+        ]);
     }
 
     verifyNoEmit("syntax errors", `const a = "hello`);

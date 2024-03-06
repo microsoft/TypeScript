@@ -82,7 +82,10 @@ interface Atomics {
      * Returns the value at the given position in the array. Until this atomic operation completes,
      * any other read or write operation against the array will block.
      */
-    load(typedArray: Int8Array | Uint8Array | Int16Array | Uint16Array | Int32Array | Uint32Array, index: number): number;
+    load(
+        typedArray: Int8Array | Uint8Array | Int16Array | Uint16Array | Int32Array | Uint32Array,
+        index: number,
+    ): number;
 
     /**
      * Stores the bitwise OR of a value with the value at the given position in the array,

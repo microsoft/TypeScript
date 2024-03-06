@@ -108,7 +108,10 @@ export class SourceText implements ts.IScriptSnapshot {
                 newLength = this.importsAndExports.length;
                 break;
             case ChangedPart.program:
-                oldSpan = ts.createTextSpan(oldText.references.length + oldText.importsAndExports.length, oldText.program.length);
+                oldSpan = ts.createTextSpan(
+                    oldText.references.length + oldText.importsAndExports.length,
+                    oldText.program.length,
+                );
                 newLength = this.program.length;
                 break;
             default:
@@ -166,7 +169,10 @@ export function createTestCompilerHost(
         },
     };
     if (useGetSourceFileByPath) {
-        const filesByPath = ts.mapEntries(files, (fileName, file) => [ts.toPath(fileName, "", getCanonicalFileName), file]);
+        const filesByPath = ts.mapEntries(
+            files,
+            (fileName, file) => [ts.toPath(fileName, "", getCanonicalFileName), file],
+        );
         result.getSourceFileByPath = (_fileName, path) => filesByPath.get(path);
     }
     return result;

@@ -2080,7 +2080,13 @@ export interface MethodSignature extends SignatureDeclarationBase, TypeElement, 
 // at later stages of the compiler pipeline.  In that case, you can either check the parent kind
 // of the method, or use helpers like isObjectLiteralMethodDeclaration
 export interface MethodDeclaration
-    extends FunctionLikeDeclarationBase, ClassElement, ObjectLiteralElement, JSDocContainer, LocalsContainer, FlowContainer
+    extends
+        FunctionLikeDeclarationBase,
+        ClassElement,
+        ObjectLiteralElement,
+        JSDocContainer,
+        LocalsContainer,
+        FlowContainer
 {
     readonly kind: SyntaxKind.MethodDeclaration;
     readonly parent: ClassLikeDeclaration | ObjectLiteralExpression;
@@ -2092,7 +2098,9 @@ export interface MethodDeclaration
     /** @internal */ readonly exclamationToken?: ExclamationToken | undefined; // A method cannot have an exclamation token
 }
 
-export interface ConstructorDeclaration extends FunctionLikeDeclarationBase, ClassElement, JSDocContainer, LocalsContainer {
+export interface ConstructorDeclaration
+    extends FunctionLikeDeclarationBase, ClassElement, JSDocContainer, LocalsContainer
+{
     readonly kind: SyntaxKind.Constructor;
     readonly parent: ClassLikeDeclaration;
     readonly modifiers?: NodeArray<ModifierLike> | undefined;
@@ -2156,7 +2164,9 @@ export interface SetAccessorDeclaration
 
 export type AccessorDeclaration = GetAccessorDeclaration | SetAccessorDeclaration;
 
-export interface IndexSignatureDeclaration extends SignatureDeclarationBase, ClassElement, TypeElement, LocalsContainer {
+export interface IndexSignatureDeclaration
+    extends SignatureDeclarationBase, ClassElement, TypeElement, LocalsContainer
+{
     readonly kind: SyntaxKind.IndexSignature;
     readonly parent: ObjectTypeDeclaration;
     readonly modifiers?: NodeArray<ModifierLike>;
@@ -2755,7 +2765,9 @@ export interface FunctionExpression
     readonly body: FunctionBody; // Required, whereas the member inherited from FunctionDeclaration is optional
 }
 
-export interface ArrowFunction extends Expression, FunctionLikeDeclarationBase, JSDocContainer, LocalsContainer, FlowContainer {
+export interface ArrowFunction
+    extends Expression, FunctionLikeDeclarationBase, JSDocContainer, LocalsContainer, FlowContainer
+{
     readonly kind: SyntaxKind.ArrowFunction;
     readonly modifiers?: NodeArray<Modifier>;
     readonly equalsGreaterThanToken: EqualsGreaterThanToken;
@@ -3968,12 +3980,16 @@ export interface JSDocUnknownTag extends JSDocTag {
  */
 export interface JSDocAugmentsTag extends JSDocTag {
     readonly kind: SyntaxKind.JSDocAugmentsTag;
-    readonly class: ExpressionWithTypeArguments & { readonly expression: Identifier | PropertyAccessEntityNameExpression; };
+    readonly class: ExpressionWithTypeArguments & {
+        readonly expression: Identifier | PropertyAccessEntityNameExpression;
+    };
 }
 
 export interface JSDocImplementsTag extends JSDocTag {
     readonly kind: SyntaxKind.JSDocImplementsTag;
-    readonly class: ExpressionWithTypeArguments & { readonly expression: Identifier | PropertyAccessEntityNameExpression; };
+    readonly class: ExpressionWithTypeArguments & {
+        readonly expression: Identifier | PropertyAccessEntityNameExpression;
+    };
 }
 
 export interface JSDocAuthorTag extends JSDocTag {
@@ -4627,7 +4643,9 @@ export const enum EmitOnly {
 }
 
 /** @internal */
-export interface LibResolution<T extends ResolvedModuleWithFailedLookupLocations = ResolvedModuleWithFailedLookupLocations> {
+export interface LibResolution<
+    T extends ResolvedModuleWithFailedLookupLocations = ResolvedModuleWithFailedLookupLocations,
+> {
     resolution: T;
     actual: string;
 }
@@ -4668,7 +4686,9 @@ export interface Program extends ScriptReferenceHost {
         mode: ResolutionMode,
     ): ResolvedModuleWithFailedLookupLocations | undefined;
     /** @internal */
-    getResolvedModuleFromModuleSpecifier(moduleSpecifier: StringLiteralLike): ResolvedModuleWithFailedLookupLocations | undefined;
+    getResolvedModuleFromModuleSpecifier(
+        moduleSpecifier: StringLiteralLike,
+    ): ResolvedModuleWithFailedLookupLocations | undefined;
     /** @internal */
     getResolvedTypeReferenceDirective(
         f: SourceFile,
@@ -4725,10 +4745,16 @@ export interface Program extends ScriptReferenceHost {
 
     getOptionsDiagnostics(cancellationToken?: CancellationToken): readonly Diagnostic[];
     getGlobalDiagnostics(cancellationToken?: CancellationToken): readonly Diagnostic[];
-    getSyntacticDiagnostics(sourceFile?: SourceFile, cancellationToken?: CancellationToken): readonly DiagnosticWithLocation[];
+    getSyntacticDiagnostics(
+        sourceFile?: SourceFile,
+        cancellationToken?: CancellationToken,
+    ): readonly DiagnosticWithLocation[];
     /** The first time this is called, it will return global diagnostics (no location). */
     getSemanticDiagnostics(sourceFile?: SourceFile, cancellationToken?: CancellationToken): readonly Diagnostic[];
-    getDeclarationDiagnostics(sourceFile?: SourceFile, cancellationToken?: CancellationToken): readonly DiagnosticWithLocation[];
+    getDeclarationDiagnostics(
+        sourceFile?: SourceFile,
+        cancellationToken?: CancellationToken,
+    ): readonly DiagnosticWithLocation[];
     getConfigFileParsingDiagnostics(): readonly Diagnostic[];
     /** @internal */ getSuggestionDiagnostics(
         sourceFile: SourceFile,
@@ -4739,7 +4765,10 @@ export interface Program extends ScriptReferenceHost {
         sourceFile: SourceFile,
         cancellationToken?: CancellationToken,
     ): readonly Diagnostic[];
-    /** @internal */ getProgramDiagnostics(sourceFile: SourceFile, cancellationToken?: CancellationToken): readonly Diagnostic[];
+    /** @internal */ getProgramDiagnostics(
+        sourceFile: SourceFile,
+        cancellationToken?: CancellationToken,
+    ): readonly Diagnostic[];
 
     /**
      * Gets a type checker that can be used to semantically analyze source files in the program.
@@ -4790,7 +4819,10 @@ export interface Program extends ScriptReferenceHost {
     // This is set on created program to let us know how the program was created using old program
     /** @internal */ readonly structureIsReused: StructureIsReused;
 
-    /** @internal */ getSourceFileFromReference(referencingFile: SourceFile, ref: FileReference): SourceFile | undefined;
+    /** @internal */ getSourceFileFromReference(
+        referencingFile: SourceFile,
+        ref: FileReference,
+    ): SourceFile | undefined;
     /** @internal */ getLibFileFromReference(ref: FileReference): SourceFile | undefined;
 
     /**
@@ -4834,7 +4866,9 @@ export interface Program extends ScriptReferenceHost {
     /** @internal */ forEachResolvedProjectReference<T>(
         cb: (resolvedProjectReference: ResolvedProjectReference) => T | undefined,
     ): T | undefined;
-    /** @internal */ getResolvedProjectReferenceByPath(projectReferencePath: Path): ResolvedProjectReference | undefined;
+    /** @internal */ getResolvedProjectReferenceByPath(
+        projectReferencePath: Path,
+    ): ResolvedProjectReference | undefined;
     /** @internal */ isSourceOfProjectReferenceRedirect(fileName: string): boolean;
     /** @internal */ getBuildInfo?(): BuildInfo;
     /** @internal */ emitBuildInfo(writeFile?: WriteFileCallback, cancellationToken?: CancellationToken): EmitResult;
@@ -5009,7 +5043,11 @@ export interface TypeChecker {
 
     // TODO: GH#18217 `xToDeclaration` calls are frequently asserted as defined.
     /** Note that the resulting nodes cannot be checked. */
-    typeToTypeNode(type: Type, enclosingDeclaration: Node | undefined, flags: NodeBuilderFlags | undefined): TypeNode | undefined;
+    typeToTypeNode(
+        type: Type,
+        enclosingDeclaration: Node | undefined,
+        flags: NodeBuilderFlags | undefined,
+    ): TypeNode | undefined;
     /** @internal */ typeToTypeNode(
         type: Type,
         enclosingDeclaration: Node | undefined,
@@ -5111,9 +5149,19 @@ export interface TypeChecker {
     getTypeAtLocation(node: Node): Type;
     getTypeFromTypeNode(node: TypeNode): Type;
 
-    signatureToString(signature: Signature, enclosingDeclaration?: Node, flags?: TypeFormatFlags, kind?: SignatureKind): string;
+    signatureToString(
+        signature: Signature,
+        enclosingDeclaration?: Node,
+        flags?: TypeFormatFlags,
+        kind?: SignatureKind,
+    ): string;
     typeToString(type: Type, enclosingDeclaration?: Node, flags?: TypeFormatFlags): string;
-    symbolToString(symbol: Symbol, enclosingDeclaration?: Node, meaning?: SymbolFlags, flags?: SymbolFormatFlags): string;
+    symbolToString(
+        symbol: Symbol,
+        enclosingDeclaration?: Node,
+        meaning?: SymbolFlags,
+        flags?: SymbolFormatFlags,
+    ): string;
     typePredicateToString(predicate: TypePredicate, enclosingDeclaration?: Node, flags?: TypeFormatFlags): string;
 
     /** @internal */ writeSignature(
@@ -5123,7 +5171,12 @@ export interface TypeChecker {
         kind?: SignatureKind,
         writer?: EmitTextWriter,
     ): string;
-    /** @internal */ writeType(type: Type, enclosingDeclaration?: Node, flags?: TypeFormatFlags, writer?: EmitTextWriter): string;
+    /** @internal */ writeType(
+        type: Type,
+        enclosingDeclaration?: Node,
+        flags?: TypeFormatFlags,
+        writer?: EmitTextWriter,
+    ): string;
     /** @internal */ writeSymbol(
         symbol: Symbol,
         enclosingDeclaration?: Node,
@@ -5183,8 +5236,13 @@ export interface TypeChecker {
     isUnknownSymbol(symbol: Symbol): boolean;
     getMergedSymbol(symbol: Symbol): Symbol;
 
-    getConstantValue(node: EnumMember | PropertyAccessExpression | ElementAccessExpression): string | number | undefined;
-    isValidPropertyAccess(node: PropertyAccessExpression | QualifiedName | ImportTypeNode, propertyName: string): boolean;
+    getConstantValue(
+        node: EnumMember | PropertyAccessExpression | ElementAccessExpression,
+    ): string | number | undefined;
+    isValidPropertyAccess(
+        node: PropertyAccessExpression | QualifiedName | ImportTypeNode,
+        propertyName: string,
+    ): boolean;
     /**
      * Exclude accesses to private properties.
      *
@@ -5206,7 +5264,10 @@ export interface TypeChecker {
      * @internal
      */
     getExportsAndPropertiesOfModule(moduleSymbol: Symbol): Symbol[];
-    /** @internal */ forEachExportAndPropertyOfModule(moduleSymbol: Symbol, cb: (symbol: Symbol, key: __String) => void): void;
+    /** @internal */ forEachExportAndPropertyOfModule(
+        moduleSymbol: Symbol,
+        cb: (symbol: Symbol, key: __String) => void,
+    ): void;
     getJsxIntrinsicTagNamesAt(location: Node): Symbol[];
     isOptionalParameter(node: ParameterDeclaration): boolean;
     getAmbientModules(): Symbol[];
@@ -5228,13 +5289,20 @@ export interface TypeChecker {
         name: Identifier | string,
         containingType: Type,
     ): Symbol | undefined;
-    /** @internal */ getSuggestionForNonexistentProperty(name: MemberName | string, containingType: Type): string | undefined;
+    /** @internal */ getSuggestionForNonexistentProperty(
+        name: MemberName | string,
+        containingType: Type,
+    ): string | undefined;
     /** @internal */ getSuggestedSymbolForNonexistentSymbol(
         location: Node,
         name: string,
         meaning: SymbolFlags,
     ): Symbol | undefined;
-    /** @internal */ getSuggestionForNonexistentSymbol(location: Node, name: string, meaning: SymbolFlags): string | undefined;
+    /** @internal */ getSuggestionForNonexistentSymbol(
+        location: Node,
+        name: string,
+        meaning: SymbolFlags,
+    ): string | undefined;
     /** @internal */ getSuggestedSymbolForNonexistentModule(node: Identifier, target: Symbol): Symbol | undefined;
     /** @internal */ getSuggestedSymbolForNonexistentClassMember(name: string, baseType: Type): Symbol | undefined;
     /** @internal */ getSuggestionForNonexistentExport(node: Identifier, target: Symbol): string | undefined;
@@ -5349,7 +5417,12 @@ export interface TypeChecker {
     /** @internal */ getSymbolCount(): number;
     /** @internal */ getTypeCount(): number;
     /** @internal */ getInstantiationCount(): number;
-    /** @internal */ getRelationCacheSizes(): { assignable: number; identity: number; subtype: number; strictSubtype: number; };
+    /** @internal */ getRelationCacheSizes(): {
+        assignable: number;
+        identity: number;
+        subtype: number;
+        strictSubtype: number;
+    };
     /** @internal */ getRecursionIdentity(type: Type): object | undefined;
     /** @internal */ getUnmatchedProperties(
         source: Type,
@@ -5390,7 +5463,12 @@ export interface TypeChecker {
      * @internal
      */
     getAllPossiblePropertiesOfTypes(type: readonly Type[]): Symbol[];
-    resolveName(name: string, location: Node | undefined, meaning: SymbolFlags, excludeGlobals: boolean): Symbol | undefined;
+    resolveName(
+        name: string,
+        location: Node | undefined,
+        meaning: SymbolFlags,
+        excludeGlobals: boolean,
+    ): Symbol | undefined;
     /** @internal */ getJsxNamespace(location?: Node): string;
     /** @internal */ getJsxFragmentFactory(location: Node): string | undefined;
 
@@ -5434,7 +5512,10 @@ export interface TypeChecker {
      *
      * @internal
      */
-    getSuggestionDiagnostics(file: SourceFile, cancellationToken?: CancellationToken): readonly DiagnosticWithLocation[];
+    getSuggestionDiagnostics(
+        file: SourceFile,
+        cancellationToken?: CancellationToken,
+    ): readonly DiagnosticWithLocation[];
 
     /**
      * Depending on the operation performed, it may be appropriate to throw away the checker
@@ -5443,7 +5524,9 @@ export interface TypeChecker {
      */
     runWithCancellationToken<T>(token: CancellationToken, cb: (checker: TypeChecker) => T): T;
 
-    /** @internal */ getLocalTypeParametersOfClassOrInterfaceOrTypeAlias(symbol: Symbol): readonly TypeParameter[] | undefined;
+    /** @internal */ getLocalTypeParametersOfClassOrInterfaceOrTypeAlias(
+        symbol: Symbol,
+    ): readonly TypeParameter[] | undefined;
     /** @internal */ isDeclarationVisible(node: Declaration | AnyImportSyntax): boolean;
     /** @internal */ isPropertyAccessible(
         node: Node,
@@ -5895,9 +5978,14 @@ export interface EmitResolver {
         meaning: SymbolFlags | undefined,
         shouldComputeAliasToMarkVisible: boolean,
     ): SymbolAccessibilityResult;
-    isEntityNameVisible(entityName: EntityNameOrEntityNameExpression, enclosingDeclaration: Node): SymbolVisibilityResult;
+    isEntityNameVisible(
+        entityName: EntityNameOrEntityNameExpression,
+        enclosingDeclaration: Node,
+    ): SymbolVisibilityResult;
     // Returns the constant value this property access resolves to, or 'undefined' for a non-constant
-    getConstantValue(node: EnumMember | PropertyAccessExpression | ElementAccessExpression): string | number | undefined;
+    getConstantValue(
+        node: EnumMember | PropertyAccessExpression | ElementAccessExpression,
+    ): string | number | undefined;
     getReferencedValueDeclaration(reference: Identifier): Declaration | undefined;
     getReferencedValueDeclarations(reference: Identifier): Declaration[] | undefined;
     getTypeReferenceSerializationKind(typeName: EntityName, location?: Node): TypeReferenceSerializationKind;
@@ -6205,7 +6293,10 @@ export const enum InternalSymbolName {
  * with a normal string (which is good, it cannot be misused on assignment or on usage),
  * while still being comparable with a normal string via === (also good) and castable from a string.
  */
-export type __String = (string & { __escapedIdentifier: void; }) | (void & { __escapedIdentifier: void; }) | InternalSymbolName;
+export type __String =
+    | (string & { __escapedIdentifier: void; })
+    | (void & { __escapedIdentifier: void; })
+    | InternalSymbolName;
 
 /** @deprecated Use ReadonlyMap<__String, T> instead. */
 export type ReadonlyUnderscoreEscapedMap<T> = ReadonlyMap<__String, T>;
@@ -8173,7 +8264,9 @@ export type SourceOfProjectReferenceRedirect = string | true;
 /** @internal */
 export interface ResolvedProjectReferenceCallbacks {
     getSourceOfProjectReferenceRedirect(fileName: string): SourceOfProjectReferenceRedirect | undefined;
-    forEachResolvedProjectReference<T>(cb: (resolvedProjectReference: ResolvedProjectReference) => T | undefined): T | undefined;
+    forEachResolvedProjectReference<T>(
+        cb: (resolvedProjectReference: ResolvedProjectReference) => T | undefined,
+    ): T | undefined;
 }
 
 /** @internal */
@@ -8253,7 +8346,8 @@ export const enum TransformFlags {
         ContainsHoistedDeclarationOrCompletion |
         ContainsBindingPattern | ContainsObjectRestOrSpread |
         ContainsPossibleTopLevelAwait,
-    ConstructorExcludes = NodeExcludes | ContainsLexicalThis | ContainsLexicalSuper | ContainsBlockScopedBinding | ContainsYield |
+    ConstructorExcludes = NodeExcludes | ContainsLexicalThis | ContainsLexicalSuper | ContainsBlockScopedBinding |
+        ContainsYield |
         ContainsAwait |
         ContainsHoistedDeclarationOrCompletion |
         ContainsBindingPattern |
@@ -8556,7 +8650,16 @@ export type WrappedExpression<T extends Expression> =
     | T;
 
 /** @internal */
-export type TypeOfTag = "null" | "undefined" | "number" | "bigint" | "boolean" | "string" | "symbol" | "object" | "function";
+export type TypeOfTag =
+    | "null"
+    | "undefined"
+    | "number"
+    | "bigint"
+    | "boolean"
+    | "string"
+    | "symbol"
+    | "object"
+    | "function";
 
 /** @internal */
 export interface CallBinding {
@@ -8650,7 +8753,10 @@ export interface NodeFactory {
         isSingleQuote?: boolean,
         hasExtendedUnicodeEscape?: boolean,
     ): StringLiteral; // eslint-disable-line @typescript-eslint/unified-signatures
-    createStringLiteralFromNode(sourceNode: PropertyNameLiteral | PrivateIdentifier, isSingleQuote?: boolean): StringLiteral;
+    createStringLiteralFromNode(
+        sourceNode: PropertyNameLiteral | PrivateIdentifier,
+        isSingleQuote?: boolean,
+    ): StringLiteral;
     createRegularExpressionLiteral(text: string): RegularExpressionLiteral;
 
     //
@@ -9074,7 +9180,11 @@ export interface NodeFactory {
     ): TypeOperatorNode;
     updateTypeOperatorNode(node: TypeOperatorNode, type: TypeNode): TypeOperatorNode;
     createIndexedAccessTypeNode(objectType: TypeNode, indexType: TypeNode): IndexedAccessTypeNode;
-    updateIndexedAccessTypeNode(node: IndexedAccessTypeNode, objectType: TypeNode, indexType: TypeNode): IndexedAccessTypeNode;
+    updateIndexedAccessTypeNode(
+        node: IndexedAccessTypeNode,
+        objectType: TypeNode,
+        indexType: TypeNode,
+    ): IndexedAccessTypeNode;
     createMappedTypeNode(
         readonlyToken: ReadonlyKeyword | PlusToken | MinusToken | undefined,
         typeParameter: TypeParameterDeclaration,
@@ -9094,7 +9204,10 @@ export interface NodeFactory {
     ): MappedTypeNode;
     createLiteralTypeNode(literal: LiteralTypeNode["literal"]): LiteralTypeNode;
     updateLiteralTypeNode(node: LiteralTypeNode, literal: LiteralTypeNode["literal"]): LiteralTypeNode;
-    createTemplateLiteralType(head: TemplateHead, templateSpans: readonly TemplateLiteralTypeSpan[]): TemplateLiteralTypeNode;
+    createTemplateLiteralType(
+        head: TemplateHead,
+        templateSpans: readonly TemplateLiteralTypeSpan[],
+    ): TemplateLiteralTypeNode;
     updateTemplateLiteralType(
         node: TemplateLiteralTypeNode,
         head: TemplateHead,
@@ -9129,7 +9242,10 @@ export interface NodeFactory {
 
     createArrayLiteralExpression(elements?: readonly Expression[], multiLine?: boolean): ArrayLiteralExpression;
     updateArrayLiteralExpression(node: ArrayLiteralExpression, elements: readonly Expression[]): ArrayLiteralExpression;
-    createObjectLiteralExpression(properties?: readonly ObjectLiteralElementLike[], multiLine?: boolean): ObjectLiteralExpression;
+    createObjectLiteralExpression(
+        properties?: readonly ObjectLiteralElementLike[],
+        multiLine?: boolean,
+    ): ObjectLiteralExpression;
     updateObjectLiteralExpression(
         node: ObjectLiteralExpression,
         properties: readonly ObjectLiteralElementLike[],
@@ -9266,7 +9382,11 @@ export interface NodeFactory {
     updatePrefixUnaryExpression(node: PrefixUnaryExpression, operand: Expression): PrefixUnaryExpression;
     createPostfixUnaryExpression(operand: Expression, operator: PostfixUnaryOperator): PostfixUnaryExpression;
     updatePostfixUnaryExpression(node: PostfixUnaryExpression, operand: Expression): PostfixUnaryExpression;
-    createBinaryExpression(left: Expression, operator: BinaryOperator | BinaryOperatorToken, right: Expression): BinaryExpression;
+    createBinaryExpression(
+        left: Expression,
+        operator: BinaryOperator | BinaryOperatorToken,
+        right: Expression,
+    ): BinaryExpression;
     updateBinaryExpression(
         node: BinaryExpression,
         left: Expression,
@@ -9366,7 +9486,11 @@ export interface NodeFactory {
     //
 
     createTemplateSpan(expression: Expression, literal: TemplateMiddle | TemplateTail): TemplateSpan;
-    updateTemplateSpan(node: TemplateSpan, expression: Expression, literal: TemplateMiddle | TemplateTail): TemplateSpan;
+    updateTemplateSpan(
+        node: TemplateSpan,
+        expression: Expression,
+        literal: TemplateMiddle | TemplateTail,
+    ): TemplateSpan;
     createSemicolonClassElement(): SemicolonClassElement;
 
     //
@@ -9445,7 +9569,11 @@ export interface NodeFactory {
     updateLabeledStatement(node: LabeledStatement, label: Identifier, statement: Statement): LabeledStatement;
     createThrowStatement(expression: Expression): ThrowStatement;
     updateThrowStatement(node: ThrowStatement, expression: Expression): ThrowStatement;
-    createTryStatement(tryBlock: Block, catchClause: CatchClause | undefined, finallyBlock: Block | undefined): TryStatement;
+    createTryStatement(
+        tryBlock: Block,
+        catchClause: CatchClause | undefined,
+        finallyBlock: Block | undefined,
+    ): TryStatement;
     updateTryStatement(
         node: TryStatement,
         tryBlock: Block,
@@ -9466,7 +9594,10 @@ export interface NodeFactory {
         type: TypeNode | undefined,
         initializer: Expression | undefined,
     ): VariableDeclaration;
-    createVariableDeclarationList(declarations: readonly VariableDeclaration[], flags?: NodeFlags): VariableDeclarationList;
+    createVariableDeclarationList(
+        declarations: readonly VariableDeclaration[],
+        flags?: NodeFlags,
+    ): VariableDeclarationList;
     updateVariableDeclarationList(
         node: VariableDeclarationList,
         declarations: readonly VariableDeclaration[],
@@ -9622,7 +9753,11 @@ export interface NodeFactory {
         multiLine?: boolean,
         token?: ImportAttributes["token"],
     ): ImportAttributes; // eslint-disable-line @typescript-eslint/unified-signatures
-    updateImportAttributes(node: ImportAttributes, elements: NodeArray<ImportAttribute>, multiLine?: boolean): ImportAttributes;
+    updateImportAttributes(
+        node: ImportAttributes,
+        elements: NodeArray<ImportAttribute>,
+        multiLine?: boolean,
+    ): ImportAttributes;
     createImportAttribute(name: ImportAttributeName, value: Expression): ImportAttribute;
     updateImportAttribute(node: ImportAttribute, name: ImportAttributeName, value: Expression): ImportAttribute;
     createNamespaceImport(name: Identifier): NamespaceImport;
@@ -9712,14 +9847,29 @@ export interface NodeFactory {
     createJSDocNameReference(name: EntityName | JSDocMemberName): JSDocNameReference;
     updateJSDocNameReference(node: JSDocNameReference, name: EntityName | JSDocMemberName): JSDocNameReference;
     createJSDocMemberName(left: EntityName | JSDocMemberName, right: Identifier): JSDocMemberName;
-    updateJSDocMemberName(node: JSDocMemberName, left: EntityName | JSDocMemberName, right: Identifier): JSDocMemberName;
+    updateJSDocMemberName(
+        node: JSDocMemberName,
+        left: EntityName | JSDocMemberName,
+        right: Identifier,
+    ): JSDocMemberName;
     createJSDocLink(name: EntityName | JSDocMemberName | undefined, text: string): JSDocLink;
     updateJSDocLink(node: JSDocLink, name: EntityName | JSDocMemberName | undefined, text: string): JSDocLink;
     createJSDocLinkCode(name: EntityName | JSDocMemberName | undefined, text: string): JSDocLinkCode;
-    updateJSDocLinkCode(node: JSDocLinkCode, name: EntityName | JSDocMemberName | undefined, text: string): JSDocLinkCode;
+    updateJSDocLinkCode(
+        node: JSDocLinkCode,
+        name: EntityName | JSDocMemberName | undefined,
+        text: string,
+    ): JSDocLinkCode;
     createJSDocLinkPlain(name: EntityName | JSDocMemberName | undefined, text: string): JSDocLinkPlain;
-    updateJSDocLinkPlain(node: JSDocLinkPlain, name: EntityName | JSDocMemberName | undefined, text: string): JSDocLinkPlain;
-    createJSDocTypeLiteral(jsDocPropertyTags?: readonly JSDocPropertyLikeTag[], isArrayType?: boolean): JSDocTypeLiteral;
+    updateJSDocLinkPlain(
+        node: JSDocLinkPlain,
+        name: EntityName | JSDocMemberName | undefined,
+        text: string,
+    ): JSDocLinkPlain;
+    createJSDocTypeLiteral(
+        jsDocPropertyTags?: readonly JSDocPropertyLikeTag[],
+        isArrayType?: boolean,
+    ): JSDocTypeLiteral;
     updateJSDocTypeLiteral(
         node: JSDocTypeLiteral,
         jsDocPropertyTags: readonly JSDocPropertyLikeTag[] | undefined,
@@ -9921,13 +10071,19 @@ export interface NodeFactory {
         tagName: Identifier | undefined,
         comment: string | NodeArray<JSDocComment> | undefined,
     ): JSDocPrivateTag;
-    createJSDocProtectedTag(tagName: Identifier | undefined, comment?: string | NodeArray<JSDocComment>): JSDocProtectedTag;
+    createJSDocProtectedTag(
+        tagName: Identifier | undefined,
+        comment?: string | NodeArray<JSDocComment>,
+    ): JSDocProtectedTag;
     updateJSDocProtectedTag(
         node: JSDocProtectedTag,
         tagName: Identifier | undefined,
         comment: string | NodeArray<JSDocComment> | undefined,
     ): JSDocProtectedTag;
-    createJSDocReadonlyTag(tagName: Identifier | undefined, comment?: string | NodeArray<JSDocComment>): JSDocReadonlyTag;
+    createJSDocReadonlyTag(
+        tagName: Identifier | undefined,
+        comment?: string | NodeArray<JSDocComment>,
+    ): JSDocReadonlyTag;
     updateJSDocReadonlyTag(
         node: JSDocReadonlyTag,
         tagName: Identifier | undefined,
@@ -9939,13 +10095,19 @@ export interface NodeFactory {
         tagName: Identifier,
         comment: string | NodeArray<JSDocComment> | undefined,
     ): JSDocUnknownTag;
-    createJSDocDeprecatedTag(tagName: Identifier | undefined, comment?: string | NodeArray<JSDocComment>): JSDocDeprecatedTag;
+    createJSDocDeprecatedTag(
+        tagName: Identifier | undefined,
+        comment?: string | NodeArray<JSDocComment>,
+    ): JSDocDeprecatedTag;
     updateJSDocDeprecatedTag(
         node: JSDocDeprecatedTag,
         tagName: Identifier | undefined,
         comment?: string | NodeArray<JSDocComment>,
     ): JSDocDeprecatedTag;
-    createJSDocOverrideTag(tagName: Identifier | undefined, comment?: string | NodeArray<JSDocComment>): JSDocOverrideTag;
+    createJSDocOverrideTag(
+        tagName: Identifier | undefined,
+        comment?: string | NodeArray<JSDocComment>,
+    ): JSDocOverrideTag;
     updateJSDocOverrideTag(
         node: JSDocOverrideTag,
         tagName: Identifier | undefined,
@@ -9975,7 +10137,10 @@ export interface NodeFactory {
     ): JSDocSatisfiesTag;
     createJSDocText(text: string): JSDocText;
     updateJSDocText(node: JSDocText, text: string): JSDocText;
-    createJSDocComment(comment?: string | NodeArray<JSDocComment> | undefined, tags?: readonly JSDocTag[] | undefined): JSDoc;
+    createJSDocComment(
+        comment?: string | NodeArray<JSDocComment> | undefined,
+        tags?: readonly JSDocTag[] | undefined,
+    ): JSDoc;
     updateJSDocComment(
         node: JSDoc,
         comment: string | NodeArray<JSDocComment> | undefined,
@@ -10037,7 +10202,11 @@ export interface NodeFactory {
         closingFragment: JsxClosingFragment,
     ): JsxFragment;
     createJsxAttribute(name: JsxAttributeName, initializer: JsxAttributeValue | undefined): JsxAttribute;
-    updateJsxAttribute(node: JsxAttribute, name: JsxAttributeName, initializer: JsxAttributeValue | undefined): JsxAttribute;
+    updateJsxAttribute(
+        node: JsxAttribute,
+        name: JsxAttributeName,
+        initializer: JsxAttributeValue | undefined,
+    ): JsxAttribute;
     createJsxAttributes(properties: readonly JsxAttributeLike[]): JsxAttributes;
     updateJsxAttributes(node: JsxAttributes, properties: readonly JsxAttributeLike[]): JsxAttributes;
     createJsxSpreadAttribute(expression: Expression): JsxSpreadAttribute;
@@ -10057,8 +10226,15 @@ export interface NodeFactory {
     updateDefaultClause(node: DefaultClause, statements: readonly Statement[]): DefaultClause;
     createHeritageClause(token: HeritageClause["token"], types: readonly ExpressionWithTypeArguments[]): HeritageClause;
     updateHeritageClause(node: HeritageClause, types: readonly ExpressionWithTypeArguments[]): HeritageClause;
-    createCatchClause(variableDeclaration: string | BindingName | VariableDeclaration | undefined, block: Block): CatchClause;
-    updateCatchClause(node: CatchClause, variableDeclaration: VariableDeclaration | undefined, block: Block): CatchClause;
+    createCatchClause(
+        variableDeclaration: string | BindingName | VariableDeclaration | undefined,
+        block: Block,
+    ): CatchClause;
+    updateCatchClause(
+        node: CatchClause,
+        variableDeclaration: VariableDeclaration | undefined,
+        block: Block,
+    ): CatchClause;
 
     //
     // Property assignments
@@ -10118,7 +10294,10 @@ export interface NodeFactory {
 
     createNotEmittedStatement(original: Node): NotEmittedStatement;
     createPartiallyEmittedExpression(expression: Expression, original?: Node): PartiallyEmittedExpression;
-    updatePartiallyEmittedExpression(node: PartiallyEmittedExpression, expression: Expression): PartiallyEmittedExpression;
+    updatePartiallyEmittedExpression(
+        node: PartiallyEmittedExpression,
+        expression: Expression,
+    ): PartiallyEmittedExpression;
     /** @internal */ createSyntheticReferenceExpression(
         expression: Expression,
         thisArg: Expression,
@@ -10138,7 +10317,10 @@ export interface NodeFactory {
     //
 
     createComma(left: Expression, right: Expression): BinaryExpression;
-    createAssignment(left: ObjectLiteralExpression | ArrayLiteralExpression, right: Expression): DestructuringAssignment;
+    createAssignment(
+        left: ObjectLiteralExpression | ArrayLiteralExpression,
+        right: Expression,
+    ): DestructuringAssignment;
     createAssignment(left: Expression, right: Expression): AssignmentExpression<EqualsToken>;
     createLogicalOr(left: Expression, right: Expression): BinaryExpression;
     createLogicalAnd(left: Expression, right: Expression): BinaryExpression;
@@ -10228,7 +10410,11 @@ export interface NodeFactory {
         target: Expression,
         propertyName: string | Expression,
     ): CallExpression;
-    /** @internal */ createReflectGetCall(target: Expression, propertyKey: Expression, receiver?: Expression): CallExpression;
+    /** @internal */ createReflectGetCall(
+        target: Expression,
+        propertyKey: Expression,
+        receiver?: Expression,
+    ): CallExpression;
     /** @internal */ createReflectSetCall(
         target: Expression,
         propertyKey: Expression,
@@ -10293,7 +10479,12 @@ export interface NodeFactory {
      *
      * @internal
      */
-    getLocalName(node: Declaration, allowComments?: boolean, allowSourceMaps?: boolean, ignoreAssignedName?: boolean): Identifier;
+    getLocalName(
+        node: Declaration,
+        allowComments?: boolean,
+        allowSourceMaps?: boolean,
+        ignoreAssignedName?: boolean,
+    ): Identifier;
     /**
      * Gets the export name of a declaration. This is primarily used for declarations that can be
      * referred to by name in the declaration's immediate scope (classes, enums, namespaces). An
@@ -10624,7 +10815,9 @@ export type Transformer<T extends Node> = (node: T) => T;
 /**
  * A function that accepts and possibly transforms a node.
  */
-export type Visitor<TIn extends Node = Node, TOut extends Node | undefined = TIn | undefined> = (node: TIn) => VisitResult<TOut>;
+export type Visitor<TIn extends Node = Node, TOut extends Node | undefined = TIn | undefined> = (
+    node: TIn,
+) => VisitResult<TOut>;
 
 /**
  * A function that walks a node using the given visitor, lifting node arrays into single nodes,
@@ -10710,7 +10903,12 @@ export interface Printer {
      * Prints a bundle of source files as-is, without any emit transformations.
      */
     printBundle(bundle: Bundle): string;
-    /** @internal */ writeNode(hint: EmitHint, node: Node, sourceFile: SourceFile | undefined, writer: EmitTextWriter): void;
+    /** @internal */ writeNode(
+        hint: EmitHint,
+        node: Node,
+        sourceFile: SourceFile | undefined,
+        writer: EmitTextWriter,
+    ): void;
     /** @internal */ writeList<T extends Node>(
         format: ListFormat,
         list: NodeArray<T> | undefined,
@@ -11282,7 +11480,8 @@ export const enum JSDocParsingMode {
 }
 
 /** @internal */
-export type PragmaArgTypeMaybeCapture<TDesc> = TDesc extends { captureSpan: true; } ? { value: string; pos: number; end: number; }
+export type PragmaArgTypeMaybeCapture<TDesc> = TDesc extends { captureSpan: true; } ?
+    { value: string; pos: number; end: number; }
     : string;
 
 /** @internal */
@@ -11291,7 +11490,8 @@ export type PragmaArgTypeOptional<TDesc, TName extends string> = TDesc extends {
     : { [K in TName]: PragmaArgTypeMaybeCapture<TDesc>; };
 
 /** @internal */
-export type UnionToIntersection<U> = (U extends any ? (k: U) => void : never) extends ((k: infer I) => void) ? I : never;
+export type UnionToIntersection<U> = (U extends any ? (k: U) => void : never) extends ((k: infer I) => void) ? I
+    : never;
 
 /** @internal */
 export type ArgumentDefinitionToFieldUnion<T extends readonly PragmaArgumentSpecification<any>[]> = {
@@ -11315,7 +11515,9 @@ export type PragmaArgumentType<KPrag extends keyof ConcretePragmaSpecs> = Concre
 export type ConcretePragmaSpecs = typeof commentPragmas;
 
 /** @internal */
-export type PragmaPseudoMap = { [K in keyof ConcretePragmaSpecs]: { arguments: PragmaArgumentType<K>; range: CommentRange; }; };
+export type PragmaPseudoMap = {
+    [K in keyof ConcretePragmaSpecs]: { arguments: PragmaArgumentType<K>; range: CommentRange; };
+};
 
 /** @internal */
 export type PragmaPseudoMapEntry = {
@@ -11344,7 +11546,9 @@ export interface ReadonlyPragmaMap
  * @internal
  */
 export interface PragmaMap
-    extends Map<string, PragmaPseudoMap[keyof PragmaPseudoMap] | PragmaPseudoMap[keyof PragmaPseudoMap][]>, ReadonlyPragmaMap
+    extends
+        Map<string, PragmaPseudoMap[keyof PragmaPseudoMap] | PragmaPseudoMap[keyof PragmaPseudoMap][]>,
+        ReadonlyPragmaMap
 {
     set<TKey extends keyof PragmaPseudoMap>(key: TKey, value: PragmaPseudoMap[TKey] | PragmaPseudoMap[TKey][]): this;
     get<TKey extends keyof PragmaPseudoMap>(key: TKey): PragmaPseudoMap[TKey] | PragmaPseudoMap[TKey][];

@@ -7,7 +7,9 @@ export function reportDocumentRegistryStats(documentRegistry: ts.DocumentRegistr
         bucketEntries.forEach((entry, path) => {
             if (ts.isDocumentRegistryEntry(entry)) {
                 str.push(
-                    `    ${path}: ${ts.Debug.formatScriptKind(entry.sourceFile.scriptKind)} ${entry.languageServiceRefCount}`,
+                    `    ${path}: ${
+                        ts.Debug.formatScriptKind(entry.sourceFile.scriptKind)
+                    } ${entry.languageServiceRefCount}`,
                 );
             }
             else {
@@ -20,7 +22,10 @@ export function reportDocumentRegistryStats(documentRegistry: ts.DocumentRegistr
     return str;
 }
 
-type DocumentRegistryExpectedStats = Map<ts.DocumentRegistryBucketKeyWithMode, Map<ts.Path, Map<ts.ScriptKind, number>>>;
+type DocumentRegistryExpectedStats = Map<
+    ts.DocumentRegistryBucketKeyWithMode,
+    Map<ts.Path, Map<ts.ScriptKind, number>>
+>;
 function verifyDocumentRegistryStats(
     documentRegistry: ts.DocumentRegistry,
     stats: DocumentRegistryExpectedStats,
@@ -82,7 +87,9 @@ function verifyDocumentRegistryStats(
         stats?.forEach((statsByPath, key) => {
             str.push(`  Key:: ${key}`);
             statsByPath.forEach((entry, path) =>
-                entry.forEach((refCount, kind) => str.push(`    ${path}: ${ts.Debug.formatScriptKind(kind)} ${refCount}`))
+                entry.forEach((refCount, kind) =>
+                    str.push(`    ${path}: ${ts.Debug.formatScriptKind(kind)} ${refCount}`)
+                )
             );
         });
         return str.join("\n");
@@ -142,9 +149,9 @@ function getResolutionCacheDetails<File, T extends ts.ResolutionWithFailedLookup
             baseline.push(`${indent}${cacheType}:`);
         }
         baseline.push(
-            `${indent}  ${key}: ${mode ? ts.getNameOfCompilerOptionValue(mode, ts.moduleOptionDeclaration.type) + ":" : ""}${
-                getResolvedFileName(resolved)
-            }`,
+            `${indent}  ${key}: ${
+                mode ? ts.getNameOfCompilerOptionValue(mode, ts.moduleOptionDeclaration.type) + ":" : ""
+            }${getResolvedFileName(resolved)}`,
         );
     }, file);
 }
@@ -169,7 +176,9 @@ function getLibResolutionCacheDetails(
             baseline.push(`${indent}Libs:`);
         }
         baseline.push(
-            `${indent}  ${libFileName}: Actual: ${resolved.actual} Resolution: ${getResolvedModuleFileName(resolved.resolution)}`,
+            `${indent}  ${libFileName}: Actual: ${resolved.actual} Resolution: ${
+                getResolvedModuleFileName(resolved.resolution)
+            }`,
         );
     });
 }
@@ -295,7 +304,11 @@ export function verifyResolutionCache(
         );
         verifySet(resolutionToExpected.get(resolution)!.files, resolution.files, `${projectName}:: Resolution files`);
     });
-    verifyMapOfResolutionSet(expected.resolvedFileToResolution, actual.resolvedFileToResolution, `resolvedFileToResolution`);
+    verifyMapOfResolutionSet(
+        expected.resolvedFileToResolution,
+        actual.resolvedFileToResolution,
+        `resolvedFileToResolution`,
+    );
     verifyResolutionSet(
         expected.resolutionsWithFailedLookups,
         actual.resolutionsWithFailedLookups,
@@ -306,8 +319,14 @@ export function verifyResolutionCache(
         actual.resolutionsWithOnlyAffectingLocations,
         `resolutionsWithOnlyAffectingLocations`,
     );
-    verifyDirectoryWatchesOfFailedLookups(expected.directoryWatchesOfFailedLookups, actual.directoryWatchesOfFailedLookups);
-    verifyFileWatchesOfAffectingLocations(expected.fileWatchesOfAffectingLocations, actual.fileWatchesOfAffectingLocations);
+    verifyDirectoryWatchesOfFailedLookups(
+        expected.directoryWatchesOfFailedLookups,
+        actual.directoryWatchesOfFailedLookups,
+    );
+    verifyFileWatchesOfAffectingLocations(
+        expected.fileWatchesOfAffectingLocations,
+        actual.fileWatchesOfAffectingLocations,
+    );
 
     // Stop watching resolutions to verify everything gets closed.
     expected.startCachingPerDirectoryResolution();
@@ -319,7 +338,10 @@ export function verifyResolutionCache(
         ts.Debug.assert(!expected.refCount, `${projectName}:: All the resolution should be released`);
         ts.Debug.assert(!expected.files?.size, `${projectName}:: Shouldnt ref to any files`);
     });
-    ts.Debug.assert(expected.resolvedFileToResolution.size === 0, `${projectName}:: resolvedFileToResolution should be released`);
+    ts.Debug.assert(
+        expected.resolvedFileToResolution.size === 0,
+        `${projectName}:: resolvedFileToResolution should be released`,
+    );
     ts.Debug.assert(
         expected.resolutionsWithFailedLookups.size === 0,
         `${projectName}:: resolutionsWithFailedLookups should be released`,
@@ -437,7 +459,10 @@ export function verifyResolutionCache(
         verifyMap(expected, actual, (expected, actual, caption) => {
             ts.Debug.assert(expected?.refCount === actual?.refCount, `${projectName}:: ${caption}:: refCount`);
             ts.Debug.assert(!!expected?.refCount, `${projectName}:: ${caption}:: expected refCount to be non zero`);
-            ts.Debug.assert(expected?.nonRecursive === actual?.nonRecursive, `${projectName}:: ${caption}:: nonRecursive`);
+            ts.Debug.assert(
+                expected?.nonRecursive === actual?.nonRecursive,
+                `${projectName}:: ${caption}:: nonRecursive`,
+            );
         }, "directoryWatchesOfFailedLookups");
     }
 
@@ -556,24 +581,29 @@ function verifyProgram(service: ts.server.ProjectService, project: ts.server.Pro
         compilerHost.getCanonicalFileName,
         project.getCompilerOptions(),
     );
-    compilerHost.resolveModuleNameLiterals = (moduleNames, containingFile, redirectedReference, options, containingSourceFile) =>
-        ts.loadWithModeAwareCache(
-            moduleNames,
-            containingFile,
-            redirectedReference,
-            options,
-            containingSourceFile,
-            compilerHost,
-            moduleResolutionCache,
-            (containingFile, redirectedReference, options) =>
-                ts.createModuleResolutionLoaderUsingGlobalCache(
-                    containingFile,
-                    redirectedReference,
-                    options,
-                    resolutionHostCacheHost,
-                    moduleResolutionCache,
-                ),
-        );
+    compilerHost.resolveModuleNameLiterals = (
+        moduleNames,
+        containingFile,
+        redirectedReference,
+        options,
+        containingSourceFile,
+    ) => ts.loadWithModeAwareCache(
+        moduleNames,
+        containingFile,
+        redirectedReference,
+        options,
+        containingSourceFile,
+        compilerHost,
+        moduleResolutionCache,
+        (containingFile, redirectedReference, options) =>
+            ts.createModuleResolutionLoaderUsingGlobalCache(
+                containingFile,
+                redirectedReference,
+                options,
+                resolutionHostCacheHost,
+                moduleResolutionCache,
+            ),
+    );
     verifyProgramStructure(
         ts.createProgram({
             rootNames: project.getScriptFileNames(),
@@ -584,13 +614,21 @@ function verifyProgram(service: ts.server.ProjectService, project: ts.server.Pro
         project.getCurrentProgram()!,
         project.projectName,
     );
-    verifyResolutionCache(project.resolutionCache, project.getCurrentProgram()!, resolutionHostCacheHost, project.projectName);
+    verifyResolutionCache(
+        project.resolutionCache,
+        project.getCurrentProgram()!,
+        resolutionHostCacheHost,
+        project.projectName,
+    );
 }
 
 interface ResolveSingleModuleNameWithoutWatchingData {
     resolutionToData: Map<
         ts.ResolutionWithFailedLookupLocations,
-        Pick<ts.ResolvedModuleWithFailedLookupLocations, "failedLookupLocations" | "affectingLocations" | "resolutionDiagnostics">
+        Pick<
+            ts.ResolvedModuleWithFailedLookupLocations,
+            "failedLookupLocations" | "affectingLocations" | "resolutionDiagnostics"
+        >
     >;
     packageJsonMap: Map<ts.Path, ts.PackageJsonInfoCacheEntry> | undefined;
 }
@@ -656,7 +694,8 @@ function onProjectCreation(project: ts.server.Project) {
 
     (project as ts.ResolutionCacheHost).beforeResolveSingleModuleNameWithoutWatching =
         beforeResolveSingleModuleNameWithoutWatching;
-    (project as ts.ResolutionCacheHost).afterResolveSingleModuleNameWithoutWatching = afterResolveSingleModuleNameWithoutWatching;
+    (project as ts.ResolutionCacheHost).afterResolveSingleModuleNameWithoutWatching =
+        afterResolveSingleModuleNameWithoutWatching;
 }
 
 export interface IncrementalVerifierCallbacks {

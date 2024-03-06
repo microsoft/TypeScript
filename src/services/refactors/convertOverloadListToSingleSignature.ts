@@ -58,7 +58,9 @@ registerRefactor(refactorName, {
     getAvailableActions: getRefactorActionsToConvertOverloadsToOneSignature,
 });
 
-function getRefactorActionsToConvertOverloadsToOneSignature(context: RefactorContext): readonly ApplicableRefactorInfo[] {
+function getRefactorActionsToConvertOverloadsToOneSignature(
+    context: RefactorContext,
+): readonly ApplicableRefactorInfo[] {
     const { file, startPosition, program } = context;
     const info = getConvertableOverloadListAtPosition(file, startPosition, program);
     if (!info) return emptyArray;
@@ -147,7 +149,10 @@ function getRefactorEditsToConvertOverloadsToOneSignature(context: RefactorConte
             break;
         }
         default:
-            return Debug.failBadSyntaxKind(lastDeclaration, "Unhandled signature kind in overload list conversion refactoring");
+            return Debug.failBadSyntaxKind(
+                lastDeclaration,
+                "Unhandled signature kind in overload list conversion refactoring",
+            );
     }
 
     if (updated === lastDeclaration) {
@@ -295,7 +300,9 @@ function getConvertableOverloadListAtPosition(file: SourceFile, startPosition: n
         | ConstructSignatureDeclaration
         | FunctionDeclaration
     )[];
-    if (some(signatureDecls, d => !!d.typeParameters || some(d.parameters, p => !!p.modifiers || !isIdentifier(p.name)))) {
+    if (
+        some(signatureDecls, d => !!d.typeParameters || some(d.parameters, p => !!p.modifiers || !isIdentifier(p.name)))
+    ) {
         return;
     }
     const signatures = mapDefined(signatureDecls, d => checker.getSignatureFromDeclaration(d));

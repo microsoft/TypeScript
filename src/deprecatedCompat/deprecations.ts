@@ -52,7 +52,9 @@ export type OverloadKeys<T extends OverloadDefinitions> = Extract<keyof T, numbe
  *
  * @internal
  */
-export type OverloadParameters<T extends OverloadDefinitions> = Parameters<{ [P in OverloadKeys<T>]: T[P]; }[OverloadKeys<T>]>;
+export type OverloadParameters<T extends OverloadDefinitions> = Parameters<
+    { [P in OverloadKeys<T>]: T[P]; }[OverloadKeys<T>]
+>;
 
 // NOTE: the following doesn't work in TS 4.4 (the current LKG in main), so we have to use UnionToIntersection for now
 // type OverloadFunction<T extends OverloadDefinitions, R extends ((...args: any[]) => any)[] = [], O = unknown> =

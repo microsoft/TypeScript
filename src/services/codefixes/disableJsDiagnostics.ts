@@ -38,7 +38,8 @@ registerCodeFix({
             return undefined;
         }
 
-        const newLineCharacter = sourceFile.checkJsDirective ? "" : getNewLineOrDefaultFromHost(host, formatContext.options);
+        const newLineCharacter = sourceFile.checkJsDirective ? ""
+            : getNewLineOrDefaultFromHost(host, formatContext.options);
         const fixes: CodeFixAction[] = [
             // fixId unnecessary because adding `// @ts-nocheck` even once will ignore every error in the file.
             createCodeFixActionWithoutFixAll(
@@ -80,7 +81,12 @@ registerCodeFix({
     },
 });
 
-function makeChange(changes: textChanges.ChangeTracker, sourceFile: SourceFile, position: number, seenLines?: Set<number>) {
+function makeChange(
+    changes: textChanges.ChangeTracker,
+    sourceFile: SourceFile,
+    position: number,
+    seenLines?: Set<number>,
+) {
     const { line: lineNumber } = getLineAndCharacterOfPosition(sourceFile, position);
     // Only need to add `// @ts-ignore` for a line once.
     if (!seenLines || tryAddToSet(seenLines, lineNumber)) {

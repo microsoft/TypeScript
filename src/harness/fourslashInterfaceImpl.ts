@@ -306,7 +306,11 @@ export class Verify extends VerifyNegatable {
         this.state.baselineInlayHints(span, preference);
     }
 
-    public quickInfoIs(expectedText: string, expectedDocumentation?: string, expectedTags?: { name: string; text: string; }[]) {
+    public quickInfoIs(
+        expectedText: string,
+        expectedDocumentation?: string,
+        expectedTags?: { name: string; text: string; }[],
+    ) {
         this.state.verifyQuickInfoString(expectedText, expectedDocumentation, expectedTags);
     }
 
@@ -536,7 +540,10 @@ export class Verify extends VerifyNegatable {
     ) {
         this.state.goToMarker(marker);
         this.state.verifyDocCommentTemplate(
-            { newText: expectedText.replace(/\r?\n/g, ts.testFormatSettings.newLineCharacter!), caretOffset: expectedOffset },
+            {
+                newText: expectedText.replace(/\r?\n/g, ts.testFormatSettings.newLineCharacter!),
+                caretOffset: expectedOffset,
+            },
             options,
         );
     }
@@ -546,7 +553,12 @@ export class Verify extends VerifyNegatable {
         this.state.verifyDocCommentTemplate(/*expected*/ undefined);
     }
 
-    public rangeAfterCodeFix(expectedText: string, includeWhiteSpace?: boolean, errorCode?: number, index?: number): void {
+    public rangeAfterCodeFix(
+        expectedText: string,
+        includeWhiteSpace?: boolean,
+        errorCode?: number,
+        index?: number,
+    ): void {
         this.state.verifyRangeAfterCodeFix(expectedText, includeWhiteSpace, errorCode, index);
     }
 
@@ -582,7 +594,11 @@ export class Verify extends VerifyNegatable {
         this.state.applyCodeActionFromCompletion(markerName, options);
     }
 
-    public importFixAtPosition(expectedTextArray: string[], errorCode?: number, preferences?: ts.UserPreferences): void {
+    public importFixAtPosition(
+        expectedTextArray: string[],
+        errorCode?: number,
+        preferences?: ts.UserPreferences,
+    ): void {
         this.state.verifyImportFixAtPosition(expectedTextArray, errorCode, preferences);
     }
 
@@ -1023,7 +1039,11 @@ export function classification(format: ts.SemanticClassificationFormat) {
         return getClassification(ts.ClassificationTypeNames.jsxAttributeStringLiteralValue, text, position);
     }
 
-    function getClassification(classificationType: ts.ClassificationTypeNames, text: string, position?: number): Classification {
+    function getClassification(
+        classificationType: ts.ClassificationTypeNames,
+        text: string,
+        position?: number,
+    ): Classification {
         const textSpan = position === undefined ? undefined : { start: position, end: position + text.length };
         return { classificationType, text, textSpan };
     }
@@ -1162,7 +1182,9 @@ export namespace Completion {
         });
     }
     export const keywordsWithUndefined: readonly ExpectedCompletionEntryObject[] = res;
-    export const keywords: readonly ExpectedCompletionEntryObject[] = keywordsWithUndefined.filter(k => k.name !== "undefined");
+    export const keywords: readonly ExpectedCompletionEntryObject[] = keywordsWithUndefined.filter(k =>
+        k.name !== "undefined"
+    );
 
     export const typeKeywords: readonly ExpectedCompletionEntryObject[] = [
         "any",
@@ -1349,7 +1371,9 @@ export namespace Completion {
 
     export const typeAssertionKeywords: readonly ExpectedCompletionEntry[] = globalTypesPlus([keywordEntry("const")]);
 
-    function getInJsKeywords(keywords: readonly ExpectedCompletionEntryObject[]): readonly ExpectedCompletionEntryObject[] {
+    function getInJsKeywords(
+        keywords: readonly ExpectedCompletionEntryObject[],
+    ): readonly ExpectedCompletionEntryObject[] {
         return keywords.filter(keyword => {
             switch (keyword.name) {
                 case "enum":

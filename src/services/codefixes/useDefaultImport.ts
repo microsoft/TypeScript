@@ -28,7 +28,10 @@ registerCodeFix({
         const { sourceFile, span: { start } } = context;
         const info = getInfo(sourceFile, start);
         if (!info) return undefined;
-        const changes = textChanges.ChangeTracker.with(context, t => doChange(t, sourceFile, info, context.preferences));
+        const changes = textChanges.ChangeTracker.with(
+            context,
+            t => doChange(t, sourceFile, info, context.preferences),
+        );
         return [
             createCodeFixAction(
                 fixId,
@@ -65,10 +68,20 @@ function getInfo(sourceFile: SourceFile, pos: number): Info | undefined {
     }
 }
 
-function doChange(changes: textChanges.ChangeTracker, sourceFile: SourceFile, info: Info, preferences: UserPreferences): void {
+function doChange(
+    changes: textChanges.ChangeTracker,
+    sourceFile: SourceFile,
+    info: Info,
+    preferences: UserPreferences,
+): void {
     changes.replaceNode(
         sourceFile,
         info.importNode,
-        makeImport(info.name, /*namedImports*/ undefined, info.moduleSpecifier, getQuotePreference(sourceFile, preferences)),
+        makeImport(
+            info.name,
+            /*namedImports*/ undefined,
+            info.moduleSpecifier,
+            getQuotePreference(sourceFile, preferences),
+        ),
     );
 }

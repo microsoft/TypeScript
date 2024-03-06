@@ -35,7 +35,10 @@ export function loadProjectFromFiles(
     });
     const libContentToAppend = valueOfFsOptions(options, "libContentToAppend");
     fs.mkdirpSync(defaultLibLocation);
-    fs.writeFileSync(`${defaultLibLocation}/lib.d.ts`, libContentToAppend ? `${libContent}${libContentToAppend}` : libContent);
+    fs.writeFileSync(
+        `${defaultLibLocation}/lib.d.ts`,
+        libContentToAppend ? `${libContent}${libContentToAppend}` : libContent,
+    );
     fs.makeReadonly();
     return fs;
 }

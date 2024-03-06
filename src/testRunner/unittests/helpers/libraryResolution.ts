@@ -28,7 +28,12 @@ function getFsContentsForLibResolution(libRedirection?: boolean): FsContents {
             /// <reference lib="es5"/>
         `,
         "/home/src/projects/project1/tsconfig.json": jsonToReadableText({
-            compilerOptions: { composite: true, typeRoots: ["./typeroot1"], lib: ["es5", "dom"], traceResolution: true },
+            compilerOptions: {
+                composite: true,
+                typeRoots: ["./typeroot1"],
+                lib: ["es5", "dom"],
+                traceResolution: true,
+            },
         }),
         "/home/src/projects/project1/typeroot1/sometype/index.d.ts": `export type TheNum = "type1";`,
         "/home/src/projects/project2/utils.d.ts": `export const y = 10;`,
@@ -57,7 +62,8 @@ function getFsContentsForLibResolution(libRedirection?: boolean): FsContents {
             "/home/src/projects/node_modules/@typescript/lib-esnext/index.d.ts": libContent,
             "/home/src/projects/node_modules/@typescript/lib-dom/index.d.ts": "interface DOMInterface { }",
             "/home/src/projects/node_modules/@typescript/lib-webworker/index.d.ts": "interface WebworkerInterface { }",
-            "/home/src/projects/node_modules/@typescript/lib-scripthost/index.d.ts": "interface ScriptHostInterface { }",
+            "/home/src/projects/node_modules/@typescript/lib-scripthost/index.d.ts":
+                "interface ScriptHostInterface { }",
         } : undefined,
     };
 }

@@ -53,7 +53,10 @@ registerCodeFix({
             getIsMatchingAsyncError(span, errorCode),
         );
         const directSpan = diagnostic && diagnostic.relatedInformation &&
-            find(diagnostic.relatedInformation, r => r.code === Diagnostics.Did_you_mean_to_mark_this_function_as_async.code) as
+            find(
+                diagnostic.relatedInformation,
+                r => r.code === Diagnostics.Did_you_mean_to_mark_this_function_as_async.code,
+            ) as
                 | TextSpan
                 | undefined;
 
@@ -128,7 +131,10 @@ function makeChange(
     );
 }
 
-function getFixableErrorSpanDeclaration(sourceFile: SourceFile, span: TextSpan | undefined): FixableDeclaration | undefined {
+function getFixableErrorSpanDeclaration(
+    sourceFile: SourceFile,
+    span: TextSpan | undefined,
+): FixableDeclaration | undefined {
     if (!span) return undefined;
     const token = getTokenAtPosition(sourceFile, span.start);
     // Checker has already done work to determine that async might be possible, and has attached
@@ -151,5 +157,8 @@ function getIsMatchingAsyncError(span: TextSpan, errorCode: number) {
         isNumber(start) && isNumber(length) && textSpansEqual({ start, length }, span) &&
         code === errorCode &&
         !!relatedInformation &&
-        some(relatedInformation, related => related.code === Diagnostics.Did_you_mean_to_mark_this_function_as_async.code);
+        some(
+            relatedInformation,
+            related => related.code === Diagnostics.Did_you_mean_to_mark_this_function_as_async.code,
+        );
 }

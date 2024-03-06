@@ -438,7 +438,10 @@ export function visitParameterList(
     return updated;
 }
 
-function addDefaultValueAssignmentsIfNeeded(parameters: NodeArray<ParameterDeclaration>, context: TransformationContext) {
+function addDefaultValueAssignmentsIfNeeded(
+    parameters: NodeArray<ParameterDeclaration>,
+    context: TransformationContext,
+) {
     let result: ParameterDeclaration[] | undefined;
     for (let i = 0; i < parameters.length; i++) {
         const parameter = parameters[i];
@@ -532,7 +535,8 @@ function addDefaultValueAssignmentForInitializer(
                     ]),
                     parameter,
                 ),
-                EmitFlags.SingleLine | EmitFlags.NoTrailingSourceMap | EmitFlags.NoTokenSourceMaps | EmitFlags.NoComments,
+                EmitFlags.SingleLine | EmitFlags.NoTrailingSourceMap | EmitFlags.NoTokenSourceMaps |
+                    EmitFlags.NoComments,
             ),
         ),
     );
@@ -666,7 +670,11 @@ export function visitCommaListElements(
  * @param visitor The callback used to visit each child.
  * @param context A lexical environment context for the visitor.
  */
-export function visitEachChild<T extends Node>(node: T, visitor: Visitor, context: TransformationContext | undefined): T;
+export function visitEachChild<T extends Node>(
+    node: T,
+    visitor: Visitor,
+    context: TransformationContext | undefined,
+): T;
 /** @internal */
 export function visitEachChild<T extends Node>(
     node: T,
@@ -850,7 +858,8 @@ const visitEachChildTable: VisitEachChildTable = {
             nodesVisitor(node.modifiers, visitor, isModifierLike),
             Debug.checkDefined(nodeVisitor(node.name, visitor, isPropertyName)),
             // QuestionToken and ExclamationToken are mutually exclusive in PropertyDeclaration
-            tokenVisitor ? nodeVisitor(node.questionToken ?? node.exclamationToken, tokenVisitor, isQuestionOrExclamationToken)
+            tokenVisitor ?
+                nodeVisitor(node.questionToken ?? node.exclamationToken, tokenVisitor, isQuestionOrExclamationToken)
                 : node.questionToken ?? node.exclamationToken,
             nodeVisitor(node.type, visitor, isTypeNode),
             nodeVisitor(node.initializer, visitor, isExpression),
@@ -1328,7 +1337,8 @@ const visitEachChildTable: VisitEachChildTable = {
                 : node.readonlyToken,
             Debug.checkDefined(nodeVisitor(node.typeParameter, visitor, isTypeParameterDeclaration)),
             nodeVisitor(node.nameType, visitor, isTypeNode),
-            tokenVisitor ? nodeVisitor(node.questionToken, tokenVisitor, isQuestionOrPlusOrMinusToken) : node.questionToken,
+            tokenVisitor ? nodeVisitor(node.questionToken, tokenVisitor, isQuestionOrPlusOrMinusToken)
+                : node.questionToken,
             nodeVisitor(node.type, visitor, isTypeNode),
             nodesVisitor(node.members, visitor, isTypeElement),
         );
@@ -1465,7 +1475,8 @@ const visitEachChildTable: VisitEachChildTable = {
             context.factory.updatePropertyAccessChain(
                 node,
                 Debug.checkDefined(nodeVisitor(node.expression, visitor, isExpression)),
-                tokenVisitor ? nodeVisitor(node.questionDotToken, tokenVisitor, isQuestionDotToken) : node.questionDotToken,
+                tokenVisitor ? nodeVisitor(node.questionDotToken, tokenVisitor, isQuestionDotToken)
+                    : node.questionDotToken,
                 Debug.checkDefined(nodeVisitor(node.name, visitor, isMemberName)),
             ) :
             context.factory.updatePropertyAccessExpression(
@@ -1487,7 +1498,8 @@ const visitEachChildTable: VisitEachChildTable = {
             context.factory.updateElementAccessChain(
                 node,
                 Debug.checkDefined(nodeVisitor(node.expression, visitor, isExpression)),
-                tokenVisitor ? nodeVisitor(node.questionDotToken, tokenVisitor, isQuestionDotToken) : node.questionDotToken,
+                tokenVisitor ? nodeVisitor(node.questionDotToken, tokenVisitor, isQuestionDotToken)
+                    : node.questionDotToken,
                 Debug.checkDefined(nodeVisitor(node.argumentExpression, visitor, isExpression)),
             ) :
             context.factory.updateElementAccessExpression(
@@ -1509,7 +1521,8 @@ const visitEachChildTable: VisitEachChildTable = {
             context.factory.updateCallChain(
                 node,
                 Debug.checkDefined(nodeVisitor(node.expression, visitor, isExpression)),
-                tokenVisitor ? nodeVisitor(node.questionDotToken, tokenVisitor, isQuestionDotToken) : node.questionDotToken,
+                tokenVisitor ? nodeVisitor(node.questionDotToken, tokenVisitor, isQuestionDotToken)
+                    : node.questionDotToken,
                 nodesVisitor(node.typeArguments, visitor, isTypeNode),
                 nodesVisitor(node.arguments, visitor, isExpression),
             ) :
@@ -1616,7 +1629,8 @@ const visitEachChildTable: VisitEachChildTable = {
             nodesVisitor(node.typeParameters, visitor, isTypeParameterDeclaration),
             visitParameterList(node.parameters, visitor, context, nodesVisitor),
             nodeVisitor(node.type, visitor, isTypeNode),
-            tokenVisitor ? Debug.checkDefined(nodeVisitor(node.equalsGreaterThanToken, tokenVisitor, isEqualsGreaterThanToken))
+            tokenVisitor ?
+                Debug.checkDefined(nodeVisitor(node.equalsGreaterThanToken, tokenVisitor, isEqualsGreaterThanToken))
                 : node.equalsGreaterThanToken,
             visitFunctionBody(node.body, visitor, context, nodeVisitor),
         );
@@ -1737,7 +1751,8 @@ const visitEachChildTable: VisitEachChildTable = {
             tokenVisitor ? Debug.checkDefined(nodeVisitor(node.questionToken, tokenVisitor, isQuestionToken))
                 : node.questionToken,
             Debug.checkDefined(nodeVisitor(node.whenTrue, visitor, isExpression)),
-            tokenVisitor ? Debug.checkDefined(nodeVisitor(node.colonToken, tokenVisitor, isColonToken)) : node.colonToken,
+            tokenVisitor ? Debug.checkDefined(nodeVisitor(node.colonToken, tokenVisitor, isColonToken))
+                : node.colonToken,
             Debug.checkDefined(nodeVisitor(node.whenFalse, visitor, isExpression)),
         );
     },
@@ -1899,7 +1914,14 @@ const visitEachChildTable: VisitEachChildTable = {
     },
 
     // Element
-    [SyntaxKind.Block]: function visitEachChildOfBlock(node, visitor, context, nodesVisitor, _nodeVisitor, _tokenVisitor) {
+    [SyntaxKind.Block]: function visitEachChildOfBlock(
+        node,
+        visitor,
+        context,
+        nodesVisitor,
+        _nodeVisitor,
+        _tokenVisitor,
+    ) {
         return context.factory.updateBlock(
             node,
             nodesVisitor(node.statements, visitor, isStatement),

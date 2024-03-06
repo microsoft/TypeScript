@@ -213,7 +213,13 @@ export function addSyntheticLeadingComment<T extends Node>(
 ) {
     return setSyntheticLeadingComments(
         node,
-        append<SynthesizedComment>(getSyntheticLeadingComments(node), { kind, pos: -1, end: -1, hasTrailingNewLine, text }),
+        append<SynthesizedComment>(getSyntheticLeadingComments(node), {
+            kind,
+            pos: -1,
+            end: -1,
+            hasTrailingNewLine,
+            text,
+        }),
     );
 }
 
@@ -234,7 +240,13 @@ export function addSyntheticTrailingComment<T extends Node>(
 ) {
     return setSyntheticTrailingComments(
         node,
-        append<SynthesizedComment>(getSyntheticTrailingComments(node), { kind, pos: -1, end: -1, hasTrailingNewLine, text }),
+        append<SynthesizedComment>(getSyntheticTrailingComments(node), {
+            kind,
+            pos: -1,
+            end: -1,
+            hasTrailingNewLine,
+            text,
+        }),
     );
 }
 
@@ -377,7 +389,9 @@ export function setIdentifierTypeArguments<T extends Identifier>(
 }
 
 /** @internal */
-export function getIdentifierTypeArguments(node: Identifier): NodeArray<TypeNode | TypeParameterDeclaration> | undefined {
+export function getIdentifierTypeArguments(
+    node: Identifier,
+): NodeArray<TypeNode | TypeParameterDeclaration> | undefined {
     return node.emitNode?.identifierTypeArguments;
 }
 
@@ -405,6 +419,8 @@ export function setIdentifierGeneratedImportReference<T extends Identifier | Pri
 }
 
 /** @internal */
-export function getIdentifierGeneratedImportReference(node: Identifier | PrivateIdentifier): ImportSpecifier | undefined {
+export function getIdentifierGeneratedImportReference(
+    node: Identifier | PrivateIdentifier,
+): ImportSpecifier | undefined {
     return node.emitNode?.generatedImportReference;
 }

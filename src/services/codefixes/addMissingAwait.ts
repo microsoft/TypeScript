@@ -69,9 +69,11 @@ const errorCodes = [
     Diagnostics.This_condition_will_always_return_true_since_this_0_is_always_defined.code,
     Diagnostics.Type_0_is_not_an_array_type.code,
     Diagnostics.Type_0_is_not_an_array_type_or_a_string_type.code,
-    Diagnostics.Type_0_can_only_be_iterated_through_when_using_the_downlevelIteration_flag_or_with_a_target_of_es2015_or_higher
+    Diagnostics
+        .Type_0_can_only_be_iterated_through_when_using_the_downlevelIteration_flag_or_with_a_target_of_es2015_or_higher
         .code,
-    Diagnostics.Type_0_is_not_an_array_type_or_a_string_type_or_does_not_have_a_Symbol_iterator_method_that_returns_an_iterator
+    Diagnostics
+        .Type_0_is_not_an_array_type_or_a_string_type_or_does_not_have_a_Symbol_iterator_method_that_returns_an_iterator
         .code,
     Diagnostics.Type_0_is_not_an_array_type_or_does_not_have_a_Symbol_iterator_method_that_returns_an_iterator.code,
     Diagnostics.Type_0_must_have_a_Symbol_iterator_method_that_returns_an_iterator.code,
@@ -103,7 +105,13 @@ registerCodeFix({
         const checker = context.program.getTypeChecker();
         const fixedDeclarations = new Set<number>();
         return codeFixAll(context, errorCodes, (t, diagnostic) => {
-            const expression = getAwaitErrorSpanExpression(sourceFile, diagnostic.code, diagnostic, cancellationToken, program);
+            const expression = getAwaitErrorSpanExpression(
+                sourceFile,
+                diagnostic.code,
+                diagnostic,
+                cancellationToken,
+                program,
+            );
             if (!expression) {
                 return;
             }
@@ -136,7 +144,13 @@ function getDeclarationSiteFix(
     fixedDeclarations?: Set<number>,
 ) {
     const { sourceFile, program, cancellationToken } = context;
-    const awaitableInitializers = findAwaitableInitializers(expression, sourceFile, cancellationToken, program, checker);
+    const awaitableInitializers = findAwaitableInitializers(
+        expression,
+        sourceFile,
+        cancellationToken,
+        program,
+        checker,
+    );
     if (awaitableInitializers) {
         const initializerChanges = trackChanges(t => {
             forEach(
@@ -153,7 +167,10 @@ function getDeclarationSiteFix(
             "addMissingAwaitToInitializer",
             initializerChanges,
             awaitableInitializers.initializers.length === 1
-                ? [Diagnostics.Add_await_to_initializer_for_0, awaitableInitializers.initializers[0].declarationSymbol.name]
+                ? [
+                    Diagnostics.Add_await_to_initializer_for_0,
+                    awaitableInitializers.initializers[0].declarationSymbol.name,
+                ]
                 : Diagnostics.Add_await_to_initializers,
         );
     }
@@ -167,7 +184,9 @@ function getUseSiteFix(
     trackChanges: ContextualTrackChangesFunction,
     fixedDeclarations?: Set<number>,
 ) {
-    const changes = trackChanges(t => makeChange(t, errorCode, context.sourceFile, checker, expression, fixedDeclarations));
+    const changes = trackChanges(t =>
+        makeChange(t, errorCode, context.sourceFile, checker, expression, fixedDeclarations)
+    );
     return createCodeFixAction(
         fixId,
         changes,
@@ -243,9 +262,15 @@ function findAwaitableInitializers(
         }
 
         const diagnostics = program.getSemanticDiagnostics(sourceFile, cancellationToken);
-        const isUsedElsewhere = FindAllReferences.Core.eachSymbolReferenceInFile(variableName, checker, sourceFile, reference => {
-            return identifier !== reference && !symbolReferenceIsAlsoMissingAwait(reference, diagnostics, sourceFile, checker);
-        });
+        const isUsedElsewhere = FindAllReferences.Core.eachSymbolReferenceInFile(
+            variableName,
+            checker,
+            sourceFile,
+            reference => {
+                return identifier !== reference &&
+                    !symbolReferenceIsAlsoMissingAwait(reference, diagnostics, sourceFile, checker);
+            },
+        );
 
         if (isUsedElsewhere) {
             isCompleteFix = false;
@@ -400,7 +425,9 @@ function makeChange(
         insertLeadingSemicolonIfNeeded(changeTracker, insertionSite, sourceFile);
     }
     else {
-        if (fixedDeclarations && isVariableDeclaration(insertionSite.parent) && isIdentifier(insertionSite.parent.name)) {
+        if (
+            fixedDeclarations && isVariableDeclaration(insertionSite.parent) && isIdentifier(insertionSite.parent.name)
+        ) {
             const symbol = checker.getSymbolAtLocation(insertionSite.parent.name);
             if (symbol && !tryAddToSet(fixedDeclarations, getSymbolId(symbol))) {
                 return;
@@ -410,7 +437,11 @@ function makeChange(
     }
 }
 
-function insertLeadingSemicolonIfNeeded(changeTracker: textChanges.ChangeTracker, beforeNode: Node, sourceFile: SourceFile) {
+function insertLeadingSemicolonIfNeeded(
+    changeTracker: textChanges.ChangeTracker,
+    beforeNode: Node,
+    sourceFile: SourceFile,
+) {
     const precedingToken = findPrecedingToken(beforeNode.pos, sourceFile);
     if (precedingToken && positionIsASICandidate(precedingToken.end, precedingToken.parent, sourceFile)) {
         changeTracker.insertText(sourceFile, beforeNode.getStart(sourceFile), ";");

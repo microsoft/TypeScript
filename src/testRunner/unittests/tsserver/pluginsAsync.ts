@@ -92,7 +92,11 @@ describe("unittests:: tsserver:: pluginsAsync:: async loaded plugins", () => {
         // wait for load to complete
         await projectService.waitForPendingPlugins();
 
-        baselineTsserverLogs("pluginsAsync", "plugins evaluation in correct order even if imports resolve out of order", session);
+        baselineTsserverLogs(
+            "pluginsAsync",
+            "plugins evaluation in correct order even if imports resolve out of order",
+            session,
+        );
     });
 
     it("sends projectsUpdatedInBackground event", async () => {
@@ -143,7 +147,9 @@ describe("unittests:: tsserver:: pluginsAsync:: async loaded plugins", () => {
 
         host.runQueuedTimeoutCallbacks();
 
-        session.logger.log(`External files before plugin after plugin is loaded: ${project.getExternalFiles().join(",")}`);
+        session.logger.log(
+            `External files before plugin after plugin is loaded: ${project.getExternalFiles().join(",")}`,
+        );
         baselineTsserverLogs("pluginsAsync", "adds external files", session);
     });
 

@@ -135,7 +135,11 @@ describe("unittests:: tsserver:: typeOnlyImportChains", () => {
             content: "import { a } from './c'; new a.A();",
         };
 
-        assertUsageError("namedExport exportNamespaceFrom typeOnlyNamedImport namedExport namedImport", [a, b, c, d], d);
+        assertUsageError(
+            "namedExport exportNamespaceFrom typeOnlyNamedImport namedExport namedImport",
+            [a, b, c, d],
+            d,
+        );
     });
 
     it("named export -> type-only export from -> export namespace from -> named import", () => {

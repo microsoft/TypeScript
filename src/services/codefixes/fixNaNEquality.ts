@@ -71,7 +71,10 @@ function getInfo(program: Program, sourceFile: SourceFile, span: TextSpan): Info
     if (diag === undefined || diag.relatedInformation === undefined) return;
 
     const related = find(diag.relatedInformation, related => related.code === Diagnostics.Did_you_mean_0.code);
-    if (related === undefined || related.file === undefined || related.start === undefined || related.length === undefined) {
+    if (
+        related === undefined || related.file === undefined || related.start === undefined ||
+        related.length === undefined
+    ) {
         return;
     }
 
@@ -84,7 +87,12 @@ function getInfo(program: Program, sourceFile: SourceFile, span: TextSpan): Info
     return undefined;
 }
 
-function doChange(changes: textChanges.ChangeTracker, sourceFile: SourceFile, arg: Expression, expression: BinaryExpression) {
+function doChange(
+    changes: textChanges.ChangeTracker,
+    sourceFile: SourceFile,
+    arg: Expression,
+    expression: BinaryExpression,
+) {
     const callExpression = factory.createCallExpression(
         factory.createPropertyAccessExpression(factory.createIdentifier("Number"), factory.createIdentifier("isNaN")),
         /*typeArguments*/ undefined,

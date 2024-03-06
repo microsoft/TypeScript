@@ -77,7 +77,8 @@ describe("unittests:: tsc:: composite::", () => {
 
     verifyTsc({
         scenario: "composite",
-        subScenario: "when setting composite false and tsbuildinfo as null on command line but has tsbuild info in config",
+        subScenario:
+            "when setting composite false and tsbuildinfo as null on command line but has tsbuild info in config",
         fs: () =>
             loadProjectFromFiles({
                 "/src/project/src/main.ts": "export const x = 10;",

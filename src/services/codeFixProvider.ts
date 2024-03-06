@@ -139,7 +139,10 @@ export function getAllFixes(context: CodeFixAllContext): CombinedCodeActions {
 }
 
 /** @internal */
-export function createCombinedCodeActions(changes: FileTextChanges[], commands?: CodeActionCommand[]): CombinedCodeActions {
+export function createCombinedCodeActions(
+    changes: FileTextChanges[],
+    commands?: CodeActionCommand[],
+): CombinedCodeActions {
     return { changes, commands };
 }
 

@@ -174,7 +174,11 @@ function fooB() { }`,
             useSingleInferredProject: true,
         });
         openFilesForSession([file1], session);
-        baselineTsserverLogs("partialSemanticServer", "should not include referenced files from unopened files", session);
+        baselineTsserverLogs(
+            "partialSemanticServer",
+            "should not include referenced files from unopened files",
+            session,
+        );
     });
 
     it("should not crash when external module name resolution is reused", () => {
@@ -187,7 +191,11 @@ function fooB() { }`,
 
         // Open file with non relative external module name
         openFilesForSession([file2], session);
-        baselineTsserverLogs("partialSemanticServer", "should not crash when external module name resolution is reused", session);
+        baselineTsserverLogs(
+            "partialSemanticServer",
+            "should not crash when external module name resolution is reused",
+            session,
+        );
     });
 
     it("should not create autoImportProvider or handle package jsons", () => {
@@ -211,7 +219,14 @@ function fooB() { }`,
             path: "/index.ts",
             content: "",
         };
-        const host = createServerHost([angularFormsDts, angularFormsPackageJson, tsconfig, packageJson, indexTs, libFile]);
+        const host = createServerHost([
+            angularFormsDts,
+            angularFormsPackageJson,
+            tsconfig,
+            packageJson,
+            indexTs,
+            libFile,
+        ]);
         const session = new TestSession({
             host,
             serverMode: ts.LanguageServiceMode.PartialSemantic,
@@ -224,7 +239,11 @@ function fooB() { }`,
         assert.isUndefined(project.getPackageJsonAutoImportProvider());
         session.host.baselineHost("After getPackageJsonAutoImportProvider");
         assert.deepEqual(project.getPackageJsonsForAutoImport(), ts.emptyArray);
-        baselineTsserverLogs("partialSemanticServer", "should not create autoImportProvider or handle package jsons", session);
+        baselineTsserverLogs(
+            "partialSemanticServer",
+            "should not create autoImportProvider or handle package jsons",
+            session,
+        );
     });
 
     it("should support go-to-definition on module specifiers", () => {

@@ -76,7 +76,11 @@ describe("unittests:: tsc-watch:: moduleResolution", () => {
             {
                 caption: "reports import errors after change to package file",
                 edit: sys =>
-                    sys.replaceFileText(`/user/username/projects/myproject/packages/pkg2/package.json`, `index.js`, `other.js`),
+                    sys.replaceFileText(
+                        `/user/username/projects/myproject/packages/pkg2/package.json`,
+                        `index.js`,
+                        `other.js`,
+                    ),
                 timeouts: sys => {
                     sys.runQueuedTimeoutCallbacks(); // invalidates failed lookups
                     sys.runQueuedTimeoutCallbacks(); // actual update
@@ -85,7 +89,11 @@ describe("unittests:: tsc-watch:: moduleResolution", () => {
             {
                 caption: "removes those errors when a package file is changed back",
                 edit: sys =>
-                    sys.replaceFileText(`/user/username/projects/myproject/packages/pkg2/package.json`, `other.js`, `index.js`),
+                    sys.replaceFileText(
+                        `/user/username/projects/myproject/packages/pkg2/package.json`,
+                        `other.js`,
+                        `index.js`,
+                    ),
                 timeouts: sys => {
                     sys.runQueuedTimeoutCallbacks(); // invalidates failed lookups
                     sys.runQueuedTimeoutCallbacks(); // actual update
@@ -142,7 +150,8 @@ describe("unittests:: tsc-watch:: moduleResolution", () => {
         commandLineArgs: ["-w", "--traceResolution"],
         edits: [{
             caption: "Add import to index2",
-            edit: sys => sys.prependFile(`/user/username/projects/myproject/index2.ts`, `import * as me from "./index.js";`),
+            edit: sys =>
+                sys.prependFile(`/user/username/projects/myproject/index2.ts`, `import * as me from "./index.js";`),
             timeouts: sys => sys.runQueuedTimeoutCallbacks(),
         }],
     });
@@ -569,7 +578,8 @@ describe("unittests:: tsc-watch:: moduleResolution", () => {
     verifyTscWatch({
         scenario: "moduleResolution",
         subScenario: "alternateResult",
-        sys: () => createWatchedSystem(getFsContentsForAlternateResult(), { currentDirectory: "/home/src/projects/project" }),
+        sys: () =>
+            createWatchedSystem(getFsContentsForAlternateResult(), { currentDirectory: "/home/src/projects/project" }),
         commandLineArgs: ["-w", "--extendedDiagnostics"],
         edits: [
             {
@@ -629,7 +639,11 @@ describe("unittests:: tsc-watch:: moduleResolution", () => {
                 edit: sys =>
                     sys.writeFile(
                         "/home/src/projects/project/node_modules/foo/package.json",
-                        getFsContentsForAlternateResultPackageJson("foo", /*addTypes*/ true, /*addTypesCondition*/ true),
+                        getFsContentsForAlternateResultPackageJson(
+                            "foo",
+                            /*addTypes*/ true,
+                            /*addTypesCondition*/ true,
+                        ),
                     ),
                 timeouts: sys => {
                     sys.runQueuedTimeoutCallbacks();
@@ -653,7 +667,11 @@ describe("unittests:: tsc-watch:: moduleResolution", () => {
                 edit: sys =>
                     sys.writeFile(
                         "/home/src/projects/project/node_modules/foo2/package.json",
-                        getFsContentsForAlternateResultPackageJson("foo2", /*addTypes*/ true, /*addTypesCondition*/ false),
+                        getFsContentsForAlternateResultPackageJson(
+                            "foo2",
+                            /*addTypes*/ true,
+                            /*addTypesCondition*/ false,
+                        ),
                     ),
                 timeouts: sys => {
                     sys.runQueuedTimeoutCallbacks();

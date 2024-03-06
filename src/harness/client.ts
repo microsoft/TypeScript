@@ -194,7 +194,8 @@ export class SessionClient implements LanguageService {
             }
             catch (e) {
                 throw new Error(
-                    "Malformed response: Failed to parse server response: " + lastMessage + ". \r\n  Error details: " + e.message,
+                    "Malformed response: Failed to parse server response: " + lastMessage + ". \r\n  Error details: " +
+                        e.message,
                 );
             }
         }
@@ -246,7 +247,12 @@ export class SessionClient implements LanguageService {
         this.processRequest(protocol.CommandTypes.Close, args);
     }
 
-    createChangeFileRequestArgs(fileName: string, start: number, end: number, insertString: string): protocol.ChangeRequestArgs {
+    createChangeFileRequestArgs(
+        fileName: string,
+        start: number,
+        end: number,
+        insertString: string,
+    ): protocol.ChangeRequestArgs {
         return { ...this.createFileLocationRequestArgsWithEndLineAndOffset(fileName, start, end), insertString };
     }
 
@@ -291,7 +297,11 @@ export class SessionClient implements LanguageService {
         };
     }
 
-    getCompletionsAtPosition(fileName: string, position: number, _preferences: UserPreferences | undefined): CompletionInfo {
+    getCompletionsAtPosition(
+        fileName: string,
+        position: number,
+        _preferences: UserPreferences | undefined,
+    ): CompletionInfo {
         // Not passing along 'preferences' because server should already have those from the 'configure' command
         const args: protocol.CompletionsRequestArgs = this.createFileLocationRequestArgs(fileName, position);
 
@@ -331,7 +341,10 @@ export class SessionClient implements LanguageService {
             entryNames: [{ name: entryName, source, data }],
         };
 
-        const request = this.processRequest<protocol.CompletionDetailsRequest>(protocol.CommandTypes.CompletionDetailsFull, args);
+        const request = this.processRequest<protocol.CompletionDetailsRequest>(
+            protocol.CommandTypes.CompletionDetailsFull,
+            args,
+        );
         const response = this.processResponse<protocol.Response>(request);
         Debug.assert(response.body.length === 1, "Unexpected length of completion details response body.");
         return response.body[0];
@@ -380,7 +393,11 @@ export class SessionClient implements LanguageService {
     }
 
     getFormattingEditsForRange(file: string, start: number, end: number, _options: FormatCodeOptions): TextChange[] {
-        const args: protocol.FormatRequestArgs = this.createFileLocationRequestArgsWithEndLineAndOffset(file, start, end);
+        const args: protocol.FormatRequestArgs = this.createFileLocationRequestArgsWithEndLineAndOffset(
+            file,
+            start,
+            end,
+        );
 
         // TODO: handle FormatCodeOptions
         const request = this.processRequest<protocol.FormatRequest>(protocol.CommandTypes.Format, args);
@@ -390,11 +407,24 @@ export class SessionClient implements LanguageService {
     }
 
     getFormattingEditsForDocument(fileName: string, options: FormatCodeOptions): TextChange[] {
-        return this.getFormattingEditsForRange(fileName, 0, this.host.getScriptSnapshot(fileName)!.getLength(), options);
+        return this.getFormattingEditsForRange(
+            fileName,
+            0,
+            this.host.getScriptSnapshot(fileName)!.getLength(),
+            options,
+        );
     }
 
-    getFormattingEditsAfterKeystroke(fileName: string, position: number, key: string, _options: FormatCodeOptions): TextChange[] {
-        const args: protocol.FormatOnKeyRequestArgs = { ...this.createFileLocationRequestArgs(fileName, position), key };
+    getFormattingEditsAfterKeystroke(
+        fileName: string,
+        position: number,
+        key: string,
+        _options: FormatCodeOptions,
+    ): TextChange[] {
+        const args: protocol.FormatOnKeyRequestArgs = {
+            ...this.createFileLocationRequestArgs(fileName, position),
+            key,
+        };
 
         // TODO: handle FormatCodeOptions
         const request = this.processRequest<protocol.FormatOnKeyRequest>(protocol.CommandTypes.Formatonkey, args);
@@ -771,8 +801,13 @@ export class SessionClient implements LanguageService {
             return undefined;
         }
 
-        const { items: encodedItems, applicableSpan: encodedApplicableSpan, selectedItemIndex, argumentIndex, argumentCount } =
-            response.body;
+        const {
+            items: encodedItems,
+            applicableSpan: encodedApplicableSpan,
+            selectedItemIndex,
+            argumentIndex,
+            argumentCount,
+        } = response.body;
 
         const applicableSpan = encodedApplicableSpan as unknown as TextSpan;
         const items = (encodedItems as (SignatureHelpItem | protocol.SignatureHelpItem)[]).map(item => ({
@@ -789,7 +824,10 @@ export class SessionClient implements LanguageService {
             filesToSearch,
         };
 
-        const request = this.processRequest<protocol.DocumentHighlightsRequest>(protocol.CommandTypes.DocumentHighlights, args);
+        const request = this.processRequest<protocol.DocumentHighlightsRequest>(
+            protocol.CommandTypes.DocumentHighlights,
+            args,
+        );
         const response = this.processResponse<protocol.DocumentHighlightsResponse>(request);
 
         return response.body!.map(item => ({ // TODO: GH#18217
@@ -802,7 +840,9 @@ export class SessionClient implements LanguageService {
     }
 
     getOutliningSpans(file: string): OutliningSpan[] {
-        const request = this.processRequest<protocol.OutliningSpansRequest>(protocol.CommandTypes.GetOutliningSpans, { file });
+        const request = this.processRequest<protocol.OutliningSpansRequest>(protocol.CommandTypes.GetOutliningSpans, {
+            file,
+        });
         const response = this.processResponse<protocol.OutliningSpansResponse>(request);
 
         return response.body!.map<OutliningSpan>(item => ({
@@ -843,13 +883,20 @@ export class SessionClient implements LanguageService {
         return notImplemented();
     }
 
-    getCodeFixesAtPosition(file: string, start: number, end: number, errorCodes: readonly number[]): readonly CodeFixAction[] {
+    getCodeFixesAtPosition(
+        file: string,
+        start: number,
+        end: number,
+        errorCodes: readonly number[],
+    ): readonly CodeFixAction[] {
         const args: protocol.CodeFixRequestArgs = { ...this.createFileRangeRequestArgs(file, start, end), errorCodes };
 
         const request = this.processRequest<protocol.CodeFixRequest>(protocol.CommandTypes.GetCodeFixes, args);
         const response = this.processResponse<protocol.CodeFixResponse>(request);
 
-        return response.body!.map<CodeFixAction>(({ fixName, description, changes, commands, fixId, fixAllDescription }) => // TODO: GH#18217
+        return response.body!.map<CodeFixAction>((
+            { fixName, description, changes, commands, fixId, fixAllDescription },
+        ) => // TODO: GH#18217
         ({
             fixName,
             description,
@@ -882,7 +929,8 @@ export class SessionClient implements LanguageService {
                     text,
                     span: span && {
                         start: this.lineOffsetToPosition(span.file, span.start),
-                        length: this.lineOffsetToPosition(span.file, span.end) - this.lineOffsetToPosition(span.file, span.start),
+                        length: this.lineOffsetToPosition(span.file, span.end) -
+                            this.lineOffsetToPosition(span.file, span.start),
                     },
                     file: span && span.file,
                 })),
@@ -985,7 +1033,10 @@ export class SessionClient implements LanguageService {
         args.action = actionName;
         args.interactiveRefactorArguments = interactiveRefactorArguments;
 
-        const request = this.processRequest<protocol.GetEditsForRefactorRequest>(protocol.CommandTypes.GetEditsForRefactor, args);
+        const request = this.processRequest<protocol.GetEditsForRefactorRequest>(
+            protocol.CommandTypes.GetEditsForRefactor,
+            args,
+        );
         const response = this.processResponse<protocol.GetEditsForRefactorResponse>(request);
 
         if (!response.body) {
@@ -1054,7 +1105,10 @@ export class SessionClient implements LanguageService {
     }
 
     configurePlugin(pluginName: string, configuration: any): void {
-        const request = this.processRequest<protocol.ConfigurePluginRequest>("configurePlugin", { pluginName, configuration });
+        const request = this.processRequest<protocol.ConfigurePluginRequest>("configurePlugin", {
+            pluginName,
+            configuration,
+        });
         this.processResponse<protocol.ConfigurePluginResponse>(request, /*expectEmptyBody*/ true);
     }
 
@@ -1074,7 +1128,11 @@ export class SessionClient implements LanguageService {
         return notImplemented();
     }
 
-    getEncodedSemanticClassifications(file: string, span: TextSpan, format?: SemanticClassificationFormat): Classifications {
+    getEncodedSemanticClassifications(
+        file: string,
+        span: TextSpan,
+        format?: SemanticClassificationFormat,
+    ): Classifications {
         const request = this.processRequest<protocol.EncodedSemanticClassificationsRequest>(
             protocol.CommandTypes.EncodedSemanticClassificationsFull,
             {
@@ -1127,7 +1185,10 @@ export class SessionClient implements LanguageService {
         return response.body.map(item => this.convertCallHierarchyIncomingCall(item));
     }
 
-    private convertCallHierarchyOutgoingCall(file: string, item: protocol.CallHierarchyOutgoingCall): CallHierarchyOutgoingCall {
+    private convertCallHierarchyOutgoingCall(
+        file: string,
+        item: protocol.CallHierarchyOutgoingCall,
+    ): CallHierarchyOutgoingCall {
         return {
             to: this.convertCallHierarchyItem(item.to),
             fromSpans: item.fromSpans.map(span => this.decodeSpan(span, file)),

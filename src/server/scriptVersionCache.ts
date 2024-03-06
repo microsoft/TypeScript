@@ -279,7 +279,10 @@ class TextChange {
     }
 
     getTextChangeRange() {
-        return createTextChangeRange(createTextSpan(this.pos, this.deleteLen), this.insertedText ? this.insertedText.length : 0);
+        return createTextChangeRange(
+            createTextSpan(this.pos, this.deleteLen),
+            this.insertedText ? this.insertedText.length : 0,
+        );
     }
 }
 
@@ -361,7 +364,8 @@ export class ScriptVersionCache {
     lineToTextSpan(line: number): TextSpan {
         const index = this._getSnapshot().index;
         const { lineText, absolutePosition } = index.lineNumberToInfo(line + 1);
-        const len = lineText !== undefined ? lineText.length : index.absolutePositionOfStartOfLine(line + 2) - absolutePosition;
+        const len = lineText !== undefined ? lineText.length
+            : index.absolutePositionOfStartOfLine(line + 2) - absolutePosition;
         return createTextSpan(absolutePosition, len);
     }
 
@@ -684,7 +688,15 @@ export class LineNode implements LineCollection {
         }
         else {
             // Case II: start and end of range in different subtrees (possibly with subtrees in the middle)
-            if (this.execWalk(adjustedStart, childCharCount - adjustedStart, walkFns, childIndex, CharRangeSection.Start)) {
+            if (
+                this.execWalk(
+                    adjustedStart,
+                    childCharCount - adjustedStart,
+                    walkFns,
+                    childIndex,
+                    CharRangeSection.Start,
+                )
+            ) {
                 return;
             }
             let adjustedLength = rangeLength - (childCharCount - adjustedStart);
@@ -730,7 +742,11 @@ export class LineNode implements LineCollection {
         for (const child of this.children) {
             if (child.charCount() > relativePosition) {
                 if (child.isLeaf()) {
-                    return { oneBasedLine: lineNumberAccumulator, zeroBasedColumn: relativePosition, lineText: child.text };
+                    return {
+                        oneBasedLine: lineNumberAccumulator,
+                        zeroBasedColumn: relativePosition,
+                        lineText: child.text,
+                    };
                 }
                 else {
                     return (child as LineNode).charOffsetToLineInfo(lineNumberAccumulator, relativePosition);

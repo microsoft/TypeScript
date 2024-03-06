@@ -748,8 +748,15 @@ export class FileSystem {
                 const baseNode = baseLinks.get(basename);
                 if (baseNode) {
                     if (isDirectory(changedNode) && isDirectory(baseNode)) {
-                        return hasChanges =
-                            FileSystem.directoryDiff(container, basename, changed, changedNode, base, baseNode, options) ||
+                        return hasChanges = FileSystem.directoryDiff(
+                            container,
+                            basename,
+                            changed,
+                            changedNode,
+                            base,
+                            baseNode,
+                            options,
+                        ) ||
                             hasChanges;
                     }
                     if (isFile(changedNode) && isFile(baseNode)) {
@@ -758,10 +765,12 @@ export class FileSystem {
                             hasChanges;
                     }
                     if (isSymlink(changedNode) && isSymlink(baseNode)) {
-                        return hasChanges = FileSystem.symlinkDiff(container, basename, changedNode, baseNode) || hasChanges;
+                        return hasChanges = FileSystem.symlinkDiff(container, basename, changedNode, baseNode) ||
+                            hasChanges;
                     }
                 }
-                return hasChanges = FileSystem.trackCreatedInode(container, basename, changed, changedNode) || hasChanges;
+                return hasChanges = FileSystem.trackCreatedInode(container, basename, changed, changedNode) ||
+                    hasChanges;
             });
             return hasChanges;
         }
@@ -808,7 +817,16 @@ export class FileSystem {
 
         // no difference if both nodes have identical children
         const children: FileSet = {};
-        if (!FileSystem.diffWorker(children, changed, changed._getLinks(changedNode), base, base._getLinks(baseNode), options)) {
+        if (
+            !FileSystem.diffWorker(
+                children,
+                changed,
+                changed._getLinks(changedNode),
+                base,
+                base._getLinks(baseNode),
+                options,
+            )
+        ) {
             return false;
         }
 
@@ -848,7 +866,9 @@ export class FileSystem {
         // no difference if both buffers are the same reference
         if (changedBuffer === baseBuffer) {
             if (!options.includeChangedFileWithSameContent || changedNode.mtimeMs === baseNode.mtimeMs) return false;
-            container[basename] = new SameFileWithModifiedTime(changedBuffer.data, { encoding: changedBuffer.encoding });
+            container[basename] = new SameFileWithModifiedTime(changedBuffer.data, {
+                encoding: changedBuffer.encoding,
+            });
             return true;
         }
 
@@ -866,7 +886,12 @@ export class FileSystem {
         return true;
     }
 
-    private static symlinkDiff(container: FileSet, basename: string, changedNode: SymlinkInode, baseNode: SymlinkInode) {
+    private static symlinkDiff(
+        container: FileSet,
+        basename: string,
+        changedNode: SymlinkInode,
+        baseNode: SymlinkInode,
+    ) {
         // no difference if the nodes are the same reference
         if (changedNode.symlink === baseNode.symlink) return false;
         container[basename] = new Symlink(changedNode.symlink);
@@ -889,7 +914,11 @@ export class FileSystem {
         return true;
     }
 
-    private static trackCreatedInodes(container: FileSet, changed: FileSystem, changedLinks: ReadonlyMap<string, Inode>) {
+    private static trackCreatedInodes(
+        container: FileSet,
+        changed: FileSystem,
+        changedLinks: ReadonlyMap<string, Inode>,
+    ) {
         // no difference if links are empty
         if (!changedLinks.size) return false;
 

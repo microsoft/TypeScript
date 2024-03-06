@@ -387,7 +387,9 @@ describe("unittests:: tsserver:: projects::", () => {
                 rootFiles: toExternalFiles([file1.path, office.path]),
             }, session);
             session.logger.log(
-                `TypeAcquisition:: ${jsonToReadableText(session.getProjectService().externalProjects[0].getTypeAcquisition())}`,
+                `TypeAcquisition:: ${
+                    jsonToReadableText(session.getProjectService().externalProjects[0].getTypeAcquisition())
+                }`,
             );
         }
         finally {
@@ -464,7 +466,9 @@ describe("unittests:: tsserver:: projects::", () => {
                 rootFiles: toExternalFiles(files.map(f => f.path)),
             }, session);
             session.logger.log(
-                `TypeAcquisition:: ${jsonToReadableText(session.getProjectService().externalProjects[0].getTypeAcquisition())}`,
+                `TypeAcquisition:: ${
+                    jsonToReadableText(session.getProjectService().externalProjects[0].getTypeAcquisition())
+                }`,
             );
         }
         finally {
@@ -830,7 +834,11 @@ describe("unittests:: tsserver:: projects::", () => {
         });
 
         session.getProjectService().ensureInferredProjectsUpToDate_TestOnly();
-        baselineTsserverLogs("projects", "project structure update is deferred if files are not added or removed", session);
+        baselineTsserverLogs(
+            "projects",
+            "project structure update is deferred if files are not added or removed",
+            session,
+        );
     });
 
     it("files with mixed content are handled correctly", () => {
@@ -1130,7 +1138,11 @@ describe("unittests:: tsserver:: projects::", () => {
             command: ts.server.protocol.CommandTypes.GetApplicableRefactors,
             arguments: { file: file2.path, startLine: 1, startOffset, endLine: 1, endOffset: startOffset + 1 },
         });
-        baselineTsserverLogs("projects", "requests are done on file on pendingReload but has svc for previous version", session);
+        baselineTsserverLogs(
+            "projects",
+            "requests are done on file on pendingReload but has svc for previous version",
+            session,
+        );
     });
 
     describe("includes deferred files in the project context", () => {
@@ -1157,7 +1169,11 @@ describe("unittests:: tsserver:: projects::", () => {
             });
 
             // Configure the deferred extension.
-            const extraFileExtensions = [{ extension: ".deferred", scriptKind: ts.ScriptKind.Deferred, isMixedContent: true }];
+            const extraFileExtensions = [{
+                extension: ".deferred",
+                scriptKind: ts.ScriptKind.Deferred,
+                isMixedContent: true,
+            }];
             session.executeCommandSeq<ts.server.protocol.ConfigureRequest>({
                 command: ts.server.protocol.CommandTypes.Configure,
                 arguments: { extraFileExtensions },
@@ -1180,7 +1196,8 @@ describe("unittests:: tsserver:: projects::", () => {
             // Allow allowNonTsExtensions will be set to true for deferred extensions.
             session.logger.info(
                 `Has allowNonTsExtension: ${
-                    session.getProjectService().configuredProjects.get(tsconfig.path)!.getCompilerOptions().allowNonTsExtensions
+                    session.getProjectService().configuredProjects.get(tsconfig.path)!.getCompilerOptions()
+                        .allowNonTsExtensions
                 }`,
             );
 
@@ -1253,7 +1270,11 @@ describe("unittests:: tsserver:: projects::", () => {
 
         host.modifyFile(file1.path, file1.content, { invokeFileDeleteCreateAsPartInsteadOfChange: true });
         session.host.baselineHost("After modifying file");
-        baselineTsserverLogs("projects", "no project structure update on directory watch invoke on open file save", session);
+        baselineTsserverLogs(
+            "projects",
+            "no project structure update on directory watch invoke on open file save",
+            session,
+        );
     });
 
     it("synchronizeProjectList provides redirect info when requested", () => {
@@ -1365,9 +1386,16 @@ describe("unittests:: tsserver:: projects::", () => {
 
         session.executeCommandSeq<ts.server.protocol.SynchronizeProjectListRequest>({
             command: ts.server.protocol.CommandTypes.SynchronizeProjectList,
-            arguments: { knownProjects: knownProjects.map(proj => proj.info!), includeProjectReferenceRedirectInfo: true },
+            arguments: {
+                knownProjects: knownProjects.map(proj => proj.info!),
+                includeProjectReferenceRedirectInfo: true,
+            },
         });
-        baselineTsserverLogs("projects", "synchronizeProjectList provides updates to redirect info when requested", session);
+        baselineTsserverLogs(
+            "projects",
+            "synchronizeProjectList provides updates to redirect info when requested",
+            session,
+        );
     });
 
     it("synchronizeProjectList returns correct information when base configuration file cannot be resolved", () => {
@@ -1524,7 +1552,11 @@ describe("unittests:: tsserver:: projects::", () => {
         const session = new TestSession({ host, useSingleInferredProject: true });
 
         openFilesForSession([rootFilePath, nodeModulesFilePath1, nodeModulesFilePath2], session);
-        baselineTsserverLogs("projects", "does not look beyond node_modules folders for default configured projects", session);
+        baselineTsserverLogs(
+            "projects",
+            "does not look beyond node_modules folders for default configured projects",
+            session,
+        );
     });
 
     describe("file opened is in configured project that will be removed", () => {

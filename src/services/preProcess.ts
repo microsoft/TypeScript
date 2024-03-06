@@ -386,7 +386,10 @@ export function preProcessFile(
                         case SyntaxKind.CloseBraceToken:
                             if (length(stack)) {
                                 if (lastOrUndefined(stack) === SyntaxKind.TemplateHead) {
-                                    if (scanner.reScanTemplateToken(/*isTaggedTemplate*/ false) === SyntaxKind.TemplateTail) {
+                                    if (
+                                        scanner.reScanTemplateToken(/*isTaggedTemplate*/ false) ===
+                                            SyntaxKind.TemplateTail
+                                    ) {
                                         stack.pop();
                                     }
                                 }

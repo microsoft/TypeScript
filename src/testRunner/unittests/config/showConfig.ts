@@ -12,7 +12,8 @@ describe("unittests:: config:: showConfig", () => {
                 const configContents = configJson ? JSON.stringify(configJson) : undefined;
                 const configParseHost: ts.ParseConfigFileHost = {
                     fileExists: path =>
-                        ts.comparePaths(ts.getNormalizedAbsolutePath(path, cwd), configPath) === ts.Comparison.EqualTo ? true
+                        ts.comparePaths(ts.getNormalizedAbsolutePath(path, cwd), configPath) === ts.Comparison.EqualTo ?
+                            true
                             : false,
                     getCurrentDirectory() {
                         return cwd;

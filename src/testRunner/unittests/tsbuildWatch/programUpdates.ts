@@ -350,7 +350,8 @@ createSomeObject().message;`,
 
             const changeFileWithoutError: TscWatchCompileChange = {
                 caption: "Change fileWithoutError",
-                edit: sys => sys.writeFile(fileWithoutError.path, fileWithoutError.content.replace(/myClass/g, "myClass2")),
+                edit: sys =>
+                    sys.writeFile(fileWithoutError.path, fileWithoutError.content.replace(/myClass/g, "myClass2")),
                 timeouts: sys => sys.runQueuedTimeoutCallbacks(),
             };
 
@@ -436,7 +437,8 @@ createSomeObject().message;`,
             },
             {
                 caption: "Make dts change",
-                edit: sys => sys.replaceFileText("logic/index.ts", `\nfunction someFn() { }`, `\nexport function someFn() { }`),
+                edit: sys =>
+                    sys.replaceFileText("logic/index.ts", `\nfunction someFn() { }`, `\nexport function someFn() { }`),
                 timeouts: sys => {
                     sys.runQueuedTimeoutCallbacks(); // build logic
                     sys.runQueuedTimeoutCallbacks(); // build tests
@@ -462,7 +464,9 @@ createSomeObject().message;`,
                     },
                 }),
             };
-            return createWatchedSystem([index, configFile, libFile], { currentDirectory: "/user/username/projects/myproject" });
+            return createWatchedSystem([index, configFile, libFile], {
+                currentDirectory: "/user/username/projects/myproject",
+            });
         },
         edits: [
             {
@@ -522,7 +526,14 @@ createSomeObject().message;`,
     verifyTscWatch({
         scenario: "programUpdates",
         subScenario: "works with extended source files",
-        commandLineArgs: ["-b", "-w", "-v", "project1.tsconfig.json", "project2.tsconfig.json", "project3.tsconfig.json"],
+        commandLineArgs: [
+            "-b",
+            "-w",
+            "-v",
+            "project1.tsconfig.json",
+            "project2.tsconfig.json",
+            "project3.tsconfig.json",
+        ],
         sys: () => {
             const alphaExtendedConfigFile: File = {
                 path: "/a/b/alpha.tsconfig.json",

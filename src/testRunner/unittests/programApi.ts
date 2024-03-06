@@ -125,7 +125,11 @@ describe("unittests:: programApi:: Program.getMissingFilePaths", () => {
             }`;
 
         const host: ts.CompilerHost = {
-            getSourceFile: (fileName: string, languageVersion: ts.ScriptTarget, _onError?: (message: string) => void) => {
+            getSourceFile: (
+                fileName: string,
+                languageVersion: ts.ScriptTarget,
+                _onError?: (message: string) => void,
+            ) => {
                 return fileName === "test.ts" ? ts.createSourceFile(fileName, testSource, languageVersion) : undefined;
             },
             getDefaultLibFileName: () => "",
@@ -163,7 +167,10 @@ describe("unittests:: Program.isSourceFileFromExternalLibrary", () => {
         const bar = new documents.TextDocument("/node_modules/bar/index.d.ts", 'import * as foo from "foo";');
         const fooPackageJsonText = jsonToReadableText({ name: "foo", version: "1.2.3" });
         const fooIndexText = "export const x: number;";
-        const barFooPackage = new documents.TextDocument("/node_modules/bar/node_modules/foo/package.json", fooPackageJsonText);
+        const barFooPackage = new documents.TextDocument(
+            "/node_modules/bar/node_modules/foo/package.json",
+            fooPackageJsonText,
+        );
         const barFooIndex = new documents.TextDocument("/node_modules/bar/node_modules/foo/index.d.ts", fooIndexText);
         const fooPackage = new documents.TextDocument("/node_modules/foo/package.json", fooPackageJsonText);
         const fooIndex = new documents.TextDocument("/node_modules/foo/index.d.ts", fooIndexText);
@@ -236,10 +243,16 @@ describe("unittests:: programApi:: Program.getTypeChecker / Program.getSemanticD
         const main = new documents.TextDocument("/main.ts", "0 as const");
 
         const fs = vfs.createFromFileSystem(Harness.IO, /*ignoreCase*/ false, { documents: [main], cwd: "/" });
-        const program = ts.createProgram(["/main.ts"], {}, new fakes.CompilerHost(fs, { newLine: ts.NewLineKind.LineFeed }));
+        const program = ts.createProgram(
+            ["/main.ts"],
+            {},
+            new fakes.CompilerHost(fs, { newLine: ts.NewLineKind.LineFeed }),
+        );
         const typeChecker = program.getTypeChecker();
         const sourceFile = program.getSourceFile("main.ts")!;
-        typeChecker.getTypeAtLocation(((sourceFile.statements[0] as ts.ExpressionStatement).expression as ts.AsExpression).type);
+        typeChecker.getTypeAtLocation(
+            ((sourceFile.statements[0] as ts.ExpressionStatement).expression as ts.AsExpression).type,
+        );
         const diag = program.getSemanticDiagnostics();
         assert.isEmpty(diag);
     });
@@ -248,7 +261,11 @@ describe("unittests:: programApi:: Program.getTypeChecker / Program.getSemanticD
         const mod = new documents.TextDocument("/module.d.ts", "declare const foo: any;");
 
         const fs = vfs.createFromFileSystem(Harness.IO, /*ignoreCase*/ false, { documents: [main, mod], cwd: "/" });
-        const program = ts.createProgram(["/main.ts"], {}, new fakes.CompilerHost(fs, { newLine: ts.NewLineKind.LineFeed }));
+        const program = ts.createProgram(
+            ["/main.ts"],
+            {},
+            new fakes.CompilerHost(fs, { newLine: ts.NewLineKind.LineFeed }),
+        );
 
         const sourceFile = program.getSourceFile("main.ts")!;
         const typeChecker = program.getTypeChecker();

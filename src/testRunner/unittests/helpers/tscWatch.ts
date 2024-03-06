@@ -110,7 +110,10 @@ function tscWatchCompile(input: TscWatchCompile) {
 
 export type TscWatchSystem = TestServerHostTrackingWrittenFiles;
 
-function changeToTestServerHostWithTimeoutLogging(host: TestServerHostTrackingWrittenFiles, baseline: string[]): TscWatchSystem {
+function changeToTestServerHostWithTimeoutLogging(
+    host: TestServerHostTrackingWrittenFiles,
+    baseline: string[],
+): TscWatchSystem {
     const logger: StateLogger = {
         log: s => baseline.push(s),
         logs: baseline,
@@ -137,7 +140,9 @@ export function createBaseline(
     modifySystem?.(initialSys, originalRead);
     const baseline: string[] = [];
     const sys = changeToTestServerHostWithTimeoutLogging(changeToHostTrackingWrittenFiles(initialSys), baseline);
-    baseline.push(`currentDirectory:: ${sys.getCurrentDirectory()} useCaseSensitiveFileNames: ${sys.useCaseSensitiveFileNames}`);
+    baseline.push(
+        `currentDirectory:: ${sys.getCurrentDirectory()} useCaseSensitiveFileNames: ${sys.useCaseSensitiveFileNames}`,
+    );
     baseline.push("Input::");
     sys.serializeState(baseline, SerializeOutputOrder.None);
     const { cb, getPrograms } = commandLineCallbacks(sys);

@@ -65,7 +65,10 @@ registerCodeFix({
                 actions,
                 createCodeFixAction(
                     addMissingParamFixId,
-                    textChanges.ChangeTracker.with(context, t => doChange(t, context.sourceFile, declarations, newParameters)),
+                    textChanges.ChangeTracker.with(
+                        context,
+                        t => doChange(t, context.sourceFile, declarations, newParameters),
+                    ),
                     [
                         length(newParameters) > 1 ? Diagnostics.Add_missing_parameters_to_0
                             : Diagnostics.Add_missing_parameter_to_0,
@@ -168,7 +171,10 @@ function getInfo(sourceFile: SourceFile, program: Program, pos: number): Signatu
         return undefined;
     }
 
-    const declarations = [nonOverloadDeclaration, ...getOverloads(nonOverloadDeclaration, convertibleSignatureDeclarations)];
+    const declarations = [
+        nonOverloadDeclaration,
+        ...getOverloads(nonOverloadDeclaration, convertibleSignatureDeclarations),
+    ];
     for (let i = 0, pos = 0, paramIndex = 0; i < argumentsLength; i++) {
         const arg = callExpression.arguments[i];
         const expr = isAccessExpression(arg) ? getNameOfAccessExpression(arg) : arg;

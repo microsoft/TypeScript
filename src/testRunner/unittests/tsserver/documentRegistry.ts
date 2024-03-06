@@ -164,6 +164,10 @@ describe("unittests:: tsserver:: documentRegistry:: works when reusing orphan sc
                 ],
             },
         });
-        baselineTsserverLogs("documentRegistry", "works when reusing orphan script info with different scriptKind", session);
+        baselineTsserverLogs(
+            "documentRegistry",
+            "works when reusing orphan script info with different scriptKind",
+            session,
+        );
     });
 });

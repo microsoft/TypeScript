@@ -166,7 +166,10 @@ interface NavigationBarNode {
 }
 
 /** @internal */
-export function getNavigationBarItems(sourceFile: SourceFile, cancellationToken: CancellationToken): NavigationBarItem[] {
+export function getNavigationBarItems(
+    sourceFile: SourceFile,
+    cancellationToken: CancellationToken,
+): NavigationBarItem[] {
     curCancellationToken = cancellationToken;
     curSourceFile = sourceFile;
     try {
@@ -324,7 +327,8 @@ function hasNavigationBarName(node: Declaration) {
 
     if (isComputedPropertyName(name)) {
         const expression = name.expression;
-        return isEntityNameExpression(expression) || isNumericLiteral(expression) || isStringOrNumericLiteralLike(expression);
+        return isEntityNameExpression(expression) || isNumericLiteral(expression) ||
+            isStringOrNumericLiteralLike(expression);
     }
     return !!name;
 }
@@ -545,10 +549,13 @@ function addChildrenRecursively(node: Node | undefined): void {
                 }
                 case AssignmentDeclarationKind.Property: {
                     const binaryExpression = node as BinaryExpression;
-                    const assignmentTarget = binaryExpression.left as PropertyAccessExpression | BindableElementAccessExpression;
+                    const assignmentTarget = binaryExpression.left as
+                        | PropertyAccessExpression
+                        | BindableElementAccessExpression;
                     const targetFunction = assignmentTarget.expression;
                     if (
-                        isIdentifier(targetFunction) && getElementOrPropertyAccessName(assignmentTarget) !== "prototype" &&
+                        isIdentifier(targetFunction) &&
+                        getElementOrPropertyAccessName(assignmentTarget) !== "prototype" &&
                         trackedEs5Classes && trackedEs5Classes.has(targetFunction.text)
                     ) {
                         if (isFunctionExpression(binaryExpression.right) || isArrowFunction(binaryExpression.right)) {
@@ -769,7 +776,8 @@ function shouldReallyMerge(a: Node, b: Node, parent: NavigationBarNode): boolean
             return isStatic(a) === isStatic(b);
         case SyntaxKind.ModuleDeclaration:
             return areSameModule(a as ModuleDeclaration, b as ModuleDeclaration)
-                && getFullyQualifiedModuleName(a as ModuleDeclaration) === getFullyQualifiedModuleName(b as ModuleDeclaration);
+                && getFullyQualifiedModuleName(a as ModuleDeclaration) ===
+                    getFullyQualifiedModuleName(b as ModuleDeclaration);
         default:
             return true;
     }
@@ -793,7 +801,8 @@ function areSameModule(a: ModuleDeclaration, b: ModuleDeclaration): boolean {
         return a.body === b.body;
     }
     return a.body.kind === b.body.kind &&
-        (a.body.kind !== SyntaxKind.ModuleDeclaration || areSameModule(a.body as ModuleDeclaration, b.body as ModuleDeclaration));
+        (a.body.kind !== SyntaxKind.ModuleDeclaration ||
+            areSameModule(a.body as ModuleDeclaration, b.body as ModuleDeclaration));
 }
 
 /** Merge source into target. Source should be thrown away after this is called. */
@@ -867,7 +876,8 @@ function getItemName(node: Node, name: Node | undefined): string {
                 ? `"${escapeString(getBaseFileName(removeFileExtension(normalizePath(sourceFile.fileName))))}"`
                 : "<global>";
         case SyntaxKind.ExportAssignment:
-            return isExportAssignment(node) && node.isExportEquals ? InternalSymbolName.ExportEquals : InternalSymbolName.Default;
+            return isExportAssignment(node) && node.isExportEquals ? InternalSymbolName.ExportEquals
+                : InternalSymbolName.Default;
 
         case SyntaxKind.ArrowFunction:
         case SyntaxKind.FunctionDeclaration:
@@ -1038,7 +1048,8 @@ function isComputedProperty(member: EnumMember): boolean {
 }
 
 function getNodeSpan(node: Node): TextSpan {
-    return node.kind === SyntaxKind.SourceFile ? createTextSpanFromRange(node) : createTextSpanFromNode(node, curSourceFile);
+    return node.kind === SyntaxKind.SourceFile ? createTextSpanFromRange(node)
+        : createTextSpanFromNode(node, curSourceFile);
 }
 
 function getModifiers(node: Node): string {
@@ -1048,7 +1059,9 @@ function getModifiers(node: Node): string {
     return getNodeModifiers(node);
 }
 
-function getFunctionOrClassName(node: FunctionExpression | FunctionDeclaration | ArrowFunction | ClassLikeDeclaration): string {
+function getFunctionOrClassName(
+    node: FunctionExpression | FunctionDeclaration | ArrowFunction | ClassLikeDeclaration,
+): string {
     const { parent } = node;
     if (node.name && getFullWidth(node.name) > 0) {
         return cleanText(declarationNameToString(node.name));

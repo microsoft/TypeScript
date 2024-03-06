@@ -57,7 +57,10 @@ registerCodeFix({
             eachDiagnostic(context, errorCodes, ({ file, start }) => {
                 const info = getInfo(file, start);
                 if (info) {
-                    tagsToSignature.set(info.signature, append(tagsToSignature.get(info.signature), info.jsDocParameterTag));
+                    tagsToSignature.set(
+                        info.signature,
+                        append(tagsToSignature.get(info.signature), info.jsDocParameterTag),
+                    );
                 }
             });
 

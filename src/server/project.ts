@@ -236,7 +236,8 @@ export function allFilesAreJsOrDts(project: Project): boolean {
 /** @internal */
 export function hasNoTypeScriptSource(fileNames: string[]): boolean {
     return !fileNames.some(fileName =>
-        (fileExtensionIs(fileName, Extension.Ts) && !isDeclarationFileName(fileName)) || fileExtensionIs(fileName, Extension.Tsx)
+        (fileExtensionIs(fileName, Extension.Ts) && !isDeclarationFileName(fileName)) ||
+        fileExtensionIs(fileName, Extension.Tsx)
     );
 }
 
@@ -551,7 +552,8 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
             this.compilerOptions.allowJs = true;
         }
         else if (
-            hasExplicitListOfFiles || getAllowJSCompilerOption(this.compilerOptions) || this.projectService.hasDeferredExtension()
+            hasExplicitListOfFiles || getAllowJSCompilerOption(this.compilerOptions) ||
+            this.projectService.hasDeferredExtension()
         ) {
             // If files are listed explicitly or allowJs is specified, allow all extensions
             this.compilerOptions.allowNonTsExtensions = true;
@@ -910,7 +912,8 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
 
     /** @internal */
     getGlobalCache() {
-        return this.getTypeAcquisition().enable ? this.projectService.typingsInstaller.globalTypingsCacheLocation : undefined;
+        return this.getTypeAcquisition().enable ? this.projectService.typingsInstaller.globalTypingsCacheLocation
+            : undefined;
     }
 
     /** @internal */
@@ -997,7 +1000,11 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
             return [];
         }
         updateProjectIfDirty(this);
-        this.builderState = BuilderState.create(this.program!, this.builderState, /*disableUseFileVersionAsSignature*/ true);
+        this.builderState = BuilderState.create(
+            this.program!,
+            this.builderState,
+            /*disableUseFileVersionAsSignature*/ true,
+        );
         return mapDefined(
             BuilderState.getFilesAffectedBy(
                 this.builderState,
@@ -1007,14 +1014,18 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
                 this.projectService.host,
             ),
             sourceFile =>
-                this.shouldEmitFile(this.projectService.getScriptInfoForPath(sourceFile.path)) ? sourceFile.fileName : undefined,
+                this.shouldEmitFile(this.projectService.getScriptInfoForPath(sourceFile.path)) ? sourceFile.fileName
+                    : undefined,
         );
     }
 
     /**
      * Returns true if emit was conducted
      */
-    emitFile(scriptInfo: ScriptInfo, writeFile: (path: string, data: string, writeByteOrderMark?: boolean) => void): EmitResult {
+    emitFile(
+        scriptInfo: ScriptInfo,
+        writeFile: (path: string, data: string, writeByteOrderMark?: boolean) => void,
+    ): EmitResult {
         if (!this.languageServiceEnabled || !this.shouldEmitFile(scriptInfo)) {
             return { emitSkipped: true, diagnostics: emptyArray };
         }
@@ -1057,7 +1068,9 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
             for (const f of this.program.getSourceFiles()) {
                 this.detachScriptInfoIfNotRoot(f.fileName);
             }
-            this.program.forEachResolvedProjectReference(ref => this.detachScriptInfoFromProject(ref.sourceFile.fileName));
+            this.program.forEachResolvedProjectReference(ref =>
+                this.detachScriptInfoFromProject(ref.sourceFile.fileName)
+            );
             this.program = undefined;
         }
     }
@@ -1418,7 +1431,10 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
      * @returns: true if set of files in the project stays the same and false - otherwise.
      */
     updateGraph(): boolean {
-        tracing?.push(tracing.Phase.Session, "updateGraph", { name: this.projectName, kind: ProjectKind[this.projectKind] });
+        tracing?.push(tracing.Phase.Session, "updateGraph", {
+            name: this.projectName,
+            kind: ProjectKind[this.projectKind],
+        });
         perfLogger?.logStartUpdateGraph();
         this.resolutionCache.startRecordingFilesWithChangedResolutions();
 
@@ -1427,7 +1443,8 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
         this.hasAddedorRemovedFiles = false;
         this.hasAddedOrRemovedSymlinks = false;
 
-        const changedFiles: readonly Path[] = this.resolutionCache.finishRecordingFilesWithChangedResolutions() || emptyArray;
+        const changedFiles: readonly Path[] = this.resolutionCache.finishRecordingFilesWithChangedResolutions() ||
+            emptyArray;
 
         for (const file of changedFiles) {
             // delete cached information for changed files
@@ -1436,7 +1453,10 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
 
         // update builder only if language service is enabled
         // otherwise tell it to drop its internal state
-        if (this.languageServiceEnabled && this.projectService.serverMode === LanguageServiceMode.Semantic && !this.isOrphan()) {
+        if (
+            this.languageServiceEnabled && this.projectService.serverMode === LanguageServiceMode.Semantic &&
+            !this.isOrphan()
+        ) {
             // 1. no changes in structure, no changes in unresolved imports - do nothing
             // 2. no changes in structure, unresolved imports were changed - collect unresolved imports for all files
             // (can reuse cached imports for files that were not changed)
@@ -1444,7 +1464,10 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
             // (can reuse cached imports for files that were not changed)
             // 4. compilation settings were changed in the way that might affect module resolution - drop all caches and collect all data from the scratch
             if (hasNewProgram || changedFiles.length) {
-                this.lastCachedUnresolvedImportsList = getUnresolvedImports(this.program!, this.cachedUnresolvedImportsPerFile);
+                this.lastCachedUnresolvedImportsList = getUnresolvedImports(
+                    this.program!,
+                    this.cachedUnresolvedImportsPerFile,
+                );
             }
 
             this.projectService.typingsCache.enqueueInstallTypingsForProject(
@@ -1488,7 +1511,9 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
             // If typing files changed, then only schedule project update
             this.typingFiles = typingFiles;
             // Invalidate files with unresolved imports
-            this.resolutionCache.setFilesWithInvalidatedNonRelativeUnresolvedImports(this.cachedUnresolvedImportsPerFile);
+            this.resolutionCache.setFilesWithInvalidatedNonRelativeUnresolvedImports(
+                this.cachedUnresolvedImportsPerFile,
+            );
             this.projectService.delayUpdateProjectGraphAndEnsureProjectStructureForOpenFiles(this);
         }
     }
@@ -1544,7 +1569,9 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
                         this.projectService.watchFactory.watchDirectory(
                             path,
                             f => {
-                                if (this.typingWatchers!.isInvoked) return this.writeLog(`TypingWatchers already invoked`);
+                                if (this.typingWatchers!.isInvoked) {
+                                    return this.writeLog(`TypingWatchers already invoked`);
+                                }
                                 if (!fileExtensionIs(f, Extension.Json)) {
                                     return this.writeLog(`Ignoring files that are not *.json`);
                                 }
@@ -1637,10 +1664,11 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
         Debug.assert(!this.isClosed(), "Called update graph worker of closed project");
         this.writeLog(`Starting updateGraphWorker: Project: ${this.getProjectName()}`);
         const start = timestamp();
-        const { hasInvalidatedResolutions, hasInvalidatedLibResolutions } = this.resolutionCache.createHasInvalidatedResolutions(
-            returnFalse,
-            returnFalse,
-        );
+        const { hasInvalidatedResolutions, hasInvalidatedLibResolutions } = this.resolutionCache
+            .createHasInvalidatedResolutions(
+                returnFalse,
+                returnFalse,
+            );
         this.hasInvalidatedResolutions = hasInvalidatedResolutions;
         this.hasInvalidatedLibResolutions = hasInvalidatedLibResolutions;
         this.resolutionCache.startCachingPerDirectoryResolution();
@@ -1660,7 +1688,8 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
         let hasNewProgram = false;
         if (
             this.program &&
-            (!oldProgram || (this.program !== oldProgram && this.program.structureIsReused !== StructureIsReused.Completely))
+            (!oldProgram ||
+                (this.program !== oldProgram && this.program.structureIsReused !== StructureIsReused.Completely))
         ) {
             hasNewProgram = true;
             if (oldProgram) {
@@ -1759,7 +1788,11 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
                         this.exportMapCache!.clear();
                         return true;
                     }
-                    return this.exportMapCache!.onFileChanged(oldSourceFile, sourceFile, !!this.getTypeAcquisition().enable);
+                    return this.exportMapCache!.onFileChanged(
+                        oldSourceFile,
+                        sourceFile,
+                        !!this.getTypeAcquisition().enable,
+                    );
                 });
             }
         }
@@ -1798,19 +1831,28 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
         this.sendPerformanceEvent("UpdateGraph", elapsed);
         this.writeLog(
             `Finishing updateGraphWorker: Project: ${this.getProjectName()} projectStateVersion: ${this.projectStateVersion} projectProgramVersion: ${this.projectProgramVersion} structureChanged: ${hasNewProgram}${
-                this.program ? ` structureIsReused:: ${(ts as any).StructureIsReused[this.program.structureIsReused]}` : ""
+                this.program ? ` structureIsReused:: ${(ts as any).StructureIsReused[this.program.structureIsReused]}`
+                    : ""
             } Elapsed: ${elapsed}ms`,
         );
         if (this.projectService.logger.isTestLogger) {
             if (this.program !== oldProgram) {
-                this.print(/*writeProjectFileNames*/ true, this.hasAddedorRemovedFiles, /*writeFileVersionAndText*/ true);
+                this.print(
+                    /*writeProjectFileNames*/ true,
+                    this.hasAddedorRemovedFiles,
+                    /*writeFileVersionAndText*/ true,
+                );
             }
             else {
                 this.writeLog(`Same program as before`);
             }
         }
         else if (this.hasAddedorRemovedFiles) {
-            this.print(/*writeProjectFileNames*/ true, /*writeFileExplaination*/ true, /*writeFileVersionAndText*/ false);
+            this.print(
+                /*writeProjectFileNames*/ true,
+                /*writeFileExplaination*/ true,
+                /*writeFileVersionAndText*/ false,
+            );
         }
         else if (this.program !== oldProgram) {
             this.writeLog(`Different program with same set of files`);
@@ -1825,7 +1867,11 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
         this.projectService.sendPerformanceEvent(kind, durationMs);
     }
 
-    private detachScriptInfoFromProject(uncheckedFileName: string, noRemoveResolution?: boolean, syncDirWatcherRemove?: boolean) {
+    private detachScriptInfoFromProject(
+        uncheckedFileName: string,
+        noRemoveResolution?: boolean,
+        syncDirWatcherRemove?: boolean,
+    ) {
         const scriptInfoToDetach = this.projectService.getScriptInfo(uncheckedFileName);
         if (scriptInfoToDetach) {
             scriptInfoToDetach.detachFromProject(this);
@@ -1945,7 +1991,11 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
     }
 
     filesToString(writeProjectFileNames: boolean) {
-        return this.filesToStringWorker(writeProjectFileNames, /*writeFileExplaination*/ true, /*writeFileVersionAndText*/ false);
+        return this.filesToStringWorker(
+            writeProjectFileNames,
+            /*writeFileExplaination*/ true,
+            /*writeFileVersionAndText*/ false,
+        );
     }
 
     /** @internal */
@@ -2042,7 +2092,9 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
             ? (files: Map<string, boolean>) =>
                 arrayFrom(
                     files.entries(),
-                    ([fileName, isSourceOfProjectReferenceRedirect]): protocol.FileWithProjectReferenceRedirectInfo => ({
+                    (
+                        [fileName, isSourceOfProjectReferenceRedirect],
+                    ): protocol.FileWithProjectReferenceRedirectInfo => ({
                         fileName,
                         isSourceOfProjectReferenceRedirect,
                     }),
@@ -2265,7 +2317,10 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
 
     /** @internal */
     getPackageJsonsForAutoImport(rootDir?: string): readonly ProjectPackageJsonInfo[] {
-        return this.getPackageJsonsVisibleToFile(combinePaths(this.currentDirectory, inferredTypesContainingFile), rootDir);
+        return this.getPackageJsonsVisibleToFile(
+            combinePaths(this.currentDirectory, inferredTypesContainingFile),
+            rootDir,
+        );
     }
 
     /** @internal */
@@ -2388,7 +2443,9 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
             );
         }
         if (this.noDtsResolutionProject.rootFile !== rootFile) {
-            this.projectService.setFileNamesOfAutpImportProviderOrAuxillaryProject(this.noDtsResolutionProject, [rootFile]);
+            this.projectService.setFileNamesOfAutpImportProviderOrAuxillaryProject(this.noDtsResolutionProject, [
+                rootFile,
+            ]);
             this.noDtsResolutionProject.rootFile = rootFile;
         }
         return this.noDtsResolutionProject;
@@ -2559,7 +2616,10 @@ export class InferredProject extends Project {
     }
 
     override close() {
-        forEach(this.getRootScriptInfos(), info => this.projectService.stopWatchingConfigFilesForInferredProjectRoot(info));
+        forEach(
+            this.getRootScriptInfos(),
+            info => this.projectService.stopWatchingConfigFilesForInferredProjectRoot(info),
+        );
         super.close();
     }
 
@@ -2630,7 +2690,9 @@ export class AutoImportProviderProject extends Project {
         let dependencyNames: Set<string> | undefined;
         let rootNames: string[] | undefined;
         const rootFileName = combinePaths(hostProject.currentDirectory, inferredTypesContainingFile);
-        const packageJsons = hostProject.getPackageJsonsForAutoImport(combinePaths(hostProject.currentDirectory, rootFileName));
+        const packageJsons = hostProject.getPackageJsonsForAutoImport(
+            combinePaths(hostProject.currentDirectory, rootFileName),
+        );
         for (const packageJson of packageJsons) {
             packageJson.dependencies?.forEach((_, dependenyName) => addDependency(dependenyName));
             packageJson.peerDependencies?.forEach((_, dependencyName) => addDependency(dependencyName));
@@ -2641,7 +2703,10 @@ export class AutoImportProviderProject extends Project {
             const symlinkCache = hostProject.getSymlinkCache();
             for (const name of arrayFrom(dependencyNames.keys())) {
                 // Avoid creating a large project that would significantly slow down time to editor interactivity
-                if (dependencySelection === PackageJsonAutoImportPreference.Auto && dependenciesAdded > this.maxDependencies) {
+                if (
+                    dependencySelection === PackageJsonAutoImportPreference.Auto &&
+                    dependenciesAdded > this.maxDependencies
+                ) {
                     hostProject.log(
                         `AutoImportProviderProject: attempted to add more than ${this.maxDependencies} dependencies. Aborting.`,
                     );
@@ -2670,23 +2735,30 @@ export class AutoImportProviderProject extends Project {
 
                 // 2. Try to load from the @types package in the tree and in the global
                 //    typings cache location, if enabled.
-                const done = forEach([hostProject.currentDirectory, hostProject.getGlobalTypingsCacheLocation()], directory => {
-                    if (directory) {
-                        const typesPackageJson = resolvePackageNameToPackageJson(
-                            `@types/${name}`,
-                            directory,
-                            compilerOptions,
-                            host,
-                            program.getModuleResolutionCache(),
-                        );
-                        if (typesPackageJson) {
-                            const entrypoints = getRootNamesFromPackageJson(typesPackageJson, program, symlinkCache);
-                            rootNames = concatenate(rootNames, entrypoints);
-                            dependenciesAdded += entrypoints?.length ? 1 : 0;
-                            return true;
+                const done = forEach(
+                    [hostProject.currentDirectory, hostProject.getGlobalTypingsCacheLocation()],
+                    directory => {
+                        if (directory) {
+                            const typesPackageJson = resolvePackageNameToPackageJson(
+                                `@types/${name}`,
+                                directory,
+                                compilerOptions,
+                                host,
+                                program.getModuleResolutionCache(),
+                            );
+                            if (typesPackageJson) {
+                                const entrypoints = getRootNamesFromPackageJson(
+                                    typesPackageJson,
+                                    program,
+                                    symlinkCache,
+                                );
+                                rootNames = concatenate(rootNames, entrypoints);
+                                dependenciesAdded += entrypoints?.length ? 1 : 0;
+                                return true;
+                            }
                         }
-                    }
-                });
+                    },
+                );
 
                 if (done) continue;
 
@@ -2694,7 +2766,12 @@ export class AutoImportProviderProject extends Project {
                 //    allow processing JS from node_modules, go back to the implementation
                 //    package and load the JS.
                 if (packageJson && compilerOptions.allowJs && compilerOptions.maxNodeModuleJsDepth) {
-                    const entrypoints = getRootNamesFromPackageJson(packageJson, program, symlinkCache, /*resolveJs*/ true);
+                    const entrypoints = getRootNamesFromPackageJson(
+                        packageJson,
+                        program,
+                        symlinkCache,
+                        /*resolveJs*/ true,
+                    );
                     rootNames = concatenate(rootNames, entrypoints);
                     dependenciesAdded += entrypoints?.length ? 1 : 0;
                 }
@@ -2741,7 +2818,8 @@ export class AutoImportProviderProject extends Project {
                 }
 
                 return mapDefined(entrypoints, entrypoint => {
-                    const resolvedFileName = isSymlink ? entrypoint.replace(packageJson.packageDirectory, real!) : entrypoint;
+                    const resolvedFileName = isSymlink ? entrypoint.replace(packageJson.packageDirectory, real!)
+                        : entrypoint;
                     if (!program.getSourceFile(resolvedFileName) && !(isSymlink && program.getSourceFile(entrypoint))) {
                         return resolvedFileName;
                     }
@@ -2998,7 +3076,12 @@ export class ConfiguredProject extends Project {
             );
         }
         // Ensure we have upto date parsed command line
-        this.projectService.ensureParsedConfigUptoDate(configFileName, canonicalConfigFilePath, configFileExistenceInfo, this);
+        this.projectService.ensureParsedConfigUptoDate(
+            configFileName,
+            canonicalConfigFilePath,
+            configFileExistenceInfo,
+            this,
+        );
         // Watch wild cards if LS is enabled
         if (this.languageServiceEnabled && this.projectService.serverMode === LanguageServiceMode.Semantic) {
             this.projectService.watchWildcards(configFileName, configFileExistenceInfo, this);
@@ -3192,7 +3275,9 @@ export class ConfiguredProject extends Project {
             return false;
         }
 
-        const configFileExistenceInfo = this.projectService.configFileExistenceInfoCache.get(this.canonicalConfigFilePath)!;
+        const configFileExistenceInfo = this.projectService.configFileExistenceInfoCache.get(
+            this.canonicalConfigFilePath,
+        )!;
         if (this.projectService.hasPendingProjectUpdate(this)) {
             // If there is pending update for this project,
             // we dont know if this project would be needed by any of the open files impacted by this config file

@@ -250,7 +250,12 @@ export function collectExternalModuleInfo(context: TransformationContext, source
             case SyntaxKind.VariableStatement:
                 if (hasSyntacticModifier(node, ModifierFlags.Export)) {
                     for (const decl of (node as VariableStatement).declarationList.declarations) {
-                        exportedNames = collectExportedVariableInfo(decl, uniqueExports, exportedNames, exportedBindings);
+                        exportedNames = collectExportedVariableInfo(
+                            decl,
+                            uniqueExports,
+                            exportedNames,
+                            exportedBindings,
+                        );
                     }
                 }
                 break;
@@ -572,7 +577,9 @@ function findSuperStatementIndexPathWorker(statements: NodeArray<Statement>, sta
             indices.unshift(i);
             return true;
         }
-        else if (isTryStatement(statement) && findSuperStatementIndexPathWorker(statement.tryBlock.statements, 0, indices)) {
+        else if (
+            isTryStatement(statement) && findSuperStatementIndexPathWorker(statement.tryBlock.statements, 0, indices)
+        ) {
             indices.unshift(i);
             return true;
         }
@@ -620,7 +627,10 @@ export function getProperties(
     requireInitializer: boolean,
     isStatic: boolean,
 ): readonly PropertyDeclaration[] {
-    return filter(node.members, m => isInitializedOrStaticProperty(m, requireInitializer, isStatic)) as PropertyDeclaration[];
+    return filter(
+        node.members,
+        m => isInitializedOrStaticProperty(m, requireInitializer, isStatic),
+    ) as PropertyDeclaration[];
 }
 
 function isStaticPropertyDeclarationOrClassStaticBlockDeclaration(
@@ -668,7 +678,9 @@ function isStaticPropertyDeclaration(member: ClassElement) {
  *
  * @internal
  */
-export function isInitializedProperty(member: ClassElement): member is PropertyDeclaration & { initializer: Expression; } {
+export function isInitializedProperty(
+    member: ClassElement,
+): member is PropertyDeclaration & { initializer: Expression; } {
     return member.kind === SyntaxKind.PropertyDeclaration
         && (member as PropertyDeclaration).initializer !== undefined;
 }
@@ -786,7 +798,10 @@ function getAllDecoratorsOfAccessors(
         return undefined;
     }
 
-    const { firstAccessor, secondAccessor, getAccessor, setAccessor } = getAllAccessorDeclarations(parent.members, accessor);
+    const { firstAccessor, secondAccessor, getAccessor, setAccessor } = getAllAccessorDeclarations(
+        parent.members,
+        accessor,
+    );
     const firstAccessorWithDecorators = hasDecorators(firstAccessor) ? firstAccessor :
         secondAccessor && hasDecorators(secondAccessor) ? secondAccessor :
         undefined;

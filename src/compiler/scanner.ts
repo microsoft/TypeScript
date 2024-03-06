@@ -571,7 +571,8 @@ function isDigit(ch: number): boolean {
 }
 
 function isHexDigit(ch: number): boolean {
-    return isDigit(ch) || ch >= CharacterCodes.A && ch <= CharacterCodes.F || ch >= CharacterCodes.a && ch <= CharacterCodes.f;
+    return isDigit(ch) || ch >= CharacterCodes.A && ch <= CharacterCodes.F ||
+        ch >= CharacterCodes.a && ch <= CharacterCodes.f;
 }
 
 function isCodePoint(code: number): boolean {
@@ -664,7 +665,8 @@ export function skipTrivia(
                     pos += 2;
                     while (pos < text.length) {
                         if (
-                            text.charCodeAt(pos) === CharacterCodes.asterisk && text.charCodeAt(pos + 1) === CharacterCodes.slash
+                            text.charCodeAt(pos) === CharacterCodes.asterisk &&
+                            text.charCodeAt(pos + 1) === CharacterCodes.slash
                         ) {
                             pos += 2;
                             break;
@@ -764,7 +766,8 @@ function scanConflictMarkerTrivia(
         while (pos < len) {
             const currentChar = text.charCodeAt(pos);
             if (
-                (currentChar === CharacterCodes.equals || currentChar === CharacterCodes.greaterThan) && currentChar !== ch &&
+                (currentChar === CharacterCodes.equals || currentChar === CharacterCodes.greaterThan) &&
+                currentChar !== ch &&
                 isConflictMarkerTrivia(text, pos)
             ) {
                 break;
@@ -895,7 +898,14 @@ function iterateCommentRanges<T, U>(
 
                     if (collecting) {
                         if (hasPendingCommentRange) {
-                            accumulator = cb(pendingPos, pendingEnd, pendingKind, pendingHasTrailingNewLine, state, accumulator);
+                            accumulator = cb(
+                                pendingPos,
+                                pendingEnd,
+                                pendingKind,
+                                pendingHasTrailingNewLine,
+                                state,
+                                accumulator,
+                            );
                             if (!reduce && accumulator) {
                                 // If we are not reducing and we have a truthy result, return it.
                                 return accumulator;
@@ -1033,7 +1043,8 @@ export function isIdentifierPart(
     return ch >= CharacterCodes.A && ch <= CharacterCodes.Z || ch >= CharacterCodes.a && ch <= CharacterCodes.z ||
         ch >= CharacterCodes._0 && ch <= CharacterCodes._9 || ch === CharacterCodes.$ || ch === CharacterCodes._ ||
         // "-" and ":" are valid in JSX Identifiers
-        (identifierVariant === LanguageVariant.JSX ? (ch === CharacterCodes.minus || ch === CharacterCodes.colon) : false) ||
+        (identifierVariant === LanguageVariant.JSX ? (ch === CharacterCodes.minus || ch === CharacterCodes.colon)
+            : false) ||
         ch > CharacterCodes.maxAsciiCharacter && isUnicodeIdentifierPart(ch, languageVersion);
 }
 
@@ -1347,11 +1358,19 @@ export function createScanner(
                 );
             }
             else {
-                error(Diagnostics.A_bigint_literal_must_be_an_integer, numericStart, identifierStart - numericStart + 1);
+                error(
+                    Diagnostics.A_bigint_literal_must_be_an_integer,
+                    numericStart,
+                    identifierStart - numericStart + 1,
+                );
             }
         }
         else {
-            error(Diagnostics.An_identifier_or_keyword_cannot_immediately_follow_a_numeric_literal, identifierStart, length);
+            error(
+                Diagnostics.An_identifier_or_keyword_cannot_immediately_follow_a_numeric_literal,
+                identifierStart,
+                length,
+            );
             pos = identifierStart;
         }
     }
@@ -1483,7 +1502,8 @@ export function createScanner(
                 contents += text.substring(start, pos);
                 tokenFlags |= TokenFlags.Unterminated;
                 error(Diagnostics.Unterminated_template_literal);
-                resultingToken = startedWithBacktick ? SyntaxKind.NoSubstitutionTemplateLiteral : SyntaxKind.TemplateTail;
+                resultingToken = startedWithBacktick ? SyntaxKind.NoSubstitutionTemplateLiteral
+                    : SyntaxKind.TemplateTail;
                 break;
             }
 
@@ -1493,12 +1513,15 @@ export function createScanner(
             if (currChar === CharacterCodes.backtick) {
                 contents += text.substring(start, pos);
                 pos++;
-                resultingToken = startedWithBacktick ? SyntaxKind.NoSubstitutionTemplateLiteral : SyntaxKind.TemplateTail;
+                resultingToken = startedWithBacktick ? SyntaxKind.NoSubstitutionTemplateLiteral
+                    : SyntaxKind.TemplateTail;
                 break;
             }
 
             // '${'
-            if (currChar === CharacterCodes.$ && pos + 1 < end && text.charCodeAt(pos + 1) === CharacterCodes.openBrace) {
+            if (
+                currChar === CharacterCodes.$ && pos + 1 < end && text.charCodeAt(pos + 1) === CharacterCodes.openBrace
+            ) {
                 contents += text.substring(start, pos);
                 pos += 2;
                 resultingToken = startedWithBacktick ? SyntaxKind.TemplateHead : SyntaxKind.TemplateMiddle;
@@ -1642,7 +1665,9 @@ export function createScanner(
                     if (!isCodePoint(escapedValue)) {
                         tokenFlags |= TokenFlags.ContainsInvalidEscape;
                         if (shouldEmitInvalidEscapeError) {
-                            error(Diagnostics.An_extended_Unicode_escape_value_must_be_between_0x0_and_0x10FFFF_inclusive);
+                            error(
+                                Diagnostics.An_extended_Unicode_escape_value_must_be_between_0x0_and_0x10FFFF_inclusive,
+                            );
                         }
                         return text.substring(start, pos);
                     }
@@ -1756,7 +1781,9 @@ export function createScanner(
     }
 
     function peekExtendedUnicodeEscape(): number {
-        if (codePointAt(text, pos + 1) === CharacterCodes.u && codePointAt(text, pos + 2) === CharacterCodes.openBrace) {
+        if (
+            codePointAt(text, pos + 1) === CharacterCodes.u && codePointAt(text, pos + 2) === CharacterCodes.openBrace
+        ) {
             const start = pos;
             pos += 3;
             const escapedValueString = scanMinimumNumberOfHexDigits(1, /*canHaveSeparators*/ false);
@@ -2050,7 +2077,10 @@ export function createScanner(
                         scanNumber();
                         return token = SyntaxKind.NumericLiteral;
                     }
-                    if (text.charCodeAt(pos + 1) === CharacterCodes.dot && text.charCodeAt(pos + 2) === CharacterCodes.dot) {
+                    if (
+                        text.charCodeAt(pos + 1) === CharacterCodes.dot &&
+                        text.charCodeAt(pos + 2) === CharacterCodes.dot
+                    ) {
                         return pos += 3, token = SyntaxKind.DotDotDotToken;
                     }
                     pos++;
@@ -2480,7 +2510,10 @@ export function createScanner(
     }
 
     function reScanAsteriskEqualsToken(): SyntaxKind {
-        Debug.assert(token === SyntaxKind.AsteriskEqualsToken, "'reScanAsteriskEqualsToken' should only be called on a '*='");
+        Debug.assert(
+            token === SyntaxKind.AsteriskEqualsToken,
+            "'reScanAsteriskEqualsToken' should only be called on a '*='",
+        );
         pos = tokenStart + 1;
         return token = SyntaxKind.EqualsToken;
     }
@@ -2611,7 +2644,10 @@ export function createScanner(
     }
 
     function reScanQuestionToken(): SyntaxKind {
-        Debug.assert(token === SyntaxKind.QuestionQuestionToken, "'reScanQuestionToken' should only be called on a '??'");
+        Debug.assert(
+            token === SyntaxKind.QuestionQuestionToken,
+            "'reScanQuestionToken' should only be called on a '??'",
+        );
         pos = tokenStart + 1;
         return token = SyntaxKind.QuestionToken;
     }

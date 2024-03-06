@@ -50,7 +50,11 @@ registerCodeFix({
         }),
 });
 
-function makeChange(changeTracker: textChanges.ChangeTracker, sourceFile: SourceFile, assertion: AsExpression | TypeAssertion) {
+function makeChange(
+    changeTracker: textChanges.ChangeTracker,
+    sourceFile: SourceFile,
+    assertion: AsExpression | TypeAssertion,
+) {
     const replacement = isAsExpression(assertion)
         ? factory.createAsExpression(assertion.expression, factory.createKeywordTypeNode(SyntaxKind.UnknownKeyword))
         : factory.createTypeAssertion(factory.createKeywordTypeNode(SyntaxKind.UnknownKeyword), assertion.expression);

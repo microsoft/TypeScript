@@ -49,7 +49,12 @@ describe("unittests:: Reuse program structure:: General", () => {
         program.getSourceFiles().forEach(f => {
             baselines.push(`File: ${f.fileName}`, f.text);
             baselineCache(baselines, "resolvedModules", f, program.forEachResolvedModule);
-            baselineCache(baselines, "resolvedTypeReferenceDirectiveNames", f, program.forEachResolvedTypeReferenceDirective);
+            baselineCache(
+                baselines,
+                "resolvedTypeReferenceDirectiveNames",
+                f,
+                program.forEachResolvedTypeReferenceDirective,
+            );
             baselines.push("");
         });
         baselineCache(
@@ -201,7 +206,12 @@ describe("unittests:: Reuse program structure:: General", () => {
         const program1 = newProgram(getFiles(), ["a.ts"], { target, module: ts.ModuleKind.CommonJS, rootDir: "/a/b" });
         const baselines: string[] = [];
         baselineProgram(baselines, program1);
-        const program2 = updateProgram(program1, ["a.ts"], { target, module: ts.ModuleKind.CommonJS, rootDir: "/a/c" }, ts.noop);
+        const program2 = updateProgram(
+            program1,
+            ["a.ts"],
+            { target, module: ts.ModuleKind.CommonJS, rootDir: "/a/c" },
+            ts.noop,
+        );
         baselineProgram(baselines, program2);
         runBaseline("rootdir changes", baselines);
     });
@@ -360,9 +370,15 @@ describe("unittests:: Reuse program structure:: General", () => {
     });
 
     it("fetches imports after npm install", () => {
-        const file1Ts = { name: "file1.ts", text: SourceText.New("", `import * as a from "a";`, "const myX: number = a.x;") };
+        const file1Ts = {
+            name: "file1.ts",
+            text: SourceText.New("", `import * as a from "a";`, "const myX: number = a.x;"),
+        };
         const file2Ts = { name: "file2.ts", text: SourceText.New("", "", "") };
-        const indexDTS = { name: "node_modules/a/index.d.ts", text: SourceText.New("", "export declare let x: number;", "") };
+        const indexDTS = {
+            name: "node_modules/a/index.d.ts",
+            text: SourceText.New("", "export declare let x: number;", ""),
+        };
         const options: ts.CompilerOptions = {
             target: ts.ScriptTarget.ES2015,
             traceResolution: true,
@@ -411,8 +427,14 @@ describe("unittests:: Reuse program structure:: General", () => {
             { name: "a2.ts", text: SourceText.New("", "", "let x = 1;") },
             { name: "b1.ts", text: SourceText.New("", "export class B { x: number; }", "") },
             { name: "b2.ts", text: SourceText.New("", "export class B { x: number; }", "") },
-            { name: "node_modules/@types/typerefs1/index.d.ts", text: SourceText.New("", "", "declare let z: string;") },
-            { name: "node_modules/@types/typerefs2/index.d.ts", text: SourceText.New("", "", "declare let z: string;") },
+            {
+                name: "node_modules/@types/typerefs1/index.d.ts",
+                text: SourceText.New("", "", "declare let z: string;"),
+            },
+            {
+                name: "node_modules/@types/typerefs2/index.d.ts",
+                text: SourceText.New("", "", "declare let z: string;"),
+            },
             {
                 name: "f1.ts",
                 text: SourceText.New(
@@ -511,7 +533,11 @@ describe("unittests:: Reuse program structure:: General", () => {
                 },
                 {
                     name: bxIndex,
-                    text: SourceText.New("", "", options ? options.bText : "export default class X { private x: number; }"),
+                    text: SourceText.New(
+                        "",
+                        "",
+                        options ? options.bText : "export default class X { private x: number; }",
+                    ),
                 },
                 {
                     name: bxPackage,
@@ -535,11 +561,21 @@ describe("unittests:: Reuse program structure:: General", () => {
             updater: (files: NamedSourceText[]) => void,
             useGetSourceFileByPath: boolean,
         ): ProgramWithSourceTexts {
-            return updateProgram(program, [root], compilerOptions, updater, /*newTexts*/ undefined, useGetSourceFileByPath);
+            return updateProgram(
+                program,
+                [root],
+                compilerOptions,
+                updater,
+                /*newTexts*/ undefined,
+                useGetSourceFileByPath,
+            );
         }
 
         function runRedirectsBaseline(scenario: string, useGetSourceFileByPath: boolean, baselines: readonly string[]) {
-            return runBaseline(`redirect${useGetSourceFileByPath ? " with getSourceFileByPath" : ""} ${scenario}`, baselines);
+            return runBaseline(
+                `redirect${useGetSourceFileByPath ? " with getSourceFileByPath" : ""} ${scenario}`,
+                baselines,
+            );
         }
 
         function verifyRedirects(useGetSourceFileByPath: boolean) {
@@ -561,7 +597,11 @@ describe("unittests:: Reuse program structure:: General", () => {
                 baselineProgram(baselines, program1);
 
                 const program2 = updateRedirectProgram(program1, files => {
-                    updateProgramText(files, axIndex, "export default class X { private x: number; private y: number; }");
+                    updateProgramText(
+                        files,
+                        axIndex,
+                        "export default class X { private x: number; private y: number; }",
+                    );
                     updateProgramText(files, axPackage, jsonToReadableText('{ name: "x", version: "1.2.4" }'));
                 }, useGetSourceFileByPath);
                 baselineProgram(baselines, program2);
@@ -574,7 +614,11 @@ describe("unittests:: Reuse program structure:: General", () => {
                 baselineProgram(baselines, program1);
 
                 const program2 = updateRedirectProgram(program1, files => {
-                    updateProgramText(files, bxIndex, "export default class X { private x: number; private y: number; }");
+                    updateProgramText(
+                        files,
+                        bxIndex,
+                        "export default class X { private x: number; private y: number; }",
+                    );
                     updateProgramText(files, bxPackage, jsonToReadableText({ name: "x", version: "1.2.4" }));
                 }, useGetSourceFileByPath);
                 baselineProgram(baselines, program2);
@@ -754,7 +798,12 @@ describe("unittests:: Reuse program structure:: isProgramUptoDate", () => {
                 content: jsonToReadableText({ compilerOptions }),
             };
 
-            verifyProgram([app, module1, module2, module3, libFile, configFile], [app.path], compilerOptions, configFile.path);
+            verifyProgram(
+                [app, module1, module2, module3, libFile, configFile],
+                [app.path],
+                compilerOptions,
+                configFile.path,
+            );
         });
 
         it("has include paths specified in tsconfig file", () => {

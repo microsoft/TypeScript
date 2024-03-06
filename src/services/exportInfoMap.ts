@@ -174,7 +174,16 @@ export function createCacheableExportInfoMap(host: CacheableExportInfoMapHost): 
             symbols.clear();
             usableByFileName = undefined;
         },
-        add: (importingFile, symbol, symbolTableKey, moduleSymbol, moduleFile, exportKind, isFromPackageJson, checker) => {
+        add: (
+            importingFile,
+            symbol,
+            symbolTableKey,
+            moduleSymbol,
+            moduleFile,
+            exportKind,
+            isFromPackageJson,
+            checker,
+        ) => {
             if (importingFile !== usableByFileName) {
                 cache.clear();
                 usableByFileName = importingFile;
@@ -184,7 +193,8 @@ export function createCacheableExportInfoMap(host: CacheableExportInfoMapHost): 
             if (moduleFile) {
                 const nodeModulesPathParts = getNodeModulePathParts(moduleFile.fileName);
                 if (nodeModulesPathParts) {
-                    const { topLevelNodeModulesIndex, topLevelPackageNameIndex, packageRootIndex } = nodeModulesPathParts;
+                    const { topLevelNodeModulesIndex, topLevelPackageNameIndex, packageRootIndex } =
+                        nodeModulesPathParts;
                     packageName = unmangleScopedPackageName(
                         getPackageNameFromTypesPackageName(
                             moduleFile.fileName.substring(topLevelPackageNameIndex + 1, packageRootIndex),
@@ -229,21 +239,24 @@ export function createCacheableExportInfoMap(host: CacheableExportInfoMapHost): 
             const storedModuleSymbol = moduleSymbol.flags & SymbolFlags.Transient ? undefined : moduleSymbol;
             if (!storedSymbol || !storedModuleSymbol) symbols.set(id, [symbol, moduleSymbol]);
 
-            exportInfo.add(key(symbolName, symbol, isExternalModuleNameRelative(moduleName) ? undefined : moduleName, checker), {
-                id,
-                symbolTableKey,
-                symbolName,
-                capitalizedSymbolName,
-                moduleName,
-                moduleFile,
-                moduleFileName: moduleFile?.fileName,
-                packageName,
-                exportKind,
-                targetFlags: target.flags,
-                isFromPackageJson,
-                symbol: storedSymbol,
-                moduleSymbol: storedModuleSymbol,
-            });
+            exportInfo.add(
+                key(symbolName, symbol, isExternalModuleNameRelative(moduleName) ? undefined : moduleName, checker),
+                {
+                    id,
+                    symbolTableKey,
+                    symbolName,
+                    capitalizedSymbolName,
+                    moduleName,
+                    moduleFile,
+                    moduleFileName: moduleFile?.fileName,
+                    packageName,
+                    exportKind,
+                    targetFlags: target.flags,
+                    isFromPackageJson,
+                    symbol: storedSymbol,
+                    moduleSymbol: storedModuleSymbol,
+                },
+            );
         },
         get: (importingFile, key) => {
             if (importingFile !== usableByFileName) return;
@@ -257,7 +270,9 @@ export function createCacheableExportInfoMap(host: CacheableExportInfoMapHost): 
                 const name = preferCapitalized && info[0].capitalizedSymbolName || symbolName;
                 if (matches(name, info[0].targetFlags)) {
                     const rehydrated = info.map(rehydrateCachedInfo);
-                    const filtered = rehydrated.filter((r, i) => isNotShadowedByDeeperNodeModulesPackage(r, info[i].packageName));
+                    const filtered = rehydrated.filter((r, i) =>
+                        isNotShadowedByDeeperNodeModulesPackage(r, info[i].packageName)
+                    );
                     if (filtered.length) {
                         const res = action(filtered, name, !!ambientModuleName, key);
                         if (res !== undefined) return res;
@@ -277,7 +292,8 @@ export function createCacheableExportInfoMap(host: CacheableExportInfoMapHost): 
                 usableByFileName && usableByFileName !== newSourceFile.path ||
                 // If ATA is enabled, auto-imports uses existing imports to guess whether you want auto-imports from node.
                 // Adding or removing imports from node could change the outcome of that guess, so could change the suggestions list.
-                typeAcquisitionEnabled && consumesNodeCoreModules(oldSourceFile) !== consumesNodeCoreModules(newSourceFile) ||
+                typeAcquisitionEnabled &&
+                    consumesNodeCoreModules(oldSourceFile) !== consumesNodeCoreModules(newSourceFile) ||
                 // Module agumentation and ambient module changes can add or remove exports available to be auto-imported.
                 // Changes elsewhere in the file can change the *type* of an export in a module augmentation,
                 // but type info is gathered in getCompletionEntryDetails, which doesn't use the cache.
@@ -321,7 +337,10 @@ export function createCacheableExportInfoMap(host: CacheableExportInfoMapHost): 
         const symbol = info.symbol || cachedSymbol || Debug.checkDefined(
             exportKind === ExportKind.ExportEquals
                 ? checker.resolveExternalModuleSymbol(moduleSymbol)
-                : checker.tryGetMemberInModuleExportsAndProperties(unescapeLeadingUnderscores(info.symbolTableKey), moduleSymbol),
+                : checker.tryGetMemberInModuleExportsAndProperties(
+                    unescapeLeadingUnderscores(info.symbolTableKey),
+                    moduleSymbol,
+                ),
             `Could not find symbol '${info.symbolName}' by key '${info.symbolTableKey}' in module ${moduleSymbol.name}`,
         );
         symbols.set(id, [symbol, moduleSymbol]);
@@ -368,8 +387,16 @@ export function createCacheableExportInfoMap(host: CacheableExportInfoMapHost): 
         for (const ambientModuleName of newSourceFile.ambientModuleNames) {
             const isMatchingModuleDeclaration = (node: Statement) =>
                 isNonGlobalAmbientModule(node) && node.name.text === ambientModuleName;
-            oldFileStatementIndex = findIndex(oldSourceFile.statements, isMatchingModuleDeclaration, oldFileStatementIndex + 1);
-            newFileStatementIndex = findIndex(newSourceFile.statements, isMatchingModuleDeclaration, newFileStatementIndex + 1);
+            oldFileStatementIndex = findIndex(
+                oldSourceFile.statements,
+                isMatchingModuleDeclaration,
+                oldFileStatementIndex + 1,
+            );
+            newFileStatementIndex = findIndex(
+                newSourceFile.statements,
+                isMatchingModuleDeclaration,
+                newFileStatementIndex + 1,
+            );
             if (oldSourceFile.statements[oldFileStatementIndex] !== newSourceFile.statements[newFileStatementIndex]) {
                 return false;
             }
@@ -421,7 +448,13 @@ export function isImportableFile(
     if (packageJsonFilter) {
         const isAutoImportable = hasImportablePath &&
             packageJsonFilter.allowsImportingSourceFile(to, moduleSpecifierResolutionHost);
-        moduleSpecifierCache?.setBlockedByPackageJsonDependencies(from.path, to.path, preferences, {}, !isAutoImportable);
+        moduleSpecifierCache?.setBlockedByPackageJsonDependencies(
+            from.path,
+            to.path,
+            preferences,
+            {},
+            !isAutoImportable,
+        );
         return isAutoImportable;
     }
 
@@ -486,7 +519,12 @@ export function forEachExternalModuleToImportFrom(
                 if (
                     file && !program.getSourceFile(file.fileName) ||
                     !file &&
-                        !checker.resolveName(module.name, /*location*/ undefined, SymbolFlags.Module, /*excludeGlobals*/ false)
+                        !checker.resolveName(
+                            module.name,
+                            /*location*/ undefined,
+                            SymbolFlags.Module,
+                            /*excludeGlobals*/ false,
+                        )
                 ) {
                     // The AutoImportProvider filters files already in the main program out of its *root* files,
                     // but non-root files can still be present in both programs, and already in the export info map
@@ -525,7 +563,8 @@ function forEachExternalModule(
 
     for (const ambient of checker.getAmbientModules()) {
         if (
-            !ambient.name.includes("*") && !(excludePatterns && ambient.declarations?.every(d => isExcluded!(d.getSourceFile())))
+            !ambient.name.includes("*") &&
+            !(excludePatterns && ambient.declarations?.every(d => isExcluded!(d.getSourceFile())))
         ) {
             cb(ambient, /*sourceFile*/ undefined);
         }
@@ -592,7 +631,8 @@ export function getExportInfoMap(
                 }
                 checker.forEachExportAndPropertyOfModule(moduleSymbol, (exported, key) => {
                     if (
-                        exported !== defaultInfo?.symbol && isImportableSymbol(exported, checker) && addToSeen(seenExports, key)
+                        exported !== defaultInfo?.symbol && isImportableSymbol(exported, checker) &&
+                        addToSeen(seenExports, key)
                     ) {
                         cache.add(
                             importingFile.path,
@@ -681,7 +721,10 @@ function getNameForExportDefault(symbol: Symbol): string | undefined {
             return tryCast(skipOuterExpressions(declaration.expression), isIdentifier)?.text;
         }
         else if (isExportSpecifier(declaration)) {
-            Debug.assert(declaration.name.text === InternalSymbolName.Default, "Expected the specifier to be a default export");
+            Debug.assert(
+                declaration.name.text === InternalSymbolName.Default,
+                "Expected the specifier to be a default export",
+            );
             return declaration.propertyName && declaration.propertyName.text;
         }
     });

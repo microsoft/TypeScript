@@ -146,7 +146,9 @@ export function getSignatureHelpItems(
     const onlyUseSyntacticOwners = !!triggerReason && triggerReason.kind === "characterTyped";
 
     // Bail out quickly in the middle of a string or comment, don't provide signature help unless the user explicitly requested it.
-    if (onlyUseSyntacticOwners && (isInString(sourceFile, position, startingToken) || isInComment(sourceFile, position))) {
+    if (
+        onlyUseSyntacticOwners && (isInString(sourceFile, position, startingToken) || isInComment(sourceFile, position))
+    ) {
         return undefined;
     }
 
@@ -157,13 +159,20 @@ export function getSignatureHelpItems(
     cancellationToken.throwIfCancellationRequested();
 
     // Extra syntactic and semantic filtering of signature help
-    const candidateInfo = getCandidateOrTypeInfo(argumentInfo, typeChecker, sourceFile, startingToken, onlyUseSyntacticOwners);
+    const candidateInfo = getCandidateOrTypeInfo(
+        argumentInfo,
+        typeChecker,
+        sourceFile,
+        startingToken,
+        onlyUseSyntacticOwners,
+    );
     cancellationToken.throwIfCancellationRequested();
 
     if (!candidateInfo) {
         // We didn't have any sig help items produced by the TS compiler.  If this is a JS
         // file, then see if we can figure out anything better.
-        return isSourceFileJS(sourceFile) ? createJSSignatureHelpItems(argumentInfo, program, cancellationToken) : undefined;
+        return isSourceFileJS(sourceFile) ? createJSSignatureHelpItems(argumentInfo, program, cancellationToken)
+            : undefined;
     }
 
     return typeChecker.runWithCancellationToken(
@@ -208,8 +217,13 @@ function getCandidateOrTypeInfo(
                 return undefined;
             }
             const candidates: Signature[] = [];
-            const resolvedSignature = checker.getResolvedSignatureForSignatureHelp(invocation.node, candidates, argumentCount)!; // TODO: GH#18217
-            return candidates.length === 0 ? undefined : { kind: CandidateOrTypeKind.Candidate, candidates, resolvedSignature };
+            const resolvedSignature = checker.getResolvedSignatureForSignatureHelp(
+                invocation.node,
+                candidates,
+                argumentCount,
+            )!; // TODO: GH#18217
+            return candidates.length === 0 ? undefined
+                : { kind: CandidateOrTypeKind.Candidate, candidates, resolvedSignature };
         }
         case InvocationKind.TypeArgs: {
             const { called } = invocation;
@@ -270,7 +284,8 @@ function createJSSignatureHelpItems(
             program.getSourceFiles(),
             sourceFile =>
                 firstDefined(sourceFile.getNamedDeclarations().get(name), declaration => {
-                    const type = declaration.symbol && typeChecker.getTypeOfSymbolAtLocation(declaration.symbol, declaration);
+                    const type = declaration.symbol &&
+                        typeChecker.getTypeOfSymbolAtLocation(declaration.symbol, declaration);
                     const callSignatures = type && type.getCallSignatures();
                     if (callSignatures && callSignatures.length) {
                         return typeChecker.runWithCancellationToken(
@@ -332,14 +347,23 @@ function getArgumentOrParameterListInfo(
     sourceFile: SourceFile,
     checker: TypeChecker,
 ):
-    | { readonly list: Node; readonly argumentIndex: number; readonly argumentCount: number; readonly argumentsSpan: TextSpan; }
+    | {
+        readonly list: Node;
+        readonly argumentIndex: number;
+        readonly argumentCount: number;
+        readonly argumentsSpan: TextSpan;
+    }
     | undefined
 {
     const info = getArgumentOrParameterListAndIndex(node, sourceFile, checker);
     if (!info) return undefined;
     const { list, argumentIndex } = info;
 
-    const argumentCount = getArgumentCount(list, /*ignoreTrailingComma*/ isInString(sourceFile, position, node), checker);
+    const argumentCount = getArgumentCount(
+        list,
+        /*ignoreTrailingComma*/ isInString(sourceFile, position, node),
+        checker,
+    );
     if (argumentIndex !== 0) {
         Debug.assertLessThan(argumentIndex, argumentCount);
     }
@@ -557,7 +581,8 @@ function getContextualSignatureLocationInfo(
             const info = getArgumentOrParameterListInfo(node, position, sourceFile, checker);
             if (!info) return undefined;
             const { argumentIndex, argumentCount, argumentsSpan } = info;
-            const contextualType = isMethodDeclaration(parent) ? checker.getContextualTypeForObjectLiteralElement(parent)
+            const contextualType = isMethodDeclaration(parent) ?
+                checker.getContextualTypeForObjectLiteralElement(parent)
                 : checker.getContextualType(parent as ParenthesizedExpression | FunctionExpression | ArrowFunction);
             return contextualType && { contextualType, argumentIndex, argumentCount, argumentsSpan };
         case SyntaxKind.BinaryExpression: {
@@ -577,7 +602,10 @@ function getContextualSignatureLocationInfo(
 // The type of a function type node has a symbol at that node, but it's better to use the symbol for a parameter or type alias.
 function chooseBetterSymbol(s: Symbol): Symbol {
     return s.name === InternalSymbolName.Type
-        ? firstDefined(s.declarations, d => isFunctionTypeNode(d) ? tryCast(d.parent, canHaveSymbol)?.symbol : undefined) || s
+        ? firstDefined(
+            s.declarations,
+            d => isFunctionTypeNode(d) ? tryCast(d.parent, canHaveSymbol)?.symbol : undefined,
+        ) || s
         : s;
 }
 
@@ -655,7 +683,12 @@ function getArgumentCount(argumentsList: Node, ignoreTrailingComma: boolean, che
 
 // spanIndex is either the index for a given template span.
 // This does not give appropriate results for a NoSubstitutionTemplateLiteral
-function getArgumentIndexForTemplatePiece(spanIndex: number, node: Node, position: number, sourceFile: SourceFile): number {
+function getArgumentIndexForTemplatePiece(
+    spanIndex: number,
+    node: Node,
+    position: number,
+    sourceFile: SourceFile,
+): number {
     // Because the TemplateStringsArray is the first argument, we have to offset each substitution expression by 1.
     // There are three cases we can encounter:
     //      1. We are precisely in the template literal (argIndex = 0).
@@ -711,7 +744,10 @@ function getApplicableSpanForArguments(argumentsList: Node, sourceFile: SourceFi
     return createTextSpan(applicableSpanStart, applicableSpanEnd - applicableSpanStart);
 }
 
-function getApplicableSpanForTaggedTemplate(taggedTemplate: TaggedTemplateExpression, sourceFile: SourceFile): TextSpan {
+function getApplicableSpanForTaggedTemplate(
+    taggedTemplate: TaggedTemplateExpression,
+    sourceFile: SourceFile,
+): TextSpan {
     const template = taggedTemplate.template;
     const applicableSpanStart = template.getStart();
     let applicableSpanEnd = template.getEnd();
@@ -749,7 +785,12 @@ function getContainingArgumentInfo(
             "Not a subspan",
             () => `Child: ${Debug.formatSyntaxKind(n.kind)}, parent: ${Debug.formatSyntaxKind(n.parent.kind)}`,
         );
-        const argumentInfo = getImmediatelyContainingArgumentOrContextualParameterInfo(n, position, sourceFile, checker);
+        const argumentInfo = getImmediatelyContainingArgumentOrContextualParameterInfo(
+            n,
+            position,
+            sourceFile,
+            checker,
+        );
         if (argumentInfo) {
             return argumentInfo;
         }
@@ -764,7 +805,9 @@ function getChildListThatStartsWithOpenerToken(parent: Node, openerToken: Node, 
     return children[indexOfOpenerToken + 1];
 }
 
-function getExpressionFromInvocation(invocation: CallInvocation | TypeArgsInvocation): Expression | JsxTagNameExpression {
+function getExpressionFromInvocation(
+    invocation: CallInvocation | TypeArgsInvocation,
+): Expression | JsxTagNameExpression {
     return invocation.kind === InvocationKind.Call ? getInvokedExpression(invocation.node) : invocation.called;
 }
 
@@ -788,7 +831,12 @@ function createSignatureHelpItems(
         : (typeChecker.getSymbolAtLocation(getExpressionFromInvocation(invocation)) ||
             useFullPrefix && resolvedSignature.declaration?.symbol);
     const callTargetDisplayParts = callTargetSymbol ?
-        symbolToDisplayParts(typeChecker, callTargetSymbol, useFullPrefix ? sourceFile : undefined, /*meaning*/ undefined)
+        symbolToDisplayParts(
+            typeChecker,
+            callTargetSymbol,
+            useFullPrefix ? sourceFile : undefined,
+            /*meaning*/ undefined,
+        )
         : emptyArray;
     const items = map(
         candidates,
@@ -829,7 +877,13 @@ function createSignatureHelpItems(
     }
 
     Debug.assert(selectedItemIndex !== -1); // If candidates is non-empty it should always include bestSignature. We check for an empty candidates before calling this function.
-    const help = { items: flatMapToMutable(items, identity), applicableSpan, selectedItemIndex, argumentIndex, argumentCount };
+    const help = {
+        items: flatMapToMutable(items, identity),
+        applicableSpan,
+        selectedItemIndex,
+        argumentIndex,
+        argumentCount,
+    };
     const selected = help.items[selectedItemIndex];
     if (selected.isVariadic) {
         const firstRest = findIndex(selected.parameters, p => !!p.isRest);
@@ -904,10 +958,21 @@ function getSignatureHelpItem(
     );
     return map(infos, ({ isVariadic, parameters, prefix, suffix }) => {
         const prefixDisplayParts = [...callTargetDisplayParts, ...prefix];
-        const suffixDisplayParts = [...suffix, ...returnTypeToDisplayParts(candidateSignature, enclosingDeclaration, checker)];
+        const suffixDisplayParts = [
+            ...suffix,
+            ...returnTypeToDisplayParts(candidateSignature, enclosingDeclaration, checker),
+        ];
         const documentation = candidateSignature.getDocumentationComment(checker);
         const tags = candidateSignature.getJsDocTags();
-        return { isVariadic, prefixDisplayParts, suffixDisplayParts, separatorDisplayParts, parameters, documentation, tags };
+        return {
+            isVariadic,
+            prefixDisplayParts,
+            suffixDisplayParts,
+            separatorDisplayParts,
+            parameters,
+            documentation,
+            tags,
+        };
     });
 }
 
@@ -967,7 +1032,8 @@ function itemInfoForTypeParameters(
             ...thisParameter,
             ...map(
                 paramList,
-                param => checker.symbolToParameterDeclaration(param, enclosingDeclaration, signatureHelpNodeBuilderFlags)!,
+                param =>
+                    checker.symbolToParameterDeclaration(param, enclosingDeclaration, signatureHelpNodeBuilderFlags)!,
             ),
         ]);
         const parameterParts = mapToDisplayParts(writer => {
@@ -1000,11 +1066,13 @@ function itemInfoForParameters(
         }
     });
     const lists = checker.getExpandedParameters(candidateSignature);
-    const isVariadic: (parameterList: readonly Symbol[]) => boolean = !checker.hasEffectiveRestParameter(candidateSignature) ?
-        _ => false
-        : lists.length === 1 ? _ => true
-        : pList =>
-            !!(pList.length && tryCast(pList[pList.length - 1], isTransientSymbol)?.links.checkFlags! & CheckFlags.RestParameter);
+    const isVariadic: (parameterList: readonly Symbol[]) => boolean =
+        !checker.hasEffectiveRestParameter(candidateSignature) ?
+            _ => false
+            : lists.length === 1 ? _ => true
+            : pList =>
+                !!(pList.length &&
+                    tryCast(pList[pList.length - 1], isTransientSymbol)?.links.checkFlags! & CheckFlags.RestParameter);
     return lists.map(parameterList => ({
         isVariadic: isVariadic(parameterList),
         parameters: parameterList.map(p =>
@@ -1023,12 +1091,22 @@ function createSignatureHelpParameterForParameter(
     printer: Printer,
 ): SignatureHelpParameter {
     const displayParts = mapToDisplayParts(writer => {
-        const param = checker.symbolToParameterDeclaration(parameter, enclosingDeclaration, signatureHelpNodeBuilderFlags)!;
+        const param = checker.symbolToParameterDeclaration(
+            parameter,
+            enclosingDeclaration,
+            signatureHelpNodeBuilderFlags,
+        )!;
         printer.writeNode(EmitHint.Unspecified, param, sourceFile, writer);
     });
     const isOptional = checker.isOptionalParameter(parameter.valueDeclaration as ParameterDeclaration);
     const isRest = isTransientSymbol(parameter) && !!(parameter.links.checkFlags & CheckFlags.RestParameter);
-    return { name: parameter.name, documentation: parameter.getDocumentationComment(checker), displayParts, isOptional, isRest };
+    return {
+        name: parameter.name,
+        documentation: parameter.getDocumentationComment(checker),
+        displayParts,
+        isOptional,
+        isRest,
+    };
 }
 
 function createSignatureHelpParameterForTypeParameter(
@@ -1039,7 +1117,11 @@ function createSignatureHelpParameterForTypeParameter(
     printer: Printer,
 ): SignatureHelpParameter {
     const displayParts = mapToDisplayParts(writer => {
-        const param = checker.typeParameterToDeclaration(typeParameter, enclosingDeclaration, signatureHelpNodeBuilderFlags)!;
+        const param = checker.typeParameterToDeclaration(
+            typeParameter,
+            enclosingDeclaration,
+            signatureHelpNodeBuilderFlags,
+        )!;
         printer.writeNode(EmitHint.Unspecified, param, sourceFile, writer);
     });
     return {

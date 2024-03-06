@@ -39,8 +39,8 @@ describe("unittests:: tsserver:: project telemetry", () => {
     });
 
     it("counts files by extension", () => {
-        const files = ["ts.ts", "tsx.tsx", "moo.ts", "dts.d.ts", "jsx.jsx", "js.js", "badExtension.badExtension"].map(f =>
-            makeFile(`/src/${f}`)
+        const files = ["ts.ts", "tsx.tsx", "moo.ts", "dts.d.ts", "jsx.jsx", "js.js", "badExtension.badExtension"].map(
+            f => makeFile(`/src/${f}`),
         );
         const notIncludedFile = makeFile("/bin/ts.js");
         const compilerOptions: ts.CompilerOptions = { allowJs: true };
@@ -138,7 +138,11 @@ describe("unittests:: tsserver:: project telemetry", () => {
         const host = createServerHost([file, tsconfig]);
         const session = new TestSession(host);
         openFilesForSession([file], session);
-        baselineTsserverLogs("telemetry", "sends telemetry for extends, files, include, exclude, and compileOnSave", session);
+        baselineTsserverLogs(
+            "telemetry",
+            "sends telemetry for extends, files, include, exclude, and compileOnSave",
+            session,
+        );
     });
 
     const autoJsCompilerOptions = {

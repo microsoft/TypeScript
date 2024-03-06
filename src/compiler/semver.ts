@@ -383,7 +383,8 @@ function parseComparator(operator: string, text: string, comparators: Comparator
             case "<":
             case ">=":
                 comparators.push(
-                    isWildcard(minor) || isWildcard(patch) ? createComparator(operator, version.with({ prerelease: "0" })) :
+                    isWildcard(minor) || isWildcard(patch) ?
+                        createComparator(operator, version.with({ prerelease: "0" })) :
                         createComparator(operator, version),
                 );
                 break;
@@ -391,9 +392,15 @@ function parseComparator(operator: string, text: string, comparators: Comparator
             case ">":
                 comparators.push(
                     isWildcard(minor) ?
-                        createComparator(operator === "<=" ? "<" : ">=", version.increment("major").with({ prerelease: "0" })) :
+                        createComparator(
+                            operator === "<=" ? "<" : ">=",
+                            version.increment("major").with({ prerelease: "0" }),
+                        ) :
                         isWildcard(patch) ?
-                        createComparator(operator === "<=" ? "<" : ">=", version.increment("minor").with({ prerelease: "0" })) :
+                        createComparator(
+                            operator === "<=" ? "<" : ">=",
+                            version.increment("minor").with({ prerelease: "0" }),
+                        ) :
                         createComparator(operator, version),
                 );
                 break;
@@ -402,7 +409,10 @@ function parseComparator(operator: string, text: string, comparators: Comparator
                 if (isWildcard(minor) || isWildcard(patch)) {
                     comparators.push(createComparator(">=", version.with({ prerelease: "0" })));
                     comparators.push(
-                        createComparator("<", version.increment(isWildcard(minor) ? "major" : "minor").with({ prerelease: "0" })),
+                        createComparator(
+                            "<",
+                            version.increment(isWildcard(minor) ? "major" : "minor").with({ prerelease: "0" }),
+                        ),
                     );
                 }
                 else {

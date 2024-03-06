@@ -269,7 +269,11 @@ declare module "fs" {
     verifyTscWatch({
         scenario,
         subScenario: "works when included file with ambient module changes",
-        commandLineArgs: ["--w", "/users/username/projects/project/foo.ts", "/users/username/projects/project/bar.d.ts"],
+        commandLineArgs: [
+            "--w",
+            "/users/username/projects/project/foo.ts",
+            "/users/username/projects/project/bar.d.ts",
+        ],
         sys: () => {
             const root = {
                 path: "/users/username/projects/project/foo.ts",
@@ -370,7 +374,9 @@ declare module "fs" {
                 path: `/user/username/projects/myproject/node_modules2/@types/qqq/index.d.ts`,
                 content: "export {}",
             };
-            return createWatchedSystem([file, libFile, module], { currentDirectory: "/user/username/projects/myproject" });
+            return createWatchedSystem([file, libFile, module], {
+                currentDirectory: "/user/username/projects/myproject",
+            });
         },
         edits: [
             {
@@ -456,7 +462,8 @@ declare module "fs" {
                         }),
                     });
                     sys.ensureFileOrFolder({
-                        path: `/user/username/projects/myproject/node_modules/@myapp/ts-types/types/somefile.define.d.ts`,
+                        path:
+                            `/user/username/projects/myproject/node_modules/@myapp/ts-types/types/somefile.define.d.ts`,
                         content: `
 declare namespace myapp {
     function component(str: string): number;
@@ -472,8 +479,9 @@ declare namespace myapp {
                 caption: "No change, just check program",
                 edit: ts.noop,
                 timeouts: (_sys, [[oldProgram, oldBuilderProgram]], watchorSolution) => {
-                    const newProgram = (watchorSolution as ts.WatchOfConfigFile<ts.EmitAndSemanticDiagnosticsBuilderProgram>)
-                        .getProgram();
+                    const newProgram =
+                        (watchorSolution as ts.WatchOfConfigFile<ts.EmitAndSemanticDiagnosticsBuilderProgram>)
+                            .getProgram();
                     assert.strictEqual(newProgram, oldBuilderProgram, "No change so builder program should be same");
                     assert.strictEqual(newProgram.getProgram(), oldProgram, "No change so program should be same");
                 },
@@ -589,7 +597,8 @@ declare namespace NodeJS {
             edits: [
                 {
                     caption: "npm ci step one: remove all node_modules files",
-                    edit: sys => sys.deleteFolder(`/user/username/projects/myproject/node_modules/@types`, /*recursive*/ true),
+                    edit: sys =>
+                        sys.deleteFolder(`/user/username/projects/myproject/node_modules/@types`, /*recursive*/ true),
                     timeouts: sys => sys.runQueuedTimeoutCallbacks(),
                 },
                 {
@@ -603,13 +612,16 @@ declare namespace NodeJS {
                 },
                 {
                     caption: `npm ci step three: create atTypes node folder`,
-                    edit: sys => sys.ensureFileOrFolder({ path: `/user/username/projects/myproject/node_modules/@types/node` }),
+                    edit: sys =>
+                        sys.ensureFileOrFolder({ path: `/user/username/projects/myproject/node_modules/@types/node` }),
                     timeouts: sys => sys.runQueuedTimeoutCallbacks(),
                 },
                 {
-                    caption: `npm ci step four: create atTypes write all the files but dont invoke watcher for index.d.ts`,
+                    caption:
+                        `npm ci step four: create atTypes write all the files but dont invoke watcher for index.d.ts`,
                     edit: sys => {
-                        const { nodeAtTypesIndex, nodeAtTypesBase, nodeAtTypes36Base, nodeAtTypesGlobals } = getNodeAtTypes();
+                        const { nodeAtTypesIndex, nodeAtTypesBase, nodeAtTypes36Base, nodeAtTypesGlobals } =
+                            getNodeAtTypes();
                         sys.ensureFileOrFolder(nodeAtTypesBase);
                         sys.ensureFileOrFolder(nodeAtTypesIndex, /*ignoreWatchInvokedWithTriggerAsFileCreate*/ true);
                         sys.ensureFileOrFolder(nodeAtTypes36Base, /*ignoreWatchInvokedWithTriggerAsFileCreate*/ true);

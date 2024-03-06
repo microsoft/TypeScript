@@ -359,7 +359,11 @@ function foo() {
         session.host.baselineHost("a2Ts modified");
         assert.isTrue(projectA.dirty);
         projectA.updateGraph();
-        baselineTsserverLogs("projectReferences", "reusing d.ts files from composite and non composite projects", session);
+        baselineTsserverLogs(
+            "projectReferences",
+            "reusing d.ts files from composite and non composite projects",
+            session,
+        );
     });
 
     describe("when references are monorepo like with symlinks", () => {
@@ -588,7 +592,11 @@ testCompositeFunction('why hello there', 42);`,
         const session = new TestSession(host);
         openFilesForSession([consumerIndex], session);
         verifyGetErrRequest({ session, files: [consumerIndex] });
-        baselineTsserverLogs("projectReferences", `when the referenced projects have allowJs and emitDeclarationOnly`, session);
+        baselineTsserverLogs(
+            "projectReferences",
+            `when the referenced projects have allowJs and emitDeclarationOnly`,
+            session,
+        );
     });
 
     it("when finding local reference doesnt load ancestor/sibling projects", () => {
@@ -653,7 +661,16 @@ testCompositeFunction('why hello there', 42);`,
                 }`,
         };
 
-        const files = [libFile, solution, compilerConfig, typesFile, programFile, servicesConfig, servicesFile, libFile];
+        const files = [
+            libFile,
+            solution,
+            compilerConfig,
+            typesFile,
+            programFile,
+            servicesConfig,
+            servicesFile,
+            libFile,
+        ];
         const host = createServerHost(files);
         const session = new TestSession(host);
         openFilesForSession([programFile], session);
@@ -671,7 +688,11 @@ testCompositeFunction('why hello there', 42);`,
             command: ts.server.protocol.CommandTypes.References,
             arguments: protocolFileLocationFromSubstring(programFile, "getSourceFiles"),
         });
-        baselineTsserverLogs("projectReferences", `finding local reference doesnt load ancestor/sibling projects`, session);
+        baselineTsserverLogs(
+            "projectReferences",
+            `finding local reference doesnt load ancestor/sibling projects`,
+            session,
+        );
     });
 
     it("when finding references in overlapping projects", () => {
@@ -773,7 +794,19 @@ testCompositeFunction('why hello there', 42);`,
                 `,
         };
 
-        const files = [libFile, solutionConfig, aConfig, aFile, bConfig, bFile, cConfig, cFile, dConfig, dFile, libFile];
+        const files = [
+            libFile,
+            solutionConfig,
+            aConfig,
+            aFile,
+            bConfig,
+            bFile,
+            cConfig,
+            cFile,
+            dConfig,
+            dFile,
+            libFile,
+        ];
         const host = createServerHost(files);
         const session = new TestSession(host);
         openFilesForSession([bFile], session);
@@ -974,7 +1007,16 @@ export const foo = local;`,
                 }`,
         };
 
-        const files = [libFile, solution, compilerConfig, typesFile, programFile, servicesConfig, servicesFile, libFile];
+        const files = [
+            libFile,
+            solution,
+            compilerConfig,
+            typesFile,
+            programFile,
+            servicesConfig,
+            servicesFile,
+            libFile,
+        ];
         const host = createServerHost(files);
         const session = new TestSession(host);
         openFilesForSession([programFile], session);
@@ -985,7 +1027,11 @@ export const foo = local;`,
             command: ts.server.protocol.CommandTypes.References,
             arguments: protocolFileLocationFromSubstring(programFile, "getSourceFiles"),
         });
-        baselineTsserverLogs("projectReferences", `with disableSolutionSearching solution and siblings are not loaded`, session);
+        baselineTsserverLogs(
+            "projectReferences",
+            `with disableSolutionSearching solution and siblings are not loaded`,
+            session,
+        );
     });
 
     describe("when default project is solution project", () => {
@@ -1225,7 +1271,8 @@ export function bar() {}`,
         it("disables looking into the child project if disableReferencedProjectLoad is set in indirect project", () => {
             const { tsconfigIndirect, indirect } = getIndirectProject("1", { disableReferencedProjectLoad: true });
             verifyDisableReferencedProjectLoad({
-                scenario: "disables looking into the child project if disableReferencedProjectLoad is set in indirect project",
+                scenario:
+                    "disables looking into the child project if disableReferencedProjectLoad is set in indirect project",
                 configRefs: ["./tsconfig-indirect1.json"],
                 additionalFiles: [tsconfigIndirect, indirect],
             });
@@ -1698,7 +1745,11 @@ bar;`,
             command: ts.server.protocol.CommandTypes.References,
             arguments: protocolFileLocationFromSubstring(coreFile, `coreConst`),
         });
-        baselineTsserverLogs("projectReferences", `when files from two projects are open and one project references`, session);
+        baselineTsserverLogs(
+            "projectReferences",
+            `when files from two projects are open and one project references`,
+            session,
+        );
     });
 
     describe("find refs to decl in other proj", () => {

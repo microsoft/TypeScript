@@ -167,7 +167,8 @@ describe("unittests:: tsc-watch:: projects with references: invoking when refere
                             files: ["b.ts"],
                             references: [{ path: "tsconfig.a.json" }],
                         }),
-                        "/user/username/projects/transitiveReferences/b.ts": `import {A} from "a";export const b = new A();`,
+                        "/user/username/projects/transitiveReferences/b.ts":
+                            `import {A} from "a";export const b = new A();`,
                     },
                     { currentDirectory: `/user/username/projects/transitiveReferences` },
                 ),

@@ -280,7 +280,10 @@ export function transformES2017(context: TransformationContext): (x: SourceFile 
                 return visitEachChild(node, visitor, context);
 
             case SyntaxKind.ElementAccessExpression:
-                if (capturedSuperProperties && (node as ElementAccessExpression).expression.kind === SyntaxKind.SuperKeyword) {
+                if (
+                    capturedSuperProperties &&
+                    (node as ElementAccessExpression).expression.kind === SyntaxKind.SuperKeyword
+                ) {
                     hasSuperElementAccess = true;
                 }
                 return visitEachChild(node, visitor, context);
@@ -373,7 +376,10 @@ export function transformES2017(context: TransformationContext): (x: SourceFile 
 
     function visitVariableStatementInAsyncBody(node: VariableStatement) {
         if (isVariableDeclarationListWithCollidingName(node.declarationList)) {
-            const expression = visitVariableDeclarationListWithCollidingNames(node.declarationList, /*hasReceiver*/ false);
+            const expression = visitVariableDeclarationListWithCollidingNames(
+                node.declarationList,
+                /*hasReceiver*/ false,
+            );
             return expression ? factory.createExpressionStatement(expression) : undefined;
         }
         return visitEachChild(node, visitor, context);
@@ -601,7 +607,10 @@ export function transformES2017(context: TransformationContext): (x: SourceFile 
         );
     }
 
-    function recordDeclarationName({ name }: ParameterDeclaration | VariableDeclaration | BindingElement, names: Set<__String>) {
+    function recordDeclarationName(
+        { name }: ParameterDeclaration | VariableDeclaration | BindingElement,
+        names: Set<__String>,
+    ) {
         if (isIdentifier(name)) {
             names.add(name.escapedText);
         }
@@ -698,13 +707,19 @@ export function transformES2017(context: TransformationContext): (x: SourceFile 
         const originalMethod = getOriginalNode(node, isFunctionLikeDeclaration);
         const emitSuperHelpers = languageVersion >= ScriptTarget.ES2015 &&
             resolver.getNodeCheckFlags(node) &
-                (NodeCheckFlags.MethodWithSuperPropertyAssignmentInAsync | NodeCheckFlags.MethodWithSuperPropertyAccessInAsync) &&
+                (NodeCheckFlags.MethodWithSuperPropertyAssignmentInAsync |
+                    NodeCheckFlags.MethodWithSuperPropertyAccessInAsync) &&
             (getFunctionFlags(originalMethod) & FunctionFlags.AsyncGenerator) !== FunctionFlags.AsyncGenerator;
 
         if (emitSuperHelpers) {
             enableSubstitutionForAsyncMethodsWithSuper();
             if (capturedSuperProperties.size) {
-                const variableStatement = createSuperAccessVariableStatement(factory, resolver, node, capturedSuperProperties);
+                const variableStatement = createSuperAccessVariableStatement(
+                    factory,
+                    resolver,
+                    node,
+                    capturedSuperProperties,
+                );
                 substitutedSuperAccessors[getNodeId(variableStatement)] = true;
 
                 const statements = updated.statements.slice();
@@ -780,12 +795,16 @@ export function transformES2017(context: TransformationContext): (x: SourceFile 
         node: MethodDeclaration | AccessorDeclaration | FunctionDeclaration | FunctionExpression,
         outerParameters: NodeArray<ParameterDeclaration>,
     ): FunctionBody;
-    function transformAsyncFunctionBody(node: ArrowFunction, outerParameters: NodeArray<ParameterDeclaration>): ConciseBody;
+    function transformAsyncFunctionBody(
+        node: ArrowFunction,
+        outerParameters: NodeArray<ParameterDeclaration>,
+    ): ConciseBody;
     function transformAsyncFunctionBody(
         node: FunctionLikeDeclaration,
         outerParameters: NodeArray<ParameterDeclaration>,
     ): ConciseBody {
-        const innerParameters = !isSimpleParameterList(node.parameters) ? visitParameterList(node.parameters, visitor, context)
+        const innerParameters = !isSimpleParameterList(node.parameters) ?
+            visitParameterList(node.parameters, visitor, context)
             : undefined;
         resumeLexicalEnvironment();
 
@@ -994,7 +1013,8 @@ export function transformES2017(context: TransformationContext): (x: SourceFile 
         // we should track it here.
         if (enabledSubstitutions & ES2017SubstitutionFlags.AsyncMethodsWithSuper && isSuperContainer(node)) {
             const superContainerFlags = resolver.getNodeCheckFlags(node) &
-                (NodeCheckFlags.MethodWithSuperPropertyAccessInAsync | NodeCheckFlags.MethodWithSuperPropertyAssignmentInAsync);
+                (NodeCheckFlags.MethodWithSuperPropertyAccessInAsync |
+                    NodeCheckFlags.MethodWithSuperPropertyAssignmentInAsync);
             if (superContainerFlags !== enclosingSuperContainerFlags) {
                 const savedEnclosingSuperContainerFlags = enclosingSuperContainerFlags;
                 enclosingSuperContainerFlags = superContainerFlags;
@@ -1045,7 +1065,10 @@ export function transformES2017(context: TransformationContext): (x: SourceFile 
         if (node.expression.kind === SyntaxKind.SuperKeyword) {
             return setTextRange(
                 factory.createPropertyAccessExpression(
-                    factory.createUniqueName("_super", GeneratedIdentifierFlags.Optimistic | GeneratedIdentifierFlags.FileLevel),
+                    factory.createUniqueName(
+                        "_super",
+                        GeneratedIdentifierFlags.Optimistic | GeneratedIdentifierFlags.FileLevel,
+                    ),
                     node.name,
                 ),
                 node,
@@ -1091,7 +1114,10 @@ export function transformES2017(context: TransformationContext): (x: SourceFile 
             || kind === SyntaxKind.SetAccessor;
     }
 
-    function createSuperElementAccessInAsyncMethod(argumentExpression: Expression, location: TextRange): LeftHandSideExpression {
+    function createSuperElementAccessInAsyncMethod(
+        argumentExpression: Expression,
+        location: TextRange,
+    ): LeftHandSideExpression {
         if (enclosingSuperContainerFlags & NodeCheckFlags.MethodWithSuperPropertyAssignmentInAsync) {
             return setTextRange(
                 factory.createPropertyAccessExpression(
@@ -1137,7 +1163,8 @@ export function createSuperAccessVariableStatement(
 ) {
     // Create a variable declaration with a getter/setter (if binding) definition for each name:
     //   const _super = Object.create(null, { x: { get: () => super.x, set: (v) => super.x = v }, ... });
-    const hasBinding = (resolver.getNodeCheckFlags(node) & NodeCheckFlags.MethodWithSuperPropertyAssignmentInAsync) !== 0;
+    const hasBinding =
+        (resolver.getNodeCheckFlags(node) & NodeCheckFlags.MethodWithSuperPropertyAssignmentInAsync) !== 0;
     const accessors: PropertyAssignment[] = [];
     names.forEach((_, key) => {
         const name = unescapeLeadingUnderscores(key);
@@ -1210,7 +1237,10 @@ export function createSuperAccessVariableStatement(
         factory.createVariableDeclarationList(
             [
                 factory.createVariableDeclaration(
-                    factory.createUniqueName("_super", GeneratedIdentifierFlags.Optimistic | GeneratedIdentifierFlags.FileLevel),
+                    factory.createUniqueName(
+                        "_super",
+                        GeneratedIdentifierFlags.Optimistic | GeneratedIdentifierFlags.FileLevel,
+                    ),
                     /*exclamationToken*/ undefined,
                     /*type*/ undefined,
                     factory.createCallExpression(

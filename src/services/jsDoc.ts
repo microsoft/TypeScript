@@ -209,10 +209,15 @@ export function getJsDocCommentsFromDeclarations(
             if (
                 jsdoc.comment === undefined && !inheritDoc
                 || isJSDoc(jsdoc)
-                    && declaration.kind !== SyntaxKind.JSDocTypedefTag && declaration.kind !== SyntaxKind.JSDocCallbackTag
+                    && declaration.kind !== SyntaxKind.JSDocTypedefTag &&
+                    declaration.kind !== SyntaxKind.JSDocCallbackTag
                     && jsdoc.tags
-                    && jsdoc.tags.some(t => t.kind === SyntaxKind.JSDocTypedefTag || t.kind === SyntaxKind.JSDocCallbackTag)
-                    && !jsdoc.tags.some(t => t.kind === SyntaxKind.JSDocParameterTag || t.kind === SyntaxKind.JSDocReturnTag)
+                    && jsdoc.tags.some(t =>
+                        t.kind === SyntaxKind.JSDocTypedefTag || t.kind === SyntaxKind.JSDocCallbackTag
+                    )
+                    && !jsdoc.tags.some(t =>
+                        t.kind === SyntaxKind.JSDocParameterTag || t.kind === SyntaxKind.JSDocReturnTag
+                    )
             ) {
                 continue;
             }
@@ -347,7 +352,12 @@ function getCommentDisplayParts(tag: JSDocTag, checker?: TypeChecker): SymbolDis
         case SyntaxKind.JSDocPropertyTag:
         case SyntaxKind.JSDocParameterTag:
         case SyntaxKind.JSDocSeeTag:
-            const { name } = tag as JSDocTypedefTag | JSDocCallbackTag | JSDocPropertyTag | JSDocParameterTag | JSDocSeeTag;
+            const { name } = tag as
+                | JSDocTypedefTag
+                | JSDocCallbackTag
+                | JSDocPropertyTag
+                | JSDocParameterTag
+                | JSDocSeeTag;
             return name ? withNode(name)
                 : comment === undefined ? undefined
                 : getDisplayPartsFromComment(comment, checker);
@@ -445,7 +455,9 @@ export function getJSDocParameterNameCompletions(tag: JSDocParameterTag): Comple
 
         const name = param.name.text;
         if (
-            jsdoc.tags!.some(t => t !== tag && isJSDocParameterTag(t) && isIdentifier(t.name) && t.name.escapedText === name) // TODO: GH#18217
+            jsdoc.tags!.some(t =>
+                t !== tag && isJSDocParameterTag(t) && isIdentifier(t.name) && t.name.escapedText === name
+            ) // TODO: GH#18217
             || nameThusFar !== undefined && !startsWith(name, nameThusFar)
         ) {
             return undefined;
@@ -590,7 +602,10 @@ interface CommentOwnerInfo {
     readonly parameters?: readonly ParameterDeclaration[];
     readonly hasReturn?: boolean;
 }
-function getCommentOwnerInfo(tokenAtPos: Node, options: DocCommentTemplateOptions | undefined): CommentOwnerInfo | undefined {
+function getCommentOwnerInfo(
+    tokenAtPos: Node,
+    options: DocCommentTemplateOptions | undefined,
+): CommentOwnerInfo | undefined {
     return forEachAncestor(tokenAtPos, n => getCommentOwnerInfoWorker(n, options));
 }
 function getCommentOwnerInfoWorker(
@@ -671,7 +686,8 @@ function getCommentOwnerInfoWorker(
 function hasReturn(node: Node, options: DocCommentTemplateOptions | undefined) {
     return !!options?.generateReturnInDocTemplate &&
         (isFunctionTypeNode(node) || isArrowFunction(node) && isExpression(node.body)
-            || isFunctionLikeDeclaration(node) && node.body && isBlock(node.body) && !!forEachReturnStatement(node.body, n => n));
+            || isFunctionLikeDeclaration(node) && node.body && isBlock(node.body) &&
+                !!forEachReturnStatement(node.body, n => n));
 }
 
 function getRightHandSideOfAssignment(
