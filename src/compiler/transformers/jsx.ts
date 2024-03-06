@@ -147,7 +147,10 @@ export function transformJsx(context: TransformationContext): (x: SourceFile | B
             specifierSourceImports = new Map();
             currentFileState.utilizedImplicitRuntimeImports.set(importSource, specifierSourceImports);
         }
-        const generatedName = factory.createUniqueName(`_${name}`, GeneratedIdentifierFlags.Optimistic | GeneratedIdentifierFlags.FileLevel | GeneratedIdentifierFlags.AllowNameSubstitution);
+        const generatedName = factory.createUniqueName(
+            `_${name}`,
+            GeneratedIdentifierFlags.Optimistic | GeneratedIdentifierFlags.FileLevel | GeneratedIdentifierFlags.AllowNameSubstitution,
+        );
         const specifier = factory.createImportSpecifier(/*isTypeOnly*/ false, factory.createIdentifier(name), generatedName);
         setIdentifierGeneratedImportReference(generatedName, specifier);
         specifierSourceImports.set(name, specifier);
@@ -479,7 +482,8 @@ export function transformJsx(context: TransformationContext): (x: SourceFile | B
                 isJsxSpreadAttribute,
                 (attrs, isSpread) =>
                     flatten(
-                        map(attrs, attr => isSpread ? transformJsxSpreadAttributeToProps(attr as JsxSpreadAttribute) : transformJsxAttributeToObjectLiteralElement(attr as JsxAttribute)),
+                        map(attrs, attr =>
+                            isSpread ? transformJsxSpreadAttributeToProps(attr as JsxSpreadAttribute) : transformJsxAttributeToObjectLiteralElement(attr as JsxAttribute)),
                     ),
             ),
         );

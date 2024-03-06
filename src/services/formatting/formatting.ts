@@ -720,7 +720,8 @@ function formatSpanWorker(
             // vs
             // var a = xValue
             //     > yValue;
-            getIndentationForToken: (line, kind, container, suppressDelta) => !suppressDelta && shouldAddDelta(line, kind, container) ? indentation + getDelta(container) : indentation,
+            getIndentationForToken: (line, kind, container, suppressDelta) =>
+                !suppressDelta && shouldAddDelta(line, kind, container) ? indentation + getDelta(container) : indentation,
             getIndentation: () => indentation,
             getDelta,
             recomputeIndentation: (lineAdded, parent) => {
@@ -959,7 +960,16 @@ function formatSpanWorker(
             let inheritedIndentation = Constants.Unknown;
             for (let i = 0; i < nodes.length; i++) {
                 const child = nodes[i];
-                inheritedIndentation = processChildNode(child, inheritedIndentation, node, listDynamicIndentation, startLine, startLine, /*isListItem*/ true, /*isFirstListItem*/ i === 0);
+                inheritedIndentation = processChildNode(
+                    child,
+                    inheritedIndentation,
+                    node,
+                    listDynamicIndentation,
+                    startLine,
+                    startLine,
+                    /*isListItem*/ true,
+                    /*isFirstListItem*/ i === 0,
+                );
             }
 
             const listEndToken = getCloseTokenForOpenToken(listStartToken);

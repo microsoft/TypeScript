@@ -87,7 +87,14 @@ registerCodeFix({
         ),
 });
 
-function doChange(changes: textChanges.ChangeTracker, sourceFile: SourceFile, position: number, checker: TypeChecker, preferences: UserPreferences, compilerOptions: CompilerOptions): void {
+function doChange(
+    changes: textChanges.ChangeTracker,
+    sourceFile: SourceFile,
+    position: number,
+    checker: TypeChecker,
+    preferences: UserPreferences,
+    compilerOptions: CompilerOptions,
+): void {
     const ctorSymbol = checker.getSymbolAtLocation(getTokenAtPosition(sourceFile, position))!;
     if (!ctorSymbol || !ctorSymbol.valueDeclaration || !(ctorSymbol.flags & (SymbolFlags.Function | SymbolFlags.Variable))) {
         // Bad input

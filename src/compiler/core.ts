@@ -887,7 +887,11 @@ export function detectSortCaseSensitivity<T>(
 }
 
 /** @internal */
-export function arrayIsEqualTo<T>(array1: readonly T[] | undefined, array2: readonly T[] | undefined, equalityComparer: (a: T, b: T, index: number) => boolean = equateValues): boolean {
+export function arrayIsEqualTo<T>(
+    array1: readonly T[] | undefined,
+    array2: readonly T[] | undefined,
+    equalityComparer: (a: T, b: T, index: number) => boolean = equateValues,
+): boolean {
     if (!array1 || !array2) {
         return array1 === array2;
     }

@@ -1148,7 +1148,12 @@ export function transformES2015(context: TransformationContext): (x: SourceFile 
      * @param node The ClassExpression or ClassDeclaration node.
      * @param extendsClauseElement The expression for the class `extends` clause.
      */
-    function addConstructor(statements: Statement[], node: ClassExpression | ClassDeclaration, name: Identifier, extendsClauseElement: ExpressionWithTypeArguments | undefined): void {
+    function addConstructor(
+        statements: Statement[],
+        node: ClassExpression | ClassDeclaration,
+        name: Identifier,
+        extendsClauseElement: ExpressionWithTypeArguments | undefined,
+    ): void {
         const savedConvertedLoopState = convertedLoopState;
         convertedLoopState = undefined;
         const ancestorFacts = enterSubtree(HierarchyFacts.ConstructorExcludes, HierarchyFacts.ConstructorIncludes);
@@ -1943,7 +1948,12 @@ export function transformES2015(context: TransformationContext): (x: SourceFile 
      * @param name The name of the parameter.
      * @param initializer The initializer for the parameter.
      */
-    function insertDefaultValueAssignmentForBindingPattern(statements: Statement[], parameter: ParameterDeclaration, name: BindingPattern, initializer: Expression | undefined): boolean {
+    function insertDefaultValueAssignmentForBindingPattern(
+        statements: Statement[],
+        parameter: ParameterDeclaration,
+        name: BindingPattern,
+        initializer: Expression | undefined,
+    ): boolean {
         // In cases where a binding pattern is simply '[]' or '{}',
         // we usually don't want to emit a var declaration; however, in the presence
         // of an initializer, we must emit that expression to preserve side effects.
@@ -2319,7 +2329,11 @@ export function transformES2015(context: TransformationContext): (x: SourceFile 
             const name = isComputedPropertyName(propertyName) ? propertyName.expression
                 : isIdentifier(propertyName) ? factory.createStringLiteral(unescapeLeadingUnderscores(propertyName.escapedText))
                 : propertyName;
-            e = factory.createObjectDefinePropertyCall(receiver, name, factory.createPropertyDescriptor({ value: memberFunction, enumerable: false, writable: true, configurable: true }));
+            e = factory.createObjectDefinePropertyCall(
+                receiver,
+                name,
+                factory.createPropertyDescriptor({ value: memberFunction, enumerable: false, writable: true, configurable: true }),
+            );
         }
         else {
             const memberName = createMemberAccessForPropertyName(factory, receiver, propertyName, /*location*/ member.name);
@@ -3145,7 +3159,11 @@ export function transformES2015(context: TransformationContext): (x: SourceFile 
         );
     }
 
-    function convertForOfStatementForArray(node: ForOfStatement, outermostLabeledStatement: LabeledStatement | undefined, convertedLoopBodyStatements: Statement[] | undefined): Statement {
+    function convertForOfStatementForArray(
+        node: ForOfStatement,
+        outermostLabeledStatement: LabeledStatement | undefined,
+        convertedLoopBodyStatements: Statement[] | undefined,
+    ): Statement {
         // The following ES6 code:
         //
         //    for (let v of expr) { }
@@ -3524,7 +3542,11 @@ export function transformES2015(context: TransformationContext): (x: SourceFile 
         return statements;
     }
 
-    function convertIterationStatementCore(node: IterationStatement, initializerFunction: IterationStatementPartFunction<VariableDeclarationList> | undefined, convertedLoopBody: Statement) {
+    function convertIterationStatementCore(
+        node: IterationStatement,
+        initializerFunction: IterationStatementPartFunction<VariableDeclarationList> | undefined,
+        convertedLoopBody: Statement,
+    ) {
         switch (node.kind) {
             case SyntaxKind.ForStatement:
                 return convertForStatement(node as ForStatement, initializerFunction, convertedLoopBody);
@@ -3982,7 +4004,12 @@ export function transformES2015(context: TransformationContext): (x: SourceFile 
         return factory.createExpressionStatement(callResult);
     }
 
-    function generateCallToConvertedLoop(loopFunctionExpressionName: Identifier, state: ConvertedLoopState, outerState: ConvertedLoopState | undefined, containsYield: boolean): Statement[] {
+    function generateCallToConvertedLoop(
+        loopFunctionExpressionName: Identifier,
+        state: ConvertedLoopState,
+        outerState: ConvertedLoopState | undefined,
+        containsYield: boolean,
+    ): Statement[] {
         const statements: Statement[] = [];
         // loop is considered simple if it does not have any return statements or break\continue that transfer control outside of the loop
         // simple loops are emitted as just 'loop()';
@@ -4072,7 +4099,13 @@ export function transformES2015(context: TransformationContext): (x: SourceFile 
         }
     }
 
-    function processLabeledJumps(table: Map<string, string>, isBreak: boolean, loopResultName: Identifier, outerLoop: ConvertedLoopState | undefined, caseClauses: CaseClause[]): void {
+    function processLabeledJumps(
+        table: Map<string, string>,
+        isBreak: boolean,
+        loopResultName: Identifier,
+        outerLoop: ConvertedLoopState | undefined,
+        caseClauses: CaseClause[],
+    ): void {
         if (!table) {
             return;
         }

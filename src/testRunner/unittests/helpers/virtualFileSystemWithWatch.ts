@@ -660,7 +660,9 @@ export class TestServerHost implements server.ServerHost, FormatDiagnosticsHost,
             this.invokeFileAndFsWatches(fileOrDirectory.fullPath, FileWatcherEventKind.Deleted, /*modifiedTime*/ undefined, options?.useTildeAsSuffixInRenameEventFileName);
         }
         this.inodes?.delete(fileOrDirectory.path);
-        if (!options?.ignoreDelete) this.invokeFileAndFsWatches(baseFolder.fullPath, FileWatcherEventKind.Changed, baseFolder.modifiedTime, options?.useTildeAsSuffixInRenameEventFileName);
+        if (!options?.ignoreDelete) {
+            this.invokeFileAndFsWatches(baseFolder.fullPath, FileWatcherEventKind.Changed, baseFolder.modifiedTime, options?.useTildeAsSuffixInRenameEventFileName);
+        }
     }
 
     deleteFile(filePath: string) {
@@ -1117,7 +1119,13 @@ function diffFsSymLink(baseline: string[], fsEntry: FsSymLink, newInode: number 
 function inodeString(inode: number | undefined) {
     return inode !== undefined ? ` Inode:: ${inode}` : "";
 }
-function diffFsEntry(baseline: string[], oldFsEntry: FSEntry | undefined, newFsEntry: FSEntry | undefined, newInode: number | undefined, writtenFiles: Map<string, any> | undefined): void {
+function diffFsEntry(
+    baseline: string[],
+    oldFsEntry: FSEntry | undefined,
+    newFsEntry: FSEntry | undefined,
+    newInode: number | undefined,
+    writtenFiles: Map<string, any> | undefined,
+): void {
     const file = newFsEntry && newFsEntry.fullPath;
     if (isFsFile(oldFsEntry)) {
         if (isFsFile(newFsEntry)) {

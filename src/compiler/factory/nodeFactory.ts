@@ -519,7 +519,8 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
     );
     const getJSDocTypeLikeTagCreateFunction = memoizeOne(
         <T extends JSDocTag & { typeExpression?: JSDocTypeExpression; }>(kind: T["kind"]) =>
-        (tagName: Identifier | undefined, typeExpression?: JSDocTypeExpression, comment?: NodeArray<JSDocComment>) => createJSDocTypeLikeTagWorker(kind, tagName, typeExpression, comment),
+        (tagName: Identifier | undefined, typeExpression?: JSDocTypeExpression, comment?: NodeArray<JSDocComment>) =>
+            createJSDocTypeLikeTagWorker(kind, tagName, typeExpression, comment),
     );
     const getJSDocTypeLikeTagUpdateFunction = memoizeOne(
         <T extends JSDocTag & { typeExpression?: JSDocTypeExpression; }>(kind: T["kind"]) =>
@@ -1420,7 +1421,12 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
         return createBasePrivateIdentifier(escapeLeadingUnderscores(text));
     }
 
-    function createBaseGeneratedPrivateIdentifier(text: string, autoGenerateFlags: GeneratedIdentifierFlags, prefix: string | GeneratedNamePart | undefined, suffix: string | undefined) {
+    function createBaseGeneratedPrivateIdentifier(
+        text: string,
+        autoGenerateFlags: GeneratedIdentifierFlags,
+        prefix: string | GeneratedNamePart | undefined,
+        suffix: string | undefined,
+    ) {
         const node = createBasePrivateIdentifier(escapeLeadingUnderscores(text));
         setIdentifierAutoGenerate(node, {
             flags: autoGenerateFlags,
@@ -1474,7 +1480,10 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
     function createToken<TKind extends SyntaxKind>(token: TKind): Token<TKind>;
     function createToken<TKind extends SyntaxKind>(token: TKind) {
         Debug.assert(token >= SyntaxKind.FirstToken && token <= SyntaxKind.LastToken, "Invalid token");
-        Debug.assert(token <= SyntaxKind.FirstTemplateToken || token >= SyntaxKind.LastTemplateToken, "Invalid token. Use 'createTemplateLiteralLikeNode' to create template literals.");
+        Debug.assert(
+            token <= SyntaxKind.FirstTemplateToken || token >= SyntaxKind.LastTemplateToken,
+            "Invalid token. Use 'createTemplateLiteralLikeNode' to create template literals.",
+        );
         Debug.assert(token <= SyntaxKind.FirstLiteralToken || token >= SyntaxKind.LastLiteralToken, "Invalid token. Use 'createLiteralLikeNode' to create literals.");
         Debug.assert(token !== SyntaxKind.Identifier, "Invalid token. Use 'createIdentifier' to create identifiers");
         const node = createBaseToken<Token<TKind>>(token);
@@ -1640,7 +1649,12 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
     //
 
     // @api
-    function createTypeParameterDeclaration(modifiers: readonly Modifier[] | undefined, name: string | Identifier, constraint?: TypeNode, defaultType?: TypeNode): TypeParameterDeclaration {
+    function createTypeParameterDeclaration(
+        modifiers: readonly Modifier[] | undefined,
+        name: string | Identifier,
+        constraint?: TypeNode,
+        defaultType?: TypeNode,
+    ): TypeParameterDeclaration {
         const node = createBaseDeclaration<TypeParameterDeclaration>(SyntaxKind.TypeParameter);
         node.modifiers = asNodeArray(modifiers);
         node.name = asName(name);
@@ -2527,7 +2541,13 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
     }
 
     // @api
-    function updateNamedTupleMember(node: NamedTupleMember, dotDotDotToken: DotDotDotToken | undefined, name: Identifier, questionToken: QuestionToken | undefined, type: TypeNode) {
+    function updateNamedTupleMember(
+        node: NamedTupleMember,
+        dotDotDotToken: DotDotDotToken | undefined,
+        name: Identifier,
+        questionToken: QuestionToken | undefined,
+        type: TypeNode,
+    ) {
         return node.dotDotDotToken !== dotDotDotToken
                 || node.name !== name
                 || node.questionToken !== questionToken
@@ -2860,7 +2880,12 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
     }
 
     // @api
-    function createBindingElement(dotDotDotToken: DotDotDotToken | undefined, propertyName: string | PropertyName | undefined, name: string | BindingName, initializer?: Expression) {
+    function createBindingElement(
+        dotDotDotToken: DotDotDotToken | undefined,
+        propertyName: string | PropertyName | undefined,
+        name: string | BindingName,
+        initializer?: Expression,
+    ) {
         const node = createBaseDeclaration<BindingElement>(SyntaxKind.BindingElement);
         node.dotDotDotToken = dotDotDotToken;
         node.propertyName = asName(propertyName);
@@ -3539,7 +3564,13 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
     }
 
     // @api
-    function createConditionalExpression(condition: Expression, questionToken: QuestionToken | undefined, whenTrue: Expression, colonToken: ColonToken | undefined, whenFalse: Expression) {
+    function createConditionalExpression(
+        condition: Expression,
+        questionToken: QuestionToken | undefined,
+        whenTrue: Expression,
+        colonToken: ColonToken | undefined,
+        whenFalse: Expression,
+    ) {
         const node = createBaseNode<ConditionalExpression>(SyntaxKind.ConditionalExpression);
         node.condition = parenthesizerRules().parenthesizeConditionOfConditionalExpression(condition);
         node.questionToken = questionToken ?? createToken(SyntaxKind.QuestionToken);
@@ -3634,7 +3665,12 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
         return node;
     }
 
-    function createTemplateLiteralLikeDeclaration(kind: SyntaxKind.NoSubstitutionTemplateLiteral, text: string, rawText: string | undefined, templateFlags: TokenFlags | undefined) {
+    function createTemplateLiteralLikeDeclaration(
+        kind: SyntaxKind.NoSubstitutionTemplateLiteral,
+        text: string,
+        rawText: string | undefined,
+        templateFlags: TokenFlags | undefined,
+    ) {
         const node = createBaseDeclaration<NoSubstitutionTemplateLiteral>(kind);
         node.text = text;
         node.rawText = rawText;
@@ -4074,7 +4110,13 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
     }
 
     // @api
-    function updateForStatement(node: ForStatement, initializer: ForInitializer | undefined, condition: Expression | undefined, incrementor: Expression | undefined, statement: Statement) {
+    function updateForStatement(
+        node: ForStatement,
+        initializer: ForInitializer | undefined,
+        condition: Expression | undefined,
+        incrementor: Expression | undefined,
+        statement: Statement,
+    ) {
         return node.initializer !== initializer
                 || node.condition !== condition
                 || node.incrementor !== incrementor
@@ -4315,7 +4357,12 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
     }
 
     // @api
-    function createVariableDeclaration(name: string | BindingName, exclamationToken: ExclamationToken | undefined, type: TypeNode | undefined, initializer: Expression | undefined) {
+    function createVariableDeclaration(
+        name: string | BindingName,
+        exclamationToken: ExclamationToken | undefined,
+        type: TypeNode | undefined,
+        initializer: Expression | undefined,
+    ) {
         const node = createBaseDeclaration<VariableDeclaration>(SyntaxKind.VariableDeclaration);
         node.name = asName(name);
         node.exclamationToken = exclamationToken;
@@ -5167,7 +5214,11 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
     // @api
     // updateJSDocNonNullableType
     // updateJSDocNullableType
-    function updateJSDocPrePostfixUnaryTypeWorker<T extends JSDocType & { readonly type: TypeNode | undefined; readonly postfix: boolean; }>(kind: T["kind"], node: T, type: T["type"]): T {
+    function updateJSDocPrePostfixUnaryTypeWorker<T extends JSDocType & { readonly type: TypeNode | undefined; readonly postfix: boolean; }>(
+        kind: T["kind"],
+        node: T,
+        type: T["type"],
+    ): T {
         return node.type !== type
             ? update(createJSDocPrePostfixUnaryTypeWorker(kind, type, node.postfix), node)
             : node;
@@ -5631,7 +5682,12 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
     // updateJSDocProtectedTag
     // updateJSDocReadonlyTag
     // updateJSDocDeprecatedTag
-    function updateJSDocSimpleTagWorker<T extends JSDocTag>(kind: T["kind"], node: T, tagName: Identifier = getDefaultTagName(node), comment: string | NodeArray<JSDocComment> | undefined) {
+    function updateJSDocSimpleTagWorker<T extends JSDocTag>(
+        kind: T["kind"],
+        node: T,
+        tagName: Identifier = getDefaultTagName(node),
+        comment: string | NodeArray<JSDocComment> | undefined,
+    ) {
         return node.tagName !== tagName
                 || node.comment !== comment
             ? update(createJSDocSimpleTagWorker(kind, tagName, comment), node) :
@@ -6555,7 +6611,11 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
 
     // compound nodes
     function createImmediatelyInvokedFunctionExpression(statements: readonly Statement[]): ImmediatelyInvokedFunctionExpression;
-    function createImmediatelyInvokedFunctionExpression(statements: readonly Statement[], param: ParameterDeclaration, paramValue: Expression): ImmediatelyInvokedFunctionExpression;
+    function createImmediatelyInvokedFunctionExpression(
+        statements: readonly Statement[],
+        param: ParameterDeclaration,
+        paramValue: Expression,
+    ): ImmediatelyInvokedFunctionExpression;
     function createImmediatelyInvokedFunctionExpression(statements: readonly Statement[], param?: ParameterDeclaration, paramValue?: Expression) {
         return createCallExpression(
             createFunctionExpression(
@@ -6757,7 +6817,11 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
         return innerExpression;
     }
 
-    function restoreEnclosingLabel(node: Statement, outermostLabeledStatement: LabeledStatement | undefined, afterRestoreLabelCallback?: (node: LabeledStatement) => void): Statement {
+    function restoreEnclosingLabel(
+        node: Statement,
+        outermostLabeledStatement: LabeledStatement | undefined,
+        afterRestoreLabelCallback?: (node: LabeledStatement) => void,
+    ): Statement {
         if (!outermostLabeledStatement) {
             return node;
         }
@@ -7255,7 +7319,8 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
             isArrowFunction(node) ? updateArrowFunction(node, modifierArray, node.typeParameters, node.parameters, node.type, node.equalsGreaterThanToken, node.body) :
             isClassExpression(node) ? updateClassExpression(node, modifierArray, node.name, node.typeParameters, node.heritageClauses, node.members) :
             isVariableStatement(node) ? updateVariableStatement(node, modifierArray, node.declarationList) :
-            isFunctionDeclaration(node) ? updateFunctionDeclaration(node, modifierArray, node.asteriskToken, node.name, node.typeParameters, node.parameters, node.type, node.body) :
+            isFunctionDeclaration(node) ?
+            updateFunctionDeclaration(node, modifierArray, node.asteriskToken, node.name, node.typeParameters, node.parameters, node.type, node.body) :
             isClassDeclaration(node) ? updateClassDeclaration(node, modifierArray, node.name, node.typeParameters, node.heritageClauses, node.members) :
             isInterfaceDeclaration(node) ? updateInterfaceDeclaration(node, modifierArray, node.name, node.typeParameters, node.heritageClauses, node.members) :
             isTypeAliasDeclaration(node) ? updateTypeAliasDeclaration(node, modifierArray, node.name, node.typeParameters, node.type) :
@@ -7285,7 +7350,10 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
         node: T,
         name: T["name"],
     ): T;
-    function replacePropertyName(node: AccessorDeclaration | MethodDeclaration | MethodSignature | PropertyDeclaration | PropertySignature | PropertyAssignment, name: PropertyName) {
+    function replacePropertyName(
+        node: AccessorDeclaration | MethodDeclaration | MethodSignature | PropertyDeclaration | PropertySignature | PropertyAssignment,
+        name: PropertyName,
+    ) {
         switch (node.kind) {
             case SyntaxKind.GetAccessor:
                 return updateGetAccessorDeclaration(node, node.modifiers, name, node.parameters, node.type, node.body);

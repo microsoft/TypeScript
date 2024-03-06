@@ -41,7 +41,13 @@ registerRefactor(actionName, {
     },
     getAvailableActions(context: RefactorContext): readonly ApplicableRefactorInfo[] {
         if (!context.endPosition) return emptyArray;
-        const info = codefix.getAccessorConvertiblePropertyAtPosition(context.file, context.program, context.startPosition, context.endPosition, context.triggerReason === "invoked");
+        const info = codefix.getAccessorConvertiblePropertyAtPosition(
+            context.file,
+            context.program,
+            context.startPosition,
+            context.endPosition,
+            context.triggerReason === "invoked",
+        );
         if (!info) return emptyArray;
 
         if (!isRefactorErrorInfo(info)) {

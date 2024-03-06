@@ -78,7 +78,12 @@ export function getEditsForFileRename(
 export type PathUpdater = (path: string) => string | undefined;
 // exported for tests
 /** @internal */
-export function getPathUpdater(oldFileOrDirPath: string, newFileOrDirPath: string, getCanonicalFileName: GetCanonicalFileName, sourceMapper: SourceMapper | undefined): PathUpdater {
+export function getPathUpdater(
+    oldFileOrDirPath: string,
+    newFileOrDirPath: string,
+    getCanonicalFileName: GetCanonicalFileName,
+    sourceMapper: SourceMapper | undefined,
+): PathUpdater {
     const canonicalOldPath = getCanonicalFileName(oldFileOrDirPath);
     return path => {
         const originalPath = sourceMapper && sourceMapper.tryGetSourcePosition({ fileName: path, pos: 0 });
@@ -268,7 +273,8 @@ function getSourceFileToImport(
         const mode = program.getModeForUsageLocation(importingSourceFile, importLiteral);
         const resolved = host.resolveModuleNameLiterals || !host.resolveModuleNames ?
             program.getResolvedModuleFromModuleSpecifier(importLiteral) :
-            host.getResolvedModuleWithFailedLookupLocationsFromCache && host.getResolvedModuleWithFailedLookupLocationsFromCache(importLiteral.text, importingSourceFile.fileName, mode);
+            host.getResolvedModuleWithFailedLookupLocationsFromCache &&
+            host.getResolvedModuleWithFailedLookupLocationsFromCache(importLiteral.text, importingSourceFile.fileName, mode);
         return getSourceFileToImportFromResolved(importLiteral, resolved, oldToNew, program.getSourceFiles());
     }
 }
@@ -328,7 +334,9 @@ function updateImportsWorker(
 
     for (const importStringLiteral of sourceFile.imports) {
         const updated = updateImport(importStringLiteral);
-        if (updated !== undefined && updated !== importStringLiteral.text) changeTracker.replaceRangeWithText(sourceFile, createStringRange(importStringLiteral, sourceFile), updated);
+        if (updated !== undefined && updated !== importStringLiteral.text) {
+            changeTracker.replaceRangeWithText(sourceFile, createStringRange(importStringLiteral, sourceFile), updated);
+        }
     }
 }
 

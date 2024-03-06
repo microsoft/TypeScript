@@ -278,7 +278,15 @@ function getNewStatementsAndRemoveFromOldFile(
 
     const useEsModuleSyntax = !fileShouldUseJavaScriptRequire(targetFileName, program, host, !!oldFile.commonJsModuleIndicator);
     const quotePreference = getQuotePreference(oldFile, preferences);
-    const importsFromTargetFile = createOldFileImportsFromTargetFile(oldFile, usage.oldFileImportsFromTargetFile, targetFileName, program, host, useEsModuleSyntax, quotePreference);
+    const importsFromTargetFile = createOldFileImportsFromTargetFile(
+        oldFile,
+        usage.oldFileImportsFromTargetFile,
+        targetFileName,
+        program,
+        host,
+        useEsModuleSyntax,
+        quotePreference,
+    );
     if (importsFromTargetFile) {
         insertImports(changes, oldFile, importsFromTargetFile, /*blankLineBetween*/ true, preferences);
     }
@@ -377,11 +385,23 @@ function getTargetFileImportsAndAddExportInOldFile(
                 const resolved = program.getResolvedModuleFromModuleSpecifier(moduleSpecifier);
                 const fileName = resolved?.resolvedModule?.resolvedFileName;
                 if (fileName && targetSourceFile) {
-                    const newModuleSpecifier = getModuleSpecifier(compilerOptions, targetSourceFile, targetSourceFile.fileName, fileName, createModuleSpecifierResolutionHost(program, host));
-                    append(copiedOldImports, filterImport(i, makeStringLiteral(newModuleSpecifier, quotePreference), name => importsToCopy.has(checker.getSymbolAtLocation(name)!)));
+                    const newModuleSpecifier = getModuleSpecifier(
+                        compilerOptions,
+                        targetSourceFile,
+                        targetSourceFile.fileName,
+                        fileName,
+                        createModuleSpecifierResolutionHost(program, host),
+                    );
+                    append(
+                        copiedOldImports,
+                        filterImport(i, makeStringLiteral(newModuleSpecifier, quotePreference), name => importsToCopy.has(checker.getSymbolAtLocation(name)!)),
+                    );
                 }
                 else {
-                    append(copiedOldImports, filterImport(i, factory.createStringLiteral(moduleSpecifierFromImport(i).text), name => importsToCopy.has(checker.getSymbolAtLocation(name)!)));
+                    append(
+                        copiedOldImports,
+                        filterImport(i, factory.createStringLiteral(moduleSpecifierFromImport(i).text), name => importsToCopy.has(checker.getSymbolAtLocation(name)!)),
+                    );
                 }
             });
         }
@@ -419,7 +439,10 @@ function getTargetFileImportsAndAddExportInOldFile(
         }
     });
     return targetFileSourceFile
-        ? append(copiedOldImports, makeImportOrRequire(targetFileSourceFile, oldFileDefault, oldFileNamedImports, oldFile.fileName, program, host, useEsModuleSyntax, quotePreference))
+        ? append(
+            copiedOldImports,
+            makeImportOrRequire(targetFileSourceFile, oldFileDefault, oldFileNamedImports, oldFile.fileName, program, host, useEsModuleSyntax, quotePreference),
+        )
         : append(copiedOldImports, makeImportOrRequire(oldFile, oldFileDefault, oldFileNamedImports, oldFile.fileName, program, host, useEsModuleSyntax, quotePreference));
 }
 
@@ -438,7 +461,8 @@ export function addNewFileToTsconfig(
     const newFilePath = getRelativePathFromFile(cfg.fileName, newFileAbsolutePath, getCanonicalFileName);
 
     const cfgObject = cfg.statements[0] && tryCast(cfg.statements[0].expression, isObjectLiteralExpression);
-    const filesProp = cfgObject && find(cfgObject.properties, (prop): prop is PropertyAssignment => isPropertyAssignment(prop) && isStringLiteral(prop.name) && prop.name.text === "files");
+    const filesProp = cfgObject &&
+        find(cfgObject.properties, (prop): prop is PropertyAssignment => isPropertyAssignment(prop) && isStringLiteral(prop.name) && prop.name.text === "files");
     if (filesProp && isArrayLiteralExpression(filesProp.initializer)) {
         changes.insertNodeInListAfter(cfg, last(filesProp.initializer.elements), factory.createStringLiteral(newFilePath), filesProp.initializer.elements);
     }
@@ -692,7 +716,8 @@ export function addExports(sourceFile: SourceFile, toMove: readonly Statement[],
 
 function isExported(sourceFile: SourceFile, decl: TopLevelDeclarationStatement, useEs6Exports: boolean, name?: Identifier): boolean {
     if (useEs6Exports) {
-        return !isExpressionStatement(decl) && hasSyntacticModifier(decl, ModifierFlags.Export) || !!(name && sourceFile.symbol && sourceFile.symbol.exports?.has(name.escapedText));
+        return !isExpressionStatement(decl) && hasSyntacticModifier(decl, ModifierFlags.Export) ||
+            !!(name && sourceFile.symbol && sourceFile.symbol.exports?.has(name.escapedText));
     }
     return !!sourceFile.symbol && !!sourceFile.symbol.exports &&
         getNamesToExportInCommonJS(decl).some(name => sourceFile.symbol.exports!.has(escapeLeadingUnderscores(name)));
@@ -717,12 +742,18 @@ export function deleteUnusedImports(sourceFile: SourceFile, importDecl: Supporte
     }
 }
 
-function deleteUnusedImportsInDeclaration(sourceFile: SourceFile, importDecl: ImportDeclaration, changes: textChanges.ChangeTracker, isUnused: (name: Identifier) => boolean): void {
+function deleteUnusedImportsInDeclaration(
+    sourceFile: SourceFile,
+    importDecl: ImportDeclaration,
+    changes: textChanges.ChangeTracker,
+    isUnused: (name: Identifier) => boolean,
+): void {
     if (!importDecl.importClause) return;
     const { name, namedBindings } = importDecl.importClause;
     const defaultUnused = !name || isUnused(name);
     const namedBindingsUnused = !namedBindings ||
-        (namedBindings.kind === SyntaxKind.NamespaceImport ? isUnused(namedBindings.name) : namedBindings.elements.length !== 0 && namedBindings.elements.every(e => isUnused(e.name)));
+        (namedBindings.kind === SyntaxKind.NamespaceImport ? isUnused(namedBindings.name)
+            : namedBindings.elements.length !== 0 && namedBindings.elements.every(e => isUnused(e.name)));
     if (defaultUnused && namedBindingsUnused) {
         changes.delete(sourceFile, importDecl);
     }
@@ -747,7 +778,12 @@ function deleteUnusedImportsInDeclaration(sourceFile: SourceFile, importDecl: Im
     }
 }
 
-function deleteUnusedImportsInVariableDeclaration(sourceFile: SourceFile, varDecl: VariableDeclaration, changes: textChanges.ChangeTracker, isUnused: (name: Identifier) => boolean) {
+function deleteUnusedImportsInVariableDeclaration(
+    sourceFile: SourceFile,
+    varDecl: VariableDeclaration,
+    changes: textChanges.ChangeTracker,
+    isUnused: (name: Identifier) => boolean,
+) {
     const { name } = varDecl;
     switch (name.kind) {
         case SyntaxKind.Identifier:
@@ -1202,7 +1238,9 @@ function forEachTopLevelDeclaration<T>(statement: Statement, cb: (node: TopLevel
         case SyntaxKind.TypeAliasDeclaration:
         case SyntaxKind.InterfaceDeclaration:
         case SyntaxKind.ImportEqualsDeclaration:
-            return cb(statement as FunctionDeclaration | ClassDeclaration | EnumDeclaration | ModuleDeclaration | TypeAliasDeclaration | InterfaceDeclaration | ImportEqualsDeclaration);
+            return cb(
+                statement as FunctionDeclaration | ClassDeclaration | EnumDeclaration | ModuleDeclaration | TypeAliasDeclaration | InterfaceDeclaration | ImportEqualsDeclaration,
+            );
 
         case SyntaxKind.VariableStatement:
             return firstDefined((statement as VariableStatement).declarationList.declarations, decl => forEachTopLevelDeclarationInBindingName(decl.name, cb));

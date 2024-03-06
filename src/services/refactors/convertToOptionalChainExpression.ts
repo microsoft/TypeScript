@@ -340,7 +340,11 @@ function doChange(sourceFile: SourceFile, checker: TypeChecker, changes: textCha
             changes.replaceNodeRange(sourceFile, firstOccurrence, finalExpression, convertedChain);
         }
         else if (isConditionalExpression(expression)) {
-            changes.replaceNode(sourceFile, expression, factory.createBinaryExpression(convertedChain, factory.createToken(SyntaxKind.QuestionQuestionToken), expression.whenFalse));
+            changes.replaceNode(
+                sourceFile,
+                expression,
+                factory.createBinaryExpression(convertedChain, factory.createToken(SyntaxKind.QuestionQuestionToken), expression.whenFalse),
+            );
         }
     }
 }

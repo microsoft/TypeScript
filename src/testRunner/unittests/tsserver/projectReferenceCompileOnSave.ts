@@ -497,7 +497,11 @@ fn2();
                     command: ts.server.protocol.CommandTypes.EmitOutput,
                     arguments: { file: dependencyTs.path, projectFileName: usageConfig.path },
                 });
-                baselineTsserverLogs("projectReferenceCompileOnSave", "when dependency project is not open and save on dependency with project and local change to dependency", session);
+                baselineTsserverLogs(
+                    "projectReferenceCompileOnSave",
+                    "when dependency project is not open and save on dependency with project and local change to dependency",
+                    session,
+                );
             });
             it("with local change to usage, without specifying project file", () => {
                 const host = createServerHost([dependencyTs, dependencyConfig, usageTs, usageConfig, libFile]);

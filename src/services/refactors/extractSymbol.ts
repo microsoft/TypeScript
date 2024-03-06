@@ -1274,7 +1274,11 @@ function extractFunctionInScope(
                 newNodes.push(factory.createVariableStatement(
                     /*modifiers*/ undefined,
                     factory.createVariableDeclarationList(
-                        [factory.createVariableDeclaration(variableDeclaration.symbol.name, /*exclamationToken*/ undefined, getTypeDeepCloneUnionUndefined(variableDeclaration.type))],
+                        [factory.createVariableDeclaration(
+                            variableDeclaration.symbol.name,
+                            /*exclamationToken*/ undefined,
+                            getTypeDeepCloneUnionUndefined(variableDeclaration.type),
+                        )],
                         flags,
                     ),
                 ));
@@ -1652,7 +1656,9 @@ function transformFunctionBody(
     }
     let returnValueProperty: string | undefined;
     let ignoreReturns = false;
-    const statements = factory.createNodeArray(isBlock(body) ? body.statements.slice(0) : [isStatement(body) ? body : factory.createReturnStatement(skipParentheses(body as Expression))]);
+    const statements = factory.createNodeArray(
+        isBlock(body) ? body.statements.slice(0) : [isStatement(body) ? body : factory.createReturnStatement(skipParentheses(body as Expression))],
+    );
     // rewrite body if either there are writes that should be propagated back via return statements or there are substitutions
     if (hasWritesOrVariableDeclarations || substitutions.size) {
         const rewrittenStatements = visitNodes(statements, visitor, isStatement).slice();
@@ -1736,7 +1742,10 @@ function getStatementsOrClassElements(scope: Scope): readonly Statement[] | read
  * Otherwise, return `undefined`.
  */
 function getNodeToInsertFunctionBefore(minPos: number, scope: Scope): Statement | ClassElement | undefined {
-    return find<Statement | ClassElement>(getStatementsOrClassElements(scope), child => child.pos >= minPos && isFunctionLikeDeclaration(child) && !isConstructorDeclaration(child));
+    return find<Statement | ClassElement>(
+        getStatementsOrClassElements(scope),
+        child => child.pos >= minPos && isFunctionLikeDeclaration(child) && !isConstructorDeclaration(child),
+    );
 }
 
 function getNodeToInsertPropertyBefore(maxPos: number, scope: ClassLikeDeclaration): ClassElement {

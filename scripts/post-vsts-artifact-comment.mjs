@@ -35,7 +35,8 @@ async function main() {
         issue_number: +process.env.SOURCE_ISSUE,
         owner: "Microsoft",
         repo: "TypeScript",
-        body: `Hey @${process.env.REQUESTING_USER}, I've packed this into [an installable tgz](${link}). You can install it for testing by referencing it in your \`package.json\` like so:
+        body:
+            `Hey @${process.env.REQUESTING_USER}, I've packed this into [an installable tgz](${link}). You can install it for testing by referencing it in your \`package.json\` like so:
 \`\`\`
 {
     "devDependencies": {

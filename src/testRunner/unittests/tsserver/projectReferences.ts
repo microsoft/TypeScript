@@ -274,7 +274,11 @@ function foo() {
                 command: ts.server.protocol.CommandTypes.References,
                 arguments: protocolFileLocationFromSubstring(keyboardTs, searchStr),
             });
-            baselineTsserverLogs("projectReferences", `root file is file from referenced project${disableSourceOfProjectReferenceRedirect ? " and using declaration maps" : ""}`, session);
+            baselineTsserverLogs(
+                "projectReferences",
+                `root file is file from referenced project${disableSourceOfProjectReferenceRedirect ? " and using declaration maps" : ""}`,
+                session,
+            );
         }
 
         it(`when using declaration file maps to navigate between projects`, () => {
@@ -1424,7 +1428,11 @@ bar;`,
             // Write back output of new class to referenced project
             host.writeFile(class3Dts, `declare class class3 {}`);
             host.runQueuedTimeoutCallbacks();
-            baselineTsserverLogs("projectReferences", `new file is added to the referenced project when referenced project is open with disableSourceOfProjectReferenceRedirect`, session);
+            baselineTsserverLogs(
+                "projectReferences",
+                `new file is added to the referenced project when referenced project is open with disableSourceOfProjectReferenceRedirect`,
+                session,
+            );
         });
     });
 
@@ -1552,9 +1560,13 @@ bar;`,
         const [noCoreRef1File, noCoreRef1Config] = getPackageAndFile("noCoreRef1");
         const [indirectFile, indirectConfig] = getPackageAndFile("indirect", ["coreRef1"]);
         const [coreRef1File, coreRef1Config] = getPackageAndFile("coreRef1", ["core"]);
-        const [indirectDisabledChildLoad1File, indirectDisabledChildLoad1Config] = getPackageAndFile("indirectDisabledChildLoad1", ["coreRef2"], { disableReferencedProjectLoad: true });
+        const [indirectDisabledChildLoad1File, indirectDisabledChildLoad1Config] = getPackageAndFile("indirectDisabledChildLoad1", ["coreRef2"], {
+            disableReferencedProjectLoad: true,
+        });
         const [coreRef2File, coreRef2Config] = getPackageAndFile("coreRef2", ["core"]);
-        const [indirectDisabledChildLoad2File, indirectDisabledChildLoad2Config] = getPackageAndFile("indirectDisabledChildLoad2", ["coreRef3"], { disableReferencedProjectLoad: true });
+        const [indirectDisabledChildLoad2File, indirectDisabledChildLoad2Config] = getPackageAndFile("indirectDisabledChildLoad2", ["coreRef3"], {
+            disableReferencedProjectLoad: true,
+        });
         const [coreRef3File, coreRef3Config] = getPackageAndFile("coreRef3", ["core"]);
         const [refToCoreRef3File, refToCoreRef3Config] = getPackageAndFile("refToCoreRef3", ["coreRef3"]);
         const [indirectNoCoreRefFile, indirectNoCoreRefConfig] = getPackageAndFile("indirectNoCoreRef", ["noCoreRef2"]);

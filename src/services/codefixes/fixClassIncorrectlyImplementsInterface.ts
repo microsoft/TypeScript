@@ -49,7 +49,10 @@ registerCodeFix({
         const { sourceFile, span } = context;
         const classDeclaration = getClass(sourceFile, span.start);
         return mapDefined<ExpressionWithTypeArguments, CodeFixAction>(getEffectiveImplementsTypeNodes(classDeclaration), implementedTypeNode => {
-            const changes = textChanges.ChangeTracker.with(context, t => addMissingDeclarations(context, implementedTypeNode, sourceFile, classDeclaration, t, context.preferences));
+            const changes = textChanges.ChangeTracker.with(
+                context,
+                t => addMissingDeclarations(context, implementedTypeNode, sourceFile, classDeclaration, t, context.preferences),
+            );
             return changes.length === 0 ? undefined
                 : createCodeFixAction(
                     fixId,
@@ -96,7 +99,9 @@ function addMissingDeclarations(
     // so duplicates cannot occur.
     const implementedType = checker.getTypeAtLocation(implementedTypeNode) as InterfaceType;
     const implementedTypeSymbols = checker.getPropertiesOfType(implementedType);
-    const nonPrivateAndNotExistedInHeritageClauseMembers = implementedTypeSymbols.filter(and(symbolPointsToNonPrivateMember, symbol => !maybeHeritageClauseSymbol.has(symbol.escapedName)));
+    const nonPrivateAndNotExistedInHeritageClauseMembers = implementedTypeSymbols.filter(
+        and(symbolPointsToNonPrivateMember, symbol => !maybeHeritageClauseSymbol.has(symbol.escapedName)),
+    );
 
     const classType = checker.getTypeAtLocation(classDeclaration);
     const constructor = find(classDeclaration.members, m => isConstructorDeclaration(m));

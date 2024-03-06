@@ -67,7 +67,9 @@ describe("unittests:: services:: hostNewLineSupport", () => {
     });
 
     it("should respect CRLF line endings around outlining spans", () => {
-        verifyOutliningSpanNewLines('// comment not included\r\n// #region name\r\nlet x: string = "x";\r\n// #endregion name\r\n', { newLine: ts.NewLineKind.CarriageReturnLineFeed });
+        verifyOutliningSpanNewLines('// comment not included\r\n// #region name\r\nlet x: string = "x";\r\n// #endregion name\r\n', {
+            newLine: ts.NewLineKind.CarriageReturnLineFeed,
+        });
     });
 
     it("should respect LF line endings around outlining spans", () => {

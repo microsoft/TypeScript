@@ -98,10 +98,21 @@ registerCodeFix({
         const importDecl = tryGetFullImport(token);
         if (importDecl) {
             const changes = textChanges.ChangeTracker.with(context, t => t.delete(sourceFile, importDecl));
-            return [createCodeFixAction(fixName, changes, [Diagnostics.Remove_import_from_0, showModuleSpecifier(importDecl)], fixIdDeleteImports, Diagnostics.Delete_all_unused_imports)];
+            return [
+                createCodeFixAction(
+                    fixName,
+                    changes,
+                    [Diagnostics.Remove_import_from_0, showModuleSpecifier(importDecl)],
+                    fixIdDeleteImports,
+                    Diagnostics.Delete_all_unused_imports,
+                ),
+            ];
         }
         else if (isImport(token)) {
-            const deletion = textChanges.ChangeTracker.with(context, t => tryDeleteDeclaration(sourceFile, token, t, checker, sourceFiles, program, cancellationToken, /*isFixAll*/ false));
+            const deletion = textChanges.ChangeTracker.with(
+                context,
+                t => tryDeleteDeclaration(sourceFile, token, t, checker, sourceFiles, program, cancellationToken, /*isFixAll*/ false),
+            );
             if (deletion.length) {
                 return [
                     createCodeFixAction(
@@ -153,7 +164,10 @@ registerCodeFix({
             result.push(createCodeFixAction(fixName, changes, [Diagnostics.Replace_infer_0_with_unknown, name], fixIdInfer, Diagnostics.Replace_all_unused_infer_with_unknown));
         }
         else {
-            const deletion = textChanges.ChangeTracker.with(context, t => tryDeleteDeclaration(sourceFile, token, t, checker, sourceFiles, program, cancellationToken, /*isFixAll*/ false));
+            const deletion = textChanges.ChangeTracker.with(
+                context,
+                t => tryDeleteDeclaration(sourceFile, token, t, checker, sourceFiles, program, cancellationToken, /*isFixAll*/ false),
+            );
             if (deletion.length) {
                 const name = isComputedPropertyName(token.parent) ? token.parent : token;
                 result.push(createDeleteFix(deletion, [Diagnostics.Remove_unused_declaration_for_Colon_0, name.getText(sourceFile)]));

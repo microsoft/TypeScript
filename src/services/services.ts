@@ -1899,7 +1899,16 @@ export function createLanguageService(
                     // file's script kind, i.e. in one project some file is treated as ".ts"
                     // and in another as ".js"
                     if (scriptKind === oldSourceFile.scriptKind || releasedScriptKinds!.has(oldSourceFile.resolvedPath)) {
-                        return documentRegistry.updateDocumentWithKey(fileName, path, host, documentRegistryBucketKey, scriptSnapshot, scriptVersion, scriptKind, languageVersionOrOptions);
+                        return documentRegistry.updateDocumentWithKey(
+                            fileName,
+                            path,
+                            host,
+                            documentRegistryBucketKey,
+                            scriptSnapshot,
+                            scriptVersion,
+                            scriptKind,
+                            languageVersionOrOptions,
+                        );
                     }
                     else {
                         // Release old source file and fall through to aquire new file with new script kind
@@ -2212,7 +2221,13 @@ export function createLanguageService(
         return DocumentHighlights.getDocumentHighlights(program, cancellationToken, sourceFile, position, sourceFilesToSearch);
     }
 
-    function findRenameLocations(fileName: string, position: number, findInStrings: boolean, findInComments: boolean, preferences?: UserPreferences | boolean): RenameLocation[] | undefined {
+    function findRenameLocations(
+        fileName: string,
+        position: number,
+        findInStrings: boolean,
+        findInComments: boolean,
+        preferences?: UserPreferences | boolean,
+    ): RenameLocation[] | undefined {
         synchronizeHostData();
         const sourceFile = getValidSourceFile(fileName);
         const node = getAdjustedRenameLocation(getTouchingPropertyName(sourceFile, position));
@@ -2515,7 +2530,12 @@ export function createLanguageService(
         return OrganizeImports.organizeImports(sourceFile, formatContext, host, program, preferences, mode);
     }
 
-    function getEditsForFileRename(oldFilePath: string, newFilePath: string, formatOptions: FormatCodeSettings, preferences: UserPreferences = emptyOptions): readonly FileTextChanges[] {
+    function getEditsForFileRename(
+        oldFilePath: string,
+        newFilePath: string,
+        formatOptions: FormatCodeSettings,
+        preferences: UserPreferences = emptyOptions,
+    ): readonly FileTextChanges[] {
         return ts_getEditsForFileRename(getProgram()!, oldFilePath, newFilePath, host, formatting.getFormatContext(formatOptions, host), preferences, sourceMapper);
     }
 
@@ -2543,7 +2563,12 @@ export function createLanguageService(
             : Promise.reject("Host does not implement `installPackage`");
     }
 
-    function getDocCommentTemplateAtPosition(fileName: string, position: number, options?: DocCommentTemplateOptions, formatOptions?: FormatCodeSettings): TextInsertion | undefined {
+    function getDocCommentTemplateAtPosition(
+        fileName: string,
+        position: number,
+        options?: DocCommentTemplateOptions,
+        formatOptions?: FormatCodeSettings,
+    ): TextInsertion | undefined {
         const formatSettings = formatOptions ? formatting.getFormatContext(formatOptions, host).options : undefined;
         return JsDoc.getDocCommentTemplateAtPosition(getNewLineOrDefaultFromHost(host, formatSettings), syntaxTreeCache.getCurrentSourceFile(fileName), position, options);
     }
@@ -3138,7 +3163,8 @@ export function createLanguageService(
             );
             return isValidSourceFile &&
                     (extension === fileNameExtension ||
-                        (extension === Extension.Tsx && fileNameExtension === Extension.Ts || extension === Extension.Jsx && fileNameExtension === Extension.Js) && !toMoveContainsJsx)
+                        (extension === Extension.Tsx && fileNameExtension === Extension.Ts || extension === Extension.Jsx && fileNameExtension === Extension.Js) &&
+                            !toMoveContainsJsx)
                 ? file.fileName : undefined;
         });
 

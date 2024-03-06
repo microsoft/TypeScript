@@ -101,7 +101,9 @@ function buildInfoFileOutput(messageTable, inputFilePathRel) {
         const argElidedInCompatabilityPyramid = elidedInCompatabilityPyramid
             ? `${!reportsUnnecessary ? ", /*reportsUnnecessary*/ undefined" : ""}, /*elidedInCompatabilityPyramid*/ ${elidedInCompatabilityPyramid}` : "";
         const argReportsDeprecated = reportsDeprecated
-            ? `${!argElidedInCompatabilityPyramid ? ", /*reportsUnnecessary*/ undefined, /*elidedInCompatabilityPyramid*/ undefined" : ""}, /*reportsDeprecated*/ ${reportsDeprecated}` : "";
+            ? `${
+                !argElidedInCompatabilityPyramid ? ", /*reportsUnnecessary*/ undefined, /*elidedInCompatabilityPyramid*/ undefined" : ""
+            }, /*reportsDeprecated*/ ${reportsDeprecated}` : "";
 
         result.push(
             `    ${propName}: diag(${code}, DiagnosticCategory.${category}, "${createKey(propName, code)}", ${

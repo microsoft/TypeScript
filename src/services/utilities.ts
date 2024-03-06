@@ -1640,7 +1640,8 @@ function getTokenAtPositionWorker(
 
             // this complex condition makes us left-recur around a zero-length node when includePrecedingTokenAtEndPosition is set, rather than right-recur on it
             if (
-                includePrecedingTokenAtEndPosition && start === position && children[middle - 1] && children[middle - 1].getEnd() === position && nodeContainsPosition(children[middle - 1])
+                includePrecedingTokenAtEndPosition && start === position && children[middle - 1] && children[middle - 1].getEnd() === position &&
+                nodeContainsPosition(children[middle - 1])
             ) {
                 return Comparison.GreaterThan;
             }
@@ -1971,7 +1972,11 @@ export function isInsideJsxElement(sourceFile: SourceFile, position: number): bo
 }
 
 /** @internal */
-export function findPrecedingMatchingToken(token: Node, matchingTokenKind: SyntaxKind.OpenBraceToken | SyntaxKind.OpenParenToken | SyntaxKind.OpenBracketToken, sourceFile: SourceFile) {
+export function findPrecedingMatchingToken(
+    token: Node,
+    matchingTokenKind: SyntaxKind.OpenBraceToken | SyntaxKind.OpenParenToken | SyntaxKind.OpenBracketToken,
+    sourceFile: SourceFile,
+) {
     const closeTokenText = tokenToString(token.kind)!;
     const matchingTokenText = tokenToString(matchingTokenKind);
     const tokenFullStart = token.getFullStart();
@@ -3106,7 +3111,12 @@ export function symbolToDisplayParts(
 }
 
 /** @internal */
-export function signatureToDisplayParts(typechecker: TypeChecker, signature: Signature, enclosingDeclaration?: Node, flags: TypeFormatFlags = TypeFormatFlags.None): SymbolDisplayPart[] {
+export function signatureToDisplayParts(
+    typechecker: TypeChecker,
+    signature: Signature,
+    enclosingDeclaration?: Node,
+    flags: TypeFormatFlags = TypeFormatFlags.None,
+): SymbolDisplayPart[] {
     flags |= TypeFormatFlags.UseAliasDefinedOutsideCurrentScope | TypeFormatFlags.MultilineObjectLiterals | TypeFormatFlags.WriteTypeArgumentsOfSignature |
         TypeFormatFlags.OmitParameterModifiers;
     return mapToDisplayParts(writer => {

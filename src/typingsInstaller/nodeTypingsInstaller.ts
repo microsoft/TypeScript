@@ -235,7 +235,15 @@ process.on("disconnect", () => {
 });
 let installer: NodeTypingsInstaller | undefined;
 process.on("message", (req: TypingInstallerRequestUnion) => {
-    installer ??= new NodeTypingsInstaller(globalTypingsCacheLocation!, typingSafeListLocation!, typesMapLocation!, npmLocation, validateDefaultNpmLocation, /*throttleLimit*/ 5, log); // TODO: GH#18217
+    installer ??= new NodeTypingsInstaller(
+        globalTypingsCacheLocation!,
+        typingSafeListLocation!,
+        typesMapLocation!,
+        npmLocation,
+        validateDefaultNpmLocation,
+        /*throttleLimit*/ 5,
+        log,
+    ); // TODO: GH#18217
     installer.handleRequest(req);
 });
 

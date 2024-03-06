@@ -486,7 +486,8 @@ export class TestState {
                     continue;
                 }
                 const memo = Utils.memoize(
-                    (_version: number, _active: string, _caret: number, _selectEnd: number, _marker: string | undefined, ...args: any[]) => (ls[key] as (...args: any[]) => any)(...args),
+                    (_version: number, _active: string, _caret: number, _selectEnd: number, _marker: string | undefined, ...args: any[]) =>
+                        (ls[key] as (...args: any[]) => any)(...args),
                     (...args) => args.map(a => a && typeof a === "object" ? JSON.stringify(a) : a).join("|,|"),
                 );
                 proxy[key] = (...args: any[]) =>
@@ -1158,7 +1159,9 @@ export class TestState {
                 assert.deepEqual(actual.replacementSpan, convertedReplacementSpan);
             }
             catch {
-                this.raiseError(`At entry ${actual.name}: Expected completion replacementSpan to be ${stringify(convertedReplacementSpan)}, got ${stringify(actual.replacementSpan)}`);
+                this.raiseError(
+                    `At entry ${actual.name}: Expected completion replacementSpan to be ${stringify(convertedReplacementSpan)}, got ${stringify(actual.replacementSpan)}`,
+                );
             }
         }
         else if (ts.hasProperty(expected, "replacementSpan")) { // Expected `replacementSpan` is explicitly set as `undefined`.
@@ -1170,10 +1173,18 @@ export class TestState {
             assert.equal(actual.kindModifiers, expected.kindModifiers || "", `At entry ${actual.name}:  Expected 'kindModifiers' for ${actual.name} to match`);
         }
         if (expected.isFromUncheckedFile !== undefined) {
-            assert.equal<boolean | undefined>(actual.isFromUncheckedFile, expected.isFromUncheckedFile, `At entry ${actual.name}: Expected 'isFromUncheckedFile' properties to match`);
+            assert.equal<boolean | undefined>(
+                actual.isFromUncheckedFile,
+                expected.isFromUncheckedFile,
+                `At entry ${actual.name}: Expected 'isFromUncheckedFile' properties to match`,
+            );
         }
         if (expected.isPackageJsonImport !== undefined) {
-            assert.equal<boolean | undefined>(actual.isPackageJsonImport, expected.isPackageJsonImport, `At entry ${actual.name}: Expected 'isPackageJsonImport' properties to match`);
+            assert.equal<boolean | undefined>(
+                actual.isPackageJsonImport,
+                expected.isPackageJsonImport,
+                `At entry ${actual.name}: Expected 'isPackageJsonImport' properties to match`,
+            );
         }
 
         assert.equal(
@@ -1184,7 +1195,9 @@ export class TestState {
         assert.equal(
             actual.labelDetails?.description,
             expected.labelDetails?.description,
-            `At entry ${actual.name}: Completion 'labelDetails.description' did not match: ${showTextDiff(expected.labelDetails?.description || "", actual.labelDetails?.description || "")}`,
+            `At entry ${actual.name}: Completion 'labelDetails.description' did not match: ${
+                showTextDiff(expected.labelDetails?.description || "", actual.labelDetails?.description || "")
+            }`,
         );
         assert.equal(
             actual.labelDetails?.detail,
@@ -1928,8 +1941,16 @@ export class TestState {
         assert.equal(actualQuickInfo.kind, kind, this.messageAtLastKnownMarker("QuickInfo kind"));
         assert.equal(actualQuickInfo.kindModifiers, kindModifiers, this.messageAtLastKnownMarker("QuickInfo kindModifiers"));
         assert.equal(JSON.stringify(actualQuickInfo.textSpan), JSON.stringify(textSpan), this.messageAtLastKnownMarker("QuickInfo textSpan"));
-        assert.equal(TestState.getDisplayPartsJson(actualQuickInfo.displayParts), TestState.getDisplayPartsJson(displayParts), this.messageAtLastKnownMarker("QuickInfo displayParts"));
-        assert.equal(TestState.getDisplayPartsJson(actualQuickInfo.documentation), TestState.getDisplayPartsJson(documentation), this.messageAtLastKnownMarker("QuickInfo documentation"));
+        assert.equal(
+            TestState.getDisplayPartsJson(actualQuickInfo.displayParts),
+            TestState.getDisplayPartsJson(displayParts),
+            this.messageAtLastKnownMarker("QuickInfo displayParts"),
+        );
+        assert.equal(
+            TestState.getDisplayPartsJson(actualQuickInfo.documentation),
+            TestState.getDisplayPartsJson(documentation),
+            this.messageAtLastKnownMarker("QuickInfo documentation"),
+        );
         if (!actualQuickInfo.tags || !tags) {
             assert.equal(actualQuickInfo.tags, tags, this.messageAtLastKnownMarker("QuickInfo tags"));
         }
@@ -2288,7 +2309,8 @@ export class TestState {
                 if (resultString.length) {
                     resultString += "\n--------------------------------";
                 }
-                currentLine = "\n" + nextLine.toString() + ts.repeatString(" ", 3 - nextLine.toString().length) + ">" + this.activeFile.content.substring(pos, fileLineMap[nextLine]) +
+                currentLine = "\n" + nextLine.toString() + ts.repeatString(" ", 3 - nextLine.toString().length) + ">" +
+                    this.activeFile.content.substring(pos, fileLineMap[nextLine]) +
                     "\n    ";
                 startColumn = 0;
                 length = 0;
@@ -2706,7 +2728,9 @@ export class TestState {
         const longestKindLength = max(entries, m => m.kind.length);
         entries.sort((m, n) => m.sortText > n.sortText ? 1 : m.sortText < n.sortText ? -1 : m.name > n.name ? 1 : m.name < n.name ? -1 : 0);
         const membersString = entries.map(m =>
-            `${pad(m.name, longestNameLength)} ${pad(m.kind, longestKindLength)} ${m.kindModifiers} ${m.isRecommended ? "recommended " : ""}${m.source === undefined ? "" : m.source}`
+            `${pad(m.name, longestNameLength)} ${pad(m.kind, longestKindLength)} ${m.kindModifiers} ${m.isRecommended ? "recommended " : ""}${
+                m.source === undefined ? "" : m.source
+            }`
         )
             .join("\n");
         Harness.IO.log(membersString);
@@ -3200,7 +3224,10 @@ export class TestState {
         });
 
         function jsonMismatchString() {
-            const showActual = actual.map(({ classificationType, textSpan }) => ({ classificationType, text: sourceFileText.slice(textSpan.start, textSpan.start + textSpan.length) }));
+            const showActual = actual.map(({ classificationType, textSpan }) => ({
+                classificationType,
+                text: sourceFileText.slice(textSpan.start, textSpan.start + textSpan.length),
+            }));
             return Harness.IO.newLine() +
                 "expected: '" + Harness.IO.newLine() + stringify(expected) + "'" + Harness.IO.newLine() +
                 "actual:   '" + Harness.IO.newLine() + stringify(showActual) + "'";
@@ -3361,7 +3388,9 @@ export class TestState {
         const fixes = this.getCodeFixes(fileName, errorCode);
         if (index === undefined) {
             if (!(fixes && fixes.length === 1)) {
-                this.raiseError(`Should find exactly one codefix, but ${fixes ? fixes.length : "none"} found. ${fixes ? fixes.map(a => `${Harness.IO.newLine()} "${a.description}"`) : ""}`);
+                this.raiseError(
+                    `Should find exactly one codefix, but ${fixes ? fixes.length : "none"} found. ${fixes ? fixes.map(a => `${Harness.IO.newLine()} "${a.description}"`) : ""}`,
+                );
             }
             index = 0;
         }
@@ -3440,7 +3469,10 @@ export class TestState {
         ts.Debug.assert(
             fixWithId !== undefined,
             "No available code fix has the expected id. Fix All is not available if there is only one potentially fixable diagnostic present.",
-            () => `Expected '${fixId}'. Available actions:\n${ts.mapDefined(this.getCodeFixes(this.activeFile.fileName), a => `${a.fixName} (${a.fixId || "no fix id"})`).join("\n")}`,
+            () =>
+                `Expected '${fixId}'. Available actions:\n${
+                    ts.mapDefined(this.getCodeFixes(this.activeFile.fileName), a => `${a.fixName} (${a.fixId || "no fix id"})`).join("\n")
+                }`,
         );
         ts.Debug.assertEqual(fixWithId.fixAllDescription, fixAllDescription);
 
@@ -3461,7 +3493,9 @@ export class TestState {
         if (index === undefined) {
             if (!(actions && actions.length === 1)) {
                 this.raiseError(
-                    `Should find exactly one codefix, but ${actions ? actions.length : "none"} found. ${actions ? actions.map(a => `${Harness.IO.newLine()} "${a.description}"`) : ""}`,
+                    `Should find exactly one codefix, but ${actions ? actions.length : "none"} found. ${
+                        actions ? actions.map(a => `${Harness.IO.newLine()} "${a.description}"`) : ""
+                    }`,
                 );
             }
             index = 0;
@@ -3573,7 +3607,14 @@ export class TestState {
                     return;
                 }
             }
-            return this.languageService.getCodeFixesAtPosition(fileName, diagnostic.start!, diagnostic.start! + diagnostic.length!, [diagnostic.code], this.formatCodeSettings, preferences);
+            return this.languageService.getCodeFixesAtPosition(
+                fileName,
+                diagnostic.start!,
+                diagnostic.start! + diagnostic.length!,
+                [diagnostic.code],
+                this.formatCodeSettings,
+                preferences,
+            );
         });
     }
 
@@ -3738,7 +3779,10 @@ export class TestState {
                 assert(details?.codeActions, `Entry '${c.name}' from "${c.source}" returned no code actions from completion details request`);
                 assert(details.codeActions.length === 1, `Entry '${c.name}' from "${c.source}" returned more than one code action`);
                 assert(details.codeActions[0].changes.length === 1, `Entry '${c.name}' from "${c.source}" returned a code action changing more than one file`);
-                assert(details.codeActions[0].changes[0].fileName === this.activeFile.fileName, `Entry '${c.name}' from "${c.source}" returned a code action changing a different file`);
+                assert(
+                    details.codeActions[0].changes[0].fileName === this.activeFile.fileName,
+                    `Entry '${c.name}' from "${c.source}" returned a code action changing a different file`,
+                );
                 const changes = details.codeActions[0].changes[0].textChanges;
                 const completionChange: ts.TextChange = {
                     newText: c.insertText || c.name,
@@ -3885,9 +3929,9 @@ export class TestState {
         }
         else {
             this.raiseError(
-                `verifyMatchingBracePosition failed - could not find the brace position: ${bracePosition} in the returned list: (${actual[0].start},${ts.textSpanEnd(actual[0])}) and (${
-                    actual[1].start
-                },${ts.textSpanEnd(actual[1])})`,
+                `verifyMatchingBracePosition failed - could not find the brace position: ${bracePosition} in the returned list: (${actual[0].start},${
+                    ts.textSpanEnd(actual[0])
+                }) and (${actual[1].start},${ts.textSpanEnd(actual[1])})`,
             );
         }
 
@@ -4032,7 +4076,10 @@ export class TestState {
                 }
             }
             else {
-                assert(typeof expected === "undefined" || typeof expected === "string", "With a negated assertion, 'expected' must be undefined or a string value of a codefix name.");
+                assert(
+                    typeof expected === "undefined" || typeof expected === "string",
+                    "With a negated assertion, 'expected' must be undefined or a string value of a codefix name.",
+                );
             }
         }
         else if (typeof expected === "string") {
@@ -4227,7 +4274,14 @@ export class TestState {
         const action = ts.first(refactor.actions);
         assert(action.name === "Move to a new file" && action.description === "Move to a new file");
 
-        const editInfo = this.languageService.getEditsForRefactor(range.fileName, this.formatCodeSettings, range, refactor.name, action.name, options.preferences || ts.emptyOptions)!;
+        const editInfo = this.languageService.getEditsForRefactor(
+            range.fileName,
+            this.formatCodeSettings,
+            range,
+            refactor.name,
+            action.name,
+            options.preferences || ts.emptyOptions,
+        )!;
         this.verifyNewContent({ newFileContent: options.newFileContents }, editInfo.edits);
     }
 
@@ -4574,7 +4628,12 @@ export class TestState {
         test(renameKeys(newFileContents, key => pathUpdater(key) || key), "with file moved");
     }
 
-    private getApplicableRefactorsAtSelection(triggerReason: ts.RefactorTriggerReason = "implicit", kind?: string, preferences = ts.emptyOptions, includeInteractiveActions?: boolean) {
+    private getApplicableRefactorsAtSelection(
+        triggerReason: ts.RefactorTriggerReason = "implicit",
+        kind?: string,
+        preferences = ts.emptyOptions,
+        includeInteractiveActions?: boolean,
+    ) {
         return this.getApplicableRefactorsWorker(this.getSelection(), this.activeFile.fileName, preferences, triggerReason, kind, includeInteractiveActions);
     }
     private getApplicableRefactors(

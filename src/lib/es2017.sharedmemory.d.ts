@@ -45,7 +45,12 @@ interface Atomics {
      * expected value, returning the original value. Until this atomic operation completes, any
      * other read or write operation against the array will block.
      */
-    compareExchange(typedArray: Int8Array | Uint8Array | Int16Array | Uint16Array | Int32Array | Uint32Array, index: number, expectedValue: number, replacementValue: number): number;
+    compareExchange(
+        typedArray: Int8Array | Uint8Array | Int16Array | Uint16Array | Int32Array | Uint32Array,
+        index: number,
+        expectedValue: number,
+        replacementValue: number,
+    ): number;
 
     /**
      * Replaces the value at the given position in the array, returning the original value. Until

@@ -194,6 +194,9 @@ function getNewFileImportsAndAddExportInOldFile(
         }
     });
 
-    append(copiedOldImports, makeImportOrRequire(oldFile, oldFileDefault, oldFileNamedImports, getBaseFileName(oldFile.fileName), program, host, useEsModuleSyntax, quotePreference));
+    append(
+        copiedOldImports,
+        makeImportOrRequire(oldFile, oldFileDefault, oldFileNamedImports, getBaseFileName(oldFile.fileName), program, host, useEsModuleSyntax, quotePreference),
+    );
     return copiedOldImports;
 }

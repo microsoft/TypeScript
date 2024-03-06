@@ -144,7 +144,13 @@ export class TypingsCache {
         }
     }
 
-    updateTypingsForProject(projectName: string, compilerOptions: CompilerOptions, typeAcquisition: TypeAcquisition, unresolvedImports: SortedReadonlyArray<string>, newTypings: string[]) {
+    updateTypingsForProject(
+        projectName: string,
+        compilerOptions: CompilerOptions,
+        typeAcquisition: TypeAcquisition,
+        unresolvedImports: SortedReadonlyArray<string>,
+        newTypings: string[],
+    ) {
         const typings = sort(newTypings);
         this.perProjectCache.set(projectName, {
             compilerOptions,

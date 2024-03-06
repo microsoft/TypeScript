@@ -2507,11 +2507,15 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
                     );
                 }
                 else if (node.flags & NodeFlags.AwaitContext) {
-                    file.bindDiagnostics.push(createDiagnosticForNode(node, Diagnostics.Identifier_expected_0_is_a_reserved_word_that_cannot_be_used_here, declarationNameToString(node)));
+                    file.bindDiagnostics.push(
+                        createDiagnosticForNode(node, Diagnostics.Identifier_expected_0_is_a_reserved_word_that_cannot_be_used_here, declarationNameToString(node)),
+                    );
                 }
             }
             else if (originalKeywordKind === SyntaxKind.YieldKeyword && node.flags & NodeFlags.YieldContext) {
-                file.bindDiagnostics.push(createDiagnosticForNode(node, Diagnostics.Identifier_expected_0_is_a_reserved_word_that_cannot_be_used_here, declarationNameToString(node)));
+                file.bindDiagnostics.push(
+                    createDiagnosticForNode(node, Diagnostics.Identifier_expected_0_is_a_reserved_word_that_cannot_be_used_here, declarationNameToString(node)),
+                );
             }
         }
     }
@@ -3435,7 +3439,11 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
         return namespaceSymbol;
     }
 
-    function bindPotentiallyNewExpandoMemberToNamespace(declaration: BindableStaticAccessExpression | CallExpression, namespaceSymbol: Symbol | undefined, isPrototypeProperty: boolean) {
+    function bindPotentiallyNewExpandoMemberToNamespace(
+        declaration: BindableStaticAccessExpression | CallExpression,
+        namespaceSymbol: Symbol | undefined,
+        isPrototypeProperty: boolean,
+    ) {
         if (!namespaceSymbol || !isExpandoSymbol(namespaceSymbol)) {
             return;
         }
@@ -3524,7 +3532,8 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
         if (init) {
             const isPrototypeAssignment = isPrototypeAccess(isVariableDeclaration(node!) ? node.name : isBinaryExpression(node!) ? node.left : node!);
             return !!getExpandoInitializer(
-                isBinaryExpression(init) && (init.operatorToken.kind === SyntaxKind.BarBarToken || init.operatorToken.kind === SyntaxKind.QuestionQuestionToken) ? init.right : init,
+                isBinaryExpression(init) && (init.operatorToken.kind === SyntaxKind.BarBarToken || init.operatorToken.kind === SyntaxKind.QuestionQuestionToken) ? init.right
+                    : init,
                 isPrototypeAssignment,
             );
         }
@@ -3538,7 +3547,10 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
         return expr.parent;
     }
 
-    function lookupSymbolForPropertyAccess(node: BindableStaticNameExpression, lookupContainer: IsContainer | IsBlockScopedContainer | EntityNameExpression = container): Symbol | undefined {
+    function lookupSymbolForPropertyAccess(
+        node: BindableStaticNameExpression,
+        lookupContainer: IsContainer | IsBlockScopedContainer | EntityNameExpression = container,
+    ): Symbol | undefined {
         if (isIdentifier(node)) {
             return lookupSymbolForName(lookupContainer, node.escapedText);
         }
@@ -3667,7 +3679,11 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
         }
 
         if (isBindingPattern(node.name)) {
-            bindAnonymousDeclaration(node, SymbolFlags.FunctionScopedVariable, "__" + (node as ParameterDeclaration).parent.parameters.indexOf(node as ParameterDeclaration) as __String);
+            bindAnonymousDeclaration(
+                node,
+                SymbolFlags.FunctionScopedVariable,
+                "__" + (node as ParameterDeclaration).parent.parameters.indexOf(node as ParameterDeclaration) as __String,
+            );
         }
         else {
             declareSymbolAndAddToSymbolTable(node, SymbolFlags.FunctionScopedVariable, SymbolFlags.ParameterExcludes);
@@ -3918,7 +3934,8 @@ export function getContainerFlags(node: Node): ContainerFlags {
 
         case SyntaxKind.FunctionExpression:
         case SyntaxKind.ArrowFunction:
-            return ContainerFlags.IsContainer | ContainerFlags.IsControlFlowContainer | ContainerFlags.HasLocals | ContainerFlags.IsFunctionLike | ContainerFlags.IsFunctionExpression;
+            return ContainerFlags.IsContainer | ContainerFlags.IsControlFlowContainer | ContainerFlags.HasLocals | ContainerFlags.IsFunctionLike |
+                ContainerFlags.IsFunctionExpression;
 
         case SyntaxKind.ModuleBlock:
             return ContainerFlags.IsControlFlowContainer;
@@ -3949,7 +3966,8 @@ export function getContainerFlags(node: Node): ContainerFlags {
             // By not creating a new block-scoped-container here, we ensure that both 'var x'
             // and 'let x' go into the Function-container's locals, and we do get a collision
             // conflict.
-            return isFunctionLike(node.parent) || isClassStaticBlockDeclaration(node.parent) ? ContainerFlags.None : ContainerFlags.IsBlockScopedContainer | ContainerFlags.HasLocals;
+            return isFunctionLike(node.parent) || isClassStaticBlockDeclaration(node.parent) ? ContainerFlags.None
+                : ContainerFlags.IsBlockScopedContainer | ContainerFlags.HasLocals;
     }
 
     return ContainerFlags.None;

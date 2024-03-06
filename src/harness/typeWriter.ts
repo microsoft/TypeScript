@@ -104,7 +104,8 @@ export class TypeWriterWalker {
             // Exception for `T` in `type T = something` because that may evaluate to some interesting type.
             if (
                 ts.isPartOfTypeNode(node) ||
-                ts.isIdentifier(node) && !(ts.getMeaningFromDeclaration(node.parent) & ts.SemanticMeaning.Value) && !(ts.isTypeAliasDeclaration(node.parent) && node.parent.name === node)
+                ts.isIdentifier(node) && !(ts.getMeaningFromDeclaration(node.parent) & ts.SemanticMeaning.Value) &&
+                    !(ts.isTypeAliasDeclaration(node.parent) && node.parent.name === node)
             ) {
                 return undefined;
             }

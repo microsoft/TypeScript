@@ -9,7 +9,10 @@ describe("unittests:: JSDocParsing", () => {
                 const typeAndDiagnostics = ts.parseJSDocTypeExpressionForTests(content);
                 assert.isTrue(typeAndDiagnostics && typeAndDiagnostics.diagnostics.length === 0, "no errors issued");
 
-                Harness.Baseline.runBaseline("JSDocParsing/TypeExpressions.parsesCorrectly." + name + ".json", Utils.sourceFileToJSON(typeAndDiagnostics!.jsDocTypeExpression.type));
+                Harness.Baseline.runBaseline(
+                    "JSDocParsing/TypeExpressions.parsesCorrectly." + name + ".json",
+                    Utils.sourceFileToJSON(typeAndDiagnostics!.jsDocTypeExpression.type),
+                );
             });
         }
 

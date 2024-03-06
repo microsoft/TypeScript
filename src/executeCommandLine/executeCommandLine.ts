@@ -264,11 +264,21 @@ function generateOptionOutput(sys: System, option: CommandLineOption, rightAlign
         text.push(...getPrettyOutput(name, description, rightAlignOfLeft, leftAlignOfRight, terminalWidth, /*colorLeft*/ true), sys.newLine);
         if (showAdditionalInfoOutput(valueCandidates, option)) {
             if (valueCandidates) {
-                text.push(...getPrettyOutput(valueCandidates.valueType, valueCandidates.possibleValues, rightAlignOfLeft, leftAlignOfRight, terminalWidth, /*colorLeft*/ false), sys.newLine);
+                text.push(
+                    ...getPrettyOutput(valueCandidates.valueType, valueCandidates.possibleValues, rightAlignOfLeft, leftAlignOfRight, terminalWidth, /*colorLeft*/ false),
+                    sys.newLine,
+                );
             }
             if (defaultValueDescription) {
                 text.push(
-                    ...getPrettyOutput(getDiagnosticText(Diagnostics.default_Colon), defaultValueDescription, rightAlignOfLeft, leftAlignOfRight, terminalWidth, /*colorLeft*/ false),
+                    ...getPrettyOutput(
+                        getDiagnosticText(Diagnostics.default_Colon),
+                        defaultValueDescription,
+                        rightAlignOfLeft,
+                        leftAlignOfRight,
+                        terminalWidth,
+                        /*colorLeft*/ false,
+                    ),
                     sys.newLine,
                 );
             }
@@ -1155,7 +1165,8 @@ function reportSolutionBuilderTimes(
 
     if (!performance.isEnabled()) {
         sys.write(
-            Diagnostics.Performance_timings_for_diagnostics_or_extendedDiagnostics_are_not_available_in_this_session_A_native_implementation_of_the_Web_Performance_API_could_not_be_found
+            Diagnostics
+                .Performance_timings_for_diagnostics_or_extendedDiagnostics_are_not_available_in_this_session_A_native_implementation_of_the_Web_Performance_API_could_not_be_found
                 .message +
                 "\n",
         );
@@ -1282,7 +1293,8 @@ function reportStatistics(sys: System, program: Program, solutionPerformance: So
         reportAllStatistics(sys, statistics);
         if (!isPerformanceEnabled) {
             sys.write(
-                Diagnostics.Performance_timings_for_diagnostics_or_extendedDiagnostics_are_not_available_in_this_session_A_native_implementation_of_the_Web_Performance_API_could_not_be_found
+                Diagnostics
+                    .Performance_timings_for_diagnostics_or_extendedDiagnostics_are_not_available_in_this_session_A_native_implementation_of_the_Web_Performance_API_could_not_be_found
                     .message +
                     "\n",
             );

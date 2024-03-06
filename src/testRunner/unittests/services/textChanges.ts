@@ -245,13 +245,23 @@ var a = 4; // comment 7`;
             changeTracker.replaceRange(sourceFile, { pos: text.indexOf("var y"), end: text.indexOf("var a") }, createTestClass(), { suffix: newLineCharacter });
         });
         runSingleFileTest("replaceRangeWithForcedIndentation", /*placeOpenBraceOnNewLineForFunctions*/ true, text, /*validateNodes*/ true, (sourceFile, changeTracker) => {
-            changeTracker.replaceRange(sourceFile, { pos: text.indexOf("var y"), end: text.indexOf("var a") }, createTestClass(), { suffix: newLineCharacter, indentation: 8, delta: 0 });
+            changeTracker.replaceRange(sourceFile, { pos: text.indexOf("var y"), end: text.indexOf("var a") }, createTestClass(), {
+                suffix: newLineCharacter,
+                indentation: 8,
+                delta: 0,
+            });
         });
 
-        runSingleFileTest("replaceRangeNoLineBreakBefore", /*placeOpenBraceOnNewLineForFunctions*/ true, `const x = 1, y = "2";`, /*validateNodes*/ false, (sourceFile, changeTracker) => {
-            const newNode = createTestVariableDeclaration("z1");
-            changeTracker.replaceRange(sourceFile, { pos: sourceFile.text.indexOf("y"), end: sourceFile.text.indexOf(";") }, newNode);
-        });
+        runSingleFileTest(
+            "replaceRangeNoLineBreakBefore",
+            /*placeOpenBraceOnNewLineForFunctions*/ true,
+            `const x = 1, y = "2";`,
+            /*validateNodes*/ false,
+            (sourceFile, changeTracker) => {
+                const newNode = createTestVariableDeclaration("z1");
+                changeTracker.replaceRange(sourceFile, { pos: sourceFile.text.indexOf("y"), end: sourceFile.text.indexOf(";") }, newNode);
+            },
+        );
     }
     {
         const text = `
@@ -417,9 +427,15 @@ class A {
     }
 }
 `;
-        runSingleFileTest("insertNodeAtConstructorStart-block with newline", /*placeOpenBraceOnNewLineForFunctions*/ false, text3, /*validateNodes*/ false, (sourceFile, changeTracker) => {
-            changeTracker.insertNodeAtConstructorStart(sourceFile, findConstructor(sourceFile), createTestSuperCall());
-        });
+        runSingleFileTest(
+            "insertNodeAtConstructorStart-block with newline",
+            /*placeOpenBraceOnNewLineForFunctions*/ false,
+            text3,
+            /*validateNodes*/ false,
+            (sourceFile, changeTracker) => {
+                changeTracker.insertNodeAtConstructorStart(sourceFile, findConstructor(sourceFile), createTestSuperCall());
+            },
+        );
     }
     {
         const text = `var a = 1, b = 2, c = 3;`;
@@ -839,16 +855,22 @@ class A {
     x = foo
 }
 `;
-        runSingleFileTest("insertNodeInClassAfterNodeWithoutSeparator1", /*placeOpenBraceOnNewLineForFunctions*/ false, text, /*validateNodes*/ false, (sourceFile, changeTracker) => {
-            const newNode = ts.factory.createPropertyDeclaration(
-                /*modifiers*/ undefined,
-                ts.factory.createComputedPropertyName(ts.factory.createNumericLiteral(1)),
-                /*questionOrExclamationToken*/ undefined,
-                ts.factory.createKeywordTypeNode(ts.SyntaxKind.AnyKeyword),
-                /*initializer*/ undefined,
-            );
-            changeTracker.insertNodeAfter(sourceFile, findChild("x", sourceFile), newNode);
-        });
+        runSingleFileTest(
+            "insertNodeInClassAfterNodeWithoutSeparator1",
+            /*placeOpenBraceOnNewLineForFunctions*/ false,
+            text,
+            /*validateNodes*/ false,
+            (sourceFile, changeTracker) => {
+                const newNode = ts.factory.createPropertyDeclaration(
+                    /*modifiers*/ undefined,
+                    ts.factory.createComputedPropertyName(ts.factory.createNumericLiteral(1)),
+                    /*questionOrExclamationToken*/ undefined,
+                    ts.factory.createKeywordTypeNode(ts.SyntaxKind.AnyKeyword),
+                    /*initializer*/ undefined,
+                );
+                changeTracker.insertNodeAfter(sourceFile, findChild("x", sourceFile), newNode);
+            },
+        );
     }
     {
         const text = `
@@ -857,16 +879,22 @@ class A {
     }
 }
 `;
-        runSingleFileTest("insertNodeInClassAfterNodeWithoutSeparator2", /*placeOpenBraceOnNewLineForFunctions*/ false, text, /*validateNodes*/ false, (sourceFile, changeTracker) => {
-            const newNode = ts.factory.createPropertyDeclaration(
-                /*modifiers*/ undefined,
-                ts.factory.createComputedPropertyName(ts.factory.createNumericLiteral(1)),
-                /*questionOrExclamationToken*/ undefined,
-                ts.factory.createKeywordTypeNode(ts.SyntaxKind.AnyKeyword),
-                /*initializer*/ undefined,
-            );
-            changeTracker.insertNodeAfter(sourceFile, findChild("x", sourceFile), newNode);
-        });
+        runSingleFileTest(
+            "insertNodeInClassAfterNodeWithoutSeparator2",
+            /*placeOpenBraceOnNewLineForFunctions*/ false,
+            text,
+            /*validateNodes*/ false,
+            (sourceFile, changeTracker) => {
+                const newNode = ts.factory.createPropertyDeclaration(
+                    /*modifiers*/ undefined,
+                    ts.factory.createComputedPropertyName(ts.factory.createNumericLiteral(1)),
+                    /*questionOrExclamationToken*/ undefined,
+                    ts.factory.createKeywordTypeNode(ts.SyntaxKind.AnyKeyword),
+                    /*initializer*/ undefined,
+                );
+                changeTracker.insertNodeAfter(sourceFile, findChild("x", sourceFile), newNode);
+            },
+        );
     }
     {
         const text = `
@@ -874,16 +902,22 @@ interface A {
     x
 }
 `;
-        runSingleFileTest("insertNodeInInterfaceAfterNodeWithoutSeparator1", /*placeOpenBraceOnNewLineForFunctions*/ false, text, /*validateNodes*/ false, (sourceFile, changeTracker) => {
-            const newNode = ts.factory.createPropertyDeclaration(
-                /*modifiers*/ undefined,
-                ts.factory.createComputedPropertyName(ts.factory.createNumericLiteral(1)),
-                /*questionOrExclamationToken*/ undefined,
-                ts.factory.createKeywordTypeNode(ts.SyntaxKind.AnyKeyword),
-                /*initializer*/ undefined,
-            );
-            changeTracker.insertNodeAfter(sourceFile, findChild("x", sourceFile), newNode);
-        });
+        runSingleFileTest(
+            "insertNodeInInterfaceAfterNodeWithoutSeparator1",
+            /*placeOpenBraceOnNewLineForFunctions*/ false,
+            text,
+            /*validateNodes*/ false,
+            (sourceFile, changeTracker) => {
+                const newNode = ts.factory.createPropertyDeclaration(
+                    /*modifiers*/ undefined,
+                    ts.factory.createComputedPropertyName(ts.factory.createNumericLiteral(1)),
+                    /*questionOrExclamationToken*/ undefined,
+                    ts.factory.createKeywordTypeNode(ts.SyntaxKind.AnyKeyword),
+                    /*initializer*/ undefined,
+                );
+                changeTracker.insertNodeAfter(sourceFile, findChild("x", sourceFile), newNode);
+            },
+        );
     }
     {
         const text = `
@@ -891,16 +925,22 @@ interface A {
     x()
 }
 `;
-        runSingleFileTest("insertNodeInInterfaceAfterNodeWithoutSeparator2", /*placeOpenBraceOnNewLineForFunctions*/ false, text, /*validateNodes*/ false, (sourceFile, changeTracker) => {
-            const newNode = ts.factory.createPropertyDeclaration(
-                /*modifiers*/ undefined,
-                ts.factory.createComputedPropertyName(ts.factory.createNumericLiteral(1)),
-                /*questionOrExclamationToken*/ undefined,
-                ts.factory.createKeywordTypeNode(ts.SyntaxKind.AnyKeyword),
-                /*initializer*/ undefined,
-            );
-            changeTracker.insertNodeAfter(sourceFile, findChild("x", sourceFile), newNode);
-        });
+        runSingleFileTest(
+            "insertNodeInInterfaceAfterNodeWithoutSeparator2",
+            /*placeOpenBraceOnNewLineForFunctions*/ false,
+            text,
+            /*validateNodes*/ false,
+            (sourceFile, changeTracker) => {
+                const newNode = ts.factory.createPropertyDeclaration(
+                    /*modifiers*/ undefined,
+                    ts.factory.createComputedPropertyName(ts.factory.createNumericLiteral(1)),
+                    /*questionOrExclamationToken*/ undefined,
+                    ts.factory.createKeywordTypeNode(ts.SyntaxKind.AnyKeyword),
+                    /*initializer*/ undefined,
+                );
+                changeTracker.insertNodeAfter(sourceFile, findChild("x", sourceFile), newNode);
+            },
+        );
     }
     {
         const text = `

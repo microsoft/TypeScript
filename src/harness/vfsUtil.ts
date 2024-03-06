@@ -767,7 +767,15 @@ export class FileSystem {
         return FileSystem.diffWorker(container, changed, changed._getRootLinks(), base, base._getRootLinks(), options);
     }
 
-    private static directoryDiff(container: FileSet, basename: string, changed: FileSystem, changedNode: DirectoryInode, base: FileSystem, baseNode: DirectoryInode, options: DiffOptions) {
+    private static directoryDiff(
+        container: FileSet,
+        basename: string,
+        changed: FileSystem,
+        changedNode: DirectoryInode,
+        base: FileSystem,
+        baseNode: DirectoryInode,
+        options: DiffOptions,
+    ) {
         while (!changedNode.links && changedNode.shadowRoot) changedNode = changedNode.shadowRoot;
         while (!baseNode.links && baseNode.shadowRoot) baseNode = baseNode.shadowRoot;
 

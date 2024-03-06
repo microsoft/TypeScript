@@ -576,7 +576,10 @@ export function expandPreOrPostfixIncrementOrDecrementExpression(
     resultVariable: Identifier | undefined,
 ) {
     const operator = node.operator;
-    Debug.assert(operator === SyntaxKind.PlusPlusToken || operator === SyntaxKind.MinusMinusToken, "Expected 'node' to be a pre- or post-increment or pre- or post-decrement expression");
+    Debug.assert(
+        operator === SyntaxKind.PlusPlusToken || operator === SyntaxKind.MinusMinusToken,
+        "Expected 'node' to be a pre- or post-increment or pre- or post-decrement expression",
+    );
 
     const temp = factory.createTempVariable(recordTempVariable);
     expression = factory.createAssignment(temp, expression);
@@ -866,7 +869,11 @@ export function getOrCreateExternalHelpersModuleNameIfNeeded(
  *
  * @internal
  */
-export function getLocalNameForExternalImport(factory: NodeFactory, node: ImportDeclaration | ExportDeclaration | ImportEqualsDeclaration, sourceFile: SourceFile): Identifier | undefined {
+export function getLocalNameForExternalImport(
+    factory: NodeFactory,
+    node: ImportDeclaration | ExportDeclaration | ImportEqualsDeclaration,
+    sourceFile: SourceFile,
+): Identifier | undefined {
     const namespaceDeclaration = getNamespaceDeclarationNode(node);
     if (namespaceDeclaration && !isDefaultImport(node) && !isExportNamespaceAsDefaultDeclaration(node)) {
         const name = namespaceDeclaration.name;

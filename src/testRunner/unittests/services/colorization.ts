@@ -74,7 +74,8 @@ describe("unittests:: services:: Colorization", () => {
                 assert.equal(
                     actualEntry.classification,
                     expectedEntry.classification,
-                    "Classification class does not match expected. Expected: " + ts.TokenClass[expectedEntry.classification] + ", Actual: " + ts.TokenClass[actualEntry.classification],
+                    "Classification class does not match expected. Expected: " + ts.TokenClass[expectedEntry.classification] + ", Actual: " +
+                        ts.TokenClass[actualEntry.classification],
                 );
                 assert.equal(
                     actualEntry.length,
@@ -219,7 +220,12 @@ describe("unittests:: services:: Colorization", () => {
         });
 
         it("classifies a single line no substitution template string correctly", () => {
-            testLexicalClassification("`number number public string`", ts.EndOfLineState.None, stringLiteral("`number number public string`"), finalEndOfLineState(ts.EndOfLineState.None));
+            testLexicalClassification(
+                "`number number public string`",
+                ts.EndOfLineState.None,
+                stringLiteral("`number number public string`"),
+                finalEndOfLineState(ts.EndOfLineState.None),
+            );
         });
         it("classifies substitution parts of a template string correctly", () => {
             testLexicalClassification(
@@ -236,7 +242,12 @@ describe("unittests:: services:: Colorization", () => {
             );
         });
         it("classifies an unterminated no substitution template string correctly", () => {
-            testLexicalClassification("`hello world", ts.EndOfLineState.None, stringLiteral("`hello world"), finalEndOfLineState(ts.EndOfLineState.InTemplateHeadOrNoSubstitutionTemplate));
+            testLexicalClassification(
+                "`hello world",
+                ts.EndOfLineState.None,
+                stringLiteral("`hello world"),
+                finalEndOfLineState(ts.EndOfLineState.InTemplateHeadOrNoSubstitutionTemplate),
+            );
         });
         it("classifies the entire line of an unterminated multiline no-substitution/head template", () => {
             testLexicalClassification(

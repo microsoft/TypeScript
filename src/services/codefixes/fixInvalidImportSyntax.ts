@@ -105,7 +105,10 @@ registerCodeFix({
 
 function getActionsForInvalidImportLocation(context: CodeFixContext): CodeFixAction[] | undefined {
     const sourceFile = context.sourceFile;
-    const node = findAncestor(getTokenAtPosition(sourceFile, context.span.start), a => a.getStart() === context.span.start && a.getEnd() === (context.span.start + context.span.length));
+    const node = findAncestor(
+        getTokenAtPosition(sourceFile, context.span.start),
+        a => a.getStart() === context.span.start && a.getEnd() === (context.span.start + context.span.length),
+    );
     if (!node) {
         return [];
     }

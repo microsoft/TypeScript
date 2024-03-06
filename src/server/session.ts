@@ -542,7 +542,12 @@ function getRenameLocationsWorker(
 }
 
 function getDefinitionLocation(defaultProject: Project, initialLocation: DocumentPosition, isForRename: boolean): DocumentPosition | undefined {
-    const infos = defaultProject.getLanguageService().getDefinitionAtPosition(initialLocation.fileName, initialLocation.pos, /*searchOtherFilesOnly*/ false, /*stopAtAlias*/ isForRename);
+    const infos = defaultProject.getLanguageService().getDefinitionAtPosition(
+        initialLocation.fileName,
+        initialLocation.pos,
+        /*searchOtherFilesOnly*/ false,
+        /*stopAtAlias*/ isForRename,
+    );
     const info = infos && firstOrUndefined(infos);
     // Note that the value of `isLocal` may depend on whether or not the checker has run on the containing file
     // (implying that FAR cascading behavior may depend on request order)
@@ -1736,7 +1741,10 @@ export class Session<TMessage = string> implements EventSender {
     }
 
     private mapDefinitionInfo(definitions: readonly DefinitionInfo[], project: Project): readonly protocol.DefinitionInfo[] {
-        return definitions.map(def => ({ ...this.toFileSpanWithContext(def.fileName, def.textSpan, def.contextSpan, project), ...def.unverified && { unverified: def.unverified } }));
+        return definitions.map(def => ({
+            ...this.toFileSpanWithContext(def.fileName, def.textSpan, def.contextSpan, project),
+            ...def.unverified && { unverified: def.unverified },
+        }));
     }
 
     /*
@@ -1859,7 +1867,10 @@ export class Session<TMessage = string> implements EventSender {
         return convertLinkedEditInfoToRanges(linkedEditInfo, scriptInfo);
     }
 
-    private getDocumentHighlights(args: protocol.DocumentHighlightsRequestArgs, simplifiedResult: boolean): readonly protocol.DocumentHighlightsItem[] | readonly DocumentHighlights[] {
+    private getDocumentHighlights(
+        args: protocol.DocumentHighlightsRequestArgs,
+        simplifiedResult: boolean,
+    ): readonly protocol.DocumentHighlightsItem[] | readonly DocumentHighlights[] {
         const { file, project } = this.getFileAndProject(args);
         const position = this.getPositionInFile(args, file);
         const documentHighlights = project.getLanguageService().getDocumentHighlights(file, position, args.filesToSearch);
@@ -2387,7 +2398,10 @@ export class Session<TMessage = string> implements EventSender {
         return res;
     }
 
-    private getCompletionEntryDetails(args: protocol.CompletionDetailsRequestArgs, fullResult: boolean): readonly protocol.CompletionEntryDetails[] | readonly CompletionEntryDetails[] {
+    private getCompletionEntryDetails(
+        args: protocol.CompletionDetailsRequestArgs,
+        fullResult: boolean,
+    ): readonly protocol.CompletionEntryDetails[] | readonly CompletionEntryDetails[] {
         const { file, project } = this.getFileAndProject(args);
         const scriptInfo = this.projectService.getScriptInfoForNormalizedPath(file)!;
         const position = this.getPosition(args, scriptInfo);
@@ -2878,7 +2892,14 @@ export class Session<TMessage = string> implements EventSender {
 
         let codeActions: readonly CodeFixAction[];
         try {
-            codeActions = project.getLanguageService().getCodeFixesAtPosition(file, startPosition, endPosition, args.errorCodes, this.getFormatOptions(file), this.getPreferences(file));
+            codeActions = project.getLanguageService().getCodeFixesAtPosition(
+                file,
+                startPosition,
+                endPosition,
+                args.errorCodes,
+                this.getFormatOptions(file),
+                this.getPreferences(file),
+            );
         }
         catch (e) {
             const ls = project.getLanguageService();

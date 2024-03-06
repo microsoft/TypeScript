@@ -1305,7 +1305,13 @@ export class ProjectService {
             case ActionSet:
                 // Update the typing files and update the project
                 project.updateTypingFiles(
-                    this.typingsCache.updateTypingsForProject(response.projectName, response.compilerOptions, response.typeAcquisition, response.unresolvedImports, response.typings),
+                    this.typingsCache.updateTypingsForProject(
+                        response.projectName,
+                        response.compilerOptions,
+                        response.typeAcquisition,
+                        response.unresolvedImports,
+                        response.typings,
+                    ),
                 );
                 return;
             case ActionInvalidate:
@@ -1707,7 +1713,10 @@ export class ProjectService {
                     if (this.openFiles.has(fileOrDirectoryPath)) {
                         const info = Debug.checkDefined(this.getScriptInfoForPath(fileOrDirectoryPath));
                         if (info.isAttached(project)) {
-                            const loadLevelToSet = Math.max(updateLevel, project.openFileWatchTriggered.get(fileOrDirectoryPath) || ProgramUpdateLevel.Update) as ProgramUpdateLevel;
+                            const loadLevelToSet = Math.max(
+                                updateLevel,
+                                project.openFileWatchTriggered.get(fileOrDirectoryPath) || ProgramUpdateLevel.Update,
+                            ) as ProgramUpdateLevel;
                             project.openFileWatchTriggered.set(fileOrDirectoryPath, loadLevelToSet);
                         }
                         else {
@@ -2224,7 +2233,10 @@ export class ProjectService {
      * The server must start searching from the directory containing
      * the newly opened file.
      */
-    private forEachConfigFileLocation(info: OpenScriptInfoOrClosedOrConfigFileInfo, action: (canonicalConfigFilePath: NormalizedPath, configFileName: NormalizedPath) => boolean | void) {
+    private forEachConfigFileLocation(
+        info: OpenScriptInfoOrClosedOrConfigFileInfo,
+        action: (canonicalConfigFilePath: NormalizedPath, configFileName: NormalizedPath) => boolean | void,
+    ) {
         if (this.serverMode !== LanguageServiceMode.Semantic) {
             return undefined;
         }
@@ -2298,7 +2310,10 @@ export class ProjectService {
             if (result !== undefined) return result || undefined;
         }
         this.logger.info(`Search path: ${getDirectoryPath(info.fileName)}`);
-        const configFileName = this.forEachConfigFileLocation(info, (canonicalConfigFilePath, configFileName) => this.configFileExists(configFileName, canonicalConfigFilePath, info));
+        const configFileName = this.forEachConfigFileLocation(
+            info,
+            (canonicalConfigFilePath, configFileName) => this.configFileExists(configFileName, canonicalConfigFilePath, info),
+        );
         if (configFileName) {
             this.logger.info(`For info: ${info.fileName} :: Config file name: ${configFileName}`);
         }
@@ -2462,7 +2477,12 @@ export class ProjectService {
         }
     }
 
-    private addFilesToNonInferredProject<T>(project: ConfiguredProject | ExternalProject, files: T[], propertyReader: FilePropertyReader<T>, typeAcquisition: TypeAcquisition): void {
+    private addFilesToNonInferredProject<T>(
+        project: ConfiguredProject | ExternalProject,
+        files: T[],
+        propertyReader: FilePropertyReader<T>,
+        typeAcquisition: TypeAcquisition,
+    ): void {
         this.updateNonInferredProjectFiles(project, files, propertyReader);
         project.setTypeAcquisition(typeAcquisition);
         project.markAsDirty();
@@ -3226,7 +3246,15 @@ export class ProjectService {
         hostToQueryFileExistsOn: DirectoryStructureHost | undefined,
     ) {
         if (isRootedDiskPath(fileName) || isDynamicFileName(fileName)) {
-            return this.getOrCreateScriptInfoWorker(fileName, currentDirectory, /*openedByClient*/ false, /*fileContent*/ undefined, scriptKind, hasMixedContent, hostToQueryFileExistsOn);
+            return this.getOrCreateScriptInfoWorker(
+                fileName,
+                currentDirectory,
+                /*openedByClient*/ false,
+                /*fileContent*/ undefined,
+                scriptKind,
+                hasMixedContent,
+                hostToQueryFileExistsOn,
+            );
         }
 
         // This is non rooted path with different current directory than project service current directory
@@ -4215,7 +4243,9 @@ export class ProjectService {
     }
 
     private telemetryOnOpenFile(scriptInfo: ScriptInfo): void {
-        if (this.serverMode !== LanguageServiceMode.Semantic || !this.eventHandler || !scriptInfo.isJavaScript() || !addToSeen(this.allJsFilesForOpenFileTelemetry, scriptInfo.path)) {
+        if (
+            this.serverMode !== LanguageServiceMode.Semantic || !this.eventHandler || !scriptInfo.isJavaScript() || !addToSeen(this.allJsFilesForOpenFileTelemetry, scriptInfo.path)
+        ) {
             return;
         }
 
@@ -4296,7 +4326,8 @@ export class ProjectService {
         if (closedFiles) {
             for (const file of closedFiles) {
                 // Close files, but dont assign projects to orphan open script infos, that part comes later
-                assignOrphanScriptInfosToInferredProject = this.closeClientFile(file, /*skipAssignOrphanScriptInfosToInferredProject*/ true) || assignOrphanScriptInfosToInferredProject;
+                assignOrphanScriptInfosToInferredProject = this.closeClientFile(file, /*skipAssignOrphanScriptInfosToInferredProject*/ true) ||
+                    assignOrphanScriptInfosToInferredProject;
             }
         }
 
@@ -4565,7 +4596,12 @@ export class ProjectService {
                 existingExternalProject.excludedFiles = excludedFiles;
                 const compilerOptions = convertCompilerOptions(proj.options);
                 const watchOptionsAndErrors = convertWatchOptions(proj.options, existingExternalProject.getCurrentDirectory());
-                const lastFileExceededProgramSize = this.getFilenameForExceededTotalSizeLimitForNonTsFiles(proj.projectFileName, compilerOptions, rootFiles, externalFilePropertyReader);
+                const lastFileExceededProgramSize = this.getFilenameForExceededTotalSizeLimitForNonTsFiles(
+                    proj.projectFileName,
+                    compilerOptions,
+                    rootFiles,
+                    externalFilePropertyReader,
+                );
                 if (lastFileExceededProgramSize) {
                     existingExternalProject.disableLanguageService(lastFileExceededProgramSize);
                 }

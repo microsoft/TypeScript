@@ -38,7 +38,10 @@ describe("unittests:: tsc:: moduleResolution::", () => {
             {
                 caption: "update package.json from @types so error is fixed",
                 edit: fs =>
-                    fs.writeFileSync("/home/src/projects/project/node_modules/@types/bar/package.json", getFsConentsForAlternateResultAtTypesPackageJson("bar", /*addTypesCondition*/ true)),
+                    fs.writeFileSync(
+                        "/home/src/projects/project/node_modules/@types/bar/package.json",
+                        getFsConentsForAlternateResultAtTypesPackageJson("bar", /*addTypesCondition*/ true),
+                    ),
             },
             {
                 caption: "update package.json so error is fixed",

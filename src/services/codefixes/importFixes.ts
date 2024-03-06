@@ -167,7 +167,8 @@ const errorCodes: readonly number[] = [
         .Cannot_find_name_0_Do_you_need_to_install_type_definitions_for_a_test_runner_Try_npm_i_save_dev_types_Slashjest_or_npm_i_save_dev_types_Slashmocha_and_then_add_jest_or_mocha_to_the_types_field_in_your_tsconfig
         .code,
     Diagnostics.Cannot_find_name_0_Did_you_mean_to_write_this_in_an_async_function.code,
-    Diagnostics.Cannot_find_name_0_Do_you_need_to_install_type_definitions_for_jQuery_Try_npm_i_save_dev_types_Slashjquery_and_then_add_jquery_to_the_types_field_in_your_tsconfig.code,
+    Diagnostics.Cannot_find_name_0_Do_you_need_to_install_type_definitions_for_jQuery_Try_npm_i_save_dev_types_Slashjquery_and_then_add_jquery_to_the_types_field_in_your_tsconfig
+        .code,
     Diagnostics.Cannot_find_name_0_Do_you_need_to_install_type_definitions_for_a_test_runner_Try_npm_i_save_dev_types_Slashjest_or_npm_i_save_dev_types_Slashmocha.code,
     Diagnostics.Cannot_find_name_0_Do_you_need_to_install_type_definitions_for_node_Try_npm_i_save_dev_types_Slashnode.code,
     Diagnostics.Cannot_find_name_0_Do_you_need_to_install_type_definitions_for_node_Try_npm_i_save_dev_types_Slashnode_and_then_add_node_to_the_types_field_in_your_tsconfig.code,
@@ -214,7 +215,13 @@ export interface ImportAdder {
 }
 
 /** @internal */
-export function createImportAdder(sourceFile: SourceFile, program: Program, preferences: UserPreferences, host: LanguageServiceHost, cancellationToken?: CancellationToken): ImportAdder {
+export function createImportAdder(
+    sourceFile: SourceFile,
+    program: Program,
+    preferences: UserPreferences,
+    host: LanguageServiceHost,
+    cancellationToken?: CancellationToken,
+): ImportAdder {
     return createImportAdderWorker(sourceFile, program, /*useAutoImportProvider*/ false, preferences, host, cancellationToken);
 }
 
@@ -284,7 +291,10 @@ function createImportAdderWorker(
                     entry.namedImports.set(symbolName, reduceAddAsTypeOnlyValues(prevValue, addAsTypeOnly));
                 }
                 else {
-                    Debug.assert(entry.defaultImport === undefined || entry.defaultImport.name === symbolName, "(Add to Existing) Default import should be missing or match symbolName");
+                    Debug.assert(
+                        entry.defaultImport === undefined || entry.defaultImport.name === symbolName,
+                        "(Add to Existing) Default import should be missing or match symbolName",
+                    );
                     entry.defaultImport = {
                         name: symbolName,
                         addAsTypeOnly: reduceAddAsTypeOnlyValues(entry.defaultImport?.addAsTypeOnly, addAsTypeOnly),
@@ -299,7 +309,10 @@ function createImportAdderWorker(
 
                 switch (importKind) {
                     case ImportKind.Default:
-                        Debug.assert(entry.defaultImport === undefined || entry.defaultImport.name === symbolName, "(Add new) Default import should be missing or match symbolName");
+                        Debug.assert(
+                            entry.defaultImport === undefined || entry.defaultImport.name === symbolName,
+                            "(Add new) Default import should be missing or match symbolName",
+                        );
                         entry.defaultImport = { name: symbolName, addAsTypeOnly: reduceAddAsTypeOnlyValues(entry.defaultImport?.addAsTypeOnly, addAsTypeOnly) };
                         break;
                     case ImportKind.Named:
@@ -308,7 +321,10 @@ function createImportAdderWorker(
                         break;
                     case ImportKind.CommonJS:
                     case ImportKind.Namespace:
-                        Debug.assert(entry.namespaceLikeImport === undefined || entry.namespaceLikeImport.name === symbolName, "Namespacelike import shoudl be missing or match symbolName");
+                        Debug.assert(
+                            entry.namespaceLikeImport === undefined || entry.namespaceLikeImport.name === symbolName,
+                            "Namespacelike import shoudl be missing or match symbolName",
+                        );
                         entry.namespaceLikeImport = { importKind, name: symbolName, addAsTypeOnly };
                         break;
                 }
@@ -642,7 +658,9 @@ function getAllExportInfoForSymbol(
     const getChecker = createGetChecker(program, host);
     return getExportInfoMap(importingFile, host, program, preferences, cancellationToken)
         .search(importingFile.path, preferCapitalized, name => name === symbolName, info => {
-            if (skipAlias(info[0].symbol, getChecker(info[0].isFromPackageJson)) === symbol && info.some(i => i.moduleSymbol === moduleSymbol || i.symbol.parent === moduleSymbol)) {
+            if (
+                skipAlias(info[0].symbol, getChecker(info[0].isFromPackageJson)) === symbol && info.some(i => i.moduleSymbol === moduleSymbol || i.symbol.parent === moduleSymbol)
+            ) {
                 return info;
             }
         });
@@ -655,7 +673,10 @@ function getSingleExportInfoForSymbol(symbol: Symbol, symbolName: string, module
         return mainProgramInfo;
     }
     const autoImportProvider = host.getPackageJsonAutoImportProvider?.()?.getTypeChecker();
-    return Debug.checkDefined(autoImportProvider && getInfoWithChecker(autoImportProvider, /*isFromPackageJson*/ true), `Could not find symbol in specified module for code actions`);
+    return Debug.checkDefined(
+        autoImportProvider && getInfoWithChecker(autoImportProvider, /*isFromPackageJson*/ true),
+        `Could not find symbol in specified module for code actions`,
+    );
 
     function getInfoWithChecker(checker: TypeChecker, isFromPackageJson: boolean): SymbolExportInfo | undefined {
         const defaultInfo = getDefaultLikeExportInfo(moduleSymbol, checker, compilerOptions);
@@ -1141,7 +1162,12 @@ function compareModuleSpecifiers(
 // E.g., do not `import { Foo } from ".."` when you could `import { Foo } from "../Foo"`.
 // This can produce false positives or negatives if re-exports cross into sibling directories
 // (e.g. `export * from "../whatever"`) or are not named "index".
-function isFixPossiblyReExportingImportingFile(fix: ImportFixWithModuleSpecifier, importingFile: SourceFile, compilerOptions: CompilerOptions, toPath: (fileName: string) => Path): boolean {
+function isFixPossiblyReExportingImportingFile(
+    fix: ImportFixWithModuleSpecifier,
+    importingFile: SourceFile,
+    compilerOptions: CompilerOptions,
+    toPath: (fileName: string) => Path,
+): boolean {
     if (
         fix.isReExport &&
         fix.exportInfo?.moduleFileName &&

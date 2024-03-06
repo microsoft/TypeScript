@@ -504,10 +504,28 @@ export function createSignatureDeclarationFromSignature(
         );
     }
     if (isArrowFunction(signatureDeclaration)) {
-        return factory.updateArrowFunction(signatureDeclaration, modifiers, typeParameters, parameters, type, signatureDeclaration.equalsGreaterThanToken, body ?? signatureDeclaration.body);
+        return factory.updateArrowFunction(
+            signatureDeclaration,
+            modifiers,
+            typeParameters,
+            parameters,
+            type,
+            signatureDeclaration.equalsGreaterThanToken,
+            body ?? signatureDeclaration.body,
+        );
     }
     if (isMethodDeclaration(signatureDeclaration)) {
-        return factory.updateMethodDeclaration(signatureDeclaration, modifiers, asteriskToken, name ?? factory.createIdentifier(""), questionToken, typeParameters, parameters, type, body);
+        return factory.updateMethodDeclaration(
+            signatureDeclaration,
+            modifiers,
+            asteriskToken,
+            name ?? factory.createIdentifier(""),
+            questionToken,
+            typeParameters,
+            parameters,
+            type,
+            body,
+        );
     }
     if (isFunctionDeclaration(signatureDeclaration)) {
         return factory.updateFunctionDeclaration(
@@ -618,7 +636,9 @@ function createTypeParametersForArguments(
     const constraintsByName = new Map(argumentTypeParameters);
 
     if (typeArguments) {
-        const typeArgumentsWithNewTypes = typeArguments.filter(typeArgument => !argumentTypeParameters.some(pair => checker.getTypeAtLocation(typeArgument) === pair[1]?.argumentType));
+        const typeArgumentsWithNewTypes = typeArguments.filter(typeArgument =>
+            !argumentTypeParameters.some(pair => checker.getTypeAtLocation(typeArgument) === pair[1]?.argumentType)
+        );
         const targetSize = usedNames.size + typeArgumentsWithNewTypes.length;
         for (let i = 0; usedNames.size < targetSize; i += 1) {
             usedNames.add(createTypeParameterName(i));

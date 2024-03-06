@@ -298,7 +298,10 @@ function collectTypeParameters(checker: TypeChecker, selection: TypeNode | TypeN
         }
         else if ((isTypePredicateNode(node) || isThisTypeNode(node))) {
             const functionLikeNode = findAncestor(node.parent, isFunctionLike);
-            if (functionLikeNode && functionLikeNode.type && rangeContainsSkipTrivia(functionLikeNode.type, node, file) && !rangeContainsSkipTrivia(selectionRange, functionLikeNode, file)) {
+            if (
+                functionLikeNode && functionLikeNode.type && rangeContainsSkipTrivia(functionLikeNode.type, node, file) &&
+                !rangeContainsSkipTrivia(selectionRange, functionLikeNode, file)
+            ) {
                 return true;
             }
         }

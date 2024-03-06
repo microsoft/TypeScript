@@ -659,7 +659,8 @@ function resolvingModuleSpecifiers<TReturn>(
             return result || "failed";
         }
         const shouldResolveModuleSpecifier = needsFullResolution || preferences.allowIncompleteCompletions && resolvedCount < moduleSpecifierResolutionLimit;
-        const shouldGetModuleSpecifierFromCache = !shouldResolveModuleSpecifier && preferences.allowIncompleteCompletions && cacheAttemptCount < moduleSpecifierResolutionCacheAttemptLimit;
+        const shouldGetModuleSpecifierFromCache = !shouldResolveModuleSpecifier && preferences.allowIncompleteCompletions &&
+            cacheAttemptCount < moduleSpecifierResolutionCacheAttemptLimit;
         const result = (shouldResolveModuleSpecifier || shouldGetModuleSpecifierFromCache)
             ? resolver.getModuleSpecifierForBestExportInfo(exportInfo, position, isValidTypeOnlyUseSite, shouldGetModuleSpecifierFromCache)
             : undefined;
@@ -711,7 +712,16 @@ export function getCompletionsAtPosition(
     // we can continue it from the cached previous response.
     const incompleteCompletionsCache = preferences.allowIncompleteCompletions ? host.getIncompleteCompletionsCache?.() : undefined;
     if (incompleteCompletionsCache && completionKind === CompletionTriggerKind.TriggerForIncompleteCompletions && previousToken && isIdentifier(previousToken)) {
-        const incompleteContinuation = continuePreviousIncompleteResponse(incompleteCompletionsCache, sourceFile, previousToken, program, host, preferences, cancellationToken, position);
+        const incompleteContinuation = continuePreviousIncompleteResponse(
+            incompleteCompletionsCache,
+            sourceFile,
+            previousToken,
+            program,
+            host,
+            preferences,
+            cancellationToken,
+            position,
+        );
         if (incompleteContinuation) {
             return incompleteContinuation;
         }
@@ -732,7 +742,18 @@ export function getCompletionsAtPosition(
         return getLabelCompletionAtPosition(previousToken.parent);
     }
 
-    const completionData = getCompletionData(program, log, sourceFile, compilerOptions, position, preferences, /*detailsEntryId*/ undefined, host, formatContext, cancellationToken);
+    const completionData = getCompletionData(
+        program,
+        log,
+        sourceFile,
+        compilerOptions,
+        position,
+        preferences,
+        /*detailsEntryId*/ undefined,
+        host,
+        formatContext,
+        cancellationToken,
+    );
     if (!completionData) {
         return undefined;
     }
@@ -1443,7 +1464,8 @@ function getExhaustiveCaseSnippets(
                         break;
                     case "number":
                         elements.push(
-                            type.value < 0 ? factory.createPrefixUnaryExpression(SyntaxKind.MinusToken, factory.createNumericLiteral(-type.value)) : factory.createNumericLiteral(type.value),
+                            type.value < 0 ? factory.createPrefixUnaryExpression(SyntaxKind.MinusToken, factory.createNumericLiteral(-type.value))
+                                : factory.createNumericLiteral(type.value),
                         );
                         break;
                     case "string":
@@ -1727,7 +1749,15 @@ function createCompletionEntry(
     if (originIsResolvedExport(origin)) {
         sourceDisplay = [textPart(origin.moduleSpecifier)];
         if (importStatementCompletion) {
-            ({ insertText, replacementSpan } = getInsertTextAndReplacementSpanForImportCompletion(name, importStatementCompletion, origin, useSemicolons, sourceFile, options, preferences));
+            ({ insertText, replacementSpan } = getInsertTextAndReplacementSpanForImportCompletion(
+                name,
+                importStatementCompletion,
+                origin,
+                useSemicolons,
+                sourceFile,
+                options,
+                preferences,
+            ));
             isSnippet = preferences.includeCompletionsWithSnippetText ? true : undefined;
         }
     }
@@ -1747,7 +1777,10 @@ function createCompletionEntry(
     //     const cc: I = { a: "red" | }
     //
     // Completion should add a comma after "red" and provide completions for b
-    if (completionKind === CompletionKind.ObjectPropertyDeclaration && contextToken && findPrecedingToken(contextToken.pos, sourceFile, contextToken)?.kind !== SyntaxKind.CommaToken) {
+    if (
+        completionKind === CompletionKind.ObjectPropertyDeclaration && contextToken &&
+        findPrecedingToken(contextToken.pos, sourceFile, contextToken)?.kind !== SyntaxKind.CommaToken
+    ) {
         if (
             isMethodDeclaration(contextToken.parent.parent) ||
             isGetAccessorDeclaration(contextToken.parent.parent) ||
@@ -2041,7 +2074,10 @@ function getEntryForMemberCompletion(
         if (presentDecorators?.length) {
             const lastNode = completionNodes[completionNodes.length - 1];
             if (canHaveDecorators(lastNode)) {
-                completionNodes[completionNodes.length - 1] = factory.replaceDecoratorsAndModifiers(lastNode, (presentDecorators as ModifierLike[]).concat(getModifiers(lastNode) || []));
+                completionNodes[completionNodes.length - 1] = factory.replaceDecoratorsAndModifiers(
+                    lastNode,
+                    (presentDecorators as ModifierLike[]).concat(getModifiers(lastNode) || []),
+                );
             }
         }
 
@@ -2208,7 +2244,8 @@ function createObjectLiteralMethod(
     const name = getSynthesizedDeepClone(getNameOfDeclaration(declaration), /*includeTrivia*/ false) as PropertyName;
     const type = checker.getWidenedType(checker.getTypeOfSymbolAtLocation(symbol, enclosingDeclaration));
     const quotePreference = getQuotePreference(sourceFile, preferences);
-    const builderFlags = NodeBuilderFlags.OmitThisParameter | (quotePreference === QuotePreference.Single ? NodeBuilderFlags.UseSingleQuotesForStringLiteralType : NodeBuilderFlags.None);
+    const builderFlags = NodeBuilderFlags.OmitThisParameter |
+        (quotePreference === QuotePreference.Single ? NodeBuilderFlags.UseSingleQuotesForStringLiteralType : NodeBuilderFlags.None);
 
     switch (declaration.kind) {
         case SyntaxKind.PropertySignature:
@@ -3477,7 +3514,9 @@ function getCompletionData(
                     // `parent` will be `{true}` and `previousToken` will be `}`
                     // Second case is for `<div foo={true} t[||] ></div>`
                     // Second case must not match for `<div foo={undefine[||]}></div>`
-                    if (previousToken.kind === SyntaxKind.CloseBraceToken || (previousToken.kind === SyntaxKind.Identifier && previousToken.parent.kind === SyntaxKind.JsxAttribute)) {
+                    if (
+                        previousToken.kind === SyntaxKind.CloseBraceToken || (previousToken.kind === SyntaxKind.Identifier && previousToken.parent.kind === SyntaxKind.JsxAttribute)
+                    ) {
                         isJsxIdentifierExpected = true;
                     }
                     break;
@@ -4463,7 +4502,8 @@ function getCompletionData(
             // through type declaration or inference.
             // Also proceed if rootDeclaration is a parameter and if its containing function expression/arrow function is contextually typed -
             // type of parameter will flow in from the contextual type of the function
-            let canGetType = hasInitializer(rootDeclaration) || !!getEffectiveTypeAnnotationNode(rootDeclaration) || rootDeclaration.parent.parent.kind === SyntaxKind.ForOfStatement;
+            let canGetType = hasInitializer(rootDeclaration) || !!getEffectiveTypeAnnotationNode(rootDeclaration) ||
+                rootDeclaration.parent.parent.kind === SyntaxKind.ForOfStatement;
             if (!canGetType && rootDeclaration.kind === SyntaxKind.Parameter) {
                 if (isExpression(rootDeclaration.parent)) {
                     canGetType = !!typeChecker.getContextualType(rootDeclaration.parent as Expression);
@@ -4517,7 +4557,8 @@ function getCompletionData(
         if (!contextToken) return GlobalsSearch.Continue;
 
         // `import { |` or `import { a as 0, | }` or `import { type | }`
-        const namedImportsOrExports = contextToken.kind === SyntaxKind.OpenBraceToken || contextToken.kind === SyntaxKind.CommaToken ? tryCast(contextToken.parent, isNamedImportsOrExports) :
+        const namedImportsOrExports = contextToken.kind === SyntaxKind.OpenBraceToken || contextToken.kind === SyntaxKind.CommaToken ?
+            tryCast(contextToken.parent, isNamedImportsOrExports) :
             isTypeKeywordTokenOrIdentifier(contextToken) ? tryCast(contextToken.parent.parent, isNamedImportsOrExports) : undefined;
 
         if (!namedImportsOrExports) return GlobalsSearch.Continue;
@@ -4640,7 +4681,8 @@ function getCompletionData(
         // No member list for private methods
         if (!(classElementModifierFlags & ModifierFlags.Private)) {
             // List of property symbols of base type that are not private and already implemented
-            const baseTypeNodes = isClassLike(decl) && classElementModifierFlags & ModifierFlags.Override ? singleElementArray(getEffectiveBaseTypeNode(decl)) : getAllSuperTypeNodes(decl);
+            const baseTypeNodes = isClassLike(decl) && classElementModifierFlags & ModifierFlags.Override ? singleElementArray(getEffectiveBaseTypeNode(decl))
+                : getAllSuperTypeNodes(decl);
             const baseSymbols = flatMap(baseTypeNodes, baseTypeNode => {
                 const type = typeChecker.getTypeAtLocation(baseTypeNode);
                 return classElementModifierFlags & ModifierFlags.Static ?
@@ -5496,7 +5538,12 @@ function getJsDocTagAtPosition(node: Node, position: number): JSDocTag | undefin
 }
 
 /** @internal */
-export function getPropertiesForObjectExpression(contextualType: Type, completionsType: Type | undefined, obj: ObjectLiteralExpression | JsxAttributes, checker: TypeChecker): Symbol[] {
+export function getPropertiesForObjectExpression(
+    contextualType: Type,
+    completionsType: Type | undefined,
+    obj: ObjectLiteralExpression | JsxAttributes,
+    checker: TypeChecker,
+): Symbol[] {
     const hasCompletionsType = completionsType && completionsType !== contextualType;
     const type = hasCompletionsType && !(completionsType.flags & TypeFlags.AnyOrUnknown)
         ? checker.getUnionType([contextualType, completionsType])
@@ -5545,7 +5592,12 @@ function getPropertiesForCompletion(type: Type, checker: TypeChecker): Symbol[] 
  * Returns the immediate owning class declaration of a context token,
  * on the condition that one exists and that the context implies completion should be given.
  */
-function tryGetObjectTypeDeclarationCompletionContainer(sourceFile: SourceFile, contextToken: Node | undefined, location: Node, position: number): ObjectTypeDeclaration | undefined {
+function tryGetObjectTypeDeclarationCompletionContainer(
+    sourceFile: SourceFile,
+    contextToken: Node | undefined,
+    location: Node,
+    position: number,
+): ObjectTypeDeclaration | undefined {
     // class c { method() { } | method2() { } }
     switch (location.kind) {
         case SyntaxKind.SyntaxList:
@@ -5679,7 +5731,8 @@ function isValidTrigger(sourceFile: SourceFile, triggerCharacter: CompletionsTri
             return !!contextToken && isPrivateIdentifier(contextToken) && !!getContainingClass(contextToken);
         case "<":
             // Opening JSX tag
-            return !!contextToken && contextToken.kind === SyntaxKind.LessThanToken && (!isBinaryExpression(contextToken.parent) || binaryExpressionMayBeOpenTag(contextToken.parent));
+            return !!contextToken && contextToken.kind === SyntaxKind.LessThanToken &&
+                (!isBinaryExpression(contextToken.parent) || binaryExpressionMayBeOpenTag(contextToken.parent));
         case "/":
             return !!contextToken && (isStringLiteralLike(contextToken)
                 ? !!tryGetImportFromModuleSpecifier(contextToken)

@@ -273,7 +273,10 @@ export function transformModule(context: TransformationContext): (x: SourceFile 
                         reduceLeft(
                             currentModuleInfo.exportedNames!.slice(i, i + chunkSize),
                             (prev, nextId) =>
-                                factory.createAssignment(factory.createPropertyAccessExpression(factory.createIdentifier("exports"), factory.createIdentifier(idText(nextId))), prev),
+                                factory.createAssignment(
+                                    factory.createPropertyAccessExpression(factory.createIdentifier("exports"), factory.createIdentifier(idText(nextId))),
+                                    prev,
+                                ),
                             factory.createVoidZero() as Expression,
                         ),
                     ),
@@ -772,7 +775,9 @@ export function transformModule(context: TransformationContext): (x: SourceFile 
     function visitorWorker(node: Node, valueIsDiscarded: boolean): VisitResult<Node> {
         // This visitor does not need to descend into the tree if there is no dynamic import, destructuring assignment, or update expression
         // as export/import statements are only transformed at the top level of a file.
-        if (!(node.transformFlags & (TransformFlags.ContainsDynamicImport | TransformFlags.ContainsDestructuringAssignment | TransformFlags.ContainsUpdateExpressionForIdentifier))) {
+        if (
+            !(node.transformFlags & (TransformFlags.ContainsDynamicImport | TransformFlags.ContainsDestructuringAssignment | TransformFlags.ContainsUpdateExpressionForIdentifier))
+        ) {
             return node;
         }
 
@@ -1166,7 +1171,8 @@ export function transformModule(context: TransformationContext): (x: SourceFile 
         const externalModuleName = getExternalModuleNameLiteral(factory, node, currentSourceFile, host, resolver, compilerOptions);
         const firstArgument = visitNode(firstOrUndefined(node.arguments), visitor, isExpression);
         // Only use the external module name if it differs from the first argument. This allows us to preserve the quote style of the argument on output.
-        const argument = externalModuleName && (!firstArgument || !isStringLiteral(firstArgument) || firstArgument.text !== externalModuleName.text) ? externalModuleName : firstArgument;
+        const argument = externalModuleName && (!firstArgument || !isStringLiteral(firstArgument) || firstArgument.text !== externalModuleName.text) ? externalModuleName
+            : firstArgument;
         const containsLexicalThis = !!(node.transformFlags & TransformFlags.ContainsLexicalThis);
         switch (compilerOptions.module) {
             case ModuleKind.AMD:
@@ -1801,7 +1807,8 @@ export function transformModule(context: TransformationContext): (x: SourceFile 
                 }
                 else if (variable.initializer) {
                     if (
-                        !isBindingPattern(variable.name) && (isArrowFunction(variable.initializer) || isFunctionExpression(variable.initializer) || isClassExpression(variable.initializer))
+                        !isBindingPattern(variable.name) &&
+                        (isArrowFunction(variable.initializer) || isFunctionExpression(variable.initializer) || isClassExpression(variable.initializer))
                     ) {
                         const expression = factory.createAssignment(
                             setTextRange(
@@ -1999,7 +2006,11 @@ export function transformModule(context: TransformationContext): (x: SourceFile 
      * appended.
      * @param decl The declaration whose exports are to be recorded.
      */
-    function appendExportsOfBindingElement(statements: Statement[] | undefined, decl: VariableDeclaration | BindingElement, isForInOrOfInitializer: boolean): Statement[] | undefined {
+    function appendExportsOfBindingElement(
+        statements: Statement[] | undefined,
+        decl: VariableDeclaration | BindingElement,
+        isForInOrOfInitializer: boolean,
+    ): Statement[] | undefined {
         if (currentModuleInfo.exportEquals) {
             return statements;
         }

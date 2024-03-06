@@ -981,7 +981,9 @@ function getJSDocParameterTagsWorker(param: ParameterDeclaration, noCache?: bool
     if (param.name) {
         if (isIdentifier(param.name)) {
             const name = param.name.escapedText;
-            return getJSDocTagsWorker(param.parent, noCache).filter((tag): tag is JSDocParameterTag => isJSDocParameterTag(tag) && isIdentifier(tag.name) && tag.name.escapedText === name);
+            return getJSDocTagsWorker(param.parent, noCache).filter((tag): tag is JSDocParameterTag =>
+                isJSDocParameterTag(tag) && isIdentifier(tag.name) && tag.name.escapedText === name
+            );
         }
         else {
             const i = param.parent.parameters.indexOf(param);
@@ -1019,7 +1021,9 @@ export function getJSDocParameterTagsNoCache(param: ParameterDeclaration): reado
 
 function getJSDocTypeParameterTagsWorker(param: TypeParameterDeclaration, noCache?: boolean): readonly JSDocTemplateTag[] {
     const name = param.name.escapedText;
-    return getJSDocTagsWorker(param.parent, noCache).filter((tag): tag is JSDocTemplateTag => isJSDocTemplateTag(tag) && tag.typeParameters.some(tp => tp.name.escapedText === name));
+    return getJSDocTagsWorker(param.parent, noCache).filter((tag): tag is JSDocTemplateTag =>
+        isJSDocTemplateTag(tag) && tag.typeParameters.some(tp => tp.name.escapedText === name)
+    );
 }
 
 /**

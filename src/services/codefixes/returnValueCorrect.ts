@@ -265,7 +265,14 @@ function addReturnStatement(changes: textChanges.ChangeTracker, sourceFile: Sour
     });
 }
 
-function removeBlockBodyBrace(changes: textChanges.ChangeTracker, sourceFile: SourceFile, declaration: ArrowFunction, expression: Expression, commentSource: Node, withParen: boolean) {
+function removeBlockBodyBrace(
+    changes: textChanges.ChangeTracker,
+    sourceFile: SourceFile,
+    declaration: ArrowFunction,
+    expression: Expression,
+    commentSource: Node,
+    withParen: boolean,
+) {
     const newBody = (withParen || needsParentheses(expression)) ? factory.createParenthesizedExpression(expression) : expression;
     suppressLeadingAndTrailingTrivia(commentSource);
     copyComments(commentSource, newBody);

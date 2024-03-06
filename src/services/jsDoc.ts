@@ -269,7 +269,8 @@ export function getJsDocTagsFromDeclarations(declarations?: Declaration[], check
 function getJSDocPropertyTagsInfo(nodes: readonly JSDocTag[] | undefined, checker: TypeChecker | undefined): readonly JSDocTagInfo[] {
     return flatMap(
         nodes,
-        propTag => concatenate([{ name: propTag.tagName.text, text: getCommentDisplayParts(propTag, checker) }], getJSDocPropertyTagsInfo(tryGetJSDocPropertyTags(propTag), checker)),
+        propTag =>
+            concatenate([{ name: propTag.tagName.text, text: getCommentDisplayParts(propTag, checker) }], getJSDocPropertyTagsInfo(tryGetJSDocPropertyTags(propTag), checker)),
     );
 }
 

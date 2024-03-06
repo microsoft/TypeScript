@@ -279,7 +279,17 @@ export function createDocumentRegistryInternal(
         scriptKind?: ScriptKind,
         languageVersionOrOptions?: CreateSourceFileOptions | ScriptTarget,
     ): SourceFile {
-        return acquireOrUpdateDocument(fileName, path, getCompilationSettings(compilationSettings), key, scriptSnapshot, version, /*acquiring*/ false, scriptKind, languageVersionOrOptions);
+        return acquireOrUpdateDocument(
+            fileName,
+            path,
+            getCompilationSettings(compilationSettings),
+            key,
+            scriptSnapshot,
+            version,
+            /*acquiring*/ false,
+            scriptKind,
+            languageVersionOrOptions,
+        );
     }
 
     function getDocumentRegistryEntry(bucketEntry: BucketEntry, scriptKind: ScriptKind | undefined) {
@@ -305,13 +315,15 @@ export function createDocumentRegistryInternal(
     ): SourceFile {
         scriptKind = ensureScriptKind(fileName, scriptKind);
         const compilationSettings = getCompilationSettings(compilationSettingsOrHost);
-        const host: MinimalResolutionCacheHost | undefined = compilationSettingsOrHost === compilationSettings ? undefined : compilationSettingsOrHost as MinimalResolutionCacheHost;
+        const host: MinimalResolutionCacheHost | undefined = compilationSettingsOrHost === compilationSettings ? undefined
+            : compilationSettingsOrHost as MinimalResolutionCacheHost;
         const scriptTarget = scriptKind === ScriptKind.JSON ? ScriptTarget.JSON : getEmitScriptTarget(compilationSettings);
         const sourceFileOptions: CreateSourceFileOptions = typeof languageVersionOrOptions === "object" ?
             languageVersionOrOptions :
             {
                 languageVersion: scriptTarget,
-                impliedNodeFormat: host && getImpliedNodeFormatForFile(path, host.getCompilerHost?.()?.getModuleResolutionCache?.()?.getPackageJsonInfoCache(), host, compilationSettings),
+                impliedNodeFormat: host &&
+                    getImpliedNodeFormatForFile(path, host.getCompilerHost?.()?.getModuleResolutionCache?.()?.getPackageJsonInfoCache(), host, compilationSettings),
                 setExternalModuleIndicator: getSetExternalModuleIndicator(compilationSettings),
                 jsDocParsingMode,
             };

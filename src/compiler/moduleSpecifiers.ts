@@ -288,7 +288,8 @@ function getModuleSpecifierWorker(
     const modulePaths = getAllModulePaths(info, toFileName, host, userPreferences, options);
     return firstDefined(
         modulePaths,
-        modulePath => tryGetModuleNameAsNodeModule(modulePath, info, importingSourceFile, host, compilerOptions, userPreferences, /*packageNameOnly*/ undefined, options.overrideImportMode),
+        modulePath =>
+            tryGetModuleNameAsNodeModule(modulePath, info, importingSourceFile, host, compilerOptions, userPreferences, /*packageNameOnly*/ undefined, options.overrideImportMode),
     ) ||
         getLocalModuleSpecifier(toFileName, info, compilerOptions, host, options.overrideImportMode || importingSourceFile.impliedNodeFormat, preferences);
 }
@@ -412,7 +413,10 @@ function computeModuleSpecifiers(
                 if (reason.kind !== FileIncludeKind.Import || reason.file !== importingSourceFile.path) return undefined;
                 // If the candidate import mode doesn't match the mode we're generating for, don't consider it
                 // TODO: maybe useful to keep around as an alternative option for certain contexts where the mode is overridable
-                if (importingSourceFile.impliedNodeFormat && importingSourceFile.impliedNodeFormat !== getModeForResolutionAtIndex(importingSourceFile, reason.index, compilerOptions)) {
+                if (
+                    importingSourceFile.impliedNodeFormat &&
+                    importingSourceFile.impliedNodeFormat !== getModeForResolutionAtIndex(importingSourceFile, reason.index, compilerOptions)
+                ) {
                     return undefined;
                 }
                 const specifier = getModuleNameStringLiteralAt(importingSourceFile, reason.index).text;
@@ -564,12 +568,14 @@ function getLocalModuleSpecifier(
 
     const fromPackageJsonImports = pathsOnly ? undefined : tryGetModuleNameFromPackageJsonImports(moduleFileName, sourceDirectory, compilerOptions, host, importMode);
 
-    const fromPaths = pathsOnly || fromPackageJsonImports === undefined ? paths && tryGetModuleNameFromPaths(relativeToBaseUrl, paths, allowedEndings, host, compilerOptions) : undefined;
+    const fromPaths = pathsOnly || fromPackageJsonImports === undefined ? paths && tryGetModuleNameFromPaths(relativeToBaseUrl, paths, allowedEndings, host, compilerOptions)
+        : undefined;
     if (pathsOnly) {
         return fromPaths;
     }
 
-    const maybeNonRelative = fromPackageJsonImports ?? (fromPaths === undefined && baseUrl !== undefined ? processEnding(relativeToBaseUrl, allowedEndings, compilerOptions) : fromPaths);
+    const maybeNonRelative = fromPackageJsonImports ??
+        (fromPaths === undefined && baseUrl !== undefined ? processEnding(relativeToBaseUrl, allowedEndings, compilerOptions) : fromPaths);
     if (!maybeNonRelative) {
         return relativePath;
     }
@@ -1046,7 +1052,13 @@ function tryGetModuleNameFromExports(
     return tryGetModuleNameFromExportsOrImports(options, host, targetFilePath, packageDirectory, packageName, exports, conditions, MatchingMode.Exact, /*isImports*/ false);
 }
 
-function tryGetModuleNameFromPackageJsonImports(moduleFileName: string, sourceDirectory: string, options: CompilerOptions, host: ModuleSpecifierResolutionHost, importMode: ResolutionMode) {
+function tryGetModuleNameFromPackageJsonImports(
+    moduleFileName: string,
+    sourceDirectory: string,
+    options: CompilerOptions,
+    host: ModuleSpecifierResolutionHost,
+    importMode: ResolutionMode,
+) {
     if (!host.readFile || !getResolvePackageJsonImports(options)) {
         return undefined;
     }

@@ -785,7 +785,8 @@ function createDirectoryWatcherSupportingRecursive({
                 const childFullName = getNormalizedAbsolutePath(child, parentDir);
                 // Filter our the symbolic link directories since those arent included in recursive watch
                 // which is same behaviour when recursive: true is passed to fs.watch
-                return !isIgnoredPath(childFullName, options) && filePathComparer(childFullName, normalizePath(realpath(childFullName))) === Comparison.EqualTo ? childFullName : undefined;
+                return !isIgnoredPath(childFullName, options) && filePathComparer(childFullName, normalizePath(realpath(childFullName))) === Comparison.EqualTo ? childFullName
+                    : undefined;
             }) : emptyArray,
             parentWatcher.childWatches,
             (child, childWatcher) => filePathComparer(child, childWatcher.dirName),
@@ -1619,7 +1620,8 @@ export let sys: System = (() => {
             disableCPUProfiler,
             cpuProfilingEnabled: () => !!activeSession || contains(process.execArgv, "--cpu-prof") || contains(process.execArgv, "--prof"),
             realpath,
-            debugMode: !!process.env.NODE_INSPECTOR_IPC || !!process.env.VSCODE_INSPECTOR_OPTIONS || some(process.execArgv, arg => /^--(inspect|debug)(-brk)?(=\d+)?$/i.test(arg)) ||
+            debugMode: !!process.env.NODE_INSPECTOR_IPC || !!process.env.VSCODE_INSPECTOR_OPTIONS ||
+                some(process.execArgv, arg => /^--(inspect|debug)(-brk)?(=\d+)?$/i.test(arg)) ||
                 !!(process as any).recordreplay,
             tryEnableSourceMapsForHost() {
                 try {

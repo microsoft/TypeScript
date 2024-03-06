@@ -697,7 +697,12 @@ export class ChangeTracker {
     }
 
     public insertNodesBefore(sourceFile: SourceFile, before: Node, newNodes: readonly Node[], blankLineBetween = false, options: ConfigurableStartEnd = {}): void {
-        this.insertNodesAt(sourceFile, getAdjustedStartPosition(sourceFile, before, options), newNodes, this.getOptionsForInsertNodeBefore(before, first(newNodes), blankLineBetween));
+        this.insertNodesAt(
+            sourceFile,
+            getAdjustedStartPosition(sourceFile, before, options),
+            newNodes,
+            this.getOptionsForInsertNodeBefore(before, first(newNodes), blankLineBetween),
+        );
     }
 
     public insertModifierAt(sourceFile: SourceFile, pos: number, modifier: SyntaxKind, options: InsertNodeOptions = {}): void {
@@ -890,7 +895,10 @@ export class ChangeTracker {
      * Tries to guess the indentation from the existing members of a class/interface/object. All members must be on
      * new lines and must share the same indentation.
      */
-    private guessIndentationFromExistingMembers(sourceFile: SourceFile, node: ClassLikeDeclaration | InterfaceDeclaration | ObjectLiteralExpression | TypeLiteralNode | EnumDeclaration) {
+    private guessIndentationFromExistingMembers(
+        sourceFile: SourceFile,
+        node: ClassLikeDeclaration | InterfaceDeclaration | ObjectLiteralExpression | TypeLiteralNode | EnumDeclaration,
+    ) {
         let indentation: number | undefined;
         let lastRange: TextRange = node;
         for (const member of getMembersOrProperties(node)) {
@@ -917,7 +925,10 @@ export class ChangeTracker {
         return indentation;
     }
 
-    private computeIndentationForNewMember(sourceFile: SourceFile, node: ClassLikeDeclaration | InterfaceDeclaration | ObjectLiteralExpression | TypeLiteralNode | EnumDeclaration) {
+    private computeIndentationForNewMember(
+        sourceFile: SourceFile,
+        node: ClassLikeDeclaration | InterfaceDeclaration | ObjectLiteralExpression | TypeLiteralNode | EnumDeclaration,
+    ) {
         const nodeStart = node.getStart(sourceFile);
         return formatting.SmartIndenter.findFirstNonWhitespaceColumn(getLineStartPositionForPosition(nodeStart, sourceFile), nodeStart, sourceFile, this.formatContext.options)
             + (this.formatContext.options.indentSize ?? 4);
@@ -1347,7 +1358,12 @@ namespace changesToText {
         return { fileName, textChanges: [createTextChange(createTextSpan(0, 0), text)], isNewFile: true };
     }
 
-    export function newFileChangesWorker(scriptKind: ScriptKind, insertions: readonly NewFileInsertion[], newLineCharacter: string, formatContext: formatting.FormatContext): string {
+    export function newFileChangesWorker(
+        scriptKind: ScriptKind,
+        insertions: readonly NewFileInsertion[],
+        newLineCharacter: string,
+        formatContext: formatting.FormatContext,
+    ): string {
         // TODO: this emits the file, parses it back, then formats it that -- may be a less roundabout way to do this
         const nonFormattedText = flatMap(
             insertions,
@@ -1410,7 +1426,12 @@ namespace changesToText {
         const formatOptions = getFormatCodeSettingsForWriting(formatContext, targetSourceFile);
         const initialIndentation = indentation !== undefined
             ? indentation
-            : formatting.SmartIndenter.getIndentation(pos, sourceFile, formatOptions, prefix === newLineCharacter || getLineStartPositionForPosition(pos, targetSourceFile) === pos);
+            : formatting.SmartIndenter.getIndentation(
+                pos,
+                sourceFile,
+                formatOptions,
+                prefix === newLineCharacter || getLineStartPositionForPosition(pos, targetSourceFile) === pos,
+            );
         if (delta === undefined) {
             delta = formatting.SmartIndenter.shouldIndentChildNode(formatOptions, nodeIn) ? (formatOptions.indentSize || 0) : 0;
         }
@@ -1421,7 +1442,10 @@ namespace changesToText {
                 return getLineAndCharacterOfPosition(this, pos);
             },
         };
-        const changes = formatting.formatNodeGivenIndentation(node, file, targetSourceFile.languageVariant, initialIndentation, delta, { ...formatContext, options: formatOptions });
+        const changes = formatting.formatNodeGivenIndentation(node, file, targetSourceFile.languageVariant, initialIndentation, delta, {
+            ...formatContext,
+            options: formatOptions,
+        });
         return applyChanges(text, changes);
     }
 
@@ -1921,7 +1945,12 @@ namespace deleteDeclaration {
  *
  * @internal
  */
-export function deleteNode(changes: ChangeTracker, sourceFile: SourceFile, node: Node, options: ConfigurableStartEnd = { leadingTriviaOption: LeadingTriviaOption.IncludeAll }): void {
+export function deleteNode(
+    changes: ChangeTracker,
+    sourceFile: SourceFile,
+    node: Node,
+    options: ConfigurableStartEnd = { leadingTriviaOption: LeadingTriviaOption.IncludeAll },
+): void {
     const startPosition = getAdjustedStartPosition(sourceFile, node, options);
     const endPosition = getAdjustedEndPosition(sourceFile, node, options);
     changes.deleteRange(sourceFile, { pos: startPosition, end: endPosition });

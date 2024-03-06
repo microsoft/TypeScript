@@ -270,7 +270,8 @@ function getSymbolDisplayPartsDocumentationAndSymbolKindWorker(
     let documentation: SymbolDisplayPart[] = [];
     let tags: JSDocTagInfo[] = [];
     const symbolFlags = getCombinedLocalAndExportSymbolFlags(symbol);
-    let symbolKind = semanticMeaning & SemanticMeaning.Value ? getSymbolKindOfConstructorPropertyMethodAccessorFunctionOrVar(typeChecker, symbol, location) : ScriptElementKind.unknown;
+    let symbolKind = semanticMeaning & SemanticMeaning.Value ? getSymbolKindOfConstructorPropertyMethodAccessorFunctionOrVar(typeChecker, symbol, location)
+        : ScriptElementKind.unknown;
     let hasAddedSymbolInfo = false;
     const isThisExpression = location.kind === SyntaxKind.ThisKeyword && isInExpressionContext(location) || isThisInTypeQuery(location);
     let documentationFromAlias: SymbolDisplayPart[] | undefined;
@@ -285,7 +286,10 @@ function getSymbolDisplayPartsDocumentationAndSymbolKindWorker(
     if (symbolKind !== ScriptElementKind.unknown || symbolFlags & SymbolFlags.Class || symbolFlags & SymbolFlags.Alias) {
         // If symbol is accessor, they are allowed only if location is at declaration identifier of the accessor
         if (symbolKind === ScriptElementKind.memberGetAccessorElement || symbolKind === ScriptElementKind.memberSetAccessorElement) {
-            const declaration = find(symbol.declarations as ((GetAccessorDeclaration | SetAccessorDeclaration | PropertyDeclaration)[]), declaration => declaration.name === location);
+            const declaration = find(
+                symbol.declarations as ((GetAccessorDeclaration | SetAccessorDeclaration | PropertyDeclaration)[]),
+                declaration => declaration.name === location,
+            );
             if (declaration) {
                 switch (declaration.kind) {
                     case SyntaxKind.GetAccessor:
@@ -567,7 +571,10 @@ function getSymbolDisplayPartsDocumentationAndSymbolKindWorker(
                 displayParts.push(operatorPart(SyntaxKind.EqualsToken));
                 displayParts.push(spacePart());
                 displayParts.push(
-                    displayPart(getTextOfConstantValue(constantValue), typeof constantValue === "number" ? SymbolDisplayPartKind.numericLiteral : SymbolDisplayPartKind.stringLiteral),
+                    displayPart(
+                        getTextOfConstantValue(constantValue),
+                        typeof constantValue === "number" ? SymbolDisplayPartKind.numericLiteral : SymbolDisplayPartKind.stringLiteral,
+                    ),
                 );
             }
         }

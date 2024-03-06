@@ -768,7 +768,11 @@ describe("unittests:: tsserver:: externalProjects", () => {
         }, session);
         const project2 = session.getProjectService().configuredProjects.get(config.path)!;
         assert.equal(project2.pendingUpdateLevel, ts.ProgramUpdateLevel.Update); // External project referenced configured project loaded
-        baselineTsserverLogs("externalProjects", "handles loads existing configured projects of external projects when lazyConfiguredProjectsFromExternalProject is disabled", session);
+        baselineTsserverLogs(
+            "externalProjects",
+            "handles loads existing configured projects of external projects when lazyConfiguredProjectsFromExternalProject is disabled",
+            session,
+        );
     });
 
     it("handles creation of external project with jsconfig before jsconfig creation watcher is invoked", () => {

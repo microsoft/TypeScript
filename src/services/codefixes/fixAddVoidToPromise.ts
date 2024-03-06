@@ -43,7 +43,15 @@ registerCodeFix({
     getCodeActions(context) {
         const changes = textChanges.ChangeTracker.with(context, t => makeChange(t, context.sourceFile, context.span, context.program));
         if (changes.length > 0) {
-            return [createCodeFixAction(fixName, changes, Diagnostics.Add_void_to_Promise_resolved_without_a_value, fixId, Diagnostics.Add_void_to_all_Promises_resolved_without_a_value)];
+            return [
+                createCodeFixAction(
+                    fixName,
+                    changes,
+                    Diagnostics.Add_void_to_Promise_resolved_without_a_value,
+                    fixId,
+                    Diagnostics.Add_void_to_all_Promises_resolved_without_a_value,
+                ),
+            ];
         }
     },
     getAllCodeActions(context: CodeFixAllContext) {

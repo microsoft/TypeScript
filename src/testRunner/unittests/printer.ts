@@ -64,7 +64,11 @@ describe("unittests:: PrinterAPI", () => {
 
         // https://github.com/microsoft/TypeScript/issues/14948
         // eslint-disable-next-line no-template-curly-in-string
-        printsCorrectly("templateLiteral", {}, printer => printer.printFile(ts.createSourceFile("source.ts", "let greeting = `Hi ${name}, how are you?`;", ts.ScriptTarget.ES2017)));
+        printsCorrectly(
+            "templateLiteral",
+            {},
+            printer => printer.printFile(ts.createSourceFile("source.ts", "let greeting = `Hi ${name}, how are you?`;", ts.ScriptTarget.ES2017)),
+        );
 
         // https://github.com/microsoft/TypeScript/issues/18071
         printsCorrectly("regularExpressionLiteral", {}, printer => printer.printFile(ts.createSourceFile("source.ts", "let regex = /abc/;", ts.ScriptTarget.ES2017)));

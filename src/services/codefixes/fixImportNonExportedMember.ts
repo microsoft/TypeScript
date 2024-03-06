@@ -52,7 +52,15 @@ registerCodeFix({
         if (info === undefined) return undefined;
 
         const changes = textChanges.ChangeTracker.with(context, t => doChange(t, program, info));
-        return [createCodeFixAction(fixId, changes, [Diagnostics.Export_0_from_module_1, info.exportName.node.text, info.moduleSpecifier], fixId, Diagnostics.Export_all_referenced_locals)];
+        return [
+            createCodeFixAction(
+                fixId,
+                changes,
+                [Diagnostics.Export_0_from_module_1, info.exportName.node.text, info.moduleSpecifier],
+                fixId,
+                Diagnostics.Export_all_referenced_locals,
+            ),
+        ];
     },
     getAllCodeActions(context) {
         const { program } = context;

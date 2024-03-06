@@ -322,7 +322,13 @@ export class SessionClient implements LanguageService {
         return notImplemented();
     }
 
-    getNavigateToItems(searchValue: string, maxResultCount: number, file: string | undefined, _excludeDtsFiles: boolean | undefined, excludeLibFiles: boolean | undefined): NavigateToItem[] {
+    getNavigateToItems(
+        searchValue: string,
+        maxResultCount: number,
+        file: string | undefined,
+        _excludeDtsFiles: boolean | undefined,
+        excludeLibFiles: boolean | undefined,
+    ): NavigateToItem[] {
         const args: protocol.NavtoRequestArgs = {
             searchValue,
             file,
@@ -512,11 +518,16 @@ export class SessionClient implements LanguageService {
     }
 
     private getDiagnostics(file: string, command: protocol.CommandTypes): DiagnosticWithLocation[] {
-        const request = this.processRequest<protocol.SyntacticDiagnosticsSyncRequest | protocol.SemanticDiagnosticsSyncRequest | protocol.SuggestionDiagnosticsSyncRequest>(command, {
-            file,
-            includeLinePosition: true,
-        });
-        const response = this.processResponse<protocol.SyntacticDiagnosticsSyncResponse | protocol.SemanticDiagnosticsSyncResponse | protocol.SuggestionDiagnosticsSyncResponse>(request);
+        const request = this.processRequest<protocol.SyntacticDiagnosticsSyncRequest | protocol.SemanticDiagnosticsSyncRequest | protocol.SuggestionDiagnosticsSyncRequest>(
+            command,
+            {
+                file,
+                includeLinePosition: true,
+            },
+        );
+        const response = this.processResponse<protocol.SyntacticDiagnosticsSyncResponse | protocol.SemanticDiagnosticsSyncResponse | protocol.SuggestionDiagnosticsSyncResponse>(
+            request,
+        );
         const sourceText = getSnapshotText(this.host.getScriptSnapshot(file)!);
         const fakeSourceFile = { fileName: file, text: sourceText } as SourceFile; // Warning! This is a huge lie!
 
@@ -818,7 +829,11 @@ export class SessionClient implements LanguageService {
         return { file, startLine, startOffset, endLine, endOffset };
     }
 
-    private createFileLocationRequestArgsWithEndLineAndOffset(file: string, start: number, end: number): protocol.FileLocationRequestArgs & { endLine: number; endOffset: number; } {
+    private createFileLocationRequestArgsWithEndLineAndOffset(
+        file: string,
+        start: number,
+        end: number,
+    ): protocol.FileLocationRequestArgs & { endLine: number; endOffset: number; } {
         const { line, offset } = this.positionToOneBasedLineOffset(file, start);
         const { line: endLine, offset: endOffset } = this.positionToOneBasedLineOffset(file, end);
         return { file, line, offset, endLine, endOffset };

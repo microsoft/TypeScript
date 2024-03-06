@@ -103,7 +103,18 @@ describe("unittests:: tsserver:: with declaration file maps:: project references
     };
 
     function makeSampleProjects(addUserTsConfig?: boolean, keepAllFiles?: boolean) {
-        const host = createServerHost([aTs, aTsconfig, aDtsMap, aDts, bTsconfig, bTs, bDtsMap, bDts, ...(addUserTsConfig ? [userTsForConfigProject, userTsconfig] : [userTs]), dummyFile]);
+        const host = createServerHost([
+            aTs,
+            aTsconfig,
+            aDtsMap,
+            aDts,
+            bTsconfig,
+            bTs,
+            bDtsMap,
+            bDts,
+            ...(addUserTsConfig ? [userTsForConfigProject, userTsconfig] : [userTs]),
+            dummyFile,
+        ]);
         const session = new TestSession(host);
 
         checkDeclarationFiles(aTs, session);

@@ -134,7 +134,9 @@ const localize = task({
     dependencies: [generateDiagnostics],
     run: async () => {
         if (needsUpdate(diagnosticMessagesGeneratedJson, generatedLCGFile)) {
-            await exec(process.execPath, ["scripts/generateLocalizedDiagnosticMessages.mjs", "src/loc/lcl", "built/local", diagnosticMessagesGeneratedJson], { ignoreExitCode: true });
+            await exec(process.execPath, ["scripts/generateLocalizedDiagnosticMessages.mjs", "src/loc/lcl", "built/local", diagnosticMessagesGeneratedJson], {
+                ignoreExitCode: true,
+            });
         }
     },
 });
@@ -882,7 +884,9 @@ export const produceLKG = task({
             .concat(localizationTargets)
             .filter(f => !fs.existsSync(f));
         if (missingFiles.length > 0) {
-            throw new Error("Cannot replace the LKG unless all built targets are present in directory 'built/local/'. The following files are missing:\n" + missingFiles.join("\n"));
+            throw new Error(
+                "Cannot replace the LKG unless all built targets are present in directory 'built/local/'. The following files are missing:\n" + missingFiles.join("\n"),
+            );
         }
 
         await exec(process.execPath, ["scripts/produceLKG.mjs"]);

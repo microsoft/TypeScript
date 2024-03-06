@@ -56,7 +56,14 @@ export function createCodeFixActionMaybeFixAll(
     return createCodeFixActionWorker(fixName, diagnosticToString(description), changes, fixId, fixAllDescription && diagnosticToString(fixAllDescription), command);
 }
 
-function createCodeFixActionWorker(fixName: string, description: string, changes: FileTextChanges[], fixId?: {}, fixAllDescription?: string, command?: CodeActionCommand): CodeFixAction {
+function createCodeFixActionWorker(
+    fixName: string,
+    description: string,
+    changes: FileTextChanges[],
+    fixId?: {},
+    fixAllDescription?: string,
+    command?: CodeActionCommand,
+): CodeFixAction {
     return { fixName, description, changes, fixId, fixAllDescription, commands: command ? [command] : undefined };
 }
 

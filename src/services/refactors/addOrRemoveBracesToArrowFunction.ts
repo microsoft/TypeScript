@@ -123,7 +123,12 @@ function getRefactorEditsToRemoveFunctionBraces(context: RefactorContext, action
     return { renameFilename: undefined, renameLocation: undefined, edits };
 }
 
-function getConvertibleArrowFunctionAtPosition(file: SourceFile, startPosition: number, considerFunctionBodies = true, kind?: string): FunctionBracesInfo | RefactorErrorInfo | undefined {
+function getConvertibleArrowFunctionAtPosition(
+    file: SourceFile,
+    startPosition: number,
+    considerFunctionBodies = true,
+    kind?: string,
+): FunctionBracesInfo | RefactorErrorInfo | undefined {
     const node = getTokenAtPosition(file, startPosition);
     const func = getContainingFunction(node);
 

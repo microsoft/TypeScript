@@ -536,7 +536,10 @@ describe("unittests:: tsc-watch:: watchEnvironment:: tsc-watch with different po
                         {
                             caption: "add new folder to temp",
                             edit: sys =>
-                                sys.ensureFileOrFolder({ path: `/user/username/projects/myproject/node_modules/bar/temp/fooBar/index.d.ts`, content: "export function temp(): string;" }),
+                                sys.ensureFileOrFolder({
+                                    path: `/user/username/projects/myproject/node_modules/bar/temp/fooBar/index.d.ts`,
+                                    content: "export function temp(): string;",
+                                }),
                             timeouts: ts.noop,
                         },
                     ],
@@ -579,7 +582,8 @@ describe("unittests:: tsc-watch:: watchEnvironment:: tsc-watch with different po
             },
             {
                 caption: "Replace file with rename event that fixes error",
-                edit: sys => sys.modifyFile(`/user/username/projects/myproject/foo.ts`, `export declare function foo(): string;`, { invokeFileDeleteCreateAsPartInsteadOfChange: true }),
+                edit: sys =>
+                    sys.modifyFile(`/user/username/projects/myproject/foo.ts`, `export declare function foo(): string;`, { invokeFileDeleteCreateAsPartInsteadOfChange: true }),
                 timeouts: sys => sys.runQueuedTimeoutCallbacks(),
             },
         ],
@@ -606,12 +610,14 @@ describe("unittests:: tsc-watch:: watchEnvironment:: tsc-watch with different po
             edits: [
                 {
                     caption: "Replace file with rename event that introduces error",
-                    edit: sys => sys.modifyFile(`/user/username/projects/myproject/foo.d.ts`, `export function foo2(): string;`, { invokeFileDeleteCreateAsPartInsteadOfChange: true }),
+                    edit: sys =>
+                        sys.modifyFile(`/user/username/projects/myproject/foo.d.ts`, `export function foo2(): string;`, { invokeFileDeleteCreateAsPartInsteadOfChange: true }),
                     timeouts: sys => sys.runQueuedTimeoutCallbacks(),
                 },
                 {
                     caption: "Replace file with rename event that fixes error",
-                    edit: sys => sys.modifyFile(`/user/username/projects/myproject/foo.d.ts`, `export function foo(): string;`, { invokeFileDeleteCreateAsPartInsteadOfChange: true }),
+                    edit: sys =>
+                        sys.modifyFile(`/user/username/projects/myproject/foo.d.ts`, `export function foo(): string;`, { invokeFileDeleteCreateAsPartInsteadOfChange: true }),
                     timeouts: sys => sys.runQueuedTimeoutCallbacks(),
                 },
             ],
@@ -691,7 +697,8 @@ describe("unittests:: tsc-watch:: watchEnvironment:: tsc-watch with different po
                 },
                 {
                     caption: "Replace file with rename event that fixes error",
-                    edit: sys => sys.modifyFile(`/user/username/projects/myproject/foo.ts`, `export declare function foo(): string;`, { invokeFileDeleteCreateAsPartInsteadOfChange: true }),
+                    edit: sys =>
+                        sys.modifyFile(`/user/username/projects/myproject/foo.ts`, `export declare function foo(): string;`, { invokeFileDeleteCreateAsPartInsteadOfChange: true }),
                     timeouts: sys => sys.runQueuedTimeoutCallbacks(),
                 },
             ],

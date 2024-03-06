@@ -396,7 +396,12 @@ export function visitLexicalEnvironment(
  * Starts a new lexical environment and visits a parameter list, suspending the lexical
  * environment upon completion.
  */
-export function visitParameterList(nodes: NodeArray<ParameterDeclaration>, visitor: Visitor, context: TransformationContext, nodesVisitor?: NodesVisitor): NodeArray<ParameterDeclaration>;
+export function visitParameterList(
+    nodes: NodeArray<ParameterDeclaration>,
+    visitor: Visitor,
+    context: TransformationContext,
+    nodesVisitor?: NodesVisitor,
+): NodeArray<ParameterDeclaration>;
 export function visitParameterList(
     nodes: NodeArray<ParameterDeclaration> | undefined,
     visitor: Visitor,
@@ -517,7 +522,15 @@ function addDefaultValueAssignmentForInitializer(parameter: ParameterDeclaration
             ),
         ),
     );
-    return factory.updateParameterDeclaration(parameter, parameter.modifiers, parameter.dotDotDotToken, parameter.name, parameter.questionToken, parameter.type, /*initializer*/ undefined);
+    return factory.updateParameterDeclaration(
+        parameter,
+        parameter.modifiers,
+        parameter.dotDotDotToken,
+        parameter.name,
+        parameter.questionToken,
+        parameter.type,
+        /*initializer*/ undefined,
+    );
 }
 
 /**
@@ -536,7 +549,12 @@ export function visitFunctionBody(node: FunctionBody | undefined, visitor: Visit
  */
 export function visitFunctionBody(node: ConciseBody, visitor: Visitor, context: TransformationContext): ConciseBody;
 /** @internal */ export function visitFunctionBody(node: FunctionBody, visitor: Visitor, context: TransformationContext, nodeVisitor?: NodeVisitor): FunctionBody; // eslint-disable-line @typescript-eslint/unified-signatures
-/** @internal */ export function visitFunctionBody(node: FunctionBody | undefined, visitor: Visitor, context: TransformationContext, nodeVisitor?: NodeVisitor): FunctionBody | undefined; // eslint-disable-line @typescript-eslint/unified-signatures
+/** @internal */ export function visitFunctionBody(
+    node: FunctionBody | undefined,
+    visitor: Visitor,
+    context: TransformationContext,
+    nodeVisitor?: NodeVisitor,
+): FunctionBody | undefined; // eslint-disable-line @typescript-eslint/unified-signatures
 /** @internal */ export function visitFunctionBody(node: ConciseBody, visitor: Visitor, context: TransformationContext, nodeVisitor?: NodeVisitor): ConciseBody; // eslint-disable-line @typescript-eslint/unified-signatures
 export function visitFunctionBody(node: ConciseBody | undefined, visitor: Visitor, context: TransformationContext, nodeVisitor: NodeVisitor = visitNode): ConciseBody | undefined {
     context.resumeLexicalEnvironment();

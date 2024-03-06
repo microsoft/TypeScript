@@ -885,7 +885,8 @@ export function emitFiles(
             }
         }
 
-        const declBlocked = (!!declarationTransform.diagnostics && !!declarationTransform.diagnostics.length) || !!host.isEmitBlocked(declarationFilePath) || !!compilerOptions.noEmit;
+        const declBlocked = (!!declarationTransform.diagnostics && !!declarationTransform.diagnostics.length) || !!host.isEmitBlocked(declarationFilePath) ||
+            !!compilerOptions.noEmit;
         emitSkipped = emitSkipped || declBlocked;
         if (!declBlocked || forceDtsEmit) {
             Debug.assert(declarationTransform.transformed.length === 1, "Should only see one output from the decl transform");
@@ -2623,7 +2624,8 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
         }
 
         const preferNewLine = node.multiLine ? ListFormat.PreferNewLine : ListFormat.None;
-        const allowTrailingComma = currentSourceFile && currentSourceFile.languageVersion >= ScriptTarget.ES5 && !isJsonSourceFile(currentSourceFile) ? ListFormat.AllowTrailingComma
+        const allowTrailingComma = currentSourceFile && currentSourceFile.languageVersion >= ScriptTarget.ES5 && !isJsonSourceFile(currentSourceFile) ?
+            ListFormat.AllowTrailingComma
             : ListFormat.None;
         emitList(node, node.properties, ListFormat.ObjectLiteralExpressionProperties | allowTrailingComma | preferNewLine);
 
@@ -5059,7 +5061,9 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
             if (lastChild === undefined) {
                 return !parentNode || currentSourceFile && rangeIsOnSingleLine(parentNode, currentSourceFile) ? 0 : 1;
             }
-            if (currentSourceFile && parentNode && !positionIsSynthesized(parentNode.pos) && !nodeIsSynthesized(lastChild) && (!lastChild.parent || lastChild.parent === parentNode)) {
+            if (
+                currentSourceFile && parentNode && !positionIsSynthesized(parentNode.pos) && !nodeIsSynthesized(lastChild) && (!lastChild.parent || lastChild.parent === parentNode)
+            ) {
                 if (preserveSourceNewlines) {
                     const end = childrenTextRange && !positionIsSynthesized(childrenTextRange.end) ? childrenTextRange.end : lastChild.end;
                     return getEffectiveLines(
@@ -5422,7 +5426,13 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
         const nodeId = getNodeId(node);
         const cache = privateName ? nodeIdToGeneratedPrivateName : nodeIdToGeneratedName;
         return cache[nodeId] ||
-            (cache[nodeId] = generateNameForNode(node, privateName, flags ?? GeneratedIdentifierFlags.None, formatGeneratedNamePart(prefix, generateName), formatGeneratedNamePart(suffix)));
+            (cache[nodeId] = generateNameForNode(
+                node,
+                privateName,
+                flags ?? GeneratedIdentifierFlags.None,
+                formatGeneratedNamePart(prefix, generateName),
+                formatGeneratedNamePart(suffix),
+            ));
     }
 
     /**
@@ -5725,7 +5735,9 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
         }
 
         return Debug.fail(
-            `Unsupported GeneratedIdentifierKind: ${Debug.formatEnum(autoGenerate.flags & GeneratedIdentifierFlags.KindMask, (ts as any).GeneratedIdentifierFlags, /*isFlags*/ true)}.`,
+            `Unsupported GeneratedIdentifierKind: ${
+                Debug.formatEnum(autoGenerate.flags & GeneratedIdentifierFlags.KindMask, (ts as any).GeneratedIdentifierFlags, /*isFlags*/ true)
+            }.`,
         );
     }
 
@@ -6087,7 +6099,8 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
     }
 
     function emitDetachedCommentsAndUpdateCommentsInfo(range: TextRange) {
-        const currentDetachedCommentInfo = currentSourceFile && emitDetachedComments(currentSourceFile.text, getCurrentLineMap(), writer, emitComment, range, newLine, commentsDisabled);
+        const currentDetachedCommentInfo = currentSourceFile &&
+            emitDetachedComments(currentSourceFile.text, getCurrentLineMap(), writer, emitComment, range, newLine, commentsDisabled);
         if (currentDetachedCommentInfo) {
             if (detachedCommentsInfo) {
                 detachedCommentsInfo.push(currentDetachedCommentInfo);

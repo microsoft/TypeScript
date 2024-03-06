@@ -360,7 +360,12 @@ function readPackageJsonField<K extends MatchingKeys<PackageJson, object | undef
     typeOfTag: "object",
     state: ModuleResolutionState,
 ): PackageJson[K] | undefined; // eslint-disable-line @typescript-eslint/unified-signatures
-function readPackageJsonField<K extends keyof PackageJson>(jsonContent: PackageJson, fieldName: K, typeOfTag: "string" | "object", state: ModuleResolutionState): PackageJson[K] | undefined {
+function readPackageJsonField<K extends keyof PackageJson>(
+    jsonContent: PackageJson,
+    fieldName: K,
+    typeOfTag: "string" | "object",
+    state: ModuleResolutionState,
+): PackageJson[K] | undefined {
     if (!hasProperty(jsonContent, fieldName)) {
         if (state.traceEnabled) {
             trace(state.host, Diagnostics.package_json_does_not_have_a_0_field, fieldName);
@@ -1228,7 +1233,12 @@ function createNonRelativeNameResolutionCache<T>(
         moduleNameToDirectoryMap.update(options);
     }
 
-    function getFromNonRelativeNameCache(nonRelativeModuleName: string, mode: ResolutionMode, directoryName: string, redirectedReference?: ResolvedProjectReference): T | undefined {
+    function getFromNonRelativeNameCache(
+        nonRelativeModuleName: string,
+        mode: ResolutionMode,
+        directoryName: string,
+        redirectedReference?: ResolvedProjectReference,
+    ): T | undefined {
         Debug.assert(!isExternalModuleNameRelative(nonRelativeModuleName));
         return moduleNameToDirectoryMap.getMapOfCacheRedirects(redirectedReference)?.get(createModeAwareCacheKey(nonRelativeModuleName, mode))?.get(directoryName);
     }
@@ -2078,7 +2088,10 @@ function nodeModuleNameResolverWorker(
             && features & NodeResolutionFeatures.Exports
             && conditions?.includes("import")
         ) {
-            traceIfEnabled(state, Diagnostics.Resolution_of_non_relative_name_failed_trying_with_modern_Node_resolution_features_disabled_to_see_if_npm_library_needs_configuration_update);
+            traceIfEnabled(
+                state,
+                Diagnostics.Resolution_of_non_relative_name_failed_trying_with_modern_Node_resolution_features_disabled_to_see_if_npm_library_needs_configuration_update,
+            );
             const diagnosticState = {
                 ...state,
                 features: state.features & ~NodeResolutionFeatures.Exports,
@@ -2298,7 +2311,12 @@ function loadModuleFromFile(extensions: Extensions, candidate: string, onlyRecor
     }
 }
 
-function loadModuleFromFileNoImplicitExtensions(extensions: Extensions, candidate: string, onlyRecordFailures: boolean, state: ModuleResolutionState): PathAndExtension | undefined {
+function loadModuleFromFileNoImplicitExtensions(
+    extensions: Extensions,
+    candidate: string,
+    onlyRecordFailures: boolean,
+    state: ModuleResolutionState,
+): PathAndExtension | undefined {
     const filename = getBaseFileName(candidate);
     if (!filename.includes(".")) {
         return undefined; // extensionless import, no lookups performed, since we don't support extensionless files
@@ -2339,7 +2357,13 @@ function loadFileNameFromPackageJsonField(extensions: Extensions, candidate: str
 }
 
 /** Try to return an existing file that adds one of the `extensions` to `candidate`. */
-function tryAddingExtensions(candidate: string, extensions: Extensions, originalExtension: string, onlyRecordFailures: boolean, state: ModuleResolutionState): PathAndExtension | undefined {
+function tryAddingExtensions(
+    candidate: string,
+    extensions: Extensions,
+    originalExtension: string,
+    onlyRecordFailures: boolean,
+    state: ModuleResolutionState,
+): PathAndExtension | undefined {
     if (!onlyRecordFailures) {
         // check if containing folder exists - if it doesn't then just record failures for all supported extensions without disk probing
         const directory = getDirectoryPath(candidate);
@@ -2372,7 +2396,8 @@ function tryAddingExtensions(candidate: string, extensions: Extensions, original
             // basically idendical to the ts/js case below, but prefers matching tsx and jsx files exactly before falling back to the ts or js file path
             // (historically, we disallow having both a a.ts and a.tsx file in the same compilation, since their outputs clash)
             // TODO: We should probably error if `"./a.tsx"` resolved to `"./a.ts"`, right?
-            return extensions & Extensions.TypeScript && (tryExtension(Extension.Tsx, originalExtension === Extension.Tsx) || tryExtension(Extension.Ts, originalExtension === Extension.Tsx))
+            return extensions & Extensions.TypeScript &&
+                    (tryExtension(Extension.Tsx, originalExtension === Extension.Tsx) || tryExtension(Extension.Ts, originalExtension === Extension.Tsx))
                 || extensions & Extensions.Declaration && tryExtension(Extension.Dts, originalExtension === Extension.Tsx)
                 || extensions & Extensions.JavaScript && (tryExtension(Extension.Jsx) || tryExtension(Extension.Js))
                 || undefined;
@@ -2573,7 +2598,11 @@ function loadEntrypointsFromExportMap(
 }
 
 /** @internal */
-export function getTemporaryModuleResolutionState(packageJsonInfoCache: PackageJsonInfoCache | undefined, host: ModuleResolutionHost, options: CompilerOptions): ModuleResolutionState {
+export function getTemporaryModuleResolutionState(
+    packageJsonInfoCache: PackageJsonInfoCache | undefined,
+    host: ModuleResolutionHost,
+    options: CompilerOptions,
+): ModuleResolutionState {
     return {
         host,
         compilerOptions: options,
@@ -2669,7 +2698,9 @@ export function getPackageJsonInfo(packageDirectory: string, onlyRecordFailures:
         if (directoryExists && traceEnabled) {
             trace(host, Diagnostics.File_0_does_not_exist, packageJsonPath);
         }
-        if (state.packageJsonInfoCache && !state.packageJsonInfoCache.isReadonly) state.packageJsonInfoCache.setPackageJsonInfo(packageJsonPath, { packageDirectory, directoryExists });
+        if (state.packageJsonInfoCache && !state.packageJsonInfoCache.isReadonly) {
+            state.packageJsonInfoCache.setPackageJsonInfo(packageJsonPath, { packageDirectory, directoryExists });
+        }
         // record package json as one of failed lookup locations - in the future if this file will appear it will invalidate resolution results
         state.failedLookupLocations?.push(packageJsonPath);
     }
@@ -2867,7 +2898,16 @@ function loadModuleFromExports(
             }
             return toSearchResult(/*value*/ undefined);
         }
-        const result = loadModuleFromImportsOrExports(extensions, state, cache, redirectedReference, subpath, scope.contents.packageJsonContent.exports, scope, /*isImports*/ false);
+        const result = loadModuleFromImportsOrExports(
+            extensions,
+            state,
+            cache,
+            redirectedReference,
+            subpath,
+            scope.contents.packageJsonContent.exports,
+            scope,
+            /*isImports*/ false,
+        );
         if (result) {
             return result;
         }
@@ -3133,7 +3173,8 @@ function getLoadModuleFromTargetImportOrExport(
                 !state.isConfigLookup
                 && (state.compilerOptions.declarationDir || state.compilerOptions.outDir)
                 && !finalPath.includes("/node_modules/")
-                && (state.compilerOptions.configFile ? containsPath(scope.packageDirectory, toAbsolutePath(state.compilerOptions.configFile.fileName), !useCaseSensitiveFileNames(state))
+                && (state.compilerOptions.configFile ?
+                    containsPath(scope.packageDirectory, toAbsolutePath(state.compilerOptions.configFile.fileName), !useCaseSensitiveFileNames(state))
                     : true)
             ) {
                 // So that all means we'll only try these guesses for files outside `node_modules` in a directory where the `package.json` and `tsconfig.json` are siblings.
@@ -3172,7 +3213,12 @@ function getLoadModuleFromTargetImportOrExport(
                     // logic may influence what files are pulled in by self-names, which in turn influences the output path shape, but it's all
                     // internally consistent so the paths should be stable so long as we prefer the "most general" (meaning: top-most-level directory) possible results first.
                     const commonDir = toAbsolutePath(
-                        getCommonSourceDirectory(state.compilerOptions, () => [requestingFile, toAbsolutePath(packagePath)], state.host.getCurrentDirectory?.() || "", getCanonicalFileName),
+                        getCommonSourceDirectory(
+                            state.compilerOptions,
+                            () => [requestingFile, toAbsolutePath(packagePath)],
+                            state.host.getCurrentDirectory?.() || "",
+                            getCanonicalFileName,
+                        ),
                     );
                     commonSourceDirGuesses.push(commonDir);
 
@@ -3210,7 +3256,10 @@ function getLoadModuleFromTargetImportOrExport(
                                         const possibleInputWithInputExtension = changeAnyExtension(possibleInputBase, possibleExt, ext, !useCaseSensitiveFileNames(state));
                                         if (state.host.fileExists(possibleInputWithInputExtension)) {
                                             return toSearchResult(
-                                                withPackageId(scope, loadFileNameFromPackageJsonField(extensions, possibleInputWithInputExtension, /*onlyRecordFailures*/ false, state)),
+                                                withPackageId(
+                                                    scope,
+                                                    loadFileNameFromPackageJsonField(extensions, possibleInputWithInputExtension, /*onlyRecordFailures*/ false, state),
+                                                ),
                                             );
                                         }
                                     }
@@ -3676,7 +3725,13 @@ export function loadModuleFromGlobalCache(
 ): ResolvedModuleWithFailedLookupLocations {
     const traceEnabled = isTraceEnabled(compilerOptions, host);
     if (traceEnabled) {
-        trace(host, Diagnostics.Auto_discovery_for_typings_is_enabled_in_project_0_Running_extra_resolution_pass_for_module_1_using_cache_location_2, projectName, moduleName, globalCache);
+        trace(
+            host,
+            Diagnostics.Auto_discovery_for_typings_is_enabled_in_project_0_Running_extra_resolution_pass_for_module_1_using_cache_location_2,
+            projectName,
+            moduleName,
+            globalCache,
+        );
     }
     const failedLookupLocations: string[] = [];
     const affectingLocations: string[] = [];

@@ -1906,7 +1906,10 @@ export function transformClassFields(context: TransformationContext): (x: Source
             statements.push(factory.createExpressionStatement(factory.inlineExpressions(pendingExpressions)));
         }
 
-        if (shouldTransformInitializersUsingSet || shouldTransformPrivateElementsOrClassStaticBlocks || getInternalEmitFlags(node) & InternalEmitFlags.TransformPrivateStaticElements) {
+        if (
+            shouldTransformInitializersUsingSet || shouldTransformPrivateElementsOrClassStaticBlocks ||
+            getInternalEmitFlags(node) & InternalEmitFlags.TransformPrivateStaticElements
+        ) {
             // Emit static property assignment. Because classDeclaration is lexically evaluated,
             // it is safe to emit static property assignment after classDeclaration
             // From ES6 specification:
@@ -2442,7 +2445,11 @@ export function transformClassFields(context: TransformationContext): (x: Source
      * @param properties An array of property declarations to transform.
      * @param receiver The receiver on which each property should be assigned.
      */
-    function addPropertyOrClassStaticBlockStatements(statements: Statement[], properties: readonly (PropertyDeclaration | ClassStaticBlockDeclaration)[], receiver: LeftHandSideExpression) {
+    function addPropertyOrClassStaticBlockStatements(
+        statements: Statement[],
+        properties: readonly (PropertyDeclaration | ClassStaticBlockDeclaration)[],
+        receiver: LeftHandSideExpression,
+    ) {
         for (const property of properties) {
             if (isStatic(property) && !shouldTransformPrivateElementsOrClassStaticBlocks) {
                 continue;

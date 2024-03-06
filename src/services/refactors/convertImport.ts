@@ -151,7 +151,13 @@ function doChange(sourceFile: SourceFile, program: Program, changes: textChanges
     }
 }
 
-function doChangeNamespaceToNamed(sourceFile: SourceFile, checker: TypeChecker, changes: textChanges.ChangeTracker, toConvert: NamespaceImport, allowSyntheticDefaultImports: boolean): void {
+function doChangeNamespaceToNamed(
+    sourceFile: SourceFile,
+    checker: TypeChecker,
+    changes: textChanges.ChangeTracker,
+    toConvert: NamespaceImport,
+    allowSyntheticDefaultImports: boolean,
+): void {
     let usedAsNamespaceOrDefault = false;
 
     const nodesToReplace: (PropertyAccessExpression | QualifiedName)[] = [];
@@ -196,7 +202,11 @@ function doChangeNamespaceToNamed(sourceFile: SourceFile, checker: TypeChecker, 
         changes.insertNodeAfter(sourceFile, importDecl, updateImport(importDecl, /*defaultImportName*/ undefined, importSpecifiers));
     }
     else {
-        changes.replaceNode(sourceFile, importDecl, updateImport(importDecl, usedAsNamespaceOrDefault ? factory.createIdentifier(toConvert.name.text) : undefined, importSpecifiers));
+        changes.replaceNode(
+            sourceFile,
+            importDecl,
+            updateImport(importDecl, usedAsNamespaceOrDefault ? factory.createIdentifier(toConvert.name.text) : undefined, importSpecifiers),
+        );
     }
 }
 
@@ -278,7 +288,11 @@ export function doChangeNamedToNamespaceOrDefault(
         const newNamedImports: ImportSpecifier[] = arrayFrom(
             neededNamedImports.values(),
             element =>
-                factory.createImportSpecifier(element.isTypeOnly, element.propertyName && factory.createIdentifier(element.propertyName.text), factory.createIdentifier(element.name.text)),
+                factory.createImportSpecifier(
+                    element.isTypeOnly,
+                    element.propertyName && factory.createIdentifier(element.propertyName.text),
+                    factory.createIdentifier(element.name.text),
+                ),
         );
         changes.insertNodeAfter(sourceFile, toConvert.parent.parent, updateImport(importDecl, /*defaultImportName*/ undefined, newNamedImports));
     }

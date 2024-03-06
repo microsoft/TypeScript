@@ -400,7 +400,9 @@ function getSearchesFromDirectImports(
         // `export =` might be imported by a default import if `--allowSyntheticDefaultImports` is on, so this handles both ExportKind.Default and ExportKind.ExportEquals.
         // If a default import has the same name as the default export, allow to rename it.
         // Given `import f` and `export default function f`, we will rename both, but for `import g` we will rename just that.
-        if (name && (exportKind === ExportKind.Default || exportKind === ExportKind.ExportEquals) && (!isForRename || name.escapedText === symbolEscapedNameNoDefault(exportSymbol))) {
+        if (
+            name && (exportKind === ExportKind.Default || exportKind === ExportKind.ExportEquals) && (!isForRename || name.escapedText === symbolEscapedNameNoDefault(exportSymbol))
+        ) {
             const defaultImportAlias = checker.getSymbolAtLocation(name)!;
             addSearch(name, defaultImportAlias);
         }
@@ -488,7 +490,8 @@ export function findModuleReferences(program: Program, sourceFiles: readonly Sou
                 }
             }
             for (const ref of referencingFile.typeReferenceDirectives) {
-                const referenced = program.getResolvedTypeReferenceDirectives().get(ref.fileName, ref.resolutionMode || referencingFile.impliedNodeFormat)?.resolvedTypeReferenceDirective;
+                const referenced = program.getResolvedTypeReferenceDirectives().get(ref.fileName, ref.resolutionMode || referencingFile.impliedNodeFormat)
+                    ?.resolvedTypeReferenceDirective;
                 if (referenced !== undefined && referenced.resolvedFileName === (searchSourceFile as SourceFile).fileName) {
                     refs.push({ kind: "reference", referencingFile, ref });
                 }

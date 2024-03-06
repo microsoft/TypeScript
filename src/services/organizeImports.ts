@@ -291,7 +291,8 @@ function removeUnusedImports(oldImports: readonly ImportDeclaration[], sourceFil
 
     function isDeclarationUsed(identifier: Identifier) {
         // The JSX factory symbol is always used if JSX elements are present - even if they are not allowed.
-        return jsxElementsPresent && (identifier.text === jsxNamespace || jsxFragmentFactory && identifier.text === jsxFragmentFactory) && jsxModeNeedsExplicitImport(compilerOptions.jsx) ||
+        return jsxElementsPresent && (identifier.text === jsxNamespace || jsxFragmentFactory && identifier.text === jsxFragmentFactory) &&
+                jsxModeNeedsExplicitImport(compilerOptions.jsx) ||
             FindAllReferences.Core.isSymbolReferencedInFile(identifier, typeChecker, sourceFile);
     }
 }
@@ -316,12 +317,22 @@ function getExternalModuleName(specifier: Expression | undefined) {
  * @deprecated Only used for testing
  * @internal
  */
-export function coalesceImports(importGroup: readonly ImportDeclaration[], ignoreCase: boolean, sourceFile?: SourceFile, preferences?: UserPreferences): readonly ImportDeclaration[] {
+export function coalesceImports(
+    importGroup: readonly ImportDeclaration[],
+    ignoreCase: boolean,
+    sourceFile?: SourceFile,
+    preferences?: UserPreferences,
+): readonly ImportDeclaration[] {
     const comparer = getOrganizeImportsOrdinalStringComparer(ignoreCase);
     return coalesceImportsWorker(importGroup, comparer, sourceFile, preferences);
 }
 
-function coalesceImportsWorker(importGroup: readonly ImportDeclaration[], comparer: Comparer<string>, sourceFile?: SourceFile, preferences?: UserPreferences): readonly ImportDeclaration[] {
+function coalesceImportsWorker(
+    importGroup: readonly ImportDeclaration[],
+    comparer: Comparer<string>,
+    sourceFile?: SourceFile,
+    preferences?: UserPreferences,
+): readonly ImportDeclaration[] {
     if (importGroup.length === 0) {
         return importGroup;
     }

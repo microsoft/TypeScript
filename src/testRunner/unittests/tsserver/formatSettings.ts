@@ -31,7 +31,9 @@ describe("unittests:: tsserver:: formatSettings", () => {
         });
 
         // get format options for file - should be equal to new global settings
-        session.logger.log(`FormatCodeOptions should be global:: ${f1.path}:: ${jsonToReadableText(session.getProjectService().getFormatCodeOptions(ts.server.toNormalizedPath(f1.path)))}`);
+        session.logger.log(
+            `FormatCodeOptions should be global:: ${f1.path}:: ${jsonToReadableText(session.getProjectService().getFormatCodeOptions(ts.server.toNormalizedPath(f1.path)))}`,
+        );
 
         // set per file format options
         const newPerFileSettings = { ...defaultSettings, insertSpaceAfterCommaDelimiter: !defaultSettings.insertSpaceAfterCommaDelimiter };

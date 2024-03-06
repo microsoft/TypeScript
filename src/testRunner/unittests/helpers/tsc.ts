@@ -197,7 +197,10 @@ function storeDtsSignatures(sys: TscCompileSystem, programs: readonly CommandLin
                 sys,
                 (signature, sourceFiles) => {
                     const exportedModules = ts.BuilderState.getExportedModules(state.exportedModulesMap && sourceFiles[0].exportedModulesFromDeclarationEmit);
-                    dtsSignatureData.set(relativeToBuildInfo(resolvedPath), { signature, exportedModules: exportedModules && ts.arrayFrom(exportedModules.keys(), relativeToBuildInfo) });
+                    dtsSignatureData.set(relativeToBuildInfo(resolvedPath), {
+                        signature,
+                        exportedModules: exportedModules && ts.arrayFrom(exportedModules.keys(), relativeToBuildInfo),
+                    });
                 },
             );
         });
@@ -457,10 +460,14 @@ function getBuildInfoForIncrementalCorrectnessCheck(text: string | undefined): {
     let sanitizedFileInfos:
         | ts.MapLike<
             | string
-            | Omit<ReadableProgramBuildInfoFileInfo<ts.ProgramMultiFileEmitBuildInfoFileInfo> | ReadableProgramBuildInfoFileInfo<ts.BuilderState.FileInfo>, "signature" | "original"> & {
-                signature: undefined;
-                original: undefined;
-            }
+            | Omit<
+                ReadableProgramBuildInfoFileInfo<ts.ProgramMultiFileEmitBuildInfoFileInfo> | ReadableProgramBuildInfoFileInfo<ts.BuilderState.FileInfo>,
+                "signature" | "original"
+            >
+                & {
+                    signature: undefined;
+                    original: undefined;
+                }
         >
         | undefined;
     if (readableBuildInfo.program?.fileInfos) {

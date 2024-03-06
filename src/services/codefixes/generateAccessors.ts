@@ -176,7 +176,13 @@ function prepareModifierFlagsForField(modifierFlags: ModifierFlags): ModifierFla
 }
 
 /** @internal */
-export function getAccessorConvertiblePropertyAtPosition(file: SourceFile, program: Program, start: number, end: number, considerEmptySpans = true): AccessorOrRefactorErrorInfo | undefined {
+export function getAccessorConvertiblePropertyAtPosition(
+    file: SourceFile,
+    program: Program,
+    start: number,
+    end: number,
+    considerEmptySpans = true,
+): AccessorOrRefactorErrorInfo | undefined {
     const node = getTokenAtPosition(file, start);
     const cursorRequest = start === end && considerEmptySpans;
     const declaration = findAncestor(node.parent, isAcceptedDeclaration);
@@ -330,7 +336,13 @@ function updateFieldDeclaration(
     }
 }
 
-function insertAccessor(changeTracker: textChanges.ChangeTracker, file: SourceFile, accessor: AccessorDeclaration, declaration: AcceptedDeclaration, container: ContainerDeclaration) {
+function insertAccessor(
+    changeTracker: textChanges.ChangeTracker,
+    file: SourceFile,
+    accessor: AccessorDeclaration,
+    declaration: AcceptedDeclaration,
+    container: ContainerDeclaration,
+) {
     isParameterPropertyDeclaration(declaration, declaration.parent) ? changeTracker.insertMemberAtStart(file, container as ClassLikeDeclaration, accessor) :
         isPropertyAssignment(declaration) ? changeTracker.insertNodeAfterComma(file, declaration, accessor) :
         changeTracker.insertNodeAfter(file, declaration, accessor);

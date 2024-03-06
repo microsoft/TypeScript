@@ -370,7 +370,11 @@ export interface LanguageServiceHost extends GetEffectiveTypeRootsHost, MinimalR
         options: CompilerOptions,
         containingSourceFile?: SourceFile,
     ): (ResolvedModule | undefined)[];
-    getResolvedModuleWithFailedLookupLocationsFromCache?(modulename: string, containingFile: string, resolutionMode?: ResolutionMode): ResolvedModuleWithFailedLookupLocations | undefined;
+    getResolvedModuleWithFailedLookupLocationsFromCache?(
+        modulename: string,
+        containingFile: string,
+        resolutionMode?: ResolutionMode,
+    ): ResolvedModuleWithFailedLookupLocations | undefined;
     /** @deprecated supply resolveTypeReferenceDirectiveReferences instead for resolution that can handle newer resolution modes like nodenext */
     resolveTypeReferenceDirectives?(
         typeDirectiveNames: string[] | FileReference[],
@@ -674,7 +678,10 @@ export interface LanguageService {
 
     applyCodeActionCommand(action: CodeActionCommand, formatSettings?: FormatCodeSettings): Promise<ApplyCodeActionCommandResult>;
     applyCodeActionCommand(action: CodeActionCommand[], formatSettings?: FormatCodeSettings): Promise<ApplyCodeActionCommandResult[]>;
-    applyCodeActionCommand(action: CodeActionCommand | CodeActionCommand[], formatSettings?: FormatCodeSettings): Promise<ApplyCodeActionCommandResult | ApplyCodeActionCommandResult[]>;
+    applyCodeActionCommand(
+        action: CodeActionCommand | CodeActionCommand[],
+        formatSettings?: FormatCodeSettings,
+    ): Promise<ApplyCodeActionCommandResult | ApplyCodeActionCommandResult[]>;
     /** @deprecated `fileName` will be ignored */
     applyCodeActionCommand(fileName: string, action: CodeActionCommand): Promise<ApplyCodeActionCommandResult>;
     /** @deprecated `fileName` will be ignored */

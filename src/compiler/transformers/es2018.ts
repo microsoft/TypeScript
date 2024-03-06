@@ -646,7 +646,13 @@ export function transformES2018(context: TransformationContext): (x: SourceFile 
             node.variableDeclaration.name.transformFlags & TransformFlags.ContainsObjectRestOrSpread
         ) {
             const name = factory.getGeneratedNameForNode(node.variableDeclaration.name);
-            const updatedDecl = factory.updateVariableDeclaration(node.variableDeclaration, node.variableDeclaration.name, /*exclamationToken*/ undefined, /*type*/ undefined, name);
+            const updatedDecl = factory.updateVariableDeclaration(
+                node.variableDeclaration,
+                node.variableDeclaration.name,
+                /*exclamationToken*/ undefined,
+                /*type*/ undefined,
+                name,
+            );
             const visitedBindings = flattenDestructuringBinding(updatedDecl, visitor, context, FlattenLevel.ObjectRest);
             let block = visitNode(node.block, visitor, isBlock);
             if (some(visitedBindings)) {
@@ -1361,7 +1367,8 @@ export function transformES2018(context: TransformationContext): (x: SourceFile 
         // If we need to support substitutions for `super` in an async method,
         // we should track it here.
         if (enabledSubstitutions & ESNextSubstitutionFlags.AsyncMethodsWithSuper && isSuperContainer(node)) {
-            const superContainerFlags = resolver.getNodeCheckFlags(node) & (NodeCheckFlags.MethodWithSuperPropertyAccessInAsync | NodeCheckFlags.MethodWithSuperPropertyAssignmentInAsync);
+            const superContainerFlags = resolver.getNodeCheckFlags(node) &
+                (NodeCheckFlags.MethodWithSuperPropertyAccessInAsync | NodeCheckFlags.MethodWithSuperPropertyAssignmentInAsync);
             if (superContainerFlags !== enclosingSuperContainerFlags) {
                 const savedEnclosingSuperContainerFlags = enclosingSuperContainerFlags;
                 enclosingSuperContainerFlags = superContainerFlags;

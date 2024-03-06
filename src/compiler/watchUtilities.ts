@@ -113,7 +113,11 @@ interface SortedAndCanonicalizedMutableFileSystemEntries {
 }
 
 /** @internal */
-export function createCachedDirectoryStructureHost(host: DirectoryStructureHost, currentDirectory: string, useCaseSensitiveFileNames: boolean): CachedDirectoryStructureHost | undefined {
+export function createCachedDirectoryStructureHost(
+    host: DirectoryStructureHost,
+    currentDirectory: string,
+    useCaseSensitiveFileNames: boolean,
+): CachedDirectoryStructureHost | undefined {
     if (!host.getDirectories || !host.readDirectory) {
         return undefined;
     }
@@ -690,7 +694,14 @@ export interface WatchFactoryHost {
 /** @internal */
 export interface WatchFactory<X, Y = undefined> {
     watchFile: (file: string, callback: FileWatcherCallback, pollingInterval: PollingInterval, options: WatchOptions | undefined, detailInfo1: X, detailInfo2?: Y) => FileWatcher;
-    watchDirectory: (directory: string, callback: DirectoryWatcherCallback, flags: WatchDirectoryFlags, options: WatchOptions | undefined, detailInfo1: X, detailInfo2?: Y) => FileWatcher;
+    watchDirectory: (
+        directory: string,
+        callback: DirectoryWatcherCallback,
+        flags: WatchDirectoryFlags,
+        options: WatchOptions | undefined,
+        detailInfo1: X,
+        detailInfo2?: Y,
+    ) => FileWatcher;
 }
 
 /** @internal */

@@ -181,7 +181,9 @@ registerCodeFix({
         }
         if (info.kind === InfoKind.Enum) {
             const changes = textChanges.ChangeTracker.with(context, t => addEnumMemberDeclaration(t, context.program.getTypeChecker(), info));
-            return [createCodeFixAction(fixMissingMember, changes, [Diagnostics.Add_missing_enum_member_0, info.token.text], fixMissingMember, Diagnostics.Add_all_missing_members)];
+            return [
+                createCodeFixAction(fixMissingMember, changes, [Diagnostics.Add_missing_enum_member_0, info.token.text], fixMissingMember, Diagnostics.Add_all_missing_members),
+            ];
         }
         return concatenate(getActionsForMissingMethodDeclaration(context, info), getActionsForMissingMemberDeclaration(context, info));
     },
@@ -520,7 +522,9 @@ function createActionsForAddMissingMemberInTypeScriptFile(
     }
 
     if (modifierFlags & ModifierFlags.Private) {
-        actions.unshift(createCodeFixActionWithoutFixAll(fixMissingMember, addPropertyDeclarationChanges(ModifierFlags.Private), [Diagnostics.Declare_private_property_0, memberName]));
+        actions.unshift(
+            createCodeFixActionWithoutFixAll(fixMissingMember, addPropertyDeclarationChanges(ModifierFlags.Private), [Diagnostics.Declare_private_property_0, memberName]),
+        );
     }
 
     actions.push(createAddIndexSignatureAction(context, declSourceFile, parentDeclaration, token.text, typeNode));
@@ -638,7 +642,15 @@ function addMethodDeclaration(
 ): void {
     const importAdder = createImportAdder(sourceFile, context.program, context.preferences, context.host);
     const kind = isClassLike(parentDeclaration) ? SyntaxKind.MethodDeclaration : SyntaxKind.MethodSignature;
-    const signatureDeclaration = createSignatureDeclarationFromCallExpression(kind, context, importAdder, callExpression, name, modifierFlags, parentDeclaration) as MethodDeclaration;
+    const signatureDeclaration = createSignatureDeclarationFromCallExpression(
+        kind,
+        context,
+        importAdder,
+        callExpression,
+        name,
+        modifierFlags,
+        parentDeclaration,
+    ) as MethodDeclaration;
     const containingMethodDeclaration = tryGetContainingMethodDeclaration(parentDeclaration, callExpression);
     if (containingMethodDeclaration) {
         changes.insertNodeAfter(sourceFile, containingMethodDeclaration, signatureDeclaration);
@@ -674,7 +686,15 @@ function addFunctionDeclaration(changes: textChanges.ChangeTracker, context: Cod
     const quotePreference = getQuotePreference(context.sourceFile, context.preferences);
     const importAdder = createImportAdder(context.sourceFile, context.program, context.preferences, context.host);
     const functionDeclaration = info.kind === InfoKind.Function
-        ? createSignatureDeclarationFromCallExpression(SyntaxKind.FunctionDeclaration, context, importAdder, info.call, idText(info.token), info.modifierFlags, info.parentDeclaration)
+        ? createSignatureDeclarationFromCallExpression(
+            SyntaxKind.FunctionDeclaration,
+            context,
+            importAdder,
+            info.call,
+            idText(info.token),
+            info.modifierFlags,
+            info.parentDeclaration,
+        )
         : createSignatureDeclarationFromSignature(
             SyntaxKind.FunctionDeclaration,
             context,
@@ -731,7 +751,12 @@ function addObjectLiteralProperties(changes: textChanges.ChangeTracker, context:
         trailingTriviaOption: textChanges.TrailingTriviaOption.Exclude,
         indentation: info.indentation,
     };
-    changes.replaceNode(context.sourceFile, info.parentDeclaration, factory.createObjectLiteralExpression([...info.parentDeclaration.properties, ...props], /*multiLine*/ true), options);
+    changes.replaceNode(
+        context.sourceFile,
+        info.parentDeclaration,
+        factory.createObjectLiteralExpression([...info.parentDeclaration.properties, ...props], /*multiLine*/ true),
+        options,
+    );
     importAdder.writeFixes(changes);
 }
 

@@ -377,7 +377,12 @@ function transformNamedEvaluationOfParameterDeclaration(
     );
 }
 
-function transformNamedEvaluationOfBindingElement(context: TransformationContext, node: NamedEvaluation & BindingElement, ignoreEmptyStringLiteral?: boolean, assignedNameText?: string) {
+function transformNamedEvaluationOfBindingElement(
+    context: TransformationContext,
+    node: NamedEvaluation & BindingElement,
+    ignoreEmptyStringLiteral?: boolean,
+    assignedNameText?: string,
+) {
     // 8.6.3 RS: IteratorBindingInitialization
     //   SingleNameBinding : BindingIdentifier Initializer?
     //     ...
@@ -477,7 +482,12 @@ function transformNamedEvaluationOfAssignmentExpression(
     );
 }
 
-function transformNamedEvaluationOfExportAssignment(context: TransformationContext, node: NamedEvaluation & ExportAssignment, ignoreEmptyStringLiteral?: boolean, assignedNameText?: string) {
+function transformNamedEvaluationOfExportAssignment(
+    context: TransformationContext,
+    node: NamedEvaluation & ExportAssignment,
+    ignoreEmptyStringLiteral?: boolean,
+    assignedNameText?: string,
+) {
     // 16.2.3.7 RS: Evaluation
     //   ExportDeclaration : `export` `default` AssignmentExpression `;`
     //     1. If IsAnonymousFunctionDefinition(|AssignmentExpression|) is *true*, then

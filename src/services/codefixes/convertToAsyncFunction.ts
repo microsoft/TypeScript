@@ -162,7 +162,8 @@ function convertToAsyncFunction(changes: textChanges.ChangeTracker, sourceFile: 
         return;
     }
 
-    const returnStatements = functionToConvertRenamed.body && isBlock(functionToConvertRenamed.body) ? getReturnStatementsWithPromiseHandlers(functionToConvertRenamed.body, checker)
+    const returnStatements = functionToConvertRenamed.body && isBlock(functionToConvertRenamed.body) ?
+        getReturnStatementsWithPromiseHandlers(functionToConvertRenamed.body, checker)
         : emptyArray;
     const transformer: Transformer = { checker, synthNamesMap, setOfExpressionsToReturn, isInJSFile: isInJavascript };
     if (!returnStatements.length) {
@@ -624,7 +625,11 @@ function transformPromiseExpressionOfPropertyAccess(
     return createVariableOrAssignmentOrExpressionStatement(continuationArgName, factory.createAwaitExpression(node), /*typeAnnotation*/ undefined);
 }
 
-function createVariableOrAssignmentOrExpressionStatement(variableName: SynthBindingName | undefined, rightHandSide: Expression, typeAnnotation: TypeNode | undefined): readonly Statement[] {
+function createVariableOrAssignmentOrExpressionStatement(
+    variableName: SynthBindingName | undefined,
+    rightHandSide: Expression,
+    typeAnnotation: TypeNode | undefined,
+): readonly Statement[] {
     if (!variableName || isEmptyBindingName(variableName)) {
         // if there's no argName to assign to, there still might be side effects
         return [factory.createExpressionStatement(rightHandSide)];
@@ -726,10 +731,13 @@ function transformCallbackArgument(
                     if (isReturnStatement(statement)) {
                         seenReturnStatement = true;
                         if (isReturnStatementWithFixablePromiseHandler(statement, transformer.checker)) {
-                            refactoredStmts = refactoredStmts.concat(transformReturnStatementWithFixablePromiseHandler(transformer, statement, hasContinuation, continuationArgName));
+                            refactoredStmts = refactoredStmts.concat(
+                                transformReturnStatementWithFixablePromiseHandler(transformer, statement, hasContinuation, continuationArgName),
+                            );
                         }
                         else {
-                            const possiblyAwaitedRightHandSide = returnType && statement.expression ? getPossiblyAwaitedRightHandSide(transformer.checker, returnType, statement.expression)
+                            const possiblyAwaitedRightHandSide = returnType && statement.expression ?
+                                getPossiblyAwaitedRightHandSide(transformer.checker, returnType, statement.expression)
                                 : statement.expression;
                             refactoredStmts.push(
                                 ...maybeAnnotateAndReturn(possiblyAwaitedRightHandSide, getExplicitPromisedTypeOfPromiseReturningCallExpression(parent, func, transformer.checker)),
@@ -803,7 +811,11 @@ function transformCallbackArgument(
                     const possiblyAwaitedRightHandSide = getPossiblyAwaitedRightHandSide(transformer.checker, returnType, funcBody);
 
                     if (!shouldReturn(parent, transformer)) {
-                        const transformedStatement = createVariableOrAssignmentOrExpressionStatement(continuationArgName, possiblyAwaitedRightHandSide, /*typeAnnotation*/ undefined);
+                        const transformedStatement = createVariableOrAssignmentOrExpressionStatement(
+                            continuationArgName,
+                            possiblyAwaitedRightHandSide,
+                            /*typeAnnotation*/ undefined,
+                        );
                         if (continuationArgName) {
                             continuationArgName.types.push(transformer.checker.getAwaitedType(returnType) || returnType);
                         }
@@ -852,7 +864,12 @@ function removeReturns(stmts: readonly Statement[], prevArgName: SynthBindingNam
                         factory.createVariableStatement(
                             /*modifiers*/ undefined,
                             factory.createVariableDeclarationList(
-                                [factory.createVariableDeclaration(declareSynthBindingName(prevArgName), /*exclamationToken*/ undefined, /*type*/ undefined, possiblyAwaitedExpression)],
+                                [factory.createVariableDeclaration(
+                                    declareSynthBindingName(prevArgName),
+                                    /*exclamationToken*/ undefined,
+                                    /*type*/ undefined,
+                                    possiblyAwaitedExpression,
+                                )],
                                 NodeFlags.Const,
                             ),
                         ),
@@ -871,7 +888,12 @@ function removeReturns(stmts: readonly Statement[], prevArgName: SynthBindingNam
             factory.createVariableStatement(
                 /*modifiers*/ undefined,
                 factory.createVariableDeclarationList(
-                    [factory.createVariableDeclaration(declareSynthBindingName(prevArgName), /*exclamationToken*/ undefined, /*type*/ undefined, factory.createIdentifier("undefined"))],
+                    [factory.createVariableDeclaration(
+                        declareSynthBindingName(prevArgName),
+                        /*exclamationToken*/ undefined,
+                        /*type*/ undefined,
+                        factory.createIdentifier("undefined"),
+                    )],
                     NodeFlags.Const,
                 ),
             ),
@@ -885,7 +907,12 @@ function removeReturns(stmts: readonly Statement[], prevArgName: SynthBindingNam
  * @param hasContinuation Whether another `then`, `catch`, or `finally` continuation follows the continuation to which this statement belongs.
  * @param continuationArgName The argument name for the continuation that follows this call.
  */
-function transformReturnStatementWithFixablePromiseHandler(transformer: Transformer, innerRetStmt: ReturnStatement, hasContinuation: boolean, continuationArgName?: SynthBindingName) {
+function transformReturnStatementWithFixablePromiseHandler(
+    transformer: Transformer,
+    innerRetStmt: ReturnStatement,
+    hasContinuation: boolean,
+    continuationArgName?: SynthBindingName,
+) {
     let innerCbBody: Statement[] = [];
     forEachChild(innerRetStmt, function visit(node) {
         if (isCallExpression(node)) {

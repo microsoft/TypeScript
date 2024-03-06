@@ -367,7 +367,10 @@ export function createEmitHelperFactory(context: TransformationContext): EmitHel
     function createESDecorateClassElementContextObject(contextIn: ESDecorateClassElementContext) {
         const properties = [
             factory.createPropertyAssignment(factory.createIdentifier("kind"), factory.createStringLiteral(contextIn.kind)),
-            factory.createPropertyAssignment(factory.createIdentifier("name"), contextIn.name.computed ? contextIn.name.name : factory.createStringLiteralFromNode(contextIn.name.name)),
+            factory.createPropertyAssignment(
+                factory.createIdentifier("name"),
+                contextIn.name.computed ? contextIn.name.name : factory.createStringLiteralFromNode(contextIn.name.name),
+            ),
             factory.createPropertyAssignment(factory.createIdentifier("static"), contextIn.static ? factory.createTrue() : factory.createFalse()),
             factory.createPropertyAssignment(factory.createIdentifier("private"), contextIn.private ? factory.createTrue() : factory.createFalse()),
             factory.createPropertyAssignment(factory.createIdentifier("access"), createESDecorateClassElementAccessObject(contextIn.name, contextIn.access)),
@@ -416,7 +419,11 @@ export function createEmitHelperFactory(context: TransformationContext): EmitHel
 
     function createAssignHelper(attributesSegments: Expression[]) {
         if (getEmitScriptTarget(context.getCompilerOptions()) >= ScriptTarget.ES2015) {
-            return factory.createCallExpression(factory.createPropertyAccessExpression(factory.createIdentifier("Object"), "assign"), /*typeArguments*/ undefined, attributesSegments);
+            return factory.createCallExpression(
+                factory.createPropertyAccessExpression(factory.createIdentifier("Object"), "assign"),
+                /*typeArguments*/ undefined,
+                attributesSegments,
+            );
         }
         context.requestEmitHelper(assignHelper);
         return factory.createCallExpression(
@@ -473,7 +480,12 @@ export function createEmitHelperFactory(context: TransformationContext): EmitHel
     /** Given value: o, propName: p, pattern: { a, b, ...p } from the original statement
      * `{ a, b, ...p } = o`, create `p = __rest(o, ["a", "b"]);`
      */
-    function createRestHelper(value: Expression, elements: readonly BindingOrAssignmentElement[], computedTempVariables: readonly Expression[] | undefined, location: TextRange): Expression {
+    function createRestHelper(
+        value: Expression,
+        elements: readonly BindingOrAssignmentElement[],
+        computedTempVariables: readonly Expression[] | undefined,
+        location: TextRange,
+    ): Expression {
         context.requestEmitHelper(restHelper);
         const propertyNames: Expression[] = [];
         let computedTempVariableOffset = 0;

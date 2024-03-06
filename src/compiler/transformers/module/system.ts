@@ -1167,7 +1167,12 @@ export function transformSystemModule(context: TransformationContext): (x: Sourc
      * @param expression The expression to export.
      * @param allowComments Whether to allow comments on the export.
      */
-    function appendExportStatement(statements: Statement[] | undefined, exportName: Identifier | StringLiteral, expression: Expression, allowComments?: boolean): Statement[] | undefined {
+    function appendExportStatement(
+        statements: Statement[] | undefined,
+        exportName: Identifier | StringLiteral,
+        expression: Expression,
+        allowComments?: boolean,
+    ): Statement[] | undefined {
         statements = append(statements, createExportStatement(exportName, expression, allowComments));
         return statements;
     }
@@ -1538,7 +1543,9 @@ export function transformSystemModule(context: TransformationContext): (x: Sourc
      * @param node The node to visit.
      */
     function visitorWorker(node: Node, valueIsDiscarded: boolean): VisitResult<Node> {
-        if (!(node.transformFlags & (TransformFlags.ContainsDestructuringAssignment | TransformFlags.ContainsDynamicImport | TransformFlags.ContainsUpdateExpressionForIdentifier))) {
+        if (
+            !(node.transformFlags & (TransformFlags.ContainsDestructuringAssignment | TransformFlags.ContainsDynamicImport | TransformFlags.ContainsUpdateExpressionForIdentifier))
+        ) {
             return node;
         }
         switch (node.kind) {
@@ -1606,7 +1613,8 @@ export function transformSystemModule(context: TransformationContext): (x: Sourc
         const externalModuleName = getExternalModuleNameLiteral(factory, node, currentSourceFile, host, resolver, compilerOptions);
         const firstArgument = visitNode(firstOrUndefined(node.arguments), visitor, isExpression);
         // Only use the external module name if it differs from the first argument. This allows us to preserve the quote style of the argument on output.
-        const argument = externalModuleName && (!firstArgument || !isStringLiteral(firstArgument) || firstArgument.text !== externalModuleName.text) ? externalModuleName : firstArgument;
+        const argument = externalModuleName && (!firstArgument || !isStringLiteral(firstArgument) || firstArgument.text !== externalModuleName.text) ? externalModuleName
+            : firstArgument;
         return factory.createCallExpression(
             factory.createPropertyAccessExpression(
                 contextObject,

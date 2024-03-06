@@ -1340,7 +1340,11 @@ describe("unittests:: tsserver:: projects::", () => {
             command: ts.server.protocol.CommandTypes.SynchronizeProjectList,
             arguments: { knownProjects: [], includeProjectReferenceRedirectInfo: true },
         });
-        baselineTsserverLogs("projects", "synchronizeProjectList returns correct information when base configuration file cannot be resolved and redirect info is requested", session);
+        baselineTsserverLogs(
+            "projects",
+            "synchronizeProjectList returns correct information when base configuration file cannot be resolved and redirect info is requested",
+            session,
+        );
     });
 
     it("handles delayed directory watch invoke on file creation", () => {

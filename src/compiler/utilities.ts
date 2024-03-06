@@ -775,7 +775,8 @@ export function createModuleNotFoundChain(sourceFile: SourceFile, host: TypeChec
             alternateResult,
         ]] as const
         : [
-            Diagnostics.There_are_types_at_0_but_this_result_could_not_be_resolved_when_respecting_package_json_exports_The_1_library_may_need_to_update_its_package_json_or_typings,
+            Diagnostics
+                .There_are_types_at_0_but_this_result_could_not_be_resolved_when_respecting_package_json_exports_The_1_library_may_need_to_update_its_package_json_or_typings,
             [alternateResult, alternateResult.includes(nodeModulesPathPart + "@types/") ? `@types/${mangleScopedPackageName(packageName)}` : packageName],
         ] as const);
     const result = alternateResultMessage
@@ -1017,9 +1018,13 @@ export function isGrammarError(parent: Node, child: Node | NodeArray<Node>) {
             isGrammarErrorElement(parent.modifiers, child, isModifierLike);
     }
     if (isMethodDeclaration(parent)) return child === parent.exclamationToken;
-    if (isConstructorDeclaration(parent)) return child === parent.typeParameters || child === parent.type || isGrammarErrorElement(parent.typeParameters, child, isTypeParameterDeclaration);
+    if (isConstructorDeclaration(parent)) {
+        return child === parent.typeParameters || child === parent.type || isGrammarErrorElement(parent.typeParameters, child, isTypeParameterDeclaration);
+    }
     if (isGetAccessorDeclaration(parent)) return child === parent.typeParameters || isGrammarErrorElement(parent.typeParameters, child, isTypeParameterDeclaration);
-    if (isSetAccessorDeclaration(parent)) return child === parent.typeParameters || child === parent.type || isGrammarErrorElement(parent.typeParameters, child, isTypeParameterDeclaration);
+    if (isSetAccessorDeclaration(parent)) {
+        return child === parent.typeParameters || child === parent.type || isGrammarErrorElement(parent.typeParameters, child, isTypeParameterDeclaration);
+    }
     if (isNamespaceExportDeclaration(parent)) return child === parent.modifiers || isGrammarErrorElement(parent.modifiers, child, isModifierLike);
     return false;
 }
@@ -2780,7 +2785,12 @@ export function isThisTypePredicate(predicate: TypePredicate): predicate is This
 }
 
 /** @internal */
-export function forEachPropertyAssignment<T>(objectLiteral: ObjectLiteralExpression | undefined, key: string, callback: (property: PropertyAssignment) => T | undefined, key2?: string) {
+export function forEachPropertyAssignment<T>(
+    objectLiteral: ObjectLiteralExpression | undefined,
+    key: string,
+    callback: (property: PropertyAssignment) => T | undefined,
+    key2?: string,
+) {
     return forEach(objectLiteral?.properties, property => {
         if (!isPropertyAssignment(property)) return undefined;
         const propName = tryGetTextOfPropertyName(property.name);
@@ -3373,16 +3383,21 @@ export function isExpressionNode(node: Node): boolean {
             while (node.parent.kind === SyntaxKind.QualifiedName) {
                 node = node.parent;
             }
-            return node.parent.kind === SyntaxKind.TypeQuery || isJSDocLinkLike(node.parent) || isJSDocNameReference(node.parent) || isJSDocMemberName(node.parent) || isJSXTagName(node);
+            return node.parent.kind === SyntaxKind.TypeQuery || isJSDocLinkLike(node.parent) || isJSDocNameReference(node.parent) || isJSDocMemberName(node.parent) ||
+                isJSXTagName(node);
         case SyntaxKind.JSDocMemberName:
             while (isJSDocMemberName(node.parent)) {
                 node = node.parent;
             }
-            return node.parent.kind === SyntaxKind.TypeQuery || isJSDocLinkLike(node.parent) || isJSDocNameReference(node.parent) || isJSDocMemberName(node.parent) || isJSXTagName(node);
+            return node.parent.kind === SyntaxKind.TypeQuery || isJSDocLinkLike(node.parent) || isJSDocNameReference(node.parent) || isJSDocMemberName(node.parent) ||
+                isJSXTagName(node);
         case SyntaxKind.PrivateIdentifier:
             return isBinaryExpression(node.parent) && node.parent.left === node && node.parent.operatorToken.kind === SyntaxKind.InKeyword;
         case SyntaxKind.Identifier:
-            if (node.parent.kind === SyntaxKind.TypeQuery || isJSDocLinkLike(node.parent) || isJSDocNameReference(node.parent) || isJSDocMemberName(node.parent) || isJSXTagName(node)) {
+            if (
+                node.parent.kind === SyntaxKind.TypeQuery || isJSDocLinkLike(node.parent) || isJSDocNameReference(node.parent) || isJSDocMemberName(node.parent) ||
+                isJSXTagName(node)
+            ) {
                 return true;
             }
             // falls through
@@ -3726,10 +3741,10 @@ export function isDefaultedExpandoInitializer(node: BinaryExpression) {
  */
 export function getNameOfExpando(node: Declaration): DeclarationName | undefined {
     if (isBinaryExpression(node.parent)) {
-        const parent =
-            ((node.parent.operatorToken.kind === SyntaxKind.BarBarToken || node.parent.operatorToken.kind === SyntaxKind.QuestionQuestionToken) && isBinaryExpression(node.parent.parent)) ?
-                node.parent.parent
-                : node.parent;
+        const parent = ((node.parent.operatorToken.kind === SyntaxKind.BarBarToken || node.parent.operatorToken.kind === SyntaxKind.QuestionQuestionToken) &&
+                isBinaryExpression(node.parent.parent)) ?
+            node.parent.parent
+            : node.parent;
         if (parent.operatorToken.kind === SyntaxKind.EqualsToken && isIdentifier(parent.left)) {
             return parent.left;
         }
@@ -4027,7 +4042,9 @@ export function isFunctionSymbol(symbol: Symbol | undefined) {
 }
 
 /** @internal */
-export function tryGetModuleSpecifierFromDeclaration(node: AnyImportOrBareOrAccessedRequire | AliasDeclarationNode | ExportDeclaration | ImportTypeNode): StringLiteralLike | undefined {
+export function tryGetModuleSpecifierFromDeclaration(
+    node: AnyImportOrBareOrAccessedRequire | AliasDeclarationNode | ExportDeclaration | ImportTypeNode,
+): StringLiteralLike | undefined {
     switch (node.kind) {
         case SyntaxKind.VariableDeclaration:
         case SyntaxKind.BindingElement:
@@ -4095,7 +4112,9 @@ export function getExternalModuleName(node: AnyImportOrReExport | ImportTypeNode
 }
 
 /** @internal */
-export function getNamespaceDeclarationNode(node: ImportDeclaration | ImportEqualsDeclaration | ExportDeclaration): ImportEqualsDeclaration | NamespaceImport | NamespaceExport | undefined {
+export function getNamespaceDeclarationNode(
+    node: ImportDeclaration | ImportEqualsDeclaration | ExportDeclaration,
+): ImportEqualsDeclaration | NamespaceImport | NamespaceExport | undefined {
     switch (node.kind) {
         case SyntaxKind.ImportDeclaration:
             return node.importClause && tryCast(node.importClause.namedBindings, isNamespaceImport);
@@ -6309,7 +6328,13 @@ export function getOwnEmitOutputFilePath(fileName: string, host: EmitHost, exten
 
 /** @internal */
 export function getDeclarationEmitOutputFilePath(fileName: string, host: EmitHost) {
-    return getDeclarationEmitOutputFilePathWorker(fileName, host.getCompilerOptions(), host.getCurrentDirectory(), host.getCommonSourceDirectory(), f => host.getCanonicalFileName(f));
+    return getDeclarationEmitOutputFilePathWorker(
+        fileName,
+        host.getCompilerOptions(),
+        host.getCurrentDirectory(),
+        host.getCommonSourceDirectory(),
+        f => host.getCanonicalFileName(f),
+    );
 }
 
 /** @internal */
@@ -8208,7 +8233,14 @@ export function getLeftmostExpression(node: Expression, stopAtCallExpressions: b
             case SyntaxKind.NonNullExpression:
             case SyntaxKind.PartiallyEmittedExpression:
             case SyntaxKind.SatisfiesExpression:
-                node = (node as CallExpression | PropertyAccessExpression | ElementAccessExpression | AsExpression | NonNullExpression | PartiallyEmittedExpression | SatisfiesExpression)
+                node = (node as
+                    | CallExpression
+                    | PropertyAccessExpression
+                    | ElementAccessExpression
+                    | AsExpression
+                    | NonNullExpression
+                    | PartiallyEmittedExpression
+                    | SatisfiesExpression)
                     .expression;
                 continue;
         }
@@ -8614,7 +8646,8 @@ function compareMessageText(t1: string | DiagnosticMessageChain, t2: string | Di
 /** @internal */
 export function getLanguageVariant(scriptKind: ScriptKind) {
     // .tsx and .jsx files are treated as jsx language variant.
-    return scriptKind === ScriptKind.TSX || scriptKind === ScriptKind.JSX || scriptKind === ScriptKind.JS || scriptKind === ScriptKind.JSON ? LanguageVariant.JSX : LanguageVariant.Standard;
+    return scriptKind === ScriptKind.TSX || scriptKind === ScriptKind.JSX || scriptKind === ScriptKind.JS || scriptKind === ScriptKind.JSON ? LanguageVariant.JSX
+        : LanguageVariant.Standard;
 }
 
 /**
@@ -8641,7 +8674,8 @@ function isFileForcedToBeModuleByFormat(file: SourceFile): true | undefined {
     // Excludes declaration files - they still require an explicit `export {}` or the like
     // for back compat purposes. The only non-declaration files _not_ forced to be a module are `.js` files
     // that aren't esm-mode (meaning not in a `type: module` scope).
-    return (file.impliedNodeFormat === ModuleKind.ESNext || (fileExtensionIsOneOf(file.fileName, [Extension.Cjs, Extension.Cts, Extension.Mjs, Extension.Mts]))) && !file.isDeclarationFile ?
+    return (file.impliedNodeFormat === ModuleKind.ESNext || (fileExtensionIsOneOf(file.fileName, [Extension.Cjs, Extension.Cts, Extension.Mjs, Extension.Mts]))) &&
+            !file.isDeclarationFile ?
         true
         : undefined;
 }
@@ -9266,7 +9300,11 @@ export function getRegularExpressionForWildcard(specs: readonly string[] | undef
 }
 
 /** @internal */
-export function getRegularExpressionsForWildcards(specs: readonly string[] | undefined, basePath: string, usage: "files" | "directories" | "exclude"): readonly string[] | undefined {
+export function getRegularExpressionsForWildcards(
+    specs: readonly string[] | undefined,
+    basePath: string,
+    usage: "files" | "directories" | "exclude",
+): readonly string[] | undefined {
     if (specs === undefined || specs.length === 0) {
         return undefined;
     }
@@ -9869,7 +9907,8 @@ export function positionIsSynthesized(pos: number): boolean {
  * @internal
  */
 export function extensionIsTS(ext: string): boolean {
-    return ext === Extension.Ts || ext === Extension.Tsx || ext === Extension.Dts || ext === Extension.Cts || ext === Extension.Mts || ext === Extension.Dmts || ext === Extension.Dcts ||
+    return ext === Extension.Ts || ext === Extension.Tsx || ext === Extension.Dts || ext === Extension.Cts || ext === Extension.Mts || ext === Extension.Dmts ||
+        ext === Extension.Dcts ||
         (startsWith(ext, ".d.") && endsWith(ext, ".ts"));
 }
 

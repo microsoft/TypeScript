@@ -818,7 +818,8 @@ const commandOptionsWithoutBuild: CommandLineOption[] = [
         affectsSemanticDiagnostics: true,
         affectsBuildInfo: true,
         category: Diagnostics.Interop_Constraints,
-        description: Diagnostics.Do_not_transform_or_elide_any_imports_or_exports_not_marked_as_type_only_ensuring_they_are_written_in_the_output_file_s_format_based_on_the_module_setting,
+        description:
+            Diagnostics.Do_not_transform_or_elide_any_imports_or_exports_not_marked_as_type_only_ensuring_they_are_written_in_the_output_file_s_format_based_on_the_module_setting,
         defaultValueDescription: false,
     },
 
@@ -1713,7 +1714,10 @@ export function createCompilerDiagnosticForInvalidCustomType(opt: CommandLineOpt
     return createDiagnosticForInvalidCustomType(opt, createCompilerDiagnostic);
 }
 
-function createDiagnosticForInvalidCustomType(opt: CommandLineOptionOfCustomType, createDiagnostic: (message: DiagnosticMessage, ...args: DiagnosticArguments) => Diagnostic): Diagnostic {
+function createDiagnosticForInvalidCustomType(
+    opt: CommandLineOptionOfCustomType,
+    createDiagnostic: (message: DiagnosticMessage, ...args: DiagnosticArguments) => Diagnostic,
+): Diagnostic {
     const namesOfType = arrayFrom(opt.type.keys());
     const stringNames = (opt.deprecatedKeys ? namesOfType.filter(k => !opt.deprecatedKeys!.has(k)) : namesOfType).map(key => `'${key}'`).join(", ");
     return createDiagnostic(Diagnostics.Argument_for_0_option_must_be_Colon_1, `--${opt.name}`, stringNames);
@@ -1778,7 +1782,13 @@ function createUnknownOptionError(
 
     const possibleOption = getSpellingSuggestion(unknownOption, diagnostics.optionDeclarations, getOptionName);
     return possibleOption ?
-        createDiagnosticForNodeInSourceFileOrCompilerDiagnostic(sourceFile, node, diagnostics.unknownDidYouMeanDiagnostic, unknownOptionErrorText || unknownOption, possibleOption.name) :
+        createDiagnosticForNodeInSourceFileOrCompilerDiagnostic(
+            sourceFile,
+            node,
+            diagnostics.unknownDidYouMeanDiagnostic,
+            unknownOptionErrorText || unknownOption,
+            possibleOption.name,
+        ) :
         createDiagnosticForNodeInSourceFileOrCompilerDiagnostic(sourceFile, node, diagnostics.unknownOptionDiagnostic, unknownOptionErrorText || unknownOption);
 }
 
@@ -2385,7 +2395,10 @@ export function convertToJson(
                 return Number((valueExpression as NumericLiteral).text);
 
             case SyntaxKind.PrefixUnaryExpression:
-                if ((valueExpression as PrefixUnaryExpression).operator !== SyntaxKind.MinusToken || (valueExpression as PrefixUnaryExpression).operand.kind !== SyntaxKind.NumericLiteral) {
+                if (
+                    (valueExpression as PrefixUnaryExpression).operator !== SyntaxKind.MinusToken ||
+                    (valueExpression as PrefixUnaryExpression).operand.kind !== SyntaxKind.NumericLiteral
+                ) {
                     break; // not valid JSON syntax
                 }
                 return -Number(((valueExpression as PrefixUnaryExpression).operand as NumericLiteral).text);
@@ -2497,7 +2510,11 @@ export function convertToTSConfig(configParseResult: ParsedCommandLine, configFi
                 host,
             ),
         ),
-        f => getRelativePathFromFile(getNormalizedAbsolutePath(configFileName, host.getCurrentDirectory()), getNormalizedAbsolutePath(f, host.getCurrentDirectory()), getCanonicalFileName),
+        f => getRelativePathFromFile(
+            getNormalizedAbsolutePath(configFileName, host.getCurrentDirectory()),
+            getNormalizedAbsolutePath(f, host.getCurrentDirectory()),
+            getCanonicalFileName,
+        ),
     );
     const pathOptions = { configFilePath: getNormalizedAbsolutePath(configFileName, host.getCurrentDirectory()), useCaseSensitiveFileNames: host.useCaseSensitiveFileNames };
     const optionMap = serializeCompilerOptions(configParseResult.options, pathOptions);
@@ -2555,7 +2572,12 @@ function filterSameAsDefaultInclude(specs: readonly string[] | undefined) {
     return specs;
 }
 
-function matchesSpecs(path: string, includeSpecs: readonly string[] | undefined, excludeSpecs: readonly string[] | undefined, host: ConvertToTSConfigHost): (path: string) => boolean {
+function matchesSpecs(
+    path: string,
+    includeSpecs: readonly string[] | undefined,
+    excludeSpecs: readonly string[] | undefined,
+    host: ConvertToTSConfigHost,
+): (path: string) => boolean {
     if (!includeSpecs) return returnTrue;
     const patterns = getFileMatcherPatterns(path, excludeSpecs, includeSpecs, host.useCaseSensitiveFileNames, host.getCurrentDirectory());
     const excludeRe = patterns.excludePattern && getRegexFromPattern(patterns.excludePattern, host.useCaseSensitiveFileNames);
@@ -2623,7 +2645,8 @@ function serializeOptionBaseObject(
             // tsconfig only options cannot be specified via command line,
             // so we can assume that only types that can appear here string | number | boolean
             if (
-                optionsNameMap.has(name) && (optionsNameMap.get(name)!.category === Diagnostics.Command_line_Options || optionsNameMap.get(name)!.category === Diagnostics.Output_Formatting)
+                optionsNameMap.has(name) &&
+                (optionsNameMap.get(name)!.category === Diagnostics.Command_line_Options || optionsNameMap.get(name)!.category === Diagnostics.Output_Formatting)
             ) {
                 continue;
             }
@@ -3238,7 +3261,11 @@ function parseConfig(
                 if (extendsRaw[propertyName]) {
                     result[propertyName] = map(extendsRaw[propertyName], (path: string) =>
                         isRootedDiskPath(path) ? path : combinePaths(
-                            relativeDifference ||= convertToRelativePath(getDirectoryPath(extendedConfigPath), basePath, createGetCanonicalFileName(host.useCaseSensitiveFileNames)),
+                            relativeDifference ||= convertToRelativePath(
+                                getDirectoryPath(extendedConfigPath),
+                                basePath,
+                                createGetCanonicalFileName(host.useCaseSensitiveFileNames),
+                            ),
                             path,
                         ));
                 }
@@ -3382,7 +3409,9 @@ function parseOwnConfigOfJsonSourceFile(
         option: CommandLineOption | undefined,
     ) {
         // Ensure value is verified except for extends which is handled in its own way for error reporting
-        if (option && option !== extendsOptionDeclaration) value = convertJsonOption(option, value, basePath, errors, propertyAssignment, propertyAssignment.initializer, sourceFile);
+        if (option && option !== extendsOptionDeclaration) {
+            value = convertJsonOption(option, value, basePath, errors, propertyAssignment, propertyAssignment.initializer, sourceFile);
+        }
         if (parentOption?.name) {
             if (option) {
                 let currentOption;
@@ -3623,7 +3652,9 @@ export function convertJsonOption(
     sourceFile?: TsConfigSourceFile,
 ): CompilerOptionsValue {
     if (opt.isCommandLineOnly) {
-        errors.push(createDiagnosticForNodeInSourceFileOrCompilerDiagnostic(sourceFile, propertyAssignment?.name, Diagnostics.Option_0_can_only_be_specified_on_command_line, opt.name));
+        errors.push(
+            createDiagnosticForNodeInSourceFileOrCompilerDiagnostic(sourceFile, propertyAssignment?.name, Diagnostics.Option_0_can_only_be_specified_on_command_line, opt.name),
+        );
         return undefined;
     }
     if (isCompilerOptionsValue(opt, value)) {
@@ -3693,7 +3724,9 @@ function convertJsonOptionOfCustomType(
         return validateJsonOptionValue(opt, val, errors, valueExpression, sourceFile);
     }
     else {
-        errors.push(createDiagnosticForInvalidCustomType(opt, (message, ...args) => createDiagnosticForNodeInSourceFileOrCompilerDiagnostic(sourceFile, valueExpression, message, ...args)));
+        errors.push(
+            createDiagnosticForInvalidCustomType(opt, (message, ...args) => createDiagnosticForNodeInSourceFileOrCompilerDiagnostic(sourceFile, valueExpression, message, ...args)),
+        );
     }
 }
 
@@ -3793,7 +3826,9 @@ export function getFileNamesFromConfigSpecs(
 
     let jsonOnlyIncludeRegexes: readonly RegExp[] | undefined;
     if (validatedIncludeSpecs && validatedIncludeSpecs.length > 0) {
-        for (const file of host.readDirectory(basePath, flatten(supportedExtensionsWithJsonIfResolveJsonModule), validatedExcludeSpecs, validatedIncludeSpecs, /*depth*/ undefined)) {
+        for (
+            const file of host.readDirectory(basePath, flatten(supportedExtensionsWithJsonIfResolveJsonModule), validatedExcludeSpecs, validatedIncludeSpecs, /*depth*/ undefined)
+        ) {
             if (fileExtensionIs(file, Extension.Json)) {
                 // Valid only if *.json specified
                 if (!jsonOnlyIncludeRegexes) {

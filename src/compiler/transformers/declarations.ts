@@ -2032,7 +2032,11 @@ function maskModifiers(factory: NodeFactory, node: Node, modifierMask?: Modifier
     return factory.createModifiersFromModifierFlags(maskModifierFlags(node, modifierMask, modifierAdditions));
 }
 
-function maskModifierFlags(node: Node, modifierMask: ModifierFlags = ModifierFlags.All ^ ModifierFlags.Public, modifierAdditions: ModifierFlags = ModifierFlags.None): ModifierFlags {
+function maskModifierFlags(
+    node: Node,
+    modifierMask: ModifierFlags = ModifierFlags.All ^ ModifierFlags.Public,
+    modifierAdditions: ModifierFlags = ModifierFlags.None,
+): ModifierFlags {
     let flags = (getEffectiveModifierFlags(node) & modifierMask) | modifierAdditions;
     if (flags & ModifierFlags.Default && !(flags & ModifierFlags.Export)) {
         // A non-exported default is a nonsequitor - we usually try to remove all export modifiers

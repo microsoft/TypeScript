@@ -274,7 +274,12 @@ export function getBuildOrderFromAnyBuildOrder(anyBuildOrder: AnyBuildOrder): Bu
 export interface SolutionBuilder<T extends BuilderProgram> {
     build(project?: string, cancellationToken?: CancellationToken, writeFile?: WriteFileCallback, getCustomTransformers?: (project: string) => CustomTransformers): ExitStatus;
     clean(project?: string): ExitStatus;
-    buildReferences(project: string, cancellationToken?: CancellationToken, writeFile?: WriteFileCallback, getCustomTransformers?: (project: string) => CustomTransformers): ExitStatus;
+    buildReferences(
+        project: string,
+        cancellationToken?: CancellationToken,
+        writeFile?: WriteFileCallback,
+        getCustomTransformers?: (project: string) => CustomTransformers,
+    ): ExitStatus;
     cleanReferences(project?: string): ExitStatus;
     getNextInvalidatedProject(cancellationToken?: CancellationToken): InvalidatedProject<T> | undefined;
 
@@ -898,7 +903,10 @@ export interface BuildInvalidedProject<T extends BuilderProgram> extends Invalid
     getSyntacticDiagnostics(sourceFile?: SourceFile, cancellationToken?: CancellationToken): readonly Diagnostic[];
     getAllDependencies(sourceFile: SourceFile): readonly string[];
     getSemanticDiagnostics(sourceFile?: SourceFile, cancellationToken?: CancellationToken): readonly Diagnostic[];
-    getSemanticDiagnosticsOfNextAffectedFile(cancellationToken?: CancellationToken, ignoreSourceFile?: (sourceFile: SourceFile) => boolean): AffectedFileResult<readonly Diagnostic[]>;
+    getSemanticDiagnosticsOfNextAffectedFile(
+        cancellationToken?: CancellationToken,
+        ignoreSourceFile?: (sourceFile: SourceFile) => boolean,
+    ): AffectedFileResult<readonly Diagnostic[]>;
     /*
      * Calling emit directly with targetSourceFile and emitOnlyDtsFiles set to true is not advised since
      * emit in build system is responsible in updating status of the project
@@ -2362,7 +2370,12 @@ function watchWildCardDirectories<T extends BuilderProgram>(
     );
 }
 
-function watchInputFiles<T extends BuilderProgram>(state: SolutionBuilderState<T>, resolved: ResolvedConfigFileName, resolvedPath: ResolvedConfigFilePath, parsed: ParsedCommandLine) {
+function watchInputFiles<T extends BuilderProgram>(
+    state: SolutionBuilderState<T>,
+    resolved: ResolvedConfigFileName,
+    resolvedPath: ResolvedConfigFilePath,
+    parsed: ParsedCommandLine,
+) {
     if (!state.watch) return;
     mutateMap(
         getOrCreateValueMapFromConfigFileMap(state.allWatchedInputFiles, resolvedPath),
@@ -2383,7 +2396,12 @@ function watchInputFiles<T extends BuilderProgram>(state: SolutionBuilderState<T
     );
 }
 
-function watchPackageJsonFiles<T extends BuilderProgram>(state: SolutionBuilderState<T>, resolved: ResolvedConfigFileName, resolvedPath: ResolvedConfigFilePath, parsed: ParsedCommandLine) {
+function watchPackageJsonFiles<T extends BuilderProgram>(
+    state: SolutionBuilderState<T>,
+    resolved: ResolvedConfigFileName,
+    resolvedPath: ResolvedConfigFilePath,
+    parsed: ParsedCommandLine,
+) {
     if (!state.watch || !state.lastCachedPackageJsonLookups) return;
     mutateMap(
         getOrCreateValueMapFromConfigFileMap(state.allWatchedPackageJsonFiles, resolvedPath),
@@ -2441,7 +2459,12 @@ function stopWatching<T extends BuilderProgram>(state: SolutionBuilderState<T>) 
  * A SolutionBuilder has an immutable set of rootNames that are the "entry point" projects, but
  * can dynamically add/remove other projects based on changes on the rootNames' references
  */
-function createSolutionBuilderWorker<T extends BuilderProgram>(watch: false, host: SolutionBuilderHost<T>, rootNames: readonly string[], defaultOptions: BuildOptions): SolutionBuilder<T>;
+function createSolutionBuilderWorker<T extends BuilderProgram>(
+    watch: false,
+    host: SolutionBuilderHost<T>,
+    rootNames: readonly string[],
+    defaultOptions: BuildOptions,
+): SolutionBuilder<T>;
 function createSolutionBuilderWorker<T extends BuilderProgram>(
     watch: true,
     host: SolutionBuilderWithWatchHost<T>,

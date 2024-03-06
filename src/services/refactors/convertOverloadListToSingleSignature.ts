@@ -261,7 +261,8 @@ function getConvertableOverloadListAtPosition(file: SourceFile, startPosition: n
     if (!every(decls, d => d.kind === kindOne)) {
         return;
     }
-    const signatureDecls = decls as (MethodSignature | MethodDeclaration | CallSignatureDeclaration | ConstructorDeclaration | ConstructSignatureDeclaration | FunctionDeclaration)[];
+    const signatureDecls =
+        decls as (MethodSignature | MethodDeclaration | CallSignatureDeclaration | ConstructorDeclaration | ConstructSignatureDeclaration | FunctionDeclaration)[];
     if (some(signatureDecls, d => !!d.typeParameters || some(d.parameters, p => !!p.modifiers || !isIdentifier(p.name)))) {
         return;
     }

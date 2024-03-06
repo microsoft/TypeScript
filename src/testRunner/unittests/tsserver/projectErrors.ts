@@ -498,7 +498,11 @@ describe("unittests:: tsserver:: Project Errors for Configure file diagnostics e
         openFilesForSession([file], session);
         // We generate only if project is created when opening file from the project
         openFilesForSession([file3], session);
-        baselineTsserverLogs("projectErrors", "configFileDiagnostic events are not generated when the config file does not include file opened and config file has errors", session);
+        baselineTsserverLogs(
+            "projectErrors",
+            "configFileDiagnostic events are not generated when the config file does not include file opened and config file has errors",
+            session,
+        );
     });
 
     it("are not generated when the config file has errors but suppressDiagnosticEvents is true", () => {
@@ -547,7 +551,11 @@ describe("unittests:: tsserver:: Project Errors for Configure file diagnostics e
         openFilesForSession([file], session);
         // We generate only if project is created when opening file from the project
         openFilesForSession([file3], session);
-        baselineTsserverLogs("projectErrors", "configFileDiagnostic events are not generated when the config file does not include file opened and doesnt contain any errors", session);
+        baselineTsserverLogs(
+            "projectErrors",
+            "configFileDiagnostic events are not generated when the config file does not include file opened and doesnt contain any errors",
+            session,
+        );
     });
 
     it("contains the project reference errors", () => {

@@ -109,7 +109,15 @@ registerRefactor(refactorName, {
 });
 
 // If a VariableStatement, will have exactly one VariableDeclaration, with an Identifier for a name.
-type ExportToConvert = FunctionDeclaration | ClassDeclaration | InterfaceDeclaration | EnumDeclaration | NamespaceDeclaration | TypeAliasDeclaration | VariableStatement | ExportAssignment;
+type ExportToConvert =
+    | FunctionDeclaration
+    | ClassDeclaration
+    | InterfaceDeclaration
+    | EnumDeclaration
+    | NamespaceDeclaration
+    | TypeAliasDeclaration
+    | VariableStatement
+    | ExportAssignment;
 interface ExportInfo {
     readonly exportNode: ExportToConvert;
     readonly exportName: Identifier; // This is exportNode.name except for VariableStatement_s.
@@ -121,7 +129,8 @@ function getInfo(context: RefactorContext, considerPartialSpans = true): ExportI
     const { file, program } = context;
     const span = getRefactorContextSpan(context);
     const token = getTokenAtPosition(file, span.start);
-    const exportNode = !!(token.parent && getSyntacticModifierFlags(token.parent) & ModifierFlags.Export) && considerPartialSpans ? token.parent : getParentNodeInSpan(token, file, span);
+    const exportNode = !!(token.parent && getSyntacticModifierFlags(token.parent) & ModifierFlags.Export) && considerPartialSpans ? token.parent
+        : getParentNodeInSpan(token, file, span);
     if (!exportNode || (!isSourceFile(exportNode.parent) && !(isModuleBlock(exportNode.parent) && isAmbientModule(exportNode.parent.parent)))) {
         return { error: getLocaleSpecificMessage(Diagnostics.Could_not_find_export_statement) };
     }
@@ -185,7 +194,11 @@ function changeExport(exportingSourceFile: SourceFile, { wasDefault, exportNode,
         if (isExportAssignment(exportNode) && !exportNode.isExportEquals) {
             const exp = exportNode.expression as Identifier;
             const spec = makeExportSpecifier(exp.text, exp.text);
-            changes.replaceNode(exportingSourceFile, exportNode, factory.createExportDeclaration(/*modifiers*/ undefined, /*isTypeOnly*/ false, factory.createNamedExports([spec])));
+            changes.replaceNode(
+                exportingSourceFile,
+                exportNode,
+                factory.createExportDeclaration(/*modifiers*/ undefined, /*isTypeOnly*/ false, factory.createNamedExports([spec])),
+            );
         }
         else {
             changes.delete(exportingSourceFile, Debug.checkDefined(findModifier(exportNode, SyntaxKind.DefaultKeyword), "Should find a default keyword in modifier list"));
@@ -204,7 +217,11 @@ function changeExport(exportingSourceFile: SourceFile, { wasDefault, exportNode,
                 const decl = first(exportNode.declarationList.declarations);
                 if (!FindAllReferences.Core.isSymbolReferencedInFile(exportName, checker, exportingSourceFile) && !decl.type) {
                     // We checked in `getInfo` that an initializer exists.
-                    changes.replaceNode(exportingSourceFile, exportNode, factory.createExportDefault(Debug.checkDefined(decl.initializer, "Initializer was previously known to be present")));
+                    changes.replaceNode(
+                        exportingSourceFile,
+                        exportNode,
+                        factory.createExportDefault(Debug.checkDefined(decl.initializer, "Initializer was previously known to be present")),
+                    );
                     break;
                 }
                 // falls through
@@ -284,7 +301,13 @@ function changeDefaultToNamedImport(importingSourceFile: SourceFile, ref: Identi
             changes.replaceNode(
                 importingSourceFile,
                 parent,
-                factory.createImportTypeNode(importTypeNode.argument, importTypeNode.attributes, factory.createIdentifier(exportName), importTypeNode.typeArguments, importTypeNode.isTypeOf),
+                factory.createImportTypeNode(
+                    importTypeNode.argument,
+                    importTypeNode.attributes,
+                    factory.createIdentifier(exportName),
+                    importTypeNode.typeArguments,
+                    importTypeNode.isTypeOf,
+                ),
             );
             break;
         default:

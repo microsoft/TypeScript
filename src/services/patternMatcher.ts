@@ -182,7 +182,10 @@ function matchTextChunk(candidate: string, chunk: TextChunk, stringToWordSpans: 
     if (index === 0) {
         // a) Check if the word is a prefix of the candidate, in a case insensitive or
         //    sensitive manner. If it does, return that there was an exact match if the word and candidate are the same length, else a prefix match.
-        return createPatternMatch(chunk.text.length === candidate.length ? PatternMatchKind.exact : PatternMatchKind.prefix, /*isCaseSensitive:*/ startsWith(candidate, chunk.text));
+        return createPatternMatch(
+            chunk.text.length === candidate.length ? PatternMatchKind.exact : PatternMatchKind.prefix,
+            /*isCaseSensitive:*/ startsWith(candidate, chunk.text),
+        );
     }
 
     if (chunk.isLowerCase) {

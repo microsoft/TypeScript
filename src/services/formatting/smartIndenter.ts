@@ -195,7 +195,14 @@ export namespace SmartIndenter {
         return findFirstNonWhitespaceColumn(lineStart, current, sourceFile, options);
     }
 
-    function getSmartIndent(sourceFile: SourceFile, position: number, precedingToken: Node, lineAtPosition: number, assumeNewLineBeforeCloseBrace: boolean, options: EditorSettings): number {
+    function getSmartIndent(
+        sourceFile: SourceFile,
+        position: number,
+        precedingToken: Node,
+        lineAtPosition: number,
+        assumeNewLineBeforeCloseBrace: boolean,
+        options: EditorSettings,
+    ): number {
         // try to find node that can contribute to indentation and includes 'position' starting from 'precedingToken'
         // if such node is found - compute initial indentation for 'position' inside this node
         let previous: Node | undefined;

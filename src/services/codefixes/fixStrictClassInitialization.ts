@@ -159,7 +159,12 @@ function getActionForAddMissingInitializer(context: CodeFixContext, info: Info):
     );
 }
 
-function addInitializer(changeTracker: textChanges.ChangeTracker, propertyDeclarationSourceFile: SourceFile, propertyDeclaration: PropertyDeclaration, initializer: Expression): void {
+function addInitializer(
+    changeTracker: textChanges.ChangeTracker,
+    propertyDeclarationSourceFile: SourceFile,
+    propertyDeclaration: PropertyDeclaration,
+    initializer: Expression,
+): void {
     suppressLeadingAndTrailingTrivia(propertyDeclaration);
     const property = factory.updatePropertyDeclaration(
         propertyDeclaration,

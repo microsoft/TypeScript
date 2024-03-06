@@ -240,7 +240,8 @@ function convertStatement(
                 }
                 case SyntaxKind.BinaryExpression: {
                     const { operatorToken } = expression as BinaryExpression;
-                    return operatorToken.kind === SyntaxKind.EqualsToken && convertAssignment(sourceFile, checker, expression as BinaryExpression, changes, exports, useSitesToUnqualify);
+                    return operatorToken.kind === SyntaxKind.EqualsToken &&
+                        convertAssignment(sourceFile, checker, expression as BinaryExpression, changes, exports, useSitesToUnqualify);
                 }
             }
         }
@@ -377,7 +378,8 @@ function tryChangeModuleExportsObject(object: ObjectLiteralExpression, useSitesT
             case SyntaxKind.PropertyAssignment:
                 return !isIdentifier(prop.name) ? undefined : convertExportsDotXEquals_replaceNode(prop.name.text, prop.initializer, useSitesToUnqualify);
             case SyntaxKind.MethodDeclaration:
-                return !isIdentifier(prop.name) ? undefined : functionExpressionToDeclaration(prop.name.text, [factory.createToken(SyntaxKind.ExportKeyword)], prop, useSitesToUnqualify);
+                return !isIdentifier(prop.name) ? undefined
+                    : functionExpressionToDeclaration(prop.name.text, [factory.createToken(SyntaxKind.ExportKeyword)], prop, useSitesToUnqualify);
             default:
                 Debug.assertNever(prop, `Convert to ES6 got invalid prop kind ${(prop as ObjectLiteralElementLike).kind}`);
         }
@@ -427,7 +429,11 @@ function reExportDefault(moduleSpecifier: string): ExportDeclaration {
     return makeExportDeclaration([factory.createExportSpecifier(/*isTypeOnly*/ false, /*propertyName*/ undefined, "default")], moduleSpecifier);
 }
 
-function convertExportsPropertyAssignment({ left, right, parent }: BinaryExpression & { left: PropertyAccessExpression; }, sourceFile: SourceFile, changes: textChanges.ChangeTracker): void {
+function convertExportsPropertyAssignment(
+    { left, right, parent }: BinaryExpression & { left: PropertyAccessExpression; },
+    sourceFile: SourceFile,
+    changes: textChanges.ChangeTracker,
+): void {
     const name = left.name.text;
     if ((isFunctionExpression(right) || isArrowFunction(right) || isClassExpression(right)) && (!right.name || right.name.text === name)) {
         // `exports.f = function() {}` -> `export function f() {}` -- Replace `exports.f = ` with `export `, and insert the name after `function`.
@@ -599,7 +605,11 @@ function convertSingleIdentifierImport(
             mapIterator(
                 namedBindingsNames.entries(),
                 ([propertyName, idName]) =>
-                    factory.createImportSpecifier(/*isTypeOnly*/ false, propertyName === idName ? undefined : factory.createIdentifier(propertyName), factory.createIdentifier(idName)),
+                    factory.createImportSpecifier(
+                        /*isTypeOnly*/ false,
+                        propertyName === idName ? undefined : factory.createIdentifier(propertyName),
+                        factory.createIdentifier(idName),
+                    ),
             ),
         );
     if (!namedBindings) {

@@ -687,8 +687,12 @@ function createSignatureHelpItems(
     const enclosingDeclaration = getEnclosingDeclarationFromInvocation(invocation);
     const callTargetSymbol = invocation.kind === InvocationKind.Contextual ? invocation.symbol
         : (typeChecker.getSymbolAtLocation(getExpressionFromInvocation(invocation)) || useFullPrefix && resolvedSignature.declaration?.symbol);
-    const callTargetDisplayParts = callTargetSymbol ? symbolToDisplayParts(typeChecker, callTargetSymbol, useFullPrefix ? sourceFile : undefined, /*meaning*/ undefined) : emptyArray;
-    const items = map(candidates, candidateSignature => getSignatureHelpItem(candidateSignature, callTargetDisplayParts, isTypeParameterList, typeChecker, enclosingDeclaration, sourceFile));
+    const callTargetDisplayParts = callTargetSymbol ? symbolToDisplayParts(typeChecker, callTargetSymbol, useFullPrefix ? sourceFile : undefined, /*meaning*/ undefined)
+        : emptyArray;
+    const items = map(
+        candidates,
+        candidateSignature => getSignatureHelpItem(candidateSignature, callTargetDisplayParts, isTypeParameterList, typeChecker, enclosingDeclaration, sourceFile),
+    );
 
     if (argumentIndex !== 0) {
         Debug.assertLessThan(argumentIndex, argumentCount);
@@ -800,7 +804,8 @@ function itemInfoForTypeParameters(candidateSignature: Signature, checker: TypeC
     const typeParameters = (candidateSignature.target || candidateSignature).typeParameters;
     const printer = createPrinterWithRemoveComments();
     const parameters = (typeParameters || emptyArray).map(t => createSignatureHelpParameterForTypeParameter(t, checker, enclosingDeclaration, sourceFile, printer));
-    const thisParameter = candidateSignature.thisParameter ? [checker.symbolToParameterDeclaration(candidateSignature.thisParameter, enclosingDeclaration, signatureHelpNodeBuilderFlags)!]
+    const thisParameter = candidateSignature.thisParameter ?
+        [checker.symbolToParameterDeclaration(candidateSignature.thisParameter, enclosingDeclaration, signatureHelpNodeBuilderFlags)!]
         : [];
 
     return checker.getExpandedParameters(candidateSignature).map(paramList => {
@@ -819,7 +824,9 @@ function itemInfoForParameters(candidateSignature: Signature, checker: TypeCheck
     const printer = createPrinterWithRemoveComments();
     const typeParameterParts = mapToDisplayParts(writer => {
         if (candidateSignature.typeParameters && candidateSignature.typeParameters.length) {
-            const args = factory.createNodeArray(candidateSignature.typeParameters.map(p => checker.typeParameterToDeclaration(p, enclosingDeclaration, signatureHelpNodeBuilderFlags)!));
+            const args = factory.createNodeArray(
+                candidateSignature.typeParameters.map(p => checker.typeParameterToDeclaration(p, enclosingDeclaration, signatureHelpNodeBuilderFlags)!),
+            );
             printer.writeList(ListFormat.TypeParameters, args, sourceFile, writer);
         }
     });
@@ -835,7 +842,13 @@ function itemInfoForParameters(candidateSignature: Signature, checker: TypeCheck
     }));
 }
 
-function createSignatureHelpParameterForParameter(parameter: Symbol, checker: TypeChecker, enclosingDeclaration: Node, sourceFile: SourceFile, printer: Printer): SignatureHelpParameter {
+function createSignatureHelpParameterForParameter(
+    parameter: Symbol,
+    checker: TypeChecker,
+    enclosingDeclaration: Node,
+    sourceFile: SourceFile,
+    printer: Printer,
+): SignatureHelpParameter {
     const displayParts = mapToDisplayParts(writer => {
         const param = checker.symbolToParameterDeclaration(parameter, enclosingDeclaration, signatureHelpNodeBuilderFlags)!;
         printer.writeNode(EmitHint.Unspecified, param, sourceFile, writer);

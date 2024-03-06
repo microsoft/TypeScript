@@ -1171,7 +1171,11 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
         }
         return map(this.program!.getSourceFiles(), sourceFile => {
             const scriptInfo = this.projectService.getScriptInfoForPath(sourceFile.resolvedPath);
-            Debug.assert(!!scriptInfo, "getScriptInfo", () => `scriptInfo for a file '${sourceFile.fileName}' Path: '${sourceFile.path}' / '${sourceFile.resolvedPath}' is missing.`);
+            Debug.assert(
+                !!scriptInfo,
+                "getScriptInfo",
+                () => `scriptInfo for a file '${sourceFile.fileName}' Path: '${sourceFile.path}' / '${sourceFile.resolvedPath}' is missing.`,
+            );
             return scriptInfo;
         });
     }
@@ -1487,7 +1491,13 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
                             f => {
                                 if (this.typingWatchers!.isInvoked) return this.writeLog(`TypingWatchers already invoked`);
                                 if (!fileExtensionIs(f, Extension.Json)) return this.writeLog(`Ignoring files that are not *.json`);
-                                if (comparePaths(f, combinePaths(this.projectService.typingsInstaller.globalTypingsCacheLocation!, "package.json"), !this.useCaseSensitiveFileNames())) {
+                                if (
+                                    comparePaths(
+                                        f,
+                                        combinePaths(this.projectService.typingsInstaller.globalTypingsCacheLocation!, "package.json"),
+                                        !this.useCaseSensitiveFileNames(),
+                                    )
+                                ) {
                                     return this.writeLog(`Ignoring package.json change at global typings location`);
                                 }
                                 this.onTypingInstallerWatchInvoke();
@@ -2239,7 +2249,12 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
     getNoDtsResolutionProject(rootFile: NormalizedPath): AuxiliaryProject {
         Debug.assert(this.projectService.serverMode === LanguageServiceMode.Semantic);
         if (!this.noDtsResolutionProject) {
-            this.noDtsResolutionProject = new AuxiliaryProject(this.projectService, this.documentRegistry, this.getCompilerOptionsForNoDtsResolutionProject(), this.currentDirectory);
+            this.noDtsResolutionProject = new AuxiliaryProject(
+                this.projectService,
+                this.documentRegistry,
+                this.getCompilerOptionsForNoDtsResolutionProject(),
+                this.currentDirectory,
+            );
         }
         if (this.noDtsResolutionProject.rootFile !== rootFile) {
             this.projectService.setFileNamesOfAutpImportProviderOrAuxillaryProject(this.noDtsResolutionProject, [rootFile]);
@@ -2457,7 +2472,12 @@ export class AutoImportProviderProject extends Project {
     private static readonly maxDependencies = 10;
 
     /** @internal */
-    static getRootFileNames(dependencySelection: PackageJsonAutoImportPreference, hostProject: Project, host: GetPackageJsonEntrypointsHost, compilerOptions: CompilerOptions): string[] {
+    static getRootFileNames(
+        dependencySelection: PackageJsonAutoImportPreference,
+        hostProject: Project,
+        host: GetPackageJsonEntrypointsHost,
+        compilerOptions: CompilerOptions,
+    ): string[] {
         if (!dependencySelection) {
             return ts.emptyArray;
         }
@@ -2815,7 +2835,10 @@ export class ConfiguredProject extends Project {
         // Ensure the config file existience info is cached
         let configFileExistenceInfo = this.projectService.configFileExistenceInfoCache.get(canonicalConfigFilePath);
         if (!configFileExistenceInfo) {
-            this.projectService.configFileExistenceInfoCache.set(canonicalConfigFilePath, configFileExistenceInfo = { exists: this.projectService.host.fileExists(configFileName) });
+            this.projectService.configFileExistenceInfoCache.set(
+                canonicalConfigFilePath,
+                configFileExistenceInfo = { exists: this.projectService.host.fileExists(configFileName) },
+            );
         }
         // Ensure we have upto date parsed command line
         this.projectService.ensureParsedConfigUptoDate(configFileName, canonicalConfigFilePath, configFileExistenceInfo, this);

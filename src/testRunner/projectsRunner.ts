@@ -315,7 +315,10 @@ class ProjectTestCase {
         if (!this.compilerResult.errors.length && this.testCase.declaration) {
             const dTsCompileResult = this.compileDeclarations(this.compilerResult);
             if (dTsCompileResult && dTsCompileResult.errors.length) {
-                Harness.Baseline.runBaseline(this.getBaselineFolder(this.compilerResult.moduleKind) + this.testCaseJustName + ".dts.errors.txt", getErrorsBaseline(dTsCompileResult));
+                Harness.Baseline.runBaseline(
+                    this.getBaselineFolder(this.compilerResult.moduleKind) + this.testCaseJustName + ".dts.errors.txt",
+                    getErrorsBaseline(dTsCompileResult),
+                );
             }
         }
     }

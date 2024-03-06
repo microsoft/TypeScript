@@ -74,7 +74,12 @@ export function computeSuggestionDiagnostics(sourceFile: SourceFile, program: Pr
         (programContainsEsModules(program) || compilerOptionsIndicateEsModules(program.getCompilerOptions())) &&
         containsTopLevelCommonjs(sourceFile)
     ) {
-        diags.push(createDiagnosticForNode(getErrorNodeFromCommonJsIndicator(sourceFile.commonJsModuleIndicator), Diagnostics.File_is_a_CommonJS_module_it_may_be_converted_to_an_ES_module));
+        diags.push(
+            createDiagnosticForNode(
+                getErrorNodeFromCommonJsIndicator(sourceFile.commonJsModuleIndicator),
+                Diagnostics.File_is_a_CommonJS_module_it_may_be_converted_to_an_ES_module,
+            ),
+        );
     }
 
     const isJsFile = isSourceFileJS(sourceFile);
@@ -106,7 +111,10 @@ export function computeSuggestionDiagnostics(sourceFile: SourceFile, program: Pr
         if (isJsFile) {
             if (canBeConvertedToClass(node, checker)) {
                 diags.push(
-                    createDiagnosticForNode(isVariableDeclaration(node.parent) ? node.parent.name : node, Diagnostics.This_constructor_function_may_be_converted_to_a_class_declaration),
+                    createDiagnosticForNode(
+                        isVariableDeclaration(node.parent) ? node.parent.name : node,
+                        Diagnostics.This_constructor_function_may_be_converted_to_a_class_declaration,
+                    ),
                 );
             }
         }
@@ -168,7 +176,8 @@ function importNameForConvertToDefaultImport(node: AnyValidImportOrReExport): Id
     switch (node.kind) {
         case SyntaxKind.ImportDeclaration:
             const { importClause, moduleSpecifier } = node;
-            return importClause && !importClause.name && importClause.namedBindings && importClause.namedBindings.kind === SyntaxKind.NamespaceImport && isStringLiteral(moduleSpecifier)
+            return importClause && !importClause.name && importClause.namedBindings && importClause.namedBindings.kind === SyntaxKind.NamespaceImport &&
+                    isStringLiteral(moduleSpecifier)
                 ? importClause.namedBindings.name
                 : undefined;
         case SyntaxKind.ImportEqualsDeclaration:

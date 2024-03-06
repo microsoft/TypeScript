@@ -191,7 +191,14 @@ class CommonJsLoader extends Loader<CommonJSModule> {
         const localRequire = (id: string) => this.import(id, base);
         const evaluateText = `(function (module, exports, require, __dirname, __filename, ${globalNames.join(", ")}) { ${text}\n})`;
         // eslint-disable-next-line no-eval
-        const evaluateThunk = (void 0, eval)(evaluateText) as (module: any, exports: any, require: (id: string) => any, dirname: string, filename: string, ...globalArgs: any[]) => void;
+        const evaluateThunk = (void 0, eval)(evaluateText) as (
+            module: any,
+            exports: any,
+            require: (id: string) => any,
+            dirname: string,
+            filename: string,
+            ...globalArgs: any[]
+        ) => void;
         evaluateThunk.call(this.globals, module, module.exports, localRequire, vpath.dirname(file), file, ...globalArgs);
     }
 }

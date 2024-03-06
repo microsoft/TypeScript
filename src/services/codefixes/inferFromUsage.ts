@@ -556,7 +556,12 @@ function inferTypeForParametersFromUsage(func: SignatureDeclaration, sourceFile:
         }));
 }
 
-function getFunctionReferences(containingFunction: SignatureDeclaration, sourceFile: SourceFile, program: Program, cancellationToken: CancellationToken): readonly Identifier[] | undefined {
+function getFunctionReferences(
+    containingFunction: SignatureDeclaration,
+    sourceFile: SourceFile,
+    program: Program,
+    cancellationToken: CancellationToken,
+): readonly Identifier[] | undefined {
     let searchToken;
     switch (containingFunction.kind) {
         case SyntaxKind.Constructor:

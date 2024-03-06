@@ -314,9 +314,11 @@ export function start() {
             worker.process.on("message", (data: ParallelClientMessage) => {
                 switch (data.type) {
                     case "error": {
-                        console.error(`Test worker encountered unexpected error${data.payload.name ? ` during the execution of test ${data.payload.name}` : ""} and was forced to close:
+                        console.error(
+                            `Test worker encountered unexpected error${data.payload.name ? ` during the execution of test ${data.payload.name}` : ""} and was forced to close:
             Message: ${data.payload.error}
-            Stack: ${data.payload.stack}`);
+            Stack: ${data.payload.stack}`,
+                        );
                         return process.exit(2);
                     }
                     case "timeout": {

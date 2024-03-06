@@ -675,7 +675,8 @@ export namespace Compiler {
                         // Calculate the start of the squiggle
                         const squiggleStart = Math.max(0, relativeOffset);
                         // TODO/REVIEW: this doesn't work quite right in the browser if a multi file test has files whose names are just the right length relative to one another
-                        outputLines += newLine() + "    " + line.substr(0, squiggleStart).replace(/[^\s]/g, " ") + new Array(Math.min(length, line.length - squiggleStart) + 1).join("~");
+                        outputLines += newLine() + "    " + line.substr(0, squiggleStart).replace(/[^\s]/g, " ") +
+                            new Array(Math.min(length, line.length - squiggleStart) + 1).join("~");
 
                         // If the error ended here, or we're at the end of the file, emit its message
                         if ((lineIndex === lines.length - 1) || nextLineStart > end) {
@@ -827,7 +828,10 @@ export namespace Compiler {
                         typeLines += codeLines.slice(0, result.line + 1).join("\r\n") + "\r\n";
                     }
                     else if (result.line !== lastIndexWritten) {
-                        if (!((lastIndexWritten + 1 < codeLines.length) && (codeLines[lastIndexWritten + 1].match(/^\s*[{|}]\s*$/) || codeLines[lastIndexWritten + 1].trim() === ""))) {
+                        if (
+                            !((lastIndexWritten + 1 < codeLines.length) &&
+                                (codeLines[lastIndexWritten + 1].match(/^\s*[{|}]\s*$/) || codeLines[lastIndexWritten + 1].trim() === ""))
+                        ) {
                             typeLines += "\r\n";
                         }
                         typeLines += codeLines.slice(lastIndexWritten + 1, result.line + 1).join("\r\n") + "\r\n";
@@ -860,7 +864,9 @@ export namespace Compiler {
             return;
         }
         else if (options.sourceMap || declMaps) {
-            if (result.maps.size !== ((options.sourceMap ? result.getNumberOfJsFiles(/*includeJson*/ false) : 0) + (declMaps ? result.getNumberOfJsFiles(/*includeJson*/ true) : 0))) {
+            if (
+                result.maps.size !== ((options.sourceMap ? result.getNumberOfJsFiles(/*includeJson*/ false) : 0) + (declMaps ? result.getNumberOfJsFiles(/*includeJson*/ true) : 0))
+            ) {
                 throw new Error("Number of sourcemap files should be same as js files.");
             }
 
@@ -893,7 +899,8 @@ export namespace Compiler {
         const anyUnfoundSources = ts.contains(sourceTDs, /*value*/ undefined);
         if (anyUnfoundSources) return "";
 
-        const hash = "#base64," + ts.map([outputJSFile.text, sourcemap].concat(sourceTDs.map(td => td!.text)), s => ts.convertToBase64(decodeURIComponent(encodeURIComponent(s)))).join(",");
+        const hash = "#base64," +
+            ts.map([outputJSFile.text, sourcemap].concat(sourceTDs.map(td => td!.text)), s => ts.convertToBase64(decodeURIComponent(encodeURIComponent(s)))).join(",");
         return "\n//// https://sokra.github.io/source-map-visualization" + hash + "\n";
     }
 

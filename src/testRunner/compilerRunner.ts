@@ -290,7 +290,10 @@ class CompilerTest {
 
     public verifyModuleResolution() {
         if (this.options.traceResolution) {
-            Baseline.runBaseline(this.configuredName.replace(/\.tsx?$/, ".trace.json"), JSON.stringify(this.result.traces.map(Utils.sanitizeTraceResolutionLogEntry), undefined, 4));
+            Baseline.runBaseline(
+                this.configuredName.replace(/\.tsx?$/, ".trace.json"),
+                JSON.stringify(this.result.traces.map(Utils.sanitizeTraceResolutionLogEntry), undefined, 4),
+            );
         }
     }
 

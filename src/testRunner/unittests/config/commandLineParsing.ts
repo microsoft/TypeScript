@@ -61,7 +61,17 @@ describe("unittests:: config:: commandLineParsing:: parseCommandLine", () => {
     // --module commonjs --target es5 0.ts --lib es5,es2015.symbol.wellknown
     assertParseResult("Parse multiple compiler flags with input files in the middle", ["--module", "commonjs", "--target", "es5", "0.ts", "--lib", "es5,es2015.symbol.wellknown"]);
     // --module commonjs --target es5 --lib es5 0.ts --library es2015.array,es2015.symbol.wellknown
-    assertParseResult("Parse multiple library compiler flags ", ["--module", "commonjs", "--target", "es5", "--lib", "es5", "0.ts", "--lib", "es2015.core, es2015.symbol.wellknown "]);
+    assertParseResult("Parse multiple library compiler flags ", [
+        "--module",
+        "commonjs",
+        "--target",
+        "es5",
+        "--lib",
+        "es5",
+        "0.ts",
+        "--lib",
+        "es2015.core, es2015.symbol.wellknown ",
+    ]);
     assertParseResult("Parse explicit boolean flag value", ["--strictNullChecks", "false", "0.ts"]);
     assertParseResult("Parse non boolean argument after boolean flag", ["--noImplicitAny", "t", "0.ts"]);
     assertParseResult("Parse implicit boolean flag value", ["--strictNullChecks"]);

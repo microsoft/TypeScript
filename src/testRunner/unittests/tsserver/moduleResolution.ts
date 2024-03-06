@@ -181,11 +181,17 @@ describe("unittests:: tsserver:: moduleResolution", () => {
         verifyErrors();
         host.writeFile("/home/src/projects/project/node_modules/@types/bar/package.json", getFsConentsForAlternateResultAtTypesPackageJson("bar", /*addTypesCondition*/ true));
         verifyErrors();
-        host.writeFile("/home/src/projects/project/node_modules/foo/package.json", getFsContentsForAlternateResultPackageJson("foo", /*addTypes*/ true, /*addTypesCondition*/ true));
+        host.writeFile(
+            "/home/src/projects/project/node_modules/foo/package.json",
+            getFsContentsForAlternateResultPackageJson("foo", /*addTypes*/ true, /*addTypesCondition*/ true),
+        );
         verifyErrors();
         host.writeFile("/home/src/projects/project/node_modules/@types/bar2/package.json", getFsConentsForAlternateResultAtTypesPackageJson("bar2", /*addTypesCondition*/ false));
         verifyErrors();
-        host.writeFile("/home/src/projects/project/node_modules/foo2/package.json", getFsContentsForAlternateResultPackageJson("foo2", /*addTypes*/ true, /*addTypesCondition*/ false));
+        host.writeFile(
+            "/home/src/projects/project/node_modules/foo2/package.json",
+            getFsContentsForAlternateResultPackageJson("foo2", /*addTypes*/ true, /*addTypesCondition*/ false),
+        );
         verifyErrors();
         host.deleteFile("/home/src/projects/project/node_modules/@types/bar2/index.d.ts");
         verifyErrors();

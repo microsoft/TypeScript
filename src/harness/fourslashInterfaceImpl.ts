@@ -495,7 +495,13 @@ export class Verify extends VerifyNegatable {
         this.state.verifyCodeFixAll(options);
     }
 
-    public fileAfterApplyingRefactorAtMarker(markerName: string, expectedContent: string, refactorNameToApply: string, actionName: string, formattingOptions?: ts.FormatCodeSettings): void {
+    public fileAfterApplyingRefactorAtMarker(
+        markerName: string,
+        expectedContent: string,
+        refactorNameToApply: string,
+        actionName: string,
+        formattingOptions?: ts.FormatCodeSettings,
+    ): void {
         this.state.verifyFileAfterApplyingRefactorAtMarker(markerName, expectedContent, refactorNameToApply, actionName, formattingOptions);
     }
 

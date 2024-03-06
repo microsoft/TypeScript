@@ -30,9 +30,12 @@ registerCodeFix({
         const { sourceFile, span, preferences } = context;
         const property = getPropertyAccessExpression(sourceFile, span.start);
         const changes = textChanges.ChangeTracker.with(context, t => doChange(t, context.sourceFile, property, preferences));
-        return [createCodeFixAction(fixId, changes, [Diagnostics.Use_element_access_for_0, property.name.text], fixId, Diagnostics.Use_element_access_for_all_undeclared_properties)];
+        return [
+            createCodeFixAction(fixId, changes, [Diagnostics.Use_element_access_for_0, property.name.text], fixId, Diagnostics.Use_element_access_for_all_undeclared_properties),
+        ];
     },
-    getAllCodeActions: context => codeFixAll(context, errorCodes, (changes, diag) => doChange(changes, diag.file, getPropertyAccessExpression(diag.file, diag.start), context.preferences)),
+    getAllCodeActions: context =>
+        codeFixAll(context, errorCodes, (changes, diag) => doChange(changes, diag.file, getPropertyAccessExpression(diag.file, diag.start), context.preferences)),
 });
 
 function doChange(changes: textChanges.ChangeTracker, sourceFile: SourceFile, node: PropertyAccessExpression, preferences: UserPreferences): void {

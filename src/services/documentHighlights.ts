@@ -125,7 +125,15 @@ export namespace DocumentHighlights {
         sourceFilesToSearch: readonly SourceFile[],
     ): DocumentHighlights[] | undefined {
         const sourceFilesSet = new Set(sourceFilesToSearch.map(f => f.fileName));
-        const referenceEntries = FindAllReferences.getReferenceEntriesForNode(position, node, program, sourceFilesToSearch, cancellationToken, /*options*/ undefined, sourceFilesSet);
+        const referenceEntries = FindAllReferences.getReferenceEntriesForNode(
+            position,
+            node,
+            program,
+            sourceFilesToSearch,
+            cancellationToken,
+            /*options*/ undefined,
+            sourceFilesSet,
+        );
         if (!referenceEntries) return undefined;
         const map = arrayToMultiMap(referenceEntries.map(FindAllReferences.toHighlightSpan), e => e.fileName, e => e.span);
         const getCanonicalFileName = createGetCanonicalFileName(program.useCaseSensitiveFileNames());
@@ -202,7 +210,8 @@ export namespace DocumentHighlights {
             return useParent(
                 node.parent,
                 nodeTest,
-                decl => mapDefined(tryCast(decl, canHaveSymbol)?.symbol.declarations, d => nodeTest(d) ? find(d.getChildren(sourceFile), c => contains(keywords, c.kind)) : undefined),
+                decl =>
+                    mapDefined(tryCast(decl, canHaveSymbol)?.symbol.declarations, d => nodeTest(d) ? find(d.getChildren(sourceFile), c => contains(keywords, c.kind)) : undefined),
             );
         }
 

@@ -190,7 +190,9 @@ new C();`,
                     verifyGetErrRequest({ session, files: [recognizersDateTimeSrcFile] });
                     baselineTsserverLogs(
                         "symLinks",
-                        `module resolution${withPathMapping ? " with path mapping" : ""} when project has node_modules setup but doesnt have modules in typings folder and then recompiles`,
+                        `module resolution${
+                            withPathMapping ? " with path mapping" : ""
+                        } when project has node_modules setup but doesnt have modules in typings folder and then recompiles`,
                         session,
                     );
                 });
@@ -212,7 +214,11 @@ new C();`,
                     host.runQueuedTimeoutCallbacks(); // Actual update
 
                     verifyGetErrRequest({ session, files: [recognizersDateTimeSrcFile] });
-                    baselineTsserverLogs("symLinks", `module resolution${withPathMapping ? " with path mapping" : ""} when project recompiles after deleting generated folders`, session);
+                    baselineTsserverLogs(
+                        "symLinks",
+                        `module resolution${withPathMapping ? " with path mapping" : ""} when project recompiles after deleting generated folders`,
+                        session,
+                    );
                 });
             });
         }

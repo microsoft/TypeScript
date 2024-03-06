@@ -738,7 +738,8 @@ export interface WatchFactoryWithLog<X, Y = undefined> extends WatchFactory<X, Y
 
 /** @internal */
 export function createWatchFactory<Y = undefined>(host: WatchFactoryHost & { trace?(s: string): void; }, options: { extendedDiagnostics?: boolean; diagnostics?: boolean; }) {
-    const watchLogLevel = host.trace ? options.extendedDiagnostics ? WatchLogLevel.Verbose : options.diagnostics ? WatchLogLevel.TriggerOnly : WatchLogLevel.None : WatchLogLevel.None;
+    const watchLogLevel = host.trace ? options.extendedDiagnostics ? WatchLogLevel.Verbose : options.diagnostics ? WatchLogLevel.TriggerOnly : WatchLogLevel.None
+        : WatchLogLevel.None;
     const writeLog: (s: string) => void = watchLogLevel !== WatchLogLevel.None ? (s => host.trace!(s)) : noop;
     const result = getWatchFactory<WatchType, Y>(host, watchLogLevel, writeLog) as WatchFactoryWithLog<WatchType, Y>;
     result.writeLog = writeLog;
@@ -746,7 +747,11 @@ export function createWatchFactory<Y = undefined>(host: WatchFactoryHost & { tra
 }
 
 /** @internal */
-export function createCompilerHostFromProgramHost(host: ProgramHost<any>, getCompilerOptions: () => CompilerOptions, directoryStructureHost: DirectoryStructureHost = host): CompilerHost {
+export function createCompilerHostFromProgramHost(
+    host: ProgramHost<any>,
+    getCompilerOptions: () => CompilerOptions,
+    directoryStructureHost: DirectoryStructureHost = host,
+): CompilerHost {
     const useCaseSensitiveFileNames = host.useCaseSensitiveFileNames();
     const compilerHost: CompilerHost = {
         getSourceFile: createGetSourceFile(
@@ -835,7 +840,10 @@ export function setGetSourceFileAsHashVersioned(compilerHost: CompilerHost) {
  *
  * @internal
  */
-export function createProgramHost<T extends BuilderProgram = EmitAndSemanticDiagnosticsBuilderProgram>(system: System, createProgram: CreateProgram<T> | undefined): ProgramHost<T> {
+export function createProgramHost<T extends BuilderProgram = EmitAndSemanticDiagnosticsBuilderProgram>(
+    system: System,
+    createProgram: CreateProgram<T> | undefined,
+): ProgramHost<T> {
     const getDefaultLibLocation = memoize(() => getDirectoryPath(normalizePath(system.getExecutingFilePath())));
     return {
         useCaseSensitiveFileNames: () => system.useCaseSensitiveFileNames,
@@ -962,7 +970,12 @@ export function createWatchCompilerHostOfFilesAndCompilerOptions<T extends Build
     reportDiagnostic,
     reportWatchStatus,
 }: CreateWatchCompilerHostOfFilesAndCompilerOptionsInput<T>): WatchCompilerHostOfFilesAndCompilerOptions<T> {
-    const host = createWatchCompilerHost(system, createProgram, reportDiagnostic || createDiagnosticReporter(system), reportWatchStatus) as WatchCompilerHostOfFilesAndCompilerOptions<T>;
+    const host = createWatchCompilerHost(
+        system,
+        createProgram,
+        reportDiagnostic || createDiagnosticReporter(system),
+        reportWatchStatus,
+    ) as WatchCompilerHostOfFilesAndCompilerOptions<T>;
     host.rootFiles = rootFiles;
     host.options = options;
     host.watchOptions = watchOptions;
@@ -991,7 +1004,8 @@ export function performIncrementalCompilation(input: IncrementalCompilationOptio
         builderProgram,
         input.reportDiagnostic || createDiagnosticReporter(system),
         s => host.trace && host.trace(s),
-        input.reportErrorSummary || input.options.pretty ? (errorCount, filesInError) => system.write(getErrorSummaryText(errorCount, filesInError, system.newLine, host)) : undefined,
+        input.reportErrorSummary || input.options.pretty ? (errorCount, filesInError) => system.write(getErrorSummaryText(errorCount, filesInError, system.newLine, host))
+            : undefined,
     );
     if (input.afterProgramEmitAndDiagnostics) input.afterProgramEmitAndDiagnostics(builderProgram);
     return exitStatus;

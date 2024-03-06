@@ -1621,7 +1621,11 @@ export function f(p: C) { return p; }`,
         edits: [
             {
                 caption: "Enable resolveJsonModule",
-                edit: sys => sys.writeFile(`/user/username/projects/myproject/tsconfig.json`, jsonToReadableText({ compilerOptions: { moduleResolution: "node", resolveJsonModule: true } })),
+                edit: sys =>
+                    sys.writeFile(
+                        `/user/username/projects/myproject/tsconfig.json`,
+                        jsonToReadableText({ compilerOptions: { moduleResolution: "node", resolveJsonModule: true } }),
+                    ),
                 timeouts: sys => sys.runQueuedTimeoutCallbacks(),
             },
         ],

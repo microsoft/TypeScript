@@ -518,7 +518,10 @@ function verifyProgram(service: ts.server.ProjectService, project: ts.server.Pro
 }
 
 interface ResolveSingleModuleNameWithoutWatchingData {
-    resolutionToData: Map<ts.ResolutionWithFailedLookupLocations, Pick<ts.ResolvedModuleWithFailedLookupLocations, "failedLookupLocations" | "affectingLocations" | "resolutionDiagnostics">>;
+    resolutionToData: Map<
+        ts.ResolutionWithFailedLookupLocations,
+        Pick<ts.ResolvedModuleWithFailedLookupLocations, "failedLookupLocations" | "affectingLocations" | "resolutionDiagnostics">
+    >;
     packageJsonMap: Map<ts.Path, ts.PackageJsonInfoCacheEntry> | undefined;
 }
 

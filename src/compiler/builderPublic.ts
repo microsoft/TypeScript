@@ -151,7 +151,10 @@ export interface SemanticDiagnosticsBuilderProgram extends BuilderProgram {
      * Gets the semantic diagnostics from the program for the next affected file and caches it
      * Returns undefined if the iteration is complete
      */
-    getSemanticDiagnosticsOfNextAffectedFile(cancellationToken?: CancellationToken, ignoreSourceFile?: (sourceFile: SourceFile) => boolean): AffectedFileResult<readonly Diagnostic[]>;
+    getSemanticDiagnosticsOfNextAffectedFile(
+        cancellationToken?: CancellationToken,
+        ignoreSourceFile?: (sourceFile: SourceFile) => boolean,
+    ): AffectedFileResult<readonly Diagnostic[]>;
 }
 
 /**
@@ -199,7 +202,14 @@ export function createSemanticDiagnosticsBuilderProgram(
 ) {
     return createBuilderProgram(
         BuilderProgramKind.SemanticDiagnosticsBuilderProgram,
-        getBuilderCreationParameters(newProgramOrRootNames, hostOrOptions, oldProgramOrHost, configFileParsingDiagnosticsOrOldProgram, configFileParsingDiagnostics, projectReferences),
+        getBuilderCreationParameters(
+            newProgramOrRootNames,
+            hostOrOptions,
+            oldProgramOrHost,
+            configFileParsingDiagnosticsOrOldProgram,
+            configFileParsingDiagnostics,
+            projectReferences,
+        ),
     );
 }
 
@@ -231,14 +241,26 @@ export function createEmitAndSemanticDiagnosticsBuilderProgram(
 ) {
     return createBuilderProgram(
         BuilderProgramKind.EmitAndSemanticDiagnosticsBuilderProgram,
-        getBuilderCreationParameters(newProgramOrRootNames, hostOrOptions, oldProgramOrHost, configFileParsingDiagnosticsOrOldProgram, configFileParsingDiagnostics, projectReferences),
+        getBuilderCreationParameters(
+            newProgramOrRootNames,
+            hostOrOptions,
+            oldProgramOrHost,
+            configFileParsingDiagnosticsOrOldProgram,
+            configFileParsingDiagnostics,
+            projectReferences,
+        ),
     );
 }
 
 /**
  * Creates a builder thats just abstraction over program and can be used with watch
  */
-export function createAbstractBuilder(newProgram: Program, host: BuilderProgramHost, oldProgram?: BuilderProgram, configFileParsingDiagnostics?: readonly Diagnostic[]): BuilderProgram;
+export function createAbstractBuilder(
+    newProgram: Program,
+    host: BuilderProgramHost,
+    oldProgram?: BuilderProgram,
+    configFileParsingDiagnostics?: readonly Diagnostic[],
+): BuilderProgram;
 export function createAbstractBuilder(
     rootNames: readonly string[] | undefined,
     options: CompilerOptions | undefined,

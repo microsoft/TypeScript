@@ -1141,7 +1141,11 @@ const forEachChildTable: ForEachChildTable = {
         return visitNode(cbNode, node.expression) ||
             visitNode(cbNode, node.caseBlock);
     },
-    [SyntaxKind.CaseBlock]: function forEachChildInCaseBlock<T>(node: CaseBlock, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
+    [SyntaxKind.CaseBlock]: function forEachChildInCaseBlock<T>(
+        node: CaseBlock,
+        cbNode: (node: Node) => T | undefined,
+        cbNodes?: (nodes: NodeArray<Node>) => T | undefined,
+    ): T | undefined {
         return visitNodes(cbNode, cbNodes, node.clauses);
     },
     [SyntaxKind.CaseClause]: function forEachChildInCaseClause<T>(
@@ -1191,7 +1195,11 @@ const forEachChildTable: ForEachChildTable = {
         return visitNode(cbNode, node.variableDeclaration) ||
             visitNode(cbNode, node.block);
     },
-    [SyntaxKind.Decorator]: function forEachChildInDecorator<T>(node: Decorator, cbNode: (node: Node) => T | undefined, _cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
+    [SyntaxKind.Decorator]: function forEachChildInDecorator<T>(
+        node: Decorator,
+        cbNode: (node: Node) => T | undefined,
+        _cbNodes?: (nodes: NodeArray<Node>) => T | undefined,
+    ): T | undefined {
         return visitNode(cbNode, node.expression);
     },
     [SyntaxKind.ClassDeclaration]: forEachChildInClassDeclarationOrExpression,
@@ -1640,7 +1648,11 @@ function forEachChildInParenthesizedTypeOrTypeOperator<T>(
     return visitNode(cbNode, node.type);
 }
 
-function forEachChildInObjectOrArrayBindingPattern<T>(node: BindingPattern, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
+function forEachChildInObjectOrArrayBindingPattern<T>(
+    node: BindingPattern,
+    cbNode: (node: Node) => T | undefined,
+    cbNodes?: (nodes: NodeArray<Node>) => T | undefined,
+): T | undefined {
     return visitNodes(cbNode, cbNodes, node.elements);
 }
 
@@ -3570,7 +3582,8 @@ namespace Parser {
                 return isVariableDeclaratorListTerminator();
             case ParsingContext.TypeParameters:
                 // Tokens other than '>' are here for better error recovery
-                return token() === SyntaxKind.GreaterThanToken || token() === SyntaxKind.OpenParenToken || token() === SyntaxKind.OpenBraceToken || token() === SyntaxKind.ExtendsKeyword ||
+                return token() === SyntaxKind.GreaterThanToken || token() === SyntaxKind.OpenParenToken || token() === SyntaxKind.OpenBraceToken ||
+                    token() === SyntaxKind.ExtendsKeyword ||
                     token() === SyntaxKind.ImplementsKeyword;
             case ParsingContext.ArgumentExpressions:
                 // Tokens other than ')' are here for better error recovery
@@ -4037,8 +4050,16 @@ namespace Parser {
 
     // Parses a comma-delimited list of elements
     function parseDelimitedList<T extends Node>(kind: ParsingContext, parseElement: () => T, considerSemicolonAsDelimiter?: boolean): NodeArray<T>;
-    function parseDelimitedList<T extends Node | undefined>(kind: ParsingContext, parseElement: () => T, considerSemicolonAsDelimiter?: boolean): NodeArray<NonNullable<T>> | undefined;
-    function parseDelimitedList<T extends Node | undefined>(kind: ParsingContext, parseElement: () => T, considerSemicolonAsDelimiter?: boolean): NodeArray<NonNullable<T>> | undefined {
+    function parseDelimitedList<T extends Node | undefined>(
+        kind: ParsingContext,
+        parseElement: () => T,
+        considerSemicolonAsDelimiter?: boolean,
+    ): NodeArray<NonNullable<T>> | undefined;
+    function parseDelimitedList<T extends Node | undefined>(
+        kind: ParsingContext,
+        parseElement: () => T,
+        considerSemicolonAsDelimiter?: boolean,
+    ): NodeArray<NonNullable<T>> | undefined {
         const saveParsingContext = parsingContext;
         parsingContext |= 1 << kind;
         const list: NonNullable<T>[] = [];
@@ -4159,7 +4180,11 @@ namespace Parser {
         return finishNode(factory.createQualifiedName(entity, name), entity.pos);
     }
 
-    function parseRightSideOfDot(allowIdentifierNames: boolean, allowPrivateIdentifiers: boolean, allowUnicodeEscapeSequenceInIdentifierName: boolean): Identifier | PrivateIdentifier {
+    function parseRightSideOfDot(
+        allowIdentifierNames: boolean,
+        allowPrivateIdentifiers: boolean,
+        allowUnicodeEscapeSequenceInIdentifierName: boolean,
+    ): Identifier | PrivateIdentifier {
         // Technically a keyword is valid here as all identifiers and keywords are identifier names.
         // However, often we'll encounter this in error situations when the identifier or keyword
         // is actually starting another valid construct.
@@ -5649,7 +5674,8 @@ namespace Parser {
         // If we do successfully parse arrow-function, we must *not* recurse for productions 1, 2 or 3. An ArrowFunction is
         // not a LeftHandSideExpression, nor does it start a ConditionalExpression.  So we are done
         // with AssignmentExpression if we see one.
-        const arrowExpression = tryParseParenthesizedArrowFunctionExpression(allowReturnTypeInArrowFunction) || tryParseAsyncSimpleArrowFunctionExpression(allowReturnTypeInArrowFunction);
+        const arrowExpression = tryParseParenthesizedArrowFunctionExpression(allowReturnTypeInArrowFunction) ||
+            tryParseAsyncSimpleArrowFunctionExpression(allowReturnTypeInArrowFunction);
         if (arrowExpression) {
             return arrowExpression;
         }
@@ -6338,7 +6364,8 @@ namespace Parser {
                 parseErrorAt(
                     pos,
                     end,
-                    Diagnostics.An_unary_expression_with_the_0_operator_is_not_allowed_in_the_left_hand_side_of_an_exponentiation_expression_Consider_enclosing_the_expression_in_parentheses,
+                    Diagnostics
+                        .An_unary_expression_with_the_0_operator_is_not_allowed_in_the_left_hand_side_of_an_exponentiation_expression_Consider_enclosing_the_expression_in_parentheses,
                     tokenToString(unaryOperator),
                 );
             }
@@ -6377,7 +6404,12 @@ namespace Parser {
                 // Just like in parseUpdateExpression, we need to avoid parsing type assertions when
                 // in JSX and we see an expression like "+ <foo> bar".
                 if (languageVariant === LanguageVariant.JSX) {
-                    return parseJsxElementOrSelfClosingElementOrFragment(/*inExpressionContext*/ true, /*topInvalidNodePosition*/ undefined, /*openingTag*/ undefined, /*mustBeUnary*/ true);
+                    return parseJsxElementOrSelfClosingElementOrFragment(
+                        /*inExpressionContext*/ true,
+                        /*topInvalidNodePosition*/ undefined,
+                        /*openingTag*/ undefined,
+                        /*mustBeUnary*/ true,
+                    );
                 }
                 // This is modified UnaryExpression grammar in TypeScript
                 //  UnaryExpression (modified):
@@ -6655,7 +6687,11 @@ namespace Parser {
                     }
                     else {
                         // other opening/closing mismatches -- put error on closing
-                        parseErrorAtRange(closingElement.tagName, Diagnostics.Expected_corresponding_JSX_closing_tag_for_0, getTextOfNodeFromSourceText(sourceText, opening.tagName));
+                        parseErrorAtRange(
+                            closingElement.tagName,
+                            Diagnostics.Expected_corresponding_JSX_closing_tag_for_0,
+                            getTextOfNodeFromSourceText(sourceText, opening.tagName),
+                        );
                     }
                 }
             }
@@ -7052,7 +7088,12 @@ namespace Parser {
             if (isTemplateStartOfTaggedTemplate()) {
                 // Absorb type arguments into TemplateExpression when preceding expression is ExpressionWithTypeArguments
                 expression = !questionDotToken && expression.kind === SyntaxKind.ExpressionWithTypeArguments ?
-                    parseTaggedTemplateRest(pos, (expression as ExpressionWithTypeArguments).expression, questionDotToken, (expression as ExpressionWithTypeArguments).typeArguments) :
+                    parseTaggedTemplateRest(
+                        pos,
+                        (expression as ExpressionWithTypeArguments).expression,
+                        questionDotToken,
+                        (expression as ExpressionWithTypeArguments).typeArguments,
+                    ) :
                     parseTaggedTemplateRest(pos, expression, questionDotToken, /*typeArguments*/ undefined);
                 continue;
             }
@@ -8722,7 +8763,12 @@ namespace Parser {
         return parseClassDeclarationOrExpression(pos, hasJSDoc, modifiers, SyntaxKind.ClassDeclaration) as ClassDeclaration;
     }
 
-    function parseClassDeclarationOrExpression(pos: number, hasJSDoc: boolean, modifiers: NodeArray<ModifierLike> | undefined, kind: ClassLikeDeclaration["kind"]): ClassLikeDeclaration {
+    function parseClassDeclarationOrExpression(
+        pos: number,
+        hasJSDoc: boolean,
+        modifiers: NodeArray<ModifierLike> | undefined,
+        kind: ClassLikeDeclaration["kind"],
+    ): ClassLikeDeclaration {
         const savedAwaitContext = inAwaitContext();
         parseExpected(SyntaxKind.ClassKeyword);
 
@@ -8952,7 +8998,11 @@ namespace Parser {
         return withJSDoc(finishNode(node, pos), hasJSDoc);
     }
 
-    function parseImportDeclarationOrImportEqualsDeclaration(pos: number, hasJSDoc: boolean, modifiers: NodeArray<ModifierLike> | undefined): ImportEqualsDeclaration | ImportDeclaration {
+    function parseImportDeclarationOrImportEqualsDeclaration(
+        pos: number,
+        hasJSDoc: boolean,
+        modifiers: NodeArray<ModifierLike> | undefined,
+    ): ImportEqualsDeclaration | ImportDeclaration {
         parseExpected(SyntaxKind.ImportKeyword);
 
         const afterImportPos = scanner.getTokenFullStart();
@@ -9387,7 +9437,11 @@ namespace Parser {
             return finishNode(result, pos);
         }
 
-        export function parseIsolatedJSDocComment(content: string, start: number | undefined, length: number | undefined): { jsDoc: JSDoc; diagnostics: Diagnostic[]; } | undefined {
+        export function parseIsolatedJSDocComment(
+            content: string,
+            start: number | undefined,
+            length: number | undefined,
+        ): { jsDoc: JSDoc; diagnostics: Diagnostic[]; } | undefined {
             initializeState("", content, ScriptTarget.Latest, /*syntaxCursor*/ undefined, ScriptKind.JS, JSDocParsingMode.ParseAll);
             const jsDoc = doInsideOfContext(NodeFlags.JSDoc, () => parseJSDocCommentWorker(start, length));
 
@@ -9780,7 +9834,10 @@ namespace Parser {
                             // Done
                             break loop;
                         case SyntaxKind.WhitespaceTrivia:
-                            Debug.assert(state !== JSDocState.SavingComments && state !== JSDocState.SavingBackticks, "whitespace shouldn't come from the scanner while saving comment text");
+                            Debug.assert(
+                                state !== JSDocState.SavingComments && state !== JSDocState.SavingBackticks,
+                                "whitespace shouldn't come from the scanner while saving comment text",
+                            );
                             const whitespace = scanner.getTokenText();
                             // if the whitespace crosses the margin, take only the whitespace that passes the margin
                             if (margin !== undefined && indent + whitespace.length > margin) {
@@ -9884,7 +9941,8 @@ namespace Parser {
                         name = finishNode(
                             factory.createQualifiedName(
                                 name,
-                                token() === SyntaxKind.PrivateIdentifier ? createMissingNode<Identifier>(SyntaxKind.Identifier, /*reportAtCurrentPosition*/ false) : parseIdentifier(),
+                                token() === SyntaxKind.PrivateIdentifier ? createMissingNode<Identifier>(SyntaxKind.Identifier, /*reportAtCurrentPosition*/ false)
+                                    : parseIdentifier(),
                             ),
                             pos,
                         );

@@ -608,7 +608,10 @@ export function transformESDecorators(context: TransformationContext): (x: Sourc
             if (isMethodOrAccessor(member) && nodeOrChildIsDecorated(/*useLegacyDecorators*/ false, member, node)) {
                 if (hasStaticModifier(member)) {
                     if (!staticMethodExtraInitializersName) {
-                        staticMethodExtraInitializersName = factory.createUniqueName("_staticExtraInitializers", GeneratedIdentifierFlags.Optimistic | GeneratedIdentifierFlags.FileLevel);
+                        staticMethodExtraInitializersName = factory.createUniqueName(
+                            "_staticExtraInitializers",
+                            GeneratedIdentifierFlags.Optimistic | GeneratedIdentifierFlags.FileLevel,
+                        );
                         const initializer = emitHelpers().createRunInitializersHelper(classThis ?? factory.createThis(), staticMethodExtraInitializersName);
                         setSourceMapRange(initializer, node.name ?? moveRangePastDecorators(node));
                         pendingStaticInitializers ??= [];
@@ -626,7 +629,10 @@ export function transformESDecorators(context: TransformationContext): (x: Sourc
                         pendingInstanceInitializers ??= [];
                         pendingInstanceInitializers.push(initializer);
                     }
-                    instanceMethodExtraInitializersName ??= factory.createUniqueName("_instanceExtraInitializers", GeneratedIdentifierFlags.Optimistic | GeneratedIdentifierFlags.FileLevel);
+                    instanceMethodExtraInitializersName ??= factory.createUniqueName(
+                        "_instanceExtraInitializers",
+                        GeneratedIdentifierFlags.Optimistic | GeneratedIdentifierFlags.FileLevel,
+                    );
                 }
             }
             if (isClassStaticBlockDeclaration(member)) {
@@ -1439,7 +1445,17 @@ export function transformESDecorators(context: TransformationContext): (x: Sourc
             const body = visitNode(node.body, visitor, isBlock);
             exitClassElement();
             return finishClassElement(
-                factory.updateMethodDeclaration(node, modifiers, node.asteriskToken, name, /*questionToken*/ undefined, /*typeParameters*/ undefined, parameters, /*type*/ undefined, body),
+                factory.updateMethodDeclaration(
+                    node,
+                    modifiers,
+                    node.asteriskToken,
+                    name,
+                    /*questionToken*/ undefined,
+                    /*typeParameters*/ undefined,
+                    parameters,
+                    /*type*/ undefined,
+                    body,
+                ),
                 node,
             );
         }

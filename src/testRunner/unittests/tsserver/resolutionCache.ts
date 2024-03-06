@@ -414,7 +414,10 @@ describe("unittests:: tsserver:: resolutionCache:: tsserverProjectSystem module 
         it("non relative module name", () => {
             const fileContent = `import { module1 } from "module1";import { module2 } from "module2";`;
             const { file1, file2 } = getFiles(fileContent);
-            const { module1, module2 } = getModules(`/user/username/projects/myproject/src/node_modules/module1/index.ts`, `/user/username/projects/myproject/node_modules/module2/index.ts`);
+            const { module1, module2 } = getModules(
+                `/user/username/projects/myproject/src/node_modules/module1/index.ts`,
+                `/user/username/projects/myproject/node_modules/module2/index.ts`,
+            );
             const files = [module1, module2, file1, file2, configFile, libFile];
             const host = createServerHost(files);
             const session = new TestSession(host);
@@ -617,7 +620,10 @@ export const x = 10;`,
                 path: `/user/username/projects/myproject/src/file1.ts`,
                 content: fileContent,
             };
-            const { module1, module2 } = getModules(`/user/username/projects/myproject/src/node_modules/module1/index.ts`, `/user/username/projects/myproject/node_modules/module2/index.ts`);
+            const { module1, module2 } = getModules(
+                `/user/username/projects/myproject/src/node_modules/module1/index.ts`,
+                `/user/username/projects/myproject/node_modules/module2/index.ts`,
+            );
             const files = [module1, module2, file1, configFile, libFile];
             const host = createServerHost(files);
             const session = new TestSession(host);

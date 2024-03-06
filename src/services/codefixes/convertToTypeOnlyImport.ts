@@ -37,9 +37,10 @@ registerCodeFix({
         const declaration = getDeclaration(context.sourceFile, context.span.start);
         if (declaration) {
             const changes = textChanges.ChangeTracker.with(context, t => doChange(t, context.sourceFile, declaration));
-            const importDeclarationChanges = declaration.kind === SyntaxKind.ImportSpecifier && canConvertImportDeclarationForSpecifier(declaration, context.sourceFile, context.program)
-                ? textChanges.ChangeTracker.with(context, t => doChange(t, context.sourceFile, declaration.parent.parent.parent))
-                : undefined;
+            const importDeclarationChanges =
+                declaration.kind === SyntaxKind.ImportSpecifier && canConvertImportDeclarationForSpecifier(declaration, context.sourceFile, context.program)
+                    ? textChanges.ChangeTracker.with(context, t => doChange(t, context.sourceFile, declaration.parent.parent.parent))
+                    : undefined;
             const mainAction = createCodeFixAction(
                 fixId,
                 changes,

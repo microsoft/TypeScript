@@ -277,7 +277,10 @@ function generateBuildInfoProgramBaseline(sys: ts.System, buildInfoPath: string,
         return result;
     }
 
-    function toReadableProgramBuilderInfoFilePendingEmit(value: ts.ProgramBuilderInfoFilePendingEmit, fullEmitForOptions: ts.BuilderFileEmit): ReadableProgramBuilderInfoFilePendingEmit {
+    function toReadableProgramBuilderInfoFilePendingEmit(
+        value: ts.ProgramBuilderInfoFilePendingEmit,
+        fullEmitForOptions: ts.BuilderFileEmit,
+    ): ReadableProgramBuilderInfoFilePendingEmit {
         return [
             ts.isNumber(value) ? toFileName(value) : [toFileName(value[0])],
             toReadableBuilderFileEmit(ts.toBuilderFileEmit(value, fullEmitForOptions)),

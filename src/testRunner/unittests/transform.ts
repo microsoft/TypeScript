@@ -265,7 +265,11 @@ describe("unittests:: TransformAPI", () => {
                     sourceFile,
                     ts.factory.createNodeArray([
                         ts.factory.createClassDeclaration(/*modifiers*/ undefined, "Foo", /*typeParameters*/ undefined, /*heritageClauses*/ undefined, /*members*/ undefined!), // TODO: GH#18217
-                        ts.factory.createModuleDeclaration(/*modifiers*/ undefined, ts.factory.createIdentifier("Foo"), ts.factory.createModuleBlock([ts.factory.createEmptyStatement()])),
+                        ts.factory.createModuleDeclaration(
+                            /*modifiers*/ undefined,
+                            ts.factory.createIdentifier("Foo"),
+                            ts.factory.createModuleBlock([ts.factory.createEmptyStatement()]),
+                        ),
                     ]),
                 );
                 return result;
@@ -440,7 +444,13 @@ describe("unittests:: TransformAPI", () => {
         const fs = vfs.createFromFileSystem(Harness.IO, /*ignoreCase*/ true, { documents: [new documents.TextDocument("/.src/index.ts", text)] });
         const host = new fakes.CompilerHost(fs, opts.compilerOptions);
         const program = ts.createProgram(["/.src/index.ts"], opts.compilerOptions!, host);
-        program.emit(program.getSourceFile("/.src/index.ts"), (p, s, bom) => host.writeFile(p, s, bom), /*cancellationToken*/ undefined, /*emitOnlyDtsFiles*/ true, opts.transformers);
+        program.emit(
+            program.getSourceFile("/.src/index.ts"),
+            (p, s, bom) => host.writeFile(p, s, bom),
+            /*cancellationToken*/ undefined,
+            /*emitOnlyDtsFiles*/ true,
+            opts.transformers,
+        );
         return fs.readFileSync("/.src/index.d.ts").toString();
     }
 
@@ -537,7 +547,9 @@ class Clazz {
             {
                 transformers: {
                     before: [
-                        addSyntheticComment(n => ts.isPropertyDeclaration(n) || ts.isParameterPropertyDeclaration(n, n.parent) || ts.isClassDeclaration(n) || ts.isConstructorDeclaration(n)),
+                        addSyntheticComment(n =>
+                            ts.isPropertyDeclaration(n) || ts.isParameterPropertyDeclaration(n, n.parent) || ts.isClassDeclaration(n) || ts.isConstructorDeclaration(n)
+                        ),
                     ],
                 },
                 compilerOptions: {

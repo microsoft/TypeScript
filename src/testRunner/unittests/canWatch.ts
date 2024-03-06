@@ -73,7 +73,12 @@ describe("unittests:: canWatch::", () => {
                         baselineGetDirectoryToWatchFailedLookupLocation(combinePaths(path, forPath, "dir/subdir/somefile.d.ts"), root, rootPathCompoments, maxLengths);
                     });
                 });
-                function baselineGetDirectoryToWatchFailedLookupLocation(path: ts.Path, root: ts.Path, rootPathCompoments: Readonly<ts.PathPathComponents>, maxLengths: readonly number[]) {
+                function baselineGetDirectoryToWatchFailedLookupLocation(
+                    path: ts.Path,
+                    root: ts.Path,
+                    rootPathCompoments: Readonly<ts.PathPathComponents>,
+                    maxLengths: readonly number[],
+                ) {
                     const result = ts.getDirectoryToWatchFailedLookupLocation(
                         path,
                         path,

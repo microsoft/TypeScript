@@ -182,7 +182,9 @@ export interface CachedResolvedModuleWithFailedLookupLocations extends ResolvedM
 }
 
 /** @internal */
-export interface CachedResolvedTypeReferenceDirectiveWithFailedLookupLocations extends ResolvedTypeReferenceDirectiveWithFailedLookupLocations, ResolutionWithFailedLookupLocations {
+export interface CachedResolvedTypeReferenceDirectiveWithFailedLookupLocations
+    extends ResolvedTypeReferenceDirectiveWithFailedLookupLocations, ResolutionWithFailedLookupLocations
+{
 }
 
 /** @internal */

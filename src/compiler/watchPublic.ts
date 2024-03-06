@@ -463,7 +463,9 @@ export function createWatchProgram<T extends BuilderProgram>(host: WatchCompiler
  * Creates the watch from the host for config file
  */
 export function createWatchProgram<T extends BuilderProgram>(host: WatchCompilerHostOfConfigFile<T>): WatchOfConfigFile<T>;
-export function createWatchProgram<T extends BuilderProgram>(host: WatchCompilerHostOfFilesAndCompilerOptionsOrConfigFile<T>): WatchOfFilesAndCompilerOptions<T> | WatchOfConfigFile<T> {
+export function createWatchProgram<T extends BuilderProgram>(
+    host: WatchCompilerHostOfFilesAndCompilerOptionsOrConfigFile<T>,
+): WatchOfFilesAndCompilerOptions<T> | WatchOfConfigFile<T> {
     interface FilePresentOnHost {
         version: string;
         sourceFile: SourceFile;
@@ -671,7 +673,10 @@ export function createWatchProgram<T extends BuilderProgram>(host: WatchCompiler
             }
         }
 
-        const { hasInvalidatedResolutions, hasInvalidatedLibResolutions } = resolutionCache.createHasInvalidatedResolutions(customHasInvalidatedResolutions, customHasInvalidLibResolutions);
+        const { hasInvalidatedResolutions, hasInvalidatedLibResolutions } = resolutionCache.createHasInvalidatedResolutions(
+            customHasInvalidatedResolutions,
+            customHasInvalidLibResolutions,
+        );
         const {
             originalReadFile,
             originalFileExists,
@@ -814,7 +819,10 @@ export function createWatchProgram<T extends BuilderProgram>(host: WatchCompiler
 
         // Create new source file if requested or the versions dont match
         const impliedNodeFormat = typeof languageVersionOrOptions === "object" ? languageVersionOrOptions.impliedNodeFormat : undefined;
-        if (hostSourceFile === undefined || shouldCreateNewSourceFile || isFilePresenceUnknownOnHost(hostSourceFile) || hostSourceFile.sourceFile.impliedNodeFormat !== impliedNodeFormat) {
+        if (
+            hostSourceFile === undefined || shouldCreateNewSourceFile || isFilePresenceUnknownOnHost(hostSourceFile) ||
+            hostSourceFile.sourceFile.impliedNodeFormat !== impliedNodeFormat
+        ) {
             const sourceFile = getNewSourceFile(fileName, languageVersionOrOptions, onError);
             if (hostSourceFile) {
                 if (sourceFile) {

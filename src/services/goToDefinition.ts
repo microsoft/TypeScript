@@ -504,7 +504,10 @@ export function getTypeDefinitionAtPosition(typeChecker: TypeChecker, sourceFile
 }
 
 function definitionFromType(type: Type, checker: TypeChecker, node: Node, failedAliasResolution: boolean | undefined): readonly DefinitionInfo[] {
-    return flatMap(type.isUnion() && !(type.flags & TypeFlags.Enum) ? type.types : [type], t => t.symbol && getDefinitionFromSymbol(checker, t.symbol, node, failedAliasResolution));
+    return flatMap(
+        type.isUnion() && !(type.flags & TypeFlags.Enum) ? type.types : [type],
+        t => t.symbol && getDefinitionFromSymbol(checker, t.symbol, node, failedAliasResolution),
+    );
 }
 
 function tryGetReturnTypeOfFunction(symbol: Symbol, type: Type, checker: TypeChecker): Type | undefined {
@@ -659,7 +662,14 @@ function getDefinitionFromSymbol(typeChecker: TypeChecker, symbol: Symbol, node:
  *
  * @internal
  */
-export function createDefinitionInfo(declaration: Declaration, checker: TypeChecker, symbol: Symbol, node: Node, unverified?: boolean, failedAliasResolution?: boolean): DefinitionInfo {
+export function createDefinitionInfo(
+    declaration: Declaration,
+    checker: TypeChecker,
+    symbol: Symbol,
+    node: Node,
+    unverified?: boolean,
+    failedAliasResolution?: boolean,
+): DefinitionInfo {
     const symbolName = checker.symbolToString(symbol); // Do not get scoped name, just the name of the symbol
     const symbolKind = SymbolDisplay.getSymbolKind(checker, symbol, node);
     const containerName = symbol.parent ? checker.symbolToString(symbol.parent, node) : "";

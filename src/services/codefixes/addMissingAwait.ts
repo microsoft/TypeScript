@@ -296,7 +296,14 @@ function isInsideAwaitableBody(node: Node) {
             ));
 }
 
-function makeChange(changeTracker: textChanges.ChangeTracker, errorCode: number, sourceFile: SourceFile, checker: TypeChecker, insertionSite: Expression, fixedDeclarations?: Set<number>) {
+function makeChange(
+    changeTracker: textChanges.ChangeTracker,
+    errorCode: number,
+    sourceFile: SourceFile,
+    checker: TypeChecker,
+    insertionSite: Expression,
+    fixedDeclarations?: Set<number>,
+) {
     if (isForOfStatement(insertionSite.parent) && !insertionSite.parent.awaitModifier) {
         const exprType = checker.getTypeAtLocation(insertionSite);
         const asyncIter = checker.getAsyncIterableType();

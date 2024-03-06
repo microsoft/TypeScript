@@ -116,7 +116,14 @@ export function patchServiceForStateBaseline(service: ProjectService) {
                 projectDiff = printProperty(PrintPropertyWhen.Always, data, "projectProgramVersion", project.projectProgramVersion, projectDiff, projectPropertyLogs);
                 projectDiff = printProperty(PrintPropertyWhen.TruthyOrChangedOrNew, data, "dirty", project.dirty, projectDiff, projectPropertyLogs);
                 projectDiff = printProperty(PrintPropertyWhen.TruthyOrChangedOrNew, data, "isClosed", project.isClosed(), projectDiff, projectPropertyLogs);
-                projectDiff = printProperty(PrintPropertyWhen.TruthyOrChangedOrNew, data, "isOrphan", !isBackgroundProject(project) && project.isOrphan(), projectDiff, projectPropertyLogs);
+                projectDiff = printProperty(
+                    PrintPropertyWhen.TruthyOrChangedOrNew,
+                    data,
+                    "isOrphan",
+                    !isBackgroundProject(project) && project.isOrphan(),
+                    projectDiff,
+                    projectPropertyLogs,
+                );
                 projectDiff = printProperty(
                     PrintPropertyWhen.TruthyOrChangedOrNew,
                     data,
@@ -193,7 +200,15 @@ export function patchServiceForStateBaseline(service: ProjectService) {
                 infoDiff = printProperty(PrintPropertyWhen.TruthyOrChangedOrNew, data, "pendingReloadFromDisk", info.textStorage.pendingReloadFromDisk, infoDiff, infoPropertyLogs);
                 infoDiff = printScriptInfoSourceMapFilePath(data, info, infoDiff, infoPropertyLogs);
                 infoDiff = printProperty(PrintPropertyWhen.DefinedOrChangedOrNew, data, "declarationInfoPath", info.declarationInfoPath, infoDiff, infoPropertyLogs);
-                infoDiff = printSetPropertyValueWorker(PrintPropertyWhen.DefinedOrChangedOrNew, data?.sourceInfos, "sourceInfos", info.sourceInfos, infoDiff, infoPropertyLogs, identity);
+                infoDiff = printSetPropertyValueWorker(
+                    PrintPropertyWhen.DefinedOrChangedOrNew,
+                    data?.sourceInfos,
+                    "sourceInfos",
+                    info.sourceInfos,
+                    infoDiff,
+                    infoPropertyLogs,
+                    identity,
+                );
                 infoDiff = printProperty(
                     PrintPropertyWhen.DefinedOrChangedOrNew,
                     data,

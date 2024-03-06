@@ -41,7 +41,12 @@ export enum Msg {
     Perf = "Perf",
 }
 
-export function createInstallTypingsRequest(project: Project, typeAcquisition: TypeAcquisition, unresolvedImports: SortedReadonlyArray<string>, cachePath?: string): DiscoverTypings {
+export function createInstallTypingsRequest(
+    project: Project,
+    typeAcquisition: TypeAcquisition,
+    unresolvedImports: SortedReadonlyArray<string>,
+    cachePath?: string,
+): DiscoverTypings {
     return {
         projectName: project.getProjectName(),
         fileNames: project.getFileNames(/*excludeFilesFromExternalLibraries*/ true, /*excludeConfigFiles*/ true).concat(project.getExcludedFiles() as NormalizedPath[]),

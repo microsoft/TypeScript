@@ -537,7 +537,11 @@ function convertToDiagnostics(diagnostics: readonly ReusableDiagnostic[], newPro
     }
 }
 
-function convertToDiagnosticRelatedInformation(diagnostic: ReusableDiagnosticRelatedInformation, newProgram: Program, toPath: (path: string) => Path): DiagnosticRelatedInformation {
+function convertToDiagnosticRelatedInformation(
+    diagnostic: ReusableDiagnosticRelatedInformation,
+    newProgram: Program,
+    toPath: (path: string) => Path,
+): DiagnosticRelatedInformation {
     const { file } = diagnostic;
     const sourceFile = file ? newProgram.getSourceFileByPath(toPath(file)) : undefined;
     return {
@@ -592,7 +596,9 @@ function restoreBuilderProgramEmitState(state: BuilderProgramState, savedEmitSta
  * Verifies that source file is ok to be used in calls that arent handled by next
  */
 function assertSourceFileOkWithoutNextAffectedCall(state: BuilderProgramState, sourceFile: SourceFile | undefined) {
-    Debug.assert(!sourceFile || !state.affectedFiles || state.affectedFiles[state.affectedFilesIndex! - 1] !== sourceFile || !state.semanticDiagnosticsPerFile!.has(sourceFile.resolvedPath));
+    Debug.assert(
+        !sourceFile || !state.affectedFiles || state.affectedFiles[state.affectedFilesIndex! - 1] !== sourceFile || !state.semanticDiagnosticsPerFile!.has(sourceFile.resolvedPath),
+    );
 }
 
 /**
@@ -1452,7 +1458,10 @@ export function computeSignature(text: string, host: HostForComputeHash, data?: 
 }
 
 /** @internal */
-export function createBuilderProgram(kind: BuilderProgramKind.SemanticDiagnosticsBuilderProgram, builderCreationParameters: BuilderCreationParameters): SemanticDiagnosticsBuilderProgram;
+export function createBuilderProgram(
+    kind: BuilderProgramKind.SemanticDiagnosticsBuilderProgram,
+    builderCreationParameters: BuilderCreationParameters,
+): SemanticDiagnosticsBuilderProgram;
 /** @internal */
 export function createBuilderProgram(
     kind: BuilderProgramKind.EmitAndSemanticDiagnosticsBuilderProgram,
@@ -2017,7 +2026,8 @@ export function createRedirectedBuilderProgram(
         getSyntacticDiagnostics: (sourceFile, cancellationToken) => getProgram().getSyntacticDiagnostics(sourceFile, cancellationToken),
         getDeclarationDiagnostics: (sourceFile, cancellationToken) => getProgram().getDeclarationDiagnostics(sourceFile, cancellationToken),
         getSemanticDiagnostics: (sourceFile, cancellationToken) => getProgram().getSemanticDiagnostics(sourceFile, cancellationToken),
-        emit: (sourceFile, writeFile, cancellationToken, emitOnlyDts, customTransformers) => getProgram().emit(sourceFile, writeFile, cancellationToken, emitOnlyDts, customTransformers),
+        emit: (sourceFile, writeFile, cancellationToken, emitOnlyDts, customTransformers) =>
+            getProgram().emit(sourceFile, writeFile, cancellationToken, emitOnlyDts, customTransformers),
         emitBuildInfo: (writeFile, cancellationToken) => getProgram().emitBuildInfo(writeFile, cancellationToken),
         getAllDependencies: notImplemented,
         getCurrentDirectory: () => getProgram().getCurrentDirectory(),
