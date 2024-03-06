@@ -104,17 +104,25 @@ function doChange(changes: textChanges.ChangeTracker, sourceFile: SourceFile, de
             if (typeParameters.length) changes.insertTypeParameters(sourceFile, decl, typeParameters);
         }
         const needParens = isArrowFunction(decl) && !findChildOfKind(decl, SyntaxKind.OpenParenToken, sourceFile);
-        if (needParens) changes.insertNodeBefore(sourceFile, first(decl.parameters), factory.createToken(SyntaxKind.OpenParenToken));
+        if (needParens) {
+            changes.insertNodeBefore(sourceFile, first(decl.parameters), factory.createToken(SyntaxKind.OpenParenToken));
+        }
         for (const param of decl.parameters) {
             if (!param.type) {
                 const paramType = getJSDocType(param);
-                if (paramType) changes.tryInsertTypeAnnotation(sourceFile, param, visitNode(paramType, transformJSDocType, isTypeNode));
+                if (paramType) {
+                    changes.tryInsertTypeAnnotation(sourceFile, param, visitNode(paramType, transformJSDocType, isTypeNode));
+                }
             }
         }
-        if (needParens) changes.insertNodeAfter(sourceFile, last(decl.parameters), factory.createToken(SyntaxKind.CloseParenToken));
+        if (needParens) {
+            changes.insertNodeAfter(sourceFile, last(decl.parameters), factory.createToken(SyntaxKind.CloseParenToken));
+        }
         if (!decl.type) {
             const returnType = getJSDocReturnType(decl);
-            if (returnType) changes.tryInsertTypeAnnotation(sourceFile, decl, visitNode(returnType, transformJSDocType, isTypeNode));
+            if (returnType) {
+                changes.tryInsertTypeAnnotation(sourceFile, decl, visitNode(returnType, transformJSDocType, isTypeNode));
+            }
         }
     }
     else {

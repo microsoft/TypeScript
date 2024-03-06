@@ -56,7 +56,11 @@ registerCodeFix({
         }
         const changes = textChanges.ChangeTracker.with(context, t => addUndefinedToOptionalProperty(t, toAdd));
         return [
-            createCodeFixActionWithoutFixAll(addOptionalPropertyUndefined, changes, Diagnostics.Add_undefined_to_optional_property_type),
+            createCodeFixActionWithoutFixAll(
+                addOptionalPropertyUndefined,
+                changes,
+                Diagnostics.Add_undefined_to_optional_property_type,
+            ),
         ];
     },
     fixIds: [addOptionalPropertyUndefined],
@@ -77,7 +81,11 @@ function getPropertiesToAdd(file: SourceFile, span: TextSpan, checker: TypeCheck
     return checker.getExactOptionalProperties(target);
 }
 
-function shouldUseParentTypeOfProperty(sourceNode: Node, targetNode: Node, checker: TypeChecker): targetNode is PropertyAccessExpression {
+function shouldUseParentTypeOfProperty(
+    sourceNode: Node,
+    targetNode: Node,
+    checker: TypeChecker,
+): targetNode is PropertyAccessExpression {
     return isPropertyAccessExpression(targetNode)
         && !!checker.getExactOptionalProperties(checker.getTypeAtLocation(targetNode.expression)).length
         && checker.getTypeAtLocation(sourceNode) === checker.getUndefinedType();
@@ -112,7 +120,10 @@ function getSourceTarget(errorNode: Node | undefined, checker: TypeChecker): { s
     ) {
         const parentTarget = getSourceTarget(errorNode.parent.parent, checker);
         if (!parentTarget) return undefined;
-        const prop = checker.getPropertyOfType(checker.getTypeAtLocation(parentTarget.target), (errorNode.parent.name as Identifier).text);
+        const prop = checker.getPropertyOfType(
+            checker.getTypeAtLocation(parentTarget.target),
+            (errorNode.parent.name as Identifier).text,
+        );
         const declaration = prop?.declarations?.[0];
         if (!declaration) return undefined;
         return {

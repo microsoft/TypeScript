@@ -157,7 +157,10 @@ var x = 0;`,
     });
 
     transpilesCorrectly("Sets module name", "var x = 1; export {};", {
-        options: { compilerOptions: { module: ts.ModuleKind.System, newLine: ts.NewLineKind.LineFeed }, moduleName: "NamedModule" },
+        options: {
+            compilerOptions: { module: ts.ModuleKind.System, newLine: ts.NewLineKind.LineFeed },
+            moduleName: "NamedModule",
+        },
     });
 
     transpilesCorrectly("No extra errors for file without extension", `"use strict";\r\nvar x = 0;`, {
@@ -389,12 +392,20 @@ var x = 0;`,
     });
 
     transpilesCorrectly("Supports setting 'moduleResolution'", "x;", {
-        options: { compilerOptions: { moduleResolution: ts.ModuleResolutionKind.Node10 }, fileName: "input.js", reportDiagnostics: true },
+        options: {
+            compilerOptions: { moduleResolution: ts.ModuleResolutionKind.Node10 },
+            fileName: "input.js",
+            reportDiagnostics: true,
+        },
         testVerbatimModuleSyntax: true,
     });
 
     transpilesCorrectly("Supports setting 'newLine'", "x;", {
-        options: { compilerOptions: { newLine: ts.NewLineKind.CarriageReturnLineFeed }, fileName: "input.js", reportDiagnostics: true },
+        options: {
+            compilerOptions: { newLine: ts.NewLineKind.CarriageReturnLineFeed },
+            fileName: "input.js",
+            reportDiagnostics: true,
+        },
         testVerbatimModuleSyntax: true,
     });
 
@@ -489,7 +500,11 @@ var x = 0;`,
     });
 
     transpilesCorrectly("Supports setting 'jsxFragmentFactory'", "x;", {
-        options: { compilerOptions: { jsxFactory: "x", jsxFragmentFactory: "frag" }, fileName: "input.js", reportDiagnostics: true },
+        options: {
+            compilerOptions: { jsxFactory: "x", jsxFragmentFactory: "frag" },
+            fileName: "input.js",
+            reportDiagnostics: true,
+        },
         testVerbatimModuleSyntax: true,
     });
 
@@ -687,7 +702,9 @@ export * as alias from './file';`,
     });
 
     transpilesCorrectly("Ignores `allowImportingTsExtensions` without `noEmit` error", `import { foo } from "./foo.ts";`, {
-        options: { compilerOptions: { module: ts.ModuleKind.ESNext, allowImportingTsExtensions: true, target: ts.ScriptTarget.ESNext } },
+        options: {
+            compilerOptions: { module: ts.ModuleKind.ESNext, allowImportingTsExtensions: true, target: ts.ScriptTarget.ESNext },
+        },
         testVerbatimModuleSyntax: true,
     });
 

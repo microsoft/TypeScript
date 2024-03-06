@@ -236,7 +236,8 @@ export function addNewNodeForMemberSymbol(
     switch (kind) {
         case SyntaxKind.PropertySignature:
         case SyntaxKind.PropertyDeclaration:
-            const flags = quotePreference === QuotePreference.Single ? NodeBuilderFlags.UseSingleQuotesForStringLiteralType : undefined;
+            const flags = quotePreference === QuotePreference.Single ? NodeBuilderFlags.UseSingleQuotesForStringLiteralType
+                : undefined;
             let typeNode = checker.typeToTypeNode(type, enclosingDeclaration, flags, getNoopSymbolTrackerWithResolver(context));
             if (importAdder) {
                 const importableReference = tryGetAutoImportableReferenceFromTypeNode(typeNode, scriptTarget);
@@ -248,7 +249,8 @@ export function addNewNodeForMemberSymbol(
             addClassElement(factory.createPropertyDeclaration(
                 modifiers,
                 declaration ? createName(declarationName) : symbol.getName(),
-                optional && (preserveOptional & PreserveOptionalFlags.Property) ? factory.createToken(SyntaxKind.QuestionToken) : undefined,
+                optional && (preserveOptional & PreserveOptionalFlags.Property) ? factory.createToken(SyntaxKind.QuestionToken)
+                    : undefined,
                 typeNode,
                 /*initializer*/ undefined,
             ));
@@ -332,8 +334,16 @@ export function addNewNodeForMemberSymbol(
 
             if (!ambient) {
                 if (declarations.length > signatures.length) {
-                    const signature = checker.getSignatureFromDeclaration(declarations[declarations.length - 1] as SignatureDeclaration)!;
-                    outputMethod(quotePreference, signature, modifiers, createName(declarationName), createBody(body, quotePreference));
+                    const signature = checker.getSignatureFromDeclaration(
+                        declarations[declarations.length - 1] as SignatureDeclaration,
+                    )!;
+                    outputMethod(
+                        quotePreference,
+                        signature,
+                        modifiers,
+                        createName(declarationName),
+                        createBody(body, quotePreference),
+                    );
                 }
                 else {
                     Debug.assert(declarations.length === signatures.length, "Declarations and signatures should match count");
@@ -448,7 +458,8 @@ export function createSignatureDeclarationFromSignature(
     const flags = NodeBuilderFlags.NoTruncation
         | NodeBuilderFlags.SuppressAnyReturnType
         | NodeBuilderFlags.AllowEmptyTuple
-        | (quotePreference === QuotePreference.Single ? NodeBuilderFlags.UseSingleQuotesForStringLiteralType : NodeBuilderFlags.None);
+        | (quotePreference === QuotePreference.Single ? NodeBuilderFlags.UseSingleQuotesForStringLiteralType
+            : NodeBuilderFlags.None);
     const signatureDeclaration = checker.signatureToSignatureDeclaration(
         signature,
         kind,
@@ -495,7 +506,10 @@ export function createSignatureDeclarationFromSignature(
                 );
             });
             if (typeParameters !== newTypeParameters) {
-                typeParameters = setTextRange(factory.createNodeArray(newTypeParameters, typeParameters.hasTrailingComma), typeParameters);
+                typeParameters = setTextRange(
+                    factory.createNodeArray(newTypeParameters, typeParameters.hasTrailingComma),
+                    typeParameters,
+                );
             }
         }
         const newParameters = sameMap(parameters, parameterDecl => {
@@ -602,7 +616,8 @@ export function createSignatureDeclarationFromCallExpression(
     const contextualType = isJs ? undefined : checker.getContextualType(call);
     const names = map(
         args,
-        arg => isIdentifier(arg) ? arg.text : isPropertyAccessExpression(arg) && isIdentifier(arg.name) ? arg.name.text : undefined,
+        arg =>
+            isIdentifier(arg) ? arg.text : isPropertyAccessExpression(arg) && isIdentifier(arg.name) ? arg.name.text : undefined,
     );
     const instanceTypes = isJs ? [] : map(args, arg => checker.getTypeAtLocation(arg));
     const { argumentTypeNodes, argumentTypeParameters } = getArgumentTypesAndTypeParameters(
@@ -690,7 +705,12 @@ function createTypeParametersForArguments(
 
     return arrayFrom(
         usedNames.values(),
-        usedName => factory.createTypeParameterDeclaration(/*modifiers*/ undefined, usedName, constraintsByName.get(usedName)?.constraint),
+        usedName =>
+            factory.createTypeParameterDeclaration(
+                /*modifiers*/ undefined,
+                usedName,
+                constraintsByName.get(usedName)?.constraint,
+            ),
     );
 }
 
@@ -810,7 +830,15 @@ export function getArgumentTypesAndTypeParameters(
         //    function added<T extends string>(value: T) { ... }
         const instanceTypeConstraint =
             instanceType.isTypeParameter() && instanceType.constraint && !isAnonymousObjectConstraintType(instanceType.constraint)
-                ? typeToAutoImportableTypeNode(checker, importAdder, instanceType.constraint, contextNode, scriptTarget, flags, tracker)
+                ? typeToAutoImportableTypeNode(
+                    checker,
+                    importAdder,
+                    instanceType.constraint,
+                    contextNode,
+                    scriptTarget,
+                    flags,
+                    tracker,
+                )
                 : undefined;
 
         if (argumentTypeParameter) {
@@ -858,7 +886,8 @@ function createDummyParameters(
             /*modifiers*/ undefined,
             /*dotDotDotToken*/ undefined,
             /*name*/ parameterName + (parameterNameCount || ""),
-            /*questionToken*/ minArgumentCount !== undefined && i >= minArgumentCount ? factory.createToken(SyntaxKind.QuestionToken)
+            /*questionToken*/ minArgumentCount !== undefined && i >= minArgumentCount ?
+                factory.createToken(SyntaxKind.QuestionToken)
                 : undefined,
             /*type*/ inJs ? undefined : types?.[i] || factory.createKeywordTypeNode(SyntaxKind.UnknownKeyword),
             /*initializer*/ undefined,
@@ -940,7 +969,12 @@ function getReturnTypeFromSignatures(
 ): TypeNode | undefined {
     if (length(signatures)) {
         const type = checker.getUnionType(map(signatures, checker.getReturnTypeOfSignature));
-        return checker.typeToTypeNode(type, enclosingDeclaration, NodeBuilderFlags.NoTruncation, getNoopSymbolTrackerWithResolver(context));
+        return checker.typeToTypeNode(
+            type,
+            enclosingDeclaration,
+            NodeBuilderFlags.NoTruncation,
+            getNoopSymbolTrackerWithResolver(context),
+        );
     }
 }
 
@@ -1018,7 +1052,11 @@ export function setJsonCompilerOptionValues(
     for (const [optionName, optionValue] of options) {
         const optionProperty = findJsonProperty(compilerOptions, optionName);
         if (optionProperty === undefined) {
-            changeTracker.insertNodeAtObjectStart(configFile, compilerOptions, createJsonPropertyAssignment(optionName, optionValue));
+            changeTracker.insertNodeAtObjectStart(
+                configFile,
+                compilerOptions,
+                createJsonPropertyAssignment(optionName, optionValue),
+            );
         }
         else {
             changeTracker.replaceNode(configFile, optionProperty.initializer, optionValue);

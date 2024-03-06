@@ -276,7 +276,9 @@ function foo() {
             });
             baselineTsserverLogs(
                 "projectReferences",
-                `root file is file from referenced project${disableSourceOfProjectReferenceRedirect ? " and using declaration maps" : ""}`,
+                `root file is file from referenced project${
+                    disableSourceOfProjectReferenceRedirect ? " and using declaration maps" : ""
+                }`,
                 session,
             );
         }
@@ -454,30 +456,33 @@ function foo() {
         }
 
         function verifyMonoRepoLike(scope = "") {
-            verifySymlinkScenario(`when packageJson has types field and has index.ts${scope ? " with scoped package" : ""}`, () => ({
-                bPackageJson: {
-                    path: `/user/username/projects/myproject/packages/B/package.json`,
-                    content: jsonToReadableText({
-                        main: "lib/index.js",
-                        types: "lib/index.d.ts",
-                    }),
-                },
-                aTest: file(
-                    "A",
-                    "index.ts",
-                    `import { foo } from '${scope}b';
+            verifySymlinkScenario(
+                `when packageJson has types field and has index.ts${scope ? " with scoped package" : ""}`,
+                () => ({
+                    bPackageJson: {
+                        path: `/user/username/projects/myproject/packages/B/package.json`,
+                        content: jsonToReadableText({
+                            main: "lib/index.js",
+                            types: "lib/index.d.ts",
+                        }),
+                    },
+                    aTest: file(
+                        "A",
+                        "index.ts",
+                        `import { foo } from '${scope}b';
 import { bar } from '${scope}b/lib/bar';
 foo();
 bar();
 `,
-                ),
-                bFoo: file("B", "index.ts", `export function foo() { }`),
-                bBar: file("B", "bar.ts", `export function bar() { }`),
-                bSymlink: {
-                    path: `/user/username/projects/myproject/node_modules/${scope}b`,
-                    symLink: `/user/username/projects/myproject/packages/B`,
-                },
-            }));
+                    ),
+                    bFoo: file("B", "index.ts", `export function foo() { }`),
+                    bBar: file("B", "bar.ts", `export function bar() { }`),
+                    bSymlink: {
+                        path: `/user/username/projects/myproject/node_modules/${scope}b`,
+                        symLink: `/user/username/projects/myproject/packages/B`,
+                    },
+                }),
+            );
 
             verifySymlinkScenario(`when referencing file from subFolder${scope ? " with scoped package" : ""}`, () => ({
                 bPackageJson: {
@@ -1553,7 +1558,17 @@ bar;`,
                 path: `/user/username/projects/myproject/node_modules/shared`,
                 symLink: `/user/username/projects/myproject/shared`,
             };
-            const files = [solnConfig, sharedConfig, sharedIndex, sharedPackage, appConfig, appBar, appIndex, sharedSymlink, libFile];
+            const files = [
+                solnConfig,
+                sharedConfig,
+                sharedIndex,
+                sharedPackage,
+                appConfig,
+                appBar,
+                appIndex,
+                sharedSymlink,
+                libFile,
+            ];
             const host = createServerHost(files);
             if (built) {
                 solutionBuildWithBaseline(host, [solnConfig.path]);
@@ -1624,17 +1639,25 @@ bar;`,
         const [noCoreRef1File, noCoreRef1Config] = getPackageAndFile("noCoreRef1");
         const [indirectFile, indirectConfig] = getPackageAndFile("indirect", ["coreRef1"]);
         const [coreRef1File, coreRef1Config] = getPackageAndFile("coreRef1", ["core"]);
-        const [indirectDisabledChildLoad1File, indirectDisabledChildLoad1Config] = getPackageAndFile("indirectDisabledChildLoad1", [
-            "coreRef2",
-        ], {
-            disableReferencedProjectLoad: true,
-        });
+        const [indirectDisabledChildLoad1File, indirectDisabledChildLoad1Config] = getPackageAndFile(
+            "indirectDisabledChildLoad1",
+            [
+                "coreRef2",
+            ],
+            {
+                disableReferencedProjectLoad: true,
+            },
+        );
         const [coreRef2File, coreRef2Config] = getPackageAndFile("coreRef2", ["core"]);
-        const [indirectDisabledChildLoad2File, indirectDisabledChildLoad2Config] = getPackageAndFile("indirectDisabledChildLoad2", [
-            "coreRef3",
-        ], {
-            disableReferencedProjectLoad: true,
-        });
+        const [indirectDisabledChildLoad2File, indirectDisabledChildLoad2Config] = getPackageAndFile(
+            "indirectDisabledChildLoad2",
+            [
+                "coreRef3",
+            ],
+            {
+                disableReferencedProjectLoad: true,
+            },
+        );
         const [coreRef3File, coreRef3Config] = getPackageAndFile("coreRef3", ["core"]);
         const [refToCoreRef3File, refToCoreRef3Config] = getPackageAndFile("refToCoreRef3", ["coreRef3"]);
         const [indirectNoCoreRefFile, indirectNoCoreRefConfig] = getPackageAndFile("indirectNoCoreRef", ["noCoreRef2"]);
@@ -1757,7 +1780,15 @@ const b: B = new B();`,
                     }),
                 };
 
-                const host = createServerHost([configA, indexA, configB, indexB, helperB, dtsB, ...(dtsMapPresent ? [dtsMapB] : [])]);
+                const host = createServerHost([
+                    configA,
+                    indexA,
+                    configB,
+                    indexB,
+                    helperB,
+                    dtsB,
+                    ...(dtsMapPresent ? [dtsMapB] : []),
+                ]);
                 const session = new TestSession(host);
                 openFilesForSession([indexA, ...(projectAlreadyLoaded ? [helperB] : [])], session);
 

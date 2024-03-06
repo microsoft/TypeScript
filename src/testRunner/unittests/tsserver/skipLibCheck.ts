@@ -152,7 +152,11 @@ describe("unittests:: tsserver:: with skipLibCheck", () => {
             command: ts.server.protocol.CommandTypes.SemanticDiagnosticsSync,
             arguments: { file: dTsFile2.path },
         });
-        baselineTsserverLogs("skipLibCheck", "should not report bind errors for declaration files with skipLibCheck=true", session);
+        baselineTsserverLogs(
+            "skipLibCheck",
+            "should not report bind errors for declaration files with skipLibCheck=true",
+            session,
+        );
     });
 
     it("should report semantic errors for loose JS files with '// @ts-check' and skipLibCheck=true", () => {

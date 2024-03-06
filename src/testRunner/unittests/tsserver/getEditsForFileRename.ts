@@ -48,7 +48,9 @@ describe("unittests:: tsserver:: getEditsForFileRename", () => {
             readFile: path => host.readFile(path),
             fileExists: path => host.fileExists(path),
             resolveModuleNames: (moduleNames, containingFile) =>
-                moduleNames.map(name => ts.resolveModuleName(name, containingFile, options, lsHost, moduleResolutionCache).resolvedModule),
+                moduleNames.map(name =>
+                    ts.resolveModuleName(name, containingFile, options, lsHost, moduleResolutionCache).resolvedModule
+                ),
             getResolvedModuleWithFailedLookupLocationsFromCache: (moduleName, containingFile, mode) =>
                 moduleResolutionCache.getFromDirectoryCache(
                     moduleName,

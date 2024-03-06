@@ -248,7 +248,12 @@ export function transformES2018(context: TransformationContext): (x: SourceFile 
         return node;
     }
 
-    function doWithHierarchyFacts<T, U>(cb: (value: T) => U, value: T, excludeFacts: HierarchyFacts, includeFacts: HierarchyFacts) {
+    function doWithHierarchyFacts<T, U>(
+        cb: (value: T) => U,
+        value: T,
+        excludeFacts: HierarchyFacts,
+        includeFacts: HierarchyFacts,
+    ) {
         if (affectsSubtree(excludeFacts, includeFacts)) {
             const ancestorFacts = enterSubtree(excludeFacts, includeFacts);
             const result = cb(value);
@@ -369,7 +374,10 @@ export function transformES2018(context: TransformationContext): (x: SourceFile 
             case SyntaxKind.TaggedTemplateExpression:
                 return visitTaggedTemplateExpression(node as TaggedTemplateExpression);
             case SyntaxKind.PropertyAccessExpression:
-                if (capturedSuperProperties && isPropertyAccessExpression(node) && node.expression.kind === SyntaxKind.SuperKeyword) {
+                if (
+                    capturedSuperProperties && isPropertyAccessExpression(node) &&
+                    node.expression.kind === SyntaxKind.SuperKeyword
+                ) {
                     capturedSuperProperties.add(node.name.escapedText);
                 }
                 return visitEachChild(node, visitor, context);
@@ -558,7 +566,10 @@ export function transformES2018(context: TransformationContext): (x: SourceFile 
      * @param expressionResultIsUnused Indicates the result of an expression is unused by the parent node (i.e., the left side of a comma or the
      * expression of an `ExpressionStatement`).
      */
-    function visitParenthesizedExpression(node: ParenthesizedExpression, expressionResultIsUnused: boolean): ParenthesizedExpression {
+    function visitParenthesizedExpression(
+        node: ParenthesizedExpression,
+        expressionResultIsUnused: boolean,
+    ): ParenthesizedExpression {
         return visitEachChild(node, expressionResultIsUnused ? visitorWithUnusedExpressionResult : visitor, context);
     }
 
@@ -635,7 +646,11 @@ export function transformES2018(context: TransformationContext): (x: SourceFile 
         let result: Expression[] | undefined;
         for (let i = 0; i < node.elements.length; i++) {
             const element = node.elements[i];
-            const visited = visitNode(element, i < node.elements.length - 1 ? visitorWithUnusedExpressionResult : visitor, isExpression);
+            const visited = visitNode(
+                element,
+                i < node.elements.length - 1 ? visitorWithUnusedExpressionResult : visitor,
+                isExpression,
+            );
             if (result || visited !== element) {
                 result ||= node.elements.slice(0, i);
                 result.push(visited);
@@ -746,7 +761,10 @@ export function transformES2018(context: TransformationContext): (x: SourceFile 
      *
      * @param node A ForOfStatement.
      */
-    function visitForOfStatement(node: ForOfStatement, outermostLabeledStatement: LabeledStatement | undefined): VisitResult<Statement> {
+    function visitForOfStatement(
+        node: ForOfStatement,
+        outermostLabeledStatement: LabeledStatement | undefined,
+    ): VisitResult<Statement> {
         const ancestorFacts = enterSubtree(HierarchyFacts.IterationStatementExcludes, HierarchyFacts.IterationStatementIncludes);
         if (
             node.initializer.transformFlags & TransformFlags.ContainsObjectRestOrSpread ||
@@ -1209,7 +1227,8 @@ export function transformES2018(context: TransformationContext): (x: SourceFile 
     function transformAsyncGeneratorFunctionBody(
         node: MethodDeclaration | AccessorDeclaration | FunctionDeclaration | FunctionExpression,
     ): FunctionBody {
-        const innerParameters = !isSimpleParameterList(node.parameters) ? visitParameterList(node.parameters, visitor, context) : undefined;
+        const innerParameters = !isSimpleParameterList(node.parameters) ? visitParameterList(node.parameters, visitor, context)
+            : undefined;
         resumeLexicalEnvironment();
 
         const savedCapturedSuperProperties = capturedSuperProperties;
@@ -1221,7 +1240,10 @@ export function transformES2018(context: TransformationContext): (x: SourceFile 
         let asyncBody = factory.updateBlock(node.body!, visitNodes(node.body!.statements, visitor, isStatement));
         asyncBody = factory.updateBlock(
             asyncBody,
-            factory.mergeLexicalEnvironment(asyncBody.statements, appendObjectRestAssignmentsIfNeeded(endLexicalEnvironment(), node)),
+            factory.mergeLexicalEnvironment(
+                asyncBody.statements,
+                appendObjectRestAssignmentsIfNeeded(endLexicalEnvironment(), node),
+            ),
         );
 
         const returnStatement = factory.createReturnStatement(
@@ -1365,7 +1387,8 @@ export function transformES2018(context: TransformationContext): (x: SourceFile 
                     setTextRange(statement, parameter);
                     setEmitFlags(
                         statement,
-                        EmitFlags.NoTokenSourceMaps | EmitFlags.NoTrailingSourceMap | EmitFlags.CustomPrologue | EmitFlags.NoComments,
+                        EmitFlags.NoTokenSourceMaps | EmitFlags.NoTrailingSourceMap | EmitFlags.CustomPrologue |
+                            EmitFlags.NoComments,
                     );
                     statements = append(statements, statement);
                 }

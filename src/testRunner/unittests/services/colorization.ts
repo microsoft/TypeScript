@@ -89,7 +89,8 @@ describe("unittests:: services:: Colorization", () => {
                 assert.equal(
                     actualEntry.length,
                     expectedEntry.value.length,
-                    "Classification length does not match expected. Expected: " + ts.TokenClass[expectedEntry.value.length] + ", Actual: " +
+                    "Classification length does not match expected. Expected: " + ts.TokenClass[expectedEntry.value.length] +
+                        ", Actual: " +
                         ts.TokenClass[actualEntry.length],
                 );
             }

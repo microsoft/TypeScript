@@ -318,7 +318,10 @@ export namespace BuilderState {
     /**
      * Returns true if oldState is reusable, that is the emitKind = module/non module has not changed
      */
-    export function canReuseOldState(newReferencedMap: ReadonlyManyToManyPathMap | undefined, oldState: BuilderState | undefined) {
+    export function canReuseOldState(
+        newReferencedMap: ReadonlyManyToManyPathMap | undefined,
+        oldState: BuilderState | undefined,
+    ) {
         return oldState && !oldState.referencedMap === !newReferencedMap;
     }
 
@@ -430,13 +433,14 @@ export namespace BuilderState {
             return [sourceFile];
         }
 
-        return (state.referencedMap ? getFilesAffectedByUpdatedShapeWhenModuleEmit : getFilesAffectedByUpdatedShapeWhenNonModuleEmit)(
-            state,
-            programOfThisState,
-            sourceFile,
-            cancellationToken,
-            host,
-        );
+        return (state.referencedMap ? getFilesAffectedByUpdatedShapeWhenModuleEmit
+            : getFilesAffectedByUpdatedShapeWhenNonModuleEmit)(
+                state,
+                programOfThisState,
+                sourceFile,
+                cancellationToken,
+                host,
+            );
     }
 
     export function updateSignatureOfFile(state: BuilderState, signature: string | undefined, path: Path) {
@@ -454,7 +458,10 @@ export namespace BuilderState {
         programOfThisState.emit(
             sourceFile,
             (fileName, text, _writeByteOrderMark, _onError, sourceFiles, data) => {
-                Debug.assert(isDeclarationFileName(fileName), `File extension for signature expected to be dts: Got:: ${fileName}`);
+                Debug.assert(
+                    isDeclarationFileName(fileName),
+                    `File extension for signature expected to be dts: Got:: ${fileName}`,
+                );
                 onNewSignature(
                     computeSignatureWithDiagnostics(
                         programOfThisState,
@@ -558,7 +565,11 @@ export namespace BuilderState {
     /**
      * Get all the dependencies of the sourceFile
      */
-    export function getAllDependencies(state: BuilderState, programOfThisState: Program, sourceFile: SourceFile): readonly string[] {
+    export function getAllDependencies(
+        state: BuilderState,
+        programOfThisState: Program,
+        sourceFile: SourceFile,
+    ): readonly string[] {
         const compilerOptions = programOfThisState.getCompilerOptions();
         // With --out or --outFile all outputs go into single file, all files depend on each other
         if (compilerOptions.outFile) {
@@ -586,7 +597,9 @@ export namespace BuilderState {
             }
         }
 
-        return arrayFrom(mapDefinedIterator(seenMap.keys(), path => programOfThisState.getSourceFileByPath(path)?.fileName ?? path));
+        return arrayFrom(
+            mapDefinedIterator(seenMap.keys(), path => programOfThisState.getSourceFileByPath(path)?.fileName ?? path),
+        );
     }
 
     /**
@@ -628,7 +641,10 @@ export namespace BuilderState {
      * they are global files as well as module
      */
     function containsGlobalScopeAugmentation(sourceFile: SourceFile) {
-        return some(sourceFile.moduleAugmentations, augmentation => isGlobalScopeAugmentation(augmentation.parent as ModuleDeclaration));
+        return some(
+            sourceFile.moduleAugmentations,
+            augmentation => isGlobalScopeAugmentation(augmentation.parent as ModuleDeclaration),
+        );
     }
 
     /**
@@ -718,7 +734,10 @@ export namespace BuilderState {
             if (!seenFileNamesMap.has(currentPath)) {
                 const currentSourceFile = programOfThisState.getSourceFileByPath(currentPath)!;
                 seenFileNamesMap.set(currentPath, currentSourceFile);
-                if (currentSourceFile && updateShapeSignature(state, programOfThisState, currentSourceFile, cancellationToken, host)) {
+                if (
+                    currentSourceFile &&
+                    updateShapeSignature(state, programOfThisState, currentSourceFile, cancellationToken, host)
+                ) {
                     queue.push(...getReferencedByPaths(state, currentSourceFile.resolvedPath));
                 }
             }

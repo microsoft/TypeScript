@@ -163,7 +163,8 @@ export function testTscCompile(input: TestTscCompile) {
     }
 
     function additionalBaseline(sys: TscCompileSystem) {
-        const { baselineSourceMap, baselineReadFileCalls, baselinePrograms: shouldBaselinePrograms, baselineDependencies } = input;
+        const { baselineSourceMap, baselineReadFileCalls, baselinePrograms: shouldBaselinePrograms, baselineDependencies } =
+            input;
         const programs = getPrograms!();
         if (input.computeDtsSignatures) storeDtsSignatures(sys, programs);
         if (shouldBaselinePrograms) {
@@ -317,11 +318,16 @@ function verifyTscEditDiscrepancies({
                 getBuildInfoForIncrementalCorrectnessCheck(
                     incrementalBuildText,
                 );
-            const { buildInfo: cleanBuildInfo, readableBuildInfo: cleanReadableBuildInfo } = getBuildInfoForIncrementalCorrectnessCheck(
-                cleanBuildText,
-            );
+            const { buildInfo: cleanBuildInfo, readableBuildInfo: cleanReadableBuildInfo } =
+                getBuildInfoForIncrementalCorrectnessCheck(
+                    cleanBuildText,
+                );
             const dtsSignaures = sys.dtsSignaures?.get(outputFile);
-            verifyTextEqual(incrementalBuildInfo, cleanBuildInfo, `TsBuild info text without affectedFilesPendingEmit:: ${outputFile}::`);
+            verifyTextEqual(
+                incrementalBuildInfo,
+                cleanBuildInfo,
+                `TsBuild info text without affectedFilesPendingEmit:: ${outputFile}::`,
+            );
             // Verify file info sigantures
             verifyMapLike(
                 incrementalReadableBuildInfo?.program?.fileInfos as ReadableProgramMultiFileEmitBuildInfo["fileInfos"],
@@ -398,13 +404,17 @@ function verifyTscEditDiscrepancies({
                         const actualFile = ts.isString(actualFileOrArray) ? actualFileOrArray : actualFileOrArray[0];
                         if (
                             !ts.find(
-                                (cleanReadableBuildInfo!.program! as ReadableProgramMultiFileEmitBuildInfo).emitDiagnosticsPerFile,
+                                (cleanReadableBuildInfo!.program! as ReadableProgramMultiFileEmitBuildInfo)
+                                    .emitDiagnosticsPerFile,
                                 ([expectedFileOrArray]) =>
-                                    actualFile === (ts.isString(expectedFileOrArray) ? expectedFileOrArray : expectedFileOrArray[0]),
+                                    actualFile ===
+                                        (ts.isString(expectedFileOrArray) ? expectedFileOrArray : expectedFileOrArray[0]),
                             ) && !ts.find(
-                                (cleanReadableBuildInfo!.program! as ReadableProgramMultiFileEmitBuildInfo).affectedFilesPendingEmit,
+                                (cleanReadableBuildInfo!.program! as ReadableProgramMultiFileEmitBuildInfo)
+                                    .affectedFilesPendingEmit,
                                 ([expectedFileOrArray]) =>
-                                    actualFile === (ts.isString(expectedFileOrArray) ? expectedFileOrArray : expectedFileOrArray[0]),
+                                    actualFile ===
+                                        (ts.isString(expectedFileOrArray) ? expectedFileOrArray : expectedFileOrArray[0]),
                             )
                         ) {
                             addBaseline(

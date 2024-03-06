@@ -619,7 +619,10 @@ function createDirectoryWatcherSupportingRecursive({
 
     const cache = new Map<string, HostDirectoryWatcher>();
     const callbackCache = createMultiMap<Path, { dirName: string; callback: DirectoryWatcherCallback; }>();
-    const cacheToUpdateChildWatches = new Map<Path, { dirName: string; options: WatchOptions | undefined; fileNames: string[]; }>();
+    const cacheToUpdateChildWatches = new Map<
+        Path,
+        { dirName: string; options: WatchOptions | undefined; fileNames: string[]; }
+    >();
     let timerToUpdateChildWatches: any;
 
     const filePathComparer = getStringComparer(!useCaseSensitiveFileNames);
@@ -707,7 +710,10 @@ function createDirectoryWatcherSupportingRecursive({
         // Call the actual callback
         callbackCache.forEach((callbacks, rootDirName) => {
             if (invokeMap && invokeMap.get(rootDirName) === true) return;
-            if (rootDirName === dirPath || (startsWith(dirPath, rootDirName) && dirPath[rootDirName.length] === directorySeparator)) {
+            if (
+                rootDirName === dirPath ||
+                (startsWith(dirPath, rootDirName) && dirPath[rootDirName.length] === directorySeparator)
+            ) {
                 if (invokeMap) {
                     if (fileNames) {
                         const existing = invokeMap.get(rootDirName);
@@ -860,7 +866,11 @@ function createDirectoryWatcherSupportingRecursive({
 }
 
 /** @internal */
-export type FsWatchCallback = (eventName: "rename" | "change", relativeFileName: string | undefined | null, modifiedTime?: Date) => void;
+export type FsWatchCallback = (
+    eventName: "rename" | "change",
+    relativeFileName: string | undefined | null,
+    modifiedTime?: Date,
+) => void;
 /** @internal */
 export type FsWatch = (
     fileOrDirectory: string,
@@ -935,7 +945,9 @@ function createFsWatchCallbackForDirectoryWatcherCallback(
         if (eventName === "rename") {
             // When deleting a file, the passed baseFileName is null
             const fileName = !relativeFileName ? directoryName : normalizePath(combinePaths(directoryName, relativeFileName));
-            if (!relativeFileName || !isIgnoredByWatchOptions(fileName, options, useCaseSensitiveFileNames, getCurrentDirectory)) {
+            if (
+                !relativeFileName || !isIgnoredByWatchOptions(fileName, options, useCaseSensitiveFileNames, getCurrentDirectory)
+            ) {
                 callback(fileName);
             }
         }
@@ -1019,7 +1031,12 @@ export function createSystemWatchFunctions({
             case WatchFileKind.DynamicPriorityPolling:
                 return ensureDynamicPollingWatchFile()(fileName, callback, pollingInterval, /*options*/ undefined);
             case WatchFileKind.FixedChunkSizePolling:
-                return ensureFixedChunkSizePollingWatchFile()(fileName, callback, /* pollingInterval */ undefined!, /*options*/ undefined);
+                return ensureFixedChunkSizePollingWatchFile()(
+                    fileName,
+                    callback,
+                    /* pollingInterval */ undefined!,
+                    /*options*/ undefined,
+                );
             case WatchFileKind.UseFsEvents:
                 return fsWatch(
                     fileName,
@@ -1068,7 +1085,11 @@ export function createSystemWatchFunctions({
             default:
                 return useNonPollingWatchers ?
                     // Use notifications from FS to watch with falling back to fs.watchFile
-                    generateWatchFileOptions(WatchFileKind.UseFsEventsOnParentDirectory, PollingWatchKind.PriorityInterval, options) :
+                    generateWatchFileOptions(
+                        WatchFileKind.UseFsEventsOnParentDirectory,
+                        PollingWatchKind.PriorityInterval,
+                        options,
+                    ) :
                     // Default to using fs events
                     { watchFile: WatchFileKind.UseFsEvents };
         }
@@ -1224,7 +1245,15 @@ export function createSystemWatchFunctions({
             useCaseSensitiveFileNames,
             fileOrDirectory,
             callback,
-            cb => fsWatchHandlingExistenceOnHost(fileOrDirectory, entryKind, cb, recursive, fallbackPollingInterval, fallbackOptions),
+            cb =>
+                fsWatchHandlingExistenceOnHost(
+                    fileOrDirectory,
+                    entryKind,
+                    cb,
+                    recursive,
+                    fallbackPollingInterval,
+                    fallbackOptions,
+                ),
         );
     }
 
@@ -1327,7 +1356,9 @@ export function createSystemWatchFunctions({
                 callback(event, relativeName, modifiedTime);
                 if (inodeWatching) {
                     // If this was rename event, inode has changed means we need to update watcher
-                    updateWatcher(modifiedTime === missingFileModifiedTime ? watchMissingFileSystemEntry : watchPresentFileSystemEntry);
+                    updateWatcher(
+                        modifiedTime === missingFileModifiedTime ? watchMissingFileSystemEntry : watchPresentFileSystemEntry,
+                    );
                 }
                 else if (modifiedTime === missingFileModifiedTime) {
                     updateWatcher(watchMissingFileSystemEntry);
@@ -1377,7 +1408,11 @@ export function createSystemWatchFunctions({
         }
     }
 
-    function fsWatchWorkerHandlingTimestamp(fileOrDirectory: string, recursive: boolean, callback: FsWatchCallback): FsWatchWorkerWatcher {
+    function fsWatchWorkerHandlingTimestamp(
+        fileOrDirectory: string,
+        recursive: boolean,
+        callback: FsWatchCallback,
+    ): FsWatchWorkerWatcher {
         let modifiedTime = getModifiedTime(fileOrDirectory) || missingFileModifiedTime;
         return fsWatchWorker(fileOrDirectory, recursive, (eventName, relativeFileName, currentModifiedTime) => {
             if (eventName === "change") {
@@ -1596,7 +1631,8 @@ export let sys: System = (() => {
 
         const platform: string = _os.platform();
         const useCaseSensitiveFileNames = isFileSystemCaseSensitive();
-        const fsRealpath = !!_fs.realpathSync.native ? process.platform === "win32" ? fsRealPathHandlingLongPath : _fs.realpathSync.native
+        const fsRealpath = !!_fs.realpathSync.native ?
+            process.platform === "win32" ? fsRealPathHandlingLongPath : _fs.realpathSync.native
             : _fs.realpathSync;
 
         // If our filename is "sys.js", then we are executing unbundled on the raw tsc output.
@@ -1604,7 +1640,8 @@ export let sys: System = (() => {
         // appear (e.g. the directory containing lib.*.d.ts files).
         //
         // Note that if we ever emit as files like cjs/mjs, this check will be wrong.
-        const executingFilePath = __filename.endsWith("sys.js") ? _path.join(_path.dirname(__dirname), "__fake__.js") : __filename;
+        const executingFilePath = __filename.endsWith("sys.js") ? _path.join(_path.dirname(__dirname), "__fake__.js")
+            : __filename;
 
         const fsSupportsRecursiveFsWatch = process.platform === "win32" || isMacOs;
         const getCurrentDirectory = memoize(() => process.cwd());
@@ -1700,7 +1737,8 @@ export let sys: System = (() => {
             },
             enableCPUProfiler,
             disableCPUProfiler,
-            cpuProfilingEnabled: () => !!activeSession || contains(process.execArgv, "--cpu-prof") || contains(process.execArgv, "--prof"),
+            cpuProfilingEnabled: () =>
+                !!activeSession || contains(process.execArgv, "--cpu-prof") || contains(process.execArgv, "--prof"),
             realpath,
             debugMode: !!process.env.NODE_INSPECTOR_IPC || !!process.env.VSCODE_INSPECTOR_OPTIONS ||
                 some(process.execArgv, arg => /^--(inspect|debug)(-brk)?(=\d+)?$/i.test(arg)) ||

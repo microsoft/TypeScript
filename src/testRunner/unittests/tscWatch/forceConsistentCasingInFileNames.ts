@@ -166,7 +166,10 @@ a;b;
                     path: `${windowsStyleRoot}/${projectRootRelative}/tsconfig.json`,
                     content: jsonToReadableText({ compilerOptions: { forceConsistentCasingInFileNames: true } }),
                 };
-                return createWatchedSystem([moduleA, moduleB, libFile, tsconfig], { windowsStyleRoot, useCaseSensitiveFileNames: false });
+                return createWatchedSystem([moduleA, moduleB, libFile, tsconfig], {
+                    windowsStyleRoot,
+                    useCaseSensitiveFileNames: false,
+                });
             },
             edits: [
                 {

@@ -304,7 +304,10 @@ function findImplementation(typeChecker: TypeChecker, node: FunctionLikeDeclarat
     }
     if (isFunctionDeclaration(node) || isMethodDeclaration(node)) {
         const symbol = getSymbolOfCallHierarchyDeclaration(typeChecker, node);
-        if (symbol && symbol.valueDeclaration && isFunctionLikeDeclaration(symbol.valueDeclaration) && symbol.valueDeclaration.body) {
+        if (
+            symbol && symbol.valueDeclaration && isFunctionLikeDeclaration(symbol.valueDeclaration) &&
+            symbol.valueDeclaration.body
+        ) {
             return symbol.valueDeclaration;
         }
         return undefined;
@@ -312,7 +315,10 @@ function findImplementation(typeChecker: TypeChecker, node: FunctionLikeDeclarat
     return node;
 }
 
-function findAllInitialDeclarations(typeChecker: TypeChecker, node: Exclude<CallHierarchyDeclaration, ClassStaticBlockDeclaration>) {
+function findAllInitialDeclarations(
+    typeChecker: TypeChecker,
+    node: Exclude<CallHierarchyDeclaration, ClassStaticBlockDeclaration>,
+) {
     const symbol = getSymbolOfCallHierarchyDeclaration(typeChecker, node);
     let declarations: CallHierarchyDeclaration[] | undefined;
     if (symbol && symbol.declarations) {
@@ -390,7 +396,10 @@ export function resolveCallHierarchyDeclaration(
                 const ancestor = findAncestor(location.parent, isValidCallHierarchyDeclaration);
                 return ancestor && findImplementationOrAllInitialDeclarations(typeChecker, ancestor);
             }
-            if (isVariableLike(location.parent) && location.parent.initializer && isAssignedExpression(location.parent.initializer)) {
+            if (
+                isVariableLike(location.parent) && location.parent.initializer &&
+                isAssignedExpression(location.parent.initializer)
+            ) {
                 return location.parent.initializer;
             }
             return undefined;
@@ -662,7 +671,10 @@ function collectCallSitesOfFunctionLikeDeclaration(
     }
 }
 
-function collectCallSitesOfClassStaticBlockDeclaration(node: ClassStaticBlockDeclaration, collect: (node: Node | undefined) => void) {
+function collectCallSitesOfClassStaticBlockDeclaration(
+    node: ClassStaticBlockDeclaration,
+    collect: (node: Node | undefined) => void,
+) {
     collect(node.body);
 }
 

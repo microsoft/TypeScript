@@ -55,7 +55,8 @@ export function createBaseNodeFactory(): BaseNodeFactory {
     }
 
     function createBasePrivateIdentifierNode(kind: SyntaxKind.PrivateIdentifier): Node {
-        return new (PrivateIdentifierConstructor || (PrivateIdentifierConstructor = objectAllocator.getPrivateIdentifierConstructor()))(
+        return new (PrivateIdentifierConstructor ||
+            (PrivateIdentifierConstructor = objectAllocator.getPrivateIdentifierConstructor()))(
             kind,
             /*pos*/ -1,
             /*end*/ -1,

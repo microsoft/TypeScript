@@ -385,9 +385,15 @@ export function transformLegacyDecorators(context: TransformationContext): (x: S
 
         //  let ${name} = ${classExpression} where name is either declaredName if the class doesn't contain self-reference
         //                                         or decoratedClassAlias if the class contain self-reference.
-        const varInitializer = classAlias && !assignClassAliasInStaticBlock ? factory.createAssignment(classAlias, classExpression)
+        const varInitializer = classAlias && !assignClassAliasInStaticBlock ?
+            factory.createAssignment(classAlias, classExpression)
             : classExpression;
-        const varDecl = factory.createVariableDeclaration(declName, /*exclamationToken*/ undefined, /*type*/ undefined, varInitializer);
+        const varDecl = factory.createVariableDeclaration(
+            declName,
+            /*exclamationToken*/ undefined,
+            /*type*/ undefined,
+            varInitializer,
+        );
         setOriginalNode(varDecl, node);
 
         const varDeclList = factory.createVariableDeclarationList([varDecl], NodeFlags.Let);
@@ -707,7 +713,10 @@ export function transformLegacyDecorators(context: TransformationContext): (x: S
             factory.getInternalName(node, /*allowComments*/ false, /*allowSourceMaps*/ true) :
             factory.getDeclarationName(node, /*allowComments*/ false, /*allowSourceMaps*/ true);
         const decorate = emitHelpers().createDecorateHelper(decoratorExpressions, localName);
-        const expression = factory.createAssignment(localName, classAlias ? factory.createAssignment(classAlias, decorate) : decorate);
+        const expression = factory.createAssignment(
+            localName,
+            classAlias ? factory.createAssignment(classAlias, decorate) : decorate,
+        );
         setEmitFlags(expression, EmitFlags.NoComments);
         setSourceMapRange(expression, moveRangePastModifiers(node));
         return expression;
@@ -752,7 +761,10 @@ export function transformLegacyDecorators(context: TransformationContext): (x: S
      *
      * @param member The member whose name should be converted into an expression.
      */
-    function getExpressionForPropertyName(member: ClassElement | EnumMember, generateNameForComputedPropertyName: boolean): Expression {
+    function getExpressionForPropertyName(
+        member: ClassElement | EnumMember,
+        generateNameForComputedPropertyName: boolean,
+    ): Expression {
         const name = member.name!;
         if (isPrivateIdentifier(name)) {
             return factory.createIdentifier("");
@@ -789,7 +801,9 @@ export function transformLegacyDecorators(context: TransformationContext): (x: S
     function getClassAliasIfNeeded(node: ClassDeclaration) {
         if (resolver.getNodeCheckFlags(node) & NodeCheckFlags.ContainsConstructorReference) {
             enableSubstitutionForClassAliases();
-            const classAlias = factory.createUniqueName(node.name && !isGeneratedIdentifier(node.name) ? idText(node.name) : "default");
+            const classAlias = factory.createUniqueName(
+                node.name && !isGeneratedIdentifier(node.name) ? idText(node.name) : "default",
+            );
             classAliases[getOriginalNodeId(node)] = classAlias;
             hoistVariableDeclaration(classAlias);
             return classAlias;

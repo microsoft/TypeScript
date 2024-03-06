@@ -234,11 +234,13 @@ function mapSuggestionDiagnostic(errorCode: number) {
             return Diagnostics.Parameter_0_implicitly_has_an_1_type.code;
         case Diagnostics.Rest_parameter_0_implicitly_has_an_any_type_but_a_better_type_may_be_inferred_from_usage.code:
             return Diagnostics.Rest_parameter_0_implicitly_has_an_any_type.code;
-        case Diagnostics.Property_0_implicitly_has_type_any_but_a_better_type_for_its_get_accessor_may_be_inferred_from_usage.code:
+        case Diagnostics.Property_0_implicitly_has_type_any_but_a_better_type_for_its_get_accessor_may_be_inferred_from_usage
+            .code:
             return Diagnostics.Property_0_implicitly_has_type_any_because_its_get_accessor_lacks_a_return_type_annotation.code;
         case Diagnostics._0_implicitly_has_an_1_return_type_but_a_better_type_may_be_inferred_from_usage.code:
             return Diagnostics._0_which_lacks_return_type_annotation_implicitly_has_an_1_return_type.code;
-        case Diagnostics.Property_0_implicitly_has_type_any_but_a_better_type_for_its_set_accessor_may_be_inferred_from_usage.code:
+        case Diagnostics.Property_0_implicitly_has_type_any_but_a_better_type_for_its_set_accessor_may_be_inferred_from_usage
+            .code:
             return Diagnostics.Property_0_implicitly_has_type_any_because_its_set_accessor_lacks_a_parameter_type_annotation.code;
         case Diagnostics.Member_0_implicitly_has_an_1_type_but_a_better_type_may_be_inferred_from_usage.code:
             return Diagnostics.Member_0_implicitly_has_an_1_type.code;
@@ -258,7 +260,8 @@ function doChange(
     preferences: UserPreferences,
 ): Declaration | undefined {
     if (
-        !isParameterPropertyModifier(token.kind) && token.kind !== SyntaxKind.Identifier && token.kind !== SyntaxKind.DotDotDotToken &&
+        !isParameterPropertyModifier(token.kind) && token.kind !== SyntaxKind.Identifier &&
+        token.kind !== SyntaxKind.DotDotDotToken &&
         token.kind !== SyntaxKind.ThisKeyword
     ) {
         return undefined;
@@ -271,7 +274,10 @@ function doChange(
         // Variable and Property declarations
         case Diagnostics.Member_0_implicitly_has_an_1_type.code:
         case Diagnostics.Variable_0_implicitly_has_type_1_in_some_locations_where_its_type_cannot_be_determined.code:
-            if ((isVariableDeclaration(parent) && markSeen(parent)) || isPropertyDeclaration(parent) || isPropertySignature(parent)) { // handle bad location
+            if (
+                (isVariableDeclaration(parent) && markSeen(parent)) || isPropertyDeclaration(parent) ||
+                isPropertySignature(parent)
+            ) { // handle bad location
                 annotateVariableDeclaration(changes, importAdder, sourceFile, parent, program, host, cancellationToken);
                 importAdder.writeFixes(changes);
                 return parent;
@@ -295,7 +301,10 @@ function doChange(
 
         case Diagnostics.Variable_0_implicitly_has_an_1_type.code: {
             const symbol = program.getTypeChecker().getSymbolAtLocation(token);
-            if (symbol && symbol.valueDeclaration && isVariableDeclaration(symbol.valueDeclaration) && markSeen(symbol.valueDeclaration)) {
+            if (
+                symbol && symbol.valueDeclaration && isVariableDeclaration(symbol.valueDeclaration) &&
+                markSeen(symbol.valueDeclaration)
+            ) {
                 annotateVariableDeclaration(
                     changes,
                     importAdder,
@@ -413,7 +422,10 @@ function annotateParameters(
     }
 
     const parameterInferences = inferTypeForParametersFromUsage(containingFunction, sourceFile, program, cancellationToken);
-    Debug.assert(containingFunction.parameters.length === parameterInferences.length, "Parameter count and inference count should match");
+    Debug.assert(
+        containingFunction.parameters.length === parameterInferences.length,
+        "Parameter count and inference count should match",
+    );
 
     if (isInJSFile(containingFunction)) {
         annotateJSDocParameters(changes, sourceFile, parameterInferences, program, host);
@@ -422,7 +434,11 @@ function annotateParameters(
         const needParens = isArrowFunction(containingFunction) &&
             !findChildOfKind(containingFunction, SyntaxKind.OpenParenToken, sourceFile);
         if (needParens) {
-            changes.insertNodeBefore(sourceFile, first(containingFunction.parameters), factory.createToken(SyntaxKind.OpenParenToken));
+            changes.insertNodeBefore(
+                sourceFile,
+                first(containingFunction.parameters),
+                factory.createToken(SyntaxKind.OpenParenToken),
+            );
         }
         for (const { declaration, type } of parameterInferences) {
             if (declaration && !declaration.type && !declaration.initializer) {
@@ -430,7 +446,11 @@ function annotateParameters(
             }
         }
         if (needParens) {
-            changes.insertNodeAfter(sourceFile, last(containingFunction.parameters), factory.createToken(SyntaxKind.CloseParenToken));
+            changes.insertNodeAfter(
+                sourceFile,
+                last(containingFunction.parameters),
+                factory.createToken(SyntaxKind.CloseParenToken),
+            );
         }
     }
 }
@@ -508,7 +528,8 @@ function annotate(
     const typeNode = getTypeNodeIfAccessible(type, declaration, program, host);
     if (typeNode) {
         if (isInJSFile(sourceFile) && declaration.kind !== SyntaxKind.PropertySignature) {
-            const parent = isVariableDeclaration(declaration) ? tryCast(declaration.parent.parent, isVariableStatement) : declaration;
+            const parent = isVariableDeclaration(declaration) ? tryCast(declaration.parent.parent, isVariableStatement)
+                : declaration;
             if (!parent) {
                 return;
             }
@@ -1151,7 +1172,8 @@ function inferTypeFromReferences(program: Program, references: readonly Identifi
             },
             {
                 high: t =>
-                    !(t.flags & (TypeFlags.Nullable | TypeFlags.Any | TypeFlags.Void)) && !(getObjectFlags(t) & ObjectFlags.Anonymous),
+                    !(t.flags & (TypeFlags.Nullable | TypeFlags.Any | TypeFlags.Void)) &&
+                    !(getObjectFlags(t) & ObjectFlags.Anonymous),
                 low: t => !!(getObjectFlags(t) & ObjectFlags.Anonymous),
             },
         ];
@@ -1203,10 +1225,14 @@ function inferTypeFromReferences(program: Program, references: readonly Identifi
         });
         const indexInfos = [];
         if (stringIndices.length) {
-            indexInfos.push(checker.createIndexInfo(checker.getStringType(), checker.getUnionType(stringIndices), stringIndexReadonly));
+            indexInfos.push(
+                checker.createIndexInfo(checker.getStringType(), checker.getUnionType(stringIndices), stringIndexReadonly),
+            );
         }
         if (numberIndices.length) {
-            indexInfos.push(checker.createIndexInfo(checker.getNumberType(), checker.getUnionType(numberIndices), numberIndexReadonly));
+            indexInfos.push(
+                checker.createIndexInfo(checker.getNumberType(), checker.getUnionType(numberIndices), numberIndexReadonly),
+            );
         }
         return checker.createAnonymousType(
             anons[0].symbol,

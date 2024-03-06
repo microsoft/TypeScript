@@ -120,7 +120,11 @@ export function getTransformers(
     };
 }
 
-function getScriptTransformers(compilerOptions: CompilerOptions, customTransformers?: CustomTransformers, emitOnly?: boolean | EmitOnly) {
+function getScriptTransformers(
+    compilerOptions: CompilerOptions,
+    customTransformers?: CustomTransformers,
+    emitOnly?: boolean | EmitOnly,
+) {
     if (emitOnly) return emptyArray;
 
     const languageVersion = getEmitScriptTarget(compilerOptions);
@@ -307,7 +311,10 @@ export function transformNodes<T extends Node>(
             return onSubstituteNode;
         },
         set onSubstituteNode(value) {
-            Debug.assert(state < TransformationState.Initialized, "Cannot modify transformation hooks after initialization has completed.");
+            Debug.assert(
+                state < TransformationState.Initialized,
+                "Cannot modify transformation hooks after initialization has completed.",
+            );
             Debug.assert(value !== undefined, "Value must not be 'undefined'");
             onSubstituteNode = value;
         },
@@ -315,7 +322,10 @@ export function transformNodes<T extends Node>(
             return onEmitNode;
         },
         set onEmitNode(value) {
-            Debug.assert(state < TransformationState.Initialized, "Cannot modify transformation hooks after initialization has completed.");
+            Debug.assert(
+                state < TransformationState.Initialized,
+                "Cannot modify transformation hooks after initialization has completed.",
+            );
             Debug.assert(value !== undefined, "Value must not be 'undefined'");
             onEmitNode = value;
         },
@@ -379,7 +389,10 @@ export function transformNodes<T extends Node>(
      * Enables expression substitutions in the pretty printer for the provided SyntaxKind.
      */
     function enableSubstitution(kind: SyntaxKind) {
-        Debug.assert(state < TransformationState.Completed, "Cannot modify the transformation context after transformation has completed.");
+        Debug.assert(
+            state < TransformationState.Completed,
+            "Cannot modify the transformation context after transformation has completed.",
+        );
         enabledSyntaxKindFeatures[kind] |= SyntaxKindFeatureFlags.Substitution;
     }
 
@@ -407,7 +420,10 @@ export function transformNodes<T extends Node>(
      * Enables before/after emit notifications in the pretty printer for the provided SyntaxKind.
      */
     function enableEmitNotification(kind: SyntaxKind) {
-        Debug.assert(state < TransformationState.Completed, "Cannot modify the transformation context after transformation has completed.");
+        Debug.assert(
+            state < TransformationState.Completed,
+            "Cannot modify the transformation context after transformation has completed.",
+        );
         enabledSyntaxKindFeatures[kind] |= SyntaxKindFeatureFlags.EmitNotifications;
     }
 
@@ -428,7 +444,10 @@ export function transformNodes<T extends Node>(
      * @param emitCallback The callback used to emit the node.
      */
     function emitNodeWithNotification(hint: EmitHint, node: Node, emitCallback: (hint: EmitHint, node: Node) => void) {
-        Debug.assert(state < TransformationState.Disposed, "Cannot invoke TransformationResult callbacks after the result is disposed.");
+        Debug.assert(
+            state < TransformationState.Disposed,
+            "Cannot invoke TransformationResult callbacks after the result is disposed.",
+        );
         if (node) {
             // TODO: Remove check and unconditionally use onEmitNode when API is breakingly changed
             // (see https://github.com/microsoft/TypeScript/pull/36248/files/5062623f39120171b98870c71344b3242eb03d23#r369766739)
@@ -446,7 +465,10 @@ export function transformNodes<T extends Node>(
      */
     function hoistVariableDeclaration(name: Identifier): void {
         Debug.assert(state > TransformationState.Uninitialized, "Cannot modify the lexical environment during initialization.");
-        Debug.assert(state < TransformationState.Completed, "Cannot modify the lexical environment after transformation has completed.");
+        Debug.assert(
+            state < TransformationState.Completed,
+            "Cannot modify the lexical environment after transformation has completed.",
+        );
         const decl = setEmitFlags(factory.createVariableDeclaration(name), EmitFlags.NoNestedSourceMaps);
         if (!lexicalEnvironmentVariableDeclarations) {
             lexicalEnvironmentVariableDeclarations = [decl];
@@ -464,7 +486,10 @@ export function transformNodes<T extends Node>(
      */
     function hoistFunctionDeclaration(func: FunctionDeclaration): void {
         Debug.assert(state > TransformationState.Uninitialized, "Cannot modify the lexical environment during initialization.");
-        Debug.assert(state < TransformationState.Completed, "Cannot modify the lexical environment after transformation has completed.");
+        Debug.assert(
+            state < TransformationState.Completed,
+            "Cannot modify the lexical environment after transformation has completed.",
+        );
         setEmitFlags(func, EmitFlags.CustomPrologue);
         if (!lexicalEnvironmentFunctionDeclarations) {
             lexicalEnvironmentFunctionDeclarations = [func];
@@ -479,7 +504,10 @@ export function transformNodes<T extends Node>(
      */
     function addInitializationStatement(node: Statement): void {
         Debug.assert(state > TransformationState.Uninitialized, "Cannot modify the lexical environment during initialization.");
-        Debug.assert(state < TransformationState.Completed, "Cannot modify the lexical environment after transformation has completed.");
+        Debug.assert(
+            state < TransformationState.Completed,
+            "Cannot modify the lexical environment after transformation has completed.",
+        );
         setEmitFlags(node, EmitFlags.CustomPrologue);
         if (!lexicalEnvironmentStatements) {
             lexicalEnvironmentStatements = [node];
@@ -495,7 +523,10 @@ export function transformNodes<T extends Node>(
      */
     function startLexicalEnvironment(): void {
         Debug.assert(state > TransformationState.Uninitialized, "Cannot modify the lexical environment during initialization.");
-        Debug.assert(state < TransformationState.Completed, "Cannot modify the lexical environment after transformation has completed.");
+        Debug.assert(
+            state < TransformationState.Completed,
+            "Cannot modify the lexical environment after transformation has completed.",
+        );
         Debug.assert(!lexicalEnvironmentSuspended, "Lexical environment is suspended.");
 
         // Save the current lexical environment. Rather than resizing the array we adjust the
@@ -516,7 +547,10 @@ export function transformNodes<T extends Node>(
     /** Suspends the current lexical environment, usually after visiting a parameter list. */
     function suspendLexicalEnvironment(): void {
         Debug.assert(state > TransformationState.Uninitialized, "Cannot modify the lexical environment during initialization.");
-        Debug.assert(state < TransformationState.Completed, "Cannot modify the lexical environment after transformation has completed.");
+        Debug.assert(
+            state < TransformationState.Completed,
+            "Cannot modify the lexical environment after transformation has completed.",
+        );
         Debug.assert(!lexicalEnvironmentSuspended, "Lexical environment is already suspended.");
         lexicalEnvironmentSuspended = true;
     }
@@ -524,7 +558,10 @@ export function transformNodes<T extends Node>(
     /** Resumes a suspended lexical environment, usually before visiting a function body. */
     function resumeLexicalEnvironment(): void {
         Debug.assert(state > TransformationState.Uninitialized, "Cannot modify the lexical environment during initialization.");
-        Debug.assert(state < TransformationState.Completed, "Cannot modify the lexical environment after transformation has completed.");
+        Debug.assert(
+            state < TransformationState.Completed,
+            "Cannot modify the lexical environment after transformation has completed.",
+        );
         Debug.assert(lexicalEnvironmentSuspended, "Lexical environment is not suspended.");
         lexicalEnvironmentSuspended = false;
     }
@@ -535,7 +572,10 @@ export function transformNodes<T extends Node>(
      */
     function endLexicalEnvironment(): Statement[] | undefined {
         Debug.assert(state > TransformationState.Uninitialized, "Cannot modify the lexical environment during initialization.");
-        Debug.assert(state < TransformationState.Completed, "Cannot modify the lexical environment after transformation has completed.");
+        Debug.assert(
+            state < TransformationState.Completed,
+            "Cannot modify the lexical environment after transformation has completed.",
+        );
         Debug.assert(!lexicalEnvironmentSuspended, "Lexical environment is suspended.");
 
         let statements: Statement[] | undefined;
@@ -640,8 +680,14 @@ export function transformNodes<T extends Node>(
     }
 
     function requestEmitHelper(helper: EmitHelper): void {
-        Debug.assert(state > TransformationState.Uninitialized, "Cannot modify the transformation context during initialization.");
-        Debug.assert(state < TransformationState.Completed, "Cannot modify the transformation context after transformation has completed.");
+        Debug.assert(
+            state > TransformationState.Uninitialized,
+            "Cannot modify the transformation context during initialization.",
+        );
+        Debug.assert(
+            state < TransformationState.Completed,
+            "Cannot modify the transformation context after transformation has completed.",
+        );
         Debug.assert(!helper.scoped, "Cannot request a scoped emit helper.");
         if (helper.dependencies) {
             for (const h of helper.dependencies) {
@@ -652,8 +698,14 @@ export function transformNodes<T extends Node>(
     }
 
     function readEmitHelpers(): EmitHelper[] | undefined {
-        Debug.assert(state > TransformationState.Uninitialized, "Cannot modify the transformation context during initialization.");
-        Debug.assert(state < TransformationState.Completed, "Cannot modify the transformation context after transformation has completed.");
+        Debug.assert(
+            state > TransformationState.Uninitialized,
+            "Cannot modify the transformation context during initialization.",
+        );
+        Debug.assert(
+            state < TransformationState.Completed,
+            "Cannot modify the transformation context after transformation has completed.",
+        );
         const helpers = emitHelpers;
         emitHelpers = undefined;
         return helpers;

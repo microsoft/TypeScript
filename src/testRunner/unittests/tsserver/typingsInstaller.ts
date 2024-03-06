@@ -372,7 +372,11 @@ describe("unittests:: tsserver:: typingsInstaller:: General functionality", () =
 
         host.runPendingInstalls();
         // files should not be removed from project if ATA is skipped
-        baselineTsserverLogs("typingsInstaller", "external projects type acquisition with disableFilenameBasedTypeAcquisition", session);
+        baselineTsserverLogs(
+            "typingsInstaller",
+            "external projects type acquisition with disableFilenameBasedTypeAcquisition",
+            session,
+        );
     });
 
     it("external project - no type acquisition, with js & ts files", () => {
@@ -771,7 +775,11 @@ describe("unittests:: tsserver:: typingsInstaller:: General functionality", () =
             host.runQueuedTimeoutCallbacks(id2); // Send the request to worker for project3
             host.runPendingInstalls(); // Actual install for project3
 
-            baselineTsserverLogs("typingsInstaller", "throttle scheduled run install requests with defer while queuing again", session);
+            baselineTsserverLogs(
+                "typingsInstaller",
+                "throttle scheduled run install requests with defer while queuing again",
+                session,
+            );
         });
     });
 
@@ -883,7 +891,16 @@ describe("unittests:: tsserver:: typingsInstaller:: General functionality", () =
                 path: "/tmp/node_modules/@types/jquery/index.d.ts",
                 content: "",
             };
-            const host = createServerHost([app, jsconfig, pkgJson, commander, commanderPackage, jquery, jqueryPackage, nestedPackage]);
+            const host = createServerHost([
+                app,
+                jsconfig,
+                pkgJson,
+                commander,
+                commanderPackage,
+                jquery,
+                jqueryPackage,
+                nestedPackage,
+            ]);
             const session = new TestSession({
                 host,
                 useSingleInferredProject: true,
@@ -1367,7 +1384,10 @@ describe("unittests:: tsserver:: typingsInstaller:: Validate package name:", () 
     });
     it("package non URI safe characters are not supported", () => {
         assert.equal(validatePackageName("  scope  "), NameValidationResult.NameContainsNonURISafeCharacters);
-        assert.equal(validatePackageName("; say ‘Hello from TypeScript!’ #"), NameValidationResult.NameContainsNonURISafeCharacters);
+        assert.equal(
+            validatePackageName("; say ‘Hello from TypeScript!’ #"),
+            NameValidationResult.NameContainsNonURISafeCharacters,
+        );
         assert.equal(validatePackageName("a/b/c"), NameValidationResult.NameContainsNonURISafeCharacters);
     });
     it("scoped package name is supported", () => {

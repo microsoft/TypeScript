@@ -420,8 +420,18 @@ export function computeLineStarts(text: string): number[] {
 
 export function getPositionOfLineAndCharacter(sourceFile: SourceFileLike, line: number, character: number): number;
 /** @internal */
-export function getPositionOfLineAndCharacter(sourceFile: SourceFileLike, line: number, character: number, allowEdits?: true): number; // eslint-disable-line @typescript-eslint/unified-signatures
-export function getPositionOfLineAndCharacter(sourceFile: SourceFileLike, line: number, character: number, allowEdits?: true): number {
+export function getPositionOfLineAndCharacter(
+    sourceFile: SourceFileLike,
+    line: number,
+    character: number,
+    allowEdits?: true,
+): number; // eslint-disable-line @typescript-eslint/unified-signatures
+export function getPositionOfLineAndCharacter(
+    sourceFile: SourceFileLike,
+    line: number,
+    character: number,
+    allowEdits?: true,
+): number {
     return sourceFile.getPositionOfLineAndCharacter ?
         sourceFile.getPositionOfLineAndCharacter(line, character, allowEdits) :
         computePositionOfLineAndCharacter(getLineStarts(sourceFile), line, character, sourceFile.text, allowEdits);
@@ -601,7 +611,13 @@ export function couldStartTrivia(text: string, pos: number): boolean {
 }
 
 /** @internal */
-export function skipTrivia(text: string, pos: number, stopAfterLineBreak?: boolean, stopAtComments?: boolean, inJSDoc?: boolean): number {
+export function skipTrivia(
+    text: string,
+    pos: number,
+    stopAfterLineBreak?: boolean,
+    stopAtComments?: boolean,
+    inJSDoc?: boolean,
+): number {
     if (positionIsSynthesized(pos)) {
         return pos;
     }
@@ -647,7 +663,9 @@ export function skipTrivia(text: string, pos: number, stopAfterLineBreak?: boole
                 if (text.charCodeAt(pos + 1) === CharacterCodes.asterisk) {
                     pos += 2;
                     while (pos < text.length) {
-                        if (text.charCodeAt(pos) === CharacterCodes.asterisk && text.charCodeAt(pos + 1) === CharacterCodes.slash) {
+                        if (
+                            text.charCodeAt(pos) === CharacterCodes.asterisk && text.charCodeAt(pos + 1) === CharacterCodes.slash
+                        ) {
                             pos += 2;
                             break;
                         }
@@ -722,7 +740,11 @@ function isConflictMarkerTrivia(text: string, pos: number) {
     return false;
 }
 
-function scanConflictMarkerTrivia(text: string, pos: number, error?: (diag: DiagnosticMessage, pos?: number, len?: number) => void) {
+function scanConflictMarkerTrivia(
+    text: string,
+    pos: number,
+    error?: (diag: DiagnosticMessage, pos?: number, len?: number) => void,
+) {
     if (error) {
         error(Diagnostics.Merge_conflict_marker_encountered, pos, mergeConflictMarkerLength);
     }
@@ -845,7 +867,8 @@ function iterateCommentRanges<T, U>(
                 const nextChar = text.charCodeAt(pos + 1);
                 let hasTrailingNewLine = false;
                 if (nextChar === CharacterCodes.slash || nextChar === CharacterCodes.asterisk) {
-                    const kind = nextChar === CharacterCodes.slash ? SyntaxKind.SingleLineCommentTrivia : SyntaxKind.MultiLineCommentTrivia;
+                    const kind = nextChar === CharacterCodes.slash ? SyntaxKind.SingleLineCommentTrivia
+                        : SyntaxKind.MultiLineCommentTrivia;
                     const startPos = pos;
                     pos += 2;
                     if (nextChar === CharacterCodes.slash) {
@@ -859,7 +882,10 @@ function iterateCommentRanges<T, U>(
                     }
                     else {
                         while (pos < text.length) {
-                            if (text.charCodeAt(pos) === CharacterCodes.asterisk && text.charCodeAt(pos + 1) === CharacterCodes.slash) {
+                            if (
+                                text.charCodeAt(pos) === CharacterCodes.asterisk &&
+                                text.charCodeAt(pos + 1) === CharacterCodes.slash
+                            ) {
                                 pos += 2;
                                 break;
                             }
@@ -999,7 +1025,11 @@ export function isIdentifierStart(ch: number, languageVersion: ScriptTarget | un
         ch > CharacterCodes.maxAsciiCharacter && isUnicodeIdentifierStart(ch, languageVersion);
 }
 
-export function isIdentifierPart(ch: number, languageVersion: ScriptTarget | undefined, identifierVariant?: LanguageVariant): boolean {
+export function isIdentifierPart(
+    ch: number,
+    languageVersion: ScriptTarget | undefined,
+    identifierVariant?: LanguageVariant,
+): boolean {
     return ch >= CharacterCodes.A && ch <= CharacterCodes.Z || ch >= CharacterCodes.a && ch <= CharacterCodes.z ||
         ch >= CharacterCodes._0 && ch <= CharacterCodes._9 || ch === CharacterCodes.$ || ch === CharacterCodes._ ||
         // "-" and ":" are valid in JSX Identifiers
@@ -1008,7 +1038,11 @@ export function isIdentifierPart(ch: number, languageVersion: ScriptTarget | und
 }
 
 /** @internal */
-export function isIdentifierText(name: string, languageVersion: ScriptTarget | undefined, identifierVariant?: LanguageVariant): boolean {
+export function isIdentifierText(
+    name: string,
+    languageVersion: ScriptTarget | undefined,
+    identifierVariant?: LanguageVariant,
+): boolean {
     let ch = codePointAt(name, 0);
     if (!isIdentifierStart(ch, languageVersion)) {
         return false;
@@ -1280,7 +1314,10 @@ export function createScanner(
         }
 
         if (decimalFragment !== undefined || tokenFlags & TokenFlags.Scientific) {
-            checkForIdentifierStartAfterNumericLiteral(start, decimalFragment === undefined && !!(tokenFlags & TokenFlags.Scientific));
+            checkForIdentifierStartAfterNumericLiteral(
+                start,
+                decimalFragment === undefined && !!(tokenFlags & TokenFlags.Scientific),
+            );
             // if value is not an integer, it can be safely coerced to a number
             tokenValue = "" + +result;
             return SyntaxKind.NumericLiteral;
@@ -1303,7 +1340,11 @@ export function createScanner(
 
         if (length === 1 && text[identifierStart] === "n") {
             if (isScientific) {
-                error(Diagnostics.A_bigint_literal_cannot_use_exponential_notation, numericStart, identifierStart - numericStart + 1);
+                error(
+                    Diagnostics.A_bigint_literal_cannot_use_exponential_notation,
+                    numericStart,
+                    identifierStart - numericStart + 1,
+                );
             }
             else {
                 error(Diagnostics.A_bigint_literal_must_be_an_integer, numericStart, identifierStart - numericStart + 1);
@@ -1883,7 +1924,10 @@ export function createScanner(
                         continue;
                     }
                     else {
-                        if (ch === CharacterCodes.carriageReturn && pos + 1 < end && text.charCodeAt(pos + 1) === CharacterCodes.lineFeed) {
+                        if (
+                            ch === CharacterCodes.carriageReturn && pos + 1 < end &&
+                            text.charCodeAt(pos + 1) === CharacterCodes.lineFeed
+                        ) {
                             // consume both CR and LF
                             pos += 2;
                         }
@@ -2096,7 +2140,10 @@ export function createScanner(
                     return token = SyntaxKind.SlashToken;
 
                 case CharacterCodes._0:
-                    if (pos + 2 < end && (text.charCodeAt(pos + 1) === CharacterCodes.X || text.charCodeAt(pos + 1) === CharacterCodes.x)) {
+                    if (
+                        pos + 2 < end &&
+                        (text.charCodeAt(pos + 1) === CharacterCodes.X || text.charCodeAt(pos + 1) === CharacterCodes.x)
+                    ) {
                         pos += 2;
                         tokenValue = scanMinimumNumberOfHexDigits(1, /*canHaveSeparators*/ true);
                         if (!tokenValue) {
@@ -2108,7 +2155,8 @@ export function createScanner(
                         return token = checkBigIntSuffix();
                     }
                     else if (
-                        pos + 2 < end && (text.charCodeAt(pos + 1) === CharacterCodes.B || text.charCodeAt(pos + 1) === CharacterCodes.b)
+                        pos + 2 < end &&
+                        (text.charCodeAt(pos + 1) === CharacterCodes.B || text.charCodeAt(pos + 1) === CharacterCodes.b)
                     ) {
                         pos += 2;
                         tokenValue = scanBinaryOrOctalDigits(/* base */ 2);
@@ -2121,7 +2169,8 @@ export function createScanner(
                         return token = checkBigIntSuffix();
                     }
                     else if (
-                        pos + 2 < end && (text.charCodeAt(pos + 1) === CharacterCodes.O || text.charCodeAt(pos + 1) === CharacterCodes.o)
+                        pos + 2 < end &&
+                        (text.charCodeAt(pos + 1) === CharacterCodes.O || text.charCodeAt(pos + 1) === CharacterCodes.o)
                     ) {
                         pos += 2;
                         tokenValue = scanBinaryOrOctalDigits(/* base */ 8);

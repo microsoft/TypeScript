@@ -52,7 +52,8 @@ describe("unittests:: tsserver:: inconsistentErrorInEditor2", () => {
                 openFiles: [
                     {
                         file: "^/untitled/ts-nul-authority/Untitled-1",
-                        fileContent: "function fn(Foo: number) {\r\n     type Foo = typeof Foo;\r\n    return 0 as any as {x: Foo};\r\n}",
+                        fileContent:
+                            "function fn(Foo: number) {\r\n     type Foo = typeof Foo;\r\n    return 0 as any as {x: Foo};\r\n}",
                         scriptKindName: "TS",
                     },
                 ],

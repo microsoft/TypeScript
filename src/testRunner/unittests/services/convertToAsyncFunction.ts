@@ -462,7 +462,8 @@ const _testConvertToAsyncFunctionFailedSuggestion = createTestWrapper((it, capti
         caption,
         text,
         "convertToAsyncFunction",
-        ConvertToAsyncTestFlags.IncludeLib | ConvertToAsyncTestFlags.ExpectNoSuggestionDiagnostic | ConvertToAsyncTestFlags.ExpectAction,
+        ConvertToAsyncTestFlags.IncludeLib | ConvertToAsyncTestFlags.ExpectNoSuggestionDiagnostic |
+            ConvertToAsyncTestFlags.ExpectAction,
     );
 });
 
@@ -472,7 +473,8 @@ const _testConvertToAsyncFunctionFailedAction = createTestWrapper((it, caption: 
         caption,
         text,
         "convertToAsyncFunction",
-        ConvertToAsyncTestFlags.IncludeLib | ConvertToAsyncTestFlags.ExpectSuggestionDiagnostic | ConvertToAsyncTestFlags.ExpectNoAction,
+        ConvertToAsyncTestFlags.IncludeLib | ConvertToAsyncTestFlags.ExpectSuggestionDiagnostic |
+            ConvertToAsyncTestFlags.ExpectNoAction,
     );
 });
 

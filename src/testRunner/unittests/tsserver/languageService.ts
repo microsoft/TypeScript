@@ -70,13 +70,15 @@ describe("unittests:: tsserver:: languageService", () => {
             session,
             `getSemanticDiagnostics:: ${files[1].path}`,
             session.getProjectService().configuredProjects.get(files[1].path)!,
-            session.getProjectService().configuredProjects.get(files[1].path)!.getLanguageService().getProgram()!.getSemanticDiagnostics(),
+            session.getProjectService().configuredProjects.get(files[1].path)!.getLanguageService().getProgram()!
+                .getSemanticDiagnostics(),
         );
         logDiagnostics(
             session,
             `getSemanticDiagnostics:: ${files[4].path}`,
             session.getProjectService().configuredProjects.get(files[4].path)!,
-            session.getProjectService().configuredProjects.get(files[4].path)!.getLanguageService().getProgram()!.getSemanticDiagnostics(),
+            session.getProjectService().configuredProjects.get(files[4].path)!.getLanguageService().getProgram()!
+                .getSemanticDiagnostics(),
         );
         baselineTsserverLogs(
             "languageService",

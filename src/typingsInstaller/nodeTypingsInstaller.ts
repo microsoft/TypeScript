@@ -81,7 +81,9 @@ function loadTypesRegistryFile(typesRegistryFilePath: string, host: InstallTypin
     catch (e) {
         if (log.isEnabled()) {
             log.writeLine(
-                `Error when loading types registry file '${typesRegistryFilePath}': ${(e as Error).message}, ${(e as Error).stack}`,
+                `Error when loading types registry file '${typesRegistryFilePath}': ${(e as Error).message}, ${
+                    (e as Error).stack
+                }`,
             );
         }
         return new Map<string, MapLike<string>>();
@@ -136,7 +138,9 @@ export class NodeTypingsInstaller extends TypingsInstaller {
         if (this.log.isEnabled()) {
             this.log.writeLine(`Process id: ${process.pid}`);
             this.log.writeLine(
-                `NPM location: ${this.npmPath} (explicit '${Arguments.NpmLocation}' ${npmLocation === undefined ? "not " : ""} provided)`,
+                `NPM location: ${this.npmPath} (explicit '${Arguments.NpmLocation}' ${
+                    npmLocation === undefined ? "not " : ""
+                } provided)`,
             );
             this.log.writeLine(`validateDefaultNpmLocation: ${validateDefaultNpmLocation}`);
         }
@@ -193,12 +197,22 @@ export class NodeTypingsInstaller extends TypingsInstaller {
         }
     }
 
-    protected installWorker(requestId: number, packageNames: string[], cwd: string, onRequestCompleted: RequestCompletedAction): void {
+    protected installWorker(
+        requestId: number,
+        packageNames: string[],
+        cwd: string,
+        onRequestCompleted: RequestCompletedAction,
+    ): void {
         if (this.log.isEnabled()) {
             this.log.writeLine(`#${requestId} with cwd: ${cwd} arguments: ${JSON.stringify(packageNames)}`);
         }
         const start = Date.now();
-        const hasError = installNpmPackages(this.npmPath, version, packageNames, command => this.execSyncAndLog(command, { cwd }));
+        const hasError = installNpmPackages(
+            this.npmPath,
+            version,
+            packageNames,
+            command => this.execSyncAndLog(command, { cwd }),
+        );
         if (this.log.isEnabled()) {
             this.log.writeLine(`npm install #${requestId} took: ${Date.now() - start} ms`);
         }
@@ -219,7 +233,9 @@ export class NodeTypingsInstaller extends TypingsInstaller {
         }
         catch (error) {
             const { stdout, stderr } = error;
-            this.log.writeLine(`    Failed. stdout:${indent(sys.newLine, stdout)}${sys.newLine}    stderr:${indent(sys.newLine, stderr)}`);
+            this.log.writeLine(
+                `    Failed. stdout:${indent(sys.newLine, stdout)}${sys.newLine}    stderr:${indent(sys.newLine, stderr)}`,
+            );
             return true;
         }
     }

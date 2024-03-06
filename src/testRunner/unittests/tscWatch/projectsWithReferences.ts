@@ -206,7 +206,8 @@ export const b = new A();`,
 import {X} from "@ref/a";
 b;
 X;`,
-                        "/user/username/projects/transitiveReferences/refs/a.d.ts": getFsContentsForTransitiveReferencesRefsAdts(),
+                        "/user/username/projects/transitiveReferences/refs/a.d.ts":
+                            getFsContentsForTransitiveReferencesRefsAdts(),
                     },
                     { currentDirectory: `/user/username/projects/transitiveReferences` },
                 ),
@@ -314,7 +315,8 @@ export const b = new A();`,
 import {X} from "@ref/a";
 b;
 X;`,
-                        "/user/username/projects/transitiveReferences/refs/a.d.ts": getFsContentsForTransitiveReferencesRefsAdts(),
+                        "/user/username/projects/transitiveReferences/refs/a.d.ts":
+                            getFsContentsForTransitiveReferencesRefsAdts(),
                     },
                     { currentDirectory: `/user/username/projects/transitiveReferences` },
                 ),

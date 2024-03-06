@@ -177,17 +177,26 @@ function getRangeToExtract(context: RefactorContext, considerEmptySpans = true):
     const range = createTextRangeFromSpan(getRefactorContextSpan(context));
     const isCursorRequest = range.pos === range.end && considerEmptySpans;
     const firstType = getFirstTypeAt(file, startPosition, range, isCursorRequest);
-    if (!firstType || !isTypeNode(firstType)) return { error: getLocaleSpecificMessage(Diagnostics.Selection_is_not_a_valid_type_node) };
+    if (!firstType || !isTypeNode(firstType)) {
+        return { error: getLocaleSpecificMessage(Diagnostics.Selection_is_not_a_valid_type_node) };
+    }
 
     const checker = context.program.getTypeChecker();
     const enclosingNode = getEnclosingNode(firstType, isJS);
-    if (enclosingNode === undefined) return { error: getLocaleSpecificMessage(Diagnostics.No_type_could_be_extracted_from_this_type_node) };
+    if (enclosingNode === undefined) {
+        return { error: getLocaleSpecificMessage(Diagnostics.No_type_could_be_extracted_from_this_type_node) };
+    }
 
     const expandedFirstType = getExpandedSelectionNode(firstType, enclosingNode);
-    if (!isTypeNode(expandedFirstType)) return { error: getLocaleSpecificMessage(Diagnostics.Selection_is_not_a_valid_type_node) };
+    if (!isTypeNode(expandedFirstType)) {
+        return { error: getLocaleSpecificMessage(Diagnostics.Selection_is_not_a_valid_type_node) };
+    }
 
     const typeList: TypeNode[] = [];
-    if ((isUnionTypeNode(expandedFirstType.parent) || isIntersectionTypeNode(expandedFirstType.parent)) && range.end > firstType.end) {
+    if (
+        (isUnionTypeNode(expandedFirstType.parent) || isIntersectionTypeNode(expandedFirstType.parent)) &&
+        range.end > firstType.end
+    ) {
         // the only extraction cases in which multiple nodes may need to be selected to capture the entire type are union and intersection types
         addRange(
             typeList,
@@ -292,11 +301,16 @@ function collectTypeParameters(
                     if (isTypeParameterDeclaration(decl) && decl.getSourceFile() === file) {
                         // skip extraction if the type node is in the range of the type parameter declaration.
                         // function foo<T extends { a?: /**/T }>(): void;
-                        if (decl.name.escapedText === typeName.escapedText && rangeContainsSkipTrivia(decl, selectionRange, file)) {
+                        if (
+                            decl.name.escapedText === typeName.escapedText && rangeContainsSkipTrivia(decl, selectionRange, file)
+                        ) {
                             return true;
                         }
 
-                        if (rangeContainsSkipTrivia(enclosingNode, decl, file) && !rangeContainsSkipTrivia(selectionRange, decl, file)) {
+                        if (
+                            rangeContainsSkipTrivia(enclosingNode, decl, file) &&
+                            !rangeContainsSkipTrivia(selectionRange, decl, file)
+                        ) {
                             pushIfUnique(result, decl);
                             break;
                         }
@@ -324,7 +338,12 @@ function collectTypeParameters(
         }
         else if (isTypeQueryNode(node)) {
             if (isIdentifier(node.exprName)) {
-                const symbol = checker.resolveName(node.exprName.text, node.exprName, SymbolFlags.Value, /*excludeGlobals*/ false);
+                const symbol = checker.resolveName(
+                    node.exprName.text,
+                    node.exprName,
+                    SymbolFlags.Value,
+                    /*excludeGlobals*/ false,
+                );
                 if (
                     symbol?.valueDeclaration && rangeContainsSkipTrivia(enclosingNode, symbol.valueDeclaration, file) &&
                     !rangeContainsSkipTrivia(selectionRange, symbol.valueDeclaration, file)
@@ -406,7 +425,13 @@ function doInterfaceChange(changes: textChanges.ChangeTracker, file: SourceFile,
     );
 }
 
-function doTypedefChange(changes: textChanges.ChangeTracker, context: RefactorContext, file: SourceFile, name: string, info: ExtractInfo) {
+function doTypedefChange(
+    changes: textChanges.ChangeTracker,
+    context: RefactorContext,
+    file: SourceFile,
+    name: string,
+    info: ExtractInfo,
+) {
     toArray(info.selection).forEach(typeNode => {
         setEmitFlags(typeNode, EmitFlags.NoComments | EmitFlags.NoNestedComments);
     });
@@ -431,12 +456,16 @@ function doTypedefChange(changes: textChanges.ChangeTracker, context: RefactorCo
         templates.push(template);
     });
 
-    const jsDoc = factory.createJSDocComment(/*comment*/ undefined, factory.createNodeArray(concatenate<JSDocTag>(templates, [node])));
+    const jsDoc = factory.createJSDocComment(
+        /*comment*/ undefined,
+        factory.createNodeArray(concatenate<JSDocTag>(templates, [node])),
+    );
     if (isJSDoc(enclosingNode)) {
         const pos = enclosingNode.getStart(file);
         const newLineCharacter = getNewLineOrDefaultFromHost(context.host, context.formatContext?.options);
         changes.insertNodeAt(file, enclosingNode.getStart(file), jsDoc, {
-            suffix: newLineCharacter + newLineCharacter + file.text.slice(getPrecedingNonSpaceCharacterPosition(file.text, pos - 1), pos),
+            suffix: newLineCharacter + newLineCharacter +
+                file.text.slice(getPrecedingNonSpaceCharacterPosition(file.text, pos - 1), pos),
         });
     }
     else {

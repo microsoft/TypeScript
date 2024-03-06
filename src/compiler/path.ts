@@ -759,7 +759,12 @@ export function changeAnyExtension(path: string, ext: string): string;
  *
  * @internal
  */
-export function changeAnyExtension(path: string, ext: string, extensions: string | readonly string[], ignoreCase: boolean): string;
+export function changeAnyExtension(
+    path: string,
+    ext: string,
+    extensions: string | readonly string[],
+    ignoreCase: boolean,
+): string;
 /** @internal */
 export function changeAnyExtension(path: string, ext: string, extensions?: string | readonly string[], ignoreCase?: boolean) {
     const pathext = extensions !== undefined && ignoreCase !== undefined ? getAnyExtensionFromPath(path, extensions, ignoreCase)
@@ -909,10 +914,15 @@ export function containsPath(parent: string, child: string, currentDirectory?: s
  *
  * @internal
  */
-export function startsWithDirectory(fileName: string, directoryName: string, getCanonicalFileName: GetCanonicalFileName): boolean {
+export function startsWithDirectory(
+    fileName: string,
+    directoryName: string,
+    getCanonicalFileName: GetCanonicalFileName,
+): boolean {
     const canonicalFileName = getCanonicalFileName(fileName);
     const canonicalDirectoryName = getCanonicalFileName(directoryName);
-    return startsWith(canonicalFileName, canonicalDirectoryName + "/") || startsWith(canonicalFileName, canonicalDirectoryName + "\\");
+    return startsWith(canonicalFileName, canonicalDirectoryName + "/") ||
+        startsWith(canonicalFileName, canonicalDirectoryName + "\\");
 }
 
 //// Relative Paths
@@ -958,15 +968,23 @@ export function getRelativePathFromDirectory(from: string, to: string, ignoreCas
  *
  * @internal
  */
-export function getRelativePathFromDirectory(fromDirectory: string, to: string, getCanonicalFileName: GetCanonicalFileName): string; // eslint-disable-line @typescript-eslint/unified-signatures
+export function getRelativePathFromDirectory(
+    fromDirectory: string,
+    to: string,
+    getCanonicalFileName: GetCanonicalFileName,
+): string; // eslint-disable-line @typescript-eslint/unified-signatures
 /** @internal */
 export function getRelativePathFromDirectory(
     fromDirectory: string,
     to: string,
     getCanonicalFileNameOrIgnoreCase: GetCanonicalFileName | boolean,
 ) {
-    Debug.assert((getRootLength(fromDirectory) > 0) === (getRootLength(to) > 0), "Paths must either both be absolute or both be relative");
-    const getCanonicalFileName = typeof getCanonicalFileNameOrIgnoreCase === "function" ? getCanonicalFileNameOrIgnoreCase : identity;
+    Debug.assert(
+        (getRootLength(fromDirectory) > 0) === (getRootLength(to) > 0),
+        "Paths must either both be absolute or both be relative",
+    );
+    const getCanonicalFileName = typeof getCanonicalFileNameOrIgnoreCase === "function" ? getCanonicalFileNameOrIgnoreCase
+        : identity;
     const ignoreCase = typeof getCanonicalFileNameOrIgnoreCase === "boolean" ? getCanonicalFileNameOrIgnoreCase : false;
     const pathComponents = getPathComponentsRelativeTo(
         fromDirectory,
@@ -985,7 +1003,13 @@ export function convertToRelativePath(
 ): string {
     return !isRootedDiskPath(absoluteOrRelativePath)
         ? absoluteOrRelativePath
-        : getRelativePathToDirectoryOrUrl(basePath, absoluteOrRelativePath, basePath, getCanonicalFileName, /*isAbsolutePathAnUrl*/ false);
+        : getRelativePathToDirectoryOrUrl(
+            basePath,
+            absoluteOrRelativePath,
+            basePath,
+            getCanonicalFileName,
+            /*isAbsolutePathAnUrl*/ false,
+        );
 }
 
 /** @internal */
@@ -1028,7 +1052,10 @@ export function forEachAncestorDirectory<T>(directory: Path, callback: (director
 /** @internal */
 export function forEachAncestorDirectory<T>(directory: string, callback: (directory: string) => T | undefined): T | undefined;
 /** @internal */
-export function forEachAncestorDirectory<T, P extends string>(directory: P, callback: (directory: P) => T | undefined): T | undefined {
+export function forEachAncestorDirectory<T, P extends string>(
+    directory: P,
+    callback: (directory: P) => T | undefined,
+): T | undefined {
     while (true) {
         const result = callback(directory);
         if (result !== undefined) {

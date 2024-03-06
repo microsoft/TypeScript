@@ -217,7 +217,9 @@ describe("unittests:: tsserver:: inferredProjects", () => {
             closeClientFiles();
             baselineTsserverLogs("inferredProjects", subScenario, session);
 
-            function openClientFiles(projectRoots: [string | undefined, string | undefined, string | undefined, string | undefined]) {
+            function openClientFiles(
+                projectRoots: [string | undefined, string | undefined, string | undefined, string | undefined],
+            ) {
                 files.forEach((file, index) =>
                     openFilesForSession(
                         [{ file: file.path, content: file.content, scriptKindName: "JS", projectRootPath: projectRoots[index] }],
@@ -273,7 +275,11 @@ describe("unittests:: tsserver:: inferredProjects", () => {
 
         // When opening file that doesnt fall back to the config file, we remove the config project
         openFilesForSession([libFile], session);
-        baselineTsserverLogs("inferredProjects", "should still retain configured project created while opening the file", session);
+        baselineTsserverLogs(
+            "inferredProjects",
+            "should still retain configured project created while opening the file",
+            session,
+        );
     });
 
     it("regression test - should infer typeAcquisition for inferred projects when set undefined", () => {
@@ -288,7 +294,9 @@ describe("unittests:: tsserver:: inferredProjects", () => {
         session.logger.log(`typeAcquisition : setting to undefined`);
         inferredProject.setTypeAcquisition(undefined);
         session.logger.log(
-            `typeAcquisition should be inferred for inferred projects: ${jsonToReadableText(inferredProject.getTypeAcquisition())}`,
+            `typeAcquisition should be inferred for inferred projects: ${
+                jsonToReadableText(inferredProject.getTypeAcquisition())
+            }`,
         );
         baselineTsserverLogs(
             "inferredProjects",

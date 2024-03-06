@@ -193,7 +193,9 @@ class CommonJsLoader extends Loader<CommonJSModule> {
         }
         const base = vpath.dirname(file);
         const localRequire = (id: string) => this.import(id, base);
-        const evaluateText = `(function (module, exports, require, __dirname, __filename, ${globalNames.join(", ")}) { ${text}\n})`;
+        const evaluateText = `(function (module, exports, require, __dirname, __filename, ${
+            globalNames.join(", ")
+        }) { ${text}\n})`;
         // eslint-disable-next-line no-eval
         const evaluateThunk = (void 0, eval)(evaluateText) as (
             module: any,
@@ -349,7 +351,9 @@ class SystemLoader extends Loader<SystemModule> {
             },
             meta: {
                 url: ts.isUrl(module.file) ? module.file
-                    : `file:///${ts.normalizeSlashes(module.file).replace(/^\//, "").split("/").map(encodeURIComponent).join("/")}`,
+                    : `file:///${
+                        ts.normalizeSlashes(module.file).replace(/^\//, "").split("/").map(encodeURIComponent).join("/")
+                    }`,
             },
         };
 

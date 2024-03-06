@@ -460,7 +460,10 @@ export function transformModule(context: TransformationContext): (x: SourceFile 
                                         ),
                                         factory.createExpressionStatement(
                                             factory.createAssignment(
-                                                factory.createPropertyAccessExpression(factory.createIdentifier("module"), "exports"),
+                                                factory.createPropertyAccessExpression(
+                                                    factory.createIdentifier("module"),
+                                                    "exports",
+                                                ),
                                                 factory.createIdentifier("v"),
                                             ),
                                         ),
@@ -612,7 +615,11 @@ export function transformModule(context: TransformationContext): (x: SourceFile 
                     setEmitFlags(importAliasName, EmitFlags.NoSubstitution);
                     aliasedModuleNames.push(externalModuleName);
                     importAliasNames.push(
-                        factory.createParameterDeclaration(/*modifiers*/ undefined, /*dotDotDotToken*/ undefined, importAliasName),
+                        factory.createParameterDeclaration(
+                            /*modifiers*/ undefined,
+                            /*dotDotDotToken*/ undefined,
+                            importAliasName,
+                        ),
                     );
                 }
                 else {
@@ -920,7 +927,14 @@ export function transformModule(context: TransformationContext): (x: SourceFile 
 
     function visitDestructuringAssignment(node: DestructuringAssignment, valueIsDiscarded: boolean): Expression {
         if (destructuringNeedsFlattening(node.left)) {
-            return flattenDestructuringAssignment(node, visitor, context, FlattenLevel.All, !valueIsDiscarded, createAllExportExpressions);
+            return flattenDestructuringAssignment(
+                node,
+                visitor,
+                context,
+                FlattenLevel.All,
+                !valueIsDiscarded,
+                createAllExportExpressions,
+            );
         }
         return visitEachChild(node, visitor, context);
     }
@@ -1242,13 +1256,20 @@ export function transformModule(context: TransformationContext): (x: SourceFile 
         if (moduleKind === ModuleKind.None && languageVersion >= ScriptTarget.ES2020) {
             return visitEachChild(node, visitor, context);
         }
-        const externalModuleName = getExternalModuleNameLiteral(factory, node, currentSourceFile, host, resolver, compilerOptions);
+        const externalModuleName = getExternalModuleNameLiteral(
+            factory,
+            node,
+            currentSourceFile,
+            host,
+            resolver,
+            compilerOptions,
+        );
         const firstArgument = visitNode(firstOrUndefined(node.arguments), visitor, isExpression);
         // Only use the external module name if it differs from the first argument. This allows us to preserve the quote style of the argument on output.
-        const argument =
-            externalModuleName && (!firstArgument || !isStringLiteral(firstArgument) || firstArgument.text !== externalModuleName.text) ?
-                externalModuleName
-                : firstArgument;
+        const argument = externalModuleName &&
+                (!firstArgument || !isStringLiteral(firstArgument) || firstArgument.text !== externalModuleName.text) ?
+            externalModuleName
+            : firstArgument;
         const containsLexicalThis = !!(node.transformFlags & TransformFlags.ContainsLexicalThis);
         switch (compilerOptions.module) {
             case ModuleKind.AMD:
@@ -1764,7 +1785,9 @@ export function transformModule(context: TransformationContext): (x: SourceFile 
             return setOriginalNode(
                 setTextRange(
                     factory.createExpressionStatement(
-                        emitHelpers().createExportStarHelper(moduleKind !== ModuleKind.AMD ? createRequireCall(node) : generatedName),
+                        emitHelpers().createExportStarHelper(
+                            moduleKind !== ModuleKind.AMD ? createRequireCall(node) : generatedName,
+                        ),
                     ),
                     node,
                 ),
@@ -1931,7 +1954,10 @@ export function transformModule(context: TransformationContext): (x: SourceFile 
                         removeCommentsOnExpressions = true;
                     }
                     else {
-                        expressions = append(expressions, transformInitializedVariable(variable as InitializedVariableDeclaration));
+                        expressions = append(
+                            expressions,
+                            transformInitializedVariable(variable as InitializedVariableDeclaration),
+                        );
                     }
                 }
             }
@@ -2021,7 +2047,10 @@ export function transformModule(context: TransformationContext): (x: SourceFile 
      * appended.
      * @param decl The declaration whose exports are to be recorded.
      */
-    function appendExportsOfImportDeclaration(statements: Statement[] | undefined, decl: ImportDeclaration): Statement[] | undefined {
+    function appendExportsOfImportDeclaration(
+        statements: Statement[] | undefined,
+        decl: ImportDeclaration,
+    ): Statement[] | undefined {
         if (currentModuleInfo.exportEquals) {
             return statements;
         }
@@ -2084,7 +2113,10 @@ export function transformModule(context: TransformationContext): (x: SourceFile 
      * appended.
      * @param node The VariableStatement whose exports are to be recorded.
      */
-    function appendExportsOfVariableStatement(statements: Statement[] | undefined, node: VariableStatement): Statement[] | undefined {
+    function appendExportsOfVariableStatement(
+        statements: Statement[] | undefined,
+        node: VariableStatement,
+    ): Statement[] | undefined {
         return appendExportsOfVariableDeclarationList(statements, node.declarationList, /*isForInOrOfInitializer*/ false);
     }
 
@@ -2138,7 +2170,9 @@ export function transformModule(context: TransformationContext): (x: SourceFile 
                 }
             }
         }
-        else if (!isGeneratedIdentifier(decl.name) && (!isVariableDeclaration(decl) || decl.initializer || isForInOrOfInitializer)) {
+        else if (
+            !isGeneratedIdentifier(decl.name) && (!isVariableDeclaration(decl) || decl.initializer || isForInOrOfInitializer)
+        ) {
             statements = appendExportsOfDeclaration(statements, new IdentifierNameMap(), decl);
         }
 
@@ -2482,7 +2516,8 @@ export function transformModule(context: TransformationContext): (x: SourceFile 
             return node;
         }
         else if (
-            !(isGeneratedIdentifier(node) && !(node.emitNode.autoGenerate.flags & GeneratedIdentifierFlags.AllowNameSubstitution)) &&
+            !(isGeneratedIdentifier(node) &&
+                !(node.emitNode.autoGenerate.flags & GeneratedIdentifierFlags.AllowNameSubstitution)) &&
             !isLocalName(node)
         ) {
             const exportContainer = resolver.getReferencedExportContainer(node, isExportName(node));

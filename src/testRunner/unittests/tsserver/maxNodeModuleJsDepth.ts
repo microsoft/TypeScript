@@ -31,13 +31,17 @@ describe("unittests:: tsserver:: maxNodeModuleJsDepth for inferred projects", ()
         openFilesForSession([file1], session);
 
         session.logger.log(
-            `maxNodeModuleJsDepth: ${session.getProjectService().inferredProjects[0].getCompilationSettings().maxNodeModuleJsDepth}`,
+            `maxNodeModuleJsDepth: ${
+                session.getProjectService().inferredProjects[0].getCompilationSettings().maxNodeModuleJsDepth
+            }`,
         );
 
         // Assert the option sticks
         setCompilerOptionsForInferredProjectsRequestForSession({ target: ts.server.protocol.ScriptTarget.ES2016 }, session);
         session.logger.log(
-            `maxNodeModuleJsDepth: ${session.getProjectService().inferredProjects[0].getCompilationSettings().maxNodeModuleJsDepth}`,
+            `maxNodeModuleJsDepth: ${
+                session.getProjectService().inferredProjects[0].getCompilationSettings().maxNodeModuleJsDepth
+            }`,
         );
         baselineTsserverLogs("maxNodeModuleJsDepth", "should be set to 2 if the project has js root files", session);
     });
@@ -57,17 +61,23 @@ describe("unittests:: tsserver:: maxNodeModuleJsDepth for inferred projects", ()
 
         openFilesForSession([file1], session);
         session.logger.log(
-            `maxNodeModuleJsDepth: ${session.getProjectService().inferredProjects[0].getCompilationSettings().maxNodeModuleJsDepth}`,
+            `maxNodeModuleJsDepth: ${
+                session.getProjectService().inferredProjects[0].getCompilationSettings().maxNodeModuleJsDepth
+            }`,
         );
 
         openFilesForSession([file2], session);
         session.logger.log(
-            `maxNodeModuleJsDepth: ${session.getProjectService().inferredProjects[0].getCompilationSettings().maxNodeModuleJsDepth}`,
+            `maxNodeModuleJsDepth: ${
+                session.getProjectService().inferredProjects[0].getCompilationSettings().maxNodeModuleJsDepth
+            }`,
         );
 
         closeFilesForSession([file2], session);
         session.logger.log(
-            `maxNodeModuleJsDepth: ${session.getProjectService().inferredProjects[0].getCompilationSettings().maxNodeModuleJsDepth}`,
+            `maxNodeModuleJsDepth: ${
+                session.getProjectService().inferredProjects[0].getCompilationSettings().maxNodeModuleJsDepth
+            }`,
         );
         baselineTsserverLogs(
             "maxNodeModuleJsDepth",

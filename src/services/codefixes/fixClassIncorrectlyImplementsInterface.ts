@@ -53,7 +53,14 @@ registerCodeFix({
             implementedTypeNode => {
                 const changes = textChanges.ChangeTracker.with(
                     context,
-                    t => addMissingDeclarations(context, implementedTypeNode, sourceFile, classDeclaration, t, context.preferences),
+                    t => addMissingDeclarations(
+                        context,
+                        implementedTypeNode,
+                        sourceFile,
+                        classDeclaration,
+                        t,
+                        context.preferences,
+                    ),
                 );
                 return changes.length === 0 ? undefined
                     : createCodeFixAction(
@@ -73,7 +80,14 @@ registerCodeFix({
             const classDeclaration = getClass(diag.file, diag.start);
             if (addToSeen(seenClassDeclarations, getNodeId(classDeclaration))) {
                 for (const implementedTypeNode of getEffectiveImplementsTypeNodes(classDeclaration)!) {
-                    addMissingDeclarations(context, implementedTypeNode, diag.file, classDeclaration, changes, context.preferences);
+                    addMissingDeclarations(
+                        context,
+                        implementedTypeNode,
+                        diag.file,
+                        classDeclaration,
+                        changes,
+                        context.preferences,
+                    );
                 }
             }
         });

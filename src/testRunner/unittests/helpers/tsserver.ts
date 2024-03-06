@@ -30,8 +30,15 @@ import {
     TestServerHostTrackingWrittenFiles,
 } from "./virtualFileSystemWithWatch";
 
-export function baselineTsserverLogs(scenario: string, subScenario: string, sessionOrService: { logger: LoggerWithInMemoryLogs; }) {
-    Harness.Baseline.runBaseline(`tsserver/${scenario}/${subScenario.split(" ").join("-")}.js`, sessionOrService.logger.logs.join("\r\n"));
+export function baselineTsserverLogs(
+    scenario: string,
+    subScenario: string,
+    sessionOrService: { logger: LoggerWithInMemoryLogs; },
+) {
+    Harness.Baseline.runBaseline(
+        `tsserver/${scenario}/${subScenario.split(" ").join("-")}.js`,
+        sessionOrService.logger.logs.join("\r\n"),
+    );
 }
 
 export function toExternalFile(fileName: string): ts.server.protocol.ExternalFile {
@@ -450,7 +457,9 @@ function verifyErrorsUsingGeterr({ scenario, subScenario, allFiles, openFiles, g
     });
 }
 
-function verifyErrorsUsingGeterrForProject({ scenario, subScenario, allFiles, openFiles, getErrForProjectRequest }: VerifyGetErrScenario) {
+function verifyErrorsUsingGeterrForProject(
+    { scenario, subScenario, allFiles, openFiles, getErrForProjectRequest }: VerifyGetErrScenario,
+) {
     it("verifies the errors in projects", () => {
         const host = createServerHost([...allFiles(), libFile]);
         const session = new TestSession(host);

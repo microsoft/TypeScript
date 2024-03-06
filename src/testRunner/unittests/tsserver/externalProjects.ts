@@ -135,7 +135,11 @@ describe("unittests:: tsserver:: externalProjects", () => {
             path: "/c/app.ts",
             content: "let x = 1",
         };
-        const makeProject = (f: File) => ({ projectFileName: f.path + ".csproj", rootFiles: [toExternalFile(f.path)], options: {} });
+        const makeProject = (f: File) => ({
+            projectFileName: f.path + ".csproj",
+            rootFiles: [toExternalFile(f.path)],
+            options: {},
+        });
         const p1 = makeProject(f1);
         const p2 = makeProject(f2);
         const p3 = makeProject(f3);
@@ -305,7 +309,11 @@ describe("unittests:: tsserver:: externalProjects", () => {
             command: ts.server.protocol.CommandTypes.CloseExternalProject,
             arguments: { projectFileName },
         });
-        baselineTsserverLogs("externalProjects", "external project with included config file opened after configured project", session);
+        baselineTsserverLogs(
+            "externalProjects",
+            "external project with included config file opened after configured project",
+            session,
+        );
     });
 
     it("external project with included config file opened after configured project and then closed", () => {
@@ -372,7 +380,11 @@ describe("unittests:: tsserver:: externalProjects", () => {
             options: {},
             rootFiles: toExternalFiles([file1.path, file2.path]),
         }, session);
-        baselineTsserverLogs("externalProjects", "can correctly update external project when set of root files has changed", session);
+        baselineTsserverLogs(
+            "externalProjects",
+            "can correctly update external project when set of root files has changed",
+            session,
+        );
     });
 
     it("can update external project when set of root files was not changed", () => {
@@ -428,21 +440,30 @@ describe("unittests:: tsserver:: externalProjects", () => {
             rootFiles: toExternalFiles([f1.path, f2.path]),
             options: {},
         }, session);
-        assert.isFalse(session.getProjectService().externalProjects[0].languageServiceEnabled, "language service should be disabled - 1");
+        assert.isFalse(
+            session.getProjectService().externalProjects[0].languageServiceEnabled,
+            "language service should be disabled - 1",
+        );
 
         openExternalProjectForSession({
             projectFileName,
             rootFiles: toExternalFiles([f1.path]),
             options: {},
         }, session);
-        assert.isTrue(session.getProjectService().externalProjects[0].languageServiceEnabled, "language service should be enabled");
+        assert.isTrue(
+            session.getProjectService().externalProjects[0].languageServiceEnabled,
+            "language service should be enabled",
+        );
 
         openExternalProjectForSession({
             projectFileName,
             rootFiles: toExternalFiles([f1.path, f2.path]),
             options: {},
         }, session);
-        assert.isFalse(session.getProjectService().externalProjects[0].languageServiceEnabled, "language service should be disabled - 2");
+        assert.isFalse(
+            session.getProjectService().externalProjects[0].languageServiceEnabled,
+            "language service should be disabled - 2",
+        );
         baselineTsserverLogs("externalProjects", "language service disabled state is updated in external projects", session);
     });
 

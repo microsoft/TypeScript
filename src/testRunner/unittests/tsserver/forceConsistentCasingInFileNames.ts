@@ -47,7 +47,9 @@ describe("unittests:: tsserver:: forceConsistentCasingInFileNames", () => {
             content: jsonToReadableText({ extends: "./tsconfig.all.json" }),
         };
 
-        const host = createServerHost([file1, file2, file2Dts, libFile, tsconfig, tsconfigAll], { useCaseSensitiveFileNames: false });
+        const host = createServerHost([file1, file2, file2Dts, libFile, tsconfig, tsconfigAll], {
+            useCaseSensitiveFileNames: false,
+        });
         const session = new TestSession(host);
 
         openFilesForSession([file1], session);

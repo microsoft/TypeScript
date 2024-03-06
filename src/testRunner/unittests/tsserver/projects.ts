@@ -80,7 +80,11 @@ describe("unittests:: tsserver:: projects::", () => {
         host.runQueuedTimeoutCallbacks(); // Update the configured project + refresh inferred projects
 
         openFilesForSession([commonFile2], session);
-        baselineTsserverLogs("projects", "should create new inferred projects for files excluded from a configured project", session);
+        baselineTsserverLogs(
+            "projects",
+            "should create new inferred projects for files excluded from a configured project",
+            session,
+        );
     });
 
     it("should disable features when the files are too large", () => {
@@ -149,7 +153,11 @@ describe("unittests:: tsserver:: projects::", () => {
         }, session);
 
         openFilesForSession([file2], session);
-        baselineTsserverLogs("projects", "should not crash when opening a file in a project with a disabled language service", session);
+        baselineTsserverLogs(
+            "projects",
+            "should not crash when opening a file in a project with a disabled language service",
+            session,
+        );
     });
 
     describe("ignoreConfigFiles", () => {
@@ -170,7 +178,11 @@ describe("unittests:: tsserver:: projects::", () => {
 
             const projectFileName = "externalproject";
             const host = createServerHost([file1, config1]);
-            const session = new TestSession({ host, useSingleInferredProject: true, serverMode: ts.LanguageServiceMode.Syntactic });
+            const session = new TestSession({
+                host,
+                useSingleInferredProject: true,
+                serverMode: ts.LanguageServiceMode.Syntactic,
+            });
             const request: ts.server.protocol.OpenExternalProjectRequest = {
                 command: ts.server.protocol.CommandTypes.OpenExternalProject,
                 arguments: {
@@ -204,7 +216,11 @@ describe("unittests:: tsserver:: projects::", () => {
             };
 
             const host = createServerHost([file1, config1]);
-            const session = new TestSession({ host, useSingleInferredProject: true, serverMode: ts.LanguageServiceMode.Syntactic });
+            const session = new TestSession({
+                host,
+                useSingleInferredProject: true,
+                serverMode: ts.LanguageServiceMode.Syntactic,
+            });
             openFilesForSession([{ file: file1, content: file1.content }], session);
             baselineTsserverLogs("projects", "loose file included in config file (openClientFile)", session);
         });
@@ -225,7 +241,11 @@ describe("unittests:: tsserver:: projects::", () => {
             };
 
             const host = createServerHost([file1, config1]);
-            const session = new TestSession({ host, useSingleInferredProject: true, serverMode: ts.LanguageServiceMode.Syntactic });
+            const session = new TestSession({
+                host,
+                useSingleInferredProject: true,
+                serverMode: ts.LanguageServiceMode.Syntactic,
+            });
             session.executeCommandSeq<ts.server.protocol.ApplyChangedToOpenFilesRequest>({
                 command: ts.server.protocol.CommandTypes.ApplyChangedToOpenFiles,
                 arguments: {
@@ -766,7 +786,9 @@ describe("unittests:: tsserver:: projects::", () => {
 
         function verfiy(config: File, host: TestServerHost) {
             logger.host = host;
-            logger.log(`currentDirectory:: ${host.getCurrentDirectory()} useCaseSensitiveFileNames: ${host.useCaseSensitiveFileNames}`);
+            logger.log(
+                `currentDirectory:: ${host.getCurrentDirectory()} useCaseSensitiveFileNames: ${host.useCaseSensitiveFileNames}`,
+            );
             const session = new TestSession({ host, logger });
             session.executeCommandSeq<ts.server.protocol.ConfigureRequest>({
                 command: ts.server.protocol.CommandTypes.Configure,
@@ -1480,7 +1502,9 @@ describe("unittests:: tsserver:: projects::", () => {
             });
         }
         catch (e) {
-            assert.isTrue(e.message.indexOf("Debug Failure. False expression: Found script Info still attached to project") === 0);
+            assert.isTrue(
+                e.message.indexOf("Debug Failure. False expression: Found script Info still attached to project") === 0,
+            );
         }
         baselineTsserverLogs("projects", "assert when removing project", session);
     });
@@ -1504,7 +1528,10 @@ describe("unittests:: tsserver:: projects::", () => {
     });
 
     describe("file opened is in configured project that will be removed", () => {
-        function runOnTs<T extends ts.server.protocol.Request>(scenario: string, getRequest: (innerFile: File) => TestSessionRequest<T>) {
+        function runOnTs<T extends ts.server.protocol.Request>(
+            scenario: string,
+            getRequest: (innerFile: File) => TestSessionRequest<T>,
+        ) {
             it(scenario, () => {
                 const testsConfig: File = {
                     path: `/user/username/projects/myproject/playground/tsconfig.json`,

@@ -156,7 +156,9 @@ export namespace SmartIndenter {
         const containerList = getListByPosition(position, precedingToken.parent, sourceFile);
         // use list position if the preceding token is before any list items
         if (containerList && !rangeContainsRange(containerList, precedingToken)) {
-            const useTheSameBaseIndentation = [SyntaxKind.FunctionExpression, SyntaxKind.ArrowFunction].includes(currentToken.parent.kind);
+            const useTheSameBaseIndentation = [SyntaxKind.FunctionExpression, SyntaxKind.ArrowFunction].includes(
+                currentToken.parent.kind,
+            );
             const indentSize = useTheSameBaseIndentation ? 0 : options.indentSize!;
             return getActualIndentationForListStartLine(containerList, sourceFile, options) + indentSize; // TODO: GH#18217
         }
@@ -176,11 +178,21 @@ export namespace SmartIndenter {
         Debug.assert(commentStartLine >= 0);
 
         if (previousLine <= commentStartLine) {
-            return findFirstNonWhitespaceColumn(getStartPositionOfLine(commentStartLine, sourceFile), position, sourceFile, options);
+            return findFirstNonWhitespaceColumn(
+                getStartPositionOfLine(commentStartLine, sourceFile),
+                position,
+                sourceFile,
+                options,
+            );
         }
 
         const startPositionOfLine = getStartPositionOfLine(previousLine, sourceFile);
-        const { column, character } = findFirstNonWhitespaceCharacterAndColumn(startPositionOfLine, position, sourceFile, options);
+        const { column, character } = findFirstNonWhitespaceCharacterAndColumn(
+            startPositionOfLine,
+            position,
+            sourceFile,
+            options,
+        );
 
         if (column === 0) {
             return column;
@@ -225,7 +237,12 @@ export namespace SmartIndenter {
                 shouldIndentChildNode(options, current, previous, sourceFile, /*isNextChild*/ true)
             ) {
                 const currentStart = getStartLineAndCharacterForNode(current, sourceFile);
-                const nextTokenKind = nextTokenIsCurlyBraceOnSameLineAsCursor(precedingToken, current, lineAtPosition, sourceFile);
+                const nextTokenKind = nextTokenIsCurlyBraceOnSameLineAsCursor(
+                    precedingToken,
+                    current,
+                    lineAtPosition,
+                    sourceFile,
+                );
                 const indentationDelta = nextTokenKind !== NextTokenKind.Unknown
                     // handle cases when codefix is about to be inserted before the close brace
                     ? assumeNewLineBeforeCloseBrace && nextTokenKind === NextTokenKind.CloseBrace ? options.indentSize : 0
@@ -358,7 +375,12 @@ export namespace SmartIndenter {
             // Instead, when at an argument, we unspoof the starting position of the enclosing call expression
             // *after* applying indentation for the argument.
 
-            const useTrueStart = isArgumentAndStartLineOverlapsExpressionBeingCalled(parent, current, currentStart.line, sourceFile);
+            const useTrueStart = isArgumentAndStartLineOverlapsExpressionBeingCalled(
+                parent,
+                current,
+                currentStart.line,
+                sourceFile,
+            );
 
             current = parent;
             parent = current.parent;
@@ -378,11 +400,20 @@ export namespace SmartIndenter {
     /*
      * Function returns Value.Unknown if indentation cannot be determined
      */
-    function getActualIndentationForListItemBeforeComma(commaToken: Node, sourceFile: SourceFile, options: EditorSettings): number {
+    function getActualIndentationForListItemBeforeComma(
+        commaToken: Node,
+        sourceFile: SourceFile,
+        options: EditorSettings,
+    ): number {
         // previous token is comma that separates items in list - find the previous item and try to derive indentation from it
         const commaItemInfo = findListItemInfo(commaToken);
         if (commaItemInfo && commaItemInfo.listItemIndex > 0) {
-            return deriveActualIndentationFromList(commaItemInfo.list.getChildren(), commaItemInfo.listItemIndex - 1, sourceFile, options);
+            return deriveActualIndentationFromList(
+                commaItemInfo.list.getChildren(),
+                commaItemInfo.listItemIndex - 1,
+                sourceFile,
+                options,
+            );
         }
         else {
             // handle broken code gracefully
@@ -588,7 +619,8 @@ export namespace SmartIndenter {
             case SyntaxKind.Constructor:
             case SyntaxKind.ConstructorType:
             case SyntaxKind.ConstructSignature:
-                return getList((node as SignatureDeclaration).typeParameters) || getList((node as SignatureDeclaration).parameters);
+                return getList((node as SignatureDeclaration).typeParameters) ||
+                    getList((node as SignatureDeclaration).parameters);
             case SyntaxKind.GetAccessor:
                 return getList((node as GetAccessorDeclaration).parameters);
             case SyntaxKind.ClassDeclaration:
@@ -628,11 +660,19 @@ export namespace SmartIndenter {
         return list;
     }
 
-    function getActualIndentationForListStartLine(list: NodeArray<Node>, sourceFile: SourceFile, options: EditorSettings): number {
+    function getActualIndentationForListStartLine(
+        list: NodeArray<Node>,
+        sourceFile: SourceFile,
+        options: EditorSettings,
+    ): number {
         if (!list) {
             return Value.Unknown;
         }
-        return findColumnForFirstNonWhitespaceCharacterInLine(sourceFile.getLineAndCharacterOfPosition(list.pos), sourceFile, options);
+        return findColumnForFirstNonWhitespaceCharacterInLine(
+            sourceFile.getLineAndCharacterOfPosition(list.pos),
+            sourceFile,
+            options,
+        );
     }
 
     function getActualIndentationForListItem(
@@ -654,7 +694,8 @@ export namespace SmartIndenter {
                     return result;
                 }
             }
-            return getActualIndentationForListStartLine(containingList, sourceFile, options) + (listIndentsChild ? options.indentSize! : 0); // TODO: GH#18217
+            return getActualIndentationForListStartLine(containingList, sourceFile, options) +
+                (listIndentsChild ? options.indentSize! : 0); // TODO: GH#18217
         }
         return Value.Unknown;
     }
@@ -803,7 +844,8 @@ export namespace SmartIndenter {
                     return rangeIsOnOneLine(sourceFile, child!);
                 }
                 if (parent.kind === SyntaxKind.BinaryExpression && sourceFile && child && childKind === SyntaxKind.JsxElement) {
-                    const parentStartLine = sourceFile.getLineAndCharacterOfPosition(skipTrivia(sourceFile.text, parent.pos)).line;
+                    const parentStartLine =
+                        sourceFile.getLineAndCharacterOfPosition(skipTrivia(sourceFile.text, parent.pos)).line;
                     const childStartLine = sourceFile.getLineAndCharacterOfPosition(skipTrivia(sourceFile.text, child.pos)).line;
                     return parentStartLine !== childStartLine;
                 }
@@ -833,7 +875,8 @@ export namespace SmartIndenter {
                 return childKind !== SyntaxKind.NamedExports;
             case SyntaxKind.ImportDeclaration:
                 return childKind !== SyntaxKind.ImportClause ||
-                    (!!(child as ImportClause).namedBindings && (child as ImportClause).namedBindings!.kind !== SyntaxKind.NamedImports);
+                    (!!(child as ImportClause).namedBindings &&
+                        (child as ImportClause).namedBindings!.kind !== SyntaxKind.NamedImports);
             case SyntaxKind.JsxElement:
                 return childKind !== SyntaxKind.JsxClosingElement;
             case SyntaxKind.JsxFragment:

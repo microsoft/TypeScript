@@ -168,7 +168,9 @@ export function createCachedDirectoryStructureHost(
         // If we're looking for the base directory, we're definitely going to search the entries
         if (!entries.sortedAndCanonicalizedFiles) {
             entries.sortedAndCanonicalizedFiles = entries.files.map(getCanonicalFileName).sort() as SortedArray<Canonicalized>;
-            entries.sortedAndCanonicalizedDirectories = entries.directories.map(getCanonicalFileName).sort() as SortedArray<Canonicalized>;
+            entries.sortedAndCanonicalizedDirectories = entries.directories.map(getCanonicalFileName).sort() as SortedArray<
+                Canonicalized
+            >;
         }
         return entries as SortedAndCanonicalizedMutableFileSystemEntries;
     }
@@ -358,7 +360,10 @@ export function createCachedDirectoryStructureHost(
             fileExists: host.fileExists(fileOrDirectory),
             directoryExists: host.directoryExists(fileOrDirectory),
         };
-        if (fsQueryResult.directoryExists || hasEntry(parentResult.sortedAndCanonicalizedDirectories, getCanonicalFileName(baseName))) {
+        if (
+            fsQueryResult.directoryExists ||
+            hasEntry(parentResult.sortedAndCanonicalizedDirectories, getCanonicalFileName(baseName))
+        ) {
             // Folder added or removed, clear the cache instead of updating the folder and its structure
             clearCache();
         }
@@ -376,7 +381,11 @@ export function createCachedDirectoryStructureHost(
 
         const parentResult = getCachedFileSystemEntriesForBaseDir(filePath);
         if (parentResult) {
-            updateFilesOfFileSystemEntry(parentResult, getBaseNameOfFileName(fileName), eventKind === FileWatcherEventKind.Created);
+            updateFilesOfFileSystemEntry(
+                parentResult,
+                getBaseNameOfFileName(fileName),
+                eventKind === FileWatcherEventKind.Created,
+            );
         }
     }
 
@@ -398,7 +407,9 @@ export function createCachedDirectoryStructureHost(
             const sortedIndex = binarySearch(canonicalizedFiles, canonicalizedBaseName, identity, compareStringsCaseSensitive);
             if (sortedIndex >= 0) {
                 canonicalizedFiles.splice(sortedIndex, 1);
-                const unsortedIndex = parentResult.files.findIndex(entry => getCanonicalFileName(entry) === canonicalizedBaseName);
+                const unsortedIndex = parentResult.files.findIndex(entry =>
+                    getCanonicalFileName(entry) === canonicalizedBaseName
+                );
                 parentResult.files.splice(unsortedIndex, 1);
             }
         }
@@ -573,7 +584,11 @@ export function updateWatchingWildcardDirectories(
         };
     }
 
-    function updateWildcardDirectoryWatcher(existingWatcher: WildcardDirectoryWatcher, flags: WatchDirectoryFlags, directory: string) {
+    function updateWildcardDirectoryWatcher(
+        existingWatcher: WildcardDirectoryWatcher,
+        flags: WatchDirectoryFlags,
+        directory: string,
+    ) {
         // Watcher needs to be updated if the recursive flags dont match
         if (existingWatcher.flags === flags) {
             return;
@@ -821,7 +836,9 @@ export function getWatchFactory<X, Y = undefined>(
         log(`ExcludeWatcher:: Added:: ${getWatchInfo(file, flags, options, detailInfo1, detailInfo2, getDetailWatchInfo)}`);
         return {
             close: () =>
-                log(`ExcludeWatcher:: Close:: ${getWatchInfo(file, flags, options, detailInfo1, detailInfo2, getDetailWatchInfo)}`),
+                log(`ExcludeWatcher:: Close:: ${
+                    getWatchInfo(file, flags, options, detailInfo1, detailInfo2, getDetailWatchInfo)
+                }`),
         };
     }
 
@@ -851,7 +868,9 @@ export function getWatchFactory<X, Y = undefined>(
         detailInfo1: X,
         detailInfo2?: Y,
     ): FileWatcher {
-        const watchInfo = `DirectoryWatcher:: Added:: ${getWatchInfo(file, flags, options, detailInfo1, detailInfo2, getDetailWatchInfo)}`;
+        const watchInfo = `DirectoryWatcher:: Added:: ${
+            getWatchInfo(file, flags, options, detailInfo1, detailInfo2, getDetailWatchInfo)
+        }`;
         log(watchInfo);
         const start = timestamp();
         const watcher = triggerInvokingFactory!.watchDirectory(file, cb, flags, options, detailInfo1, detailInfo2);

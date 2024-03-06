@@ -76,7 +76,10 @@ export namespace Status {
      * We track what the newest input file is.
      */
     export interface UpToDate {
-        type: UpToDateStatusType.UpToDate | UpToDateStatusType.UpToDateWithUpstreamTypes | UpToDateStatusType.UpToDateWithInputFileText;
+        type:
+            | UpToDateStatusType.UpToDate
+            | UpToDateStatusType.UpToDateWithUpstreamTypes
+            | UpToDateStatusType.UpToDateWithInputFileText;
         newestInputFileTime?: Date;
         newestInputFileName?: string;
         oldestOutputFileName: string;

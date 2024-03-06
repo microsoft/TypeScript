@@ -177,7 +177,11 @@ function getWordSpans(word: string, stringToWordSpans: Map<string, TextSpan[]>):
     return spans;
 }
 
-function matchTextChunk(candidate: string, chunk: TextChunk, stringToWordSpans: Map<string, TextSpan[]>): PatternMatch | undefined {
+function matchTextChunk(
+    candidate: string,
+    chunk: TextChunk,
+    stringToWordSpans: Map<string, TextSpan[]>,
+): PatternMatch | undefined {
     const index = indexOfIgnoringCase(candidate, chunk.textLowerCase);
     if (index === 0) {
         // a) Check if the word is a prefix of the candidate, in a case insensitive or

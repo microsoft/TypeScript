@@ -113,7 +113,10 @@ describe("unittests:: Reuse program structure:: General", () => {
             { name: "/a.ts", text: SourceText.New("", "import {b} from 'b'", "var a = b;") },
             { name: "/node_modules/b/index.d.ts", text: SourceText.New("", "export * from './internal';", "") },
             { name: "/node_modules/b/internal.d.ts", text: SourceText.New("", "", "export const b = 1;") },
-            { name: "/node_modules/b/package.json", text: SourceText.New("", "", jsonToReadableText({ name: "b", version: "1.2.3" })) },
+            {
+                name: "/node_modules/b/package.json",
+                text: SourceText.New("", "", jsonToReadableText({ name: "b", version: "1.2.3" })),
+            },
         ];
 
         const options: ts.CompilerOptions = { target, moduleResolution: ts.ModuleResolutionKind.Node10 };
@@ -204,7 +207,11 @@ describe("unittests:: Reuse program structure:: General", () => {
     });
 
     it("fails if config path changes", () => {
-        const program1 = newProgram(getFiles(), ["a.ts"], { target, module: ts.ModuleKind.CommonJS, configFilePath: "/a/b/tsconfig.json" });
+        const program1 = newProgram(getFiles(), ["a.ts"], {
+            target,
+            module: ts.ModuleKind.CommonJS,
+            configFilePath: "/a/b/tsconfig.json",
+        });
         const baselines: string[] = [];
         baselineProgram(baselines, program1);
         const program2 = updateProgram(
@@ -233,7 +240,10 @@ describe("unittests:: Reuse program structure:: General", () => {
         const program1 = newProgram(files, ["a.ts"], options);
         const baselines: string[] = [];
         baselineProgram(baselines, program1);
-        const newTexts: NamedSourceText[] = files.concat([{ name: "non-existing-file.ts", text: SourceText.New("", "", `var x = 1`) }]);
+        const newTexts: NamedSourceText[] = files.concat([{
+            name: "non-existing-file.ts",
+            text: SourceText.New("", "", `var x = 1`),
+        }]);
         const program2 = updateProgram(program1, ["a.ts"], options, ts.noop, newTexts);
         baselineProgram(baselines, program2);
         runBaseline("missing file is created", baselines);
@@ -505,7 +515,11 @@ describe("unittests:: Reuse program structure:: General", () => {
                 },
                 {
                     name: bxPackage,
-                    text: SourceText.New("", "", jsonToReadableText({ name: "x", version: options ? options.bVersion : "1.2.3" })),
+                    text: SourceText.New(
+                        "",
+                        "",
+                        jsonToReadableText({ name: "x", version: options ? options.bVersion : "1.2.3" }),
+                    ),
                 },
                 {
                     name: root,
@@ -777,7 +791,10 @@ describe("unittests:: Reuse program structure:: isProgramUptoDate", () => {
                 path: "/src/tsconfig.json",
                 content: jsonToReadableText({ compilerOptions, include: ["packages/**/*.ts"] }),
             };
-            verifyProgramWithConfigFile(createWatchedSystem([app, module1, module2, module3, libFile, configFile]), configFile.path);
+            verifyProgramWithConfigFile(
+                createWatchedSystem([app, module1, module2, module3, libFile, configFile]),
+                configFile.path,
+            );
         });
         it("has the same root file names", () => {
             const module1: File = {

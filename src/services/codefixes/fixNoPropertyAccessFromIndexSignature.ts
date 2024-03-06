@@ -44,7 +44,8 @@ registerCodeFix({
         codeFixAll(
             context,
             errorCodes,
-            (changes, diag) => doChange(changes, diag.file, getPropertyAccessExpression(diag.file, diag.start), context.preferences),
+            (changes, diag) =>
+                doChange(changes, diag.file, getPropertyAccessExpression(diag.file, diag.start), context.preferences),
         ),
 });
 

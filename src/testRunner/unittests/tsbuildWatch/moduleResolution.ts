@@ -20,7 +20,10 @@ describe("unittests:: tsbuildWatch:: watchMode:: moduleResolution", () => {
             createWatchedSystem(
                 [
                     { path: `/user/username/projects/myproject/project1/index.ts`, content: `import { foo } from "file";` },
-                    { path: `/user/username/projects/myproject/project1/node_modules/file/index.d.ts`, content: "export const foo = 10;" },
+                    {
+                        path: `/user/username/projects/myproject/project1/node_modules/file/index.d.ts`,
+                        content: "export const foo = 10;",
+                    },
                     {
                         path: `/user/username/projects/myproject/project1/tsconfig.json`,
                         content: jsonToReadableText({
@@ -37,8 +40,14 @@ describe("unittests:: tsbuildWatch:: watchMode:: moduleResolution", () => {
                             files: ["index.ts"],
                         }),
                     },
-                    { path: `/user/username/projects/myproject/node_modules/@types/foo/index.d.ts`, content: "export const foo = 10;" },
-                    { path: `/user/username/projects/myproject/node_modules/@types/bar/index.d.ts`, content: "export const bar = 10;" },
+                    {
+                        path: `/user/username/projects/myproject/node_modules/@types/foo/index.d.ts`,
+                        content: "export const foo = 10;",
+                    },
+                    {
+                        path: `/user/username/projects/myproject/node_modules/@types/bar/index.d.ts`,
+                        content: "export const bar = 10;",
+                    },
                     {
                         path: `/user/username/projects/myproject/tsconfig.json`,
                         content: jsonToReadableText({
@@ -65,7 +74,8 @@ describe("unittests:: tsbuildWatch:: watchMode:: moduleResolution", () => {
 
     verifyTscWatch({
         scenario: "moduleResolution",
-        subScenario: `resolves specifier in output declaration file from referenced project correctly with cts and mts extensions`,
+        subScenario:
+            `resolves specifier in output declaration file from referenced project correctly with cts and mts extensions`,
         sys: () =>
             createWatchedSystem([
                 {
@@ -130,17 +140,20 @@ describe("unittests:: tsbuildWatch:: watchMode:: moduleResolution", () => {
         edits: [
             {
                 caption: "reports import errors after change to package file",
-                edit: sys => sys.replaceFileText(`/user/username/projects/myproject/packages/pkg1/package.json`, `"module"`, `"commonjs"`),
+                edit: sys =>
+                    sys.replaceFileText(`/user/username/projects/myproject/packages/pkg1/package.json`, `"module"`, `"commonjs"`),
                 timeouts: sys => sys.runQueuedTimeoutCallbacks(),
             },
             {
                 caption: "removes those errors when a package file is changed back",
-                edit: sys => sys.replaceFileText(`/user/username/projects/myproject/packages/pkg1/package.json`, `"commonjs"`, `"module"`),
+                edit: sys =>
+                    sys.replaceFileText(`/user/username/projects/myproject/packages/pkg1/package.json`, `"commonjs"`, `"module"`),
                 timeouts: sys => sys.runQueuedTimeoutCallbacks(),
             },
             {
                 caption: "reports import errors after change to package file",
-                edit: sys => sys.replaceFileText(`/user/username/projects/myproject/packages/pkg1/package.json`, `"module"`, `"commonjs"`),
+                edit: sys =>
+                    sys.replaceFileText(`/user/username/projects/myproject/packages/pkg1/package.json`, `"module"`, `"commonjs"`),
                 timeouts: sys => sys.runQueuedTimeoutCallbacks(),
             },
             {
@@ -232,12 +245,14 @@ describe("unittests:: tsbuildWatch:: watchMode:: moduleResolution", () => {
         edits: [
             {
                 caption: "reports import errors after change to package file",
-                edit: sys => sys.replaceFileText(`/user/username/projects/myproject/packages/pkg2/package.json`, `index.js`, `other.js`),
+                edit: sys =>
+                    sys.replaceFileText(`/user/username/projects/myproject/packages/pkg2/package.json`, `index.js`, `other.js`),
                 timeouts: sys => sys.runQueuedTimeoutCallbacks(),
             },
             {
                 caption: "removes those errors when a package file is changed back",
-                edit: sys => sys.replaceFileText(`/user/username/projects/myproject/packages/pkg2/package.json`, `other.js`, `index.js`),
+                edit: sys =>
+                    sys.replaceFileText(`/user/username/projects/myproject/packages/pkg2/package.json`, `other.js`, `index.js`),
                 timeouts: sys => sys.runQueuedTimeoutCallbacks(),
             },
         ],

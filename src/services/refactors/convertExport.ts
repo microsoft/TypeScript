@@ -75,7 +75,9 @@ registerRefactor(refactorName, {
         defaultToNamedAction.kind,
         namedToDefaultAction.kind,
     ],
-    getAvailableActions: function getRefactorActionsToConvertBetweenNamedAndDefaultExports(context): readonly ApplicableRefactorInfo[] {
+    getAvailableActions: function getRefactorActionsToConvertBetweenNamedAndDefaultExports(
+        context,
+    ): readonly ApplicableRefactorInfo[] {
         const info = getInfo(context, context.triggerReason === "invoked");
         if (!info) return emptyArray;
 
@@ -100,7 +102,10 @@ registerRefactor(refactorName, {
         return emptyArray;
     },
     getEditsForAction: function getRefactorEditsToConvertBetweenNamedAndDefaultExports(context, actionName): RefactorEditInfo {
-        Debug.assert(actionName === defaultToNamedAction.name || actionName === namedToDefaultAction.name, "Unexpected action name");
+        Debug.assert(
+            actionName === defaultToNamedAction.name || actionName === namedToDefaultAction.name,
+            "Unexpected action name",
+        );
         const info = getInfo(context);
         Debug.assert(info && !isRefactorErrorInfo(info), "Expected applicable refactor info");
         const edits = textChanges.ChangeTracker.with(
@@ -132,9 +137,10 @@ function getInfo(context: RefactorContext, considerPartialSpans = true): ExportI
     const { file, program } = context;
     const span = getRefactorContextSpan(context);
     const token = getTokenAtPosition(file, span.start);
-    const exportNode = !!(token.parent && getSyntacticModifierFlags(token.parent) & ModifierFlags.Export) && considerPartialSpans ?
-        token.parent
-        : getParentNodeInSpan(token, file, span);
+    const exportNode =
+        !!(token.parent && getSyntacticModifierFlags(token.parent) & ModifierFlags.Export) && considerPartialSpans ?
+            token.parent
+            : getParentNodeInSpan(token, file, span);
     if (
         !exportNode ||
         (!isSourceFile(exportNode.parent) && !(isModuleBlock(exportNode.parent) && isAmbientModule(exportNode.parent.parent)))
@@ -222,13 +228,20 @@ function changeExport(
             changes.replaceNode(
                 exportingSourceFile,
                 exportNode,
-                factory.createExportDeclaration(/*modifiers*/ undefined, /*isTypeOnly*/ false, factory.createNamedExports([spec])),
+                factory.createExportDeclaration(
+                    /*modifiers*/ undefined,
+                    /*isTypeOnly*/ false,
+                    factory.createNamedExports([spec]),
+                ),
             );
         }
         else {
             changes.delete(
                 exportingSourceFile,
-                Debug.checkDefined(findModifier(exportNode, SyntaxKind.DefaultKeyword), "Should find a default keyword in modifier list"),
+                Debug.checkDefined(
+                    findModifier(exportNode, SyntaxKind.DefaultKeyword),
+                    "Should find a default keyword in modifier list",
+                ),
             );
         }
     }
@@ -251,7 +264,9 @@ function changeExport(
                     changes.replaceNode(
                         exportingSourceFile,
                         exportNode,
-                        factory.createExportDefault(Debug.checkDefined(decl.initializer, "Initializer was previously known to be present")),
+                        factory.createExportDefault(
+                            Debug.checkDefined(decl.initializer, "Initializer was previously known to be present"),
+                        ),
                     );
                     break;
                 }

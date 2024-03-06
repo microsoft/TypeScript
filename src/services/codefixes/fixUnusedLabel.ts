@@ -22,7 +22,9 @@ registerCodeFix({
     errorCodes,
     getCodeActions(context) {
         const changes = textChanges.ChangeTracker.with(context, t => doChange(t, context.sourceFile, context.span.start));
-        return [createCodeFixAction(fixId, changes, Diagnostics.Remove_unused_label, fixId, Diagnostics.Remove_all_unused_labels)];
+        return [
+            createCodeFixAction(fixId, changes, Diagnostics.Remove_unused_label, fixId, Diagnostics.Remove_all_unused_labels),
+        ];
     },
     fixIds: [fixId],
     getAllCodeActions: context => codeFixAll(context, errorCodes, (changes, diag) => doChange(changes, diag.file, diag.start)),

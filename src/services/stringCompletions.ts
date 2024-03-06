@@ -332,7 +332,8 @@ function stringLiteralCompletionDetails(
     switch (completion.kind) {
         case StringLiteralCompletionKind.Paths: {
             const match = find(completion.paths, p => p.name === name);
-            return match && createCompletionDetails(name, kindModifiersFromExtension(match.extension), match.kind, [textPart(name)]);
+            return match &&
+                createCompletionDetails(name, kindModifiersFromExtension(match.extension), match.kind, [textPart(name)]);
         }
         case StringLiteralCompletionKind.Properties: {
             const match = find(completion.symbols, s => s.name === name);
@@ -479,7 +480,8 @@ function getStringLiteralCompletionEntries(
                 // Get string literal completions from specialized signatures of the target
                 // i.e. declare function f(a: 'A');
                 // f("/*completion position*/")
-                return argumentInfo && getStringLiteralCompletionsFromSignature(argumentInfo.invocation, node, argumentInfo, typeChecker) ||
+                return argumentInfo &&
+                        getStringLiteralCompletionsFromSignature(argumentInfo.invocation, node, argumentInfo, typeChecker) ||
                     fromContextualType(ContextFlags.None);
             }
             // falls through (is `require("")` or `require(""` or `import("")`)
@@ -542,7 +544,10 @@ function getStringLiteralCompletionEntries(
                 if (!result) {
                     return undefined;
                 }
-                const alreadyUsedTypes = getAlreadyUsedTypesInStringLiteralUnion(grandParent as UnionTypeNode, parent as LiteralTypeNode);
+                const alreadyUsedTypes = getAlreadyUsedTypesInStringLiteralUnion(
+                    grandParent as UnionTypeNode,
+                    parent as LiteralTypeNode,
+                );
                 if (result.kind === StringLiteralCompletionKind.Properties) {
                     return {
                         kind: StringLiteralCompletionKind.Properties,
@@ -561,7 +566,9 @@ function getStringLiteralCompletionEntries(
         }
     }
 
-    function fromContextualType(contextFlags: ContextFlags = ContextFlags.Completions): StringLiteralCompletionsFromTypes | undefined {
+    function fromContextualType(
+        contextFlags: ContextFlags = ContextFlags.Completions,
+    ): StringLiteralCompletionsFromTypes | undefined {
         // Get completion for string literal from string literal type
         // i.e. var x: "hi" | "hello" = "/*completion position*/"
         const types = getStringLiteralTypes(getContextualTypeFromParent(node, typeChecker, contextFlags));
@@ -604,7 +611,10 @@ function getStringLiteralCompletionsFromSignature(
         if (!signatureHasRestParameter(candidate) && argumentInfo.argumentCount > candidate.parameters.length) return;
         let type = candidate.getTypeParameterAtPosition(argumentInfo.argumentIndex);
         if (isJsxOpeningLikeElement(call)) {
-            const propType = checker.getTypeOfPropertyOfType(type, getTextOfJsxAttributeName((editingArgument as JsxAttribute).name));
+            const propType = checker.getTypeOfPropertyOfType(
+                type,
+                getTextOfJsxAttributeName((editingArgument as JsxAttribute).name),
+            );
             if (propType) {
                 type = propType;
             }
@@ -719,7 +729,14 @@ function getStringLiteralCompletionsFromModuleNamesWorker(
 
     return isPathRelativeToScript(literalValue) ||
             !compilerOptions.baseUrl && !compilerOptions.paths && (isRootedDiskPath(literalValue) || isUrl(literalValue))
-        ? getCompletionEntriesForRelativeModules(literalValue, scriptDirectory, compilerOptions, host, scriptPath, extensionOptions)
+        ? getCompletionEntriesForRelativeModules(
+            literalValue,
+            scriptDirectory,
+            compilerOptions,
+            host,
+            scriptPath,
+            extensionOptions,
+        )
         : getCompletionEntriesForNonRelativeModules(
             literalValue,
             scriptDirectory,
@@ -789,7 +806,10 @@ function getCompletionEntriesForRelativeModules(
     }
 }
 
-function getSupportedExtensionsForModuleResolution(compilerOptions: CompilerOptions, typeChecker?: TypeChecker): readonly string[][] {
+function getSupportedExtensionsForModuleResolution(
+    compilerOptions: CompilerOptions,
+    typeChecker?: TypeChecker,
+): readonly string[][] {
     /** file extensions from ambient modules declarations e.g. *.css */
     const ambientModulesExtensions = !typeChecker ? [] : mapDefined(typeChecker.getAmbientModules(), module => {
         const name = module.name.slice(1, -1);
@@ -825,7 +845,8 @@ function getBaseDirectoriesFromRootDirs(
     const relativeDirectory = firstDefined(
         rootDirs,
         rootDirectory =>
-            containsPath(rootDirectory, scriptDirectory, basePath, ignoreCase) ? scriptDirectory.substr(rootDirectory.length) : undefined,
+            containsPath(rootDirectory, scriptDirectory, basePath, ignoreCase) ? scriptDirectory.substr(rootDirectory.length)
+                : undefined,
     )!; // TODO: GH#18217
 
     // Now find a path for each potential directory that is to be merged with the one containing the script
@@ -920,7 +941,16 @@ function getCompletionEntriesForDirectoryFragment(
                 if (versionPaths) {
                     const packageDirectory = getDirectoryPath(packageJsonPath);
                     const pathInPackage = absolutePath.slice(ensureTrailingDirectorySeparator(packageDirectory).length);
-                    if (addCompletionEntriesFromPaths(result, pathInPackage, packageDirectory, extensionOptions, host, versionPaths)) {
+                    if (
+                        addCompletionEntriesFromPaths(
+                            result,
+                            pathInPackage,
+                            packageDirectory,
+                            extensionOptions,
+                            host,
+                            versionPaths,
+                        )
+                    ) {
                         // A true result means one of the `versionPaths` was matched, which will block relative resolution
                         // to files and folders from here. All reachable paths given the pattern match are already added.
                         return result;
@@ -934,7 +964,9 @@ function getCompletionEntriesForDirectoryFragment(
     if (!tryDirectoryExists(host, baseDirectory)) return result;
 
     // Enumerate the available files if possible
-    const files = tryReadDirectory(host, baseDirectory, extensionOptions.extensionsToSearch, /*exclude*/ undefined, /*include*/ ["./*"]);
+    const files = tryReadDirectory(host, baseDirectory, extensionOptions.extensionsToSearch, /*exclude*/ undefined, /*include*/ [
+        "./*",
+    ]);
 
     if (files) {
         for (let filePath of files) {
@@ -1070,7 +1102,8 @@ function addCompletionEntriesFromPathsOrExports(
             const pathPattern = tryParsePattern(keyWithoutLeadingDotSlash);
             if (!pathPattern) continue;
             const isMatch = typeof pathPattern === "object" && isPatternMatch(pathPattern, fragment);
-            const isLongestMatch = isMatch && (matchedPath === undefined || comparePaths(key, matchedPath) === Comparison.LessThan);
+            const isLongestMatch = isMatch &&
+                (matchedPath === undefined || comparePaths(key, matchedPath) === Comparison.LessThan);
             if (isLongestMatch) {
                 // If this is a higher priority match than anything we've seen so far, previous results from matches are invalid, e.g.
                 // for `import {} from "some-package/|"` with a typesVersions:
@@ -1086,7 +1119,10 @@ function addCompletionEntriesFromPathsOrExports(
                 matchedPath = key;
                 pathResults = pathResults.filter(r => !r.matchedPattern);
             }
-            if (typeof pathPattern === "string" || matchedPath === undefined || comparePaths(key, matchedPath) !== Comparison.GreaterThan) {
+            if (
+                typeof pathPattern === "string" || matchedPath === undefined ||
+                comparePaths(key, matchedPath) !== Comparison.GreaterThan
+            ) {
                 pathResults.push({
                     matchedPattern: isMatch,
                     results: getCompletionsForPathMapping(
@@ -1241,7 +1277,9 @@ function getPatternFromFirstMatchingCondition(target: unknown, conditions: reado
     }
     if (target && typeof target === "object" && !isArray(target)) {
         for (const condition in target) {
-            if (condition === "default" || conditions.includes(condition) || isApplicableVersionedTypesKey(conditions, condition)) {
+            if (
+                condition === "default" || conditions.includes(condition) || isApplicableVersionedTypesKey(conditions, condition)
+            ) {
                 const pattern = (target as MapLike<unknown>)[condition];
                 return getPatternFromFirstMatchingCondition(pattern, conditions);
             }
@@ -1271,24 +1309,30 @@ function getCompletionsForPathMapping(
     const remainingFragment = tryRemovePrefix(fragment, pathPrefix);
     if (remainingFragment === undefined) {
         const starIsFullPathComponent = path[path.length - 2] === "/";
-        return starIsFullPathComponent ? justPathMappingName(pathPrefix, ScriptElementKind.directory) : flatMap(patterns, pattern =>
-            getModulesForPathsPattern("", packageDirectory, pattern, extensionOptions, isExportsWildcard, host)?.map((
-                { name, ...rest },
-            ) => ({
-                name: pathPrefix + name,
-                ...rest,
-            })));
+        return starIsFullPathComponent ? justPathMappingName(pathPrefix, ScriptElementKind.directory) :
+            flatMap(
+                patterns,
+                pattern =>
+                    getModulesForPathsPattern("", packageDirectory, pattern, extensionOptions, isExportsWildcard, host)?.map((
+                        { name, ...rest },
+                    ) => ({
+                        name: pathPrefix + name,
+                        ...rest,
+                    })),
+            );
     }
     return flatMap(
         patterns,
-        pattern => getModulesForPathsPattern(remainingFragment, packageDirectory, pattern, extensionOptions, isExportsWildcard, host),
+        pattern =>
+            getModulesForPathsPattern(remainingFragment, packageDirectory, pattern, extensionOptions, isExportsWildcard, host),
     );
 
     function justPathMappingName(
         name: string,
         kind: ScriptElementKind.directory | ScriptElementKind.scriptElement,
     ): readonly NameAndKind[] {
-        return startsWith(name, fragment) ? [{ name: removeTrailingDirectorySeparator(name), kind, extension: undefined }] : emptyArray;
+        return startsWith(name, fragment) ? [{ name: removeTrailingDirectorySeparator(name), kind, extension: undefined }]
+            : emptyArray;
     }
 }
 
@@ -1312,14 +1356,17 @@ function getModulesForPathsPattern(
     // The prefix has two effective parts: the directory path and the base component after the filepath that is not a
     // full directory component. For example: directory/path/of/prefix/base*
     const normalizedPrefix = resolvePath(parsed.prefix);
-    const normalizedPrefixDirectory = hasTrailingDirectorySeparator(parsed.prefix) ? normalizedPrefix : getDirectoryPath(normalizedPrefix);
+    const normalizedPrefixDirectory = hasTrailingDirectorySeparator(parsed.prefix) ? normalizedPrefix
+        : getDirectoryPath(normalizedPrefix);
     const normalizedPrefixBase = hasTrailingDirectorySeparator(parsed.prefix) ? "" : getBaseFileName(normalizedPrefix);
 
     const fragmentHasPath = containsSlash(fragment);
-    const fragmentDirectory = fragmentHasPath ? hasTrailingDirectorySeparator(fragment) ? fragment : getDirectoryPath(fragment) : undefined;
+    const fragmentDirectory = fragmentHasPath ? hasTrailingDirectorySeparator(fragment) ? fragment : getDirectoryPath(fragment)
+        : undefined;
 
     // Try and expand the prefix to include any path from the fragment so that we can limit the readDirectory call
-    const expandedPrefixDirectory = fragmentHasPath ? combinePaths(normalizedPrefixDirectory, normalizedPrefixBase + fragmentDirectory)
+    const expandedPrefixDirectory = fragmentHasPath ?
+        combinePaths(normalizedPrefixDirectory, normalizedPrefixBase + fragmentDirectory)
         : normalizedPrefixDirectory;
 
     const normalizedSuffix = normalizePath(parsed.suffix);
@@ -1328,7 +1375,8 @@ function getModulesForPathsPattern(
         : [normalizedSuffix];
     // Need to normalize after combining: If we combinePaths("a", "../b"), we want "b" and not "a/../b".
     const baseDirectory = normalizePath(combinePaths(packageDirectory, expandedPrefixDirectory));
-    const completePrefix = fragmentHasPath ? baseDirectory : ensureTrailingDirectorySeparator(baseDirectory) + normalizedPrefixBase;
+    const completePrefix = fragmentHasPath ? baseDirectory
+        : ensureTrailingDirectorySeparator(baseDirectory) + normalizedPrefixBase;
 
     // If we have a suffix, then we read the directory all the way down to avoid returning completions for
     // directories that don't contain files that would match the suffix. A previous comment here was concerned
@@ -1385,10 +1433,16 @@ function removeLeadingDirectorySeparator(path: string): string {
     return path[0] === directorySeparator ? path.slice(1) : path;
 }
 
-function getAmbientModuleCompletions(fragment: string, fragmentDirectory: string | undefined, checker: TypeChecker): readonly string[] {
+function getAmbientModuleCompletions(
+    fragment: string,
+    fragmentDirectory: string | undefined,
+    checker: TypeChecker,
+): readonly string[] {
     // Get modules that the type checker picked up
     const ambientModules = checker.getAmbientModules().map(sym => stripQuotes(sym.name));
-    const nonRelativeModuleNames = ambientModules.filter(moduleName => startsWith(moduleName, fragment) && !moduleName.includes("*"));
+    const nonRelativeModuleNames = ambientModules.filter(moduleName =>
+        startsWith(moduleName, fragment) && !moduleName.includes("*")
+    );
 
     // Nested modules of the form "module-name/sub" need to be adjusted to only return the string
     // after the last '/' that appears in the fragment because that's where the replacement span
@@ -1408,7 +1462,8 @@ function getTripleSlashReferenceCompletion(
 ): readonly PathCompletion[] | undefined {
     const token = getTokenAtPosition(sourceFile, position);
     const commentRanges = getLeadingCommentRanges(sourceFile.text, token.pos);
-    const range = commentRanges && find(commentRanges, commentRange => position >= commentRange.pos && position <= commentRange.end);
+    const range = commentRanges &&
+        find(commentRanges, commentRange => position >= commentRange.pos && position <= commentRange.end);
     if (!range) {
         return undefined;
     }
@@ -1481,7 +1536,11 @@ function getCompletionEntriesFromTypings(
             }
             else {
                 const baseDirectory = combinePaths(directory, typeDirectoryName);
-                const remainingFragment = tryRemoveDirectoryPrefix(fragmentDirectory, packageName, hostGetCanonicalFileName(host));
+                const remainingFragment = tryRemoveDirectoryPrefix(
+                    fragmentDirectory,
+                    packageName,
+                    hostGetCanonicalFileName(host),
+                );
                 if (remainingFragment !== undefined) {
                     getCompletionEntriesForDirectoryFragment(
                         remainingFragment,
@@ -1552,7 +1611,12 @@ function isPathRelativeToScript(path: string) {
  */
 const tripleSlashDirectiveFragmentRegex = /^(\/\/\/\s*<reference\s+(path|types)\s*=\s*(?:'|"))([^\3"]*)$/;
 
-const nodeModulesDependencyKeys: readonly string[] = ["dependencies", "devDependencies", "peerDependencies", "optionalDependencies"];
+const nodeModulesDependencyKeys: readonly string[] = [
+    "dependencies",
+    "devDependencies",
+    "peerDependencies",
+    "optionalDependencies",
+];
 
 function containsSlash(fragment: string) {
     return fragment.includes(directorySeparator);

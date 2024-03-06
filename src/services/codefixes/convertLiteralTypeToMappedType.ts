@@ -72,7 +72,11 @@ function getInfo(sourceFile: SourceFile, pos: number): Info | undefined {
     return undefined;
 }
 
-function doChange(changes: textChanges.ChangeTracker, sourceFile: SourceFile, { container, typeNode, constraint, name }: Info): void {
+function doChange(
+    changes: textChanges.ChangeTracker,
+    sourceFile: SourceFile,
+    { container, typeNode, constraint, name }: Info,
+): void {
     changes.replaceNode(
         sourceFile,
         container,

@@ -54,7 +54,8 @@ function main() {
     // Ensure we are actually changing something - the user probably wants to know that the update failed.
     if (tsFileContents === modifiedTsFileContents) {
         let err = `\n  '${tsFilePath}' was not updated while configuring for a prerelease publish for '${tag}'.\n    `;
-        err += `Ensure that you have not already run this script; otherwise, erase your changes using 'git checkout -- "${tsFilePath}"'.`;
+        err +=
+            `Ensure that you have not already run this script; otherwise, erase your changes using 'git checkout -- "${tsFilePath}"'.`;
         throw new Error(err + "\n");
     }
 

@@ -62,7 +62,11 @@ describe("unittests:: tsserver:: packageJsonInfo::", () => {
         packageJsonInfo = projectService.packageJsonCache.getInDirectory("/")!;
         assert.isUndefined(packageJsonInfo.dependencies);
 
-        baselineTsserverLogs("packageJsonInfo", "detects new package.json files that are added, caches them, and watches them", session);
+        baselineTsserverLogs(
+            "packageJsonInfo",
+            "detects new package.json files that are added, caches them, and watches them",
+            session,
+        );
     });
 
     it("finds package.json on demand, watches for deletion, and removes them from cache", () => {
@@ -75,7 +79,11 @@ describe("unittests:: tsserver:: packageJsonInfo::", () => {
         host.deleteFile(packageJson.path);
         session.host.baselineHost("delete packageJson");
         assert.isUndefined(projectService.packageJsonCache.getInDirectory("/"));
-        baselineTsserverLogs("packageJsonInfo", "finds package.json on demand, watches for deletion, and removes them from cache", session);
+        baselineTsserverLogs(
+            "packageJsonInfo",
+            "finds package.json on demand, watches for deletion, and removes them from cache",
+            session,
+        );
     });
 
     it("finds multiple package.json files when present", () => {
@@ -91,7 +99,10 @@ describe("unittests:: tsserver:: packageJsonInfo::", () => {
 
     it("handles errors in json parsing of package.json", () => {
         const packageJsonContent = `{ "mod" }`;
-        const { session, projectService, host, project } = setup([tsConfig, { path: packageJson.path, content: packageJsonContent }]);
+        const { session, projectService, host, project } = setup([tsConfig, {
+            path: packageJson.path,
+            content: packageJsonContent,
+        }]);
         projectService.getPackageJsonsVisibleToFile("/src/whatever/blah.ts", project);
         const packageJsonInfo = projectService.packageJsonCache.getInDirectory("/")!;
         assert.isFalse(packageJsonInfo.parseable);
@@ -110,7 +121,10 @@ describe("unittests:: tsserver:: packageJsonInfo::", () => {
 
     it("handles empty package.json", () => {
         const packageJsonContent = "";
-        const { session, projectService, host, project } = setup([tsConfig, { path: packageJson.path, content: packageJsonContent }]);
+        const { session, projectService, host, project } = setup([tsConfig, {
+            path: packageJson.path,
+            content: packageJsonContent,
+        }]);
         projectService.getPackageJsonsVisibleToFile("/src/whatever/blah.ts", project);
         const packageJsonInfo = projectService.packageJsonCache.getInDirectory("/")!;
         assert.isFalse(packageJsonInfo.parseable);
@@ -137,7 +151,9 @@ function setup(files: readonly File[] = [tsConfig, packageJson]) {
     projectService.getPackageJsonsVisibleToFile = (fileName, project, rootDir) => {
         session.host.baselineHost(`getPackageJsonsVisibleToFile:: ${fileName} ${rootDir}`);
         const result = getPackageJsonsVisibleToFile.call(projectService, fileName, project, rootDir);
-        session.host.baselineHost(`getPackageJsonsVisibleToFile:: ${fileName} ${rootDir}:: Result:: ${jsonToReadableText(result)}`);
+        session.host.baselineHost(
+            `getPackageJsonsVisibleToFile:: ${fileName} ${rootDir}:: Result:: ${jsonToReadableText(result)}`,
+        );
         return result;
     };
     return { host, session, projectService, project: projectService.inferredProjects[0] };

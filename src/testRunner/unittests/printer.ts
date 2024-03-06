@@ -5,7 +5,11 @@ import * as vfs from "../_namespaces/vfs";
 
 describe("unittests:: PrinterAPI", () => {
     function makePrintsCorrectly(prefix: string) {
-        return function printsCorrectly(name: string, options: ts.PrinterOptions, printCallback: (printer: ts.Printer) => string) {
+        return function printsCorrectly(
+            name: string,
+            options: ts.PrinterOptions,
+            printCallback: (printer: ts.Printer) => string,
+        ) {
             it(name, () => {
                 Harness.Baseline.runBaseline(
                     `printerApi/${prefix}.${name}.js`,
@@ -71,7 +75,9 @@ describe("unittests:: PrinterAPI", () => {
             "templateLiteral",
             {},
             printer =>
-                printer.printFile(ts.createSourceFile("source.ts", "let greeting = `Hi ${name}, how are you?`;", ts.ScriptTarget.ES2017)),
+                printer.printFile(
+                    ts.createSourceFile("source.ts", "let greeting = `Hi ${name}, how are you?`;", ts.ScriptTarget.ES2017),
+                ),
         );
 
         // https://github.com/microsoft/TypeScript/issues/18071

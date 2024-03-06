@@ -62,7 +62,10 @@ describe("unittests:: tsserver:: moduleResolution", () => {
                         }
                     `,
             };
-            const host = createServerHost([configFile, fileA, fileB, packageFile, { ...libFile, path: "/a/lib/lib.es2016.full.d.ts" }]);
+            const host = createServerHost([configFile, fileA, fileB, packageFile, {
+                ...libFile,
+                path: "/a/lib/lib.es2016.full.d.ts",
+            }]);
             const session = new TestSession(host);
             openFilesForSession([fileA], session);
             return {
@@ -159,7 +162,11 @@ describe("unittests:: tsserver:: moduleResolution", () => {
             host.runQueuedTimeoutCallbacks(); // Actual update
             verifyErr();
 
-            baselineTsserverLogs("moduleResolution", "package json file is edited when package json with type module exists", session);
+            baselineTsserverLogs(
+                "moduleResolution",
+                "package json file is edited when package json with type module exists",
+                session,
+            );
         });
     });
 
@@ -175,7 +182,10 @@ describe("unittests:: tsserver:: moduleResolution", () => {
         verifyErrors();
         host.deleteFile("/home/src/projects/project/node_modules/foo/index.d.ts");
         verifyErrors();
-        host.writeFile("/home/src/projects/project/node_modules/@types/bar/index.d.ts", getFsContentsForAlternateResultDts("bar"));
+        host.writeFile(
+            "/home/src/projects/project/node_modules/@types/bar/index.d.ts",
+            getFsContentsForAlternateResultDts("bar"),
+        );
         verifyErrors();
         host.writeFile("/home/src/projects/project/node_modules/foo/index.d.ts", getFsContentsForAlternateResultDts("foo"));
         verifyErrors();
@@ -203,7 +213,10 @@ describe("unittests:: tsserver:: moduleResolution", () => {
         verifyErrors();
         host.deleteFile("/home/src/projects/project/node_modules/foo2/index.d.ts");
         verifyErrors();
-        host.writeFile("/home/src/projects/project/node_modules/@types/bar2/index.d.ts", getFsContentsForAlternateResultDts("bar2"));
+        host.writeFile(
+            "/home/src/projects/project/node_modules/@types/bar2/index.d.ts",
+            getFsContentsForAlternateResultDts("bar2"),
+        );
         verifyErrors();
         host.writeFile("/home/src/projects/project/node_modules/foo2/index.d.ts", getFsContentsForAlternateResultDts("foo2"));
         verifyErrors();

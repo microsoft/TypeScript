@@ -143,11 +143,17 @@ export class VerifyNegatable {
         this.state.verifySignatureHelpPresence(/*expectPresent*/ false, /*triggerReason*/ undefined, markers);
     }
 
-    public noSignatureHelpForTriggerReason(reason: ts.SignatureHelpTriggerReason, ...markers: (string | FourSlash.Marker)[]): void {
+    public noSignatureHelpForTriggerReason(
+        reason: ts.SignatureHelpTriggerReason,
+        ...markers: (string | FourSlash.Marker)[]
+    ): void {
         this.state.verifySignatureHelpPresence(/*expectPresent*/ false, reason, markers);
     }
 
-    public signatureHelpPresentForTriggerReason(reason: ts.SignatureHelpTriggerReason, ...markers: (string | FourSlash.Marker)[]): void {
+    public signatureHelpPresentForTriggerReason(
+        reason: ts.SignatureHelpTriggerReason,
+        ...markers: (string | FourSlash.Marker)[]
+    ): void {
         this.state.verifySignatureHelpPresence(/*expectPresent*/ true, reason, markers);
     }
 
@@ -439,7 +445,10 @@ export class Verify extends VerifyNegatable {
         this.state.baselineDocumentHighlights(markerOrRange, /*rangeText*/ undefined, options);
     }
 
-    public baselineDocumentHighlightsAtRangesWithText(rangeText?: ArrayOrSingle<string>, options?: VerifyDocumentHighlightsOptions) {
+    public baselineDocumentHighlightsAtRangesWithText(
+        rangeText?: ArrayOrSingle<string>,
+        options?: VerifyDocumentHighlightsOptions,
+    ) {
         this.state.baselineDocumentHighlights(/*markerOrRange*/ undefined, rangeText, options);
     }
 
@@ -552,7 +561,13 @@ export class Verify extends VerifyNegatable {
         actionName: string,
         formattingOptions?: ts.FormatCodeSettings,
     ): void {
-        this.state.verifyFileAfterApplyingRefactorAtMarker(markerName, expectedContent, refactorNameToApply, actionName, formattingOptions);
+        this.state.verifyFileAfterApplyingRefactorAtMarker(
+            markerName,
+            expectedContent,
+            refactorNameToApply,
+            actionName,
+            formattingOptions,
+        );
     }
 
     public rangeIs(expectedText: string, includeWhiteSpace?: boolean): void {
@@ -626,7 +641,15 @@ export class Verify extends VerifyNegatable {
         expectedRange?: FourSlash.Range,
         preferences?: ts.UserPreferences,
     ) {
-        this.state.verifyRenameInfoSucceeded(displayName, fullDisplayName, kind, kindModifiers, fileToRename, expectedRange, preferences);
+        this.state.verifyRenameInfoSucceeded(
+            displayName,
+            fullDisplayName,
+            kind,
+            kindModifiers,
+            fileToRename,
+            expectedRange,
+            preferences,
+        );
     }
 
     public renameInfoFailed(message?: string, preferences?: ts.UserPreferences) {
@@ -849,7 +872,10 @@ export class Format {
     }
 
     public selection(startMarker: string, endMarker: string) {
-        this.state.formatSelection(this.state.getMarkerByName(startMarker).position, this.state.getMarkerByName(endMarker).position);
+        this.state.formatSelection(
+            this.state.getMarkerByName(startMarker).position,
+            this.state.getMarkerByName(endMarker).position,
+        );
     }
 
     public onType(posMarker: string, key: string) {

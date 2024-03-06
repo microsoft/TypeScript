@@ -578,7 +578,8 @@ describe("unittests:: tsserver:: CachingFileSystemInformation:: tsserverProjectS
             baselineTsserverLogs(
                 "cachingFileSystemInformation",
                 `npm install works when ${
-                    timeoutDuringPartialInstallation ? "timeout occurs inbetween installation" : "timeout occurs after installation"
+                    timeoutDuringPartialInstallation ? "timeout occurs inbetween installation"
+                        : "timeout occurs after installation"
                 }`,
                 session,
             );
@@ -636,7 +637,11 @@ describe("unittests:: tsserver:: CachingFileSystemInformation:: tsserverProjectS
         host.writeFile(debugTypesFile.path, debugTypesFile.content);
         host.runQueuedTimeoutCallbacks();
         logSemanticDiagnostics(session, project, app);
-        baselineTsserverLogs("cachingFileSystemInformation", "when node_modules dont receive event for the @types file addition", session);
+        baselineTsserverLogs(
+            "cachingFileSystemInformation",
+            "when node_modules dont receive event for the @types file addition",
+            session,
+        );
     });
 
     it("when creating new file in symlinked folder", () => {

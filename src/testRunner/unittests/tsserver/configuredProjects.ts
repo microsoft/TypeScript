@@ -277,7 +277,11 @@ describe("unittests:: tsserver:: ConfiguredProjects", () => {
         const host = createServerHost([commonFile1, commonFile2, libFile, configFile]);
         const session = new TestSession(host);
         openFilesForSession([commonFile1], session);
-        baselineTsserverLogs("configuredProjects", "should tolerate config file errors and still try to build a project", session);
+        baselineTsserverLogs(
+            "configuredProjects",
+            "should tolerate config file errors and still try to build a project",
+            session,
+        );
     });
 
     it("should reuse same project if file is opened from the configured project that has no open files", () => {
@@ -442,10 +446,17 @@ describe("unittests:: tsserver:: ConfiguredProjects", () => {
         const session = new TestSession(host);
         openFilesForSession([file1], session);
 
-        host.writeFile(configFile.path, jsonToReadableText({ compilerOptions: { outFile: "out.js" }, files: ["f1.ts", "f2.ts"] }));
+        host.writeFile(
+            configFile.path,
+            jsonToReadableText({ compilerOptions: { outFile: "out.js" }, files: ["f1.ts", "f2.ts"] }),
+        );
         host.runQueuedTimeoutCallbacks();
 
-        baselineTsserverLogs("configuredProjects", "can update configured project when set of root files was not changed", session);
+        baselineTsserverLogs(
+            "configuredProjects",
+            "can update configured project when set of root files was not changed",
+            session,
+        );
     });
 
     it("Open ref of configured project when open file gets added to the project as part of configured file update", () => {
@@ -593,7 +604,9 @@ describe("unittests:: tsserver:: ConfiguredProjects", () => {
         const session = new TestSession(host);
         openFilesForSession([f1], session);
         session.logger.log(
-            `Language languageServiceEnabled:: ${session.getProjectService().configuredProjects.get(config.path)!.languageServiceEnabled}`,
+            `Language languageServiceEnabled:: ${
+                session.getProjectService().configuredProjects.get(config.path)!.languageServiceEnabled
+            }`,
         );
 
         session.executeCommandSeq({
@@ -698,7 +711,10 @@ declare var console: {
             path: `/user/username/projects/myproject/src/sub/fooBar.ts`,
             content: "export function fooBar() { }",
         };
-        function verifySessionWorker({ withExclude, openFileBeforeCreating }: VerifySession, errorOnNewFileBeforeOldFile: boolean) {
+        function verifySessionWorker(
+            { withExclude, openFileBeforeCreating }: VerifySession,
+            errorOnNewFileBeforeOldFile: boolean,
+        ) {
             const host = createServerHost([
                 foo,
                 bar,
@@ -746,9 +762,11 @@ declare var console: {
             });
             baselineTsserverLogs(
                 "configuredProjects",
-                `creating new file and then open it ${openFileBeforeCreating ? "before" : "after"} watcher is invoked, ask errors on it ${
-                    errorOnNewFileBeforeOldFile ? "before" : "after"
-                } old one${withExclude ? " without file being in config" : ""}`,
+                `creating new file and then open it ${
+                    openFileBeforeCreating ? "before" : "after"
+                } watcher is invoked, ask errors on it ${errorOnNewFileBeforeOldFile ? "before" : "after"} old one${
+                    withExclude ? " without file being in config" : ""
+                }`,
                 session,
             );
         }

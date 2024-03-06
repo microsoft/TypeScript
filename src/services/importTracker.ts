@@ -118,7 +118,10 @@ export function createImportTracker(
             checker,
             cancellationToken,
         );
-        return { indirectUsers, ...getSearchesFromDirectImports(directImports, exportSymbol, exportInfo.exportKind, checker, isForRename) };
+        return {
+            indirectUsers,
+            ...getSearchesFromDirectImports(directImports, exportSymbol, exportInfo.exportKind, checker, isForRename),
+        };
     };
 }
 
@@ -496,7 +499,11 @@ export type ModuleReference =
     | { kind: "implicit"; literal: StringLiteralLike; referencingFile: SourceFile; };
 
 /** @internal */
-export function findModuleReferences(program: Program, sourceFiles: readonly SourceFile[], searchModuleSymbol: Symbol): ModuleReference[] {
+export function findModuleReferences(
+    program: Program,
+    sourceFiles: readonly SourceFile[],
+    searchModuleSymbol: Symbol,
+): ModuleReference[] {
     const refs: ModuleReference[] = [];
     const checker = program.getTypeChecker();
     for (const referencingFile of sourceFiles) {
@@ -564,7 +571,8 @@ function forEachPossibleImportOrExportStatement<T>(sourceFileLike: SourceFileLik
         sourceFileLike.kind === SyntaxKind.SourceFile ? sourceFileLike.statements : sourceFileLike.body!.statements,
         statement =>
             // TODO: GH#18217
-            action(statement) || (isAmbientModuleDeclaration(statement) && forEach(statement.body && statement.body.statements, action)),
+            action(statement) ||
+            (isAmbientModuleDeclaration(statement) && forEach(statement.body && statement.body.statements, action)),
     );
 }
 
@@ -705,7 +713,8 @@ export function getImportOrExportSymbol(
                     return undefined;
             }
 
-            const sym = useLhsSymbol ? checker.getSymbolAtLocation(getNameOfAccessExpression(cast(node.left, isAccessExpression))) : symbol;
+            const sym = useLhsSymbol ? checker.getSymbolAtLocation(getNameOfAccessExpression(cast(node.left, isAccessExpression)))
+                : symbol;
             return sym && exportInfo(sym, kind);
         }
     }
@@ -784,7 +793,8 @@ function isNodeImport(node: Node): boolean {
     const { parent } = node;
     switch (parent.kind) {
         case SyntaxKind.ImportEqualsDeclaration:
-            return (parent as ImportEqualsDeclaration).name === node && isExternalModuleImportEquals(parent as ImportEqualsDeclaration);
+            return (parent as ImportEqualsDeclaration).name === node &&
+                isExternalModuleImportEquals(parent as ImportEqualsDeclaration);
         case SyntaxKind.ImportSpecifier:
             // For a rename import `{ foo as bar }`, don't search for the imported symbol. Just find local uses of `bar`.
             return !(parent as ImportSpecifier).propertyName;

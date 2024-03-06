@@ -116,7 +116,8 @@ describe("unittests:: tsc-watch:: watchAPI:: tsc-watch with custom module resolu
                         },
                         {
                             caption: "change other file",
-                            edit: sys => sys.appendFile(`/user/username/projects/myproject/other.d.ts`, "export function bar(): void;"),
+                            edit: sys =>
+                                sys.appendFile(`/user/username/projects/myproject/other.d.ts`, "export function bar(): void;"),
                             timeouts: sys => sys.runQueuedTimeoutCallbacks(),
                         },
                         {
@@ -412,7 +413,9 @@ describe("unittests:: tsc-watch:: watchAPI:: when watchHost uses createSemanticD
             );
 
             // Verify noEmit results in same output
-            verifyBuilder(baseline, emitBaseline, config, sys, emitSys, ts.createSemanticDiagnosticsBuilderProgram, { noEmit: true });
+            verifyBuilder(baseline, emitBaseline, config, sys, emitSys, ts.createSemanticDiagnosticsBuilderProgram, {
+                noEmit: true,
+            });
 
             // Emit on both sys should result in same output
             verifyBuilder(baseline, emitBaseline, config, sys, emitSys, ts.createEmitAndSemanticDiagnosticsBuilderProgram);
@@ -435,10 +438,16 @@ describe("unittests:: tsc-watch:: watchAPI:: when watchHost uses createSemanticD
             emitBaseline = undefined!;
         });
         it("noEmit with composite writes the tsbuildinfo with pending affected files correctly", () => {
-            Harness.Baseline.runBaseline(`tscWatch/watchApi/noEmit-with-composite-with-semantic-builder.js`, baseline.join("\r\n"));
+            Harness.Baseline.runBaseline(
+                `tscWatch/watchApi/noEmit-with-composite-with-semantic-builder.js`,
+                baseline.join("\r\n"),
+            );
         });
         it("baseline in createEmitAndSemanticDiagnosticsBuilderProgram:: noEmit with composite writes the tsbuildinfo with pending affected files correctly", () => {
-            Harness.Baseline.runBaseline(`tscWatch/watchApi/noEmit-with-composite-with-emit-builder.js`, emitBaseline.join("\r\n"));
+            Harness.Baseline.runBaseline(
+                `tscWatch/watchApi/noEmit-with-composite-with-emit-builder.js`,
+                emitBaseline.join("\r\n"),
+            );
         });
     });
 
@@ -471,17 +480,30 @@ describe("unittests:: tsc-watch:: watchAPI:: when watchHost uses createSemanticD
 
             // Fix error
             const fixed = "export const x = 10;";
-            applyChangeForBuilderTest(baseline, emitBaseline, sys, emitSys, sys => sys.writeFile(mainFile.path, fixed), "Fix error");
+            applyChangeForBuilderTest(
+                baseline,
+                emitBaseline,
+                sys,
+                emitSys,
+                sys => sys.writeFile(mainFile.path, fixed),
+                "Fix error",
+            );
 
             // Emit on both the builders should result in same files
             verifyBuilder(baseline, emitBaseline, config, sys, emitSys, ts.createSemanticDiagnosticsBuilderProgram);
         });
 
         it("noEmitOnError with composite writes the tsbuildinfo with pending affected files correctly", () => {
-            Harness.Baseline.runBaseline(`tscWatch/watchApi/noEmitOnError-with-composite-with-semantic-builder.js`, baseline.join("\r\n"));
+            Harness.Baseline.runBaseline(
+                `tscWatch/watchApi/noEmitOnError-with-composite-with-semantic-builder.js`,
+                baseline.join("\r\n"),
+            );
         });
         it("baseline in createEmitAndSemanticDiagnosticsBuilderProgram:: noEmitOnError with composite writes the tsbuildinfo with pending affected files correctly", () => {
-            Harness.Baseline.runBaseline(`tscWatch/watchApi/noEmitOnError-with-composite-with-emit-builder.js`, emitBaseline.join("\r\n"));
+            Harness.Baseline.runBaseline(
+                `tscWatch/watchApi/noEmitOnError-with-composite-with-emit-builder.js`,
+                emitBaseline.join("\r\n"),
+            );
         });
     });
 
@@ -626,7 +648,10 @@ describe("unittests:: tsc-watch:: watchAPI:: when getParsedCommandLine is implem
                 {
                     caption: "Add output of class3",
                     edit: sys =>
-                        sys.writeFile(`/user/username/projects/myproject/projects/project1/class3.d.ts`, `declare class class3 {}`),
+                        sys.writeFile(
+                            `/user/username/projects/myproject/projects/project1/class3.d.ts`,
+                            `declare class class3 {}`,
+                        ),
                     timeouts: ts.noop,
                 },
             ],
@@ -655,7 +680,10 @@ describe("unittests:: tsc-watch:: watchAPI:: when getParsedCommandLine is implem
                 {
                     caption: "Add class3 output to project1",
                     edit: sys =>
-                        sys.writeFile(`/user/username/projects/myproject/projects/project1/class3.d.ts`, `declare class class3 {}`),
+                        sys.writeFile(
+                            `/user/username/projects/myproject/projects/project1/class3.d.ts`,
+                            `declare class class3 {}`,
+                        ),
                     timeouts: sys => sys.runQueuedTimeoutCallbacks(),
                 },
                 {
@@ -675,7 +703,10 @@ describe("unittests:: tsc-watch:: watchAPI:: when getParsedCommandLine is implem
                 {
                     caption: "Add output of class3",
                     edit: sys =>
-                        sys.writeFile(`/user/username/projects/myproject/projects/project1/class3.d.ts`, `declare class class3 {}`),
+                        sys.writeFile(
+                            `/user/username/projects/myproject/projects/project1/class3.d.ts`,
+                            `declare class class3 {}`,
+                        ),
                     timeouts: sys => sys.runQueuedTimeoutCallbacks(),
                 },
             ],

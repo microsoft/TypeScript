@@ -112,7 +112,10 @@ export function extractMessage(message: string): string {
     const responseBody = lines[2];
 
     // Verify content length
-    Debug.assert(responseBody.length + 1 === contentLength, "Malformed response: Content length did not match the response's body length.");
+    Debug.assert(
+        responseBody.length + 1 === contentLength,
+        "Malformed response: Content length did not match the response's body length.",
+    );
     return responseBody;
 }
 
@@ -270,7 +273,8 @@ export class SessionClient implements LanguageService {
             kindModifiers: body.kindModifiers,
             textSpan: this.decodeSpan(body, fileName),
             displayParts: [{ kind: "text", text: body.displayString }],
-            documentation: typeof body.documentation === "string" ? [{ kind: "text", text: body.documentation }] : body.documentation,
+            documentation: typeof body.documentation === "string" ? [{ kind: "text", text: body.documentation }]
+                : body.documentation,
             tags: this.decodeLinkDisplayParts(body.tags),
         };
     }
@@ -418,7 +422,10 @@ export class SessionClient implements LanguageService {
     getDefinitionAndBoundSpan(fileName: string, position: number): DefinitionInfoAndBoundSpan {
         const args: protocol.FileLocationRequestArgs = this.createFileLocationRequestArgs(fileName, position);
 
-        const request = this.processRequest<protocol.DefinitionAndBoundSpanRequest>(protocol.CommandTypes.DefinitionAndBoundSpan, args);
+        const request = this.processRequest<protocol.DefinitionAndBoundSpanRequest>(
+            protocol.CommandTypes.DefinitionAndBoundSpan,
+            args,
+        );
         const response = this.processResponse<protocol.DefinitionInfoAndBoundSpanResponse>(request);
         const body = Debug.checkDefined(response.body); // TODO: GH#18217
 
@@ -454,7 +461,10 @@ export class SessionClient implements LanguageService {
 
     getSourceDefinitionAndBoundSpan(fileName: string, position: number): DefinitionInfo[] {
         const args: protocol.FileLocationRequestArgs = this.createFileLocationRequestArgs(fileName, position);
-        const request = this.processRequest<protocol.FindSourceDefinitionRequest>(protocol.CommandTypes.FindSourceDefinition, args);
+        const request = this.processRequest<protocol.FindSourceDefinitionRequest>(
+            protocol.CommandTypes.FindSourceDefinition,
+            args,
+        );
         const response = this.processResponse<protocol.DefinitionResponse>(request);
         const body = Debug.checkDefined(response.body); // TODO: GH#18217
 
@@ -505,7 +515,9 @@ export class SessionClient implements LanguageService {
     }
 
     getFileReferences(fileName: string): ReferenceEntry[] {
-        const request = this.processRequest<protocol.FileReferencesRequest>(protocol.CommandTypes.FileReferences, { file: fileName });
+        const request = this.processRequest<protocol.FileReferencesRequest>(protocol.CommandTypes.FileReferences, {
+            file: fileName,
+        });
         const response = this.processResponse<protocol.FileReferencesResponse>(request);
 
         return response.body!.refs.map(entry => ({ // TODO: GH#18217
@@ -534,7 +546,9 @@ export class SessionClient implements LanguageService {
 
     private getDiagnostics(file: string, command: protocol.CommandTypes): DiagnosticWithLocation[] {
         const request = this.processRequest<
-            protocol.SyntacticDiagnosticsSyncRequest | protocol.SemanticDiagnosticsSyncRequest | protocol.SuggestionDiagnosticsSyncRequest
+            | protocol.SyntacticDiagnosticsSyncRequest
+            | protocol.SemanticDiagnosticsSyncRequest
+            | protocol.SuggestionDiagnosticsSyncRequest
         >(
             command,
             {
@@ -770,7 +784,10 @@ export class SessionClient implements LanguageService {
     }
 
     getDocumentHighlights(fileName: string, position: number, filesToSearch: string[]): DocumentHighlights[] {
-        const args: protocol.DocumentHighlightsRequestArgs = { ...this.createFileLocationRequestArgs(fileName, position), filesToSearch };
+        const args: protocol.DocumentHighlightsRequestArgs = {
+            ...this.createFileLocationRequestArgs(fileName, position),
+            filesToSearch,
+        };
 
         const request = this.processRequest<protocol.DocumentHighlightsRequest>(protocol.CommandTypes.DocumentHighlights, args);
         const response = this.processResponse<protocol.DocumentHighlightsResponse>(request);
@@ -915,11 +932,17 @@ export class SessionClient implements LanguageService {
         if (preferences) { // Temporarily set preferences
             this.configure(preferences);
         }
-        const args: protocol.GetApplicableRefactorsRequestArgs = this.createFileLocationOrRangeRequestArgs(positionOrRange, fileName);
+        const args: protocol.GetApplicableRefactorsRequestArgs = this.createFileLocationOrRangeRequestArgs(
+            positionOrRange,
+            fileName,
+        );
         args.triggerReason = triggerReason;
         args.kind = kind;
         args.includeInteractiveActions = includeInteractiveActions;
-        const request = this.processRequest<protocol.GetApplicableRefactorsRequest>(protocol.CommandTypes.GetApplicableRefactors, args);
+        const request = this.processRequest<protocol.GetApplicableRefactorsRequest>(
+            protocol.CommandTypes.GetApplicableRefactors,
+            args,
+        );
         const response = this.processResponse<protocol.GetApplicableRefactorsResponse>(request);
         if (preferences) { // Restore preferences
             this.configure(oldPreferences || {});
@@ -927,7 +950,10 @@ export class SessionClient implements LanguageService {
         return response.body!; // TODO: GH#18217
     }
 
-    getMoveToRefactoringFileSuggestions(fileName: string, positionOrRange: number | TextRange): { newFileName: string; files: string[]; } {
+    getMoveToRefactoringFileSuggestions(
+        fileName: string,
+        positionOrRange: number | TextRange,
+    ): { newFileName: string; files: string[]; } {
         const args = this.createFileLocationOrRangeRequestArgs(positionOrRange, fileName);
 
         const request = this.processRequest<protocol.GetMoveToRefactoringFileSuggestionsRequest>(
@@ -951,7 +977,10 @@ export class SessionClient implements LanguageService {
         if (preferences) { // Temporarily set preferences
             this.configure(preferences);
         }
-        const args = this.createFileLocationOrRangeRequestArgs(positionOrRange, fileName) as protocol.GetEditsForRefactorRequestArgs;
+        const args = this.createFileLocationOrRangeRequestArgs(
+            positionOrRange,
+            fileName,
+        ) as protocol.GetEditsForRefactorRequestArgs;
         args.refactor = refactorName;
         args.action = actionName;
         args.interactiveRefactorArguments = interactiveRefactorArguments;
@@ -1073,7 +1102,10 @@ export class SessionClient implements LanguageService {
 
     prepareCallHierarchy(fileName: string, position: number): CallHierarchyItem | CallHierarchyItem[] | undefined {
         const args = this.createFileLocationRequestArgs(fileName, position);
-        const request = this.processRequest<protocol.PrepareCallHierarchyRequest>(protocol.CommandTypes.PrepareCallHierarchy, args);
+        const request = this.processRequest<protocol.PrepareCallHierarchyRequest>(
+            protocol.CommandTypes.PrepareCallHierarchy,
+            args,
+        );
         const response = this.processResponse<protocol.PrepareCallHierarchyResponse>(request);
         return response.body && mapOneOrMany(response.body, item => this.convertCallHierarchyItem(item));
     }
@@ -1128,7 +1160,10 @@ export class SessionClient implements LanguageService {
         throw new Error("Program objects are not serializable through the server protocol.");
     }
 
-    updateIsDefinitionOfReferencedSymbols(_referencedSymbols: readonly ReferencedSymbol[], _knownSymbolSpans: Set<DocumentSpan>): boolean {
+    updateIsDefinitionOfReferencedSymbols(
+        _referencedSymbols: readonly ReferencedSymbol[],
+        _knownSymbolSpans: Set<DocumentSpan>,
+    ): boolean {
         return notImplemented();
     }
 

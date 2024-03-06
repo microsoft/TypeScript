@@ -79,7 +79,10 @@ function flattenInvalidBinaryExpr(node: Node): JsxChild[] | undefined {
     const children: JsxChild[] = [];
     let current = node;
     while (true) {
-        if (isBinaryExpression(current) && nodeIsMissing(current.operatorToken) && current.operatorToken.kind === SyntaxKind.CommaToken) {
+        if (
+            isBinaryExpression(current) && nodeIsMissing(current.operatorToken) &&
+            current.operatorToken.kind === SyntaxKind.CommaToken
+        ) {
             children.push(current.left as JsxChild);
             if (isJsxChild(current.right)) {
                 children.push(current.right);

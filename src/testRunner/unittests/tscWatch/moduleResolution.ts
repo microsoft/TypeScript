@@ -75,7 +75,8 @@ describe("unittests:: tsc-watch:: moduleResolution", () => {
         edits: [
             {
                 caption: "reports import errors after change to package file",
-                edit: sys => sys.replaceFileText(`/user/username/projects/myproject/packages/pkg2/package.json`, `index.js`, `other.js`),
+                edit: sys =>
+                    sys.replaceFileText(`/user/username/projects/myproject/packages/pkg2/package.json`, `index.js`, `other.js`),
                 timeouts: sys => {
                     sys.runQueuedTimeoutCallbacks(); // invalidates failed lookups
                     sys.runQueuedTimeoutCallbacks(); // actual update
@@ -83,7 +84,8 @@ describe("unittests:: tsc-watch:: moduleResolution", () => {
             },
             {
                 caption: "removes those errors when a package file is changed back",
-                edit: sys => sys.replaceFileText(`/user/username/projects/myproject/packages/pkg2/package.json`, `other.js`, `index.js`),
+                edit: sys =>
+                    sys.replaceFileText(`/user/username/projects/myproject/packages/pkg2/package.json`, `other.js`, `index.js`),
                 timeouts: sys => {
                     sys.runQueuedTimeoutCallbacks(); // invalidates failed lookups
                     sys.runQueuedTimeoutCallbacks(); // actual update
@@ -555,7 +557,10 @@ describe("unittests:: tsc-watch:: moduleResolution", () => {
             {
                 caption: "modify aFile by adding import",
                 edit: sys =>
-                    sys.prependFile(`/user/username/projects/myproject/a.ts`, `/// <reference types="pkg" resolution-mode="import"/>\n`),
+                    sys.prependFile(
+                        `/user/username/projects/myproject/a.ts`,
+                        `/// <reference types="pkg" resolution-mode="import"/>\n`,
+                    ),
                 timeouts: sys => sys.runQueuedTimeoutCallbacks(),
             },
         ],
@@ -598,7 +603,10 @@ describe("unittests:: tsc-watch:: moduleResolution", () => {
             {
                 caption: "add the alternateResult in package/types",
                 edit: sys =>
-                    sys.writeFile("/home/src/projects/project/node_modules/foo/index.d.ts", getFsContentsForAlternateResultDts("foo")),
+                    sys.writeFile(
+                        "/home/src/projects/project/node_modules/foo/index.d.ts",
+                        getFsContentsForAlternateResultDts("foo"),
+                    ),
                 timeouts: sys => {
                     sys.runQueuedTimeoutCallbacks();
                     sys.runQueuedTimeoutCallbacks();
@@ -683,7 +691,10 @@ describe("unittests:: tsc-watch:: moduleResolution", () => {
             {
                 caption: "add the ndoe10Result in package/types",
                 edit: sys =>
-                    sys.writeFile("/home/src/projects/project/node_modules/foo2/index.d.ts", getFsContentsForAlternateResultDts("foo2")),
+                    sys.writeFile(
+                        "/home/src/projects/project/node_modules/foo2/index.d.ts",
+                        getFsContentsForAlternateResultDts("foo2"),
+                    ),
                 timeouts: sys => {
                     sys.runQueuedTimeoutCallbacks();
                     sys.runQueuedTimeoutCallbacks();

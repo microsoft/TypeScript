@@ -16,7 +16,9 @@ import {
 
 const fixId = "useBigintLiteral";
 const errorCodes = [
-    Diagnostics.Numeric_literals_with_absolute_values_equal_to_2_53_or_greater_are_too_large_to_be_represented_accurately_as_integers.code,
+    Diagnostics
+        .Numeric_literals_with_absolute_values_equal_to_2_53_or_greater_are_too_large_to_be_represented_accurately_as_integers
+        .code,
 ];
 
 registerCodeFix({

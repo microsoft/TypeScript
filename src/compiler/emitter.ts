@@ -489,7 +489,10 @@ export function getTsBuildInfoEmitOutputFilePath(options: CompilerOptions) {
         const configFileExtensionLess = removeFileExtension(configFile);
         buildInfoExtensionLess = options.outDir ?
             options.rootDir ?
-                resolvePath(options.outDir, getRelativePathFromDirectory(options.rootDir, configFileExtensionLess, /*ignoreCase*/ true)) :
+                resolvePath(
+                    options.outDir,
+                    getRelativePathFromDirectory(options.rootDir, configFileExtensionLess, /*ignoreCase*/ true),
+                ) :
                 combinePaths(options.outDir, getBaseFileName(configFileExtensionLess)) :
             configFileExtensionLess;
     }
@@ -501,8 +504,10 @@ export function getOutputPathsForBundle(options: CompilerOptions, forceDtsPaths:
     const outPath = options.outFile!;
     const jsFilePath = options.emitDeclarationOnly ? undefined : outPath;
     const sourceMapFilePath = jsFilePath && getSourceMapFilePath(jsFilePath, options);
-    const declarationFilePath = (forceDtsPaths || getEmitDeclarations(options)) ? removeFileExtension(outPath) + Extension.Dts : undefined;
-    const declarationMapPath = declarationFilePath && getAreDeclarationMapsEnabled(options) ? declarationFilePath + ".map" : undefined;
+    const declarationFilePath = (forceDtsPaths || getEmitDeclarations(options)) ? removeFileExtension(outPath) + Extension.Dts
+        : undefined;
+    const declarationMapPath = declarationFilePath && getAreDeclarationMapsEnabled(options) ? declarationFilePath + ".map"
+        : undefined;
     const buildInfoPath = getTsBuildInfoEmitOutputFilePath(options);
     return { jsFilePath, sourceMapFilePath, declarationFilePath, declarationMapPath, buildInfoPath };
 }
@@ -514,18 +519,29 @@ export function getOutputPathsFor(sourceFile: SourceFile | Bundle, host: EmitHos
         return getOutputPathsForBundle(options, forceDtsPaths);
     }
     else {
-        const ownOutputFilePath = getOwnEmitOutputFilePath(sourceFile.fileName, host, getOutputExtension(sourceFile.fileName, options));
+        const ownOutputFilePath = getOwnEmitOutputFilePath(
+            sourceFile.fileName,
+            host,
+            getOutputExtension(sourceFile.fileName, options),
+        );
         const isJsonFile = isJsonSourceFile(sourceFile);
         // If json file emits to the same location skip writing it, if emitDeclarationOnly skip writing it
         const isJsonEmittedToSameLocation = isJsonFile &&
-            comparePaths(sourceFile.fileName, ownOutputFilePath, host.getCurrentDirectory(), !host.useCaseSensitiveFileNames()) ===
+            comparePaths(
+                    sourceFile.fileName,
+                    ownOutputFilePath,
+                    host.getCurrentDirectory(),
+                    !host.useCaseSensitiveFileNames(),
+                ) ===
                 Comparison.EqualTo;
         const jsFilePath = options.emitDeclarationOnly || isJsonEmittedToSameLocation ? undefined : ownOutputFilePath;
-        const sourceMapFilePath = !jsFilePath || isJsonSourceFile(sourceFile) ? undefined : getSourceMapFilePath(jsFilePath, options);
+        const sourceMapFilePath = !jsFilePath || isJsonSourceFile(sourceFile) ? undefined
+            : getSourceMapFilePath(jsFilePath, options);
         const declarationFilePath = (forceDtsPaths || (getEmitDeclarations(options) && !isJsonFile)) ?
             getDeclarationEmitOutputFilePath(sourceFile.fileName, host)
             : undefined;
-        const declarationMapPath = declarationFilePath && getAreDeclarationMapsEnabled(options) ? declarationFilePath + ".map" : undefined;
+        const declarationMapPath = declarationFilePath && getAreDeclarationMapsEnabled(options) ? declarationFilePath + ".map"
+            : undefined;
         return { jsFilePath, sourceMapFilePath, declarationFilePath, declarationMapPath, buildInfoPath: undefined };
     }
 }
@@ -575,7 +591,12 @@ export function getOutputDeclarationFileNameWorker(
     getCommonSourceDirectory: () => string,
 ) {
     return changeExtension(
-        getOutputPathWithoutChangingExt(inputFileName, ignoreCase, options.declarationDir || options.outDir, getCommonSourceDirectory),
+        getOutputPathWithoutChangingExt(
+            inputFileName,
+            ignoreCase,
+            options.declarationDir || options.outDir,
+            getCommonSourceDirectory,
+        ),
         getDeclarationEmitExtensionForPath(inputFileName),
     );
 }
@@ -697,7 +718,8 @@ export function getCommonSourceDirectoryOfConfig({ options, fileNames }: ParsedC
             filter(
                 fileNames,
                 file =>
-                    !(options.noEmitForJsFiles && fileExtensionIsOneOf(file, supportedJSExtensionsFlat)) && !isDeclarationFileName(file),
+                    !(options.noEmitForJsFiles && fileExtensionIsOneOf(file, supportedJSExtensionsFlat)) &&
+                    !isDeclarationFileName(file),
             ),
         getDirectoryPath(normalizeSlashes(Debug.checkDefined(options.configFilePath))),
         createGetCanonicalFileName(!ignoreCase),
@@ -720,7 +742,11 @@ export function getAllProjectOutputs(configFile: ParsedCommandLine, ignoreCase: 
     return getOutputs();
 }
 
-export function getOutputFileNames(commandLine: ParsedCommandLine, inputFileName: string, ignoreCase: boolean): readonly string[] {
+export function getOutputFileNames(
+    commandLine: ParsedCommandLine,
+    inputFileName: string,
+    ignoreCase: boolean,
+): readonly string[] {
     inputFileName = normalizePath(inputFileName);
     Debug.assert(contains(commandLine.fileNames, inputFileName), `Expected fileName to be present in command line`);
     const { addOutput, getOutputs } = createAddOutput();
@@ -1089,7 +1115,8 @@ export function emitFiles(
 
     function shouldEmitSourceMaps(mapOptions: SourceMapOptions, sourceFileOrBundle: SourceFile | Bundle) {
         return (mapOptions.sourceMap || mapOptions.inlineSourceMap)
-            && (sourceFileOrBundle.kind !== SyntaxKind.SourceFile || !fileExtensionIs(sourceFileOrBundle.fileName, Extension.Json));
+            && (sourceFileOrBundle.kind !== SyntaxKind.SourceFile ||
+                !fileExtensionIs(sourceFileOrBundle.fileName, Extension.Json));
     }
 
     function getSourceRoot(mapOptions: SourceMapOptions) {
@@ -1551,7 +1578,9 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
                 }
                 // falls through
             case PipelinePhase.Substitution:
-                if (substituteNode !== noEmitSubstitution && (lastSubstitution = substituteNode(emitHint, node) || node) !== node) {
+                if (
+                    substituteNode !== noEmitSubstitution && (lastSubstitution = substituteNode(emitHint, node) || node) !== node
+                ) {
                     if (currentParenthesizerRule) {
                         lastSubstitution = currentParenthesizerRule(lastSubstitution);
                     }
@@ -2286,7 +2315,8 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
         emitInitializer(
             node.initializer,
             node.type ? node.type.end
-                : node.questionToken ? node.questionToken.end : node.name ? node.name.end : node.modifiers ? node.modifiers.end : node.pos,
+                : node.questionToken ? node.questionToken.end
+                : node.name ? node.name.end : node.modifiers ? node.modifiers.end : node.pos,
             node,
             parenthesizer.parenthesizeExpressionForDisallowedComma,
         );
@@ -2315,7 +2345,11 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
         emit(node.questionToken);
         emit(node.exclamationToken);
         emitTypeAnnotation(node.type);
-        emitInitializer(node.initializer, node.type ? node.type.end : node.questionToken ? node.questionToken.end : node.name.end, node);
+        emitInitializer(
+            node.initializer,
+            node.type ? node.type.end : node.questionToken ? node.questionToken.end : node.name.end,
+            node,
+        );
         writeTrailingSemicolon();
     }
 
@@ -2524,7 +2558,12 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
     }
 
     function emitIntersectionType(node: IntersectionTypeNode) {
-        emitList(node, node.types, ListFormat.IntersectionTypeConstituents, parenthesizer.parenthesizeConstituentTypeOfIntersectionType);
+        emitList(
+            node,
+            node.types,
+            ListFormat.IntersectionTypeConstituents,
+            parenthesizer.parenthesizeConstituentTypeOfIntersectionType,
+        );
     }
 
     function emitConditionalType(node: ConditionalTypeNode) {
@@ -2757,7 +2796,11 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
         expression = skipPartiallyEmittedExpressions(expression);
         if (isNumericLiteral(expression)) {
             // check if numeric literal is a decimal literal that was originally written with a dot
-            const text = getLiteralTextOfNode(expression as LiteralExpression, /*neverAsciiEscape*/ true, /*jsxAttributeEscape*/ false);
+            const text = getLiteralTextOfNode(
+                expression as LiteralExpression,
+                /*neverAsciiEscape*/ true,
+                /*jsxAttributeEscape*/ false,
+            );
             // If the number will be printed verbatim and it doesn't already contain a dot or an exponent indicator, add one
             // if the expression doesn't have any comments that will be emitted.
             return !(expression.numericLiteralFlags & TokenFlags.WithSpecifier)
@@ -2809,7 +2852,12 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
         writeSpace();
         emitExpression(node.expression, parenthesizer.parenthesizeExpressionOfNew);
         emitTypeArguments(node, node.typeArguments);
-        emitExpressionList(node, node.arguments, ListFormat.NewExpressionArguments, parenthesizer.parenthesizeExpressionForDisallowedComma);
+        emitExpressionList(
+            node,
+            node.arguments,
+            ListFormat.NewExpressionArguments,
+            parenthesizer.parenthesizeExpressionForDisallowedComma,
+        );
     }
 
     function emitTaggedTemplateExpression(node: TaggedTemplateExpression) {
@@ -2842,7 +2890,12 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
         emitExpression(node.expression, /*parenthesizerRule*/ undefined);
         writeLineSeparatorsAfter(node.expression, node);
         decreaseIndentIf(indented);
-        emitTokenWithComment(SyntaxKind.CloseParenToken, node.expression ? node.expression.end : openParenPos, writePunctuation, node);
+        emitTokenWithComment(
+            SyntaxKind.CloseParenToken,
+            node.expression ? node.expression.end : openParenPos,
+            writePunctuation,
+            node,
+        );
     }
 
     function emitFunctionExpression(node: FunctionExpression) {
@@ -2996,7 +3049,9 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
                 const shouldEmitSourceMaps = state.shouldEmitSourceMapsStack[state.stackIndex];
                 afterEmitNode(savedPreserveSourceNewlines);
                 if (shouldEmitSourceMaps) emitSourceMapsAfterNode(node);
-                if (shouldEmitComments) emitCommentsAfterNode(node, savedContainerPos, savedContainerEnd, savedDeclarationListContainerEnd);
+                if (shouldEmitComments) {
+                    emitCommentsAfterNode(node, savedContainerPos, savedContainerEnd, savedDeclarationListContainerEnd);
+                }
                 onAfterEmitNode?.(node);
                 state.stackIndex--;
             }
@@ -3219,7 +3274,12 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
         writeSpace();
         let pos = emitTokenWithComment(SyntaxKind.OpenParenToken, openParenPos, writePunctuation, /*contextNode*/ node);
         emitForBinding(node.initializer);
-        pos = emitTokenWithComment(SyntaxKind.SemicolonToken, node.initializer ? node.initializer.end : pos, writePunctuation, node);
+        pos = emitTokenWithComment(
+            SyntaxKind.SemicolonToken,
+            node.initializer ? node.initializer.end : pos,
+            writePunctuation,
+            node,
+        );
         emitExpressionWithLeadingSpace(node.condition);
         pos = emitTokenWithComment(SyntaxKind.SemicolonToken, node.condition ? node.condition.end : pos, writePunctuation, node);
         emitExpressionWithLeadingSpace(node.incrementor);
@@ -3277,7 +3337,13 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
         writeTrailingSemicolon();
     }
 
-    function emitTokenWithComment(token: SyntaxKind, pos: number, writer: (s: string) => void, contextNode: Node, indentLeading?: boolean) {
+    function emitTokenWithComment(
+        token: SyntaxKind,
+        pos: number,
+        writer: (s: string) => void,
+        contextNode: Node,
+        indentLeading?: boolean,
+    ) {
         const node = getParseTreeNode(contextNode);
         const isSimilarNode = node && node.kind === contextNode.kind;
         const startPos = pos;
@@ -3330,7 +3396,9 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
         if (some(getSyntheticLeadingComments(node), commentWillEmitNewLine)) return true;
         if (isPartiallyEmittedExpression(node)) {
             if (node.pos !== node.expression.pos) {
-                if (some(getTrailingCommentRanges(currentSourceFile.text, node.expression.pos), commentWillEmitNewLine)) return true;
+                if (some(getTrailingCommentRanges(currentSourceFile.text, node.expression.pos), commentWillEmitNewLine)) {
+                    return true;
+                }
             }
             return willEmitLeadingNewLine(node.expression);
         }
@@ -3362,7 +3430,10 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
 
     function emitReturnStatement(node: ReturnStatement) {
         emitTokenWithComment(SyntaxKind.ReturnKeyword, node.pos, writeKeyword, /*contextNode*/ node);
-        emitExpressionWithLeadingSpace(node.expression && parenthesizeExpressionForNoAsi(node.expression), parenthesizeExpressionForNoAsi);
+        emitExpressionWithLeadingSpace(
+            node.expression && parenthesizeExpressionForNoAsi(node.expression),
+            parenthesizeExpressionForNoAsi,
+        );
         writeTrailingSemicolon();
     }
 
@@ -3576,7 +3647,13 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
             increaseIndent();
         }
         else {
-            emitList(body, body.statements, ListFormat.MultiLineFunctionBodyStatements, /*parenthesizerRule*/ undefined, statementOffset);
+            emitList(
+                body,
+                body.statements,
+                ListFormat.MultiLineFunctionBodyStatements,
+                /*parenthesizerRule*/ undefined,
+                statementOffset,
+            );
         }
     }
 
@@ -4389,7 +4466,13 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
         emitHelpers(node);
         const index = findIndex(statements, statement => !isPrologueDirective(statement));
         emitTripleSlashDirectivesIfNeeded(node);
-        emitList(node, statements, ListFormat.MultiLine, /*parenthesizerRule*/ undefined, index === -1 ? statements.length : index);
+        emitList(
+            node,
+            statements,
+            ListFormat.MultiLine,
+            /*parenthesizerRule*/ undefined,
+            index === -1 ? statements.length : index,
+        );
         popNameGenerationScope(node);
     }
 
@@ -4414,12 +4497,17 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
      * Emits any prologue directives at the start of a Statement list, returning the
      * number of prologue directives written to the output.
      */
-    function emitPrologueDirectives(statements: readonly Node[], sourceFile?: SourceFile, seenPrologueDirectives?: Set<string>): number {
+    function emitPrologueDirectives(
+        statements: readonly Node[],
+        sourceFile?: SourceFile,
+        seenPrologueDirectives?: Set<string>,
+    ): number {
         let needsToSetSourceFile = !!sourceFile;
         for (let i = 0; i < statements.length; i++) {
             const statement = statements[i];
             if (isPrologueDirective(statement)) {
-                const shouldEmitPrologueDirective = seenPrologueDirectives ? !seenPrologueDirectives.has(statement.expression.text) : true;
+                const shouldEmitPrologueDirective = seenPrologueDirectives
+                    ? !seenPrologueDirectives.has(statement.expression.text) : true;
                 if (shouldEmitPrologueDirective) {
                     if (needsToSetSourceFile) {
                         needsToSetSourceFile = false;
@@ -4776,7 +4864,8 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
             // Write a line terminator if the parent node was multi-line
             if (
                 format & ListFormat.MultiLine &&
-                !(preserveSourceNewlines && (!parentNode || currentSourceFile && rangeIsOnSingleLine(parentNode, currentSourceFile)))
+                !(preserveSourceNewlines &&
+                    (!parentNode || currentSourceFile && rangeIsOnSingleLine(parentNode, currentSourceFile)))
             ) {
                 writeLine();
             }
@@ -4785,7 +4874,17 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
             }
         }
         else {
-            emitNodeListItems(emit, parentNode, children, format, parenthesizerRule, start, count, children.hasTrailingComma, children);
+            emitNodeListItems(
+                emit,
+                parentNode,
+                children,
+                format,
+                parenthesizerRule,
+                start,
+                count,
+                children.hasTrailingComma,
+                children,
+            );
         }
 
         onAfterEmitNodeArray?.(children);
@@ -4872,7 +4971,9 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
                         shouldDecreaseIndentAfterEmit = true;
                     }
 
-                    if (shouldEmitInterveningComments && format & ListFormat.DelimitersMask && !positionIsSynthesized(child.pos)) {
+                    if (
+                        shouldEmitInterveningComments && format & ListFormat.DelimitersMask && !positionIsSynthesized(child.pos)
+                    ) {
                         const commentRange = getCommentRange(child);
                         emitTrailingCommentsOfPosition(
                             commentRange.pos,
@@ -4912,7 +5013,8 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
         // Write a trailing comma, if requested.
         const emitFlags = previousSibling ? getEmitFlags(previousSibling) : 0;
         const skipTrailingComments = commentsDisabled || !!(emitFlags & EmitFlags.NoTrailingComments);
-        const emitTrailingComma = hasTrailingComma && (format & ListFormat.AllowTrailingComma) && (format & ListFormat.CommaDelimited);
+        const emitTrailingComma = hasTrailingComma && (format & ListFormat.AllowTrailingComma) &&
+            (format & ListFormat.CommaDelimited);
         if (emitTrailingComma) {
             if (previousSibling && !skipTrailingComments) {
                 emitTokenWithComment(SyntaxKind.CommaToken, previousSibling.end, writePunctuation, previousSibling);
@@ -4929,10 +5031,13 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
         //          /* end of element 2 */
         //       ];
         if (
-            previousSibling && (parentNode ? parentNode.end : -1) !== previousSibling.end && (format & ListFormat.DelimitersMask) &&
+            previousSibling && (parentNode ? parentNode.end : -1) !== previousSibling.end &&
+            (format & ListFormat.DelimitersMask) &&
             !skipTrailingComments
         ) {
-            emitLeadingCommentsOfPosition(emitTrailingComma && childrenTextRange?.end ? childrenTextRange.end : previousSibling.end);
+            emitLeadingCommentsOfPosition(
+                emitTrailingComma && childrenTextRange?.end ? childrenTextRange.end : previousSibling.end,
+            );
         }
 
         // Decrease the indent, if requested.
@@ -5106,7 +5211,11 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
         }
     }
 
-    function getLeadingLineTerminatorCount(parentNode: Node | undefined, firstChild: Node | undefined, format: ListFormat): number {
+    function getLeadingLineTerminatorCount(
+        parentNode: Node | undefined,
+        firstChild: Node | undefined,
+        format: ListFormat,
+    ): number {
         if (format & ListFormat.PreserveLines || preserveSourceNewlines) {
             if (format & ListFormat.PreferNewLine) {
                 return 1;
@@ -5225,7 +5334,8 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
                 (!lastChild.parent || lastChild.parent === parentNode)
             ) {
                 if (preserveSourceNewlines) {
-                    const end = childrenTextRange && !positionIsSynthesized(childrenTextRange.end) ? childrenTextRange.end : lastChild.end;
+                    const end = childrenTextRange && !positionIsSynthesized(childrenTextRange.end) ? childrenTextRange.end
+                        : lastChild.end;
                     return getEffectiveLines(
                         includeComments =>
                             getLinesBetweenPositionAndNextNonWhitespaceCharacter(
@@ -5346,7 +5456,10 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
         return node;
     }
 
-    function getTextOfNode(node: Identifier | PrivateIdentifier | LiteralExpression | JsxNamespacedName, includeTrivia?: boolean): string {
+    function getTextOfNode(
+        node: Identifier | PrivateIdentifier | LiteralExpression | JsxNamespacedName,
+        includeTrivia?: boolean,
+    ): string {
         if (isGeneratedIdentifier(node) || isGeneratedPrivateIdentifier(node)) {
             return generateName(node);
         }
@@ -5374,7 +5487,11 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
         return getSourceTextOfNodeFromSourceFile(sourceFile, node, includeTrivia);
     }
 
-    function getLiteralTextOfNode(node: LiteralLikeNode, neverAsciiEscape: boolean | undefined, jsxAttributeEscape: boolean): string {
+    function getLiteralTextOfNode(
+        node: LiteralLikeNode,
+        neverAsciiEscape: boolean | undefined,
+        jsxAttributeEscape: boolean,
+    ): string {
         if (node.kind === SyntaxKind.StringLiteral && (node as StringLiteral).textSourceNode) {
             const textSourceNode = (node as StringLiteral).textSourceNode!;
             if (
@@ -5394,7 +5511,8 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
         const flags = (neverAsciiEscape ? GetLiteralTextFlags.NeverAsciiEscape : 0)
             | (jsxAttributeEscape ? GetLiteralTextFlags.JsxAttributeEscape : 0)
             | (printerOptions.terminateUnterminatedLiterals ? GetLiteralTextFlags.TerminateUnterminatedLiterals : 0)
-            | (printerOptions.target && printerOptions.target >= ScriptTarget.ES2021 ? GetLiteralTextFlags.AllowNumericSeparator : 0);
+            | (printerOptions.target && printerOptions.target >= ScriptTarget.ES2021 ? GetLiteralTextFlags.AllowNumericSeparator
+                : 0);
 
         return getLiteralText(node, currentSourceFile, flags);
     }
@@ -5588,7 +5706,8 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
             // Auto, Loop, and Unique names are cached based on their unique
             // autoGenerateId.
             const autoGenerateId = autoGenerate.id;
-            return autoGeneratedIdToGeneratedName[autoGenerateId] || (autoGeneratedIdToGeneratedName[autoGenerateId] = makeName(name));
+            return autoGeneratedIdToGeneratedName[autoGenerateId] ||
+                (autoGeneratedIdToGeneratedName[autoGenerateId] = makeName(name));
         }
     }
 
@@ -5934,7 +6053,12 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
             case SyntaxKind.MethodDeclaration:
             case SyntaxKind.GetAccessor:
             case SyntaxKind.SetAccessor:
-                return generateNameForMethodOrAccessor(node as MethodDeclaration | AccessorDeclaration, privateName, prefix, suffix);
+                return generateNameForMethodOrAccessor(
+                    node as MethodDeclaration | AccessorDeclaration,
+                    privateName,
+                    prefix,
+                    suffix,
+                );
             case SyntaxKind.ComputedPropertyName:
                 return makeTempVariableName(TempFlags.Auto, /*reservedInNestedScopes*/ true, privateName, prefix, suffix);
             default:
@@ -6055,8 +6179,10 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
 
         // We have to explicitly check that the node is JsxText because if the compilerOptions.jsx is "preserve" we will not do any transformation.
         // It is expensive to walk entire tree just to set one kind of node to have no comments.
-        const skipLeadingComments = pos < 0 || (emitFlags & EmitFlags.NoLeadingComments) !== 0 || node.kind === SyntaxKind.JsxText;
-        const skipTrailingComments = end < 0 || (emitFlags & EmitFlags.NoTrailingComments) !== 0 || node.kind === SyntaxKind.JsxText;
+        const skipLeadingComments = pos < 0 || (emitFlags & EmitFlags.NoLeadingComments) !== 0 ||
+            node.kind === SyntaxKind.JsxText;
+        const skipTrailingComments = end < 0 || (emitFlags & EmitFlags.NoTrailingComments) !== 0 ||
+            node.kind === SyntaxKind.JsxText;
 
         // Save current container state on the stack.
         if ((pos > 0 || end > 0) && pos !== end) {
@@ -6096,7 +6222,8 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
         savedDeclarationListContainerEnd: number,
     ) {
         enterComment();
-        const skipTrailingComments = end < 0 || (emitFlags & EmitFlags.NoTrailingComments) !== 0 || node.kind === SyntaxKind.JsxText;
+        const skipTrailingComments = end < 0 || (emitFlags & EmitFlags.NoTrailingComments) !== 0 ||
+            node.kind === SyntaxKind.JsxText;
         forEach(getSyntheticTrailingComments(node), emitTrailingSynthesizedComment);
         if ((pos > 0 || end > 0) && pos !== end) {
             // Restore previous container state.
@@ -6257,7 +6384,13 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
         return true;
     }
 
-    function emitLeadingComment(commentPos: number, commentEnd: number, kind: SyntaxKind, hasTrailingNewLine: boolean, rangePos: number) {
+    function emitLeadingComment(
+        commentPos: number,
+        commentEnd: number,
+        kind: SyntaxKind,
+        hasTrailingNewLine: boolean,
+        rangePos: number,
+    ) {
         if (!currentSourceFile || !shouldWriteComment(currentSourceFile.text, commentPos)) return;
         if (!hasWrittenComment) {
             emitNewLineBeforeLeadingCommentOfPosition(getCurrentLineMap(), writer, rangePos, commentPos);
@@ -6312,7 +6445,8 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
         enterComment();
         forEachTrailingCommentToEmit(
             pos,
-            prefixSpace ? emitTrailingComment : forceNoNewline ? emitTrailingCommentOfPositionNoNewline : emitTrailingCommentOfPosition,
+            prefixSpace ? emitTrailingComment
+                : forceNoNewline ? emitTrailingCommentOfPositionNoNewline : emitTrailingCommentOfPosition,
         );
         exitComment();
     }
@@ -6330,7 +6464,12 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
         }
     }
 
-    function emitTrailingCommentOfPosition(commentPos: number, commentEnd: number, _kind: SyntaxKind, hasTrailingNewLine: boolean) {
+    function emitTrailingCommentOfPosition(
+        commentPos: number,
+        commentEnd: number,
+        _kind: SyntaxKind,
+        hasTrailingNewLine: boolean,
+    ) {
         if (!currentSourceFile) return;
         // trailing comments of a position are emitted at /*trailing comment1 */space/*trailing comment*/space
 
@@ -6393,7 +6532,15 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
 
     function emitDetachedCommentsAndUpdateCommentsInfo(range: TextRange) {
         const currentDetachedCommentInfo = currentSourceFile &&
-            emitDetachedComments(currentSourceFile.text, getCurrentLineMap(), writer, emitComment, range, newLine, commentsDisabled);
+            emitDetachedComments(
+                currentSourceFile.text,
+                getCurrentLineMap(),
+                writer,
+                emitComment,
+                range,
+                newLine,
+                commentsDisabled,
+            );
         if (currentDetachedCommentInfo) {
             if (detachedCommentsInfo) {
                 detachedCommentsInfo.push(currentDetachedCommentInfo);

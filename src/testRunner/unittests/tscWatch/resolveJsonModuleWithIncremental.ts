@@ -24,7 +24,11 @@ describe("unittests:: tsc-watch:: resolveJsonModuleWithIncremental:: emit file -
         commandLineArgs: ["--p", "src/project", "-i", "-w"],
         edits: [{
             caption: "Change json setting",
-            edit: sys => sys.writeFile("/src/project/tsconfig.json", jsonToReadableText({ compilerOptions: { resolveJsonModule: false } })),
+            edit: sys =>
+                sys.writeFile(
+                    "/src/project/tsconfig.json",
+                    jsonToReadableText({ compilerOptions: { resolveJsonModule: false } }),
+                ),
             timeouts: sys => sys.runQueuedTimeoutCallbacks(),
         }],
     });

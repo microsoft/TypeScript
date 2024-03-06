@@ -134,7 +134,8 @@ export class SourceMap {
 
                 const mappingsForSource = this._sourceLineMappings[mapping.sourceIndex] ||
                     (this._sourceLineMappings[mapping.sourceIndex] = []);
-                const mappingsForSourceLine = mappingsForSource[mapping.sourceLine] || (mappingsForSource[mapping.sourceLine] = []);
+                const mappingsForSourceLine = mappingsForSource[mapping.sourceLine] ||
+                    (mappingsForSource[mapping.sourceLine] = []);
                 mappingsForSourceLine.push(mapping);
             }
             else if (match[2]) {

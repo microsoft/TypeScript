@@ -245,7 +245,9 @@ describe("unittests:: tsserver:: projectErrors:: are reported as appropriate", (
             verifyGetErrRequest({ session, files: [untitledFile] });
             baselineTsserverLogs(
                 "projectErrors",
-                `when opening new file that doesnt exist on disk yet ${useProjectRoot ? "with projectRoot" : "without projectRoot"}`,
+                `when opening new file that doesnt exist on disk yet ${
+                    useProjectRoot ? "with projectRoot" : "without projectRoot"
+                }`,
                 session,
             );
         }
@@ -429,7 +431,11 @@ describe("unittests:: tsserver:: Project Errors for Configure file diagnostics e
         const host = createServerHost([file, libFile, configFile]);
         const session = new TestSession(host);
         openFilesForSession([file], session);
-        baselineTsserverLogs("projectErrors", "configFileDiagnostic events are generated when the config file has errors", session);
+        baselineTsserverLogs(
+            "projectErrors",
+            "configFileDiagnostic events are generated when the config file has errors",
+            session,
+        );
     });
 
     it("are generated when the config file doesn't have errors", () => {
@@ -446,7 +452,11 @@ describe("unittests:: tsserver:: Project Errors for Configure file diagnostics e
         const host = createServerHost([file, libFile, configFile]);
         const session = new TestSession(host);
         openFilesForSession([file], session);
-        baselineTsserverLogs("projectErrors", "configFileDiagnostic events are generated when the config file doesnt have errors", session);
+        baselineTsserverLogs(
+            "projectErrors",
+            "configFileDiagnostic events are generated when the config file doesnt have errors",
+            session,
+        );
     });
 
     it("are generated when the config file changes", () => {
@@ -667,7 +677,8 @@ describe("unittests:: tsserver:: projectErrors:: reports Options Diagnostic loca
                     "mapRoot": "./"
                 }
             }`;
-        const configFileContentWithComment = configFileContentBeforeComment + configFileContentComment + configFileContentAfterComment;
+        const configFileContentWithComment = configFileContentBeforeComment + configFileContentComment +
+            configFileContentAfterComment;
         const configFileContentWithoutCommentLine = configFileContentBeforeComment + configFileContentAfterComment;
 
         const configFile = {
@@ -749,7 +760,11 @@ console.log(blabla);`,
             include: ["./src/*.ts", "./src/*.json"],
         });
         verifyGetErrRequest({ session, files: [test] });
-        baselineTsserverLogs("projectErrors", `should not report incorrect error when json is root file found by tsconfig`, session);
+        baselineTsserverLogs(
+            "projectErrors",
+            `should not report incorrect error when json is root file found by tsconfig`,
+            session,
+        );
     });
 
     it("should report error when json is not root file found by tsconfig", () => {
@@ -832,7 +847,11 @@ describe("unittests:: tsserver:: projectErrors:: with npm install when", () => {
                 host.runQueuedTimeoutCallbacks(); // Invalidation of failed lookups
                 host.runQueuedTimeoutCallbacks(); // Actual update
             }
-            verifyGetErrRequest({ session, files: [main], existingTimeouts: !npmInstallComplete && !timeoutDuringPartialInstallation });
+            verifyGetErrRequest({
+                session,
+                files: [main],
+                existingTimeouts: !npmInstallComplete && !timeoutDuringPartialInstallation,
+            });
         }
     }
 

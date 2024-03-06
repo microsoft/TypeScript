@@ -101,7 +101,10 @@ function fixSingleExportDeclaration(
     }
 }
 
-function getTypeExportSpecifiers(originExportSpecifier: ExportSpecifier, context: CodeFixContextBase): readonly ExportSpecifier[] {
+function getTypeExportSpecifiers(
+    originExportSpecifier: ExportSpecifier,
+    context: CodeFixContextBase,
+): readonly ExportSpecifier[] {
     const exportClause = originExportSpecifier.parent;
     if (exportClause.elements.length === 1) {
         return exportClause.elements;

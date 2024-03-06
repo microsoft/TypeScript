@@ -308,17 +308,20 @@ export class Data {
                 changes: [
                     {
                         caption: "Rename property title to title2 of interface ITest to initialize signatures",
-                        edit: sys => sys.writeFile(lib1ToolsInterface.path, lib1ToolsInterface.content.replace("title", "title2")),
+                        edit: sys =>
+                            sys.writeFile(lib1ToolsInterface.path, lib1ToolsInterface.content.replace("title", "title2")),
                         timeouts: sys => sys.runQueuedTimeoutCallbacks(),
                     },
                     {
                         caption: "Rename property title2 to title of interface ITest to revert back to original text",
-                        edit: sys => sys.writeFile(lib1ToolsInterface.path, lib1ToolsInterface.content.replace("title2", "title")),
+                        edit: sys =>
+                            sys.writeFile(lib1ToolsInterface.path, lib1ToolsInterface.content.replace("title2", "title")),
                         timeouts: sys => sys.runQueuedTimeoutCallbacks(),
                     },
                     {
                         caption: "Rename property title to title2 of interface ITest",
-                        edit: sys => sys.writeFile(lib1ToolsInterface.path, lib1ToolsInterface.content.replace("title", "title2")),
+                        edit: sys =>
+                            sys.writeFile(lib1ToolsInterface.path, lib1ToolsInterface.content.replace("title", "title2")),
                         timeouts: sys => sys.runQueuedTimeoutCallbacks(),
                     },
                 ],

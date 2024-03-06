@@ -155,7 +155,9 @@ export class FileSystem {
      */
     public shadow(ignoreCase = this.ignoreCase) {
         if (!this.isReadonly) throw new Error("Cannot shadow a mutable file system.");
-        if (ignoreCase && !this.ignoreCase) throw new Error("Cannot create a case-insensitive file system from a case-sensitive one.");
+        if (ignoreCase && !this.ignoreCase) {
+            throw new Error("Cannot create a case-insensitive file system from a case-sensitive one.");
+        }
         const fs = new FileSystem(ignoreCase, { time: this._time });
         fs._shadowRoot = this;
         fs._cwd = this._cwd;
@@ -595,7 +597,9 @@ export class FileSystem {
                 if (!isDirectory(existingNode)) throw createIOError("ENOTDIR");
                 // if both old and new arguments point to the same directory, just pass. So we could rename /src/a/1 to /src/A/1 in Win.
                 // if not and the directory pointed by the new path is not empty, throw an error.
-                if (this.stringComparer(oldpath, newpath) !== 0 && this._getLinks(existingNode).size > 0) throw createIOError("ENOTEMPTY");
+                if (this.stringComparer(oldpath, newpath) !== 0 && this._getLinks(existingNode).size > 0) {
+                    throw createIOError("ENOTEMPTY");
+                }
             }
             else {
                 if (isDirectory(existingNode)) throw createIOError("EISDIR");
@@ -744,11 +748,13 @@ export class FileSystem {
                 const baseNode = baseLinks.get(basename);
                 if (baseNode) {
                     if (isDirectory(changedNode) && isDirectory(baseNode)) {
-                        return hasChanges = FileSystem.directoryDiff(container, basename, changed, changedNode, base, baseNode, options) ||
+                        return hasChanges =
+                            FileSystem.directoryDiff(container, basename, changed, changedNode, base, baseNode, options) ||
                             hasChanges;
                     }
                     if (isFile(changedNode) && isFile(baseNode)) {
-                        return hasChanges = FileSystem.fileDiff(container, basename, changed, changedNode, base, baseNode, options) ||
+                        return hasChanges =
+                            FileSystem.fileDiff(container, basename, changed, changedNode, base, baseNode, options) ||
                             hasChanges;
                     }
                     if (isSymlink(changedNode) && isSymlink(baseNode)) {
@@ -1158,7 +1164,10 @@ export class FileSystem {
      */
     private _resolve(path: string) {
         return this._cwd
-            ? vpath.resolve(this._cwd, vpath.validate(path, vpath.ValidationFlags.RelativeOrAbsolute | vpath.ValidationFlags.AllowWildcard))
+            ? vpath.resolve(
+                this._cwd,
+                vpath.validate(path, vpath.ValidationFlags.RelativeOrAbsolute | vpath.ValidationFlags.AllowWildcard),
+            )
             : vpath.validate(path, vpath.ValidationFlags.Absolute | vpath.ValidationFlags.AllowWildcard);
     }
 

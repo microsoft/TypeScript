@@ -149,7 +149,8 @@ export function transformJsx(context: TransformationContext): (x: SourceFile | B
         }
         const generatedName = factory.createUniqueName(
             `_${name}`,
-            GeneratedIdentifierFlags.Optimistic | GeneratedIdentifierFlags.FileLevel | GeneratedIdentifierFlags.AllowNameSubstitution,
+            GeneratedIdentifierFlags.Optimistic | GeneratedIdentifierFlags.FileLevel |
+                GeneratedIdentifierFlags.AllowNameSubstitution,
         );
         const specifier = factory.createImportSpecifier(/*isTypeOnly*/ false, factory.createIdentifier(name), generatedName);
         setIdentifierGeneratedImportReference(generatedName, specifier);
@@ -183,7 +184,9 @@ export function transformJsx(context: TransformationContext): (x: SourceFile | B
             );
         }
         if (currentFileState.utilizedImplicitRuntimeImports) {
-            for (const [importSource, importSpecifiersMap] of arrayFrom(currentFileState.utilizedImplicitRuntimeImports.entries())) {
+            for (
+                const [importSource, importSpecifiersMap] of arrayFrom(currentFileState.utilizedImplicitRuntimeImports.entries())
+            ) {
                 if (isExternalModule(node)) {
                     // Add `import` statement
                     const importStatement = factory.createImportDeclaration(
@@ -321,7 +324,8 @@ export function transformJsx(context: TransformationContext): (x: SourceFile | B
     }
 
     function visitJsxSelfClosingElement(node: JsxSelfClosingElement, isChild: boolean) {
-        const tagTransform = shouldUseCreateElement(node) ? visitJsxOpeningLikeElementCreateElement : visitJsxOpeningLikeElementJSX;
+        const tagTransform = shouldUseCreateElement(node) ? visitJsxOpeningLikeElementCreateElement
+            : visitJsxOpeningLikeElementJSX;
         return tagTransform(node, /*children*/ undefined, isChild, /*location*/ node);
     }
 
@@ -343,7 +347,8 @@ export function transformJsx(context: TransformationContext): (x: SourceFile | B
             return result && factory.createPropertyAssignment("children", result);
         }
         const result = mapDefined(children, transformJsxChildToExpression);
-        return length(result) ? factory.createPropertyAssignment("children", factory.createArrayLiteralExpression(result)) : undefined;
+        return length(result) ? factory.createPropertyAssignment("children", factory.createArrayLiteralExpression(result))
+            : undefined;
     }
 
     function visitJsxOpeningLikeElementJSX(
@@ -379,7 +384,8 @@ export function transformJsx(context: TransformationContext): (x: SourceFile | B
         location: TextRange,
     ) {
         const nonWhitespaceChildren = getSemanticJsxChildren(children);
-        const isStaticChildren = length(nonWhitespaceChildren) > 1 || !!(nonWhitespaceChildren[0] as JsxExpression)?.dotDotDotToken;
+        const isStaticChildren = length(nonWhitespaceChildren) > 1 ||
+            !!(nonWhitespaceChildren[0] as JsxExpression)?.dotDotDotToken;
         const args: Expression[] = [tagName, objectProperties];
         // function jsx(type, config, maybeKey) {}
         // "maybeKey" is optional. It is acceptable to use "_jsx" without a third argument
@@ -455,7 +461,12 @@ export function transformJsx(context: TransformationContext): (x: SourceFile | B
         return element;
     }
 
-    function visitJsxOpeningFragmentJSX(_node: JsxOpeningFragment, children: readonly JsxChild[], isChild: boolean, location: TextRange) {
+    function visitJsxOpeningFragmentJSX(
+        _node: JsxOpeningFragment,
+        children: readonly JsxChild[],
+        isChild: boolean,
+        location: TextRange,
+    ) {
         let childrenProps: Expression | undefined;
         if (children && children.length) {
             const result = convertJsxChildrenToChildrenPropObject(children);
@@ -498,12 +509,18 @@ export function transformJsx(context: TransformationContext): (x: SourceFile | B
 
     function transformJsxSpreadAttributeToProps(node: JsxSpreadAttribute) {
         if (isObjectLiteralExpression(node.expression) && !hasProto(node.expression)) {
-            return sameMap(node.expression.properties, p => Debug.checkDefined(visitNode(p, visitor, isObjectLiteralElementLike)));
+            return sameMap(
+                node.expression.properties,
+                p => Debug.checkDefined(visitNode(p, visitor, isObjectLiteralElementLike)),
+            );
         }
         return factory.createSpreadAssignment(Debug.checkDefined(visitNode(node.expression, visitor, isExpression)));
     }
 
-    function transformJsxAttributesToObjectProps(attrs: readonly (JsxSpreadAttribute | JsxAttribute)[], children?: PropertyAssignment) {
+    function transformJsxAttributesToObjectProps(
+        attrs: readonly (JsxSpreadAttribute | JsxAttribute)[],
+        children?: PropertyAssignment,
+    ) {
         const target = getEmitScriptTarget(compilerOptions);
         return target && target >= ScriptTarget.ES2018 ?
             factory.createObjectLiteralExpression(transformJsxAttributesToProps(attrs, children)) :
@@ -529,7 +546,10 @@ export function transformJsx(context: TransformationContext): (x: SourceFile | B
         return props;
     }
 
-    function transformJsxAttributesToExpression(attrs: readonly (JsxSpreadAttribute | JsxAttribute)[], children?: PropertyAssignment) {
+    function transformJsxAttributesToExpression(
+        attrs: readonly (JsxSpreadAttribute | JsxAttribute)[],
+        children?: PropertyAssignment,
+    ) {
         const expressions: Expression[] = [];
         let properties: ObjectLiteralElementLike[] = [];
 
@@ -591,7 +611,8 @@ export function transformJsx(context: TransformationContext): (x: SourceFile | B
         if (node.kind === SyntaxKind.StringLiteral) {
             // Always recreate the literal to escape any escape sequences or newlines which may be in the original jsx string and which
             // Need to be escaped to be handled correctly in a normal string
-            const singleQuote = node.singleQuote !== undefined ? node.singleQuote : !isStringDoubleQuoted(node, currentSourceFile);
+            const singleQuote = node.singleQuote !== undefined ? node.singleQuote
+                : !isStringDoubleQuoted(node, currentSourceFile);
             const literal = factory.createStringLiteral(tryDecodeEntities(node.text) || node.text, singleQuote);
             return setTextRange(literal, node);
         }

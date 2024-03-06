@@ -427,7 +427,12 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
         return hasOneOrMoreJsAndNoTsFiles(this);
     }
 
-    public static resolveModule(moduleName: string, initialDir: string, host: ServerHost, log: (message: string) => void): {} | undefined {
+    public static resolveModule(
+        moduleName: string,
+        initialDir: string,
+        host: ServerHost,
+        log: (message: string) => void,
+    ): {} | undefined {
         return Project.importServicePluginSync({ name: moduleName }, [initialDir], host, log).resolvedModule;
     }
 
@@ -480,7 +485,9 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
                 break;
             }
             const err = result.error.stack || result.error.message || JSON.stringify(result.error);
-            (errorLogs ??= []).push(`Failed to dynamically import module '${pluginConfigEntry.name}' from ${resolvedPath}: ${err}`);
+            (errorLogs ??= []).push(
+                `Failed to dynamically import module '${pluginConfigEntry.name}' from ${resolvedPath}: ${err}`,
+            );
         }
         return { pluginConfigEntry, resolvedModule, errorLogs };
     }
@@ -543,7 +550,9 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
             this.compilerOptions.allowNonTsExtensions = true;
             this.compilerOptions.allowJs = true;
         }
-        else if (hasExplicitListOfFiles || getAllowJSCompilerOption(this.compilerOptions) || this.projectService.hasDeferredExtension()) {
+        else if (
+            hasExplicitListOfFiles || getAllowJSCompilerOption(this.compilerOptions) || this.projectService.hasDeferredExtension()
+        ) {
             // If files are listed explicitly or allowJs is specified, allow all extensions
             this.compilerOptions.allowNonTsExtensions = true;
         }
@@ -850,11 +859,15 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
 
     /** @internal */
     scheduleInvalidateResolutionsOfFailedLookupLocations() {
-        this.projectService.throttledOperations.schedule(`${this.getProjectName()}FailedLookupInvalidation`, /*delay*/ 1000, () => {
-            if (this.resolutionCache.invalidateResolutionsOfFailedLookupLocations()) {
-                this.projectService.delayUpdateProjectGraphAndEnsureProjectStructureForOpenFiles(this);
-            }
-        });
+        this.projectService.throttledOperations.schedule(
+            `${this.getProjectName()}FailedLookupInvalidation`,
+            /*delay*/ 1000,
+            () => {
+                if (this.resolutionCache.invalidateResolutionsOfFailedLookupLocations()) {
+                    this.projectService.delayUpdateProjectGraphAndEnsureProjectStructureForOpenFiles(this);
+                }
+            },
+        );
     }
 
     /** @internal */
@@ -993,7 +1006,8 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
                 this.cancellationToken,
                 this.projectService.host,
             ),
-            sourceFile => this.shouldEmitFile(this.projectService.getScriptInfoForPath(sourceFile.path)) ? sourceFile.fileName : undefined,
+            sourceFile =>
+                this.shouldEmitFile(this.projectService.getScriptInfoForPath(sourceFile.path)) ? sourceFile.fileName : undefined,
         );
     }
 
@@ -1261,7 +1275,8 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
     getFileNamesWithRedirectInfo(includeProjectReferenceRedirectInfo: boolean) {
         return this.getFileNames().map((fileName): protocol.FileWithProjectReferenceRedirectInfo => ({
             fileName,
-            isSourceOfProjectReferenceRedirect: includeProjectReferenceRedirectInfo && this.isSourceOfProjectReferenceRedirect(fileName),
+            isSourceOfProjectReferenceRedirect: includeProjectReferenceRedirectInfo &&
+                this.isSourceOfProjectReferenceRedirect(fileName),
         }));
     }
 
@@ -1530,11 +1545,16 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
                             path,
                             f => {
                                 if (this.typingWatchers!.isInvoked) return this.writeLog(`TypingWatchers already invoked`);
-                                if (!fileExtensionIs(f, Extension.Json)) return this.writeLog(`Ignoring files that are not *.json`);
+                                if (!fileExtensionIs(f, Extension.Json)) {
+                                    return this.writeLog(`Ignoring files that are not *.json`);
+                                }
                                 if (
                                     comparePaths(
                                         f,
-                                        combinePaths(this.projectService.typingsInstaller.globalTypingsCacheLocation!, "package.json"),
+                                        combinePaths(
+                                            this.projectService.typingsInstaller.globalTypingsCacheLocation!,
+                                            "package.json",
+                                        ),
                                         !this.useCaseSensitiveFileNames(),
                                     )
                                 ) {
@@ -1583,7 +1603,10 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
                     !this.useCaseSensitiveFileNames(),
                 )
             ) {
-                createProjectWatcher(this.projectService.typingsInstaller.globalTypingsCacheLocation!, TypingWatcherType.DirectoryWatcher);
+                createProjectWatcher(
+                    this.projectService.typingsInstaller.globalTypingsCacheLocation!,
+                    TypingWatcherType.DirectoryWatcher,
+                );
                 continue;
             }
 
@@ -1745,7 +1768,8 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
         }
 
         if (
-            this.hasAddedOrRemovedSymlinks || this.program && !this.program.structureIsReused && this.getCompilerOptions().preserveSymlinks
+            this.hasAddedOrRemovedSymlinks ||
+            this.program && !this.program.structureIsReused && this.getCompilerOptions().preserveSymlinks
         ) {
             // With --preserveSymlinks, we may not determine that a file is a symlink, so we never set `hasAddedOrRemovedSymlinks`
             this.symlinks = undefined;
@@ -1925,14 +1949,20 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
     }
 
     /** @internal */
-    private filesToStringWorker(writeProjectFileNames: boolean, writeFileExplaination: boolean, writeFileVersionAndText: boolean) {
+    private filesToStringWorker(
+        writeProjectFileNames: boolean,
+        writeFileExplaination: boolean,
+        writeFileVersionAndText: boolean,
+    ) {
         if (this.isInitialLoadPending()) return "\tFiles (0) InitialLoadPending\n";
         if (!this.program) return "\tFiles (0) NoProgram\n";
         const sourceFiles = this.program.getSourceFiles();
         let strBuilder = `\tFiles (${sourceFiles.length})\n`;
         if (writeProjectFileNames) {
             for (const file of sourceFiles) {
-                strBuilder += `\t${file.fileName}${writeFileVersionAndText ? ` ${file.version} ${JSON.stringify(file.text)}` : ""}\n`;
+                strBuilder += `\t${file.fileName}${
+                    writeFileVersionAndText ? ` ${file.version} ${JSON.stringify(file.text)}` : ""
+                }\n`;
             }
             if (writeFileExplaination) {
                 strBuilder += "\n\n";
@@ -2004,7 +2034,10 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
     }
 
     /** @internal */
-    getChangesSinceVersion(lastKnownVersion?: number, includeProjectReferenceRedirectInfo?: boolean): ProjectFilesWithTSDiagnostics {
+    getChangesSinceVersion(
+        lastKnownVersion?: number,
+        includeProjectReferenceRedirectInfo?: boolean,
+    ): ProjectFilesWithTSDiagnostics {
         const includeProjectReferenceRedirectInfoIfRequested = includeProjectReferenceRedirectInfo
             ? (files: Map<string, boolean>) =>
                 arrayFrom(
@@ -2060,7 +2093,8 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
                     added.set(fileName, isSourceOfProjectReferenceRedirect);
                 }
                 else if (
-                    includeProjectReferenceRedirectInfo && isSourceOfProjectReferenceRedirect !== lastReportedFileNames.get(fileName)
+                    includeProjectReferenceRedirectInfo &&
+                    isSourceOfProjectReferenceRedirect !== lastReportedFileNames.get(fileName)
                 ) {
                     updatedRedirects.push({
                         fileName,
@@ -2189,7 +2223,9 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
             for (const k of Object.keys(this.languageService)) {
                 // eslint-disable-next-line local/no-in-operator
                 if (!(k in newLS)) {
-                    this.projectService.logger.info(`Plugin activation warning: Missing proxied method ${k} in created LS. Patching.`);
+                    this.projectService.logger.info(
+                        `Plugin activation warning: Missing proxied method ${k} in created LS. Patching.`,
+                    );
                     (newLS as any)[k] = (this.languageService as any)[k];
                 }
             }
@@ -2375,7 +2411,10 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
     }
 }
 
-function getUnresolvedImports(program: Program, cachedUnresolvedImportsPerFile: Map<Path, readonly string[]>): SortedReadonlyArray<string> {
+function getUnresolvedImports(
+    program: Program,
+    cachedUnresolvedImportsPerFile: Map<Path, readonly string[]>,
+): SortedReadonlyArray<string> {
     const sourceFiles = program.getSourceFiles();
     tracing?.push(tracing.Phase.Session, "getUnresolvedImports", { count: sourceFiles.length });
     const ambientModules = program.getTypeChecker().getAmbientModules().map(mod => stripQuotes(mod.getName()));
@@ -2769,7 +2808,10 @@ export class AutoImportProviderProject extends Project {
         );
 
         this.rootFileNames = initialRootNames;
-        this.useSourceOfProjectReferenceRedirect = maybeBind(this.hostProject, this.hostProject.useSourceOfProjectReferenceRedirect);
+        this.useSourceOfProjectReferenceRedirect = maybeBind(
+            this.hostProject,
+            this.hostProject.useSourceOfProjectReferenceRedirect,
+        );
         this.getParsedCommandLine = maybeBind(this.hostProject, this.hostProject.getParsedCommandLine);
     }
 
@@ -2966,7 +3008,9 @@ export class ConfiguredProject extends Project {
 
     /** @internal */
     onReleaseParsedCommandLine(fileName: string) {
-        this.releaseParsedConfig(asNormalizedPath(this.projectService.toCanonicalFileName(asNormalizedPath(normalizePath(fileName)))));
+        this.releaseParsedConfig(
+            asNormalizedPath(this.projectService.toCanonicalFileName(asNormalizedPath(normalizePath(fileName)))),
+        );
     }
 
     /** @internal */

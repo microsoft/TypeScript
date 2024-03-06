@@ -150,7 +150,11 @@ export function transformES2020(context: TransformationContext): (x: SourceFile 
         }
         if (isParenthesizedExpression(node.expression) && isOptionalChain(skipParentheses(node.expression))) {
             // capture thisArg for calls of parenthesized optional chains like `(foo?.bar)()`
-            const expression = visitNonOptionalParenthesizedExpression(node.expression, /*captureThisArg*/ true, /*isDelete*/ false);
+            const expression = visitNonOptionalParenthesizedExpression(
+                node.expression,
+                /*captureThisArg*/ true,
+                /*isDelete*/ false,
+            );
             const args = visitNodes(node.arguments, visitor, isExpression);
             if (isSyntheticReference(expression)) {
                 return setTextRange(factory.createFunctionCallCall(expression.expression, expression.thisArg, args), node);
@@ -176,10 +180,18 @@ export function transformES2020(context: TransformationContext): (x: SourceFile 
 
     function visitOptionalExpression(node: OptionalChain, captureThisArg: boolean, isDelete: boolean): Expression {
         const { expression, chain } = flattenChain(node);
-        const left = visitNonOptionalExpression(skipPartiallyEmittedExpressions(expression), isCallChain(chain[0]), /*isDelete*/ false);
+        const left = visitNonOptionalExpression(
+            skipPartiallyEmittedExpressions(expression),
+            isCallChain(chain[0]),
+            /*isDelete*/ false,
+        );
         let leftThisArg = isSyntheticReference(left) ? left.thisArg : undefined;
         let capturedLeft = isSyntheticReference(left) ? left.expression : left;
-        let leftExpression = factory.restoreOuterExpressions(expression, capturedLeft, OuterExpressionKinds.PartiallyEmittedExpressions);
+        let leftExpression = factory.restoreOuterExpressions(
+            expression,
+            capturedLeft,
+            OuterExpressionKinds.PartiallyEmittedExpressions,
+        );
         if (!isSimpleCopiableExpression(capturedLeft)) {
             capturedLeft = factory.createTempVariable(hoistVariableDeclaration);
             leftExpression = factory.createAssignment(capturedLeft, leftExpression);

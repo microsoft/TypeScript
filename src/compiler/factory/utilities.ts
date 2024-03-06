@@ -397,13 +397,19 @@ export function createExpressionFromEntityName(factory: NodeFactory, node: Entit
 }
 
 /** @internal */
-export function createExpressionForPropertyName(factory: NodeFactory, memberName: Exclude<PropertyName, PrivateIdentifier>): Expression {
+export function createExpressionForPropertyName(
+    factory: NodeFactory,
+    memberName: Exclude<PropertyName, PrivateIdentifier>,
+): Expression {
     if (isIdentifier(memberName)) {
         return factory.createStringLiteralFromNode(memberName);
     }
     else if (isComputedPropertyName(memberName)) {
         // TODO(rbuckton): Does this need to be parented?
-        return setParent(setTextRange(factory.cloneNode(memberName.expression), memberName.expression), memberName.expression.parent);
+        return setParent(
+            setTextRange(factory.cloneNode(memberName.expression), memberName.expression),
+            memberName.expression.parent,
+        );
     }
     else {
         // TODO(rbuckton): Does this need to be parented?
@@ -479,7 +485,11 @@ function createExpressionForPropertyAssignment(factory: NodeFactory, property: P
     );
 }
 
-function createExpressionForShorthandPropertyAssignment(factory: NodeFactory, property: ShorthandPropertyAssignment, receiver: Expression) {
+function createExpressionForShorthandPropertyAssignment(
+    factory: NodeFactory,
+    property: ShorthandPropertyAssignment,
+    receiver: Expression,
+) {
     return setOriginalNode(
         setTextRange(
             factory.createAssignment(
@@ -787,7 +797,10 @@ export function createExternalHelpersImportDeclarationIfNeeded(
     if (compilerOptions.importHelpers && isEffectiveExternalModule(sourceFile, compilerOptions)) {
         let namedBindings: NamedImportBindings | undefined;
         const moduleKind = getEmitModuleKind(compilerOptions);
-        if ((moduleKind >= ModuleKind.ES2015 && moduleKind <= ModuleKind.ESNext) || sourceFile.impliedNodeFormat === ModuleKind.ESNext) {
+        if (
+            (moduleKind >= ModuleKind.ES2015 && moduleKind <= ModuleKind.ESNext) ||
+            sourceFile.impliedNodeFormat === ModuleKind.ESNext
+        ) {
             // use named imports
             const helpers = getEmitHelpers(sourceFile);
             if (helpers) {
@@ -1308,7 +1321,9 @@ export function isModuleName(node: Node): node is ModuleName {
 }
 
 /** @internal */
-export function isLiteralTypeLikeExpression(node: Node): node is NullLiteral | BooleanLiteral | LiteralExpression | PrefixUnaryExpression {
+export function isLiteralTypeLikeExpression(
+    node: Node,
+): node is NullLiteral | BooleanLiteral | LiteralExpression | PrefixUnaryExpression {
     const kind = node.kind;
     return kind === SyntaxKind.NullKeyword
         || kind === SyntaxKind.TrueKeyword
@@ -1628,7 +1643,9 @@ class BinaryExpressionStateMachine<TOuterState, TState, TResult> {
     constructor(
         readonly onEnter: (node: BinaryExpression, prev: TState | undefined, outerState: TOuterState) => TState,
         readonly onLeft: ((left: Expression, userState: TState, node: BinaryExpression) => BinaryExpression | void) | undefined,
-        readonly onOperator: ((operatorToken: BinaryOperatorToken, userState: TState, node: BinaryExpression) => void) | undefined,
+        readonly onOperator:
+            | ((operatorToken: BinaryOperatorToken, userState: TState, node: BinaryExpression) => void)
+            | undefined,
         readonly onRight: ((right: Expression, userState: TState, node: BinaryExpression) => BinaryExpression | void) | undefined,
         readonly onExit: (node: BinaryExpression, userState: TState) => TResult,
         readonly foldState: ((userState: TState, result: TResult, side: "left" | "right") => TState) | undefined,
@@ -1693,7 +1710,15 @@ export function createBinaryExpressionTrampoline<TOuterState, TState, TResult>(
         const userStateStack: TState[] = [undefined!];
         let stackIndex = 0;
         while (stateStack[stackIndex] !== BinaryExpressionState.done) {
-            stackIndex = stateStack[stackIndex](machine, stackIndex, stateStack, nodeStack, userStateStack, resultHolder, outerState);
+            stackIndex = stateStack[stackIndex](
+                machine,
+                stackIndex,
+                stateStack,
+                nodeStack,
+                userStateStack,
+                resultHolder,
+                outerState,
+            );
         }
         Debug.assertEqual(stackIndex, 0);
         return resultHolder.value;
@@ -1783,7 +1808,8 @@ export function formatGeneratedNamePart(
     part: string | GeneratedNamePart | undefined,
     generateName?: (name: GeneratedIdentifier | GeneratedPrivateIdentifier) => string,
 ): string {
-    return typeof part === "object" ? formatGeneratedName(/*privateName*/ false, part.prefix, part.node, part.suffix, generateName!) :
+    return typeof part === "object" ?
+        formatGeneratedName(/*privateName*/ false, part.prefix, part.node, part.suffix, generateName!) :
         typeof part === "string" ? part.length > 0 && part.charCodeAt(0) === CharacterCodes.hash ? part.slice(1) : part :
         "";
 }
@@ -1815,7 +1841,12 @@ function formatIdentifierWorker(
  *
  * @internal
  */
-export function formatGeneratedName(privateName: boolean, prefix: string | undefined, baseName: string, suffix: string | undefined): string;
+export function formatGeneratedName(
+    privateName: boolean,
+    prefix: string | undefined,
+    baseName: string,
+    suffix: string | undefined,
+): string;
 /**
  * Formats a generated name.
  * @param privateName When `true`, inserts a `#` character at the start of the result.

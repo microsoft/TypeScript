@@ -88,7 +88,8 @@ function baselineProgram(
             baseline.push("Semantic diagnostics in builder refreshed for::");
             for (const file of program.getSourceFiles()) {
                 if (
-                    !internalState.semanticDiagnosticsFromOldState || !internalState.semanticDiagnosticsFromOldState.has(file.resolvedPath)
+                    !internalState.semanticDiagnosticsFromOldState ||
+                    !internalState.semanticDiagnosticsFromOldState.has(file.resolvedPath)
                 ) {
                     baseline.push(file.fileName);
                 }
@@ -179,7 +180,10 @@ export type ReadableProgramMultiFileEmitBuildInfo =
         changeFileSet: readonly string[] | undefined;
         emitSignatures: readonly ReadableProgramBuildInfoEmitSignature[] | undefined;
     };
-export type ReadableProgramBuildInfoBundlePendingEmit = [emitKind: ReadableBuilderFileEmit, original: ts.ProgramBuildInfoBundlePendingEmit];
+export type ReadableProgramBuildInfoBundlePendingEmit = [
+    emitKind: ReadableBuilderFileEmit,
+    original: ts.ProgramBuildInfoBundlePendingEmit,
+];
 export type ReadableProgramBundleEmitBuildInfo = Omit<ts.ProgramBundleEmitBuildInfo, "fileInfos" | "root" | "pendingEmit"> & {
     fileInfos: ts.MapLike<string | ReadableProgramBuildInfoFileInfo<ts.BuilderState.FileInfo>>;
     root: readonly ReadableProgramBuildInfoRoot[];
@@ -226,7 +230,8 @@ function generateBuildInfoProgramBaseline(sys: ts.System, buildInfoPath: string,
             )
         );
         fileNamesList = buildInfo.program.fileIdsList?.map(fileIdsListId => fileIdsListId.map(toFileName));
-        const fullEmitForOptions = buildInfo.program.affectedFilesPendingEmit ? ts.getBuilderFileEmit(buildInfo.program.options || {})
+        const fullEmitForOptions = buildInfo.program.affectedFilesPendingEmit ?
+            ts.getBuilderFileEmit(buildInfo.program.options || {})
             : undefined;
         program = buildInfo.program && {
             fileNames: buildInfo.program.fileNames,
@@ -236,7 +241,9 @@ function generateBuildInfoProgramBaseline(sys: ts.System, buildInfoPath: string,
             options: buildInfo.program.options,
             referencedMap: toMapOfReferencedSet(buildInfo.program.referencedMap),
             exportedModulesMap: toMapOfReferencedSet(buildInfo.program.exportedModulesMap),
-            semanticDiagnosticsPerFile: toReadableProgramBuildInfoDiagnosticsPerFile(buildInfo.program.semanticDiagnosticsPerFile),
+            semanticDiagnosticsPerFile: toReadableProgramBuildInfoDiagnosticsPerFile(
+                buildInfo.program.semanticDiagnosticsPerFile,
+            ),
             emitDiagnosticsPerFile: toReadableProgramBuildInfoDiagnosticsPerFile(buildInfo.program.emitDiagnosticsPerFile),
             affectedFilesPendingEmit: buildInfo.program.affectedFilesPendingEmit?.map(value =>
                 toReadableProgramBuilderInfoFilePendingEmit(value, fullEmitForOptions!)
@@ -275,7 +282,8 @@ function generateBuildInfoProgramBaseline(sys: ts.System, buildInfoPath: string,
         return {
             original: ts.isString(original) ? undefined : original,
             ...info,
-            impliedFormat: info.impliedFormat && ts.getNameOfCompilerOptionValue(info.impliedFormat, ts.moduleOptionDeclaration.type),
+            impliedFormat: info.impliedFormat &&
+                ts.getNameOfCompilerOptionValue(info.impliedFormat, ts.moduleOptionDeclaration.type),
         };
     }
 
@@ -356,7 +364,7 @@ export function tscBaselineName(
     isWatch?: boolean,
     suffix?: string,
 ) {
-    return `${ts.isBuild(commandLineArgs) ? "tsbuild" : "tsc"}${isWatch ? "Watch" : ""}/${scenario}/${subScenario.split(" ").join("-")}${
-        suffix ? suffix : ""
-    }.js`;
+    return `${ts.isBuild(commandLineArgs) ? "tsbuild" : "tsc"}${isWatch ? "Watch" : ""}/${scenario}/${
+        subScenario.split(" ").join("-")
+    }${suffix ? suffix : ""}.js`;
 }

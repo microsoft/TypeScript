@@ -112,7 +112,8 @@ export class TypeWriterWalker {
 
             // Workaround to ensure we output 'C' instead of 'typeof C' for base class expressions
             // let type = this.checker.getTypeAtLocation(node);
-            let type = ts.isExpressionWithTypeArgumentsInClassExtendsClause(node.parent) ? this.checker.getTypeAtLocation(node.parent)
+            let type = ts.isExpressionWithTypeArgumentsInClassExtendsClause(node.parent) ?
+                this.checker.getTypeAtLocation(node.parent)
                 : undefined;
             if (!type || type.flags & ts.TypeFlags.Any) type = this.checker.getTypeAtLocation(node);
             // Distinguish `errorType`s from `any`s; but only if the file has no errors.

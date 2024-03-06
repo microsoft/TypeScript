@@ -195,7 +195,10 @@ export function flattenDestructuringAssignment(
         const expression = createAssignmentCallback
             ? createAssignmentCallback(target as Identifier, value, location)
             : setTextRange(
-                context.factory.createAssignment(Debug.checkDefined(visitNode(target as Expression, visitor, isExpression)), value),
+                context.factory.createAssignment(
+                    Debug.checkDefined(visitNode(target as Expression, visitor, isExpression)),
+                    value,
+                ),
                 location,
             );
         expression.original = original;
@@ -444,7 +447,10 @@ function flattenObjectBindingOrAssignmentPattern(
                     (TransformFlags.ContainsRestOrSpread | TransformFlags.ContainsObjectRestOrSpread))
                 && !isComputedPropertyName(propertyName)
             ) {
-                bindingElements = append(bindingElements, visitNode(element, flattenContext.visitor, isBindingOrAssignmentElement));
+                bindingElements = append(
+                    bindingElements,
+                    visitNode(element, flattenContext.visitor, isBindingOrAssignmentElement),
+                );
             }
             else {
                 if (bindingElements) {
@@ -560,7 +566,10 @@ function flattenArrayBindingOrAssignmentPattern(
                     flattenContext.context.hoistVariableDeclaration(temp);
                 }
 
-                restContainingElements = append(restContainingElements, [temp, element] as [Identifier, BindingOrAssignmentElement]);
+                restContainingElements = append(
+                    restContainingElements,
+                    [temp, element] as [Identifier, BindingOrAssignmentElement],
+                );
                 bindingElements = append(bindingElements, flattenContext.createArrayBindingOrAssignmentElement(temp));
             }
             else {
@@ -677,7 +686,12 @@ function createDestructuringPropertyAccess(
  * false if it is necessary to always emit an identifier.
  * @param location The location to use for source maps and comments.
  */
-function ensureIdentifier(flattenContext: FlattenContext, value: Expression, reuseIdentifierExpressions: boolean, location: TextRange) {
+function ensureIdentifier(
+    flattenContext: FlattenContext,
+    value: Expression,
+    reuseIdentifierExpressions: boolean,
+    location: TextRange,
+) {
     if (isIdentifier(value) && reuseIdentifierExpressions) {
         return value;
     }

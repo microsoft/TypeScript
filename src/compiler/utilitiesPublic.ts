@@ -796,7 +796,8 @@ export function getParseTreeNode(node: Node | undefined, nodeTest?: (node: Node)
 
 /** Add an extra underscore to identifiers that start with two underscores to avoid issues with magic names like '__proto__' */
 export function escapeLeadingUnderscores(identifier: string): __String {
-    return (identifier.length >= 2 && identifier.charCodeAt(0) === CharacterCodes._ && identifier.charCodeAt(1) === CharacterCodes._ ?
+    return (identifier.length >= 2 && identifier.charCodeAt(0) === CharacterCodes._ &&
+            identifier.charCodeAt(1) === CharacterCodes._ ?
         "_" + identifier
         : identifier) as __String;
 }
@@ -857,7 +858,10 @@ function nameForNamelessJSDocTypedef(declaration: JSDocTypedefTag | JSDocEnumTag
             break;
         case SyntaxKind.ExpressionStatement:
             let expr = hostNode.expression;
-            if (expr.kind === SyntaxKind.BinaryExpression && (expr as BinaryExpression).operatorToken.kind === SyntaxKind.EqualsToken) {
+            if (
+                expr.kind === SyntaxKind.BinaryExpression &&
+                (expr as BinaryExpression).operatorToken.kind === SyntaxKind.EqualsToken
+            ) {
                 expr = (expr as BinaryExpression).left;
             }
             switch (expr.kind) {
@@ -928,7 +932,9 @@ export function getNonAssignedNameOfDeclaration(declaration: Declaration | Expre
                 case AssignmentDeclarationKind.ThisProperty:
                 case AssignmentDeclarationKind.Property:
                 case AssignmentDeclarationKind.PrototypeProperty:
-                    return getElementOrPropertyAccessArgumentExpressionOrName((expr as BinaryExpression).left as AccessExpression);
+                    return getElementOrPropertyAccessArgumentExpressionOrName(
+                        (expr as BinaryExpression).left as AccessExpression,
+                    );
                 case AssignmentDeclarationKind.ObjectDefinePropertyValue:
                 case AssignmentDeclarationKind.ObjectDefinePropertyExports:
                 case AssignmentDeclarationKind.ObjectDefinePrototypeProperty:
@@ -957,7 +963,8 @@ export function getNonAssignedNameOfDeclaration(declaration: Declaration | Expre
 export function getNameOfDeclaration(declaration: Declaration | Expression | undefined): DeclarationName | undefined {
     if (declaration === undefined) return undefined;
     return getNonAssignedNameOfDeclaration(declaration) ||
-        (isFunctionExpression(declaration) || isArrowFunction(declaration) || isClassExpression(declaration) ? getAssignedName(declaration)
+        (isFunctionExpression(declaration) || isArrowFunction(declaration) || isClassExpression(declaration) ?
+            getAssignedName(declaration)
             : undefined);
 }
 
@@ -1246,7 +1253,11 @@ export function getJSDocTagsNoCache(node: Node): readonly JSDocTag[] {
 }
 
 /** Get the first JSDoc tag of a specified kind, or undefined if not present. */
-function getFirstJSDocTag<T extends JSDocTag>(node: Node, predicate: (tag: JSDocTag) => tag is T, noCache?: boolean): T | undefined {
+function getFirstJSDocTag<T extends JSDocTag>(
+    node: Node,
+    predicate: (tag: JSDocTag) => tag is T,
+    noCache?: boolean,
+): T | undefined {
     return find(getJSDocTagsWorker(node, noCache), predicate);
 }
 
@@ -1390,7 +1401,8 @@ export function isOutermostOptionalChain(node: OptionalChain) {
 }
 
 export function isNullishCoalesce(node: Node) {
-    return node.kind === SyntaxKind.BinaryExpression && (node as BinaryExpression).operatorToken.kind === SyntaxKind.QuestionQuestionToken;
+    return node.kind === SyntaxKind.BinaryExpression &&
+        (node as BinaryExpression).operatorToken.kind === SyntaxKind.QuestionQuestionToken;
 }
 
 export function isConstTypeReference(node: Node) {
@@ -1878,7 +1890,9 @@ export function isBindingOrAssignmentPattern(node: BindingOrAssignmentElementTar
  *
  * @internal
  */
-export function isObjectBindingOrAssignmentPattern(node: BindingOrAssignmentElementTarget): node is ObjectBindingOrAssignmentPattern {
+export function isObjectBindingOrAssignmentPattern(
+    node: BindingOrAssignmentElementTarget,
+): node is ObjectBindingOrAssignmentPattern {
     switch (node.kind) {
         case SyntaxKind.ObjectBindingPattern:
         case SyntaxKind.ObjectLiteralExpression:
@@ -1905,7 +1919,9 @@ export function isObjectBindingOrAssignmentElement(node: Node): node is ObjectBi
  *
  * @internal
  */
-export function isArrayBindingOrAssignmentPattern(node: BindingOrAssignmentElementTarget): node is ArrayBindingOrAssignmentPattern {
+export function isArrayBindingOrAssignmentPattern(
+    node: BindingOrAssignmentElementTarget,
+): node is ArrayBindingOrAssignmentPattern {
     switch (node.kind) {
         case SyntaxKind.ArrayBindingPattern:
         case SyntaxKind.ArrayLiteralExpression:
@@ -2054,7 +2070,9 @@ export function isUnaryExpressionWithWrite(expr: Node): expr is PrefixUnaryExpre
     }
 }
 
-export function isLiteralTypeLiteral(node: Node): node is NullLiteral | BooleanLiteral | LiteralExpression | PrefixUnaryExpression {
+export function isLiteralTypeLiteral(
+    node: Node,
+): node is NullLiteral | BooleanLiteral | LiteralExpression | PrefixUnaryExpression {
     switch (node.kind) {
         case SyntaxKind.NullKeyword:
         case SyntaxKind.TrueKeyword:
@@ -2576,7 +2594,8 @@ export function hasOnlyExpressionInitializer(node: Node): node is HasExpressionI
 }
 
 export function isObjectLiteralElement(node: Node): node is ObjectLiteralElement {
-    return node.kind === SyntaxKind.JsxAttribute || node.kind === SyntaxKind.JsxSpreadAttribute || isObjectLiteralElementLike(node);
+    return node.kind === SyntaxKind.JsxAttribute || node.kind === SyntaxKind.JsxSpreadAttribute ||
+        isObjectLiteralElementLike(node);
 }
 
 /** @internal */
@@ -2613,7 +2632,8 @@ export function isStringLiteralLike(node: Node | FileReference): node is StringL
 }
 
 export function isJSDocLinkLike(node: Node): node is JSDocLink | JSDocLinkCode | JSDocLinkPlain {
-    return node.kind === SyntaxKind.JSDocLink || node.kind === SyntaxKind.JSDocLinkCode || node.kind === SyntaxKind.JSDocLinkPlain;
+    return node.kind === SyntaxKind.JSDocLink || node.kind === SyntaxKind.JSDocLinkCode ||
+        node.kind === SyntaxKind.JSDocLinkPlain;
 }
 
 export function hasRestParameter(s: SignatureDeclaration | JSDocSignature): boolean {
@@ -2636,7 +2656,8 @@ export function isInternalDeclaration(node: Node, sourceFile?: SourceFile) {
     const parseTreeNode = getParseTreeNode(node);
     if (parseTreeNode && parseTreeNode.kind === SyntaxKind.Parameter) {
         const paramIdx = (parseTreeNode.parent as SignatureDeclaration).parameters.indexOf(parseTreeNode as ParameterDeclaration);
-        const previousSibling = paramIdx > 0 ? (parseTreeNode.parent as SignatureDeclaration).parameters[paramIdx - 1] : undefined;
+        const previousSibling = paramIdx > 0 ? (parseTreeNode.parent as SignatureDeclaration).parameters[paramIdx - 1]
+            : undefined;
         const text = sourceFile.text;
         const commentRanges = previousSibling
             ? concatenate(

@@ -19,7 +19,8 @@ import {
 
 const fixId = "fixReturnTypeInAsyncFunction";
 const errorCodes = [
-    Diagnostics.The_return_type_of_an_async_function_or_method_must_be_the_global_Promise_T_type_Did_you_mean_to_write_Promise_0.code,
+    Diagnostics.The_return_type_of_an_async_function_or_method_must_be_the_global_Promise_T_type_Did_you_mean_to_write_Promise_0
+        .code,
 ];
 
 interface Info {
@@ -78,6 +79,11 @@ function getInfo(sourceFile: SourceFile, checker: TypeChecker, pos: number): Inf
     }
 }
 
-function doChange(changes: textChanges.ChangeTracker, sourceFile: SourceFile, returnTypeNode: TypeNode, promisedTypeNode: TypeNode): void {
+function doChange(
+    changes: textChanges.ChangeTracker,
+    sourceFile: SourceFile,
+    returnTypeNode: TypeNode,
+    promisedTypeNode: TypeNode,
+): void {
     changes.replaceNode(sourceFile, returnTypeNode, factory.createTypeReferenceNode("Promise", [promisedTypeNode]));
 }

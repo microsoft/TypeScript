@@ -416,7 +416,9 @@ export function transformTypeScript(context: TransformationContext) {
             case SyntaxKind.ImportEqualsDeclaration:
             case SyntaxKind.ExportAssignment:
             case SyntaxKind.ExportDeclaration:
-                return visitElidableStatement(node as ImportDeclaration | ImportEqualsDeclaration | ExportAssignment | ExportDeclaration);
+                return visitElidableStatement(
+                    node as ImportDeclaration | ImportEqualsDeclaration | ExportAssignment | ExportDeclaration,
+                );
             default:
                 return visitorWorker(node);
         }
@@ -591,7 +593,9 @@ export function transformTypeScript(context: TransformationContext) {
         }
     }
 
-    function getObjectLiteralElementVisitor(parent: ObjectLiteralExpression): <T extends Node>(node: T) => VisitResult<Node | undefined> {
+    function getObjectLiteralElementVisitor(
+        parent: ObjectLiteralExpression,
+    ): <T extends Node>(node: T) => VisitResult<Node | undefined> {
         return node => saveStateAndInvoke(node, n => objectLiteralElementVisitorWorker(n, parent));
     }
 
@@ -861,12 +865,16 @@ export function transformTypeScript(context: TransformationContext) {
 
     function getClassFacts(node: ClassDeclaration) {
         let facts = ClassFacts.None;
-        if (some(getProperties(node, /*requireInitializer*/ true, /*isStatic*/ true))) facts |= ClassFacts.HasStaticInitializedProperties;
+        if (some(getProperties(node, /*requireInitializer*/ true, /*isStatic*/ true))) {
+            facts |= ClassFacts.HasStaticInitializedProperties;
+        }
         const extendsClauseElement = getEffectiveBaseTypeNode(node);
         if (extendsClauseElement && skipOuterExpressions(extendsClauseElement.expression).kind !== SyntaxKind.NullKeyword) {
             facts |= ClassFacts.IsDerivedClass;
         }
-        if (classOrConstructorParameterIsDecorated(legacyDecorators, node)) facts |= ClassFacts.HasClassOrConstructorParameterDecorators;
+        if (classOrConstructorParameterIsDecorated(legacyDecorators, node)) {
+            facts |= ClassFacts.HasClassOrConstructorParameterDecorators;
+        }
         if (childIsDecorated(legacyDecorators, node)) facts |= ClassFacts.HasMemberDecorators;
         if (isExportOfNamespace(node)) facts |= ClassFacts.IsExportOfNamespace;
         else if (isDefaultExternalModuleExport(node)) facts |= ClassFacts.IsDefaultExternalExport;
@@ -966,7 +974,10 @@ export function transformTypeScript(context: TransformationContext) {
             //  }();
             //
             const statements: Statement[] = [classDeclaration];
-            const closingBraceLocation = createTokenRange(skipTrivia(currentSourceFile.text, node.members.end), SyntaxKind.CloseBraceToken);
+            const closingBraceLocation = createTokenRange(
+                skipTrivia(currentSourceFile.text, node.members.end),
+                SyntaxKind.CloseBraceToken,
+            );
             const localName = factory.getInternalName(node);
 
             // The following partially-emitted expression exists purely to align our sourcemap
@@ -1024,7 +1035,9 @@ export function transformTypeScript(context: TransformationContext) {
             if (facts & ClassFacts.IsNamedExternalExport) {
                 return [
                     statement,
-                    factory.createExternalModuleExport(factory.getDeclarationName(node, /*allowComments*/ false, /*allowSourceMaps*/ true)),
+                    factory.createExternalModuleExport(
+                        factory.getDeclarationName(node, /*allowComments*/ false, /*allowSourceMaps*/ true),
+                    ),
                 ];
             }
         }
@@ -1059,7 +1072,10 @@ export function transformTypeScript(context: TransformationContext) {
         let newMembers: ClassElement[] | undefined;
         const constructor = getFirstConstructorWithBody(node);
         const parametersWithPropertyAssignments = constructor &&
-            filter(constructor.parameters, (p): p is ParameterPropertyDeclaration => isParameterPropertyDeclaration(p, constructor));
+            filter(
+                constructor.parameters,
+                (p): p is ParameterPropertyDeclaration => isParameterPropertyDeclaration(p, constructor),
+            );
 
         if (parametersWithPropertyAssignments) {
             for (const parameter of parametersWithPropertyAssignments) {
@@ -1141,7 +1157,11 @@ export function transformTypeScript(context: TransformationContext) {
             if (shouldAddParamTypesMetadata(node)) {
                 const paramTypesMetadata = emitHelpers().createMetadataHelper(
                     "design:paramtypes",
-                    typeSerializer.serializeParameterTypesOfNode({ currentLexicalScope, currentNameScope: container }, node, container),
+                    typeSerializer.serializeParameterTypesOfNode(
+                        { currentLexicalScope, currentNameScope: container },
+                        node,
+                        container,
+                    ),
                 );
                 decorators = append(decorators, factory.createDecorator(paramTypesMetadata));
             }
@@ -1182,7 +1202,11 @@ export function transformTypeScript(context: TransformationContext) {
                         [],
                         /*type*/ undefined,
                         factory.createToken(SyntaxKind.EqualsGreaterThanToken),
-                        typeSerializer.serializeParameterTypesOfNode({ currentLexicalScope, currentNameScope: container }, node, container),
+                        typeSerializer.serializeParameterTypesOfNode(
+                            { currentLexicalScope, currentNameScope: container },
+                            node,
+                            container,
+                        ),
                     ),
                 );
                 properties = append(properties, paramTypeProperty);
@@ -1265,7 +1289,10 @@ export function transformTypeScript(context: TransformationContext) {
      *
      * @param member The member whose name should be converted into an expression.
      */
-    function getExpressionForPropertyName(member: ClassElement | EnumMember, generateNameForComputedPropertyName: boolean): Expression {
+    function getExpressionForPropertyName(
+        member: ClassElement | EnumMember,
+        generateNameForComputedPropertyName: boolean,
+    ): Expression {
         const name = member.name!;
         if (isPrivateIdentifier(name)) {
             return factory.createIdentifier("");
@@ -1351,7 +1378,9 @@ export function transformTypeScript(context: TransformationContext) {
      *
      * @param node The declaration node.
      */
-    function shouldEmitFunctionLikeDeclaration<T extends FunctionLikeDeclaration>(node: T): node is T & { body: NonNullable<T["body"]>; } {
+    function shouldEmitFunctionLikeDeclaration<T extends FunctionLikeDeclaration>(
+        node: T,
+    ): node is T & { body: NonNullable<T["body"]>; } {
         return !nodeIsMissing(node.body);
     }
 
@@ -1413,7 +1442,10 @@ export function transformTypeScript(context: TransformationContext) {
     ) {
         const superStatementIndex = superPath[superPathDepth];
         const superStatement = statementsIn[superStatementIndex];
-        addRange(statementsOut, visitNodes(statementsIn, visitor, isStatement, statementOffset, superStatementIndex - statementOffset));
+        addRange(
+            statementsOut,
+            visitNodes(statementsIn, visitor, isStatement, statementOffset, superStatementIndex - statementOffset),
+        );
         if (isTryStatement(superStatement)) {
             const tryBlockStatements: Statement[] = [];
 
@@ -1471,7 +1503,10 @@ export function transformTypeScript(context: TransformationContext) {
         //      this.y = y;
         //  }
         //
-        const parameterPropertyAssignments = mapDefined(parametersWithPropertyAssignments, transformParameterWithPropertyAssignment);
+        const parameterPropertyAssignments = mapDefined(
+            parametersWithPropertyAssignments,
+            transformParameterWithPropertyAssignment,
+        );
         if (superPath.length) {
             transformConstructorBodyWorker(
                 statements,
@@ -2097,7 +2132,9 @@ export function transformTypeScript(context: TransformationContext) {
         // Emit a variable statement for the module. We emit top-level enums as a `var`
         // declaration to avoid static errors in global scripts scripts due to redeclaration.
         // enums in any other scope are emitted as a `let` declaration.
-        const varDecl = factory.createVariableDeclaration(factory.getLocalName(node, /*allowComments*/ false, /*allowSourceMaps*/ true));
+        const varDecl = factory.createVariableDeclaration(
+            factory.getLocalName(node, /*allowComments*/ false, /*allowSourceMaps*/ true),
+        );
         const varFlags = currentLexicalScope.kind === SyntaxKind.SourceFile ? NodeFlags.None : NodeFlags.Let;
         const statement = factory.createVariableStatement(
             visitNodes(node.modifiers, modifierVisitor, isModifier),
@@ -2332,7 +2369,9 @@ export function transformTypeScript(context: TransformationContext) {
 
     function getInnerMostModuleDeclarationFromDottedModule(moduleDeclaration: ModuleDeclaration): ModuleDeclaration | undefined {
         if (moduleDeclaration.body!.kind === SyntaxKind.ModuleDeclaration) {
-            const recursiveInnerModule = getInnerMostModuleDeclarationFromDottedModule(moduleDeclaration.body as ModuleDeclaration);
+            const recursiveInnerModule = getInnerMostModuleDeclarationFromDottedModule(
+                moduleDeclaration.body as ModuleDeclaration,
+            );
             return recursiveInnerModule || moduleDeclaration.body as ModuleDeclaration;
         }
     }
@@ -2472,7 +2511,10 @@ export function transformTypeScript(context: TransformationContext) {
         return factory.updateNamespaceExport(node, Debug.checkDefined(visitNode(node.name, visitor, isIdentifier)));
     }
 
-    function visitNamedExportBindings(node: NamedExportBindings, allowEmpty: boolean): VisitResult<NamedExportBindings> | undefined {
+    function visitNamedExportBindings(
+        node: NamedExportBindings,
+        allowEmpty: boolean,
+    ): VisitResult<NamedExportBindings> | undefined {
         return isNamespaceExport(node) ? visitNamespaceExports(node) : visitNamedExports(node, allowEmpty);
     }
 
@@ -2483,7 +2525,8 @@ export function transformTypeScript(context: TransformationContext) {
      */
     function visitExportSpecifier(node: ExportSpecifier): VisitResult<ExportSpecifier> | undefined {
         // Elide an export specifier if it does not reference a value.
-        return !node.isTypeOnly && (compilerOptions.verbatimModuleSyntax || resolver.isValueAliasDeclaration(node)) ? node : undefined;
+        return !node.isTypeOnly && (compilerOptions.verbatimModuleSyntax || resolver.isValueAliasDeclaration(node)) ? node
+            : undefined;
     }
 
     /**
@@ -2644,7 +2687,12 @@ export function transformTypeScript(context: TransformationContext) {
     }
 
     function getNamespaceMemberNameWithSourceMapsAndWithoutComments(name: Identifier) {
-        return factory.getNamespaceMemberName(currentNamespaceContainerName, name, /*allowComments*/ false, /*allowSourceMaps*/ true);
+        return factory.getNamespaceMemberName(
+            currentNamespaceContainerName,
+            name,
+            /*allowComments*/ false,
+            /*allowSourceMaps*/ true,
+        );
     }
 
     /**

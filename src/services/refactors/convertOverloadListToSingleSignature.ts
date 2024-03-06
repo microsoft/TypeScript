@@ -261,7 +261,10 @@ function getConvertableOverloadListAtPosition(file: SourceFile, startPosition: n
     if (!containingDecl) {
         return;
     }
-    if (isFunctionLikeDeclaration(containingDecl) && containingDecl.body && rangeContainsPosition(containingDecl.body, startPosition)) {
+    if (
+        isFunctionLikeDeclaration(containingDecl) && containingDecl.body &&
+        rangeContainsPosition(containingDecl.body, startPosition)
+    ) {
         return;
     }
 

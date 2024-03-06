@@ -96,7 +96,10 @@ function getInfo(sourceFile: SourceFile, pos: number): Info | undefined {
 
 function getActionForAddMissingDefiniteAssignmentAssertion(context: CodeFixContext, info: Info): CodeFixAction | undefined {
     if (info.isJs) return undefined;
-    const changes = textChanges.ChangeTracker.with(context, t => addDefiniteAssignmentAssertion(t, context.sourceFile, info.prop));
+    const changes = textChanges.ChangeTracker.with(
+        context,
+        t => addDefiniteAssignmentAssertion(t, context.sourceFile, info.prop),
+    );
     return createCodeFixAction(
         fixName,
         changes,

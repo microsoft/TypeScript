@@ -108,7 +108,13 @@ function getRefactorEditsToRemoveFunctionBraces(context: RefactorContext, action
     else if (actionName === removeBracesAction.name && returnStatement) {
         const actualExpression = expression || factory.createVoidZero();
         body = needsParentheses(actualExpression) ? factory.createParenthesizedExpression(actualExpression) : actualExpression;
-        copyTrailingAsLeadingComments(returnStatement, body, file, SyntaxKind.MultiLineCommentTrivia, /*hasTrailingNewLine*/ false);
+        copyTrailingAsLeadingComments(
+            returnStatement,
+            body,
+            file,
+            SyntaxKind.MultiLineCommentTrivia,
+            /*hasTrailingNewLine*/ false,
+        );
         copyLeadingComments(returnStatement, body, file, SyntaxKind.MultiLineCommentTrivia, /*hasTrailingNewLine*/ false);
         copyTrailingComments(returnStatement, body, file, SyntaxKind.MultiLineCommentTrivia, /*hasTrailingNewLine*/ false);
     }

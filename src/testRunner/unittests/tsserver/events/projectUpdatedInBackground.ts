@@ -94,7 +94,9 @@ describe("unittests:: tsserver:: events:: ProjectsUpdatedInBackground", () => {
                 /** initial list of files to reload in fs and first file in this list being the file to open */
                 firstReloadFileList?: string[];
             }
-            function getInitialState({ configObj = {}, getAdditionalFileOrFolder, firstReloadFileList }: InitialStateParams = {}) {
+            function getInitialState(
+                { configObj = {}, getAdditionalFileOrFolder, firstReloadFileList }: InitialStateParams = {},
+            ) {
                 const moduleFile1: File = {
                     path: moduleFile1Path,
                     content: "export function Foo() { };",
@@ -137,7 +139,8 @@ describe("unittests:: tsserver:: events:: ProjectsUpdatedInBackground", () => {
                     configFile,
                 ];
 
-                const filesToReload = firstReloadFileList?.map(fileName => ts.find(files, file => file.path === fileName)!) || files;
+                const filesToReload = firstReloadFileList?.map(fileName => ts.find(files, file => file.path === fileName)!) ||
+                    files;
                 const host = createServerHost([filesToReload[0], configFile]);
 
                 // Initial project creation
@@ -242,7 +245,10 @@ describe("unittests:: tsserver:: events:: ProjectsUpdatedInBackground", () => {
                 const { host, moduleFile1, session } = getInitialState();
 
                 host.writeFile(moduleFile1.path, `export var T: number;export function Foo() { };`);
-                host.writeFile("/users/username/projects/project/file1Consumer3.ts", `import {Foo} from "./moduleFile1"; let y = Foo();`);
+                host.writeFile(
+                    "/users/username/projects/project/file1Consumer3.ts",
+                    `import {Foo} from "./moduleFile1"; let y = Foo();`,
+                );
                 host.runQueuedTimeoutCallbacks();
                 baselineTsserverLogs(
                     "events/projectUpdatedInBackground",
@@ -378,7 +384,11 @@ describe("unittests:: tsserver:: events:: ProjectsUpdatedInBackground", () => {
 
                 host.deleteFile(moduleFile1Path);
                 host.runQueuedTimeoutCallbacks();
-                baselineTsserverLogs("events/projectUpdatedInBackground", `${scenario} and should detect removed code file`, session);
+                baselineTsserverLogs(
+                    "events/projectUpdatedInBackground",
+                    `${scenario} and should detect removed code file`,
+                    session,
+                );
             });
 
             it("should detect non-existing code file", () => {
@@ -399,14 +409,19 @@ describe("unittests:: tsserver:: events:: ProjectsUpdatedInBackground", () => {
                 // Create module File2 and see both files are saved
                 host.writeFile(moduleFile2.path, moduleFile2.content);
                 host.runQueuedTimeoutCallbacks();
-                baselineTsserverLogs("events/projectUpdatedInBackground", `${scenario} and should detect non-existing code file`, session);
+                baselineTsserverLogs(
+                    "events/projectUpdatedInBackground",
+                    `${scenario} and should detect non-existing code file`,
+                    session,
+                );
             });
         });
 
         describe("resolution when resolution cache size", () => {
             function verifyWithMaxCacheLimit(subScenario: string, useSlashRootAsSomeNotRootFolderInUserDirectory: boolean) {
                 it(subScenario, () => {
-                    const rootFolder = useSlashRootAsSomeNotRootFolderInUserDirectory ? "/user/username/rootfolder/otherfolder/" : "/";
+                    const rootFolder = useSlashRootAsSomeNotRootFolderInUserDirectory ? "/user/username/rootfolder/otherfolder/"
+                        : "/";
                     const file1: File = {
                         path: rootFolder + "a/b/project/file1.ts",
                         content: 'import a from "file2"',

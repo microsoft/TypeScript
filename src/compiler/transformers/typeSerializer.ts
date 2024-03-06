@@ -155,7 +155,8 @@ export function createRuntimeTypeSerializer(context: TransformationContext): Run
         serializeTypeOfNode: (serializerContext, node) => setSerializerContextAnd(serializerContext, serializeTypeOfNode, node),
         serializeParameterTypesOfNode: (serializerContext, node, container) =>
             setSerializerContextAnd(serializerContext, serializeParameterTypesOfNode, node, container),
-        serializeReturnTypeOfNode: (serializerContext, node) => setSerializerContextAnd(serializerContext, serializeReturnTypeOfNode, node),
+        serializeReturnTypeOfNode: (serializerContext, node) =>
+            setSerializerContextAnd(serializerContext, serializeReturnTypeOfNode, node),
     };
 
     function setSerializerContextAnd<TNode extends Node | undefined, R>(
@@ -344,10 +345,16 @@ export function createRuntimeTypeSerializer(context: TransformationContext): Run
                 return serializeTypeReferenceNode(node as TypeReferenceNode);
 
             case SyntaxKind.IntersectionType:
-                return serializeUnionOrIntersectionConstituents((node as UnionOrIntersectionTypeNode).types, /*isIntersection*/ true);
+                return serializeUnionOrIntersectionConstituents(
+                    (node as UnionOrIntersectionTypeNode).types,
+                    /*isIntersection*/ true,
+                );
 
             case SyntaxKind.UnionType:
-                return serializeUnionOrIntersectionConstituents((node as UnionOrIntersectionTypeNode).types, /*isIntersection*/ false);
+                return serializeUnionOrIntersectionConstituents(
+                    (node as UnionOrIntersectionTypeNode).types,
+                    /*isIntersection*/ false,
+                );
 
             case SyntaxKind.ConditionalType:
                 return serializeUnionOrIntersectionConstituents(

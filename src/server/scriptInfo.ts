@@ -314,7 +314,10 @@ export class TextStorage {
 
     private getOrLoadText() {
         if (this.text === undefined || this.pendingReloadFromDisk) {
-            Debug.assert(!this.svc || this.pendingReloadFromDisk, "ScriptVersionCache should not be set when reloading from disk");
+            Debug.assert(
+                !this.svc || this.pendingReloadFromDisk,
+                "ScriptVersionCache should not be set when reloading from disk",
+            );
             this.reloadWithFileText();
         }
         return this.text!;

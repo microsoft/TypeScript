@@ -37,7 +37,13 @@ registerCodeFix({
         const { suggestion, expression, arg } = info;
         const changes = textChanges.ChangeTracker.with(context, t => doChange(t, sourceFile, arg, expression));
         return [
-            createCodeFixAction(fixId, changes, [Diagnostics.Use_0, suggestion], fixId, Diagnostics.Use_Number_isNaN_in_all_conditions),
+            createCodeFixAction(
+                fixId,
+                changes,
+                [Diagnostics.Use_0, suggestion],
+                fixId,
+                Diagnostics.Use_Number_isNaN_in_all_conditions,
+            ),
         ];
     },
     fixIds: [fixId],
@@ -58,11 +64,16 @@ interface Info {
 }
 
 function getInfo(program: Program, sourceFile: SourceFile, span: TextSpan): Info | undefined {
-    const diag = find(program.getSemanticDiagnostics(sourceFile), diag => diag.start === span.start && diag.length === span.length);
+    const diag = find(
+        program.getSemanticDiagnostics(sourceFile),
+        diag => diag.start === span.start && diag.length === span.length,
+    );
     if (diag === undefined || diag.relatedInformation === undefined) return;
 
     const related = find(diag.relatedInformation, related => related.code === Diagnostics.Did_you_mean_0.code);
-    if (related === undefined || related.file === undefined || related.start === undefined || related.length === undefined) return;
+    if (related === undefined || related.file === undefined || related.start === undefined || related.length === undefined) {
+        return;
+    }
 
     const token = findAncestorMatchingSpan(related.file, createTextSpan(related.start, related.length));
     if (token === undefined) return;

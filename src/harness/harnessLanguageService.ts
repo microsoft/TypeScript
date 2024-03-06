@@ -142,7 +142,10 @@ export abstract class LanguageServiceAdapterHost {
     private scriptInfos: collections.SortedMap<string, ScriptInfo>;
     public jsDocParsingMode: ts.JSDocParsingMode | undefined;
 
-    constructor(protected cancellationToken = DefaultHostCancellationToken.instance, protected settings = ts.getDefaultCompilerOptions()) {
+    constructor(
+        protected cancellationToken = DefaultHostCancellationToken.instance,
+        protected settings = ts.getDefaultCompilerOptions(),
+    ) {
         this.scriptInfos = new collections.SortedMap({ comparer: this.vfs.stringComparer, sort: "insertion" });
     }
 
@@ -631,9 +634,10 @@ class FourslashSession extends ts.server.Session {
     }
     getText(fileName: string) {
         return ts.getSnapshotText(
-            this.projectService.getDefaultProjectForFile(ts.server.toNormalizedPath(fileName), /*ensureProject*/ true)!.getScriptSnapshot(
-                fileName,
-            )!,
+            this.projectService.getDefaultProjectForFile(ts.server.toNormalizedPath(fileName), /*ensureProject*/ true)!
+                .getScriptSnapshot(
+                    fileName,
+                )!,
         );
     }
 

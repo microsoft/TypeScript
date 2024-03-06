@@ -25,7 +25,10 @@ describe("unittests:: tsbuild - output file paths", () => {
         noChangeProject,
     ];
 
-    function verify(input: Pick<VerifyTscWithEditsInput, "subScenario" | "fs" | "edits">, expectedOuptutNames: readonly string[]) {
+    function verify(
+        input: Pick<VerifyTscWithEditsInput, "subScenario" | "fs" | "edits">,
+        expectedOuptutNames: readonly string[],
+    ) {
         verifyTsc({
             scenario: "outputPaths",
             commandLineArgs: ["--b", "/src/tsconfig.json", "-v"],

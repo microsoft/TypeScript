@@ -84,7 +84,8 @@ function baselineParseConfigWith(
             const baseline: string[] = [];
             header?.(baseline);
             for (
-                const { createHost, jsonText, configFileName, existingOptions, basePath, existingWatchOptions, baselineParsed } of input()
+                const { createHost, jsonText, configFileName, existingOptions, basePath, existingWatchOptions, baselineParsed }
+                    of input()
             ) {
                 const host = createHost(baseline);
                 if (!skipFs) baselineParseConfigHost(baseline, host);

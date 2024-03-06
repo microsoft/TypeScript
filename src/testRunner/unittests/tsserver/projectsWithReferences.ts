@@ -236,7 +236,11 @@ export class A {}`,
             // revert the edit on config file
             host.writeFile(cConfig.path, cConfig.content);
             host.runQueuedTimeoutCallbacks();
-            baselineTsserverLogs("projectsWithReferences", "trasitive references without files with edit on config file", session);
+            baselineTsserverLogs(
+                "projectsWithReferences",
+                "trasitive references without files with edit on config file",
+                session,
+            );
         });
 
         it("edit in referenced config file", () => {

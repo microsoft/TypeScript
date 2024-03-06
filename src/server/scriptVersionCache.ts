@@ -45,7 +45,13 @@ export interface LineIndexWalker {
     goSubtree: boolean;
     done: boolean;
     leaf(relativeStart: number, relativeLength: number, lineCollection: LineLeaf): void;
-    pre?(relativeStart: number, relativeLength: number, lineCollection: LineCollection, parent: LineNode, nodeType: CharRangeSection): void;
+    pre?(
+        relativeStart: number,
+        relativeLength: number,
+        lineCollection: LineCollection,
+        parent: LineNode,
+        nodeType: CharRangeSection,
+    ): void;
     post?(
         relativeStart: number,
         relativeLength: number,
@@ -623,7 +629,13 @@ export class LineNode implements LineCollection {
         }
     }
 
-    private execWalk(rangeStart: number, rangeLength: number, walkFns: LineIndexWalker, childIndex: number, nodeType: CharRangeSection) {
+    private execWalk(
+        rangeStart: number,
+        rangeLength: number,
+        walkFns: LineIndexWalker,
+        childIndex: number,
+        nodeType: CharRangeSection,
+    ) {
         if (walkFns.pre) {
             walkFns.pre(rangeStart, rangeLength, this.children[childIndex], this, nodeType);
         }
@@ -744,7 +756,10 @@ export class LineNode implements LineCollection {
      * Output line number is relative to the child.
      * positionAccumulator will be an absolute position once relativeLineNumber reaches 0.
      */
-    lineNumberToInfo(relativeOneBasedLine: number, positionAccumulator: number): { position: number; leaf: LineLeaf | undefined; } {
+    lineNumberToInfo(
+        relativeOneBasedLine: number,
+        positionAccumulator: number,
+    ): { position: number; leaf: LineLeaf | undefined; } {
         for (const child of this.children) {
             const childLineCount = child.lineCount();
             if (childLineCount >= relativeOneBasedLine) {

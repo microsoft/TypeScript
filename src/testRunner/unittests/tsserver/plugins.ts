@@ -196,7 +196,9 @@ describe("unittests:: tsserver:: plugins:: loading", () => {
         const session = new TestSession(host);
         openFilesForSession([aTs], session);
         session.logger.log(
-            `ExternalFiles:: ${jsonToReadableText(session.getProjectService().configuredProjects.get(tsconfig.path)!.getExternalFiles())}`,
+            `ExternalFiles:: ${
+                jsonToReadableText(session.getProjectService().configuredProjects.get(tsconfig.path)!.getExternalFiles())
+            }`,
         );
 
         host.writeFile(
@@ -209,7 +211,9 @@ describe("unittests:: tsserver:: plugins:: loading", () => {
         );
         host.runQueuedTimeoutCallbacks();
         session.logger.log(
-            `ExternalFiles:: ${jsonToReadableText(session.getProjectService().configuredProjects.get(tsconfig.path)!.getExternalFiles())}`,
+            `ExternalFiles:: ${
+                jsonToReadableText(session.getProjectService().configuredProjects.get(tsconfig.path)!.getExternalFiles())
+            }`,
         );
 
         baselineTsserverLogs("plugins", "gets external files with config file reload", session);
@@ -347,10 +351,14 @@ describe("unittests:: tsserver:: plugins:: supportedExtensions::", () => {
                             ts.fileExtensionIs(fileName, ".vue") ?
                                 ts.ScriptKind.TS :
                                 originalScriptKind(fileName);
-                        const originalGetScriptSnapshot = info.languageServiceHost.getScriptSnapshot.bind(info.languageServiceHost);
+                        const originalGetScriptSnapshot = info.languageServiceHost.getScriptSnapshot.bind(
+                            info.languageServiceHost,
+                        );
                         info.languageServiceHost.getScriptSnapshot = fileName =>
                             ts.fileExtensionIs(fileName, ".vue") ?
-                                ts.ScriptSnapshot.fromString(`export const y = "${info.languageServiceHost.readFile(fileName)}";`) :
+                                ts.ScriptSnapshot.fromString(
+                                    `export const y = "${info.languageServiceHost.readFile(fileName)}";`,
+                                ) :
                                 originalGetScriptSnapshot(fileName);
                         return proxy;
                     },
@@ -399,7 +407,9 @@ describe("unittests:: tsserver:: plugins:: supportedExtensions::", () => {
                             fileName === bVue.path ?
                                 currentVueScriptKind :
                                 originalScriptKind(fileName);
-                        const originalGetScriptSnapshot = info.languageServiceHost.getScriptSnapshot.bind(info.languageServiceHost);
+                        const originalGetScriptSnapshot = info.languageServiceHost.getScriptSnapshot.bind(
+                            info.languageServiceHost,
+                        );
                         info.languageServiceHost.getScriptSnapshot = fileName =>
                             fileName === bVue.path ?
                                 ts.ScriptSnapshot.fromString(`import { y } from "${bVue.content}";`) : // Change the text so that imports change and we need to reconstruct program

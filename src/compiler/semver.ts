@@ -53,7 +53,13 @@ export class Version {
     readonly build: readonly string[];
 
     constructor(text: string);
-    constructor(major: number, minor?: number, patch?: number, prerelease?: string | readonly string[], build?: string | readonly string[]);
+    constructor(
+        major: number,
+        minor?: number,
+        patch?: number,
+        prerelease?: string | readonly string[],
+        build?: string | readonly string[],
+    );
     constructor(
         major: number | string,
         minor = 0,
@@ -271,7 +277,8 @@ const whitespaceRegExp = /\s+/g;
 // build        ::= parts
 // parts        ::= part ( '.' part ) *
 // part         ::= nr | [-0-9A-Za-z]+
-const partialRegExp = /^([xX*0]|[1-9]\d*)(?:\.([xX*0]|[1-9]\d*)(?:\.([xX*0]|[1-9]\d*)(?:-([a-z0-9-.]+))?(?:\+([a-z0-9-.]+))?)?)?$/i;
+const partialRegExp =
+    /^([xX*0]|[1-9]\d*)(?:\.([xX*0]|[1-9]\d*)(?:\.([xX*0]|[1-9]\d*)(?:-([a-z0-9-.]+))?(?:\+([a-z0-9-.]+))?)?)?$/i;
 
 // https://github.com/npm/node-semver#range-grammar
 //

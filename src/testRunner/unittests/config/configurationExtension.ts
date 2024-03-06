@@ -277,7 +277,10 @@ describe("unittests:: config:: configurationExtension", () => {
         }
 
         baselineParsedCommandLine("can resolve an extension with a base extension", "tsconfig.json");
-        baselineParsedCommandLine("can resolve an extension with a base extension that overrides options", "tsconfig.nostrictnull.json");
+        baselineParsedCommandLine(
+            "can resolve an extension with a base extension that overrides options",
+            "tsconfig.nostrictnull.json",
+        );
         baselineParsedCommandLine("can report errors on circular imports", "circular.json");
         baselineParsedCommandLine("can report missing configurations", "missing.json");
         baselineParsedCommandLine("can report errors in extended configs", "failure.json");

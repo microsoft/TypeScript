@@ -148,7 +148,8 @@ function createNodeIO(): IO {
         getExecutingFilePath: () => ts.sys.getExecutingFilePath(),
         getWorkspaceRoot: () => workspaceRoot,
         exit: exitCode => ts.sys.exit(exitCode),
-        readDirectory: (path, extension, exclude, include, depth) => ts.sys.readDirectory(path, extension, exclude, include, depth),
+        readDirectory: (path, extension, exclude, include, depth) =>
+            ts.sys.readDirectory(path, extension, exclude, include, depth),
         getAccessibleFileSystemEntries: ts.sys.getAccessibleFileSystemEntries!,
         tryEnableSourceMapsForHost: () => ts.sys.tryEnableSourceMapsForHost && ts.sys.tryEnableSourceMapsForHost(),
         getMemoryUsage: () => ts.sys.getMemoryUsage && ts.sys.getMemoryUsage(),
@@ -228,7 +229,12 @@ export namespace Compiler {
         const shouldAssertInvariants = !lightMode;
 
         // Only set the parent nodes if we're asserting invariants.  We don't need them otherwise.
-        const result = ts.createSourceFile(fileName, sourceText, languageVersionOrOptions, /*setParentNodes:*/ shouldAssertInvariants);
+        const result = ts.createSourceFile(
+            fileName,
+            sourceText,
+            languageVersionOrOptions,
+            /*setParentNodes:*/ shouldAssertInvariants,
+        );
 
         if (shouldAssertInvariants) {
             Utils.assertInvariants(result, /*parent:*/ undefined);
@@ -262,7 +268,11 @@ export namespace Compiler {
         if (!sourceFile) {
             libFileNameSourceFileMap.set(
                 fileName,
-                sourceFile = createSourceFileAndAssertInvariants(fileName, IO.readFile(libFolder + fileName)!, ts.ScriptTarget.Latest),
+                sourceFile = createSourceFileAndAssertInvariants(
+                    fileName,
+                    IO.readFile(libFolder + fileName)!,
+                    ts.ScriptTarget.Latest,
+                ),
             );
         }
         return sourceFile;
@@ -415,7 +425,8 @@ export namespace Compiler {
             }
         }
 
-        const useCaseSensitiveFileNames = options.useCaseSensitiveFileNames !== undefined ? options.useCaseSensitiveFileNames : true;
+        const useCaseSensitiveFileNames = options.useCaseSensitiveFileNames !== undefined ? options.useCaseSensitiveFileNames
+            : true;
         // When a tsconfig is present, root names passed to createProgram should already be absolute
         const programFileNames = inputFiles
             .map(file => options.configFile ? ts.getNormalizedAbsolutePath(file.unitName, currentDirectory) : file.unitName)
@@ -440,7 +451,10 @@ export namespace Compiler {
             fs.apply(symlinks);
         }
 
-        ts.assign(options, ts.convertToOptionsWithAbsolutePaths(options, path => ts.getNormalizedAbsolutePath(path, currentDirectory)));
+        ts.assign(
+            options,
+            ts.convertToOptionsWithAbsolutePaths(options, path => ts.getNormalizedAbsolutePath(path, currentDirectory)),
+        );
         const host = new fakes.CompilerHost(fs, options);
         const result = compiler.compileFiles(host, programFileNames, options, typeScriptVersion);
         result.symlinks = symlinks;
@@ -495,7 +509,9 @@ export namespace Compiler {
             if (vpath.isDeclaration(file.unitName) || vpath.isJson(file.unitName)) {
                 dtsFiles.push(file);
             }
-            else if (vpath.isTypeScript(file.unitName) || (vpath.isJavaScript(file.unitName) && ts.getAllowJSCompilerOption(options))) {
+            else if (
+                vpath.isTypeScript(file.unitName) || (vpath.isJavaScript(file.unitName) && ts.getAllowJSCompilerOption(options))
+            ) {
                 const declFile = findResultCodeFile(file.unitName);
                 if (declFile && !findUnit(declFile.file, declInputFiles) && !findUnit(declFile.file, declOtherFiles)) {
                     dtsFiles.push({
@@ -536,7 +552,10 @@ export namespace Compiler {
         }
     }
 
-    export function compileDeclarationFiles(context: DeclarationCompilationContext | undefined, symlinks: vfs.FileSet | undefined) {
+    export function compileDeclarationFiles(
+        context: DeclarationCompilationContext | undefined,
+        symlinks: vfs.FileSet | undefined,
+    ) {
         if (!context) {
             return;
         }
@@ -559,9 +578,14 @@ export namespace Compiler {
         }
         if (pretty) {
             outputLines += Utils.removeTestPathPrefixes(
-                ts.getErrorSummaryText(ts.getErrorCountForSummary(diagnostics), ts.getFilesInErrorForSummary(diagnostics), IO.newLine(), {
-                    getCurrentDirectory: () => "",
-                }),
+                ts.getErrorSummaryText(
+                    ts.getErrorCountForSummary(diagnostics),
+                    ts.getFilesInErrorForSummary(diagnostics),
+                    IO.newLine(),
+                    {
+                        getCurrentDirectory: () => "",
+                    },
+                ),
             );
         }
         return outputLines;
@@ -608,13 +632,16 @@ export namespace Compiler {
                 .map(s => "!!! " + ts.diagnosticCategoryName(error) + " TS" + error.code + ": " + s);
             if (error.relatedInformation) {
                 for (const info of error.relatedInformation) {
-                    let location = info.file ? " " + ts.formatLocation(info.file, info.start!, formatDiagnsoticHost, ts.identity) : "";
+                    let location = info.file ? " " + ts.formatLocation(info.file, info.start!, formatDiagnsoticHost, ts.identity)
+                        : "";
                     location = Utils.removeTestPathPrefixes(location);
                     if (location && isDefaultLibraryFile(info.file!.fileName)) {
                         location = location.replace(/(lib(?:.*)\.d\.ts):\d+:\d+/i, "$1:--:--");
                     }
                     errLines.push(
-                        `!!! related TS${info.code}${location}: ${ts.flattenDiagnosticMessageText(info.messageText, IO.newLine())}`,
+                        `!!! related TS${info.code}${location}: ${
+                            ts.flattenDiagnosticMessageText(info.messageText, IO.newLine())
+                        }`,
                     );
                 }
             }
@@ -830,7 +857,10 @@ export namespace Compiler {
                 baselinePath.replace(/\.tsx?/, "") : baselinePath;
 
             if (!multifile) {
-                const fullBaseLine = generateBaseLine(isSymbolBaseLine, isSymbolBaseLine ? skipSymbolBaselines : skipTypeBaselines);
+                const fullBaseLine = generateBaseLine(
+                    isSymbolBaseLine,
+                    isSymbolBaseLine ? skipSymbolBaselines : skipTypeBaselines,
+                );
                 Baseline.runBaseline(outputFileName + fullExtension, fullBaseLine, opts);
             }
             else {
@@ -873,7 +903,8 @@ export namespace Compiler {
                     else if (result.line !== lastIndexWritten) {
                         if (
                             !((lastIndexWritten + 1 < codeLines.length) &&
-                                (codeLines[lastIndexWritten + 1].match(/^\s*[{|}]\s*$/) || codeLines[lastIndexWritten + 1].trim() === ""))
+                                (codeLines[lastIndexWritten + 1].match(/^\s*[{|}]\s*$/) ||
+                                    codeLines[lastIndexWritten + 1].trim() === ""))
                         ) {
                             typeLines += "\r\n";
                         }
@@ -889,7 +920,8 @@ export namespace Compiler {
                 if (lastIndexWritten + 1 < codeLines.length) {
                     if (
                         !((lastIndexWritten + 1 < codeLines.length) &&
-                            (codeLines[lastIndexWritten + 1].match(/^\s*[{|}]\s*$/) || codeLines[lastIndexWritten + 1].trim() === ""))
+                            (codeLines[lastIndexWritten + 1].match(/^\s*[{|}]\s*$/) ||
+                                codeLines[lastIndexWritten + 1].trim() === ""))
                     ) {
                         typeLines += "\r\n";
                     }
@@ -1033,7 +1065,10 @@ export namespace Compiler {
         }
 
         // eslint-disable-next-line no-null/no-null
-        Baseline.runBaseline(baselinePath.replace(/\.tsx?/, ts.Extension.Js), jsCode.length > 0 ? tsCode + "\r\n\r\n" + jsCode : null);
+        Baseline.runBaseline(
+            baselinePath.replace(/\.tsx?/, ts.Extension.Js),
+            jsCode.length > 0 ? tsCode + "\r\n\r\n" + jsCode : null,
+        );
     }
 
     function fileOutput(file: documents.TextDocument, harnessSettings: TestCaseParser.CompilerSettings): string {
@@ -1196,7 +1231,10 @@ function computeFileBasedTestConfigurationVariations(
 let booleanVaryByStarSettingValues: Map<string, string | number> | undefined;
 
 function getVaryByStarSettingValues(varyBy: string): ReadonlyMap<string, string | number> | undefined {
-    const option = ts.forEach(ts.optionDeclarations, decl => ts.equateStringsCaseInsensitive(decl.name, varyBy) ? decl : undefined);
+    const option = ts.forEach(
+        ts.optionDeclarations,
+        decl => ts.equateStringsCaseInsensitive(decl.name, varyBy) ? decl : undefined,
+    );
     if (option) {
         if (typeof option.type === "object") {
             return option.type;
@@ -1228,7 +1266,9 @@ export function getFileBasedTestConfigurations(
                 variationCount *= entries.length;
                 if (variationCount > 25) {
                     throw new Error(
-                        `Provided test options exceeded the maximum number of variations: ${varyBy.map(v => `'@${v}'`).join(", ")}`,
+                        `Provided test options exceeded the maximum number of variations: ${
+                            varyBy.map(v => `'@${v}'`).join(", ")
+                        }`,
                     );
                 }
                 varyByEntries.push([varyByKey, entries]);
@@ -1399,30 +1439,41 @@ export namespace TestCaseParser {
         const parseConfigHost: ts.ParseConfigHost = {
             useCaseSensitiveFileNames: false,
             readDirectory: (directory, extensions, excludes, includes, depth) => {
-                return ts.matchFiles(directory, extensions, excludes, includes, /*useCaseSensitiveFileNames*/ false, "", depth, dir => {
-                    const files: string[] = [];
-                    const directories = new Set<string>();
-                    for (const unit of testUnitData) {
-                        const fileName = ts.getNormalizedAbsolutePath(unit.name, vfs.srcFolder);
-                        if (fileName.toLowerCase().startsWith(dir.toLowerCase())) {
-                            let path = fileName.substring(dir.length);
-                            if (path.startsWith("/")) {
-                                path = path.substring(1);
-                            }
-                            if (path.includes("/")) {
-                                const directoryName = path.substring(0, path.indexOf("/"));
-                                directories.add(directoryName);
-                            }
-                            else {
-                                files.push(path);
+                return ts.matchFiles(
+                    directory,
+                    extensions,
+                    excludes,
+                    includes,
+                    /*useCaseSensitiveFileNames*/ false,
+                    "",
+                    depth,
+                    dir => {
+                        const files: string[] = [];
+                        const directories = new Set<string>();
+                        for (const unit of testUnitData) {
+                            const fileName = ts.getNormalizedAbsolutePath(unit.name, vfs.srcFolder);
+                            if (fileName.toLowerCase().startsWith(dir.toLowerCase())) {
+                                let path = fileName.substring(dir.length);
+                                if (path.startsWith("/")) {
+                                    path = path.substring(1);
+                                }
+                                if (path.includes("/")) {
+                                    const directoryName = path.substring(0, path.indexOf("/"));
+                                    directories.add(directoryName);
+                                }
+                                else {
+                                    files.push(path);
+                                }
                             }
                         }
-                    }
-                    return { files, directories: ts.arrayFrom(directories) };
-                }, ts.identity);
+                        return { files, directories: ts.arrayFrom(directories) };
+                    },
+                    ts.identity,
+                );
             },
             fileExists: fileName => testUnitData.some(data => data.name.toLowerCase() === fileName.toLowerCase()),
-            readFile: name => ts.forEach(testUnitData, data => data.name.toLowerCase() === name.toLowerCase() ? data.content : undefined),
+            readFile: name =>
+                ts.forEach(testUnitData, data => data.name.toLowerCase() === name.toLowerCase() ? data.content : undefined),
         };
 
         // check if project has tsconfig.json in the list of files
@@ -1516,7 +1567,13 @@ export namespace Baseline {
         return { expected, actual };
     }
 
-    function writeComparison(expected: string, actual: string, relativeFileName: string, actualFileName: string, opts?: BaselineOptions) {
+    function writeComparison(
+        expected: string,
+        actual: string,
+        relativeFileName: string,
+        actualFileName: string,
+        opts?: BaselineOptions,
+    ) {
         // For now this is written using TypeScript, because sys is not available when running old test cases.
         // But we need to move to sys once we have
         // Creates the directory including its parent if not already present
@@ -1553,7 +1610,14 @@ export namespace Baseline {
             const errorMessage = getBaselineFileChangedErrorMessage(relativeFileName);
             if (!!require && opts && opts.PrintDiff) {
                 const Diff = require("diff");
-                const patch = Diff.createTwoFilesPatch("Expected", "Actual", expected, actual, "The current baseline", "The new version");
+                const patch = Diff.createTwoFilesPatch(
+                    "Expected",
+                    "Actual",
+                    expected,
+                    actual,
+                    "The current baseline",
+                    "The new version",
+                );
                 throw new Error(`${errorMessage}${ts.ForegroundColorEscapeSequences.Grey}\n\n${patch}`);
             }
             else {
@@ -1612,7 +1676,8 @@ export namespace Baseline {
         const referenceDir = referencePath(relativeFileBase, opts && opts.Baselinefolder, opts && opts.Subfolder);
         let existing = IO.readDirectory(referenceDir, referencedExtensions || [extension]);
         if (
-            extension === ".ts" || referencedExtensions && referencedExtensions.includes(".ts") && !referencedExtensions.includes(".d.ts")
+            extension === ".ts" ||
+            referencedExtensions && referencedExtensions.includes(".ts") && !referencedExtensions.includes(".d.ts")
         ) {
             // special-case and filter .d.ts out of .ts results
             existing = existing.filter(f => !ts.endsWith(f, ".d.ts"));

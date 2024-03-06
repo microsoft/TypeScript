@@ -140,7 +140,8 @@ function getInfo(context: RefactorContext, considerEmptySpans = true): OptionalC
         endToken && endToken.end >= startToken.pos ? endToken.getEnd() : startToken.getEnd(),
     );
 
-    const parent = forEmptySpan ? getValidParentNodeOfEmptySpan(startToken) : getValidParentNodeContainingSpan(startToken, adjustedSpan);
+    const parent = forEmptySpan ? getValidParentNodeOfEmptySpan(startToken)
+        : getValidParentNodeContainingSpan(startToken, adjustedSpan);
     const expression = parent && isValidExpressionOrStatement(parent) ? getExpression(parent) : undefined;
     if (!expression) return { error: getLocaleSpecificMessage(Diagnostics.Could_not_find_convertible_access_expression) };
 
@@ -148,7 +149,10 @@ function getInfo(context: RefactorContext, considerEmptySpans = true): OptionalC
     return isConditionalExpression(expression) ? getConditionalInfo(expression, checker) : getBinaryInfo(expression);
 }
 
-function getConditionalInfo(expression: ConditionalExpression, checker: TypeChecker): OptionalChainInfo | RefactorErrorInfo | undefined {
+function getConditionalInfo(
+    expression: ConditionalExpression,
+    checker: TypeChecker,
+): OptionalChainInfo | RefactorErrorInfo | undefined {
     const condition = expression.condition;
     const finalExpression = getFinalExpressionInChain(expression.whenTrue);
 
@@ -298,7 +302,9 @@ function getExpression(node: ValidExpressionOrStatement): ValidExpression | unde
  * it is followed by a different binary operator.
  * @param node the right child of a binary expression or a call expression.
  */
-function getFinalExpressionInChain(node: Expression): CallExpression | PropertyAccessExpression | ElementAccessExpression | undefined {
+function getFinalExpressionInChain(
+    node: Expression,
+): CallExpression | PropertyAccessExpression | ElementAccessExpression | undefined {
     // foo && |foo.bar === 1|; - here the right child of the && binary expression is another binary expression.
     // the rightmost member of the && chain should be the leftmost child of that expression.
     node = skipParentheses(node);
@@ -306,7 +312,9 @@ function getFinalExpressionInChain(node: Expression): CallExpression | PropertyA
         return getFinalExpressionInChain(node.left);
     }
     // foo && |foo.bar()()| - nested calls are treated like further accesses.
-    else if ((isPropertyAccessExpression(node) || isElementAccessExpression(node) || isCallExpression(node)) && !isOptionalChain(node)) {
+    else if (
+        (isPropertyAccessExpression(node) || isElementAccessExpression(node) || isCallExpression(node)) && !isOptionalChain(node)
+    ) {
         return node;
     }
     return undefined;
@@ -338,7 +346,11 @@ function convertOccurrences(checker: TypeChecker, toConvert: Expression, occurre
         }
         else if (isElementAccessExpression(toConvert)) {
             return isOccurrence ?
-                factory.createElementAccessChain(chain, factory.createToken(SyntaxKind.QuestionDotToken), toConvert.argumentExpression) :
+                factory.createElementAccessChain(
+                    chain,
+                    factory.createToken(SyntaxKind.QuestionDotToken),
+                    toConvert.argumentExpression,
+                ) :
                 factory.createElementAccessChain(chain, toConvert.questionDotToken, toConvert.argumentExpression);
         }
     }
@@ -357,7 +369,8 @@ function doChange(
     const convertedChain = convertOccurrences(checker, finalExpression, occurrences);
     if (
         convertedChain &&
-        (isPropertyAccessExpression(convertedChain) || isElementAccessExpression(convertedChain) || isCallExpression(convertedChain))
+        (isPropertyAccessExpression(convertedChain) || isElementAccessExpression(convertedChain) ||
+            isCallExpression(convertedChain))
     ) {
         if (isBinaryExpression(expression)) {
             changes.replaceNodeRange(sourceFile, firstOccurrence, finalExpression, convertedChain);
@@ -366,7 +379,11 @@ function doChange(
             changes.replaceNode(
                 sourceFile,
                 expression,
-                factory.createBinaryExpression(convertedChain, factory.createToken(SyntaxKind.QuestionQuestionToken), expression.whenFalse),
+                factory.createBinaryExpression(
+                    convertedChain,
+                    factory.createToken(SyntaxKind.QuestionQuestionToken),
+                    expression.whenFalse,
+                ),
             );
         }
     }

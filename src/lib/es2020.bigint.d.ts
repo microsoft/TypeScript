@@ -271,7 +271,9 @@ interface BigInt64Array {
      * the accumulation. The first call to the callbackfn function provides this value as an argument
      * instead of an array value.
      */
-    reduce(callbackfn: (previousValue: bigint, currentValue: bigint, currentIndex: number, array: BigInt64Array) => bigint): bigint;
+    reduce(
+        callbackfn: (previousValue: bigint, currentValue: bigint, currentIndex: number, array: BigInt64Array) => bigint,
+    ): bigint;
 
     /**
      * Calls the specified callback function for all the elements in an array. The return value of
@@ -283,7 +285,10 @@ interface BigInt64Array {
      * the accumulation. The first call to the callbackfn function provides this value as an argument
      * instead of an array value.
      */
-    reduce<U>(callbackfn: (previousValue: U, currentValue: bigint, currentIndex: number, array: BigInt64Array) => U, initialValue: U): U;
+    reduce<U>(
+        callbackfn: (previousValue: U, currentValue: bigint, currentIndex: number, array: BigInt64Array) => U,
+        initialValue: U,
+    ): U;
 
     /**
      * Calls the specified callback function for all the elements in an array, in descending order.
@@ -295,7 +300,9 @@ interface BigInt64Array {
      * the accumulation. The first call to the callbackfn function provides this value as an
      * argument instead of an array value.
      */
-    reduceRight(callbackfn: (previousValue: bigint, currentValue: bigint, currentIndex: number, array: BigInt64Array) => bigint): bigint;
+    reduceRight(
+        callbackfn: (previousValue: bigint, currentValue: bigint, currentIndex: number, array: BigInt64Array) => bigint,
+    ): bigint;
 
     /**
      * Calls the specified callback function for all the elements in an array, in descending order.
@@ -546,7 +553,9 @@ interface BigUint64Array {
      * the accumulation. The first call to the callbackfn function provides this value as an argument
      * instead of an array value.
      */
-    reduce(callbackfn: (previousValue: bigint, currentValue: bigint, currentIndex: number, array: BigUint64Array) => bigint): bigint;
+    reduce(
+        callbackfn: (previousValue: bigint, currentValue: bigint, currentIndex: number, array: BigUint64Array) => bigint,
+    ): bigint;
 
     /**
      * Calls the specified callback function for all the elements in an array. The return value of
@@ -558,7 +567,10 @@ interface BigUint64Array {
      * the accumulation. The first call to the callbackfn function provides this value as an argument
      * instead of an array value.
      */
-    reduce<U>(callbackfn: (previousValue: U, currentValue: bigint, currentIndex: number, array: BigUint64Array) => U, initialValue: U): U;
+    reduce<U>(
+        callbackfn: (previousValue: U, currentValue: bigint, currentIndex: number, array: BigUint64Array) => U,
+        initialValue: U,
+    ): U;
 
     /**
      * Calls the specified callback function for all the elements in an array, in descending order.
@@ -570,7 +582,9 @@ interface BigUint64Array {
      * the accumulation. The first call to the callbackfn function provides this value as an
      * argument instead of an array value.
      */
-    reduceRight(callbackfn: (previousValue: bigint, currentValue: bigint, currentIndex: number, array: BigUint64Array) => bigint): bigint;
+    reduceRight(
+        callbackfn: (previousValue: bigint, currentValue: bigint, currentIndex: number, array: BigUint64Array) => bigint,
+    ): bigint;
 
     /**
      * Calls the specified callback function for all the elements in an array, in descending order.

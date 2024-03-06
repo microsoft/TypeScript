@@ -91,7 +91,12 @@ registerCodeFix({
             return append(
                 [getActionForfixAddReturnStatement(context, info.expression, info.statement)],
                 isArrowFunction(info.declaration) ?
-                    getActionForFixRemoveBracesFromArrowFunctionBody(context, info.declaration, info.expression, info.commentSource)
+                    getActionForFixRemoveBracesFromArrowFunctionBody(
+                        context,
+                        info.declaration,
+                        info.expression,
+                        info.commentSource,
+                    )
                     : undefined,
             );
         }
@@ -110,7 +115,14 @@ registerCodeFix({
                     break;
                 case fixRemoveBracesFromArrowFunctionBody:
                     if (!isArrowFunction(info.declaration)) return undefined;
-                    removeBlockBodyBrace(changes, diag.file, info.declaration, info.expression, info.commentSource, /*withParen*/ false);
+                    removeBlockBodyBrace(
+                        changes,
+                        diag.file,
+                        info.declaration,
+                        info.expression,
+                        info.commentSource,
+                        /*withParen*/ false,
+                    );
                     break;
                 case fixIdWrapTheBlockWithParen:
                     if (!isArrowFunction(info.declaration)) return undefined;
@@ -140,7 +152,13 @@ function getFixInfo(
     const firstStatement = first(declaration.body.statements);
     if (
         isExpressionStatement(firstStatement) &&
-        checkFixedAssignableTo(checker, declaration, checker.getTypeAtLocation(firstStatement.expression), expectType, isFunctionType)
+        checkFixedAssignableTo(
+            checker,
+            declaration,
+            checker.getTypeAtLocation(firstStatement.expression),
+            expectType,
+            isFunctionType,
+        )
     ) {
         return {
             declaration,
@@ -154,7 +172,11 @@ function getFixInfo(
         const node = factory.createObjectLiteralExpression([
             factory.createPropertyAssignment(firstStatement.label, firstStatement.statement.expression),
         ]);
-        const nodeType = createObjectTypeFromLabeledExpression(checker, firstStatement.label, firstStatement.statement.expression);
+        const nodeType = createObjectTypeFromLabeledExpression(
+            checker,
+            firstStatement.label,
+            firstStatement.statement.expression,
+        );
         if (checkFixedAssignableTo(checker, declaration, nodeType, expectType, isFunctionType)) {
             return isArrowFunction(declaration) ? {
                 declaration,
@@ -242,7 +264,9 @@ function getInfo(checker: TypeChecker, sourceFile: SourceFile, position: number,
     const declaration = findAncestor(node.parent, isFunctionLikeDeclaration);
     switch (errorCode) {
         case Diagnostics.A_function_whose_declared_type_is_neither_undefined_void_nor_any_must_return_a_value.code:
-            if (!declaration || !declaration.body || !declaration.type || !rangeContainsRange(declaration.type, node)) return undefined;
+            if (!declaration || !declaration.body || !declaration.type || !rangeContainsRange(declaration.type, node)) {
+                return undefined;
+            }
             return getFixInfo(checker, declaration, checker.getTypeFromTypeNode(declaration.type), /*isFunctionType*/ false);
         case Diagnostics.Argument_of_type_0_is_not_assignable_to_parameter_of_type_1.code:
             if (!declaration || !isCallExpression(declaration.parent) || !declaration.body) return undefined;
@@ -269,7 +293,8 @@ function getVariableLikeInitializer(declaration: VariableLikeDeclaration): Expre
         case SyntaxKind.PropertyAssignment:
             return declaration.initializer;
         case SyntaxKind.JsxAttribute:
-            return declaration.initializer && (isJsxExpression(declaration.initializer) ? declaration.initializer.expression : undefined);
+            return declaration.initializer &&
+                (isJsxExpression(declaration.initializer) ? declaration.initializer.expression : undefined);
         case SyntaxKind.ShorthandPropertyAssignment:
         case SyntaxKind.PropertySignature:
         case SyntaxKind.EnumMember:
@@ -279,7 +304,12 @@ function getVariableLikeInitializer(declaration: VariableLikeDeclaration): Expre
     }
 }
 
-function addReturnStatement(changes: textChanges.ChangeTracker, sourceFile: SourceFile, expression: Expression, statement: Statement) {
+function addReturnStatement(
+    changes: textChanges.ChangeTracker,
+    sourceFile: SourceFile,
+    expression: Expression,
+    statement: Statement,
+) {
     suppressLeadingAndTrailingTrivia(expression);
     const probablyNeedSemi = probablyUsesSemicolons(sourceFile);
     changes.replaceNode(sourceFile, statement, factory.createReturnStatement(expression), {
@@ -314,7 +344,10 @@ function wrapBlockWithParen(
 }
 
 function getActionForfixAddReturnStatement(context: CodeFixContext, expression: Expression, statement: Statement) {
-    const changes = textChanges.ChangeTracker.with(context, t => addReturnStatement(t, context.sourceFile, expression, statement));
+    const changes = textChanges.ChangeTracker.with(
+        context,
+        t => addReturnStatement(t, context.sourceFile, expression, statement),
+    );
     return createCodeFixAction(
         fixId,
         changes,
@@ -344,7 +377,10 @@ function getActionForFixRemoveBracesFromArrowFunctionBody(
 }
 
 function getActionForfixWrapTheBlockWithParen(context: CodeFixContext, declaration: ArrowFunction, expression: Expression) {
-    const changes = textChanges.ChangeTracker.with(context, t => wrapBlockWithParen(t, context.sourceFile, declaration, expression));
+    const changes = textChanges.ChangeTracker.with(
+        context,
+        t => wrapBlockWithParen(t, context.sourceFile, declaration, expression),
+    );
     return createCodeFixAction(
         fixId,
         changes,

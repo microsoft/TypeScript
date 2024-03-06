@@ -20,11 +20,21 @@ describe("unittests:: config:: initTSConfig", () => {
 
     initTSConfigCorrectly("Initialized TSConfig with boolean value compiler options", ["--init", "--noUnusedLocals"]);
 
-    initTSConfigCorrectly("Initialized TSConfig with enum value compiler options", ["--init", "--target", "es5", "--jsx", "react"]);
+    initTSConfigCorrectly("Initialized TSConfig with enum value compiler options", [
+        "--init",
+        "--target",
+        "es5",
+        "--jsx",
+        "react",
+    ]);
 
     initTSConfigCorrectly("Initialized TSConfig with list compiler options", ["--init", "--types", "jquery,mocha"]);
 
-    initTSConfigCorrectly("Initialized TSConfig with list compiler options with enum value", ["--init", "--lib", "es5,es2015.core"]);
+    initTSConfigCorrectly("Initialized TSConfig with list compiler options with enum value", [
+        "--init",
+        "--lib",
+        "es5,es2015.core",
+    ]);
 
     initTSConfigCorrectly("Initialized TSConfig with incorrect compiler option", ["--init", "--someNonExistOption"]);
 

@@ -186,11 +186,18 @@ function treeToArray(current: Expression) {
 
 // to copy comments following the operator
 // "foo" + /* comment */ "bar"
-const copyTrailingOperatorComments = (operators: Token<BinaryOperator>[], file: SourceFile) => (index: number, targetNode: Node) => {
-    if (index < operators.length) {
-        copyTrailingComments(operators[index], targetNode, file, SyntaxKind.MultiLineCommentTrivia, /*hasTrailingNewLine*/ false);
-    }
-};
+const copyTrailingOperatorComments =
+    (operators: Token<BinaryOperator>[], file: SourceFile) => (index: number, targetNode: Node) => {
+        if (index < operators.length) {
+            copyTrailingComments(
+                operators[index],
+                targetNode,
+                file,
+                SyntaxKind.MultiLineCommentTrivia,
+                /*hasTrailingNewLine*/ false,
+            );
+        }
+    };
 
 // to copy comments following the string
 // "foo" /* comment */ + "bar" /* comment */ + "bar2"
@@ -246,7 +253,10 @@ function concatConsecutiveString(
     return [index, text, rawText, indexes];
 }
 
-function nodesToTemplate({ nodes, operators }: { nodes: readonly Expression[]; operators: Token<BinaryOperator>[]; }, file: SourceFile) {
+function nodesToTemplate(
+    { nodes, operators }: { nodes: readonly Expression[]; operators: Token<BinaryOperator>[]; },
+    file: SourceFile,
+) {
     const copyOperatorComments = copyTrailingOperatorComments(operators, file);
     const copyCommentFromStringLiterals = copyCommentFromMultiNode(nodes, file, copyOperatorComments);
     const [begin, headText, rawHeadText, headIndexes] = concatConsecutiveString(0, nodes);
@@ -301,7 +311,13 @@ function nodesToTemplate({ nodes, operators }: { nodes: readonly Expression[]; o
 function copyExpressionComments(node: ParenthesizedExpression | TemplateSpan) {
     const file = node.getSourceFile();
     copyTrailingComments(node, node.expression, file, SyntaxKind.MultiLineCommentTrivia, /*hasTrailingNewLine*/ false);
-    copyTrailingAsLeadingComments(node.expression, node.expression, file, SyntaxKind.MultiLineCommentTrivia, /*hasTrailingNewLine*/ false);
+    copyTrailingAsLeadingComments(
+        node.expression,
+        node.expression,
+        file,
+        SyntaxKind.MultiLineCommentTrivia,
+        /*hasTrailingNewLine*/ false,
+    );
 }
 
 function getExpressionFromParenthesesOrExpression(node: Expression) {

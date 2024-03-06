@@ -154,7 +154,9 @@ function addRegionOutliningSpans(sourceFile: SourceFile, out: OutliningSpan[]): 
 
         if (!result[1]) {
             const span = createTextSpanFromBounds(sourceFile.text.indexOf("//", currentLineStart), lineEnd);
-            regions.push(createOutliningSpan(span, OutliningSpanKind.Region, span, /*autoCollapse*/ false, result[2] || "#region"));
+            regions.push(
+                createOutliningSpan(span, OutliningSpanKind.Region, span, /*autoCollapse*/ false, result[2] || "#region"),
+            );
         }
         else {
             const region = regions.pop();
@@ -226,7 +228,9 @@ function addOutliningForLeadingCommentsForPos(
     function combineAndAddMultipleSingleLineComments(): void {
         // Only outline spans of two or more consecutive single line comments
         if (singleLineCommentCount > 1) {
-            out.push(createOutliningSpanFromBounds(firstSingleLineCommentStart, lastSingleLineCommentEnd, OutliningSpanKind.Comment));
+            out.push(
+                createOutliningSpanFromBounds(firstSingleLineCommentStart, lastSingleLineCommentEnd, OutliningSpanKind.Comment),
+            );
         }
     }
 }
@@ -291,7 +295,12 @@ function getOutliningSpanForNode(n: Node, sourceFile: SourceFile): OutliningSpan
         case SyntaxKind.ObjectBindingPattern:
             return spanForNode(n);
         case SyntaxKind.TupleType:
-            return spanForNode(n, /*autoCollapse*/ false, /*useFullStart*/ !isTupleTypeNode(n.parent), SyntaxKind.OpenBracketToken);
+            return spanForNode(
+                n,
+                /*autoCollapse*/ false,
+                /*useFullStart*/ !isTupleTypeNode(n.parent),
+                SyntaxKind.OpenBracketToken,
+            );
         case SyntaxKind.CaseClause:
         case SyntaxKind.DefaultClause:
             return spanForNodeArray((n as CaseClause | DefaultClause).statements);
@@ -310,7 +319,12 @@ function getOutliningSpanForNode(n: Node, sourceFile: SourceFile): OutliningSpan
         case SyntaxKind.NoSubstitutionTemplateLiteral:
             return spanForTemplateLiteral(n as TemplateExpression | NoSubstitutionTemplateLiteral);
         case SyntaxKind.ArrayBindingPattern:
-            return spanForNode(n, /*autoCollapse*/ false, /*useFullStart*/ !isBindingElement(n.parent), SyntaxKind.OpenBracketToken);
+            return spanForNode(
+                n,
+                /*autoCollapse*/ false,
+                /*useFullStart*/ !isBindingElement(n.parent),
+                SyntaxKind.OpenBracketToken,
+            );
         case SyntaxKind.ArrowFunction:
             return spanForArrowFunction(n as ArrowFunction);
         case SyntaxKind.CallExpression:
@@ -412,7 +426,8 @@ function getOutliningSpanForNode(n: Node, sourceFile: SourceFile): OutliningSpan
     ): OutliningSpan | undefined {
         const openToken = findChildOfKind(n, open, sourceFile);
         const closeToken = findChildOfKind(n, close, sourceFile);
-        return openToken && closeToken && spanBetweenTokens(openToken, closeToken, hintSpanNode, sourceFile, autoCollapse, useFullStart);
+        return openToken && closeToken &&
+            spanBetweenTokens(openToken, closeToken, hintSpanNode, sourceFile, autoCollapse, useFullStart);
     }
 
     function spanForNodeArray(nodeArray: NodeArray<Node>): OutliningSpan | undefined {

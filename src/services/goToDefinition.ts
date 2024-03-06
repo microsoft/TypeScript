@@ -120,8 +120,8 @@ export function getDefinitionAtPosition(
     stopAtAlias?: boolean,
 ): readonly DefinitionInfo[] | undefined {
     const resolvedRef = getReferenceAtPosition(sourceFile, position, program);
-    const fileReferenceDefinition =
-        resolvedRef && [getDefinitionInfoForFileReference(resolvedRef.reference.fileName, resolvedRef.fileName, resolvedRef.unverified)] ||
+    const fileReferenceDefinition = resolvedRef &&
+            [getDefinitionInfoForFileReference(resolvedRef.reference.fileName, resolvedRef.fileName, resolvedRef.unverified)] ||
         emptyArray;
     if (resolvedRef?.file) {
         // If `file` is missing, do a symbol-based lookup as well
@@ -136,14 +136,17 @@ export function getDefinitionAtPosition(
     const { parent } = node;
     const typeChecker = program.getTypeChecker();
 
-    if (node.kind === SyntaxKind.OverrideKeyword || (isIdentifier(node) && isJSDocOverrideTag(parent) && parent.tagName === node)) {
+    if (
+        node.kind === SyntaxKind.OverrideKeyword || (isIdentifier(node) && isJSDocOverrideTag(parent) && parent.tagName === node)
+    ) {
         return getDefinitionFromOverriddenMember(typeChecker, node) || emptyArray;
     }
 
     // Labels
     if (isJumpStatementTarget(node)) {
         const label = getTargetLabel(node.parent, node.text);
-        return label ? [createDefinitionInfoFromName(typeChecker, label, ScriptElementKind.label, node.text, /*containerName*/ undefined!)]
+        return label ?
+            [createDefinitionInfoFromName(typeChecker, label, ScriptElementKind.label, node.text, /*containerName*/ undefined!)]
             : undefined; // TODO: GH#18217
     }
 
@@ -171,7 +174,8 @@ export function getDefinitionAtPosition(
 
     if (node.kind === SyntaxKind.AwaitKeyword) {
         const functionDeclaration = findAncestor(node, n => isFunctionLikeDeclaration(n)) as FunctionLikeDeclaration | undefined;
-        const isAsyncFunction = functionDeclaration && some(functionDeclaration.modifiers, node => node.kind === SyntaxKind.AsyncKeyword);
+        const isAsyncFunction = functionDeclaration &&
+            some(functionDeclaration.modifiers, node => node.kind === SyntaxKind.AsyncKeyword);
         return isAsyncFunction ? [createDefinitionFromSignatureDeclaration(typeChecker, functionDeclaration)] : undefined;
     }
 
@@ -248,7 +252,9 @@ export function getDefinitionAtPosition(
         return concatenate(fileReferenceDefinition, getDefinitionInfoForIndexSignatures(node, typeChecker));
     }
 
-    if (searchOtherFilesOnly && every(symbol.declarations, d => d.getSourceFile().fileName === sourceFile.fileName)) return undefined;
+    if (searchOtherFilesOnly && every(symbol.declarations, d => d.getSourceFile().fileName === sourceFile.fileName)) {
+        return undefined;
+    }
 
     const calledDeclaration = tryGetSignatureDeclaration(typeChecker, node);
     // Don't go to the component constructor definition for a JSX element, just go to the component definition.
@@ -260,7 +266,8 @@ export function getDefinitionAtPosition(
             return [sigInfo];
         }
         else {
-            const defs = getDefinitionFromSymbol(typeChecker, symbol, node, failedAliasResolution, calledDeclaration) || emptyArray;
+            const defs = getDefinitionFromSymbol(typeChecker, symbol, node, failedAliasResolution, calledDeclaration) ||
+                emptyArray;
             // For a 'super()' call, put the signature first, else put the variable first.
             return node.kind === SyntaxKind.SuperKeyword ? [sigInfo, ...defs] : [...defs, sigInfo];
         }
@@ -475,7 +482,12 @@ function getFirstTypeArgumentDefinitions(
         !!(getObjectFlags(type) & ObjectFlags.Reference) &&
         shouldUnwrapFirstTypeArgumentTypeDefinitionFromTypeReference(typeChecker, type as TypeReference)
     ) {
-        return definitionFromType(typeChecker.getTypeArguments(type as TypeReference)[0], typeChecker, node, failedAliasResolution);
+        return definitionFromType(
+            typeChecker.getTypeArguments(type as TypeReference)[0],
+            typeChecker,
+            node,
+            failedAliasResolution,
+        );
     }
     if (shouldUnwrapFirstTypeArgumentTypeDefinitionFromAlias(typeChecker, type) && type.aliasTypeArguments) {
         return definitionFromType(type.aliasTypeArguments[0], typeChecker, node, failedAliasResolution);
@@ -488,7 +500,10 @@ function getFirstTypeArgumentDefinitions(
     ) {
         const declaration = type.aliasSymbol?.declarations?.[0];
 
-        if (declaration && isTypeAliasDeclaration(declaration) && isTypeReferenceNode(declaration.type) && declaration.type.typeArguments) {
+        if (
+            declaration && isTypeAliasDeclaration(declaration) && isTypeReferenceNode(declaration.type) &&
+            declaration.type.typeArguments
+        ) {
             return definitionFromType(
                 typeChecker.getTypeAtLocation(declaration.type.typeArguments[0]),
                 typeChecker,
@@ -514,7 +529,12 @@ export function getTypeDefinitionAtPosition(
     }
 
     if (isImportMeta(node.parent) && node.parent.name === node) {
-        return definitionFromType(typeChecker.getTypeAtLocation(node.parent), typeChecker, node.parent, /*failedAliasResolution*/ false);
+        return definitionFromType(
+            typeChecker.getTypeAtLocation(node.parent),
+            typeChecker,
+            node.parent,
+            /*failedAliasResolution*/ false,
+        );
     }
     const { symbol, failedAliasResolution } = getSymbol(node, typeChecker, /*stopAtAlias*/ false);
     if (!symbol) return undefined;
@@ -604,7 +624,9 @@ function getSymbol(node: Node, checker: TypeChecker, stopAtAlias: boolean | unde
     //   import {A, B} from "mod";
     // to jump to the implementation directly.
     let failedAliasResolution = false;
-    if (symbol?.declarations && symbol.flags & SymbolFlags.Alias && !stopAtAlias && shouldSkipAlias(node, symbol.declarations[0])) {
+    if (
+        symbol?.declarations && symbol.flags & SymbolFlags.Alias && !stopAtAlias && shouldSkipAlias(node, symbol.declarations[0])
+    ) {
         const aliased = checker.getAliasedSymbol(symbol);
         if (aliased.declarations) {
             return { symbol: aliased };
@@ -674,7 +696,8 @@ function getDefinitionFromSymbol(
     return getConstructSignatureDefinition() || getCallSignatureDefinition() ||
         map(
             results,
-            declaration => createDefinitionInfo(declaration, typeChecker, symbol, node, /*unverified*/ false, failedAliasResolution),
+            declaration =>
+                createDefinitionInfo(declaration, typeChecker, symbol, node, /*unverified*/ false, failedAliasResolution),
         );
 
     function getConstructSignatureDefinition(): DefinitionInfo[] | undefined {
@@ -710,7 +733,14 @@ function getDefinitionFromSymbol(
         return declarations.length
             ? declarationsWithBody.length !== 0
                 ? declarationsWithBody.map(x => createDefinitionInfo(x, typeChecker, symbol, node))
-                : [createDefinitionInfo(last(declarations), typeChecker, symbol, node, /*unverified*/ false, failedAliasResolution)]
+                : [createDefinitionInfo(
+                    last(declarations),
+                    typeChecker,
+                    symbol,
+                    node,
+                    /*unverified*/ false,
+                    failedAliasResolution,
+                )]
             : undefined;
     }
 }
@@ -731,7 +761,15 @@ export function createDefinitionInfo(
     const symbolName = checker.symbolToString(symbol); // Do not get scoped name, just the name of the symbol
     const symbolKind = SymbolDisplay.getSymbolKind(checker, symbol, node);
     const containerName = symbol.parent ? checker.symbolToString(symbol.parent, node) : "";
-    return createDefinitionInfoFromName(checker, declaration, symbolKind, symbolName, containerName, unverified, failedAliasResolution);
+    return createDefinitionInfoFromName(
+        checker,
+        declaration,
+        symbolKind,
+        symbolName,
+        containerName,
+        unverified,
+        failedAliasResolution,
+    );
 }
 
 /** Creates a DefinitionInfo directly from the name of a declaration. */
@@ -856,7 +894,10 @@ function tryGetSignatureDeclaration(typeChecker: TypeChecker, node: Node): Signa
     const callLike = getAncestorCallLikeExpression(node);
     const signature = callLike && typeChecker.getResolvedSignature(callLike);
     // Don't go to a function type, go to the value having that type.
-    return tryCast(signature && signature.declaration, (d): d is SignatureDeclaration => isFunctionLike(d) && !isFunctionTypeNode(d));
+    return tryCast(
+        signature && signature.declaration,
+        (d): d is SignatureDeclaration => isFunctionLike(d) && !isFunctionTypeNode(d),
+    );
 }
 
 function isConstructorLike(node: Node): boolean {

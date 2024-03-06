@@ -182,7 +182,10 @@ export function transformESNext(context: TransformationContext): (x: SourceFile 
                 const statement = node.statements[pos];
                 if (getUsingKind(statement) !== UsingKind.None) {
                     if (pos > prologueCount) {
-                        addRange(topLevelStatements, visitNodes(node.statements, visitor, isStatement, prologueCount, pos - prologueCount));
+                        addRange(
+                            topLevelStatements,
+                            visitNodes(node.statements, visitor, isStatement, prologueCount, pos - prologueCount),
+                        );
                     }
                     break;
                 }
@@ -193,7 +196,13 @@ export function transformESNext(context: TransformationContext): (x: SourceFile 
 
             // transform the rest of the body
             const envBinding = createEnvBinding();
-            const bodyStatements = transformUsingDeclarations(node.statements, pos, node.statements.length, envBinding, topLevelStatements);
+            const bodyStatements = transformUsingDeclarations(
+                node.statements,
+                pos,
+                node.statements.length,
+                envBinding,
+                topLevelStatements,
+            );
 
             // add `export {}` declarations for any hoisted bindings.
             if (exportBindings.size) {
@@ -217,7 +226,10 @@ export function transformESNext(context: TransformationContext): (x: SourceFile 
                     ),
                 ));
             }
-            addRange(topLevelStatements, createDownlevelUsingStatements(bodyStatements, envBinding, usingKind === UsingKind.Async));
+            addRange(
+                topLevelStatements,
+                createDownlevelUsingStatements(bodyStatements, envBinding, usingKind === UsingKind.Async),
+            );
 
             if (exportEqualsBinding) {
                 topLevelStatements.push(factory.createExportAssignment(
@@ -322,7 +334,10 @@ export function transformESNext(context: TransformationContext): (x: SourceFile 
                 /*type*/ undefined,
                 temp,
             );
-            const usingVarList = factory.createVariableDeclarationList([usingVar], isAwaitUsing ? NodeFlags.AwaitUsing : NodeFlags.Using);
+            const usingVarList = factory.createVariableDeclarationList(
+                [usingVar],
+                isAwaitUsing ? NodeFlags.AwaitUsing : NodeFlags.Using,
+            );
             const usingVarStatement = factory.createVariableStatement(/*modifiers*/ undefined, usingVarList);
             return visitNode(
                 factory.updateForOfStatement(
@@ -550,7 +565,8 @@ export function transformESNext(context: TransformationContext): (x: SourceFile 
 
         defaultExportBinding = factory.createUniqueName(
             "_default",
-            GeneratedIdentifierFlags.ReservedInNestedScopes | GeneratedIdentifierFlags.FileLevel | GeneratedIdentifierFlags.Optimistic,
+            GeneratedIdentifierFlags.ReservedInNestedScopes | GeneratedIdentifierFlags.FileLevel |
+                GeneratedIdentifierFlags.Optimistic,
         );
         hoistBindingIdentifier(defaultExportBinding, /*isExport*/ true, "default", node);
 
@@ -592,7 +608,8 @@ export function transformESNext(context: TransformationContext): (x: SourceFile 
 
         exportEqualsBinding = factory.createUniqueName(
             "_default",
-            GeneratedIdentifierFlags.ReservedInNestedScopes | GeneratedIdentifierFlags.FileLevel | GeneratedIdentifierFlags.Optimistic,
+            GeneratedIdentifierFlags.ReservedInNestedScopes | GeneratedIdentifierFlags.FileLevel |
+                GeneratedIdentifierFlags.Optimistic,
         );
         hoistVariableDeclaration(exportEqualsBinding);
 
@@ -676,7 +693,8 @@ export function transformESNext(context: TransformationContext): (x: SourceFile 
             // Though we will never reassign `default_1`, this most closely matches the specified runtime semantics.
             defaultExportBinding = factory.createUniqueName(
                 "_default",
-                GeneratedIdentifierFlags.ReservedInNestedScopes | GeneratedIdentifierFlags.FileLevel | GeneratedIdentifierFlags.Optimistic,
+                GeneratedIdentifierFlags.ReservedInNestedScopes | GeneratedIdentifierFlags.FileLevel |
+                    GeneratedIdentifierFlags.Optimistic,
             );
             hoistBindingIdentifier(defaultExportBinding, /*isExport*/ true, "default", node);
             expression = factory.createAssignment(defaultExportBinding, expression);
@@ -728,7 +746,11 @@ export function transformESNext(context: TransformationContext): (x: SourceFile 
         return assignment;
     }
 
-    function hoistBindingElement(node: VariableDeclaration | BindingElement, isExportedDeclaration: boolean, original: Node | undefined) {
+    function hoistBindingElement(
+        node: VariableDeclaration | BindingElement,
+        isExportedDeclaration: boolean,
+        original: Node | undefined,
+    ) {
         // NOTE: `node` has already been visited
         if (isBindingPattern(node.name)) {
             for (const element of node.name.elements) {
@@ -787,7 +809,12 @@ export function transformESNext(context: TransformationContext): (x: SourceFile 
             factory.createPropertyAssignment("error", factory.createVoidZero()),
             factory.createPropertyAssignment("hasError", factory.createFalse()),
         ]);
-        const envVar = factory.createVariableDeclaration(envBinding, /*exclamationToken*/ undefined, /*type*/ undefined, envObject);
+        const envVar = factory.createVariableDeclaration(
+            envBinding,
+            /*exclamationToken*/ undefined,
+            /*type*/ undefined,
+            envObject,
+        );
         const envVarList = factory.createVariableDeclarationList([envVar], NodeFlags.Const);
         const envVarStatement = factory.createVariableStatement(/*modifiers*/ undefined, envVarList);
         statements.push(envVarStatement);

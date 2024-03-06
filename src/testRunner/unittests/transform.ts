@@ -317,7 +317,9 @@ describe("unittests:: TransformAPI", () => {
                     if (node.kind === ts.SyntaxKind.ExportDeclaration) {
                         const ed = node as ts.Node as ts.ExportDeclaration;
                         const exports = [{ name: "x" }];
-                        const exportSpecifiers = exports.map(e => ts.factory.createExportSpecifier(/*isTypeOnly*/ false, e.name, e.name));
+                        const exportSpecifiers = exports.map(e =>
+                            ts.factory.createExportSpecifier(/*isTypeOnly*/ false, e.name, e.name)
+                        );
                         const exportClause = ts.factory.createNamedExports(exportSpecifiers);
                         const newEd = ts.factory.updateExportDeclaration(
                             ed,
@@ -558,7 +560,8 @@ export {Value};
                 transformers: {
                     before: [
                         addSyntheticComment(n =>
-                            ts.isImportDeclaration(n) || ts.isExportDeclaration(n) || ts.isImportSpecifier(n) || ts.isExportSpecifier(n)
+                            ts.isImportDeclaration(n) || ts.isExportDeclaration(n) || ts.isImportSpecifier(n) ||
+                            ts.isExportSpecifier(n)
                         ),
                     ],
                 },
@@ -588,7 +591,8 @@ class Clazz {
                 transformers: {
                     before: [
                         addSyntheticComment(n =>
-                            ts.isPropertyDeclaration(n) || ts.isParameterPropertyDeclaration(n, n.parent) || ts.isClassDeclaration(n) ||
+                            ts.isPropertyDeclaration(n) || ts.isParameterPropertyDeclaration(n, n.parent) ||
+                            ts.isClassDeclaration(n) ||
                             ts.isConstructorDeclaration(n)
                         ),
                     ],

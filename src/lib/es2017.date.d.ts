@@ -9,5 +9,13 @@ interface DateConstructor {
      * @param seconds Must be supplied if milliseconds is supplied. A number from 0 to 59 that specifies the seconds.
      * @param ms A number from 0 to 999 that specifies the milliseconds.
      */
-    UTC(year: number, monthIndex?: number, date?: number, hours?: number, minutes?: number, seconds?: number, ms?: number): number;
+    UTC(
+        year: number,
+        monthIndex?: number,
+        date?: number,
+        hours?: number,
+        minutes?: number,
+        seconds?: number,
+        ms?: number,
+    ): number;
 }

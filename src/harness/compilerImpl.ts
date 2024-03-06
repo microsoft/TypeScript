@@ -153,7 +153,10 @@ export class CompilationResult {
                                 inputs: [input],
                                 js: js.get(this.getOutputPath(sourceFile.fileName, extname)),
                                 dts: dts.get(
-                                    this.getOutputPath(sourceFile.fileName, ts.getDeclarationEmitExtensionForPath(sourceFile.fileName)),
+                                    this.getOutputPath(
+                                        sourceFile.fileName,
+                                        ts.getDeclarationEmitExtensionForPath(sourceFile.fileName),
+                                    ),
                                 ),
                                 map: maps.get(this.getOutputPath(sourceFile.fileName, extname + ".map")),
                             };
@@ -242,9 +245,10 @@ export class CompilationResult {
         }
         else {
             path = vpath.resolve(this.vfs.cwd(), path);
-            const outDir = ext === ".d.ts" || ext === ".d.mts" || ext === ".d.cts" || (ext.endsWith(".ts") || ext.includes(".d.")) ?
-                this.options.declarationDir || this.options.outDir
-                : this.options.outDir;
+            const outDir =
+                ext === ".d.ts" || ext === ".d.mts" || ext === ".d.cts" || (ext.endsWith(".ts") || ext.includes(".d.")) ?
+                    this.options.declarationDir || this.options.outDir
+                    : this.options.outDir;
             if (outDir) {
                 const common = this.commonSourceDirectory;
                 if (common) {
@@ -331,7 +335,10 @@ export function compileFiles(
                 key: "-1",
                 message: `The excess diagnostics are:`,
             }),
-            ...ts.filter(longerErrors!, p => !ts.some(shorterErrors, p2 => ts.compareDiagnostics(p, p2) === ts.Comparison.EqualTo)),
+            ...ts.filter(
+                longerErrors!,
+                p => !ts.some(shorterErrors, p2 => ts.compareDiagnostics(p, p2) === ts.Comparison.EqualTo),
+            ),
         ),
     ] : postErrors;
     return new CompilationResult(host, compilerOptions, program, emitResult, errors);

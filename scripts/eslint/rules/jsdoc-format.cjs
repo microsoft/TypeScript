@@ -80,13 +80,25 @@ module.exports = createRule({
                 }
 
                 if (!isJSDoc) {
-                    context.report({ messageId: "internalCommentInNonJSDocError", node: c, loc: getAtInternalLoc(c, indexInComment) });
+                    context.report({
+                        messageId: "internalCommentInNonJSDocError",
+                        node: c,
+                        loc: getAtInternalLoc(c, indexInComment),
+                    });
                 }
                 else if (i !== last) {
-                    context.report({ messageId: "internalCommentNotLastError", node: c, loc: getAtInternalLoc(c, indexInComment) });
+                    context.report({
+                        messageId: "internalCommentNotLastError",
+                        node: c,
+                        loc: getAtInternalLoc(c, indexInComment),
+                    });
                 }
                 else if (node.type === "TSParameterProperty") {
-                    context.report({ messageId: "internalCommentOnParameterProperty", node: c, loc: getAtInternalLoc(c, indexInComment) });
+                    context.report({
+                        messageId: "internalCommentOnParameterProperty",
+                        node: c,
+                        loc: getAtInternalLoc(c, indexInComment),
+                    });
                 }
             }
         };

@@ -59,7 +59,11 @@ registerCodeFix({
             // for nullable types, suggest the flow-compatible `T | null | undefined`
             // in addition to the jsdoc/closure-compatible `T | null`
             actions.push(
-                fix(type, fixIdNullable, Diagnostics.Change_all_jsdoc_style_types_to_TypeScript_and_add_undefined_to_nullable_types),
+                fix(
+                    type,
+                    fixIdNullable,
+                    Diagnostics.Change_all_jsdoc_style_types_to_TypeScript_and_add_undefined_to_nullable_types,
+                ),
             );
         }
         return actions;

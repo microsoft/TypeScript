@@ -36,7 +36,10 @@ describe("unittests:: services:: hostNewLineSupport", () => {
         const result = ls.getEmitOutput("input.ts");
         assert(!result.emitSkipped, "emit was skipped");
         assert(result.outputFiles.length === 1, "a number of files other than 1 was output");
-        assert(result.outputFiles[0].name === "input.js", `Expected output file name input.js, but got ${result.outputFiles[0].name}`);
+        assert(
+            result.outputFiles[0].name === "input.js",
+            `Expected output file name input.js, but got ${result.outputFiles[0].name}`,
+        );
         assert(
             result.outputFiles[0].text.match(options.newLine === ts.NewLineKind.CarriageReturnLineFeed ? /\r\n/ : /[^\r]\n/),
             "expected to find appropriate newlines",
@@ -79,9 +82,12 @@ describe("unittests:: services:: hostNewLineSupport", () => {
     });
 
     it("should respect CRLF line endings around outlining spans", () => {
-        verifyOutliningSpanNewLines('// comment not included\r\n// #region name\r\nlet x: string = "x";\r\n// #endregion name\r\n', {
-            newLine: ts.NewLineKind.CarriageReturnLineFeed,
-        });
+        verifyOutliningSpanNewLines(
+            '// comment not included\r\n// #region name\r\nlet x: string = "x";\r\n// #endregion name\r\n',
+            {
+                newLine: ts.NewLineKind.CarriageReturnLineFeed,
+            },
+        );
     });
 
     it("should respect LF line endings around outlining spans", () => {

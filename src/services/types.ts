@@ -69,7 +69,10 @@ declare module "../compiler/types" {
         /** @internal */
         getLastToken(sourceFile?: SourceFileLike): Node | undefined; // eslint-disable-line @typescript-eslint/unified-signatures
         // See ts.forEachChild for documentation.
-        forEachChild<T>(cbNode: (node: Node) => T | undefined, cbNodeArray?: (nodes: NodeArray<Node>) => T | undefined): T | undefined;
+        forEachChild<T>(
+            cbNode: (node: Node) => T | undefined,
+            cbNodeArray?: (nodes: NodeArray<Node>) => T | undefined,
+        ): T | undefined;
     }
 }
 
@@ -440,7 +443,10 @@ export interface LanguageServiceHost extends GetEffectiveTypeRootsHost, MinimalR
     installPackage?(options: InstallPackageOptions): Promise<ApplyCodeActionCommandResult>;
     writeFile?(fileName: string, content: string): void;
 
-    /** @internal */ getDocumentPositionMapper?(generatedFileName: string, sourceFileName?: string): DocumentPositionMapper | undefined;
+    /** @internal */ getDocumentPositionMapper?(
+        generatedFileName: string,
+        sourceFileName?: string,
+    ): DocumentPositionMapper | undefined;
     /** @internal */ getSourceFileLike?(fileName: string): SourceFileLike | undefined;
     /** @internal */ getPackageJsonsVisibleToFile?(fileName: string, rootDir?: string): readonly ProjectPackageJsonInfo[];
     /** @internal */ getNearestAncestorDirectoryWithPackageJson?(fileName: string): string | undefined;
@@ -688,7 +694,12 @@ export interface LanguageService {
     getBraceMatchingAtPosition(fileName: string, position: number): TextSpan[];
     getIndentationAtPosition(fileName: string, position: number, options: EditorOptions | EditorSettings): number;
 
-    getFormattingEditsForRange(fileName: string, start: number, end: number, options: FormatCodeOptions | FormatCodeSettings): TextChange[];
+    getFormattingEditsForRange(
+        fileName: string,
+        start: number,
+        end: number,
+        options: FormatCodeOptions | FormatCodeSettings,
+    ): TextChange[];
     getFormattingEditsForDocument(fileName: string, options: FormatCodeOptions | FormatCodeSettings): TextChange[];
     getFormattingEditsAfterKeystroke(
         fileName: string,
@@ -736,7 +747,10 @@ export interface LanguageService {
     ): CombinedCodeActions;
 
     applyCodeActionCommand(action: CodeActionCommand, formatSettings?: FormatCodeSettings): Promise<ApplyCodeActionCommandResult>;
-    applyCodeActionCommand(action: CodeActionCommand[], formatSettings?: FormatCodeSettings): Promise<ApplyCodeActionCommandResult[]>;
+    applyCodeActionCommand(
+        action: CodeActionCommand[],
+        formatSettings?: FormatCodeSettings,
+    ): Promise<ApplyCodeActionCommandResult[]>;
     applyCodeActionCommand(
         action: CodeActionCommand | CodeActionCommand[],
         formatSettings?: FormatCodeSettings,
@@ -1774,7 +1788,11 @@ export interface Classifier {
      * @deprecated Use getLexicalClassifications instead.
      */
     getClassificationsForLine(text: string, lexState: EndOfLineState, syntacticClassifierAbsent: boolean): ClassificationResult;
-    getEncodedLexicalClassifications(text: string, endOfLineState: EndOfLineState, syntacticClassifierAbsent: boolean): Classifications;
+    getEncodedLexicalClassifications(
+        text: string,
+        endOfLineState: EndOfLineState,
+        syntacticClassifierAbsent: boolean,
+    ): Classifications;
 }
 
 export const enum ScriptElementKind {

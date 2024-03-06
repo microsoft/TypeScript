@@ -42,7 +42,14 @@ describe("unittests:: tsc:: incremental::", () => {
                         ]
                     }`,
             }),
-        commandLineArgs: ["--incremental", "--p", "src/project", "--tsBuildInfoFile", "src/project/.tsbuildinfo", "--explainFiles"],
+        commandLineArgs: [
+            "--incremental",
+            "--p",
+            "src/project",
+            "--tsBuildInfoFile",
+            "src/project/.tsbuildinfo",
+            "--explainFiles",
+        ],
         edits: noChangeOnlyRuns,
     });
 
@@ -791,7 +798,10 @@ console.log(a);`,
                 noChangeRun,
                 withOptionChange("with declaration and declarationMap", "--declaration", "--declarationMap"),
                 noChangeWithSubscenario("should re-emit only dts so they dont contain sourcemap"),
-                withOptionChangeAndDiscrepancyExplanation("with emitDeclarationOnly should not emit anything", "--emitDeclarationOnly"),
+                withOptionChangeAndDiscrepancyExplanation(
+                    "with emitDeclarationOnly should not emit anything",
+                    "--emitDeclarationOnly",
+                ),
                 noChangeRun,
                 localChange(),
                 withOptionChangeAndDiscrepancyExplanation("with declaration should not emit anything", "--declaration"),

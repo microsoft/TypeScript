@@ -41,7 +41,10 @@ function createModuleResolutionHost(baselines: string[], hasDirectoryExists: boo
             realpath,
             directoryExists: path => directories.has(path),
             fileExists: path => {
-                assert.isTrue(directories.has(ts.getDirectoryPath(path)), `'fileExists' '${path}' request in non-existing directory`);
+                assert.isTrue(
+                    directories.has(ts.getDirectoryPath(path)),
+                    `'fileExists' '${path}' request in non-existing directory`,
+                );
                 return map.has(path);
             },
             useCaseSensitiveFileNames: true,
@@ -82,7 +85,12 @@ describe("unittests:: moduleResolution:: Node module resolution - relative paths
         testLoadAsFile("load as file with name starting with directory seperator", "/foo/bar/baz.ts", "/foo", "/foo");
         testLoadAsFile("load as file with name starting with window root", "c:/foo/bar/baz.ts", "c:/foo", "c:/foo");
         runBaseline("relative module name as file", baselines);
-        function testLoadAsFile(scenario: string, containingFileName: string, moduleFileNameNoExt: string, moduleName: string): void {
+        function testLoadAsFile(
+            scenario: string,
+            containingFileName: string,
+            moduleFileNameNoExt: string,
+            moduleName: string,
+        ): void {
             baselines.push(scenario);
             for (const ext of autoExtensions) {
                 test(ext, /*hasDirectoryExists*/ true);
@@ -195,7 +203,9 @@ describe("unittests:: moduleResolution:: Node module resolution - relative paths
             const packageJson = { name: "/a/b/foo/package.json", content: jsonToReadableText({ main: "/c/d" }) };
             const indexFile = { name: "/a/b/foo/index.d.ts" };
             baselines.push(
-                `Resolving "./foo" from ${containingFile.name}${hasDirectoryExists ? "" : " with host that doesnt have directoryExists"}`,
+                `Resolving "./foo" from ${containingFile.name}${
+                    hasDirectoryExists ? "" : " with host that doesnt have directoryExists"
+                }`,
             );
             const resolution = ts.nodeModuleNameResolver(
                 "./foo",
@@ -314,7 +324,9 @@ describe("unittests:: moduleResolution:: Node module resolution - non-relative p
             const containingFile = { name: "/a/b/c/d/e.ts" };
             const moduleFile = { name: "/a/b/node_modules/foo.ts" };
             baselines.push(
-                `Resolving "foo" from ${containingFile.name}${hasDirectoryExists ? "" : " with host that doesnt have directoryExists"}`,
+                `Resolving "foo" from ${containingFile.name}${
+                    hasDirectoryExists ? "" : " with host that doesnt have directoryExists"
+                }`,
             );
             const resolution = ts.nodeModuleNameResolver(
                 "foo",
@@ -337,7 +349,9 @@ describe("unittests:: moduleResolution:: Node module resolution - non-relative p
             const containingFile = { name: "/a/b/c/d/e.ts" };
             const moduleFile = { name: "/a/b/node_modules/foo.d.ts" };
             baselines.push(
-                `Resolving "foo" from ${containingFile.name}${hasDirectoryExists ? "" : " with host that doesnt have directoryExists"}`,
+                `Resolving "foo" from ${containingFile.name}${
+                    hasDirectoryExists ? "" : " with host that doesnt have directoryExists"
+                }`,
             );
             const resolution = ts.nodeModuleNameResolver(
                 "foo",
@@ -360,7 +374,9 @@ describe("unittests:: moduleResolution:: Node module resolution - non-relative p
             const containingFile: File = { name: "/a/node_modules/b/c/node_modules/d/e.ts" };
             const moduleFile: File = { name: "/a/node_modules/foo/index.d.ts" };
             baselines.push(
-                `Resolving "foo" from ${containingFile.name}${hasDirectoryExists ? "" : " with host that doesnt have directoryExists"}`,
+                `Resolving "foo" from ${containingFile.name}${
+                    hasDirectoryExists ? "" : " with host that doesnt have directoryExists"
+                }`,
             );
             const resolution = ts.nodeModuleNameResolver(
                 "foo",
@@ -385,7 +401,10 @@ describe("unittests:: moduleResolution:: Node module resolution - non-relative p
                 baselines,
                 /*hasDirectoryExists*/ true,
                 { name: realFileName, symlinks: [symlinkFileName] },
-                { name: "/app/node_modules/linked/package.json", content: jsonToReadableText({ version: "0.0.0", main: "./index" }) },
+                {
+                    name: "/app/node_modules/linked/package.json",
+                    content: jsonToReadableText({ version: "0.0.0", main: "./index" }),
+                },
             );
             baselines.push(`Resolving "linked" from /app/app.ts when preserveSymlinks is ${preserveSymlinks}`);
             const resolution = ts.nodeModuleNameResolver("linked", "/app/app.ts", { preserveSymlinks }, host);
@@ -596,7 +615,10 @@ describe("unittests:: moduleResolution:: Files with different casing with forceC
                 readFile: ts.notImplemented,
             };
             const program = ts.createProgram(rootFiles, options, host);
-            const diagnostics = ts.sortAndDeduplicateDiagnostics([...program.getSemanticDiagnostics(), ...program.getOptionsDiagnostics()]);
+            const diagnostics = ts.sortAndDeduplicateDiagnostics([
+                ...program.getSemanticDiagnostics(),
+                ...program.getOptionsDiagnostics(),
+            ]);
             baselines.push("Diagnostics::");
             baselines.push(ts.formatDiagnostics(diagnostics, host), "");
             runBaseline(scenario, baselines);
@@ -743,7 +765,9 @@ describe("unittests:: moduleResolution:: baseUrl augmented module resolution", (
                 }
                 {
                     baselines.push(
-                        `Resolving "./file3" from ${file2.name}${hasDirectoryExists ? "" : " with host that doesnt have directoryExists"}`,
+                        `Resolving "./file3" from ${file2.name}${
+                            hasDirectoryExists ? "" : " with host that doesnt have directoryExists"
+                        }`,
                     );
                     const result = ts.resolveModuleName("./file3", file2.name, options, host);
                     baselines.push(`Resolution:: ${jsonToReadableText(result)}`);
@@ -788,7 +812,9 @@ describe("unittests:: moduleResolution:: baseUrl augmented module resolution", (
 
             function check(name: string, caller: File) {
                 baselines.push(
-                    `Resolving "${name}" from ${caller.name}${hasDirectoryExists ? "" : " with host that doesnt have directoryExists"}`,
+                    `Resolving "${name}" from ${caller.name}${
+                        hasDirectoryExists ? "" : " with host that doesnt have directoryExists"
+                    }`,
                 );
                 const result = ts.resolveModuleName(name, caller.name, options, host);
                 baselines.push(`Resolution:: ${jsonToReadableText(result)}`);
@@ -820,7 +846,9 @@ describe("unittests:: moduleResolution:: baseUrl augmented module resolution", (
 
             function check(name: string, caller: File) {
                 baselines.push(
-                    `Resolving "${name}" from ${caller.name}${hasDirectoryExists ? "" : " with host that doesnt have directoryExists"}`,
+                    `Resolving "${name}" from ${caller.name}${
+                        hasDirectoryExists ? "" : " with host that doesnt have directoryExists"
+                    }`,
                 );
                 const result = ts.resolveModuleName(name, caller.name, options, host);
                 baselines.push(`Resolution:: ${jsonToReadableText(result)}`);
@@ -848,7 +876,17 @@ describe("unittests:: moduleResolution:: baseUrl augmented module resolution", (
             const file4: File = { name: "/root/generated/folder2/file4/dist/types.d.ts" }; // load file pointed by typings
             const file5: File = { name: "/root/someanotherfolder/file5/index.d.ts" }; // load remapped module from folder
             const file6: File = { name: "/root/node_modules/file6.ts" }; // fallback to node
-            const host = createModuleResolutionHost(baselines, hasDirectoryExists, file1, file2, file3, file4, file4Typings, file5, file6);
+            const host = createModuleResolutionHost(
+                baselines,
+                hasDirectoryExists,
+                file1,
+                file2,
+                file3,
+                file4,
+                file4Typings,
+                file5,
+                file6,
+            );
 
             const options: ts.CompilerOptions = {
                 moduleResolution: ts.ModuleResolutionKind.Node10,
@@ -877,7 +915,9 @@ describe("unittests:: moduleResolution:: baseUrl augmented module resolution", (
 
             function check(name: string) {
                 baselines.push(
-                    `Resolving "${name}" from ${main.name}${hasDirectoryExists ? "" : " with host that doesnt have directoryExists"}`,
+                    `Resolving "${name}" from ${main.name}${
+                        hasDirectoryExists ? "" : " with host that doesnt have directoryExists"
+                    }`,
                 );
                 const result = ts.resolveModuleName(name, main.name, options, host);
                 baselines.push(`Resolution:: ${jsonToReadableText(result)}`);
@@ -924,7 +964,9 @@ describe("unittests:: moduleResolution:: baseUrl augmented module resolution", (
 
             function check(name: string) {
                 baselines.push(
-                    `Resolving "${name}" from ${main.name}${hasDirectoryExists ? "" : " with host that doesnt have directoryExists"}`,
+                    `Resolving "${name}" from ${main.name}${
+                        hasDirectoryExists ? "" : " with host that doesnt have directoryExists"
+                    }`,
                 );
                 const result = ts.resolveModuleName(name, main.name, options, host);
                 baselines.push(`Resolution:: ${jsonToReadableText(result)}`);
@@ -958,7 +1000,9 @@ describe("unittests:: moduleResolution:: baseUrl augmented module resolution", (
 
             function check(name: string, container: File) {
                 baselines.push(
-                    `Resolving "${name}" from ${container.name}${hasDirectoryExists ? "" : " with host that doesnt have directoryExists"}`,
+                    `Resolving "${name}" from ${container.name}${
+                        hasDirectoryExists ? "" : " with host that doesnt have directoryExists"
+                    }`,
                 );
                 const result = ts.resolveModuleName(name, container.name, options, host);
                 baselines.push(`Resolution:: ${jsonToReadableText(result)}`);
@@ -992,7 +1036,9 @@ describe("unittests:: moduleResolution:: baseUrl augmented module resolution", (
 
             function check(name: string, container: File) {
                 baselines.push(
-                    `Resolving "${name}" from ${container.name}${hasDirectoryExists ? "" : " with host that doesnt have directoryExists"}`,
+                    `Resolving "${name}" from ${container.name}${
+                        hasDirectoryExists ? "" : " with host that doesnt have directoryExists"
+                    }`,
                 );
                 const result = ts.resolveModuleName(name, container.name, options, host);
                 baselines.push(`Resolution:: ${jsonToReadableText(result)}`);
@@ -1023,7 +1069,9 @@ describe("unittests:: moduleResolution:: baseUrl augmented module resolution", (
                 },
             };
             baselines.push(
-                `Resolving "libs/guid" from ${app.name}${hasDirectoryExists ? "" : " with host that doesnt have directoryExists"}`,
+                `Resolving "libs/guid" from ${app.name}${
+                    hasDirectoryExists ? "" : " with host that doesnt have directoryExists"
+                }`,
             );
             const result = ts.resolveModuleName("libs/guid", app.name, options, host);
             baselines.push(`Resolution:: ${jsonToReadableText(result)}`);
@@ -1055,13 +1103,22 @@ describe("unittests:: moduleResolution:: Type reference directive resolution: ",
         targetFile: File,
         ...otherFiles: File[]
     ) {
-        const host = createModuleResolutionHost(baselines, hasDirectoryExists, ...[initialFile, targetFile].concat(...otherFiles));
+        const host = createModuleResolutionHost(
+            baselines,
+            hasDirectoryExists,
+            ...[initialFile, targetFile].concat(...otherFiles),
+        );
         baselines.push(
             `Resolving "${typeDirective}" from ${initialFile.name} typesRoots: ${typesRoot ? `[${typesRoot}]` : undefined}${
                 hasDirectoryExists ? "" : " with host that doesnt have directoryExists"
             }`,
         );
-        const result = ts.resolveTypeReferenceDirective(typeDirective, initialFile.name, typesRoot ? { typeRoots: [typesRoot] } : {}, host);
+        const result = ts.resolveTypeReferenceDirective(
+            typeDirective,
+            initialFile.name,
+            typesRoot ? { typeRoots: [typesRoot] } : {},
+            host,
+        );
         baselines.push(`Resolution:: ${jsonToReadableText(result)}`);
         baselines.push("");
     }
@@ -1087,7 +1144,10 @@ describe("unittests:: moduleResolution:: Type reference directive resolution: ",
         {
             const f1 = { name: "/root/src/app.ts" };
             const f2 = { name: "/root/src/types/lib/typings/lib.d.ts" };
-            const packageFile = { name: "/root/src/types/lib/package.json", content: jsonToReadableText({ types: "typings/lib.d.ts" }) };
+            const packageFile = {
+                name: "/root/src/types/lib/package.json",
+                content: jsonToReadableText({ types: "typings/lib.d.ts" }),
+            };
             test(baselines, /*typesRoot*/ "/root/src/types", /* typeDirective */ "lib", f1, f2, packageFile);
         }
         {

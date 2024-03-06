@@ -344,7 +344,9 @@ declare module "fs" {
                     },
                 }),
             };
-            return createWatchedSystem([file1, file2, module1, libFile, configFile], { currentDirectory: "/a/b/projects/myProject/" });
+            return createWatchedSystem([file1, file2, module1, libFile, configFile], {
+                currentDirectory: "/a/b/projects/myProject/",
+            });
         },
         edits: [
             {
@@ -374,7 +376,10 @@ declare module "fs" {
             {
                 caption: "npm install",
                 edit: sys =>
-                    sys.renameFolder(`/user/username/projects/myproject/node_modules2`, `/user/username/projects/myproject/node_modules`),
+                    sys.renameFolder(
+                        `/user/username/projects/myproject/node_modules2`,
+                        `/user/username/projects/myproject/node_modules`,
+                    ),
                 timeouts: sys => sys.runQueuedTimeoutCallbacks(),
             },
         ],
@@ -467,7 +472,8 @@ declare namespace myapp {
                 caption: "No change, just check program",
                 edit: ts.noop,
                 timeouts: (_sys, [[oldProgram, oldBuilderProgram]], watchorSolution) => {
-                    const newProgram = (watchorSolution as ts.WatchOfConfigFile<ts.EmitAndSemanticDiagnosticsBuilderProgram>).getProgram();
+                    const newProgram = (watchorSolution as ts.WatchOfConfigFile<ts.EmitAndSemanticDiagnosticsBuilderProgram>)
+                        .getProgram();
                     assert.strictEqual(newProgram, oldBuilderProgram, "No change so builder program should be same");
                     assert.strictEqual(newProgram.getProgram(), oldProgram, "No change so program should be same");
                 },
@@ -514,7 +520,15 @@ declare namespace myapp {
                 path: `${linkedPackageRoot}/dist/other.d.ts`,
                 content: 'export declare const Foo = "BAR";',
             };
-            const files = [libFile, mainFile, config, linkedPackageInMain, linkedPackageJson, linkedPackageIndex, linkedPackageOther];
+            const files = [
+                libFile,
+                mainFile,
+                config,
+                linkedPackageInMain,
+                linkedPackageJson,
+                linkedPackageIndex,
+                linkedPackageOther,
+            ];
             return createWatchedSystem(files, { currentDirectory: mainPackageRoot });
         },
     });
@@ -547,7 +561,8 @@ declare namespace NodeJS {
         }
         verifyTscWatch({
             scenario,
-            subScenario: "works when installing something in node_modules or @types when there is no notification from fs for index file",
+            subScenario:
+                "works when installing something in node_modules or @types when there is no notification from fs for index file",
             commandLineArgs: ["--w", `--extendedDiagnostics`],
             sys: () => {
                 const file: File = {

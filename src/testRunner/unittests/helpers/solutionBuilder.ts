@@ -32,7 +32,11 @@ export function createSolutionBuilderHostForBaseline(
     return host;
 }
 
-export function createSolutionBuilder(system: TestServerHost, rootNames: readonly string[], originalRead?: TestServerHost["readFile"]) {
+export function createSolutionBuilder(
+    system: TestServerHost,
+    rootNames: readonly string[],
+    originalRead?: TestServerHost["readFile"],
+) {
     const host = createSolutionBuilderHostForBaseline(system, /*versionToWrite*/ undefined, originalRead);
     return ts.createSolutionBuilder(host, rootNames, {});
 }

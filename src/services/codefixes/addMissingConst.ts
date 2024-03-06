@@ -52,7 +52,11 @@ registerCodeFix({
     fixIds: [fixId],
     getAllCodeActions: context => {
         const fixedNodes = new Set<Node>();
-        return codeFixAll(context, errorCodes, (changes, diag) => makeChange(changes, diag.file, diag.start, context.program, fixedNodes));
+        return codeFixAll(
+            context,
+            errorCodes,
+            (changes, diag) => makeChange(changes, diag.file, diag.start, context.program, fixedNodes),
+        );
     },
 });
 
@@ -70,7 +74,9 @@ function makeChange(
     if (forInitializer) return applyChange(changeTracker, forInitializer, sourceFile, fixedNodes);
 
     const parent = token.parent;
-    if (isBinaryExpression(parent) && parent.operatorToken.kind === SyntaxKind.EqualsToken && isExpressionStatement(parent.parent)) {
+    if (
+        isBinaryExpression(parent) && parent.operatorToken.kind === SyntaxKind.EqualsToken && isExpressionStatement(parent.parent)
+    ) {
         return applyChange(changeTracker, token, sourceFile, fixedNodes);
     }
 
@@ -96,7 +102,12 @@ function makeChange(
     }
 }
 
-function applyChange(changeTracker: textChanges.ChangeTracker, initializer: Node, sourceFile: SourceFile, fixedNodes?: Set<Node>) {
+function applyChange(
+    changeTracker: textChanges.ChangeTracker,
+    initializer: Node,
+    sourceFile: SourceFile,
+    fixedNodes?: Set<Node>,
+) {
     if (!fixedNodes || tryAddToSet(fixedNodes, initializer)) {
         changeTracker.insertModifierBefore(sourceFile, SyntaxKind.ConstKeyword, initializer);
     }
@@ -117,7 +128,8 @@ function isPossiblyPartOfDestructuring(node: Node): boolean {
 
 function arrayElementCouldBeVariableDeclaration(expression: Expression, checker: TypeChecker): boolean {
     const identifier = isIdentifier(expression) ? expression :
-        isAssignmentExpression(expression, /*excludeCompoundAssignment*/ true) && isIdentifier(expression.left) ? expression.left :
+        isAssignmentExpression(expression, /*excludeCompoundAssignment*/ true) && isIdentifier(expression.left) ?
+        expression.left :
         undefined;
     return !!identifier && !checker.getSymbolAtLocation(identifier);
 }
@@ -139,7 +151,10 @@ function expressionCouldBeVariableDeclaration(expression: Node, checker: TypeChe
     }
 
     if (expression.operatorToken.kind === SyntaxKind.CommaToken) {
-        return every([expression.left, expression.right], expression => expressionCouldBeVariableDeclaration(expression, checker));
+        return every(
+            [expression.left, expression.right],
+            expression => expressionCouldBeVariableDeclaration(expression, checker),
+        );
     }
 
     return expression.operatorToken.kind === SyntaxKind.EqualsToken

@@ -207,7 +207,9 @@ function doChange(
                     // a() {}
                     if (isMethodDeclaration(property) || isGetOrSetAccessorDeclaration(property)) return true;
                     // a: function() {}
-                    if (isPropertyAssignment(property) && isFunctionExpression(property.initializer) && !!property.name) return true;
+                    if (isPropertyAssignment(property) && isFunctionExpression(property.initializer) && !!property.name) {
+                        return true;
+                    }
                     // x.prototype.constructor = fn
                     if (isConstructorAssignment(property)) return true;
                     return false;
@@ -261,7 +263,9 @@ function doChange(
             }
 
             // f.x = expr
-            if (isAccessExpression(memberDeclaration) && (isFunctionExpression(assignmentExpr) || isArrowFunction(assignmentExpr))) {
+            if (
+                isAccessExpression(memberDeclaration) && (isFunctionExpression(assignmentExpr) || isArrowFunction(assignmentExpr))
+            ) {
                 const quotePreference = getQuotePreference(sourceFile, preferences);
                 const name = tryGetPropertyName(memberDeclaration, compilerOptions, quotePreference);
                 if (name) {
@@ -313,8 +317,15 @@ function doChange(
                 else return createArrowFunctionExpressionMember(members, expression, name);
             }
 
-            function createFunctionExpressionMember(members: ClassElement[], functionExpression: FunctionExpression, name: PropertyName) {
-                const fullModifiers = concatenate(modifiers, getModifierKindFromSource(functionExpression, SyntaxKind.AsyncKeyword));
+            function createFunctionExpressionMember(
+                members: ClassElement[],
+                functionExpression: FunctionExpression,
+                name: PropertyName,
+            ) {
+                const fullModifiers = concatenate(
+                    modifiers,
+                    getModifierKindFromSource(functionExpression, SyntaxKind.AsyncKeyword),
+                );
                 const method = factory.createMethodDeclaration(
                     fullModifiers,
                     /*asteriskToken*/ undefined,
@@ -330,7 +341,11 @@ function doChange(
                 return;
             }
 
-            function createArrowFunctionExpressionMember(members: ClassElement[], arrowFunction: ArrowFunction, name: PropertyName) {
+            function createArrowFunctionExpressionMember(
+                members: ClassElement[],
+                arrowFunction: ArrowFunction,
+                name: PropertyName,
+            ) {
                 const arrowFunctionBody = arrowFunction.body;
                 let bodyBlock: Block;
 
@@ -367,7 +382,9 @@ function doChange(
 
         const memberElements = createClassElementsFromSymbol(node.symbol);
         if (initializer.body) {
-            memberElements.unshift(factory.createConstructorDeclaration(/*modifiers*/ undefined, initializer.parameters, initializer.body));
+            memberElements.unshift(
+                factory.createConstructorDeclaration(/*modifiers*/ undefined, initializer.parameters, initializer.body),
+            );
         }
 
         const modifiers = getModifierKindFromSource(node.parent.parent, SyntaxKind.ExportKeyword);
@@ -402,7 +419,8 @@ function doChange(
 }
 
 function getModifierKindFromSource(source: Node, kind: Modifier["kind"]): readonly Modifier[] | undefined {
-    return canHaveModifiers(source) ? filter(source.modifiers, (modifier): modifier is Modifier => modifier.kind === kind) : undefined;
+    return canHaveModifiers(source) ? filter(source.modifiers, (modifier): modifier is Modifier => modifier.kind === kind)
+        : undefined;
 }
 
 function isConstructorAssignment(x: ObjectLiteralElementLike | PropertyAccessExpression) {

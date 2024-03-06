@@ -93,7 +93,10 @@ describe("unittests:: tsbuild:: commandLine::", () => {
                 noChangeRun,
                 withOptionChange("with declaration and declarationMap", "--declaration", "--declarationMap"),
                 noChangeWithSubscenario("should re-emit only dts so they dont contain sourcemap"),
-                withOptionChangeAndDiscrepancyExplanation("with emitDeclarationOnly should not emit anything", "--emitDeclarationOnly"),
+                withOptionChangeAndDiscrepancyExplanation(
+                    "with emitDeclarationOnly should not emit anything",
+                    "--emitDeclarationOnly",
+                ),
                 noChangeRun,
                 localChange(),
                 withOptionChangeAndDiscrepancyExplanation("with declaration should not emit anything", "--declaration"),
@@ -183,8 +186,12 @@ describe("unittests:: tsbuild:: commandLine::", () => {
                     references: [{ path: "../../project1/src" }],
                 }),
                 "/src/project2/src/e.ts": `export const e = 10;`,
-                "/src/project2/src/f.ts": `import { a } from "${options.outFile ? "a" : "../../project1/src/a"}"; export const f = a;`,
-                "/src/project2/src/g.ts": `import { b } from "${options.outFile ? "b" : "../../project1/src/b"}"; export const g = b;`,
+                "/src/project2/src/f.ts": `import { a } from "${
+                    options.outFile ? "a" : "../../project1/src/a"
+                }"; export const f = a;`,
+                "/src/project2/src/g.ts": `import { b } from "${
+                    options.outFile ? "b" : "../../project1/src/b"
+                }"; export const g = b;`,
             });
         }
         function verifyWithIncremental(options: ts.CompilerOptions) {
@@ -278,7 +285,9 @@ describe("unittests:: tsbuild:: commandLine::", () => {
                 baselinePrograms: true,
             });
             function subScenario(text: string) {
-                return `${text}${options.composite ? "" : " with declaration and incremental"}${options.outFile ? " with outFile" : ""}`;
+                return `${text}${options.composite ? "" : " with declaration and incremental"}${
+                    options.outFile ? " with outFile" : ""
+                }`;
             }
         }
         verifyWithIncremental({ composite: true });

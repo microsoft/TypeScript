@@ -52,7 +52,9 @@ describe("unittests:: tsserver:: pluginsAsync:: async loaded plugins", () => {
 
         await projectService.waitForPendingPlugins();
 
-        session.logger.log(`at this point all plugin modules should have been instantiated and all plugins should have been invoked`);
+        session.logger.log(
+            `at this point all plugin modules should have been instantiated and all plugins should have been invoked`,
+        );
         session.logger.log(`pluginModuleInstantiated:: ${pluginModuleInstantiated}`);
         session.logger.log(`pluginInvoked:: ${pluginInvoked}`);
 

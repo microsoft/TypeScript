@@ -99,10 +99,14 @@ export namespace DocumentHighlights {
     ): DocumentHighlights[] | undefined {
         const node = getTouchingPropertyName(sourceFile, position);
 
-        if (node.parent && (isJsxOpeningElement(node.parent) && node.parent.tagName === node || isJsxClosingElement(node.parent))) {
+        if (
+            node.parent && (isJsxOpeningElement(node.parent) && node.parent.tagName === node || isJsxClosingElement(node.parent))
+        ) {
             // For a JSX element, just highlight the matching tag, not all references.
             const { openingElement, closingElement } = node.parent.parent;
-            const highlightSpans = [openingElement, closingElement].map(({ tagName }) => getHighlightSpanForNode(tagName, sourceFile));
+            const highlightSpans = [openingElement, closingElement].map(({ tagName }) =>
+                getHighlightSpanForNode(tagName, sourceFile)
+            );
             return [{ fileName: sourceFile.fileName, highlightSpans }];
         }
 
@@ -144,7 +148,10 @@ export namespace DocumentHighlights {
                     return undefined;
                 }
                 const redirectTarget = program.getSourceFile(fileName);
-                const redirect = find(sourceFilesToSearch, f => !!f.redirectInfo && f.redirectInfo.redirectTarget === redirectTarget)!;
+                const redirect = find(
+                    sourceFilesToSearch,
+                    f => !!f.redirectInfo && f.redirectInfo.redirectTarget === redirectTarget,
+                )!;
                 fileName = redirect.fileName;
                 Debug.assert(sourceFilesSet.has(fileName));
             }
@@ -331,7 +338,10 @@ export namespace DocumentHighlights {
     }
 
     function getModifierOccurrences(modifier: Modifier["kind"], declaration: Node): Node[] {
-        return mapDefined(getNodesToSearchForModifier(declaration, modifierToFlag(modifier)), node => findModifier(node, modifier));
+        return mapDefined(
+            getNodesToSearchForModifier(declaration, modifierToFlag(modifier)),
+            node => findModifier(node, modifier),
+        );
     }
 
     function getNodesToSearchForModifier(declaration: Node, modifierFlag: ModifierFlags): readonly Node[] | undefined {
@@ -404,7 +414,15 @@ export namespace DocumentHighlights {
     function getLoopBreakContinueOccurrences(loopNode: IterationStatement): Node[] {
         const keywords: Node[] = [];
 
-        if (pushKeywordIf(keywords, loopNode.getFirstToken(), SyntaxKind.ForKeyword, SyntaxKind.WhileKeyword, SyntaxKind.DoKeyword)) {
+        if (
+            pushKeywordIf(
+                keywords,
+                loopNode.getFirstToken(),
+                SyntaxKind.ForKeyword,
+                SyntaxKind.WhileKeyword,
+                SyntaxKind.DoKeyword,
+            )
+        ) {
             // If we succeeded and got a do-while loop, then start looking for a 'while' keyword.
             if (loopNode.kind === SyntaxKind.DoStatement) {
                 const loopTokens = loopNode.getChildren();

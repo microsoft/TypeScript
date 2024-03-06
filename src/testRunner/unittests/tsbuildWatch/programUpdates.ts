@@ -391,7 +391,8 @@ createSomeObject().message;`,
 
                 verifyTscWatch({
                     scenario: "programUpdates",
-                    subScenario: "reportErrors/declarationEmitErrors/introduceError/when fixing errors only changed file is emitted",
+                    subScenario:
+                        "reportErrors/declarationEmitErrors/introduceError/when fixing errors only changed file is emitted",
                     commandLineArgs: ["-b", "-w", subProject],
                     sys: () =>
                         createWatchedSystem(
@@ -588,7 +589,11 @@ createSomeObject().message;`,
             const project3Config: File = {
                 path: "/a/b/project3.tsconfig.json",
                 content: jsonToReadableText({
-                    extends: ["./extendsConfig1.tsconfig.json", "./extendsConfig2.tsconfig.json", "./extendsConfig3.tsconfig.json"],
+                    extends: [
+                        "./extendsConfig1.tsconfig.json",
+                        "./extendsConfig2.tsconfig.json",
+                        "./extendsConfig3.tsconfig.json",
+                    ],
                     compilerOptions: {
                         composite: false,
                     },

@@ -13,7 +13,11 @@ import {
     SyntaxKind,
 } from "./_namespaces/ts";
 
-export function preProcessFile(sourceText: string, readImportFiles = true, detectJavaScriptImports = false): PreProcessedFileInfo {
+export function preProcessFile(
+    sourceText: string,
+    readImportFiles = true,
+    detectJavaScriptImports = false,
+): PreProcessedFileInfo {
     const pragmaContext: PragmaContext = {
         languageVersion: ScriptTarget.ES5, // controls whether the token scanner considers unicode identifiers or not - shouldn't matter, since we're only using it for trivia
         pragmas: undefined,

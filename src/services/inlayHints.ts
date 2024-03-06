@@ -192,7 +192,8 @@ export function provideInlayHints(context: InlayHintsContext): InlayHint[] {
         }
         else {
             if (
-                preferences.includeInlayFunctionParameterTypeHints && isFunctionLikeDeclaration(node) && hasContextSensitiveParameters(node)
+                preferences.includeInlayFunctionParameterTypeHints && isFunctionLikeDeclaration(node) &&
+                hasContextSensitiveParameters(node)
             ) {
                 visitFunctionLikeForParameterType(node);
             }

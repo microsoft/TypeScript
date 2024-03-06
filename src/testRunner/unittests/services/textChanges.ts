@@ -125,7 +125,9 @@ namespace M
                         /*argumentsArray*/ ts.emptyArray,
                     ),
                 );
-                changeTracker.replaceNodeRange(sourceFile, statements[0], ts.last(statements), newStatement, { suffix: newLineCharacter });
+                changeTracker.replaceNodeRange(sourceFile, statements[0], ts.last(statements), newStatement, {
+                    suffix: newLineCharacter,
+                });
             },
         );
     }
@@ -346,9 +348,14 @@ var a = 4; // comment 7`;
             text,
             /*validateNodes*/ true,
             (sourceFile, changeTracker) => {
-                changeTracker.replaceRange(sourceFile, { pos: text.indexOf("var y"), end: text.indexOf("var a") }, createTestClass(), {
-                    suffix: newLineCharacter,
-                });
+                changeTracker.replaceRange(
+                    sourceFile,
+                    { pos: text.indexOf("var y"), end: text.indexOf("var a") },
+                    createTestClass(),
+                    {
+                        suffix: newLineCharacter,
+                    },
+                );
             },
         );
         runSingleFileTest(
@@ -357,11 +364,16 @@ var a = 4; // comment 7`;
             text,
             /*validateNodes*/ true,
             (sourceFile, changeTracker) => {
-                changeTracker.replaceRange(sourceFile, { pos: text.indexOf("var y"), end: text.indexOf("var a") }, createTestClass(), {
-                    suffix: newLineCharacter,
-                    indentation: 8,
-                    delta: 0,
-                });
+                changeTracker.replaceRange(
+                    sourceFile,
+                    { pos: text.indexOf("var y"), end: text.indexOf("var a") },
+                    createTestClass(),
+                    {
+                        suffix: newLineCharacter,
+                        indentation: 8,
+                        delta: 0,
+                    },
+                );
             },
         );
 
@@ -372,7 +384,11 @@ var a = 4; // comment 7`;
             /*validateNodes*/ false,
             (sourceFile, changeTracker) => {
                 const newNode = createTestVariableDeclaration("z1");
-                changeTracker.replaceRange(sourceFile, { pos: sourceFile.text.indexOf("y"), end: sourceFile.text.indexOf(";") }, newNode);
+                changeTracker.replaceRange(
+                    sourceFile,
+                    { pos: sourceFile.text.indexOf("y"), end: sourceFile.text.indexOf(";") },
+                    newNode,
+                );
             },
         );
     }
@@ -668,7 +684,11 @@ class A {
             text2,
             /*validateNodes*/ false,
             (sourceFile, changeTracker) => {
-                changeTracker.insertNodeAfter(sourceFile, findVariableStatementContaining("x", sourceFile), createTestSuperCall());
+                changeTracker.insertNodeAfter(
+                    sourceFile,
+                    findVariableStatementContaining("x", sourceFile),
+                    createTestSuperCall(),
+                );
             },
         );
         const text3 = `
@@ -1166,7 +1186,11 @@ import {
                 changeTracker.insertNodeInListAfter(
                     sourceFile,
                     findChild("x", sourceFile),
-                    ts.factory.createImportSpecifier(/*isTypeOnly*/ false, /*propertyName*/ undefined, ts.factory.createIdentifier("a")),
+                    ts.factory.createImportSpecifier(
+                        /*isTypeOnly*/ false,
+                        /*propertyName*/ undefined,
+                        ts.factory.createIdentifier("a"),
+                    ),
                 );
             },
         );
@@ -1185,7 +1209,11 @@ import {
                 changeTracker.insertNodeInListAfter(
                     sourceFile,
                     findChild("x", sourceFile),
-                    ts.factory.createImportSpecifier(/*isTypeOnly*/ false, /*propertyName*/ undefined, ts.factory.createIdentifier("a")),
+                    ts.factory.createImportSpecifier(
+                        /*isTypeOnly*/ false,
+                        /*propertyName*/ undefined,
+                        ts.factory.createIdentifier("a"),
+                    ),
                 );
             },
         );
@@ -1253,7 +1281,11 @@ import {
                 changeTracker.insertNodeInListAfter(
                     sourceFile,
                     findChild("x", sourceFile),
-                    ts.factory.createImportSpecifier(/*isTypeOnly*/ false, /*propertyName*/ undefined, ts.factory.createIdentifier("a")),
+                    ts.factory.createImportSpecifier(
+                        /*isTypeOnly*/ false,
+                        /*propertyName*/ undefined,
+                        ts.factory.createIdentifier("a"),
+                    ),
                 );
             },
         );
@@ -1273,7 +1305,11 @@ import {
                 changeTracker.insertNodeInListAfter(
                     sourceFile,
                     findChild("x", sourceFile),
-                    ts.factory.createImportSpecifier(/*isTypeOnly*/ false, /*propertyName*/ undefined, ts.factory.createIdentifier("a")),
+                    ts.factory.createImportSpecifier(
+                        /*isTypeOnly*/ false,
+                        /*propertyName*/ undefined,
+                        ts.factory.createIdentifier("a"),
+                    ),
                 );
             },
         );
@@ -1292,7 +1328,11 @@ import {
                 changeTracker.insertNodeInListAfter(
                     sourceFile,
                     findChild("x", sourceFile),
-                    ts.factory.createImportSpecifier(/*isTypeOnly*/ false, /*propertyName*/ undefined, ts.factory.createIdentifier("a")),
+                    ts.factory.createImportSpecifier(
+                        /*isTypeOnly*/ false,
+                        /*propertyName*/ undefined,
+                        ts.factory.createIdentifier("a"),
+                    ),
                 );
             },
         );

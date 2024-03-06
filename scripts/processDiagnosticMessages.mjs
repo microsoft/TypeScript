@@ -105,7 +105,8 @@ function buildInfoFileOutput(messageTable, inputFilePathRel) {
             "";
         const argReportsDeprecated = reportsDeprecated
             ? `${
-                !argElidedInCompatabilityPyramid ? ", /*reportsUnnecessary*/ undefined, /*elidedInCompatabilityPyramid*/ undefined" : ""
+                !argElidedInCompatabilityPyramid
+                    ? ", /*reportsUnnecessary*/ undefined, /*elidedInCompatabilityPyramid*/ undefined" : ""
             }, /*reportsDeprecated*/ ${reportsDeprecated}` : "";
 
         result.push(

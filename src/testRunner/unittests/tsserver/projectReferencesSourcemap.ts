@@ -212,7 +212,13 @@ fn5();
         });
     }
 
-    function setup(type: SessionType, openFiles: readonly File[], action: Action | Action[], max?: number, onHostCreate?: OnHostCreate) {
+    function setup(
+        type: SessionType,
+        openFiles: readonly File[],
+        action: Action | Action[],
+        max?: number,
+        onHostCreate?: OnHostCreate,
+    ) {
         const session = type === SessionType.NoReference ? createSessionWithoutProjectReferences(onHostCreate) :
             type === SessionType.ProjectReference ? createSessionWithProjectReferences(onHostCreate) :
             type === SessionType.DisableSourceOfProjectReferenceRedirect ?
@@ -241,7 +247,11 @@ fn5();
         it(options.scenario, () => {
             const session = setup(options.type, options.openFiles, options.action);
             verifyScriptInfoCollectionWith(session, options.openFiles);
-            baselineTsserverLogs("projectReferencesSourcemap", `${options.scenarioLocation}/${options.type}/${options.scenario}`, session);
+            baselineTsserverLogs(
+                "projectReferencesSourcemap",
+                `${options.scenarioLocation}/${options.type}/${options.scenario}`,
+                session,
+            );
         });
     }
     interface VerifyScenarioWithChangesOptions {
@@ -289,7 +299,13 @@ fn5();
             return options.file === "dts" ? dtsLocation : dtsMapLocation;
         }
         it(`with ${options.file} file, when file is not present`, () => {
-            const session = setup(options.type, options.openFiles, options.action, undefined, host => host.deleteFile(file(options)));
+            const session = setup(
+                options.type,
+                options.openFiles,
+                options.action,
+                undefined,
+                host => host.deleteFile(file(options)),
+            );
             verifyScriptInfoCollectionWith(session, options.openFiles);
             baselineTsserverLogs(
                 "projectReferencesSourcemap",
@@ -408,7 +424,11 @@ fn5();
             openFilesForSession(options.openFiles, session);
             runActions(session, options.action);
             verifyScriptInfoCollectionWith(session, options.openFiles);
-            baselineTsserverLogs("projectReferencesSourcemap", `${options.scenarioLocation}/${type}/when projects are not built`, session);
+            baselineTsserverLogs(
+                "projectReferencesSourcemap",
+                `${options.scenarioLocation}/${type}/when projects are not built`,
+                session,
+            );
         });
     }
 

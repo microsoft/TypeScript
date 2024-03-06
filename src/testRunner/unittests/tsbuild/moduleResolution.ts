@@ -101,7 +101,13 @@ describe("unittests:: tsbuild:: moduleResolution:: handles the modules and optio
                 }),
                 "/src/packages/typeroot2/sometype/index.d.ts": Utils.dedent`declare type TheNum2 = "type2";`,
             }),
-        commandLineArgs: ["-b", "/src/packages/pkg1.tsconfig.json", "/src/packages/pkg2.tsconfig.json", "--verbose", "--traceResolution"],
+        commandLineArgs: [
+            "-b",
+            "/src/packages/pkg1.tsconfig.json",
+            "/src/packages/pkg2.tsconfig.json",
+            "--verbose",
+            "--traceResolution",
+        ],
     });
 });
 

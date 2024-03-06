@@ -213,7 +213,11 @@ describe("unittests:: tsserver:: dynamicFiles:: ", () => {
             // Without project root
             const file2Path = file.path.replace("#1", "#2");
             openFilesForSession([{ file: file2Path, content: file.content }], session);
-            baselineTsserverLogs("dynamicFiles", "dynamic file with projectRootPath with useInferredProjectPerProjectRoot", session);
+            baselineTsserverLogs(
+                "dynamicFiles",
+                "dynamic file with projectRootPath with useInferredProjectPerProjectRoot",
+                session,
+            );
         });
 
         it("fails when useInferredProjectPerProjectRoot is false", () => {

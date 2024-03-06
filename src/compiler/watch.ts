@@ -226,7 +226,13 @@ export function parseConfigFileWithSystem(
 ): ParsedCommandLine | undefined {
     const host: ParseConfigFileHost = system as any;
     host.onUnRecoverableConfigFileDiagnostic = diagnostic => reportUnrecoverableDiagnostic(system, reportDiagnostic, diagnostic);
-    const result = getParsedCommandLineOfConfigFile(configFileName, optionsToExtend, host, extendedConfigCache, watchOptionsToExtend);
+    const result = getParsedCommandLineOfConfigFile(
+        configFileName,
+        optionsToExtend,
+        host,
+        extendedConfigCache,
+        watchOptionsToExtend,
+    );
     host.onUnRecoverableConfigFileDiagnostic = undefined!; // TODO: GH#18217
     return result;
 }
@@ -313,7 +319,9 @@ export function getErrorSummaryText(
 }
 
 function createTabularErrorsDisplay(filesInError: (ReportFileInError | undefined)[], host: HasCurrentDirectory) {
-    const distinctFiles = filesInError.filter((value, index, self) => index === self.findIndex(file => file?.fileName === value?.fileName));
+    const distinctFiles = filesInError.filter((value, index, self) =>
+        index === self.findIndex(file => file?.fileName === value?.fileName)
+    );
     if (distinctFiles.length === 0) return "";
 
     const numberLength = (num: number) => Math.log(num) * Math.LOG10E + 1;
@@ -485,7 +493,8 @@ export function fileIncludeReasonToDiagnostics(
                 }
                 else if (referenceLocation.text === externalHelpersModuleNameText) {
                     message = referenceLocation.packageId ?
-                        Diagnostics.Imported_via_0_from_file_1_with_packageId_2_to_import_importHelpers_as_specified_in_compilerOptions :
+                        Diagnostics
+                            .Imported_via_0_from_file_1_with_packageId_2_to_import_importHelpers_as_specified_in_compilerOptions :
                         Diagnostics.Imported_via_0_from_file_1_to_import_importHelpers_as_specified_in_compilerOptions;
                 }
                 else {
@@ -525,7 +534,9 @@ export function fileIncludeReasonToDiagnostics(
             }
             const fileName = getNormalizedAbsolutePath(program.getRootFileNames()[reason.index], program.getCurrentDirectory());
             const matchedByFiles = getMatchedFileSpec(program, fileName);
-            if (matchedByFiles) return chainDiagnosticMessages(/*details*/ undefined, Diagnostics.Part_of_files_list_in_tsconfig_json);
+            if (matchedByFiles) {
+                return chainDiagnosticMessages(/*details*/ undefined, Diagnostics.Part_of_files_list_in_tsconfig_json);
+            }
             const matchedByInclude = getMatchedIncludeSpec(program, fileName);
             return isString(matchedByInclude) ?
                 chainDiagnosticMessages(
@@ -902,7 +913,8 @@ export function createProgramHost<T extends BuilderProgram = EmitAndSemanticDiag
         readFile: (path, encoding) => system.readFile(path, encoding),
         directoryExists: path => system.directoryExists(path),
         getDirectories: path => system.getDirectories(path),
-        readDirectory: (path, extensions, exclude, include, depth) => system.readDirectory(path, extensions, exclude, include, depth),
+        readDirectory: (path, extensions, exclude, include, depth) =>
+            system.readDirectory(path, extensions, exclude, include, depth),
         realpath: maybeBind(system, system.realpath),
         getEnvironmentVariable: maybeBind(system, system.getEnvironmentVariable),
         trace: s => system.write(s + system.newLine),
@@ -986,8 +998,14 @@ export function createWatchCompilerHostOfConfigFile<T extends BuilderProgram = E
     reportWatchStatus,
 }: CreateWatchCompilerHostOfConfigFileInput<T>): WatchCompilerHostOfConfigFile<T> {
     const diagnosticReporter = reportDiagnostic || createDiagnosticReporter(system);
-    const host = createWatchCompilerHost(system, createProgram, diagnosticReporter, reportWatchStatus) as WatchCompilerHostOfConfigFile<T>;
-    host.onUnRecoverableConfigFileDiagnostic = diagnostic => reportUnrecoverableDiagnostic(system, diagnosticReporter, diagnostic);
+    const host = createWatchCompilerHost(
+        system,
+        createProgram,
+        diagnosticReporter,
+        reportWatchStatus,
+    ) as WatchCompilerHostOfConfigFile<T>;
+    host.onUnRecoverableConfigFileDiagnostic = diagnostic =>
+        reportUnrecoverableDiagnostic(system, diagnosticReporter, diagnostic);
     host.configFileName = configFileName;
     host.optionsToExtend = optionsToExtend;
     host.watchOptionsToExtend = watchOptionsToExtend;
@@ -996,7 +1014,9 @@ export function createWatchCompilerHostOfConfigFile<T extends BuilderProgram = E
 }
 
 /** @internal */
-export interface CreateWatchCompilerHostOfFilesAndCompilerOptionsInput<T extends BuilderProgram> extends CreateWatchCompilerHostInput<T> {
+export interface CreateWatchCompilerHostOfFilesAndCompilerOptionsInput<T extends BuilderProgram>
+    extends CreateWatchCompilerHostInput<T>
+{
     rootFiles: string[];
     options: CompilerOptions;
     watchOptions: WatchOptions | undefined;
@@ -1007,7 +1027,9 @@ export interface CreateWatchCompilerHostOfFilesAndCompilerOptionsInput<T extends
  *
  * @internal
  */
-export function createWatchCompilerHostOfFilesAndCompilerOptions<T extends BuilderProgram = EmitAndSemanticDiagnosticsBuilderProgram>({
+export function createWatchCompilerHostOfFilesAndCompilerOptions<
+    T extends BuilderProgram = EmitAndSemanticDiagnosticsBuilderProgram,
+>({
     rootFiles,
     options,
     watchOptions,

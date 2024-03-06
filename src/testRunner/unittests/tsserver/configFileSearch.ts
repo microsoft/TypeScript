@@ -80,7 +80,11 @@ describe("unittests:: tsserver:: configFileSearch:: searching for config file", 
         // Delete config file - should create inferred project with project root path set
         host.deleteFile(configFile.path);
         host.runQueuedTimeoutCallbacks();
-        baselineTsserverLogs("configFileSearch", "should use projectRootPath when searching for inferred project again 2", session);
+        baselineTsserverLogs(
+            "configFileSearch",
+            "should use projectRootPath when searching for inferred project again 2",
+            session,
+        );
     });
 
     describe("when the opened file is not from project root", () => {

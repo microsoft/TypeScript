@@ -152,7 +152,12 @@ export function createIncrementalProgram<T extends BuilderProgram = EmitAndSeman
     return createProgram(rootNames, options, host, oldProgram, configFileParsingDiagnostics, projectReferences);
 }
 
-export type WatchStatusReporter = (diagnostic: Diagnostic, newLine: string, options: CompilerOptions, errorCount?: number) => void;
+export type WatchStatusReporter = (
+    diagnostic: Diagnostic,
+    newLine: string,
+    options: CompilerOptions,
+    errorCount?: number,
+) => void;
 /** Create the program with rootNames and options, if they are undefined, oldProgram and new configFile diagnostics create new program */
 export type CreateProgram<T extends BuilderProgram> = (
     rootNames: readonly string[] | undefined,
@@ -329,7 +334,9 @@ export interface WatchCompilerHostOfFilesAndCompilerOptions<T extends BuilderPro
 /**
  * Host to create watch with config file
  */
-export interface WatchCompilerHostOfConfigFile<T extends BuilderProgram> extends WatchCompilerHost<T>, ConfigFileDiagnosticsReporter {
+export interface WatchCompilerHostOfConfigFile<T extends BuilderProgram>
+    extends WatchCompilerHost<T>, ConfigFileDiagnosticsReporter
+{
     /** Name of the config file to compile */
     configFileName: string;
 
@@ -510,8 +517,13 @@ export function createWatchProgram<T extends BuilderProgram>(
 
     const useCaseSensitiveFileNames = host.useCaseSensitiveFileNames();
     const currentDirectory = host.getCurrentDirectory();
-    const { configFileName, optionsToExtend: optionsToExtendForConfigFile = {}, watchOptionsToExtend, extraFileExtensions, createProgram } =
-        host;
+    const {
+        configFileName,
+        optionsToExtend: optionsToExtendForConfigFile = {},
+        watchOptionsToExtend,
+        extraFileExtensions,
+        createProgram,
+    } = host;
     let { rootFiles: rootFileNames, options: compilerOptions, watchOptions, projectReferences } = host;
     let wildcardDirectories: MapLike<WatchDirectoryFlags> | undefined;
     let configFileParsingDiagnostics: Diagnostic[] | undefined;
@@ -546,7 +558,13 @@ export function createWatchProgram<T extends BuilderProgram>(
     writeLog(`Current directory: ${currentDirectory} CaseSensitiveFileNames: ${useCaseSensitiveFileNames}`);
     let configFileWatcher: FileWatcher | undefined;
     if (configFileName) {
-        configFileWatcher = watchFile(configFileName, scheduleProgramReload, PollingInterval.High, watchOptions, WatchType.ConfigFile);
+        configFileWatcher = watchFile(
+            configFileName,
+            scheduleProgramReload,
+            PollingInterval.High,
+            watchOptions,
+            WatchType.ConfigFile,
+        );
     }
 
     const compilerHost = createCompilerHostFromProgramHost(host, () => compilerOptions!, directoryStructureHost) as
@@ -629,7 +647,13 @@ export function createWatchProgram<T extends BuilderProgram>(
 
     return configFileName ?
         { getCurrentProgram: getCurrentBuilderProgram, getProgram: updateProgram, close, getResolutionCache } :
-        { getCurrentProgram: getCurrentBuilderProgram, getProgram: updateProgram, updateRootFileNames, close, getResolutionCache };
+        {
+            getCurrentProgram: getCurrentBuilderProgram,
+            getProgram: updateProgram,
+            updateRootFileNames,
+            close,
+            getResolutionCache,
+        };
 
     function close() {
         clearInvalidateResolutionsOfFailedLookupLocations();
@@ -859,7 +883,8 @@ export function createWatchProgram<T extends BuilderProgram>(
         }
 
         // Create new source file if requested or the versions dont match
-        const impliedNodeFormat = typeof languageVersionOrOptions === "object" ? languageVersionOrOptions.impliedNodeFormat : undefined;
+        const impliedNodeFormat = typeof languageVersionOrOptions === "object" ? languageVersionOrOptions.impliedNodeFormat
+            : undefined;
         if (
             hostSourceFile === undefined || shouldCreateNewSourceFile || isFilePresenceUnknownOnHost(hostSourceFile) ||
             hostSourceFile.sourceFile.impliedNodeFormat !== impliedNodeFormat
@@ -1118,7 +1143,10 @@ export function createWatchProgram<T extends BuilderProgram>(
         if (config) {
             if (!config.updateLevel) return config.parsedCommandLine;
             // With host implementing getParsedCommandLine we cant just update file names
-            if (config.parsedCommandLine && config.updateLevel === ProgramUpdateLevel.RootNamesAndUpdate && !host.getParsedCommandLine) {
+            if (
+                config.parsedCommandLine && config.updateLevel === ProgramUpdateLevel.RootNamesAndUpdate &&
+                !host.getParsedCommandLine
+            ) {
                 writeLog("Reloading new file names and options");
                 Debug.assert(compilerOptions);
                 const fileNames = getFileNamesFromConfigSpecs(

@@ -314,7 +314,13 @@ export function discoverTypings(
             // This is #1 described above.
             ? manifestTypingNames.map(typingName => combinePaths(packagesFolderPath, typingName, manifestName))
             // And #2. Depth = 3 because scoped packages look like `node_modules/@foo/bar/package.json`
-            : host.readDirectory(packagesFolderPath, [Extension.Json], /*excludes*/ undefined, /*includes*/ undefined, /*depth*/ 3)
+            : host.readDirectory(
+                packagesFolderPath,
+                [Extension.Json],
+                /*excludes*/ undefined,
+                /*includes*/ undefined,
+                /*depth*/ 3,
+            )
                 .filter(manifestPath => {
                     if (getBaseFileName(manifestPath) !== manifestName) {
                         return false;
@@ -330,7 +336,9 @@ export function discoverTypings(
                         !isScoped && toFileNameLowerCase(pathComponents[pathComponents.length - 3]) === modulesDirName; // `node_modules/foo`
                 });
 
-        if (log) log(`Searching for typing names in ${packagesFolderPath}; all files: ${JSON.stringify(dependencyManifestNames)}`);
+        if (log) {
+            log(`Searching for typing names in ${packagesFolderPath}; all files: ${JSON.stringify(dependencyManifestNames)}`);
+        }
 
         // Once we have the names of things to look up, we iterate over
         // and either collect their included typings, or add them to the

@@ -129,7 +129,8 @@ function getRefactorActionsToConvertFunctionExpressions(context: RefactorContext
     }
 
     if (refactorKindBeginsWith(toArrowFunctionAction.kind, kind)) {
-        const error = isFunctionExpression(func) ? undefined : getLocaleSpecificMessage(Diagnostics.Could_not_convert_to_arrow_function);
+        const error = isFunctionExpression(func) ? undefined
+            : getLocaleSpecificMessage(Diagnostics.Could_not_convert_to_arrow_function);
         if (error) {
             errors.push({ ...toArrowFunctionAction, notApplicableReason: error });
         }
@@ -146,7 +147,10 @@ function getRefactorActionsToConvertFunctionExpressions(context: RefactorContext
     }];
 }
 
-function getRefactorEditsToConvertFunctionExpressions(context: RefactorContext, actionName: string): RefactorEditInfo | undefined {
+function getRefactorEditsToConvertFunctionExpressions(
+    context: RefactorContext,
+    actionName: string,
+): RefactorEditInfo | undefined {
     const { file, startPosition, program } = context;
     const info = getFunctionInfo(file, startPosition, program);
 
@@ -257,18 +261,26 @@ function convertToBlock(body: ConciseBody): Block {
 
 function getVariableInfo(func: FunctionExpression | ArrowFunction): VariableInfo | undefined {
     const variableDeclaration = func.parent;
-    if (!isVariableDeclaration(variableDeclaration) || !isVariableDeclarationInVariableStatement(variableDeclaration)) return undefined;
+    if (!isVariableDeclaration(variableDeclaration) || !isVariableDeclarationInVariableStatement(variableDeclaration)) {
+        return undefined;
+    }
 
     const variableDeclarationList = variableDeclaration.parent;
     const statement = variableDeclarationList.parent;
-    if (!isVariableDeclarationList(variableDeclarationList) || !isVariableStatement(statement) || !isIdentifier(variableDeclaration.name)) {
+    if (
+        !isVariableDeclarationList(variableDeclarationList) || !isVariableStatement(statement) ||
+        !isIdentifier(variableDeclaration.name)
+    ) {
         return undefined;
     }
 
     return { variableDeclaration, variableDeclarationList, statement, name: variableDeclaration.name };
 }
 
-function getEditInfoForConvertToAnonymousFunction(context: RefactorContext, func: FunctionExpression | ArrowFunction): FileTextChanges[] {
+function getEditInfoForConvertToAnonymousFunction(
+    context: RefactorContext,
+    func: FunctionExpression | ArrowFunction,
+): FileTextChanges[] {
     const { file } = context;
     const body = convertToBlock(func.body);
     const newNode = factory.createFunctionExpression(
@@ -294,7 +306,8 @@ function getEditInfoForConvertToNamedFunction(
     const { variableDeclaration, variableDeclarationList, statement, name } = variableInfo;
     suppressLeadingTrivia(statement);
 
-    const modifiersFlags = (getCombinedModifierFlags(variableDeclaration) & ModifierFlags.Export) | getEffectiveModifierFlags(func);
+    const modifiersFlags = (getCombinedModifierFlags(variableDeclaration) & ModifierFlags.Export) |
+        getEffectiveModifierFlags(func);
     const modifiers = factory.createModifiersFromModifierFlags(modifiersFlags);
     const newNode = factory.createFunctionDeclaration(
         length(modifiers) ? modifiers : undefined,

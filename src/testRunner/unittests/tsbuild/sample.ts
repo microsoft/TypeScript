@@ -258,7 +258,8 @@ describe("unittests:: tsbuild:: on 'sample1' project", () => {
 
         verifyTscCompileLike(testTscCompileLike, {
             scenario: "sample1",
-            subScenario: "does not rebuild if there is no program and bundle in the ts build info event if version doesnt match ts version",
+            subScenario:
+                "does not rebuild if there is no program and bundle in the ts build info event if version doesnt match ts version",
             fs: () => {
                 const fs = projFs.shadow();
                 const host = fakes.SolutionBuilderHost.create(
@@ -522,7 +523,8 @@ class someClass2 { }`,
                 ),
             edits: [{
                 caption: "incremental-declaration-changes",
-                edit: fs => replaceText(fs, "core/tsconfig.json", `"incremental": true,`, `"incremental": true, "declaration": true,`),
+                edit: fs =>
+                    replaceText(fs, "core/tsconfig.json", `"incremental": true,`, `"incremental": true, "declaration": true,`),
             }],
         });
 

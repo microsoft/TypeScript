@@ -40,7 +40,9 @@ export function start() {
     const { statSync } = require("fs") as typeof import("fs");
 
     // NOTE: paths for module and types for FailedTestReporter _do not_ line up due to our use of --outFile for run.js
-    const FailedTestReporter = require(Utils.findUpFile("scripts/failed-tests.cjs")) as typeof import("../../../scripts/failed-tests.cjs");
+    const FailedTestReporter = require(
+        Utils.findUpFile("scripts/failed-tests.cjs"),
+    ) as typeof import("../../../scripts/failed-tests.cjs");
 
     const perfdataFileNameFragment = ".parallelperf";
     const perfData = readSavedPerfData(configOption);
@@ -213,7 +215,9 @@ export function start() {
     }
 
     function startDelayed(perfData: { [testHash: string]: number; } | undefined, totalCost: number) {
-        console.log(`Discovered ${tasks.length} unittest suites` + (newTasks.length ? ` and ${newTasks.length} new suites.` : "."));
+        console.log(
+            `Discovered ${tasks.length} unittest suites` + (newTasks.length ? ` and ${newTasks.length} new suites.` : "."),
+        );
         console.log("Discovering runner-based tests...");
         const discoverStart = +(new Date());
         for (const runner of runners) {
@@ -278,7 +282,13 @@ export function start() {
         let closedWorkers = 0;
         for (let i = 0; i < workerCount; i++) {
             // TODO: Just send the config over the IPC channel or in the command line arguments
-            const config: TestConfig = { light: lightMode, listenForWork: true, runUnitTests, stackTraceLimit, timeout: globalTimeout };
+            const config: TestConfig = {
+                light: lightMode,
+                listenForWork: true,
+                runUnitTests,
+                stackTraceLimit,
+                timeout: globalTimeout,
+            };
             const configPath = ts.combinePaths(taskConfigsFolder, `task-config${i}.json`);
             IO.writeFile(configPath, JSON.stringify(config));
             const worker: Worker = {
@@ -477,7 +487,8 @@ export function start() {
             const summaryColor = isPartitionFail ? "fail" : "green";
             const summarySymbol = isPartitionFail ? Base.symbols.err : Base.symbols.ok;
 
-            const summaryTests = (isPartitionFail ? totalPassing + "/" + (errorResults.length + totalPassing) : totalPassing) + " passing";
+            const summaryTests = (isPartitionFail ? totalPassing + "/" + (errorResults.length + totalPassing) : totalPassing) +
+                " passing";
             const summaryDuration = "(" + ms(duration) + ")";
             const savedUseColors = Base.useColors;
             Base.useColors = !noColors;

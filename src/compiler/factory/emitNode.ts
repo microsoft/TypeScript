@@ -51,7 +51,10 @@ export function getOrCreateEmitNode(node: Node): EmitNode {
         node.emitNode = {} as EmitNode;
     }
     else {
-        Debug.assert(!(node.emitNode.internalFlags & InternalEmitFlags.Immutable), "Invalid attempt to mutate an immutable node.");
+        Debug.assert(
+            !(node.emitNode.internalFlags & InternalEmitFlags.Immutable),
+            "Invalid attempt to mutate an immutable node.",
+        );
     }
     return node.emitNode;
 }
@@ -379,7 +382,10 @@ export function getIdentifierTypeArguments(node: Identifier): NodeArray<TypeNode
 }
 
 /** @internal */
-export function setIdentifierAutoGenerate<T extends Identifier | PrivateIdentifier>(node: T, autoGenerate: AutoGenerateInfo | undefined) {
+export function setIdentifierAutoGenerate<T extends Identifier | PrivateIdentifier>(
+    node: T,
+    autoGenerate: AutoGenerateInfo | undefined,
+) {
     getOrCreateEmitNode(node).autoGenerate = autoGenerate;
     return node;
 }

@@ -181,7 +181,10 @@ function doChange(
     const functionCalls = sortAndDeduplicate(groupedReferences.functionCalls, /*comparer*/ (a, b) => compareValues(a.pos, b.pos));
     for (const call of functionCalls) {
         if (call.arguments && call.arguments.length) {
-            const newArgument = getSynthesizedDeepClone(createNewArgument(functionDeclaration, call.arguments), /*includeTrivia*/ true);
+            const newArgument = getSynthesizedDeepClone(
+                createNewArgument(functionDeclaration, call.arguments),
+                /*includeTrivia*/ true,
+            );
             changes.replaceNodeRange(
                 getSourceFileOfNode(call),
                 first(call.arguments),
@@ -227,7 +230,8 @@ function getGroupedReferences(
 
     const references = flatMap(
         names,
-        /*mapfn*/ name => FindAllReferences.getReferenceEntriesForNode(-1, name, program, program.getSourceFiles(), cancellationToken),
+        /*mapfn*/ name =>
+            FindAllReferences.getReferenceEntriesForNode(-1, name, program, program.getSourceFiles(), cancellationToken),
     );
     const groupedReferences = groupReferences(references);
 
@@ -402,7 +406,10 @@ function entryToFunctionCall(entry: FindAllReferences.NodeEntry): CallExpression
             // x.foo(...)
             case SyntaxKind.PropertyAccessExpression:
                 const propertyAccessExpression = tryCast(parent, isPropertyAccessExpression);
-                if (propertyAccessExpression && propertyAccessExpression.parent && propertyAccessExpression.name === functionReference) {
+                if (
+                    propertyAccessExpression && propertyAccessExpression.parent &&
+                    propertyAccessExpression.name === functionReference
+                ) {
                     const callOrNewExpression = tryCast(propertyAccessExpression.parent, isCallOrNewExpression);
                     if (callOrNewExpression && callOrNewExpression.expression === propertyAccessExpression) {
                         return callOrNewExpression;
@@ -427,7 +434,9 @@ function entryToFunctionCall(entry: FindAllReferences.NodeEntry): CallExpression
     return undefined;
 }
 
-function entryToAccessExpression(entry: FindAllReferences.NodeEntry): ElementAccessExpression | PropertyAccessExpression | undefined {
+function entryToAccessExpression(
+    entry: FindAllReferences.NodeEntry,
+): ElementAccessExpression | PropertyAccessExpression | undefined {
     if (entry.node.parent) {
         const reference = entry.node;
         const parent = reference.parent;
@@ -453,7 +462,10 @@ function entryToAccessExpression(entry: FindAllReferences.NodeEntry): ElementAcc
 
 function entryToType(entry: FindAllReferences.NodeEntry): Node | undefined {
     const reference = entry.node;
-    if (getMeaningFromLocation(reference) === SemanticMeaning.Type || isExpressionWithTypeArgumentsInClassExtendsClause(reference.parent)) {
+    if (
+        getMeaningFromLocation(reference) === SemanticMeaning.Type ||
+        isExpressionWithTypeArgumentsInClassExtendsClause(reference.parent)
+    ) {
         return reference;
     }
     return undefined;
@@ -576,7 +588,10 @@ function getRefactorableParameters(parameters: NodeArray<ValidParameterDeclarati
     return parameters;
 }
 
-function createPropertyOrShorthandAssignment(name: string, initializer: Expression): PropertyAssignment | ShorthandPropertyAssignment {
+function createPropertyOrShorthandAssignment(
+    name: string,
+    initializer: Expression,
+): PropertyAssignment | ShorthandPropertyAssignment {
     if (isIdentifier(initializer) && getTextOfIdentifierOrLiteral(initializer) === name) {
         return factory.createShorthandPropertyAssignment(name);
     }
@@ -665,7 +680,8 @@ function createNewParameters(
             /*dotDotDotToken*/ undefined,
             /*propertyName*/ undefined,
             getParameterName(parameterDeclaration),
-            isRestParameter(parameterDeclaration) && isOptionalParameter(parameterDeclaration) ? factory.createArrayLiteralExpression()
+            isRestParameter(parameterDeclaration) && isOptionalParameter(parameterDeclaration) ?
+                factory.createArrayLiteralExpression()
                 : parameterDeclaration.initializer,
         );
 
@@ -691,7 +707,8 @@ function createNewParameters(
         const propertySignature = factory.createPropertySignature(
             /*modifiers*/ undefined,
             getParameterName(parameterDeclaration),
-            isOptionalParameter(parameterDeclaration) ? factory.createToken(SyntaxKind.QuestionToken) : parameterDeclaration.questionToken,
+            isOptionalParameter(parameterDeclaration) ? factory.createToken(SyntaxKind.QuestionToken)
+                : parameterDeclaration.questionToken,
             parameterType,
         );
 

@@ -70,7 +70,10 @@ registerCodeFix({
         const fixedDeclarations = new Set<number>();
         return codeFixAll(context, errorCodes, (t, diagnostic) => {
             const span = diagnostic.relatedInformation &&
-                find(diagnostic.relatedInformation, r => r.code === Diagnostics.Did_you_mean_to_mark_this_function_as_async.code) as
+                find(
+                    diagnostic.relatedInformation,
+                    r => r.code === Diagnostics.Did_you_mean_to_mark_this_function_as_async.code,
+                ) as
                     | TextSpan
                     | undefined;
             const decl = getFixableErrorSpanDeclaration(sourceFile, span);
@@ -114,7 +117,9 @@ function makeChange(
     fixedDeclarations?.add(getNodeId(insertionSite));
     const cloneWithModifier = factory.replaceModifiers(
         getSynthesizedDeepClone(insertionSite, /*includeTrivia*/ true),
-        factory.createNodeArray(factory.createModifiersFromModifierFlags(getSyntacticModifierFlags(insertionSite) | ModifierFlags.Async)),
+        factory.createNodeArray(
+            factory.createModifiersFromModifierFlags(getSyntacticModifierFlags(insertionSite) | ModifierFlags.Async),
+        ),
     );
     changeTracker.replaceNode(
         sourceFile,
@@ -133,7 +138,8 @@ function getFixableErrorSpanDeclaration(sourceFile: SourceFile, span: TextSpan |
         if (node.getStart(sourceFile) < span.start || node.getEnd() > textSpanEnd(span)) {
             return "quit";
         }
-        return (isArrowFunction(node) || isMethodDeclaration(node) || isFunctionExpression(node) || isFunctionDeclaration(node)) &&
+        return (isArrowFunction(node) || isMethodDeclaration(node) || isFunctionExpression(node) ||
+            isFunctionDeclaration(node)) &&
             textSpansEqual(span, createTextSpanFromNode(node, sourceFile));
     }) as FixableDeclaration | undefined;
 

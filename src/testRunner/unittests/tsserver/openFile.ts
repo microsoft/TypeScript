@@ -173,7 +173,11 @@ bar();`,
             },
         });
         verifyGetErrRequest({ session, files: [file] });
-        baselineTsserverLogs("openfile", "when file makes edits to add/remove comment directives, they are handled correcrly", session);
+        baselineTsserverLogs(
+            "openfile",
+            "when file makes edits to add/remove comment directives, they are handled correcrly",
+            session,
+        );
     });
 
     describe("opening file and refreshing program", () => {
@@ -257,7 +261,11 @@ bar();`,
             session.getProjectService().configuredProjects.get("/project/tsconfig.json")!.updateGraph();
             host.appendFile("/project/b.ts", "export const x = 10;");
             host.runQueuedTimeoutCallbacks();
-            baselineTsserverLogs("openfile", "edits on file and then close does not refresh sourceFile if contents match", session);
+            baselineTsserverLogs(
+                "openfile",
+                "edits on file and then close does not refresh sourceFile if contents match",
+                session,
+            );
         });
     });
 });

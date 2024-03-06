@@ -294,7 +294,10 @@ export function initializeNodeSystem(): StartInput {
     let canWrite = true;
 
     if (useWatchGuard) {
-        const currentDrive = extractWatchDirectoryCacheKey(sys.resolvePath(sys.getCurrentDirectory()), /*currentDriveKey*/ undefined);
+        const currentDrive = extractWatchDirectoryCacheKey(
+            sys.resolvePath(sys.getCurrentDirectory()),
+            /*currentDriveKey*/ undefined,
+        );
         const statusCache = new Map<string, boolean>();
         sys.watchDirectory = (path, callback, recursive, options) => {
             const cacheKey = extractWatchDirectoryCacheKey(path, currentDrive);
@@ -666,7 +669,10 @@ function startNodeSession(options: StartSessionOptions, logger: Logger, cancella
         }
 
         private writeToEventSocket(body: object, eventName: string): void {
-            this.eventSocket!.write(formatMessage(toEvent(eventName, body), this.logger, this.byteLength, this.host.newLine), "utf8");
+            this.eventSocket!.write(
+                formatMessage(toEvent(eventName, body), this.logger, this.byteLength, this.host.newLine),
+                "utf8",
+            );
         }
 
         override exit() {
@@ -751,7 +757,8 @@ function startNodeSession(options: StartSessionOptions, logger: Logger, cancella
                     process.env.APPDATA ||
                     (os.homedir && os.homedir()) ||
                     process.env.USERPROFILE ||
-                    (process.env.HOMEDRIVE && process.env.HOMEPATH && normalizeSlashes(process.env.HOMEDRIVE + process.env.HOMEPATH)) ||
+                    (process.env.HOMEDRIVE && process.env.HOMEPATH &&
+                        normalizeSlashes(process.env.HOMEDRIVE + process.env.HOMEPATH)) ||
                     os.tmpdir();
                 return combinePaths(combinePaths(normalizeSlashes(basePath), "Microsoft/TypeScript"), versionMajorMinor);
             }

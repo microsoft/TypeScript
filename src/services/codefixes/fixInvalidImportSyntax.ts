@@ -73,7 +73,10 @@ function getCodeFixesForImportDeclaration(context: CodeFixContext, node: ImportD
 
 function createAction(context: CodeFixContext, sourceFile: SourceFile, node: Node, replacement: Node): CodeFixAction {
     const changes = textChanges.ChangeTracker.with(context, t => t.replaceNode(sourceFile, node, replacement));
-    return createCodeFixActionWithoutFixAll(fixName, changes, [Diagnostics.Replace_import_with_0, changes[0].textChanges[0].newText]);
+    return createCodeFixActionWithoutFixAll(fixName, changes, [
+        Diagnostics.Replace_import_with_0,
+        changes[0].textChanges[0].newText,
+    ]);
 }
 
 registerCodeFix({

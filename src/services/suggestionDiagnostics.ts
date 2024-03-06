@@ -139,7 +139,9 @@ export function computeSuggestionDiagnostics(
 
             const jsdocTypedefNodes = codefix.getJSDocTypedefNodes(node);
             for (const jsdocTypedefNode of jsdocTypedefNodes) {
-                diags.push(createDiagnosticForNode(jsdocTypedefNode, Diagnostics.JSDoc_typedef_may_be_converted_to_TypeScript_type));
+                diags.push(
+                    createDiagnosticForNode(jsdocTypedefNode, Diagnostics.JSDoc_typedef_may_be_converted_to_TypeScript_type),
+                );
             }
 
             if (codefix.parameterShouldGetTypeFromJSDoc(node)) {
@@ -195,7 +197,11 @@ function importNameForConvertToDefaultImport(node: AnyValidImportOrReExport): Id
     }
 }
 
-function addConvertToAsyncFunctionDiagnostics(node: FunctionLikeDeclaration, checker: TypeChecker, diags: DiagnosticWithLocation[]): void {
+function addConvertToAsyncFunctionDiagnostics(
+    node: FunctionLikeDeclaration,
+    checker: TypeChecker,
+    diags: DiagnosticWithLocation[],
+): void {
     // need to check function before checking map so that deeper levels of nested callbacks are checked
     if (isConvertibleFunction(node, checker) && !visitedNestedConvertibleFunctions.has(getKeyFromNode(node))) {
         diags.push(createDiagnosticForNode(
@@ -252,7 +258,8 @@ export function isFixablePromiseHandler(node: Node, checker: TypeChecker): boole
     while (isPromiseHandler(currentNode) || isPropertyAccessExpression(currentNode)) {
         if (isCallExpression(currentNode)) {
             if (
-                !hasSupportedNumberOfArguments(currentNode) || !currentNode.arguments.every(arg => isFixablePromiseArgument(arg, checker))
+                !hasSupportedNumberOfArguments(currentNode) ||
+                !currentNode.arguments.every(arg => isFixablePromiseArgument(arg, checker))
             ) {
                 return false;
             }
@@ -337,7 +344,9 @@ function canBeConvertedToClass(node: Node, checker: TypeChecker): boolean {
 }
 
 /** @internal */
-export function canBeConvertedToAsync(node: Node): node is FunctionDeclaration | MethodDeclaration | FunctionExpression | ArrowFunction {
+export function canBeConvertedToAsync(
+    node: Node,
+): node is FunctionDeclaration | MethodDeclaration | FunctionExpression | ArrowFunction {
     switch (node.kind) {
         case SyntaxKind.FunctionDeclaration:
         case SyntaxKind.MethodDeclaration:

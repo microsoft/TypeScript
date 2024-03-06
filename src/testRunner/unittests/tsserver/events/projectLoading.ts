@@ -76,7 +76,11 @@ describe("unittests:: tsserver:: events:: ProjectLoadingStart and ProjectLoading
 
                 host.writeFile(configA.path, configA.content);
                 host.runQueuedTimeoutCallbacks();
-                baselineTsserverLogs("events/projectLoading", `change is detected in an extended config file ${sessionType}`, session);
+                baselineTsserverLogs(
+                    "events/projectLoading",
+                    `change is detected in an extended config file ${sessionType}`,
+                    session,
+                );
             });
 
             describe("when opening original location project", () => {

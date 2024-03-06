@@ -116,7 +116,8 @@ import { something } from "something";
             command: ts.server.protocol.CommandTypes.SyntacticDiagnosticsSync,
             arguments: { file: file1.path },
         };
-        const response = session.executeCommandSeq(request).response as ts.server.protocol.SyntacticDiagnosticsSyncResponse["body"];
+        const response = session.executeCommandSeq(request)
+            .response as ts.server.protocol.SyntacticDiagnosticsSyncResponse["body"];
         assert.isDefined(response);
         assert.equal(response!.length, 1);
         assert.equal((response![0] as ts.server.protocol.Diagnostic).text, expectedErrorMessage);
@@ -211,7 +212,11 @@ function fooB() { }`,
             content: "",
         };
         const host = createServerHost([angularFormsDts, angularFormsPackageJson, tsconfig, packageJson, indexTs, libFile]);
-        const session = new TestSession({ host, serverMode: ts.LanguageServiceMode.PartialSemantic, useSingleInferredProject: true });
+        const session = new TestSession({
+            host,
+            serverMode: ts.LanguageServiceMode.PartialSemantic,
+            useSingleInferredProject: true,
+        });
         const service = session.getProjectService();
         openFilesForSession([indexTs], session);
         const project = service.inferredProjects[0];

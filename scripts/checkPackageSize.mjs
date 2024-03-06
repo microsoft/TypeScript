@@ -5,7 +5,9 @@ const baseRepo = process.argv[2];
 const headRepo = process.argv[3];
 
 /** @type {Array<{ size: number, unpackedSize: number; files: Array<{ path: string; size: number; }>; }>} */
-const [before, after] = JSON.parse(cp.execFileSync("npm", ["pack", "--dry-run", "--json", baseRepo, headRepo], { encoding: "utf8" }));
+const [before, after] = JSON.parse(
+    cp.execFileSync("npm", ["pack", "--dry-run", "--json", baseRepo, headRepo], { encoding: "utf8" }),
+);
 
 /** @param {{ path: string; size: number; }[]} files */
 function filesToMap(files) {

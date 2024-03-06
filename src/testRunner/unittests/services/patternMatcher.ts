@@ -200,7 +200,10 @@ describe("unittests:: services:: PatternMatcher", () => {
 
     describe("MultiWordPattern", () => {
         it("ExactWithLowercase", () => {
-            assertSegmentMatch("AddMetadataReference", "addmetadatareference", { kind: ts.PatternMatchKind.exact, isCaseSensitive: false });
+            assertSegmentMatch("AddMetadataReference", "addmetadatareference", {
+                kind: ts.PatternMatchKind.exact,
+                isCaseSensitive: false,
+            });
         });
 
         it("SingleLowercasedSearchWord1", () => {
@@ -208,7 +211,10 @@ describe("unittests:: services:: PatternMatcher", () => {
         });
 
         it("SingleLowercasedSearchWord2", () => {
-            assertSegmentMatch("AddMetadataReference", "metadata", { kind: ts.PatternMatchKind.substring, isCaseSensitive: false });
+            assertSegmentMatch("AddMetadataReference", "metadata", {
+                kind: ts.PatternMatchKind.substring,
+                isCaseSensitive: false,
+            });
         });
 
         it("SingleUppercaseSearchWord1", () => {
@@ -216,7 +222,10 @@ describe("unittests:: services:: PatternMatcher", () => {
         });
 
         it("SingleUppercaseSearchWord2", () => {
-            assertSegmentMatch("AddMetadataReference", "Metadata", { kind: ts.PatternMatchKind.substring, isCaseSensitive: true });
+            assertSegmentMatch("AddMetadataReference", "Metadata", {
+                kind: ts.PatternMatchKind.substring,
+                isCaseSensitive: true,
+            });
         });
 
         it("SingleUppercaseSearchLetter1", () => {
@@ -228,7 +237,10 @@ describe("unittests:: services:: PatternMatcher", () => {
         });
 
         it("TwoLowercaseWords0", () => {
-            assertSegmentMatch("AddMetadataReference", "add metadata", { kind: ts.PatternMatchKind.prefix, isCaseSensitive: false });
+            assertSegmentMatch("AddMetadataReference", "add metadata", {
+                kind: ts.PatternMatchKind.prefix,
+                isCaseSensitive: false,
+            });
         });
 
         it("TwoLowercaseWords1", () => {
@@ -240,7 +252,10 @@ describe("unittests:: services:: PatternMatcher", () => {
         });
 
         it("TwoLowercaseWords3", () => {
-            assertSegmentMatch("AddMetadataReference", "ref Metadata", { kind: ts.PatternMatchKind.substring, isCaseSensitive: true });
+            assertSegmentMatch("AddMetadataReference", "ref Metadata", {
+                kind: ts.PatternMatchKind.substring,
+                isCaseSensitive: true,
+            });
         });
 
         it("TwoLowercaseWords4", () => {
@@ -319,7 +334,12 @@ describe("unittests:: services:: PatternMatcher", () => {
         assert.deepEqual(ts.createPatternMatcher(pattern)!.getMatchForLastSegmentOfPattern(candidate), expected);
     }
 
-    function assertFullMatch(dottedContainer: string, candidate: string, pattern: string, expected: ts.PatternMatch | undefined): void {
+    function assertFullMatch(
+        dottedContainer: string,
+        candidate: string,
+        pattern: string,
+        expected: ts.PatternMatch | undefined,
+    ): void {
         assert.deepEqual(ts.createPatternMatcher(pattern)!.getFullMatch(dottedContainer.split("."), candidate), expected);
     }
 

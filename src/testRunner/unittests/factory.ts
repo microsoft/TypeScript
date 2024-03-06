@@ -96,7 +96,9 @@ describe("unittests:: FactoryAPI", () => {
                     ts.factory.createPropertyAccessExpression(ts.factory.createObjectLiteralExpression(), "prop"),
                 ),
             );
-            checkBody(ts.factory.createCommaListExpression([ts.factory.createStringLiteral("a"), ts.factory.createStringLiteral("b")]));
+            checkBody(
+                ts.factory.createCommaListExpression([ts.factory.createStringLiteral("a"), ts.factory.createStringLiteral("b")]),
+            );
             checkBody(
                 ts.factory.createBinaryExpression(
                     ts.factory.createStringLiteral("a"),

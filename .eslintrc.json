@@ -71,7 +71,11 @@
         // @typescript-eslint/eslint-plugin
         "@typescript-eslint/naming-convention": [
             "error",
-            { "selector": "typeLike", "format": ["PascalCase"], "filter": { "regex": "^(__String|[A-Za-z]+_[A-Za-z]+)$", "match": false } },
+            {
+                "selector": "typeLike",
+                "format": ["PascalCase"],
+                "filter": { "regex": "^(__String|[A-Za-z]+_[A-Za-z]+)$", "match": false }
+            },
             {
                 "selector": "interface",
                 "format": ["PascalCase"],

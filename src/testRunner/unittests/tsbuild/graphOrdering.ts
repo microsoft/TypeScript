@@ -53,7 +53,11 @@ describe("unittests:: tsbuild - graph-ordering", () => {
     });
 
     function checkGraphOrdering(rootNames: string[], expectedBuildSet: string[], circular?: true) {
-        const builder = ts.createSolutionBuilder(host!, rootNames.map(getProjectFileName), { dry: true, force: false, verbose: false });
+        const builder = ts.createSolutionBuilder(host!, rootNames.map(getProjectFileName), {
+            dry: true,
+            force: false,
+            verbose: false,
+        });
         const buildOrder = builder.getBuildOrder();
         assert.equal(ts.isCircularBuildOrder(buildOrder), !!circular);
         const buildQueue = ts.getBuildOrderFromAnyBuildOrder(buildOrder);

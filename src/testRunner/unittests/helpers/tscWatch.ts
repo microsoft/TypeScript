@@ -163,7 +163,9 @@ interface CreateWatchCompilerHostOfConfigFileForBaseline<T extends ts.BuilderPro
     cb: ts.ExecuteCommandLineCallbacks;
 }
 
-export function createWatchCompilerHostOfConfigFileForBaseline<T extends ts.BuilderProgram = ts.EmitAndSemanticDiagnosticsBuilderProgram>(
+export function createWatchCompilerHostOfConfigFileForBaseline<
+    T extends ts.BuilderProgram = ts.EmitAndSemanticDiagnosticsBuilderProgram,
+>(
     input: CreateWatchCompilerHostOfConfigFileForBaseline<T>,
 ) {
     const host = ts.createWatchCompilerHostOfConfigFile({
@@ -195,7 +197,10 @@ export function createWatchCompilerHostOfFilesAndCompilerOptionsForBaseline<
     return host;
 }
 
-function updateWatchHostForBaseline<T extends ts.BuilderProgram>(host: ts.WatchCompilerHost<T>, cb: ts.ExecuteCommandLineCallbacks) {
+function updateWatchHostForBaseline<T extends ts.BuilderProgram>(
+    host: ts.WatchCompilerHost<T>,
+    cb: ts.ExecuteCommandLineCallbacks,
+) {
     const emitFilesAndReportErrors = host.afterProgramCreate!;
     host.afterProgramCreate = builderProgram => {
         emitFilesAndReportErrors.call(host, builderProgram);
@@ -257,14 +262,18 @@ export function runWatchBaseline<T extends ts.BuilderProgram = ts.EmitAndSemanti
                 baselineSourceMap,
                 baselineDependencies,
                 caption,
-                resolutionCache: !skipStructureCheck ? (watchOrSolution as ts.WatchOfConfigFile<T> | undefined)?.getResolutionCache?.()
+                resolutionCache: !skipStructureCheck ?
+                    (watchOrSolution as ts.WatchOfConfigFile<T> | undefined)?.getResolutionCache?.()
                     : undefined,
                 useSourceOfProjectReferenceRedirect,
                 symlinksNotReflected,
             });
         }
     }
-    Baseline.runBaseline(tscBaselineName(scenario, subScenario, commandLineArgs, isWatch(commandLineArgs)), baseline.join("\r\n"));
+    Baseline.runBaseline(
+        tscBaselineName(scenario, subScenario, commandLineArgs, isWatch(commandLineArgs)),
+        baseline.join("\r\n"),
+    );
 }
 
 export function isWatch(commandLineArgs: readonly string[]) {

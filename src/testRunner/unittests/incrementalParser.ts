@@ -122,7 +122,8 @@ function deleteCode(source: string, index: number, toDelete: string) {
     for (let i = 0; i < repeat; i++) {
         const oldText = ts.ScriptSnapshot.fromString(source);
         const newTextAndChange = withDelete(oldText, index, 1);
-        const newTree = compareTrees(oldText, newTextAndChange.text, newTextAndChange.textChangeRange, -1, oldTree).incrementalNewTree;
+        const newTree =
+            compareTrees(oldText, newTextAndChange.text, newTextAndChange.textChangeRange, -1, oldTree).incrementalNewTree;
 
         source = ts.getSnapshotText(newTextAndChange.text);
         oldTree = newTree;
@@ -135,7 +136,8 @@ function insertCode(source: string, index: number, toInsert: string) {
     for (let i = 0; i < repeat; i++) {
         const oldText = ts.ScriptSnapshot.fromString(source);
         const newTextAndChange = withInsert(oldText, index + i, toInsert.charAt(i));
-        const newTree = compareTrees(oldText, newTextAndChange.text, newTextAndChange.textChangeRange, -1, oldTree).incrementalNewTree;
+        const newTree =
+            compareTrees(oldText, newTextAndChange.text, newTextAndChange.textChangeRange, -1, oldTree).incrementalNewTree;
 
         source = ts.getSnapshotText(newTextAndChange.text);
         oldTree = newTree;
@@ -760,7 +762,8 @@ module m3 { }\
     });
 
     it("Moving index signatures from class to interface in strict mode", () => {
-        const source = '"use strict"; class C { public [a: number]: string; public [a: number]: string; public [a: number]: string }';
+        const source =
+            '"use strict"; class C { public [a: number]: string; public [a: number]: string; public [a: number]: string }';
 
         const oldText = ts.ScriptSnapshot.fromString(source);
         const newTextAndChange = withChange(oldText, 14, "class".length, "interface");
@@ -778,7 +781,8 @@ module m3 { }\
     });
 
     it("Moving index signatures from interface to class in strict mode", () => {
-        const source = '"use strict"; interface C { public [a: number]: string; public [a: number]: string; public [a: number]: string }';
+        const source =
+            '"use strict"; interface C { public [a: number]: string; public [a: number]: string; public [a: number]: string }';
 
         const oldText = ts.ScriptSnapshot.fromString(source);
         const newTextAndChange = withChange(oldText, 14, "interface".length, "class");
@@ -817,7 +821,12 @@ module m3 { }\
         const source = `class Greeter { constructor(element: HTMLElement) { } }`;
         const oldText = ts.ScriptSnapshot.fromString(source);
         const newTextAndChange = withChange(oldText, 15, 0, "\n");
-        const { oldTree, incrementalNewTree } = compareTrees(oldText, newTextAndChange.text, newTextAndChange.textChangeRange, -1);
+        const { oldTree, incrementalNewTree } = compareTrees(
+            oldText,
+            newTextAndChange.text,
+            newTextAndChange.textChangeRange,
+            -1,
+        );
         ts.bindSourceFile(oldTree, {});
         ts.bindSourceFile(incrementalNewTree, {});
         assert.equal(oldTree.transformFlags, incrementalNewTree.transformFlags);
@@ -893,7 +902,12 @@ module m3 { }\
                 oldText: ts.IScriptSnapshot,
                 newTextAndChange: { text: ts.IScriptSnapshot; textChangeRange: ts.TextChangeRange; },
             ) {
-                const { incrementalNewTree, newTree } = compareTrees(oldText, newTextAndChange.text, newTextAndChange.textChangeRange, -1);
+                const { incrementalNewTree, newTree } = compareTrees(
+                    oldText,
+                    newTextAndChange.text,
+                    newTextAndChange.textChangeRange,
+                    -1,
+                );
                 assert.deepEqual(incrementalNewTree.commentDirectives, newTree.commentDirectives);
             }
 

@@ -59,7 +59,12 @@ const nullLog: Log = {
     writeLine: noop,
 };
 
-function typingToFileName(cachePath: string, packageName: string, installTypingHost: InstallTypingHost, log: Log): string | undefined {
+function typingToFileName(
+    cachePath: string,
+    packageName: string,
+    installTypingHost: InstallTypingHost,
+    log: Log,
+): string | undefined {
     try {
         const result = resolveModuleName(
             packageName,
@@ -78,7 +83,12 @@ function typingToFileName(cachePath: string, packageName: string, installTypingH
 }
 
 /** @internal */
-export function installNpmPackages(npmPath: string, tsVersion: string, packageNames: string[], install: (command: string) => boolean) {
+export function installNpmPackages(
+    npmPath: string,
+    tsVersion: string,
+    packageNames: string[],
+    install: (command: string) => boolean,
+) {
     let hasError = false;
     for (let remaining = packageNames.length; remaining > 0;) {
         const result = getNpmCommandForInstallation(npmPath, tsVersion, packageNames, remaining);
@@ -368,14 +378,18 @@ export abstract class TypingsInstaller {
         return mapDefined(typingsToInstall, typing => {
             const typingKey = mangleScopedPackageName(typing);
             if (this.missingTypingsSet.has(typingKey)) {
-                if (this.log.isEnabled()) this.log.writeLine(`'${typing}':: '${typingKey}' is in missingTypingsSet - skipping...`);
+                if (this.log.isEnabled()) {
+                    this.log.writeLine(`'${typing}':: '${typingKey}' is in missingTypingsSet - skipping...`);
+                }
                 return undefined;
             }
             const validationResult = JsTyping.validatePackageName(typing);
             if (validationResult !== JsTyping.NameValidationResult.Ok) {
                 // add typing name to missing set so we won't process it again
                 this.missingTypingsSet.add(typingKey);
-                if (this.log.isEnabled()) this.log.writeLine(JsTyping.renderPackageNameValidationFailure(validationResult, typing));
+                if (this.log.isEnabled()) {
+                    this.log.writeLine(JsTyping.renderPackageNameValidationFailure(validationResult, typing));
+                }
                 return undefined;
             }
             if (!this.typesRegistry.has(typingKey)) {
@@ -390,7 +404,9 @@ export abstract class TypingsInstaller {
                 this.packageNameToTypingLocation.get(typingKey) &&
                 JsTyping.isTypingUpToDate(this.packageNameToTypingLocation.get(typingKey)!, this.typesRegistry.get(typingKey)!)
             ) {
-                if (this.log.isEnabled()) this.log.writeLine(`'${typing}':: '${typingKey}' already has an up-to-date typing - skipping...`);
+                if (this.log.isEnabled()) {
+                    this.log.writeLine(`'${typing}':: '${typingKey}' already has an up-to-date typing - skipping...`);
+                }
                 return undefined;
             }
             return typingKey;
@@ -411,7 +427,12 @@ export abstract class TypingsInstaller {
         }
     }
 
-    private installTypings(req: DiscoverTypings, cachePath: string, currentlyCachedTypings: string[], typingsToInstall: string[]) {
+    private installTypings(
+        req: DiscoverTypings,
+        cachePath: string,
+        currentlyCachedTypings: string[],
+        typingsToInstall: string[],
+    ) {
         if (this.log.isEnabled()) {
             this.log.writeLine(`Installing typings ${JSON.stringify(typingsToInstall)}`);
         }
@@ -533,7 +554,12 @@ export abstract class TypingsInstaller {
         };
     }
 
-    private installTypingsAsync(requestId: number, packageNames: string[], cwd: string, onRequestCompleted: RequestCompletedAction): void {
+    private installTypingsAsync(
+        requestId: number,
+        packageNames: string[],
+        cwd: string,
+        onRequestCompleted: RequestCompletedAction,
+    ): void {
         this.pendingRunRequests.unshift({ requestId, packageNames, cwd, onRequestCompleted });
         this.executeWithThrottling();
     }

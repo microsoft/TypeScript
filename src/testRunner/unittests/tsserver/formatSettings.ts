@@ -41,7 +41,10 @@ describe("unittests:: tsserver:: formatSettings", () => {
         );
 
         // set per file format options
-        const newPerFileSettings = { ...defaultSettings, insertSpaceAfterCommaDelimiter: !defaultSettings.insertSpaceAfterCommaDelimiter };
+        const newPerFileSettings = {
+            ...defaultSettings,
+            insertSpaceAfterCommaDelimiter: !defaultSettings.insertSpaceAfterCommaDelimiter,
+        };
         session.executeCommandSeq<ts.server.protocol.ConfigureRequest>({
             command: ts.server.protocol.CommandTypes.Configure,
             arguments: { formatOptions: newPerFileSettings, file: f1.path },

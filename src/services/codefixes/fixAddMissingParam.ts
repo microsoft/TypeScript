@@ -66,7 +66,11 @@ registerCodeFix({
                 createCodeFixAction(
                     addMissingParamFixId,
                     textChanges.ChangeTracker.with(context, t => doChange(t, context.sourceFile, declarations, newParameters)),
-                    [length(newParameters) > 1 ? Diagnostics.Add_missing_parameters_to_0 : Diagnostics.Add_missing_parameter_to_0, name],
+                    [
+                        length(newParameters) > 1 ? Diagnostics.Add_missing_parameters_to_0
+                            : Diagnostics.Add_missing_parameter_to_0,
+                        name,
+                    ],
                     addMissingParamFixId,
                     Diagnostics.Add_all_missing_parameters,
                 ),
@@ -78,7 +82,10 @@ registerCodeFix({
                 actions,
                 createCodeFixAction(
                     addOptionalParamFixId,
-                    textChanges.ChangeTracker.with(context, t => doChange(t, context.sourceFile, declarations, newOptionalParameters)),
+                    textChanges.ChangeTracker.with(
+                        context,
+                        t => doChange(t, context.sourceFile, declarations, newOptionalParameters),
+                    ),
                     [
                         length(newOptionalParameters) > 1 ? Diagnostics.Add_optional_parameters_to_0
                             : Diagnostics.Add_optional_parameter_to_0,
@@ -331,5 +338,8 @@ function createParameter(name: string, type: TypeNode, questionToken: QuestionTo
 
 function isOptionalPos(declarations: ConvertibleSignatureDeclaration[], pos: number) {
     return length(declarations) &&
-        some(declarations, d => pos < length(d.parameters) && !!d.parameters[pos] && d.parameters[pos].questionToken === undefined);
+        some(
+            declarations,
+            d => pos < length(d.parameters) && !!d.parameters[pos] && d.parameters[pos].questionToken === undefined,
+        );
 }

@@ -34,7 +34,8 @@ registerCodeFix({
         const changes = textChanges.ChangeTracker.with(context, t => {
             diagnostic = doChange(t, sourceFile, span.start, program.getTypeChecker());
         });
-        return diagnostic ? [createCodeFixAction(fixId, changes, diagnostic, fixId, Diagnostics.Fix_all_implicit_this_errors)] : emptyArray;
+        return diagnostic ? [createCodeFixAction(fixId, changes, diagnostic, fixId, Diagnostics.Fix_all_implicit_this_errors)]
+            : emptyArray;
     },
     fixIds: [fixId],
     getAllCodeActions: context =>

@@ -178,7 +178,8 @@ describe("unittests:: tsc-watch:: emit for configured projects", () => {
         changes: [
             changeModuleFile1Shape,
             {
-                caption: "Change the content of moduleFile1 to `export var T: number;export function Foo() { console.log('hi'); };`",
+                caption:
+                    "Change the content of moduleFile1 to `export var T: number;export function Foo() { console.log('hi'); };`",
                 edit: sys => sys.writeFile(moduleFile1Path, `export var T: number;export function Foo() { console.log('hi'); };`),
                 timeouts: sys => sys.runQueuedTimeoutCallbacks(),
             },
@@ -200,7 +201,8 @@ describe("unittests:: tsc-watch:: emit for configured projects", () => {
                 timeouts: sys => sys.runQueuedTimeoutCallbacks(),
             },
             {
-                caption: "Change the content of moduleFile1 to `export var T: number;export var T2: string;export function Foo() { };`",
+                caption:
+                    "Change the content of moduleFile1 to `export var T: number;export var T2: string;export function Foo() { };`",
                 edit: sys => sys.writeFile(moduleFile1Path, `export let y = Foo();`),
                 timeouts: sys => sys.runQueuedTimeoutCallbacks(),
             },

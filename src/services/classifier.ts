@@ -81,13 +81,21 @@ import {
 export function createClassifier(): Classifier {
     const scanner = createScanner(ScriptTarget.Latest, /*skipTrivia*/ false);
 
-    function getClassificationsForLine(text: string, lexState: EndOfLineState, syntacticClassifierAbsent: boolean): ClassificationResult {
+    function getClassificationsForLine(
+        text: string,
+        lexState: EndOfLineState,
+        syntacticClassifierAbsent: boolean,
+    ): ClassificationResult {
         return convertClassificationsToResult(getEncodedLexicalClassifications(text, lexState, syntacticClassifierAbsent), text);
     }
 
     // If there is a syntactic classifier ('syntacticClassifierAbsent' is false),
     // we will be more conservative in order to avoid conflicting with the syntactic classifier.
-    function getEncodedLexicalClassifications(text: string, lexState: EndOfLineState, syntacticClassifierAbsent: boolean): Classifications {
+    function getEncodedLexicalClassifications(
+        text: string,
+        lexState: EndOfLineState,
+        syntacticClassifierAbsent: boolean,
+    ): Classifications {
         let token = SyntaxKind.Unknown;
         let lastNonTriviaToken = SyntaxKind.Unknown;
 
@@ -225,7 +233,11 @@ export function createClassifier(): Classifier {
                             }
                         }
                         else {
-                            Debug.assertEqual(lastTemplateStackToken, SyntaxKind.OpenBraceToken, "Should have been an open brace");
+                            Debug.assertEqual(
+                                lastTemplateStackToken,
+                                SyntaxKind.OpenBraceToken,
+                                "Should have been an open brace",
+                            );
                             templateStack.pop();
                         }
                     }
@@ -315,7 +327,8 @@ function getNewEndOfLineState(
                         return EndOfLineState.InTemplateHeadOrNoSubstitutionTemplate;
                     default:
                         return Debug.fail(
-                            "Only 'NoSubstitutionTemplateLiteral's and 'TemplateTail's can be unterminated; got SyntaxKind #" + token,
+                            "Only 'NoSubstitutionTemplateLiteral's and 'TemplateTail's can be unterminated; got SyntaxKind #" +
+                                token,
                         );
                 }
             }
@@ -323,7 +336,13 @@ function getNewEndOfLineState(
     }
 }
 
-function pushEncodedClassification(start: number, end: number, offset: number, classification: ClassificationType, result: number[]): void {
+function pushEncodedClassification(
+    start: number,
+    end: number,
+    offset: number,
+    classification: ClassificationType,
+    result: number[],
+): void {
     if (classification === ClassificationType.whiteSpace) {
         // Don't bother with whitespace classifications.  They're not needed.
         return;
@@ -627,7 +646,11 @@ export function getEncodedSemanticClassifications(
     }
 }
 
-function classifySymbol(symbol: Symbol, meaningAtPosition: SemanticMeaning, checker: TypeChecker): ClassificationType | undefined {
+function classifySymbol(
+    symbol: Symbol,
+    meaningAtPosition: SemanticMeaning,
+    checker: TypeChecker,
+): ClassificationType | undefined {
     const flags = symbol.getFlags();
     if ((flags & SymbolFlags.Classifiable) === SymbolFlags.None) {
         return undefined;
@@ -645,7 +668,8 @@ function classifySymbol(symbol: Symbol, meaningAtPosition: SemanticMeaning, chec
         // Only classify a module as such if
         //  - It appears in a namespace context.
         //  - There exists a module declaration which actually impacts the value side.
-        return meaningAtPosition & SemanticMeaning.Namespace || meaningAtPosition & SemanticMeaning.Value && hasValueSideModule(symbol) ?
+        return meaningAtPosition & SemanticMeaning.Namespace ||
+                meaningAtPosition & SemanticMeaning.Value && hasValueSideModule(symbol) ?
             ClassificationType.moduleName
             : undefined;
     }
@@ -665,7 +689,8 @@ function classifySymbol(symbol: Symbol, meaningAtPosition: SemanticMeaning, chec
 function hasValueSideModule(symbol: Symbol): boolean {
     return some(
         symbol.declarations,
-        declaration => isModuleDeclaration(declaration) && getModuleInstanceState(declaration) === ModuleInstanceState.Instantiated,
+        declaration =>
+            isModuleDeclaration(declaration) && getModuleInstanceState(declaration) === ModuleInstanceState.Instantiated,
     );
 }
 
@@ -758,7 +783,12 @@ export function getEncodedSyntacticClassifications(
 
     // Make a scanner we can get trivia from.
     const triviaScanner = createScanner(ScriptTarget.Latest, /*skipTrivia*/ false, sourceFile.languageVariant, sourceFile.text);
-    const mergeConflictScanner = createScanner(ScriptTarget.Latest, /*skipTrivia*/ false, sourceFile.languageVariant, sourceFile.text);
+    const mergeConflictScanner = createScanner(
+        ScriptTarget.Latest,
+        /*skipTrivia*/ false,
+        sourceFile.languageVariant,
+        sourceFile.text,
+    );
 
     const result: number[] = [];
     processElement(sourceFile);

@@ -28,7 +28,11 @@ registerCodeFix({
     },
     fixIds: [fixId],
     getAllCodeActions: context =>
-        codeFixAll(context, errorCodes, (changes, diag) => doChange(changes, context.sourceFile, getImportTypeNode(diag.file, diag.start))),
+        codeFixAll(
+            context,
+            errorCodes,
+            (changes, diag) => doChange(changes, context.sourceFile, getImportTypeNode(diag.file, diag.start)),
+        ),
 });
 
 function getImportTypeNode(sourceFile: SourceFile, pos: number): ImportTypeNode {

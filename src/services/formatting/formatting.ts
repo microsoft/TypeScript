@@ -189,7 +189,12 @@ export function formatOnEnter(position: number, sourceFile: SourceFile, formatCo
 /** @internal */
 export function formatOnSemicolon(position: number, sourceFile: SourceFile, formatContext: FormatContext): TextChange[] {
     const semicolon = findImmediatelyPrecedingTokenOfKind(position, SyntaxKind.SemicolonToken, sourceFile);
-    return formatNodeLines(findOutermostNodeWithinListLevel(semicolon), sourceFile, formatContext, FormattingRequestKind.FormatOnSemicolon);
+    return formatNodeLines(
+        findOutermostNodeWithinListLevel(semicolon),
+        sourceFile,
+        formatContext,
+        FormattingRequestKind.FormatOnSemicolon,
+    );
 }
 
 /** @internal */
@@ -255,7 +260,11 @@ export function formatSelection(start: number, end: number, sourceFile: SourceFi
  * Validating `expectedTokenKind` ensures the token was typed in the context we expect (eg: not a comment).
  * @param expectedTokenKind The kind of the last token constituting the desired parent node.
  */
-function findImmediatelyPrecedingTokenOfKind(end: number, expectedTokenKind: SyntaxKind, sourceFile: SourceFile): Node | undefined {
+function findImmediatelyPrecedingTokenOfKind(
+    end: number,
+    expectedTokenKind: SyntaxKind,
+    sourceFile: SourceFile,
+): Node | undefined {
     const precedingToken = findPrecedingToken(end, sourceFile);
 
     return precedingToken && precedingToken.kind === expectedTokenKind && end === precedingToken.getEnd() ?
@@ -537,7 +546,8 @@ function formatSpanWorker(
         const startLine = sourceFile.getLineAndCharacterOfPosition(enclosingNode.getStart(sourceFile)).line;
         let undecoratedStartLine = startLine;
         if (hasDecorators(enclosingNode)) {
-            undecoratedStartLine = sourceFile.getLineAndCharacterOfPosition(getNonDecoratorTokenPosOfNode(enclosingNode, sourceFile)).line;
+            undecoratedStartLine =
+                sourceFile.getLineAndCharacterOfPosition(getNonDecoratorTokenPosOfNode(enclosingNode, sourceFile)).line;
         }
 
         processNode(enclosingNode, enclosingNode, startLine, undecoratedStartLine, initialIndentation, delta);
@@ -663,7 +673,8 @@ function formatSpanWorker(
             // - inherit indentation from the parent
             // - push children if either parent of node itself has non-zero delta
             return {
-                indentation: startLine === lastIndentedLine ? indentationOnLastIndentedLine : parentDynamicIndentation.getIndentation(),
+                indentation: startLine === lastIndentedLine ? indentationOnLastIndentedLine
+                    : parentDynamicIndentation.getIndentation(),
                 delta: Math.min(options.indentSize!, parentDynamicIndentation.getDelta(node) + delta),
             };
         }
@@ -681,7 +692,10 @@ function formatSpanWorker(
                 return { indentation: parentDynamicIndentation.getIndentation(), delta };
             }
             else {
-                return { indentation: parentDynamicIndentation.getIndentation() + parentDynamicIndentation.getDelta(node), delta };
+                return {
+                    indentation: parentDynamicIndentation.getIndentation() + parentDynamicIndentation.getDelta(node),
+                    delta,
+                };
             }
         }
         else {
@@ -877,7 +891,8 @@ function formatSpanWorker(
 
             let undecoratedChildStartLine = childStartLine;
             if (hasDecorators(child)) {
-                undecoratedChildStartLine = sourceFile.getLineAndCharacterOfPosition(getNonDecoratorTokenPosOfNode(child, sourceFile)).line;
+                undecoratedChildStartLine =
+                    sourceFile.getLineAndCharacterOfPosition(getNonDecoratorTokenPosOfNode(child, sourceFile)).line;
             }
 
             // if child is a list item - try to get its indentation, only if parent is within the original range.
@@ -961,7 +976,9 @@ function formatSpanWorker(
 
             childContextNode = node;
 
-            if (isFirstListItem && parent.kind === SyntaxKind.ArrayLiteralExpression && inheritedIndentation === Constants.Unknown) {
+            if (
+                isFirstListItem && parent.kind === SyntaxKind.ArrayLiteralExpression && inheritedIndentation === Constants.Unknown
+            ) {
                 inheritedIndentation = childIndentation.indentation;
             }
 
@@ -1102,7 +1119,8 @@ function formatSpanWorker(
                 if (!rangeHasError) {
                     if (lineAction === LineAction.None) {
                         // indent token only if end line of previous range does not match start line of the token
-                        const prevEndLine = savePreviousRange && sourceFile.getLineAndCharacterOfPosition(savePreviousRange.end).line;
+                        const prevEndLine = savePreviousRange &&
+                            sourceFile.getLineAndCharacterOfPosition(savePreviousRange.end).line;
                         indentToken = lastTriviaWasNewLine && tokenStart.line !== prevEndLine;
                     }
                     else {
@@ -1118,7 +1136,12 @@ function formatSpanWorker(
 
             if (indentToken) {
                 const tokenIndentation = (isTokenInRange && !rangeContainsError(currentTokenInfo.token)) ?
-                    dynamicIndentation.getIndentationForToken(tokenStart.line, currentTokenInfo.token.kind, container, !!isListEndToken) :
+                    dynamicIndentation.getIndentationForToken(
+                        tokenStart.line,
+                        currentTokenInfo.token.kind,
+                        container,
+                        !!isListEndToken,
+                    ) :
                     Constants.Unknown;
 
                 let indentNextTokenOrTrivia = true;
@@ -1180,7 +1203,12 @@ function formatSpanWorker(
         return indentNextTokenOrTrivia;
     }
 
-    function processTrivia(trivia: TextRangeWithKind[], parent: Node, contextNode: Node, dynamicIndentation: DynamicIndentation): void {
+    function processTrivia(
+        trivia: TextRangeWithKind[],
+        parent: Node,
+        contextNode: Node,
+        dynamicIndentation: DynamicIndentation,
+    ): void {
         for (const triviaItem of trivia) {
             if (isComment(triviaItem.kind) && rangeContainsRange(originalRange, triviaItem)) {
                 const triviaItemStart = sourceFile.getLineAndCharacterOfPosition(triviaItem.pos);
@@ -1322,7 +1350,12 @@ function formatSpanWorker(
         return indentationString !== sourceFile.text.substr(startLinePosition, indentationString.length);
     }
 
-    function indentMultilineComment(commentRange: TextRange, indentation: number, firstLineIsIndented: boolean, indentFinalLine = true) {
+    function indentMultilineComment(
+        commentRange: TextRange,
+        indentation: number,
+        firstLineIsIndented: boolean,
+        indentFinalLine = true,
+    ) {
         // split comment in lines
         let startLine = sourceFile.getLineAndCharacterOfPosition(commentRange.pos).line;
         const endLine = sourceFile.getLineAndCharacterOfPosition(commentRange.end).line;
@@ -1398,7 +1431,8 @@ function formatSpanWorker(
             const whitespaceStart = getTrailingWhitespaceStartPosition(lineStartPosition, lineEndPosition);
             if (whitespaceStart !== -1) {
                 Debug.assert(
-                    whitespaceStart === lineStartPosition || !isWhiteSpaceSingleLine(sourceFile.text.charCodeAt(whitespaceStart - 1)),
+                    whitespaceStart === lineStartPosition ||
+                        !isWhiteSpaceSingleLine(sourceFile.text.charCodeAt(whitespaceStart - 1)),
                 );
                 recordDelete(whitespaceStart, lineEndPosition + 1 - whitespaceStart);
             }
@@ -1499,7 +1533,11 @@ function formatSpanWorker(
                 // edit should not be applied if we have one line feed between elements
                 const lineDelta = currentStartLine - previousStartLine;
                 if (lineDelta !== 1) {
-                    recordReplace(previousRange.end, currentRange.pos - previousRange.end, getNewLineOrDefaultFromHost(host, options));
+                    recordReplace(
+                        previousRange.end,
+                        currentRange.pos - previousRange.end,
+                        getNewLineOrDefaultFromHost(host, options),
+                    );
                     return onLaterLine ? LineAction.None : LineAction.LineAdded;
                 }
                 break;

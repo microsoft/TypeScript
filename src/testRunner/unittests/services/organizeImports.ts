@@ -1006,8 +1006,16 @@ export * from "lib";
             testOrganizeImports(`${testName}.exports`, /*skipDestructiveCodeActions*/ true, testFile, ...otherFiles);
         }
 
-        function testOrganizeImports(testName: string, skipDestructiveCodeActions: boolean, testFile: File, ...otherFiles: File[]) {
-            it(testName, () => runBaseline(`organizeImports/${testName}.ts`, skipDestructiveCodeActions, testFile, ...otherFiles));
+        function testOrganizeImports(
+            testName: string,
+            skipDestructiveCodeActions: boolean,
+            testFile: File,
+            ...otherFiles: File[]
+        ) {
+            it(
+                testName,
+                () => runBaseline(`organizeImports/${testName}.ts`, skipDestructiveCodeActions, testFile, ...otherFiles),
+            );
         }
 
         function runBaseline(baselinePath: string, skipDestructiveCodeActions: boolean, testFile: File, ...otherFiles: File[]) {

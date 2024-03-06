@@ -5,11 +5,18 @@ import {
 } from "../helpers";
 
 describe("unittests:: config:: commandLineParsing:: parseCommandLine", () => {
-    function assertParseResult(subScenario: string, commandLine: string[], workerDiagnostic?: () => ts.ParseCommandLineWorkerDiagnostics) {
+    function assertParseResult(
+        subScenario: string,
+        commandLine: string[],
+        workerDiagnostic?: () => ts.ParseCommandLineWorkerDiagnostics,
+    ) {
         it(subScenario, () => {
             const baseline: string[] = [];
             baseline.push(commandLine.join(" "));
-            const parsed = ts.parseCommandLineWorker(workerDiagnostic?.() || ts.compilerOptionsDidYouMeanDiagnostics, commandLine);
+            const parsed = ts.parseCommandLineWorker(
+                workerDiagnostic?.() || ts.compilerOptionsDidYouMeanDiagnostics,
+                commandLine,
+            );
             baseline.push("CompilerOptions::");
             baseline.push(jsonToReadableText(parsed.options));
             baseline.push("WatchOptions::");
@@ -205,7 +212,13 @@ describe("unittests:: config:: commandLineParsing:: parseCommandLine", () => {
         });
     });
 
-    assertParseResult("allows tsconfig only option to be set to null", ["--composite", "null", "-tsBuildInfoFile", "null", "0.ts"]);
+    assertParseResult("allows tsconfig only option to be set to null", [
+        "--composite",
+        "null",
+        "-tsBuildInfoFile",
+        "null",
+        "0.ts",
+    ]);
 
     describe("Watch options", () => {
         assertParseResult("parse --watchFile", ["--watchFile", "UseFsEvents", "0.ts"]);

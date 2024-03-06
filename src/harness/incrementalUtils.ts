@@ -6,10 +6,14 @@ export function reportDocumentRegistryStats(documentRegistry: ts.DocumentRegistr
         str.push(`  Key:: ${key}`);
         bucketEntries.forEach((entry, path) => {
             if (ts.isDocumentRegistryEntry(entry)) {
-                str.push(`    ${path}: ${ts.Debug.formatScriptKind(entry.sourceFile.scriptKind)} ${entry.languageServiceRefCount}`);
+                str.push(
+                    `    ${path}: ${ts.Debug.formatScriptKind(entry.sourceFile.scriptKind)} ${entry.languageServiceRefCount}`,
+                );
             }
             else {
-                entry.forEach((real, kind) => str.push(`    ${path}: ${ts.Debug.formatScriptKind(kind)} ${real.languageServiceRefCount}`));
+                entry.forEach((real, kind) =>
+                    str.push(`    ${path}: ${ts.Debug.formatScriptKind(kind)} ${real.languageServiceRefCount}`)
+                );
             }
         });
     });
@@ -173,7 +177,9 @@ function getLibResolutionCacheDetails(
 function getProgramStructure(program: ts.Program | undefined) {
     const baseline: string[] = [];
     program?.getSourceFiles().slice().sort((f1, f2) => ts.comparePathsCaseSensitive(f1.path, f2.path)).forEach(f => {
-        baseline.push(`  File: ${f.fileName} Path: ${f.path} ResolvedPath: ${f.resolvedPath} impliedNodeFormat: ${f.impliedNodeFormat}`);
+        baseline.push(
+            `  File: ${f.fileName} Path: ${f.path} ResolvedPath: ${f.resolvedPath} impliedNodeFormat: ${f.impliedNodeFormat}`,
+        );
         baseline.push(f.text.split(/\r?\n/g).map(l => l ? "    " + l : "").join("\n"));
         getResolutionCacheDetails(
             baseline,
@@ -290,7 +296,11 @@ export function verifyResolutionCache(
         verifySet(resolutionToExpected.get(resolution)!.files, resolution.files, `${projectName}:: Resolution files`);
     });
     verifyMapOfResolutionSet(expected.resolvedFileToResolution, actual.resolvedFileToResolution, `resolvedFileToResolution`);
-    verifyResolutionSet(expected.resolutionsWithFailedLookups, actual.resolutionsWithFailedLookups, `resolutionsWithFailedLookups`);
+    verifyResolutionSet(
+        expected.resolutionsWithFailedLookups,
+        actual.resolutionsWithFailedLookups,
+        `resolutionsWithFailedLookups`,
+    );
     verifyResolutionSet(
         expected.resolutionsWithOnlyAffectingLocations,
         actual.resolutionsWithOnlyAffectingLocations,
@@ -310,7 +320,10 @@ export function verifyResolutionCache(
         ts.Debug.assert(!expected.files?.size, `${projectName}:: Shouldnt ref to any files`);
     });
     ts.Debug.assert(expected.resolvedFileToResolution.size === 0, `${projectName}:: resolvedFileToResolution should be released`);
-    ts.Debug.assert(expected.resolutionsWithFailedLookups.size === 0, `${projectName}:: resolutionsWithFailedLookups should be released`);
+    ts.Debug.assert(
+        expected.resolutionsWithFailedLookups.size === 0,
+        `${projectName}:: resolutionsWithFailedLookups should be released`,
+    );
     ts.Debug.assert(
         expected.resolutionsWithOnlyAffectingLocations.size === 0,
         `${projectName}:: resolutionsWithOnlyAffectingLocations should be released`,
@@ -482,7 +495,8 @@ function verifyProgram(service: ts.server.ProjectService, project: ts.server.Pro
     compilerHost.useSourceOfProjectReferenceRedirect = project.useSourceOfProjectReferenceRedirect?.bind(project);
     compilerHost.getCurrentDirectory = project.getCurrentDirectory.bind(project);
     const getDefaultLibLocation = compilerHost.getDefaultLibLocation!;
-    compilerHost.getDefaultLibLocation = () => ts.getNormalizedAbsolutePath(getDefaultLibLocation(), service.host.getCurrentDirectory());
+    compilerHost.getDefaultLibLocation = () =>
+        ts.getNormalizedAbsolutePath(getDefaultLibLocation(), service.host.getCurrentDirectory());
     compilerHost.getDefaultLibFileName = options =>
         ts.combinePaths(compilerHost.getDefaultLibLocation!(), ts.getDefaultLibFileName(options));
     compilerHost.trace = ts.noop; // We dont want to update host just because of trace
@@ -640,7 +654,8 @@ function afterResolveSingleModuleNameWithoutWatching(
 function onProjectCreation(project: ts.server.Project) {
     if (project.projectKind !== ts.server.ProjectKind.Auxiliary) return;
 
-    (project as ts.ResolutionCacheHost).beforeResolveSingleModuleNameWithoutWatching = beforeResolveSingleModuleNameWithoutWatching;
+    (project as ts.ResolutionCacheHost).beforeResolveSingleModuleNameWithoutWatching =
+        beforeResolveSingleModuleNameWithoutWatching;
     (project as ts.ResolutionCacheHost).afterResolveSingleModuleNameWithoutWatching = afterResolveSingleModuleNameWithoutWatching;
 }
 

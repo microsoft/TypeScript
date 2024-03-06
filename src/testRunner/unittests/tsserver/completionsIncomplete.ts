@@ -36,7 +36,12 @@ function createNodeModulesPackage(
     exportCount: number,
     getExportPrefix: (fileIndex: number) => string,
 ): File[] {
-    const exportingFiles = createExportingModuleFiles(`/node_modules/${packageName}/file`, fileCount, exportCount, getExportPrefix);
+    const exportingFiles = createExportingModuleFiles(
+        `/node_modules/${packageName}/file`,
+        fileCount,
+        exportCount,
+        getExportPrefix,
+    );
     return [
         {
             path: `/node_modules/${packageName}/package.json`,
@@ -89,7 +94,10 @@ describe("unittests:: tsserver:: completionsIncomplete", () => {
                 completions.entries.filter(entry => (entry.data as any)?.moduleSpecifier),
                 ts.Completions.moduleSpecifierResolutionLimit,
             );
-            assert.lengthOf(completions.entries.filter(entry => entry.source && !(entry.data as any)?.moduleSpecifier), excessFileCount);
+            assert.lengthOf(
+                completions.entries.filter(entry => entry.source && !(entry.data as any)?.moduleSpecifier),
+                excessFileCount,
+            );
             assert.deepEqual(completions.optionalReplacementSpan, { start: { line: 1, offset: 1 }, end: { line: 1, offset: 2 } });
         })
             .continueTyping("a", completions => {
@@ -98,7 +106,10 @@ describe("unittests:: tsserver:: completionsIncomplete", () => {
                     completions.entries.filter(entry => (entry.data as any)?.moduleSpecifier),
                     ts.Completions.moduleSpecifierResolutionLimit * 2,
                 );
-                assert.deepEqual(completions.optionalReplacementSpan, { start: { line: 1, offset: 1 }, end: { line: 1, offset: 3 } });
+                assert.deepEqual(completions.optionalReplacementSpan, {
+                    start: { line: 1, offset: 1 },
+                    end: { line: 1, offset: 3 },
+                });
             })
             .continueTyping("_", completions => {
                 assert(!completions.isIncomplete);
@@ -141,7 +152,12 @@ describe("unittests:: tsserver:: completionsIncomplete", () => {
             content: `declare module "ambient_${i}" { export const aa_${i} = ${i}; }`,
         }));
 
-        const exportingFiles = createExportingModuleFiles(`/lib/a`, ts.Completions.moduleSpecifierResolutionLimit, 5, i => `aa_${i}_`);
+        const exportingFiles = createExportingModuleFiles(
+            `/lib/a`,
+            ts.Completions.moduleSpecifierResolutionLimit,
+            5,
+            i => `aa_${i}_`,
+        );
         const { typeToTriggerCompletions, session } = setup([tsconfigFile, indexFile, ...ambientFiles, ...exportingFiles]);
         openFilesForSession([indexFile], session);
 
@@ -160,7 +176,12 @@ describe("unittests:: tsserver:: completionsIncomplete", () => {
     });
 
     it("works with PackageJsonAutoImportProvider", () => {
-        const exportingFiles = createExportingModuleFiles(`/lib/a`, ts.Completions.moduleSpecifierResolutionLimit, 1, i => `aa_${i}_`);
+        const exportingFiles = createExportingModuleFiles(
+            `/lib/a`,
+            ts.Completions.moduleSpecifierResolutionLimit,
+            1,
+            i => `aa_${i}_`,
+        );
         const nodeModulesPackage = createNodeModulesPackage("dep-a", 50, 1, i => `depA_${i}_`);
         const { typeToTriggerCompletions, assertCompletionDetailsOk, session } = setup([
             tsconfigFile,
@@ -174,7 +195,10 @@ describe("unittests:: tsserver:: completionsIncomplete", () => {
         typeToTriggerCompletions(indexFile.path, "a", completions => assert(completions.isIncomplete))
             .continueTyping("_", completions => {
                 assert(!completions.isIncomplete);
-                assert.lengthOf(completions.entries.filter(entry => (entry.data as any)?.moduleSpecifier?.startsWith("dep-a")), 50);
+                assert.lengthOf(
+                    completions.entries.filter(entry => (entry.data as any)?.moduleSpecifier?.startsWith("dep-a")),
+                    50,
+                );
                 assertCompletionDetailsOk(
                     indexFile.path,
                     completions.entries.find(entry => (entry.data as any)?.moduleSpecifier?.startsWith("dep-a"))!,
@@ -191,7 +215,12 @@ describe("unittests:: tsserver:: completionsIncomplete", () => {
                     declare const exp: {} & { [K in Signals]: K };
                     export = exp;`,
         };
-        const exportingFiles = createExportingModuleFiles("/lib/a", ts.Completions.moduleSpecifierResolutionLimit, 1, i => `S${i}`);
+        const exportingFiles = createExportingModuleFiles(
+            "/lib/a",
+            ts.Completions.moduleSpecifierResolutionLimit,
+            1,
+            i => `S${i}`,
+        );
         const { typeToTriggerCompletions, session } = setup([tsconfigFile, indexFile, ...exportingFiles, constantsDts]);
         openFilesForSession([indexFile], session);
 
@@ -313,7 +342,9 @@ function setup(files: File[]) {
 
     function assertCompletionDetailsOk(fileName: string, entry: ts.server.protocol.CompletionEntry) {
         const project = projectService.getDefaultProjectForFile(ts.server.toNormalizedPath(fileName), /*ensureProject*/ true)!;
-        const file = ts.Debug.checkDefined(project.getLanguageService(/*ensureSynchronized*/ true).getProgram()?.getSourceFile(fileName));
+        const file = ts.Debug.checkDefined(
+            project.getLanguageService(/*ensureSynchronized*/ true).getProgram()?.getSourceFile(fileName),
+        );
         const { line, character } = ts.getLineAndCharacterOfPosition(file, file.text.length - 1);
         const details = session.executeCommandSeq<ts.server.protocol.CompletionDetailsRequest>({
             command: ts.server.protocol.CommandTypes.CompletionDetails,

@@ -91,6 +91,10 @@ declare class TestLib {
         const host = createServerHost(files);
         const session = new TestSession(host);
         openFilesForSession([file], session);
-        baselineTsserverLogs("typeReferenceDirectives", "when typeReferenceDirective is relative path and in a sibling folder", session);
+        baselineTsserverLogs(
+            "typeReferenceDirectives",
+            "when typeReferenceDirective is relative path and in a sibling folder",
+            session,
+        );
     });
 });

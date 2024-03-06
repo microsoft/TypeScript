@@ -131,7 +131,10 @@ describe("unittests:: tsc:: declarationEmit::", () => {
                     path: `/user/username/projects/myproject/plugin-two/node_modules/typescript-fsa/package.json`,
                     content: fsaPackageJson(),
                 },
-                { path: `/user/username/projects/myproject/plugin-two/node_modules/typescript-fsa/index.d.ts`, content: fsaIndex() },
+                {
+                    path: `/user/username/projects/myproject/plugin-two/node_modules/typescript-fsa/index.d.ts`,
+                    content: fsaIndex(),
+                },
                 { path: `/user/username/projects/myproject/plugin-one/tsconfig.json`, content: pluginOneConfig() },
                 { path: `/user/username/projects/myproject/plugin-one/index.ts`, content: pluginOneIndex() },
                 { path: `/user/username/projects/myproject/plugin-one/action.ts`, content: pluginOneAction() },
@@ -139,7 +142,10 @@ describe("unittests:: tsc:: declarationEmit::", () => {
                     path: `/user/username/projects/myproject/plugin-one/node_modules/typescript-fsa/package.json`,
                     content: fsaPackageJson(),
                 },
-                { path: `/user/username/projects/myproject/plugin-one/node_modules/typescript-fsa/index.d.ts`, content: fsaIndex() },
+                {
+                    path: `/user/username/projects/myproject/plugin-one/node_modules/typescript-fsa/index.d.ts`,
+                    content: fsaIndex(),
+                },
                 {
                     path: `/user/username/projects/myproject/plugin-one/node_modules/plugin-two`,
                     symLink: `/user/username/projects/myproject/plugin-two`,
@@ -166,7 +172,10 @@ describe("unittests:: tsc:: declarationEmit::", () => {
                     path: `/user/username/projects/myproject/plugin-two/node_modules/typescript-fsa/package.json`,
                     content: fsaPackageJson(),
                 },
-                { path: `/user/username/projects/myproject/plugin-two/node_modules/typescript-fsa/index.d.ts`, content: fsaIndex() },
+                {
+                    path: `/user/username/projects/myproject/plugin-two/node_modules/typescript-fsa/index.d.ts`,
+                    content: fsaIndex(),
+                },
                 { path: `/user/username/projects/myproject/plugin-one/tsconfig.json`, content: pluginOneConfig() },
                 {
                     path: `/user/username/projects/myproject/plugin-one/index.ts`,
@@ -177,7 +186,10 @@ ${pluginOneAction()}`,
                     path: `/user/username/projects/myproject/plugin-one/node_modules/typescript-fsa/package.json`,
                     content: fsaPackageJson(),
                 },
-                { path: `/user/username/projects/myproject/plugin-one/node_modules/typescript-fsa/index.d.ts`, content: fsaIndex() },
+                {
+                    path: `/user/username/projects/myproject/plugin-one/node_modules/typescript-fsa/index.d.ts`,
+                    content: fsaIndex(),
+                },
                 { path: `/temp/yarn/data/link/plugin-two`, symLink: `/user/username/projects/myproject/plugin-two` },
                 {
                     path: `/user/username/projects/myproject/plugin-one/node_modules/plugin-two`,

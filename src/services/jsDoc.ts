@@ -183,7 +183,10 @@ let jsDocTagNameCompletionEntries: CompletionEntry[];
 let jsDocTagCompletionEntries: CompletionEntry[];
 
 /** @internal */
-export function getJsDocCommentsFromDeclarations(declarations: readonly Declaration[], checker?: TypeChecker): SymbolDisplayPart[] {
+export function getJsDocCommentsFromDeclarations(
+    declarations: readonly Declaration[],
+    checker?: TypeChecker,
+): SymbolDisplayPart[] {
     // Only collect doc comments from duplicate declarations once:
     // In case of a union property there might be same declaration multiple times
     // which only varies in type parameter
@@ -270,7 +273,10 @@ export function getJsDocTagsFromDeclarations(declarations?: Declaration[], check
     return infos;
 }
 
-function getJSDocPropertyTagsInfo(nodes: readonly JSDocTag[] | undefined, checker: TypeChecker | undefined): readonly JSDocTagInfo[] {
+function getJSDocPropertyTagsInfo(
+    nodes: readonly JSDocTag[] | undefined,
+    checker: TypeChecker | undefined,
+): readonly JSDocTagInfo[] {
     return flatMap(
         nodes,
         propTag =>
@@ -286,7 +292,10 @@ function tryGetJSDocPropertyTags(node: JSDocTag) {
             isJSDocTypeLiteral(node.typeExpression.type) ? node.typeExpression.type.jsDocPropertyTags : undefined;
 }
 
-function getDisplayPartsFromComment(comment: string | readonly JSDocComment[], checker: TypeChecker | undefined): SymbolDisplayPart[] {
+function getDisplayPartsFromComment(
+    comment: string | readonly JSDocComment[],
+    checker: TypeChecker | undefined,
+): SymbolDisplayPart[] {
     if (typeof comment === "string") {
         return [textPart(comment)];
     }
@@ -442,7 +451,12 @@ export function getJSDocParameterNameCompletions(tag: JSDocParameterTag): Comple
             return undefined;
         }
 
-        return { name, kind: ScriptElementKind.parameterElement, kindModifiers: "", sortText: Completions.SortText.LocationPriority };
+        return {
+            name,
+            kind: ScriptElementKind.parameterElement,
+            kindModifiers: "",
+            sortText: Completions.SortText.LocationPriority,
+        };
     });
 }
 
@@ -590,7 +604,12 @@ function getCommentOwnerInfoWorker(
         case SyntaxKind.Constructor:
         case SyntaxKind.MethodSignature:
         case SyntaxKind.ArrowFunction:
-            const host = commentOwner as ArrowFunction | FunctionDeclaration | MethodDeclaration | ConstructorDeclaration | MethodSignature;
+            const host = commentOwner as
+                | ArrowFunction
+                | FunctionDeclaration
+                | MethodDeclaration
+                | ConstructorDeclaration
+                | MethodSignature;
             return { commentOwner, parameters: host.parameters, hasReturn: hasReturn(host, options) };
 
         case SyntaxKind.PropertyAssignment:
@@ -655,7 +674,9 @@ function hasReturn(node: Node, options: DocCommentTemplateOptions | undefined) {
             || isFunctionLikeDeclaration(node) && node.body && isBlock(node.body) && !!forEachReturnStatement(node.body, n => n));
 }
 
-function getRightHandSideOfAssignment(rightHandSide: Expression): FunctionExpression | ArrowFunction | ConstructorDeclaration | undefined {
+function getRightHandSideOfAssignment(
+    rightHandSide: Expression,
+): FunctionExpression | ArrowFunction | ConstructorDeclaration | undefined {
     while (rightHandSide.kind === SyntaxKind.ParenthesizedExpression) {
         rightHandSide = (rightHandSide as ParenthesizedExpression).expression;
     }

@@ -65,7 +65,12 @@ export function getAllRules(): RuleSpec[] {
         SyntaxKind.IsKeyword,
         SyntaxKind.SatisfiesKeyword,
     ];
-    const unaryPrefixOperators = [SyntaxKind.PlusPlusToken, SyntaxKind.MinusMinusToken, SyntaxKind.TildeToken, SyntaxKind.ExclamationToken];
+    const unaryPrefixOperators = [
+        SyntaxKind.PlusPlusToken,
+        SyntaxKind.MinusMinusToken,
+        SyntaxKind.TildeToken,
+        SyntaxKind.ExclamationToken,
+    ];
     const unaryPrefixExpressions = [
         SyntaxKind.NumericLiteral,
         SyntaxKind.BigIntLiteral,
@@ -76,14 +81,24 @@ export function getAllRules(): RuleSpec[] {
         SyntaxKind.ThisKeyword,
         SyntaxKind.NewKeyword,
     ];
-    const unaryPreincrementExpressions = [SyntaxKind.Identifier, SyntaxKind.OpenParenToken, SyntaxKind.ThisKeyword, SyntaxKind.NewKeyword];
+    const unaryPreincrementExpressions = [
+        SyntaxKind.Identifier,
+        SyntaxKind.OpenParenToken,
+        SyntaxKind.ThisKeyword,
+        SyntaxKind.NewKeyword,
+    ];
     const unaryPostincrementExpressions = [
         SyntaxKind.Identifier,
         SyntaxKind.CloseParenToken,
         SyntaxKind.CloseBracketToken,
         SyntaxKind.NewKeyword,
     ];
-    const unaryPredecrementExpressions = [SyntaxKind.Identifier, SyntaxKind.OpenParenToken, SyntaxKind.ThisKeyword, SyntaxKind.NewKeyword];
+    const unaryPredecrementExpressions = [
+        SyntaxKind.Identifier,
+        SyntaxKind.OpenParenToken,
+        SyntaxKind.ThisKeyword,
+        SyntaxKind.NewKeyword,
+    ];
     const unaryPostdecrementExpressions = [
         SyntaxKind.Identifier,
         SyntaxKind.CloseParenToken,
@@ -122,7 +137,13 @@ export function getAllRules(): RuleSpec[] {
     const highPriorityCommonRules = [
         // Leave comments alone
         rule("IgnoreBeforeComment", anyToken, comments, anyContext, RuleAction.StopProcessingSpaceActions),
-        rule("IgnoreAfterLineComment", SyntaxKind.SingleLineCommentTrivia, anyToken, anyContext, RuleAction.StopProcessingSpaceActions),
+        rule(
+            "IgnoreAfterLineComment",
+            SyntaxKind.SingleLineCommentTrivia,
+            anyToken,
+            anyContext,
+            RuleAction.StopProcessingSpaceActions,
+        ),
 
         rule(
             "NotSpaceBeforeColon",
@@ -345,7 +366,13 @@ export function getAllRules(): RuleSpec[] {
             RuleAction.InsertSpace,
         ),
 
-        rule("SpaceAfterFunctionInFuncDecl", SyntaxKind.FunctionKeyword, anyToken, [isFunctionDeclContext], RuleAction.InsertSpace),
+        rule(
+            "SpaceAfterFunctionInFuncDecl",
+            SyntaxKind.FunctionKeyword,
+            anyToken,
+            [isFunctionDeclContext],
+            RuleAction.InsertSpace,
+        ),
         // Insert new line after { and before } in multi-line contexts.
         rule(
             "NewLineAfterOpenBraceInBlockContext",
@@ -569,11 +596,29 @@ export function getAllRules(): RuleSpec[] {
             RuleAction.InsertSpace,
         ),
         // Treat string literals in module names as identifiers, and add a space between the literal and the opening Brace braces, e.g.: module "m2" {
-        rule("SpaceAfterModuleName", SyntaxKind.StringLiteral, SyntaxKind.OpenBraceToken, [isModuleDeclContext], RuleAction.InsertSpace),
+        rule(
+            "SpaceAfterModuleName",
+            SyntaxKind.StringLiteral,
+            SyntaxKind.OpenBraceToken,
+            [isModuleDeclContext],
+            RuleAction.InsertSpace,
+        ),
 
         // Lambda expressions
-        rule("SpaceBeforeArrow", anyToken, SyntaxKind.EqualsGreaterThanToken, [isNonJsxSameLineTokenContext], RuleAction.InsertSpace),
-        rule("SpaceAfterArrow", SyntaxKind.EqualsGreaterThanToken, anyToken, [isNonJsxSameLineTokenContext], RuleAction.InsertSpace),
+        rule(
+            "SpaceBeforeArrow",
+            anyToken,
+            SyntaxKind.EqualsGreaterThanToken,
+            [isNonJsxSameLineTokenContext],
+            RuleAction.InsertSpace,
+        ),
+        rule(
+            "SpaceAfterArrow",
+            SyntaxKind.EqualsGreaterThanToken,
+            anyToken,
+            [isNonJsxSameLineTokenContext],
+            RuleAction.InsertSpace,
+        ),
 
         // Optional parameters and let args
         rule(
@@ -731,7 +776,11 @@ export function getAllRules(): RuleSpec[] {
             "NoSpaceAfterComma",
             SyntaxKind.CommaToken,
             anyToken,
-            [isOptionDisabledOrUndefined("insertSpaceAfterCommaDelimiter"), isNonJsxSameLineTokenContext, isNonJsxElementOrFragmentContext],
+            [
+                isOptionDisabledOrUndefined("insertSpaceAfterCommaDelimiter"),
+                isNonJsxSameLineTokenContext,
+                isNonJsxElementOrFragmentContext,
+            ],
             RuleAction.DeleteSpace,
         ),
 
@@ -743,10 +792,16 @@ export function getAllRules(): RuleSpec[] {
             [isOptionEnabled("insertSpaceAfterFunctionKeywordForAnonymousFunctions"), isFunctionDeclContext],
             RuleAction.InsertSpace,
         ),
-        rule("NoSpaceAfterAnonymousFunctionKeyword", [SyntaxKind.FunctionKeyword, SyntaxKind.AsteriskToken], SyntaxKind.OpenParenToken, [
-            isOptionDisabledOrUndefined("insertSpaceAfterFunctionKeywordForAnonymousFunctions"),
-            isFunctionDeclContext,
-        ], RuleAction.DeleteSpace),
+        rule(
+            "NoSpaceAfterAnonymousFunctionKeyword",
+            [SyntaxKind.FunctionKeyword, SyntaxKind.AsteriskToken],
+            SyntaxKind.OpenParenToken,
+            [
+                isOptionDisabledOrUndefined("insertSpaceAfterFunctionKeywordForAnonymousFunctions"),
+                isFunctionDeclContext,
+            ],
+            RuleAction.DeleteSpace,
+        ),
 
         // Insert space after keywords in control flow statements
         rule(
@@ -797,14 +852,20 @@ export function getAllRules(): RuleSpec[] {
             "NoSpaceAfterOpenParen",
             SyntaxKind.OpenParenToken,
             anyToken,
-            [isOptionDisabledOrUndefined("insertSpaceAfterOpeningAndBeforeClosingNonemptyParenthesis"), isNonJsxSameLineTokenContext],
+            [
+                isOptionDisabledOrUndefined("insertSpaceAfterOpeningAndBeforeClosingNonemptyParenthesis"),
+                isNonJsxSameLineTokenContext,
+            ],
             RuleAction.DeleteSpace,
         ),
         rule(
             "NoSpaceBeforeCloseParen",
             anyToken,
             SyntaxKind.CloseParenToken,
-            [isOptionDisabledOrUndefined("insertSpaceAfterOpeningAndBeforeClosingNonemptyParenthesis"), isNonJsxSameLineTokenContext],
+            [
+                isOptionDisabledOrUndefined("insertSpaceAfterOpeningAndBeforeClosingNonemptyParenthesis"),
+                isNonJsxSameLineTokenContext,
+            ],
             RuleAction.DeleteSpace,
         ),
 
@@ -834,14 +895,20 @@ export function getAllRules(): RuleSpec[] {
             "NoSpaceAfterOpenBracket",
             SyntaxKind.OpenBracketToken,
             anyToken,
-            [isOptionDisabledOrUndefined("insertSpaceAfterOpeningAndBeforeClosingNonemptyBrackets"), isNonJsxSameLineTokenContext],
+            [
+                isOptionDisabledOrUndefined("insertSpaceAfterOpeningAndBeforeClosingNonemptyBrackets"),
+                isNonJsxSameLineTokenContext,
+            ],
             RuleAction.DeleteSpace,
         ),
         rule(
             "NoSpaceBeforeCloseBracket",
             anyToken,
             SyntaxKind.CloseBracketToken,
-            [isOptionDisabledOrUndefined("insertSpaceAfterOpeningAndBeforeClosingNonemptyBrackets"), isNonJsxSameLineTokenContext],
+            [
+                isOptionDisabledOrUndefined("insertSpaceAfterOpeningAndBeforeClosingNonemptyBrackets"),
+                isNonJsxSameLineTokenContext,
+            ],
             RuleAction.DeleteSpace,
         ),
 
@@ -926,7 +993,10 @@ export function getAllRules(): RuleSpec[] {
             "NoSpaceBeforeTemplateMiddleAndTail",
             anyToken,
             [SyntaxKind.TemplateMiddle, SyntaxKind.TemplateTail],
-            [isOptionDisabledOrUndefined("insertSpaceAfterOpeningAndBeforeClosingTemplateStringBraces"), isNonJsxSameLineTokenContext],
+            [
+                isOptionDisabledOrUndefined("insertSpaceAfterOpeningAndBeforeClosingTemplateStringBraces"),
+                isNonJsxSameLineTokenContext,
+            ],
             RuleAction.DeleteSpace,
         ),
 
@@ -1011,14 +1081,22 @@ export function getAllRules(): RuleSpec[] {
             "NoSpaceBeforeBinaryOperator",
             anyToken,
             binaryOperators,
-            [isOptionDisabledOrUndefined("insertSpaceBeforeAndAfterBinaryOperators"), isNonJsxSameLineTokenContext, isBinaryOpContext],
+            [
+                isOptionDisabledOrUndefined("insertSpaceBeforeAndAfterBinaryOperators"),
+                isNonJsxSameLineTokenContext,
+                isBinaryOpContext,
+            ],
             RuleAction.DeleteSpace,
         ),
         rule(
             "NoSpaceAfterBinaryOperator",
             binaryOperators,
             anyToken,
-            [isOptionDisabledOrUndefined("insertSpaceBeforeAndAfterBinaryOperators"), isNonJsxSameLineTokenContext, isBinaryOpContext],
+            [
+                isOptionDisabledOrUndefined("insertSpaceBeforeAndAfterBinaryOperators"),
+                isNonJsxSameLineTokenContext,
+                isBinaryOpContext,
+            ],
             RuleAction.DeleteSpace,
         ),
 
@@ -1033,7 +1111,11 @@ export function getAllRules(): RuleSpec[] {
             "NoSpaceBeforeOpenParenInFuncDecl",
             anyToken,
             SyntaxKind.OpenParenToken,
-            [isOptionDisabledOrUndefined("insertSpaceBeforeFunctionParenthesis"), isNonJsxSameLineTokenContext, isFunctionDeclContext],
+            [
+                isOptionDisabledOrUndefined("insertSpaceBeforeFunctionParenthesis"),
+                isNonJsxSameLineTokenContext,
+                isFunctionDeclContext,
+            ],
             RuleAction.DeleteSpace,
         ),
 
@@ -1062,7 +1144,11 @@ export function getAllRules(): RuleSpec[] {
             "NewLineBeforeOpenBraceInTypeScriptDeclWithBlock",
             typeScriptOpenBraceLeftTokenRange,
             SyntaxKind.OpenBraceToken,
-            [isOptionEnabled("placeOpenBraceOnNewLineForFunctions"), isTypeScriptDeclWithBlockContext, isBeforeMultilineBlockContext],
+            [
+                isOptionEnabled("placeOpenBraceOnNewLineForFunctions"),
+                isTypeScriptDeclWithBlockContext,
+                isBeforeMultilineBlockContext,
+            ],
             RuleAction.InsertNewLine,
             RuleFlags.CanDeleteNewLines,
         ),
@@ -1093,7 +1179,11 @@ export function getAllRules(): RuleSpec[] {
             "NoSpaceBeforeTypeAnnotation",
             anyToken,
             [SyntaxKind.QuestionToken, SyntaxKind.ColonToken],
-            [isOptionDisabledOrUndefined("insertSpaceBeforeTypeAnnotation"), isNonJsxSameLineTokenContext, isTypeAnnotationContext],
+            [
+                isOptionDisabledOrUndefined("insertSpaceBeforeTypeAnnotation"),
+                isNonJsxSameLineTokenContext,
+                isTypeAnnotationContext,
+            ],
             RuleAction.DeleteSpace,
         ),
 
@@ -1116,7 +1206,13 @@ export function getAllRules(): RuleSpec[] {
     // These rules are lower in priority than user-configurable. Rules earlier in this list have priority over rules later in the list.
     const lowPriorityCommonRules = [
         // Space after keyword but not before ; or : or ?
-        rule("NoSpaceBeforeSemicolon", anyToken, SyntaxKind.SemicolonToken, [isNonJsxSameLineTokenContext], RuleAction.DeleteSpace),
+        rule(
+            "NoSpaceBeforeSemicolon",
+            anyToken,
+            SyntaxKind.SemicolonToken,
+            [isNonJsxSameLineTokenContext],
+            RuleAction.DeleteSpace,
+        ),
 
         rule(
             "SpaceBeforeOpenBraceInControl",
@@ -1242,7 +1338,11 @@ function rule(
     action: RuleAction,
     flags: RuleFlags = RuleFlags.None,
 ): RuleSpec {
-    return { leftTokenRange: toTokenRange(left), rightTokenRange: toTokenRange(right), rule: { debugName, context, action, flags } };
+    return {
+        leftTokenRange: toTokenRange(left),
+        rightTokenRange: toTokenRange(right),
+        rule: { debugName, context, action, flags },
+    };
 }
 
 function tokenRangeFrom(tokens: readonly SyntaxKind[]): TokenRange {
@@ -1286,9 +1386,12 @@ function isOptionDisabledOrUndefined(optionName: keyof FormatCodeSettings): (con
     return context => !context.options || !hasProperty(context.options, optionName) || !context.options[optionName];
 }
 
-function isOptionDisabledOrUndefinedOrTokensOnSameLine(optionName: keyof FormatCodeSettings): (context: FormattingContext) => boolean {
+function isOptionDisabledOrUndefinedOrTokensOnSameLine(
+    optionName: keyof FormatCodeSettings,
+): (context: FormattingContext) => boolean {
     return context =>
-        !context.options || !hasProperty(context.options, optionName) || !context.options[optionName] || context.TokensAreOnSameLine();
+        !context.options || !hasProperty(context.options, optionName) || !context.options[optionName] ||
+        context.TokensAreOnSameLine();
 }
 
 function isOptionEnabledOrUndefined(optionName: keyof FormatCodeSettings): (context: FormattingContext) => boolean {
@@ -1338,13 +1441,15 @@ function isBinaryOpContext(context: FormattingContext): boolean {
         case SyntaxKind.EnumMember:
         case SyntaxKind.PropertyDeclaration:
         case SyntaxKind.PropertySignature:
-            return context.currentTokenSpan.kind === SyntaxKind.EqualsToken || context.nextTokenSpan.kind === SyntaxKind.EqualsToken;
+            return context.currentTokenSpan.kind === SyntaxKind.EqualsToken ||
+                context.nextTokenSpan.kind === SyntaxKind.EqualsToken;
         // "in" keyword in for (let x in []) { }
         case SyntaxKind.ForInStatement:
         // "in" keyword in [P in keyof T]: T[P]
         // falls through
         case SyntaxKind.TypeParameter:
-            return context.currentTokenSpan.kind === SyntaxKind.InKeyword || context.nextTokenSpan.kind === SyntaxKind.InKeyword ||
+            return context.currentTokenSpan.kind === SyntaxKind.InKeyword ||
+                context.nextTokenSpan.kind === SyntaxKind.InKeyword ||
                 context.currentTokenSpan.kind === SyntaxKind.EqualsToken ||
                 context.nextTokenSpan.kind === SyntaxKind.EqualsToken;
         // Technically, "of" is not a binary operator, but format it the same way as "in"
@@ -1464,7 +1569,8 @@ function isNotFunctionDeclContext(context: FormattingContext): boolean {
 }
 
 function isFunctionDeclarationOrFunctionExpressionContext(context: FormattingContext): boolean {
-    return context.contextNode.kind === SyntaxKind.FunctionDeclaration || context.contextNode.kind === SyntaxKind.FunctionExpression;
+    return context.contextNode.kind === SyntaxKind.FunctionDeclaration ||
+        context.contextNode.kind === SyntaxKind.FunctionExpression;
 }
 
 function isTypeScriptDeclWithBlockContext(context: FormattingContext): boolean {
@@ -1501,7 +1607,10 @@ function isAfterCodeBlockContext(context: FormattingContext): boolean {
         case SyntaxKind.Block: {
             const blockParent = context.currentTokenParent.parent;
             // In a codefix scenario, we can't rely on parents being set. So just always return true.
-            if (!blockParent || blockParent.kind !== SyntaxKind.ArrowFunction && blockParent.kind !== SyntaxKind.FunctionExpression) {
+            if (
+                !blockParent ||
+                blockParent.kind !== SyntaxKind.ArrowFunction && blockParent.kind !== SyntaxKind.FunctionExpression
+            ) {
                 return true;
             }
         }
@@ -1585,7 +1694,8 @@ function isJsxExpressionContext(context: FormattingContext): boolean {
 
 function isNextTokenParentJsxAttribute(context: FormattingContext): boolean {
     return context.nextTokenParent.kind === SyntaxKind.JsxAttribute || (
-        context.nextTokenParent.kind === SyntaxKind.JsxNamespacedName && context.nextTokenParent.parent.kind === SyntaxKind.JsxAttribute
+        context.nextTokenParent.kind === SyntaxKind.JsxNamespacedName &&
+        context.nextTokenParent.parent.kind === SyntaxKind.JsxAttribute
     );
 }
 
@@ -1685,11 +1795,13 @@ function isNonTypeAssertionContext(context: FormattingContext): boolean {
 }
 
 function isVoidOpContext(context: FormattingContext): boolean {
-    return context.currentTokenSpan.kind === SyntaxKind.VoidKeyword && context.currentTokenParent.kind === SyntaxKind.VoidExpression;
+    return context.currentTokenSpan.kind === SyntaxKind.VoidKeyword &&
+        context.currentTokenParent.kind === SyntaxKind.VoidExpression;
 }
 
 function isYieldOrYieldStarWithOperand(context: FormattingContext): boolean {
-    return context.contextNode.kind === SyntaxKind.YieldExpression && (context.contextNode as YieldExpression).expression !== undefined;
+    return context.contextNode.kind === SyntaxKind.YieldExpression &&
+        (context.contextNode as YieldExpression).expression !== undefined;
 }
 
 function isNonNullAssertionContext(context: FormattingContext): boolean {

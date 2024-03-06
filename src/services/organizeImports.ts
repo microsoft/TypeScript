@@ -105,7 +105,9 @@ export function organizeImports(
         return importGroup;
     };
 
-    topLevelImportGroupDecls.forEach(importGroupDecl => organizeImportsWorker(importGroupDecl, processImportsOfSameModuleSpecifier));
+    topLevelImportGroupDecls.forEach(importGroupDecl =>
+        organizeImportsWorker(importGroupDecl, processImportsOfSameModuleSpecifier)
+    );
 
     // Exports are always used
     if (mode !== OrganizeImportsMode.RemoveUnused) {
@@ -304,7 +306,8 @@ function removeUnusedImports(oldImports: readonly ImportDeclaration[], sourceFil
 
     function isDeclarationUsed(identifier: Identifier) {
         // The JSX factory symbol is always used if JSX elements are present - even if they are not allowed.
-        return jsxElementsPresent && (identifier.text === jsxNamespace || jsxFragmentFactory && identifier.text === jsxFragmentFactory) &&
+        return jsxElementsPresent &&
+                (identifier.text === jsxNamespace || jsxFragmentFactory && identifier.text === jsxFragmentFactory) &&
                 jsxModeNeedsExplicitImport(compilerOptions.jsx) ||
             FindAllReferences.Core.isSymbolReferencedInFile(identifier, typeChecker, sourceFile);
     }
@@ -398,7 +401,11 @@ function coalesceImportsWorker(
             for (const namespaceImport of sortedNamespaceImports) {
                 // Drop the name, if any
                 coalescedImports.push(
-                    updateImportDeclarationAndClause(namespaceImport, /*name*/ undefined, namespaceImport.importClause.namedBindings),
+                    updateImportDeclarationAndClause(
+                        namespaceImport,
+                        /*name*/ undefined,
+                        namespaceImport.importClause.namedBindings,
+                    ),
                 );
             }
 
@@ -552,7 +559,11 @@ export function coalesceExports(exportGroup: readonly ExportDeclaration[], ignor
     return coalesceExportsWorker(exportGroup, comparer, preferences);
 }
 
-function coalesceExportsWorker(exportGroup: readonly ExportDeclaration[], comparer: Comparer<string>, preferences?: UserPreferences) {
+function coalesceExportsWorker(
+    exportGroup: readonly ExportDeclaration[],
+    comparer: Comparer<string>,
+    preferences?: UserPreferences,
+) {
     if (exportGroup.length === 0) {
         return exportGroup;
     }
@@ -634,7 +645,12 @@ function updateImportDeclarationAndClause(
     return factory.updateImportDeclaration(
         importDeclaration,
         importDeclaration.modifiers,
-        factory.updateImportClause(importDeclaration.importClause!, importDeclaration.importClause!.isTypeOnly, name, namedBindings), // TODO: GH#18217
+        factory.updateImportClause(
+            importDeclaration.importClause!,
+            importDeclaration.importClause!.isTypeOnly,
+            name,
+            namedBindings,
+        ), // TODO: GH#18217
         importDeclaration.moduleSpecifier,
         importDeclaration.attributes,
     );
@@ -760,7 +776,10 @@ function detectSortingWorker(importGroups: ImportDeclaration[][], preferences: U
 }
 
 /** @internal */
-export function detectImportDeclarationSorting(imports: readonly AnyImportOrRequireStatement[], preferences: UserPreferences): SortKind {
+export function detectImportDeclarationSorting(
+    imports: readonly AnyImportOrRequireStatement[],
+    preferences: UserPreferences,
+): SortKind {
     const collateCaseSensitive = getOrganizeImportsComparer(preferences, /*ignoreCase*/ false);
     const collateCaseInsensitive = getOrganizeImportsComparer(preferences, /*ignoreCase*/ true);
     return detectSortCaseSensitivity(
@@ -825,7 +844,12 @@ export const detectImportSpecifierSorting = memoizeCached(
         if (preferences.organizeImportsTypeOrder !== "inline") {
             const { type: regularImports, regular: typeImports } = groupBy(specifiers, s => s.isTypeOnly ? "type" : "regular");
             const regularCaseSensitivity = regularImports?.length
-                ? detectSortCaseSensitivity(regularImports, specifier => specifier.name.text, collateCaseSensitive, collateCaseInsensitive)
+                ? detectSortCaseSensitivity(
+                    regularImports,
+                    specifier => specifier.name.text,
+                    collateCaseSensitive,
+                    collateCaseInsensitive,
+                )
                 : undefined;
             const typeCaseSensitivity = typeImports?.length
                 ? detectSortCaseSensitivity(
@@ -848,7 +872,12 @@ export const detectImportSpecifierSorting = memoizeCached(
         }
 
         // else inline
-        return detectSortCaseSensitivity(specifiers, specifier => specifier.name.text, collateCaseSensitive, collateCaseInsensitive);
+        return detectSortCaseSensitivity(
+            specifiers,
+            specifier => specifier.name.text,
+            collateCaseSensitive,
+            collateCaseInsensitive,
+        );
     },
     new ImportSpecifierSortingCache(),
 );
@@ -983,7 +1012,10 @@ export function getOrganizeImportsComparer(preferences: UserPreferences, ignoreC
         getOrganizeImportsOrdinalStringComparer(ignoreCase);
 }
 
-function getOrganizeImportsComparerWithDetection(preferences: UserPreferences, detectIgnoreCase?: () => boolean): Comparer<string> {
+function getOrganizeImportsComparerWithDetection(
+    preferences: UserPreferences,
+    detectIgnoreCase?: () => boolean,
+): Comparer<string> {
     const ignoreCase = typeof preferences.organizeImportsIgnoreCase === "boolean" ? preferences.organizeImportsIgnoreCase
         : detectIgnoreCase?.() ?? false;
     return getOrganizeImportsComparer(preferences, ignoreCase);

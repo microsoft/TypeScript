@@ -38,7 +38,10 @@ describe("unittests:: tsc:: moduleResolution::", () => {
             {
                 caption: "add the ndoe10Result in package/types",
                 edit: fs =>
-                    fs.writeFileSync("/home/src/projects/project/node_modules/foo/index.d.ts", getFsContentsForAlternateResultDts("foo")),
+                    fs.writeFileSync(
+                        "/home/src/projects/project/node_modules/foo/index.d.ts",
+                        getFsContentsForAlternateResultDts("foo"),
+                    ),
             },
             {
                 caption: "update package.json from @types so error is fixed",
@@ -91,7 +94,10 @@ describe("unittests:: tsc:: moduleResolution::", () => {
             {
                 caption: "add the ndoe10Result in package/types",
                 edit: fs =>
-                    fs.writeFileSync("/home/src/projects/project/node_modules/foo2/index.d.ts", getFsContentsForAlternateResultDts("foo2")),
+                    fs.writeFileSync(
+                        "/home/src/projects/project/node_modules/foo2/index.d.ts",
+                        getFsContentsForAlternateResultDts("foo2"),
+                    ),
             },
         ],
     });

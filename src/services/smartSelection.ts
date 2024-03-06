@@ -126,7 +126,9 @@ export function getSmartSelectionRange(pos: number, sourceFile: SourceFile): Sel
                 // covering the JSDoc comment before diving further.
                 if (isSyntaxList(node)) {
                     const firstChild = node.getChildren()[0];
-                    if (firstChild && hasJSDocNodes(firstChild) && firstChild.jsDoc?.length && firstChild.getStart() !== node.pos) {
+                    if (
+                        firstChild && hasJSDocNodes(firstChild) && firstChild.jsDoc?.length && firstChild.getStart() !== node.pos
+                    ) {
                         start = Math.min(start, first(firstChild.jsDoc).getStart());
                     }
                 }
@@ -243,10 +245,13 @@ function getSelectionChildren(node: Node): readonly Node[] {
                 child === node.questionToken || child.kind === SyntaxKind.QuestionToken,
         );
         // Group type parameter with surrounding brackets
-        const groupedWithBrackets = groupChildren(groupedWithPlusMinusTokens, ({ kind }) =>
-            kind === SyntaxKind.OpenBracketToken ||
-            kind === SyntaxKind.TypeParameter ||
-            kind === SyntaxKind.CloseBracketToken);
+        const groupedWithBrackets = groupChildren(
+            groupedWithPlusMinusTokens,
+            ({ kind }) =>
+                kind === SyntaxKind.OpenBracketToken ||
+                kind === SyntaxKind.TypeParameter ||
+                kind === SyntaxKind.CloseBracketToken,
+        );
         return [
             openBraceToken,
             // Pivot on `:`
@@ -266,7 +271,10 @@ function getSelectionChildren(node: Node): readonly Node[] {
 
     // Group the parameter name with its `...`, then that group with its `?`, then pivot on `=`.
     if (isParameter(node)) {
-        const groupedDotDotDotAndName = groupChildren(node.getChildren(), child => child === node.dotDotDotToken || child === node.name);
+        const groupedDotDotDotAndName = groupChildren(
+            node.getChildren(),
+            child => child === node.dotDotDotToken || child === node.name,
+        );
         const groupedWithQuestionToken = groupChildren(
             groupedDotDotDotAndName,
             child => child === groupedDotDotDotAndName[0] || child === node.questionToken,

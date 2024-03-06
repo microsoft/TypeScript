@@ -297,7 +297,8 @@ describe("unittests:: tsc-watch:: watchEnvironment:: tsc-watch with different po
                 },
                 {
                     caption: "npm install index file in file2",
-                    edit: sys => sys.writeFile(`/user/username/projects/myproject/node_modules/file2/index.d.ts`, `export const x = 10;`),
+                    edit: sys =>
+                        sys.writeFile(`/user/username/projects/myproject/node_modules/file2/index.d.ts`, `export const x = 10;`),
                     timeouts: ts.noop, // To update folder structure
                 },
                 {
@@ -500,7 +501,10 @@ describe("unittests:: tsc-watch:: watchEnvironment:: tsc-watch with different po
                     content: "export function temp(): string;",
                 };
                 const files = [libFile, main, bar, foo, fooBar, temp, configFile];
-                return createWatchedSystem(files, { currentDirectory: "/user/username/projects/myproject", runWithoutRecursiveWatches });
+                return createWatchedSystem(files, {
+                    currentDirectory: "/user/username/projects/myproject",
+                    runWithoutRecursiveWatches,
+                });
             }
 
             function verifyWorker(...additionalFlags: string[]) {
@@ -513,7 +517,11 @@ describe("unittests:: tsc-watch:: watchEnvironment:: tsc-watch with different po
                         {
                             caption: "Change foo",
                             edit: sys =>
-                                sys.replaceFileText(`/user/username/projects/myproject/node_modules/bar/foo.d.ts`, "foo", "fooBar"),
+                                sys.replaceFileText(
+                                    `/user/username/projects/myproject/node_modules/bar/foo.d.ts`,
+                                    "foo",
+                                    "fooBar",
+                                ),
                             timeouts: ts.noop,
                         },
                     ],
@@ -535,7 +543,9 @@ describe("unittests:: tsc-watch:: watchEnvironment:: tsc-watch with different po
 
                 verifyTscWatch({
                     scenario,
-                    subScenario: `watchOptions/with excludeDirectories option with recursive directory watching${additionalFlags.join("")}`,
+                    subScenario: `watchOptions/with excludeDirectories option with recursive directory watching${
+                        additionalFlags.join("")
+                    }`,
                     commandLineArgs: ["-w", ...additionalFlags],
                     sys: () => sys({ excludeDirectories: ["**/temp"] }, /*runWithoutRecursiveWatches*/ true),
                     edits: [

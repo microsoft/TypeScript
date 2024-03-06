@@ -29,19 +29,30 @@ function formatDeprecationMessage(
     let deprecationMessage = error ? "DeprecationError: " : "DeprecationWarning: ";
     deprecationMessage += `'${name}' `;
     deprecationMessage += since ? `has been deprecated since v${since}` : "is deprecated";
-    deprecationMessage += error ? " and can no longer be used." : errorAfter ? ` and will no longer be usable after v${errorAfter}.` : ".";
+    deprecationMessage += error ? " and can no longer be used."
+        : errorAfter ? ` and will no longer be usable after v${errorAfter}.` : ".";
     deprecationMessage += message ? ` ${formatStringFromArgs(message, [name])}` : "";
     return deprecationMessage;
 }
 
-function createErrorDeprecation(name: string, errorAfter: Version | undefined, since: Version | undefined, message: string | undefined) {
+function createErrorDeprecation(
+    name: string,
+    errorAfter: Version | undefined,
+    since: Version | undefined,
+    message: string | undefined,
+) {
     const deprecationMessage = formatDeprecationMessage(name, /*error*/ true, errorAfter, since, message);
     return () => {
         throw new TypeError(deprecationMessage);
     };
 }
 
-function createWarningDeprecation(name: string, errorAfter: Version | undefined, since: Version | undefined, message: string | undefined) {
+function createWarningDeprecation(
+    name: string,
+    errorAfter: Version | undefined,
+    since: Version | undefined,
+    message: string | undefined,
+) {
     let hasWrittenDeprecation = false;
     return () => {
         if (enableDeprecationWarnings && !hasWrittenDeprecation) {

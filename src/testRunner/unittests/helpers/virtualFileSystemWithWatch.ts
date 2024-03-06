@@ -261,7 +261,9 @@ class Callbacks {
             logger.log(`Before running ${this.log()}`);
             this.host.serializeState(logger.logs, serializeOutputOrder);
             if (invokeKey !== undefined) {
-                logger.log(`Invoking ${this.callbackType} callback:: timeoutId:: ${invokeKey}:: ${this.map.get(invokeKey)!.args[0]}`);
+                logger.log(
+                    `Invoking ${this.callbackType} callback:: timeoutId:: ${invokeKey}:: ${this.map.get(invokeKey)!.args[0]}`,
+                );
             }
             this.invokeWorker(invokeKey);
             logger.log(`After running ${this.callbackType} callback:: count: ${this.map.size}`);
@@ -633,7 +635,11 @@ export class TestServerHost implements server.ServerHost, FormatDiagnosticsHost,
         }
     }
 
-    private ensureFolder(fullPath: string, ignoreWatch: boolean | undefined, options: Partial<WatchInvokeOptions> | undefined): FsFolder {
+    private ensureFolder(
+        fullPath: string,
+        ignoreWatch: boolean | undefined,
+        options: Partial<WatchInvokeOptions> | undefined,
+    ): FsFolder {
         const path = this.toPath(fullPath);
         let folder = this.fs.get(path) as FsFolder;
         if (!folder) {
@@ -821,7 +827,14 @@ export class TestServerHost implements server.ServerHost, FormatDiagnosticsHost,
         entryFullPath?: string,
         useTildeSuffix?: boolean,
     ) {
-        this.fsWatchCallback(this.watchUtils.fsWatchesRecursive, fullPath, eventName, modifiedTime, entryFullPath, useTildeSuffix);
+        this.fsWatchCallback(
+            this.watchUtils.fsWatchesRecursive,
+            fullPath,
+            eventName,
+            modifiedTime,
+            entryFullPath,
+            useTildeSuffix,
+        );
     }
 
     private getRelativePathToDirectory(directoryFullPath: string, fileFullPath: string) {
@@ -848,7 +861,12 @@ export class TestServerHost implements server.ServerHost, FormatDiagnosticsHost,
         }
     }
 
-    invokeFsWatches(fullPath: string, eventName: "rename" | "change", modifiedTime: Date | undefined, useTildeSuffix: boolean | undefined) {
+    invokeFsWatches(
+        fullPath: string,
+        eventName: "rename" | "change",
+        modifiedTime: Date | undefined,
+        useTildeSuffix: boolean | undefined,
+    ) {
         this.invokeFsWatchesCallbacks(fullPath, eventName, modifiedTime, fullPath, useTildeSuffix);
         this.invokeFsWatchesCallbacks(getDirectoryPath(fullPath), eventName, modifiedTime, fullPath, useTildeSuffix);
         this.invokeRecursiveFsWatches(fullPath, eventName, modifiedTime, /*entryFullPath*/ undefined, useTildeSuffix);
@@ -999,25 +1017,35 @@ export class TestServerHost implements server.ServerHost, FormatDiagnosticsHost,
         include?: readonly string[],
         depth?: number,
     ): string[] {
-        return matchFiles(path, extensions, exclude, include, this.useCaseSensitiveFileNames, this.getCurrentDirectory(), depth, dir => {
-            const directories: string[] = [];
-            const files: string[] = [];
-            const folder = this.getRealFolder(this.toPath(dir));
-            if (folder) {
-                folder.entries.forEach(entry => {
-                    if (this.isFsFolder(entry)) {
-                        directories.push(getBaseFileName(entry.fullPath));
-                    }
-                    else if (this.isFsFile(entry)) {
-                        files.push(getBaseFileName(entry.fullPath));
-                    }
-                    else {
-                        Debug.fail("Unknown entry");
-                    }
-                });
-            }
-            return { directories, files };
-        }, path => this.realpath(path));
+        return matchFiles(
+            path,
+            extensions,
+            exclude,
+            include,
+            this.useCaseSensitiveFileNames,
+            this.getCurrentDirectory(),
+            depth,
+            dir => {
+                const directories: string[] = [];
+                const files: string[] = [];
+                const folder = this.getRealFolder(this.toPath(dir));
+                if (folder) {
+                    folder.entries.forEach(entry => {
+                        if (this.isFsFolder(entry)) {
+                            directories.push(getBaseFileName(entry.fullPath));
+                        }
+                        else if (this.isFsFile(entry)) {
+                            files.push(getBaseFileName(entry.fullPath));
+                        }
+                        else {
+                            Debug.fail("Unknown entry");
+                        }
+                    });
+                }
+                return { directories, files };
+            },
+            path => this.realpath(path),
+        );
     }
 
     createHash(s: string): string {
@@ -1265,7 +1293,9 @@ function diffFsEntry(
             }
             else if (oldFsEntry.modifiedTime !== newFsEntry.modifiedTime) {
                 if (oldFsEntry.fullPath !== newFsEntry.fullPath) {
-                    baseline.push(`//// [${file}] symlink was renamed from symlink ${oldFsEntry.fullPath}${inodeString(newInode)}`);
+                    baseline.push(
+                        `//// [${file}] symlink was renamed from symlink ${oldFsEntry.fullPath}${inodeString(newInode)}`,
+                    );
                 }
                 else if (writtenFiles && !writtenFiles.has(newFsEntry.path)) {
                     baseline.push(`//// [${file}] symlink changed its modified time${inodeString(newInode)}`);

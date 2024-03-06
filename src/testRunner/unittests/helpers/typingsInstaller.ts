@@ -65,13 +65,18 @@ function loadTypesRegistryFile(
         return new Map(Object.entries(content.entries));
     }
     catch (e) {
-        log.writeLine(`Error when loading types registry file '${typesRegistryFilePath}': ${(e as Error).message}, ${(e as Error).stack}`);
+        log.writeLine(
+            `Error when loading types registry file '${typesRegistryFilePath}': ${(e as Error).message}, ${(e as Error).stack}`,
+        );
         return new Map<string, ts.MapLike<string>>();
     }
 }
 const typesRegistryPackageName = "types-registry";
 function getTypesRegistryFileLocation(globalTypingsCacheLocation: string): string {
-    return ts.combinePaths(ts.normalizeSlashes(globalTypingsCacheLocation), `node_modules/${typesRegistryPackageName}/index.json`);
+    return ts.combinePaths(
+        ts.normalizeSlashes(globalTypingsCacheLocation),
+        `node_modules/${typesRegistryPackageName}/index.json`,
+    );
 }
 
 export interface FileWithPackageName extends File {

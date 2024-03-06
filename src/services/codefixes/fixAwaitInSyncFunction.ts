@@ -112,7 +112,11 @@ function doChange(
     if (returnType) {
         const entityName = getEntityNameFromTypeNode(returnType);
         if (!entityName || entityName.kind !== SyntaxKind.Identifier || entityName.text !== "Promise") {
-            changes.replaceNode(sourceFile, returnType, factory.createTypeReferenceNode("Promise", factory.createNodeArray([returnType])));
+            changes.replaceNode(
+                sourceFile,
+                returnType,
+                factory.createTypeReferenceNode("Promise", factory.createNodeArray([returnType])),
+            );
         }
     }
     changes.insertModifierBefore(sourceFile, SyntaxKind.AsyncKeyword, insertBefore);

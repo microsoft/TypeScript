@@ -410,7 +410,8 @@ export function transformDeclarations(context: TransformationContext) {
         return errorNameNode ? declarationNameToString(errorNameNode) :
             errorFallbackNode && getNameOfDeclaration(errorFallbackNode) ?
             declarationNameToString(getNameOfDeclaration(errorFallbackNode)) :
-            errorFallbackNode && isExportAssignment(errorFallbackNode) ? errorFallbackNode.isExportEquals ? "export=" : "default" :
+            errorFallbackNode && isExportAssignment(errorFallbackNode) ?
+            errorFallbackNode.isExportEquals ? "export=" : "default" :
             "(Missing)"; // same fallback declarationNameToString uses when node is zero-width (ie, nameless)
     }
 
@@ -491,7 +492,8 @@ export function transformDeclarations(context: TransformationContext) {
                     ),
                     createDiagnosticForNode(
                         primaryDeclaration,
-                        Diagnostics.This_is_the_declaration_being_augmented_Consider_moving_the_augmenting_declaration_into_the_same_file,
+                        Diagnostics
+                            .This_is_the_declaration_being_augmented_Consider_moving_the_augmenting_declaration_into_the_same_file,
                     ),
                 ));
             }
@@ -512,8 +514,8 @@ export function transformDeclarations(context: TransformationContext) {
 
     function transformDeclarationsForJS(sourceFile: SourceFile, bundled?: boolean) {
         const oldDiag = getSymbolAccessibilityDiagnostic;
-        getSymbolAccessibilityDiagnostic =
-            s => (s.errorNode && canProduceDiagnostics(s.errorNode) ? createGetSymbolAccessibilityDiagnosticForNode(s.errorNode)(s) : ({
+        getSymbolAccessibilityDiagnostic = s => (s.errorNode && canProduceDiagnostics(s.errorNode) ?
+            createGetSymbolAccessibilityDiagnosticForNode(s.errorNode)(s) : ({
                 diagnosticMessage: s.errorModuleName
                     ? Diagnostics
                         .Declaration_emit_for_this_file_requires_using_private_name_0_from_module_1_An_explicit_type_annotation_may_unblock_declaration_emit
@@ -521,7 +523,12 @@ export function transformDeclarations(context: TransformationContext) {
                         .Declaration_emit_for_this_file_requires_using_private_name_0_An_explicit_type_annotation_may_unblock_declaration_emit,
                 errorNode: s.errorNode || sourceFile,
             }));
-        const result = resolver.getDeclarationStatementsForSourceFile(sourceFile, declarationEmitNodeBuilderFlags, symbolTracker, bundled);
+        const result = resolver.getDeclarationStatementsForSourceFile(
+            sourceFile,
+            declarationEmitNodeBuilderFlags,
+            symbolTracker,
+            bundled,
+        );
         getSymbolAccessibilityDiagnostic = oldDiag;
         return result;
     }
@@ -663,7 +670,8 @@ export function transformDeclarations(context: TransformationContext) {
         }
 
         function getFileReferencesForUsedTypeReferences() {
-            return necessaryTypeReferences ? mapDefined(arrayFrom(necessaryTypeReferences.keys()), getFileReferenceForSpecifierModeTuple)
+            return necessaryTypeReferences ?
+                mapDefined(arrayFrom(necessaryTypeReferences.keys()), getFileReferenceForSpecifierModeTuple)
                 : [];
         }
 
@@ -673,7 +681,9 @@ export function transformDeclarations(context: TransformationContext) {
             // Elide type references for which we have imports
             if (emittedImports) {
                 for (const importStatement of emittedImports) {
-                    if (isImportEqualsDeclaration(importStatement) && isExternalModuleReference(importStatement.moduleReference)) {
+                    if (
+                        isImportEqualsDeclaration(importStatement) && isExternalModuleReference(importStatement.moduleReference)
+                    ) {
                         const expr = importStatement.moduleReference.expression;
                         if (isStringLiteralLike(expr) && expr.text === typeName) {
                             return undefined;
@@ -773,7 +783,10 @@ export function transformDeclarations(context: TransformationContext) {
         }
         else {
             if (name.kind === SyntaxKind.ArrayBindingPattern) {
-                return factory.updateArrayBindingPattern(name, visitNodes(name.elements, visitBindingElement, isArrayBindingElement));
+                return factory.updateArrayBindingPattern(
+                    name,
+                    visitNodes(name.elements, visitBindingElement, isArrayBindingElement),
+                );
             }
             else {
                 return factory.updateObjectBindingPattern(name, visitNodes(name.elements, visitBindingElement, isBindingElement));
@@ -785,7 +798,10 @@ export function transformDeclarations(context: TransformationContext) {
             if (elem.kind === SyntaxKind.OmittedExpression) {
                 return elem;
             }
-            if (elem.propertyName && isComputedPropertyName(elem.propertyName) && isEntityNameExpression(elem.propertyName.expression)) {
+            if (
+                elem.propertyName && isComputedPropertyName(elem.propertyName) &&
+                isEntityNameExpression(elem.propertyName.expression)
+            ) {
                 checkEntityNameVisibility(elem.propertyName.expression, enclosingDeclaration);
             }
 
@@ -821,7 +837,8 @@ export function transformDeclarations(context: TransformationContext) {
     }
 
     function shouldPrintWithInitializer(node: Node) {
-        return canHaveLiteralInitializer(node) && resolver.isLiteralConstDeclaration(getParseTreeNode(node) as CanHaveLiteralInitializer); // TODO: Make safe
+        return canHaveLiteralInitializer(node) &&
+            resolver.isLiteralConstDeclaration(getParseTreeNode(node) as CanHaveLiteralInitializer); // TODO: Make safe
     }
 
     function ensureNoInitializer(node: CanHaveLiteralInitializer) {
@@ -978,7 +995,10 @@ export function transformDeclarations(context: TransformationContext) {
             if (!isPrivate) {
                 const valueParameter = getSetAccessorValueParameter(input);
                 if (valueParameter) {
-                    const accessorType = getTypeAnnotationFromAllAccessorDeclarations(input, resolver.getAllAccessorDeclarations(input));
+                    const accessorType = getTypeAnnotationFromAllAccessorDeclarations(
+                        input,
+                        resolver.getAllAccessorDeclarations(input),
+                    );
                     newValueParameter = ensureParameter(valueParameter, /*modifierMask*/ undefined, accessorType);
                 }
             }
@@ -1081,9 +1101,10 @@ export function transformDeclarations(context: TransformationContext) {
             );
         }
         // The `importClause` visibility corresponds to the default's visibility.
-        const visibleDefaultBinding = decl.importClause && decl.importClause.name && resolver.isDeclarationVisible(decl.importClause) ?
-            decl.importClause.name
-            : undefined;
+        const visibleDefaultBinding =
+            decl.importClause && decl.importClause.name && resolver.isDeclarationVisible(decl.importClause) ?
+                decl.importClause.name
+                : undefined;
         if (!decl.importClause.namedBindings) {
             // No named bindings (either namespace or list), meaning the import is just default or should be elided
             return visibleDefaultBinding && factory.updateImportDeclaration(
@@ -1117,7 +1138,10 @@ export function transformDeclarations(context: TransformationContext) {
             ) : undefined;
         }
         // Named imports (optionally with visible default)
-        const bindingList = mapDefined(decl.importClause.namedBindings.elements, b => resolver.isDeclarationVisible(b) ? b : undefined);
+        const bindingList = mapDefined(
+            decl.importClause.namedBindings.elements,
+            b => resolver.isDeclarationVisible(b) ? b : undefined,
+        );
         if ((bindingList && bindingList.length) || visibleDefaultBinding) {
             return factory.updateImportDeclaration(
                 decl,
@@ -1320,7 +1344,10 @@ export function transformDeclarations(context: TransformationContext) {
                     if (isPrivateIdentifier(input.name)) {
                         return cleanup(/*returnValue*/ undefined);
                     }
-                    const accessorType = getTypeAnnotationFromAllAccessorDeclarations(input, resolver.getAllAccessorDeclarations(input));
+                    const accessorType = getTypeAnnotationFromAllAccessorDeclarations(
+                        input,
+                        resolver.getAllAccessorDeclarations(input),
+                    );
                     return cleanup(factory.updateGetAccessorDeclaration(
                         input,
                         ensureModifiers(input),
@@ -1394,7 +1421,8 @@ export function transformDeclarations(context: TransformationContext) {
                         input,
                         ensureModifiers(input),
                         updateParamsList(input, input.parameters),
-                        visitNode(input.type, visitDeclarationSubtree, isTypeNode) || factory.createKeywordTypeNode(SyntaxKind.AnyKeyword),
+                        visitNode(input.type, visitDeclarationSubtree, isTypeNode) ||
+                            factory.createKeywordTypeNode(SyntaxKind.AnyKeyword),
                     ));
                 }
                 case SyntaxKind.VariableDeclaration: {
@@ -1473,7 +1501,10 @@ export function transformDeclarations(context: TransformationContext) {
                     ));
                 }
                 default:
-                    Debug.assertNever(input, `Attempted to process unhandled node kind: ${Debug.formatSyntaxKind((input as Node).kind)}`);
+                    Debug.assertNever(
+                        input,
+                        `Attempted to process unhandled node kind: ${Debug.formatSyntaxKind((input as Node).kind)}`,
+                    );
             }
         }
 
@@ -1579,7 +1610,8 @@ export function transformDeclarations(context: TransformationContext) {
 
     function stripExportModifiers(statement: Statement): Statement {
         if (
-            isImportEqualsDeclaration(statement) || hasEffectiveModifier(statement, ModifierFlags.Default) || !canHaveModifiers(statement)
+            isImportEqualsDeclaration(statement) || hasEffectiveModifier(statement, ModifierFlags.Default) ||
+            !canHaveModifiers(statement)
         ) {
             // `export import` statements should remain as-is, as imports are _not_ implicitly exported in an ambient namespace
             // Likewise, `export default` classes and the like and just be `default`, so we preserve their `export` modifiers, too
@@ -1652,7 +1684,9 @@ export function transformDeclarations(context: TransformationContext) {
         const canProdiceDiagnostic = canProduceDiagnostics(input);
         const oldDiag = getSymbolAccessibilityDiagnostic;
         if (canProdiceDiagnostic) {
-            getSymbolAccessibilityDiagnostic = createGetSymbolAccessibilityDiagnosticForNode(input as DeclarationDiagnosticProducing);
+            getSymbolAccessibilityDiagnostic = createGetSymbolAccessibilityDiagnosticForNode(
+                input as DeclarationDiagnosticProducing,
+            );
         }
 
         const previousNeedsDeclare = needsDeclare;
@@ -1738,7 +1772,10 @@ export function transformDeclarations(context: TransformationContext) {
                         );
                     });
                     if (!exportMappings.length) {
-                        declarations = mapDefined(declarations, declaration => factory.replaceModifiers(declaration, ModifierFlags.None));
+                        declarations = mapDefined(
+                            declarations,
+                            declaration => factory.replaceModifiers(declaration, ModifierFlags.None),
+                        );
                     }
                     else {
                         declarations.push(factory.createExportDeclaration(
@@ -1862,7 +1899,9 @@ export function transformDeclarations(context: TransformationContext) {
                 if (ctor) {
                     const oldDiag = getSymbolAccessibilityDiagnostic;
                     parameterProperties = compact(flatMap(ctor.parameters, param => {
-                        if (!hasSyntacticModifier(param, ModifierFlags.ParameterPropertyModifier) || shouldStripInternal(param)) return;
+                        if (!hasSyntacticModifier(param, ModifierFlags.ParameterPropertyModifier) || shouldStripInternal(param)) {
+                            return;
+                        }
                         getSymbolAccessibilityDiagnostic = createGetSymbolAccessibilityDiagnosticForNode(param);
                         if (param.name.kind === SyntaxKind.Identifier) {
                             return preserveJsDoc(
@@ -1938,7 +1977,12 @@ export function transformDeclarations(context: TransformationContext) {
                     const varDecl = factory.createVariableDeclaration(
                         newId,
                         /*exclamationToken*/ undefined,
-                        resolver.createTypeOfExpression(extendsClause.expression, input, declarationEmitNodeBuilderFlags, symbolTracker),
+                        resolver.createTypeOfExpression(
+                            extendsClause.expression,
+                            input,
+                            declarationEmitNodeBuilderFlags,
+                            symbolTracker,
+                        ),
                         /*initializer*/ undefined,
                     );
                     const statement = factory.createVariableStatement(
@@ -2024,7 +2068,10 @@ export function transformDeclarations(context: TransformationContext) {
             }
         }
         // Anything left unhandled is an error, so this should be unreachable
-        return Debug.assertNever(input, `Unhandled top-level node in declaration emit: ${Debug.formatSyntaxKind((input as Node).kind)}`);
+        return Debug.assertNever(
+            input,
+            `Unhandled top-level node in declaration emit: ${Debug.formatSyntaxKind((input as Node).kind)}`,
+        );
 
         function cleanup<T extends Node>(node: T | undefined): T | undefined {
             if (isEnclosingDeclaration(input)) {

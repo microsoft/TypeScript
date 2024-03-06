@@ -39,13 +39,17 @@ describe("unittests:: tsserver:: events:: ProjectLanguageServiceStateEvent", () 
         const session = new TestSession(host);
         openFilesForSession([f1], session);
         session.logger.log(
-            `Language service enabled: ${session.getProjectService().configuredProjects.get(config.path)!.languageServiceEnabled}`,
+            `Language service enabled: ${
+                session.getProjectService().configuredProjects.get(config.path)!.languageServiceEnabled
+            }`,
         );
 
         host.writeFile(configWithExclude.path, configWithExclude.content);
         host.runQueuedTimeoutCallbacks();
         session.logger.log(
-            `Language service enabled: ${session.getProjectService().configuredProjects.get(config.path)!.languageServiceEnabled}`,
+            `Language service enabled: ${
+                session.getProjectService().configuredProjects.get(config.path)!.languageServiceEnabled
+            }`,
         );
         baselineTsserverLogs("events/projectLanguageServiceState", "language service disabled events are triggered", session);
     });

@@ -361,7 +361,10 @@ describe("unittests:: config:: tsconfigParsing:: parseConfigFileTextToJson", () 
         allFileList: ["/apath/a.ts"],
     }]);
 
-    function baselineWildcards(subScenario: string, scenario: () => { configFileName: string; jsonText: string; basePath: string; }[]) {
+    function baselineWildcards(
+        subScenario: string,
+        scenario: () => { configFileName: string; jsonText: string; basePath: string; }[],
+    ) {
         baselineParseConfig({
             scenario: "tsconfigParsing",
             subScenario,
@@ -381,7 +384,9 @@ describe("unittests:: config:: tsconfigParsing:: parseConfigFileTextToJson", () 
                         baseline.push("Wildcards::");
                         ts.getOwnKeys(parsed.wildcardDirectories!).forEach(dir =>
                             baseline.push(
-                                `${dir}: WatchDirectoryFlags.${(ts as any).WatchDirectoryFlags[parsed.wildcardDirectories![dir]]}`,
+                                `${dir}: WatchDirectoryFlags.${
+                                    (ts as any).WatchDirectoryFlags[parsed.wildcardDirectories![dir]]
+                                }`,
                             )
                         );
                     },
@@ -398,11 +403,14 @@ describe("unittests:: config:: tsconfigParsing:: parseConfigFileTextToJson", () 
         basePath: "/foo.bar",
     }]);
 
-    baselineWildcards("correctly parses wild card directories from implicit glob when two keys differ only in directory seperator", () => [{
-        configFileName: "/foo.bar/tsconfig.json",
-        jsonText: jsonToReadableText({
-            include: ["./", "./**/*.json"],
-        }),
-        basePath: "/foo",
-    }]);
+    baselineWildcards(
+        "correctly parses wild card directories from implicit glob when two keys differ only in directory seperator",
+        () => [{
+            configFileName: "/foo.bar/tsconfig.json",
+            jsonText: jsonToReadableText({
+                include: ["./", "./**/*.json"],
+            }),
+            basePath: "/foo",
+        }],
+    );
 });

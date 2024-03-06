@@ -428,7 +428,8 @@ export class IdentifierNameMap<V> {
             const autoGenerate = name.emitNode.autoGenerate;
             if ((autoGenerate.flags & GeneratedIdentifierFlags.KindMask) === GeneratedIdentifierFlags.Node) {
                 const node = getNodeForGeneratedName(name);
-                const baseName = isMemberName(node) && node !== name ? IdentifierNameMap.toKey(node) : `(generated@${getNodeId(node)})`;
+                const baseName = isMemberName(node) && node !== name ? IdentifierNameMap.toKey(node)
+                    : `(generated@${getNodeId(node)})`;
                 return formatGeneratedName(
                     /*privateName*/ false,
                     autoGenerate.prefix,
@@ -681,7 +682,11 @@ export function isInitializedProperty(member: ClassElement): member is PropertyD
  */
 export function isNonStaticMethodOrAccessorWithPrivateName(
     member: ClassElement,
-): member is PrivateIdentifierMethodDeclaration | PrivateIdentifierAccessorDeclaration | PrivateIdentifierAutoAccessorPropertyDeclaration {
+): member is
+    | PrivateIdentifierMethodDeclaration
+    | PrivateIdentifierAccessorDeclaration
+    | PrivateIdentifierAutoAccessorPropertyDeclaration
+{
     return !isStatic(member) && (isMethodOrAccessor(member) || isAutoAccessorPropertyDeclaration(member)) &&
         isPrivateIdentifier(member.name);
 }
@@ -773,7 +778,10 @@ export function getAllDecoratorsOfClassElement(
  * @param parent The class node that contains the accessor.
  * @param accessor The class accessor member.
  */
-function getAllDecoratorsOfAccessors(accessor: AccessorDeclaration, parent: ClassExpression | ClassDeclaration): AllDecorators | undefined {
+function getAllDecoratorsOfAccessors(
+    accessor: AccessorDeclaration,
+    parent: ClassExpression | ClassDeclaration,
+): AllDecorators | undefined {
     if (!accessor.body) {
         return undefined;
     }

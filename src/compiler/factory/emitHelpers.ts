@@ -706,7 +706,10 @@ export function createEmitHelperFactory(context: TransformationContext): EmitHel
         );
     }
 
-    function createExportStarHelper(moduleExpression: Expression, exportsExpression: Expression = factory.createIdentifier("exports")) {
+    function createExportStarHelper(
+        moduleExpression: Expression,
+        exportsExpression: Expression = factory.createIdentifier("exports"),
+    ) {
         context.requestEmitHelper(exportStarHelper);
         context.requestEmitHelper(createBindingHelper);
         return factory.createCallExpression(
@@ -755,7 +758,10 @@ export function createEmitHelperFactory(context: TransformationContext): EmitHel
 
     function createClassPrivateFieldInHelper(state: Identifier, receiver: Expression) {
         context.requestEmitHelper(classPrivateFieldInHelper);
-        return factory.createCallExpression(getUnscopedHelperName("__classPrivateFieldIn"), /*typeArguments*/ undefined, [state, receiver]);
+        return factory.createCallExpression(getUnscopedHelperName("__classPrivateFieldIn"), /*typeArguments*/ undefined, [
+            state,
+            receiver,
+        ]);
     }
 
     function createAddDisposableResourceHelper(envBinding: Expression, value: Expression, async: boolean): Expression {
@@ -769,7 +775,9 @@ export function createEmitHelperFactory(context: TransformationContext): EmitHel
 
     function createDisposeResourcesHelper(envBinding: Expression) {
         context.requestEmitHelper(disposeResourcesHelper);
-        return factory.createCallExpression(getUnscopedHelperName("__disposeResources"), /*typeArguments*/ undefined, [envBinding]);
+        return factory.createCallExpression(getUnscopedHelperName("__disposeResources"), /*typeArguments*/ undefined, [
+            envBinding,
+        ]);
     }
 }
 

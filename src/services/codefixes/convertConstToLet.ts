@@ -33,7 +33,13 @@ registerCodeFix({
 
         const changes = textChanges.ChangeTracker.with(context, t => doChange(t, sourceFile, info.token));
         return [
-            createCodeFixActionMaybeFixAll(fixId, changes, Diagnostics.Convert_const_to_let, fixId, Diagnostics.Convert_all_const_to_let),
+            createCodeFixActionMaybeFixAll(
+                fixId,
+                changes,
+                Diagnostics.Convert_const_to_let,
+                fixId,
+                Diagnostics.Convert_all_const_to_let,
+            ),
         ];
     },
     getAllCodeActions: context => {

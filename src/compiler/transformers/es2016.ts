@@ -69,7 +69,10 @@ export function transformES2016(context: TransformationContext): (x: SourceFile 
             target = setTextRange(
                 factory.createElementAccessExpression(
                     setTextRange(factory.createAssignment(expressionTemp, left.expression), left.expression),
-                    setTextRange(factory.createAssignment(argumentExpressionTemp, left.argumentExpression), left.argumentExpression),
+                    setTextRange(
+                        factory.createAssignment(argumentExpressionTemp, left.argumentExpression),
+                        left.argumentExpression,
+                    ),
                 ),
                 left,
             );

@@ -166,10 +166,19 @@ export function getSignatureHelpItems(
         return isSourceFileJS(sourceFile) ? createJSSignatureHelpItems(argumentInfo, program, cancellationToken) : undefined;
     }
 
-    return typeChecker.runWithCancellationToken(cancellationToken, typeChecker =>
-        candidateInfo.kind === CandidateOrTypeKind.Candidate
-            ? createSignatureHelpItems(candidateInfo.candidates, candidateInfo.resolvedSignature, argumentInfo, sourceFile, typeChecker)
-            : createTypeHelpItems(candidateInfo.symbol, argumentInfo, sourceFile, typeChecker));
+    return typeChecker.runWithCancellationToken(
+        cancellationToken,
+        typeChecker =>
+            candidateInfo.kind === CandidateOrTypeKind.Candidate
+                ? createSignatureHelpItems(
+                    candidateInfo.candidates,
+                    candidateInfo.resolvedSignature,
+                    argumentInfo,
+                    sourceFile,
+                    typeChecker,
+                )
+                : createTypeHelpItems(candidateInfo.symbol, argumentInfo, sourceFile, typeChecker),
+    );
 }
 
 const enum CandidateOrTypeKind {
@@ -205,18 +214,25 @@ function getCandidateOrTypeInfo(
         case InvocationKind.TypeArgs: {
             const { called } = invocation;
             if (
-                onlyUseSyntacticOwners && !containsPrecedingToken(startingToken, sourceFile, isIdentifier(called) ? called.parent : called)
+                onlyUseSyntacticOwners &&
+                !containsPrecedingToken(startingToken, sourceFile, isIdentifier(called) ? called.parent : called)
             ) {
                 return undefined;
             }
             const candidates = getPossibleGenericSignatures(called, argumentCount, checker);
-            if (candidates.length !== 0) return { kind: CandidateOrTypeKind.Candidate, candidates, resolvedSignature: first(candidates) };
+            if (candidates.length !== 0) {
+                return { kind: CandidateOrTypeKind.Candidate, candidates, resolvedSignature: first(candidates) };
+            }
 
             const symbol = checker.getSymbolAtLocation(called);
             return symbol && { kind: CandidateOrTypeKind.Type, symbol };
         }
         case InvocationKind.Contextual:
-            return { kind: CandidateOrTypeKind.Candidate, candidates: [invocation.signature], resolvedSignature: invocation.signature };
+            return {
+                kind: CandidateOrTypeKind.Candidate,
+                candidates: [invocation.signature],
+                resolvedSignature: invocation.signature,
+            };
         default:
             return Debug.assertNever(invocation);
     }
@@ -250,25 +266,28 @@ function createJSSignatureHelpItems(
     const name = isPropertyAccessExpression(expression) ? expression.name.text : undefined;
     const typeChecker = program.getTypeChecker();
     return name === undefined ? undefined :
-        firstDefined(program.getSourceFiles(), sourceFile =>
-            firstDefined(sourceFile.getNamedDeclarations().get(name), declaration => {
-                const type = declaration.symbol && typeChecker.getTypeOfSymbolAtLocation(declaration.symbol, declaration);
-                const callSignatures = type && type.getCallSignatures();
-                if (callSignatures && callSignatures.length) {
-                    return typeChecker.runWithCancellationToken(
-                        cancellationToken,
-                        typeChecker =>
-                            createSignatureHelpItems(
-                                callSignatures,
-                                callSignatures[0],
-                                argumentInfo,
-                                sourceFile,
-                                typeChecker,
-                                /*useFullPrefix*/ true,
-                            ),
-                    );
-                }
-            }));
+        firstDefined(
+            program.getSourceFiles(),
+            sourceFile =>
+                firstDefined(sourceFile.getNamedDeclarations().get(name), declaration => {
+                    const type = declaration.symbol && typeChecker.getTypeOfSymbolAtLocation(declaration.symbol, declaration);
+                    const callSignatures = type && type.getCallSignatures();
+                    if (callSignatures && callSignatures.length) {
+                        return typeChecker.runWithCancellationToken(
+                            cancellationToken,
+                            typeChecker =>
+                                createSignatureHelpItems(
+                                    callSignatures,
+                                    callSignatures[0],
+                                    argumentInfo,
+                                    sourceFile,
+                                    typeChecker,
+                                    /*useFullPrefix*/ true,
+                                ),
+                        );
+                    }
+                }),
+        );
 }
 
 function containsPrecedingToken(startingToken: Node, sourceFile: SourceFile, container: Node) {
@@ -312,7 +331,10 @@ function getArgumentOrParameterListInfo(
     position: number,
     sourceFile: SourceFile,
     checker: TypeChecker,
-): { readonly list: Node; readonly argumentIndex: number; readonly argumentCount: number; readonly argumentsSpan: TextSpan; } | undefined {
+):
+    | { readonly list: Node; readonly argumentIndex: number; readonly argumentCount: number; readonly argumentsSpan: TextSpan; }
+    | undefined
+{
     const info = getArgumentOrParameterListAndIndex(node, sourceFile, checker);
     if (!info) return undefined;
     const { list, argumentIndex } = info;
@@ -508,7 +530,8 @@ function getAdjustedNode(node: Node) {
         default:
             return findAncestor(
                 node.parent,
-                n => isParameter(n) ? true : isBindingElement(n) || isObjectBindingPattern(n) || isArrayBindingPattern(n) ? false : "quit",
+                n => isParameter(n) ? true
+                    : isBindingElement(n) || isObjectBindingPattern(n) || isArrayBindingPattern(n) ? false : "quit",
             );
     }
 }
@@ -543,7 +566,8 @@ function getContextualSignatureLocationInfo(
             const argumentIndex = node.kind === SyntaxKind.OpenParenToken ? 0
                 : countBinaryExpressionParameters(parent as BinaryExpression) - 1;
             const argumentCount = countBinaryExpressionParameters(highestBinary);
-            return contextualType && { contextualType, argumentIndex, argumentCount, argumentsSpan: createTextSpanFromNode(parent) };
+            return contextualType &&
+                { contextualType, argumentIndex, argumentCount, argumentsSpan: createTextSpanFromNode(parent) };
         }
         default:
             return undefined;
@@ -659,7 +683,8 @@ function getArgumentListInfoForTemplate(
     sourceFile: SourceFile,
 ): ArgumentListInfo {
     // argumentCount is either 1 or (numSpans + 1) to account for the template strings array argument.
-    const argumentCount = isNoSubstitutionTemplateLiteral(tagExpression.template) ? 1 : tagExpression.template.templateSpans.length + 1;
+    const argumentCount = isNoSubstitutionTemplateLiteral(tagExpression.template) ? 1
+        : tagExpression.template.templateSpans.length + 1;
     if (argumentIndex !== 0) {
         Debug.assertLessThan(argumentIndex, argumentCount);
     }
@@ -827,7 +852,9 @@ function createTypeHelpItems(
 ): SignatureHelpItems | undefined {
     const typeParameters = checker.getLocalTypeParametersOfClassOrInterfaceOrTypeAlias(symbol);
     if (!typeParameters) return undefined;
-    const items = [getTypeHelpItem(symbol, typeParameters, checker, getEnclosingDeclarationFromInvocation(invocation), sourceFile)];
+    const items = [
+        getTypeHelpItem(symbol, typeParameters, checker, getEnclosingDeclarationFromInvocation(invocation), sourceFile),
+    ];
     return { items, applicableSpan, selectedItemIndex: 0, argumentIndex, argumentCount };
 }
 
@@ -897,7 +924,12 @@ function returnTypeToDisplayParts(
             checker.writeTypePredicate(predicate, enclosingDeclaration, /*flags*/ undefined, writer);
         }
         else {
-            checker.writeType(checker.getReturnTypeOfSignature(candidateSignature), enclosingDeclaration, /*flags*/ undefined, writer);
+            checker.writeType(
+                checker.getReturnTypeOfSignature(candidateSignature),
+                enclosingDeclaration,
+                /*flags*/ undefined,
+                writer,
+            );
         }
     });
 }
@@ -921,13 +953,22 @@ function itemInfoForTypeParameters(
         createSignatureHelpParameterForTypeParameter(t, checker, enclosingDeclaration, sourceFile, printer)
     );
     const thisParameter = candidateSignature.thisParameter ?
-        [checker.symbolToParameterDeclaration(candidateSignature.thisParameter, enclosingDeclaration, signatureHelpNodeBuilderFlags)!]
+        [
+            checker.symbolToParameterDeclaration(
+                candidateSignature.thisParameter,
+                enclosingDeclaration,
+                signatureHelpNodeBuilderFlags,
+            )!,
+        ]
         : [];
 
     return checker.getExpandedParameters(candidateSignature).map(paramList => {
         const params = factory.createNodeArray([
             ...thisParameter,
-            ...map(paramList, param => checker.symbolToParameterDeclaration(param, enclosingDeclaration, signatureHelpNodeBuilderFlags)!),
+            ...map(
+                paramList,
+                param => checker.symbolToParameterDeclaration(param, enclosingDeclaration, signatureHelpNodeBuilderFlags)!,
+            ),
         ]);
         const parameterParts = mapToDisplayParts(writer => {
             printer.writeList(ListFormat.CallExpressionArguments, params, sourceFile, writer);
@@ -959,12 +1000,16 @@ function itemInfoForParameters(
         }
     });
     const lists = checker.getExpandedParameters(candidateSignature);
-    const isVariadic: (parameterList: readonly Symbol[]) => boolean = !checker.hasEffectiveRestParameter(candidateSignature) ? _ => false
+    const isVariadic: (parameterList: readonly Symbol[]) => boolean = !checker.hasEffectiveRestParameter(candidateSignature) ?
+        _ => false
         : lists.length === 1 ? _ => true
-        : pList => !!(pList.length && tryCast(pList[pList.length - 1], isTransientSymbol)?.links.checkFlags! & CheckFlags.RestParameter);
+        : pList =>
+            !!(pList.length && tryCast(pList[pList.length - 1], isTransientSymbol)?.links.checkFlags! & CheckFlags.RestParameter);
     return lists.map(parameterList => ({
         isVariadic: isVariadic(parameterList),
-        parameters: parameterList.map(p => createSignatureHelpParameterForParameter(p, checker, enclosingDeclaration, sourceFile, printer)),
+        parameters: parameterList.map(p =>
+            createSignatureHelpParameterForParameter(p, checker, enclosingDeclaration, sourceFile, printer)
+        ),
         prefix: [...typeParameterParts, punctuationPart(SyntaxKind.OpenParenToken)],
         suffix: [punctuationPart(SyntaxKind.CloseParenToken)],
     }));

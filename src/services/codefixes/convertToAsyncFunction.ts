@@ -149,7 +149,12 @@ interface PromiseReturningCallExpression<Name extends string> extends CallExpres
     };
 }
 
-function convertToAsyncFunction(changes: textChanges.ChangeTracker, sourceFile: SourceFile, position: number, checker: TypeChecker): void {
+function convertToAsyncFunction(
+    changes: textChanges.ChangeTracker,
+    sourceFile: SourceFile,
+    position: number,
+    checker: TypeChecker,
+): void {
     // get the function declaration - returns a promise
     const tokenAtPosition = getTokenAtPosition(sourceFile, position);
     let functionToConvert: FunctionLikeDeclaration | undefined;
@@ -352,7 +357,9 @@ function renameCollidingVarNames(
                 collidingSymbolMap.add(ident.text, symbol);
             }
             // We only care about identifiers that are parameters, variable declarations, or binding elements
-            else if (node.parent && (isParameter(node.parent) || isVariableDeclaration(node.parent) || isBindingElement(node.parent))) {
+            else if (
+                node.parent && (isParameter(node.parent) || isVariableDeclaration(node.parent) || isBindingElement(node.parent))
+            ) {
                 const originalName = node.text;
                 const collidingSymbols = collidingSymbolMap.get(originalName);
 
@@ -446,7 +453,13 @@ function transformExpression(
     const nodeType = transformer.checker.getTypeAtLocation(node);
     if (nodeType && transformer.checker.getPromisedTypeOfPromise(nodeType)) {
         Debug.assertNode(getOriginalNode(node).parent, isPropertyAccessExpression);
-        return transformPromiseExpressionOfPropertyAccess(returnContextNode, node, transformer, hasContinuation, continuationArgName);
+        return transformPromiseExpressionOfPropertyAccess(
+            returnContextNode,
+            node,
+            transformer,
+            hasContinuation,
+            continuationArgName,
+        );
     }
 
     return silentFail();
@@ -638,7 +651,14 @@ function transformCatch(
 
     // Transform the callback argument into an array of inlined statements. We pass whether we have an outer continuation here
     // as that indicates whether `return` is valid.
-    const inlinedCallback = transformCallbackArgument(onRejected, hasContinuation, possibleNameForVarDecl, inputArgName, node, transformer);
+    const inlinedCallback = transformCallbackArgument(
+        onRejected,
+        hasContinuation,
+        possibleNameForVarDecl,
+        inputArgName,
+        node,
+        transformer,
+    );
     if (hasFailed()) return silentFail(); // shortcut out of more work
 
     const tryBlock = factory.createBlock(inlinedLeftHandSide);
@@ -686,7 +706,14 @@ function transformThen(
 
     // Transform the callback argument into an array of inlined statements. We pass whether we have an outer continuation here
     // as that indicates whether `return` is valid.
-    const inlinedCallback = transformCallbackArgument(onFulfilled, hasContinuation, continuationArgName, inputArgName, node, transformer);
+    const inlinedCallback = transformCallbackArgument(
+        onFulfilled,
+        hasContinuation,
+        continuationArgName,
+        inputArgName,
+        node,
+        transformer,
+    );
     if (hasFailed()) return silentFail(); // shortcut out of more work
 
     return concatenate(inlinedLeftHandSide, inlinedCallback);
@@ -820,7 +847,8 @@ function transformCallbackArgument(
         case SyntaxKind.FunctionExpression:
         case SyntaxKind.ArrowFunction: {
             const funcBody = (func as FunctionExpression | ArrowFunction).body;
-            const returnType = getLastCallSignature(transformer.checker.getTypeAtLocation(func), transformer.checker)?.getReturnType();
+            const returnType = getLastCallSignature(transformer.checker.getTypeAtLocation(func), transformer.checker)
+                ?.getReturnType();
 
             // Arrow functions with block bodies { } will enter this control flow
             if (isBlock(funcBody)) {
@@ -920,7 +948,11 @@ function transformCallbackArgument(
                 }
 
                 if (returnType) {
-                    const possiblyAwaitedRightHandSide = getPossiblyAwaitedRightHandSide(transformer.checker, returnType, funcBody);
+                    const possiblyAwaitedRightHandSide = getPossiblyAwaitedRightHandSide(
+                        transformer.checker,
+                        returnType,
+                        funcBody,
+                    );
 
                     if (!shouldReturn(parent, transformer)) {
                         const transformedStatement = createVariableOrAssignmentOrExpressionStatement(

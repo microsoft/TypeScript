@@ -115,7 +115,9 @@ namespace SourceMapSpanWriter {
                 decodeErrors = ["!!^^ !!^^ There was decoding error in the sourcemap at this location: " + decodeResult.error];
             }
             else {
-                decodeErrors = ["!!^^ !!^^ The decoded span from sourcemap's mapping entry does not match what was encoded for this span:"];
+                decodeErrors = [
+                    "!!^^ !!^^ The decoded span from sourcemap's mapping entry does not match what was encoded for this span:",
+                ];
             }
             decodeErrors.push(
                 "!!^^ !!^^ Decoded span from sourcemap's mappings entry: " +
@@ -135,7 +137,9 @@ namespace SourceMapSpanWriter {
 
     export function recordNewSourceFileSpan(sourceMapSpan: ts.Mapping, newSourceFileCode: string) {
         let continuesLine = false;
-        if (spansOnSingleLine.length > 0 && spansOnSingleLine[0].sourceMapSpan.generatedCharacter === sourceMapSpan.generatedLine) {
+        if (
+            spansOnSingleLine.length > 0 && spansOnSingleLine[0].sourceMapSpan.generatedCharacter === sourceMapSpan.generatedLine
+        ) {
             writeRecordedSpans();
             spansOnSingleLine = [];
             nextJsLineToWrite--; // walk back one line to reprint the line
@@ -163,7 +167,9 @@ namespace SourceMapSpanWriter {
         writeRecordedSpans();
 
         if (!SourceMapDecoder.hasCompletedDecoding()) {
-            sourceMapRecorder.WriteLine("!!!! **** There are more source map entries in the sourceMap's mapping than what was encoded");
+            sourceMapRecorder.WriteLine(
+                "!!!! **** There are more source map entries in the sourceMap's mapping than what was encoded",
+            );
             sourceMapRecorder.WriteLine("!!!! **** Remaining decoded string: " + SourceMapDecoder.getRemainingDecodeString());
         }
 

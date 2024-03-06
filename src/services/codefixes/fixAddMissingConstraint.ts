@@ -61,7 +61,10 @@ registerCodeFix({
         const info = getInfo(program, sourceFile, span);
         if (info === undefined) return;
 
-        const changes = textChanges.ChangeTracker.with(context, t => addMissingConstraint(t, program, preferences, host, sourceFile, info));
+        const changes = textChanges.ChangeTracker.with(
+            context,
+            t => addMissingConstraint(t, program, preferences, host, sourceFile, info),
+        );
         return [
             createCodeFixAction(
                 fixId,
@@ -98,14 +101,19 @@ interface Info {
 }
 
 function getInfo(program: Program, sourceFile: SourceFile, span: TextSpan): Info | undefined {
-    const diag = find(program.getSemanticDiagnostics(sourceFile), diag => diag.start === span.start && diag.length === span.length);
+    const diag = find(
+        program.getSemanticDiagnostics(sourceFile),
+        diag => diag.start === span.start && diag.length === span.length,
+    );
     if (diag === undefined || diag.relatedInformation === undefined) return;
 
     const related = find(
         diag.relatedInformation,
         related => related.code === Diagnostics.This_type_parameter_might_need_an_extends_0_constraint.code,
     );
-    if (related === undefined || related.file === undefined || related.start === undefined || related.length === undefined) return;
+    if (related === undefined || related.file === undefined || related.start === undefined || related.length === undefined) {
+        return;
+    }
 
     let declaration = findAncestorMatchingSpan(related.file, createTextSpan(related.start, related.length));
     if (declaration === undefined) return;

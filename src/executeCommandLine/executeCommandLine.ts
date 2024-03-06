@@ -509,7 +509,9 @@ function printEasyHelp(sys: System, simpleOptions: readonly CommandLineOption[])
     let output: string[] = [
         ...getHeader(
             sys,
-            `${getDiagnosticText(Diagnostics.tsc_Colon_The_TypeScript_Compiler)} - ${getDiagnosticText(Diagnostics.Version_0, version)}`,
+            `${getDiagnosticText(Diagnostics.tsc_Colon_The_TypeScript_Compiler)} - ${
+                getDiagnosticText(Diagnostics.Version_0, version)
+            }`,
         ),
     ];
     output.push(colors.bold(getDiagnosticText(Diagnostics.COMMON_COMMANDS)) + sys.newLine + sys.newLine);
@@ -567,7 +569,9 @@ function printAllHelp(
     let output: string[] = [
         ...getHeader(
             sys,
-            `${getDiagnosticText(Diagnostics.tsc_Colon_The_TypeScript_Compiler)} - ${getDiagnosticText(Diagnostics.Version_0, version)}`,
+            `${getDiagnosticText(Diagnostics.tsc_Colon_The_TypeScript_Compiler)} - ${
+                getDiagnosticText(Diagnostics.Version_0, version)
+            }`,
         ),
     ];
     output = [
@@ -617,7 +621,9 @@ function printBuildHelp(sys: System, buildOptions: readonly CommandLineOption[])
     let output: string[] = [
         ...getHeader(
             sys,
-            `${getDiagnosticText(Diagnostics.tsc_Colon_The_TypeScript_Compiler)} - ${getDiagnosticText(Diagnostics.Version_0, version)}`,
+            `${getDiagnosticText(Diagnostics.tsc_Colon_The_TypeScript_Compiler)} - ${
+                getDiagnosticText(Diagnostics.Version_0, version)
+            }`,
         ),
     ];
     output = [
@@ -717,7 +723,9 @@ function executeCommandLineWorker(
 
     if (commandLine.options.project) {
         if (commandLine.fileNames.length !== 0) {
-            reportDiagnostic(createCompilerDiagnostic(Diagnostics.Option_project_cannot_be_mixed_with_source_files_on_a_command_line));
+            reportDiagnostic(
+                createCompilerDiagnostic(Diagnostics.Option_project_cannot_be_mixed_with_source_files_on_a_command_line),
+            );
             return sys.exit(ExitStatus.DiagnosticsPresent_OutputsSkipped);
         }
 
@@ -832,7 +840,8 @@ function executeCommandLineWorker(
         if (commandLineOptions.showConfig) {
             // eslint-disable-next-line no-null/no-null
             sys.write(
-                JSON.stringify(convertToTSConfig(commandLine, combinePaths(currentDirectory, "tsconfig.json"), sys), null, 4) + sys.newLine,
+                JSON.stringify(convertToTSConfig(commandLine, combinePaths(currentDirectory, "tsconfig.json"), sys), null, 4) +
+                    sys.newLine,
             );
             return sys.exit(ExitStatus.Success);
         }
@@ -873,7 +882,8 @@ function executeCommandLineWorker(
 
 export function isBuild(commandLineArgs: readonly string[]) {
     if (commandLineArgs.length > 0 && commandLineArgs[0].charCodeAt(0) === CharacterCodes.minus) {
-        const firstOption = commandLineArgs[0].slice(commandLineArgs[0].charCodeAt(1) === CharacterCodes.minus ? 2 : 1).toLowerCase();
+        const firstOption = commandLineArgs[0].slice(commandLineArgs[0].charCodeAt(1) === CharacterCodes.minus ? 2 : 1)
+            .toLowerCase();
         return firstOption === "build" || firstOption === "b";
     }
     return false;
@@ -1105,7 +1115,11 @@ function updateSolutionBuilderHost(
     };
 }
 
-function updateCreateProgram<T extends BuilderProgram>(sys: System, host: { createProgram: CreateProgram<T>; }, isBuildMode: boolean) {
+function updateCreateProgram<T extends BuilderProgram>(
+    sys: System,
+    host: { createProgram: CreateProgram<T>; },
+    isBuildMode: boolean,
+) {
     const compileUsingBuilder = host.createProgram;
     host.createProgram = (rootNames, options, host, oldProgram, configFileParsingDiagnostics, projectReferences) => {
         Debug.assert(rootNames !== undefined || (options === undefined && !!oldProgram));
@@ -1237,7 +1251,11 @@ function reportSolutionBuilderTimes(
 
     const statistics: Statistic[] = [];
     statistics.push(
-        { name: "Projects in scope", value: getBuildOrderFromAnyBuildOrder(builder.getBuildOrder()).length, type: StatisticType.count },
+        {
+            name: "Projects in scope",
+            value: getBuildOrderFromAnyBuildOrder(builder.getBuildOrder()).length,
+            type: StatisticType.count,
+        },
     );
     reportSolutionBuilderCountStatistic("SolutionBuilder::Projects built");
     reportSolutionBuilderCountStatistic("SolutionBuilder::Timestamps only updates");
@@ -1248,7 +1266,11 @@ function reportSolutionBuilderTimes(
     });
     performance.forEachMeasure((name, duration) => {
         if (isSolutionMarkOrMeasure(name)) {
-            statistics.push({ name: `${getNameFromSolutionBuilderMarkOrMeasure(name)} time`, value: duration, type: StatisticType.time });
+            statistics.push({
+                name: `${getNameFromSolutionBuilderMarkOrMeasure(name)} time`,
+                value: duration,
+                type: StatisticType.time,
+            });
         }
     });
     performance.disable();

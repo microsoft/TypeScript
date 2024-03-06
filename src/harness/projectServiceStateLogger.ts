@@ -104,7 +104,13 @@ export function patchServiceForStateBaseline(service: ProjectService) {
         const autoImportProviderProjects = [] as AutoImportProviderProject[];
         const auxiliaryProjects = [] as AuxiliaryProject[];
         return baselineState(
-            [service.externalProjects, service.configuredProjects, service.inferredProjects, autoImportProviderProjects, auxiliaryProjects],
+            [
+                service.externalProjects,
+                service.configuredProjects,
+                service.inferredProjects,
+                autoImportProviderProjects,
+                auxiliaryProjects,
+            ],
             projects,
             (logs, project, data) => {
                 if (project.autoImportProviderHost) autoImportProviderProjects.push(project.autoImportProviderHost);

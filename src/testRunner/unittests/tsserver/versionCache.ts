@@ -325,7 +325,11 @@ describe(`unittests:: tsserver:: VersionCache stress test`, () => {
             const lp = lineIndex.positionToLineOffset(rsa[i]);
             const lac = ts.computeLineAndCharacterOfPosition(lineMap, rsa[i]);
             assert.equal(lac.line + 1, lp.line, "Line number mismatch " + (lac.line + 1) + " " + lp.line + " " + i);
-            assert.equal(lac.character, lp.offset - 1, "Character offset mismatch " + lac.character + " " + (lp.offset - 1) + " " + i);
+            assert.equal(
+                lac.character,
+                lp.offset - 1,
+                "Character offset mismatch " + lac.character + " " + (lp.offset - 1) + " " + i,
+            );
         }
     });
 

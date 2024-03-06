@@ -42,7 +42,11 @@ registerCodeFix({
 });
 
 function doChange(changes: textChanges.ChangeTracker, sourceFile: SourceFile, node: ShorthandPropertyAssignment): void {
-    changes.replaceNode(sourceFile, node, factory.createPropertyAssignment(node.name, node.objectAssignmentInitializer as Expression));
+    changes.replaceNode(
+        sourceFile,
+        node,
+        factory.createPropertyAssignment(node.name, node.objectAssignmentInitializer as Expression),
+    );
 }
 
 function getProperty(sourceFile: SourceFile, pos: number): ShorthandPropertyAssignment {

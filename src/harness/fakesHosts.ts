@@ -281,7 +281,10 @@ export class CompilerHost implements ts.CompilerHost {
         this.sys = sys;
         this.defaultLibLocation = sys.vfs.meta.get("defaultLibLocation") || "";
         this._newLine = ts.getNewLineCharacter(options);
-        this._sourceFiles = new collections.SortedMap<string, ts.SourceFile>({ comparer: sys.vfs.stringComparer, sort: "insertion" });
+        this._sourceFiles = new collections.SortedMap<string, ts.SourceFile>({
+            comparer: sys.vfs.stringComparer,
+            sort: "insertion",
+        });
         this._setParentNodes = setParentNodes;
         this._outputsMap = new collections.SortedMap(this.vfs.stringComparer);
         this.jsDocParsingMode = jsDocParsingMode;
@@ -431,7 +434,8 @@ export class CompilerHost implements ts.CompilerHost {
             let fs = this.vfs;
             while (fs.shadowRoot) {
                 try {
-                    const shadowRootStats = fs.shadowRoot.existsSync(canonicalFileName) ? fs.shadowRoot.statSync(canonicalFileName)
+                    const shadowRootStats = fs.shadowRoot.existsSync(canonicalFileName) ?
+                        fs.shadowRoot.statSync(canonicalFileName)
                         : undefined!; // TODO: GH#18217
                     if (
                         shadowRootStats.dev !== stats.dev ||
@@ -558,7 +562,9 @@ function diagnosticRelatedInformationToText({ file, start, length, messageText }
         text;
 }
 
-function diagnosticToText({ kind, diagnostic: { relatedInformation, ...diagnosticRelatedInformation } }: SolutionBuilderDiagnostic) {
+function diagnosticToText(
+    { kind, diagnostic: { relatedInformation, ...diagnosticRelatedInformation } }: SolutionBuilderDiagnostic,
+) {
     let text = `${kind}!: ${diagnosticRelatedInformationToText(diagnosticRelatedInformation)}`;
     if (relatedInformation) {
         for (const kid of relatedInformation) {

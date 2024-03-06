@@ -87,7 +87,9 @@ export function transformECMAScriptModule(context: TransformationContext): (x: S
                 result = factory.updateSourceFile(
                     result,
                     setTextRange(
-                        factory.createNodeArray(insertStatementsAfterCustomPrologue(result.statements.slice(), importRequireStatements)),
+                        factory.createNodeArray(
+                            insertStatementsAfterCustomPrologue(result.statements.slice(), importRequireStatements),
+                        ),
                         result.statements,
                     ),
                 );
@@ -182,7 +184,11 @@ export function transformECMAScriptModule(context: TransformationContext): (x: S
                     /*isTypeOnly*/ false,
                     /*name*/ undefined,
                     factory.createNamedImports([
-                        factory.createImportSpecifier(/*isTypeOnly*/ false, factory.createIdentifier("createRequire"), createRequireName),
+                        factory.createImportSpecifier(
+                            /*isTypeOnly*/ false,
+                            factory.createIdentifier("createRequire"),
+                            createRequireName,
+                        ),
                     ]),
                 ),
                 factory.createStringLiteral("module"),
@@ -386,7 +392,10 @@ export function transformECMAScriptModule(context: TransformationContext): (x: S
         if (!substitution) {
             helperNameSubstitutions!.set(
                 name,
-                substitution = factory.createUniqueName(name, GeneratedIdentifierFlags.Optimistic | GeneratedIdentifierFlags.FileLevel),
+                substitution = factory.createUniqueName(
+                    name,
+                    GeneratedIdentifierFlags.Optimistic | GeneratedIdentifierFlags.FileLevel,
+                ),
             );
         }
         return substitution;

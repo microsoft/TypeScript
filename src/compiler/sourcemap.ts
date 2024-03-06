@@ -262,7 +262,8 @@ export function createSourceMapGenerator(
             const newGeneratedLine = rawGeneratedLine + generatedLine;
             const rawGeneratedCharacter = start && start.line === raw.generatedLine ? raw.generatedCharacter - start.character
                 : raw.generatedCharacter;
-            const newGeneratedCharacter = rawGeneratedLine === 0 ? rawGeneratedCharacter + generatedCharacter : rawGeneratedCharacter;
+            const newGeneratedCharacter = rawGeneratedLine === 0 ? rawGeneratedCharacter + generatedCharacter
+                : rawGeneratedCharacter;
             addMapping(newGeneratedLine, newGeneratedCharacter, newSourceIndex, newSourceLine, newSourceCharacter, newNameIndex);
         }
         exit();
@@ -543,12 +544,16 @@ export function decodeMappings(mappings: string): MappingsDecoder {
                     sourceIndex += base64VLQFormatDecode();
                     if (hasReportedError()) return stopIterating();
                     if (sourceIndex < 0) return setErrorAndStopIterating("Invalid sourceIndex found");
-                    if (isSourceMappingSegmentEnd()) return setErrorAndStopIterating("Unsupported Format: No entries after sourceIndex");
+                    if (isSourceMappingSegmentEnd()) {
+                        return setErrorAndStopIterating("Unsupported Format: No entries after sourceIndex");
+                    }
 
                     sourceLine += base64VLQFormatDecode();
                     if (hasReportedError()) return stopIterating();
                     if (sourceLine < 0) return setErrorAndStopIterating("Invalid sourceLine found");
-                    if (isSourceMappingSegmentEnd()) return setErrorAndStopIterating("Unsupported Format: No entries after sourceLine");
+                    if (isSourceMappingSegmentEnd()) {
+                        return setErrorAndStopIterating("Unsupported Format: No entries after sourceLine");
+                    }
 
                     sourceCharacter += base64VLQFormatDecode();
                     if (hasReportedError()) return stopIterating();
@@ -731,7 +736,11 @@ function getGeneratedPositionOfMapping(value: MappedPosition) {
 }
 
 /** @internal */
-export function createDocumentPositionMapper(host: DocumentPositionMapperHost, map: RawSourceMap, mapPath: string): DocumentPositionMapper {
+export function createDocumentPositionMapper(
+    host: DocumentPositionMapperHost,
+    map: RawSourceMap,
+    mapPath: string,
+): DocumentPositionMapper {
     const mapDirectory = getDirectoryPath(mapPath);
     const sourceRoot = map.sourceRoot ? getNormalizedAbsolutePath(map.sourceRoot, mapDirectory) : mapDirectory;
     const generatedAbsoluteFilePath = getNormalizedAbsolutePath(map.file, mapDirectory);
@@ -795,7 +804,9 @@ export function createDocumentPositionMapper(host: DocumentPositionMapperHost, m
                 if (!list) lists[mapping.sourceIndex] = list = [];
                 list.push(mapping);
             }
-            sourceMappings = lists.map(list => sortAndDeduplicate<SourceMappedPosition>(list, compareSourcePositions, sameMappedPosition));
+            sourceMappings = lists.map(list =>
+                sortAndDeduplicate<SourceMappedPosition>(list, compareSourcePositions, sameMappedPosition)
+            );
         }
         return sourceMappings[sourceIndex];
     }

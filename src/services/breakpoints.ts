@@ -117,7 +117,10 @@ export function spanInSourceFileAtLocation(sourceFile: SourceFile, position: num
     }
 
     function textSpanEndingAtNextToken(startNode: Node, previousTokenToFindNextEndToken: Node): TextSpan {
-        return textSpan(startNode, findNextToken(previousTokenToFindNextEndToken, previousTokenToFindNextEndToken.parent, sourceFile));
+        return textSpan(
+            startNode,
+            findNextToken(previousTokenToFindNextEndToken, previousTokenToFindNextEndToken.parent, sourceFile),
+        );
     }
 
     function spanInNodeIfStartsOnSameLine(node: Node | undefined, otherwiseOnNode?: Node): TextSpan | undefined {
@@ -369,7 +372,8 @@ export function spanInSourceFileAtLocation(sourceFile: SourceFile, position: num
                         }
 
                         if (
-                            operatorToken.kind === SyntaxKind.EqualsToken && isArrayLiteralOrObjectLiteralDestructuringPattern(node.parent)
+                            operatorToken.kind === SyntaxKind.EqualsToken &&
+                            isArrayLiteralOrObjectLiteralDestructuringPattern(node.parent)
                         ) {
                             // Set breakpoint on assignment expression element of destructuring pattern
                             // a = expression of
@@ -462,10 +466,14 @@ export function spanInSourceFileAtLocation(sourceFile: SourceFile, position: num
             variableDeclaration: VariableDeclaration | PropertyDeclaration | PropertySignature,
         ): TextSpan {
             if (
-                isVariableDeclarationList(variableDeclaration.parent) && variableDeclaration.parent.declarations[0] === variableDeclaration
+                isVariableDeclarationList(variableDeclaration.parent) &&
+                variableDeclaration.parent.declarations[0] === variableDeclaration
             ) {
                 // First declaration - include let keyword
-                return textSpan(findPrecedingToken(variableDeclaration.pos, sourceFile, variableDeclaration.parent)!, variableDeclaration);
+                return textSpan(
+                    findPrecedingToken(variableDeclaration.pos, sourceFile, variableDeclaration.parent)!,
+                    variableDeclaration,
+                );
             }
             else {
                 // Span only on this declaration
@@ -540,7 +548,8 @@ export function spanInSourceFileAtLocation(sourceFile: SourceFile, position: num
 
         function canFunctionHaveSpanInWholeDeclaration(functionDeclaration: FunctionLikeDeclaration) {
             return hasSyntacticModifier(functionDeclaration, ModifierFlags.Export) ||
-                (functionDeclaration.parent.kind === SyntaxKind.ClassDeclaration && functionDeclaration.kind !== SyntaxKind.Constructor);
+                (functionDeclaration.parent.kind === SyntaxKind.ClassDeclaration &&
+                    functionDeclaration.kind !== SyntaxKind.Constructor);
         }
 
         function spanInFunctionDeclaration(functionDeclaration: FunctionLikeDeclaration): TextSpan | undefined {
@@ -584,14 +593,19 @@ export function spanInSourceFileAtLocation(sourceFile: SourceFile, position: num
                 // Set span on previous token if it starts on same line otherwise on the first statement of the block
                 case SyntaxKind.ForStatement:
                 case SyntaxKind.ForOfStatement:
-                    return spanInNodeIfStartsOnSameLine(findPrecedingToken(block.pos, sourceFile, block.parent), block.statements[0]);
+                    return spanInNodeIfStartsOnSameLine(
+                        findPrecedingToken(block.pos, sourceFile, block.parent),
+                        block.statements[0],
+                    );
             }
 
             // Default action is to set on first statement
             return spanInNode(block.statements[0]);
         }
 
-        function spanInInitializerOfForLike(forLikeStatement: ForStatement | ForOfStatement | ForInStatement): TextSpan | undefined {
+        function spanInInitializerOfForLike(
+            forLikeStatement: ForStatement | ForOfStatement | ForInStatement,
+        ): TextSpan | undefined {
             if (forLikeStatement.initializer!.kind === SyntaxKind.VariableDeclarationList) {
                 // Declaration list - set breakpoint in first declaration
                 const variableDeclarationList = forLikeStatement.initializer as VariableDeclarationList;
@@ -640,10 +654,14 @@ export function spanInSourceFileAtLocation(sourceFile: SourceFile, position: num
 
         function spanInArrayLiteralOrObjectLiteralDestructuringPattern(node: DestructuringPattern): TextSpan | undefined {
             Debug.assert(node.kind !== SyntaxKind.ArrayBindingPattern && node.kind !== SyntaxKind.ObjectBindingPattern);
-            const elements: NodeArray<Expression | ObjectLiteralElement> = node.kind === SyntaxKind.ArrayLiteralExpression ? node.elements
+            const elements: NodeArray<Expression | ObjectLiteralElement> = node.kind === SyntaxKind.ArrayLiteralExpression ?
+                node.elements
                 : node.properties;
 
-            const firstBindingElement = forEach(elements, element => element.kind !== SyntaxKind.OmittedExpression ? element : undefined);
+            const firstBindingElement = forEach(
+                elements,
+                element => element.kind !== SyntaxKind.OmittedExpression ? element : undefined,
+            );
 
             if (firstBindingElement) {
                 return spanInNode(firstBindingElement);

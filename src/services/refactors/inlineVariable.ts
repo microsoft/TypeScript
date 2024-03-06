@@ -169,7 +169,8 @@ function getInliningInfo(
         // Make sure we're not inlining something like "let foo;" or "for (let i = 0; i < 5; i++) {}".
         const declaration = definition.declarations[0];
         if (
-            !isInitializedVariable(declaration) || !isVariableDeclarationInVariableStatement(declaration) || !isIdentifier(declaration.name)
+            !isInitializedVariable(declaration) || !isVariableDeclarationInVariableStatement(declaration) ||
+            !isIdentifier(declaration.name)
         ) {
             return undefined;
         }
@@ -193,7 +194,11 @@ function isDeclarationExported(declaration: InitializedVariableDeclaration): boo
     return some(variableStatement.modifiers, isExportModifier);
 }
 
-function getReferenceNodes(declaration: InitializedVariableDeclaration, checker: TypeChecker, file: SourceFile): Identifier[] | undefined {
+function getReferenceNodes(
+    declaration: InitializedVariableDeclaration,
+    checker: TypeChecker,
+    file: SourceFile,
+): Identifier[] | undefined {
     const references: Identifier[] = [];
     const cannotInline = FindAllReferences.Core.eachSymbolReferenceInFile(declaration.name as Identifier, checker, file, ref => {
         // Only inline if all references are reads, or if it includes a shorthand property assignment.
@@ -236,7 +241,10 @@ function getReplacementExpression(reference: Node, replacement: Expression) {
     // Note that binaryOperandNeedsParentheses has further logic when the precedences
     // are equal, but for the purposes of this refactor we keep things simple and
     // instead just check for special cases with needsParentheses.
-    if (isExpression(parent) && (getExpressionPrecedence(replacement) < getExpressionPrecedence(parent) || needsParentheses(parent))) {
+    if (
+        isExpression(parent) &&
+        (getExpressionPrecedence(replacement) < getExpressionPrecedence(parent) || needsParentheses(parent))
+    ) {
         return factory.createParenthesizedExpression(replacement);
     }
 

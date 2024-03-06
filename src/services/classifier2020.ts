@@ -116,7 +116,12 @@ export function getEncodedSemanticClassifications(
     };
 }
 
-function getSemanticTokens(program: Program, sourceFile: SourceFile, span: TextSpan, cancellationToken: CancellationToken): number[] {
+function getSemanticTokens(
+    program: Program,
+    sourceFile: SourceFile,
+    span: TextSpan,
+    cancellationToken: CancellationToken,
+): number[] {
     const resultTokens: number[] = [];
 
     const collector = (node: Node, typeIdx: number, modifierSet: number) => {
@@ -209,14 +214,20 @@ function collectTokens(
                                 modifierSet |= 1 << TokenModifier.readonly;
                             }
                         }
-                        if ((typeIdx === TokenType.variable || typeIdx === TokenType.function) && isLocalDeclaration(decl, sourceFile)) {
+                        if (
+                            (typeIdx === TokenType.variable || typeIdx === TokenType.function) &&
+                            isLocalDeclaration(decl, sourceFile)
+                        ) {
                             modifierSet |= 1 << TokenModifier.local;
                         }
                         if (program.isSourceFileDefaultLibrary(decl.getSourceFile())) {
                             modifierSet |= 1 << TokenModifier.defaultLibrary;
                         }
                     }
-                    else if (symbol.declarations && symbol.declarations.some(d => program.isSourceFileDefaultLibrary(d.getSourceFile()))) {
+                    else if (
+                        symbol.declarations &&
+                        symbol.declarations.some(d => program.isSourceFileDefaultLibrary(d.getSourceFile()))
+                    ) {
                         modifierSet |= 1 << TokenModifier.defaultLibrary;
                     }
 

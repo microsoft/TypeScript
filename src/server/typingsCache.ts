@@ -122,7 +122,11 @@ export class TypingsCache {
         return this.installer.installPackage(options);
     }
 
-    enqueueInstallTypingsForProject(project: Project, unresolvedImports: SortedReadonlyArray<string> | undefined, forceRefresh: boolean) {
+    enqueueInstallTypingsForProject(
+        project: Project,
+        unresolvedImports: SortedReadonlyArray<string> | undefined,
+        forceRefresh: boolean,
+    ) {
         const typeAcquisition = project.getTypeAcquisition();
 
         if (!typeAcquisition || !typeAcquisition.enable) {

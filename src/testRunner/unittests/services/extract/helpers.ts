@@ -83,7 +83,9 @@ export function extractTest(source: string): Test {
                 pos = saved;
             }
         }
-        else if (source.charCodeAt(pos) === ts.CharacterCodes.bar && source.charCodeAt(pos + 1) === ts.CharacterCodes.closeBracket) {
+        else if (
+            source.charCodeAt(pos) === ts.CharacterCodes.bar && source.charCodeAt(pos + 1) === ts.CharacterCodes.closeBracket
+        ) {
             text += source.substring(lastPos, pos);
             activeRanges[activeRanges.length - 1].end = text.length;
             const range = activeRanges.pop()!;
@@ -156,8 +158,15 @@ export function testExtractSymbol(
             formatContext: ts.formatting.getFormatContext(ts.testFormatSettings, notImplementedHost),
             preferences: ts.emptyOptions,
         };
-        const rangeToExtract = ts.refactor.extractSymbol.getRangeToExtract(sourceFile, ts.createTextSpanFromRange(selectionRange));
-        assert.equal(rangeToExtract.errors, undefined, rangeToExtract.errors && "Range error: " + rangeToExtract.errors[0].messageText);
+        const rangeToExtract = ts.refactor.extractSymbol.getRangeToExtract(
+            sourceFile,
+            ts.createTextSpanFromRange(selectionRange),
+        );
+        assert.equal(
+            rangeToExtract.errors,
+            undefined,
+            rangeToExtract.errors && "Range error: " + rangeToExtract.errors[0].messageText,
+        );
         const infos = ts.refactor.extractSymbol.getRefactorActionsToExtractSymbol(context);
         const actions = ts.find(infos, info => info.description === description.message)!.actions;
 
@@ -219,8 +228,14 @@ export function testExtractSymbolFailed(caption: string, text: string, descripti
             formatContext: ts.formatting.getFormatContext(ts.testFormatSettings, notImplementedHost),
             preferences: ts.emptyOptions,
         };
-        const rangeToExtract = ts.refactor.extractSymbol.getRangeToExtract(sourceFile, ts.createTextSpanFromRange(selectionRange));
-        assert.isUndefined(rangeToExtract.errors, rangeToExtract.errors && "Range error: " + rangeToExtract.errors[0].messageText);
+        const rangeToExtract = ts.refactor.extractSymbol.getRangeToExtract(
+            sourceFile,
+            ts.createTextSpanFromRange(selectionRange),
+        );
+        assert.isUndefined(
+            rangeToExtract.errors,
+            rangeToExtract.errors && "Range error: " + rangeToExtract.errors[0].messageText,
+        );
         const infos = ts.refactor.extractSymbol.getRefactorActionsToExtractSymbol(context);
         assert.isUndefined(ts.find(infos, info => info.description === description.message));
     });

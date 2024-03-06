@@ -81,16 +81,31 @@ describe("unittests:: semver", () => {
             // > A larger set of pre-release fields has a higher precedence than a smaller set, if all
             // > of the preceding identifiers are equal.
             assert.strictEqual(new ts.Version("1.0.0-alpha").compareTo(new ts.Version("1.0.0-alpha.0")), ts.Comparison.LessThan);
-            assert.strictEqual(new ts.Version("1.0.0-alpha.0").compareTo(new ts.Version("1.0.0-alpha")), ts.Comparison.GreaterThan);
+            assert.strictEqual(
+                new ts.Version("1.0.0-alpha.0").compareTo(new ts.Version("1.0.0-alpha")),
+                ts.Comparison.GreaterThan,
+            );
 
             // https://semver.org/#spec-item-11
             // > Precedence for two pre-release versions with the same major, minor, and patch version
             // > MUST be determined by comparing each dot separated identifier from left to right until
             // > a difference is found [...]
-            assert.strictEqual(new ts.Version("1.0.0-a.0.b.1").compareTo(new ts.Version("1.0.0-a.0.b.2")), ts.Comparison.LessThan);
-            assert.strictEqual(new ts.Version("1.0.0-a.0.b.1").compareTo(new ts.Version("1.0.0-b.0.a.1")), ts.Comparison.LessThan);
-            assert.strictEqual(new ts.Version("1.0.0-a.0.b.2").compareTo(new ts.Version("1.0.0-a.0.b.1")), ts.Comparison.GreaterThan);
-            assert.strictEqual(new ts.Version("1.0.0-b.0.a.1").compareTo(new ts.Version("1.0.0-a.0.b.1")), ts.Comparison.GreaterThan);
+            assert.strictEqual(
+                new ts.Version("1.0.0-a.0.b.1").compareTo(new ts.Version("1.0.0-a.0.b.2")),
+                ts.Comparison.LessThan,
+            );
+            assert.strictEqual(
+                new ts.Version("1.0.0-a.0.b.1").compareTo(new ts.Version("1.0.0-b.0.a.1")),
+                ts.Comparison.LessThan,
+            );
+            assert.strictEqual(
+                new ts.Version("1.0.0-a.0.b.2").compareTo(new ts.Version("1.0.0-a.0.b.1")),
+                ts.Comparison.GreaterThan,
+            );
+            assert.strictEqual(
+                new ts.Version("1.0.0-b.0.a.1").compareTo(new ts.Version("1.0.0-a.0.b.1")),
+                ts.Comparison.GreaterThan,
+            );
 
             // https://semver.org/#spec-item-11
             // > Build metadata does not figure into precedence

@@ -64,7 +64,10 @@ async function main() {
             console.error(`Invalid output locale name for '${result.LCX.$_TgtCul}'.`);
             process.exit(1);
         }
-        await writeFile(path.join(outputPath, outputDirectoryName, "diagnosticMessages.generated.json"), xmlObjectToString(result));
+        await writeFile(
+            path.join(outputPath, outputDirectoryName, "diagnosticMessages.generated.json"),
+            xmlObjectToString(result),
+        );
     }
 
     /**

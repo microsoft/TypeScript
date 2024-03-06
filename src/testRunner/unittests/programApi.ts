@@ -74,7 +74,11 @@ describe("unittests:: programApi:: Program.getMissingFilePaths", () => {
     });
 
     it("handles a mix of present and missing root files", () => {
-        const program = ts.createProgram(["./nonexistent0.ts", emptyFileRelativePath, "./nonexistent1.ts"], options, testCompilerHost);
+        const program = ts.createProgram(
+            ["./nonexistent0.ts", emptyFileRelativePath, "./nonexistent1.ts"],
+            options,
+            testCompilerHost,
+        );
         const missing = program.getMissingFilePaths();
         verifyMissingFilePaths(missing, ["d:/pretend/nonexistent0.ts", "d:/pretend/nonexistent1.ts"]);
     });
@@ -145,7 +149,10 @@ describe("unittests:: programApi:: Program.getMissingFilePaths", () => {
         const program = ts.createProgram(["test.ts"], { module: ts.ModuleKind.ES2015 }, host);
         assert(program.getSourceFiles().length === 1, "expected 'getSourceFiles' length to be 1");
         assert(program.getMissingFilePaths().size === 0, "expected 'getMissingFilePaths' length to be 0");
-        assert((program.getFileProcessingDiagnostics()?.length || 0) === 0, "expected 'getFileProcessingDiagnostics' length to be 0");
+        assert(
+            (program.getFileProcessingDiagnostics()?.length || 0) === 0,
+            "expected 'getFileProcessingDiagnostics' length to be 0",
+        );
     });
 });
 
@@ -165,7 +172,11 @@ describe("unittests:: Program.isSourceFileFromExternalLibrary", () => {
             documents: [a, bar, barFooPackage, barFooIndex, fooPackage, fooIndex],
             cwd: "/",
         });
-        const program = ts.createProgram(["/a.ts"], ts.emptyOptions, new fakes.CompilerHost(fs, { newLine: ts.NewLineKind.LineFeed }));
+        const program = ts.createProgram(
+            ["/a.ts"],
+            ts.emptyOptions,
+            new fakes.CompilerHost(fs, { newLine: ts.NewLineKind.LineFeed }),
+        );
         assertIsExternal(program, [a, bar, barFooIndex, fooIndex], f => f !== a);
     });
 
@@ -173,7 +184,11 @@ describe("unittests:: Program.isSourceFileFromExternalLibrary", () => {
         const a = new documents.TextDocument("/a.ts", '/// <reference types="foo" />');
         const fooIndex = new documents.TextDocument("/node_modules/foo/index.d.ts", "declare const foo: number;");
         const fs = vfs.createFromFileSystem(Harness.IO, /*ignoreCase*/ false, { documents: [a, fooIndex], cwd: "/" });
-        const program = ts.createProgram(["/a.ts"], ts.emptyOptions, new fakes.CompilerHost(fs, { newLine: ts.NewLineKind.LineFeed }));
+        const program = ts.createProgram(
+            ["/a.ts"],
+            ts.emptyOptions,
+            new fakes.CompilerHost(fs, { newLine: ts.NewLineKind.LineFeed }),
+        );
         assertIsExternal(program, [a, fooIndex], f => f !== a);
     });
 
@@ -185,7 +200,11 @@ describe("unittests:: Program.isSourceFileFromExternalLibrary", () => {
         for (const file of files) {
             const actual = program.isSourceFileFromExternalLibrary(program.getSourceFile(file.file)!);
             const expected = isExternalExpected(file);
-            assert.equal(actual, expected, `Expected ${file.file} isSourceFileFromExternalLibrary to be ${expected}, got ${actual}`);
+            assert.equal(
+                actual,
+                expected,
+                `Expected ${file.file} isSourceFileFromExternalLibrary to be ${expected}, got ${actual}`,
+            );
         }
     }
 });

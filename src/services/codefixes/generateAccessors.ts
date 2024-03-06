@@ -210,7 +210,10 @@ export function getAccessorConvertiblePropertyAtPosition(
     const name = declaration.name.text;
     const startWithUnderscore = startsWithUnderscore(name);
     const fieldName = createPropertyName(startWithUnderscore ? name : getUniqueName(`_${name}`, file), declaration.name);
-    const accessorName = createPropertyName(startWithUnderscore ? getUniqueName(name.substring(1), file) : name, declaration.name);
+    const accessorName = createPropertyName(
+        startWithUnderscore ? getUniqueName(name.substring(1), file) : name,
+        declaration.name,
+    );
     return {
         isStatic: hasStaticModifier(declaration),
         isReadonly: hasEffectiveReadonlyModifier(declaration),
@@ -373,7 +376,8 @@ function updateReadonlyPropertyInitializerStatementConstructor(
             changeTracker.replaceNode(file, node.argumentExpression, factory.createStringLiteral(fieldName));
         }
         if (
-            isPropertyAccessExpression(node) && node.expression.kind === SyntaxKind.ThisKeyword && node.name.text === originalName &&
+            isPropertyAccessExpression(node) && node.expression.kind === SyntaxKind.ThisKeyword &&
+            node.name.text === originalName &&
             isWriteAccess(node)
         ) {
             changeTracker.replaceNode(file, node.name, factory.createIdentifier(fieldName));

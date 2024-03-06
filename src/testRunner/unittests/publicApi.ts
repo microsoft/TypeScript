@@ -149,7 +149,8 @@ describe("unittests:: Public APIs:: getTypeAtLocation", () => {
 
         const checker = program.getTypeChecker();
         const file = program.getSourceFile("/file.ts")!;
-        const [declaration] = (ts.findLast(file.statements, ts.isVariableStatement) as ts.VariableStatement).declarationList.declarations;
+        const [declaration] =
+            (ts.findLast(file.statements, ts.isVariableStatement) as ts.VariableStatement).declarationList.declarations;
         assert.equal(checker.getTypeAtLocation(declaration.initializer!).flags, ts.TypeFlags.Object);
     });
 
@@ -170,7 +171,8 @@ describe("unittests:: Public APIs:: getTypeAtLocation", () => {
 
         const checker = program.getTypeChecker();
         const file = program.getSourceFile("/file.ts")!;
-        const [declaration] = (ts.findLast(file.statements, ts.isVariableStatement) as ts.VariableStatement).declarationList.declarations;
+        const [declaration] =
+            (ts.findLast(file.statements, ts.isVariableStatement) as ts.VariableStatement).declarationList.declarations;
         assert.equal(checker.getTypeAtLocation(declaration).flags, ts.TypeFlags.Any);
     });
 });

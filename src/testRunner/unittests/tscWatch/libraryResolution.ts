@@ -149,7 +149,10 @@ describe("unittests:: tsc-watch:: libraryResolution", () => {
                         sys.runQueuedTimeoutCallbacks();
                     },
                 },
-                ...editOptions(withoutConfig, sys => sys.deleteFile("/home/src/projects/node_modules/@typescript/lib-dom/index.d.ts")),
+                ...editOptions(
+                    withoutConfig,
+                    sys => sys.deleteFile("/home/src/projects/node_modules/@typescript/lib-dom/index.d.ts"),
+                ),
                 {
                     caption: "delete redirect file webworker",
                     edit: sys => sys.deleteFile("/home/src/projects/node_modules/@typescript/lib-webworker/index.d.ts"),

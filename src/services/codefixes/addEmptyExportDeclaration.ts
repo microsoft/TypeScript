@@ -32,7 +32,11 @@ registerCodeFix({
             changes.insertNodeAtEndOfScope(sourceFile, sourceFile, exportDeclaration);
         });
         return [
-            createCodeFixActionWithoutFixAll("addEmptyExportDeclaration", changes, Diagnostics.Add_export_to_make_this_file_into_a_module),
+            createCodeFixActionWithoutFixAll(
+                "addEmptyExportDeclaration",
+                changes,
+                Diagnostics.Add_export_to_make_this_file_into_a_module,
+            ),
         ];
     },
 });

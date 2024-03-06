@@ -345,7 +345,9 @@ describe("unittests:: tsserver:: resolutionCache:: tsserverProjectSystem rename 
                 };
                 const config = {
                     path: "/a/b/tsconfig.json",
-                    content: jsonToReadableText({ compilerOptions: { types: ["node"], typeRoots: includeTypeRoots ? [] : undefined } }),
+                    content: jsonToReadableText({
+                        compilerOptions: { types: ["node"], typeRoots: includeTypeRoots ? [] : undefined },
+                    }),
                 };
                 const node = {
                     path: "/a/b/node_modules/@types/node/index.d.ts",
@@ -436,7 +438,12 @@ describe("unittests:: tsserver:: resolutionCache:: tsserverProjectSystem module 
     });
 
     describe("from files in different folders", () => {
-        function getFiles(fileContent1: string, fileContent2 = fileContent1, fileContent3 = fileContent1, fileContent4 = fileContent1) {
+        function getFiles(
+            fileContent1: string,
+            fileContent2 = fileContent1,
+            fileContent3 = fileContent1,
+            fileContent4 = fileContent1,
+        ) {
             const file1: File = {
                 path: `/user/username/projects/myproject/product/src/file1.ts`,
                 content: fileContent1,

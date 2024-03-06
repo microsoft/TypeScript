@@ -186,7 +186,9 @@ export function createCacheableExportInfoMap(host: CacheableExportInfoMapHost): 
                 if (nodeModulesPathParts) {
                     const { topLevelNodeModulesIndex, topLevelPackageNameIndex, packageRootIndex } = nodeModulesPathParts;
                     packageName = unmangleScopedPackageName(
-                        getPackageNameFromTypesPackageName(moduleFile.fileName.substring(topLevelPackageNameIndex + 1, packageRootIndex)),
+                        getPackageNameFromTypesPackageName(
+                            moduleFile.fileName.substring(topLevelPackageNameIndex + 1, packageRootIndex),
+                        ),
                     );
                     if (startsWith(importingFile, moduleFile.path.substring(0, topLevelNodeModulesIndex))) {
                         const prevDeepestNodeModulesPath = packages.get(packageName);
@@ -335,7 +337,9 @@ export function createCacheableExportInfoMap(host: CacheableExportInfoMapHost): 
 
     function key(importedName: string, symbol: Symbol, ambientModuleName: string | undefined, checker: TypeChecker) {
         const moduleKey = ambientModuleName || "";
-        return `${importedName.length} ${getSymbolId(skipAlias(symbol, checker))} ${importedName} ${moduleKey}` as ExportMapInfoKey;
+        return `${importedName.length} ${
+            getSymbolId(skipAlias(symbol, checker))
+        } ${importedName} ${moduleKey}` as ExportMapInfoKey;
     }
 
     function parseKey(key: ExportMapInfoKey) {
@@ -351,7 +355,8 @@ export function createCacheableExportInfoMap(host: CacheableExportInfoMapHost): 
     }
 
     function fileIsGlobalOnly(file: SourceFile) {
-        return !file.commonJsModuleIndicator && !file.externalModuleIndicator && !file.moduleAugmentations && !file.ambientModuleNames;
+        return !file.commonJsModuleIndicator && !file.externalModuleIndicator && !file.moduleAugmentations &&
+            !file.ambientModuleNames;
     }
 
     function ambientModuleDeclarationsAreEqual(oldSourceFile: SourceFile, newSourceFile: SourceFile) {
@@ -361,7 +366,8 @@ export function createCacheableExportInfoMap(host: CacheableExportInfoMapHost): 
         let oldFileStatementIndex = -1;
         let newFileStatementIndex = -1;
         for (const ambientModuleName of newSourceFile.ambientModuleNames) {
-            const isMatchingModuleDeclaration = (node: Statement) => isNonGlobalAmbientModule(node) && node.name.text === ambientModuleName;
+            const isMatchingModuleDeclaration = (node: Statement) =>
+                isNonGlobalAmbientModule(node) && node.name.text === ambientModuleName;
             oldFileStatementIndex = findIndex(oldSourceFile.statements, isMatchingModuleDeclaration, oldFileStatementIndex + 1);
             newFileStatementIndex = findIndex(newSourceFile.statements, isMatchingModuleDeclaration, newFileStatementIndex + 1);
             if (oldSourceFile.statements[oldFileStatementIndex] !== newSourceFile.statements[newFileStatementIndex]) {
@@ -413,7 +419,8 @@ export function isImportableFile(
     );
 
     if (packageJsonFilter) {
-        const isAutoImportable = hasImportablePath && packageJsonFilter.allowsImportingSourceFile(to, moduleSpecifierResolutionHost);
+        const isAutoImportable = hasImportablePath &&
+            packageJsonFilter.allowsImportingSourceFile(to, moduleSpecifierResolutionHost);
         moduleSpecifierCache?.setBlockedByPackageJsonDependencies(from.path, to.path, preferences, {}, !isAutoImportable);
         return isAutoImportable;
     }
@@ -425,9 +432,17 @@ export function isImportableFile(
  * Don't include something from a `node_modules` that isn't actually reachable by a global import.
  * A relative import to node_modules is usually a bad idea.
  */
-function isImportablePath(fromPath: string, toPath: string, getCanonicalFileName: GetCanonicalFileName, globalCachePath?: string): boolean {
+function isImportablePath(
+    fromPath: string,
+    toPath: string,
+    getCanonicalFileName: GetCanonicalFileName,
+    globalCachePath?: string,
+): boolean {
     // If it's in a `node_modules` but is not reachable from here via a global import, don't bother.
-    const toNodeModules = forEachAncestorDirectory(toPath, ancestor => getBaseFileName(ancestor) === "node_modules" ? ancestor : undefined);
+    const toNodeModules = forEachAncestorDirectory(
+        toPath,
+        ancestor => getBaseFileName(ancestor) === "node_modules" ? ancestor : undefined,
+    );
     const toNodeModulesParent = toNodeModules && getDirectoryPath(getCanonicalFileName(toNodeModules));
     return toNodeModulesParent === undefined
         || startsWith(getCanonicalFileName(fromPath), toNodeModulesParent)
@@ -443,12 +458,13 @@ export function forEachExternalModuleToImportFrom(
     cb: (module: Symbol, moduleFile: SourceFile | undefined, program: Program, isFromPackageJson: boolean) => void,
 ) {
     const useCaseSensitiveFileNames = hostUsesCaseSensitiveFileNames(host);
-    const excludePatterns = preferences.autoImportFileExcludePatterns && mapDefined(preferences.autoImportFileExcludePatterns, spec => {
-        // The client is expected to send rooted path specs since we don't know
-        // what directory a relative path is relative to.
-        const pattern = getSubPatternFromSpec(spec, "", "exclude");
-        return pattern ? getRegexFromPattern(pattern, useCaseSensitiveFileNames) : undefined;
-    });
+    const excludePatterns = preferences.autoImportFileExcludePatterns &&
+        mapDefined(preferences.autoImportFileExcludePatterns, spec => {
+            // The client is expected to send rooted path specs since we don't know
+            // what directory a relative path is relative to.
+            const pattern = getSubPatternFromSpec(spec, "", "exclude");
+            return pattern ? getRegexFromPattern(pattern, useCaseSensitiveFileNames) : undefined;
+        });
 
     forEachExternalModule(
         program.getTypeChecker(),
@@ -469,7 +485,8 @@ export function forEachExternalModuleToImportFrom(
             (module, file) => {
                 if (
                     file && !program.getSourceFile(file.fileName) ||
-                    !file && !checker.resolveName(module.name, /*location*/ undefined, SymbolFlags.Module, /*excludeGlobals*/ false)
+                    !file &&
+                        !checker.resolveName(module.name, /*location*/ undefined, SymbolFlags.Module, /*excludeGlobals*/ false)
                 ) {
                     // The AutoImportProvider filters files already in the main program out of its *root* files,
                     // but non-root files can still be present in both programs, and already in the export info map
@@ -507,7 +524,9 @@ function forEachExternalModule(
     });
 
     for (const ambient of checker.getAmbientModules()) {
-        if (!ambient.name.includes("*") && !(excludePatterns && ambient.declarations?.every(d => isExcluded!(d.getSourceFile())))) {
+        if (
+            !ambient.name.includes("*") && !(excludePatterns && ambient.declarations?.every(d => isExcluded!(d.getSourceFile())))
+        ) {
             cb(ambient, /*sourceFile*/ undefined);
         }
     }
@@ -562,7 +581,8 @@ export function getExportInfoMap(
                     cache.add(
                         importingFile.path,
                         defaultInfo.symbol,
-                        defaultInfo.exportKind === ExportKind.Default ? InternalSymbolName.Default : InternalSymbolName.ExportEquals,
+                        defaultInfo.exportKind === ExportKind.Default ? InternalSymbolName.Default
+                            : InternalSymbolName.ExportEquals,
                         moduleSymbol,
                         moduleFile,
                         defaultInfo.exportKind,
@@ -571,7 +591,9 @@ export function getExportInfoMap(
                     );
                 }
                 checker.forEachExportAndPropertyOfModule(moduleSymbol, (exported, key) => {
-                    if (exported !== defaultInfo?.symbol && isImportableSymbol(exported, checker) && addToSeen(seenExports, key)) {
+                    if (
+                        exported !== defaultInfo?.symbol && isImportableSymbol(exported, checker) && addToSeen(seenExports, key)
+                    ) {
                         cache.add(
                             importingFile.path,
                             exported,

@@ -20,7 +20,11 @@ describe("unittests:: tsserver:: Text storage", () => {
     };
 
     function getDummyScriptInfo(fileName: string) {
-        return { fileName, closeSourceMapFileWatcher: ts.noop, isDynamicOrHasMixedContent: ts.returnFalse } as ts.server.ScriptInfo;
+        return {
+            fileName,
+            closeSourceMapFileWatcher: ts.noop,
+            isDynamicOrHasMixedContent: ts.returnFalse,
+        } as ts.server.ScriptInfo;
     }
 
     it("text based storage should be have exactly the same as script version cache", () => {
@@ -40,7 +44,11 @@ describe("unittests:: tsserver:: Text storage", () => {
             for (let offset = 0; offset < end - start; offset++) {
                 const pos1 = ts1.lineOffsetToPosition(line + 1, offset + 1);
                 const pos2 = ts2.lineOffsetToPosition(line + 1, offset + 1);
-                assert.strictEqual(pos1, pos2, `lineOffsetToPosition ${line + 1}-${offset + 1}: expected ${pos1} to equal ${pos2}`);
+                assert.strictEqual(
+                    pos1,
+                    pos2,
+                    `lineOffsetToPosition ${line + 1}-${offset + 1}: expected ${pos1} to equal ${pos2}`,
+                );
             }
 
             const { start: start1, length: length1 } = ts1.lineToTextSpan(line);

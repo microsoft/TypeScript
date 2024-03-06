@@ -154,7 +154,12 @@ export interface DocumentRegistry {
     /**
      * @deprecated pass scriptKind for and impliedNodeFormat correctness */
     releaseDocumentWithKey(path: Path, key: DocumentRegistryBucketKey, scriptKind?: ScriptKind): void;
-    releaseDocumentWithKey(path: Path, key: DocumentRegistryBucketKey, scriptKind: ScriptKind, impliedNodeFormat: ResolutionMode): void; // eslint-disable-line @typescript-eslint/unified-signatures
+    releaseDocumentWithKey(
+        path: Path,
+        key: DocumentRegistryBucketKey,
+        scriptKind: ScriptKind,
+        impliedNodeFormat: ResolutionMode,
+    ): void; // eslint-disable-line @typescript-eslint/unified-signatures
 
     reportStats(): string;
     /** @internal */ getBuckets(): Map<DocumentRegistryBucketKeyWithMode, Map<Path, BucketEntry>>;
@@ -220,7 +225,9 @@ export function createDocumentRegistryInternal(
                     });
                 }
                 else {
-                    entry.forEach((value, scriptKind) => sourceFiles.push({ name, scriptKind, refCount: value.languageServiceRefCount }));
+                    entry.forEach((value, scriptKind) =>
+                        sourceFiles.push({ name, scriptKind, refCount: value.languageServiceRefCount })
+                    );
                 }
             });
             sourceFiles.sort((x, y) => y.refCount - x.refCount);
@@ -396,7 +403,11 @@ export function createDocumentRegistryInternal(
             const otherBucketKey = !isDeclarationFileName(path) &&
                 forEachEntry(buckets, (bucket, bucketKey) => bucketKey !== keyWithMode && bucket.has(path) && bucketKey);
             if (otherBucketKey) {
-                tracing.instant(tracing.Phase.Session, "documentRegistryBucketOverlap", { path, key1: otherBucketKey, key2: keyWithMode });
+                tracing.instant(tracing.Phase.Session, "documentRegistryBucketOverlap", {
+                    path,
+                    key1: otherBucketKey,
+                    key2: keyWithMode,
+                });
             }
         }
 

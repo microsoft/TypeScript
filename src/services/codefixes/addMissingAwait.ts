@@ -69,8 +69,10 @@ const errorCodes = [
     Diagnostics.This_condition_will_always_return_true_since_this_0_is_always_defined.code,
     Diagnostics.Type_0_is_not_an_array_type.code,
     Diagnostics.Type_0_is_not_an_array_type_or_a_string_type.code,
-    Diagnostics.Type_0_can_only_be_iterated_through_when_using_the_downlevelIteration_flag_or_with_a_target_of_es2015_or_higher.code,
-    Diagnostics.Type_0_is_not_an_array_type_or_a_string_type_or_does_not_have_a_Symbol_iterator_method_that_returns_an_iterator.code,
+    Diagnostics.Type_0_can_only_be_iterated_through_when_using_the_downlevelIteration_flag_or_with_a_target_of_es2015_or_higher
+        .code,
+    Diagnostics.Type_0_is_not_an_array_type_or_a_string_type_or_does_not_have_a_Symbol_iterator_method_that_returns_an_iterator
+        .code,
     Diagnostics.Type_0_is_not_an_array_type_or_does_not_have_a_Symbol_iterator_method_that_returns_an_iterator.code,
     Diagnostics.Type_0_must_have_a_Symbol_iterator_method_that_returns_an_iterator.code,
     Diagnostics.Type_0_must_have_a_Symbol_asyncIterator_method_that_returns_an_async_iterator.code,
@@ -166,7 +168,13 @@ function getUseSiteFix(
     fixedDeclarations?: Set<number>,
 ) {
     const changes = trackChanges(t => makeChange(t, errorCode, context.sourceFile, checker, expression, fixedDeclarations));
-    return createCodeFixAction(fixId, changes, Diagnostics.Add_await, fixId, Diagnostics.Fix_all_expressions_possibly_missing_await);
+    return createCodeFixAction(
+        fixId,
+        changes,
+        Diagnostics.Add_await,
+        fixId,
+        Diagnostics.Fix_all_expressions_possibly_missing_await,
+    );
 }
 
 function isMissingAwaitError(
@@ -310,14 +318,17 @@ function symbolReferenceIsAlsoMissingAwait(
 
 function isInsideAwaitableBody(node: Node) {
     return node.flags & NodeFlags.AwaitContext ||
-        !!findAncestor(node, ancestor =>
-            ancestor.parent && isArrowFunction(ancestor.parent) && ancestor.parent.body === ancestor ||
-            isBlock(ancestor) && (
-                    ancestor.parent.kind === SyntaxKind.FunctionDeclaration ||
-                    ancestor.parent.kind === SyntaxKind.FunctionExpression ||
-                    ancestor.parent.kind === SyntaxKind.ArrowFunction ||
-                    ancestor.parent.kind === SyntaxKind.MethodDeclaration
-                ));
+        !!findAncestor(
+            node,
+            ancestor =>
+                ancestor.parent && isArrowFunction(ancestor.parent) && ancestor.parent.body === ancestor ||
+                isBlock(ancestor) && (
+                        ancestor.parent.kind === SyntaxKind.FunctionDeclaration ||
+                        ancestor.parent.kind === SyntaxKind.FunctionExpression ||
+                        ancestor.parent.kind === SyntaxKind.ArrowFunction ||
+                        ancestor.parent.kind === SyntaxKind.MethodDeclaration
+                    ),
+        );
 }
 
 function makeChange(

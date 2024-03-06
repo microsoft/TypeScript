@@ -113,7 +113,13 @@ function getItemsFromNamedDeclaration(
             // If the pattern has dots in it, then also see if the declaration container matches as well.
             const fullMatch = patternMatcher.getFullMatch(getContainers(declaration), name);
             if (fullMatch) {
-                rawItems.push({ name, fileName, matchKind: fullMatch.kind, isCaseSensitive: fullMatch.isCaseSensitive, declaration });
+                rawItems.push({
+                    name,
+                    fileName,
+                    matchKind: fullMatch.kind,
+                    isCaseSensitive: fullMatch.isCaseSensitive,
+                    declaration,
+                });
             }
         }
         else {
@@ -132,7 +138,9 @@ function shouldKeepItem(
         case SyntaxKind.ImportClause:
         case SyntaxKind.ImportSpecifier:
         case SyntaxKind.ImportEqualsDeclaration:
-            const importer = checker.getSymbolAtLocation((declaration as ImportClause | ImportSpecifier | ImportEqualsDeclaration).name!)!; // TODO: GH#18217
+            const importer = checker.getSymbolAtLocation(
+                (declaration as ImportClause | ImportSpecifier | ImportEqualsDeclaration).name!,
+            )!; // TODO: GH#18217
             const imported = checker.getAliasedSymbol(importer);
             return importer.escapedName !== imported.escapedName
                 && !imported.declarations?.every(d => shouldExcludeFile(d.getSourceFile(), excludeLibFiles, singleCurrentFile));

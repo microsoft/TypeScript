@@ -72,7 +72,9 @@ const actions = {
 
 registerRefactor(refactorName, {
     kinds: getOwnValues(actions).map(a => a.kind),
-    getAvailableActions: function getRefactorActionsToConvertBetweenNamedAndNamespacedImports(context): readonly ApplicableRefactorInfo[] {
+    getAvailableActions: function getRefactorActionsToConvertBetweenNamedAndNamespacedImports(
+        context,
+    ): readonly ApplicableRefactorInfo[] {
         const info = getImportConversionInfo(context, context.triggerReason === "invoked");
         if (!info) return emptyArray;
 
@@ -144,10 +146,21 @@ function getShouldUseDefault(program: Program, importClause: ImportClause) {
         && isExportEqualsModule(importClause.parent.moduleSpecifier, program.getTypeChecker());
 }
 
-function doChange(sourceFile: SourceFile, program: Program, changes: textChanges.ChangeTracker, info: ImportConversionInfo): void {
+function doChange(
+    sourceFile: SourceFile,
+    program: Program,
+    changes: textChanges.ChangeTracker,
+    info: ImportConversionInfo,
+): void {
     const checker = program.getTypeChecker();
     if (info.convertTo === ImportKind.Named) {
-        doChangeNamespaceToNamed(sourceFile, checker, changes, info.import, getAllowSyntheticDefaultImports(program.getCompilerOptions()));
+        doChangeNamespaceToNamed(
+            sourceFile,
+            checker,
+            changes,
+            info.import,
+            getAllowSyntheticDefaultImports(program.getCompilerOptions()),
+        );
     }
     else {
         doChangeNamedToNamespaceOrDefault(sourceFile, program, changes, info.import, info.convertTo === ImportKind.Default);
@@ -209,7 +222,11 @@ function doChangeNamespaceToNamed(
     const importDecl = toConvert.parent.parent;
     if (usedAsNamespaceOrDefault && !allowSyntheticDefaultImports) {
         // Need to leave the namespace import alone
-        changes.insertNodeAfter(sourceFile, importDecl, updateImport(importDecl, /*defaultImportName*/ undefined, importSpecifiers));
+        changes.insertNodeAfter(
+            sourceFile,
+            importDecl,
+            updateImport(importDecl, /*defaultImportName*/ undefined, importSpecifiers),
+        );
     }
     else {
         changes.replaceNode(

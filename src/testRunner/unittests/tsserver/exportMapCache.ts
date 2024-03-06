@@ -84,7 +84,11 @@ describe("unittests:: tsserver:: exportMapCache", () => {
         assert.ok(exportMapCache.isUsableByFile(bTs.path as ts.Path));
         assert.ok(!exportMapCache.isEmpty());
         session.host.baselineHost("After getPackageJsonAutoImportProvider");
-        baselineTsserverLogs("exportMapCache", "does not invalidate the cache when package.json is changed inconsequentially", session);
+        baselineTsserverLogs(
+            "exportMapCache",
+            "does not invalidate the cache when package.json is changed inconsequentially",
+            session,
+        );
     });
 
     it("invalidates the cache when package.json change results in AutoImportProvider change", () => {
@@ -236,7 +240,16 @@ describe("unittests:: tsserver:: exportMapCache", () => {
 });
 
 function setup() {
-    const host = createServerHost([aTs, bTs, ambientDeclaration, tsconfig, packageJson, mobxPackageJson, mobxDts, exportEqualsMappedType]);
+    const host = createServerHost([
+        aTs,
+        bTs,
+        ambientDeclaration,
+        tsconfig,
+        packageJson,
+        mobxPackageJson,
+        mobxDts,
+        exportEqualsMappedType,
+    ]);
     const session = new TestSession(host);
     openFilesForSession([aTs, bTs], session);
     const project = session.getProjectService().configuredProjects.get(tsconfig.path)!;

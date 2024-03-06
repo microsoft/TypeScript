@@ -483,7 +483,10 @@ export function transformGenerators(context: TransformationContext): (x: SourceF
                 if (node.transformFlags & TransformFlags.ContainsYield) {
                     return visitJavaScriptContainingYield(node);
                 }
-                else if (node.transformFlags & (TransformFlags.ContainsGenerator | TransformFlags.ContainsHoistedDeclarationOrCompletion)) {
+                else if (
+                    node.transformFlags &
+                    (TransformFlags.ContainsGenerator | TransformFlags.ContainsHoistedDeclarationOrCompletion)
+                ) {
                     return visitEachChild(node, visitor, context);
                 }
                 else {
@@ -798,7 +801,9 @@ export function transformGenerators(context: TransformationContext): (x: SourceF
                     target = factory.updatePropertyAccessExpression(
                         left as PropertyAccessExpression,
                         cacheExpression(
-                            Debug.checkDefined(visitNode((left as PropertyAccessExpression).expression, visitor, isLeftHandSideExpression)),
+                            Debug.checkDefined(
+                                visitNode((left as PropertyAccessExpression).expression, visitor, isLeftHandSideExpression),
+                            ),
                         ),
                         (left as PropertyAccessExpression).name,
                     );
@@ -819,10 +824,14 @@ export function transformGenerators(context: TransformationContext): (x: SourceF
                     target = factory.updateElementAccessExpression(
                         left as ElementAccessExpression,
                         cacheExpression(
-                            Debug.checkDefined(visitNode((left as ElementAccessExpression).expression, visitor, isLeftHandSideExpression)),
+                            Debug.checkDefined(
+                                visitNode((left as ElementAccessExpression).expression, visitor, isLeftHandSideExpression),
+                            ),
                         ),
                         cacheExpression(
-                            Debug.checkDefined(visitNode((left as ElementAccessExpression).argumentExpression, visitor, isExpression)),
+                            Debug.checkDefined(
+                                visitNode((left as ElementAccessExpression).argumentExpression, visitor, isExpression),
+                            ),
                         ),
                     );
                     break;
@@ -918,7 +927,9 @@ export function transformGenerators(context: TransformationContext): (x: SourceF
             }
             else {
                 if (containsYield(node) && pendingExpressions.length > 0) {
-                    emitWorker(OpCode.Statement, [factory.createExpressionStatement(factory.inlineExpressions(pendingExpressions))]);
+                    emitWorker(OpCode.Statement, [
+                        factory.createExpressionStatement(factory.inlineExpressions(pendingExpressions)),
+                    ]);
                     pendingExpressions = [];
                 }
 
@@ -941,7 +952,9 @@ export function transformGenerators(context: TransformationContext): (x: SourceF
             }
             else {
                 if (containsYield(elem) && pendingExpressions.length > 0) {
-                    emitWorker(OpCode.Statement, [factory.createExpressionStatement(factory.inlineExpressions(pendingExpressions))]);
+                    emitWorker(OpCode.Statement, [
+                        factory.createExpressionStatement(factory.inlineExpressions(pendingExpressions)),
+                    ]);
                     pendingExpressions = [];
                 }
                 pendingExpressions.push(Debug.checkDefined(visitNode(elem, visitor, isExpression)));
@@ -1036,10 +1049,18 @@ export function transformGenerators(context: TransformationContext): (x: SourceF
                 Debug.checkDefined(visitNode(node.condition, visitor, isExpression)),
                 /*location*/ node.condition,
             );
-            emitAssignment(resultLocal, Debug.checkDefined(visitNode(node.whenTrue, visitor, isExpression)), /*location*/ node.whenTrue);
+            emitAssignment(
+                resultLocal,
+                Debug.checkDefined(visitNode(node.whenTrue, visitor, isExpression)),
+                /*location*/ node.whenTrue,
+            );
             emitBreak(resultLabel);
             markLabel(whenFalseLabel);
-            emitAssignment(resultLocal, Debug.checkDefined(visitNode(node.whenFalse, visitor, isExpression)), /*location*/ node.whenFalse);
+            emitAssignment(
+                resultLocal,
+                Debug.checkDefined(visitNode(node.whenFalse, visitor, isExpression)),
+                /*location*/ node.whenFalse,
+            );
             markLabel(resultLabel);
             return resultLocal;
         }
@@ -1094,7 +1115,12 @@ export function transformGenerators(context: TransformationContext): (x: SourceF
      * @param elements The elements to visit.
      * @param multiLine Whether array literals created should be emitted on multiple lines.
      */
-    function visitElements(elements: NodeArray<Expression>, leadingElement?: Expression, location?: TextRange, multiLine?: boolean) {
+    function visitElements(
+        elements: NodeArray<Expression>,
+        leadingElement?: Expression,
+        location?: TextRange,
+        multiLine?: boolean,
+    ) {
         // [source]
         //      ar = [1, yield, 2];
         //

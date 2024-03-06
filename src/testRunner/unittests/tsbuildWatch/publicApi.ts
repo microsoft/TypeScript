@@ -95,7 +95,12 @@ export function f22() { } // trailing`,
                 }
             }
             function visitFunction(node: ts.FunctionDeclaration) {
-                ts.addSyntheticLeadingComment(node, ts.SyntaxKind.MultiLineCommentTrivia, `@before${project}`, /*hasTrailingNewLine*/ true);
+                ts.addSyntheticLeadingComment(
+                    node,
+                    ts.SyntaxKind.MultiLineCommentTrivia,
+                    `@before${project}`,
+                    /*hasTrailingNewLine*/ true,
+                );
                 return node;
             }
         };

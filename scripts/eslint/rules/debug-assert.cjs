@@ -21,7 +21,8 @@ module.exports = createRule({
         const isArrowFunction = node => node.type === AST_NODE_TYPES.ArrowFunctionExpression;
         /** @type {(node: import("@typescript-eslint/utils").TSESTree.Node) => boolean} */
         const isStringLiteral = node => (
-            (node.type === AST_NODE_TYPES.Literal && typeof node.value === "string") || node.type === AST_NODE_TYPES.TemplateLiteral
+            (node.type === AST_NODE_TYPES.Literal && typeof node.value === "string") ||
+            node.type === AST_NODE_TYPES.TemplateLiteral
         );
 
         /** @type {(node: import("@typescript-eslint/utils").TSESTree.MemberExpression) => boolean} */

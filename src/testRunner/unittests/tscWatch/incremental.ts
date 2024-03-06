@@ -346,9 +346,18 @@ export const Fragment: unique symbol;
             files: () => [
                 { path: libFile.path, content: libContent },
                 { path: `${project}/node_modules/react/jsx-runtime/index.d.ts`, content: jsxLibraryContent },
-                { path: `${project}/node_modules/react/package.json`, content: jsonToReadableText({ name: "react", version: "0.0.1" }) },
-                { path: `${project}/node_modules/preact/jsx-runtime/index.d.ts`, content: jsxLibraryContent.replace("propA", "propB") },
-                { path: `${project}/node_modules/preact/package.json`, content: jsonToReadableText({ name: "preact", version: "0.0.1" }) },
+                {
+                    path: `${project}/node_modules/react/package.json`,
+                    content: jsonToReadableText({ name: "react", version: "0.0.1" }),
+                },
+                {
+                    path: `${project}/node_modules/preact/jsx-runtime/index.d.ts`,
+                    content: jsxLibraryContent.replace("propA", "propB"),
+                },
+                {
+                    path: `${project}/node_modules/preact/package.json`,
+                    content: jsonToReadableText({ name: "preact", version: "0.0.1" }),
+                },
                 { path: `${project}/index.tsx`, content: `export const App = () => <div propA={true}></div>;` },
                 { path: configFile.path, content: jsonToReadableText({ compilerOptions: jsxImportSourceOptions }) },
             ],
@@ -372,7 +381,10 @@ export const Fragment: unique symbol;
                 host.createDirectory(`${project}/node_modules/react`);
                 host.createDirectory(`${project}/node_modules/react/jsx-runtime`);
                 host.writeFile(`${project}/node_modules/react/jsx-runtime/index.d.ts`, jsxLibraryContent);
-                host.writeFile(`${project}/node_modules/react/package.json`, jsonToReadableText({ name: "react", version: "0.0.1" }));
+                host.writeFile(
+                    `${project}/node_modules/react/package.json`,
+                    jsonToReadableText({ name: "react", version: "0.0.1" }),
+                );
             },
         });
 
@@ -381,7 +393,10 @@ export const Fragment: unique symbol;
             files: () => [
                 { path: libFile.path, content: libContent },
                 { path: `${project}/node_modules/react/jsx-runtime/index.d.ts`, content: jsxLibraryContent },
-                { path: `${project}/node_modules/react/package.json`, content: jsonToReadableText({ name: "react", version: "0.0.1" }) },
+                {
+                    path: `${project}/node_modules/react/package.json`,
+                    content: jsonToReadableText({ name: "react", version: "0.0.1" }),
+                },
                 { path: `${project}/index.tsx`, content: `export const App = () => <div propA={true}></div>;` },
                 { path: configFile.path, content: jsonToReadableText({ compilerOptions: jsxImportSourceOptions }) },
             ],
@@ -396,7 +411,10 @@ export const Fragment: unique symbol;
             files: () => [
                 { path: libFile.path, content: libContent },
                 { path: `${project}/node_modules/tslib/index.d.ts`, content: "export function __assign(...args: any[]): any;" },
-                { path: `${project}/node_modules/tslib/package.json`, content: jsonToReadableText({ name: "tslib", version: "0.0.1" }) },
+                {
+                    path: `${project}/node_modules/tslib/package.json`,
+                    content: jsonToReadableText({ name: "tslib", version: "0.0.1" }),
+                },
                 { path: `${project}/index.tsx`, content: `export const x = {...{}};` },
                 { path: configFile.path, content: jsonToReadableText({ compilerOptions: { importHelpers: true } }) },
             ],
@@ -421,11 +439,17 @@ export const Fragment: unique symbol;
                     content: `export {}; declare module "classnames" { interface Result { foo } }`,
                 },
                 { path: `${project}/src/index.ts`, content: `import classNames from "classnames"; classNames().foo;` },
-                { path: configFile.path, content: jsonToReadableText({ compilerOptions: { module: "commonjs", incremental: true } }) },
+                {
+                    path: configFile.path,
+                    content: jsonToReadableText({ compilerOptions: { module: "commonjs", incremental: true } }),
+                },
             ],
             modifyFs: host => {
                 // delete 'foo'
-                host.writeFile(`${project}/src/types/classnames.d.ts`, `export {}; declare module "classnames" { interface Result {} }`);
+                host.writeFile(
+                    `${project}/src/types/classnames.d.ts`,
+                    `export {}; declare module "classnames" { interface Result {} }`,
+                );
             },
         });
     });

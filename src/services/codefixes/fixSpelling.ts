@@ -54,7 +54,8 @@ const errorCodes = [
     Diagnostics.Cannot_find_name_0_Did_you_mean_the_static_member_1_0.code,
     Diagnostics._0_has_no_exported_member_named_1_Did_you_mean_2.code,
     Diagnostics.This_member_cannot_have_an_override_modifier_because_it_is_not_declared_in_the_base_class_0_Did_you_mean_1.code,
-    Diagnostics.This_member_cannot_have_a_JSDoc_comment_with_an_override_tag_because_it_is_not_declared_in_the_base_class_0_Did_you_mean_1
+    Diagnostics
+        .This_member_cannot_have_a_JSDoc_comment_with_an_override_tag_because_it_is_not_declared_in_the_base_class_0_Did_you_mean_1
         .code,
     // for JSX class components
     Diagnostics.No_overload_matches_this_call.code,
@@ -158,13 +159,23 @@ function getInfo(
         const meaning = getMeaningFromLocation(node);
         const name = getTextOfNode(node);
         Debug.assert(name !== undefined, "name should be defined");
-        suggestedSymbol = checker.getSuggestedSymbolForNonexistentSymbol(node, name, convertSemanticMeaningToSymbolFlags(meaning));
+        suggestedSymbol = checker.getSuggestedSymbolForNonexistentSymbol(
+            node,
+            name,
+            convertSemanticMeaningToSymbolFlags(meaning),
+        );
     }
 
     return suggestedSymbol === undefined ? undefined : { node, suggestedSymbol };
 }
 
-function doChange(changes: textChanges.ChangeTracker, sourceFile: SourceFile, node: Node, suggestedSymbol: Symbol, target: ScriptTarget) {
+function doChange(
+    changes: textChanges.ChangeTracker,
+    sourceFile: SourceFile,
+    node: Node,
+    suggestedSymbol: Symbol,
+    target: ScriptTarget,
+) {
     const suggestion = symbolName(suggestedSymbol);
     if (!isIdentifierText(suggestion, target) && isPropertyAccessExpression(node.parent)) {
         const valDecl = suggestedSymbol.valueDeclaration;
@@ -204,7 +215,8 @@ function getResolvedSourceFileFromImportDeclaration(
 ): SourceFile | undefined {
     if (!importDeclaration || !isStringLiteralLike(importDeclaration.moduleSpecifier)) return undefined;
 
-    const resolvedModule = context.program.getResolvedModuleFromModuleSpecifier(importDeclaration.moduleSpecifier)?.resolvedModule;
+    const resolvedModule = context.program.getResolvedModuleFromModuleSpecifier(importDeclaration.moduleSpecifier)
+        ?.resolvedModule;
     if (!resolvedModule) return undefined;
 
     return context.program.getSourceFile(resolvedModule.resolvedFileName);

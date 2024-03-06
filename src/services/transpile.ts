@@ -61,7 +61,8 @@ const optionsRedundantWithVerbatimModuleSyntax = new Set([
 export function transpileModule(input: string, transpileOptions: TranspileOptions): TranspileOutput {
     const diagnostics: Diagnostic[] = [];
 
-    const options: CompilerOptions = transpileOptions.compilerOptions ? fixupCompilerOptions(transpileOptions.compilerOptions, diagnostics)
+    const options: CompilerOptions = transpileOptions.compilerOptions ?
+        fixupCompilerOptions(transpileOptions.compilerOptions, diagnostics)
         : {};
 
     // mix in default options

@@ -80,7 +80,12 @@ describe("unittests:: services:: DocumentRegistry", () => {
         const defaultCompilerOptions = ts.getDefaultCompilerOptions();
 
         // Simulate one LS getting the document.
-        documentRegistry.acquireDocument("file1.ts", defaultCompilerOptions, ts.ScriptSnapshot.fromString("var x = 1;"), /* version */ "1");
+        documentRegistry.acquireDocument(
+            "file1.ts",
+            defaultCompilerOptions,
+            ts.ScriptSnapshot.fromString("var x = 1;"),
+            /* version */ "1",
+        );
 
         // Simulate another LS getting the document at another version.
         const f2 = documentRegistry.acquireDocument(

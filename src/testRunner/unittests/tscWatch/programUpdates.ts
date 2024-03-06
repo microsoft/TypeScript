@@ -665,7 +665,10 @@ export class A {
 
         baseline.push(`First program is not updated:: ${getPrograms() === ts.emptyArray}`);
         baseline.push(`Second program is not updated:: ${getPrograms2() === ts.emptyArray}`);
-        Harness.Baseline.runBaseline(`tscWatch/${scenario}/two-watch-programs-are-not-affected-by-each-other.js`, baseline.join("\r\n"));
+        Harness.Baseline.runBaseline(
+            `tscWatch/${scenario}/two-watch-programs-are-not-affected-by-each-other.js`,
+            baseline.join("\r\n"),
+        );
     });
 
     verifyTscWatch({
@@ -710,7 +713,8 @@ export class A {
         edits: [
             {
                 caption: "Modify config to make f2 as root too",
-                edit: sys => sys.writeFile(configFilePath, jsonToReadableText({ compilerOptions: {}, files: ["f1.ts", "f2.ts"] })),
+                edit: sys =>
+                    sys.writeFile(configFilePath, jsonToReadableText({ compilerOptions: {}, files: ["f1.ts", "f2.ts"] })),
                 timeouts: sys => sys.runQueuedTimeoutCallbacks(),
             },
         ],
@@ -733,7 +737,9 @@ export class A {
                 path: `/user/username/projects/myproject/tsconfig.json`,
                 content: jsonToReadableText({ compilerOptions: { composite: true }, include: ["./", "./**/*.json"] }),
             };
-            return createWatchedSystem([file1, file2, libFile, configFile], { currentDirectory: "/user/username/projects/myproject" });
+            return createWatchedSystem([file1, file2, libFile, configFile], {
+                currentDirectory: "/user/username/projects/myproject",
+            });
         },
         edits: [
             {
@@ -762,7 +768,9 @@ export class A {
                 path: `/user/username/projects/myproject/Project/tsconfig.json`,
                 content: jsonToReadableText({ include: [".", "./**/*.json"] }),
             };
-            return createWatchedSystem([file1, libFile, configFile], { currentDirectory: `/user/username/projects/myproject/Project` });
+            return createWatchedSystem([file1, libFile, configFile], {
+                currentDirectory: `/user/username/projects/myproject/Project`,
+            });
         },
         edits: [
             {
@@ -974,7 +982,8 @@ declare const eval: any`,
     };
     const changeModuleFile1ToModuleFile: TscWatchCompileChange = {
         caption: "Rename moduleFile1 back to moduleFile",
-        edit: sys => sys.renameFile("/users/username/projects/project/moduleFile1.ts", "/users/username/projects/project/moduleFile.ts"),
+        edit: sys =>
+            sys.renameFile("/users/username/projects/project/moduleFile1.ts", "/users/username/projects/project/moduleFile.ts"),
         timeouts: runQueuedTimeoutCallbacksTwice,
     };
 
@@ -1039,7 +1048,9 @@ declare const eval: any`,
                     };
                     const config = {
                         path: configFilePath,
-                        content: jsonToReadableText({ compilerOptions: { types: ["node"], typeRoots: includeTypeRoots ? [] : undefined } }),
+                        content: jsonToReadableText({
+                            compilerOptions: { types: ["node"], typeRoots: includeTypeRoots ? [] : undefined },
+                        }),
                     };
                     const node = {
                         path: "/a/b/node_modules/@types/node/index.d.ts",
@@ -1439,7 +1450,9 @@ export default test;`,
                     },
                 }),
             };
-            return createWatchedSystem([aFile, bFile, libFile, tsconfigFile], { currentDirectory: "/user/username/projects/myproject" });
+            return createWatchedSystem([aFile, bFile, libFile, tsconfigFile], {
+                currentDirectory: "/user/username/projects/myproject",
+            });
         },
         edits: [
             changeParameterTypeOfBFile("x", "string"),
@@ -1486,7 +1499,8 @@ foo().hello`,
             },
             {
                 caption: "Disable strict",
-                edit: sys => sys.writeFile(`/user/username/projects/myproject/tsconfig.json`, jsonToReadableText({ compilerOptions: {} })),
+                edit: sys =>
+                    sys.writeFile(`/user/username/projects/myproject/tsconfig.json`, jsonToReadableText({ compilerOptions: {} })),
                 timeouts: sys => sys.runQueuedTimeoutCallbacks(),
             },
         ],
@@ -1576,7 +1590,9 @@ export function f(p: C) { return p; }`,
                 path: `/user/username/projects/myproject/tsconfig.json`,
                 content: jsonToReadableText({ compilerOptions: {} }),
             };
-            return createWatchedSystem([aFile, bFile, config, libFile], { currentDirectory: "/user/username/projects/myproject" });
+            return createWatchedSystem([aFile, bFile, config, libFile], {
+                currentDirectory: "/user/username/projects/myproject",
+            });
         },
         edits: [
             {
@@ -1627,7 +1643,10 @@ export function f(p: C) { return p; }`,
             {
                 caption: "Enable forceConsistentCasingInFileNames",
                 edit: sys =>
-                    sys.writeFile(`/tsconfig.json`, jsonToReadableText({ compilerOptions: { forceConsistentCasingInFileNames: true } })),
+                    sys.writeFile(
+                        `/tsconfig.json`,
+                        jsonToReadableText({ compilerOptions: { forceConsistentCasingInFileNames: true } }),
+                    ),
                 timeouts: sys => sys.runQueuedTimeoutCallbacks(),
             },
         ],
@@ -1650,7 +1669,9 @@ export function f(p: C) { return p; }`,
                 path: `/user/username/projects/myproject/tsconfig.json`,
                 content: jsonToReadableText({ compilerOptions: { moduleResolution: "node" } }),
             };
-            return createWatchedSystem([aFile, jsonFile, config, libFile], { currentDirectory: "/user/username/projects/myproject" });
+            return createWatchedSystem([aFile, jsonFile, config, libFile], {
+                currentDirectory: "/user/username/projects/myproject",
+            });
         },
         edits: [
             {
@@ -1723,7 +1744,10 @@ interface Document {
                     scenario,
                     subScenario: `updates errors in lib file/${subScenario}`,
                     commandLineArgs: ["-w", aFile.path, ...commandLineOptions],
-                    sys: () => createWatchedSystem([aFile, libFileWithDocument], { currentDirectory: "/user/username/projects/myproject" }),
+                    sys: () =>
+                        createWatchedSystem([aFile, libFileWithDocument], {
+                            currentDirectory: "/user/username/projects/myproject",
+                        }),
                     edits: [
                         {
                             caption: "Remove document declaration from file",
@@ -1840,7 +1864,9 @@ const b: string = a;`,
                     },
                 }),
             };
-            return createWatchedSystem([aFile, bFile, configFile, libFile], { currentDirectory: "/user/username/projects/myproject" });
+            return createWatchedSystem([aFile, bFile, configFile, libFile], {
+                currentDirectory: "/user/username/projects/myproject",
+            });
         },
         edits: [
             {
@@ -1873,7 +1899,9 @@ const b: string = a;`,
                     },
                 }),
             };
-            return createWatchedSystem([aFile, bFile, configFile, libFile], { currentDirectory: "/user/username/projects/myproject" });
+            return createWatchedSystem([aFile, bFile, configFile, libFile], {
+                currentDirectory: "/user/username/projects/myproject",
+            });
         },
         edits: [
             {
@@ -1912,7 +1940,8 @@ import { x } from "../b";`,
         edits: [
             {
                 caption: "Update 'jsx' to 'react'",
-                edit: sys => sys.writeFile(`/user/username/projects/myproject/tsconfig.json`, '{ "compilerOptions": { "jsx": "react" } }'),
+                edit: sys =>
+                    sys.writeFile(`/user/username/projects/myproject/tsconfig.json`, '{ "compilerOptions": { "jsx": "react" } }'),
                 timeouts: sys => sys.runQueuedTimeoutCallbacks(),
             },
         ],
@@ -1939,7 +1968,10 @@ import { x } from "../b";`,
             {
                 caption: "Update 'jsx' to 'preserve'",
                 edit: sys =>
-                    sys.writeFile(`/user/username/projects/myproject/tsconfig.json`, '{ "compilerOptions": { "jsx": "preserve" } }'),
+                    sys.writeFile(
+                        `/user/username/projects/myproject/tsconfig.json`,
+                        '{ "compilerOptions": { "jsx": "preserve" } }',
+                    ),
                 timeouts: sys => sys.runQueuedTimeoutCallbacks(),
             },
         ],
@@ -2083,7 +2115,12 @@ import { x } from "../b";`,
     verifyTscWatch({
         scenario,
         subScenario: "when new file is added to the referenced project",
-        commandLineArgs: ["-w", "-p", `/user/username/projects/myproject/projects/project2/tsconfig.json`, "--extendedDiagnostics"],
+        commandLineArgs: [
+            "-w",
+            "-p",
+            `/user/username/projects/myproject/projects/project2/tsconfig.json`,
+            "--extendedDiagnostics",
+        ],
         sys: () => {
             const config1: File = {
                 path: `/user/username/projects/myproject/projects/project1/tsconfig.json`,
@@ -2130,7 +2167,8 @@ import { x } from "../b";`,
             },
             {
                 caption: "Add output of class3",
-                edit: sys => sys.writeFile(`/user/username/projects/myproject/projects/project1/class3.d.ts`, `declare class class3 {}`),
+                edit: sys =>
+                    sys.writeFile(`/user/username/projects/myproject/projects/project1/class3.d.ts`, `declare class class3 {}`),
                 timeouts: sys => sys.runQueuedTimeoutCallbacks(),
             },
             {
@@ -2149,7 +2187,8 @@ import { x } from "../b";`,
             },
             {
                 caption: "Add output of class3",
-                edit: sys => sys.writeFile(`/user/username/projects/myproject/projects/project1/class3.d.ts`, `declare class class3 {}`),
+                edit: sys =>
+                    sys.writeFile(`/user/username/projects/myproject/projects/project1/class3.d.ts`, `declare class class3 {}`),
                 timeouts: sys => sys.runQueuedTimeoutCallbacks(),
             },
         ],
@@ -2201,7 +2240,9 @@ import { x } from "../b";`,
                     },
                 }),
             };
-            return createWatchedSystem([module1, module2, config, libFile], { currentDirectory: "/user/username/projects/myproject" });
+            return createWatchedSystem([module1, module2, config, libFile], {
+                currentDirectory: "/user/username/projects/myproject",
+            });
         },
         edits: [
             {
@@ -2242,7 +2283,9 @@ import { x } from "../b";`,
                     },
                 }),
             };
-            return createWatchedSystem([module1, module2, config, libFile], { currentDirectory: "/user/username/projects/myproject" });
+            return createWatchedSystem([module1, module2, config, libFile], {
+                currentDirectory: "/user/username/projects/myproject",
+            });
         },
         edits: [
             {

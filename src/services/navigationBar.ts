@@ -305,7 +305,9 @@ function addNodeWithRecursiveChild(node: Node, child: Node | undefined, name?: D
     endNode();
 }
 
-function addNodeWithRecursiveInitializer(node: VariableDeclaration | PropertyAssignment | BindingElement | PropertyDeclaration): void {
+function addNodeWithRecursiveInitializer(
+    node: VariableDeclaration | PropertyAssignment | BindingElement | PropertyDeclaration,
+): void {
     if (node.initializer && isFunctionOrClassExpression(node.initializer)) {
         startNode(node);
         forEachChild(node.initializer, addChildrenRecursively);
@@ -499,7 +501,10 @@ function addChildrenRecursively(node: Node | undefined): void {
                         className = prototypeAccess.expression;
                     }
                     else {
-                        [depth, className] = startNestedNodes(binaryExpression, prototypeAccess.expression as EntityNameExpression);
+                        [depth, className] = startNestedNodes(
+                            binaryExpression,
+                            prototypeAccess.expression as EntityNameExpression,
+                        );
                     }
                     if (special === AssignmentDeclarationKind.Prototype) {
                         if (isObjectLiteralExpression(binaryExpression.right)) {
@@ -551,7 +556,11 @@ function addChildrenRecursively(node: Node | undefined): void {
                         }
                         else if (isBindableStaticAccessExpression(assignmentTarget)) {
                             startNode(binaryExpression, targetFunction);
-                            addNodeWithRecursiveChild(binaryExpression.left, binaryExpression.right, getNameOrArgument(assignmentTarget));
+                            addNodeWithRecursiveChild(
+                                binaryExpression.left,
+                                binaryExpression.right,
+                                getNameOrArgument(assignmentTarget),
+                            );
                             endNode();
                         }
                         return;
@@ -631,7 +640,12 @@ const isEs5ClassMember: Record<AssignmentDeclarationKind, boolean> = {
     [AssignmentDeclarationKind.Prototype]: true,
     [AssignmentDeclarationKind.ThisProperty]: false,
 };
-function tryMergeEs5Class(a: NavigationBarNode, b: NavigationBarNode, bIndex: number, parent: NavigationBarNode): boolean | undefined {
+function tryMergeEs5Class(
+    a: NavigationBarNode,
+    b: NavigationBarNode,
+    bIndex: number,
+    parent: NavigationBarNode,
+): boolean | undefined {
     function isPossibleConstructor(node: Node) {
         return isFunctionExpression(node) || isFunctionDeclaration(node) || isVariableDeclaration(node);
     }
@@ -1068,7 +1082,10 @@ function getFunctionOrClassName(node: FunctionExpression | FunctionDeclaration |
             }
 
             const args = cleanText(
-                mapDefined(parent.arguments, a => isStringLiteralLike(a) || isTemplateLiteral(a) ? a.getText(curSourceFile) : undefined)
+                mapDefined(
+                    parent.arguments,
+                    a => isStringLiteralLike(a) || isTemplateLiteral(a) ? a.getText(curSourceFile) : undefined,
+                )
                     .join(", "),
             );
             return `${name}(${args}) callback`;

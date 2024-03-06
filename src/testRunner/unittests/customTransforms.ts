@@ -25,7 +25,11 @@ describe("unittests:: customTransforms", () => {
                 writeFile: (fileName, text) => outputs.set(fileName, text),
             };
 
-            const program = ts.createProgram(ts.arrayFrom(fileMap.keys()), { newLine: ts.NewLineKind.LineFeed, ...options }, host);
+            const program = ts.createProgram(
+                ts.arrayFrom(fileMap.keys()),
+                { newLine: ts.NewLineKind.LineFeed, ...options },
+                host,
+            );
             program.emit(
                 /*targetSourceFile*/ undefined,
                 host.writeFile,

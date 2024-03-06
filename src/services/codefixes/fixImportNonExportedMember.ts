@@ -72,7 +72,9 @@ registerCodeFix({
                 if (info === undefined) return undefined;
 
                 const { exportName, node, moduleSourceFile } = info;
-                if (tryGetExportDeclaration(moduleSourceFile, exportName.isTypeOnly) === undefined && canHaveExportModifier(node)) {
+                if (
+                    tryGetExportDeclaration(moduleSourceFile, exportName.isTypeOnly) === undefined && canHaveExportModifier(node)
+                ) {
                     changes.insertExportModifier(moduleSourceFile, node);
                 }
                 else {
@@ -136,7 +138,8 @@ function getInfo(sourceFile: SourceFile, pos: number, program: Program): Info | 
         const importDeclaration = findAncestor(token, isImportDeclaration);
         if (importDeclaration === undefined) return undefined;
 
-        const moduleSpecifier = isStringLiteral(importDeclaration.moduleSpecifier) ? importDeclaration.moduleSpecifier : undefined;
+        const moduleSpecifier = isStringLiteral(importDeclaration.moduleSpecifier) ? importDeclaration.moduleSpecifier
+            : undefined;
         if (moduleSpecifier === undefined) return undefined;
 
         const resolvedModule = program.getResolvedModuleFromModuleSpecifier(moduleSpecifier)?.resolvedModule;
@@ -204,7 +207,8 @@ function updateExport(
     node: ExportDeclaration,
     names: ExportName[],
 ) {
-    const namedExports = node.exportClause && isNamedExports(node.exportClause) ? node.exportClause.elements : factory.createNodeArray([]);
+    const namedExports = node.exportClause && isNamedExports(node.exportClause) ? node.exportClause.elements
+        : factory.createNodeArray([]);
     const allowTypeModifier = !node.isTypeOnly &&
         !!(getIsolatedModules(program.getCompilerOptions()) || find(namedExports, e => e.isTypeOnly));
     changes.replaceNode(
@@ -253,6 +257,7 @@ function getNodeOfSymbol(symbol: Symbol) {
         return firstOrUndefined(symbol.declarations);
     }
     const declaration = symbol.valueDeclaration;
-    const variableStatement = isVariableDeclaration(declaration) ? tryCast(declaration.parent.parent, isVariableStatement) : undefined;
+    const variableStatement = isVariableDeclaration(declaration) ? tryCast(declaration.parent.parent, isVariableStatement)
+        : undefined;
     return variableStatement && length(variableStatement.declarationList.declarations) === 1 ? variableStatement : declaration;
 }

@@ -250,7 +250,11 @@ export namespace Debug {
         }
     }
 
-    export function assertIsDefined<T>(value: T, message?: string, stackCrawlMark?: AnyFunction): asserts value is NonNullable<T> {
+    export function assertIsDefined<T>(
+        value: T,
+        message?: string,
+        stackCrawlMark?: AnyFunction,
+    ): asserts value is NonNullable<T> {
         // eslint-disable-next-line no-null/no-null
         if (value === undefined || value === null) {
             fail(message, stackCrawlMark || assertIsDefined);
@@ -460,7 +464,11 @@ export namespace Debug {
         }
     }
 
-    export function assertMissingNode(node: Node | undefined, message?: string, stackCrawlMark?: AnyFunction): asserts node is undefined;
+    export function assertMissingNode(
+        node: Node | undefined,
+        message?: string,
+        stackCrawlMark?: AnyFunction,
+    ): asserts node is undefined;
     export function assertMissingNode(node: Node | undefined, message?: string, stackCrawlMark?: AnyFunction) {
         if (shouldAssertFunction(AssertionLevel.Normal, "assertMissingNode")) {
             assert(
@@ -495,9 +503,9 @@ export namespace Debug {
     }
 
     export function formatSymbol(symbol: Symbol): string {
-        return `{ name: ${unescapeLeadingUnderscores(symbol.escapedName)}; flags: ${formatSymbolFlags(symbol.flags)}; declarations: ${
-            map(symbol.declarations, node => formatSyntaxKind(node.kind))
-        } }`;
+        return `{ name: ${unescapeLeadingUnderscores(symbol.escapedName)}; flags: ${
+            formatSymbolFlags(symbol.flags)
+        }; declarations: ${map(symbol.declarations, node => formatSyntaxKind(node.kind))} }`;
     }
 
     /**
@@ -758,7 +766,8 @@ export namespace Debug {
                             (this as IntrinsicType).debugIntrinsicName ? ` (${(this as IntrinsicType).debugIntrinsicName})` : ""
                         }` :
                         this.flags & TypeFlags.Nullable ? "NullableType" :
-                        this.flags & TypeFlags.StringOrNumberLiteral ? `LiteralType ${JSON.stringify((this as LiteralType).value)}` :
+                        this.flags & TypeFlags.StringOrNumberLiteral ?
+                        `LiteralType ${JSON.stringify((this as LiteralType).value)}` :
                         this.flags & TypeFlags.BigIntLiteral ?
                         `LiteralType ${(this as BigIntLiteralType).value.negative ? "-" : ""}${
                             (this as BigIntLiteralType).value.base10Value
@@ -843,7 +852,9 @@ export namespace Debug {
                                 isIdentifier(this) ? `Identifier '${idText(this)}'` :
                                 isPrivateIdentifier(this) ? `PrivateIdentifier '${idText(this)}'` :
                                 isStringLiteral(this) ?
-                                `StringLiteral ${JSON.stringify(this.text.length < 10 ? this.text : this.text.slice(10) + "...")}` :
+                                `StringLiteral ${
+                                    JSON.stringify(this.text.length < 10 ? this.text : this.text.slice(10) + "...")
+                                }` :
                                 isNumericLiteral(this) ? `NumericLiteral ${this.text}` :
                                 isBigIntLiteral(this) ? `BigIntLiteral ${this.text}n` :
                                 isTypeParameterDeclaration(this) ? "TypeParameterDeclaration" :
@@ -956,7 +967,9 @@ export namespace Debug {
                 case TypeMapKind.Function:
                     return this.debugInfo?.() || "(function mapper)";
                 case TypeMapKind.Simple:
-                    return `${(this.source as DebugType).__debugTypeToString()} -> ${(this.target as DebugType).__debugTypeToString()}`;
+                    return `${(this.source as DebugType).__debugTypeToString()} -> ${
+                        (this.target as DebugType).__debugTypeToString()
+                    }`;
                 case TypeMapKind.Array:
                     return zipWith<DebugType, DebugType | string, unknown>(
                         this.sources as readonly DebugType[],
@@ -1315,7 +1328,8 @@ m2: ${(this.mapper2 as unknown as DebugTypeMapper).__debugToString().split("\n")
                     writeLane(lane, getBoxCharacter(connector));
                     writeLane(
                         lane,
-                        connector & Connection.Right && column < columnCount - 1 && !grid[column + 1][lane] ? BoxCharacter.lr : " ",
+                        connector & Connection.Right && column < columnCount - 1 && !grid[column + 1][lane] ? BoxCharacter.lr
+                            : " ",
                     );
                 }
             }

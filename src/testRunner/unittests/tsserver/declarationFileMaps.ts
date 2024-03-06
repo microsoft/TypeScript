@@ -20,7 +20,11 @@ function checkDeclarationFiles(file: File, session: TestSession): void {
         session.getProjectService().getDefaultProjectForFile(file.path as ts.server.NormalizedPath, /*ensureProject*/ false),
     );
     const program = project.getCurrentProgram()!;
-    const output = ts.getFileEmitOutput(program, ts.Debug.checkDefined(program.getSourceFile(file.path)), /*emitOnlyDtsFiles*/ true);
+    const output = ts.getFileEmitOutput(
+        program,
+        ts.Debug.checkDefined(program.getSourceFile(file.path)),
+        /*emitOnlyDtsFiles*/ true,
+    );
     session.logger.log(`ts.getFileEmitOutput: ${file.path}: ${jsonToReadableText(output)}`);
     closeFilesForSession([file], session);
 }
@@ -95,7 +99,8 @@ describe("unittests:: tsserver:: with declaration file maps:: project references
 
     const userTsForConfigProject: File = {
         path: "/user/user.ts",
-        content: 'import * as a from "../a/a";\nimport * as b from "../b/b";\nexport function fnUser() { a.fnA(); b.fnB(); a.instanceA; }',
+        content:
+            'import * as a from "../a/a";\nimport * as b from "../b/b";\nexport function fnUser() { a.fnA(); b.fnB(); a.instanceA; }',
     };
 
     const userTsconfig: File = {

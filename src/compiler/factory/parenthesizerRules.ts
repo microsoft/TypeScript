@@ -146,7 +146,10 @@ export function createParenthesizerRules(factory: NodeFactory): ParenthesizerRul
         const binaryOperatorPrecedence = getOperatorPrecedence(SyntaxKind.BinaryExpression, binaryOperator);
         const binaryOperatorAssociativity = getOperatorAssociativity(SyntaxKind.BinaryExpression, binaryOperator);
         const emittedOperand = skipPartiallyEmittedExpressions(operand);
-        if (!isLeftSideOfBinary && operand.kind === SyntaxKind.ArrowFunction && binaryOperatorPrecedence > OperatorPrecedence.Assignment) {
+        if (
+            !isLeftSideOfBinary && operand.kind === SyntaxKind.ArrowFunction &&
+            binaryOperatorPrecedence > OperatorPrecedence.Assignment
+        ) {
             // We need to parenthesize arrow functions on the right side to avoid it being
             // parsed as parenthesized expression: `a && (() => {})`
             return true;
@@ -412,7 +415,8 @@ export function createParenthesizerRules(factory: NodeFactory): ParenthesizerRul
 
     function parenthesizeOperandOfPostfixUnary(operand: Expression): LeftHandSideExpression {
         // TODO(rbuckton): Verifiy whether `setTextRange` is needed.
-        return isLeftHandSideExpression(operand) ? operand : setTextRange(factory.createParenthesizedExpression(operand), operand);
+        return isLeftHandSideExpression(operand) ? operand
+            : setTextRange(factory.createParenthesizedExpression(operand), operand);
     }
 
     function parenthesizeOperandOfPrefixUnary(operand: Expression): UnaryExpression {
@@ -452,7 +456,10 @@ export function createParenthesizerRules(factory: NodeFactory): ParenthesizerRul
         }
 
         const leftmostExpressionKind = getLeftmostExpression(emittedExpression, /*stopAtCallExpressions*/ false).kind;
-        if (leftmostExpressionKind === SyntaxKind.ObjectLiteralExpression || leftmostExpressionKind === SyntaxKind.FunctionExpression) {
+        if (
+            leftmostExpressionKind === SyntaxKind.ObjectLiteralExpression ||
+            leftmostExpressionKind === SyntaxKind.FunctionExpression
+        ) {
             // TODO(rbuckton): Verifiy whether `setTextRange` is needed.
             return setTextRange(factory.createParenthesizedExpression(expression), expression);
         }
@@ -628,11 +635,15 @@ export function createParenthesizerRules(factory: NodeFactory): ParenthesizerRul
     function hasJSDocPostfixQuestion(type: TypeNode | NamedTupleMember): boolean {
         if (isJSDocNullableType(type)) return type.postfix;
         if (isNamedTupleMember(type)) return hasJSDocPostfixQuestion(type.type);
-        if (isFunctionTypeNode(type) || isConstructorTypeNode(type) || isTypeOperatorNode(type)) return hasJSDocPostfixQuestion(type.type);
+        if (isFunctionTypeNode(type) || isConstructorTypeNode(type) || isTypeOperatorNode(type)) {
+            return hasJSDocPostfixQuestion(type.type);
+        }
         if (isConditionalTypeNode(type)) return hasJSDocPostfixQuestion(type.falseType);
         if (isUnionTypeNode(type)) return hasJSDocPostfixQuestion(last(type.types));
         if (isIntersectionTypeNode(type)) return hasJSDocPostfixQuestion(last(type.types));
-        if (isInferTypeNode(type)) return !!type.typeParameter.constraint && hasJSDocPostfixQuestion(type.typeParameter.constraint);
+        if (isInferTypeNode(type)) {
+            return !!type.typeParameter.constraint && hasJSDocPostfixQuestion(type.typeParameter.constraint);
+        }
         return false;
     }
 

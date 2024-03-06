@@ -39,7 +39,11 @@ describe("unittests:: services:: PreProcessFile:", () => {
         if (expected === actual) {
             return;
         }
-        assert.deepEqual(actual, expected, `Expected [${kind}] ${jsonToReadableText(expected)}, got ${jsonToReadableText(actual)}`);
+        assert.deepEqual(
+            actual,
+            expected,
+            `Expected [${kind}] ${jsonToReadableText(expected)}, got ${jsonToReadableText(actual)}`,
+        );
     }
 
     describe("Test preProcessFiles,", () => {
@@ -178,7 +182,11 @@ describe("unittests:: services:: PreProcessFile:", () => {
                 /*readImportFile*/ true,
                 /*detectJavaScriptImports*/ false,
                 {
-                    referencedFiles: [{ fileName: "refFile1.ts", pos: 20, end: 31 }, { fileName: "refFile2.ts", pos: 57, end: 68 }],
+                    referencedFiles: [{ fileName: "refFile1.ts", pos: 20, end: 31 }, {
+                        fileName: "refFile2.ts",
+                        pos: 57,
+                        end: 68,
+                    }],
                     typeReferenceDirectives: [],
                     libReferenceDirectives: [],
                     importedFiles: [{ fileName: "r1.ts", pos: 92, end: 97 }, { fileName: "r2.ts", pos: 121, end: 126 }],

@@ -1153,7 +1153,8 @@ export function transformSystemModule(context: TransformationContext): (x: Sourc
 
         let excludeName: string | undefined;
         if (hasSyntacticModifier(decl, ModifierFlags.Export)) {
-            const exportName = hasSyntacticModifier(decl, ModifierFlags.Default) ? factory.createStringLiteral("default") : decl.name!;
+            const exportName = hasSyntacticModifier(decl, ModifierFlags.Default) ? factory.createStringLiteral("default")
+                : decl.name!;
             statements = appendExportStatement(statements, exportName, factory.getLocalName(decl));
             excludeName = getTextOfIdentifierOrLiteral(exportName);
         }
@@ -1242,7 +1243,10 @@ export function transformSystemModule(context: TransformationContext): (x: Sourc
     function createExportExpression(name: Identifier | StringLiteral, value: Expression) {
         const exportName = isIdentifier(name) ? factory.createStringLiteralFromNode(name) : name;
         setEmitFlags(value, getEmitFlags(value) | EmitFlags.NoComments);
-        return setCommentRange(factory.createCallExpression(exportFunction, /*typeArguments*/ undefined, [exportName, value]), value);
+        return setCommentRange(
+            factory.createCallExpression(exportFunction, /*typeArguments*/ undefined, [exportName, value]),
+            value,
+        );
     }
 
     //
@@ -1610,7 +1614,10 @@ export function transformSystemModule(context: TransformationContext): (x: Sourc
                 break;
             case SyntaxKind.PrefixUnaryExpression:
             case SyntaxKind.PostfixUnaryExpression:
-                return visitPrefixOrPostfixUnaryExpression(node as PrefixUnaryExpression | PostfixUnaryExpression, valueIsDiscarded);
+                return visitPrefixOrPostfixUnaryExpression(
+                    node as PrefixUnaryExpression | PostfixUnaryExpression,
+                    valueIsDiscarded,
+                );
         }
         return visitEachChild(node, visitor, context);
     }
@@ -1657,13 +1664,20 @@ export function transformSystemModule(context: TransformationContext): (x: Sourc
         //         }
         //     };
         // });
-        const externalModuleName = getExternalModuleNameLiteral(factory, node, currentSourceFile, host, resolver, compilerOptions);
+        const externalModuleName = getExternalModuleNameLiteral(
+            factory,
+            node,
+            currentSourceFile,
+            host,
+            resolver,
+            compilerOptions,
+        );
         const firstArgument = visitNode(firstOrUndefined(node.arguments), visitor, isExpression);
         // Only use the external module name if it differs from the first argument. This allows us to preserve the quote style of the argument on output.
-        const argument =
-            externalModuleName && (!firstArgument || !isStringLiteral(firstArgument) || firstArgument.text !== externalModuleName.text) ?
-                externalModuleName
-                : firstArgument;
+        const argument = externalModuleName &&
+                (!firstArgument || !isStringLiteral(firstArgument) || firstArgument.text !== externalModuleName.text) ?
+            externalModuleName
+            : firstArgument;
         return factory.createCallExpression(
             factory.createPropertyAccessExpression(
                 contextObject,
@@ -1726,7 +1740,10 @@ export function transformSystemModule(context: TransformationContext): (x: Sourc
         }
     }
 
-    function visitPrefixOrPostfixUnaryExpression(node: PrefixUnaryExpression | PostfixUnaryExpression, valueIsDiscarded: boolean) {
+    function visitPrefixOrPostfixUnaryExpression(
+        node: PrefixUnaryExpression | PostfixUnaryExpression,
+        valueIsDiscarded: boolean,
+    ) {
         // When we see a prefix or postfix increment expression whose operand is an exported
         // symbol, we should ensure all exports of that symbol are updated with the correct
         // value.

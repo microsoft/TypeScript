@@ -38,7 +38,8 @@ describe("unittests:: canWatch::", () => {
 
     baselineCanWatch(
         "canWatchAffectingLocation",
-        () => `Determines if package.json that was found during module resolution and change in it will affect resolution can be watched.`,
+        () =>
+            `Determines if package.json that was found during module resolution and change in it will affect resolution can be watched.`,
         (paths, longestPathLength, baseline) => {
             const testType = "canWatchAffectingLocation";
             const maxLengths = [longestPathLength + "/package.json".length, testType.length] as const;

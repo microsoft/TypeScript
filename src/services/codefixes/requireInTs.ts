@@ -39,7 +39,13 @@ registerCodeFix({
         }
         const changes = textChanges.ChangeTracker.with(context, t => doChange(t, context.sourceFile, info));
         return [
-            createCodeFixAction(fixId, changes, Diagnostics.Convert_require_to_import, fixId, Diagnostics.Convert_all_require_to_import),
+            createCodeFixAction(
+                fixId,
+                changes,
+                Diagnostics.Convert_require_to_import,
+                fixId,
+                Diagnostics.Convert_all_require_to_import,
+            ),
         ];
     },
     fixIds: [fixId],

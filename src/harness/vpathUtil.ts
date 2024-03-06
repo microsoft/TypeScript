@@ -70,7 +70,8 @@ function validateComponents(components: string[], flags: ValidationFlags, hasTra
     const hasExtname = hasBasename && extRegExp.test(components[components.length - 1]);
     const invalidComponentRegExp = flags & ValidationFlags.AllowNavigation
         ? flags & ValidationFlags.AllowWildcard ? invalidNavigableComponentWithWildcardsRegExp : invalidNavigableComponentRegExp
-        : flags & ValidationFlags.AllowWildcard ? invalidNonNavigableComponentWithWildcardsRegExp : invalidNonNavigableComponentRegExp;
+        : flags & ValidationFlags.AllowWildcard ? invalidNonNavigableComponentWithWildcardsRegExp
+        : invalidNonNavigableComponentRegExp;
 
     // Validate required components
     if (flags & ValidationFlags.RequireRoot && !hasRoot) return false;

@@ -54,7 +54,12 @@ import {
 } from "./_namespaces/ts";
 
 /** @internal */
-export function getRenameInfo(program: Program, sourceFile: SourceFile, position: number, preferences: UserPreferences): RenameInfo {
+export function getRenameInfo(
+    program: Program,
+    sourceFile: SourceFile,
+    position: number,
+    preferences: UserPreferences,
+): RenameInfo {
     const node = getAdjustedRenameLocation(getTouchingPropertyName(sourceFile, position));
     if (nodeIsEligibleForRename(node)) {
         const renameInfo = getRenameInfoForNode(node, program.getTypeChecker(), sourceFile, program, preferences);
@@ -78,7 +83,8 @@ function getRenameInfoForNode(
             const type = getContextualTypeFromParentOrAncestorTypeNode(node, typeChecker);
             if (
                 type && ((type.flags & TypeFlags.StringLiteral) || (
-                    (type.flags & TypeFlags.Union) && every((type as UnionType).types, type => !!(type.flags & TypeFlags.StringLiteral))
+                    (type.flags & TypeFlags.Union) &&
+                    every((type as UnionType).types, type => !!(type.flags & TypeFlags.StringLiteral))
                 ))
             ) {
                 return getRenameInfoSuccess(node.text, node.text, ScriptElementKind.string, "", node, sourceFile);
@@ -115,10 +121,10 @@ function getRenameInfoForNode(
     }
 
     const kind = SymbolDisplay.getSymbolKind(typeChecker, symbol, node);
-    const specifierName =
-        (isImportOrExportSpecifierName(node) || isStringOrNumericLiteralLike(node) && node.parent.kind === SyntaxKind.ComputedPropertyName)
-            ? stripQuotes(getTextOfIdentifierOrLiteral(node))
-            : undefined;
+    const specifierName = (isImportOrExportSpecifierName(node) ||
+            isStringOrNumericLiteralLike(node) && node.parent.kind === SyntaxKind.ComputedPropertyName)
+        ? stripQuotes(getTextOfIdentifierOrLiteral(node))
+        : undefined;
     const displayName = specifierName || typeChecker.symbolToString(symbol);
     const fullDisplayName = specifierName || typeChecker.getFullyQualifiedName(symbol);
     return getRenameInfoSuccess(
@@ -198,7 +204,10 @@ function getRenameInfoForModule(node: StringLiteralLike, sourceFile: SourceFile,
     const kind = withoutIndex === undefined ? ScriptElementKind.moduleElement : ScriptElementKind.directory;
     const indexAfterLastSlash = node.text.lastIndexOf("/") + 1;
     // Span should only be the last component of the path. + 1 to account for the quote character.
-    const triggerSpan = createTextSpan(node.getStart(sourceFile) + 1 + indexAfterLastSlash, node.text.length - indexAfterLastSlash);
+    const triggerSpan = createTextSpan(
+        node.getStart(sourceFile) + 1 + indexAfterLastSlash,
+        node.text.length - indexAfterLastSlash,
+    );
     return {
         canRename: true,
         fileToRename: fileName,
