@@ -35529,7 +35529,11 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         // file would probably be preferable.
         const typeSymbol = exports && getSymbol(exports, JsxNames.Element, SymbolFlags.Type);
         const returnNode = typeSymbol && nodeBuilder.symbolToEntityName(typeSymbol, SymbolFlags.Type, node);
-        const declaration = factory.createFunctionTypeNode(/*typeParameters*/ undefined, [factory.createParameterDeclaration(/*modifiers*/ undefined, /*dotDotDotToken*/ undefined, "props", /*questionToken*/ undefined, nodeBuilder.typeToTypeNode(result, node))], returnNode ? factory.createTypeReferenceNode(returnNode, /*typeArguments*/ undefined) : factory.createKeywordTypeNode(SyntaxKind.AnyKeyword));
+        const declaration = factory.createFunctionTypeNode(
+            /*typeParameters*/ undefined,
+            [factory.createParameterDeclaration(/*modifiers*/ undefined, /*dotDotDotToken*/ undefined, "props", /*questionToken*/ undefined, nodeBuilder.typeToTypeNode(result, node))],
+            returnNode ? factory.createTypeReferenceNode(returnNode, /*typeArguments*/ undefined) : factory.createKeywordTypeNode(SyntaxKind.AnyKeyword),
+        );
         const parameterSymbol = createSymbol(SymbolFlags.FunctionScopedVariable, "props" as __String);
         parameterSymbol.links.type = result;
         return createSignature(

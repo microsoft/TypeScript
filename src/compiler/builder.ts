@@ -1362,7 +1362,14 @@ export interface BuilderCreationParameters {
 }
 
 /** @internal */
-export function getBuilderCreationParameters(newProgramOrRootNames: Program | readonly string[] | undefined, hostOrOptions: BuilderProgramHost | CompilerOptions | undefined, oldProgramOrHost?: BuilderProgram | CompilerHost, configFileParsingDiagnosticsOrOldProgram?: readonly Diagnostic[] | BuilderProgram, configFileParsingDiagnostics?: readonly Diagnostic[], projectReferences?: readonly ProjectReference[]): BuilderCreationParameters {
+export function getBuilderCreationParameters(
+    newProgramOrRootNames: Program | readonly string[] | undefined,
+    hostOrOptions: BuilderProgramHost | CompilerOptions | undefined,
+    oldProgramOrHost?: BuilderProgram | CompilerHost,
+    configFileParsingDiagnosticsOrOldProgram?: readonly Diagnostic[] | BuilderProgram,
+    configFileParsingDiagnostics?: readonly Diagnostic[],
+    projectReferences?: readonly ProjectReference[],
+): BuilderCreationParameters {
     let host: BuilderProgramHost;
     let newProgram: Program;
     let oldProgram: BuilderProgram;
