@@ -8611,12 +8611,6 @@ export function impliedNodeFormatAffectsModuleResolution(options: CompilerOption
 }
 
 /** @internal */
-export function impliedNodeFormatAffectsInteropChecking(options: CompilerOptions) {
-    const moduleKind = getEmitModuleKind(options);
-    return ModuleKind.Node16 <= moduleKind && moduleKind <= ModuleKind.NodeNext;
-}
-
-/** @internal */
 export function impliedNodeFormatForModuleResolution(sourceFile: SourceFile, options: CompilerOptions): ResolutionMode {
     return impliedNodeFormatAffectsModuleResolution(options) ? sourceFile.impliedNodeFormat : undefined;
 }
@@ -8628,7 +8622,25 @@ export function impliedNodeFormatForEmit(sourceFile: SourceFile, options: Compil
 
 /** @internal */
 export function impliedNodeFormatForInteropChecking(sourceFile: SourceFile, options: CompilerOptions): ResolutionMode {
-    return impliedNodeFormatAffectsInteropChecking(options) ? sourceFile.impliedNodeFormat : undefined;
+    const moduleKind = getEmitModuleKind(options);
+    if (ModuleKind.Node16 <= moduleKind && moduleKind <= ModuleKind.NodeNext) {
+        return sourceFile.impliedNodeFormat;
+    }
+    if (
+        sourceFile.impliedNodeFormat === ModuleKind.CommonJS
+        && (sourceFile.packageJsonScope?.contents.packageJsonContent.type === "commonjs"
+            || fileExtensionIsOneOf(sourceFile.fileName, [Extension.Cjs, Extension.Cts]))
+    ) {
+        return ModuleKind.CommonJS;
+    }
+    if (
+        sourceFile.impliedNodeFormat === ModuleKind.ESNext
+        && (sourceFile.packageJsonScope?.contents.packageJsonContent.type === "module"
+            || fileExtensionIsOneOf(sourceFile.fileName, [Extension.Mjs, Extension.Mts]))
+    ) {
+        return ModuleKind.ESNext;
+    }
+    return undefined;
 }
 
 type CompilerOptionKeys = keyof { [K in keyof CompilerOptions as string extends K ? never : K]: any; };

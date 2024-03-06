@@ -2,7 +2,7 @@
 
 === file1.ts ===
 import * as b  from './b.json';
->b : { a: boolean; b: string; }
+>b : { default: { a: boolean; b: string; }; }
 
 === b.json ===
 {

@@ -2,22 +2,22 @@
 
 === index.mts ===
 import * as exportAny from "./exportAny.cjs";
->exportAny : any
+>exportAny : { default: any; }
 
 import * as exportUnknown from "./exportUnknown.cjs";
->exportUnknown : unknown
+>exportUnknown : { default: unknown; }
 
 import * as exportSymbol from "./exportSymbol.cjs";
->exportSymbol : symbol
+>exportSymbol : { default: symbol; }
 
 import type * as exportAnyType from "./exportAny.cjs";
->exportAnyType : any
+>exportAnyType : { default: any; }
 
 import type * as exportUnknownType from "./exportUnknown.cjs";
->exportUnknownType : unknown
+>exportUnknownType : { default: unknown; }
 
 import type * as exportSymbolType from "./exportSymbol.cjs";
->exportSymbolType : symbol
+>exportSymbolType : { default: symbol; }
 
 === exportAny.d.cts ===
 declare const __: any;

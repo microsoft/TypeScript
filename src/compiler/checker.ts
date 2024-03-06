@@ -4058,8 +4058,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             || isNamespaceExport(node));
     }
 
-    function getUsageModeForExpression(usage: Expression) {
-        return isStringLiteralLike(usage) ? host.getModeForUsageLocation(getSourceFileOfNode(usage), usage) : undefined;
+    function getEmitSyntaxForModuleSpecifierExpression(usage: Expression) {
+        return isStringLiteralLike(usage) ? host.getEmitSyntaxForUsageLocation(getSourceFileOfNode(usage), usage) : undefined;
     }
 
     function isESMFormatImportImportingCommonjsFormatFile(usageMode: ResolutionMode, targetMode: ResolutionMode) {
@@ -4067,15 +4067,16 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function isOnlyImportedAsDefault(usage: Expression) {
-        const usageMode = getUsageModeForExpression(usage);
+        const usageMode = getEmitSyntaxForModuleSpecifierExpression(usage);
         return usageMode === ModuleKind.ESNext && endsWith((usage as StringLiteralLike).text, Extension.Json);
     }
 
     function canHaveSyntheticDefault(file: SourceFile | undefined, moduleSymbol: Symbol, dontResolveAlias: boolean, usage: Expression) {
-        const usageMode = file && getUsageModeForExpression(usage);
-        if (file && usageMode !== undefined && ModuleKind.Node16 <= moduleKind && moduleKind <= ModuleKind.NodeNext) {
-            const result = isESMFormatImportImportingCommonjsFormatFile(usageMode, impliedNodeFormatForInteropChecking(file, compilerOptions));
-            if (usageMode === ModuleKind.ESNext || result) {
+        const usageMode = file && getEmitSyntaxForModuleSpecifierExpression(usage);
+        if (file && usageMode !== undefined) {
+            const targetMode = impliedNodeFormatForInteropChecking(file, compilerOptions);
+            const result = isESMFormatImportImportingCommonjsFormatFile(usageMode, targetMode);
+            if (usageMode === ModuleKind.ESNext && targetMode !== undefined || result) {
                 return result;
             }
             // fallthrough on cjs usages so we imply defaults for interop'd imports, too
@@ -5301,7 +5302,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 }
 
                 const targetFile = moduleSymbol?.declarations?.find(isSourceFile);
-                const isEsmCjsRef = targetFile && isESMFormatImportImportingCommonjsFormatFile(getUsageModeForExpression(reference), impliedNodeFormatForInteropChecking(targetFile, compilerOptions));
+                const isEsmCjsRef = targetFile && isESMFormatImportImportingCommonjsFormatFile(getEmitSyntaxForModuleSpecifierExpression(reference), impliedNodeFormatForInteropChecking(targetFile, compilerOptions));
                 if (getESModuleInterop(compilerOptions) || isEsmCjsRef) {
                     let sigs = getSignaturesOfStructuredType(type, SignatureKind.Call);
                     if (!sigs || !sigs.length) {
@@ -46071,7 +46072,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 return; // Other grammar checks do not apply to type-only imports with resolution mode assertions
             }
 
-            const mode = (moduleKind === ModuleKind.NodeNext) && declaration.moduleSpecifier && getUsageModeForExpression(declaration.moduleSpecifier);
+            const mode = (moduleKind === ModuleKind.NodeNext) && declaration.moduleSpecifier && getEmitSyntaxForModuleSpecifierExpression(declaration.moduleSpecifier);
             if (mode !== ModuleKind.ESNext && moduleKind !== ModuleKind.ESNext && moduleKind !== ModuleKind.Preserve) {
                 const message = isImportAttributes
                     ? moduleKind === ModuleKind.NodeNext

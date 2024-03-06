@@ -9875,7 +9875,7 @@ declare namespace ts {
         },
         usage: StringLiteralLike,
         compilerOptions: CompilerOptions,
-    ): ModuleKind.CommonJS | ModuleKind.ESNext | undefined;
+    ): ResolutionMode;
     function getConfigFileParsingDiagnostics(configFileParseResult: ParsedCommandLine): readonly Diagnostic[];
     /**
      * A function for determining if a given file is esm or cjs format, assuming modern node module resolution rules, as configured by the

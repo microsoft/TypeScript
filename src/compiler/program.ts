@@ -136,6 +136,8 @@ import {
     getPositionOfLineAndCharacter,
     getPropertyArrayElementValue,
     getResolveJsonModule,
+    getResolvePackageJsonExports,
+    getResolvePackageJsonImports,
     getRootLength,
     getSetExternalModuleIndicator,
     getSourceFileOfNode,
@@ -913,23 +915,46 @@ function getModeForUsageLocationWorker(file: { impliedNodeFormat?: ResolutionMod
             return override;
         }
     }
+
+    const emitSyntax = getEmitSyntaxForUsageLocationWorker(file, usage, compilerOptions);
+    const moduleResolution = compilerOptions && getEmitModuleResolutionKind(compilerOptions);
+    if (
+        compilerOptions && (
+            getResolvePackageJsonExports(compilerOptions) ||
+            getResolvePackageJsonImports(compilerOptions) ||
+            ModuleResolutionKind.Node16 <= moduleResolution! && moduleResolution! <= ModuleResolutionKind.NodeNext
+        )
+    ) {
+        return emitSyntax;
+    }
+}
+
+function getEmitSyntaxForUsageLocationWorker(file: { impliedNodeFormat?: ResolutionMode; }, usage: StringLiteralLike, compilerOptions?: CompilerOptions): ResolutionMode {
     if (compilerOptions && getEmitModuleKind(compilerOptions) === ModuleKind.Preserve) {
         return (usage.parent.parent && isImportEqualsDeclaration(usage.parent.parent) || isRequireCall(usage.parent, /*requireStringLiteralLikeArgument*/ false))
             ? ModuleKind.CommonJS
             : ModuleKind.ESNext;
     }
-    if (file.impliedNodeFormat === undefined || !(compilerOptions && impliedNodeFormatAffectsModuleResolution(compilerOptions))) {
-        // TODO: we don't know whether this is being called for module resolution, emit, or interop checking
+    if (!compilerOptions) {
+        // This should always be provided, but we try to fail somewhat
+        // gracefully to allow projects like ts-node time to update.
         return undefined;
     }
-    if (file.impliedNodeFormat !== ModuleKind.ESNext) {
-        // in cjs files, import call expressions are esm format, otherwise everything is cjs
-        return isImportCall(walkUpParenthesizedExpressions(usage.parent)) ? ModuleKind.ESNext : ModuleKind.CommonJS;
+    if (impliedNodeFormatAffectsModuleResolution(compilerOptions)) {
+        if (file.impliedNodeFormat !== ModuleKind.ESNext) {
+            // in cjs files, import call expressions are esm format, otherwise everything is cjs
+            return isImportCall(walkUpParenthesizedExpressions(usage.parent)) ? ModuleKind.ESNext : ModuleKind.CommonJS;
+        }
+        const exprParentParent = walkUpParenthesizedExpressions(usage.parent)?.parent;
+        return exprParentParent && isImportEqualsDeclaration(exprParentParent) ? ModuleKind.CommonJS : ModuleKind.ESNext;
     }
-    // in esm files, import=require statements are cjs format, otherwise everything is esm
-    // imports are only parent'd up to their containing declaration/expression, so access farther parents with care
-    const exprParentParent = walkUpParenthesizedExpressions(usage.parent)?.parent;
-    return exprParentParent && isImportEqualsDeclaration(exprParentParent) ? ModuleKind.CommonJS : ModuleKind.ESNext;
+    if (getEmitModuleKind(compilerOptions) === ModuleKind.CommonJS) {
+        return ModuleKind.CommonJS;
+    }
+    if (emitModuleKindIsNonNodeESM(getEmitModuleKind(compilerOptions))) {
+        return ModuleKind.ESNext;
+    }
+    return undefined;
 }
 
 /** @internal */
@@ -1897,6 +1922,7 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
         isSourceFileFromExternalLibrary,
         isSourceFileDefaultLibrary,
         getModeForUsageLocation,
+        getEmitSyntaxForUsageLocation,
         getModeForResolutionAtIndex,
         getSourceFileFromReference,
         getLibFileFromReference,
@@ -4929,6 +4955,11 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
     function getModeForUsageLocation(file: SourceFile, usage: StringLiteralLike): ResolutionMode {
         const optionsForFile = getRedirectReferenceForResolution(file)?.commandLine.options || options;
         return getModeForUsageLocationWorker(file, usage, optionsForFile);
+    }
+
+    function getEmitSyntaxForUsageLocation(file: SourceFile, usage: StringLiteralLike): ResolutionMode {
+        const optionsForFile = getRedirectReferenceForResolution(file)?.commandLine.options || options;
+        return getEmitSyntaxForUsageLocationWorker(file, usage, optionsForFile);
     }
 
     function getModeForResolutionAtIndex(file: SourceFile, index: number): ResolutionMode {
