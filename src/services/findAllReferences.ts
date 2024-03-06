@@ -1308,7 +1308,15 @@ export namespace Core {
     }
 
     /** Core find-all-references algorithm for a normal symbol. */
-    function getReferencedSymbolsForSymbol(originalSymbol: Symbol, node: Node | undefined, sourceFiles: readonly SourceFile[], sourceFilesSet: ReadonlySet<string>, checker: TypeChecker, cancellationToken: CancellationToken, options: Options): SymbolAndEntries[] {
+    function getReferencedSymbolsForSymbol(
+        originalSymbol: Symbol,
+        node: Node | undefined,
+        sourceFiles: readonly SourceFile[],
+        sourceFilesSet: ReadonlySet<string>,
+        checker: TypeChecker,
+        cancellationToken: CancellationToken,
+        options: Options,
+    ): SymbolAndEntries[] {
         const symbol = node && skipPastExportOrImportSpecifierOrUnion(originalSymbol, node, checker, /*useLocalSymbolForExportSpecifier*/ !isForRenameWithPrefixAndSuffixText(options)) || originalSymbol;
 
         // Compute the meaning from the location and the symbol it references
@@ -2808,7 +2816,10 @@ export namespace Core {
     function getParentSymbolsOfPropertyAccess(location: Node, symbol: Symbol, checker: TypeChecker): readonly Symbol[] | undefined {
         const propertyAccessExpression = isRightSideOfPropertyAccess(location) ? location.parent as PropertyAccessExpression : undefined;
         const lhsType = propertyAccessExpression && checker.getTypeAtLocation(propertyAccessExpression.expression);
-        const res = mapDefined(lhsType && (lhsType.isUnionOrIntersection() ? lhsType.types : lhsType.symbol === symbol.parent ? undefined : [lhsType]), t => t.symbol && t.symbol.flags & (SymbolFlags.Class | SymbolFlags.Interface) ? t.symbol : undefined);
+        const res = mapDefined(
+            lhsType && (lhsType.isUnionOrIntersection() ? lhsType.types : lhsType.symbol === symbol.parent ? undefined : [lhsType]),
+            t => t.symbol && t.symbol.flags & (SymbolFlags.Class | SymbolFlags.Interface) ? t.symbol : undefined,
+        );
         return res.length === 0 ? undefined : res;
     }
 

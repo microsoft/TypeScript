@@ -193,7 +193,13 @@ function createExport(changes: textChanges.ChangeTracker, program: Program, sour
     changes.insertNodeAtEndOfScope(
         sourceFile,
         sourceFile,
-        factory.createExportDeclaration(/*modifiers*/ undefined, /*isTypeOnly*/ false, factory.createNamedExports(createExportSpecifiers(names, /*allowTypeModifier*/ getIsolatedModules(program.getCompilerOptions()))), /*moduleSpecifier*/ undefined, /*attributes*/ undefined),
+        factory.createExportDeclaration(
+            /*modifiers*/ undefined,
+            /*isTypeOnly*/ false,
+            factory.createNamedExports(createExportSpecifiers(names, /*allowTypeModifier*/ getIsolatedModules(program.getCompilerOptions()))),
+            /*moduleSpecifier*/ undefined,
+            /*attributes*/ undefined,
+        ),
     );
 }
 

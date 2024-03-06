@@ -1004,7 +1004,9 @@ export function isGrammarError(parent: Node, child: Node | NodeArray<Node>) {
     if (isPropertySignature(parent)) return child === parent.initializer;
     if (isPropertyDeclaration(parent)) return child === parent.questionToken && isAutoAccessorPropertyDeclaration(parent);
     if (isPropertyAssignment(parent)) return child === parent.modifiers || child === parent.questionToken || child === parent.exclamationToken || isGrammarErrorElement(parent.modifiers, child, isModifierLike);
-    if (isShorthandPropertyAssignment(parent)) return child === parent.equalsToken || child === parent.modifiers || child === parent.questionToken || child === parent.exclamationToken || isGrammarErrorElement(parent.modifiers, child, isModifierLike);
+    if (isShorthandPropertyAssignment(parent)) {
+        return child === parent.equalsToken || child === parent.modifiers || child === parent.questionToken || child === parent.exclamationToken || isGrammarErrorElement(parent.modifiers, child, isModifierLike);
+    }
     if (isMethodDeclaration(parent)) return child === parent.exclamationToken;
     if (isConstructorDeclaration(parent)) return child === parent.typeParameters || child === parent.type || isGrammarErrorElement(parent.typeParameters, child, isTypeParameterDeclaration);
     if (isGetAccessorDeclaration(parent)) return child === parent.typeParameters || isGrammarErrorElement(parent.typeParameters, child, isTypeParameterDeclaration);
@@ -2462,7 +2464,10 @@ export function isPartOfTypeNode(node: Node): boolean {
                 node = node.parent;
             }
             // At this point, node is either a qualified name or an identifier
-            Debug.assert(node.kind === SyntaxKind.Identifier || node.kind === SyntaxKind.QualifiedName || node.kind === SyntaxKind.PropertyAccessExpression, "'node' was expected to be a qualified name, identifier or property access in 'isPartOfTypeNode'.");
+            Debug.assert(
+                node.kind === SyntaxKind.Identifier || node.kind === SyntaxKind.QualifiedName || node.kind === SyntaxKind.PropertyAccessExpression,
+                "'node' was expected to be a qualified name, identifier or property access in 'isPartOfTypeNode'.",
+            );
             // falls through
 
         case SyntaxKind.QualifiedName:
@@ -6208,7 +6213,11 @@ function getCanonicalAbsolutePath(host: ResolveModuleNameResolutionHost, path: s
 }
 
 /** @internal */
-export function getExternalModuleNameFromDeclaration(host: ResolveModuleNameResolutionHost, resolver: EmitResolver, declaration: ImportEqualsDeclaration | ImportDeclaration | ExportDeclaration | ModuleDeclaration | ImportTypeNode): string | undefined {
+export function getExternalModuleNameFromDeclaration(
+    host: ResolveModuleNameResolutionHost,
+    resolver: EmitResolver,
+    declaration: ImportEqualsDeclaration | ImportDeclaration | ExportDeclaration | ModuleDeclaration | ImportTypeNode,
+): string | undefined {
     const file = resolver.getExternalModuleFileFromDeclaration(declaration);
     if (!file || file.isDeclarationFile) {
         return undefined;
@@ -10475,7 +10484,9 @@ export function getParameterTypeNode(parameter: ParameterDeclaration | JSDocPara
 }
 
 /** @internal */
-export function isTypeDeclaration(node: Node): node is TypeParameterDeclaration | ClassDeclaration | InterfaceDeclaration | TypeAliasDeclaration | JSDocTypedefTag | JSDocCallbackTag | JSDocEnumTag | EnumDeclaration | ImportClause | ImportSpecifier | ExportSpecifier {
+export function isTypeDeclaration(
+    node: Node,
+): node is TypeParameterDeclaration | ClassDeclaration | InterfaceDeclaration | TypeAliasDeclaration | JSDocTypedefTag | JSDocCallbackTag | JSDocEnumTag | EnumDeclaration | ImportClause | ImportSpecifier | ExportSpecifier {
     switch (node.kind) {
         case SyntaxKind.TypeParameter:
         case SyntaxKind.ClassDeclaration:

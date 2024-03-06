@@ -97,7 +97,13 @@ function getInfo(sourceFile: SourceFile, pos: number): Info | undefined {
 function getActionForAddMissingDefiniteAssignmentAssertion(context: CodeFixContext, info: Info): CodeFixAction | undefined {
     if (info.isJs) return undefined;
     const changes = textChanges.ChangeTracker.with(context, t => addDefiniteAssignmentAssertion(t, context.sourceFile, info.prop));
-    return createCodeFixAction(fixName, changes, [Diagnostics.Add_definite_assignment_assertion_to_property_0, info.prop.getText()], fixIdAddDefiniteAssignmentAssertions, Diagnostics.Add_definite_assignment_assertions_to_all_uninitialized_properties);
+    return createCodeFixAction(
+        fixName,
+        changes,
+        [Diagnostics.Add_definite_assignment_assertion_to_property_0, info.prop.getText()],
+        fixIdAddDefiniteAssignmentAssertions,
+        Diagnostics.Add_definite_assignment_assertions_to_all_uninitialized_properties,
+    );
 }
 
 function addDefiniteAssignmentAssertion(changeTracker: textChanges.ChangeTracker, propertyDeclarationSourceFile: SourceFile, propertyDeclaration: PropertyDeclaration): void {

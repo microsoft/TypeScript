@@ -225,7 +225,14 @@ export function createDocumentRegistryInternal(useCaseSensitiveFileNames?: boole
         return settingsOrHost as CompilerOptions;
     }
 
-    function acquireDocument(fileName: string, compilationSettings: CompilerOptions | MinimalResolutionCacheHost, scriptSnapshot: IScriptSnapshot, version: string, scriptKind?: ScriptKind, languageVersionOrOptions?: CreateSourceFileOptions | ScriptTarget): SourceFile {
+    function acquireDocument(
+        fileName: string,
+        compilationSettings: CompilerOptions | MinimalResolutionCacheHost,
+        scriptSnapshot: IScriptSnapshot,
+        version: string,
+        scriptKind?: ScriptKind,
+        languageVersionOrOptions?: CreateSourceFileOptions | ScriptTarget,
+    ): SourceFile {
         const path = toPath(fileName, currentDirectory, getCanonicalFileName);
         const key = getKeyForCompilationSettings(getCompilationSettings(compilationSettings));
         return acquireDocumentWithKey(fileName, path, compilationSettings, key, scriptSnapshot, version, scriptKind, languageVersionOrOptions);
@@ -244,7 +251,14 @@ export function createDocumentRegistryInternal(useCaseSensitiveFileNames?: boole
         return acquireOrUpdateDocument(fileName, path, compilationSettings, key, scriptSnapshot, version, /*acquiring*/ true, scriptKind, languageVersionOrOptions);
     }
 
-    function updateDocument(fileName: string, compilationSettings: CompilerOptions | MinimalResolutionCacheHost, scriptSnapshot: IScriptSnapshot, version: string, scriptKind?: ScriptKind, languageVersionOrOptions?: CreateSourceFileOptions | ScriptTarget): SourceFile {
+    function updateDocument(
+        fileName: string,
+        compilationSettings: CompilerOptions | MinimalResolutionCacheHost,
+        scriptSnapshot: IScriptSnapshot,
+        version: string,
+        scriptKind?: ScriptKind,
+        languageVersionOrOptions?: CreateSourceFileOptions | ScriptTarget,
+    ): SourceFile {
         const path = toPath(fileName, currentDirectory, getCanonicalFileName);
         const key = getKeyForCompilationSettings(getCompilationSettings(compilationSettings));
         return updateDocumentWithKey(fileName, path, compilationSettings, key, scriptSnapshot, version, scriptKind, languageVersionOrOptions);
@@ -265,7 +279,10 @@ export function createDocumentRegistryInternal(useCaseSensitiveFileNames?: boole
 
     function getDocumentRegistryEntry(bucketEntry: BucketEntry, scriptKind: ScriptKind | undefined) {
         const entry = isDocumentRegistryEntry(bucketEntry) ? bucketEntry : bucketEntry.get(Debug.checkDefined(scriptKind, "If there are more than one scriptKind's for same document the scriptKind should be provided"));
-        Debug.assert(scriptKind === undefined || !entry || entry.sourceFile.scriptKind === scriptKind, `Script kind should match provided ScriptKind:${scriptKind} and sourceFile.scriptKind: ${entry?.sourceFile.scriptKind}, !entry: ${!entry}`);
+        Debug.assert(
+            scriptKind === undefined || !entry || entry.sourceFile.scriptKind === scriptKind,
+            `Script kind should match provided ScriptKind:${scriptKind} and sourceFile.scriptKind: ${entry?.sourceFile.scriptKind}, !entry: ${!entry}`,
+        );
         return entry;
     }
 

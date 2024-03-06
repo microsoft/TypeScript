@@ -471,7 +471,15 @@ function getSymbolDisplayPartsDocumentationAndSymbolKindWorker(
         displayParts.push(spacePart());
         displayParts.push(operatorPart(SyntaxKind.EqualsToken));
         displayParts.push(spacePart());
-        addRange(displayParts, typeToDisplayParts(typeChecker, location.parent && isConstTypeReference(location.parent) ? typeChecker.getTypeAtLocation(location.parent) : typeChecker.getDeclaredTypeOfSymbol(symbol), enclosingDeclaration, TypeFormatFlags.InTypeAlias));
+        addRange(
+            displayParts,
+            typeToDisplayParts(
+                typeChecker,
+                location.parent && isConstTypeReference(location.parent) ? typeChecker.getTypeAtLocation(location.parent) : typeChecker.getDeclaredTypeOfSymbol(symbol),
+                enclosingDeclaration,
+                TypeFormatFlags.InTypeAlias,
+            ),
+        );
     }
     if (symbolFlags & SymbolFlags.Enum) {
         prefixNextMeaning();
@@ -806,7 +814,13 @@ function getSymbolDisplayPartsDocumentationAndSymbolKindWorker(
             fullSymbolDisplayParts.push(punctuationPart(SyntaxKind.CloseBracketToken));
         }
         else {
-            fullSymbolDisplayParts = symbolToDisplayParts(typeChecker, symbolToDisplay, enclosingDeclaration || sourceFile, /*meaning*/ undefined, SymbolFormatFlags.WriteTypeParametersOrArguments | SymbolFormatFlags.UseOnlyExternalAliasing | SymbolFormatFlags.AllowAnyNodeKind);
+            fullSymbolDisplayParts = symbolToDisplayParts(
+                typeChecker,
+                symbolToDisplay,
+                enclosingDeclaration || sourceFile,
+                /*meaning*/ undefined,
+                SymbolFormatFlags.WriteTypeParametersOrArguments | SymbolFormatFlags.UseOnlyExternalAliasing | SymbolFormatFlags.AllowAnyNodeKind,
+            );
         }
         addRange(displayParts, fullSymbolDisplayParts);
         if (symbol.flags & SymbolFlags.Optional) {

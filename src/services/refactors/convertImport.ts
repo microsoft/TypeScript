@@ -267,7 +267,10 @@ export function doChangeNamedToNamespaceOrDefault(sourceFile: SourceFile, progra
             : factory.createNamespaceImport(factory.createIdentifier(namespaceImportName)),
     );
     if (neededNamedImports.size) {
-        const newNamedImports: ImportSpecifier[] = arrayFrom(neededNamedImports.values(), element => factory.createImportSpecifier(element.isTypeOnly, element.propertyName && factory.createIdentifier(element.propertyName.text), factory.createIdentifier(element.name.text)));
+        const newNamedImports: ImportSpecifier[] = arrayFrom(
+            neededNamedImports.values(),
+            element => factory.createImportSpecifier(element.isTypeOnly, element.propertyName && factory.createIdentifier(element.propertyName.text), factory.createIdentifier(element.name.text)),
+        );
         changes.insertNodeAfter(sourceFile, toConvert.parent.parent, updateImport(importDecl, /*defaultImportName*/ undefined, newNamedImports));
     }
 }
@@ -280,5 +283,10 @@ function isExportEqualsModule(moduleSpecifier: Expression, checker: TypeChecker)
 }
 
 function updateImport(old: ImportDeclaration, defaultImportName: Identifier | undefined, elements: readonly ImportSpecifier[] | undefined): ImportDeclaration {
-    return factory.createImportDeclaration(/*modifiers*/ undefined, factory.createImportClause(/*isTypeOnly*/ false, defaultImportName, elements && elements.length ? factory.createNamedImports(elements) : undefined), old.moduleSpecifier, /*attributes*/ undefined);
+    return factory.createImportDeclaration(
+        /*modifiers*/ undefined,
+        factory.createImportClause(/*isTypeOnly*/ false, defaultImportName, elements && elements.length ? factory.createNamedImports(elements) : undefined),
+        old.moduleSpecifier,
+        /*attributes*/ undefined,
+    );
 }

@@ -278,7 +278,11 @@ function updateFieldDeclaration(changeTracker: textChanges.ChangeTracker, file: 
         updatePropertyAssignmentDeclaration(changeTracker, file, declaration, fieldName);
     }
     else {
-        changeTracker.replaceNode(file, declaration, factory.updateParameterDeclaration(declaration, modifiers, declaration.dotDotDotToken, cast(fieldName, isIdentifier), declaration.questionToken, declaration.type, declaration.initializer));
+        changeTracker.replaceNode(
+            file,
+            declaration,
+            factory.updateParameterDeclaration(declaration, modifiers, declaration.dotDotDotToken, cast(fieldName, isIdentifier), declaration.questionToken, declaration.type, declaration.initializer),
+        );
     }
 }
 

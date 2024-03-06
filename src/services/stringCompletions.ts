@@ -282,7 +282,16 @@ function convertStringLiteralCompletions(
 }
 
 /** @internal */
-export function getStringLiteralCompletionDetails(name: string, sourceFile: SourceFile, position: number, contextToken: Node | undefined, program: Program, host: LanguageServiceHost, cancellationToken: CancellationToken, preferences: UserPreferences) {
+export function getStringLiteralCompletionDetails(
+    name: string,
+    sourceFile: SourceFile,
+    position: number,
+    contextToken: Node | undefined,
+    program: Program,
+    host: LanguageServiceHost,
+    cancellationToken: CancellationToken,
+    preferences: UserPreferences,
+) {
     if (!contextToken || !isStringLiteralLike(contextToken)) return undefined;
     const completions = getStringLiteralCompletionEntries(sourceFile, contextToken, position, program, host, preferences);
     return completions && stringLiteralCompletionDetails(name, contextToken, completions, sourceFile, program.getTypeChecker(), cancellationToken);
@@ -666,7 +675,15 @@ function getBaseDirectoriesFromRootDirs(rootDirs: string[], basePath: string, sc
     );
 }
 
-function getCompletionEntriesForDirectoryFragmentWithRootDirs(rootDirs: string[], fragment: string, scriptDirectory: string, extensionOptions: ExtensionOptions, compilerOptions: CompilerOptions, host: LanguageServiceHost, exclude: string): readonly NameAndKind[] {
+function getCompletionEntriesForDirectoryFragmentWithRootDirs(
+    rootDirs: string[],
+    fragment: string,
+    scriptDirectory: string,
+    extensionOptions: ExtensionOptions,
+    compilerOptions: CompilerOptions,
+    host: LanguageServiceHost,
+    exclude: string,
+): readonly NameAndKind[] {
     const basePath = compilerOptions.project || host.getCurrentDirectory();
     const ignoreCase = !(host.useCaseSensitiveFileNames && host.useCaseSensitiveFileNames());
     const baseDirectories = getBaseDirectoriesFromRootDirs(rootDirs, basePath, scriptDirectory, ignoreCase);

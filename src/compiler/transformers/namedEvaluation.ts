@@ -468,7 +468,12 @@ function transformNamedEvaluationOfExportAssignment(context: TransformationConte
  * Performs a shallow transformation of a `NamedEvaluation` node, such that a valid name will be assigned.
  * @internal
  */
-export function transformNamedEvaluation<T extends NamedEvaluation>(context: TransformationContext, node: T, ignoreEmptyStringLiteral?: boolean, assignedName?: string): Extract<NamedEvaluation, Pick<T, "kind" | keyof T & "operatorToken" | keyof T & "name">>;
+export function transformNamedEvaluation<T extends NamedEvaluation>(
+    context: TransformationContext,
+    node: T,
+    ignoreEmptyStringLiteral?: boolean,
+    assignedName?: string,
+): Extract<NamedEvaluation, Pick<T, "kind" | keyof T & "operatorToken" | keyof T & "name">>;
 export function transformNamedEvaluation(context: TransformationContext, node: NamedEvaluation, ignoreEmptyStringLiteral?: boolean, assignedName?: string) {
     switch (node.kind) {
         case SyntaxKind.PropertyAssignment:

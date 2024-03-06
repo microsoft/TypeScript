@@ -2273,7 +2273,15 @@ export function transformESDecorators(context: TransformationContext): (x: Sourc
     /**
      * Creates a `value`, `get`, or `set` method for a pseudo-{@link PropertyDescriptor} object created for a private element.
      */
-    function createDescriptorMethod(original: Node, name: PrivateIdentifier, modifiers: ModifiersArray | undefined, asteriskToken: AsteriskToken | undefined, kind: "value" | "get" | "set", parameters: readonly ParameterDeclaration[], body: Block | undefined) {
+    function createDescriptorMethod(
+        original: Node,
+        name: PrivateIdentifier,
+        modifiers: ModifiersArray | undefined,
+        asteriskToken: AsteriskToken | undefined,
+        kind: "value" | "get" | "set",
+        parameters: readonly ParameterDeclaration[],
+        body: Block | undefined,
+    ) {
         const func = factory.createFunctionExpression(
             modifiers,
             asteriskToken,

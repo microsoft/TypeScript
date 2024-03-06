@@ -253,7 +253,19 @@ function getNewStatementsAndRemoveFromOldFile(
     deleteMovedStatements(oldFile, toMove.ranges, changes);
     updateImportsInOtherFiles(changes, program, host, oldFile, usage.movedSymbols, targetFileName, quotePreference);
 
-    const imports = getTargetFileImportsAndAddExportInOldFile(oldFile, targetFileName, usage.oldImportsNeededByTargetFile, usage.targetFileImportsFromOldFile, changes, checker, program, host, useEsModuleSyntax, quotePreference, importAdder);
+    const imports = getTargetFileImportsAndAddExportInOldFile(
+        oldFile,
+        targetFileName,
+        usage.oldImportsNeededByTargetFile,
+        usage.targetFileImportsFromOldFile,
+        changes,
+        checker,
+        program,
+        host,
+        useEsModuleSyntax,
+        quotePreference,
+        importAdder,
+    );
     const body = addExports(oldFile, toMove.all, usage.oldFileImportsFromTargetFile, useEsModuleSyntax);
     if (typeof targetFile !== "string") {
         if (targetFile.statements.length > 0) {

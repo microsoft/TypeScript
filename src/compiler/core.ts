@@ -2644,7 +2644,14 @@ export function singleElementArray<T>(t: T | undefined): T[] | undefined {
 }
 
 /** @internal */
-export function enumerateInsertsAndDeletes<T, U>(newItems: readonly T[], oldItems: readonly U[], comparer: (a: T, b: U) => Comparison, inserted: (newItem: T) => void, deleted: (oldItem: U) => void, unchanged?: (oldItem: U, newItem: T) => void) {
+export function enumerateInsertsAndDeletes<T, U>(
+    newItems: readonly T[],
+    oldItems: readonly U[],
+    comparer: (a: T, b: U) => Comparison,
+    inserted: (newItem: T) => void,
+    deleted: (oldItem: U) => void,
+    unchanged?: (oldItem: U, newItem: T) => void,
+) {
     unchanged = unchanged || noop;
     let newIndex = 0;
     let oldIndex = 0;

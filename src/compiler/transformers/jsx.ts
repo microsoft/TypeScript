@@ -468,7 +468,13 @@ export function transformJsx(context: TransformationContext): (x: SourceFile | B
     }
 
     function transformJsxAttributesToProps(attrs: readonly (JsxSpreadAttribute | JsxAttribute)[], children?: PropertyAssignment) {
-        const props = flatten(spanMap(attrs, isJsxSpreadAttribute, (attrs, isSpread) => flatten(map(attrs, attr => isSpread ? transformJsxSpreadAttributeToProps(attr as JsxSpreadAttribute) : transformJsxAttributeToObjectLiteralElement(attr as JsxAttribute)))));
+        const props = flatten(
+            spanMap(
+                attrs,
+                isJsxSpreadAttribute,
+                (attrs, isSpread) => flatten(map(attrs, attr => isSpread ? transformJsxSpreadAttributeToProps(attr as JsxSpreadAttribute) : transformJsxAttributeToObjectLiteralElement(attr as JsxAttribute))),
+            ),
+        );
         if (children) {
             props.push(children);
         }

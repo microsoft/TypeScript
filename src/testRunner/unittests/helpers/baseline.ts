@@ -142,7 +142,10 @@ export type ReadableProgramBuildInfoRoot =
     | [original: ts.ProgramBuildInfoFileId, readable: string]
     | [original: ts.ProgramBuildInfoRootStartEnd, readable: readonly string[]];
 export type ReadableProgramMultiFileEmitBuildInfo =
-    & Omit<ts.ProgramMultiFileEmitBuildInfo, "fileIdsList" | "fileInfos" | "root" | "referencedMap" | "exportedModulesMap" | "semanticDiagnosticsPerFile" | "emitDiagnosticsPerFile" | "affectedFilesPendingEmit" | "changeFileSet" | "emitSignatures">
+    & Omit<
+        ts.ProgramMultiFileEmitBuildInfo,
+        "fileIdsList" | "fileInfos" | "root" | "referencedMap" | "exportedModulesMap" | "semanticDiagnosticsPerFile" | "emitDiagnosticsPerFile" | "affectedFilesPendingEmit" | "changeFileSet" | "emitSignatures"
+    >
     & {
         fileNamesList: readonly (readonly string[])[] | undefined;
         fileInfos: ts.MapLike<ReadableProgramBuildInfoFileInfo<ts.ProgramMultiFileEmitBuildInfoFileInfo>>;

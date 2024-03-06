@@ -377,7 +377,9 @@ export namespace Messages {
     export const cannotExtractRangeContainingConditionalBreakOrContinueStatements: DiagnosticMessage = createMessage("Cannot extract range containing conditional break or continue statements.");
     export const cannotExtractRangeContainingConditionalReturnStatement: DiagnosticMessage = createMessage("Cannot extract range containing conditional return statement.");
     export const cannotExtractRangeContainingLabeledBreakOrContinueStatementWithTargetOutsideOfTheRange: DiagnosticMessage = createMessage("Cannot extract range containing labeled break or continue with target outside of the range.");
-    export const cannotExtractRangeThatContainsWritesToReferencesLocatedOutsideOfTheTargetRangeInGenerators: DiagnosticMessage = createMessage("Cannot extract range containing writes to references located outside of the target range in generators.");
+    export const cannotExtractRangeThatContainsWritesToReferencesLocatedOutsideOfTheTargetRangeInGenerators: DiagnosticMessage = createMessage(
+        "Cannot extract range containing writes to references located outside of the target range in generators.",
+    );
     export const typeWillNotBeVisibleInTheNewScope = createMessage("Type will not visible in the new scope.");
     export const functionWillNotBeVisibleInTheNewScope = createMessage("Function will not visible in the new scope.");
     export const cannotExtractIdentifier = createMessage("Select more than a single identifier.");
@@ -1365,9 +1367,10 @@ function extractConstantInScope(
 
     // Make a unique name for the extracted variable
     const file = scope.getSourceFile();
-    const localNameText = isPropertyAccessExpression(node) && !isClassLike(scope) && !checker.resolveName(node.name.text, node, SymbolFlags.Value, /*excludeGlobals*/ false) && !isPrivateIdentifier(node.name) && !identifierToKeywordKind(node.name)
-        ? node.name.text
-        : getUniqueName(isClassLike(scope) ? "newProperty" : "newLocal", file);
+    const localNameText =
+        isPropertyAccessExpression(node) && !isClassLike(scope) && !checker.resolveName(node.name.text, node, SymbolFlags.Value, /*excludeGlobals*/ false) && !isPrivateIdentifier(node.name) && !identifierToKeywordKind(node.name)
+            ? node.name.text
+            : getUniqueName(isClassLike(scope) ? "newProperty" : "newLocal", file);
     const isJS = isInJSFile(scope);
 
     let variableType = isJS || !checker.isContextSensitive(node)
@@ -1615,7 +1618,13 @@ function getCalledExpression(scope: Node, range: TargetRange, functionNameText: 
     }
 }
 
-function transformFunctionBody(body: Node, exposedVariableDeclarations: readonly VariableDeclaration[], writes: readonly UsageEntry[] | undefined, substitutions: ReadonlyMap<string, Node>, hasReturn: boolean): { body: Block; returnValueProperty: string | undefined; } {
+function transformFunctionBody(
+    body: Node,
+    exposedVariableDeclarations: readonly VariableDeclaration[],
+    writes: readonly UsageEntry[] | undefined,
+    substitutions: ReadonlyMap<string, Node>,
+    hasReturn: boolean,
+): { body: Block; returnValueProperty: string | undefined; } {
     const hasWritesOrVariableDeclarations = writes !== undefined || exposedVariableDeclarations.length > 0;
     if (isBlock(body) && !hasWritesOrVariableDeclarations && substitutions.size === 0) {
         // already block, no declarations or writes to propagate back, no substitutions - can use node as is

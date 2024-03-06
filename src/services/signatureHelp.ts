@@ -283,7 +283,12 @@ export function getArgumentInfoForCompletions(node: Node, position: number, sour
         : { invocation: info.invocation.node, argumentCount: info.argumentCount, argumentIndex: info.argumentIndex };
 }
 
-function getArgumentOrParameterListInfo(node: Node, position: number, sourceFile: SourceFile, checker: TypeChecker): { readonly list: Node; readonly argumentIndex: number; readonly argumentCount: number; readonly argumentsSpan: TextSpan; } | undefined {
+function getArgumentOrParameterListInfo(
+    node: Node,
+    position: number,
+    sourceFile: SourceFile,
+    checker: TypeChecker,
+): { readonly list: Node; readonly argumentIndex: number; readonly argumentCount: number; readonly argumentsSpan: TextSpan; } | undefined {
     const info = getArgumentOrParameterListAndIndex(node, sourceFile, checker);
     if (!info) return undefined;
     const { list, argumentIndex } = info;
@@ -738,7 +743,14 @@ function getTypeHelpItem(symbol: Symbol, typeParameters: readonly TypeParameter[
 
 const separatorDisplayParts: SymbolDisplayPart[] = [punctuationPart(SyntaxKind.CommaToken), spacePart()];
 
-function getSignatureHelpItem(candidateSignature: Signature, callTargetDisplayParts: readonly SymbolDisplayPart[], isTypeParameterList: boolean, checker: TypeChecker, enclosingDeclaration: Node, sourceFile: SourceFile): SignatureHelpItem[] {
+function getSignatureHelpItem(
+    candidateSignature: Signature,
+    callTargetDisplayParts: readonly SymbolDisplayPart[],
+    isTypeParameterList: boolean,
+    checker: TypeChecker,
+    enclosingDeclaration: Node,
+    sourceFile: SourceFile,
+): SignatureHelpItem[] {
     const infos = (isTypeParameterList ? itemInfoForTypeParameters : itemInfoForParameters)(candidateSignature, checker, enclosingDeclaration, sourceFile);
     return map(infos, ({ isVariadic, parameters, prefix, suffix }) => {
         const prefixDisplayParts = [...callTargetDisplayParts, ...prefix];

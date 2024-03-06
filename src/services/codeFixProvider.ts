@@ -33,7 +33,14 @@ export function createCodeFixActionWithoutFixAll(fixName: string, changes: FileT
 }
 
 /** @internal */
-export function createCodeFixAction(fixName: string, changes: FileTextChanges[], description: DiagnosticOrDiagnosticAndArguments, fixId: {}, fixAllDescription: DiagnosticOrDiagnosticAndArguments, command?: CodeActionCommand): CodeFixAction {
+export function createCodeFixAction(
+    fixName: string,
+    changes: FileTextChanges[],
+    description: DiagnosticOrDiagnosticAndArguments,
+    fixId: {},
+    fixAllDescription: DiagnosticOrDiagnosticAndArguments,
+    command?: CodeActionCommand,
+): CodeFixAction {
     return createCodeFixActionWorker(fixName, diagnosticToString(description), changes, fixId, diagnosticToString(fixAllDescription), command);
 }
 

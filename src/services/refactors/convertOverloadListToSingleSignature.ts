@@ -160,7 +160,9 @@ function getRefactorEditsToConvertOverloadsToOneSignature(context: RefactorConte
 
     return { renameFilename: undefined, renameLocation: undefined, edits };
 
-    function getNewParametersForCombinedSignature(signatureDeclarations: (MethodSignature | MethodDeclaration | CallSignatureDeclaration | ConstructorDeclaration | ConstructSignatureDeclaration | FunctionDeclaration)[]): NodeArray<ParameterDeclaration> {
+    function getNewParametersForCombinedSignature(
+        signatureDeclarations: (MethodSignature | MethodDeclaration | CallSignatureDeclaration | ConstructorDeclaration | ConstructSignatureDeclaration | FunctionDeclaration)[],
+    ): NodeArray<ParameterDeclaration> {
         const lastSig = signatureDeclarations[signatureDeclarations.length - 1];
         if (isFunctionLikeDeclaration(lastSig) && lastSig.body) {
             // Trim away implementation signature arguments (they should already be compatible with overloads, but are likely less precise to guarantee compatability with the overloads)

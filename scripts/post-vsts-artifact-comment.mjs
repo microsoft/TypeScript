@@ -63,7 +63,8 @@ main().catch(async e => {
             issue_number: +process.env.SOURCE_ISSUE,
             owner: "Microsoft",
             repo: "TypeScript",
-            body: `Hey @${process.env.REQUESTING_USER}, something went wrong when looking for the build artifact. ([You can check the log here](https://typescript.visualstudio.com/TypeScript/_build/index?buildId=${process.env.BUILD_BUILDID}&_a=summary)).`,
+            body:
+                `Hey @${process.env.REQUESTING_USER}, something went wrong when looking for the build artifact. ([You can check the log here](https://typescript.visualstudio.com/TypeScript/_build/index?buildId=${process.env.BUILD_BUILDID}&_a=summary)).`,
         });
     }
 });

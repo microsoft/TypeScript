@@ -183,7 +183,12 @@ var a = 4; // comment 7
         });
     }
     function createTestVariableDeclaration(name: string) {
-        return ts.factory.createVariableDeclaration(name, /*exclamationToken*/ undefined, /*type*/ undefined, ts.factory.createObjectLiteralExpression([ts.factory.createPropertyAssignment("p1", ts.factory.createNumericLiteral(1))], /*multiLine*/ true));
+        return ts.factory.createVariableDeclaration(
+            name,
+            /*exclamationToken*/ undefined,
+            /*type*/ undefined,
+            ts.factory.createObjectLiteralExpression([ts.factory.createPropertyAssignment("p1", ts.factory.createNumericLiteral(1))], /*multiLine*/ true),
+        );
     }
     function createTestClass() {
         return ts.factory.createClassDeclaration(
@@ -262,10 +267,16 @@ var a = 4; // comment 7`;
             changeTracker.replaceNode(sourceFile, findVariableStatementContaining("y", sourceFile), createTestClass(), { trailingTriviaOption: ts.textChanges.TrailingTriviaOption.Exclude, suffix: newLineCharacter });
         });
         runSingleFileTest("replaceNode4", /*placeOpenBraceOnNewLineForFunctions*/ true, text, /*validateNodes*/ true, (sourceFile, changeTracker) => {
-            changeTracker.replaceNode(sourceFile, findVariableStatementContaining("y", sourceFile), createTestClass(), { leadingTriviaOption: ts.textChanges.LeadingTriviaOption.Exclude, trailingTriviaOption: ts.textChanges.TrailingTriviaOption.Exclude });
+            changeTracker.replaceNode(sourceFile, findVariableStatementContaining("y", sourceFile), createTestClass(), {
+                leadingTriviaOption: ts.textChanges.LeadingTriviaOption.Exclude,
+                trailingTriviaOption: ts.textChanges.TrailingTriviaOption.Exclude,
+            });
         });
         runSingleFileTest("replaceNode5", /*placeOpenBraceOnNewLineForFunctions*/ true, text, /*validateNodes*/ true, (sourceFile, changeTracker) => {
-            changeTracker.replaceNode(sourceFile, findVariableStatementContaining("x", sourceFile), createTestClass(), { leadingTriviaOption: ts.textChanges.LeadingTriviaOption.Exclude, trailingTriviaOption: ts.textChanges.TrailingTriviaOption.Exclude });
+            changeTracker.replaceNode(sourceFile, findVariableStatementContaining("x", sourceFile), createTestClass(), {
+                leadingTriviaOption: ts.textChanges.LeadingTriviaOption.Exclude,
+                trailingTriviaOption: ts.textChanges.TrailingTriviaOption.Exclude,
+            });
         });
     }
     {
@@ -288,7 +299,10 @@ var a = 4; // comment 7`;
             });
         });
         runSingleFileTest("replaceNodeRange3", /*placeOpenBraceOnNewLineForFunctions*/ true, text, /*validateNodes*/ true, (sourceFile, changeTracker) => {
-            changeTracker.replaceNodeRange(sourceFile, findVariableStatementContaining("y", sourceFile), findVariableStatementContaining("z", sourceFile), createTestClass(), { trailingTriviaOption: ts.textChanges.TrailingTriviaOption.Exclude, suffix: newLineCharacter });
+            changeTracker.replaceNodeRange(sourceFile, findVariableStatementContaining("y", sourceFile), findVariableStatementContaining("z", sourceFile), createTestClass(), {
+                trailingTriviaOption: ts.textChanges.TrailingTriviaOption.Exclude,
+                suffix: newLineCharacter,
+            });
         });
         runSingleFileTest("replaceNodeRange4", /*placeOpenBraceOnNewLineForFunctions*/ true, text, /*validateNodes*/ true, (sourceFile, changeTracker) => {
             changeTracker.replaceNodeRange(sourceFile, findVariableStatementContaining("y", sourceFile), findVariableStatementContaining("z", sourceFile), createTestClass(), {

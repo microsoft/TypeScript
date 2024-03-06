@@ -1479,7 +1479,9 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
                             f => {
                                 if (this.typingWatchers!.isInvoked) return this.writeLog(`TypingWatchers already invoked`);
                                 if (!fileExtensionIs(f, Extension.Json)) return this.writeLog(`Ignoring files that are not *.json`);
-                                if (comparePaths(f, combinePaths(this.projectService.typingsInstaller.globalTypingsCacheLocation!, "package.json"), !this.useCaseSensitiveFileNames())) return this.writeLog(`Ignoring package.json change at global typings location`);
+                                if (comparePaths(f, combinePaths(this.projectService.typingsInstaller.globalTypingsCacheLocation!, "package.json"), !this.useCaseSensitiveFileNames())) {
+                                    return this.writeLog(`Ignoring package.json change at global typings location`);
+                                }
                                 this.onTypingInstallerWatchInvoke();
                             },
                             WatchDirectoryFlags.Recursive,

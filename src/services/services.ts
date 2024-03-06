@@ -1836,7 +1836,13 @@ export function createLanguageService(
             return getOrCreateSourceFileByPath(fileName, toPath(fileName, currentDirectory, getCanonicalFileName), languageVersionOrOptions, onError, shouldCreateNewSourceFile);
         }
 
-        function getOrCreateSourceFileByPath(fileName: string, path: Path, languageVersionOrOptions: ScriptTarget | CreateSourceFileOptions, _onError?: (message: string) => void, shouldCreateNewSourceFile?: boolean): SourceFile | undefined {
+        function getOrCreateSourceFileByPath(
+            fileName: string,
+            path: Path,
+            languageVersionOrOptions: ScriptTarget | CreateSourceFileOptions,
+            _onError?: (message: string) => void,
+            shouldCreateNewSourceFile?: boolean,
+        ): SourceFile | undefined {
             Debug.assert(compilerHost, "getOrCreateSourceFileByPath called after typical CompilerHost lifetime, check the callstack something with a reference to an old host.");
             // The program is asking for this file, check first if the host can locate it.
             // If the host can not locate the file, then it does not exist. return undefined
@@ -2047,7 +2053,15 @@ export function createLanguageService(
         );
     }
 
-    function getCompletionEntryDetails(fileName: string, position: number, name: string, formattingOptions: FormatCodeSettings | undefined, source: string | undefined, preferences: UserPreferences = emptyOptions, data?: CompletionEntryData): CompletionEntryDetails | undefined {
+    function getCompletionEntryDetails(
+        fileName: string,
+        position: number,
+        name: string,
+        formattingOptions: FormatCodeSettings | undefined,
+        source: string | undefined,
+        preferences: UserPreferences = emptyOptions,
+        data?: CompletionEntryData,
+    ): CompletionEntryDetails | undefined {
         synchronizeHostData();
         return Completions.getCompletionEntryDetails(
             program,
@@ -2477,7 +2491,10 @@ export function createLanguageService(
     function applyCodeActionCommand(action: CodeActionCommand | CodeActionCommand[], formatSettings?: FormatCodeSettings): Promise<ApplyCodeActionCommandResult | ApplyCodeActionCommandResult[]>;
     function applyCodeActionCommand(fileName: Path, action: CodeActionCommand): Promise<ApplyCodeActionCommandResult>;
     function applyCodeActionCommand(fileName: Path, action: CodeActionCommand[]): Promise<ApplyCodeActionCommandResult[]>;
-    function applyCodeActionCommand(fileName: Path | CodeActionCommand | CodeActionCommand[], actionOrFormatSettingsOrUndefined?: CodeActionCommand | CodeActionCommand[] | FormatCodeSettings): Promise<ApplyCodeActionCommandResult | ApplyCodeActionCommandResult[]> {
+    function applyCodeActionCommand(
+        fileName: Path | CodeActionCommand | CodeActionCommand[],
+        actionOrFormatSettingsOrUndefined?: CodeActionCommand | CodeActionCommand[] | FormatCodeSettings,
+    ): Promise<ApplyCodeActionCommandResult | ApplyCodeActionCommandResult[]> {
         const action = typeof fileName === "string" ? actionOrFormatSettingsOrUndefined as CodeActionCommand | CodeActionCommand[] : fileName as CodeActionCommand[];
         return isArray(action) ? Promise.all(action.map(a => applySingleCodeActionCommand(a))) : applySingleCodeActionCommand(action);
     }
@@ -3042,7 +3059,14 @@ export function createLanguageService(
         return SmartSelectionRange.getSmartSelectionRange(position, syntaxTreeCache.getCurrentSourceFile(fileName));
     }
 
-    function getApplicableRefactors(fileName: string, positionOrRange: number | TextRange, preferences: UserPreferences = emptyOptions, triggerReason: RefactorTriggerReason, kind: string, includeInteractiveActions?: boolean): ApplicableRefactorInfo[] {
+    function getApplicableRefactors(
+        fileName: string,
+        positionOrRange: number | TextRange,
+        preferences: UserPreferences = emptyOptions,
+        triggerReason: RefactorTriggerReason,
+        kind: string,
+        includeInteractiveActions?: boolean,
+    ): ApplicableRefactorInfo[] {
         synchronizeHostData();
         const file = getValidSourceFile(fileName);
         return refactor.getApplicableRefactors(getRefactorContext(file, positionOrRange, preferences, emptyOptions, triggerReason, kind), includeInteractiveActions);
@@ -3063,7 +3087,8 @@ export function createLanguageService(
                 extension === Extension.Ts && fileNameExtension === Extension.Dts ||
                 extension === Extension.Dts && startsWith(getBaseFileName(file.fileName), "lib.") && fileNameExtension === Extension.Dts
             );
-            return isValidSourceFile && (extension === fileNameExtension || (extension === Extension.Tsx && fileNameExtension === Extension.Ts || extension === Extension.Jsx && fileNameExtension === Extension.Js) && !toMoveContainsJsx) ? file.fileName : undefined;
+            return isValidSourceFile && (extension === fileNameExtension || (extension === Extension.Tsx && fileNameExtension === Extension.Ts || extension === Extension.Jsx && fileNameExtension === Extension.Js) && !toMoveContainsJsx)
+                ? file.fileName : undefined;
         });
 
         return { newFileName: createNewFileName(sourceFile, program, host, toMove), files };

@@ -3480,8 +3480,22 @@ function convertWatchOptionsFromJsonWorker(jsonOptions: any, basePath: string, e
 }
 
 function convertOptionsFromJson(optionsNameMap: Map<string, CommandLineOption>, jsonOptions: any, basePath: string, defaultOptions: undefined, diagnostics: DidYouMeanOptionsDiagnostics, errors: Diagnostic[]): WatchOptions | undefined;
-function convertOptionsFromJson(optionsNameMap: Map<string, CommandLineOption>, jsonOptions: any, basePath: string, defaultOptions: CompilerOptions | TypeAcquisition, diagnostics: DidYouMeanOptionsDiagnostics, errors: Diagnostic[]): CompilerOptions | TypeAcquisition;
-function convertOptionsFromJson(optionsNameMap: Map<string, CommandLineOption>, jsonOptions: any, basePath: string, defaultOptions: CompilerOptions | TypeAcquisition | WatchOptions | undefined, diagnostics: DidYouMeanOptionsDiagnostics, errors: Diagnostic[]) {
+function convertOptionsFromJson(
+    optionsNameMap: Map<string, CommandLineOption>,
+    jsonOptions: any,
+    basePath: string,
+    defaultOptions: CompilerOptions | TypeAcquisition,
+    diagnostics: DidYouMeanOptionsDiagnostics,
+    errors: Diagnostic[],
+): CompilerOptions | TypeAcquisition;
+function convertOptionsFromJson(
+    optionsNameMap: Map<string, CommandLineOption>,
+    jsonOptions: any,
+    basePath: string,
+    defaultOptions: CompilerOptions | TypeAcquisition | WatchOptions | undefined,
+    diagnostics: DidYouMeanOptionsDiagnostics,
+    errors: Diagnostic[],
+) {
     if (!jsonOptions) {
         return;
     }

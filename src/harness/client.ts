@@ -301,7 +301,15 @@ export class SessionClient implements LanguageService {
         };
     }
 
-    getCompletionEntryDetails(fileName: string, position: number, entryName: string, _options: FormatCodeOptions | FormatCodeSettings | undefined, source: string | undefined, _preferences: UserPreferences | undefined, data: unknown): CompletionEntryDetails {
+    getCompletionEntryDetails(
+        fileName: string,
+        position: number,
+        entryName: string,
+        _options: FormatCodeOptions | FormatCodeSettings | undefined,
+        source: string | undefined,
+        _preferences: UserPreferences | undefined,
+        data: unknown,
+    ): CompletionEntryDetails {
         const args: protocol.CompletionDetailsRequestArgs = { ...this.createFileLocationRequestArgs(fileName, position), entryNames: [{ name: entryName, source, data }] };
 
         const request = this.processRequest<protocol.CompletionDetailsRequest>(protocol.CommandTypes.CompletionDetailsFull, args);

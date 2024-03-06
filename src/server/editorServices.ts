@@ -3182,7 +3182,13 @@ export class ProjectService {
         }
     }
 
-    private getOrCreateScriptInfoNotOpenedByClientForNormalizedPath(fileName: NormalizedPath, currentDirectory: string, scriptKind: ScriptKind | undefined, hasMixedContent: boolean | undefined, hostToQueryFileExistsOn: DirectoryStructureHost | undefined) {
+    private getOrCreateScriptInfoNotOpenedByClientForNormalizedPath(
+        fileName: NormalizedPath,
+        currentDirectory: string,
+        scriptKind: ScriptKind | undefined,
+        hasMixedContent: boolean | undefined,
+        hostToQueryFileExistsOn: DirectoryStructureHost | undefined,
+    ) {
         if (isRootedDiskPath(fileName) || isDynamicFileName(fileName)) {
             return this.getOrCreateScriptInfoWorker(fileName, currentDirectory, /*openedByClient*/ false, /*fileContent*/ undefined, scriptKind, hasMixedContent, hostToQueryFileExistsOn);
         }
@@ -3207,7 +3213,15 @@ export class ProjectService {
         return this.getOrCreateScriptInfoWorker(fileName, this.currentDirectory, openedByClient, fileContent, scriptKind, hasMixedContent, hostToQueryFileExistsOn);
     }
 
-    private getOrCreateScriptInfoWorker(fileName: NormalizedPath, currentDirectory: string, openedByClient: boolean, fileContent?: string, scriptKind?: ScriptKind, hasMixedContent?: boolean, hostToQueryFileExistsOn?: { fileExists(path: string): boolean; }) {
+    private getOrCreateScriptInfoWorker(
+        fileName: NormalizedPath,
+        currentDirectory: string,
+        openedByClient: boolean,
+        fileContent?: string,
+        scriptKind?: ScriptKind,
+        hasMixedContent?: boolean,
+        hostToQueryFileExistsOn?: { fileExists(path: string): boolean; },
+    ) {
         Debug.assert(fileContent === undefined || openedByClient, "ScriptInfo needs to be opened by client to be able to set its user defined content");
         const path = normalizedPathToPath(fileName, currentDirectory, this.toCanonicalFileName);
         let info = this.getScriptInfoForPath(path);
@@ -3743,7 +3757,9 @@ export class ProjectService {
                     return projectContainsOriginalInfo(child) ? child : undefined;
                 },
                 ProjectReferenceProjectLoadKind.FindCreateLoad,
-                `Creating project referenced in solution ${configuredProject.projectName} to find possible configured project for original file: ${originalFileInfo.fileName}${location !== originalLocation ? " for location: " + location.fileName : ""}`,
+                `Creating project referenced in solution ${configuredProject.projectName} to find possible configured project for original file: ${originalFileInfo.fileName}${
+                    location !== originalLocation ? " for location: " + location.fileName : ""
+                }`,
             );
             if (!configuredProject) return undefined;
             if (configuredProject === project) return originalLocation;

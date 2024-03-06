@@ -542,7 +542,11 @@ export namespace Compiler {
 
     export const diagnosticSummaryMarker = "__diagnosticSummary";
     export const globalErrorsMarker = "__globalErrors";
-    export function* iterateErrorBaseline(inputFiles: readonly TestFile[], diagnostics: readonly ts.Diagnostic[], options?: { pretty?: boolean; caseSensitive?: boolean; currentDirectory?: string; }): IterableIterator<[string, string, number]> {
+    export function* iterateErrorBaseline(
+        inputFiles: readonly TestFile[],
+        diagnostics: readonly ts.Diagnostic[],
+        options?: { pretty?: boolean; caseSensitive?: boolean; currentDirectory?: string; },
+    ): IterableIterator<[string, string, number]> {
         diagnostics = ts.sort(diagnostics, ts.compareDiagnostics);
         let outputLines = "";
         // Count up all errors that were found in files other than lib.d.ts so we don't miss any
@@ -616,7 +620,8 @@ export namespace Compiler {
             // Filter down to the errors in the file
             const fileErrors = diagnostics.filter((e): e is ts.DiagnosticWithLocation => {
                 const errFn = e.file;
-                return !!errFn && ts.comparePaths(Utils.removeTestPathPrefixes(errFn.fileName), Utils.removeTestPathPrefixes(inputFile.unitName), options && options.currentDirectory || "", !(options && options.caseSensitive)) === ts.Comparison.EqualTo;
+                return !!errFn &&
+                    ts.comparePaths(Utils.removeTestPathPrefixes(errFn.fileName), Utils.removeTestPathPrefixes(inputFile.unitName), options && options.currentDirectory || "", !(options && options.caseSensitive)) === ts.Comparison.EqualTo;
             });
 
             // Header
@@ -1463,7 +1468,13 @@ export namespace Baseline {
         writeComparison(comparison.expected, comparison.actual, relativeFileName, actualFileName, opts);
     }
 
-    export function runMultifileBaseline(relativeFileBase: string, extension: string, generateContent: () => IterableIterator<[string, string, number]> | IterableIterator<[string, string]> | null, opts?: BaselineOptions, referencedExtensions?: string[]): void {
+    export function runMultifileBaseline(
+        relativeFileBase: string,
+        extension: string,
+        generateContent: () => IterableIterator<[string, string, number]> | IterableIterator<[string, string]> | null,
+        opts?: BaselineOptions,
+        referencedExtensions?: string[],
+    ): void {
         const gen = generateContent();
         const writtenFiles = new Map<string, true>();
         const errors: Error[] = [];
@@ -1508,7 +1519,9 @@ export namespace Baseline {
         if (errors.length || missing.length) {
             let errorMsg = "";
             if (errors.length) {
-                errorMsg += `The baseline for ${relativeFileBase} in ${errors.length} files has changed:${"\n    " + errors.slice(0, 5).map(e => e.message).join("\n    ") + (errors.length > 5 ? "\n" + `    and ${errors.length - 5} more` : "")}`;
+                errorMsg += `The baseline for ${relativeFileBase} in ${errors.length} files has changed:${
+                    "\n    " + errors.slice(0, 5).map(e => e.message).join("\n    ") + (errors.length > 5 ? "\n" + `    and ${errors.length - 5} more` : "")
+                }`;
             }
             if (errors.length && missing.length) {
                 errorMsg += "\n";

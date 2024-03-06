@@ -422,7 +422,10 @@ function convertExportsPropertyAssignment({ left, right, parent }: BinaryExpress
     }
     else {
         // `exports.f = function g() {}` -> `export const f = function g() {}` -- just replace `exports.` with `export const `
-        changes.replaceNodeRangeWithNodes(sourceFile, left.expression, findChildOfKind(left, SyntaxKind.DotToken, sourceFile)!, [factory.createToken(SyntaxKind.ExportKeyword), factory.createToken(SyntaxKind.ConstKeyword)], { joiner: " ", suffix: " " });
+        changes.replaceNodeRangeWithNodes(sourceFile, left.expression, findChildOfKind(left, SyntaxKind.DotToken, sourceFile)!, [factory.createToken(SyntaxKind.ExportKeyword), factory.createToken(SyntaxKind.ConstKeyword)], {
+            joiner: " ",
+            suffix: " ",
+        });
     }
 }
 
@@ -565,7 +568,12 @@ function convertSingleIdentifierImport(name: Identifier, moduleSpecifier: String
     }
 
     const namedBindings = namedBindingsNames.size === 0 ? undefined
-        : arrayFrom(mapIterator(namedBindingsNames.entries(), ([propertyName, idName]) => factory.createImportSpecifier(/*isTypeOnly*/ false, propertyName === idName ? undefined : factory.createIdentifier(propertyName), factory.createIdentifier(idName))));
+        : arrayFrom(
+            mapIterator(
+                namedBindingsNames.entries(),
+                ([propertyName, idName]) => factory.createImportSpecifier(/*isTypeOnly*/ false, propertyName === idName ? undefined : factory.createIdentifier(propertyName), factory.createIdentifier(idName)),
+            ),
+        );
     if (!namedBindings) {
         // If it was unused, ensure that we at least import *something*.
         needDefaultImport = true;
@@ -629,7 +637,12 @@ function isFreeIdentifier(node: Identifier): boolean {
 
 // Node helpers
 
-function functionExpressionToDeclaration(name: string | undefined, additionalModifiers: readonly Modifier[], fn: FunctionExpression | ArrowFunction | MethodDeclaration, useSitesToUnqualify: Map<Node, Node> | undefined): FunctionDeclaration {
+function functionExpressionToDeclaration(
+    name: string | undefined,
+    additionalModifiers: readonly Modifier[],
+    fn: FunctionExpression | ArrowFunction | MethodDeclaration,
+    useSitesToUnqualify: Map<Node, Node> | undefined,
+): FunctionDeclaration {
     return factory.createFunctionDeclaration(
         concatenate(additionalModifiers, getSynthesizedDeepClones(fn.modifiers)),
         getSynthesizedDeepClone(fn.asteriskToken),

@@ -631,7 +631,16 @@ export function createDefinitionInfo(declaration: Declaration, checker: TypeChec
 }
 
 /** Creates a DefinitionInfo directly from the name of a declaration. */
-function createDefinitionInfoFromName(checker: TypeChecker, declaration: Declaration, symbolKind: ScriptElementKind, symbolName: string, containerName: string, unverified?: boolean, failedAliasResolution?: boolean, textSpan?: TextSpan): DefinitionInfo {
+function createDefinitionInfoFromName(
+    checker: TypeChecker,
+    declaration: Declaration,
+    symbolKind: ScriptElementKind,
+    symbolName: string,
+    containerName: string,
+    unverified?: boolean,
+    failedAliasResolution?: boolean,
+    textSpan?: TextSpan,
+): DefinitionInfo {
     const sourceFile = declaration.getSourceFile();
     if (!textSpan) {
         const name = getNameOfDeclaration(declaration) || declaration;

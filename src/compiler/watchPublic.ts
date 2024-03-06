@@ -221,7 +221,14 @@ export interface ProgramHost<T extends BuilderProgram> {
      *
      * If provided, used to resolve the module names, otherwise typescript's default module resolution
      */
-    resolveModuleNames?(moduleNames: string[], containingFile: string, reusedNames: string[] | undefined, redirectedReference: ResolvedProjectReference | undefined, options: CompilerOptions, containingSourceFile?: SourceFile): (ResolvedModule | undefined)[];
+    resolveModuleNames?(
+        moduleNames: string[],
+        containingFile: string,
+        reusedNames: string[] | undefined,
+        redirectedReference: ResolvedProjectReference | undefined,
+        options: CompilerOptions,
+        containingSourceFile?: SourceFile,
+    ): (ResolvedModule | undefined)[];
     /**
      * @deprecated supply resolveTypeReferenceDirectiveReferences instead for resolution that can handle newer resolution modes like nodenext
      *
@@ -1192,7 +1199,12 @@ export function createWatchProgram<T extends BuilderProgram>(host: WatchCompiler
         );
     }
 
-    function updateExtendedConfigFilesWatches(forProjectPath: Path, options: CompilerOptions | undefined, watchOptions: WatchOptions | undefined, watchType: WatchTypeRegistry["ExtendedConfigFile"] | WatchTypeRegistry["ExtendedConfigOfReferencedProject"]) {
+    function updateExtendedConfigFilesWatches(
+        forProjectPath: Path,
+        options: CompilerOptions | undefined,
+        watchOptions: WatchOptions | undefined,
+        watchType: WatchTypeRegistry["ExtendedConfigFile"] | WatchTypeRegistry["ExtendedConfigOfReferencedProject"],
+    ) {
         updateSharedExtendedConfigFileWatcher(
             forProjectPath,
             options,

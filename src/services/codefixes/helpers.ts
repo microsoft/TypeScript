@@ -311,14 +311,27 @@ export function addNewNodeForMemberSymbol(
                 }
                 else {
                     Debug.assert(declarations.length === signatures.length, "Declarations and signatures should match count");
-                    addClassElement(createMethodImplementingSignatures(checker, context, enclosingDeclaration, signatures, createName(declarationName), optional && !!(preserveOptional & PreserveOptionalFlags.Method), modifiers, quotePreference, body));
+                    addClassElement(
+                        createMethodImplementingSignatures(checker, context, enclosingDeclaration, signatures, createName(declarationName), optional && !!(preserveOptional & PreserveOptionalFlags.Method), modifiers, quotePreference, body),
+                    );
                 }
             }
             break;
     }
 
     function outputMethod(quotePreference: QuotePreference, signature: Signature, modifiers: NodeArray<Modifier> | undefined, name: PropertyName, body?: Block): void {
-        const method = createSignatureDeclarationFromSignature(SyntaxKind.MethodDeclaration, context, quotePreference, signature, body, name, modifiers, optional && !!(preserveOptional & PreserveOptionalFlags.Method), enclosingDeclaration, importAdder) as MethodDeclaration;
+        const method = createSignatureDeclarationFromSignature(
+            SyntaxKind.MethodDeclaration,
+            context,
+            quotePreference,
+            signature,
+            body,
+            name,
+            modifiers,
+            optional && !!(preserveOptional & PreserveOptionalFlags.Method),
+            enclosingDeclaration,
+            importAdder,
+        ) as MethodDeclaration;
         if (method) addClassElement(method);
     }
 
@@ -392,7 +405,11 @@ export function createSignatureDeclarationFromSignature(
         | NodeBuilderFlags.SuppressAnyReturnType
         | NodeBuilderFlags.AllowEmptyTuple
         | (quotePreference === QuotePreference.Single ? NodeBuilderFlags.UseSingleQuotesForStringLiteralType : NodeBuilderFlags.None);
-    const signatureDeclaration = checker.signatureToSignatureDeclaration(signature, kind, enclosingDeclaration, flags, getNoopSymbolTrackerWithResolver(context)) as ArrowFunction | FunctionExpression | MethodDeclaration | FunctionDeclaration;
+    const signatureDeclaration = checker.signatureToSignatureDeclaration(signature, kind, enclosingDeclaration, flags, getNoopSymbolTrackerWithResolver(context)) as
+        | ArrowFunction
+        | FunctionExpression
+        | MethodDeclaration
+        | FunctionDeclaration;
     if (!signatureDeclaration) {
         return undefined;
     }

@@ -1015,7 +1015,8 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
             }
             // We create a return control flow graph for IIFEs and constructors. For constructors
             // we use the return control flow graph in strict property initialization checks.
-            currentReturnTarget = isImmediatelyInvoked || node.kind === SyntaxKind.Constructor || (isInJSFile(node) && (node.kind === SyntaxKind.FunctionDeclaration || node.kind === SyntaxKind.FunctionExpression)) ? createBranchLabel() : undefined;
+            currentReturnTarget = isImmediatelyInvoked || node.kind === SyntaxKind.Constructor || (isInJSFile(node) && (node.kind === SyntaxKind.FunctionDeclaration || node.kind === SyntaxKind.FunctionExpression)) ? createBranchLabel()
+                : undefined;
             currentExceptionTarget = undefined;
             currentBreakTarget = undefined;
             currentContinueTarget = undefined;
@@ -2886,7 +2887,11 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
                 // as other properties in the object literal.  So we use SymbolFlags.PropertyExcludes
                 // so that it will conflict with any other object literal members with the same
                 // name.
-                return bindPropertyOrMethodOrAccessor(node as Declaration, SymbolFlags.Method | ((node as MethodDeclaration).questionToken ? SymbolFlags.Optional : SymbolFlags.None), isObjectLiteralMethod(node) ? SymbolFlags.PropertyExcludes : SymbolFlags.MethodExcludes);
+                return bindPropertyOrMethodOrAccessor(
+                    node as Declaration,
+                    SymbolFlags.Method | ((node as MethodDeclaration).questionToken ? SymbolFlags.Optional : SymbolFlags.None),
+                    isObjectLiteralMethod(node) ? SymbolFlags.PropertyExcludes : SymbolFlags.MethodExcludes,
+                );
             case SyntaxKind.FunctionDeclaration:
                 return bindFunctionDeclaration(node as FunctionDeclaration);
             case SyntaxKind.Constructor:

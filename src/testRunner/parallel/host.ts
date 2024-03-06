@@ -421,7 +421,11 @@ export function start() {
                 console.log(`${prefix}. Unprofiled tests including ${unknownValue} will be run first.`);
             }
             else {
-                console.log(`${prefix} with approximate total ${perfData ? "time" : "file sizes"} of ${perfData ? ms(batchSize) : `${Math.floor(batchSize)} bytes`} in each group. (${(scheduledTotal / totalCost * 100).toFixed(1)}% of total tests batched)`);
+                console.log(
+                    `${prefix} with approximate total ${perfData ? "time" : "file sizes"} of ${perfData ? ms(batchSize) : `${Math.floor(batchSize)} bytes`} in each group. (${
+                        (scheduledTotal / totalCost * 100).toFixed(1)
+                    }% of total tests batched)`,
+                );
             }
             for (const worker of workers) {
                 const payload = batches.pop();

@@ -492,7 +492,15 @@ function getInfo(importingSourceFileName: string, host: ModuleSpecifierResolutio
 }
 
 function getLocalModuleSpecifier(moduleFileName: string, info: Info, compilerOptions: CompilerOptions, host: ModuleSpecifierResolutionHost, importMode: ResolutionMode, preferences: ModuleSpecifierPreferences): string;
-function getLocalModuleSpecifier(moduleFileName: string, info: Info, compilerOptions: CompilerOptions, host: ModuleSpecifierResolutionHost, importMode: ResolutionMode, preferences: ModuleSpecifierPreferences, pathsOnly?: boolean): string | undefined;
+function getLocalModuleSpecifier(
+    moduleFileName: string,
+    info: Info,
+    compilerOptions: CompilerOptions,
+    host: ModuleSpecifierResolutionHost,
+    importMode: ResolutionMode,
+    preferences: ModuleSpecifierPreferences,
+    pathsOnly?: boolean,
+): string | undefined;
 function getLocalModuleSpecifier(
     moduleFileName: string,
     info: Info,
@@ -961,7 +969,15 @@ function tryGetModuleNameFromExportsOrImports(
     return undefined;
 }
 
-function tryGetModuleNameFromExports(options: CompilerOptions, host: ModuleSpecifierResolutionHost, targetFilePath: string, packageDirectory: string, packageName: string, exports: unknown, conditions: string[]): { moduleFileToTry: string; } | undefined {
+function tryGetModuleNameFromExports(
+    options: CompilerOptions,
+    host: ModuleSpecifierResolutionHost,
+    targetFilePath: string,
+    packageDirectory: string,
+    packageName: string,
+    exports: unknown,
+    conditions: string[],
+): { moduleFileToTry: string; } | undefined {
     if (typeof exports === "object" && exports !== null && !Array.isArray(exports) && allKeysStartWithDot(exports as MapLike<unknown>)) { // eslint-disable-line no-null/no-null
         // sub-mappings
         // 3 cases:
@@ -1008,7 +1024,14 @@ function tryGetModuleNameFromPackageJsonImports(moduleFileName: string, sourceDi
     })?.moduleFileToTry;
 }
 
-function tryGetModuleNameFromRootDirs(rootDirs: readonly string[], moduleFileName: string, sourceDirectory: string, getCanonicalFileName: (file: string) => string, allowedEndings: readonly ModuleSpecifierEnding[], compilerOptions: CompilerOptions): string | undefined {
+function tryGetModuleNameFromRootDirs(
+    rootDirs: readonly string[],
+    moduleFileName: string,
+    sourceDirectory: string,
+    getCanonicalFileName: (file: string) => string,
+    allowedEndings: readonly ModuleSpecifierEnding[],
+    compilerOptions: CompilerOptions,
+): string | undefined {
     const normalizedTargetPaths = getPathsRelativeToRootDirs(moduleFileName, rootDirs, getCanonicalFileName);
     if (normalizedTargetPaths === undefined) {
         return undefined;

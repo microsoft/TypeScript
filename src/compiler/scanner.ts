@@ -777,7 +777,15 @@ export function scanShebangTrivia(text: string, pos: number) {
  * @returns If "reduce" is true, the accumulated value. If "reduce" is false, the first truthy
  *      return value of the callback.
  */
-function iterateCommentRanges<T, U>(reduce: boolean, text: string, pos: number, trailing: boolean, cb: (pos: number, end: number, kind: CommentKind, hasTrailingNewLine: boolean, state: T, memo: U | undefined) => U, state: T, initial?: U): U | undefined {
+function iterateCommentRanges<T, U>(
+    reduce: boolean,
+    text: string,
+    pos: number,
+    trailing: boolean,
+    cb: (pos: number, end: number, kind: CommentKind, hasTrailingNewLine: boolean, state: T, memo: U | undefined) => U,
+    state: T,
+    initial?: U,
+): U | undefined {
     let pendingPos!: number;
     let pendingEnd!: number;
     let pendingKind!: CommentKind;

@@ -3346,7 +3346,13 @@ export function copyTrailingAsLeadingComments(sourceNode: Node, targetNode: Node
     forEachTrailingCommentRange(sourceFile.text, sourceNode.pos, getAddCommentsFunction(targetNode, sourceFile, commentKind, hasTrailingNewLine, addSyntheticLeadingComment));
 }
 
-function getAddCommentsFunction(targetNode: Node, sourceFile: SourceFile, commentKind: CommentKind | undefined, hasTrailingNewLine: boolean | undefined, cb: (node: Node, kind: CommentKind, text: string, hasTrailingNewLine?: boolean) => void) {
+function getAddCommentsFunction(
+    targetNode: Node,
+    sourceFile: SourceFile,
+    commentKind: CommentKind | undefined,
+    hasTrailingNewLine: boolean | undefined,
+    cb: (node: Node, kind: CommentKind, text: string, hasTrailingNewLine?: boolean) => void,
+) {
     return (pos: number, end: number, kind: CommentKind, htnl: boolean) => {
         if (kind === SyntaxKind.MultiLineCommentTrivia) {
             // Remove leading /*

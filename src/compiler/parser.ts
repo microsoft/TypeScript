@@ -508,7 +508,11 @@ const forEachChildTable: ForEachChildTable = {
             visitNode(cbNode, node.default) ||
             visitNode(cbNode, node.expression);
     },
-    [SyntaxKind.ShorthandPropertyAssignment]: function forEachChildInShorthandPropertyAssignment<T>(node: ShorthandPropertyAssignment, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
+    [SyntaxKind.ShorthandPropertyAssignment]: function forEachChildInShorthandPropertyAssignment<T>(
+        node: ShorthandPropertyAssignment,
+        cbNode: (node: Node) => T | undefined,
+        cbNodes?: (nodes: NodeArray<Node>) => T | undefined,
+    ): T | undefined {
         return visitNodes(cbNode, cbNodes, node.modifiers) ||
             visitNode(cbNode, node.name) ||
             visitNode(cbNode, node.questionToken) ||
@@ -650,7 +654,11 @@ const forEachChildTable: ForEachChildTable = {
             visitNode(cbNode, node.equalsGreaterThanToken) ||
             visitNode(cbNode, node.body);
     },
-    [SyntaxKind.ClassStaticBlockDeclaration]: function forEachChildInClassStaticBlockDeclaration<T>(node: ClassStaticBlockDeclaration, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
+    [SyntaxKind.ClassStaticBlockDeclaration]: function forEachChildInClassStaticBlockDeclaration<T>(
+        node: ClassStaticBlockDeclaration,
+        cbNode: (node: Node) => T | undefined,
+        cbNodes?: (nodes: NodeArray<Node>) => T | undefined,
+    ): T | undefined {
         return visitNodes(cbNode, cbNodes, node.modifiers) ||
             visitNode(cbNode, node.body);
     },
@@ -693,7 +701,11 @@ const forEachChildTable: ForEachChildTable = {
             visitNode(cbNode, node.qualifier) ||
             visitNodes(cbNode, cbNodes, node.typeArguments);
     },
-    [SyntaxKind.ImportTypeAssertionContainer]: function forEachChildInImportTypeAssertionContainer<T>(node: ImportTypeAssertionContainer, cbNode: (node: Node) => T | undefined, _cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
+    [SyntaxKind.ImportTypeAssertionContainer]: function forEachChildInImportTypeAssertionContainer<T>(
+        node: ImportTypeAssertionContainer,
+        cbNode: (node: Node) => T | undefined,
+        _cbNodes?: (nodes: NodeArray<Node>) => T | undefined,
+    ): T | undefined {
         return visitNode(cbNode, node.assertClause);
     },
     [SyntaxKind.ParenthesizedType]: forEachChildInParenthesizedTypeOrTypeOperator,
@@ -987,7 +999,11 @@ const forEachChildTable: ForEachChildTable = {
     [SyntaxKind.HeritageClause]: function forEachChildInHeritageClause<T>(node: HeritageClause, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
         return visitNodes(cbNode, cbNodes, node.types);
     },
-    [SyntaxKind.ExpressionWithTypeArguments]: function forEachChildInExpressionWithTypeArguments<T>(node: ExpressionWithTypeArguments, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
+    [SyntaxKind.ExpressionWithTypeArguments]: function forEachChildInExpressionWithTypeArguments<T>(
+        node: ExpressionWithTypeArguments,
+        cbNode: (node: Node) => T | undefined,
+        cbNodes?: (nodes: NodeArray<Node>) => T | undefined,
+    ): T | undefined {
         return visitNode(cbNode, node.expression) ||
             visitNodes(cbNode, cbNodes, node.typeArguments);
     },
@@ -1203,7 +1219,11 @@ function forEachChildInJSDocParameterOrPropertyTag<T>(node: JSDocParameterTag | 
         (typeof node.comment === "string" ? undefined : visitNodes(cbNode, cbNodes, node.comment));
 }
 
-function forEachChildInJSDocTypeLikeTag<T>(node: JSDocReturnTag | JSDocTypeTag | JSDocThisTag | JSDocEnumTag | JSDocThrowsTag | JSDocOverloadTag | JSDocSatisfiesTag, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
+function forEachChildInJSDocTypeLikeTag<T>(
+    node: JSDocReturnTag | JSDocTypeTag | JSDocThisTag | JSDocEnumTag | JSDocThrowsTag | JSDocOverloadTag | JSDocSatisfiesTag,
+    cbNode: (node: Node) => T | undefined,
+    cbNodes?: (nodes: NodeArray<Node>) => T | undefined,
+): T | undefined {
     return visitNode(cbNode, node.tagName) ||
         visitNode(cbNode, node.typeExpression) ||
         (typeof node.comment === "string" ? undefined : visitNodes(cbNode, cbNodes, node.comment));
@@ -6008,7 +6028,12 @@ namespace Parser {
         return finishNode(factoryCreatePropertyAccessExpression(expression, parseRightSideOfDot(/*allowIdentifierNames*/ true, /*allowPrivateIdentifiers*/ true, /*allowUnicodeEscapeSequenceInIdentifierName*/ true)), pos);
     }
 
-    function parseJsxElementOrSelfClosingElementOrFragment(inExpressionContext: boolean, topInvalidNodePosition?: number, openingTag?: JsxOpeningElement | JsxOpeningFragment, mustBeUnary = false): JsxElement | JsxSelfClosingElement | JsxFragment {
+    function parseJsxElementOrSelfClosingElementOrFragment(
+        inExpressionContext: boolean,
+        topInvalidNodePosition?: number,
+        openingTag?: JsxOpeningElement | JsxOpeningFragment,
+        mustBeUnary = false,
+    ): JsxElement | JsxSelfClosingElement | JsxFragment {
         const pos = getNodePos();
         const opening = parseJsxOpeningOrSelfClosingElementOrOpeningFragment(inExpressionContext);
         let result: JsxElement | JsxSelfClosingElement | JsxFragment;
@@ -9824,7 +9849,16 @@ namespace IncrementalParser {
         if (sourceFile.statements.length === 0) {
             // If we don't have any statements in the current source file, then there's no real
             // way to incrementally parse.  So just do a full parse instead.
-            return Parser.parseSourceFile(sourceFile.fileName, newText, sourceFile.languageVersion, /*syntaxCursor*/ undefined, /*setParentNodes*/ true, sourceFile.scriptKind, sourceFile.setExternalModuleIndicator, sourceFile.jsDocParsingMode);
+            return Parser.parseSourceFile(
+                sourceFile.fileName,
+                newText,
+                sourceFile.languageVersion,
+                /*syntaxCursor*/ undefined,
+                /*setParentNodes*/ true,
+                sourceFile.scriptKind,
+                sourceFile.setExternalModuleIndicator,
+                sourceFile.jsDocParsingMode,
+            );
         }
 
         // Make sure we're not trying to incrementally update a source file more than once.  Once

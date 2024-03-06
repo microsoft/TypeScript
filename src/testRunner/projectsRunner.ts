@@ -342,7 +342,13 @@ class ProjectTestCase {
         return url;
     }
 
-    private compileProjectFiles(moduleKind: ts.ModuleKind, configFileSourceFiles: readonly ts.SourceFile[], getInputFiles: () => readonly string[], compilerHost: ts.CompilerHost, compilerOptions: ts.CompilerOptions): CompileProjectFilesResult {
+    private compileProjectFiles(
+        moduleKind: ts.ModuleKind,
+        configFileSourceFiles: readonly ts.SourceFile[],
+        getInputFiles: () => readonly string[],
+        compilerHost: ts.CompilerHost,
+        compilerOptions: ts.CompilerOptions,
+    ): CompileProjectFilesResult {
         const program = ts.createProgram(getInputFiles(), compilerOptions, compilerHost);
         const errors = ts.getPreEmitDiagnostics(program);
 

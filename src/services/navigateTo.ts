@@ -38,7 +38,15 @@ interface RawNavigateToItem {
 }
 
 /** @internal */
-export function getNavigateToItems(sourceFiles: readonly SourceFile[], checker: TypeChecker, cancellationToken: CancellationToken, searchValue: string, maxResultCount: number | undefined, excludeDtsFiles: boolean, excludeLibFiles?: boolean): NavigateToItem[] {
+export function getNavigateToItems(
+    sourceFiles: readonly SourceFile[],
+    checker: TypeChecker,
+    cancellationToken: CancellationToken,
+    searchValue: string,
+    maxResultCount: number | undefined,
+    excludeDtsFiles: boolean,
+    excludeLibFiles?: boolean,
+): NavigateToItem[] {
     const patternMatcher = createPatternMatcher(searchValue);
     if (!patternMatcher) return emptyArray;
     const rawItems: RawNavigateToItem[] = [];

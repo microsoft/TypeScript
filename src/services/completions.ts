@@ -1435,7 +1435,9 @@ function getExhaustiveCaseSnippets(
             else if (!tracker.hasValue(type.value)) {
                 switch (typeof type.value) {
                     case "object":
-                        elements.push(type.value.negative ? factory.createPrefixUnaryExpression(SyntaxKind.MinusToken, factory.createBigIntLiteral({ negative: false, base10Value: type.value.base10Value })) : factory.createBigIntLiteral(type.value));
+                        elements.push(
+                            type.value.negative ? factory.createPrefixUnaryExpression(SyntaxKind.MinusToken, factory.createBigIntLiteral({ negative: false, base10Value: type.value.base10Value })) : factory.createBigIntLiteral(type.value),
+                        );
                         break;
                     case "number":
                         elements.push(type.value < 0 ? factory.createPrefixUnaryExpression(SyntaxKind.MinusToken, factory.createNumericLiteral(-type.value)) : factory.createNumericLiteral(type.value));
@@ -1794,7 +1796,10 @@ function createCompletionEntry(
             && !(type.flags & TypeFlags.BooleanLike)
             && !(type.flags & TypeFlags.Union && find((type as UnionType).types, type => !!(type.flags & TypeFlags.BooleanLike)))
         ) {
-            if (type.flags & TypeFlags.StringLike || (type.flags & TypeFlags.Union && every((type as UnionType).types, type => !!(type.flags & (TypeFlags.StringLike | TypeFlags.Undefined) || isStringAndEmptyAnonymousObjectIntersection(type))))) {
+            if (
+                type.flags & TypeFlags.StringLike ||
+                (type.flags & TypeFlags.Union && every((type as UnionType).types, type => !!(type.flags & (TypeFlags.StringLike | TypeFlags.Undefined) || isStringAndEmptyAnonymousObjectIntersection(type))))
+            ) {
                 // If is string like or undefined use quotes
                 insertText = `${escapeSnippetText(name)}=${quote(sourceFile, preferences, "$1")}`;
                 isSnippet = true;
@@ -2454,7 +2459,15 @@ function completionEntryDataToSymbolOriginInfo(data: CompletionEntryData, comple
     return unresolvedOrigin;
 }
 
-function getInsertTextAndReplacementSpanForImportCompletion(name: string, importStatementCompletion: ImportStatementCompletionInfo, origin: SymbolOriginInfoResolvedExport, useSemicolons: boolean, sourceFile: SourceFile, options: CompilerOptions, preferences: UserPreferences) {
+function getInsertTextAndReplacementSpanForImportCompletion(
+    name: string,
+    importStatementCompletion: ImportStatementCompletionInfo,
+    origin: SymbolOriginInfoResolvedExport,
+    useSemicolons: boolean,
+    sourceFile: SourceFile,
+    options: CompilerOptions,
+    preferences: UserPreferences,
+) {
     const replacementSpan = importStatementCompletion.replacementSpan;
     const quotedModuleSpecifier = escapeSnippetText(quote(sourceFile, preferences, origin.moduleSpecifier));
     const exportKind = origin.isDefaultExport ? ExportKind.Default :
@@ -2830,7 +2843,24 @@ export function getCompletionEntryDetails(
         }
         case "symbol": {
             const { symbol, location, contextToken, origin, previousToken } = symbolCompletion;
-            const { codeActions, sourceDisplay } = getCompletionEntryCodeActionsAndSourceDisplay(name, location, contextToken, origin, symbol, program, host, compilerOptions, sourceFile, position, previousToken, formatContext, preferences, data, source, cancellationToken);
+            const { codeActions, sourceDisplay } = getCompletionEntryCodeActionsAndSourceDisplay(
+                name,
+                location,
+                contextToken,
+                origin,
+                symbol,
+                program,
+                host,
+                compilerOptions,
+                sourceFile,
+                position,
+                previousToken,
+                formatContext,
+                preferences,
+                data,
+                source,
+                cancellationToken,
+            );
             const symbolName = originIsComputedPropertyName(origin) ? origin.symbolName : symbol.name;
             return createCompletionDetailsForSymbol(symbol, symbolName, typeChecker, sourceFile, location, cancellationToken, codeActions, sourceDisplay); // TODO: GH#18217
         }
@@ -2889,13 +2919,34 @@ function createSimpleDetails(name: string, kind: ScriptElementKind, kind2: Symbo
 }
 
 /** @internal */
-export function createCompletionDetailsForSymbol(symbol: Symbol, name: string, checker: TypeChecker, sourceFile: SourceFile, location: Node, cancellationToken: CancellationToken, codeActions?: CodeAction[], sourceDisplay?: SymbolDisplayPart[]): CompletionEntryDetails {
-    const { displayParts, documentation, symbolKind, tags } = checker.runWithCancellationToken(cancellationToken, checker => SymbolDisplay.getSymbolDisplayPartsDocumentationAndSymbolKind(checker, symbol, sourceFile, location, location, SemanticMeaning.All));
+export function createCompletionDetailsForSymbol(
+    symbol: Symbol,
+    name: string,
+    checker: TypeChecker,
+    sourceFile: SourceFile,
+    location: Node,
+    cancellationToken: CancellationToken,
+    codeActions?: CodeAction[],
+    sourceDisplay?: SymbolDisplayPart[],
+): CompletionEntryDetails {
+    const { displayParts, documentation, symbolKind, tags } = checker.runWithCancellationToken(
+        cancellationToken,
+        checker => SymbolDisplay.getSymbolDisplayPartsDocumentationAndSymbolKind(checker, symbol, sourceFile, location, location, SemanticMeaning.All),
+    );
     return createCompletionDetails(name, SymbolDisplay.getSymbolModifiers(checker, symbol), symbolKind, displayParts, documentation, tags, codeActions, sourceDisplay);
 }
 
 /** @internal */
-export function createCompletionDetails(name: string, kindModifiers: string, kind: ScriptElementKind, displayParts: SymbolDisplayPart[], documentation?: SymbolDisplayPart[], tags?: JSDocTagInfo[], codeActions?: CodeAction[], source?: SymbolDisplayPart[]): CompletionEntryDetails {
+export function createCompletionDetails(
+    name: string,
+    kindModifiers: string,
+    kind: ScriptElementKind,
+    displayParts: SymbolDisplayPart[],
+    documentation?: SymbolDisplayPart[],
+    tags?: JSDocTagInfo[],
+    codeActions?: CodeAction[],
+    source?: SymbolDisplayPart[],
+): CompletionEntryDetails {
     return { name, kindModifiers, kind, displayParts, documentation, tags, codeActions, source, sourceDisplay: source };
 }
 

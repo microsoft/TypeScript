@@ -3790,7 +3790,9 @@ export class TestState {
             actualMatchPosition = actual[0].start;
         }
         else {
-            this.raiseError(`verifyMatchingBracePosition failed - could not find the brace position: ${bracePosition} in the returned list: (${actual[0].start},${ts.textSpanEnd(actual[0])}) and (${actual[1].start},${ts.textSpanEnd(actual[1])})`);
+            this.raiseError(
+                `verifyMatchingBracePosition failed - could not find the brace position: ${bracePosition} in the returned list: (${actual[0].start},${ts.textSpanEnd(actual[0])}) and (${actual[1].start},${ts.textSpanEnd(actual[1])})`,
+            );
         }
 
         if (actualMatchPosition !== expectedMatchPosition) {
@@ -3983,7 +3985,16 @@ export class TestState {
         };
     }
 
-    public verifyRefactorAvailable(negative: boolean, triggerReason: ts.RefactorTriggerReason, name: string, actionName?: string, actionDescription?: string, kind?: string, preferences = ts.emptyOptions, includeInteractiveActions?: boolean) {
+    public verifyRefactorAvailable(
+        negative: boolean,
+        triggerReason: ts.RefactorTriggerReason,
+        name: string,
+        actionName?: string,
+        actionDescription?: string,
+        kind?: string,
+        preferences = ts.emptyOptions,
+        includeInteractiveActions?: boolean,
+    ) {
         let refactors = this.getApplicableRefactorsAtSelection(triggerReason, kind, preferences, includeInteractiveActions);
         refactors = refactors.filter(r => r.name === name);
 
@@ -4452,10 +4463,23 @@ export class TestState {
     private getApplicableRefactorsAtSelection(triggerReason: ts.RefactorTriggerReason = "implicit", kind?: string, preferences = ts.emptyOptions, includeInteractiveActions?: boolean) {
         return this.getApplicableRefactorsWorker(this.getSelection(), this.activeFile.fileName, preferences, triggerReason, kind, includeInteractiveActions);
     }
-    private getApplicableRefactors(rangeOrMarker: Range | Marker, preferences = ts.emptyOptions, triggerReason: ts.RefactorTriggerReason = "implicit", kind?: string, includeInteractiveActions?: boolean): readonly ts.ApplicableRefactorInfo[] {
+    private getApplicableRefactors(
+        rangeOrMarker: Range | Marker,
+        preferences = ts.emptyOptions,
+        triggerReason: ts.RefactorTriggerReason = "implicit",
+        kind?: string,
+        includeInteractiveActions?: boolean,
+    ): readonly ts.ApplicableRefactorInfo[] {
         return this.getApplicableRefactorsWorker("position" in rangeOrMarker ? rangeOrMarker.position : rangeOrMarker, rangeOrMarker.fileName, preferences, triggerReason, kind, includeInteractiveActions); // eslint-disable-line local/no-in-operator
     }
-    private getApplicableRefactorsWorker(positionOrRange: number | ts.TextRange, fileName: string, preferences = ts.emptyOptions, triggerReason: ts.RefactorTriggerReason, kind?: string, includeInteractiveActions?: boolean): readonly ts.ApplicableRefactorInfo[] {
+    private getApplicableRefactorsWorker(
+        positionOrRange: number | ts.TextRange,
+        fileName: string,
+        preferences = ts.emptyOptions,
+        triggerReason: ts.RefactorTriggerReason,
+        kind?: string,
+        includeInteractiveActions?: boolean,
+    ): readonly ts.ApplicableRefactorInfo[] {
         return this.languageService.getApplicableRefactors(fileName, positionOrRange, preferences, triggerReason, kind, includeInteractiveActions) || ts.emptyArray;
     }
 
@@ -4581,7 +4605,9 @@ export function runFourSlashTestContent(basePath: string, testType: FourSlashTes
 function runCode(code: string, state: TestState, fileName: string): void {
     // Compile and execute the test
     const generatedFile = ts.changeExtension(fileName, ".js");
-    const wrappedCode = `(function(ts, test, goTo, config, verify, edit, debug, format, cancellation, classification, completion, verifyOperationIsCancelled, ignoreInterpolations) {${code}\n//# sourceURL=${ts.getBaseFileName(generatedFile)}\n})`;
+    const wrappedCode = `(function(ts, test, goTo, config, verify, edit, debug, format, cancellation, classification, completion, verifyOperationIsCancelled, ignoreInterpolations) {${code}\n//# sourceURL=${
+        ts.getBaseFileName(generatedFile)
+    }\n})`;
 
     type SourceMapSupportModule = typeof import("source-map-support") & {
         // TODO(rbuckton): This is missing from the DT definitions and needs to be added.

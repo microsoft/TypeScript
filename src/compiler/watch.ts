@@ -862,7 +862,12 @@ export function createProgramHost<T extends BuilderProgram = EmitAndSemanticDiag
 /**
  * Creates the watch compiler host that can be extended with config file or root file names and options host
  */
-function createWatchCompilerHost<T extends BuilderProgram = EmitAndSemanticDiagnosticsBuilderProgram>(system = sys, createProgram: CreateProgram<T> | undefined, reportDiagnostic: DiagnosticReporter, reportWatchStatus?: WatchStatusReporter): WatchCompilerHost<T> {
+function createWatchCompilerHost<T extends BuilderProgram = EmitAndSemanticDiagnosticsBuilderProgram>(
+    system = sys,
+    createProgram: CreateProgram<T> | undefined,
+    reportDiagnostic: DiagnosticReporter,
+    reportWatchStatus?: WatchStatusReporter,
+): WatchCompilerHost<T> {
     const write = (s: string) => system.write(s + system.newLine);
     const result = createProgramHost(system, createProgram) as WatchCompilerHost<T>;
     copyProperties(result, createWatchHost(system, reportWatchStatus));

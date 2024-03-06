@@ -451,7 +451,11 @@ function getBuildInfoForIncrementalCorrectnessCheck(text: string | undefined): {
 } {
     if (!text) return { buildInfo: text };
     const readableBuildInfo = JSON.parse(text) as ReadableBuildInfo;
-    let sanitizedFileInfos: ts.MapLike<string | Omit<ReadableProgramBuildInfoFileInfo<ts.ProgramMultiFileEmitBuildInfoFileInfo> | ReadableProgramBuildInfoFileInfo<ts.BuilderState.FileInfo>, "signature" | "original"> & { signature: undefined; original: undefined; }> | undefined;
+    let sanitizedFileInfos:
+        | ts.MapLike<
+            string | Omit<ReadableProgramBuildInfoFileInfo<ts.ProgramMultiFileEmitBuildInfoFileInfo> | ReadableProgramBuildInfoFileInfo<ts.BuilderState.FileInfo>, "signature" | "original"> & { signature: undefined; original: undefined; }
+        >
+        | undefined;
     if (readableBuildInfo.program?.fileInfos) {
         sanitizedFileInfos = {};
         for (const id in readableBuildInfo.program.fileInfos) {

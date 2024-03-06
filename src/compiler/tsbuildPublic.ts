@@ -431,7 +431,13 @@ interface SolutionBuilderState<T extends BuilderProgram> extends WatchFactory<Wa
     writeLog: (s: string) => void;
 }
 
-function createSolutionBuilderState<T extends BuilderProgram>(watch: boolean, hostOrHostWithWatch: SolutionBuilderHost<T> | SolutionBuilderWithWatchHost<T>, rootNames: readonly string[], options: BuildOptions, baseWatchOptions: WatchOptions | undefined): SolutionBuilderState<T> {
+function createSolutionBuilderState<T extends BuilderProgram>(
+    watch: boolean,
+    hostOrHostWithWatch: SolutionBuilderHost<T> | SolutionBuilderWithWatchHost<T>,
+    rootNames: readonly string[],
+    options: BuildOptions,
+    baseWatchOptions: WatchOptions | undefined,
+): SolutionBuilderState<T> {
     const host = hostOrHostWithWatch as SolutionBuilderHost<T>;
     const hostWithWatch = hostOrHostWithWatch as SolutionBuilderWithWatchHost<T>;
 
@@ -1504,7 +1510,15 @@ function getModifiedTime<T extends BuilderProgram>(state: SolutionBuilderState<T
     return result;
 }
 
-function watchFile<T extends BuilderProgram>(state: SolutionBuilderState<T>, file: string, callback: FileWatcherCallback, pollingInterval: PollingInterval, options: WatchOptions | undefined, watchType: WatchType, project?: ResolvedConfigFileName): FileWatcher {
+function watchFile<T extends BuilderProgram>(
+    state: SolutionBuilderState<T>,
+    file: string,
+    callback: FileWatcherCallback,
+    pollingInterval: PollingInterval,
+    options: WatchOptions | undefined,
+    watchType: WatchType,
+    project?: ResolvedConfigFileName,
+): FileWatcher {
     const path = toPath(state, file);
     const existing = state.filesWatched.get(path);
     if (existing && isFileWatcherWithModifiedTime(existing)) {
@@ -2052,7 +2066,14 @@ function queueReferencingProjects<T extends BuilderProgram>(
     }
 }
 
-function build<T extends BuilderProgram>(state: SolutionBuilderState<T>, project?: string, cancellationToken?: CancellationToken, writeFile?: WriteFileCallback, getCustomTransformers?: (project: string) => CustomTransformers, onlyReferences?: boolean): ExitStatus {
+function build<T extends BuilderProgram>(
+    state: SolutionBuilderState<T>,
+    project?: string,
+    cancellationToken?: CancellationToken,
+    writeFile?: WriteFileCallback,
+    getCustomTransformers?: (project: string) => CustomTransformers,
+    onlyReferences?: boolean,
+): ExitStatus {
     performance.mark("SolutionBuilder::beforeBuild");
     const result = buildWorker(state, project, cancellationToken, writeFile, getCustomTransformers, onlyReferences);
     performance.mark("SolutionBuilder::afterBuild");
@@ -2370,7 +2391,13 @@ function stopWatching<T extends BuilderProgram>(state: SolutionBuilderState<T>) 
  */
 function createSolutionBuilderWorker<T extends BuilderProgram>(watch: false, host: SolutionBuilderHost<T>, rootNames: readonly string[], defaultOptions: BuildOptions): SolutionBuilder<T>;
 function createSolutionBuilderWorker<T extends BuilderProgram>(watch: true, host: SolutionBuilderWithWatchHost<T>, rootNames: readonly string[], defaultOptions: BuildOptions, baseWatchOptions?: WatchOptions): SolutionBuilder<T>;
-function createSolutionBuilderWorker<T extends BuilderProgram>(watch: boolean, hostOrHostWithWatch: SolutionBuilderHost<T> | SolutionBuilderWithWatchHost<T>, rootNames: readonly string[], options: BuildOptions, baseWatchOptions?: WatchOptions): SolutionBuilder<T> {
+function createSolutionBuilderWorker<T extends BuilderProgram>(
+    watch: boolean,
+    hostOrHostWithWatch: SolutionBuilderHost<T> | SolutionBuilderWithWatchHost<T>,
+    rootNames: readonly string[],
+    options: BuildOptions,
+    baseWatchOptions?: WatchOptions,
+): SolutionBuilder<T> {
     const state = createSolutionBuilderState(watch, hostOrHostWithWatch, rootNames, options, baseWatchOptions);
     return {
         build: (project, cancellationToken, writeFile, getCustomTransformers) => build(state, project, cancellationToken, writeFile, getCustomTransformers),

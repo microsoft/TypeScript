@@ -218,7 +218,13 @@ export function transformES2020(context: TransformationContext): (x: SourceFile 
         }
 
         const target = isDelete
-            ? factory.createConditionalExpression(createNotNullCondition(leftExpression, capturedLeft, /*invert*/ true), /*questionToken*/ undefined, factory.createTrue(), /*colonToken*/ undefined, factory.createDeleteExpression(rightExpression))
+            ? factory.createConditionalExpression(
+                createNotNullCondition(leftExpression, capturedLeft, /*invert*/ true),
+                /*questionToken*/ undefined,
+                factory.createTrue(),
+                /*colonToken*/ undefined,
+                factory.createDeleteExpression(rightExpression),
+            )
             : factory.createConditionalExpression(createNotNullCondition(leftExpression, capturedLeft, /*invert*/ true), /*questionToken*/ undefined, factory.createVoidZero(), /*colonToken*/ undefined, rightExpression);
         setTextRange(target, node);
         return thisArg ? factory.createSyntheticReferenceExpression(target, thisArg) : target;

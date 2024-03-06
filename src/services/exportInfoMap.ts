@@ -115,7 +115,12 @@ export interface ExportInfoMap {
     clear(): void;
     add(importingFile: Path, symbol: Symbol, key: __String, moduleSymbol: Symbol, moduleFile: SourceFile | undefined, exportKind: ExportKind, isFromPackageJson: boolean, checker: TypeChecker): void;
     get(importingFile: Path, key: ExportMapInfoKey): readonly SymbolExportInfo[] | undefined;
-    search<T>(importingFile: Path, preferCapitalized: boolean, matches: (name: string, targetFlags: SymbolFlags) => boolean, action: (info: readonly SymbolExportInfo[], symbolName: string, isFromAmbientModule: boolean, key: ExportMapInfoKey) => T | undefined): T | undefined;
+    search<T>(
+        importingFile: Path,
+        preferCapitalized: boolean,
+        matches: (name: string, targetFlags: SymbolFlags) => boolean,
+        action: (info: readonly SymbolExportInfo[], symbolName: string, isFromAmbientModule: boolean, key: ExportMapInfoKey) => T | undefined,
+    ): T | undefined;
     releaseSymbols(): void;
     isEmpty(): boolean;
     /** @returns Whether the change resulted in the cache being cleared */

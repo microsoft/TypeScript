@@ -3807,7 +3807,11 @@ function applyEdits(text: string, textFilename: string, edits: readonly FileText
     return text;
 }
 
-function referenceEntryToReferencesResponseItem(projectService: ProjectService, { fileName, textSpan, contextSpan, isWriteAccess, isDefinition }: ReferencedSymbolEntry, { disableLineTextInReferences }: protocol.UserPreferences): protocol.ReferencesResponseItem {
+function referenceEntryToReferencesResponseItem(
+    projectService: ProjectService,
+    { fileName, textSpan, contextSpan, isWriteAccess, isDefinition }: ReferencedSymbolEntry,
+    { disableLineTextInReferences }: protocol.UserPreferences,
+): protocol.ReferencesResponseItem {
     const scriptInfo = Debug.checkDefined(projectService.getScriptInfo(fileName));
     const span = toProtocolTextSpanWithContext(textSpan, contextSpan, scriptInfo);
     const lineText = disableLineTextInReferences ? undefined : getLineText(scriptInfo, span);

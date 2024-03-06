@@ -1370,7 +1370,9 @@ export const plainJSErrors = new Set<number>([
     Diagnostics.Identifier_expected_0_is_a_reserved_word_that_cannot_be_used_here.code,
     Diagnostics.constructor_is_a_reserved_word.code,
     Diagnostics.delete_cannot_be_called_on_an_identifier_in_strict_mode.code,
-    Diagnostics.Code_contained_in_a_class_is_evaluated_in_JavaScript_s_strict_mode_which_does_not_allow_this_use_of_0_For_more_information_see_https_Colon_Slash_Slashdeveloper_mozilla_org_Slashen_US_Slashdocs_SlashWeb_SlashJavaScript_SlashReference_SlashStrict_mode.code,
+    Diagnostics
+        .Code_contained_in_a_class_is_evaluated_in_JavaScript_s_strict_mode_which_does_not_allow_this_use_of_0_For_more_information_see_https_Colon_Slash_Slashdeveloper_mozilla_org_Slashen_US_Slashdocs_SlashWeb_SlashJavaScript_SlashReference_SlashStrict_mode
+        .code,
     Diagnostics.Invalid_use_of_0_Modules_are_automatically_in_strict_mode.code,
     Diagnostics.Invalid_use_of_0_in_strict_mode.code,
     Diagnostics.A_label_is_not_allowed_here.code,
@@ -1755,7 +1757,10 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
                             const getCommonSourceDirectory = memoize(() => getCommonSourceDirectoryOfConfig(parsedRef.commandLine, !host.useCaseSensitiveFileNames()));
                             for (const fileName of parsedRef.commandLine.fileNames) {
                                 if (!isDeclarationFileName(fileName) && !fileExtensionIs(fileName, Extension.Json)) {
-                                    processProjectReferenceFile(getOutputDeclarationFileName(fileName, parsedRef.commandLine, !host.useCaseSensitiveFileNames(), getCommonSourceDirectory), { kind: FileIncludeKind.OutputFromProjectReference, index });
+                                    processProjectReferenceFile(getOutputDeclarationFileName(fileName, parsedRef.commandLine, !host.useCaseSensitiveFileNames(), getCommonSourceDirectory), {
+                                        kind: FileIncludeKind.OutputFromProjectReference,
+                                        index,
+                                    });
                                 }
                             }
                         }
@@ -2054,7 +2059,11 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
         return result;
     }
 
-    function resolveTypeReferenceDirectiveNamesWorker<T extends FileReference | string>(typeDirectiveNames: readonly T[], containingFile: string | SourceFile, reusedNames: readonly T[] | undefined): readonly ResolvedTypeReferenceDirectiveWithFailedLookupLocations[] {
+    function resolveTypeReferenceDirectiveNamesWorker<T extends FileReference | string>(
+        typeDirectiveNames: readonly T[],
+        containingFile: string | SourceFile,
+        reusedNames: readonly T[] | undefined,
+    ): readonly ResolvedTypeReferenceDirectiveWithFailedLookupLocations[] {
         if (!typeDirectiveNames.length) return [];
         const containingSourceFile = !isString(containingFile) ? containingFile : undefined;
         const containingFileName = !isString(containingFile) ? getNormalizedAbsolutePath(containingFile.originalFileName, currentDirectory) : containingFile;
@@ -3881,7 +3890,12 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
         resolution: ResolvedTypeReferenceDirectiveWithFailedLookupLocations,
         reason: FileIncludeReason,
     ): void {
-        tracing?.push(tracing.Phase.Program, "processTypeReferenceDirective", { directive: typeReferenceDirective, hasResolved: !!resolution.resolvedTypeReferenceDirective, refKind: reason.kind, refPath: isReferencedFile(reason) ? reason.file : undefined });
+        tracing?.push(tracing.Phase.Program, "processTypeReferenceDirective", {
+            directive: typeReferenceDirective,
+            hasResolved: !!resolution.resolvedTypeReferenceDirective,
+            refKind: reason.kind,
+            refPath: isReferencedFile(reason) ? reason.file : undefined,
+        });
         processTypeReferenceDirectiveWorker(typeReferenceDirective, mode, resolution, reason);
         tracing?.pop();
     }
@@ -4472,7 +4486,10 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
                     let chain: DiagnosticMessageChain | undefined;
                     if (!options.configFilePath) {
                         // The program is from either an inferred project or an external project
-                        chain = chainDiagnosticMessages(/*details*/ undefined, Diagnostics.Adding_a_tsconfig_json_file_will_help_organize_projects_that_contain_both_TypeScript_and_JavaScript_files_Learn_more_at_https_Colon_Slash_Slashaka_ms_Slashtsconfig);
+                        chain = chainDiagnosticMessages(
+                            /*details*/ undefined,
+                            Diagnostics.Adding_a_tsconfig_json_file_will_help_organize_projects_that_contain_both_TypeScript_and_JavaScript_files_Learn_more_at_https_Colon_Slash_Slashaka_ms_Slashtsconfig,
+                        );
                     }
                     chain = chainDiagnosticMessages(chain, Diagnostics.Cannot_write_file_0_because_it_would_overwrite_input_file, emitFileName);
                     blockEmittingOfFile(emitFileName, createCompilerDiagnosticFromMessageChain(chain));
@@ -4531,10 +4548,27 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
                 }
                 else {
                     if (value === undefined) {
-                        createDiagnostic(name, value, useInstead, Diagnostics.Option_0_is_deprecated_and_will_stop_functioning_in_TypeScript_1_Specify_compilerOption_ignoreDeprecations_Colon_2_to_silence_this_error, name, removedIn, deprecatedIn);
+                        createDiagnostic(
+                            name,
+                            value,
+                            useInstead,
+                            Diagnostics.Option_0_is_deprecated_and_will_stop_functioning_in_TypeScript_1_Specify_compilerOption_ignoreDeprecations_Colon_2_to_silence_this_error,
+                            name,
+                            removedIn,
+                            deprecatedIn,
+                        );
                     }
                     else {
-                        createDiagnostic(name, value, useInstead, Diagnostics.Option_0_1_is_deprecated_and_will_stop_functioning_in_TypeScript_2_Specify_compilerOption_ignoreDeprecations_Colon_3_to_silence_this_error, name, value, removedIn, deprecatedIn);
+                        createDiagnostic(
+                            name,
+                            value,
+                            useInstead,
+                            Diagnostics.Option_0_1_is_deprecated_and_will_stop_functioning_in_TypeScript_2_Specify_compilerOption_ignoreDeprecations_Colon_3_to_silence_this_error,
+                            name,
+                            value,
+                            removedIn,
+                            deprecatedIn,
+                        );
                     }
                 }
             });
@@ -4693,7 +4727,11 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
             case FileIncludeKind.SourceFromProjectReference:
             case FileIncludeKind.OutputFromProjectReference:
                 const referencedResolvedRef = Debug.checkDefined(resolvedProjectReferences?.[reason.index]);
-                const referenceInfo = forEachProjectReference(projectReferences, resolvedProjectReferences, (resolvedRef, parent, index) => resolvedRef === referencedResolvedRef ? { sourceFile: parent?.sourceFile || options.configFile!, index } : undefined);
+                const referenceInfo = forEachProjectReference(
+                    projectReferences,
+                    resolvedProjectReferences,
+                    (resolvedRef, parent, index) => resolvedRef === referencedResolvedRef ? { sourceFile: parent?.sourceFile || options.configFile!, index } : undefined,
+                );
                 if (!referenceInfo) return undefined;
                 const { sourceFile, index } = referenceInfo;
                 const referencesSyntax = forEachTsConfigPropArray(sourceFile as TsConfigSourceFile, "references", property => isArrayLiteralExpression(property.initializer) ? property.initializer : undefined);
@@ -4864,8 +4902,22 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
 
     function createOptionDiagnosticInObjectLiteralSyntax(objectLiteral: ObjectLiteralExpression, onKey: boolean, key1: string, key2: string | undefined, messageChain: DiagnosticMessageChain): boolean;
     function createOptionDiagnosticInObjectLiteralSyntax(objectLiteral: ObjectLiteralExpression, onKey: boolean, key1: string, key2: string | undefined, message: DiagnosticMessage, ...args: DiagnosticArguments): boolean;
-    function createOptionDiagnosticInObjectLiteralSyntax(objectLiteral: ObjectLiteralExpression, onKey: boolean, key1: string, key2: string | undefined, message: DiagnosticMessage | DiagnosticMessageChain, ...args: DiagnosticArguments): boolean;
-    function createOptionDiagnosticInObjectLiteralSyntax(objectLiteral: ObjectLiteralExpression, onKey: boolean, key1: string, key2: string | undefined, message: DiagnosticMessage | DiagnosticMessageChain, ...args: DiagnosticArguments): boolean {
+    function createOptionDiagnosticInObjectLiteralSyntax(
+        objectLiteral: ObjectLiteralExpression,
+        onKey: boolean,
+        key1: string,
+        key2: string | undefined,
+        message: DiagnosticMessage | DiagnosticMessageChain,
+        ...args: DiagnosticArguments
+    ): boolean;
+    function createOptionDiagnosticInObjectLiteralSyntax(
+        objectLiteral: ObjectLiteralExpression,
+        onKey: boolean,
+        key1: string,
+        key2: string | undefined,
+        message: DiagnosticMessage | DiagnosticMessageChain,
+        ...args: DiagnosticArguments
+    ): boolean {
         let needsCompilerDiagnostic = false;
         forEachPropertyAssignment(objectLiteral, key1, prop => {
             // eslint-disable-next-line local/no-in-operator

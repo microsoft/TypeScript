@@ -314,7 +314,16 @@ function tryDeleteDeclaration(sourceFile: SourceFile, token: Node, changes: text
     }
 }
 
-function tryDeleteDeclarationWorker(token: Node, changes: textChanges.ChangeTracker, sourceFile: SourceFile, checker: TypeChecker, sourceFiles: readonly SourceFile[], program: Program, cancellationToken: CancellationToken, isFixAll: boolean): void {
+function tryDeleteDeclarationWorker(
+    token: Node,
+    changes: textChanges.ChangeTracker,
+    sourceFile: SourceFile,
+    checker: TypeChecker,
+    sourceFiles: readonly SourceFile[],
+    program: Program,
+    cancellationToken: CancellationToken,
+    isFixAll: boolean,
+): void {
     const { parent } = token;
     if (isParameter(parent)) {
         tryDeleteParameter(changes, sourceFile, parent, checker, sourceFiles, program, cancellationToken, isFixAll);

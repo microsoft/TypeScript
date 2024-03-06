@@ -1252,7 +1252,12 @@ export function transformES2015(context: TransformationContext): (x: SourceFile 
      * @param hasSynthesizedSuper A value indicating whether the constructor starts with a
      *                            synthesized `super` call.
      */
-    function transformConstructorBody(constructor: ConstructorDeclaration & { body: FunctionBody; } | undefined, node: ClassDeclaration | ClassExpression, extendsClauseElement: ExpressionWithTypeArguments | undefined, hasSynthesizedSuper: boolean) {
+    function transformConstructorBody(
+        constructor: ConstructorDeclaration & { body: FunctionBody; } | undefined,
+        node: ClassDeclaration | ClassExpression,
+        extendsClauseElement: ExpressionWithTypeArguments | undefined,
+        hasSynthesizedSuper: boolean,
+    ) {
         // determine whether the class is known syntactically to be a derived class (e.g. a
         // class that extends a value that is not syntactically known to be `null`).
         const isDerivedClass = !!extendsClauseElement && skipOuterExpressions(extendsClauseElement.expression).kind !== SyntaxKind.NullKeyword;
@@ -2047,7 +2052,8 @@ export function transformES2015(context: TransformationContext): (x: SourceFile 
 
         // `declarationName` is the name of the local declaration for the parameter.
         // TODO(rbuckton): Does this need to be parented?
-        const declarationName = parameter.name.kind === SyntaxKind.Identifier ? setParent(setTextRange(factory.cloneNode(parameter.name), parameter.name), parameter.name.parent) : factory.createTempVariable(/*recordTempVariable*/ undefined);
+        const declarationName = parameter.name.kind === SyntaxKind.Identifier ? setParent(setTextRange(factory.cloneNode(parameter.name), parameter.name), parameter.name.parent)
+            : factory.createTempVariable(/*recordTempVariable*/ undefined);
         setEmitFlags(declarationName, EmitFlags.NoSourceMap);
 
         // `expressionName` is the name of the parameter used in expressions.

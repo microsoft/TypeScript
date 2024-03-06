@@ -198,7 +198,10 @@ function wrapCustomTransformer(transformer: CustomTransformer): Transformer<Bund
 /**
  * Wrap a transformer factory that may return a custom script or declaration transformer object.
  */
-function wrapCustomTransformerFactory<T extends SourceFile | Bundle>(transformer: TransformerFactory<T> | CustomTransformerFactory, handleDefault: (context: TransformationContext, tx: Transformer<T>) => Transformer<Bundle | SourceFile>): TransformerFactory<Bundle | SourceFile> {
+function wrapCustomTransformerFactory<T extends SourceFile | Bundle>(
+    transformer: TransformerFactory<T> | CustomTransformerFactory,
+    handleDefault: (context: TransformationContext, tx: Transformer<T>) => Transformer<Bundle | SourceFile>,
+): TransformerFactory<Bundle | SourceFile> {
     return context => {
         const customTransformer = transformer(context);
         return typeof customTransformer === "function"
@@ -237,7 +240,15 @@ export function noEmitNotification(hint: EmitHint, node: Node, callback: (hint: 
  *
  * @internal
  */
-export function transformNodes<T extends Node>(resolver: EmitResolver | undefined, host: EmitHost | undefined, factory: NodeFactory, options: CompilerOptions, nodes: readonly T[], transformers: readonly TransformerFactory<T>[], allowDtsFiles: boolean): TransformationResult<T> {
+export function transformNodes<T extends Node>(
+    resolver: EmitResolver | undefined,
+    host: EmitHost | undefined,
+    factory: NodeFactory,
+    options: CompilerOptions,
+    nodes: readonly T[],
+    transformers: readonly TransformerFactory<T>[],
+    allowDtsFiles: boolean,
+): TransformationResult<T> {
     const enabledSyntaxKindFeatures = new Array<SyntaxKindFeatureFlags>(SyntaxKind.Count);
     let lexicalEnvironmentVariableDeclarations: VariableDeclaration[];
     let lexicalEnvironmentFunctionDeclarations: FunctionDeclaration[];

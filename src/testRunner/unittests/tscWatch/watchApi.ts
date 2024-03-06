@@ -306,7 +306,15 @@ describe("unittests:: tsc-watch:: watchAPI:: when watchHost uses createSemanticD
 
     function verifyOutputs(baseline: string[], sys: ts.System, emitSys: ts.System) {
         baseline.push("Checking if output is same as EmitAndSemanticDiagnosticsBuilderProgram::");
-        for (const output of [`/user/username/projects/myproject/main.js`, `/user/username/projects/myproject/main.d.ts`, `/user/username/projects/myproject/other.js`, `/user/username/projects/myproject/other.d.ts`, `/user/username/projects/myproject/tsconfig.tsbuildinfo`]) {
+        for (
+            const output of [
+                `/user/username/projects/myproject/main.js`,
+                `/user/username/projects/myproject/main.d.ts`,
+                `/user/username/projects/myproject/other.js`,
+                `/user/username/projects/myproject/other.d.ts`,
+                `/user/username/projects/myproject/tsconfig.tsbuildinfo`,
+            ]
+        ) {
             baseline.push(`Output file text for ${output} is same:: ${sys.readFile(output) === emitSys.readFile(output)}`);
         }
         baseline.push("");

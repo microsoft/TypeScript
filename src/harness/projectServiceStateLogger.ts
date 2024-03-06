@@ -187,7 +187,15 @@ export function patchServiceForStateBaseline(service: ProjectService) {
                 infoDiff = printScriptInfoSourceMapFilePath(data, info, infoDiff, infoPropertyLogs);
                 infoDiff = printProperty(PrintPropertyWhen.DefinedOrChangedOrNew, data, "declarationInfoPath", info.declarationInfoPath, infoDiff, infoPropertyLogs);
                 infoDiff = printSetPropertyValueWorker(PrintPropertyWhen.DefinedOrChangedOrNew, data?.sourceInfos, "sourceInfos", info.sourceInfos, infoDiff, infoPropertyLogs, identity);
-                infoDiff = printProperty(PrintPropertyWhen.DefinedOrChangedOrNew, data, "documentPositionMapper", info.documentPositionMapper, infoDiff, infoPropertyLogs, info.documentPositionMapper ? toStringDocumentPostionMapper(info.documentPositionMapper) : undefined);
+                infoDiff = printProperty(
+                    PrintPropertyWhen.DefinedOrChangedOrNew,
+                    data,
+                    "documentPositionMapper",
+                    info.documentPositionMapper,
+                    infoDiff,
+                    infoPropertyLogs,
+                    info.documentPositionMapper ? toStringDocumentPostionMapper(info.documentPositionMapper) : undefined,
+                );
                 let defaultProject: Project | undefined;
                 try {
                     if (isOpen) defaultProject = info.getDefaultProject();

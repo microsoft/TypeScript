@@ -219,7 +219,17 @@ function mapSuggestionDiagnostic(errorCode: number) {
     return errorCode;
 }
 
-function doChange(changes: textChanges.ChangeTracker, sourceFile: SourceFile, token: Node, errorCode: number, program: Program, cancellationToken: CancellationToken, markSeen: NodeSeenTracker, host: LanguageServiceHost, preferences: UserPreferences): Declaration | undefined {
+function doChange(
+    changes: textChanges.ChangeTracker,
+    sourceFile: SourceFile,
+    token: Node,
+    errorCode: number,
+    program: Program,
+    cancellationToken: CancellationToken,
+    markSeen: NodeSeenTracker,
+    host: LanguageServiceHost,
+    preferences: UserPreferences,
+): Declaration | undefined {
     if (!isParameterPropertyModifier(token.kind) && token.kind !== SyntaxKind.Identifier && token.kind !== SyntaxKind.DotDotDotToken && token.kind !== SyntaxKind.ThisKeyword) {
         return undefined;
     }
@@ -420,7 +430,8 @@ function annotate(changes: textChanges.ChangeTracker, importAdder: ImportAdder, 
                 return;
             }
             const typeExpression = factory.createJSDocTypeExpression(typeNode);
-            const typeTag = isGetAccessorDeclaration(declaration) ? factory.createJSDocReturnTag(/*tagName*/ undefined, typeExpression, /*comment*/ undefined) : factory.createJSDocTypeTag(/*tagName*/ undefined, typeExpression, /*comment*/ undefined);
+            const typeTag = isGetAccessorDeclaration(declaration) ? factory.createJSDocReturnTag(/*tagName*/ undefined, typeExpression, /*comment*/ undefined)
+                : factory.createJSDocTypeTag(/*tagName*/ undefined, typeExpression, /*comment*/ undefined);
             changes.addJSDocTags(sourceFile, parent, [typeTag]);
         }
         else if (!tryReplaceImportTypeNodeWithAutoImport(typeNode, declaration, sourceFile, changes, importAdder, getEmitScriptTarget(program.getCompilerOptions()))) {
@@ -486,7 +497,10 @@ function annotateJSDocParameters(changes: textChanges.ChangeTracker, sourceFile:
         }
     }
     else {
-        const paramTags = map(inferences, ({ name, typeNode, isOptional }) => factory.createJSDocParameterTag(/*tagName*/ undefined, name, /*isBracketed*/ !!isOptional, factory.createJSDocTypeExpression(typeNode), /*isNameFirst*/ false, /*comment*/ undefined));
+        const paramTags = map(
+            inferences,
+            ({ name, typeNode, isOptional }) => factory.createJSDocParameterTag(/*tagName*/ undefined, name, /*isBracketed*/ !!isOptional, factory.createJSDocTypeExpression(typeNode), /*isNameFirst*/ false, /*comment*/ undefined),
+        );
         changes.addJSDocTags(sourceFile, signature, paramTags);
     }
 }

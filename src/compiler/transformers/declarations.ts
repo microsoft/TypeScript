@@ -337,10 +337,20 @@ export function transformDeclarations(context: TransformationContext) {
             const errorInfo = getSymbolAccessibilityDiagnostic(symbolAccessibilityResult);
             if (errorInfo) {
                 if (errorInfo.typeName) {
-                    context.addDiagnostic(createDiagnosticForNode(symbolAccessibilityResult.errorNode || errorInfo.errorNode, errorInfo.diagnosticMessage, getTextOfNode(errorInfo.typeName), symbolAccessibilityResult.errorSymbolName!, symbolAccessibilityResult.errorModuleName!));
+                    context.addDiagnostic(
+                        createDiagnosticForNode(
+                            symbolAccessibilityResult.errorNode || errorInfo.errorNode,
+                            errorInfo.diagnosticMessage,
+                            getTextOfNode(errorInfo.typeName),
+                            symbolAccessibilityResult.errorSymbolName!,
+                            symbolAccessibilityResult.errorModuleName!,
+                        ),
+                    );
                 }
                 else {
-                    context.addDiagnostic(createDiagnosticForNode(symbolAccessibilityResult.errorNode || errorInfo.errorNode, errorInfo.diagnosticMessage, symbolAccessibilityResult.errorSymbolName!, symbolAccessibilityResult.errorModuleName!));
+                    context.addDiagnostic(
+                        createDiagnosticForNode(symbolAccessibilityResult.errorNode || errorInfo.errorNode, errorInfo.diagnosticMessage, symbolAccessibilityResult.errorSymbolName!, symbolAccessibilityResult.errorModuleName!),
+                    );
                 }
                 return true;
             }
@@ -378,26 +388,41 @@ export function transformDeclarations(context: TransformationContext) {
 
     function reportInaccessibleUniqueSymbolError() {
         if (errorNameNode || errorFallbackNode) {
-            context.addDiagnostic(createDiagnosticForNode((errorNameNode || errorFallbackNode)!, Diagnostics.The_inferred_type_of_0_references_an_inaccessible_1_type_A_type_annotation_is_necessary, errorDeclarationNameWithFallback(), "unique symbol"));
+            context.addDiagnostic(
+                createDiagnosticForNode((errorNameNode || errorFallbackNode)!, Diagnostics.The_inferred_type_of_0_references_an_inaccessible_1_type_A_type_annotation_is_necessary, errorDeclarationNameWithFallback(), "unique symbol"),
+            );
         }
     }
 
     function reportCyclicStructureError() {
         if (errorNameNode || errorFallbackNode) {
-            context.addDiagnostic(createDiagnosticForNode((errorNameNode || errorFallbackNode)!, Diagnostics.The_inferred_type_of_0_references_a_type_with_a_cyclic_structure_which_cannot_be_trivially_serialized_A_type_annotation_is_necessary, errorDeclarationNameWithFallback()));
+            context.addDiagnostic(
+                createDiagnosticForNode(
+                    (errorNameNode || errorFallbackNode)!,
+                    Diagnostics.The_inferred_type_of_0_references_a_type_with_a_cyclic_structure_which_cannot_be_trivially_serialized_A_type_annotation_is_necessary,
+                    errorDeclarationNameWithFallback(),
+                ),
+            );
         }
     }
 
     function reportInaccessibleThisError() {
         if (errorNameNode || errorFallbackNode) {
-            context.addDiagnostic(createDiagnosticForNode((errorNameNode || errorFallbackNode)!, Diagnostics.The_inferred_type_of_0_references_an_inaccessible_1_type_A_type_annotation_is_necessary, errorDeclarationNameWithFallback(), "this"));
+            context.addDiagnostic(
+                createDiagnosticForNode((errorNameNode || errorFallbackNode)!, Diagnostics.The_inferred_type_of_0_references_an_inaccessible_1_type_A_type_annotation_is_necessary, errorDeclarationNameWithFallback(), "this"),
+            );
         }
     }
 
     function reportLikelyUnsafeImportRequiredError(specifier: string) {
         if (errorNameNode || errorFallbackNode) {
             context.addDiagnostic(
-                createDiagnosticForNode((errorNameNode || errorFallbackNode)!, Diagnostics.The_inferred_type_of_0_cannot_be_named_without_a_reference_to_1_This_is_likely_not_portable_A_type_annotation_is_necessary, errorDeclarationNameWithFallback(), specifier),
+                createDiagnosticForNode(
+                    (errorNameNode || errorFallbackNode)!,
+                    Diagnostics.The_inferred_type_of_0_cannot_be_named_without_a_reference_to_1_This_is_likely_not_portable_A_type_annotation_is_necessary,
+                    errorDeclarationNameWithFallback(),
+                    specifier,
+                ),
             );
         }
     }
@@ -1365,7 +1390,12 @@ export function transformDeclarations(context: TransformationContext) {
                         errorNode: input,
                     });
                     errorFallbackNode = input;
-                    const varDecl = factory.createVariableDeclaration(newId, /*exclamationToken*/ undefined, resolver.createTypeOfExpression(input.expression, input, declarationEmitNodeBuilderFlags, symbolTracker), /*initializer*/ undefined);
+                    const varDecl = factory.createVariableDeclaration(
+                        newId,
+                        /*exclamationToken*/ undefined,
+                        resolver.createTypeOfExpression(input.expression, input, declarationEmitNodeBuilderFlags, symbolTracker),
+                        /*initializer*/ undefined,
+                    );
                     errorFallbackNode = undefined;
                     const statement = factory.createVariableStatement(needsDeclare ? [factory.createModifier(SyntaxKind.DeclareKeyword)] : [], factory.createVariableDeclarationList([varDecl], NodeFlags.Const));
 
@@ -1704,7 +1734,12 @@ export function transformDeclarations(context: TransformationContext) {
                         errorNode: extendsClause,
                         typeName: input.name,
                     });
-                    const varDecl = factory.createVariableDeclaration(newId, /*exclamationToken*/ undefined, resolver.createTypeOfExpression(extendsClause.expression, input, declarationEmitNodeBuilderFlags, symbolTracker), /*initializer*/ undefined);
+                    const varDecl = factory.createVariableDeclaration(
+                        newId,
+                        /*exclamationToken*/ undefined,
+                        resolver.createTypeOfExpression(extendsClause.expression, input, declarationEmitNodeBuilderFlags, symbolTracker),
+                        /*initializer*/ undefined,
+                    );
                     const statement = factory.createVariableStatement(needsDeclare ? [factory.createModifier(SyntaxKind.DeclareKeyword)] : [], factory.createVariableDeclarationList([varDecl], NodeFlags.Const));
                     const heritageClauses = factory.createNodeArray(map(input.heritageClauses, clause => {
                         if (clause.token === SyntaxKind.ExtendsKeyword) {
@@ -1714,7 +1749,10 @@ export function transformDeclarations(context: TransformationContext) {
                             getSymbolAccessibilityDiagnostic = oldDiag;
                             return newClause;
                         }
-                        return factory.updateHeritageClause(clause, visitNodes(factory.createNodeArray(filter(clause.types, t => isEntityNameExpression(t.expression) || t.expression.kind === SyntaxKind.NullKeyword)), visitDeclarationSubtree, isExpressionWithTypeArguments));
+                        return factory.updateHeritageClause(
+                            clause,
+                            visitNodes(factory.createNodeArray(filter(clause.types, t => isEntityNameExpression(t.expression) || t.expression.kind === SyntaxKind.NullKeyword)), visitDeclarationSubtree, isExpressionWithTypeArguments),
+                        );
                     }));
                     return [
                         statement,

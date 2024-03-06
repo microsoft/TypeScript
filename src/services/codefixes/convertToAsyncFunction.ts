@@ -452,7 +452,13 @@ function getPossibleNameForVarDecl(node: PromiseReturningCallExpression<"then" |
     return possibleNameForVarDecl;
 }
 
-function finishCatchOrFinallyTransform(node: PromiseReturningCallExpression<"then" | "catch" | "finally">, transformer: Transformer, tryStatement: TryStatement, possibleNameForVarDecl: SynthIdentifier | undefined, continuationArgName?: SynthBindingName) {
+function finishCatchOrFinallyTransform(
+    node: PromiseReturningCallExpression<"then" | "catch" | "finally">,
+    transformer: Transformer,
+    tryStatement: TryStatement,
+    possibleNameForVarDecl: SynthIdentifier | undefined,
+    continuationArgName?: SynthBindingName,
+) {
     const statements: Statement[] = [];
 
     // In order to avoid an implicit any, we will synthesize a type for the declaration using the unions of the types of both paths (try block and catch block)
@@ -546,7 +552,14 @@ function transformCatch(node: PromiseReturningCallExpression<"then" | "catch">, 
  * @param hasContinuation Whether another `then`, `catch`, or `finally` continuation follows this continuation.
  * @param continuationArgName The argument name for the continuation that follows this call.
  */
-function transformThen(node: PromiseReturningCallExpression<"then">, onFulfilled: Expression | undefined, onRejected: Expression | undefined, transformer: Transformer, hasContinuation: boolean, continuationArgName?: SynthBindingName): readonly Statement[] {
+function transformThen(
+    node: PromiseReturningCallExpression<"then">,
+    onFulfilled: Expression | undefined,
+    onRejected: Expression | undefined,
+    transformer: Transformer,
+    hasContinuation: boolean,
+    continuationArgName?: SynthBindingName,
+): readonly Statement[] {
     if (!onFulfilled || isNullOrUndefined(transformer, onFulfilled)) {
         // If we don't have an `onfulfilled` callback, try treating this as a `.catch`.
         return transformCatch(node, onRejected, transformer, hasContinuation, continuationArgName);
@@ -648,7 +661,11 @@ function transformCallbackArgument(
                 break;
             }
 
-            const synthCall = factory.createCallExpression(getSynthesizedDeepClone(func as Identifier | PropertyAccessExpression), /*typeArguments*/ undefined, isSynthIdentifier(inputArgName) ? [referenceSynthIdentifier(inputArgName)] : []);
+            const synthCall = factory.createCallExpression(
+                getSynthesizedDeepClone(func as Identifier | PropertyAccessExpression),
+                /*typeArguments*/ undefined,
+                isSynthIdentifier(inputArgName) ? [referenceSynthIdentifier(inputArgName)] : [],
+            );
 
             if (shouldReturn(parent, transformer)) {
                 return maybeAnnotateAndReturn(synthCall, getExplicitPromisedTypeOfPromiseReturningCallExpression(parent, func, transformer.checker));
@@ -661,7 +678,11 @@ function transformCallbackArgument(
                 return silentFail();
             }
             const returnType = callSignatures[0].getReturnType();
-            const varDeclOrAssignment = createVariableOrAssignmentOrExpressionStatement(continuationArgName, factory.createAwaitExpression(synthCall), getExplicitPromisedTypeOfPromiseReturningCallExpression(parent, func, transformer.checker));
+            const varDeclOrAssignment = createVariableOrAssignmentOrExpressionStatement(
+                continuationArgName,
+                factory.createAwaitExpression(synthCall),
+                getExplicitPromisedTypeOfPromiseReturningCallExpression(parent, func, transformer.checker),
+            );
             if (continuationArgName) {
                 continuationArgName.types.push(transformer.checker.getAwaitedType(returnType) || returnType);
             }

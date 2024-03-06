@@ -71,7 +71,11 @@ describe("unittests:: services:: Colorization", () => {
                 const actualEntry = getEntryAtPosition(result, actualEntryPosition)!;
 
                 assert(actualEntry, "Could not find classification entry for '" + expectedEntry.value + "' at position: " + actualEntryPosition);
-                assert.equal(actualEntry.classification, expectedEntry.classification, "Classification class does not match expected. Expected: " + ts.TokenClass[expectedEntry.classification] + ", Actual: " + ts.TokenClass[actualEntry.classification]);
+                assert.equal(
+                    actualEntry.classification,
+                    expectedEntry.classification,
+                    "Classification class does not match expected. Expected: " + ts.TokenClass[expectedEntry.classification] + ", Actual: " + ts.TokenClass[actualEntry.classification],
+                );
                 assert.equal(actualEntry.length, expectedEntry.value.length, "Classification length does not match expected. Expected: " + ts.TokenClass[expectedEntry.value.length] + ", Actual: " + ts.TokenClass[actualEntry.length]);
             }
         }
@@ -228,10 +232,28 @@ describe("unittests:: services:: Colorization", () => {
             testLexicalClassification("...`", ts.EndOfLineState.InTemplateHeadOrNoSubstitutionTemplate, stringLiteral("...`"), finalEndOfLineState(ts.EndOfLineState.None));
         });
         it("classifies the substitution parts and middle/tail of a multiline template string", () => {
-            testLexicalClassification("${ 1 + 1 }...`", ts.EndOfLineState.InTemplateHeadOrNoSubstitutionTemplate, stringLiteral("${"), numberLiteral("1"), operator("+"), numberLiteral("1"), stringLiteral("}...`"), finalEndOfLineState(ts.EndOfLineState.None));
+            testLexicalClassification(
+                "${ 1 + 1 }...`",
+                ts.EndOfLineState.InTemplateHeadOrNoSubstitutionTemplate,
+                stringLiteral("${"),
+                numberLiteral("1"),
+                operator("+"),
+                numberLiteral("1"),
+                stringLiteral("}...`"),
+                finalEndOfLineState(ts.EndOfLineState.None),
+            );
         });
         it("classifies a template middle and propagates the end of line state", () => {
-            testLexicalClassification("${ 1 + 1 }...`", ts.EndOfLineState.InTemplateHeadOrNoSubstitutionTemplate, stringLiteral("${"), numberLiteral("1"), operator("+"), numberLiteral("1"), stringLiteral("}...`"), finalEndOfLineState(ts.EndOfLineState.None));
+            testLexicalClassification(
+                "${ 1 + 1 }...`",
+                ts.EndOfLineState.InTemplateHeadOrNoSubstitutionTemplate,
+                stringLiteral("${"),
+                numberLiteral("1"),
+                operator("+"),
+                numberLiteral("1"),
+                stringLiteral("}...`"),
+                finalEndOfLineState(ts.EndOfLineState.None),
+            );
         });
         it("classifies substitution expressions with curly braces appropriately", () => {
             let pos = 0;
@@ -274,7 +296,18 @@ describe("unittests:: services:: Colorization", () => {
             testLexicalClassification("<number", ts.EndOfLineState.None, operator("<"), keyword("number"), finalEndOfLineState(ts.EndOfLineState.None));
 
             // handle nesting properly.
-            testLexicalClassification("Foo<Foo,Foo<number", ts.EndOfLineState.None, identifier("Foo"), operator("<"), identifier("Foo"), operator(","), identifier("Foo"), operator("<"), identifier("number"), finalEndOfLineState(ts.EndOfLineState.None));
+            testLexicalClassification(
+                "Foo<Foo,Foo<number",
+                ts.EndOfLineState.None,
+                identifier("Foo"),
+                operator("<"),
+                identifier("Foo"),
+                operator(","),
+                identifier("Foo"),
+                operator("<"),
+                identifier("number"),
+                finalEndOfLineState(ts.EndOfLineState.None),
+            );
         });
 
         it("LexicallyClassifiesConflictTokens", () => {

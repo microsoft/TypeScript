@@ -485,7 +485,14 @@ function printEasyHelp(sys: System, simpleOptions: readonly CommandLineOption[])
     output = [
         ...output,
         ...generateSectionOptionsOutput(sys, getDiagnosticText(Diagnostics.COMMAND_LINE_FLAGS), cliCommands, /*subCategory*/ false, /*beforeOptionsDescription*/ undefined, /*afterOptionsDescription*/ undefined),
-        ...generateSectionOptionsOutput(sys, getDiagnosticText(Diagnostics.COMMON_COMPILER_OPTIONS), configOpts, /*subCategory*/ false, /*beforeOptionsDescription*/ undefined, formatMessage(Diagnostics.You_can_learn_about_all_of_the_compiler_options_at_0, "https://aka.ms/tsc")),
+        ...generateSectionOptionsOutput(
+            sys,
+            getDiagnosticText(Diagnostics.COMMON_COMPILER_OPTIONS),
+            configOpts,
+            /*subCategory*/ false,
+            /*beforeOptionsDescription*/ undefined,
+            formatMessage(Diagnostics.You_can_learn_about_all_of_the_compiler_options_at_0, "https://aka.ms/tsc"),
+        ),
     ];
 
     for (const line of output) {
@@ -505,7 +512,14 @@ function printAllHelp(sys: System, compilerOptions: readonly CommandLineOption[]
     let output: string[] = [...getHeader(sys, `${getDiagnosticText(Diagnostics.tsc_Colon_The_TypeScript_Compiler)} - ${getDiagnosticText(Diagnostics.Version_0, version)}`)];
     output = [
         ...output,
-        ...generateSectionOptionsOutput(sys, getDiagnosticText(Diagnostics.ALL_COMPILER_OPTIONS), compilerOptions, /*subCategory*/ true, /*beforeOptionsDescription*/ undefined, formatMessage(Diagnostics.You_can_learn_about_all_of_the_compiler_options_at_0, "https://aka.ms/tsc")),
+        ...generateSectionOptionsOutput(
+            sys,
+            getDiagnosticText(Diagnostics.ALL_COMPILER_OPTIONS),
+            compilerOptions,
+            /*subCategory*/ true,
+            /*beforeOptionsDescription*/ undefined,
+            formatMessage(Diagnostics.You_can_learn_about_all_of_the_compiler_options_at_0, "https://aka.ms/tsc"),
+        ),
     ];
     output = [
         ...output,
@@ -524,7 +538,10 @@ function printAllHelp(sys: System, compilerOptions: readonly CommandLineOption[]
             getDiagnosticText(Diagnostics.BUILD_OPTIONS),
             buildOptions,
             /*subCategory*/ false,
-            formatMessage(Diagnostics.Using_build_b_will_make_tsc_behave_more_like_a_build_orchestrator_than_a_compiler_This_is_used_to_trigger_building_composite_projects_which_you_can_learn_more_about_at_0, "https://aka.ms/tsc-composite-builds"),
+            formatMessage(
+                Diagnostics.Using_build_b_will_make_tsc_behave_more_like_a_build_orchestrator_than_a_compiler_This_is_used_to_trigger_building_composite_projects_which_you_can_learn_more_about_at_0,
+                "https://aka.ms/tsc-composite-builds",
+            ),
         ),
     ];
     for (const line of output) {
@@ -541,7 +558,10 @@ function printBuildHelp(sys: System, buildOptions: readonly CommandLineOption[])
             getDiagnosticText(Diagnostics.BUILD_OPTIONS),
             buildOptions,
             /*subCategory*/ false,
-            formatMessage(Diagnostics.Using_build_b_will_make_tsc_behave_more_like_a_build_orchestrator_than_a_compiler_This_is_used_to_trigger_building_composite_projects_which_you_can_learn_more_about_at_0, "https://aka.ms/tsc-composite-builds"),
+            formatMessage(
+                Diagnostics.Using_build_b_will_make_tsc_behave_more_like_a_build_orchestrator_than_a_compiler_This_is_used_to_trigger_building_composite_projects_which_you_can_learn_more_about_at_0,
+                "https://aka.ms/tsc-composite-builds",
+            ),
         ),
     ];
     for (const line of output) {

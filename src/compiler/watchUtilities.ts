@@ -803,7 +803,9 @@ export function getWatchFactory<X, Y = undefined>(host: WatchFactoryHost, watchL
             /*thisArgs*/ undefined,
             file,
             (...args: any[]) => {
-                const triggerredInfo = `${key === "watchFile" ? "FileWatcher" : "DirectoryWatcher"}:: Triggered with ${args[0]} ${args[1] !== undefined ? args[1] : ""}:: ${getWatchInfo(file, flags, options, detailInfo1, detailInfo2, getDetailWatchInfo)}`;
+                const triggerredInfo = `${key === "watchFile" ? "FileWatcher" : "DirectoryWatcher"}:: Triggered with ${args[0]} ${args[1] !== undefined ? args[1] : ""}:: ${
+                    getWatchInfo(file, flags, options, detailInfo1, detailInfo2, getDetailWatchInfo)
+                }`;
                 log(triggerredInfo);
                 const start = timestamp();
                 cb.call(/*thisArg*/ undefined, ...args);

@@ -380,7 +380,13 @@ export function createExpressionForPropertyName(factory: NodeFactory, memberName
     }
 }
 
-function createExpressionForAccessorDeclaration(factory: NodeFactory, properties: NodeArray<Declaration>, property: AccessorDeclaration & { readonly name: Exclude<PropertyName, PrivateIdentifier>; }, receiver: Expression, multiLine: boolean) {
+function createExpressionForAccessorDeclaration(
+    factory: NodeFactory,
+    properties: NodeArray<Declaration>,
+    property: AccessorDeclaration & { readonly name: Exclude<PropertyName, PrivateIdentifier>; },
+    receiver: Expression,
+    multiLine: boolean,
+) {
     const { firstAccessor, getAccessor, setAccessor } = getAllAccessorDeclarations(properties, property);
     if (property === firstAccessor) {
         return setTextRange(
@@ -534,7 +540,13 @@ export function createExpressionForObjectLiteralElementLike(factory: NodeFactory
  *
  * @internal
  */
-export function expandPreOrPostfixIncrementOrDecrementExpression(factory: NodeFactory, node: PrefixUnaryExpression | PostfixUnaryExpression, expression: Expression, recordTempVariable: (node: Identifier) => void, resultVariable: Identifier | undefined) {
+export function expandPreOrPostfixIncrementOrDecrementExpression(
+    factory: NodeFactory,
+    node: PrefixUnaryExpression | PostfixUnaryExpression,
+    expression: Expression,
+    recordTempVariable: (node: Identifier) => void,
+    resultVariable: Identifier | undefined,
+) {
     const operator = node.operator;
     Debug.assert(operator === SyntaxKind.PlusPlusToken || operator === SyntaxKind.MinusMinusToken, "Expected 'node' to be a pre- or post-increment or pre- or post-decrement expression");
 
@@ -716,7 +728,15 @@ export function hasRecordedExternalHelpers(sourceFile: SourceFile) {
 }
 
 /** @internal */
-export function createExternalHelpersImportDeclarationIfNeeded(nodeFactory: NodeFactory, helperFactory: EmitHelperFactory, sourceFile: SourceFile, compilerOptions: CompilerOptions, hasExportStarsToExportValues?: boolean, hasImportStar?: boolean, hasImportDefault?: boolean) {
+export function createExternalHelpersImportDeclarationIfNeeded(
+    nodeFactory: NodeFactory,
+    helperFactory: EmitHelperFactory,
+    sourceFile: SourceFile,
+    compilerOptions: CompilerOptions,
+    hasExportStarsToExportValues?: boolean,
+    hasImportStar?: boolean,
+    hasImportDefault?: boolean,
+) {
     if (compilerOptions.importHelpers && isEffectiveExternalModule(sourceFile, compilerOptions)) {
         let namedBindings: NamedImportBindings | undefined;
         const moduleKind = getEmitModuleKind(compilerOptions);
@@ -831,7 +851,14 @@ export function getLocalNameForExternalImport(factory: NodeFactory, node: Import
  *
  * @internal
  */
-export function getExternalModuleNameLiteral(factory: NodeFactory, importNode: ImportDeclaration | ExportDeclaration | ImportEqualsDeclaration | ImportCall, sourceFile: SourceFile, host: EmitHost, resolver: EmitResolver, compilerOptions: CompilerOptions) {
+export function getExternalModuleNameLiteral(
+    factory: NodeFactory,
+    importNode: ImportDeclaration | ExportDeclaration | ImportEqualsDeclaration | ImportCall,
+    sourceFile: SourceFile,
+    host: EmitHost,
+    resolver: EmitResolver,
+    compilerOptions: CompilerOptions,
+) {
     const moduleName = getExternalModuleName(importNode);
     if (moduleName && isStringLiteral(moduleName)) {
         return tryGetModuleNameFromDeclaration(importNode, host, factory, resolver, compilerOptions)

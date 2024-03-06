@@ -254,7 +254,16 @@ function doChange(changes: textChanges.ChangeTracker, sourceFile: SourceFile, po
 
             function createFunctionExpressionMember(members: ClassElement[], functionExpression: FunctionExpression, name: PropertyName) {
                 const fullModifiers = concatenate(modifiers, getModifierKindFromSource(functionExpression, SyntaxKind.AsyncKeyword));
-                const method = factory.createMethodDeclaration(fullModifiers, /*asteriskToken*/ undefined, name, /*questionToken*/ undefined, /*typeParameters*/ undefined, functionExpression.parameters, /*type*/ undefined, functionExpression.body);
+                const method = factory.createMethodDeclaration(
+                    fullModifiers,
+                    /*asteriskToken*/ undefined,
+                    name,
+                    /*questionToken*/ undefined,
+                    /*typeParameters*/ undefined,
+                    functionExpression.parameters,
+                    /*type*/ undefined,
+                    functionExpression.body,
+                );
                 copyLeadingComments(assignmentBinaryExpression, method, sourceFile);
                 members.push(method);
                 return;

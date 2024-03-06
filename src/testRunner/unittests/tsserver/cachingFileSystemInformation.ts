@@ -510,7 +510,8 @@ describe("unittests:: tsserver:: CachingFileSystemInformation:: tsserverProjectS
                 { path: "/a/b/node_modules/.staging/rxjs-22375c61/src/add/observable/dom" },
                 {
                     path: "/a/b/node_modules/.staging/@types/lodash-e56c4fe7/index.d.ts",
-                    content: "\n// Stub for lodash\nexport = _;\nexport as namespace _;\ndeclare var _: _.LoDashStatic;\ndeclare namespace _ {\n    interface LoDashStatic {\n        someProp: string;\n    }\n    class SomeClass {\n        someMethod(): void;\n    }\n}",
+                    content:
+                        "\n// Stub for lodash\nexport = _;\nexport as namespace _;\ndeclare var _: _.LoDashStatic;\ndeclare namespace _ {\n    interface LoDashStatic {\n        someProp: string;\n    }\n    class SomeClass {\n        someMethod(): void;\n    }\n}",
                 },
             ].map(getRootedFileOrFolder));
             verifyAfterPartialOrCompleteNpmInstall();

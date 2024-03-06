@@ -475,7 +475,13 @@ function createActionsForAddMissingMemberInTypeScriptFile(context: CodeFixContex
     const addPropertyDeclarationChanges = (modifierFlags: ModifierFlags) => textChanges.ChangeTracker.with(context, t => addPropertyDeclaration(t, declSourceFile, parentDeclaration, memberName, typeNode, modifierFlags));
 
     const actions = [
-        createCodeFixAction(fixMissingMember, addPropertyDeclarationChanges(modifierFlags & ModifierFlags.Static), [isStatic ? Diagnostics.Declare_static_property_0 : Diagnostics.Declare_property_0, memberName], fixMissingMember, Diagnostics.Add_all_missing_members),
+        createCodeFixAction(
+            fixMissingMember,
+            addPropertyDeclarationChanges(modifierFlags & ModifierFlags.Static),
+            [isStatic ? Diagnostics.Declare_static_property_0 : Diagnostics.Declare_property_0, memberName],
+            fixMissingMember,
+            Diagnostics.Add_all_missing_members,
+        ),
     ];
     if (isStatic || isPrivateIdentifier(token)) {
         return actions;
@@ -504,7 +510,14 @@ function getTypeNode(checker: TypeChecker, node: ClassLikeDeclaration | Interfac
     return typeNode || factory.createKeywordTypeNode(SyntaxKind.AnyKeyword);
 }
 
-function addPropertyDeclaration(changeTracker: textChanges.ChangeTracker, sourceFile: SourceFile, node: ClassLikeDeclaration | InterfaceDeclaration | TypeLiteralNode, tokenName: string, typeNode: TypeNode, modifierFlags: ModifierFlags): void {
+function addPropertyDeclaration(
+    changeTracker: textChanges.ChangeTracker,
+    sourceFile: SourceFile,
+    node: ClassLikeDeclaration | InterfaceDeclaration | TypeLiteralNode,
+    tokenName: string,
+    typeNode: TypeNode,
+    modifierFlags: ModifierFlags,
+): void {
     const modifiers = modifierFlags ? factory.createNodeArray(factory.createModifiersFromModifierFlags(modifierFlags)) : undefined;
 
     const property = isClassLike(node)
@@ -796,7 +809,10 @@ function getUnmatchedAttributes(checker: TypeChecker, target: ScriptTarget, sour
             }
         }
     }
-    return filter(targetProps, targetProp => isIdentifierText(targetProp.name, target, LanguageVariant.JSX) && !((targetProp.flags & SymbolFlags.Optional || getCheckFlags(targetProp) & CheckFlags.Partial) || seenNames.has(targetProp.escapedName)));
+    return filter(
+        targetProps,
+        targetProp => isIdentifierText(targetProp.name, target, LanguageVariant.JSX) && !((targetProp.flags & SymbolFlags.Optional || getCheckFlags(targetProp) & CheckFlags.Partial) || seenNames.has(targetProp.escapedName)),
+    );
 }
 
 function tryGetContainingMethodDeclaration(node: ClassLikeDeclaration | InterfaceDeclaration | TypeLiteralNode, callExpression: CallExpression) {

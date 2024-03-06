@@ -605,7 +605,11 @@ export function transformModule(context: TransformationContext): (x: SourceFile 
             append(
                 statements,
                 factory.createExpressionStatement(
-                    reduceLeft(currentModuleInfo.exportedNames, (prev, nextId) => factory.createAssignment(factory.createPropertyAccessExpression(factory.createIdentifier("exports"), factory.createIdentifier(idText(nextId))), prev), factory.createVoidZero() as Expression),
+                    reduceLeft(
+                        currentModuleInfo.exportedNames,
+                        (prev, nextId) => factory.createAssignment(factory.createPropertyAccessExpression(factory.createIdentifier("exports"), factory.createIdentifier(idText(nextId))), prev),
+                        factory.createVoidZero() as Expression,
+                    ),
                 ),
             );
         }
@@ -2065,7 +2069,15 @@ export function transformModule(context: TransformationContext): (x: SourceFile 
      * @param location The location to use for source maps and comments for the export.
      * @param allowComments Whether to allow comments on the export.
      */
-    function appendExportStatement(statements: Statement[] | undefined, seen: IdentifierNameMap<boolean>, exportName: Identifier, expression: Expression, location?: TextRange, allowComments?: boolean, liveBinding?: boolean): Statement[] | undefined {
+    function appendExportStatement(
+        statements: Statement[] | undefined,
+        seen: IdentifierNameMap<boolean>,
+        exportName: Identifier,
+        expression: Expression,
+        location?: TextRange,
+        allowComments?: boolean,
+        liveBinding?: boolean,
+    ): Statement[] | undefined {
         if (!seen.has(exportName)) {
             seen.set(exportName, true);
             statements = append(statements, createExportStatement(exportName, expression, location, allowComments, liveBinding));

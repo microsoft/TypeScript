@@ -521,7 +521,9 @@ function resolveModuleNameUsingGlobalCache(
 }
 
 /** @internal */
-export type GetResolutionWithResolvedFileName<T extends ResolutionWithFailedLookupLocations = ResolutionWithFailedLookupLocations, R extends ResolutionWithResolvedFileName = ResolutionWithResolvedFileName> = (resolution: T) => R | undefined;
+export type GetResolutionWithResolvedFileName<T extends ResolutionWithFailedLookupLocations = ResolutionWithFailedLookupLocations, R extends ResolutionWithResolvedFileName = ResolutionWithResolvedFileName> = (
+    resolution: T,
+) => R | undefined;
 
 /** @internal */
 export function createResolutionCache(resolutionHost: ResolutionCacheHost, rootDirForResolution: string, logChangesWhenResolvingModule: boolean): ResolutionCache {
@@ -1330,7 +1332,10 @@ export function createResolutionCache(resolutionHost: ResolutionCacheHost, rootD
         removeResolutionsOfFileFromCache(resolvedTypeReferenceDirectives, filePath, getResolvedTypeReferenceDirective, syncDirWatcherRemove);
     }
 
-    function invalidateResolutions(resolutions: Set<ResolutionWithFailedLookupLocations> | Map<string, ResolutionWithFailedLookupLocations> | undefined, canInvalidate: (resolution: ResolutionWithFailedLookupLocations) => boolean | undefined) {
+    function invalidateResolutions(
+        resolutions: Set<ResolutionWithFailedLookupLocations> | Map<string, ResolutionWithFailedLookupLocations> | undefined,
+        canInvalidate: (resolution: ResolutionWithFailedLookupLocations) => boolean | undefined,
+    ) {
         if (!resolutions) return false;
         let invalidated = false;
         resolutions.forEach(resolution => {

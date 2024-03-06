@@ -717,7 +717,15 @@ export function getFirstProjectOutput(configFile: ParsedCommandLine, ignoreCase:
 
 /** @internal */
 // targetSourceFile is when users only want one file in entire project to be emitted. This is used in compileOnSave feature
-export function emitFiles(resolver: EmitResolver, host: EmitHost, targetSourceFile: SourceFile | undefined, { scriptTransformers, declarationTransformers }: EmitTransformers, emitOnly?: boolean | EmitOnly, onlyBuildInfo?: boolean, forceDtsEmit?: boolean): EmitResult {
+export function emitFiles(
+    resolver: EmitResolver,
+    host: EmitHost,
+    targetSourceFile: SourceFile | undefined,
+    { scriptTransformers, declarationTransformers }: EmitTransformers,
+    emitOnly?: boolean | EmitOnly,
+    onlyBuildInfo?: boolean,
+    forceDtsEmit?: boolean,
+): EmitResult {
     // Why var? It avoids TDZ checks in the runtime which can be costly.
     // See: https://github.com/microsoft/TypeScript/issues/52924
     /* eslint-disable no-var */
@@ -2165,7 +2173,12 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
             emitTypeAnnotation(node.type);
         }
         // The comment position has to fallback to any present node within the parameterdeclaration because as it turns out, the parser can make parameter declarations with _just_ an initializer.
-        emitInitializer(node.initializer, node.type ? node.type.end : node.questionToken ? node.questionToken.end : node.name ? node.name.end : node.modifiers ? node.modifiers.end : node.pos, node, parenthesizer.parenthesizeExpressionForDisallowedComma);
+        emitInitializer(
+            node.initializer,
+            node.type ? node.type.end : node.questionToken ? node.questionToken.end : node.name ? node.name.end : node.modifiers ? node.modifiers.end : node.pos,
+            node,
+            parenthesizer.parenthesizeExpressionForDisallowedComma,
+        );
     }
 
     function emitDecorator(decorator: Decorator) {
@@ -4519,7 +4532,14 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
         }
     }
 
-    function emitList<Child extends Node, Children extends NodeArray<Child>>(parentNode: Node | undefined, children: Children | undefined, format: ListFormat, parenthesizerRule?: ParenthesizerRuleOrSelector<Child>, start?: number, count?: number) {
+    function emitList<Child extends Node, Children extends NodeArray<Child>>(
+        parentNode: Node | undefined,
+        children: Children | undefined,
+        format: ListFormat,
+        parenthesizerRule?: ParenthesizerRuleOrSelector<Child>,
+        start?: number,
+        count?: number,
+    ) {
         emitNodeList(
             emit,
             parentNode,
@@ -4531,7 +4551,14 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
         );
     }
 
-    function emitExpressionList<Child extends Node, Children extends NodeArray<Child>>(parentNode: Node | undefined, children: Children | undefined, format: ListFormat, parenthesizerRule?: ParenthesizerRuleOrSelector<Child>, start?: number, count?: number) {
+    function emitExpressionList<Child extends Node, Children extends NodeArray<Child>>(
+        parentNode: Node | undefined,
+        children: Children | undefined,
+        format: ListFormat,
+        parenthesizerRule?: ParenthesizerRuleOrSelector<Child>,
+        start?: number,
+        count?: number,
+    ) {
         emitNodeList(emitExpression, parentNode, children, format, parenthesizerRule, start, count);
     }
 

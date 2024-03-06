@@ -142,7 +142,13 @@ function doChange(changes: textChanges.ChangeTracker, sourceFile: SourceFile, de
                     sameMap(importClause.namedBindings.elements, e => factory.updateImportSpecifier(e, /*isTypeOnly*/ false, e.propertyName, e.name)),
                 )
                 : importClause.namedBindings;
-            const importDeclaration = factory.updateImportDeclaration(declaration, declaration.modifiers, factory.updateImportClause(importClause, /*isTypeOnly*/ true, importClause.name, newNamedBindings), declaration.moduleSpecifier, declaration.attributes);
+            const importDeclaration = factory.updateImportDeclaration(
+                declaration,
+                declaration.modifiers,
+                factory.updateImportClause(importClause, /*isTypeOnly*/ true, importClause.name, newNamedBindings),
+                declaration.moduleSpecifier,
+                declaration.attributes,
+            );
             changes.replaceNode(sourceFile, declaration, importDeclaration);
         }
     }

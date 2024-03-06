@@ -479,7 +479,10 @@ export function getIncomingCalls(program: Program, declaration: CallHierarchyDec
         return [];
     }
     const location = getCallHierarchyDeclarationReferenceNode(declaration);
-    const calls = filter(FindAllReferences.findReferenceOrRenameEntries(program, cancellationToken, program.getSourceFiles(), location, /*position*/ 0, { use: FindAllReferences.FindReferencesUse.References }, convertEntryToCallSite), isDefined);
+    const calls = filter(
+        FindAllReferences.findReferenceOrRenameEntries(program, cancellationToken, program.getSourceFiles(), location, /*position*/ 0, { use: FindAllReferences.FindReferencesUse.References }, convertEntryToCallSite),
+        isDefined,
+    );
     return calls ? group(calls, getCallSiteGroupKey, entries => convertCallSiteGroupToIncomingCall(program, entries)) : [];
 }
 

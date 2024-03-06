@@ -362,10 +362,23 @@ export interface LanguageServiceHost extends GetEffectiveTypeRootsHost, MinimalR
      * If this is implemented, `getResolvedModuleWithFailedLookupLocationsFromCache` should be too.
      */
     /** @deprecated supply resolveModuleNameLiterals instead for resolution that can handle newer resolution modes like nodenext */
-    resolveModuleNames?(moduleNames: string[], containingFile: string, reusedNames: string[] | undefined, redirectedReference: ResolvedProjectReference | undefined, options: CompilerOptions, containingSourceFile?: SourceFile): (ResolvedModule | undefined)[];
+    resolveModuleNames?(
+        moduleNames: string[],
+        containingFile: string,
+        reusedNames: string[] | undefined,
+        redirectedReference: ResolvedProjectReference | undefined,
+        options: CompilerOptions,
+        containingSourceFile?: SourceFile,
+    ): (ResolvedModule | undefined)[];
     getResolvedModuleWithFailedLookupLocationsFromCache?(modulename: string, containingFile: string, resolutionMode?: ResolutionMode): ResolvedModuleWithFailedLookupLocations | undefined;
     /** @deprecated supply resolveTypeReferenceDirectiveReferences instead for resolution that can handle newer resolution modes like nodenext */
-    resolveTypeReferenceDirectives?(typeDirectiveNames: string[] | FileReference[], containingFile: string, redirectedReference: ResolvedProjectReference | undefined, options: CompilerOptions, containingFileMode?: ResolutionMode): (ResolvedTypeReferenceDirective | undefined)[];
+    resolveTypeReferenceDirectives?(
+        typeDirectiveNames: string[] | FileReference[],
+        containingFile: string,
+        redirectedReference: ResolvedProjectReference | undefined,
+        options: CompilerOptions,
+        containingFileMode?: ResolutionMode,
+    ): (ResolvedTypeReferenceDirective | undefined)[];
     resolveModuleNameLiterals?(
         moduleLiterals: readonly StringLiteralLike[],
         containingFile: string,
@@ -657,7 +670,14 @@ export interface LanguageService {
      * property of each returned `RefactorActionInfo` and ensure they are able to collect the appropriate
      * arguments for any interactive action before offering it.
      */
-    getApplicableRefactors(fileName: string, positionOrRange: number | TextRange, preferences: UserPreferences | undefined, triggerReason?: RefactorTriggerReason, kind?: string, includeInteractiveActions?: boolean): ApplicableRefactorInfo[];
+    getApplicableRefactors(
+        fileName: string,
+        positionOrRange: number | TextRange,
+        preferences: UserPreferences | undefined,
+        triggerReason?: RefactorTriggerReason,
+        kind?: string,
+        includeInteractiveActions?: boolean,
+    ): ApplicableRefactorInfo[];
     getEditsForRefactor(
         fileName: string,
         formatOptions: FormatCodeSettings,

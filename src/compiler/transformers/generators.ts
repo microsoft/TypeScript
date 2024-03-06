@@ -1210,7 +1210,11 @@ export function transformGenerators(context: TransformationContext): (x: SourceF
             //  .mark resumeLabel
             //      a = _a[%sent%]
 
-            return factory.updateElementAccessExpression(node, cacheExpression(Debug.checkDefined(visitNode(node.expression, visitor, isLeftHandSideExpression))), Debug.checkDefined(visitNode(node.argumentExpression, visitor, isExpression)));
+            return factory.updateElementAccessExpression(
+                node,
+                cacheExpression(Debug.checkDefined(visitNode(node.expression, visitor, isLeftHandSideExpression))),
+                Debug.checkDefined(visitNode(node.argumentExpression, visitor, isExpression)),
+            );
         }
 
         return visitEachChild(node, visitor, context);
@@ -1730,7 +1734,12 @@ export function transformGenerators(context: TransformationContext): (x: SourceF
                 hoistVariableDeclaration(variable.name as Identifier);
             }
 
-            node = factory.updateForInStatement(node, initializer.declarations[0].name as Identifier, Debug.checkDefined(visitNode(node.expression, visitor, isExpression)), Debug.checkDefined(visitNode(node.statement, visitor, isStatement, factory.liftToBlock)));
+            node = factory.updateForInStatement(
+                node,
+                initializer.declarations[0].name as Identifier,
+                Debug.checkDefined(visitNode(node.expression, visitor, isExpression)),
+                Debug.checkDefined(visitNode(node.statement, visitor, isStatement, factory.liftToBlock)),
+            );
         }
         else {
             node = visitEachChild(node, visitor, context);

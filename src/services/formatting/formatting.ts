@@ -1098,7 +1098,16 @@ function formatSpanWorker(
         return lineAction;
     }
 
-    function processPair(currentItem: TextRangeWithKind, currentStartLine: number, currentParent: Node, previousItem: TextRangeWithKind, previousStartLine: number, previousParent: Node, contextNode: Node, dynamicIndentation: DynamicIndentation | undefined): LineAction {
+    function processPair(
+        currentItem: TextRangeWithKind,
+        currentStartLine: number,
+        currentParent: Node,
+        previousItem: TextRangeWithKind,
+        previousStartLine: number,
+        previousParent: Node,
+        contextNode: Node,
+        dynamicIndentation: DynamicIndentation | undefined,
+    ): LineAction {
         formattingContext.updateContext(previousItem, previousParent, currentItem, currentParent, contextNode);
 
         const rules = getRules(formattingContext);

@@ -2249,7 +2249,15 @@ export function transformClassFields(context: TransformationContext): (x: Source
         );
     }
 
-    function transformConstructorBodyWorker(statementsOut: Statement[], statementsIn: NodeArray<Statement>, statementOffset: number, superPath: readonly number[], superPathDepth: number, initializerStatements: readonly Statement[], constructor: ConstructorDeclaration) {
+    function transformConstructorBodyWorker(
+        statementsOut: Statement[],
+        statementsIn: NodeArray<Statement>,
+        statementOffset: number,
+        superPath: readonly number[],
+        superPathDepth: number,
+        initializerStatements: readonly Statement[],
+        constructor: ConstructorDeclaration,
+    ) {
         const superStatementIndex = superPath[superPathDepth];
         const superStatement = statementsIn[superStatementIndex];
         addRange(statementsOut, visitNodes(statementsIn, visitor, isStatement, statementOffset, superStatementIndex - statementOffset));

@@ -26,25 +26,35 @@ describe("unittests:: services:: PreProcessFile:", () => {
 
     describe("Test preProcessFiles,", () => {
         it("Correctly return referenced files from triple slash", () => {
-            test('///<reference path = "refFile1.ts" />' + "\n" + '///<reference path ="refFile2.ts"/>' + "\n" + '///<reference path="refFile3.ts" />' + "\n" + '///<reference path= "..\\refFile4d.ts" />', /*readImportFile*/ true, /*detectJavaScriptImports*/ false, {
-                referencedFiles: [{ fileName: "refFile1.ts", pos: 22, end: 33 }, { fileName: "refFile2.ts", pos: 59, end: 70 }, { fileName: "refFile3.ts", pos: 94, end: 105 }, { fileName: "..\\refFile4d.ts", pos: 131, end: 146 }],
-                importedFiles: [] as ts.FileReference[],
-                typeReferenceDirectives: [],
-                libReferenceDirectives: [],
-                ambientExternalModules: undefined,
-                isLibFile: false,
-            });
+            test(
+                '///<reference path = "refFile1.ts" />' + "\n" + '///<reference path ="refFile2.ts"/>' + "\n" + '///<reference path="refFile3.ts" />' + "\n" + '///<reference path= "..\\refFile4d.ts" />',
+                /*readImportFile*/ true,
+                /*detectJavaScriptImports*/ false,
+                {
+                    referencedFiles: [{ fileName: "refFile1.ts", pos: 22, end: 33 }, { fileName: "refFile2.ts", pos: 59, end: 70 }, { fileName: "refFile3.ts", pos: 94, end: 105 }, { fileName: "..\\refFile4d.ts", pos: 131, end: 146 }],
+                    importedFiles: [] as ts.FileReference[],
+                    typeReferenceDirectives: [],
+                    libReferenceDirectives: [],
+                    ambientExternalModules: undefined,
+                    isLibFile: false,
+                },
+            );
         });
 
         it("Do not return reference path because of invalid triple-slash syntax", () => {
-            test('///<reference path"refFile1.ts" />' + "\n" + '///<reference path ="refFile2.ts">' + "\n" + '///<referencepath="refFile3.ts" />' + "\n" + '///<reference pat= "refFile4d.ts" />', /*readImportFile*/ true, /*detectJavaScriptImports*/ false, {
-                referencedFiles: [] as ts.FileReference[],
-                importedFiles: [] as ts.FileReference[],
-                typeReferenceDirectives: [],
-                libReferenceDirectives: [],
-                ambientExternalModules: undefined,
-                isLibFile: false,
-            });
+            test(
+                '///<reference path"refFile1.ts" />' + "\n" + '///<reference path ="refFile2.ts">' + "\n" + '///<referencepath="refFile3.ts" />' + "\n" + '///<reference pat= "refFile4d.ts" />',
+                /*readImportFile*/ true,
+                /*detectJavaScriptImports*/ false,
+                {
+                    referencedFiles: [] as ts.FileReference[],
+                    importedFiles: [] as ts.FileReference[],
+                    typeReferenceDirectives: [],
+                    libReferenceDirectives: [],
+                    ambientExternalModules: undefined,
+                    isLibFile: false,
+                },
+            );
         });
 
         it("Do not return reference path of non-imports", () => {
@@ -74,7 +84,11 @@ describe("unittests:: services:: PreProcessFile:", () => {
                 referencedFiles: [] as ts.FileReference[],
                 typeReferenceDirectives: [],
                 libReferenceDirectives: [],
-                importedFiles: [{ fileName: "r1.ts", pos: 20, end: 25 }, { fileName: "r2.ts", pos: 49, end: 54 }, { fileName: "r3.ts", pos: 78, end: 83 }, { fileName: "r4.ts", pos: 106, end: 111 }, { fileName: "r5.ts", pos: 138, end: 143 }],
+                importedFiles: [{ fileName: "r1.ts", pos: 20, end: 25 }, { fileName: "r2.ts", pos: 49, end: 54 }, { fileName: "r3.ts", pos: 78, end: 83 }, { fileName: "r4.ts", pos: 106, end: 111 }, {
+                    fileName: "r5.ts",
+                    pos: 138,
+                    end: 143,
+                }],
                 ambientExternalModules: undefined,
                 isLibFile: false,
             });
@@ -114,14 +128,19 @@ describe("unittests:: services:: PreProcessFile:", () => {
         });
 
         it("Correctly return referenced files and import files even with some invalid syntax", () => {
-            test('///<reference path="refFile1.ts" />' + "\n" + '///<reference path "refFile2.ts"/>' + "\n" + 'import i1 = require("r1.ts"); import = require("r2.ts"); import i2 = require("r3.ts");', /*readImportFile*/ true, /*detectJavaScriptImports*/ false, {
-                referencedFiles: [{ fileName: "refFile1.ts", pos: 20, end: 31 }],
-                typeReferenceDirectives: [],
-                libReferenceDirectives: [],
-                importedFiles: [{ fileName: "r1.ts", pos: 91, end: 96 }, { fileName: "r3.ts", pos: 148, end: 153 }],
-                ambientExternalModules: undefined,
-                isLibFile: false,
-            });
+            test(
+                '///<reference path="refFile1.ts" />' + "\n" + '///<reference path "refFile2.ts"/>' + "\n" + 'import i1 = require("r1.ts"); import = require("r2.ts"); import i2 = require("r3.ts");',
+                /*readImportFile*/ true,
+                /*detectJavaScriptImports*/ false,
+                {
+                    referencedFiles: [{ fileName: "refFile1.ts", pos: 20, end: 31 }],
+                    typeReferenceDirectives: [],
+                    libReferenceDirectives: [],
+                    importedFiles: [{ fileName: "r1.ts", pos: 91, end: 96 }, { fileName: "r3.ts", pos: 148, end: 153 }],
+                    ambientExternalModules: undefined,
+                    isLibFile: false,
+                },
+            );
         });
 
         it("Correctly return ES6 imports", () => {

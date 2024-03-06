@@ -499,15 +499,21 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
     const getJSDocPrimaryTypeCreateFunction = memoizeOne(<T extends JSDocType>(kind: T["kind"]) => () => createJSDocPrimaryTypeWorker(kind));
     const getJSDocUnaryTypeCreateFunction = memoizeOne(<T extends JSDocType & { readonly type: TypeNode | undefined; }>(kind: T["kind"]) => (type: T["type"]) => createJSDocUnaryTypeWorker<T>(kind, type));
     const getJSDocUnaryTypeUpdateFunction = memoizeOne(<T extends JSDocType & { readonly type: TypeNode | undefined; }>(kind: T["kind"]) => (node: T, type: T["type"]) => updateJSDocUnaryTypeWorker<T>(kind, node, type));
-    const getJSDocPrePostfixUnaryTypeCreateFunction = memoizeOne(<T extends JSDocType & { readonly type: TypeNode | undefined; readonly postfix: boolean; }>(kind: T["kind"]) => (type: T["type"], postfix?: boolean) => createJSDocPrePostfixUnaryTypeWorker<T>(kind, type, postfix));
-    const getJSDocPrePostfixUnaryTypeUpdateFunction = memoizeOne(<T extends JSDocType & { readonly type: TypeNode | undefined; readonly postfix: boolean; }>(kind: T["kind"]) => (node: T, type: T["type"]) => updateJSDocPrePostfixUnaryTypeWorker<T>(kind, node, type));
+    const getJSDocPrePostfixUnaryTypeCreateFunction = memoizeOne(<T extends JSDocType & { readonly type: TypeNode | undefined; readonly postfix: boolean; }>(kind: T["kind"]) => (type: T["type"], postfix?: boolean) =>
+        createJSDocPrePostfixUnaryTypeWorker<T>(kind, type, postfix)
+    );
+    const getJSDocPrePostfixUnaryTypeUpdateFunction = memoizeOne(<T extends JSDocType & { readonly type: TypeNode | undefined; readonly postfix: boolean; }>(kind: T["kind"]) => (node: T, type: T["type"]) =>
+        updateJSDocPrePostfixUnaryTypeWorker<T>(kind, node, type)
+    );
     const getJSDocSimpleTagCreateFunction = memoizeOne(<T extends JSDocTag>(kind: T["kind"]) => (tagName: Identifier | undefined, comment?: NodeArray<JSDocComment>) => createJSDocSimpleTagWorker(kind, tagName, comment));
     const getJSDocSimpleTagUpdateFunction = memoizeOne(<T extends JSDocTag>(kind: T["kind"]) => (node: T, tagName: Identifier | undefined, comment?: NodeArray<JSDocComment>) => updateJSDocSimpleTagWorker(kind, node, tagName, comment));
-    const getJSDocTypeLikeTagCreateFunction = memoizeOne(<T extends JSDocTag & { typeExpression?: JSDocTypeExpression; }>(kind: T["kind"]) => (tagName: Identifier | undefined, typeExpression?: JSDocTypeExpression, comment?: NodeArray<JSDocComment>) =>
-        createJSDocTypeLikeTagWorker(kind, tagName, typeExpression, comment)
+    const getJSDocTypeLikeTagCreateFunction = memoizeOne(
+        <T extends JSDocTag & { typeExpression?: JSDocTypeExpression; }>(kind: T["kind"]) => (tagName: Identifier | undefined, typeExpression?: JSDocTypeExpression, comment?: NodeArray<JSDocComment>) =>
+            createJSDocTypeLikeTagWorker(kind, tagName, typeExpression, comment),
     );
-    const getJSDocTypeLikeTagUpdateFunction = memoizeOne(<T extends JSDocTag & { typeExpression?: JSDocTypeExpression; }>(kind: T["kind"]) => (node: T, tagName: Identifier | undefined, typeExpression?: JSDocTypeExpression, comment?: NodeArray<JSDocComment>) =>
-        updateJSDocTypeLikeTagWorker(kind, node, tagName, typeExpression, comment)
+    const getJSDocTypeLikeTagUpdateFunction = memoizeOne(
+        <T extends JSDocTag & { typeExpression?: JSDocTypeExpression; }>(kind: T["kind"]) => (node: T, tagName: Identifier | undefined, typeExpression?: JSDocTypeExpression, comment?: NodeArray<JSDocComment>) =>
+            updateJSDocTypeLikeTagWorker(kind, node, tagName, typeExpression, comment),
     );
 
     const factory: NodeFactory = {
@@ -1365,7 +1371,10 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
     // @api
     function createUniqueName(text: string, flags: GeneratedIdentifierFlags = GeneratedIdentifierFlags.None, prefix?: string | GeneratedNamePart, suffix?: string): Identifier {
         Debug.assert(!(flags & GeneratedIdentifierFlags.KindMask), "Argument out of range: flags");
-        Debug.assert((flags & (GeneratedIdentifierFlags.Optimistic | GeneratedIdentifierFlags.FileLevel)) !== GeneratedIdentifierFlags.FileLevel, "GeneratedIdentifierFlags.FileLevel cannot be set without also setting GeneratedIdentifierFlags.Optimistic");
+        Debug.assert(
+            (flags & (GeneratedIdentifierFlags.Optimistic | GeneratedIdentifierFlags.FileLevel)) !== GeneratedIdentifierFlags.FileLevel,
+            "GeneratedIdentifierFlags.FileLevel cannot be set without also setting GeneratedIdentifierFlags.Optimistic",
+        );
         return createBaseGeneratedIdentifier(text, GeneratedIdentifierFlags.Unique | flags, prefix, suffix);
     }
 
@@ -5217,7 +5226,13 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
     }
 
     // @api
-    function updateJSDocTemplateTag(node: JSDocTemplateTag, tagName: Identifier = getDefaultTagName(node), constraint: JSDocTypeExpression | undefined, typeParameters: readonly TypeParameterDeclaration[], comment: string | NodeArray<JSDocComment> | undefined): JSDocTemplateTag {
+    function updateJSDocTemplateTag(
+        node: JSDocTemplateTag,
+        tagName: Identifier = getDefaultTagName(node),
+        constraint: JSDocTypeExpression | undefined,
+        typeParameters: readonly TypeParameterDeclaration[],
+        comment: string | NodeArray<JSDocComment> | undefined,
+    ): JSDocTemplateTag {
         return node.tagName !== tagName
                 || node.constraint !== constraint
                 || node.typeParameters !== typeParameters
@@ -5327,7 +5342,13 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
     }
 
     // @api
-    function updateJSDocCallbackTag(node: JSDocCallbackTag, tagName: Identifier = getDefaultTagName(node), typeExpression: JSDocSignature, fullName: Identifier | JSDocNamespaceDeclaration | undefined, comment: string | NodeArray<JSDocComment> | undefined): JSDocCallbackTag {
+    function updateJSDocCallbackTag(
+        node: JSDocCallbackTag,
+        tagName: Identifier = getDefaultTagName(node),
+        typeExpression: JSDocSignature,
+        fullName: Identifier | JSDocNamespaceDeclaration | undefined,
+        comment: string | NodeArray<JSDocComment> | undefined,
+    ): JSDocCallbackTag {
         return node.tagName !== tagName
                 || node.typeExpression !== typeExpression
                 || node.fullName !== fullName

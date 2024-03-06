@@ -583,7 +583,16 @@ export function getPromoteTypeOnlyCompletionAction(sourceFile: SourceFile, symbo
     ));
 }
 
-function getImportFixForSymbol(sourceFile: SourceFile, exportInfos: readonly SymbolExportInfo[], program: Program, position: number | undefined, isValidTypeOnlyUseSite: boolean, useRequire: boolean, host: LanguageServiceHost, preferences: UserPreferences) {
+function getImportFixForSymbol(
+    sourceFile: SourceFile,
+    exportInfos: readonly SymbolExportInfo[],
+    program: Program,
+    position: number | undefined,
+    isValidTypeOnlyUseSite: boolean,
+    useRequire: boolean,
+    host: LanguageServiceHost,
+    preferences: UserPreferences,
+) {
     const packageJsonImportFilter = createPackageJsonImportFilter(sourceFile, preferences, host);
     return getBestFix(getImportFixes(exportInfos, position, isValidTypeOnlyUseSite, useRequire, program, sourceFile, host, preferences).fixes, sourceFile, program, packageJsonImportFilter, host);
 }
@@ -891,7 +900,8 @@ function getNewImportFixes(
     const rejectNodeModulesRelativePaths = moduleResolutionUsesNodeModules(moduleResolution);
     const getModuleSpecifiers = fromCacheOnly
         ? (moduleSymbol: Symbol) => ({ moduleSpecifiers: moduleSpecifiers.tryGetModuleSpecifiersFromCache(moduleSymbol, sourceFile, moduleSpecifierResolutionHost, preferences), computedWithoutCache: false })
-        : (moduleSymbol: Symbol, checker: TypeChecker) => moduleSpecifiers.getModuleSpecifiersWithCacheInfo(moduleSymbol, checker, compilerOptions, sourceFile, moduleSpecifierResolutionHost, preferences, /*options*/ undefined, /*forAutoImport*/ true);
+        : (moduleSymbol: Symbol, checker: TypeChecker) =>
+            moduleSpecifiers.getModuleSpecifiersWithCacheInfo(moduleSymbol, checker, compilerOptions, sourceFile, moduleSpecifierResolutionHost, preferences, /*options*/ undefined, /*forAutoImport*/ true);
 
     let computedWithoutCacheCount = 0;
     const fixes = flatMap(exportInfo, (exportInfo, i) => {
@@ -1005,7 +1015,13 @@ function getFixInfos(context: CodeFixContextBase, errorCode: number, pos: number
     return info && sortFixInfo(info, context.sourceFile, context.program, packageJsonImportFilter, context.host);
 }
 
-function sortFixInfo(fixes: readonly (FixInfo & { fix: ImportFixWithModuleSpecifier; })[], sourceFile: SourceFile, program: Program, packageJsonImportFilter: PackageJsonImportFilter, host: LanguageServiceHost): readonly (FixInfo & { fix: ImportFixWithModuleSpecifier; })[] {
+function sortFixInfo(
+    fixes: readonly (FixInfo & { fix: ImportFixWithModuleSpecifier; })[],
+    sourceFile: SourceFile,
+    program: Program,
+    packageJsonImportFilter: PackageJsonImportFilter,
+    host: LanguageServiceHost,
+): readonly (FixInfo & { fix: ImportFixWithModuleSpecifier; })[] {
     const _toPath = (fileName: string) => toPath(fileName, host.getCurrentDirectory(), hostGetCanonicalFileName(host));
     return sort(fixes, (a, b) =>
         compareBooleans(!!a.isJsxNamespaceFix, !!b.isJsxNamespaceFix) ||
@@ -1171,7 +1187,11 @@ function getUmdImportKind(importingFile: SourceFile, compilerOptions: CompilerOp
     }
 }
 
-function getFixesInfoForNonUMDImport({ sourceFile, program, cancellationToken, host, preferences }: CodeFixContextBase, symbolToken: Identifier, useAutoImportProvider: boolean): readonly (FixInfo & { fix: ImportFixWithModuleSpecifier; })[] | undefined {
+function getFixesInfoForNonUMDImport(
+    { sourceFile, program, cancellationToken, host, preferences }: CodeFixContextBase,
+    symbolToken: Identifier,
+    useAutoImportProvider: boolean,
+): readonly (FixInfo & { fix: ImportFixWithModuleSpecifier; })[] | undefined {
     const checker = program.getTypeChecker();
     const compilerOptions = program.getCompilerOptions();
     return flatMap(getSymbolNamesToImport(sourceFile, checker, symbolToken, compilerOptions), symbolName => {
@@ -1245,7 +1265,14 @@ function getExportInfos(
             !toFile && packageJsonFilter.allowsImportingAmbientModule(moduleSymbol, moduleSpecifierResolutionHost)
         ) {
             const checker = program.getTypeChecker();
-            originalSymbolToExportInfos.add(getUniqueSymbolId(exportedSymbol, checker).toString(), { symbol: exportedSymbol, moduleSymbol, moduleFileName: toFile?.fileName, exportKind, targetFlags: skipAlias(exportedSymbol, checker).flags, isFromPackageJson });
+            originalSymbolToExportInfos.add(getUniqueSymbolId(exportedSymbol, checker).toString(), {
+                symbol: exportedSymbol,
+                moduleSymbol,
+                moduleFileName: toFile?.fileName,
+                exportKind,
+                targetFlags: skipAlias(exportedSymbol, checker).flags,
+                isFromPackageJson,
+            });
         }
     }
     forEachExternalModuleToImportFrom(program, host, preferences, useAutoImportProvider, (moduleSymbol, sourceFile, program, isFromPackageJson) => {
@@ -1254,7 +1281,10 @@ function getExportInfos(
 
         const compilerOptions = program.getCompilerOptions();
         const defaultInfo = getDefaultLikeExportInfo(moduleSymbol, checker, compilerOptions);
-        if (defaultInfo && (defaultInfo.name === symbolName || moduleSymbolToValidIdentifier(moduleSymbol, getEmitScriptTarget(compilerOptions), isJsxTagName) === symbolName) && symbolHasMeaning(defaultInfo.resolvedSymbol, currentTokenMeaning)) {
+        if (
+            defaultInfo && (defaultInfo.name === symbolName || moduleSymbolToValidIdentifier(moduleSymbol, getEmitScriptTarget(compilerOptions), isJsxTagName) === symbolName) &&
+            symbolHasMeaning(defaultInfo.resolvedSymbol, currentTokenMeaning)
+        ) {
             addSymbol(moduleSymbol, sourceFile, defaultInfo.symbol, defaultInfo.exportKind, program, isFromPackageJson);
         }
 
@@ -1681,7 +1711,13 @@ function getNewImports(
     return Debug.checkDefined(statements);
 }
 
-function getNewRequires(moduleSpecifier: string, quotePreference: QuotePreference, defaultImport: Import | undefined, namedImports: readonly Import[] | undefined, namespaceLikeImport: Import | undefined): RequireVariableStatement | readonly RequireVariableStatement[] {
+function getNewRequires(
+    moduleSpecifier: string,
+    quotePreference: QuotePreference,
+    defaultImport: Import | undefined,
+    namedImports: readonly Import[] | undefined,
+    namespaceLikeImport: Import | undefined,
+): RequireVariableStatement | readonly RequireVariableStatement[] {
     const quotedModuleSpecifier = makeStringLiteral(moduleSpecifier, quotePreference);
     let statements: RequireVariableStatement | readonly RequireVariableStatement[] | undefined;
     // const { default: foo, bar, etc } = require('./mod');
