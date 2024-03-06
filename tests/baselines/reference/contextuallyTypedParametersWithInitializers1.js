@@ -89,7 +89,7 @@ const fz2: Function = (debug = true) => false;
 //// [contextuallyTypedParametersWithInitializers1.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.executeSomething = void 0;
+exports.executeSomething = executeSomething;
 var f10 = function (_a) {
     var _b = _a.foo, foo = _b === void 0 ? 42 : _b;
     return foo;
@@ -223,7 +223,6 @@ function executeSomething() {
         }
     });
 }
-exports.executeSomething = executeSomething;
 var fz1 = function (debug) {
     if (debug === void 0) { debug = true; }
     return false;

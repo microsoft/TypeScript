@@ -50,9 +50,8 @@ exports.C = C;
 //// [/user/username/projects/myproject/b.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.f = void 0;
-function f(p) { return p; }
 exports.f = f;
+function f(p) { return p; }
 
 
 
@@ -147,10 +146,9 @@ Output::
 //// [/user/username/projects/myproject/b.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.f = void 0;
+exports.f = f;
 var a_1 = require("./a");
 function f(p) { return p; }
-exports.f = f;
 
 
 
@@ -209,9 +207,8 @@ Output::
 //// [/user/username/projects/myproject/b.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.f = void 0;
-function f(p) { return p; }
 exports.f = f;
+function f(p) { return p; }
 
 
 

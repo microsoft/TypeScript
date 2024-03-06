@@ -409,7 +409,8 @@ Input::
 //// [/user/username/projects/myproject/c.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.foo = exports.C = void 0;
+exports.C = void 0;
+exports.foo = foo;
 var C = /** @class */ (function () {
     function C() {
         this.d = 1;
@@ -418,7 +419,6 @@ var C = /** @class */ (function () {
 }());
 exports.C = C;
 function foo() { }
-exports.foo = foo;
 
 
 //// [/user/username/projects/myproject/c.d.ts]

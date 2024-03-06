@@ -179,7 +179,7 @@ export { createDog, Dog };
 //// [/user/username/projects/demo/lib/animals/dog.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.createDog = void 0;
+exports.createDog = createDog;
 var utilities_1 = require("../core/utilities");
 function createDog() {
     return ({
@@ -190,7 +190,6 @@ function createDog() {
         name: (0, utilities_1.makeRandomName)()
     });
 }
-exports.createDog = createDog;
 
 
 //// [/user/username/projects/demo/lib/animals/dog.d.ts]

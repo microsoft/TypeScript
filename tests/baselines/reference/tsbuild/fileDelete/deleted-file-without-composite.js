@@ -61,21 +61,19 @@ exitCode:: ExitStatus.Success
 //// [/src/child/child.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.child = void 0;
+exports.child = child;
 var child2_1 = require("../child/child2");
 function child() {
     (0, child2_1.child2)();
 }
-exports.child = child;
 
 
 //// [/src/child/child2.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.child2 = void 0;
+exports.child2 = child2;
 function child2() {
 }
-exports.child2 = child2;
 
 
 

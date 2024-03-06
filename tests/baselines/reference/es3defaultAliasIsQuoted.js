@@ -17,6 +17,7 @@ assert(Foo.CONSTANT === "Foo");
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Foo = void 0;
+exports.default = assert;
 var Foo = /** @class */ (function () {
     function Foo() {
     }
@@ -28,7 +29,6 @@ function assert(value) {
     if (!value)
         throw new Error("Assertion failed!");
 }
-exports.default = assert;
 //// [es3defaultAliasQuoted_file1.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
