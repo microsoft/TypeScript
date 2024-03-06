@@ -176,7 +176,10 @@ export function transformJsx(context: TransformationContext): (x: SourceFile | B
         if (currentFileState.filenameDeclaration) {
             statements = insertStatementAfterCustomPrologue(
                 statements.slice(),
-                factory.createVariableStatement(/*modifiers*/ undefined, factory.createVariableDeclarationList([currentFileState.filenameDeclaration], NodeFlags.Const)),
+                factory.createVariableStatement(
+                    /*modifiers*/ undefined,
+                    factory.createVariableDeclarationList([currentFileState.filenameDeclaration], NodeFlags.Const),
+                ),
             );
         }
         if (currentFileState.utilizedImplicitRuntimeImports) {
@@ -185,7 +188,11 @@ export function transformJsx(context: TransformationContext): (x: SourceFile | B
                     // Add `import` statement
                     const importStatement = factory.createImportDeclaration(
                         /*modifiers*/ undefined,
-                        factory.createImportClause(/*isTypeOnly*/ false, /*name*/ undefined, factory.createNamedImports(arrayFrom(importSpecifiersMap.values()))),
+                        factory.createImportClause(
+                            /*isTypeOnly*/ false,
+                            /*name*/ undefined,
+                            factory.createNamedImports(arrayFrom(importSpecifiersMap.values())),
+                        ),
                         factory.createStringLiteral(importSource),
                         /*attributes*/ undefined,
                     );
@@ -199,7 +206,10 @@ export function transformJsx(context: TransformationContext): (x: SourceFile | B
                         factory.createVariableDeclarationList([
                             factory.createVariableDeclaration(
                                 factory.createObjectBindingPattern(
-                                    arrayFrom(importSpecifiersMap.values(), s => factory.createBindingElement(/*dotDotDotToken*/ undefined, s.propertyName, s.name)),
+                                    arrayFrom(
+                                        importSpecifiersMap.values(),
+                                        s => factory.createBindingElement(/*dotDotDotToken*/ undefined, s.propertyName, s.name),
+                                    ),
                                 ),
                                 /*exclamationToken*/ undefined,
                                 /*type*/ undefined,
@@ -397,7 +407,12 @@ export function transformJsx(context: TransformationContext): (x: SourceFile | B
         return element;
     }
 
-    function visitJsxOpeningLikeElementCreateElement(node: JsxOpeningLikeElement, children: readonly JsxChild[] | undefined, isChild: boolean, location: TextRange) {
+    function visitJsxOpeningLikeElementCreateElement(
+        node: JsxOpeningLikeElement,
+        children: readonly JsxChild[] | undefined,
+        isChild: boolean,
+        location: TextRange,
+    ) {
         const tagName = getTagName(node);
         const attrs = node.attributes.properties;
         const objectProperties = length(attrs) ? transformJsxAttributesToObjectProps(attrs) :

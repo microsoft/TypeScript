@@ -622,7 +622,9 @@ export function getRangeToExtract(sourceFile: SourceFile, span: TextSpan, invoke
         // For understanding how skipTrivia functioned:
         Debug.assert(!positionIsSynthesized(nodeToCheck.pos), "This failure could trigger https://github.com/Microsoft/TypeScript/issues/20809 (2)");
 
-        if (!isStatement(nodeToCheck) && !(isExpressionNode(nodeToCheck) && isExtractableExpression(nodeToCheck)) && !isStringLiteralJsxAttribute(nodeToCheck)) {
+        if (
+            !isStatement(nodeToCheck) && !(isExpressionNode(nodeToCheck) && isExtractableExpression(nodeToCheck)) && !isStringLiteralJsxAttribute(nodeToCheck)
+        ) {
             return [createDiagnosticForNode(nodeToCheck, Messages.statementOrExpressionExpected)];
         }
 
@@ -895,7 +897,14 @@ function getFunctionExtractionAtIndex(targetRange: TargetRange, context: Refacto
     );
     Debug.assert(!functionErrorsPerScope[requestedChangesIndex].length, "The extraction went missing? How?");
     context.cancellationToken!.throwIfCancellationRequested(); // TODO: GH#18217
-    return extractFunctionInScope(target, scopes[requestedChangesIndex], usagesPerScope[requestedChangesIndex], exposedVariableDeclarations, targetRange, context);
+    return extractFunctionInScope(
+        target,
+        scopes[requestedChangesIndex],
+        usagesPerScope[requestedChangesIndex],
+        exposedVariableDeclarations,
+        targetRange,
+        context,
+    );
 }
 
 function getConstantExtractionAtIndex(targetRange: TargetRange, context: RefactorContext, requestedChangesIndex: number): RefactorEditInfo {
@@ -974,7 +983,10 @@ function getPossibleExtractions(targetRange: TargetRange, context: RefactorConte
     return extractions;
 }
 
-function getPossibleExtractionsWorker(targetRange: TargetRange, context: RefactorContext): { readonly scopes: Scope[]; readonly readsAndWrites: ReadsAndWrites; } {
+function getPossibleExtractionsWorker(
+    targetRange: TargetRange,
+    context: RefactorContext,
+): { readonly scopes: Scope[]; readonly readsAndWrites: ReadsAndWrites; } {
     const { file: sourceFile } = context;
 
     const scopes = collectEnclosingScopes(targetRange);
@@ -1112,7 +1124,13 @@ function extractFunctionInScope(
         returnType = checker.typeToTypeNode(contextualType!, scope, NodeBuilderFlags.NoTruncation); // TODO: GH#18217
     }
 
-    const { body, returnValueProperty } = transformFunctionBody(node, exposedVariableDeclarations, writes, substitutions, !!(range.facts & RangeFacts.HasReturn));
+    const { body, returnValueProperty } = transformFunctionBody(
+        node,
+        exposedVariableDeclarations,
+        writes,
+        substitutions,
+        !!(range.facts & RangeFacts.HasReturn),
+    );
     suppressLeadingAndTrailingTrivia(body);
 
     let newFunction: MethodDeclaration | FunctionDeclaration;
@@ -2033,7 +2051,10 @@ function collectReadsAndWrites(
         });
 
         // If an expression was extracted, then there shouldn't have been any variable declarations.
-        Debug.assert(isReadonlyArray(targetRange.range) || exposedVariableDeclarations.length === 0, "No variable declarations expected if something was extracted");
+        Debug.assert(
+            isReadonlyArray(targetRange.range) || exposedVariableDeclarations.length === 0,
+            "No variable declarations expected if something was extracted",
+        );
 
         if (hasWrite && !isReadonlyArray(targetRange.range)) {
             const diag = createDiagnosticForNode(targetRange.range, Messages.cannotWriteInExpression);
@@ -2167,7 +2188,10 @@ function collectReadsAndWrites(
         if (targetRange.facts & RangeFacts.IsGenerator && usage === Usage.Write) {
             // this is write to a reference located outside of the target scope and range is extracted into generator
             // currently this is unsupported scenario
-            const diag = createDiagnosticForNode(identifier, Messages.cannotExtractRangeThatContainsWritesToReferencesLocatedOutsideOfTheTargetRangeInGenerators);
+            const diag = createDiagnosticForNode(
+                identifier,
+                Messages.cannotExtractRangeThatContainsWritesToReferencesLocatedOutsideOfTheTargetRangeInGenerators,
+            );
             for (const errors of functionErrorsPerScope) {
                 errors.push(diag);
             }

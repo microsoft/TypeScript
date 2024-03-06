@@ -624,7 +624,8 @@ declare namespace NodeJS {
         edits: [
             {
                 caption: "write file not resolved by import",
-                edit: sys => sys.ensureFileOrFolder({ path: "/users/username/projects/project/node_modules/pkg1/index.d.ts", content: `export interface Import1 {}` }),
+                edit: sys =>
+                    sys.ensureFileOrFolder({ path: "/users/username/projects/project/node_modules/pkg1/index.d.ts", content: `export interface Import1 {}` }),
                 timeouts: sys => {
                     sys.runQueuedTimeoutCallbacks(); // failed lookup
                     sys.runQueuedTimeoutCallbacks(); // actual update
@@ -632,7 +633,8 @@ declare namespace NodeJS {
             },
             {
                 caption: "write file not resolved by typeRef",
-                edit: sys => sys.ensureFileOrFolder({ path: "/users/username/projects/project/node_modules/pkg3/index.d.ts", content: `export interface Import3 {}` }),
+                edit: sys =>
+                    sys.ensureFileOrFolder({ path: "/users/username/projects/project/node_modules/pkg3/index.d.ts", content: `export interface Import3 {}` }),
                 timeouts: sys => {
                     sys.runQueuedTimeoutCallbacks(); // failed lookup
                     sys.runQueuedTimeoutCallbacks(); // actual update

@@ -1195,7 +1195,10 @@ export function transformTypeScript(context: TransformationContext) {
                 properties = append(properties, returnTypeProperty);
             }
             if (properties) {
-                const typeInfoMetadata = emitHelpers().createMetadataHelper("design:typeinfo", factory.createObjectLiteralExpression(properties, /*multiLine*/ true));
+                const typeInfoMetadata = emitHelpers().createMetadataHelper(
+                    "design:typeinfo",
+                    factory.createObjectLiteralExpression(properties, /*multiLine*/ true),
+                );
                 return [factory.createDecorator(typeInfoMetadata)];
             }
         }
@@ -1234,7 +1237,9 @@ export function transformTypeScript(context: TransformationContext) {
      *
      * @param node The node to test.
      */
-    function shouldAddParamTypesMetadata(node: Declaration): node is ClassLikeDeclaration & { _hasConstructorBrand: never; } | MethodDeclaration | AccessorDeclaration {
+    function shouldAddParamTypesMetadata(
+        node: Declaration,
+    ): node is ClassLikeDeclaration & { _hasConstructorBrand: never; } | MethodDeclaration | AccessorDeclaration {
         switch (node.kind) {
             case SyntaxKind.ClassDeclaration:
             case SyntaxKind.ClassExpression:
@@ -2732,7 +2737,8 @@ export function transformTypeScript(context: TransformationContext) {
             // an identifier that is exported from a merged namespace.
             const container = resolver.getReferencedExportContainer(node, /*prefixLocals*/ false);
             if (container && container.kind !== SyntaxKind.SourceFile) {
-                const substitute = (applicableSubstitutions & TypeScriptSubstitutionFlags.NamespaceExports && container.kind === SyntaxKind.ModuleDeclaration) ||
+                const substitute =
+                    (applicableSubstitutions & TypeScriptSubstitutionFlags.NamespaceExports && container.kind === SyntaxKind.ModuleDeclaration) ||
                     (applicableSubstitutions & TypeScriptSubstitutionFlags.NonQualifiedEnumMembers && container.kind === SyntaxKind.EnumDeclaration);
                 if (substitute) {
                     return setTextRange(

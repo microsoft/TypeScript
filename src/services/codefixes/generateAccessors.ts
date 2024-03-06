@@ -293,7 +293,12 @@ function updatePropertyDeclaration(
     changeTracker.replaceNode(file, declaration, property);
 }
 
-function updatePropertyAssignmentDeclaration(changeTracker: textChanges.ChangeTracker, file: SourceFile, declaration: PropertyAssignment, fieldName: AcceptedNameType) {
+function updatePropertyAssignmentDeclaration(
+    changeTracker: textChanges.ChangeTracker,
+    file: SourceFile,
+    declaration: PropertyAssignment,
+    fieldName: AcceptedNameType,
+) {
     let assignment = factory.updatePropertyAssignment(declaration, fieldName, declaration.initializer);
     // Remove grammar errors from assignment
     if (assignment.modifiers || assignment.questionToken || assignment.exclamationToken) {

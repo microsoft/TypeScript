@@ -1178,7 +1178,8 @@ export function transformModule(context: TransformationContext): (x: SourceFile 
         const externalModuleName = getExternalModuleNameLiteral(factory, node, currentSourceFile, host, resolver, compilerOptions);
         const firstArgument = visitNode(firstOrUndefined(node.arguments), visitor, isExpression);
         // Only use the external module name if it differs from the first argument. This allows us to preserve the quote style of the argument on output.
-        const argument = externalModuleName && (!firstArgument || !isStringLiteral(firstArgument) || firstArgument.text !== externalModuleName.text) ? externalModuleName
+        const argument = externalModuleName && (!firstArgument || !isStringLiteral(firstArgument) || firstArgument.text !== externalModuleName.text) ?
+            externalModuleName
             : firstArgument;
         const containsLexicalThis = !!(node.transformFlags & TransformFlags.ContainsLexicalThis);
         switch (compilerOptions.module) {
@@ -1209,7 +1210,8 @@ export function transformModule(context: TransformationContext): (x: SourceFile 
         needUMDDynamicImportHelper = true;
         if (isSimpleCopiableExpression(arg)) {
             const argClone = isGeneratedIdentifier(arg) ? arg
-                : isStringLiteral(arg) ? factory.createStringLiteralFromNode(arg) : setEmitFlags(setTextRange(factory.cloneNode(arg), arg), EmitFlags.NoComments);
+                : isStringLiteral(arg) ? factory.createStringLiteralFromNode(arg)
+                : setEmitFlags(setTextRange(factory.cloneNode(arg), arg), EmitFlags.NoComments);
             return factory.createConditionalExpression(
                 /*condition*/ factory.createIdentifier("__syncRequire"),
                 /*questionToken*/ undefined,
@@ -1288,9 +1290,13 @@ export function transformModule(context: TransformationContext): (x: SourceFile 
 
         const promise = factory.createNewExpression(factory.createIdentifier("Promise"), /*typeArguments*/ undefined, [func]);
         if (getESModuleInterop(compilerOptions)) {
-            return factory.createCallExpression(factory.createPropertyAccessExpression(promise, factory.createIdentifier("then")), /*typeArguments*/ undefined, [
-                emitHelpers().createImportStarCallbackHelper(),
-            ]);
+            return factory.createCallExpression(
+                factory.createPropertyAccessExpression(promise, factory.createIdentifier("then")),
+                /*typeArguments*/ undefined,
+                [
+                    emitHelpers().createImportStarCallbackHelper(),
+                ],
+            );
         }
         return promise;
     }
@@ -1367,7 +1373,11 @@ export function transformModule(context: TransformationContext): (x: SourceFile 
             );
         }
 
-        const downleveledImport = factory.createCallExpression(factory.createPropertyAccessExpression(promiseResolveCall, "then"), /*typeArguments*/ undefined, [func]);
+        const downleveledImport = factory.createCallExpression(
+            factory.createPropertyAccessExpression(promiseResolveCall, "then"),
+            /*typeArguments*/ undefined,
+            [func],
+        );
 
         return downleveledImport;
     }
@@ -1697,7 +1707,12 @@ export function transformModule(context: TransformationContext): (x: SourceFile 
             return undefined;
         }
 
-        return createExportStatement(factory.createIdentifier("default"), visitNode(node.expression, visitor, isExpression), /*location*/ node, /*allowComments*/ true);
+        return createExportStatement(
+            factory.createIdentifier("default"),
+            visitNode(node.expression, visitor, isExpression),
+            /*location*/ node,
+            /*allowComments*/ true,
+        );
     }
 
     /**
@@ -1845,7 +1860,10 @@ export function transformModule(context: TransformationContext): (x: SourceFile 
             }
 
             if (variables) {
-                statements = append(statements, factory.updateVariableStatement(node, modifiers, factory.updateVariableDeclarationList(node.declarationList, variables)));
+                statements = append(
+                    statements,
+                    factory.updateVariableStatement(node, modifiers, factory.updateVariableDeclarationList(node.declarationList, variables)),
+                );
             }
 
             if (expressions) {

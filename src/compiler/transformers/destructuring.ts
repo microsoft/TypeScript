@@ -413,7 +413,8 @@ function flattenObjectBindingOrAssignmentPattern(
             if (
                 flattenContext.level >= FlattenLevel.ObjectRest
                 && !(element.transformFlags & (TransformFlags.ContainsRestOrSpread | TransformFlags.ContainsObjectRestOrSpread))
-                && !(getTargetOfBindingOrAssignmentElement(element)!.transformFlags & (TransformFlags.ContainsRestOrSpread | TransformFlags.ContainsObjectRestOrSpread))
+                && !(getTargetOfBindingOrAssignmentElement(element)!.transformFlags &
+                    (TransformFlags.ContainsRestOrSpread | TransformFlags.ContainsObjectRestOrSpread))
                 && !isComputedPropertyName(propertyName)
             ) {
                 bindingElements = append(bindingElements, visitNode(element, flattenContext.visitor, isBindingOrAssignmentElement));

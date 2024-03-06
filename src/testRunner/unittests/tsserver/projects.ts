@@ -697,14 +697,20 @@ describe("unittests:: tsserver:: projects::", () => {
 
         // Specify .html extension as mixed content in a configure host request
         const extraFileExtensions = [{ extension: ".html", scriptKind: ts.ScriptKind.JS, isMixedContent: true }];
-        verfiy(config1, createServerHost([file1, file2, config1, libFile], { executingFilePath: ts.combinePaths(ts.getDirectoryPath(libFile.path), "tsc.js") }));
+        verfiy(
+            config1,
+            createServerHost([file1, file2, config1, libFile], { executingFilePath: ts.combinePaths(ts.getDirectoryPath(libFile.path), "tsc.js") }),
+        );
 
         //  #2. Ensure no errors when allowJs is false
         const config2 = {
             path: "/a/b/tsconfig.json",
             content: jsonToReadableText({ compilerOptions: { allowJs: false } }),
         };
-        verfiy(config2, createServerHost([file1, file2, config2, libFile], { executingFilePath: ts.combinePaths(ts.getDirectoryPath(libFile.path), "tsc.js") }));
+        verfiy(
+            config2,
+            createServerHost([file1, file2, config2, libFile], { executingFilePath: ts.combinePaths(ts.getDirectoryPath(libFile.path), "tsc.js") }),
+        );
 
         //  #3. Ensure no errors when compiler options aren't specified
         const config3 = {
@@ -712,7 +718,10 @@ describe("unittests:: tsserver:: projects::", () => {
             content: jsonToReadableText({}),
         };
 
-        verfiy(config3, createServerHost([file1, file2, config3, libFile], { executingFilePath: ts.combinePaths(ts.getDirectoryPath(libFile.path), "tsc.js") }));
+        verfiy(
+            config3,
+            createServerHost([file1, file2, config3, libFile], { executingFilePath: ts.combinePaths(ts.getDirectoryPath(libFile.path), "tsc.js") }),
+        );
 
         //  #4. Ensure no errors when files are explicitly specified in tsconfig
         const config4 = {
@@ -720,7 +729,10 @@ describe("unittests:: tsserver:: projects::", () => {
             content: jsonToReadableText({ compilerOptions: { allowJs: true }, files: [file1.path, file2.path] }),
         };
 
-        verfiy(config4, createServerHost([file1, file2, config4, libFile], { executingFilePath: ts.combinePaths(ts.getDirectoryPath(libFile.path), "tsc.js") }));
+        verfiy(
+            config4,
+            createServerHost([file1, file2, config4, libFile], { executingFilePath: ts.combinePaths(ts.getDirectoryPath(libFile.path), "tsc.js") }),
+        );
 
         //  #4. Ensure no errors when files are explicitly excluded in tsconfig
         const config5 = {
@@ -945,7 +957,11 @@ describe("unittests:: tsserver:: projects::", () => {
                 files: [f1.path],
             },
         } as ts.server.protocol.GeterrRequest);
-        baselineTsserverLogs("projects", "getting errors from closed script info does not throw exception because of getting project from orphan script info", session);
+        baselineTsserverLogs(
+            "projects",
+            "getting errors from closed script info does not throw exception because of getting project from orphan script info",
+            session,
+        );
     });
 
     it("Properly handle Windows-style outDir", () => {
@@ -1423,7 +1439,10 @@ describe("unittests:: tsserver:: projects::", () => {
         openFilesForSession([commonFile1], session);
         const project = session.getProjectService().inferredProjects[0];
         // Intentionally create scriptinfo and attach it to project
-        const info = session.getProjectService().getOrCreateScriptInfoForNormalizedPath(commonFile2.path as ts.server.NormalizedPath, /*openedByClient*/ false)!;
+        const info = session.getProjectService().getOrCreateScriptInfoForNormalizedPath(
+            commonFile2.path as ts.server.NormalizedPath,
+            /*openedByClient*/ false,
+        )!;
         info.attachToProject(project);
         try {
             session.executeCommandSeq<ts.server.protocol.ApplyChangedToOpenFilesRequest>({

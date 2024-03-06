@@ -1378,7 +1378,11 @@ describe("unittests:: tsserver:: typingsInstaller:: Validate package name:", () 
         assert.deepEqual(validatePackageName("@_scope/_bar"), { name: "_scope", isScopeName: true, result: NameValidationResult.NameStartsWithUnderscore });
     });
     it("scope name in scoped package name with non URI safe characters are not supported", () => {
-        assert.deepEqual(validatePackageName("@  scope  /bar"), { name: "  scope  ", isScopeName: true, result: NameValidationResult.NameContainsNonURISafeCharacters });
+        assert.deepEqual(validatePackageName("@  scope  /bar"), {
+            name: "  scope  ",
+            isScopeName: true,
+            result: NameValidationResult.NameContainsNonURISafeCharacters,
+        });
         assert.deepEqual(validatePackageName("@; say ‘Hello from TypeScript!’ #/bar"), {
             name: "; say ‘Hello from TypeScript!’ #",
             isScopeName: true,
@@ -1397,7 +1401,11 @@ describe("unittests:: tsserver:: typingsInstaller:: Validate package name:", () 
         assert.deepEqual(validatePackageName("@scope/_bar"), { name: "_bar", isScopeName: false, result: NameValidationResult.NameStartsWithUnderscore });
     });
     it("package name in scoped package name with non URI safe characters are not supported", () => {
-        assert.deepEqual(validatePackageName("@scope/  bar  "), { name: "  bar  ", isScopeName: false, result: NameValidationResult.NameContainsNonURISafeCharacters });
+        assert.deepEqual(validatePackageName("@scope/  bar  "), {
+            name: "  bar  ",
+            isScopeName: false,
+            result: NameValidationResult.NameContainsNonURISafeCharacters,
+        });
         assert.deepEqual(validatePackageName("@scope/; say ‘Hello from TypeScript!’ #"), {
             name: "; say ‘Hello from TypeScript!’ #",
             isScopeName: false,
@@ -2325,7 +2333,8 @@ describe("unittests:: tsserver:: typingsInstaller:: npm installation command", (
     ];
     const expectedCommands = [
         ts.server.typingsInstaller.getNpmCommandForInstallation(npmPath, tsVersion, packageNames, packageNames.length).command,
-        ts.server.typingsInstaller.getNpmCommandForInstallation(npmPath, tsVersion, packageNames, packageNames.length - Math.ceil(packageNames.length / 2)).command,
+        ts.server.typingsInstaller.getNpmCommandForInstallation(npmPath, tsVersion, packageNames, packageNames.length - Math.ceil(packageNames.length / 2))
+            .command,
     ];
     it("works when the command is too long to install all packages at once", () => {
         const commands: string[] = [];

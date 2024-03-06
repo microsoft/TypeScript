@@ -1736,7 +1736,9 @@ export function transformClassFields(context: TransformationContext): (x: Source
                 ) {
                     facts |= ClassFacts.NeedsClassConstructorReference;
                 }
-                else if (isAutoAccessorPropertyDeclaration(member) && shouldTransformAutoAccessors === Ternary.True && !node.name && !node.emitNode?.classThis) {
+                else if (
+                    isAutoAccessorPropertyDeclaration(member) && shouldTransformAutoAccessors === Ternary.True && !node.name && !node.emitNode?.classThis
+                ) {
                     facts |= ClassFacts.NeedsClassConstructorReference;
                 }
                 if (isPropertyDeclaration(member) || isClassStaticBlockDeclaration(member)) {
@@ -1992,7 +1994,10 @@ export function transformClassFields(context: TransformationContext): (x: Source
             }
 
             const requiresBlockScopedVar = classCheckFlags & NodeCheckFlags.BlockScopedBindingInLoop;
-            const temp = factory.createTempVariable(requiresBlockScopedVar ? addBlockScopedVariable : hoistVariableDeclaration, /*reservedInNestedScopes*/ true);
+            const temp = factory.createTempVariable(
+                requiresBlockScopedVar ? addBlockScopedVariable : hoistVariableDeclaration,
+                /*reservedInNestedScopes*/ true,
+            );
             getClassLexicalEnvironment().classConstructor = factory.cloneNode(temp);
             return temp;
         }
@@ -2823,7 +2828,10 @@ export function transformClassFields(context: TransformationContext): (x: Source
         _previousInfo: PrivateIdentifierInfo | undefined,
     ) {
         if (isStatic) {
-            const brandCheckIdentifier = Debug.checkDefined(lex.classThis ?? lex.classConstructor, "classConstructor should be set in private identifier environment");
+            const brandCheckIdentifier = Debug.checkDefined(
+                lex.classThis ?? lex.classConstructor,
+                "classConstructor should be set in private identifier environment",
+            );
 
             const variableName = createHoistedVariableForPrivateName(name);
             setPrivateIdentifier(privateEnv, name, {
@@ -3365,7 +3373,12 @@ function createPrivateStaticFieldInitializer(factory: NodeFactory, variableName:
     );
 }
 
-function createPrivateInstanceFieldInitializer(factory: NodeFactory, receiver: LeftHandSideExpression, initializer: Expression | undefined, weakMapName: Identifier) {
+function createPrivateInstanceFieldInitializer(
+    factory: NodeFactory,
+    receiver: LeftHandSideExpression,
+    initializer: Expression | undefined,
+    weakMapName: Identifier,
+) {
     return factory.createCallExpression(
         factory.createPropertyAccessExpression(weakMapName, "set"),
         /*typeArguments*/ undefined,

@@ -312,7 +312,12 @@ a;b;
         });
     }
 
-    verifyDirSymlink("when both directory symlink target and import match disk", `/user/username/projects/myproject/XY`, `/user/username/projects/myproject/XY`, `./XY`);
+    verifyDirSymlink(
+        "when both directory symlink target and import match disk",
+        `/user/username/projects/myproject/XY`,
+        `/user/username/projects/myproject/XY`,
+        `./XY`,
+    );
     verifyDirSymlink(
         "when directory symlink target matches disk but import does not",
         `/user/username/projects/myproject/XY`,

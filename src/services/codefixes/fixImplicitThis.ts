@@ -43,7 +43,12 @@ registerCodeFix({
         }),
 });
 
-function doChange(changes: textChanges.ChangeTracker, sourceFile: SourceFile, pos: number, checker: TypeChecker): DiagnosticOrDiagnosticAndArguments | undefined {
+function doChange(
+    changes: textChanges.ChangeTracker,
+    sourceFile: SourceFile,
+    pos: number,
+    checker: TypeChecker,
+): DiagnosticOrDiagnosticAndArguments | undefined {
     const token = getTokenAtPosition(sourceFile, pos);
     if (!isThis(token)) return undefined;
 

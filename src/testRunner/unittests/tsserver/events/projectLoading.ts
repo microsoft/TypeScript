@@ -98,7 +98,14 @@ describe("unittests:: tsserver:: events:: ProjectLoadingStart and ProjectLoading
                     };
                     const aDTsMap: File = {
                         path: `/user/username/projects/a/a.d.ts.map`,
-                        content: jsonToReadableText({ version: 3, file: "a.d.ts", sourceRoot: "", sources: ["./a.ts"], names: [], mappings: "AAAA,qBAAa,CAAC;CAAI" }),
+                        content: jsonToReadableText({
+                            version: 3,
+                            file: "a.d.ts",
+                            sourceRoot: "",
+                            sources: ["./a.ts"],
+                            names: [],
+                            mappings: "AAAA,qBAAa,CAAC;CAAI",
+                        }),
                     };
                     const bTs: File = {
                         path: bTsPath,
@@ -129,7 +136,9 @@ describe("unittests:: tsserver:: events:: ProjectLoadingStart and ProjectLoading
                     });
                     baselineTsserverLogs(
                         "events/projectLoading",
-                        `opening original location project${disableSourceOfProjectReferenceRedirect ? " disableSourceOfProjectReferenceRedirect" : ""} ${sessionType}`,
+                        `opening original location project${
+                            disableSourceOfProjectReferenceRedirect ? " disableSourceOfProjectReferenceRedirect" : ""
+                        } ${sessionType}`,
                         session,
                     );
                 }
@@ -163,7 +172,11 @@ describe("unittests:: tsserver:: events:: ProjectLoadingStart and ProjectLoading
                 it("when lazyConfiguredProjectsFromExternalProject is true and file is opened", () => {
                     const session = createSessionAndOpenProject(/*lazyConfiguredProjectsFromExternalProject*/ true);
                     openFilesForSession([aTs], session);
-                    baselineTsserverLogs("events/projectLoading", `lazyConfiguredProjectsFromExternalProject is true and file is opened ${sessionType}`, session);
+                    baselineTsserverLogs(
+                        "events/projectLoading",
+                        `lazyConfiguredProjectsFromExternalProject is true and file is opened ${sessionType}`,
+                        session,
+                    );
                 });
 
                 it("when lazyConfiguredProjectsFromExternalProject is disabled", () => {

@@ -265,7 +265,14 @@ function generateOptionOutput(sys: System, option: CommandLineOption, rightAlign
         if (showAdditionalInfoOutput(valueCandidates, option)) {
             if (valueCandidates) {
                 text.push(
-                    ...getPrettyOutput(valueCandidates.valueType, valueCandidates.possibleValues, rightAlignOfLeft, leftAlignOfRight, terminalWidth, /*colorLeft*/ false),
+                    ...getPrettyOutput(
+                        valueCandidates.valueType,
+                        valueCandidates.possibleValues,
+                        rightAlignOfLeft,
+                        leftAlignOfRight,
+                        terminalWidth,
+                        /*colorLeft*/ false,
+                    ),
                     sys.newLine,
                 );
             }
@@ -564,7 +571,9 @@ function printAllHelp(
             getDiagnosticText(Diagnostics.WATCH_OPTIONS),
             watchOptions,
             /*subCategory*/ false,
-            getDiagnosticText(Diagnostics.Including_watch_w_will_start_watching_the_current_project_for_the_file_changes_Once_set_you_can_config_watch_mode_with_Colon),
+            getDiagnosticText(
+                Diagnostics.Including_watch_w_will_start_watching_the_current_project_for_the_file_changes_Once_set_you_can_config_watch_mode_with_Colon,
+            ),
         ),
     ];
     output = [
@@ -695,7 +704,9 @@ function executeCommandLineWorker(
         if (!fileOrDirectory /* current directory "." */ || sys.directoryExists(fileOrDirectory)) {
             configFileName = combinePaths(fileOrDirectory, "tsconfig.json");
             if (!sys.fileExists(configFileName)) {
-                reportDiagnostic(createCompilerDiagnostic(Diagnostics.Cannot_find_a_tsconfig_json_file_at_the_specified_directory_Colon_0, commandLine.options.project));
+                reportDiagnostic(
+                    createCompilerDiagnostic(Diagnostics.Cannot_find_a_tsconfig_json_file_at_the_specified_directory_Colon_0, commandLine.options.project),
+                );
                 return sys.exit(ExitStatus.DiagnosticsPresent_OutputsSkipped);
             }
         }
@@ -715,7 +726,10 @@ function executeCommandLineWorker(
     if (commandLine.fileNames.length === 0 && !configFileName) {
         if (commandLine.options.showConfig) {
             reportDiagnostic(
-                createCompilerDiagnostic(Diagnostics.Cannot_find_a_tsconfig_json_file_at_the_current_directory_Colon_0, normalizePath(sys.getCurrentDirectory())),
+                createCompilerDiagnostic(
+                    Diagnostics.Cannot_find_a_tsconfig_json_file_at_the_current_directory_Colon_0,
+                    normalizePath(sys.getCurrentDirectory()),
+                ),
             );
         }
         else {
@@ -732,7 +746,14 @@ function executeCommandLineWorker(
     );
     if (configFileName) {
         const extendedConfigCache = new Map<string, ExtendedConfigCacheEntry>();
-        const configParseResult = parseConfigFileWithSystem(configFileName, commandLineOptions, extendedConfigCache, commandLine.watchOptions, sys, reportDiagnostic)!; // TODO: GH#18217
+        const configParseResult = parseConfigFileWithSystem(
+            configFileName,
+            commandLineOptions,
+            extendedConfigCache,
+            commandLine.watchOptions,
+            sys,
+            reportDiagnostic,
+        )!; // TODO: GH#18217
         if (commandLineOptions.showConfig) {
             if (configParseResult.errors.length !== 0) {
                 reportDiagnostic = updateReportDiagnostic(
@@ -1198,7 +1219,9 @@ function reportSolutionBuilderTimes(
         statistics.push(s);
     });
     performance.forEachMeasure((name, duration) => {
-        if (isSolutionMarkOrMeasure(name)) statistics.push({ name: `${getNameFromSolutionBuilderMarkOrMeasure(name)} time`, value: duration, type: StatisticType.time });
+        if (isSolutionMarkOrMeasure(name)) {
+            statistics.push({ name: `${getNameFromSolutionBuilderMarkOrMeasure(name)} time`, value: duration, type: StatisticType.time });
+        }
     });
     performance.disable();
     performance.enable();

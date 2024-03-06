@@ -18,7 +18,9 @@ import {
 } from "../_namespaces/ts.codefix";
 
 const fixId = "correctQualifiedNameToIndexedAccessType";
-const errorCodes = [Diagnostics.Cannot_access_0_1_because_0_is_a_type_but_not_a_namespace_Did_you_mean_to_retrieve_the_type_of_the_property_1_in_0_with_0_1.code];
+const errorCodes = [
+    Diagnostics.Cannot_access_0_1_because_0_is_a_type_but_not_a_namespace_Did_you_mean_to_retrieve_the_type_of_the_property_1_in_0_with_0_1.code,
+];
 registerCodeFix({
     errorCodes,
     getCodeActions(context) {
@@ -26,7 +28,15 @@ registerCodeFix({
         if (!qualifiedName) return undefined;
         const changes = textChanges.ChangeTracker.with(context, t => doChange(t, context.sourceFile, qualifiedName));
         const newText = `${qualifiedName.left.text}["${qualifiedName.right.text}"]`;
-        return [createCodeFixAction(fixId, changes, [Diagnostics.Rewrite_as_the_indexed_access_type_0, newText], fixId, Diagnostics.Rewrite_all_as_indexed_access_types)];
+        return [
+            createCodeFixAction(
+                fixId,
+                changes,
+                [Diagnostics.Rewrite_as_the_indexed_access_type_0, newText],
+                fixId,
+                Diagnostics.Rewrite_all_as_indexed_access_types,
+            ),
+        ];
     },
     fixIds: [fixId],
     getAllCodeActions: context =>

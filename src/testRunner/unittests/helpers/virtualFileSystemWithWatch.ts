@@ -502,7 +502,12 @@ export class TestServerHost implements server.ServerHost, FormatDiagnosticsHost,
 
         if (options && options.invokeFileDeleteCreateAsPartInsteadOfChange) {
             this.removeFileOrFolder(currentEntry, /*isRenaming*/ false, options);
-            this.ensureFileOrFolder({ path: filePath, content }, /*ignoreWatchInvokedWithTriggerAsFileCreate*/ undefined, /*ignoreParentWatch*/ undefined, options);
+            this.ensureFileOrFolder(
+                { path: filePath, content },
+                /*ignoreWatchInvokedWithTriggerAsFileCreate*/ undefined,
+                /*ignoreParentWatch*/ undefined,
+                options,
+            );
         }
         else {
             currentEntry.content = content;
@@ -648,7 +653,12 @@ export class TestServerHost implements server.ServerHost, FormatDiagnosticsHost,
         return folder;
     }
 
-    private addFileOrFolderInFolder(folder: FsFolder, fileOrDirectory: FsFile | FsFolder | FsSymLink, ignoreWatch?: boolean, options?: Partial<WatchInvokeOptions>) {
+    private addFileOrFolderInFolder(
+        folder: FsFolder,
+        fileOrDirectory: FsFile | FsFolder | FsSymLink,
+        ignoreWatch?: boolean,
+        options?: Partial<WatchInvokeOptions>,
+    ) {
         if (!this.fs.has(fileOrDirectory.path)) {
             insertSorted(folder.entries, fileOrDirectory, (a, b) => compareStringsCaseSensitive(getBaseFileName(a.path), getBaseFileName(b.path)));
         }
@@ -661,8 +671,18 @@ export class TestServerHost implements server.ServerHost, FormatDiagnosticsHost,
         }
         const inodeWatching = this.inodeWatching;
         if (options?.skipInodeCheckOnCreate) this.inodeWatching = false;
-        this.invokeFileAndFsWatches(fileOrDirectory.fullPath, FileWatcherEventKind.Created, fileOrDirectory.modifiedTime, options?.useTildeAsSuffixInRenameEventFileName);
-        this.invokeFileAndFsWatches(folder.fullPath, FileWatcherEventKind.Changed, fileOrDirectory.modifiedTime, options?.useTildeAsSuffixInRenameEventFileName);
+        this.invokeFileAndFsWatches(
+            fileOrDirectory.fullPath,
+            FileWatcherEventKind.Created,
+            fileOrDirectory.modifiedTime,
+            options?.useTildeAsSuffixInRenameEventFileName,
+        );
+        this.invokeFileAndFsWatches(
+            folder.fullPath,
+            FileWatcherEventKind.Changed,
+            fileOrDirectory.modifiedTime,
+            options?.useTildeAsSuffixInRenameEventFileName,
+        );
         this.inodeWatching = inodeWatching;
     }
 
@@ -689,7 +709,12 @@ export class TestServerHost implements server.ServerHost, FormatDiagnosticsHost,
         }
         this.inodes?.delete(fileOrDirectory.path);
         if (!options?.ignoreDelete) {
-            this.invokeFileAndFsWatches(baseFolder.fullPath, FileWatcherEventKind.Changed, baseFolder.modifiedTime, options?.useTildeAsSuffixInRenameEventFileName);
+            this.invokeFileAndFsWatches(
+                baseFolder.fullPath,
+                FileWatcherEventKind.Changed,
+                baseFolder.modifiedTime,
+                options?.useTildeAsSuffixInRenameEventFileName,
+            );
         }
     }
 
@@ -778,7 +803,13 @@ export class TestServerHost implements server.ServerHost, FormatDiagnosticsHost,
     }
 
     private getRelativePathToDirectory(directoryFullPath: string, fileFullPath: string) {
-        return getRelativePathToDirectoryOrUrl(directoryFullPath, fileFullPath, this.currentDirectory, this.getCanonicalFileName, /*isAbsolutePathAnUrl*/ false);
+        return getRelativePathToDirectoryOrUrl(
+            directoryFullPath,
+            fileFullPath,
+            this.currentDirectory,
+            this.getCanonicalFileName,
+            /*isAbsolutePathAnUrl*/ false,
+        );
     }
 
     private invokeRecursiveFsWatches(fullPath: string, eventName: "rename" | "change", modifiedTime?: Date, entryFullPath?: string, useTildeSuffix?: boolean) {

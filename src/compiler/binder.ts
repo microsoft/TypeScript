@@ -873,7 +873,8 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
                     const declarationName = getNameOfDeclaration(node) || node;
                     forEach(symbol.declarations, (declaration, index) => {
                         const decl = getNameOfDeclaration(declaration) || declaration;
-                        const diag = messageNeedsName ? createDiagnosticForNode(decl, message, getDisplayName(declaration)) : createDiagnosticForNode(decl, message);
+                        const diag = messageNeedsName ? createDiagnosticForNode(decl, message, getDisplayName(declaration))
+                            : createDiagnosticForNode(decl, message);
                         file.bindDiagnostics.push(
                             multipleDefaultExports ?
                                 addRelatedInfo(
@@ -1264,7 +1265,8 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
             case SyntaxKind.BinaryExpression:
                 return isNarrowingBinaryExpression(expr as BinaryExpression);
             case SyntaxKind.PrefixUnaryExpression:
-                return (expr as PrefixUnaryExpression).operator === SyntaxKind.ExclamationToken && isNarrowingExpression((expr as PrefixUnaryExpression).operand);
+                return (expr as PrefixUnaryExpression).operator === SyntaxKind.ExclamationToken &&
+                    isNarrowingExpression((expr as PrefixUnaryExpression).operand);
             case SyntaxKind.TypeOfExpression:
                 return isNarrowingExpression((expr as TypeOfExpression).expression);
         }
@@ -2306,7 +2308,10 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
         setExportContextFlag(node);
         if (isAmbientModule(node)) {
             if (hasSyntacticModifier(node, ModifierFlags.Export)) {
-                errorOnFirstToken(node, Diagnostics.export_modifier_cannot_be_applied_to_ambient_modules_and_module_augmentations_since_they_are_always_visible);
+                errorOnFirstToken(
+                    node,
+                    Diagnostics.export_modifier_cannot_be_applied_to_ambient_modules_and_module_augmentations_since_they_are_always_visible,
+                );
             }
             if (isModuleAugmentationExternal(node)) {
                 declareModuleSymbol(node);
@@ -2322,7 +2327,10 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
                 }
 
                 const symbol = declareSymbolAndAddToSymbolTable(node, SymbolFlags.ValueModule, SymbolFlags.ValueModuleExcludes)!;
-                file.patternAmbientModules = append<PatternAmbientModule>(file.patternAmbientModules, pattern && !isString(pattern) ? { pattern, symbol } : undefined);
+                file.patternAmbientModules = append<PatternAmbientModule>(
+                    file.patternAmbientModules,
+                    pattern && !isString(pattern) ? { pattern, symbol } : undefined,
+                );
             }
         }
         else {
@@ -2509,12 +2517,20 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
             else if (originalKeywordKind === SyntaxKind.AwaitKeyword) {
                 if (isExternalModule(file) && isInTopLevelContext(node)) {
                     file.bindDiagnostics.push(
-                        createDiagnosticForNode(node, Diagnostics.Identifier_expected_0_is_a_reserved_word_at_the_top_level_of_a_module, declarationNameToString(node)),
+                        createDiagnosticForNode(
+                            node,
+                            Diagnostics.Identifier_expected_0_is_a_reserved_word_at_the_top_level_of_a_module,
+                            declarationNameToString(node),
+                        ),
                     );
                 }
                 else if (node.flags & NodeFlags.AwaitContext) {
                     file.bindDiagnostics.push(
-                        createDiagnosticForNode(node, Diagnostics.Identifier_expected_0_is_a_reserved_word_that_cannot_be_used_here, declarationNameToString(node)),
+                        createDiagnosticForNode(
+                            node,
+                            Diagnostics.Identifier_expected_0_is_a_reserved_word_that_cannot_be_used_here,
+                            declarationNameToString(node),
+                        ),
                     );
                 }
             }
@@ -2588,7 +2604,9 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
                 // We check first if the name is inside class declaration or class expression; if so give explicit message
                 // otherwise report generic error message.
                 const span = getErrorSpanForNode(file, name);
-                file.bindDiagnostics.push(createFileDiagnostic(file, span.start, span.length, getStrictModeEvalOrArgumentsMessage(contextNode), idText(identifier)));
+                file.bindDiagnostics.push(
+                    createFileDiagnostic(file, span.start, span.length, getStrictModeEvalOrArgumentsMessage(contextNode), idText(identifier)),
+                );
             }
         }
     }
@@ -2619,7 +2637,8 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
         // Provide specialized messages to help the user understand why we think they're in
         // strict mode.
         if (getContainingClass(node)) {
-            return Diagnostics.Function_declarations_are_not_allowed_inside_blocks_in_strict_mode_when_targeting_ES5_Class_definitions_are_automatically_in_strict_mode;
+            return Diagnostics
+                .Function_declarations_are_not_allowed_inside_blocks_in_strict_mode_when_targeting_ES5_Class_definitions_are_automatically_in_strict_mode;
         }
 
         if (file.externalModuleIndicator) {
@@ -2640,7 +2659,9 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
                 // We check first if the name is inside class declaration or class expression; if so give explicit message
                 // otherwise report generic error message.
                 const errorSpan = getErrorSpanForNode(file, node);
-                file.bindDiagnostics.push(createFileDiagnostic(file, errorSpan.start, errorSpan.length, getStrictModeBlockScopeFunctionDeclarationMessage(node)));
+                file.bindDiagnostics.push(
+                    createFileDiagnostic(file, errorSpan.start, errorSpan.length, getStrictModeBlockScopeFunctionDeclarationMessage(node)),
+                );
             }
         }
     }
@@ -3187,7 +3208,8 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
             return symbol;
         });
         if (symbol) {
-            const isAlias = isAliasableExpression(node.right) && (isExportsIdentifier(node.left.expression) || isModuleExportsAccessExpression(node.left.expression));
+            const isAlias = isAliasableExpression(node.right) &&
+                (isExportsIdentifier(node.left.expression) || isModuleExportsAccessExpression(node.left.expression));
             const flags = isAlias ? SymbolFlags.Alias : SymbolFlags.Property | SymbolFlags.ExportValue;
             setParent(node.left, node);
             declareSymbol(symbol.exports!, symbol, node.left, flags, SymbolFlags.None);
@@ -3371,13 +3393,20 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
     function bindObjectDefinePropertyAssignment(node: BindableObjectDefinePropertyCall) {
         let namespaceSymbol = lookupSymbolForPropertyAccess(node.arguments[0]);
         const isToplevel = node.parent.parent.kind === SyntaxKind.SourceFile;
-        namespaceSymbol = bindPotentiallyMissingNamespaces(namespaceSymbol, node.arguments[0], isToplevel, /*isPrototypeProperty*/ false, /*containerIsClass*/ false);
+        namespaceSymbol = bindPotentiallyMissingNamespaces(
+            namespaceSymbol,
+            node.arguments[0],
+            isToplevel,
+            /*isPrototypeProperty*/ false,
+            /*containerIsClass*/ false,
+        );
         bindPotentiallyNewExpandoMemberToNamespace(node, namespaceSymbol, /*isPrototypeProperty*/ false);
     }
 
     function bindSpecialPropertyAssignment(node: BindablePropertyAssignmentExpression) {
         // Class declarations in Typescript do not allow property declarations
-        const parentSymbol = lookupSymbolForPropertyAccess(node.left.expression, blockScopeContainer) || lookupSymbolForPropertyAccess(node.left.expression, container);
+        const parentSymbol = lookupSymbolForPropertyAccess(node.left.expression, blockScopeContainer) ||
+            lookupSymbolForPropertyAccess(node.left.expression, container);
         if (!isInJSFile(node) && !isFunctionSymbol(parentSymbol)) {
             return;
         }
@@ -3550,7 +3579,8 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
         if (init) {
             const isPrototypeAssignment = isPrototypeAccess(isVariableDeclaration(node!) ? node.name : isBinaryExpression(node!) ? node.left : node!);
             return !!getExpandoInitializer(
-                isBinaryExpression(init) && (init.operatorToken.kind === SyntaxKind.BarBarToken || init.operatorToken.kind === SyntaxKind.QuestionQuestionToken) ?
+                isBinaryExpression(init) &&
+                    (init.operatorToken.kind === SyntaxKind.BarBarToken || init.operatorToken.kind === SyntaxKind.QuestionQuestionToken) ?
                     init.right
                     : init,
                 isPrototypeAssignment,

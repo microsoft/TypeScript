@@ -90,14 +90,24 @@
                 "leadingUnderscore": "allow",
                 "filter": { "regex": "^[A-Za-z]+_[A-Za-z]+$", "match": false }
             },
-            { "selector": "parameter", "format": ["camelCase"], "leadingUnderscore": "allow", "filter": { "regex": "^(_+|[A-Za-z]+_[A-Z][a-z]+)$", "match": false } },
+            {
+                "selector": "parameter",
+                "format": ["camelCase"],
+                "leadingUnderscore": "allow",
+                "filter": { "regex": "^(_+|[A-Za-z]+_[A-Z][a-z]+)$", "match": false }
+            },
             {
                 "selector": "method",
                 "format": ["camelCase", "PascalCase"],
                 "leadingUnderscore": "allow",
                 "filter": { "regex": "^([0-9]+|[A-Za-z]+_[A-Za-z]+)$", "match": false }
             },
-            { "selector": "memberLike", "format": ["camelCase"], "leadingUnderscore": "allow", "filter": { "regex": "^([0-9]+|[A-Za-z]+_[A-Za-z]+)$", "match": false } },
+            {
+                "selector": "memberLike",
+                "format": ["camelCase"],
+                "leadingUnderscore": "allow",
+                "filter": { "regex": "^([0-9]+|[A-Za-z]+_[A-Za-z]+)$", "match": false }
+            },
             {
                 "selector": "enumMember",
                 "format": ["camelCase", "PascalCase"],

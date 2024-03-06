@@ -166,7 +166,12 @@ class ProjectTestCase {
             const result = ts.readJsonConfigFile(configFileName, path => this.sys.readFile(path));
             configFileSourceFiles.push(result);
             const configParseHost = new ProjectParseConfigHost(this.sys, this.testCase);
-            const configParseResult = ts.parseJsonSourceFileConfigFileContent(result, configParseHost, ts.getDirectoryPath(configFileName), this.compilerOptions);
+            const configParseResult = ts.parseJsonSourceFileConfigFileContent(
+                result,
+                configParseHost,
+                ts.getDirectoryPath(configFileName),
+                this.compilerOptions,
+            );
             inputFiles = configParseResult.fileNames;
             this.compilerOptions = configParseResult.options;
             errors = [...result.parseDiagnostics, ...configParseResult.errors];
@@ -437,7 +442,13 @@ class ProjectTestCase {
 
         // Dont allow config files since we are compiling existing source options
         const compilerHost = new ProjectCompilerHost(_vfs, compilerResult.compilerOptions!, this.testCaseJustName, this.testCase, compilerResult.moduleKind);
-        return this.compileProjectFiles(compilerResult.moduleKind, compilerResult.configFileSourceFiles, () => rootFiles, compilerHost, compilerResult.compilerOptions!);
+        return this.compileProjectFiles(
+            compilerResult.moduleKind,
+            compilerResult.configFileSourceFiles,
+            () => rootFiles,
+            compilerHost,
+            compilerResult.compilerOptions!,
+        );
 
         function findOutputDtsFile(fileName: string) {
             return ts.forEach(compilerResult.outputFiles, outputFile => outputFile.meta.get("fileName") === fileName ? outputFile : undefined);

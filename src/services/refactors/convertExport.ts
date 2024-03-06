@@ -157,7 +157,13 @@ function getInfo(context: RefactorContext, considerPartialSpans = true): ExportI
         case SyntaxKind.EnumDeclaration:
         case SyntaxKind.TypeAliasDeclaration:
         case SyntaxKind.ModuleDeclaration: {
-            const node = exportNode as FunctionDeclaration | ClassDeclaration | InterfaceDeclaration | EnumDeclaration | TypeAliasDeclaration | NamespaceDeclaration;
+            const node = exportNode as
+                | FunctionDeclaration
+                | ClassDeclaration
+                | InterfaceDeclaration
+                | EnumDeclaration
+                | TypeAliasDeclaration
+                | NamespaceDeclaration;
             if (!node.name) return undefined;
             return noSymbolError(node.name)
                 || { exportNode: node, exportName: node.name, wasDefault, exportingModuleSymbol };
@@ -308,9 +314,15 @@ function changeDefaultToNamedImport(importingSourceFile: SourceFile, ref: Identi
             else if (namedBindings.kind === SyntaxKind.NamespaceImport) {
                 // `import foo, * as a from "./a";` --> `import * as a from ".a/"; import { foo } from "./a";`
                 changes.deleteRange(importingSourceFile, { pos: ref.getStart(importingSourceFile), end: namedBindings.getStart(importingSourceFile) });
-                const quotePreference = isStringLiteral(clause.parent.moduleSpecifier) ? quotePreferenceFromString(clause.parent.moduleSpecifier, importingSourceFile)
+                const quotePreference = isStringLiteral(clause.parent.moduleSpecifier) ?
+                    quotePreferenceFromString(clause.parent.moduleSpecifier, importingSourceFile)
                     : QuotePreference.Double;
-                const newImport = makeImport(/*defaultImport*/ undefined, [makeImportSpecifier(exportName, ref.text)], clause.parent.moduleSpecifier, quotePreference);
+                const newImport = makeImport(
+                    /*defaultImport*/ undefined,
+                    [makeImportSpecifier(exportName, ref.text)],
+                    clause.parent.moduleSpecifier,
+                    quotePreference,
+                );
                 changes.insertNodeAfter(importingSourceFile, clause.parent, newImport);
             }
             else {

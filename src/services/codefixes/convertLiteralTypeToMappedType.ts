@@ -30,7 +30,15 @@ registerCodeFix({
         }
         const { name, constraint } = info;
         const changes = textChanges.ChangeTracker.with(context, t => doChange(t, sourceFile, info));
-        return [createCodeFixAction(fixId, changes, [Diagnostics.Convert_0_to_1_in_0, constraint, name], fixId, Diagnostics.Convert_all_type_literals_to_mapped_type)];
+        return [
+            createCodeFixAction(
+                fixId,
+                changes,
+                [Diagnostics.Convert_0_to_1_in_0, constraint, name],
+                fixId,
+                Diagnostics.Convert_all_type_literals_to_mapped_type,
+            ),
+        ];
     },
     fixIds: [fixId],
     getAllCodeActions: context =>

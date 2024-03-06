@@ -436,7 +436,11 @@ export function getAnyExtensionFromPath(path: string, extensions?: string | read
     // Retrieves any string from the final "." onwards from a base file name.
     // Unlike extensionFromPath, which throws an exception on unrecognized extensions.
     if (extensions) {
-        return getAnyExtensionFromPathWorker(removeTrailingDirectorySeparator(path), extensions, ignoreCase ? equateStringsCaseInsensitive : equateStringsCaseSensitive);
+        return getAnyExtensionFromPathWorker(
+            removeTrailingDirectorySeparator(path),
+            extensions,
+            ignoreCase ? equateStringsCaseInsensitive : equateStringsCaseSensitive,
+        );
     }
     const baseFileName = getBaseFileName(path);
     const extensionIndex = baseFileName.lastIndexOf(".");
@@ -753,7 +757,8 @@ export function changeAnyExtension(path: string, ext: string): string;
 export function changeAnyExtension(path: string, ext: string, extensions: string | readonly string[], ignoreCase: boolean): string;
 /** @internal */
 export function changeAnyExtension(path: string, ext: string, extensions?: string | readonly string[], ignoreCase?: boolean) {
-    const pathext = extensions !== undefined && ignoreCase !== undefined ? getAnyExtensionFromPath(path, extensions, ignoreCase) : getAnyExtensionFromPath(path);
+    const pathext = extensions !== undefined && ignoreCase !== undefined ? getAnyExtensionFromPath(path, extensions, ignoreCase)
+        : getAnyExtensionFromPath(path);
     return pathext ? path.slice(0, path.length - pathext.length) + (startsWith(ext, ".") ? ext : "." + ext) : path;
 }
 
@@ -954,7 +959,12 @@ export function getRelativePathFromDirectory(fromDirectory: string, to: string, 
     Debug.assert((getRootLength(fromDirectory) > 0) === (getRootLength(to) > 0), "Paths must either both be absolute or both be relative");
     const getCanonicalFileName = typeof getCanonicalFileNameOrIgnoreCase === "function" ? getCanonicalFileNameOrIgnoreCase : identity;
     const ignoreCase = typeof getCanonicalFileNameOrIgnoreCase === "boolean" ? getCanonicalFileNameOrIgnoreCase : false;
-    const pathComponents = getPathComponentsRelativeTo(fromDirectory, to, ignoreCase ? equateStringsCaseInsensitive : equateStringsCaseSensitive, getCanonicalFileName);
+    const pathComponents = getPathComponentsRelativeTo(
+        fromDirectory,
+        to,
+        ignoreCase ? equateStringsCaseInsensitive : equateStringsCaseSensitive,
+        getCanonicalFileName,
+    );
     return getPathFromPathComponents(pathComponents);
 }
 

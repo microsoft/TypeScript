@@ -28,7 +28,10 @@ export function createModuleSpecifierCache(host: ModuleSpecifierResolutionCacheH
             return cache.get(toFileName);
         },
         set(fromFileName, toFileName, preferences, options, modulePaths, moduleSpecifiers) {
-            ensureCache(fromFileName, preferences, options).set(toFileName, createInfo(modulePaths, moduleSpecifiers, /*isBlockedByPackageJsonDependencies*/ false));
+            ensureCache(fromFileName, preferences, options).set(
+                toFileName,
+                createInfo(modulePaths, moduleSpecifiers, /*isBlockedByPackageJsonDependencies*/ false),
+            );
 
             // If any module specifiers were generated based off paths in node_modules,
             // a package.json file in that package was read and is an input to the cached.

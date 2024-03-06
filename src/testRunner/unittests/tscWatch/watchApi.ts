@@ -585,7 +585,11 @@ describe("unittests:: tsc-watch:: watchAPI:: when getParsedCommandLine is implem
                 },
                 {
                     caption: "Add excluded file to project1",
-                    edit: sys => sys.ensureFileOrFolder({ path: `/user/username/projects/myproject/projects/project1/temp/file.d.ts`, content: `declare class file {}` }),
+                    edit: sys =>
+                        sys.ensureFileOrFolder({
+                            path: `/user/username/projects/myproject/projects/project1/temp/file.d.ts`,
+                            content: `declare class file {}`,
+                        }),
                     timeouts: ts.noop,
                 },
                 {
@@ -623,7 +627,11 @@ describe("unittests:: tsc-watch:: watchAPI:: when getParsedCommandLine is implem
                 },
                 {
                     caption: "Add excluded file to project1",
-                    edit: sys => sys.ensureFileOrFolder({ path: `/user/username/projects/myproject/projects/project1/temp/file.d.ts`, content: `declare class file {}` }),
+                    edit: sys =>
+                        sys.ensureFileOrFolder({
+                            path: `/user/username/projects/myproject/projects/project1/temp/file.d.ts`,
+                            content: `declare class file {}`,
+                        }),
                     timeouts: ts.noop,
                 },
                 {

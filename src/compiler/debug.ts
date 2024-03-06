@@ -209,7 +209,12 @@ export namespace Debug {
         );
     }
 
-    export function assert(expression: unknown, message?: string, verboseDebugInfo?: string | (() => string), stackCrawlMark?: AnyFunction): asserts expression {
+    export function assert(
+        expression: unknown,
+        message?: string,
+        verboseDebugInfo?: string | (() => string),
+        stackCrawlMark?: AnyFunction,
+    ): asserts expression {
         if (!expression) {
             message = message ? `False expression: ${message}` : "False expression.";
             if (verboseDebugInfo) {
@@ -270,7 +275,8 @@ export namespace Debug {
     }
 
     export function assertNever(member: never, message = "Illegal value:", stackCrawlMark?: AnyFunction): never {
-        const detail = typeof member === "object" && hasProperty(member, "kind") && hasProperty(member, "pos") ? "SyntaxKind: " + formatSyntaxKind((member as Node).kind)
+        const detail = typeof member === "object" && hasProperty(member, "kind") && hasProperty(member, "pos") ?
+            "SyntaxKind: " + formatSyntaxKind((member as Node).kind)
             : JSON.stringify(member);
         return fail(`${message} ${detail}`, stackCrawlMark || assertNever);
     }
@@ -300,7 +306,12 @@ export namespace Debug {
         stackCrawlMark?: AnyFunction,
     ): asserts nodes is readonly U[] | undefined;
     export function assertEachNode(nodes: readonly Node[], test: ((node: Node) => boolean) | undefined, message?: string, stackCrawlMark?: AnyFunction): void;
-    export function assertEachNode(nodes: readonly Node[] | undefined, test: ((node: Node) => boolean) | undefined, message?: string, stackCrawlMark?: AnyFunction) {
+    export function assertEachNode(
+        nodes: readonly Node[] | undefined,
+        test: ((node: Node) => boolean) | undefined,
+        message?: string,
+        stackCrawlMark?: AnyFunction,
+    ) {
         if (shouldAssertFunction(AssertionLevel.Normal, "assertEachNode")) {
             assert(
                 test === undefined || every(nodes, test),
@@ -359,7 +370,12 @@ export namespace Debug {
         message?: string,
         stackCrawlMark?: AnyFunction,
     ): asserts node is U | undefined;
-    export function assertOptionalNode(node: Node | undefined, test: ((node: Node) => boolean) | undefined, message?: string, stackCrawlMark?: AnyFunction): void;
+    export function assertOptionalNode(
+        node: Node | undefined,
+        test: ((node: Node) => boolean) | undefined,
+        message?: string,
+        stackCrawlMark?: AnyFunction,
+    ): void;
     export function assertOptionalNode(node: Node | undefined, test: ((node: Node) => boolean) | undefined, message?: string, stackCrawlMark?: AnyFunction) {
         if (shouldAssertFunction(AssertionLevel.Normal, "assertOptionalNode")) {
             assert(

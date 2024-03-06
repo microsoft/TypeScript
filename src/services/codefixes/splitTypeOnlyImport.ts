@@ -27,7 +27,15 @@ registerCodeFix({
             return splitTypeOnlyImport(t, getImportDeclaration(context.sourceFile, context.span), context);
         });
         if (changes.length) {
-            return [createCodeFixAction(fixId, changes, Diagnostics.Split_into_two_separate_import_declarations, fixId, Diagnostics.Split_all_invalid_type_only_imports)];
+            return [
+                createCodeFixAction(
+                    fixId,
+                    changes,
+                    Diagnostics.Split_into_two_separate_import_declarations,
+                    fixId,
+                    Diagnostics.Split_all_invalid_type_only_imports,
+                ),
+            ];
         }
     },
     getAllCodeActions: context =>

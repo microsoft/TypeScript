@@ -503,7 +503,8 @@ export function createWatchProgram<T extends BuilderProgram>(
     let canConfigFileJsonReportNoInputFiles = false;
     let hasChangedConfigFileParsingErrors = false;
 
-    const cachedDirectoryStructureHost = configFileName === undefined ? undefined : createCachedDirectoryStructureHost(host, currentDirectory, useCaseSensitiveFileNames);
+    const cachedDirectoryStructureHost = configFileName === undefined ? undefined
+        : createCachedDirectoryStructureHost(host, currentDirectory, useCaseSensitiveFileNames);
     const directoryStructureHost: DirectoryStructureHost = cachedDirectoryStructureHost || host;
     const parseConfigFileHost = parseConfigHostFromCompilerHostLike(host, directoryStructureHost);
 

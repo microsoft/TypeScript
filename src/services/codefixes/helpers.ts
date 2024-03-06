@@ -329,7 +329,13 @@ export function addNewNodeForMemberSymbol(
             break;
     }
 
-    function outputMethod(quotePreference: QuotePreference, signature: Signature, modifiers: NodeArray<Modifier> | undefined, name: PropertyName, body?: Block): void {
+    function outputMethod(
+        quotePreference: QuotePreference,
+        signature: Signature,
+        modifiers: NodeArray<Modifier> | undefined,
+        name: PropertyName,
+        body?: Block,
+    ): void {
         const method = createSignatureDeclarationFromSignature(
             SyntaxKind.MethodDeclaration,
             context,
@@ -415,7 +421,13 @@ export function createSignatureDeclarationFromSignature(
         | NodeBuilderFlags.SuppressAnyReturnType
         | NodeBuilderFlags.AllowEmptyTuple
         | (quotePreference === QuotePreference.Single ? NodeBuilderFlags.UseSingleQuotesForStringLiteralType : NodeBuilderFlags.None);
-    const signatureDeclaration = checker.signatureToSignatureDeclaration(signature, kind, enclosingDeclaration, flags, getNoopSymbolTrackerWithResolver(context)) as
+    const signatureDeclaration = checker.signatureToSignatureDeclaration(
+        signature,
+        kind,
+        enclosingDeclaration,
+        flags,
+        getNoopSymbolTrackerWithResolver(context),
+    ) as
         | ArrowFunction
         | FunctionExpression
         | MethodDeclaration

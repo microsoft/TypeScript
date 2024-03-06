@@ -290,7 +290,12 @@ export interface ArgumentInfoForCompletions {
     readonly argumentCount: number;
 }
 /** @internal */
-export function getArgumentInfoForCompletions(node: Node, position: number, sourceFile: SourceFile, checker: TypeChecker): ArgumentInfoForCompletions | undefined {
+export function getArgumentInfoForCompletions(
+    node: Node,
+    position: number,
+    sourceFile: SourceFile,
+    checker: TypeChecker,
+): ArgumentInfoForCompletions | undefined {
     const info = getImmediatelyContainingArgumentInfo(node, position, sourceFile, checker);
     return !info || info.isTypeParameterList || info.invocation.kind !== InvocationKind.Call ? undefined
         : { invocation: info.invocation.node, argumentCount: info.argumentCount, argumentIndex: info.argumentIndex };
@@ -467,7 +472,10 @@ function getAdjustedNode(node: Node) {
         case SyntaxKind.CommaToken:
             return node;
         default:
-            return findAncestor(node.parent, n => isParameter(n) ? true : isBindingElement(n) || isObjectBindingPattern(n) || isArrayBindingPattern(n) ? false : "quit");
+            return findAncestor(
+                node.parent,
+                n => isParameter(n) ? true : isBindingElement(n) || isObjectBindingPattern(n) || isArrayBindingPattern(n) ? false : "quit",
+            );
     }
 }
 
@@ -477,7 +485,12 @@ interface ContextualSignatureLocationInfo {
     readonly argumentCount: number;
     readonly argumentsSpan: TextSpan;
 }
-function getContextualSignatureLocationInfo(node: Node, sourceFile: SourceFile, position: number, checker: TypeChecker): ContextualSignatureLocationInfo | undefined {
+function getContextualSignatureLocationInfo(
+    node: Node,
+    sourceFile: SourceFile,
+    position: number,
+    checker: TypeChecker,
+): ContextualSignatureLocationInfo | undefined {
     const { parent } = node;
     switch (parent.kind) {
         case SyntaxKind.ParenthesizedExpression:
@@ -657,7 +670,13 @@ function getApplicableSpanForTaggedTemplate(taggedTemplate: TaggedTemplateExpres
     return createTextSpan(applicableSpanStart, applicableSpanEnd - applicableSpanStart);
 }
 
-function getContainingArgumentInfo(node: Node, position: number, sourceFile: SourceFile, checker: TypeChecker, isManuallyInvoked: boolean): ArgumentListInfo | undefined {
+function getContainingArgumentInfo(
+    node: Node,
+    position: number,
+    sourceFile: SourceFile,
+    checker: TypeChecker,
+    isManuallyInvoked: boolean,
+): ArgumentListInfo | undefined {
     for (let n = node; !isSourceFile(n) && (isManuallyInvoked || !isBlock(n)); n = n.parent) {
         // If the node is not a subspan of its parent, this is a big problem.
         // There have been crashes that might be caused by this violation.
@@ -689,7 +708,8 @@ function getEnclosingDeclarationFromInvocation(invocation: Invocation): Node {
     return invocation.kind === InvocationKind.Call ? invocation.node : invocation.kind === InvocationKind.TypeArgs ? invocation.called : invocation.node;
 }
 
-const signatureHelpNodeBuilderFlags = NodeBuilderFlags.OmitParameterModifiers | NodeBuilderFlags.IgnoreErrors | NodeBuilderFlags.UseAliasDefinedOutsideCurrentScope;
+const signatureHelpNodeBuilderFlags = NodeBuilderFlags.OmitParameterModifiers | NodeBuilderFlags.IgnoreErrors |
+    NodeBuilderFlags.UseAliasDefinedOutsideCurrentScope;
 function createSignatureHelpItems(
     candidates: readonly Signature[],
     resolvedSignature: Signature,
@@ -701,11 +721,13 @@ function createSignatureHelpItems(
     const enclosingDeclaration = getEnclosingDeclarationFromInvocation(invocation);
     const callTargetSymbol = invocation.kind === InvocationKind.Contextual ? invocation.symbol
         : (typeChecker.getSymbolAtLocation(getExpressionFromInvocation(invocation)) || useFullPrefix && resolvedSignature.declaration?.symbol);
-    const callTargetDisplayParts = callTargetSymbol ? symbolToDisplayParts(typeChecker, callTargetSymbol, useFullPrefix ? sourceFile : undefined, /*meaning*/ undefined)
+    const callTargetDisplayParts = callTargetSymbol ?
+        symbolToDisplayParts(typeChecker, callTargetSymbol, useFullPrefix ? sourceFile : undefined, /*meaning*/ undefined)
         : emptyArray;
     const items = map(
         candidates,
-        candidateSignature => getSignatureHelpItem(candidateSignature, callTargetDisplayParts, isTypeParameterList, typeChecker, enclosingDeclaration, sourceFile),
+        candidateSignature =>
+            getSignatureHelpItem(candidateSignature, callTargetDisplayParts, isTypeParameterList, typeChecker, enclosingDeclaration, sourceFile),
     );
 
     if (argumentIndex !== 0) {
@@ -828,10 +850,17 @@ interface SignatureHelpItemInfo {
     readonly suffix: readonly SymbolDisplayPart[];
 }
 
-function itemInfoForTypeParameters(candidateSignature: Signature, checker: TypeChecker, enclosingDeclaration: Node, sourceFile: SourceFile): SignatureHelpItemInfo[] {
+function itemInfoForTypeParameters(
+    candidateSignature: Signature,
+    checker: TypeChecker,
+    enclosingDeclaration: Node,
+    sourceFile: SourceFile,
+): SignatureHelpItemInfo[] {
     const typeParameters = (candidateSignature.target || candidateSignature).typeParameters;
     const printer = createPrinterWithRemoveComments();
-    const parameters = (typeParameters || emptyArray).map(t => createSignatureHelpParameterForTypeParameter(t, checker, enclosingDeclaration, sourceFile, printer));
+    const parameters = (typeParameters || emptyArray).map(t =>
+        createSignatureHelpParameterForTypeParameter(t, checker, enclosingDeclaration, sourceFile, printer)
+    );
     const thisParameter = candidateSignature.thisParameter ?
         [checker.symbolToParameterDeclaration(candidateSignature.thisParameter, enclosingDeclaration, signatureHelpNodeBuilderFlags)!]
         : [];
@@ -853,7 +882,12 @@ function itemInfoForTypeParameters(candidateSignature: Signature, checker: TypeC
     });
 }
 
-function itemInfoForParameters(candidateSignature: Signature, checker: TypeChecker, enclosingDeclaration: Node, sourceFile: SourceFile): SignatureHelpItemInfo[] {
+function itemInfoForParameters(
+    candidateSignature: Signature,
+    checker: TypeChecker,
+    enclosingDeclaration: Node,
+    sourceFile: SourceFile,
+): SignatureHelpItemInfo[] {
     const printer = createPrinterWithRemoveComments();
     const typeParameterParts = mapToDisplayParts(writer => {
         if (candidateSignature.typeParameters && candidateSignature.typeParameters.length) {
@@ -902,5 +936,11 @@ function createSignatureHelpParameterForTypeParameter(
         const param = checker.typeParameterToDeclaration(typeParameter, enclosingDeclaration, signatureHelpNodeBuilderFlags)!;
         printer.writeNode(EmitHint.Unspecified, param, sourceFile, writer);
     });
-    return { name: typeParameter.symbol.name, documentation: typeParameter.symbol.getDocumentationComment(checker), displayParts, isOptional: false, isRest: false };
+    return {
+        name: typeParameter.symbol.name,
+        documentation: typeParameter.symbol.getDocumentationComment(checker),
+        displayParts,
+        isOptional: false,
+        isRest: false,
+    };
 }

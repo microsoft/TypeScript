@@ -688,7 +688,10 @@ export class LineNode implements LineCollection {
 
     // Input position is relative to the start of this node.
     // Output line number is absolute.
-    charOffsetToLineInfo(lineNumberAccumulator: number, relativePosition: number): { oneBasedLine: number; zeroBasedColumn: number; lineText: string | undefined; } {
+    charOffsetToLineInfo(
+        lineNumberAccumulator: number,
+        relativePosition: number,
+    ): { oneBasedLine: number; zeroBasedColumn: number; lineText: string | undefined; } {
         if (this.children.length === 0) {
             // Root node might have no children if this is an empty document.
             return { oneBasedLine: lineNumberAccumulator, zeroBasedColumn: relativePosition, lineText: undefined };
@@ -727,7 +730,8 @@ export class LineNode implements LineCollection {
         for (const child of this.children) {
             const childLineCount = child.lineCount();
             if (childLineCount >= relativeOneBasedLine) {
-                return child.isLeaf() ? { position: positionAccumulator, leaf: child } : (child as LineNode).lineNumberToInfo(relativeOneBasedLine, positionAccumulator);
+                return child.isLeaf() ? { position: positionAccumulator, leaf: child }
+                    : (child as LineNode).lineNumberToInfo(relativeOneBasedLine, positionAccumulator);
             }
             else {
                 relativeOneBasedLine -= childLineCount;

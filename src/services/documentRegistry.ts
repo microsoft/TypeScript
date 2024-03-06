@@ -253,7 +253,17 @@ export function createDocumentRegistryInternal(
         scriptKind?: ScriptKind,
         languageVersionOrOptions?: CreateSourceFileOptions | ScriptTarget,
     ): SourceFile {
-        return acquireOrUpdateDocument(fileName, path, compilationSettings, key, scriptSnapshot, version, /*acquiring*/ true, scriptKind, languageVersionOrOptions);
+        return acquireOrUpdateDocument(
+            fileName,
+            path,
+            compilationSettings,
+            key,
+            scriptSnapshot,
+            version,
+            /*acquiring*/ true,
+            scriptKind,
+            languageVersionOrOptions,
+        );
     }
 
     function updateDocument(
@@ -323,7 +333,12 @@ export function createDocumentRegistryInternal(
             {
                 languageVersion: scriptTarget,
                 impliedNodeFormat: host &&
-                    getImpliedNodeFormatForFile(path, host.getCompilerHost?.()?.getModuleResolutionCache?.()?.getPackageJsonInfoCache(), host, compilationSettings),
+                    getImpliedNodeFormatForFile(
+                        path,
+                        host.getCompilerHost?.()?.getModuleResolutionCache?.()?.getPackageJsonInfoCache(),
+                        host,
+                        compilationSettings,
+                    ),
                 setExternalModuleIndicator: getSetExternalModuleIndicator(compilationSettings),
                 jsDocParsingMode,
             };
@@ -337,7 +352,10 @@ export function createDocumentRegistryInternal(
                 // It is interesting, but not definitively problematic if a build requires multiple document registry buckets -
                 // perhaps they are for two projects that don't have any overlap.
                 // Bonus: these events can help us interpret the more interesting event below.
-                tracing.instant(tracing.Phase.Session, "createdDocumentRegistryBucket", { configFilePath: compilationSettings.configFilePath, key: keyWithMode });
+                tracing.instant(tracing.Phase.Session, "createdDocumentRegistryBucket", {
+                    configFilePath: compilationSettings.configFilePath,
+                    key: keyWithMode,
+                });
             }
 
             // It is fairly suspicious to have one path in two buckets - you'd expect dependencies to have similar configurations.

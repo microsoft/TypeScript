@@ -276,7 +276,10 @@ export function discoverTypings(
         if (host.fileExists(manifestPath)) {
             filesToWatch.push(manifestPath);
             manifest = readConfigFile(manifestPath, path => host.readFile(path)).config;
-            manifestTypingNames = flatMap([manifest.dependencies, manifest.devDependencies, manifest.optionalDependencies, manifest.peerDependencies], getOwnKeys);
+            manifestTypingNames = flatMap(
+                [manifest.dependencies, manifest.devDependencies, manifest.optionalDependencies, manifest.peerDependencies],
+                getOwnKeys,
+            );
             addInferredTypings(manifestTypingNames, `Typing names in '${manifestPath}' dependencies`);
         }
 

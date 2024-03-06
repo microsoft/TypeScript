@@ -456,7 +456,10 @@ describe("unittests:: tsserver:: resolutionCache:: tsserverProjectSystem module 
             const fileContent3 = `import { module1 } from "../../src/module1";import { module2 } from "../../module2";`;
             const fileContent4 = `import { module1 } from "../src/module1}";import { module2 } from "../module2";`;
             const { file1, file2, file3, file4 } = getFiles(fileContent1, fileContent2, fileContent3, fileContent4);
-            const { module1, module2 } = getModules(`/user/username/projects/myproject/product/src/module1.ts`, `/user/username/projects/myproject/product/module2.ts`);
+            const { module1, module2 } = getModules(
+                `/user/username/projects/myproject/product/src/module1.ts`,
+                `/user/username/projects/myproject/product/module2.ts`,
+            );
             const files = [module1, module2, file1, file2, file3, file4, configFile, libFile];
             const host = createServerHost(files);
             const session = new TestSession(host);

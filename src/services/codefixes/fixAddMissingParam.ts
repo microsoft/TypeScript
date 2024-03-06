@@ -291,7 +291,10 @@ function updateParameters(node: ConvertibleSignatureDeclaration, newParameters: 
     return parameters;
 }
 
-function getOverloads(implementation: ConvertibleSignatureDeclaration, declarations: readonly ConvertibleSignatureDeclaration[]): ConvertibleSignatureDeclaration[] {
+function getOverloads(
+    implementation: ConvertibleSignatureDeclaration,
+    declarations: readonly ConvertibleSignatureDeclaration[],
+): ConvertibleSignatureDeclaration[] {
     const overloads: ConvertibleSignatureDeclaration[] = [];
     for (const declaration of declarations) {
         if (isOverload(declaration)) {

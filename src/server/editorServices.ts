@@ -759,7 +759,8 @@ function forEachResolvedProjectReferenceProjectWorker<T>(
         }
 
         (seenResolvedRefs || (seenResolvedRefs = new Map())).set(canonicalPath, loadKind);
-        return ref.references && forEachResolvedProjectReferenceProjectWorker(ref.references, ref.commandLine.options, cb, loadKind, projectService, seenResolvedRefs);
+        return ref.references &&
+            forEachResolvedProjectReferenceProjectWorker(ref.references, ref.commandLine.options, cb, loadKind, projectService, seenResolvedRefs);
     });
 }
 
@@ -1541,7 +1542,8 @@ export class ProjectService {
         const scriptInfo = isString(fileNameOrScriptInfo) ? this.getScriptInfoForNormalizedPath(fileNameOrScriptInfo) : fileNameOrScriptInfo;
         return scriptInfo ?
             scriptInfo.getDefaultProject() :
-            (this.logErrorForScriptInfoNotFound(isString(fileNameOrScriptInfo) ? fileNameOrScriptInfo : fileNameOrScriptInfo.fileName), Errors.ThrowNoProject());
+            (this.logErrorForScriptInfoNotFound(isString(fileNameOrScriptInfo) ? fileNameOrScriptInfo : fileNameOrScriptInfo.fileName),
+                Errors.ThrowNoProject());
     }
 
     getScriptInfoEnsuringProjectsUptoDate(uncheckedFileName: string) {
@@ -2395,7 +2397,9 @@ export class ProjectService {
                     .sort((a, b) => b.size - a.size)
                     .slice(0, 5);
                 this.logger.info(
-                    `Non TS file size exceeded limit (${totalNonTsFileSize}). Largest files: ${top5LargestFiles.map(file => `${file.name}:${file.size}`).join(", ")}`,
+                    `Non TS file size exceeded limit (${totalNonTsFileSize}). Largest files: ${
+                        top5LargestFiles.map(file => `${file.name}:${file.size}`).join(", ")
+                    }`,
                 );
                 // Keep the size as zero since it's disabled
                 return fileName;
@@ -2418,7 +2422,12 @@ export class ProjectService {
             this,
             this.documentRegistry,
             compilerOptions,
-            /*lastFileExceededProgramSize*/ this.getFilenameForExceededTotalSizeLimitForNonTsFiles(projectFileName, compilerOptions, files, externalFilePropertyReader),
+            /*lastFileExceededProgramSize*/ this.getFilenameForExceededTotalSizeLimitForNonTsFiles(
+                projectFileName,
+                compilerOptions,
+                files,
+                externalFilePropertyReader,
+            ),
             options.compileOnSave === undefined ? true : options.compileOnSave,
             /*projectFilePath*/ undefined,
             watchOptionsAndErrors?.watchOptions,
@@ -2507,7 +2516,11 @@ export class ProjectService {
         }
         if (!configFileExistenceInfo.config) {
             configFileExistenceInfo.config = {
-                cachedDirectoryStructureHost: createCachedDirectoryStructureHost(this.host, this.host.getCurrentDirectory(), this.host.useCaseSensitiveFileNames)!,
+                cachedDirectoryStructureHost: createCachedDirectoryStructureHost(
+                    this.host,
+                    this.host.getCurrentDirectory(),
+                    this.host.useCaseSensitiveFileNames,
+                )!,
                 projects: new Map(),
                 updateLevel: ProgramUpdateLevel.Full,
             };
@@ -3010,7 +3023,8 @@ export class ProjectService {
     }
 
     private createInferredProject(currentDirectory: string, isSingleInferredProject?: boolean, projectRootPath?: NormalizedPath): InferredProject {
-        const compilerOptions = projectRootPath && this.compilerOptionsForInferredProjectsPerProjectRoot.get(projectRootPath) || this.compilerOptionsForInferredProjects!; // TODO: GH#18217
+        const compilerOptions = projectRootPath && this.compilerOptionsForInferredProjectsPerProjectRoot.get(projectRootPath) ||
+            this.compilerOptionsForInferredProjects!; // TODO: GH#18217
         let watchOptionsAndErrors: WatchOptionsAndErrors | false | undefined;
         let typeAcquisition: TypeAcquisition | undefined;
         if (projectRootPath) {
@@ -3305,7 +3319,15 @@ export class ProjectService {
         hasMixedContent?: boolean,
         hostToQueryFileExistsOn?: { fileExists(path: string): boolean; },
     ) {
-        return this.getOrCreateScriptInfoWorker(fileName, this.currentDirectory, openedByClient, fileContent, scriptKind, hasMixedContent, hostToQueryFileExistsOn);
+        return this.getOrCreateScriptInfoWorker(
+            fileName,
+            this.currentDirectory,
+            openedByClient,
+            fileContent,
+            scriptKind,
+            hasMixedContent,
+            hostToQueryFileExistsOn,
+        );
     }
 
     private getOrCreateScriptInfoWorker(
@@ -3336,7 +3358,8 @@ export class ProjectService {
                     }\nScript info with non-dynamic relative file name can only be open script info or in context of host currentDirectory`,
             );
             Debug.assert(
-                !isRootedDiskPath(fileName) || this.currentDirectory === currentDirectory || !this.openFilesWithNonRootedDiskPath.has(this.toCanonicalFileName(fileName)),
+                !isRootedDiskPath(fileName) || this.currentDirectory === currentDirectory ||
+                    !this.openFilesWithNonRootedDiskPath.has(this.toCanonicalFileName(fileName)),
                 "",
                 () =>
                     `${
@@ -3427,7 +3450,11 @@ export class ProjectService {
             declarationInfo.sourceMapFilePath = undefined;
         }
         else if (declarationInfo.sourceMapFilePath) {
-            declarationInfo.sourceMapFilePath.sourceInfos = this.addSourceInfoToSourceMap(sourceFileName, project, declarationInfo.sourceMapFilePath.sourceInfos);
+            declarationInfo.sourceMapFilePath.sourceInfos = this.addSourceInfoToSourceMap(
+                sourceFileName,
+                project,
+                declarationInfo.sourceMapFilePath.sourceInfos,
+            );
             return undefined;
         }
         else if (declarationInfo.sourceMapFilePath !== undefined) {
@@ -3523,7 +3550,11 @@ export class ProjectService {
         }
 
         // Need to look for other files.
-        const info = this.getOrCreateScriptInfoNotOpenedByClient(fileName, (project || this).currentDirectory, project ? project.directoryStructureHost : this.host);
+        const info = this.getOrCreateScriptInfoNotOpenedByClient(
+            fileName,
+            (project || this).currentDirectory,
+            project ? project.directoryStructureHost : this.host,
+        );
         if (!info) return undefined;
 
         // Attach as source
@@ -3614,7 +3645,9 @@ export class ProjectService {
 
             if (args.watchOptions) {
                 this.hostConfiguration.watchOptions = convertWatchOptions(args.watchOptions)?.watchOptions;
-                this.logger.info(`Host watch options changed to ${JSON.stringify(this.hostConfiguration.watchOptions)}, it will be take effect for next watches.`);
+                this.logger.info(
+                    `Host watch options changed to ${JSON.stringify(this.hostConfiguration.watchOptions)}, it will be take effect for next watches.`,
+                );
             }
         }
     }
@@ -4700,7 +4733,9 @@ export class ProjectService {
             isExternalModuleNameRelative(pluginConfigEntry.name) ||
             /[\\/]\.\.?($|[\\/])/.test(pluginConfigEntry.name)
         ) {
-            this.logger.info(`Skipped loading plugin ${pluginConfigEntry.name || JSON.stringify(pluginConfigEntry)} because only package name is allowed plugin name`);
+            this.logger.info(
+                `Skipped loading plugin ${pluginConfigEntry.name || JSON.stringify(pluginConfigEntry)} because only package name is allowed plugin name`,
+            );
             return;
         }
 

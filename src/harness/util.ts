@@ -9,7 +9,10 @@ export function removeTestPathPrefixes(text: string, retainTrailingDirectorySepa
     return text !== undefined ? text.replace(testPathPrefixRegExp, (_, scheme) => scheme || (retainTrailingDirectorySeparator ? "/" : "")) : undefined!; // TODO: GH#18217
 }
 
-function createDiagnosticMessageReplacer<R extends (messageArgs: string[], ...args: string[]) => string[]>(diagnosticMessage: ts.DiagnosticMessage, replacer: R) {
+function createDiagnosticMessageReplacer<R extends (messageArgs: string[], ...args: string[]) => string[]>(
+    diagnosticMessage: ts.DiagnosticMessage,
+    replacer: R,
+) {
     const messageParts = diagnosticMessage.message.split(/{\d+}/g);
     const regExp = new RegExp(`^(?:${messageParts.map(ts.regExpEscape).join("(.*?)")})$`);
     type Args<R> = R extends (messageArgs: string[], ...args: infer A) => string[] ? A : [];

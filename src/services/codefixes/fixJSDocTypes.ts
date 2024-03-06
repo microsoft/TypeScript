@@ -75,7 +75,8 @@ registerCodeFix({
             const info = getInfo(err.file, err.start, checker);
             if (!info) return;
             const { typeNode, type } = info;
-            const fixedType = typeNode.kind === SyntaxKind.JSDocNullableType && fixId === fixIdNullable ? checker.getNullableType(type, TypeFlags.Undefined) : type;
+            const fixedType = typeNode.kind === SyntaxKind.JSDocNullableType && fixId === fixIdNullable ? checker.getNullableType(type, TypeFlags.Undefined)
+                : type;
             doChange(changes, sourceFile, typeNode, fixedType, checker);
         });
     },

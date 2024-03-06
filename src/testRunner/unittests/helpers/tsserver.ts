@@ -159,7 +159,9 @@ export class TestSession extends ts.server.Session {
         if (this.logger.hasLevel(ts.server.LogLevel.verbose)) {
             this.logger.info(
                 `response:${
-                    ts.server.stringifyIndented(response.response === ts.getSupportedCodeFixes() ? { ...response, response: "ts.getSupportedCodeFixes()" } : response)
+                    ts.server.stringifyIndented(
+                        response.response === ts.getSupportedCodeFixes() ? { ...response, response: "ts.getSupportedCodeFixes()" } : response,
+                    )
                 }`,
             );
             this.host.baselineHost("After request");
@@ -204,7 +206,10 @@ export function createSessionWithCustomEventHandler(
                 break;
             // Map diagnostics
             case ts.server.ConfigFileDiagEvent:
-                data = { ...data, diagnostics: ts.map(event.data.diagnostics, diagnostic => ts.server.formatDiagnosticToProtocol(diagnostic, /*includeFileName*/ true)) };
+                data = {
+                    ...data,
+                    diagnostics: ts.map(event.data.diagnostics, diagnostic => ts.server.formatDiagnosticToProtocol(diagnostic, /*includeFileName*/ true)),
+                };
                 break;
             default:
                 ts.Debug.assertNever(event);
@@ -240,7 +245,11 @@ export function textSpanFromSubstring(str: string, substring: string, options?: 
     return ts.createTextSpan(start, substring.length);
 }
 
-export function protocolFileLocationFromSubstring(file: File, substring: string, options?: SpanFromSubstringOptions): ts.server.protocol.FileLocationRequestArgs {
+export function protocolFileLocationFromSubstring(
+    file: File,
+    substring: string,
+    options?: SpanFromSubstringOptions,
+): ts.server.protocol.FileLocationRequestArgs {
     return { file: file.path, ...protocolLocationFromSubstring(file.content, substring, options) };
 }
 

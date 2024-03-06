@@ -53,7 +53,14 @@ export function createCodeFixActionMaybeFixAll(
     fixAllDescription?: DiagnosticOrDiagnosticAndArguments,
     command?: CodeActionCommand,
 ) {
-    return createCodeFixActionWorker(fixName, diagnosticToString(description), changes, fixId, fixAllDescription && diagnosticToString(fixAllDescription), command);
+    return createCodeFixActionWorker(
+        fixName,
+        diagnosticToString(description),
+        changes,
+        fixId,
+        fixAllDescription && diagnosticToString(fixAllDescription),
+        command,
+    );
 }
 
 function createCodeFixActionWorker(

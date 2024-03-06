@@ -390,7 +390,12 @@ function foo() {
             });
         }
 
-        function verifySession(scenario: string, { bPackageJson, aTest, bFoo, bBar, bSymlink }: Packages, alreadyBuilt: boolean, extraOptions: ts.CompilerOptions) {
+        function verifySession(
+            scenario: string,
+            { bPackageJson, aTest, bFoo, bBar, bSymlink }: Packages,
+            alreadyBuilt: boolean,
+            extraOptions: ts.CompilerOptions,
+        ) {
             const aConfig = config("A", extraOptions, ["../B"]);
             const bConfig = config("B", extraOptions);
             const files = [libFile, bPackageJson, aConfig, bConfig, aTest, bFoo, bBar, bSymlink];
@@ -563,7 +568,16 @@ testCompositeFunction('why hello there', 42);`,
             path: `/user/username/projects/myproject/node_modules/emit-composite`,
             symLink: `/user/username/projects/myproject/packages/emit-composite`,
         };
-        const host = createServerHost([libFile, compositeConfig, compositePackageJson, compositeIndex, compositeTestModule, consumerConfig, consumerIndex, symlink], {
+        const host = createServerHost([
+            libFile,
+            compositeConfig,
+            compositePackageJson,
+            compositeIndex,
+            compositeTestModule,
+            consumerConfig,
+            consumerIndex,
+            symlink,
+        ], {
             useCaseSensitiveFileNames: true,
         });
         const session = new TestSession(host);
@@ -1076,7 +1090,9 @@ export function bar() {}`,
             const info = session.getProjectService().getScriptInfoForPath(main.path as ts.Path)!;
             session.logger.startGroup();
             session.logger.info(`getDefaultProject for ${main.path}: ${info.getDefaultProject().projectName}`);
-            session.logger.info(`findDefaultConfiguredProject for ${main.path}: ${session.getProjectService().findDefaultConfiguredProject(info)!.projectName}`);
+            session.logger.info(
+                `findDefaultConfiguredProject for ${main.path}: ${session.getProjectService().findDefaultConfiguredProject(info)!.projectName}`,
+            );
             session.logger.endGroup();
 
             // Verify errors
@@ -1142,7 +1158,9 @@ export function bar() {}`,
             const info = session.getProjectService().getScriptInfoForPath(main.path as ts.Path)!;
             session.logger.startGroup();
             session.logger.info(`getDefaultProject for ${main.path}: ${info.getDefaultProject().projectName}`);
-            session.logger.info(`findDefaultConfiguredProject for ${main.path}: ${session.getProjectService().findDefaultConfiguredProject(info)?.projectName}`);
+            session.logger.info(
+                `findDefaultConfiguredProject for ${main.path}: ${session.getProjectService().findDefaultConfiguredProject(info)?.projectName}`,
+            );
             session.logger.endGroup();
 
             // Verify collection of script infos
@@ -1268,7 +1286,8 @@ bar;`,
                 };
                 const { tsconfigIndirect, indirect } = getIndirectProject("1", { disableReferencedProjectLoad: true });
                 verifyDisableReferencedProjectLoad({
-                    scenario: "solution with its own files and disables looking into the child project if disableReferencedProjectLoad is set in indirect project",
+                    scenario:
+                        "solution with its own files and disables looking into the child project if disableReferencedProjectLoad is set in indirect project",
                     solutionFiles: [`./own/main.ts`],
                     solutionOptions: {
                         outDir: "./target/",

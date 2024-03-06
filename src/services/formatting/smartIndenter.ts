@@ -296,7 +296,8 @@ export namespace SmartIndenter {
                 // }, {                  itself contributes nothing.
                 //   prop: 1        L3 - The indentation of the second object literal is best understood by
                 // })                    looking at the relationship between the list and *first* list item.
-                const listIndentsChild = !!firstListChild && getStartLineAndCharacterForNode(firstListChild, sourceFile).line > containingListOrParentStart.line;
+                const listIndentsChild = !!firstListChild &&
+                    getStartLineAndCharacterForNode(firstListChild, sourceFile).line > containingListOrParentStart.line;
                 let actualIndentation = getActualIndentationForListItem(current, sourceFile, options, listIndentsChild);
                 if (actualIndentation !== Value.Unknown) {
                     return actualIndentation + indentationDelta;
@@ -415,7 +416,12 @@ export namespace SmartIndenter {
         return sourceFile.getLineAndCharacterOfPosition(n.getStart(sourceFile));
     }
 
-    export function isArgumentAndStartLineOverlapsExpressionBeingCalled(parent: Node, child: Node, childStartLine: number, sourceFile: SourceFileLike): boolean {
+    export function isArgumentAndStartLineOverlapsExpressionBeingCalled(
+        parent: Node,
+        child: Node,
+        childStartLine: number,
+        sourceFile: SourceFileLike,
+    ): boolean {
         if (!(isCallExpression(parent) && contains(parent.arguments, child))) {
             return false;
         }
@@ -425,7 +431,12 @@ export namespace SmartIndenter {
         return expressionOfCallExpressionEndLine === childStartLine;
     }
 
-    export function childStartsOnTheSameLineWithElseInIfStatement(parent: Node, child: TextRangeWithKind, childStartLine: number, sourceFile: SourceFileLike): boolean {
+    export function childStartsOnTheSameLineWithElseInIfStatement(
+        parent: Node,
+        child: TextRangeWithKind,
+        childStartLine: number,
+        sourceFile: SourceFileLike,
+    ): boolean {
         if (parent.kind === SyntaxKind.IfStatement && (parent as IfStatement).elseStatement === child) {
             const elseKeyword = findChildOfKind(parent, SyntaxKind.ElseKeyword, sourceFile)!;
             Debug.assert(elseKeyword !== undefined);
@@ -458,7 +469,12 @@ export namespace SmartIndenter {
     // whenTrue and whenFalse children to avoid double-indenting their contents. To identify this scenario,
     // we check for the whenTrue branch beginning on the line that the condition ends, and the whenFalse
     // branch beginning on the line that the whenTrue branch ends.
-    export function childIsUnindentedBranchOfConditionalExpression(parent: Node, child: TextRangeWithKind, childStartLine: number, sourceFile: SourceFileLike): boolean {
+    export function childIsUnindentedBranchOfConditionalExpression(
+        parent: Node,
+        child: TextRangeWithKind,
+        childStartLine: number,
+        sourceFile: SourceFileLike,
+    ): boolean {
         if (isConditionalExpression(parent) && (child === parent.whenTrue || child === parent.whenFalse)) {
             const conditionEndLine = getLineAndCharacterOfPosition(sourceFile, parent.condition.end).line;
             if (child === parent.whenTrue) {
@@ -480,7 +496,12 @@ export namespace SmartIndenter {
         return false;
     }
 
-    export function argumentStartsOnSameLineAsPreviousArgument(parent: Node, child: TextRangeWithKind, childStartLine: number, sourceFile: SourceFileLike): boolean {
+    export function argumentStartsOnSameLineAsPreviousArgument(
+        parent: Node,
+        child: TextRangeWithKind,
+        childStartLine: number,
+        sourceFile: SourceFileLike,
+    ): boolean {
         if (isCallOrNewExpression(parent)) {
             if (!parent.arguments) return false;
             const currentNode = find(parent.arguments, arg => arg.pos === child.pos);

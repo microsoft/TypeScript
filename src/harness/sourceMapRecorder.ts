@@ -58,7 +58,11 @@ namespace SourceMapSpanWriter {
     let nextJsLineToWrite: number;
     let spanMarkerContinues: boolean;
 
-    export function initializeSourceMapSpanWriter(sourceMapRecordWriter: Compiler.WriterAggregator, sourceMap: ts.RawSourceMap, currentJsFile: documents.TextDocument) {
+    export function initializeSourceMapSpanWriter(
+        sourceMapRecordWriter: Compiler.WriterAggregator,
+        sourceMap: ts.RawSourceMap,
+        currentJsFile: documents.TextDocument,
+    ) {
         sourceMapRecorder = sourceMapRecordWriter;
         sourceMapSources = sourceMap.sources;
         sourceMapNames = sourceMap.names;

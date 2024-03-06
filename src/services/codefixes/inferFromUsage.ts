@@ -185,7 +185,8 @@ function getDiagnostic(errorCode: number, token: Node): DiagnosticMessage {
     switch (errorCode) {
         case Diagnostics.Parameter_0_implicitly_has_an_1_type.code:
         case Diagnostics.Parameter_0_implicitly_has_an_1_type_but_a_better_type_may_be_inferred_from_usage.code:
-            return isSetAccessorDeclaration(getContainingFunction(token)!) ? Diagnostics.Infer_type_of_0_from_usage : Diagnostics.Infer_parameter_types_from_usage; // TODO: GH#18217
+            return isSetAccessorDeclaration(getContainingFunction(token)!) ? Diagnostics.Infer_type_of_0_from_usage
+                : Diagnostics.Infer_parameter_types_from_usage; // TODO: GH#18217
         case Diagnostics.Rest_parameter_0_implicitly_has_an_any_type.code:
         case Diagnostics.Rest_parameter_0_implicitly_has_an_any_type_but_a_better_type_may_be_inferred_from_usage.code:
             return Diagnostics.Infer_parameter_types_from_usage;
@@ -468,7 +469,9 @@ function annotate(
                 : factory.createJSDocTypeTag(/*tagName*/ undefined, typeExpression, /*comment*/ undefined);
             changes.addJSDocTags(sourceFile, parent, [typeTag]);
         }
-        else if (!tryReplaceImportTypeNodeWithAutoImport(typeNode, declaration, sourceFile, changes, importAdder, getEmitScriptTarget(program.getCompilerOptions()))) {
+        else if (
+            !tryReplaceImportTypeNodeWithAutoImport(typeNode, declaration, sourceFile, changes, importAdder, getEmitScriptTarget(program.getCompilerOptions()))
+        ) {
             changes.tryInsertTypeAnnotation(sourceFile, declaration, typeNode);
         }
     }
@@ -553,7 +556,11 @@ function annotateJSDocParameters(
     }
 }
 
-function getReferences(token: PropertyName | Token<SyntaxKind.ConstructorKeyword>, program: Program, cancellationToken: CancellationToken): readonly Identifier[] {
+function getReferences(
+    token: PropertyName | Token<SyntaxKind.ConstructorKeyword>,
+    program: Program,
+    cancellationToken: CancellationToken,
+): readonly Identifier[] {
     // Position shouldn't matter since token is not a SourceFile.
     return mapDefined(
         FindAllReferences.getReferenceEntriesForNode(-1, token, program, program.getSourceFiles(), cancellationToken),
@@ -953,7 +960,8 @@ function inferTypeFromReferences(program: Program, references: readonly Identifi
             case SyntaxKind.QuestionQuestionToken:
                 if (
                     node === parent.left &&
-                    (node.parent.parent.kind === SyntaxKind.VariableDeclaration || isAssignmentExpression(node.parent.parent, /*excludeCompoundAssignment*/ true))
+                    (node.parent.parent.kind === SyntaxKind.VariableDeclaration ||
+                        isAssignmentExpression(node.parent.parent, /*excludeCompoundAssignment*/ true))
                 ) {
                     // var x = x || {};
                     // TODO: use getFalsyflagsOfType
@@ -1179,7 +1187,8 @@ function inferTypeFromReferences(program: Program, references: readonly Identifi
         }
         const callSignatures: Signature[] = usage.calls ? [getSignatureFromCalls(usage.calls)] : [];
         const constructSignatures: Signature[] = usage.constructs ? [getSignatureFromCalls(usage.constructs)] : [];
-        const indexInfos = usage.stringIndex ? [checker.createIndexInfo(checker.getStringType(), combineFromUsage(usage.stringIndex), /*isReadonly*/ false)] : [];
+        const indexInfos = usage.stringIndex ? [checker.createIndexInfo(checker.getStringType(), combineFromUsage(usage.stringIndex), /*isReadonly*/ false)]
+            : [];
         return checker.createAnonymousType(/*symbol*/ undefined, members, callSignatures, constructSignatures, indexInfos);
     }
 
@@ -1269,7 +1278,8 @@ function inferTypeFromReferences(program: Program, references: readonly Identifi
             if (!usageParam) {
                 break;
             }
-            let genericParamType = genericParam.valueDeclaration ? checker.getTypeOfSymbolAtLocation(genericParam, genericParam.valueDeclaration) : checker.getAnyType();
+            let genericParamType = genericParam.valueDeclaration ? checker.getTypeOfSymbolAtLocation(genericParam, genericParam.valueDeclaration)
+                : checker.getAnyType();
             const elementType = isRest && checker.getElementTypeOfArrayType(genericParamType);
             if (elementType) {
                 genericParamType = elementType;

@@ -1451,13 +1451,17 @@ foo().hello`,
         edits: [
             {
                 caption: "Enable strict null checks",
-                edit: sys => sys.writeFile(`/user/username/projects/myproject/tsconfig.json`, jsonToReadableText({ compilerOptions: { strictNullChecks: true } })),
+                edit: sys =>
+                    sys.writeFile(`/user/username/projects/myproject/tsconfig.json`, jsonToReadableText({ compilerOptions: { strictNullChecks: true } })),
                 timeouts: sys => sys.runQueuedTimeoutCallbacks(),
             },
             {
                 caption: "Set always strict false",
                 edit: sys =>
-                    sys.writeFile(`/user/username/projects/myproject/tsconfig.json`, jsonToReadableText({ compilerOptions: { strict: true, alwaysStrict: false } })), // Avoid changing 'alwaysStrict' or must re-bind
+                    sys.writeFile(
+                        `/user/username/projects/myproject/tsconfig.json`,
+                        jsonToReadableText({ compilerOptions: { strict: true, alwaysStrict: false } }),
+                    ), // Avoid changing 'alwaysStrict' or must re-bind
                 timeouts: sys => sys.runQueuedTimeoutCallbacks(),
             },
             {
@@ -1495,7 +1499,8 @@ v === 'foo';`,
         edits: [
             {
                 caption: "Enable noErrorTruncation",
-                edit: sys => sys.writeFile(`/user/username/projects/myproject/tsconfig.json`, jsonToReadableText({ compilerOptions: { noErrorTruncation: true } })),
+                edit: sys =>
+                    sys.writeFile(`/user/username/projects/myproject/tsconfig.json`, jsonToReadableText({ compilerOptions: { noErrorTruncation: true } })),
                 timeouts: sys => sys.runQueuedTimeoutCallbacks(),
             },
         ],
@@ -2093,7 +2098,8 @@ import { x } from "../b";`,
             },
             {
                 caption: "Add excluded file to project1",
-                edit: sys => sys.ensureFileOrFolder({ path: `/user/username/projects/myproject/projects/project1/temp/file.d.ts`, content: `declare class file {}` }),
+                edit: sys =>
+                    sys.ensureFileOrFolder({ path: `/user/username/projects/myproject/projects/project1/temp/file.d.ts`, content: `declare class file {}` }),
                 timeouts: ts.noop,
             },
             {

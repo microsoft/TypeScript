@@ -206,7 +206,10 @@ function getGroupedReferences(functionDeclaration: ValidFunctionDeclaration, pro
     const names = deduplicate([...functionNames, ...classNames], equateValues);
     const checker = program.getTypeChecker();
 
-    const references = flatMap(names, /*mapfn*/ name => FindAllReferences.getReferenceEntriesForNode(-1, name, program, program.getSourceFiles(), cancellationToken));
+    const references = flatMap(
+        names,
+        /*mapfn*/ name => FindAllReferences.getReferenceEntriesForNode(-1, name, program, program.getSourceFiles(), cancellationToken),
+    );
     const groupedReferences = groupReferences(references);
 
     if (!every(groupedReferences.declarations, /*callback*/ decl => contains(names, decl))) {

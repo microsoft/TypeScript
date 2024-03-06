@@ -116,7 +116,11 @@ function canConvertImportDeclarationForSpecifier(specifier: ImportSpecifier, sou
 
 function doChange(changes: textChanges.ChangeTracker, sourceFile: SourceFile, declaration: ImportDeclaration | ImportSpecifier) {
     if (isImportSpecifier(declaration)) {
-        changes.replaceNode(sourceFile, declaration, factory.updateImportSpecifier(declaration, /*isTypeOnly*/ true, declaration.propertyName, declaration.name));
+        changes.replaceNode(
+            sourceFile,
+            declaration,
+            factory.updateImportSpecifier(declaration, /*isTypeOnly*/ true, declaration.propertyName, declaration.name),
+        );
     }
     else {
         const importClause = declaration.importClause as ImportClause;
@@ -124,13 +128,21 @@ function doChange(changes: textChanges.ChangeTracker, sourceFile: SourceFile, de
             changes.replaceNodeWithNodes(sourceFile, declaration, [
                 factory.createImportDeclaration(
                     getSynthesizedDeepClones(declaration.modifiers, /*includeTrivia*/ true),
-                    factory.createImportClause(/*isTypeOnly*/ true, getSynthesizedDeepClone(importClause.name, /*includeTrivia*/ true), /*namedBindings*/ undefined),
+                    factory.createImportClause(
+                        /*isTypeOnly*/ true,
+                        getSynthesizedDeepClone(importClause.name, /*includeTrivia*/ true),
+                        /*namedBindings*/ undefined,
+                    ),
                     getSynthesizedDeepClone(declaration.moduleSpecifier, /*includeTrivia*/ true),
                     getSynthesizedDeepClone(declaration.attributes, /*includeTrivia*/ true),
                 ),
                 factory.createImportDeclaration(
                     getSynthesizedDeepClones(declaration.modifiers, /*includeTrivia*/ true),
-                    factory.createImportClause(/*isTypeOnly*/ true, /*name*/ undefined, getSynthesizedDeepClone(importClause.namedBindings, /*includeTrivia*/ true)),
+                    factory.createImportClause(
+                        /*isTypeOnly*/ true,
+                        /*name*/ undefined,
+                        getSynthesizedDeepClone(importClause.namedBindings, /*includeTrivia*/ true),
+                    ),
                     getSynthesizedDeepClone(declaration.moduleSpecifier, /*includeTrivia*/ true),
                     getSynthesizedDeepClone(declaration.attributes, /*includeTrivia*/ true),
                 ),

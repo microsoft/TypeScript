@@ -829,7 +829,8 @@ export function getNodeKind(node: Node): ScriptElementKind {
         case SyntaxKind.EnumMember:
             return ScriptElementKind.enumMemberElement;
         case SyntaxKind.Parameter:
-            return hasSyntacticModifier(node, ModifierFlags.ParameterPropertyModifier) ? ScriptElementKind.memberVariableElement : ScriptElementKind.parameterElement;
+            return hasSyntacticModifier(node, ModifierFlags.ParameterPropertyModifier) ? ScriptElementKind.memberVariableElement
+                : ScriptElementKind.parameterElement;
         case SyntaxKind.ImportEqualsDeclaration:
         case SyntaxKind.ImportSpecifier:
         case SyntaxKind.ExportSpecifier:
@@ -1566,7 +1567,13 @@ export function getTouchingPropertyName(sourceFile: SourceFile, position: number
  * @internal
  */
 export function getTouchingToken(sourceFile: SourceFile, position: number, includePrecedingTokenAtEndPosition?: (n: Node) => boolean): Node {
-    return getTokenAtPositionWorker(sourceFile, position, /*allowPositionInLeadingTrivia*/ false, includePrecedingTokenAtEndPosition, /*includeEndPosition*/ false);
+    return getTokenAtPositionWorker(
+        sourceFile,
+        position,
+        /*allowPositionInLeadingTrivia*/ false,
+        includePrecedingTokenAtEndPosition,
+        /*includeEndPosition*/ false,
+    );
 }
 
 /**
@@ -1844,7 +1851,12 @@ function findRightmostToken(n: Node, sourceFile: SourceFileLike): Node | undefin
 /**
  * Finds the rightmost child to the left of `children[exclusiveStartPosition]` which is a non-all-whitespace token or has constituent tokens.
  */
-function findRightmostChildNodeWithTokens(children: Node[], exclusiveStartPosition: number, sourceFile: SourceFileLike, parentKind: SyntaxKind): Node | undefined {
+function findRightmostChildNodeWithTokens(
+    children: Node[],
+    exclusiveStartPosition: number,
+    sourceFile: SourceFileLike,
+    parentKind: SyntaxKind,
+): Node | undefined {
     for (let i = exclusiveStartPosition - 1; i >= 0; i--) {
         const child = children[i];
 
@@ -2541,7 +2553,11 @@ export function makeImport(
     return factory.createImportDeclaration(
         /*modifiers*/ undefined,
         defaultImport || namedImports
-            ? factory.createImportClause(!!isTypeOnly, defaultImport, namedImports && namedImports.length ? factory.createNamedImports(namedImports) : undefined)
+            ? factory.createImportClause(
+                !!isTypeOnly,
+                defaultImport,
+                namedImports && namedImports.length ? factory.createNamedImports(namedImports) : undefined,
+            )
             : undefined,
         typeof moduleSpecifier === "string" ? makeStringLiteral(moduleSpecifier, quotePreference) : moduleSpecifier,
         /*attributes*/ undefined,
@@ -2766,7 +2782,11 @@ export function getMappedLocation(
 }
 
 /** @internal */
-export function getMappedDocumentSpan(documentSpan: DocumentSpan, sourceMapper: SourceMapper, fileExists?: (path: string) => boolean): DocumentSpan | undefined {
+export function getMappedDocumentSpan(
+    documentSpan: DocumentSpan,
+    sourceMapper: SourceMapper,
+    fileExists?: (path: string) => boolean,
+): DocumentSpan | undefined {
     const { fileName, textSpan } = documentSpan;
     const newPosition = getMappedLocation({ fileName, pos: textSpan.start }, sourceMapper, fileExists);
     if (!newPosition) return undefined;
@@ -2811,7 +2831,10 @@ export function getMappedContextSpan(documentSpan: DocumentSpan, sourceMapper: S
 /** @internal */
 export function isFirstDeclarationOfSymbolParameter(symbol: Symbol) {
     const declaration = symbol.declarations ? firstOrUndefined(symbol.declarations) : undefined;
-    return !!findAncestor(declaration, n => isParameter(n) ? true : isBindingElement(n) || isObjectBindingPattern(n) || isArrayBindingPattern(n) ? false : "quit");
+    return !!findAncestor(
+        declaration,
+        n => isParameter(n) ? true : isBindingElement(n) || isObjectBindingPattern(n) || isArrayBindingPattern(n) ? false : "quit",
+    );
 }
 
 const displayPartWriter = getDisplayPartWriter();
@@ -3038,8 +3061,9 @@ export function buildLinkParts(link: JSDocLink | JSDocLinkCode | JSDocLinkPlain,
             if (text) parts.push(linkTextPart(text));
         }
         else {
-            const separator = suffix === 0 || (link.text.charCodeAt(suffix) === CharacterCodes.bar && name.charCodeAt(name.length - 1) !== CharacterCodes.space) ? " "
-                : "";
+            const separator =
+                suffix === 0 || (link.text.charCodeAt(suffix) === CharacterCodes.bar && name.charCodeAt(name.length - 1) !== CharacterCodes.space) ? " "
+                    : "";
             parts.push(linkTextPart(name + separator + text));
         }
     }
@@ -3112,7 +3136,12 @@ export function typeToDisplayParts(
     flags: TypeFormatFlags = TypeFormatFlags.None,
 ): SymbolDisplayPart[] {
     return mapToDisplayParts(writer => {
-        typechecker.writeType(type, enclosingDeclaration, flags | TypeFormatFlags.MultilineObjectLiterals | TypeFormatFlags.UseAliasDefinedOutsideCurrentScope, writer);
+        typechecker.writeType(
+            type,
+            enclosingDeclaration,
+            flags | TypeFormatFlags.MultilineObjectLiterals | TypeFormatFlags.UseAliasDefinedOutsideCurrentScope,
+            writer,
+        );
     });
 }
 
@@ -3411,7 +3440,13 @@ export function copyTrailingComments(sourceNode: Node, targetNode: Node, sourceF
  *
  * @internal
  */
-export function copyTrailingAsLeadingComments(sourceNode: Node, targetNode: Node, sourceFile: SourceFile, commentKind?: CommentKind, hasTrailingNewLine?: boolean) {
+export function copyTrailingAsLeadingComments(
+    sourceNode: Node,
+    targetNode: Node,
+    sourceFile: SourceFile,
+    commentKind?: CommentKind,
+    hasTrailingNewLine?: boolean,
+) {
     forEachTrailingCommentRange(
         sourceFile.text,
         sourceNode.pos,
@@ -3531,7 +3566,8 @@ export function getTypeNodeIfAccessible(type: Type, enclosingScope: Node, progra
     const res = checker.typeToTypeNode(type, enclosingScope, NodeBuilderFlags.NoTruncation, {
         trackSymbol: (symbol, declaration, meaning) => {
             typeIsAccessible = typeIsAccessible &&
-                checker.isSymbolAccessible(symbol, declaration, meaning, /*shouldComputeAliasToMarkVisible*/ false).accessibility === SymbolAccessibility.Accessible;
+                checker.isSymbolAccessible(symbol, declaration, meaning, /*shouldComputeAliasToMarkVisible*/ false).accessibility ===
+                    SymbolAccessibility.Accessible;
             return !typeIsAccessible;
         },
         reportInaccessibleThisError: notAccessible,
@@ -4121,7 +4157,8 @@ export function getNameForExportedSymbol(symbol: Symbol, scriptTarget: ScriptTar
 }
 
 function needsNameFromDeclaration(symbol: Symbol) {
-    return !(symbol.flags & SymbolFlags.Transient) && (symbol.escapedName === InternalSymbolName.ExportEquals || symbol.escapedName === InternalSymbolName.Default);
+    return !(symbol.flags & SymbolFlags.Transient) &&
+        (symbol.escapedName === InternalSymbolName.ExportEquals || symbol.escapedName === InternalSymbolName.Default);
 }
 
 function getDefaultLikeExportNameFromDeclaration(symbol: Symbol): string | undefined {
@@ -4242,7 +4279,8 @@ export function diagnosticToString(diag: DiagnosticOrDiagnosticAndArguments): st
  */
 export function getFormatCodeSettingsForWriting({ options }: formatting.FormatContext, sourceFile: SourceFile): FormatCodeSettings {
     const shouldAutoDetectSemicolonPreference = !options.semicolons || options.semicolons === SemicolonPreference.Ignore;
-    const shouldRemoveSemicolons = options.semicolons === SemicolonPreference.Remove || shouldAutoDetectSemicolonPreference && !probablyUsesSemicolons(sourceFile);
+    const shouldRemoveSemicolons = options.semicolons === SemicolonPreference.Remove ||
+        shouldAutoDetectSemicolonPreference && !probablyUsesSemicolons(sourceFile);
     return {
         ...options,
         semicolons: shouldRemoveSemicolons ? SemicolonPreference.Remove : SemicolonPreference.Ignore,

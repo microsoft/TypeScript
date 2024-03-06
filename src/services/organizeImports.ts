@@ -627,7 +627,12 @@ function sortSpecifiers<T extends ImportOrExportSpecifier>(specifiers: readonly 
 }
 
 /** @internal */
-export function compareImportOrExportSpecifiers<T extends ImportOrExportSpecifier>(s1: T, s2: T, comparer: Comparer<string>, preferences?: UserPreferences): Comparison {
+export function compareImportOrExportSpecifiers<T extends ImportOrExportSpecifier>(
+    s1: T,
+    s2: T,
+    comparer: Comparer<string>,
+    preferences?: UserPreferences,
+): Comparison {
     switch (preferences?.organizeImportsTypeOrder) {
         case "first":
             return compareBooleans(s2.isTypeOnly, s1.isTypeOnly) || comparer(s1.name.text, s2.name.text);
@@ -707,7 +712,10 @@ function detectSortingWorker(importGroups: ImportDeclaration[][], preferences: U
             i => tryCast(i.importClause?.namedBindings, isNamedImports)?.elements.length! > 1,
         );
         if (declarationWithNamedImports) {
-            const namedImportSort = detectImportSpecifierSorting((declarationWithNamedImports.importClause!.namedBindings as NamedImports).elements, preferences);
+            const namedImportSort = detectImportSpecifierSorting(
+                (declarationWithNamedImports.importClause!.namedBindings as NamedImports).elements,
+                preferences,
+            );
             if (namedImportSort) {
                 // Don't let a single unsorted group of named imports make the whole algorithm detect unsorted.
                 // If other things are sorted consistently, that's a stronger indicator than unsorted named imports.

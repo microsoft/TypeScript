@@ -22,7 +22,8 @@ describe("unittests:: canWatch::", () => {
 
     baselineCanWatch(
         "canWatchAtTypes",
-        () => `Determines if given node_modules/@types can be watched.\r\nThese are the typeRoots calculated because user didnt specify typeRoots in compierOptions`,
+        () =>
+            `Determines if given node_modules/@types can be watched.\r\nThese are the typeRoots calculated because user didnt specify typeRoots in compierOptions`,
         (paths, longestPathLength, baseline) => {
             const testType = "canWatchAtTypes";
             const maxLengths = [longestPathLength + "/node_modules/@types".length, testType.length] as const;
@@ -70,7 +71,12 @@ describe("unittests:: canWatch::", () => {
                     paths.forEach(path => {
                         baselineGetDirectoryToWatchFailedLookupLocation(combinePaths(path, forPath, "somefile.d.ts"), root, rootPathCompoments, maxLengths);
                         baselineGetDirectoryToWatchFailedLookupLocation(combinePaths(path, forPath, "dir/somefile.d.ts"), root, rootPathCompoments, maxLengths);
-                        baselineGetDirectoryToWatchFailedLookupLocation(combinePaths(path, forPath, "dir/subdir/somefile.d.ts"), root, rootPathCompoments, maxLengths);
+                        baselineGetDirectoryToWatchFailedLookupLocation(
+                            combinePaths(path, forPath, "dir/subdir/somefile.d.ts"),
+                            root,
+                            rootPathCompoments,
+                            maxLengths,
+                        );
                     });
                 });
                 function baselineGetDirectoryToWatchFailedLookupLocation(

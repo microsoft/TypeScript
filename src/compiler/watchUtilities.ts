@@ -259,7 +259,13 @@ export function createCachedDirectoryStructureHost(
         return host.getDirectories!(rootDir);
     }
 
-    function readDirectory(rootDir: string, extensions?: readonly string[], excludes?: readonly string[], includes?: readonly string[], depth?: number): string[] {
+    function readDirectory(
+        rootDir: string,
+        extensions?: readonly string[],
+        excludes?: readonly string[],
+        includes?: readonly string[],
+        depth?: number,
+    ): string[] {
         const rootDirPath = toPath(rootDir);
         const rootResult = tryReadDirectory(rootDir, rootDirPath);
         let rootSymLinkResult: FileSystemEntries | undefined;
@@ -723,7 +729,8 @@ export function getWatchFactory<X, Y = undefined>(
     setSysLog(watchLogLevel === WatchLogLevel.Verbose ? log : noop);
     const plainInvokeFactory: WatchFactory<X, Y> = {
         watchFile: (file, callback, pollingInterval, options) => host.watchFile(file, callback, pollingInterval, options),
-        watchDirectory: (directory, callback, flags, options) => host.watchDirectory(directory, callback, (flags & WatchDirectoryFlags.Recursive) !== 0, options),
+        watchDirectory: (directory, callback, flags, options) =>
+            host.watchDirectory(directory, callback, (flags & WatchDirectoryFlags.Recursive) !== 0, options),
     };
     const triggerInvokingFactory: WatchFactory<X, Y> | undefined = watchLogLevel !== WatchLogLevel.None ?
         {

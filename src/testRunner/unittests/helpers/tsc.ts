@@ -289,7 +289,9 @@ function verifyTscEditDiscrepancies({
         if (ts.isBuildInfoFile(outputFile)) {
             // Check only presence and absence and not text as we will do that for readable baseline
             if (!sys.fileExists(`${outputFile}.readable.baseline.txt`)) addBaseline(`Readable baseline not present in clean build:: File:: ${outputFile}`);
-            if (!newSys.fileExists(`${outputFile}.readable.baseline.txt`)) addBaseline(`Readable baseline not present in incremental build:: File:: ${outputFile}`);
+            if (!newSys.fileExists(`${outputFile}.readable.baseline.txt`)) {
+                addBaseline(`Readable baseline not present in incremental build:: File:: ${outputFile}`);
+            }
             verifyPresenceAbsence(incrementalBuildText, cleanBuildText, `Incremental and clean tsbuildinfo file presence differs:: File:: ${outputFile}`);
         }
         else if (!ts.fileExtensionIs(outputFile, ".tsbuildinfo.readable.baseline.txt")) {
@@ -297,7 +299,9 @@ function verifyTscEditDiscrepancies({
         }
         else if (incrementalBuildText !== cleanBuildText) {
             // Verify build info without affectedFilesPendingEmit
-            const { buildInfo: incrementalBuildInfo, readableBuildInfo: incrementalReadableBuildInfo } = getBuildInfoForIncrementalCorrectnessCheck(incrementalBuildText);
+            const { buildInfo: incrementalBuildInfo, readableBuildInfo: incrementalReadableBuildInfo } = getBuildInfoForIncrementalCorrectnessCheck(
+                incrementalBuildText,
+            );
             const { buildInfo: cleanBuildInfo, readableBuildInfo: cleanReadableBuildInfo } = getBuildInfoForIncrementalCorrectnessCheck(cleanBuildText);
             const dtsSignaures = sys.dtsSignaures?.get(outputFile);
             verifyTextEqual(incrementalBuildInfo, cleanBuildInfo, `TsBuild info text without affectedFilesPendingEmit:: ${outputFile}::`);

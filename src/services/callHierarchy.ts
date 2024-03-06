@@ -330,7 +330,10 @@ function findAllInitialDeclarations(typeChecker: TypeChecker, node: Exclude<Call
 }
 
 /** Find the implementation or the first declaration for a call hierarchy declaration. */
-function findImplementationOrAllInitialDeclarations(typeChecker: TypeChecker, node: CallHierarchyDeclaration): CallHierarchyDeclaration | CallHierarchyDeclaration[] {
+function findImplementationOrAllInitialDeclarations(
+    typeChecker: TypeChecker,
+    node: CallHierarchyDeclaration,
+): CallHierarchyDeclaration | CallHierarchyDeclaration[] {
     if (isClassStaticBlockDeclaration(node)) {
         return node;
     }
@@ -427,7 +430,10 @@ export function createCallHierarchyItem(program: Program, node: CallHierarchyDec
     const containerName = getCallHierarchItemContainerName(node);
     const kind = getNodeKind(node);
     const kindModifiers = getNodeModifiers(node);
-    const span = createTextSpanFromBounds(skipTrivia(sourceFile.text, node.getFullStart(), /*stopAfterLineBreak*/ false, /*stopAtComments*/ true), node.getEnd());
+    const span = createTextSpanFromBounds(
+        skipTrivia(sourceFile.text, node.getFullStart(), /*stopAfterLineBreak*/ false, /*stopAtComments*/ true),
+        node.getEnd(),
+    );
     const selectionSpan = createTextSpanFromBounds(name.pos, name.end);
     return { file: sourceFile.fileName, kind, kindModifiers, name: name.text, containerName, span, selectionSpan };
 }
@@ -468,7 +474,10 @@ function createCallHierarchyIncomingCall(from: CallHierarchyItem, fromSpans: Tex
 }
 
 function convertCallSiteGroupToIncomingCall(program: Program, entries: readonly CallSite[]) {
-    return createCallHierarchyIncomingCall(createCallHierarchyItem(program, entries[0].declaration), map(entries, entry => createTextSpanFromRange(entry.range)));
+    return createCallHierarchyIncomingCall(
+        createCallHierarchyItem(program, entries[0].declaration),
+        map(entries, entry => createTextSpanFromRange(entry.range)),
+    );
 }
 
 /**
@@ -701,7 +710,10 @@ function createCallHierarchyOutgoingCall(to: CallHierarchyItem, fromSpans: TextS
 }
 
 function convertCallSiteGroupToOutgoingCall(program: Program, entries: readonly CallSite[]) {
-    return createCallHierarchyOutgoingCall(createCallHierarchyItem(program, entries[0].declaration), map(entries, entry => createTextSpanFromRange(entry.range)));
+    return createCallHierarchyOutgoingCall(
+        createCallHierarchyItem(program, entries[0].declaration),
+        map(entries, entry => createTextSpanFromRange(entry.range)),
+    );
 }
 
 /**

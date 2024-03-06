@@ -77,7 +77,12 @@ registerCodeFix({
 });
 
 type FixableDeclaration = ArrowFunction | FunctionDeclaration | FunctionExpression | MethodDeclaration;
-function getFix(context: CodeFixContext | CodeFixAllContext, decl: FixableDeclaration, trackChanges: ContextualTrackChangesFunction, fixedDeclarations?: Set<number>) {
+function getFix(
+    context: CodeFixContext | CodeFixAllContext,
+    decl: FixableDeclaration,
+    trackChanges: ContextualTrackChangesFunction,
+    fixedDeclarations?: Set<number>,
+) {
     const changes = trackChanges(t => makeChange(t, context.sourceFile, decl, fixedDeclarations));
     return createCodeFixAction(fixId, changes, Diagnostics.Add_async_modifier_to_containing_function, fixId, Diagnostics.Add_all_missing_async_modifiers);
 }

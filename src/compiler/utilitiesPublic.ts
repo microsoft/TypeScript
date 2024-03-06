@@ -636,7 +636,12 @@ export const supportedLocaleDirectories = ["cs", "de", "es", "fr", "it", "ja", "
  */
 export function validateLocaleAndSetLanguage(
     locale: string,
-    sys: { getExecutingFilePath(): string; resolvePath(path: string): string; fileExists(fileName: string): boolean; readFile(fileName: string): string | undefined; },
+    sys: {
+        getExecutingFilePath(): string;
+        resolvePath(path: string): string;
+        fileExists(fileName: string): boolean;
+        readFile(fileName: string): string | undefined;
+    },
     errors?: Diagnostic[],
 ) {
     const lowerCaseLocale = locale.toLowerCase();
@@ -796,7 +801,8 @@ export function escapeLeadingUnderscores(identifier: string): __String {
  */
 export function unescapeLeadingUnderscores(identifier: __String): string {
     const id = identifier as string;
-    return id.length >= 3 && id.charCodeAt(0) === CharacterCodes._ && id.charCodeAt(1) === CharacterCodes._ && id.charCodeAt(2) === CharacterCodes._ ? id.substr(1) : id;
+    return id.length >= 3 && id.charCodeAt(0) === CharacterCodes._ && id.charCodeAt(1) === CharacterCodes._ && id.charCodeAt(2) === CharacterCodes._
+        ? id.substr(1) : id;
 }
 
 export function idText(identifierOrPrivateName: Identifier | PrivateIdentifier): string {
@@ -1709,7 +1715,8 @@ export function isAutoAccessorPropertyDeclaration(node: Node): node is AutoAcces
 /** @internal */
 export function isClassInstanceProperty(node: Declaration): boolean {
     if (isInJSFile(node) && isExpandoPropertyDeclaration(node)) {
-        return (!isBindableStaticAccessExpression(node) || !isPrototypeAccess(node.expression)) && !isBindableStaticNameExpression(node, /*excludeThisKeyword*/ true);
+        return (!isBindableStaticAccessExpression(node) || !isPrototypeAccess(node.expression)) &&
+            !isBindableStaticNameExpression(node, /*excludeThisKeyword*/ true);
     }
     return node.parent && isClassLike(node.parent) && isPropertyDeclaration(node) && !hasAccessorModifier(node);
 }
@@ -1822,7 +1829,9 @@ export function isArrayBindingElement(node: Node): node is ArrayBindingElement {
  *
  * @internal
  */
-export function isDeclarationBindingElement(bindingElement: BindingOrAssignmentElement): bindingElement is VariableDeclaration | ParameterDeclaration | BindingElement {
+export function isDeclarationBindingElement(
+    bindingElement: BindingOrAssignmentElement,
+): bindingElement is VariableDeclaration | ParameterDeclaration | BindingElement {
     switch (bindingElement.kind) {
         case SyntaxKind.VariableDeclaration:
         case SyntaxKind.Parameter:

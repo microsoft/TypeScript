@@ -572,7 +572,8 @@ export function resolveTypeReferenceDirective(
     }
 
     const containingDirectory = containingFile ? getDirectoryPath(containingFile) : undefined;
-    let result = containingDirectory ? cache?.getFromDirectoryCache(typeReferenceDirectiveName, resolutionMode, containingDirectory, redirectedReference) : undefined;
+    let result = containingDirectory ? cache?.getFromDirectoryCache(typeReferenceDirectiveName, resolutionMode, containingDirectory, redirectedReference)
+        : undefined;
     if (!result && containingDirectory && !isExternalModuleNameRelative(typeReferenceDirectiveName)) {
         result = cache?.getFromNonRelativeNameCache(typeReferenceDirectiveName, resolutionMode, containingDirectory, redirectedReference);
     }
@@ -581,7 +582,12 @@ export function resolveTypeReferenceDirective(
         if (traceEnabled) {
             trace(host, Diagnostics.Resolving_type_reference_directive_0_containing_file_1, typeReferenceDirectiveName, containingFile);
             if (redirectedReference) trace(host, Diagnostics.Using_compiler_options_of_project_reference_redirect_0, redirectedReference.sourceFile.fileName);
-            trace(host, Diagnostics.Resolution_for_type_reference_directive_0_was_found_in_cache_from_location_1, typeReferenceDirectiveName, containingDirectory);
+            trace(
+                host,
+                Diagnostics.Resolution_for_type_reference_directive_0_was_found_in_cache_from_location_1,
+                typeReferenceDirectiveName,
+                containingDirectory,
+            );
             traceResult(result);
         }
         return result;
@@ -599,10 +605,21 @@ export function resolveTypeReferenceDirective(
         }
         else {
             if (typeRoots === undefined) {
-                trace(host, Diagnostics.Resolving_type_reference_directive_0_containing_file_1_root_directory_not_set, typeReferenceDirectiveName, containingFile);
+                trace(
+                    host,
+                    Diagnostics.Resolving_type_reference_directive_0_containing_file_1_root_directory_not_set,
+                    typeReferenceDirectiveName,
+                    containingFile,
+                );
             }
             else {
-                trace(host, Diagnostics.Resolving_type_reference_directive_0_containing_file_1_root_directory_2, typeReferenceDirectiveName, containingFile, typeRoots);
+                trace(
+                    host,
+                    Diagnostics.Resolving_type_reference_directive_0_containing_file_1_root_directory_2,
+                    typeReferenceDirectiveName,
+                    containingFile,
+                    typeRoots,
+                );
             }
         }
         if (redirectedReference) {
@@ -718,7 +735,8 @@ export function resolveTypeReferenceDirective(
                     const resolvedFromFile = loadModuleFromFile(Extensions.Declaration, candidate, !directoryExists, moduleResolutionState);
                     if (resolvedFromFile) {
                         const packageDirectory = parseNodeModuleFromPath(resolvedFromFile.path);
-                        const packageInfo = packageDirectory ? getPackageJsonInfo(packageDirectory, /*onlyRecordFailures*/ false, moduleResolutionState) : undefined;
+                        const packageInfo = packageDirectory ? getPackageJsonInfo(packageDirectory, /*onlyRecordFailures*/ false, moduleResolutionState)
+                            : undefined;
                         return resolvedTypeScriptOnly(withPackageId(packageInfo, resolvedFromFile));
                     }
                 }
@@ -944,7 +962,11 @@ export interface NonRelativeNameResolutionCache<T> {
         directoryName: string,
         redirectedReference: ResolvedProjectReference | undefined,
     ): T | undefined;
-    getOrCreateCacheForNonRelativeName(nonRelativeName: string, mode: ResolutionMode, redirectedReference?: ResolvedProjectReference): PerNonRelativeNameCache<T>;
+    getOrCreateCacheForNonRelativeName(
+        nonRelativeName: string,
+        mode: ResolutionMode,
+        redirectedReference?: ResolvedProjectReference,
+    ): PerNonRelativeNameCache<T>;
     clear(): void;
     /**
      *  Updates with the current compilerOptions the cache will operate with.
@@ -1024,7 +1046,8 @@ function compilerOptionValueToString(value: unknown): string {
 
 /** @internal */
 export function getKeyForCompilerOptions(options: CompilerOptions, affectingOptionDeclarations: readonly CommandLineOption[]) {
-    return affectingOptionDeclarations.map(option => compilerOptionValueToString(getCompilerOptionValue(options, option))).join("|") + `|${options.pathsBasePath}`;
+    return affectingOptionDeclarations.map(option => compilerOptionValueToString(getCompilerOptionValue(options, option))).join("|") +
+        `|${options.pathsBasePath}`;
 }
 
 /** @internal */
@@ -1134,7 +1157,12 @@ function createPackageJsonInfoCache(currentDirectory: string, getCanonicalFileNa
     }
 }
 
-function getOrCreateCache<K, V>(cacheWithRedirects: CacheWithRedirects<K, V>, redirectedReference: ResolvedProjectReference | undefined, key: K, create: () => V): V {
+function getOrCreateCache<K, V>(
+    cacheWithRedirects: CacheWithRedirects<K, V>,
+    redirectedReference: ResolvedProjectReference | undefined,
+    key: K,
+    create: () => V,
+): V {
     const cache = cacheWithRedirects.getOrCreateMapOfCacheRedirects(redirectedReference);
     let result = cache.get(key);
     if (!result) {
@@ -1262,7 +1290,9 @@ function createNonRelativeNameResolutionCache<T>(
         redirectedReference?: ResolvedProjectReference,
     ): T | undefined {
         Debug.assert(!isExternalModuleNameRelative(nonRelativeModuleName));
-        return moduleNameToDirectoryMap.getMapOfCacheRedirects(redirectedReference)?.get(createModeAwareCacheKey(nonRelativeModuleName, mode))?.get(directoryName);
+        return moduleNameToDirectoryMap.getMapOfCacheRedirects(redirectedReference)?.get(createModeAwareCacheKey(nonRelativeModuleName, mode))?.get(
+            directoryName,
+        );
     }
 
     function getOrCreateCacheForNonRelativeName(
@@ -1613,7 +1643,12 @@ export function resolveModuleName(
  * 'typings' entry or file 'index' with some supported extension
  * - Classic loader will only try to interpret '/a/b/c' as file.
  */
-type ResolutionKindSpecificLoader = (extensions: Extensions, candidate: string, onlyRecordFailures: boolean, state: ModuleResolutionState) => Resolved | undefined;
+type ResolutionKindSpecificLoader = (
+    extensions: Extensions,
+    candidate: string,
+    onlyRecordFailures: boolean,
+    state: ModuleResolutionState,
+) => Resolved | undefined;
 
 /**
  * Any module resolution kind can be augmented with optional settings: 'baseUrl', 'paths' and 'rootDirs' - they are used to
@@ -1788,7 +1823,12 @@ function tryLoadModuleUsingRootDirs(
     return undefined;
 }
 
-function tryLoadModuleUsingBaseUrl(extensions: Extensions, moduleName: string, loader: ResolutionKindSpecificLoader, state: ModuleResolutionState): Resolved | undefined {
+function tryLoadModuleUsingBaseUrl(
+    extensions: Extensions,
+    moduleName: string,
+    loader: ResolutionKindSpecificLoader,
+    state: ModuleResolutionState,
+): Resolved | undefined {
     const { baseUrl } = state.compilerOptions;
     if (!baseUrl) {
         return undefined;
@@ -2122,7 +2162,8 @@ function nodeModuleNameResolverWorker(
         ) {
             traceIfEnabled(
                 state,
-                Diagnostics.Resolution_of_non_relative_name_failed_trying_with_modern_Node_resolution_features_disabled_to_see_if_npm_library_needs_configuration_update,
+                Diagnostics
+                    .Resolution_of_non_relative_name_failed_trying_with_modern_Node_resolution_features_disabled_to_see_if_npm_library_needs_configuration_update,
             );
             const diagnosticState = {
                 ...state,
@@ -2188,7 +2229,12 @@ function nodeModuleNameResolverWorker(
             if (!resolved) {
                 if (moduleName.includes(":")) {
                     if (traceEnabled) {
-                        trace(host, Diagnostics.Skipping_module_0_that_looks_like_an_absolute_URI_target_file_types_Colon_1, moduleName, formatExtensions(extensions));
+                        trace(
+                            host,
+                            Diagnostics.Skipping_module_0_that_looks_like_an_absolute_URI_target_file_types_Colon_1,
+                            moduleName,
+                            formatExtensions(extensions),
+                        );
                     }
                     return undefined;
                 }
@@ -2245,7 +2291,12 @@ function nodeLoadModuleByRelativeName(
     considerPackageJson: boolean,
 ): Resolved | undefined {
     if (state.traceEnabled) {
-        trace(state.host, Diagnostics.Loading_module_as_file_Slash_folder_candidate_module_location_0_target_file_types_Colon_1, candidate, formatExtensions(extensions));
+        trace(
+            state.host,
+            Diagnostics.Loading_module_as_file_Slash_folder_candidate_module_location_0_target_file_types_Colon_1,
+            candidate,
+            formatExtensions(extensions),
+        );
     }
     if (!hasTrailingDirectorySeparator(candidate)) {
         if (!onlyRecordFailures) {
@@ -2321,7 +2372,12 @@ function moveToNextDirectorySeparatorIfAvailable(path: string, prevSeparatorInde
     return nextSeparatorIndex === -1 ? isFolder ? path.length : prevSeparatorIndex : nextSeparatorIndex;
 }
 
-function loadModuleFromFileNoPackageId(extensions: Extensions, candidate: string, onlyRecordFailures: boolean, state: ModuleResolutionState): Resolved | undefined {
+function loadModuleFromFileNoPackageId(
+    extensions: Extensions,
+    candidate: string,
+    onlyRecordFailures: boolean,
+    state: ModuleResolutionState,
+): Resolved | undefined {
     return noPackageId(loadModuleFromFile(extensions, candidate, onlyRecordFailures, state));
 }
 
@@ -2329,7 +2385,12 @@ function loadModuleFromFileNoPackageId(extensions: Extensions, candidate: string
  * @param {boolean} onlyRecordFailures - if true then function won't try to actually load files but instead record all attempts as failures. This flag is necessary
  * in cases when we know upfront that all load attempts will fail (because containing folder does not exists) however we still need to record all failed lookup locations.
  */
-function loadModuleFromFile(extensions: Extensions, candidate: string, onlyRecordFailures: boolean, state: ModuleResolutionState): PathAndExtension | undefined {
+function loadModuleFromFile(
+    extensions: Extensions,
+    candidate: string,
+    onlyRecordFailures: boolean,
+    state: ModuleResolutionState,
+): PathAndExtension | undefined {
     // ./foo.js -> ./foo.ts
     const resolvedByReplacingExtension = loadModuleFromFileNoImplicitExtensions(extensions, candidate, onlyRecordFailures, state);
     if (resolvedByReplacingExtension) {
@@ -2416,15 +2477,19 @@ function tryAddingExtensions(
         case Extension.Mjs:
         case Extension.Mts:
         case Extension.Dmts:
-            return extensions & Extensions.TypeScript && tryExtension(Extension.Mts, originalExtension === Extension.Mts || originalExtension === Extension.Dmts)
-                || extensions & Extensions.Declaration && tryExtension(Extension.Dmts, originalExtension === Extension.Mts || originalExtension === Extension.Dmts)
+            return extensions & Extensions.TypeScript &&
+                    tryExtension(Extension.Mts, originalExtension === Extension.Mts || originalExtension === Extension.Dmts)
+                || extensions & Extensions.Declaration &&
+                    tryExtension(Extension.Dmts, originalExtension === Extension.Mts || originalExtension === Extension.Dmts)
                 || extensions & Extensions.JavaScript && tryExtension(Extension.Mjs)
                 || undefined;
         case Extension.Cjs:
         case Extension.Cts:
         case Extension.Dcts:
-            return extensions & Extensions.TypeScript && tryExtension(Extension.Cts, originalExtension === Extension.Cts || originalExtension === Extension.Dcts)
-                || extensions & Extensions.Declaration && tryExtension(Extension.Dcts, originalExtension === Extension.Cts || originalExtension === Extension.Dcts)
+            return extensions & Extensions.TypeScript &&
+                    tryExtension(Extension.Cts, originalExtension === Extension.Cts || originalExtension === Extension.Dcts)
+                || extensions & Extensions.Declaration &&
+                    tryExtension(Extension.Dcts, originalExtension === Extension.Cts || originalExtension === Extension.Dcts)
                 || extensions & Extensions.JavaScript && tryExtension(Extension.Cjs)
                 || undefined;
         case Extension.Json:
@@ -2492,7 +2557,13 @@ function tryFileLookup(fileName: string, onlyRecordFailures: boolean, state: Mod
     return undefined;
 }
 
-function loadNodeModuleFromDirectory(extensions: Extensions, candidate: string, onlyRecordFailures: boolean, state: ModuleResolutionState, considerPackageJson = true) {
+function loadNodeModuleFromDirectory(
+    extensions: Extensions,
+    candidate: string,
+    onlyRecordFailures: boolean,
+    state: ModuleResolutionState,
+    considerPackageJson = true,
+) {
     const packageInfo = considerPackageJson ? getPackageJsonInfo(candidate, onlyRecordFailures, state) : undefined;
     const packageJsonContent = packageInfo && packageInfo.contents.packageJsonContent;
     const versionPaths = packageInfo && getVersionPathsOfPackageJsonInfo(packageInfo, state);
@@ -2833,8 +2904,10 @@ function loadNodeModuleFromDirectoryWorker(
 
 /** True if `extension` is one of the supported `extensions`. */
 function extensionIsOk(extensions: Extensions, extension: string): boolean {
-    return extensions & Extensions.JavaScript && (extension === Extension.Js || extension === Extension.Jsx || extension === Extension.Mjs || extension === Extension.Cjs)
-        || extensions & Extensions.TypeScript && (extension === Extension.Ts || extension === Extension.Tsx || extension === Extension.Mts || extension === Extension.Cts)
+    return extensions & Extensions.JavaScript &&
+            (extension === Extension.Js || extension === Extension.Jsx || extension === Extension.Mjs || extension === Extension.Cjs)
+        || extensions & Extensions.TypeScript &&
+            (extension === Extension.Ts || extension === Extension.Tsx || extension === Extension.Mts || extension === Extension.Cts)
         || extensions & Extensions.Declaration && (extension === Extension.Dts || extension === Extension.Dmts || extension === Extension.Dcts)
         || extensions & Extensions.Json && extension === Extension.Json
         || false;
@@ -3045,7 +3118,15 @@ function loadModuleFromImportsOrExports(
     scope: PackageJsonInfo,
     isImports: boolean,
 ): SearchResult<Resolved> | undefined {
-    const loadModuleFromTargetImportOrExport = getLoadModuleFromTargetImportOrExport(extensions, state, cache, redirectedReference, moduleName, scope, isImports);
+    const loadModuleFromTargetImportOrExport = getLoadModuleFromTargetImportOrExport(
+        extensions,
+        state,
+        cache,
+        redirectedReference,
+        moduleName,
+        scope,
+        isImports,
+    );
 
     if (!endsWith(moduleName, directorySeparator) && !moduleName.includes("*") && hasProperty(lookupTable, moduleName)) {
         const target = (lookupTable as { [idx: string]: unknown; })[moduleName];
@@ -3314,7 +3395,15 @@ function getLoadModuleFromTargetImportOrExport(
                             // The matched export is looking up something in either the out declaration or js dir, now map the written path back into the source dir and source extension
                             const pathFragment = finalPath.slice(candidateDir.length + 1); // +1 to also remove directory seperator
                             const possibleInputBase = combinePaths(commonSourceDirGuess, pathFragment);
-                            const jsAndDtsExtensions = [Extension.Mjs, Extension.Cjs, Extension.Js, Extension.Json, Extension.Dmts, Extension.Dcts, Extension.Dts];
+                            const jsAndDtsExtensions = [
+                                Extension.Mjs,
+                                Extension.Cjs,
+                                Extension.Js,
+                                Extension.Json,
+                                Extension.Dmts,
+                                Extension.Dcts,
+                                Extension.Dts,
+                            ];
                             for (const ext of jsAndDtsExtensions) {
                                 if (fileExtensionIs(possibleInputBase, ext)) {
                                     const inputExts = getPossibleOriginalInputExtensionForExtension(possibleInputBase);
@@ -3330,7 +3419,12 @@ function getLoadModuleFromTargetImportOrExport(
                                             return toSearchResult(
                                                 withPackageId(
                                                     scope,
-                                                    loadFileNameFromPackageJsonField(extensions, possibleInputWithInputExtension, /*onlyRecordFailures*/ false, state),
+                                                    loadFileNameFromPackageJsonField(
+                                                        extensions,
+                                                        possibleInputWithInputExtension,
+                                                        /*onlyRecordFailures*/ false,
+                                                        state,
+                                                    ),
                                                 ),
                                             );
                                         }
@@ -3413,13 +3507,21 @@ function loadModuleFromNearestNodeModulesDirectoryWorker(
     const secondaryExtensions = extensions & ~(Extensions.TypeScript | Extensions.Declaration);
     // (1)
     if (priorityExtensions) {
-        traceIfEnabled(state, Diagnostics.Searching_all_ancestor_node_modules_directories_for_preferred_extensions_Colon_0, formatExtensions(priorityExtensions));
+        traceIfEnabled(
+            state,
+            Diagnostics.Searching_all_ancestor_node_modules_directories_for_preferred_extensions_Colon_0,
+            formatExtensions(priorityExtensions),
+        );
         const result = lookup(priorityExtensions);
         if (result) return result;
     }
     // (2)
     if (secondaryExtensions && !typesScopeOnly) {
-        traceIfEnabled(state, Diagnostics.Searching_all_ancestor_node_modules_directories_for_fallback_extensions_Colon_0, formatExtensions(secondaryExtensions));
+        traceIfEnabled(
+            state,
+            Diagnostics.Searching_all_ancestor_node_modules_directories_for_fallback_extensions_Colon_0,
+            formatExtensions(secondaryExtensions),
+        );
         return lookup(secondaryExtensions);
     }
 
@@ -3532,7 +3634,8 @@ function loadModuleFromSpecificNodeModulesDirectory(
     }
 
     const loader: ResolutionKindSpecificLoader = (extensions, candidate, onlyRecordFailures, state) => {
-        let pathAndExtension = (rest || !(state.features & NodeResolutionFeatures.EsmMode)) && loadModuleFromFile(extensions, candidate, onlyRecordFailures, state) ||
+        let pathAndExtension =
+            (rest || !(state.features & NodeResolutionFeatures.EsmMode)) && loadModuleFromFile(extensions, candidate, onlyRecordFailures, state) ||
             loadNodeModuleFromDirectoryWorker(
                 extensions,
                 candidate,
@@ -3747,7 +3850,13 @@ export function classicNameResolver(
     );
 
     function tryResolve(extensions: Extensions): SearchResult<Resolved> {
-        const resolvedUsingSettings = tryLoadModuleUsingOptionalResolutionSettings(extensions, moduleName, containingDirectory, loadModuleFromFileNoPackageId, state);
+        const resolvedUsingSettings = tryLoadModuleUsingOptionalResolutionSettings(
+            extensions,
+            moduleName,
+            containingDirectory,
+            loadModuleFromFileNoPackageId,
+            state,
+        );
         if (resolvedUsingSettings) {
             return { value: resolvedUsingSettings };
         }

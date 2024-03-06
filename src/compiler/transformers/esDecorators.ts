@@ -371,7 +371,11 @@ export function transformESDecorators(context: TransformationContext): (x: Sourc
     }
 
     function exitClassElement() {
-        Debug.assert(top?.kind === "class-element", "Incorrect value for top.kind.", () => `Expected top.kind to be 'class-element' but got '${top?.kind}' instead.`);
+        Debug.assert(
+            top?.kind === "class-element",
+            "Incorrect value for top.kind.",
+            () => `Expected top.kind to be 'class-element' but got '${top?.kind}' instead.`,
+        );
         Debug.assert(
             top.next?.kind === "class",
             "Incorrect value for top.next.kind.",
@@ -382,7 +386,11 @@ export function transformESDecorators(context: TransformationContext): (x: Sourc
     }
 
     function enterName() {
-        Debug.assert(top?.kind === "class-element", "Incorrect value for top.kind.", () => `Expected top.kind to be 'class-element' but got '${top?.kind}' instead.`);
+        Debug.assert(
+            top?.kind === "class-element",
+            "Incorrect value for top.kind.",
+            () => `Expected top.kind to be 'class-element' but got '${top?.kind}' instead.`,
+        );
         top = { kind: "name", next: top };
         updateState();
     }
@@ -713,8 +721,14 @@ export function transformESDecorators(context: TransformationContext): (x: Sourc
             //   of the mutated class.
             // - Since a class decorator can add extra initializers, we must define a variable to keep track of
             //   extra initializers.
-            classInfo.classDecoratorsName = factory.createUniqueName("_classDecorators", GeneratedIdentifierFlags.Optimistic | GeneratedIdentifierFlags.FileLevel);
-            classInfo.classDescriptorName = factory.createUniqueName("_classDescriptor", GeneratedIdentifierFlags.Optimistic | GeneratedIdentifierFlags.FileLevel);
+            classInfo.classDecoratorsName = factory.createUniqueName(
+                "_classDecorators",
+                GeneratedIdentifierFlags.Optimistic | GeneratedIdentifierFlags.FileLevel,
+            );
+            classInfo.classDescriptorName = factory.createUniqueName(
+                "_classDescriptor",
+                GeneratedIdentifierFlags.Optimistic | GeneratedIdentifierFlags.FileLevel,
+            );
             classInfo.classExtraInitializersName = factory.createUniqueName(
                 "_classExtraInitializers",
                 GeneratedIdentifierFlags.Optimistic | GeneratedIdentifierFlags.FileLevel,
@@ -1035,12 +1049,23 @@ export function transformESDecorators(context: TransformationContext): (x: Sourc
             //      return C;
             //  })();
 
-            classExpression = factory.createClassExpression(/*modifiers*/ undefined, /*name*/ undefined, /*typeParameters*/ undefined, heritageClauses, members);
+            classExpression = factory.createClassExpression(
+                /*modifiers*/ undefined,
+                /*name*/ undefined,
+                /*typeParameters*/ undefined,
+                heritageClauses,
+                members,
+            );
             if (classInfo.classThis) {
                 classExpression = injectClassThisAssignmentIfMissing(factory, classExpression, classInfo.classThis);
             }
 
-            const classReferenceDeclaration = factory.createVariableDeclaration(classReference, /*exclamationToken*/ undefined, /*type*/ undefined, classExpression);
+            const classReferenceDeclaration = factory.createVariableDeclaration(
+                classReference,
+                /*exclamationToken*/ undefined,
+                /*type*/ undefined,
+                classExpression,
+            );
             const classReferenceVarDeclList = factory.createVariableDeclarationList([classReferenceDeclaration]);
             const returnExpr = classInfo.classThis ? factory.createAssignment(classReference, classInfo.classThis) : classReference;
             classDefinitionStatements.push(
@@ -1114,7 +1139,8 @@ export function transformESDecorators(context: TransformationContext): (x: Sourc
                 //  let C = (() => { ... })();
                 Debug.assertIsDefined(node.name, "A class declaration that is not a default export must have a name.");
                 const iife = transformClassLike(node);
-                const modifierVisitorNoExport = isExport ? ((node: ModifierLike) => isExportModifier(node) ? undefined : modifierVisitor(node)) : modifierVisitor;
+                const modifierVisitorNoExport = isExport ? ((node: ModifierLike) => isExportModifier(node) ? undefined : modifierVisitor(node))
+                    : modifierVisitor;
                 const modifiers = visitNodes(node.modifiers, modifierVisitorNoExport, isModifier);
                 const declName = factory.getLocalName(node, /*allowComments*/ false, /*allowSourceMaps*/ true);
                 const varDecl = factory.createVariableDeclaration(declName, /*exclamationToken*/ undefined, /*type*/ undefined, iife);
@@ -1372,7 +1398,8 @@ export function transformESDecorators(context: TransformationContext): (x: Sourc
                 //  __esDecorate(this, _static_member_descriptor = { set() { ... } }, _static_member_decorators, { kind: "setter", name: "...", static: true, private: true, access: { ... } }, _staticExtraInitializers);
                 //  __esDecorate(this, _member_descriptor = { set() { ... } }, _member_decorators, { kind: "setter", name: "...", static: false, private: true, access: { ... } }, _instanceExtraInitializers);
 
-                const methodExtraInitializersName = isStatic(member) ? classInfo.staticMethodExtraInitializersName : classInfo.instanceMethodExtraInitializersName;
+                const methodExtraInitializersName = isStatic(member) ? classInfo.staticMethodExtraInitializersName
+                    : classInfo.instanceMethodExtraInitializersName;
                 Debug.assertIsDefined(methodExtraInitializersName);
 
                 let descriptor: Expression | undefined;
@@ -1790,7 +1817,8 @@ export function transformESDecorators(context: TransformationContext): (x: Sourc
         // transforms to `return class { };`, and thus the empty string *can* be ignored.
 
         const innerExpression = skipOuterExpressions(node);
-        return isClassExpression(innerExpression) && !innerExpression.name && !classOrConstructorParameterIsDecorated(/*useLegacyDecorators*/ false, innerExpression);
+        return isClassExpression(innerExpression) && !innerExpression.name &&
+            !classOrConstructorParameterIsDecorated(/*useLegacyDecorators*/ false, innerExpression);
     }
 
     function visitForStatement(node: ForStatement) {

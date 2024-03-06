@@ -52,7 +52,9 @@ function doChange(changes: textChanges.ChangeTracker, sourceFile: SourceFile, na
     let unwrappedType = namedTupleMember.type;
     let sawOptional = false;
     let sawRest = false;
-    while (unwrappedType.kind === SyntaxKind.OptionalType || unwrappedType.kind === SyntaxKind.RestType || unwrappedType.kind === SyntaxKind.ParenthesizedType) {
+    while (
+        unwrappedType.kind === SyntaxKind.OptionalType || unwrappedType.kind === SyntaxKind.RestType || unwrappedType.kind === SyntaxKind.ParenthesizedType
+    ) {
         if (unwrappedType.kind === SyntaxKind.OptionalType) {
             sawOptional = true;
         }

@@ -110,7 +110,10 @@ import { value1 } from "../node_modules/.cache/someFile.d.ts";`,
         const file2: File = { path: "/a/lib.d.ts", content: "" };
         const file3: File = { path: "/a/file3.d.ts", content: "" };
         const file4: File = { path: "/a/lib.es6.d.ts", content: "" };
-        const tsconfig: File = { path: "/tsconfig.json", content: jsonToReadableText({ files: ["./file1.d.ts", "./a/lib.d.ts", "./a/file3.d.ts", "/a/lib.es6.d.ts"] }) };
+        const tsconfig: File = {
+            path: "/tsconfig.json",
+            content: jsonToReadableText({ files: ["./file1.d.ts", "./a/lib.d.ts", "./a/file3.d.ts", "/a/lib.es6.d.ts"] }),
+        };
 
         const host = createServerHost([file1, file2, file3, file4, tsconfig]);
         const session = new TestSession(host);

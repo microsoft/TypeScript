@@ -305,7 +305,11 @@ function partStartsWith(
     patternSpan: TextSpan = { start: 0, length: pattern.length },
 ): boolean {
     return patternSpan.length <= candidateSpan.length // If pattern part is longer than the candidate part there can never be a match.
-        && everyInRange(0, patternSpan.length, i => equalChars(pattern.charCodeAt(patternSpan.start + i), candidate.charCodeAt(candidateSpan.start + i), ignoreCase));
+        && everyInRange(
+            0,
+            patternSpan.length,
+            i => equalChars(pattern.charCodeAt(patternSpan.start + i), candidate.charCodeAt(candidateSpan.start + i), ignoreCase),
+        );
 }
 
 function equalChars(ch1: number, ch2: number, ignoreCase: boolean): boolean {

@@ -181,7 +181,11 @@ describe("unittests:: semver", () => {
         function assertRange(rangeText: string, versionText: string, inRange: boolean) {
             const range = new ts.VersionRange(rangeText);
             const version = new ts.Version(versionText);
-            assert.strictEqual(range.test(version), inRange, `Expected version '${version}' ${inRange ? `to be` : `to not be`} in range '${rangeText}' (${range})`);
+            assert.strictEqual(
+                range.test(version),
+                inRange,
+                `Expected version '${version}' ${inRange ? `to be` : `to not be`} in range '${rangeText}' (${range})`,
+            );
         }
 
         theory("comparators", assertRange, [

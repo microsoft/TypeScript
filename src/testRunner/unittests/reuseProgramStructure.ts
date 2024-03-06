@@ -37,7 +37,9 @@ describe("unittests:: Reuse program structure:: General", () => {
                 addedHeader = true;
                 baselines.push(`${cacheType}:`);
             }
-            baselines.push(`${key}: ${mode ? ts.getNameOfCompilerOptionValue(mode, ts.moduleOptionDeclaration.type) + ": " : ""}${jsonToReadableText(resolved)}`);
+            baselines.push(
+                `${key}: ${mode ? ts.getNameOfCompilerOptionValue(mode, ts.moduleOptionDeclaration.type) + ": " : ""}${jsonToReadableText(resolved)}`,
+            );
         }
     }
     function baselineProgram(baselines: string[], program: ts.Program, host?: TestCompilerHost) {

@@ -119,7 +119,10 @@ function isNamedDefaultReference(e: ImportSpecifier): boolean {
 }
 
 /** @internal */
-export function chainBundle(context: CoreTransformationContext, transformSourceFile: (x: SourceFile) => SourceFile): (x: SourceFile | Bundle) => SourceFile | Bundle {
+export function chainBundle(
+    context: CoreTransformationContext,
+    transformSourceFile: (x: SourceFile) => SourceFile,
+): (x: SourceFile | Bundle) => SourceFile | Bundle {
     return transformSourceFileOrBundle;
 
     function transformSourceFileOrBundle(node: SourceFile | Bundle) {
@@ -160,7 +163,8 @@ export function getImportNeedsImportStarHelper(node: ImportDeclaration): boolean
 export function getImportNeedsImportDefaultHelper(node: ImportDeclaration): boolean {
     // Import default is needed if there's a default import or a default ref and no other refs (meaning an import star helper wasn't requested)
     return !getImportNeedsImportStarHelper(node) &&
-        (isDefaultImport(node) || (!!node.importClause && isNamedImports(node.importClause.namedBindings!) && containsDefaultReference(node.importClause.namedBindings))); // TODO: GH#18217
+        (isDefaultImport(node) ||
+            (!!node.importClause && isNamedImports(node.importClause.namedBindings!) && containsDefaultReference(node.importClause.namedBindings))); // TODO: GH#18217
 }
 
 /** @internal */
@@ -579,11 +583,17 @@ function isStaticPropertyDeclarationOrClassStaticBlockDeclaration(element: Class
 }
 
 /** @internal */
-export function getStaticPropertiesAndClassStaticBlock(node: ClassExpression | ClassDeclaration): readonly (PropertyDeclaration | ClassStaticBlockDeclaration)[];
+export function getStaticPropertiesAndClassStaticBlock(
+    node: ClassExpression | ClassDeclaration,
+): readonly (PropertyDeclaration | ClassStaticBlockDeclaration)[];
 /** @internal */
-export function getStaticPropertiesAndClassStaticBlock(node: ClassExpression | ClassDeclaration): readonly (PropertyDeclaration | ClassStaticBlockDeclaration)[];
+export function getStaticPropertiesAndClassStaticBlock(
+    node: ClassExpression | ClassDeclaration,
+): readonly (PropertyDeclaration | ClassStaticBlockDeclaration)[];
 /** @internal */
-export function getStaticPropertiesAndClassStaticBlock(node: ClassExpression | ClassDeclaration): readonly (PropertyDeclaration | ClassStaticBlockDeclaration)[] {
+export function getStaticPropertiesAndClassStaticBlock(
+    node: ClassExpression | ClassDeclaration,
+): readonly (PropertyDeclaration | ClassStaticBlockDeclaration)[] {
     return filter(node.members, isStaticPropertyDeclarationOrClassStaticBlockDeclaration);
 }
 

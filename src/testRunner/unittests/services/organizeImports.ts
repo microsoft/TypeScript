@@ -967,7 +967,11 @@ export * from "lib";
         function runBaseline(baselinePath: string, skipDestructiveCodeActions: boolean, testFile: File, ...otherFiles: File[]) {
             const { path: testPath, content: testContent } = testFile;
             const languageService = makeLanguageService(testFile, ...otherFiles);
-            const changes = languageService.organizeImports({ skipDestructiveCodeActions, type: "file", fileName: testPath }, ts.testFormatSettings, ts.emptyOptions);
+            const changes = languageService.organizeImports(
+                { skipDestructiveCodeActions, type: "file", fileName: testPath },
+                ts.testFormatSettings,
+                ts.emptyOptions,
+            );
             assert.equal(changes.length, 1);
             assert.equal(changes[0].fileName, testPath);
 

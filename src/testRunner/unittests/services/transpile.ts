@@ -40,7 +40,8 @@ describe("unittests:: services:: Transpile", () => {
 
                 transpileOptions.reportDiagnostics = true;
 
-                const justName = "transpile/" + name.replace(/[^a-z0-9\-. ()=]/ig, "") + (transpileOptions.compilerOptions.jsx ? ts.Extension.Tsx : ts.Extension.Ts);
+                const justName = "transpile/" + name.replace(/[^a-z0-9\-. ()=]/ig, "") +
+                    (transpileOptions.compilerOptions.jsx ? ts.Extension.Tsx : ts.Extension.Ts);
                 const toBeCompiled = [{
                     unitName,
                     content: input,
@@ -168,7 +169,10 @@ var x = 0;`,
             `declare function use(a: any);\n` +
             `use(foo);`,
         {
-            options: { compilerOptions: { module: ts.ModuleKind.System, newLine: ts.NewLineKind.LineFeed }, renamedDependencies: { SomeName: "SomeOtherName" } },
+            options: {
+                compilerOptions: { module: ts.ModuleKind.System, newLine: ts.NewLineKind.LineFeed },
+                renamedDependencies: { SomeName: "SomeOtherName" },
+            },
         },
     );
 

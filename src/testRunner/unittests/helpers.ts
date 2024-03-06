@@ -31,7 +31,13 @@ export interface TestCompilerHost extends ts.CompilerHost {
 export class SourceText implements ts.IScriptSnapshot {
     private fullText: string | undefined;
 
-    constructor(private references: string, private importsAndExports: string, private program: string, private changedPart = ChangedPart.none, private version = 0) {
+    constructor(
+        private references: string,
+        private importsAndExports: string,
+        private program: string,
+        private changedPart = ChangedPart.none,
+        private version = 0,
+    ) {
     }
 
     static New(references: string, importsAndExports: string, program: string): SourceText {
@@ -51,7 +57,13 @@ export class SourceText implements ts.IScriptSnapshot {
     }
     public updateImportsAndExports(newImportsAndExports: string): SourceText {
         ts.Debug.assert(newImportsAndExports !== undefined);
-        return new SourceText(this.references, newImportsAndExports + newLine, this.program, this.changedPart | ChangedPart.importsAndExports, this.version + 1);
+        return new SourceText(
+            this.references,
+            newImportsAndExports + newLine,
+            this.program,
+            this.changedPart | ChangedPart.importsAndExports,
+            this.version + 1,
+        );
     }
     public updateProgram(newProgram: string): SourceText {
         ts.Debug.assert(newProgram !== undefined);
@@ -148,7 +160,12 @@ export function createTestCompilerHost(
     return result;
 }
 
-export function newProgram(texts: NamedSourceText[], rootNames: string[], options: ts.CompilerOptions, useGetSourceFileByPath?: boolean): ProgramWithSourceTexts {
+export function newProgram(
+    texts: NamedSourceText[],
+    rootNames: string[],
+    options: ts.CompilerOptions,
+    useGetSourceFileByPath?: boolean,
+): ProgramWithSourceTexts {
     const host = createTestCompilerHost(texts, options.target!, /*oldProgram*/ undefined, useGetSourceFileByPath);
     const program = ts.createProgram(rootNames, options, host) as ProgramWithSourceTexts;
     program.sourceTexts = texts;

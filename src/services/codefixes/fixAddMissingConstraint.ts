@@ -43,7 +43,8 @@ const errorCodes = [
     // Diagnostics.This_type_parameter_probably_needs_an_extends_0_constraint
     Diagnostics.Type_0_is_not_comparable_to_type_1.code,
     Diagnostics.Type_0_is_not_assignable_to_type_1_Two_different_types_with_this_name_exist_but_they_are_unrelated.code,
-    Diagnostics.Type_0_is_not_assignable_to_type_1_with_exactOptionalPropertyTypes_Colon_true_Consider_adding_undefined_to_the_types_of_the_target_s_properties.code,
+    Diagnostics.Type_0_is_not_assignable_to_type_1_with_exactOptionalPropertyTypes_Colon_true_Consider_adding_undefined_to_the_types_of_the_target_s_properties
+        .code,
     Diagnostics.Type_0_is_not_assignable_to_type_1.code,
     Diagnostics
         .Argument_of_type_0_is_not_assignable_to_parameter_of_type_1_with_exactOptionalPropertyTypes_Colon_true_Consider_adding_undefined_to_the_types_of_the_target_s_properties

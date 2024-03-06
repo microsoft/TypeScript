@@ -149,11 +149,16 @@ export function createRuntimeTypeSerializer(context: TransformationContext): Run
     return {
         serializeTypeNode: (serializerContext, node) => setSerializerContextAnd(serializerContext, serializeTypeNode, node),
         serializeTypeOfNode: (serializerContext, node) => setSerializerContextAnd(serializerContext, serializeTypeOfNode, node),
-        serializeParameterTypesOfNode: (serializerContext, node, container) => setSerializerContextAnd(serializerContext, serializeParameterTypesOfNode, node, container),
+        serializeParameterTypesOfNode: (serializerContext, node, container) =>
+            setSerializerContextAnd(serializerContext, serializeParameterTypesOfNode, node, container),
         serializeReturnTypeOfNode: (serializerContext, node) => setSerializerContextAnd(serializerContext, serializeReturnTypeOfNode, node),
     };
 
-    function setSerializerContextAnd<TNode extends Node | undefined, R>(serializerContext: RuntimeTypeSerializerContext, cb: (node: TNode) => R, node: TNode): R;
+    function setSerializerContextAnd<TNode extends Node | undefined, R>(
+        serializerContext: RuntimeTypeSerializerContext,
+        cb: (node: TNode) => R,
+        node: TNode,
+    ): R;
     function setSerializerContextAnd<TNode extends Node | undefined, T, R>(
         serializerContext: RuntimeTypeSerializerContext,
         cb: (node: TNode, arg: T) => R,
@@ -189,7 +194,9 @@ export function createRuntimeTypeSerializer(context: TransformationContext): Run
      * Serializes the type of a node for use with decorator type metadata.
      * @param node The node that should have its type serialized.
      */
-    function serializeTypeOfNode(node: PropertyDeclaration | ParameterDeclaration | AccessorDeclaration | ClassLikeDeclaration | MethodDeclaration): SerializedTypeNode {
+    function serializeTypeOfNode(
+        node: PropertyDeclaration | ParameterDeclaration | AccessorDeclaration | ClassLikeDeclaration | MethodDeclaration,
+    ): SerializedTypeNode {
         switch (node.kind) {
             case SyntaxKind.PropertyDeclaration:
             case SyntaxKind.Parameter:
@@ -435,7 +442,8 @@ export function createRuntimeTypeSerializer(context: TransformationContext): Run
             }
 
             if (
-                !strictNullChecks && ((isLiteralTypeNode(typeNode) && typeNode.literal.kind === SyntaxKind.NullKeyword) || typeNode.kind === SyntaxKind.UndefinedKeyword)
+                !strictNullChecks &&
+                ((isLiteralTypeNode(typeNode) && typeNode.literal.kind === SyntaxKind.NullKeyword) || typeNode.kind === SyntaxKind.UndefinedKeyword)
             ) {
                 continue; // Elide null and undefined from unions for metadata, just like what we did prior to the implementation of strict null checks
             }

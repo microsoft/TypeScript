@@ -214,7 +214,9 @@ function wrapScriptTransformerFactory(transformer: TransformerFactory<SourceFile
     return wrapCustomTransformerFactory(transformer, chainBundle);
 }
 
-function wrapDeclarationTransformerFactory(transformer: TransformerFactory<Bundle | SourceFile> | CustomTransformerFactory): TransformerFactory<Bundle | SourceFile> {
+function wrapDeclarationTransformerFactory(
+    transformer: TransformerFactory<Bundle | SourceFile> | CustomTransformerFactory,
+): TransformerFactory<Bundle | SourceFile> {
     return wrapCustomTransformerFactory(transformer, (_, node) => node);
 }
 

@@ -161,11 +161,27 @@ registerCodeFix({
         }
         if (info.kind === InfoKind.ObjectLiteral) {
             const changes = textChanges.ChangeTracker.with(context, t => addObjectLiteralProperties(t, context, info));
-            return [createCodeFixAction(fixMissingProperties, changes, Diagnostics.Add_missing_properties, fixMissingProperties, Diagnostics.Add_all_missing_properties)];
+            return [
+                createCodeFixAction(
+                    fixMissingProperties,
+                    changes,
+                    Diagnostics.Add_missing_properties,
+                    fixMissingProperties,
+                    Diagnostics.Add_all_missing_properties,
+                ),
+            ];
         }
         if (info.kind === InfoKind.JsxAttributes) {
             const changes = textChanges.ChangeTracker.with(context, t => addJsxAttributes(t, context, info));
-            return [createCodeFixAction(fixMissingAttributes, changes, Diagnostics.Add_missing_attributes, fixMissingAttributes, Diagnostics.Add_all_missing_attributes)];
+            return [
+                createCodeFixAction(
+                    fixMissingAttributes,
+                    changes,
+                    Diagnostics.Add_missing_attributes,
+                    fixMissingAttributes,
+                    Diagnostics.Add_all_missing_attributes,
+                ),
+            ];
         }
         if (info.kind === InfoKind.Function || info.kind === InfoKind.Signature) {
             const changes = textChanges.ChangeTracker.with(context, t => addFunctionDeclaration(t, context, info));
@@ -203,7 +219,10 @@ registerCodeFix({
         return createCombinedCodeActions(textChanges.ChangeTracker.with(context, changes => {
             eachDiagnostic(context, errorCodes, diag => {
                 const info = getInfo(diag.file, diag.start, diag.code, checker, context.program);
-                if (!info || !addToSeen(seen, getNodeId(info.parentDeclaration) + "#" + (info.kind === InfoKind.ObjectLiteral ? info.identifier : info.token.text))) {
+                if (
+                    !info ||
+                    !addToSeen(seen, getNodeId(info.parentDeclaration) + "#" + (info.kind === InfoKind.ObjectLiteral ? info.identifier : info.token.text))
+                ) {
                     return;
                 }
                 if (fixId === fixMissingFunctionDeclaration && (info.kind === InfoKind.Function || info.kind === InfoKind.Signature)) {
@@ -345,7 +364,12 @@ function getInfo(sourceFile: SourceFile, tokenPos: number, errorCode: number, ch
     if (token.kind === SyntaxKind.OpenBraceToken && isObjectLiteralExpression(parent)) {
         const targetType = checker.getContextualType(parent) || checker.getTypeAtLocation(parent);
         const properties = arrayFrom(
-            checker.getUnmatchedProperties(checker.getTypeAtLocation(parent), targetType, /*requireOptionalProperties*/ false, /*matchDiscriminantProperties*/ false),
+            checker.getUnmatchedProperties(
+                checker.getTypeAtLocation(parent),
+                targetType,
+                /*requireOptionalProperties*/ false,
+                /*matchDiscriminantProperties*/ false,
+            ),
         );
         if (!length(properties)) return undefined;
 
@@ -401,7 +425,14 @@ function getInfo(sourceFile: SourceFile, tokenPos: number, errorCode: number, ch
         const moduleDeclaration = find(symbol.declarations, isModuleDeclaration);
         const moduleDeclarationSourceFile = moduleDeclaration?.getSourceFile();
         if (moduleDeclaration && moduleDeclarationSourceFile && !isSourceFileFromLibrary(program, moduleDeclarationSourceFile)) {
-            return { kind: InfoKind.Function, token, call: parent.parent, sourceFile, modifierFlags: ModifierFlags.Export, parentDeclaration: moduleDeclaration };
+            return {
+                kind: InfoKind.Function,
+                token,
+                call: parent.parent,
+                sourceFile,
+                modifierFlags: ModifierFlags.Export,
+                parentDeclaration: moduleDeclaration,
+            };
         }
 
         const moduleSourceFile = find(symbol.declarations, isSourceFile);
@@ -656,7 +687,10 @@ function getActionsForMissingMethodDeclaration(context: CodeFixContext, info: Ty
     ];
     if (modifierFlags & ModifierFlags.Private) {
         actions.unshift(
-            createCodeFixActionWithoutFixAll(fixMissingMember, addMethodDeclarationChanges(ModifierFlags.Private), [Diagnostics.Declare_private_method_0, methodName]),
+            createCodeFixActionWithoutFixAll(fixMissingMember, addMethodDeclarationChanges(ModifierFlags.Private), [
+                Diagnostics.Declare_private_method_0,
+                methodName,
+            ]),
         );
     }
     return actions;
@@ -762,7 +796,9 @@ function addJsxAttributes(changes: textChanges.ChangeTracker, context: CodeFixCo
         setParent(name, jsxAttribute);
         return jsxAttribute;
     });
-    const jsxAttributes = factory.createJsxAttributes(hasSpreadAttribute ? [...attrs, ...jsxAttributesNode.properties] : [...jsxAttributesNode.properties, ...attrs]);
+    const jsxAttributes = factory.createJsxAttributes(
+        hasSpreadAttribute ? [...attrs, ...jsxAttributesNode.properties] : [...jsxAttributesNode.properties, ...attrs],
+    );
     const options = { prefix: jsxAttributesNode.pos === jsxAttributesNode.end ? " " : undefined };
     changes.replaceNode(context.sourceFile, jsxAttributesNode, jsxAttributes, options);
     importAdder.writeFixes(changes);
@@ -841,7 +877,10 @@ function tryGetValueFromType(
         return factory.createNull();
     }
     if (type.flags & TypeFlags.Union) {
-        const expression = firstDefined((type as UnionType).types, t => tryGetValueFromType(context, checker, importAdder, quotePreference, t, enclosingDeclaration));
+        const expression = firstDefined(
+            (type as UnionType).types,
+            t => tryGetValueFromType(context, checker, importAdder, quotePreference, t, enclosingDeclaration),
+        );
         return expression ?? createUndefined();
     }
     if (checker.isArrayLikeType(type)) {
@@ -939,7 +978,13 @@ function createPropertyNameFromSymbol(symbol: Symbol, target: ScriptTarget, quot
         if (prop && isComputedPropertyName(prop)) return prop;
     }
     // We're using these nodes as property names in an object literal; no need to quote names when not needed.
-    return createPropertyNameNodeForIdentifierOrLiteral(symbol.name, target, quotePreference === QuotePreference.Single, /*stringNamed*/ false, /*isMethod*/ false);
+    return createPropertyNameNodeForIdentifierOrLiteral(
+        symbol.name,
+        target,
+        quotePreference === QuotePreference.Single,
+        /*stringNamed*/ false,
+        /*isMethod*/ false,
+    );
 }
 
 function findScope(node: Node) {

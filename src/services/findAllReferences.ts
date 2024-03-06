@@ -524,7 +524,10 @@ export function findReferencedSymbols(
         mapDefined<SymbolAndEntries, ReferencedSymbol>(referencedSymbols, ({ definition, references }) =>
             // Only include referenced symbols that have a valid definition.
             definition && {
-                definition: checker.runWithCancellationToken(cancellationToken, checker => definitionToReferencedSymbolDefinitionInfo(definition, checker, node)),
+                definition: checker.runWithCancellationToken(
+                    cancellationToken,
+                    checker => definitionToReferencedSymbolDefinitionInfo(definition, checker, node),
+                ),
                 references: references.map(r => toReferencedSymbolEntry(r, symbol)),
             });
 }
@@ -602,7 +605,10 @@ function getImplementationReferenceEntries(
     }
     else {
         // Perform "Find all References" and retrieve only those that are implementations
-        return getReferenceEntriesForNode(position, node, program, sourceFiles, cancellationToken, { implementations: true, use: FindReferencesUse.References });
+        return getReferenceEntriesForNode(position, node, program, sourceFiles, cancellationToken, {
+            implementations: true,
+            use: FindReferencesUse.References,
+        });
     }
 }
 
@@ -678,7 +684,12 @@ function definitionToReferencedSymbolDefinitionInfo(def: Definition, checker: Ty
             case DefinitionKind.Keyword: {
                 const { node } = def;
                 const name = tokenToString(node.kind)!;
-                return { ...getFileAndTextSpanFromNode(node), name, kind: ScriptElementKind.keyword, displayParts: [{ text: name, kind: ScriptElementKind.keyword }] };
+                return {
+                    ...getFileAndTextSpanFromNode(node),
+                    name,
+                    kind: ScriptElementKind.keyword,
+                    displayParts: [{ text: name, kind: ScriptElementKind.keyword }],
+                };
             }
             case DefinitionKind.This: {
                 const { node } = def;
@@ -1008,7 +1019,13 @@ function declarationIsWriteAccess(decl: Declaration): boolean {
         case SyntaxKind.MethodDeclaration:
         case SyntaxKind.GetAccessor:
         case SyntaxKind.SetAccessor:
-            return !!(decl as FunctionDeclaration | FunctionExpression | ConstructorDeclaration | MethodDeclaration | GetAccessorDeclaration | SetAccessorDeclaration)
+            return !!(decl as
+                | FunctionDeclaration
+                | FunctionExpression
+                | ConstructorDeclaration
+                | MethodDeclaration
+                | GetAccessorDeclaration
+                | SetAccessorDeclaration)
                 .body;
 
         case SyntaxKind.VariableDeclaration:
@@ -1131,7 +1148,8 @@ export namespace Core {
     ): readonly Entry[] {
         const moduleSymbol = program.getSourceFile(fileName)?.symbol;
         if (moduleSymbol) {
-            return getReferencedSymbolsForModule(program, moduleSymbol, /*excludeImportTypeOfExportEquals*/ false, sourceFiles, sourceFilesSet)[0]?.references ||
+            return getReferencedSymbolsForModule(program, moduleSymbol, /*excludeImportTypeOfExportEquals*/ false, sourceFiles, sourceFilesSet)[0]
+                ?.references ||
                 emptyArray;
         }
         const fileIncludeReasons = program.getFileIncludeReasons();
@@ -1139,7 +1157,11 @@ export namespace Core {
         return referencedFile && fileIncludeReasons && getReferencesForNonModule(referencedFile, fileIncludeReasons, program) || emptyArray;
     }
 
-    function getReferencesForNonModule(referencedFile: SourceFile, refFileMap: MultiMap<Path, FileIncludeReason>, program: Program): readonly SpanEntry[] | undefined {
+    function getReferencesForNonModule(
+        referencedFile: SourceFile,
+        refFileMap: MultiMap<Path, FileIncludeReason>,
+        program: Program,
+    ): readonly SpanEntry[] | undefined {
         let entries: SpanEntry[] | undefined;
         const references = refFileMap.get(referencedFile.path) || emptyArray;
         for (const ref of references) {
@@ -1457,7 +1479,13 @@ export namespace Core {
         // otherwise we'll need to search globally (i.e. include each file).
         const scope = getSymbolScope(symbol);
         if (scope) {
-            getReferencesInContainer(scope, scope.getSourceFile(), search, state, /*addReferencesHere*/ !(isSourceFile(scope) && !contains(state.sourceFiles, scope)));
+            getReferencesInContainer(
+                scope,
+                scope.getSourceFile(),
+                search,
+                state,
+                /*addReferencesHere*/ !(isSourceFile(scope) && !contains(state.sourceFiles, scope)),
+            );
         }
         else {
             // Global search
@@ -1485,7 +1513,12 @@ export namespace Core {
     }
 
     /** Handle a few special cases relating to export/import specifiers. */
-    function skipPastExportOrImportSpecifierOrUnion(symbol: Symbol, node: Node, checker: TypeChecker, useLocalSymbolForExportSpecifier: boolean): Symbol | undefined {
+    function skipPastExportOrImportSpecifierOrUnion(
+        symbol: Symbol,
+        node: Node,
+        checker: TypeChecker,
+        useLocalSymbolForExportSpecifier: boolean,
+    ): Symbol | undefined {
         const { parent } = node;
         if (isExportSpecifier(parent) && useLocalSymbolForExportSpecifier) {
             return getLocalSymbolForExportSpecifier(node as Identifier, symbol, parent, checker);
@@ -1740,7 +1773,12 @@ export namespace Core {
         for (const declaration of symbol.declarations) {
             const exportingFile = declaration.getSourceFile();
             // Need to search in the file even if it's not in the search-file set, because it might export the symbol.
-            getReferencesInSourceFile(exportingFile, state.createSearch(declaration, symbol, ImportExport.Import), state, state.includesSourceFile(exportingFile));
+            getReferencesInSourceFile(
+                exportingFile,
+                state.createSearch(declaration, symbol, ImportExport.Import),
+                state,
+                state.includesSourceFile(exportingFile),
+            );
         }
     }
 
@@ -1837,7 +1875,12 @@ export namespace Core {
     }
 
     /** Used as a quick check for whether a symbol is used at all in a file (besides its definition). */
-    export function isSymbolReferencedInFile(definition: Identifier, checker: TypeChecker, sourceFile: SourceFile, searchContainer: Node = sourceFile): boolean {
+    export function isSymbolReferencedInFile(
+        definition: Identifier,
+        checker: TypeChecker,
+        sourceFile: SourceFile,
+        searchContainer: Node = sourceFile,
+    ): boolean {
         return eachSymbolReferenceInFile(definition, checker, sourceFile, () => true, searchContainer) || false;
     }
 
@@ -1990,7 +2033,8 @@ export namespace Core {
             }
 
             case SyntaxKind.NumericLiteral:
-                return isLiteralNameOfPropertyDeclarationOrIndexAccess(node as NumericLiteral) && (node as NumericLiteral).text.length === searchSymbolName.length;
+                return isLiteralNameOfPropertyDeclarationOrIndexAccess(node as NumericLiteral) &&
+                    (node as NumericLiteral).text.length === searchSymbolName.length;
 
             case SyntaxKind.DefaultKeyword:
                 return "default".length === searchSymbolName.length;
@@ -2063,7 +2107,8 @@ export namespace Core {
             // for.
             if (
                 !state.options.implementations &&
-                (state.options.findInStrings && isInString(sourceFile, position) || state.options.findInComments && isInNonReferenceComment(sourceFile, position))
+                (state.options.findInStrings && isInString(sourceFile, position) ||
+                    state.options.findInComments && isInNonReferenceComment(sourceFile, position))
             ) {
                 // In the case where we're looking inside comments/strings, we don't have
                 // an actual definition.  So just use 'undefined' here.  Features like
@@ -2206,7 +2251,10 @@ export namespace Core {
         }
 
         // At `export { x } from "foo"`, also search for the imported symbol `"foo".x`.
-        if (search.comingFrom !== ImportExport.Export && exportDeclaration.moduleSpecifier && !propertyName && !isForRenameWithPrefixAndSuffixText(state.options)) {
+        if (
+            search.comingFrom !== ImportExport.Export && exportDeclaration.moduleSpecifier && !propertyName &&
+            !isForRenameWithPrefixAndSuffixText(state.options)
+        ) {
             const imported = state.checker.getExportSpecifierLocalTargetSymbol(exportSpecifier);
             if (imported) searchForImportedSymbol(imported, state);
         }
@@ -2216,7 +2264,12 @@ export namespace Core {
         }
     }
 
-    function getLocalSymbolForExportSpecifier(referenceLocation: Identifier, referenceSymbol: Symbol, exportSpecifier: ExportSpecifier, checker: TypeChecker): Symbol {
+    function getLocalSymbolForExportSpecifier(
+        referenceLocation: Identifier,
+        referenceSymbol: Symbol,
+        exportSpecifier: ExportSpecifier,
+        checker: TypeChecker,
+    ): Symbol {
         return isExportSpecifierAlias(referenceLocation, exportSpecifier) && checker.getExportSpecifierLocalTargetSymbol(exportSpecifier) || referenceSymbol;
     }
 
@@ -2513,10 +2566,11 @@ export namespace Core {
     }
 
     function getReferencesForSuperKeyword(superKeyword: Node): SymbolAndEntries[] | undefined {
-        let searchSpaceNode: SuperContainer | ClassLikeDeclaration | TypeLiteralNode | InterfaceDeclaration | ObjectLiteralExpression | undefined = getSuperContainer(
-            superKeyword,
-            /*stopOnFunctions*/ false,
-        );
+        let searchSpaceNode: SuperContainer | ClassLikeDeclaration | TypeLiteralNode | InterfaceDeclaration | ObjectLiteralExpression | undefined =
+            getSuperContainer(
+                superKeyword,
+                /*stopOnFunctions*/ false,
+            );
         if (!searchSpaceNode) {
             return undefined;
         }
@@ -2755,7 +2809,8 @@ export namespace Core {
             const res1 = propertySymbol && cbSymbol(propertySymbol, /*rootSymbol*/ undefined, /*baseSymbol*/ undefined, EntryKind.SearchedPropertyFoundLocal);
             if (res1) return res1;
 
-            const res2 = shorthandValueSymbol && cbSymbol(shorthandValueSymbol, /*rootSymbol*/ undefined, /*baseSymbol*/ undefined, EntryKind.SearchedLocalFoundProperty);
+            const res2 = shorthandValueSymbol &&
+                cbSymbol(shorthandValueSymbol, /*rootSymbol*/ undefined, /*baseSymbol*/ undefined, EntryKind.SearchedLocalFoundProperty);
             if (res2) return res2;
         }
 
@@ -2772,7 +2827,9 @@ export namespace Core {
         if (symbol.valueDeclaration && isParameterPropertyDeclaration(symbol.valueDeclaration, symbol.valueDeclaration.parent)) {
             // For a parameter property, now try on the other symbol (property if this was a parameter, parameter if this was a property).
             const paramProps = checker.getSymbolsOfParameterPropertyDeclaration(cast(symbol.valueDeclaration, isParameter), symbol.name);
-            Debug.assert(paramProps.length === 2 && !!(paramProps[0].flags & SymbolFlags.FunctionScopedVariable) && !!(paramProps[1].flags & SymbolFlags.Property)); // is [parameter, property]
+            Debug.assert(
+                paramProps.length === 2 && !!(paramProps[0].flags & SymbolFlags.FunctionScopedVariable) && !!(paramProps[1].flags & SymbolFlags.Property),
+            ); // is [parameter, property]
             return fromRoot(symbol.flags & SymbolFlags.FunctionScopedVariable ? paramProps[1] : paramProps[0]);
         }
 
@@ -2790,7 +2847,8 @@ export namespace Core {
         if (!isForRenamePopulateSearchSymbolSet) {
             let bindingElementPropertySymbol: Symbol | undefined;
             if (onlyIncludeBindingElementAtReferenceLocation) {
-                bindingElementPropertySymbol = isObjectBindingElementWithoutPropertyName(location.parent) ? getPropertySymbolFromBindingElement(checker, location.parent)
+                bindingElementPropertySymbol = isObjectBindingElementWithoutPropertyName(location.parent) ?
+                    getPropertySymbolFromBindingElement(checker, location.parent)
                     : undefined;
             }
             else {
@@ -2840,7 +2898,12 @@ export namespace Core {
      * @param previousIterationSymbolsCache a cache of symbol from previous iterations of calling this function to prevent infinite revisiting of the same symbol.
      *                                The value of previousIterationSymbol is undefined when the function is first called.
      */
-    function getPropertySymbolsFromBaseTypes<T>(symbol: Symbol, propertyName: string, checker: TypeChecker, cb: (symbol: Symbol) => T | undefined): T | undefined {
+    function getPropertySymbolsFromBaseTypes<T>(
+        symbol: Symbol,
+        propertyName: string,
+        checker: TypeChecker,
+        cb: (symbol: Symbol) => T | undefined,
+    ): T | undefined {
         const seen = new Map<SymbolId, true>();
         return recur(symbol);
 
@@ -2879,7 +2942,8 @@ export namespace Core {
             referenceLocation,
             checker,
             /*isForRenamePopulateSearchSymbolSet*/ false,
-            /*onlyIncludeBindingElementAtReferenceLocation*/ state.options.use !== FindReferencesUse.Rename || !!state.options.providePrefixAndSuffixTextForRename,
+            /*onlyIncludeBindingElementAtReferenceLocation*/ state.options.use !== FindReferencesUse.Rename ||
+                !!state.options.providePrefixAndSuffixTextForRename,
             (sym, rootSymbol, baseSymbol, kind): RelatedSymbol | undefined => {
                 // check whether the symbol used to search itself is just the searched one.
                 if (baseSymbol) {

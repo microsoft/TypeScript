@@ -227,7 +227,9 @@ function tryGetFunctionFromVariableDeclaration(sourceFile: SourceFile, typeCheck
     }
     const variableDeclaration = isVariableDeclaration(parent) ? parent : first(parent.declarations);
     const initializer = variableDeclaration.initializer;
-    if (initializer && (isArrowFunction(initializer) || isFunctionExpression(initializer) && !isFunctionReferencedInFile(sourceFile, typeChecker, initializer))) {
+    if (
+        initializer && (isArrowFunction(initializer) || isFunctionExpression(initializer) && !isFunctionReferencedInFile(sourceFile, typeChecker, initializer))
+    ) {
         return initializer;
     }
     return undefined;
@@ -261,11 +263,23 @@ function getVariableInfo(func: FunctionExpression | ArrowFunction): VariableInfo
 function getEditInfoForConvertToAnonymousFunction(context: RefactorContext, func: FunctionExpression | ArrowFunction): FileTextChanges[] {
     const { file } = context;
     const body = convertToBlock(func.body);
-    const newNode = factory.createFunctionExpression(func.modifiers, func.asteriskToken, /*name*/ undefined, func.typeParameters, func.parameters, func.type, body);
+    const newNode = factory.createFunctionExpression(
+        func.modifiers,
+        func.asteriskToken,
+        /*name*/ undefined,
+        func.typeParameters,
+        func.parameters,
+        func.type,
+        body,
+    );
     return textChanges.ChangeTracker.with(context, t => t.replaceNode(file, func, newNode));
 }
 
-function getEditInfoForConvertToNamedFunction(context: RefactorContext, func: FunctionExpression | ArrowFunction, variableInfo: VariableInfo): FileTextChanges[] {
+function getEditInfoForConvertToNamedFunction(
+    context: RefactorContext,
+    func: FunctionExpression | ArrowFunction,
+    variableInfo: VariableInfo,
+): FileTextChanges[] {
     const { file } = context;
     const body = convertToBlock(func.body);
 

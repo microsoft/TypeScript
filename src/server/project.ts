@@ -235,7 +235,9 @@ export function allFilesAreJsOrDts(project: Project): boolean {
 
 /** @internal */
 export function hasNoTypeScriptSource(fileNames: string[]): boolean {
-    return !fileNames.some(fileName => (fileExtensionIs(fileName, Extension.Ts) && !isDeclarationFileName(fileName)) || fileExtensionIs(fileName, Extension.Tsx));
+    return !fileNames.some(fileName =>
+        (fileExtensionIs(fileName, Extension.Ts) && !isDeclarationFileName(fileName)) || fileExtensionIs(fileName, Extension.Tsx)
+    );
 }
 
 /** @internal */
@@ -1535,7 +1537,9 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
             }
 
             // path in global cache, watch global cache
-            if (containsPath(this.projectService.typingsInstaller.globalTypingsCacheLocation!, file, this.currentDirectory, !this.useCaseSensitiveFileNames())) {
+            if (
+                containsPath(this.projectService.typingsInstaller.globalTypingsCacheLocation!, file, this.currentDirectory, !this.useCaseSensitiveFileNames())
+            ) {
                 createProjectWatcher(this.projectService.typingsInstaller.globalTypingsCacheLocation!, TypingWatcherType.DirectoryWatcher);
                 continue;
             }
@@ -1599,7 +1603,11 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
 
                 oldProgram.forEachResolvedProjectReference(resolvedProjectReference => {
                     if (!this.program!.getResolvedProjectReferenceByPath(resolvedProjectReference.sourceFile.path)) {
-                        this.detachScriptInfoFromProject(resolvedProjectReference.sourceFile.fileName, /*noRemoveResolution*/ undefined, /*syncDirWatcherRemove*/ true);
+                        this.detachScriptInfoFromProject(
+                            resolvedProjectReference.sourceFile.fileName,
+                            /*noRemoveResolution*/ undefined,
+                            /*syncDirWatcherRemove*/ true,
+                        );
                     }
                 });
             }
@@ -1790,7 +1798,9 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
             const path = this.toPath(sourceFile);
             if (this.generatedFilesMap) {
                 if (isGeneratedFileWatcher(this.generatedFilesMap)) {
-                    Debug.fail(`${this.projectName} Expected to not have --out watcher for generated file with options: ${JSON.stringify(this.compilerOptions)}`);
+                    Debug.fail(
+                        `${this.projectName} Expected to not have --out watcher for generated file with options: ${JSON.stringify(this.compilerOptions)}`,
+                    );
                     return;
                 }
                 if (this.generatedFilesMap.has(path)) return;
@@ -2216,7 +2226,12 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
         if (dependencySelection) {
             tracing?.push(tracing.Phase.Session, "getPackageJsonAutoImportProvider");
             const start = timestamp();
-            this.autoImportProviderHost = AutoImportProviderProject.create(dependencySelection, this, this.getHostForAutoImportProvider(), this.documentRegistry);
+            this.autoImportProviderHost = AutoImportProviderProject.create(
+                dependencySelection,
+                this,
+                this.getHostForAutoImportProvider(),
+                this.documentRegistry,
+            );
             if (this.autoImportProviderHost) {
                 updateProjectIfDirty(this.autoImportProviderHost);
                 this.sendPerformanceEvent("CreatePackageJsonAutoImportProvider", timestamp() - start);
@@ -2561,7 +2576,9 @@ export class AutoImportProviderProject extends Project {
         }
 
         if (rootNames?.length) {
-            hostProject.log(`AutoImportProviderProject: found ${rootNames.length} root files in ${dependenciesAdded} dependencies in ${timestamp() - start} ms`);
+            hostProject.log(
+                `AutoImportProviderProject: found ${rootNames.length} root files in ${dependenciesAdded} dependencies in ${timestamp() - start} ms`,
+            );
         }
         return rootNames || ts.emptyArray;
 

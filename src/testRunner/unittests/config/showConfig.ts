@@ -22,7 +22,8 @@ describe("unittests:: config:: showConfig", () => {
                     readDirectory() {
                         return [];
                     },
-                    readFile: path => ts.comparePaths(ts.getNormalizedAbsolutePath(path, cwd), configPath) === ts.Comparison.EqualTo ? configContents : undefined,
+                    readFile: path =>
+                        ts.comparePaths(ts.getNormalizedAbsolutePath(path, cwd), configPath) === ts.Comparison.EqualTo ? configContents : undefined,
                 };
                 let commandLine = ts.parseCommandLine(commandLinesArgs);
                 if (commandLine.options.project) {
@@ -55,7 +56,14 @@ describe("unittests:: config:: showConfig", () => {
 
     showTSConfigCorrectly("Show TSConfig with incorrect compiler option value", ["--showConfig", "--lib", "nonExistLib,es5,es2015.promise"]);
 
-    showTSConfigCorrectly("Show TSConfig with advanced options", ["--showConfig", "--declaration", "--declarationDir", "lib", "--skipLibCheck", "--noErrorTruncation"]);
+    showTSConfigCorrectly("Show TSConfig with advanced options", [
+        "--showConfig",
+        "--declaration",
+        "--declarationDir",
+        "lib",
+        "--skipLibCheck",
+        "--noErrorTruncation",
+    ]);
 
     showTSConfigCorrectly("Show TSConfig with compileOnSave and more", ["-p", "tsconfig.json"], {
         compilerOptions: {

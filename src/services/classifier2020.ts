@@ -82,7 +82,12 @@ export const enum TokenModifier {
  *
  * @internal
  */
-export function getSemanticClassifications(program: Program, cancellationToken: CancellationToken, sourceFile: SourceFile, span: TextSpan): ClassifiedSpan2020[] {
+export function getSemanticClassifications(
+    program: Program,
+    cancellationToken: CancellationToken,
+    sourceFile: SourceFile,
+    span: TextSpan,
+): ClassifiedSpan2020[] {
     const classifications = getEncodedSemanticClassifications(program, cancellationToken, sourceFile, span);
 
     Debug.assert(classifications.spans.length % 3 === 0);
@@ -99,7 +104,12 @@ export function getSemanticClassifications(program: Program, cancellationToken: 
 }
 
 /** @internal */
-export function getEncodedSemanticClassifications(program: Program, cancellationToken: CancellationToken, sourceFile: SourceFile, span: TextSpan): Classifications {
+export function getEncodedSemanticClassifications(
+    program: Program,
+    cancellationToken: CancellationToken,
+    sourceFile: SourceFile,
+    span: TextSpan,
+): Classifications {
     return {
         spans: getSemanticTokens(program, sourceFile, span, cancellationToken),
         endOfLineState: EndOfLineState.None,

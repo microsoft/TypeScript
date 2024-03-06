@@ -145,7 +145,10 @@ registerCodeFix({
             }
             return [
                 createDeleteFix(
-                    textChanges.ChangeTracker.with(context, t => deleteDestructuring(context, t, sourceFile, token.parent as ObjectBindingPattern | ArrayBindingPattern)),
+                    textChanges.ChangeTracker.with(
+                        context,
+                        t => deleteDestructuring(context, t, sourceFile, token.parent as ObjectBindingPattern | ArrayBindingPattern),
+                    ),
                     Diagnostics.Remove_unused_destructuring_declaration,
                 ),
             ];
@@ -165,7 +168,13 @@ registerCodeFix({
             const changes = textChanges.ChangeTracker.with(context, t => changeInferToUnknown(t, sourceFile, token));
             const name = cast(token.parent, isInferTypeNode).typeParameter.name.text;
             result.push(
-                createCodeFixAction(fixName, changes, [Diagnostics.Replace_infer_0_with_unknown, name], fixIdInfer, Diagnostics.Replace_all_unused_infer_with_unknown),
+                createCodeFixAction(
+                    fixName,
+                    changes,
+                    [Diagnostics.Replace_infer_0_with_unknown, name],
+                    fixIdInfer,
+                    Diagnostics.Replace_all_unused_infer_with_unknown,
+                ),
             );
         }
         else {
@@ -513,5 +522,6 @@ function isLastParameter(func: FunctionLikeDeclaration, parameter: ParameterDecl
 
 function mayDeleteExpression(node: Node) {
     return ((isBinaryExpression(node.parent) && node.parent.left === node) ||
-        ((isPostfixUnaryExpression(node.parent) || isPrefixUnaryExpression(node.parent)) && node.parent.operand === node)) && isExpressionStatement(node.parent.parent);
+        ((isPostfixUnaryExpression(node.parent) || isPrefixUnaryExpression(node.parent)) && node.parent.operand === node)) &&
+        isExpressionStatement(node.parent.parent);
 }

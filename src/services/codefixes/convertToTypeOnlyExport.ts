@@ -34,7 +34,15 @@ registerCodeFix({
             t => fixSingleExportDeclaration(t, getExportSpecifierForDiagnosticSpan(context.span, context.sourceFile), context),
         );
         if (changes.length) {
-            return [createCodeFixAction(fixId, changes, Diagnostics.Convert_to_type_only_export, fixId, Diagnostics.Convert_all_re_exported_types_to_type_only_exports)];
+            return [
+                createCodeFixAction(
+                    fixId,
+                    changes,
+                    Diagnostics.Convert_to_type_only_export,
+                    fixId,
+                    Diagnostics.Convert_all_re_exported_types_to_type_only_exports,
+                ),
+            ];
         }
     },
     fixIds: [fixId],

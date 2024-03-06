@@ -152,7 +152,13 @@ export interface EmitHelperFactory {
     createExportStarHelper(moduleExpression: Expression, exportsExpression?: Expression): Expression;
     // Class Fields Helpers
     createClassPrivateFieldGetHelper(receiver: Expression, state: Identifier, kind: PrivateIdentifierKind, f: Identifier | undefined): Expression;
-    createClassPrivateFieldSetHelper(receiver: Expression, state: Identifier, value: Expression, kind: PrivateIdentifierKind, f: Identifier | undefined): Expression;
+    createClassPrivateFieldSetHelper(
+        receiver: Expression,
+        state: Identifier,
+        value: Expression,
+        kind: PrivateIdentifierKind,
+        f: Identifier | undefined,
+    ): Expression;
     createClassPrivateFieldInHelper(state: Identifier, receiver: Expression): Expression;
     // 'using' helpers
     createAddDisposableResourceHelper(envBinding: Expression, value: Expression, async: boolean): Expression;
@@ -695,7 +701,13 @@ export function createEmitHelperFactory(context: TransformationContext): EmitHel
         return factory.createCallExpression(getUnscopedHelperName("__classPrivateFieldGet"), /*typeArguments*/ undefined, args);
     }
 
-    function createClassPrivateFieldSetHelper(receiver: Expression, state: Identifier, value: Expression, kind: PrivateIdentifierKind, f: Identifier | undefined) {
+    function createClassPrivateFieldSetHelper(
+        receiver: Expression,
+        state: Identifier,
+        value: Expression,
+        kind: PrivateIdentifierKind,
+        f: Identifier | undefined,
+    ) {
         context.requestEmitHelper(classPrivateFieldSetHelper);
         let args;
         if (!f) {

@@ -383,18 +383,24 @@ describe("unittests:: TransformAPI", () => {
             };
             function visitNode(sf: ts.SourceFile) {
                 // produce `class Foo { @Bar baz() {} }`;
-                const classDecl = ts.factory.createClassDeclaration(/*modifiers*/ undefined, "Foo", /*typeParameters*/ undefined, /*heritageClauses*/ undefined, [
-                    ts.factory.createMethodDeclaration(
-                        [ts.factory.createDecorator(ts.factory.createIdentifier("Bar"))],
-                        /*asteriskToken*/ undefined,
-                        "baz",
-                        /*questionToken*/ undefined,
-                        /*typeParameters*/ undefined,
-                        [],
-                        /*type*/ undefined,
-                        ts.factory.createBlock([]),
-                    ),
-                ]);
+                const classDecl = ts.factory.createClassDeclaration(
+                    /*modifiers*/ undefined,
+                    "Foo",
+                    /*typeParameters*/ undefined,
+                    /*heritageClauses*/ undefined,
+                    [
+                        ts.factory.createMethodDeclaration(
+                            [ts.factory.createDecorator(ts.factory.createIdentifier("Bar"))],
+                            /*asteriskToken*/ undefined,
+                            "baz",
+                            /*questionToken*/ undefined,
+                            /*typeParameters*/ undefined,
+                            [],
+                            /*type*/ undefined,
+                            ts.factory.createBlock([]),
+                        ),
+                    ],
+                );
                 return ts.factory.updateSourceFile(sf, [classDecl]);
             }
         }
@@ -468,7 +474,13 @@ describe("unittests:: TransformAPI", () => {
             function rootTransform<T extends ts.Node>(node: T): ts.VisitResult<T> {
                 if (nodeFilter(node)) {
                     ts.setEmitFlags(node, ts.EmitFlags.NoLeadingComments);
-                    ts.setSyntheticLeadingComments(node, [{ kind: ts.SyntaxKind.MultiLineCommentTrivia, text: "comment", pos: -1, end: -1, hasTrailingNewLine: true }]);
+                    ts.setSyntheticLeadingComments(node, [{
+                        kind: ts.SyntaxKind.MultiLineCommentTrivia,
+                        text: "comment",
+                        pos: -1,
+                        end: -1,
+                        hasTrailingNewLine: true,
+                    }]);
                 }
                 return ts.visitEachChild(node, rootTransform, context);
             }
@@ -526,7 +538,9 @@ export {Value};
 `,
             {
                 transformers: {
-                    before: [addSyntheticComment(n => ts.isImportDeclaration(n) || ts.isExportDeclaration(n) || ts.isImportSpecifier(n) || ts.isExportSpecifier(n))],
+                    before: [
+                        addSyntheticComment(n => ts.isImportDeclaration(n) || ts.isExportDeclaration(n) || ts.isImportSpecifier(n) || ts.isExportSpecifier(n)),
+                    ],
                 },
                 compilerOptions: {
                     target: ts.ScriptTarget.ES5,
@@ -554,7 +568,8 @@ class Clazz {
                 transformers: {
                     before: [
                         addSyntheticComment(n =>
-                            ts.isPropertyDeclaration(n) || ts.isParameterPropertyDeclaration(n, n.parent) || ts.isClassDeclaration(n) || ts.isConstructorDeclaration(n)
+                            ts.isPropertyDeclaration(n) || ts.isParameterPropertyDeclaration(n, n.parent) || ts.isClassDeclaration(n) ||
+                            ts.isConstructorDeclaration(n)
                         ),
                     ],
                 },
@@ -631,7 +646,9 @@ module MyModule {
     // https://github.com/Microsoft/TypeScript/issues/24709
     testBaseline("issue24709", () => {
         const fs = vfs.createFromFileSystem(Harness.IO, /*ignoreCase*/ true);
-        const transformed = ts.transform(ts.createSourceFile("source.ts", "class X { echo(x: string) { return x; } }", ts.ScriptTarget.ES5), [transformSourceFile]);
+        const transformed = ts.transform(ts.createSourceFile("source.ts", "class X { echo(x: string) { return x; } }", ts.ScriptTarget.ES5), [
+            transformSourceFile,
+        ]);
         const transformedSourceFile = transformed.transformed[0];
         transformed.dispose();
         const host = new fakes.CompilerHost(fs);

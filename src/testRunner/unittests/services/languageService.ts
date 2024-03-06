@@ -188,14 +188,18 @@ export function Component(x: Config): any;`,
                 content: `class class2 {}`,
             };
             const system = createServerHost([config1, class1, class1Dts, config2, class2, libFile]);
-            const result = ts.getParsedCommandLineOfConfigFile(`/user/username/projects/myproject/projects/project2/tsconfig.json`, /*optionsToExtend*/ undefined, {
-                useCaseSensitiveFileNames: true,
-                fileExists: path => system.fileExists(path),
-                readFile: path => system.readFile(path),
-                getCurrentDirectory: () => system.getCurrentDirectory(),
-                readDirectory: (path, extensions, excludes, includes, depth) => system.readDirectory(path, extensions, excludes, includes, depth),
-                onUnRecoverableConfigFileDiagnostic: ts.noop,
-            })!;
+            const result = ts.getParsedCommandLineOfConfigFile(
+                `/user/username/projects/myproject/projects/project2/tsconfig.json`,
+                /*optionsToExtend*/ undefined,
+                {
+                    useCaseSensitiveFileNames: true,
+                    fileExists: path => system.fileExists(path),
+                    readFile: path => system.readFile(path),
+                    getCurrentDirectory: () => system.getCurrentDirectory(),
+                    readDirectory: (path, extensions, excludes, includes, depth) => system.readDirectory(path, extensions, excludes, includes, depth),
+                    onUnRecoverableConfigFileDiagnostic: ts.noop,
+                },
+            )!;
             const host: ts.LanguageServiceHost = {
                 useCaseSensitiveFileNames: ts.returnTrue,
                 useSourceOfProjectReferenceRedirect,

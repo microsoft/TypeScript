@@ -99,7 +99,12 @@ export enum PollingInterval {
 }
 
 /** @internal */
-export type HostWatchFile = (fileName: string, callback: FileWatcherCallback, pollingInterval: PollingInterval, options: WatchOptions | undefined) => FileWatcher;
+export type HostWatchFile = (
+    fileName: string,
+    callback: FileWatcherCallback,
+    pollingInterval: PollingInterval,
+    options: WatchOptions | undefined,
+) => FileWatcher;
 /** @internal */
 export type HostWatchDirectory = (fileName: string, callback: DirectoryWatcherCallback, recursive: boolean, options: WatchOptions | undefined) => FileWatcher;
 
@@ -790,7 +795,8 @@ function createDirectoryWatcherSupportingRecursive({
                 const childFullName = getNormalizedAbsolutePath(child, parentDir);
                 // Filter our the symbolic link directories since those arent included in recursive watch
                 // which is same behaviour when recursive: true is passed to fs.watch
-                return !isIgnoredPath(childFullName, options) && filePathComparer(childFullName, normalizePath(realpath(childFullName))) === Comparison.EqualTo ?
+                return !isIgnoredPath(childFullName, options) &&
+                        filePathComparer(childFullName, normalizePath(realpath(childFullName))) === Comparison.EqualTo ?
                     childFullName
                     : undefined;
             }) : emptyArray,
@@ -1077,7 +1083,12 @@ export function createSystemWatchFunctions({
         return hostRecursiveDirectoryWatcher(directoryName, callback, recursive, options);
     }
 
-    function nonRecursiveWatchDirectory(directoryName: string, callback: DirectoryWatcherCallback, recursive: boolean, options: WatchOptions | undefined): FileWatcher {
+    function nonRecursiveWatchDirectory(
+        directoryName: string,
+        callback: DirectoryWatcherCallback,
+        recursive: boolean,
+        options: WatchOptions | undefined,
+    ): FileWatcher {
         Debug.assert(!recursive);
         const watchDirectoryOptions = updateOptionsForWatchDirectory(options);
         const watchDirectoryKind = Debug.checkDefined(watchDirectoryOptions.watchDirectory);
@@ -1195,7 +1206,9 @@ export function createSystemWatchFunctions({
             // If watcher is not closed, update it
             if (watcher) {
                 sysLog(
-                    `sysLog:: ${fileOrDirectory}:: Changing watcher to ${createWatcher === watchPresentFileSystemEntry ? "Present" : "Missing"}FileSystemEntryWatcher`,
+                    `sysLog:: ${fileOrDirectory}:: Changing watcher to ${
+                        createWatcher === watchPresentFileSystemEntry ? "Present" : "Missing"
+                    }FileSystemEntryWatcher`,
                 );
                 watcher.close();
                 watcher = createWatcher();
@@ -1948,7 +1961,13 @@ export let sys: System = (() => {
             }
         }
 
-        function readDirectory(path: string, extensions?: readonly string[], excludes?: readonly string[], includes?: readonly string[], depth?: number): string[] {
+        function readDirectory(
+            path: string,
+            extensions?: readonly string[],
+            excludes?: readonly string[],
+            includes?: readonly string[],
+            depth?: number,
+        ): string[] {
             return matchFiles(path, extensions, excludes, includes, useCaseSensitiveFileNames, process.cwd(), depth, getAccessibleFileSystemEntries, realpath);
         }
 

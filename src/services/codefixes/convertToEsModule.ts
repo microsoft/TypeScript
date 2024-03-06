@@ -153,7 +153,17 @@ function convertFileToEsModule(
     }
     // `convertStatement` will delete entries from `useSitesToUnqualify` when containing statements are replaced
     for (const statement of filter(sourceFile.statements, s => !isVariableStatement(s))) {
-        const moduleExportsChanged = convertStatement(sourceFile, statement, checker, changes, identifiers, target, exports, useSitesToUnqualify, quotePreference);
+        const moduleExportsChanged = convertStatement(
+            sourceFile,
+            statement,
+            checker,
+            changes,
+            identifiers,
+            target,
+            exports,
+            useSitesToUnqualify,
+            quotePreference,
+        );
         moduleExportsChangedToDefault = moduleExportsChangedToDefault || moduleExportsChanged;
     }
     // Remaining use sites can be changed directly
@@ -204,7 +214,10 @@ function forEachExportReference(sourceFile: SourceFile, cb: (node: PropertyAcces
     sourceFile.forEachChild(function recur(node) {
         if (isPropertyAccessExpression(node) && isExportsOrModuleExportsOrAlias(sourceFile, node.expression) && isIdentifier(node.name)) {
             const { parent } = node;
-            cb(node as typeof node & { name: Identifier; }, isBinaryExpression(parent) && parent.left === node && parent.operatorToken.kind === SyntaxKind.EqualsToken);
+            cb(
+                node as typeof node & { name: Identifier; },
+                isBinaryExpression(parent) && parent.left === node && parent.operatorToken.kind === SyntaxKind.EqualsToken,
+            );
         }
         node.forEachChild(recur);
     });
@@ -284,7 +297,9 @@ function convertVariableStatement(
             }
         }
         // Move it out to its own variable statement. (This will not be used if `!foundImport`)
-        return convertedImports([factory.createVariableStatement(/*modifiers*/ undefined, factory.createVariableDeclarationList([decl], declarationList.flags))]);
+        return convertedImports([
+            factory.createVariableStatement(/*modifiers*/ undefined, factory.createVariableDeclarationList([decl], declarationList.flags)),
+        ]);
     });
     if (foundImport) {
         // useNonAdjustedEndPosition to ensure we don't eat the newline after the statement.

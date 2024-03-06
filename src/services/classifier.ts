@@ -293,7 +293,8 @@ function getNewEndOfLineState(scanner: Scanner, token: SyntaxKind, lastOnTemplat
 
             // If we have an odd number of backslashes, then the multiline string is unclosed
             if ((numBackslashes & 1) === 0) return undefined;
-            return tokenText.charCodeAt(0) === CharacterCodes.doubleQuote ? EndOfLineState.InDoubleQuoteStringLiteral : EndOfLineState.InSingleQuoteStringLiteral;
+            return tokenText.charCodeAt(0) === CharacterCodes.doubleQuote ? EndOfLineState.InDoubleQuoteStringLiteral
+                : EndOfLineState.InSingleQuoteStringLiteral;
         }
         case SyntaxKind.MultiLineCommentTrivia:
             // Check to see if the multiline comment was unclosed.
@@ -636,14 +637,16 @@ function classifySymbol(symbol: Symbol, meaningAtPosition: SemanticMeaning, chec
         // Only classify a module as such if
         //  - It appears in a namespace context.
         //  - There exists a module declaration which actually impacts the value side.
-        return meaningAtPosition & SemanticMeaning.Namespace || meaningAtPosition & SemanticMeaning.Value && hasValueSideModule(symbol) ? ClassificationType.moduleName
+        return meaningAtPosition & SemanticMeaning.Namespace || meaningAtPosition & SemanticMeaning.Value && hasValueSideModule(symbol) ?
+            ClassificationType.moduleName
             : undefined;
     }
     else if (flags & SymbolFlags.Alias) {
         return classifySymbol(checker.getAliasedSymbol(symbol), meaningAtPosition, checker);
     }
     else if (meaningAtPosition & SemanticMeaning.Type) {
-        return flags & SymbolFlags.Interface ? ClassificationType.interfaceName : flags & SymbolFlags.TypeParameter ? ClassificationType.typeParameterName : undefined;
+        return flags & SymbolFlags.Interface ? ClassificationType.interfaceName
+            : flags & SymbolFlags.TypeParameter ? ClassificationType.typeParameterName : undefined;
     }
     else {
         return undefined;
@@ -652,7 +655,10 @@ function classifySymbol(symbol: Symbol, meaningAtPosition: SemanticMeaning, chec
 
 /** Returns true if there exists a module that introduces entities on the value side. */
 function hasValueSideModule(symbol: Symbol): boolean {
-    return some(symbol.declarations, declaration => isModuleDeclaration(declaration) && getModuleInstanceState(declaration) === ModuleInstanceState.Instantiated);
+    return some(
+        symbol.declarations,
+        declaration => isModuleDeclaration(declaration) && getModuleInstanceState(declaration) === ModuleInstanceState.Instantiated,
+    );
 }
 
 function getClassificationTypeName(type: ClassificationType): ClassificationTypeNames {
@@ -871,7 +877,8 @@ export function getEncodedSyntacticClassifications(cancellationToken: Cancellati
                         break;
                     case SyntaxKind.JSDocTypedefTag:
                         const type = tag as JSDocTypedefTag;
-                        commentStart = type.typeExpression?.kind === SyntaxKind.JSDocTypeExpression && type.fullName?.end || type.typeExpression?.end || commentStart;
+                        commentStart = type.typeExpression?.kind === SyntaxKind.JSDocTypeExpression && type.fullName?.end || type.typeExpression?.end ||
+                            commentStart;
                         break;
                     case SyntaxKind.JSDocCallbackTag:
                         commentStart = (tag as JSDocCallbackTag).typeExpression.end;
@@ -1167,7 +1174,8 @@ export function getEncodedSyntacticClassifications(cancellationToken: Cancellati
             return ClassificationType.bigintLiteral;
         }
         else if (tokenKind === SyntaxKind.StringLiteral) {
-            return token && token.parent.kind === SyntaxKind.JsxAttribute ? ClassificationType.jsxAttributeStringLiteralValue : ClassificationType.stringLiteral;
+            return token && token.parent.kind === SyntaxKind.JsxAttribute ? ClassificationType.jsxAttributeStringLiteralValue
+                : ClassificationType.stringLiteral;
         }
         else if (tokenKind === SyntaxKind.RegularExpressionLiteral) {
             // TODO: we should get another classification type for these literals.

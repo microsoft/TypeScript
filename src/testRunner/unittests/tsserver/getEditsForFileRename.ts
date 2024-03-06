@@ -30,7 +30,11 @@ describe("unittests:: tsserver:: getEditsForFileRename", () => {
 
         const host = createServerHost([userTs, newTs, tsconfig]);
         const options: ts.CompilerOptions = {};
-        const moduleResolutionCache = ts.createModuleResolutionCache(host.getCurrentDirectory(), ts.createGetCanonicalFileName(host.useCaseSensitiveFileNames), options);
+        const moduleResolutionCache = ts.createModuleResolutionCache(
+            host.getCurrentDirectory(),
+            ts.createGetCanonicalFileName(host.useCaseSensitiveFileNames),
+            options,
+        );
         const lsHost: ts.LanguageServiceHost = {
             getCompilationSettings: () => options,
             getScriptFileNames: () => [newTs.path, userTs.path],

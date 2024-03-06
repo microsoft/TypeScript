@@ -316,7 +316,10 @@ function testConvertToAsyncFunction(it: Mocha.PendingTestFunction, caption: stri
     const expectAction = !!(flags & ConvertToAsyncTestFlags.ExpectAction);
     const expectNoAction = !!(flags & ConvertToAsyncTestFlags.ExpectNoAction);
     const expectFailure = expectNoSuggestionDiagnostic || expectNoAction;
-    ts.Debug.assert(!(expectSuggestionDiagnostic && expectNoSuggestionDiagnostic), "Cannot combine both 'ExpectSuggestionDiagnostic' and 'ExpectNoSuggestionDiagnostic'");
+    ts.Debug.assert(
+        !(expectSuggestionDiagnostic && expectNoSuggestionDiagnostic),
+        "Cannot combine both 'ExpectSuggestionDiagnostic' and 'ExpectNoSuggestionDiagnostic'",
+    );
     ts.Debug.assert(!(expectAction && expectNoAction), "Cannot combine both 'ExpectAction' and 'ExpectNoAction'");
 
     const t = extractTest(text);

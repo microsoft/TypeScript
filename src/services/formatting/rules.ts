@@ -145,7 +145,13 @@ export function getAllRules(): RuleSpec[] {
         ),
 
         // in other cases there should be no space between '?' and next token
-        rule("NoSpaceAfterQuestionMark", SyntaxKind.QuestionToken, anyToken, [isNonJsxSameLineTokenContext, isNonOptionalPropertyContext], RuleAction.DeleteSpace),
+        rule(
+            "NoSpaceAfterQuestionMark",
+            SyntaxKind.QuestionToken,
+            anyToken,
+            [isNonJsxSameLineTokenContext, isNonOptionalPropertyContext],
+            RuleAction.DeleteSpace,
+        ),
 
         rule(
             "NoSpaceBeforeDot",
@@ -174,8 +180,20 @@ export function getAllRules(): RuleSpec[] {
             [isNonJsxSameLineTokenContext, isNotBinaryOpContext],
             RuleAction.DeleteSpace,
         ),
-        rule("NoSpaceAfterUnaryPreincrementOperator", SyntaxKind.PlusPlusToken, unaryPreincrementExpressions, [isNonJsxSameLineTokenContext], RuleAction.DeleteSpace),
-        rule("NoSpaceAfterUnaryPredecrementOperator", SyntaxKind.MinusMinusToken, unaryPredecrementExpressions, [isNonJsxSameLineTokenContext], RuleAction.DeleteSpace),
+        rule(
+            "NoSpaceAfterUnaryPreincrementOperator",
+            SyntaxKind.PlusPlusToken,
+            unaryPreincrementExpressions,
+            [isNonJsxSameLineTokenContext],
+            RuleAction.DeleteSpace,
+        ),
+        rule(
+            "NoSpaceAfterUnaryPredecrementOperator",
+            SyntaxKind.MinusMinusToken,
+            unaryPredecrementExpressions,
+            [isNonJsxSameLineTokenContext],
+            RuleAction.DeleteSpace,
+        ),
         rule(
             "NoSpaceBeforeUnaryPostincrementOperator",
             unaryPostincrementExpressions,
@@ -301,7 +319,13 @@ export function getAllRules(): RuleSpec[] {
         // Though, we do extra check on the context to make sure we are dealing with get/set node. Example:
         //      get x() {}
         //      set x(val) {}
-        rule("SpaceAfterGetSetInMember", [SyntaxKind.GetKeyword, SyntaxKind.SetKeyword], SyntaxKind.Identifier, [isFunctionDeclContext], RuleAction.InsertSpace),
+        rule(
+            "SpaceAfterGetSetInMember",
+            [SyntaxKind.GetKeyword, SyntaxKind.SetKeyword],
+            SyntaxKind.Identifier,
+            [isFunctionDeclContext],
+            RuleAction.InsertSpace,
+        ),
 
         rule(
             "NoSpaceBetweenYieldKeywordAndStar",
@@ -396,8 +420,20 @@ export function getAllRules(): RuleSpec[] {
             [isJsxSelfClosingElementContext, isNonJsxSameLineTokenContext],
             RuleAction.DeleteSpace,
         ),
-        rule("NoSpaceBeforeEqualInJsxAttribute", anyToken, SyntaxKind.EqualsToken, [isJsxAttributeContext, isNonJsxSameLineTokenContext], RuleAction.DeleteSpace),
-        rule("NoSpaceAfterEqualInJsxAttribute", SyntaxKind.EqualsToken, anyToken, [isJsxAttributeContext, isNonJsxSameLineTokenContext], RuleAction.DeleteSpace),
+        rule(
+            "NoSpaceBeforeEqualInJsxAttribute",
+            anyToken,
+            SyntaxKind.EqualsToken,
+            [isJsxAttributeContext, isNonJsxSameLineTokenContext],
+            RuleAction.DeleteSpace,
+        ),
+        rule(
+            "NoSpaceAfterEqualInJsxAttribute",
+            SyntaxKind.EqualsToken,
+            anyToken,
+            [isJsxAttributeContext, isNonJsxSameLineTokenContext],
+            RuleAction.DeleteSpace,
+        ),
         rule("NoSpaceBeforeJsxNamespaceColon", SyntaxKind.Identifier, SyntaxKind.ColonToken, [isNextTokenParentJsxNamespacedName], RuleAction.DeleteSpace),
         rule("NoSpaceAfterJsxNamespaceColon", SyntaxKind.ColonToken, SyntaxKind.Identifier, [isNextTokenParentJsxNamespacedName], RuleAction.DeleteSpace),
 
@@ -557,7 +593,13 @@ export function getAllRules(): RuleSpec[] {
             [isNonJsxSameLineTokenContext, isConstructorSignatureContext],
             RuleAction.DeleteSpace,
         ),
-        rule("SpaceLessThanAndNonJSXTypeAnnotation", SyntaxKind.LessThanToken, SyntaxKind.LessThanToken, [isNonJsxSameLineTokenContext], RuleAction.InsertSpace),
+        rule(
+            "SpaceLessThanAndNonJSXTypeAnnotation",
+            SyntaxKind.LessThanToken,
+            SyntaxKind.LessThanToken,
+            [isNonJsxSameLineTokenContext],
+            RuleAction.InsertSpace,
+        ),
     ];
 
     // These rules are applied after high priority

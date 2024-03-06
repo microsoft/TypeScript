@@ -74,16 +74,32 @@ registerCodeFix({
     getCodeActions(context: CodeFixContext) {
         const changes = textChanges.ChangeTracker.with(
             context,
-            t => doChange(t, context.sourceFile, context.span.start, context.program.getTypeChecker(), context.preferences, context.program.getCompilerOptions()),
+            t => doChange(
+                t,
+                context.sourceFile,
+                context.span.start,
+                context.program.getTypeChecker(),
+                context.preferences,
+                context.program.getCompilerOptions(),
+            ),
         );
-        return [createCodeFixAction(fixId, changes, Diagnostics.Convert_function_to_an_ES2015_class, fixId, Diagnostics.Convert_all_constructor_functions_to_classes)];
+        return [
+            createCodeFixAction(
+                fixId,
+                changes,
+                Diagnostics.Convert_function_to_an_ES2015_class,
+                fixId,
+                Diagnostics.Convert_all_constructor_functions_to_classes,
+            ),
+        ];
     },
     fixIds: [fixId],
     getAllCodeActions: context =>
         codeFixAll(
             context,
             errorCodes,
-            (changes, err) => doChange(changes, err.file, err.start, context.program.getTypeChecker(), context.preferences, context.program.getCompilerOptions()),
+            (changes, err) =>
+                doChange(changes, err.file, err.start, context.program.getTypeChecker(), context.preferences, context.program.getCompilerOptions()),
         ),
 });
 
@@ -224,7 +240,13 @@ function doChange(
 
             if (!assignmentExpr) {
                 members.push(
-                    factory.createPropertyDeclaration(modifiers, symbol.name, /*questionOrExclamationToken*/ undefined, /*type*/ undefined, /*initializer*/ undefined),
+                    factory.createPropertyDeclaration(
+                        modifiers,
+                        symbol.name,
+                        /*questionOrExclamationToken*/ undefined,
+                        /*type*/ undefined,
+                        /*initializer*/ undefined,
+                    ),
                 );
                 return;
             }

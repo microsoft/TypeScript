@@ -448,7 +448,10 @@ export function createParenthesizerRules(factory: NodeFactory): ParenthesizerRul
     function parenthesizeConciseBodyOfArrowFunction(body: Expression): Expression;
     function parenthesizeConciseBodyOfArrowFunction(body: ConciseBody): ConciseBody;
     function parenthesizeConciseBodyOfArrowFunction(body: ConciseBody): ConciseBody {
-        if (!isBlock(body) && (isCommaSequence(body) || getLeftmostExpression(body, /*stopAtCallExpressions*/ false).kind === SyntaxKind.ObjectLiteralExpression)) {
+        if (
+            !isBlock(body) &&
+            (isCommaSequence(body) || getLeftmostExpression(body, /*stopAtCallExpressions*/ false).kind === SyntaxKind.ObjectLiteralExpression)
+        ) {
             // TODO(rbuckton): Verifiy whether `setTextRange` is needed.
             return setTextRange(factory.createParenthesizedExpression(body), body);
         }

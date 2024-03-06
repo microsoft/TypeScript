@@ -447,7 +447,8 @@ export function forEachEmittedFile<T>(
     onlyBuildInfo?: boolean,
     includeBuildInfo?: boolean,
 ) {
-    const sourceFiles = isArray(sourceFilesOrTargetSourceFile) ? sourceFilesOrTargetSourceFile : getSourceFilesToEmit(host, sourceFilesOrTargetSourceFile, forceDtsEmit);
+    const sourceFiles = isArray(sourceFilesOrTargetSourceFile) ? sourceFilesOrTargetSourceFile
+        : getSourceFilesToEmit(host, sourceFilesOrTargetSourceFile, forceDtsEmit);
     const options = host.getCompilerOptions();
     if (options.outFile) {
         if (sourceFiles.length) {
@@ -520,7 +521,8 @@ export function getOutputPathsFor(sourceFile: SourceFile | Bundle, host: EmitHos
             comparePaths(sourceFile.fileName, ownOutputFilePath, host.getCurrentDirectory(), !host.useCaseSensitiveFileNames()) === Comparison.EqualTo;
         const jsFilePath = options.emitDeclarationOnly || isJsonEmittedToSameLocation ? undefined : ownOutputFilePath;
         const sourceMapFilePath = !jsFilePath || isJsonSourceFile(sourceFile) ? undefined : getSourceMapFilePath(jsFilePath, options);
-        const declarationFilePath = (forceDtsPaths || (getEmitDeclarations(options) && !isJsonFile)) ? getDeclarationEmitOutputFilePath(sourceFile.fileName, host)
+        const declarationFilePath = (forceDtsPaths || (getEmitDeclarations(options) && !isJsonFile)) ?
+            getDeclarationEmitOutputFilePath(sourceFile.fileName, host)
             : undefined;
         const declarationMapPath = declarationFilePath && getAreDeclarationMapsEnabled(options) ? declarationFilePath + ".map" : undefined;
         return { jsFilePath, sourceMapFilePath, declarationFilePath, declarationMapPath, buildInfoPath: undefined };
@@ -565,7 +567,12 @@ export function getOutputDeclarationFileName(
 }
 
 /** @internal */
-export function getOutputDeclarationFileNameWorker(inputFileName: string, options: CompilerOptions, ignoreCase: boolean, getCommonSourceDirectory: () => string) {
+export function getOutputDeclarationFileNameWorker(
+    inputFileName: string,
+    options: CompilerOptions,
+    ignoreCase: boolean,
+    getCommonSourceDirectory: () => string,
+) {
     return changeExtension(
         getOutputPathWithoutChangingExt(inputFileName, ignoreCase, options.declarationDir || options.outDir, getCommonSourceDirectory),
         getDeclarationEmitExtensionForPath(inputFileName),
@@ -581,13 +588,19 @@ function getOutputJSFileName(
     if (configFile.options.emitDeclarationOnly) return undefined;
     const isJsonFile = fileExtensionIs(inputFileName, Extension.Json);
     const outputFileName = getOutputJSFileNameWorker(inputFileName, configFile.options, ignoreCase, getCommonSourceDirectory);
-    return !isJsonFile || comparePaths(inputFileName, outputFileName, Debug.checkDefined(configFile.options.configFilePath), ignoreCase) !== Comparison.EqualTo ?
+    return !isJsonFile ||
+            comparePaths(inputFileName, outputFileName, Debug.checkDefined(configFile.options.configFilePath), ignoreCase) !== Comparison.EqualTo ?
         outputFileName :
         undefined;
 }
 
 /** @internal */
-export function getOutputJSFileNameWorker(inputFileName: string, options: CompilerOptions, ignoreCase: boolean, getCommonSourceDirectory: () => string): string {
+export function getOutputJSFileNameWorker(
+    inputFileName: string,
+    options: CompilerOptions,
+    ignoreCase: boolean,
+    getCommonSourceDirectory: () => string,
+): string {
     return changeExtension(
         getOutputPathWithoutChangingExt(inputFileName, ignoreCase, options.outDir, getCommonSourceDirectory),
         getOutputExtension(inputFileName, options),
@@ -883,7 +896,15 @@ export function emitFiles(
             // Do that here when emitting only dts files
             filesForEmit.forEach(collectLinkedAliases);
         }
-        const declarationTransform = transformNodes(resolver, host, factory, compilerOptions, inputListOrBundle, declarationTransformers, /*allowDtsFiles*/ false);
+        const declarationTransform = transformNodes(
+            resolver,
+            host,
+            factory,
+            compilerOptions,
+            inputListOrBundle,
+            declarationTransformers,
+            /*allowDtsFiles*/ false,
+        );
         if (length(declarationTransform.diagnostics)) {
             for (const diagnostic of declarationTransform.diagnostics!) {
                 emitterDiagnostics.add(diagnostic);
@@ -1186,7 +1207,9 @@ export const createPrinterWithRemoveComments = /* @__PURE__ */ memoize(() => cre
 export const createPrinterWithRemoveCommentsNeverAsciiEscape = /* @__PURE__ */ memoize(() => createPrinter({ removeComments: true, neverAsciiEscape: true }));
 
 /** @internal */
-export const createPrinterWithRemoveCommentsOmitTrailingSemicolon = /* @__PURE__ */ memoize(() => createPrinter({ removeComments: true, omitTrailingSemicolon: true }));
+export const createPrinterWithRemoveCommentsOmitTrailingSemicolon = /* @__PURE__ */ memoize(() =>
+    createPrinter({ removeComments: true, omitTrailingSemicolon: true })
+);
 
 export function createPrinter(printerOptions: PrinterOptions = {}, handlers: PrintHandlers = {}): Printer {
     // Why var? It avoids TDZ checks in the runtime which can be costly.
@@ -2213,7 +2236,8 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
         // The comment position has to fallback to any present node within the parameterdeclaration because as it turns out, the parser can make parameter declarations with _just_ an initializer.
         emitInitializer(
             node.initializer,
-            node.type ? node.type.end : node.questionToken ? node.questionToken.end : node.name ? node.name.end : node.modifiers ? node.modifiers.end : node.pos,
+            node.type ? node.type.end
+                : node.questionToken ? node.questionToken.end : node.name ? node.name.end : node.modifiers ? node.modifiers.end : node.pos,
             node,
             parenthesizer.parenthesizeExpressionForDisallowedComma,
         );
@@ -2824,7 +2848,8 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
         const operand = node.operand;
         return operand.kind === SyntaxKind.PrefixUnaryExpression
             && ((node.operator === SyntaxKind.PlusToken &&
-                ((operand as PrefixUnaryExpression).operator === SyntaxKind.PlusToken || (operand as PrefixUnaryExpression).operator === SyntaxKind.PlusPlusToken))
+                ((operand as PrefixUnaryExpression).operator === SyntaxKind.PlusToken ||
+                    (operand as PrefixUnaryExpression).operator === SyntaxKind.PlusPlusToken))
                 || (node.operator === SyntaxKind.MinusToken &&
                     ((operand as PrefixUnaryExpression).operator === SyntaxKind.MinusToken ||
                         (operand as PrefixUnaryExpression).operator === SyntaxKind.MinusMinusToken)));
@@ -3038,7 +3063,8 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
 
     function emitBlockStatements(node: BlockLike, forceSingleLine: boolean) {
         emitTokenWithComment(SyntaxKind.OpenBraceToken, node.pos, writePunctuation, /*contextNode*/ node);
-        const format = forceSingleLine || getEmitFlags(node) & EmitFlags.SingleLine ? ListFormat.SingleLineBlockStatements : ListFormat.MultiLineBlockStatements;
+        const format = forceSingleLine || getEmitFlags(node) & EmitFlags.SingleLine ? ListFormat.SingleLineBlockStatements
+            : ListFormat.MultiLineBlockStatements;
         emitList(node, node.statements, format);
         emitTokenWithComment(
             SyntaxKind.CloseBraceToken,
@@ -4226,14 +4252,26 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
     }
 
     function emitSyntheticTripleSlashReferencesIfNeeded(node: Bundle) {
-        emitTripleSlashDirectives(!!node.hasNoDefaultLib, node.syntheticFileReferences || [], node.syntheticTypeReferences || [], node.syntheticLibReferences || []);
+        emitTripleSlashDirectives(
+            !!node.hasNoDefaultLib,
+            node.syntheticFileReferences || [],
+            node.syntheticTypeReferences || [],
+            node.syntheticLibReferences || [],
+        );
     }
 
     function emitTripleSlashDirectivesIfNeeded(node: SourceFile) {
-        if (node.isDeclarationFile) emitTripleSlashDirectives(node.hasNoDefaultLib, node.referencedFiles, node.typeReferenceDirectives, node.libReferenceDirectives);
+        if (node.isDeclarationFile) {
+            emitTripleSlashDirectives(node.hasNoDefaultLib, node.referencedFiles, node.typeReferenceDirectives, node.libReferenceDirectives);
+        }
     }
 
-    function emitTripleSlashDirectives(hasNoDefaultLib: boolean, files: readonly FileReference[], types: readonly FileReference[], libs: readonly FileReference[]) {
+    function emitTripleSlashDirectives(
+        hasNoDefaultLib: boolean,
+        files: readonly FileReference[],
+        types: readonly FileReference[],
+        libs: readonly FileReference[],
+    ) {
         if (hasNoDefaultLib) {
             writeComment(`/// <reference no-default-lib="true"/>`);
             writeLine();
@@ -4455,7 +4493,12 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
         }
     }
 
-    function emitInitializer(node: Expression | undefined, equalCommentStartPos: number, container: Node, parenthesizerRule?: (node: Expression) => Expression) {
+    function emitInitializer(
+        node: Expression | undefined,
+        equalCommentStartPos: number,
+        container: Node,
+        parenthesizerRule?: (node: Expression) => Expression,
+    ) {
         if (node) {
             writeSpace();
             emitTokenWithComment(SyntaxKind.EqualsToken, equalCommentStartPos, writeOperator, container);
@@ -4652,7 +4695,10 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
 
         if (isEmpty) {
             // Write a line terminator if the parent node was multi-line
-            if (format & ListFormat.MultiLine && !(preserveSourceNewlines && (!parentNode || currentSourceFile && rangeIsOnSingleLine(parentNode, currentSourceFile)))) {
+            if (
+                format & ListFormat.MultiLine &&
+                !(preserveSourceNewlines && (!parentNode || currentSourceFile && rangeIsOnSingleLine(parentNode, currentSourceFile)))
+            ) {
                 writeLine();
             }
             else if (format & ListFormat.SpaceBetweenBraces && !(format & ListFormat.NoSpaceIfEmpty)) {
@@ -5239,7 +5285,9 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
     function getLiteralTextOfNode(node: LiteralLikeNode, neverAsciiEscape: boolean | undefined, jsxAttributeEscape: boolean): string {
         if (node.kind === SyntaxKind.StringLiteral && (node as StringLiteral).textSourceNode) {
             const textSourceNode = (node as StringLiteral).textSourceNode!;
-            if (isIdentifier(textSourceNode) || isPrivateIdentifier(textSourceNode) || isNumericLiteral(textSourceNode) || isJsxNamespacedName(textSourceNode)) {
+            if (
+                isIdentifier(textSourceNode) || isPrivateIdentifier(textSourceNode) || isNumericLiteral(textSourceNode) || isJsxNamespacedName(textSourceNode)
+            ) {
                 const text = isNumericLiteral(textSourceNode) ? textSourceNode.text : getTextOfNode(textSourceNode);
                 return jsxAttributeEscape ? `"${escapeJsxAttributeString(text)}"` :
                     neverAsciiEscape || (getEmitFlags(node) & EmitFlags.NoAsciiEscaping) ? `"${escapeString(text)}"` :
@@ -5638,7 +5686,15 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
     }
 
     function makeFileLevelOptimisticUniqueName(name: string) {
-        return makeUniqueName(name, isFileLevelUniqueNameInCurrentFile, /*optimistic*/ true, /*scoped*/ false, /*privateName*/ false, /*prefix*/ "", /*suffix*/ "");
+        return makeUniqueName(
+            name,
+            isFileLevelUniqueNameInCurrentFile,
+            /*optimistic*/ true,
+            /*scoped*/ false,
+            /*privateName*/ false,
+            /*prefix*/ "",
+            /*suffix*/ "",
+        );
     }
 
     /**
@@ -6063,7 +6119,10 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
             return;
         }
         enterComment();
-        forEachTrailingCommentToEmit(pos, prefixSpace ? emitTrailingComment : forceNoNewline ? emitTrailingCommentOfPositionNoNewline : emitTrailingCommentOfPosition);
+        forEachTrailingCommentToEmit(
+            pos,
+            prefixSpace ? emitTrailingComment : forceNoNewline ? emitTrailingCommentOfPositionNoNewline : emitTrailingCommentOfPosition,
+        );
         exitComment();
     }
 
@@ -6363,7 +6422,12 @@ type ParenthesizerRule<T extends Node> = (node: T) => T;
 type ParenthesizerRuleOrSelector<T extends Node> = OrdinalParentheizerRuleSelector<T> | ParenthesizerRule<T>;
 
 type EmitFunction = <T extends Node>(node: T, parenthesizerRule?: ParenthesizerRule<T>) => void;
-type EmitListItemFunction<T extends Node> = (node: Node, emit: EmitFunction, parenthesizerRule: ParenthesizerRuleOrSelector<T> | undefined, index: number) => void;
+type EmitListItemFunction<T extends Node> = (
+    node: Node,
+    emit: EmitFunction,
+    parenthesizerRule: ParenthesizerRuleOrSelector<T> | undefined,
+    index: number,
+) => void;
 
 function emitListItemNoParenthesizer(node: Node, emit: EmitFunction, _parenthesizerRule: ParenthesizerRuleOrSelector<Node> | undefined, _index: number) {
     emit(node);

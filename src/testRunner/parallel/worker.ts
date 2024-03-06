@@ -122,7 +122,9 @@ export function start() {
         context.describe = context.context = ((title: string, fn: (this: Mocha.Suite) => void) => addSuite(title, fn)) as Mocha.SuiteFunction;
         context.describe.skip = context.xdescribe = context.xcontext = (title: string) => addSuite(title, /*fn*/ undefined);
         context.describe.only = (title: string, fn?: (this: Mocha.Suite) => void) => addSuite(title, fn);
-        context.it = context.specify = ((title: string | Mocha.Func | Mocha.AsyncFunc, fn?: Mocha.Func | Mocha.AsyncFunc) => addTest(title, fn)) as Mocha.TestFunction;
+        context.it =
+            context.specify =
+                ((title: string | Mocha.Func | Mocha.AsyncFunc, fn?: Mocha.Func | Mocha.AsyncFunc) => addTest(title, fn)) as Mocha.TestFunction;
         context.it.skip = context.xit = context.xspecify = (title: string | Mocha.Func | Mocha.AsyncFunc) =>
             addTest(typeof title === "function" ? title.name : title, /*fn*/ undefined);
         context.it.only = (title: string | Mocha.Func | Mocha.AsyncFunc, fn?: Mocha.Func | Mocha.AsyncFunc) => addTest(title, fn);

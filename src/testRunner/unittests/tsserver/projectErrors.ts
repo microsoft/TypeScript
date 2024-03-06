@@ -810,7 +810,11 @@ describe("unittests:: tsserver:: projectErrors:: with npm install when", () => {
         // Additional watch for watching script infos from node_modules
         verifyWhileNpmInstall();
 
-        baselineTsserverLogs("projectErrors", `npm install when timeout occurs ${timeoutDuringPartialInstallation ? "inbetween" : "after"} installation`, session);
+        baselineTsserverLogs(
+            "projectErrors",
+            `npm install when timeout occurs ${timeoutDuringPartialInstallation ? "inbetween" : "after"} installation`,
+            session,
+        );
 
         function verifyWhileNpmInstall() {
             filesAndFoldersToAdd.forEach(f => host.ensureFileOrFolder(f));

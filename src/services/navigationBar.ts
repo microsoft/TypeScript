@@ -770,7 +770,8 @@ function areSameModule(a: ModuleDeclaration, b: ModuleDeclaration): boolean {
     if (!a.body || !b.body) {
         return a.body === b.body;
     }
-    return a.body.kind === b.body.kind && (a.body.kind !== SyntaxKind.ModuleDeclaration || areSameModule(a.body as ModuleDeclaration, b.body as ModuleDeclaration));
+    return a.body.kind === b.body.kind &&
+        (a.body.kind !== SyntaxKind.ModuleDeclaration || areSameModule(a.body as ModuleDeclaration, b.body as ModuleDeclaration));
 }
 
 /** Merge source into target. Source should be thrown away after this is called. */
@@ -1058,7 +1059,9 @@ function getFunctionOrClassName(node: FunctionExpression | FunctionDeclaration |
                 return `${name} callback`;
             }
 
-            const args = cleanText(mapDefined(parent.arguments, a => isStringLiteralLike(a) || isTemplateLiteral(a) ? a.getText(curSourceFile) : undefined).join(", "));
+            const args = cleanText(
+                mapDefined(parent.arguments, a => isStringLiteralLike(a) || isTemplateLiteral(a) ? a.getText(curSourceFile) : undefined).join(", "),
+            );
             return `${name}(${args}) callback`;
         }
     }

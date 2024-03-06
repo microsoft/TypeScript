@@ -432,7 +432,9 @@ class NodeObject implements Node {
     }
 
     public getChildren(sourceFile?: SourceFileLike): Node[] {
-        this.assertHasRealPosition("Node without a real position cannot be scanned and thus has no token nodes - use forEachChild and collect the result if that's fine");
+        this.assertHasRealPosition(
+            "Node without a real position cannot be scanned and thus has no token nodes - use forEachChild and collect the result if that's fine",
+        );
         return this._children || (this._children = createChildren(this, sourceFile));
     }
 
@@ -1361,7 +1363,11 @@ class SyntaxTreeCache {
             const options: CreateSourceFileOptions = {
                 languageVersion: ScriptTarget.Latest,
                 impliedNodeFormat: getImpliedNodeFormatForFile(
-                    toPath(fileName, this.host.getCurrentDirectory(), this.host.getCompilerHost?.()?.getCanonicalFileName || hostGetCanonicalFileName(this.host)),
+                    toPath(
+                        fileName,
+                        this.host.getCurrentDirectory(),
+                        this.host.getCompilerHost?.()?.getCanonicalFileName || hostGetCanonicalFileName(this.host),
+                    ),
                     this.host.getCompilerHost?.()?.getModuleResolutionCache?.()?.getPackageJsonInfoCache(),
                     this.host,
                     this.host.getCompilationSettings(),
@@ -2175,7 +2181,13 @@ export function createLanguageService(
         const { symbolKind, displayParts, documentation, tags } = typeChecker.runWithCancellationToken(
             cancellationToken,
             typeChecker =>
-                SymbolDisplay.getSymbolDisplayPartsDocumentationAndSymbolKind(typeChecker, symbol, sourceFile, getContainerNode(nodeForQuickInfo), nodeForQuickInfo),
+                SymbolDisplay.getSymbolDisplayPartsDocumentationAndSymbolKind(
+                    typeChecker,
+                    symbol,
+                    sourceFile,
+                    getContainerNode(nodeForQuickInfo),
+                    nodeForQuickInfo,
+                ),
         );
         return {
             kind: symbolKind,
@@ -2224,7 +2236,12 @@ export function createLanguageService(
     }
 
     /// Goto definition
-    function getDefinitionAtPosition(fileName: string, position: number, searchOtherFilesOnly?: boolean, stopAtAlias?: boolean): readonly DefinitionInfo[] | undefined {
+    function getDefinitionAtPosition(
+        fileName: string,
+        position: number,
+        searchOtherFilesOnly?: boolean,
+        stopAtAlias?: boolean,
+    ): readonly DefinitionInfo[] | undefined {
         synchronizeHostData();
         return GoToDefinition.getDefinitionAtPosition(program, getValidSourceFile(fileName), position, searchOtherFilesOnly, stopAtAlias);
     }
@@ -2328,10 +2345,24 @@ export function createLanguageService(
         return FindAllReferences.Core.getReferencesForFileName(fileName, program, program.getSourceFiles()).map(FindAllReferences.toReferenceEntry);
     }
 
-    function getNavigateToItems(searchValue: string, maxResultCount?: number, fileName?: string, excludeDtsFiles = false, excludeLibFiles = false): NavigateToItem[] {
+    function getNavigateToItems(
+        searchValue: string,
+        maxResultCount?: number,
+        fileName?: string,
+        excludeDtsFiles = false,
+        excludeLibFiles = false,
+    ): NavigateToItem[] {
         synchronizeHostData();
         const sourceFiles = fileName ? [getValidSourceFile(fileName)] : program.getSourceFiles();
-        return NavigateTo.getNavigateToItems(sourceFiles, program.getTypeChecker(), cancellationToken, searchValue, maxResultCount, excludeDtsFiles, excludeLibFiles);
+        return NavigateTo.getNavigateToItems(
+            sourceFiles,
+            program.getTypeChecker(),
+            cancellationToken,
+            searchValue,
+            maxResultCount,
+            excludeDtsFiles,
+            excludeLibFiles,
+        );
     }
 
     function getEmitOutput(fileName: string, emitOnlyDtsFiles?: boolean, forceDtsEmit?: boolean) {
@@ -2346,7 +2377,11 @@ export function createLanguageService(
     /**
      * This is a semantic operation.
      */
-    function getSignatureHelpItems(fileName: string, position: number, { triggerReason }: SignatureHelpItemsOptions = emptyOptions): SignatureHelpItems | undefined {
+    function getSignatureHelpItems(
+        fileName: string,
+        position: number,
+        { triggerReason }: SignatureHelpItemsOptions = emptyOptions,
+    ): SignatureHelpItems | undefined {
         synchronizeHostData();
 
         const sourceFile = getValidSourceFile(fileName);
@@ -2442,7 +2477,13 @@ export function createLanguageService(
             return classifier2020.getSemanticClassifications(program, cancellationToken, getValidSourceFile(fileName), span);
         }
         else {
-            return classifier.getSemanticClassifications(program.getTypeChecker(), cancellationToken, getValidSourceFile(fileName), program.getClassifiableNames(), span);
+            return classifier.getSemanticClassifications(
+                program.getTypeChecker(),
+                cancellationToken,
+                getValidSourceFile(fileName),
+                program.getClassifiableNames(),
+                span,
+            );
         }
     }
 
@@ -2573,7 +2614,11 @@ export function createLanguageService(
         return codefix.getAllFixes({ fixId, sourceFile, program, host, cancellationToken, formatContext, preferences });
     }
 
-    function organizeImports(args: OrganizeImportsArgs, formatOptions: FormatCodeSettings, preferences: UserPreferences = emptyOptions): readonly FileTextChanges[] {
+    function organizeImports(
+        args: OrganizeImportsArgs,
+        formatOptions: FormatCodeSettings,
+        preferences: UserPreferences = emptyOptions,
+    ): readonly FileTextChanges[] {
         synchronizeHostData();
         Debug.assert(args.type === "file");
         const sourceFile = getValidSourceFile(args.fileName);
@@ -2589,7 +2634,15 @@ export function createLanguageService(
         formatOptions: FormatCodeSettings,
         preferences: UserPreferences = emptyOptions,
     ): readonly FileTextChanges[] {
-        return ts_getEditsForFileRename(getProgram()!, oldFilePath, newFilePath, host, formatting.getFormatContext(formatOptions, host), preferences, sourceMapper);
+        return ts_getEditsForFileRename(
+            getProgram()!,
+            oldFilePath,
+            newFilePath,
+            host,
+            formatting.getFormatContext(formatOptions, host),
+            preferences,
+            sourceMapper,
+        );
     }
 
     function applyCodeActionCommand(action: CodeActionCommand, formatSettings?: FormatCodeSettings): Promise<ApplyCodeActionCommandResult>;
@@ -2604,7 +2657,8 @@ export function createLanguageService(
         fileName: Path | CodeActionCommand | CodeActionCommand[],
         actionOrFormatSettingsOrUndefined?: CodeActionCommand | CodeActionCommand[] | FormatCodeSettings,
     ): Promise<ApplyCodeActionCommandResult | ApplyCodeActionCommandResult[]> {
-        const action = typeof fileName === "string" ? actionOrFormatSettingsOrUndefined as CodeActionCommand | CodeActionCommand[] : fileName as CodeActionCommand[];
+        const action = typeof fileName === "string" ? actionOrFormatSettingsOrUndefined as CodeActionCommand | CodeActionCommand[]
+            : fileName as CodeActionCommand[];
         return isArray(action) ? Promise.all(action.map(a => applySingleCodeActionCommand(a))) : applySingleCodeActionCommand(action);
     }
 
@@ -3205,7 +3259,10 @@ export function createLanguageService(
     ): ApplicableRefactorInfo[] {
         synchronizeHostData();
         const file = getValidSourceFile(fileName);
-        return refactor.getApplicableRefactors(getRefactorContext(file, positionOrRange, preferences, emptyOptions, triggerReason, kind), includeInteractiveActions);
+        return refactor.getApplicableRefactors(
+            getRefactorContext(file, positionOrRange, preferences, emptyOptions, triggerReason, kind),
+            includeInteractiveActions,
+        );
     }
 
     function getMoveToRefactoringFileSuggestions(
@@ -3229,7 +3286,8 @@ export function createLanguageService(
             );
             return isValidSourceFile &&
                     (extension === fileNameExtension ||
-                        (extension === Extension.Tsx && fileNameExtension === Extension.Ts || extension === Extension.Jsx && fileNameExtension === Extension.Js) &&
+                        (extension === Extension.Tsx && fileNameExtension === Extension.Ts ||
+                                extension === Extension.Jsx && fileNameExtension === Extension.Js) &&
                             !toMoveContainsJsx)
                 ? file.fileName : undefined;
         });

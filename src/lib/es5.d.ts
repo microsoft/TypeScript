@@ -1507,7 +1507,9 @@ interface TypedPropertyDescriptor<T> {
     set?: (value: T) => void;
 }
 
-declare type PromiseConstructorLike = new <T>(executor: (resolve: (value: T | PromiseLike<T>) => void, reject: (reason?: any) => void) => void) => PromiseLike<T>;
+declare type PromiseConstructorLike = new <T>(
+    executor: (resolve: (value: T | PromiseLike<T>) => void, reject: (reason?: any) => void) => void,
+) => PromiseLike<T>;
 
 interface PromiseLike<T> {
     /**
@@ -2589,7 +2591,10 @@ interface Uint8ClampedArray {
      * argument instead of an array value.
      */
     reduceRight(callbackfn: (previousValue: number, currentValue: number, currentIndex: number, array: Uint8ClampedArray) => number): number;
-    reduceRight(callbackfn: (previousValue: number, currentValue: number, currentIndex: number, array: Uint8ClampedArray) => number, initialValue: number): number;
+    reduceRight(
+        callbackfn: (previousValue: number, currentValue: number, currentIndex: number, array: Uint8ClampedArray) => number,
+        initialValue: number,
+    ): number;
 
     /**
      * Calls the specified callback function for all the elements in an array, in descending order.
@@ -4459,7 +4464,8 @@ declare namespace Intl {
 
     type NumberFormatOptionsUseGrouping = {} extends NumberFormatOptionsUseGroupingRegistry ? boolean
         : keyof NumberFormatOptionsUseGroupingRegistry | "true" | "false" | boolean;
-    type ResolvedNumberFormatOptionsUseGrouping = {} extends NumberFormatOptionsUseGroupingRegistry ? boolean : keyof NumberFormatOptionsUseGroupingRegistry | false;
+    type ResolvedNumberFormatOptionsUseGrouping = {} extends NumberFormatOptionsUseGroupingRegistry ? boolean
+        : keyof NumberFormatOptionsUseGroupingRegistry | false;
 
     interface NumberFormatOptions {
         localeMatcher?: "lookup" | "best fit" | undefined;

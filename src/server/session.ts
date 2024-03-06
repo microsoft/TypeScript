@@ -318,7 +318,12 @@ export type CommandNames = protocol.CommandTypes;
 /** @deprecated use ts.server.protocol.CommandTypes */
 export const CommandNames = (protocol as any).CommandTypes;
 
-export function formatMessage<T extends protocol.Message>(msg: T, logger: Logger, byteLength: (s: string, encoding: BufferEncoding) => number, newLine: string): string {
+export function formatMessage<T extends protocol.Message>(
+    msg: T,
+    logger: Logger,
+    byteLength: (s: string, encoding: BufferEncoding) => number,
+    newLine: string,
+): string {
     const verboseLogging = logger.hasLevel(LogLevel.verbose);
 
     const json = JSON.stringify(msg);
@@ -1451,7 +1456,10 @@ export class Session<TMessage = string> implements EventSender {
         );
     }
 
-    private convertToDiagnosticsWithLinePosition(diagnostics: readonly Diagnostic[], scriptInfo: ScriptInfo | undefined): protocol.DiagnosticWithLinePosition[] {
+    private convertToDiagnosticsWithLinePosition(
+        diagnostics: readonly Diagnostic[],
+        scriptInfo: ScriptInfo | undefined,
+    ): protocol.DiagnosticWithLinePosition[] {
         return diagnostics.map(d =>
             ({
                 message: flattenDiagnosticMessageText(d.messageText, this.host.newLine),
@@ -1486,7 +1494,10 @@ export class Session<TMessage = string> implements EventSender {
             : diagnostics.map(d => formatDiag(file, project, d));
     }
 
-    private getDefinition(args: protocol.FileLocationRequestArgs, simplifiedResult: boolean): readonly protocol.FileSpanWithContext[] | readonly DefinitionInfo[] {
+    private getDefinition(
+        args: protocol.FileLocationRequestArgs,
+        simplifiedResult: boolean,
+    ): readonly protocol.FileSpanWithContext[] | readonly DefinitionInfo[] {
         const { file, project } = this.getFileAndProject(args);
         const position = this.getPositionInFile(args, file);
         const definitions = this.mapDefinitionInfoLocations(project.getLanguageService().getDefinitionAtPosition(file, position) || emptyArray, project);
@@ -1634,7 +1645,8 @@ export class Session<TMessage = string> implements EventSender {
                 if (entrypoints && some(entrypoints, e => project.toPath(e) === path)) {
                     // This file was the main entrypoint of a package. Try to resolve that same package name with
                     // the auxiliary project that only resolves to implementation files.
-                    return auxiliaryProject.resolutionCache.resolveSingleModuleNameWithoutWatching(packageName, resolveFromFile).resolvedModule?.resolvedFileName;
+                    return auxiliaryProject.resolutionCache.resolveSingleModuleNameWithoutWatching(packageName, resolveFromFile).resolvedModule
+                        ?.resolvedFileName;
                 }
                 else {
                     // It wasn't the main entrypoint but we are in node_modules. Try a subpath into the package.
@@ -1818,7 +1830,10 @@ export class Session<TMessage = string> implements EventSender {
     ): readonly protocol.FileSpanWithContext[] | readonly ImplementationLocation[] {
         const { file, project } = this.getFileAndProject(args);
         const position = this.getPositionInFile(args, file);
-        const implementations = this.mapImplementationLocations(project.getLanguageService().getImplementationAtPosition(file, position) || emptyArray, project);
+        const implementations = this.mapImplementationLocations(
+            project.getLanguageService().getImplementationAtPosition(file, position) || emptyArray,
+            project,
+        );
         return simplifiedResult ?
             implementations.map(({ fileName, textSpan, contextSpan }) => this.toFileSpanWithContext(fileName, textSpan, contextSpan, project)) :
             implementations.map(Session.mapToOriginalLocation);
@@ -2488,7 +2503,10 @@ export class Session<TMessage = string> implements EventSender {
             return args.richResponse ? { emitSkipped: true, diagnostics: [] } : false;
         }
         const scriptInfo = project.getScriptInfo(file)!;
-        const { emitSkipped, diagnostics } = project.emitFile(scriptInfo, (path, data, writeByteOrderMark) => this.host.writeFile(path, data, writeByteOrderMark));
+        const { emitSkipped, diagnostics } = project.emitFile(
+            scriptInfo,
+            (path, data, writeByteOrderMark) => this.host.writeFile(path, data, writeByteOrderMark),
+        );
         return args.richResponse ?
             {
                 emitSkipped,
@@ -2499,7 +2517,10 @@ export class Session<TMessage = string> implements EventSender {
             !emitSkipped;
     }
 
-    private getSignatureHelpItems(args: protocol.SignatureHelpRequestArgs, simplifiedResult: boolean): protocol.SignatureHelpItems | SignatureHelpItems | undefined {
+    private getSignatureHelpItems(
+        args: protocol.SignatureHelpRequestArgs,
+        simplifiedResult: boolean,
+    ): protocol.SignatureHelpItems | SignatureHelpItems | undefined {
         const { file, project } = this.getFileAndProject(args);
         const scriptInfo = this.projectService.getScriptInfoForNormalizedPath(file)!;
         const position = this.getPosition(args, scriptInfo);
@@ -2852,7 +2873,10 @@ export class Session<TMessage = string> implements EventSender {
         return project.getLanguageService().getMoveToRefactoringFileSuggestions(file, this.extractPositionOrRange(args, scriptInfo), this.getPreferences(file));
     }
 
-    private organizeImports(args: protocol.OrganizeImportsRequestArgs, simplifiedResult: boolean): readonly protocol.FileCodeEdits[] | readonly FileTextChanges[] {
+    private organizeImports(
+        args: protocol.OrganizeImportsRequestArgs,
+        simplifiedResult: boolean,
+    ): readonly protocol.FileCodeEdits[] | readonly FileTextChanges[] {
         Debug.assert(args.scope.type === "file");
         const { file, project } = this.getFileAndProject(args.scope.args);
         const changes = project.getLanguageService().organizeImports(
@@ -2904,7 +2928,10 @@ export class Session<TMessage = string> implements EventSender {
         return simplifiedResult ? textChanges.map(c => this.mapTextChangeToCodeEdit(c)) : textChanges;
     }
 
-    private getCodeFixes(args: protocol.CodeFixRequestArgs, simplifiedResult: boolean): readonly protocol.CodeFixAction[] | readonly CodeFixAction[] | undefined {
+    private getCodeFixes(
+        args: protocol.CodeFixRequestArgs,
+        simplifiedResult: boolean,
+    ): readonly protocol.CodeFixAction[] | readonly CodeFixAction[] | undefined {
         const { file, project } = this.getFileAndProject(args);
 
         const scriptInfo = project.getScriptInfoForNormalizedPath(file)!;
@@ -2942,10 +2969,18 @@ export class Session<TMessage = string> implements EventSender {
         return simplifiedResult ? codeActions.map(codeAction => this.mapCodeFixAction(codeAction)) : codeActions;
     }
 
-    private getCombinedCodeFix({ scope, fixId }: protocol.GetCombinedCodeFixRequestArgs, simplifiedResult: boolean): protocol.CombinedCodeActions | CombinedCodeActions {
+    private getCombinedCodeFix(
+        { scope, fixId }: protocol.GetCombinedCodeFixRequestArgs,
+        simplifiedResult: boolean,
+    ): protocol.CombinedCodeActions | CombinedCodeActions {
         Debug.assert(scope.type === "file");
         const { file, project } = this.getFileAndProject(scope.args);
-        const res = project.getLanguageService().getCombinedCodeFix({ type: "file", fileName: file }, fixId, this.getFormatOptions(file), this.getPreferences(file));
+        const res = project.getLanguageService().getCombinedCodeFix(
+            { type: "file", fileName: file },
+            fixId,
+            this.getFormatOptions(file),
+            this.getPreferences(file),
+        );
         if (simplifiedResult) {
             return { changes: this.mapTextChangesToCodeEdits(res.changes), commands: res.commands };
         }
@@ -3819,7 +3854,11 @@ function toProtocolTextSpanWithContext(span: TextSpan, contextSpan: TextSpan | u
 }
 
 function convertTextChangeToCodeEdit(change: TextChange, scriptInfo: ScriptInfoOrConfig): protocol.CodeEdit {
-    return { start: positionToLineOffset(scriptInfo, change.span.start), end: positionToLineOffset(scriptInfo, textSpanEnd(change.span)), newText: change.newText };
+    return {
+        start: positionToLineOffset(scriptInfo, change.span.start),
+        end: positionToLineOffset(scriptInfo, textSpanEnd(change.span)),
+        newText: change.newText,
+    };
 }
 
 function positionToLineOffset(info: ScriptInfoOrConfig, position: number): protocol.Location {
@@ -3857,7 +3896,12 @@ export interface HandlerResponse {
 
 /** @internal */
 // Exported only for tests
-export function getLocationInNewDocument(oldText: string, renameFilename: string, renameLocation: number, edits: readonly FileTextChanges[]): protocol.Location {
+export function getLocationInNewDocument(
+    oldText: string,
+    renameFilename: string,
+    renameLocation: number,
+    edits: readonly FileTextChanges[],
+): protocol.Location {
     const newText = applyEdits(oldText, renameFilename, edits);
     const { line, character } = computeLineAndCharacterOfPosition(computeLineStarts(newText), renameLocation);
     return { line: line + 1, offset: character + 1 };

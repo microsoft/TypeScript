@@ -10,7 +10,8 @@ module.exports = createRule({
             internalCommentInNonJSDocError: `@internal should not appear in non-JSDoc comment for declaration.`,
             internalCommentNotLastError: `@internal should only appear in final JSDoc comment for declaration.`,
             multipleJSDocError: `Declaration has multiple JSDoc comments.`,
-            internalCommentOnParameterProperty: `@internal cannot appear on a JSDoc comment; use a declared property and an assignment in the constructor instead.`,
+            internalCommentOnParameterProperty:
+                `@internal cannot appear on a JSDoc comment; use a declared property and an assignment in the constructor instead.`,
         },
         schema: [],
         type: "problem",

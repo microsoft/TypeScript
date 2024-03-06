@@ -370,7 +370,10 @@ function createBuilderProgramState(newProgram: Program, oldState: Readonly<Reusa
             // Implied formats dont match
             oldInfo.impliedFormat !== info.impliedFormat ||
             // Referenced files changed
-            !hasSameKeys(newReferences = referencedMap && referencedMap.getValues(sourceFilePath), oldReferencedMap && oldReferencedMap.getValues(sourceFilePath)) ||
+            !hasSameKeys(
+                newReferences = referencedMap && referencedMap.getValues(sourceFilePath),
+                oldReferencedMap && oldReferencedMap.getValues(sourceFilePath),
+            ) ||
             // Referenced file was deleted in the new program
             newReferences && forEachKey(newReferences, path => !state.fileInfos.has(path) && oldState!.fileInfos.has(path))
         ) {
@@ -409,7 +412,10 @@ function createBuilderProgramState(newProgram: Program, oldState: Readonly<Reusa
         if (canCopyEmitSignatures) {
             const oldEmitSignature = oldState.emitSignatures.get(sourceFilePath);
             if (oldEmitSignature) {
-                (state.emitSignatures ??= new Map()).set(sourceFilePath, getEmitSignatureFromOldSignature(compilerOptions, oldState.compilerOptions, oldEmitSignature));
+                (state.emitSignatures ??= new Map()).set(
+                    sourceFilePath,
+                    getEmitSignatureFromOldSignature(compilerOptions, oldState.compilerOptions, oldEmitSignature),
+                );
             }
         }
     });
@@ -554,7 +560,12 @@ function convertToDiagnosticRelatedInformation(
         file: sourceFile,
         messageText: isString(diagnostic.messageText) ?
             diagnostic.messageText :
-            convertOrRepopulateDiagnosticMessageChain(diagnostic.messageText, sourceFile, newProgram, chain => (chain as ReusableRepopulateModuleNotFoundChain).info),
+            convertOrRepopulateDiagnosticMessageChain(
+                diagnostic.messageText,
+                sourceFile,
+                newProgram,
+                chain => (chain as ReusableRepopulateModuleNotFoundChain).info,
+            ),
     };
 }
 
@@ -952,7 +963,11 @@ function getSemanticDiagnosticsOfFile(state: BuilderProgramState, sourceFile: So
  * Gets the binder and checker diagnostics either from cache if present, or otherwise from program and caches it
  * Note that it is assumed that when asked about binder and checker diagnostics, the file has been taken out of affected files/changed file set
  */
-function getBinderAndCheckerDiagnosticsOfFile(state: BuilderProgramState, sourceFile: SourceFile, cancellationToken?: CancellationToken): readonly Diagnostic[] {
+function getBinderAndCheckerDiagnosticsOfFile(
+    state: BuilderProgramState,
+    sourceFile: SourceFile,
+    cancellationToken?: CancellationToken,
+): readonly Diagnostic[] {
     const path = sourceFile.resolvedPath;
     if (state.semanticDiagnosticsPerFile) {
         const cachedDiagnostics = state.semanticDiagnosticsPerFile.get(path);
@@ -983,7 +998,10 @@ export type ProgramBuildInfoDiagnostic = ProgramBuildInfoFileId | [fileId: Progr
  *
  * @internal
  */
-export type ProgramBuilderInfoFilePendingEmit = ProgramBuildInfoFileId | [fileId: ProgramBuildInfoFileId] | [fileId: ProgramBuildInfoFileId, emitKind: BuilderFileEmit];
+export type ProgramBuilderInfoFilePendingEmit = ProgramBuildInfoFileId | [fileId: ProgramBuildInfoFileId] | [
+    fileId: ProgramBuildInfoFileId,
+    emitKind: BuilderFileEmit,
+];
 /** @internal */
 export type ProgramBuildInfoReferencedMap = [fileId: ProgramBuildInfoFileId, fileIdListId: ProgramBuildInfoFileIdListId][];
 /** @internal */
@@ -1878,7 +1896,10 @@ export function createBuilderProgramUsingProgramBuildInfo(
         const fileInfos = new Map<Path, BuilderState.FileInfo>();
         program.fileInfos.forEach((fileInfo, index) => {
             const path = toFilePath(index + 1 as ProgramBuildInfoFileId);
-            fileInfos.set(path, isString(fileInfo) ? { version: fileInfo, signature: undefined, affectsGlobalScope: undefined, impliedFormat: undefined } : fileInfo);
+            fileInfos.set(
+                path,
+                isString(fileInfo) ? { version: fileInfo, signature: undefined, affectsGlobalScope: undefined, impliedFormat: undefined } : fileInfo,
+            );
         });
         state = {
             fileInfos,
@@ -1985,7 +2006,8 @@ export function createBuilderProgramUsingProgramBuildInfo(
     }
 
     function toPerFileDiagnostics(diagnostics: readonly ProgramBuildInfoDiagnostic[] | undefined): Map<Path, readonly ReusableDiagnostic[]> | undefined {
-        return diagnostics && arrayToMap(diagnostics, value => toFilePath(isNumber(value) ? value : value[0]), value => isNumber(value) ? emptyArray : value[1]);
+        return diagnostics &&
+            arrayToMap(diagnostics, value => toFilePath(isNumber(value) ? value : value[0]), value => isNumber(value) ? emptyArray : value[1]);
     }
 }
 

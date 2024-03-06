@@ -202,7 +202,16 @@ registerRefactor(refactorNameForMoveToFile, {
             }
             const edits = textChanges.ChangeTracker.with(
                 context,
-                t => doChange(context, context.file, interactiveRefactorArguments.targetFile, context.program, statements, t, context.host, context.preferences),
+                t => doChange(
+                    context,
+                    context.file,
+                    interactiveRefactorArguments.targetFile,
+                    context.program,
+                    statements,
+                    t,
+                    context.host,
+                    context.preferences,
+                ),
             );
             return { edits, renameFilename: undefined, renameLocation: undefined };
         }
@@ -404,7 +413,11 @@ function getTargetFileImportsAndAddExportInOldFile(
                 else {
                     append(
                         copiedOldImports,
-                        filterImport(i, factory.createStringLiteral(moduleSpecifierFromImport(i).text), name => importsToCopy.has(checker.getSymbolAtLocation(name)!)),
+                        filterImport(
+                            i,
+                            factory.createStringLiteral(moduleSpecifierFromImport(i).text),
+                            name => importsToCopy.has(checker.getSymbolAtLocation(name)!),
+                        ),
                     );
                 }
             });
@@ -469,7 +482,10 @@ export function addNewFileToTsconfig(
 
     const cfgObject = cfg.statements[0] && tryCast(cfg.statements[0].expression, isObjectLiteralExpression);
     const filesProp = cfgObject &&
-        find(cfgObject.properties, (prop): prop is PropertyAssignment => isPropertyAssignment(prop) && isStringLiteral(prop.name) && prop.name.text === "files");
+        find(
+            cfgObject.properties,
+            (prop): prop is PropertyAssignment => isPropertyAssignment(prop) && isStringLiteral(prop.name) && prop.name.text === "files",
+        );
     if (filesProp && isArrayLiteralExpression(filesProp.initializer)) {
         changes.insertNodeInListAfter(cfg, last(filesProp.initializer.elements), factory.createStringLiteral(newFilePath), filesProp.initializer.elements);
     }
@@ -579,7 +595,11 @@ function updateNamespaceLikeImport(
         for (const ref of toChange) {
             changes.replaceNode(sourceFile, ref, factory.createIdentifier(newNamespaceName));
         }
-        changes.insertNodeAfter(sourceFile, oldImportNode, updateNamespaceLikeImportNode(oldImportNode, preferredNewNamespaceName, newModuleSpecifier, quotePreference));
+        changes.insertNodeAfter(
+            sourceFile,
+            oldImportNode,
+            updateNamespaceLikeImportNode(oldImportNode, preferredNewNamespaceName, newModuleSpecifier, quotePreference),
+        );
     }
 }
 
@@ -812,7 +832,10 @@ function deleteUnusedImportsInVariableDeclaration(
         case SyntaxKind.Identifier:
             if (isUnused(name)) {
                 if (varDecl.initializer && isRequireCall(varDecl.initializer, /*requireStringLiteralLikeArgument*/ true)) {
-                    changes.delete(sourceFile, isVariableDeclarationList(varDecl.parent) && length(varDecl.parent.declarations) === 1 ? varDecl.parent.parent : varDecl);
+                    changes.delete(
+                        sourceFile,
+                        isVariableDeclarationList(varDecl.parent) && length(varDecl.parent.declarations) === 1 ? varDecl.parent.parent : varDecl,
+                    );
                 }
                 else {
                     changes.delete(sourceFile, name);
@@ -823,7 +846,10 @@ function deleteUnusedImportsInVariableDeclaration(
             break;
         case SyntaxKind.ObjectBindingPattern:
             if (name.elements.every(e => isIdentifier(e.name) && isUnused(e.name))) {
-                changes.delete(sourceFile, isVariableDeclarationList(varDecl.parent) && varDecl.parent.declarations.length === 1 ? varDecl.parent.parent : varDecl);
+                changes.delete(
+                    sourceFile,
+                    isVariableDeclarationList(varDecl.parent) && varDecl.parent.declarations.length === 1 ? varDecl.parent.parent : varDecl,
+                );
             }
             else {
                 for (const element of name.elements) {
@@ -912,7 +938,11 @@ function getNamesToExportInCommonJS(decl: TopLevelDeclarationStatement): readonl
 }
 
 /** @internal */
-export function filterImport(i: SupportedImport, moduleSpecifier: StringLiteralLike, keep: (name: Identifier) => boolean): SupportedImportStatement | undefined {
+export function filterImport(
+    i: SupportedImport,
+    moduleSpecifier: StringLiteralLike,
+    keep: (name: Identifier) => boolean,
+): SupportedImportStatement | undefined {
     switch (i.kind) {
         case SyntaxKind.ImportDeclaration: {
             const clause = i.importClause;
@@ -1157,7 +1187,12 @@ function isPureImport(node: Node): boolean {
 }
 
 /** @internal */
-export function getUsageInfo(oldFile: SourceFile, toMove: readonly Statement[], checker: TypeChecker, existingTargetLocals: ReadonlySet<Symbol> = new Set()): UsageInfo {
+export function getUsageInfo(
+    oldFile: SourceFile,
+    toMove: readonly Statement[],
+    checker: TypeChecker,
+    existingTargetLocals: ReadonlySet<Symbol> = new Set(),
+): UsageInfo {
     const movedSymbols = new Set<Symbol>();
     const oldImportsNeededByTargetFile = new Map<Symbol, /*isValidTypeOnlyUseSite*/ boolean>();
     const targetFileImportsFromOldFile = new Set<Symbol>();
@@ -1170,7 +1205,9 @@ export function getUsageInfo(oldFile: SourceFile, toMove: readonly Statement[], 
 
     for (const statement of toMove) {
         forEachTopLevelDeclaration(statement, decl => {
-            movedSymbols.add(Debug.checkDefined(isExpressionStatement(decl) ? checker.getSymbolAtLocation(decl.expression.left) : decl.symbol, "Need a symbol here"));
+            movedSymbols.add(
+                Debug.checkDefined(isExpressionStatement(decl) ? checker.getSymbolAtLocation(decl.expression.left) : decl.symbol, "Need a symbol here"),
+            );
         });
     }
 
@@ -1348,7 +1385,13 @@ function isNonVariableTopLevelDeclaration(node: Node): node is NonVariableTopLev
     }
 }
 
-function moveStatementsToTargetFile(changes: textChanges.ChangeTracker, program: Program, statements: readonly Statement[], targetFile: SourceFile, toMove: ToMove) {
+function moveStatementsToTargetFile(
+    changes: textChanges.ChangeTracker,
+    program: Program,
+    statements: readonly Statement[],
+    targetFile: SourceFile,
+    toMove: ToMove,
+) {
     const removedExports = new Set<ExportDeclaration>();
     const targetExports = targetFile.symbol?.exports;
     if (targetExports) {

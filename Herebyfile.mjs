@@ -412,7 +412,12 @@ export const dtsServices = task({
     description: "Bundles typescript.d.ts",
     dependencies: [buildServices],
     run: async () => {
-        if (needsUpdate(["./built/local/typescript/tsconfig.tsbuildinfo", dtsBundlerPath], ["./built/local/typescript.d.ts", "./built/local/typescript.internal.d.ts"])) {
+        if (
+            needsUpdate(["./built/local/typescript/tsconfig.tsbuildinfo", dtsBundlerPath], [
+                "./built/local/typescript.d.ts",
+                "./built/local/typescript.internal.d.ts",
+            ])
+        ) {
             await runDtsBundler("./built/local/typescript/typescript.d.ts", "./built/local/typescript.d.ts");
         }
     },
@@ -885,7 +890,8 @@ export const produceLKG = task({
             .filter(f => !fs.existsSync(f));
         if (missingFiles.length > 0) {
             throw new Error(
-                "Cannot replace the LKG unless all built targets are present in directory 'built/local/'. The following files are missing:\n" + missingFiles.join("\n"),
+                "Cannot replace the LKG unless all built targets are present in directory 'built/local/'. The following files are missing:\n" +
+                    missingFiles.join("\n"),
             );
         }
 

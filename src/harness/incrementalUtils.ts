@@ -27,7 +27,8 @@ function verifyDocumentRegistryStats(
             const expected = statsByPath?.get(path);
             if (ts.isDocumentRegistryEntry(entry)) {
                 ts.Debug.assert(
-                    expected?.size === 1 && expected.has(entry.sourceFile.scriptKind) && expected.get(entry.sourceFile.scriptKind) === entry.languageServiceRefCount,
+                    expected?.size === 1 && expected.has(entry.sourceFile.scriptKind) &&
+                        expected.get(entry.sourceFile.scriptKind) === entry.languageServiceRefCount,
                     `Document registry has unexpected language service ref count for ${key} ${path} ${
                         ts.Debug.formatScriptKind(entry.sourceFile.scriptKind)
                     } ${entry.languageServiceRefCount}`,
@@ -132,7 +133,9 @@ function getResolutionCacheDetails<File, T extends ts.ResolutionWithFailedLookup
             addedCacheType = true;
             baseline.push(`${indent}${cacheType}:`);
         }
-        baseline.push(`${indent}  ${key}: ${mode ? ts.getNameOfCompilerOptionValue(mode, ts.moduleOptionDeclaration.type) + ":" : ""}${getResolvedFileName(resolved)}`);
+        baseline.push(
+            `${indent}  ${key}: ${mode ? ts.getNameOfCompilerOptionValue(mode, ts.moduleOptionDeclaration.type) + ":" : ""}${getResolvedFileName(resolved)}`,
+        );
     }, file);
 }
 
@@ -377,7 +380,10 @@ export function verifyResolutionCache(
         );
     }
 
-    function verifyDirectoryWatchesOfFailedLookups(expected: Map<string, ts.DirectoryWatchesOfFailedLookup>, actual: Map<string, ts.DirectoryWatchesOfFailedLookup>) {
+    function verifyDirectoryWatchesOfFailedLookups(
+        expected: Map<string, ts.DirectoryWatchesOfFailedLookup>,
+        actual: Map<string, ts.DirectoryWatchesOfFailedLookup>,
+    ) {
         verifyMap(expected, actual, (expected, actual, caption) => {
             ts.Debug.assert(expected?.refCount === actual?.refCount, `${projectName}:: ${caption}:: refCount`);
             ts.Debug.assert(!!expected?.refCount, `${projectName}:: ${caption}:: expected refCount to be non zero`);
@@ -493,7 +499,11 @@ function verifyProgram(service: ts.server.ProjectService, project: ts.server.Pro
         getCachedDirectoryStructureHost: ts.returnUndefined,
         writeLog: ts.noop,
     };
-    const moduleResolutionCache = ts.createModuleResolutionCache(compilerHost.getCurrentDirectory(), compilerHost.getCanonicalFileName, project.getCompilerOptions());
+    const moduleResolutionCache = ts.createModuleResolutionCache(
+        compilerHost.getCurrentDirectory(),
+        compilerHost.getCanonicalFileName,
+        project.getCompilerOptions(),
+    );
     compilerHost.resolveModuleNameLiterals = (moduleNames, containingFile, redirectedReference, options, containingSourceFile) =>
         ts.loadWithModeAwareCache(
             moduleNames,

@@ -486,7 +486,9 @@ switch (x) {
 
     testExtractRangeFailed("extractRangeFailed18", `[#|{ 1;|] }`, [ts.refactor.extractSymbol.Messages.cannotExtractRange.message]);
 
-    testExtractRangeFailed("extractRangeFailed19", `[#|/** @type {number} */|] const foo = 1;`, [ts.refactor.extractSymbol.Messages.cannotExtractJSDoc.message]);
+    testExtractRangeFailed("extractRangeFailed19", `[#|/** @type {number} */|] const foo = 1;`, [
+        ts.refactor.extractSymbol.Messages.cannotExtractJSDoc.message,
+    ]);
 
     testExtractRangeFailed("extract-method-not-for-token-expression-statement", `[#|a|]`, [ts.refactor.extractSymbol.Messages.cannotExtractIdentifier.message]);
 });

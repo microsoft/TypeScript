@@ -147,7 +147,13 @@ export function transpileModule(input: string, transpileOptions: TranspileOption
         addRange(/*to*/ diagnostics, /*from*/ program.getOptionsDiagnostics());
     }
     // Emit
-    program.emit(/*targetSourceFile*/ undefined, /*writeFile*/ undefined, /*cancellationToken*/ undefined, /*emitOnlyDtsFiles*/ undefined, transpileOptions.transformers);
+    program.emit(
+        /*targetSourceFile*/ undefined,
+        /*writeFile*/ undefined,
+        /*cancellationToken*/ undefined,
+        /*emitOnlyDtsFiles*/ undefined,
+        transpileOptions.transformers,
+    );
 
     if (outputText === undefined) return Debug.fail("Output generation failed");
 

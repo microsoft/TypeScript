@@ -184,7 +184,10 @@ function getRefactorEditsToConvertOverloadsToOneSignature(context: RefactorConte
         decl: MethodSignature | MethodDeclaration | CallSignatureDeclaration | ConstructorDeclaration | ConstructSignatureDeclaration | FunctionDeclaration,
     ): TupleTypeNode {
         const members = map(decl.parameters, convertParameterToNamedTupleMember);
-        return setEmitFlags(factory.createTupleTypeNode(members), some(members, m => !!length(getSyntheticLeadingComments(m))) ? EmitFlags.None : EmitFlags.SingleLine);
+        return setEmitFlags(
+            factory.createTupleTypeNode(members),
+            some(members, m => !!length(getSyntheticLeadingComments(m))) ? EmitFlags.None : EmitFlags.SingleLine,
+        );
     }
 
     function convertParameterToNamedTupleMember(p: ParameterDeclaration): NamedTupleMember {
@@ -262,8 +265,14 @@ function getConvertableOverloadListAtPosition(file: SourceFile, startPosition: n
     if (!every(decls, d => d.kind === kindOne)) {
         return;
     }
-    const signatureDecls =
-        decls as (MethodSignature | MethodDeclaration | CallSignatureDeclaration | ConstructorDeclaration | ConstructSignatureDeclaration | FunctionDeclaration)[];
+    const signatureDecls = decls as (
+        | MethodSignature
+        | MethodDeclaration
+        | CallSignatureDeclaration
+        | ConstructorDeclaration
+        | ConstructSignatureDeclaration
+        | FunctionDeclaration
+    )[];
     if (some(signatureDecls, d => !!d.typeParameters || some(d.parameters, p => !!p.modifiers || !isIdentifier(p.name)))) {
         return;
     }

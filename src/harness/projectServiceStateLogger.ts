@@ -112,8 +112,22 @@ export function patchServiceForStateBaseline(service: ProjectService) {
                 let projectDiff = newOrDeleted(project, projects, data);
                 if (projectDiff !== Diff.Deleted) getSourceMapper(project)?.documentPositionMappers.forEach(mapper => currentMappers.add(mapper));
                 const projectPropertyLogs = [] as string[];
-                projectDiff = printProperty(PrintPropertyWhen.Always, data, "projectStateVersion", project.projectStateVersion, projectDiff, projectPropertyLogs);
-                projectDiff = printProperty(PrintPropertyWhen.Always, data, "projectProgramVersion", project.projectProgramVersion, projectDiff, projectPropertyLogs);
+                projectDiff = printProperty(
+                    PrintPropertyWhen.Always,
+                    data,
+                    "projectStateVersion",
+                    project.projectStateVersion,
+                    projectDiff,
+                    projectPropertyLogs,
+                );
+                projectDiff = printProperty(
+                    PrintPropertyWhen.Always,
+                    data,
+                    "projectProgramVersion",
+                    project.projectProgramVersion,
+                    projectDiff,
+                    projectPropertyLogs,
+                );
                 projectDiff = printProperty(PrintPropertyWhen.TruthyOrChangedOrNew, data, "dirty", project.dirty, projectDiff, projectPropertyLogs);
                 projectDiff = printProperty(PrintPropertyWhen.TruthyOrChangedOrNew, data, "isClosed", project.isClosed(), projectDiff, projectPropertyLogs);
                 projectDiff = printProperty(
@@ -206,7 +220,14 @@ export function patchServiceForStateBaseline(service: ProjectService) {
                     infoPropertyLogs,
                 );
                 infoDiff = printScriptInfoSourceMapFilePath(data, info, infoDiff, infoPropertyLogs);
-                infoDiff = printProperty(PrintPropertyWhen.DefinedOrChangedOrNew, data, "declarationInfoPath", info.declarationInfoPath, infoDiff, infoPropertyLogs);
+                infoDiff = printProperty(
+                    PrintPropertyWhen.DefinedOrChangedOrNew,
+                    data,
+                    "declarationInfoPath",
+                    info.declarationInfoPath,
+                    infoDiff,
+                    infoPropertyLogs,
+                );
                 infoDiff = printSetPropertyValueWorker(
                     PrintPropertyWhen.DefinedOrChangedOrNew,
                     data?.sourceInfos,

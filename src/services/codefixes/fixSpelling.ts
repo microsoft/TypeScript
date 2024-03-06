@@ -163,7 +163,11 @@ function doChange(changes: textChanges.ChangeTracker, sourceFile: SourceFile, no
             changes.replaceNode(sourceFile, node, factory.createIdentifier(suggestion));
         }
         else {
-            changes.replaceNode(sourceFile, node.parent, factory.createElementAccessExpression(node.parent.expression, factory.createStringLiteral(suggestion)));
+            changes.replaceNode(
+                sourceFile,
+                node.parent,
+                factory.createElementAccessExpression(node.parent.expression, factory.createStringLiteral(suggestion)),
+            );
         }
     }
     else {

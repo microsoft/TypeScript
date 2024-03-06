@@ -283,7 +283,12 @@ export class Verify extends VerifyNegatable {
         this.state.verifyQuickInfoString(expectedText, expectedDocumentation, expectedTags);
     }
 
-    public quickInfoAt(markerName: string | FourSlash.Range, expectedText: string, expectedDocumentation?: string, expectedTags?: { name: string; text: string; }[]) {
+    public quickInfoAt(
+        markerName: string | FourSlash.Range,
+        expectedText: string,
+        expectedDocumentation?: string,
+        expectedTags?: { name: string; text: string; }[],
+    ) {
         this.state.verifyQuickInfoAt(markerName, expectedText, expectedDocumentation, expectedTags);
     }
 
@@ -486,7 +491,10 @@ export class Verify extends VerifyNegatable {
 
     public docCommentTemplateAt(marker: string | FourSlash.Marker, expectedOffset: number, expectedText: string, options?: ts.DocCommentTemplateOptions) {
         this.state.goToMarker(marker);
-        this.state.verifyDocCommentTemplate({ newText: expectedText.replace(/\r?\n/g, ts.testFormatSettings.newLineCharacter!), caretOffset: expectedOffset }, options);
+        this.state.verifyDocCommentTemplate(
+            { newText: expectedText.replace(/\r?\n/g, ts.testFormatSettings.newLineCharacter!), caretOffset: expectedOffset },
+            options,
+        );
     }
 
     public noDocCommentTemplateAt(marker: string | FourSlash.Marker) {

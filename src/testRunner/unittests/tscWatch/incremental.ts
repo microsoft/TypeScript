@@ -64,7 +64,9 @@ describe("unittests:: tsc-watch:: emit file --incremental", () => {
         }
 
         Harness.Baseline.runBaseline(
-            `${ts.isBuild(argsToPass) ? "tsbuild/watchMode" : "tscWatch"}/incremental/${subScenario.split(" ").join("-")}-${incremental ? "incremental" : "watch"}.js`,
+            `${ts.isBuild(argsToPass) ? "tsbuild/watchMode" : "tscWatch"}/incremental/${subScenario.split(" ").join("-")}-${
+                incremental ? "incremental" : "watch"
+            }.js`,
             baseline.join("\r\n"),
         );
 
@@ -350,7 +352,8 @@ export const Fragment: unique symbol;
                 { path: `${project}/index.tsx`, content: `export const App = () => <div propA={true}></div>;` },
                 { path: configFile.path, content: jsonToReadableText({ compilerOptions: jsxImportSourceOptions }) },
             ],
-            modifyFs: host => host.writeFile(configFile.path, jsonToReadableText({ compilerOptions: { ...jsxImportSourceOptions, jsxImportSource: "preact" } })),
+            modifyFs: host =>
+                host.writeFile(configFile.path, jsonToReadableText({ compilerOptions: { ...jsxImportSourceOptions, jsxImportSource: "preact" } })),
             optionsToExtend: ["--explainFiles"],
         });
 

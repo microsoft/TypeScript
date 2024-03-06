@@ -41,7 +41,12 @@ registerCodeFix({
         if (!info) return undefined;
         const changes = textChanges.ChangeTracker.with(context, t => doChange(t, sourceFile, info));
         const name = idText(info.container.name);
-        return [createCodeFixAction(fixId, changes, [Diagnostics.Convert_0_to_mapped_object_type, name], fixId, [Diagnostics.Convert_0_to_mapped_object_type, name])];
+        return [
+            createCodeFixAction(fixId, changes, [Diagnostics.Convert_0_to_mapped_object_type, name], fixId, [
+                Diagnostics.Convert_0_to_mapped_object_type,
+                name,
+            ]),
+        ];
     },
     fixIds: [fixId],
     getAllCodeActions: context =>

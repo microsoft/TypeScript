@@ -74,7 +74,11 @@ describe("unittests:: PrinterAPI", () => {
         );
 
         // https://github.com/microsoft/TypeScript/issues/18071
-        printsCorrectly("regularExpressionLiteral", {}, printer => printer.printFile(ts.createSourceFile("source.ts", "let regex = /abc/;", ts.ScriptTarget.ES2017)));
+        printsCorrectly(
+            "regularExpressionLiteral",
+            {},
+            printer => printer.printFile(ts.createSourceFile("source.ts", "let regex = /abc/;", ts.ScriptTarget.ES2017)),
+        );
 
         // https://github.com/microsoft/TypeScript/issues/22239
         printsCorrectly(

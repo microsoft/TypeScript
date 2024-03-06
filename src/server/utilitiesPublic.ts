@@ -49,7 +49,9 @@ export function createInstallTypingsRequest(
 ): DiscoverTypings {
     return {
         projectName: project.getProjectName(),
-        fileNames: project.getFileNames(/*excludeFilesFromExternalLibraries*/ true, /*excludeConfigFiles*/ true).concat(project.getExcludedFiles() as NormalizedPath[]),
+        fileNames: project.getFileNames(/*excludeFilesFromExternalLibraries*/ true, /*excludeConfigFiles*/ true).concat(
+            project.getExcludedFiles() as NormalizedPath[],
+        ),
         compilerOptions: project.getCompilationSettings(),
         typeAcquisition,
         unresolvedImports,

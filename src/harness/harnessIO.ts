@@ -722,11 +722,18 @@ export namespace Compiler {
         });
 
         // Verify we didn't miss any errors in total
-        assert.equal(totalErrorsReportedInNonLibraryNonTsconfigFiles + numLibraryDiagnostics + numTsconfigDiagnostics, diagnostics.length, "total number of errors");
+        assert.equal(
+            totalErrorsReportedInNonLibraryNonTsconfigFiles + numLibraryDiagnostics + numTsconfigDiagnostics,
+            diagnostics.length,
+            "total number of errors",
+        );
     }
 
     export function doErrorBaseline(baselinePath: string, inputFiles: readonly TestFile[], errors: readonly ts.Diagnostic[], pretty?: boolean) {
-        Baseline.runBaseline(baselinePath.replace(/\.tsx?$/, ".errors.txt"), !errors || (errors.length === 0) ? null : getErrorBaseline(inputFiles, errors, pretty)); // eslint-disable-line no-null/no-null
+        Baseline.runBaseline(
+            baselinePath.replace(/\.tsx?$/, ".errors.txt"),
+            !errors || (errors.length === 0) ? null : getErrorBaseline(inputFiles, errors, pretty),
+        ); // eslint-disable-line no-null/no-null
     }
 
     export function doTypeAndSymbolBaseline(
@@ -883,7 +890,8 @@ export namespace Compiler {
         else if (options.sourceMap || declMaps) {
             if (
                 result.maps.size !==
-                    ((options.sourceMap ? result.getNumberOfJsFiles(/*includeJson*/ false) : 0) + (declMaps ? result.getNumberOfJsFiles(/*includeJson*/ true) : 0))
+                    ((options.sourceMap ? result.getNumberOfJsFiles(/*includeJson*/ false) : 0) +
+                        (declMaps ? result.getNumberOfJsFiles(/*includeJson*/ true) : 0))
             ) {
                 throw new Error("Number of sourcemap files should be same as js files.");
             }
@@ -918,7 +926,8 @@ export namespace Compiler {
         if (anyUnfoundSources) return "";
 
         const hash = "#base64," +
-            ts.map([outputJSFile.text, sourcemap].concat(sourceTDs.map(td => td!.text)), s => ts.convertToBase64(decodeURIComponent(encodeURIComponent(s)))).join(",");
+            ts.map([outputJSFile.text, sourcemap].concat(sourceTDs.map(td => td!.text)), s => ts.convertToBase64(decodeURIComponent(encodeURIComponent(s))))
+                .join(",");
         return "\n//// https://sokra.github.io/source-map-visualization" + hash + "\n";
     }
 
@@ -1025,7 +1034,10 @@ export namespace Compiler {
         const dupeCase = new Map<string, number>();
         // Yield them
         for (const outputFile of files) {
-            yield [checkDuplicatedFileName(outputFile.file, dupeCase), "/*====== " + outputFile.file + " ======*/\r\n" + Utils.removeByteOrderMark(outputFile.text)];
+            yield [
+                checkDuplicatedFileName(outputFile.file, dupeCase),
+                "/*====== " + outputFile.file + " ======*/\r\n" + Utils.removeByteOrderMark(outputFile.text),
+            ];
         }
 
         function cleanName(fn: string) {
@@ -1177,7 +1189,9 @@ export function getFileBasedTestConfigurations(settings: TestCaseParser.Compiler
             if (entries) {
                 if (!varyByEntries) varyByEntries = [];
                 variationCount *= entries.length;
-                if (variationCount > 25) throw new Error(`Provided test options exceeded the maximum number of variations: ${varyBy.map(v => `'@${v}'`).join(", ")}`);
+                if (variationCount > 25) {
+                    throw new Error(`Provided test options exceeded the maximum number of variations: ${varyBy.map(v => `'@${v}'`).join(", ")}`);
+                }
                 varyByEntries.push([varyByKey, entries]);
             }
         }
@@ -1306,7 +1320,8 @@ export namespace TestCaseParser {
                     // First metadata marker in the file
                     currentFileName = testMetaData[2].trim();
                     if (
-                        currentFileContent && ts.skipTrivia(currentFileContent, 0, /*stopAfterLineBreak*/ false, /*stopAtComments*/ false) !== currentFileContent.length
+                        currentFileContent &&
+                        ts.skipTrivia(currentFileContent, 0, /*stopAfterLineBreak*/ false, /*stopAtComments*/ false) !== currentFileContent.length
                     ) {
                         throw new Error("Non-comment test content appears before the first '// @Filename' directive");
                     }
@@ -1582,7 +1597,8 @@ export namespace Baseline {
                 errorMsg += `Baseline missing ${missing.length} files:${
                     "\n    " + missing.slice(0, 5).join("\n    ") + (missing.length > 5 ? "\n" + `    and ${missing.length - 5} more` : "") + "\n"
                 }Written ${writtenFiles.size} files:${
-                    "\n    " + writtenFilesArray.slice(0, 5).join("\n    ") + (writtenFilesArray.length > 5 ? "\n" + `    and ${writtenFilesArray.length - 5} more` : "")
+                    "\n    " + writtenFilesArray.slice(0, 5).join("\n    ") +
+                    (writtenFilesArray.length > 5 ? "\n" + `    and ${writtenFilesArray.length - 5} more` : "")
                 }`;
             }
             throw new Error(errorMsg);

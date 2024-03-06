@@ -143,7 +143,9 @@ export class NodeTypingsInstaller extends TypingsInstaller {
             if (this.log.isEnabled()) {
                 this.log.writeLine(`Updating ${typesRegistryPackageName} npm package...`);
             }
-            this.execSyncAndLog(`${this.npmPath} install --ignore-scripts ${typesRegistryPackageName}@${this.latestDistTag}`, { cwd: globalTypingsCacheLocation });
+            this.execSyncAndLog(`${this.npmPath} install --ignore-scripts ${typesRegistryPackageName}@${this.latestDistTag}`, {
+                cwd: globalTypingsCacheLocation,
+            });
             if (this.log.isEnabled()) {
                 this.log.writeLine(`Updated ${typesRegistryPackageName} npm package`);
             }

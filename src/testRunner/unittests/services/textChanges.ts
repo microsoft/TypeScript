@@ -156,7 +156,9 @@ var z = 3; // comment 4
             deleteNode(changeTracker, sourceFile, findVariableStatementContaining("y", sourceFile));
         });
         runSingleFileTest("deleteNode2", /*placeOpenBraceOnNewLineForFunctions*/ false, text, /*validateNodes*/ false, (sourceFile, changeTracker) => {
-            deleteNode(changeTracker, sourceFile, findVariableStatementContaining("y", sourceFile), { leadingTriviaOption: ts.textChanges.LeadingTriviaOption.Exclude });
+            deleteNode(changeTracker, sourceFile, findVariableStatementContaining("y", sourceFile), {
+                leadingTriviaOption: ts.textChanges.LeadingTriviaOption.Exclude,
+            });
         });
         runSingleFileTest("deleteNode3", /*placeOpenBraceOnNewLineForFunctions*/ false, text, /*validateNodes*/ false, (sourceFile, changeTracker) => {
             deleteNode(changeTracker, sourceFile, findVariableStatementContaining("y", sourceFile), {
@@ -280,10 +282,16 @@ namespace A {
     const x = 1, y = "2";
 }
 `;
-        runSingleFileTest("replaceNode1NoLineBreakBefore", /*placeOpenBraceOnNewLineForFunctions*/ false, text, /*validateNodes*/ false, (sourceFile, changeTracker) => {
-            const newNode = createTestVariableDeclaration("z1");
-            changeTracker.replaceNode(sourceFile, findChild("y", sourceFile), newNode);
-        });
+        runSingleFileTest(
+            "replaceNode1NoLineBreakBefore",
+            /*placeOpenBraceOnNewLineForFunctions*/ false,
+            text,
+            /*validateNodes*/ false,
+            (sourceFile, changeTracker) => {
+                const newNode = createTestVariableDeclaration("z1");
+                changeTracker.replaceNode(sourceFile, findChild("y", sourceFile), newNode);
+            },
+        );
     }
     {
         const text = `
@@ -448,9 +456,15 @@ class A {
     }
 }
 `;
-        runSingleFileTest("insertNodeAtConstructorStart", /*placeOpenBraceOnNewLineForFunctions*/ false, text1, /*validateNodes*/ false, (sourceFile, changeTracker) => {
-            changeTracker.insertNodeAtConstructorStart(sourceFile, findConstructor(sourceFile), createTestSuperCall());
-        });
+        runSingleFileTest(
+            "insertNodeAtConstructorStart",
+            /*placeOpenBraceOnNewLineForFunctions*/ false,
+            text1,
+            /*validateNodes*/ false,
+            (sourceFile, changeTracker) => {
+                changeTracker.insertNodeAtConstructorStart(sourceFile, findConstructor(sourceFile), createTestSuperCall());
+            },
+        );
         const text2 = `
 class A {
     constructor() {
@@ -589,139 +603,217 @@ function foo(
     {
         const text = `
 const x = 1, y = 2;`;
-        runSingleFileTest("insertNodeInListAfter1", /*placeOpenBraceOnNewLineForFunctions*/ false, text, /*validateNodes*/ false, (sourceFile, changeTracker) => {
-            changeTracker.insertNodeInListAfter(
-                sourceFile,
-                findChild("x", sourceFile),
-                ts.factory.createVariableDeclaration("z", /*exclamationToken*/ undefined, /*type*/ undefined, ts.factory.createNumericLiteral(1)),
-            );
-        });
-        runSingleFileTest("insertNodeInListAfter2", /*placeOpenBraceOnNewLineForFunctions*/ false, text, /*validateNodes*/ false, (sourceFile, changeTracker) => {
-            changeTracker.insertNodeInListAfter(
-                sourceFile,
-                findChild("y", sourceFile),
-                ts.factory.createVariableDeclaration("z", /*exclamationToken*/ undefined, /*type*/ undefined, ts.factory.createNumericLiteral(1)),
-            );
-        });
+        runSingleFileTest(
+            "insertNodeInListAfter1",
+            /*placeOpenBraceOnNewLineForFunctions*/ false,
+            text,
+            /*validateNodes*/ false,
+            (sourceFile, changeTracker) => {
+                changeTracker.insertNodeInListAfter(
+                    sourceFile,
+                    findChild("x", sourceFile),
+                    ts.factory.createVariableDeclaration("z", /*exclamationToken*/ undefined, /*type*/ undefined, ts.factory.createNumericLiteral(1)),
+                );
+            },
+        );
+        runSingleFileTest(
+            "insertNodeInListAfter2",
+            /*placeOpenBraceOnNewLineForFunctions*/ false,
+            text,
+            /*validateNodes*/ false,
+            (sourceFile, changeTracker) => {
+                changeTracker.insertNodeInListAfter(
+                    sourceFile,
+                    findChild("y", sourceFile),
+                    ts.factory.createVariableDeclaration("z", /*exclamationToken*/ undefined, /*type*/ undefined, ts.factory.createNumericLiteral(1)),
+                );
+            },
+        );
     }
     {
         const text = `
 const /*x*/ x = 1, /*y*/ y = 2;`;
-        runSingleFileTest("insertNodeInListAfter3", /*placeOpenBraceOnNewLineForFunctions*/ false, text, /*validateNodes*/ false, (sourceFile, changeTracker) => {
-            changeTracker.insertNodeInListAfter(
-                sourceFile,
-                findChild("x", sourceFile),
-                ts.factory.createVariableDeclaration("z", /*exclamationToken*/ undefined, /*type*/ undefined, ts.factory.createNumericLiteral(1)),
-            );
-        });
-        runSingleFileTest("insertNodeInListAfter4", /*placeOpenBraceOnNewLineForFunctions*/ false, text, /*validateNodes*/ false, (sourceFile, changeTracker) => {
-            changeTracker.insertNodeInListAfter(
-                sourceFile,
-                findChild("y", sourceFile),
-                ts.factory.createVariableDeclaration("z", /*exclamationToken*/ undefined, /*type*/ undefined, ts.factory.createNumericLiteral(1)),
-            );
-        });
+        runSingleFileTest(
+            "insertNodeInListAfter3",
+            /*placeOpenBraceOnNewLineForFunctions*/ false,
+            text,
+            /*validateNodes*/ false,
+            (sourceFile, changeTracker) => {
+                changeTracker.insertNodeInListAfter(
+                    sourceFile,
+                    findChild("x", sourceFile),
+                    ts.factory.createVariableDeclaration("z", /*exclamationToken*/ undefined, /*type*/ undefined, ts.factory.createNumericLiteral(1)),
+                );
+            },
+        );
+        runSingleFileTest(
+            "insertNodeInListAfter4",
+            /*placeOpenBraceOnNewLineForFunctions*/ false,
+            text,
+            /*validateNodes*/ false,
+            (sourceFile, changeTracker) => {
+                changeTracker.insertNodeInListAfter(
+                    sourceFile,
+                    findChild("y", sourceFile),
+                    ts.factory.createVariableDeclaration("z", /*exclamationToken*/ undefined, /*type*/ undefined, ts.factory.createNumericLiteral(1)),
+                );
+            },
+        );
     }
     {
         const text = `
 const x = 1;`;
-        runSingleFileTest("insertNodeInListAfter5", /*placeOpenBraceOnNewLineForFunctions*/ false, text, /*validateNodes*/ false, (sourceFile, changeTracker) => {
-            changeTracker.insertNodeInListAfter(
-                sourceFile,
-                findChild("x", sourceFile),
-                ts.factory.createVariableDeclaration("z", /*exclamationToken*/ undefined, /*type*/ undefined, ts.factory.createNumericLiteral(1)),
-            );
-        });
+        runSingleFileTest(
+            "insertNodeInListAfter5",
+            /*placeOpenBraceOnNewLineForFunctions*/ false,
+            text,
+            /*validateNodes*/ false,
+            (sourceFile, changeTracker) => {
+                changeTracker.insertNodeInListAfter(
+                    sourceFile,
+                    findChild("x", sourceFile),
+                    ts.factory.createVariableDeclaration("z", /*exclamationToken*/ undefined, /*type*/ undefined, ts.factory.createNumericLiteral(1)),
+                );
+            },
+        );
     }
     {
         const text = `
 const x = 1,
     y = 2;`;
-        runSingleFileTest("insertNodeInListAfter6", /*placeOpenBraceOnNewLineForFunctions*/ false, text, /*validateNodes*/ false, (sourceFile, changeTracker) => {
-            changeTracker.insertNodeInListAfter(
-                sourceFile,
-                findChild("x", sourceFile),
-                ts.factory.createVariableDeclaration("z", /*exclamationToken*/ undefined, /*type*/ undefined, ts.factory.createNumericLiteral(1)),
-            );
-        });
-        runSingleFileTest("insertNodeInListAfter7", /*placeOpenBraceOnNewLineForFunctions*/ false, text, /*validateNodes*/ false, (sourceFile, changeTracker) => {
-            changeTracker.insertNodeInListAfter(
-                sourceFile,
-                findChild("y", sourceFile),
-                ts.factory.createVariableDeclaration("z", /*exclamationToken*/ undefined, /*type*/ undefined, ts.factory.createNumericLiteral(1)),
-            );
-        });
+        runSingleFileTest(
+            "insertNodeInListAfter6",
+            /*placeOpenBraceOnNewLineForFunctions*/ false,
+            text,
+            /*validateNodes*/ false,
+            (sourceFile, changeTracker) => {
+                changeTracker.insertNodeInListAfter(
+                    sourceFile,
+                    findChild("x", sourceFile),
+                    ts.factory.createVariableDeclaration("z", /*exclamationToken*/ undefined, /*type*/ undefined, ts.factory.createNumericLiteral(1)),
+                );
+            },
+        );
+        runSingleFileTest(
+            "insertNodeInListAfter7",
+            /*placeOpenBraceOnNewLineForFunctions*/ false,
+            text,
+            /*validateNodes*/ false,
+            (sourceFile, changeTracker) => {
+                changeTracker.insertNodeInListAfter(
+                    sourceFile,
+                    findChild("y", sourceFile),
+                    ts.factory.createVariableDeclaration("z", /*exclamationToken*/ undefined, /*type*/ undefined, ts.factory.createNumericLiteral(1)),
+                );
+            },
+        );
     }
     {
         const text = `
 const /*x*/ x = 1,
     /*y*/ y = 2;`;
-        runSingleFileTest("insertNodeInListAfter8", /*placeOpenBraceOnNewLineForFunctions*/ false, text, /*validateNodes*/ false, (sourceFile, changeTracker) => {
-            changeTracker.insertNodeInListAfter(
-                sourceFile,
-                findChild("x", sourceFile),
-                ts.factory.createVariableDeclaration("z", /*exclamationToken*/ undefined, /*type*/ undefined, ts.factory.createNumericLiteral(1)),
-            );
-        });
-        runSingleFileTest("insertNodeInListAfter9", /*placeOpenBraceOnNewLineForFunctions*/ false, text, /*validateNodes*/ false, (sourceFile, changeTracker) => {
-            changeTracker.insertNodeInListAfter(
-                sourceFile,
-                findChild("y", sourceFile),
-                ts.factory.createVariableDeclaration("z", /*exclamationToken*/ undefined, /*type*/ undefined, ts.factory.createNumericLiteral(1)),
-            );
-        });
+        runSingleFileTest(
+            "insertNodeInListAfter8",
+            /*placeOpenBraceOnNewLineForFunctions*/ false,
+            text,
+            /*validateNodes*/ false,
+            (sourceFile, changeTracker) => {
+                changeTracker.insertNodeInListAfter(
+                    sourceFile,
+                    findChild("x", sourceFile),
+                    ts.factory.createVariableDeclaration("z", /*exclamationToken*/ undefined, /*type*/ undefined, ts.factory.createNumericLiteral(1)),
+                );
+            },
+        );
+        runSingleFileTest(
+            "insertNodeInListAfter9",
+            /*placeOpenBraceOnNewLineForFunctions*/ false,
+            text,
+            /*validateNodes*/ false,
+            (sourceFile, changeTracker) => {
+                changeTracker.insertNodeInListAfter(
+                    sourceFile,
+                    findChild("y", sourceFile),
+                    ts.factory.createVariableDeclaration("z", /*exclamationToken*/ undefined, /*type*/ undefined, ts.factory.createNumericLiteral(1)),
+                );
+            },
+        );
     }
     {
         const text = `
 import {
     x
 } from "bar"`;
-        runSingleFileTest("insertNodeInListAfter10", /*placeOpenBraceOnNewLineForFunctions*/ false, text, /*validateNodes*/ false, (sourceFile, changeTracker) => {
-            changeTracker.insertNodeInListAfter(
-                sourceFile,
-                findChild("x", sourceFile),
-                ts.factory.createImportSpecifier(/*isTypeOnly*/ false, ts.factory.createIdentifier("b"), ts.factory.createIdentifier("a")),
-            );
-        });
+        runSingleFileTest(
+            "insertNodeInListAfter10",
+            /*placeOpenBraceOnNewLineForFunctions*/ false,
+            text,
+            /*validateNodes*/ false,
+            (sourceFile, changeTracker) => {
+                changeTracker.insertNodeInListAfter(
+                    sourceFile,
+                    findChild("x", sourceFile),
+                    ts.factory.createImportSpecifier(/*isTypeOnly*/ false, ts.factory.createIdentifier("b"), ts.factory.createIdentifier("a")),
+                );
+            },
+        );
     }
     {
         const text = `
 import {
     x // this is x
 } from "bar"`;
-        runSingleFileTest("insertNodeInListAfter11", /*placeOpenBraceOnNewLineForFunctions*/ false, text, /*validateNodes*/ false, (sourceFile, changeTracker) => {
-            changeTracker.insertNodeInListAfter(
-                sourceFile,
-                findChild("x", sourceFile),
-                ts.factory.createImportSpecifier(/*isTypeOnly*/ false, ts.factory.createIdentifier("b"), ts.factory.createIdentifier("a")),
-            );
-        });
+        runSingleFileTest(
+            "insertNodeInListAfter11",
+            /*placeOpenBraceOnNewLineForFunctions*/ false,
+            text,
+            /*validateNodes*/ false,
+            (sourceFile, changeTracker) => {
+                changeTracker.insertNodeInListAfter(
+                    sourceFile,
+                    findChild("x", sourceFile),
+                    ts.factory.createImportSpecifier(/*isTypeOnly*/ false, ts.factory.createIdentifier("b"), ts.factory.createIdentifier("a")),
+                );
+            },
+        );
     }
     {
         const text = `
 import {
     x
 } from "bar"`;
-        runSingleFileTest("insertNodeInListAfter12", /*placeOpenBraceOnNewLineForFunctions*/ false, text, /*validateNodes*/ false, (sourceFile, changeTracker) => {
-            changeTracker.insertNodeInListAfter(
-                sourceFile,
-                findChild("x", sourceFile),
-                ts.factory.createImportSpecifier(/*isTypeOnly*/ false, /*propertyName*/ undefined, ts.factory.createIdentifier("a")),
-            );
-        });
+        runSingleFileTest(
+            "insertNodeInListAfter12",
+            /*placeOpenBraceOnNewLineForFunctions*/ false,
+            text,
+            /*validateNodes*/ false,
+            (sourceFile, changeTracker) => {
+                changeTracker.insertNodeInListAfter(
+                    sourceFile,
+                    findChild("x", sourceFile),
+                    ts.factory.createImportSpecifier(/*isTypeOnly*/ false, /*propertyName*/ undefined, ts.factory.createIdentifier("a")),
+                );
+            },
+        );
     }
     {
         const text = `
 import {
     x // this is x
 } from "bar"`;
-        runSingleFileTest("insertNodeInListAfter13", /*placeOpenBraceOnNewLineForFunctions*/ false, text, /*validateNodes*/ false, (sourceFile, changeTracker) => {
-            changeTracker.insertNodeInListAfter(
-                sourceFile,
-                findChild("x", sourceFile),
-                ts.factory.createImportSpecifier(/*isTypeOnly*/ false, /*propertyName*/ undefined, ts.factory.createIdentifier("a")),
-            );
-        });
+        runSingleFileTest(
+            "insertNodeInListAfter13",
+            /*placeOpenBraceOnNewLineForFunctions*/ false,
+            text,
+            /*validateNodes*/ false,
+            (sourceFile, changeTracker) => {
+                changeTracker.insertNodeInListAfter(
+                    sourceFile,
+                    findChild("x", sourceFile),
+                    ts.factory.createImportSpecifier(/*isTypeOnly*/ false, /*propertyName*/ undefined, ts.factory.createIdentifier("a")),
+                );
+            },
+        );
     }
     {
         const text = `
@@ -729,13 +821,19 @@ import {
     x0,
     x
 } from "bar"`;
-        runSingleFileTest("insertNodeInListAfter14", /*placeOpenBraceOnNewLineForFunctions*/ false, text, /*validateNodes*/ false, (sourceFile, changeTracker) => {
-            changeTracker.insertNodeInListAfter(
-                sourceFile,
-                findChild("x", sourceFile),
-                ts.factory.createImportSpecifier(/*isTypeOnly*/ false, ts.factory.createIdentifier("b"), ts.factory.createIdentifier("a")),
-            );
-        });
+        runSingleFileTest(
+            "insertNodeInListAfter14",
+            /*placeOpenBraceOnNewLineForFunctions*/ false,
+            text,
+            /*validateNodes*/ false,
+            (sourceFile, changeTracker) => {
+                changeTracker.insertNodeInListAfter(
+                    sourceFile,
+                    findChild("x", sourceFile),
+                    ts.factory.createImportSpecifier(/*isTypeOnly*/ false, ts.factory.createIdentifier("b"), ts.factory.createIdentifier("a")),
+                );
+            },
+        );
     }
     {
         const text = `
@@ -743,13 +841,19 @@ import {
     x0,
     x // this is x
 } from "bar"`;
-        runSingleFileTest("insertNodeInListAfter15", /*placeOpenBraceOnNewLineForFunctions*/ false, text, /*validateNodes*/ false, (sourceFile, changeTracker) => {
-            changeTracker.insertNodeInListAfter(
-                sourceFile,
-                findChild("x", sourceFile),
-                ts.factory.createImportSpecifier(/*isTypeOnly*/ false, ts.factory.createIdentifier("b"), ts.factory.createIdentifier("a")),
-            );
-        });
+        runSingleFileTest(
+            "insertNodeInListAfter15",
+            /*placeOpenBraceOnNewLineForFunctions*/ false,
+            text,
+            /*validateNodes*/ false,
+            (sourceFile, changeTracker) => {
+                changeTracker.insertNodeInListAfter(
+                    sourceFile,
+                    findChild("x", sourceFile),
+                    ts.factory.createImportSpecifier(/*isTypeOnly*/ false, ts.factory.createIdentifier("b"), ts.factory.createIdentifier("a")),
+                );
+            },
+        );
     }
     {
         const text = `
@@ -757,13 +861,19 @@ import {
     x0,
     x
 } from "bar"`;
-        runSingleFileTest("insertNodeInListAfter16", /*placeOpenBraceOnNewLineForFunctions*/ false, text, /*validateNodes*/ false, (sourceFile, changeTracker) => {
-            changeTracker.insertNodeInListAfter(
-                sourceFile,
-                findChild("x", sourceFile),
-                ts.factory.createImportSpecifier(/*isTypeOnly*/ false, /*propertyName*/ undefined, ts.factory.createIdentifier("a")),
-            );
-        });
+        runSingleFileTest(
+            "insertNodeInListAfter16",
+            /*placeOpenBraceOnNewLineForFunctions*/ false,
+            text,
+            /*validateNodes*/ false,
+            (sourceFile, changeTracker) => {
+                changeTracker.insertNodeInListAfter(
+                    sourceFile,
+                    findChild("x", sourceFile),
+                    ts.factory.createImportSpecifier(/*isTypeOnly*/ false, /*propertyName*/ undefined, ts.factory.createIdentifier("a")),
+                );
+            },
+        );
     }
     {
         const text = `
@@ -771,26 +881,38 @@ import {
     x0,
     x // this is x
 } from "bar"`;
-        runSingleFileTest("insertNodeInListAfter17", /*placeOpenBraceOnNewLineForFunctions*/ false, text, /*validateNodes*/ false, (sourceFile, changeTracker) => {
-            changeTracker.insertNodeInListAfter(
-                sourceFile,
-                findChild("x", sourceFile),
-                ts.factory.createImportSpecifier(/*isTypeOnly*/ false, /*propertyName*/ undefined, ts.factory.createIdentifier("a")),
-            );
-        });
+        runSingleFileTest(
+            "insertNodeInListAfter17",
+            /*placeOpenBraceOnNewLineForFunctions*/ false,
+            text,
+            /*validateNodes*/ false,
+            (sourceFile, changeTracker) => {
+                changeTracker.insertNodeInListAfter(
+                    sourceFile,
+                    findChild("x", sourceFile),
+                    ts.factory.createImportSpecifier(/*isTypeOnly*/ false, /*propertyName*/ undefined, ts.factory.createIdentifier("a")),
+                );
+            },
+        );
     }
     {
         const text = `
 import {
     x0, x
 } from "bar"`;
-        runSingleFileTest("insertNodeInListAfter18", /*placeOpenBraceOnNewLineForFunctions*/ false, text, /*validateNodes*/ false, (sourceFile, changeTracker) => {
-            changeTracker.insertNodeInListAfter(
-                sourceFile,
-                findChild("x", sourceFile),
-                ts.factory.createImportSpecifier(/*isTypeOnly*/ false, /*propertyName*/ undefined, ts.factory.createIdentifier("a")),
-            );
-        });
+        runSingleFileTest(
+            "insertNodeInListAfter18",
+            /*placeOpenBraceOnNewLineForFunctions*/ false,
+            text,
+            /*validateNodes*/ false,
+            (sourceFile, changeTracker) => {
+                changeTracker.insertNodeInListAfter(
+                    sourceFile,
+                    findChild("x", sourceFile),
+                    ts.factory.createImportSpecifier(/*isTypeOnly*/ false, /*propertyName*/ undefined, ts.factory.createIdentifier("a")),
+                );
+            },
+        );
     }
     {
         const runTest = (name: string, text: string) =>
@@ -815,44 +937,56 @@ import {
 class A {
     x;
 }`;
-        runSingleFileTest("insertNodeAfterMultipleNodes", /*placeOpenBraceOnNewLineForFunctions*/ false, text, /*validateNodes*/ false, (sourceFile, changeTracker) => {
-            const newNodes = [];
-            for (let i = 0; i < 11 /*error doesn't occur with fewer nodes*/; ++i) {
-                newNodes.push(
+        runSingleFileTest(
+            "insertNodeAfterMultipleNodes",
+            /*placeOpenBraceOnNewLineForFunctions*/ false,
+            text,
+            /*validateNodes*/ false,
+            (sourceFile, changeTracker) => {
+                const newNodes = [];
+                for (let i = 0; i < 11 /*error doesn't occur with fewer nodes*/; ++i) {
+                    newNodes.push(
+                        ts.factory.createPropertyDeclaration(
+                            /*modifiers*/ undefined,
+                            i + "",
+                            /*questionOrExclamationToken*/ undefined,
+                            /*type*/ undefined,
+                            /*initializer*/ undefined,
+                        ),
+                    );
+                }
+                const insertAfter = findChild("x", sourceFile);
+                for (const newNode of newNodes) {
+                    changeTracker.insertNodeAfter(sourceFile, insertAfter, newNode);
+                }
+            },
+        );
+    }
+    {
+        const text = `
+class A {
+    x
+}
+`;
+        runSingleFileTest(
+            "insertNodeAfterInClass1",
+            /*placeOpenBraceOnNewLineForFunctions*/ false,
+            text,
+            /*validateNodes*/ false,
+            (sourceFile, changeTracker) => {
+                changeTracker.insertNodeAfter(
+                    sourceFile,
+                    findChild("x", sourceFile),
                     ts.factory.createPropertyDeclaration(
                         /*modifiers*/ undefined,
-                        i + "",
+                        "a",
                         /*questionOrExclamationToken*/ undefined,
-                        /*type*/ undefined,
+                        ts.factory.createKeywordTypeNode(ts.SyntaxKind.BooleanKeyword),
                         /*initializer*/ undefined,
                     ),
                 );
-            }
-            const insertAfter = findChild("x", sourceFile);
-            for (const newNode of newNodes) {
-                changeTracker.insertNodeAfter(sourceFile, insertAfter, newNode);
-            }
-        });
-    }
-    {
-        const text = `
-class A {
-    x
-}
-`;
-        runSingleFileTest("insertNodeAfterInClass1", /*placeOpenBraceOnNewLineForFunctions*/ false, text, /*validateNodes*/ false, (sourceFile, changeTracker) => {
-            changeTracker.insertNodeAfter(
-                sourceFile,
-                findChild("x", sourceFile),
-                ts.factory.createPropertyDeclaration(
-                    /*modifiers*/ undefined,
-                    "a",
-                    /*questionOrExclamationToken*/ undefined,
-                    ts.factory.createKeywordTypeNode(ts.SyntaxKind.BooleanKeyword),
-                    /*initializer*/ undefined,
-                ),
-            );
-        });
+            },
+        );
     }
     {
         const text = `
@@ -860,19 +994,25 @@ class A {
     x;
 }
 `;
-        runSingleFileTest("insertNodeAfterInClass2", /*placeOpenBraceOnNewLineForFunctions*/ false, text, /*validateNodes*/ false, (sourceFile, changeTracker) => {
-            changeTracker.insertNodeAfter(
-                sourceFile,
-                findChild("x", sourceFile),
-                ts.factory.createPropertyDeclaration(
-                    /*modifiers*/ undefined,
-                    "a",
-                    /*questionOrExclamationToken*/ undefined,
-                    ts.factory.createKeywordTypeNode(ts.SyntaxKind.BooleanKeyword),
-                    /*initializer*/ undefined,
-                ),
-            );
-        });
+        runSingleFileTest(
+            "insertNodeAfterInClass2",
+            /*placeOpenBraceOnNewLineForFunctions*/ false,
+            text,
+            /*validateNodes*/ false,
+            (sourceFile, changeTracker) => {
+                changeTracker.insertNodeAfter(
+                    sourceFile,
+                    findChild("x", sourceFile),
+                    ts.factory.createPropertyDeclaration(
+                        /*modifiers*/ undefined,
+                        "a",
+                        /*questionOrExclamationToken*/ undefined,
+                        ts.factory.createKeywordTypeNode(ts.SyntaxKind.BooleanKeyword),
+                        /*initializer*/ undefined,
+                    ),
+                );
+            },
+        );
     }
     {
         const text = `
@@ -881,9 +1021,15 @@ class A {
     y = 1;
 }
 `;
-        runSingleFileTest("deleteNodeAfterInClass1", /*placeOpenBraceOnNewLineForFunctions*/ false, text, /*validateNodes*/ false, (sourceFile, changeTracker) => {
-            deleteNode(changeTracker, sourceFile, findChild("x", sourceFile));
-        });
+        runSingleFileTest(
+            "deleteNodeAfterInClass1",
+            /*placeOpenBraceOnNewLineForFunctions*/ false,
+            text,
+            /*validateNodes*/ false,
+            (sourceFile, changeTracker) => {
+                deleteNode(changeTracker, sourceFile, findChild("x", sourceFile));
+            },
+        );
     }
     {
         const text = `
@@ -892,9 +1038,15 @@ class A {
     y = 1;
 }
 `;
-        runSingleFileTest("deleteNodeAfterInClass2", /*placeOpenBraceOnNewLineForFunctions*/ false, text, /*validateNodes*/ false, (sourceFile, changeTracker) => {
-            deleteNode(changeTracker, sourceFile, findChild("x", sourceFile));
-        });
+        runSingleFileTest(
+            "deleteNodeAfterInClass2",
+            /*placeOpenBraceOnNewLineForFunctions*/ false,
+            text,
+            /*validateNodes*/ false,
+            (sourceFile, changeTracker) => {
+                deleteNode(changeTracker, sourceFile, findChild("x", sourceFile));
+            },
+        );
     }
     {
         const text = `

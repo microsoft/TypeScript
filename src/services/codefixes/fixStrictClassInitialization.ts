@@ -139,7 +139,9 @@ function addUndefinedType(changeTracker: textChanges.ChangeTracker, sourceFile: 
     const types = isUnionTypeNode(info.type) ? info.type.types.concat(undefinedTypeNode) : [info.type, undefinedTypeNode];
     const unionTypeNode = factory.createUnionTypeNode(types);
     if (info.isJs) {
-        changeTracker.addJSDocTags(sourceFile, info.prop, [factory.createJSDocTypeTag(/*tagName*/ undefined, factory.createJSDocTypeExpression(unionTypeNode))]);
+        changeTracker.addJSDocTags(sourceFile, info.prop, [
+            factory.createJSDocTypeTag(/*tagName*/ undefined, factory.createJSDocTypeExpression(unionTypeNode)),
+        ]);
     }
     else {
         changeTracker.replaceNode(sourceFile, info.type, unionTypeNode);

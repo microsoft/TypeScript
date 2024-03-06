@@ -241,7 +241,8 @@ export function doChangeNamedToNamespaceOrDefault(
             toConvertSymbols.add(symbol);
         }
     });
-    const preferredName = moduleSpecifier && isStringLiteral(moduleSpecifier) ? codefix.moduleSpecifierToValidIdentifier(moduleSpecifier.text, ScriptTarget.ESNext)
+    const preferredName = moduleSpecifier && isStringLiteral(moduleSpecifier) ?
+        codefix.moduleSpecifierToValidIdentifier(moduleSpecifier.text, ScriptTarget.ESNext)
         : "module";
     function hasNamespaceNameConflict(namedImport: ImportSpecifier): boolean {
         // We need to check if the preferred namespace name (`preferredName`) we'd like to use in the refactored code will present a name conflict.

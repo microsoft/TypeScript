@@ -134,7 +134,8 @@ function shouldKeepItem(
 
 function tryAddSingleDeclarationName(declaration: Declaration, containers: string[]): boolean {
     const name = getNameOfDeclaration(declaration);
-    return !!name && (pushLiteral(name, containers) || name.kind === SyntaxKind.ComputedPropertyName && tryAddComputedPropertyName(name.expression, containers));
+    return !!name &&
+        (pushLiteral(name, containers) || name.kind === SyntaxKind.ComputedPropertyName && tryAddComputedPropertyName(name.expression, containers));
 }
 
 // Only added the names of computed properties if they're simple dotted expressions, like:
@@ -142,7 +143,8 @@ function tryAddSingleDeclarationName(declaration: Declaration, containers: strin
 //      [X.Y.Z]() { }
 function tryAddComputedPropertyName(expression: Expression, containers: string[]): boolean {
     return pushLiteral(expression, containers)
-        || isPropertyAccessExpression(expression) && (containers.push(expression.name.text), true) && tryAddComputedPropertyName(expression.expression, containers);
+        || isPropertyAccessExpression(expression) && (containers.push(expression.name.text), true) &&
+            tryAddComputedPropertyName(expression.expression, containers);
 }
 
 function pushLiteral(node: Node, containers: string[]): boolean {

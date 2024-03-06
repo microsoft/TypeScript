@@ -124,7 +124,12 @@ registerRefactor(refactorName, {
     },
 });
 
-function getInliningInfo(file: SourceFile, startPosition: number, tryWithReferenceToken: boolean, program: Program): InliningInfo | RefactorErrorInfo | undefined {
+function getInliningInfo(
+    file: SourceFile,
+    startPosition: number,
+    tryWithReferenceToken: boolean,
+    program: Program,
+): InliningInfo | RefactorErrorInfo | undefined {
     const checker = program.getTypeChecker();
     const token = getTouchingPropertyName(file, startPosition);
     const parent = token.parent;

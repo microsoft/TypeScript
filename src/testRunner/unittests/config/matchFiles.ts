@@ -994,7 +994,12 @@ describe("unittests:: config:: matchFiles", () => {
         );
     });
 
-    baselineMatches("can include files in the same order on multiple platforms case sensitive", {}, caseSensitiveOrderingDiffersWithCaseHost, caseSensitiveBasePath);
+    baselineMatches(
+        "can include files in the same order on multiple platforms case sensitive",
+        {},
+        caseSensitiveOrderingDiffersWithCaseHost,
+        caseSensitiveBasePath,
+    );
     baselineMatches(
         "can include files in the same order on multiple platforms case insensitive",
         {},

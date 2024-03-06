@@ -503,7 +503,8 @@ function resolveModuleNameUsingGlobalCache(
     // otherwise try to load typings from @types
     const globalCache = resolutionHost.getGlobalCache();
     if (
-        globalCache !== undefined && !isExternalModuleNameRelative(moduleName) && !(primaryResult.resolvedModule && extensionIsTS(primaryResult.resolvedModule.extension))
+        globalCache !== undefined && !isExternalModuleNameRelative(moduleName) &&
+        !(primaryResult.resolvedModule && extensionIsTS(primaryResult.resolvedModule.extension))
     ) {
         // create different collection of failed lookup locations for second pass
         // if it will fail and we've already found something during the first pass - we don't want to pollute its results
@@ -538,7 +539,11 @@ export type GetResolutionWithResolvedFileName<
 ) => R | undefined;
 
 /** @internal */
-export function createResolutionCache(resolutionHost: ResolutionCacheHost, rootDirForResolution: string, logChangesWhenResolvingModule: boolean): ResolutionCache {
+export function createResolutionCache(
+    resolutionHost: ResolutionCacheHost,
+    rootDirForResolution: string,
+    logChangesWhenResolvingModule: boolean,
+): ResolutionCache {
     let filesWithChangedSetOfUnresolvedImports: Path[] | undefined;
     let filesWithInvalidatedResolutions: Set<Path> | undefined;
     let filesWithInvalidatedNonRelativeUnresolvedImports: ReadonlyMap<Path, readonly string[]> | undefined;
@@ -852,7 +857,13 @@ export function createResolutionCache(resolutionHost: ResolutionCacheHost, rootD
                 }
                 resolutionsInFile.set(name, mode, resolution);
                 if (resolution !== existingResolution) {
-                    watchFailedLookupLocationsOfExternalModuleResolutions(name, resolution, path, getResolutionWithResolvedFileName, deferWatchingNonRelativeResolution);
+                    watchFailedLookupLocationsOfExternalModuleResolutions(
+                        name,
+                        resolution,
+                        path,
+                        getResolutionWithResolvedFileName,
+                        deferWatchingNonRelativeResolution,
+                    );
                     if (existingResolution) {
                         stopWatchFailedLookupLocationOfResolution(existingResolution, path, getResolutionWithResolvedFileName);
                     }
@@ -878,7 +889,8 @@ export function createResolutionCache(resolutionHost: ResolutionCacheHost, rootD
                                 Diagnostics.Reusing_resolution_of_module_0_from_1_of_old_program_it_was_not_resolved :
                             resolved?.resolvedFileName ?
                             resolved.packageId ?
-                                Diagnostics.Reusing_resolution_of_type_reference_directive_0_from_1_of_old_program_it_was_successfully_resolved_to_2_with_Package_ID_3 :
+                                Diagnostics
+                                    .Reusing_resolution_of_type_reference_directive_0_from_1_of_old_program_it_was_successfully_resolved_to_2_with_Package_ID_3 :
                                 Diagnostics.Reusing_resolution_of_type_reference_directive_0_from_1_of_old_program_it_was_successfully_resolved_to_2 :
                             Diagnostics.Reusing_resolution_of_type_reference_directive_0_from_1_of_old_program_it_was_not_resolved,
                         name,
@@ -1000,7 +1012,13 @@ export function createResolutionCache(resolutionHost: ResolutionCacheHost, rootD
             const existingResolution = resolution;
             resolution = ts_resolveLibrary(libraryName, resolveFrom, options, host, libraryResolutionCache);
             const path = resolutionHost.toPath(resolveFrom);
-            watchFailedLookupLocationsOfExternalModuleResolutions(libraryName, resolution, path, getResolvedModule, /*deferWatchingNonRelativeResolution*/ false);
+            watchFailedLookupLocationsOfExternalModuleResolutions(
+                libraryName,
+                resolution,
+                path,
+                getResolvedModule,
+                /*deferWatchingNonRelativeResolution*/ false,
+            );
             resolvedLibraries.set(libFileName, resolution);
             if (existingResolution) {
                 stopWatchFailedLookupLocationOfResolution(existingResolution, path, getResolvedModule);
@@ -1178,7 +1196,8 @@ export function createResolutionCache(resolutionHost: ResolutionCacheHost, rootD
                         const symlinkWatcher = fileWatchesOfAffectingLocations.get(locationToWatch);
                         // Close symlink watcher if no ref
                         if (
-                            symlinkWatcher?.symlinks?.delete(affectingLocation) && !symlinkWatcher.symlinks.size && !symlinkWatcher.resolutions && !symlinkWatcher.files
+                            symlinkWatcher?.symlinks?.delete(affectingLocation) && !symlinkWatcher.symlinks.size && !symlinkWatcher.resolutions &&
+                            !symlinkWatcher.files
                         ) {
                             fileWatchesOfAffectingLocations.delete(locationToWatch);
                             symlinkWatcher.watcher.close();

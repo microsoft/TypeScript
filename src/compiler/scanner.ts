@@ -428,7 +428,13 @@ export function getPositionOfLineAndCharacter(sourceFile: SourceFileLike, line: 
 }
 
 /** @internal */
-export function computePositionOfLineAndCharacter(lineStarts: readonly number[], line: number, character: number, debugText?: string, allowEdits?: true): number {
+export function computePositionOfLineAndCharacter(
+    lineStarts: readonly number[],
+    line: number,
+    character: number,
+    debugText?: string,
+    allowEdits?: true,
+): number {
     if (line < 0 || line >= lineStarts.length) {
         if (allowEdits) {
             // Clamp line to nearest allowable value
@@ -734,7 +740,9 @@ function scanConflictMarkerTrivia(text: string, pos: number, error?: (diag: Diag
         // of the next ======= or >>>>>>> marker.
         while (pos < len) {
             const currentChar = text.charCodeAt(pos);
-            if ((currentChar === CharacterCodes.equals || currentChar === CharacterCodes.greaterThan) && currentChar !== ch && isConflictMarkerTrivia(text, pos)) {
+            if (
+                (currentChar === CharacterCodes.equals || currentChar === CharacterCodes.greaterThan) && currentChar !== ch && isConflictMarkerTrivia(text, pos)
+            ) {
                 break;
             }
 
@@ -2043,7 +2051,12 @@ export function createScanner(
                             tokenFlags |= TokenFlags.PrecedingJSDocComment;
                         }
 
-                        commentDirectives = appendIfCommentDirective(commentDirectives, text.slice(lastLineStart, pos), commentDirectiveRegExMultiLine, lastLineStart);
+                        commentDirectives = appendIfCommentDirective(
+                            commentDirectives,
+                            text.slice(lastLineStart, pos),
+                            commentDirectiveRegExMultiLine,
+                            lastLineStart,
+                        );
 
                         if (!commentClosed) {
                             error(Diagnostics.Asterisk_Slash_expected);
@@ -2753,7 +2766,9 @@ export function createScanner(
 
         if (isIdentifierStart(ch, languageVersion)) {
             let char = ch;
-            while (pos < end && isIdentifierPart(char = codePointAt(text, pos), languageVersion) || text.charCodeAt(pos) === CharacterCodes.minus) pos += charSize(char);
+            while (pos < end && isIdentifierPart(char = codePointAt(text, pos), languageVersion) || text.charCodeAt(pos) === CharacterCodes.minus) {
+                pos += charSize(char);
+            }
             tokenValue = text.substring(tokenStart, pos);
             if (char === CharacterCodes.backslash) {
                 tokenValue += scanIdentifierParts();

@@ -408,7 +408,12 @@ export function visitParameterList(
     context: TransformationContext,
     nodesVisitor?: NodesVisitor,
 ): NodeArray<ParameterDeclaration> | undefined;
-export function visitParameterList(nodes: NodeArray<ParameterDeclaration> | undefined, visitor: Visitor, context: TransformationContext, nodesVisitor = visitNodes) {
+export function visitParameterList(
+    nodes: NodeArray<ParameterDeclaration> | undefined,
+    visitor: Visitor,
+    context: TransformationContext,
+    nodesVisitor = visitNodes,
+) {
     let updated: NodeArray<ParameterDeclaration> | undefined;
     context.startLexicalEnvironment();
     if (nodes) {
@@ -548,7 +553,12 @@ export function visitFunctionBody(node: FunctionBody | undefined, visitor: Visit
  * environment and merging hoisted declarations upon completion.
  */
 export function visitFunctionBody(node: ConciseBody, visitor: Visitor, context: TransformationContext): ConciseBody;
-/** @internal */ export function visitFunctionBody(node: FunctionBody, visitor: Visitor, context: TransformationContext, nodeVisitor?: NodeVisitor): FunctionBody; // eslint-disable-line @typescript-eslint/unified-signatures
+/** @internal */ export function visitFunctionBody(
+    node: FunctionBody,
+    visitor: Visitor,
+    context: TransformationContext,
+    nodeVisitor?: NodeVisitor,
+): FunctionBody; // eslint-disable-line @typescript-eslint/unified-signatures
 /** @internal */ export function visitFunctionBody(
     node: FunctionBody | undefined,
     visitor: Visitor,
@@ -822,7 +832,14 @@ const visitEachChildTable: VisitEachChildTable = {
         );
     },
 
-    [SyntaxKind.ClassStaticBlockDeclaration]: function visitEachChildOfClassStaticBlockDeclaration(node, visitor, context, _nodesVisitor, nodeVisitor, _tokenVisitor) {
+    [SyntaxKind.ClassStaticBlockDeclaration]: function visitEachChildOfClassStaticBlockDeclaration(
+        node,
+        visitor,
+        context,
+        _nodesVisitor,
+        nodeVisitor,
+        _tokenVisitor,
+    ) {
         context.startLexicalEnvironment();
         context.suspendLexicalEnvironment();
         return context.factory.updateClassStaticBlockDeclaration(
@@ -980,7 +997,14 @@ const visitEachChildTable: VisitEachChildTable = {
         );
     },
 
-    [SyntaxKind.ImportTypeAssertionContainer]: function visitEachChildOfImportTypeAssertionContainer(node, visitor, context, _nodesVisitor, nodeVisitor, _tokenVisitor) {
+    [SyntaxKind.ImportTypeAssertionContainer]: function visitEachChildOfImportTypeAssertionContainer(
+        node,
+        visitor,
+        context,
+        _nodesVisitor,
+        nodeVisitor,
+        _tokenVisitor,
+    ) {
         return context.factory.updateImportTypeAssertionContainer(
             node,
             Debug.checkDefined(nodeVisitor(node.assertClause, visitor, isAssertClause)),
@@ -1296,7 +1320,14 @@ const visitEachChildTable: VisitEachChildTable = {
         );
     },
 
-    [SyntaxKind.ExpressionWithTypeArguments]: function visitEachChildOfExpressionWithTypeArguments(node, visitor, context, nodesVisitor, nodeVisitor, _tokenVisitor) {
+    [SyntaxKind.ExpressionWithTypeArguments]: function visitEachChildOfExpressionWithTypeArguments(
+        node,
+        visitor,
+        context,
+        nodesVisitor,
+        nodeVisitor,
+        _tokenVisitor,
+    ) {
         return context.factory.updateExpressionWithTypeArguments(
             node,
             Debug.checkDefined(nodeVisitor(node.expression, visitor, isExpression)),
@@ -1580,7 +1611,14 @@ const visitEachChildTable: VisitEachChildTable = {
         );
     },
 
-    [SyntaxKind.NamespaceExportDeclaration]: function visitEachChildOfNamespaceExportDeclaration(node, visitor, context, _nodesVisitor, nodeVisitor, _tokenVisitor) {
+    [SyntaxKind.NamespaceExportDeclaration]: function visitEachChildOfNamespaceExportDeclaration(
+        node,
+        visitor,
+        context,
+        _nodesVisitor,
+        nodeVisitor,
+        _tokenVisitor,
+    ) {
         return context.factory.updateNamespaceExportDeclaration(
             node,
             Debug.checkDefined(nodeVisitor(node.name, visitor, isIdentifier)),
@@ -1826,7 +1864,14 @@ const visitEachChildTable: VisitEachChildTable = {
         );
     },
 
-    [SyntaxKind.ShorthandPropertyAssignment]: function visitEachChildOfShorthandPropertyAssignment(node, visitor, context, _nodesVisitor, nodeVisitor, _tokenVisitor) {
+    [SyntaxKind.ShorthandPropertyAssignment]: function visitEachChildOfShorthandPropertyAssignment(
+        node,
+        visitor,
+        context,
+        _nodesVisitor,
+        nodeVisitor,
+        _tokenVisitor,
+    ) {
         return context.factory.updateShorthandPropertyAssignment(
             node,
             Debug.checkDefined(nodeVisitor(node.name, visitor, isIdentifier)),
@@ -1859,7 +1904,14 @@ const visitEachChildTable: VisitEachChildTable = {
     },
 
     // Transformation nodes
-    [SyntaxKind.PartiallyEmittedExpression]: function visitEachChildOfPartiallyEmittedExpression(node, visitor, context, _nodesVisitor, nodeVisitor, _tokenVisitor) {
+    [SyntaxKind.PartiallyEmittedExpression]: function visitEachChildOfPartiallyEmittedExpression(
+        node,
+        visitor,
+        context,
+        _nodesVisitor,
+        nodeVisitor,
+        _tokenVisitor,
+    ) {
         return context.factory.updatePartiallyEmittedExpression(
             node,
             Debug.checkDefined(nodeVisitor(node.expression, visitor, isExpression)),

@@ -423,7 +423,10 @@ export function getMatchedFileSpec(program: Program, fileName: string) {
 
     const filePath = program.getCanonicalFileName(fileName);
     const basePath = getDirectoryPath(getNormalizedAbsolutePath(configFile.fileName, program.getCurrentDirectory()));
-    return find(configFile.configFileSpecs.validatedFilesSpec, fileSpec => program.getCanonicalFileName(getNormalizedAbsolutePath(fileSpec, basePath)) === filePath);
+    return find(
+        configFile.configFileSpecs.validatedFilesSpec,
+        fileSpec => program.getCanonicalFileName(getNormalizedAbsolutePath(fileSpec, basePath)) === filePath,
+    );
 }
 
 /** @internal */
@@ -445,7 +448,11 @@ export function getMatchedIncludeSpec(program: Program, fileName: string) {
 }
 
 /** @internal */
-export function fileIncludeReasonToDiagnostics(program: Program, reason: FileIncludeReason, fileNameConvertor?: (fileName: string) => string): DiagnosticMessageChain {
+export function fileIncludeReasonToDiagnostics(
+    program: Program,
+    reason: FileIncludeReason,
+    fileNameConvertor?: (fileName: string) => string,
+): DiagnosticMessageChain {
     const options = program.getCompilerOptions();
     if (isReferencedFile(reason)) {
         const referenceLocation = getReferencedFileLocation(program, reason);
@@ -535,7 +542,11 @@ export function fileIncludeReasonToDiagnostics(program: Program, reason: FileInc
         case FileIncludeKind.AutomaticTypeDirectiveFile: {
             const messageAndArgs: DiagnosticAndArguments = options.types ?
                 reason.packageId ?
-                    [Diagnostics.Entry_point_of_type_library_0_specified_in_compilerOptions_with_packageId_1, reason.typeReference, packageIdToString(reason.packageId)] :
+                    [
+                        Diagnostics.Entry_point_of_type_library_0_specified_in_compilerOptions_with_packageId_1,
+                        reason.typeReference,
+                        packageIdToString(reason.packageId),
+                    ] :
                     [Diagnostics.Entry_point_of_type_library_0_specified_in_compilerOptions, reason.typeReference] :
                 reason.packageId ?
                 [Diagnostics.Entry_point_for_implicit_type_library_0_with_packageId_1, reason.typeReference, packageIdToString(reason.packageId)] :
@@ -743,7 +754,8 @@ export function createWatchFactory<Y = undefined>(
     host: WatchFactoryHost & { trace?(s: string): void; },
     options: { extendedDiagnostics?: boolean; diagnostics?: boolean; },
 ) {
-    const watchLogLevel = host.trace ? options.extendedDiagnostics ? WatchLogLevel.Verbose : options.diagnostics ? WatchLogLevel.TriggerOnly : WatchLogLevel.None
+    const watchLogLevel = host.trace ?
+        options.extendedDiagnostics ? WatchLogLevel.Verbose : options.diagnostics ? WatchLogLevel.TriggerOnly : WatchLogLevel.None
         : WatchLogLevel.None;
     const writeLog: (s: string) => void = watchLogLevel !== WatchLogLevel.None ? (s => host.trace!(s)) : noop;
     const result = getWatchFactory<WatchType, Y>(host, watchLogLevel, writeLog) as WatchFactoryWithLog<WatchType, Y>;
@@ -1009,7 +1021,8 @@ export function performIncrementalCompilation(input: IncrementalCompilationOptio
         builderProgram,
         input.reportDiagnostic || createDiagnosticReporter(system),
         s => host.trace && host.trace(s),
-        input.reportErrorSummary || input.options.pretty ? (errorCount, filesInError) => system.write(getErrorSummaryText(errorCount, filesInError, system.newLine, host))
+        input.reportErrorSummary || input.options.pretty ?
+            (errorCount, filesInError) => system.write(getErrorSummaryText(errorCount, filesInError, system.newLine, host))
             : undefined,
     );
     if (input.afterProgramEmitAndDiagnostics) input.afterProgramEmitAndDiagnostics(builderProgram);

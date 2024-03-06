@@ -1,7 +1,12 @@
 import * as ts from "../_namespaces/ts";
 import * as Utils from "../_namespaces/Utils";
 
-function withChange(text: ts.IScriptSnapshot, start: number, length: number, newText: string): { text: ts.IScriptSnapshot; textChangeRange: ts.TextChangeRange; } {
+function withChange(
+    text: ts.IScriptSnapshot,
+    start: number,
+    length: number,
+    newText: string,
+): { text: ts.IScriptSnapshot; textChangeRange: ts.TextChangeRange; } {
     const contents = ts.getSnapshotText(text);
     const newContents = contents.substr(0, start) + newText + contents.substring(start + length);
 
@@ -525,7 +530,8 @@ describe("unittests:: Incremental Parser", () => {
     });
 
     it("Delete semicolon", () => {
-        const source = "export class Foo {\r\n}\r\n\r\nexport var foo = new Foo();\r\n\r\n    export function test(foo: Foo) {\r\n        return true;\r\n    }\r\n";
+        const source =
+            "export class Foo {\r\n}\r\n\r\nexport var foo = new Foo();\r\n\r\n    export function test(foo: Foo) {\r\n        return true;\r\n    }\r\n";
 
         const oldText = ts.ScriptSnapshot.fromString(source);
         const index = source.lastIndexOf(";");
@@ -869,7 +875,10 @@ module m3 { }\
             verifyScenario("when changing text that adds another comment", verifyChangeDirectiveType);
             verifyScenario("when changing text that keeps the comment but adds more nodes", verifyReuseChange);
 
-            function verifyCommentDirectives(oldText: ts.IScriptSnapshot, newTextAndChange: { text: ts.IScriptSnapshot; textChangeRange: ts.TextChangeRange; }) {
+            function verifyCommentDirectives(
+                oldText: ts.IScriptSnapshot,
+                newTextAndChange: { text: ts.IScriptSnapshot; textChangeRange: ts.TextChangeRange; },
+            ) {
                 const { incrementalNewTree, newTree } = compareTrees(oldText, newTextAndChange.text, newTextAndChange.textChangeRange, -1);
                 assert.deepEqual(incrementalNewTree.commentDirectives, newTree.commentDirectives);
             }
@@ -937,7 +946,10 @@ module m3 { }\
 
             function verifyChangeBackToDirective(atIndex: number, singleIgnore?: true) {
                 const index = getIndexOfTsIgnoreComment(atIndex) + tsIgnoreComment.indexOf("@");
-                const source = textWithIgnoreCommentFrom(textWithIgnoreComment.slice(0, index) + "blah " + textWithIgnoreComment.slice(index + 1), singleIgnore);
+                const source = textWithIgnoreCommentFrom(
+                    textWithIgnoreComment.slice(0, index) + "blah " + textWithIgnoreComment.slice(index + 1),
+                    singleIgnore,
+                );
                 const oldText = ts.ScriptSnapshot.fromString(source);
                 const newTextAndChange = withChange(oldText, index, "blah ".length, "@");
                 verifyCommentDirectives(oldText, newTextAndChange);
@@ -946,7 +958,10 @@ module m3 { }\
             function verifyDeletingBlah(atIndex: number, singleIgnore?: true) {
                 const tsIgnoreIndex = getIndexOfTsIgnoreComment(atIndex);
                 const index = tsIgnoreIndex + tsIgnoreComment.indexOf("@");
-                const source = textWithIgnoreCommentFrom(textWithIgnoreComment.slice(0, index) + "blah " + textWithIgnoreComment.slice(index + 1), singleIgnore);
+                const source = textWithIgnoreCommentFrom(
+                    textWithIgnoreComment.slice(0, index) + "blah " + textWithIgnoreComment.slice(index + 1),
+                    singleIgnore,
+                );
                 const oldText = ts.ScriptSnapshot.fromString(source);
                 const newTextAndChange = withDelete(oldText, tsIgnoreIndex, tsIgnoreComment.length + "blah".length);
                 verifyCommentDirectives(oldText, newTextAndChange);

@@ -164,7 +164,9 @@ export function createWatchCompilerHostOfConfigFileForBaseline<T extends ts.Buil
     return host;
 }
 
-interface CreateWatchCompilerHostOfFilesAndCompilerOptionsForBaseline<T extends ts.BuilderProgram> extends ts.CreateWatchCompilerHostOfFilesAndCompilerOptionsInput<T> {
+interface CreateWatchCompilerHostOfFilesAndCompilerOptionsForBaseline<T extends ts.BuilderProgram>
+    extends ts.CreateWatchCompilerHostOfFilesAndCompilerOptionsInput<T>
+{
     system: TestServerHost;
     cb: ts.ExecuteCommandLineCallbacks;
 }
@@ -189,7 +191,12 @@ function updateWatchHostForBaseline<T extends ts.BuilderProgram>(host: ts.WatchC
     return host;
 }
 
-export function applyEdit(sys: BaselineBase["sys"], baseline: BaselineBase["baseline"], edit: TscWatchCompileChange["edit"], caption?: TscWatchCompileChange["caption"]) {
+export function applyEdit(
+    sys: BaselineBase["sys"],
+    baseline: BaselineBase["baseline"],
+    edit: TscWatchCompileChange["edit"],
+    caption?: TscWatchCompileChange["caption"],
+) {
     baseline.push(`Change::${caption ? " " + caption : ""}`, "");
     edit(sys);
     baseline.push("Input::");

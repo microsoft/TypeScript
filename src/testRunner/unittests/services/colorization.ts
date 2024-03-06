@@ -134,7 +134,12 @@ describe("unittests:: services:: Colorization", () => {
         });
 
         it("correctly classifies a multiline string with one backslash", () => {
-            testLexicalClassification("'line1\\", ts.EndOfLineState.None, stringLiteral("'line1\\"), finalEndOfLineState(ts.EndOfLineState.InSingleQuoteStringLiteral));
+            testLexicalClassification(
+                "'line1\\",
+                ts.EndOfLineState.None,
+                stringLiteral("'line1\\"),
+                finalEndOfLineState(ts.EndOfLineState.InSingleQuoteStringLiteral),
+            );
         });
 
         it("correctly classifies a multiline string with three backslashes", () => {
@@ -185,7 +190,12 @@ describe("unittests:: services:: Colorization", () => {
         });
 
         it("correctly classifies the last line of an unterminated multiline string ending in four backslashes", () => {
-            testLexicalClassification("\\\\\\\\", ts.EndOfLineState.InDoubleQuoteStringLiteral, stringLiteral("\\\\\\\\"), finalEndOfLineState(ts.EndOfLineState.None));
+            testLexicalClassification(
+                "\\\\\\\\",
+                ts.EndOfLineState.InDoubleQuoteStringLiteral,
+                stringLiteral("\\\\\\\\"),
+                finalEndOfLineState(ts.EndOfLineState.None),
+            );
         });
 
         it("correctly classifies the last line of a multiline string", () => {
@@ -226,7 +236,14 @@ describe("unittests:: services:: Colorization", () => {
         });
 
         it("correctly classifies a keyword after a dot separated by comment trivia", () => {
-            testLexicalClassification("a./*hello world*/ var", ts.EndOfLineState.None, identifier("a"), punctuation("."), comment("/*hello world*/"), identifier("var"));
+            testLexicalClassification(
+                "a./*hello world*/ var",
+                ts.EndOfLineState.None,
+                identifier("a"),
+                punctuation("."),
+                comment("/*hello world*/"),
+                identifier("var"),
+            );
         });
 
         it("classifies a property access with whitespace around the dot", () => {
@@ -238,7 +255,13 @@ describe("unittests:: services:: Colorization", () => {
         });
 
         it("classifies multiple keywords properly", () => {
-            testLexicalClassification("public static", ts.EndOfLineState.None, keyword("public"), keyword("static"), finalEndOfLineState(ts.EndOfLineState.None));
+            testLexicalClassification(
+                "public static",
+                ts.EndOfLineState.None,
+                keyword("public"),
+                keyword("static"),
+                finalEndOfLineState(ts.EndOfLineState.None),
+            );
 
             testLexicalClassification("public var", ts.EndOfLineState.None, keyword("public"), identifier("var"), finalEndOfLineState(ts.EndOfLineState.None));
         });

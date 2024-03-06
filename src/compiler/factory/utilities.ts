@@ -215,7 +215,11 @@ function createReactNamespace(reactNamespace: string, parent: JsxOpeningLikeElem
     return react;
 }
 
-function createJsxFactoryExpressionFromEntityName(factory: NodeFactory, jsxFactory: EntityName, parent: JsxOpeningLikeElement | JsxOpeningFragment): Expression {
+function createJsxFactoryExpressionFromEntityName(
+    factory: NodeFactory,
+    jsxFactory: EntityName,
+    parent: JsxOpeningLikeElement | JsxOpeningFragment,
+): Expression {
     if (isQualifiedName(jsxFactory)) {
         const left = createJsxFactoryExpressionFromEntityName(factory, jsxFactory.left, parent);
         const right = factory.createIdentifier(idText(jsxFactory.right)) as Mutable<Identifier>;
@@ -792,7 +796,11 @@ export function createExternalHelpersImportDeclarationIfNeeded(
                         map(helperNames, name =>
                             isFileLevelUniqueName(sourceFile, name)
                                 ? nodeFactory.createImportSpecifier(/*isTypeOnly*/ false, /*propertyName*/ undefined, nodeFactory.createIdentifier(name))
-                                : nodeFactory.createImportSpecifier(/*isTypeOnly*/ false, nodeFactory.createIdentifier(name), helperFactory.getUnscopedHelperName(name))),
+                                : nodeFactory.createImportSpecifier(
+                                    /*isTypeOnly*/ false,
+                                    nodeFactory.createIdentifier(name),
+                                    helperFactory.getUnscopedHelperName(name),
+                                )),
                     );
                     const parseNode = getOriginalNode(sourceFile, isSourceFile);
                     const emitNode = getOrCreateEmitNode(parseNode);
@@ -934,7 +942,12 @@ function tryRenameExternalModule(factory: NodeFactory, moduleName: LiteralExpres
  *
  * @internal
  */
-export function tryGetModuleNameFromFile(factory: NodeFactory, file: SourceFile | undefined, host: EmitHost, options: CompilerOptions): StringLiteral | undefined {
+export function tryGetModuleNameFromFile(
+    factory: NodeFactory,
+    file: SourceFile | undefined,
+    host: EmitHost,
+    options: CompilerOptions,
+): StringLiteral | undefined {
     if (!file) {
         return undefined;
     }
@@ -1112,7 +1125,9 @@ export function getPropertyNameOfBindingOrAssignmentElement(bindingElement: Bind
 }
 
 /** @internal */
-export function tryGetPropertyNameOfBindingOrAssignmentElement(bindingElement: BindingOrAssignmentElement): Exclude<PropertyName, PrivateIdentifier> | undefined {
+export function tryGetPropertyNameOfBindingOrAssignmentElement(
+    bindingElement: BindingOrAssignmentElement,
+): Exclude<PropertyName, PrivateIdentifier> | undefined {
     switch (bindingElement.kind) {
         case SyntaxKind.BindingElement:
             // `a` in `let { a: b } = ...`
@@ -1533,7 +1548,10 @@ namespace BinaryExpressionState {
         return stackIndex;
     }
 
-    export function nextState<TOuterState, TState, TResult>(machine: BinaryExpressionStateMachine<TOuterState, TState, TResult>, currentState: BinaryExpressionState) {
+    export function nextState<TOuterState, TState, TResult>(
+        machine: BinaryExpressionStateMachine<TOuterState, TState, TResult>,
+        currentState: BinaryExpressionState,
+    ) {
         switch (currentState) {
             case enter:
                 if (machine.onLeft) return left;
@@ -1555,7 +1573,13 @@ namespace BinaryExpressionState {
         }
     }
 
-    function pushStack<TState>(stackIndex: number, stateStack: BinaryExpressionState[], nodeStack: BinaryExpression[], userStateStack: TState[], node: BinaryExpression) {
+    function pushStack<TState>(
+        stackIndex: number,
+        stateStack: BinaryExpressionState[],
+        nodeStack: BinaryExpression[],
+        userStateStack: TState[],
+        node: BinaryExpression,
+    ) {
         stackIndex++;
         stateStack[stackIndex] = enter;
         nodeStack[stackIndex] = node;

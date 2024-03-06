@@ -84,6 +84,10 @@ describe("unittests:: tsserver:: maxNodeModuleJsDepth for inferred projects", ()
         const session = new TestSession({ host, useSingleInferredProject: true });
 
         openFilesForSession(["/user/username/projects/project1/src/file1.js"], session);
-        baselineTsserverLogs("maxNodeModuleJsDepth", "handles resolutions when currentNodeModulesDepth changes when referencing file from another file", session);
+        baselineTsserverLogs(
+            "maxNodeModuleJsDepth",
+            "handles resolutions when currentNodeModulesDepth changes when referencing file from another file",
+            session,
+        );
     });
 });

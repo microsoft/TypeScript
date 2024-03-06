@@ -35,7 +35,8 @@ registerRefactor(actionName, {
         const renameFilename = context.file.fileName;
         const nameNeedRename = info.renameAccessor ? info.accessorName : info.fieldName;
         const renameLocationOffset = isIdentifier(nameNeedRename) ? 0 : -1;
-        const renameLocation = renameLocationOffset + getRenameLocation(edits, renameFilename, nameNeedRename.text, /*preferLastLocation*/ isParameter(info.declaration));
+        const renameLocation = renameLocationOffset +
+            getRenameLocation(edits, renameFilename, nameNeedRename.text, /*preferLastLocation*/ isParameter(info.declaration));
 
         return { renameFilename, renameLocation, edits };
     },

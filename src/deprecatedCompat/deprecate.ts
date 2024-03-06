@@ -19,7 +19,13 @@ function getTypeScriptVersion() {
     return typeScriptVersion ?? (typeScriptVersion = new Version(version));
 }
 
-function formatDeprecationMessage(name: string, error: boolean | undefined, errorAfter: Version | undefined, since: Version | undefined, message: string | undefined) {
+function formatDeprecationMessage(
+    name: string,
+    error: boolean | undefined,
+    errorAfter: Version | undefined,
+    since: Version | undefined,
+    message: string | undefined,
+) {
     let deprecationMessage = error ? "DeprecationError: " : "DeprecationWarning: ";
     deprecationMessage += `'${name}' `;
     deprecationMessage += since ? `has been deprecated since v${since}` : "is deprecated";
@@ -48,7 +54,8 @@ function createWarningDeprecation(name: string, errorAfter: Version | undefined,
 export function createDeprecation(name: string, options: DeprecationOptions & { error: true; }): () => never;
 export function createDeprecation(name: string, options?: DeprecationOptions): () => void;
 export function createDeprecation(name: string, options: DeprecationOptions = {}) {
-    const version = typeof options.typeScriptVersion === "string" ? new Version(options.typeScriptVersion) : options.typeScriptVersion ?? getTypeScriptVersion();
+    const version = typeof options.typeScriptVersion === "string" ? new Version(options.typeScriptVersion)
+        : options.typeScriptVersion ?? getTypeScriptVersion();
     const errorAfter = typeof options.errorAfter === "string" ? new Version(options.errorAfter) : options.errorAfter;
     const warnAfter = typeof options.warnAfter === "string" ? new Version(options.warnAfter) : options.warnAfter;
     const since = typeof options.since === "string" ? new Version(options.since) : options.since ?? warnAfter;

@@ -139,7 +139,10 @@ export function intersperse<T>(input: T[], element: T): T[] {
  */
 export function every<T, U extends T>(array: readonly T[], callback: (element: T, index: number) => element is U): array is readonly U[];
 /** @internal */
-export function every<T, U extends T>(array: readonly T[] | undefined, callback: (element: T, index: number) => element is U): array is readonly U[] | undefined;
+export function every<T, U extends T>(
+    array: readonly T[] | undefined,
+    callback: (element: T, index: number) => element is U,
+): array is readonly U[] | undefined;
 /** @internal */
 export function every<T>(array: readonly T[] | undefined, callback: (element: T, index: number) => boolean): boolean;
 export function every<T>(array: readonly T[] | undefined, callback: (element: T, index: number) => boolean): boolean {
@@ -159,7 +162,11 @@ export function every<T>(array: readonly T[] | undefined, callback: (element: T,
  *
  * @internal
  */
-export function find<T, U extends T>(array: readonly T[] | undefined, predicate: (element: T, index: number) => element is U, startIndex?: number): U | undefined;
+export function find<T, U extends T>(
+    array: readonly T[] | undefined,
+    predicate: (element: T, index: number) => element is U,
+    startIndex?: number,
+): U | undefined;
 /** @internal */
 export function find<T>(array: readonly T[] | undefined, predicate: (element: T, index: number) => boolean, startIndex?: number): T | undefined;
 /** @internal */
@@ -175,7 +182,11 @@ export function find<T>(array: readonly T[] | undefined, predicate: (element: T,
 }
 
 /** @internal */
-export function findLast<T, U extends T>(array: readonly T[] | undefined, predicate: (element: T, index: number) => element is U, startIndex?: number): U | undefined;
+export function findLast<T, U extends T>(
+    array: readonly T[] | undefined,
+    predicate: (element: T, index: number) => element is U,
+    startIndex?: number,
+): U | undefined;
 /** @internal */
 export function findLast<T>(array: readonly T[] | undefined, predicate: (element: T, index: number) => boolean, startIndex?: number): T | undefined;
 /** @internal */
@@ -1336,7 +1347,13 @@ export function reduceLeft<T, U>(array: readonly T[] | undefined, f: (memo: U, v
 /** @internal */
 export function reduceLeft<T>(array: readonly T[], f: (memo: T, value: T, i: number) => T): T | undefined;
 /** @internal */
-export function reduceLeft<T>(array: readonly T[] | undefined, f: (memo: T, value: T, i: number) => T, initial?: T, start?: number, count?: number): T | undefined {
+export function reduceLeft<T>(
+    array: readonly T[] | undefined,
+    f: (memo: T, value: T, i: number) => T,
+    initial?: T,
+    start?: number,
+    count?: number,
+): T | undefined {
     if (array && array.length > 0) {
         const size = array.length;
         if (size > 0) {
@@ -1513,7 +1530,11 @@ export function arrayToMap<T>(array: readonly T[], makeKey: (value: T) => string
 /** @internal */
 export function arrayToMap<T, U>(array: readonly T[], makeKey: (value: T) => string | undefined, makeValue: (value: T) => U): Map<string, U>;
 /** @internal */
-export function arrayToMap<K, V1, V2>(array: readonly V1[], makeKey: (value: V1) => K | undefined, makeValue: (value: V1) => V1 | V2 = identity): Map<K, V1 | V2> {
+export function arrayToMap<K, V1, V2>(
+    array: readonly V1[],
+    makeKey: (value: V1) => K | undefined,
+    makeValue: (value: V1) => V1 | V2 = identity,
+): Map<K, V1 | V2> {
     const result = new Map<K, V1 | V2>();
     for (const value of array) {
         const key = makeKey(value);
@@ -2644,7 +2665,11 @@ export function and<T>(f: (arg: T) => boolean, g: (arg: T) => boolean) {
 /** @internal */
 export function or<P, R1 extends P, R2 extends P>(f1: (p1: P) => p1 is R1, f2: (p2: P) => p2 is R2): (p: P) => p is R1 | R2;
 /** @internal */
-export function or<P, R1 extends P, R2 extends P, R3 extends P>(f1: (p1: P) => p1 is R1, f2: (p2: P) => p2 is R2, f3: (p3: P) => p3 is R3): (p: P) => p is R1 | R2 | R3;
+export function or<P, R1 extends P, R2 extends P, R3 extends P>(
+    f1: (p1: P) => p1 is R1,
+    f2: (p2: P) => p2 is R2,
+    f3: (p3: P) => p3 is R3,
+): (p: P) => p is R1 | R2 | R3;
 /** @internal */
 export function or<T extends unknown[], U>(...fs: ((...args: T) => U)[]): (...args: T) => U;
 /** @internal */

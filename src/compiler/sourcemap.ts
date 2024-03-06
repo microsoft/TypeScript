@@ -152,7 +152,14 @@ export function createSourceMapGenerator(
                 || pendingSourceLine === sourceLine && pendingSourceCharacter > sourceCharacter);
     }
 
-    function addMapping(generatedLine: number, generatedCharacter: number, sourceIndex?: number, sourceLine?: number, sourceCharacter?: number, nameIndex?: number) {
+    function addMapping(
+        generatedLine: number,
+        generatedCharacter: number,
+        sourceIndex?: number,
+        sourceLine?: number,
+        sourceCharacter?: number,
+        nameIndex?: number,
+    ) {
         Debug.assert(generatedLine >= pendingGeneratedLine, "generatedLine cannot backtrack");
         Debug.assert(generatedCharacter >= 0, "generatedCharacter cannot be negative");
         Debug.assert(sourceIndex === undefined || sourceIndex >= 0, "sourceIndex cannot be negative");

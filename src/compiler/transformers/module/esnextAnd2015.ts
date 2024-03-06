@@ -86,7 +86,10 @@ export function transformECMAScriptModule(context: TransformationContext): (x: S
             if (importRequireStatements) {
                 result = factory.updateSourceFile(
                     result,
-                    setTextRange(factory.createNodeArray(insertStatementsAfterCustomPrologue(result.statements.slice(), importRequireStatements)), result.statements),
+                    setTextRange(
+                        factory.createNodeArray(insertStatementsAfterCustomPrologue(result.statements.slice(), importRequireStatements)),
+                        result.statements,
+                    ),
                 );
             }
             if (!isExternalModule(node) || getEmitModuleKind(compilerOptions) === ModuleKind.Preserve || some(result.statements, isExternalModuleIndicator)) {
@@ -352,7 +355,10 @@ export function transformECMAScriptModule(context: TransformationContext): (x: S
         const name = idText(node);
         let substitution = helperNameSubstitutions!.get(name);
         if (!substitution) {
-            helperNameSubstitutions!.set(name, substitution = factory.createUniqueName(name, GeneratedIdentifierFlags.Optimistic | GeneratedIdentifierFlags.FileLevel));
+            helperNameSubstitutions!.set(
+                name,
+                substitution = factory.createUniqueName(name, GeneratedIdentifierFlags.Optimistic | GeneratedIdentifierFlags.FileLevel),
+            );
         }
         return substitution;
     }

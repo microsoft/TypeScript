@@ -411,12 +411,25 @@ function functionSpan(node: SignatureDeclaration, body: Block, sourceFile: Sourc
     return openToken && closeToken && spanBetweenTokens(openToken, closeToken, node, sourceFile, /*autoCollapse*/ node.kind !== SyntaxKind.ArrowFunction);
 }
 
-function spanBetweenTokens(openToken: Node, closeToken: Node, hintSpanNode: Node, sourceFile: SourceFile, autoCollapse = false, useFullStart = true): OutliningSpan {
+function spanBetweenTokens(
+    openToken: Node,
+    closeToken: Node,
+    hintSpanNode: Node,
+    sourceFile: SourceFile,
+    autoCollapse = false,
+    useFullStart = true,
+): OutliningSpan {
     const textSpan = createTextSpanFromBounds(useFullStart ? openToken.getFullStart() : openToken.getStart(sourceFile), closeToken.getEnd());
     return createOutliningSpan(textSpan, OutliningSpanKind.Code, createTextSpanFromNode(hintSpanNode, sourceFile), autoCollapse);
 }
 
-function createOutliningSpan(textSpan: TextSpan, kind: OutliningSpanKind, hintSpan: TextSpan = textSpan, autoCollapse = false, bannerText = "..."): OutliningSpan {
+function createOutliningSpan(
+    textSpan: TextSpan,
+    kind: OutliningSpanKind,
+    hintSpan: TextSpan = textSpan,
+    autoCollapse = false,
+    bannerText = "...",
+): OutliningSpan {
     return { textSpan, kind, hintSpan, bannerText, autoCollapse };
 }
 

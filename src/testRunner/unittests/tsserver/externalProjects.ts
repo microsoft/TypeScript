@@ -546,7 +546,9 @@ describe("unittests:: tsserver:: externalProjects", () => {
             }, session);
             baselineTsserverLogs(
                 "externalProjects",
-                `correctly handling add or remove tsconfig - 1${lazyConfiguredProjectsFromExternalProject ? " with lazyConfiguredProjectsFromExternalProject" : ""}`,
+                `correctly handling add or remove tsconfig - 1${
+                    lazyConfiguredProjectsFromExternalProject ? " with lazyConfiguredProjectsFromExternalProject" : ""
+                }`,
                 session,
             );
         }
@@ -637,7 +639,9 @@ describe("unittests:: tsserver:: externalProjects", () => {
             });
             baselineTsserverLogs(
                 "externalProjects",
-                `correctly handling add or remove tsconfig - 2${lazyConfiguredProjectsFromExternalProject ? " with lazyConfiguredProjectsFromExternalProject" : ""}`,
+                `correctly handling add or remove tsconfig - 2${
+                    lazyConfiguredProjectsFromExternalProject ? " with lazyConfiguredProjectsFromExternalProject" : ""
+                }`,
                 session,
             );
         }

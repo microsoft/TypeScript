@@ -740,7 +740,13 @@ describe("unittests:: tsc-watch:: watchEnvironment:: tsc-watch with different po
                 edits: [
                     {
                         caption: "emulate access",
-                        edit: sys => sys.invokeFsWatches("/user/username/projects/myproject/main.ts", "change", /*modifiedTime*/ undefined, /*useTildeSuffix*/ undefined),
+                        edit: sys =>
+                            sys.invokeFsWatches(
+                                "/user/username/projects/myproject/main.ts",
+                                "change",
+                                /*modifiedTime*/ undefined,
+                                /*useTildeSuffix*/ undefined,
+                            ),
                         timeouts: sys => sys.runQueuedTimeoutCallbacks(),
                     },
                     {

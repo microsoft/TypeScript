@@ -175,7 +175,11 @@ new C();`,
                     host.runQueuedTimeoutCallbacks(); // Scheduled invalidation of resolutions
                     host.runQueuedTimeoutCallbacks(); // Actual update
 
-                    baselineTsserverLogs("symLinks", `module resolution${withPathMapping ? " with path mapping" : ""} when project compiles from sources`, session);
+                    baselineTsserverLogs(
+                        "symLinks",
+                        `module resolution${withPathMapping ? " with path mapping" : ""} when project compiles from sources`,
+                        session,
+                    );
                 });
 
                 it("when project has node_modules setup but doesnt have modules in typings folder and then recompiles", () => {

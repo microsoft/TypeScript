@@ -31,13 +31,14 @@ describe("unittests:: tsserver:: CachingFileSystemInformation:: tsserverProjectS
     type CalledWithFiveArgs = [readonly string[], readonly string[], readonly string[], number];
     function createLoggerTrackingHostCalls(host: TestServerHost) {
         const originals: Record<CalledMaps, any> = {} as any;
-        const calledMaps: Record<CalledMapsWithSingleArg, ts.MultiMap<string, true>> & Record<CalledMapsWithFiveArgs, ts.MultiMap<string, CalledWithFiveArgs>> = {
-            fileExists: setCallsTrackingWithSingleArgFn("fileExists"),
-            directoryExists: setCallsTrackingWithSingleArgFn("directoryExists"),
-            getDirectories: setCallsTrackingWithSingleArgFn("getDirectories"),
-            readFile: setCallsTrackingWithSingleArgFn("readFile"),
-            readDirectory: setCallsTrackingWithFiveArgFn("readDirectory"),
-        };
+        const calledMaps: Record<CalledMapsWithSingleArg, ts.MultiMap<string, true>> & Record<CalledMapsWithFiveArgs, ts.MultiMap<string, CalledWithFiveArgs>> =
+            {
+                fileExists: setCallsTrackingWithSingleArgFn("fileExists"),
+                directoryExists: setCallsTrackingWithSingleArgFn("directoryExists"),
+                getDirectories: setCallsTrackingWithSingleArgFn("getDirectories"),
+                readFile: setCallsTrackingWithSingleArgFn("readFile"),
+                readDirectory: setCallsTrackingWithFiveArgFn("readDirectory"),
+            };
 
         (host as IncrementalVerifierCallbacks).beforeVerification = storeAndSetToOriginal;
         (host as IncrementalVerifierCallbacks).afterVerification = revertCallbacks;

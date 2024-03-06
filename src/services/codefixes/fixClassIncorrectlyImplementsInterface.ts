@@ -131,7 +131,12 @@ function addMissingDeclarations(
             insertInterfaceMemberNode(
                 sourceFile,
                 classDeclaration,
-                checker.indexInfoToIndexSignatureDeclaration(indexInfoOfKind, classDeclaration, /*flags*/ undefined, getNoopSymbolTrackerWithResolver(context))!,
+                checker.indexInfoToIndexSignatureDeclaration(
+                    indexInfoOfKind,
+                    classDeclaration,
+                    /*flags*/ undefined,
+                    getNoopSymbolTrackerWithResolver(context),
+                )!,
             );
         }
     }

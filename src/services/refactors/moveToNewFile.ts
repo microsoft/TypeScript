@@ -70,7 +70,10 @@ registerRefactor(refactorName, {
             return [{
                 name: refactorName,
                 description,
-                actions: [{ ...moveToNewFileAction, notApplicableReason: getLocaleSpecificMessage(Diagnostics.Selection_is_not_a_valid_statement_or_statements) }],
+                actions: [{
+                    ...moveToNewFileAction,
+                    notApplicableReason: getLocaleSpecificMessage(Diagnostics.Selection_is_not_a_valid_statement_or_statements),
+                }],
             }];
         }
         return emptyArray;

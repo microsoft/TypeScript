@@ -26,7 +26,15 @@ registerCodeFix({
     getCodeActions: function getCodeActionsToAddMissingDeclareOnProperty(context) {
         const changes = textChanges.ChangeTracker.with(context, t => makeChange(t, context.sourceFile, context.span.start));
         if (changes.length > 0) {
-            return [createCodeFixAction(fixId, changes, Diagnostics.Prefix_with_declare, fixId, Diagnostics.Prefix_all_incorrect_property_declarations_with_declare)];
+            return [
+                createCodeFixAction(
+                    fixId,
+                    changes,
+                    Diagnostics.Prefix_with_declare,
+                    fixId,
+                    Diagnostics.Prefix_all_incorrect_property_declarations_with_declare,
+                ),
+            ];
         }
     },
     fixIds: [fixId],

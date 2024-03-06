@@ -132,7 +132,10 @@ function getImportCodeFixesForExpression(context: CodeFixContext, expr: Node): C
     }
     if (isExpression(expr) && !(isNamedDeclaration(expr.parent) && expr.parent.name === expr)) {
         const sourceFile = context.sourceFile;
-        const changes = textChanges.ChangeTracker.with(context, t => t.replaceNode(sourceFile, expr, factory.createPropertyAccessExpression(expr, "default"), {}));
+        const changes = textChanges.ChangeTracker.with(
+            context,
+            t => t.replaceNode(sourceFile, expr, factory.createPropertyAccessExpression(expr, "default"), {}),
+        );
         fixes.push(createCodeFixActionWithoutFixAll(fixName, changes, Diagnostics.Use_synthetic_default_member));
     }
     return fixes;

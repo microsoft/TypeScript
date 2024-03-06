@@ -348,7 +348,8 @@ class SystemLoader extends Loader<SystemModule> {
                 throw new Error("Dynamic import not implemented.");
             },
             meta: {
-                url: ts.isUrl(module.file) ? module.file : `file:///${ts.normalizeSlashes(module.file).replace(/^\//, "").split("/").map(encodeURIComponent).join("/")}`,
+                url: ts.isUrl(module.file) ? module.file
+                    : `file:///${ts.normalizeSlashes(module.file).replace(/^\//, "").split("/").map(encodeURIComponent).join("/")}`,
             },
         };
 

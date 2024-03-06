@@ -260,7 +260,12 @@ function rangeContainsSkipTrivia(r1: TextRange, node: TextRange, file: SourceFil
     return rangeContainsStartEnd(r1, skipTrivia(file.text, node.pos), node.end);
 }
 
-function collectTypeParameters(checker: TypeChecker, selection: TypeNode | TypeNode[], enclosingNode: Node, file: SourceFile): TypeParameterDeclaration[] | undefined {
+function collectTypeParameters(
+    checker: TypeChecker,
+    selection: TypeNode | TypeNode[],
+    enclosingNode: Node,
+    file: SourceFile,
+): TypeParameterDeclaration[] | undefined {
     const result: TypeParameterDeclaration[] = [];
     const selectionArray = toArray(selection);
     const selectionRange = { pos: selectionArray[0].pos, end: selectionArray[selectionArray.length - 1].end };
@@ -427,7 +432,8 @@ function getNodesToEdit(info: ExtractInfo) {
         return {
             firstTypeNode: info.selection[0],
             lastTypeNode: info.selection[info.selection.length - 1],
-            newTypeNode: isUnionTypeNode(info.selection[0].parent) ? factory.createUnionTypeNode(info.selection) : factory.createIntersectionTypeNode(info.selection),
+            newTypeNode: isUnionTypeNode(info.selection[0].parent) ? factory.createUnionTypeNode(info.selection)
+                : factory.createIntersectionTypeNode(info.selection),
         };
     }
     return {

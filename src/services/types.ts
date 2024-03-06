@@ -446,7 +446,11 @@ export interface LanguageServiceHost extends GetEffectiveTypeRootsHost, MinimalR
     /** @internal */ getPackageJsonAutoImportProvider?(): Program | undefined;
     /** @internal */ sendPerformanceEvent?(kind: PerformanceEvent["kind"], durationMs: number): void;
     getParsedCommandLine?(fileName: string): ParsedCommandLine | undefined;
-    /** @internal */ onReleaseParsedCommandLine?(configFileName: string, oldResolvedRef: ResolvedProjectReference | undefined, optionOptions: CompilerOptions): void;
+    /** @internal */ onReleaseParsedCommandLine?(
+        configFileName: string,
+        oldResolvedRef: ResolvedProjectReference | undefined,
+        optionOptions: CompilerOptions,
+    ): void;
     /** @internal */ getIncompleteCompletionsCache?(): IncompleteCompletionsCache;
 
     jsDocParsingMode?: JSDocParsingMode | undefined;
@@ -698,7 +702,10 @@ export interface LanguageService {
     /** @deprecated `fileName` will be ignored */
     applyCodeActionCommand(fileName: string, action: CodeActionCommand[]): Promise<ApplyCodeActionCommandResult[]>;
     /** @deprecated `fileName` will be ignored */
-    applyCodeActionCommand(fileName: string, action: CodeActionCommand | CodeActionCommand[]): Promise<ApplyCodeActionCommandResult | ApplyCodeActionCommandResult[]>;
+    applyCodeActionCommand(
+        fileName: string,
+        action: CodeActionCommand | CodeActionCommand[],
+    ): Promise<ApplyCodeActionCommandResult | ApplyCodeActionCommandResult[]>;
 
     /**
      * @param includeInteractiveActions Include refactor actions that require additional arguments to be

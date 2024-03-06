@@ -226,7 +226,10 @@ export function start() {
                     catch {
                         // May be a directory
                         try {
-                            size = IO.listFiles(path.join(runner.workingDirectory, file), /.*/g, { recursive: true }).reduce((acc, elem) => acc + statSync(elem).size, 0);
+                            size = IO.listFiles(path.join(runner.workingDirectory, file), /.*/g, { recursive: true }).reduce(
+                                (acc, elem) => acc + statSync(elem).size,
+                                0,
+                            );
                         }
                         catch {
                             // Unknown test kind, just return 0 and let the historical analysis take over after one run

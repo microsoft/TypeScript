@@ -207,7 +207,10 @@ export function addSyntheticLeadingComment<T extends Node>(
     text: string,
     hasTrailingNewLine?: boolean,
 ) {
-    return setSyntheticLeadingComments(node, append<SynthesizedComment>(getSyntheticLeadingComments(node), { kind, pos: -1, end: -1, hasTrailingNewLine, text }));
+    return setSyntheticLeadingComments(
+        node,
+        append<SynthesizedComment>(getSyntheticLeadingComments(node), { kind, pos: -1, end: -1, hasTrailingNewLine, text }),
+    );
 }
 
 export function getSyntheticTrailingComments(node: Node): SynthesizedComment[] | undefined {
@@ -225,7 +228,10 @@ export function addSyntheticTrailingComment<T extends Node>(
     text: string,
     hasTrailingNewLine?: boolean,
 ) {
-    return setSyntheticTrailingComments(node, append<SynthesizedComment>(getSyntheticTrailingComments(node), { kind, pos: -1, end: -1, hasTrailingNewLine, text }));
+    return setSyntheticTrailingComments(
+        node,
+        append<SynthesizedComment>(getSyntheticTrailingComments(node), { kind, pos: -1, end: -1, hasTrailingNewLine, text }),
+    );
 }
 
 export function moveSyntheticComments<T extends Node>(node: T, original: Node): T {

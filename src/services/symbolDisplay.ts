@@ -110,7 +110,8 @@ import {
     VariableDeclaration,
 } from "./_namespaces/ts";
 
-const symbolDisplayNodeBuilderFlags = NodeBuilderFlags.OmitParameterModifiers | NodeBuilderFlags.IgnoreErrors | NodeBuilderFlags.UseAliasDefinedOutsideCurrentScope;
+const symbolDisplayNodeBuilderFlags = NodeBuilderFlags.OmitParameterModifiers | NodeBuilderFlags.IgnoreErrors |
+    NodeBuilderFlags.UseAliasDefinedOutsideCurrentScope;
 
 // TODO(drosen): use contextual SemanticMeaning.
 /** @internal */
@@ -330,7 +331,8 @@ function getSymbolDisplayPartsDocumentationAndSymbolKindWorker(
             callExpressionLike = location.parent as CallExpression | NewExpression;
         }
         else if (
-            location.parent && (isJsxOpeningLikeElement(location.parent) || isTaggedTemplateExpression(location.parent)) && isFunctionLike(symbol.valueDeclaration)
+            location.parent && (isJsxOpeningLikeElement(location.parent) || isTaggedTemplateExpression(location.parent)) &&
+            isFunctionLike(symbol.valueDeclaration)
         ) {
             callExpressionLike = location.parent;
         }
@@ -496,7 +498,8 @@ function getSymbolDisplayPartsDocumentationAndSymbolKindWorker(
             displayParts,
             typeToDisplayParts(
                 typeChecker,
-                location.parent && isConstTypeReference(location.parent) ? typeChecker.getTypeAtLocation(location.parent) : typeChecker.getDeclaredTypeOfSymbol(symbol),
+                location.parent && isConstTypeReference(location.parent) ? typeChecker.getTypeAtLocation(location.parent)
+                    : typeChecker.getDeclaredTypeOfSymbol(symbol),
                 enclosingDeclaration,
                 TypeFormatFlags.InTypeAlias,
             ),
@@ -628,7 +631,9 @@ function getSymbolDisplayPartsDocumentationAndSymbolKindWorker(
                 case SyntaxKind.ExportAssignment:
                     displayParts.push(keywordPart(SyntaxKind.ExportKeyword));
                     displayParts.push(spacePart());
-                    displayParts.push(keywordPart((symbol.declarations[0] as ExportAssignment).isExportEquals ? SyntaxKind.EqualsToken : SyntaxKind.DefaultKeyword));
+                    displayParts.push(
+                        keywordPart((symbol.declarations[0] as ExportAssignment).isExportEquals ? SyntaxKind.EqualsToken : SyntaxKind.DefaultKeyword),
+                    );
                     break;
                 case SyntaxKind.ExportSpecifier:
                     displayParts.push(keywordPart(SyntaxKind.ExportKeyword));
@@ -649,7 +654,10 @@ function getSymbolDisplayPartsDocumentationAndSymbolKindWorker(
                     displayParts.push(keywordPart(SyntaxKind.RequireKeyword));
                     displayParts.push(punctuationPart(SyntaxKind.OpenParenToken));
                     displayParts.push(
-                        displayPart(getTextOfNode(getExternalModuleImportEqualsDeclarationExpression(importEqualsDeclaration)), SymbolDisplayPartKind.stringLiteral),
+                        displayPart(
+                            getTextOfNode(getExternalModuleImportEqualsDeclarationExpression(importEqualsDeclaration)),
+                            SymbolDisplayPartKind.stringLiteral,
+                        ),
                     );
                     displayParts.push(punctuationPart(SyntaxKind.CloseParenToken));
                 }
@@ -703,7 +711,10 @@ function getSymbolDisplayPartsDocumentationAndSymbolKindWorker(
                     else {
                         addRange(displayParts, typeToDisplayParts(typeChecker, type, enclosingDeclaration));
                     }
-                    if (isTransientSymbol(symbol) && symbol.links.target && isTransientSymbol(symbol.links.target) && symbol.links.target.links.tupleLabelDeclaration) {
+                    if (
+                        isTransientSymbol(symbol) && symbol.links.target && isTransientSymbol(symbol.links.target) &&
+                        symbol.links.target.links.tupleLabelDeclaration
+                    ) {
                         const labelDecl = symbol.links.target.links.tupleLabelDeclaration;
                         Debug.assertNode(labelDecl.name, isIdentifier);
                         displayParts.push(spacePart());

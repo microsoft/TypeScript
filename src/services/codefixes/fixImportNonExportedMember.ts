@@ -162,7 +162,13 @@ function doChange(changes: textChanges.ChangeTracker, program: Program, { export
     }
 }
 
-function doChanges(changes: textChanges.ChangeTracker, program: Program, sourceFile: SourceFile, moduleExports: ExportName[], node: ExportDeclaration | undefined) {
+function doChanges(
+    changes: textChanges.ChangeTracker,
+    program: Program,
+    sourceFile: SourceFile,
+    moduleExports: ExportName[],
+    node: ExportDeclaration | undefined,
+) {
     if (length(moduleExports)) {
         if (node) {
             updateExport(changes, program, sourceFile, node, moduleExports);
@@ -189,7 +195,10 @@ function updateExport(changes: textChanges.ChangeTracker, program: Program, sour
             node.modifiers,
             node.isTypeOnly,
             factory.createNamedExports(
-                factory.createNodeArray([...namedExports, ...createExportSpecifiers(names, allowTypeModifier)], /*hasTrailingComma*/ namedExports.hasTrailingComma),
+                factory.createNodeArray(
+                    [...namedExports, ...createExportSpecifiers(names, allowTypeModifier)],
+                    /*hasTrailingComma*/ namedExports.hasTrailingComma,
+                ),
             ),
             node.moduleSpecifier,
             node.attributes,

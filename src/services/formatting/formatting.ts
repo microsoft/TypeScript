@@ -596,7 +596,13 @@ function formatSpanWorker(
      * If list element is in the range - its indentation will be equal
      * to inherited indentation from its predecessors.
      */
-    function tryComputeIndentationForListItem(startPos: number, endPos: number, parentStartLine: number, range: TextRange, inheritedIndentation: number): number {
+    function tryComputeIndentationForListItem(
+        startPos: number,
+        endPos: number,
+        parentStartLine: number,
+        range: TextRange,
+        inheritedIndentation: number,
+    ): number {
         if (
             rangeOverlapsWithStartEnd(range, startPos, endPos) ||
             rangeContainsStartEnd(range, startPos, endPos) /* Not to miss zero-range nodes e.g. JsxText */
@@ -900,7 +906,14 @@ function formatSpanWorker(
             }
 
             const effectiveParentStartLine = child.kind === SyntaxKind.Decorator ? childStartLine : undecoratedParentStartLine;
-            const childIndentation = computeIndentation(child, childStartLine, childIndentationAmount, node, parentDynamicIndentation, effectiveParentStartLine);
+            const childIndentation = computeIndentation(
+                child,
+                childStartLine,
+                childIndentationAmount,
+                node,
+                parentDynamicIndentation,
+                effectiveParentStartLine,
+            );
 
             processNode(child, childContextNode, childStartLine, undecoratedChildStartLine, childIndentation.indentation, childIndentation.delta);
 
@@ -953,7 +966,12 @@ function formatSpanWorker(
                         }
                         else {
                             const startLinePosition = getLineStartPositionForPosition(tokenInfo.token.pos, sourceFile);
-                            indentationOnListStartToken = SmartIndenter.findFirstNonWhitespaceColumn(startLinePosition, tokenInfo.token.pos, sourceFile, options);
+                            indentationOnListStartToken = SmartIndenter.findFirstNonWhitespaceColumn(
+                                startLinePosition,
+                                tokenInfo.token.pos,
+                                sourceFile,
+                                options,
+                            );
                         }
 
                         listDynamicIndentation = getDynamicIndentation(parent, parentStartLine, indentationOnListStartToken, options.indentSize!); // TODO: GH#18217
@@ -1112,7 +1130,13 @@ function formatSpanWorker(
         }
     }
 
-    function processRange(range: TextRangeWithKind, rangeStart: LineAndCharacter, parent: Node, contextNode: Node, dynamicIndentation: DynamicIndentation): LineAction {
+    function processRange(
+        range: TextRangeWithKind,
+        rangeStart: LineAndCharacter,
+        parent: Node,
+        contextNode: Node,
+        dynamicIndentation: DynamicIndentation,
+    ): LineAction {
         const rangeHasError = rangeContainsError(range);
         let lineAction = LineAction.None;
         if (!rangeHasError) {
@@ -1122,7 +1146,16 @@ function formatSpanWorker(
                 trimTrailingWhitespacesForLines(originalStart.line, rangeStart.line);
             }
             else {
-                lineAction = processPair(range, rangeStart.line, parent, previousRange, previousRangeStartLine, previousParent, contextNode, dynamicIndentation);
+                lineAction = processPair(
+                    range,
+                    rangeStart.line,
+                    parent,
+                    previousRange,
+                    previousRangeStartLine,
+                    previousParent,
+                    contextNode,
+                    dynamicIndentation,
+                );
             }
         }
 

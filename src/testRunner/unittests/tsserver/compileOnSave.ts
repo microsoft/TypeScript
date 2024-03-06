@@ -752,7 +752,9 @@ describe("unittests:: tsserver:: compileOnSave:: EmitFile test", () => {
             };
             const host = createServerHost([f], { newLine });
             logger.host = host;
-            logger.log(`currentDirectory:: ${host.getCurrentDirectory()} useCaseSensitiveFileNames: ${host.useCaseSensitiveFileNames} newLine: ${host.newLine}`);
+            logger.log(
+                `currentDirectory:: ${host.getCurrentDirectory()} useCaseSensitiveFileNames: ${host.useCaseSensitiveFileNames} newLine: ${host.newLine}`,
+            );
             const session = new TestSession({ host, logger });
             openFilesForSession([f], session);
             session.executeCommandSeq<ts.server.protocol.CompileOnSaveEmitFileRequest>({

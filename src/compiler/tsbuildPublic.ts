@@ -199,7 +199,10 @@ function getOrCreateValueFromConfigFileMap<T>(configFileMap: Map<ResolvedConfigF
     return existingValue || newValue!;
 }
 
-function getOrCreateValueMapFromConfigFileMap<K extends string, V>(configFileMap: Map<ResolvedConfigFilePath, Map<K, V>>, resolved: ResolvedConfigFilePath): Map<K, V> {
+function getOrCreateValueMapFromConfigFileMap<K extends string, V>(
+    configFileMap: Map<ResolvedConfigFilePath, Map<K, V>>,
+    resolved: ResolvedConfigFilePath,
+): Map<K, V> {
     return getOrCreateValueFromConfigFileMap(configFileMap, resolved, () => new Map());
 }
 
@@ -302,7 +305,8 @@ export interface SolutionBuilder<T extends BuilderProgram> {
  */
 export function createBuilderStatusReporter(system: System, pretty?: boolean): DiagnosticReporter {
     return diagnostic => {
-        let output = pretty ? `[${formatColorAndReset(getLocaleTimeString(system), ForegroundColorEscapeSequences.Grey)}] ` : `${getLocaleTimeString(system)} - `;
+        let output = pretty ? `[${formatColorAndReset(getLocaleTimeString(system), ForegroundColorEscapeSequences.Grey)}] `
+            : `${getLocaleTimeString(system)} - `;
         output += `${flattenDiagnosticMessageText(diagnostic.messageText, system.newLine)}${system.newLine + system.newLine}`;
         system.write(output);
     };
@@ -612,7 +616,10 @@ function isParsedCommandLine(entry: ConfigFileCacheEntry): entry is ParsedComman
     return !!(entry as ParsedCommandLine).options;
 }
 
-function getCachedParsedConfigFile<T extends BuilderProgram>(state: SolutionBuilderState<T>, configFilePath: ResolvedConfigFilePath): ParsedCommandLine | undefined {
+function getCachedParsedConfigFile<T extends BuilderProgram>(
+    state: SolutionBuilderState<T>,
+    configFilePath: ResolvedConfigFilePath,
+): ParsedCommandLine | undefined {
     const value = state.configFileCache.get(configFilePath);
     return value && isParsedCommandLine(value) ? value : undefined;
 }
@@ -849,7 +856,11 @@ function clearProjectStatus<T extends BuilderProgram>(state: SolutionBuilderStat
     state.diagnostics.delete(resolved);
 }
 
-function addProjToQueue<T extends BuilderProgram>({ projectPendingBuild }: SolutionBuilderState<T>, proj: ResolvedConfigFilePath, updateLevel: ProgramUpdateLevel) {
+function addProjToQueue<T extends BuilderProgram>(
+    { projectPendingBuild }: SolutionBuilderState<T>,
+    proj: ResolvedConfigFilePath,
+    updateLevel: ProgramUpdateLevel,
+) {
     const value = projectPendingBuild.get(proj);
     if (value === undefined) {
         projectPendingBuild.set(proj, updateLevel);
@@ -1057,7 +1068,13 @@ function createBuildOrUpdateInvalidedProject<T extends BuilderProgram>(
             if (targetSourceFile || emitOnlyDtsFiles) {
                 return withProgramOrUndefined(
                     program =>
-                        program.emit(targetSourceFile, writeFile, cancellationToken, emitOnlyDtsFiles, customTransformers || state.host.getCustomTransformers?.(project)),
+                        program.emit(
+                            targetSourceFile,
+                            writeFile,
+                            cancellationToken,
+                            emitOnlyDtsFiles,
+                            customTransformers || state.host.getCustomTransformers?.(project),
+                        ),
                 );
             }
             executeSteps(BuildStep.SemanticDiagnostics, cancellationToken);
@@ -1392,7 +1409,13 @@ function getNextInvalidatedProjectCreateInfo<T extends BuilderProgram>(
                 config.options,
                 state.parseConfigFileHost,
             );
-            updateErrorForNoInputFiles(config.fileNames, project, config.options.configFile!.configFileSpecs!, config.errors, canJsonReportNoInputFiles(config.raw));
+            updateErrorForNoInputFiles(
+                config.fileNames,
+                project,
+                config.options.configFile!.configFileSpecs!,
+                config.errors,
+                canJsonReportNoInputFiles(config.raw),
+            );
             watchInputFiles(state, project, projectPath, config);
             watchPackageJsonFiles(state, project, projectPath, config);
         }
@@ -1986,7 +2009,11 @@ function getUpToDateStatusWorker<T extends BuilderProgram>(
     };
 }
 
-function hasSameBuildInfo<T extends BuilderProgram>(state: SolutionBuilderState<T>, buildInfoCacheEntry: BuildInfoCacheEntry, resolvedRefPath: ResolvedConfigFilePath) {
+function hasSameBuildInfo<T extends BuilderProgram>(
+    state: SolutionBuilderState<T>,
+    buildInfoCacheEntry: BuildInfoCacheEntry,
+    resolvedRefPath: ResolvedConfigFilePath,
+) {
     const refBuildInfo = state.buildInfoCache.get(resolvedRefPath)!;
     return refBuildInfo.path === buildInfoCacheEntry.path;
 }
@@ -2063,7 +2090,11 @@ function updateOutputTimestampsWorker<T extends BuilderProgram>(
     });
 }
 
-function getLatestChangedDtsTime<T extends BuilderProgram>(state: SolutionBuilderState<T>, options: CompilerOptions, resolvedConfigPath: ResolvedConfigFilePath) {
+function getLatestChangedDtsTime<T extends BuilderProgram>(
+    state: SolutionBuilderState<T>,
+    options: CompilerOptions,
+    resolvedConfigPath: ResolvedConfigFilePath,
+) {
     if (!options.composite) return undefined;
     const entry = Debug.checkDefined(state.buildInfoCache.get(resolvedConfigPath));
     if (entry.latestChangedDtsTime !== undefined) return entry.latestChangedDtsTime || undefined;
@@ -2346,7 +2377,11 @@ function watchConfigFile<T extends BuilderProgram>(
     );
 }
 
-function watchExtendedConfigFiles<T extends BuilderProgram>(state: SolutionBuilderState<T>, resolvedPath: ResolvedConfigFilePath, parsed: ParsedCommandLine | undefined) {
+function watchExtendedConfigFiles<T extends BuilderProgram>(
+    state: SolutionBuilderState<T>,
+    resolvedPath: ResolvedConfigFilePath,
+    parsed: ParsedCommandLine | undefined,
+) {
     updateSharedExtendedConfigFileWatcher(
         resolvedPath,
         parsed?.options,

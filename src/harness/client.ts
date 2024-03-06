@@ -731,7 +731,10 @@ export class SessionClient implements LanguageService {
         const { items: encodedItems, applicableSpan: encodedApplicableSpan, selectedItemIndex, argumentIndex, argumentCount } = response.body;
 
         const applicableSpan = encodedApplicableSpan as unknown as TextSpan;
-        const items = (encodedItems as (SignatureHelpItem | protocol.SignatureHelpItem)[]).map(item => ({ ...item, tags: this.decodeLinkDisplayParts(item.tags) }));
+        const items = (encodedItems as (SignatureHelpItem | protocol.SignatureHelpItem)[]).map(item => ({
+            ...item,
+            tags: this.decodeLinkDisplayParts(item.tags),
+        }));
 
         return { items, applicableSpan, selectedItemIndex, argumentIndex, argumentCount };
     }
@@ -768,7 +771,12 @@ export class SessionClient implements LanguageService {
         return notImplemented();
     }
 
-    getDocCommentTemplateAtPosition(_fileName: string, _position: number, _options?: DocCommentTemplateOptions, _formatOptions?: FormatCodeSettings): TextInsertion {
+    getDocCommentTemplateAtPosition(
+        _fileName: string,
+        _position: number,
+        _options?: DocCommentTemplateOptions,
+        _formatOptions?: FormatCodeSettings,
+    ): TextInsertion {
         return notImplemented();
     }
 
@@ -882,7 +890,10 @@ export class SessionClient implements LanguageService {
     getMoveToRefactoringFileSuggestions(fileName: string, positionOrRange: number | TextRange): { newFileName: string; files: string[]; } {
         const args = this.createFileLocationOrRangeRequestArgs(positionOrRange, fileName);
 
-        const request = this.processRequest<protocol.GetMoveToRefactoringFileSuggestionsRequest>(protocol.CommandTypes.GetMoveToRefactoringFileSuggestions, args);
+        const request = this.processRequest<protocol.GetMoveToRefactoringFileSuggestionsRequest>(
+            protocol.CommandTypes.GetMoveToRefactoringFileSuggestions,
+            args,
+        );
         const response = this.processResponse<protocol.GetMoveToRefactoringFileSuggestions>(request);
         return { newFileName: response.body?.newFileName, files: response.body?.files };
     }

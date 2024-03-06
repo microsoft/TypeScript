@@ -659,7 +659,8 @@ export function transformES2017(context: TransformationContext): (x: SourceFile 
         // This step isn't needed if we eventually transform this to ES5.
         const originalMethod = getOriginalNode(node, isFunctionLikeDeclaration);
         const emitSuperHelpers = languageVersion >= ScriptTarget.ES2015 &&
-            resolver.getNodeCheckFlags(node) & (NodeCheckFlags.MethodWithSuperPropertyAssignmentInAsync | NodeCheckFlags.MethodWithSuperPropertyAccessInAsync) &&
+            resolver.getNodeCheckFlags(node) &
+                (NodeCheckFlags.MethodWithSuperPropertyAssignmentInAsync | NodeCheckFlags.MethodWithSuperPropertyAccessInAsync) &&
             (getFunctionFlags(originalMethod) & FunctionFlags.AsyncGenerator) !== FunctionFlags.AsyncGenerator;
 
         if (emitSuperHelpers) {
@@ -825,7 +826,8 @@ export function transformES2017(context: TransformationContext): (x: SourceFile 
             // Minor optimization, emit `_super` helper to capture `super` access in an arrow.
             // This step isn't needed if we eventually transform this to ES5.
             const emitSuperHelpers = languageVersion >= ScriptTarget.ES2015 &&
-                resolver.getNodeCheckFlags(node) & (NodeCheckFlags.MethodWithSuperPropertyAssignmentInAsync | NodeCheckFlags.MethodWithSuperPropertyAccessInAsync);
+                resolver.getNodeCheckFlags(node) &
+                    (NodeCheckFlags.MethodWithSuperPropertyAssignmentInAsync | NodeCheckFlags.MethodWithSuperPropertyAccessInAsync);
 
             if (emitSuperHelpers) {
                 enableSubstitutionForAsyncMethodsWithSuper();

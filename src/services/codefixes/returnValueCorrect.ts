@@ -90,7 +90,8 @@ registerCodeFix({
         if (info.kind === ProblemKind.MissingReturnStatement) {
             return append(
                 [getActionForfixAddReturnStatement(context, info.expression, info.statement)],
-                isArrowFunction(info.declaration) ? getActionForFixRemoveBracesFromArrowFunctionBody(context, info.declaration, info.expression, info.commentSource)
+                isArrowFunction(info.declaration) ?
+                    getActionForFixRemoveBracesFromArrowFunctionBody(context, info.declaration, info.expression, info.commentSource)
                     : undefined,
             );
         }
@@ -166,7 +167,9 @@ function getFixInfo(checker: TypeChecker, declaration: FunctionLikeDeclaration, 
     else if (isBlock(firstStatement) && length(firstStatement.statements) === 1) {
         const firstBlockStatement = first(firstStatement.statements);
         if (isLabeledStatement(firstBlockStatement) && isExpressionStatement(firstBlockStatement.statement)) {
-            const node = factory.createObjectLiteralExpression([factory.createPropertyAssignment(firstBlockStatement.label, firstBlockStatement.statement.expression)]);
+            const node = factory.createObjectLiteralExpression([
+                factory.createPropertyAssignment(firstBlockStatement.label, firstBlockStatement.statement.expression),
+            ]);
             const nodeType = createObjectTypeFromLabeledExpression(checker, firstBlockStatement.label, firstBlockStatement.statement.expression);
             if (checkFixedAssignableTo(checker, declaration, nodeType, expectType, isFunctionType)) {
                 return {

@@ -256,7 +256,11 @@ describe("unittests:: tsserver:: ConfiguredProjects", () => {
         openFilesForSession([file1], session);
         closeFilesForSession([file1], session);
         openFilesForSession([file2], session);
-        baselineTsserverLogs("configuredProjects", "should keep the configured project when the opened file is referenced by the project but not its root", session);
+        baselineTsserverLogs(
+            "configuredProjects",
+            "should keep the configured project when the opened file is referenced by the project but not its root",
+            session,
+        );
     });
 
     it("should tolerate config file errors and still try to build a project", () => {
@@ -401,7 +405,11 @@ describe("unittests:: tsserver:: ConfiguredProjects", () => {
         host.writeFile(configFile.path, jsonToReadableText({ compilerOptions: {}, files: ["f1.ts", "f2.ts"] }));
 
         host.runQueuedTimeoutCallbacks();
-        baselineTsserverLogs("configuredProjects", "can correctly update configured project when set of root files has changed (new file in list of files)", session);
+        baselineTsserverLogs(
+            "configuredProjects",
+            "can correctly update configured project when set of root files has changed (new file in list of files)",
+            session,
+        );
     });
 
     it("can update configured project when set of root files was not changed", () => {
@@ -469,7 +477,11 @@ describe("unittests:: tsserver:: ConfiguredProjects", () => {
         session.host.baselineHost("File5 written");
         openFilesForSession([file5], session);
 
-        baselineTsserverLogs("configuredProjects", "Open ref of configured project when open file gets added to the project as part of configured file update", session);
+        baselineTsserverLogs(
+            "configuredProjects",
+            "Open ref of configured project when open file gets added to the project as part of configured file update",
+            session,
+        );
     });
 
     it("Open ref of configured project when open file gets added to the project as part of configured file update buts its open file references are all closed when the update happens", () => {

@@ -156,7 +156,10 @@ describe("unittests:: Program.isSourceFileFromExternalLibrary", () => {
         const fooPackage = new documents.TextDocument("/node_modules/foo/package.json", fooPackageJsonText);
         const fooIndex = new documents.TextDocument("/node_modules/foo/index.d.ts", fooIndexText);
 
-        const fs = vfs.createFromFileSystem(Harness.IO, /*ignoreCase*/ false, { documents: [a, bar, barFooPackage, barFooIndex, fooPackage, fooIndex], cwd: "/" });
+        const fs = vfs.createFromFileSystem(Harness.IO, /*ignoreCase*/ false, {
+            documents: [a, bar, barFooPackage, barFooIndex, fooPackage, fooIndex],
+            cwd: "/",
+        });
         const program = ts.createProgram(["/a.ts"], ts.emptyOptions, new fakes.CompilerHost(fs, { newLine: ts.NewLineKind.LineFeed }));
         assertIsExternal(program, [a, bar, barFooIndex, fooIndex], f => f !== a);
     });
@@ -169,7 +172,11 @@ describe("unittests:: Program.isSourceFileFromExternalLibrary", () => {
         assertIsExternal(program, [a, fooIndex], f => f !== a);
     });
 
-    function assertIsExternal(program: ts.Program, files: readonly documents.TextDocument[], isExternalExpected: (file: documents.TextDocument) => boolean): void {
+    function assertIsExternal(
+        program: ts.Program,
+        files: readonly documents.TextDocument[],
+        isExternalExpected: (file: documents.TextDocument) => boolean,
+    ): void {
         for (const file of files) {
             const actual = program.isSourceFileFromExternalLibrary(program.getSourceFile(file.file)!);
             const expected = isExternalExpected(file);

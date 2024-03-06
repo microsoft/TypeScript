@@ -64,7 +64,10 @@ describe("unittests:: tsc-watch:: libraryResolution", () => {
                 {
                     caption: "write redirect file dom",
                     edit: sys =>
-                        sys.ensureFileOrFolder({ path: "/home/src/projects/node_modules/@typescript/lib-dom/index.d.ts", content: "interface DOMInterface { }" }),
+                        sys.ensureFileOrFolder({
+                            path: "/home/src/projects/node_modules/@typescript/lib-dom/index.d.ts",
+                            content: "interface DOMInterface { }",
+                        }),
                     timeouts: sys => {
                         sys.runQueuedTimeoutCallbacks();
                         sys.runQueuedTimeoutCallbacks();
@@ -87,7 +90,11 @@ describe("unittests:: tsc-watch:: libraryResolution", () => {
                 },
                 ...editOptions(
                     withoutConfig,
-                    sys => sys.ensureFileOrFolder({ path: "/home/src/projects/node_modules/@typescript/lib-dom/index.d.ts", content: "interface DOMInterface { }" }),
+                    sys =>
+                        sys.ensureFileOrFolder({
+                            path: "/home/src/projects/node_modules/@typescript/lib-dom/index.d.ts",
+                            content: "interface DOMInterface { }",
+                        }),
                 ),
                 {
                     caption: "write redirect file webworker",
@@ -133,7 +140,10 @@ describe("unittests:: tsc-watch:: libraryResolution", () => {
                 {
                     caption: "write redirect file dom",
                     edit: sys =>
-                        sys.ensureFileOrFolder({ path: "/home/src/projects/node_modules/@typescript/lib-dom/index.d.ts", content: "interface DOMInterface { }" }),
+                        sys.ensureFileOrFolder({
+                            path: "/home/src/projects/node_modules/@typescript/lib-dom/index.d.ts",
+                            content: "interface DOMInterface { }",
+                        }),
                     timeouts: sys => {
                         sys.runQueuedTimeoutCallbacks();
                         sys.runQueuedTimeoutCallbacks();

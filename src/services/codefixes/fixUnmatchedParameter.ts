@@ -72,7 +72,10 @@ registerCodeFix({
 });
 
 function getDeleteAction(context: CodeFixContext, { name, jsDocHost, jsDocParameterTag }: Info) {
-    const changes = textChanges.ChangeTracker.with(context, changeTracker => changeTracker.filterJSDocTags(context.sourceFile, jsDocHost, t => t !== jsDocParameterTag));
+    const changes = textChanges.ChangeTracker.with(
+        context,
+        changeTracker => changeTracker.filterJSDocTags(context.sourceFile, jsDocHost, t => t !== jsDocParameterTag),
+    );
     return createCodeFixAction(
         deleteUnmatchedParameter,
         changes,
@@ -95,7 +98,10 @@ function getRenameAction(context: CodeFixContext, { name, jsDocHost, signature, 
     }
     // @todo - match to all available names instead to the first parameter name
     // @see /codeFixRenameUnmatchedParameter3.ts
-    const parameterName = firstDefined(signature.parameters, p => isIdentifier(p.name) && !names.has(p.name.escapedText) ? p.name.getText(sourceFile) : undefined);
+    const parameterName = firstDefined(
+        signature.parameters,
+        p => isIdentifier(p.name) && !names.has(p.name.escapedText) ? p.name.getText(sourceFile) : undefined,
+    );
     if (parameterName === undefined) return undefined;
 
     const newJSDocParameterTag = factory.updateJSDocParameterTag(
@@ -111,7 +117,11 @@ function getRenameAction(context: CodeFixContext, { name, jsDocHost, signature, 
         context,
         changeTracker => changeTracker.replaceJSDocComment(sourceFile, jsDocHost, map(tags, t => t === jsDocParameterTag ? newJSDocParameterTag : t)),
     );
-    return createCodeFixActionWithoutFixAll(renameUnmatchedParameter, changes, [Diagnostics.Rename_param_tag_name_0_to_1, name.getText(sourceFile), parameterName]);
+    return createCodeFixActionWithoutFixAll(renameUnmatchedParameter, changes, [
+        Diagnostics.Rename_param_tag_name_0_to_1,
+        name.getText(sourceFile),
+        parameterName,
+    ]);
 }
 
 interface Info {

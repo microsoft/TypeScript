@@ -507,7 +507,10 @@ export function findModuleReferences(program: Program, sourceFiles: readonly Sou
         forEachImport(referencingFile, (importDecl, moduleSpecifier) => {
             const moduleSymbol = checker.getSymbolAtLocation(moduleSpecifier);
             if (moduleSymbol === searchModuleSymbol) {
-                refs.push(nodeIsSynthesized(importDecl) ? { kind: "implicit", literal: moduleSpecifier, referencingFile } : { kind: "import", literal: moduleSpecifier });
+                refs.push(
+                    nodeIsSynthesized(importDecl) ? { kind: "implicit", literal: moduleSpecifier, referencingFile }
+                        : { kind: "import", literal: moduleSpecifier },
+                );
             }
         });
     }
@@ -599,7 +602,12 @@ export interface ExportedSymbol {
  *
  * @internal
  */
-export function getImportOrExportSymbol(node: Node, symbol: Symbol, checker: TypeChecker, comingFromExport: boolean): ImportedSymbol | ExportedSymbol | undefined {
+export function getImportOrExportSymbol(
+    node: Node,
+    symbol: Symbol,
+    checker: TypeChecker,
+    comingFromExport: boolean,
+): ImportedSymbol | ExportedSymbol | undefined {
     return comingFromExport ? getExport() : getExport() || getImport();
 
     function getExport(): ExportedSymbol | ImportedSymbol | undefined {
@@ -785,7 +793,9 @@ function skipExportSpecifierSymbol(symbol: Symbol, checker: TypeChecker): Symbol
             if (isExportSpecifier(declaration) && !declaration.propertyName && !declaration.parent.parent.moduleSpecifier) {
                 return checker.getExportSpecifierLocalTargetSymbol(declaration) || symbol;
             }
-            else if (isPropertyAccessExpression(declaration) && isModuleExportsAccessExpression(declaration.expression) && !isPrivateIdentifier(declaration.name)) {
+            else if (
+                isPropertyAccessExpression(declaration) && isModuleExportsAccessExpression(declaration.expression) && !isPrivateIdentifier(declaration.name)
+            ) {
                 // Export of form 'module.exports.propName = expr';
                 return checker.getSymbolAtLocation(declaration)!;
             }

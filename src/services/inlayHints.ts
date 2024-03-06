@@ -204,7 +204,8 @@ export function provideInlayHints(context: InlayHintsContext): InlayHint[] {
     function isSignatureSupportingReturnAnnotation(
         node: Node,
     ): node is FunctionDeclaration | ArrowFunction | FunctionExpression | MethodDeclaration | GetAccessorDeclaration {
-        return isArrowFunction(node) || isFunctionExpression(node) || isFunctionDeclaration(node) || isMethodDeclaration(node) || isGetAccessorDeclaration(node);
+        return isArrowFunction(node) || isFunctionExpression(node) || isFunctionDeclaration(node) || isMethodDeclaration(node) ||
+            isGetAccessorDeclaration(node);
     }
 
     function addParameterHints(text: string, parameter: Identifier, position: number, isFirstVariadicArgument: boolean) {
@@ -388,7 +389,9 @@ export function provideInlayHints(context: InlayHintsContext): InlayHint[] {
         return isLiteralExpression(node);
     }
 
-    function visitFunctionDeclarationLikeForReturnType(decl: FunctionDeclaration | ArrowFunction | FunctionExpression | MethodDeclaration | GetAccessorDeclaration) {
+    function visitFunctionDeclarationLikeForReturnType(
+        decl: FunctionDeclaration | ArrowFunction | FunctionExpression | MethodDeclaration | GetAccessorDeclaration,
+    ) {
         if (isArrowFunction(decl)) {
             if (!findChildOfKind(decl, SyntaxKind.OpenParenToken, file)) {
                 return;
@@ -507,7 +510,8 @@ export function provideInlayHints(context: InlayHintsContext): InlayHint[] {
                 case SyntaxKind.Identifier:
                     Debug.assertNode(node, isIdentifier);
                     const identifierText = idText(node);
-                    const name = node.symbol && node.symbol.declarations && node.symbol.declarations.length && getNameOfDeclaration(node.symbol.declarations[0]);
+                    const name = node.symbol && node.symbol.declarations && node.symbol.declarations.length &&
+                        getNameOfDeclaration(node.symbol.declarations[0]);
                     if (name) {
                         parts.push(getNodeDisplayPart(identifierText, name));
                     }
@@ -902,7 +906,8 @@ export function provideInlayHints(context: InlayHintsContext): InlayHint[] {
     function isHintableDeclaration(node: VariableDeclaration | ParameterDeclaration) {
         if ((isParameterDeclaration(node) || isVariableDeclaration(node) && isVarConst(node)) && node.initializer) {
             const initializer = skipParentheses(node.initializer);
-            return !(isHintableLiteral(initializer) || isNewExpression(initializer) || isObjectLiteralExpression(initializer) || isAssertionExpression(initializer));
+            return !(isHintableLiteral(initializer) || isNewExpression(initializer) || isObjectLiteralExpression(initializer) ||
+                isAssertionExpression(initializer));
         }
         return true;
     }

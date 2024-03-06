@@ -56,7 +56,12 @@ function doChange(changes: textChanges.ChangeTracker, sourceFile: SourceFile, in
         sourceFile,
         statement,
         defaultImportName && !allowSyntheticDefaults
-            ? factory.createImportEqualsDeclaration(/*modifiers*/ undefined, /*isTypeOnly*/ false, defaultImportName, factory.createExternalModuleReference(required))
+            ? factory.createImportEqualsDeclaration(
+                /*modifiers*/ undefined,
+                /*isTypeOnly*/ false,
+                defaultImportName,
+                factory.createExternalModuleReference(required),
+            )
             : factory.createImportDeclaration(
                 /*modifiers*/ undefined,
                 factory.createImportClause(/*isTypeOnly*/ false, defaultImportName, namedImports),

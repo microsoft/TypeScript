@@ -61,7 +61,12 @@ const nullLog: Log = {
 
 function typingToFileName(cachePath: string, packageName: string, installTypingHost: InstallTypingHost, log: Log): string | undefined {
     try {
-        const result = resolveModuleName(packageName, combinePaths(cachePath, "index.d.ts"), { moduleResolution: ModuleResolutionKind.Node10 }, installTypingHost);
+        const result = resolveModuleName(
+            packageName,
+            combinePaths(cachePath, "index.d.ts"),
+            { moduleResolution: ModuleResolutionKind.Node10 },
+            installTypingHost,
+        );
         return result.resolvedModule && result.resolvedModule.resolvedFileName;
     }
     catch (e) {
@@ -327,7 +332,9 @@ export abstract class TypingsInstaller {
                         }
 
                         if (this.log.isEnabled()) {
-                            this.log.writeLine(`New typing for package ${packageName} from '${typingFile}' conflicts with existing typing file '${existingTypingFile}'`);
+                            this.log.writeLine(
+                                `New typing for package ${packageName} from '${typingFile}' conflicts with existing typing file '${existingTypingFile}'`,
+                            );
                         }
                     }
                     if (this.log.isEnabled()) {
@@ -365,7 +372,9 @@ export abstract class TypingsInstaller {
                 return undefined;
             }
             if (!this.typesRegistry.has(typingKey)) {
-                if (this.log.isEnabled()) this.log.writeLine(`'${typing}':: Entry for package '${typingKey}' does not exist in local types registry - skipping...`);
+                if (this.log.isEnabled()) {
+                    this.log.writeLine(`'${typing}':: Entry for package '${typingKey}' does not exist in local types registry - skipping...`);
+                }
                 return undefined;
             }
             if (
@@ -424,7 +433,9 @@ export abstract class TypingsInstaller {
             try {
                 if (!ok) {
                     if (this.log.isEnabled()) {
-                        this.log.writeLine(`install request failed, marking packages as missing to prevent repeated requests: ${JSON.stringify(filteredTypings)}`);
+                        this.log.writeLine(
+                            `install request failed, marking packages as missing to prevent repeated requests: ${JSON.stringify(filteredTypings)}`,
+                        );
                     }
                     for (const typing of filteredTypings) {
                         this.missingTypingsSet.add(typing);
@@ -532,7 +543,14 @@ export abstract class TypingsInstaller {
     protected abstract sendResponse(response: SetTypings | InvalidateCachedTypings | BeginInstallTypes | EndInstallTypes | WatchTypingLocations): void;
     /** @internal */
     protected abstract sendResponse(
-        response: SetTypings | InvalidateCachedTypings | BeginInstallTypes | EndInstallTypes | WatchTypingLocations | PackageInstalledResponse | TypesRegistryResponse,
+        response:
+            | SetTypings
+            | InvalidateCachedTypings
+            | BeginInstallTypes
+            | EndInstallTypes
+            | WatchTypingLocations
+            | PackageInstalledResponse
+            | TypesRegistryResponse,
     ): void; // eslint-disable-line @typescript-eslint/unified-signatures
     protected readonly latestDistTag = "latest";
 }

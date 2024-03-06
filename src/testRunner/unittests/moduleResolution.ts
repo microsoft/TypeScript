@@ -110,7 +110,13 @@ describe("unittests:: moduleResolution:: Node module resolution - relative paths
         testLoadingFromPackageJson("c:/a/b/c/d.ts", "c:/bar/package.json", "e.d.ts", "c:/bar/e.d.ts", "c:/bar");
         runBaseline("relative module name as directory", baselines);
 
-        function testLoadingFromPackageJson(containingFileName: string, packageJsonFileName: string, fieldRef: string, moduleFileName: string, moduleName: string): void {
+        function testLoadingFromPackageJson(
+            containingFileName: string,
+            packageJsonFileName: string,
+            fieldRef: string,
+            moduleFileName: string,
+            moduleName: string,
+        ): void {
             test(/*hasDirectoryExists*/ true);
             test(/*hasDirectoryExists*/ false);
 
@@ -717,7 +723,9 @@ describe("unittests:: moduleResolution:: baseUrl augmented module resolution", (
                     baselines.push("");
                 }
                 {
-                    baselines.push(`Resolving "/root/folder1/file1" from ${file2.name}${hasDirectoryExists ? "" : " with host that doesnt have directoryExists"}`);
+                    baselines.push(
+                        `Resolving "/root/folder1/file1" from ${file2.name}${hasDirectoryExists ? "" : " with host that doesnt have directoryExists"}`,
+                    );
                     const result = ts.resolveModuleName("/root/folder1/file1", file2.name, options, host);
                     baselines.push(`Resolution:: ${jsonToReadableText(result)}`);
                     baselines.push("");

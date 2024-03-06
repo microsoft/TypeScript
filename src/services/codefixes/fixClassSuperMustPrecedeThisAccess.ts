@@ -70,7 +70,8 @@ function getNodes(sourceFile: SourceFile, pos: number): { readonly constructor: 
     const superCall = findSuperCall(constructor.body!);
     // figure out if the `this` access is actually inside the supercall
     // i.e. super(this.a), since in that case we won't suggest a fix
-    return superCall && !superCall.expression.arguments.some(arg => isPropertyAccessExpression(arg) && arg.expression === token) ? { constructor, superCall } : undefined;
+    return superCall && !superCall.expression.arguments.some(arg => isPropertyAccessExpression(arg) && arg.expression === token) ? { constructor, superCall }
+        : undefined;
 }
 
 function findSuperCall(n: Node): ExpressionStatement & { expression: CallExpression; } | undefined {

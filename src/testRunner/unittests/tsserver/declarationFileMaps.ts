@@ -52,7 +52,8 @@ describe("unittests:: tsserver:: with declaration file maps:: project references
     const aDts: File = {
         path: "/a/bin/a.d.ts",
         // ${""} is needed to mangle the sourceMappingURL part or it breaks the build
-        content: `export declare function fnA(): void;\nexport interface IfaceA {\n}\nexport declare const instanceA: IfaceA;\n//# source${""}MappingURL=a.d.ts.map`,
+        content:
+            `export declare function fnA(): void;\nexport interface IfaceA {\n}\nexport declare const instanceA: IfaceA;\n//# source${""}MappingURL=a.d.ts.map`,
     };
 
     const bTs: File = {

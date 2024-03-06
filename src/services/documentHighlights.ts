@@ -106,7 +106,8 @@ export namespace DocumentHighlights {
             return [{ fileName: sourceFile.fileName, highlightSpans }];
         }
 
-        return getSemanticDocumentHighlights(position, node, program, cancellationToken, sourceFilesToSearch) || getSyntacticDocumentHighlights(node, sourceFile);
+        return getSemanticDocumentHighlights(position, node, program, cancellationToken, sourceFilesToSearch) ||
+            getSyntacticDocumentHighlights(node, sourceFile);
     }
 
     function getHighlightSpanForNode(node: Node, sourceFile: SourceFile): HighlightSpan {
@@ -185,7 +186,11 @@ export namespace DocumentHighlights {
             case SyntaxKind.ForKeyword:
             case SyntaxKind.WhileKeyword:
             case SyntaxKind.DoKeyword:
-                return useParent(node.parent, (n): n is IterationStatement => isIterationStatement(n, /*lookInLabeledStatements*/ true), getLoopBreakContinueOccurrences);
+                return useParent(
+                    node.parent,
+                    (n): n is IterationStatement => isIterationStatement(n, /*lookInLabeledStatements*/ true),
+                    getLoopBreakContinueOccurrences,
+                );
             case SyntaxKind.ConstructorKeyword:
                 return getFromAllDeclarations(isConstructorDeclaration, [SyntaxKind.ConstructorKeyword]);
             case SyntaxKind.GetKeyword:

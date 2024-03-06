@@ -120,7 +120,8 @@ export function getDefinitionAtPosition(
     stopAtAlias?: boolean,
 ): readonly DefinitionInfo[] | undefined {
     const resolvedRef = getReferenceAtPosition(sourceFile, position, program);
-    const fileReferenceDefinition = resolvedRef && [getDefinitionInfoForFileReference(resolvedRef.reference.fileName, resolvedRef.fileName, resolvedRef.unverified)] ||
+    const fileReferenceDefinition =
+        resolvedRef && [getDefinitionInfoForFileReference(resolvedRef.reference.fileName, resolvedRef.fileName, resolvedRef.unverified)] ||
         emptyArray;
     if (resolvedRef?.file) {
         // If `file` is missing, do a symbol-based lookup as well
@@ -456,7 +457,12 @@ function shouldUnwrapFirstTypeArgumentTypeDefinitionFromAlias(typeChecker: TypeC
     return !!globalType && globalType === type.aliasSymbol;
 }
 
-function getFirstTypeArgumentDefinitions(typeChecker: TypeChecker, type: Type, node: Node, failedAliasResolution: boolean | undefined): readonly DefinitionInfo[] {
+function getFirstTypeArgumentDefinitions(
+    typeChecker: TypeChecker,
+    type: Type,
+    node: Node,
+    failedAliasResolution: boolean | undefined,
+): readonly DefinitionInfo[] {
     if (!!(getObjectFlags(type) & ObjectFlags.Reference) && shouldUnwrapFirstTypeArgumentTypeDefinitionFromTypeReference(typeChecker, type as TypeReference)) {
         return definitionFromType(typeChecker.getTypeArguments(type as TypeReference)[0], typeChecker, node, failedAliasResolution);
     }
@@ -746,7 +752,9 @@ function isDefinitionVisible(checker: TypeChecker, declaration: Declaration): bo
     if (!declaration.parent) return false;
 
     // Variable initializers are visible if variable is visible
-    if (hasInitializer(declaration.parent) && declaration.parent.initializer === declaration) return isDefinitionVisible(checker, declaration.parent as Declaration);
+    if (hasInitializer(declaration.parent) && declaration.parent.initializer === declaration) {
+        return isDefinitionVisible(checker, declaration.parent as Declaration);
+    }
 
     // Handle some exceptions here like arrow function, members of class and object literal expression which are technically not visible but we want the definition to be determined by its parent
     switch (declaration.kind) {

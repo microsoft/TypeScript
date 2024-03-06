@@ -395,7 +395,10 @@ export function transformES2018(context: TransformationContext): (x: SourceFile 
         if (enclosingFunctionFlags & FunctionFlags.Async && enclosingFunctionFlags & FunctionFlags.Generator) {
             return setOriginalNode(
                 setTextRange(
-                    factory.createYieldExpression(/*asteriskToken*/ undefined, emitHelpers().createAwaitHelper(visitNode(node.expression, visitor, isExpression))),
+                    factory.createYieldExpression(
+                        /*asteriskToken*/ undefined,
+                        emitHelpers().createAwaitHelper(visitNode(node.expression, visitor, isExpression)),
+                    ),
                     /*location*/ node,
                 ),
                 node,
@@ -663,7 +666,13 @@ export function transformES2018(context: TransformationContext): (x: SourceFile 
             }
             return factory.updateCatchClause(
                 node,
-                factory.updateVariableDeclaration(node.variableDeclaration, name, /*exclamationToken*/ undefined, /*type*/ undefined, /*initializer*/ undefined),
+                factory.updateVariableDeclaration(
+                    node.variableDeclaration,
+                    name,
+                    /*exclamationToken*/ undefined,
+                    /*type*/ undefined,
+                    /*initializer*/ undefined,
+                ),
                 block,
             );
         }
@@ -1229,7 +1238,9 @@ export function transformES2018(context: TransformationContext): (x: SourceFile 
         return block;
     }
 
-    function transformFunctionBody(node: FunctionDeclaration | FunctionExpression | ConstructorDeclaration | MethodDeclaration | AccessorDeclaration): FunctionBody;
+    function transformFunctionBody(
+        node: FunctionDeclaration | FunctionExpression | ConstructorDeclaration | MethodDeclaration | AccessorDeclaration,
+    ): FunctionBody;
     function transformFunctionBody(node: ArrowFunction): ConciseBody;
     function transformFunctionBody(node: FunctionLikeDeclaration): ConciseBody {
         resumeLexicalEnvironment();

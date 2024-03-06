@@ -711,7 +711,13 @@ export class ChangeTracker {
         );
     }
 
-    public insertNodesBefore(sourceFile: SourceFile, before: Node, newNodes: readonly Node[], blankLineBetween = false, options: ConfigurableStartEnd = {}): void {
+    public insertNodesBefore(
+        sourceFile: SourceFile,
+        before: Node,
+        newNodes: readonly Node[],
+        blankLineBetween = false,
+        options: ConfigurableStartEnd = {},
+    ): void {
         this.insertNodesAt(
             sourceFile,
             getAdjustedStartPosition(sourceFile, before, options),
@@ -1078,13 +1084,19 @@ export class ChangeTracker {
                     joiner: " ",
                     suffix: " ",
                 });
-                this.insertNodesAt(sourceFile, node.body.end, [factory.createToken(SyntaxKind.SemicolonToken), factory.createToken(SyntaxKind.CloseBraceToken)], {
-                    joiner: " ",
-                });
+                this.insertNodesAt(
+                    sourceFile,
+                    node.body.end,
+                    [factory.createToken(SyntaxKind.SemicolonToken), factory.createToken(SyntaxKind.CloseBraceToken)],
+                    {
+                        joiner: " ",
+                    },
+                );
             }
         }
         else {
-            const pos = findChildOfKind(node, node.kind === SyntaxKind.FunctionExpression ? SyntaxKind.FunctionKeyword : SyntaxKind.ClassKeyword, sourceFile)!.end;
+            const pos =
+                findChildOfKind(node, node.kind === SyntaxKind.FunctionExpression ? SyntaxKind.FunctionKeyword : SyntaxKind.ClassKeyword, sourceFile)!.end;
             this.insertNodeAt(sourceFile, pos, factory.createIdentifier(name), { prefix: " " });
         }
     }
@@ -1193,7 +1205,12 @@ export class ChangeTracker {
                 // insert separator immediately following the 'after' node to preserve comments in trailing trivia
                 this.replaceRange(sourceFile, createRange(end), factory.createToken(separator));
                 // use the same indentation as 'after' item
-                const indentation = formatting.SmartIndenter.findFirstNonWhitespaceColumn(afterStartLinePosition, afterStart, sourceFile, this.formatContext.options);
+                const indentation = formatting.SmartIndenter.findFirstNonWhitespaceColumn(
+                    afterStartLinePosition,
+                    afterStart,
+                    sourceFile,
+                    this.formatContext.options,
+                );
                 // insert element before the line break on the line that contains 'after' element
                 let insertPos = skipTrivia(sourceFile.text, end, /*stopAfterLineBreak*/ true, /*stopAtComments*/ false);
                 // find position before "\n" or "\r\n"
@@ -1249,7 +1266,10 @@ export class ChangeTracker {
 
             const lastNonDeletedIndex = findLastIndex(list, n => !deletedNodesInLists.has(n), list.length - 2);
             if (lastNonDeletedIndex !== -1) {
-                this.deleteRange(sourceFile, { pos: list[lastNonDeletedIndex].end, end: startPositionToDeleteNodeInList(sourceFile, list[lastNonDeletedIndex + 1]) });
+                this.deleteRange(sourceFile, {
+                    pos: list[lastNonDeletedIndex].end,
+                    end: startPositionToDeleteNodeInList(sourceFile, list[lastNonDeletedIndex + 1]),
+                });
             }
         });
     }
@@ -1353,7 +1373,9 @@ function getClassOrObjectBraceEnds(
     const close = findChildOfKind(cls, SyntaxKind.CloseBraceToken, sourceFile);
     return [open?.end, close?.end];
 }
-function getMembersOrProperties(node: ClassLikeDeclaration | InterfaceDeclaration | ObjectLiteralExpression | TypeLiteralNode | EnumDeclaration): NodeArray<Node> {
+function getMembersOrProperties(
+    node: ClassLikeDeclaration | InterfaceDeclaration | ObjectLiteralExpression | TypeLiteralNode | EnumDeclaration,
+): NodeArray<Node> {
     return isObjectLiteralExpression(node) ? node.properties : node.members;
 }
 
@@ -1455,7 +1477,8 @@ namespace changesToText {
             ? change.nodes.map(n => removeSuffix(format(n), newLineCharacter)).join(change.options?.joiner || newLineCharacter)
             : format(change.node);
         // strip initial indentation (spaces or tabs) if text will be inserted in the middle of the line
-        const noIndent = (options.indentation !== undefined || getLineStartPositionForPosition(pos, targetSourceFile) === pos) ? text : text.replace(/^\s+/, "");
+        const noIndent = (options.indentation !== undefined || getLineStartPositionForPosition(pos, targetSourceFile) === pos) ? text
+            : text.replace(/^\s+/, "");
         return (options.prefix || "") + noIndent
             + ((!options.suffix || endsWith(noIndent, options.suffix))
                 ? "" : options.suffix);
@@ -1817,7 +1840,8 @@ function getInsertionPositionAtSourceFileTop(sourceFile: SourceFile): number {
 
 /** @internal */
 export function isValidLocationToAddComment(sourceFile: SourceFile, position: number) {
-    return !isInComment(sourceFile, position) && !isInString(sourceFile, position) && !isInTemplateString(sourceFile, position) && !isInJSXText(sourceFile, position);
+    return !isInComment(sourceFile, position) && !isInString(sourceFile, position) && !isInTemplateString(sourceFile, position) &&
+        !isInJSXText(sourceFile, position);
 }
 
 function needSemicolonBetween(a: Node, b: Node): boolean {
@@ -1848,10 +1872,12 @@ namespace deleteDeclaration {
 
             case SyntaxKind.ImportDeclaration:
             case SyntaxKind.ImportEqualsDeclaration:
-                const isFirstImport = sourceFile.imports.length && node === first(sourceFile.imports).parent || node === find(sourceFile.statements, isAnyImportSyntax);
+                const isFirstImport = sourceFile.imports.length && node === first(sourceFile.imports).parent ||
+                    node === find(sourceFile.statements, isAnyImportSyntax);
                 // For first import, leave header comment in place, otherwise only delete JSDoc comments
                 deleteNode(changes, sourceFile, node, {
-                    leadingTriviaOption: isFirstImport ? LeadingTriviaOption.Exclude : hasJSDocNodes(node) ? LeadingTriviaOption.JSDoc : LeadingTriviaOption.StartLine,
+                    leadingTriviaOption: isFirstImport ? LeadingTriviaOption.Exclude
+                        : hasJSDocNodes(node) ? LeadingTriviaOption.JSDoc : LeadingTriviaOption.StartLine,
                 });
                 break;
 

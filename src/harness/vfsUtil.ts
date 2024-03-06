@@ -1062,7 +1062,11 @@ export class FileSystem {
      * @link http://man7.org/linux/man-pages/man7/path_resolution.7.html
      */
     private _walk(path: string, noFollow?: boolean, onError?: (error: NodeJS.ErrnoException, fragment: WalkResult) => "retry" | "throw"): WalkResult;
-    private _walk(path: string, noFollow?: boolean, onError?: (error: NodeJS.ErrnoException, fragment: WalkResult) => "stop" | "retry" | "throw"): WalkResult | undefined;
+    private _walk(
+        path: string,
+        noFollow?: boolean,
+        onError?: (error: NodeJS.ErrnoException, fragment: WalkResult) => "stop" | "retry" | "throw",
+    ): WalkResult | undefined;
     private _walk(
         path: string,
         noFollow?: boolean,
