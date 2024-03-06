@@ -454,8 +454,14 @@ describe("unittests:: tsserver:: CachingFileSystemInformation:: tsserverProjectS
                 { path: "/a/b/node_modules/.staging/symbol-observable-24bcbbff" },
                 { path: "/a/b/node_modules/.staging/rxjs-22375c61" },
                 { path: "/a/b/node_modules/.staging/typescript-8493ea5d" },
-                { path: "/a/b/node_modules/.staging/symbol-observable-24bcbbff/package.json", content: '{\n  "name": "symbol-observable",\n  "version": "1.0.4",\n  "description": "Symbol.observable ponyfill",\n  "license": "MIT",\n  "repository": "blesh/symbol-observable",\n  "author": {\n    "name": "Ben Lesh",\n    "email": "ben@benlesh.com"\n  },\n  "engines": {\n    "node": ">=0.10.0"\n  },\n  "scripts": {\n    "test": "npm run build && mocha && tsc ./ts-test/test.ts && node ./ts-test/test.js && check-es3-syntax -p lib/ --kill",\n    "build": "babel es --out-dir lib",\n    "prepublish": "npm test"\n  },\n  "files": [\n    "' },
-                { path: "/a/b/node_modules/.staging/lodash-b0733faa/package.json", content: '{\n  "name": "lodash",\n  "version": "4.17.4",\n  "description": "Lodash modular utilities.",\n  "keywords": "modules, stdlib, util",\n  "homepage": "https://lodash.com/",\n  "repository": "lodash/lodash",\n  "icon": "https://lodash.com/icon.svg",\n  "license": "MIT",\n  "main": "lodash.js",\n  "author": "John-David Dalton <john.david.dalton@gmail.com> (http://allyoucanleet.com/)",\n  "contributors": [\n    "John-David Dalton <john.david.dalton@gmail.com> (http://allyoucanleet.com/)",\n    "Mathias Bynens <mathias@qiwi.' },
+                {
+                    path: "/a/b/node_modules/.staging/symbol-observable-24bcbbff/package.json",
+                    content: '{\n  "name": "symbol-observable",\n  "version": "1.0.4",\n  "description": "Symbol.observable ponyfill",\n  "license": "MIT",\n  "repository": "blesh/symbol-observable",\n  "author": {\n    "name": "Ben Lesh",\n    "email": "ben@benlesh.com"\n  },\n  "engines": {\n    "node": ">=0.10.0"\n  },\n  "scripts": {\n    "test": "npm run build && mocha && tsc ./ts-test/test.ts && node ./ts-test/test.js && check-es3-syntax -p lib/ --kill",\n    "build": "babel es --out-dir lib",\n    "prepublish": "npm test"\n  },\n  "files": [\n    "',
+                },
+                {
+                    path: "/a/b/node_modules/.staging/lodash-b0733faa/package.json",
+                    content: '{\n  "name": "lodash",\n  "version": "4.17.4",\n  "description": "Lodash modular utilities.",\n  "keywords": "modules, stdlib, util",\n  "homepage": "https://lodash.com/",\n  "repository": "lodash/lodash",\n  "icon": "https://lodash.com/icon.svg",\n  "license": "MIT",\n  "main": "lodash.js",\n  "author": "John-David Dalton <john.david.dalton@gmail.com> (http://allyoucanleet.com/)",\n  "contributors": [\n    "John-David Dalton <john.david.dalton@gmail.com> (http://allyoucanleet.com/)",\n    "Mathias Bynens <mathias@qiwi.',
+                },
                 {
                     path: "/a/b/node_modules/.staging/rxjs-22375c61/package.json",
                     content:

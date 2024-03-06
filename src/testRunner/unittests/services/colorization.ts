@@ -211,7 +211,24 @@ describe("unittests:: services:: Colorization", () => {
             let pos = 0;
             let lastLength = 0;
 
-            testLexicalClassification("...${ () => { } } ${ { x: `1` } }...`", ts.EndOfLineState.InTemplateHeadOrNoSubstitutionTemplate, stringLiteral(track("...${"), pos), punctuation(track(" ", "("), pos), punctuation(track(")"), pos), punctuation(track(" ", "=>"), pos), punctuation(track(" ", "{"), pos), punctuation(track(" ", "}"), pos), stringLiteral(track(" ", "} ${"), pos), punctuation(track(" ", "{"), pos), identifier(track(" ", "x"), pos), punctuation(track(":"), pos), stringLiteral(track(" ", "`1`"), pos), punctuation(track(" ", "}"), pos), stringLiteral(track(" ", "}...`"), pos), finalEndOfLineState(ts.EndOfLineState.None));
+            testLexicalClassification(
+                "...${ () => { } } ${ { x: `1` } }...`",
+                ts.EndOfLineState.InTemplateHeadOrNoSubstitutionTemplate,
+                stringLiteral(track("...${"), pos),
+                punctuation(track(" ", "("), pos),
+                punctuation(track(")"), pos),
+                punctuation(track(" ", "=>"), pos),
+                punctuation(track(" ", "{"), pos),
+                punctuation(track(" ", "}"), pos),
+                stringLiteral(track(" ", "} ${"), pos),
+                punctuation(track(" ", "{"), pos),
+                identifier(track(" ", "x"), pos),
+                punctuation(track(":"), pos),
+                stringLiteral(track(" ", "`1`"), pos),
+                punctuation(track(" ", "}"), pos),
+                stringLiteral(track(" ", "}...`"), pos),
+                finalEndOfLineState(ts.EndOfLineState.None),
+            );
 
             // Adjusts 'pos' by accounting for the length of each portion of the string,
             // but only return the last given string
