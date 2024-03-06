@@ -2840,13 +2840,14 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 // still might be illegal if the usage is within a computed property name in the class (eg class A { static p = "a"; [A.p]() {} })
                 // or when used within a decorator in the class (e.g. `@dec(A.x) class A { static x = "x" }`),
                 // except when used in a function that is not an IIFE (e.g., `@dec(() => A.x) class A { ... }`)
-                const container = findAncestor(usage, n => n === declaration ? "quit" :
-                    isComputedPropertyName(n) ? n.parent.parent === declaration :
-                    isDecorator(n) && (n.parent === declaration ||
-                        isMethodDeclaration(n.parent) && n.parent.parent === declaration ||
-                        isGetOrSetAccessorDeclaration(n.parent) && n.parent.parent === declaration ||
-                        isPropertyDeclaration(n.parent) && n.parent.parent === declaration ||
-                        isParameter(n.parent) && n.parent.parent.parent === declaration));
+                const container = findAncestor(usage, n =>
+                    n === declaration ? "quit" :
+                        isComputedPropertyName(n) ? n.parent.parent === declaration :
+                        isDecorator(n) && (n.parent === declaration ||
+                            isMethodDeclaration(n.parent) && n.parent.parent === declaration ||
+                            isGetOrSetAccessorDeclaration(n.parent) && n.parent.parent === declaration ||
+                            isPropertyDeclaration(n.parent) && n.parent.parent === declaration ||
+                            isParameter(n.parent) && n.parent.parent.parent === declaration));
                 if (!container) {
                     return true;
                 }
