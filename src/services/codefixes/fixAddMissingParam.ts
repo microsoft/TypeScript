@@ -326,5 +326,6 @@ function createParameter(name: string, type: TypeNode, questionToken: QuestionTo
 }
 
 function isOptionalPos(declarations: ConvertibleSignatureDeclaration[], pos: number) {
-    return length(declarations) && some(declarations, d => pos < length(d.parameters) && !!d.parameters[pos] && d.parameters[pos].questionToken === undefined);
+    return length(declarations) &&
+        some(declarations, d => pos < length(d.parameters) && !!d.parameters[pos] && d.parameters[pos].questionToken === undefined);
 }

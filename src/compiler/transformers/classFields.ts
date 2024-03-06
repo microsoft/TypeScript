@@ -1661,7 +1661,12 @@ export function transformClassFields(context: TransformationContext): (x: Source
         return factory.updateParenthesizedExpression(node, expression);
     }
 
-    function createPrivateIdentifierAssignment(info: PrivateIdentifierInfo, receiver: Expression, right: Expression, operator: AssignmentOperator): Expression {
+    function createPrivateIdentifierAssignment(
+        info: PrivateIdentifierInfo,
+        receiver: Expression,
+        right: Expression,
+        operator: AssignmentOperator,
+    ): Expression {
         receiver = visitNode(receiver, visitor, isExpression);
         right = visitNode(right, visitor, isExpression);
         ensureDynamicThisIfNeeded(receiver);
@@ -1737,7 +1742,8 @@ export function transformClassFields(context: TransformationContext): (x: Source
                     facts |= ClassFacts.NeedsClassConstructorReference;
                 }
                 else if (
-                    isAutoAccessorPropertyDeclaration(member) && shouldTransformAutoAccessors === Ternary.True && !node.name && !node.emitNode?.classThis
+                    isAutoAccessorPropertyDeclaration(member) && shouldTransformAutoAccessors === Ternary.True && !node.name &&
+                    !node.emitNode?.classThis
                 ) {
                     facts |= ClassFacts.NeedsClassConstructorReference;
                 }
@@ -2038,7 +2044,10 @@ export function transformClassFields(context: TransformationContext): (x: Source
 
         if (hasTransformableStatics || some(pendingExpressions)) {
             if (isDecoratedClassDeclaration) {
-                Debug.assertIsDefined(pendingStatements, "Decorated classes transformed by TypeScript are expected to be within a variable declaration.");
+                Debug.assertIsDefined(
+                    pendingStatements,
+                    "Decorated classes transformed by TypeScript are expected to be within a variable declaration.",
+                );
 
                 // Write any pending expressions from elided or moved computed property names
                 if (some(pendingExpressions)) {
@@ -2337,11 +2346,18 @@ export function transformClassFields(context: TransformationContext): (x: Source
         addRange(statementsOut, visitNodes(statementsIn, visitor, isStatement, statementOffset));
     }
 
-    function transformConstructorBody(node: ClassDeclaration | ClassExpression, constructor: ConstructorDeclaration | undefined, isDerivedClass: boolean) {
+    function transformConstructorBody(
+        node: ClassDeclaration | ClassExpression,
+        constructor: ConstructorDeclaration | undefined,
+        isDerivedClass: boolean,
+    ) {
         const instanceProperties = getProperties(node, /*requireInitializer*/ false, /*isStatic*/ false);
         let properties = instanceProperties;
         if (!useDefineForClassFields) {
-            properties = filter(properties, property => !!property.initializer || isPrivateIdentifier(property.name) || hasAccessorModifier(property));
+            properties = filter(
+                properties,
+                property => !!property.initializer || isPrivateIdentifier(property.name) || hasAccessorModifier(property),
+            );
         }
 
         const privateMethodsAndAccessors = getPrivateInstanceMethodsAndAccessors(node);
@@ -3001,7 +3017,12 @@ export function transformClassFields(context: TransformationContext): (x: Source
         const { className } = getPrivateIdentifierEnvironment().data;
         const prefix: GeneratedNamePart | string = className ? { prefix: "_", node: className, suffix: "_" } : "_";
         const identifier = typeof name === "object" ?
-            factory.getGeneratedNameForNode(name, GeneratedIdentifierFlags.Optimistic | GeneratedIdentifierFlags.ReservedInNestedScopes, prefix, suffix) :
+            factory.getGeneratedNameForNode(
+                name,
+                GeneratedIdentifierFlags.Optimistic | GeneratedIdentifierFlags.ReservedInNestedScopes,
+                prefix,
+                suffix,
+            ) :
             typeof name === "string" ? factory.createUniqueName(name, GeneratedIdentifierFlags.Optimistic, prefix, suffix) :
             factory.createTempVariable(/*recordTempVariable*/ undefined, /*reservedInNestedScopes*/ true, prefix, suffix);
 
@@ -3041,7 +3062,9 @@ export function transformClassFields(context: TransformationContext): (x: Source
         // differently inside the function.
         if (isThisProperty(node) || isSuperProperty(node) || !isSimpleCopiableExpression(node.expression)) {
             receiver = factory.createTempVariable(hoistVariableDeclaration, /*reservedInNestedScopes*/ true);
-            getPendingExpressions().push(factory.createBinaryExpression(receiver, SyntaxKind.EqualsToken, visitNode(node.expression, visitor, isExpression)));
+            getPendingExpressions().push(
+                factory.createBinaryExpression(receiver, SyntaxKind.EqualsToken, visitNode(node.expression, visitor, isExpression)),
+            );
         }
         return factory.createAssignmentTargetWrapper(
             parameter,

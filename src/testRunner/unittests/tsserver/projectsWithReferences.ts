@@ -272,7 +272,11 @@ export class A {}`,
             // revert
             host.writeFile(aConfig.path, aConfig.content);
             host.runQueuedTimeoutCallbacks(); // Schedules failed lookup invalidation
-            baselineTsserverLogs("projectsWithReferences", "trasitive references without files with deleting transitively referenced config file", session);
+            baselineTsserverLogs(
+                "projectsWithReferences",
+                "trasitive references without files with deleting transitively referenced config file",
+                session,
+            );
         });
     });
 });

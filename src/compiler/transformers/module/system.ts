@@ -178,7 +178,10 @@ export function transformSystemModule(context: TransformationContext): (x: Sourc
      * @param node The SourceFile node.
      */
     function transformSourceFile(node: SourceFile) {
-        if (node.isDeclarationFile || !(isEffectiveExternalModule(node, compilerOptions) || node.transformFlags & TransformFlags.ContainsDynamicImport)) {
+        if (
+            node.isDeclarationFile ||
+            !(isEffectiveExternalModule(node, compilerOptions) || node.transformFlags & TransformFlags.ContainsDynamicImport)
+        ) {
             return node;
         }
 
@@ -751,7 +754,10 @@ export function transformSystemModule(context: TransformationContext): (x: Sourc
      * @param node The node to visit.
      */
     function visitImportEqualsDeclaration(node: ImportEqualsDeclaration): VisitResult<Statement | undefined> {
-        Debug.assert(isExternalModuleImportEqualsDeclaration(node), "import= for internal module references should be handled in an earlier transformer.");
+        Debug.assert(
+            isExternalModuleImportEqualsDeclaration(node),
+            "import= for internal module references should be handled in an earlier transformer.",
+        );
 
         let statements: Statement[] | undefined;
         hoistVariableDeclaration(getLocalNameForExternalImport(factory, node, currentSourceFile)!); // TODO: GH#18217
@@ -1053,7 +1059,11 @@ export function transformSystemModule(context: TransformationContext): (x: Sourc
      * @param exportSelf A value indicating whether to also export each VariableDeclaration of
      * `nodes` declaration list.
      */
-    function appendExportsOfVariableStatement(statements: Statement[] | undefined, node: VariableStatement, exportSelf: boolean): Statement[] | undefined {
+    function appendExportsOfVariableStatement(
+        statements: Statement[] | undefined,
+        node: VariableStatement,
+        exportSelf: boolean,
+    ): Statement[] | undefined {
         if (moduleInfo.exportEquals) {
             return statements;
         }
@@ -1115,7 +1125,10 @@ export function transformSystemModule(context: TransformationContext): (x: Sourc
      * appended.
      * @param decl The declaration whose exports are to be recorded.
      */
-    function appendExportsOfHoistedDeclaration(statements: Statement[] | undefined, decl: ClassDeclaration | FunctionDeclaration): Statement[] | undefined {
+    function appendExportsOfHoistedDeclaration(
+        statements: Statement[] | undefined,
+        decl: ClassDeclaration | FunctionDeclaration,
+    ): Statement[] | undefined {
         if (moduleInfo.exportEquals) {
             return statements;
         }
@@ -1549,7 +1562,8 @@ export function transformSystemModule(context: TransformationContext): (x: Sourc
     function visitorWorker(node: Node, valueIsDiscarded: boolean): VisitResult<Node> {
         if (
             !(node.transformFlags &
-                (TransformFlags.ContainsDestructuringAssignment | TransformFlags.ContainsDynamicImport | TransformFlags.ContainsUpdateExpressionForIdentifier))
+                (TransformFlags.ContainsDestructuringAssignment | TransformFlags.ContainsDynamicImport |
+                    TransformFlags.ContainsUpdateExpressionForIdentifier))
         ) {
             return node;
         }
@@ -1597,11 +1611,17 @@ export function transformSystemModule(context: TransformationContext): (x: Sourc
     }
 
     function visitParenthesizedExpression(node: ParenthesizedExpression, valueIsDiscarded: boolean) {
-        return factory.updateParenthesizedExpression(node, visitNode(node.expression, valueIsDiscarded ? discardedValueVisitor : visitor, isExpression));
+        return factory.updateParenthesizedExpression(
+            node,
+            visitNode(node.expression, valueIsDiscarded ? discardedValueVisitor : visitor, isExpression),
+        );
     }
 
     function visitPartiallyEmittedExpression(node: PartiallyEmittedExpression, valueIsDiscarded: boolean) {
-        return factory.updatePartiallyEmittedExpression(node, visitNode(node.expression, valueIsDiscarded ? discardedValueVisitor : visitor, isExpression));
+        return factory.updatePartiallyEmittedExpression(
+            node,
+            visitNode(node.expression, valueIsDiscarded ? discardedValueVisitor : visitor, isExpression),
+        );
     }
 
     function visitImportCallExpression(node: ImportCall): Expression {

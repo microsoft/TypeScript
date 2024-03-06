@@ -529,7 +529,11 @@ type AmdDefineArgsUnnamedModuleNoDependencies = [declare: AmdModuleDeclaration];
 type AmdDefineArgsUnnamedModule = [dependencies: string[], declare: AmdModuleDeclaration];
 type AmdDefineArgsNamedModuleNoDependencies = [id: string, declare: AmdModuleDeclaration];
 type AmdDefineArgsNamedModule = [id: string, dependencies: string[], declare: AmdModuleDeclaration];
-type AmdDefineArgs = AmdDefineArgsUnnamedModuleNoDependencies | AmdDefineArgsUnnamedModule | AmdDefineArgsNamedModuleNoDependencies | AmdDefineArgsNamedModule;
+type AmdDefineArgs =
+    | AmdDefineArgsUnnamedModuleNoDependencies
+    | AmdDefineArgsUnnamedModule
+    | AmdDefineArgsNamedModuleNoDependencies
+    | AmdDefineArgsNamedModule;
 
 function isAmdDefineArgsUnnamedModuleNoDependencies(args: AmdDefineArgs): args is AmdDefineArgsUnnamedModuleNoDependencies {
     return args.length === 1;

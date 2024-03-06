@@ -1139,12 +1139,16 @@ describe("unittests:: tsserver:: projects::", () => {
 
             // Allow allowNonTsExtensions will be set to true for deferred extensions.
             session.logger.info(
-                `Has allowNonTsExtension: ${session.getProjectService().configuredProjects.get(tsconfig.path)!.getCompilerOptions().allowNonTsExtensions}`,
+                `Has allowNonTsExtension: ${
+                    session.getProjectService().configuredProjects.get(tsconfig.path)!.getCompilerOptions().allowNonTsExtensions
+                }`,
             );
 
             baselineTsserverLogs(
                 "projects",
-                `deferred files in the project context${lazyConfiguredProjectsFromExternalProject ? " with lazyConfiguredProjectsFromExternalProject" : ""}`,
+                `deferred files in the project context${
+                    lazyConfiguredProjectsFromExternalProject ? " with lazyConfiguredProjectsFromExternalProject" : ""
+                }`,
                 session,
             );
         }
@@ -1342,7 +1346,11 @@ describe("unittests:: tsserver:: projects::", () => {
             command: ts.server.protocol.CommandTypes.SynchronizeProjectList,
             arguments: { knownProjects: [], includeProjectReferenceRedirectInfo: false },
         });
-        baselineTsserverLogs("projects", "synchronizeProjectList returns correct information when base configuration file cannot be resolved", session);
+        baselineTsserverLogs(
+            "projects",
+            "synchronizeProjectList returns correct information when base configuration file cannot be resolved",
+            session,
+        );
     });
 
     it("synchronizeProjectList returns correct information when base configuration file cannot be resolved and redirect info is requested", () => {

@@ -5,8 +5,18 @@ describe("unittests:: services:: DocumentRegistry", () => {
         const documentRegistry = ts.createDocumentRegistry();
         const defaultCompilerOptions = ts.getDefaultCompilerOptions();
 
-        const f1 = documentRegistry.acquireDocument("file1.ts", defaultCompilerOptions, ts.ScriptSnapshot.fromString("var x = 1;"), /* version */ "1");
-        const f2 = documentRegistry.acquireDocument("file1.ts", defaultCompilerOptions, ts.ScriptSnapshot.fromString("var x = 1;"), /* version */ "1");
+        const f1 = documentRegistry.acquireDocument(
+            "file1.ts",
+            defaultCompilerOptions,
+            ts.ScriptSnapshot.fromString("var x = 1;"),
+            /* version */ "1",
+        );
+        const f2 = documentRegistry.acquireDocument(
+            "file1.ts",
+            defaultCompilerOptions,
+            ts.ScriptSnapshot.fromString("var x = 1;"),
+            /* version */ "1",
+        );
 
         assert(f1 === f2, "DocumentRegistry should return the same document for the same name");
     });
@@ -48,7 +58,12 @@ describe("unittests:: services:: DocumentRegistry", () => {
         documentRegistry.acquireDocument("file1.ts", defaultCompilerOptions, ts.ScriptSnapshot.fromString("var x = 1;"), /* version */ "1");
 
         // Simulate another LS getting the document at another version.
-        const f2 = documentRegistry.acquireDocument("file1.ts", defaultCompilerOptions, ts.ScriptSnapshot.fromString("var x = 1;"), /* version */ "2");
+        const f2 = documentRegistry.acquireDocument(
+            "file1.ts",
+            defaultCompilerOptions,
+            ts.ScriptSnapshot.fromString("var x = 1;"),
+            /* version */ "2",
+        );
 
         assert(f2.version === "2");
     });

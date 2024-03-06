@@ -43,7 +43,8 @@ const errorCodes = [
     // Diagnostics.This_type_parameter_probably_needs_an_extends_0_constraint
     Diagnostics.Type_0_is_not_comparable_to_type_1.code,
     Diagnostics.Type_0_is_not_assignable_to_type_1_Two_different_types_with_this_name_exist_but_they_are_unrelated.code,
-    Diagnostics.Type_0_is_not_assignable_to_type_1_with_exactOptionalPropertyTypes_Colon_true_Consider_adding_undefined_to_the_types_of_the_target_s_properties
+    Diagnostics
+        .Type_0_is_not_assignable_to_type_1_with_exactOptionalPropertyTypes_Colon_true_Consider_adding_undefined_to_the_types_of_the_target_s_properties
         .code,
     Diagnostics.Type_0_is_not_assignable_to_type_1.code,
     Diagnostics
@@ -61,7 +62,9 @@ registerCodeFix({
         if (info === undefined) return;
 
         const changes = textChanges.ChangeTracker.with(context, t => addMissingConstraint(t, program, preferences, host, sourceFile, info));
-        return [createCodeFixAction(fixId, changes, Diagnostics.Add_extends_constraint, fixId, Diagnostics.Add_extends_constraint_to_all_type_parameters)];
+        return [
+            createCodeFixAction(fixId, changes, Diagnostics.Add_extends_constraint, fixId, Diagnostics.Add_extends_constraint_to_all_type_parameters),
+        ];
     },
     fixIds: [fixId],
     getAllCodeActions: context => {
@@ -92,7 +95,10 @@ function getInfo(program: Program, sourceFile: SourceFile, span: TextSpan): Info
     const diag = find(program.getSemanticDiagnostics(sourceFile), diag => diag.start === span.start && diag.length === span.length);
     if (diag === undefined || diag.relatedInformation === undefined) return;
 
-    const related = find(diag.relatedInformation, related => related.code === Diagnostics.This_type_parameter_might_need_an_extends_0_constraint.code);
+    const related = find(
+        diag.relatedInformation,
+        related => related.code === Diagnostics.This_type_parameter_might_need_an_extends_0_constraint.code,
+    );
     if (related === undefined || related.file === undefined || related.start === undefined || related.length === undefined) return;
 
     let declaration = findAncestorMatchingSpan(related.file, createTextSpan(related.start, related.length));
@@ -133,7 +139,15 @@ function addMissingConstraint(
         const scriptTarget = getEmitScriptTarget(program.getCompilerOptions());
         const tracker = getNoopSymbolTrackerWithResolver({ program, host });
         const importAdder = createImportAdder(sourceFile, program, preferences, host);
-        const typeNode = typeToAutoImportableTypeNode(checker, importAdder, constraint, /*contextNode*/ undefined, scriptTarget, /*flags*/ undefined, tracker);
+        const typeNode = typeToAutoImportableTypeNode(
+            checker,
+            importAdder,
+            constraint,
+            /*contextNode*/ undefined,
+            scriptTarget,
+            /*flags*/ undefined,
+            tracker,
+        );
         if (typeNode) {
             changes.replaceNode(
                 sourceFile,

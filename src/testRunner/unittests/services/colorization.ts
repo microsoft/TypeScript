@@ -160,7 +160,12 @@ describe("unittests:: services:: Colorization", () => {
         });
 
         it("correctly classifies an unterminated single-line string with four backslashes", () => {
-            testLexicalClassification("'line1\\\\\\\\", ts.EndOfLineState.None, stringLiteral("'line1\\\\\\\\"), finalEndOfLineState(ts.EndOfLineState.None));
+            testLexicalClassification(
+                "'line1\\\\\\\\",
+                ts.EndOfLineState.None,
+                stringLiteral("'line1\\\\\\\\"),
+                finalEndOfLineState(ts.EndOfLineState.None),
+            );
         });
 
         it("correctly classifies the continuing line of a multiline string ending in one backslash", () => {
@@ -182,11 +187,21 @@ describe("unittests:: services:: Colorization", () => {
         });
 
         it("correctly classifies the last line of an unterminated multiline string ending in no backslashes", () => {
-            testLexicalClassification("  ", ts.EndOfLineState.InDoubleQuoteStringLiteral, stringLiteral("  "), finalEndOfLineState(ts.EndOfLineState.None));
+            testLexicalClassification(
+                "  ",
+                ts.EndOfLineState.InDoubleQuoteStringLiteral,
+                stringLiteral("  "),
+                finalEndOfLineState(ts.EndOfLineState.None),
+            );
         });
 
         it("correctly classifies the last line of an unterminated multiline string ending in two backslashes", () => {
-            testLexicalClassification("\\\\", ts.EndOfLineState.InDoubleQuoteStringLiteral, stringLiteral("\\\\"), finalEndOfLineState(ts.EndOfLineState.None));
+            testLexicalClassification(
+                "\\\\",
+                ts.EndOfLineState.InDoubleQuoteStringLiteral,
+                stringLiteral("\\\\"),
+                finalEndOfLineState(ts.EndOfLineState.None),
+            );
         });
 
         it("correctly classifies the last line of an unterminated multiline string ending in four backslashes", () => {
@@ -199,7 +214,12 @@ describe("unittests:: services:: Colorization", () => {
         });
 
         it("correctly classifies the last line of a multiline string", () => {
-            testLexicalClassification("'", ts.EndOfLineState.InSingleQuoteStringLiteral, stringLiteral("'"), finalEndOfLineState(ts.EndOfLineState.None));
+            testLexicalClassification(
+                "'",
+                ts.EndOfLineState.InSingleQuoteStringLiteral,
+                stringLiteral("'"),
+                finalEndOfLineState(ts.EndOfLineState.None),
+            );
         });
 
         it("correctly classifies an unterminated multiline comment", () => {
@@ -207,7 +227,12 @@ describe("unittests:: services:: Colorization", () => {
         });
 
         it("correctly classifies the termination of a multiline comment", () => {
-            testLexicalClassification("   */     ", ts.EndOfLineState.InMultiLineCommentTrivia, comment("   */"), finalEndOfLineState(ts.EndOfLineState.None));
+            testLexicalClassification(
+                "   */     ",
+                ts.EndOfLineState.InMultiLineCommentTrivia,
+                comment("   */"),
+                finalEndOfLineState(ts.EndOfLineState.None),
+            );
         });
 
         it("correctly classifies the continuation of a multiline comment", () => {
@@ -220,7 +245,12 @@ describe("unittests:: services:: Colorization", () => {
         });
 
         it("correctly classifies an unterminated multiline comment on a line ending in '/*/'", () => {
-            testLexicalClassification("   /*/", ts.EndOfLineState.None, comment("/*/"), finalEndOfLineState(ts.EndOfLineState.InMultiLineCommentTrivia));
+            testLexicalClassification(
+                "   /*/",
+                ts.EndOfLineState.None,
+                comment("/*/"),
+                finalEndOfLineState(ts.EndOfLineState.InMultiLineCommentTrivia),
+            );
         });
 
         it("correctly classifies an unterminated multiline comment with trailing space", () => {
@@ -263,7 +293,13 @@ describe("unittests:: services:: Colorization", () => {
                 finalEndOfLineState(ts.EndOfLineState.None),
             );
 
-            testLexicalClassification("public var", ts.EndOfLineState.None, keyword("public"), identifier("var"), finalEndOfLineState(ts.EndOfLineState.None));
+            testLexicalClassification(
+                "public var",
+                ts.EndOfLineState.None,
+                keyword("public"),
+                identifier("var"),
+                finalEndOfLineState(ts.EndOfLineState.None),
+            );
         });
 
         it("classifies a single line no substitution template string correctly", () => {
@@ -397,7 +433,13 @@ describe("unittests:: services:: Colorization", () => {
             );
 
             // Looks like a cast, should get classified as a keyword.
-            testLexicalClassification("<number", ts.EndOfLineState.None, operator("<"), keyword("number"), finalEndOfLineState(ts.EndOfLineState.None));
+            testLexicalClassification(
+                "<number",
+                ts.EndOfLineState.None,
+                operator("<"),
+                keyword("number"),
+                finalEndOfLineState(ts.EndOfLineState.None),
+            );
 
             // handle nesting properly.
             testLexicalClassification(

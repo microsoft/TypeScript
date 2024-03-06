@@ -115,9 +115,10 @@ function getRenameInfoForNode(
     }
 
     const kind = SymbolDisplay.getSymbolKind(typeChecker, symbol, node);
-    const specifierName = (isImportOrExportSpecifierName(node) || isStringOrNumericLiteralLike(node) && node.parent.kind === SyntaxKind.ComputedPropertyName)
-        ? stripQuotes(getTextOfIdentifierOrLiteral(node))
-        : undefined;
+    const specifierName =
+        (isImportOrExportSpecifierName(node) || isStringOrNumericLiteralLike(node) && node.parent.kind === SyntaxKind.ComputedPropertyName)
+            ? stripQuotes(getTextOfIdentifierOrLiteral(node))
+            : undefined;
     const displayName = specifierName || typeChecker.symbolToString(symbol);
     const fullDisplayName = specifierName || typeChecker.getFullyQualifiedName(symbol);
     return getRenameInfoSuccess(displayName, fullDisplayName, kind, SymbolDisplay.getSymbolModifiers(typeChecker, symbol), node, sourceFile);

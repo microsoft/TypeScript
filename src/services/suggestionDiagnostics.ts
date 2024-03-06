@@ -62,11 +62,16 @@ import {
 const visitedNestedConvertibleFunctions = new Map<string, true>();
 
 /** @internal */
-export function computeSuggestionDiagnostics(sourceFile: SourceFile, program: Program, cancellationToken: CancellationToken): DiagnosticWithLocation[] {
+export function computeSuggestionDiagnostics(
+    sourceFile: SourceFile,
+    program: Program,
+    cancellationToken: CancellationToken,
+): DiagnosticWithLocation[] {
     program.getSemanticDiagnostics(sourceFile, cancellationToken);
     const diags: DiagnosticWithLocation[] = [];
     const checker = program.getTypeChecker();
-    const isCommonJSFile = sourceFile.impliedNodeFormat === ModuleKind.CommonJS || fileExtensionIsOneOf(sourceFile.fileName, [Extension.Cts, Extension.Cjs]);
+    const isCommonJSFile = sourceFile.impliedNodeFormat === ModuleKind.CommonJS ||
+        fileExtensionIsOneOf(sourceFile.fileName, [Extension.Cts, Extension.Cjs]);
 
     if (
         !isCommonJSFile &&
@@ -177,7 +182,8 @@ function importNameForConvertToDefaultImport(node: AnyValidImportOrReExport): Id
     switch (node.kind) {
         case SyntaxKind.ImportDeclaration:
             const { importClause, moduleSpecifier } = node;
-            return importClause && !importClause.name && importClause.namedBindings && importClause.namedBindings.kind === SyntaxKind.NamespaceImport &&
+            return importClause && !importClause.name && importClause.namedBindings &&
+                    importClause.namedBindings.kind === SyntaxKind.NamespaceImport &&
                     isStringLiteral(moduleSpecifier)
                 ? importClause.namedBindings.name
                 : undefined;
@@ -222,7 +228,10 @@ function hasReturnStatementWithPromiseHandler(body: Block, checker: TypeChecker)
 }
 
 /** @internal */
-export function isReturnStatementWithFixablePromiseHandler(node: Node, checker: TypeChecker): node is ReturnStatement & { expression: CallExpression; } {
+export function isReturnStatementWithFixablePromiseHandler(
+    node: Node,
+    checker: TypeChecker,
+): node is ReturnStatement & { expression: CallExpression; } {
     return isReturnStatement(node) && !!node.expression && isFixablePromiseHandler(node.expression, checker);
 }
 
@@ -290,7 +299,10 @@ function isFixablePromiseArgument(arg: Expression, checker: TypeChecker): boolea
                 return false;
             }
             return checker.isUndefinedSymbol(symbol) ||
-                some(skipAlias(symbol, checker).declarations, d => isFunctionLike(d) || hasInitializer(d) && !!d.initializer && isFunctionLike(d.initializer));
+                some(
+                    skipAlias(symbol, checker).declarations,
+                    d => isFunctionLike(d) || hasInitializer(d) && !!d.initializer && isFunctionLike(d.initializer),
+                );
         }
         default:
             return false;

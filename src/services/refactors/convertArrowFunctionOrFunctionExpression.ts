@@ -221,14 +221,19 @@ function isSingleVariableDeclaration(parent: Node): parent is VariableDeclaratio
     return isVariableDeclaration(parent) || (isVariableDeclarationList(parent) && parent.declarations.length === 1);
 }
 
-function tryGetFunctionFromVariableDeclaration(sourceFile: SourceFile, typeChecker: TypeChecker, parent: Node): ArrowFunction | FunctionExpression | undefined {
+function tryGetFunctionFromVariableDeclaration(
+    sourceFile: SourceFile,
+    typeChecker: TypeChecker,
+    parent: Node,
+): ArrowFunction | FunctionExpression | undefined {
     if (!isSingleVariableDeclaration(parent)) {
         return undefined;
     }
     const variableDeclaration = isVariableDeclaration(parent) ? parent : first(parent.declarations);
     const initializer = variableDeclaration.initializer;
     if (
-        initializer && (isArrowFunction(initializer) || isFunctionExpression(initializer) && !isFunctionReferencedInFile(sourceFile, typeChecker, initializer))
+        initializer &&
+        (isArrowFunction(initializer) || isFunctionExpression(initializer) && !isFunctionReferencedInFile(sourceFile, typeChecker, initializer))
     ) {
         return initializer;
     }
@@ -255,7 +260,9 @@ function getVariableInfo(func: FunctionExpression | ArrowFunction): VariableInfo
 
     const variableDeclarationList = variableDeclaration.parent;
     const statement = variableDeclarationList.parent;
-    if (!isVariableDeclarationList(variableDeclarationList) || !isVariableStatement(statement) || !isIdentifier(variableDeclaration.name)) return undefined;
+    if (!isVariableDeclarationList(variableDeclarationList) || !isVariableStatement(statement) || !isIdentifier(variableDeclaration.name)) {
+        return undefined;
+    }
 
     return { variableDeclaration, variableDeclarationList, statement, name: variableDeclaration.name };
 }

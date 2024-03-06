@@ -200,7 +200,10 @@ function matchTextChunk(candidate: string, chunk: TextChunk, stringToWordSpans: 
         const wordSpans = getWordSpans(candidate, stringToWordSpans);
         for (const span of wordSpans) {
             if (partStartsWith(candidate, span, chunk.text, /*ignoreCase*/ true)) {
-                return createPatternMatch(PatternMatchKind.substring, /*isCaseSensitive:*/ partStartsWith(candidate, span, chunk.text, /*ignoreCase*/ false));
+                return createPatternMatch(
+                    PatternMatchKind.substring,
+                    /*isCaseSensitive:*/ partStartsWith(candidate, span, chunk.text, /*ignoreCase*/ false),
+                );
             }
         }
         // c) Is the pattern a substring of the candidate starting on one of the candidate's word boundaries?

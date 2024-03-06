@@ -53,7 +53,9 @@ const mobxDts: File = {
 describe("unittests:: tsserver:: moduleSpecifierCache", () => {
     it("caches importability within a file", () => {
         const { session, moduleSpecifierCache } = setup();
-        session.logger.info(`importability: ${moduleSpecifierCache.get(bTs.path as ts.Path, aTs.path as ts.Path, {}, {})?.isBlockedByPackageJsonDependencies}`);
+        session.logger.info(
+            `importability: ${moduleSpecifierCache.get(bTs.path as ts.Path, aTs.path as ts.Path, {}, {})?.isBlockedByPackageJsonDependencies}`,
+        );
         baselineTsserverLogs("moduleSpecifierCache", "caches importability within a file", session);
     });
 
@@ -72,14 +74,20 @@ describe("unittests:: tsserver:: moduleSpecifierCache", () => {
         host.writeFile("/node_modules/.staging/mobx-12345678/package.json", "{}");
         host.runQueuedTimeoutCallbacks();
         assert.equal(moduleSpecifierCache.count(), 0);
-        baselineTsserverLogs("moduleSpecifierCache", "invalidates module specifiers when changes happen in contained node_modules directories", session);
+        baselineTsserverLogs(
+            "moduleSpecifierCache",
+            "invalidates module specifiers when changes happen in contained node_modules directories",
+            session,
+        );
     });
 
     it("does not invalidate the cache when new files are added", () => {
         const { session, host, moduleSpecifierCache } = setup();
         host.writeFile("/src/a2.ts", aTs.content);
         host.runQueuedTimeoutCallbacks();
-        session.logger.info(`importability: ${moduleSpecifierCache.get(bTs.path as ts.Path, aTs.path as ts.Path, {}, {})?.isBlockedByPackageJsonDependencies}`);
+        session.logger.info(
+            `importability: ${moduleSpecifierCache.get(bTs.path as ts.Path, aTs.path as ts.Path, {}, {})?.isBlockedByPackageJsonDependencies}`,
+        );
         baselineTsserverLogs("moduleSpecifierCache", "does not invalidate the cache when new files are added", session);
     });
 

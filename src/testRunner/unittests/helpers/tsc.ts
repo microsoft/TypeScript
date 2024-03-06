@@ -76,7 +76,10 @@ export function testTscCompileLike(input: TestTscCompileLike) {
     const fs = inputFs.shadow();
 
     // Create system
-    const sys = new fakes.System(fs, { executingFilePath: `${fs.meta.get("defaultLibLocation")}/tsc`, env: environmentVariables }) as TscCompileSystem;
+    const sys = new fakes.System(fs, {
+        executingFilePath: `${fs.meta.get("defaultLibLocation")}/tsc`,
+        env: environmentVariables,
+    }) as TscCompileSystem;
     sys.storeFilesChangingSignatureDuringEmit = true;
     sys.write(`${sys.getExecutingFilePath()} ${commandLineArgs.join(" ")}\n`);
     sys.exit = exitCode => sys.exitCode = exitCode;
@@ -196,7 +199,9 @@ function storeDtsSignatures(sys: TscCompileSystem, programs: readonly CommandLin
                 /*cancellationToken*/ undefined,
                 sys,
                 (signature, sourceFiles) => {
-                    const exportedModules = ts.BuilderState.getExportedModules(state.exportedModulesMap && sourceFiles[0].exportedModulesFromDeclarationEmit);
+                    const exportedModules = ts.BuilderState.getExportedModules(
+                        state.exportedModulesMap && sourceFiles[0].exportedModulesFromDeclarationEmit,
+                    );
                     dtsSignatureData.set(relativeToBuildInfo(resolvedPath), {
                         signature,
                         exportedModules: exportedModules && ts.arrayFrom(exportedModules.keys(), relativeToBuildInfo),
@@ -288,11 +293,17 @@ function verifyTscEditDiscrepancies({
         const incrementalBuildText = newSys.readFile(outputFile);
         if (ts.isBuildInfoFile(outputFile)) {
             // Check only presence and absence and not text as we will do that for readable baseline
-            if (!sys.fileExists(`${outputFile}.readable.baseline.txt`)) addBaseline(`Readable baseline not present in clean build:: File:: ${outputFile}`);
+            if (!sys.fileExists(`${outputFile}.readable.baseline.txt`)) {
+                addBaseline(`Readable baseline not present in clean build:: File:: ${outputFile}`);
+            }
             if (!newSys.fileExists(`${outputFile}.readable.baseline.txt`)) {
                 addBaseline(`Readable baseline not present in incremental build:: File:: ${outputFile}`);
             }
-            verifyPresenceAbsence(incrementalBuildText, cleanBuildText, `Incremental and clean tsbuildinfo file presence differs:: File:: ${outputFile}`);
+            verifyPresenceAbsence(
+                incrementalBuildText,
+                cleanBuildText,
+                `Incremental and clean tsbuildinfo file presence differs:: File:: ${outputFile}`,
+            );
         }
         else if (!ts.fileExtensionIs(outputFile, ".tsbuildinfo.readable.baseline.txt")) {
             verifyTextEqual(incrementalBuildText, cleanBuildText, `File: ${outputFile}`);
@@ -302,7 +313,9 @@ function verifyTscEditDiscrepancies({
             const { buildInfo: incrementalBuildInfo, readableBuildInfo: incrementalReadableBuildInfo } = getBuildInfoForIncrementalCorrectnessCheck(
                 incrementalBuildText,
             );
-            const { buildInfo: cleanBuildInfo, readableBuildInfo: cleanReadableBuildInfo } = getBuildInfoForIncrementalCorrectnessCheck(cleanBuildText);
+            const { buildInfo: cleanBuildInfo, readableBuildInfo: cleanReadableBuildInfo } = getBuildInfoForIncrementalCorrectnessCheck(
+                cleanBuildText,
+            );
             const dtsSignaures = sys.dtsSignaures?.get(outputFile);
             verifyTextEqual(incrementalBuildInfo, cleanBuildInfo, `TsBuild info text without affectedFilesPendingEmit:: ${outputFile}::`);
             // Verify file info sigantures
@@ -313,7 +326,8 @@ function verifyTscEditDiscrepancies({
                     const dtsForKey = dtsSignaures?.get(key);
                     if (
                         !incrementalFileInfo || !cleanFileInfo ||
-                        incrementalFileInfo.signature !== cleanFileInfo.signature && (!dtsForKey || incrementalFileInfo.signature !== dtsForKey.signature)
+                        incrementalFileInfo.signature !== cleanFileInfo.signature &&
+                            (!dtsForKey || incrementalFileInfo.signature !== dtsForKey.signature)
                     ) {
                         return [
                             `Incremental signature is neither dts signature nor file version for File:: ${key}`,
@@ -361,7 +375,8 @@ function verifyTscEditDiscrepancies({
                         const actualFile = ts.isString(actualFileOrArray) ? actualFileOrArray : actualFileOrArray[0];
                         expectedIndex = ts.findIndex(
                             (cleanReadableBuildInfo!.program! as ReadableProgramMultiFileEmitBuildInfo).affectedFilesPendingEmit,
-                            ([expectedFileOrArray]) => actualFile === (ts.isString(expectedFileOrArray) ? expectedFileOrArray : expectedFileOrArray[0]),
+                            ([expectedFileOrArray]) =>
+                                actualFile === (ts.isString(expectedFileOrArray) ? expectedFileOrArray : expectedFileOrArray[0]),
                             expectedIndex,
                         );
                         if (expectedIndex === -1) {
@@ -380,10 +395,12 @@ function verifyTscEditDiscrepancies({
                         if (
                             !ts.find(
                                 (cleanReadableBuildInfo!.program! as ReadableProgramMultiFileEmitBuildInfo).emitDiagnosticsPerFile,
-                                ([expectedFileOrArray]) => actualFile === (ts.isString(expectedFileOrArray) ? expectedFileOrArray : expectedFileOrArray[0]),
+                                ([expectedFileOrArray]) =>
+                                    actualFile === (ts.isString(expectedFileOrArray) ? expectedFileOrArray : expectedFileOrArray[0]),
                             ) && !ts.find(
                                 (cleanReadableBuildInfo!.program! as ReadableProgramMultiFileEmitBuildInfo).affectedFilesPendingEmit,
-                                ([expectedFileOrArray]) => actualFile === (ts.isString(expectedFileOrArray) ? expectedFileOrArray : expectedFileOrArray[0]),
+                                ([expectedFileOrArray]) =>
+                                    actualFile === (ts.isString(expectedFileOrArray) ? expectedFileOrArray : expectedFileOrArray[0]),
                             )
                         ) {
                             addBaseline(
@@ -465,7 +482,8 @@ function getBuildInfoForIncrementalCorrectnessCheck(text: string | undefined): {
         | ts.MapLike<
             | string
             | Omit<
-                ReadableProgramBuildInfoFileInfo<ts.ProgramMultiFileEmitBuildInfoFileInfo> | ReadableProgramBuildInfoFileInfo<ts.BuilderState.FileInfo>,
+                | ReadableProgramBuildInfoFileInfo<ts.ProgramMultiFileEmitBuildInfoFileInfo>
+                | ReadableProgramBuildInfoFileInfo<ts.BuilderState.FileInfo>,
                 "signature" | "original"
             >
                 & {

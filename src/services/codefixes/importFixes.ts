@@ -337,7 +337,10 @@ function createImportAdderWorker(
                             entry.defaultImport === undefined || entry.defaultImport.name === symbolName,
                             "(Add new) Default import should be missing or match symbolName",
                         );
-                        entry.defaultImport = { name: symbolName, addAsTypeOnly: reduceAddAsTypeOnlyValues(entry.defaultImport?.addAsTypeOnly, addAsTypeOnly) };
+                        entry.defaultImport = {
+                            name: symbolName,
+                            addAsTypeOnly: reduceAddAsTypeOnlyValues(entry.defaultImport?.addAsTypeOnly, addAsTypeOnly),
+                        };
                         break;
                     case ImportKind.Named:
                         const prevValue = (entry.namedImports ||= new Map()).get(symbolName);
@@ -604,13 +607,25 @@ export function getImportCompletionAction(
         // The old way, kept alive for super old editors that don't give us `data` back.
         exportInfos = pathIsBareSpecifier(stripQuotes(moduleSymbol.name))
             ? [getSingleExportInfoForSymbol(targetSymbol, symbolName, moduleSymbol, program, host)]
-            : getAllExportInfoForSymbol(sourceFile, targetSymbol, symbolName, moduleSymbol, isJsxTagName, program, host, preferences, cancellationToken);
+            : getAllExportInfoForSymbol(
+                sourceFile,
+                targetSymbol,
+                symbolName,
+                moduleSymbol,
+                isJsxTagName,
+                program,
+                host,
+                preferences,
+                cancellationToken,
+            );
         Debug.assertIsDefined(exportInfos, "Some exportInfo should match the specified symbol / moduleSymbol");
     }
 
     const useRequire = shouldUseRequire(sourceFile, program);
     const isValidTypeOnlyUseSite = isValidTypeOnlyAliasUseSite(getTokenAtPosition(sourceFile, position));
-    const fix = Debug.checkDefined(getImportFixForSymbol(sourceFile, exportInfos, program, position, isValidTypeOnlyUseSite, useRequire, host, preferences));
+    const fix = Debug.checkDefined(
+        getImportFixForSymbol(sourceFile, exportInfos, program, position, isValidTypeOnlyUseSite, useRequire, host, preferences),
+    );
     return {
         moduleSpecifier: fix.moduleSpecifier,
         codeAction: codeFixActionToCodeAction(codeActionForFix(
@@ -696,7 +711,13 @@ function getAllExportInfoForSymbol(
         });
 }
 
-function getSingleExportInfoForSymbol(symbol: Symbol, symbolName: string, moduleSymbol: Symbol, program: Program, host: LanguageServiceHost): SymbolExportInfo {
+function getSingleExportInfoForSymbol(
+    symbol: Symbol,
+    symbolName: string,
+    moduleSymbol: Symbol,
+    program: Program,
+    host: LanguageServiceHost,
+): SymbolExportInfo {
     const compilerOptions = program.getCompilerOptions();
     const mainProgramInfo = getInfoWithChecker(program.getTypeChecker(), /*isFromPackageJson*/ false);
     if (mainProgramInfo) {
@@ -859,7 +880,9 @@ function tryAddToExistingImport(
     }
     return best;
 
-    function getAddToExistingImportFix({ declaration, importKind, symbol, targetFlags }: FixAddToExistingImportInfo): FixAddToExistingImport | undefined {
+    function getAddToExistingImportFix(
+        { declaration, importKind, symbol, targetFlags }: FixAddToExistingImportInfo,
+    ): FixAddToExistingImport | undefined {
         if (importKind === ImportKind.CommonJS || importKind === ImportKind.Namespace || declaration.kind === SyntaxKind.ImportEqualsDeclaration) {
             // These kinds of imports are not combinable with anything
             return undefined;
@@ -891,7 +914,14 @@ function tryAddToExistingImport(
         // N.B. we don't have to figure out whether to use the main program checker
         // or the AutoImportProvider checker because we're adding to an existing import; the existence of
         // the import guarantees the symbol came from the main program.
-        const addAsTypeOnly = getAddAsTypeOnly(isValidTypeOnlyUseSite, /*isForNewImportDeclaration*/ false, symbol, targetFlags, checker, compilerOptions);
+        const addAsTypeOnly = getAddAsTypeOnly(
+            isValidTypeOnlyUseSite,
+            /*isForNewImportDeclaration*/ false,
+            symbol,
+            targetFlags,
+            checker,
+            compilerOptions,
+        );
 
         if (
             importKind === ImportKind.Default && (
@@ -1266,7 +1296,8 @@ function getFixesInfoForUMDImport(
     // not), and this function will only be called for UMD symbols, which are necessarily an `export =`, not a
     // named export.
     const fixes =
-        getImportFixes(exportInfo, /*usagePosition*/ undefined, /*isValidTypeOnlyUseSite*/ false, useRequire, program, sourceFile, host, preferences).fixes;
+        getImportFixes(exportInfo, /*usagePosition*/ undefined, /*isValidTypeOnlyUseSite*/ false, useRequire, program, sourceFile, host, preferences)
+            .fixes;
     return fixes.map(fix => ({ fix, symbolName, errorIdentifierText: tryCast(token, isIdentifier)?.text }));
 }
 function getUmdSymbol(token: Node, checker: TypeChecker): Symbol | undefined {
@@ -1296,7 +1327,12 @@ function getUmdSymbol(token: Node, checker: TypeChecker): Symbol | undefined {
  *
  * @internal
  */
-export function getImportKind(importingFile: SourceFile, exportKind: ExportKind, compilerOptions: CompilerOptions, forceImportKeyword?: boolean): ImportKind {
+export function getImportKind(
+    importingFile: SourceFile,
+    exportKind: ExportKind,
+    compilerOptions: CompilerOptions,
+    forceImportKeyword?: boolean,
+): ImportKind {
     if (
         compilerOptions.verbatimModuleSyntax &&
         (getEmitModuleKind(compilerOptions) === ModuleKind.CommonJS || importingFile.impliedNodeFormat === ModuleKind.CommonJS)
@@ -1380,7 +1416,16 @@ function getFixesInfoForNonUMDImport(
             flatMapIterator(
                 exportInfo.values(),
                 exportInfos =>
-                    getImportFixes(exportInfos, symbolToken.getStart(sourceFile), isValidTypeOnlyUseSite, useRequire, program, sourceFile, host, preferences)
+                    getImportFixes(
+                        exportInfos,
+                        symbolToken.getStart(sourceFile),
+                        isValidTypeOnlyUseSite,
+                        useRequire,
+                        program,
+                        sourceFile,
+                        host,
+                        preferences,
+                    )
                         .fixes,
             ),
             fix => ({ fix, symbolName, errorIdentifierText: symbolToken.text, isJsxNamespaceFix: symbolName !== symbolToken.text }),
@@ -1388,7 +1433,12 @@ function getFixesInfoForNonUMDImport(
     });
 }
 
-function getTypeOnlyPromotionFix(sourceFile: SourceFile, symbolToken: Identifier, symbolName: string, program: Program): FixPromoteTypeOnlyImport | undefined {
+function getTypeOnlyPromotionFix(
+    sourceFile: SourceFile,
+    symbolToken: Identifier,
+    symbolName: string,
+    program: Program,
+): FixPromoteTypeOnlyImport | undefined {
     const checker = program.getTypeChecker();
     const symbol = checker.resolveName(symbolName, symbolToken, SymbolFlags.Value, /*excludeGlobals*/ true);
     if (!symbol) return undefined;
@@ -1401,7 +1451,10 @@ function getTypeOnlyPromotionFix(sourceFile: SourceFile, symbolToken: Identifier
 
 function getSymbolNamesToImport(sourceFile: SourceFile, checker: TypeChecker, symbolToken: Identifier, compilerOptions: CompilerOptions): string[] {
     const parent = symbolToken.parent;
-    if ((isJsxOpeningLikeElement(parent) || isJsxClosingElement(parent)) && parent.tagName === symbolToken && jsxModeNeedsExplicitImport(compilerOptions.jsx)) {
+    if (
+        (isJsxOpeningLikeElement(parent) || isJsxClosingElement(parent)) && parent.tagName === symbolToken &&
+        jsxModeNeedsExplicitImport(compilerOptions.jsx)
+    ) {
         const jsxNamespace = checker.getJsxNamespace(sourceFile);
         if (needsJsxNamespaceFix(jsxNamespace, symbolToken, checker)) {
             const needsComponentNameFix = !isIntrinsicJsxName(symbolToken.text) &&
@@ -1415,7 +1468,8 @@ function getSymbolNamesToImport(sourceFile: SourceFile, checker: TypeChecker, sy
 function needsJsxNamespaceFix(jsxNamespace: string, symbolToken: Identifier, checker: TypeChecker) {
     if (isIntrinsicJsxName(symbolToken.text)) return true; // If we were triggered by a matching error code on an intrinsic, the error must have been about missing the JSX factory
     const namespaceSymbol = checker.resolveName(jsxNamespace, symbolToken, SymbolFlags.Value, /*excludeGlobals*/ true);
-    return !namespaceSymbol || some(namespaceSymbol.declarations, isTypeOnlyImportOrExportDeclaration) && !(namespaceSymbol.flags & SymbolFlags.Value);
+    return !namespaceSymbol ||
+        some(namespaceSymbol.declarations, isTypeOnlyImportOrExportDeclaration) && !(namespaceSymbol.flags & SymbolFlags.Value);
 }
 
 // Returns a map from an exported symbol's ID to a list of every way it's (re-)exported.
@@ -1448,7 +1502,8 @@ function getExportInfos(
     ): void {
         const moduleSpecifierResolutionHost = getModuleSpecifierResolutionHost(isFromPackageJson);
         if (
-            toFile && isImportableFile(program, fromFile, toFile, preferences, packageJsonFilter, moduleSpecifierResolutionHost, moduleSpecifierCache) ||
+            toFile &&
+                isImportableFile(program, fromFile, toFile, preferences, packageJsonFilter, moduleSpecifierResolutionHost, moduleSpecifierCache) ||
             !toFile && packageJsonFilter.allowsImportingAmbientModule(moduleSymbol, moduleSpecifierResolutionHost)
         ) {
             const checker = program.getTypeChecker();
@@ -1934,7 +1989,9 @@ function getNewRequires(
     let statements: RequireVariableStatement | readonly RequireVariableStatement[] | undefined;
     // const { default: foo, bar, etc } = require('./mod');
     if (defaultImport || namedImports?.length) {
-        const bindingElements = namedImports?.map(({ name }) => factory.createBindingElement(/*dotDotDotToken*/ undefined, /*propertyName*/ undefined, name)) ||
+        const bindingElements = namedImports?.map(({ name }) =>
+            factory.createBindingElement(/*dotDotDotToken*/ undefined, /*propertyName*/ undefined, name)
+        ) ||
             [];
         if (defaultImport) {
             bindingElements.unshift(factory.createBindingElement(/*dotDotDotToken*/ undefined, "default", defaultImport.name));

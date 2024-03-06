@@ -55,7 +55,10 @@ function mjs(packageName: string) {
 
 export function getFsContentsForAlternateResult(): FsContents {
     return {
-        "/home/src/projects/project/node_modules/@types/bar/package.json": getFsConentsForAlternateResultAtTypesPackageJson("bar", /*addTypesCondition*/ false),
+        "/home/src/projects/project/node_modules/@types/bar/package.json": getFsConentsForAlternateResultAtTypesPackageJson(
+            "bar",
+            /*addTypesCondition*/ false,
+        ),
         "/home/src/projects/project/node_modules/@types/bar/index.d.ts": getFsContentsForAlternateResultDts("bar"),
         "/home/src/projects/project/node_modules/bar/package.json": getFsContentsForAlternateResultPackageJson(
             "bar",

@@ -112,7 +112,8 @@ export function transpileModule(input: string, transpileOptions: TranspileOption
     };
 
     // if jsx is specified then treat file as .tsx
-    const inputFileName = transpileOptions.fileName || (transpileOptions.compilerOptions && transpileOptions.compilerOptions.jsx ? "module.tsx" : "module.ts");
+    const inputFileName = transpileOptions.fileName ||
+        (transpileOptions.compilerOptions && transpileOptions.compilerOptions.jsx ? "module.tsx" : "module.ts");
     const sourceFile = createSourceFile(
         inputFileName,
         input,
@@ -163,7 +164,13 @@ export function transpileModule(input: string, transpileOptions: TranspileOption
 /*
  * This is a shortcut function for transpileModule - it accepts transpileOptions as parameters and returns only outputText part of the result.
  */
-export function transpile(input: string, compilerOptions?: CompilerOptions, fileName?: string, diagnostics?: Diagnostic[], moduleName?: string): string {
+export function transpile(
+    input: string,
+    compilerOptions?: CompilerOptions,
+    fileName?: string,
+    diagnostics?: Diagnostic[],
+    moduleName?: string,
+): string {
     const output = transpileModule(input, { compilerOptions, fileName, reportDiagnostics: !!diagnostics, moduleName });
     // addRange correctly handles cases when wither 'from' or 'to' argument is missing
     addRange(diagnostics, output.diagnostics);
@@ -180,7 +187,10 @@ let commandLineOptionsStringToEnum: CommandLineOptionOfCustomType[];
 export function fixupCompilerOptions(options: CompilerOptions, diagnostics: Diagnostic[]): CompilerOptions {
     // Lazily create this value to fix module loading errors.
     commandLineOptionsStringToEnum = commandLineOptionsStringToEnum ||
-        filter(optionDeclarations, o => typeof o.type === "object" && !forEachEntry(o.type, v => typeof v !== "number")) as CommandLineOptionOfCustomType[];
+        filter(
+            optionDeclarations,
+            o => typeof o.type === "object" && !forEachEntry(o.type, v => typeof v !== "number"),
+        ) as CommandLineOptionOfCustomType[];
 
     options = cloneCompilerOptions(options);
 

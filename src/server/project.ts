@@ -736,7 +736,14 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
         containingSourceFile: SourceFile,
         reusedNames: readonly StringLiteralLike[] | undefined,
     ): readonly ResolvedModuleWithFailedLookupLocations[] {
-        return this.resolutionCache.resolveModuleNameLiterals(moduleLiterals, containingFile, redirectedReference, options, containingSourceFile, reusedNames);
+        return this.resolutionCache.resolveModuleNameLiterals(
+            moduleLiterals,
+            containingFile,
+            redirectedReference,
+            options,
+            containingSourceFile,
+            reusedNames,
+        );
     }
 
     /** @internal */
@@ -1538,7 +1545,12 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
 
             // path in global cache, watch global cache
             if (
-                containsPath(this.projectService.typingsInstaller.globalTypingsCacheLocation!, file, this.currentDirectory, !this.useCaseSensitiveFileNames())
+                containsPath(
+                    this.projectService.typingsInstaller.globalTypingsCacheLocation!,
+                    file,
+                    this.currentDirectory,
+                    !this.useCaseSensitiveFileNames(),
+                )
             ) {
                 createProjectWatcher(this.projectService.typingsInstaller.globalTypingsCacheLocation!, TypingWatcherType.DirectoryWatcher);
                 continue;
@@ -1571,7 +1583,10 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
         Debug.assert(!this.isClosed(), "Called update graph worker of closed project");
         this.writeLog(`Starting updateGraphWorker: Project: ${this.getProjectName()}`);
         const start = timestamp();
-        const { hasInvalidatedResolutions, hasInvalidatedLibResolutions } = this.resolutionCache.createHasInvalidatedResolutions(returnFalse, returnFalse);
+        const { hasInvalidatedResolutions, hasInvalidatedLibResolutions } = this.resolutionCache.createHasInvalidatedResolutions(
+            returnFalse,
+            returnFalse,
+        );
         this.hasInvalidatedResolutions = hasInvalidatedResolutions;
         this.hasInvalidatedLibResolutions = hasInvalidatedLibResolutions;
         this.resolutionCache.startCachingPerDirectoryResolution();
@@ -1706,7 +1721,11 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
             // by the host for files in the program when the program is retrieved above but
             // the program doesn't contain external files so this must be done explicitly.
             inserted => {
-                const scriptInfo = this.projectService.getOrCreateScriptInfoNotOpenedByClient(inserted, this.currentDirectory, this.directoryStructureHost);
+                const scriptInfo = this.projectService.getOrCreateScriptInfoNotOpenedByClient(
+                    inserted,
+                    this.currentDirectory,
+                    this.directoryStructureHost,
+                );
                 scriptInfo?.attachToProject(this);
             },
             removed => this.detachScriptInfoFromProject(removed),
@@ -1799,7 +1818,9 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
             if (this.generatedFilesMap) {
                 if (isGeneratedFileWatcher(this.generatedFilesMap)) {
                     Debug.fail(
-                        `${this.projectName} Expected to not have --out watcher for generated file with options: ${JSON.stringify(this.compilerOptions)}`,
+                        `${this.projectName} Expected to not have --out watcher for generated file with options: ${
+                            JSON.stringify(this.compilerOptions)
+                        }`,
                     );
                     return;
                 }
@@ -2743,7 +2764,9 @@ export class AutoImportProviderProject extends Project {
     }
 
     override getHostForAutoImportProvider(): never {
-        throw new Error("AutoImportProviderProject cannot provide its own host; use `hostProject.getModuleResolutionHostForAutomImportProvider()` instead.");
+        throw new Error(
+            "AutoImportProviderProject cannot provide its own host; use `hostProject.getModuleResolutionHostForAutomImportProvider()` instead.",
+        );
     }
 
     override getProjectReferences() {

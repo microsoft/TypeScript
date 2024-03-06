@@ -238,7 +238,10 @@ export function Component(x: Config): any;`,
                 [libFile.path, class1.path, class3, class2.path],
             );
             // Add excluded file to referenced project
-            system.ensureFileOrFolder({ path: `/user/username/projects/myproject/projects/project1/temp/file.d.ts`, content: `declare class file {}` });
+            system.ensureFileOrFolder({
+                path: `/user/username/projects/myproject/projects/project1/temp/file.d.ts`,
+                content: `declare class file {}`,
+            });
             assert.strictEqual(ls.getProgram(), program);
             // Add output from new class to referenced project
             system.writeFile(`/user/username/projects/myproject/projects/project1/class3.d.ts`, `declare class class3 {}`);
@@ -269,7 +272,10 @@ export function Component(x: Config): any;`,
                 [libFile.path, class1Dts.path, class3Dts, class2.path],
             );
             // Add excluded file to referenced project
-            system.ensureFileOrFolder({ path: `/user/username/projects/myproject/projects/project1/temp/file.d.ts`, content: `declare class file {}` });
+            system.ensureFileOrFolder({
+                path: `/user/username/projects/myproject/projects/project1/temp/file.d.ts`,
+                content: `declare class file {}`,
+            });
             assert.strictEqual(ls.getProgram(), program2);
             // Delete output from new class to referenced project
             system.deleteFile(class3Dts);

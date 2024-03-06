@@ -298,7 +298,11 @@ export function assertStructuralEquals(node1: ts.Node, node2: ts.Node) {
     // call this on both nodes to ensure all propagated flags have been set (and thus can be
     // compared).
     assert.equal(ts.containsParseError(node1), ts.containsParseError(node2));
-    assert.equal(node1.flags & ~ts.NodeFlags.ReachabilityAndEmitFlags, node2.flags & ~ts.NodeFlags.ReachabilityAndEmitFlags, "node1.flags !== node2.flags");
+    assert.equal(
+        node1.flags & ~ts.NodeFlags.ReachabilityAndEmitFlags,
+        node2.flags & ~ts.NodeFlags.ReachabilityAndEmitFlags,
+        "node1.flags !== node2.flags",
+    );
 
     ts.forEachChild(node1, child1 => {
         const childName = findChildName(node1, child1);

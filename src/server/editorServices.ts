@@ -460,7 +460,10 @@ export function convertCompilerOptions(protocolOptions: protocol.ExternalProject
     return protocolOptions as any;
 }
 
-export function convertWatchOptions(protocolOptions: protocol.ExternalProjectCompilerOptions, currentDirectory?: string): WatchOptionsAndErrors | undefined {
+export function convertWatchOptions(
+    protocolOptions: protocol.ExternalProjectCompilerOptions,
+    currentDirectory?: string,
+): WatchOptionsAndErrors | undefined {
     let watchOptions: WatchOptions | undefined;
     let errors: Diagnostic[] | undefined;
     optionsForWatch.forEach(option => {
@@ -550,7 +553,8 @@ const fileNamePropertyReader: FilePropertyReader<string> = {
         }
         return result!; // TODO: GH#18217
     },
-    hasMixedContent: (fileName, extraFileExtensions) => some(extraFileExtensions, ext => ext.isMixedContent && fileExtensionIs(fileName, ext.extension)),
+    hasMixedContent: (fileName, extraFileExtensions) =>
+        some(extraFileExtensions, ext => ext.isMixedContent && fileExtensionIs(fileName, ext.extension)),
 };
 
 const externalFilePropertyReader: FilePropertyReader<protocol.ExternalFile> = {
@@ -1201,7 +1205,12 @@ export class ProjectService {
             extraFileExtensions: [],
         };
 
-        this.documentRegistry = createDocumentRegistryInternal(this.host.useCaseSensitiveFileNames, this.currentDirectory, this.jsDocParsingMode, this);
+        this.documentRegistry = createDocumentRegistryInternal(
+            this.host.useCaseSensitiveFileNames,
+            this.currentDirectory,
+            this.jsDocParsingMode,
+            this,
+        );
         const watchLogLevel = this.logger.hasLevel(LogLevel.verbose) ? WatchLogLevel.Verbose :
             this.logger.loggingEnabled() ? WatchLogLevel.TriggerOnly : WatchLogLevel.None;
         const log: (s: string) => void = watchLogLevel !== WatchLogLevel.None ? (s => this.logger.info(s)) : noop;
@@ -2063,7 +2072,11 @@ export class ProjectService {
     }
 
     /** @internal */
-    private createConfigFileWatcherForParsedConfig(configFileName: NormalizedPath, canonicalConfigFilePath: NormalizedPath, forProject: ConfiguredProject) {
+    private createConfigFileWatcherForParsedConfig(
+        configFileName: NormalizedPath,
+        canonicalConfigFilePath: NormalizedPath,
+        forProject: ConfiguredProject,
+    ) {
         const configFileExistenceInfo = this.configFileExistenceInfoCache.get(canonicalConfigFilePath)!;
         // When watching config file for parsed config, remove the noopFileWatcher that can be created for open files impacted by config file and watch for real
         if (!configFileExistenceInfo.watcher || configFileExistenceInfo.watcher === noopConfigFileWatcher) {
@@ -2250,7 +2263,8 @@ export class ProjectService {
         if (scriptInfo.isDynamic) return undefined;
 
         let searchPath = asNormalizedPath(getDirectoryPath(info.fileName));
-        const isSearchPathInProjectRoot = () => containsPath(projectRootPath!, searchPath, this.currentDirectory, !this.host.useCaseSensitiveFileNames);
+        const isSearchPathInProjectRoot = () =>
+            containsPath(projectRootPath!, searchPath, this.currentDirectory, !this.host.useCaseSensitiveFileNames);
 
         // If projectRootPath doesn't contain info.path, then do normal search for config file
         const anySearchPathOk = !projectRootPath || !isSearchPathInProjectRoot();
@@ -2876,7 +2890,11 @@ export class ProjectService {
             this.configFileExistenceInfoCache.get(project.canonicalConfigFilePath)!.config!,
         );
         project.updateErrorOnNoInputFiles(fileNames);
-        this.updateNonInferredProjectFiles(project, fileNames.concat(project.getExternalFiles(ProgramUpdateLevel.RootNamesAndUpdate)), fileNamePropertyReader);
+        this.updateNonInferredProjectFiles(
+            project,
+            fileNames.concat(project.getExternalFiles(ProgramUpdateLevel.RootNamesAndUpdate)),
+            fileNamePropertyReader,
+        );
         project.markAsDirty();
         return project.updateGraph();
     }
@@ -2947,7 +2965,10 @@ export class ProjectService {
         );
     }
 
-    private getOrCreateInferredProjectForProjectRootPathIfEnabled(info: ScriptInfo, projectRootPath: NormalizedPath | undefined): InferredProject | undefined {
+    private getOrCreateInferredProjectForProjectRootPathIfEnabled(
+        info: ScriptInfo,
+        projectRootPath: NormalizedPath | undefined,
+    ): InferredProject | undefined {
         if (
             !this.useInferredProjectPerProjectRoot ||
             // Its a dynamic info opened without project root
@@ -3339,7 +3360,10 @@ export class ProjectService {
         hasMixedContent?: boolean,
         hostToQueryFileExistsOn?: { fileExists(path: string): boolean; },
     ) {
-        Debug.assert(fileContent === undefined || openedByClient, "ScriptInfo needs to be opened by client to be able to set its user defined content");
+        Debug.assert(
+            fileContent === undefined || openedByClient,
+            "ScriptInfo needs to be opened by client to be able to set its user defined content",
+        );
         const path = normalizedPathToPath(fileName, currentDirectory, this.toCanonicalFileName);
         let info = this.getScriptInfoForPath(path);
         if (!info) {
@@ -3542,7 +3566,8 @@ export class ProjectService {
 
     /** @internal */
     getSourceFileLike(fileName: string, projectNameOrProject: string | Project, declarationInfo?: ScriptInfo): SourceFileLike | undefined {
-        const project = (projectNameOrProject as Project).projectName ? projectNameOrProject as Project : this.findProject(projectNameOrProject as string);
+        const project = (projectNameOrProject as Project).projectName ? projectNameOrProject as Project
+            : this.findProject(projectNameOrProject as string);
         if (project) {
             const path = project.toPath(fileName);
             const sourceFile = project.getSourceFile(path);
@@ -3604,7 +3629,10 @@ export class ProjectService {
                 this.logger.info(`Host information ${args.hostInfo}`);
             }
             if (args.formatOptions) {
-                this.hostConfiguration.formatCodeOptions = { ...this.hostConfiguration.formatCodeOptions, ...convertFormatOptions(args.formatOptions) };
+                this.hostConfiguration.formatCodeOptions = {
+                    ...this.hostConfiguration.formatCodeOptions,
+                    ...convertFormatOptions(args.formatOptions),
+                };
                 this.logger.info("Format host information updated");
             }
             if (args.preferences) {
@@ -3905,7 +3933,9 @@ export class ProjectService {
 
             configuredProject = this.createAndLoadConfiguredProject(
                 configFileName,
-                `Creating project for original file: ${originalFileInfo.fileName}${location !== originalLocation ? " for location: " + location.fileName : ""}`,
+                `Creating project for original file: ${originalFileInfo.fileName}${
+                    location !== originalLocation ? " for location: " + location.fileName : ""
+                }`,
             );
         }
         updateProjectIfDirty(configuredProject);
@@ -3998,7 +4028,10 @@ export class ProjectService {
             if (configFileName) {
                 project = this.findConfiguredProjectByProjectName(configFileName);
                 if (!project) {
-                    project = this.createLoadAndUpdateConfiguredProject(configFileName, `Creating possible configured project for ${info.fileName} to open`);
+                    project = this.createLoadAndUpdateConfiguredProject(
+                        configFileName,
+                        `Creating possible configured project for ${info.fileName} to open`,
+                    );
                     defaultConfigProjectIsCreated = true;
                 }
                 else {
@@ -4152,7 +4185,10 @@ export class ProjectService {
 
         for (const child of children) {
             if (!child) continue;
-            const referencedProject = forEachResolvedProjectReference(child.references, ref => forProjects.has(ref.sourceFile.path) ? ref : undefined);
+            const referencedProject = forEachResolvedProjectReference(
+                child.references,
+                ref => forProjects.has(ref.sourceFile.path) ? ref : undefined,
+            );
             if (!referencedProject) continue;
 
             // Load this project,
@@ -4359,7 +4395,10 @@ export class ProjectService {
     }
 
     /** @internal */
-    synchronizeProjectList(knownProjects: protocol.ProjectVersionInfo[], includeProjectReferenceRedirectInfo?: boolean): ProjectFilesWithTSDiagnostics[] {
+    synchronizeProjectList(
+        knownProjects: protocol.ProjectVersionInfo[],
+        includeProjectReferenceRedirectInfo?: boolean,
+    ): ProjectFilesWithTSDiagnostics[] {
         const files: ProjectFilesWithTSDiagnostics[] = [];
         this.collectChanges(knownProjects, this.externalProjects, includeProjectReferenceRedirectInfo, files);
         this.collectChanges(knownProjects, this.configuredProjects.values(), includeProjectReferenceRedirectInfo, files);
@@ -4368,7 +4407,11 @@ export class ProjectService {
     }
 
     /** @internal */
-    applyChangesInOpenFiles(openFiles: Iterable<OpenFileArguments> | undefined, changedFiles?: Iterable<ChangeFileArguments>, closedFiles?: string[]): void {
+    applyChangesInOpenFiles(
+        openFiles: Iterable<OpenFileArguments> | undefined,
+        changedFiles?: Iterable<ChangeFileArguments>,
+        closedFiles?: string[],
+    ): void {
         let openScriptInfos: ScriptInfo[] | undefined;
         let assignOrphanScriptInfosToInferredProject = false;
         if (openFiles) {
@@ -4629,8 +4672,14 @@ export class ProjectService {
                     if (!project) {
                         // errors are stored in the project, do not need to update the graph
                         project = this.getHostPreferences().lazyConfiguredProjectsFromExternalProject ?
-                            this.createConfiguredProjectWithDelayLoad(normalized, `Creating configured project in external project: ${proj.projectFileName}`) :
-                            this.createLoadAndUpdateConfiguredProject(normalized, `Creating configured project in external project: ${proj.projectFileName}`);
+                            this.createConfiguredProjectWithDelayLoad(
+                                normalized,
+                                `Creating configured project in external project: ${proj.projectFileName}`,
+                            ) :
+                            this.createLoadAndUpdateConfiguredProject(
+                                normalized,
+                                `Creating configured project in external project: ${proj.projectFileName}`,
+                            );
                     }
                     if (!existingConfiguredProjects?.has(project)) {
                         // keep project alive even if no documents are opened - its lifetime is bound to the lifetime of containing external project
@@ -4734,7 +4783,9 @@ export class ProjectService {
             /[\\/]\.\.?($|[\\/])/.test(pluginConfigEntry.name)
         ) {
             this.logger.info(
-                `Skipped loading plugin ${pluginConfigEntry.name || JSON.stringify(pluginConfigEntry)} because only package name is allowed plugin name`,
+                `Skipped loading plugin ${
+                    pluginConfigEntry.name || JSON.stringify(pluginConfigEntry)
+                } because only package name is allowed plugin name`,
             );
             return;
         }

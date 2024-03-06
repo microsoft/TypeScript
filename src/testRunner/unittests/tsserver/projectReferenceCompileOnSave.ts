@@ -369,7 +369,11 @@ fn2();
                     command: ts.server.protocol.CommandTypes.EmitOutput,
                     arguments: { file: usageTs.path },
                 });
-                baselineTsserverLogs("projectReferenceCompileOnSave", "when dependency project is not open and save on usage and change to usage", session);
+                baselineTsserverLogs(
+                    "projectReferenceCompileOnSave",
+                    "when dependency project is not open and save on usage and change to usage",
+                    session,
+                );
             });
             it("with change to usage, with specifying project file", () => {
                 const host = createServerHost([dependencyTs, dependencyConfig, usageTs, usageConfig, libFile]);
@@ -465,7 +469,11 @@ fn2();
                     command: ts.server.protocol.CommandTypes.EmitOutput,
                     arguments: { file: dependencyTs.path, projectFileName: usageConfig.path },
                 });
-                baselineTsserverLogs("projectReferenceCompileOnSave", "when dependency project is not open and save on dependency with project", session);
+                baselineTsserverLogs(
+                    "projectReferenceCompileOnSave",
+                    "when dependency project is not open and save on dependency with project",
+                    session,
+                );
             });
             it("with local change to dependency, without specifying project file", () => {
                 const host = createServerHost([dependencyTs, dependencyConfig, usageTs, usageConfig, libFile]);
@@ -1229,7 +1237,11 @@ fn2();
                     command: ts.server.protocol.CommandTypes.EmitOutput,
                     arguments: { file: dependencyTs.path, projectFileName: usageConfig.path },
                 });
-                baselineTsserverLogs("projectReferenceCompileOnSave", "save on dependency with usage project and local change to dependency", session);
+                baselineTsserverLogs(
+                    "projectReferenceCompileOnSave",
+                    "save on dependency with usage project and local change to dependency",
+                    session,
+                );
             });
             it("with local change to usage, with specifying project file", () => {
                 const host = createServerHost([dependencyTs, dependencyConfig, usageTs, usageConfig, libFile]);
@@ -1793,7 +1805,9 @@ describe("unittests:: tsserver:: with project references and compile on save wit
     }
 }`,
         };
-        const host = createServerHost([libFile, tsbaseJson, buttonConfig, buttonSource, siblingConfig, siblingSource], { useCaseSensitiveFileNames: true });
+        const host = createServerHost([libFile, tsbaseJson, buttonConfig, buttonSource, siblingConfig, siblingSource], {
+            useCaseSensitiveFileNames: true,
+        });
 
         // ts build should succeed
         ensureErrorFreeBuild(host, [siblingConfig.path]);

@@ -106,7 +106,12 @@ export type HostWatchFile = (
     options: WatchOptions | undefined,
 ) => FileWatcher;
 /** @internal */
-export type HostWatchDirectory = (fileName: string, callback: DirectoryWatcherCallback, recursive: boolean, options: WatchOptions | undefined) => FileWatcher;
+export type HostWatchDirectory = (
+    fileName: string,
+    callback: DirectoryWatcherCallback,
+    recursive: boolean,
+    options: WatchOptions | undefined,
+) => FileWatcher;
 
 /** @internal */
 export const missingFileModifiedTime = new Date(0); // Any subsequent modification will occur after this time
@@ -976,7 +981,12 @@ export function createSystemWatchFunctions({
         watchDirectory,
     };
 
-    function watchFile(fileName: string, callback: FileWatcherCallback, pollingInterval: PollingInterval, options: WatchOptions | undefined): FileWatcher {
+    function watchFile(
+        fileName: string,
+        callback: FileWatcherCallback,
+        pollingInterval: PollingInterval,
+        options: WatchOptions | undefined,
+    ): FileWatcher {
         options = updateOptionsForWatchFile(options, useNonPollingWatchers);
         const watchFileKind = Debug.checkDefined(options.watchFile);
         switch (watchFileKind) {
@@ -1056,7 +1066,12 @@ export function createSystemWatchFunctions({
         };
     }
 
-    function watchDirectory(directoryName: string, callback: DirectoryWatcherCallback, recursive: boolean, options: WatchOptions | undefined): FileWatcher {
+    function watchDirectory(
+        directoryName: string,
+        callback: DirectoryWatcherCallback,
+        recursive: boolean,
+        options: WatchOptions | undefined,
+    ): FileWatcher {
         if (fsSupportsRecursiveFsWatch) {
             return fsWatch(
                 directoryName,
@@ -1118,7 +1133,13 @@ export function createSystemWatchFunctions({
                 return fsWatch(
                     directoryName,
                     FileSystemEntryKind.Directory,
-                    createFsWatchCallbackForDirectoryWatcherCallback(directoryName, callback, options, useCaseSensitiveFileNames, getCurrentDirectory),
+                    createFsWatchCallbackForDirectoryWatcherCallback(
+                        directoryName,
+                        callback,
+                        options,
+                        useCaseSensitiveFileNames,
+                        getCurrentDirectory,
+                    ),
                     recursive,
                     PollingInterval.Medium,
                     getFallbackOptions(watchDirectoryOptions),
@@ -1536,7 +1557,8 @@ export let sys: System = (() => {
 
         const platform: string = _os.platform();
         const useCaseSensitiveFileNames = isFileSystemCaseSensitive();
-        const fsRealpath = !!_fs.realpathSync.native ? process.platform === "win32" ? fsRealPathHandlingLongPath : _fs.realpathSync.native : _fs.realpathSync;
+        const fsRealpath = !!_fs.realpathSync.native ? process.platform === "win32" ? fsRealPathHandlingLongPath : _fs.realpathSync.native
+            : _fs.realpathSync;
 
         // If our filename is "sys.js", then we are executing unbundled on the raw tsc output.
         // In that case, simulate a faked path in the directory where a bundle would normally
@@ -1738,7 +1760,8 @@ export let sys: System = (() => {
                         );
                     }
                     else if (!nativePattern.test(url)) {
-                        node.callFrame.url = (remappedPaths.has(url) ? remappedPaths : remappedPaths.set(url, `external${externalFileCounter}.js`)).get(url)!;
+                        node.callFrame.url = (remappedPaths.has(url) ? remappedPaths : remappedPaths.set(url, `external${externalFileCounter}.js`))
+                            .get(url)!;
                         externalFileCounter++;
                     }
                 }
@@ -1968,7 +1991,17 @@ export let sys: System = (() => {
             includes?: readonly string[],
             depth?: number,
         ): string[] {
-            return matchFiles(path, extensions, excludes, includes, useCaseSensitiveFileNames, process.cwd(), depth, getAccessibleFileSystemEntries, realpath);
+            return matchFiles(
+                path,
+                extensions,
+                excludes,
+                includes,
+                useCaseSensitiveFileNames,
+                process.cwd(),
+                depth,
+                getAccessibleFileSystemEntries,
+                realpath,
+            );
         }
 
         function fileSystemEntryExists(path: string, entryKind: FileSystemEntryKind): boolean {

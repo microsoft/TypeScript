@@ -143,7 +143,8 @@ export function getDefinitionAtPosition(
     // Labels
     if (isJumpStatementTarget(node)) {
         const label = getTargetLabel(node.parent, node.text);
-        return label ? [createDefinitionInfoFromName(typeChecker, label, ScriptElementKind.label, node.text, /*containerName*/ undefined!)] : undefined; // TODO: GH#18217
+        return label ? [createDefinitionInfoFromName(typeChecker, label, ScriptElementKind.label, node.text, /*containerName*/ undefined!)]
+            : undefined; // TODO: GH#18217
     }
 
     switch (node.kind) {
@@ -302,7 +303,8 @@ export function getDefinitionAtPosition(
     const objectLiteralElementDefinition = getDefinitionFromObjectLiteralElement(typeChecker, node);
     return concatenate(
         fileReferenceDefinition,
-        objectLiteralElementDefinition.length ? objectLiteralElementDefinition : getDefinitionFromSymbol(typeChecker, symbol, node, failedAliasResolution),
+        objectLiteralElementDefinition.length ? objectLiteralElementDefinition
+            : getDefinitionFromSymbol(typeChecker, symbol, node, failedAliasResolution),
     );
 }
 
@@ -395,7 +397,10 @@ export function getReferenceAtPosition(
     if (sourceFile.imports.length || sourceFile.moduleAugmentations.length) {
         const node = getTouchingToken(sourceFile, position);
         let resolution: ResolvedModuleWithFailedLookupLocations | undefined;
-        if (isModuleSpecifierLike(node) && isExternalModuleNameRelative(node.text) && (resolution = program.getResolvedModuleFromModuleSpecifier(node))) {
+        if (
+            isModuleSpecifierLike(node) && isExternalModuleNameRelative(node.text) &&
+            (resolution = program.getResolvedModuleFromModuleSpecifier(node))
+        ) {
             const verifiedFileName = resolution.resolvedModule?.resolvedFileName;
             const fileName = verifiedFileName || resolvePath(getDirectoryPath(sourceFile.fileName), node.text);
             return {
@@ -463,7 +468,10 @@ function getFirstTypeArgumentDefinitions(
     node: Node,
     failedAliasResolution: boolean | undefined,
 ): readonly DefinitionInfo[] {
-    if (!!(getObjectFlags(type) & ObjectFlags.Reference) && shouldUnwrapFirstTypeArgumentTypeDefinitionFromTypeReference(typeChecker, type as TypeReference)) {
+    if (
+        !!(getObjectFlags(type) & ObjectFlags.Reference) &&
+        shouldUnwrapFirstTypeArgumentTypeDefinitionFromTypeReference(typeChecker, type as TypeReference)
+    ) {
         return definitionFromType(typeChecker.getTypeArguments(type as TypeReference)[0], typeChecker, node, failedAliasResolution);
     }
     if (shouldUnwrapFirstTypeArgumentTypeDefinitionFromAlias(typeChecker, type) && type.aliasTypeArguments) {
@@ -487,7 +495,11 @@ function getFirstTypeArgumentDefinitions(
 
 /// Goto type
 /** @internal */
-export function getTypeDefinitionAtPosition(typeChecker: TypeChecker, sourceFile: SourceFile, position: number): readonly DefinitionInfo[] | undefined {
+export function getTypeDefinitionAtPosition(
+    typeChecker: TypeChecker,
+    sourceFile: SourceFile,
+    position: number,
+): readonly DefinitionInfo[] | undefined {
     const node = getTouchingPropertyName(sourceFile, position);
     if (node === sourceFile) {
         return undefined;
@@ -561,7 +573,10 @@ export function getDefinitionAndBoundSpan(program: Program, sourceFile: SourceFi
 
 // At 'x.foo', see if the type of 'x' has an index signature, and if so find its declarations.
 function getDefinitionInfoForIndexSignatures(node: Node, checker: TypeChecker): DefinitionInfo[] | undefined {
-    return mapDefined(checker.getIndexInfosAtLocation(node), info => info.declaration && createDefinitionFromSignatureDeclaration(checker, info.declaration));
+    return mapDefined(
+        checker.getIndexInfosAtLocation(node),
+        info => info.declaration && createDefinitionFromSignatureDeclaration(checker, info.declaration),
+    );
 }
 
 function getSymbol(node: Node, checker: TypeChecker, stopAtAlias: boolean | undefined) {
@@ -659,7 +674,10 @@ function getDefinitionFromSymbol(
             : undefined;
     }
 
-    function getSignatureDefinition(signatureDeclarations: readonly Declaration[] | undefined, selectConstructors: boolean): DefinitionInfo[] | undefined {
+    function getSignatureDefinition(
+        signatureDeclarations: readonly Declaration[] | undefined,
+        selectConstructors: boolean,
+    ): DefinitionInfo[] | undefined {
         if (!signatureDeclarations) {
             return undefined;
         }
@@ -780,7 +798,11 @@ function isDefinitionVisible(checker: TypeChecker, declaration: Declaration): bo
     }
 }
 
-function createDefinitionFromSignatureDeclaration(typeChecker: TypeChecker, decl: SignatureDeclaration, failedAliasResolution?: boolean): DefinitionInfo {
+function createDefinitionFromSignatureDeclaration(
+    typeChecker: TypeChecker,
+    decl: SignatureDeclaration,
+    failedAliasResolution?: boolean,
+): DefinitionInfo {
     return createDefinitionInfo(decl, typeChecker, decl.symbol, decl, /*unverified*/ false, failedAliasResolution);
 }
 

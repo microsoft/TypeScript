@@ -485,7 +485,11 @@ function convertCallSiteGroupToIncomingCall(program: Program, entries: readonly 
  *
  * @internal
  */
-export function getIncomingCalls(program: Program, declaration: CallHierarchyDeclaration, cancellationToken: CancellationToken): CallHierarchyIncomingCall[] {
+export function getIncomingCalls(
+    program: Program,
+    declaration: CallHierarchyDeclaration,
+    cancellationToken: CancellationToken,
+): CallHierarchyIncomingCall[] {
     // Source files and modules have no incoming calls.
     if (isSourceFile(declaration) || isModuleDeclaration(declaration) || isClassStaticBlockDeclaration(declaration)) {
         return [];
@@ -639,7 +643,11 @@ function collectCallSitesOfModuleDeclaration(node: ModuleDeclaration, collect: (
     }
 }
 
-function collectCallSitesOfFunctionLikeDeclaration(typeChecker: TypeChecker, node: FunctionLikeDeclaration, collect: (node: Node | undefined) => void) {
+function collectCallSitesOfFunctionLikeDeclaration(
+    typeChecker: TypeChecker,
+    node: FunctionLikeDeclaration,
+    collect: (node: Node | undefined) => void,
+) {
     const implementation = findImplementation(typeChecker, node);
     if (implementation) {
         forEach(implementation.parameters, collect);

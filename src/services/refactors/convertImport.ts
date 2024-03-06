@@ -184,7 +184,10 @@ function doChangeNamespaceToNamed(
         const exportName = getRightOfPropertyAccessOrQualifiedName(propertyAccessOrQualifiedName).text;
         let importName = exportNameToImportName.get(exportName);
         if (importName === undefined) {
-            exportNameToImportName.set(exportName, importName = conflictingNames.has(exportName) ? getUniqueName(exportName, sourceFile) : exportName);
+            exportNameToImportName.set(
+                exportName,
+                importName = conflictingNames.has(exportName) ? getUniqueName(exportName, sourceFile) : exportName,
+            );
         }
         changes.replaceNode(sourceFile, propertyAccessOrQualifiedName, factory.createIdentifier(importName));
     }
@@ -311,10 +314,18 @@ function isExportEqualsModule(moduleSpecifier: Expression, checker: TypeChecker)
     return externalModule !== exportEquals;
 }
 
-function updateImport(old: ImportDeclaration, defaultImportName: Identifier | undefined, elements: readonly ImportSpecifier[] | undefined): ImportDeclaration {
+function updateImport(
+    old: ImportDeclaration,
+    defaultImportName: Identifier | undefined,
+    elements: readonly ImportSpecifier[] | undefined,
+): ImportDeclaration {
     return factory.createImportDeclaration(
         /*modifiers*/ undefined,
-        factory.createImportClause(/*isTypeOnly*/ false, defaultImportName, elements && elements.length ? factory.createNamedImports(elements) : undefined),
+        factory.createImportClause(
+            /*isTypeOnly*/ false,
+            defaultImportName,
+            elements && elements.length ? factory.createNamedImports(elements) : undefined,
+        ),
         old.moduleSpecifier,
         /*attributes*/ undefined,
     );

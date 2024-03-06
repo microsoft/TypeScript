@@ -49,7 +49,10 @@ describe("unittests:: tsserver:: libraryResolution", () => {
         );
         host.ensureFileOrFolder({ path: "/home/src/projects/node_modules/@typescript/lib-dom/index.d.ts", content: "interface DOMInterface { }" });
         host.runQueuedTimeoutCallbacks();
-        host.ensureFileOrFolder({ path: "/home/src/projects/node_modules/@typescript/lib-webworker/index.d.ts", content: "interface WebWorkerInterface { }" });
+        host.ensureFileOrFolder({
+            path: "/home/src/projects/node_modules/@typescript/lib-webworker/index.d.ts",
+            content: "interface WebWorkerInterface { }",
+        });
         host.runQueuedTimeoutCallbacks();
         host.runQueuedTimeoutCallbacks();
         host.deleteFile("/home/src/projects/node_modules/@typescript/lib-webworker/index.d.ts");
@@ -96,7 +99,10 @@ describe("unittests:: tsserver:: libraryResolution", () => {
         host.runQueuedTimeoutCallbacks();
         host.deleteFile("/home/src/projects/node_modules/@typescript/lib-webworker/index.d.ts");
         host.runQueuedTimeoutCallbacks();
-        host.ensureFileOrFolder({ path: "/home/src/projects/node_modules/@typescript/lib-webworker/index.d.ts", content: "interface WebWorkerInterface { }" });
+        host.ensureFileOrFolder({
+            path: "/home/src/projects/node_modules/@typescript/lib-webworker/index.d.ts",
+            content: "interface WebWorkerInterface { }",
+        });
         host.runQueuedTimeoutCallbacks();
         host.runQueuedTimeoutCallbacks();
         baselineTsserverLogs("libraryResolution", "with config with redirection", session);

@@ -123,7 +123,11 @@ export interface RuntimeTypeSerializer {
      * Serializes the types of the parameters of a node for use with decorator type metadata.
      * @param node The node that should have its parameter types serialized.
      */
-    serializeParameterTypesOfNode(serializerContext: RuntimeTypeSerializerContext, node: Node, container: ClassLikeDeclaration): ArrayLiteralExpression;
+    serializeParameterTypesOfNode(
+        serializerContext: RuntimeTypeSerializerContext,
+        node: Node,
+        container: ClassLikeDeclaration,
+    ): ArrayLiteralExpression;
     /**
      * Serializes the return type of a node for use with decorator type metadata.
      * @param node The node that should have its return type serialized.

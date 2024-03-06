@@ -308,7 +308,13 @@ const enum ConvertToAsyncTestFlags {
     ExpectFailed = ExpectNoSuggestionDiagnostic | ExpectNoAction,
 }
 
-function testConvertToAsyncFunction(it: Mocha.PendingTestFunction, caption: string, text: string, baselineFolder: string, flags: ConvertToAsyncTestFlags) {
+function testConvertToAsyncFunction(
+    it: Mocha.PendingTestFunction,
+    caption: string,
+    text: string,
+    baselineFolder: string,
+    flags: ConvertToAsyncTestFlags,
+) {
     const includeLib = !!(flags & ConvertToAsyncTestFlags.IncludeLib);
     const includeModule = !!(flags & ConvertToAsyncTestFlags.IncludeModule);
     const expectSuggestionDiagnostic = !!(flags & ConvertToAsyncTestFlags.ExpectSuggestionDiagnostic);
@@ -361,9 +367,12 @@ function testConvertToAsyncFunction(it: Mocha.PendingTestFunction, caption: stri
         };
 
         const diagnostics = languageService.getSuggestionDiagnostics(f.path);
-        const diagnostic = ts.find(diagnostics, diagnostic =>
-            diagnostic.messageText === ts.Diagnostics.This_may_be_converted_to_an_async_function.message &&
-            diagnostic.start === context.span.start && diagnostic.length === context.span.length);
+        const diagnostic = ts.find(
+            diagnostics,
+            diagnostic =>
+                diagnostic.messageText === ts.Diagnostics.This_may_be_converted_to_an_async_function.message &&
+                diagnostic.start === context.span.start && diagnostic.length === context.span.length,
+        );
         const actions = ts.codefix.getFixes(context);
         const action = ts.find(actions, action => action.description === ts.Diagnostics.Convert_to_async_function.message);
 
@@ -428,11 +437,23 @@ function testConvertToAsyncFunction(it: Mocha.PendingTestFunction, caption: stri
 }
 
 const _testConvertToAsyncFunction = createTestWrapper((it, caption: string, text: string) => {
-    testConvertToAsyncFunction(it, caption, text, "convertToAsyncFunction", ConvertToAsyncTestFlags.IncludeLib | ConvertToAsyncTestFlags.ExpectSuccess);
+    testConvertToAsyncFunction(
+        it,
+        caption,
+        text,
+        "convertToAsyncFunction",
+        ConvertToAsyncTestFlags.IncludeLib | ConvertToAsyncTestFlags.ExpectSuccess,
+    );
 });
 
 const _testConvertToAsyncFunctionFailed = createTestWrapper((it, caption: string, text: string) => {
-    testConvertToAsyncFunction(it, caption, text, "convertToAsyncFunction", ConvertToAsyncTestFlags.IncludeLib | ConvertToAsyncTestFlags.ExpectFailed);
+    testConvertToAsyncFunction(
+        it,
+        caption,
+        text,
+        "convertToAsyncFunction",
+        ConvertToAsyncTestFlags.IncludeLib | ConvertToAsyncTestFlags.ExpectFailed,
+    );
 });
 
 const _testConvertToAsyncFunctionFailedSuggestion = createTestWrapper((it, caption: string, text: string) => {

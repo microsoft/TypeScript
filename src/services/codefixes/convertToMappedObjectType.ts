@@ -29,7 +29,9 @@ import {
 } from "../_namespaces/ts.codefix";
 
 const fixId = "fixConvertToMappedObjectType";
-const errorCodes = [Diagnostics.An_index_signature_parameter_type_cannot_be_a_literal_type_or_generic_type_Consider_using_a_mapped_object_type_instead.code];
+const errorCodes = [
+    Diagnostics.An_index_signature_parameter_type_cannot_be_a_literal_type_or_generic_type_Consider_using_a_mapped_object_type_instead.code,
+];
 
 type FixableDeclaration = InterfaceDeclaration | TypeAliasDeclaration;
 
@@ -65,7 +67,8 @@ function getInfo(sourceFile: SourceFile, pos: number): Info | undefined {
     const indexSignature = tryCast(token.parent.parent, isIndexSignatureDeclaration);
     if (!indexSignature) return undefined;
 
-    const container = isInterfaceDeclaration(indexSignature.parent) ? indexSignature.parent : tryCast(indexSignature.parent.parent, isTypeAliasDeclaration);
+    const container = isInterfaceDeclaration(indexSignature.parent) ? indexSignature.parent
+        : tryCast(indexSignature.parent.parent, isTypeAliasDeclaration);
     if (!container) return undefined;
 
     return { indexSignature, container };

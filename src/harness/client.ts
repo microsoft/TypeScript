@@ -292,7 +292,11 @@ export class SessionClient implements LanguageService {
             isNewIdentifierLocation: response.body!.isNewIdentifierLocation,
             entries: response.body!.entries.map<CompletionEntry>(entry => { // TODO: GH#18217
                 if (entry.replacementSpan !== undefined) {
-                    const res: CompletionEntry = { ...entry, data: entry.data as any, replacementSpan: this.decodeSpan(entry.replacementSpan, fileName) };
+                    const res: CompletionEntry = {
+                        ...entry,
+                        data: entry.data as any,
+                        replacementSpan: this.decodeSpan(entry.replacementSpan, fileName),
+                    };
                     return res;
                 }
 
@@ -624,7 +628,8 @@ export class SessionClient implements LanguageService {
             this.lastRenameEntry.inputs.findInStrings !== findInStrings ||
             this.lastRenameEntry.inputs.findInComments !== findInComments
         ) {
-            const providePrefixAndSuffixTextForRename = typeof preferences === "boolean" ? preferences : preferences?.providePrefixAndSuffixTextForRename;
+            const providePrefixAndSuffixTextForRename = typeof preferences === "boolean" ? preferences
+                : preferences?.providePrefixAndSuffixTextForRename;
             const quotePreference = typeof preferences === "boolean" ? undefined : preferences?.quotePreference;
             if (providePrefixAndSuffixTextForRename !== undefined || quotePreference !== undefined) {
                 const oldPreferences = this.preferences;
@@ -1006,12 +1011,15 @@ export class SessionClient implements LanguageService {
     }
 
     getEncodedSemanticClassifications(file: string, span: TextSpan, format?: SemanticClassificationFormat): Classifications {
-        const request = this.processRequest<protocol.EncodedSemanticClassificationsRequest>(protocol.CommandTypes.EncodedSemanticClassificationsFull, {
-            file,
-            start: span.start,
-            length: span.length,
-            format,
-        });
+        const request = this.processRequest<protocol.EncodedSemanticClassificationsRequest>(
+            protocol.CommandTypes.EncodedSemanticClassificationsFull,
+            {
+                file,
+                start: span.start,
+                length: span.length,
+                format,
+            },
+        );
         const r = this.processResponse<protocol.EncodedSemanticClassificationsResponse>(request);
         return r.body!;
     }
@@ -1044,7 +1052,10 @@ export class SessionClient implements LanguageService {
 
     provideCallHierarchyIncomingCalls(fileName: string, position: number) {
         const args = this.createFileLocationRequestArgs(fileName, position);
-        const request = this.processRequest<protocol.ProvideCallHierarchyIncomingCallsRequest>(protocol.CommandTypes.ProvideCallHierarchyIncomingCalls, args);
+        const request = this.processRequest<protocol.ProvideCallHierarchyIncomingCallsRequest>(
+            protocol.CommandTypes.ProvideCallHierarchyIncomingCalls,
+            args,
+        );
         const response = this.processResponse<protocol.ProvideCallHierarchyIncomingCallsResponse>(request);
         return response.body.map(item => this.convertCallHierarchyIncomingCall(item));
     }
@@ -1058,7 +1069,10 @@ export class SessionClient implements LanguageService {
 
     provideCallHierarchyOutgoingCalls(fileName: string, position: number) {
         const args = this.createFileLocationRequestArgs(fileName, position);
-        const request = this.processRequest<protocol.ProvideCallHierarchyOutgoingCallsRequest>(protocol.CommandTypes.ProvideCallHierarchyOutgoingCalls, args);
+        const request = this.processRequest<protocol.ProvideCallHierarchyOutgoingCallsRequest>(
+            protocol.CommandTypes.ProvideCallHierarchyOutgoingCalls,
+            args,
+        );
         const response = this.processResponse<protocol.ProvideCallHierarchyOutgoingCallsResponse>(request);
         return response.body.map(item => this.convertCallHierarchyOutgoingCall(fileName, item));
     }

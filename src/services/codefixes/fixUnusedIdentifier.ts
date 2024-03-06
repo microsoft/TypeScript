@@ -157,7 +157,10 @@ registerCodeFix({
         if (canDeleteEntireVariableStatement(sourceFile, token)) {
             return [
                 createDeleteFix(
-                    textChanges.ChangeTracker.with(context, t => deleteEntireVariableStatement(t, sourceFile, token.parent as VariableDeclarationList)),
+                    textChanges.ChangeTracker.with(
+                        context,
+                        t => deleteEntireVariableStatement(t, sourceFile, token.parent as VariableDeclarationList),
+                    ),
                     Diagnostics.Remove_variable_statement,
                 ),
             ];
@@ -282,7 +285,8 @@ function deleteTypeParameters(changes: textChanges.ChangeTracker, sourceFile: So
 
 function isImport(token: Node) {
     return token.kind === SyntaxKind.ImportKeyword
-        || token.kind === SyntaxKind.Identifier && (token.parent.kind === SyntaxKind.ImportSpecifier || token.parent.kind === SyntaxKind.ImportClause);
+        || token.kind === SyntaxKind.Identifier &&
+            (token.parent.kind === SyntaxKind.ImportSpecifier || token.parent.kind === SyntaxKind.ImportClause);
 }
 
 /** Sometimes the diagnostic span is an entire ImportDeclaration, so we should remove the whole thing. */

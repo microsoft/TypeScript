@@ -1374,8 +1374,16 @@ describe("unittests:: tsserver:: typingsInstaller:: Validate package name:", () 
         assert.deepEqual(validatePackageName("@.scope/.bar"), { name: ".scope", isScopeName: true, result: NameValidationResult.NameStartsWithDot });
     });
     it("scope name in scoped package name cannot start with underscore", () => {
-        assert.deepEqual(validatePackageName("@_scope/bar"), { name: "_scope", isScopeName: true, result: NameValidationResult.NameStartsWithUnderscore });
-        assert.deepEqual(validatePackageName("@_scope/_bar"), { name: "_scope", isScopeName: true, result: NameValidationResult.NameStartsWithUnderscore });
+        assert.deepEqual(validatePackageName("@_scope/bar"), {
+            name: "_scope",
+            isScopeName: true,
+            result: NameValidationResult.NameStartsWithUnderscore,
+        });
+        assert.deepEqual(validatePackageName("@_scope/_bar"), {
+            name: "_scope",
+            isScopeName: true,
+            result: NameValidationResult.NameStartsWithUnderscore,
+        });
     });
     it("scope name in scoped package name with non URI safe characters are not supported", () => {
         assert.deepEqual(validatePackageName("@  scope  /bar"), {
@@ -1398,7 +1406,11 @@ describe("unittests:: tsserver:: typingsInstaller:: Validate package name:", () 
         assert.deepEqual(validatePackageName("@scope/.bar"), { name: ".bar", isScopeName: false, result: NameValidationResult.NameStartsWithDot });
     });
     it("package name in scoped package name cannot start with underscore", () => {
-        assert.deepEqual(validatePackageName("@scope/_bar"), { name: "_bar", isScopeName: false, result: NameValidationResult.NameStartsWithUnderscore });
+        assert.deepEqual(validatePackageName("@scope/_bar"), {
+            name: "_bar",
+            isScopeName: false,
+            result: NameValidationResult.NameStartsWithUnderscore,
+        });
     });
     it("package name in scoped package name with non URI safe characters are not supported", () => {
         assert.deepEqual(validatePackageName("@scope/  bar  "), {
@@ -1506,7 +1518,16 @@ describe("unittests:: tsserver:: typingsInstaller:: discover typings", () => {
         const { discoverTypings, baseline } = setup([f, node]);
         const cache = new Map(Object.entries<ts.JsTyping.CachedTyping>({ node: { typingLocation: node.path, version: new ts.Version("1.3.0") } }));
         const registry = createTypesRegistry("node");
-        discoverTypings([f.path], ts.getDirectoryPath(f.path as ts.Path), emptySafeList, cache, { enable: true }, ["fs", "bar"], registry, ts.emptyOptions);
+        discoverTypings(
+            [f.path],
+            ts.getDirectoryPath(f.path as ts.Path),
+            emptySafeList,
+            cache,
+            { enable: true },
+            ["fs", "bar"],
+            registry,
+            ts.emptyOptions,
+        );
         baseline("should use cached locations");
     });
 
@@ -2333,7 +2354,12 @@ describe("unittests:: tsserver:: typingsInstaller:: npm installation command", (
     ];
     const expectedCommands = [
         ts.server.typingsInstaller.getNpmCommandForInstallation(npmPath, tsVersion, packageNames, packageNames.length).command,
-        ts.server.typingsInstaller.getNpmCommandForInstallation(npmPath, tsVersion, packageNames, packageNames.length - Math.ceil(packageNames.length / 2))
+        ts.server.typingsInstaller.getNpmCommandForInstallation(
+            npmPath,
+            tsVersion,
+            packageNames,
+            packageNames.length - Math.ceil(packageNames.length / 2),
+        )
             .command,
     ];
     it("works when the command is too long to install all packages at once", () => {

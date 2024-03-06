@@ -97,30 +97,36 @@ namespace M
         }
     }
 }`;
-        runSingleFileTest("extractMethodLike", /*placeOpenBraceOnNewLineForFunctions*/ true, text, /*validateNodes*/ true, (sourceFile, changeTracker) => {
-            const statements = (findChild("foo", sourceFile) as ts.FunctionDeclaration).body!.statements.slice(1);
-            const newFunction = ts.factory.createFunctionDeclaration(
-                /*modifiers*/ undefined,
-                /*asteriskToken*/ undefined,
-                /*name*/ "bar",
-                /*typeParameters*/ undefined,
-                /*parameters*/ ts.emptyArray,
-                /*type*/ ts.factory.createKeywordTypeNode(ts.SyntaxKind.AnyKeyword),
-                /*body */ ts.factory.createBlock(statements),
-            );
+        runSingleFileTest(
+            "extractMethodLike",
+            /*placeOpenBraceOnNewLineForFunctions*/ true,
+            text,
+            /*validateNodes*/ true,
+            (sourceFile, changeTracker) => {
+                const statements = (findChild("foo", sourceFile) as ts.FunctionDeclaration).body!.statements.slice(1);
+                const newFunction = ts.factory.createFunctionDeclaration(
+                    /*modifiers*/ undefined,
+                    /*asteriskToken*/ undefined,
+                    /*name*/ "bar",
+                    /*typeParameters*/ undefined,
+                    /*parameters*/ ts.emptyArray,
+                    /*type*/ ts.factory.createKeywordTypeNode(ts.SyntaxKind.AnyKeyword),
+                    /*body */ ts.factory.createBlock(statements),
+                );
 
-            changeTracker.insertNodeBefore(sourceFile, /*before*/ findChild("M2", sourceFile), newFunction);
+                changeTracker.insertNodeBefore(sourceFile, /*before*/ findChild("M2", sourceFile), newFunction);
 
-            // replace statements with return statement
-            const newStatement = ts.factory.createReturnStatement(
-                ts.factory.createCallExpression(
-                    /*expression*/ newFunction.name!,
-                    /*typeArguments*/ undefined,
-                    /*argumentsArray*/ ts.emptyArray,
-                ),
-            );
-            changeTracker.replaceNodeRange(sourceFile, statements[0], ts.last(statements), newStatement, { suffix: newLineCharacter });
-        });
+                // replace statements with return statement
+                const newStatement = ts.factory.createReturnStatement(
+                    ts.factory.createCallExpression(
+                        /*expression*/ newFunction.name!,
+                        /*typeArguments*/ undefined,
+                        /*argumentsArray*/ ts.emptyArray,
+                    ),
+                );
+                changeTracker.replaceNodeRange(sourceFile, statements[0], ts.last(statements), newStatement, { suffix: newLineCharacter });
+            },
+        );
     }
     {
         const text = `
@@ -132,9 +138,15 @@ function bar() {
     return 2;
 }
 `;
-        runSingleFileTest("deleteRange1", /*placeOpenBraceOnNewLineForFunctions*/ false, text, /*validateNodes*/ false, (sourceFile, changeTracker) => {
-            changeTracker.deleteRange(sourceFile, { pos: text.indexOf("function foo"), end: text.indexOf("function bar") });
-        });
+        runSingleFileTest(
+            "deleteRange1",
+            /*placeOpenBraceOnNewLineForFunctions*/ false,
+            text,
+            /*validateNodes*/ false,
+            (sourceFile, changeTracker) => {
+                changeTracker.deleteRange(sourceFile, { pos: text.indexOf("function foo"), end: text.indexOf("function bar") });
+            },
+        );
     }
     function findVariableStatementContaining(name: string, sourceFile: ts.SourceFile): ts.VariableStatement {
         return ts.cast(findVariableDeclarationContaining(name, sourceFile).parent.parent, ts.isVariableStatement);
@@ -152,28 +164,58 @@ var x = 1; // some comment - 1
 var y = 2; // comment 3
 var z = 3; // comment 4
 `;
-        runSingleFileTest("deleteNode1", /*placeOpenBraceOnNewLineForFunctions*/ false, text, /*validateNodes*/ false, (sourceFile, changeTracker) => {
-            deleteNode(changeTracker, sourceFile, findVariableStatementContaining("y", sourceFile));
-        });
-        runSingleFileTest("deleteNode2", /*placeOpenBraceOnNewLineForFunctions*/ false, text, /*validateNodes*/ false, (sourceFile, changeTracker) => {
-            deleteNode(changeTracker, sourceFile, findVariableStatementContaining("y", sourceFile), {
-                leadingTriviaOption: ts.textChanges.LeadingTriviaOption.Exclude,
-            });
-        });
-        runSingleFileTest("deleteNode3", /*placeOpenBraceOnNewLineForFunctions*/ false, text, /*validateNodes*/ false, (sourceFile, changeTracker) => {
-            deleteNode(changeTracker, sourceFile, findVariableStatementContaining("y", sourceFile), {
-                trailingTriviaOption: ts.textChanges.TrailingTriviaOption.Exclude,
-            });
-        });
-        runSingleFileTest("deleteNode4", /*placeOpenBraceOnNewLineForFunctions*/ false, text, /*validateNodes*/ false, (sourceFile, changeTracker) => {
-            deleteNode(changeTracker, sourceFile, findVariableStatementContaining("y", sourceFile), {
-                leadingTriviaOption: ts.textChanges.LeadingTriviaOption.Exclude,
-                trailingTriviaOption: ts.textChanges.TrailingTriviaOption.Exclude,
-            });
-        });
-        runSingleFileTest("deleteNode5", /*placeOpenBraceOnNewLineForFunctions*/ false, text, /*validateNodes*/ false, (sourceFile, changeTracker) => {
-            deleteNode(changeTracker, sourceFile, findVariableStatementContaining("x", sourceFile));
-        });
+        runSingleFileTest(
+            "deleteNode1",
+            /*placeOpenBraceOnNewLineForFunctions*/ false,
+            text,
+            /*validateNodes*/ false,
+            (sourceFile, changeTracker) => {
+                deleteNode(changeTracker, sourceFile, findVariableStatementContaining("y", sourceFile));
+            },
+        );
+        runSingleFileTest(
+            "deleteNode2",
+            /*placeOpenBraceOnNewLineForFunctions*/ false,
+            text,
+            /*validateNodes*/ false,
+            (sourceFile, changeTracker) => {
+                deleteNode(changeTracker, sourceFile, findVariableStatementContaining("y", sourceFile), {
+                    leadingTriviaOption: ts.textChanges.LeadingTriviaOption.Exclude,
+                });
+            },
+        );
+        runSingleFileTest(
+            "deleteNode3",
+            /*placeOpenBraceOnNewLineForFunctions*/ false,
+            text,
+            /*validateNodes*/ false,
+            (sourceFile, changeTracker) => {
+                deleteNode(changeTracker, sourceFile, findVariableStatementContaining("y", sourceFile), {
+                    trailingTriviaOption: ts.textChanges.TrailingTriviaOption.Exclude,
+                });
+            },
+        );
+        runSingleFileTest(
+            "deleteNode4",
+            /*placeOpenBraceOnNewLineForFunctions*/ false,
+            text,
+            /*validateNodes*/ false,
+            (sourceFile, changeTracker) => {
+                deleteNode(changeTracker, sourceFile, findVariableStatementContaining("y", sourceFile), {
+                    leadingTriviaOption: ts.textChanges.LeadingTriviaOption.Exclude,
+                    trailingTriviaOption: ts.textChanges.TrailingTriviaOption.Exclude,
+                });
+            },
+        );
+        runSingleFileTest(
+            "deleteNode5",
+            /*placeOpenBraceOnNewLineForFunctions*/ false,
+            text,
+            /*validateNodes*/ false,
+            (sourceFile, changeTracker) => {
+                deleteNode(changeTracker, sourceFile, findVariableStatementContaining("x", sourceFile));
+            },
+        );
     }
     {
         const text = `
@@ -185,32 +227,78 @@ var z = 3; // comment 5
 // comment 6
 var a = 4; // comment 7
 `;
-        runSingleFileTest("deleteNodeRange1", /*placeOpenBraceOnNewLineForFunctions*/ false, text, /*validateNodes*/ false, (sourceFile, changeTracker) => {
-            changeTracker.deleteNodeRange(sourceFile, findVariableStatementContaining("y", sourceFile), findVariableStatementContaining("z", sourceFile));
-        });
-        runSingleFileTest("deleteNodeRange2", /*placeOpenBraceOnNewLineForFunctions*/ false, text, /*validateNodes*/ false, (sourceFile, changeTracker) => {
-            changeTracker.deleteNodeRange(sourceFile, findVariableStatementContaining("y", sourceFile), findVariableStatementContaining("z", sourceFile), {
-                leadingTriviaOption: ts.textChanges.LeadingTriviaOption.Exclude,
-            });
-        });
-        runSingleFileTest("deleteNodeRange3", /*placeOpenBraceOnNewLineForFunctions*/ false, text, /*validateNodes*/ false, (sourceFile, changeTracker) => {
-            changeTracker.deleteNodeRange(sourceFile, findVariableStatementContaining("y", sourceFile), findVariableStatementContaining("z", sourceFile), {
-                trailingTriviaOption: ts.textChanges.TrailingTriviaOption.Exclude,
-            });
-        });
-        runSingleFileTest("deleteNodeRange4", /*placeOpenBraceOnNewLineForFunctions*/ false, text, /*validateNodes*/ false, (sourceFile, changeTracker) => {
-            changeTracker.deleteNodeRange(sourceFile, findVariableStatementContaining("y", sourceFile), findVariableStatementContaining("z", sourceFile), {
-                leadingTriviaOption: ts.textChanges.LeadingTriviaOption.Exclude,
-                trailingTriviaOption: ts.textChanges.TrailingTriviaOption.Exclude,
-            });
-        });
+        runSingleFileTest(
+            "deleteNodeRange1",
+            /*placeOpenBraceOnNewLineForFunctions*/ false,
+            text,
+            /*validateNodes*/ false,
+            (sourceFile, changeTracker) => {
+                changeTracker.deleteNodeRange(
+                    sourceFile,
+                    findVariableStatementContaining("y", sourceFile),
+                    findVariableStatementContaining("z", sourceFile),
+                );
+            },
+        );
+        runSingleFileTest(
+            "deleteNodeRange2",
+            /*placeOpenBraceOnNewLineForFunctions*/ false,
+            text,
+            /*validateNodes*/ false,
+            (sourceFile, changeTracker) => {
+                changeTracker.deleteNodeRange(
+                    sourceFile,
+                    findVariableStatementContaining("y", sourceFile),
+                    findVariableStatementContaining("z", sourceFile),
+                    {
+                        leadingTriviaOption: ts.textChanges.LeadingTriviaOption.Exclude,
+                    },
+                );
+            },
+        );
+        runSingleFileTest(
+            "deleteNodeRange3",
+            /*placeOpenBraceOnNewLineForFunctions*/ false,
+            text,
+            /*validateNodes*/ false,
+            (sourceFile, changeTracker) => {
+                changeTracker.deleteNodeRange(
+                    sourceFile,
+                    findVariableStatementContaining("y", sourceFile),
+                    findVariableStatementContaining("z", sourceFile),
+                    {
+                        trailingTriviaOption: ts.textChanges.TrailingTriviaOption.Exclude,
+                    },
+                );
+            },
+        );
+        runSingleFileTest(
+            "deleteNodeRange4",
+            /*placeOpenBraceOnNewLineForFunctions*/ false,
+            text,
+            /*validateNodes*/ false,
+            (sourceFile, changeTracker) => {
+                changeTracker.deleteNodeRange(
+                    sourceFile,
+                    findVariableStatementContaining("y", sourceFile),
+                    findVariableStatementContaining("z", sourceFile),
+                    {
+                        leadingTriviaOption: ts.textChanges.LeadingTriviaOption.Exclude,
+                        trailingTriviaOption: ts.textChanges.TrailingTriviaOption.Exclude,
+                    },
+                );
+            },
+        );
     }
     function createTestVariableDeclaration(name: string) {
         return ts.factory.createVariableDeclaration(
             name,
             /*exclamationToken*/ undefined,
             /*type*/ undefined,
-            ts.factory.createObjectLiteralExpression([ts.factory.createPropertyAssignment("p1", ts.factory.createNumericLiteral(1))], /*multiLine*/ true),
+            ts.factory.createObjectLiteralExpression(
+                [ts.factory.createPropertyAssignment("p1", ts.factory.createNumericLiteral(1))],
+                /*multiLine*/ true,
+            ),
         );
     }
     function createTestClass() {
@@ -249,7 +337,9 @@ var z = 3; // comment 5
 // comment 6
 var a = 4; // comment 7`;
         runSingleFileTest("replaceRange", /*placeOpenBraceOnNewLineForFunctions*/ true, text, /*validateNodes*/ true, (sourceFile, changeTracker) => {
-            changeTracker.replaceRange(sourceFile, { pos: text.indexOf("var y"), end: text.indexOf("var a") }, createTestClass(), { suffix: newLineCharacter });
+            changeTracker.replaceRange(sourceFile, { pos: text.indexOf("var y"), end: text.indexOf("var a") }, createTestClass(), {
+                suffix: newLineCharacter,
+            });
         });
         runSingleFileTest(
             "replaceRangeWithForcedIndentation",
@@ -340,54 +430,78 @@ var y = 2; // comment 4
 var z = 3; // comment 5
 // comment 6
 var a = 4; // comment 7`;
-        runSingleFileTest("replaceNodeRange1", /*placeOpenBraceOnNewLineForFunctions*/ true, text, /*validateNodes*/ true, (sourceFile, changeTracker) => {
-            changeTracker.replaceNodeRange(
-                sourceFile,
-                findVariableStatementContaining("y", sourceFile),
-                findVariableStatementContaining("z", sourceFile),
-                createTestClass(),
-                {
-                    suffix: newLineCharacter,
-                },
-            );
-        });
-        runSingleFileTest("replaceNodeRange2", /*placeOpenBraceOnNewLineForFunctions*/ true, text, /*validateNodes*/ true, (sourceFile, changeTracker) => {
-            changeTracker.replaceNodeRange(
-                sourceFile,
-                findVariableStatementContaining("y", sourceFile),
-                findVariableStatementContaining("z", sourceFile),
-                createTestClass(),
-                {
-                    leadingTriviaOption: ts.textChanges.LeadingTriviaOption.Exclude,
-                    suffix: newLineCharacter,
-                    prefix: newLineCharacter,
-                },
-            );
-        });
-        runSingleFileTest("replaceNodeRange3", /*placeOpenBraceOnNewLineForFunctions*/ true, text, /*validateNodes*/ true, (sourceFile, changeTracker) => {
-            changeTracker.replaceNodeRange(
-                sourceFile,
-                findVariableStatementContaining("y", sourceFile),
-                findVariableStatementContaining("z", sourceFile),
-                createTestClass(),
-                {
-                    trailingTriviaOption: ts.textChanges.TrailingTriviaOption.Exclude,
-                    suffix: newLineCharacter,
-                },
-            );
-        });
-        runSingleFileTest("replaceNodeRange4", /*placeOpenBraceOnNewLineForFunctions*/ true, text, /*validateNodes*/ true, (sourceFile, changeTracker) => {
-            changeTracker.replaceNodeRange(
-                sourceFile,
-                findVariableStatementContaining("y", sourceFile),
-                findVariableStatementContaining("z", sourceFile),
-                createTestClass(),
-                {
-                    leadingTriviaOption: ts.textChanges.LeadingTriviaOption.Exclude,
-                    trailingTriviaOption: ts.textChanges.TrailingTriviaOption.Exclude,
-                },
-            );
-        });
+        runSingleFileTest(
+            "replaceNodeRange1",
+            /*placeOpenBraceOnNewLineForFunctions*/ true,
+            text,
+            /*validateNodes*/ true,
+            (sourceFile, changeTracker) => {
+                changeTracker.replaceNodeRange(
+                    sourceFile,
+                    findVariableStatementContaining("y", sourceFile),
+                    findVariableStatementContaining("z", sourceFile),
+                    createTestClass(),
+                    {
+                        suffix: newLineCharacter,
+                    },
+                );
+            },
+        );
+        runSingleFileTest(
+            "replaceNodeRange2",
+            /*placeOpenBraceOnNewLineForFunctions*/ true,
+            text,
+            /*validateNodes*/ true,
+            (sourceFile, changeTracker) => {
+                changeTracker.replaceNodeRange(
+                    sourceFile,
+                    findVariableStatementContaining("y", sourceFile),
+                    findVariableStatementContaining("z", sourceFile),
+                    createTestClass(),
+                    {
+                        leadingTriviaOption: ts.textChanges.LeadingTriviaOption.Exclude,
+                        suffix: newLineCharacter,
+                        prefix: newLineCharacter,
+                    },
+                );
+            },
+        );
+        runSingleFileTest(
+            "replaceNodeRange3",
+            /*placeOpenBraceOnNewLineForFunctions*/ true,
+            text,
+            /*validateNodes*/ true,
+            (sourceFile, changeTracker) => {
+                changeTracker.replaceNodeRange(
+                    sourceFile,
+                    findVariableStatementContaining("y", sourceFile),
+                    findVariableStatementContaining("z", sourceFile),
+                    createTestClass(),
+                    {
+                        trailingTriviaOption: ts.textChanges.TrailingTriviaOption.Exclude,
+                        suffix: newLineCharacter,
+                    },
+                );
+            },
+        );
+        runSingleFileTest(
+            "replaceNodeRange4",
+            /*placeOpenBraceOnNewLineForFunctions*/ true,
+            text,
+            /*validateNodes*/ true,
+            (sourceFile, changeTracker) => {
+                changeTracker.replaceNodeRange(
+                    sourceFile,
+                    findVariableStatementContaining("y", sourceFile),
+                    findVariableStatementContaining("z", sourceFile),
+                    createTestClass(),
+                    {
+                        leadingTriviaOption: ts.textChanges.LeadingTriviaOption.Exclude,
+                        trailingTriviaOption: ts.textChanges.TrailingTriviaOption.Exclude,
+                    },
+                );
+            },
+        );
     }
     {
         const text = `
@@ -398,9 +512,15 @@ var y; // comment 4
 var z = 3; // comment 5
 // comment 6
 var a = 4; // comment 7`;
-        runSingleFileTest("insertNodeBefore3", /*placeOpenBraceOnNewLineForFunctions*/ true, text, /*validateNodes*/ true, (sourceFile, changeTracker) => {
-            changeTracker.insertNodeBefore(sourceFile, findVariableStatementContaining("y", sourceFile), createTestClass());
-        });
+        runSingleFileTest(
+            "insertNodeBefore3",
+            /*placeOpenBraceOnNewLineForFunctions*/ true,
+            text,
+            /*validateNodes*/ true,
+            (sourceFile, changeTracker) => {
+                changeTracker.insertNodeBefore(sourceFile, findVariableStatementContaining("y", sourceFile), createTestClass());
+            },
+        );
         runSingleFileTest(
             "insertNodeAfterVariableDeclaration",
             /*placeOpenBraceOnNewLineForFunctions*/ true,
@@ -422,18 +542,42 @@ namespace M {
     // comment 6
     var a = 4; // comment 7
 }`;
-        runSingleFileTest("insertNodeBefore1", /*placeOpenBraceOnNewLineForFunctions*/ true, text, /*validateNodes*/ true, (sourceFile, changeTracker) => {
-            changeTracker.insertNodeBefore(sourceFile, findVariableStatementContaining("y", sourceFile), createTestClass());
-        });
-        runSingleFileTest("insertNodeBefore2", /*placeOpenBraceOnNewLineForFunctions*/ true, text, /*validateNodes*/ true, (sourceFile, changeTracker) => {
-            changeTracker.insertNodeBefore(sourceFile, findChild("M", sourceFile), createTestClass());
-        });
-        runSingleFileTest("insertNodeAfter1", /*placeOpenBraceOnNewLineForFunctions*/ true, text, /*validateNodes*/ true, (sourceFile, changeTracker) => {
-            changeTracker.insertNodeAfter(sourceFile, findVariableStatementContaining("y", sourceFile), createTestClass());
-        });
-        runSingleFileTest("insertNodeAfter2", /*placeOpenBraceOnNewLineForFunctions*/ true, text, /*validateNodes*/ true, (sourceFile, changeTracker) => {
-            changeTracker.insertNodeAfter(sourceFile, findChild("M", sourceFile), createTestClass());
-        });
+        runSingleFileTest(
+            "insertNodeBefore1",
+            /*placeOpenBraceOnNewLineForFunctions*/ true,
+            text,
+            /*validateNodes*/ true,
+            (sourceFile, changeTracker) => {
+                changeTracker.insertNodeBefore(sourceFile, findVariableStatementContaining("y", sourceFile), createTestClass());
+            },
+        );
+        runSingleFileTest(
+            "insertNodeBefore2",
+            /*placeOpenBraceOnNewLineForFunctions*/ true,
+            text,
+            /*validateNodes*/ true,
+            (sourceFile, changeTracker) => {
+                changeTracker.insertNodeBefore(sourceFile, findChild("M", sourceFile), createTestClass());
+            },
+        );
+        runSingleFileTest(
+            "insertNodeAfter1",
+            /*placeOpenBraceOnNewLineForFunctions*/ true,
+            text,
+            /*validateNodes*/ true,
+            (sourceFile, changeTracker) => {
+                changeTracker.insertNodeAfter(sourceFile, findVariableStatementContaining("y", sourceFile), createTestClass());
+            },
+        );
+        runSingleFileTest(
+            "insertNodeAfter2",
+            /*placeOpenBraceOnNewLineForFunctions*/ true,
+            text,
+            /*validateNodes*/ true,
+            (sourceFile, changeTracker) => {
+                changeTracker.insertNodeAfter(sourceFile, findChild("M", sourceFile), createTestClass());
+            },
+        );
     }
 
     function findConstructor(sourceFile: ts.SourceFile): ts.ConstructorDeclaration {
@@ -472,9 +616,15 @@ class A {
     }
 }
 `;
-        runSingleFileTest("insertNodeAfter4", /*placeOpenBraceOnNewLineForFunctions*/ false, text2, /*validateNodes*/ false, (sourceFile, changeTracker) => {
-            changeTracker.insertNodeAfter(sourceFile, findVariableStatementContaining("x", sourceFile), createTestSuperCall());
-        });
+        runSingleFileTest(
+            "insertNodeAfter4",
+            /*placeOpenBraceOnNewLineForFunctions*/ false,
+            text2,
+            /*validateNodes*/ false,
+            (sourceFile, changeTracker) => {
+                changeTracker.insertNodeAfter(sourceFile, findVariableStatementContaining("x", sourceFile), createTestSuperCall());
+            },
+        );
         const text3 = `
 class A {
     constructor() {
@@ -494,27 +644,63 @@ class A {
     }
     {
         const text = `var a = 1, b = 2, c = 3;`;
-        runSingleFileTest("deleteNodeInList1", /*placeOpenBraceOnNewLineForFunctions*/ false, text, /*validateNodes*/ false, (sourceFile, changeTracker) => {
-            changeTracker.delete(sourceFile, findChild("a", sourceFile));
-        });
-        runSingleFileTest("deleteNodeInList2", /*placeOpenBraceOnNewLineForFunctions*/ false, text, /*validateNodes*/ false, (sourceFile, changeTracker) => {
-            changeTracker.delete(sourceFile, findChild("b", sourceFile));
-        });
-        runSingleFileTest("deleteNodeInList3", /*placeOpenBraceOnNewLineForFunctions*/ false, text, /*validateNodes*/ false, (sourceFile, changeTracker) => {
-            changeTracker.delete(sourceFile, findChild("c", sourceFile));
-        });
+        runSingleFileTest(
+            "deleteNodeInList1",
+            /*placeOpenBraceOnNewLineForFunctions*/ false,
+            text,
+            /*validateNodes*/ false,
+            (sourceFile, changeTracker) => {
+                changeTracker.delete(sourceFile, findChild("a", sourceFile));
+            },
+        );
+        runSingleFileTest(
+            "deleteNodeInList2",
+            /*placeOpenBraceOnNewLineForFunctions*/ false,
+            text,
+            /*validateNodes*/ false,
+            (sourceFile, changeTracker) => {
+                changeTracker.delete(sourceFile, findChild("b", sourceFile));
+            },
+        );
+        runSingleFileTest(
+            "deleteNodeInList3",
+            /*placeOpenBraceOnNewLineForFunctions*/ false,
+            text,
+            /*validateNodes*/ false,
+            (sourceFile, changeTracker) => {
+                changeTracker.delete(sourceFile, findChild("c", sourceFile));
+            },
+        );
     }
     {
         const text = `var a = 1,b = 2,c = 3;`;
-        runSingleFileTest("deleteNodeInList1_1", /*placeOpenBraceOnNewLineForFunctions*/ false, text, /*validateNodes*/ false, (sourceFile, changeTracker) => {
-            changeTracker.delete(sourceFile, findChild("a", sourceFile));
-        });
-        runSingleFileTest("deleteNodeInList2_1", /*placeOpenBraceOnNewLineForFunctions*/ false, text, /*validateNodes*/ false, (sourceFile, changeTracker) => {
-            changeTracker.delete(sourceFile, findChild("b", sourceFile));
-        });
-        runSingleFileTest("deleteNodeInList3_1", /*placeOpenBraceOnNewLineForFunctions*/ false, text, /*validateNodes*/ false, (sourceFile, changeTracker) => {
-            changeTracker.delete(sourceFile, findChild("c", sourceFile));
-        });
+        runSingleFileTest(
+            "deleteNodeInList1_1",
+            /*placeOpenBraceOnNewLineForFunctions*/ false,
+            text,
+            /*validateNodes*/ false,
+            (sourceFile, changeTracker) => {
+                changeTracker.delete(sourceFile, findChild("a", sourceFile));
+            },
+        );
+        runSingleFileTest(
+            "deleteNodeInList2_1",
+            /*placeOpenBraceOnNewLineForFunctions*/ false,
+            text,
+            /*validateNodes*/ false,
+            (sourceFile, changeTracker) => {
+                changeTracker.delete(sourceFile, findChild("b", sourceFile));
+            },
+        );
+        runSingleFileTest(
+            "deleteNodeInList3_1",
+            /*placeOpenBraceOnNewLineForFunctions*/ false,
+            text,
+            /*validateNodes*/ false,
+            (sourceFile, changeTracker) => {
+                changeTracker.delete(sourceFile, findChild("c", sourceFile));
+            },
+        );
     }
     {
         const text = `
@@ -523,15 +709,33 @@ namespace M {
         b = 2,
         c = 3;
 }`;
-        runSingleFileTest("deleteNodeInList4", /*placeOpenBraceOnNewLineForFunctions*/ false, text, /*validateNodes*/ false, (sourceFile, changeTracker) => {
-            changeTracker.delete(sourceFile, findChild("a", sourceFile));
-        });
-        runSingleFileTest("deleteNodeInList5", /*placeOpenBraceOnNewLineForFunctions*/ false, text, /*validateNodes*/ false, (sourceFile, changeTracker) => {
-            changeTracker.delete(sourceFile, findChild("b", sourceFile));
-        });
-        runSingleFileTest("deleteNodeInList6", /*placeOpenBraceOnNewLineForFunctions*/ false, text, /*validateNodes*/ false, (sourceFile, changeTracker) => {
-            changeTracker.delete(sourceFile, findChild("c", sourceFile));
-        });
+        runSingleFileTest(
+            "deleteNodeInList4",
+            /*placeOpenBraceOnNewLineForFunctions*/ false,
+            text,
+            /*validateNodes*/ false,
+            (sourceFile, changeTracker) => {
+                changeTracker.delete(sourceFile, findChild("a", sourceFile));
+            },
+        );
+        runSingleFileTest(
+            "deleteNodeInList5",
+            /*placeOpenBraceOnNewLineForFunctions*/ false,
+            text,
+            /*validateNodes*/ false,
+            (sourceFile, changeTracker) => {
+                changeTracker.delete(sourceFile, findChild("b", sourceFile));
+            },
+        );
+        runSingleFileTest(
+            "deleteNodeInList6",
+            /*placeOpenBraceOnNewLineForFunctions*/ false,
+            text,
+            /*validateNodes*/ false,
+            (sourceFile, changeTracker) => {
+                changeTracker.delete(sourceFile, findChild("c", sourceFile));
+            },
+        );
     }
     {
         const text = `
@@ -542,45 +746,99 @@ namespace M {
         // comment 4
         c = 3; // comment 5
 }`;
-        runSingleFileTest("deleteNodeInList4_1", /*placeOpenBraceOnNewLineForFunctions*/ false, text, /*validateNodes*/ false, (sourceFile, changeTracker) => {
-            changeTracker.delete(sourceFile, findChild("a", sourceFile));
-        });
-        runSingleFileTest("deleteNodeInList5_1", /*placeOpenBraceOnNewLineForFunctions*/ false, text, /*validateNodes*/ false, (sourceFile, changeTracker) => {
-            changeTracker.delete(sourceFile, findChild("b", sourceFile));
-        });
-        runSingleFileTest("deleteNodeInList6_1", /*placeOpenBraceOnNewLineForFunctions*/ false, text, /*validateNodes*/ false, (sourceFile, changeTracker) => {
-            changeTracker.delete(sourceFile, findChild("c", sourceFile));
-        });
+        runSingleFileTest(
+            "deleteNodeInList4_1",
+            /*placeOpenBraceOnNewLineForFunctions*/ false,
+            text,
+            /*validateNodes*/ false,
+            (sourceFile, changeTracker) => {
+                changeTracker.delete(sourceFile, findChild("a", sourceFile));
+            },
+        );
+        runSingleFileTest(
+            "deleteNodeInList5_1",
+            /*placeOpenBraceOnNewLineForFunctions*/ false,
+            text,
+            /*validateNodes*/ false,
+            (sourceFile, changeTracker) => {
+                changeTracker.delete(sourceFile, findChild("b", sourceFile));
+            },
+        );
+        runSingleFileTest(
+            "deleteNodeInList6_1",
+            /*placeOpenBraceOnNewLineForFunctions*/ false,
+            text,
+            /*validateNodes*/ false,
+            (sourceFile, changeTracker) => {
+                changeTracker.delete(sourceFile, findChild("c", sourceFile));
+            },
+        );
     }
     {
         const text = `
 function foo(a: number, b: string, c = true) {
     return 1;
 }`;
-        runSingleFileTest("deleteNodeInList7", /*placeOpenBraceOnNewLineForFunctions*/ false, text, /*validateNodes*/ false, (sourceFile, changeTracker) => {
-            changeTracker.delete(sourceFile, findChild("a", sourceFile));
-        });
-        runSingleFileTest("deleteNodeInList8", /*placeOpenBraceOnNewLineForFunctions*/ false, text, /*validateNodes*/ false, (sourceFile, changeTracker) => {
-            changeTracker.delete(sourceFile, findChild("b", sourceFile));
-        });
-        runSingleFileTest("deleteNodeInList9", /*placeOpenBraceOnNewLineForFunctions*/ false, text, /*validateNodes*/ false, (sourceFile, changeTracker) => {
-            changeTracker.delete(sourceFile, findChild("c", sourceFile));
-        });
+        runSingleFileTest(
+            "deleteNodeInList7",
+            /*placeOpenBraceOnNewLineForFunctions*/ false,
+            text,
+            /*validateNodes*/ false,
+            (sourceFile, changeTracker) => {
+                changeTracker.delete(sourceFile, findChild("a", sourceFile));
+            },
+        );
+        runSingleFileTest(
+            "deleteNodeInList8",
+            /*placeOpenBraceOnNewLineForFunctions*/ false,
+            text,
+            /*validateNodes*/ false,
+            (sourceFile, changeTracker) => {
+                changeTracker.delete(sourceFile, findChild("b", sourceFile));
+            },
+        );
+        runSingleFileTest(
+            "deleteNodeInList9",
+            /*placeOpenBraceOnNewLineForFunctions*/ false,
+            text,
+            /*validateNodes*/ false,
+            (sourceFile, changeTracker) => {
+                changeTracker.delete(sourceFile, findChild("c", sourceFile));
+            },
+        );
     }
     {
         const text = `
 function foo(a: number,b: string,c = true) {
     return 1;
 }`;
-        runSingleFileTest("deleteNodeInList10", /*placeOpenBraceOnNewLineForFunctions*/ false, text, /*validateNodes*/ false, (sourceFile, changeTracker) => {
-            changeTracker.delete(sourceFile, findChild("a", sourceFile));
-        });
-        runSingleFileTest("deleteNodeInList11", /*placeOpenBraceOnNewLineForFunctions*/ false, text, /*validateNodes*/ false, (sourceFile, changeTracker) => {
-            changeTracker.delete(sourceFile, findChild("b", sourceFile));
-        });
-        runSingleFileTest("deleteNodeInList12", /*placeOpenBraceOnNewLineForFunctions*/ false, text, /*validateNodes*/ false, (sourceFile, changeTracker) => {
-            changeTracker.delete(sourceFile, findChild("c", sourceFile));
-        });
+        runSingleFileTest(
+            "deleteNodeInList10",
+            /*placeOpenBraceOnNewLineForFunctions*/ false,
+            text,
+            /*validateNodes*/ false,
+            (sourceFile, changeTracker) => {
+                changeTracker.delete(sourceFile, findChild("a", sourceFile));
+            },
+        );
+        runSingleFileTest(
+            "deleteNodeInList11",
+            /*placeOpenBraceOnNewLineForFunctions*/ false,
+            text,
+            /*validateNodes*/ false,
+            (sourceFile, changeTracker) => {
+                changeTracker.delete(sourceFile, findChild("b", sourceFile));
+            },
+        );
+        runSingleFileTest(
+            "deleteNodeInList12",
+            /*placeOpenBraceOnNewLineForFunctions*/ false,
+            text,
+            /*validateNodes*/ false,
+            (sourceFile, changeTracker) => {
+                changeTracker.delete(sourceFile, findChild("c", sourceFile));
+            },
+        );
     }
     {
         const text = `
@@ -590,15 +848,33 @@ function foo(
     c = true) {
     return 1;
 }`;
-        runSingleFileTest("deleteNodeInList13", /*placeOpenBraceOnNewLineForFunctions*/ false, text, /*validateNodes*/ false, (sourceFile, changeTracker) => {
-            changeTracker.delete(sourceFile, findChild("a", sourceFile));
-        });
-        runSingleFileTest("deleteNodeInList14", /*placeOpenBraceOnNewLineForFunctions*/ false, text, /*validateNodes*/ false, (sourceFile, changeTracker) => {
-            changeTracker.delete(sourceFile, findChild("b", sourceFile));
-        });
-        runSingleFileTest("deleteNodeInList15", /*placeOpenBraceOnNewLineForFunctions*/ false, text, /*validateNodes*/ false, (sourceFile, changeTracker) => {
-            changeTracker.delete(sourceFile, findChild("c", sourceFile));
-        });
+        runSingleFileTest(
+            "deleteNodeInList13",
+            /*placeOpenBraceOnNewLineForFunctions*/ false,
+            text,
+            /*validateNodes*/ false,
+            (sourceFile, changeTracker) => {
+                changeTracker.delete(sourceFile, findChild("a", sourceFile));
+            },
+        );
+        runSingleFileTest(
+            "deleteNodeInList14",
+            /*placeOpenBraceOnNewLineForFunctions*/ false,
+            text,
+            /*validateNodes*/ false,
+            (sourceFile, changeTracker) => {
+                changeTracker.delete(sourceFile, findChild("b", sourceFile));
+            },
+        );
+        runSingleFileTest(
+            "deleteNodeInList15",
+            /*placeOpenBraceOnNewLineForFunctions*/ false,
+            text,
+            /*validateNodes*/ false,
+            (sourceFile, changeTracker) => {
+                changeTracker.delete(sourceFile, findChild("c", sourceFile));
+            },
+        );
     }
     {
         const text = `

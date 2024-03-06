@@ -146,7 +146,9 @@ function getFixInfo(checker: TypeChecker, declaration: FunctionLikeDeclaration, 
         };
     }
     else if (isLabeledStatement(firstStatement) && isExpressionStatement(firstStatement.statement)) {
-        const node = factory.createObjectLiteralExpression([factory.createPropertyAssignment(firstStatement.label, firstStatement.statement.expression)]);
+        const node = factory.createObjectLiteralExpression([
+            factory.createPropertyAssignment(firstStatement.label, firstStatement.statement.expression),
+        ]);
         const nodeType = createObjectTypeFromLabeledExpression(checker, firstStatement.label, firstStatement.statement.expression);
         if (checkFixedAssignableTo(checker, declaration, nodeType, expectType, isFunctionType)) {
             return isArrowFunction(declaration) ? {
@@ -293,10 +295,21 @@ function wrapBlockWithParen(changes: textChanges.ChangeTracker, sourceFile: Sour
 
 function getActionForfixAddReturnStatement(context: CodeFixContext, expression: Expression, statement: Statement) {
     const changes = textChanges.ChangeTracker.with(context, t => addReturnStatement(t, context.sourceFile, expression, statement));
-    return createCodeFixAction(fixId, changes, Diagnostics.Add_a_return_statement, fixIdAddReturnStatement, Diagnostics.Add_all_missing_return_statement);
+    return createCodeFixAction(
+        fixId,
+        changes,
+        Diagnostics.Add_a_return_statement,
+        fixIdAddReturnStatement,
+        Diagnostics.Add_all_missing_return_statement,
+    );
 }
 
-function getActionForFixRemoveBracesFromArrowFunctionBody(context: CodeFixContext, declaration: ArrowFunction, expression: Expression, commentSource: Node) {
+function getActionForFixRemoveBracesFromArrowFunctionBody(
+    context: CodeFixContext,
+    declaration: ArrowFunction,
+    expression: Expression,
+    commentSource: Node,
+) {
     const changes = textChanges.ChangeTracker.with(
         context,
         t => removeBlockBodyBrace(t, context.sourceFile, declaration, expression, commentSource, /*withParen*/ false),

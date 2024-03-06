@@ -185,7 +185,10 @@ registerRefactor(refactorNameForMoveToFile, {
             return [{
                 name: refactorNameForMoveToFile,
                 description,
-                actions: [{ ...moveToFileAction, notApplicableReason: getLocaleSpecificMessage(Diagnostics.Selection_is_not_a_valid_statement_or_statements) }],
+                actions: [{
+                    ...moveToFileAction,
+                    notApplicableReason: getLocaleSpecificMessage(Diagnostics.Selection_is_not_a_valid_statement_or_statements),
+                }],
             }];
         }
         return emptyArray;
@@ -239,7 +242,16 @@ function doChange(
         changes.createNewFile(
             oldFile,
             targetFile,
-            getNewStatementsAndRemoveFromOldFile(oldFile, targetFile, getUsageInfo(oldFile, toMove.all, checker), changes, toMove, program, host, preferences),
+            getNewStatementsAndRemoveFromOldFile(
+                oldFile,
+                targetFile,
+                getUsageInfo(oldFile, toMove.all, checker),
+                changes,
+                toMove,
+                program,
+                host,
+                preferences,
+            ),
         );
         addNewFileToTsconfig(program, changes, oldFile.fileName, targetFile, hostGetCanonicalFileName(host));
     }
@@ -274,7 +286,8 @@ function getNewStatementsAndRemoveFromOldFile(
     const checker = program.getTypeChecker();
     const prologueDirectives = takeWhile(oldFile.statements, isPrologueDirective);
     if (
-        oldFile.externalModuleIndicator === undefined && oldFile.commonJsModuleIndicator === undefined && usage.oldImportsNeededByTargetFile.size === 0 &&
+        oldFile.externalModuleIndicator === undefined && oldFile.commonJsModuleIndicator === undefined &&
+        usage.oldImportsNeededByTargetFile.size === 0 &&
         usage.targetFileImportsFromOldFile.size === 0 &&
         typeof targetFile === "string"
     ) {
@@ -407,7 +420,11 @@ function getTargetFileImportsAndAddExportInOldFile(
                     );
                     append(
                         copiedOldImports,
-                        filterImport(i, makeStringLiteral(newModuleSpecifier, quotePreference), name => importsToCopy.has(checker.getSymbolAtLocation(name)!)),
+                        filterImport(
+                            i,
+                            makeStringLiteral(newModuleSpecifier, quotePreference),
+                            name => importsToCopy.has(checker.getSymbolAtLocation(name)!),
+                        ),
                     );
                 }
                 else {
@@ -458,7 +475,16 @@ function getTargetFileImportsAndAddExportInOldFile(
     return targetFileSourceFile
         ? append(
             copiedOldImports,
-            makeImportOrRequire(targetFileSourceFile, oldFileDefault, oldFileNamedImports, oldFile.fileName, program, host, useEsModuleSyntax, quotePreference),
+            makeImportOrRequire(
+                targetFileSourceFile,
+                oldFileDefault,
+                oldFileNamedImports,
+                oldFile.fileName,
+                program,
+                host,
+                useEsModuleSyntax,
+                quotePreference,
+            ),
         )
         : append(
             copiedOldImports,
@@ -487,7 +513,12 @@ export function addNewFileToTsconfig(
             (prop): prop is PropertyAssignment => isPropertyAssignment(prop) && isStringLiteral(prop.name) && prop.name.text === "files",
         );
     if (filesProp && isArrayLiteralExpression(filesProp.initializer)) {
-        changes.insertNodeInListAfter(cfg, last(filesProp.initializer.elements), factory.createStringLiteral(newFilePath), filesProp.initializer.elements);
+        changes.insertNodeInListAfter(
+            cfg,
+            last(filesProp.initializer.elements),
+            factory.createStringLiteral(newFilePath),
+            filesProp.initializer.elements,
+        );
     }
 }
 
@@ -603,7 +634,12 @@ function updateNamespaceLikeImport(
     }
 }
 
-function updateNamespaceLikeImportNode(node: SupportedImport, newNamespaceName: string, newModuleSpecifier: string, quotePreference: QuotePreference): Node {
+function updateNamespaceLikeImportNode(
+    node: SupportedImport,
+    newNamespaceName: string,
+    newModuleSpecifier: string,
+    quotePreference: QuotePreference,
+): Node {
     const newNamespaceId = factory.createIdentifier(newNamespaceName);
     const newModuleString = makeStringLiteral(newModuleSpecifier, quotePreference);
     switch (node.kind) {
@@ -622,7 +658,12 @@ function updateNamespaceLikeImportNode(node: SupportedImport, newNamespaceName: 
                 factory.createExternalModuleReference(newModuleString),
             );
         case SyntaxKind.VariableDeclaration:
-            return factory.createVariableDeclaration(newNamespaceId, /*exclamationToken*/ undefined, /*type*/ undefined, createRequireCall(newModuleString));
+            return factory.createVariableDeclaration(
+                newNamespaceId,
+                /*exclamationToken*/ undefined,
+                /*type*/ undefined,
+                createRequireCall(newModuleString),
+            );
         default:
             return Debug.assertNever(node, `Unexpected node kind ${(node as SupportedImport).kind}`);
     }
@@ -714,7 +755,9 @@ export function makeImportOrRequire(
     );
 
     if (useEs6Imports) {
-        const specifiers = imports.map(i => factory.createImportSpecifier(/*isTypeOnly*/ false, /*propertyName*/ undefined, factory.createIdentifier(i)));
+        const specifiers = imports.map(i =>
+            factory.createImportSpecifier(/*isTypeOnly*/ false, /*propertyName*/ undefined, factory.createIdentifier(i))
+        );
         return makeImportIfNecessary(defaultImport, specifiers, pathToTargetFileWithCorrectExtension, quotePreference);
     }
     else {
@@ -730,7 +773,12 @@ export function makeImportOrRequire(
     }
 }
 
-function makeVariableStatement(name: BindingName, type: TypeNode | undefined, initializer: Expression | undefined, flags: NodeFlags = NodeFlags.Const) {
+function makeVariableStatement(
+    name: BindingName,
+    type: TypeNode | undefined,
+    initializer: Expression | undefined,
+    flags: NodeFlags = NodeFlags.Const,
+) {
     return factory.createVariableStatement(
         /*modifiers*/ undefined,
         factory.createVariableDeclarationList([factory.createVariableDeclaration(name, /*exclamationToken*/ undefined, type, initializer)], flags),
@@ -738,7 +786,12 @@ function makeVariableStatement(name: BindingName, type: TypeNode | undefined, in
 }
 
 /** @internal */
-export function addExports(sourceFile: SourceFile, toMove: readonly Statement[], needExport: Set<Symbol>, useEs6Exports: boolean): readonly Statement[] {
+export function addExports(
+    sourceFile: SourceFile,
+    toMove: readonly Statement[],
+    needExport: Set<Symbol>,
+    useEs6Exports: boolean,
+): readonly Statement[] {
     return flatMap(toMove, statement => {
         if (
             isTopLevelDeclarationStatement(statement) &&
@@ -881,7 +934,14 @@ function addEs6Export(d: TopLevelDeclarationStatement): TopLevelDeclarationState
             return factory.updateFunctionDeclaration(d, modifiers, d.asteriskToken, d.name, d.typeParameters, d.parameters, d.type, d.body);
         case SyntaxKind.ClassDeclaration:
             const decorators = canHaveDecorators(d) ? getDecorators(d) : undefined;
-            return factory.updateClassDeclaration(d, concatenate<ModifierLike>(decorators, modifiers), d.name, d.typeParameters, d.heritageClauses, d.members);
+            return factory.updateClassDeclaration(
+                d,
+                concatenate<ModifierLike>(decorators, modifiers),
+                d.name,
+                d.typeParameters,
+                d.heritageClauses,
+                d.members,
+            );
         case SyntaxKind.VariableStatement:
             return factory.updateVariableStatement(d, modifiers, d.declarationList);
         case SyntaxKind.ModuleDeclaration:
@@ -1206,7 +1266,10 @@ export function getUsageInfo(
     for (const statement of toMove) {
         forEachTopLevelDeclaration(statement, decl => {
             movedSymbols.add(
-                Debug.checkDefined(isExpressionStatement(decl) ? checker.getSymbolAtLocation(decl.expression.left) : decl.symbol, "Need a symbol here"),
+                Debug.checkDefined(
+                    isExpressionStatement(decl) ? checker.getSymbolAtLocation(decl.expression.left) : decl.symbol,
+                    "Need a symbol here",
+                ),
             );
         });
     }
@@ -1224,7 +1287,10 @@ export function getUsageInfo(
             for (const decl of symbol.declarations) {
                 if (isInImport(decl)) {
                     const prevIsTypeOnly = oldImportsNeededByTargetFile.get(symbol);
-                    oldImportsNeededByTargetFile.set(symbol, prevIsTypeOnly === undefined ? isValidTypeOnlyUseSite : prevIsTypeOnly && isValidTypeOnlyUseSite);
+                    oldImportsNeededByTargetFile.set(
+                        symbol,
+                        prevIsTypeOnly === undefined ? isValidTypeOnlyUseSite : prevIsTypeOnly && isValidTypeOnlyUseSite,
+                    );
                 }
                 else if (isTopLevelDeclaration(decl) && sourceFileOfTopLevelDeclaration(decl) === oldFile && !movedSymbols.has(symbol)) {
                     targetFileImportsFromOldFile.add(symbol);
@@ -1318,7 +1384,10 @@ function forEachTopLevelDeclaration<T>(statement: Statement, cb: (node: TopLevel
             );
 
         case SyntaxKind.VariableStatement:
-            return firstDefined((statement as VariableStatement).declarationList.declarations, decl => forEachTopLevelDeclarationInBindingName(decl.name, cb));
+            return firstDefined(
+                (statement as VariableStatement).declarationList.declarations,
+                decl => forEachTopLevelDeclarationInBindingName(decl.name, cb),
+            );
 
         case SyntaxKind.ExpressionStatement: {
             const { expression } = statement as ExpressionStatement;
@@ -1352,7 +1421,8 @@ function isVariableDeclarationInImport(decl: VariableDeclaration) {
 
 /** @internal */
 export function isTopLevelDeclaration(node: Node): node is TopLevelDeclaration {
-    return isNonVariableTopLevelDeclaration(node) && isSourceFile(node.parent) || isVariableDeclaration(node) && isSourceFile(node.parent.parent.parent);
+    return isNonVariableTopLevelDeclaration(node) && isSourceFile(node.parent) ||
+        isVariableDeclaration(node) && isSourceFile(node.parent.parent.parent);
 }
 function sourceFileOfTopLevelDeclaration(node: TopLevelDeclaration): Node {
     return isVariableDeclaration(node) ? node.parent.parent.parent : node.parent;
@@ -1401,7 +1471,8 @@ function moveStatementsToTargetFile(
         for (const node of toMove.all) {
             if (isTopLevelDeclarationStatement(node) && hasSyntacticModifier(node, ModifierFlags.Export)) {
                 forEachTopLevelDeclaration(node, declaration => {
-                    const targetDeclarations = canHaveSymbol(declaration) ? targetExports.get(declaration.symbol.escapedName)?.declarations : undefined;
+                    const targetDeclarations = canHaveSymbol(declaration) ? targetExports.get(declaration.symbol.escapedName)?.declarations
+                        : undefined;
                     const exportDeclaration = firstDefined(targetDeclarations, d =>
                         isExportDeclaration(d) ? d :
                             isExportSpecifier(d) ? tryCast(d.parent.parent, isExportDeclaration) : undefined);
@@ -1417,7 +1488,9 @@ function moveStatementsToTargetFile(
                 const elements = exportDeclaration.exportClause.elements;
                 const updatedElements = filter(
                     elements,
-                    elem => find(skipAlias(elem.symbol, checker).declarations, d => isTopLevelDeclaration(d) && topLevelDeclarations.has(d)) === undefined,
+                    elem =>
+                        find(skipAlias(elem.symbol, checker).declarations, d => isTopLevelDeclaration(d) && topLevelDeclarations.has(d)) ===
+                            undefined,
                 );
 
                 if (length(updatedElements) === 0) {
@@ -1434,7 +1507,10 @@ function moveStatementsToTargetFile(
                             exportDeclaration,
                             exportDeclaration.modifiers,
                             exportDeclaration.isTypeOnly,
-                            factory.updateNamedExports(exportDeclaration.exportClause, factory.createNodeArray(updatedElements, elements.hasTrailingComma)),
+                            factory.updateNamedExports(
+                                exportDeclaration.exportClause,
+                                factory.createNodeArray(updatedElements, elements.hasTrailingComma),
+                            ),
                             exportDeclaration.moduleSpecifier,
                             exportDeclaration.attributes,
                         ),

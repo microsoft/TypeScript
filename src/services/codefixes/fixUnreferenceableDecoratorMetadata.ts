@@ -43,12 +43,19 @@ registerCodeFix({
 
         const namespaceChanges = textChanges.ChangeTracker.with(
             context,
-            t => importDeclaration.kind === SyntaxKind.ImportSpecifier && doNamespaceImportChange(t, context.sourceFile, importDeclaration, context.program),
+            t => importDeclaration.kind === SyntaxKind.ImportSpecifier &&
+                doNamespaceImportChange(t, context.sourceFile, importDeclaration, context.program),
         );
-        const typeOnlyChanges = textChanges.ChangeTracker.with(context, t => doTypeOnlyImportChange(t, context.sourceFile, importDeclaration, context.program));
+        const typeOnlyChanges = textChanges.ChangeTracker.with(
+            context,
+            t => doTypeOnlyImportChange(t, context.sourceFile, importDeclaration, context.program),
+        );
         let actions: CodeFixAction[] | undefined;
         if (namespaceChanges.length) {
-            actions = append(actions, createCodeFixActionWithoutFixAll(fixId, namespaceChanges, Diagnostics.Convert_named_imports_to_namespace_import));
+            actions = append(
+                actions,
+                createCodeFixActionWithoutFixAll(fixId, namespaceChanges, Diagnostics.Convert_named_imports_to_namespace_import),
+            );
         }
         if (typeOnlyChanges.length) {
             actions = append(actions, createCodeFixActionWithoutFixAll(fixId, typeOnlyChanges, Diagnostics.Use_import_type));
@@ -58,7 +65,11 @@ registerCodeFix({
     fixIds: [fixId],
 });
 
-function getImportDeclaration(sourceFile: SourceFile, program: Program, start: number): ImportClause | ImportSpecifier | ImportEqualsDeclaration | undefined {
+function getImportDeclaration(
+    sourceFile: SourceFile,
+    program: Program,
+    start: number,
+): ImportClause | ImportSpecifier | ImportEqualsDeclaration | undefined {
     const identifier = tryCast(getTokenAtPosition(sourceFile, start), isIdentifier);
     if (!identifier || identifier.parent.kind !== SyntaxKind.TypeReference) return;
 
@@ -66,7 +77,9 @@ function getImportDeclaration(sourceFile: SourceFile, program: Program, start: n
     const symbol = checker.getSymbolAtLocation(identifier);
     return find(
         symbol?.declarations || emptyArray,
-        or(isImportClause, isImportSpecifier, isImportEqualsDeclaration) as (n: Node) => n is ImportClause | ImportSpecifier | ImportEqualsDeclaration,
+        or(isImportClause, isImportSpecifier, isImportEqualsDeclaration) as (
+            n: Node,
+        ) => n is ImportClause | ImportSpecifier | ImportEqualsDeclaration,
     );
 }
 

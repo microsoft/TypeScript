@@ -838,10 +838,16 @@ export function transformES2018(context: TransformationContext): (x: SourceFile 
             : factory.createAwaitExpression(expression);
     }
 
-    function transformForAwaitOfStatement(node: ForOfStatement, outermostLabeledStatement: LabeledStatement | undefined, ancestorFacts: HierarchyFacts) {
+    function transformForAwaitOfStatement(
+        node: ForOfStatement,
+        outermostLabeledStatement: LabeledStatement | undefined,
+        ancestorFacts: HierarchyFacts,
+    ) {
         const expression = visitNode(node.expression, visitor, isExpression);
-        const iterator = isIdentifier(expression) ? factory.getGeneratedNameForNode(expression) : factory.createTempVariable(/*recordTempVariable*/ undefined);
-        const result = isIdentifier(expression) ? factory.getGeneratedNameForNode(iterator) : factory.createTempVariable(/*recordTempVariable*/ undefined);
+        const iterator = isIdentifier(expression) ? factory.getGeneratedNameForNode(expression)
+            : factory.createTempVariable(/*recordTempVariable*/ undefined);
+        const result = isIdentifier(expression) ? factory.getGeneratedNameForNode(iterator)
+            : factory.createTempVariable(/*recordTempVariable*/ undefined);
         const nonUserCode = factory.createTempVariable(/*recordTempVariable*/ undefined);
         const done = factory.createTempVariable(hoistVariableDeclaration);
         const errorRecord = factory.createUniqueName("e");
@@ -867,7 +873,12 @@ export function transformES2018(context: TransformationContext): (x: SourceFile 
                     /*initializer*/ setEmitFlags(
                         setTextRange(
                             factory.createVariableDeclarationList([
-                                factory.createVariableDeclaration(nonUserCode, /*exclamationToken*/ undefined, /*type*/ undefined, factory.createTrue()),
+                                factory.createVariableDeclaration(
+                                    nonUserCode,
+                                    /*exclamationToken*/ undefined,
+                                    /*type*/ undefined,
+                                    factory.createTrue(),
+                                ),
                                 setTextRange(
                                     factory.createVariableDeclaration(iterator, /*exclamationToken*/ undefined, /*type*/ undefined, initializer),
                                     node.expression,
@@ -1178,7 +1189,9 @@ export function transformES2018(context: TransformationContext): (x: SourceFile 
         return newParametersArray;
     }
 
-    function transformAsyncGeneratorFunctionBody(node: MethodDeclaration | AccessorDeclaration | FunctionDeclaration | FunctionExpression): FunctionBody {
+    function transformAsyncGeneratorFunctionBody(
+        node: MethodDeclaration | AccessorDeclaration | FunctionDeclaration | FunctionExpression,
+    ): FunctionBody {
         const innerParameters = !isSimpleParameterList(node.parameters) ? visitParameterList(node.parameters, visitor, context) : undefined;
         resumeLexicalEnvironment();
 
@@ -1212,7 +1225,8 @@ export function transformES2018(context: TransformationContext): (x: SourceFile 
         // Minor optimization, emit `_super` helper to capture `super` access in an arrow.
         // This step isn't needed if we eventually transform this to ES5.
         const emitSuperHelpers = languageVersion >= ScriptTarget.ES2015 &&
-            resolver.getNodeCheckFlags(node) & (NodeCheckFlags.MethodWithSuperPropertyAssignmentInAsync | NodeCheckFlags.MethodWithSuperPropertyAccessInAsync);
+            resolver.getNodeCheckFlags(node) &
+                (NodeCheckFlags.MethodWithSuperPropertyAssignmentInAsync | NodeCheckFlags.MethodWithSuperPropertyAccessInAsync);
         if (emitSuperHelpers) {
             enableSubstitutionForAsyncMethodsWithSuper();
             const variableStatement = createSuperAccessVariableStatement(factory, resolver, node, capturedSuperProperties);
@@ -1326,7 +1340,10 @@ export function transformES2018(context: TransformationContext): (x: SourceFile 
                     const statement = factory.createIfStatement(typeCheck, block);
                     startOnNewLine(statement);
                     setTextRange(statement, parameter);
-                    setEmitFlags(statement, EmitFlags.NoTokenSourceMaps | EmitFlags.NoTrailingSourceMap | EmitFlags.CustomPrologue | EmitFlags.NoComments);
+                    setEmitFlags(
+                        statement,
+                        EmitFlags.NoTokenSourceMaps | EmitFlags.NoTrailingSourceMap | EmitFlags.CustomPrologue | EmitFlags.NoComments,
+                    );
                     statements = append(statements, statement);
                 }
             }

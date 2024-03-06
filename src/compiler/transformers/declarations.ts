@@ -219,7 +219,11 @@ import {
 import * as moduleSpecifiers from "../_namespaces/ts.moduleSpecifiers";
 
 /** @internal */
-export function getDeclarationDiagnostics(host: EmitHost, resolver: EmitResolver, file: SourceFile | undefined): DiagnosticWithLocation[] | undefined {
+export function getDeclarationDiagnostics(
+    host: EmitHost,
+    resolver: EmitResolver,
+    file: SourceFile | undefined,
+): DiagnosticWithLocation[] | undefined {
     const compilerOptions = host.getCompilerOptions();
     const result = transformNodes(
         resolver,
@@ -292,7 +296,9 @@ export function transformDeclarations(context: TransformationContext) {
     const { noResolve, stripInternal } = options;
     return transformRoot;
 
-    function recordTypeReferenceDirectivesIfNecessary(typeReferenceDirectives: readonly [specifier: string, mode: ResolutionMode][] | undefined): void {
+    function recordTypeReferenceDirectivesIfNecessary(
+        typeReferenceDirectives: readonly [specifier: string, mode: ResolutionMode][] | undefined,
+    ): void {
         if (!typeReferenceDirectives) {
             return;
         }
@@ -449,7 +455,8 @@ export function transformDeclarations(context: TransformationContext) {
             context.addDiagnostic(
                 createDiagnosticForNode(
                     (errorNameNode || errorFallbackNode)!,
-                    Diagnostics.The_inferred_type_of_0_cannot_be_named_without_a_reference_to_1_This_is_likely_not_portable_A_type_annotation_is_necessary,
+                    Diagnostics
+                        .The_inferred_type_of_0_cannot_be_named_without_a_reference_to_1_This_is_likely_not_portable_A_type_annotation_is_necessary,
                     errorDeclarationNameWithFallback(),
                     specifier,
                 ),
@@ -462,7 +469,8 @@ export function transformDeclarations(context: TransformationContext) {
             context.addDiagnostic(
                 createDiagnosticForNode(
                     (errorNameNode || errorFallbackNode)!,
-                    Diagnostics.The_inferred_type_of_this_node_exceeds_the_maximum_length_the_compiler_will_serialize_An_explicit_type_annotation_is_needed,
+                    Diagnostics
+                        .The_inferred_type_of_this_node_exceeds_the_maximum_length_the_compiler_will_serialize_An_explicit_type_annotation_is_needed,
                 ),
             );
         }
@@ -503,7 +511,8 @@ export function transformDeclarations(context: TransformationContext) {
                 diagnosticMessage: s.errorModuleName
                     ? Diagnostics
                         .Declaration_emit_for_this_file_requires_using_private_name_0_from_module_1_An_explicit_type_annotation_may_unblock_declaration_emit
-                    : Diagnostics.Declaration_emit_for_this_file_requires_using_private_name_0_An_explicit_type_annotation_may_unblock_declaration_emit,
+                    : Diagnostics
+                        .Declaration_emit_for_this_file_requires_using_private_name_0_An_explicit_type_annotation_may_unblock_declaration_emit,
                 errorNode: s.errorNode || sourceFile,
             }));
         const result = resolver.getDeclarationStatementsForSourceFile(sourceFile, declarationEmitNodeBuilderFlags, symbolTracker, bundled);
@@ -541,7 +550,8 @@ export function transformDeclarations(context: TransformationContext) {
                     if (isExternalOrCommonJsModule(sourceFile) || isJsonSourceFile(sourceFile)) {
                         resultHasExternalModuleIndicator = false; // unused in external module bundle emit (all external modules are within module blocks, therefore are known to be modules)
                         needsDeclare = false;
-                        const statements = isSourceFileJS(sourceFile) ? factory.createNodeArray(transformDeclarationsForJS(sourceFile, /*bundled*/ true))
+                        const statements = isSourceFileJS(sourceFile) ?
+                            factory.createNodeArray(transformDeclarationsForJS(sourceFile, /*bundled*/ true))
                             : visitNodes(sourceFile.statements, visitDeclarationStatements, isStatement);
                         const newFile = factory.updateSourceFile(
                             sourceFile,
@@ -549,7 +559,10 @@ export function transformDeclarations(context: TransformationContext) {
                                 [factory.createModifier(SyntaxKind.DeclareKeyword)],
                                 factory.createStringLiteral(getResolvedExternalModuleName(context.getEmitHost(), sourceFile)),
                                 factory.createModuleBlock(
-                                    setTextRange(factory.createNodeArray(transformAndReplaceLatePaintedStatements(statements)), sourceFile.statements),
+                                    setTextRange(
+                                        factory.createNodeArray(transformAndReplaceLatePaintedStatements(statements)),
+                                        sourceFile.statements,
+                                    ),
                                 ),
                             )],
                             /*isDeclarationFile*/ true,
@@ -853,7 +866,12 @@ export function transformDeclarations(context: TransformationContext) {
             case SyntaxKind.MethodDeclaration:
             case SyntaxKind.GetAccessor:
             case SyntaxKind.CallSignature:
-                typeNode = resolver.createReturnTypeOfSignatureDeclaration(node, enclosingDeclaration, declarationEmitNodeBuilderFlags, symbolTracker);
+                typeNode = resolver.createReturnTypeOfSignatureDeclaration(
+                    node,
+                    enclosingDeclaration,
+                    declarationEmitNodeBuilderFlags,
+                    symbolTracker,
+                );
                 break;
             default:
                 Debug.assertNever(node);
@@ -954,7 +972,8 @@ export function transformDeclarations(context: TransformationContext) {
     }
 
     function ensureTypeParams(node: Node, params: NodeArray<TypeParameterDeclaration> | undefined) {
-        return hasEffectiveModifier(node, ModifierFlags.Private) ? undefined : visitNodes(params, visitDeclarationSubtree, isTypeParameterDeclaration);
+        return hasEffectiveModifier(node, ModifierFlags.Private) ? undefined
+            : visitNodes(params, visitDeclarationSubtree, isTypeParameterDeclaration);
     }
 
     function isEnclosingDeclaration(node: Node) {
@@ -1039,7 +1058,8 @@ export function transformDeclarations(context: TransformationContext) {
             );
         }
         // The `importClause` visibility corresponds to the default's visibility.
-        const visibleDefaultBinding = decl.importClause && decl.importClause.name && resolver.isDeclarationVisible(decl.importClause) ? decl.importClause.name
+        const visibleDefaultBinding = decl.importClause && decl.importClause.name && resolver.isDeclarationVisible(decl.importClause) ?
+            decl.importClause.name
             : undefined;
         if (!decl.importClause.namedBindings) {
             // No named bindings (either namespace or list), meaning the import is just default or should be elided
@@ -1126,7 +1146,9 @@ export function transformDeclarations(context: TransformationContext) {
             const i = lateMarkedStatements!.shift()!;
             if (!isLateVisibilityPaintedStatement(i)) {
                 return Debug.fail(
-                    `Late replaced statement was found which is not handled by the declaration transformer!: ${Debug.formatSyntaxKind((i as Node).kind)}`,
+                    `Late replaced statement was found which is not handled by the declaration transformer!: ${
+                        Debug.formatSyntaxKind((i as Node).kind)
+                    }`,
                 );
             }
             const priorNeedsDeclare = needsDeclare;
@@ -1151,7 +1173,10 @@ export function transformDeclarations(context: TransformationContext) {
                             // Top-level declarations in .d.ts files are always considered exported even without a modifier unless there's an export assignment or specifier
                             needsScopeFixMarker = true;
                         }
-                        if (isSourceFile(statement.parent) && (isArray(result) ? some(result, isExternalModuleIndicator) : isExternalModuleIndicator(result))) {
+                        if (
+                            isSourceFile(statement.parent) &&
+                            (isArray(result) ? some(result, isExternalModuleIndicator) : isExternalModuleIndicator(result))
+                        ) {
                             resultHasExternalModuleIndicator = true;
                         }
                     }
@@ -1366,7 +1391,13 @@ export function transformDeclarations(context: TransformationContext) {
                 case SyntaxKind.TypeParameter: {
                     if (isPrivateMethodTypeParameter(input) && (input.default || input.constraint)) {
                         return cleanup(
-                            factory.updateTypeParameterDeclaration(input, input.modifiers, input.name, /*constraint*/ undefined, /*defaultType*/ undefined),
+                            factory.updateTypeParameterDeclaration(
+                                input,
+                                input.modifiers,
+                                input.name,
+                                /*constraint*/ undefined,
+                                /*defaultType*/ undefined,
+                            ),
                         );
                     }
                     return cleanup(visitEachChild(input, visitDeclarationSubtree, context));
@@ -1655,7 +1686,8 @@ export function transformDeclarations(context: TransformationContext) {
                         const type = resolver.createTypeOfDeclaration(p.valueDeclaration, fakespace, declarationEmitNodeBuilderFlags, symbolTracker);
                         getSymbolAccessibilityDiagnostic = oldDiag;
                         const isNonContextualKeywordName = isStringANonContextualKeyword(nameStr);
-                        const name = isNonContextualKeywordName ? factory.getGeneratedNameForNode(p.valueDeclaration) : factory.createIdentifier(nameStr);
+                        const name = isNonContextualKeywordName ? factory.getGeneratedNameForNode(p.valueDeclaration)
+                            : factory.createIdentifier(nameStr);
                         if (isNonContextualKeywordName) {
                             exportMappings.push([name, nameStr]);
                         }
@@ -1878,7 +1910,11 @@ export function transformDeclarations(context: TransformationContext) {
                                 clause,
                                 map(
                                     clause.types,
-                                    t => factory.updateExpressionWithTypeArguments(t, newId, visitNodes(t.typeArguments, visitDeclarationSubtree, isTypeNode)),
+                                    t => factory.updateExpressionWithTypeArguments(
+                                        t,
+                                        newId,
+                                        visitNodes(t.typeArguments, visitDeclarationSubtree, isTypeNode),
+                                    ),
                                 ),
                             );
                             getSymbolAccessibilityDiagnostic = oldDiag;
@@ -1995,7 +2031,12 @@ export function transformDeclarations(context: TransformationContext) {
                 return recreateBindingPattern(e.name);
             }
             else {
-                return factory.createVariableDeclaration(e.name, /*exclamationToken*/ undefined, ensureType(e, /*type*/ undefined), /*initializer*/ undefined);
+                return factory.createVariableDeclaration(
+                    e.name,
+                    /*exclamationToken*/ undefined,
+                    ensureType(e, /*type*/ undefined),
+                    /*initializer*/ undefined,
+                );
             }
         }
     }

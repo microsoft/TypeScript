@@ -340,7 +340,14 @@ function generateOptionOutput(sys: System, option: CommandLineOption, rightAlign
         return true;
     }
 
-    function getPrettyOutput(left: string, right: string, rightAlignOfLeft: number, leftAlignOfRight: number, terminalWidth: number, colorLeft: boolean) {
+    function getPrettyOutput(
+        left: string,
+        right: string,
+        rightAlignOfLeft: number,
+        leftAlignOfRight: number,
+        terminalWidth: number,
+        colorLeft: boolean,
+    ) {
         const res = [];
         let isFirstLine = true;
         let remainRight = right;
@@ -496,7 +503,10 @@ function generateSectionOptionsOutput(
 function printEasyHelp(sys: System, simpleOptions: readonly CommandLineOption[]) {
     const colors = createColors(sys);
     let output: string[] = [
-        ...getHeader(sys, `${getDiagnosticText(Diagnostics.tsc_Colon_The_TypeScript_Compiler)} - ${getDiagnosticText(Diagnostics.Version_0, version)}`),
+        ...getHeader(
+            sys,
+            `${getDiagnosticText(Diagnostics.tsc_Colon_The_TypeScript_Compiler)} - ${getDiagnosticText(Diagnostics.Version_0, version)}`,
+        ),
     ];
     output.push(colors.bold(getDiagnosticText(Diagnostics.COMMON_COMMANDS)) + sys.newLine + sys.newLine);
 
@@ -551,7 +561,10 @@ function printAllHelp(
     watchOptions: readonly CommandLineOption[],
 ) {
     let output: string[] = [
-        ...getHeader(sys, `${getDiagnosticText(Diagnostics.tsc_Colon_The_TypeScript_Compiler)} - ${getDiagnosticText(Diagnostics.Version_0, version)}`),
+        ...getHeader(
+            sys,
+            `${getDiagnosticText(Diagnostics.tsc_Colon_The_TypeScript_Compiler)} - ${getDiagnosticText(Diagnostics.Version_0, version)}`,
+        ),
     ];
     output = [
         ...output,
@@ -572,7 +585,8 @@ function printAllHelp(
             watchOptions,
             /*subCategory*/ false,
             getDiagnosticText(
-                Diagnostics.Including_watch_w_will_start_watching_the_current_project_for_the_file_changes_Once_set_you_can_config_watch_mode_with_Colon,
+                Diagnostics
+                    .Including_watch_w_will_start_watching_the_current_project_for_the_file_changes_Once_set_you_can_config_watch_mode_with_Colon,
             ),
         ),
     ];
@@ -597,7 +611,10 @@ function printAllHelp(
 
 function printBuildHelp(sys: System, buildOptions: readonly CommandLineOption[]) {
     let output: string[] = [
-        ...getHeader(sys, `${getDiagnosticText(Diagnostics.tsc_Colon_The_TypeScript_Compiler)} - ${getDiagnosticText(Diagnostics.Version_0, version)}`),
+        ...getHeader(
+            sys,
+            `${getDiagnosticText(Diagnostics.tsc_Colon_The_TypeScript_Compiler)} - ${getDiagnosticText(Diagnostics.Version_0, version)}`,
+        ),
     ];
     output = [
         ...output,
@@ -705,7 +722,10 @@ function executeCommandLineWorker(
             configFileName = combinePaths(fileOrDirectory, "tsconfig.json");
             if (!sys.fileExists(configFileName)) {
                 reportDiagnostic(
-                    createCompilerDiagnostic(Diagnostics.Cannot_find_a_tsconfig_json_file_at_the_specified_directory_Colon_0, commandLine.options.project),
+                    createCompilerDiagnostic(
+                        Diagnostics.Cannot_find_a_tsconfig_json_file_at_the_specified_directory_Colon_0,
+                        commandLine.options.project,
+                    ),
                 );
                 return sys.exit(ExitStatus.DiagnosticsPresent_OutputsSkipped);
             }

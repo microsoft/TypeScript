@@ -110,7 +110,14 @@ export function createImportTracker(
 ): ImportTracker {
     const allDirectImports = getDirectImportsMap(sourceFiles, checker, cancellationToken);
     return (exportSymbol, exportInfo, isForRename) => {
-        const { directImports, indirectUsers } = getImportersForExport(sourceFiles, sourceFilesSet, allDirectImports, exportInfo, checker, cancellationToken);
+        const { directImports, indirectUsers } = getImportersForExport(
+            sourceFiles,
+            sourceFilesSet,
+            allDirectImports,
+            exportInfo,
+            checker,
+            cancellationToken,
+        );
         return { indirectUsers, ...getSearchesFromDirectImports(directImports, exportSymbol, exportInfo.exportKind, checker, isForRename) };
     };
 }
@@ -496,7 +503,10 @@ export function findModuleReferences(program: Program, sourceFiles: readonly Sou
                 }
             }
             for (const ref of referencingFile.typeReferenceDirectives) {
-                const referenced = program.getResolvedTypeReferenceDirectives().get(ref.fileName, ref.resolutionMode || referencingFile.impliedNodeFormat)
+                const referenced = program.getResolvedTypeReferenceDirectives().get(
+                    ref.fileName,
+                    ref.resolutionMode || referencingFile.impliedNodeFormat,
+                )
                     ?.resolvedTypeReferenceDirective;
                 if (referenced !== undefined && referenced.resolvedFileName === (searchSourceFile as SourceFile).fileName) {
                     refs.push({ kind: "reference", referencingFile, ref });
@@ -794,7 +804,8 @@ function skipExportSpecifierSymbol(symbol: Symbol, checker: TypeChecker): Symbol
                 return checker.getExportSpecifierLocalTargetSymbol(declaration) || symbol;
             }
             else if (
-                isPropertyAccessExpression(declaration) && isModuleExportsAccessExpression(declaration.expression) && !isPrivateIdentifier(declaration.name)
+                isPropertyAccessExpression(declaration) && isModuleExportsAccessExpression(declaration.expression) &&
+                !isPrivateIdentifier(declaration.name)
             ) {
                 // Export of form 'module.exports.propName = expr';
                 return checker.getSymbolAtLocation(declaration)!;
@@ -832,6 +843,8 @@ function isAmbientModuleDeclaration(node: Node): node is AmbientModuleDeclaratio
     return node.kind === SyntaxKind.ModuleDeclaration && (node as ModuleDeclaration).name.kind === SyntaxKind.StringLiteral;
 }
 
-function isExternalModuleImportEquals(eq: ImportEqualsDeclaration): eq is ImportEqualsDeclaration & { moduleReference: { expression: StringLiteral; }; } {
+function isExternalModuleImportEquals(
+    eq: ImportEqualsDeclaration,
+): eq is ImportEqualsDeclaration & { moduleReference: { expression: StringLiteral; }; } {
     return eq.moduleReference.kind === SyntaxKind.ExternalModuleReference && eq.moduleReference.expression.kind === SyntaxKind.StringLiteral;
 }

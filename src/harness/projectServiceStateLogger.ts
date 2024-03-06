@@ -129,7 +129,14 @@ export function patchServiceForStateBaseline(service: ProjectService) {
                     projectPropertyLogs,
                 );
                 projectDiff = printProperty(PrintPropertyWhen.TruthyOrChangedOrNew, data, "dirty", project.dirty, projectDiff, projectPropertyLogs);
-                projectDiff = printProperty(PrintPropertyWhen.TruthyOrChangedOrNew, data, "isClosed", project.isClosed(), projectDiff, projectPropertyLogs);
+                projectDiff = printProperty(
+                    PrintPropertyWhen.TruthyOrChangedOrNew,
+                    data,
+                    "isClosed",
+                    project.isClosed(),
+                    projectDiff,
+                    projectPropertyLogs,
+                );
                 projectDiff = printProperty(
                     PrintPropertyWhen.TruthyOrChangedOrNew,
                     data,

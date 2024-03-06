@@ -156,7 +156,8 @@ export function getImportNeedsImportStarHelper(node: ImportDeclaration): boolean
         }
     }
     // Import star is required if there's default named refs mixed with non-default refs, or if theres non-default refs and it has a default import
-    return (defaultRefCount > 0 && defaultRefCount !== bindings.elements.length) || (!!(bindings.elements.length - defaultRefCount) && isDefaultImport(node));
+    return (defaultRefCount > 0 && defaultRefCount !== bindings.elements.length) ||
+        (!!(bindings.elements.length - defaultRefCount) && isDefaultImport(node));
 }
 
 /** @internal */
@@ -258,7 +259,11 @@ export function collectExternalModuleInfo(context: TransformationContext, source
                     if (hasSyntacticModifier(node, ModifierFlags.Default)) {
                         // export default function() { }
                         if (!hasExportDefault) {
-                            multiMapSparseArrayAdd(exportedBindings, getOriginalNodeId(node), context.factory.getDeclarationName(node as FunctionDeclaration));
+                            multiMapSparseArrayAdd(
+                                exportedBindings,
+                                getOriginalNodeId(node),
+                                context.factory.getDeclarationName(node as FunctionDeclaration),
+                            );
                             hasExportDefault = true;
                         }
                     }
@@ -279,7 +284,11 @@ export function collectExternalModuleInfo(context: TransformationContext, source
                     if (hasSyntacticModifier(node, ModifierFlags.Default)) {
                         // export default class { }
                         if (!hasExportDefault) {
-                            multiMapSparseArrayAdd(exportedBindings, getOriginalNodeId(node), context.factory.getDeclarationName(node as ClassDeclaration));
+                            multiMapSparseArrayAdd(
+                                exportedBindings,
+                                getOriginalNodeId(node),
+                                context.factory.getDeclarationName(node as ClassDeclaration),
+                            );
                             hasExportDefault = true;
                         }
                     }
@@ -310,7 +319,15 @@ export function collectExternalModuleInfo(context: TransformationContext, source
         externalImports.unshift(externalHelpersImportDeclaration);
     }
 
-    return { externalImports, exportSpecifiers, exportEquals, hasExportStarsToExportValues, exportedBindings, exportedNames, externalHelpersImportDeclaration };
+    return {
+        externalImports,
+        exportSpecifiers,
+        exportEquals,
+        hasExportStarsToExportValues,
+        exportedBindings,
+        exportedNames,
+        externalHelpersImportDeclaration,
+    };
 
     function addExportedNamesForExportDeclaration(node: ExportDeclaration) {
         for (const specifier of cast(node.exportClause, isNamedExports).elements) {
@@ -481,7 +498,9 @@ export function isCompoundAssignment(kind: BinaryOperator): kind is CompoundAssi
 }
 
 /** @internal */
-export function getNonAssignmentOperatorForCompoundAssignment(kind: CompoundAssignmentOperator): LogicalOperatorOrHigher | SyntaxKind.QuestionQuestionToken {
+export function getNonAssignmentOperatorForCompoundAssignment(
+    kind: CompoundAssignmentOperator,
+): LogicalOperatorOrHigher | SyntaxKind.QuestionQuestionToken {
     switch (kind) {
         case SyntaxKind.PlusEqualsToken:
             return SyntaxKind.PlusToken;
@@ -570,15 +589,29 @@ export function findSuperStatementIndexPath(statements: NodeArray<Statement>, st
  *
  * @internal
  */
-export function getProperties(node: ClassExpression | ClassDeclaration, requireInitializer: true, isStatic: boolean): readonly InitializedPropertyDeclaration[];
+export function getProperties(
+    node: ClassExpression | ClassDeclaration,
+    requireInitializer: true,
+    isStatic: boolean,
+): readonly InitializedPropertyDeclaration[];
 /** @internal */
-export function getProperties(node: ClassExpression | ClassDeclaration, requireInitializer: boolean, isStatic: boolean): readonly PropertyDeclaration[];
+export function getProperties(
+    node: ClassExpression | ClassDeclaration,
+    requireInitializer: boolean,
+    isStatic: boolean,
+): readonly PropertyDeclaration[];
 /** @internal */
-export function getProperties(node: ClassExpression | ClassDeclaration, requireInitializer: boolean, isStatic: boolean): readonly PropertyDeclaration[] {
+export function getProperties(
+    node: ClassExpression | ClassDeclaration,
+    requireInitializer: boolean,
+    isStatic: boolean,
+): readonly PropertyDeclaration[] {
     return filter(node.members, m => isInitializedOrStaticProperty(m, requireInitializer, isStatic)) as PropertyDeclaration[];
 }
 
-function isStaticPropertyDeclarationOrClassStaticBlockDeclaration(element: ClassElement): element is PropertyDeclaration | ClassStaticBlockDeclaration {
+function isStaticPropertyDeclarationOrClassStaticBlockDeclaration(
+    element: ClassElement,
+): element is PropertyDeclaration | ClassStaticBlockDeclaration {
     return isStaticPropertyDeclaration(element) || isClassStaticBlockDeclaration(element);
 }
 
@@ -696,7 +729,11 @@ export function getAllDecoratorsOfClass(node: ClassLikeDeclaration): AllDecorato
  *
  * @internal
  */
-export function getAllDecoratorsOfClassElement(member: ClassElement, parent: ClassLikeDeclaration, useLegacyDecorators: boolean): AllDecorators | undefined {
+export function getAllDecoratorsOfClassElement(
+    member: ClassElement,
+    parent: ClassLikeDeclaration,
+    useLegacyDecorators: boolean,
+): AllDecorators | undefined {
     switch (member.kind) {
         case SyntaxKind.GetAccessor:
         case SyntaxKind.SetAccessor:

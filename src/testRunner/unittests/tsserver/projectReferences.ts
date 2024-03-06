@@ -1216,7 +1216,8 @@ export function bar() {}`,
             const { tsconfigIndirect, indirect } = getIndirectProject("1", { disableReferencedProjectLoad: true });
             const { tsconfigIndirect: tsconfigIndirect2, indirect: indirect2 } = getIndirectProject("2");
             verifyDisableReferencedProjectLoad({
-                scenario: "disables looking into the child project if disableReferencedProjectLoad is set in first indirect project but not in another one",
+                scenario:
+                    "disables looking into the child project if disableReferencedProjectLoad is set in first indirect project but not in another one",
                 configRefs: ["./tsconfig-indirect1.json", "./tsconfig-indirect2.json"],
                 additionalFiles: [tsconfigIndirect, indirect, tsconfigIndirect2, indirect2],
             });

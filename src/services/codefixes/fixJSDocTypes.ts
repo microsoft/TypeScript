@@ -64,7 +64,13 @@ registerCodeFix({
 
         function fix(type: Type, fixId: string, fixAllDescription: DiagnosticMessage): CodeFixAction {
             const changes = textChanges.ChangeTracker.with(context, t => doChange(t, sourceFile, typeNode, type, checker));
-            return createCodeFixAction("jdocTypes", changes, [Diagnostics.Change_0_to_1, original, checker.typeToString(type)], fixId, fixAllDescription);
+            return createCodeFixAction(
+                "jdocTypes",
+                changes,
+                [Diagnostics.Change_0_to_1, original, checker.typeToString(type)],
+                fixId,
+                fixAllDescription,
+            );
         }
     },
     fixIds: [fixIdPlain, fixIdNullable],
@@ -75,7 +81,8 @@ registerCodeFix({
             const info = getInfo(err.file, err.start, checker);
             if (!info) return;
             const { typeNode, type } = info;
-            const fixedType = typeNode.kind === SyntaxKind.JSDocNullableType && fixId === fixIdNullable ? checker.getNullableType(type, TypeFlags.Undefined)
+            const fixedType = typeNode.kind === SyntaxKind.JSDocNullableType && fixId === fixIdNullable ?
+                checker.getNullableType(type, TypeFlags.Undefined)
                 : type;
             doChange(changes, sourceFile, typeNode, fixedType, checker);
         });

@@ -211,7 +211,12 @@ export abstract class LanguageServiceAdapterHost {
         this.vfs.mkdirpSync(ts.getDirectoryPath(newPath));
         this.vfs.renameSync(oldPath, newPath);
 
-        const updater = ts.getPathUpdater(oldPath, newPath, ts.createGetCanonicalFileName(this.useCaseSensitiveFileNames()), /*sourceMapper*/ undefined);
+        const updater = ts.getPathUpdater(
+            oldPath,
+            newPath,
+            ts.createGetCanonicalFileName(this.useCaseSensitiveFileNames()),
+            /*sourceMapper*/ undefined,
+        );
         this.scriptInfos.forEach((scriptInfo, key) => {
             const newFileName = updater(key);
             if (newFileName !== undefined) {
@@ -540,7 +545,11 @@ class SessionServerHost implements ts.server.ServerHost {
                             proxy.getSemanticDiagnostics = filename => {
                                 const prev = info.languageService.getSemanticDiagnostics(filename);
                                 const sourceFile: ts.SourceFile = info.project.getSourceFile(
-                                    ts.toPath(filename, /*basePath*/ undefined, ts.createGetCanonicalFileName(info.serverHost.useCaseSensitiveFileNames)),
+                                    ts.toPath(
+                                        filename,
+                                        /*basePath*/ undefined,
+                                        ts.createGetCanonicalFileName(info.serverHost.useCaseSensitiveFileNames),
+                                    ),
                                 )!;
                                 prev.push({
                                     category: ts.DiagnosticCategory.Warning,
@@ -569,7 +578,11 @@ class SessionServerHost implements ts.server.ServerHost {
                             proxy.getSemanticDiagnostics = filename => {
                                 const prev = info.languageService.getSemanticDiagnostics(filename);
                                 const sourceFile: ts.SourceFile = info.project.getSourceFile(
-                                    ts.toPath(filename, /*basePath*/ undefined, ts.createGetCanonicalFileName(info.serverHost.useCaseSensitiveFileNames)),
+                                    ts.toPath(
+                                        filename,
+                                        /*basePath*/ undefined,
+                                        ts.createGetCanonicalFileName(info.serverHost.useCaseSensitiveFileNames),
+                                    ),
                                 )!;
                                 prev.push({
                                     category: ts.DiagnosticCategory.Error,

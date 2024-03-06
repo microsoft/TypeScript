@@ -91,7 +91,13 @@ registerCodeFix({
                 const exportDeclaration = tryGetExportDeclaration(moduleSourceFile, /*isTypeOnly*/ true);
                 if (exportDeclaration && exportDeclaration.isTypeOnly) {
                     doChanges(changes, program, moduleSourceFile, moduleExports.typeOnlyExports, exportDeclaration);
-                    doChanges(changes, program, moduleSourceFile, moduleExports.exports, tryGetExportDeclaration(moduleSourceFile, /*isTypeOnly*/ false));
+                    doChanges(
+                        changes,
+                        program,
+                        moduleSourceFile,
+                        moduleExports.exports,
+                        tryGetExportDeclaration(moduleSourceFile, /*isTypeOnly*/ false),
+                    );
                 }
                 else {
                     doChanges(changes, program, moduleSourceFile, [...moduleExports.exports, ...moduleExports.typeOnlyExports], exportDeclaration);
@@ -221,7 +227,9 @@ function createExport(changes: textChanges.ChangeTracker, program: Program, sour
 }
 
 function createExportSpecifiers(names: ExportName[], allowTypeModifier: boolean) {
-    return factory.createNodeArray(map(names, n => factory.createExportSpecifier(allowTypeModifier && n.isTypeOnly, /*propertyName*/ undefined, n.node)));
+    return factory.createNodeArray(
+        map(names, n => factory.createExportSpecifier(allowTypeModifier && n.isTypeOnly, /*propertyName*/ undefined, n.node)),
+    );
 }
 
 function getNodeOfSymbol(symbol: Symbol) {

@@ -16,7 +16,12 @@ function createExportingModuleFile(path: string, exportPrefix: string, exportCou
     };
 }
 
-function createExportingModuleFiles(pathPrefix: string, fileCount: number, exportCount: number, getExportPrefix: (fileIndex: number) => string): File[] {
+function createExportingModuleFiles(
+    pathPrefix: string,
+    fileCount: number,
+    exportCount: number,
+    getExportPrefix: (fileIndex: number) => string,
+): File[] {
     return ts.arrayOf(fileCount, fileIndex =>
         createExportingModuleFile(
             `${pathPrefix}_${fileIndex}.ts`,
@@ -25,7 +30,12 @@ function createExportingModuleFiles(pathPrefix: string, fileCount: number, expor
         ));
 }
 
-function createNodeModulesPackage(packageName: string, fileCount: number, exportCount: number, getExportPrefix: (fileIndex: number) => string): File[] {
+function createNodeModulesPackage(
+    packageName: string,
+    fileCount: number,
+    exportCount: number,
+    getExportPrefix: (fileIndex: number) => string,
+): File[] {
     const exportingFiles = createExportingModuleFiles(`/node_modules/${packageName}/file`, fileCount, exportCount, getExportPrefix);
     return [
         {
@@ -35,7 +45,9 @@ function createNodeModulesPackage(packageName: string, fileCount: number, export
         {
             path: `/node_modules/${packageName}/index.d.ts`,
             content: exportingFiles
-                .map(f => `export * from "./${ts.removeFileExtension(ts.convertToRelativePath(f.path, `/node_modules/${packageName}/`, ts.identity))}";`)
+                .map(f =>
+                    `export * from "./${ts.removeFileExtension(ts.convertToRelativePath(f.path, `/node_modules/${packageName}/`, ts.identity))}";`
+                )
                 .join("\n") + `\nexport default function main(): void;`,
         },
         ...exportingFiles,
@@ -60,7 +72,12 @@ const packageJsonFile: File = {
 describe("unittests:: tsserver:: completionsIncomplete", () => {
     it("works", () => {
         const excessFileCount = ts.Completions.moduleSpecifierResolutionLimit + 50;
-        const exportingFiles = createExportingModuleFiles(`/lib/a`, ts.Completions.moduleSpecifierResolutionLimit + excessFileCount, 1, i => `aa_${i}_`);
+        const exportingFiles = createExportingModuleFiles(
+            `/lib/a`,
+            ts.Completions.moduleSpecifierResolutionLimit + excessFileCount,
+            1,
+            i => `aa_${i}_`,
+        );
         const { typeToTriggerCompletions, session } = setup([tsconfigFile, indexFile, ...exportingFiles]);
         openFilesForSession([indexFile], session);
 
@@ -72,7 +89,10 @@ describe("unittests:: tsserver:: completionsIncomplete", () => {
         })
             .continueTyping("a", completions => {
                 assert(completions.isIncomplete);
-                assert.lengthOf(completions.entries.filter(entry => (entry.data as any)?.moduleSpecifier), ts.Completions.moduleSpecifierResolutionLimit * 2);
+                assert.lengthOf(
+                    completions.entries.filter(entry => (entry.data as any)?.moduleSpecifier),
+                    ts.Completions.moduleSpecifierResolutionLimit * 2,
+                );
                 assert.deepEqual(completions.optionalReplacementSpan, { start: { line: 1, offset: 1 }, end: { line: 1, offset: 3 } });
             })
             .continueTyping("_", completions => {
@@ -95,7 +115,12 @@ describe("unittests:: tsserver:: completionsIncomplete", () => {
 
     it("resolves more when available from module specifier cache (2)", () => {
         const excessFileCount = 50;
-        const exportingFiles = createExportingModuleFiles(`/lib/a`, ts.Completions.moduleSpecifierResolutionLimit + excessFileCount, 1, i => `aa_${i}_`);
+        const exportingFiles = createExportingModuleFiles(
+            `/lib/a`,
+            ts.Completions.moduleSpecifierResolutionLimit + excessFileCount,
+            1,
+            i => `aa_${i}_`,
+        );
         const { typeToTriggerCompletions, session } = setup([tsconfigFile, indexFile, ...exportingFiles]);
         openFilesForSession([indexFile], session);
 
@@ -194,7 +219,11 @@ function setup(files: File[]) {
         const project = projectService.getDefaultProjectForFile(ts.server.toNormalizedPath(fileName), /*ensureProject*/ true)!;
         return type(typedCharacters, cb, /*isIncompleteContinuation*/ false);
 
-        function type(typedCharacters: string, cb: ((completions: ts.server.protocol.CompletionInfo) => void) | undefined, isIncompleteContinuation: boolean) {
+        function type(
+            typedCharacters: string,
+            cb: ((completions: ts.server.protocol.CompletionInfo) => void) | undefined,
+            isIncompleteContinuation: boolean,
+        ) {
             const file = ts.Debug.checkDefined(project.getLanguageService(/*ensureSynchronized*/ true).getProgram()?.getSourceFile(fileName));
             const { line, character } = ts.getLineAndCharacterOfPosition(file, file.text.length);
             const oneBasedEditPosition = { line: line + 1, offset: character + 1 };

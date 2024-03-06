@@ -289,7 +289,11 @@ fn5();
         it(`with ${options.file} file, when file is not present`, () => {
             const session = setup(options.type, options.openFiles, options.action, undefined, host => host.deleteFile(file(options)));
             verifyScriptInfoCollectionWith(session, options.openFiles);
-            baselineTsserverLogs("projectReferencesSourcemap", `${options.scenarioLocation}/${options.type}/dependency ${options.file} not present`, session);
+            baselineTsserverLogs(
+                "projectReferencesSourcemap",
+                `${options.scenarioLocation}/${options.type}/dependency ${options.file} not present`,
+                session,
+            );
         });
         it(`with ${options.file} file, when file is created after actions on projects`, () => {
             let fileContents: string;
@@ -301,14 +305,22 @@ fn5();
             session.host.writeFile(location, fileContents!);
             runActions(session, options.action);
             verifyScriptInfoCollectionWith(session, options.openFiles);
-            baselineTsserverLogs("projectReferencesSourcemap", `${options.scenarioLocation}/${options.type}/dependency ${options.file} created`, session);
+            baselineTsserverLogs(
+                "projectReferencesSourcemap",
+                `${options.scenarioLocation}/${options.type}/dependency ${options.file} created`,
+                session,
+            );
         });
         it(`with ${options.file} file, when file is deleted after actions on the projects`, () => {
             const session = setup(options.type, options.openFiles, options.action, 1);
             session.host.deleteFile(file(options));
             runActions(session, options.action);
             verifyScriptInfoCollectionWith(session, options.openFiles);
-            baselineTsserverLogs("projectReferencesSourcemap", `${options.scenarioLocation}/${options.type}/dependency ${options.file} deleted`, session);
+            baselineTsserverLogs(
+                "projectReferencesSourcemap",
+                `${options.scenarioLocation}/${options.type}/dependency ${options.file} deleted`,
+                session,
+            );
         });
     }
 

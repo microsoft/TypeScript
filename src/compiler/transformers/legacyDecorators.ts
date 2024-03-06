@@ -640,7 +640,10 @@ export function transformLegacyDecorators(context: TransformationContext): (x: S
         //
 
         const prefix = getClassMemberPrefix(node, member);
-        const memberName = getExpressionForPropertyName(member, /*generateNameForComputedPropertyName*/ !hasSyntacticModifier(member, ModifierFlags.Ambient));
+        const memberName = getExpressionForPropertyName(
+            member,
+            /*generateNameForComputedPropertyName*/ !hasSyntacticModifier(member, ModifierFlags.Ambient),
+        );
         const descriptor = isPropertyDeclaration(member) && !hasAccessorModifier(member)
             // We emit `void 0` here to indicate to `__decorate` that it can invoke `Object.defineProperty` directly, but that it
             // should not invoke `Object.getOwnPropertyDescriptor`.

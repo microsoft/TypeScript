@@ -43,7 +43,8 @@ export function getOrCreateEmitNode(node: Node): EmitNode {
                 return node.emitNode = { annotatedNodes: [node] } as EmitNode;
             }
 
-            const sourceFile = getSourceFileOfNode(getParseTreeNode(getSourceFileOfNode(node))) ?? Debug.fail("Could not determine parsed source file.");
+            const sourceFile = getSourceFileOfNode(getParseTreeNode(getSourceFileOfNode(node))) ??
+                Debug.fail("Could not determine parsed source file.");
             getOrCreateEmitNode(sourceFile).annotatedNodes!.push(node);
         }
 

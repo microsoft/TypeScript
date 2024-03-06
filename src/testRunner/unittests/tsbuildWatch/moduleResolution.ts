@@ -147,7 +147,10 @@ describe("unittests:: tsbuildWatch:: watchMode:: moduleResolution", () => {
                 caption: "removes those errors when a package file is changed to cjs extensions",
                 edit: sys => {
                     sys.replaceFileText(`/user/username/projects/myproject/packages/pkg2/package.json`, `"build/index.js"`, `"build/index.cjs"`);
-                    sys.renameFile(`/user/username/projects/myproject/packages/pkg2/index.ts`, `/user/username/projects/myproject/packages/pkg2/index.cts`);
+                    sys.renameFile(
+                        `/user/username/projects/myproject/packages/pkg2/index.ts`,
+                        `/user/username/projects/myproject/packages/pkg2/index.cts`,
+                    );
                 },
                 timeouts: sys => {
                     sys.runQueuedTimeoutCallbacks(); // building pkg2

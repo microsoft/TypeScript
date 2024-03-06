@@ -57,7 +57,11 @@ describe("unittests:: tsserver:: events:: LargeFileReferencedEvent with large fi
             const files = [file, libFile];
             const session = createSessionWithEventHandler(files, useLargeTsFile);
             openFilesForSession([file], session);
-            baselineTsserverLogs("events/largeFileReferenced", `when large ${getFileType(useLargeTsFile)} file is included by module resolution`, session);
+            baselineTsserverLogs(
+                "events/largeFileReferenced",
+                `when large ${getFileType(useLargeTsFile)} file is included by module resolution`,
+                session,
+            );
         });
     }
 

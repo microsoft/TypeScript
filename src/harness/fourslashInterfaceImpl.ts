@@ -75,7 +75,10 @@ export class GoTo {
 
     public eachMarker(markers: readonly string[], action: (marker: FourSlash.Marker, index: number) => void): void;
     public eachMarker(action: (marker: FourSlash.Marker, index: number) => void): void;
-    public eachMarker(a: readonly string[] | ((marker: FourSlash.Marker, index: number) => void), b?: (marker: FourSlash.Marker, index: number) => void): void {
+    public eachMarker(
+        a: readonly string[] | ((marker: FourSlash.Marker, index: number) => void),
+        b?: (marker: FourSlash.Marker, index: number) => void,
+    ): void {
         const markers = typeof a === "function" ? this.state.getMarkers() : a.map(m => this.state.getMarkerByName(m));
         this.state.goToEachMarker(markers, typeof a === "function" ? a : b!);
     }
@@ -220,7 +223,16 @@ export class VerifyNegatable {
         preferences = ts.emptyOptions,
         includeInteractiveActions?: boolean,
     ) {
-        this.state.verifyRefactorAvailable(this.negative, "implicit", name, actionName, actionDescription, kind, preferences, includeInteractiveActions);
+        this.state.verifyRefactorAvailable(
+            this.negative,
+            "implicit",
+            name,
+            actionName,
+            actionDescription,
+            kind,
+            preferences,
+            includeInteractiveActions,
+        );
     }
 
     public refactorAvailableForTriggerReason(
@@ -232,7 +244,16 @@ export class VerifyNegatable {
         preferences = ts.emptyOptions,
         includeInteractiveActions?: boolean,
     ) {
-        this.state.verifyRefactorAvailable(this.negative, triggerReason, name, actionName, actionDescription, kind, preferences, includeInteractiveActions);
+        this.state.verifyRefactorAvailable(
+            this.negative,
+            triggerReason,
+            name,
+            actionName,
+            actionDescription,
+            kind,
+            preferences,
+            includeInteractiveActions,
+        );
     }
 
     public refactorKindAvailable(kind: string, expected: string[], preferences = ts.emptyOptions) {
@@ -304,7 +325,13 @@ export class Verify extends VerifyNegatable {
         this.state.verifyIndentationAtCurrentPosition(numberOfSpaces);
     }
 
-    public indentationAtPositionIs(fileName: string, position: number, numberOfSpaces: number, indentStyle = ts.IndentStyle.Smart, baseIndentSize = 0) {
+    public indentationAtPositionIs(
+        fileName: string,
+        position: number,
+        numberOfSpaces: number,
+        indentStyle = ts.IndentStyle.Smart,
+        baseIndentSize = 0,
+    ) {
         this.state.verifyIndentationAtPosition(fileName, position, numberOfSpaces, indentStyle, baseIndentSize);
     }
 
@@ -489,7 +516,12 @@ export class Verify extends VerifyNegatable {
         this.state.verifyNoMatchingBracePosition(bracePosition);
     }
 
-    public docCommentTemplateAt(marker: string | FourSlash.Marker, expectedOffset: number, expectedText: string, options?: ts.DocCommentTemplateOptions) {
+    public docCommentTemplateAt(
+        marker: string | FourSlash.Marker,
+        expectedOffset: number,
+        expectedText: string,
+        options?: ts.DocCommentTemplateOptions,
+    ) {
         this.state.goToMarker(marker);
         this.state.verifyDocCommentTemplate(
             { newText: expectedText.replace(/\r?\n/g, ts.testFormatSettings.newLineCharacter!), caretOffset: expectedOffset },
@@ -1340,13 +1372,14 @@ export namespace Completion {
 
     export const classElementInJsKeywords = getInJsKeywords(classElementKeywords);
 
-    export const constructorParameterKeywords: readonly ExpectedCompletionEntryObject[] = ["override", "private", "protected", "public", "readonly"].map((
-        name,
-    ): ExpectedCompletionEntryObject => ({
-        name,
-        kind: "keyword",
-        sortText: SortText.GlobalsOrKeywords,
-    }));
+    export const constructorParameterKeywords: readonly ExpectedCompletionEntryObject[] = ["override", "private", "protected", "public", "readonly"]
+        .map((
+            name,
+        ): ExpectedCompletionEntryObject => ({
+            name,
+            kind: "keyword",
+            sortText: SortText.GlobalsOrKeywords,
+        }));
 
     export const functionMembers: readonly ExpectedCompletionEntryObject[] = [
         methodEntry("apply"),
@@ -1591,7 +1624,10 @@ export namespace Completion {
         sortText: SortText.GlobalsOrKeywords,
     };
     // TODO: many of these are inappropriate to always provide
-    export const globalsInsideFunction = (plus: readonly ExpectedCompletionEntry[], options?: { noLib?: boolean; }): readonly ExpectedCompletionEntry[] =>
+    export const globalsInsideFunction = (
+        plus: readonly ExpectedCompletionEntry[],
+        options?: { noLib?: boolean; },
+    ): readonly ExpectedCompletionEntry[] =>
         [
             { name: "arguments", kind: "local var" },
             ...plus,
@@ -1604,7 +1640,10 @@ export namespace Completion {
     const globalInJsKeywordsInsideFunction = getInJsKeywords(globalKeywordsInsideFunction);
 
     // TODO: many of these are inappropriate to always provide
-    export const globalsInJsInsideFunction = (plus: readonly ExpectedCompletionEntry[], options?: { noLib?: boolean; }): readonly ExpectedCompletionEntry[] =>
+    export const globalsInJsInsideFunction = (
+        plus: readonly ExpectedCompletionEntry[],
+        options?: { noLib?: boolean; },
+    ): readonly ExpectedCompletionEntry[] =>
         [
             { name: "arguments", kind: "local var" },
             globalThisEntry,
@@ -1970,7 +2009,11 @@ export type RenameLocationsOptions = readonly RenameLocationOptions[] | {
 export interface DiagnosticIgnoredInterpolations {
     template: string;
 }
-export type RenameLocationOptions = FourSlash.Range | { readonly range: FourSlash.Range; readonly prefixText?: string; readonly suffixText?: string; };
+export type RenameLocationOptions = FourSlash.Range | {
+    readonly range: FourSlash.Range;
+    readonly prefixText?: string;
+    readonly suffixText?: string;
+};
 export interface RenameOptions {
     readonly findInStrings?: boolean;
     readonly findInComments?: boolean;

@@ -608,7 +608,11 @@ export function* singleIterator<T>(value: T) {
  *
  * @internal
  */
-export function spanMap<T, K, U>(array: readonly T[], keyfn: (x: T, i: number) => K, mapfn: (chunk: T[], key: K, start: number, end: number) => U): U[];
+export function spanMap<T, K, U>(
+    array: readonly T[],
+    keyfn: (x: T, i: number) => K,
+    mapfn: (chunk: T[], key: K, start: number, end: number) => U,
+): U[];
 /** @internal */
 export function spanMap<T, K, U>(
     array: readonly T[] | undefined,
@@ -663,9 +667,15 @@ export function spanMap<T, K, U>(
 /** @internal */
 export function mapEntries<K1, V1, K2, V2>(map: ReadonlyMap<K1, V1>, f: (key: K1, value: V1) => readonly [K2, V2]): Map<K2, V2>;
 /** @internal */
-export function mapEntries<K1, V1, K2, V2>(map: ReadonlyMap<K1, V1> | undefined, f: (key: K1, value: V1) => readonly [K2, V2]): Map<K2, V2> | undefined;
+export function mapEntries<K1, V1, K2, V2>(
+    map: ReadonlyMap<K1, V1> | undefined,
+    f: (key: K1, value: V1) => readonly [K2, V2],
+): Map<K2, V2> | undefined;
 /** @internal */
-export function mapEntries<K1, V1, K2, V2>(map: ReadonlyMap<K1, V1> | undefined, f: (key: K1, value: V1) => readonly [K2, V2]): Map<K2, V2> | undefined {
+export function mapEntries<K1, V1, K2, V2>(
+    map: ReadonlyMap<K1, V1> | undefined,
+    f: (key: K1, value: V1) => readonly [K2, V2],
+): Map<K2, V2> | undefined {
     if (!map) {
         return undefined;
     }
@@ -1317,7 +1327,13 @@ export function binarySearch<T, U>(array: readonly T[], value: T, keySelector: (
  *
  * @internal
  */
-export function binarySearchKey<T, U>(array: readonly T[], key: U, keySelector: (v: T, i: number) => U, keyComparer: Comparer<U>, offset?: number): number {
+export function binarySearchKey<T, U>(
+    array: readonly T[],
+    key: U,
+    keySelector: (v: T, i: number) => U,
+    keyComparer: Comparer<U>,
+    offset?: number,
+): number {
     if (!some(array)) {
         return -1;
     }
@@ -1343,7 +1359,13 @@ export function binarySearchKey<T, U>(array: readonly T[], key: U, keySelector: 
 }
 
 /** @internal */
-export function reduceLeft<T, U>(array: readonly T[] | undefined, f: (memo: U, value: T, i: number) => U, initial: U, start?: number, count?: number): U;
+export function reduceLeft<T, U>(
+    array: readonly T[] | undefined,
+    f: (memo: U, value: T, i: number) => U,
+    initial: U,
+    start?: number,
+    count?: number,
+): U;
 /** @internal */
 export function reduceLeft<T>(array: readonly T[], f: (memo: T, value: T, i: number) => T): T | undefined;
 /** @internal */
@@ -1491,7 +1513,11 @@ export function assign<T extends object>(t: T, ...args: (T | undefined)[]) {
  *
  * @internal
  */
-export function equalOwnProperties<T>(left: MapLike<T> | undefined, right: MapLike<T> | undefined, equalityComparer: EqualityComparer<T> = equateValues) {
+export function equalOwnProperties<T>(
+    left: MapLike<T> | undefined,
+    right: MapLike<T> | undefined,
+    equalityComparer: EqualityComparer<T> = equateValues,
+) {
     if (left === right) return true;
     if (!left || !right) return false;
     for (const key in left) {
@@ -1561,7 +1587,11 @@ export function arrayToMultiMap<K, V>(values: readonly V[], makeKey: (value: V) 
 /** @internal */
 export function arrayToMultiMap<K, V, U>(values: readonly V[], makeKey: (value: V) => K, makeValue: (value: V) => U): MultiMap<K, U>;
 /** @internal */
-export function arrayToMultiMap<K, V, U>(values: readonly V[], makeKey: (value: V) => K, makeValue: (value: V) => V | U = identity): MultiMap<K, V | U> {
+export function arrayToMultiMap<K, V, U>(
+    values: readonly V[],
+    makeKey: (value: V) => K,
+    makeValue: (value: V) => V | U = identity,
+): MultiMap<K, V | U> {
     const result = createMultiMap<K, V | U>();
     for (const value of values) {
         result.add(makeKey(value), makeValue(value));
@@ -1587,7 +1617,10 @@ export function group<T, K>(
 }
 
 /** @internal */
-export function groupBy<T, U extends T>(values: readonly T[] | undefined, keySelector: (value: T) => value is U): { true?: U[]; false?: Exclude<T, U>[]; };
+export function groupBy<T, U extends T>(
+    values: readonly T[] | undefined,
+    keySelector: (value: T) => value is U,
+): { true?: U[]; false?: Exclude<T, U>[]; };
 /** @internal */
 export function groupBy<T, K extends string | number | boolean | null | undefined>(
     values: readonly T[] | undefined,
@@ -2343,7 +2376,12 @@ export function compareStringsCaseSensitiveUI(a: string, b: string) {
 }
 
 /** @internal */
-export function compareProperties<T extends object, K extends keyof T>(a: T | undefined, b: T | undefined, key: K, comparer: Comparer<T[K]>): Comparison {
+export function compareProperties<T extends object, K extends keyof T>(
+    a: T | undefined,
+    b: T | undefined,
+    key: K,
+    comparer: Comparer<T[K]>,
+): Comparison {
     return a === b ? Comparison.EqualTo :
         a === undefined ? Comparison.LessThan :
         b === undefined ? Comparison.GreaterThan :

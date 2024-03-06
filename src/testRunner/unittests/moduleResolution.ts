@@ -711,20 +711,26 @@ describe("unittests:: moduleResolution:: baseUrl augmented module resolution", (
             for (const moduleResolution of [ts.ModuleResolutionKind.Node10, ts.ModuleResolutionKind.Classic]) {
                 const options: ts.CompilerOptions = { moduleResolution, baseUrl: "/root" };
                 {
-                    baselines.push(`Resolving "folder2/file2" from ${file1.name}${hasDirectoryExists ? "" : " with host that doesnt have directoryExists"}`);
+                    baselines.push(
+                        `Resolving "folder2/file2" from ${file1.name}${hasDirectoryExists ? "" : " with host that doesnt have directoryExists"}`,
+                    );
                     const result = ts.resolveModuleName("folder2/file2", file1.name, options, host);
                     baselines.push(`Resolution:: ${jsonToReadableText(result)}`);
                     baselines.push("");
                 }
                 {
-                    baselines.push(`Resolving "./file3" from ${file2.name}${hasDirectoryExists ? "" : " with host that doesnt have directoryExists"}`);
+                    baselines.push(
+                        `Resolving "./file3" from ${file2.name}${hasDirectoryExists ? "" : " with host that doesnt have directoryExists"}`,
+                    );
                     const result = ts.resolveModuleName("./file3", file2.name, options, host);
                     baselines.push(`Resolution:: ${jsonToReadableText(result)}`);
                     baselines.push("");
                 }
                 {
                     baselines.push(
-                        `Resolving "/root/folder1/file1" from ${file2.name}${hasDirectoryExists ? "" : " with host that doesnt have directoryExists"}`,
+                        `Resolving "/root/folder1/file1" from ${file2.name}${
+                            hasDirectoryExists ? "" : " with host that doesnt have directoryExists"
+                        }`,
                     );
                     const result = ts.resolveModuleName("/root/folder1/file1", file2.name, options, host);
                     baselines.push(`Resolution:: ${jsonToReadableText(result)}`);
@@ -804,7 +810,10 @@ describe("unittests:: moduleResolution:: baseUrl augmented module resolution", (
             const file1: File = { name: "/root/folder1/file1.ts" };
             const file2: File = { name: "/root/generated/folder1/file2.ts" }; // load remapped file as module
             const file3: File = { name: "/root/generated/folder2/file3/index.d.ts" }; // load folder a module
-            const file4Typings: File = { name: "/root/generated/folder2/file4/package.json", content: jsonToReadableText({ typings: "dist/types.d.ts" }) };
+            const file4Typings: File = {
+                name: "/root/generated/folder2/file4/package.json",
+                content: jsonToReadableText({ typings: "dist/types.d.ts" }),
+            };
             const file4: File = { name: "/root/generated/folder2/file4/dist/types.d.ts" }; // load file pointed by typings
             const file5: File = { name: "/root/someanotherfolder/file5/index.d.ts" }; // load remapped module from folder
             const file6: File = { name: "/root/node_modules/file6.ts" }; // fallback to node
@@ -913,7 +922,9 @@ describe("unittests:: moduleResolution:: baseUrl augmented module resolution", (
             check("../folder1/file1_1", file3);
 
             function check(name: string, container: File) {
-                baselines.push(`Resolving "${name}" from ${container.name}${hasDirectoryExists ? "" : " with host that doesnt have directoryExists"}`);
+                baselines.push(
+                    `Resolving "${name}" from ${container.name}${hasDirectoryExists ? "" : " with host that doesnt have directoryExists"}`,
+                );
                 const result = ts.resolveModuleName(name, container.name, options, host);
                 baselines.push(`Resolution:: ${jsonToReadableText(result)}`);
                 baselines.push("");
@@ -945,7 +956,9 @@ describe("unittests:: moduleResolution:: baseUrl augmented module resolution", (
             check("folder1/file1_1", file3);
 
             function check(name: string, container: File) {
-                baselines.push(`Resolving "${name}" from ${container.name}${hasDirectoryExists ? "" : " with host that doesnt have directoryExists"}`);
+                baselines.push(
+                    `Resolving "${name}" from ${container.name}${hasDirectoryExists ? "" : " with host that doesnt have directoryExists"}`,
+                );
                 const result = ts.resolveModuleName(name, container.name, options, host);
                 baselines.push(`Resolution:: ${jsonToReadableText(result)}`);
                 baselines.push("");
@@ -1049,7 +1062,10 @@ describe("unittests:: moduleResolution:: Type reference directive resolution: ",
         {
             const f1 = { name: "/root/src/app.ts" };
             const f2 = { name: "/root/src/node_modules/@types/lib/typings/lib.d.ts" };
-            const packageFile = { name: "/root/src/node_modules/@types/lib/package.json", content: jsonToReadableText({ types: "typings/lib.d.ts" }) };
+            const packageFile = {
+                name: "/root/src/node_modules/@types/lib/package.json",
+                content: jsonToReadableText({ types: "typings/lib.d.ts" }),
+            };
             test(baselines, /*typesRoot*/ "/root/src/types", /* typeDirective */ "lib", f1, f2, packageFile);
         }
         runBaseline("type reference from primary location", baselines);
@@ -1194,8 +1210,22 @@ describe("unittests:: moduleResolution:: Type reference directive resolution: ",
         const baselines: string[] = [];
         const initialFile = { name: "/root/src/background/app.ts" };
         const targetFile = { name: "/root/src/typedefs/filesystem.d.ts" };
-        testWorker(baselines, /*hasDirectoryExists*/ true, /*typesRoot*/ undefined, /*typeDirective*/ "../typedefs/filesystem", initialFile, targetFile);
-        testWorker(baselines, /*hasDirectoryExists*/ false, /*typesRoot*/ undefined, /*typeDirective*/ "../typedefs/filesystem", initialFile, targetFile);
+        testWorker(
+            baselines,
+            /*hasDirectoryExists*/ true,
+            /*typesRoot*/ undefined,
+            /*typeDirective*/ "../typedefs/filesystem",
+            initialFile,
+            targetFile,
+        );
+        testWorker(
+            baselines,
+            /*hasDirectoryExists*/ false,
+            /*typesRoot*/ undefined,
+            /*typeDirective*/ "../typedefs/filesystem",
+            initialFile,
+            targetFile,
+        );
         runBaseline("typeReferenceDirective is relative and in a sibling folder", baselines);
     });
 });

@@ -534,7 +534,9 @@ export function createWatchProgram<T extends BuilderProgram>(
         configFileWatcher = watchFile(configFileName, scheduleProgramReload, PollingInterval.High, watchOptions, WatchType.ConfigFile);
     }
 
-    const compilerHost = createCompilerHostFromProgramHost(host, () => compilerOptions!, directoryStructureHost) as CompilerHost & ResolutionCacheHost;
+    const compilerHost = createCompilerHostFromProgramHost(host, () => compilerOptions!, directoryStructureHost) as
+        & CompilerHost
+        & ResolutionCacheHost;
     setGetSourceFileAsHashVersioned(compilerHost);
     // Members for CompilerHost
     const getNewSourceFile = compilerHost.getSourceFile;
@@ -548,7 +550,8 @@ export function createWatchProgram<T extends BuilderProgram>(
     compilerHost.toPath = toPath;
     compilerHost.getCompilationSettings = () => compilerOptions!;
     compilerHost.useSourceOfProjectReferenceRedirect = maybeBind(host, host.useSourceOfProjectReferenceRedirect);
-    compilerHost.watchDirectoryOfFailedLookupLocation = (dir, cb, flags) => watchDirectory(dir, cb, flags, watchOptions, WatchType.FailedLookupLocations);
+    compilerHost.watchDirectoryOfFailedLookupLocation = (dir, cb, flags) =>
+        watchDirectory(dir, cb, flags, watchOptions, WatchType.FailedLookupLocations);
     compilerHost.watchAffectingFileLocation = (file, cb) => watchFile(file, cb, PollingInterval.High, watchOptions, WatchType.AffectingFileLocation);
     compilerHost.watchTypeRootsDirectory = (dir, cb, flags) => watchDirectory(dir, cb, flags, watchOptions, WatchType.TypeRoots);
     compilerHost.getCachedDirectoryStructureHost = () => cachedDirectoryStructureHost;
@@ -838,7 +841,14 @@ export function createWatchProgram<T extends BuilderProgram>(
                     (hostSourceFile as FilePresentOnHost).sourceFile = sourceFile;
                     hostSourceFile.version = sourceFile.version;
                     if (!hostSourceFile.fileWatcher) {
-                        hostSourceFile.fileWatcher = watchFilePath(path, fileName, onSourceFileChange, PollingInterval.Low, watchOptions, WatchType.SourceFile);
+                        hostSourceFile.fileWatcher = watchFilePath(
+                            path,
+                            fileName,
+                            onSourceFileChange,
+                            PollingInterval.Low,
+                            watchOptions,
+                            WatchType.SourceFile,
+                        );
                     }
                 }
                 else {
@@ -931,7 +941,11 @@ export function createWatchProgram<T extends BuilderProgram>(
         }
         const pending = clearInvalidateResolutionsOfFailedLookupLocations();
         writeLog(`Scheduling invalidateFailedLookup${pending ? ", Cancelled earlier one" : ""}`);
-        timerToInvalidateFailedLookupResolutions = host.setTimeout(invalidateResolutionsOfFailedLookup, 250, "timerToInvalidateFailedLookupResolutions");
+        timerToInvalidateFailedLookupResolutions = host.setTimeout(
+            invalidateResolutionsOfFailedLookup,
+            250,
+            "timerToInvalidateFailedLookupResolutions",
+        );
     }
 
     function invalidateResolutionsOfFailedLookup() {

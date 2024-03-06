@@ -303,7 +303,11 @@ describe("unittests:: tsserver:: ConfiguredProjects", () => {
         openFilesForSession([file1], session);
         closeFilesForSession([file1], session);
         openFilesForSession([file2], session);
-        baselineTsserverLogs("configuredProjects", "should reuse same project if file is opened from the configured project that has no open files", session);
+        baselineTsserverLogs(
+            "configuredProjects",
+            "should reuse same project if file is opened from the configured project that has no open files",
+            session,
+        );
     });
 
     it("should not close configured project after closing last open file, but should be closed on next file open if its not the file from same project", () => {
@@ -381,7 +385,11 @@ describe("unittests:: tsserver:: ConfiguredProjects", () => {
 
         host.runQueuedTimeoutCallbacks();
 
-        baselineTsserverLogs("configuredProjects", "can correctly update configured project when set of root files has changed (new file on disk)", session);
+        baselineTsserverLogs(
+            "configuredProjects",
+            "can correctly update configured project when set of root files has changed (new file on disk)",
+            session,
+        );
     });
 
     it("can correctly update configured project when set of root files has changed (new file in list of files)", () => {
@@ -546,7 +554,8 @@ describe("unittests:: tsserver:: ConfiguredProjects", () => {
         };
         const host = createServerHost([f1, f2, f3, config]);
         const originalGetFileSize = host.getFileSize;
-        host.getFileSize = (filePath: string) => filePath === f2.path ? ts.server.maxProgramSizeForNonTsFiles + 1 : originalGetFileSize.call(host, filePath);
+        host.getFileSize = (filePath: string) =>
+            filePath === f2.path ? ts.server.maxProgramSizeForNonTsFiles + 1 : originalGetFileSize.call(host, filePath);
 
         const session = new TestSession(host);
         openFilesForSession([f1], session);
@@ -575,10 +584,13 @@ describe("unittests:: tsserver:: ConfiguredProjects", () => {
         };
         const host = createServerHost([f1, f2, config]);
         const originalGetFileSize = host.getFileSize;
-        host.getFileSize = (filePath: string) => filePath === f2.path ? ts.server.maxProgramSizeForNonTsFiles + 1 : originalGetFileSize.call(host, filePath);
+        host.getFileSize = (filePath: string) =>
+            filePath === f2.path ? ts.server.maxProgramSizeForNonTsFiles + 1 : originalGetFileSize.call(host, filePath);
         const session = new TestSession(host);
         openFilesForSession([f1], session);
-        session.logger.log(`Language languageServiceEnabled:: ${session.getProjectService().configuredProjects.get(config.path)!.languageServiceEnabled}`);
+        session.logger.log(
+            `Language languageServiceEnabled:: ${session.getProjectService().configuredProjects.get(config.path)!.languageServiceEnabled}`,
+        );
 
         session.executeCommandSeq({
             command: ts.server.protocol.CommandTypes.FormatFull,
@@ -822,7 +834,9 @@ foo();`,
             },
         });
         session.logger.log(
-            `Default project for file: ${fooDts}: ${session.getProjectService().tryGetDefaultProjectForFile(ts.server.toNormalizedPath(fooDts))?.projectName}`,
+            `Default project for file: ${fooDts}: ${
+                session.getProjectService().tryGetDefaultProjectForFile(ts.server.toNormalizedPath(fooDts))?.projectName
+            }`,
         );
         baselineTsserverLogs("configuredProjects", "when default configured project does not contain the file", session);
     });
@@ -862,7 +876,15 @@ foo();`,
                 content: `let b = 1;`,
             };
 
-            const host = createServerHost([alphaExtendedConfig, aConfig, aFile, bravoExtendedConfig, bConfig, bFile, ...(additionalFiles || ts.emptyArray)]);
+            const host = createServerHost([
+                alphaExtendedConfig,
+                aConfig,
+                aFile,
+                bravoExtendedConfig,
+                bConfig,
+                bFile,
+                ...(additionalFiles || ts.emptyArray),
+            ]);
             const session = new TestSession(host);
             return { host, session, aFile, bFile, aConfig, bConfig, alphaExtendedConfig, bravoExtendedConfig };
         }

@@ -623,7 +623,8 @@ export function getRangeToExtract(sourceFile: SourceFile, span: TextSpan, invoke
         Debug.assert(!positionIsSynthesized(nodeToCheck.pos), "This failure could trigger https://github.com/Microsoft/TypeScript/issues/20809 (2)");
 
         if (
-            !isStatement(nodeToCheck) && !(isExpressionNode(nodeToCheck) && isExtractableExpression(nodeToCheck)) && !isStringLiteralJsxAttribute(nodeToCheck)
+            !isStatement(nodeToCheck) && !(isExpressionNode(nodeToCheck) && isExtractableExpression(nodeToCheck)) &&
+            !isStringLiteralJsxAttribute(nodeToCheck)
         ) {
             return [createDiagnosticForNode(nodeToCheck, Messages.statementOrExpressionExpected)];
         }
@@ -778,14 +779,19 @@ export function getRangeToExtract(sourceFile: SourceFile, span: TextSpan, invoke
                         if (!contains(seenLabels, label.escapedText)) {
                             // attempts to jump to label that is not in range to be extracted
                             (errors ||= []).push(
-                                createDiagnosticForNode(node, Messages.cannotExtractRangeContainingLabeledBreakOrContinueStatementWithTargetOutsideOfTheRange),
+                                createDiagnosticForNode(
+                                    node,
+                                    Messages.cannotExtractRangeContainingLabeledBreakOrContinueStatementWithTargetOutsideOfTheRange,
+                                ),
                             );
                         }
                     }
                     else {
                         if (!(permittedJumps & (node.kind === SyntaxKind.BreakStatement ? PermittedJumps.Break : PermittedJumps.Continue))) {
                             // attempt to break or continue in a forbidden context
-                            (errors ||= []).push(createDiagnosticForNode(node, Messages.cannotExtractRangeContainingConditionalBreakOrContinueStatements));
+                            (errors ||= []).push(
+                                createDiagnosticForNode(node, Messages.cannotExtractRangeContainingConditionalBreakOrContinueStatements),
+                            );
                         }
                     }
                     break;
@@ -952,21 +958,41 @@ function getPossibleExtractions(targetRange: TargetRange, context: RefactorConte
         let functionDescription: string;
         let constantDescription: string;
         if (scopeDescription === SpecialScope.Global) {
-            functionDescription = formatStringFromArgs(getLocaleSpecificMessage(Diagnostics.Extract_to_0_in_1_scope), [functionDescriptionPart, "global"]);
-            constantDescription = formatStringFromArgs(getLocaleSpecificMessage(Diagnostics.Extract_to_0_in_1_scope), [constantDescriptionPart, "global"]);
+            functionDescription = formatStringFromArgs(getLocaleSpecificMessage(Diagnostics.Extract_to_0_in_1_scope), [
+                functionDescriptionPart,
+                "global",
+            ]);
+            constantDescription = formatStringFromArgs(getLocaleSpecificMessage(Diagnostics.Extract_to_0_in_1_scope), [
+                constantDescriptionPart,
+                "global",
+            ]);
         }
         else if (scopeDescription === SpecialScope.Module) {
-            functionDescription = formatStringFromArgs(getLocaleSpecificMessage(Diagnostics.Extract_to_0_in_1_scope), [functionDescriptionPart, "module"]);
-            constantDescription = formatStringFromArgs(getLocaleSpecificMessage(Diagnostics.Extract_to_0_in_1_scope), [constantDescriptionPart, "module"]);
+            functionDescription = formatStringFromArgs(getLocaleSpecificMessage(Diagnostics.Extract_to_0_in_1_scope), [
+                functionDescriptionPart,
+                "module",
+            ]);
+            constantDescription = formatStringFromArgs(getLocaleSpecificMessage(Diagnostics.Extract_to_0_in_1_scope), [
+                constantDescriptionPart,
+                "module",
+            ]);
         }
         else {
-            functionDescription = formatStringFromArgs(getLocaleSpecificMessage(Diagnostics.Extract_to_0_in_1), [functionDescriptionPart, scopeDescription]);
-            constantDescription = formatStringFromArgs(getLocaleSpecificMessage(Diagnostics.Extract_to_0_in_1), [constantDescriptionPart, scopeDescription]);
+            functionDescription = formatStringFromArgs(getLocaleSpecificMessage(Diagnostics.Extract_to_0_in_1), [
+                functionDescriptionPart,
+                scopeDescription,
+            ]);
+            constantDescription = formatStringFromArgs(getLocaleSpecificMessage(Diagnostics.Extract_to_0_in_1), [
+                constantDescriptionPart,
+                scopeDescription,
+            ]);
         }
 
         // Customize the phrasing for the innermost scope to increase clarity.
         if (i === 0 && !isClassLike(scope)) {
-            constantDescription = formatStringFromArgs(getLocaleSpecificMessage(Diagnostics.Extract_to_0_in_enclosing_scope), [constantDescriptionPart]);
+            constantDescription = formatStringFromArgs(getLocaleSpecificMessage(Diagnostics.Extract_to_0_in_enclosing_scope), [
+                constantDescriptionPart,
+            ]);
         }
 
         return {
@@ -1323,7 +1349,11 @@ function extractFunctionInScope(
             newNodes.push(factory.createVariableStatement(
                 /*modifiers*/ undefined,
                 factory.createVariableDeclarationList(
-                    [factory.createVariableDeclaration(returnValueProperty, /*exclamationToken*/ undefined, getTypeDeepCloneUnionUndefined(returnType))],
+                    [factory.createVariableDeclaration(
+                        returnValueProperty,
+                        /*exclamationToken*/ undefined,
+                        getTypeDeepCloneUnionUndefined(returnType),
+                    )],
                     NodeFlags.Let,
                 ),
             ));
@@ -1413,12 +1443,12 @@ function extractConstantInScope(
 
     // Make a unique name for the extracted variable
     const file = scope.getSourceFile();
-    const localNameText =
-        isPropertyAccessExpression(node) && !isClassLike(scope) && !checker.resolveName(node.name.text, node, SymbolFlags.Value, /*excludeGlobals*/ false) &&
+    const localNameText = isPropertyAccessExpression(node) && !isClassLike(scope) &&
+            !checker.resolveName(node.name.text, node, SymbolFlags.Value, /*excludeGlobals*/ false) &&
             !isPrivateIdentifier(node.name) &&
             !identifierToKeywordKind(node.name)
-            ? node.name.text
-            : getUniqueName(isClassLike(scope) ? "newProperty" : "newLocal", file);
+        ? node.name.text
+        : getUniqueName(isClassLike(scope) ? "newProperty" : "newLocal", file);
     const isJS = isInJSFile(scope);
 
     let variableType = isJS || !checker.isContextSensitive(node)
@@ -1718,7 +1748,10 @@ function transformFunctionBody(
 
     function visitor(node: Node): VisitResult<Node> {
         if (!ignoreReturns && isReturnStatement(node) && hasWritesOrVariableDeclarations) {
-            const assignments: ObjectLiteralElementLike[] = getPropertyAssignmentsForWritesAndVariableDeclarations(exposedVariableDeclarations, writes);
+            const assignments: ObjectLiteralElementLike[] = getPropertyAssignmentsForWritesAndVariableDeclarations(
+                exposedVariableDeclarations,
+                writes,
+            );
             if (node.expression) {
                 if (!returnValueProperty) {
                     returnValueProperty = "__return";

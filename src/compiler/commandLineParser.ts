@@ -296,8 +296,8 @@ export const optionsForWatch: CommandLineOption[] = [
         name: "synchronousWatchDirectory",
         type: "boolean",
         category: Diagnostics.Watch_and_Build_Modes,
-        description:
-            Diagnostics.Synchronously_call_callbacks_and_update_the_state_of_directory_watchers_on_platforms_that_don_t_support_recursive_watching_natively,
+        description: Diagnostics
+            .Synchronously_call_callbacks_and_update_the_state_of_directory_watchers_on_platforms_that_don_t_support_recursive_watching_natively,
         defaultValueDescription: false,
     },
     {
@@ -1564,8 +1564,8 @@ const commandOptionsWithoutBuild: CommandLineOption[] = [
         affectsModuleResolution: true,
         description: Diagnostics.Control_what_method_is_used_to_detect_module_format_JS_files,
         category: Diagnostics.Language_and_Environment,
-        defaultValueDescription:
-            Diagnostics.auto_Colon_Treat_files_with_imports_exports_import_meta_jsx_with_jsx_Colon_react_jsx_or_esm_format_with_module_Colon_node16_as_modules,
+        defaultValueDescription: Diagnostics
+            .auto_Colon_Treat_files_with_imports_exports_import_meta_jsx_with_jsx_Colon_react_jsx_or_esm_format_with_module_Colon_node16_as_modules,
     },
     {
         name: "ignoreDeprecations",
@@ -1581,13 +1581,17 @@ export const optionDeclarations: CommandLineOption[] = [
 ];
 
 /** @internal */
-export const semanticDiagnosticsOptionDeclarations: readonly CommandLineOption[] = optionDeclarations.filter(option => !!option.affectsSemanticDiagnostics);
+export const semanticDiagnosticsOptionDeclarations: readonly CommandLineOption[] = optionDeclarations.filter(option =>
+    !!option.affectsSemanticDiagnostics
+);
 
 /** @internal */
 export const affectsEmitOptionDeclarations: readonly CommandLineOption[] = optionDeclarations.filter(option => !!option.affectsEmit);
 
 /** @internal */
-export const affectsDeclarationPathOptionDeclarations: readonly CommandLineOption[] = optionDeclarations.filter(option => !!option.affectsDeclarationPath);
+export const affectsDeclarationPathOptionDeclarations: readonly CommandLineOption[] = optionDeclarations.filter(option =>
+    !!option.affectsDeclarationPath
+);
 
 /** @internal */
 export const moduleResolutionOptionDeclarations: readonly CommandLineOption[] = optionDeclarations.filter(option => !!option.affectsModuleResolution);
@@ -1799,7 +1803,12 @@ function createUnknownOptionError(
             unknownOptionErrorText || unknownOption,
             possibleOption.name,
         ) :
-        createDiagnosticForNodeInSourceFileOrCompilerDiagnostic(sourceFile, node, diagnostics.unknownOptionDiagnostic, unknownOptionErrorText || unknownOption);
+        createDiagnosticForNodeInSourceFileOrCompilerDiagnostic(
+            sourceFile,
+            node,
+            diagnostics.unknownOptionDiagnostic,
+            unknownOptionErrorText || unknownOption,
+        );
 }
 
 /** @internal */
@@ -1836,7 +1845,11 @@ export function parseCommandLineWorker(
                     i = parseOptionValue(args, i, diagnostics, opt, options, errors);
                 }
                 else {
-                    const watchOpt = getOptionDeclarationFromName(watchOptionsDidYouMeanDiagnostics.getOptionsNameMap, inputOptionName, /*allowShort*/ true);
+                    const watchOpt = getOptionDeclarationFromName(
+                        watchOptionsDidYouMeanDiagnostics.getOptionsNameMap,
+                        inputOptionName,
+                        /*allowShort*/ true,
+                    );
                     if (watchOpt) {
                         i = parseOptionValue(args, i, watchOptionsDidYouMeanDiagnostics, watchOpt, watchOptions || (watchOptions = {}), errors);
                     }
@@ -1914,7 +1927,9 @@ function parseOptionValue(
             }
         }
         else {
-            errors.push(createCompilerDiagnostic(Diagnostics.Option_0_can_only_be_specified_in_tsconfig_json_file_or_set_to_null_on_command_line, opt.name));
+            errors.push(
+                createCompilerDiagnostic(Diagnostics.Option_0_can_only_be_specified_in_tsconfig_json_file_or_set_to_null_on_command_line, opt.name),
+            );
             if (optValue && !startsWith(optValue, "-")) i++;
         }
     }
@@ -2142,7 +2157,8 @@ export function parseConfigFileTextToJson(fileName: string, jsonText: string): {
  */
 export function readJsonConfigFile(fileName: string, readFile: (path: string) => string | undefined): TsConfigSourceFile {
     const textOrDiagnostic = tryReadFile(fileName, readFile);
-    return isString(textOrDiagnostic) ? parseJsonText(fileName, textOrDiagnostic) : { fileName, parseDiagnostics: [textOrDiagnostic] } as TsConfigSourceFile;
+    return isString(textOrDiagnostic) ? parseJsonText(fileName, textOrDiagnostic)
+        : { fileName, parseDiagnostics: [textOrDiagnostic] } as TsConfigSourceFile;
 }
 
 /** @internal */
@@ -2409,7 +2425,9 @@ export function convertToJson(
 
             case SyntaxKind.StringLiteral:
                 if (!isDoubleQuotedString(valueExpression)) {
-                    errors.push(createDiagnosticForNodeInSourceFile(sourceFile, valueExpression, Diagnostics.String_literal_with_double_quotes_expected));
+                    errors.push(
+                        createDiagnosticForNodeInSourceFile(sourceFile, valueExpression, Diagnostics.String_literal_with_double_quotes_expected),
+                    );
                 }
                 return (valueExpression as StringLiteral).text;
 
@@ -2700,7 +2718,10 @@ function serializeOptionBaseObject(
                 }
                 else {
                     if (optionDefinition.type === "list") {
-                        result.set(name, (value as readonly (string | number)[]).map(element => getNameOfCompilerOptionValue(element, customTypeMap)!)); // TODO: GH#18217
+                        result.set(
+                            name,
+                            (value as readonly (string | number)[]).map(element => getNameOfCompilerOptionValue(element, customTypeMap)!),
+                        ); // TODO: GH#18217
                     }
                     else {
                         // There is a typeMap associated with this command-line option so use it to map value back to its name
@@ -2835,7 +2856,9 @@ export function generateTSConfig(options: CompilerOptions, fileNames: readonly s
         result.push(`{`);
         result.push(`${tab}"compilerOptions": {`);
         result.push(
-            `${tab}${tab}/* ${getLocaleSpecificMessage(Diagnostics.Visit_https_Colon_Slash_Slashaka_ms_Slashtsconfig_to_read_more_about_this_file)} */`,
+            `${tab}${tab}/* ${
+                getLocaleSpecificMessage(Diagnostics.Visit_https_Colon_Slash_Slashaka_ms_Slashtsconfig_to_read_more_about_this_file)
+            } */`,
         );
         result.push("");
         // Print out each row, aligning all the descriptions on the same column.
@@ -2880,7 +2903,11 @@ export function convertToOptionsWithAbsolutePaths(options: CompilerOptions, toAb
     return result;
 }
 
-function convertToOptionValueWithAbsolutePaths(option: CommandLineOption | undefined, value: CompilerOptionsValue, toAbsolutePath: (path: string) => string) {
+function convertToOptionValueWithAbsolutePaths(
+    option: CommandLineOption | undefined,
+    value: CompilerOptionsValue,
+    toAbsolutePath: (path: string) => string,
+) {
     if (option && !isNullOrUndefined(value)) {
         if (option.type === "list") {
             const values = value as readonly string[];
@@ -3249,7 +3276,10 @@ function parseConfig(
 
     if (resolutionStack.includes(resolvedPath)) {
         errors.push(
-            createCompilerDiagnostic(Diagnostics.Circularity_detected_while_resolving_configuration_Colon_0, [...resolutionStack, resolvedPath].join(" -> ")),
+            createCompilerDiagnostic(
+                Diagnostics.Circularity_detected_while_resolving_configuration_Colon_0,
+                [...resolutionStack, resolvedPath].join(" -> "),
+            ),
         );
         return { raw: json || convertToObject(sourceFile!, errors) };
     }
@@ -3495,7 +3525,11 @@ function parseOwnConfigOfJsonSourceFile(
             else if (!option) {
                 if (keyText === "excludes") {
                     errors.push(
-                        createDiagnosticForNodeInSourceFile(sourceFile, propertyAssignment.name, Diagnostics.Unknown_option_excludes_Did_you_mean_exclude),
+                        createDiagnosticForNodeInSourceFile(
+                            sourceFile,
+                            propertyAssignment.name,
+                            Diagnostics.Unknown_option_excludes_Did_you_mean_exclude,
+                        ),
                     );
                 }
                 if (find(commandOptionsWithoutBuild, opt => opt.name === keyText)) {
@@ -3520,7 +3554,14 @@ function getExtendsConfigPath(
         if (!host.fileExists(extendedConfigPath) && !endsWith(extendedConfigPath, Extension.Json)) {
             extendedConfigPath = `${extendedConfigPath}.json`;
             if (!host.fileExists(extendedConfigPath)) {
-                errors.push(createDiagnosticForNodeInSourceFileOrCompilerDiagnostic(sourceFile, valueExpression, Diagnostics.File_0_not_found, extendedConfig));
+                errors.push(
+                    createDiagnosticForNodeInSourceFileOrCompilerDiagnostic(
+                        sourceFile,
+                        valueExpression,
+                        Diagnostics.File_0_not_found,
+                        extendedConfig,
+                    ),
+                );
                 return undefined;
             }
         }
@@ -3542,7 +3583,9 @@ function getExtendsConfigPath(
         );
     }
     else {
-        errors.push(createDiagnosticForNodeInSourceFileOrCompilerDiagnostic(sourceFile, valueExpression, Diagnostics.File_0_not_found, extendedConfig));
+        errors.push(
+            createDiagnosticForNodeInSourceFileOrCompilerDiagnostic(sourceFile, valueExpression, Diagnostics.File_0_not_found, extendedConfig),
+        );
     }
     return undefined;
 }
@@ -3840,7 +3883,10 @@ function convertJsonOptionOfListType(
     sourceFile: TsConfigSourceFile | undefined,
 ): any[] {
     return filter(
-        map(values, (v, index) => convertJsonOption(option.element, v, basePath, errors, propertyAssignment, valueExpression?.elements[index], sourceFile)),
+        map(
+            values,
+            (v, index) => convertJsonOption(option.element, v, basePath, errors, propertyAssignment, valueExpression?.elements[index], sourceFile),
+        ),
         v => option.listPreserveFalsyValues ? true : !!v,
     );
 }
@@ -4078,7 +4124,8 @@ function specToDiagnostic(spec: CompilerOptionsValue, disallowTrailingRecursion?
     }
     else if (invalidDotDotAfterRecursiveWildcard(spec)) {
         return [
-            Diagnostics.File_specification_cannot_contain_a_parent_directory_that_appears_after_a_recursive_directory_wildcard_Asterisk_Asterisk_Colon_0,
+            Diagnostics
+                .File_specification_cannot_contain_a_parent_directory_that_appears_after_a_recursive_directory_wildcard_Asterisk_Asterisk_Colon_0,
             spec,
         ];
     }

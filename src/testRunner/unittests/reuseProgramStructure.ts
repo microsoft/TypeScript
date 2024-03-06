@@ -50,7 +50,12 @@ describe("unittests:: Reuse program structure:: General", () => {
             baselineCache(baselines, "resolvedTypeReferenceDirectiveNames", f, program.forEachResolvedTypeReferenceDirective);
             baselines.push("");
         });
-        baselineCache(baselines, "automaticTypeDirectiveResolutions", /*file*/ undefined, cb => program.getAutomaticTypeDirectiveResolutions().forEach(cb));
+        baselineCache(
+            baselines,
+            "automaticTypeDirectiveResolutions",
+            /*file*/ undefined,
+            cb => program.getAutomaticTypeDirectiveResolutions().forEach(cb),
+        );
         host ??= (program as ProgramWithSourceTexts).host;
         host.getTrace().forEach(trace => baselines.push(Utils.sanitizeTraceResolutionLogEntry(trace)));
         host.clearTrace();
@@ -287,7 +292,10 @@ describe("unittests:: Reuse program structure:: General", () => {
         let sourceFile = program1.getSourceFile("/a.ts")!;
         const baselines: string[] = [];
         baselineProgram(baselines, program1, host);
-        sourceFile = ts.updateSourceFile(sourceFile, "'use strict';" + sourceFile.text, { newLength: "'use strict';".length, span: { start: 0, length: 0 } });
+        sourceFile = ts.updateSourceFile(sourceFile, "'use strict';" + sourceFile.text, {
+            newLength: "'use strict';".length,
+            span: { start: 0, length: 0 },
+        });
         baselines.push(`parent pointers are updated: ${sourceFile.statements[2].getSourceFile() === sourceFile}`);
         const updateHost: TestCompilerHost = {
             ...host,
@@ -338,7 +346,11 @@ describe("unittests:: Reuse program structure:: General", () => {
         const file1Ts = { name: "file1.ts", text: SourceText.New("", `import * as a from "a";`, "const myX: number = a.x;") };
         const file2Ts = { name: "file2.ts", text: SourceText.New("", "", "") };
         const indexDTS = { name: "node_modules/a/index.d.ts", text: SourceText.New("", "export declare let x: number;", "") };
-        const options: ts.CompilerOptions = { target: ts.ScriptTarget.ES2015, traceResolution: true, moduleResolution: ts.ModuleResolutionKind.Node10 };
+        const options: ts.CompilerOptions = {
+            target: ts.ScriptTarget.ES2015,
+            traceResolution: true,
+            moduleResolution: ts.ModuleResolutionKind.Node10,
+        };
         const rootFiles = [file1Ts, file2Ts];
         const filesAfterNpmInstall = [file1Ts, file2Ts, indexDTS];
         const initialProgram = newProgram(rootFiles, rootFiles.map(f => f.name), options);
@@ -402,7 +414,11 @@ describe("unittests:: Reuse program structure:: General", () => {
             },
         ];
 
-        const options: ts.CompilerOptions = { target: ts.ScriptTarget.ES2015, traceResolution: true, moduleResolution: ts.ModuleResolutionKind.Classic };
+        const options: ts.CompilerOptions = {
+            target: ts.ScriptTarget.ES2015,
+            traceResolution: true,
+            moduleResolution: ts.ModuleResolutionKind.Classic,
+        };
         const program1 = newProgram(files, files.map(f => f.name), options);
         const baselines: string[] = [];
         baselineProgram(baselines, program1);
@@ -540,7 +556,10 @@ describe("unittests:: Reuse program structure:: General", () => {
             });
 
             it("Previously duplicate packages -> program structure not reused", () => {
-                const program1 = createRedirectProgram(useGetSourceFileByPath, { bVersion: "1.2.4", bText: "export = class X { private x: number; }" });
+                const program1 = createRedirectProgram(useGetSourceFileByPath, {
+                    bVersion: "1.2.4",
+                    bText: "export = class X { private x: number; }",
+                });
                 const baselines: string[] = [];
                 baselineProgram(baselines, program1);
 

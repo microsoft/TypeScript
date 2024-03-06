@@ -209,7 +209,10 @@ export namespace SmartIndenter {
         let current = precedingToken;
 
         while (current) {
-            if (positionBelongsToNode(current, position, sourceFile) && shouldIndentChildNode(options, current, previous, sourceFile, /*isNextChild*/ true)) {
+            if (
+                positionBelongsToNode(current, position, sourceFile) &&
+                shouldIndentChildNode(options, current, previous, sourceFile, /*isNextChild*/ true)
+            ) {
                 const currentStart = getStartLineAndCharacterForNode(current, sourceFile);
                 const nextTokenKind = nextTokenIsCurlyBraceOnSameLineAsCursor(precedingToken, current, lineAtPosition, sourceFile);
                 const indentationDelta = nextTokenKind !== NextTokenKind.Unknown
@@ -245,7 +248,15 @@ export namespace SmartIndenter {
 
     export function getIndentationForNode(n: Node, ignoreActualIndentationRange: TextRange, sourceFile: SourceFile, options: EditorSettings): number {
         const start = sourceFile.getLineAndCharacterOfPosition(n.getStart(sourceFile));
-        return getIndentationForNodeWorker(n, start, ignoreActualIndentationRange, /*indentationDelta*/ 0, sourceFile, /*isNextChild*/ false, options);
+        return getIndentationForNodeWorker(
+            n,
+            start,
+            ignoreActualIndentationRange,
+            /*indentationDelta*/ 0,
+            sourceFile,
+            /*isNextChild*/ false,
+            options,
+        );
     }
 
     export function getBaseIndentation(options: EditorSettings) {
@@ -385,7 +396,12 @@ export namespace SmartIndenter {
         CloseBrace,
     }
 
-    function nextTokenIsCurlyBraceOnSameLineAsCursor(precedingToken: Node, current: Node, lineAtPosition: number, sourceFile: SourceFile): NextTokenKind {
+    function nextTokenIsCurlyBraceOnSameLineAsCursor(
+        precedingToken: Node,
+        current: Node,
+        lineAtPosition: number,
+        sourceFile: SourceFile,
+    ): NextTokenKind {
         const nextToken = findNextToken(precedingToken, current, sourceFile);
         if (!nextToken) {
             return NextTokenKind.Unknown;
@@ -556,7 +572,9 @@ export namespace SmartIndenter {
             case SyntaxKind.InterfaceDeclaration:
             case SyntaxKind.TypeAliasDeclaration:
             case SyntaxKind.JSDocTemplateTag:
-                return getList((node as ClassDeclaration | ClassExpression | InterfaceDeclaration | TypeAliasDeclaration | JSDocTemplateTag).typeParameters);
+                return getList(
+                    (node as ClassDeclaration | ClassExpression | InterfaceDeclaration | TypeAliasDeclaration | JSDocTemplateTag).typeParameters,
+                );
             case SyntaxKind.NewExpression:
             case SyntaxKind.CallExpression:
                 return getList((node as CallExpression).typeArguments) || getList((node as CallExpression).arguments);
@@ -633,7 +651,11 @@ export namespace SmartIndenter {
         return Value.Unknown;
     }
 
-    function findColumnForFirstNonWhitespaceCharacterInLine(lineAndCharacter: LineAndCharacter, sourceFile: SourceFile, options: EditorSettings): number {
+    function findColumnForFirstNonWhitespaceCharacterInLine(
+        lineAndCharacter: LineAndCharacter,
+        sourceFile: SourceFile,
+        options: EditorSettings,
+    ): number {
         const lineStart = sourceFile.getPositionOfLineAndCharacter(lineAndCharacter.line, 0);
         return findFirstNonWhitespaceColumn(lineStart, lineStart + lineAndCharacter.character, sourceFile, options);
     }

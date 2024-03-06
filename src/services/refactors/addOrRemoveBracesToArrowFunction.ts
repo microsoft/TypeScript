@@ -154,10 +154,10 @@ function getConvertibleArrowFunctionAtPosition(
     else if (refactorKindBeginsWith(removeBracesAction.kind, kind) && isBlock(func.body) && func.body.statements.length === 1) {
         const firstStatement = first(func.body.statements);
         if (isReturnStatement(firstStatement)) {
-            const expression =
-                firstStatement.expression && isObjectLiteralExpression(getLeftmostExpression(firstStatement.expression, /*stopAtCallExpressions*/ false)) ?
-                    factory.createParenthesizedExpression(firstStatement.expression)
-                    : firstStatement.expression;
+            const expression = firstStatement.expression &&
+                    isObjectLiteralExpression(getLeftmostExpression(firstStatement.expression, /*stopAtCallExpressions*/ false)) ?
+                factory.createParenthesizedExpression(firstStatement.expression)
+                : firstStatement.expression;
             return { func, addBraces: false, expression, returnStatement: firstStatement };
         }
     }

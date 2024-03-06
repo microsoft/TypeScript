@@ -16,7 +16,9 @@ import {
 
 function checkDeclarationFiles(file: File, session: TestSession): void {
     openFilesForSession([file], session);
-    const project = ts.Debug.checkDefined(session.getProjectService().getDefaultProjectForFile(file.path as ts.server.NormalizedPath, /*ensureProject*/ false));
+    const project = ts.Debug.checkDefined(
+        session.getProjectService().getDefaultProjectForFile(file.path as ts.server.NormalizedPath, /*ensureProject*/ false),
+    );
     const program = project.getCurrentProgram()!;
     const output = ts.getFileEmitOutput(program, ts.Debug.checkDefined(program.getSourceFile(file.path)), /*emitOnlyDtsFiles*/ true);
     session.logger.log(`ts.getFileEmitOutput: ${file.path}: ${jsonToReadableText(output)}`);
@@ -289,7 +291,14 @@ describe("unittests:: tsserver:: with declaration file maps:: project references
         const aDts: File = { path: "/bin/a.d.ts", content: `declare function f(): void;\n//# sourceMappingURL=a.d.ts.map` };
         const aDtsMap: File = {
             path: "/bin/a.d.ts.map",
-            content: jsonToReadableText({ version: 3, file: "a.d.ts", sourceRoot: "", sources: ["../a/a.ts"], names: [], mappings: "AAAA,iBAAS,CAAC,SAAK" }),
+            content: jsonToReadableText({
+                version: 3,
+                file: "a.d.ts",
+                sourceRoot: "",
+                sources: ["../a/a.ts"],
+                names: [],
+                mappings: "AAAA,iBAAS,CAAC,SAAK",
+            }),
         };
 
         const host = createServerHost([aTs, aTsconfig, bTs, bTsconfig, aDts, aDtsMap]);

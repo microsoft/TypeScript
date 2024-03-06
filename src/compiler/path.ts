@@ -395,7 +395,11 @@ function tryGetExtensionFromPath(path: string, extension: string, stringEquality
     }
 }
 
-function getAnyExtensionFromPathWorker(path: string, extensions: string | readonly string[], stringEqualityComparer: (a: string, b: string) => boolean) {
+function getAnyExtensionFromPathWorker(
+    path: string,
+    extensions: string | readonly string[],
+    stringEqualityComparer: (a: string, b: string) => boolean,
+) {
     if (typeof extensions === "string") {
         return tryGetExtensionFromPath(path, extensions, stringEqualityComparer) || "";
     }

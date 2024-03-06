@@ -88,7 +88,9 @@ export interface TestSessionOptions extends ts.server.SessionOptions, TestTyping
     disableAutomaticTypingAcquisition?: boolean;
     useCancellationToken?: boolean | number;
 }
-export type TestSessionPartialOptionsAndHost = Partial<Omit<TestSessionOptions, "typingsInstaller" | "cancellationToken">> & Pick<TestSessionOptions, "host">;
+export type TestSessionPartialOptionsAndHost =
+    & Partial<Omit<TestSessionOptions, "typingsInstaller" | "cancellationToken">>
+    & Pick<TestSessionOptions, "host">;
 export type TestSessionConstructorOptions = TestServerHost | TestSessionPartialOptionsAndHost;
 export type TestSessionRequest<T extends ts.server.protocol.Request> = Pick<T, "command" | "arguments">;
 
@@ -208,7 +210,10 @@ export function createSessionWithCustomEventHandler(
             case ts.server.ConfigFileDiagEvent:
                 data = {
                     ...data,
-                    diagnostics: ts.map(event.data.diagnostics, diagnostic => ts.server.formatDiagnosticToProtocol(diagnostic, /*includeFileName*/ true)),
+                    diagnostics: ts.map(
+                        event.data.diagnostics,
+                        diagnostic => ts.server.formatDiagnosticToProtocol(diagnostic, /*includeFileName*/ true),
+                    ),
                 };
                 break;
             default:
@@ -293,7 +298,9 @@ export class TestServerCancellationToken implements ts.server.ServerCancellation
 
     resetRequest(requestId: number) {
         this.logger.log(
-            `TestServerCancellationToken:: resetRequest:: ${requestId} is ${requestId === this.currentId ? "as expected" : `expected to be ${this.currentId}`}`,
+            `TestServerCancellationToken:: resetRequest:: ${requestId} is ${
+                requestId === this.currentId ? "as expected" : `expected to be ${this.currentId}`
+            }`,
         );
         assert.equal(requestId, this.currentId, "unexpected request id in cancellation");
         this.currentId = undefined;
@@ -377,7 +384,12 @@ export function setCompilerOptionsForInferredProjectsRequestForSession(
     });
 }
 
-export function logDiagnostics(sessionOrService: TestSession, diagnosticsType: string, project: ts.server.Project, diagnostics: readonly ts.Diagnostic[]) {
+export function logDiagnostics(
+    sessionOrService: TestSession,
+    diagnosticsType: string,
+    project: ts.server.Project,
+    diagnostics: readonly ts.Diagnostic[],
+) {
     sessionOrService.logger.info(`${diagnosticsType}:: ${diagnostics.length}`);
     diagnostics.forEach(d => sessionOrService.logger.info(ts.formatDiagnostic(d, project)));
 }

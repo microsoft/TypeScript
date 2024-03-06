@@ -17,7 +17,11 @@ import {
  * @param transformers An array of `TransformerFactory` callbacks used to process the transformation.
  * @param compilerOptions Optional compiler options.
  */
-export function transform<T extends Node>(source: T | T[], transformers: TransformerFactory<T>[], compilerOptions?: CompilerOptions): TransformationResult<T> {
+export function transform<T extends Node>(
+    source: T | T[],
+    transformers: TransformerFactory<T>[],
+    compilerOptions?: CompilerOptions,
+): TransformationResult<T> {
     const diagnostics: DiagnosticWithLocation[] = [];
     compilerOptions = fixupCompilerOptions(compilerOptions!, diagnostics); // TODO: GH#18217
     const nodes = isArray(source) ? source : [source];

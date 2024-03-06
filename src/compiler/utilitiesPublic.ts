@@ -649,7 +649,9 @@ export function validateLocaleAndSetLanguage(
 
     if (!matchResult) {
         if (errors) {
-            errors.push(createCompilerDiagnostic(Diagnostics.Locale_must_be_of_the_form_language_or_language_territory_For_example_0_or_1, "en", "ja-jp"));
+            errors.push(
+                createCompilerDiagnostic(Diagnostics.Locale_must_be_of_the_form_language_or_language_territory_For_example_0_or_1, "en", "ja-jp"),
+            );
         }
         return;
     }
@@ -789,7 +791,8 @@ export function getParseTreeNode(node: Node | undefined, nodeTest?: (node: Node)
 
 /** Add an extra underscore to identifiers that start with two underscores to avoid issues with magic names like '__proto__' */
 export function escapeLeadingUnderscores(identifier: string): __String {
-    return (identifier.length >= 2 && identifier.charCodeAt(0) === CharacterCodes._ && identifier.charCodeAt(1) === CharacterCodes._ ? "_" + identifier
+    return (identifier.length >= 2 && identifier.charCodeAt(0) === CharacterCodes._ && identifier.charCodeAt(1) === CharacterCodes._ ?
+        "_" + identifier
         : identifier) as __String;
 }
 
@@ -948,7 +951,8 @@ export function getNonAssignedNameOfDeclaration(declaration: Declaration | Expre
 export function getNameOfDeclaration(declaration: Declaration | Expression | undefined): DeclarationName | undefined {
     if (declaration === undefined) return undefined;
     return getNonAssignedNameOfDeclaration(declaration) ||
-        (isFunctionExpression(declaration) || isArrowFunction(declaration) || isClassExpression(declaration) ? getAssignedName(declaration) : undefined);
+        (isFunctionExpression(declaration) || isArrowFunction(declaration) || isClassExpression(declaration) ? getAssignedName(declaration)
+            : undefined);
 }
 
 /** @internal */
@@ -1515,7 +1519,8 @@ export function isTypeOnlyExportDeclaration(node: Node): node is TypeOnlyExportD
         case SyntaxKind.ExportSpecifier:
             return (node as ExportSpecifier).isTypeOnly || (node as ExportSpecifier).parent.parent.isTypeOnly;
         case SyntaxKind.ExportDeclaration:
-            return (node as ExportDeclaration).isTypeOnly && !!(node as ExportDeclaration).moduleSpecifier && !(node as ExportDeclaration).exportClause;
+            return (node as ExportDeclaration).isTypeOnly && !!(node as ExportDeclaration).moduleSpecifier &&
+                !(node as ExportDeclaration).exportClause;
         case SyntaxKind.NamespaceExport:
             return (node as NamespaceExport).parent.isTypeOnly;
     }
@@ -2119,7 +2124,8 @@ export function hasScopeMarker(statements: readonly Statement[]) {
 
 /** @internal */
 export function needsScopeMarker(result: Statement) {
-    return !isAnyImportOrReExport(result) && !isExportAssignment(result) && !hasSyntacticModifier(result, ModifierFlags.Export) && !isAmbientModule(result);
+    return !isAnyImportOrReExport(result) && !isExportAssignment(result) && !hasSyntacticModifier(result, ModifierFlags.Export) &&
+        !isAmbientModule(result);
 }
 
 /** @internal */

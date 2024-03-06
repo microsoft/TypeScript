@@ -884,7 +884,8 @@ export function provideInlayHints(context: InlayHintsContext): InlayHint[] {
                 case SyntaxKind.TemplateHead:
                 case SyntaxKind.TemplateMiddle:
                 case SyntaxKind.TemplateTail: {
-                    const rawText = (node as TemplateLiteralLikeNode).rawText ?? escapeTemplateSubstitution(escapeString(node.text, CharacterCodes.backtick));
+                    const rawText = (node as TemplateLiteralLikeNode).rawText ??
+                        escapeTemplateSubstitution(escapeString(node.text, CharacterCodes.backtick));
                     switch (node.kind) {
                         case SyntaxKind.TemplateHead:
                             return "`" + rawText + "${";

@@ -168,7 +168,9 @@ export function createCachedDirectoryStructureHost(
     function createCachedFileSystemEntries(rootDir: string, rootDirPath: Path) {
         if (!host.realpath || ensureTrailingDirectorySeparator(toPath(host.realpath(rootDir))) === rootDirPath) {
             const resultFromHost: MutableFileSystemEntries = {
-                files: map(host.readDirectory!(rootDir, /*extensions*/ undefined, /*exclude*/ undefined, /*include*/ ["*.*"]), getBaseNameOfFileName) || [],
+                files:
+                    map(host.readDirectory!(rootDir, /*extensions*/ undefined, /*exclude*/ undefined, /*include*/ ["*.*"]), getBaseNameOfFileName) ||
+                    [],
                 directories: host.getDirectories!(rootDir) || [],
             };
 
@@ -270,7 +272,17 @@ export function createCachedDirectoryStructureHost(
         const rootResult = tryReadDirectory(rootDir, rootDirPath);
         let rootSymLinkResult: FileSystemEntries | undefined;
         if (rootResult !== undefined) {
-            return matchFiles(rootDir, extensions, excludes, includes, useCaseSensitiveFileNames, currentDirectory, depth, getFileSystemEntries, realpath);
+            return matchFiles(
+                rootDir,
+                extensions,
+                excludes,
+                includes,
+                useCaseSensitiveFileNames,
+                currentDirectory,
+                depth,
+                getFileSystemEntries,
+                realpath,
+            );
         }
         return host.readDirectory!(rootDir, extensions, excludes, includes, depth);
 
@@ -288,7 +300,8 @@ export function createCachedDirectoryStructureHost(
         function getFileSystemEntriesFromHost(dir: string, path: Path): FileSystemEntries {
             if (rootSymLinkResult && path === rootDirPath) return rootSymLinkResult;
             const result: FileSystemEntries = {
-                files: map(host.readDirectory!(dir, /*extensions*/ undefined, /*exclude*/ undefined, /*include*/ ["*.*"]), getBaseNameOfFileName) || emptyArray,
+                files: map(host.readDirectory!(dir, /*extensions*/ undefined, /*exclude*/ undefined, /*include*/ ["*.*"]), getBaseNameOfFileName) ||
+                    emptyArray,
                 directories: host.getDirectories!(dir) || emptyArray,
             };
             if (path === rootDirPath) rootSymLinkResult = result;
@@ -871,7 +884,8 @@ export function getWatchFactory<X, Y = undefined>(
         getDetailWatchInfo: GetDetailWatchInfo<X, Y> | undefined,
     ) {
         return `WatchInfo: ${file} ${flags} ${JSON.stringify(options)} ${
-            getDetailWatchInfo ? getDetailWatchInfo(detailInfo1, detailInfo2) : detailInfo2 === undefined ? detailInfo1 : `${detailInfo1} ${detailInfo2}`
+            getDetailWatchInfo ? getDetailWatchInfo(detailInfo1, detailInfo2)
+                : detailInfo2 === undefined ? detailInfo1 : `${detailInfo1} ${detailInfo2}`
         }`;
     }
 }

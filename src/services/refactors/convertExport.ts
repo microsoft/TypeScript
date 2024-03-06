@@ -226,7 +226,10 @@ function changeExport(
         }
     }
     else {
-        const exportKeyword = Debug.checkDefined(findModifier(exportNode, SyntaxKind.ExportKeyword), "Should find an export keyword in modifier list");
+        const exportKeyword = Debug.checkDefined(
+            findModifier(exportNode, SyntaxKind.ExportKeyword),
+            "Should find an export keyword in modifier list",
+        );
         switch (exportNode.kind) {
             case SyntaxKind.FunctionDeclaration:
             case SyntaxKind.ClassDeclaration:
@@ -313,7 +316,10 @@ function changeDefaultToNamedImport(importingSourceFile: SourceFile, ref: Identi
             }
             else if (namedBindings.kind === SyntaxKind.NamespaceImport) {
                 // `import foo, * as a from "./a";` --> `import * as a from ".a/"; import { foo } from "./a";`
-                changes.deleteRange(importingSourceFile, { pos: ref.getStart(importingSourceFile), end: namedBindings.getStart(importingSourceFile) });
+                changes.deleteRange(importingSourceFile, {
+                    pos: ref.getStart(importingSourceFile),
+                    end: namedBindings.getStart(importingSourceFile),
+                });
                 const quotePreference = isStringLiteral(clause.parent.moduleSpecifier) ?
                     quotePreferenceFromString(clause.parent.moduleSpecifier, importingSourceFile)
                     : QuotePreference.Double;

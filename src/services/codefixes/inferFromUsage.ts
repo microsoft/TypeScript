@@ -169,7 +169,13 @@ registerCodeFix({
         });
         const name = declaration && getNameOfDeclaration(declaration);
         return !name || changes.length === 0 ? undefined
-            : [createCodeFixAction(fixId, changes, [getDiagnostic(errorCode, token), getTextOfNode(name)], fixId, Diagnostics.Infer_all_types_from_usage)];
+            : [createCodeFixAction(
+                fixId,
+                changes,
+                [getDiagnostic(errorCode, token), getTextOfNode(name)],
+                fixId,
+                Diagnostics.Infer_all_types_from_usage,
+            )];
     },
     fixIds: [fixId],
     getAllCodeActions(context) {
@@ -255,7 +261,11 @@ function doChange(
                 const typeNode = getTypeNodeIfAccessible(type, parent, program, host);
                 if (typeNode) {
                     // Note that the codefix will never fire with an existing `@type` tag, so there is no need to merge tags
-                    const typeTag = factory.createJSDocTypeTag(/*tagName*/ undefined, factory.createJSDocTypeExpression(typeNode), /*comment*/ undefined);
+                    const typeTag = factory.createJSDocTypeTag(
+                        /*tagName*/ undefined,
+                        factory.createJSDocTypeExpression(typeNode),
+                        /*comment*/ undefined,
+                    );
                     changes.addJSDocTags(sourceFile, cast(parent.parent.parent, isExpressionStatement), [typeTag]);
                 }
                 importAdder.writeFixes(changes);
@@ -356,7 +366,15 @@ function annotateVariableDeclaration(
     cancellationToken: CancellationToken,
 ): void {
     if (isIdentifier(declaration.name)) {
-        annotate(changes, importAdder, sourceFile, declaration, inferTypeForVariableFromUsage(declaration.name, program, cancellationToken), program, host);
+        annotate(
+            changes,
+            importAdder,
+            sourceFile,
+            declaration,
+            inferTypeForVariableFromUsage(declaration.name, program, cancellationToken),
+            program,
+            host,
+        );
     }
 }
 
@@ -465,12 +483,20 @@ function annotate(
                 return;
             }
             const typeExpression = factory.createJSDocTypeExpression(typeNode);
-            const typeTag = isGetAccessorDeclaration(declaration) ? factory.createJSDocReturnTag(/*tagName*/ undefined, typeExpression, /*comment*/ undefined)
+            const typeTag = isGetAccessorDeclaration(declaration) ?
+                factory.createJSDocReturnTag(/*tagName*/ undefined, typeExpression, /*comment*/ undefined)
                 : factory.createJSDocTypeTag(/*tagName*/ undefined, typeExpression, /*comment*/ undefined);
             changes.addJSDocTags(sourceFile, parent, [typeTag]);
         }
         else if (
-            !tryReplaceImportTypeNodeWithAutoImport(typeNode, declaration, sourceFile, changes, importAdder, getEmitScriptTarget(program.getCompilerOptions()))
+            !tryReplaceImportTypeNodeWithAutoImport(
+                typeNode,
+                declaration,
+                sourceFile,
+                changes,
+                importAdder,
+                getEmitScriptTarget(program.getCompilerOptions()),
+            )
         ) {
             changes.tryInsertTypeAnnotation(sourceFile, declaration, typeNode);
         }
@@ -1128,8 +1154,12 @@ function inferTypeFromReferences(program: Program, references: readonly Identifi
             return [name, s];
         });
         const indexInfos = [];
-        if (stringIndices.length) indexInfos.push(checker.createIndexInfo(checker.getStringType(), checker.getUnionType(stringIndices), stringIndexReadonly));
-        if (numberIndices.length) indexInfos.push(checker.createIndexInfo(checker.getNumberType(), checker.getUnionType(numberIndices), numberIndexReadonly));
+        if (stringIndices.length) {
+            indexInfos.push(checker.createIndexInfo(checker.getStringType(), checker.getUnionType(stringIndices), stringIndexReadonly));
+        }
+        if (numberIndices.length) {
+            indexInfos.push(checker.createIndexInfo(checker.getNumberType(), checker.getUnionType(numberIndices), numberIndexReadonly));
+        }
         return checker.createAnonymousType(
             anons[0].symbol,
             members,
@@ -1187,7 +1217,8 @@ function inferTypeFromReferences(program: Program, references: readonly Identifi
         }
         const callSignatures: Signature[] = usage.calls ? [getSignatureFromCalls(usage.calls)] : [];
         const constructSignatures: Signature[] = usage.constructs ? [getSignatureFromCalls(usage.constructs)] : [];
-        const indexInfos = usage.stringIndex ? [checker.createIndexInfo(checker.getStringType(), combineFromUsage(usage.stringIndex), /*isReadonly*/ false)]
+        const indexInfos = usage.stringIndex ?
+            [checker.createIndexInfo(checker.getStringType(), combineFromUsage(usage.stringIndex), /*isReadonly*/ false)]
             : [];
         return checker.createAnonymousType(/*symbol*/ undefined, members, callSignatures, constructSignatures, indexInfos);
     }

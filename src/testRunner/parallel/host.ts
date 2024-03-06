@@ -297,7 +297,8 @@ export function start() {
                 worker.process.kill();
                 console.error(
                     `Worker exceeded ${timeout.duration}ms timeout ${
-                        worker.currentTasks && worker.currentTasks.length ? `while running test '${worker.currentTasks[0].file}'.` : `during test setup.`
+                        worker.currentTasks && worker.currentTasks.length ? `while running test '${worker.currentTasks[0].file}'.`
+                            : `during test setup.`
                     }`,
                 );
                 return process.exit(2);
@@ -406,7 +407,9 @@ export function start() {
             while (true) {
                 for (let i = 0; i < batchCount; i++) {
                     if (tasks.length <= workerCount) { // Keep a small reserve even in the suboptimally packed case
-                        console.log(`Suboptimal packing detected: no tests remain to be stolen. Reduce packing fraction from ${packfraction} to fix.`);
+                        console.log(
+                            `Suboptimal packing detected: no tests remain to be stolen. Reduce packing fraction from ${packfraction} to fix.`,
+                        );
                         break batcher;
                     }
                     if (doneBatching[i]) {

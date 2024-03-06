@@ -73,7 +73,8 @@ describe("unittests:: services:: Transpile", () => {
                 it("Correct errors for " + justName, () => {
                     Harness.Baseline.runBaseline(
                         justName.replace(/\.tsx?$/, ".errors.txt"),
-                        transpileResult.diagnostics!.length === 0 ? null : Harness.Compiler.getErrorBaseline(toBeCompiled, transpileResult.diagnostics!),
+                        transpileResult.diagnostics!.length === 0 ? null
+                            : Harness.Compiler.getErrorBaseline(toBeCompiled, transpileResult.diagnostics!),
                     );
                 });
 
@@ -182,7 +183,10 @@ var x = 0;`,
             `declare function use(a: any);\n` +
             `use(foo);`,
         {
-            options: { compilerOptions: { module: ts.ModuleKind.AMD, newLine: ts.NewLineKind.LineFeed }, renamedDependencies: { SomeName: "SomeOtherName" } },
+            options: {
+                compilerOptions: { module: ts.ModuleKind.AMD, newLine: ts.NewLineKind.LineFeed },
+                renamedDependencies: { SomeName: "SomeOtherName" },
+            },
         },
     );
 
@@ -192,7 +196,10 @@ var x = 0;`,
             `declare function use(a: any);\n` +
             `use(foo);`,
         {
-            options: { compilerOptions: { module: ts.ModuleKind.UMD, newLine: ts.NewLineKind.LineFeed }, renamedDependencies: { SomeName: "SomeOtherName" } },
+            options: {
+                compilerOptions: { module: ts.ModuleKind.UMD, newLine: ts.NewLineKind.LineFeed },
+                renamedDependencies: { SomeName: "SomeOtherName" },
+            },
         },
     );
 
@@ -235,7 +242,11 @@ var x = 0;`,
     });
 
     transpilesCorrectly("transpile .js files", "const a = 10;", {
-        options: { compilerOptions: { newLine: ts.NewLineKind.LineFeed, module: ts.ModuleKind.CommonJS }, fileName: "input.js", reportDiagnostics: true },
+        options: {
+            compilerOptions: { newLine: ts.NewLineKind.LineFeed, module: ts.ModuleKind.CommonJS },
+            fileName: "input.js",
+            reportDiagnostics: true,
+        },
     });
 
     transpilesCorrectly("Supports urls in file name", "var x", {
@@ -266,7 +277,11 @@ var x = 0;`,
     });
 
     transpilesCorrectly("Support options with types values", "const a = 10;", {
-        options: { compilerOptions: { types: ["jquery", "typescript"], module: ts.ModuleKind.CommonJS }, fileName: "input.js", reportDiagnostics: true },
+        options: {
+            compilerOptions: { types: ["jquery", "typescript"], module: ts.ModuleKind.CommonJS },
+            fileName: "input.js",
+            reportDiagnostics: true,
+        },
         testVerbatimModuleSyntax: true,
     });
 
@@ -540,7 +555,11 @@ var x = 0;`,
     });
 
     transpilesCorrectly("Supports setting 'tsbuildinfo'", "x;", {
-        options: { compilerOptions: { incremental: true, tsBuildInfoFile: "./folder/config.tsbuildinfo" }, fileName: "input.js", reportDiagnostics: true },
+        options: {
+            compilerOptions: { incremental: true, tsBuildInfoFile: "./folder/config.tsbuildinfo" },
+            fileName: "input.js",
+            reportDiagnostics: true,
+        },
         testVerbatimModuleSyntax: true,
     });
 

@@ -216,7 +216,14 @@ function pushChild(parent: NavigationBarNode, child: NavigationBarNode): void {
 
 function rootNavigationBarNode(sourceFile: SourceFile): NavigationBarNode {
     Debug.assert(!parentsStack.length);
-    const root: NavigationBarNode = { node: sourceFile, name: undefined, additionalNodes: undefined, parent: undefined, children: undefined, indent: 0 };
+    const root: NavigationBarNode = {
+        node: sourceFile,
+        name: undefined,
+        additionalNodes: undefined,
+        parent: undefined,
+        children: undefined,
+        indent: 0,
+    };
     parent = root;
     for (const statement of sourceFile.statements) {
         addChildrenRecursively(statement);

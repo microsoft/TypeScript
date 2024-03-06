@@ -92,7 +92,10 @@ export function transformECMAScriptModule(context: TransformationContext): (x: S
                     ),
                 );
             }
-            if (!isExternalModule(node) || getEmitModuleKind(compilerOptions) === ModuleKind.Preserve || some(result.statements, isExternalModuleIndicator)) {
+            if (
+                !isExternalModule(node) || getEmitModuleKind(compilerOptions) === ModuleKind.Preserve ||
+                some(result.statements, isExternalModuleIndicator)
+            ) {
                 return result;
             }
             return factory.updateSourceFile(
@@ -128,7 +131,8 @@ export function transformECMAScriptModule(context: TransformationContext): (x: S
                 // Though an error in es2020 modules, in node-flavor es2020 modules, we can helpfully transform this to a synthetic `require` call
                 // To give easy access to a synchronous `require` in node-flavor esm. We do the transform even in scenarios where we error, but `import.meta.url`
                 // is available, just because the output is reasonable for a node-like runtime.
-                return getEmitModuleKind(compilerOptions) >= ModuleKind.Node16 ? visitImportEqualsDeclaration(node as ImportEqualsDeclaration) : undefined;
+                return getEmitModuleKind(compilerOptions) >= ModuleKind.Node16 ? visitImportEqualsDeclaration(node as ImportEqualsDeclaration)
+                    : undefined;
             case SyntaxKind.ExportAssignment:
                 return visitExportAssignment(node as ExportAssignment);
             case SyntaxKind.ExportDeclaration:
@@ -155,7 +159,10 @@ export function transformECMAScriptModule(context: TransformationContext): (x: S
         }
 
         if (!importRequireStatements) {
-            const createRequireName = factory.createUniqueName("_createRequire", GeneratedIdentifierFlags.Optimistic | GeneratedIdentifierFlags.FileLevel);
+            const createRequireName = factory.createUniqueName(
+                "_createRequire",
+                GeneratedIdentifierFlags.Optimistic | GeneratedIdentifierFlags.FileLevel,
+            );
             const importStatement = factory.createImportDeclaration(
                 /*modifiers*/ undefined,
                 factory.createImportClause(
@@ -202,7 +209,10 @@ export function transformECMAScriptModule(context: TransformationContext): (x: S
      * @param node The node to visit.
      */
     function visitImportEqualsDeclaration(node: ImportEqualsDeclaration): VisitResult<Statement | undefined> {
-        Debug.assert(isExternalModuleImportEqualsDeclaration(node), "import= for internal module references should be handled in an earlier transformer.");
+        Debug.assert(
+            isExternalModuleImportEqualsDeclaration(node),
+            "import= for internal module references should be handled in an earlier transformer.",
+        );
 
         let statements: Statement[] | undefined;
         statements = append(

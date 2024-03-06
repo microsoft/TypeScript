@@ -204,7 +204,8 @@ describe("unittests:: tsc-watch:: moduleResolution", () => {
                 },
                 {
                     caption: "Modify package.json file to remove type module",
-                    edit: sys => sys.writeFile(`/user/username/projects/myproject/package.json`, jsonToReadableText({ name: "app", version: "1.0.0" })),
+                    edit: sys =>
+                        sys.writeFile(`/user/username/projects/myproject/package.json`, jsonToReadableText({ name: "app", version: "1.0.0" })),
                     timeouts: host => {
                         host.runQueuedTimeoutCallbacks(); // Failed lookup updates
                         host.runQueuedTimeoutCallbacks(); // Actual update
@@ -258,7 +259,8 @@ describe("unittests:: tsc-watch:: moduleResolution", () => {
             edits: [
                 {
                     caption: "Modify package.json file to remove type module",
-                    edit: sys => sys.writeFile(`/user/username/projects/myproject/package.json`, jsonToReadableText({ name: "app", version: "1.0.0" })),
+                    edit: sys =>
+                        sys.writeFile(`/user/username/projects/myproject/package.json`, jsonToReadableText({ name: "app", version: "1.0.0" })),
                     timeouts: host => {
                         host.runQueuedTimeoutCallbacks(); // Failed lookup updates
                         host.runQueuedTimeoutCallbacks(); // Actual update
@@ -290,7 +292,8 @@ describe("unittests:: tsc-watch:: moduleResolution", () => {
                 },
                 {
                     caption: "Modify package json file to without type module",
-                    edit: sys => sys.writeFile(`/user/username/projects/myproject/package.json`, jsonToReadableText({ name: "app", version: "1.0.0" })),
+                    edit: sys =>
+                        sys.writeFile(`/user/username/projects/myproject/package.json`, jsonToReadableText({ name: "app", version: "1.0.0" })),
                     timeouts: host => {
                         host.runQueuedTimeoutCallbacks(); // Failed lookup updates
                         host.runQueuedTimeoutCallbacks(); // Actual update
@@ -449,7 +452,10 @@ describe("unittests:: tsc-watch:: moduleResolution", () => {
             {
                 caption: "modify aFile by adding import",
                 edit: sys =>
-                    sys.appendFile(`/user/username/projects/myproject/a.ts`, `import type { ImportInterface } from "pkg" with { "resolution-mode": "import" }`),
+                    sys.appendFile(
+                        `/user/username/projects/myproject/a.ts`,
+                        `import type { ImportInterface } from "pkg" with { "resolution-mode": "import" }`,
+                    ),
                 timeouts: sys => sys.runQueuedTimeoutCallbacks(),
             },
         ],
@@ -569,7 +575,8 @@ describe("unittests:: tsc-watch:: moduleResolution", () => {
             },
             {
                 caption: "add the alternateResult in @types",
-                edit: sys => sys.writeFile("/home/src/projects/project/node_modules/@types/bar/index.d.ts", getFsContentsForAlternateResultDts("bar")),
+                edit: sys =>
+                    sys.writeFile("/home/src/projects/project/node_modules/@types/bar/index.d.ts", getFsContentsForAlternateResultDts("bar")),
                 timeouts: sys => {
                     sys.runQueuedTimeoutCallbacks();
                     sys.runQueuedTimeoutCallbacks();
@@ -649,7 +656,8 @@ describe("unittests:: tsc-watch:: moduleResolution", () => {
             },
             {
                 caption: "add the alternateResult in @types",
-                edit: sys => sys.writeFile("/home/src/projects/project/node_modules/@types/bar2/index.d.ts", getFsContentsForAlternateResultDts("bar2")),
+                edit: sys =>
+                    sys.writeFile("/home/src/projects/project/node_modules/@types/bar2/index.d.ts", getFsContentsForAlternateResultDts("bar2")),
                 timeouts: sys => {
                     sys.runQueuedTimeoutCallbacks();
                     sys.runQueuedTimeoutCallbacks();

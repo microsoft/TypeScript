@@ -80,7 +80,12 @@ export type OverloadBinders<T extends OverloadDefinitions> = { [P in OverloadKey
 export type OverloadDeprecations<T extends OverloadDefinitions> = { [P in OverloadKeys<T>]?: DeprecationOptions; };
 
 /** @internal */
-export function createOverload<T extends OverloadDefinitions>(name: string, overloads: T, binder: OverloadBinders<T>, deprecations?: OverloadDeprecations<T>) {
+export function createOverload<T extends OverloadDefinitions>(
+    name: string,
+    overloads: T,
+    binder: OverloadBinders<T>,
+    deprecations?: OverloadDeprecations<T>,
+) {
     Object.defineProperty(call, "name", { ...Object.getOwnPropertyDescriptor(call, "name"), value: name });
 
     if (deprecations) {

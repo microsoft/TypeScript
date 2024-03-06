@@ -54,7 +54,11 @@ import {
  * Gets a string literal to use as the assigned name of an anonymous class or function declaration.
  * @internal
  */
-export function getAssignedNameOfIdentifier(factory: NodeFactory, name: Identifier, expression: WrappedExpression<AnonymousFunctionDefinition>): StringLiteral {
+export function getAssignedNameOfIdentifier(
+    factory: NodeFactory,
+    name: Identifier,
+    expression: WrappedExpression<AnonymousFunctionDefinition>,
+): StringLiteral {
     const original = getOriginalNode(skipOuterExpressions(expression));
     if (
         (isClassDeclaration(original) || isFunctionDeclaration(original)) &&
@@ -299,7 +303,12 @@ function transformNamedEvaluationOfShorthandAssignmentProperty(
     const { factory } = context;
     const assignedName = assignedNameText !== undefined ? factory.createStringLiteral(assignedNameText) :
         getAssignedNameOfIdentifier(factory, node.name, node.objectAssignmentInitializer);
-    const objectAssignmentInitializer = finishTransformNamedEvaluation(context, node.objectAssignmentInitializer, assignedName, ignoreEmptyStringLiteral);
+    const objectAssignmentInitializer = finishTransformNamedEvaluation(
+        context,
+        node.objectAssignmentInitializer,
+        assignedName,
+        ignoreEmptyStringLiteral,
+    );
     return factory.updateShorthandPropertyAssignment(
         node,
         node.name,
@@ -518,7 +527,12 @@ export function transformNamedEvaluation<T extends NamedEvaluation>(
     ignoreEmptyStringLiteral?: boolean,
     assignedName?: string,
 ): Extract<NamedEvaluation, Pick<T, "kind" | keyof T & "operatorToken" | keyof T & "name">>;
-export function transformNamedEvaluation(context: TransformationContext, node: NamedEvaluation, ignoreEmptyStringLiteral?: boolean, assignedName?: string) {
+export function transformNamedEvaluation(
+    context: TransformationContext,
+    node: NamedEvaluation,
+    ignoreEmptyStringLiteral?: boolean,
+    assignedName?: string,
+) {
     switch (node.kind) {
         case SyntaxKind.PropertyAssignment:
             return transformNamedEvaluationOfPropertyAssignment(context, node, ignoreEmptyStringLiteral, assignedName);

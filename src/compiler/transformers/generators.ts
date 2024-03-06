@@ -797,7 +797,9 @@ export function transformGenerators(context: TransformationContext): (x: SourceF
 
                     target = factory.updatePropertyAccessExpression(
                         left as PropertyAccessExpression,
-                        cacheExpression(Debug.checkDefined(visitNode((left as PropertyAccessExpression).expression, visitor, isLeftHandSideExpression))),
+                        cacheExpression(
+                            Debug.checkDefined(visitNode((left as PropertyAccessExpression).expression, visitor, isLeftHandSideExpression)),
+                        ),
                         (left as PropertyAccessExpression).name,
                     );
                     break;
@@ -816,7 +818,9 @@ export function transformGenerators(context: TransformationContext): (x: SourceF
 
                     target = factory.updateElementAccessExpression(
                         left as ElementAccessExpression,
-                        cacheExpression(Debug.checkDefined(visitNode((left as ElementAccessExpression).expression, visitor, isLeftHandSideExpression))),
+                        cacheExpression(
+                            Debug.checkDefined(visitNode((left as ElementAccessExpression).expression, visitor, isLeftHandSideExpression)),
+                        ),
                         cacheExpression(Debug.checkDefined(visitNode((left as ElementAccessExpression).argumentExpression, visitor, isExpression))),
                     );
                     break;
@@ -1237,7 +1241,12 @@ export function transformGenerators(context: TransformationContext): (x: SourceF
             //  .yield resumeLabel
             //  .mark resumeLabel
             //      _b.apply(_a, _c.concat([%sent%, 2]));
-            const { target, thisArg } = factory.createCallBinding(node.expression, hoistVariableDeclaration, languageVersion, /*cacheIdentifiers*/ true);
+            const { target, thisArg } = factory.createCallBinding(
+                node.expression,
+                hoistVariableDeclaration,
+                languageVersion,
+                /*cacheIdentifiers*/ true,
+            );
             return setOriginalNode(
                 setTextRange(
                     factory.createFunctionApplyCall(
@@ -1267,7 +1276,10 @@ export function transformGenerators(context: TransformationContext): (x: SourceF
             //  .mark resumeLabel
             //      new (_b.apply(_a, _c.concat([%sent%, 2])));
 
-            const { target, thisArg } = factory.createCallBinding(factory.createPropertyAccessExpression(node.expression, "bind"), hoistVariableDeclaration);
+            const { target, thisArg } = factory.createCallBinding(
+                factory.createPropertyAccessExpression(node.expression, "bind"),
+                hoistVariableDeclaration,
+            );
             return setOriginalNode(
                 setTextRange(
                     factory.createNewExpression(

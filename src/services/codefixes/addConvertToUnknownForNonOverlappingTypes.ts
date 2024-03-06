@@ -59,5 +59,8 @@ function makeChange(changeTracker: textChanges.ChangeTracker, sourceFile: Source
 
 function getAssertion(sourceFile: SourceFile, pos: number): AsExpression | TypeAssertion | undefined {
     if (isInJSFile(sourceFile)) return undefined;
-    return findAncestor(getTokenAtPosition(sourceFile, pos), (n): n is AsExpression | TypeAssertion => isAsExpression(n) || isTypeAssertionExpression(n));
+    return findAncestor(
+        getTokenAtPosition(sourceFile, pos),
+        (n): n is AsExpression | TypeAssertion => isAsExpression(n) || isTypeAssertionExpression(n),
+    );
 }

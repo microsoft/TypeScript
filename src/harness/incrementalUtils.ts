@@ -75,7 +75,9 @@ function verifyDocumentRegistryStats(
         str.push("Expected::");
         stats?.forEach((statsByPath, key) => {
             str.push(`  Key:: ${key}`);
-            statsByPath.forEach((entry, path) => entry.forEach((refCount, kind) => str.push(`    ${path}: ${ts.Debug.formatScriptKind(kind)} ${refCount}`)));
+            statsByPath.forEach((entry, path) =>
+                entry.forEach((refCount, kind) => str.push(`    ${path}: ${ts.Debug.formatScriptKind(kind)} ${refCount}`))
+            );
         });
         return str.join("\n");
     }
@@ -134,7 +136,9 @@ function getResolutionCacheDetails<File, T extends ts.ResolutionWithFailedLookup
             baseline.push(`${indent}${cacheType}:`);
         }
         baseline.push(
-            `${indent}  ${key}: ${mode ? ts.getNameOfCompilerOptionValue(mode, ts.moduleOptionDeclaration.type) + ":" : ""}${getResolvedFileName(resolved)}`,
+            `${indent}  ${key}: ${mode ? ts.getNameOfCompilerOptionValue(mode, ts.moduleOptionDeclaration.type) + ":" : ""}${
+                getResolvedFileName(resolved)
+            }`,
         );
     }, file);
 }
@@ -275,7 +279,11 @@ export function verifyResolutionCache(
     });
     verifyMapOfResolutionSet(expected.resolvedFileToResolution, actual.resolvedFileToResolution, `resolvedFileToResolution`);
     verifyResolutionSet(expected.resolutionsWithFailedLookups, actual.resolutionsWithFailedLookups, `resolutionsWithFailedLookups`);
-    verifyResolutionSet(expected.resolutionsWithOnlyAffectingLocations, actual.resolutionsWithOnlyAffectingLocations, `resolutionsWithOnlyAffectingLocations`);
+    verifyResolutionSet(
+        expected.resolutionsWithOnlyAffectingLocations,
+        actual.resolutionsWithOnlyAffectingLocations,
+        `resolutionsWithOnlyAffectingLocations`,
+    );
     verifyDirectoryWatchesOfFailedLookups(expected.directoryWatchesOfFailedLookups, actual.directoryWatchesOfFailedLookups);
     verifyFileWatchesOfAffectingLocations(expected.fileWatchesOfAffectingLocations, actual.fileWatchesOfAffectingLocations);
 
@@ -291,7 +299,10 @@ export function verifyResolutionCache(
     });
     ts.Debug.assert(expected.resolvedFileToResolution.size === 0, `${projectName}:: resolvedFileToResolution should be released`);
     ts.Debug.assert(expected.resolutionsWithFailedLookups.size === 0, `${projectName}:: resolutionsWithFailedLookups should be released`);
-    ts.Debug.assert(expected.resolutionsWithOnlyAffectingLocations.size === 0, `${projectName}:: resolutionsWithOnlyAffectingLocations should be released`);
+    ts.Debug.assert(
+        expected.resolutionsWithOnlyAffectingLocations.size === 0,
+        `${projectName}:: resolutionsWithOnlyAffectingLocations should be released`,
+    );
     ts.Debug.assert(expected.directoryWatchesOfFailedLookups.size === 0, `${projectName}:: directoryWatchesOfFailedLookups should be released`);
     ts.Debug.assert(expected.fileWatchesOfAffectingLocations.size === 0, `${projectName}:: fileWatchesOfAffectingLocations should be released`);
 

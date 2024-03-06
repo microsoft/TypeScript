@@ -185,7 +185,10 @@ describe("unittests:: tsc-watch:: watchEnvironment:: tsc-watch with different po
 
         verifyRenamingFileInSubFolder("uses watchFile when renaming file in subfolder", Tsc_WatchDirectory.WatchFile);
 
-        verifyRenamingFileInSubFolder("uses non recursive watchDirectory when renaming file in subfolder", Tsc_WatchDirectory.NonRecursiveWatchDirectory);
+        verifyRenamingFileInSubFolder(
+            "uses non recursive watchDirectory when renaming file in subfolder",
+            Tsc_WatchDirectory.NonRecursiveWatchDirectory,
+        );
 
         verifyRenamingFileInSubFolder("uses non recursive dynamic polling when renaming file in subfolder", Tsc_WatchDirectory.DynamicPolling);
 
@@ -778,7 +781,13 @@ describe("unittests:: tsc-watch:: watchEnvironment:: tsc-watch with different po
             },
             {
                 caption: "receive another change event without modifying the file",
-                edit: sys => sys.invokeFsWatches("/user/username/projects/project/main.ts", "change", /*modifiedTime*/ undefined, /*useTildeSuffix*/ undefined),
+                edit: sys =>
+                    sys.invokeFsWatches(
+                        "/user/username/projects/project/main.ts",
+                        "change",
+                        /*modifiedTime*/ undefined,
+                        /*useTildeSuffix*/ undefined,
+                    ),
                 timeouts: sys => sys.runQueuedTimeoutCallbacks(),
             },
             {
@@ -788,7 +797,13 @@ describe("unittests:: tsc-watch:: watchEnvironment:: tsc-watch with different po
             },
             {
                 caption: "receive another change event without modifying the file",
-                edit: sys => sys.invokeFsWatches("/user/username/projects/project/main.ts", "change", /*modifiedTime*/ undefined, /*useTildeSuffix*/ undefined),
+                edit: sys =>
+                    sys.invokeFsWatches(
+                        "/user/username/projects/project/main.ts",
+                        "change",
+                        /*modifiedTime*/ undefined,
+                        /*useTildeSuffix*/ undefined,
+                    ),
                 timeouts: sys => sys.runQueuedTimeoutCallbacks(),
             },
         ],

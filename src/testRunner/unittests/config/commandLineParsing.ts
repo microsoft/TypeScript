@@ -57,7 +57,13 @@ describe("unittests:: config:: commandLineParsing:: parseCommandLine", () => {
     // --lib es5, es7 0.ts
     assertParseResult("Parse --lib option with trailing white-space", ["--lib", "es5, ", "es7", "0.ts"]);
     // --lib es5,es2015.symbol.wellknown --target es5 0.ts
-    assertParseResult("Parse multiple compiler flags with input files at the end", ["--lib", "es5,es2015.symbol.wellknown", "--target", "es5", "0.ts"]);
+    assertParseResult("Parse multiple compiler flags with input files at the end", [
+        "--lib",
+        "es5,es2015.symbol.wellknown",
+        "--target",
+        "es5",
+        "0.ts",
+    ]);
     // --module commonjs --target es5 0.ts --lib es5,es2015.symbol.wellknown
     assertParseResult("Parse multiple compiler flags with input files in the middle", [
         "--module",

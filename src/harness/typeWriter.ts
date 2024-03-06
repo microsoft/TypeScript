@@ -180,7 +180,9 @@ export class TypeWriterWalker {
                 const declLineAndCharacter = declSourceFile.getLineAndCharacterOfPosition(declaration.pos);
                 const fileName = ts.getBaseFileName(declSourceFile.fileName);
                 const isLibFile = /lib(.*)\.d\.ts/i.test(fileName);
-                const declText = `Decl(${fileName}, ${isLibFile ? "--" : declLineAndCharacter.line}, ${isLibFile ? "--" : declLineAndCharacter.character})`;
+                const declText = `Decl(${fileName}, ${isLibFile ? "--" : declLineAndCharacter.line}, ${
+                    isLibFile ? "--" : declLineAndCharacter.character
+                })`;
                 symbolString += declText;
                 (declaration as any).__symbolTestOutputCache = declText;
             }

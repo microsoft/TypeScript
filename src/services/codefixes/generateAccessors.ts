@@ -348,7 +348,8 @@ function insertAccessor(
     declaration: AcceptedDeclaration,
     container: ContainerDeclaration,
 ) {
-    isParameterPropertyDeclaration(declaration, declaration.parent) ? changeTracker.insertMemberAtStart(file, container as ClassLikeDeclaration, accessor) :
+    isParameterPropertyDeclaration(declaration, declaration.parent) ?
+        changeTracker.insertMemberAtStart(file, container as ClassLikeDeclaration, accessor) :
         isPropertyAssignment(declaration) ? changeTracker.insertNodeAfterComma(file, declaration, accessor) :
         changeTracker.insertNodeAfter(file, declaration, accessor);
 }
@@ -371,7 +372,10 @@ function updateReadonlyPropertyInitializerStatementConstructor(
         ) {
             changeTracker.replaceNode(file, node.argumentExpression, factory.createStringLiteral(fieldName));
         }
-        if (isPropertyAccessExpression(node) && node.expression.kind === SyntaxKind.ThisKeyword && node.name.text === originalName && isWriteAccess(node)) {
+        if (
+            isPropertyAccessExpression(node) && node.expression.kind === SyntaxKind.ThisKeyword && node.name.text === originalName &&
+            isWriteAccess(node)
+        ) {
             changeTracker.replaceNode(file, node.name, factory.createIdentifier(fieldName));
         }
         if (!isFunctionLike(node) && !isClassLike(node)) {

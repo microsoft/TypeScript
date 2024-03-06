@@ -64,7 +64,16 @@ export function getNavigateToItems(
         }
 
         sourceFile.getNamedDeclarations().forEach((declarations, name) => {
-            getItemsFromNamedDeclaration(patternMatcher, name, declarations, checker, sourceFile.fileName, !!excludeLibFiles, singleCurrentFile, rawItems);
+            getItemsFromNamedDeclaration(
+                patternMatcher,
+                name,
+                declarations,
+                checker,
+                sourceFile.fileName,
+                !!excludeLibFiles,
+                singleCurrentFile,
+                rawItems,
+            );
         });
     }
 

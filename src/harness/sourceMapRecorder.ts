@@ -90,7 +90,8 @@ namespace SourceMapSpanWriter {
     function getSourceMapSpanString(mapEntry: ts.Mapping, getAbsentNameIndex?: boolean) {
         let mapString = "Emitted(" + (mapEntry.generatedLine + 1) + ", " + (mapEntry.generatedCharacter + 1) + ")";
         if (ts.isSourceMapping(mapEntry)) {
-            mapString += " Source(" + (mapEntry.sourceLine + 1) + ", " + (mapEntry.sourceCharacter + 1) + ") + SourceIndex(" + mapEntry.sourceIndex + ")";
+            mapString += " Source(" + (mapEntry.sourceLine + 1) + ", " + (mapEntry.sourceCharacter + 1) + ") + SourceIndex(" + mapEntry.sourceIndex +
+                ")";
             if (mapEntry.nameIndex! >= 0 && mapEntry.nameIndex! < sourceMapNames!.length) {
                 mapString += " name (" + sourceMapNames![mapEntry.nameIndex!] + ")";
             }
@@ -116,7 +117,8 @@ namespace SourceMapSpanWriter {
                 decodeErrors = ["!!^^ !!^^ The decoded span from sourcemap's mapping entry does not match what was encoded for this span:"];
             }
             decodeErrors.push(
-                "!!^^ !!^^ Decoded span from sourcemap's mappings entry: " + getSourceMapSpanString(decodeResult.sourceMapSpan, /*getAbsentNameIndex*/ true) +
+                "!!^^ !!^^ Decoded span from sourcemap's mappings entry: " +
+                    getSourceMapSpanString(decodeResult.sourceMapSpan, /*getAbsentNameIndex*/ true) +
                     " Span encoded by the emitter:" +
                     getSourceMapSpanString(sourceMapSpan, /*getAbsentNameIndex*/ true),
             );
@@ -280,7 +282,12 @@ namespace SourceMapSpanWriter {
             const jsFileText = getTextOfLine(currentJsLine + 1, jsLineMap, jsFile.text);
             if (prevEmittedCol < jsFileText.length - 1) {
                 // There is remaining text on this line that will be part of next source span so write marker that continues
-                writeSourceMapMarker(/*currentSpan*/ undefined!, spansOnSingleLine.length, /*endColumn*/ jsFileText.length - 1, /*endContinues*/ true); // TODO: GH#18217
+                writeSourceMapMarker(
+                    /*currentSpan*/ undefined!,
+                    spansOnSingleLine.length,
+                    /*endColumn*/ jsFileText.length - 1,
+                    /*endContinues*/ true,
+                ); // TODO: GH#18217
             }
 
             // Emit Source text

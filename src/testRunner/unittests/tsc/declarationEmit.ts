@@ -20,7 +20,11 @@ describe("unittests:: tsc:: declarationEmit::", () => {
         changeCaseFileTestPath: (path: string) => boolean;
     }
 
-    function changeCaseFile(file: FileOrFolderOrSymLink, testPath: (path: string) => boolean, replacePath: (path: string) => string): FileOrFolderOrSymLink {
+    function changeCaseFile(
+        file: FileOrFolderOrSymLink,
+        testPath: (path: string) => boolean,
+        replacePath: (path: string) => string,
+    ): FileOrFolderOrSymLink {
         return !isSymLink(file) || !testPath(file.symLink) ?
             testPath(file.path) ? { ...file, path: replacePath(file.path) } : file :
             { path: testPath(file.path) ? replacePath(file.path) : file.path, symLink: replacePath(file.symLink) };
@@ -130,7 +134,10 @@ describe("unittests:: tsc:: declarationEmit::", () => {
                 { path: `/user/username/projects/myproject/plugin-one/action.ts`, content: pluginOneAction() },
                 { path: `/user/username/projects/myproject/plugin-one/node_modules/typescript-fsa/package.json`, content: fsaPackageJson() },
                 { path: `/user/username/projects/myproject/plugin-one/node_modules/typescript-fsa/index.d.ts`, content: fsaIndex() },
-                { path: `/user/username/projects/myproject/plugin-one/node_modules/plugin-two`, symLink: `/user/username/projects/myproject/plugin-two` },
+                {
+                    path: `/user/username/projects/myproject/plugin-one/node_modules/plugin-two`,
+                    symLink: `/user/username/projects/myproject/plugin-two`,
+                },
                 libFile,
             ],
             changeCaseFileTestPath: str => str.includes("/plugin-two"),

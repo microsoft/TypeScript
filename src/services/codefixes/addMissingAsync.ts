@@ -65,7 +65,9 @@ registerCodeFix({
         const fixedDeclarations = new Set<number>();
         return codeFixAll(context, errorCodes, (t, diagnostic) => {
             const span = diagnostic.relatedInformation &&
-                find(diagnostic.relatedInformation, r => r.code === Diagnostics.Did_you_mean_to_mark_this_function_as_async.code) as TextSpan | undefined;
+                find(diagnostic.relatedInformation, r => r.code === Diagnostics.Did_you_mean_to_mark_this_function_as_async.code) as
+                    | TextSpan
+                    | undefined;
             const decl = getFixableErrorSpanDeclaration(sourceFile, span);
             if (!decl) {
                 return;
@@ -84,10 +86,21 @@ function getFix(
     fixedDeclarations?: Set<number>,
 ) {
     const changes = trackChanges(t => makeChange(t, context.sourceFile, decl, fixedDeclarations));
-    return createCodeFixAction(fixId, changes, Diagnostics.Add_async_modifier_to_containing_function, fixId, Diagnostics.Add_all_missing_async_modifiers);
+    return createCodeFixAction(
+        fixId,
+        changes,
+        Diagnostics.Add_async_modifier_to_containing_function,
+        fixId,
+        Diagnostics.Add_all_missing_async_modifiers,
+    );
 }
 
-function makeChange(changeTracker: textChanges.ChangeTracker, sourceFile: SourceFile, insertionSite: FixableDeclaration, fixedDeclarations?: Set<number>) {
+function makeChange(
+    changeTracker: textChanges.ChangeTracker,
+    sourceFile: SourceFile,
+    insertionSite: FixableDeclaration,
+    fixedDeclarations?: Set<number>,
+) {
     if (fixedDeclarations) {
         if (fixedDeclarations.has(getNodeId(insertionSite))) {
             return;

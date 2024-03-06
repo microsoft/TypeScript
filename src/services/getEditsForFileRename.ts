@@ -65,7 +65,15 @@ export function getEditsForFileRename(
     const oldToNew = getPathUpdater(oldFileOrDirPath, newFileOrDirPath, getCanonicalFileName, sourceMapper);
     const newToOld = getPathUpdater(newFileOrDirPath, oldFileOrDirPath, getCanonicalFileName, sourceMapper);
     return textChanges.ChangeTracker.with({ host, formatContext, preferences }, changeTracker => {
-        updateTsconfigFiles(program, changeTracker, oldToNew, oldFileOrDirPath, newFileOrDirPath, host.getCurrentDirectory(), useCaseSensitiveFileNames);
+        updateTsconfigFiles(
+            program,
+            changeTracker,
+            oldToNew,
+            oldFileOrDirPath,
+            newFileOrDirPath,
+            host.getCurrentDirectory(),
+            useCaseSensitiveFileNames,
+        );
         updateImports(program, changeTracker, oldToNew, newToOld, host, getCanonicalFileName);
     });
 }
@@ -137,7 +145,11 @@ function updateTsconfigFiles(
                     getRegexFromPattern(Debug.checkDefined(matchers.includeFilePattern), useCaseSensitiveFileNames).test(oldFileOrDirPath) &&
                     !getRegexFromPattern(Debug.checkDefined(matchers.includeFilePattern), useCaseSensitiveFileNames).test(newFileOrDirPath)
                 ) {
-                    changeTracker.insertNodeAfter(configFile, last(property.initializer.elements), factory.createStringLiteral(relativePath(newFileOrDirPath)));
+                    changeTracker.insertNodeAfter(
+                        configFile,
+                        last(property.initializer.elements),
+                        factory.createStringLiteral(relativePath(newFileOrDirPath)),
+                    );
                 }
                 return;
             }
@@ -330,7 +342,9 @@ function updateImportsWorker(
 ) {
     for (const ref of sourceFile.referencedFiles || emptyArray) { // TODO: GH#26162
         const updated = updateRef(ref.fileName);
-        if (updated !== undefined && updated !== sourceFile.text.slice(ref.pos, ref.end)) changeTracker.replaceRangeWithText(sourceFile, ref, updated);
+        if (updated !== undefined && updated !== sourceFile.text.slice(ref.pos, ref.end)) {
+            changeTracker.replaceRangeWithText(sourceFile, ref, updated);
+        }
     }
 
     for (const importStringLiteral of sourceFile.imports) {

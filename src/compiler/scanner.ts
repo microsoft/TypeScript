@@ -741,7 +741,8 @@ function scanConflictMarkerTrivia(text: string, pos: number, error?: (diag: Diag
         while (pos < len) {
             const currentChar = text.charCodeAt(pos);
             if (
-                (currentChar === CharacterCodes.equals || currentChar === CharacterCodes.greaterThan) && currentChar !== ch && isConflictMarkerTrivia(text, pos)
+                (currentChar === CharacterCodes.equals || currentChar === CharacterCodes.greaterThan) && currentChar !== ch &&
+                isConflictMarkerTrivia(text, pos)
             ) {
                 break;
             }
@@ -1541,7 +1542,12 @@ export function createScanner(
                 tokenFlags |= TokenFlags.ContainsInvalidEscape;
                 if (shouldEmitInvalidEscapeError) {
                     const code = parseInt(text.substring(start + 1, pos), 8);
-                    error(Diagnostics.Octal_escape_sequences_are_not_allowed_Use_the_syntax_0, start, pos - start, "\\x" + code.toString(16).padStart(2, "0"));
+                    error(
+                        Diagnostics.Octal_escape_sequences_are_not_allowed_Use_the_syntax_0,
+                        start,
+                        pos - start,
+                        "\\x" + code.toString(16).padStart(2, "0"),
+                    );
                     return String.fromCharCode(code);
                 }
                 return text.substring(start, pos);

@@ -382,7 +382,11 @@ declare module '@custom/plugin' {
             },
         });
         verifyGetErrRequest({ session, files: [aFile] });
-        baselineTsserverLogs("projectErrors", `correct errors when resolution resolves to file that has same ambient module and is also module`, session);
+        baselineTsserverLogs(
+            "projectErrors",
+            `correct errors when resolution resolves to file that has same ambient module and is also module`,
+            session,
+        );
     });
 
     describe("when semantic error returns includes global error", () => {
@@ -792,7 +796,10 @@ describe("unittests:: tsserver:: projectErrors:: with npm install when", () => {
 
         filesAndFoldersToAdd = [
             { path: `/user/username/projects/myproject/node_modules/.staging/@angular/platform-browser-dynamic-5efaaa1a` },
-            { path: `/user/username/projects/myproject/node_modules/.staging/@angular/cli-c1e44b05/models/analytics.d.ts`, content: `export const x = 10;` },
+            {
+                path: `/user/username/projects/myproject/node_modules/.staging/@angular/cli-c1e44b05/models/analytics.d.ts`,
+                content: `export const x = 10;`,
+            },
             { path: `/user/username/projects/myproject/node_modules/.staging/@angular/core-0963aebf/index.d.ts`, content: `export const y = 10;` },
         ];
         // Since we added/removed in .staging no timeout

@@ -612,7 +612,10 @@ export function spanInSourceFileAtLocation(sourceFile: SourceFile, position: num
 
         function spanInBindingPattern(bindingPattern: BindingPattern): TextSpan | undefined {
             // Set breakpoint in first binding element
-            const firstBindingElement = forEach(bindingPattern.elements, element => element.kind !== SyntaxKind.OmittedExpression ? element : undefined);
+            const firstBindingElement = forEach(
+                bindingPattern.elements,
+                element => element.kind !== SyntaxKind.OmittedExpression ? element : undefined,
+            );
 
             if (firstBindingElement) {
                 return spanInNode(firstBindingElement);
@@ -629,7 +632,8 @@ export function spanInSourceFileAtLocation(sourceFile: SourceFile, position: num
 
         function spanInArrayLiteralOrObjectLiteralDestructuringPattern(node: DestructuringPattern): TextSpan | undefined {
             Debug.assert(node.kind !== SyntaxKind.ArrayBindingPattern && node.kind !== SyntaxKind.ObjectBindingPattern);
-            const elements: NodeArray<Expression | ObjectLiteralElement> = node.kind === SyntaxKind.ArrayLiteralExpression ? node.elements : node.properties;
+            const elements: NodeArray<Expression | ObjectLiteralElement> = node.kind === SyntaxKind.ArrayLiteralExpression ? node.elements
+                : node.properties;
 
             const firstBindingElement = forEach(elements, element => element.kind !== SyntaxKind.OmittedExpression ? element : undefined);
 

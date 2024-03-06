@@ -26,7 +26,13 @@ describe("unittests:: customTransforms", () => {
             };
 
             const program = ts.createProgram(ts.arrayFrom(fileMap.keys()), { newLine: ts.NewLineKind.LineFeed, ...options }, host);
-            program.emit(/*targetSourceFile*/ undefined, host.writeFile, /*cancellationToken*/ undefined, /*emitOnlyDtsFiles*/ false, customTransformers);
+            program.emit(
+                /*targetSourceFile*/ undefined,
+                host.writeFile,
+                /*cancellationToken*/ undefined,
+                /*emitOnlyDtsFiles*/ false,
+                customTransformers,
+            );
             let content = "";
             for (const [file, text] of outputs.entries()) {
                 if (content) content += "\n\n";

@@ -481,7 +481,10 @@ function getStringLiteralCompletionEntries(
             //      import x = require("/*completion position*/");
             //      var y = require("/*completion position*/");
             //      export * from "/*completion position*/";
-            return { kind: StringLiteralCompletionKind.Paths, paths: getStringLiteralCompletionsFromModuleNames(sourceFile, node, program, host, preferences) };
+            return {
+                kind: StringLiteralCompletionKind.Paths,
+                paths: getStringLiteralCompletionsFromModuleNames(sourceFile, node, program, host, preferences),
+            };
         case SyntaxKind.CaseClause:
             const tracker = newCaseClauseTracker(typeChecker, (parent as CaseClause).parent.clauses);
             const contextualTypes = fromContextualType();
@@ -567,7 +570,10 @@ function walkUpParentheses(node: Node) {
 }
 
 function getAlreadyUsedTypesInStringLiteralUnion(union: UnionTypeNode, current: LiteralTypeNode): readonly string[] {
-    return mapDefined(union.types, type => type !== current && isLiteralTypeNode(type) && isStringLiteral(type.literal) ? type.literal.text : undefined);
+    return mapDefined(
+        union.types,
+        type => type !== current && isLiteralTypeNode(type) && isStringLiteral(type.literal) ? type.literal.text : undefined,
+    );
 }
 
 function getStringLiteralCompletionsFromSignature(
@@ -598,7 +604,10 @@ function getStringLiteralCompletionsFromSignature(
 function stringLiteralCompletionsFromProperties(type: Type | undefined): StringLiteralCompletionsFromProperties | undefined {
     return type && {
         kind: StringLiteralCompletionKind.Properties,
-        symbols: filter(type.getApparentProperties(), prop => !(prop.valueDeclaration && isPrivateIdentifierClassElementDeclaration(prop.valueDeclaration))),
+        symbols: filter(
+            type.getApparentProperties(),
+            prop => !(prop.valueDeclaration && isPrivateIdentifierClassElementDeclaration(prop.valueDeclaration)),
+        ),
         hasIndexSignature: hasIndexSignature(type),
     };
 }
@@ -687,7 +696,8 @@ function getStringLiteralCompletionsFromModuleNamesWorker(
     const typeChecker = program.getTypeChecker();
     const extensionOptions = getExtensionOptions(compilerOptions, ReferenceKind.ModuleSpecifier, sourceFile, typeChecker, preferences, mode);
 
-    return isPathRelativeToScript(literalValue) || !compilerOptions.baseUrl && !compilerOptions.paths && (isRootedDiskPath(literalValue) || isUrl(literalValue))
+    return isPathRelativeToScript(literalValue) ||
+            !compilerOptions.baseUrl && !compilerOptions.paths && (isRootedDiskPath(literalValue) || isUrl(literalValue))
         ? getCompletionEntriesForRelativeModules(literalValue, scriptDirectory, compilerOptions, host, scriptPath, extensionOptions)
         : getCompletionEntriesForNonRelativeModules(literalValue, scriptDirectory, mode, compilerOptions, host, extensionOptions, typeChecker);
 }
@@ -737,7 +747,14 @@ function getCompletionEntriesForRelativeModules(
     }
     else {
         return arrayFrom(
-            getCompletionEntriesForDirectoryFragment(literalValue, scriptDirectory, extensionOptions, host, /*moduleSpecifierIsRelative*/ true, scriptPath)
+            getCompletionEntriesForDirectoryFragment(
+                literalValue,
+                scriptDirectory,
+                extensionOptions,
+                host,
+                /*moduleSpecifierIsRelative*/ true,
+                scriptPath,
+            )
                 .values(),
         );
     }
@@ -771,7 +788,8 @@ function getBaseDirectoriesFromRootDirs(rootDirs: string[], basePath: string, sc
     // Determine the path to the directory containing the script relative to the root directory it is contained within
     const relativeDirectory = firstDefined(
         rootDirs,
-        rootDirectory => containsPath(rootDirectory, scriptDirectory, basePath, ignoreCase) ? scriptDirectory.substr(rootDirectory.length) : undefined,
+        rootDirectory =>
+            containsPath(rootDirectory, scriptDirectory, basePath, ignoreCase) ? scriptDirectory.substr(rootDirectory.length) : undefined,
     )!; // TODO: GH#18217
 
     // Now find a path for each potential directory that is to be merged with the one containing the script
@@ -801,7 +819,14 @@ function getCompletionEntriesForDirectoryFragmentWithRootDirs(
             baseDirectories,
             baseDirectory =>
                 arrayFrom(
-                    getCompletionEntriesForDirectoryFragment(fragment, baseDirectory, extensionOptions, host, /*moduleSpecifierIsRelative*/ true, exclude)
+                    getCompletionEntriesForDirectoryFragment(
+                        fragment,
+                        baseDirectory,
+                        extensionOptions,
+                        host,
+                        /*moduleSpecifierIsRelative*/ true,
+                        exclude,
+                    )
                         .values(),
                 ),
         ),
@@ -1215,7 +1240,10 @@ function getCompletionsForPathMapping(
                 ...rest,
             })));
     }
-    return flatMap(patterns, pattern => getModulesForPathsPattern(remainingFragment, packageDirectory, pattern, extensionOptions, isExportsWildcard, host));
+    return flatMap(
+        patterns,
+        pattern => getModulesForPathsPattern(remainingFragment, packageDirectory, pattern, extensionOptions, isExportsWildcard, host),
+    );
 
     function justPathMappingName(name: string, kind: ScriptElementKind.directory | ScriptElementKind.scriptElement): readonly NameAndKind[] {
         return startsWith(name, fragment) ? [{ name: removeTrailingDirectorySeparator(name), kind, extension: undefined }] : emptyArray;
@@ -1271,16 +1299,24 @@ function getModulesForPathsPattern(
         ? matchingSuffixes.map(suffix => "**/*" + suffix)
         : ["./*"];
 
-    const matches = mapDefined(tryReadDirectory(host, baseDirectory, extensionOptions.extensionsToSearch, /*exclude*/ undefined, includeGlobs), match => {
-        const trimmedWithPattern = trimPrefixAndSuffix(match);
-        if (trimmedWithPattern) {
-            if (containsSlash(trimmedWithPattern)) {
-                return directoryResult(getPathComponents(removeLeadingDirectorySeparator(trimmedWithPattern))[1]);
+    const matches = mapDefined(
+        tryReadDirectory(host, baseDirectory, extensionOptions.extensionsToSearch, /*exclude*/ undefined, includeGlobs),
+        match => {
+            const trimmedWithPattern = trimPrefixAndSuffix(match);
+            if (trimmedWithPattern) {
+                if (containsSlash(trimmedWithPattern)) {
+                    return directoryResult(getPathComponents(removeLeadingDirectorySeparator(trimmedWithPattern))[1]);
+                }
+                const { name, extension } = getFilenameWithExtensionOption(
+                    trimmedWithPattern,
+                    host.getCompilationSettings(),
+                    extensionOptions,
+                    isExportsWildcard,
+                );
+                return nameAndKind(name, ScriptElementKind.scriptElement, extension);
             }
-            const { name, extension } = getFilenameWithExtensionOption(trimmedWithPattern, host.getCompilationSettings(), extensionOptions, isExportsWildcard);
-            return nameAndKind(name, ScriptElementKind.scriptElement, extension);
-        }
-    });
+        },
+    );
 
     // If we had a suffix, we already recursively searched for all possible files that could match
     // it and returned the directories leading to those files. Otherwise, assume any directory could
@@ -1445,7 +1481,8 @@ function getDirectoryFragmentTextSpan(text: string, textStart: number): TextSpan
     const offset = index !== -1 ? index + 1 : 0;
     // If the range is an identifier, span is unnecessary.
     const length = text.length - offset;
-    return length === 0 || isIdentifierText(text.substr(offset, length), ScriptTarget.ESNext) ? undefined : createTextSpan(textStart + offset, length);
+    return length === 0 || isIdentifierText(text.substr(offset, length), ScriptTarget.ESNext) ? undefined
+        : createTextSpan(textStart + offset, length);
 }
 
 // Returns true if the path is explicitly relative to the script (i.e. relative to . or ..)

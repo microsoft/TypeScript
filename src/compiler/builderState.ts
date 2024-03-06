@@ -206,7 +206,12 @@ export namespace BuilderState {
     /**
      * Gets the path to reference file from file name, it could be resolvedPath if present otherwise path
      */
-    function getReferencedFileFromFileName(program: Program, fileName: string, sourceFileDirectory: Path, getCanonicalFileName: GetCanonicalFileName): Path {
+    function getReferencedFileFromFileName(
+        program: Program,
+        fileName: string,
+        sourceFileDirectory: Path,
+        getCanonicalFileName: GetCanonicalFileName,
+    ): Path {
         return toPath(program.getProjectReferenceRedirect(fileName) || fileName, sourceFileDirectory, getCanonicalFileName);
     }
 
@@ -300,7 +305,11 @@ export namespace BuilderState {
     /**
      * Creates the state of file references and signature for the new program from oldState if it is safe
      */
-    export function create(newProgram: Program, oldState: Readonly<BuilderState> | undefined, disableUseFileVersionAsSignature: boolean): BuilderState {
+    export function create(
+        newProgram: Program,
+        oldState: Readonly<BuilderState> | undefined,
+        disableUseFileVersionAsSignature: boolean,
+    ): BuilderState {
         const fileInfos = new Map<Path, FileInfo>();
         const options = newProgram.getCompilerOptions();
         const isOutFile = options.outFile;
@@ -314,7 +323,10 @@ export namespace BuilderState {
 
         // Create the reference map, and set the file infos
         for (const sourceFile of newProgram.getSourceFiles()) {
-            const version = Debug.checkDefined(sourceFile.version, "Program intended to be used with Builder should have source files with versions set");
+            const version = Debug.checkDefined(
+                sourceFile.version,
+                "Program intended to be used with Builder should have source files with versions set",
+            );
             const oldUncommittedSignature = useOldState ? oldState!.oldSignatures?.get(sourceFile.resolvedPath) : undefined;
             const signature = oldUncommittedSignature === undefined ?
                 useOldState ? oldState!.fileInfos.get(sourceFile.resolvedPath)?.signature : undefined :
@@ -470,7 +482,10 @@ export namespace BuilderState {
         if (latestSignature === undefined) {
             latestSignature = sourceFile.version;
             if (state.exportedModulesMap && latestSignature !== prevSignature) {
-                (state.oldExportedModulesMap ||= new Map()).set(sourceFile.resolvedPath, state.exportedModulesMap.getValues(sourceFile.resolvedPath) || false);
+                (state.oldExportedModulesMap ||= new Map()).set(
+                    sourceFile.resolvedPath,
+                    state.exportedModulesMap.getValues(sourceFile.resolvedPath) || false,
+                );
                 // All the references in this file are exported
                 const references = state.referencedMap ? state.referencedMap.getValues(sourceFile.resolvedPath) : undefined;
                 if (references) {
@@ -496,7 +511,10 @@ export namespace BuilderState {
         exportedModulesFromDeclarationEmit: ExportedModulesFromDeclarationEmit | undefined,
     ) {
         if (!state.exportedModulesMap) return;
-        (state.oldExportedModulesMap ||= new Map()).set(sourceFile.resolvedPath, state.exportedModulesMap.getValues(sourceFile.resolvedPath) || false);
+        (state.oldExportedModulesMap ||= new Map()).set(
+            sourceFile.resolvedPath,
+            state.exportedModulesMap.getValues(sourceFile.resolvedPath) || false,
+        );
         const exportedModules = getExportedModules(exportedModulesFromDeclarationEmit);
         if (exportedModules) {
             state.exportedModulesMap.set(sourceFile.resolvedPath, exportedModules);
@@ -634,7 +652,11 @@ export namespace BuilderState {
     /**
      * When program emits non modular code, gets the files affected by the sourceFile whose shape has changed
      */
-    function getFilesAffectedByUpdatedShapeWhenNonModuleEmit(state: BuilderState, programOfThisState: Program, sourceFileWithUpdatedShape: SourceFile) {
+    function getFilesAffectedByUpdatedShapeWhenNonModuleEmit(
+        state: BuilderState,
+        programOfThisState: Program,
+        sourceFileWithUpdatedShape: SourceFile,
+    ) {
         const compilerOptions = programOfThisState.getCompilerOptions();
         // If `--out` or `--outFile` is specified, any new emit will result in re-emitting the entire project,
         // so returning the file itself is good enough.

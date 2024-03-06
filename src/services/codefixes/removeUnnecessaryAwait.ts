@@ -30,7 +30,9 @@ registerCodeFix({
     getCodeActions: function getCodeActionsToRemoveUnnecessaryAwait(context) {
         const changes = textChanges.ChangeTracker.with(context, t => makeChange(t, context.sourceFile, context.span));
         if (changes.length > 0) {
-            return [createCodeFixAction(fixId, changes, Diagnostics.Remove_unnecessary_await, fixId, Diagnostics.Remove_all_unnecessary_uses_of_await)];
+            return [
+                createCodeFixAction(fixId, changes, Diagnostics.Remove_unnecessary_await, fixId, Diagnostics.Remove_all_unnecessary_uses_of_await),
+            ];
         }
     },
     fixIds: [fixId],

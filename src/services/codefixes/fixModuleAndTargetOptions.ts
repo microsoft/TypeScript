@@ -44,7 +44,10 @@ registerCodeFix({
                 setJsonCompilerOptionValue(changes, configFile, "module", factory.createStringLiteral("esnext"));
             });
             codeFixes.push(
-                createCodeFixActionWithoutFixAll("fixModuleOption", changes, [Diagnostics.Set_the_module_option_in_your_configuration_file_to_0, "esnext"]),
+                createCodeFixActionWithoutFixAll("fixModuleOption", changes, [
+                    Diagnostics.Set_the_module_option_in_your_configuration_file_to_0,
+                    "esnext",
+                ]),
             );
         }
 
@@ -65,7 +68,10 @@ registerCodeFix({
             });
 
             codeFixes.push(
-                createCodeFixActionWithoutFixAll("fixTargetOption", changes, [Diagnostics.Set_the_target_option_in_your_configuration_file_to_0, "es2017"]),
+                createCodeFixActionWithoutFixAll("fixTargetOption", changes, [
+                    Diagnostics.Set_the_target_option_in_your_configuration_file_to_0,
+                    "es2017",
+                ]),
             );
         }
 

@@ -184,11 +184,21 @@ import {
 
 /** @internal */
 export function createEmptyExports(factory: NodeFactory) {
-    return factory.createExportDeclaration(/*modifiers*/ undefined, /*isTypeOnly*/ false, factory.createNamedExports([]), /*moduleSpecifier*/ undefined);
+    return factory.createExportDeclaration(
+        /*modifiers*/ undefined,
+        /*isTypeOnly*/ false,
+        factory.createNamedExports([]),
+        /*moduleSpecifier*/ undefined,
+    );
 }
 
 /** @internal */
-export function createMemberAccessForPropertyName(factory: NodeFactory, target: Expression, memberName: PropertyName, location?: TextRange): MemberExpression {
+export function createMemberAccessForPropertyName(
+    factory: NodeFactory,
+    target: Expression,
+    memberName: PropertyName,
+    location?: TextRange,
+): MemberExpression {
     if (isComputedPropertyName(memberName)) {
         return setTextRange(factory.createElementAccessExpression(target, memberName.expression), location);
     }
@@ -795,7 +805,11 @@ export function createExternalHelpersImportDeclarationIfNeeded(
                     namedBindings = nodeFactory.createNamedImports(
                         map(helperNames, name =>
                             isFileLevelUniqueName(sourceFile, name)
-                                ? nodeFactory.createImportSpecifier(/*isTypeOnly*/ false, /*propertyName*/ undefined, nodeFactory.createIdentifier(name))
+                                ? nodeFactory.createImportSpecifier(
+                                    /*isTypeOnly*/ false,
+                                    /*propertyName*/ undefined,
+                                    nodeFactory.createIdentifier(name),
+                                )
                                 : nodeFactory.createImportSpecifier(
                                     /*isTypeOnly*/ false,
                                     nodeFactory.createIdentifier(name),
@@ -867,7 +881,8 @@ export function getOrCreateExternalHelpersModuleNameIfNeeded(
         if (create) {
             const parseNode = getOriginalNode(node, isSourceFile);
             const emitNode = getOrCreateEmitNode(parseNode);
-            return emitNode.externalHelpersModuleName || (emitNode.externalHelpersModuleName = factory.createUniqueName(externalHelpersModuleNameText));
+            return emitNode.externalHelpersModuleName ||
+                (emitNode.externalHelpersModuleName = factory.createUniqueName(externalHelpersModuleNameText));
         }
     }
 }
@@ -1097,7 +1112,9 @@ export function getTargetOfBindingOrAssignmentElement(bindingElement: BindingOrA
  *
  * @internal
  */
-export function getRestIndicatorOfBindingOrAssignmentElement(bindingElement: BindingOrAssignmentElement): BindingOrAssignmentElementRestIndicator | undefined {
+export function getRestIndicatorOfBindingOrAssignmentElement(
+    bindingElement: BindingOrAssignmentElement,
+): BindingOrAssignmentElementRestIndicator | undefined {
     switch (bindingElement.kind) {
         case SyntaxKind.Parameter:
         case SyntaxKind.BindingElement:
@@ -1118,7 +1135,9 @@ export function getRestIndicatorOfBindingOrAssignmentElement(bindingElement: Bin
  *
  * @internal
  */
-export function getPropertyNameOfBindingOrAssignmentElement(bindingElement: BindingOrAssignmentElement): Exclude<PropertyName, PrivateIdentifier> | undefined {
+export function getPropertyNameOfBindingOrAssignmentElement(
+    bindingElement: BindingOrAssignmentElement,
+): Exclude<PropertyName, PrivateIdentifier> | undefined {
     const propertyName = tryGetPropertyNameOfBindingOrAssignmentElement(bindingElement);
     Debug.assert(!!propertyName || isSpreadAssignment(bindingElement), "Invalid property name for binding element.");
     return propertyName;
@@ -1764,12 +1783,18 @@ export function formatGeneratedNamePart(
         "";
 }
 
-function formatIdentifier(name: string | Identifier | PrivateIdentifier, generateName?: (name: GeneratedIdentifier | GeneratedPrivateIdentifier) => string) {
+function formatIdentifier(
+    name: string | Identifier | PrivateIdentifier,
+    generateName?: (name: GeneratedIdentifier | GeneratedPrivateIdentifier) => string,
+) {
     return typeof name === "string" ? name :
         formatIdentifierWorker(name, Debug.checkDefined(generateName));
 }
 
-function formatIdentifierWorker(node: Identifier | PrivateIdentifier, generateName: (name: GeneratedIdentifier | GeneratedPrivateIdentifier) => string) {
+function formatIdentifierWorker(
+    node: Identifier | PrivateIdentifier,
+    generateName: (name: GeneratedIdentifier | GeneratedPrivateIdentifier) => string,
+) {
     return isGeneratedPrivateIdentifier(node) ? generateName(node).slice(1) :
         isGeneratedIdentifier(node) ? generateName(node) :
         isPrivateIdentifier(node) ? (node.escapedText as string).slice(1) :

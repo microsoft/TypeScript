@@ -29,7 +29,14 @@ registerRefactor(actionName, {
         if (!context.endPosition) return undefined;
         const info = codefix.getAccessorConvertiblePropertyAtPosition(context.file, context.program, context.startPosition, context.endPosition);
         Debug.assert(info && !isRefactorErrorInfo(info), "Expected applicable refactor info");
-        const edits = codefix.generateAccessorFromProperty(context.file, context.program, context.startPosition, context.endPosition, context, actionName);
+        const edits = codefix.generateAccessorFromProperty(
+            context.file,
+            context.program,
+            context.startPosition,
+            context.endPosition,
+            context,
+            actionName,
+        );
         if (!edits) return undefined;
 
         const renameFilename = context.file.fileName;

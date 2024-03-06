@@ -178,7 +178,13 @@ class ProjectTestCase {
         }
 
         const compilerHost = new ProjectCompilerHost(this.sys, this.compilerOptions, this.testCaseJustName, this.testCase, moduleKind);
-        const projectCompilerResult = this.compileProjectFiles(moduleKind, configFileSourceFiles, () => inputFiles, compilerHost, this.compilerOptions);
+        const projectCompilerResult = this.compileProjectFiles(
+            moduleKind,
+            configFileSourceFiles,
+            () => inputFiles,
+            compilerHost,
+            this.compilerOptions,
+        );
 
         this.compilerResult = {
             configFileSourceFiles,
@@ -215,7 +221,11 @@ class ProjectTestCase {
 
         function makeFileSystem() {
             const fs = vfs.createFromFileSystem(Harness.IO, /*ignoreCase*/ false);
-            fs.mountSync(vpath.resolve(Harness.IO.getWorkspaceRoot(), "tests"), vpath.combine(vfs.srcFolder, "tests"), vfs.createResolver(Harness.IO));
+            fs.mountSync(
+                vpath.resolve(Harness.IO.getWorkspaceRoot(), "tests"),
+                vpath.combine(vfs.srcFolder, "tests"),
+                vfs.createResolver(Harness.IO),
+            );
             fs.mkdirpSync(vpath.combine(vfs.srcFolder, testCase.projectRoot));
             fs.chdir(vpath.combine(vfs.srcFolder, testCase.projectRoot));
             fs.makeReadonly();
@@ -292,7 +302,9 @@ class ProjectTestCase {
                         // If the generated output file resides in the parent folder or is rooted path,
                         // we need to instead create files that can live in the project reference folder
                         // but make sure extension of these files matches with the fileName the compiler asked to write
-                        diskRelativeName = `diskFile${nonSubfolderDiskFiles}${vpath.extname(fileName, [".js.map", ".js", ".d.ts"], this.vfs.ignoreCase)}`;
+                        diskRelativeName = `diskFile${nonSubfolderDiskFiles}${
+                            vpath.extname(fileName, [".js.map", ".js", ".d.ts"], this.vfs.ignoreCase)
+                        }`;
                         nonSubfolderDiskFiles++;
                     }
 
@@ -441,7 +453,13 @@ class ProjectTestCase {
         });
 
         // Dont allow config files since we are compiling existing source options
-        const compilerHost = new ProjectCompilerHost(_vfs, compilerResult.compilerOptions!, this.testCaseJustName, this.testCase, compilerResult.moduleKind);
+        const compilerHost = new ProjectCompilerHost(
+            _vfs,
+            compilerResult.compilerOptions!,
+            this.testCaseJustName,
+            this.testCase,
+            compilerResult.moduleKind,
+        );
         return this.compileProjectFiles(
             compilerResult.moduleKind,
             compilerResult.configFileSourceFiles,

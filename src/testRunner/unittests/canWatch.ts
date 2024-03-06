@@ -69,8 +69,18 @@ describe("unittests:: canWatch::", () => {
                 baselineCanWatchForRoot(paths, baseline, (rootPathCompoments, root) => {
                     pushHeader(baseline, ["Location", "getDirectoryToWatchFailedLookupLocation", recursive], maxLengths);
                     paths.forEach(path => {
-                        baselineGetDirectoryToWatchFailedLookupLocation(combinePaths(path, forPath, "somefile.d.ts"), root, rootPathCompoments, maxLengths);
-                        baselineGetDirectoryToWatchFailedLookupLocation(combinePaths(path, forPath, "dir/somefile.d.ts"), root, rootPathCompoments, maxLengths);
+                        baselineGetDirectoryToWatchFailedLookupLocation(
+                            combinePaths(path, forPath, "somefile.d.ts"),
+                            root,
+                            rootPathCompoments,
+                            maxLengths,
+                        );
+                        baselineGetDirectoryToWatchFailedLookupLocation(
+                            combinePaths(path, forPath, "dir/somefile.d.ts"),
+                            root,
+                            rootPathCompoments,
+                            maxLengths,
+                        );
                         baselineGetDirectoryToWatchFailedLookupLocation(
                             combinePaths(path, forPath, "dir/subdir/somefile.d.ts"),
                             root,

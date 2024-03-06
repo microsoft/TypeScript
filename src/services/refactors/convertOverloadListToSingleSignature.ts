@@ -161,8 +161,14 @@ function getRefactorEditsToConvertOverloadsToOneSignature(context: RefactorConte
     return { renameFilename: undefined, renameLocation: undefined, edits };
 
     function getNewParametersForCombinedSignature(
-        signatureDeclarations:
-            (MethodSignature | MethodDeclaration | CallSignatureDeclaration | ConstructorDeclaration | ConstructSignatureDeclaration | FunctionDeclaration)[],
+        signatureDeclarations: (
+            | MethodSignature
+            | MethodDeclaration
+            | CallSignatureDeclaration
+            | ConstructorDeclaration
+            | ConstructSignatureDeclaration
+            | FunctionDeclaration
+        )[],
     ): NodeArray<ParameterDeclaration> {
         const lastSig = signatureDeclarations[signatureDeclarations.length - 1];
         if (isFunctionLikeDeclaration(lastSig) && lastSig.body) {
@@ -181,7 +187,13 @@ function getRefactorEditsToConvertOverloadsToOneSignature(context: RefactorConte
     }
 
     function convertSignatureParametersToTuple(
-        decl: MethodSignature | MethodDeclaration | CallSignatureDeclaration | ConstructorDeclaration | ConstructSignatureDeclaration | FunctionDeclaration,
+        decl:
+            | MethodSignature
+            | MethodDeclaration
+            | CallSignatureDeclaration
+            | ConstructorDeclaration
+            | ConstructSignatureDeclaration
+            | FunctionDeclaration,
     ): TupleTypeNode {
         const members = map(decl.parameters, convertParameterToNamedTupleMember);
         return setEmitFlags(
@@ -223,7 +235,14 @@ ${newComment.split("\n").map(c => ` * ${c}`).join("\n")}
 
 function isConvertableSignatureDeclaration(
     d: Node,
-): d is MethodSignature | MethodDeclaration | CallSignatureDeclaration | ConstructorDeclaration | ConstructSignatureDeclaration | FunctionDeclaration {
+): d is
+    | MethodSignature
+    | MethodDeclaration
+    | CallSignatureDeclaration
+    | ConstructorDeclaration
+    | ConstructSignatureDeclaration
+    | FunctionDeclaration
+{
     switch (d.kind) {
         case SyntaxKind.MethodSignature:
         case SyntaxKind.MethodDeclaration:

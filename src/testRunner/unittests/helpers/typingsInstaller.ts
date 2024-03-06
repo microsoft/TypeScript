@@ -51,7 +51,11 @@ export function loggerToTypingsInstallerLog(logger: LoggerWithInMemoryLogs): ts.
 interface TypesRegistryFile {
     entries: ts.MapLike<ts.MapLike<string>>;
 }
-function loadTypesRegistryFile(typesRegistryFilePath: string, host: TestServerHost, log: ts.server.typingsInstaller.Log): Map<string, ts.MapLike<string>> {
+function loadTypesRegistryFile(
+    typesRegistryFilePath: string,
+    host: TestServerHost,
+    log: ts.server.typingsInstaller.Log,
+): Map<string, ts.MapLike<string>> {
     if (!host.fileExists(typesRegistryFilePath)) {
         log.writeLine(`Types registry file '${typesRegistryFilePath}' does not exist`);
         return new Map<string, ts.MapLike<string>>();
@@ -122,7 +126,12 @@ export class TestTypingsInstallerWorker extends ts.server.typingsInstaller.Typin
         testTypingInstaller.session.host.baselineHost("TI:: typing installer creation complete");
     }
 
-    installWorker(requestId: number, packageNames: string[], cwd: string, onRequestCompleted: ts.server.typingsInstaller.RequestCompletedAction): void {
+    installWorker(
+        requestId: number,
+        packageNames: string[],
+        cwd: string,
+        onRequestCompleted: ts.server.typingsInstaller.RequestCompletedAction,
+    ): void {
         this.log.writeLine(`#${requestId} with cwd: ${cwd} arguments: ${jsonToReadableText(packageNames)}`);
         if (typeof this.testTypingInstaller.installAction === "boolean") {
             this.scheduleInstall(

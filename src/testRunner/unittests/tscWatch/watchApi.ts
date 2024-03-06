@@ -97,7 +97,9 @@ describe("unittests:: tsc-watch:: watchAPI:: tsc-watch with custom module resolu
                 host.resolveModuleNames = (moduleNames, containingFile, _reusedNames, _redirectedReference, options) =>
                     moduleNames.map(m => ts.resolveModuleName(m, containingFile, options, host).resolvedModule);
                 // Invalidate resolutions only when ts file is created
-                if (implementHasInvalidatedResolution) host.hasInvalidatedResolutions = () => sys.fileExists(`/user/username/projects/myproject/other.ts`);
+                if (implementHasInvalidatedResolution) {
+                    host.hasInvalidatedResolutions = () => sys.fileExists(`/user/username/projects/myproject/other.ts`);
+                }
                 const watch = ts.createWatchProgram(host);
                 runWatchBaseline({
                     scenario: "watchApi",
@@ -691,7 +693,12 @@ describe("unittests:: tsc-watch:: watchAPI:: when builder emit occurs with emitO
                         caption: "Emit with emitOnlyDts shouldnt emit anything",
                         edit: () => {
                             const program = watch.getCurrentProgram();
-                            program.emit(/*targetSourceFile*/ undefined, /*writeFile*/ undefined, /*cancellationToken*/ undefined, /*emitOnlyDtsFiles*/ true);
+                            program.emit(
+                                /*targetSourceFile*/ undefined,
+                                /*writeFile*/ undefined,
+                                /*cancellationToken*/ undefined,
+                                /*emitOnlyDtsFiles*/ true,
+                            );
                             baseline.cb(program);
                         },
                         timeouts: ts.noop,
@@ -709,7 +716,12 @@ describe("unittests:: tsc-watch:: watchAPI:: when builder emit occurs with emitO
                         caption: "Emit with emitOnlyDts shouldnt emit anything",
                         edit: () => {
                             const program = watch.getCurrentProgram();
-                            program.emit(/*targetSourceFile*/ undefined, /*writeFile*/ undefined, /*cancellationToken*/ undefined, /*emitOnlyDtsFiles*/ true);
+                            program.emit(
+                                /*targetSourceFile*/ undefined,
+                                /*writeFile*/ undefined,
+                                /*cancellationToken*/ undefined,
+                                /*emitOnlyDtsFiles*/ true,
+                            );
                             baseline.cb(program);
                         },
                         timeouts: ts.noop,

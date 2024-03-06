@@ -183,7 +183,10 @@ function doChange(
         }
     }
 
-    function replaceParameters(declarationOrSignature: ValidFunctionDeclaration | ValidMethodSignature, parameterDeclarations: ParameterDeclaration[]) {
+    function replaceParameters(
+        declarationOrSignature: ValidFunctionDeclaration | ValidMethodSignature,
+        parameterDeclarations: ParameterDeclaration[],
+    ) {
         changes.replaceNodeRangeWithNodes(
             sourceFile,
             first(declarationOrSignature.parameters),
@@ -200,7 +203,11 @@ function doChange(
     }
 }
 
-function getGroupedReferences(functionDeclaration: ValidFunctionDeclaration, program: Program, cancellationToken: CancellationToken): GroupedReferences {
+function getGroupedReferences(
+    functionDeclaration: ValidFunctionDeclaration,
+    program: Program,
+    cancellationToken: CancellationToken,
+): GroupedReferences {
     const functionNames = getFunctionNames(functionDeclaration);
     const classNames = isConstructorDeclaration(functionDeclaration) ? getClassNames(functionDeclaration) : [];
     const names = deduplicate([...functionNames, ...classNames], equateValues);
@@ -573,7 +580,10 @@ function createNewArgument(functionDeclaration: ValidFunctionDeclaration, functi
 
     if (hasRestParameter && functionArguments.length >= parameters.length) {
         const restArguments = functionArguments.slice(parameters.length - 1);
-        const restProperty = factory.createPropertyAssignment(getParameterName(last(parameters)), factory.createArrayLiteralExpression(restArguments));
+        const restProperty = factory.createPropertyAssignment(
+            getParameterName(last(parameters)),
+            factory.createArrayLiteralExpression(restArguments),
+        );
         properties.push(restProperty);
     }
 
@@ -740,7 +750,10 @@ function getFunctionNames(functionDeclaration: ValidFunctionDeclaration): Node[]
             if (functionDeclaration.name) return [functionDeclaration.name, functionDeclaration.parent.name];
             return [functionDeclaration.parent.name];
         default:
-            return Debug.assertNever(functionDeclaration, `Unexpected function declaration kind ${(functionDeclaration as ValidFunctionDeclaration).kind}`);
+            return Debug.assertNever(
+                functionDeclaration,
+                `Unexpected function declaration kind ${(functionDeclaration as ValidFunctionDeclaration).kind}`,
+            );
     }
 }
 

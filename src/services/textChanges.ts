@@ -469,7 +469,8 @@ function getAdjustedEndPosition(sourceFile: SourceFile, node: Node, options: Con
  */
 function isSeparator(node: Node, candidate: Node | undefined): candidate is Token<SyntaxKind.CommaToken | SyntaxKind.SemicolonToken> {
     return !!candidate && !!node.parent &&
-        (candidate.kind === SyntaxKind.CommaToken || (candidate.kind === SyntaxKind.SemicolonToken && node.parent.kind === SyntaxKind.ObjectLiteralExpression));
+        (candidate.kind === SyntaxKind.CommaToken ||
+            (candidate.kind === SyntaxKind.SemicolonToken && node.parent.kind === SyntaxKind.ObjectLiteralExpression));
 }
 
 /** @internal */
@@ -534,7 +535,11 @@ export class ChangeTracker {
     }
 
     /** Stop! Consider using `delete` instead, which has logic for deleting nodes from delimited lists. */
-    public deleteNode(sourceFile: SourceFile, node: Node, options: ConfigurableStartEnd = { leadingTriviaOption: LeadingTriviaOption.IncludeAll }): void {
+    public deleteNode(
+        sourceFile: SourceFile,
+        node: Node,
+        options: ConfigurableStartEnd = { leadingTriviaOption: LeadingTriviaOption.IncludeAll },
+    ): void {
         this.deleteRange(sourceFile, getAdjustedRange(sourceFile, node, node, options));
     }
 
@@ -556,7 +561,10 @@ export class ChangeTracker {
     }
 
     public deleteModifier(sourceFile: SourceFile, modifier: Modifier): void {
-        this.deleteRange(sourceFile, { pos: modifier.getStart(sourceFile), end: skipTrivia(sourceFile.text, modifier.end, /*stopAfterLineBreak*/ true) });
+        this.deleteRange(sourceFile, {
+            pos: modifier.getStart(sourceFile),
+            end: skipTrivia(sourceFile.text, modifier.end, /*stopAfterLineBreak*/ true),
+        });
     }
 
     public deleteNodeRange(
@@ -589,7 +597,13 @@ export class ChangeTracker {
         this.replaceRange(sourceFile, getAdjustedRange(sourceFile, oldNode, oldNode, options), newNode, options);
     }
 
-    public replaceNodeRange(sourceFile: SourceFile, startNode: Node, endNode: Node, newNode: Node, options: ChangeNodeOptions = useNonAdjustedPositions): void {
+    public replaceNodeRange(
+        sourceFile: SourceFile,
+        startNode: Node,
+        endNode: Node,
+        newNode: Node,
+        options: ChangeNodeOptions = useNonAdjustedPositions,
+    ): void {
         this.replaceRange(sourceFile, getAdjustedRange(sourceFile, startNode, endNode, options), newNode, options);
     }
 
@@ -602,7 +616,12 @@ export class ChangeTracker {
         this.changes.push({ kind: ChangeKind.ReplaceWithMultipleNodes, sourceFile, range, options, nodes: newNodes });
     }
 
-    public replaceNodeWithNodes(sourceFile: SourceFile, oldNode: Node, newNodes: readonly Node[], options: ChangeNodeOptions = useNonAdjustedPositions): void {
+    public replaceNodeWithNodes(
+        sourceFile: SourceFile,
+        oldNode: Node,
+        newNodes: readonly Node[],
+        options: ChangeNodeOptions = useNonAdjustedPositions,
+    ): void {
         this.replaceRangeWithNodes(sourceFile, getAdjustedRange(sourceFile, oldNode, oldNode, options), newNodes, options);
     }
 
@@ -764,7 +783,10 @@ export class ChangeTracker {
     }
 
     private createJSDocText(sourceFile: SourceFile, node: HasJSDoc) {
-        const comments = flatMap(node.jsDoc, jsDoc => isString(jsDoc.comment) ? factory.createJSDocText(jsDoc.comment) : jsDoc.comment) as JSDocComment[];
+        const comments = flatMap(
+            node.jsDoc,
+            jsDoc => isString(jsDoc.comment) ? factory.createJSDocText(jsDoc.comment) : jsDoc.comment,
+        ) as JSDocComment[];
         const jsDoc = singleOrUndefined(node.jsDoc);
         return jsDoc && positionsAreOnSameLine(jsDoc.pos, jsDoc.end, sourceFile) && length(comments) === 0 ? undefined :
             factory.createNodeArray(intersperse(comments, factory.createJSDocText("\n")));
@@ -890,7 +912,8 @@ export class ChangeTracker {
     public insertNodeAtEndOfScope(sourceFile: SourceFile, scope: Node, newNode: Node): void {
         const pos = getAdjustedStartPosition(sourceFile, scope.getLastToken()!, {});
         this.insertNodeAt(sourceFile, pos, newNode, {
-            prefix: isLineBreak(sourceFile.text.charCodeAt(scope.getLastToken()!.pos)) ? this.newLineCharacter : this.newLineCharacter + this.newLineCharacter,
+            prefix: isLineBreak(sourceFile.text.charCodeAt(scope.getLastToken()!.pos)) ? this.newLineCharacter
+                : this.newLineCharacter + this.newLineCharacter,
             suffix: this.newLineCharacter,
         });
     }
@@ -913,7 +936,12 @@ export class ChangeTracker {
         newElement: ClassElement | ObjectLiteralElementLike | PropertySignature | MethodSignature | EnumMember,
     ): void {
         const indentation = this.guessIndentationFromExistingMembers(sourceFile, node) ?? this.computeIndentationForNewMember(sourceFile, node);
-        this.insertNodeAt(sourceFile, getMembersOrProperties(node).pos, newElement, this.getInsertNodeAtStartInsertOptions(sourceFile, node, indentation));
+        this.insertNodeAt(
+            sourceFile,
+            getMembersOrProperties(node).pos,
+            newElement,
+            this.getInsertNodeAtStartInsertOptions(sourceFile, node, indentation),
+        );
     }
 
     /**
@@ -1063,7 +1091,10 @@ export class ChangeTracker {
             const lparen = findChildOfKind(node, SyntaxKind.OpenParenToken, sourceFile);
             if (lparen) {
                 // `() => {}` --> `function f() {}`
-                this.insertNodesAt(sourceFile, lparen.getStart(sourceFile), [factory.createToken(SyntaxKind.FunctionKeyword), factory.createIdentifier(name)], {
+                this.insertNodesAt(sourceFile, lparen.getStart(sourceFile), [
+                    factory.createToken(SyntaxKind.FunctionKeyword),
+                    factory.createIdentifier(name),
+                ], {
                     joiner: " ",
                 });
                 deleteNode(this, sourceFile, arrow);
@@ -1096,7 +1127,8 @@ export class ChangeTracker {
         }
         else {
             const pos =
-                findChildOfKind(node, node.kind === SyntaxKind.FunctionExpression ? SyntaxKind.FunctionKeyword : SyntaxKind.ClassKeyword, sourceFile)!.end;
+                findChildOfKind(node, node.kind === SyntaxKind.FunctionExpression ? SyntaxKind.FunctionKeyword : SyntaxKind.ClassKeyword, sourceFile)!
+                    .end;
             this.insertNodeAt(sourceFile, pos, factory.createIdentifier(name), { prefix: " " });
         }
     }
@@ -1440,7 +1472,8 @@ namespace changesToText {
         // TODO: this emits the file, parses it back, then formats it that -- may be a less roundabout way to do this
         const nonFormattedText = flatMap(
             insertions,
-            insertion => insertion.statements.map(s => s === SyntaxKind.NewLineTrivia ? "" : getNonformattedText(s, insertion.oldFile, newLineCharacter).text),
+            insertion =>
+                insertion.statements.map(s => s === SyntaxKind.NewLineTrivia ? "" : getNonformattedText(s, insertion.oldFile, newLineCharacter).text),
         )
             .join(
                 newLineCharacter,
@@ -1924,7 +1957,9 @@ namespace deleteDeclaration {
 
             case SyntaxKind.ClassDeclaration:
             case SyntaxKind.FunctionDeclaration:
-                deleteNode(changes, sourceFile, node, { leadingTriviaOption: hasJSDocNodes(node) ? LeadingTriviaOption.JSDoc : LeadingTriviaOption.StartLine });
+                deleteNode(changes, sourceFile, node, {
+                    leadingTriviaOption: hasJSDocNodes(node) ? LeadingTriviaOption.JSDoc : LeadingTriviaOption.StartLine,
+                });
                 break;
 
             default:
@@ -1981,7 +2016,12 @@ namespace deleteDeclaration {
         }
     }
 
-    function deleteVariableDeclaration(changes: ChangeTracker, deletedNodesInLists: Set<Node>, sourceFile: SourceFile, node: VariableDeclaration): void {
+    function deleteVariableDeclaration(
+        changes: ChangeTracker,
+        deletedNodesInLists: Set<Node>,
+        sourceFile: SourceFile,
+        node: VariableDeclaration,
+    ): void {
         const { parent } = node;
 
         if (parent.kind === SyntaxKind.CatchClause) {
@@ -2011,7 +2051,9 @@ namespace deleteDeclaration {
                 break;
 
             case SyntaxKind.VariableStatement:
-                deleteNode(changes, sourceFile, gp, { leadingTriviaOption: hasJSDocNodes(gp) ? LeadingTriviaOption.JSDoc : LeadingTriviaOption.StartLine });
+                deleteNode(changes, sourceFile, gp, {
+                    leadingTriviaOption: hasJSDocNodes(gp) ? LeadingTriviaOption.JSDoc : LeadingTriviaOption.StartLine,
+                });
                 break;
 
             default:

@@ -81,5 +81,12 @@ function doChange(file: SourceFile, start: number, length: number, code: number,
     else {
         Debug.fail("fixPropertyOverrideAccessor codefix got unexpected error code " + code);
     }
-    return generateAccessorFromProperty(file, context.program, startPosition, endPosition, context, Diagnostics.Generate_get_and_set_accessors.message);
+    return generateAccessorFromProperty(
+        file,
+        context.program,
+        startPosition,
+        endPosition,
+        context,
+        Diagnostics.Generate_get_and_set_accessors.message,
+    );
 }

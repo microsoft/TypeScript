@@ -134,7 +134,12 @@ const localize = task({
     dependencies: [generateDiagnostics],
     run: async () => {
         if (needsUpdate(diagnosticMessagesGeneratedJson, generatedLCGFile)) {
-            await exec(process.execPath, ["scripts/generateLocalizedDiagnosticMessages.mjs", "src/loc/lcl", "built/local", diagnosticMessagesGeneratedJson], {
+            await exec(process.execPath, [
+                "scripts/generateLocalizedDiagnosticMessages.mjs",
+                "src/loc/lcl",
+                "built/local",
+                diagnosticMessagesGeneratedJson,
+            ], {
                 ignoreExitCode: true,
             });
         }

@@ -490,5 +490,7 @@ switch (x) {
         ts.refactor.extractSymbol.Messages.cannotExtractJSDoc.message,
     ]);
 
-    testExtractRangeFailed("extract-method-not-for-token-expression-statement", `[#|a|]`, [ts.refactor.extractSymbol.Messages.cannotExtractIdentifier.message]);
+    testExtractRangeFailed("extract-method-not-for-token-expression-statement", `[#|a|]`, [
+        ts.refactor.extractSymbol.Messages.cannotExtractIdentifier.message,
+    ]);
 });

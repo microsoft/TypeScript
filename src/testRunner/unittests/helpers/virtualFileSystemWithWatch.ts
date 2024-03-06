@@ -260,7 +260,9 @@ class Callbacks {
         this.invoke = invokeKey => {
             logger.log(`Before running ${this.log()}`);
             this.host.serializeState(logger.logs, serializeOutputOrder);
-            if (invokeKey !== undefined) logger.log(`Invoking ${this.callbackType} callback:: timeoutId:: ${invokeKey}:: ${this.map.get(invokeKey)!.args[0]}`);
+            if (invokeKey !== undefined) {
+                logger.log(`Invoking ${this.callbackType} callback:: timeoutId:: ${invokeKey}:: ${this.map.get(invokeKey)!.args[0]}`);
+            }
             this.invokeWorker(invokeKey);
             logger.log(`After running ${this.callbackType} callback:: count: ${this.map.size}`);
             this.host.serializeState(logger.logs, serializeOutputOrder);
@@ -794,11 +796,23 @@ export class TestServerHost implements server.ServerHost, FormatDiagnosticsHost,
         });
     }
 
-    invokeFsWatchesCallbacks(fullPath: string, eventName: "rename" | "change", modifiedTime?: Date, entryFullPath?: string, useTildeSuffix?: boolean) {
+    invokeFsWatchesCallbacks(
+        fullPath: string,
+        eventName: "rename" | "change",
+        modifiedTime?: Date,
+        entryFullPath?: string,
+        useTildeSuffix?: boolean,
+    ) {
         this.fsWatchCallback(this.watchUtils.fsWatches, fullPath, eventName, modifiedTime, entryFullPath, useTildeSuffix);
     }
 
-    invokeFsWatchesRecursiveCallbacks(fullPath: string, eventName: "rename" | "change", modifiedTime?: Date, entryFullPath?: string, useTildeSuffix?: boolean) {
+    invokeFsWatchesRecursiveCallbacks(
+        fullPath: string,
+        eventName: "rename" | "change",
+        modifiedTime?: Date,
+        entryFullPath?: string,
+        useTildeSuffix?: boolean,
+    ) {
         this.fsWatchCallback(this.watchUtils.fsWatchesRecursive, fullPath, eventName, modifiedTime, entryFullPath, useTildeSuffix);
     }
 
@@ -812,7 +826,13 @@ export class TestServerHost implements server.ServerHost, FormatDiagnosticsHost,
         );
     }
 
-    private invokeRecursiveFsWatches(fullPath: string, eventName: "rename" | "change", modifiedTime?: Date, entryFullPath?: string, useTildeSuffix?: boolean) {
+    private invokeRecursiveFsWatches(
+        fullPath: string,
+        eventName: "rename" | "change",
+        modifiedTime?: Date,
+        entryFullPath?: string,
+        useTildeSuffix?: boolean,
+    ) {
         this.invokeFsWatchesRecursiveCallbacks(fullPath, eventName, modifiedTime, entryFullPath, useTildeSuffix);
         const basePath = getDirectoryPath(fullPath);
         if (this.getCanonicalFileName(fullPath) !== this.getCanonicalFileName(basePath)) {
@@ -859,7 +879,11 @@ export class TestServerHost implements server.ServerHost, FormatDiagnosticsHost,
         return fsFolder;
     }
 
-    private getRealFsEntry<T extends FSEntry>(isFsEntry: (fsEntry: FSEntry) => fsEntry is T, path: Path, fsEntry = this.fs.get(path)!): T | undefined {
+    private getRealFsEntry<T extends FSEntry>(
+        isFsEntry: (fsEntry: FSEntry) => fsEntry is T,
+        path: Path,
+        fsEntry = this.fs.get(path)!,
+    ): T | undefined {
         if (isFsEntry(fsEntry)) {
             return fsEntry;
         }

@@ -24,7 +24,10 @@ describe("unittests:: tsserver:: formatSettings", () => {
         const defaultSettings = session.getProjectService().getFormatCodeOptions(f1.path as ts.server.NormalizedPath);
 
         // set global settings
-        const newGlobalSettings1 = { ...defaultSettings, placeOpenBraceOnNewLineForControlBlocks: !defaultSettings.placeOpenBraceOnNewLineForControlBlocks };
+        const newGlobalSettings1 = {
+            ...defaultSettings,
+            placeOpenBraceOnNewLineForControlBlocks: !defaultSettings.placeOpenBraceOnNewLineForControlBlocks,
+        };
         session.executeCommandSeq<ts.server.protocol.ConfigureRequest>({
             command: ts.server.protocol.CommandTypes.Configure,
             arguments: { formatOptions: newGlobalSettings1 },
@@ -52,7 +55,10 @@ describe("unittests:: tsserver:: formatSettings", () => {
         );
 
         // set new global settings - they should not affect ones that were set per-file
-        const newGlobalSettings2 = { ...defaultSettings, insertSpaceAfterSemicolonInForStatements: !defaultSettings.insertSpaceAfterSemicolonInForStatements };
+        const newGlobalSettings2 = {
+            ...defaultSettings,
+            insertSpaceAfterSemicolonInForStatements: !defaultSettings.insertSpaceAfterSemicolonInForStatements,
+        };
         session.executeCommandSeq<ts.server.protocol.ConfigureRequest>({
             command: ts.server.protocol.CommandTypes.Configure,
             arguments: { formatOptions: newGlobalSettings2 },

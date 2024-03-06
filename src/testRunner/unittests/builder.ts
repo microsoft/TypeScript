@@ -94,7 +94,9 @@ function makeAssertChanges(getProgram: () => ts.Program): (fileNames: readonly s
     };
 }
 
-function makeAssertChangesWithCancellationToken(getProgram: () => ts.Program): (fileNames: readonly string[], cancelAfterEmitLength?: number) => void {
+function makeAssertChangesWithCancellationToken(
+    getProgram: () => ts.Program,
+): (fileNames: readonly string[], cancelAfterEmitLength?: number) => void {
     const host: ts.BuilderProgramHost = {};
     let builderProgram: ts.EmitAndSemanticDiagnosticsBuilderProgram | undefined;
     let cancel = false;

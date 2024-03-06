@@ -37,7 +37,13 @@ export class FormattingContext {
     constructor(public readonly sourceFile: SourceFileLike, public formattingRequestKind: FormattingRequestKind, public options: FormatCodeSettings) {
     }
 
-    public updateContext(currentRange: TextRangeWithKind, currentTokenParent: Node, nextRange: TextRangeWithKind, nextTokenParent: Node, commonParent: Node) {
+    public updateContext(
+        currentRange: TextRangeWithKind,
+        currentTokenParent: Node,
+        nextRange: TextRangeWithKind,
+        nextTokenParent: Node,
+        commonParent: Node,
+    ) {
         this.currentTokenSpan = Debug.checkDefined(currentRange);
         this.currentTokenParent = Debug.checkDefined(currentTokenParent);
         this.nextTokenSpan = Debug.checkDefined(nextRange);

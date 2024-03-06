@@ -477,7 +477,9 @@ export function transformTypeScript(context: TransformationContext) {
         return false;
     }
 
-    function visitElidableStatement(node: ImportDeclaration | ImportEqualsDeclaration | ExportAssignment | ExportDeclaration): VisitResult<Node | undefined> {
+    function visitElidableStatement(
+        node: ImportDeclaration | ImportEqualsDeclaration | ExportAssignment | ExportDeclaration,
+    ): VisitResult<Node | undefined> {
         if (isElisionBlocked(node)) {
             // We do not reuse `visitorWorker`, as the ellidable statement syntax kinds are technically unrecognized by
             // the switch-case in `visitTypeScript`, and will trigger debug failures when debug verbosity is turned up.
@@ -858,7 +860,9 @@ export function transformTypeScript(context: TransformationContext) {
         let facts = ClassFacts.None;
         if (some(getProperties(node, /*requireInitializer*/ true, /*isStatic*/ true))) facts |= ClassFacts.HasStaticInitializedProperties;
         const extendsClauseElement = getEffectiveBaseTypeNode(node);
-        if (extendsClauseElement && skipOuterExpressions(extendsClauseElement.expression).kind !== SyntaxKind.NullKeyword) facts |= ClassFacts.IsDerivedClass;
+        if (extendsClauseElement && skipOuterExpressions(extendsClauseElement.expression).kind !== SyntaxKind.NullKeyword) {
+            facts |= ClassFacts.IsDerivedClass;
+        }
         if (classOrConstructorParameterIsDecorated(legacyDecorators, node)) facts |= ClassFacts.HasClassOrConstructorParameterDecorators;
         if (childIsDecorated(legacyDecorators, node)) facts |= ClassFacts.HasMemberDecorators;
         if (isExportOfNamespace(node)) facts |= ClassFacts.IsExportOfNamespace;
@@ -1289,7 +1293,10 @@ export function transformTypeScript(context: TransformationContext) {
         // The names are used more than once when:
         //   - the property is non-static and its initializer is moved to the constructor (when there are parameter property assignments).
         //   - the property has a decorator.
-        if (isComputedPropertyName(name) && ((!hasStaticModifier(member) && currentClassHasParameterProperties) || hasDecorators(member) && legacyDecorators)) {
+        if (
+            isComputedPropertyName(name) &&
+            ((!hasStaticModifier(member) && currentClassHasParameterProperties) || hasDecorators(member) && legacyDecorators)
+        ) {
             const expression = visitNode(name.expression, visitor, isExpression);
             Debug.assert(expression);
             const innerExpression = skipPartiallyEmittedExpressions(expression);
@@ -1435,7 +1442,9 @@ export function transformTypeScript(context: TransformationContext) {
 
     function transformConstructorBody(body: Block, constructor: ConstructorDeclaration) {
         const parametersWithPropertyAssignments = constructor &&
-            filter(constructor.parameters, p => isParameterPropertyDeclaration(p, constructor)) as readonly ParameterPropertyDeclaration[] | undefined;
+            filter(constructor.parameters, p => isParameterPropertyDeclaration(p, constructor)) as
+                | readonly ParameterPropertyDeclaration[]
+                | undefined;
         if (!some(parametersWithPropertyAssignments)) {
             return visitFunctionBody(body, visitor, context);
         }
@@ -1461,7 +1470,14 @@ export function transformTypeScript(context: TransformationContext) {
         //
         const parameterPropertyAssignments = mapDefined(parametersWithPropertyAssignments, transformParameterWithPropertyAssignment);
         if (superPath.length) {
-            transformConstructorBodyWorker(statements, body.statements, prologueStatementCount, superPath, /*superPathDepth*/ 0, parameterPropertyAssignments);
+            transformConstructorBodyWorker(
+                statements,
+                body.statements,
+                prologueStatementCount,
+                superPath,
+                /*superPathDepth*/ 0,
+                parameterPropertyAssignments,
+            );
         }
         else {
             addRange(statements, parameterPropertyAssignments);

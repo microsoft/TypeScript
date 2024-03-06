@@ -15,15 +15,21 @@ describe("unittests:: FactoryAPI", () => {
                 assertSyntaxKind(node.expression, ts.SyntaxKind.ParenthesizedExpression);
             }
 
-            const clazz = ts.factory.createClassExpression(/*modifiers*/ undefined, "C", /*typeParameters*/ undefined, /*heritageClauses*/ undefined, [
-                ts.factory.createPropertyDeclaration(
-                    [ts.factory.createToken(ts.SyntaxKind.StaticKeyword)],
-                    "prop",
-                    /*questionOrExclamationToken*/ undefined,
-                    /*type*/ undefined,
-                    ts.factory.createStringLiteral("1"),
-                ),
-            ]);
+            const clazz = ts.factory.createClassExpression(
+                /*modifiers*/ undefined,
+                "C",
+                /*typeParameters*/ undefined,
+                /*heritageClauses*/ undefined,
+                [
+                    ts.factory.createPropertyDeclaration(
+                        [ts.factory.createToken(ts.SyntaxKind.StaticKeyword)],
+                        "prop",
+                        /*questionOrExclamationToken*/ undefined,
+                        /*type*/ undefined,
+                        ts.factory.createStringLiteral("1"),
+                    ),
+                ],
+            );
             checkExpression(clazz);
             checkExpression(ts.factory.createPropertyAccessExpression(clazz, "prop"));
 
@@ -38,7 +44,9 @@ describe("unittests:: FactoryAPI", () => {
             );
             checkExpression(func);
             checkExpression(ts.factory.createCallExpression(func, /*typeArguments*/ undefined, /*argumentsArray*/ undefined));
-            checkExpression(ts.factory.createTaggedTemplateExpression(func, /*typeArguments*/ undefined, ts.factory.createNoSubstitutionTemplateLiteral("")));
+            checkExpression(
+                ts.factory.createTaggedTemplateExpression(func, /*typeArguments*/ undefined, ts.factory.createNoSubstitutionTemplateLiteral("")),
+            );
 
             checkExpression(
                 ts.factory.createBinaryExpression(ts.factory.createStringLiteral("a"), ts.SyntaxKind.CommaToken, ts.factory.createStringLiteral("b")),
@@ -69,9 +77,13 @@ describe("unittests:: FactoryAPI", () => {
                     ts.factory.createTypeReferenceNode("T", /*typeArguments*/ undefined),
                 ),
             );
-            checkBody(ts.factory.createNonNullExpression(ts.factory.createPropertyAccessExpression(ts.factory.createObjectLiteralExpression(), "prop")));
+            checkBody(
+                ts.factory.createNonNullExpression(ts.factory.createPropertyAccessExpression(ts.factory.createObjectLiteralExpression(), "prop")),
+            );
             checkBody(ts.factory.createCommaListExpression([ts.factory.createStringLiteral("a"), ts.factory.createStringLiteral("b")]));
-            checkBody(ts.factory.createBinaryExpression(ts.factory.createStringLiteral("a"), ts.SyntaxKind.CommaToken, ts.factory.createStringLiteral("b")));
+            checkBody(
+                ts.factory.createBinaryExpression(ts.factory.createStringLiteral("a"), ts.SyntaxKind.CommaToken, ts.factory.createStringLiteral("b")),
+            );
         });
     });
 

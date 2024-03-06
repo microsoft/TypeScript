@@ -29,7 +29,8 @@ describe("unittests:: tsc:: moduleResolution::", () => {
             },
             {
                 caption: "add the alternateResult in @types",
-                edit: fs => fs.writeFileSync("/home/src/projects/project/node_modules/@types/bar/index.d.ts", getFsContentsForAlternateResultDts("bar")),
+                edit: fs =>
+                    fs.writeFileSync("/home/src/projects/project/node_modules/@types/bar/index.d.ts", getFsContentsForAlternateResultDts("bar")),
             },
             {
                 caption: "add the ndoe10Result in package/types",
@@ -77,7 +78,8 @@ describe("unittests:: tsc:: moduleResolution::", () => {
             },
             {
                 caption: "add the alternateResult in @types",
-                edit: fs => fs.writeFileSync("/home/src/projects/project/node_modules/@types/bar2/index.d.ts", getFsContentsForAlternateResultDts("bar2")),
+                edit: fs =>
+                    fs.writeFileSync("/home/src/projects/project/node_modules/@types/bar2/index.d.ts", getFsContentsForAlternateResultDts("bar2")),
             },
             {
                 caption: "add the ndoe10Result in package/types",

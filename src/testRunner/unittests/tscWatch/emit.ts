@@ -65,7 +65,8 @@ describe("unittests:: tsc-watch:: emit with outFile or out setting", () => {
                 };
                 const file4: File = {
                     path: "/a/b/project/src/main2.ts",
-                    content: "namespace main.file4 { import DynamicMenu = Common.SomeComponent.DynamicMenu; export function foo(a: DynamicMenu.z) {  } }",
+                    content:
+                        "namespace main.file4 { import DynamicMenu = Common.SomeComponent.DynamicMenu; export function foo(a: DynamicMenu.z) {  } }",
                 };
                 const configFile: File = {
                     path: "/a/b/project/tsconfig.json",
@@ -484,7 +485,8 @@ describe("unittests:: tsc-watch:: emit file content", () => {
         edits: [
             {
                 caption: "file is deleted and then created to modify content",
-                edit: sys => sys.appendFile("/home/username/project/app/file.ts", "\nvar b = 10;", { invokeFileDeleteCreateAsPartInsteadOfChange: true }),
+                edit: sys =>
+                    sys.appendFile("/home/username/project/app/file.ts", "\nvar b = 10;", { invokeFileDeleteCreateAsPartInsteadOfChange: true }),
                 timeouts: sys => sys.runQueuedTimeoutCallbacks(),
             },
         ],

@@ -297,7 +297,10 @@ describe("unittests:: config:: configurationExtension", () => {
             "can lookup via an implicit tsconfig in a package-relative directory with name",
             "tsconfig.extendsBoxImpliedUnstrictExtension.json",
         );
-        baselineParsedCommandLine("can lookup via an implicit tsconfig in a package-relative directory with extension", "tsconfig.extendsBoxImpliedPath.json");
+        baselineParsedCommandLine(
+            "can lookup via an implicit tsconfig in a package-relative directory with extension",
+            "tsconfig.extendsBoxImpliedPath.json",
+        );
         baselineParsedCommandLine("can lookup via an package.json exports", "tsconfig.extendsFoo.json");
 
         baselineExtendsSourceFile("adds extendedSourceFiles only once", "configs/fourth.json");

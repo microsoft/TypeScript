@@ -373,7 +373,10 @@ class NodeObject implements Node {
 
     private assertHasRealPosition(message?: string) {
         // eslint-disable-next-line local/debug-assert
-        Debug.assert(!positionIsSynthesized(this.pos) && !positionIsSynthesized(this.end), message || "Node must have a real position for this operation");
+        Debug.assert(
+            !positionIsSynthesized(this.pos) && !positionIsSynthesized(this.end),
+            message || "Node must have a real position for this operation",
+        );
     }
 
     public getSourceFile(): SourceFile {
@@ -1150,7 +1153,10 @@ class SourceFileObject extends NodeObject implements SourceFile {
                         const lastDeclaration = lastOrUndefined(declarations);
 
                         // Check whether this declaration belongs to an "overload group".
-                        if (lastDeclaration && functionDeclaration.parent === lastDeclaration.parent && functionDeclaration.symbol === lastDeclaration.symbol) {
+                        if (
+                            lastDeclaration && functionDeclaration.parent === lastDeclaration.parent &&
+                            functionDeclaration.symbol === lastDeclaration.symbol
+                        ) {
                             // Overwrite the last declaration if it was an overload
                             // and this one is an implementation.
                             if (functionDeclaration.body && !(lastDeclaration as FunctionLikeDeclaration).body) {
@@ -1578,7 +1584,10 @@ const invalidOperationsInSyntacticMode: readonly (keyof LanguageService)[] = [
 ];
 export function createLanguageService(
     host: LanguageServiceHost,
-    documentRegistry: DocumentRegistry = createDocumentRegistry(host.useCaseSensitiveFileNames && host.useCaseSensitiveFileNames(), host.getCurrentDirectory()),
+    documentRegistry: DocumentRegistry = createDocumentRegistry(
+        host.useCaseSensitiveFileNames && host.useCaseSensitiveFileNames(),
+        host.getCurrentDirectory(),
+    ),
     syntaxOnlyOrLanguageServiceMode?: boolean | LanguageServiceMode,
 ): LanguageService {
     let languageServiceMode: LanguageServiceMode;
@@ -1705,8 +1714,17 @@ export function createLanguageService(
             getDirectories: path => {
                 return host.getDirectories ? host.getDirectories(path) : [];
             },
-            readDirectory: (path: string, extensions?: readonly string[], exclude?: readonly string[], include?: readonly string[], depth?: number) => {
-                Debug.checkDefined(host.readDirectory, "'LanguageServiceHost.readDirectory' must be implemented to correctly process 'projectReferences'");
+            readDirectory: (
+                path: string,
+                extensions?: readonly string[],
+                exclude?: readonly string[],
+                include?: readonly string[],
+                depth?: number,
+            ) => {
+                Debug.checkDefined(
+                    host.readDirectory,
+                    "'LanguageServiceHost.readDirectory' must be implemented to correctly process 'projectReferences'",
+                );
                 return host.readDirectory!(path, extensions, exclude, include, depth);
             },
             onReleaseOldSourceFile,
@@ -1836,7 +1854,11 @@ export function createLanguageService(
             );
         }
 
-        function onReleaseParsedCommandLine(configFileName: string, oldResolvedRef: ResolvedProjectReference | undefined, oldOptions: CompilerOptions) {
+        function onReleaseParsedCommandLine(
+            configFileName: string,
+            oldResolvedRef: ResolvedProjectReference | undefined,
+            oldOptions: CompilerOptions,
+        ) {
             if (host.getParsedCommandLine) {
                 host.onReleaseParsedCommandLine?.(configFileName, oldResolvedRef, oldOptions);
             }
@@ -1849,7 +1871,12 @@ export function createLanguageService(
         // not part of the new program.
         function onReleaseOldSourceFile(oldSourceFile: SourceFile, oldOptions: CompilerOptions) {
             const oldSettingsKey = documentRegistry.getKeyForCompilationSettings(oldOptions);
-            documentRegistry.releaseDocumentWithKey(oldSourceFile.resolvedPath, oldSettingsKey, oldSourceFile.scriptKind, oldSourceFile.impliedNodeFormat);
+            documentRegistry.releaseDocumentWithKey(
+                oldSourceFile.resolvedPath,
+                oldSettingsKey,
+                oldSourceFile.scriptKind,
+                oldSourceFile.impliedNodeFormat,
+            );
         }
 
         function getOrCreateSourceFile(
@@ -2260,7 +2287,13 @@ export function createLanguageService(
 
     function getImplementationAtPosition(fileName: string, position: number): ImplementationLocation[] | undefined {
         synchronizeHostData();
-        return FindAllReferences.getImplementationsAtPosition(program, cancellationToken, program.getSourceFiles(), getValidSourceFile(fileName), position);
+        return FindAllReferences.getImplementationsAtPosition(
+            program,
+            cancellationToken,
+            program.getSourceFiles(),
+            getValidSourceFile(fileName),
+            position,
+        );
     }
 
     /// References and Occurrences
@@ -2298,7 +2331,8 @@ export function createLanguageService(
         }
         else {
             const quotePreference = getQuotePreference(sourceFile, preferences ?? emptyOptions);
-            const providePrefixAndSuffixTextForRename = typeof preferences === "boolean" ? preferences : preferences?.providePrefixAndSuffixTextForRename;
+            const providePrefixAndSuffixTextForRename = typeof preferences === "boolean" ? preferences
+                : preferences?.providePrefixAndSuffixTextForRename;
             return getReferencesWorker(
                 node,
                 position,
@@ -2469,7 +2503,11 @@ export function createLanguageService(
     }
 
     function getSemanticClassifications(fileName: string, span: TextSpan): ClassifiedSpan[];
-    function getSemanticClassifications(fileName: string, span: TextSpan, format?: SemanticClassificationFormat): ClassifiedSpan[] | ClassifiedSpan2020[] {
+    function getSemanticClassifications(
+        fileName: string,
+        span: TextSpan,
+        format?: SemanticClassificationFormat,
+    ): ClassifiedSpan[] | ClassifiedSpan2020[] {
         synchronizeHostData();
 
         const responseFormat = format || SemanticClassificationFormat.Original;
@@ -2535,7 +2573,8 @@ export function createLanguageService(
         const matchKind = token.getStart(sourceFile) === position ? braceMatching.get(token.kind.toString()) : undefined;
         const match = matchKind && findChildOfKind(token.parent, matchKind, sourceFile);
         // We want to order the braces when we return the result.
-        return match ? [createTextSpanFromNode(token, sourceFile), createTextSpanFromNode(match, sourceFile)].sort((a, b) => a.start - b.start) : emptyArray;
+        return match ? [createTextSpanFromNode(token, sourceFile), createTextSpanFromNode(match, sourceFile)].sort((a, b) => a.start - b.start)
+            : emptyArray;
     }
 
     function getIndentationAtPosition(fileName: string, position: number, editorOptions: EditorOptions | EditorSettings) {
@@ -2558,10 +2597,18 @@ export function createLanguageService(
     }
 
     function getFormattingEditsForDocument(fileName: string, options: FormatCodeOptions | FormatCodeSettings): TextChange[] {
-        return formatting.formatDocument(syntaxTreeCache.getCurrentSourceFile(fileName), formatting.getFormatContext(toEditorSettings(options), host));
+        return formatting.formatDocument(
+            syntaxTreeCache.getCurrentSourceFile(fileName),
+            formatting.getFormatContext(toEditorSettings(options), host),
+        );
     }
 
-    function getFormattingEditsAfterKeystroke(fileName: string, position: number, key: string, options: FormatCodeOptions | FormatCodeSettings): TextChange[] {
+    function getFormattingEditsAfterKeystroke(
+        fileName: string,
+        position: number,
+        key: string,
+        options: FormatCodeOptions | FormatCodeSettings,
+    ): TextChange[] {
         const sourceFile = syntaxTreeCache.getCurrentSourceFile(fileName);
         const formatContext = formatting.getFormatContext(toEditorSettings(options), host);
 
@@ -2786,7 +2833,9 @@ export function createLanguageService(
             ) return undefined;
 
             // only return linked cursors if the cursor is within a tag name
-            if (!(openTagNameStart <= position && position <= openTagNameEnd || closeTagNameStart <= position && position <= closeTagNameEnd)) return undefined;
+            if (!(openTagNameStart <= position && position <= openTagNameEnd || closeTagNameStart <= position && position <= closeTagNameEnd)) {
+                return undefined;
+            }
 
             // only return linked cursors if text in both tags is identical
             const openingTagText = openTag.tagName.getText(sourceFile);
@@ -3031,10 +3080,14 @@ export function createLanguageService(
             if (commentRange) {
                 switch (commentRange.kind) {
                     case SyntaxKind.SingleLineCommentTrivia:
-                        textChanges.push(...toggleLineComment(fileName, { end: commentRange.end, pos: commentRange.pos + 1 }, /*insertComment*/ false));
+                        textChanges.push(
+                            ...toggleLineComment(fileName, { end: commentRange.end, pos: commentRange.pos + 1 }, /*insertComment*/ false),
+                        );
                         break;
                     case SyntaxKind.MultiLineCommentTrivia:
-                        textChanges.push(...toggleMultilineComment(fileName, { end: commentRange.end, pos: commentRange.pos + 1 }, /*insertComment*/ false));
+                        textChanges.push(
+                            ...toggleMultilineComment(fileName, { end: commentRange.end, pos: commentRange.pos + 1 }, /*insertComment*/ false),
+                        );
                 }
 
                 i = commentRange.end + 1;
@@ -3219,7 +3272,8 @@ export function createLanguageService(
         triggerReason?: RefactorTriggerReason,
         kind?: string,
     ): RefactorContext {
-        const [startPosition, endPosition] = typeof positionOrRange === "number" ? [positionOrRange, undefined] : [positionOrRange.pos, positionOrRange.end];
+        const [startPosition, endPosition] = typeof positionOrRange === "number" ? [positionOrRange, undefined]
+            : [positionOrRange.pos, positionOrRange.end];
         return {
             file,
             startPosition,
@@ -3504,7 +3558,8 @@ function literalIsName(node: StringLiteralLike | NumericLiteral): boolean {
  */
 export function getContainingObjectLiteralElement(node: Node): ObjectLiteralElementWithName | undefined {
     const element = getContainingObjectLiteralElementWorker(node);
-    return element && (isObjectLiteralExpression(element.parent) || isJsxAttributes(element.parent)) ? element as ObjectLiteralElementWithName : undefined;
+    return element && (isObjectLiteralExpression(element.parent) || isJsxAttributes(element.parent)) ? element as ObjectLiteralElementWithName
+        : undefined;
 }
 function getContainingObjectLiteralElementWorker(node: Node): ObjectLiteralElement | undefined {
     switch (node.kind) {

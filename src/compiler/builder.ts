@@ -318,7 +318,8 @@ function createBuilderProgramState(newProgram: Program, oldState: Readonly<Reusa
         state.semanticDiagnosticsPerFile = new Map();
     }
     else if (compilerOptions.composite && oldState?.outSignature && outFilePath === oldState.compilerOptions.outFile) {
-        state.outSignature = oldState.outSignature && getEmitSignatureFromOldSignature(compilerOptions, oldState.compilerOptions, oldState.outSignature);
+        state.outSignature = oldState.outSignature &&
+            getEmitSignatureFromOldSignature(compilerOptions, oldState.compilerOptions, oldState.outSignature);
     }
     state.changedFilesSet = new Set();
     state.latestChangedDtsFile = compilerOptions.composite ? oldState?.latestChangedDtsFile : undefined;
@@ -355,7 +356,8 @@ function createBuilderProgramState(newProgram: Program, oldState: Readonly<Reusa
     const referencedMap = state.referencedMap;
     const oldReferencedMap = useOldState ? oldState!.referencedMap : undefined;
     const copyDeclarationFileDiagnostics = canCopySemanticDiagnostics && !compilerOptions.skipLibCheck === !oldCompilerOptions!.skipLibCheck;
-    const copyLibFileDiagnostics = copyDeclarationFileDiagnostics && !compilerOptions.skipDefaultLibCheck === !oldCompilerOptions!.skipDefaultLibCheck;
+    const copyLibFileDiagnostics = copyDeclarationFileDiagnostics &&
+        !compilerOptions.skipDefaultLibCheck === !oldCompilerOptions!.skipDefaultLibCheck;
     state.fileInfos.forEach((info, sourceFilePath) => {
         let oldInfo: Readonly<BuilderState.FileInfo> | undefined;
         let newReferences: ReadonlySet<Path> | undefined;
@@ -489,7 +491,12 @@ function repopulateDiagnostics(diagnostics: readonly Diagnostic[], newProgram: P
     if (!diagnostics.length) return diagnostics;
     return sameMap(diagnostics, diag => {
         if (isString(diag.messageText)) return diag;
-        const repopulatedChain = convertOrRepopulateDiagnosticMessageChain(diag.messageText, diag.file, newProgram, chain => chain.repopulateInfo?.());
+        const repopulatedChain = convertOrRepopulateDiagnosticMessageChain(
+            diag.messageText,
+            diag.file,
+            newProgram,
+            chain => chain.repopulateInfo?.(),
+        );
         return repopulatedChain === diag.messageText ?
             diag :
             { ...diag, messageText: repopulatedChain };
@@ -952,7 +959,11 @@ function handleDtsMayChangeOfFileAndExportsOfFile(
  * Gets semantic diagnostics for the file which are
  * bindAndCheckDiagnostics (from cache) and program diagnostics
  */
-function getSemanticDiagnosticsOfFile(state: BuilderProgramState, sourceFile: SourceFile, cancellationToken?: CancellationToken): readonly Diagnostic[] {
+function getSemanticDiagnosticsOfFile(
+    state: BuilderProgramState,
+    sourceFile: SourceFile,
+    cancellationToken?: CancellationToken,
+): readonly Diagnostic[] {
     return concatenate(
         getBinderAndCheckerDiagnosticsOfFile(state, sourceFile, cancellationToken),
         Debug.checkDefined(state.program).getProgramDiagnostics(sourceFile),
@@ -1088,7 +1099,9 @@ export function isProgramBundleEmitBuildInfo(info: ProgramBuildInfo): info is Pr
  */
 function getBuildInfo(state: BuilderProgramState): BuildInfo {
     const currentDirectory = Debug.checkDefined(state.program).getCurrentDirectory();
-    const buildInfoDirectory = getDirectoryPath(getNormalizedAbsolutePath(getTsBuildInfoEmitOutputFilePath(state.compilerOptions)!, currentDirectory));
+    const buildInfoDirectory = getDirectoryPath(
+        getNormalizedAbsolutePath(getTsBuildInfoEmitOutputFilePath(state.compilerOptions)!, currentDirectory),
+    );
     // Convert the file name to Path here if we set the fileName instead to optimize multiple d.ts file emits and having to compute Canonical path
     const latestChangedDtsFile = state.latestChangedDtsFile ? relativeToBuildInfoEnsuringAbsolutePath(state.latestChangedDtsFile) : undefined;
     const fileNames: string[] = [];
@@ -1156,7 +1169,12 @@ function getBuildInfo(state: BuilderProgramState): BuildInfo {
                 // If we havent computed signature, use fileInfo as is
                 value :
                 // Serialize fileInfo with new updated signature
-                { version: value.version, signature: actualSignature, affectsGlobalScope: value.affectsGlobalScope, impliedFormat: value.impliedFormat } :
+                {
+                    version: value.version,
+                    signature: actualSignature,
+                    affectsGlobalScope: value.affectsGlobalScope,
+                    impliedFormat: value.impliedFormat,
+                } :
             // Signature of the FileInfo is undefined, serialize it as false
             { version: value.version, signature: false, affectsGlobalScope: value.affectsGlobalScope, impliedFormat: value.impliedFormat };
     });
@@ -1447,7 +1465,9 @@ export function computeSignatureWithDiagnostics(
     let sourceFileDirectory: string | undefined;
     if (data?.diagnostics?.length) {
         text += data.diagnostics.map(diagnostic =>
-            `${locationInfo(diagnostic)}${DiagnosticCategory[diagnostic.category]}${diagnostic.code}: ${flattenDiagnosticMessageText(diagnostic.messageText)}`
+            `${locationInfo(diagnostic)}${DiagnosticCategory[diagnostic.category]}${diagnostic.code}: ${
+                flattenDiagnosticMessageText(diagnostic.messageText)
+            }`
         )
             .join("\n");
     }
@@ -1492,7 +1512,10 @@ export function createBuilderProgram(
     builderCreationParameters: BuilderCreationParameters,
 ): EmitAndSemanticDiagnosticsBuilderProgram;
 /** @internal */
-export function createBuilderProgram(kind: BuilderProgramKind, { newProgram, host, oldProgram, configFileParsingDiagnostics }: BuilderCreationParameters) {
+export function createBuilderProgram(
+    kind: BuilderProgramKind,
+    { newProgram, host, oldProgram, configFileParsingDiagnostics }: BuilderCreationParameters,
+) {
     // Return same program if underlying program doesnt change
     let oldState = oldProgram && oldProgram.getState();
     if (oldState && newProgram === oldState.program && configFileParsingDiagnostics === newProgram.getConfigFileParsingDiagnostics()) {
@@ -1524,7 +1547,8 @@ export function createBuilderProgram(kind: BuilderProgramKind, { newProgram, hos
         (builderProgram as SemanticDiagnosticsBuilderProgram).getSemanticDiagnosticsOfNextAffectedFile = getSemanticDiagnosticsOfNextAffectedFile;
     }
     else if (kind === BuilderProgramKind.EmitAndSemanticDiagnosticsBuilderProgram) {
-        (builderProgram as EmitAndSemanticDiagnosticsBuilderProgram).getSemanticDiagnosticsOfNextAffectedFile = getSemanticDiagnosticsOfNextAffectedFile;
+        (builderProgram as EmitAndSemanticDiagnosticsBuilderProgram).getSemanticDiagnosticsOfNextAffectedFile =
+            getSemanticDiagnosticsOfNextAffectedFile;
         (builderProgram as EmitAndSemanticDiagnosticsBuilderProgram).emitNextAffectedFile = emitNextAffectedFile;
         builderProgram.emitBuildInfo = emitBuildInfo;
     }
@@ -1635,7 +1659,10 @@ export function createBuilderProgram(kind: BuilderProgramKind, { newProgram, hos
         return { result, affected };
     }
 
-    function getWriteFileCallback(writeFile: WriteFileCallback | undefined, customTransformers: CustomTransformers | undefined): WriteFileCallback | undefined {
+    function getWriteFileCallback(
+        writeFile: WriteFileCallback | undefined,
+        customTransformers: CustomTransformers | undefined,
+    ): WriteFileCallback | undefined {
         if (!getEmitDeclarations(state.compilerOptions)) return writeFile || maybeBind(host, host.writeFile);
         return (fileName, text, writeByteOrderMark, onError, sourceFiles, data) => {
             if (isDeclarationFileName(fileName)) {
@@ -1657,7 +1684,9 @@ export function createBuilderProgram(kind: BuilderProgramKind, { newProgram, hos
                             if (!data?.diagnostics?.length) emitSignature = signature;
                             if (signature !== file.version) { // Update it
                                 if (host.storeFilesChangingSignatureDuringEmit) (state.filesChangingSignature ??= new Set()).add(file.resolvedPath);
-                                if (state.exportedModulesMap) BuilderState.updateExportedModules(state, file, file.exportedModulesFromDeclarationEmit);
+                                if (state.exportedModulesMap) {
+                                    BuilderState.updateExportedModules(state, file, file.exportedModulesFromDeclarationEmit);
+                                }
                                 if (state.affectedFiles) {
                                     // Keep old signature so we know what to undo if cancellation happens
                                     const existing = state.oldSignatures?.get(file.resolvedPath);
@@ -2005,7 +2034,9 @@ export function createBuilderProgramUsingProgramBuildInfo(
         return map;
     }
 
-    function toPerFileDiagnostics(diagnostics: readonly ProgramBuildInfoDiagnostic[] | undefined): Map<Path, readonly ReusableDiagnostic[]> | undefined {
+    function toPerFileDiagnostics(
+        diagnostics: readonly ProgramBuildInfoDiagnostic[] | undefined,
+    ): Map<Path, readonly ReusableDiagnostic[]> | undefined {
         return diagnostics &&
             arrayToMap(diagnostics, value => toFilePath(isNumber(value) ? value : value[0]), value => isNumber(value) ? emptyArray : value[1]);
     }

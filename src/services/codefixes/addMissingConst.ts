@@ -36,7 +36,13 @@ registerCodeFix({
         const changes = textChanges.ChangeTracker.with(context, t => makeChange(t, context.sourceFile, context.span.start, context.program));
         if (changes.length > 0) {
             return [
-                createCodeFixAction(fixId, changes, Diagnostics.Add_const_to_unresolved_variable, fixId, Diagnostics.Add_const_to_all_unresolved_variables),
+                createCodeFixAction(
+                    fixId,
+                    changes,
+                    Diagnostics.Add_const_to_unresolved_variable,
+                    fixId,
+                    Diagnostics.Add_const_to_all_unresolved_variables,
+                ),
             ];
         }
     },

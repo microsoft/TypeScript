@@ -55,7 +55,15 @@ registerCodeFix({
         const decl = getDeclaration(context.sourceFile, context.span.start);
         if (!decl) return;
         const changes = textChanges.ChangeTracker.with(context, t => doChange(t, context.sourceFile, decl));
-        return [createCodeFixAction(fixId, changes, Diagnostics.Annotate_with_type_from_JSDoc, fixId, Diagnostics.Annotate_everything_with_types_from_JSDoc)];
+        return [
+            createCodeFixAction(
+                fixId,
+                changes,
+                Diagnostics.Annotate_with_type_from_JSDoc,
+                fixId,
+                Diagnostics.Annotate_everything_with_types_from_JSDoc,
+            ),
+        ];
     },
     fixIds: [fixId],
     getAllCodeActions: context =>
@@ -155,14 +163,18 @@ function transformJSDocTypeLiteral(node: JSDocTypeLiteral) {
             /*modifiers*/ undefined,
             isIdentifier(tag.name) ? tag.name : tag.name.right,
             isOptionalJSDocPropertyLikeTag(tag) ? factory.createToken(SyntaxKind.QuestionToken) : undefined,
-            tag.typeExpression && visitNode(tag.typeExpression.type, transformJSDocType, isTypeNode) || factory.createKeywordTypeNode(SyntaxKind.AnyKeyword),
+            tag.typeExpression && visitNode(tag.typeExpression.type, transformJSDocType, isTypeNode) ||
+                factory.createKeywordTypeNode(SyntaxKind.AnyKeyword),
         )));
     setEmitFlags(typeNode, EmitFlags.SingleLine);
     return typeNode;
 }
 
 function transformJSDocOptionalType(node: JSDocOptionalType) {
-    return factory.createUnionTypeNode([visitNode(node.type, transformJSDocType, isTypeNode), factory.createTypeReferenceNode("undefined", emptyArray)]);
+    return factory.createUnionTypeNode([
+        visitNode(node.type, transformJSDocType, isTypeNode),
+        factory.createTypeReferenceNode("undefined", emptyArray),
+    ]);
 }
 
 function transformJSDocNullableType(node: JSDocNullableType) {

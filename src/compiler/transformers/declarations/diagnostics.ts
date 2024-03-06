@@ -289,7 +289,9 @@ export function createGetSymbolAccessibilityDiagnosticForNode(node: DeclarationD
         }
     }
 
-    function getVariableDeclarationTypeVisibilityError(symbolAccessibilityResult: SymbolAccessibilityResult): SymbolAccessibilityDiagnostic | undefined {
+    function getVariableDeclarationTypeVisibilityError(
+        symbolAccessibilityResult: SymbolAccessibilityResult,
+    ): SymbolAccessibilityDiagnostic | undefined {
         const diagnosticMessage = getVariableDeclarationTypeVisibilityDiagnosticMessage(symbolAccessibilityResult);
         return diagnosticMessage !== undefined ? {
             diagnosticMessage,
@@ -326,7 +328,8 @@ export function createGetSymbolAccessibilityDiagnosticForNode(node: DeclarationD
             else {
                 diagnosticMessage = symbolAccessibilityResult.errorModuleName ?
                     symbolAccessibilityResult.accessibility === SymbolAccessibility.CannotBeNamed ?
-                        Diagnostics.Return_type_of_public_getter_0_from_exported_class_has_or_is_using_name_1_from_external_module_2_but_cannot_be_named :
+                        Diagnostics
+                            .Return_type_of_public_getter_0_from_exported_class_has_or_is_using_name_1_from_external_module_2_but_cannot_be_named :
                         Diagnostics.Return_type_of_public_getter_0_from_exported_class_has_or_is_using_name_1_from_private_module_2 :
                     Diagnostics.Return_type_of_public_getter_0_from_exported_class_has_or_is_using_private_name_1;
             }
@@ -375,7 +378,8 @@ export function createGetSymbolAccessibilityDiagnosticForNode(node: DeclarationD
                 else if (node.parent.kind === SyntaxKind.ClassDeclaration) {
                     diagnosticMessage = symbolAccessibilityResult.errorModuleName ?
                         symbolAccessibilityResult.accessibility === SymbolAccessibility.CannotBeNamed ?
-                            Diagnostics.Return_type_of_public_method_from_exported_class_has_or_is_using_name_0_from_external_module_1_but_cannot_be_named :
+                            Diagnostics
+                                .Return_type_of_public_method_from_exported_class_has_or_is_using_name_0_from_external_module_1_but_cannot_be_named :
                             Diagnostics.Return_type_of_public_method_from_exported_class_has_or_is_using_name_0_from_private_module_1 :
                         Diagnostics.Return_type_of_public_method_from_exported_class_has_or_is_using_private_name_0;
                 }
@@ -405,7 +409,9 @@ export function createGetSymbolAccessibilityDiagnosticForNode(node: DeclarationD
         };
     }
 
-    function getParameterDeclarationTypeVisibilityError(symbolAccessibilityResult: SymbolAccessibilityResult): SymbolAccessibilityDiagnostic | undefined {
+    function getParameterDeclarationTypeVisibilityError(
+        symbolAccessibilityResult: SymbolAccessibilityResult,
+    ): SymbolAccessibilityDiagnostic | undefined {
         const diagnosticMessage: DiagnosticMessage = getParameterDeclarationTypeVisibilityDiagnosticMessage(symbolAccessibilityResult);
         return diagnosticMessage !== undefined ? {
             diagnosticMessage,
@@ -455,7 +461,8 @@ export function createGetSymbolAccessibilityDiagnosticForNode(node: DeclarationD
                 else if (node.parent.parent.kind === SyntaxKind.ClassDeclaration) {
                     return symbolAccessibilityResult.errorModuleName ?
                         symbolAccessibilityResult.accessibility === SymbolAccessibility.CannotBeNamed ?
-                            Diagnostics.Parameter_0_of_public_method_from_exported_class_has_or_is_using_name_1_from_external_module_2_but_cannot_be_named :
+                            Diagnostics
+                                .Parameter_0_of_public_method_from_exported_class_has_or_is_using_name_1_from_external_module_2_but_cannot_be_named :
                             Diagnostics.Parameter_0_of_public_method_from_exported_class_has_or_is_using_name_1_from_private_module_2 :
                         Diagnostics.Parameter_0_of_public_method_from_exported_class_has_or_is_using_private_name_1;
                 }

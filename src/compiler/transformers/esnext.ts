@@ -243,7 +243,13 @@ export function transformESNext(context: TransformationContext): (x: SourceFile 
                 [
                     ...visitArray(node.statements, visitor, isStatement, 0, prologueCount),
                     ...createDownlevelUsingStatements(
-                        transformUsingDeclarations(node.statements, prologueCount, node.statements.length, envBinding, /*topLevelStatements*/ undefined),
+                        transformUsingDeclarations(
+                            node.statements,
+                            prologueCount,
+                            node.statements.length,
+                            envBinding,
+                            /*topLevelStatements*/ undefined,
+                        ),
                         envBinding,
                         usingKind === UsingKind.Async,
                     ),

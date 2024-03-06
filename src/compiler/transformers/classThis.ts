@@ -31,7 +31,11 @@ import {
  * expression that has already had its `EmitFlags` set or may have been tracked to prevent substitution.
  * @internal
  */
-export function createClassThisAssignmentBlock(factory: NodeFactory, classThis: Identifier, thisExpression = factory.createThis()): ClassThisAssignmentBlock {
+export function createClassThisAssignmentBlock(
+    factory: NodeFactory,
+    classThis: Identifier,
+    thisExpression = factory.createThis(),
+): ClassThisAssignmentBlock {
     // produces:
     //
     //  static { _classThis = this; }

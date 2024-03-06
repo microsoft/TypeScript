@@ -214,7 +214,9 @@ a;b;
                     path: `/user/username/projects/myproject/tsconfig.json`,
                     content: jsonToReadableText({ compilerOptions: { forceConsistentCasingInFileNames: true } }),
                 };
-                return createWatchedSystem([moduleA, symlinkA, moduleB, libFile, tsconfig], { currentDirectory: "/user/username/projects/myproject" });
+                return createWatchedSystem([moduleA, symlinkA, moduleB, libFile, tsconfig], {
+                    currentDirectory: "/user/username/projects/myproject",
+                });
             },
             edits: [
                 {
@@ -294,7 +296,9 @@ a;b;
                     // Use outFile because otherwise the real and linked files will have the same output path
                     content: jsonToReadableText({ compilerOptions: { forceConsistentCasingInFileNames: true, outFile: "out.js", module: "system" } }),
                 };
-                return createWatchedSystem([moduleA, symlinkA, moduleB, libFile, tsconfig], { currentDirectory: "/user/username/projects/myproject" });
+                return createWatchedSystem([moduleA, symlinkA, moduleB, libFile, tsconfig], {
+                    currentDirectory: "/user/username/projects/myproject",
+                });
             },
             edits: [
                 {

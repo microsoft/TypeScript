@@ -47,7 +47,11 @@ import { value1 } from "../node_modules/.cache/someFile.d.ts";`,
             command: ts.server.protocol.CommandTypes.GetMoveToRefactoringFileSuggestions,
             arguments: { file: file1.path, line: 1, offset: 11 },
         });
-        baselineTsserverLogs("getMoveToRefactoringFileSuggestions", "works for suggesting a list of files, excluding node_modules within a project", session);
+        baselineTsserverLogs(
+            "getMoveToRefactoringFileSuggestions",
+            "works for suggesting a list of files, excluding node_modules within a project",
+            session,
+        );
     });
     it("suggests only .ts file for a .ts filepath", () => {
         const file1: File = {
@@ -65,7 +69,9 @@ import { value1 } from "../node_modules/.cache/someFile.d.ts";`,
         const file7: File = { path: "/file7.ts", content: "" };
         const tsconfig: File = {
             path: "/tsconfig.json",
-            content: jsonToReadableText({ files: ["./file1.ts", "./file2.tsx", "./file3.mts", "./file4.cts", "./file5.js", "./file6.d.ts", "./file7.ts"] }),
+            content: jsonToReadableText({
+                files: ["./file1.ts", "./file2.tsx", "./file3.mts", "./file4.cts", "./file5.js", "./file6.d.ts", "./file7.ts"],
+            }),
         };
 
         const host = createServerHost([file1, file2, file3, file4, file5, file6, file7, tsconfig]);

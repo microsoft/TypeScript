@@ -32,7 +32,13 @@ export interface IO {
     getExecutingFilePath(): string;
     getWorkspaceRoot(): string;
     exit(exitCode?: number): void;
-    readDirectory(path: string, extension?: readonly string[], exclude?: readonly string[], include?: readonly string[], depth?: number): readonly string[];
+    readDirectory(
+        path: string,
+        extension?: readonly string[],
+        exclude?: readonly string[],
+        include?: readonly string[],
+        depth?: number,
+    ): readonly string[];
     getAccessibleFileSystemEntries(dirname: string): ts.FileSystemEntries;
     tryEnableSourceMapsForHost?(): void;
     getEnvironmentVariable?(name: string): string;
@@ -324,7 +330,10 @@ export namespace Compiler {
         return optionsIndex.get(name.toLowerCase());
     }
 
-    export function setCompilerOptionsFromHarnessSetting(settings: TestCaseParser.CompilerSettings, options: ts.CompilerOptions & HarnessOptions): void {
+    export function setCompilerOptionsFromHarnessSetting(
+        settings: TestCaseParser.CompilerSettings,
+        options: ts.CompilerOptions & HarnessOptions,
+    ): void {
         for (const name in settings) {
             if (ts.hasProperty(settings, name)) {
                 const value = settings[name];
@@ -472,7 +481,13 @@ export namespace Compiler {
         if (options.declaration && result.diagnostics.length === 0 && result.dts.size > 0) {
             ts.forEach(inputFiles, file => addDtsFile(file, declInputFiles));
             ts.forEach(otherFiles, file => addDtsFile(file, declOtherFiles));
-            return { declInputFiles, declOtherFiles, harnessSettings, options, currentDirectory: currentDirectory || harnessSettings.currentDirectory };
+            return {
+                declInputFiles,
+                declOtherFiles,
+                harnessSettings,
+                options,
+                currentDirectory: currentDirectory || harnessSettings.currentDirectory,
+            };
         }
 
         function addDtsFile(file: TestFile, dtsFiles: TestFile[]) {
@@ -926,7 +941,10 @@ export namespace Compiler {
         if (anyUnfoundSources) return "";
 
         const hash = "#base64," +
-            ts.map([outputJSFile.text, sourcemap].concat(sourceTDs.map(td => td!.text)), s => ts.convertToBase64(decodeURIComponent(encodeURIComponent(s))))
+            ts.map(
+                [outputJSFile.text, sourcemap].concat(sourceTDs.map(td => td!.text)),
+                s => ts.convertToBase64(decodeURIComponent(encodeURIComponent(s))),
+            )
                 .join(",");
         return "\n//// https://sokra.github.io/source-map-visualization" + hash + "\n";
     }
@@ -1061,7 +1079,11 @@ export namespace Compiler {
     }
 
     export function sanitizeTestFilePath(name: string) {
-        const path = ts.toPath(ts.normalizeSlashes(name.replace(/[\^<>:"|?*%]/g, "_")).replace(/\.\.\//g, "__dotdot/"), "", Utils.canonicalizeForHarness);
+        const path = ts.toPath(
+            ts.normalizeSlashes(name.replace(/[\^<>:"|?*%]/g, "_")).replace(/\.\.\//g, "__dotdot/"),
+            "",
+            Utils.canonicalizeForHarness,
+        );
         if (ts.startsWith(path, "/")) {
             return path.substring(1);
         }
@@ -1179,7 +1201,10 @@ function getVaryByStarSettingValues(varyBy: string): ReadonlyMap<string, string 
 /**
  * Compute FileBasedTestConfiguration variations based on a supplied list of variable settings.
  */
-export function getFileBasedTestConfigurations(settings: TestCaseParser.CompilerSettings, varyBy: readonly string[]): FileBasedTestConfiguration[] | undefined {
+export function getFileBasedTestConfigurations(
+    settings: TestCaseParser.CompilerSettings,
+    varyBy: readonly string[],
+): FileBasedTestConfiguration[] | undefined {
     let varyByEntries: [string, string[]][] | undefined;
     let variationCount = 1;
     for (const varyByKey of varyBy) {
@@ -1395,7 +1420,13 @@ export namespace TestCaseParser {
                 assert.isTrue(configJson.endOfFileToken !== undefined);
                 const configFileName = ts.getNormalizedAbsolutePath(data.name, vfs.srcFolder);
                 const configDir = ts.getDirectoryPath(configFileName);
-                tsConfig = ts.parseJsonSourceFileConfigFileContent(configJson, parseConfigHost, configDir, /*existingOptions*/ undefined, configFileName);
+                tsConfig = ts.parseJsonSourceFileConfigFileContent(
+                    configJson,
+                    parseConfigHost,
+                    configDir,
+                    /*existingOptions*/ undefined,
+                    configFileName,
+                );
                 tsConfigFileUnitData = data;
 
                 // delete entry from the list
@@ -1586,7 +1617,8 @@ export namespace Baseline {
             let errorMsg = "";
             if (errors.length) {
                 errorMsg += `The baseline for ${relativeFileBase} in ${errors.length} files has changed:${
-                    "\n    " + errors.slice(0, 5).map(e => e.message).join("\n    ") + (errors.length > 5 ? "\n" + `    and ${errors.length - 5} more` : "")
+                    "\n    " + errors.slice(0, 5).map(e => e.message).join("\n    ") +
+                    (errors.length > 5 ? "\n" + `    and ${errors.length - 5} more` : "")
                 }`;
             }
             if (errors.length && missing.length) {

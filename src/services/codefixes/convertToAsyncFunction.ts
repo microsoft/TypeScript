@@ -242,7 +242,11 @@ function getAllPromiseExpressionsToReturn(func: FunctionLikeDeclaration, checker
     return setOfExpressionsToReturn;
 }
 
-function isPromiseReturningCallExpression<Name extends string>(node: Node, checker: TypeChecker, name: Name): node is PromiseReturningCallExpression<Name> {
+function isPromiseReturningCallExpression<Name extends string>(
+    node: Node,
+    checker: TypeChecker,
+    name: Name,
+): node is PromiseReturningCallExpression<Name> {
     if (!isCallExpression(node)) return false;
     const isExpressionOfName = hasPropertyAccessExpressionWithName(node, name);
     const nodeType = isExpressionOfName && checker.getTypeAtLocation(node);
@@ -465,7 +469,10 @@ function getPossibleNameForVarDecl(
             });
         }
         else {
-            possibleNameForVarDecl = createSynthIdentifier(factory.createUniqueName("result", GeneratedIdentifierFlags.Optimistic), continuationArgName.types);
+            possibleNameForVarDecl = createSynthIdentifier(
+                factory.createUniqueName("result", GeneratedIdentifierFlags.Optimistic),
+                continuationArgName.types,
+            );
         }
 
         // We are about to write a 'let' variable declaration, but `transformExpression` for both
@@ -683,7 +690,11 @@ function createVariableOrAssignmentOrExpressionStatement(
 
     if (isSynthIdentifier(variableName) && variableName.hasBeenDeclared) {
         // if the variable has already been declared, we don't need "let" or "const"
-        return [factory.createExpressionStatement(factory.createAssignment(getSynthesizedDeepClone(referenceSynthIdentifier(variableName)), rightHandSide))];
+        return [
+            factory.createExpressionStatement(
+                factory.createAssignment(getSynthesizedDeepClone(referenceSynthIdentifier(variableName)), rightHandSide),
+            ),
+        ];
     }
 
     return [
@@ -921,7 +932,9 @@ function removeReturns(
                     ret.push(factory.createExpressionStatement(possiblyAwaitedExpression));
                 }
                 else if (isSynthIdentifier(prevArgName) && prevArgName.hasBeenDeclared) {
-                    ret.push(factory.createExpressionStatement(factory.createAssignment(referenceSynthIdentifier(prevArgName), possiblyAwaitedExpression)));
+                    ret.push(
+                        factory.createExpressionStatement(factory.createAssignment(referenceSynthIdentifier(prevArgName), possiblyAwaitedExpression)),
+                    );
                 }
                 else {
                     ret.push(

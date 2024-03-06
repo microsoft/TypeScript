@@ -132,7 +132,10 @@ function getInfo(context: RefactorContext, considerEmptySpans = true): OptionalC
     // selecting fo[|o && foo.ba|]r should be valid, so adjust span to fit start and end tokens
     const startToken = getTokenAtPosition(file, span.start);
     const endToken = findTokenOnLeftOfPosition(file, span.start + span.length);
-    const adjustedSpan = createTextSpanFromBounds(startToken.pos, endToken && endToken.end >= startToken.pos ? endToken.getEnd() : startToken.getEnd());
+    const adjustedSpan = createTextSpanFromBounds(
+        startToken.pos,
+        endToken && endToken.end >= startToken.pos ? endToken.getEnd() : startToken.getEnd(),
+    );
 
     const parent = forEmptySpan ? getValidParentNodeOfEmptySpan(startToken) : getValidParentNodeContainingSpan(startToken, adjustedSpan);
     const expression = parent && isValidExpressionOrStatement(parent) ? getExpression(parent) : undefined;
@@ -331,11 +334,20 @@ function convertOccurrences(checker: TypeChecker, toConvert: Expression, occurre
     return toConvert;
 }
 
-function doChange(sourceFile: SourceFile, checker: TypeChecker, changes: textChanges.ChangeTracker, info: OptionalChainInfo, _actionName: string): void {
+function doChange(
+    sourceFile: SourceFile,
+    checker: TypeChecker,
+    changes: textChanges.ChangeTracker,
+    info: OptionalChainInfo,
+    _actionName: string,
+): void {
     const { finalExpression, occurrences, expression } = info;
     const firstOccurrence = occurrences[occurrences.length - 1];
     const convertedChain = convertOccurrences(checker, finalExpression, occurrences);
-    if (convertedChain && (isPropertyAccessExpression(convertedChain) || isElementAccessExpression(convertedChain) || isCallExpression(convertedChain))) {
+    if (
+        convertedChain &&
+        (isPropertyAccessExpression(convertedChain) || isElementAccessExpression(convertedChain) || isCallExpression(convertedChain))
+    ) {
         if (isBinaryExpression(expression)) {
             changes.replaceNodeRange(sourceFile, firstOccurrence, finalExpression, convertedChain);
         }

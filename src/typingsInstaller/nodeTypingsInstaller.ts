@@ -124,7 +124,8 @@ export class NodeTypingsInstaller extends TypingsInstaller {
             throttleLimit,
             log,
         );
-        this.npmPath = npmLocation !== undefined ? npmLocation : getDefaultNPMLocation(process.argv[0], validateDefaultNpmLocation, this.installTypingHost);
+        this.npmPath = npmLocation !== undefined ? npmLocation
+            : getDefaultNPMLocation(process.argv[0], validateDefaultNpmLocation, this.installTypingHost);
 
         // If the NPM path contains spaces and isn't wrapped in quotes, do so.
         if (this.npmPath.includes(" ") && this.npmPath[0] !== `"`) {
@@ -132,7 +133,9 @@ export class NodeTypingsInstaller extends TypingsInstaller {
         }
         if (this.log.isEnabled()) {
             this.log.writeLine(`Process id: ${process.pid}`);
-            this.log.writeLine(`NPM location: ${this.npmPath} (explicit '${Arguments.NpmLocation}' ${npmLocation === undefined ? "not " : ""} provided)`);
+            this.log.writeLine(
+                `NPM location: ${this.npmPath} (explicit '${Arguments.NpmLocation}' ${npmLocation === undefined ? "not " : ""} provided)`,
+            );
             this.log.writeLine(`validateDefaultNpmLocation: ${validateDefaultNpmLocation}`);
         }
         ({ execSync: this.nodeExecSync } = require("child_process"));

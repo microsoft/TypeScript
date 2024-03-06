@@ -261,8 +261,16 @@ export namespace Debug {
         return value;
     }
 
-    export function assertEachIsDefined<T extends Node>(value: NodeArray<T>, message?: string, stackCrawlMark?: AnyFunction): asserts value is NodeArray<T>;
-    export function assertEachIsDefined<T>(value: readonly T[], message?: string, stackCrawlMark?: AnyFunction): asserts value is readonly NonNullable<T>[];
+    export function assertEachIsDefined<T extends Node>(
+        value: NodeArray<T>,
+        message?: string,
+        stackCrawlMark?: AnyFunction,
+    ): asserts value is NodeArray<T>;
+    export function assertEachIsDefined<T>(
+        value: readonly T[],
+        message?: string,
+        stackCrawlMark?: AnyFunction,
+    ): asserts value is readonly NonNullable<T>[];
     export function assertEachIsDefined<T>(value: readonly T[], message?: string, stackCrawlMark?: AnyFunction) {
         for (const v of value) {
             assertIsDefined(v, message, stackCrawlMark || assertEachIsDefined);
@@ -305,7 +313,12 @@ export namespace Debug {
         message?: string,
         stackCrawlMark?: AnyFunction,
     ): asserts nodes is readonly U[] | undefined;
-    export function assertEachNode(nodes: readonly Node[], test: ((node: Node) => boolean) | undefined, message?: string, stackCrawlMark?: AnyFunction): void;
+    export function assertEachNode(
+        nodes: readonly Node[],
+        test: ((node: Node) => boolean) | undefined,
+        message?: string,
+        stackCrawlMark?: AnyFunction,
+    ): void;
     export function assertEachNode(
         nodes: readonly Node[] | undefined,
         test: ((node: Node) => boolean) | undefined,
@@ -328,7 +341,12 @@ export namespace Debug {
         message?: string,
         stackCrawlMark?: AnyFunction,
     ): asserts node is U;
-    export function assertNode(node: Node | undefined, test: ((node: Node) => boolean) | undefined, message?: string, stackCrawlMark?: AnyFunction): void;
+    export function assertNode(
+        node: Node | undefined,
+        test: ((node: Node) => boolean) | undefined,
+        message?: string,
+        stackCrawlMark?: AnyFunction,
+    ): void;
     export function assertNode(node: Node | undefined, test: ((node: Node) => boolean) | undefined, message?: string, stackCrawlMark?: AnyFunction) {
         if (shouldAssertFunction(AssertionLevel.Normal, "assertNode")) {
             assert(
@@ -346,8 +364,18 @@ export namespace Debug {
         message?: string,
         stackCrawlMark?: AnyFunction,
     ): asserts node is Exclude<T, U>;
-    export function assertNotNode(node: Node | undefined, test: ((node: Node) => boolean) | undefined, message?: string, stackCrawlMark?: AnyFunction): void;
-    export function assertNotNode(node: Node | undefined, test: ((node: Node) => boolean) | undefined, message?: string, stackCrawlMark?: AnyFunction) {
+    export function assertNotNode(
+        node: Node | undefined,
+        test: ((node: Node) => boolean) | undefined,
+        message?: string,
+        stackCrawlMark?: AnyFunction,
+    ): void;
+    export function assertNotNode(
+        node: Node | undefined,
+        test: ((node: Node) => boolean) | undefined,
+        message?: string,
+        stackCrawlMark?: AnyFunction,
+    ) {
         if (shouldAssertFunction(AssertionLevel.Normal, "assertNotNode")) {
             assert(
                 node === undefined || test === undefined || !test(node),
@@ -376,7 +404,12 @@ export namespace Debug {
         message?: string,
         stackCrawlMark?: AnyFunction,
     ): void;
-    export function assertOptionalNode(node: Node | undefined, test: ((node: Node) => boolean) | undefined, message?: string, stackCrawlMark?: AnyFunction) {
+    export function assertOptionalNode(
+        node: Node | undefined,
+        test: ((node: Node) => boolean) | undefined,
+        message?: string,
+        stackCrawlMark?: AnyFunction,
+    ) {
         if (shouldAssertFunction(AssertionLevel.Normal, "assertOptionalNode")) {
             assert(
                 test === undefined || node === undefined || test(node),
@@ -729,7 +762,8 @@ export namespace Debug {
                             (this as ObjectType).objectFlags & ObjectFlags.EvolvingArray ? "EvolvingArrayType" :
                             "ObjectType" :
                         "Type";
-                    const remainingObjectFlags = this.flags & TypeFlags.Object ? (this as ObjectType).objectFlags & ~ObjectFlags.ObjectTypeKindMask : 0;
+                    const remainingObjectFlags = this.flags & TypeFlags.Object ? (this as ObjectType).objectFlags & ~ObjectFlags.ObjectTypeKindMask
+                        : 0;
                     return `${typeHeader}${this.symbol ? ` '${symbolName(this.symbol)}'` : ""}${
                         remainingObjectFlags ? ` (${formatObjectFlags(remainingObjectFlags)})` : ""
                     }`;
@@ -787,7 +821,8 @@ export namespace Debug {
                             const nodeHeader = isGeneratedIdentifier(this) ? "GeneratedIdentifier" :
                                 isIdentifier(this) ? `Identifier '${idText(this)}'` :
                                 isPrivateIdentifier(this) ? `PrivateIdentifier '${idText(this)}'` :
-                                isStringLiteral(this) ? `StringLiteral ${JSON.stringify(this.text.length < 10 ? this.text : this.text.slice(10) + "...")}` :
+                                isStringLiteral(this) ?
+                                `StringLiteral ${JSON.stringify(this.text.length < 10 ? this.text : this.text.slice(10) + "...")}` :
                                 isNumericLiteral(this) ? `NumericLiteral ${this.text}` :
                                 isBigIntLiteral(this) ? `BigIntLiteral ${this.text}n` :
                                 isTypeParameterDeclaration(this) ? "TypeParameterDeclaration" :

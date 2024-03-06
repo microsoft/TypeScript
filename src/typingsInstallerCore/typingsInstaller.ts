@@ -228,7 +228,12 @@ export abstract class TypingsInstaller {
 
         // install typings
         if (discoverTypingsResult.newTypingNames.length) {
-            this.installTypings(req, req.cachePath || this.globalCachePath, discoverTypingsResult.cachedTypingPaths, discoverTypingsResult.newTypingNames);
+            this.installTypings(
+                req,
+                req.cachePath || this.globalCachePath,
+                discoverTypingsResult.cachedTypingPaths,
+                discoverTypingsResult.newTypingNames,
+            );
         }
         else {
             this.sendResponse(this.createSetTypings(req, discoverTypingsResult.cachedTypingPaths));
@@ -540,7 +545,9 @@ export abstract class TypingsInstaller {
     }
 
     protected abstract installWorker(requestId: number, packageNames: string[], cwd: string, onRequestCompleted: RequestCompletedAction): void;
-    protected abstract sendResponse(response: SetTypings | InvalidateCachedTypings | BeginInstallTypes | EndInstallTypes | WatchTypingLocations): void;
+    protected abstract sendResponse(
+        response: SetTypings | InvalidateCachedTypings | BeginInstallTypes | EndInstallTypes | WatchTypingLocations,
+    ): void;
     /** @internal */
     protected abstract sendResponse(
         response:

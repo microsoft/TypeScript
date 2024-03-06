@@ -112,7 +112,13 @@ registerCodeFix({
     },
 });
 
-function getAwaitErrorSpanExpression(sourceFile: SourceFile, errorCode: number, span: TextSpan, cancellationToken: CancellationToken, program: Program) {
+function getAwaitErrorSpanExpression(
+    sourceFile: SourceFile,
+    errorCode: number,
+    span: TextSpan,
+    cancellationToken: CancellationToken,
+    program: Program,
+) {
     const expression = getFixableErrorSpanExpression(sourceFile, span);
     return expression
             && isMissingAwaitError(sourceFile, errorCode, span, cancellationToken, program)
@@ -131,7 +137,10 @@ function getDeclarationSiteFix(
     const awaitableInitializers = findAwaitableInitializers(expression, sourceFile, cancellationToken, program, checker);
     if (awaitableInitializers) {
         const initializerChanges = trackChanges(t => {
-            forEach(awaitableInitializers.initializers, ({ expression }) => makeChange(t, errorCode, sourceFile, checker, expression, fixedDeclarations));
+            forEach(
+                awaitableInitializers.initializers,
+                ({ expression }) => makeChange(t, errorCode, sourceFile, checker, expression, fixedDeclarations),
+            );
             if (fixedDeclarations && awaitableInitializers.needsSecondPassForFixAll) {
                 makeChange(t, errorCode, sourceFile, checker, expression, fixedDeclarations);
             }
@@ -163,11 +172,14 @@ function getUseSiteFix(
 function isMissingAwaitError(sourceFile: SourceFile, errorCode: number, span: TextSpan, cancellationToken: CancellationToken, program: Program) {
     const checker = program.getTypeChecker();
     const diagnostics = checker.getDiagnostics(sourceFile, cancellationToken);
-    return some(diagnostics, ({ start, length, relatedInformation, code }) =>
-        isNumber(start) && isNumber(length) && textSpansEqual({ start, length }, span) &&
-        code === errorCode &&
-        !!relatedInformation &&
-        some(relatedInformation, related => related.code === Diagnostics.Did_you_forget_to_use_await.code));
+    return some(
+        diagnostics,
+        ({ start, length, relatedInformation, code }) =>
+            isNumber(start) && isNumber(length) && textSpansEqual({ start, length }, span) &&
+            code === errorCode &&
+            !!relatedInformation &&
+            some(relatedInformation, related => related.code === Diagnostics.Did_you_forget_to_use_await.code),
+    );
 }
 
 interface AwaitableInitializer {
@@ -313,7 +325,13 @@ function makeChange(
             changeTracker.replaceNode(
                 sourceFile,
                 forOf,
-                factory.updateForOfStatement(forOf, factory.createToken(SyntaxKind.AwaitKeyword), forOf.initializer, forOf.expression, forOf.statement),
+                factory.updateForOfStatement(
+                    forOf,
+                    factory.createToken(SyntaxKind.AwaitKeyword),
+                    forOf.initializer,
+                    forOf.expression,
+                    forOf.statement,
+                ),
             );
             return;
         }

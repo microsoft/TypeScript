@@ -18,7 +18,8 @@ import {
 
 const fixId = "fixIncorrectNamedTupleSyntax";
 const errorCodes = [
-    Diagnostics.A_labeled_tuple_element_is_declared_as_optional_with_a_question_mark_after_the_name_and_before_the_colon_rather_than_after_the_type.code,
+    Diagnostics.A_labeled_tuple_element_is_declared_as_optional_with_a_question_mark_after_the_name_and_before_the_colon_rather_than_after_the_type
+        .code,
     Diagnostics.A_labeled_tuple_element_is_declared_as_rest_with_a_before_the_name_rather_than_before_the_type.code,
 ];
 
@@ -53,7 +54,8 @@ function doChange(changes: textChanges.ChangeTracker, sourceFile: SourceFile, na
     let sawOptional = false;
     let sawRest = false;
     while (
-        unwrappedType.kind === SyntaxKind.OptionalType || unwrappedType.kind === SyntaxKind.RestType || unwrappedType.kind === SyntaxKind.ParenthesizedType
+        unwrappedType.kind === SyntaxKind.OptionalType || unwrappedType.kind === SyntaxKind.RestType ||
+        unwrappedType.kind === SyntaxKind.ParenthesizedType
     ) {
         if (unwrappedType.kind === SyntaxKind.OptionalType) {
             sawOptional = true;

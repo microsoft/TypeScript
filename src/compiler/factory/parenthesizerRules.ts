@@ -120,7 +120,12 @@ export function createParenthesizerRules(factory: NodeFactory): ParenthesizerRul
      * @param isLeftSideOfBinary A value indicating whether the operand is the left side of the
      *                           BinaryExpression.
      */
-    function binaryOperandNeedsParentheses(binaryOperator: SyntaxKind, operand: Expression, isLeftSideOfBinary: boolean, leftOperand: Expression | undefined) {
+    function binaryOperandNeedsParentheses(
+        binaryOperator: SyntaxKind,
+        operand: Expression,
+        isLeftSideOfBinary: boolean,
+        leftOperand: Expression | undefined,
+    ) {
         // If the operand has lower precedence, then it needs to be parenthesized to preserve the
         // intent of the expression. For example, if the operand is `a + b` and the operator is
         // `*`, then we need to parenthesize the operand to preserve the intended order of

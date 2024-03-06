@@ -626,9 +626,19 @@ export interface LanguageService {
     getSmartSelectionRange(fileName: string, position: number): SelectionRange;
 
     /** @internal */
-    getDefinitionAtPosition(fileName: string, position: number, searchOtherFilesOnly: false, stopAtAlias: boolean): readonly DefinitionInfo[] | undefined;
+    getDefinitionAtPosition(
+        fileName: string,
+        position: number,
+        searchOtherFilesOnly: false,
+        stopAtAlias: boolean,
+    ): readonly DefinitionInfo[] | undefined;
     /** @internal */
-    getDefinitionAtPosition(fileName: string, position: number, searchOtherFilesOnly: boolean, stopAtAlias: false): readonly DefinitionInfo[] | undefined;
+    getDefinitionAtPosition(
+        fileName: string,
+        position: number,
+        searchOtherFilesOnly: boolean,
+        stopAtAlias: false,
+    ): readonly DefinitionInfo[] | undefined;
     getDefinitionAtPosition(fileName: string, position: number): readonly DefinitionInfo[] | undefined;
     getDefinitionAndBoundSpan(fileName: string, position: number): DefinitionInfoAndBoundSpan | undefined;
     getTypeDefinitionAtPosition(fileName: string, position: number): readonly DefinitionInfo[] | undefined;
@@ -639,7 +649,13 @@ export interface LanguageService {
     getDocumentHighlights(fileName: string, position: number, filesToSearch: string[]): DocumentHighlights[] | undefined;
     getFileReferences(fileName: string): ReferenceEntry[];
 
-    getNavigateToItems(searchValue: string, maxResultCount?: number, fileName?: string, excludeDtsFiles?: boolean, excludeLibFiles?: boolean): NavigateToItem[];
+    getNavigateToItems(
+        searchValue: string,
+        maxResultCount?: number,
+        fileName?: string,
+        excludeDtsFiles?: boolean,
+        excludeLibFiles?: boolean,
+    ): NavigateToItem[];
     getNavigationBarItems(fileName: string): NavigationBarItem[];
     getNavigationTree(fileName: string): NavigationTree;
 
@@ -737,7 +753,11 @@ export interface LanguageService {
         triggerReason?: RefactorTriggerReason,
         kind?: string,
     ): { newFileName: string; files: string[]; };
-    organizeImports(args: OrganizeImportsArgs, formatOptions: FormatCodeSettings, preferences: UserPreferences | undefined): readonly FileTextChanges[];
+    organizeImports(
+        args: OrganizeImportsArgs,
+        formatOptions: FormatCodeSettings,
+        preferences: UserPreferences | undefined,
+    ): readonly FileTextChanges[];
     getEditsForFileRename(
         oldFilePath: string,
         newFilePath: string,
@@ -756,7 +776,10 @@ export interface LanguageService {
     /// Returns true if a suitable symbol was found in the project.
     /// May set isDefinition properties in `referencedSymbols` to false.
     /// May add elements to `knownSymbolSpans`.
-    /** @internal */ updateIsDefinitionOfReferencedSymbols(referencedSymbols: readonly ReferencedSymbol[], knownSymbolSpans: Set<DocumentSpan>): boolean;
+    /** @internal */ updateIsDefinitionOfReferencedSymbols(
+        referencedSymbols: readonly ReferencedSymbol[],
+        knownSymbolSpans: Set<DocumentSpan>,
+    ): boolean;
 
     toggleLineComment(fileName: string, textRange: TextRange): TextChange[];
     toggleMultilineComment(fileName: string, textRange: TextRange): TextChange[];
@@ -1966,7 +1989,11 @@ export interface Refactor {
     kinds?: string[];
 
     /** Compute the associated code actions */
-    getEditsForAction(context: RefactorContext, actionName: string, interactiveRefactorArguments?: InteractiveRefactorArguments): RefactorEditInfo | undefined;
+    getEditsForAction(
+        context: RefactorContext,
+        actionName: string,
+        interactiveRefactorArguments?: InteractiveRefactorArguments,
+    ): RefactorEditInfo | undefined;
 
     /** Compute (quickly) which actions are available here */
     getAvailableActions(

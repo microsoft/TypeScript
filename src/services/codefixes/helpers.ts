@@ -572,7 +572,10 @@ export function createSignatureDeclarationFromCallExpression(
     const { typeArguments, arguments: args, parent } = call;
 
     const contextualType = isJs ? undefined : checker.getContextualType(call);
-    const names = map(args, arg => isIdentifier(arg) ? arg.text : isPropertyAccessExpression(arg) && isIdentifier(arg.name) ? arg.name.text : undefined);
+    const names = map(
+        args,
+        arg => isIdentifier(arg) ? arg.text : isPropertyAccessExpression(arg) && isIdentifier(arg.name) ? arg.name.text : undefined,
+    );
     const instanceTypes = isJs ? [] : map(args, arg => checker.getTypeAtLocation(arg));
     const { argumentTypeNodes, argumentTypeParameters } = getArgumentTypesAndTypeParameters(
         checker,
@@ -769,9 +772,10 @@ export function getArgumentTypesAndTypeParameters(
         //    function added<T>(value: T) { ... }
         // We instead want to output:
         //    function added<T extends string>(value: T) { ... }
-        const instanceTypeConstraint = instanceType.isTypeParameter() && instanceType.constraint && !isAnonymousObjectConstraintType(instanceType.constraint)
-            ? typeToAutoImportableTypeNode(checker, importAdder, instanceType.constraint, contextNode, scriptTarget, flags, tracker)
-            : undefined;
+        const instanceTypeConstraint =
+            instanceType.isTypeParameter() && instanceType.constraint && !isAnonymousObjectConstraintType(instanceType.constraint)
+                ? typeToAutoImportableTypeNode(checker, importAdder, instanceType.constraint, contextNode, scriptTarget, flags, tracker)
+                : undefined;
 
         if (argumentTypeParameter) {
             argumentTypeParameters.set(argumentTypeParameter, { argumentType: instanceType, constraint: instanceTypeConstraint });
@@ -850,7 +854,10 @@ function createMethodImplementingSignatures(
         if (signatureHasRestParameter(sig)) {
             someSigHasRestParameter = true;
         }
-        if (sig.parameters.length >= maxArgsSignature.parameters.length && (!signatureHasRestParameter(sig) || signatureHasRestParameter(maxArgsSignature))) {
+        if (
+            sig.parameters.length >= maxArgsSignature.parameters.length &&
+            (!signatureHasRestParameter(sig) || signatureHasRestParameter(maxArgsSignature))
+        ) {
             maxArgsSignature = sig;
         }
     }
@@ -993,7 +1000,10 @@ export function createJsonPropertyAssignment(name: string, initializer: Expressi
 
 /** @internal */
 export function findJsonProperty(obj: ObjectLiteralExpression, name: string): PropertyAssignment | undefined {
-    return find(obj.properties, (p): p is PropertyAssignment => isPropertyAssignment(p) && !!p.name && isStringLiteral(p.name) && p.name.text === name);
+    return find(
+        obj.properties,
+        (p): p is PropertyAssignment => isPropertyAssignment(p) && !!p.name && isStringLiteral(p.name) && p.name.text === name,
+    );
 }
 
 /**

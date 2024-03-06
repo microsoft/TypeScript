@@ -266,11 +266,23 @@ export function transformES2017(context: TransformationContext): (x: SourceFile 
                 return visitEachChild(node, visitor, context);
 
             case SyntaxKind.GetAccessor:
-                return doWithContext(ContextFlags.NonTopLevel | ContextFlags.HasLexicalThis, visitGetAccessorDeclaration, node as GetAccessorDeclaration);
+                return doWithContext(
+                    ContextFlags.NonTopLevel | ContextFlags.HasLexicalThis,
+                    visitGetAccessorDeclaration,
+                    node as GetAccessorDeclaration,
+                );
             case SyntaxKind.SetAccessor:
-                return doWithContext(ContextFlags.NonTopLevel | ContextFlags.HasLexicalThis, visitSetAccessorDeclaration, node as SetAccessorDeclaration);
+                return doWithContext(
+                    ContextFlags.NonTopLevel | ContextFlags.HasLexicalThis,
+                    visitSetAccessorDeclaration,
+                    node as SetAccessorDeclaration,
+                );
             case SyntaxKind.Constructor:
-                return doWithContext(ContextFlags.NonTopLevel | ContextFlags.HasLexicalThis, visitConstructorDeclaration, node as ConstructorDeclaration);
+                return doWithContext(
+                    ContextFlags.NonTopLevel | ContextFlags.HasLexicalThis,
+                    visitConstructorDeclaration,
+                    node as ConstructorDeclaration,
+                );
             case SyntaxKind.ClassDeclaration:
             case SyntaxKind.ClassExpression:
                 return doWithContext(ContextFlags.NonTopLevel | ContextFlags.HasLexicalThis, visitDefault, node);
@@ -1067,7 +1079,12 @@ export function transformES2017(context: TransformationContext): (x: SourceFile 
  *
  * @internal
  */
-export function createSuperAccessVariableStatement(factory: NodeFactory, resolver: EmitResolver, node: FunctionLikeDeclaration, names: Set<__String>) {
+export function createSuperAccessVariableStatement(
+    factory: NodeFactory,
+    resolver: EmitResolver,
+    node: FunctionLikeDeclaration,
+    names: Set<__String>,
+) {
     // Create a variable declaration with a getter/setter (if binding) definition for each name:
     //   const _super = Object.create(null, { x: { get: () => super.x, set: (v) => super.x = v }, ... });
     const hasBinding = (resolver.getNodeCheckFlags(node) & NodeCheckFlags.MethodWithSuperPropertyAssignmentInAsync) !== 0;

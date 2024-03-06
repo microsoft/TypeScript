@@ -285,5 +285,8 @@ export function createAbstractBuilder(
         configFileParsingDiagnostics,
         projectReferences,
     );
-    return createRedirectedBuilderProgram(() => ({ program: newProgram, compilerOptions: newProgram.getCompilerOptions() }), newConfigFileParsingDiagnostics);
+    return createRedirectedBuilderProgram(
+        () => ({ program: newProgram, compilerOptions: newProgram.getCompilerOptions() }),
+        newConfigFileParsingDiagnostics,
+    );
 }

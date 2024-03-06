@@ -149,7 +149,10 @@ export function organizeImports(
             ? group(oldImportDecls, importDecl => getExternalModuleName(importDecl.moduleSpecifier)!)
             : [oldImportDecls];
         const sortedImportGroups = shouldSort
-            ? stableSort(oldImportGroups, (group1, group2) => compareModuleSpecifiersWorker(group1[0].moduleSpecifier, group2[0].moduleSpecifier, comparer))
+            ? stableSort(
+                oldImportGroups,
+                (group1, group2) => compareModuleSpecifiersWorker(group1[0].moduleSpecifier, group2[0].moduleSpecifier, comparer),
+            )
             : oldImportGroups;
         const newImportDecls = flatMap(
             sortedImportGroups,
@@ -553,7 +556,9 @@ function coalesceExportsWorker(exportGroup: readonly ExportDeclaration[], compar
             continue;
         }
         const newExportSpecifiers: ExportSpecifier[] = [];
-        newExportSpecifiers.push(...flatMap(exportGroup, i => i.exportClause && isNamedExports(i.exportClause) ? i.exportClause.elements : emptyArray));
+        newExportSpecifiers.push(
+            ...flatMap(exportGroup, i => i.exportClause && isNamedExports(i.exportClause) ? i.exportClause.elements : emptyArray),
+        );
 
         const sortedExportSpecifiers = sortSpecifiers(newExportSpecifiers, comparer, preferences);
 
@@ -622,7 +627,11 @@ function updateImportDeclarationAndClause(
     );
 }
 
-function sortSpecifiers<T extends ImportOrExportSpecifier>(specifiers: readonly T[], comparer: Comparer<string>, preferences?: UserPreferences): readonly T[] {
+function sortSpecifiers<T extends ImportOrExportSpecifier>(
+    specifiers: readonly T[],
+    comparer: Comparer<string>,
+    preferences?: UserPreferences,
+): readonly T[] {
     return stableSort(specifiers, (s1, s2) => compareImportOrExportSpecifiers(s1, s2, comparer, preferences));
 }
 
@@ -882,7 +891,8 @@ function getNewImportSpecifiers(namedImports: ImportDeclaration[]) {
             map(
                 tryGetNamedBindingElements(namedImport),
                 importSpecifier =>
-                    importSpecifier.name && importSpecifier.propertyName && importSpecifier.name.escapedText === importSpecifier.propertyName.escapedText
+                    importSpecifier.name && importSpecifier.propertyName &&
+                        importSpecifier.name.escapedText === importSpecifier.propertyName.escapedText
                         ? factory.updateImportSpecifier(importSpecifier, importSpecifier.isTypeOnly, /*propertyName*/ undefined, importSpecifier.name)
                         : importSpecifier,
             ),
@@ -938,7 +948,8 @@ export function getOrganizeImportsComparer(preferences: UserPreferences, ignoreC
 }
 
 function getOrganizeImportsComparerWithDetection(preferences: UserPreferences, detectIgnoreCase?: () => boolean): Comparer<string> {
-    const ignoreCase = typeof preferences.organizeImportsIgnoreCase === "boolean" ? preferences.organizeImportsIgnoreCase : detectIgnoreCase?.() ?? false;
+    const ignoreCase = typeof preferences.organizeImportsIgnoreCase === "boolean" ? preferences.organizeImportsIgnoreCase
+        : detectIgnoreCase?.() ?? false;
     return getOrganizeImportsComparer(preferences, ignoreCase);
 }
 

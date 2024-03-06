@@ -45,7 +45,9 @@ export interface PerformanceObserver {
 }
 
 /** @internal */
-export type PerformanceObserverConstructor = new (callback: (list: PerformanceObserverEntryList, observer: PerformanceObserver) => void) => PerformanceObserver;
+export type PerformanceObserverConstructor = new (
+    callback: (list: PerformanceObserverEntryList, observer: PerformanceObserver) => void,
+) => PerformanceObserver;
 /** @internal */
 export type PerformanceEntryList = PerformanceEntry[];
 

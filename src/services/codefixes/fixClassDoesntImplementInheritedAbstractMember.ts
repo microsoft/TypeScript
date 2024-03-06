@@ -78,7 +78,9 @@ function addMissingMembers(
 
     // Note that this is ultimately derived from a map indexed by symbol names,
     // so duplicates cannot occur.
-    const abstractAndNonPrivateExtendsSymbols = checker.getPropertiesOfType(instantiatedExtendsType).filter(symbolPointsToNonPrivateAndAbstractMember);
+    const abstractAndNonPrivateExtendsSymbols = checker.getPropertiesOfType(instantiatedExtendsType).filter(
+        symbolPointsToNonPrivateAndAbstractMember,
+    );
 
     const importAdder = createImportAdder(sourceFile, context.program, preferences, context.host);
     createMissingMemberNodes(

@@ -31,8 +31,9 @@ describe("unittests:: tsserver:: CachingFileSystemInformation:: tsserverProjectS
     type CalledWithFiveArgs = [readonly string[], readonly string[], readonly string[], number];
     function createLoggerTrackingHostCalls(host: TestServerHost) {
         const originals: Record<CalledMaps, any> = {} as any;
-        const calledMaps: Record<CalledMapsWithSingleArg, ts.MultiMap<string, true>> & Record<CalledMapsWithFiveArgs, ts.MultiMap<string, CalledWithFiveArgs>> =
-            {
+        const calledMaps:
+            & Record<CalledMapsWithSingleArg, ts.MultiMap<string, true>>
+            & Record<CalledMapsWithFiveArgs, ts.MultiMap<string, CalledWithFiveArgs>> = {
                 fileExists: setCallsTrackingWithSingleArgFn("fileExists"),
                 directoryExists: setCallsTrackingWithSingleArgFn("directoryExists"),
                 getDirectories: setCallsTrackingWithSingleArgFn("getDirectories"),
@@ -569,7 +570,9 @@ describe("unittests:: tsserver:: CachingFileSystemInformation:: tsserverProjectS
 
             baselineTsserverLogs(
                 "cachingFileSystemInformation",
-                `npm install works when ${timeoutDuringPartialInstallation ? "timeout occurs inbetween installation" : "timeout occurs after installation"}`,
+                `npm install works when ${
+                    timeoutDuringPartialInstallation ? "timeout occurs inbetween installation" : "timeout occurs after installation"
+                }`,
                 session,
             );
 

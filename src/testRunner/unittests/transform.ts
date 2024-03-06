@@ -319,7 +319,14 @@ describe("unittests:: TransformAPI", () => {
                         const exports = [{ name: "x" }];
                         const exportSpecifiers = exports.map(e => ts.factory.createExportSpecifier(/*isTypeOnly*/ false, e.name, e.name));
                         const exportClause = ts.factory.createNamedExports(exportSpecifiers);
-                        const newEd = ts.factory.updateExportDeclaration(ed, ed.modifiers, ed.isTypeOnly, exportClause, ed.moduleSpecifier, ed.attributes);
+                        const newEd = ts.factory.updateExportDeclaration(
+                            ed,
+                            ed.modifiers,
+                            ed.isTypeOnly,
+                            exportClause,
+                            ed.moduleSpecifier,
+                            ed.attributes,
+                        );
 
                         return newEd as ts.Node as T;
                     }
@@ -539,7 +546,9 @@ export {Value};
             {
                 transformers: {
                     before: [
-                        addSyntheticComment(n => ts.isImportDeclaration(n) || ts.isExportDeclaration(n) || ts.isImportSpecifier(n) || ts.isExportSpecifier(n)),
+                        addSyntheticComment(n =>
+                            ts.isImportDeclaration(n) || ts.isExportDeclaration(n) || ts.isImportSpecifier(n) || ts.isExportSpecifier(n)
+                        ),
                     ],
                 },
                 compilerOptions: {

@@ -594,7 +594,13 @@ export function isNewExpressionTarget(node: Node, includeElementAccess = false, 
 
 /** @internal */
 export function isCallOrNewExpressionTarget(node: Node, includeElementAccess = false, skipPastOuterExpressions = false): boolean {
-    return isCalleeWorker(node, isCallOrNewExpression, selectExpressionOfCallOrNewExpressionOrDecorator, includeElementAccess, skipPastOuterExpressions);
+    return isCalleeWorker(
+        node,
+        isCallOrNewExpression,
+        selectExpressionOfCallOrNewExpressionOrDecorator,
+        includeElementAccess,
+        skipPastOuterExpressions,
+    );
 }
 
 /** @internal */
@@ -1449,7 +1455,10 @@ function getAdjustedLocation(node: Node, forRename: boolean): Node {
     // class ... /**/implements name1, name2 ...
     // interface ... /**/extends [|name|] ...
     // interface ... /**/extends name1, name2 ...
-    if ((node.kind === SyntaxKind.ExtendsKeyword || node.kind === SyntaxKind.ImplementsKeyword) && isHeritageClause(parent) && parent.token === node.kind) {
+    if (
+        (node.kind === SyntaxKind.ExtendsKeyword || node.kind === SyntaxKind.ImplementsKeyword) && isHeritageClause(parent) &&
+        parent.token === node.kind
+    ) {
         const location = getAdjustedLocationForHeritageClause(parent);
         if (location) {
             return location;
@@ -1512,7 +1521,10 @@ function getAdjustedLocation(node: Node, forRename: boolean): Node {
         }
         // left /**/in [|name|]
         // left /**/instanceof [|name|]
-        if ((node.kind === SyntaxKind.InKeyword || node.kind === SyntaxKind.InstanceOfKeyword) && isBinaryExpression(parent) && parent.operatorToken === node) {
+        if (
+            (node.kind === SyntaxKind.InKeyword || node.kind === SyntaxKind.InstanceOfKeyword) && isBinaryExpression(parent) &&
+            parent.operatorToken === node
+        ) {
             return skipOuterExpressions(parent.right);
         }
         // left /**/as [|name|]
@@ -1635,7 +1647,8 @@ function getTokenAtPositionWorker(
                 return Comparison.LessThan;
             }
 
-            const start = allowPositionInLeadingTrivia ? children[middle].getFullStart() : children[middle].getStart(sourceFile, /*includeJsDocComment*/ true);
+            const start = allowPositionInLeadingTrivia ? children[middle].getFullStart()
+                : children[middle].getStart(sourceFile, /*includeJsDocComment*/ true);
             if (start > position) {
                 return Comparison.GreaterThan;
             }
@@ -1819,7 +1832,9 @@ export function findPrecedingToken(position: number, sourceFile: SourceFileLike,
             }
         }
 
-        Debug.assert(startNode !== undefined || n.kind === SyntaxKind.SourceFile || n.kind === SyntaxKind.EndOfFileToken || isJSDocCommentContainingNode(n));
+        Debug.assert(
+            startNode !== undefined || n.kind === SyntaxKind.SourceFile || n.kind === SyntaxKind.EndOfFileToken || isJSDocCommentContainingNode(n),
+        );
 
         // Here we know that none of child token nodes embrace the position,
         // the only known case is when position is at the end of the file.
@@ -2260,7 +2275,8 @@ export function isStringAndEmptyAnonymousObjectIntersection(type: Type) {
 
     const { types, checker } = type;
     return types.length === 2 &&
-        (areIntersectedTypesAvoidingStringReduction(checker, types[0], types[1]) || areIntersectedTypesAvoidingStringReduction(checker, types[1], types[0]));
+        (areIntersectedTypesAvoidingStringReduction(checker, types[0], types[1]) ||
+            areIntersectedTypesAvoidingStringReduction(checker, types[1], types[0]));
 }
 
 /** @internal */
@@ -2317,7 +2333,9 @@ export function isArrayLiteralOrObjectLiteralDestructuringPattern(node: Node) {
         // [x, [a, b, c] ] = someExpression
         // or
         // {x, a: {a, b, c} } = someExpression
-        if (isArrayLiteralOrObjectLiteralDestructuringPattern(node.parent.kind === SyntaxKind.PropertyAssignment ? node.parent.parent : node.parent)) {
+        if (
+            isArrayLiteralOrObjectLiteralDestructuringPattern(node.parent.kind === SyntaxKind.PropertyAssignment ? node.parent.parent : node.parent)
+        ) {
             return true;
         }
     }
@@ -2539,7 +2557,8 @@ export function makeImportIfNecessary(
     moduleSpecifier: string,
     quotePreference: QuotePreference,
 ): ImportDeclaration | undefined {
-    return defaultImport || namedImports && namedImports.length ? makeImport(defaultImport, namedImports, moduleSpecifier, quotePreference) : undefined;
+    return defaultImport || namedImports && namedImports.length ? makeImport(defaultImport, namedImports, moduleSpecifier, quotePreference)
+        : undefined;
 }
 
 /** @internal */
@@ -2645,7 +2664,10 @@ export function isObjectBindingElementWithoutPropertyName(bindingElement: Node):
 }
 
 /** @internal */
-export function getPropertySymbolFromBindingElement(checker: TypeChecker, bindingElement: ObjectBindingElementWithoutPropertyName): Symbol | undefined {
+export function getPropertySymbolFromBindingElement(
+    checker: TypeChecker,
+    bindingElement: ObjectBindingElementWithoutPropertyName,
+): Symbol | undefined {
     const typeOfPattern = checker.getTypeAtLocation(bindingElement.parent);
     return typeOfPattern && checker.getPropertyOfType(typeOfPattern, bindingElement.name.text);
 }
@@ -2682,12 +2704,14 @@ export function insertImports(
     preferences: UserPreferences,
 ): void {
     const decl = isArray(imports) ? imports[0] : imports;
-    const importKindPredicate: (node: Node) => node is AnyImportOrRequireStatement = decl.kind === SyntaxKind.VariableStatement ? isRequireVariableStatement
+    const importKindPredicate: (node: Node) => node is AnyImportOrRequireStatement = decl.kind === SyntaxKind.VariableStatement ?
+        isRequireVariableStatement
         : isAnyImportSyntax;
     const existingImportStatements = filter(sourceFile.statements, importKindPredicate);
     let sortKind = isArray(imports) ? OrganizeImports.detectImportDeclarationSorting(imports, preferences) : SortKind.Both;
     const comparer = OrganizeImports.getOrganizeImportsComparer(preferences, sortKind === SortKind.CaseInsensitive);
-    const sortedNewImports = isArray(imports) ? stableSort(imports, (a, b) => OrganizeImports.compareImportsOrRequireStatements(a, b, comparer)) : [imports];
+    const sortedNewImports = isArray(imports) ? stableSort(imports, (a, b) => OrganizeImports.compareImportsOrRequireStatements(a, b, comparer))
+        : [imports];
     if (!existingImportStatements.length) {
         changes.insertNodesAtTopOfFile(sourceFile, sortedNewImports, blankLineBetween);
     }
@@ -2808,7 +2832,11 @@ export function getMappedDocumentSpan(
 }
 
 /** @internal */
-export function getMappedContextSpan(documentSpan: DocumentSpan, sourceMapper: SourceMapper, fileExists?: (path: string) => boolean): TextSpan | undefined {
+export function getMappedContextSpan(
+    documentSpan: DocumentSpan,
+    sourceMapper: SourceMapper,
+    fileExists?: (path: string) => boolean,
+): TextSpan | undefined {
     const contextSpanStart = documentSpan.contextSpan && getMappedLocation(
         { fileName: documentSpan.fileName, pos: documentSpan.contextSpan.start },
         sourceMapper,
@@ -3062,7 +3090,8 @@ export function buildLinkParts(link: JSDocLink | JSDocLinkCode | JSDocLinkPlain,
         }
         else {
             const separator =
-                suffix === 0 || (link.text.charCodeAt(suffix) === CharacterCodes.bar && name.charCodeAt(name.length - 1) !== CharacterCodes.space) ? " "
+                suffix === 0 || (link.text.charCodeAt(suffix) === CharacterCodes.bar && name.charCodeAt(name.length - 1) !== CharacterCodes.space) ?
+                    " "
                     : "";
             parts.push(linkTextPart(name + separator + text));
         }
@@ -3165,7 +3194,8 @@ export function signatureToDisplayParts(
     enclosingDeclaration?: Node,
     flags: TypeFormatFlags = TypeFormatFlags.None,
 ): SymbolDisplayPart[] {
-    flags |= TypeFormatFlags.UseAliasDefinedOutsideCurrentScope | TypeFormatFlags.MultilineObjectLiterals | TypeFormatFlags.WriteTypeArgumentsOfSignature |
+    flags |= TypeFormatFlags.UseAliasDefinedOutsideCurrentScope | TypeFormatFlags.MultilineObjectLiterals |
+        TypeFormatFlags.WriteTypeArgumentsOfSignature |
         TypeFormatFlags.OmitParameterModifiers;
     return mapToDisplayParts(writer => {
         typechecker.writeSignature(signature, enclosingDeclaration, flags, /*kind*/ undefined, writer);
@@ -3414,7 +3444,13 @@ export function getRenameLocation(edits: readonly FileTextChanges[], renameFilen
 }
 
 /** @internal */
-export function copyLeadingComments(sourceNode: Node, targetNode: Node, sourceFile: SourceFile, commentKind?: CommentKind, hasTrailingNewLine?: boolean) {
+export function copyLeadingComments(
+    sourceNode: Node,
+    targetNode: Node,
+    sourceFile: SourceFile,
+    commentKind?: CommentKind,
+    hasTrailingNewLine?: boolean,
+) {
     forEachLeadingCommentRange(
         sourceFile.text,
         sourceNode.pos,
@@ -3423,7 +3459,13 @@ export function copyLeadingComments(sourceNode: Node, targetNode: Node, sourceFi
 }
 
 /** @internal */
-export function copyTrailingComments(sourceNode: Node, targetNode: Node, sourceFile: SourceFile, commentKind?: CommentKind, hasTrailingNewLine?: boolean) {
+export function copyTrailingComments(
+    sourceNode: Node,
+    targetNode: Node,
+    sourceFile: SourceFile,
+    commentKind?: CommentKind,
+    hasTrailingNewLine?: boolean,
+) {
     forEachTrailingCommentRange(
         sourceFile.text,
         sourceNode.end,
@@ -3818,7 +3860,10 @@ export function getPackageJsonsVisibleToFile(fileName: string, host: LanguageSer
 }
 
 /** @internal */
-export function createPackageJsonInfo(fileName: string, host: { readFile?(fileName: string): string | undefined; }): ProjectPackageJsonInfo | undefined {
+export function createPackageJsonInfo(
+    fileName: string,
+    host: { readFile?(fileName: string): string | undefined; },
+): ProjectPackageJsonInfo | undefined {
     if (!host.readFile) {
         return undefined;
     }
@@ -3884,9 +3929,14 @@ export interface PackageJsonImportFilter {
 }
 
 /** @internal */
-export function createPackageJsonImportFilter(fromFile: SourceFile, preferences: UserPreferences, host: LanguageServiceHost): PackageJsonImportFilter {
+export function createPackageJsonImportFilter(
+    fromFile: SourceFile,
+    preferences: UserPreferences,
+    host: LanguageServiceHost,
+): PackageJsonImportFilter {
     const packageJsons = (
-        (host.getPackageJsonsVisibleToFile && host.getPackageJsonsVisibleToFile(fromFile.fileName)) || getPackageJsonsVisibleToFile(fromFile.fileName, host)
+        (host.getPackageJsonsVisibleToFile && host.getPackageJsonsVisibleToFile(fromFile.fileName)) ||
+        getPackageJsonsVisibleToFile(fromFile.fileName, host)
     ).filter(p => p.parseable);
 
     let usesNodeCoreModules: boolean | undefined;
@@ -3994,7 +4044,10 @@ export function createPackageJsonImportFilter(fromFile: SourceFile, preferences:
         return false;
     }
 
-    function getNodeModulesPackageNameFromFileName(importedFileName: string, moduleSpecifierResolutionHost: ModuleSpecifierResolutionHost): string | undefined {
+    function getNodeModulesPackageNameFromFileName(
+        importedFileName: string,
+        moduleSpecifierResolutionHost: ModuleSpecifierResolutionHost,
+    ): string | undefined {
         if (!importedFileName.includes("node_modules")) {
             return undefined;
         }
@@ -4111,7 +4164,11 @@ export function mapOneOrMany<T, U>(valueOrArray: T | readonly T[] | undefined, f
 /** @internal */
 export function mapOneOrMany<T, U>(valueOrArray: T | readonly T[], f: (x: T, i: number) => U, resultSelector: (x: U[]) => U): U;
 /** @internal */
-export function mapOneOrMany<T, U>(valueOrArray: T | readonly T[] | undefined, f: (x: T, i: number) => U, resultSelector: (x: U[]) => U): U | undefined;
+export function mapOneOrMany<T, U>(
+    valueOrArray: T | readonly T[] | undefined,
+    f: (x: T, i: number) => U,
+    resultSelector: (x: U[]) => U,
+): U | undefined;
 /** @internal */
 export function mapOneOrMany<T, U>(
     valueOrArray: T | readonly T[] | undefined,

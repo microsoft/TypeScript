@@ -205,7 +205,9 @@ describe("unittests:: tsserver:: autoImportProvider", () => {
 
         openFilesForSession([indexTs], session);
         const project = session.getProjectService().configuredProjects.get(tsconfig.path)!;
-        const completionsBefore = project.getLanguageService().getCompletionsAtPosition(indexTs.path, 0, { includeCompletionsForModuleExports: true });
+        const completionsBefore = project.getLanguageService().getCompletionsAtPosition(indexTs.path, 0, {
+            includeCompletionsForModuleExports: true,
+        });
         assert.isTrue(completionsBefore?.entries.some(c => c.name === "PatternValidator"));
         session.host.baselineHost("After completions");
 
@@ -237,7 +239,9 @@ describe("unittests:: tsserver:: autoImportProvider", () => {
 
         openFilesForSession([indexTs, angularFormsDts], session);
         const project = session.getProjectService().configuredProjects.get(tsconfig.path)!;
-        const completionsBefore = project.getLanguageService().getCompletionsAtPosition(indexTs.path, 0, { includeCompletionsForModuleExports: true });
+        const completionsBefore = project.getLanguageService().getCompletionsAtPosition(indexTs.path, 0, {
+            includeCompletionsForModuleExports: true,
+        });
         assert.isTrue(completionsBefore?.entries.some(c => c.name === "PatternValidator"));
 
         updateFile(angularFormsDts.path, "export class ValidatorPattern {}");
@@ -355,7 +359,9 @@ describe("unittests:: tsserver:: autoImportProvider - monorepo", () => {
         findAllReferences("/packages/b/index.ts", 1, "export class B".length - 1);
 
         // Project for A is created - ensure it doesn't have an autoImportProvider
-        assert.isUndefined(session.getProjectService().configuredProjects.get("/packages/a/tsconfig.json")!.getLanguageService().getAutoImportProvider());
+        assert.isUndefined(
+            session.getProjectService().configuredProjects.get("/packages/a/tsconfig.json")!.getLanguageService().getAutoImportProvider(),
+        );
         session.host.baselineHost("After getAutoImportProvider");
         baselineTsserverLogs("autoImportProvider", "Does not create auto import providers upon opening projects for find-all-references", session);
     });
@@ -364,7 +370,10 @@ describe("unittests:: tsserver:: autoImportProvider - monorepo", () => {
         const files = [
             // packages/a
             { path: "/packages/a/package.json", content: `{ "dependencies": { "b": "*" } }` },
-            { path: "/packages/a/tsconfig.json", content: `{ "compilerOptions": { "composite": true }, "references": [{ "path": "./node_modules/b" }] }` },
+            {
+                path: "/packages/a/tsconfig.json",
+                content: `{ "compilerOptions": { "composite": true }, "references": [{ "path": "./node_modules/b" }] }`,
+            },
             { path: "/packages/a/index.ts", content: "" },
 
             // packages/b

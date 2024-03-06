@@ -180,7 +180,11 @@ export function isDocumentRegistryEntry(entry: BucketEntry): entry is DocumentRe
     return !!(entry as DocumentRegistryEntry).sourceFile;
 }
 
-export function createDocumentRegistry(useCaseSensitiveFileNames?: boolean, currentDirectory?: string, jsDocParsingMode?: JSDocParsingMode): DocumentRegistry {
+export function createDocumentRegistry(
+    useCaseSensitiveFileNames?: boolean,
+    currentDirectory?: string,
+    jsDocParsingMode?: JSDocParsingMode,
+): DocumentRegistry {
     return createDocumentRegistryInternal(useCaseSensitiveFileNames, currentDirectory, jsDocParsingMode);
 }
 
@@ -304,7 +308,9 @@ export function createDocumentRegistryInternal(
 
     function getDocumentRegistryEntry(bucketEntry: BucketEntry, scriptKind: ScriptKind | undefined) {
         const entry = isDocumentRegistryEntry(bucketEntry) ? bucketEntry
-            : bucketEntry.get(Debug.checkDefined(scriptKind, "If there are more than one scriptKind's for same document the scriptKind should be provided"));
+            : bucketEntry.get(
+                Debug.checkDefined(scriptKind, "If there are more than one scriptKind's for same document the scriptKind should be provided"),
+            );
         Debug.assert(
             scriptKind === undefined || !entry || entry.sourceFile.scriptKind === scriptKind,
             `Script kind should match provided ScriptKind:${scriptKind} and sourceFile.scriptKind: ${entry?.sourceFile.scriptKind}, !entry: ${!entry}`,
@@ -384,7 +390,14 @@ export function createDocumentRegistryInternal(
 
         if (!entry) {
             // Have never seen this file with these settings.  Create a new source file for it.
-            const sourceFile = createLanguageServiceSourceFile(fileName, scriptSnapshot, sourceFileOptions, version, /*setNodeParents*/ false, scriptKind);
+            const sourceFile = createLanguageServiceSourceFile(
+                fileName,
+                scriptSnapshot,
+                sourceFileOptions,
+                version,
+                /*setNodeParents*/ false,
+                scriptKind,
+            );
             if (externalCache) {
                 externalCache.setDocument(keyWithMode, path, sourceFile);
             }
@@ -439,7 +452,12 @@ export function createDocumentRegistryInternal(
         }
     }
 
-    function releaseDocument(fileName: string, compilationSettings: CompilerOptions, scriptKind?: ScriptKind, impliedNodeFormat?: ResolutionMode): void {
+    function releaseDocument(
+        fileName: string,
+        compilationSettings: CompilerOptions,
+        scriptKind?: ScriptKind,
+        impliedNodeFormat?: ResolutionMode,
+    ): void {
         const path = toPath(fileName, currentDirectory, getCanonicalFileName);
         const key = getKeyForCompilationSettings(compilationSettings);
         return releaseDocumentWithKey(path, key, scriptKind, impliedNodeFormat);

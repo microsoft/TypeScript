@@ -256,7 +256,8 @@ export function createSourceMapGenerator(
 
             const rawGeneratedLine = raw.generatedLine - (start ? start.line : 0);
             const newGeneratedLine = rawGeneratedLine + generatedLine;
-            const rawGeneratedCharacter = start && start.line === raw.generatedLine ? raw.generatedCharacter - start.character : raw.generatedCharacter;
+            const rawGeneratedCharacter = start && start.line === raw.generatedLine ? raw.generatedCharacter - start.character
+                : raw.generatedCharacter;
             const newGeneratedCharacter = rawGeneratedLine === 0 ? rawGeneratedCharacter + generatedCharacter : rawGeneratedCharacter;
             addMapping(newGeneratedLine, newGeneratedCharacter, newSourceIndex, newSourceLine, newSourceCharacter, newNameIndex);
         }

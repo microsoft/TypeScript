@@ -121,7 +121,8 @@ export class SourceMap {
 
                 mappings.push(mapping);
 
-                const mappingsForEmittedLine = this._emittedLineMappings[mapping.emittedLine] || (this._emittedLineMappings[mapping.emittedLine] = []);
+                const mappingsForEmittedLine = this._emittedLineMappings[mapping.emittedLine] ||
+                    (this._emittedLineMappings[mapping.emittedLine] = []);
                 mappingsForEmittedLine.push(mapping);
 
                 const mappingsForSource = this._sourceLineMappings[mapping.sourceIndex] || (this._sourceLineMappings[mapping.sourceIndex] = []);

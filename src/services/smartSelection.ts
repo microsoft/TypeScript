@@ -235,9 +235,12 @@ function getSelectionChildren(node: Node): readonly Node[] {
         Debug.assertEqual(openBraceToken.kind, SyntaxKind.OpenBraceToken);
         Debug.assertEqual(closeBraceToken.kind, SyntaxKind.CloseBraceToken);
         // Group `-/+readonly` and `-/+?`
-        const groupedWithPlusMinusTokens = groupChildren(children, child =>
-            child === node.readonlyToken || child.kind === SyntaxKind.ReadonlyKeyword ||
-            child === node.questionToken || child.kind === SyntaxKind.QuestionToken);
+        const groupedWithPlusMinusTokens = groupChildren(
+            children,
+            child =>
+                child === node.readonlyToken || child.kind === SyntaxKind.ReadonlyKeyword ||
+                child === node.questionToken || child.kind === SyntaxKind.QuestionToken,
+        );
         // Group type parameter with surrounding brackets
         const groupedWithBrackets = groupChildren(groupedWithPlusMinusTokens, ({ kind }) =>
             kind === SyntaxKind.OpenBracketToken ||
@@ -263,7 +266,10 @@ function getSelectionChildren(node: Node): readonly Node[] {
     // Group the parameter name with its `...`, then that group with its `?`, then pivot on `=`.
     if (isParameter(node)) {
         const groupedDotDotDotAndName = groupChildren(node.getChildren(), child => child === node.dotDotDotToken || child === node.name);
-        const groupedWithQuestionToken = groupChildren(groupedDotDotDotAndName, child => child === groupedDotDotDotAndName[0] || child === node.questionToken);
+        const groupedWithQuestionToken = groupChildren(
+            groupedDotDotDotAndName,
+            child => child === groupedDotDotDotAndName[0] || child === node.questionToken,
+        );
         return splitChildren(groupedWithQuestionToken, ({ kind }) => kind === SyntaxKind.EqualsToken);
     }
 

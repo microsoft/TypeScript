@@ -184,7 +184,10 @@ describe("unittests:: Public APIs:: validateLocaleAndSetLanguage", () => {
                 getExecutingFilePath: () => "/tsc.js",
                 resolvePath: ts.identity,
                 fileExists: fileName => {
-                    assert.isTrue(expectedToReadFile, `Locale : ${locale} ${expectedToReadFile ? "should" : "should not"} check if ${fileName} exists.`);
+                    assert.isTrue(
+                        expectedToReadFile,
+                        `Locale : ${locale} ${expectedToReadFile ? "should" : "should not"} check if ${fileName} exists.`,
+                    );
                     return expectedToReadFile;
                 },
                 readFile: fileName => {

@@ -103,7 +103,13 @@ export class System implements ts.System {
         return result;
     }
 
-    public readDirectory(path: string, extensions?: readonly string[], exclude?: readonly string[], include?: readonly string[], depth?: number): string[] {
+    public readDirectory(
+        path: string,
+        extensions?: readonly string[],
+        exclude?: readonly string[],
+        include?: readonly string[],
+        depth?: number,
+    ): string[] {
         return ts.matchFiles(
             path,
             extensions,
@@ -265,7 +271,12 @@ export class CompilerHost implements ts.CompilerHost {
     private _parseConfigHost: ParseConfigHost | undefined;
     private _newLine: string;
 
-    constructor(sys: System | vfs.FileSystem, options = ts.getDefaultCompilerOptions(), setParentNodes = false, jsDocParsingMode?: ts.JSDocParsingMode) {
+    constructor(
+        sys: System | vfs.FileSystem,
+        options = ts.getDefaultCompilerOptions(),
+        setParentNodes = false,
+        jsDocParsingMode?: ts.JSDocParsingMode,
+    ) {
         if (sys instanceof vfs.FileSystem) sys = new System(sys);
         this.sys = sys;
         this.defaultLibLocation = sys.vfs.meta.get("defaultLibLocation") || "";
@@ -324,7 +335,13 @@ export class CompilerHost implements ts.CompilerHost {
         return this.sys.getDirectories(path);
     }
 
-    public readDirectory(path: string, extensions?: readonly string[], exclude?: readonly string[], include?: readonly string[], depth?: number): string[] {
+    public readDirectory(
+        path: string,
+        extensions?: readonly string[],
+        exclude?: readonly string[],
+        include?: readonly string[],
+        depth?: number,
+    ): string[] {
         return this.sys.readDirectory(path, extensions, exclude, include, depth);
     }
 
@@ -381,7 +398,8 @@ export class CompilerHost implements ts.CompilerHost {
         // and so any options bag will be keyed as "[object Object]", and we'll incorrectly share
         // SourceFiles parsed with different options. But fixing this doesn't expose any bugs and
         // doubles the memory usage of a test run, so I'm leaving it for now.
-        const cacheKey = this.vfs.shadowRoot && `SourceFile[languageVersionOrOptions=${languageVersionOrOptions},setParentNodes=${this._setParentNodes}]`;
+        const cacheKey = this.vfs.shadowRoot &&
+            `SourceFile[languageVersionOrOptions=${languageVersionOrOptions},setParentNodes=${this._setParentNodes}]`;
         if (cacheKey) {
             const meta = this.vfs.filemeta(canonicalFileName);
             const sourceFileFromMetadata = meta.get(cacheKey) as ts.SourceFile | undefined;

@@ -580,7 +580,10 @@ export class FileSystem {
         if (!oldParent) throw createIOError("EPERM");
         if (!node) throw createIOError("ENOENT");
 
-        const { parent: newParent, links: newParentLinks, node: existingNode, basename: newBasename } = this._walk(this._resolve(newpath), /*noFollow*/ true);
+        const { parent: newParent, links: newParentLinks, node: existingNode, basename: newBasename } = this._walk(
+            this._resolve(newpath),
+            /*noFollow*/ true,
+        );
         if (!newParent) throw createIOError("EPERM");
 
         const time = this.time();
@@ -738,7 +741,8 @@ export class FileSystem {
                 const baseNode = baseLinks.get(basename);
                 if (baseNode) {
                     if (isDirectory(changedNode) && isDirectory(baseNode)) {
-                        return hasChanges = FileSystem.directoryDiff(container, basename, changed, changedNode, base, baseNode, options) || hasChanges;
+                        return hasChanges = FileSystem.directoryDiff(container, basename, changed, changedNode, base, baseNode, options) ||
+                            hasChanges;
                     }
                     if (isFile(changedNode) && isFile(baseNode)) {
                         return hasChanges = FileSystem.fileDiff(container, basename, changed, changedNode, base, baseNode, options) || hasChanges;
@@ -918,7 +922,13 @@ export class FileSystem {
         if (!parent && !this._cwd) this._cwd = name;
     }
 
-    private _removeLink(parent: DirectoryInode | undefined, links: collections.SortedMap<string, Inode>, name: string, node: Inode, time = this.time()) {
+    private _removeLink(
+        parent: DirectoryInode | undefined,
+        links: collections.SortedMap<string, Inode>,
+        name: string,
+        node: Inode,
+        time = this.time(),
+    ) {
         links.delete(name);
         node.nlink--;
         node.ctimeMs = time;
@@ -1284,7 +1294,11 @@ export function createResolver(host: FileSystemResolverHost): FileSystemResolver
  *
  * Unless overridden, `/.src` will be the current working directory for the virtual file system.
  */
-export function createFromFileSystem(host: FileSystemResolverHost, ignoreCase: boolean, { documents, files, cwd, time, meta }: FileSystemCreateOptions = {}) {
+export function createFromFileSystem(
+    host: FileSystemResolverHost,
+    ignoreCase: boolean,
+    { documents, files, cwd, time, meta }: FileSystemCreateOptions = {},
+) {
     const fs = getBuiltLocal(host, ignoreCase).shadow();
     if (meta) {
         for (const key of Object.keys(meta)) {
@@ -1354,7 +1368,20 @@ export class Stats {
         ctimeMs: number,
         birthtimeMs: number,
     );
-    constructor(dev = 0, ino = 0, mode = 0, nlink = 0, rdev = 0, size = 0, blksize = 0, blocks = 0, atimeMs = 0, mtimeMs = 0, ctimeMs = 0, birthtimeMs = 0) {
+    constructor(
+        dev = 0,
+        ino = 0,
+        mode = 0,
+        nlink = 0,
+        rdev = 0,
+        size = 0,
+        blksize = 0,
+        blocks = 0,
+        atimeMs = 0,
+        mtimeMs = 0,
+        ctimeMs = 0,
+        birthtimeMs = 0,
+    ) {
         this.dev = dev;
         this.ino = ino;
         this.mode = mode;

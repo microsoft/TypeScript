@@ -53,7 +53,13 @@ export class SourceText implements ts.IScriptSnapshot {
 
     public updateReferences(newReferences: string): SourceText {
         ts.Debug.assert(newReferences !== undefined);
-        return new SourceText(newReferences + newLine, this.importsAndExports, this.program, this.changedPart | ChangedPart.references, this.version + 1);
+        return new SourceText(
+            newReferences + newLine,
+            this.importsAndExports,
+            this.program,
+            this.changedPart | ChangedPart.references,
+            this.version + 1,
+        );
     }
     public updateImportsAndExports(newImportsAndExports: string): SourceText {
         ts.Debug.assert(newImportsAndExports !== undefined);

@@ -10,7 +10,10 @@ function withChange(
     const contents = ts.getSnapshotText(text);
     const newContents = contents.substr(0, start) + newText + contents.substring(start + length);
 
-    return { text: ts.ScriptSnapshot.fromString(newContents), textChangeRange: ts.createTextChangeRange(ts.createTextSpan(start, length), newText.length) };
+    return {
+        text: ts.ScriptSnapshot.fromString(newContents),
+        textChangeRange: ts.createTextChangeRange(ts.createTextSpan(start, length), newText.length),
+    };
 }
 
 function withInsert(text: ts.IScriptSnapshot, start: number, newText: string): { text: ts.IScriptSnapshot; textChangeRange: ts.TextChangeRange; } {

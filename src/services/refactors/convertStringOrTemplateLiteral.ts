@@ -215,7 +215,10 @@ function getRawTextOfTemplate(node: TemplateHead | TemplateMiddle | TemplateTail
     return getTextOfNode(node).slice(1, rightShaving);
 }
 
-function concatConsecutiveString(index: number, nodes: readonly Expression[]): [nextIndex: number, text: string, rawText: string, usedIndexes: number[]] {
+function concatConsecutiveString(
+    index: number,
+    nodes: readonly Expression[],
+): [nextIndex: number, text: string, rawText: string, usedIndexes: number[]] {
     const indexes = [];
     let text = "", rawText = "";
     while (index < nodes.length) {

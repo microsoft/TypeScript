@@ -81,7 +81,10 @@ registerRefactor(refactorName, {
     getEditsForAction: function getRefactorEditsToMoveToNewFile(context, actionName): RefactorEditInfo {
         Debug.assert(actionName === refactorName, "Wrong refactor invoked");
         const statements = Debug.checkDefined(getStatementsToMove(context));
-        const edits = textChanges.ChangeTracker.with(context, t => doChange(context.file, context.program, statements, t, context.host, context.preferences));
+        const edits = textChanges.ChangeTracker.with(
+            context,
+            t => doChange(context.file, context.program, statements, t, context.host, context.preferences),
+        );
         return { edits, renameFilename: undefined, renameLocation: undefined };
     },
 });
@@ -99,7 +102,11 @@ function doChange(
     const newFilename = createNewFileName(oldFile, program, host, toMove);
 
     // If previous file was global, this is easy.
-    changes.createNewFile(oldFile, newFilename, getNewStatementsAndRemoveFromOldFile(oldFile, usage, changes, toMove, program, host, newFilename, preferences));
+    changes.createNewFile(
+        oldFile,
+        newFilename,
+        getNewStatementsAndRemoveFromOldFile(oldFile, usage, changes, toMove, program, host, newFilename, preferences),
+    );
 
     addNewFileToTsconfig(program, changes, oldFile.fileName, newFilename, hostGetCanonicalFileName(host));
 }
@@ -116,7 +123,10 @@ function getNewStatementsAndRemoveFromOldFile(
 ) {
     const checker = program.getTypeChecker();
     const prologueDirectives = takeWhile(oldFile.statements, isPrologueDirective);
-    if (oldFile.externalModuleIndicator === undefined && oldFile.commonJsModuleIndicator === undefined && usage.oldImportsNeededByTargetFile.size === 0) {
+    if (
+        oldFile.externalModuleIndicator === undefined && oldFile.commonJsModuleIndicator === undefined &&
+        usage.oldImportsNeededByTargetFile.size === 0
+    ) {
         deleteMovedStatements(oldFile, toMove.ranges, changes);
         return [...prologueDirectives, ...toMove.all];
     }
@@ -214,7 +224,16 @@ function getNewFileImportsAndAddExportInOldFile(
 
     append(
         copiedOldImports,
-        makeImportOrRequire(oldFile, oldFileDefault, oldFileNamedImports, getBaseFileName(oldFile.fileName), program, host, useEsModuleSyntax, quotePreference),
+        makeImportOrRequire(
+            oldFile,
+            oldFileDefault,
+            oldFileNamedImports,
+            getBaseFileName(oldFile.fileName),
+            program,
+            host,
+            useEsModuleSyntax,
+            quotePreference,
+        ),
     );
     return copiedOldImports;
 }

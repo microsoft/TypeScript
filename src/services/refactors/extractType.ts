@@ -239,7 +239,10 @@ function flattenTypeLiteralNodeReference(checker: TypeChecker, selection: TypeNo
         const seen = new Map<string, true>();
         for (const type of selection.types) {
             const flattenedTypeMembers = flattenTypeLiteralNodeReference(checker, type);
-            if (!flattenedTypeMembers || !flattenedTypeMembers.every(type => type.name && addToSeen(seen, getNameFromPropertyName(type.name) as string))) {
+            if (
+                !flattenedTypeMembers ||
+                !flattenedTypeMembers.every(type => type.name && addToSeen(seen, getNameFromPropertyName(type.name) as string))
+            ) {
                 return undefined;
             }
 
@@ -327,7 +330,10 @@ function collectTypeParameters(
             }
         }
 
-        if (file && isTupleTypeNode(node) && (getLineAndCharacterOfPosition(file, node.pos).line === getLineAndCharacterOfPosition(file, node.end).line)) {
+        if (
+            file && isTupleTypeNode(node) &&
+            (getLineAndCharacterOfPosition(file, node.pos).line === getLineAndCharacterOfPosition(file, node.end).line)
+        ) {
             setEmitFlags(node, EmitFlags.SingleLine);
         }
 

@@ -221,7 +221,10 @@ registerCodeFix({
                 const info = getInfo(diag.file, diag.start, diag.code, checker, context.program);
                 if (
                     !info ||
-                    !addToSeen(seen, getNodeId(info.parentDeclaration) + "#" + (info.kind === InfoKind.ObjectLiteral ? info.identifier : info.token.text))
+                    !addToSeen(
+                        seen,
+                        getNodeId(info.parentDeclaration) + "#" + (info.kind === InfoKind.ObjectLiteral ? info.identifier : info.token.text),
+                    )
                 ) {
                     return;
                 }
@@ -270,7 +273,14 @@ registerCodeFix({
                         }
                         else {
                             const typeNode = getTypeNode(checker, parentDeclaration, token);
-                            addPropertyDeclaration(changes, declSourceFile, parentDeclaration, token.text, typeNode, modifierFlags & ModifierFlags.Static);
+                            addPropertyDeclaration(
+                                changes,
+                                declSourceFile,
+                                parentDeclaration,
+                                token.text,
+                                typeNode,
+                                modifierFlags & ModifierFlags.Static,
+                            );
                         }
                     }
                 }
@@ -411,7 +421,14 @@ function getInfo(sourceFile: SourceFile, tokenPos: number, errorCode: number, ch
             return { kind: InfoKind.Signature, token, signature, sourceFile, parentDeclaration: findScope(token) };
         }
         if (isCallExpression(parent) && parent.expression === token) {
-            return { kind: InfoKind.Function, token, call: parent, sourceFile, modifierFlags: ModifierFlags.None, parentDeclaration: findScope(token) };
+            return {
+                kind: InfoKind.Function,
+                token,
+                call: parent,
+                sourceFile,
+                modifierFlags: ModifierFlags.None,
+                parentDeclaration: findScope(token),
+            };
         }
     }
 
@@ -464,7 +481,8 @@ function getInfo(sourceFile: SourceFile, tokenPos: number, errorCode: number, ch
 
         const declSourceFile = declaration.getSourceFile();
         const modifierFlags = isTypeLiteralNode(declaration) ? ModifierFlags.None :
-            (makeStatic ? ModifierFlags.Static : ModifierFlags.None) | (startsWithUnderscore(token.text) ? ModifierFlags.Private : ModifierFlags.None);
+            (makeStatic ? ModifierFlags.Static : ModifierFlags.None) |
+            (startsWithUnderscore(token.text) ? ModifierFlags.Private : ModifierFlags.None);
         const isJSFile = isSourceFileJS(declSourceFile);
         const call = tryCast(parent.parent, isCallExpression);
         return { kind: InfoKind.TypeLikeDeclaration, token, call, modifierFlags, parentDeclaration: declaration, declSourceFile, isJSFile };
@@ -563,7 +581,10 @@ function createActionsForAddMissingMemberInTypeScriptFile(
     const isStatic = modifierFlags & ModifierFlags.Static;
     const typeNode = getTypeNode(context.program.getTypeChecker(), parentDeclaration, token);
     const addPropertyDeclarationChanges = (modifierFlags: ModifierFlags) =>
-        textChanges.ChangeTracker.with(context, t => addPropertyDeclaration(t, declSourceFile, parentDeclaration, memberName, typeNode, modifierFlags));
+        textChanges.ChangeTracker.with(
+            context,
+            t => addPropertyDeclaration(t, declSourceFile, parentDeclaration, memberName, typeNode, modifierFlags),
+        );
 
     const actions = [
         createCodeFixAction(
@@ -601,7 +622,8 @@ function getTypeNode(checker: TypeChecker, node: ClassLikeDeclaration | Interfac
     }
     else {
         const contextualType = checker.getContextualType(token.parent as Expression);
-        typeNode = contextualType ? checker.typeToTypeNode(contextualType, /*enclosingDeclaration*/ undefined, NodeBuilderFlags.NoTruncation) : undefined;
+        typeNode = contextualType ? checker.typeToTypeNode(contextualType, /*enclosingDeclaration*/ undefined, NodeBuilderFlags.NoTruncation)
+            : undefined;
     }
     return typeNode || factory.createKeywordTypeNode(SyntaxKind.AnyKeyword);
 }
@@ -810,7 +832,14 @@ function addObjectLiteralProperties(changes: textChanges.ChangeTracker, context:
     const target = getEmitScriptTarget(context.program.getCompilerOptions());
     const checker = context.program.getTypeChecker();
     const props = map(info.properties, prop => {
-        const initializer = tryGetValueFromType(context, checker, importAdder, quotePreference, checker.getTypeOfSymbol(prop), info.parentDeclaration);
+        const initializer = tryGetValueFromType(
+            context,
+            checker,
+            importAdder,
+            quotePreference,
+            checker.getTypeOfSymbol(prop),
+            info.parentDeclaration,
+        );
         return factory.createPropertyAssignment(createPropertyNameFromSymbol(prop, target, quotePreference, checker), initializer);
     });
     const options = {
@@ -888,7 +917,14 @@ function tryGetValueFromType(
     }
     if (isObjectLiteralType(type)) {
         const props = map(checker.getPropertiesOfType(type), prop => {
-            const initializer = tryGetValueFromType(context, checker, importAdder, quotePreference, checker.getTypeOfSymbol(prop), enclosingDeclaration);
+            const initializer = tryGetValueFromType(
+                context,
+                checker,
+                importAdder,
+                quotePreference,
+                checker.getTypeOfSymbol(prop),
+                enclosingDeclaration,
+            );
             return factory.createPropertyAssignment(prop.name, initializer);
         });
         return factory.createObjectLiteralExpression(props, /*multiLine*/ true);
@@ -934,7 +970,8 @@ function createUndefined() {
 
 function isObjectLiteralType(type: Type) {
     return (type.flags & TypeFlags.Object) &&
-        ((getObjectFlags(type) & ObjectFlags.ObjectLiteral) || (type.symbol && tryCast(singleOrUndefined(type.symbol.declarations), isTypeLiteralNode)));
+        ((getObjectFlags(type) & ObjectFlags.ObjectLiteral) ||
+            (type.symbol && tryCast(singleOrUndefined(type.symbol.declarations), isTypeLiteralNode)));
 }
 
 function getUnmatchedAttributes(checker: TypeChecker, target: ScriptTarget, source: JsxOpeningLikeElement) {

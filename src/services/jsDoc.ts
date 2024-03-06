@@ -194,7 +194,10 @@ export function getJsDocCommentsFromDeclarations(declarations: readonly Declarat
     forEachUnique(declarations, declaration => {
         for (const jsdoc of getCommentHavingNodes(declaration)) {
             const inheritDoc = isJSDoc(jsdoc) && jsdoc.tags &&
-                find(jsdoc.tags, t => t.kind === SyntaxKind.JSDocTag && (t.tagName.escapedText === "inheritDoc" || t.tagName.escapedText === "inheritdoc"));
+                find(
+                    jsdoc.tags,
+                    t => t.kind === SyntaxKind.JSDocTag && (t.tagName.escapedText === "inheritDoc" || t.tagName.escapedText === "inheritdoc"),
+                );
             // skip comments containing @typedefs since they're not associated with particular declarations
             // Exceptions:
             // - @typedefs are themselves declarations with associated comments
@@ -550,7 +553,12 @@ function getIndentationStringAtPosition(sourceFile: SourceFile, position: number
     return text.slice(lineStart, pos);
 }
 
-function parameterDocComments(parameters: readonly ParameterDeclaration[], isJavaScriptFile: boolean, indentationStr: string, newLine: string): string {
+function parameterDocComments(
+    parameters: readonly ParameterDeclaration[],
+    isJavaScriptFile: boolean,
+    indentationStr: string,
+    newLine: string,
+): string {
     return parameters.map(({ name, dotDotDotToken }, i) => {
         const paramName = name.kind === SyntaxKind.Identifier ? name.text : "param" + i;
         const type = isJavaScriptFile ? (dotDotDotToken ? "{...any} " : "{any} ") : "";

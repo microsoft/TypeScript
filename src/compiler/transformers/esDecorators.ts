@@ -609,7 +609,8 @@ export function transformESDecorators(context: TransformationContext): (x: Sourc
             // ability access the captured `_classThis` of outer scopes.
             const needsUniqueClassThis = some(
                 node.members,
-                member => (isPrivateIdentifierClassElementDeclaration(member) || isAutoAccessorPropertyDeclaration(member)) && hasStaticModifier(member),
+                member =>
+                    (isPrivateIdentifierClassElementDeclaration(member) || isAutoAccessorPropertyDeclaration(member)) && hasStaticModifier(member),
             );
             classThis = factory.createUniqueName(
                 "_classThis",
@@ -627,7 +628,10 @@ export function transformESDecorators(context: TransformationContext): (x: Sourc
                             "_staticExtraInitializers",
                             GeneratedIdentifierFlags.Optimistic | GeneratedIdentifierFlags.FileLevel,
                         );
-                        const initializer = emitHelpers().createRunInitializersHelper(classThis ?? factory.createThis(), staticMethodExtraInitializersName);
+                        const initializer = emitHelpers().createRunInitializersHelper(
+                            classThis ?? factory.createThis(),
+                            staticMethodExtraInitializersName,
+                        );
                         setSourceMapRange(initializer, node.name ?? moveRangePastDecorators(node));
                         pendingStaticInitializers ??= [];
                         pendingStaticInitializers.push(initializer);
@@ -763,7 +767,11 @@ export function transformESDecorators(context: TransformationContext): (x: Sourc
                 factory.createComma(factory.createNumericLiteral(0), extendsExpression) :
                 extendsExpression;
             classDefinitionStatements.push(createLet(classInfo.classSuper, safeExtendsExpression));
-            const updatedExtendsElement = factory.updateExpressionWithTypeArguments(extendsElement, classInfo.classSuper, /*typeArguments*/ undefined);
+            const updatedExtendsElement = factory.updateExpressionWithTypeArguments(
+                extendsElement,
+                classInfo.classSuper,
+                /*typeArguments*/ undefined,
+            );
             const updatedExtendsClause = factory.updateHeritageClause(extendsClause, [updatedExtendsElement]);
             heritageClauses = factory.createNodeArray([updatedExtendsClause]);
         }
@@ -829,7 +837,8 @@ export function transformESDecorators(context: TransformationContext): (x: Sourc
             const initializerStatements = prepareConstructor(node, classInfo);
             if (initializerStatements) {
                 const extendsClauseElement = getEffectiveBaseTypeNode(node);
-                const isDerivedClass = !!(extendsClauseElement && skipOuterExpressions(extendsClauseElement.expression).kind !== SyntaxKind.NullKeyword);
+                const isDerivedClass =
+                    !!(extendsClauseElement && skipOuterExpressions(extendsClauseElement.expression).kind !== SyntaxKind.NullKeyword);
                 const constructorStatements: Statement[] = [];
                 if (isDerivedClass) {
                     const spreadArguments = factory.createSpreadElement(factory.createIdentifier("arguments"));
@@ -1076,7 +1085,13 @@ export function transformESDecorators(context: TransformationContext): (x: Sourc
         else {
             // produces:
             //  return <classExpression>;
-            classExpression = factory.createClassExpression(/*modifiers*/ undefined, node.name, /*typeParameters*/ undefined, heritageClauses, members);
+            classExpression = factory.createClassExpression(
+                /*modifiers*/ undefined,
+                node.name,
+                /*typeParameters*/ undefined,
+                heritageClauses,
+                members,
+            );
             classDefinitionStatements.push(factory.createReturnStatement(classExpression));
         }
 
@@ -1113,7 +1128,12 @@ export function transformESDecorators(context: TransformationContext): (x: Sourc
                 if (node.name) {
                     //  let C = (() => { ... })();
                     //  export default C;
-                    const varDecl = factory.createVariableDeclaration(factory.getLocalName(node), /*exclamationToken*/ undefined, /*type*/ undefined, iife);
+                    const varDecl = factory.createVariableDeclaration(
+                        factory.getLocalName(node),
+                        /*exclamationToken*/ undefined,
+                        /*type*/ undefined,
+                        iife,
+                    );
                     setOriginalNode(varDecl, node);
 
                     const varDecls = factory.createVariableDeclarationList([varDecl], NodeFlags.Let);
@@ -1261,7 +1281,14 @@ export function transformESDecorators(context: TransformationContext): (x: Sourc
                 const nonPrologueStart = factory.copyPrologue(node.body.statements, statements, /*ensureUseStrict*/ false, visitor);
                 const superStatementIndices = findSuperStatementIndexPath(node.body.statements, nonPrologueStart);
                 if (superStatementIndices.length > 0) {
-                    transformConstructorBodyWorker(statements, node.body.statements, nonPrologueStart, superStatementIndices, 0, initializerStatements);
+                    transformConstructorBodyWorker(
+                        statements,
+                        node.body.statements,
+                        nonPrologueStart,
+                        superStatementIndices,
+                        0,
+                        initializerStatements,
+                    );
                 }
                 else {
                     addRange(statements, initializerStatements);
@@ -1312,7 +1339,9 @@ export function transformESDecorators(context: TransformationContext): (x: Sourc
         // Member decorators require privileged access to private names. However, computed property
         // evaluation occurs interspersed with decorator evaluation. This means that if we encounter
         // a computed property name we must inline decorator evaluation.
-        const memberDecorators = transformAllDecoratorsOfDeclaration(getAllDecoratorsOfClassElement(member, classInfo.class, /*useLegacyDecorators*/ false));
+        const memberDecorators = transformAllDecoratorsOfDeclaration(
+            getAllDecoratorsOfClassElement(member, classInfo.class, /*useLegacyDecorators*/ false),
+        );
         const modifiers = visitNodes(member.modifiers, modifierVisitor, isModifier);
 
         if (memberDecorators) {
@@ -2309,7 +2338,10 @@ export function transformESDecorators(context: TransformationContext): (x: Sourc
     }
 
     function injectPendingInitializers(classInfo: ClassInfo, isStatic: boolean, expression: Expression | undefined) {
-        const result = injectPendingExpressionsCommon(isStatic ? classInfo.pendingStaticInitializers : classInfo.pendingInstanceInitializers, expression);
+        const result = injectPendingExpressionsCommon(
+            isStatic ? classInfo.pendingStaticInitializers : classInfo.pendingInstanceInitializers,
+            expression,
+        );
         if (result !== expression) {
             if (isStatic) {
                 classInfo.pendingStaticInitializers = undefined;

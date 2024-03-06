@@ -335,7 +335,11 @@ describe("unittests:: tsserver:: externalProjects", () => {
         closeFilesForSession([file1], session);
 
         openFilesForSession([file2], session);
-        baselineTsserverLogs("externalProjects", "external project with included config file opened after configured project and then closed", session);
+        baselineTsserverLogs(
+            "externalProjects",
+            "external project with included config file opened after configured project and then closed",
+            session,
+        );
     });
 
     it("can correctly update external project when set of root files has changed", () => {
@@ -406,7 +410,8 @@ describe("unittests:: tsserver:: externalProjects", () => {
         };
         const host = createServerHost([f1, f2]);
         const originalGetFileSize = host.getFileSize;
-        host.getFileSize = (filePath: string) => filePath === f2.path ? ts.server.maxProgramSizeForNonTsFiles + 1 : originalGetFileSize.call(host, filePath);
+        host.getFileSize = (filePath: string) =>
+            filePath === f2.path ? ts.server.maxProgramSizeForNonTsFiles + 1 : originalGetFileSize.call(host, filePath);
 
         const session = new TestSession(host);
         const projectFileName = "/a/proj.csproj";
@@ -829,7 +834,11 @@ describe("unittests:: tsserver:: externalProjects", () => {
             rootFiles: [{ fileName: jsConfig.path }, { fileName: tsconfig.path }, { fileName: jsFilePath }],
             options: { allowJs: false },
         }], session);
-        baselineTsserverLogs("externalProjects", "handles creation of external project with jsconfig before jsconfig creation watcher is invoked", session);
+        baselineTsserverLogs(
+            "externalProjects",
+            "handles creation of external project with jsconfig before jsconfig creation watcher is invoked",
+            session,
+        );
     });
 
     it("does not crash if external file does not exist", () => {

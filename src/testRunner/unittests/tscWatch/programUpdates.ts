@@ -1390,7 +1390,8 @@ export function two() {
     function changeParameterTypeOfBFile(parameterName: string, toType: string): TscWatchCompileChange {
         return {
             caption: `Changed ${parameterName} type to ${toType}`,
-            edit: sys => sys.replaceFileText(`/user/username/projects/myproject/b.ts`, new RegExp(`${parameterName}: [a-z]*`), `${parameterName}: ${toType}`),
+            edit: sys =>
+                sys.replaceFileText(`/user/username/projects/myproject/b.ts`, new RegExp(`${parameterName}: [a-z]*`), `${parameterName}: ${toType}`),
             timeouts: sys => sys.runQueuedTimeoutCallbacks(),
         };
     }
@@ -1452,7 +1453,10 @@ foo().hello`,
             {
                 caption: "Enable strict null checks",
                 edit: sys =>
-                    sys.writeFile(`/user/username/projects/myproject/tsconfig.json`, jsonToReadableText({ compilerOptions: { strictNullChecks: true } })),
+                    sys.writeFile(
+                        `/user/username/projects/myproject/tsconfig.json`,
+                        jsonToReadableText({ compilerOptions: { strictNullChecks: true } }),
+                    ),
                 timeouts: sys => sys.runQueuedTimeoutCallbacks(),
             },
             {
@@ -1500,7 +1504,10 @@ v === 'foo';`,
             {
                 caption: "Enable noErrorTruncation",
                 edit: sys =>
-                    sys.writeFile(`/user/username/projects/myproject/tsconfig.json`, jsonToReadableText({ compilerOptions: { noErrorTruncation: true } })),
+                    sys.writeFile(
+                        `/user/username/projects/myproject/tsconfig.json`,
+                        jsonToReadableText({ compilerOptions: { noErrorTruncation: true } }),
+                    ),
                 timeouts: sys => sys.runQueuedTimeoutCallbacks(),
             },
         ],
@@ -1525,7 +1532,8 @@ class D extends C { prop = 1; }`,
         edits: [
             {
                 caption: "Enable useDefineForClassFields",
-                edit: sys => sys.writeFile(`/tsconfig.json`, jsonToReadableText({ compilerOptions: { target: "es6", useDefineForClassFields: true } })),
+                edit: sys =>
+                    sys.writeFile(`/tsconfig.json`, jsonToReadableText({ compilerOptions: { target: "es6", useDefineForClassFields: true } })),
                 timeouts: sys => sys.runQueuedTimeoutCallbacks(),
             },
         ],
@@ -2037,7 +2045,8 @@ import { x } from "../b";`,
         edits: [
             {
                 caption: "Add module3 to folder2",
-                edit: sys => sys.writeFile(`/user/username/projects/myproject/client/linktofolder2/module3.ts`, `import * as M from "folder1/module1";`),
+                edit: sys =>
+                    sys.writeFile(`/user/username/projects/myproject/client/linktofolder2/module3.ts`, `import * as M from "folder1/module1";`),
                 timeouts: sys => sys.runQueuedTimeoutCallbacks(),
             },
         ],
@@ -2099,7 +2108,10 @@ import { x } from "../b";`,
             {
                 caption: "Add excluded file to project1",
                 edit: sys =>
-                    sys.ensureFileOrFolder({ path: `/user/username/projects/myproject/projects/project1/temp/file.d.ts`, content: `declare class file {}` }),
+                    sys.ensureFileOrFolder({
+                        path: `/user/username/projects/myproject/projects/project1/temp/file.d.ts`,
+                        content: `declare class file {}`,
+                    }),
                 timeouts: ts.noop,
             },
             {

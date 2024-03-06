@@ -42,7 +42,10 @@ describe("unittests:: tsserver:: inlayHints", () => {
         session.executeCommandSeq<ts.server.protocol.UpdateOpenRequest>({
             command: ts.server.protocol.CommandTypes.UpdateOpen,
             arguments: {
-                changedFiles: [{ fileName: app.path, textChanges: [{ start: { line: 1, offset: 39 }, end: { line: 1, offset: 39 }, newText: "//" }] }],
+                changedFiles: [{
+                    fileName: app.path,
+                    textChanges: [{ start: { line: 1, offset: 39 }, end: { line: 1, offset: 39 }, newText: "//" }],
+                }],
             },
         });
         verifyInlayHintResponse(session);

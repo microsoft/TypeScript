@@ -35,7 +35,11 @@ export const commonFile2: File = {
     content: "let y = 1",
 };
 
-export type WatchOrSolution<T extends ts.BuilderProgram> = void | ts.SolutionBuilder<T> | ts.WatchOfConfigFile<T> | ts.WatchOfFilesAndCompilerOptions<T>;
+export type WatchOrSolution<T extends ts.BuilderProgram> =
+    | void
+    | ts.SolutionBuilder<T>
+    | ts.WatchOfConfigFile<T>
+    | ts.WatchOfFilesAndCompilerOptions<T>;
 export interface TscWatchCompileChange<T extends ts.BuilderProgram = ts.EmitAndSemanticDiagnosticsBuilderProgram> {
     caption: string;
     edit: (sys: TscWatchSystem) => void;
@@ -122,7 +126,10 @@ export interface BaselineBase {
 export interface Baseline extends BaselineBase, CommandLineCallbacks {
 }
 
-export function createBaseline(system: TestServerHost, modifySystem?: (sys: TestServerHost, originalRead: TestServerHost["readFile"]) => void): Baseline {
+export function createBaseline(
+    system: TestServerHost,
+    modifySystem?: (sys: TestServerHost, originalRead: TestServerHost["readFile"]) => void,
+): Baseline {
     const originalRead = system.readFile;
     const initialSys = patchHostForBuildInfoReadWrite(system);
     modifySystem?.(initialSys, originalRead);
@@ -170,7 +177,9 @@ interface CreateWatchCompilerHostOfFilesAndCompilerOptionsForBaseline<T extends 
     system: TestServerHost;
     cb: ts.ExecuteCommandLineCallbacks;
 }
-export function createWatchCompilerHostOfFilesAndCompilerOptionsForBaseline<T extends ts.BuilderProgram = ts.EmitAndSemanticDiagnosticsBuilderProgram>(
+export function createWatchCompilerHostOfFilesAndCompilerOptionsForBaseline<
+    T extends ts.BuilderProgram = ts.EmitAndSemanticDiagnosticsBuilderProgram,
+>(
     input: CreateWatchCompilerHostOfFilesAndCompilerOptionsForBaseline<T>,
 ) {
     const host = ts.createWatchCompilerHostOfFilesAndCompilerOptions({
@@ -292,7 +301,14 @@ export function watchBaseline({
     // Verify program structure and resolution cache when incremental edit with tsc --watch (without build mode)
     if (resolutionCache && programs.length) {
         ts.Debug.assert(programs.length === 1);
-        verifyProgramStructureAndResolutionCache(caption!, sys, programs[0][0], resolutionCache, useSourceOfProjectReferenceRedirect, symlinksNotReflected);
+        verifyProgramStructureAndResolutionCache(
+            caption!,
+            sys,
+            programs[0][0],
+            resolutionCache,
+            useSourceOfProjectReferenceRedirect,
+            symlinksNotReflected,
+        );
     }
     return programs;
 }

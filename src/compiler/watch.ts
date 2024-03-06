@@ -203,7 +203,9 @@ export function createWatchStatusReporter(system: System, pretty?: boolean): Wat
             }
 
             output += `${getLocaleTimeString(system)} - `;
-            output += `${flattenDiagnosticMessageText(diagnostic.messageText, system.newLine)}${getPlainDiagnosticFollowingNewLines(diagnostic, newLine)}`;
+            output += `${flattenDiagnosticMessageText(diagnostic.messageText, system.newLine)}${
+                getPlainDiagnosticFollowingNewLines(diagnostic, newLine)
+            }`;
 
             system.write(output);
         };
@@ -296,7 +298,8 @@ export function getErrorSummaryText(
     }
     else {
         messageAndArgs = distinctFileNamesWithLines.length === 0 ? [Diagnostics.Found_0_errors, errorCount] :
-            distinctFileNamesWithLines.length === 1 ? [Diagnostics.Found_0_errors_in_the_same_file_starting_at_Colon_1, errorCount, firstFileReference!] :
+            distinctFileNamesWithLines.length === 1 ?
+            [Diagnostics.Found_0_errors_in_the_same_file_starting_at_Colon_1, errorCount, firstFileReference!] :
             [Diagnostics.Found_0_errors_in_1_files, errorCount, distinctFileNamesWithLines.length];
     }
 
@@ -310,7 +313,9 @@ function createTabularErrorsDisplay(filesInError: (ReportFileInError | undefined
     if (distinctFiles.length === 0) return "";
 
     const numberLength = (num: number) => Math.log(num) * Math.LOG10E + 1;
-    const fileToErrorCount = distinctFiles.map(file => ([file, countWhere(filesInError, fileInError => fileInError!.fileName === file!.fileName)] as const));
+    const fileToErrorCount = distinctFiles.map(
+        file => ([file, countWhere(filesInError, fileInError => fileInError!.fileName === file!.fileName)] as const),
+    );
     const maxErrors = fileToErrorCount.reduce((acc, value) => Math.max(acc, value[1] || 0), 0);
 
     const headerRow = Diagnostics.Errors_Files.message;
@@ -456,7 +461,8 @@ export function fileIncludeReasonToDiagnostics(
     const options = program.getCompilerOptions();
     if (isReferencedFile(reason)) {
         const referenceLocation = getReferencedFileLocation(program, reason);
-        const referenceText = isReferenceFileLocation(referenceLocation) ? referenceLocation.file.text.substring(referenceLocation.pos, referenceLocation.end)
+        const referenceText = isReferenceFileLocation(referenceLocation) ?
+            referenceLocation.file.text.substring(referenceLocation.pos, referenceLocation.end)
             : `"${referenceLocation.text}"`;
         let message: DiagnosticMessage;
         Debug.assert(isReferenceFileLocation(referenceLocation) || reason.kind === FileIncludeKind.Import, "Only synthetic references are imports");
@@ -504,7 +510,9 @@ export function fileIncludeReasonToDiagnostics(
     }
     switch (reason.kind) {
         case FileIncludeKind.RootFile:
-            if (!options.configFile?.configFileSpecs) return chainDiagnosticMessages(/*details*/ undefined, Diagnostics.Root_file_specified_for_compilation);
+            if (!options.configFile?.configFileSpecs) {
+                return chainDiagnosticMessages(/*details*/ undefined, Diagnostics.Root_file_specified_for_compilation);
+            }
             const fileName = getNormalizedAbsolutePath(program.getRootFileNames()[reason.index], program.getCurrentDirectory());
             const matchedByFiles = getMatchedFileSpec(program, fileName);
             if (matchedByFiles) return chainDiagnosticMessages(/*details*/ undefined, Diagnostics.Part_of_files_list_in_tsconfig_json);
@@ -559,7 +567,8 @@ export function fileIncludeReasonToDiagnostics(
                 return chainDiagnosticMessages(/*details*/ undefined, Diagnostics.Library_0_specified_in_compilerOptions, options.lib![reason.index]);
             }
             const target = forEachEntry(targetOptionDeclaration.type, (value, key) => value === getEmitScriptTarget(options) ? key : undefined);
-            const messageAndArgs: DiagnosticAndArguments = target ? [Diagnostics.Default_library_for_target_0, target] : [Diagnostics.Default_library];
+            const messageAndArgs: DiagnosticAndArguments = target ? [Diagnostics.Default_library_for_target_0, target]
+                : [Diagnostics.Default_library];
             return chainDiagnosticMessages(/*details*/ undefined, ...messageAndArgs);
         }
         default:

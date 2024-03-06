@@ -237,7 +237,11 @@ function isSyntacticOwner(startingToken: Node, node: CallLikeExpression, sourceF
     }
 }
 
-function createJSSignatureHelpItems(argumentInfo: ArgumentListInfo, program: Program, cancellationToken: CancellationToken): SignatureHelpItems | undefined {
+function createJSSignatureHelpItems(
+    argumentInfo: ArgumentListInfo,
+    program: Program,
+    cancellationToken: CancellationToken,
+): SignatureHelpItems | undefined {
     if (argumentInfo.invocation.kind === InvocationKind.Contextual) return undefined;
     // See if we can find some symbol with the call expression name that has call signatures.
     const expression = getExpressionFromInvocation(argumentInfo.invocation);
@@ -344,7 +348,12 @@ function getArgumentOrParameterListAndIndex(
  * Returns relevant information for the argument list and the current argument if we are
  * in the argument of an invocation; returns undefined otherwise.
  */
-function getImmediatelyContainingArgumentInfo(node: Node, position: number, sourceFile: SourceFile, checker: TypeChecker): ArgumentListInfo | undefined {
+function getImmediatelyContainingArgumentInfo(
+    node: Node,
+    position: number,
+    sourceFile: SourceFile,
+    checker: TypeChecker,
+): ArgumentListInfo | undefined {
     const { parent } = node;
     if (isCallOrNewExpression(parent)) {
         const invocation = parent;
@@ -705,7 +714,8 @@ function getExpressionFromInvocation(invocation: CallInvocation | TypeArgsInvoca
 }
 
 function getEnclosingDeclarationFromInvocation(invocation: Invocation): Node {
-    return invocation.kind === InvocationKind.Call ? invocation.node : invocation.kind === InvocationKind.TypeArgs ? invocation.called : invocation.node;
+    return invocation.kind === InvocationKind.Call ? invocation.node
+        : invocation.kind === InvocationKind.TypeArgs ? invocation.called : invocation.node;
 }
 
 const signatureHelpNodeBuilderFlags = NodeBuilderFlags.OmitParameterModifiers | NodeBuilderFlags.IgnoreErrors |
@@ -819,7 +829,12 @@ function getSignatureHelpItem(
     enclosingDeclaration: Node,
     sourceFile: SourceFile,
 ): SignatureHelpItem[] {
-    const infos = (isTypeParameterList ? itemInfoForTypeParameters : itemInfoForParameters)(candidateSignature, checker, enclosingDeclaration, sourceFile);
+    const infos = (isTypeParameterList ? itemInfoForTypeParameters : itemInfoForParameters)(
+        candidateSignature,
+        checker,
+        enclosingDeclaration,
+        sourceFile,
+    );
     return map(infos, ({ isVariadic, parameters, prefix, suffix }) => {
         const prefixDisplayParts = [...callTargetDisplayParts, ...prefix];
         const suffixDisplayParts = [...suffix, ...returnTypeToDisplayParts(candidateSignature, enclosingDeclaration, checker)];
@@ -892,7 +907,9 @@ function itemInfoForParameters(
     const typeParameterParts = mapToDisplayParts(writer => {
         if (candidateSignature.typeParameters && candidateSignature.typeParameters.length) {
             const args = factory.createNodeArray(
-                candidateSignature.typeParameters.map(p => checker.typeParameterToDeclaration(p, enclosingDeclaration, signatureHelpNodeBuilderFlags)!),
+                candidateSignature.typeParameters.map(p =>
+                    checker.typeParameterToDeclaration(p, enclosingDeclaration, signatureHelpNodeBuilderFlags)!
+                ),
             );
             printer.writeList(ListFormat.TypeParameters, args, sourceFile, writer);
         }

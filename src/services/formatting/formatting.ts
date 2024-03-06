@@ -224,7 +224,12 @@ export function formatOnOpeningCurly(position: number, sourceFile: SourceFile, f
 /** @internal */
 export function formatOnClosingCurly(position: number, sourceFile: SourceFile, formatContext: FormatContext): TextChange[] {
     const precedingToken = findImmediatelyPrecedingTokenOfKind(position, SyntaxKind.CloseBraceToken, sourceFile);
-    return formatNodeLines(findOutermostNodeWithinListLevel(precedingToken), sourceFile, formatContext, FormattingRequestKind.FormatOnClosingCurlyBrace);
+    return formatNodeLines(
+        findOutermostNodeWithinListLevel(precedingToken),
+        sourceFile,
+        formatContext,
+        FormattingRequestKind.FormatOnClosingCurlyBrace,
+    );
 }
 
 /** @internal */
@@ -457,7 +462,12 @@ export function formatNodeGivenIndentation(
         ));
 }
 
-function formatNodeLines(node: Node | undefined, sourceFile: SourceFile, formatContext: FormatContext, requestKind: FormattingRequestKind): TextChange[] {
+function formatNodeLines(
+    node: Node | undefined,
+    sourceFile: SourceFile,
+    formatContext: FormatContext,
+    requestKind: FormattingRequestKind,
+): TextChange[] {
     if (!node) {
         return [];
     }
@@ -470,7 +480,12 @@ function formatNodeLines(node: Node | undefined, sourceFile: SourceFile, formatC
     return formatSpan(span, sourceFile, formatContext, requestKind);
 }
 
-function formatSpan(originalRange: TextRange, sourceFile: SourceFile, formatContext: FormatContext, requestKind: FormattingRequestKind): TextChange[] {
+function formatSpan(
+    originalRange: TextRange,
+    sourceFile: SourceFile,
+    formatContext: FormatContext,
+    requestKind: FormattingRequestKind,
+): TextChange[] {
     // find the smallest node that fully wraps the range and compute the initial indentation for the node
     const enclosingNode = findEnclosingNode(originalRange, sourceFile);
     return getFormattingScanner(
@@ -855,7 +870,13 @@ function formatSpanWorker(
             let childIndentationAmount = Constants.Unknown;
 
             if (isListItem && rangeContainsRange(originalRange, parent)) {
-                childIndentationAmount = tryComputeIndentationForListItem(childStartPos, child.end, parentStartLine, originalRange, inheritedIndentation);
+                childIndentationAmount = tryComputeIndentationForListItem(
+                    childStartPos,
+                    child.end,
+                    parentStartLine,
+                    originalRange,
+                    inheritedIndentation,
+                );
                 if (childIndentationAmount !== Constants.Unknown) {
                     inheritedIndentation = childIndentationAmount;
                 }
@@ -926,7 +947,12 @@ function formatSpanWorker(
             return inheritedIndentation;
         }
 
-        function processChildNodes(nodes: NodeArray<Node>, parent: Node, parentStartLine: number, parentDynamicIndentation: DynamicIndentation): void {
+        function processChildNodes(
+            nodes: NodeArray<Node>,
+            parent: Node,
+            parentStartLine: number,
+            parentDynamicIndentation: DynamicIndentation,
+        ): void {
             Debug.assert(isNodeArray(nodes));
             Debug.assert(!nodeIsSynthesized(nodes));
 
@@ -1211,7 +1237,8 @@ function formatSpanWorker(
                 }
 
                 // We need to trim trailing whitespace between the tokens if they were on different lines, and no rule was applied to put them on the same line
-                trimTrailingWhitespaces = trimTrailingWhitespaces && !(rule.action & RuleAction.DeleteSpace) && rule.flags !== RuleFlags.CanDeleteNewLines;
+                trimTrailingWhitespaces = trimTrailingWhitespaces && !(rule.action & RuleAction.DeleteSpace) &&
+                    rule.flags !== RuleFlags.CanDeleteNewLines;
             });
         }
         else {
@@ -1236,7 +1263,10 @@ function formatSpanWorker(
         else {
             const tokenStart = sourceFile.getLineAndCharacterOfPosition(pos);
             const startLinePosition = getStartPositionOfLine(tokenStart.line, sourceFile);
-            if (indentation !== characterToColumn(startLinePosition, tokenStart.character) || indentationIsDifferent(indentationString, startLinePosition)) {
+            if (
+                indentation !== characterToColumn(startLinePosition, tokenStart.character) ||
+                indentationIsDifferent(indentationString, startLinePosition)
+            ) {
                 recordReplace(startLinePosition, tokenStart.character, indentationString);
             }
         }
@@ -1287,7 +1317,12 @@ function formatSpanWorker(
 
         const startLinePos = getStartPositionOfLine(startLine, sourceFile);
 
-        const nonWhitespaceColumnInFirstPart = SmartIndenter.findFirstNonWhitespaceCharacterAndColumn(startLinePos, parts[0].pos, sourceFile, options);
+        const nonWhitespaceColumnInFirstPart = SmartIndenter.findFirstNonWhitespaceCharacterAndColumn(
+            startLinePos,
+            parts[0].pos,
+            sourceFile,
+            options,
+        );
 
         let startIndex = 0;
         if (firstLineIsIndented) {

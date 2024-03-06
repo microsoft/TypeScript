@@ -250,7 +250,8 @@ export function flattenDestructuringBinding(
     skipInitializer?: boolean,
 ): VariableDeclaration[] {
     let pendingExpressions: Expression[] | undefined;
-    const pendingDeclarations: { pendingExpressions?: Expression[]; name: BindingName; value: Expression; location?: TextRange; original?: Node; }[] = [];
+    const pendingDeclarations: { pendingExpressions?: Expression[]; name: BindingName; value: Expression; location?: TextRange; original?: Node; }[] =
+        [];
     const declarations: VariableDeclaration[] = [];
     const flattenContext: FlattenContext = {
         context,
@@ -319,7 +320,12 @@ export function flattenDestructuringBinding(
         pendingExpressions = append(pendingExpressions, value);
     }
 
-    function emitBindingOrAssignment(target: BindingOrAssignmentElementTarget, value: Expression, location: TextRange | undefined, original: Node | undefined) {
+    function emitBindingOrAssignment(
+        target: BindingOrAssignmentElementTarget,
+        value: Expression,
+        location: TextRange | undefined,
+        original: Node | undefined,
+    ) {
         Debug.assertNode(target, isBindingName);
         if (pendingExpressions) {
             value = context.factory.inlineExpressions(append(pendingExpressions, value));
@@ -421,7 +427,12 @@ function flattenObjectBindingOrAssignmentPattern(
             }
             else {
                 if (bindingElements) {
-                    flattenContext.emitBindingOrAssignment(flattenContext.createObjectBindingOrAssignmentPattern(bindingElements), value, location, pattern);
+                    flattenContext.emitBindingOrAssignment(
+                        flattenContext.createObjectBindingOrAssignmentPattern(bindingElements),
+                        value,
+                        location,
+                        pattern,
+                    );
                     bindingElements = undefined;
                 }
                 const rhsValue = createDestructuringPropertyAccess(flattenContext, value, propertyName);
@@ -433,7 +444,12 @@ function flattenObjectBindingOrAssignmentPattern(
         }
         else if (i === numElements - 1) {
             if (bindingElements) {
-                flattenContext.emitBindingOrAssignment(flattenContext.createObjectBindingOrAssignmentPattern(bindingElements), value, location, pattern);
+                flattenContext.emitBindingOrAssignment(
+                    flattenContext.createObjectBindingOrAssignmentPattern(bindingElements),
+                    value,
+                    location,
+                    pattern,
+                );
                 bindingElements = undefined;
             }
             const rhsValue = flattenContext.context.getEmitHelperFactory().createRestHelper(value, elements, computedTempVariables, pattern);

@@ -211,7 +211,10 @@ export namespace DocumentHighlights {
                     : undefined;
         }
 
-        function getFromAllDeclarations<T extends Node>(nodeTest: (node: Node) => node is T, keywords: readonly SyntaxKind[]): HighlightSpan[] | undefined {
+        function getFromAllDeclarations<T extends Node>(
+            nodeTest: (node: Node) => node is T,
+            keywords: readonly SyntaxKind[],
+        ): HighlightSpan[] | undefined {
             return useParent(
                 node.parent,
                 nodeTest,
@@ -283,7 +286,8 @@ export namespace DocumentHighlights {
     }
 
     function aggregateAllBreakAndContinueStatements(node: Node): readonly BreakOrContinueStatement[] | undefined {
-        return isBreakOrContinueStatement(node) ? [node] : isFunctionLike(node) ? undefined : flatMapChildren(node, aggregateAllBreakAndContinueStatements);
+        return isBreakOrContinueStatement(node) ? [node]
+            : isFunctionLike(node) ? undefined : flatMapChildren(node, aggregateAllBreakAndContinueStatements);
     }
 
     function flatMapChildren<T>(node: Node, cb: (child: Node) => readonly T[] | T | undefined): readonly T[] {
@@ -567,7 +571,8 @@ export namespace DocumentHighlights {
     function traverseWithoutCrossingFunction(node: Node, cb: (node: Node) => void) {
         cb(node);
         if (
-            !isFunctionLike(node) && !isClassLike(node) && !isInterfaceDeclaration(node) && !isModuleDeclaration(node) && !isTypeAliasDeclaration(node) &&
+            !isFunctionLike(node) && !isClassLike(node) && !isInterfaceDeclaration(node) && !isModuleDeclaration(node) &&
+            !isTypeAliasDeclaration(node) &&
             !isTypeNode(node)
         ) {
             forEachChild(node, child => traverseWithoutCrossingFunction(child, cb));

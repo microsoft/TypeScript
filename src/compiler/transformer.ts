@@ -109,7 +109,11 @@ const enum SyntaxKindFeatureFlags {
 export const noTransformers: EmitTransformers = { scriptTransformers: emptyArray, declarationTransformers: emptyArray };
 
 /** @internal */
-export function getTransformers(compilerOptions: CompilerOptions, customTransformers?: CustomTransformers, emitOnly?: boolean | EmitOnly): EmitTransformers {
+export function getTransformers(
+    compilerOptions: CompilerOptions,
+    customTransformers?: CustomTransformers,
+    emitOnly?: boolean | EmitOnly,
+): EmitTransformers {
     return {
         scriptTransformers: getScriptTransformers(compilerOptions, customTransformers, emitOnly),
         declarationTransformers: getDeclarationTransformers(customTransformers),
@@ -210,7 +214,9 @@ function wrapCustomTransformerFactory<T extends SourceFile | Bundle>(
     };
 }
 
-function wrapScriptTransformerFactory(transformer: TransformerFactory<SourceFile> | CustomTransformerFactory): TransformerFactory<Bundle | SourceFile> {
+function wrapScriptTransformerFactory(
+    transformer: TransformerFactory<SourceFile> | CustomTransformerFactory,
+): TransformerFactory<Bundle | SourceFile> {
     return wrapCustomTransformerFactory(transformer, chainBundle);
 }
 

@@ -197,7 +197,9 @@ function collectTokens(
                             modifierSet |= 1 << TokenModifier.async;
                         }
                         if (typeIdx !== TokenType.class && typeIdx !== TokenType.interface) {
-                            if ((modifiers & ModifierFlags.Readonly) || (nodeFlags & NodeFlags.Const) || (symbol.getFlags() & SymbolFlags.EnumMember)) {
+                            if (
+                                (modifiers & ModifierFlags.Readonly) || (nodeFlags & NodeFlags.Const) || (symbol.getFlags() & SymbolFlags.EnumMember)
+                            ) {
                                 modifierSet |= 1 << TokenModifier.readonly;
                             }
                         }

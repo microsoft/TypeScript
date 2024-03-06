@@ -337,7 +337,10 @@ function getOutliningSpanForNode(n: Node, sourceFile: SourceFile): OutliningSpan
     }
 
     function spanForArrowFunction(node: ArrowFunction): OutliningSpan | undefined {
-        if (isBlock(node.body) || isParenthesizedExpression(node.body) || positionsAreOnSameLine(node.body.getFullStart(), node.body.getEnd(), sourceFile)) {
+        if (
+            isBlock(node.body) || isParenthesizedExpression(node.body) ||
+            positionsAreOnSameLine(node.body.getFullStart(), node.body.getEnd(), sourceFile)
+        ) {
             return undefined;
         }
         const textSpan = createTextSpanFromBounds(node.body.getFullStart(), node.body.getEnd());
@@ -379,7 +382,12 @@ function getOutliningSpanForNode(n: Node, sourceFile: SourceFile): OutliningSpan
         // If the block has no leading keywords and is inside an array literal or call expression,
         // we only want to collapse the span of the block.
         // Otherwise, the collapsed section will include the end of the previous line.
-        return spanForNode(node, /*autoCollapse*/ false, /*useFullStart*/ !isArrayLiteralExpression(node.parent) && !isCallExpression(node.parent), open);
+        return spanForNode(
+            node,
+            /*autoCollapse*/ false,
+            /*useFullStart*/ !isArrayLiteralExpression(node.parent) && !isCallExpression(node.parent),
+            open,
+        );
     }
 
     function spanForNode(
@@ -408,7 +416,8 @@ function getOutliningSpanForNode(n: Node, sourceFile: SourceFile): OutliningSpan
 function functionSpan(node: SignatureDeclaration, body: Block, sourceFile: SourceFile): OutliningSpan | undefined {
     const openToken = tryGetFunctionOpenToken(node, body, sourceFile);
     const closeToken = findChildOfKind(body, SyntaxKind.CloseBraceToken, sourceFile);
-    return openToken && closeToken && spanBetweenTokens(openToken, closeToken, node, sourceFile, /*autoCollapse*/ node.kind !== SyntaxKind.ArrowFunction);
+    return openToken && closeToken &&
+        spanBetweenTokens(openToken, closeToken, node, sourceFile, /*autoCollapse*/ node.kind !== SyntaxKind.ArrowFunction);
 }
 
 function spanBetweenTokens(

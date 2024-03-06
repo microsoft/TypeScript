@@ -100,7 +100,12 @@ export type ESDecorateContext =
 export interface EmitHelperFactory {
     getUnscopedHelperName(name: string): Identifier;
     // TypeScript Helpers
-    createDecorateHelper(decoratorExpressions: readonly Expression[], target: Expression, memberName?: Expression, descriptor?: Expression): Expression;
+    createDecorateHelper(
+        decoratorExpressions: readonly Expression[],
+        target: Expression,
+        memberName?: Expression,
+        descriptor?: Expression,
+    ): Expression;
     createMetadataHelper(metadataKey: string, metadataValue: Expression): Expression;
     createParamHelper(expression: Expression, parameterOffset: number): Expression;
     // ES Decorators Helpers
@@ -384,7 +389,10 @@ export function createEmitHelperFactory(context: TransformationContext): EmitHel
             ),
             factory.createPropertyAssignment(factory.createIdentifier("static"), contextIn.static ? factory.createTrue() : factory.createFalse()),
             factory.createPropertyAssignment(factory.createIdentifier("private"), contextIn.private ? factory.createTrue() : factory.createFalse()),
-            factory.createPropertyAssignment(factory.createIdentifier("access"), createESDecorateClassElementAccessObject(contextIn.name, contextIn.access)),
+            factory.createPropertyAssignment(
+                factory.createIdentifier("access"),
+                createESDecorateClassElementAccessObject(contextIn.name, contextIn.access),
+            ),
             factory.createPropertyAssignment(factory.createIdentifier("metadata"), contextIn.metadata),
         ];
         return factory.createObjectLiteralExpression(properties);
@@ -504,7 +512,10 @@ export function createEmitHelperFactory(context: TransformationContext): EmitHel
             const propertyName = getPropertyNameOfBindingOrAssignmentElement(elements[i]);
             if (propertyName) {
                 if (isComputedPropertyName(propertyName)) {
-                    Debug.assertIsDefined(computedTempVariables, "Encountered computed property name but 'computedTempVariables' argument was not provided.");
+                    Debug.assertIsDefined(
+                        computedTempVariables,
+                        "Encountered computed property name but 'computedTempVariables' argument was not provided.",
+                    );
                     const temp = computedTempVariables[computedTempVariableOffset];
                     computedTempVariableOffset++;
                     // typeof _tmp === "symbol" ? _tmp : _tmp + ""

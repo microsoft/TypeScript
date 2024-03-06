@@ -877,7 +877,8 @@ export function getEncodedSyntacticClassifications(cancellationToken: Cancellati
                         break;
                     case SyntaxKind.JSDocTypedefTag:
                         const type = tag as JSDocTypedefTag;
-                        commentStart = type.typeExpression?.kind === SyntaxKind.JSDocTypeExpression && type.fullName?.end || type.typeExpression?.end ||
+                        commentStart = type.typeExpression?.kind === SyntaxKind.JSDocTypeExpression && type.fullName?.end ||
+                            type.typeExpression?.end ||
                             commentStart;
                         break;
                     case SyntaxKind.JSDocCallbackTag:

@@ -120,11 +120,19 @@ function fixImportOfModuleExports(
         const importNode = importFromModuleSpecifier(moduleSpecifier);
         switch (importNode.kind) {
             case SyntaxKind.ImportEqualsDeclaration:
-                changes.replaceNode(importingFile, importNode, makeImport(importNode.name, /*namedImports*/ undefined, moduleSpecifier, quotePreference));
+                changes.replaceNode(
+                    importingFile,
+                    importNode,
+                    makeImport(importNode.name, /*namedImports*/ undefined, moduleSpecifier, quotePreference),
+                );
                 break;
             case SyntaxKind.CallExpression:
                 if (isRequireCall(importNode, /*requireStringLiteralLikeArgument*/ false)) {
-                    changes.replaceNode(importingFile, importNode, factory.createPropertyAccessExpression(getSynthesizedDeepClone(importNode), "default"));
+                    changes.replaceNode(
+                        importingFile,
+                        importNode,
+                        factory.createPropertyAccessExpression(getSynthesizedDeepClone(importNode), "default"),
+                    );
                 }
                 break;
         }
@@ -210,7 +218,10 @@ function convertExportsAccesses(sourceFile: SourceFile, exports: ExportRenames, 
     });
 }
 
-function forEachExportReference(sourceFile: SourceFile, cb: (node: PropertyAccessExpression & { name: Identifier; }, isAssignmentLhs: boolean) => void): void {
+function forEachExportReference(
+    sourceFile: SourceFile,
+    cb: (node: PropertyAccessExpression & { name: Identifier; }, isAssignmentLhs: boolean) => void,
+): void {
     sourceFile.forEachChild(function recur(node) {
         if (isPropertyAccessExpression(node) && isExportsOrModuleExportsOrAlias(sourceFile, node.expression) && isIdentifier(node.name)) {
             const { parent } = node;
@@ -398,7 +409,8 @@ function tryChangeModuleExportsObject(
             case SyntaxKind.SpreadAssignment:
                 return undefined;
             case SyntaxKind.PropertyAssignment:
-                return !isIdentifier(prop.name) ? undefined : convertExportsDotXEquals_replaceNode(prop.name.text, prop.initializer, useSitesToUnqualify);
+                return !isIdentifier(prop.name) ? undefined
+                    : convertExportsDotXEquals_replaceNode(prop.name.text, prop.initializer, useSitesToUnqualify);
             case SyntaxKind.MethodDeclaration:
                 return !isIdentifier(prop.name) ? undefined
                     : functionExpressionToDeclaration(prop.name.text, [factory.createToken(SyntaxKind.ExportKeyword)], prop, useSitesToUnqualify);
@@ -459,9 +471,14 @@ function convertExportsPropertyAssignment(
     const name = left.name.text;
     if ((isFunctionExpression(right) || isArrowFunction(right) || isClassExpression(right)) && (!right.name || right.name.text === name)) {
         // `exports.f = function() {}` -> `export function f() {}` -- Replace `exports.f = ` with `export `, and insert the name after `function`.
-        changes.replaceRange(sourceFile, { pos: left.getStart(sourceFile), end: right.getStart(sourceFile) }, factory.createToken(SyntaxKind.ExportKeyword), {
-            suffix: " ",
-        });
+        changes.replaceRange(
+            sourceFile,
+            { pos: left.getStart(sourceFile), end: right.getStart(sourceFile) },
+            factory.createToken(SyntaxKind.ExportKeyword),
+            {
+                suffix: " ",
+            },
+        );
 
         if (!right.name) changes.insertName(sourceFile, right, name);
 
@@ -481,7 +498,11 @@ function convertExportsPropertyAssignment(
 }
 
 // TODO: GH#22492 this will cause an error if a change has been made inside the body of the node.
-function convertExportsDotXEquals_replaceNode(name: string | undefined, exported: Expression, useSitesToUnqualify: Map<Node, Node> | undefined): Statement {
+function convertExportsDotXEquals_replaceNode(
+    name: string | undefined,
+    exported: Expression,
+    useSitesToUnqualify: Map<Node, Node> | undefined,
+): Statement {
     const modifiers = [factory.createToken(SyntaxKind.ExportKeyword)];
     switch (exported.kind) {
         case SyntaxKind.FunctionExpression: {
@@ -733,7 +754,12 @@ function classExpressionToDeclaration(
     );
 }
 
-function makeSingleImport(localName: string, propertyName: string, moduleSpecifier: StringLiteralLike, quotePreference: QuotePreference): ImportDeclaration {
+function makeSingleImport(
+    localName: string,
+    propertyName: string,
+    moduleSpecifier: StringLiteralLike,
+    quotePreference: QuotePreference,
+): ImportDeclaration {
     return propertyName === "default"
         ? makeImport(factory.createIdentifier(localName), /*namedImports*/ undefined, moduleSpecifier, quotePreference)
         : makeImport(/*defaultImport*/ undefined, [makeImportSpecifier(propertyName, localName)], moduleSpecifier, quotePreference);

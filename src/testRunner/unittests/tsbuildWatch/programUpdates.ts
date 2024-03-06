@@ -211,7 +211,8 @@ describe("unittests:: tsbuildWatch:: watchMode:: program updates", () => {
             },
             {
                 caption: "Make local change and build core",
-                edit: sys => sys.replaceFileText("sample1/core/index.ts", `\nfunction myFunc() { return 10; }`, `\nfunction myFunc() { return 100; }`),
+                edit: sys =>
+                    sys.replaceFileText("sample1/core/index.ts", `\nfunction myFunc() { return 10; }`, `\nfunction myFunc() { return 100; }`),
                 timeouts: sys => sys.runQueuedTimeoutCallbacks(), // Builds core
             },
             {

@@ -399,7 +399,10 @@ describe("unittests:: tsserver:: resolutionCache:: tsserverProjectSystem module 
         it("relative module name", () => {
             const fileContent = `import { module1 } from "./module1";import { module2 } from "../module2";`;
             const { file1, file2 } = getFiles(fileContent);
-            const { module1, module2 } = getModules(`/user/username/projects/myproject/src/module1.ts`, `/user/username/projects/myproject/module2.ts`);
+            const { module1, module2 } = getModules(
+                `/user/username/projects/myproject/src/module1.ts`,
+                `/user/username/projects/myproject/module2.ts`,
+            );
             const files = [module1, module2, file1, file2, configFile, libFile];
             const host = createServerHost(files);
             const session = new TestSession(host);
