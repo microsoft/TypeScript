@@ -363,8 +363,26 @@ export interface WatchOfFilesAndCompilerOptions<T> extends Watch<T> {
 /**
  * Create the watch compiler host for either configFile or fileNames and its options
  */
-export function createWatchCompilerHost<T extends BuilderProgram>(configFileName: string, optionsToExtend: CompilerOptions | undefined, system: System, createProgram?: CreateProgram<T>, reportDiagnostic?: DiagnosticReporter, reportWatchStatus?: WatchStatusReporter, watchOptionsToExtend?: WatchOptions, extraFileExtensions?: readonly FileExtensionInfo[]): WatchCompilerHostOfConfigFile<T>;
-export function createWatchCompilerHost<T extends BuilderProgram>(rootFiles: string[], options: CompilerOptions, system: System, createProgram?: CreateProgram<T>, reportDiagnostic?: DiagnosticReporter, reportWatchStatus?: WatchStatusReporter, projectReferences?: readonly ProjectReference[], watchOptions?: WatchOptions): WatchCompilerHostOfFilesAndCompilerOptions<T>;
+export function createWatchCompilerHost<T extends BuilderProgram>(
+    configFileName: string,
+    optionsToExtend: CompilerOptions | undefined,
+    system: System,
+    createProgram?: CreateProgram<T>,
+    reportDiagnostic?: DiagnosticReporter,
+    reportWatchStatus?: WatchStatusReporter,
+    watchOptionsToExtend?: WatchOptions,
+    extraFileExtensions?: readonly FileExtensionInfo[],
+): WatchCompilerHostOfConfigFile<T>;
+export function createWatchCompilerHost<T extends BuilderProgram>(
+    rootFiles: string[],
+    options: CompilerOptions,
+    system: System,
+    createProgram?: CreateProgram<T>,
+    reportDiagnostic?: DiagnosticReporter,
+    reportWatchStatus?: WatchStatusReporter,
+    projectReferences?: readonly ProjectReference[],
+    watchOptions?: WatchOptions,
+): WatchCompilerHostOfFilesAndCompilerOptions<T>;
 export function createWatchCompilerHost<T extends BuilderProgram>(
     rootFilesOrConfigFileName: string | string[],
     options: CompilerOptions | undefined,

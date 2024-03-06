@@ -182,7 +182,14 @@ export function createSemanticDiagnosticsBuilderProgram(
  * to emit the those files and manage semantic diagnostics cache as well
  */
 export function createEmitAndSemanticDiagnosticsBuilderProgram(newProgram: Program, host: BuilderProgramHost, oldProgram?: EmitAndSemanticDiagnosticsBuilderProgram, configFileParsingDiagnostics?: readonly Diagnostic[]): EmitAndSemanticDiagnosticsBuilderProgram;
-export function createEmitAndSemanticDiagnosticsBuilderProgram(rootNames: readonly string[] | undefined, options: CompilerOptions | undefined, host?: CompilerHost, oldProgram?: EmitAndSemanticDiagnosticsBuilderProgram, configFileParsingDiagnostics?: readonly Diagnostic[], projectReferences?: readonly ProjectReference[]): EmitAndSemanticDiagnosticsBuilderProgram;
+export function createEmitAndSemanticDiagnosticsBuilderProgram(
+    rootNames: readonly string[] | undefined,
+    options: CompilerOptions | undefined,
+    host?: CompilerHost,
+    oldProgram?: EmitAndSemanticDiagnosticsBuilderProgram,
+    configFileParsingDiagnostics?: readonly Diagnostic[],
+    projectReferences?: readonly ProjectReference[],
+): EmitAndSemanticDiagnosticsBuilderProgram;
 export function createEmitAndSemanticDiagnosticsBuilderProgram(
     newProgramOrRootNames: Program | readonly string[] | undefined,
     hostOrOptions: BuilderProgramHost | CompilerOptions | undefined,

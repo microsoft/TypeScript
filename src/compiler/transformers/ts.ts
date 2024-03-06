@@ -1144,7 +1144,10 @@ export function transformTypeScript(context: TransformationContext) {
                 properties = append(properties, typeProperty);
             }
             if (shouldAddParamTypesMetadata(node)) {
-                const paramTypeProperty = factory.createPropertyAssignment("paramTypes", factory.createArrowFunction(/*modifiers*/ undefined, /*typeParameters*/ undefined, [], /*type*/ undefined, factory.createToken(SyntaxKind.EqualsGreaterThanToken), typeSerializer.serializeParameterTypesOfNode({ currentLexicalScope, currentNameScope: container }, node, container)));
+                const paramTypeProperty = factory.createPropertyAssignment(
+                    "paramTypes",
+                    factory.createArrowFunction(/*modifiers*/ undefined, /*typeParameters*/ undefined, [], /*type*/ undefined, factory.createToken(SyntaxKind.EqualsGreaterThanToken), typeSerializer.serializeParameterTypesOfNode({ currentLexicalScope, currentNameScope: container }, node, container)),
+                );
                 properties = append(properties, paramTypeProperty);
             }
             if (shouldAddReturnTypeMetadata(node)) {

@@ -2831,7 +2831,17 @@ export function parseJsonConfigFileContent(json: any, host: ParseConfigHost, bas
  * @param basePath A root directory to resolve relative path entries in the config
  *    file to. e.g. outDir
  */
-export function parseJsonSourceFileConfigFileContent(sourceFile: TsConfigSourceFile, host: ParseConfigHost, basePath: string, existingOptions?: CompilerOptions, configFileName?: string, resolutionStack?: Path[], extraFileExtensions?: readonly FileExtensionInfo[], extendedConfigCache?: Map<string, ExtendedConfigCacheEntry>, existingWatchOptions?: WatchOptions): ParsedCommandLine {
+export function parseJsonSourceFileConfigFileContent(
+    sourceFile: TsConfigSourceFile,
+    host: ParseConfigHost,
+    basePath: string,
+    existingOptions?: CompilerOptions,
+    configFileName?: string,
+    resolutionStack?: Path[],
+    extraFileExtensions?: readonly FileExtensionInfo[],
+    extendedConfigCache?: Map<string, ExtendedConfigCacheEntry>,
+    existingWatchOptions?: WatchOptions,
+): ParsedCommandLine {
     tracing?.push(tracing.Phase.Parse, "parseJsonSourceFileConfigFileContent", { path: sourceFile.fileName });
     const result = parseJsonConfigFileContentWorker(/*json*/ undefined, sourceFile, host, basePath, existingOptions, existingWatchOptions, configFileName, resolutionStack, extraFileExtensions, extendedConfigCache);
     tracing?.pop();

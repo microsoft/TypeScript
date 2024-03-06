@@ -6922,7 +6922,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     else if (
                         symbol.flags & SymbolFlags.Class
                             && !getBaseTypeVariableOfClass(symbol)
-                            && !(symbol.valueDeclaration && isClassLike(symbol.valueDeclaration) && context.flags & NodeBuilderFlags.WriteClassExpressionAsTypeLiteral && (!isClassDeclaration(symbol.valueDeclaration) || isSymbolAccessible(symbol, context.enclosingDeclaration, isInstanceType, /*shouldComputeAliasesToMakeVisible*/ false).accessibility !== SymbolAccessibility.Accessible)) ||
+                            && !(symbol.valueDeclaration && isClassLike(symbol.valueDeclaration) && context.flags & NodeBuilderFlags.WriteClassExpressionAsTypeLiteral &&
+                                (!isClassDeclaration(symbol.valueDeclaration) || isSymbolAccessible(symbol, context.enclosingDeclaration, isInstanceType, /*shouldComputeAliasesToMakeVisible*/ false).accessibility !== SymbolAccessibility.Accessible)) ||
                         symbol.flags & (SymbolFlags.Enum | SymbolFlags.ValueModule) ||
                         shouldWriteTypeOfFunctionSymbol()
                     ) {
@@ -19569,7 +19570,16 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         // Don't compute resolvedReturnType and resolvedTypePredicate now,
         // because using `mapper` now could trigger inferences to become fixed. (See `createInferenceContext`.)
         // See GH#17600.
-        const result = createSignature(signature.declaration, freshTypeParameters, signature.thisParameter && instantiateSymbol(signature.thisParameter, mapper), instantiateList(signature.parameters, mapper, instantiateSymbol), /*resolvedReturnType*/ undefined, /*resolvedTypePredicate*/ undefined, signature.minArgumentCount, signature.flags & SignatureFlags.PropagatingFlags);
+        const result = createSignature(
+            signature.declaration,
+            freshTypeParameters,
+            signature.thisParameter && instantiateSymbol(signature.thisParameter, mapper),
+            instantiateList(signature.parameters, mapper, instantiateSymbol),
+            /*resolvedReturnType*/ undefined,
+            /*resolvedTypePredicate*/ undefined,
+            signature.minArgumentCount,
+            signature.flags & SignatureFlags.PropagatingFlags,
+        );
         result.target = signature;
         result.mapper = mapper;
         return result;

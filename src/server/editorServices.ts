@@ -3205,7 +3205,11 @@ export class ProjectService {
         let info = this.getScriptInfoForPath(path);
         if (!info) {
             const isDynamic = isDynamicFileName(fileName);
-            Debug.assert(isRootedDiskPath(fileName) || isDynamic || openedByClient, "", () => `${JSON.stringify({ fileName, currentDirectory, hostCurrentDirectory: this.currentDirectory, openKeys: arrayFrom(this.openFilesWithNonRootedDiskPath.keys()) })}\nScript info with non-dynamic relative file name can only be open script info or in context of host currentDirectory`);
+            Debug.assert(
+                isRootedDiskPath(fileName) || isDynamic || openedByClient,
+                "",
+                () => `${JSON.stringify({ fileName, currentDirectory, hostCurrentDirectory: this.currentDirectory, openKeys: arrayFrom(this.openFilesWithNonRootedDiskPath.keys()) })}\nScript info with non-dynamic relative file name can only be open script info or in context of host currentDirectory`,
+            );
             Debug.assert(
                 !isRootedDiskPath(fileName) || this.currentDirectory === currentDirectory || !this.openFilesWithNonRootedDiskPath.has(this.toCanonicalFileName(fileName)),
                 "",

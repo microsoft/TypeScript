@@ -89,7 +89,8 @@ describe("unittests:: canWatch::", () => {
 
     baselineCanWatch(
         "getDirectoryToWatchFailedLookupLocationFromTypeRoot",
-        () => `When watched typeRoot handler is invoked, this method determines the directory for which the failedLookupLocation would need to be invalidated.\r\nSince this is invoked only when watching default typeRoot and is used to handle flaky directory watchers, this is used as a fail safe where if failed lookup starts with returned directory we will invalidate that resolution.`,
+        () =>
+            `When watched typeRoot handler is invoked, this method determines the directory for which the failedLookupLocation would need to be invalidated.\r\nSince this is invoked only when watching default typeRoot and is used to handle flaky directory watchers, this is used as a fail safe where if failed lookup starts with returned directory we will invalidate that resolution.`,
         (paths, longestPathLength, baseline) => {
             const maxLength = longestPathLength + "/node_modules/@types".length;
             const maxLengths = [maxLength, maxLength] as const;

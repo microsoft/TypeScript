@@ -736,7 +736,14 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
     }
 
     /** @internal */
-    resolveTypeReferenceDirectiveReferences<T extends string | FileReference>(typeDirectiveReferences: readonly T[], containingFile: string, redirectedReference: ResolvedProjectReference | undefined, options: CompilerOptions, containingSourceFile: SourceFile | undefined, reusedNames: readonly T[] | undefined): readonly ResolvedTypeReferenceDirectiveWithFailedLookupLocations[] {
+    resolveTypeReferenceDirectiveReferences<T extends string | FileReference>(
+        typeDirectiveReferences: readonly T[],
+        containingFile: string,
+        redirectedReference: ResolvedProjectReference | undefined,
+        options: CompilerOptions,
+        containingSourceFile: SourceFile | undefined,
+        reusedNames: readonly T[] | undefined,
+    ): readonly ResolvedTypeReferenceDirectiveWithFailedLookupLocations[] {
         return this.resolutionCache.resolveTypeReferenceDirectiveReferences(
             typeDirectiveReferences,
             containingFile,
@@ -2572,7 +2579,19 @@ export class AutoImportProviderProject extends Project {
         documentRegistry: DocumentRegistry,
         compilerOptions: CompilerOptions,
     ) {
-        super(hostProject.projectService.newAutoImportProviderProjectName(), ProjectKind.AutoImportProvider, hostProject.projectService, documentRegistry, /*hasExplicitListOfFiles*/ false, /*lastFileExceededProgramSize*/ undefined, compilerOptions, /*compileOnSaveEnabled*/ false, hostProject.getWatchOptions(), hostProject.projectService.host, hostProject.currentDirectory);
+        super(
+            hostProject.projectService.newAutoImportProviderProjectName(),
+            ProjectKind.AutoImportProvider,
+            hostProject.projectService,
+            documentRegistry,
+            /*hasExplicitListOfFiles*/ false,
+            /*lastFileExceededProgramSize*/ undefined,
+            compilerOptions,
+            /*compileOnSaveEnabled*/ false,
+            hostProject.getWatchOptions(),
+            hostProject.projectService.host,
+            hostProject.currentDirectory,
+        );
 
         this.rootFileNames = initialRootNames;
         this.useSourceOfProjectReferenceRedirect = maybeBind(this.hostProject, this.hostProject.useSourceOfProjectReferenceRedirect);

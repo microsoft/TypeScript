@@ -719,7 +719,9 @@ function tryGetValueFromType(context: CodeFixContextBase, checker: TypeChecker, 
         const signature = checker.getSignaturesOfType(type, SignatureKind.Call);
         if (signature === undefined) return createUndefined();
 
-        const func = createSignatureDeclarationFromSignature(SyntaxKind.FunctionExpression, context, quotePreference, signature[0], createStubbedBody(Diagnostics.Function_not_implemented.message, quotePreference), /*name*/ undefined, /*modifiers*/ undefined, /*optional*/ undefined, /*enclosingDeclaration*/ enclosingDeclaration, importAdder) as FunctionExpression | undefined;
+        const func = createSignatureDeclarationFromSignature(SyntaxKind.FunctionExpression, context, quotePreference, signature[0], createStubbedBody(Diagnostics.Function_not_implemented.message, quotePreference), /*name*/ undefined, /*modifiers*/ undefined, /*optional*/ undefined, /*enclosingDeclaration*/ enclosingDeclaration, importAdder) as
+            | FunctionExpression
+            | undefined;
         return func ?? createUndefined();
     }
     if (getObjectFlags(type) & ObjectFlags.Class) {

@@ -92,7 +92,23 @@ function getInfo(sourceFile: SourceFile, pos: number, checker: TypeChecker): { r
 }
 
 // TODO: GH#19856 Node & { type: TypeNode }
-type TypeContainer = AsExpression | CallSignatureDeclaration | ConstructSignatureDeclaration | FunctionDeclaration | GetAccessorDeclaration | IndexSignatureDeclaration | MappedTypeNode | MethodDeclaration | MethodSignature | ParameterDeclaration | PropertyDeclaration | PropertySignature | SetAccessorDeclaration | TypeAliasDeclaration | TypeAssertion | VariableDeclaration;
+type TypeContainer =
+    | AsExpression
+    | CallSignatureDeclaration
+    | ConstructSignatureDeclaration
+    | FunctionDeclaration
+    | GetAccessorDeclaration
+    | IndexSignatureDeclaration
+    | MappedTypeNode
+    | MethodDeclaration
+    | MethodSignature
+    | ParameterDeclaration
+    | PropertyDeclaration
+    | PropertySignature
+    | SetAccessorDeclaration
+    | TypeAliasDeclaration
+    | TypeAssertion
+    | VariableDeclaration;
 function isTypeContainer(node: Node): node is TypeContainer {
     // NOTE: Some locations are not handled yet:
     // MappedTypeNode.typeParameters and SignatureDeclaration.typeParameters, as well as CallExpression.typeArguments
