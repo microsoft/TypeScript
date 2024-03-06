@@ -2770,7 +2770,15 @@ export class ProjectService {
         }
     }
 
-    private updateRootAndOptionsOfNonInferredProject<T>(project: ExternalProject | ConfiguredProject, newUncheckedFiles: T[], propertyReader: FilePropertyReader<T>, newOptions: CompilerOptions, newTypeAcquisition: TypeAcquisition, compileOnSave: boolean | undefined, watchOptions: WatchOptions | undefined) {
+    private updateRootAndOptionsOfNonInferredProject<T>(
+        project: ExternalProject | ConfiguredProject,
+        newUncheckedFiles: T[],
+        propertyReader: FilePropertyReader<T>,
+        newOptions: CompilerOptions,
+        newTypeAcquisition: TypeAcquisition,
+        compileOnSave: boolean | undefined,
+        watchOptions: WatchOptions | undefined,
+    ) {
         project.setCompilerOptions(newOptions);
         project.setWatchOptions(watchOptions);
         // VS only set the CompileOnSaveEnabled option in the request if the option was changed recently
@@ -3208,7 +3216,8 @@ export class ProjectService {
             Debug.assert(
                 isRootedDiskPath(fileName) || isDynamic || openedByClient,
                 "",
-                () => `${JSON.stringify({ fileName, currentDirectory, hostCurrentDirectory: this.currentDirectory, openKeys: arrayFrom(this.openFilesWithNonRootedDiskPath.keys()) })}\nScript info with non-dynamic relative file name can only be open script info or in context of host currentDirectory`,
+                () =>
+                    `${JSON.stringify({ fileName, currentDirectory, hostCurrentDirectory: this.currentDirectory, openKeys: arrayFrom(this.openFilesWithNonRootedDiskPath.keys()) })}\nScript info with non-dynamic relative file name can only be open script info or in context of host currentDirectory`,
             );
             Debug.assert(
                 !isRootedDiskPath(fileName) || this.currentDirectory === currentDirectory || !this.openFilesWithNonRootedDiskPath.has(this.toCanonicalFileName(fileName)),
@@ -3218,7 +3227,10 @@ export class ProjectService {
             Debug.assert(
                 !isDynamic || this.currentDirectory === currentDirectory || this.useInferredProjectPerProjectRoot,
                 "",
-                () => `${JSON.stringify({ fileName, currentDirectory, hostCurrentDirectory: this.currentDirectory, openKeys: arrayFrom(this.openFilesWithNonRootedDiskPath.keys()) })}\nDynamic files must always be opened with service's current directory or service should support inferred project per projectRootPath.`,
+                () =>
+                    `${
+                        JSON.stringify({ fileName, currentDirectory, hostCurrentDirectory: this.currentDirectory, openKeys: arrayFrom(this.openFilesWithNonRootedDiskPath.keys()) })
+                    }\nDynamic files must always be opened with service's current directory or service should support inferred project per projectRootPath.`,
             );
             // If the file is not opened by client and the file doesnot exist on the disk, return
             if (!openedByClient && !isDynamic && !(hostToQueryFileExistsOn || this.host).fileExists(fileName)) {

@@ -527,7 +527,15 @@ function getCandidateFromTypeRoot(typeRoot: string, typeReferenceDirectiveName: 
  * This is possible in case if resolution is performed for directives specified via 'types' parameter. In this case initial path for secondary lookups
  * is assumed to be the same as root directory of the project.
  */
-export function resolveTypeReferenceDirective(typeReferenceDirectiveName: string, containingFile: string | undefined, options: CompilerOptions, host: ModuleResolutionHost, redirectedReference?: ResolvedProjectReference, cache?: TypeReferenceDirectiveResolutionCache, resolutionMode?: ResolutionMode): ResolvedTypeReferenceDirectiveWithFailedLookupLocations {
+export function resolveTypeReferenceDirective(
+    typeReferenceDirectiveName: string,
+    containingFile: string | undefined,
+    options: CompilerOptions,
+    host: ModuleResolutionHost,
+    redirectedReference?: ResolvedProjectReference,
+    cache?: TypeReferenceDirectiveResolutionCache,
+    resolutionMode?: ResolutionMode,
+): ResolvedTypeReferenceDirectiveWithFailedLookupLocations {
     Debug.assert(typeof typeReferenceDirectiveName === "string", "Non-string value passed to `ts.resolveTypeReferenceDirective`, likely by a wrapping package working with an outdated `resolveTypeReferenceDirectives` signature. This is probably not a problem in TS itself.");
     const traceEnabled = isTraceEnabled(options, host);
     if (redirectedReference) {
@@ -644,7 +652,14 @@ export function resolveTypeReferenceDirective(typeReferenceDirectiveName: string
             trace(host, Diagnostics.Type_reference_directive_0_was_not_resolved, typeReferenceDirectiveName);
         }
         else if (result.resolvedTypeReferenceDirective.packageId) {
-            trace(host, Diagnostics.Type_reference_directive_0_was_successfully_resolved_to_1_with_Package_ID_2_primary_Colon_3, typeReferenceDirectiveName, result.resolvedTypeReferenceDirective.resolvedFileName, packageIdToString(result.resolvedTypeReferenceDirective.packageId), result.resolvedTypeReferenceDirective.primary);
+            trace(
+                host,
+                Diagnostics.Type_reference_directive_0_was_successfully_resolved_to_1_with_Package_ID_2_primary_Colon_3,
+                typeReferenceDirectiveName,
+                result.resolvedTypeReferenceDirective.resolvedFileName,
+                packageIdToString(result.resolvedTypeReferenceDirective.packageId),
+                result.resolvedTypeReferenceDirective.primary,
+            );
         }
         else {
             trace(host, Diagnostics.Type_reference_directive_0_was_successfully_resolved_to_1_primary_Colon_2, typeReferenceDirectiveName, result.resolvedTypeReferenceDirective.resolvedFileName, result.resolvedTypeReferenceDirective.primary);
@@ -1726,7 +1741,17 @@ function nodeNextModuleNameResolver(moduleName: string, containingFile: string, 
     );
 }
 
-function nodeNextModuleNameResolverWorker(features: NodeResolutionFeatures, moduleName: string, containingFile: string, compilerOptions: CompilerOptions, host: ModuleResolutionHost, cache?: ModuleResolutionCache, redirectedReference?: ResolvedProjectReference, resolutionMode?: ResolutionMode, conditions?: string[]): ResolvedModuleWithFailedLookupLocations {
+function nodeNextModuleNameResolverWorker(
+    features: NodeResolutionFeatures,
+    moduleName: string,
+    containingFile: string,
+    compilerOptions: CompilerOptions,
+    host: ModuleResolutionHost,
+    cache?: ModuleResolutionCache,
+    redirectedReference?: ResolvedProjectReference,
+    resolutionMode?: ResolutionMode,
+    conditions?: string[],
+): ResolvedModuleWithFailedLookupLocations {
     const containingDirectory = getDirectoryPath(containingFile);
 
     // es module file or cjs-like input file, use a variant of the legacy cjs resolver that supports the selected modern features
@@ -1765,8 +1790,26 @@ export function bundlerModuleNameResolver(moduleName: string, containingFile: st
 }
 
 export function nodeModuleNameResolver(moduleName: string, containingFile: string, compilerOptions: CompilerOptions, host: ModuleResolutionHost, cache?: ModuleResolutionCache, redirectedReference?: ResolvedProjectReference): ResolvedModuleWithFailedLookupLocations;
-/** @internal */ export function nodeModuleNameResolver(moduleName: string, containingFile: string, compilerOptions: CompilerOptions, host: ModuleResolutionHost, cache?: ModuleResolutionCache, redirectedReference?: ResolvedProjectReference, conditions?: string[], lookupConfig?: boolean): ResolvedModuleWithFailedLookupLocations; // eslint-disable-line @typescript-eslint/unified-signatures
-export function nodeModuleNameResolver(moduleName: string, containingFile: string, compilerOptions: CompilerOptions, host: ModuleResolutionHost, cache?: ModuleResolutionCache, redirectedReference?: ResolvedProjectReference, conditions?: string[], isConfigLookup?: boolean): ResolvedModuleWithFailedLookupLocations {
+/** @internal */ export function nodeModuleNameResolver(
+    moduleName: string,
+    containingFile: string,
+    compilerOptions: CompilerOptions,
+    host: ModuleResolutionHost,
+    cache?: ModuleResolutionCache,
+    redirectedReference?: ResolvedProjectReference,
+    conditions?: string[],
+    lookupConfig?: boolean,
+): ResolvedModuleWithFailedLookupLocations; // eslint-disable-line @typescript-eslint/unified-signatures
+export function nodeModuleNameResolver(
+    moduleName: string,
+    containingFile: string,
+    compilerOptions: CompilerOptions,
+    host: ModuleResolutionHost,
+    cache?: ModuleResolutionCache,
+    redirectedReference?: ResolvedProjectReference,
+    conditions?: string[],
+    isConfigLookup?: boolean,
+): ResolvedModuleWithFailedLookupLocations {
     let extensions;
     if (isConfigLookup) {
         extensions = Extensions.Json;
@@ -1786,7 +1829,18 @@ export function nodeModuleNameResolver(moduleName: string, containingFile: strin
 
 /** @internal */
 export function nodeNextJsonConfigResolver(moduleName: string, containingFile: string, host: ModuleResolutionHost): ResolvedModuleWithFailedLookupLocations {
-    return nodeModuleNameResolverWorker(NodeResolutionFeatures.NodeNextDefault, moduleName, getDirectoryPath(containingFile), { moduleResolution: ModuleResolutionKind.NodeNext }, host, /*cache*/ undefined, Extensions.Json, /*isConfigLookup*/ true, /*redirectedReference*/ undefined, /*conditions*/ undefined);
+    return nodeModuleNameResolverWorker(
+        NodeResolutionFeatures.NodeNextDefault,
+        moduleName,
+        getDirectoryPath(containingFile),
+        { moduleResolution: ModuleResolutionKind.NodeNext },
+        host,
+        /*cache*/ undefined,
+        Extensions.Json,
+        /*isConfigLookup*/ true,
+        /*redirectedReference*/ undefined,
+        /*conditions*/ undefined,
+    );
 }
 
 function nodeModuleNameResolverWorker(
@@ -2661,7 +2715,16 @@ export function comparePatternKeys(a: string, b: string) {
     return 0;
 }
 
-function loadModuleFromImportsOrExports(extensions: Extensions, state: ModuleResolutionState, cache: ModuleResolutionCache | undefined, redirectedReference: ResolvedProjectReference | undefined, moduleName: string, lookupTable: object, scope: PackageJsonInfo, isImports: boolean): SearchResult<Resolved> | undefined {
+function loadModuleFromImportsOrExports(
+    extensions: Extensions,
+    state: ModuleResolutionState,
+    cache: ModuleResolutionCache | undefined,
+    redirectedReference: ResolvedProjectReference | undefined,
+    moduleName: string,
+    lookupTable: object,
+    scope: PackageJsonInfo,
+    isImports: boolean,
+): SearchResult<Resolved> | undefined {
     const loadModuleFromTargetImportOrExport = getLoadModuleFromTargetImportOrExport(extensions, state, cache, redirectedReference, moduleName, scope, isImports);
 
     if (!endsWith(moduleName, directorySeparator) && !moduleName.includes("*") && hasProperty(lookupTable, moduleName)) {
@@ -2947,7 +3010,15 @@ function loadModuleFromNearestNodeModulesDirectoryTypesScope(moduleName: string,
     return loadModuleFromNearestNodeModulesDirectoryWorker(Extensions.Declaration, moduleName, directory, state, /*typesScopeOnly*/ true, /*cache*/ undefined, /*redirectedReference*/ undefined);
 }
 
-function loadModuleFromNearestNodeModulesDirectoryWorker(extensions: Extensions, moduleName: string, directory: string, state: ModuleResolutionState, typesScopeOnly: boolean, cache: ModuleResolutionCache | undefined, redirectedReference: ResolvedProjectReference | undefined): SearchResult<Resolved> {
+function loadModuleFromNearestNodeModulesDirectoryWorker(
+    extensions: Extensions,
+    moduleName: string,
+    directory: string,
+    state: ModuleResolutionState,
+    typesScopeOnly: boolean,
+    cache: ModuleResolutionCache | undefined,
+    redirectedReference: ResolvedProjectReference | undefined,
+): SearchResult<Resolved> {
     const mode = state.features === 0 ? undefined : state.features & NodeResolutionFeatures.EsmMode ? ModuleKind.ESNext : ModuleKind.CommonJS;
     // Do (up to) two passes through node_modules:
     //   1. For each ancestor node_modules directory, try to find:
@@ -3009,7 +3080,15 @@ function loadModuleFromImmediateNodeModulesDirectory(extensions: Extensions, mod
     }
 }
 
-function loadModuleFromSpecificNodeModulesDirectory(extensions: Extensions, moduleName: string, nodeModulesDirectory: string, nodeModulesDirectoryExists: boolean, state: ModuleResolutionState, cache: ModuleResolutionCache | undefined, redirectedReference: ResolvedProjectReference | undefined): Resolved | undefined {
+function loadModuleFromSpecificNodeModulesDirectory(
+    extensions: Extensions,
+    moduleName: string,
+    nodeModulesDirectory: string,
+    nodeModulesDirectoryExists: boolean,
+    state: ModuleResolutionState,
+    cache: ModuleResolutionCache | undefined,
+    redirectedReference: ResolvedProjectReference | undefined,
+): Resolved | undefined {
     const candidate = normalizePath(combinePaths(nodeModulesDirectory, moduleName));
     const { packageName, rest } = parsePackageName(moduleName);
     const packageDirectory = combinePaths(nodeModulesDirectory, packageName);
@@ -3088,7 +3167,16 @@ function loadModuleFromSpecificNodeModulesDirectory(extensions: Extensions, modu
     return loader(extensions, candidate, !nodeModulesDirectoryExists, state);
 }
 
-function tryLoadModuleUsingPaths(extensions: Extensions, moduleName: string, baseDirectory: string, paths: MapLike<string[]>, pathPatterns: readonly (string | Pattern)[] | undefined, loader: ResolutionKindSpecificLoader, onlyRecordFailures: boolean, state: ModuleResolutionState): SearchResult<Resolved> {
+function tryLoadModuleUsingPaths(
+    extensions: Extensions,
+    moduleName: string,
+    baseDirectory: string,
+    paths: MapLike<string[]>,
+    pathPatterns: readonly (string | Pattern)[] | undefined,
+    loader: ResolutionKindSpecificLoader,
+    onlyRecordFailures: boolean,
+    state: ModuleResolutionState,
+): SearchResult<Resolved> {
     pathPatterns ||= tryParsePatterns(paths);
     const matchedPattern = matchPatternOrExact(pathPatterns, moduleName);
     if (matchedPattern) {

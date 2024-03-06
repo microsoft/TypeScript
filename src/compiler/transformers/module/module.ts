@@ -602,7 +602,12 @@ export function transformModule(context: TransformationContext): (x: SourceFile 
             append(statements, createUnderscoreUnderscoreESModule());
         }
         if (length(currentModuleInfo.exportedNames)) {
-            append(statements, factory.createExpressionStatement(reduceLeft(currentModuleInfo.exportedNames, (prev, nextId) => factory.createAssignment(factory.createPropertyAccessExpression(factory.createIdentifier("exports"), factory.createIdentifier(idText(nextId))), prev), factory.createVoidZero() as Expression)));
+            append(
+                statements,
+                factory.createExpressionStatement(
+                    reduceLeft(currentModuleInfo.exportedNames, (prev, nextId) => factory.createAssignment(factory.createPropertyAccessExpression(factory.createIdentifier("exports"), factory.createIdentifier(idText(nextId))), prev), factory.createVoidZero() as Expression),
+                ),
+            );
         }
 
         // Visit each statement of the module body.

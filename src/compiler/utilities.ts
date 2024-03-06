@@ -6694,7 +6694,15 @@ export function emitComments(
  *
  * @internal
  */
-export function emitDetachedComments(text: string, lineMap: readonly number[], writer: EmitTextWriter, writeComment: (text: string, lineMap: readonly number[], writer: EmitTextWriter, commentPos: number, commentEnd: number, newLine: string) => void, node: TextRange, newLine: string, removeComments: boolean) {
+export function emitDetachedComments(
+    text: string,
+    lineMap: readonly number[],
+    writer: EmitTextWriter,
+    writeComment: (text: string, lineMap: readonly number[], writer: EmitTextWriter, commentPos: number, commentEnd: number, newLine: string) => void,
+    node: TextRange,
+    newLine: string,
+    removeComments: boolean,
+) {
     let leadingComments: CommentRange[] | undefined;
     let currentDetachedCommentInfo: { nodePos: number; detachedCommentEndPos: number; } | undefined;
     if (removeComments) {

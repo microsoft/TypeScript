@@ -231,7 +231,16 @@ export function createDocumentRegistryInternal(useCaseSensitiveFileNames?: boole
         return acquireDocumentWithKey(fileName, path, compilationSettings, key, scriptSnapshot, version, scriptKind, languageVersionOrOptions);
     }
 
-    function acquireDocumentWithKey(fileName: string, path: Path, compilationSettings: CompilerOptions | MinimalResolutionCacheHost, key: DocumentRegistryBucketKey, scriptSnapshot: IScriptSnapshot, version: string, scriptKind?: ScriptKind, languageVersionOrOptions?: CreateSourceFileOptions | ScriptTarget): SourceFile {
+    function acquireDocumentWithKey(
+        fileName: string,
+        path: Path,
+        compilationSettings: CompilerOptions | MinimalResolutionCacheHost,
+        key: DocumentRegistryBucketKey,
+        scriptSnapshot: IScriptSnapshot,
+        version: string,
+        scriptKind?: ScriptKind,
+        languageVersionOrOptions?: CreateSourceFileOptions | ScriptTarget,
+    ): SourceFile {
         return acquireOrUpdateDocument(fileName, path, compilationSettings, key, scriptSnapshot, version, /*acquiring*/ true, scriptKind, languageVersionOrOptions);
     }
 
@@ -241,7 +250,16 @@ export function createDocumentRegistryInternal(useCaseSensitiveFileNames?: boole
         return updateDocumentWithKey(fileName, path, compilationSettings, key, scriptSnapshot, version, scriptKind, languageVersionOrOptions);
     }
 
-    function updateDocumentWithKey(fileName: string, path: Path, compilationSettings: CompilerOptions | MinimalResolutionCacheHost, key: DocumentRegistryBucketKey, scriptSnapshot: IScriptSnapshot, version: string, scriptKind?: ScriptKind, languageVersionOrOptions?: CreateSourceFileOptions | ScriptTarget): SourceFile {
+    function updateDocumentWithKey(
+        fileName: string,
+        path: Path,
+        compilationSettings: CompilerOptions | MinimalResolutionCacheHost,
+        key: DocumentRegistryBucketKey,
+        scriptSnapshot: IScriptSnapshot,
+        version: string,
+        scriptKind?: ScriptKind,
+        languageVersionOrOptions?: CreateSourceFileOptions | ScriptTarget,
+    ): SourceFile {
         return acquireOrUpdateDocument(fileName, path, getCompilationSettings(compilationSettings), key, scriptSnapshot, version, /*acquiring*/ false, scriptKind, languageVersionOrOptions);
     }
 

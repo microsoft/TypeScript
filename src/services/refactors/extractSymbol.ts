@@ -1515,7 +1515,15 @@ function extractConstantInScope(
         if (hasAny) return { variableType, initializer };
         variableType = undefined;
         if (isArrowFunction(initializer)) {
-            initializer = factory.updateArrowFunction(initializer, canHaveModifiers(node) ? getModifiers(node) : undefined, initializer.typeParameters, parameters, initializer.type || checker.typeToTypeNode(functionSignature.getReturnType(), scope, NodeBuilderFlags.NoTruncation), initializer.equalsGreaterThanToken, initializer.body);
+            initializer = factory.updateArrowFunction(
+                initializer,
+                canHaveModifiers(node) ? getModifiers(node) : undefined,
+                initializer.typeParameters,
+                parameters,
+                initializer.type || checker.typeToTypeNode(functionSignature.getReturnType(), scope, NodeBuilderFlags.NoTruncation),
+                initializer.equalsGreaterThanToken,
+                initializer.body,
+            );
         }
         else {
             if (functionSignature && !!functionSignature.thisParameter) {
@@ -1537,7 +1545,16 @@ function extractConstantInScope(
                     );
                 }
             }
-            initializer = factory.updateFunctionExpression(initializer, canHaveModifiers(node) ? getModifiers(node) : undefined, initializer.asteriskToken, initializer.name, initializer.typeParameters, parameters, initializer.type || checker.typeToTypeNode(functionSignature.getReturnType(), scope, NodeBuilderFlags.NoTruncation), initializer.body);
+            initializer = factory.updateFunctionExpression(
+                initializer,
+                canHaveModifiers(node) ? getModifiers(node) : undefined,
+                initializer.asteriskToken,
+                initializer.name,
+                initializer.typeParameters,
+                parameters,
+                initializer.type || checker.typeToTypeNode(functionSignature.getReturnType(), scope, NodeBuilderFlags.NoTruncation),
+                initializer.body,
+            );
         }
         return { variableType, initializer };
     }

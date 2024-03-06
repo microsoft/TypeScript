@@ -592,7 +592,17 @@ function codeFixActionToCodeAction({ description, changes, commands }: CodeFixAc
     return { description, changes, commands };
 }
 
-function getAllExportInfoForSymbol(importingFile: SourceFile, symbol: Symbol, symbolName: string, moduleSymbol: Symbol, preferCapitalized: boolean, program: Program, host: LanguageServiceHost, preferences: UserPreferences, cancellationToken: CancellationToken | undefined): readonly SymbolExportInfo[] | undefined {
+function getAllExportInfoForSymbol(
+    importingFile: SourceFile,
+    symbol: Symbol,
+    symbolName: string,
+    moduleSymbol: Symbol,
+    preferCapitalized: boolean,
+    program: Program,
+    host: LanguageServiceHost,
+    preferences: UserPreferences,
+    cancellationToken: CancellationToken | undefined,
+): readonly SymbolExportInfo[] | undefined {
     const getChecker = createGetChecker(program, host);
     return getExportInfoMap(importingFile, host, program, preferences, cancellationToken)
         .search(importingFile.path, preferCapitalized, name => name === symbolName, info => {

@@ -726,7 +726,14 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
     }
 
     /** @internal */
-    resolveModuleNameLiterals(moduleLiterals: readonly StringLiteralLike[], containingFile: string, redirectedReference: ResolvedProjectReference | undefined, options: CompilerOptions, containingSourceFile: SourceFile, reusedNames: readonly StringLiteralLike[] | undefined): readonly ResolvedModuleWithFailedLookupLocations[] {
+    resolveModuleNameLiterals(
+        moduleLiterals: readonly StringLiteralLike[],
+        containingFile: string,
+        redirectedReference: ResolvedProjectReference | undefined,
+        options: CompilerOptions,
+        containingSourceFile: SourceFile,
+        reusedNames: readonly StringLiteralLike[] | undefined,
+    ): readonly ResolvedModuleWithFailedLookupLocations[] {
         return this.resolutionCache.resolveModuleNameLiterals(moduleLiterals, containingFile, redirectedReference, options, containingSourceFile, reusedNames);
     }
 
@@ -1672,7 +1679,11 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
         );
         const elapsed = timestamp() - start;
         this.sendPerformanceEvent("UpdateGraph", elapsed);
-        this.writeLog(`Finishing updateGraphWorker: Project: ${this.getProjectName()} projectStateVersion: ${this.projectStateVersion} projectProgramVersion: ${this.projectProgramVersion} structureChanged: ${hasNewProgram}${this.program ? ` structureIsReused:: ${(ts as any).StructureIsReused[this.program.structureIsReused]}` : ""} Elapsed: ${elapsed}ms`);
+        this.writeLog(
+            `Finishing updateGraphWorker: Project: ${this.getProjectName()} projectStateVersion: ${this.projectStateVersion} projectProgramVersion: ${this.projectProgramVersion} structureChanged: ${hasNewProgram}${
+                this.program ? ` structureIsReused:: ${(ts as any).StructureIsReused[this.program.structureIsReused]}` : ""
+            } Elapsed: ${elapsed}ms`,
+        );
         if (this.projectService.logger.isTestLogger) {
             if (this.program !== oldProgram) {
                 this.print(/*writeProjectFileNames*/ true, this.hasAddedorRemovedFiles, /*writeFileVersionAndText*/ true);
@@ -2400,7 +2411,19 @@ export class InferredProject extends Project {
 export class AuxiliaryProject extends Project {
     /** @internal */ rootFile: NormalizedPath | undefined;
     constructor(projectService: ProjectService, documentRegistry: DocumentRegistry, compilerOptions: CompilerOptions, currentDirectory: string) {
-        super(projectService.newAuxiliaryProjectName(), ProjectKind.Auxiliary, projectService, documentRegistry, /*hasExplicitListOfFiles*/ false, /*lastFileExceededProgramSize*/ undefined, compilerOptions, /*compileOnSaveEnabled*/ false, /*watchOptions*/ undefined, projectService.host, currentDirectory);
+        super(
+            projectService.newAuxiliaryProjectName(),
+            ProjectKind.Auxiliary,
+            projectService,
+            documentRegistry,
+            /*hasExplicitListOfFiles*/ false,
+            /*lastFileExceededProgramSize*/ undefined,
+            compilerOptions,
+            /*compileOnSaveEnabled*/ false,
+            /*watchOptions*/ undefined,
+            projectService.host,
+            currentDirectory,
+        );
     }
 
     override isOrphan(): boolean {
@@ -2734,7 +2757,19 @@ export class ConfiguredProject extends Project {
         documentRegistry: DocumentRegistry,
         cachedDirectoryStructureHost: CachedDirectoryStructureHost,
     ) {
-        super(configFileName, ProjectKind.Configured, projectService, documentRegistry, /*hasExplicitListOfFiles*/ false, /*lastFileExceededProgramSize*/ undefined, /*compilerOptions*/ {}, /*compileOnSaveEnabled*/ false, /*watchOptions*/ undefined, cachedDirectoryStructureHost, getDirectoryPath(configFileName));
+        super(
+            configFileName,
+            ProjectKind.Configured,
+            projectService,
+            documentRegistry,
+            /*hasExplicitListOfFiles*/ false,
+            /*lastFileExceededProgramSize*/ undefined,
+            /*compilerOptions*/ {},
+            /*compileOnSaveEnabled*/ false,
+            /*watchOptions*/ undefined,
+            cachedDirectoryStructureHost,
+            getDirectoryPath(configFileName),
+        );
     }
 
     /** @internal */
@@ -2998,8 +3033,29 @@ export class ConfiguredProject extends Project {
 export class ExternalProject extends Project {
     excludedFiles: readonly NormalizedPath[] = [];
     /** @internal */
-    constructor(public externalProjectName: string, projectService: ProjectService, documentRegistry: DocumentRegistry, compilerOptions: CompilerOptions, lastFileExceededProgramSize: string | undefined, public override compileOnSaveEnabled: boolean, projectFilePath?: string, watchOptions?: WatchOptions) {
-        super(externalProjectName, ProjectKind.External, projectService, documentRegistry, /*hasExplicitListOfFiles*/ true, lastFileExceededProgramSize, compilerOptions, compileOnSaveEnabled, watchOptions, projectService.host, getDirectoryPath(projectFilePath || normalizeSlashes(externalProjectName)));
+    constructor(
+        public externalProjectName: string,
+        projectService: ProjectService,
+        documentRegistry: DocumentRegistry,
+        compilerOptions: CompilerOptions,
+        lastFileExceededProgramSize: string | undefined,
+        public override compileOnSaveEnabled: boolean,
+        projectFilePath?: string,
+        watchOptions?: WatchOptions,
+    ) {
+        super(
+            externalProjectName,
+            ProjectKind.External,
+            projectService,
+            documentRegistry,
+            /*hasExplicitListOfFiles*/ true,
+            lastFileExceededProgramSize,
+            compilerOptions,
+            compileOnSaveEnabled,
+            watchOptions,
+            projectService.host,
+            getDirectoryPath(projectFilePath || normalizeSlashes(externalProjectName)),
+        );
         this.enableGlobalPlugins(this.getCompilerOptions());
     }
 

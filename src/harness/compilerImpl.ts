@@ -279,7 +279,8 @@ export function compileFiles(host: fakes.CompilerHost, rootFiles: string[] | und
                 category: ts.DiagnosticCategory.Error,
                 code: -1,
                 key: "-1",
-                message: `Pre-emit (${preErrors.length}) and post-emit (${postErrors.length}) diagnostic counts do not match! This can indicate that a semantic _error_ was added by the emit resolver - such an error may not be reflected on the command line or in the editor, but may be captured in a baseline here!`,
+                message:
+                    `Pre-emit (${preErrors.length}) and post-emit (${postErrors.length}) diagnostic counts do not match! This can indicate that a semantic _error_ was added by the emit resolver - such an error may not be reflected on the command line or in the editor, but may be captured in a baseline here!`,
             }),
             ts.createCompilerDiagnostic({
                 category: ts.DiagnosticCategory.Error,

@@ -558,7 +558,9 @@ function getActionsForMissingMethodDeclaration(context: CodeFixContext, info: Ty
 
     const methodName = token.text;
     const addMethodDeclarationChanges = (modifierFlags: ModifierFlags) => textChanges.ChangeTracker.with(context, t => addMethodDeclaration(context, t, call, token, modifierFlags, parentDeclaration, declSourceFile));
-    const actions = [createCodeFixAction(fixMissingMember, addMethodDeclarationChanges(modifierFlags & ModifierFlags.Static), [modifierFlags & ModifierFlags.Static ? Diagnostics.Declare_static_method_0 : Diagnostics.Declare_method_0, methodName], fixMissingMember, Diagnostics.Add_all_missing_members)];
+    const actions = [
+        createCodeFixAction(fixMissingMember, addMethodDeclarationChanges(modifierFlags & ModifierFlags.Static), [modifierFlags & ModifierFlags.Static ? Diagnostics.Declare_static_method_0 : Diagnostics.Declare_method_0, methodName], fixMissingMember, Diagnostics.Add_all_missing_members),
+    ];
     if (modifierFlags & ModifierFlags.Private) {
         actions.unshift(createCodeFixActionWithoutFixAll(fixMissingMember, addMethodDeclarationChanges(ModifierFlags.Private), [Diagnostics.Declare_private_method_0, methodName]));
     }
@@ -613,7 +615,18 @@ function addFunctionDeclaration(changes: textChanges.ChangeTracker, context: Cod
     const importAdder = createImportAdder(context.sourceFile, context.program, context.preferences, context.host);
     const functionDeclaration = info.kind === InfoKind.Function
         ? createSignatureDeclarationFromCallExpression(SyntaxKind.FunctionDeclaration, context, importAdder, info.call, idText(info.token), info.modifierFlags, info.parentDeclaration)
-        : createSignatureDeclarationFromSignature(SyntaxKind.FunctionDeclaration, context, quotePreference, info.signature, createStubbedBody(Diagnostics.Function_not_implemented.message, quotePreference), info.token, /*modifiers*/ undefined, /*optional*/ undefined, /*enclosingDeclaration*/ undefined, importAdder);
+        : createSignatureDeclarationFromSignature(
+            SyntaxKind.FunctionDeclaration,
+            context,
+            quotePreference,
+            info.signature,
+            createStubbedBody(Diagnostics.Function_not_implemented.message, quotePreference),
+            info.token,
+            /*modifiers*/ undefined,
+            /*optional*/ undefined,
+            /*enclosingDeclaration*/ undefined,
+            importAdder,
+        );
     if (functionDeclaration === undefined) {
         Debug.fail("fixMissingFunctionDeclaration codefix got unexpected error.");
     }
@@ -719,7 +732,18 @@ function tryGetValueFromType(context: CodeFixContextBase, checker: TypeChecker, 
         const signature = checker.getSignaturesOfType(type, SignatureKind.Call);
         if (signature === undefined) return createUndefined();
 
-        const func = createSignatureDeclarationFromSignature(SyntaxKind.FunctionExpression, context, quotePreference, signature[0], createStubbedBody(Diagnostics.Function_not_implemented.message, quotePreference), /*name*/ undefined, /*modifiers*/ undefined, /*optional*/ undefined, /*enclosingDeclaration*/ enclosingDeclaration, importAdder) as
+        const func = createSignatureDeclarationFromSignature(
+            SyntaxKind.FunctionExpression,
+            context,
+            quotePreference,
+            signature[0],
+            createStubbedBody(Diagnostics.Function_not_implemented.message, quotePreference),
+            /*name*/ undefined,
+            /*modifiers*/ undefined,
+            /*optional*/ undefined,
+            /*enclosingDeclaration*/ enclosingDeclaration,
+            importAdder,
+        ) as
             | FunctionExpression
             | undefined;
         return func ?? createUndefined();

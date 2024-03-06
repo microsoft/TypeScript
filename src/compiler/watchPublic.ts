@@ -660,7 +660,20 @@ export function createWatchProgram<T extends BuilderProgram>(host: WatchCompiler
             originalWriteFile,
             readFileWithCache,
         } = changeCompilerHostLikeToUseCache(compilerHost, toPath);
-        if (isProgramUptoDate(getCurrentProgram(), rootFileNames, compilerOptions, path => getSourceVersion(path, readFileWithCache), fileName => compilerHost.fileExists(fileName), hasInvalidatedResolutions, hasInvalidatedLibResolutions, hasChangedAutomaticTypeDirectiveNames, getParsedCommandLine, projectReferences)) {
+        if (
+            isProgramUptoDate(
+                getCurrentProgram(),
+                rootFileNames,
+                compilerOptions,
+                path => getSourceVersion(path, readFileWithCache),
+                fileName => compilerHost.fileExists(fileName),
+                hasInvalidatedResolutions,
+                hasInvalidatedLibResolutions,
+                hasChangedAutomaticTypeDirectiveNames,
+                getParsedCommandLine,
+                projectReferences,
+            )
+        ) {
             if (hasChangedConfigFileParsingErrors) {
                 if (reportFileChangeDetectedOnCreateProgram) {
                     reportWatchDiagnostic(Diagnostics.File_change_detected_Starting_incremental_compilation);

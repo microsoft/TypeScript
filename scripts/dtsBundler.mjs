@@ -327,7 +327,11 @@ function verifyMatchingSymbols(decl, isInternal) {
             }
 
             if (symbolsConflict(symbolOfNode, symbolInScope)) {
-                fail(`Declaration at ${nodeToLocation(decl)}\n    references ${symbolOfNode.name} at ${symbolOfNode.declarations && nodeToLocation(symbolOfNode.declarations[0])},\n    but containing scope contains a symbol with the same name declared at ${symbolInScope.declarations && nodeToLocation(symbolInScope.declarations[0])}`);
+                fail(
+                    `Declaration at ${nodeToLocation(decl)}\n    references ${symbolOfNode.name} at ${symbolOfNode.declarations && nodeToLocation(symbolOfNode.declarations[0])},\n    but containing scope contains a symbol with the same name declared at ${
+                        symbolInScope.declarations && nodeToLocation(symbolInScope.declarations[0])
+                    }`,
+                );
             }
         }
 

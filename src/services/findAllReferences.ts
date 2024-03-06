@@ -984,7 +984,15 @@ function declarationIsWriteAccess(decl: Declaration): boolean {
  */
 export namespace Core {
     /** Core find-all-references algorithm. Handles special cases before delegating to `getReferencedSymbolsForSymbol`. */
-    export function getReferencedSymbolsForNode(position: number, node: Node, program: Program, sourceFiles: readonly SourceFile[], cancellationToken: CancellationToken, options: Options = {}, sourceFilesSet: ReadonlySet<string> = new Set(sourceFiles.map(f => f.fileName))): readonly SymbolAndEntries[] | undefined {
+    export function getReferencedSymbolsForNode(
+        position: number,
+        node: Node,
+        program: Program,
+        sourceFiles: readonly SourceFile[],
+        cancellationToken: CancellationToken,
+        options: Options = {},
+        sourceFilesSet: ReadonlySet<string> = new Set(sourceFiles.map(f => f.fileName)),
+    ): readonly SymbolAndEntries[] | undefined {
         node = getAdjustedNode(node, options);
         if (isSourceFile(node)) {
             const resolvedRef = GoToDefinition.getReferenceAtPosition(node, position, program);
@@ -2696,19 +2704,27 @@ export namespace Core {
 
     function getRelatedSymbol(search: Search, referenceSymbol: Symbol, referenceLocation: Node, state: State): RelatedSymbol | undefined {
         const { checker } = state;
-        return forEachRelatedSymbol(referenceSymbol, referenceLocation, checker, /*isForRenamePopulateSearchSymbolSet*/ false, /*onlyIncludeBindingElementAtReferenceLocation*/ state.options.use !== FindReferencesUse.Rename || !!state.options.providePrefixAndSuffixTextForRename, (sym, rootSymbol, baseSymbol, kind): RelatedSymbol | undefined => {
-            // check whether the symbol used to search itself is just the searched one.
-            if (baseSymbol) {
-                // static method/property and instance method/property might have the same name. Only check static or only check instance.
-                if (isStaticSymbol(referenceSymbol) !== isStaticSymbol(baseSymbol)) {
-                    baseSymbol = undefined;
+        return forEachRelatedSymbol(
+            referenceSymbol,
+            referenceLocation,
+            checker,
+            /*isForRenamePopulateSearchSymbolSet*/ false,
+            /*onlyIncludeBindingElementAtReferenceLocation*/ state.options.use !== FindReferencesUse.Rename || !!state.options.providePrefixAndSuffixTextForRename,
+            (sym, rootSymbol, baseSymbol, kind): RelatedSymbol | undefined => {
+                // check whether the symbol used to search itself is just the searched one.
+                if (baseSymbol) {
+                    // static method/property and instance method/property might have the same name. Only check static or only check instance.
+                    if (isStaticSymbol(referenceSymbol) !== isStaticSymbol(baseSymbol)) {
+                        baseSymbol = undefined;
+                    }
                 }
-            }
-            return search.includes(baseSymbol || rootSymbol || sym)
-                // For a base type, use the symbol for the derived type. For a synthetic (e.g. union) property, use the union symbol.
-                ? { symbol: rootSymbol && !(getCheckFlags(sym) & CheckFlags.Synthetic) ? rootSymbol : sym, kind }
-                : undefined;
-        }, /*allowBaseTypes*/ rootSymbol => !(search.parents && !search.parents.some(parent => explicitlyInheritsFrom(rootSymbol.parent!, parent, state.inheritsFromCache, checker))));
+                return search.includes(baseSymbol || rootSymbol || sym)
+                    // For a base type, use the symbol for the derived type. For a synthetic (e.g. union) property, use the union symbol.
+                    ? { symbol: rootSymbol && !(getCheckFlags(sym) & CheckFlags.Synthetic) ? rootSymbol : sym, kind }
+                    : undefined;
+            },
+            /*allowBaseTypes*/ rootSymbol => !(search.parents && !search.parents.some(parent => explicitlyInheritsFrom(rootSymbol.parent!, parent, state.inheritsFromCache, checker))),
+        );
     }
 
     /**

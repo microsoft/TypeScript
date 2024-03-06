@@ -1187,7 +1187,11 @@ function forEachChildInJsxOpeningOrSelfClosingElement<T>(node: JsxOpeningLikeEle
         visitNode(cbNode, node.attributes);
 }
 
-function forEachChildInOptionalRestOrJSDocParameterModifier<T>(node: OptionalTypeNode | RestTypeNode | JSDocTypeExpression | JSDocNullableType | JSDocNonNullableType | JSDocOptionalType | JSDocVariadicType, cbNode: (node: Node) => T | undefined, _cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
+function forEachChildInOptionalRestOrJSDocParameterModifier<T>(
+    node: OptionalTypeNode | RestTypeNode | JSDocTypeExpression | JSDocNullableType | JSDocNonNullableType | JSDocOptionalType | JSDocVariadicType,
+    cbNode: (node: Node) => T | undefined,
+    _cbNodes?: (nodes: NodeArray<Node>) => T | undefined,
+): T | undefined {
     return visitNode(cbNode, node.type);
 }
 

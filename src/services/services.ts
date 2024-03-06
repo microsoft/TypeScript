@@ -1738,7 +1738,20 @@ export function createLanguageService(
         let releasedScriptKinds: Set<Path> | undefined = new Set();
 
         // If the program is already up-to-date, we can reuse it
-        if (isProgramUptoDate(program, rootFileNames, newSettings, (_path, fileName) => host.getScriptVersion(fileName), fileName => compilerHost!.fileExists(fileName), hasInvalidatedResolutions, hasInvalidatedLibResolutions, hasChangedAutomaticTypeDirectiveNames, getParsedCommandLine, projectReferences)) {
+        if (
+            isProgramUptoDate(
+                program,
+                rootFileNames,
+                newSettings,
+                (_path, fileName) => host.getScriptVersion(fileName),
+                fileName => compilerHost!.fileExists(fileName),
+                hasInvalidatedResolutions,
+                hasInvalidatedLibResolutions,
+                hasChangedAutomaticTypeDirectiveNames,
+                getParsedCommandLine,
+                projectReferences,
+            )
+        ) {
             compilerHost = undefined;
             parsedCommandLines = undefined;
             releasedScriptKinds = undefined;
@@ -2180,7 +2193,12 @@ export function createLanguageService(
         else {
             const quotePreference = getQuotePreference(sourceFile, preferences ?? emptyOptions);
             const providePrefixAndSuffixTextForRename = typeof preferences === "boolean" ? preferences : preferences?.providePrefixAndSuffixTextForRename;
-            return getReferencesWorker(node, position, { findInStrings, findInComments, providePrefixAndSuffixTextForRename, use: FindAllReferences.FindReferencesUse.Rename }, (entry, originalNode, checker) => FindAllReferences.toRenameLocation(entry, originalNode, checker, providePrefixAndSuffixTextForRename || false, quotePreference));
+            return getReferencesWorker(
+                node,
+                position,
+                { findInStrings, findInComments, providePrefixAndSuffixTextForRename, use: FindAllReferences.FindReferencesUse.Rename },
+                (entry, originalNode, checker) => FindAllReferences.toRenameLocation(entry, originalNode, checker, providePrefixAndSuffixTextForRename || false, quotePreference),
+            );
         }
     }
 

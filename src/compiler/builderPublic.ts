@@ -165,7 +165,14 @@ export interface EmitAndSemanticDiagnosticsBuilderProgram extends SemanticDiagno
  * Create the builder to manage semantic diagnostics and cache them
  */
 export function createSemanticDiagnosticsBuilderProgram(newProgram: Program, host: BuilderProgramHost, oldProgram?: SemanticDiagnosticsBuilderProgram, configFileParsingDiagnostics?: readonly Diagnostic[]): SemanticDiagnosticsBuilderProgram;
-export function createSemanticDiagnosticsBuilderProgram(rootNames: readonly string[] | undefined, options: CompilerOptions | undefined, host?: CompilerHost, oldProgram?: SemanticDiagnosticsBuilderProgram, configFileParsingDiagnostics?: readonly Diagnostic[], projectReferences?: readonly ProjectReference[]): SemanticDiagnosticsBuilderProgram;
+export function createSemanticDiagnosticsBuilderProgram(
+    rootNames: readonly string[] | undefined,
+    options: CompilerOptions | undefined,
+    host?: CompilerHost,
+    oldProgram?: SemanticDiagnosticsBuilderProgram,
+    configFileParsingDiagnostics?: readonly Diagnostic[],
+    projectReferences?: readonly ProjectReference[],
+): SemanticDiagnosticsBuilderProgram;
 export function createSemanticDiagnosticsBuilderProgram(
     newProgramOrRootNames: Program | readonly string[] | undefined,
     hostOrOptions: BuilderProgramHost | CompilerOptions | undefined,

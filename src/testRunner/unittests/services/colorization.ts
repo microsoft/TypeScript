@@ -79,7 +79,22 @@ describe("unittests:: services:: Colorization", () => {
 
     describe("test getClassifications", () => {
         it("returns correct token classes", () => {
-            testLexicalClassification('var x: string = "foo" ?? "bar"; //Hello', ts.EndOfLineState.None, keyword("var"), whitespace(" "), identifier("x"), punctuation(":"), keyword("string"), operator("="), stringLiteral('"foo"'), whitespace(" "), operator("??"), stringLiteral('"foo"'), comment("//Hello"), punctuation(";"));
+            testLexicalClassification(
+                'var x: string = "foo" ?? "bar"; //Hello',
+                ts.EndOfLineState.None,
+                keyword("var"),
+                whitespace(" "),
+                identifier("x"),
+                punctuation(":"),
+                keyword("string"),
+                operator("="),
+                stringLiteral('"foo"'),
+                whitespace(" "),
+                operator("??"),
+                stringLiteral('"foo"'),
+                comment("//Hello"),
+                punctuation(";"),
+            );
         });
 
         it("correctly classifies a comment after a divide operator", () => {
@@ -184,7 +199,18 @@ describe("unittests:: services:: Colorization", () => {
             testLexicalClassification("`number number public string`", ts.EndOfLineState.None, stringLiteral("`number number public string`"), finalEndOfLineState(ts.EndOfLineState.None));
         });
         it("classifies substitution parts of a template string correctly", () => {
-            testLexicalClassification("`number '${ 1 + 1 }' string '${ 'hello' }'`", ts.EndOfLineState.None, stringLiteral("`number '${"), numberLiteral("1"), operator("+"), numberLiteral("1"), stringLiteral("}' string '${"), stringLiteral("'hello'"), stringLiteral("}'`"), finalEndOfLineState(ts.EndOfLineState.None));
+            testLexicalClassification(
+                "`number '${ 1 + 1 }' string '${ 'hello' }'`",
+                ts.EndOfLineState.None,
+                stringLiteral("`number '${"),
+                numberLiteral("1"),
+                operator("+"),
+                numberLiteral("1"),
+                stringLiteral("}' string '${"),
+                stringLiteral("'hello'"),
+                stringLiteral("}'`"),
+                finalEndOfLineState(ts.EndOfLineState.None),
+            );
         });
         it("classifies an unterminated no substitution template string correctly", () => {
             testLexicalClassification("`hello world", ts.EndOfLineState.None, stringLiteral("`hello world"), finalEndOfLineState(ts.EndOfLineState.InTemplateHeadOrNoSubstitutionTemplate));

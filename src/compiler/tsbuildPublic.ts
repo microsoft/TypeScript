@@ -2048,7 +2048,14 @@ function build<T extends BuilderProgram>(state: SolutionBuilderState<T>, project
     return result;
 }
 
-function buildWorker<T extends BuilderProgram>(state: SolutionBuilderState<T>, project: string | undefined, cancellationToken: CancellationToken | undefined, writeFile: WriteFileCallback | undefined, getCustomTransformers: ((project: string) => CustomTransformers) | undefined, onlyReferences: boolean | undefined): ExitStatus {
+function buildWorker<T extends BuilderProgram>(
+    state: SolutionBuilderState<T>,
+    project: string | undefined,
+    cancellationToken: CancellationToken | undefined,
+    writeFile: WriteFileCallback | undefined,
+    getCustomTransformers: ((project: string) => CustomTransformers) | undefined,
+    onlyReferences: boolean | undefined,
+): ExitStatus {
     const buildOrder = getBuildOrderFor(state, project, onlyReferences);
     if (!buildOrder) return ExitStatus.InvalidProject_OutputsSkipped;
 

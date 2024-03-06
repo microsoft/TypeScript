@@ -4535,7 +4535,15 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
         emitNodeList(emitExpression, parentNode, children, format, parenthesizerRule, start, count);
     }
 
-    function emitNodeList<Child extends Node, Children extends NodeArray<Child>>(emit: EmitFunction, parentNode: Node | undefined, children: Children | undefined, format: ListFormat, parenthesizerRule: ParenthesizerRuleOrSelector<Child> | undefined, start = 0, count = children ? children.length - start : 0) {
+    function emitNodeList<Child extends Node, Children extends NodeArray<Child>>(
+        emit: EmitFunction,
+        parentNode: Node | undefined,
+        children: Children | undefined,
+        format: ListFormat,
+        parenthesizerRule: ParenthesizerRuleOrSelector<Child> | undefined,
+        start = 0,
+        count = children ? children.length - start : 0,
+    ) {
         const isUndefined = children === undefined;
         if (isUndefined && format & ListFormat.OptionalIfUndefined) {
             return;
@@ -4585,7 +4593,17 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
      *
      * NOTE: You probably don't want to call this directly and should be using `emitList` or `emitExpressionList` instead.
      */
-    function emitNodeListItems<Child extends Node>(emit: EmitFunction, parentNode: Node | undefined, children: readonly Child[], format: ListFormat, parenthesizerRule: ParenthesizerRuleOrSelector<Child> | undefined, start: number, count: number, hasTrailingComma: boolean, childrenTextRange: TextRange | undefined) {
+    function emitNodeListItems<Child extends Node>(
+        emit: EmitFunction,
+        parentNode: Node | undefined,
+        children: readonly Child[],
+        format: ListFormat,
+        parenthesizerRule: ParenthesizerRuleOrSelector<Child> | undefined,
+        start: number,
+        count: number,
+        hasTrailingComma: boolean,
+        childrenTextRange: TextRange | undefined,
+    ) {
         // Write the opening line terminator or leading whitespace.
         const mayEmitInterveningComments = (format & ListFormat.NoInterveningComments) === 0;
         let shouldEmitInterveningComments = mayEmitInterveningComments;

@@ -493,7 +493,15 @@ function getInfo(importingSourceFileName: string, host: ModuleSpecifierResolutio
 
 function getLocalModuleSpecifier(moduleFileName: string, info: Info, compilerOptions: CompilerOptions, host: ModuleSpecifierResolutionHost, importMode: ResolutionMode, preferences: ModuleSpecifierPreferences): string;
 function getLocalModuleSpecifier(moduleFileName: string, info: Info, compilerOptions: CompilerOptions, host: ModuleSpecifierResolutionHost, importMode: ResolutionMode, preferences: ModuleSpecifierPreferences, pathsOnly?: boolean): string | undefined;
-function getLocalModuleSpecifier(moduleFileName: string, info: Info, compilerOptions: CompilerOptions, host: ModuleSpecifierResolutionHost, importMode: ResolutionMode, { getAllowedEndingsInPreferredOrder: getAllowedEndingsInPrefererredOrder, relativePreference }: ModuleSpecifierPreferences, pathsOnly?: boolean): string | undefined {
+function getLocalModuleSpecifier(
+    moduleFileName: string,
+    info: Info,
+    compilerOptions: CompilerOptions,
+    host: ModuleSpecifierResolutionHost,
+    importMode: ResolutionMode,
+    { getAllowedEndingsInPreferredOrder: getAllowedEndingsInPrefererredOrder, relativePreference }: ModuleSpecifierPreferences,
+    pathsOnly?: boolean,
+): string | undefined {
     const { baseUrl, paths, rootDirs } = compilerOptions;
     if (pathsOnly && !paths) {
         return undefined;
@@ -863,7 +871,17 @@ const enum MatchingMode {
     Pattern,
 }
 
-function tryGetModuleNameFromExportsOrImports(options: CompilerOptions, host: ModuleSpecifierResolutionHost, targetFilePath: string, packageDirectory: string, packageName: string, exports: unknown, conditions: string[], mode: MatchingMode, isImports: boolean): { moduleFileToTry: string; } | undefined {
+function tryGetModuleNameFromExportsOrImports(
+    options: CompilerOptions,
+    host: ModuleSpecifierResolutionHost,
+    targetFilePath: string,
+    packageDirectory: string,
+    packageName: string,
+    exports: unknown,
+    conditions: string[],
+    mode: MatchingMode,
+    isImports: boolean,
+): { moduleFileToTry: string; } | undefined {
     if (typeof exports === "string") {
         const ignoreCase = !hostUsesCaseSensitiveFileNames(host);
         const getCommonSourceDirectory = () => host.getCommonSourceDirectory();
@@ -1007,7 +1025,16 @@ function tryGetModuleNameFromRootDirs(rootDirs: readonly string[], moduleFileNam
     return processEnding(shortest, allowedEndings, compilerOptions);
 }
 
-function tryGetModuleNameAsNodeModule({ path, isRedirect }: ModulePath, { getCanonicalFileName, canonicalSourceDirectory }: Info, importingSourceFile: SourceFile, host: ModuleSpecifierResolutionHost, options: CompilerOptions, userPreferences: UserPreferences, packageNameOnly?: boolean, overrideMode?: ResolutionMode): string | undefined {
+function tryGetModuleNameAsNodeModule(
+    { path, isRedirect }: ModulePath,
+    { getCanonicalFileName, canonicalSourceDirectory }: Info,
+    importingSourceFile: SourceFile,
+    host: ModuleSpecifierResolutionHost,
+    options: CompilerOptions,
+    userPreferences: UserPreferences,
+    packageNameOnly?: boolean,
+    overrideMode?: ResolutionMode,
+): string | undefined {
     if (!host.fileExists || !host.readFile) {
         return undefined;
     }

@@ -1229,7 +1229,14 @@ function moveStatementsToTargetFile(changes: textChanges.ChangeTracker, program:
                     changes.replaceNode(
                         targetFile,
                         exportDeclaration,
-                        factory.updateExportDeclaration(exportDeclaration, exportDeclaration.modifiers, exportDeclaration.isTypeOnly, factory.updateNamedExports(exportDeclaration.exportClause, factory.createNodeArray(updatedElements, elements.hasTrailingComma)), exportDeclaration.moduleSpecifier, exportDeclaration.attributes),
+                        factory.updateExportDeclaration(
+                            exportDeclaration,
+                            exportDeclaration.modifiers,
+                            exportDeclaration.isTypeOnly,
+                            factory.updateNamedExports(exportDeclaration.exportClause, factory.createNodeArray(updatedElements, elements.hasTrailingComma)),
+                            exportDeclaration.moduleSpecifier,
+                            exportDeclaration.attributes,
+                        ),
                     );
                 }
             }

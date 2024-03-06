@@ -374,7 +374,12 @@ function createDynamicPriorityPollingWatchFile(host: {
     }
 
     function scheduleNextPoll(pollingInterval: PollingInterval) {
-        pollingIntervalQueue(pollingInterval).pollScheduled = host.setTimeout(pollingInterval === PollingInterval.Low ? pollLowPollingIntervalQueue : pollPollingIntervalQueue, pollingInterval, pollingInterval === PollingInterval.Low ? "pollLowPollingIntervalQueue" : "pollPollingIntervalQueue", pollingIntervalQueue(pollingInterval));
+        pollingIntervalQueue(pollingInterval).pollScheduled = host.setTimeout(
+            pollingInterval === PollingInterval.Low ? pollLowPollingIntervalQueue : pollPollingIntervalQueue,
+            pollingInterval,
+            pollingInterval === PollingInterval.Low ? "pollLowPollingIntervalQueue" : "pollPollingIntervalQueue",
+            pollingIntervalQueue(pollingInterval),
+        );
     }
 }
 

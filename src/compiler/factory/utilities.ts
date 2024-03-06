@@ -1290,7 +1290,15 @@ export function isBinaryOperatorToken(node: Node): node is BinaryOperatorToken {
     return isBinaryOperator(node.kind);
 }
 
-type BinaryExpressionState = <TOuterState, TState, TResult>(machine: BinaryExpressionStateMachine<TOuterState, TState, TResult>, stackIndex: number, stateStack: BinaryExpressionState[], nodeStack: BinaryExpression[], userStateStack: TState[], resultHolder: { value: TResult; }, outerState: TOuterState) => number;
+type BinaryExpressionState = <TOuterState, TState, TResult>(
+    machine: BinaryExpressionStateMachine<TOuterState, TState, TResult>,
+    stackIndex: number,
+    stateStack: BinaryExpressionState[],
+    nodeStack: BinaryExpression[],
+    userStateStack: TState[],
+    resultHolder: { value: TResult; },
+    outerState: TOuterState,
+) => number;
 
 namespace BinaryExpressionState {
     /**
@@ -1299,7 +1307,15 @@ namespace BinaryExpressionState {
      * @param frame The current frame
      * @returns The new frame
      */
-    export function enter<TOuterState, TState, TResult>(machine: BinaryExpressionStateMachine<TOuterState, TState, TResult>, stackIndex: number, stateStack: BinaryExpressionState[], nodeStack: BinaryExpression[], userStateStack: TState[], _resultHolder: { value: TResult; }, outerState: TOuterState): number {
+    export function enter<TOuterState, TState, TResult>(
+        machine: BinaryExpressionStateMachine<TOuterState, TState, TResult>,
+        stackIndex: number,
+        stateStack: BinaryExpressionState[],
+        nodeStack: BinaryExpression[],
+        userStateStack: TState[],
+        _resultHolder: { value: TResult; },
+        outerState: TOuterState,
+    ): number {
         const prevUserState = stackIndex > 0 ? userStateStack[stackIndex - 1] : undefined;
         Debug.assertEqual(stateStack[stackIndex], enter);
         userStateStack[stackIndex] = machine.onEnter(nodeStack[stackIndex], prevUserState, outerState);
@@ -1313,7 +1329,15 @@ namespace BinaryExpressionState {
      * @param frame The current frame
      * @returns The new frame
      */
-    export function left<TOuterState, TState, TResult>(machine: BinaryExpressionStateMachine<TOuterState, TState, TResult>, stackIndex: number, stateStack: BinaryExpressionState[], nodeStack: BinaryExpression[], userStateStack: TState[], _resultHolder: { value: TResult; }, _outerState: TOuterState): number {
+    export function left<TOuterState, TState, TResult>(
+        machine: BinaryExpressionStateMachine<TOuterState, TState, TResult>,
+        stackIndex: number,
+        stateStack: BinaryExpressionState[],
+        nodeStack: BinaryExpression[],
+        userStateStack: TState[],
+        _resultHolder: { value: TResult; },
+        _outerState: TOuterState,
+    ): number {
         Debug.assertEqual(stateStack[stackIndex], left);
         Debug.assertIsDefined(machine.onLeft);
         stateStack[stackIndex] = nextState(machine, left);
@@ -1331,7 +1355,15 @@ namespace BinaryExpressionState {
      * @param frame The current frame
      * @returns The new frame
      */
-    export function operator<TOuterState, TState, TResult>(machine: BinaryExpressionStateMachine<TOuterState, TState, TResult>, stackIndex: number, stateStack: BinaryExpressionState[], nodeStack: BinaryExpression[], userStateStack: TState[], _resultHolder: { value: TResult; }, _outerState: TOuterState): number {
+    export function operator<TOuterState, TState, TResult>(
+        machine: BinaryExpressionStateMachine<TOuterState, TState, TResult>,
+        stackIndex: number,
+        stateStack: BinaryExpressionState[],
+        nodeStack: BinaryExpression[],
+        userStateStack: TState[],
+        _resultHolder: { value: TResult; },
+        _outerState: TOuterState,
+    ): number {
         Debug.assertEqual(stateStack[stackIndex], operator);
         Debug.assertIsDefined(machine.onOperator);
         stateStack[stackIndex] = nextState(machine, operator);
@@ -1345,7 +1377,15 @@ namespace BinaryExpressionState {
      * @param frame The current frame
      * @returns The new frame
      */
-    export function right<TOuterState, TState, TResult>(machine: BinaryExpressionStateMachine<TOuterState, TState, TResult>, stackIndex: number, stateStack: BinaryExpressionState[], nodeStack: BinaryExpression[], userStateStack: TState[], _resultHolder: { value: TResult; }, _outerState: TOuterState): number {
+    export function right<TOuterState, TState, TResult>(
+        machine: BinaryExpressionStateMachine<TOuterState, TState, TResult>,
+        stackIndex: number,
+        stateStack: BinaryExpressionState[],
+        nodeStack: BinaryExpression[],
+        userStateStack: TState[],
+        _resultHolder: { value: TResult; },
+        _outerState: TOuterState,
+    ): number {
         Debug.assertEqual(stateStack[stackIndex], right);
         Debug.assertIsDefined(machine.onRight);
         stateStack[stackIndex] = nextState(machine, right);
@@ -1363,7 +1403,15 @@ namespace BinaryExpressionState {
      * @param frame The current frame
      * @returns The new frame
      */
-    export function exit<TOuterState, TState, TResult>(machine: BinaryExpressionStateMachine<TOuterState, TState, TResult>, stackIndex: number, stateStack: BinaryExpressionState[], nodeStack: BinaryExpression[], userStateStack: TState[], resultHolder: { value: TResult; }, _outerState: TOuterState): number {
+    export function exit<TOuterState, TState, TResult>(
+        machine: BinaryExpressionStateMachine<TOuterState, TState, TResult>,
+        stackIndex: number,
+        stateStack: BinaryExpressionState[],
+        nodeStack: BinaryExpression[],
+        userStateStack: TState[],
+        resultHolder: { value: TResult; },
+        _outerState: TOuterState,
+    ): number {
         Debug.assertEqual(stateStack[stackIndex], exit);
         stateStack[stackIndex] = nextState(machine, exit);
         const result = machine.onExit(nodeStack[stackIndex], userStateStack[stackIndex]);
@@ -1384,7 +1432,15 @@ namespace BinaryExpressionState {
      * Handles a frame that is already done.
      * @returns The `done` state.
      */
-    export function done<TOuterState, TState, TResult>(_machine: BinaryExpressionStateMachine<TOuterState, TState, TResult>, stackIndex: number, stateStack: BinaryExpressionState[], _nodeStack: BinaryExpression[], _userStateStack: TState[], _resultHolder: { value: TResult; }, _outerState: TOuterState): number {
+    export function done<TOuterState, TState, TResult>(
+        _machine: BinaryExpressionStateMachine<TOuterState, TState, TResult>,
+        stackIndex: number,
+        stateStack: BinaryExpressionState[],
+        _nodeStack: BinaryExpression[],
+        _userStateStack: TState[],
+        _resultHolder: { value: TResult; },
+        _outerState: TOuterState,
+    ): number {
         Debug.assertEqual(stateStack[stackIndex], done);
         return stackIndex;
     }
