@@ -7,7 +7,10 @@ describe("unittests:: PrinterAPI", () => {
     function makePrintsCorrectly(prefix: string) {
         return function printsCorrectly(name: string, options: ts.PrinterOptions, printCallback: (printer: ts.Printer) => string) {
             it(name, () => {
-                Harness.Baseline.runBaseline(`printerApi/${prefix}.${name}.js`, printCallback(ts.createPrinter({ newLine: ts.NewLineKind.CarriageReturnLineFeed, ...options })));
+                Harness.Baseline.runBaseline(
+                    `printerApi/${prefix}.${name}.js`,
+                    printCallback(ts.createPrinter({ newLine: ts.NewLineKind.CarriageReturnLineFeed, ...options })),
+                );
             });
         };
     }

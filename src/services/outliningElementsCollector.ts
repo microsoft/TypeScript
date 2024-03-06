@@ -372,7 +372,10 @@ function getOutliningSpanForNode(n: Node, sourceFile: SourceFile): OutliningSpan
         return createOutliningSpanFromBounds(node.getStart(sourceFile), node.getEnd(), OutliningSpanKind.Code);
     }
 
-    function spanForObjectOrArrayLiteral(node: Node, open: SyntaxKind.OpenBraceToken | SyntaxKind.OpenBracketToken = SyntaxKind.OpenBraceToken): OutliningSpan | undefined {
+    function spanForObjectOrArrayLiteral(
+        node: Node,
+        open: SyntaxKind.OpenBraceToken | SyntaxKind.OpenBracketToken = SyntaxKind.OpenBraceToken,
+    ): OutliningSpan | undefined {
         // If the block has no leading keywords and is inside an array literal or call expression,
         // we only want to collapse the span of the block.
         // Otherwise, the collapsed section will include the end of the previous line.

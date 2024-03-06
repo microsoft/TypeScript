@@ -311,7 +311,12 @@ export namespace Debug {
         }
     }
 
-    export function assertNode<T extends Node, U extends T>(node: T | undefined, test: (node: T) => node is U, message?: string, stackCrawlMark?: AnyFunction): asserts node is U;
+    export function assertNode<T extends Node, U extends T>(
+        node: T | undefined,
+        test: (node: T) => node is U,
+        message?: string,
+        stackCrawlMark?: AnyFunction,
+    ): asserts node is U;
     export function assertNode(node: Node | undefined, test: ((node: Node) => boolean) | undefined, message?: string, stackCrawlMark?: AnyFunction): void;
     export function assertNode(node: Node | undefined, test: ((node: Node) => boolean) | undefined, message?: string, stackCrawlMark?: AnyFunction) {
         if (shouldAssertFunction(AssertionLevel.Normal, "assertNode")) {
@@ -342,7 +347,12 @@ export namespace Debug {
         }
     }
 
-    export function assertOptionalNode<T extends Node, U extends T>(node: T, test: (node: T) => node is U, message?: string, stackCrawlMark?: AnyFunction): asserts node is U;
+    export function assertOptionalNode<T extends Node, U extends T>(
+        node: T,
+        test: (node: T) => node is U,
+        message?: string,
+        stackCrawlMark?: AnyFunction,
+    ): asserts node is U;
     export function assertOptionalNode<T extends Node, U extends T>(
         node: T | undefined,
         test: (node: T) => node is U,
@@ -704,7 +714,9 @@ export namespace Debug {
                             "ObjectType" :
                         "Type";
                     const remainingObjectFlags = this.flags & TypeFlags.Object ? (this as ObjectType).objectFlags & ~ObjectFlags.ObjectTypeKindMask : 0;
-                    return `${typeHeader}${this.symbol ? ` '${symbolName(this.symbol)}'` : ""}${remainingObjectFlags ? ` (${formatObjectFlags(remainingObjectFlags)})` : ""}`;
+                    return `${typeHeader}${this.symbol ? ` '${symbolName(this.symbol)}'` : ""}${
+                        remainingObjectFlags ? ` (${formatObjectFlags(remainingObjectFlags)})` : ""
+                    }`;
                 },
             },
             __debugFlags: {

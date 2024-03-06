@@ -247,7 +247,8 @@ class ProjectTestCase {
         const resolutionInfo: ProjectRunnerTestCaseResolutionInfo & ts.CompilerOptions = JSON.parse(JSON.stringify(this.testCase));
         resolutionInfo.resolvedInputFiles = this.compilerResult.program!.getSourceFiles()
             .map(({ fileName: input }) =>
-                vpath.beneath(vfs.builtFolder, input, this.vfs.ignoreCase) || vpath.beneath(vfs.testLibFolder, input, this.vfs.ignoreCase) ? Utils.removeTestPathPrefixes(input) :
+                vpath.beneath(vfs.builtFolder, input, this.vfs.ignoreCase) || vpath.beneath(vfs.testLibFolder, input, this.vfs.ignoreCase) ?
+                    Utils.removeTestPathPrefixes(input) :
                     vpath.isAbsolute(input) ? vpath.relative(cwd, input, ignoreCase) :
                     input
             );
@@ -262,7 +263,10 @@ class ProjectTestCase {
 
     public verifyDiagnostics() {
         if (this.compilerResult.errors.length) {
-            Harness.Baseline.runBaseline(this.getBaselineFolder(this.compilerResult.moduleKind) + this.testCaseJustName + ".errors.txt", getErrorsBaseline(this.compilerResult));
+            Harness.Baseline.runBaseline(
+                this.getBaselineFolder(this.compilerResult.moduleKind) + this.testCaseJustName + ".errors.txt",
+                getErrorsBaseline(this.compilerResult),
+            );
         }
     }
 

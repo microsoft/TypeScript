@@ -40,7 +40,12 @@ function getCodeFixesForImportDeclaration(context: CodeFixContext, node: ImportD
 
     // import Bluebird from "bluebird";
     variations.push(
-        createAction(context, sourceFile, node, makeImport(namespace.name, /*namedImports*/ undefined, node.moduleSpecifier, getQuotePreference(sourceFile, context.preferences))),
+        createAction(
+            context,
+            sourceFile,
+            node,
+            makeImport(namespace.name, /*namedImports*/ undefined, node.moduleSpecifier, getQuotePreference(sourceFile, context.preferences)),
+        ),
     );
 
     if (getEmitModuleKind(opts) === ModuleKind.CommonJS) {

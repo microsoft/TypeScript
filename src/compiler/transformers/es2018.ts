@@ -859,7 +859,10 @@ export function transformES2018(context: TransformationContext): (x: SourceFile 
                         setTextRange(
                             factory.createVariableDeclarationList([
                                 factory.createVariableDeclaration(nonUserCode, /*exclamationToken*/ undefined, /*type*/ undefined, factory.createTrue()),
-                                setTextRange(factory.createVariableDeclaration(iterator, /*exclamationToken*/ undefined, /*type*/ undefined, initializer), node.expression),
+                                setTextRange(
+                                    factory.createVariableDeclaration(iterator, /*exclamationToken*/ undefined, /*type*/ undefined, initializer),
+                                    node.expression,
+                                ),
                                 factory.createVariableDeclaration(result),
                             ]),
                             node.expression,
@@ -1177,7 +1180,10 @@ export function transformES2018(context: TransformationContext): (x: SourceFile 
 
         const outerStatements: Statement[] = [];
         let asyncBody = factory.updateBlock(node.body!, visitNodes(node.body!.statements, visitor, isStatement));
-        asyncBody = factory.updateBlock(asyncBody, factory.mergeLexicalEnvironment(asyncBody.statements, appendObjectRestAssignmentsIfNeeded(endLexicalEnvironment(), node)));
+        asyncBody = factory.updateBlock(
+            asyncBody,
+            factory.mergeLexicalEnvironment(asyncBody.statements, appendObjectRestAssignmentsIfNeeded(endLexicalEnvironment(), node)),
+        );
 
         const returnStatement = factory.createReturnStatement(
             emitHelpers().createAsyncGeneratorHelper(

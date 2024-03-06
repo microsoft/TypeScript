@@ -406,7 +406,13 @@ export function transformESNext(context: TransformationContext): (x: SourceFile 
     /**
      * Transform `using` declarations in a statement list.
      */
-    function transformUsingDeclarations(statementsIn: readonly Statement[], start: number, end: number, envBinding: Identifier, topLevelStatements: Statement[] | undefined) {
+    function transformUsingDeclarations(
+        statementsIn: readonly Statement[],
+        start: number,
+        end: number,
+        envBinding: Identifier,
+        topLevelStatements: Statement[] | undefined,
+    ) {
         const statements: Statement[] = [];
 
         for (let i = start; i < end; i++) {

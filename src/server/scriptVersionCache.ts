@@ -383,7 +383,12 @@ export class ScriptVersionCache {
 }
 
 class LineIndexSnapshot implements IScriptSnapshot {
-    constructor(readonly version: number, readonly cache: ScriptVersionCache, readonly index: LineIndex, readonly changesSincePreviousVersion: readonly TextChange[] = emptyArray) {
+    constructor(
+        readonly version: number,
+        readonly cache: ScriptVersionCache,
+        readonly index: LineIndex,
+        readonly changesSincePreviousVersion: readonly TextChange[] = emptyArray,
+    ) {
     }
 
     getText(rangeStart: number, rangeEnd: number) {

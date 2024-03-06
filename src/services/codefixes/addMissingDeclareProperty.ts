@@ -16,7 +16,8 @@ import {
 
 const fixId = "addMissingDeclareProperty";
 const errorCodes = [
-    Diagnostics.Property_0_will_overwrite_the_base_property_in_1_If_this_is_intentional_add_an_initializer_Otherwise_add_a_declare_modifier_or_remove_the_redundant_declaration
+    Diagnostics
+        .Property_0_will_overwrite_the_base_property_in_1_If_this_is_intentional_add_an_initializer_Otherwise_add_a_declare_modifier_or_remove_the_redundant_declaration
         .code,
 ];
 

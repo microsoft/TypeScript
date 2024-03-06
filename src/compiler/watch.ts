@@ -544,7 +544,9 @@ export function fileIncludeReasonToDiagnostics(program: Program, reason: FileInc
             return chainDiagnosticMessages(/*details*/ undefined, ...messageAndArgs);
         }
         case FileIncludeKind.LibFile: {
-            if (reason.index !== undefined) return chainDiagnosticMessages(/*details*/ undefined, Diagnostics.Library_0_specified_in_compilerOptions, options.lib![reason.index]);
+            if (reason.index !== undefined) {
+                return chainDiagnosticMessages(/*details*/ undefined, Diagnostics.Library_0_specified_in_compilerOptions, options.lib![reason.index]);
+            }
             const target = forEachEntry(targetOptionDeclaration.type, (value, key) => value === getEmitScriptTarget(options) ? key : undefined);
             const messageAndArgs: DiagnosticAndArguments = target ? [Diagnostics.Default_library_for_target_0, target] : [Diagnostics.Default_library];
             return chainDiagnosticMessages(/*details*/ undefined, ...messageAndArgs);
@@ -737,7 +739,10 @@ export interface WatchFactoryWithLog<X, Y = undefined> extends WatchFactory<X, Y
 }
 
 /** @internal */
-export function createWatchFactory<Y = undefined>(host: WatchFactoryHost & { trace?(s: string): void; }, options: { extendedDiagnostics?: boolean; diagnostics?: boolean; }) {
+export function createWatchFactory<Y = undefined>(
+    host: WatchFactoryHost & { trace?(s: string): void; },
+    options: { extendedDiagnostics?: boolean; diagnostics?: boolean; },
+) {
     const watchLogLevel = host.trace ? options.extendedDiagnostics ? WatchLogLevel.Verbose : options.diagnostics ? WatchLogLevel.TriggerOnly : WatchLogLevel.None
         : WatchLogLevel.None;
     const writeLog: (s: string) => void = watchLogLevel !== WatchLogLevel.None ? (s => host.trace!(s)) : noop;

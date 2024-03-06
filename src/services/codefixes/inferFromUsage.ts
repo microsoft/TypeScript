@@ -230,7 +230,10 @@ function doChange(
     host: LanguageServiceHost,
     preferences: UserPreferences,
 ): Declaration | undefined {
-    if (!isParameterPropertyModifier(token.kind) && token.kind !== SyntaxKind.Identifier && token.kind !== SyntaxKind.DotDotDotToken && token.kind !== SyntaxKind.ThisKeyword) {
+    if (
+        !isParameterPropertyModifier(token.kind) && token.kind !== SyntaxKind.Identifier && token.kind !== SyntaxKind.DotDotDotToken &&
+        token.kind !== SyntaxKind.ThisKeyword
+    ) {
         return undefined;
     }
 
@@ -262,7 +265,15 @@ function doChange(
         case Diagnostics.Variable_0_implicitly_has_an_1_type.code: {
             const symbol = program.getTypeChecker().getSymbolAtLocation(token);
             if (symbol && symbol.valueDeclaration && isVariableDeclaration(symbol.valueDeclaration) && markSeen(symbol.valueDeclaration)) {
-                annotateVariableDeclaration(changes, importAdder, getSourceFileOfNode(symbol.valueDeclaration), symbol.valueDeclaration, program, host, cancellationToken);
+                annotateVariableDeclaration(
+                    changes,
+                    importAdder,
+                    getSourceFileOfNode(symbol.valueDeclaration),
+                    symbol.valueDeclaration,
+                    program,
+                    host,
+                    cancellationToken,
+                );
                 importAdder.writeFixes(changes);
                 return symbol.valueDeclaration;
             }
@@ -297,7 +308,15 @@ function doChange(
         case Diagnostics.Property_0_implicitly_has_type_any_because_its_get_accessor_lacks_a_return_type_annotation.code:
         case Diagnostics._0_which_lacks_return_type_annotation_implicitly_has_an_1_return_type.code:
             if (isGetAccessorDeclaration(containingFunction) && isIdentifier(containingFunction.name)) {
-                annotate(changes, importAdder, sourceFile, containingFunction, inferTypeForVariableFromUsage(containingFunction.name, program, cancellationToken), program, host);
+                annotate(
+                    changes,
+                    importAdder,
+                    sourceFile,
+                    containingFunction,
+                    inferTypeForVariableFromUsage(containingFunction.name, program, cancellationToken),
+                    program,
+                    host,
+                );
                 declaration = containingFunction;
             }
             break;

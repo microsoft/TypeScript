@@ -161,7 +161,8 @@ function getRefactorEditsToConvertOverloadsToOneSignature(context: RefactorConte
     return { renameFilename: undefined, renameLocation: undefined, edits };
 
     function getNewParametersForCombinedSignature(
-        signatureDeclarations: (MethodSignature | MethodDeclaration | CallSignatureDeclaration | ConstructorDeclaration | ConstructSignatureDeclaration | FunctionDeclaration)[],
+        signatureDeclarations:
+            (MethodSignature | MethodDeclaration | CallSignatureDeclaration | ConstructorDeclaration | ConstructSignatureDeclaration | FunctionDeclaration)[],
     ): NodeArray<ParameterDeclaration> {
         const lastSig = signatureDeclarations[signatureDeclarations.length - 1];
         if (isFunctionLikeDeclaration(lastSig) && lastSig.body) {

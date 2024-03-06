@@ -154,8 +154,18 @@ export function createRuntimeTypeSerializer(context: TransformationContext): Run
     };
 
     function setSerializerContextAnd<TNode extends Node | undefined, R>(serializerContext: RuntimeTypeSerializerContext, cb: (node: TNode) => R, node: TNode): R;
-    function setSerializerContextAnd<TNode extends Node | undefined, T, R>(serializerContext: RuntimeTypeSerializerContext, cb: (node: TNode, arg: T) => R, node: TNode, arg: T): R;
-    function setSerializerContextAnd<TNode extends Node | undefined, T, R>(serializerContext: RuntimeTypeSerializerContext, cb: (node: TNode, arg?: T) => R, node: TNode, arg?: T) {
+    function setSerializerContextAnd<TNode extends Node | undefined, T, R>(
+        serializerContext: RuntimeTypeSerializerContext,
+        cb: (node: TNode, arg: T) => R,
+        node: TNode,
+        arg: T,
+    ): R;
+    function setSerializerContextAnd<TNode extends Node | undefined, T, R>(
+        serializerContext: RuntimeTypeSerializerContext,
+        cb: (node: TNode, arg?: T) => R,
+        node: TNode,
+        arg?: T,
+    ) {
         const savedCurrentLexicalScope = currentLexicalScope;
         const savedCurrentNameScope = currentNameScope;
 
@@ -329,7 +339,10 @@ export function createRuntimeTypeSerializer(context: TransformationContext): Run
                 return serializeUnionOrIntersectionConstituents((node as UnionOrIntersectionTypeNode).types, /*isIntersection*/ false);
 
             case SyntaxKind.ConditionalType:
-                return serializeUnionOrIntersectionConstituents([(node as ConditionalTypeNode).trueType, (node as ConditionalTypeNode).falseType], /*isIntersection*/ false);
+                return serializeUnionOrIntersectionConstituents(
+                    [(node as ConditionalTypeNode).trueType, (node as ConditionalTypeNode).falseType],
+                    /*isIntersection*/ false,
+                );
 
             case SyntaxKind.TypeOperator:
                 if ((node as TypeOperatorNode).operator === SyntaxKind.ReadonlyKeyword) {
@@ -421,7 +434,9 @@ export function createRuntimeTypeSerializer(context: TransformationContext): Run
                 return factory.createIdentifier("Object"); // Reduce to `any` in a union or intersection
             }
 
-            if (!strictNullChecks && ((isLiteralTypeNode(typeNode) && typeNode.literal.kind === SyntaxKind.NullKeyword) || typeNode.kind === SyntaxKind.UndefinedKeyword)) {
+            if (
+                !strictNullChecks && ((isLiteralTypeNode(typeNode) && typeNode.literal.kind === SyntaxKind.NullKeyword) || typeNode.kind === SyntaxKind.UndefinedKeyword)
+            ) {
                 continue; // Elide null and undefined from unions for metadata, just like what we did prior to the implementation of strict null checks
             }
 

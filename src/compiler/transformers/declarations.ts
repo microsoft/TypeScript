@@ -379,7 +379,9 @@ export function transformDeclarations(context: TransformationContext) {
 
     function trackSymbol(symbol: Symbol, enclosingDeclaration?: Node, meaning?: SymbolFlags) {
         if (symbol.flags & SymbolFlags.TypeParameter) return false;
-        const issuedDiagnostic = handleSymbolAccessibilityError(resolver.isSymbolAccessible(symbol, enclosingDeclaration, meaning, /*shouldComputeAliasToMarkVisible*/ true));
+        const issuedDiagnostic = handleSymbolAccessibilityError(
+            resolver.isSymbolAccessible(symbol, enclosingDeclaration, meaning, /*shouldComputeAliasToMarkVisible*/ true),
+        );
         recordTypeReferenceDirectivesIfNecessary(resolver.getTypeReferenceDirectivesForSymbol(symbol, meaning));
         return issuedDiagnostic;
     }
@@ -387,7 +389,11 @@ export function transformDeclarations(context: TransformationContext) {
     function reportPrivateInBaseOfClassExpression(propertyName: string) {
         if (errorNameNode || errorFallbackNode) {
             context.addDiagnostic(
-                createDiagnosticForNode((errorNameNode || errorFallbackNode)!, Diagnostics.Property_0_of_exported_class_expression_may_not_be_private_or_protected, propertyName),
+                createDiagnosticForNode(
+                    (errorNameNode || errorFallbackNode)!,
+                    Diagnostics.Property_0_of_exported_class_expression_may_not_be_private_or_protected,
+                    propertyName,
+                ),
             );
         }
     }
@@ -468,7 +474,10 @@ export function transformDeclarations(context: TransformationContext) {
             for (const augmentations of augmentingDeclarations) {
                 context.addDiagnostic(addRelatedInfo(
                     createDiagnosticForNode(augmentations, Diagnostics.Declaration_augments_declaration_in_another_file_This_cannot_be_serialized),
-                    createDiagnosticForNode(primaryDeclaration, Diagnostics.This_is_the_declaration_being_augmented_Consider_moving_the_augmenting_declaration_into_the_same_file),
+                    createDiagnosticForNode(
+                        primaryDeclaration,
+                        Diagnostics.This_is_the_declaration_being_augmented_Consider_moving_the_augmenting_declaration_into_the_same_file,
+                    ),
                 ));
             }
         }
@@ -536,7 +545,9 @@ export function transformDeclarations(context: TransformationContext) {
                             [factory.createModuleDeclaration(
                                 [factory.createModifier(SyntaxKind.DeclareKeyword)],
                                 factory.createStringLiteral(getResolvedExternalModuleName(context.getEmitHost(), sourceFile)),
-                                factory.createModuleBlock(setTextRange(factory.createNodeArray(transformAndReplaceLatePaintedStatements(statements)), sourceFile.statements)),
+                                factory.createModuleBlock(
+                                    setTextRange(factory.createNodeArray(transformAndReplaceLatePaintedStatements(statements)), sourceFile.statements),
+                                ),
                             )],
                             /*isDeclarationFile*/ true,
                             /*referencedFiles*/ [],
@@ -633,7 +644,9 @@ export function transformDeclarations(context: TransformationContext) {
                             return undefined;
                         }
                     }
-                    else if (isImportDeclaration(importStatement) && isStringLiteral(importStatement.moduleSpecifier) && importStatement.moduleSpecifier.text === typeName) {
+                    else if (
+                        isImportDeclaration(importStatement) && isStringLiteral(importStatement.moduleSpecifier) && importStatement.moduleSpecifier.text === typeName
+                    ) {
                         return undefined;
                     }
                 }
@@ -1015,7 +1028,8 @@ export function transformDeclarations(context: TransformationContext) {
             );
         }
         // The `importClause` visibility corresponds to the default's visibility.
-        const visibleDefaultBinding = decl.importClause && decl.importClause.name && resolver.isDeclarationVisible(decl.importClause) ? decl.importClause.name : undefined;
+        const visibleDefaultBinding = decl.importClause && decl.importClause.name && resolver.isDeclarationVisible(decl.importClause) ? decl.importClause.name
+            : undefined;
         if (!decl.importClause.namedBindings) {
             // No named bindings (either namespace or list), meaning the import is just default or should be elided
             return visibleDefaultBinding && factory.updateImportDeclaration(
@@ -1168,7 +1182,13 @@ export function transformDeclarations(context: TransformationContext) {
             if (hasEffectiveModifier(input, ModifierFlags.Private)) {
                 if (input.symbol && input.symbol.declarations && input.symbol.declarations[0] !== input) return; // Elide all but the first overload
                 return cleanup(
-                    factory.createPropertyDeclaration(ensureModifiers(input), input.name, /*questionOrExclamationToken*/ undefined, /*type*/ undefined, /*initializer*/ undefined),
+                    factory.createPropertyDeclaration(
+                        ensureModifiers(input),
+                        input.name,
+                        /*questionOrExclamationToken*/ undefined,
+                        /*type*/ undefined,
+                        /*initializer*/ undefined,
+                    ),
                 );
             }
         }
@@ -1319,7 +1339,9 @@ export function transformDeclarations(context: TransformationContext) {
                     }
                     shouldEnterSuppressNewDiagnosticsContextContext = true;
                     suppressNewDiagnosticContexts = true; // Variable declaration types also suppress new diagnostic contexts, provided the contexts wouldn't be made for binding pattern types
-                    return cleanup(factory.updateVariableDeclaration(input, input.name, /*exclamationToken*/ undefined, ensureType(input, input.type), ensureNoInitializer(input)));
+                    return cleanup(
+                        factory.updateVariableDeclaration(input, input.name, /*exclamationToken*/ undefined, ensureType(input, input.type), ensureNoInitializer(input)),
+                    );
                 }
                 case SyntaxKind.TypeParameter: {
                     if (isPrivateMethodTypeParameter(input) && (input.default || input.constraint)) {
@@ -1377,7 +1399,10 @@ export function transformDeclarations(context: TransformationContext) {
             }
         }
 
-        if (isTupleTypeNode(input) && (getLineAndCharacterOfPosition(currentSourceFile, input.pos).line === getLineAndCharacterOfPosition(currentSourceFile, input.end).line)) {
+        if (
+            isTupleTypeNode(input) &&
+            (getLineAndCharacterOfPosition(currentSourceFile, input.pos).line === getLineAndCharacterOfPosition(currentSourceFile, input.end).line)
+        ) {
             setEmitFlags(input, EmitFlags.SingleLine);
         }
 
@@ -1630,7 +1655,12 @@ export function transformDeclarations(context: TransformationContext) {
                             })),
                         ));
                     }
-                    const namespaceDecl = factory.createModuleDeclaration(ensureModifiers(input), input.name!, factory.createModuleBlock(declarations), NodeFlags.Namespace);
+                    const namespaceDecl = factory.createModuleDeclaration(
+                        ensureModifiers(input),
+                        input.name!,
+                        factory.createModuleBlock(declarations),
+                        NodeFlags.Namespace,
+                    );
                     if (!hasEffectiveModifier(clean, ModifierFlags.Default)) {
                         return [clean, namespaceDecl];
                     }
@@ -1819,7 +1849,10 @@ export function transformDeclarations(context: TransformationContext) {
                             getSymbolAccessibilityDiagnostic = createGetSymbolAccessibilityDiagnosticForNode(clause.types[0]);
                             const newClause = factory.updateHeritageClause(
                                 clause,
-                                map(clause.types, t => factory.updateExpressionWithTypeArguments(t, newId, visitNodes(t.typeArguments, visitDeclarationSubtree, isTypeNode))),
+                                map(
+                                    clause.types,
+                                    t => factory.updateExpressionWithTypeArguments(t, newId, visitNodes(t.typeArguments, visitDeclarationSubtree, isTypeNode)),
+                                ),
                             );
                             getSymbolAccessibilityDiagnostic = oldDiag;
                             return newClause;

@@ -106,7 +106,11 @@ function getActionForAddMissingDefiniteAssignmentAssertion(context: CodeFixConte
     );
 }
 
-function addDefiniteAssignmentAssertion(changeTracker: textChanges.ChangeTracker, propertyDeclarationSourceFile: SourceFile, propertyDeclaration: PropertyDeclaration): void {
+function addDefiniteAssignmentAssertion(
+    changeTracker: textChanges.ChangeTracker,
+    propertyDeclarationSourceFile: SourceFile,
+    propertyDeclaration: PropertyDeclaration,
+): void {
     suppressLeadingAndTrailingTrivia(propertyDeclaration);
     const property = factory.updatePropertyDeclaration(
         propertyDeclaration,

@@ -244,13 +244,20 @@ export namespace Compiler {
 
         if (!libFileNameSourceFileMap) {
             libFileNameSourceFileMap = new Map(Object.entries({
-                [defaultLibFileName]: createSourceFileAndAssertInvariants(defaultLibFileName, IO.readFile(libFolder + "lib.es5.d.ts")!, /*languageVersion*/ ts.ScriptTarget.Latest),
+                [defaultLibFileName]: createSourceFileAndAssertInvariants(
+                    defaultLibFileName,
+                    IO.readFile(libFolder + "lib.es5.d.ts")!,
+                    /*languageVersion*/ ts.ScriptTarget.Latest,
+                ),
             }));
         }
 
         let sourceFile = libFileNameSourceFileMap.get(fileName);
         if (!sourceFile) {
-            libFileNameSourceFileMap.set(fileName, sourceFile = createSourceFileAndAssertInvariants(fileName, IO.readFile(libFolder + fileName)!, ts.ScriptTarget.Latest));
+            libFileNameSourceFileMap.set(
+                fileName,
+                sourceFile = createSourceFileAndAssertInvariants(fileName, IO.readFile(libFolder + fileName)!, ts.ScriptTarget.Latest),
+            );
         }
         return sourceFile;
     }
@@ -536,7 +543,9 @@ export namespace Compiler {
         }
         if (pretty) {
             outputLines += Utils.removeTestPathPrefixes(
-                ts.getErrorSummaryText(ts.getErrorCountForSummary(diagnostics), ts.getFilesInErrorForSummary(diagnostics), IO.newLine(), { getCurrentDirectory: () => "" }),
+                ts.getErrorSummaryText(ts.getErrorCountForSummary(diagnostics), ts.getFilesInErrorForSummary(diagnostics), IO.newLine(), {
+                    getCurrentDirectory: () => "",
+                }),
             );
         }
         return outputLines;
@@ -844,7 +853,10 @@ export namespace Compiler {
 
                 lastIndexWritten ??= -1;
                 if (lastIndexWritten + 1 < codeLines.length) {
-                    if (!((lastIndexWritten + 1 < codeLines.length) && (codeLines[lastIndexWritten + 1].match(/^\s*[{|}]\s*$/) || codeLines[lastIndexWritten + 1].trim() === ""))) {
+                    if (
+                        !((lastIndexWritten + 1 < codeLines.length) &&
+                            (codeLines[lastIndexWritten + 1].match(/^\s*[{|}]\s*$/) || codeLines[lastIndexWritten + 1].trim() === ""))
+                    ) {
                         typeLines += "\r\n";
                     }
                     typeLines += codeLines.slice(lastIndexWritten + 1).join("\r\n");
@@ -855,7 +867,12 @@ export namespace Compiler {
         }
     }
 
-    export function doSourcemapBaseline(baselinePath: string, options: ts.CompilerOptions, result: compiler.CompilationResult, harnessSettings: TestCaseParser.CompilerSettings) {
+    export function doSourcemapBaseline(
+        baselinePath: string,
+        options: ts.CompilerOptions,
+        result: compiler.CompilationResult,
+        harnessSettings: TestCaseParser.CompilerSettings,
+    ) {
         const declMaps = ts.getAreDeclarationMapsEnabled(options);
         if (options.inlineSourceMap) {
             if (result.maps.size > 0 && !declMaps) {
@@ -865,7 +882,8 @@ export namespace Compiler {
         }
         else if (options.sourceMap || declMaps) {
             if (
-                result.maps.size !== ((options.sourceMap ? result.getNumberOfJsFiles(/*includeJson*/ false) : 0) + (declMaps ? result.getNumberOfJsFiles(/*includeJson*/ true) : 0))
+                result.maps.size !==
+                    ((options.sourceMap ? result.getNumberOfJsFiles(/*includeJson*/ false) : 0) + (declMaps ? result.getNumberOfJsFiles(/*includeJson*/ true) : 0))
             ) {
                 throw new Error("Number of sourcemap files should be same as js files.");
             }
@@ -1212,7 +1230,9 @@ export namespace TestCaseParser {
         if (!linkMetaData) return undefined;
 
         if (!symlinks) symlinks = {};
-        symlinks[ts.getNormalizedAbsolutePath(linkMetaData[2].trim(), absoluteRootDir)] = new vfs.Symlink(ts.getNormalizedAbsolutePath(linkMetaData[1].trim(), absoluteRootDir));
+        symlinks[ts.getNormalizedAbsolutePath(linkMetaData[2].trim(), absoluteRootDir)] = new vfs.Symlink(
+            ts.getNormalizedAbsolutePath(linkMetaData[1].trim(), absoluteRootDir),
+        );
         return symlinks;
     }
 
@@ -1285,7 +1305,9 @@ export namespace TestCaseParser {
                 else {
                     // First metadata marker in the file
                     currentFileName = testMetaData[2].trim();
-                    if (currentFileContent && ts.skipTrivia(currentFileContent, 0, /*stopAfterLineBreak*/ false, /*stopAtComments*/ false) !== currentFileContent.length) {
+                    if (
+                        currentFileContent && ts.skipTrivia(currentFileContent, 0, /*stopAfterLineBreak*/ false, /*stopAtComments*/ false) !== currentFileContent.length
+                    ) {
                         throw new Error("Non-comment test content appears before the first '// @Filename' directive");
                     }
                     currentFileContent = "";

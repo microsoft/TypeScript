@@ -390,7 +390,12 @@ function createUseFsEventsOnParentDirectoryWatchFile(fsWatch: FsWatch, useCaseSe
     const toCanonicalName = createGetCanonicalFileName(useCaseSensitiveFileNames);
     return nonPollingWatchFile;
 
-    function nonPollingWatchFile(fileName: string, callback: FileWatcherCallback, _pollingInterval: PollingInterval, fallbackOptions: WatchOptions | undefined): FileWatcher {
+    function nonPollingWatchFile(
+        fileName: string,
+        callback: FileWatcherCallback,
+        _pollingInterval: PollingInterval,
+        fallbackOptions: WatchOptions | undefined,
+    ): FileWatcher {
         const filePath = toCanonicalName(fileName);
         fileWatcherCallbacks.add(filePath, callback);
         const dirPath = getDirectoryPath(filePath) || ".";
@@ -785,7 +790,8 @@ function createDirectoryWatcherSupportingRecursive({
                 const childFullName = getNormalizedAbsolutePath(child, parentDir);
                 // Filter our the symbolic link directories since those arent included in recursive watch
                 // which is same behaviour when recursive: true is passed to fs.watch
-                return !isIgnoredPath(childFullName, options) && filePathComparer(childFullName, normalizePath(realpath(childFullName))) === Comparison.EqualTo ? childFullName
+                return !isIgnoredPath(childFullName, options) && filePathComparer(childFullName, normalizePath(realpath(childFullName))) === Comparison.EqualTo ?
+                    childFullName
                     : undefined;
             }) : emptyArray,
             parentWatcher.childWatches,
@@ -1188,7 +1194,9 @@ export function createSystemWatchFunctions({
         function updateWatcher(createWatcher: () => FileWatcher) {
             // If watcher is not closed, update it
             if (watcher) {
-                sysLog(`sysLog:: ${fileOrDirectory}:: Changing watcher to ${createWatcher === watchPresentFileSystemEntry ? "Present" : "Missing"}FileSystemEntryWatcher`);
+                sysLog(
+                    `sysLog:: ${fileOrDirectory}:: Changing watcher to ${createWatcher === watchPresentFileSystemEntry ? "Present" : "Missing"}FileSystemEntryWatcher`,
+                );
                 watcher.close();
                 watcher = createWatcher();
             }

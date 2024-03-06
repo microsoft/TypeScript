@@ -1128,7 +1128,11 @@ export function transformES2015(context: TransformationContext): (x: SourceFile 
      * @param node The ClassExpression or ClassDeclaration node.
      * @param extendsClauseElement The expression for the class `extends` clause.
      */
-    function addExtendsHelperIfNeeded(statements: Statement[], node: ClassExpression | ClassDeclaration, extendsClauseElement: ExpressionWithTypeArguments | undefined): void {
+    function addExtendsHelperIfNeeded(
+        statements: Statement[],
+        node: ClassExpression | ClassDeclaration,
+        extendsClauseElement: ExpressionWithTypeArguments | undefined,
+    ): void {
         if (extendsClauseElement) {
             statements.push(
                 setTextRange(
@@ -2067,7 +2071,8 @@ export function transformES2015(context: TransformationContext): (x: SourceFile 
 
         // `declarationName` is the name of the local declaration for the parameter.
         // TODO(rbuckton): Does this need to be parented?
-        const declarationName = parameter.name.kind === SyntaxKind.Identifier ? setParent(setTextRange(factory.cloneNode(parameter.name), parameter.name), parameter.name.parent)
+        const declarationName = parameter.name.kind === SyntaxKind.Identifier ?
+            setParent(setTextRange(factory.cloneNode(parameter.name), parameter.name), parameter.name.parent)
             : factory.createTempVariable(/*recordTempVariable*/ undefined);
         setEmitFlags(declarationName, EmitFlags.NoSourceMap);
 
@@ -2765,7 +2770,10 @@ export function transformES2015(context: TransformationContext): (x: SourceFile 
     }
 
     function visitVariableStatement(node: VariableStatement): Statement | undefined {
-        const ancestorFacts = enterSubtree(HierarchyFacts.None, hasSyntacticModifier(node, ModifierFlags.Export) ? HierarchyFacts.ExportedVariableStatement : HierarchyFacts.None);
+        const ancestorFacts = enterSubtree(
+            HierarchyFacts.None,
+            hasSyntacticModifier(node, ModifierFlags.Export) ? HierarchyFacts.ExportedVariableStatement : HierarchyFacts.None,
+        );
         let updated: Statement | undefined;
         if (convertedLoopState && (node.declarationList.flags & NodeFlags.BlockScoped) === 0 && !isVariableStatementOfTypeScriptClassWrapper(node)) {
             // we are inside a converted loop - hoist variable declarations
@@ -2783,7 +2791,11 @@ export function transformES2015(context: TransformationContext): (x: SourceFile 
                         );
                     }
                     else {
-                        assignment = factory.createBinaryExpression(decl.name, SyntaxKind.EqualsToken, Debug.checkDefined(visitNode(decl.initializer, visitor, isExpression)));
+                        assignment = factory.createBinaryExpression(
+                            decl.name,
+                            SyntaxKind.EqualsToken,
+                            Debug.checkDefined(visitNode(decl.initializer, visitor, isExpression)),
+                        );
                         setTextRange(assignment, decl);
                     }
 
@@ -3129,7 +3141,9 @@ export function transformES2015(context: TransformationContext): (x: SourceFile 
             }
             else {
                 setTextRangeEnd(assignment, initializer.end);
-                statements.push(setTextRange(factory.createExpressionStatement(Debug.checkDefined(visitNode(assignment, visitor, isExpression))), moveRangeEnd(initializer, -1)));
+                statements.push(
+                    setTextRange(factory.createExpressionStatement(Debug.checkDefined(visitNode(assignment, visitor, isExpression))), moveRangeEnd(initializer, -1)),
+                );
             }
         }
 
@@ -3208,7 +3222,10 @@ export function transformES2015(context: TransformationContext): (x: SourceFile 
                                 factory.createVariableDeclaration(counter, /*exclamationToken*/ undefined, /*type*/ undefined, factory.createNumericLiteral(0)),
                                 moveRangePos(node.expression, -1),
                             ),
-                            setTextRange(factory.createVariableDeclaration(rhsReference, /*exclamationToken*/ undefined, /*type*/ undefined, expression), node.expression),
+                            setTextRange(
+                                factory.createVariableDeclaration(rhsReference, /*exclamationToken*/ undefined, /*type*/ undefined, expression),
+                                node.expression,
+                            ),
                         ]),
                         node.expression,
                     ),
@@ -3267,7 +3284,10 @@ export function transformES2015(context: TransformationContext): (x: SourceFile 
                     /*initializer*/ setEmitFlags(
                         setTextRange(
                             factory.createVariableDeclarationList([
-                                setTextRange(factory.createVariableDeclaration(iterator, /*exclamationToken*/ undefined, /*type*/ undefined, initializer), node.expression),
+                                setTextRange(
+                                    factory.createVariableDeclaration(iterator, /*exclamationToken*/ undefined, /*type*/ undefined, initializer),
+                                    node.expression,
+                                ),
                                 factory.createVariableDeclaration(result, /*exclamationToken*/ undefined, /*type*/ undefined, next),
                             ]),
                             node.expression,
@@ -3510,7 +3530,8 @@ export function transformES2015(context: TransformationContext): (x: SourceFile 
         convertedLoopState = currentState;
 
         const initializerFunction = shouldConvertInitializerOfForStatement(node) ? createFunctionForInitializerOfForStatement(node, currentState) : undefined;
-        const bodyFunction = shouldConvertBodyOfIterationStatement(node) ? createFunctionForBodyOfIterationStatement(node, currentState, outerConvertedLoopState) : undefined;
+        const bodyFunction = shouldConvertBodyOfIterationStatement(node) ? createFunctionForBodyOfIterationStatement(node, currentState, outerConvertedLoopState)
+            : undefined;
 
         convertedLoopState = outerConvertedLoopState;
 
@@ -3534,7 +3555,11 @@ export function transformES2015(context: TransformationContext): (x: SourceFile 
             }
         }
         else {
-            const clone = convertIterationStatementCore(node, initializerFunction, Debug.checkDefined(visitNode(node.statement, visitor, isStatement, factory.liftToBlock)));
+            const clone = convertIterationStatementCore(
+                node,
+                initializerFunction,
+                Debug.checkDefined(visitNode(node.statement, visitor, isStatement, factory.liftToBlock)),
+            );
             loop = factory.restoreEnclosingLabel(clone, outermostLabeledStatement, convertedLoopState && resetLabel);
         }
 
@@ -3563,7 +3588,11 @@ export function transformES2015(context: TransformationContext): (x: SourceFile 
         }
     }
 
-    function convertForStatement(node: ForStatement, initializerFunction: IterationStatementPartFunction<VariableDeclarationList> | undefined, convertedLoopBody: Statement) {
+    function convertForStatement(
+        node: ForStatement,
+        initializerFunction: IterationStatementPartFunction<VariableDeclarationList> | undefined,
+        convertedLoopBody: Statement,
+    ) {
         const shouldConvertCondition = node.condition && shouldConvertPartOfIterationStatement(node.condition);
         const shouldConvertIncrementor = shouldConvertCondition || node.incrementor && shouldConvertPartOfIterationStatement(node.incrementor);
         return factory.updateForStatement(
@@ -3734,7 +3763,9 @@ export function transformES2015(context: TransformationContext): (x: SourceFile 
             if (!extraVariableDeclarations) {
                 extraVariableDeclarations = [];
             }
-            extraVariableDeclarations.push(factory.createVariableDeclaration(state.conditionVariable, /*exclamationToken*/ undefined, /*type*/ undefined, factory.createFalse()));
+            extraVariableDeclarations.push(
+                factory.createVariableDeclaration(state.conditionVariable, /*exclamationToken*/ undefined, /*type*/ undefined, factory.createFalse()),
+            );
         }
 
         // create variable statement to hold all introduced variable declarations

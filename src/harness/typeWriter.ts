@@ -142,7 +142,8 @@ export class TypeWriterWalker {
                 typeString = (type as ts.IntrinsicType).intrinsicName;
             }
             else {
-                const typeFormatFlags = ts.TypeFormatFlags.NoTruncation | ts.TypeFormatFlags.AllowUniqueESSymbolType | ts.TypeFormatFlags.GenerateNamesForShadowedTypeParams;
+                const typeFormatFlags = ts.TypeFormatFlags.NoTruncation | ts.TypeFormatFlags.AllowUniqueESSymbolType |
+                    ts.TypeFormatFlags.GenerateNamesForShadowedTypeParams;
                 typeString = this.checker.typeToString(type, node.parent, typeFormatFlags);
                 if (ts.isIdentifier(node) && ts.isTypeAliasDeclaration(node.parent) && node.parent.name === node && typeString === ts.idText(node)) {
                     // for a complex type alias `type T = ...`, showing "T : T" isn't very helpful for type tests. When the type produced is the same as

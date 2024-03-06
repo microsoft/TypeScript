@@ -514,8 +514,9 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
     const getJSDocSimpleTagCreateFunction = memoizeOne(<T extends JSDocTag>(kind: T["kind"]) => (tagName: Identifier | undefined, comment?: NodeArray<JSDocComment>) =>
         createJSDocSimpleTagWorker(kind, tagName, comment)
     );
-    const getJSDocSimpleTagUpdateFunction = memoizeOne(<T extends JSDocTag>(kind: T["kind"]) => (node: T, tagName: Identifier | undefined, comment?: NodeArray<JSDocComment>) =>
-        updateJSDocSimpleTagWorker(kind, node, tagName, comment)
+    const getJSDocSimpleTagUpdateFunction = memoizeOne(
+        <T extends JSDocTag>(kind: T["kind"]) => (node: T, tagName: Identifier | undefined, comment?: NodeArray<JSDocComment>) =>
+            updateJSDocSimpleTagWorker(kind, node, tagName, comment),
     );
     const getJSDocTypeLikeTagCreateFunction = memoizeOne(
         <T extends JSDocTag & { typeExpression?: JSDocTypeExpression; }>(kind: T["kind"]) =>
@@ -1325,7 +1326,12 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
         return node;
     }
 
-    function createBaseGeneratedIdentifier(text: string, autoGenerateFlags: GeneratedIdentifierFlags, prefix: string | GeneratedNamePart | undefined, suffix: string | undefined) {
+    function createBaseGeneratedIdentifier(
+        text: string,
+        autoGenerateFlags: GeneratedIdentifierFlags,
+        prefix: string | GeneratedNamePart | undefined,
+        suffix: string | undefined,
+    ) {
         const node = createBaseIdentifier(escapeLeadingUnderscores(text)) as Mutable<GeneratedIdentifier>;
         setIdentifierAutoGenerate(node, {
             flags: autoGenerateFlags,
@@ -1386,7 +1392,12 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
 
     /** Create a unique name based on the supplied text. */
     // @api
-    function createUniqueName(text: string, flags: GeneratedIdentifierFlags = GeneratedIdentifierFlags.None, prefix?: string | GeneratedNamePart, suffix?: string): Identifier {
+    function createUniqueName(
+        text: string,
+        flags: GeneratedIdentifierFlags = GeneratedIdentifierFlags.None,
+        prefix?: string | GeneratedNamePart,
+        suffix?: string,
+    ): Identifier {
         Debug.assert(!(flags & GeneratedIdentifierFlags.KindMask), "Argument out of range: flags");
         Debug.assert(
             (flags & (GeneratedIdentifierFlags.Optimistic | GeneratedIdentifierFlags.FileLevel)) !== GeneratedIdentifierFlags.FileLevel,
@@ -1825,7 +1836,8 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
             propagateNameFlags(node.name) |
             propagateChildFlags(node.initializer) |
             (isAmbient || node.questionToken || node.exclamationToken || node.type ? TransformFlags.ContainsTypeScript : TransformFlags.None) |
-            (isComputedPropertyName(node.name) || modifiersToFlags(node.modifiers) & ModifierFlags.Static && node.initializer ? TransformFlags.ContainsTypeScriptClassSyntax
+            (isComputedPropertyName(node.name) || modifiersToFlags(node.modifiers) & ModifierFlags.Static && node.initializer ?
+                TransformFlags.ContainsTypeScriptClassSyntax
                 : TransformFlags.None) |
             TransformFlags.ContainsClassFields;
 
@@ -1844,8 +1856,10 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
     ) {
         return node.modifiers !== modifiers
                 || node.name !== name
-                || node.questionToken !== (questionOrExclamationToken !== undefined && isQuestionToken(questionOrExclamationToken) ? questionOrExclamationToken : undefined)
-                || node.exclamationToken !== (questionOrExclamationToken !== undefined && isExclamationToken(questionOrExclamationToken) ? questionOrExclamationToken : undefined)
+                || node.questionToken !==
+                    (questionOrExclamationToken !== undefined && isQuestionToken(questionOrExclamationToken) ? questionOrExclamationToken : undefined)
+                || node.exclamationToken !==
+                    (questionOrExclamationToken !== undefined && isExclamationToken(questionOrExclamationToken) ? questionOrExclamationToken : undefined)
                 || node.type !== type
                 || node.initializer !== initializer
             ? update(createPropertyDeclaration(modifiers, name, questionOrExclamationToken, type, initializer), node)
@@ -2330,7 +2344,12 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
     }
 
     // @api
-    function updateTypePredicateNode(node: TypePredicateNode, assertsModifier: AssertsKeyword | undefined, parameterName: Identifier | ThisTypeNode, type: TypeNode | undefined) {
+    function updateTypePredicateNode(
+        node: TypePredicateNode,
+        assertsModifier: AssertsKeyword | undefined,
+        parameterName: Identifier | ThisTypeNode,
+        type: TypeNode | undefined,
+    ) {
         return node.assertsModifier !== assertsModifier
                 || node.parameterName !== parameterName
                 || node.type !== type
@@ -2619,7 +2638,11 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
 
     // @api
     function createIntersectionTypeNode(types: readonly TypeNode[]): IntersectionTypeNode {
-        return createUnionOrIntersectionTypeNode(SyntaxKind.IntersectionType, types, parenthesizerRules().parenthesizeConstituentTypesOfIntersectionType) as IntersectionTypeNode;
+        return createUnionOrIntersectionTypeNode(
+            SyntaxKind.IntersectionType,
+            types,
+            parenthesizerRules().parenthesizeConstituentTypesOfIntersectionType,
+        ) as IntersectionTypeNode;
     }
 
     // @api
@@ -3017,8 +3040,16 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
     }
 
     // @api
-    function updatePropertyAccessChain(node: PropertyAccessChain, expression: Expression, questionDotToken: QuestionDotToken | undefined, name: Identifier | PrivateIdentifier) {
-        Debug.assert(!!(node.flags & NodeFlags.OptionalChain), "Cannot update a PropertyAccessExpression using updatePropertyAccessChain. Use updatePropertyAccess instead.");
+    function updatePropertyAccessChain(
+        node: PropertyAccessChain,
+        expression: Expression,
+        questionDotToken: QuestionDotToken | undefined,
+        name: Identifier | PrivateIdentifier,
+    ) {
+        Debug.assert(
+            !!(node.flags & NodeFlags.OptionalChain),
+            "Cannot update a PropertyAccessExpression using updatePropertyAccessChain. Use updatePropertyAccess instead.",
+        );
         // Because we are updating an existing PropertyAccessChain we want to inherit its emitFlags
         // instead of using the default from createPropertyAccess
         return node.expression !== expression
@@ -3083,7 +3114,10 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
 
     // @api
     function updateElementAccessChain(node: ElementAccessChain, expression: Expression, questionDotToken: QuestionDotToken | undefined, argumentExpression: Expression) {
-        Debug.assert(!!(node.flags & NodeFlags.OptionalChain), "Cannot update a ElementAccessExpression using updateElementAccessChain. Use updateElementAccess instead.");
+        Debug.assert(
+            !!(node.flags & NodeFlags.OptionalChain),
+            "Cannot update a ElementAccessExpression using updateElementAccessChain. Use updateElementAccess instead.",
+        );
         // Because we are updating an existing ElementAccessChain we want to inherit its emitFlags
         // instead of using the default from createElementAccess
         return node.expression !== expression
@@ -3195,7 +3229,12 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
     }
 
     // @api
-    function updateNewExpression(node: NewExpression, expression: Expression, typeArguments: readonly TypeNode[] | undefined, argumentsArray: readonly Expression[] | undefined) {
+    function updateNewExpression(
+        node: NewExpression,
+        expression: Expression,
+        typeArguments: readonly TypeNode[] | undefined,
+        argumentsArray: readonly Expression[] | undefined,
+    ) {
         return node.expression !== expression
                 || node.typeArguments !== typeArguments
                 || node.arguments !== argumentsArray
@@ -4173,7 +4212,13 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
     }
 
     // @api
-    function updateForOfStatement(node: ForOfStatement, awaitModifier: AwaitKeyword | undefined, initializer: ForInitializer, expression: Expression, statement: Statement) {
+    function updateForOfStatement(
+        node: ForOfStatement,
+        awaitModifier: AwaitKeyword | undefined,
+        initializer: ForInitializer,
+        expression: Expression,
+        statement: Statement,
+    ) {
         return node.awaitModifier !== awaitModifier
                 || node.initializer !== initializer
                 || node.expression !== expression
@@ -5288,7 +5333,11 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
     }
 
     // @api
-    function createJSDocSignature(typeParameters: readonly JSDocTemplateTag[] | undefined, parameters: readonly JSDocParameterTag[], type?: JSDocReturnTag): JSDocSignature {
+    function createJSDocSignature(
+        typeParameters: readonly JSDocTemplateTag[] | undefined,
+        parameters: readonly JSDocParameterTag[],
+        type?: JSDocReturnTag,
+    ): JSDocSignature {
         const node = createBaseDeclaration<JSDocSignature>(SyntaxKind.JSDocSignature);
         node.typeParameters = asNodeArray(typeParameters);
         node.parameters = createNodeArray(parameters);
@@ -5329,7 +5378,11 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
         return node;
     }
 
-    function createBaseJSDocTagDeclaration<T extends JSDocTag & Declaration>(kind: T["kind"], tagName: Identifier, comment: string | NodeArray<JSDocComment> | undefined) {
+    function createBaseJSDocTagDeclaration<T extends JSDocTag & Declaration>(
+        kind: T["kind"],
+        tagName: Identifier,
+        comment: string | NodeArray<JSDocComment> | undefined,
+    ) {
         const node = createBaseDeclaration<T>(kind);
         node.tagName = tagName;
         node.comment = comment;
@@ -5548,7 +5601,11 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
     }
 
     // @api
-    function createJSDocImplementsTag(tagName: Identifier | undefined, className: JSDocImplementsTag["class"], comment?: string | NodeArray<JSDocComment>): JSDocImplementsTag {
+    function createJSDocImplementsTag(
+        tagName: Identifier | undefined,
+        className: JSDocImplementsTag["class"],
+        comment?: string | NodeArray<JSDocComment>,
+    ): JSDocImplementsTag {
         const node = createBaseJSDocTag<JSDocImplementsTag>(SyntaxKind.JSDocImplementsTag, tagName ?? createIdentifier("implements"), comment);
         node.class = className;
         return node;
@@ -5562,7 +5619,12 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
     }
 
     // @api
-    function updateJSDocSeeTag(node: JSDocSeeTag, tagName: Identifier | undefined, name: JSDocNameReference | undefined, comment?: string | NodeArray<JSDocComment>): JSDocSeeTag {
+    function updateJSDocSeeTag(
+        node: JSDocSeeTag,
+        tagName: Identifier | undefined,
+        name: JSDocNameReference | undefined,
+        comment?: string | NodeArray<JSDocComment>,
+    ): JSDocSeeTag {
         return node.tagName !== tagName
                 || node.name !== name
                 || node.comment !== comment
@@ -5747,7 +5809,11 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
 
     // @api
     function createJSDocEnumTag(tagName: Identifier | undefined, typeExpression: JSDocTypeExpression, comment?: string | NodeArray<JSDocComment>) {
-        const node = createBaseJSDocTagDeclaration<JSDocEnumTag>(SyntaxKind.JSDocEnumTag, tagName ?? createIdentifier(getDefaultTagNameForKind(SyntaxKind.JSDocEnumTag)), comment);
+        const node = createBaseJSDocTagDeclaration<JSDocEnumTag>(
+            SyntaxKind.JSDocEnumTag,
+            tagName ?? createIdentifier(getDefaultTagNameForKind(SyntaxKind.JSDocEnumTag)),
+            comment,
+        );
         node.typeExpression = typeExpression;
 
         node.locals = undefined; // initialized by binder (LocalsContainer)
@@ -5842,7 +5908,12 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
     }
 
     // @api
-    function updateJsxSelfClosingElement(node: JsxSelfClosingElement, tagName: JsxTagNameExpression, typeArguments: readonly TypeNode[] | undefined, attributes: JsxAttributes) {
+    function updateJsxSelfClosingElement(
+        node: JsxSelfClosingElement,
+        tagName: JsxTagNameExpression,
+        typeArguments: readonly TypeNode[] | undefined,
+        attributes: JsxAttributes,
+    ) {
         return node.tagName !== tagName
                 || node.typeArguments !== typeArguments
                 || node.attributes !== attributes
@@ -6395,7 +6466,10 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
                 || node.typeReferenceDirectives !== typeReferenceDirectives
                 || node.hasNoDefaultLib !== hasNoDefaultLib
                 || node.libReferenceDirectives !== libReferenceDirectives
-            ? update(cloneSourceFileWithChanges(node, statements, isDeclarationFile, referencedFiles, typeReferenceDirectives, hasNoDefaultLib, libReferenceDirectives), node)
+            ? update(
+                cloneSourceFileWithChanges(node, statements, isDeclarationFile, referencedFiles, typeReferenceDirectives, hasNoDefaultLib, libReferenceDirectives),
+                node,
+            )
             : node;
     }
 
@@ -6633,7 +6707,11 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
     }
 
     function createImmediatelyInvokedArrowFunction(statements: readonly Statement[]): ImmediatelyInvokedArrowFunction;
-    function createImmediatelyInvokedArrowFunction(statements: readonly Statement[], param: ParameterDeclaration, paramValue: Expression): ImmediatelyInvokedArrowFunction;
+    function createImmediatelyInvokedArrowFunction(
+        statements: readonly Statement[],
+        param: ParameterDeclaration,
+        paramValue: Expression,
+    ): ImmediatelyInvokedArrowFunction;
     function createImmediatelyInvokedArrowFunction(statements: readonly Statement[], param?: ParameterDeclaration, paramValue?: Expression) {
         return createCallExpression(
             createArrowFunction(
@@ -6861,7 +6939,12 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
         }
     }
 
-    function createCallBinding(expression: Expression, recordTempVariable: (temp: Identifier) => void, languageVersion?: ScriptTarget, cacheIdentifiers = false): CallBinding {
+    function createCallBinding(
+        expression: Expression,
+        recordTempVariable: (temp: Identifier) => void,
+        languageVersion?: ScriptTarget,
+        cacheIdentifiers = false,
+    ): CallBinding {
         const callee = skipOuterExpressions(expression, OuterExpressionKinds.All);
         let thisArg: Expression;
         let target: LeftHandSideExpression;
@@ -7307,7 +7390,8 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
             isParameter(node) ? updateParameterDeclaration(node, modifierArray, node.dotDotDotToken, node.name, node.questionToken, node.type, node.initializer) :
             isConstructorTypeNode(node) ? updateConstructorTypeNode1(node, modifierArray, node.typeParameters, node.parameters, node.type) :
             isPropertySignature(node) ? updatePropertySignature(node, modifierArray, node.name, node.questionToken, node.type) :
-            isPropertyDeclaration(node) ? updatePropertyDeclaration(node, modifierArray, node.name, node.questionToken ?? node.exclamationToken, node.type, node.initializer) :
+            isPropertyDeclaration(node) ?
+            updatePropertyDeclaration(node, modifierArray, node.name, node.questionToken ?? node.exclamationToken, node.type, node.initializer) :
             isMethodSignature(node) ? updateMethodSignature(node, modifierArray, node.name, node.questionToken, node.typeParameters, node.parameters, node.type) :
             isMethodDeclaration(node) ?
             updateMethodDeclaration(node, modifierArray, node.asteriskToken, node.name, node.questionToken, node.typeParameters, node.parameters, node.type, node.body) :
@@ -7315,7 +7399,8 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
             isGetAccessorDeclaration(node) ? updateGetAccessorDeclaration(node, modifierArray, node.name, node.parameters, node.type, node.body) :
             isSetAccessorDeclaration(node) ? updateSetAccessorDeclaration(node, modifierArray, node.name, node.parameters, node.body) :
             isIndexSignatureDeclaration(node) ? updateIndexSignature(node, modifierArray, node.parameters, node.type) :
-            isFunctionExpression(node) ? updateFunctionExpression(node, modifierArray, node.asteriskToken, node.name, node.typeParameters, node.parameters, node.type, node.body) :
+            isFunctionExpression(node) ?
+            updateFunctionExpression(node, modifierArray, node.asteriskToken, node.name, node.typeParameters, node.parameters, node.type, node.body) :
             isArrowFunction(node) ? updateArrowFunction(node, modifierArray, node.typeParameters, node.parameters, node.type, node.equalsGreaterThanToken, node.body) :
             isClassExpression(node) ? updateClassExpression(node, modifierArray, node.name, node.typeParameters, node.heritageClauses, node.members) :
             isVariableStatement(node) ? updateVariableStatement(node, modifierArray, node.declarationList) :
@@ -7336,7 +7421,8 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
     function replaceDecoratorsAndModifiers<T extends HasModifiers & HasDecorators>(node: T, modifiers: readonly ModifierLike[]): T;
     function replaceDecoratorsAndModifiers(node: HasModifiers & HasDecorators, modifierArray: readonly ModifierLike[]) {
         return isParameter(node) ? updateParameterDeclaration(node, modifierArray, node.dotDotDotToken, node.name, node.questionToken, node.type, node.initializer) :
-            isPropertyDeclaration(node) ? updatePropertyDeclaration(node, modifierArray, node.name, node.questionToken ?? node.exclamationToken, node.type, node.initializer) :
+            isPropertyDeclaration(node) ?
+            updatePropertyDeclaration(node, modifierArray, node.name, node.questionToken ?? node.exclamationToken, node.type, node.initializer) :
             isMethodDeclaration(node) ?
             updateMethodDeclaration(node, modifierArray, node.asteriskToken, node.name, node.questionToken, node.typeParameters, node.parameters, node.type, node.body) :
             isGetAccessorDeclaration(node) ? updateGetAccessorDeclaration(node, modifierArray, node.name, node.parameters, node.type, node.body) :
@@ -7360,7 +7446,17 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
             case SyntaxKind.SetAccessor:
                 return updateSetAccessorDeclaration(node, node.modifiers, name, node.parameters, node.body);
             case SyntaxKind.MethodDeclaration:
-                return updateMethodDeclaration(node, node.modifiers, node.asteriskToken, name, node.questionToken, node.typeParameters, node.parameters, node.type, node.body);
+                return updateMethodDeclaration(
+                    node,
+                    node.modifiers,
+                    node.asteriskToken,
+                    name,
+                    node.questionToken,
+                    node.typeParameters,
+                    node.parameters,
+                    node.type,
+                    node.body,
+                );
             case SyntaxKind.MethodSignature:
                 return updateMethodSignature(node, node.modifiers, name, node.questionToken, node.typeParameters, node.parameters, node.type);
             case SyntaxKind.PropertyDeclaration:

@@ -809,7 +809,9 @@ foo();`,
                 endOffset: 1,
             },
         });
-        session.logger.log(`Default project for file: ${fooDts}: ${session.getProjectService().tryGetDefaultProjectForFile(ts.server.toNormalizedPath(fooDts))?.projectName}`);
+        session.logger.log(
+            `Default project for file: ${fooDts}: ${session.getProjectService().tryGetDefaultProjectForFile(ts.server.toNormalizedPath(fooDts))?.projectName}`,
+        );
         baselineTsserverLogs("configuredProjects", "when default configured project does not contain the file", session);
     });
 

@@ -125,7 +125,13 @@ describe("unittests:: tsserver:: completionsIncomplete", () => {
     it("works with PackageJsonAutoImportProvider", () => {
         const exportingFiles = createExportingModuleFiles(`/lib/a`, ts.Completions.moduleSpecifierResolutionLimit, 1, i => `aa_${i}_`);
         const nodeModulesPackage = createNodeModulesPackage("dep-a", 50, 1, i => `depA_${i}_`);
-        const { typeToTriggerCompletions, assertCompletionDetailsOk, session } = setup([tsconfigFile, packageJsonFile, indexFile, ...exportingFiles, ...nodeModulesPackage]);
+        const { typeToTriggerCompletions, assertCompletionDetailsOk, session } = setup([
+            tsconfigFile,
+            packageJsonFile,
+            indexFile,
+            ...exportingFiles,
+            ...nodeModulesPackage,
+        ]);
         openFilesForSession([indexFile], session);
 
         typeToTriggerCompletions(indexFile.path, "a", completions => assert(completions.isIncomplete))

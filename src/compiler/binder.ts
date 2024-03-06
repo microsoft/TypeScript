@@ -865,7 +865,9 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
                         symbol.flags & (SymbolFlags.Alias | SymbolFlags.Type | SymbolFlags.Namespace)
                     ) {
                         // export type T; - may have meant export type { T }?
-                        relatedInformation.push(createDiagnosticForNode(node, Diagnostics.Did_you_mean_0, `export type { ${unescapeLeadingUnderscores(node.name.escapedText)} }`));
+                        relatedInformation.push(
+                            createDiagnosticForNode(node, Diagnostics.Did_you_mean_0, `export type { ${unescapeLeadingUnderscores(node.name.escapedText)} }`),
+                        );
                     }
 
                     const declarationName = getNameOfDeclaration(node) || node;
@@ -874,7 +876,10 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
                         const diag = messageNeedsName ? createDiagnosticForNode(decl, message, getDisplayName(declaration)) : createDiagnosticForNode(decl, message);
                         file.bindDiagnostics.push(
                             multipleDefaultExports ?
-                                addRelatedInfo(diag, createDiagnosticForNode(declarationName, index === 0 ? Diagnostics.Another_export_default_is_here : Diagnostics.and_here))
+                                addRelatedInfo(
+                                    diag,
+                                    createDiagnosticForNode(declarationName, index === 0 ? Diagnostics.Another_export_default_is_here : Diagnostics.and_here),
+                                )
                                 : diag,
                         );
                         if (multipleDefaultExports) {
@@ -882,7 +887,8 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
                         }
                     });
 
-                    const diag = messageNeedsName ? createDiagnosticForNode(declarationName, message, getDisplayName(node)) : createDiagnosticForNode(declarationName, message);
+                    const diag = messageNeedsName ? createDiagnosticForNode(declarationName, message, getDisplayName(node))
+                        : createDiagnosticForNode(declarationName, message);
                     file.bindDiagnostics.push(addRelatedInfo(diag, ...relatedInformation));
 
                     symbol = createSymbol(SymbolFlags.None, name);
@@ -3273,7 +3279,14 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
                     bindDynamicallyNamedThisPropertyAssignment(node, containingClass.symbol, symbolTable);
                 }
                 else {
-                    declareSymbol(symbolTable, containingClass.symbol, node, SymbolFlags.Property | SymbolFlags.Assignment, SymbolFlags.None, /*isReplaceableByMethod*/ true);
+                    declareSymbol(
+                        symbolTable,
+                        containingClass.symbol,
+                        node,
+                        SymbolFlags.Property | SymbolFlags.Assignment,
+                        SymbolFlags.None,
+                        /*isReplaceableByMethod*/ true,
+                    );
                 }
                 break;
             case SyntaxKind.SourceFile:
@@ -3498,7 +3511,12 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
             : propertyAccess.parent.parent.kind === SyntaxKind.SourceFile;
     }
 
-    function bindPropertyAssignment(name: BindableStaticNameExpression, propertyAccess: BindableStaticAccessExpression, isPrototypeProperty: boolean, containerIsClass: boolean) {
+    function bindPropertyAssignment(
+        name: BindableStaticNameExpression,
+        propertyAccess: BindableStaticAccessExpression,
+        isPrototypeProperty: boolean,
+        containerIsClass: boolean,
+    ) {
         let namespaceSymbol = lookupSymbolForPropertyAccess(name, blockScopeContainer) || lookupSymbolForPropertyAccess(name, container);
         const isToplevel = isTopLevelNamespaceAssignment(propertyAccess);
         namespaceSymbol = bindPotentiallyMissingNamespaces(namespaceSymbol, propertyAccess.expression, isToplevel, isPrototypeProperty, containerIsClass);
@@ -3532,7 +3550,8 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
         if (init) {
             const isPrototypeAssignment = isPrototypeAccess(isVariableDeclaration(node!) ? node.name : isBinaryExpression(node!) ? node.left : node!);
             return !!getExpandoInitializer(
-                isBinaryExpression(init) && (init.operatorToken.kind === SyntaxKind.BarBarToken || init.operatorToken.kind === SyntaxKind.QuestionQuestionToken) ? init.right
+                isBinaryExpression(init) && (init.operatorToken.kind === SyntaxKind.BarBarToken || init.operatorToken.kind === SyntaxKind.QuestionQuestionToken) ?
+                    init.right
                     : init,
                 isPrototypeAssignment,
             );

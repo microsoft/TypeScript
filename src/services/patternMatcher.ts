@@ -297,7 +297,13 @@ function compareMatches(a: PatternMatch | undefined, b: PatternMatch | undefined
         : compareValues(a.kind, b.kind) || compareBooleans(!a.isCaseSensitive, !b.isCaseSensitive);
 }
 
-function partStartsWith(candidate: string, candidateSpan: TextSpan, pattern: string, ignoreCase: boolean, patternSpan: TextSpan = { start: 0, length: pattern.length }): boolean {
+function partStartsWith(
+    candidate: string,
+    candidateSpan: TextSpan,
+    pattern: string,
+    ignoreCase: boolean,
+    patternSpan: TextSpan = { start: 0, length: pattern.length },
+): boolean {
     return patternSpan.length <= candidateSpan.length // If pattern part is longer than the candidate part there can never be a match.
         && everyInRange(0, patternSpan.length, i => equalChars(pattern.charCodeAt(patternSpan.start + i), candidate.charCodeAt(candidateSpan.start + i), ignoreCase));
 }

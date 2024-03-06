@@ -264,7 +264,13 @@ describe("unittests:: TransformAPI", () => {
                 const result = ts.factory.updateSourceFile(
                     sourceFile,
                     ts.factory.createNodeArray([
-                        ts.factory.createClassDeclaration(/*modifiers*/ undefined, "Foo", /*typeParameters*/ undefined, /*heritageClauses*/ undefined, /*members*/ undefined!), // TODO: GH#18217
+                        ts.factory.createClassDeclaration(
+                            /*modifiers*/ undefined,
+                            "Foo",
+                            /*typeParameters*/ undefined,
+                            /*heritageClauses*/ undefined,
+                            /*members*/ undefined!,
+                        ), // TODO: GH#18217
                         ts.factory.createModuleDeclaration(
                             /*modifiers*/ undefined,
                             ts.factory.createIdentifier("Foo"),
@@ -609,7 +615,13 @@ module MyModule {
             };
             function rootTransform<T extends ts.Node>(node: T): ts.Node {
                 if (ts.isVariableDeclaration(node)) {
-                    return ts.factory.updateVariableDeclaration(node, ts.factory.createIdentifier("newName"), /*exclamationToken*/ undefined, /*type*/ undefined, node.initializer);
+                    return ts.factory.updateVariableDeclaration(
+                        node,
+                        ts.factory.createIdentifier("newName"),
+                        /*exclamationToken*/ undefined,
+                        /*type*/ undefined,
+                        node.initializer,
+                    );
                 }
                 return ts.visitEachChild(node, rootTransform, context);
             }
@@ -694,7 +706,13 @@ module MyModule {
                         ts.factory.createStringLiteral("x"),
                     ),
                 ];
-                ts.setSyntheticLeadingComments(newMembers[0], [{ kind: ts.SyntaxKind.MultiLineCommentTrivia, text: "comment", pos: -1, end: -1, hasTrailingNewLine: true }]);
+                ts.setSyntheticLeadingComments(newMembers[0], [{
+                    kind: ts.SyntaxKind.MultiLineCommentTrivia,
+                    text: "comment",
+                    pos: -1,
+                    end: -1,
+                    hasTrailingNewLine: true,
+                }]);
                 return ts.isClassDeclaration(node) ?
                     ts.factory.updateClassDeclaration(
                         node,

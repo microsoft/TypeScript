@@ -211,7 +211,10 @@ export namespace DocumentHighlights {
                 node.parent,
                 nodeTest,
                 decl =>
-                    mapDefined(tryCast(decl, canHaveSymbol)?.symbol.declarations, d => nodeTest(d) ? find(d.getChildren(sourceFile), c => contains(keywords, c.kind)) : undefined),
+                    mapDefined(
+                        tryCast(decl, canHaveSymbol)?.symbol.declarations,
+                        d => nodeTest(d) ? find(d.getChildren(sourceFile), c => contains(keywords, c.kind)) : undefined,
+                    ),
             );
         }
 
@@ -558,7 +561,10 @@ export namespace DocumentHighlights {
     // Do not cross function/class/interface/module/type boundaries.
     function traverseWithoutCrossingFunction(node: Node, cb: (node: Node) => void) {
         cb(node);
-        if (!isFunctionLike(node) && !isClassLike(node) && !isInterfaceDeclaration(node) && !isModuleDeclaration(node) && !isTypeAliasDeclaration(node) && !isTypeNode(node)) {
+        if (
+            !isFunctionLike(node) && !isClassLike(node) && !isInterfaceDeclaration(node) && !isModuleDeclaration(node) && !isTypeAliasDeclaration(node) &&
+            !isTypeNode(node)
+        ) {
             forEachChild(node, child => traverseWithoutCrossingFunction(child, cb));
         }
     }

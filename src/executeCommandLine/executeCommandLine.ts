@@ -488,7 +488,9 @@ function generateSectionOptionsOutput(
 
 function printEasyHelp(sys: System, simpleOptions: readonly CommandLineOption[]) {
     const colors = createColors(sys);
-    let output: string[] = [...getHeader(sys, `${getDiagnosticText(Diagnostics.tsc_Colon_The_TypeScript_Compiler)} - ${getDiagnosticText(Diagnostics.Version_0, version)}`)];
+    let output: string[] = [
+        ...getHeader(sys, `${getDiagnosticText(Diagnostics.tsc_Colon_The_TypeScript_Compiler)} - ${getDiagnosticText(Diagnostics.Version_0, version)}`),
+    ];
     output.push(colors.bold(getDiagnosticText(Diagnostics.COMMON_COMMANDS)) + sys.newLine + sys.newLine);
 
     example("tsc", Diagnostics.Compiles_the_current_project_tsconfig_json_in_the_working_directory);
@@ -535,8 +537,15 @@ function printEasyHelp(sys: System, simpleOptions: readonly CommandLineOption[])
     }
 }
 
-function printAllHelp(sys: System, compilerOptions: readonly CommandLineOption[], buildOptions: readonly CommandLineOption[], watchOptions: readonly CommandLineOption[]) {
-    let output: string[] = [...getHeader(sys, `${getDiagnosticText(Diagnostics.tsc_Colon_The_TypeScript_Compiler)} - ${getDiagnosticText(Diagnostics.Version_0, version)}`)];
+function printAllHelp(
+    sys: System,
+    compilerOptions: readonly CommandLineOption[],
+    buildOptions: readonly CommandLineOption[],
+    watchOptions: readonly CommandLineOption[],
+) {
+    let output: string[] = [
+        ...getHeader(sys, `${getDiagnosticText(Diagnostics.tsc_Colon_The_TypeScript_Compiler)} - ${getDiagnosticText(Diagnostics.Version_0, version)}`),
+    ];
     output = [
         ...output,
         ...generateSectionOptionsOutput(
@@ -578,7 +587,9 @@ function printAllHelp(sys: System, compilerOptions: readonly CommandLineOption[]
 }
 
 function printBuildHelp(sys: System, buildOptions: readonly CommandLineOption[]) {
-    let output: string[] = [...getHeader(sys, `${getDiagnosticText(Diagnostics.tsc_Colon_The_TypeScript_Compiler)} - ${getDiagnosticText(Diagnostics.Version_0, version)}`)];
+    let output: string[] = [
+        ...getHeader(sys, `${getDiagnosticText(Diagnostics.tsc_Colon_The_TypeScript_Compiler)} - ${getDiagnosticText(Diagnostics.Version_0, version)}`),
+    ];
     output = [
         ...output,
         ...generateSectionOptionsOutput(
@@ -703,7 +714,9 @@ function executeCommandLineWorker(
 
     if (commandLine.fileNames.length === 0 && !configFileName) {
         if (commandLine.options.showConfig) {
-            reportDiagnostic(createCompilerDiagnostic(Diagnostics.Cannot_find_a_tsconfig_json_file_at_the_current_directory_Colon_0, normalizePath(sys.getCurrentDirectory())));
+            reportDiagnostic(
+                createCompilerDiagnostic(Diagnostics.Cannot_find_a_tsconfig_json_file_at_the_current_directory_Colon_0, normalizePath(sys.getCurrentDirectory())),
+            );
         }
         else {
             printVersion(sys);

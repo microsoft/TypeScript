@@ -107,7 +107,12 @@ export function injectClassThisAssignmentIfMissing<T extends ClassLikeDeclaratio
     classThis: Identifier,
     thisExpression?: ThisExpression,
 ): Extract<ClassLikeDeclaration, Pick<T, "kind">>;
-export function injectClassThisAssignmentIfMissing<T extends ClassLikeDeclaration>(factory: NodeFactory, node: T, classThis: Identifier, thisExpression?: ThisExpression) {
+export function injectClassThisAssignmentIfMissing<T extends ClassLikeDeclaration>(
+    factory: NodeFactory,
+    node: T,
+    classThis: Identifier,
+    thisExpression?: ThisExpression,
+) {
     // given:
     //
     //  class C {

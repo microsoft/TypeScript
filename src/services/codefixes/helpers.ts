@@ -939,7 +939,10 @@ export function setJsonCompilerOptionValues(
             tsconfigObjectLiteral,
             createJsonPropertyAssignment(
                 "compilerOptions",
-                factory.createObjectLiteralExpression(options.map(([optionName, optionValue]) => createJsonPropertyAssignment(optionName, optionValue)), /*multiLine*/ true),
+                factory.createObjectLiteralExpression(
+                    options.map(([optionName, optionValue]) => createJsonPropertyAssignment(optionName, optionValue)),
+                    /*multiLine*/ true,
+                ),
             ),
         );
         return;

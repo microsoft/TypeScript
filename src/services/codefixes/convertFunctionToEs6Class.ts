@@ -223,7 +223,9 @@ function doChange(
             changes.delete(sourceFile, nodeToDelete);
 
             if (!assignmentExpr) {
-                members.push(factory.createPropertyDeclaration(modifiers, symbol.name, /*questionOrExclamationToken*/ undefined, /*type*/ undefined, /*initializer*/ undefined));
+                members.push(
+                    factory.createPropertyDeclaration(modifiers, symbol.name, /*questionOrExclamationToken*/ undefined, /*type*/ undefined, /*initializer*/ undefined),
+                );
                 return;
             }
 
@@ -259,7 +261,13 @@ function doChange(
                 // Don't try to declare members in JavaScript files
                 if (isSourceFileJS(sourceFile)) return;
                 if (!isPropertyAccessExpression(memberDeclaration)) return;
-                const prop = factory.createPropertyDeclaration(modifiers, memberDeclaration.name, /*questionOrExclamationToken*/ undefined, /*type*/ undefined, assignmentExpr);
+                const prop = factory.createPropertyDeclaration(
+                    modifiers,
+                    memberDeclaration.name,
+                    /*questionOrExclamationToken*/ undefined,
+                    /*type*/ undefined,
+                    assignmentExpr,
+                );
                 copyLeadingComments(assignmentBinaryExpression.parent, prop, sourceFile);
                 members.push(prop);
                 return;

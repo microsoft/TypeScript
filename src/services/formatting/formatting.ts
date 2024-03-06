@@ -796,7 +796,15 @@ function formatSpanWorker(
         forEachChild(
             node,
             child => {
-                processChildNode(child, /*inheritedIndentation*/ Constants.Unknown, node, nodeDynamicIndentation, nodeStartLine, undecoratedNodeStartLine, /*isListItem*/ false);
+                processChildNode(
+                    child,
+                    /*inheritedIndentation*/ Constants.Unknown,
+                    node,
+                    nodeDynamicIndentation,
+                    nodeStartLine,
+                    undecoratedNodeStartLine,
+                    /*isListItem*/ false,
+                );
             },
             nodes => {
                 processChildNodes(nodes, node, nodeStartLine, nodeDynamicIndentation);
@@ -992,7 +1000,13 @@ function formatSpanWorker(
             }
         }
 
-        function consumeTokenAndAdvanceScanner(currentTokenInfo: TokenInfo, parent: Node, dynamicIndentation: DynamicIndentation, container: Node, isListEndToken?: boolean): void {
+        function consumeTokenAndAdvanceScanner(
+            currentTokenInfo: TokenInfo,
+            parent: Node,
+            dynamicIndentation: DynamicIndentation,
+            container: Node,
+            isListEndToken?: boolean,
+        ): void {
             Debug.assert(rangeContainsRange(parent, currentTokenInfo.token));
 
             const lastTriviaWasNewLine = formattingScanner.lastTrailingTriviaWasNewLine();
@@ -1272,7 +1286,10 @@ function formatSpanWorker(
             const lineEndPosition = getEndLinePosition(line, sourceFile);
 
             // do not trim whitespaces in comments or template expression
-            if (range && (isComment(range.kind) || isStringOrRegularExpressionOrTemplateLiteral(range.kind)) && range.pos <= lineEndPosition && range.end > lineEndPosition) {
+            if (
+                range && (isComment(range.kind) || isStringOrRegularExpressionOrTemplateLiteral(range.kind)) && range.pos <= lineEndPosition &&
+                range.end > lineEndPosition
+            ) {
                 continue;
             }
 
@@ -1345,7 +1362,13 @@ function formatSpanWorker(
         }
     }
 
-    function applyRuleEdits(rule: Rule, previousRange: TextRangeWithKind, previousStartLine: number, currentRange: TextRangeWithKind, currentStartLine: number): LineAction {
+    function applyRuleEdits(
+        rule: Rule,
+        previousRange: TextRangeWithKind,
+        previousStartLine: number,
+        currentRange: TextRangeWithKind,
+        currentStartLine: number,
+    ): LineAction {
         const onLaterLine = currentStartLine !== previousStartLine;
         switch (rule.action) {
             case RuleAction.StopProcessingSpaceActions:

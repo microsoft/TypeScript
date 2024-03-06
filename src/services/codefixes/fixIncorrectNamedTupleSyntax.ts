@@ -28,7 +28,15 @@ registerCodeFix({
         const { sourceFile, span } = context;
         const namedTupleMember = getNamedTupleMember(sourceFile, span.start);
         const changes = textChanges.ChangeTracker.with(context, t => doChange(t, sourceFile, namedTupleMember));
-        return [createCodeFixAction(fixId, changes, Diagnostics.Move_labeled_tuple_element_modifiers_to_labels, fixId, Diagnostics.Move_labeled_tuple_element_modifiers_to_labels)];
+        return [
+            createCodeFixAction(
+                fixId,
+                changes,
+                Diagnostics.Move_labeled_tuple_element_modifiers_to_labels,
+                fixId,
+                Diagnostics.Move_labeled_tuple_element_modifiers_to_labels,
+            ),
+        ];
     },
     fixIds: [fixId],
 });

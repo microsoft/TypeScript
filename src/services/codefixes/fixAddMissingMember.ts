@@ -182,7 +182,13 @@ registerCodeFix({
         if (info.kind === InfoKind.Enum) {
             const changes = textChanges.ChangeTracker.with(context, t => addEnumMemberDeclaration(t, context.program.getTypeChecker(), info));
             return [
-                createCodeFixAction(fixMissingMember, changes, [Diagnostics.Add_missing_enum_member_0, info.token.text], fixMissingMember, Diagnostics.Add_all_missing_members),
+                createCodeFixAction(
+                    fixMissingMember,
+                    changes,
+                    [Diagnostics.Add_missing_enum_member_0, info.token.text],
+                    fixMissingMember,
+                    Diagnostics.Add_all_missing_members,
+                ),
             ];
         }
         return concatenate(getActionsForMissingMethodDeclaration(context, info), getActionsForMissingMemberDeclaration(context, info));
@@ -354,7 +360,12 @@ function getInfo(sourceFile: SourceFile, tokenPos: number, errorCode: number, ch
     if (isIdentifier(token) && hasInitializer(parent) && parent.initializer && isObjectLiteralExpression(parent.initializer)) {
         const targetType = checker.getContextualType(token) || checker.getTypeAtLocation(token);
         const properties = arrayFrom(
-            checker.getUnmatchedProperties(checker.getTypeAtLocation(parent.initializer), targetType, /*requireOptionalProperties*/ false, /*matchDiscriminantProperties*/ false),
+            checker.getUnmatchedProperties(
+                checker.getTypeAtLocation(parent.initializer),
+                targetType,
+                /*requireOptionalProperties*/ false,
+                /*matchDiscriminantProperties*/ false,
+            ),
         );
         if (!length(properties)) return undefined;
 
@@ -397,7 +408,14 @@ function getInfo(sourceFile: SourceFile, tokenPos: number, errorCode: number, ch
         if (sourceFile.commonJsModuleIndicator) return undefined;
 
         if (moduleSourceFile && !isSourceFileFromLibrary(program, moduleSourceFile)) {
-            return { kind: InfoKind.Function, token, call: parent.parent, sourceFile: moduleSourceFile, modifierFlags: ModifierFlags.Export, parentDeclaration: moduleSourceFile };
+            return {
+                kind: InfoKind.Function,
+                token,
+                call: parent.parent,
+                sourceFile: moduleSourceFile,
+                modifierFlags: ModifierFlags.Export,
+                parentDeclaration: moduleSourceFile,
+            };
         }
     }
 
@@ -406,9 +424,11 @@ function getInfo(sourceFile: SourceFile, tokenPos: number, errorCode: number, ch
     if (!classDeclaration && isPrivateIdentifier(token)) return undefined;
 
     // Prefer to change the class instead of the interface if they are merged
-    const declaration = classDeclaration || find(symbol.declarations, d => isInterfaceDeclaration(d) || isTypeLiteralNode(d)) as InterfaceDeclaration | TypeLiteralNode | undefined;
+    const declaration = classDeclaration ||
+        find(symbol.declarations, d => isInterfaceDeclaration(d) || isTypeLiteralNode(d)) as InterfaceDeclaration | TypeLiteralNode | undefined;
     if (declaration && !isSourceFileFromLibrary(program, declaration.getSourceFile())) {
-        const makeStatic = !isTypeLiteralNode(declaration) && ((leftExpressionType as TypeReference).target || leftExpressionType) !== checker.getDeclaredTypeOfSymbol(symbol);
+        const makeStatic = !isTypeLiteralNode(declaration) &&
+            ((leftExpressionType as TypeReference).target || leftExpressionType) !== checker.getDeclaredTypeOfSymbol(symbol);
         if (makeStatic && (isPrivateIdentifier(token) || isInterfaceDeclaration(declaration))) return undefined;
 
         const declSourceFile = declaration.getSourceFile();
@@ -420,7 +440,10 @@ function getInfo(sourceFile: SourceFile, tokenPos: number, errorCode: number, ch
     }
 
     const enumDeclaration = find(symbol.declarations, isEnumDeclaration);
-    if (enumDeclaration && !(leftExpressionType.flags & TypeFlags.EnumLike) && !isPrivateIdentifier(token) && !isSourceFileFromLibrary(program, enumDeclaration.getSourceFile())) {
+    if (
+        enumDeclaration && !(leftExpressionType.flags & TypeFlags.EnumLike) && !isPrivateIdentifier(token) &&
+        !isSourceFileFromLibrary(program, enumDeclaration.getSourceFile())
+    ) {
         return { kind: InfoKind.Enum, token, parentDeclaration: enumDeclaration };
     }
 
@@ -440,7 +463,10 @@ function createActionForAddMissingMemberInJavascriptFile(
         return undefined;
     }
 
-    const changes = textChanges.ChangeTracker.with(context, t => addMissingMemberInJs(t, declSourceFile, parentDeclaration, token, !!(modifierFlags & ModifierFlags.Static)));
+    const changes = textChanges.ChangeTracker.with(
+        context,
+        t => addMissingMemberInJs(t, declSourceFile, parentDeclaration, token, !!(modifierFlags & ModifierFlags.Static)),
+    );
     if (changes.length === 0) {
         return undefined;
     }
@@ -523,7 +549,10 @@ function createActionsForAddMissingMemberInTypeScriptFile(
 
     if (modifierFlags & ModifierFlags.Private) {
         actions.unshift(
-            createCodeFixActionWithoutFixAll(fixMissingMember, addPropertyDeclarationChanges(ModifierFlags.Private), [Diagnostics.Declare_private_property_0, memberName]),
+            createCodeFixActionWithoutFixAll(fixMissingMember, addPropertyDeclarationChanges(ModifierFlags.Private), [
+                Diagnostics.Declare_private_property_0,
+                memberName,
+            ]),
         );
     }
 
@@ -626,7 +655,9 @@ function getActionsForMissingMethodDeclaration(context: CodeFixContext, info: Ty
         ),
     ];
     if (modifierFlags & ModifierFlags.Private) {
-        actions.unshift(createCodeFixActionWithoutFixAll(fixMissingMember, addMethodDeclarationChanges(ModifierFlags.Private), [Diagnostics.Declare_private_method_0, methodName]));
+        actions.unshift(
+            createCodeFixActionWithoutFixAll(fixMissingMember, addMethodDeclarationChanges(ModifierFlags.Private), [Diagnostics.Declare_private_method_0, methodName]),
+        );
     }
     return actions;
 }
@@ -791,7 +822,8 @@ function tryGetValueFromType(
             /*enclosingDeclaration*/ undefined,
             /*flags*/ NodeBuilderFlags.UseFullyQualifiedType,
         );
-        return enumMember === undefined || name === undefined ? factory.createNumericLiteral(0) : factory.createPropertyAccessExpression(name, checker.symbolToString(enumMember));
+        return enumMember === undefined || name === undefined ? factory.createNumericLiteral(0)
+            : factory.createPropertyAccessExpression(name, checker.symbolToString(enumMember));
     }
     if (type.flags & TypeFlags.NumberLiteral) {
         return factory.createNumericLiteral((type as NumberLiteralType).value);

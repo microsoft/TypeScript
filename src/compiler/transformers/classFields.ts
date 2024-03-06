@@ -825,7 +825,9 @@ export function transformClassFields(context: TransformationContext): (x: Source
         return fallbackVisitor(node);
     }
 
-    function shouldTransformClassElementToWeakMap(node: PrivateIdentifierMethodDeclaration | PrivateIdentifierAccessorDeclaration | PrivateIdentifierPropertyDeclaration) {
+    function shouldTransformClassElementToWeakMap(
+        node: PrivateIdentifierMethodDeclaration | PrivateIdentifierAccessorDeclaration | PrivateIdentifierPropertyDeclaration,
+    ) {
         if (shouldTransformPrivateElementsOrClassStaticBlocks) return true;
         if (hasStaticModifier(node) && getInternalEmitFlags(node) & InternalEmitFlags.TransformPrivateStaticElements) return true;
         return false;
@@ -986,7 +988,10 @@ export function transformClassFields(context: TransformationContext): (x: Source
             return undefined;
         }
 
-        if (shouldTransformInitializersUsingSet && !isStatic(node) && lexicalEnvironment?.data && lexicalEnvironment.data.facts & ClassFacts.WillHoistInitializersToConstructor) {
+        if (
+            shouldTransformInitializersUsingSet && !isStatic(node) && lexicalEnvironment?.data &&
+            lexicalEnvironment.data.facts & ClassFacts.WillHoistInitializersToConstructor
+        ) {
             // If we are transforming initializers using Set semantics we will elide the initializer as it will
             // be moved to the constructor to preserve evaluation order next to public instance fields. We don't
             // need to do this transformation for private static fields since public static fields can be
@@ -2019,7 +2024,8 @@ export function transformClassFields(context: TransformationContext): (x: Source
 
         // Static initializers are transformed to `static {}` blocks when `useDefineForClassFields: false`
         // and not also transforming static blocks.
-        const hasTransformableStatics = (shouldTransformPrivateElementsOrClassStaticBlocks || getInternalEmitFlags(node) & InternalEmitFlags.TransformPrivateStaticElements) &&
+        const hasTransformableStatics =
+            (shouldTransformPrivateElementsOrClassStaticBlocks || getInternalEmitFlags(node) & InternalEmitFlags.TransformPrivateStaticElements) &&
             some(staticPropertiesOrClassStaticBlocks, node =>
                 isClassStaticBlockDeclaration(node) ||
                 isPrivateIdentifierClassElementDeclaration(node) ||
@@ -2035,7 +2041,11 @@ export function transformClassFields(context: TransformationContext): (x: Source
                 }
 
                 if (some(staticPropertiesOrClassStaticBlocks)) {
-                    addPropertyOrClassStaticBlockStatements(pendingStatements, staticPropertiesOrClassStaticBlocks, node.emitNode?.classThis ?? factory.getInternalName(node));
+                    addPropertyOrClassStaticBlockStatements(
+                        pendingStatements,
+                        staticPropertiesOrClassStaticBlocks,
+                        node.emitNode?.classThis ?? factory.getInternalName(node),
+                    );
                 }
 
                 if (temp) {
@@ -2975,7 +2985,11 @@ export function transformClassFields(context: TransformationContext): (x: Source
         addDeclaration(node, name, lex, privateEnv, isStatic, isValid, previousInfo);
     }
 
-    function createHoistedVariableForClass(name: string | PrivateIdentifier | undefined, node: PrivateIdentifier | ClassStaticBlockDeclaration, suffix?: string): Identifier {
+    function createHoistedVariableForClass(
+        name: string | PrivateIdentifier | undefined,
+        node: PrivateIdentifier | ClassStaticBlockDeclaration,
+        suffix?: string,
+    ): Identifier {
         const { className } = getPrivateIdentifierEnvironment().data;
         const prefix: GeneratedNamePart | string = className ? { prefix: "_", node: className, suffix: "_" } : "_";
         const identifier = typeof name === "object" ?
@@ -3210,7 +3224,8 @@ export function transformClassFields(context: TransformationContext): (x: Source
             const savedPreviousShouldSubstituteThisWithClassThis = previousShouldSubstituteThisWithClassThis;
             lexicalEnvironment = lex;
             previousShouldSubstituteThisWithClassThis = shouldSubstituteThisWithClassThis;
-            shouldSubstituteThisWithClassThis = !isClassStaticBlockDeclaration(original) || !(getInternalEmitFlags(original) & InternalEmitFlags.TransformPrivateStaticElements);
+            shouldSubstituteThisWithClassThis = !isClassStaticBlockDeclaration(original) ||
+                !(getInternalEmitFlags(original) & InternalEmitFlags.TransformPrivateStaticElements);
             previousOnEmitNode(hint, node, emitCallback);
             shouldSubstituteThisWithClassThis = previousShouldSubstituteThisWithClassThis;
             previousShouldSubstituteThisWithClassThis = savedPreviousShouldSubstituteThisWithClassThis;

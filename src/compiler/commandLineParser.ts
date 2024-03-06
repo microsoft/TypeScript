@@ -500,7 +500,8 @@ export const commonOptionsWithBuild: CommandLineOption[] = [
         affectsEmit: true,
         affectsBuildInfo: true,
         category: Diagnostics.Watch_and_Build_Modes,
-        description: Diagnostics.Have_recompiles_in_projects_that_use_incremental_and_watch_mode_assume_that_changes_within_a_file_will_only_affect_files_directly_depending_on_it,
+        description:
+            Diagnostics.Have_recompiles_in_projects_that_use_incremental_and_watch_mode_assume_that_changes_within_a_file_will_only_affect_files_directly_depending_on_it,
         defaultValueDescription: false,
     },
     {
@@ -702,7 +703,8 @@ const commandOptionsWithoutBuild: CommandLineOption[] = [
         paramType: Diagnostics.FILE,
         showInSimplifiedHelpView: true,
         category: Diagnostics.Emit,
-        description: Diagnostics.Specify_a_file_that_bundles_all_outputs_into_one_JavaScript_file_If_declaration_is_true_also_designates_a_file_that_bundles_all_d_ts_output,
+        description:
+            Diagnostics.Specify_a_file_that_bundles_all_outputs_into_one_JavaScript_file_If_declaration_is_true_also_designates_a_file_that_bundles_all_d_ts_output,
         transpileOptionValue: undefined,
     },
     {
@@ -818,8 +820,8 @@ const commandOptionsWithoutBuild: CommandLineOption[] = [
         affectsSemanticDiagnostics: true,
         affectsBuildInfo: true,
         category: Diagnostics.Interop_Constraints,
-        description:
-            Diagnostics.Do_not_transform_or_elide_any_imports_or_exports_not_marked_as_type_only_ensuring_they_are_written_in_the_output_file_s_format_based_on_the_module_setting,
+        description: Diagnostics
+            .Do_not_transform_or_elide_any_imports_or_exports_not_marked_as_type_only_ensuring_they_are_written_in_the_output_file_s_format_based_on_the_module_setting,
         defaultValueDescription: false,
     },
 
@@ -1093,7 +1095,8 @@ const commandOptionsWithoutBuild: CommandLineOption[] = [
         affectsBuildInfo: true,
         showInSimplifiedHelpView: true,
         category: Diagnostics.Interop_Constraints,
-        description: Diagnostics.Emit_additional_JavaScript_to_ease_support_for_importing_CommonJS_modules_This_enables_allowSyntheticDefaultImports_for_type_compatibility,
+        description:
+            Diagnostics.Emit_additional_JavaScript_to_ease_support_for_importing_CommonJS_modules_This_enables_allowSyntheticDefaultImports_for_type_compatibility,
         defaultValueDescription: false,
     },
     {
@@ -1559,7 +1562,8 @@ const commandOptionsWithoutBuild: CommandLineOption[] = [
         affectsModuleResolution: true,
         description: Diagnostics.Control_what_method_is_used_to_detect_module_format_JS_files,
         category: Diagnostics.Language_and_Environment,
-        defaultValueDescription: Diagnostics.auto_Colon_Treat_files_with_imports_exports_import_meta_jsx_with_jsx_Colon_react_jsx_or_esm_format_with_module_Colon_node16_as_modules,
+        defaultValueDescription:
+            Diagnostics.auto_Colon_Treat_files_with_imports_exports_import_meta_jsx_with_jsx_Colon_react_jsx_or_esm_format_with_module_Colon_node16_as_modules,
     },
     {
         name: "ignoreDeprecations",
@@ -1587,7 +1591,9 @@ export const affectsDeclarationPathOptionDeclarations: readonly CommandLineOptio
 export const moduleResolutionOptionDeclarations: readonly CommandLineOption[] = optionDeclarations.filter(option => !!option.affectsModuleResolution);
 
 /** @internal */
-export const sourceFileAffectingCompilerOptions: readonly CommandLineOption[] = optionDeclarations.filter(option => !!option.affectsSourceFile || !!option.affectsBindDiagnostics);
+export const sourceFileAffectingCompilerOptions: readonly CommandLineOption[] = optionDeclarations.filter(option =>
+    !!option.affectsSourceFile || !!option.affectsBindDiagnostics
+);
 
 /** @internal */
 export const optionsAffectingProgramStructure: readonly CommandLineOption[] = optionDeclarations.filter(option => !!option.affectsProgramStructure);
@@ -2516,7 +2522,10 @@ export function convertToTSConfig(configParseResult: ParsedCommandLine, configFi
             getCanonicalFileName,
         ),
     );
-    const pathOptions = { configFilePath: getNormalizedAbsolutePath(configFileName, host.getCurrentDirectory()), useCaseSensitiveFileNames: host.useCaseSensitiveFileNames };
+    const pathOptions = {
+        configFilePath: getNormalizedAbsolutePath(configFileName, host.getCurrentDirectory()),
+        useCaseSensitiveFileNames: host.useCaseSensitiveFileNames,
+    };
     const optionMap = serializeCompilerOptions(configParseResult.options, pathOptions);
     const watchOptionMap = configParseResult.watchOptions && serializeWatchOptions(configParseResult.watchOptions);
     const config: TSConfig & { watchOptions?: object; } = {
@@ -3108,7 +3117,11 @@ function parseJsonConfigFileContentWorker(
         return getPropFromRaw(prop, isString, "string");
     }
 
-    function getPropFromRaw<T>(prop: "files" | "include" | "exclude" | "references", validateElement: (value: unknown) => boolean, elementTypeName: string): PropOfRaw<T> {
+    function getPropFromRaw<T>(
+        prop: "files" | "include" | "exclude" | "references",
+        validateElement: (value: unknown) => boolean,
+        elementTypeName: string,
+    ): PropOfRaw<T> {
         if (hasProperty(raw, prop) && !isNullOrUndefined(raw[prop])) {
             if (isArray(raw[prop])) {
                 const result = raw[prop] as T[];
@@ -3432,13 +3445,24 @@ function parseOwnConfigOfJsonSourceFile(
                     ));
                 }
                 else {
-                    errors.push(createDiagnosticForNodeInSourceFile(sourceFile, propertyAssignment.name, parentOption.extraKeyDiagnostics.unknownOptionDiagnostic, keyText));
+                    errors.push(
+                        createDiagnosticForNodeInSourceFile(sourceFile, propertyAssignment.name, parentOption.extraKeyDiagnostics.unknownOptionDiagnostic, keyText),
+                    );
                 }
             }
         }
         else if (parentOption === rootOptions) {
             if (option === extendsOptionDeclaration) {
-                extendedConfigPath = getExtendsConfigPathOrArray(value, host, basePath, configFileName, errors, propertyAssignment, propertyAssignment.initializer, sourceFile);
+                extendedConfigPath = getExtendsConfigPathOrArray(
+                    value,
+                    host,
+                    basePath,
+                    configFileName,
+                    errors,
+                    propertyAssignment,
+                    propertyAssignment.initializer,
+                    sourceFile,
+                );
             }
             else if (!option) {
                 if (keyText === "excludes") {
@@ -3478,7 +3502,14 @@ function getExtendsConfigPath(
         return resolved.resolvedModule.resolvedFileName;
     }
     if (extendedConfig === "") {
-        errors.push(createDiagnosticForNodeInSourceFileOrCompilerDiagnostic(sourceFile, valueExpression, Diagnostics.Compiler_option_0_cannot_be_given_an_empty_string, "extends"));
+        errors.push(
+            createDiagnosticForNodeInSourceFileOrCompilerDiagnostic(
+                sourceFile,
+                valueExpression,
+                Diagnostics.Compiler_option_0_cannot_be_given_an_empty_string,
+                "extends",
+            ),
+        );
     }
     else {
         errors.push(createDiagnosticForNodeInSourceFileOrCompilerDiagnostic(sourceFile, valueExpression, Diagnostics.File_0_not_found, extendedConfig));
@@ -3653,7 +3684,12 @@ export function convertJsonOption(
 ): CompilerOptionsValue {
     if (opt.isCommandLineOnly) {
         errors.push(
-            createDiagnosticForNodeInSourceFileOrCompilerDiagnostic(sourceFile, propertyAssignment?.name, Diagnostics.Option_0_can_only_be_specified_on_command_line, opt.name),
+            createDiagnosticForNodeInSourceFileOrCompilerDiagnostic(
+                sourceFile,
+                propertyAssignment?.name,
+                Diagnostics.Option_0_can_only_be_specified_on_command_line,
+                opt.name,
+            ),
         );
         return undefined;
     }
@@ -3725,7 +3761,10 @@ function convertJsonOptionOfCustomType(
     }
     else {
         errors.push(
-            createDiagnosticForInvalidCustomType(opt, (message, ...args) => createDiagnosticForNodeInSourceFileOrCompilerDiagnostic(sourceFile, valueExpression, message, ...args)),
+            createDiagnosticForInvalidCustomType(
+                opt,
+                (message, ...args) => createDiagnosticForNodeInSourceFileOrCompilerDiagnostic(sourceFile, valueExpression, message, ...args),
+            ),
         );
     }
 }
@@ -3827,14 +3866,21 @@ export function getFileNamesFromConfigSpecs(
     let jsonOnlyIncludeRegexes: readonly RegExp[] | undefined;
     if (validatedIncludeSpecs && validatedIncludeSpecs.length > 0) {
         for (
-            const file of host.readDirectory(basePath, flatten(supportedExtensionsWithJsonIfResolveJsonModule), validatedExcludeSpecs, validatedIncludeSpecs, /*depth*/ undefined)
+            const file of host.readDirectory(
+                basePath,
+                flatten(supportedExtensionsWithJsonIfResolveJsonModule),
+                validatedExcludeSpecs,
+                validatedIncludeSpecs,
+                /*depth*/ undefined,
+            )
         ) {
             if (fileExtensionIs(file, Extension.Json)) {
                 // Valid only if *.json specified
                 if (!jsonOnlyIncludeRegexes) {
                     const includes = validatedIncludeSpecs.filter(s => endsWith(s, Extension.Json));
                     const includeFilePatterns = map(getRegularExpressionsForWildcards(includes, basePath, "files"), pattern => `^${pattern}$`);
-                    jsonOnlyIncludeRegexes = includeFilePatterns ? includeFilePatterns.map(pattern => getRegexFromPattern(pattern, host.useCaseSensitiveFileNames)) : emptyArray;
+                    jsonOnlyIncludeRegexes = includeFilePatterns ? includeFilePatterns.map(pattern => getRegexFromPattern(pattern, host.useCaseSensitiveFileNames))
+                        : emptyArray;
                 }
                 const includeIndex = findIndex(jsonOnlyIncludeRegexes, re => re.test(file));
                 if (includeIndex !== -1) {
@@ -4114,7 +4160,12 @@ function hasFileWithHigherPriorityExtension(
  *
  * @param file The path to the file.
  */
-function removeWildcardFilesWithLowerPriorityExtension(file: string, wildcardFiles: Map<string, string>, extensions: readonly string[][], keyMapper: (value: string) => string) {
+function removeWildcardFilesWithLowerPriorityExtension(
+    file: string,
+    wildcardFiles: Map<string, string>,
+    extensions: readonly string[][],
+    keyMapper: (value: string) => string,
+) {
     const extensionGroup = forEach(extensions, group => fileExtensionIsOneOf(file, group) ? group : undefined);
     if (!extensionGroup) {
         return;

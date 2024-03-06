@@ -63,7 +63,8 @@ describe("unittests:: tsc-watch:: libraryResolution", () => {
             edits: [
                 {
                     caption: "write redirect file dom",
-                    edit: sys => sys.ensureFileOrFolder({ path: "/home/src/projects/node_modules/@typescript/lib-dom/index.d.ts", content: "interface DOMInterface { }" }),
+                    edit: sys =>
+                        sys.ensureFileOrFolder({ path: "/home/src/projects/node_modules/@typescript/lib-dom/index.d.ts", content: "interface DOMInterface { }" }),
                     timeouts: sys => {
                         sys.runQueuedTimeoutCallbacks();
                         sys.runQueuedTimeoutCallbacks();
@@ -91,7 +92,10 @@ describe("unittests:: tsc-watch:: libraryResolution", () => {
                 {
                     caption: "write redirect file webworker",
                     edit: sys =>
-                        sys.ensureFileOrFolder({ path: "/home/src/projects/node_modules/@typescript/lib-webworker/index.d.ts", content: "interface WebworkerInterface { }" }),
+                        sys.ensureFileOrFolder({
+                            path: "/home/src/projects/node_modules/@typescript/lib-webworker/index.d.ts",
+                            content: "interface WebworkerInterface { }",
+                        }),
                     timeouts: sys => {
                         sys.runQueuedTimeoutCallbacks();
                         sys.runQueuedTimeoutCallbacks();
@@ -128,7 +132,8 @@ describe("unittests:: tsc-watch:: libraryResolution", () => {
                 },
                 {
                     caption: "write redirect file dom",
-                    edit: sys => sys.ensureFileOrFolder({ path: "/home/src/projects/node_modules/@typescript/lib-dom/index.d.ts", content: "interface DOMInterface { }" }),
+                    edit: sys =>
+                        sys.ensureFileOrFolder({ path: "/home/src/projects/node_modules/@typescript/lib-dom/index.d.ts", content: "interface DOMInterface { }" }),
                     timeouts: sys => {
                         sys.runQueuedTimeoutCallbacks();
                         sys.runQueuedTimeoutCallbacks();
@@ -143,7 +148,10 @@ describe("unittests:: tsc-watch:: libraryResolution", () => {
                 {
                     caption: "write redirect file webworker",
                     edit: sys =>
-                        sys.ensureFileOrFolder({ path: "/home/src/projects/node_modules/@typescript/lib-webworker/index.d.ts", content: "interface WebworkerInterface { }" }),
+                        sys.ensureFileOrFolder({
+                            path: "/home/src/projects/node_modules/@typescript/lib-webworker/index.d.ts",
+                            content: "interface WebworkerInterface { }",
+                        }),
                     timeouts: sys => {
                         sys.runQueuedTimeoutCallbacks();
                         sys.runQueuedTimeoutCallbacks();

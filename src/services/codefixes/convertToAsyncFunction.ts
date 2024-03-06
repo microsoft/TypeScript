@@ -95,7 +95,8 @@ registerCodeFix({
         return codeActionSucceeded ? [createCodeFixAction(fixId, changes, Diagnostics.Convert_to_async_function, fixId, Diagnostics.Convert_all_to_async_functions)] : [];
     },
     fixIds: [fixId],
-    getAllCodeActions: context => codeFixAll(context, errorCodes, (changes, err) => convertToAsyncFunction(changes, err.file, err.start, context.program.getTypeChecker())),
+    getAllCodeActions: context =>
+        codeFixAll(context, errorCodes, (changes, err) => convertToAsyncFunction(changes, err.file, err.start, context.program.getTypeChecker())),
 });
 
 const enum SynthBindingNameKind {
@@ -251,7 +252,11 @@ function isReferenceToType(type: Type, target: Type) {
         && (type as TypeReference).target === target;
 }
 
-function getExplicitPromisedTypeOfPromiseReturningCallExpression(node: PromiseReturningCallExpression<"then" | "catch" | "finally">, callback: Expression, checker: TypeChecker) {
+function getExplicitPromisedTypeOfPromiseReturningCallExpression(
+    node: PromiseReturningCallExpression<"then" | "catch" | "finally">,
+    callback: Expression,
+    checker: TypeChecker,
+) {
     if (node.expression.name.escapedText === "finally") {
         // for a `finally`, there's no type argument
         return undefined;
@@ -520,7 +525,13 @@ function transformFinally(
     const possibleNameForVarDecl = getPossibleNameForVarDecl(node, transformer, continuationArgName);
 
     // Transform the left-hand-side of `.finally` into an array of inlined statements. We pass `true` for hasContinuation as `node` is the outer continuation.
-    const inlinedLeftHandSide = transformExpression(/*returnContextNode*/ node, node.expression.expression, transformer, /*hasContinuation*/ true, possibleNameForVarDecl);
+    const inlinedLeftHandSide = transformExpression(
+        /*returnContextNode*/ node,
+        node.expression.expression,
+        transformer,
+        /*hasContinuation*/ true,
+        possibleNameForVarDecl,
+    );
     if (hasFailed()) return silentFail(); // shortcut out of more work
 
     // Transform the callback argument into an array of inlined statements. We pass whether we have an outer continuation here
@@ -554,7 +565,13 @@ function transformCatch(
     const possibleNameForVarDecl = getPossibleNameForVarDecl(node, transformer, continuationArgName);
 
     // Transform the left-hand-side of `.then`/`.catch` into an array of inlined statements. We pass `true` for hasContinuation as `node` is the outer continuation.
-    const inlinedLeftHandSide = transformExpression(/*returnContextNode*/ node, node.expression.expression, transformer, /*hasContinuation*/ true, possibleNameForVarDecl);
+    const inlinedLeftHandSide = transformExpression(
+        /*returnContextNode*/ node,
+        node.expression.expression,
+        transformer,
+        /*hasContinuation*/ true,
+        possibleNameForVarDecl,
+    );
     if (hasFailed()) return silentFail(); // shortcut out of more work
 
     // Transform the callback argument into an array of inlined statements. We pass whether we have an outer continuation here
@@ -740,7 +757,10 @@ function transformCallbackArgument(
                                 getPossiblyAwaitedRightHandSide(transformer.checker, returnType, statement.expression)
                                 : statement.expression;
                             refactoredStmts.push(
-                                ...maybeAnnotateAndReturn(possiblyAwaitedRightHandSide, getExplicitPromisedTypeOfPromiseReturningCallExpression(parent, func, transformer.checker)),
+                                ...maybeAnnotateAndReturn(
+                                    possiblyAwaitedRightHandSide,
+                                    getExplicitPromisedTypeOfPromiseReturningCallExpression(parent, func, transformer.checker),
+                                ),
                             );
                         }
                     }
@@ -822,7 +842,10 @@ function transformCallbackArgument(
                         return transformedStatement;
                     }
                     else {
-                        return maybeAnnotateAndReturn(possiblyAwaitedRightHandSide, getExplicitPromisedTypeOfPromiseReturningCallExpression(parent, func, transformer.checker));
+                        return maybeAnnotateAndReturn(
+                            possiblyAwaitedRightHandSide,
+                            getExplicitPromisedTypeOfPromiseReturningCallExpression(parent, func, transformer.checker),
+                        );
                     }
                 }
                 else {
@@ -847,12 +870,18 @@ function getLastCallSignature(type: Type, checker: TypeChecker): Signature | und
     return lastOrUndefined(callSignatures);
 }
 
-function removeReturns(stmts: readonly Statement[], prevArgName: SynthBindingName | undefined, transformer: Transformer, seenReturnStatement: boolean): readonly Statement[] {
+function removeReturns(
+    stmts: readonly Statement[],
+    prevArgName: SynthBindingName | undefined,
+    transformer: Transformer,
+    seenReturnStatement: boolean,
+): readonly Statement[] {
     const ret: Statement[] = [];
     for (const stmt of stmts) {
         if (isReturnStatement(stmt)) {
             if (stmt.expression) {
-                const possiblyAwaitedExpression = isPromiseTypedExpression(stmt.expression, transformer.checker) ? factory.createAwaitExpression(stmt.expression) : stmt.expression;
+                const possiblyAwaitedExpression = isPromiseTypedExpression(stmt.expression, transformer.checker) ? factory.createAwaitExpression(stmt.expression)
+                    : stmt.expression;
                 if (prevArgName === undefined) {
                     ret.push(factory.createExpressionStatement(possiblyAwaitedExpression));
                 }

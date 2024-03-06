@@ -192,7 +192,11 @@ function doChangeNamespaceToNamed(
     const importSpecifiers: ImportSpecifier[] = [];
     exportNameToImportName.forEach((name, propertyName) => {
         importSpecifiers.push(
-            factory.createImportSpecifier(/*isTypeOnly*/ false, name === propertyName ? undefined : factory.createIdentifier(propertyName), factory.createIdentifier(name)),
+            factory.createImportSpecifier(
+                /*isTypeOnly*/ false,
+                name === propertyName ? undefined : factory.createIdentifier(propertyName),
+                factory.createIdentifier(name),
+            ),
         );
     });
 
@@ -237,7 +241,8 @@ export function doChangeNamedToNamespaceOrDefault(
             toConvertSymbols.add(symbol);
         }
     });
-    const preferredName = moduleSpecifier && isStringLiteral(moduleSpecifier) ? codefix.moduleSpecifierToValidIdentifier(moduleSpecifier.text, ScriptTarget.ESNext) : "module";
+    const preferredName = moduleSpecifier && isStringLiteral(moduleSpecifier) ? codefix.moduleSpecifierToValidIdentifier(moduleSpecifier.text, ScriptTarget.ESNext)
+        : "module";
     function hasNamespaceNameConflict(namedImport: ImportSpecifier): boolean {
         // We need to check if the preferred namespace name (`preferredName`) we'd like to use in the refactored code will present a name conflict.
         // A name conflict means that, in a scope where we would like to use the preferred namespace name, there already exists a symbol with that name in that scope.

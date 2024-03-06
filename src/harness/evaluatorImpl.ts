@@ -33,7 +33,11 @@ for (const symbolName of symbolNames) {
     }
 }
 
-export function evaluateTypeScript(source: string | { files: vfs.FileSet; rootFiles: string[]; main: string; }, options?: ts.CompilerOptions, globals?: Record<string, any>) {
+export function evaluateTypeScript(
+    source: string | { files: vfs.FileSet; rootFiles: string[]; main: string; },
+    options?: ts.CompilerOptions,
+    globals?: Record<string, any>,
+) {
     if (typeof source === "string") source = { files: { [sourceFile]: source }, rootFiles: [sourceFile], main: sourceFile };
     const fs = vfs.createFromFileSystem(Harness.IO, /*ignoreCase*/ false, { files: source.files });
     const compilerOptions: ts.CompilerOptions = {

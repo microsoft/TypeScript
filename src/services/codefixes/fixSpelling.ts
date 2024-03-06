@@ -69,7 +69,15 @@ registerCodeFix({
         const { node, suggestedSymbol } = info;
         const target = getEmitScriptTarget(context.host.getCompilationSettings());
         const changes = textChanges.ChangeTracker.with(context, t => doChange(t, sourceFile, node, suggestedSymbol, target));
-        return [createCodeFixAction("spelling", changes, [Diagnostics.Change_spelling_to_0, symbolName(suggestedSymbol)], fixId, Diagnostics.Fix_all_detected_spelling_errors)];
+        return [
+            createCodeFixAction(
+                "spelling",
+                changes,
+                [Diagnostics.Change_spelling_to_0, symbolName(suggestedSymbol)],
+                fixId,
+                Diagnostics.Fix_all_detected_spelling_errors,
+            ),
+        ];
     },
     fixIds: [fixId],
     getAllCodeActions: context =>

@@ -114,7 +114,13 @@ export function getAllRules(): RuleSpec[] {
         rule("IgnoreBeforeComment", anyToken, comments, anyContext, RuleAction.StopProcessingSpaceActions),
         rule("IgnoreAfterLineComment", SyntaxKind.SingleLineCommentTrivia, anyToken, anyContext, RuleAction.StopProcessingSpaceActions),
 
-        rule("NotSpaceBeforeColon", anyToken, SyntaxKind.ColonToken, [isNonJsxSameLineTokenContext, isNotBinaryOpContext, isNotTypeAnnotationContext], RuleAction.DeleteSpace),
+        rule(
+            "NotSpaceBeforeColon",
+            anyToken,
+            SyntaxKind.ColonToken,
+            [isNonJsxSameLineTokenContext, isNotBinaryOpContext, isNotTypeAnnotationContext],
+            RuleAction.DeleteSpace,
+        ),
         rule(
             "SpaceAfterColon",
             SyntaxKind.ColonToken,
@@ -161,7 +167,13 @@ export function getAllRules(): RuleSpec[] {
         // Special handling of unary operators.
         // Prefix operators generally shouldn't have a space between
         // them and their target unary expression.
-        rule("NoSpaceAfterUnaryPrefixOperator", unaryPrefixOperators, unaryPrefixExpressions, [isNonJsxSameLineTokenContext, isNotBinaryOpContext], RuleAction.DeleteSpace),
+        rule(
+            "NoSpaceAfterUnaryPrefixOperator",
+            unaryPrefixOperators,
+            unaryPrefixExpressions,
+            [isNonJsxSameLineTokenContext, isNotBinaryOpContext],
+            RuleAction.DeleteSpace,
+        ),
         rule("NoSpaceAfterUnaryPreincrementOperator", SyntaxKind.PlusPlusToken, unaryPreincrementExpressions, [isNonJsxSameLineTokenContext], RuleAction.DeleteSpace),
         rule("NoSpaceAfterUnaryPredecrementOperator", SyntaxKind.MinusMinusToken, unaryPredecrementExpressions, [isNonJsxSameLineTokenContext], RuleAction.DeleteSpace),
         rule(
@@ -184,9 +196,27 @@ export function getAllRules(): RuleSpec[] {
         // around unary operators.  Examples:
         //      1 - -2  --X--> 1--2
         //      a + ++b --X--> a+++b
-        rule("SpaceAfterPostincrementWhenFollowedByAdd", SyntaxKind.PlusPlusToken, SyntaxKind.PlusToken, [isNonJsxSameLineTokenContext, isBinaryOpContext], RuleAction.InsertSpace),
-        rule("SpaceAfterAddWhenFollowedByUnaryPlus", SyntaxKind.PlusToken, SyntaxKind.PlusToken, [isNonJsxSameLineTokenContext, isBinaryOpContext], RuleAction.InsertSpace),
-        rule("SpaceAfterAddWhenFollowedByPreincrement", SyntaxKind.PlusToken, SyntaxKind.PlusPlusToken, [isNonJsxSameLineTokenContext, isBinaryOpContext], RuleAction.InsertSpace),
+        rule(
+            "SpaceAfterPostincrementWhenFollowedByAdd",
+            SyntaxKind.PlusPlusToken,
+            SyntaxKind.PlusToken,
+            [isNonJsxSameLineTokenContext, isBinaryOpContext],
+            RuleAction.InsertSpace,
+        ),
+        rule(
+            "SpaceAfterAddWhenFollowedByUnaryPlus",
+            SyntaxKind.PlusToken,
+            SyntaxKind.PlusToken,
+            [isNonJsxSameLineTokenContext, isBinaryOpContext],
+            RuleAction.InsertSpace,
+        ),
+        rule(
+            "SpaceAfterAddWhenFollowedByPreincrement",
+            SyntaxKind.PlusToken,
+            SyntaxKind.PlusPlusToken,
+            [isNonJsxSameLineTokenContext, isBinaryOpContext],
+            RuleAction.InsertSpace,
+        ),
         rule(
             "SpaceAfterPostdecrementWhenFollowedBySubtract",
             SyntaxKind.MinusMinusToken,
@@ -194,7 +224,13 @@ export function getAllRules(): RuleSpec[] {
             [isNonJsxSameLineTokenContext, isBinaryOpContext],
             RuleAction.InsertSpace,
         ),
-        rule("SpaceAfterSubtractWhenFollowedByUnaryMinus", SyntaxKind.MinusToken, SyntaxKind.MinusToken, [isNonJsxSameLineTokenContext, isBinaryOpContext], RuleAction.InsertSpace),
+        rule(
+            "SpaceAfterSubtractWhenFollowedByUnaryMinus",
+            SyntaxKind.MinusToken,
+            SyntaxKind.MinusToken,
+            [isNonJsxSameLineTokenContext, isBinaryOpContext],
+            RuleAction.InsertSpace,
+        ),
         rule(
             "SpaceAfterSubtractWhenFollowedByPredecrement",
             SyntaxKind.MinusToken,
@@ -203,9 +239,21 @@ export function getAllRules(): RuleSpec[] {
             RuleAction.InsertSpace,
         ),
 
-        rule("NoSpaceAfterCloseBrace", SyntaxKind.CloseBraceToken, [SyntaxKind.CommaToken, SyntaxKind.SemicolonToken], [isNonJsxSameLineTokenContext], RuleAction.DeleteSpace),
+        rule(
+            "NoSpaceAfterCloseBrace",
+            SyntaxKind.CloseBraceToken,
+            [SyntaxKind.CommaToken, SyntaxKind.SemicolonToken],
+            [isNonJsxSameLineTokenContext],
+            RuleAction.DeleteSpace,
+        ),
         // For functions and control block place } on a new line [multi-line rule]
-        rule("NewLineBeforeCloseBraceInBlockContext", anyTokenIncludingMultilineComments, SyntaxKind.CloseBraceToken, [isMultilineBlockContext], RuleAction.InsertNewLine),
+        rule(
+            "NewLineBeforeCloseBraceInBlockContext",
+            anyTokenIncludingMultilineComments,
+            SyntaxKind.CloseBraceToken,
+            [isMultilineBlockContext],
+            RuleAction.InsertNewLine,
+        ),
 
         // Space/new line after }.
         rule(
@@ -219,7 +267,13 @@ export function getAllRules(): RuleSpec[] {
         // Also should not apply to })
         rule("SpaceBetweenCloseBraceAndElse", SyntaxKind.CloseBraceToken, SyntaxKind.ElseKeyword, [isNonJsxSameLineTokenContext], RuleAction.InsertSpace),
         rule("SpaceBetweenCloseBraceAndWhile", SyntaxKind.CloseBraceToken, SyntaxKind.WhileKeyword, [isNonJsxSameLineTokenContext], RuleAction.InsertSpace),
-        rule("NoSpaceBetweenEmptyBraceBrackets", SyntaxKind.OpenBraceToken, SyntaxKind.CloseBraceToken, [isNonJsxSameLineTokenContext, isObjectContext], RuleAction.DeleteSpace),
+        rule(
+            "NoSpaceBetweenEmptyBraceBrackets",
+            SyntaxKind.OpenBraceToken,
+            SyntaxKind.CloseBraceToken,
+            [isNonJsxSameLineTokenContext, isObjectContext],
+            RuleAction.DeleteSpace,
+        ),
 
         // Add a space after control dec context if the next character is an open bracket ex: 'if (false)[a, b] = [1, 2];' -> 'if (false) [a, b] = [1, 2];'
         rule("SpaceAfterConditionalClosingParen", SyntaxKind.CloseParenToken, SyntaxKind.OpenBracketToken, [isControlDeclContext], RuleAction.InsertSpace),
@@ -231,7 +285,13 @@ export function getAllRules(): RuleSpec[] {
             [isFunctionDeclarationOrFunctionExpressionContext],
             RuleAction.DeleteSpace,
         ),
-        rule("SpaceAfterStarInGeneratorDeclaration", SyntaxKind.AsteriskToken, SyntaxKind.Identifier, [isFunctionDeclarationOrFunctionExpressionContext], RuleAction.InsertSpace),
+        rule(
+            "SpaceAfterStarInGeneratorDeclaration",
+            SyntaxKind.AsteriskToken,
+            SyntaxKind.Identifier,
+            [isFunctionDeclarationOrFunctionExpressionContext],
+            RuleAction.InsertSpace,
+        ),
 
         rule("SpaceAfterFunctionInFuncDecl", SyntaxKind.FunctionKeyword, anyToken, [isFunctionDeclContext], RuleAction.InsertSpace),
         // Insert new line after { and before } in multi-line contexts.
@@ -296,7 +356,13 @@ export function getAllRules(): RuleSpec[] {
         rule("SpaceAfterVoidOperator", SyntaxKind.VoidKeyword, anyToken, [isNonJsxSameLineTokenContext, isVoidOpContext], RuleAction.InsertSpace),
 
         // Async-await
-        rule("SpaceBetweenAsyncAndOpenParen", SyntaxKind.AsyncKeyword, SyntaxKind.OpenParenToken, [isArrowFunctionContext, isNonJsxSameLineTokenContext], RuleAction.InsertSpace),
+        rule(
+            "SpaceBetweenAsyncAndOpenParen",
+            SyntaxKind.AsyncKeyword,
+            SyntaxKind.OpenParenToken,
+            [isArrowFunctionContext, isNonJsxSameLineTokenContext],
+            RuleAction.InsertSpace,
+        ),
         rule(
             "SpaceBetweenAsyncAndFunctionKeyword",
             SyntaxKind.AsyncKeyword,
@@ -316,7 +382,13 @@ export function getAllRules(): RuleSpec[] {
 
         // JSX opening elements
         rule("SpaceBeforeJsxAttribute", anyToken, SyntaxKind.Identifier, [isNextTokenParentJsxAttribute, isNonJsxSameLineTokenContext], RuleAction.InsertSpace),
-        rule("SpaceBeforeSlashInJsxOpeningElement", anyToken, SyntaxKind.SlashToken, [isJsxSelfClosingElementContext, isNonJsxSameLineTokenContext], RuleAction.InsertSpace),
+        rule(
+            "SpaceBeforeSlashInJsxOpeningElement",
+            anyToken,
+            SyntaxKind.SlashToken,
+            [isJsxSelfClosingElementContext, isNonJsxSameLineTokenContext],
+            RuleAction.InsertSpace,
+        ),
         rule(
             "NoSpaceBeforeGreaterThanTokenInJsxOpeningElement",
             SyntaxKind.SlashToken,
@@ -331,7 +403,13 @@ export function getAllRules(): RuleSpec[] {
 
         // TypeScript-specific rules
         // Use of module as a function call. e.g.: import m2 = module("m2");
-        rule("NoSpaceAfterModuleImport", [SyntaxKind.ModuleKeyword, SyntaxKind.RequireKeyword], SyntaxKind.OpenParenToken, [isNonJsxSameLineTokenContext], RuleAction.DeleteSpace),
+        rule(
+            "NoSpaceAfterModuleImport",
+            [SyntaxKind.ModuleKeyword, SyntaxKind.RequireKeyword],
+            SyntaxKind.OpenParenToken,
+            [isNonJsxSameLineTokenContext],
+            RuleAction.DeleteSpace,
+        ),
         // Add a space around certain TypeScript keywords
         rule(
             "SpaceAfterCertainTypeScriptKeywords",
@@ -465,7 +543,13 @@ export function getAllRules(): RuleSpec[] {
             RuleAction.InsertSpace,
         ),
 
-        rule("NoSpaceBeforeNonNullAssertionOperator", anyToken, SyntaxKind.ExclamationToken, [isNonJsxSameLineTokenContext, isNonNullAssertionContext], RuleAction.DeleteSpace),
+        rule(
+            "NoSpaceBeforeNonNullAssertionOperator",
+            anyToken,
+            SyntaxKind.ExclamationToken,
+            [isNonJsxSameLineTokenContext, isNonNullAssertionContext],
+            RuleAction.DeleteSpace,
+        ),
         rule(
             "NoSpaceAfterNewKeywordOnConstructorSignature",
             SyntaxKind.NewKeyword,
@@ -628,7 +712,13 @@ export function getAllRules(): RuleSpec[] {
             [isOptionEnabledOrUndefined("insertSpaceAfterOpeningAndBeforeClosingNonemptyBraces"), isBraceWrappedContext],
             RuleAction.InsertSpace,
         ),
-        rule("NoSpaceBetweenEmptyBraceBrackets", SyntaxKind.OpenBraceToken, SyntaxKind.CloseBraceToken, [isNonJsxSameLineTokenContext, isObjectContext], RuleAction.DeleteSpace),
+        rule(
+            "NoSpaceBetweenEmptyBraceBrackets",
+            SyntaxKind.OpenBraceToken,
+            SyntaxKind.CloseBraceToken,
+            [isNonJsxSameLineTokenContext, isObjectContext],
+            RuleAction.DeleteSpace,
+        ),
         rule(
             "NoSpaceAfterOpenBrace",
             SyntaxKind.OpenBraceToken,

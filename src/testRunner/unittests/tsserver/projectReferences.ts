@@ -418,7 +418,9 @@ function foo() {
             verifyGetErrRequest({ session, files: [aTest] });
             baselineTsserverLogs(
                 "projectReferences",
-                `monorepo like with symlinks ${scenario} and solution is ${alreadyBuilt ? "built" : "not built"}${extraOptions.preserveSymlinks ? " with preserveSymlinks" : ""}`,
+                `monorepo like with symlinks ${scenario} and solution is ${alreadyBuilt ? "built" : "not built"}${
+                    extraOptions.preserveSymlinks ? " with preserveSymlinks" : ""
+                }`,
                 session,
             );
         }
@@ -1516,7 +1518,9 @@ bar;`,
             });
             baselineTsserverLogs(
                 "projectReferences",
-                `auto import with referenced project${built ? " when built" : ""}${disableSourceOfProjectReferenceRedirect ? " with disableSourceOfProjectReferenceRedirect" : ""}`,
+                `auto import with referenced project${built ? " when built" : ""}${
+                    disableSourceOfProjectReferenceRedirect ? " with disableSourceOfProjectReferenceRedirect" : ""
+                }`,
                 session,
             );
         }

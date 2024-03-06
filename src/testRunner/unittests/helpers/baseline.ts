@@ -59,7 +59,12 @@ export function baselinePrograms(
     }
 }
 
-function baselineProgram(baseline: string[], [program, builderProgram]: CommandLineProgram, oldProgram: CommandLineProgram | undefined, baselineDependencies: boolean | undefined) {
+function baselineProgram(
+    baseline: string[],
+    [program, builderProgram]: CommandLineProgram,
+    oldProgram: CommandLineProgram | undefined,
+    baselineDependencies: boolean | undefined,
+) {
     if (program !== oldProgram?.[0]) {
         const options = program.getCompilerOptions();
         baseline.push(`Program root files: ${jsonToReadableText(program.getRootFileNames())}`);
@@ -302,7 +307,9 @@ function generateBuildInfoProgramBaseline(sys: ts.System, buildInfoPath: string,
         }
     }
 
-    function toReadableProgramBuildInfoDiagnosticsPerFile(diagnostics: ts.ProgramBuildInfoDiagnostic[] | undefined): readonly ReadableProgramBuildInfoDiagnostic[] | undefined {
+    function toReadableProgramBuildInfoDiagnosticsPerFile(
+        diagnostics: ts.ProgramBuildInfoDiagnostic[] | undefined,
+    ): readonly ReadableProgramBuildInfoDiagnostic[] | undefined {
         return diagnostics?.map(d =>
             ts.isNumber(d) ?
                 toFileName(d) :

@@ -728,7 +728,10 @@ describe("unittests:: tsserver:: projects::", () => {
             content: jsonToReadableText({ compilerOptions: { allowJs: true }, exclude: [file2.path] }),
         };
 
-        const session = verfiy(config5, createServerHost([file1, file2, config5, libFile], { executingFilePath: ts.combinePaths(ts.getDirectoryPath(libFile.path), "tsc.js") }));
+        const session = verfiy(
+            config5,
+            createServerHost([file1, file2, config5, libFile], { executingFilePath: ts.combinePaths(ts.getDirectoryPath(libFile.path), "tsc.js") }),
+        );
         baselineTsserverLogs("projects", "no tsconfig script block diagnostic errors", session);
 
         function verfiy(config: File, host: TestServerHost) {
@@ -1119,7 +1122,9 @@ describe("unittests:: tsserver:: projects::", () => {
             }
 
             // Allow allowNonTsExtensions will be set to true for deferred extensions.
-            session.logger.info(`Has allowNonTsExtension: ${session.getProjectService().configuredProjects.get(tsconfig.path)!.getCompilerOptions().allowNonTsExtensions}`);
+            session.logger.info(
+                `Has allowNonTsExtension: ${session.getProjectService().configuredProjects.get(tsconfig.path)!.getCompilerOptions().allowNonTsExtensions}`,
+            );
 
             baselineTsserverLogs(
                 "projects",

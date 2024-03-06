@@ -462,7 +462,10 @@ describe("unittests:: tsc-watch:: watchAPI:: when watchHost uses createSemanticD
 
     it("SemanticDiagnosticsBuilderProgram emitDtsOnly does not update affected files pending emit", () => {
         // Initial
-        const { sys, baseline, config, mainFile } = createSystem(jsonToReadableText({ compilerOptions: { composite: true, noEmitOnError: true } }), "export const x: string = 10;");
+        const { sys, baseline, config, mainFile } = createSystem(
+            jsonToReadableText({ compilerOptions: { composite: true, noEmitOnError: true } }),
+            "export const x: string = 10;",
+        );
         createWatch(baseline, config, sys, ts.createSemanticDiagnosticsBuilderProgram);
 
         // Fix error and emit
@@ -600,7 +603,8 @@ describe("unittests:: tsc-watch:: watchAPI:: when getParsedCommandLine is implem
         const { watch, baseline, config2, calledGetParsedCommandLine } = setup();
         runWatchBaseline({
             scenario: "watchApi",
-            subScenario: "when new file is added to the referenced project with host implementing getParsedCommandLine without implementing useSourceOfProjectReferenceRedirect",
+            subScenario:
+                "when new file is added to the referenced project with host implementing getParsedCommandLine without implementing useSourceOfProjectReferenceRedirect",
             commandLineArgs: ["--w", "-p", config2.path, "--extendedDiagnostics"],
             ...baseline,
             edits: [

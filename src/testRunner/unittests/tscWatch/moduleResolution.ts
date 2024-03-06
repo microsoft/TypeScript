@@ -373,7 +373,8 @@ describe("unittests:: tsc-watch:: moduleResolution", () => {
         edits: [
             {
                 caption: "modify aFile by adding import",
-                edit: sys => sys.appendFile(`/user/username/projects/myproject/a.ts`, `import type { ImportInterface } from "pkg" assert { "resolution-mode": "import" }`),
+                edit: sys =>
+                    sys.appendFile(`/user/username/projects/myproject/a.ts`, `import type { ImportInterface } from "pkg" assert { "resolution-mode": "import" }`),
                 timeouts: sys => sys.runQueuedTimeoutCallbacks(),
             },
         ],

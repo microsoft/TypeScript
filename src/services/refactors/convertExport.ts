@@ -137,7 +137,8 @@ function getInfo(context: RefactorContext, considerPartialSpans = true): ExportI
 
     const checker = program.getTypeChecker();
     const exportingModuleSymbol = getExportingModuleSymbol(exportNode.parent, checker);
-    const flags = getSyntacticModifierFlags(exportNode) || ((isExportAssignment(exportNode) && !exportNode.isExportEquals) ? ModifierFlags.ExportDefault : ModifierFlags.None);
+    const flags = getSyntacticModifierFlags(exportNode) ||
+        ((isExportAssignment(exportNode) && !exportNode.isExportEquals) ? ModifierFlags.ExportDefault : ModifierFlags.None);
 
     const wasDefault = !!(flags & ModifierFlags.Default);
     // If source file already has a default export, don't offer refactor.
@@ -184,12 +185,23 @@ function getInfo(context: RefactorContext, considerPartialSpans = true): ExportI
     }
 }
 
-function doChange(exportingSourceFile: SourceFile, program: Program, info: ExportInfo, changes: textChanges.ChangeTracker, cancellationToken: CancellationToken | undefined): void {
+function doChange(
+    exportingSourceFile: SourceFile,
+    program: Program,
+    info: ExportInfo,
+    changes: textChanges.ChangeTracker,
+    cancellationToken: CancellationToken | undefined,
+): void {
     changeExport(exportingSourceFile, info, changes, program.getTypeChecker());
     changeImports(program, info, changes, cancellationToken);
 }
 
-function changeExport(exportingSourceFile: SourceFile, { wasDefault, exportNode, exportName }: ExportInfo, changes: textChanges.ChangeTracker, checker: TypeChecker): void {
+function changeExport(
+    exportingSourceFile: SourceFile,
+    { wasDefault, exportNode, exportName }: ExportInfo,
+    changes: textChanges.ChangeTracker,
+    checker: TypeChecker,
+): void {
     if (wasDefault) {
         if (isExportAssignment(exportNode) && !exportNode.isExportEquals) {
             const exp = exportNode.expression as Identifier;
@@ -201,7 +213,10 @@ function changeExport(exportingSourceFile: SourceFile, { wasDefault, exportNode,
             );
         }
         else {
-            changes.delete(exportingSourceFile, Debug.checkDefined(findModifier(exportNode, SyntaxKind.DefaultKeyword), "Should find a default keyword in modifier list"));
+            changes.delete(
+                exportingSourceFile,
+                Debug.checkDefined(findModifier(exportNode, SyntaxKind.DefaultKeyword), "Should find a default keyword in modifier list"),
+            );
         }
     }
     else {
@@ -246,16 +261,25 @@ function changeImports(
 ): void {
     const checker = program.getTypeChecker();
     const exportSymbol = Debug.checkDefined(checker.getSymbolAtLocation(exportName), "Export name should resolve to a symbol");
-    FindAllReferences.Core.eachExportReference(program.getSourceFiles(), checker, cancellationToken, exportSymbol, exportingModuleSymbol, exportName.text, wasDefault, ref => {
-        if (exportName === ref) return;
-        const importingSourceFile = ref.getSourceFile();
-        if (wasDefault) {
-            changeDefaultToNamedImport(importingSourceFile, ref, changes, exportName.text);
-        }
-        else {
-            changeNamedToDefaultImport(importingSourceFile, ref, changes);
-        }
-    });
+    FindAllReferences.Core.eachExportReference(
+        program.getSourceFiles(),
+        checker,
+        cancellationToken,
+        exportSymbol,
+        exportingModuleSymbol,
+        exportName.text,
+        wasDefault,
+        ref => {
+            if (exportName === ref) return;
+            const importingSourceFile = ref.getSourceFile();
+            if (wasDefault) {
+                changeDefaultToNamedImport(importingSourceFile, ref, changes, exportName.text);
+            }
+            else {
+                changeNamedToDefaultImport(importingSourceFile, ref, changes);
+            }
+        },
+    );
 }
 
 function changeDefaultToNamedImport(importingSourceFile: SourceFile, ref: Identifier, changes: textChanges.ChangeTracker, exportName: string): void {
@@ -349,11 +373,19 @@ function changeNamedToDefaultImport(importingSourceFile: SourceFile, ref: Identi
 }
 
 function makeImportSpecifier(propertyName: string, name: string): ImportSpecifier {
-    return factory.createImportSpecifier(/*isTypeOnly*/ false, propertyName === name ? undefined : factory.createIdentifier(propertyName), factory.createIdentifier(name));
+    return factory.createImportSpecifier(
+        /*isTypeOnly*/ false,
+        propertyName === name ? undefined : factory.createIdentifier(propertyName),
+        factory.createIdentifier(name),
+    );
 }
 
 function makeExportSpecifier(propertyName: string, name: string): ExportSpecifier {
-    return factory.createExportSpecifier(/*isTypeOnly*/ false, propertyName === name ? undefined : factory.createIdentifier(propertyName), factory.createIdentifier(name));
+    return factory.createExportSpecifier(
+        /*isTypeOnly*/ false,
+        propertyName === name ? undefined : factory.createIdentifier(propertyName),
+        factory.createIdentifier(name),
+    );
 }
 
 function getExportingModuleSymbol(parent: SourceFile | ModuleBlock, checker: TypeChecker) {

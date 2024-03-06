@@ -31,7 +31,9 @@ import {
 
 const fixId = "fixUnreferenceableDecoratorMetadata";
 const errorCodes = [
-    Diagnostics.A_type_referenced_in_a_decorated_signature_must_be_imported_with_import_type_or_a_namespace_import_when_isolatedModules_and_emitDecoratorMetadata_are_enabled.code,
+    Diagnostics
+        .A_type_referenced_in_a_decorated_signature_must_be_imported_with_import_type_or_a_namespace_import_when_isolatedModules_and_emitDecoratorMetadata_are_enabled
+        .code,
 ];
 registerCodeFix({
     errorCodes,

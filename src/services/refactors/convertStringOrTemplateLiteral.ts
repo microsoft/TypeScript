@@ -154,7 +154,12 @@ function getParentBinaryExpression(expr: Node) {
 function treeToArray(current: Expression) {
     const loop = (current: Node): { nodes: Expression[]; operators: Token<BinaryOperator>[]; hasString: boolean; validOperators: boolean; } => {
         if (!isBinaryExpression(current)) {
-            return { nodes: [current as Expression], operators: [], validOperators: true, hasString: isStringLiteral(current) || isNoSubstitutionTemplateLiteral(current) };
+            return {
+                nodes: [current as Expression],
+                operators: [],
+                validOperators: true,
+                hasString: isStringLiteral(current) || isNoSubstitutionTemplateLiteral(current),
+            };
         }
         const { nodes, operators, hasString: leftHasString, validOperators: leftOperatorValid } = loop(current.left);
 

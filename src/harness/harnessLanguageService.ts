@@ -605,7 +605,9 @@ class FourslashSession extends ts.server.Session {
         patchServiceForStateBaseline(this.projectService);
     }
     getText(fileName: string) {
-        return ts.getSnapshotText(this.projectService.getDefaultProjectForFile(ts.server.toNormalizedPath(fileName), /*ensureProject*/ true)!.getScriptSnapshot(fileName)!);
+        return ts.getSnapshotText(
+            this.projectService.getDefaultProjectForFile(ts.server.toNormalizedPath(fileName), /*ensureProject*/ true)!.getScriptSnapshot(fileName)!,
+        );
     }
 
     protected override toStringMessage(message: string): string {

@@ -102,7 +102,12 @@ function createSourceFileWithText(fileName: string, sourceText: SourceText, targ
     return file;
 }
 
-export function createTestCompilerHost(texts: readonly NamedSourceText[], target: ts.ScriptTarget, oldProgram?: ProgramWithSourceTexts, useGetSourceFileByPath?: boolean) {
+export function createTestCompilerHost(
+    texts: readonly NamedSourceText[],
+    target: ts.ScriptTarget,
+    oldProgram?: ProgramWithSourceTexts,
+    useGetSourceFileByPath?: boolean,
+) {
     const files = ts.arrayToMap(texts, t => t.name, t => {
         if (oldProgram) {
             let oldFile = oldProgram.getSourceFile(t.name) as SourceFileWithText;

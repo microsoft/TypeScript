@@ -243,7 +243,11 @@ describe("unittests:: tsserver:: projectErrors:: are reported as appropriate", (
 
             // Since this is not js project so no typings are queued
             verifyGetErrRequest({ session, files: [untitledFile] });
-            baselineTsserverLogs("projectErrors", `when opening new file that doesnt exist on disk yet ${useProjectRoot ? "with projectRoot" : "without projectRoot"}`, session);
+            baselineTsserverLogs(
+                "projectErrors",
+                `when opening new file that doesnt exist on disk yet ${useProjectRoot ? "with projectRoot" : "without projectRoot"}`,
+                session,
+            );
         }
 
         it("has projectRoot", () => {
@@ -326,7 +330,11 @@ describe("unittests:: tsserver:: projectErrors:: are reported as appropriate", (
         closeFilesForSession([backendTest], session);
         openFilesForSession([{ file: serverUtilities.path, projectRootPath: "/user/username/projects/myproject" }], session);
         verifyGetErrRequest({ session, files: [serverUtilities.path, app.path] });
-        baselineTsserverLogs("projectErrors", `reports errors correctly when file referenced by inferred project root, is opened right after closing the root file`, session);
+        baselineTsserverLogs(
+            "projectErrors",
+            `reports errors correctly when file referenced by inferred project root, is opened right after closing the root file`,
+            session,
+        );
     });
 
     it("Correct errors when resolution resolves to file that has same ambient module and is also module", () => {
@@ -522,7 +530,11 @@ describe("unittests:: tsserver:: Project Errors for Configure file diagnostics e
         const host = createServerHost([file, libFile, configFile]);
         const session = new TestSession({ host, suppressDiagnosticEvents: true });
         openFilesForSession([file], session);
-        baselineTsserverLogs("projectErrors", "configFileDiagnostic events are not generated when the config file has errors but suppressDiagnosticEvents is true", session);
+        baselineTsserverLogs(
+            "projectErrors",
+            "configFileDiagnostic events are not generated when the config file has errors but suppressDiagnosticEvents is true",
+            session,
+        );
     });
 
     it("are not generated when the config file does not include file opened and doesnt contain any errors", () => {

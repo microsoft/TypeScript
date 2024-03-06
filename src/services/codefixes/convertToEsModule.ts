@@ -234,7 +234,11 @@ function convertStatement(
                 case SyntaxKind.CallExpression: {
                     if (isRequireCall(expression, /*requireStringLiteralLikeArgument*/ true)) {
                         // For side-effecting require() call, just make a side-effecting import.
-                        changes.replaceNode(sourceFile, statement, makeImport(/*defaultImport*/ undefined, /*namedImports*/ undefined, expression.arguments[0], quotePreference));
+                        changes.replaceNode(
+                            sourceFile,
+                            statement,
+                            makeImport(/*defaultImport*/ undefined, /*namedImports*/ undefined, expression.arguments[0], quotePreference),
+                        );
                     }
                     return false;
                 }
@@ -365,7 +369,10 @@ function convertAssignment(
  * Convert `module.exports = { ... }` to individual exports..
  * We can't always do this if the module has interesting members -- then it will be a default export instead.
  */
-function tryChangeModuleExportsObject(object: ObjectLiteralExpression, useSitesToUnqualify: Map<Node, Node> | undefined): [readonly Statement[], ModuleExportsChanged] | undefined {
+function tryChangeModuleExportsObject(
+    object: ObjectLiteralExpression,
+    useSitesToUnqualify: Map<Node, Node> | undefined,
+): [readonly Statement[], ModuleExportsChanged] | undefined {
     const statements = mapAllOrFail(object.properties, prop => {
         switch (prop.kind) {
             case SyntaxKind.GetAccessor:
@@ -437,7 +444,9 @@ function convertExportsPropertyAssignment(
     const name = left.name.text;
     if ((isFunctionExpression(right) || isArrowFunction(right) || isClassExpression(right)) && (!right.name || right.name.text === name)) {
         // `exports.f = function() {}` -> `export function f() {}` -- Replace `exports.f = ` with `export `, and insert the name after `function`.
-        changes.replaceRange(sourceFile, { pos: left.getStart(sourceFile), end: right.getStart(sourceFile) }, factory.createToken(SyntaxKind.ExportKeyword), { suffix: " " });
+        changes.replaceRange(sourceFile, { pos: left.getStart(sourceFile), end: right.getStart(sourceFile) }, factory.createToken(SyntaxKind.ExportKeyword), {
+            suffix: " ",
+        });
 
         if (!right.name) changes.insertName(sourceFile, right, name);
 
@@ -522,10 +531,12 @@ function convertSingleImport(
 ): ConvertedImports {
     switch (name.kind) {
         case SyntaxKind.ObjectBindingPattern: {
-            const importSpecifiers = mapAllOrFail(name.elements, e =>
-                e.dotDotDotToken || e.initializer || e.propertyName && !isIdentifier(e.propertyName) || !isIdentifier(e.name)
+            const importSpecifiers = mapAllOrFail(
+                name.elements,
+                e => e.dotDotDotToken || e.initializer || e.propertyName && !isIdentifier(e.propertyName) || !isIdentifier(e.name)
                     ? undefined
-                    : makeImportSpecifier(e.propertyName && e.propertyName.text, e.name.text));
+                    : makeImportSpecifier(e.propertyName && e.propertyName.text, e.name.text),
+            );
             if (importSpecifiers) {
                 return convertedImports([makeImport(/*defaultImport*/ undefined, importSpecifiers, moduleSpecifier, quotePreference)]);
             }

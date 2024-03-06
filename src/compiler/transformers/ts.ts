@@ -1090,7 +1090,11 @@ export function transformTypeScript(context: TransformationContext) {
         return modifiers;
     }
 
-    function injectClassElementTypeMetadata(modifiers: NodeArray<ModifierLike> | undefined, node: ClassElement, container: ClassLikeDeclaration | ObjectLiteralExpression) {
+    function injectClassElementTypeMetadata(
+        modifiers: NodeArray<ModifierLike> | undefined,
+        node: ClassElement,
+        container: ClassLikeDeclaration | ObjectLiteralExpression,
+    ) {
         if (isClassLike(container) && classElementOrClassElementParameterIsDecorated(legacyDecorators, node, container)) {
             const metadata = getTypeMetadata(node, container);
             if (some(metadata)) {

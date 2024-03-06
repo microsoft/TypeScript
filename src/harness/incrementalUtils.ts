@@ -38,7 +38,9 @@ function verifyDocumentRegistryStats(
                 entry.forEach((real, kind) =>
                     ts.Debug.assert(
                         real.languageServiceRefCount === expected?.get(kind),
-                        `Document registry has unexpected language service ref count for ${key} ${path} ${ts.Debug.formatScriptKind(kind)} ${real.languageServiceRefCount}`,
+                        `Document registry has unexpected language service ref count for ${key} ${path} ${
+                            ts.Debug.formatScriptKind(kind)
+                        } ${real.languageServiceRefCount}`,
                         reportStats,
                     )
                 );
@@ -338,7 +340,13 @@ export function verifyResolutionCache(
             expectedToResolution.set(expectedResolution, resolved);
             resolutionToExpected.set(resolved, expectedResolution);
         }
-        expected.watchFailedLookupLocationsOfExternalModuleResolutions(name, expectedResolution, fileName, () => ({ resolvedFileName }), deferWatchingNonRelativeResolution);
+        expected.watchFailedLookupLocationsOfExternalModuleResolutions(
+            name,
+            expectedResolution,
+            fileName,
+            () => ({ resolvedFileName }),
+            deferWatchingNonRelativeResolution,
+        );
         return expectedResolution;
     }
 

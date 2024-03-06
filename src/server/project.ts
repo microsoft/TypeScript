@@ -2974,7 +2974,9 @@ export class ConfiguredProject extends Project {
     }
 
     override close() {
-        this.projectService.configFileExistenceInfoCache.forEach((_configFileExistenceInfo, canonicalConfigFilePath) => this.releaseParsedConfig(canonicalConfigFilePath));
+        this.projectService.configFileExistenceInfoCache.forEach((_configFileExistenceInfo, canonicalConfigFilePath) =>
+            this.releaseParsedConfig(canonicalConfigFilePath)
+        );
         this.projectErrors = undefined;
         this.openFileWatchTriggered.clear();
         this.compilerHost = undefined;

@@ -83,7 +83,14 @@ registerRefactor(refactorName, {
     },
 });
 
-function doChange(oldFile: SourceFile, program: Program, toMove: ToMove, changes: textChanges.ChangeTracker, host: LanguageServiceHost, preferences: UserPreferences): void {
+function doChange(
+    oldFile: SourceFile,
+    program: Program,
+    toMove: ToMove,
+    changes: textChanges.ChangeTracker,
+    host: LanguageServiceHost,
+    preferences: UserPreferences,
+): void {
     const checker = program.getTypeChecker();
     const usage = getUsageInfo(oldFile, toMove.all, checker);
     const newFilename = createNewFileName(oldFile, program, host, toMove);
@@ -113,7 +120,15 @@ function getNewStatementsAndRemoveFromOldFile(
 
     const useEsModuleSyntax = !fileShouldUseJavaScriptRequire(newFilename, program, host, !!oldFile.commonJsModuleIndicator);
     const quotePreference = getQuotePreference(oldFile, preferences);
-    const importsFromNewFile = createOldFileImportsFromTargetFile(oldFile, usage.oldFileImportsFromTargetFile, newFilename, program, host, useEsModuleSyntax, quotePreference);
+    const importsFromNewFile = createOldFileImportsFromTargetFile(
+        oldFile,
+        usage.oldFileImportsFromTargetFile,
+        newFilename,
+        program,
+        host,
+        useEsModuleSyntax,
+        quotePreference,
+    );
     if (importsFromNewFile) {
         insertImports(changes, oldFile, importsFromNewFile, /*blankLineBetween*/ true, preferences);
     }

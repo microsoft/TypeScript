@@ -406,7 +406,11 @@ export class TestState {
 
             // Check if no-default-lib flag is false and if so add default library
             if (!resolvedResult.isLibFile) {
-                this.languageServiceAdapterHost.addScript(Harness.Compiler.defaultLibFileName, Harness.Compiler.getDefaultLibrarySourceFile()!.text, /*isRootFile*/ false);
+                this.languageServiceAdapterHost.addScript(
+                    Harness.Compiler.defaultLibFileName,
+                    Harness.Compiler.getDefaultLibrarySourceFile()!.text,
+                    /*isRootFile*/ false,
+                );
 
                 compilationOptions.lib?.forEach(fileName => {
                     const libFile = Harness.Compiler.getDefaultLibrarySourceFile(fileName);
@@ -1202,7 +1206,9 @@ export class TestState {
         assert.equal(
             actual.labelDetails?.detail,
             expected.labelDetails?.detail,
-            `At entry ${actual.name}: Completion 'labelDetails.detail' did not match: ${showTextDiff(expected.labelDetails?.detail || "", actual.labelDetails?.detail || "")}`,
+            `At entry ${actual.name}: Completion 'labelDetails.detail' did not match: ${
+                showTextDiff(expected.labelDetails?.detail || "", actual.labelDetails?.detail || "")
+            }`,
         );
         assert.equal(actual.hasAction, expected.hasAction, `At entry ${actual.name}: Expected 'hasAction' properties to match`);
         assert.equal(actual.isRecommended, expected.isRecommended, `At entry ${actual.name}: Expected 'isRecommended' properties to match'`);
@@ -1840,7 +1846,15 @@ export class TestState {
         if (preferences) {
             this.configure(preferences);
         }
-        return this.languageService.getCompletionEntryDetails(this.activeFile.fileName, this.currentCaretPosition, entryName, this.formatCodeSettings, source, preferences, data);
+        return this.languageService.getCompletionEntryDetails(
+            this.activeFile.fileName,
+            this.currentCaretPosition,
+            entryName,
+            this.formatCodeSettings,
+            source,
+            preferences,
+            data,
+        );
     }
 
     private findReferencesAtCaret() {
@@ -2071,7 +2085,11 @@ export class TestState {
 
         assert.equal(help.items.length, options.overloadsCount || 1, this.assertionMessageAtLastKnownMarker("signature help overloads count"));
 
-        assert.equal(ts.displayPartsToString(selectedItem.documentation), options.docComment || "", this.assertionMessageAtLastKnownMarker("current signature help doc comment"));
+        assert.equal(
+            ts.displayPartsToString(selectedItem.documentation),
+            options.docComment || "",
+            this.assertionMessageAtLastKnownMarker("current signature help doc comment"),
+        );
 
         if (options.text !== undefined) {
             assert.equal(
@@ -2886,7 +2904,11 @@ export class TestState {
         const options: ts.CreateSourceFileOptions = {
             languageVersion: ts.ScriptTarget.Latest,
             impliedNodeFormat: ts.getImpliedNodeFormatForFile(
-                ts.toPath(this.activeFile.fileName, this.languageServiceAdapterHost.sys.getCurrentDirectory(), ts.hostGetCanonicalFileName(this.languageServiceAdapterHost)),
+                ts.toPath(
+                    this.activeFile.fileName,
+                    this.languageServiceAdapterHost.sys.getCurrentDirectory(),
+                    ts.hostGetCanonicalFileName(this.languageServiceAdapterHost),
+                ),
                 /*packageJsonInfoCache*/ undefined,
                 this.languageServiceAdapterHost,
                 this.languageService.getProgram()?.getCompilerOptions() || {},
@@ -3062,7 +3084,13 @@ export class TestState {
         }
     }
 
-    public verifyIndentationAtPosition(fileName: string, position: number, numberOfSpaces: number, indentStyle: ts.IndentStyle = ts.IndentStyle.Smart, baseIndentSize = 0) {
+    public verifyIndentationAtPosition(
+        fileName: string,
+        position: number,
+        numberOfSpaces: number,
+        indentStyle: ts.IndentStyle = ts.IndentStyle.Smart,
+        baseIndentSize = 0,
+    ) {
         const actual = this.getIndentation(fileName, position, indentStyle, baseIndentSize);
         const lineCol = this.getLineColStringAtPosition(position);
         if (actual !== numberOfSpaces) {
@@ -3321,7 +3349,9 @@ export class TestState {
         const filterActual = ts.filter(actual, f => kind === undefined ? true : f.kind === kind);
         if (filterActual.length !== spans.length) {
             this.raiseError(
-                `verifyOutliningSpans failed - expected total spans to be ${spans.length}, but was ${actual.length}\n\nFound Spans:\n\n${this.printOutliningSpansInline(actual)}`,
+                `verifyOutliningSpans failed - expected total spans to be ${spans.length}, but was ${actual.length}\n\nFound Spans:\n\n${
+                    this.printOutliningSpansInline(actual)
+                }`,
             );
         }
 
@@ -3389,7 +3419,9 @@ export class TestState {
         if (index === undefined) {
             if (!(fixes && fixes.length === 1)) {
                 this.raiseError(
-                    `Should find exactly one codefix, but ${fixes ? fixes.length : "none"} found. ${fixes ? fixes.map(a => `${Harness.IO.newLine()} "${a.description}"`) : ""}`,
+                    `Should find exactly one codefix, but ${fixes ? fixes.length : "none"} found. ${
+                        fixes ? fixes.map(a => `${Harness.IO.newLine()} "${a.description}"`) : ""
+                    }`,
                 );
             }
             index = 0;
@@ -3665,7 +3697,9 @@ export class TestState {
             }
         }
         if (expectedTextArray.length !== actualTextArray.length) {
-            this.raiseError(`Expected ${expectedTextArray.length} import fixes, got ${actualTextArray.length}:\n\n${actualTextArray.join("\n\n" + "-".repeat(20) + "\n\n")}`);
+            this.raiseError(
+                `Expected ${expectedTextArray.length} import fixes, got ${actualTextArray.length}:\n\n${actualTextArray.join("\n\n" + "-".repeat(20) + "\n\n")}`,
+            );
         }
         ts.zipWith(expectedTextArray, actualTextArray, (expected, actual, index) => {
             if (expected !== actual) {
@@ -3710,7 +3744,9 @@ export class TestState {
         }
         else {
             if (actual === undefined) {
-                this.raiseError(`${name} failed - expected the template {newText: "${expected.newText}", caretOffset: "${expected.caretOffset}"} but got nothing instead`);
+                this.raiseError(
+                    `${name} failed - expected the template {newText: "${expected.newText}", caretOffset: "${expected.caretOffset}"} but got nothing instead`,
+                );
             }
 
             if (actual.newText !== expected.newText) {
@@ -3767,7 +3803,8 @@ export class TestState {
         const fileName = this.activeFile.fileName;
         const ext = ts.getAnyExtensionFromPath(fileName).slice(1);
         const lang = ["mts", "cts"].includes(ext) ? "ts" : ext;
-        let baselineText = codeFence(this.renderMarkers([{ text: "|", fileName: marker.fileName, position: marker.position }], /*useTerminalBoldSequence*/ false), lang) + "\n\n";
+        let baselineText = codeFence(this.renderMarkers([{ text: "|", fileName: marker.fileName, position: marker.position }], /*useTerminalBoldSequence*/ false), lang) +
+            "\n\n";
 
         const completions = this.getCompletionListAtCaret(completionPreferences)!;
 
@@ -4193,7 +4230,9 @@ export class TestState {
         }
     }
 
-    public applyRefactor({ refactorName, actionName, actionDescription, newContent: newContentWithRenameMarker, triggerReason }: FourSlashInterface.ApplyRefactorOptions) {
+    public applyRefactor(
+        { refactorName, actionName, actionDescription, newContent: newContentWithRenameMarker, triggerReason }: FourSlashInterface.ApplyRefactorOptions,
+    ) {
         const range = this.getSelection();
         const refactors = this.getApplicableRefactorsAtSelection(triggerReason);
         const refactorsWithName = refactors.filter(r => r.name === refactorName);
@@ -4478,7 +4517,13 @@ export class TestState {
                 for (let i = 0; i < outgoingCalls.values.length; i++) {
                     const outgoingCall = outgoingCalls.values[i];
                     text += `${prefix}│ ╭ to:\n`;
-                    text += this.formatCallHierarchyItem(this.findFile(outgoingCall.to.file), outgoingCall.to, CallHierarchyItemDirection.Outgoing, seen, `${prefix}│ │ `);
+                    text += this.formatCallHierarchyItem(
+                        this.findFile(outgoingCall.to.file),
+                        outgoingCall.to,
+                        CallHierarchyItemDirection.Outgoing,
+                        seen,
+                        `${prefix}│ │ `,
+                    );
                     text += `${prefix}│ ├ fromSpans:\n`;
                     text += this.formatCallHierarchyItemSpans(
                         file,
@@ -4764,7 +4809,13 @@ export function runFourSlashTest(basePath: string, testType: FourSlashTestType, 
     runFourSlashTestContent(basePath, testType, content, fileName, serverLogBaseliner);
 }
 
-export function runFourSlashTestContent(basePath: string, testType: FourSlashTestType, content: string, fileName: string, serverLogBaseliner?: FourSlashServerLogBaseliner): void {
+export function runFourSlashTestContent(
+    basePath: string,
+    testType: FourSlashTestType,
+    content: string,
+    fileName: string,
+    serverLogBaseliner?: FourSlashServerLogBaseliner,
+): void {
     // Give file paths an absolute path for the virtual file system
     const absoluteBasePath = ts.combinePaths(Harness.virtualFileSystemRoot, basePath);
     const absoluteFileName = ts.combinePaths(Harness.virtualFileSystemRoot, fileName);

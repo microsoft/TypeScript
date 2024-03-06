@@ -486,7 +486,11 @@ describe("unittests:: Reuse program structure:: General", () => {
             return newProgram(files, [root], compilerOptions, useGetSourceFileByPath);
         }
 
-        function updateRedirectProgram(program: ProgramWithSourceTexts, updater: (files: NamedSourceText[]) => void, useGetSourceFileByPath: boolean): ProgramWithSourceTexts {
+        function updateRedirectProgram(
+            program: ProgramWithSourceTexts,
+            updater: (files: NamedSourceText[]) => void,
+            useGetSourceFileByPath: boolean,
+        ): ProgramWithSourceTexts {
             return updateProgram(program, [root], compilerOptions, updater, /*newTexts*/ undefined, useGetSourceFileByPath);
         }
 

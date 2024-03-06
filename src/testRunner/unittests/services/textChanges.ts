@@ -68,7 +68,10 @@ describe("unittests:: services:: textChanges", () => {
             assert.equal(changes.length, 1);
             assert.equal(changes[0].fileName, sourceFile.fileName);
             const modified = ts.textChanges.applyChanges(sourceFile.text, changes[0].textChanges);
-            Harness.Baseline.runBaseline(`textChanges/${caption}.js`, `===ORIGINAL===${newLineCharacter}${text}${newLineCharacter}===MODIFIED===${newLineCharacter}${modified}`);
+            Harness.Baseline.runBaseline(
+                `textChanges/${caption}.js`,
+                `===ORIGINAL===${newLineCharacter}${text}${newLineCharacter}===MODIFIED===${newLineCharacter}${modified}`,
+            );
         });
     }
 
@@ -156,7 +159,9 @@ var z = 3; // comment 4
             deleteNode(changeTracker, sourceFile, findVariableStatementContaining("y", sourceFile), { leadingTriviaOption: ts.textChanges.LeadingTriviaOption.Exclude });
         });
         runSingleFileTest("deleteNode3", /*placeOpenBraceOnNewLineForFunctions*/ false, text, /*validateNodes*/ false, (sourceFile, changeTracker) => {
-            deleteNode(changeTracker, sourceFile, findVariableStatementContaining("y", sourceFile), { trailingTriviaOption: ts.textChanges.TrailingTriviaOption.Exclude });
+            deleteNode(changeTracker, sourceFile, findVariableStatementContaining("y", sourceFile), {
+                trailingTriviaOption: ts.textChanges.TrailingTriviaOption.Exclude,
+            });
         });
         runSingleFileTest("deleteNode4", /*placeOpenBraceOnNewLineForFunctions*/ false, text, /*validateNodes*/ false, (sourceFile, changeTracker) => {
             deleteNode(changeTracker, sourceFile, findVariableStatementContaining("y", sourceFile), {
@@ -244,13 +249,19 @@ var a = 4; // comment 7`;
         runSingleFileTest("replaceRange", /*placeOpenBraceOnNewLineForFunctions*/ true, text, /*validateNodes*/ true, (sourceFile, changeTracker) => {
             changeTracker.replaceRange(sourceFile, { pos: text.indexOf("var y"), end: text.indexOf("var a") }, createTestClass(), { suffix: newLineCharacter });
         });
-        runSingleFileTest("replaceRangeWithForcedIndentation", /*placeOpenBraceOnNewLineForFunctions*/ true, text, /*validateNodes*/ true, (sourceFile, changeTracker) => {
-            changeTracker.replaceRange(sourceFile, { pos: text.indexOf("var y"), end: text.indexOf("var a") }, createTestClass(), {
-                suffix: newLineCharacter,
-                indentation: 8,
-                delta: 0,
-            });
-        });
+        runSingleFileTest(
+            "replaceRangeWithForcedIndentation",
+            /*placeOpenBraceOnNewLineForFunctions*/ true,
+            text,
+            /*validateNodes*/ true,
+            (sourceFile, changeTracker) => {
+                changeTracker.replaceRange(sourceFile, { pos: text.indexOf("var y"), end: text.indexOf("var a") }, createTestClass(), {
+                    suffix: newLineCharacter,
+                    indentation: 8,
+                    delta: 0,
+                });
+            },
+        );
 
         runSingleFileTest(
             "replaceRangeNoLineBreakBefore",
@@ -322,28 +333,52 @@ var z = 3; // comment 5
 // comment 6
 var a = 4; // comment 7`;
         runSingleFileTest("replaceNodeRange1", /*placeOpenBraceOnNewLineForFunctions*/ true, text, /*validateNodes*/ true, (sourceFile, changeTracker) => {
-            changeTracker.replaceNodeRange(sourceFile, findVariableStatementContaining("y", sourceFile), findVariableStatementContaining("z", sourceFile), createTestClass(), {
-                suffix: newLineCharacter,
-            });
+            changeTracker.replaceNodeRange(
+                sourceFile,
+                findVariableStatementContaining("y", sourceFile),
+                findVariableStatementContaining("z", sourceFile),
+                createTestClass(),
+                {
+                    suffix: newLineCharacter,
+                },
+            );
         });
         runSingleFileTest("replaceNodeRange2", /*placeOpenBraceOnNewLineForFunctions*/ true, text, /*validateNodes*/ true, (sourceFile, changeTracker) => {
-            changeTracker.replaceNodeRange(sourceFile, findVariableStatementContaining("y", sourceFile), findVariableStatementContaining("z", sourceFile), createTestClass(), {
-                leadingTriviaOption: ts.textChanges.LeadingTriviaOption.Exclude,
-                suffix: newLineCharacter,
-                prefix: newLineCharacter,
-            });
+            changeTracker.replaceNodeRange(
+                sourceFile,
+                findVariableStatementContaining("y", sourceFile),
+                findVariableStatementContaining("z", sourceFile),
+                createTestClass(),
+                {
+                    leadingTriviaOption: ts.textChanges.LeadingTriviaOption.Exclude,
+                    suffix: newLineCharacter,
+                    prefix: newLineCharacter,
+                },
+            );
         });
         runSingleFileTest("replaceNodeRange3", /*placeOpenBraceOnNewLineForFunctions*/ true, text, /*validateNodes*/ true, (sourceFile, changeTracker) => {
-            changeTracker.replaceNodeRange(sourceFile, findVariableStatementContaining("y", sourceFile), findVariableStatementContaining("z", sourceFile), createTestClass(), {
-                trailingTriviaOption: ts.textChanges.TrailingTriviaOption.Exclude,
-                suffix: newLineCharacter,
-            });
+            changeTracker.replaceNodeRange(
+                sourceFile,
+                findVariableStatementContaining("y", sourceFile),
+                findVariableStatementContaining("z", sourceFile),
+                createTestClass(),
+                {
+                    trailingTriviaOption: ts.textChanges.TrailingTriviaOption.Exclude,
+                    suffix: newLineCharacter,
+                },
+            );
         });
         runSingleFileTest("replaceNodeRange4", /*placeOpenBraceOnNewLineForFunctions*/ true, text, /*validateNodes*/ true, (sourceFile, changeTracker) => {
-            changeTracker.replaceNodeRange(sourceFile, findVariableStatementContaining("y", sourceFile), findVariableStatementContaining("z", sourceFile), createTestClass(), {
-                leadingTriviaOption: ts.textChanges.LeadingTriviaOption.Exclude,
-                trailingTriviaOption: ts.textChanges.TrailingTriviaOption.Exclude,
-            });
+            changeTracker.replaceNodeRange(
+                sourceFile,
+                findVariableStatementContaining("y", sourceFile),
+                findVariableStatementContaining("z", sourceFile),
+                createTestClass(),
+                {
+                    leadingTriviaOption: ts.textChanges.LeadingTriviaOption.Exclude,
+                    trailingTriviaOption: ts.textChanges.TrailingTriviaOption.Exclude,
+                },
+            );
         });
     }
     {
@@ -358,9 +393,15 @@ var a = 4; // comment 7`;
         runSingleFileTest("insertNodeBefore3", /*placeOpenBraceOnNewLineForFunctions*/ true, text, /*validateNodes*/ true, (sourceFile, changeTracker) => {
             changeTracker.insertNodeBefore(sourceFile, findVariableStatementContaining("y", sourceFile), createTestClass());
         });
-        runSingleFileTest("insertNodeAfterVariableDeclaration", /*placeOpenBraceOnNewLineForFunctions*/ true, text, /*validateNodes*/ false, (sourceFile, changeTracker) => {
-            changeTracker.insertNodeAfter(sourceFile, findVariableDeclarationContaining("y", sourceFile), createTestVariableDeclaration("z1"));
-        });
+        runSingleFileTest(
+            "insertNodeAfterVariableDeclaration",
+            /*placeOpenBraceOnNewLineForFunctions*/ true,
+            text,
+            /*validateNodes*/ false,
+            (sourceFile, changeTracker) => {
+                changeTracker.insertNodeAfter(sourceFile, findVariableDeclarationContaining("y", sourceFile), createTestVariableDeclaration("z1"));
+            },
+        );
     }
     {
         const text = `
@@ -778,7 +819,13 @@ class A {
             const newNodes = [];
             for (let i = 0; i < 11 /*error doesn't occur with fewer nodes*/; ++i) {
                 newNodes.push(
-                    ts.factory.createPropertyDeclaration(/*modifiers*/ undefined, i + "", /*questionOrExclamationToken*/ undefined, /*type*/ undefined, /*initializer*/ undefined),
+                    ts.factory.createPropertyDeclaration(
+                        /*modifiers*/ undefined,
+                        i + "",
+                        /*questionOrExclamationToken*/ undefined,
+                        /*type*/ undefined,
+                        /*initializer*/ undefined,
+                    ),
                 );
             }
             const insertAfter = findChild("x", sourceFile);

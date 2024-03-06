@@ -44,7 +44,13 @@ function assertSameDiagnostics(file1: ts.SourceFile, file2: ts.SourceFile) {
 // be a good thing.  If it decreases, that's not great (less reusability), but that may be
 // unavoidable.  If it does decrease an investigation should be done to make sure that things
 // are still ok and we're still appropriately reusing most of the tree.
-function compareTrees(oldText: ts.IScriptSnapshot, newText: ts.IScriptSnapshot, textChangeRange: ts.TextChangeRange, expectedReusedElements: number, oldTree?: ts.SourceFile) {
+function compareTrees(
+    oldText: ts.IScriptSnapshot,
+    newText: ts.IScriptSnapshot,
+    textChangeRange: ts.TextChangeRange,
+    expectedReusedElements: number,
+    oldTree?: ts.SourceFile,
+) {
     oldTree = oldTree || createTree(oldText, /*version:*/ ".");
     Utils.assertInvariants(oldTree, /*parent:*/ undefined);
 
@@ -913,7 +919,10 @@ module m3 { }\
 
             function verifyInsert(atIndex: number, singleIgnore?: true) {
                 const index = getIndexOfTsIgnoreComment(atIndex);
-                const source = textWithIgnoreCommentFrom(textWithIgnoreComment.slice(0, index) + textWithIgnoreComment.slice(index + tsIgnoreComment.length), singleIgnore);
+                const source = textWithIgnoreCommentFrom(
+                    textWithIgnoreComment.slice(0, index) + textWithIgnoreComment.slice(index + tsIgnoreComment.length),
+                    singleIgnore,
+                );
                 const oldText = ts.ScriptSnapshot.fromString(source);
                 const newTextAndChange = withInsert(oldText, index, tsIgnoreComment);
                 verifyCommentDirectives(oldText, newTextAndChange);

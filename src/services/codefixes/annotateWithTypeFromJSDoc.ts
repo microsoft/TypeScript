@@ -184,7 +184,14 @@ function transformJSDocParameter(node: ParameterDeclaration) {
     const isRest = node.type!.kind === SyntaxKind.JSDocVariadicType && index === node.parent.parameters.length - 1; // TODO: GH#18217
     const name = node.name || (isRest ? "rest" : "arg" + index);
     const dotdotdot = isRest ? factory.createToken(SyntaxKind.DotDotDotToken) : node.dotDotDotToken;
-    return factory.createParameterDeclaration(node.modifiers, dotdotdot, name, node.questionToken, visitNode(node.type, transformJSDocType, isTypeNode), node.initializer);
+    return factory.createParameterDeclaration(
+        node.modifiers,
+        dotdotdot,
+        name,
+        node.questionToken,
+        visitNode(node.type, transformJSDocType, isTypeNode),
+        node.initializer,
+    );
 }
 
 function transformJSDocTypeReference(node: TypeReferenceNode) {

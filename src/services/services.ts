@@ -333,7 +333,12 @@ import * as classifier2020 from "./classifier2020";
 /** The version of the language service API */
 export const servicesVersion = "0.8";
 
-function createNode<TKind extends SyntaxKind>(kind: TKind, pos: number, end: number, parent: Node): NodeObject | TokenObject<TKind> | IdentifierObject | PrivateIdentifierObject {
+function createNode<TKind extends SyntaxKind>(
+    kind: TKind,
+    pos: number,
+    end: number,
+    parent: Node,
+): NodeObject | TokenObject<TKind> | IdentifierObject | PrivateIdentifierObject {
     const node = isNodeKind(kind) ? new NodeObject(kind, pos, end) :
         kind === SyntaxKind.Identifier ? new IdentifierObject(SyntaxKind.Identifier, pos, end) :
         kind === SyntaxKind.PrivateIdentifier ? new PrivateIdentifierObject(SyntaxKind.PrivateIdentifier, pos, end) :
@@ -668,7 +673,10 @@ class SymbolObject implements Symbol {
         if (!this.documentationComment) {
             this.documentationComment = emptyArray; // Set temporarily to avoid an infinite loop finding inherited docs
 
-            if (!this.declarations && isTransientSymbol(this) && this.links.target && isTransientSymbol(this.links.target) && this.links.target.links.tupleLabelDeclaration) {
+            if (
+                !this.declarations && isTransientSymbol(this) && this.links.target && isTransientSymbol(this.links.target) &&
+                this.links.target.links.tupleLabelDeclaration
+            ) {
                 const labelDecl = this.links.target.links.tupleLabelDeclaration;
                 this.documentationComment = getDocumentationComment([labelDecl], checker);
             }
@@ -1844,7 +1852,13 @@ export function createLanguageService(
             onError?: (message: string) => void,
             shouldCreateNewSourceFile?: boolean,
         ): SourceFile | undefined {
-            return getOrCreateSourceFileByPath(fileName, toPath(fileName, currentDirectory, getCanonicalFileName), languageVersionOrOptions, onError, shouldCreateNewSourceFile);
+            return getOrCreateSourceFileByPath(
+                fileName,
+                toPath(fileName, currentDirectory, getCanonicalFileName),
+                languageVersionOrOptions,
+                onError,
+                shouldCreateNewSourceFile,
+            );
         }
 
         function getOrCreateSourceFileByPath(
@@ -1854,7 +1868,10 @@ export function createLanguageService(
             _onError?: (message: string) => void,
             shouldCreateNewSourceFile?: boolean,
         ): SourceFile | undefined {
-            Debug.assert(compilerHost, "getOrCreateSourceFileByPath called after typical CompilerHost lifetime, check the callstack something with a reference to an old host.");
+            Debug.assert(
+                compilerHost,
+                "getOrCreateSourceFileByPath called after typical CompilerHost lifetime, check the callstack something with a reference to an old host.",
+            );
             // The program is asking for this file, check first if the host can locate it.
             // If the host can not locate the file, then it does not exist. return undefined
             // to the program to allow reporting of errors for missing files.
@@ -1926,7 +1943,16 @@ export function createLanguageService(
             }
 
             // Could not find this file in the old program, create a new SourceFile for it.
-            return documentRegistry.acquireDocumentWithKey(fileName, path, host, documentRegistryBucketKey, scriptSnapshot, scriptVersion, scriptKind, languageVersionOrOptions);
+            return documentRegistry.acquireDocumentWithKey(
+                fileName,
+                path,
+                host,
+                documentRegistryBucketKey,
+                scriptSnapshot,
+                scriptVersion,
+                scriptKind,
+                languageVersionOrOptions,
+            );
         }
     }
 
@@ -2106,7 +2132,13 @@ export function createLanguageService(
         );
     }
 
-    function getCompletionEntrySymbol(fileName: string, position: number, name: string, source?: string, preferences: UserPreferences = emptyOptions): Symbol | undefined {
+    function getCompletionEntrySymbol(
+        fileName: string,
+        position: number,
+        name: string,
+        source?: string,
+        preferences: UserPreferences = emptyOptions,
+    ): Symbol | undefined {
         synchronizeHostData();
         return Completions.getCompletionEntrySymbol(program, log, getValidSourceFile(fileName), position, { name, source }, host, preferences);
     }
@@ -2131,7 +2163,10 @@ export function createLanguageService(
                 kind: ScriptElementKind.unknown,
                 kindModifiers: ScriptElementKindModifier.none,
                 textSpan: createTextSpanFromNode(nodeForQuickInfo, sourceFile),
-                displayParts: typeChecker.runWithCancellationToken(cancellationToken, typeChecker => typeToDisplayParts(typeChecker, type, getContainerNode(nodeForQuickInfo))),
+                displayParts: typeChecker.runWithCancellationToken(
+                    cancellationToken,
+                    typeChecker => typeToDisplayParts(typeChecker, type, getContainerNode(nodeForQuickInfo)),
+                ),
                 documentation: type.symbol ? type.symbol.getDocumentationComment(typeChecker) : undefined,
                 tags: type.symbol ? type.symbol.getJsDocTags(typeChecker) : undefined,
             };
@@ -2139,7 +2174,8 @@ export function createLanguageService(
 
         const { symbolKind, displayParts, documentation, tags } = typeChecker.runWithCancellationToken(
             cancellationToken,
-            typeChecker => SymbolDisplay.getSymbolDisplayPartsDocumentationAndSymbolKind(typeChecker, symbol, sourceFile, getContainerNode(nodeForQuickInfo), nodeForQuickInfo),
+            typeChecker =>
+                SymbolDisplay.getSymbolDisplayPartsDocumentationAndSymbolKind(typeChecker, symbol, sourceFile, getContainerNode(nodeForQuickInfo), nodeForQuickInfo),
         );
         return {
             kind: symbolKind,
@@ -2250,7 +2286,8 @@ export function createLanguageService(
                 node,
                 position,
                 { findInStrings, findInComments, providePrefixAndSuffixTextForRename, use: FindAllReferences.FindReferencesUse.Rename },
-                (entry, originalNode, checker) => FindAllReferences.toRenameLocation(entry, originalNode, checker, providePrefixAndSuffixTextForRename || false, quotePreference),
+                (entry, originalNode, checker) =>
+                    FindAllReferences.toRenameLocation(entry, originalNode, checker, providePrefixAndSuffixTextForRename || false, quotePreference),
             );
         }
     }
@@ -2265,7 +2302,12 @@ export function createLanguageService(
         );
     }
 
-    function getReferencesWorker<T>(node: Node, position: number, options: FindAllReferences.Options, cb: FindAllReferences.ToReferenceOrRenameEntry<T>): T[] | undefined {
+    function getReferencesWorker<T>(
+        node: Node,
+        position: number,
+        options: FindAllReferences.Options,
+        cb: FindAllReferences.ToReferenceOrRenameEntry<T>,
+    ): T[] | undefined {
         synchronizeHostData();
 
         // Exclude default library when renaming as commonly user don't want to change that file.
@@ -2409,7 +2451,13 @@ export function createLanguageService(
 
         const responseFormat = format || SemanticClassificationFormat.Original;
         if (responseFormat === SemanticClassificationFormat.Original) {
-            return classifier.getEncodedSemanticClassifications(program.getTypeChecker(), cancellationToken, getValidSourceFile(fileName), program.getClassifiableNames(), span);
+            return classifier.getEncodedSemanticClassifications(
+                program.getTypeChecker(),
+                cancellationToken,
+                getValidSourceFile(fileName),
+                program.getClassifiableNames(),
+                span,
+            );
         }
         else {
             return classifier2020.getEncodedSemanticClassifications(program, cancellationToken, getValidSourceFile(fileName), span);
@@ -2511,7 +2559,12 @@ export function createLanguageService(
         });
     }
 
-    function getCombinedCodeFix(scope: CombinedCodeFixScope, fixId: {}, formatOptions: FormatCodeSettings, preferences: UserPreferences = emptyOptions): CombinedCodeActions {
+    function getCombinedCodeFix(
+        scope: CombinedCodeFixScope,
+        fixId: {},
+        formatOptions: FormatCodeSettings,
+        preferences: UserPreferences = emptyOptions,
+    ): CombinedCodeActions {
         synchronizeHostData();
         Debug.assert(scope.type === "file");
         const sourceFile = getValidSourceFile(scope.fileName);
@@ -2570,7 +2623,12 @@ export function createLanguageService(
         formatOptions?: FormatCodeSettings,
     ): TextInsertion | undefined {
         const formatSettings = formatOptions ? formatting.getFormatContext(formatOptions, host).options : undefined;
-        return JsDoc.getDocCommentTemplateAtPosition(getNewLineOrDefaultFromHost(host, formatSettings), syntaxTreeCache.getCurrentSourceFile(fileName), position, options);
+        return JsDoc.getDocCommentTemplateAtPosition(
+            getNewLineOrDefaultFromHost(host, formatSettings),
+            syntaxTreeCache.getCurrentSourceFile(fileName),
+            position,
+            options,
+        );
     }
 
     function isValidBraceCompletionAtPosition(fileName: string, position: number, openingBrace: number): boolean {
@@ -2681,7 +2739,10 @@ export function createLanguageService(
             if (openingTagText !== closeTag.tagName.getText(sourceFile)) return undefined;
 
             return {
-                ranges: [{ start: openTagNameStart, length: openTagNameEnd - openTagNameStart }, { start: closeTagNameStart, length: closeTagNameEnd - closeTagNameStart }],
+                ranges: [{ start: openTagNameStart, length: openTagNameEnd - openTagNameStart }, {
+                    start: closeTagNameStart,
+                    length: closeTagNameEnd - closeTagNameStart,
+                }],
                 wordPattern: jsxTagWordPattern,
             };
         }
@@ -2736,7 +2797,12 @@ export function createLanguageService(
             if (lineTextStart !== undefined) {
                 if (isJsx) {
                     textChanges.push(
-                        ...toggleMultilineComment(fileName, { pos: lineStarts[i] + leftMostPosition, end: sourceFile.getLineEndOfPosition(lineStarts[i]) }, isCommenting, isJsx),
+                        ...toggleMultilineComment(
+                            fileName,
+                            { pos: lineStarts[i] + leftMostPosition, end: sourceFile.getLineEndOfPosition(lineStarts[i]) },
+                            isCommenting,
+                            isJsx,
+                        ),
                     );
                 }
                 else if (isCommenting) {
@@ -3182,7 +3248,12 @@ export function createLanguageService(
     ): RefactorEditInfo | undefined {
         synchronizeHostData();
         const file = getValidSourceFile(fileName);
-        return refactor.getEditsForRefactor(getRefactorContext(file, positionOrRange, preferences, formatOptions), refactorName, actionName, interactiveRefactorArguments);
+        return refactor.getEditsForRefactor(
+            getRefactorContext(file, positionOrRange, preferences, formatOptions),
+            refactorName,
+            actionName,
+            interactiveRefactorArguments,
+        );
     }
 
     function toLineColumnOffset(fileName: string, position: number): LineAndCharacter {
@@ -3205,14 +3276,18 @@ export function createLanguageService(
     function provideCallHierarchyIncomingCalls(fileName: string, position: number): CallHierarchyIncomingCall[] {
         synchronizeHostData();
         const sourceFile = getValidSourceFile(fileName);
-        const declaration = firstOrOnly(CallHierarchy.resolveCallHierarchyDeclaration(program, position === 0 ? sourceFile : getTouchingPropertyName(sourceFile, position)));
+        const declaration = firstOrOnly(
+            CallHierarchy.resolveCallHierarchyDeclaration(program, position === 0 ? sourceFile : getTouchingPropertyName(sourceFile, position)),
+        );
         return declaration ? CallHierarchy.getIncomingCalls(program, declaration, cancellationToken) : [];
     }
 
     function provideCallHierarchyOutgoingCalls(fileName: string, position: number): CallHierarchyOutgoingCall[] {
         synchronizeHostData();
         const sourceFile = getValidSourceFile(fileName);
-        const declaration = firstOrOnly(CallHierarchy.resolveCallHierarchyDeclaration(program, position === 0 ? sourceFile : getTouchingPropertyName(sourceFile, position)));
+        const declaration = firstOrOnly(
+            CallHierarchy.resolveCallHierarchyDeclaration(program, position === 0 ? sourceFile : getTouchingPropertyName(sourceFile, position)),
+        );
         return declaration ? CallHierarchy.getOutgoingCalls(program, declaration) : [];
     }
 
@@ -3411,7 +3486,12 @@ function getSymbolAtLocationForQuickInfo(node: Node, checker: TypeChecker): Symb
  *
  * @internal
  */
-export function getPropertySymbolsFromContextualType(node: ObjectLiteralElementWithName, checker: TypeChecker, contextualType: Type, unionSymbolOk: boolean): readonly Symbol[] {
+export function getPropertySymbolsFromContextualType(
+    node: ObjectLiteralElementWithName,
+    checker: TypeChecker,
+    contextualType: Type,
+    unionSymbolOk: boolean,
+): readonly Symbol[] {
     const name = getNameFromPropertyName(node.name);
     if (!name) return emptyArray;
     if (!contextualType.isUnion()) {

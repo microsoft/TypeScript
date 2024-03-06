@@ -211,7 +211,8 @@ function updateImports(
             if (!pathIsRelative(referenceText)) return undefined;
             const oldAbsolute = combinePathsSafe(oldImportFromDirectory, referenceText);
             const newAbsolute = oldToNew(oldAbsolute);
-            return newAbsolute === undefined ? undefined : ensurePathIsNonModuleName(getRelativePathFromDirectory(newImportFromDirectory, newAbsolute, getCanonicalFileName));
+            return newAbsolute === undefined ? undefined
+                : ensurePathIsNonModuleName(getRelativePathFromDirectory(newImportFromDirectory, newAbsolute, getCanonicalFileName));
         }, importLiteral => {
             const importedModuleSymbol = program.getTypeChecker().getSymbolAtLocation(importLiteral);
             // No need to update if it's an ambient module^M

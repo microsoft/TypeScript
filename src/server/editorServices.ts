@@ -1160,7 +1160,8 @@ export class ProjectService {
         this.globalPlugins = opts.globalPlugins || emptyArray;
         this.pluginProbeLocations = opts.pluginProbeLocations || emptyArray;
         this.allowLocalPluginLoads = !!opts.allowLocalPluginLoads;
-        this.typesMapLocation = (opts.typesMapLocation === undefined) ? combinePaths(getDirectoryPath(this.getExecutingFilePath()), "typesMap.json") : opts.typesMapLocation;
+        this.typesMapLocation = (opts.typesMapLocation === undefined) ? combinePaths(getDirectoryPath(this.getExecutingFilePath()), "typesMap.json")
+            : opts.typesMapLocation;
         this.session = opts.session;
         this.jsDocParsingMode = opts.jsDocParsingMode;
 
@@ -2393,7 +2394,9 @@ export class ProjectService {
                     .map(name => ({ name, size: this.host.getFileSize!(name) }))
                     .sort((a, b) => b.size - a.size)
                     .slice(0, 5);
-                this.logger.info(`Non TS file size exceeded limit (${totalNonTsFileSize}). Largest files: ${top5LargestFiles.map(file => `${file.name}:${file.size}`).join(", ")}`);
+                this.logger.info(
+                    `Non TS file size exceeded limit (${totalNonTsFileSize}). Largest files: ${top5LargestFiles.map(file => `${file.name}:${file.size}`).join(", ")}`,
+                );
                 // Keep the size as zero since it's disabled
                 return fileName;
             }
@@ -2585,7 +2588,9 @@ export class ProjectService {
         );
         if (lastFileExceededProgramSize) {
             project.disableLanguageService(lastFileExceededProgramSize);
-            this.configFileExistenceInfoCache.forEach((_configFileExistenceInfo, canonicalConfigFilePath) => this.stopWatchingWildCards(canonicalConfigFilePath, project));
+            this.configFileExistenceInfoCache.forEach((_configFileExistenceInfo, canonicalConfigFilePath) =>
+                this.stopWatchingWildCards(canonicalConfigFilePath, project)
+            );
         }
         else {
             project.setCompilerOptions(compilerOptions);
@@ -2699,8 +2704,10 @@ export class ProjectService {
                         // Update projects
                         let ensureProjectsForOpenFiles = false;
                         this.sharedExtendedConfigFileWatchers.get(extendedConfigFilePath)?.projects.forEach(canonicalPath => {
-                            ensureProjectsForOpenFiles =
-                                this.delayUpdateProjectsFromParsedConfigOnConfigFileChange(canonicalPath, `Change in extended config file ${extendedConfigFileName} detected`) ||
+                            ensureProjectsForOpenFiles = this.delayUpdateProjectsFromParsedConfigOnConfigFileChange(
+                                canonicalPath,
+                                `Change in extended config file ${extendedConfigFileName} detected`,
+                            ) ||
                                 ensureProjectsForOpenFiles;
                         });
                         if (ensureProjectsForOpenFiles) this.delayEnsureProjectForOpenFiles();
@@ -2851,7 +2858,10 @@ export class ProjectService {
      * @internal
      */
     reloadFileNamesOfConfiguredProject(project: ConfiguredProject) {
-        const fileNames = this.reloadFileNamesOfParsedConfig(project.getConfigFilePath(), this.configFileExistenceInfoCache.get(project.canonicalConfigFilePath)!.config!);
+        const fileNames = this.reloadFileNamesOfParsedConfig(
+            project.getConfigFilePath(),
+            this.configFileExistenceInfoCache.get(project.canonicalConfigFilePath)!.config!,
+        );
         project.updateErrorOnNoInputFiles(fileNames);
         this.updateNonInferredProjectFiles(project, fileNames.concat(project.getExternalFiles(ProgramUpdateLevel.RootNamesAndUpdate)), fileNamePropertyReader);
         project.markAsDirty();
@@ -3014,7 +3024,15 @@ export class ProjectService {
             typeAcquisition = this.typeAcquisitionForInferredProjects;
         }
         watchOptionsAndErrors = watchOptionsAndErrors || undefined;
-        const project = new InferredProject(this, this.documentRegistry, compilerOptions, watchOptionsAndErrors?.watchOptions, projectRootPath, currentDirectory, typeAcquisition);
+        const project = new InferredProject(
+            this,
+            this.documentRegistry,
+            compilerOptions,
+            watchOptionsAndErrors?.watchOptions,
+            projectRootPath,
+            currentDirectory,
+            typeAcquisition,
+        );
         project.setProjectErrors(watchOptionsAndErrors?.errors);
         if (isSingleInferredProject) {
             this.inferredProjects.unshift(project);
@@ -3309,7 +3327,12 @@ export class ProjectService {
                 "",
                 () =>
                     `${
-                        JSON.stringify({ fileName, currentDirectory, hostCurrentDirectory: this.currentDirectory, openKeys: arrayFrom(this.openFilesWithNonRootedDiskPath.keys()) })
+                        JSON.stringify({
+                            fileName,
+                            currentDirectory,
+                            hostCurrentDirectory: this.currentDirectory,
+                            openKeys: arrayFrom(this.openFilesWithNonRootedDiskPath.keys()),
+                        })
                     }\nScript info with non-dynamic relative file name can only be open script info or in context of host currentDirectory`,
             );
             Debug.assert(
@@ -3317,7 +3340,12 @@ export class ProjectService {
                 "",
                 () =>
                     `${
-                        JSON.stringify({ fileName, currentDirectory, hostCurrentDirectory: this.currentDirectory, openKeys: arrayFrom(this.openFilesWithNonRootedDiskPath.keys()) })
+                        JSON.stringify({
+                            fileName,
+                            currentDirectory,
+                            hostCurrentDirectory: this.currentDirectory,
+                            openKeys: arrayFrom(this.openFilesWithNonRootedDiskPath.keys()),
+                        })
                     }\nOpen script files with non rooted disk path opened with current directory context cannot have same canonical names`,
             );
             Debug.assert(
@@ -3325,7 +3353,12 @@ export class ProjectService {
                 "",
                 () =>
                     `${
-                        JSON.stringify({ fileName, currentDirectory, hostCurrentDirectory: this.currentDirectory, openKeys: arrayFrom(this.openFilesWithNonRootedDiskPath.keys()) })
+                        JSON.stringify({
+                            fileName,
+                            currentDirectory,
+                            hostCurrentDirectory: this.currentDirectory,
+                            openKeys: arrayFrom(this.openFilesWithNonRootedDiskPath.keys()),
+                        })
                     }\nDynamic files must always be opened with service's current directory or service should support inferred project per projectRootPath.`,
             );
             // If the file is not opened by client and the file doesnot exist on the disk, return
@@ -3419,7 +3452,11 @@ export class ProjectService {
         };
         const projectName = project.projectName;
         const documentPositionMapper = getDocumentPositionMapper(
-            { getCanonicalFileName: this.toCanonicalFileName, log: s => this.logger.info(s), getSourceFileLike: f => this.getSourceFileLike(f, projectName, declarationInfo) },
+            {
+                getCanonicalFileName: this.toCanonicalFileName,
+                log: s => this.logger.info(s),
+                getSourceFileLike: f => this.getSourceFileLike(f, projectName, declarationInfo),
+            },
             declarationInfo.fileName,
             declarationInfo.textStorage.getLineInfo(),
             readMapFile,
@@ -4244,7 +4281,8 @@ export class ProjectService {
 
     private telemetryOnOpenFile(scriptInfo: ScriptInfo): void {
         if (
-            this.serverMode !== LanguageServiceMode.Semantic || !this.eventHandler || !scriptInfo.isJavaScript() || !addToSeen(this.allJsFilesForOpenFileTelemetry, scriptInfo.path)
+            this.serverMode !== LanguageServiceMode.Semantic || !this.eventHandler || !scriptInfo.isJavaScript() ||
+            !addToSeen(this.allJsFilesForOpenFileTelemetry, scriptInfo.path)
         ) {
             return;
         }

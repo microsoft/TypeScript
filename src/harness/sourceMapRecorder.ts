@@ -139,7 +139,9 @@ namespace SourceMapSpanWriter {
 
         assert.isTrue(spansOnSingleLine.length === 1);
         sourceMapRecorder.WriteLine("-------------------------------------------------------------------");
-        sourceMapRecorder.WriteLine("emittedFile:" + jsFile.file + (continuesLine ? ` (${sourceMapSpan.generatedLine + 1}, ${sourceMapSpan.generatedCharacter + 1})` : ""));
+        sourceMapRecorder.WriteLine(
+            "emittedFile:" + jsFile.file + (continuesLine ? ` (${sourceMapSpan.generatedLine + 1}, ${sourceMapSpan.generatedCharacter + 1})` : ""),
+        );
         sourceMapRecorder.WriteLine("sourceFile:" + sourceMapSources[spansOnSingleLine[0].sourceMapSpan.sourceIndex!]);
         sourceMapRecorder.WriteLine("-------------------------------------------------------------------");
 
@@ -209,7 +211,12 @@ namespace SourceMapSpanWriter {
             }
         }
 
-        function writeSourceMapMarker(currentSpan: SourceMapSpanWithDecodeErrors, index: number, endColumn = currentSpan.sourceMapSpan.generatedCharacter, endContinues = false) {
+        function writeSourceMapMarker(
+            currentSpan: SourceMapSpanWithDecodeErrors,
+            index: number,
+            endColumn = currentSpan.sourceMapSpan.generatedCharacter,
+            endContinues = false,
+        ) {
             const markerId = getMarkerId(index);
             markerIds.push(markerId);
 

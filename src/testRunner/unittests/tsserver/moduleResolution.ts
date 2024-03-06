@@ -179,14 +179,20 @@ describe("unittests:: tsserver:: moduleResolution", () => {
         verifyErrors();
         host.writeFile("/home/src/projects/project/node_modules/foo/index.d.ts", getFsContentsForAlternateResultDts("foo"));
         verifyErrors();
-        host.writeFile("/home/src/projects/project/node_modules/@types/bar/package.json", getFsConentsForAlternateResultAtTypesPackageJson("bar", /*addTypesCondition*/ true));
+        host.writeFile(
+            "/home/src/projects/project/node_modules/@types/bar/package.json",
+            getFsConentsForAlternateResultAtTypesPackageJson("bar", /*addTypesCondition*/ true),
+        );
         verifyErrors();
         host.writeFile(
             "/home/src/projects/project/node_modules/foo/package.json",
             getFsContentsForAlternateResultPackageJson("foo", /*addTypes*/ true, /*addTypesCondition*/ true),
         );
         verifyErrors();
-        host.writeFile("/home/src/projects/project/node_modules/@types/bar2/package.json", getFsConentsForAlternateResultAtTypesPackageJson("bar2", /*addTypesCondition*/ false));
+        host.writeFile(
+            "/home/src/projects/project/node_modules/@types/bar2/package.json",
+            getFsConentsForAlternateResultAtTypesPackageJson("bar2", /*addTypesCondition*/ false),
+        );
         verifyErrors();
         host.writeFile(
             "/home/src/projects/project/node_modules/foo2/package.json",

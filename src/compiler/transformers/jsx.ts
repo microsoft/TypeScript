@@ -203,7 +203,9 @@ export function transformJsx(context: TransformationContext): (x: SourceFile | B
                                 ),
                                 /*exclamationToken*/ undefined,
                                 /*type*/ undefined,
-                                factory.createCallExpression(factory.createIdentifier("require"), /*typeArguments*/ undefined, [factory.createStringLiteral(importSource)]),
+                                factory.createCallExpression(factory.createIdentifier("require"), /*typeArguments*/ undefined, [
+                                    factory.createStringLiteral(importSource),
+                                ]),
                             ),
                         ], NodeFlags.Const),
                     );
@@ -483,7 +485,8 @@ export function transformJsx(context: TransformationContext): (x: SourceFile | B
                 (attrs, isSpread) =>
                     flatten(
                         map(attrs, attr =>
-                            isSpread ? transformJsxSpreadAttributeToProps(attr as JsxSpreadAttribute) : transformJsxAttributeToObjectLiteralElement(attr as JsxAttribute)),
+                            isSpread ? transformJsxSpreadAttributeToProps(attr as JsxSpreadAttribute)
+                                : transformJsxAttributeToObjectLiteralElement(attr as JsxAttribute)),
                     ),
             ),
         );

@@ -703,7 +703,14 @@ export function createWatchProgram<T extends BuilderProgram>(
                 if (reportFileChangeDetectedOnCreateProgram) {
                     reportWatchDiagnostic(Diagnostics.File_change_detected_Starting_incremental_compilation);
                 }
-                builderProgram = createProgram(/*rootNames*/ undefined, /*options*/ undefined, compilerHost, builderProgram, configFileParsingDiagnostics, projectReferences);
+                builderProgram = createProgram(
+                    /*rootNames*/ undefined,
+                    /*options*/ undefined,
+                    compilerHost,
+                    builderProgram,
+                    configFileParsingDiagnostics,
+                    projectReferences,
+                );
                 hasChangedConfigFileParsingErrors = false;
             }
         }

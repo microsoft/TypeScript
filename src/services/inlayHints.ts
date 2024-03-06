@@ -201,7 +201,9 @@ export function provideInlayHints(context: InlayHintsContext): InlayHint[] {
         return forEachChild(node, visitor);
     }
 
-    function isSignatureSupportingReturnAnnotation(node: Node): node is FunctionDeclaration | ArrowFunction | FunctionExpression | MethodDeclaration | GetAccessorDeclaration {
+    function isSignatureSupportingReturnAnnotation(
+        node: Node,
+    ): node is FunctionDeclaration | ArrowFunction | FunctionExpression | MethodDeclaration | GetAccessorDeclaration {
         return isArrowFunction(node) || isFunctionExpression(node) || isFunctionDeclaration(node) || isMethodDeclaration(node) || isGetAccessorDeclaration(node);
     }
 
@@ -277,7 +279,8 @@ export function provideInlayHints(context: InlayHintsContext): InlayHint[] {
         const hintParts = typeToInlayHintParts(declarationType);
         if (hintParts) {
             const hintText = typeof hintParts === "string" ? hintParts : hintParts.map(part => part.text).join("");
-            const isVariableNameMatchesType = preferences.includeInlayVariableTypeHintsWhenTypeMatchesName === false && equateStringsCaseInsensitive(decl.name.getText(), hintText);
+            const isVariableNameMatchesType = preferences.includeInlayVariableTypeHintsWhenTypeMatchesName === false &&
+                equateStringsCaseInsensitive(decl.name.getText(), hintText);
             if (isVariableNameMatchesType) {
                 return;
             }

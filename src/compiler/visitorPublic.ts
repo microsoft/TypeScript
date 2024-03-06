@@ -556,7 +556,12 @@ export function visitFunctionBody(node: ConciseBody, visitor: Visitor, context: 
     nodeVisitor?: NodeVisitor,
 ): FunctionBody | undefined; // eslint-disable-line @typescript-eslint/unified-signatures
 /** @internal */ export function visitFunctionBody(node: ConciseBody, visitor: Visitor, context: TransformationContext, nodeVisitor?: NodeVisitor): ConciseBody; // eslint-disable-line @typescript-eslint/unified-signatures
-export function visitFunctionBody(node: ConciseBody | undefined, visitor: Visitor, context: TransformationContext, nodeVisitor: NodeVisitor = visitNode): ConciseBody | undefined {
+export function visitFunctionBody(
+    node: ConciseBody | undefined,
+    visitor: Visitor,
+    context: TransformationContext,
+    nodeVisitor: NodeVisitor = visitNode,
+): ConciseBody | undefined {
     context.resumeLexicalEnvironment();
     const updated = nodeVisitor(node, visitor, isConciseBody);
     const declarations = context.endLexicalEnvironment();
@@ -754,7 +759,8 @@ const visitEachChildTable: VisitEachChildTable = {
             nodesVisitor(node.modifiers, visitor, isModifierLike),
             Debug.checkDefined(nodeVisitor(node.name, visitor, isPropertyName)),
             // QuestionToken and ExclamationToken are mutually exclusive in PropertyDeclaration
-            tokenVisitor ? nodeVisitor(node.questionToken ?? node.exclamationToken, tokenVisitor, isQuestionOrExclamationToken) : node.questionToken ?? node.exclamationToken,
+            tokenVisitor ? nodeVisitor(node.questionToken ?? node.exclamationToken, tokenVisitor, isQuestionOrExclamationToken)
+                : node.questionToken ?? node.exclamationToken,
             nodeVisitor(node.type, visitor, isTypeNode),
             nodeVisitor(node.initializer, visitor, isExpression),
         );

@@ -895,7 +895,11 @@ function iterateCommentRanges<T, U>(
     return accumulator;
 }
 
-export function forEachLeadingCommentRange<U>(text: string, pos: number, cb: (pos: number, end: number, kind: CommentKind, hasTrailingNewLine: boolean) => U): U | undefined;
+export function forEachLeadingCommentRange<U>(
+    text: string,
+    pos: number,
+    cb: (pos: number, end: number, kind: CommentKind, hasTrailingNewLine: boolean) => U,
+): U | undefined;
 export function forEachLeadingCommentRange<T, U>(
     text: string,
     pos: number,
@@ -911,7 +915,11 @@ export function forEachLeadingCommentRange<T, U>(
     return iterateCommentRanges(/*reduce*/ false, text, pos, /*trailing*/ false, cb, state!);
 }
 
-export function forEachTrailingCommentRange<U>(text: string, pos: number, cb: (pos: number, end: number, kind: CommentKind, hasTrailingNewLine: boolean) => U): U | undefined;
+export function forEachTrailingCommentRange<U>(
+    text: string,
+    pos: number,
+    cb: (pos: number, end: number, kind: CommentKind, hasTrailingNewLine: boolean) => U,
+): U | undefined;
 export function forEachTrailingCommentRange<T, U>(
     text: string,
     pos: number,

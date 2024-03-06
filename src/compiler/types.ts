@@ -2099,7 +2099,9 @@ export interface SemicolonClassElement extends ClassElement, JSDocContainer {
 
 // See the comment on MethodDeclaration for the intuition behind GetAccessorDeclaration being a
 // ClassElement and an ObjectLiteralElement.
-export interface GetAccessorDeclaration extends FunctionLikeDeclarationBase, ClassElement, TypeElement, ObjectLiteralElement, JSDocContainer, LocalsContainer, FlowContainer {
+export interface GetAccessorDeclaration
+    extends FunctionLikeDeclarationBase, ClassElement, TypeElement, ObjectLiteralElement, JSDocContainer, LocalsContainer, FlowContainer
+{
     readonly kind: SyntaxKind.GetAccessor;
     readonly parent: ClassLikeDeclaration | ObjectLiteralExpression | TypeLiteralNode | InterfaceDeclaration;
     readonly modifiers?: NodeArray<ModifierLike>;
@@ -2112,7 +2114,9 @@ export interface GetAccessorDeclaration extends FunctionLikeDeclarationBase, Cla
 
 // See the comment on MethodDeclaration for the intuition behind SetAccessorDeclaration being a
 // ClassElement and an ObjectLiteralElement.
-export interface SetAccessorDeclaration extends FunctionLikeDeclarationBase, ClassElement, TypeElement, ObjectLiteralElement, JSDocContainer, LocalsContainer, FlowContainer {
+export interface SetAccessorDeclaration
+    extends FunctionLikeDeclarationBase, ClassElement, TypeElement, ObjectLiteralElement, JSDocContainer, LocalsContainer, FlowContainer
+{
     readonly kind: SyntaxKind.SetAccessor;
     readonly parent: ClassLikeDeclaration | ObjectLiteralExpression | TypeLiteralNode | InterfaceDeclaration;
     readonly modifiers?: NodeArray<ModifierLike>;
@@ -4419,7 +4423,13 @@ export interface ScriptReferenceHost {
 export interface ParseConfigHost extends ModuleResolutionHost {
     useCaseSensitiveFileNames: boolean;
 
-    readDirectory(rootDir: string, extensions: readonly string[], excludes: readonly string[] | undefined, includes: readonly string[], depth?: number): readonly string[];
+    readDirectory(
+        rootDir: string,
+        extensions: readonly string[],
+        excludes: readonly string[] | undefined,
+        includes: readonly string[],
+        depth?: number,
+    ): readonly string[];
 
     /**
      * Gets a value indicating whether the specified path exists and is a file.
@@ -4604,7 +4614,11 @@ export interface Program extends ScriptReferenceHost {
     /** @internal */
     getResolvedModuleFromModuleSpecifier(moduleSpecifier: StringLiteralLike): ResolvedModuleWithFailedLookupLocations | undefined;
     /** @internal */
-    getResolvedTypeReferenceDirective(f: SourceFile, typeDirectiveName: string, mode: ResolutionMode): ResolvedTypeReferenceDirectiveWithFailedLookupLocations | undefined;
+    getResolvedTypeReferenceDirective(
+        f: SourceFile,
+        typeDirectiveName: string,
+        mode: ResolutionMode,
+    ): ResolvedTypeReferenceDirectiveWithFailedLookupLocations | undefined;
     /** @internal */
     forEachResolvedModule(
         callback: (resolution: ResolvedModuleWithFailedLookupLocations, moduleName: string, mode: ResolutionMode, filePath: Path) => void,
@@ -4914,7 +4928,12 @@ export interface TypeChecker {
     // TODO: GH#18217 `xToDeclaration` calls are frequently asserted as defined.
     /** Note that the resulting nodes cannot be checked. */
     typeToTypeNode(type: Type, enclosingDeclaration: Node | undefined, flags: NodeBuilderFlags | undefined): TypeNode | undefined;
-    /** @internal */ typeToTypeNode(type: Type, enclosingDeclaration: Node | undefined, flags: NodeBuilderFlags | undefined, tracker?: SymbolTracker): TypeNode | undefined; // eslint-disable-line @typescript-eslint/unified-signatures
+    /** @internal */ typeToTypeNode(
+        type: Type,
+        enclosingDeclaration: Node | undefined,
+        flags: NodeBuilderFlags | undefined,
+        tracker?: SymbolTracker,
+    ): TypeNode | undefined; // eslint-disable-line @typescript-eslint/unified-signatures
     /** Note that the resulting nodes cannot be checked. */
     signatureToSignatureDeclaration(
         signature: Signature,
@@ -4930,7 +4949,11 @@ export interface TypeChecker {
         tracker?: SymbolTracker,
     ): SignatureDeclaration & { typeArguments?: NodeArray<TypeNode>; } | undefined; // eslint-disable-line @typescript-eslint/unified-signatures
     /** Note that the resulting nodes cannot be checked. */
-    indexInfoToIndexSignatureDeclaration(indexInfo: IndexInfo, enclosingDeclaration: Node | undefined, flags: NodeBuilderFlags | undefined): IndexSignatureDeclaration | undefined;
+    indexInfoToIndexSignatureDeclaration(
+        indexInfo: IndexInfo,
+        enclosingDeclaration: Node | undefined,
+        flags: NodeBuilderFlags | undefined,
+    ): IndexSignatureDeclaration | undefined;
     /** @internal */ indexInfoToIndexSignatureDeclaration(
         indexInfo: IndexInfo,
         enclosingDeclaration: Node | undefined,
@@ -4948,11 +4971,19 @@ export interface TypeChecker {
      */
     symbolToNode(symbol: Symbol, meaning: SymbolFlags, enclosingDeclaration: Node | undefined, flags: NodeBuilderFlags | undefined): Node | undefined;
     /** Note that the resulting nodes cannot be checked. */
-    symbolToTypeParameterDeclarations(symbol: Symbol, enclosingDeclaration: Node | undefined, flags: NodeBuilderFlags | undefined): NodeArray<TypeParameterDeclaration> | undefined;
+    symbolToTypeParameterDeclarations(
+        symbol: Symbol,
+        enclosingDeclaration: Node | undefined,
+        flags: NodeBuilderFlags | undefined,
+    ): NodeArray<TypeParameterDeclaration> | undefined;
     /** Note that the resulting nodes cannot be checked. */
     symbolToParameterDeclaration(symbol: Symbol, enclosingDeclaration: Node | undefined, flags: NodeBuilderFlags | undefined): ParameterDeclaration | undefined;
     /** Note that the resulting nodes cannot be checked. */
-    typeParameterToDeclaration(parameter: TypeParameter, enclosingDeclaration: Node | undefined, flags: NodeBuilderFlags | undefined): TypeParameterDeclaration | undefined;
+    typeParameterToDeclaration(
+        parameter: TypeParameter,
+        enclosingDeclaration: Node | undefined,
+        flags: NodeBuilderFlags | undefined,
+    ): TypeParameterDeclaration | undefined;
 
     getSymbolsInScope(location: Node, meaning: SymbolFlags): Symbol[];
     getSymbolAtLocation(node: Node): Symbol | undefined;
@@ -5170,7 +5201,12 @@ export interface TypeChecker {
     /** @internal */ getInstantiationCount(): number;
     /** @internal */ getRelationCacheSizes(): { assignable: number; identity: number; subtype: number; strictSubtype: number; };
     /** @internal */ getRecursionIdentity(type: Type): object | undefined;
-    /** @internal */ getUnmatchedProperties(source: Type, target: Type, requireOptionalProperties: boolean, matchDiscriminantProperties: boolean): IterableIterator<Symbol>;
+    /** @internal */ getUnmatchedProperties(
+        source: Type,
+        target: Type,
+        requireOptionalProperties: boolean,
+        matchDiscriminantProperties: boolean,
+    ): IterableIterator<Symbol>;
 
     /**
      * True if this type is the `Array` or `ReadonlyArray` type from lib.d.ts.
@@ -7091,7 +7127,17 @@ export enum PollingWatchKind {
     FixedChunkSize,
 }
 
-export type CompilerOptionsValue = string | number | boolean | (string | number)[] | string[] | MapLike<string[]> | PluginImport[] | ProjectReference[] | null | undefined;
+export type CompilerOptionsValue =
+    | string
+    | number
+    | boolean
+    | (string | number)[]
+    | string[]
+    | MapLike<string[]>
+    | PluginImport[]
+    | ProjectReference[]
+    | null
+    | undefined;
 
 export interface CompilerOptions {
     /** @internal */ all?: boolean;
@@ -7968,11 +8014,13 @@ export const enum TransformFlags {
     OuterExpressionExcludes = HasComputedFlags,
     PropertyAccessExcludes = OuterExpressionExcludes,
     NodeExcludes = PropertyAccessExcludes,
-    ArrowFunctionExcludes = NodeExcludes | ContainsTypeScriptClassSyntax | ContainsBlockScopedBinding | ContainsYield | ContainsAwait | ContainsHoistedDeclarationOrCompletion |
+    ArrowFunctionExcludes = NodeExcludes | ContainsTypeScriptClassSyntax | ContainsBlockScopedBinding | ContainsYield | ContainsAwait |
+        ContainsHoistedDeclarationOrCompletion |
         ContainsBindingPattern |
         ContainsObjectRestOrSpread |
         ContainsPossibleTopLevelAwait,
-    FunctionExcludes = NodeExcludes | ContainsTypeScriptClassSyntax | ContainsLexicalThis | ContainsLexicalSuper | ContainsBlockScopedBinding | ContainsYield | ContainsAwait |
+    FunctionExcludes = NodeExcludes | ContainsTypeScriptClassSyntax | ContainsLexicalThis | ContainsLexicalSuper | ContainsBlockScopedBinding | ContainsYield |
+        ContainsAwait |
         ContainsHoistedDeclarationOrCompletion |
         ContainsBindingPattern | ContainsObjectRestOrSpread |
         ContainsPossibleTopLevelAwait,
@@ -8454,7 +8502,12 @@ export interface NodeFactory {
     // Signature elements
     //
 
-    createTypeParameterDeclaration(modifiers: readonly Modifier[] | undefined, name: string | Identifier, constraint?: TypeNode, defaultType?: TypeNode): TypeParameterDeclaration;
+    createTypeParameterDeclaration(
+        modifiers: readonly Modifier[] | undefined,
+        name: string | Identifier,
+        constraint?: TypeNode,
+        defaultType?: TypeNode,
+    ): TypeParameterDeclaration;
     updateTypeParameterDeclaration(
         node: TypeParameterDeclaration,
         modifiers: readonly Modifier[] | undefined,
@@ -8552,7 +8605,11 @@ export interface NodeFactory {
         type: TypeNode | undefined,
         body: Block | undefined,
     ): MethodDeclaration;
-    createConstructorDeclaration(modifiers: readonly ModifierLike[] | undefined, parameters: readonly ParameterDeclaration[], body: Block | undefined): ConstructorDeclaration;
+    createConstructorDeclaration(
+        modifiers: readonly ModifierLike[] | undefined,
+        parameters: readonly ParameterDeclaration[],
+        body: Block | undefined,
+    ): ConstructorDeclaration;
     updateConstructorDeclaration(
         node: ConstructorDeclaration,
         modifiers: readonly ModifierLike[] | undefined,
@@ -8631,7 +8688,11 @@ export interface NodeFactory {
     //
 
     createKeywordTypeNode<TKind extends KeywordTypeSyntaxKind>(kind: TKind): KeywordTypeNode<TKind>;
-    createTypePredicateNode(assertsModifier: AssertsKeyword | undefined, parameterName: Identifier | ThisTypeNode | string, type: TypeNode | undefined): TypePredicateNode;
+    createTypePredicateNode(
+        assertsModifier: AssertsKeyword | undefined,
+        parameterName: Identifier | ThisTypeNode | string,
+        type: TypeNode | undefined,
+    ): TypePredicateNode;
     updateTypePredicateNode(
         node: TypePredicateNode,
         assertsModifier: AssertsKeyword | undefined,
@@ -8640,7 +8701,11 @@ export interface NodeFactory {
     ): TypePredicateNode;
     createTypeReferenceNode(typeName: string | EntityName, typeArguments?: readonly TypeNode[]): TypeReferenceNode;
     updateTypeReferenceNode(node: TypeReferenceNode, typeName: EntityName, typeArguments: NodeArray<TypeNode> | undefined): TypeReferenceNode;
-    createFunctionTypeNode(typeParameters: readonly TypeParameterDeclaration[] | undefined, parameters: readonly ParameterDeclaration[], type: TypeNode): FunctionTypeNode;
+    createFunctionTypeNode(
+        typeParameters: readonly TypeParameterDeclaration[] | undefined,
+        parameters: readonly ParameterDeclaration[],
+        type: TypeNode,
+    ): FunctionTypeNode;
     updateFunctionTypeNode(
         node: FunctionTypeNode,
         typeParameters: NodeArray<TypeParameterDeclaration> | undefined,
@@ -8688,7 +8753,13 @@ export interface NodeFactory {
     updateConditionalTypeNode(node: ConditionalTypeNode, checkType: TypeNode, extendsType: TypeNode, trueType: TypeNode, falseType: TypeNode): ConditionalTypeNode;
     createInferTypeNode(typeParameter: TypeParameterDeclaration): InferTypeNode;
     updateInferTypeNode(node: InferTypeNode, typeParameter: TypeParameterDeclaration): InferTypeNode;
-    createImportTypeNode(argument: TypeNode, attributes?: ImportAttributes, qualifier?: EntityName, typeArguments?: readonly TypeNode[], isTypeOf?: boolean): ImportTypeNode;
+    createImportTypeNode(
+        argument: TypeNode,
+        attributes?: ImportAttributes,
+        qualifier?: EntityName,
+        typeArguments?: readonly TypeNode[],
+        isTypeOf?: boolean,
+    ): ImportTypeNode;
     updateImportTypeNode(
         node: ImportTypeNode,
         argument: TypeNode,
@@ -8763,9 +8834,19 @@ export interface NodeFactory {
     createElementAccessExpression(expression: Expression, index: number | Expression): ElementAccessExpression;
     updateElementAccessExpression(node: ElementAccessExpression, expression: Expression, argumentExpression: Expression): ElementAccessExpression;
     createElementAccessChain(expression: Expression, questionDotToken: QuestionDotToken | undefined, index: number | Expression): ElementAccessChain;
-    updateElementAccessChain(node: ElementAccessChain, expression: Expression, questionDotToken: QuestionDotToken | undefined, argumentExpression: Expression): ElementAccessChain;
+    updateElementAccessChain(
+        node: ElementAccessChain,
+        expression: Expression,
+        questionDotToken: QuestionDotToken | undefined,
+        argumentExpression: Expression,
+    ): ElementAccessChain;
     createCallExpression(expression: Expression, typeArguments: readonly TypeNode[] | undefined, argumentsArray: readonly Expression[] | undefined): CallExpression;
-    updateCallExpression(node: CallExpression, expression: Expression, typeArguments: readonly TypeNode[] | undefined, argumentsArray: readonly Expression[]): CallExpression;
+    updateCallExpression(
+        node: CallExpression,
+        expression: Expression,
+        typeArguments: readonly TypeNode[] | undefined,
+        argumentsArray: readonly Expression[],
+    ): CallExpression;
     createCallChain(
         expression: Expression,
         questionDotToken: QuestionDotToken | undefined,
@@ -8902,7 +8983,11 @@ export interface NodeFactory {
     ): ClassExpression;
     createOmittedExpression(): OmittedExpression;
     createExpressionWithTypeArguments(expression: Expression, typeArguments: readonly TypeNode[] | undefined): ExpressionWithTypeArguments;
-    updateExpressionWithTypeArguments(node: ExpressionWithTypeArguments, expression: Expression, typeArguments: readonly TypeNode[] | undefined): ExpressionWithTypeArguments;
+    updateExpressionWithTypeArguments(
+        node: ExpressionWithTypeArguments,
+        expression: Expression,
+        typeArguments: readonly TypeNode[] | undefined,
+    ): ExpressionWithTypeArguments;
     createAsExpression(expression: Expression, type: TypeNode): AsExpression;
     updateAsExpression(node: AsExpression, expression: Expression, type: TypeNode): AsExpression;
     createNonNullExpression(expression: Expression): NonNullExpression;
@@ -8939,7 +9024,12 @@ export interface NodeFactory {
     updateDoStatement(node: DoStatement, statement: Statement, expression: Expression): DoStatement;
     createWhileStatement(expression: Expression, statement: Statement): WhileStatement;
     updateWhileStatement(node: WhileStatement, expression: Expression, statement: Statement): WhileStatement;
-    createForStatement(initializer: ForInitializer | undefined, condition: Expression | undefined, incrementor: Expression | undefined, statement: Statement): ForStatement;
+    createForStatement(
+        initializer: ForInitializer | undefined,
+        condition: Expression | undefined,
+        incrementor: Expression | undefined,
+        statement: Statement,
+    ): ForStatement;
     updateForStatement(
         node: ForStatement,
         initializer: ForInitializer | undefined,
@@ -8950,7 +9040,13 @@ export interface NodeFactory {
     createForInStatement(initializer: ForInitializer, expression: Expression, statement: Statement): ForInStatement;
     updateForInStatement(node: ForInStatement, initializer: ForInitializer, expression: Expression, statement: Statement): ForInStatement;
     createForOfStatement(awaitModifier: AwaitKeyword | undefined, initializer: ForInitializer, expression: Expression, statement: Statement): ForOfStatement;
-    updateForOfStatement(node: ForOfStatement, awaitModifier: AwaitKeyword | undefined, initializer: ForInitializer, expression: Expression, statement: Statement): ForOfStatement;
+    updateForOfStatement(
+        node: ForOfStatement,
+        awaitModifier: AwaitKeyword | undefined,
+        initializer: ForInitializer,
+        expression: Expression,
+        statement: Statement,
+    ): ForOfStatement;
     createContinueStatement(label?: string | Identifier): ContinueStatement;
     updateContinueStatement(node: ContinueStatement, label: Identifier | undefined): ContinueStatement;
     createBreakStatement(label?: string | Identifier): BreakStatement;
@@ -9234,7 +9330,12 @@ export interface NodeFactory {
         comment: string | NodeArray<JSDocComment> | undefined,
     ): JSDocTypeTag;
     createJSDocSeeTag(tagName: Identifier | undefined, nameExpression: JSDocNameReference | undefined, comment?: string | NodeArray<JSDocComment>): JSDocSeeTag;
-    updateJSDocSeeTag(node: JSDocSeeTag, tagName: Identifier | undefined, nameExpression: JSDocNameReference | undefined, comment?: string | NodeArray<JSDocComment>): JSDocSeeTag;
+    updateJSDocSeeTag(
+        node: JSDocSeeTag,
+        tagName: Identifier | undefined,
+        nameExpression: JSDocNameReference | undefined,
+        comment?: string | NodeArray<JSDocComment>,
+    ): JSDocSeeTag;
     createJSDocReturnTag(tagName: Identifier | undefined, typeExpression?: JSDocTypeExpression, comment?: string | NodeArray<JSDocComment>): JSDocReturnTag;
     updateJSDocReturnTag(
         node: JSDocReturnTag,
@@ -9341,7 +9442,12 @@ export interface NodeFactory {
         attributes: JsxAttributes,
     ): JsxSelfClosingElement;
     createJsxOpeningElement(tagName: JsxTagNameExpression, typeArguments: readonly TypeNode[] | undefined, attributes: JsxAttributes): JsxOpeningElement;
-    updateJsxOpeningElement(node: JsxOpeningElement, tagName: JsxTagNameExpression, typeArguments: readonly TypeNode[] | undefined, attributes: JsxAttributes): JsxOpeningElement;
+    updateJsxOpeningElement(
+        node: JsxOpeningElement,
+        tagName: JsxTagNameExpression,
+        typeArguments: readonly TypeNode[] | undefined,
+        attributes: JsxAttributes,
+    ): JsxOpeningElement;
     createJsxClosingElement(tagName: JsxTagNameExpression): JsxClosingElement;
     updateJsxClosingElement(node: JsxClosingElement, tagName: JsxTagNameExpression): JsxClosingElement;
     createJsxFragment(openingFragment: JsxOpeningFragment, children: readonly JsxChild[], closingFragment: JsxClosingFragment): JsxFragment;
@@ -9381,7 +9487,11 @@ export interface NodeFactory {
     createPropertyAssignment(name: string | PropertyName, initializer: Expression): PropertyAssignment;
     updatePropertyAssignment(node: PropertyAssignment, name: PropertyName, initializer: Expression): PropertyAssignment;
     createShorthandPropertyAssignment(name: string | Identifier, objectAssignmentInitializer?: Expression): ShorthandPropertyAssignment;
-    updateShorthandPropertyAssignment(node: ShorthandPropertyAssignment, name: Identifier, objectAssignmentInitializer: Expression | undefined): ShorthandPropertyAssignment;
+    updateShorthandPropertyAssignment(
+        node: ShorthandPropertyAssignment,
+        name: Identifier,
+        objectAssignmentInitializer: Expression | undefined,
+    ): ShorthandPropertyAssignment;
     createSpreadAssignment(expression: Expression): SpreadAssignment;
     updateSpreadAssignment(node: SpreadAssignment, expression: Expression): SpreadAssignment;
 
@@ -10068,7 +10178,14 @@ export interface SourceMapGenerator {
     /**
      * Appends a source map.
      */
-    appendSourceMap(generatedLine: number, generatedCharacter: number, sourceMap: RawSourceMap, sourceMapPath: string, start?: LineAndCharacter, end?: LineAndCharacter): void;
+    appendSourceMap(
+        generatedLine: number,
+        generatedCharacter: number,
+        sourceMap: RawSourceMap,
+        sourceMapPath: string,
+        start?: LineAndCharacter,
+        end?: LineAndCharacter,
+    ): void;
     /**
      * Gets the source map as a `RawSourceMap` object.
      */

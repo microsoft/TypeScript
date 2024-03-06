@@ -529,7 +529,9 @@ function originIsResolvedExport(origin: SymbolOriginInfo | undefined): origin is
     return !!(origin && origin.kind === SymbolOriginInfoKind.ResolvedExport);
 }
 
-function originIncludesSymbolName(origin: SymbolOriginInfo | undefined): origin is SymbolOriginInfoExport | SymbolOriginInfoResolvedExport | SymbolOriginInfoComputedPropertyName {
+function originIncludesSymbolName(
+    origin: SymbolOriginInfo | undefined,
+): origin is SymbolOriginInfoExport | SymbolOriginInfoResolvedExport | SymbolOriginInfoComputedPropertyName {
     return originIsExport(origin) || originIsResolvedExport(origin) || originIsComputedPropertyName(origin);
 }
 
@@ -630,7 +632,8 @@ function resolvingModuleSpecifiers<TReturn>(
     // relative path into node_modules), and we want to filter those completions out entirely.
     // Import statement completions always need specifier resolution because the module specifier is
     // part of their `insertText`, not the `codeActions` creating edits away from the cursor.
-    const needsFullResolution = isForImportStatementCompletion || moduleResolutionSupportsPackageJsonExportsAndImports(getEmitModuleResolutionKind(program.getCompilerOptions()));
+    const needsFullResolution = isForImportStatementCompletion ||
+        moduleResolutionSupportsPackageJsonExportsAndImports(getEmitModuleResolutionKind(program.getCompilerOptions()));
     let skippedAny = false;
     let ambientCount = 0;
     let resolvedCount = 0;
@@ -730,7 +733,17 @@ export function getCompletionsAtPosition(
         incompleteCompletionsCache?.clear();
     }
 
-    const stringCompletions = StringCompletions.getStringLiteralCompletions(sourceFile, position, previousToken, compilerOptions, host, program, log, preferences, includeSymbol);
+    const stringCompletions = StringCompletions.getStringLiteralCompletions(
+        sourceFile,
+        position,
+        previousToken,
+        compilerOptions,
+        host,
+        program,
+        log,
+        preferences,
+        includeSymbol,
+    );
     if (stringCompletions) {
         return stringCompletions;
     }
@@ -1458,7 +1471,10 @@ function getExhaustiveCaseSnippets(
                     case "object":
                         elements.push(
                             type.value.negative ?
-                                factory.createPrefixUnaryExpression(SyntaxKind.MinusToken, factory.createBigIntLiteral({ negative: false, base10Value: type.value.base10Value }))
+                                factory.createPrefixUnaryExpression(
+                                    SyntaxKind.MinusToken,
+                                    factory.createBigIntLiteral({ negative: false, base10Value: type.value.base10Value }),
+                                )
                                 : factory.createBigIntLiteral(type.value),
                         );
                         break;
@@ -1842,7 +1858,10 @@ function createCompletionEntry(
             if (
                 type.flags & TypeFlags.StringLike ||
                 (type.flags & TypeFlags.Union &&
-                    every((type as UnionType).types, type => !!(type.flags & (TypeFlags.StringLike | TypeFlags.Undefined) || isStringAndEmptyAnonymousObjectIntersection(type))))
+                    every(
+                        (type as UnionType).types,
+                        type => !!(type.flags & (TypeFlags.StringLike | TypeFlags.Undefined) || isStringAndEmptyAnonymousObjectIntersection(type)),
+                    ))
             ) {
                 // If is string like or undefined use quotes
                 insertText = `${escapeSnippetText(name)}=${quote(sourceFile, preferences, "$1")}`;
@@ -2203,7 +2222,11 @@ function getEntryForObjectLiteralMethodCompletion(
         );
     }
     else {
-        insertText = printer.printSnippetList(ListFormat.CommaDelimited | ListFormat.AllowTrailingComma, factory.createNodeArray([method], /*hasTrailingComma*/ true), sourceFile);
+        insertText = printer.printSnippetList(
+            ListFormat.CommaDelimited | ListFormat.AllowTrailingComma,
+            factory.createNodeArray([method], /*hasTrailingComma*/ true),
+            sourceFile,
+        );
     }
 
     const signaturePrinter = createPrinter({
@@ -2482,7 +2505,11 @@ function originToCompletionEntryData(origin: SymbolOriginInfoExport | SymbolOrig
     return unresolvedData;
 }
 
-function completionEntryDataToSymbolOriginInfo(data: CompletionEntryData, completionName: string, moduleSymbol: Symbol): SymbolOriginInfoExport | SymbolOriginInfoResolvedExport {
+function completionEntryDataToSymbolOriginInfo(
+    data: CompletionEntryData,
+    completionName: string,
+    moduleSymbol: Symbol,
+): SymbolOriginInfoExport | SymbolOriginInfoResolvedExport {
     const isDefaultExport = data.exportName === InternalSymbolName.Default;
     const isFromPackageJson = !!data.isPackageJsonImport;
     if (completionEntryDataIsResolved(data)) {
@@ -2906,7 +2933,8 @@ export function getCompletionEntryDetails(
                 case CompletionDataKind.JsDocParameterName:
                     return JsDoc.getJSDocParameterNameCompletionDetails(name);
                 case CompletionDataKind.Keywords:
-                    return some(request.keywordCompletions, c => c.name === name) ? createSimpleDetails(name, ScriptElementKind.keyword, SymbolDisplayPartKind.keyword) : undefined;
+                    return some(request.keywordCompletions, c => c.name === name) ? createSimpleDetails(name, ScriptElementKind.keyword, SymbolDisplayPartKind.keyword)
+                        : undefined;
                 default:
                     return Debug.assertNever(request);
             }
@@ -3247,7 +3275,8 @@ function getContextualType(previousToken: Node, position: number, sourceFile: So
             const caseClause = tryCast(parent, isCaseClause);
             return caseClause ? getSwitchedType(caseClause, checker) : undefined;
         case SyntaxKind.OpenBraceToken:
-            return isJsxExpression(parent) && !isJsxElement(parent.parent) && !isJsxFragment(parent.parent) ? checker.getContextualTypeForJsxAttribute(parent.parent) : undefined;
+            return isJsxExpression(parent) && !isJsxElement(parent.parent) && !isJsxFragment(parent.parent) ? checker.getContextualTypeForJsxAttribute(parent.parent)
+                : undefined;
         default:
             const argInfo = SignatureHelp.getArgumentInfoForCompletions(previousToken, position, sourceFile, checker);
             return argInfo ?
@@ -3515,7 +3544,8 @@ function getCompletionData(
                     // Second case is for `<div foo={true} t[||] ></div>`
                     // Second case must not match for `<div foo={undefine[||]}></div>`
                     if (
-                        previousToken.kind === SyntaxKind.CloseBraceToken || (previousToken.kind === SyntaxKind.Identifier && previousToken.parent.kind === SyntaxKind.JsxAttribute)
+                        previousToken.kind === SyntaxKind.CloseBraceToken ||
+                        (previousToken.kind === SyntaxKind.Identifier && previousToken.parent.kind === SyntaxKind.JsxAttribute)
                     ) {
                         isJsxIdentifierExpected = true;
                     }
@@ -3712,7 +3742,9 @@ function getCompletionData(
                         !isTypeLocation &&
                         !insideJsDocTagTypeExpression &&
                         symbol.declarations &&
-                        symbol.declarations.some(d => d.kind !== SyntaxKind.SourceFile && d.kind !== SyntaxKind.ModuleDeclaration && d.kind !== SyntaxKind.EnumDeclaration)
+                        symbol.declarations.some(d =>
+                            d.kind !== SyntaxKind.SourceFile && d.kind !== SyntaxKind.ModuleDeclaration && d.kind !== SyntaxKind.EnumDeclaration
+                        )
                     ) {
                         let type = typeChecker.getTypeOfSymbolAtLocation(symbol, node).getNonOptionalType();
                         let insertQuestionDot = false;
@@ -4584,7 +4616,9 @@ function getCompletionData(
         isNewIdentifierLocation = false;
         const exports = typeChecker.getExportsAndPropertiesOfModule(moduleSpecifierSymbol);
         const existing = new Set(
-            (namedImportsOrExports.elements as NodeArray<ImportOrExportSpecifier>).filter(n => !isCurrentlyEditingNode(n)).map(n => (n.propertyName || n.name).escapedText),
+            (namedImportsOrExports.elements as NodeArray<ImportOrExportSpecifier>).filter(n => !isCurrentlyEditingNode(n)).map(n =>
+                (n.propertyName || n.name).escapedText
+            ),
         );
         const uniques = exports.filter(e => e.escapedName !== InternalSymbolName.Default && !existing.has(e.escapedName));
         symbols = concatenate(symbols, uniques);
@@ -4601,7 +4635,8 @@ function getCompletionData(
     function tryGetImportAttributesCompletionSymbols(): GlobalsSearch {
         if (contextToken === undefined) return GlobalsSearch.Continue;
 
-        const importAttributes = contextToken.kind === SyntaxKind.OpenBraceToken || contextToken.kind === SyntaxKind.CommaToken ? tryCast(contextToken.parent, isImportAttributes) :
+        const importAttributes = contextToken.kind === SyntaxKind.OpenBraceToken || contextToken.kind === SyntaxKind.CommaToken ?
+            tryCast(contextToken.parent, isImportAttributes) :
             contextToken.kind === SyntaxKind.ColonToken ? tryCast(contextToken.parent.parent, isImportAttributes) : undefined;
         if (importAttributes === undefined) return GlobalsSearch.Continue;
 
@@ -5232,7 +5267,11 @@ function getCompletionData(
  * Returns the immediate owning object literal or binding pattern of a context token,
  * on the condition that one exists and that the context implies completion should be given.
  */
-function tryGetObjectLikeCompletionContainer(contextToken: Node | undefined, position: number, sourceFile: SourceFile): ObjectLiteralExpression | ObjectBindingPattern | undefined {
+function tryGetObjectLikeCompletionContainer(
+    contextToken: Node | undefined,
+    position: number,
+    sourceFile: SourceFile,
+): ObjectLiteralExpression | ObjectBindingPattern | undefined {
     if (contextToken) {
         const { parent } = contextToken;
         switch (contextToken.kind) {
@@ -5287,7 +5326,10 @@ function tryGetObjectLikeCompletionContainer(contextToken: Node | undefined, pos
     return undefined;
 }
 
-function getRelevantTokens(position: number, sourceFile: SourceFile): { contextToken: Node; previousToken: Node; } | { contextToken: undefined; previousToken: undefined; } {
+function getRelevantTokens(
+    position: number,
+    sourceFile: SourceFile,
+): { contextToken: Node; previousToken: Node; } | { contextToken: undefined; previousToken: undefined; } {
     const previousToken = findPrecedingToken(position, sourceFile);
     if (previousToken && position <= previousToken.end && (isMemberName(previousToken) || isKeyword(previousToken.kind))) {
         const contextToken = findPrecedingToken(previousToken.getFullStart(), sourceFile, /*startNode*/ undefined)!; // TODO: GH#18217
@@ -5871,7 +5913,9 @@ function getImportStatementCompletionInfo(contextToken: Node, sourceFile: Source
     }
 }
 
-function getSingleLineReplacementSpanForImportCompletionNode(node: ImportDeclaration | ImportEqualsDeclaration | ImportSpecifier | Token<SyntaxKind.ImportKeyword> | undefined) {
+function getSingleLineReplacementSpanForImportCompletionNode(
+    node: ImportDeclaration | ImportEqualsDeclaration | ImportSpecifier | Token<SyntaxKind.ImportKeyword> | undefined,
+) {
     if (!node) return undefined;
     const top = findAncestor(node, or(isImportDeclaration, isImportEqualsDeclaration)) ?? node;
     const sourceFile = top.getSourceFile();

@@ -315,7 +315,9 @@ export function start() {
                 switch (data.type) {
                     case "error": {
                         console.error(
-                            `Test worker encountered unexpected error${data.payload.name ? ` during the execution of test ${data.payload.name}` : ""} and was forced to close:
+                            `Test worker encountered unexpected error${
+                                data.payload.name ? ` during the execution of test ${data.payload.name}` : ""
+                            } and was forced to close:
             Message: ${data.payload.error}
             Stack: ${data.payload.stack}`,
                         );
@@ -355,7 +357,11 @@ export function start() {
                             while (nextProgress < progress) {
                                 nextProgress += progressUpdateInterval;
                             }
-                            updateProgress(progress, errorResults.length ? `${errorResults.length} failing` : `${totalPassing} passing`, errorResults.length ? "fail" : undefined);
+                            updateProgress(
+                                progress,
+                                errorResults.length ? `${errorResults.length} failing` : `${totalPassing} passing`,
+                                errorResults.length ? "fail" : undefined,
+                            );
                         }
 
                         if (data.type === "result") {
@@ -428,9 +434,9 @@ export function start() {
             }
             else {
                 console.log(
-                    `${prefix} with approximate total ${perfData ? "time" : "file sizes"} of ${perfData ? ms(batchSize) : `${Math.floor(batchSize)} bytes`} in each group. (${
-                        (scheduledTotal / totalCost * 100).toFixed(1)
-                    }% of total tests batched)`,
+                    `${prefix} with approximate total ${perfData ? "time" : "file sizes"} of ${
+                        perfData ? ms(batchSize) : `${Math.floor(batchSize)} bytes`
+                    } in each group. (${(scheduledTotal / totalCost * 100).toFixed(1)}% of total tests batched)`,
                 );
             }
             for (const worker of workers) {

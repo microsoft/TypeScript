@@ -4457,7 +4457,8 @@ declare namespace Intl {
 
     interface NumberFormatOptionsUseGroupingRegistry {}
 
-    type NumberFormatOptionsUseGrouping = {} extends NumberFormatOptionsUseGroupingRegistry ? boolean : keyof NumberFormatOptionsUseGroupingRegistry | "true" | "false" | boolean;
+    type NumberFormatOptionsUseGrouping = {} extends NumberFormatOptionsUseGroupingRegistry ? boolean
+        : keyof NumberFormatOptionsUseGroupingRegistry | "true" | "false" | boolean;
     type ResolvedNumberFormatOptionsUseGrouping = {} extends NumberFormatOptionsUseGroupingRegistry ? boolean : keyof NumberFormatOptionsUseGroupingRegistry | false;
 
     interface NumberFormatOptions {

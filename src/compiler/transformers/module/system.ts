@@ -1077,7 +1077,11 @@ export function transformSystemModule(context: TransformationContext): (x: Sourc
      * @param decl The declaration whose exports are to be recorded.
      * @param exportSelf A value indicating whether to also export the declaration itself.
      */
-    function appendExportsOfBindingElement(statements: Statement[] | undefined, decl: VariableDeclaration | BindingElement, exportSelf: boolean): Statement[] | undefined {
+    function appendExportsOfBindingElement(
+        statements: Statement[] | undefined,
+        decl: VariableDeclaration | BindingElement,
+        exportSelf: boolean,
+    ): Statement[] | undefined {
         if (moduleInfo.exportEquals) {
             return statements;
         }
@@ -1544,7 +1548,8 @@ export function transformSystemModule(context: TransformationContext): (x: Sourc
      */
     function visitorWorker(node: Node, valueIsDiscarded: boolean): VisitResult<Node> {
         if (
-            !(node.transformFlags & (TransformFlags.ContainsDestructuringAssignment | TransformFlags.ContainsDynamicImport | TransformFlags.ContainsUpdateExpressionForIdentifier))
+            !(node.transformFlags &
+                (TransformFlags.ContainsDestructuringAssignment | TransformFlags.ContainsDynamicImport | TransformFlags.ContainsUpdateExpressionForIdentifier))
         ) {
             return node;
         }

@@ -18,7 +18,9 @@ import {
 export interface TestProjectServiceOptions extends ts.server.ProjectServiceOptions {
     host: TestServerHost;
 }
-export type TestProjectServicePartialOptionsAndHost = Partial<Omit<TestProjectServiceOptions, "typingsInstaller" | "logger" | "host">> & Pick<TestProjectServiceOptions, "host">;
+export type TestProjectServicePartialOptionsAndHost =
+    & Partial<Omit<TestProjectServiceOptions, "typingsInstaller" | "logger" | "host">>
+    & Pick<TestProjectServiceOptions, "host">;
 
 export class TestProjectService extends ts.server.ProjectService {
     constructor(optsOrHost: TestServerHost | TestProjectServicePartialOptionsAndHost) {

@@ -135,7 +135,10 @@ registerCodeFix({
                 ];
                 return [
                     createDeleteFix(
-                        textChanges.ChangeTracker.with(context, t => deleteDestructuringElements(t, sourceFile, token.parent as ObjectBindingPattern | ArrayBindingPattern)),
+                        textChanges.ChangeTracker.with(
+                            context,
+                            t => deleteDestructuringElements(t, sourceFile, token.parent as ObjectBindingPattern | ArrayBindingPattern),
+                        ),
                         diagnostic,
                     ),
                 ];
@@ -161,7 +164,9 @@ registerCodeFix({
         if (token.kind === SyntaxKind.InferKeyword) {
             const changes = textChanges.ChangeTracker.with(context, t => changeInferToUnknown(t, sourceFile, token));
             const name = cast(token.parent, isInferTypeNode).typeParameter.name.text;
-            result.push(createCodeFixAction(fixName, changes, [Diagnostics.Replace_infer_0_with_unknown, name], fixIdInfer, Diagnostics.Replace_all_unused_infer_with_unknown));
+            result.push(
+                createCodeFixAction(fixName, changes, [Diagnostics.Replace_infer_0_with_unknown, name], fixIdInfer, Diagnostics.Replace_all_unused_infer_with_unknown),
+            );
         }
         else {
             const deletion = textChanges.ChangeTracker.with(
@@ -260,7 +265,10 @@ function createDeleteFix(changes: FileTextChanges[], diag: DiagnosticOrDiagnosti
 }
 
 function deleteTypeParameters(changes: textChanges.ChangeTracker, sourceFile: SourceFile, token: Node): void {
-    changes.delete(sourceFile, Debug.checkDefined(cast(token.parent, isDeclarationWithTypeParameterChildren).typeParameters, "The type parameter to delete should exist"));
+    changes.delete(
+        sourceFile,
+        Debug.checkDefined(cast(token.parent, isDeclarationWithTypeParameterChildren).typeParameters, "The type parameter to delete should exist"),
+    );
 }
 
 function isImport(token: Node) {
@@ -285,7 +293,12 @@ function deleteDestructuringElements(changes: textChanges.ChangeTracker, sourceF
     forEach(node.elements, n => changes.delete(sourceFile, n));
 }
 
-function deleteDestructuring(context: CodeFixContext, changes: textChanges.ChangeTracker, sourceFile: SourceFile, { parent }: ObjectBindingPattern | ArrayBindingPattern) {
+function deleteDestructuring(
+    context: CodeFixContext,
+    changes: textChanges.ChangeTracker,
+    sourceFile: SourceFile,
+    { parent }: ObjectBindingPattern | ArrayBindingPattern,
+) {
     if (isVariableDeclaration(parent) && parent.initializer && isCallLikeExpression(parent.initializer)) {
         if (isVariableDeclarationList(parent.parent) && length(parent.parent.declarations) > 1) {
             const varStatement = parent.parent.parent;

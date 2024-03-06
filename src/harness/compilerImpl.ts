@@ -66,7 +66,13 @@ export class CompilationResult {
     private _inputs: documents.TextDocument[] = [];
     private _inputsAndOutputs: collections.SortedMap<string, CompilationOutput>;
 
-    constructor(host: fakes.CompilerHost, options: ts.CompilerOptions, program: ts.Program | undefined, result: ts.EmitResult | undefined, diagnostics: readonly ts.Diagnostic[]) {
+    constructor(
+        host: fakes.CompilerHost,
+        options: ts.CompilerOptions,
+        program: ts.Program | undefined,
+        result: ts.EmitResult | undefined,
+        diagnostics: readonly ts.Diagnostic[],
+    ) {
         this.host = host;
         this.program = program;
         this.result = result;
@@ -248,7 +254,12 @@ export class CompilationResult {
     }
 }
 
-export function compileFiles(host: fakes.CompilerHost, rootFiles: string[] | undefined, compilerOptions: ts.CompilerOptions, typeScriptVersion?: string): CompilationResult {
+export function compileFiles(
+    host: fakes.CompilerHost,
+    rootFiles: string[] | undefined,
+    compilerOptions: ts.CompilerOptions,
+    typeScriptVersion?: string,
+): CompilationResult {
     if (compilerOptions.project || !rootFiles || rootFiles.length === 0) {
         const project = readProject(host.parseConfigHost, compilerOptions.project, compilerOptions);
         if (project) {
@@ -272,7 +283,12 @@ export function compileFiles(host: fakes.CompilerHost, rootFiles: string[] | und
     // and if the test is running `skipLibCheck` - an indicator that we want the tets to run quickly - skip the before/after error comparison, too
     const skipErrorComparison = ts.length(rootFiles) >= 100 || (!!compilerOptions.skipLibCheck && !!compilerOptions.declaration);
     const preProgram = !skipErrorComparison ?
-        ts.createProgram({ rootNames: rootFiles || [], options: { ...compilerOptions, configFile: compilerOptions.configFile, traceResolution: false }, host, typeScriptVersion })
+        ts.createProgram({
+            rootNames: rootFiles || [],
+            options: { ...compilerOptions, configFile: compilerOptions.configFile, traceResolution: false },
+            host,
+            typeScriptVersion,
+        })
         : undefined;
     const preErrors = preProgram && ts.getPreEmitDiagnostics(preProgram);
 

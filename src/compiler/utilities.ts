@@ -771,9 +771,13 @@ export function moduleResolutionIsEqualTo(oldResolution: ResolvedModuleWithFaile
 export function createModuleNotFoundChain(sourceFile: SourceFile, host: TypeCheckerHost, moduleReference: string, mode: ResolutionMode, packageName: string) {
     const alternateResult = host.getResolvedModule(sourceFile, moduleReference, mode)?.alternateResult;
     const alternateResultMessage = alternateResult && (getEmitModuleResolutionKind(host.getCompilerOptions()) === ModuleResolutionKind.Node10
-        ? [Diagnostics.There_are_types_at_0_but_this_result_could_not_be_resolved_under_your_current_moduleResolution_setting_Consider_updating_to_node16_nodenext_or_bundler, [
-            alternateResult,
-        ]] as const
+        ? [
+            Diagnostics
+                .There_are_types_at_0_but_this_result_could_not_be_resolved_under_your_current_moduleResolution_setting_Consider_updating_to_node16_nodenext_or_bundler,
+            [
+                alternateResult,
+            ],
+        ] as const
         : [
             Diagnostics
                 .There_are_types_at_0_but_this_result_could_not_be_resolved_when_respecting_package_json_exports_The_1_library_may_need_to_update_its_package_json_or_typings,
@@ -1011,7 +1015,8 @@ export function isGrammarError(parent: Node, child: Node | NodeArray<Node>) {
     if (isPropertySignature(parent)) return child === parent.initializer;
     if (isPropertyDeclaration(parent)) return child === parent.questionToken && isAutoAccessorPropertyDeclaration(parent);
     if (isPropertyAssignment(parent)) {
-        return child === parent.modifiers || child === parent.questionToken || child === parent.exclamationToken || isGrammarErrorElement(parent.modifiers, child, isModifierLike);
+        return child === parent.modifiers || child === parent.questionToken || child === parent.exclamationToken ||
+            isGrammarErrorElement(parent.modifiers, child, isModifierLike);
     }
     if (isShorthandPropertyAssignment(parent)) {
         return child === parent.equalsToken || child === parent.modifiers || child === parent.questionToken || child === parent.exclamationToken ||
@@ -2117,13 +2122,23 @@ export function createDiagnosticForNode(node: Node, message: DiagnosticMessage, 
 }
 
 /** @internal */
-export function createDiagnosticForNodeArray(sourceFile: SourceFile, nodes: NodeArray<Node>, message: DiagnosticMessage, ...args: DiagnosticArguments): DiagnosticWithLocation {
+export function createDiagnosticForNodeArray(
+    sourceFile: SourceFile,
+    nodes: NodeArray<Node>,
+    message: DiagnosticMessage,
+    ...args: DiagnosticArguments
+): DiagnosticWithLocation {
     const start = skipTrivia(sourceFile.text, nodes.pos);
     return createFileDiagnostic(sourceFile, start, nodes.end - start, message, ...args);
 }
 
 /** @internal */
-export function createDiagnosticForNodeInSourceFile(sourceFile: SourceFile, node: Node, message: DiagnosticMessage, ...args: DiagnosticArguments): DiagnosticWithLocation {
+export function createDiagnosticForNodeInSourceFile(
+    sourceFile: SourceFile,
+    node: Node,
+    message: DiagnosticMessage,
+    ...args: DiagnosticArguments
+): DiagnosticWithLocation {
     const span = getErrorSpanForNode(sourceFile, node);
     return createFileDiagnostic(sourceFile, span.start, span.length, message, ...args);
 }
@@ -2825,7 +2840,11 @@ export function getTsConfigPropArrayElementValue(tsConfigSourceFile: TsConfigSou
 }
 
 /** @internal */
-export function forEachTsConfigPropArray<T>(tsConfigSourceFile: TsConfigSourceFile | undefined, propKey: string, callback: (property: PropertyAssignment) => T | undefined) {
+export function forEachTsConfigPropArray<T>(
+    tsConfigSourceFile: TsConfigSourceFile | undefined,
+    propKey: string,
+    callback: (property: PropertyAssignment) => T | undefined,
+) {
     return forEachPropertyAssignment(getTsConfigObjectLiteralExpression(tsConfigSourceFile), propKey, callback);
 }
 
@@ -2891,7 +2910,11 @@ export function getThisContainer(node: Node, includeArrowFunctions: false, inclu
 /** @internal */
 export function getThisContainer(node: Node, includeArrowFunctions: boolean, includeClassComputedPropertyName: false): ThisContainer | ArrowFunction;
 /** @internal */
-export function getThisContainer(node: Node, includeArrowFunctions: boolean, includeClassComputedPropertyName: boolean): ThisContainer | ArrowFunction | ComputedPropertyName;
+export function getThisContainer(
+    node: Node,
+    includeArrowFunctions: boolean,
+    includeClassComputedPropertyName: boolean,
+): ThisContainer | ArrowFunction | ComputedPropertyName;
 export function getThisContainer(node: Node, includeArrowFunctions: boolean, includeClassComputedPropertyName: boolean) {
     Debug.assert(node.kind !== SyntaxKind.SourceFile);
     while (true) {
@@ -3494,7 +3517,8 @@ export function getExternalModuleImportEqualsDeclarationExpression(node: Node) {
 
 /** @internal */
 export function getExternalModuleRequireArgument(node: Node) {
-    return isVariableDeclarationInitializedToBareOrAccessedRequire(node) && (getLeftmostAccessExpression(node.initializer) as CallExpression).arguments[0] as StringLiteral;
+    return isVariableDeclarationInitializedToBareOrAccessedRequire(node) &&
+        (getLeftmostAccessExpression(node.initializer) as CallExpression).arguments[0] as StringLiteral;
 }
 
 /** @internal */
@@ -4011,7 +4035,9 @@ export function isPrototypePropertyAssignment(node: Node): node is PrototypeProp
 }
 
 /** @internal */
-export function isSpecialPropertyDeclaration(expr: PropertyAccessExpression | ElementAccessExpression): expr is PropertyAccessExpression | LiteralLikeElementAccessExpression {
+export function isSpecialPropertyDeclaration(
+    expr: PropertyAccessExpression | ElementAccessExpression,
+): expr is PropertyAccessExpression | LiteralLikeElementAccessExpression {
     return isInJSFile(expr) &&
         expr.parent && expr.parent.kind === SyntaxKind.ExpressionStatement &&
         (!isElementAccessExpression(expr) || isLiteralLikeElementAccess(expr)) &&
@@ -4133,7 +4159,10 @@ export function isDefaultImport(node: ImportDeclaration | ImportEqualsDeclaratio
 }
 
 /** @internal */
-export function forEachImportClauseDeclaration<T>(node: ImportClause, action: (declaration: ImportClause | NamespaceImport | ImportSpecifier) => T | undefined): T | undefined {
+export function forEachImportClauseDeclaration<T>(
+    node: ImportClause,
+    action: (declaration: ImportClause | NamespaceImport | ImportSpecifier) => T | undefined,
+): T | undefined {
     if (node.name) {
         const result = action(node);
         if (result) return result;
@@ -5243,7 +5272,10 @@ export type AnonymousFunctionDefinition =
  * @see https://tc39.es/ecma262/#sec-isanonymousfunctiondefinition
  * @internal
  */
-export function isAnonymousFunctionDefinition(node: Expression, cb?: (node: AnonymousFunctionDefinition) => boolean): node is WrappedExpression<AnonymousFunctionDefinition> {
+export function isAnonymousFunctionDefinition(
+    node: Expression,
+    cb?: (node: AnonymousFunctionDefinition) => boolean,
+): node is WrappedExpression<AnonymousFunctionDefinition> {
     node = skipOuterExpressions(node);
     switch (node.kind) {
         case SyntaxKind.ClassExpression:
@@ -6454,7 +6486,10 @@ export function sourceFileMayBeEmitted(sourceFile: SourceFile, host: SourceFileM
     if (!options.outDir) return false;
     // Otherwise if rootDir or composite config file, we know common sourceDir and can check if file would be emitted in same location
     if (options.rootDir || (options.composite && options.configFilePath)) {
-        const commonDir = getNormalizedAbsolutePath(getCommonSourceDirectory(options, () => [], host.getCurrentDirectory(), host.getCanonicalFileName), host.getCurrentDirectory());
+        const commonDir = getNormalizedAbsolutePath(
+            getCommonSourceDirectory(options, () => [], host.getCurrentDirectory(), host.getCanonicalFileName),
+            host.getCurrentDirectory(),
+        );
         const outputPath = getSourceFilePathInNewDirWorker(sourceFile.fileName, options.outDir, host.getCurrentDirectory(), commonDir, host.getCanonicalFileName);
         if (comparePaths(sourceFile.fileName, outputPath, host.getCurrentDirectory(), !host.useCaseSensitiveFileNames()) === Comparison.EqualTo) return false;
     }
@@ -6725,12 +6760,22 @@ export function getEffectiveSetAccessorTypeAnnotationNode(node: SetAccessorDecla
 }
 
 /** @internal */
-export function emitNewLineBeforeLeadingComments(lineMap: readonly number[], writer: EmitTextWriter, node: TextRange, leadingComments: readonly CommentRange[] | undefined) {
+export function emitNewLineBeforeLeadingComments(
+    lineMap: readonly number[],
+    writer: EmitTextWriter,
+    node: TextRange,
+    leadingComments: readonly CommentRange[] | undefined,
+) {
     emitNewLineBeforeLeadingCommentsOfPosition(lineMap, writer, node.pos, leadingComments);
 }
 
 /** @internal */
-export function emitNewLineBeforeLeadingCommentsOfPosition(lineMap: readonly number[], writer: EmitTextWriter, pos: number, leadingComments: readonly CommentRange[] | undefined) {
+export function emitNewLineBeforeLeadingCommentsOfPosition(
+    lineMap: readonly number[],
+    writer: EmitTextWriter,
+    pos: number,
+    leadingComments: readonly CommentRange[] | undefined,
+) {
     // If the leading comments start on different line than the start of node, write new line
     if (
         leadingComments && leadingComments.length && pos !== leadingComments[0].pos &&
@@ -8165,7 +8210,10 @@ export function getLeftmostAccessExpression(expr: Expression): Expression {
 }
 
 /** @internal */
-export function forEachNameInAccessChainWalkingLeft<T>(name: MemberName | StringLiteralLike, action: (name: MemberName | StringLiteralLike) => T | undefined): T | undefined {
+export function forEachNameInAccessChainWalkingLeft<T>(
+    name: MemberName | StringLiteralLike,
+    action: (name: MemberName | StringLiteralLike) => T | undefined,
+): T | undefined {
     if (isAccessExpression(name.parent) && isRightSideOfAccessExpression(name)) {
         return walkAccessExpression(name.parent);
     }
@@ -9622,17 +9670,32 @@ export function getScriptKindFromFileName(fileName: string): ScriptKind {
  *
  * @internal
  */
-export const supportedTSExtensions: readonly Extension[][] = [[Extension.Ts, Extension.Tsx, Extension.Dts], [Extension.Cts, Extension.Dcts], [Extension.Mts, Extension.Dmts]];
+export const supportedTSExtensions: readonly Extension[][] = [[Extension.Ts, Extension.Tsx, Extension.Dts], [Extension.Cts, Extension.Dcts], [
+    Extension.Mts,
+    Extension.Dmts,
+]];
 /** @internal */
 export const supportedTSExtensionsFlat: readonly Extension[] = flatten(supportedTSExtensions);
 const supportedTSExtensionsWithJson: readonly Extension[][] = [...supportedTSExtensions, [Extension.Json]];
 /** Must have ".d.ts" first because if ".ts" goes first, that will be detected as the extension instead of ".d.ts". */
-const supportedTSExtensionsForExtractExtension: readonly Extension[] = [Extension.Dts, Extension.Dcts, Extension.Dmts, Extension.Cts, Extension.Mts, Extension.Ts, Extension.Tsx];
+const supportedTSExtensionsForExtractExtension: readonly Extension[] = [
+    Extension.Dts,
+    Extension.Dcts,
+    Extension.Dmts,
+    Extension.Cts,
+    Extension.Mts,
+    Extension.Ts,
+    Extension.Tsx,
+];
 /** @internal */
 export const supportedJSExtensions: readonly Extension[][] = [[Extension.Js, Extension.Jsx], [Extension.Mjs], [Extension.Cjs]];
 /** @internal */
 export const supportedJSExtensionsFlat: readonly Extension[] = flatten(supportedJSExtensions);
-const allSupportedExtensions: readonly Extension[][] = [[Extension.Ts, Extension.Tsx, Extension.Dts, Extension.Js, Extension.Jsx], [Extension.Cts, Extension.Dcts, Extension.Cjs], [
+const allSupportedExtensions: readonly Extension[][] = [[Extension.Ts, Extension.Tsx, Extension.Dts, Extension.Js, Extension.Jsx], [
+    Extension.Cts,
+    Extension.Dcts,
+    Extension.Cjs,
+], [
     Extension.Mts,
     Extension.Dmts,
     Extension.Mjs,
@@ -9643,7 +9706,14 @@ export const supportedDeclarationExtensions: readonly Extension[] = [Extension.D
 /** @internal */
 export const supportedTSImplementationExtensions: readonly Extension[] = [Extension.Ts, Extension.Cts, Extension.Mts, Extension.Tsx];
 /** @internal */
-export const extensionsNotSupportingExtensionlessResolution: readonly Extension[] = [Extension.Mts, Extension.Dmts, Extension.Mjs, Extension.Cts, Extension.Dcts, Extension.Cjs];
+export const extensionsNotSupportingExtensionlessResolution: readonly Extension[] = [
+    Extension.Mts,
+    Extension.Dmts,
+    Extension.Mjs,
+    Extension.Cts,
+    Extension.Dcts,
+    Extension.Cjs,
+];
 
 /** @internal */
 export function getSupportedExtensions(options?: CompilerOptions): readonly Extension[][];
@@ -9663,7 +9733,8 @@ export function getSupportedExtensions(options?: CompilerOptions, extraFileExten
         ...builtins,
         ...mapDefined(
             extraFileExtensions,
-            x => x.scriptKind === ScriptKind.Deferred || needJsExtensions && isJSLike(x.scriptKind) && !flatBuiltins.includes(x.extension as Extension) ? [x.extension] : undefined,
+            x => x.scriptKind === ScriptKind.Deferred || needJsExtensions && isJSLike(x.scriptKind) && !flatBuiltins.includes(x.extension as Extension) ? [x.extension]
+                : undefined,
         ),
     ];
 
@@ -9671,7 +9742,10 @@ export function getSupportedExtensions(options?: CompilerOptions, extraFileExten
 }
 
 /** @internal */
-export function getSupportedExtensionsWithJsonIfResolveJsonModule(options: CompilerOptions | undefined, supportedExtensions: readonly Extension[][]): readonly Extension[][];
+export function getSupportedExtensionsWithJsonIfResolveJsonModule(
+    options: CompilerOptions | undefined,
+    supportedExtensions: readonly Extension[][],
+): readonly Extension[][];
 /** @internal */
 export function getSupportedExtensionsWithJsonIfResolveJsonModule(options: CompilerOptions | undefined, supportedExtensions: readonly string[][]): readonly string[][];
 /** @internal */
@@ -10041,7 +10115,8 @@ export function skipTypeChecking(sourceFile: SourceFile, options: CompilerOption
 /** @internal */
 export function isJsonEqual(a: unknown, b: unknown): boolean {
     // eslint-disable-next-line no-null/no-null
-    return a === b || typeof a === "object" && a !== null && typeof b === "object" && b !== null && equalOwnProperties(a as MapLike<unknown>, b as MapLike<unknown>, isJsonEqual);
+    return a === b ||
+        typeof a === "object" && a !== null && typeof b === "object" && b !== null && equalOwnProperties(a as MapLike<unknown>, b as MapLike<unknown>, isJsonEqual);
 }
 
 /**
@@ -10674,7 +10749,8 @@ export function isTypeDeclaration(
 /** @internal */
 export function canHaveExportModifier(node: Node): node is Extract<HasModifiers, Statement> {
     return isEnumDeclaration(node) || isVariableStatement(node) || isFunctionDeclaration(node) || isClassDeclaration(node)
-        || isInterfaceDeclaration(node) || isTypeDeclaration(node) || (isModuleDeclaration(node) && !isExternalModuleAugmentation(node) && !isGlobalScopeAugmentation(node));
+        || isInterfaceDeclaration(node) || isTypeDeclaration(node) ||
+        (isModuleDeclaration(node) && !isExternalModuleAugmentation(node) && !isGlobalScopeAugmentation(node));
 }
 
 /** @internal */
@@ -10707,7 +10783,9 @@ export function isJSDocOptionalParameter(node: ParameterDeclaration) {
     return isInJSFile(node) && (
         // node.type should only be a JSDocOptionalType when node is a parameter of a JSDocFunctionType
         node.type && node.type.kind === SyntaxKind.JSDocOptionalType
-        || getJSDocParameterTags(node).some(({ isBracketed, typeExpression }) => isBracketed || !!typeExpression && typeExpression.type.kind === SyntaxKind.JSDocOptionalType)
+        || getJSDocParameterTags(node).some(({ isBracketed, typeExpression }) =>
+            isBracketed || !!typeExpression && typeExpression.type.kind === SyntaxKind.JSDocOptionalType
+        )
     );
 }
 

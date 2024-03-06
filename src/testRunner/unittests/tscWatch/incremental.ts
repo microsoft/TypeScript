@@ -177,7 +177,14 @@ describe("unittests:: tsc-watch:: emit file --incremental", () => {
                     system,
                 });
 
-                const command = ts.parseConfigFileWithSystem("tsconfig.json", {}, /*extendedConfigCache*/ undefined, /*watchOptionsToExtend*/ undefined, system, ts.noop)!;
+                const command = ts.parseConfigFileWithSystem(
+                    "tsconfig.json",
+                    {},
+                    /*extendedConfigCache*/ undefined,
+                    /*watchOptionsToExtend*/ undefined,
+                    system,
+                    ts.noop,
+                )!;
                 const builderProgram = ts.createIncrementalProgram({
                     rootNames: command.fileNames,
                     options: command.options,

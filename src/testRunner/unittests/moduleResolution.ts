@@ -119,7 +119,9 @@ describe("unittests:: moduleResolution:: Node module resolution - relative paths
                 const packageJson = { name: packageJsonFileName, content: jsonToReadableText({ typings: fieldRef }) };
                 const moduleFile = { name: moduleFileName };
                 baselines.push(
-                    `Resolving "${moduleName}" from ${containingFile.name} with typings: ${fieldRef}${hasDirectoryExists ? "" : " with host that doesnt have directoryExists"}`,
+                    `Resolving "${moduleName}" from ${containingFile.name} with typings: ${fieldRef}${
+                        hasDirectoryExists ? "" : " with host that doesnt have directoryExists"
+                    }`,
                 );
                 const resolution = ts.nodeModuleNameResolver(
                     moduleName,
@@ -297,7 +299,12 @@ describe("unittests:: moduleResolution:: Node module resolution - non-relative p
             const containingFile = { name: "/a/b/c/d/e.ts" };
             const moduleFile = { name: "/a/b/node_modules/foo.ts" };
             baselines.push(`Resolving "foo" from ${containingFile.name}${hasDirectoryExists ? "" : " with host that doesnt have directoryExists"}`);
-            const resolution = ts.nodeModuleNameResolver("foo", containingFile.name, {}, createModuleResolutionHost(baselines, hasDirectoryExists, containingFile, moduleFile));
+            const resolution = ts.nodeModuleNameResolver(
+                "foo",
+                containingFile.name,
+                {},
+                createModuleResolutionHost(baselines, hasDirectoryExists, containingFile, moduleFile),
+            );
             baselines.push(`Resolution:: ${jsonToReadableText(resolution)}`);
             baselines.push("");
         }
@@ -313,7 +320,12 @@ describe("unittests:: moduleResolution:: Node module resolution - non-relative p
             const containingFile = { name: "/a/b/c/d/e.ts" };
             const moduleFile = { name: "/a/b/node_modules/foo.d.ts" };
             baselines.push(`Resolving "foo" from ${containingFile.name}${hasDirectoryExists ? "" : " with host that doesnt have directoryExists"}`);
-            const resolution = ts.nodeModuleNameResolver("foo", containingFile.name, {}, createModuleResolutionHost(baselines, hasDirectoryExists, containingFile, moduleFile));
+            const resolution = ts.nodeModuleNameResolver(
+                "foo",
+                containingFile.name,
+                {},
+                createModuleResolutionHost(baselines, hasDirectoryExists, containingFile, moduleFile),
+            );
             baselines.push(`Resolution:: ${jsonToReadableText(resolution)}`);
             baselines.push("");
         }
@@ -329,7 +341,12 @@ describe("unittests:: moduleResolution:: Node module resolution - non-relative p
             const containingFile: File = { name: "/a/node_modules/b/c/node_modules/d/e.ts" };
             const moduleFile: File = { name: "/a/node_modules/foo/index.d.ts" };
             baselines.push(`Resolving "foo" from ${containingFile.name}${hasDirectoryExists ? "" : " with host that doesnt have directoryExists"}`);
-            const resolution = ts.nodeModuleNameResolver("foo", containingFile.name, {}, createModuleResolutionHost(baselines, hasDirectoryExists, containingFile, moduleFile));
+            const resolution = ts.nodeModuleNameResolver(
+                "foo",
+                containingFile.name,
+                {},
+                createModuleResolutionHost(baselines, hasDirectoryExists, containingFile, moduleFile),
+            );
             baselines.push(`Resolution:: ${jsonToReadableText(resolution)}`);
             baselines.push("");
         }

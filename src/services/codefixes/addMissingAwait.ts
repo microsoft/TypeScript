@@ -286,14 +286,15 @@ function symbolReferenceIsAlsoMissingAwait(reference: Identifier, diagnostics: r
 }
 
 function isInsideAwaitableBody(node: Node) {
-    return node.flags & NodeFlags.AwaitContext || !!findAncestor(node, ancestor =>
-        ancestor.parent && isArrowFunction(ancestor.parent) && ancestor.parent.body === ancestor ||
-        isBlock(ancestor) && (
-                ancestor.parent.kind === SyntaxKind.FunctionDeclaration ||
-                ancestor.parent.kind === SyntaxKind.FunctionExpression ||
-                ancestor.parent.kind === SyntaxKind.ArrowFunction ||
-                ancestor.parent.kind === SyntaxKind.MethodDeclaration
-            ));
+    return node.flags & NodeFlags.AwaitContext ||
+        !!findAncestor(node, ancestor =>
+            ancestor.parent && isArrowFunction(ancestor.parent) && ancestor.parent.body === ancestor ||
+            isBlock(ancestor) && (
+                    ancestor.parent.kind === SyntaxKind.FunctionDeclaration ||
+                    ancestor.parent.kind === SyntaxKind.FunctionExpression ||
+                    ancestor.parent.kind === SyntaxKind.ArrowFunction ||
+                    ancestor.parent.kind === SyntaxKind.MethodDeclaration
+                ));
 }
 
 function makeChange(

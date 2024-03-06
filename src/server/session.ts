@@ -1508,7 +1508,10 @@ export class Session<TMessage = string> implements EventSender {
         });
     }
 
-    private getDefinitionAndBoundSpan(args: protocol.FileLocationRequestArgs, simplifiedResult: boolean): protocol.DefinitionInfoAndBoundSpan | DefinitionInfoAndBoundSpan {
+    private getDefinitionAndBoundSpan(
+        args: protocol.FileLocationRequestArgs,
+        simplifiedResult: boolean,
+    ): protocol.DefinitionInfoAndBoundSpan | DefinitionInfoAndBoundSpan {
         const { file, project } = this.getFileAndProject(args);
         const position = this.getPositionInFile(args, file);
         const scriptInfo = Debug.checkDefined(project.getScriptInfo(file));
@@ -1809,7 +1812,10 @@ export class Session<TMessage = string> implements EventSender {
         });
     }
 
-    private getImplementation(args: protocol.FileLocationRequestArgs, simplifiedResult: boolean): readonly protocol.FileSpanWithContext[] | readonly ImplementationLocation[] {
+    private getImplementation(
+        args: protocol.FileLocationRequestArgs,
+        simplifiedResult: boolean,
+    ): readonly protocol.FileSpanWithContext[] | readonly ImplementationLocation[] {
         const { file, project } = this.getFileAndProject(args);
         const position = this.getPositionInFile(args, file);
         const implementations = this.mapImplementationLocations(project.getLanguageService().getImplementationAtPosition(file, position) || emptyArray, project);
@@ -1825,7 +1831,12 @@ export class Session<TMessage = string> implements EventSender {
             return emptyArray;
         }
 
-        return this.getDiagnosticsWorker(args, /*isSemantic*/ false, (project, file) => project.getLanguageService().getSyntacticDiagnostics(file), !!args.includeLinePosition);
+        return this.getDiagnosticsWorker(
+            args,
+            /*isSemantic*/ false,
+            (project, file) => project.getLanguageService().getSyntacticDiagnostics(file),
+            !!args.includeLinePosition,
+        );
     }
 
     private getSemanticDiagnosticsSync(args: protocol.SemanticDiagnosticsSyncRequestArgs) {
@@ -1848,7 +1859,12 @@ export class Session<TMessage = string> implements EventSender {
             return emptyArray;
         }
         // isSemantic because we don't want to info diagnostics in declaration files for JS-only users
-        return this.getDiagnosticsWorker(args, /*isSemantic*/ true, (project, file) => project.getLanguageService().getSuggestionDiagnostics(file), !!args.includeLinePosition);
+        return this.getDiagnosticsWorker(
+            args,
+            /*isSemantic*/ true,
+            (project, file) => project.getLanguageService().getSuggestionDiagnostics(file),
+            !!args.includeLinePosition,
+        );
     }
 
     private getJsxClosingTag(args: protocol.JsxClosingTagRequestArgs): TextInsertion | undefined {
@@ -2421,7 +2437,8 @@ export class Session<TMessage = string> implements EventSender {
             );
         });
         return fullResult
-            ? (useDisplayParts ? result : result.map(details => ({ ...details, tags: this.mapJSDocTagInfo(details.tags, project, /*richResponse*/ false) as JSDocTagInfo[] })))
+            ? (useDisplayParts ? result
+                : result.map(details => ({ ...details, tags: this.mapJSDocTagInfo(details.tags, project, /*richResponse*/ false) as JSDocTagInfo[] })))
             : result.map(details => ({
                 ...details,
                 codeActions: map(details.codeActions, action => this.mapCodeAction(action)),
@@ -2855,7 +2872,10 @@ export class Session<TMessage = string> implements EventSender {
         }
     }
 
-    private getEditsForFileRename(args: protocol.GetEditsForFileRenameRequestArgs, simplifiedResult: boolean): readonly protocol.FileCodeEdits[] | readonly FileTextChanges[] {
+    private getEditsForFileRename(
+        args: protocol.GetEditsForFileRenameRequestArgs,
+        simplifiedResult: boolean,
+    ): readonly protocol.FileCodeEdits[] | readonly FileTextChanges[] {
         const oldPath = toNormalizedPath(args.oldFilePath);
         const newPath = toNormalizedPath(args.newFilePath);
         const formatOptions = this.getHostFormatOptions();
@@ -3019,7 +3039,12 @@ export class Session<TMessage = string> implements EventSender {
             return;
         }
 
-        const { fileNames, languageServiceDisabled } = this.getProjectInfoWorker(fileName, /*projectFileName*/ undefined, /*needFileNameList*/ true, /*excludeConfigFiles*/ true);
+        const { fileNames, languageServiceDisabled } = this.getProjectInfoWorker(
+            fileName,
+            /*projectFileName*/ undefined,
+            /*needFileNameList*/ true,
+            /*excludeConfigFiles*/ true,
+        );
         if (languageServiceDisabled) {
             return;
         }

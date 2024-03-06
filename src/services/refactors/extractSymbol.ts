@@ -377,7 +377,9 @@ export namespace Messages {
     export const cannotExtractRangeContainingConditionalBreakOrContinueStatements: DiagnosticMessage = createMessage(
         "Cannot extract range containing conditional break or continue statements.",
     );
-    export const cannotExtractRangeContainingConditionalReturnStatement: DiagnosticMessage = createMessage("Cannot extract range containing conditional return statement.");
+    export const cannotExtractRangeContainingConditionalReturnStatement: DiagnosticMessage = createMessage(
+        "Cannot extract range containing conditional return statement.",
+    );
     export const cannotExtractRangeContainingLabeledBreakOrContinueStatementWithTargetOutsideOfTheRange: DiagnosticMessage = createMessage(
         "Cannot extract range containing labeled break or continue with target outside of the range.",
     );
@@ -389,7 +391,9 @@ export namespace Messages {
     export const cannotExtractIdentifier = createMessage("Select more than a single identifier.");
     export const cannotExtractExportedEntity = createMessage("Cannot extract exported declaration");
     export const cannotWriteInExpression = createMessage("Cannot write back side-effects when extracting an expression");
-    export const cannotExtractReadonlyPropertyInitializerOutsideConstructor = createMessage("Cannot move initialization of read-only class property outside of the constructor");
+    export const cannotExtractReadonlyPropertyInitializerOutsideConstructor = createMessage(
+        "Cannot move initialization of read-only class property outside of the constructor",
+    );
     export const cannotExtractAmbientBlock = createMessage("Cannot extract code from ambient contexts");
     export const cannotAccessVariablesFromNestedScopes = createMessage("Cannot access variables from nested scopes");
     export const cannotExtractToJSClass = createMessage("Cannot extract constant to a class scope in JS");
@@ -771,7 +775,9 @@ export function getRangeToExtract(sourceFile: SourceFile, span: TextSpan, invoke
                     if (label) {
                         if (!contains(seenLabels, label.escapedText)) {
                             // attempts to jump to label that is not in range to be extracted
-                            (errors ||= []).push(createDiagnosticForNode(node, Messages.cannotExtractRangeContainingLabeledBreakOrContinueStatementWithTargetOutsideOfTheRange));
+                            (errors ||= []).push(
+                                createDiagnosticForNode(node, Messages.cannotExtractRangeContainingLabeledBreakOrContinueStatementWithTargetOutsideOfTheRange),
+                            );
                         }
                     }
                     else {
@@ -883,14 +889,20 @@ function collectEnclosingScopes(range: TargetRange): Scope[] {
 }
 
 function getFunctionExtractionAtIndex(targetRange: TargetRange, context: RefactorContext, requestedChangesIndex: number): RefactorEditInfo {
-    const { scopes, readsAndWrites: { target, usagesPerScope, functionErrorsPerScope, exposedVariableDeclarations } } = getPossibleExtractionsWorker(targetRange, context);
+    const { scopes, readsAndWrites: { target, usagesPerScope, functionErrorsPerScope, exposedVariableDeclarations } } = getPossibleExtractionsWorker(
+        targetRange,
+        context,
+    );
     Debug.assert(!functionErrorsPerScope[requestedChangesIndex].length, "The extraction went missing? How?");
     context.cancellationToken!.throwIfCancellationRequested(); // TODO: GH#18217
     return extractFunctionInScope(target, scopes[requestedChangesIndex], usagesPerScope[requestedChangesIndex], exposedVariableDeclarations, targetRange, context);
 }
 
 function getConstantExtractionAtIndex(targetRange: TargetRange, context: RefactorContext, requestedChangesIndex: number): RefactorEditInfo {
-    const { scopes, readsAndWrites: { target, usagesPerScope, constantErrorsPerScope, exposedVariableDeclarations } } = getPossibleExtractionsWorker(targetRange, context);
+    const { scopes, readsAndWrites: { target, usagesPerScope, constantErrorsPerScope, exposedVariableDeclarations } } = getPossibleExtractionsWorker(
+        targetRange,
+        context,
+    );
     Debug.assert(!constantErrorsPerScope[requestedChangesIndex].length, "The extraction went missing? How?");
     Debug.assert(exposedVariableDeclarations.length === 0, "Extract constant accepted a range containing a variable declaration?");
     context.cancellationToken!.throwIfCancellationRequested();
@@ -1077,7 +1089,10 @@ function extractFunctionInScope(
         callArguments.push(factory.createIdentifier(name));
     });
 
-    const typeParametersAndDeclarations = arrayFrom(typeParameterUsages.values(), type => ({ type, declaration: getFirstDeclarationBeforePosition(type, context.startPosition) }));
+    const typeParametersAndDeclarations = arrayFrom(
+        typeParameterUsages.values(),
+        type => ({ type, declaration: getFirstDeclarationBeforePosition(type, context.startPosition) }),
+    );
     const sortedTypeParametersAndDeclarations = typeParametersAndDeclarations.sort(compareTypesByDeclarationOrder);
 
     const typeParameters: readonly TypeParameterDeclaration[] | undefined = sortedTypeParametersAndDeclarations.length === 0
@@ -1380,11 +1395,12 @@ function extractConstantInScope(
 
     // Make a unique name for the extracted variable
     const file = scope.getSourceFile();
-    const localNameText = isPropertyAccessExpression(node) && !isClassLike(scope) && !checker.resolveName(node.name.text, node, SymbolFlags.Value, /*excludeGlobals*/ false) &&
+    const localNameText =
+        isPropertyAccessExpression(node) && !isClassLike(scope) && !checker.resolveName(node.name.text, node, SymbolFlags.Value, /*excludeGlobals*/ false) &&
             !isPrivateIdentifier(node.name) &&
             !identifierToKeywordKind(node.name)
-        ? node.name.text
-        : getUniqueName(isClassLike(scope) ? "newProperty" : "newLocal", file);
+            ? node.name.text
+            : getUniqueName(isClassLike(scope) ? "newProperty" : "newLocal", file);
     const isJS = isInJSFile(scope);
 
     let variableType = isJS || !checker.isContextSensitive(node)
@@ -1499,7 +1515,10 @@ function extractConstantInScope(
     const renameLocation = getRenameLocation(edits, renameFilename, localNameText, /*preferLastLocation*/ true);
     return { renameFilename, renameLocation, edits };
 
-    function transformFunctionInitializerAndType(variableType: TypeNode | undefined, initializer: Expression): { variableType: TypeNode | undefined; initializer: Expression; } {
+    function transformFunctionInitializerAndType(
+        variableType: TypeNode | undefined,
+        initializer: Expression,
+    ): { variableType: TypeNode | undefined; initializer: Expression; } {
         // If no contextual type exists there is nothing to transfer to the function signature
         if (variableType === undefined) return { variableType, initializer };
         // Only do this for function expressions and arrow functions that are not generic
@@ -1905,7 +1924,11 @@ function collectReadsAndWrites(
 
     // initialize results
     for (const scope of scopes) {
-        usagesPerScope.push({ usages: new Map<string, UsageEntry>(), typeParameterUsages: new Map<string, TypeParameter>(), substitutions: new Map<string, Expression>() });
+        usagesPerScope.push({
+            usages: new Map<string, UsageEntry>(),
+            typeParameterUsages: new Map<string, TypeParameter>(),
+            substitutions: new Map<string, Expression>(),
+        });
         substitutionsPerScope.push(new Map<string, Expression>());
 
         functionErrorsPerScope.push([]);
@@ -2222,7 +2245,11 @@ function collectReadsAndWrites(
             : checker.getSymbolAtLocation(identifier);
     }
 
-    function tryReplaceWithQualifiedNameOrPropertyAccess(symbol: Symbol | undefined, scopeDecl: Node, isTypeNode: boolean): PropertyAccessExpression | EntityName | undefined {
+    function tryReplaceWithQualifiedNameOrPropertyAccess(
+        symbol: Symbol | undefined,
+        scopeDecl: Node,
+        isTypeNode: boolean,
+    ): PropertyAccessExpression | EntityName | undefined {
         if (!symbol) {
             return undefined;
         }

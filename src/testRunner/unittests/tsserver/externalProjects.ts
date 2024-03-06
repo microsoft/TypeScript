@@ -51,7 +51,9 @@ describe("unittests:: tsserver:: externalProjects", () => {
             openFilesForSession([f1], session);
             baselineTsserverLogs(
                 "externalProjects",
-                `can handle tsconfig file name with difference casing${lazyConfiguredProjectsFromExternalProject ? " with lazyConfiguredProjectsFromExternalProject" : ""}`,
+                `can handle tsconfig file name with difference casing${
+                    lazyConfiguredProjectsFromExternalProject ? " with lazyConfiguredProjectsFromExternalProject" : ""
+                }`,
                 session,
             );
         }
@@ -480,7 +482,9 @@ describe("unittests:: tsserver:: externalProjects", () => {
 
             baselineTsserverLogs(
                 "externalProjects",
-                `deleting config file opened from the external project works${lazyConfiguredProjectsFromExternalProject ? " with lazyConfiguredProjectsFromExternalProject" : ""}`,
+                `deleting config file opened from the external project works${
+                    lazyConfiguredProjectsFromExternalProject ? " with lazyConfiguredProjectsFromExternalProject" : ""
+                }`,
                 session,
             );
         }

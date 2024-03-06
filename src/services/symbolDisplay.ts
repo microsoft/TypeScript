@@ -329,7 +329,9 @@ function getSymbolDisplayPartsDocumentationAndSymbolKindWorker(
         else if (isCallExpressionTarget(location) || isNewExpressionTarget(location)) {
             callExpressionLike = location.parent as CallExpression | NewExpression;
         }
-        else if (location.parent && (isJsxOpeningLikeElement(location.parent) || isTaggedTemplateExpression(location.parent)) && isFunctionLike(symbol.valueDeclaration)) {
+        else if (
+            location.parent && (isJsxOpeningLikeElement(location.parent) || isTaggedTemplateExpression(location.parent)) && isFunctionLike(symbol.valueDeclaration)
+        ) {
             callExpressionLike = location.parent;
         }
 
@@ -422,7 +424,10 @@ function getSymbolDisplayPartsDocumentationAndSymbolKindWorker(
             const functionDeclaration = location.parent as SignatureDeclaration;
             // Use function declaration to write the signatures only if the symbol corresponding to this declaration
             const locationIsSymbolDeclaration = symbol.declarations &&
-                find(symbol.declarations, declaration => declaration === (location.kind === SyntaxKind.ConstructorKeyword ? functionDeclaration.parent : functionDeclaration));
+                find(
+                    symbol.declarations,
+                    declaration => declaration === (location.kind === SyntaxKind.ConstructorKeyword ? functionDeclaration.parent : functionDeclaration),
+                );
 
             if (locationIsSymbolDeclaration) {
                 const allSignatures = functionDeclaration.kind === SyntaxKind.Constructor ? type.getNonNullableType().getConstructSignatures()
@@ -643,7 +648,9 @@ function getSymbolDisplayPartsDocumentationAndSymbolKindWorker(
                     displayParts.push(spacePart());
                     displayParts.push(keywordPart(SyntaxKind.RequireKeyword));
                     displayParts.push(punctuationPart(SyntaxKind.OpenParenToken));
-                    displayParts.push(displayPart(getTextOfNode(getExternalModuleImportEqualsDeclarationExpression(importEqualsDeclaration)), SymbolDisplayPartKind.stringLiteral));
+                    displayParts.push(
+                        displayPart(getTextOfNode(getExternalModuleImportEqualsDeclarationExpression(importEqualsDeclaration)), SymbolDisplayPartKind.stringLiteral),
+                    );
                     displayParts.push(punctuationPart(SyntaxKind.CloseParenToken));
                 }
                 else {
@@ -919,7 +926,16 @@ export function getSymbolDisplayPartsDocumentationAndSymbolKind(
     semanticMeaning = getMeaningFromLocation(location),
     alias?: Symbol,
 ): SymbolDisplayPartsDocumentationAndSymbolKind {
-    return getSymbolDisplayPartsDocumentationAndSymbolKindWorker(typeChecker, symbol, sourceFile, enclosingDeclaration, location, /*type*/ undefined, semanticMeaning, alias);
+    return getSymbolDisplayPartsDocumentationAndSymbolKindWorker(
+        typeChecker,
+        symbol,
+        sourceFile,
+        enclosingDeclaration,
+        location,
+        /*type*/ undefined,
+        semanticMeaning,
+        alias,
+    );
 }
 
 function isLocalVariableOrFunction(symbol: Symbol) {

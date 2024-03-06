@@ -368,7 +368,11 @@ function getTargetFileImportsAndAddExportInOldFile(
                     forEachImportInStatement(oldStatement, i => {
                         append(
                             copiedOldImports,
-                            filterImport(i, factory.createStringLiteral(moduleSpecifierFromImport(i).text), name => importsToCopy.has(checker.getSymbolAtLocation(name)!)),
+                            filterImport(
+                                i,
+                                factory.createStringLiteral(moduleSpecifierFromImport(i).text),
+                                name => importsToCopy.has(checker.getSymbolAtLocation(name)!),
+                            ),
                         );
                     });
                 }
@@ -443,7 +447,10 @@ function getTargetFileImportsAndAddExportInOldFile(
             copiedOldImports,
             makeImportOrRequire(targetFileSourceFile, oldFileDefault, oldFileNamedImports, oldFile.fileName, program, host, useEsModuleSyntax, quotePreference),
         )
-        : append(copiedOldImports, makeImportOrRequire(oldFile, oldFileDefault, oldFileNamedImports, oldFile.fileName, program, host, useEsModuleSyntax, quotePreference));
+        : append(
+            copiedOldImports,
+            makeImportOrRequire(oldFile, oldFileDefault, oldFileNamedImports, oldFile.fileName, program, host, useEsModuleSyntax, quotePreference),
+        );
 }
 
 /** @internal */
@@ -476,7 +483,13 @@ export function deleteMovedStatements(sourceFile: SourceFile, moved: readonly St
 }
 
 /** @internal */
-export function deleteUnusedOldImports(oldFile: SourceFile, toMove: readonly Statement[], changes: textChanges.ChangeTracker, toDelete: Set<Symbol>, checker: TypeChecker) {
+export function deleteUnusedOldImports(
+    oldFile: SourceFile,
+    toMove: readonly Statement[],
+    changes: textChanges.ChangeTracker,
+    toDelete: Set<Symbol>,
+    checker: TypeChecker,
+) {
     for (const statement of oldFile.statements) {
         if (contains(toMove, statement)) continue;
         forEachImportInStatement(statement, i => deleteUnusedImports(oldFile, i, changes, name => toDelete.has(checker.getSymbolAtLocation(name)!)));
@@ -582,7 +595,12 @@ function updateNamespaceLikeImportNode(node: SupportedImport, newNamespaceName: 
                 /*attributes*/ undefined,
             );
         case SyntaxKind.ImportEqualsDeclaration:
-            return factory.createImportEqualsDeclaration(/*modifiers*/ undefined, /*isTypeOnly*/ false, newNamespaceId, factory.createExternalModuleReference(newModuleString));
+            return factory.createImportEqualsDeclaration(
+                /*modifiers*/ undefined,
+                /*isTypeOnly*/ false,
+                newNamespaceId,
+                factory.createExternalModuleReference(newModuleString),
+            );
         case SyntaxKind.VariableDeclaration:
             return factory.createVariableDeclaration(newNamespaceId, /*exclamationToken*/ undefined, /*type*/ undefined, createRequireCall(newModuleString));
         default:
@@ -724,7 +742,12 @@ function isExported(sourceFile: SourceFile, decl: TopLevelDeclarationStatement, 
 }
 
 /** @internal */
-export function deleteUnusedImports(sourceFile: SourceFile, importDecl: SupportedImport, changes: textChanges.ChangeTracker, isUnused: (name: Identifier) => boolean): void {
+export function deleteUnusedImports(
+    sourceFile: SourceFile,
+    importDecl: SupportedImport,
+    changes: textChanges.ChangeTracker,
+    isUnused: (name: Identifier) => boolean,
+): void {
     switch (importDecl.kind) {
         case SyntaxKind.ImportDeclaration:
             deleteUnusedImportsInDeclaration(sourceFile, importDecl, changes, isUnused);
@@ -960,7 +983,13 @@ export function getTopLevelDeclarationStatement(d: TopLevelDeclaration): TopLeve
 }
 
 /** @internal */
-export function addExportToChanges(sourceFile: SourceFile, decl: TopLevelDeclarationStatement, name: Identifier, changes: textChanges.ChangeTracker, useEs6Exports: boolean): void {
+export function addExportToChanges(
+    sourceFile: SourceFile,
+    decl: TopLevelDeclarationStatement,
+    name: Identifier,
+    changes: textChanges.ChangeTracker,
+    useEs6Exports: boolean,
+): void {
     if (isExported(sourceFile, decl, useEs6Exports, name)) return;
     if (useEs6Exports) {
         if (!isExpressionStatement(decl)) changes.insertExportModifier(sourceFile, decl);
@@ -1119,7 +1148,9 @@ function isPureImport(node: Node): boolean {
         case SyntaxKind.ImportEqualsDeclaration:
             return !hasSyntacticModifier(node, ModifierFlags.Export);
         case SyntaxKind.VariableStatement:
-            return (node as VariableStatement).declarationList.declarations.every(d => !!d.initializer && isRequireCall(d.initializer, /*requireStringLiteralLikeArgument*/ true));
+            return (node as VariableStatement).declarationList.declarations.every(d =>
+                !!d.initializer && isRequireCall(d.initializer, /*requireStringLiteralLikeArgument*/ true)
+            );
         default:
             return false;
     }
@@ -1239,7 +1270,14 @@ function forEachTopLevelDeclaration<T>(statement: Statement, cb: (node: TopLevel
         case SyntaxKind.InterfaceDeclaration:
         case SyntaxKind.ImportEqualsDeclaration:
             return cb(
-                statement as FunctionDeclaration | ClassDeclaration | EnumDeclaration | ModuleDeclaration | TypeAliasDeclaration | InterfaceDeclaration | ImportEqualsDeclaration,
+                statement as
+                    | FunctionDeclaration
+                    | ClassDeclaration
+                    | EnumDeclaration
+                    | ModuleDeclaration
+                    | TypeAliasDeclaration
+                    | InterfaceDeclaration
+                    | ImportEqualsDeclaration,
             );
 
         case SyntaxKind.VariableStatement:

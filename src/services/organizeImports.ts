@@ -110,7 +110,9 @@ export function organizeImports(
     // Exports are always used
     if (mode !== OrganizeImportsMode.RemoveUnused) {
         // All of the old ExportDeclarations in the file, in syntactic order.
-        getTopLevelExportGroups(sourceFile).forEach(exportGroupDecl => organizeImportsWorker(exportGroupDecl, group => coalesceExportsWorker(group, comparer, preferences)));
+        getTopLevelExportGroups(sourceFile).forEach(exportGroupDecl =>
+            organizeImportsWorker(exportGroupDecl, group => coalesceExportsWorker(group, comparer, preferences))
+        );
     }
 
     for (const ambientModule of sourceFile.statements.filter(isAmbientModule)) {
@@ -149,10 +151,13 @@ export function organizeImports(
         const sortedImportGroups = shouldSort
             ? stableSort(oldImportGroups, (group1, group2) => compareModuleSpecifiersWorker(group1[0].moduleSpecifier, group2[0].moduleSpecifier, comparer))
             : oldImportGroups;
-        const newImportDecls = flatMap(sortedImportGroups, importGroup =>
-            getExternalModuleName(importGroup[0].moduleSpecifier) || importGroup[0].moduleSpecifier === undefined
-                ? coalesce(importGroup)
-                : importGroup);
+        const newImportDecls = flatMap(
+            sortedImportGroups,
+            importGroup =>
+                getExternalModuleName(importGroup[0].moduleSpecifier) || importGroup[0].moduleSpecifier === undefined
+                    ? coalesce(importGroup)
+                    : importGroup,
+        );
 
         // Delete all nodes if there are no imports.
         if (newImportDecls.length === 0) {
@@ -373,7 +378,10 @@ function coalesceImportsWorker(
                 continue;
             }
 
-            const sortedNamespaceImports = stableSort(namespaceImports, (i1, i2) => comparer(i1.importClause.namedBindings.name.text, i2.importClause.namedBindings.name.text));
+            const sortedNamespaceImports = stableSort(
+                namespaceImports,
+                (i1, i2) => comparer(i1.importClause.namedBindings.name.text, i2.importClause.namedBindings.name.text),
+            );
 
             for (const namespaceImport of sortedNamespaceImports) {
                 // Drop the name, if any
@@ -808,13 +816,22 @@ export const detectImportSpecifierSorting = memoizeCached((specifiers: readonly 
 }, new ImportSpecifierSortingCache());
 
 /** @internal */
-export function getImportDeclarationInsertionIndex(sortedImports: readonly AnyImportOrRequireStatement[], newImport: AnyImportOrRequireStatement, comparer: Comparer<string>) {
+export function getImportDeclarationInsertionIndex(
+    sortedImports: readonly AnyImportOrRequireStatement[],
+    newImport: AnyImportOrRequireStatement,
+    comparer: Comparer<string>,
+) {
     const index = binarySearch(sortedImports, newImport, identity, (a, b) => compareImportsOrRequireStatements(a, b, comparer));
     return index < 0 ? ~index : index;
 }
 
 /** @internal */
-export function getImportSpecifierInsertionIndex(sortedImports: readonly ImportSpecifier[], newImport: ImportSpecifier, comparer: Comparer<string>, preferences: UserPreferences) {
+export function getImportSpecifierInsertionIndex(
+    sortedImports: readonly ImportSpecifier[],
+    newImport: ImportSpecifier,
+    comparer: Comparer<string>,
+    preferences: UserPreferences,
+) {
     const index = binarySearch(sortedImports, newImport, identity, (s1, s2) => compareImportOrExportSpecifiers(s1, s2, comparer, preferences));
     return index < 0 ? ~index : index;
 }

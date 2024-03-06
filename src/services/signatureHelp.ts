@@ -243,25 +243,26 @@ function createJSSignatureHelpItems(argumentInfo: ArgumentListInfo, program: Pro
     const expression = getExpressionFromInvocation(argumentInfo.invocation);
     const name = isPropertyAccessExpression(expression) ? expression.name.text : undefined;
     const typeChecker = program.getTypeChecker();
-    return name === undefined ? undefined : firstDefined(program.getSourceFiles(), sourceFile =>
-        firstDefined(sourceFile.getNamedDeclarations().get(name), declaration => {
-            const type = declaration.symbol && typeChecker.getTypeOfSymbolAtLocation(declaration.symbol, declaration);
-            const callSignatures = type && type.getCallSignatures();
-            if (callSignatures && callSignatures.length) {
-                return typeChecker.runWithCancellationToken(
-                    cancellationToken,
-                    typeChecker =>
-                        createSignatureHelpItems(
-                            callSignatures,
-                            callSignatures[0],
-                            argumentInfo,
-                            sourceFile,
-                            typeChecker,
-                            /*useFullPrefix*/ true,
-                        ),
-                );
-            }
-        }));
+    return name === undefined ? undefined :
+        firstDefined(program.getSourceFiles(), sourceFile =>
+            firstDefined(sourceFile.getNamedDeclarations().get(name), declaration => {
+                const type = declaration.symbol && typeChecker.getTypeOfSymbolAtLocation(declaration.symbol, declaration);
+                const callSignatures = type && type.getCallSignatures();
+                if (callSignatures && callSignatures.length) {
+                    return typeChecker.runWithCancellationToken(
+                        cancellationToken,
+                        typeChecker =>
+                            createSignatureHelpItems(
+                                callSignatures,
+                                callSignatures[0],
+                                argumentInfo,
+                                sourceFile,
+                                typeChecker,
+                                /*useFullPrefix*/ true,
+                            ),
+                    );
+                }
+            }));
 }
 
 function containsPrecedingToken(startingToken: Node, sourceFile: SourceFile, container: Node) {
@@ -312,7 +313,11 @@ function getArgumentOrParameterListInfo(
     const argumentsSpan = getApplicableSpanForArguments(list, sourceFile);
     return { list, argumentIndex, argumentCount, argumentsSpan };
 }
-function getArgumentOrParameterListAndIndex(node: Node, sourceFile: SourceFile, checker: TypeChecker): { readonly list: Node; readonly argumentIndex: number; } | undefined {
+function getArgumentOrParameterListAndIndex(
+    node: Node,
+    sourceFile: SourceFile,
+    checker: TypeChecker,
+): { readonly list: Node; readonly argumentIndex: number; } | undefined {
     if (node.kind === SyntaxKind.LessThanToken || node.kind === SyntaxKind.OpenParenToken) {
         // Find the list that starts right *after* the < or ( token.
         // If the user has just opened a list, consider this item 0.
@@ -418,7 +423,12 @@ function getImmediatelyContainingArgumentInfo(node: Node, position: number, sour
     }
 }
 
-function getImmediatelyContainingArgumentOrContextualParameterInfo(node: Node, position: number, sourceFile: SourceFile, checker: TypeChecker): ArgumentListInfo | undefined {
+function getImmediatelyContainingArgumentOrContextualParameterInfo(
+    node: Node,
+    position: number,
+    sourceFile: SourceFile,
+    checker: TypeChecker,
+): ArgumentListInfo | undefined {
     return tryGetParameterInfo(node, position, sourceFile, checker) || getImmediatelyContainingArgumentInfo(node, position, sourceFile, checker);
 }
 
@@ -651,7 +661,11 @@ function getContainingArgumentInfo(node: Node, position: number, sourceFile: Sou
     for (let n = node; !isSourceFile(n) && (isManuallyInvoked || !isBlock(n)); n = n.parent) {
         // If the node is not a subspan of its parent, this is a big problem.
         // There have been crashes that might be caused by this violation.
-        Debug.assert(rangeContainsRange(n.parent, n), "Not a subspan", () => `Child: ${Debug.formatSyntaxKind(n.kind)}, parent: ${Debug.formatSyntaxKind(n.parent.kind)}`);
+        Debug.assert(
+            rangeContainsRange(n.parent, n),
+            "Not a subspan",
+            () => `Child: ${Debug.formatSyntaxKind(n.kind)}, parent: ${Debug.formatSyntaxKind(n.parent.kind)}`,
+        );
         const argumentInfo = getImmediatelyContainingArgumentOrContextualParameterInfo(n, position, sourceFile, checker);
         if (argumentInfo) {
             return argumentInfo;
@@ -747,7 +761,13 @@ function createTypeHelpItems(
     return { items, applicableSpan, selectedItemIndex: 0, argumentIndex, argumentCount };
 }
 
-function getTypeHelpItem(symbol: Symbol, typeParameters: readonly TypeParameter[], checker: TypeChecker, enclosingDeclaration: Node, sourceFile: SourceFile): SignatureHelpItem {
+function getTypeHelpItem(
+    symbol: Symbol,
+    typeParameters: readonly TypeParameter[],
+    checker: TypeChecker,
+    enclosingDeclaration: Node,
+    sourceFile: SourceFile,
+): SignatureHelpItem {
     const typeSymbolDisplay = symbolToDisplayParts(checker, symbol);
 
     const printer = createPrinterWithRemoveComments();
@@ -756,7 +776,15 @@ function getTypeHelpItem(symbol: Symbol, typeParameters: readonly TypeParameter[
     const documentation = symbol.getDocumentationComment(checker);
     const tags = symbol.getJsDocTags(checker);
     const prefixDisplayParts = [...typeSymbolDisplay, punctuationPart(SyntaxKind.LessThanToken)];
-    return { isVariadic: false, prefixDisplayParts, suffixDisplayParts: [punctuationPart(SyntaxKind.GreaterThanToken)], separatorDisplayParts, parameters, documentation, tags };
+    return {
+        isVariadic: false,
+        prefixDisplayParts,
+        suffixDisplayParts: [punctuationPart(SyntaxKind.GreaterThanToken)],
+        separatorDisplayParts,
+        parameters,
+        documentation,
+        tags,
+    };
 }
 
 const separatorDisplayParts: SymbolDisplayPart[] = [punctuationPart(SyntaxKind.CommaToken), spacePart()];
@@ -816,7 +844,12 @@ function itemInfoForTypeParameters(candidateSignature: Signature, checker: TypeC
         const parameterParts = mapToDisplayParts(writer => {
             printer.writeList(ListFormat.CallExpressionArguments, params, sourceFile, writer);
         });
-        return { isVariadic: false, parameters, prefix: [punctuationPart(SyntaxKind.LessThanToken)], suffix: [punctuationPart(SyntaxKind.GreaterThanToken), ...parameterParts] };
+        return {
+            isVariadic: false,
+            parameters,
+            prefix: [punctuationPart(SyntaxKind.LessThanToken)],
+            suffix: [punctuationPart(SyntaxKind.GreaterThanToken), ...parameterParts],
+        };
     });
 }
 

@@ -802,7 +802,15 @@ export class FileSystem {
         return true;
     }
 
-    private static fileDiff(container: FileSet, basename: string, changed: FileSystem, changedNode: FileInode, base: FileSystem, baseNode: FileInode, options: DiffOptions) {
+    private static fileDiff(
+        container: FileSet,
+        basename: string,
+        changed: FileSystem,
+        changedNode: FileInode,
+        base: FileSystem,
+        baseNode: FileInode,
+        options: DiffOptions,
+    ) {
         while (!changedNode.buffer && changedNode.shadowRoot) changedNode = changedNode.shadowRoot;
         while (!baseNode.buffer && baseNode.shadowRoot) baseNode = baseNode.shadowRoot;
 
@@ -1055,7 +1063,11 @@ export class FileSystem {
      */
     private _walk(path: string, noFollow?: boolean, onError?: (error: NodeJS.ErrnoException, fragment: WalkResult) => "retry" | "throw"): WalkResult;
     private _walk(path: string, noFollow?: boolean, onError?: (error: NodeJS.ErrnoException, fragment: WalkResult) => "stop" | "retry" | "throw"): WalkResult | undefined;
-    private _walk(path: string, noFollow?: boolean, onError?: (error: NodeJS.ErrnoException, fragment: WalkResult) => "stop" | "retry" | "throw"): WalkResult | undefined {
+    private _walk(
+        path: string,
+        noFollow?: boolean,
+        onError?: (error: NodeJS.ErrnoException, fragment: WalkResult) => "stop" | "retry" | "throw",
+    ): WalkResult | undefined {
         let links = this._getRootLinks();
         let parent: DirectoryInode | undefined;
         let components = vpath.parse(path);

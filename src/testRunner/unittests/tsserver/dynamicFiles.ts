@@ -173,7 +173,10 @@ describe("unittests:: tsserver:: dynamicFiles:: ", () => {
         baselineTsserverLogs("dynamicFiles", "dynamic file without external project", session);
     });
 
-    verifyPathRecognizedAsDynamic("dynamic file with reference paths without external project", "^walkThroughSnippet:/Users/UserName/projects/someProject/out/someFile#1.js");
+    verifyPathRecognizedAsDynamic(
+        "dynamic file with reference paths without external project",
+        "^walkThroughSnippet:/Users/UserName/projects/someProject/out/someFile#1.js",
+    );
 
     describe("dynamic file with projectRootPath", () => {
         const file: File = {

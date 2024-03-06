@@ -259,7 +259,11 @@ describe("unittests:: tsserver:: events:: ProjectsUpdatedInBackground", () => {
 
                 host.writeFile(moduleFile1.path, `export var T: number;export function Foo() { };`);
                 host.runQueuedTimeoutCallbacks();
-                baselineTsserverLogs("events/projectUpdatedInBackground", `${scenario} and should always return the file itself if --isolatedModules is specified`, session);
+                baselineTsserverLogs(
+                    "events/projectUpdatedInBackground",
+                    `${scenario} and should always return the file itself if --isolatedModules is specified`,
+                    session,
+                );
             });
 
             it("should always return the file itself if '--out' or '--outFile' is specified", () => {
@@ -270,7 +274,11 @@ describe("unittests:: tsserver:: events:: ProjectsUpdatedInBackground", () => {
 
                 host.writeFile(moduleFile1.path, `export var T: number;export function Foo() { };`);
                 host.runQueuedTimeoutCallbacks();
-                baselineTsserverLogs("events/projectUpdatedInBackground", `${scenario} and should always return the file itself if --out or --outFile is specified`, session);
+                baselineTsserverLogs(
+                    "events/projectUpdatedInBackground",
+                    `${scenario} and should always return the file itself if --out or --outFile is specified`,
+                    session,
+                );
             });
 
             it("should return cascaded affected file list", () => {

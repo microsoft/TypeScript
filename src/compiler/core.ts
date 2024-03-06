@@ -599,9 +599,17 @@ export function* singleIterator<T>(value: T) {
  */
 export function spanMap<T, K, U>(array: readonly T[], keyfn: (x: T, i: number) => K, mapfn: (chunk: T[], key: K, start: number, end: number) => U): U[];
 /** @internal */
-export function spanMap<T, K, U>(array: readonly T[] | undefined, keyfn: (x: T, i: number) => K, mapfn: (chunk: T[], key: K, start: number, end: number) => U): U[] | undefined;
+export function spanMap<T, K, U>(
+    array: readonly T[] | undefined,
+    keyfn: (x: T, i: number) => K,
+    mapfn: (chunk: T[], key: K, start: number, end: number) => U,
+): U[] | undefined;
 /** @internal */
-export function spanMap<T, K, U>(array: readonly T[] | undefined, keyfn: (x: T, i: number) => K, mapfn: (chunk: T[], key: K, start: number, end: number) => U): U[] | undefined {
+export function spanMap<T, K, U>(
+    array: readonly T[] | undefined,
+    keyfn: (x: T, i: number) => K,
+    mapfn: (chunk: T[], key: K, start: number, end: number) => U,
+): U[] | undefined {
     let result: U[] | undefined;
     if (array) {
         result = [];
@@ -1549,15 +1557,25 @@ export function group<T>(values: readonly T[], getGroupId: (value: T) => string)
 /** @internal */
 export function group<T, R>(values: readonly T[], getGroupId: (value: T) => string, resultSelector: (values: readonly T[]) => R): R[];
 /** @internal */
-export function group<T, K>(values: readonly T[], getGroupId: (value: T) => K, resultSelector: (values: readonly T[]) => readonly T[] = identity): readonly (readonly T[])[] {
+export function group<T, K>(
+    values: readonly T[],
+    getGroupId: (value: T) => K,
+    resultSelector: (values: readonly T[]) => readonly T[] = identity,
+): readonly (readonly T[])[] {
     return arrayFrom(arrayToMultiMap(values, getGroupId).values(), resultSelector);
 }
 
 /** @internal */
 export function groupBy<T, U extends T>(values: readonly T[] | undefined, keySelector: (value: T) => value is U): { true?: U[]; false?: Exclude<T, U>[]; };
 /** @internal */
-export function groupBy<T, K extends string | number | boolean | null | undefined>(values: readonly T[] | undefined, keySelector: (value: T) => K): { [P in K as `${P}`]?: T[]; };
-export function groupBy<T, K extends string | number | boolean | null | undefined>(values: readonly T[] | undefined, keySelector: (value: T) => K): { [P in K as `${P}`]?: T[]; } {
+export function groupBy<T, K extends string | number | boolean | null | undefined>(
+    values: readonly T[] | undefined,
+    keySelector: (value: T) => K,
+): { [P in K as `${P}`]?: T[]; };
+export function groupBy<T, K extends string | number | boolean | null | undefined>(
+    values: readonly T[] | undefined,
+    keySelector: (value: T) => K,
+): { [P in K as `${P}`]?: T[]; } {
     const result: Record<string, T[]> = {};
     if (values) {
         for (const value of values) {

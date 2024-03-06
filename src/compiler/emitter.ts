@@ -520,7 +520,8 @@ export function getOutputPathsFor(sourceFile: SourceFile | Bundle, host: EmitHos
             comparePaths(sourceFile.fileName, ownOutputFilePath, host.getCurrentDirectory(), !host.useCaseSensitiveFileNames()) === Comparison.EqualTo;
         const jsFilePath = options.emitDeclarationOnly || isJsonEmittedToSameLocation ? undefined : ownOutputFilePath;
         const sourceMapFilePath = !jsFilePath || isJsonSourceFile(sourceFile) ? undefined : getSourceMapFilePath(jsFilePath, options);
-        const declarationFilePath = (forceDtsPaths || (getEmitDeclarations(options) && !isJsonFile)) ? getDeclarationEmitOutputFilePath(sourceFile.fileName, host) : undefined;
+        const declarationFilePath = (forceDtsPaths || (getEmitDeclarations(options) && !isJsonFile)) ? getDeclarationEmitOutputFilePath(sourceFile.fileName, host)
+            : undefined;
         const declarationMapPath = declarationFilePath && getAreDeclarationMapsEnabled(options) ? declarationFilePath + ".map" : undefined;
         return { jsFilePath, sourceMapFilePath, declarationFilePath, declarationMapPath, buildInfoPath: undefined };
     }
@@ -607,7 +608,10 @@ function createAddOutput() {
 }
 
 function getSingleOutputFileNames(configFile: ParsedCommandLine, addOutput: ReturnType<typeof createAddOutput>["addOutput"]) {
-    const { jsFilePath, sourceMapFilePath, declarationFilePath, declarationMapPath, buildInfoPath } = getOutputPathsForBundle(configFile.options, /*forceDtsPaths*/ false);
+    const { jsFilePath, sourceMapFilePath, declarationFilePath, declarationMapPath, buildInfoPath } = getOutputPathsForBundle(
+        configFile.options,
+        /*forceDtsPaths*/ false,
+    );
     addOutput(jsFilePath);
     addOutput(sourceMapFilePath);
     addOutput(declarationFilePath);
@@ -746,8 +750,9 @@ export function emitFiles(
     // See: https://github.com/microsoft/TypeScript/issues/52924
     /* eslint-disable no-var */
     var compilerOptions = host.getCompilerOptions();
-    var sourceMapDataList: SourceMapEmitResult[] | undefined = (compilerOptions.sourceMap || compilerOptions.inlineSourceMap || getAreDeclarationMapsEnabled(compilerOptions)) ? []
-        : undefined;
+    var sourceMapDataList: SourceMapEmitResult[] | undefined =
+        (compilerOptions.sourceMap || compilerOptions.inlineSourceMap || getAreDeclarationMapsEnabled(compilerOptions)) ? []
+            : undefined;
     var emittedFilesList: string[] | undefined = compilerOptions.listEmittedFiles ? [] : undefined;
     var emitterDiagnostics = createDiagnosticCollection();
     var newLine = getNewLineCharacter(compilerOptions);
@@ -2821,7 +2826,8 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
             && ((node.operator === SyntaxKind.PlusToken &&
                 ((operand as PrefixUnaryExpression).operator === SyntaxKind.PlusToken || (operand as PrefixUnaryExpression).operator === SyntaxKind.PlusPlusToken))
                 || (node.operator === SyntaxKind.MinusToken &&
-                    ((operand as PrefixUnaryExpression).operator === SyntaxKind.MinusToken || (operand as PrefixUnaryExpression).operator === SyntaxKind.MinusMinusToken)));
+                    ((operand as PrefixUnaryExpression).operator === SyntaxKind.MinusToken ||
+                        (operand as PrefixUnaryExpression).operator === SyntaxKind.MinusMinusToken)));
     }
 
     function emitPostfixUnaryExpression(node: PostfixUnaryExpression) {
@@ -3034,7 +3040,13 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
         emitTokenWithComment(SyntaxKind.OpenBraceToken, node.pos, writePunctuation, /*contextNode*/ node);
         const format = forceSingleLine || getEmitFlags(node) & EmitFlags.SingleLine ? ListFormat.SingleLineBlockStatements : ListFormat.MultiLineBlockStatements;
         emitList(node, node.statements, format);
-        emitTokenWithComment(SyntaxKind.CloseBraceToken, node.statements.end, writePunctuation, /*contextNode*/ node, /*indentLeading*/ !!(format & ListFormat.MultiLine));
+        emitTokenWithComment(
+            SyntaxKind.CloseBraceToken,
+            node.statements.end,
+            writePunctuation,
+            /*contextNode*/ node,
+            /*indentLeading*/ !!(format & ListFormat.MultiLine),
+        );
     }
 
     function emitVariableStatement(node: VariableStatement) {
@@ -3323,7 +3335,12 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
         emit(node.name);
         emit(node.exclamationToken);
         emitTypeAnnotation(node.type);
-        emitInitializer(node.initializer, node.type?.end ?? node.name.emitNode?.typeNode?.end ?? node.name.end, node, parenthesizer.parenthesizeExpressionForDisallowedComma);
+        emitInitializer(
+            node.initializer,
+            node.type?.end ?? node.name.emitNode?.typeNode?.end ?? node.name.end,
+            node,
+            parenthesizer.parenthesizeExpressionForDisallowedComma,
+        );
     }
 
     function emitVariableDeclarationList(node: VariableDeclarationList) {
@@ -5052,7 +5069,12 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
         return format & ListFormat.MultiLine ? 1 : 0;
     }
 
-    function getClosingLineTerminatorCount(parentNode: Node | undefined, lastChild: Node | undefined, format: ListFormat, childrenTextRange: TextRange | undefined): number {
+    function getClosingLineTerminatorCount(
+        parentNode: Node | undefined,
+        lastChild: Node | undefined,
+        format: ListFormat,
+        childrenTextRange: TextRange | undefined,
+    ): number {
         if (format & ListFormat.PreserveLines || preserveSourceNewlines) {
             if (format & ListFormat.PreferNewLine) {
                 return 1;
@@ -5062,7 +5084,8 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
                 return !parentNode || currentSourceFile && rangeIsOnSingleLine(parentNode, currentSourceFile) ? 0 : 1;
             }
             if (
-                currentSourceFile && parentNode && !positionIsSynthesized(parentNode.pos) && !nodeIsSynthesized(lastChild) && (!lastChild.parent || lastChild.parent === parentNode)
+                currentSourceFile && parentNode && !positionIsSynthesized(parentNode.pos) && !nodeIsSynthesized(lastChild) &&
+                (!lastChild.parent || lastChild.parent === parentNode)
             ) {
                 if (preserveSourceNewlines) {
                     const end = childrenTextRange && !positionIsSynthesized(childrenTextRange.end) ? childrenTextRange.end : lastChild.end;
@@ -5718,10 +5741,22 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
         const suffix = formatGeneratedNamePart(autoGenerate.suffix);
         switch (autoGenerate.flags & GeneratedIdentifierFlags.KindMask) {
             case GeneratedIdentifierFlags.Auto:
-                return makeTempVariableName(TempFlags.Auto, !!(autoGenerate.flags & GeneratedIdentifierFlags.ReservedInNestedScopes), isPrivateIdentifier(name), prefix, suffix);
+                return makeTempVariableName(
+                    TempFlags.Auto,
+                    !!(autoGenerate.flags & GeneratedIdentifierFlags.ReservedInNestedScopes),
+                    isPrivateIdentifier(name),
+                    prefix,
+                    suffix,
+                );
             case GeneratedIdentifierFlags.Loop:
                 Debug.assertNode(name, isIdentifier);
-                return makeTempVariableName(TempFlags._i, !!(autoGenerate.flags & GeneratedIdentifierFlags.ReservedInNestedScopes), /*privateName*/ false, prefix, suffix);
+                return makeTempVariableName(
+                    TempFlags._i,
+                    !!(autoGenerate.flags & GeneratedIdentifierFlags.ReservedInNestedScopes),
+                    /*privateName*/ false,
+                    prefix,
+                    suffix,
+                );
             case GeneratedIdentifierFlags.Unique:
                 return makeUniqueName(
                     idText(name),
@@ -6061,7 +6096,10 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
         }
     }
 
-    function forEachLeadingCommentToEmit(pos: number, cb: (commentPos: number, commentEnd: number, kind: SyntaxKind, hasTrailingNewLine: boolean, rangePos: number) => void) {
+    function forEachLeadingCommentToEmit(
+        pos: number,
+        cb: (commentPos: number, commentEnd: number, kind: SyntaxKind, hasTrailingNewLine: boolean, rangePos: number) => void,
+    ) {
         // Emit the leading comments only if the container's pos doesn't match because the container should take care of emitting these comments
         if (currentSourceFile && (containerPos === -1 || pos !== containerPos)) {
             if (hasDetachedComments(pos)) {
@@ -6084,7 +6122,9 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
         return detachedCommentsInfo !== undefined && last(detachedCommentsInfo).nodePos === pos;
     }
 
-    function forEachLeadingCommentWithoutDetachedComments(cb: (commentPos: number, commentEnd: number, kind: SyntaxKind, hasTrailingNewLine: boolean, rangePos: number) => void) {
+    function forEachLeadingCommentWithoutDetachedComments(
+        cb: (commentPos: number, commentEnd: number, kind: SyntaxKind, hasTrailingNewLine: boolean, rangePos: number) => void,
+    ) {
         if (!currentSourceFile) return;
         // get the leading comments from detachedPos
         const pos = last(detachedCommentsInfo!).detachedCommentEndPos;
@@ -6329,7 +6369,12 @@ function emitListItemNoParenthesizer(node: Node, emit: EmitFunction, _parenthesi
     emit(node);
 }
 
-function emitListItemWithParenthesizerRuleSelector(node: Node, emit: EmitFunction, parenthesizerRuleSelector: OrdinalParentheizerRuleSelector<Node> | undefined, index: number) {
+function emitListItemWithParenthesizerRuleSelector(
+    node: Node,
+    emit: EmitFunction,
+    parenthesizerRuleSelector: OrdinalParentheizerRuleSelector<Node> | undefined,
+    index: number,
+) {
     emit(node, parenthesizerRuleSelector!.select(index));
 }
 

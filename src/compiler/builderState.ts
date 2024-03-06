@@ -490,7 +490,11 @@ export namespace BuilderState {
     /**
      * Coverts the declaration emit result into exported modules map
      */
-    export function updateExportedModules(state: BuilderState, sourceFile: SourceFile, exportedModulesFromDeclarationEmit: ExportedModulesFromDeclarationEmit | undefined) {
+    export function updateExportedModules(
+        state: BuilderState,
+        sourceFile: SourceFile,
+        exportedModulesFromDeclarationEmit: ExportedModulesFromDeclarationEmit | undefined,
+    ) {
         if (!state.exportedModulesMap) return;
         (state.oldExportedModulesMap ||= new Map()).set(sourceFile.resolvedPath, state.exportedModulesMap.getValues(sourceFile.resolvedPath) || false);
         const exportedModules = getExportedModules(exportedModulesFromDeclarationEmit);
@@ -600,7 +604,11 @@ export namespace BuilderState {
     /**
      * Gets all files of the program excluding the default library file
      */
-    export function getAllFilesExcludingDefaultLibraryFile(state: BuilderState, programOfThisState: Program, firstSourceFile: SourceFile | undefined): readonly SourceFile[] {
+    export function getAllFilesExcludingDefaultLibraryFile(
+        state: BuilderState,
+        programOfThisState: Program,
+        firstSourceFile: SourceFile | undefined,
+    ): readonly SourceFile[] {
         // Use cached result
         if (state.allFilesExcludingDefaultLibraryFile) {
             return state.allFilesExcludingDefaultLibraryFile;

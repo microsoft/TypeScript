@@ -1426,7 +1426,11 @@ export function transformGenerators(context: TransformationContext): (x: SourceF
             if (containsYield(node.thenStatement) || containsYield(node.elseStatement)) {
                 const endLabel = defineLabel();
                 const elseLabel = node.elseStatement ? defineLabel() : undefined;
-                emitBreakWhenFalse(node.elseStatement ? elseLabel! : endLabel, Debug.checkDefined(visitNode(node.expression, visitor, isExpression)), /*location*/ node.expression);
+                emitBreakWhenFalse(
+                    node.elseStatement ? elseLabel! : endLabel,
+                    Debug.checkDefined(visitNode(node.expression, visitor, isExpression)),
+                    /*location*/ node.expression,
+                );
                 transformAndEmitEmbeddedStatement(node.thenStatement);
                 if (node.elseStatement) {
                     emitBreak(endLabel);

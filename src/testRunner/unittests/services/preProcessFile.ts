@@ -135,19 +135,25 @@ describe("unittests:: services:: PreProcessFile:", () => {
         });
 
         it("Do not return import path because of invalid import syntax", () => {
-            test('import i1 require("r1.ts"); import = require("r2.ts") import i3= require("r3.ts"); import i5', /*readImportFile*/ true, /*detectJavaScriptImports*/ false, {
-                referencedFiles: [] as ts.FileReference[],
-                typeReferenceDirectives: [],
-                libReferenceDirectives: [],
-                importedFiles: [{ fileName: "r3.ts", pos: 73, end: 78 }],
-                ambientExternalModules: undefined,
-                isLibFile: false,
-            });
+            test(
+                'import i1 require("r1.ts"); import = require("r2.ts") import i3= require("r3.ts"); import i5',
+                /*readImportFile*/ true,
+                /*detectJavaScriptImports*/ false,
+                {
+                    referencedFiles: [] as ts.FileReference[],
+                    typeReferenceDirectives: [],
+                    libReferenceDirectives: [],
+                    importedFiles: [{ fileName: "r3.ts", pos: 73, end: 78 }],
+                    ambientExternalModules: undefined,
+                    isLibFile: false,
+                },
+            );
         });
 
         it("Correctly return referenced files and import files", () => {
             test(
-                '///<reference path="refFile1.ts" />' + "\n" + '///<reference path ="refFile2.ts"/>' + "\n" + 'import i1 = require("r1.ts"); import i2 =require("r2.ts");',
+                '///<reference path="refFile1.ts" />' + "\n" + '///<reference path ="refFile2.ts"/>' + "\n" +
+                    'import i1 = require("r1.ts"); import i2 =require("r2.ts");',
                 /*readImportFile*/ true,
                 /*detectJavaScriptImports*/ false,
                 {
@@ -292,19 +298,24 @@ describe("unittests:: services:: PreProcessFile:", () => {
 
         it("Correctly returns dynamic imports from nested template expression", () => {
             /* eslint-disable no-template-curly-in-string */
-            test('`${foo(`${bar(`${import("a")} ${import("b")}`, `${baz(`${import("c") ${import("d")}`)}`)}`)}`', /*readImportFile*/ true, /*detectJavaScriptImports*/ true, {
-                referencedFiles: [],
-                typeReferenceDirectives: [],
-                libReferenceDirectives: [],
-                importedFiles: [
-                    { fileName: "a", pos: 24, end: 25 },
-                    { fileName: "b", pos: 39, end: 40 },
-                    { fileName: "c", pos: 64, end: 65 },
-                    { fileName: "d", pos: 78, end: 79 },
-                ],
-                ambientExternalModules: undefined,
-                isLibFile: false,
-            });
+            test(
+                '`${foo(`${bar(`${import("a")} ${import("b")}`, `${baz(`${import("c") ${import("d")}`)}`)}`)}`',
+                /*readImportFile*/ true,
+                /*detectJavaScriptImports*/ true,
+                {
+                    referencedFiles: [],
+                    typeReferenceDirectives: [],
+                    libReferenceDirectives: [],
+                    importedFiles: [
+                        { fileName: "a", pos: 24, end: 25 },
+                        { fileName: "b", pos: 39, end: 40 },
+                        { fileName: "c", pos: 64, end: 65 },
+                        { fileName: "d", pos: 78, end: 79 },
+                    ],
+                    ambientExternalModules: undefined,
+                    isLibFile: false,
+                },
+            );
             /* eslint-enable no-template-curly-in-string */
         });
 

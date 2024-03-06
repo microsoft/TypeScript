@@ -578,7 +578,11 @@ function createNewArgument(functionDeclaration: ValidFunctionDeclaration, functi
     return objectLiteral;
 }
 
-function createNewParameters(functionDeclaration: ValidFunctionDeclaration | ValidMethodSignature, program: Program, host: LanguageServiceHost): NodeArray<ParameterDeclaration> {
+function createNewParameters(
+    functionDeclaration: ValidFunctionDeclaration | ValidMethodSignature,
+    program: Program,
+    host: LanguageServiceHost,
+): NodeArray<ParameterDeclaration> {
     const checker = program.getTypeChecker();
     const refactorableParameters = getRefactorableParameters(functionDeclaration.parameters);
     const bindingElements = map(refactorableParameters, createBindingElementFromParameterDeclaration);
@@ -626,7 +630,8 @@ function createNewParameters(functionDeclaration: ValidFunctionDeclaration | Val
             /*dotDotDotToken*/ undefined,
             /*propertyName*/ undefined,
             getParameterName(parameterDeclaration),
-            isRestParameter(parameterDeclaration) && isOptionalParameter(parameterDeclaration) ? factory.createArrayLiteralExpression() : parameterDeclaration.initializer,
+            isRestParameter(parameterDeclaration) && isOptionalParameter(parameterDeclaration) ? factory.createArrayLiteralExpression()
+                : parameterDeclaration.initializer,
         );
 
         suppressLeadingAndTrailingTrivia(element);

@@ -1384,7 +1384,11 @@ describe("unittests:: tsserver:: typingsInstaller:: Validate package name:", () 
             isScopeName: true,
             result: NameValidationResult.NameContainsNonURISafeCharacters,
         });
-        assert.deepEqual(validatePackageName("@  scope  /  bar  "), { name: "  scope  ", isScopeName: true, result: NameValidationResult.NameContainsNonURISafeCharacters });
+        assert.deepEqual(validatePackageName("@  scope  /  bar  "), {
+            name: "  scope  ",
+            isScopeName: true,
+            result: NameValidationResult.NameContainsNonURISafeCharacters,
+        });
     });
     it("package name in scoped package name cannot start with dot", () => {
         assert.deepEqual(validatePackageName("@scope/.bar"), { name: ".bar", isScopeName: false, result: NameValidationResult.NameStartsWithDot });
@@ -2550,7 +2554,14 @@ describe("unittests:: tsserver:: typingsInstaller:: tsserver:: with inferred Pro
             }),
         };
 
-        const files = [file, packageJsonInCurrentDirectory, packageJsonOfPkgcurrentdirectory, indexOfPkgcurrentdirectory, typingsCachePackageJson, typingsCachePackageLockJson];
+        const files = [
+            file,
+            packageJsonInCurrentDirectory,
+            packageJsonOfPkgcurrentdirectory,
+            indexOfPkgcurrentdirectory,
+            typingsCachePackageJson,
+            typingsCachePackageLockJson,
+        ];
         const host = createServerHost(files, { currentDirectory });
         const session = new TestSession({
             host,

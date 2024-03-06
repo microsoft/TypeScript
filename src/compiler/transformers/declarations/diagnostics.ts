@@ -216,7 +216,8 @@ export function createGetSymbolAccessibilityDiagnosticForNode(node: DeclarationD
         return getAccessorDeclarationTypeVisibilityError;
     }
     else if (
-        isConstructSignatureDeclaration(node) || isCallSignatureDeclaration(node) || isMethodDeclaration(node) || isMethodSignature(node) || isFunctionDeclaration(node) ||
+        isConstructSignatureDeclaration(node) || isCallSignatureDeclaration(node) || isMethodDeclaration(node) || isMethodSignature(node) ||
+        isFunctionDeclaration(node) ||
         isIndexSignatureDeclaration(node)
     ) {
         return getReturnTypeVisibilityError;

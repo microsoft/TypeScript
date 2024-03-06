@@ -282,7 +282,10 @@ export function getBuilderFileEmit(options: CompilerOptions) {
  *
  * @internal
  */
-export function getPendingEmitKind(optionsOrEmitKind: CompilerOptions | BuilderFileEmit, oldOptionsOrEmitKind: CompilerOptions | BuilderFileEmit | undefined): BuilderFileEmit {
+export function getPendingEmitKind(
+    optionsOrEmitKind: CompilerOptions | BuilderFileEmit,
+    oldOptionsOrEmitKind: CompilerOptions | BuilderFileEmit | undefined,
+): BuilderFileEmit {
     const oldEmitKind = oldOptionsOrEmitKind && (isNumber(oldOptionsOrEmitKind) ? oldOptionsOrEmitKind : getBuilderFileEmit(oldOptionsOrEmitKind));
     const emitKind = isNumber(optionsOrEmitKind) ? optionsOrEmitKind : getBuilderFileEmit(optionsOrEmitKind);
     if (oldEmitKind === emitKind) return BuilderFileEmit.None;
@@ -532,7 +535,9 @@ function convertToDiagnostics(diagnostics: readonly ReusableDiagnostic[], newPro
     });
 
     function toPathInBuildInfoDirectory(path: string) {
-        buildInfoDirectory ??= getDirectoryPath(getNormalizedAbsolutePath(getTsBuildInfoEmitOutputFilePath(newProgram.getCompilerOptions())!, newProgram.getCurrentDirectory()));
+        buildInfoDirectory ??= getDirectoryPath(
+            getNormalizedAbsolutePath(getTsBuildInfoEmitOutputFilePath(newProgram.getCompilerOptions())!, newProgram.getCurrentDirectory()),
+        );
         return toPath(path, buildInfoDirectory, newProgram.getCanonicalFileName);
     }
 }
@@ -597,7 +602,8 @@ function restoreBuilderProgramEmitState(state: BuilderProgramState, savedEmitSta
  */
 function assertSourceFileOkWithoutNextAffectedCall(state: BuilderProgramState, sourceFile: SourceFile | undefined) {
     Debug.assert(
-        !sourceFile || !state.affectedFiles || state.affectedFiles[state.affectedFilesIndex! - 1] !== sourceFile || !state.semanticDiagnosticsPerFile!.has(sourceFile.resolvedPath),
+        !sourceFile || !state.affectedFiles || state.affectedFiles[state.affectedFilesIndex! - 1] !== sourceFile ||
+            !state.semanticDiagnosticsPerFile!.has(sourceFile.resolvedPath),
     );
 }
 
@@ -1540,7 +1546,10 @@ export function createBuilderProgram(kind: BuilderProgramKind, { newProgram, hos
                 if (!pendingAffectedFile) {
                     const pendingForDiagnostics = getNextPendingEmitDiagnosticsFile(state);
                     if (pendingForDiagnostics) {
-                        (state.seenEmittedFiles ??= new Map()).set(pendingForDiagnostics.affectedFile.resolvedPath, pendingForDiagnostics.seenKind | BuilderFileEmit.AllDts);
+                        (state.seenEmittedFiles ??= new Map()).set(
+                            pendingForDiagnostics.affectedFile.resolvedPath,
+                            pendingForDiagnostics.seenKind | BuilderFileEmit.AllDts,
+                        );
                         return {
                             result: { emitSkipped: true, diagnostics: pendingForDiagnostics.diagnostics },
                             affected: pendingForDiagnostics.affectedFile,
@@ -1852,7 +1861,11 @@ export function toProgramEmitPending(value: ProgramBuildInfoBundlePendingEmit, o
 }
 
 /** @internal */
-export function createBuilderProgramUsingProgramBuildInfo(buildInfo: BuildInfo, buildInfoPath: string, host: ReadBuildProgramHost): EmitAndSemanticDiagnosticsBuilderProgram {
+export function createBuilderProgramUsingProgramBuildInfo(
+    buildInfo: BuildInfo,
+    buildInfoPath: string,
+    host: ReadBuildProgramHost,
+): EmitAndSemanticDiagnosticsBuilderProgram {
     const program = buildInfo.program!;
     const buildInfoDirectory = getDirectoryPath(getNormalizedAbsolutePath(buildInfoPath, host.getCurrentDirectory()));
     const getCanonicalFileName = createGetCanonicalFileName(host.useCaseSensitiveFileNames());
@@ -1908,7 +1921,11 @@ export function createBuilderProgramUsingProgramBuildInfo(buildInfo: BuildInfo, 
             emitDiagnosticsPerFile: toPerFileDiagnostics(program.emitDiagnosticsPerFile),
             hasReusableDiagnostic: true,
             affectedFilesPendingEmit: program.affectedFilesPendingEmit &&
-                arrayToMap(program.affectedFilesPendingEmit, value => toFilePath(isNumber(value) ? value : value[0]), value => toBuilderFileEmit(value, fullEmitForOptions!)),
+                arrayToMap(
+                    program.affectedFilesPendingEmit,
+                    value => toFilePath(isNumber(value) ? value : value[0]),
+                    value => toBuilderFileEmit(value, fullEmitForOptions!),
+                ),
             changedFilesSet: new Set(map(program.changeFileSet, toFilePath)),
             latestChangedDtsFile,
             emitSignatures: emitSignatures?.size ? emitSignatures : undefined,

@@ -137,7 +137,9 @@ export class TestTypingsInstallerWorker extends ts.server.typingsInstaller.Typin
             assert(false, this.testTypingInstaller.installAction);
         }
         else {
-            const typingFiles = this.testTypingInstaller.installAction.filter(f => !f.package || packageNames.includes(ts.server.typingsInstaller.typingsName(f.package)));
+            const typingFiles = this.testTypingInstaller.installAction.filter(f =>
+                !f.package || packageNames.includes(ts.server.typingsInstaller.typingsName(f.package))
+            );
             this.scheduleInstall(
                 requestId,
                 packageNames,

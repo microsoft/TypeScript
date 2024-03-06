@@ -38,7 +38,10 @@ describe("unittests:: services:: hostNewLineSupport", () => {
         assert(result.outputFiles.length === 1, "a number of files other than 1 was output");
         assert(result.outputFiles[0].name === "input.js", `Expected output file name input.js, but got ${result.outputFiles[0].name}`);
         assert(result.outputFiles[0].text.match(options.newLine === ts.NewLineKind.CarriageReturnLineFeed ? /\r\n/ : /[^\r]\n/), "expected to find appropriate newlines");
-        assert(!result.outputFiles[0].text.match(options.newLine === ts.NewLineKind.CarriageReturnLineFeed ? /[^\r]\n/ : /\r\n/), "expected not to find inappropriate newlines");
+        assert(
+            !result.outputFiles[0].text.match(options.newLine === ts.NewLineKind.CarriageReturnLineFeed ? /[^\r]\n/ : /\r\n/),
+            "expected not to find inappropriate newlines",
+        );
     }
 
     function verifyBothNewLines(content: string) {
@@ -55,7 +58,10 @@ describe("unittests:: services:: hostNewLineSupport", () => {
         const span = ls.getOutliningSpans("input.ts")[0];
         const textAfterSpanCollapse = content.substring(span.textSpan.start + span.textSpan.length);
         assert(textAfterSpanCollapse.match(options.newLine === ts.NewLineKind.CarriageReturnLineFeed ? /\r\n/ : /[^\r]\n/), "expected to find appropriate newlines");
-        assert(!textAfterSpanCollapse.match(options.newLine === ts.NewLineKind.CarriageReturnLineFeed ? /[^\r]\n/ : /\r\n/), "expected not to find inappropriate newlines");
+        assert(
+            !textAfterSpanCollapse.match(options.newLine === ts.NewLineKind.CarriageReturnLineFeed ? /[^\r]\n/ : /\r\n/),
+            "expected not to find inappropriate newlines",
+        );
     }
 
     it("should exist and respect provided compiler options", () => {

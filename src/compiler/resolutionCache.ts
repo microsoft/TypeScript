@@ -342,7 +342,8 @@ export function getDirectoryToWatchFailedLookupLocation(
 ): DirectoryOfFailedLookupWatch | undefined {
     const failedLookupPathComponents: Readonly<PathPathComponents> = getPathComponents(failedLookupLocationPath);
     // Ensure failed look up is normalized path
-    failedLookupLocation = isRootedDiskPath(failedLookupLocation) ? normalizePath(failedLookupLocation) : getNormalizedAbsolutePath(failedLookupLocation, getCurrentDirectory());
+    failedLookupLocation = isRootedDiskPath(failedLookupLocation) ? normalizePath(failedLookupLocation)
+        : getNormalizedAbsolutePath(failedLookupLocation, getCurrentDirectory());
     const failedLookupComponents: readonly string[] = getPathComponents(failedLookupLocation);
     const perceivedOsRootLength = perceivedOsRootLengthForWatching(failedLookupPathComponents, failedLookupPathComponents.length);
     if (failedLookupPathComponents.length <= perceivedOsRootLength + 1) return undefined;
@@ -352,7 +353,11 @@ export function getDirectoryToWatchFailedLookupLocation(
     if (isInDirectoryPath(rootPathComponents, failedLookupPathComponents)) {
         if (failedLookupPathComponents.length > rootPathComponents.length + 1) {
             // Instead of watching root, watch directory in root to avoid watching excluded directories not needed for module resolution
-            return getDirectoryOfFailedLookupWatch(failedLookupComponents, failedLookupPathComponents, Math.max(rootPathComponents.length + 1, perceivedOsRootLength + 1));
+            return getDirectoryOfFailedLookupWatch(
+                failedLookupComponents,
+                failedLookupPathComponents,
+                Math.max(rootPathComponents.length + 1, perceivedOsRootLength + 1),
+            );
         }
         else {
             // Always watch root directory non recursively
@@ -497,7 +502,9 @@ function resolveModuleNameUsingGlobalCache(
 
     // otherwise try to load typings from @types
     const globalCache = resolutionHost.getGlobalCache();
-    if (globalCache !== undefined && !isExternalModuleNameRelative(moduleName) && !(primaryResult.resolvedModule && extensionIsTS(primaryResult.resolvedModule.extension))) {
+    if (
+        globalCache !== undefined && !isExternalModuleNameRelative(moduleName) && !(primaryResult.resolvedModule && extensionIsTS(primaryResult.resolvedModule.extension))
+    ) {
         // create different collection of failed lookup locations for second pass
         // if it will fail and we've already found something during the first pass - we don't want to pollute its results
         const { resolvedModule, failedLookupLocations, affectingLocations, resolutionDiagnostics } = loadModuleFromGlobalCache(
@@ -1170,7 +1177,9 @@ export function createResolutionCache(resolutionHost: ResolutionCacheHost, rootD
                     close: () => {
                         const symlinkWatcher = fileWatchesOfAffectingLocations.get(locationToWatch);
                         // Close symlink watcher if no ref
-                        if (symlinkWatcher?.symlinks?.delete(affectingLocation) && !symlinkWatcher.symlinks.size && !symlinkWatcher.resolutions && !symlinkWatcher.files) {
+                        if (
+                            symlinkWatcher?.symlinks?.delete(affectingLocation) && !symlinkWatcher.symlinks.size && !symlinkWatcher.resolutions && !symlinkWatcher.files
+                        ) {
                             fileWatchesOfAffectingLocations.delete(locationToWatch);
                             symlinkWatcher.watcher.close();
                         }

@@ -310,7 +310,10 @@ export class SessionClient implements LanguageService {
         _preferences: UserPreferences | undefined,
         data: unknown,
     ): CompletionEntryDetails {
-        const args: protocol.CompletionDetailsRequestArgs = { ...this.createFileLocationRequestArgs(fileName, position), entryNames: [{ name: entryName, source, data }] };
+        const args: protocol.CompletionDetailsRequestArgs = {
+            ...this.createFileLocationRequestArgs(fileName, position),
+            entryNames: [{ name: entryName, source, data }],
+        };
 
         const request = this.processRequest<protocol.CompletionDetailsRequest>(protocol.CommandTypes.CompletionDetailsFull, args);
         const response = this.processResponse<protocol.Response>(request);
@@ -518,21 +521,28 @@ export class SessionClient implements LanguageService {
     }
 
     private getDiagnostics(file: string, command: protocol.CommandTypes): DiagnosticWithLocation[] {
-        const request = this.processRequest<protocol.SyntacticDiagnosticsSyncRequest | protocol.SemanticDiagnosticsSyncRequest | protocol.SuggestionDiagnosticsSyncRequest>(
+        const request = this.processRequest<
+            protocol.SyntacticDiagnosticsSyncRequest | protocol.SemanticDiagnosticsSyncRequest | protocol.SuggestionDiagnosticsSyncRequest
+        >(
             command,
             {
                 file,
                 includeLinePosition: true,
             },
         );
-        const response = this.processResponse<protocol.SyntacticDiagnosticsSyncResponse | protocol.SemanticDiagnosticsSyncResponse | protocol.SuggestionDiagnosticsSyncResponse>(
+        const response = this.processResponse<
+            protocol.SyntacticDiagnosticsSyncResponse | protocol.SemanticDiagnosticsSyncResponse | protocol.SuggestionDiagnosticsSyncResponse
+        >(
             request,
         );
         const sourceText = getSnapshotText(this.host.getScriptSnapshot(file)!);
         const fakeSourceFile = { fileName: file, text: sourceText } as SourceFile; // Warning! This is a huge lie!
 
         return (response.body as protocol.DiagnosticWithLinePosition[]).map((entry): DiagnosticWithLocation => {
-            const category = firstDefined(Object.keys(DiagnosticCategory), id => isString(id) && entry.category === id.toLowerCase() ? (DiagnosticCategory as any)[id] : undefined);
+            const category = firstDefined(
+                Object.keys(DiagnosticCategory),
+                id => isString(id) && entry.category === id.toLowerCase() ? (DiagnosticCategory as any)[id] : undefined,
+            );
             return {
                 file: fakeSourceFile,
                 start: entry.start,
@@ -600,7 +610,13 @@ export class SessionClient implements LanguageService {
         return notImplemented();
     }
 
-    findRenameLocations(fileName: string, position: number, findInStrings: boolean, findInComments: boolean, preferences: UserPreferences | boolean | undefined): RenameLocation[] {
+    findRenameLocations(
+        fileName: string,
+        position: number,
+        findInStrings: boolean,
+        findInComments: boolean,
+        preferences: UserPreferences | boolean | undefined,
+    ): RenameLocation[] {
         if (
             !this.lastRenameEntry ||
             this.lastRenameEntry.inputs.fileName !== fileName ||

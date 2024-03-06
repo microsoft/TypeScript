@@ -693,7 +693,14 @@ export interface WatchFactoryHost {
 
 /** @internal */
 export interface WatchFactory<X, Y = undefined> {
-    watchFile: (file: string, callback: FileWatcherCallback, pollingInterval: PollingInterval, options: WatchOptions | undefined, detailInfo1: X, detailInfo2?: Y) => FileWatcher;
+    watchFile: (
+        file: string,
+        callback: FileWatcherCallback,
+        pollingInterval: PollingInterval,
+        options: WatchOptions | undefined,
+        detailInfo1: X,
+        detailInfo2?: Y,
+    ) => FileWatcher;
     watchDirectory: (
         directory: string,
         callback: DirectoryWatcherCallback,
@@ -747,7 +754,12 @@ export function getWatchFactory<X, Y = undefined>(
             options: WatchOptions | undefined,
             detailInfo1: X,
             detailInfo2?: Y,
-        ) => !matchesExclude(file, key === "watchFile" ? options?.excludeFiles : options?.excludeDirectories, useCaseSensitiveFileNames(), host.getCurrentDirectory?.() || "") ?
+        ) => !matchesExclude(
+                file,
+                key === "watchFile" ? options?.excludeFiles : options?.excludeDirectories,
+                useCaseSensitiveFileNames(),
+                host.getCurrentDirectory?.() || "",
+            ) ?
             factory[key].call(/*thisArgs*/ undefined, file, cb, flags, options, detailInfo1, detailInfo2) :
             excludeWatcherFactory(file, flags, options, detailInfo1, detailInfo2);
     }
@@ -827,9 +839,9 @@ export function getWatchFactory<X, Y = undefined>(
             /*thisArgs*/ undefined,
             file,
             (...args: any[]) => {
-                const triggerredInfo = `${key === "watchFile" ? "FileWatcher" : "DirectoryWatcher"}:: Triggered with ${args[0]} ${args[1] !== undefined ? args[1] : ""}:: ${
-                    getWatchInfo(file, flags, options, detailInfo1, detailInfo2, getDetailWatchInfo)
-                }`;
+                const triggerredInfo = `${key === "watchFile" ? "FileWatcher" : "DirectoryWatcher"}:: Triggered with ${args[0]} ${
+                    args[1] !== undefined ? args[1] : ""
+                }:: ${getWatchInfo(file, flags, options, detailInfo1, detailInfo2, getDetailWatchInfo)}`;
                 log(triggerredInfo);
                 const start = timestamp();
                 cb.call(/*thisArg*/ undefined, ...args);

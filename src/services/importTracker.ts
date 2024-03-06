@@ -272,7 +272,12 @@ function getImportersForExport(
         });
     }
 
-    function handleNamespaceImport(importDeclaration: ImportEqualsDeclaration | ImportDeclaration, name: Identifier, isReExport: boolean, alreadyAddedDirect: boolean): void {
+    function handleNamespaceImport(
+        importDeclaration: ImportEqualsDeclaration | ImportDeclaration,
+        name: Identifier,
+        isReExport: boolean,
+        alreadyAddedDirect: boolean,
+    ): void {
         if (exportKind === ExportKind.ExportEquals) {
             // This is a direct import, not import-as-namespace.
             if (!alreadyAddedDirect) directImports.push(importDeclaration);
@@ -401,7 +406,8 @@ function getSearchesFromDirectImports(
         // If a default import has the same name as the default export, allow to rename it.
         // Given `import f` and `export default function f`, we will rename both, but for `import g` we will rename just that.
         if (
-            name && (exportKind === ExportKind.Default || exportKind === ExportKind.ExportEquals) && (!isForRename || name.escapedText === symbolEscapedNameNoDefault(exportSymbol))
+            name && (exportKind === ExportKind.Default || exportKind === ExportKind.ExportEquals) &&
+            (!isForRename || name.escapedText === symbolEscapedNameNoDefault(exportSymbol))
         ) {
             const defaultImportAlias = checker.getSymbolAtLocation(name)!;
             addSearch(name, defaultImportAlias);
@@ -509,7 +515,11 @@ export function findModuleReferences(program: Program, sourceFiles: readonly Sou
 }
 
 /** Returns a map from a module symbol Id to all import statements that directly reference the module. */
-function getDirectImportsMap(sourceFiles: readonly SourceFile[], checker: TypeChecker, cancellationToken: CancellationToken | undefined): Map<string, ImporterOrCallExpression[]> {
+function getDirectImportsMap(
+    sourceFiles: readonly SourceFile[],
+    checker: TypeChecker,
+    cancellationToken: CancellationToken | undefined,
+): Map<string, ImporterOrCallExpression[]> {
     const map = new Map<string, ImporterOrCallExpression[]>();
 
     for (const sourceFile of sourceFiles) {

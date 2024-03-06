@@ -270,7 +270,8 @@ export function getNodeModulesPackageName(
     const modulePaths = getAllModulePaths(info, nodeModulesFileName, host, preferences, options);
     return firstDefined(
         modulePaths,
-        modulePath => tryGetModuleNameAsNodeModule(modulePath, info, importingSourceFile, host, compilerOptions, preferences, /*packageNameOnly*/ true, options.overrideImportMode),
+        modulePath =>
+            tryGetModuleNameAsNodeModule(modulePath, info, importingSourceFile, host, compilerOptions, preferences, /*packageNameOnly*/ true, options.overrideImportMode),
     );
 }
 
@@ -289,7 +290,16 @@ function getModuleSpecifierWorker(
     return firstDefined(
         modulePaths,
         modulePath =>
-            tryGetModuleNameAsNodeModule(modulePath, info, importingSourceFile, host, compilerOptions, userPreferences, /*packageNameOnly*/ undefined, options.overrideImportMode),
+            tryGetModuleNameAsNodeModule(
+                modulePath,
+                info,
+                importingSourceFile,
+                host,
+                compilerOptions,
+                userPreferences,
+                /*packageNameOnly*/ undefined,
+                options.overrideImportMode,
+            ),
     ) ||
         getLocalModuleSpecifier(toFileName, info, compilerOptions, host, options.overrideImportMode || importingSourceFile.impliedNodeFormat, preferences);
 }
@@ -444,7 +454,16 @@ function computeModuleSpecifiers(
     let relativeSpecifiers: string[] | undefined;
     for (const modulePath of modulePaths) {
         const specifier = modulePath.isInNodeModules
-            ? tryGetModuleNameAsNodeModule(modulePath, info, importingSourceFile, host, compilerOptions, userPreferences, /*packageNameOnly*/ undefined, options.overrideImportMode)
+            ? tryGetModuleNameAsNodeModule(
+                modulePath,
+                info,
+                importingSourceFile,
+                host,
+                compilerOptions,
+                userPreferences,
+                /*packageNameOnly*/ undefined,
+                options.overrideImportMode,
+            )
             : undefined;
         nodeModulesSpecifiers = append(nodeModulesSpecifiers, specifier);
         if (specifier && modulePath.isRedirect) {
@@ -568,7 +587,8 @@ function getLocalModuleSpecifier(
 
     const fromPackageJsonImports = pathsOnly ? undefined : tryGetModuleNameFromPackageJsonImports(moduleFileName, sourceDirectory, compilerOptions, host, importMode);
 
-    const fromPaths = pathsOnly || fromPackageJsonImports === undefined ? paths && tryGetModuleNameFromPaths(relativeToBaseUrl, paths, allowedEndings, host, compilerOptions)
+    const fromPaths = pathsOnly || fromPackageJsonImports === undefined ?
+        paths && tryGetModuleNameFromPaths(relativeToBaseUrl, paths, allowedEndings, host, compilerOptions)
         : undefined;
     if (pathsOnly) {
         return fromPaths;
@@ -944,7 +964,8 @@ function tryGetModuleNameFromExportsOrImports(
         const declarationFile = isImports && getOutputDeclarationFileNameWorker(targetFilePath, options, ignoreCase, getCommonSourceDirectory);
 
         const pathOrPattern = getNormalizedAbsolutePath(combinePaths(packageDirectory, exports), /*currentDirectory*/ undefined);
-        const extensionSwappedTarget = hasTSFileExtension(targetFilePath) ? removeFileExtension(targetFilePath) + tryGetJSExtensionForFile(targetFilePath, options) : undefined;
+        const extensionSwappedTarget = hasTSFileExtension(targetFilePath) ? removeFileExtension(targetFilePath) + tryGetJSExtensionForFile(targetFilePath, options)
+            : undefined;
 
         switch (mode) {
             case MatchingMode.Exact:
@@ -979,7 +1000,9 @@ function tryGetModuleNameFromExportsOrImports(
                 const starPos = pathOrPattern.indexOf("*");
                 const leadingSlice = pathOrPattern.slice(0, starPos);
                 const trailingSlice = pathOrPattern.slice(starPos + 1);
-                if (extensionSwappedTarget && startsWith(extensionSwappedTarget, leadingSlice, ignoreCase) && endsWith(extensionSwappedTarget, trailingSlice, ignoreCase)) {
+                if (
+                    extensionSwappedTarget && startsWith(extensionSwappedTarget, leadingSlice, ignoreCase) && endsWith(extensionSwappedTarget, trailingSlice, ignoreCase)
+                ) {
                     const starReplacement = extensionSwappedTarget.slice(leadingSlice.length, extensionSwappedTarget.length - trailingSlice.length);
                     return { moduleFileToTry: replaceFirstStar(packageName, starReplacement) };
                 }
@@ -1049,7 +1072,17 @@ function tryGetModuleNameFromExports(
             );
         });
     }
-    return tryGetModuleNameFromExportsOrImports(options, host, targetFilePath, packageDirectory, packageName, exports, conditions, MatchingMode.Exact, /*isImports*/ false);
+    return tryGetModuleNameFromExportsOrImports(
+        options,
+        host,
+        targetFilePath,
+        packageDirectory,
+        packageName,
+        exports,
+        conditions,
+        MatchingMode.Exact,
+        /*isImports*/ false,
+    );
 }
 
 function tryGetModuleNameFromPackageJsonImports(
@@ -1196,7 +1229,9 @@ function tryGetModuleNameAsNodeModule(
     // For classic resolution, only allow importing from node_modules/@types, not other node_modules
     return getEmitModuleResolutionKind(options) === ModuleResolutionKind.Classic && packageName === nodeModulesDirectoryName ? undefined : packageName;
 
-    function tryDirectoryWithPackageJson(packageRootIndex: number): { moduleFileToTry: string; packageRootPath?: string; blockedByExports?: true; verbatimFromExports?: true; } {
+    function tryDirectoryWithPackageJson(
+        packageRootIndex: number,
+    ): { moduleFileToTry: string; packageRootPath?: string; blockedByExports?: true; verbatimFromExports?: true; } {
         const packageRootPath = path.substring(0, packageRootIndex);
         const packageJsonPath = combinePaths(packageRootPath, "package.json");
         let moduleFileToTry = path;
@@ -1286,7 +1321,11 @@ function tryGetAnyFileFromPath(host: ModuleSpecifierResolutionHost, path: string
     if (!host.fileExists) return;
     // We check all js, `node` and `json` extensions in addition to TS, since node module resolution would also choose those over the directory
     const extensions = flatten(
-        getSupportedExtensions({ allowJs: true }, [{ extension: "node", isMixedContent: false }, { extension: "json", isMixedContent: false, scriptKind: ScriptKind.JSON }]),
+        getSupportedExtensions({ allowJs: true }, [{ extension: "node", isMixedContent: false }, {
+            extension: "json",
+            isMixedContent: false,
+            scriptKind: ScriptKind.JSON,
+        }]),
     );
     for (const e of extensions) {
         const fullPath = path + e;

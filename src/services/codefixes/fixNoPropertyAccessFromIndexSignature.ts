@@ -31,7 +31,13 @@ registerCodeFix({
         const property = getPropertyAccessExpression(sourceFile, span.start);
         const changes = textChanges.ChangeTracker.with(context, t => doChange(t, context.sourceFile, property, preferences));
         return [
-            createCodeFixAction(fixId, changes, [Diagnostics.Use_element_access_for_0, property.name.text], fixId, Diagnostics.Use_element_access_for_all_undeclared_properties),
+            createCodeFixAction(
+                fixId,
+                changes,
+                [Diagnostics.Use_element_access_for_0, property.name.text],
+                fixId,
+                Diagnostics.Use_element_access_for_all_undeclared_properties,
+            ),
         ];
     },
     getAllCodeActions: context =>

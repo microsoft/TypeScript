@@ -372,7 +372,11 @@ export function transformESDecorators(context: TransformationContext): (x: Sourc
 
     function exitClassElement() {
         Debug.assert(top?.kind === "class-element", "Incorrect value for top.kind.", () => `Expected top.kind to be 'class-element' but got '${top?.kind}' instead.`);
-        Debug.assert(top.next?.kind === "class", "Incorrect value for top.next.kind.", () => `Expected top.next.kind to be 'class' but got '${top!.next?.kind}' instead.`);
+        Debug.assert(
+            top.next?.kind === "class",
+            "Incorrect value for top.next.kind.",
+            () => `Expected top.next.kind to be 'class' but got '${top!.next?.kind}' instead.`,
+        );
         top = top.next;
         updateState();
     }
@@ -558,7 +562,10 @@ export function transformESDecorators(context: TransformationContext): (x: Sourc
     }
 
     function createHelperVariable(node: ClassLikeDeclaration | ClassElement, suffix: string) {
-        return factory.createUniqueName(`${getHelperVariableName(node)}_${suffix}`, GeneratedIdentifierFlags.Optimistic | GeneratedIdentifierFlags.ReservedInNestedScopes);
+        return factory.createUniqueName(
+            `${getHelperVariableName(node)}_${suffix}`,
+            GeneratedIdentifierFlags.Optimistic | GeneratedIdentifierFlags.ReservedInNestedScopes,
+        );
     }
 
     function createLet(name: Identifier, initializer?: Expression) {
@@ -708,7 +715,10 @@ export function transformESDecorators(context: TransformationContext): (x: Sourc
             //   extra initializers.
             classInfo.classDecoratorsName = factory.createUniqueName("_classDecorators", GeneratedIdentifierFlags.Optimistic | GeneratedIdentifierFlags.FileLevel);
             classInfo.classDescriptorName = factory.createUniqueName("_classDescriptor", GeneratedIdentifierFlags.Optimistic | GeneratedIdentifierFlags.FileLevel);
-            classInfo.classExtraInitializersName = factory.createUniqueName("_classExtraInitializers", GeneratedIdentifierFlags.Optimistic | GeneratedIdentifierFlags.FileLevel);
+            classInfo.classExtraInitializersName = factory.createUniqueName(
+                "_classExtraInitializers",
+                GeneratedIdentifierFlags.Optimistic | GeneratedIdentifierFlags.FileLevel,
+            );
             Debug.assertIsDefined(classInfo.classThis);
             classDefinitionStatements.push(
                 createLet(classInfo.classDecoratorsName, factory.createArrayLiteralExpression(classDecorators)),
@@ -1667,7 +1677,10 @@ export function transformESDecorators(context: TransformationContext): (x: Sourc
             return [backingField, getter, setter];
         }
 
-        return finishClassElement(factory.updatePropertyDeclaration(node, modifiers, name, /*questionOrExclamationToken*/ undefined, /*type*/ undefined, initializer), node);
+        return finishClassElement(
+            factory.updatePropertyDeclaration(node, modifiers, name, /*questionOrExclamationToken*/ undefined, /*type*/ undefined, initializer),
+            node,
+        );
     }
 
     function visitThisExpression(node: ThisExpression) {

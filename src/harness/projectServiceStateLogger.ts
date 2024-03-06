@@ -197,7 +197,14 @@ export function patchServiceForStateBaseline(service: ProjectService) {
                 const isOpen = info.isScriptOpen();
                 infoDiff = printProperty(PrintPropertyWhen.Changed, data, "open", isOpen, infoDiff, infoPropertyLogs);
                 infoDiff = printProperty(PrintPropertyWhen.Always, data, "version", info.textStorage.getVersion(), infoDiff, infoPropertyLogs);
-                infoDiff = printProperty(PrintPropertyWhen.TruthyOrChangedOrNew, data, "pendingReloadFromDisk", info.textStorage.pendingReloadFromDisk, infoDiff, infoPropertyLogs);
+                infoDiff = printProperty(
+                    PrintPropertyWhen.TruthyOrChangedOrNew,
+                    data,
+                    "pendingReloadFromDisk",
+                    info.textStorage.pendingReloadFromDisk,
+                    infoDiff,
+                    infoPropertyLogs,
+                );
                 infoDiff = printScriptInfoSourceMapFilePath(data, info, infoDiff, infoPropertyLogs);
                 infoDiff = printProperty(PrintPropertyWhen.DefinedOrChangedOrNew, data, "declarationInfoPath", info.declarationInfoPath, infoDiff, infoPropertyLogs);
                 infoDiff = printSetPropertyValueWorker(

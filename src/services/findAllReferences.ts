@@ -520,12 +520,13 @@ export function findReferencedSymbols(
     // Unless the starting node is a declaration (vs e.g. JSDoc), don't attempt to compute isDefinition
     const adjustedNode = Core.getAdjustedNode(node, options);
     const symbol = isDefinitionForReference(adjustedNode) ? checker.getSymbolAtLocation(adjustedNode) : undefined;
-    return !referencedSymbols || !referencedSymbols.length ? undefined : mapDefined<SymbolAndEntries, ReferencedSymbol>(referencedSymbols, ({ definition, references }) =>
-        // Only include referenced symbols that have a valid definition.
-        definition && {
-            definition: checker.runWithCancellationToken(cancellationToken, checker => definitionToReferencedSymbolDefinitionInfo(definition, checker, node)),
-            references: references.map(r => toReferencedSymbolEntry(r, symbol)),
-        });
+    return !referencedSymbols || !referencedSymbols.length ? undefined :
+        mapDefined<SymbolAndEntries, ReferencedSymbol>(referencedSymbols, ({ definition, references }) =>
+            // Only include referenced symbols that have a valid definition.
+            definition && {
+                definition: checker.runWithCancellationToken(cancellationToken, checker => definitionToReferencedSymbolDefinitionInfo(definition, checker, node)),
+                references: references.map(r => toReferencedSymbolEntry(r, symbol)),
+            });
 }
 
 function isDefinitionForReference(node: Node): boolean {
@@ -750,7 +751,13 @@ function getDefinitionKindAndDisplayParts(symbol: Symbol, checker: TypeChecker, 
 }
 
 /** @internal */
-export function toRenameLocation(entry: Entry, originalNode: Node, checker: TypeChecker, providePrefixAndSuffixText: boolean, quotePreference: QuotePreference): RenameLocation {
+export function toRenameLocation(
+    entry: Entry,
+    originalNode: Node,
+    checker: TypeChecker,
+    providePrefixAndSuffixText: boolean,
+    quotePreference: QuotePreference,
+): RenameLocation {
     return { ...entryToDocumentSpan(entry), ...(providePrefixAndSuffixText && getPrefixAndSuffixText(entry, originalNode, checker, quotePreference)) };
 }
 
@@ -1001,7 +1008,8 @@ function declarationIsWriteAccess(decl: Declaration): boolean {
         case SyntaxKind.MethodDeclaration:
         case SyntaxKind.GetAccessor:
         case SyntaxKind.SetAccessor:
-            return !!(decl as FunctionDeclaration | FunctionExpression | ConstructorDeclaration | MethodDeclaration | GetAccessorDeclaration | SetAccessorDeclaration).body;
+            return !!(decl as FunctionDeclaration | FunctionExpression | ConstructorDeclaration | MethodDeclaration | GetAccessorDeclaration | SetAccessorDeclaration)
+                .body;
 
         case SyntaxKind.VariableDeclaration:
         case SyntaxKind.PropertyDeclaration:
@@ -1123,7 +1131,8 @@ export namespace Core {
     ): readonly Entry[] {
         const moduleSymbol = program.getSourceFile(fileName)?.symbol;
         if (moduleSymbol) {
-            return getReferencedSymbolsForModule(program, moduleSymbol, /*excludeImportTypeOfExportEquals*/ false, sourceFiles, sourceFilesSet)[0]?.references || emptyArray;
+            return getReferencedSymbolsForModule(program, moduleSymbol, /*excludeImportTypeOfExportEquals*/ false, sourceFiles, sourceFilesSet)[0]?.references ||
+                emptyArray;
         }
         const fileIncludeReasons = program.getFileIncludeReasons();
         const referencedFile = program.getSourceFile(fileName);
@@ -1264,7 +1273,8 @@ export namespace Core {
                 // Return either: The first JSX node in the (if not a tslib import), the first statement of the file, or the whole file if neither of those exist
                 const range = reference.literal.text !== externalHelpersModuleNameText && forEachChildRecursively(
                             reference.referencingFile,
-                            n => !(n.transformFlags & TransformFlags.ContainsJsx) ? "skip" : isJsxElement(n) || isJsxSelfClosingElement(n) || isJsxFragment(n) ? n : undefined,
+                            n => !(n.transformFlags & TransformFlags.ContainsJsx) ? "skip"
+                                : isJsxElement(n) || isJsxSelfClosingElement(n) || isJsxFragment(n) ? n : undefined,
                         ) || reference.referencingFile.statements[0] || reference.referencingFile;
                 return nodeEntry(range);
             }
@@ -1383,8 +1393,13 @@ export namespace Core {
         cancellationToken: CancellationToken,
         options: Options,
     ): SymbolAndEntries[] {
-        const symbol =
-            node && skipPastExportOrImportSpecifierOrUnion(originalSymbol, node, checker, /*useLocalSymbolForExportSpecifier*/ !isForRenameWithPrefixAndSuffixText(options)) ||
+        const symbol = node &&
+                skipPastExportOrImportSpecifierOrUnion(
+                    originalSymbol,
+                    node,
+                    checker,
+                    /*useLocalSymbolForExportSpecifier*/ !isForRenameWithPrefixAndSuffixText(options),
+                ) ||
             originalSymbol;
 
         // Compute the meaning from the location and the symbol it references
@@ -1968,7 +1983,8 @@ export namespace Core {
             case SyntaxKind.NoSubstitutionTemplateLiteral:
             case SyntaxKind.StringLiteral: {
                 const str = node as StringLiteralLike;
-                return (isLiteralNameOfPropertyDeclarationOrIndexAccess(str) || isNameOfModuleDeclaration(node) || isExpressionOfExternalModuleImportEqualsDeclaration(node) ||
+                return (isLiteralNameOfPropertyDeclarationOrIndexAccess(str) || isNameOfModuleDeclaration(node) ||
+                    isExpressionOfExternalModuleImportEqualsDeclaration(node) ||
                     (isCallExpression(node.parent) && isBindableObjectDefinePropertyCall(node.parent) && node.parent.arguments[1] === node)) &&
                     str.text.length === searchSymbolName.length;
             }
@@ -2142,7 +2158,10 @@ export namespace Core {
         addReferencesHere: boolean,
         alwaysGetReferences?: boolean,
     ): void {
-        Debug.assert(!alwaysGetReferences || !!state.options.providePrefixAndSuffixTextForRename, "If alwaysGetReferences is true, then prefix/suffix text must be enabled");
+        Debug.assert(
+            !alwaysGetReferences || !!state.options.providePrefixAndSuffixTextForRename,
+            "If alwaysGetReferences is true, then prefix/suffix text must be enabled",
+        );
 
         const { parent, propertyName, name } = exportSpecifier;
         const exportDeclaration = parent.parent;
@@ -2540,7 +2559,11 @@ export namespace Core {
         return node.kind === SyntaxKind.Identifier && node.parent.kind === SyntaxKind.Parameter && (node.parent as ParameterDeclaration).name === node;
     }
 
-    function getReferencesForThisKeyword(thisOrSuperKeyword: Node, sourceFiles: readonly SourceFile[], cancellationToken: CancellationToken): SymbolAndEntries[] | undefined {
+    function getReferencesForThisKeyword(
+        thisOrSuperKeyword: Node,
+        sourceFiles: readonly SourceFile[],
+        cancellationToken: CancellationToken,
+    ): SymbolAndEntries[] | undefined {
         let searchSpaceNode: Node = getThisContainer(thisOrSuperKeyword, /*includeArrowFunctions*/ false, /*includeClassComputedPropertyName*/ false);
 
         // Whether 'this' occurs in a static context within a class.

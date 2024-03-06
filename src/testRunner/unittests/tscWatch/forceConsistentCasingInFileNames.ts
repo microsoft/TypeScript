@@ -232,16 +232,36 @@ a;b;
         });
     }
 
-    verifyFileSymlink("when both file symlink target and import match disk", `/user/username/projects/myproject/XY.ts`, `/user/username/projects/myproject/XY.ts`, `./XY`);
-    verifyFileSymlink("when file symlink target matches disk but import does not", `/user/username/projects/myproject/XY.ts`, `/user/username/projects/myproject/Xy.ts`, `./XY`);
-    verifyFileSymlink("when import matches disk but file symlink target does not", `/user/username/projects/myproject/XY.ts`, `/user/username/projects/myproject/XY.ts`, `./Xy`);
+    verifyFileSymlink(
+        "when both file symlink target and import match disk",
+        `/user/username/projects/myproject/XY.ts`,
+        `/user/username/projects/myproject/XY.ts`,
+        `./XY`,
+    );
+    verifyFileSymlink(
+        "when file symlink target matches disk but import does not",
+        `/user/username/projects/myproject/XY.ts`,
+        `/user/username/projects/myproject/Xy.ts`,
+        `./XY`,
+    );
+    verifyFileSymlink(
+        "when import matches disk but file symlink target does not",
+        `/user/username/projects/myproject/XY.ts`,
+        `/user/username/projects/myproject/XY.ts`,
+        `./Xy`,
+    );
     verifyFileSymlink(
         "when import and file symlink target agree but do not match disk",
         `/user/username/projects/myproject/XY.ts`,
         `/user/username/projects/myproject/Xy.ts`,
         `./Xy`,
     );
-    verifyFileSymlink("when import, file symlink target, and disk are all different", `/user/username/projects/myproject/XY.ts`, `/user/username/projects/myproject/Xy.ts`, `./yX`);
+    verifyFileSymlink(
+        "when import, file symlink target, and disk are all different",
+        `/user/username/projects/myproject/XY.ts`,
+        `/user/username/projects/myproject/Xy.ts`,
+        `./yX`,
+    );
 
     function verifyDirSymlink(subScenario: string, diskPath: string, targetPath: string, importedPath: string) {
         verifyTscWatch({
@@ -293,15 +313,30 @@ a;b;
     }
 
     verifyDirSymlink("when both directory symlink target and import match disk", `/user/username/projects/myproject/XY`, `/user/username/projects/myproject/XY`, `./XY`);
-    verifyDirSymlink("when directory symlink target matches disk but import does not", `/user/username/projects/myproject/XY`, `/user/username/projects/myproject/Xy`, `./XY`);
-    verifyDirSymlink("when import matches disk but directory symlink target does not", `/user/username/projects/myproject/XY`, `/user/username/projects/myproject/XY`, `./Xy`);
+    verifyDirSymlink(
+        "when directory symlink target matches disk but import does not",
+        `/user/username/projects/myproject/XY`,
+        `/user/username/projects/myproject/Xy`,
+        `./XY`,
+    );
+    verifyDirSymlink(
+        "when import matches disk but directory symlink target does not",
+        `/user/username/projects/myproject/XY`,
+        `/user/username/projects/myproject/XY`,
+        `./Xy`,
+    );
     verifyDirSymlink(
         "when import and directory symlink target agree but do not match disk",
         `/user/username/projects/myproject/XY`,
         `/user/username/projects/myproject/Xy`,
         `./Xy`,
     );
-    verifyDirSymlink("when import, directory symlink target, and disk are all different", `/user/username/projects/myproject/XY`, `/user/username/projects/myproject/Xy`, `./yX`);
+    verifyDirSymlink(
+        "when import, directory symlink target, and disk are all different",
+        `/user/username/projects/myproject/XY`,
+        `/user/username/projects/myproject/Xy`,
+        `./yX`,
+    );
 
     verifyTscWatch({
         scenario: "forceConsistentCasingInFileNames",

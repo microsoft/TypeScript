@@ -158,7 +158,9 @@ export class TestSession extends ts.server.Session {
         const response = super.executeCommand(request);
         if (this.logger.hasLevel(ts.server.LogLevel.verbose)) {
             this.logger.info(
-                `response:${ts.server.stringifyIndented(response.response === ts.getSupportedCodeFixes() ? { ...response, response: "ts.getSupportedCodeFixes()" } : response)}`,
+                `response:${
+                    ts.server.stringifyIndented(response.response === ts.getSupportedCodeFixes() ? { ...response, response: "ts.getSupportedCodeFixes()" } : response)
+                }`,
             );
             this.host.baselineHost("After request");
         }
@@ -281,7 +283,9 @@ export class TestServerCancellationToken implements ts.server.ServerCancellation
     }
 
     resetRequest(requestId: number) {
-        this.logger.log(`TestServerCancellationToken:: resetRequest:: ${requestId} is ${requestId === this.currentId ? "as expected" : `expected to be ${this.currentId}`}`);
+        this.logger.log(
+            `TestServerCancellationToken:: resetRequest:: ${requestId} is ${requestId === this.currentId ? "as expected" : `expected to be ${this.currentId}`}`,
+        );
         assert.equal(requestId, this.currentId, "unexpected request id in cancellation");
         this.currentId = undefined;
     }

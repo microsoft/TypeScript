@@ -636,7 +636,8 @@ function classifySymbol(symbol: Symbol, meaningAtPosition: SemanticMeaning, chec
         // Only classify a module as such if
         //  - It appears in a namespace context.
         //  - There exists a module declaration which actually impacts the value side.
-        return meaningAtPosition & SemanticMeaning.Namespace || meaningAtPosition & SemanticMeaning.Value && hasValueSideModule(symbol) ? ClassificationType.moduleName : undefined;
+        return meaningAtPosition & SemanticMeaning.Namespace || meaningAtPosition & SemanticMeaning.Value && hasValueSideModule(symbol) ? ClassificationType.moduleName
+            : undefined;
     }
     else if (flags & SymbolFlags.Alias) {
         return classifySymbol(checker.getAliasedSymbol(symbol), meaningAtPosition, checker);

@@ -499,7 +499,10 @@ function flattenArrayBindingOrAssignmentPattern(
         if (flattenContext.level >= FlattenLevel.ObjectRest) {
             // If an array pattern contains an ObjectRest, we must cache the result so that we
             // can perform the ObjectRest destructuring in a different declaration
-            if (element.transformFlags & TransformFlags.ContainsObjectRestOrSpread || flattenContext.hasTransformedPriorElement && !isSimpleBindingOrAssignmentElement(element)) {
+            if (
+                element.transformFlags & TransformFlags.ContainsObjectRestOrSpread ||
+                flattenContext.hasTransformedPriorElement && !isSimpleBindingOrAssignmentElement(element)
+            ) {
                 flattenContext.hasTransformedPriorElement = true;
                 const temp = flattenContext.context.factory.createTempVariable(/*recordTempVariable*/ undefined);
                 if (flattenContext.hoistTempVariables) {

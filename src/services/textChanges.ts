@@ -559,7 +559,12 @@ export class ChangeTracker {
         this.deleteRange(sourceFile, { pos: modifier.getStart(sourceFile), end: skipTrivia(sourceFile.text, modifier.end, /*stopAfterLineBreak*/ true) });
     }
 
-    public deleteNodeRange(sourceFile: SourceFile, startNode: Node, endNode: Node, options: ConfigurableStartEnd = { leadingTriviaOption: LeadingTriviaOption.IncludeAll }): void {
+    public deleteNodeRange(
+        sourceFile: SourceFile,
+        startNode: Node,
+        endNode: Node,
+        options: ConfigurableStartEnd = { leadingTriviaOption: LeadingTriviaOption.IncludeAll },
+    ): void {
         const startPosition = getAdjustedStartPosition(sourceFile, startNode, options);
         const endPosition = getAdjustedEndPosition(sourceFile, endNode, options);
         this.deleteRange(sourceFile, { pos: startPosition, end: endPosition });
@@ -588,7 +593,12 @@ export class ChangeTracker {
         this.replaceRange(sourceFile, getAdjustedRange(sourceFile, startNode, endNode, options), newNode, options);
     }
 
-    private replaceRangeWithNodes(sourceFile: SourceFile, range: TextRange, newNodes: readonly Node[], options: ReplaceWithMultipleNodesOptions & ConfigurableStartEnd = {}): void {
+    private replaceRangeWithNodes(
+        sourceFile: SourceFile,
+        range: TextRange,
+        newNodes: readonly Node[],
+        options: ReplaceWithMultipleNodesOptions & ConfigurableStartEnd = {},
+    ): void {
         this.changes.push({ kind: ChangeKind.ReplaceWithMultipleNodes, sourceFile, range, options, nodes: newNodes });
     }
 
@@ -693,7 +703,12 @@ export class ChangeTracker {
     }
 
     public insertNodeBefore(sourceFile: SourceFile, before: Node, newNode: Node, blankLineBetween = false, options: ConfigurableStartEnd = {}): void {
-        this.insertNodeAt(sourceFile, getAdjustedStartPosition(sourceFile, before, options), newNode, this.getOptionsForInsertNodeBefore(before, newNode, blankLineBetween));
+        this.insertNodeAt(
+            sourceFile,
+            getAdjustedStartPosition(sourceFile, before, options),
+            newNode,
+            this.getOptionsForInsertNodeBefore(before, newNode, blankLineBetween),
+        );
     }
 
     public insertNodesBefore(sourceFile: SourceFile, before: Node, newNodes: readonly Node[], blankLineBetween = false, options: ConfigurableStartEnd = {}): void {
@@ -750,7 +765,11 @@ export class ChangeTracker {
     }
 
     public replaceJSDocComment(sourceFile: SourceFile, node: HasJSDoc, tags: readonly JSDocTag[]) {
-        this.insertJsdocCommentBefore(sourceFile, updateJSDocHost(node), factory.createJSDocComment(this.createJSDocText(sourceFile, node), factory.createNodeArray(tags)));
+        this.insertJsdocCommentBefore(
+            sourceFile,
+            updateJSDocHost(node),
+            factory.createJSDocComment(this.createJSDocText(sourceFile, node), factory.createNodeArray(tags)),
+        );
     }
 
     public addJSDocTags(sourceFile: SourceFile, parent: HasJSDoc, newTags: readonly JSDocTag[]): void {
@@ -930,7 +949,12 @@ export class ChangeTracker {
         node: ClassLikeDeclaration | InterfaceDeclaration | ObjectLiteralExpression | TypeLiteralNode | EnumDeclaration,
     ) {
         const nodeStart = node.getStart(sourceFile);
-        return formatting.SmartIndenter.findFirstNonWhitespaceColumn(getLineStartPositionForPosition(nodeStart, sourceFile), nodeStart, sourceFile, this.formatContext.options)
+        return formatting.SmartIndenter.findFirstNonWhitespaceColumn(
+            getLineStartPositionForPosition(nodeStart, sourceFile),
+            nodeStart,
+            sourceFile,
+            this.formatContext.options,
+        )
             + (this.formatContext.options.indentSize ?? 4);
     }
 
@@ -1033,7 +1057,9 @@ export class ChangeTracker {
             const lparen = findChildOfKind(node, SyntaxKind.OpenParenToken, sourceFile);
             if (lparen) {
                 // `() => {}` --> `function f() {}`
-                this.insertNodesAt(sourceFile, lparen.getStart(sourceFile), [factory.createToken(SyntaxKind.FunctionKeyword), factory.createIdentifier(name)], { joiner: " " });
+                this.insertNodesAt(sourceFile, lparen.getStart(sourceFile), [factory.createToken(SyntaxKind.FunctionKeyword), factory.createIdentifier(name)], {
+                    joiner: " ",
+                });
                 deleteNode(this, sourceFile, arrow);
             }
             else {
@@ -1045,11 +1071,16 @@ export class ChangeTracker {
 
             if (node.body.kind !== SyntaxKind.Block) {
                 // `() => 0` => `function f() { return 0; }`
-                this.insertNodesAt(sourceFile, node.body.getStart(sourceFile), [factory.createToken(SyntaxKind.OpenBraceToken), factory.createToken(SyntaxKind.ReturnKeyword)], {
+                this.insertNodesAt(sourceFile, node.body.getStart(sourceFile), [
+                    factory.createToken(SyntaxKind.OpenBraceToken),
+                    factory.createToken(SyntaxKind.ReturnKeyword),
+                ], {
                     joiner: " ",
                     suffix: " ",
                 });
-                this.insertNodesAt(sourceFile, node.body.end, [factory.createToken(SyntaxKind.SemicolonToken), factory.createToken(SyntaxKind.CloseBraceToken)], { joiner: " " });
+                this.insertNodesAt(sourceFile, node.body.end, [factory.createToken(SyntaxKind.SemicolonToken), factory.createToken(SyntaxKind.CloseBraceToken)], {
+                    joiner: " ",
+                });
             }
         }
         else {
@@ -1082,7 +1113,12 @@ export class ChangeTracker {
      * i.e. arguments in arguments lists, parameters in parameter lists etc.
      * Note that separators are part of the node in statements and class elements.
      */
-    public insertNodeInListAfter(sourceFile: SourceFile, after: Node, newNode: Node, containingList = formatting.SmartIndenter.getContainingList(after, sourceFile)): void {
+    public insertNodeInListAfter(
+        sourceFile: SourceFile,
+        after: Node,
+        newNode: Node,
+        containingList = formatting.SmartIndenter.getContainingList(after, sourceFile),
+    ): void {
         if (!containingList) {
             Debug.fail("node is not a list element");
             return;
@@ -1261,7 +1297,14 @@ function tryMergeJsdocTags(oldTag: JSDocTag, newTag: JSDocTag): JSDocTag | undef
             const oldParam = oldTag as JSDocParameterTag;
             const newParam = newTag as JSDocParameterTag;
             return isIdentifier(oldParam.name) && isIdentifier(newParam.name) && oldParam.name.escapedText === newParam.name.escapedText
-                ? factory.createJSDocParameterTag(/*tagName*/ undefined, newParam.name, /*isBracketed*/ false, newParam.typeExpression, newParam.isNameFirst, oldParam.comment)
+                ? factory.createJSDocParameterTag(
+                    /*tagName*/ undefined,
+                    newParam.name,
+                    /*isBracketed*/ false,
+                    newParam.typeExpression,
+                    newParam.isNameFirst,
+                    oldParam.comment,
+                )
                 : undefined;
         }
         case SyntaxKind.JSDocReturnTag:
@@ -1302,7 +1345,10 @@ function endPositionToDeleteNodeInList(sourceFile: SourceFile, node: Node, prevN
     return end;
 }
 
-function getClassOrObjectBraceEnds(cls: ClassLikeDeclaration | InterfaceDeclaration | ObjectLiteralExpression, sourceFile: SourceFile): [number | undefined, number | undefined] {
+function getClassOrObjectBraceEnds(
+    cls: ClassLikeDeclaration | InterfaceDeclaration | ObjectLiteralExpression,
+    sourceFile: SourceFile,
+): [number | undefined, number | undefined] {
     const open = findChildOfKind(cls, SyntaxKind.OpenBraceToken, sourceFile);
     const close = findChildOfKind(cls, SyntaxKind.CloseBraceToken, sourceFile);
     return [open?.end, close?.end];
@@ -1353,7 +1399,12 @@ namespace changesToText {
         });
     }
 
-    export function newFileChanges(fileName: string, insertions: readonly NewFileInsertion[], newLineCharacter: string, formatContext: formatting.FormatContext): FileTextChanges {
+    export function newFileChanges(
+        fileName: string,
+        insertions: readonly NewFileInsertion[],
+        newLineCharacter: string,
+        formatContext: formatting.FormatContext,
+    ): FileTextChanges {
         const text = newFileChangesWorker(getScriptKindFromFileName(fileName), insertions, newLineCharacter, formatContext);
         return { fileName, textChanges: [createTextChange(createTextSpan(0, 0), text)], isNewFile: true };
     }
@@ -1909,7 +1960,11 @@ namespace deleteDeclaration {
 
         if (parent.kind === SyntaxKind.CatchClause) {
             // TODO: There's currently no unused diagnostic for this, could be a suggestion
-            changes.deleteNodeRange(sourceFile, findChildOfKind(parent, SyntaxKind.OpenParenToken, sourceFile)!, findChildOfKind(parent, SyntaxKind.CloseParenToken, sourceFile)!);
+            changes.deleteNodeRange(
+                sourceFile,
+                findChildOfKind(parent, SyntaxKind.OpenParenToken, sourceFile)!,
+                findChildOfKind(parent, SyntaxKind.CloseParenToken, sourceFile)!,
+            );
             return;
         }
 

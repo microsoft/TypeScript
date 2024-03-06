@@ -13,7 +13,8 @@ function createDiagnosticMessageReplacer<R extends (messageArgs: string[], ...ar
     const messageParts = diagnosticMessage.message.split(/{\d+}/g);
     const regExp = new RegExp(`^(?:${messageParts.map(ts.regExpEscape).join("(.*?)")})$`);
     type Args<R> = R extends (messageArgs: string[], ...args: infer A) => string[] ? A : [];
-    return (text: string, ...args: Args<R>) => text.replace(regExp, (_, ...fixedArgs) => ts.formatStringFromArgs(diagnosticMessage.message, replacer(fixedArgs, ...args)));
+    return (text: string, ...args: Args<R>) =>
+        text.replace(regExp, (_, ...fixedArgs) => ts.formatStringFromArgs(diagnosticMessage.message, replacer(fixedArgs, ...args)));
 }
 
 const replaceTypesVersionsMessage = createDiagnosticMessageReplacer(

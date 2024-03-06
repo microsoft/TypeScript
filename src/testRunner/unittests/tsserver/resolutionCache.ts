@@ -566,7 +566,10 @@ export const x = 10;`,
                 const files = [...(useNodeFile ? [nodeFile] : []), electronFile, srcFile, moduleFile, configFile, libFile];
                 const host = createServerHost(files);
                 const session = new TestSession(host);
-                openFilesForSession([{ file: srcFile.path, content: srcFile.content, scriptKindName: "TS", projectRootPath: "/user/username/projects/myproject" }], session);
+                openFilesForSession(
+                    [{ file: srcFile.path, content: srcFile.content, scriptKindName: "TS", projectRootPath: "/user/username/projects/myproject" }],
+                    session,
+                );
                 baselineTsserverLogs("resolutionCache", scenario, session);
             });
         }

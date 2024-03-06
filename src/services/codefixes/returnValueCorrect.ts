@@ -90,7 +90,8 @@ registerCodeFix({
         if (info.kind === ProblemKind.MissingReturnStatement) {
             return append(
                 [getActionForfixAddReturnStatement(context, info.expression, info.statement)],
-                isArrowFunction(info.declaration) ? getActionForFixRemoveBracesFromArrowFunctionBody(context, info.declaration, info.expression, info.commentSource) : undefined,
+                isArrowFunction(info.declaration) ? getActionForFixRemoveBracesFromArrowFunctionBody(context, info.declaration, info.expression, info.commentSource)
+                    : undefined,
             );
         }
         else {
@@ -131,7 +132,10 @@ function getFixInfo(checker: TypeChecker, declaration: FunctionLikeDeclaration, 
     if (!declaration.body || !isBlock(declaration.body) || length(declaration.body.statements) !== 1) return undefined;
 
     const firstStatement = first(declaration.body.statements);
-    if (isExpressionStatement(firstStatement) && checkFixedAssignableTo(checker, declaration, checker.getTypeAtLocation(firstStatement.expression), expectType, isFunctionType)) {
+    if (
+        isExpressionStatement(firstStatement) &&
+        checkFixedAssignableTo(checker, declaration, checker.getTypeAtLocation(firstStatement.expression), expectType, isFunctionType)
+    ) {
         return {
             declaration,
             kind: ProblemKind.MissingReturnStatement,
@@ -290,7 +294,10 @@ function getActionForfixAddReturnStatement(context: CodeFixContext, expression: 
 }
 
 function getActionForFixRemoveBracesFromArrowFunctionBody(context: CodeFixContext, declaration: ArrowFunction, expression: Expression, commentSource: Node) {
-    const changes = textChanges.ChangeTracker.with(context, t => removeBlockBodyBrace(t, context.sourceFile, declaration, expression, commentSource, /*withParen*/ false));
+    const changes = textChanges.ChangeTracker.with(
+        context,
+        t => removeBlockBodyBrace(t, context.sourceFile, declaration, expression, commentSource, /*withParen*/ false),
+    );
     return createCodeFixAction(
         fixId,
         changes,

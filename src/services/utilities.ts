@@ -1575,7 +1575,13 @@ export function getTouchingToken(sourceFile: SourceFile, position: number, inclu
  * @internal
  */
 export function getTokenAtPosition(sourceFile: SourceFile, position: number): Node {
-    return getTokenAtPositionWorker(sourceFile, position, /*allowPositionInLeadingTrivia*/ true, /*includePrecedingTokenAtEndPosition*/ undefined, /*includeEndPosition*/ false);
+    return getTokenAtPositionWorker(
+        sourceFile,
+        position,
+        /*allowPositionInLeadingTrivia*/ true,
+        /*includePrecedingTokenAtEndPosition*/ undefined,
+        /*includeEndPosition*/ false,
+    );
 }
 
 /** Get the token whose text contains the position */
@@ -2463,7 +2469,9 @@ export function getNameFromPropertyName(name: PropertyName): string | undefined 
 
 /** @internal */
 export function programContainsModules(program: Program): boolean {
-    return program.getSourceFiles().some(s => !s.isDeclarationFile && !program.isSourceFileFromExternalLibrary(s) && !!(s.externalModuleIndicator || s.commonJsModuleIndicator));
+    return program.getSourceFiles().some(s =>
+        !s.isDeclarationFile && !program.isSourceFileFromExternalLibrary(s) && !!(s.externalModuleIndicator || s.commonJsModuleIndicator)
+    );
 }
 /** @internal */
 export function programContainsEsModules(program: Program): boolean {
@@ -2658,7 +2666,8 @@ export function insertImports(
     preferences: UserPreferences,
 ): void {
     const decl = isArray(imports) ? imports[0] : imports;
-    const importKindPredicate: (node: Node) => node is AnyImportOrRequireStatement = decl.kind === SyntaxKind.VariableStatement ? isRequireVariableStatement : isAnyImportSyntax;
+    const importKindPredicate: (node: Node) => node is AnyImportOrRequireStatement = decl.kind === SyntaxKind.VariableStatement ? isRequireVariableStatement
+        : isAnyImportSyntax;
     const existingImportStatements = filter(sourceFile.statements, importKindPredicate);
     let sortKind = isArray(imports) ? OrganizeImports.detectImportDeclarationSorting(imports, preferences) : SortKind.Both;
     const comparer = OrganizeImports.getOrganizeImportsComparer(preferences, sortKind === SortKind.CaseInsensitive);
@@ -2747,7 +2756,11 @@ export function isTextWhiteSpaceLike(text: string, startPos: number, endPos: num
 }
 
 /** @internal */
-export function getMappedLocation(location: DocumentPosition, sourceMapper: SourceMapper, fileExists: ((path: string) => boolean) | undefined): DocumentPosition | undefined {
+export function getMappedLocation(
+    location: DocumentPosition,
+    sourceMapper: SourceMapper,
+    fileExists: ((path: string) => boolean) | undefined,
+): DocumentPosition | undefined {
     const mapsTo = sourceMapper.tryGetSourcePosition(location);
     return mapsTo && (!fileExists || fileExists(normalizePath(mapsTo.fileName)) ? mapsTo : undefined);
 }
@@ -3025,7 +3038,8 @@ export function buildLinkParts(link: JSDocLink | JSDocLinkCode | JSDocLinkPlain,
             if (text) parts.push(linkTextPart(text));
         }
         else {
-            const separator = suffix === 0 || (link.text.charCodeAt(suffix) === CharacterCodes.bar && name.charCodeAt(name.length - 1) !== CharacterCodes.space) ? " " : "";
+            const separator = suffix === 0 || (link.text.charCodeAt(suffix) === CharacterCodes.bar && name.charCodeAt(name.length - 1) !== CharacterCodes.space) ? " "
+                : "";
             parts.push(linkTextPart(name + separator + text));
         }
     }
@@ -3091,7 +3105,12 @@ export function mapToDisplayParts(writeDisplayParts: (writer: DisplayPartsSymbol
 }
 
 /** @internal */
-export function typeToDisplayParts(typechecker: TypeChecker, type: Type, enclosingDeclaration?: Node, flags: TypeFormatFlags = TypeFormatFlags.None): SymbolDisplayPart[] {
+export function typeToDisplayParts(
+    typechecker: TypeChecker,
+    type: Type,
+    enclosingDeclaration?: Node,
+    flags: TypeFormatFlags = TypeFormatFlags.None,
+): SymbolDisplayPart[] {
     return mapToDisplayParts(writer => {
         typechecker.writeType(type, enclosingDeclaration, flags | TypeFormatFlags.MultilineObjectLiterals | TypeFormatFlags.UseAliasDefinedOutsideCurrentScope, writer);
     });
@@ -3367,12 +3386,20 @@ export function getRenameLocation(edits: readonly FileTextChanges[], renameFilen
 
 /** @internal */
 export function copyLeadingComments(sourceNode: Node, targetNode: Node, sourceFile: SourceFile, commentKind?: CommentKind, hasTrailingNewLine?: boolean) {
-    forEachLeadingCommentRange(sourceFile.text, sourceNode.pos, getAddCommentsFunction(targetNode, sourceFile, commentKind, hasTrailingNewLine, addSyntheticLeadingComment));
+    forEachLeadingCommentRange(
+        sourceFile.text,
+        sourceNode.pos,
+        getAddCommentsFunction(targetNode, sourceFile, commentKind, hasTrailingNewLine, addSyntheticLeadingComment),
+    );
 }
 
 /** @internal */
 export function copyTrailingComments(sourceNode: Node, targetNode: Node, sourceFile: SourceFile, commentKind?: CommentKind, hasTrailingNewLine?: boolean) {
-    forEachTrailingCommentRange(sourceFile.text, sourceNode.end, getAddCommentsFunction(targetNode, sourceFile, commentKind, hasTrailingNewLine, addSyntheticTrailingComment));
+    forEachTrailingCommentRange(
+        sourceFile.text,
+        sourceNode.end,
+        getAddCommentsFunction(targetNode, sourceFile, commentKind, hasTrailingNewLine, addSyntheticTrailingComment),
+    );
 }
 
 /**
@@ -3385,7 +3412,11 @@ export function copyTrailingComments(sourceNode: Node, targetNode: Node, sourceF
  * @internal
  */
 export function copyTrailingAsLeadingComments(sourceNode: Node, targetNode: Node, sourceFile: SourceFile, commentKind?: CommentKind, hasTrailingNewLine?: boolean) {
-    forEachTrailingCommentRange(sourceFile.text, sourceNode.pos, getAddCommentsFunction(targetNode, sourceFile, commentKind, hasTrailingNewLine, addSyntheticLeadingComment));
+    forEachTrailingCommentRange(
+        sourceFile.text,
+        sourceNode.pos,
+        getAddCommentsFunction(targetNode, sourceFile, commentKind, hasTrailingNewLine, addSyntheticLeadingComment),
+    );
 }
 
 function getAddCommentsFunction(
@@ -4046,7 +4077,11 @@ export function mapOneOrMany<T, U>(valueOrArray: T | readonly T[], f: (x: T, i: 
 /** @internal */
 export function mapOneOrMany<T, U>(valueOrArray: T | readonly T[] | undefined, f: (x: T, i: number) => U, resultSelector: (x: U[]) => U): U | undefined;
 /** @internal */
-export function mapOneOrMany<T, U>(valueOrArray: T | readonly T[] | undefined, f: (x: T, i: number) => U, resultSelector: (x: U[]) => U | U[] = identity): U | U[] | undefined {
+export function mapOneOrMany<T, U>(
+    valueOrArray: T | readonly T[] | undefined,
+    f: (x: T, i: number) => U,
+    resultSelector: (x: U[]) => U | U[] = identity,
+): U | U[] | undefined {
     return valueOrArray ? isArray(valueOrArray) ? resultSelector(map(valueOrArray, f)) : f(valueOrArray, 0) : undefined;
 }
 
@@ -4304,7 +4339,12 @@ export function fileShouldUseJavaScriptRequire(file: SourceFile | string, progra
     const compilerOptions = program.getCompilerOptions();
     const moduleKind = getEmitModuleKind(compilerOptions);
     const impliedNodeFormat = typeof file === "string"
-        ? getImpliedNodeFormatForFile(toPath(file, host.getCurrentDirectory(), hostGetCanonicalFileName(host)), program.getPackageJsonInfoCache?.(), host, compilerOptions)
+        ? getImpliedNodeFormatForFile(
+            toPath(file, host.getCurrentDirectory(), hostGetCanonicalFileName(host)),
+            program.getPackageJsonInfoCache?.(),
+            host,
+            compilerOptions,
+        )
         : file.impliedNodeFormat;
 
     if (impliedNodeFormat === ModuleKind.ESNext) {

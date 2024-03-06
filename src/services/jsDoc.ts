@@ -270,7 +270,10 @@ function getJSDocPropertyTagsInfo(nodes: readonly JSDocTag[] | undefined, checke
     return flatMap(
         nodes,
         propTag =>
-            concatenate([{ name: propTag.tagName.text, text: getCommentDisplayParts(propTag, checker) }], getJSDocPropertyTagsInfo(tryGetJSDocPropertyTags(propTag), checker)),
+            concatenate(
+                [{ name: propTag.tagName.text, text: getCommentDisplayParts(propTag, checker) }],
+                getJSDocPropertyTagsInfo(tryGetJSDocPropertyTags(propTag), checker),
+            ),
     );
 }
 
@@ -477,7 +480,12 @@ export function getJSDocParameterNameCompletionDetails(name: string): Completion
  *
  * @internal
  */
-export function getDocCommentTemplateAtPosition(newLine: string, sourceFile: SourceFile, position: number, options?: DocCommentTemplateOptions): TextInsertion | undefined {
+export function getDocCommentTemplateAtPosition(
+    newLine: string,
+    sourceFile: SourceFile,
+    position: number,
+    options?: DocCommentTemplateOptions,
+): TextInsertion | undefined {
     const tokenAtPos = getTokenAtPosition(sourceFile, position);
     const existingDocComment = findAncestor(tokenAtPos, isJSDoc);
     if (existingDocComment && (existingDocComment.comment !== undefined || length(existingDocComment.tags))) {

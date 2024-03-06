@@ -120,7 +120,8 @@ export function getDefinitionAtPosition(
     stopAtAlias?: boolean,
 ): readonly DefinitionInfo[] | undefined {
     const resolvedRef = getReferenceAtPosition(sourceFile, position, program);
-    const fileReferenceDefinition = resolvedRef && [getDefinitionInfoForFileReference(resolvedRef.reference.fileName, resolvedRef.fileName, resolvedRef.unverified)] || emptyArray;
+    const fileReferenceDefinition = resolvedRef && [getDefinitionInfoForFileReference(resolvedRef.reference.fileName, resolvedRef.fileName, resolvedRef.unverified)] ||
+        emptyArray;
     if (resolvedRef?.file) {
         // If `file` is missing, do a symbol-based lookup as well
         return fileReferenceDefinition;
@@ -375,7 +376,10 @@ export function getReferenceAtPosition(
 
     const typeReferenceDirective = findReferenceInPosition(sourceFile.typeReferenceDirectives, position);
     if (typeReferenceDirective) {
-        const reference = program.getResolvedTypeReferenceDirectives().get(typeReferenceDirective.fileName, typeReferenceDirective.resolutionMode || sourceFile.impliedNodeFormat)
+        const reference = program.getResolvedTypeReferenceDirectives().get(
+            typeReferenceDirective.fileName,
+            typeReferenceDirective.resolutionMode || sourceFile.impliedNodeFormat,
+        )
             ?.resolvedTypeReferenceDirective;
         const file = reference && program.getSourceFile(reference.resolvedFileName!); // TODO:GH#18217
         return file && { reference: typeReferenceDirective, fileName: file.fileName, file, unverified: false };
@@ -499,7 +503,8 @@ export function getTypeDefinitionAtPosition(typeChecker: TypeChecker, sourceFile
         [typeAtLocation, definitionFromType(typeAtLocation, typeChecker, node, failedAliasResolution)];
 
     return typeDefinitions.length ? [...getFirstTypeArgumentDefinitions(typeChecker, resolvedType, node, failedAliasResolution), ...typeDefinitions]
-        : !(symbol.flags & SymbolFlags.Value) && symbol.flags & SymbolFlags.Type ? getDefinitionFromSymbol(typeChecker, skipAlias(symbol, typeChecker), node, failedAliasResolution)
+        : !(symbol.flags & SymbolFlags.Value) && symbol.flags & SymbolFlags.Type ?
+        getDefinitionFromSymbol(typeChecker, skipAlias(symbol, typeChecker), node, failedAliasResolution)
         : undefined;
 }
 
@@ -516,7 +521,8 @@ function tryGetReturnTypeOfFunction(symbol: Symbol, type: Type, checker: TypeChe
     if (
         type.symbol === symbol ||
         // At `const f = () => {}`, the symbol is `f` and the type symbol is at `() => {}`
-        symbol.valueDeclaration && type.symbol && isVariableDeclaration(symbol.valueDeclaration) && symbol.valueDeclaration.initializer === type.symbol.valueDeclaration as Node
+        symbol.valueDeclaration && type.symbol && isVariableDeclaration(symbol.valueDeclaration) &&
+            symbol.valueDeclaration.initializer === type.symbol.valueDeclaration as Node
     ) {
         const sigs = type.getCallSignatures();
         if (sigs.length === 1) return checker.getReturnTypeOfSignature(first(sigs));
@@ -616,7 +622,13 @@ function isExpandoDeclaration(node: Declaration): boolean {
     return !!containingAssignment && getAssignmentDeclarationKind(containingAssignment) === AssignmentDeclarationKind.Property;
 }
 
-function getDefinitionFromSymbol(typeChecker: TypeChecker, symbol: Symbol, node: Node, failedAliasResolution?: boolean, excludeDeclaration?: Node): DefinitionInfo[] | undefined {
+function getDefinitionFromSymbol(
+    typeChecker: TypeChecker,
+    symbol: Symbol,
+    node: Node,
+    failedAliasResolution?: boolean,
+    excludeDeclaration?: Node,
+): DefinitionInfo[] | undefined {
     const filteredDeclarations = filter(symbol.declarations, d => d !== excludeDeclaration);
     const withoutExpandos = filter(filteredDeclarations, d => !isExpandoDeclaration(d));
     const results = some(withoutExpandos) ? withoutExpandos : filteredDeclarations;

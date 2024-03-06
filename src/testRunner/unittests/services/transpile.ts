@@ -52,7 +52,13 @@ describe("unittests:: services:: Transpile", () => {
 
                     if (canUseOldTranspile) {
                         oldTranspileDiagnostics = [];
-                        oldTranspileResult = ts.transpile(input, transpileOptions.compilerOptions, transpileOptions.fileName, oldTranspileDiagnostics, transpileOptions.moduleName);
+                        oldTranspileResult = ts.transpile(
+                            input,
+                            transpileOptions.compilerOptions,
+                            transpileOptions.fileName,
+                            oldTranspileDiagnostics,
+                            transpileOptions.moduleName,
+                        );
                     }
                 });
 

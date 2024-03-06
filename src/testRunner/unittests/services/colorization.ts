@@ -80,7 +80,8 @@ describe("unittests:: services:: Colorization", () => {
                 assert.equal(
                     actualEntry.length,
                     expectedEntry.value.length,
-                    "Classification length does not match expected. Expected: " + ts.TokenClass[expectedEntry.value.length] + ", Actual: " + ts.TokenClass[actualEntry.length],
+                    "Classification length does not match expected. Expected: " + ts.TokenClass[expectedEntry.value.length] + ", Actual: " +
+                        ts.TokenClass[actualEntry.length],
                 );
             }
         }
@@ -107,7 +108,15 @@ describe("unittests:: services:: Colorization", () => {
         });
 
         it("correctly classifies a comment after a divide operator", () => {
-            testLexicalClassification("1 / 2 // comment", ts.EndOfLineState.None, numberLiteral("1"), whitespace(" "), operator("/"), numberLiteral("2"), comment("// comment"));
+            testLexicalClassification(
+                "1 / 2 // comment",
+                ts.EndOfLineState.None,
+                numberLiteral("1"),
+                whitespace(" "),
+                operator("/"),
+                numberLiteral("2"),
+                comment("// comment"),
+            );
         });
 
         it("correctly classifies a literal after a divide operator", () => {
@@ -129,7 +138,12 @@ describe("unittests:: services:: Colorization", () => {
         });
 
         it("correctly classifies a multiline string with three backslashes", () => {
-            testLexicalClassification("'line1\\\\\\", ts.EndOfLineState.None, stringLiteral("'line1\\\\\\"), finalEndOfLineState(ts.EndOfLineState.InSingleQuoteStringLiteral));
+            testLexicalClassification(
+                "'line1\\\\\\",
+                ts.EndOfLineState.None,
+                stringLiteral("'line1\\\\\\"),
+                finalEndOfLineState(ts.EndOfLineState.InSingleQuoteStringLiteral),
+            );
         });
 
         it("correctly classifies an unterminated single-line string with no backslashes", () => {
@@ -145,11 +159,21 @@ describe("unittests:: services:: Colorization", () => {
         });
 
         it("correctly classifies the continuing line of a multiline string ending in one backslash", () => {
-            testLexicalClassification("\\", ts.EndOfLineState.InDoubleQuoteStringLiteral, stringLiteral("\\"), finalEndOfLineState(ts.EndOfLineState.InDoubleQuoteStringLiteral));
+            testLexicalClassification(
+                "\\",
+                ts.EndOfLineState.InDoubleQuoteStringLiteral,
+                stringLiteral("\\"),
+                finalEndOfLineState(ts.EndOfLineState.InDoubleQuoteStringLiteral),
+            );
         });
 
         it("correctly classifies the continuing line of a multiline string ending in three backslashes", () => {
-            testLexicalClassification("\\", ts.EndOfLineState.InDoubleQuoteStringLiteral, stringLiteral("\\"), finalEndOfLineState(ts.EndOfLineState.InDoubleQuoteStringLiteral));
+            testLexicalClassification(
+                "\\",
+                ts.EndOfLineState.InDoubleQuoteStringLiteral,
+                stringLiteral("\\"),
+                finalEndOfLineState(ts.EndOfLineState.InDoubleQuoteStringLiteral),
+            );
         });
 
         it("correctly classifies the last line of an unterminated multiline string ending in no backslashes", () => {
@@ -258,7 +282,12 @@ describe("unittests:: services:: Colorization", () => {
             );
         });
         it("classifies the entire line of an unterminated multiline template middle/end", () => {
-            testLexicalClassification("...", ts.EndOfLineState.InTemplateMiddleOrTail, stringLiteral("..."), finalEndOfLineState(ts.EndOfLineState.InTemplateMiddleOrTail));
+            testLexicalClassification(
+                "...",
+                ts.EndOfLineState.InTemplateMiddleOrTail,
+                stringLiteral("..."),
+                finalEndOfLineState(ts.EndOfLineState.InTemplateMiddleOrTail),
+            );
         });
         it("classifies a termination of a multiline template head", () => {
             testLexicalClassification(
@@ -269,7 +298,12 @@ describe("unittests:: services:: Colorization", () => {
             );
         });
         it("classifies the termination of a multiline no substitution template", () => {
-            testLexicalClassification("...`", ts.EndOfLineState.InTemplateHeadOrNoSubstitutionTemplate, stringLiteral("...`"), finalEndOfLineState(ts.EndOfLineState.None));
+            testLexicalClassification(
+                "...`",
+                ts.EndOfLineState.InTemplateHeadOrNoSubstitutionTemplate,
+                stringLiteral("...`"),
+                finalEndOfLineState(ts.EndOfLineState.None),
+            );
         });
         it("classifies the substitution parts and middle/tail of a multiline template string", () => {
             testLexicalClassification(
@@ -330,7 +364,14 @@ describe("unittests:: services:: Colorization", () => {
         });
 
         it("classifies partially written generics correctly.", () => {
-            testLexicalClassification("Foo<number", ts.EndOfLineState.None, identifier("Foo"), operator("<"), identifier("number"), finalEndOfLineState(ts.EndOfLineState.None));
+            testLexicalClassification(
+                "Foo<number",
+                ts.EndOfLineState.None,
+                identifier("Foo"),
+                operator("<"),
+                identifier("number"),
+                finalEndOfLineState(ts.EndOfLineState.None),
+            );
 
             // Looks like a cast, should get classified as a keyword.
             testLexicalClassification("<number", ts.EndOfLineState.None, operator("<"), keyword("number"), finalEndOfLineState(ts.EndOfLineState.None));

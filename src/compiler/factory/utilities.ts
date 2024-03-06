@@ -1726,9 +1726,15 @@ export function formatGeneratedNamePart(part: string | undefined): string;
  *
  * @internal
  */
-export function formatGeneratedNamePart(part: string | GeneratedNamePart | undefined, generateName: (name: GeneratedIdentifier | GeneratedPrivateIdentifier) => string): string;
+export function formatGeneratedNamePart(
+    part: string | GeneratedNamePart | undefined,
+    generateName: (name: GeneratedIdentifier | GeneratedPrivateIdentifier) => string,
+): string;
 /** @internal */
-export function formatGeneratedNamePart(part: string | GeneratedNamePart | undefined, generateName?: (name: GeneratedIdentifier | GeneratedPrivateIdentifier) => string): string {
+export function formatGeneratedNamePart(
+    part: string | GeneratedNamePart | undefined,
+    generateName?: (name: GeneratedIdentifier | GeneratedPrivateIdentifier) => string,
+): string {
     return typeof part === "object" ? formatGeneratedName(/*privateName*/ false, part.prefix, part.node, part.suffix, generateName!) :
         typeof part === "string" ? part.length > 0 && part.charCodeAt(0) === CharacterCodes.hash ? part.slice(1) : part :
         "";
@@ -1792,7 +1798,12 @@ export function formatGeneratedName(
  *
  * @internal
  */
-export function createAccessorPropertyBackingField(factory: NodeFactory, node: PropertyDeclaration, modifiers: ModifiersArray | undefined, initializer: Expression | undefined) {
+export function createAccessorPropertyBackingField(
+    factory: NodeFactory,
+    node: PropertyDeclaration,
+    modifiers: ModifiersArray | undefined,
+    initializer: Expression | undefined,
+) {
     return factory.updatePropertyDeclaration(
         node,
         modifiers,

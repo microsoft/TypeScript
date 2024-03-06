@@ -91,7 +91,13 @@ export function createSourceMapGenerator(
 
     function addSource(fileName: string) {
         enter();
-        const source = getRelativePathToDirectoryOrUrl(sourcesDirectoryPath, fileName, host.getCurrentDirectory(), host.getCanonicalFileName, /*isAbsolutePathAnUrl*/ true);
+        const source = getRelativePathToDirectoryOrUrl(
+            sourcesDirectoryPath,
+            fileName,
+            host.getCurrentDirectory(),
+            host.getCanonicalFileName,
+            /*isAbsolutePathAnUrl*/ true,
+        );
 
         let sourceIndex = sourceToSourceIndexMap.get(source);
         if (sourceIndex === undefined) {
@@ -179,7 +185,14 @@ export function createSourceMapGenerator(
         exit();
     }
 
-    function appendSourceMap(generatedLine: number, generatedCharacter: number, map: RawSourceMap, sourceMapPath: string, start?: LineAndCharacter, end?: LineAndCharacter) {
+    function appendSourceMap(
+        generatedLine: number,
+        generatedCharacter: number,
+        map: RawSourceMap,
+        sourceMapPath: string,
+        start?: LineAndCharacter,
+        end?: LineAndCharacter,
+    ) {
         Debug.assert(generatedLine >= pendingGeneratedLine, "generatedLine cannot backtrack");
         Debug.assert(generatedCharacter >= 0, "generatedCharacter cannot be negative");
         enter();

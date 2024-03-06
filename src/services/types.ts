@@ -603,7 +603,13 @@ export interface LanguageService {
     /** @deprecated Use the signature with `UserPreferences` instead. */
     getRenameInfo(fileName: string, position: number, options?: RenameInfoOptions): RenameInfo;
 
-    findRenameLocations(fileName: string, position: number, findInStrings: boolean, findInComments: boolean, preferences: UserPreferences): readonly RenameLocation[] | undefined;
+    findRenameLocations(
+        fileName: string,
+        position: number,
+        findInStrings: boolean,
+        findInComments: boolean,
+        preferences: UserPreferences,
+    ): readonly RenameLocation[] | undefined;
     /** @deprecated Pass `providePrefixAndSuffixTextForRename` as part of a `UserPreferences` parameter. */
     findRenameLocations(
         fileName: string,
@@ -648,7 +654,12 @@ export interface LanguageService {
     getFormattingEditsForDocument(fileName: string, options: FormatCodeOptions | FormatCodeSettings): TextChange[];
     getFormattingEditsAfterKeystroke(fileName: string, position: number, key: string, options: FormatCodeOptions | FormatCodeSettings): TextChange[];
 
-    getDocCommentTemplateAtPosition(fileName: string, position: number, options?: DocCommentTemplateOptions, formatOptions?: FormatCodeSettings): TextInsertion | undefined;
+    getDocCommentTemplateAtPosition(
+        fileName: string,
+        position: number,
+        options?: DocCommentTemplateOptions,
+        formatOptions?: FormatCodeSettings,
+    ): TextInsertion | undefined;
 
     isValidBraceCompletionAtPosition(fileName: string, position: number, openingBrace: number): boolean;
     /**
@@ -720,7 +731,12 @@ export interface LanguageService {
         kind?: string,
     ): { newFileName: string; files: string[]; };
     organizeImports(args: OrganizeImportsArgs, formatOptions: FormatCodeSettings, preferences: UserPreferences | undefined): readonly FileTextChanges[];
-    getEditsForFileRename(oldFilePath: string, newFilePath: string, formatOptions: FormatCodeSettings, preferences: UserPreferences | undefined): readonly FileTextChanges[];
+    getEditsForFileRename(
+        oldFilePath: string,
+        newFilePath: string,
+        formatOptions: FormatCodeSettings,
+        preferences: UserPreferences | undefined,
+    ): readonly FileTextChanges[];
 
     getEmitOutput(fileName: string, emitOnlyDtsFiles?: boolean, forceDtsEmit?: boolean): EmitOutput;
 
@@ -1946,7 +1962,11 @@ export interface Refactor {
     getEditsForAction(context: RefactorContext, actionName: string, interactiveRefactorArguments?: InteractiveRefactorArguments): RefactorEditInfo | undefined;
 
     /** Compute (quickly) which actions are available here */
-    getAvailableActions(context: RefactorContext, includeInteractive?: boolean, interactiveRefactorArguments?: InteractiveRefactorArguments): readonly ApplicableRefactorInfo[];
+    getAvailableActions(
+        context: RefactorContext,
+        includeInteractive?: boolean,
+        interactiveRefactorArguments?: InteractiveRefactorArguments,
+    ): readonly ApplicableRefactorInfo[];
 }
 
 /** @internal */

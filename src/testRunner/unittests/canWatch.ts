@@ -120,7 +120,11 @@ describe("unittests:: canWatch::", () => {
         },
     );
 
-    function baselineCanWatchForRoot(paths: readonly ts.Path[], baseline: string[], baselineForRoot: (rootPathCompoments: Readonly<ts.PathPathComponents>, root: ts.Path) => void) {
+    function baselineCanWatchForRoot(
+        paths: readonly ts.Path[],
+        baseline: string[],
+        baselineForRoot: (rootPathCompoments: Readonly<ts.PathPathComponents>, root: ts.Path) => void,
+    ) {
         paths.forEach(rootDirForResolution => {
             const root = ts.getRootDirectoryOfResolutionCache(rootDirForResolution, ts.returnUndefined) as ts.Path;
             assert(root === rootDirForResolution);

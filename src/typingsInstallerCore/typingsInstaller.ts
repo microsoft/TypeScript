@@ -369,7 +369,8 @@ export abstract class TypingsInstaller {
                 return undefined;
             }
             if (
-                this.packageNameToTypingLocation.get(typingKey) && JsTyping.isTypingUpToDate(this.packageNameToTypingLocation.get(typingKey)!, this.typesRegistry.get(typingKey)!)
+                this.packageNameToTypingLocation.get(typingKey) &&
+                JsTyping.isTypingUpToDate(this.packageNameToTypingLocation.get(typingKey)!, this.typesRegistry.get(typingKey)!)
             ) {
                 if (this.log.isEnabled()) this.log.writeLine(`'${typing}':: '${typingKey}' already has an up-to-date typing - skipping...`);
                 return undefined;

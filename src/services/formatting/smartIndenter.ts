@@ -216,7 +216,15 @@ export namespace SmartIndenter {
                     // handle cases when codefix is about to be inserted before the close brace
                     ? assumeNewLineBeforeCloseBrace && nextTokenKind === NextTokenKind.CloseBrace ? options.indentSize : 0
                     : lineAtPosition !== currentStart.line ? options.indentSize : 0;
-                return getIndentationForNodeWorker(current, currentStart, /*ignoreActualIndentationRange*/ undefined, indentationDelta!, sourceFile, /*isNextChild*/ true, options); // TODO: GH#18217
+                return getIndentationForNodeWorker(
+                    current,
+                    currentStart,
+                    /*ignoreActualIndentationRange*/ undefined,
+                    indentationDelta!,
+                    sourceFile,
+                    /*isNextChild*/ true,
+                    options,
+                ); // TODO: GH#18217
             }
 
             // check if current node is a list item - if yes, take indentation from it
@@ -766,7 +774,13 @@ export namespace SmartIndenter {
      * True when the parent node should indent the given child by an explicit rule.
      * @param isNextChild If true, we are judging indent of a hypothetical child *after* this one, not the current child.
      */
-    export function shouldIndentChildNode(settings: FormatCodeSettings, parent: TextRangeWithKind, child?: Node, sourceFile?: SourceFileLike, isNextChild = false): boolean {
+    export function shouldIndentChildNode(
+        settings: FormatCodeSettings,
+        parent: TextRangeWithKind,
+        child?: Node,
+        sourceFile?: SourceFileLike,
+        isNextChild = false,
+    ): boolean {
         return nodeWillIndentChild(settings, parent, child, sourceFile, /*indentByDefault*/ false)
             && !(isNextChild && child && isControlFlowEndingStatement(child.kind, parent));
     }

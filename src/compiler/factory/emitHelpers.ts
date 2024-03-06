@@ -120,7 +120,12 @@ export interface EmitHelperFactory {
     createAsyncDelegatorHelper(expression: Expression): Expression;
     createAsyncValuesHelper(expression: Expression): Expression;
     // ES2018 Destructuring Helpers
-    createRestHelper(value: Expression, elements: readonly BindingOrAssignmentElement[], computedTempVariables: readonly Expression[] | undefined, location: TextRange): Expression;
+    createRestHelper(
+        value: Expression,
+        elements: readonly BindingOrAssignmentElement[],
+        computedTempVariables: readonly Expression[] | undefined,
+        location: TextRange,
+    ): Expression;
     // ES2017 Helpers
     createAwaiterHelper(
         hasLexicalThis: boolean,

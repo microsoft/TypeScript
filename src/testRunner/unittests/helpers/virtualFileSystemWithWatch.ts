@@ -83,11 +83,17 @@ export interface TestServerHostCreationParameters {
     fsWatchWithTimestamp?: boolean;
 }
 
-export function createWatchedSystem(fileOrFolderList: FileOrFolderOrSymLinkMap | readonly FileOrFolderOrSymLink[], params?: TestServerHostCreationParameters): TestServerHost {
+export function createWatchedSystem(
+    fileOrFolderList: FileOrFolderOrSymLinkMap | readonly FileOrFolderOrSymLink[],
+    params?: TestServerHostCreationParameters,
+): TestServerHost {
     return new TestServerHost(fileOrFolderList, params);
 }
 
-export function createServerHost(fileOrFolderList: FileOrFolderOrSymLinkMap | readonly FileOrFolderOrSymLink[], params?: TestServerHostCreationParameters): TestServerHost {
+export function createServerHost(
+    fileOrFolderList: FileOrFolderOrSymLinkMap | readonly FileOrFolderOrSymLink[],
+    params?: TestServerHostCreationParameters,
+): TestServerHost {
     const host = new TestServerHost(fileOrFolderList, params);
     // Just like sys, patch the host to use writeFile
     patchWriteFileEnsuringDirectory(host);
@@ -505,11 +511,28 @@ export class TestServerHost implements server.ServerHost, FormatDiagnosticsHost,
             if (options && options.invokeDirectoryWatcherInsteadOfFileChanged) {
                 const directoryFullPath = getDirectoryPath(currentEntry.fullPath);
                 this.invokeFileWatcher(directoryFullPath, FileWatcherEventKind.Changed, currentEntry.modifiedTime);
-                this.invokeFsWatchesCallbacks(directoryFullPath, "rename", currentEntry.modifiedTime, currentEntry.fullPath, options.useTildeAsSuffixInRenameEventFileName);
-                this.invokeRecursiveFsWatches(directoryFullPath, "rename", currentEntry.modifiedTime, currentEntry.fullPath, options.useTildeAsSuffixInRenameEventFileName);
+                this.invokeFsWatchesCallbacks(
+                    directoryFullPath,
+                    "rename",
+                    currentEntry.modifiedTime,
+                    currentEntry.fullPath,
+                    options.useTildeAsSuffixInRenameEventFileName,
+                );
+                this.invokeRecursiveFsWatches(
+                    directoryFullPath,
+                    "rename",
+                    currentEntry.modifiedTime,
+                    currentEntry.fullPath,
+                    options.useTildeAsSuffixInRenameEventFileName,
+                );
             }
             else {
-                this.invokeFileAndFsWatches(currentEntry.fullPath, FileWatcherEventKind.Changed, currentEntry.modifiedTime, options?.useTildeAsSuffixInRenameEventFileName);
+                this.invokeFileAndFsWatches(
+                    currentEntry.fullPath,
+                    FileWatcherEventKind.Changed,
+                    currentEntry.modifiedTime,
+                    options?.useTildeAsSuffixInRenameEventFileName,
+                );
             }
         }
     }
@@ -657,7 +680,12 @@ export class TestServerHost implements server.ServerHost, FormatDiagnosticsHost,
             Debug.assert(fileOrDirectory.entries.length === 0 || isRenaming);
         }
         if (!options?.ignoreDelete) {
-            this.invokeFileAndFsWatches(fileOrDirectory.fullPath, FileWatcherEventKind.Deleted, /*modifiedTime*/ undefined, options?.useTildeAsSuffixInRenameEventFileName);
+            this.invokeFileAndFsWatches(
+                fileOrDirectory.fullPath,
+                FileWatcherEventKind.Deleted,
+                /*modifiedTime*/ undefined,
+                options?.useTildeAsSuffixInRenameEventFileName,
+            );
         }
         this.inodes?.delete(fileOrDirectory.path);
         if (!options?.ignoreDelete) {

@@ -691,7 +691,12 @@ export function transformES2017(context: TransformationContext): (x: SourceFile 
 
     function createCaptureArgumentsStatement() {
         Debug.assert(lexicalArgumentsBinding);
-        const variable = factory.createVariableDeclaration(lexicalArgumentsBinding, /*exclamationToken*/ undefined, /*type*/ undefined, factory.createIdentifier("arguments"));
+        const variable = factory.createVariableDeclaration(
+            lexicalArgumentsBinding,
+            /*exclamationToken*/ undefined,
+            /*type*/ undefined,
+            factory.createIdentifier("arguments"),
+        );
         const statement = factory.createVariableStatement(/*modifiers*/ undefined, [variable]);
         startOnNewLine(statement);
         addEmitFlags(statement, EmitFlags.CustomPrologue);

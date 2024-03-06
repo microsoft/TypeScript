@@ -315,7 +315,8 @@ function stringLiteralCompletionDetails(
             return match && createCompletionDetailsForSymbol(match, match.name, checker, sourceFile, location, cancellationToken);
         }
         case StringLiteralCompletionKind.Types:
-            return find(completion.types, t => t.value === name) ? createCompletionDetails(name, ScriptElementKindModifier.none, ScriptElementKind.string, [textPart(name)])
+            return find(completion.types, t => t.value === name) ?
+                createCompletionDetails(name, ScriptElementKindModifier.none, ScriptElementKind.string, [textPart(name)])
                 : undefined;
         default:
             return Debug.assertNever(completion);
@@ -442,11 +443,17 @@ function getStringLiteralCompletionEntries(
         case SyntaxKind.NewExpression:
         case SyntaxKind.JsxAttribute:
             if (!isRequireCallArgument(node) && !isImportCall(parent)) {
-                const argumentInfo = SignatureHelp.getArgumentInfoForCompletions(parent.kind === SyntaxKind.JsxAttribute ? parent.parent : node, position, sourceFile, typeChecker);
+                const argumentInfo = SignatureHelp.getArgumentInfoForCompletions(
+                    parent.kind === SyntaxKind.JsxAttribute ? parent.parent : node,
+                    position,
+                    sourceFile,
+                    typeChecker,
+                );
                 // Get string literal completions from specialized signatures of the target
                 // i.e. declare function f(a: 'A');
                 // f("/*completion position*/")
-                return argumentInfo && getStringLiteralCompletionsFromSignature(argumentInfo.invocation, node, argumentInfo, typeChecker) || fromContextualType(ContextFlags.None);
+                return argumentInfo && getStringLiteralCompletionsFromSignature(argumentInfo.invocation, node, argumentInfo, typeChecker) ||
+                    fromContextualType(ContextFlags.None);
             }
             // falls through (is `require("")` or `require(""` or `import("")`)
 
@@ -478,7 +485,11 @@ function getStringLiteralCompletionEntries(
             case SyntaxKind.TypeReference: {
                 const typeArgument = findAncestor(parent, n => n.parent === grandParent) as LiteralTypeNode;
                 if (typeArgument) {
-                    return { kind: StringLiteralCompletionKind.Types, types: getStringLiteralTypes(typeChecker.getTypeArgumentConstraint(typeArgument)), isNewIdentifier: false };
+                    return {
+                        kind: StringLiteralCompletionKind.Types,
+                        types: getStringLiteralTypes(typeChecker.getTypeArgumentConstraint(typeArgument)),
+                        isNewIdentifier: false,
+                    };
                 }
                 return undefined;
             }
@@ -573,7 +584,10 @@ function stringLiteralCompletionsFromProperties(type: Type | undefined): StringL
     };
 }
 
-function stringLiteralCompletionsForObjectLiteral(checker: TypeChecker, objectLiteralExpression: ObjectLiteralExpression): StringLiteralCompletionsFromProperties | undefined {
+function stringLiteralCompletionsForObjectLiteral(
+    checker: TypeChecker,
+    objectLiteralExpression: ObjectLiteralExpression,
+): StringLiteralCompletionsFromProperties | undefined {
     const contextualType = checker.getContextualType(objectLiteralExpression);
     if (!contextualType) return undefined;
 
@@ -698,7 +712,9 @@ function getCompletionEntriesForRelativeModules(
         );
     }
     else {
-        return arrayFrom(getCompletionEntriesForDirectoryFragment(literalValue, scriptDirectory, extensionOptions, host, /*moduleSpecifierIsRelative*/ true, scriptPath).values());
+        return arrayFrom(
+            getCompletionEntriesForDirectoryFragment(literalValue, scriptDirectory, extensionOptions, host, /*moduleSpecifierIsRelative*/ true, scriptPath).values(),
+        );
     }
 }
 
@@ -757,7 +773,9 @@ function getCompletionEntriesForDirectoryFragmentWithRootDirs(
         flatMap(
             baseDirectories,
             baseDirectory =>
-                arrayFrom(getCompletionEntriesForDirectoryFragment(fragment, baseDirectory, extensionOptions, host, /*moduleSpecifierIsRelative*/ true, exclude).values()),
+                arrayFrom(
+                    getCompletionEntriesForDirectoryFragment(fragment, baseDirectory, extensionOptions, host, /*moduleSpecifierIsRelative*/ true, exclude).values(),
+                ),
         ),
         (itemA, itemB) => itemA.name === itemB.name && itemA.kind === itemB.kind && itemA.extension === itemB.extension,
     );
@@ -836,7 +854,12 @@ function getCompletionEntriesForDirectoryFragment(
                 continue;
             }
 
-            const { name, extension } = getFilenameWithExtensionOption(getBaseFileName(filePath), host.getCompilationSettings(), extensionOptions, /*isExportsWildcard*/ false);
+            const { name, extension } = getFilenameWithExtensionOption(
+                getBaseFileName(filePath),
+                host.getCompilationSettings(),
+                extensionOptions,
+                /*isExportsWildcard*/ false,
+            );
             result.add(nameAndKind(name, ScriptElementKind.scriptElement, extension));
         }
     }
@@ -923,7 +946,17 @@ function addCompletionEntriesFromPaths(
         const lengthB = typeof patternB === "object" ? patternB.prefix.length : b.length;
         return compareValues(lengthB, lengthA);
     };
-    return addCompletionEntriesFromPathsOrExports(result, /*isExports*/ false, fragment, baseDirectory, extensionOptions, host, getOwnKeys(paths), getPatternsForKey, comparePaths);
+    return addCompletionEntriesFromPathsOrExports(
+        result,
+        /*isExports*/ false,
+        fragment,
+        baseDirectory,
+        extensionOptions,
+        host,
+        getOwnKeys(paths),
+        getPatternsForKey,
+        comparePaths,
+    );
 }
 
 /** @returns whether `fragment` was a match for any `paths` (which should indicate whether any other path completions should be offered) */
@@ -1033,7 +1066,15 @@ function getCompletionEntriesForNonRelativeModules(
             let ancestorLookup: (directory: string) => void | undefined = ancestor => {
                 const nodeModules = combinePaths(ancestor, "node_modules");
                 if (tryDirectoryExists(host, nodeModules)) {
-                    getCompletionEntriesForDirectoryFragment(fragment, nodeModules, extensionOptions, host, /*moduleSpecifierIsRelative*/ false, /*exclude*/ undefined, result);
+                    getCompletionEntriesForDirectoryFragment(
+                        fragment,
+                        nodeModules,
+                        extensionOptions,
+                        host,
+                        /*moduleSpecifierIsRelative*/ false,
+                        /*exclude*/ undefined,
+                        result,
+                    );
                 }
             };
             if (fragmentDirectory && getResolvePackageJsonExports(compilerOptions)) {

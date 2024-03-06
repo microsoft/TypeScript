@@ -580,7 +580,10 @@ export function transformModule(context: TransformationContext): (x: SourceFile 
     }
 
     function getAMDImportExpressionForImport(node: ImportDeclaration | ExportDeclaration | ImportEqualsDeclaration) {
-        if (isImportEqualsDeclaration(node) || isExportDeclaration(node) || !getExternalModuleNameLiteral(factory, node, currentSourceFile, host, resolver, compilerOptions)) {
+        if (
+            isImportEqualsDeclaration(node) || isExportDeclaration(node) ||
+            !getExternalModuleNameLiteral(factory, node, currentSourceFile, host, resolver, compilerOptions)
+        ) {
             return undefined;
         }
         const name = getLocalNameForExternalImport(factory, node, currentSourceFile)!; // TODO: GH#18217
@@ -612,7 +615,10 @@ export function transformModule(context: TransformationContext): (x: SourceFile 
                     reduceLeft(
                         currentModuleInfo.exportedNames,
                         (prev, nextId) =>
-                            factory.createAssignment(factory.createPropertyAccessExpression(factory.createIdentifier("exports"), factory.createIdentifier(idText(nextId))), prev),
+                            factory.createAssignment(
+                                factory.createPropertyAccessExpression(factory.createIdentifier("exports"), factory.createIdentifier(idText(nextId))),
+                                prev,
+                            ),
                         factory.createVoidZero() as Expression,
                     ),
                 ),
@@ -776,7 +782,8 @@ export function transformModule(context: TransformationContext): (x: SourceFile 
         // This visitor does not need to descend into the tree if there is no dynamic import, destructuring assignment, or update expression
         // as export/import statements are only transformed at the top level of a file.
         if (
-            !(node.transformFlags & (TransformFlags.ContainsDynamicImport | TransformFlags.ContainsDestructuringAssignment | TransformFlags.ContainsUpdateExpressionForIdentifier))
+            !(node.transformFlags &
+                (TransformFlags.ContainsDynamicImport | TransformFlags.ContainsDestructuringAssignment | TransformFlags.ContainsUpdateExpressionForIdentifier))
         ) {
             return node;
         }
@@ -1985,7 +1992,11 @@ export function transformModule(context: TransformationContext): (x: SourceFile 
      * appended.
      * @param node The VariableDeclarationList whose exports are to be recorded.
      */
-    function appendExportsOfVariableDeclarationList(statements: Statement[] | undefined, node: VariableDeclarationList, isForInOrOfInitializer: boolean): Statement[] | undefined {
+    function appendExportsOfVariableDeclarationList(
+        statements: Statement[] | undefined,
+        node: VariableDeclarationList,
+        isForInOrOfInitializer: boolean,
+    ): Statement[] | undefined {
         if (currentModuleInfo.exportEquals) {
             return statements;
         }
@@ -2064,12 +2075,25 @@ export function transformModule(context: TransformationContext): (x: SourceFile 
      * appended.
      * @param decl The declaration to export.
      */
-    function appendExportsOfDeclaration(statements: Statement[] | undefined, seen: IdentifierNameMap<boolean>, decl: Declaration, liveBinding?: boolean): Statement[] | undefined {
+    function appendExportsOfDeclaration(
+        statements: Statement[] | undefined,
+        seen: IdentifierNameMap<boolean>,
+        decl: Declaration,
+        liveBinding?: boolean,
+    ): Statement[] | undefined {
         const name = factory.getDeclarationName(decl);
         const exportSpecifiers = currentModuleInfo.exportSpecifiers.get(name);
         if (exportSpecifiers) {
             for (const exportSpecifier of exportSpecifiers) {
-                statements = appendExportStatement(statements, seen, exportSpecifier.name, name, /*location*/ exportSpecifier.name, /*allowComments*/ undefined, liveBinding);
+                statements = appendExportStatement(
+                    statements,
+                    seen,
+                    exportSpecifier.name,
+                    name,
+                    /*location*/ exportSpecifier.name,
+                    /*allowComments*/ undefined,
+                    liveBinding,
+                );
             }
         }
         return statements;

@@ -184,7 +184,8 @@ function getRenameInfoForModule(node: StringLiteralLike, sourceFile: SourceFile,
 
     const moduleSourceFile = moduleSymbol.declarations && find(moduleSymbol.declarations, isSourceFile);
     if (!moduleSourceFile) return undefined;
-    const withoutIndex = endsWith(node.text, "/index") || endsWith(node.text, "/index.js") ? undefined : tryRemoveSuffix(removeFileExtension(moduleSourceFile.fileName), "/index");
+    const withoutIndex = endsWith(node.text, "/index") || endsWith(node.text, "/index.js") ? undefined
+        : tryRemoveSuffix(removeFileExtension(moduleSourceFile.fileName), "/index");
     const fileName = withoutIndex === undefined ? moduleSourceFile.fileName : withoutIndex;
     const kind = withoutIndex === undefined ? ScriptElementKind.moduleElement : ScriptElementKind.directory;
     const indexAfterLastSlash = node.text.lastIndexOf("/") + 1;
@@ -201,7 +202,14 @@ function getRenameInfoForModule(node: StringLiteralLike, sourceFile: SourceFile,
     };
 }
 
-function getRenameInfoSuccess(displayName: string, fullDisplayName: string, kind: ScriptElementKind, kindModifiers: string, node: Node, sourceFile: SourceFile): RenameInfoSuccess {
+function getRenameInfoSuccess(
+    displayName: string,
+    fullDisplayName: string,
+    kind: ScriptElementKind,
+    kindModifiers: string,
+    node: Node,
+    sourceFile: SourceFile,
+): RenameInfoSuccess {
     return {
         canRename: true,
         fileToRename: undefined,
