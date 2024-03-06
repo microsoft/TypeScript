@@ -66,7 +66,9 @@ import {
 } from "../../_namespaces/ts";
 
 /** @internal */
-export type GetSymbolAccessibilityDiagnostic = (symbolAccessibilityResult: SymbolAccessibilityResult) => SymbolAccessibilityDiagnostic | undefined;
+export type GetSymbolAccessibilityDiagnostic = (
+    symbolAccessibilityResult: SymbolAccessibilityResult,
+) => SymbolAccessibilityDiagnostic | undefined;
 
 /** @internal */
 export interface SymbolAccessibilityDiagnostic {
@@ -152,7 +154,8 @@ export function createGetSymbolAccessibilityDiagnosticForNodeName(node: Declarat
         if (isStatic(node)) {
             return symbolAccessibilityResult.errorModuleName ?
                 symbolAccessibilityResult.accessibility === SymbolAccessibility.CannotBeNamed ?
-                    Diagnostics.Public_static_property_0_of_exported_class_has_or_is_using_name_1_from_external_module_2_but_cannot_be_named :
+                    Diagnostics
+                        .Public_static_property_0_of_exported_class_has_or_is_using_name_1_from_external_module_2_but_cannot_be_named :
                     Diagnostics.Public_static_property_0_of_exported_class_has_or_is_using_name_1_from_private_module_2 :
                 Diagnostics.Public_static_property_0_of_exported_class_has_or_is_using_private_name_1;
         }
@@ -269,7 +272,8 @@ export function createGetSymbolAccessibilityDiagnosticForNode(node: DeclarationD
             if (isStatic(node)) {
                 return symbolAccessibilityResult.errorModuleName ?
                     symbolAccessibilityResult.accessibility === SymbolAccessibility.CannotBeNamed ?
-                        Diagnostics.Public_static_property_0_of_exported_class_has_or_is_using_name_1_from_external_module_2_but_cannot_be_named :
+                        Diagnostics
+                            .Public_static_property_0_of_exported_class_has_or_is_using_name_1_from_external_module_2_but_cannot_be_named :
                         Diagnostics.Public_static_property_0_of_exported_class_has_or_is_using_name_1_from_private_module_2 :
                     Diagnostics.Public_static_property_0_of_exported_class_has_or_is_using_private_name_1;
             }
@@ -300,7 +304,9 @@ export function createGetSymbolAccessibilityDiagnosticForNode(node: DeclarationD
         } : undefined;
     }
 
-    function getAccessorDeclarationTypeVisibilityError(symbolAccessibilityResult: SymbolAccessibilityResult): SymbolAccessibilityDiagnostic {
+    function getAccessorDeclarationTypeVisibilityError(
+        symbolAccessibilityResult: SymbolAccessibilityResult,
+    ): SymbolAccessibilityDiagnostic {
         let diagnosticMessage: DiagnosticMessage;
         if (node.kind === SyntaxKind.SetAccessor) {
             // Getters can infer the return type from the returned expression, but setters cannot, so the
@@ -372,7 +378,8 @@ export function createGetSymbolAccessibilityDiagnosticForNode(node: DeclarationD
                         symbolAccessibilityResult.accessibility === SymbolAccessibility.CannotBeNamed ?
                             Diagnostics
                                 .Return_type_of_public_static_method_from_exported_class_has_or_is_using_name_0_from_external_module_1_but_cannot_be_named :
-                            Diagnostics.Return_type_of_public_static_method_from_exported_class_has_or_is_using_name_0_from_private_module_1 :
+                            Diagnostics
+                                .Return_type_of_public_static_method_from_exported_class_has_or_is_using_name_0_from_private_module_1 :
                         Diagnostics.Return_type_of_public_static_method_from_exported_class_has_or_is_using_private_name_0;
                 }
                 else if (node.parent.kind === SyntaxKind.ClassDeclaration) {
@@ -420,12 +427,15 @@ export function createGetSymbolAccessibilityDiagnosticForNode(node: DeclarationD
         } : undefined;
     }
 
-    function getParameterDeclarationTypeVisibilityDiagnosticMessage(symbolAccessibilityResult: SymbolAccessibilityResult): DiagnosticMessage {
+    function getParameterDeclarationTypeVisibilityDiagnosticMessage(
+        symbolAccessibilityResult: SymbolAccessibilityResult,
+    ): DiagnosticMessage {
         switch (node.parent.kind) {
             case SyntaxKind.Constructor:
                 return symbolAccessibilityResult.errorModuleName ?
                     symbolAccessibilityResult.accessibility === SymbolAccessibility.CannotBeNamed ?
-                        Diagnostics.Parameter_0_of_constructor_from_exported_class_has_or_is_using_name_1_from_external_module_2_but_cannot_be_named :
+                        Diagnostics
+                            .Parameter_0_of_constructor_from_exported_class_has_or_is_using_name_1_from_external_module_2_but_cannot_be_named :
                         Diagnostics.Parameter_0_of_constructor_from_exported_class_has_or_is_using_name_1_from_private_module_2 :
                     Diagnostics.Parameter_0_of_constructor_from_exported_class_has_or_is_using_private_name_1;
 
@@ -455,7 +465,8 @@ export function createGetSymbolAccessibilityDiagnosticForNode(node: DeclarationD
                         symbolAccessibilityResult.accessibility === SymbolAccessibility.CannotBeNamed ?
                             Diagnostics
                                 .Parameter_0_of_public_static_method_from_exported_class_has_or_is_using_name_1_from_external_module_2_but_cannot_be_named :
-                            Diagnostics.Parameter_0_of_public_static_method_from_exported_class_has_or_is_using_name_1_from_private_module_2 :
+                            Diagnostics
+                                .Parameter_0_of_public_static_method_from_exported_class_has_or_is_using_name_1_from_private_module_2 :
                         Diagnostics.Parameter_0_of_public_static_method_from_exported_class_has_or_is_using_private_name_1;
                 }
                 else if (node.parent.parent.kind === SyntaxKind.ClassDeclaration) {
@@ -511,7 +522,8 @@ export function createGetSymbolAccessibilityDiagnosticForNode(node: DeclarationD
 
             case SyntaxKind.ConstructorType:
             case SyntaxKind.ConstructSignature:
-                diagnosticMessage = Diagnostics.Type_parameter_0_of_constructor_signature_from_exported_interface_has_or_is_using_private_name_1;
+                diagnosticMessage =
+                    Diagnostics.Type_parameter_0_of_constructor_signature_from_exported_interface_has_or_is_using_private_name_1;
                 break;
 
             case SyntaxKind.CallSignature:
@@ -521,7 +533,8 @@ export function createGetSymbolAccessibilityDiagnosticForNode(node: DeclarationD
             case SyntaxKind.MethodDeclaration:
             case SyntaxKind.MethodSignature:
                 if (isStatic(node.parent)) {
-                    diagnosticMessage = Diagnostics.Type_parameter_0_of_public_static_method_from_exported_class_has_or_is_using_private_name_1;
+                    diagnosticMessage =
+                        Diagnostics.Type_parameter_0_of_public_static_method_from_exported_class_has_or_is_using_private_name_1;
                 }
                 else if (node.parent.parent.kind === SyntaxKind.ClassDeclaration) {
                     diagnosticMessage = Diagnostics.Type_parameter_0_of_public_method_from_exported_class_has_or_is_using_private_name_1;

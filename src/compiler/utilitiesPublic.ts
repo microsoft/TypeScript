@@ -557,7 +557,8 @@ export function getTypeParameterOwner(d: Declaration): Declaration | undefined {
 export type ParameterPropertyDeclaration = ParameterDeclaration & { parent: ConstructorDeclaration; name: Identifier; };
 
 export function isParameterPropertyDeclaration(node: Node, parent: Node): node is ParameterPropertyDeclaration {
-    return isParameter(node) && hasSyntacticModifier(node, ModifierFlags.ParameterPropertyModifier) && parent.kind === SyntaxKind.Constructor;
+    return isParameter(node) && hasSyntacticModifier(node, ModifierFlags.ParameterPropertyModifier) &&
+        parent.kind === SyntaxKind.Constructor;
 }
 
 export function isEmptyBindingPattern(node: BindingName): node is BindingPattern {
@@ -650,7 +651,11 @@ export function validateLocaleAndSetLanguage(
     if (!matchResult) {
         if (errors) {
             errors.push(
-                createCompilerDiagnostic(Diagnostics.Locale_must_be_of_the_form_language_or_language_territory_For_example_0_or_1, "en", "ja-jp"),
+                createCompilerDiagnostic(
+                    Diagnostics.Locale_must_be_of_the_form_language_or_language_territory_For_example_0_or_1,
+                    "en",
+                    "ja-jp",
+                ),
             );
         }
         return;
@@ -804,7 +809,8 @@ export function escapeLeadingUnderscores(identifier: string): __String {
  */
 export function unescapeLeadingUnderscores(identifier: __String): string {
     const id = identifier as string;
-    return id.length >= 3 && id.charCodeAt(0) === CharacterCodes._ && id.charCodeAt(1) === CharacterCodes._ && id.charCodeAt(2) === CharacterCodes._
+    return id.length >= 3 && id.charCodeAt(0) === CharacterCodes._ && id.charCodeAt(1) === CharacterCodes._ &&
+            id.charCodeAt(2) === CharacterCodes._
         ? id.substr(1) : id;
 }
 
@@ -1641,7 +1647,9 @@ export function isFunctionLike(node: Node | undefined): node is SignatureDeclara
 }
 
 /** @internal */
-export function isFunctionLikeOrClassStaticBlockDeclaration(node: Node | undefined): node is SignatureDeclaration | ClassStaticBlockDeclaration {
+export function isFunctionLikeOrClassStaticBlockDeclaration(
+    node: Node | undefined,
+): node is SignatureDeclaration | ClassStaticBlockDeclaration {
     return !!node && (isFunctionLikeKind(node.kind) || isClassStaticBlockDeclaration(node));
 }
 
@@ -1924,7 +1932,9 @@ export function isArrayBindingOrAssignmentElement(node: Node): node is ArrayBind
 }
 
 /** @internal */
-export function isPropertyAccessOrQualifiedNameOrImportTypeNode(node: Node): node is PropertyAccessExpression | QualifiedName | ImportTypeNode {
+export function isPropertyAccessOrQualifiedNameOrImportTypeNode(
+    node: Node,
+): node is PropertyAccessExpression | QualifiedName | ImportTypeNode {
     const kind = node.kind;
     return kind === SyntaxKind.PropertyAccessExpression
         || kind === SyntaxKind.QualifiedName
@@ -2633,7 +2643,10 @@ export function isInternalDeclaration(node: Node, sourceFile?: SourceFile) {
                 // to handle
                 // ... parameters, /** @internal */
                 // public param: string
-                getTrailingCommentRanges(text, skipTrivia(text, previousSibling.end + 1, /*stopAfterLineBreak*/ false, /*stopAtComments*/ true)),
+                getTrailingCommentRanges(
+                    text,
+                    skipTrivia(text, previousSibling.end + 1, /*stopAfterLineBreak*/ false, /*stopAtComments*/ true),
+                ),
                 getLeadingCommentRanges(text, node.pos),
             )
             : getTrailingCommentRanges(text, skipTrivia(text, node.pos, /*stopAfterLineBreak*/ false, /*stopAtComments*/ true));

@@ -181,7 +181,10 @@ export function getSourceMapper(host: SourceMapperHost): SourceMapper {
  *
  * @internal
  */
-export type ReadMapFile = (mapFileName: string, mapFileNameFromDts: string | undefined) => string | undefined | DocumentPositionMapper | false;
+export type ReadMapFile = (
+    mapFileName: string,
+    mapFileNameFromDts: string | undefined,
+) => string | undefined | DocumentPositionMapper | false;
 
 /** @internal */
 export function getDocumentPositionMapper(

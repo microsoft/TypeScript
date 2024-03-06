@@ -61,7 +61,11 @@ function getExportSpecifierForDiagnosticSpan(span: TextSpan, sourceFile: SourceF
     return tryCast(getTokenAtPosition(sourceFile, span.start).parent, isExportSpecifier);
 }
 
-function fixSingleExportDeclaration(changes: textChanges.ChangeTracker, exportSpecifier: ExportSpecifier | undefined, context: CodeFixContextBase) {
+function fixSingleExportDeclaration(
+    changes: textChanges.ChangeTracker,
+    exportSpecifier: ExportSpecifier | undefined,
+    context: CodeFixContextBase,
+) {
     if (!exportSpecifier) {
         return;
     }

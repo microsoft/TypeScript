@@ -43,7 +43,11 @@ export function ensureErrorFreeBuild(host: TestServerHost, rootNames: readonly s
     assert.equal(host.getOutput().length, 0, jsonToReadableText(host.getOutput()));
 }
 
-export function solutionBuildWithBaseline(sys: TestServerHost, solutionRoots: readonly string[], originalRead?: TestServerHost["readFile"]) {
+export function solutionBuildWithBaseline(
+    sys: TestServerHost,
+    solutionRoots: readonly string[],
+    originalRead?: TestServerHost["readFile"],
+) {
     const originalReadFile = sys.readFile;
     const originalWrite = sys.write;
     const originalWriteFile = sys.writeFile;

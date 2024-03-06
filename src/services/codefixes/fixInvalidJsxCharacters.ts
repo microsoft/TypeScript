@@ -55,7 +55,8 @@ registerCodeFix({
         return codeFixAll(
             context,
             errorCodes,
-            (changes, diagnostic) => doChange(changes, context.preferences, diagnostic.file, diagnostic.start, context.fixId === fixIdHtmlEntity),
+            (changes, diagnostic) =>
+                doChange(changes, context.preferences, diagnostic.file, diagnostic.start, context.fixId === fixIdHtmlEntity),
         );
     },
 });
@@ -69,7 +70,13 @@ function isValidCharacter(character: string): character is keyof typeof htmlEnti
     return hasProperty(htmlEntity, character);
 }
 
-function doChange(changes: textChanges.ChangeTracker, preferences: UserPreferences, sourceFile: SourceFile, start: number, useHtmlEntity: boolean) {
+function doChange(
+    changes: textChanges.ChangeTracker,
+    preferences: UserPreferences,
+    sourceFile: SourceFile,
+    start: number,
+    useHtmlEntity: boolean,
+) {
     const character = sourceFile.getText()[start];
     // sanity check
     if (!isValidCharacter(character)) {

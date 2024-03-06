@@ -61,7 +61,10 @@ export function createModuleSpecifierCache(host: ModuleSpecifierResolutionCacheH
                 info.modulePaths = modulePaths;
             }
             else {
-                cache.set(toFileName, createInfo(modulePaths, /*moduleSpecifiers*/ undefined, /*isBlockedByPackageJsonDependencies*/ undefined));
+                cache.set(
+                    toFileName,
+                    createInfo(modulePaths, /*moduleSpecifiers*/ undefined, /*isBlockedByPackageJsonDependencies*/ undefined),
+                );
             }
         },
         setBlockedByPackageJsonDependencies(fromFileName, toFileName, preferences, options, isBlockedByPackageJsonDependencies) {
@@ -71,7 +74,10 @@ export function createModuleSpecifierCache(host: ModuleSpecifierResolutionCacheH
                 info.isBlockedByPackageJsonDependencies = isBlockedByPackageJsonDependencies;
             }
             else {
-                cache.set(toFileName, createInfo(/*modulePaths*/ undefined, /*moduleSpecifiers*/ undefined, isBlockedByPackageJsonDependencies));
+                cache.set(
+                    toFileName,
+                    createInfo(/*modulePaths*/ undefined, /*moduleSpecifiers*/ undefined, isBlockedByPackageJsonDependencies),
+                );
             }
         },
         clear() {

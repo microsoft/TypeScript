@@ -16,11 +16,19 @@ function withChange(
     };
 }
 
-function withInsert(text: ts.IScriptSnapshot, start: number, newText: string): { text: ts.IScriptSnapshot; textChangeRange: ts.TextChangeRange; } {
+function withInsert(
+    text: ts.IScriptSnapshot,
+    start: number,
+    newText: string,
+): { text: ts.IScriptSnapshot; textChangeRange: ts.TextChangeRange; } {
     return withChange(text, start, 0, newText);
 }
 
-function withDelete(text: ts.IScriptSnapshot, start: number, length: number): { text: ts.IScriptSnapshot; textChangeRange: ts.TextChangeRange; } {
+function withDelete(
+    text: ts.IScriptSnapshot,
+    start: number,
+    length: number,
+): { text: ts.IScriptSnapshot; textChangeRange: ts.TextChangeRange; } {
     return withChange(text, start, length, "");
 }
 
@@ -301,7 +309,8 @@ describe("unittests:: Incremental Parser", () => {
     });
 
     it("Strict mode 5", () => {
-        const source = "'use blahhh';\r\nfoo1();\r\nfoo2();\r\nfoo3();\r\nfoo4();\r\nfoo4();\r\nfoo6();\r\nfoo7();\r\nfoo8();\r\nfoo9();\r\n";
+        const source =
+            "'use blahhh';\r\nfoo1();\r\nfoo2();\r\nfoo3();\r\nfoo4();\r\nfoo4();\r\nfoo6();\r\nfoo7();\r\nfoo8();\r\nfoo9();\r\n";
 
         const index = source.indexOf("b");
         const oldText = ts.ScriptSnapshot.fromString(source);
@@ -311,7 +320,8 @@ describe("unittests:: Incremental Parser", () => {
     });
 
     it("Strict mode 6", () => {
-        const source = "'use strict';\r\nfoo1();\r\nfoo2();\r\nfoo3();\r\nfoo4();\r\nfoo4();\r\nfoo6();\r\nfoo7();\r\nfoo8();\r\nfoo9();\r\n";
+        const source =
+            "'use strict';\r\nfoo1();\r\nfoo2();\r\nfoo3();\r\nfoo4();\r\nfoo4();\r\nfoo6();\r\nfoo7();\r\nfoo8();\r\nfoo9();\r\n";
 
         const index = source.indexOf("s");
         const oldText = ts.ScriptSnapshot.fromString(source);
@@ -321,7 +331,8 @@ describe("unittests:: Incremental Parser", () => {
     });
 
     it("Strict mode 7", () => {
-        const source = "'use blahhh';\r\nfoo1();\r\nfoo2();\r\nfoo3();\r\nfoo4();\r\nfoo4();\r\nfoo6();\r\nfoo7();\r\nfoo8();\r\nfoo9();\r\n";
+        const source =
+            "'use blahhh';\r\nfoo1();\r\nfoo2();\r\nfoo3();\r\nfoo4();\r\nfoo4();\r\nfoo6();\r\nfoo7();\r\nfoo8();\r\nfoo9();\r\n";
 
         const index = source.indexOf("f");
         const oldText = ts.ScriptSnapshot.fromString(source);

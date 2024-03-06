@@ -136,7 +136,16 @@ export function createMissingMemberNodes(
     const classMembers = classDeclaration.symbol.members!;
     for (const symbol of possiblyMissingSymbols) {
         if (!classMembers.has(symbol.escapedName)) {
-            addNewNodeForMemberSymbol(symbol, classDeclaration, sourceFile, context, preferences, importAdder, addClassElement, /*body*/ undefined);
+            addNewNodeForMemberSymbol(
+                symbol,
+                classDeclaration,
+                sourceFile,
+                context,
+                preferences,
+                importAdder,
+                addClassElement,
+                /*body*/ undefined,
+            );
         }
     }
 }
@@ -156,7 +165,13 @@ export interface TypeConstructionContext {
 }
 
 /** @internal */
-export type AddNode = PropertyDeclaration | GetAccessorDeclaration | SetAccessorDeclaration | MethodDeclaration | FunctionExpression | ArrowFunction;
+export type AddNode =
+    | PropertyDeclaration
+    | GetAccessorDeclaration
+    | SetAccessorDeclaration
+    | MethodDeclaration
+    | FunctionExpression
+    | ArrowFunction;
 
 /** @internal */
 export const enum PreserveOptionalFlags {
@@ -241,7 +256,12 @@ export function addNewNodeForMemberSymbol(
         case SyntaxKind.GetAccessor:
         case SyntaxKind.SetAccessor: {
             Debug.assertIsDefined(declarations);
-            let typeNode = checker.typeToTypeNode(type, enclosingDeclaration, /*flags*/ undefined, getNoopSymbolTrackerWithResolver(context));
+            let typeNode = checker.typeToTypeNode(
+                type,
+                enclosingDeclaration,
+                /*flags*/ undefined,
+                getNoopSymbolTrackerWithResolver(context),
+            );
             const allAccessors = getAllAccessorDeclarations(declarations, declaration as AccessorDeclaration);
             const orderedAccessors = allAccessors.secondAccessor
                 ? [allAccessors.firstAccessor, allAccessors.secondAccessor]
@@ -295,7 +315,13 @@ export function addNewNodeForMemberSymbol(
             if (declarations.length === 1) {
                 Debug.assert(signatures.length === 1, "One declaration implies one signature");
                 const signature = signatures[0];
-                outputMethod(quotePreference, signature, modifiers, createName(declarationName), createBody(body, quotePreference, ambient));
+                outputMethod(
+                    quotePreference,
+                    signature,
+                    modifiers,
+                    createName(declarationName),
+                    createBody(body, quotePreference, ambient),
+                );
                 break;
             }
 
@@ -371,7 +397,9 @@ export function addNewNodeForMemberSymbol(
 
     function createName(node: PropertyName) {
         if (isIdentifier(node) && node.escapedText === "constructor") {
-            return factory.createComputedPropertyName(factory.createStringLiteral(idText(node), quotePreference === QuotePreference.Single));
+            return factory.createComputedPropertyName(
+                factory.createStringLiteral(idText(node), quotePreference === QuotePreference.Single),
+            );
         }
         return getSynthesizedDeepClone(node, /*includeTrivia*/ false);
     }
@@ -755,7 +783,15 @@ export function getArgumentTypesAndTypeParameters(
 
         // Widen the type so we don't emit nonsense annotations like "function fn(x: 3) {"
         const widenedInstanceType = checker.getBaseTypeOfLiteralType(instanceType);
-        const argumentTypeNode = typeToAutoImportableTypeNode(checker, importAdder, widenedInstanceType, contextNode, scriptTarget, flags, tracker);
+        const argumentTypeNode = typeToAutoImportableTypeNode(
+            checker,
+            importAdder,
+            widenedInstanceType,
+            contextNode,
+            scriptTarget,
+            flags,
+            tracker,
+        );
         if (!argumentTypeNode) {
             continue;
         }
@@ -822,7 +858,8 @@ function createDummyParameters(
             /*modifiers*/ undefined,
             /*dotDotDotToken*/ undefined,
             /*name*/ parameterName + (parameterNameCount || ""),
-            /*questionToken*/ minArgumentCount !== undefined && i >= minArgumentCount ? factory.createToken(SyntaxKind.QuestionToken) : undefined,
+            /*questionToken*/ minArgumentCount !== undefined && i >= minArgumentCount ? factory.createToken(SyntaxKind.QuestionToken)
+                : undefined,
             /*type*/ inJs ? undefined : types?.[i] || factory.createKeywordTypeNode(SyntaxKind.UnknownKeyword),
             /*initializer*/ undefined,
         );
@@ -863,7 +900,13 @@ function createMethodImplementingSignatures(
     }
     const maxNonRestArgs = maxArgsSignature.parameters.length - (signatureHasRestParameter(maxArgsSignature) ? 1 : 0);
     const maxArgsParameterSymbolNames = maxArgsSignature.parameters.map(symbol => symbol.name);
-    const parameters = createDummyParameters(maxNonRestArgs, maxArgsParameterSymbolNames, /*types*/ undefined, minArgumentCount, /*inJs*/ false);
+    const parameters = createDummyParameters(
+        maxNonRestArgs,
+        maxArgsParameterSymbolNames,
+        /*types*/ undefined,
+        minArgumentCount,
+        /*inJs*/ false,
+    );
 
     if (someSigHasRestParameter) {
         const restParameter = factory.createParameterDeclaration(

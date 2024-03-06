@@ -821,7 +821,9 @@ export function transformGenerators(context: TransformationContext): (x: SourceF
                         cacheExpression(
                             Debug.checkDefined(visitNode((left as ElementAccessExpression).expression, visitor, isLeftHandSideExpression)),
                         ),
-                        cacheExpression(Debug.checkDefined(visitNode((left as ElementAccessExpression).argumentExpression, visitor, isExpression))),
+                        cacheExpression(
+                            Debug.checkDefined(visitNode((left as ElementAccessExpression).argumentExpression, visitor, isExpression)),
+                        ),
                     );
                     break;
 
@@ -848,7 +850,12 @@ export function transformGenerators(context: TransformationContext): (x: SourceF
                 );
             }
             else {
-                return factory.updateBinaryExpression(node, target, node.operatorToken, Debug.checkDefined(visitNode(right, visitor, isExpression)));
+                return factory.updateBinaryExpression(
+                    node,
+                    target,
+                    node.operatorToken,
+                    Debug.checkDefined(visitNode(right, visitor, isExpression)),
+                );
             }
         }
 
@@ -1024,7 +1031,11 @@ export function transformGenerators(context: TransformationContext): (x: SourceF
             const whenFalseLabel = defineLabel();
             const resultLabel = defineLabel();
             const resultLocal = declareLocal();
-            emitBreakWhenFalse(whenFalseLabel, Debug.checkDefined(visitNode(node.condition, visitor, isExpression)), /*location*/ node.condition);
+            emitBreakWhenFalse(
+                whenFalseLabel,
+                Debug.checkDefined(visitNode(node.condition, visitor, isExpression)),
+                /*location*/ node.condition,
+            );
             emitAssignment(resultLocal, Debug.checkDefined(visitNode(node.whenTrue, visitor, isExpression)), /*location*/ node.whenTrue);
             emitBreak(resultLabel);
             markLabel(whenFalseLabel);
@@ -1699,7 +1710,10 @@ export function transformGenerators(context: TransformationContext): (x: SourceF
             const endLoopLabel = beginLoopBlock(incrementLabel);
 
             markLabel(conditionLabel);
-            emitBreakWhenFalse(endLoopLabel, factory.createLessThan(keysIndex, factory.createPropertyAccessExpression(keysArray, "length")));
+            emitBreakWhenFalse(
+                endLoopLabel,
+                factory.createLessThan(keysIndex, factory.createPropertyAccessExpression(keysArray, "length")),
+            );
 
             emitAssignment(key, factory.createElementAccessExpression(keysArray, keysIndex));
             emitBreakWhenFalse(incrementLabel, factory.createBinaryExpression(key, SyntaxKind.InKeyword, obj));
@@ -2292,7 +2306,10 @@ export function transformGenerators(context: TransformationContext): (x: SourceF
         exception.catchVariable = name;
         exception.catchLabel = catchLabel;
 
-        emitAssignment(name, factory.createCallExpression(factory.createPropertyAccessExpression(state, "sent"), /*typeArguments*/ undefined, []));
+        emitAssignment(
+            name,
+            factory.createCallExpression(factory.createPropertyAccessExpression(state, "sent"), /*typeArguments*/ undefined, []),
+        );
         emitNop();
     }
 

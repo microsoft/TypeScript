@@ -353,7 +353,10 @@ export const Fragment: unique symbol;
                 { path: configFile.path, content: jsonToReadableText({ compilerOptions: jsxImportSourceOptions }) },
             ],
             modifyFs: host =>
-                host.writeFile(configFile.path, jsonToReadableText({ compilerOptions: { ...jsxImportSourceOptions, jsxImportSource: "preact" } })),
+                host.writeFile(
+                    configFile.path,
+                    jsonToReadableText({ compilerOptions: { ...jsxImportSourceOptions, jsxImportSource: "preact" } }),
+                ),
             optionsToExtend: ["--explainFiles"],
         });
 
@@ -413,7 +416,10 @@ export const Fragment: unique symbol;
                     path: `${project}/node_modules/classnames/index.d.ts`,
                     content: `export interface Result {} export default function classNames(): Result;`,
                 },
-                { path: `${project}/src/types/classnames.d.ts`, content: `export {}; declare module "classnames" { interface Result { foo } }` },
+                {
+                    path: `${project}/src/types/classnames.d.ts`,
+                    content: `export {}; declare module "classnames" { interface Result { foo } }`,
+                },
                 { path: `${project}/src/index.ts`, content: `import classNames from "classnames"; classNames().foo;` },
                 { path: configFile.path, content: jsonToReadableText({ compilerOptions: { module: "commonjs", incremental: true } }) },
             ],

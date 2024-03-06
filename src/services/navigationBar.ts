@@ -671,7 +671,8 @@ function tryMergeEs5Class(a: NavigationBarNode, b: NavigationBarNode, bIndex: nu
                 const ctor = emptyNavigationBarNode(ctorNode);
                 ctor.indent = a.indent + 1;
                 ctor.children = a.node === ctorFunction ? a.children : b.children;
-                a.children = a.node === ctorFunction ? concatenate([ctor], b.children || [b]) : concatenate(a.children || [{ ...a }], [ctor]);
+                a.children = a.node === ctorFunction ? concatenate([ctor], b.children || [b])
+                    : concatenate(a.children || [{ ...a }], [ctor]);
             }
             else {
                 if (a.children || b.children) {
@@ -1067,7 +1068,8 @@ function getFunctionOrClassName(node: FunctionExpression | FunctionDeclaration |
             }
 
             const args = cleanText(
-                mapDefined(parent.arguments, a => isStringLiteralLike(a) || isTemplateLiteral(a) ? a.getText(curSourceFile) : undefined).join(", "),
+                mapDefined(parent.arguments, a => isStringLiteralLike(a) || isTemplateLiteral(a) ? a.getText(curSourceFile) : undefined)
+                    .join(", "),
             );
             return `${name}(${args}) callback`;
         }

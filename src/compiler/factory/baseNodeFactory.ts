@@ -39,11 +39,19 @@ export function createBaseNodeFactory(): BaseNodeFactory {
     };
 
     function createBaseSourceFileNode(kind: SyntaxKind.SourceFile): Node {
-        return new (SourceFileConstructor || (SourceFileConstructor = objectAllocator.getSourceFileConstructor()))(kind, /*pos*/ -1, /*end*/ -1);
+        return new (SourceFileConstructor || (SourceFileConstructor = objectAllocator.getSourceFileConstructor()))(
+            kind,
+            /*pos*/ -1,
+            /*end*/ -1,
+        );
     }
 
     function createBaseIdentifierNode(kind: SyntaxKind.Identifier): Node {
-        return new (IdentifierConstructor || (IdentifierConstructor = objectAllocator.getIdentifierConstructor()))(kind, /*pos*/ -1, /*end*/ -1);
+        return new (IdentifierConstructor || (IdentifierConstructor = objectAllocator.getIdentifierConstructor()))(
+            kind,
+            /*pos*/ -1,
+            /*end*/ -1,
+        );
     }
 
     function createBasePrivateIdentifierNode(kind: SyntaxKind.PrivateIdentifier): Node {

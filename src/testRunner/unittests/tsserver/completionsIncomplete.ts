@@ -46,7 +46,9 @@ function createNodeModulesPackage(
             path: `/node_modules/${packageName}/index.d.ts`,
             content: exportingFiles
                 .map(f =>
-                    `export * from "./${ts.removeFileExtension(ts.convertToRelativePath(f.path, `/node_modules/${packageName}/`, ts.identity))}";`
+                    `export * from "./${
+                        ts.removeFileExtension(ts.convertToRelativePath(f.path, `/node_modules/${packageName}/`, ts.identity))
+                    }";`
                 )
                 .join("\n") + `\nexport default function main(): void;`,
         },
@@ -83,7 +85,10 @@ describe("unittests:: tsserver:: completionsIncomplete", () => {
 
         typeToTriggerCompletions(indexFile.path, "a", completions => {
             assert(completions.isIncomplete);
-            assert.lengthOf(completions.entries.filter(entry => (entry.data as any)?.moduleSpecifier), ts.Completions.moduleSpecifierResolutionLimit);
+            assert.lengthOf(
+                completions.entries.filter(entry => (entry.data as any)?.moduleSpecifier),
+                ts.Completions.moduleSpecifierResolutionLimit,
+            );
             assert.lengthOf(completions.entries.filter(entry => entry.source && !(entry.data as any)?.moduleSpecifier), excessFileCount);
             assert.deepEqual(completions.optionalReplacementSpan, { start: { line: 1, offset: 1 }, end: { line: 1, offset: 2 } });
         })
@@ -142,9 +147,16 @@ describe("unittests:: tsserver:: completionsIncomplete", () => {
 
         typeToTriggerCompletions(indexFile.path, "a", completions => {
             assert(!completions.isIncomplete);
-            assert.lengthOf(completions.entries.filter(e => (e.data as any)?.moduleSpecifier), ambientFiles.length * 5 + exportingFiles.length);
+            assert.lengthOf(
+                completions.entries.filter(e => (e.data as any)?.moduleSpecifier),
+                ambientFiles.length * 5 + exportingFiles.length,
+            );
         });
-        baselineTsserverLogs("completionsIncomplete", "ambient module specifier resolutions do not count against the resolution limit", session);
+        baselineTsserverLogs(
+            "completionsIncomplete",
+            "ambient module specifier resolutions do not count against the resolution limit",
+            session,
+        );
     });
 
     it("works with PackageJsonAutoImportProvider", () => {
@@ -215,7 +227,11 @@ function setup(files: File[]) {
 
     return { host, session, projectService, typeToTriggerCompletions, assertCompletionDetailsOk };
 
-    function typeToTriggerCompletions(fileName: string, typedCharacters: string, cb?: (completions: ts.server.protocol.CompletionInfo) => void) {
+    function typeToTriggerCompletions(
+        fileName: string,
+        typedCharacters: string,
+        cb?: (completions: ts.server.protocol.CompletionInfo) => void,
+    ) {
         const project = projectService.getDefaultProjectForFile(ts.server.toNormalizedPath(fileName), /*ensureProject*/ true)!;
         return type(typedCharacters, cb, /*isIncompleteContinuation*/ false);
 
@@ -224,7 +240,9 @@ function setup(files: File[]) {
             cb: ((completions: ts.server.protocol.CompletionInfo) => void) | undefined,
             isIncompleteContinuation: boolean,
         ) {
-            const file = ts.Debug.checkDefined(project.getLanguageService(/*ensureSynchronized*/ true).getProgram()?.getSourceFile(fileName));
+            const file = ts.Debug.checkDefined(
+                project.getLanguageService(/*ensureSynchronized*/ true).getProgram()?.getSourceFile(fileName),
+            );
             const { line, character } = ts.getLineAndCharacterOfPosition(file, file.text.length);
             const oneBasedEditPosition = { line: line + 1, offset: character + 1 };
             session.executeCommandSeq<ts.server.protocol.UpdateOpenRequest>({
@@ -263,7 +281,9 @@ function setup(files: File[]) {
         }
 
         function backspace(n = 1) {
-            const file = ts.Debug.checkDefined(project.getLanguageService(/*ensureSynchronized*/ true).getProgram()?.getSourceFile(fileName));
+            const file = ts.Debug.checkDefined(
+                project.getLanguageService(/*ensureSynchronized*/ true).getProgram()?.getSourceFile(fileName),
+            );
             const startLineCharacter = ts.getLineAndCharacterOfPosition(file, file.text.length - n);
             const endLineCharacter = ts.getLineAndCharacterOfPosition(file, file.text.length);
             const oneBasedStartPosition = { line: startLineCharacter.line + 1, offset: startLineCharacter.character + 1 };

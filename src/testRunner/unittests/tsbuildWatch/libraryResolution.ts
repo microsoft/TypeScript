@@ -11,7 +11,17 @@ describe("unittests:: tsbuildWatch:: watchMode:: libraryResolution:: library fil
             scenario: "libraryResolution",
             subScenario: `with config${libRedirection ? " with redirection" : ""}`,
             sys: () => getSysForLibResolution(libRedirection),
-            commandLineArgs: ["-b", "-w", "project1", "project2", "project3", "project4", "--verbose", "--explainFiles", "--extendedDiagnostics"],
+            commandLineArgs: [
+                "-b",
+                "-w",
+                "project1",
+                "project2",
+                "project3",
+                "project4",
+                "--verbose",
+                "--explainFiles",
+                "--extendedDiagnostics",
+            ],
         });
     }
     verify();

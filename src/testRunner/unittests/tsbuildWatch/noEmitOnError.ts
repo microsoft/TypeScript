@@ -19,7 +19,10 @@ describe("unittests:: tsbuildWatch:: watchMode:: with noEmitOnError", () => {
     const noChange: TscWatchCompileChange = {
         caption: "No change",
         edit: sys =>
-            sys.writeFile(`/user/username/projects/noEmitOnError/src/main.ts`, sys.readFile(`/user/username/projects/noEmitOnError/src/main.ts`)!),
+            sys.writeFile(
+                `/user/username/projects/noEmitOnError/src/main.ts`,
+                sys.readFile(`/user/username/projects/noEmitOnError/src/main.ts`)!,
+            ),
         // build project
         timeouts: sys => sys.runQueuedTimeoutCallbacks(),
     };

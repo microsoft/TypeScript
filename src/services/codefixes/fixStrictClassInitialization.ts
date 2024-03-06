@@ -189,7 +189,8 @@ function getInitializer(checker: TypeChecker, propertyDeclaration: PropertyDecla
 
 function getDefaultValueFromType(checker: TypeChecker, type: Type): Expression | undefined {
     if (type.flags & TypeFlags.BooleanLiteral) {
-        return (type === checker.getFalseType() || type === checker.getFalseType(/*fresh*/ true)) ? factory.createFalse() : factory.createTrue();
+        return (type === checker.getFalseType() || type === checker.getFalseType(/*fresh*/ true)) ? factory.createFalse()
+            : factory.createTrue();
     }
     else if (type.isStringLiteral()) {
         return factory.createStringLiteral(type.value);
@@ -210,7 +211,11 @@ function getDefaultValueFromType(checker: TypeChecker, type: Type): Expression |
         const constructorDeclaration = getFirstConstructorWithBody(classDeclaration);
         if (constructorDeclaration && constructorDeclaration.parameters.length) return undefined;
 
-        return factory.createNewExpression(factory.createIdentifier(type.symbol.name), /*typeArguments*/ undefined, /*argumentsArray*/ undefined);
+        return factory.createNewExpression(
+            factory.createIdentifier(type.symbol.name),
+            /*typeArguments*/ undefined,
+            /*argumentsArray*/ undefined,
+        );
     }
     else if (checker.isArrayLikeType(type)) {
         return factory.createArrayLiteralExpression();

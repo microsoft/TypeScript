@@ -97,7 +97,8 @@ export function getPathUpdater(
         const originalPath = sourceMapper && sourceMapper.tryGetSourcePosition({ fileName: path, pos: 0 });
         const updatedPath = getUpdatedPath(originalPath ? originalPath.fileName : path);
         return originalPath
-            ? updatedPath === undefined ? undefined : makeCorrespondingRelativeChange(originalPath.fileName, updatedPath, path, getCanonicalFileName)
+            ? updatedPath === undefined ? undefined
+                : makeCorrespondingRelativeChange(originalPath.fileName, updatedPath, path, getCanonicalFileName)
             : updatedPath;
     };
 
@@ -142,7 +143,9 @@ function updateTsconfigFiles(
                 const matchers = getFileMatcherPatterns(configDir, /*excludes*/ [], includes, useCaseSensitiveFileNames, currentDirectory);
                 // If there isn't some include for this, add a new one.
                 if (
-                    getRegexFromPattern(Debug.checkDefined(matchers.includeFilePattern), useCaseSensitiveFileNames).test(oldFileOrDirPath) &&
+                    getRegexFromPattern(Debug.checkDefined(matchers.includeFilePattern), useCaseSensitiveFileNames).test(
+                        oldFileOrDirPath,
+                    ) &&
                     !getRegexFromPattern(Debug.checkDefined(matchers.includeFilePattern), useCaseSensitiveFileNames).test(newFileOrDirPath)
                 ) {
                     changeTracker.insertNodeAfter(

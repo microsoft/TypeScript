@@ -90,7 +90,8 @@ namespace SourceMapSpanWriter {
     function getSourceMapSpanString(mapEntry: ts.Mapping, getAbsentNameIndex?: boolean) {
         let mapString = "Emitted(" + (mapEntry.generatedLine + 1) + ", " + (mapEntry.generatedCharacter + 1) + ")";
         if (ts.isSourceMapping(mapEntry)) {
-            mapString += " Source(" + (mapEntry.sourceLine + 1) + ", " + (mapEntry.sourceCharacter + 1) + ") + SourceIndex(" + mapEntry.sourceIndex +
+            mapString += " Source(" + (mapEntry.sourceLine + 1) + ", " + (mapEntry.sourceCharacter + 1) + ") + SourceIndex(" +
+                mapEntry.sourceIndex +
                 ")";
             if (mapEntry.nameIndex! >= 0 && mapEntry.nameIndex! < sourceMapNames!.length) {
                 mapString += " name (" + sourceMapNames![mapEntry.nameIndex!] + ")";
@@ -146,7 +147,8 @@ namespace SourceMapSpanWriter {
         assert.isTrue(spansOnSingleLine.length === 1);
         sourceMapRecorder.WriteLine("-------------------------------------------------------------------");
         sourceMapRecorder.WriteLine(
-            "emittedFile:" + jsFile.file + (continuesLine ? ` (${sourceMapSpan.generatedLine + 1}, ${sourceMapSpan.generatedCharacter + 1})` : ""),
+            "emittedFile:" + jsFile.file +
+                (continuesLine ? ` (${sourceMapSpan.generatedLine + 1}, ${sourceMapSpan.generatedCharacter + 1})` : ""),
         );
         sourceMapRecorder.WriteLine("sourceFile:" + sourceMapSources[spansOnSingleLine[0].sourceMapSpan.sourceIndex!]);
         sourceMapRecorder.WriteLine("-------------------------------------------------------------------");

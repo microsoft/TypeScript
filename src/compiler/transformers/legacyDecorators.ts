@@ -151,7 +151,10 @@ export function transformLegacyDecorators(context: TransformationContext): (x: S
     }
 
     function visitClassDeclaration(node: ClassDeclaration): VisitResult<Statement> {
-        if (!(classOrConstructorParameterIsDecorated(/*useLegacyDecorators*/ true, node) || childIsDecorated(/*useLegacyDecorators*/ true, node))) {
+        if (
+            !(classOrConstructorParameterIsDecorated(/*useLegacyDecorators*/ true, node) ||
+                childIsDecorated(/*useLegacyDecorators*/ true, node))
+        ) {
             return visitEachChild(node, visitor, context);
         }
 
@@ -322,7 +325,11 @@ export function transformLegacyDecorators(context: TransformationContext): (x: S
 
         const isExport = hasSyntacticModifier(node, ModifierFlags.Export);
         const isDefault = hasSyntacticModifier(node, ModifierFlags.Default);
-        const modifiers = visitNodes(node.modifiers, node => isExportOrDefaultModifier(node) || isDecorator(node) ? undefined : node, isModifierLike);
+        const modifiers = visitNodes(
+            node.modifiers,
+            node => isExportOrDefaultModifier(node) || isDecorator(node) ? undefined : node,
+            isModifierLike,
+        );
 
         const location = moveRangePastModifiers(node);
         const classAlias = getClassAliasIfNeeded(node);
@@ -378,7 +385,8 @@ export function transformLegacyDecorators(context: TransformationContext): (x: S
 
         //  let ${name} = ${classExpression} where name is either declaredName if the class doesn't contain self-reference
         //                                         or decoratedClassAlias if the class contain self-reference.
-        const varInitializer = classAlias && !assignClassAliasInStaticBlock ? factory.createAssignment(classAlias, classExpression) : classExpression;
+        const varInitializer = classAlias && !assignClassAliasInStaticBlock ? factory.createAssignment(classAlias, classExpression)
+            : classExpression;
         const varDecl = factory.createVariableDeclaration(declName, /*exclamationToken*/ undefined, /*type*/ undefined, varInitializer);
         setOriginalNode(varDecl, node);
 
@@ -552,7 +560,10 @@ export function transformLegacyDecorators(context: TransformationContext): (x: S
      *                 instance members.
      */
     function addClassElementDecorationStatements(statements: Statement[], node: ClassDeclaration, isStatic: boolean) {
-        addRange(statements, map(generateClassElementDecorationExpressions(node, isStatic), expr => factory.createExpressionStatement(expr)));
+        addRange(
+            statements,
+            map(generateClassElementDecorationExpressions(node, isStatic), expr => factory.createExpressionStatement(expr)),
+        );
     }
 
     /**

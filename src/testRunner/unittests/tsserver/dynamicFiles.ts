@@ -66,7 +66,10 @@ describe("unittests:: tsserver:: dynamicFiles:: Untitled files", () => {
             path: `/user/username/projects/myproject/tsconfig.json`,
             content: "{}",
         };
-        const host = createServerHost([config, libFile], { useCaseSensitiveFileNames: true, currentDirectory: "/user/username/projects/myproject" });
+        const host = createServerHost([config, libFile], {
+            useCaseSensitiveFileNames: true,
+            currentDirectory: "/user/username/projects/myproject",
+        });
         const session = new TestSession(host);
         openFilesForSession([{
             file: untitledFile,
@@ -117,7 +120,11 @@ describe("unittests:: tsserver:: dynamicFiles:: Untitled files", () => {
 
         // Open file from configured project which should collect inferredProject
         openFilesForSession([file], session);
-        baselineTsserverLogs("dynamicFiles", "opening and closing untitled files when projectRootPath is different from currentDirectory", session);
+        baselineTsserverLogs(
+            "dynamicFiles",
+            "opening and closing untitled files when projectRootPath is different from currentDirectory",
+            session,
+        );
     });
 
     it("when changing scriptKind of the untitled files", () => {
@@ -227,7 +234,11 @@ describe("unittests:: tsserver:: dynamicFiles:: ", () => {
             }
             const file2Path = file.path.replace("#1", "#2");
             openFilesForSession([{ file: file2Path, content: file.content }], session);
-            baselineTsserverLogs("dynamicFiles", "dynamic file with projectRootPath fails when useInferredProjectPerProjectRoot is false", session);
+            baselineTsserverLogs(
+                "dynamicFiles",
+                "dynamic file with projectRootPath fails when useInferredProjectPerProjectRoot is false",
+                session,
+            );
         });
     });
 

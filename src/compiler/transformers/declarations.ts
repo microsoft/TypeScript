@@ -319,7 +319,9 @@ export function transformDeclarations(context: TransformationContext) {
         refs.set(getOriginalNodeId(container), container);
     }
 
-    function trackReferencedAmbientModuleFromImport(node: ImportDeclaration | ExportDeclaration | ImportEqualsDeclaration | ImportTypeNode) {
+    function trackReferencedAmbientModuleFromImport(
+        node: ImportDeclaration | ExportDeclaration | ImportEqualsDeclaration | ImportTypeNode,
+    ) {
         const moduleSpecifier = tryGetModuleSpecifierFromDeclaration(node);
         const symbol = moduleSpecifier && resolver.tryFindAmbientModule(moduleSpecifier);
         if (symbol?.declarations) {
@@ -406,7 +408,8 @@ export function transformDeclarations(context: TransformationContext) {
 
     function errorDeclarationNameWithFallback() {
         return errorNameNode ? declarationNameToString(errorNameNode) :
-            errorFallbackNode && getNameOfDeclaration(errorFallbackNode) ? declarationNameToString(getNameOfDeclaration(errorFallbackNode)) :
+            errorFallbackNode && getNameOfDeclaration(errorFallbackNode) ?
+            declarationNameToString(getNameOfDeclaration(errorFallbackNode)) :
             errorFallbackNode && isExportAssignment(errorFallbackNode) ? errorFallbackNode.isExportEquals ? "export=" : "default" :
             "(Missing)"; // same fallback declarationNameToString uses when node is zero-width (ie, nameless)
     }
@@ -482,7 +485,10 @@ export function transformDeclarations(context: TransformationContext) {
         if (primaryDeclaration && augmentingDeclarations) {
             for (const augmentations of augmentingDeclarations) {
                 context.addDiagnostic(addRelatedInfo(
-                    createDiagnosticForNode(augmentations, Diagnostics.Declaration_augments_declaration_in_another_file_This_cannot_be_serialized),
+                    createDiagnosticForNode(
+                        augmentations,
+                        Diagnostics.Declaration_augments_declaration_in_another_file_This_cannot_be_serialized,
+                    ),
                     createDiagnosticForNode(
                         primaryDeclaration,
                         Diagnostics.This_is_the_declaration_being_augmented_Consider_moving_the_augmenting_declaration_into_the_same_file,
@@ -591,7 +597,9 @@ export function transformDeclarations(context: TransformationContext) {
             bundle.syntheticTypeReferences = getFileReferencesForUsedTypeReferences();
             bundle.syntheticLibReferences = getLibReferences();
             bundle.hasNoDefaultLib = hasNoDefaultLib;
-            const outputFilePath = getDirectoryPath(normalizeSlashes(getOutputPathsFor(node, host, /*forceDtsPaths*/ true).declarationFilePath!));
+            const outputFilePath = getDirectoryPath(
+                normalizeSlashes(getOutputPathsFor(node, host, /*forceDtsPaths*/ true).declarationFilePath!),
+            );
             const referenceVisitor = mapReferencesIntoArray(bundle.syntheticFileReferences as FileReference[], outputFilePath);
             refs.forEach(referenceVisitor);
             return bundle;
@@ -613,7 +621,9 @@ export function transformDeclarations(context: TransformationContext) {
         refs = collectReferences(currentSourceFile, new Map());
         libs = collectLibs(currentSourceFile, new Map());
         const references: FileReference[] = [];
-        const outputFilePath = getDirectoryPath(normalizeSlashes(getOutputPathsFor(node, host, /*forceDtsPaths*/ true).declarationFilePath!));
+        const outputFilePath = getDirectoryPath(
+            normalizeSlashes(getOutputPathsFor(node, host, /*forceDtsPaths*/ true).declarationFilePath!),
+        );
         const referenceVisitor = mapReferencesIntoArray(references, outputFilePath);
         let combinedStatements: NodeArray<Statement>;
         if (isSourceFileJS(currentSourceFile)) {
@@ -623,11 +633,17 @@ export function transformDeclarations(context: TransformationContext) {
         }
         else {
             const statements = visitNodes(node.statements, visitDeclarationStatements, isStatement);
-            combinedStatements = setTextRange(factory.createNodeArray(transformAndReplaceLatePaintedStatements(statements)), node.statements);
+            combinedStatements = setTextRange(
+                factory.createNodeArray(transformAndReplaceLatePaintedStatements(statements)),
+                node.statements,
+            );
             refs.forEach(referenceVisitor);
             emittedImports = filter(combinedStatements, isAnyImportSyntax);
             if (isExternalModule(node) && (!resultHasExternalModuleIndicator || (needsScopeFixMarker && !resultHasScopeMarker))) {
-                combinedStatements = setTextRange(factory.createNodeArray([...combinedStatements, createEmptyExports(factory)]), combinedStatements);
+                combinedStatements = setTextRange(
+                    factory.createNodeArray([...combinedStatements, createEmptyExports(factory)]),
+                    combinedStatements,
+                );
             }
         }
         const updated = factory.updateSourceFile(
@@ -647,10 +663,13 @@ export function transformDeclarations(context: TransformationContext) {
         }
 
         function getFileReferencesForUsedTypeReferences() {
-            return necessaryTypeReferences ? mapDefined(arrayFrom(necessaryTypeReferences.keys()), getFileReferenceForSpecifierModeTuple) : [];
+            return necessaryTypeReferences ? mapDefined(arrayFrom(necessaryTypeReferences.keys()), getFileReferenceForSpecifierModeTuple)
+                : [];
         }
 
-        function getFileReferenceForSpecifierModeTuple([typeName, mode]: [specifier: string, mode: ResolutionMode]): FileReference | undefined {
+        function getFileReferenceForSpecifierModeTuple(
+            [typeName, mode]: [specifier: string, mode: ResolutionMode],
+        ): FileReference | undefined {
             // Elide type references for which we have imports
             if (emittedImports) {
                 for (const importStatement of emittedImports) {
@@ -931,7 +950,11 @@ export function transformDeclarations(context: TransformationContext) {
         }
     }
 
-    function updateParamsList(node: Node, params: NodeArray<ParameterDeclaration>, modifierMask?: ModifierFlags): NodeArray<ParameterDeclaration> {
+    function updateParamsList(
+        node: Node,
+        params: NodeArray<ParameterDeclaration>,
+        modifierMask?: ModifierFlags,
+    ): NodeArray<ParameterDeclaration> {
         if (hasEffectiveModifier(node, ModifierFlags.Private)) {
             return factory.createNodeArray();
         }
@@ -1103,7 +1126,8 @@ export function transformDeclarations(context: TransformationContext) {
                     decl.importClause,
                     decl.importClause.isTypeOnly,
                     visibleDefaultBinding,
-                    bindingList && bindingList.length ? factory.updateNamedImports(decl.importClause.namedBindings, bindingList) : undefined,
+                    bindingList && bindingList.length ? factory.updateNamedImports(decl.importClause.namedBindings, bindingList)
+                        : undefined,
                 ),
                 rewriteModuleSpecifier(decl, decl.moduleSpecifier),
                 tryGetResolutionModeOverride(decl.attributes),
@@ -1213,7 +1237,8 @@ export function transformDeclarations(context: TransformationContext) {
         // We'd see a TDZ violation at runtime
         const canProduceDiagnostic = canProduceDiagnostics(input);
         const oldWithinObjectLiteralType = suppressNewDiagnosticContexts;
-        let shouldEnterSuppressNewDiagnosticsContextContext = (input.kind === SyntaxKind.TypeLiteral || input.kind === SyntaxKind.MappedType) &&
+        let shouldEnterSuppressNewDiagnosticsContextContext =
+            (input.kind === SyntaxKind.TypeLiteral || input.kind === SyntaxKind.MappedType) &&
             input.parent.kind !== SyntaxKind.TypeAliasDeclaration;
 
         // Emit methods which are private as properties with no type information
@@ -1454,7 +1479,8 @@ export function transformDeclarations(context: TransformationContext) {
 
         if (
             isTupleTypeNode(input) &&
-            (getLineAndCharacterOfPosition(currentSourceFile, input.pos).line === getLineAndCharacterOfPosition(currentSourceFile, input.end).line)
+            (getLineAndCharacterOfPosition(currentSourceFile, input.pos).line ===
+                getLineAndCharacterOfPosition(currentSourceFile, input.end).line)
         ) {
             setEmitFlags(input, EmitFlags.SingleLine);
         }
@@ -1552,13 +1578,17 @@ export function transformDeclarations(context: TransformationContext) {
     }
 
     function stripExportModifiers(statement: Statement): Statement {
-        if (isImportEqualsDeclaration(statement) || hasEffectiveModifier(statement, ModifierFlags.Default) || !canHaveModifiers(statement)) {
+        if (
+            isImportEqualsDeclaration(statement) || hasEffectiveModifier(statement, ModifierFlags.Default) || !canHaveModifiers(statement)
+        ) {
             // `export import` statements should remain as-is, as imports are _not_ implicitly exported in an ambient namespace
             // Likewise, `export default` classes and the like and just be `default`, so we preserve their `export` modifiers, too
             return statement;
         }
 
-        const modifiers = factory.createModifiersFromModifierFlags(getEffectiveModifierFlags(statement) & (ModifierFlags.All ^ ModifierFlags.Export));
+        const modifiers = factory.createModifiersFromModifierFlags(
+            getEffectiveModifierFlags(statement) & (ModifierFlags.All ^ ModifierFlags.Export),
+        );
         return factory.replaceModifiers(statement, modifiers);
     }
 
@@ -1683,7 +1713,12 @@ export function transformDeclarations(context: TransformationContext) {
                             return undefined; // unique symbol or non-identifier name - omit, since there's no syntax that can preserve it
                         }
                         getSymbolAccessibilityDiagnostic = createGetSymbolAccessibilityDiagnosticForNode(p.valueDeclaration);
-                        const type = resolver.createTypeOfDeclaration(p.valueDeclaration, fakespace, declarationEmitNodeBuilderFlags, symbolTracker);
+                        const type = resolver.createTypeOfDeclaration(
+                            p.valueDeclaration,
+                            fakespace,
+                            declarationEmitNodeBuilderFlags,
+                            symbolTracker,
+                        );
                         getSymbolAccessibilityDiagnostic = oldDiag;
                         const isNonContextualKeywordName = isStringANonContextualKeyword(nameStr);
                         const name = isNonContextualKeywordName ? factory.getGeneratedNameForNode(p.valueDeclaration)
@@ -1691,7 +1726,12 @@ export function transformDeclarations(context: TransformationContext) {
                         if (isNonContextualKeywordName) {
                             exportMappings.push([name, nameStr]);
                         }
-                        const varDecl = factory.createVariableDeclaration(name, /*exclamationToken*/ undefined, type, /*initializer*/ undefined);
+                        const varDecl = factory.createVariableDeclaration(
+                            name,
+                            /*exclamationToken*/ undefined,
+                            type,
+                            /*initializer*/ undefined,
+                        );
                         return factory.createVariableStatement(
                             isNonContextualKeywordName ? undefined : [factory.createToken(SyntaxKind.ExportKeyword)],
                             factory.createVariableDeclarationList([varDecl]),
@@ -1882,7 +1922,10 @@ export function transformDeclarations(context: TransformationContext) {
                 const members = factory.createNodeArray(memberNodes);
 
                 const extendsClause = getEffectiveBaseTypeNode(input);
-                if (extendsClause && !isEntityNameExpression(extendsClause.expression) && extendsClause.expression.kind !== SyntaxKind.NullKeyword) {
+                if (
+                    extendsClause && !isEntityNameExpression(extendsClause.expression) &&
+                    extendsClause.expression.kind !== SyntaxKind.NullKeyword
+                ) {
                     // We must add a temporary declaration for the extends clause expression
 
                     const oldId = input.name ? unescapeLeadingUnderscores(input.name.escapedText) : "default";
@@ -1924,7 +1967,10 @@ export function transformDeclarations(context: TransformationContext) {
                             clause,
                             visitNodes(
                                 factory.createNodeArray(
-                                    filter(clause.types, t => isEntityNameExpression(t.expression) || t.expression.kind === SyntaxKind.NullKeyword),
+                                    filter(
+                                        clause.types,
+                                        t => isEntityNameExpression(t.expression) || t.expression.kind === SyntaxKind.NullKeyword,
+                                    ),
                                 ),
                                 visitDeclarationSubtree,
                                 isExpressionWithTypeArguments,
@@ -1969,7 +2015,8 @@ export function transformDeclarations(context: TransformationContext) {
                         const constValue = resolver.getConstantValue(m);
                         const newInitializer = constValue === undefined ? undefined
                             : typeof constValue === "string" ? factory.createStringLiteral(constValue)
-                            : constValue < 0 ? factory.createPrefixUnaryExpression(SyntaxKind.MinusToken, factory.createNumericLiteral(-constValue))
+                            : constValue < 0 ?
+                            factory.createPrefixUnaryExpression(SyntaxKind.MinusToken, factory.createNumericLiteral(-constValue))
                             : factory.createNumericLiteral(constValue);
                         return preserveJsDoc(factory.updateEnumMember(m, m.name, newInitializer), m);
                     })),
@@ -2132,7 +2179,12 @@ function isAlwaysType(node: Node) {
 }
 
 // Elide "public" modifier, as it is the default
-function maskModifiers(factory: NodeFactory, node: Node, modifierMask?: ModifierFlags, modifierAdditions?: ModifierFlags): Modifier[] | undefined {
+function maskModifiers(
+    factory: NodeFactory,
+    node: Node,
+    modifierMask?: ModifierFlags,
+    modifierAdditions?: ModifierFlags,
+): Modifier[] | undefined {
     return factory.createModifiersFromModifierFlags(maskModifierFlags(node, modifierMask, modifierAdditions));
 }
 

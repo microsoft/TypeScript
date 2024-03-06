@@ -259,7 +259,12 @@ export function transformModule(context: TransformationContext): (x: SourceFile 
 
         const statements: Statement[] = [];
         const ensureUseStrict = getStrictOptionValue(compilerOptions, "alwaysStrict") || isExternalModule(currentSourceFile);
-        const statementOffset = factory.copyPrologue(node.statements, statements, ensureUseStrict && !isJsonSourceFile(node), topLevelVisitor);
+        const statementOffset = factory.copyPrologue(
+            node.statements,
+            statements,
+            ensureUseStrict && !isJsonSourceFile(node),
+            topLevelVisitor,
+        );
 
         if (shouldEmitUnderscoreUnderscoreESModule()) {
             append(statements, createUnderscoreUnderscoreESModule());
@@ -372,8 +377,16 @@ export function transformModule(context: TransformationContext): (x: SourceFile 
                                         /*name*/ undefined,
                                         /*typeParameters*/ undefined,
                                         [
-                                            factory.createParameterDeclaration(/*modifiers*/ undefined, /*dotDotDotToken*/ undefined, "require"),
-                                            factory.createParameterDeclaration(/*modifiers*/ undefined, /*dotDotDotToken*/ undefined, "exports"),
+                                            factory.createParameterDeclaration(
+                                                /*modifiers*/ undefined,
+                                                /*dotDotDotToken*/ undefined,
+                                                "require",
+                                            ),
+                                            factory.createParameterDeclaration(
+                                                /*modifiers*/ undefined,
+                                                /*dotDotDotToken*/ undefined,
+                                                "exports",
+                                            ),
                                             ...importAliasNames,
                                         ],
                                         /*type*/ undefined,
@@ -518,8 +531,16 @@ export function transformModule(context: TransformationContext): (x: SourceFile 
                                     /*name*/ undefined,
                                     /*typeParameters*/ undefined,
                                     [
-                                        factory.createParameterDeclaration(/*modifiers*/ undefined, /*dotDotDotToken*/ undefined, "require"),
-                                        factory.createParameterDeclaration(/*modifiers*/ undefined, /*dotDotDotToken*/ undefined, "exports"),
+                                        factory.createParameterDeclaration(
+                                            /*modifiers*/ undefined,
+                                            /*dotDotDotToken*/ undefined,
+                                            "require",
+                                        ),
+                                        factory.createParameterDeclaration(
+                                            /*modifiers*/ undefined,
+                                            /*dotDotDotToken*/ undefined,
+                                            "exports",
+                                        ),
                                         ...importAliasNames,
                                     ],
                                     /*type*/ undefined,
@@ -559,7 +580,9 @@ export function transformModule(context: TransformationContext): (x: SourceFile 
         for (const amdDependency of node.amdDependencies) {
             if (amdDependency.name) {
                 aliasedModuleNames.push(factory.createStringLiteral(amdDependency.path));
-                importAliasNames.push(factory.createParameterDeclaration(/*modifiers*/ undefined, /*dotDotDotToken*/ undefined, amdDependency.name));
+                importAliasNames.push(
+                    factory.createParameterDeclaration(/*modifiers*/ undefined, /*dotDotDotToken*/ undefined, amdDependency.name),
+                );
             }
             else {
                 unaliasedModuleNames.push(factory.createStringLiteral(amdDependency.path));
@@ -568,7 +591,14 @@ export function transformModule(context: TransformationContext): (x: SourceFile 
 
         for (const importNode of currentModuleInfo.externalImports) {
             // Find the name of the external module
-            const externalModuleName = getExternalModuleNameLiteral(factory, importNode, currentSourceFile, host, resolver, compilerOptions);
+            const externalModuleName = getExternalModuleNameLiteral(
+                factory,
+                importNode,
+                currentSourceFile,
+                host,
+                resolver,
+                compilerOptions,
+            );
 
             // Find the name of the module alias, if there is one
             const importAliasName = getLocalNameForExternalImport(factory, importNode, currentSourceFile);
@@ -581,7 +611,9 @@ export function transformModule(context: TransformationContext): (x: SourceFile 
                     // This is so that when printer will not substitute the identifier
                     setEmitFlags(importAliasName, EmitFlags.NoSubstitution);
                     aliasedModuleNames.push(externalModuleName);
-                    importAliasNames.push(factory.createParameterDeclaration(/*modifiers*/ undefined, /*dotDotDotToken*/ undefined, importAliasName));
+                    importAliasNames.push(
+                        factory.createParameterDeclaration(/*modifiers*/ undefined, /*dotDotDotToken*/ undefined, importAliasName),
+                    );
                 }
                 else {
                     unaliasedModuleNames.push(externalModuleName);
@@ -629,7 +661,10 @@ export function transformModule(context: TransformationContext): (x: SourceFile 
                         currentModuleInfo.exportedNames,
                         (prev, nextId) =>
                             factory.createAssignment(
-                                factory.createPropertyAccessExpression(factory.createIdentifier("exports"), factory.createIdentifier(idText(nextId))),
+                                factory.createPropertyAccessExpression(
+                                    factory.createIdentifier("exports"),
+                                    factory.createIdentifier(idText(nextId)),
+                                ),
                                 prev,
                             ),
                         factory.createVoidZero() as Expression,
@@ -1210,9 +1245,10 @@ export function transformModule(context: TransformationContext): (x: SourceFile 
         const externalModuleName = getExternalModuleNameLiteral(factory, node, currentSourceFile, host, resolver, compilerOptions);
         const firstArgument = visitNode(firstOrUndefined(node.arguments), visitor, isExpression);
         // Only use the external module name if it differs from the first argument. This allows us to preserve the quote style of the argument on output.
-        const argument = externalModuleName && (!firstArgument || !isStringLiteral(firstArgument) || firstArgument.text !== externalModuleName.text) ?
-            externalModuleName
-            : firstArgument;
+        const argument =
+            externalModuleName && (!firstArgument || !isStringLiteral(firstArgument) || firstArgument.text !== externalModuleName.text) ?
+                externalModuleName
+                : firstArgument;
         const containsLexicalThis = !!(node.transformFlags & TransformFlags.ContainsLexicalThis);
         switch (compilerOptions.module) {
             case ModuleKind.AMD:
@@ -1680,7 +1716,12 @@ export function transformModule(context: TransformationContext): (x: SourceFile 
                     setOriginalNode(
                         setTextRange(
                             factory.createExpressionStatement(
-                                createExportExpression(factory.getExportName(specifier), exportedValue, /*location*/ undefined, /*liveBinding*/ true),
+                                createExportExpression(
+                                    factory.getExportName(specifier),
+                                    exportedValue,
+                                    /*location*/ undefined,
+                                    /*liveBinding*/ true,
+                                ),
                             ),
                             specifier,
                         ),
@@ -1898,7 +1939,11 @@ export function transformModule(context: TransformationContext): (x: SourceFile 
             if (variables) {
                 statements = append(
                     statements,
-                    factory.updateVariableStatement(node, modifiers, factory.updateVariableDeclarationList(node.declarationList, variables)),
+                    factory.updateVariableStatement(
+                        node,
+                        modifiers,
+                        factory.updateVariableDeclarationList(node.declarationList, variables),
+                    ),
                 );
             }
 
@@ -2019,7 +2064,10 @@ export function transformModule(context: TransformationContext): (x: SourceFile 
      * appended.
      * @param decl The declaration whose exports are to be recorded.
      */
-    function appendExportsOfImportEqualsDeclaration(statements: Statement[] | undefined, decl: ImportEqualsDeclaration): Statement[] | undefined {
+    function appendExportsOfImportEqualsDeclaration(
+        statements: Statement[] | undefined,
+        decl: ImportEqualsDeclaration,
+    ): Statement[] | undefined {
         if (currentModuleInfo.exportEquals) {
             return statements;
         }
@@ -2214,7 +2262,13 @@ export function transformModule(context: TransformationContext): (x: SourceFile 
      * @param location The location to use for source maps and comments for the export.
      * @param allowComments An optional value indicating whether to emit comments for the statement.
      */
-    function createExportStatement(name: Identifier, value: Expression, location?: TextRange, allowComments?: boolean, liveBinding?: boolean) {
+    function createExportStatement(
+        name: Identifier,
+        value: Expression,
+        location?: TextRange,
+        allowComments?: boolean,
+        liveBinding?: boolean,
+    ) {
         const statement = setTextRange(
             factory.createExpressionStatement(createExportExpression(name, value, /*location*/ undefined, liveBinding)),
             location,

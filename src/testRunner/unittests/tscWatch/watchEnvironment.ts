@@ -190,7 +190,10 @@ describe("unittests:: tsc-watch:: watchEnvironment:: tsc-watch with different po
             Tsc_WatchDirectory.NonRecursiveWatchDirectory,
         );
 
-        verifyRenamingFileInSubFolder("uses non recursive dynamic polling when renaming file in subfolder", Tsc_WatchDirectory.DynamicPolling);
+        verifyRenamingFileInSubFolder(
+            "uses non recursive dynamic polling when renaming file in subfolder",
+            Tsc_WatchDirectory.DynamicPolling,
+        );
 
         verifyTscWatch({
             scenario,
@@ -380,7 +383,11 @@ describe("unittests:: tsc-watch:: watchEnvironment:: tsc-watch with different po
                 noopChange,
                 {
                     caption: "rename the file",
-                    edit: sys => sys.renameFile(`/user/username/projects/myproject/src/file2.ts`, `/user/username/projects/myproject/src/renamed.ts`),
+                    edit: sys =>
+                        sys.renameFile(
+                            `/user/username/projects/myproject/src/file2.ts`,
+                            `/user/username/projects/myproject/src/renamed.ts`,
+                        ),
                     // 1. For updating program and 2. for updating child watches
                     timeouts: sys => sys.runQueuedTimeoutCallbacks(1), // Update program
                 },
@@ -505,7 +512,8 @@ describe("unittests:: tsc-watch:: watchEnvironment:: tsc-watch with different po
                     edits: [
                         {
                             caption: "Change foo",
-                            edit: sys => sys.replaceFileText(`/user/username/projects/myproject/node_modules/bar/foo.d.ts`, "foo", "fooBar"),
+                            edit: sys =>
+                                sys.replaceFileText(`/user/username/projects/myproject/node_modules/bar/foo.d.ts`, "foo", "fooBar"),
                             timeouts: ts.noop,
                         },
                     ],

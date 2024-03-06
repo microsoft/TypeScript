@@ -34,7 +34,11 @@ export class FormattingContext {
     private contextNodeBlockIsOnOneLine: boolean | undefined;
     private nextNodeBlockIsOnOneLine: boolean | undefined;
 
-    constructor(public readonly sourceFile: SourceFileLike, public formattingRequestKind: FormattingRequestKind, public options: FormatCodeSettings) {
+    constructor(
+        public readonly sourceFile: SourceFileLike,
+        public formattingRequestKind: FormattingRequestKind,
+        public options: FormatCodeSettings,
+    ) {
     }
 
     public updateContext(

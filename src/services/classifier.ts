@@ -278,7 +278,11 @@ const noRegexTable: true[] = arrayToNumericMap<SyntaxKind, true>(
     () => true,
 );
 
-function getNewEndOfLineState(scanner: Scanner, token: SyntaxKind, lastOnTemplateStack: SyntaxKind | undefined): EndOfLineState | undefined {
+function getNewEndOfLineState(
+    scanner: Scanner,
+    token: SyntaxKind,
+    lastOnTemplateStack: SyntaxKind | undefined,
+): EndOfLineState | undefined {
     switch (token) {
         case SyntaxKind.StringLiteral: {
             // Check to see if we finished up on a multiline string literal.
@@ -310,7 +314,9 @@ function getNewEndOfLineState(scanner: Scanner, token: SyntaxKind, lastOnTemplat
                     case SyntaxKind.NoSubstitutionTemplateLiteral:
                         return EndOfLineState.InTemplateHeadOrNoSubstitutionTemplate;
                     default:
-                        return Debug.fail("Only 'NoSubstitutionTemplateLiteral's and 'TemplateTail's can be unterminated; got SyntaxKind #" + token);
+                        return Debug.fail(
+                            "Only 'NoSubstitutionTemplateLiteral's and 'TemplateTail's can be unterminated; got SyntaxKind #" + token,
+                        );
                 }
             }
             return lastOnTemplateStack === SyntaxKind.TemplateHead ? EndOfLineState.InTemplateSubstitutionPosition : undefined;
@@ -553,7 +559,9 @@ export function getSemanticClassifications(
     classifiableNames: ReadonlySet<__String>,
     span: TextSpan,
 ): ClassifiedSpan[] {
-    return convertClassificationsToSpans(getEncodedSemanticClassifications(typeChecker, cancellationToken, sourceFile, classifiableNames, span));
+    return convertClassificationsToSpans(
+        getEncodedSemanticClassifications(typeChecker, cancellationToken, sourceFile, classifiableNames, span),
+    );
 }
 
 function checkForClassificationCancellation(cancellationToken: CancellationToken, kind: SyntaxKind) {
@@ -731,12 +739,20 @@ function convertClassificationsToSpans(classifications: Classifications): Classi
 }
 
 /** @internal */
-export function getSyntacticClassifications(cancellationToken: CancellationToken, sourceFile: SourceFile, span: TextSpan): ClassifiedSpan[] {
+export function getSyntacticClassifications(
+    cancellationToken: CancellationToken,
+    sourceFile: SourceFile,
+    span: TextSpan,
+): ClassifiedSpan[] {
     return convertClassificationsToSpans(getEncodedSyntacticClassifications(cancellationToken, sourceFile, span));
 }
 
 /** @internal */
-export function getEncodedSyntacticClassifications(cancellationToken: CancellationToken, sourceFile: SourceFile, span: TextSpan): Classifications {
+export function getEncodedSyntacticClassifications(
+    cancellationToken: CancellationToken,
+    sourceFile: SourceFile,
+    span: TextSpan,
+): Classifications {
     const spanStart = span.start;
     const spanLength = span.length;
 

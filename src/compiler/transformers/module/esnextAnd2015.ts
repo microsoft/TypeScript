@@ -108,7 +108,12 @@ export function transformECMAScriptModule(context: TransformationContext): (x: S
     }
 
     function updateExternalModule(node: SourceFile) {
-        const externalHelpersImportDeclaration = createExternalHelpersImportDeclarationIfNeeded(factory, emitHelpers(), node, compilerOptions);
+        const externalHelpersImportDeclaration = createExternalHelpersImportDeclarationIfNeeded(
+            factory,
+            emitHelpers(),
+            node,
+            compilerOptions,
+        );
         if (externalHelpersImportDeclaration) {
             const statements: Statement[] = [];
             const statementOffset = factory.copyPrologue(node.statements, statements);
@@ -131,7 +136,8 @@ export function transformECMAScriptModule(context: TransformationContext): (x: S
                 // Though an error in es2020 modules, in node-flavor es2020 modules, we can helpfully transform this to a synthetic `require` call
                 // To give easy access to a synchronous `require` in node-flavor esm. We do the transform even in scenarios where we error, but `import.meta.url`
                 // is available, just because the output is reasonable for a node-like runtime.
-                return getEmitModuleKind(compilerOptions) >= ModuleKind.Node16 ? visitImportEqualsDeclaration(node as ImportEqualsDeclaration)
+                return getEmitModuleKind(compilerOptions) >= ModuleKind.Node16 ?
+                    visitImportEqualsDeclaration(node as ImportEqualsDeclaration)
                     : undefined;
             case SyntaxKind.ExportAssignment:
                 return visitExportAssignment(node as ExportAssignment);
@@ -149,7 +155,14 @@ export function transformECMAScriptModule(context: TransformationContext): (x: S
      * @param importNode The declaration to import.
      */
     function createRequireCall(importNode: ImportDeclaration | ImportEqualsDeclaration | ExportDeclaration) {
-        const moduleName = getExternalModuleNameLiteral(factory, importNode, Debug.checkDefined(currentSourceFile), host, resolver, compilerOptions);
+        const moduleName = getExternalModuleNameLiteral(
+            factory,
+            importNode,
+            Debug.checkDefined(currentSourceFile),
+            host,
+            resolver,
+            compilerOptions,
+        );
         const args: Expression[] = [];
         if (moduleName) {
             args.push(moduleName);
@@ -175,7 +188,10 @@ export function transformECMAScriptModule(context: TransformationContext): (x: S
                 factory.createStringLiteral("module"),
                 /*attributes*/ undefined,
             );
-            const requireHelperName = factory.createUniqueName("__require", GeneratedIdentifierFlags.Optimistic | GeneratedIdentifierFlags.FileLevel);
+            const requireHelperName = factory.createUniqueName(
+                "__require",
+                GeneratedIdentifierFlags.Optimistic | GeneratedIdentifierFlags.FileLevel,
+            );
             const requireStatement = factory.createVariableStatement(
                 /*modifiers*/ undefined,
                 factory.createVariableDeclarationList(
@@ -251,7 +267,9 @@ export function transformECMAScriptModule(context: TransformationContext): (x: S
                 factory.createExportDeclaration(
                     /*modifiers*/ undefined,
                     node.isTypeOnly,
-                    factory.createNamedExports([factory.createExportSpecifier(/*isTypeOnly*/ false, /*propertyName*/ undefined, idText(node.name))]),
+                    factory.createNamedExports([
+                        factory.createExportSpecifier(/*isTypeOnly*/ false, /*propertyName*/ undefined, idText(node.name)),
+                    ]),
                 ),
             );
         }
@@ -308,11 +326,12 @@ export function transformECMAScriptModule(context: TransformationContext): (x: S
         );
         setOriginalNode(importDecl, node.exportClause);
 
-        const exportDecl = isExportNamespaceAsDefaultDeclaration(node) ? factory.createExportDefault(synthName) : factory.createExportDeclaration(
-            /*modifiers*/ undefined,
-            /*isTypeOnly*/ false,
-            factory.createNamedExports([factory.createExportSpecifier(/*isTypeOnly*/ false, synthName, oldIdentifier)]),
-        );
+        const exportDecl = isExportNamespaceAsDefaultDeclaration(node) ? factory.createExportDefault(synthName) :
+            factory.createExportDeclaration(
+                /*modifiers*/ undefined,
+                /*isTypeOnly*/ false,
+                factory.createNamedExports([factory.createExportSpecifier(/*isTypeOnly*/ false, synthName, oldIdentifier)]),
+            );
         setOriginalNode(exportDecl, node);
 
         return [importDecl, exportDecl];

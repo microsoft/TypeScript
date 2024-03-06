@@ -791,7 +791,10 @@ export function transformES2015(context: TransformationContext): (x: SourceFile 
         addRange(statements, visitNodes(node.statements, visitor, isStatement, statementOffset));
         if (taggedTemplateStringDeclarations) {
             statements.push(
-                factory.createVariableStatement(/*modifiers*/ undefined, factory.createVariableDeclarationList(taggedTemplateStringDeclarations)),
+                factory.createVariableStatement(
+                    /*modifiers*/ undefined,
+                    factory.createVariableDeclarationList(taggedTemplateStringDeclarations),
+                ),
             );
         }
         factory.mergeLexicalEnvironment(prologue, endLexicalEnvironment());
@@ -1052,7 +1055,8 @@ export function transformES2015(context: TransformationContext): (x: SourceFile 
             /*asteriskToken*/ undefined,
             /*name*/ undefined,
             /*typeParameters*/ undefined,
-            extendsClauseElement ? [factory.createParameterDeclaration(/*modifiers*/ undefined, /*dotDotDotToken*/ undefined, createSyntheticSuper())]
+            extendsClauseElement ?
+                [factory.createParameterDeclaration(/*modifiers*/ undefined, /*dotDotDotToken*/ undefined, createSyntheticSuper())]
                 : [],
             /*type*/ undefined,
             transformClassBody(node, extendsClauseElement),
@@ -1092,7 +1096,10 @@ export function transformES2015(context: TransformationContext): (x: SourceFile 
      * @param node A ClassExpression or ClassDeclaration node.
      * @param extendsClauseElement The expression for the class `extends` clause.
      */
-    function transformClassBody(node: ClassExpression | ClassDeclaration, extendsClauseElement: ExpressionWithTypeArguments | undefined): Block {
+    function transformClassBody(
+        node: ClassExpression | ClassDeclaration,
+        extendsClauseElement: ExpressionWithTypeArguments | undefined,
+    ): Block {
         const statements: Statement[] = [];
         const name = factory.getInternalName(node);
         const constructorLikeName = isIdentifierANonContextualKeyword(name) ? factory.getGeneratedNameForNode(name) : name;
@@ -1275,7 +1282,8 @@ export function transformES2015(context: TransformationContext): (x: SourceFile 
     ) {
         // determine whether the class is known syntactically to be a derived class (e.g. a
         // class that extends a value that is not syntactically known to be `null`).
-        const isDerivedClass = !!extendsClauseElement && skipOuterExpressions(extendsClauseElement.expression).kind !== SyntaxKind.NullKeyword;
+        const isDerivedClass = !!extendsClauseElement &&
+            skipOuterExpressions(extendsClauseElement.expression).kind !== SyntaxKind.NullKeyword;
 
         // When the subclass does not have a constructor, we synthesize a *default* constructor using the following
         // representation:
@@ -1351,12 +1359,18 @@ export function transformES2015(context: TransformationContext): (x: SourceFile 
         readonly declarationList: { readonly declarations: { 0: ThisCapturingVariableDeclaration; }; };
     };
     type ThisCapturingAssignmentExpression = AssignmentExpression<EqualsToken> & { readonly left: CapturedThis; };
-    type TransformedSuperCall = CallExpression & { readonly expression: PropertyAccessExpression & { readonly expression: SyntheticSuper; }; };
+    type TransformedSuperCall = CallExpression & {
+        readonly expression: PropertyAccessExpression & { readonly expression: SyntheticSuper; };
+    };
     type TransformedSuperCallWithFallback = BinaryExpression & { readonly left: TransformedSuperCall; readonly right: ThisExpression; };
     type ImplicitSuperCall = BinaryExpression & { readonly left: BinaryExpression; readonly right: TransformedSuperCall; };
     type ImplicitSuperCallWithFallback = BinaryExpression & { readonly left: ImplicitSuperCall; readonly right: ThisExpression; };
-    type ThisCapturingTransformedSuperCallWithFallback = ThisCapturingAssignmentExpression & { readonly right: TransformedSuperCallWithFallback; };
-    type ThisCapturingImplicitSuperCallWithFallback = ThisCapturingAssignmentExpression & { readonly right: ImplicitSuperCallWithFallback; };
+    type ThisCapturingTransformedSuperCallWithFallback = ThisCapturingAssignmentExpression & {
+        readonly right: TransformedSuperCallWithFallback;
+    };
+    type ThisCapturingImplicitSuperCallWithFallback = ThisCapturingAssignmentExpression & {
+        readonly right: ImplicitSuperCallWithFallback;
+    };
     type TransformedSuperCallLike =
         | TransformedSuperCall
         | TransformedSuperCallWithFallback
@@ -1663,7 +1677,10 @@ export function transformES2015(context: TransformationContext): (x: SourceFile 
             case SyntaxKind.PropertyDeclaration: {
                 const named = node as AccessorDeclaration | MethodDeclaration | PropertyDeclaration;
                 if (isComputedPropertyName(named.name)) {
-                    return factory.replacePropertyName(named, visitEachChild(named.name, elideUnusedThisCaptureWorker, /*context*/ undefined));
+                    return factory.replacePropertyName(
+                        named,
+                        visitEachChild(named.name, elideUnusedThisCaptureWorker, /*context*/ undefined),
+                    );
                 }
                 return node;
             }
@@ -1749,7 +1766,10 @@ export function transformES2015(context: TransformationContext): (x: SourceFile 
             case SyntaxKind.PropertyDeclaration: {
                 const named = node as AccessorDeclaration | MethodDeclaration | PropertyDeclaration;
                 if (isComputedPropertyName(named.name)) {
-                    return factory.replacePropertyName(named, visitEachChild(named.name, injectSuperPresenceCheckWorker, /*context*/ undefined));
+                    return factory.replacePropertyName(
+                        named,
+                        visitEachChild(named.name, injectSuperPresenceCheckWorker, /*context*/ undefined),
+                    );
                 }
                 return node;
             }
@@ -2028,7 +2048,10 @@ export function transformES2015(context: TransformationContext): (x: SourceFile 
                                 setTextRange(
                                     factory.createAssignment(
                                         // TODO(rbuckton): Does this need to be parented?
-                                        setEmitFlags(setParent(setTextRange(factory.cloneNode(name), name), name.parent), EmitFlags.NoSourceMap),
+                                        setEmitFlags(
+                                            setParent(setTextRange(factory.cloneNode(name), name), name.parent),
+                                            EmitFlags.NoSourceMap,
+                                        ),
                                         setEmitFlags(initializer, EmitFlags.NoSourceMap | getEmitFlags(initializer) | EmitFlags.NoComments),
                                     ),
                                     parameter,
@@ -2045,7 +2068,10 @@ export function transformES2015(context: TransformationContext): (x: SourceFile 
 
         startOnNewLine(statement);
         setTextRange(statement, parameter);
-        setEmitFlags(statement, EmitFlags.NoTokenSourceMaps | EmitFlags.NoTrailingSourceMap | EmitFlags.CustomPrologue | EmitFlags.NoComments);
+        setEmitFlags(
+            statement,
+            EmitFlags.NoTokenSourceMaps | EmitFlags.NoTrailingSourceMap | EmitFlags.CustomPrologue | EmitFlags.NoComments,
+        );
         insertStatementAfterCustomPrologue(statements, statement);
     }
 
@@ -2073,7 +2099,11 @@ export function transformES2015(context: TransformationContext): (x: SourceFile 
      *                                          part of a constructor declaration with a
      *                                          synthesized call to `super`
      */
-    function addRestParameterIfNeeded(statements: Statement[], node: FunctionLikeDeclaration, inConstructorWithSynthesizedSuper: boolean): boolean {
+    function addRestParameterIfNeeded(
+        statements: Statement[],
+        node: FunctionLikeDeclaration,
+        inConstructorWithSynthesizedSuper: boolean,
+    ): boolean {
         const prologueStatements: Statement[] = [];
         const parameter = lastOrUndefined(node.parameters);
         if (!shouldAddRestParameter(parameter, inConstructorWithSynthesizedSuper)) {
@@ -2382,7 +2412,11 @@ export function transformES2015(context: TransformationContext): (x: SourceFile 
      * @param receiver The receiver for the member.
      * @param accessors The set of related get/set accessors.
      */
-    function transformAccessorsToStatement(receiver: LeftHandSideExpression, accessors: AllAccessorDeclarations, container: Node): Statement {
+    function transformAccessorsToStatement(
+        receiver: LeftHandSideExpression,
+        accessors: AllAccessorDeclarations,
+        container: Node,
+    ): Statement {
         const statement = factory.createExpressionStatement(
             transformAccessorsToExpression(receiver, accessors, container, /*startsOnNewLine*/ false),
         );
@@ -2758,7 +2792,9 @@ export function transformES2015(context: TransformationContext): (x: SourceFile 
                 node,
                 Debug.checkDefined(visitNode(node.left, visitorWithUnusedExpressionResult, isExpression)),
                 node.operatorToken,
-                Debug.checkDefined(visitNode(node.right, expressionResultIsUnused ? visitorWithUnusedExpressionResult : visitor, isExpression)),
+                Debug.checkDefined(
+                    visitNode(node.right, expressionResultIsUnused ? visitorWithUnusedExpressionResult : visitor, isExpression),
+                ),
             );
         }
         return visitEachChild(node, visitor, context);
@@ -2798,7 +2834,10 @@ export function transformES2015(context: TransformationContext): (x: SourceFile 
             hasSyntacticModifier(node, ModifierFlags.Export) ? HierarchyFacts.ExportedVariableStatement : HierarchyFacts.None,
         );
         let updated: Statement | undefined;
-        if (convertedLoopState && (node.declarationList.flags & NodeFlags.BlockScoped) === 0 && !isVariableStatementOfTypeScriptClassWrapper(node)) {
+        if (
+            convertedLoopState && (node.declarationList.flags & NodeFlags.BlockScoped) === 0 &&
+            !isVariableStatementOfTypeScriptClassWrapper(node)
+        ) {
             // we are inside a converted loop - hoist variable declarations
             let assignments: Expression[] | undefined;
             for (const decl of node.declarationList.declarations) {
@@ -2970,7 +3009,13 @@ export function transformES2015(context: TransformationContext): (x: SourceFile 
         }
 
         if (!node.initializer && shouldEmitExplicitInitializerForLetDeclaration(node)) {
-            return factory.updateVariableDeclaration(node, node.name, /*exclamationToken*/ undefined, /*type*/ undefined, factory.createVoidZero());
+            return factory.updateVariableDeclaration(
+                node,
+                node.name,
+                /*exclamationToken*/ undefined,
+                /*type*/ undefined,
+                factory.createVoidZero(),
+            );
         }
 
         return visitEachChild(node, visitor, context);
@@ -3263,7 +3308,12 @@ export function transformES2015(context: TransformationContext): (x: SourceFile 
                                 moveRangePos(node.expression, -1),
                             ),
                             setTextRange(
-                                factory.createVariableDeclaration(rhsReference, /*exclamationToken*/ undefined, /*type*/ undefined, expression),
+                                factory.createVariableDeclaration(
+                                    rhsReference,
+                                    /*exclamationToken*/ undefined,
+                                    /*type*/ undefined,
+                                    expression,
+                                ),
                                 node.expression,
                             ),
                         ]),
@@ -3310,7 +3360,11 @@ export function transformES2015(context: TransformationContext): (x: SourceFile 
         const catchVariable = factory.getGeneratedNameForNode(errorRecord);
         const returnMethod = factory.createTempVariable(/*recordTempVariable*/ undefined);
         const values = setTextRange(emitHelpers().createValuesHelper(expression), node.expression);
-        const next = factory.createCallExpression(factory.createPropertyAccessExpression(iterator, "next"), /*typeArguments*/ undefined, []);
+        const next = factory.createCallExpression(
+            factory.createPropertyAccessExpression(iterator, "next"),
+            /*typeArguments*/ undefined,
+            [],
+        );
 
         hoistVariableDeclaration(errorRecord);
         hoistVariableDeclaration(returnMethod);
@@ -3327,7 +3381,12 @@ export function transformES2015(context: TransformationContext): (x: SourceFile 
                         setTextRange(
                             factory.createVariableDeclarationList([
                                 setTextRange(
-                                    factory.createVariableDeclaration(iterator, /*exclamationToken*/ undefined, /*type*/ undefined, initializer),
+                                    factory.createVariableDeclaration(
+                                        iterator,
+                                        /*exclamationToken*/ undefined,
+                                        /*type*/ undefined,
+                                        initializer,
+                                    ),
                                     node.expression,
                                 ),
                                 factory.createVariableDeclaration(result, /*exclamationToken*/ undefined, /*type*/ undefined, next),
@@ -3571,7 +3630,8 @@ export function transformES2015(context: TransformationContext): (x: SourceFile 
         const outerConvertedLoopState = convertedLoopState;
         convertedLoopState = currentState;
 
-        const initializerFunction = shouldConvertInitializerOfForStatement(node) ? createFunctionForInitializerOfForStatement(node, currentState)
+        const initializerFunction = shouldConvertInitializerOfForStatement(node) ?
+            createFunctionForInitializerOfForStatement(node, currentState)
             : undefined;
         const bodyFunction = shouldConvertBodyOfIterationStatement(node) ?
             createFunctionForBodyOfIterationStatement(node, currentState, outerConvertedLoopState)
@@ -3594,7 +3654,11 @@ export function transformES2015(context: TransformationContext): (x: SourceFile 
                 loop = convert(node, outermostLabeledStatement, bodyFunction.part, ancestorFacts);
             }
             else {
-                const clone = convertIterationStatementCore(node, initializerFunction, factory.createBlock(bodyFunction.part, /*multiLine*/ true));
+                const clone = convertIterationStatementCore(
+                    node,
+                    initializerFunction,
+                    factory.createBlock(bodyFunction.part, /*multiLine*/ true),
+                );
                 loop = factory.restoreEnclosingLabel(clone, outermostLabeledStatement, convertedLoopState && resetLabel);
             }
         }
@@ -3638,10 +3702,15 @@ export function transformES2015(context: TransformationContext): (x: SourceFile 
         convertedLoopBody: Statement,
     ) {
         const shouldConvertCondition = node.condition && shouldConvertPartOfIterationStatement(node.condition);
-        const shouldConvertIncrementor = shouldConvertCondition || node.incrementor && shouldConvertPartOfIterationStatement(node.incrementor);
+        const shouldConvertIncrementor = shouldConvertCondition ||
+            node.incrementor && shouldConvertPartOfIterationStatement(node.incrementor);
         return factory.updateForStatement(
             node,
-            visitNode(initializerFunction ? initializerFunction.part : node.initializer, visitorWithUnusedExpressionResult, isForInitializer),
+            visitNode(
+                initializerFunction ? initializerFunction.part : node.initializer,
+                visitorWithUnusedExpressionResult,
+                isForInitializer,
+            ),
             visitNode(shouldConvertCondition ? undefined : node.condition, visitor, isExpression),
             visitNode(shouldConvertIncrementor ? undefined : node.incrementor, visitorWithUnusedExpressionResult, isExpression),
             convertedLoopBody,
@@ -3732,7 +3801,11 @@ export function transformES2015(context: TransformationContext): (x: SourceFile 
         return currentState;
     }
 
-    function addExtraDeclarationsForConvertedLoop(statements: Statement[], state: ConvertedLoopState, outerState: ConvertedLoopState | undefined) {
+    function addExtraDeclarationsForConvertedLoop(
+        statements: Statement[],
+        state: ConvertedLoopState,
+        outerState: ConvertedLoopState | undefined,
+    ) {
         let extraVariableDeclarations: VariableDeclaration[] | undefined;
         // propagate state from the inner loop to the outer loop if necessary
         if (state.argumentsName) {
@@ -3808,7 +3881,12 @@ export function transformES2015(context: TransformationContext): (x: SourceFile 
                 extraVariableDeclarations = [];
             }
             extraVariableDeclarations.push(
-                factory.createVariableDeclaration(state.conditionVariable, /*exclamationToken*/ undefined, /*type*/ undefined, factory.createFalse()),
+                factory.createVariableDeclaration(
+                    state.conditionVariable,
+                    /*exclamationToken*/ undefined,
+                    /*type*/ undefined,
+                    factory.createFalse(),
+                ),
             );
         }
 
@@ -4326,7 +4404,11 @@ export function transformES2015(context: TransformationContext): (x: SourceFile 
      * @param property The ShorthandPropertyAssignment node.
      * @param receiver The receiver for the assignment.
      */
-    function transformShorthandPropertyAssignmentToExpression(property: ShorthandPropertyAssignment, receiver: Expression, startsOnNewLine: boolean) {
+    function transformShorthandPropertyAssignmentToExpression(
+        property: ShorthandPropertyAssignment,
+        receiver: Expression,
+        startsOnNewLine: boolean,
+    ) {
         const expression = factory.createAssignment(
             createMemberAccessForPropertyName(
                 factory,
@@ -4742,7 +4824,8 @@ export function transformES2015(context: TransformationContext): (x: SourceFile 
 
                 resultingCall = factory.createFunctionApplyCall(
                     Debug.checkDefined(visitNode(target, callExpressionVisitor, isExpression)),
-                    node.expression.kind === SyntaxKind.SuperKeyword ? thisArg : Debug.checkDefined(visitNode(thisArg, visitor, isExpression)),
+                    node.expression.kind === SyntaxKind.SuperKeyword ? thisArg
+                        : Debug.checkDefined(visitNode(thisArg, visitor, isExpression)),
                     transformAndSpreadElements(node.arguments, /*isArgumentList*/ true, /*multiLine*/ false, /*hasTrailingComma*/ false),
                 );
             }
@@ -4759,7 +4842,8 @@ export function transformES2015(context: TransformationContext): (x: SourceFile 
                 resultingCall = setTextRange(
                     factory.createFunctionCallCall(
                         Debug.checkDefined(visitNode(target, callExpressionVisitor, isExpression)),
-                        node.expression.kind === SyntaxKind.SuperKeyword ? thisArg : Debug.checkDefined(visitNode(thisArg, visitor, isExpression)),
+                        node.expression.kind === SyntaxKind.SuperKeyword ? thisArg
+                            : Debug.checkDefined(visitNode(thisArg, visitor, isExpression)),
                         visitNodes(node.arguments, visitor, isExpression),
                     ),
                     node,
@@ -4929,7 +5013,8 @@ export function transformES2015(context: TransformationContext): (x: SourceFile 
 
         // We don't need to pack already packed array literals, or existing calls to the `__read` helper.
         const isCallToReadHelper = isCallToHelper(expression, "___read" as __String);
-        let kind = isCallToReadHelper || isPackedArrayLiteral(expression) ? SpreadSegmentKind.PackedSpread : SpreadSegmentKind.UnpackedSpread;
+        let kind = isCallToReadHelper || isPackedArrayLiteral(expression) ? SpreadSegmentKind.PackedSpread
+            : SpreadSegmentKind.UnpackedSpread;
 
         // We don't need the `__read` helper for array literals. Array packing will be performed by `__spreadArray`.
         if (
@@ -5033,7 +5118,10 @@ export function transformES2015(context: TransformationContext): (x: SourceFile 
     }
 
     function createSyntheticSuper() {
-        return factory.createUniqueName("_super", GeneratedIdentifierFlags.Optimistic | GeneratedIdentifierFlags.FileLevel) as SyntheticSuper;
+        return factory.createUniqueName(
+            "_super",
+            GeneratedIdentifierFlags.Optimistic | GeneratedIdentifierFlags.FileLevel,
+        ) as SyntheticSuper;
     }
 
     /**

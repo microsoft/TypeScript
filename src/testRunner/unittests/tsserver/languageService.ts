@@ -78,6 +78,10 @@ describe("unittests:: tsserver:: languageService", () => {
             session.getProjectService().configuredProjects.get(files[4].path)!,
             session.getProjectService().configuredProjects.get(files[4].path)!.getLanguageService().getProgram()!.getSemanticDiagnostics(),
         );
-        baselineTsserverLogs("languageService", "should support multiple projects with the same file under differing paths settings", session);
+        baselineTsserverLogs(
+            "languageService",
+            "should support multiple projects with the same file under differing paths settings",
+            session,
+        );
     });
 });

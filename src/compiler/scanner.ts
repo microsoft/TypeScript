@@ -454,7 +454,8 @@ export function computePositionOfLineAndCharacter(
         // Clamp to nearest allowable values to allow the underlying to be edited without crashing (accuracy is lost, instead)
         // TODO: Somehow track edits between file as it was during the creation of sourcemap we have and the current file and
         // apply them to the computed position to improve accuracy
-        return res > lineStarts[line + 1] ? lineStarts[line + 1] : typeof debugText === "string" && res > debugText.length ? debugText.length : res;
+        return res > lineStarts[line + 1] ? lineStarts[line + 1]
+            : typeof debugText === "string" && res > debugText.length ? debugText.length : res;
     }
     if (line < lineStarts.length - 1) {
         Debug.assert(res < lineStarts[line + 1]);
@@ -964,7 +965,14 @@ export function reduceEachTrailingCommentRange<T, U>(
     return iterateCommentRanges(/*reduce*/ true, text, pos, /*trailing*/ true, cb, state, initial);
 }
 
-function appendCommentRange(pos: number, end: number, kind: CommentKind, hasTrailingNewLine: boolean, _state: any, comments: CommentRange[] = []) {
+function appendCommentRange(
+    pos: number,
+    end: number,
+    kind: CommentKind,
+    hasTrailingNewLine: boolean,
+    _state: any,
+    comments: CommentRange[] = [],
+) {
     comments.push({ kind, pos, end, hasTrailingNewLine });
     return comments;
 }
@@ -2032,7 +2040,8 @@ export function createScanner(
                     // Multi-line comment
                     if (text.charCodeAt(pos + 1) === CharacterCodes.asterisk) {
                         pos += 2;
-                        const isJSDoc = text.charCodeAt(pos) === CharacterCodes.asterisk && text.charCodeAt(pos + 1) !== CharacterCodes.slash;
+                        const isJSDoc = text.charCodeAt(pos) === CharacterCodes.asterisk &&
+                            text.charCodeAt(pos + 1) !== CharacterCodes.slash;
 
                         let commentClosed = false;
                         let lastLineStart = tokenStart;
@@ -2098,7 +2107,9 @@ export function createScanner(
                         tokenFlags |= TokenFlags.HexSpecifier;
                         return token = checkBigIntSuffix();
                     }
-                    else if (pos + 2 < end && (text.charCodeAt(pos + 1) === CharacterCodes.B || text.charCodeAt(pos + 1) === CharacterCodes.b)) {
+                    else if (
+                        pos + 2 < end && (text.charCodeAt(pos + 1) === CharacterCodes.B || text.charCodeAt(pos + 1) === CharacterCodes.b)
+                    ) {
                         pos += 2;
                         tokenValue = scanBinaryOrOctalDigits(/* base */ 2);
                         if (!tokenValue) {
@@ -2109,7 +2120,9 @@ export function createScanner(
                         tokenFlags |= TokenFlags.BinarySpecifier;
                         return token = checkBigIntSuffix();
                     }
-                    else if (pos + 2 < end && (text.charCodeAt(pos + 1) === CharacterCodes.O || text.charCodeAt(pos + 1) === CharacterCodes.o)) {
+                    else if (
+                        pos + 2 < end && (text.charCodeAt(pos + 1) === CharacterCodes.O || text.charCodeAt(pos + 1) === CharacterCodes.o)
+                    ) {
                         pos += 2;
                         tokenValue = scanBinaryOrOctalDigits(/* base */ 8);
                         if (!tokenValue) {
@@ -2366,7 +2379,10 @@ export function createScanner(
     }
 
     function reScanInvalidIdentifier(): SyntaxKind {
-        Debug.assert(token === SyntaxKind.Unknown, "'reScanInvalidIdentifier' should only be called when the current token is 'SyntaxKind.Unknown'.");
+        Debug.assert(
+            token === SyntaxKind.Unknown,
+            "'reScanInvalidIdentifier' should only be called when the current token is 'SyntaxKind.Unknown'.",
+        );
         pos = tokenStart = fullStartPos;
         tokenFlags = 0;
         const ch = codePointAt(text, pos);
@@ -2675,7 +2691,11 @@ export function createScanner(
         if (pos >= end) {
             return token = SyntaxKind.EndOfFileToken;
         }
-        for (let ch = text.charCodeAt(pos); pos < end && (!isLineBreak(ch) && ch !== CharacterCodes.backtick); ch = codePointAt(text, ++pos)) {
+        for (
+            let ch = text.charCodeAt(pos);
+            pos < end && (!isLineBreak(ch) && ch !== CharacterCodes.backtick);
+            ch = codePointAt(text, ++pos)
+        ) {
             if (!inBackticks) {
                 if (ch === CharacterCodes.openBrace) {
                     break;
@@ -2772,7 +2792,10 @@ export function createScanner(
 
         if (isIdentifierStart(ch, languageVersion)) {
             let char = ch;
-            while (pos < end && isIdentifierPart(char = codePointAt(text, pos), languageVersion) || text.charCodeAt(pos) === CharacterCodes.minus) {
+            while (
+                pos < end && isIdentifierPart(char = codePointAt(text, pos), languageVersion) ||
+                text.charCodeAt(pos) === CharacterCodes.minus
+            ) {
                 pos += charSize(char);
             }
             tokenValue = text.substring(tokenStart, pos);
@@ -2918,7 +2941,8 @@ function utf16EncodeAsStringFallback(codePoint: number) {
     return String.fromCharCode(codeUnit1, codeUnit2);
 }
 
-const utf16EncodeAsStringWorker: (codePoint: number) => string = (String as any).fromCodePoint ? codePoint => (String as any).fromCodePoint(codePoint)
+const utf16EncodeAsStringWorker: (codePoint: number) => string = (String as any).fromCodePoint ?
+    codePoint => (String as any).fromCodePoint(codePoint)
     : utf16EncodeAsStringFallback;
 
 /** @internal */

@@ -29,7 +29,10 @@ export abstract class RunnerBase {
     }
 
     public enumerateFiles(folder: string, regex?: RegExp, options?: { recursive: boolean; }): string[] {
-        return ts.map(IO.listFiles(userSpecifiedRoot + folder, regex, { recursive: (options ? options.recursive : false) }), ts.normalizeSlashes);
+        return ts.map(
+            IO.listFiles(userSpecifiedRoot + folder, regex, { recursive: (options ? options.recursive : false) }),
+            ts.normalizeSlashes,
+        );
     }
 
     abstract kind(): TestRunnerKind;

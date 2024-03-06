@@ -106,7 +106,10 @@ type ImportConversionInfo =
     | { convertTo: ImportKind.Namespace; import: NamedImports; }
     | { convertTo: ImportKind.Named; import: NamespaceImport; };
 
-function getImportConversionInfo(context: RefactorContext, considerPartialSpans = true): ImportConversionInfo | RefactorErrorInfo | undefined {
+function getImportConversionInfo(
+    context: RefactorContext,
+    considerPartialSpans = true,
+): ImportConversionInfo | RefactorErrorInfo | undefined {
     const { file } = context;
     const span = getRefactorContextSpan(context);
     const token = getTokenAtPosition(file, span.start);
@@ -212,17 +215,23 @@ function doChangeNamespaceToNamed(
         changes.replaceNode(
             sourceFile,
             importDecl,
-            updateImport(importDecl, usedAsNamespaceOrDefault ? factory.createIdentifier(toConvert.name.text) : undefined, importSpecifiers),
+            updateImport(
+                importDecl,
+                usedAsNamespaceOrDefault ? factory.createIdentifier(toConvert.name.text) : undefined,
+                importSpecifiers,
+            ),
         );
     }
 }
 
 function getRightOfPropertyAccessOrQualifiedName(propertyAccessOrQualifiedName: PropertyAccessExpression | QualifiedName) {
-    return isPropertyAccessExpression(propertyAccessOrQualifiedName) ? propertyAccessOrQualifiedName.name : propertyAccessOrQualifiedName.right;
+    return isPropertyAccessExpression(propertyAccessOrQualifiedName) ? propertyAccessOrQualifiedName.name
+        : propertyAccessOrQualifiedName.right;
 }
 
 function getLeftOfPropertyAccessOrQualifiedName(propertyAccessOrQualifiedName: PropertyAccessExpression | QualifiedName) {
-    return isPropertyAccessExpression(propertyAccessOrQualifiedName) ? propertyAccessOrQualifiedName.expression : propertyAccessOrQualifiedName.left;
+    return isPropertyAccessExpression(propertyAccessOrQualifiedName) ? propertyAccessOrQualifiedName.expression
+        : propertyAccessOrQualifiedName.left;
 }
 
 /** @internal */
@@ -303,7 +312,11 @@ export function doChangeNamedToNamespaceOrDefault(
                     factory.createIdentifier(element.name.text),
                 ),
         );
-        changes.insertNodeAfter(sourceFile, toConvert.parent.parent, updateImport(importDecl, /*defaultImportName*/ undefined, newNamedImports));
+        changes.insertNodeAfter(
+            sourceFile,
+            toConvert.parent.parent,
+            updateImport(importDecl, /*defaultImportName*/ undefined, newNamedImports),
+        );
     }
 }
 

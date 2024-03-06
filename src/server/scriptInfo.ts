@@ -273,7 +273,9 @@ export class TextStorage {
             if (fileSize > maxFileSize) {
                 Debug.assert(!!this.info.containingProjects.length);
                 const service = this.info.containingProjects[0].projectService;
-                service.logger.info(`Skipped loading contents of large file ${fileName} for info ${this.info.fileName}: fileSize: ${fileSize}`);
+                service.logger.info(
+                    `Skipped loading contents of large file ${fileName} for info ${this.info.fileName}: fileSize: ${fileSize}`,
+                );
                 this.info.containingProjects[0].projectService.sendLargeFileReferencedEvent(fileName, fileSize);
                 return { text: "", fileSize };
             }

@@ -237,7 +237,10 @@ describe("unittests:: config:: tsconfigParsing:: parseConfigFileTextToJson", () 
         const configJsonObject = ts.convertToObject(result, result.parseDiagnostics);
         baseline.push("Result::", jsonToReadableText(configJsonObject));
         baseline.push("Errors::", formatErrors(result.parseDiagnostics));
-        Harness.Baseline.runBaseline(`config/tsconfigParsing/parse and re-emit tsconfig.json file with diagnostics.js`, baseline.join("\n"));
+        Harness.Baseline.runBaseline(
+            `config/tsconfigParsing/parse and re-emit tsconfig.json file with diagnostics.js`,
+            baseline.join("\n"),
+        );
     });
 
     baselinedParsed("generates errors for empty files list", () => [{
@@ -377,7 +380,9 @@ describe("unittests:: config:: tsconfigParsing:: parseConfigFileTextToJson", () 
                     baselineParsed: (baseline, parsed) => {
                         baseline.push("Wildcards::");
                         ts.getOwnKeys(parsed.wildcardDirectories!).forEach(dir =>
-                            baseline.push(`${dir}: WatchDirectoryFlags.${(ts as any).WatchDirectoryFlags[parsed.wildcardDirectories![dir]]}`)
+                            baseline.push(
+                                `${dir}: WatchDirectoryFlags.${(ts as any).WatchDirectoryFlags[parsed.wildcardDirectories![dir]]}`,
+                            )
                         );
                     },
                 })),

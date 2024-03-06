@@ -63,7 +63,13 @@ registerCodeFix({
 
         const changes = textChanges.ChangeTracker.with(context, t => addMissingConstraint(t, program, preferences, host, sourceFile, info));
         return [
-            createCodeFixAction(fixId, changes, Diagnostics.Add_extends_constraint, fixId, Diagnostics.Add_extends_constraint_to_all_type_parameters),
+            createCodeFixAction(
+                fixId,
+                changes,
+                Diagnostics.Add_extends_constraint,
+                fixId,
+                Diagnostics.Add_extends_constraint_to_all_type_parameters,
+            ),
         ];
     },
     fixIds: [fixId],
@@ -152,7 +158,13 @@ function addMissingConstraint(
             changes.replaceNode(
                 sourceFile,
                 declaration,
-                factory.updateTypeParameterDeclaration(declaration, /*modifiers*/ undefined, declaration.name, typeNode, declaration.default),
+                factory.updateTypeParameterDeclaration(
+                    declaration,
+                    /*modifiers*/ undefined,
+                    declaration.name,
+                    typeNode,
+                    declaration.default,
+                ),
             );
             importAdder.writeFixes(changes);
         }

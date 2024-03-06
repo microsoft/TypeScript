@@ -100,7 +100,13 @@ registerCodeFix({
                     );
                 }
                 else {
-                    doChanges(changes, program, moduleSourceFile, [...moduleExports.exports, ...moduleExports.typeOnlyExports], exportDeclaration);
+                    doChanges(
+                        changes,
+                        program,
+                        moduleSourceFile,
+                        [...moduleExports.exports, ...moduleExports.typeOnlyExports],
+                        exportDeclaration,
+                    );
                 }
             });
         }));
@@ -186,13 +192,21 @@ function doChanges(
 }
 
 function tryGetExportDeclaration(sourceFile: SourceFile, isTypeOnly: boolean) {
-    const predicate = (node: Node): node is ExportDeclaration => isExportDeclaration(node) && (isTypeOnly && node.isTypeOnly || !node.isTypeOnly);
+    const predicate = (node: Node): node is ExportDeclaration =>
+        isExportDeclaration(node) && (isTypeOnly && node.isTypeOnly || !node.isTypeOnly);
     return findLast(sourceFile.statements, predicate);
 }
 
-function updateExport(changes: textChanges.ChangeTracker, program: Program, sourceFile: SourceFile, node: ExportDeclaration, names: ExportName[]) {
+function updateExport(
+    changes: textChanges.ChangeTracker,
+    program: Program,
+    sourceFile: SourceFile,
+    node: ExportDeclaration,
+    names: ExportName[],
+) {
     const namedExports = node.exportClause && isNamedExports(node.exportClause) ? node.exportClause.elements : factory.createNodeArray([]);
-    const allowTypeModifier = !node.isTypeOnly && !!(getIsolatedModules(program.getCompilerOptions()) || find(namedExports, e => e.isTypeOnly));
+    const allowTypeModifier = !node.isTypeOnly &&
+        !!(getIsolatedModules(program.getCompilerOptions()) || find(namedExports, e => e.isTypeOnly));
     changes.replaceNode(
         sourceFile,
         node,
@@ -219,7 +233,9 @@ function createExport(changes: textChanges.ChangeTracker, program: Program, sour
         factory.createExportDeclaration(
             /*modifiers*/ undefined,
             /*isTypeOnly*/ false,
-            factory.createNamedExports(createExportSpecifiers(names, /*allowTypeModifier*/ getIsolatedModules(program.getCompilerOptions()))),
+            factory.createNamedExports(
+                createExportSpecifiers(names, /*allowTypeModifier*/ getIsolatedModules(program.getCompilerOptions())),
+            ),
             /*moduleSpecifier*/ undefined,
             /*attributes*/ undefined,
         ),

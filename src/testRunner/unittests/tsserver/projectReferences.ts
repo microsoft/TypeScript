@@ -843,7 +843,17 @@ ${usage}`,
                     path: `${solutionLocation}/shared/src/index.ts`,
                     content: definition,
                 };
-                const host = createServerHost([libFile, solution, libFile, apiConfig, apiFile, appConfig, appFile, sharedConfig, sharedFile]);
+                const host = createServerHost([
+                    libFile,
+                    solution,
+                    libFile,
+                    apiConfig,
+                    apiFile,
+                    appConfig,
+                    appFile,
+                    sharedConfig,
+                    sharedFile,
+                ]);
                 const session = new TestSession(host);
                 openFilesForSession([apiFile], session);
 
@@ -1091,7 +1101,9 @@ export function bar() {}`,
             session.logger.startGroup();
             session.logger.info(`getDefaultProject for ${main.path}: ${info.getDefaultProject().projectName}`);
             session.logger.info(
-                `findDefaultConfiguredProject for ${main.path}: ${session.getProjectService().findDefaultConfiguredProject(info)!.projectName}`,
+                `findDefaultConfiguredProject for ${main.path}: ${
+                    session.getProjectService().findDefaultConfiguredProject(info)!.projectName
+                }`,
             );
             session.logger.endGroup();
 
@@ -1159,7 +1171,9 @@ export function bar() {}`,
             session.logger.startGroup();
             session.logger.info(`getDefaultProject for ${main.path}: ${info.getDefaultProject().projectName}`);
             session.logger.info(
-                `findDefaultConfiguredProject for ${main.path}: ${session.getProjectService().findDefaultConfiguredProject(info)?.projectName}`,
+                `findDefaultConfiguredProject for ${main.path}: ${
+                    session.getProjectService().findDefaultConfiguredProject(info)?.projectName
+                }`,
             );
             session.logger.endGroup();
 
@@ -1230,7 +1244,8 @@ export function bar() {}`,
                     content: fileResolvingToMainDts.content,
                 };
                 verifySolutionScenario({
-                    scenario: "solution with its own files and project found is not solution but references open file through project reference",
+                    scenario:
+                        "solution with its own files and project found is not solution but references open file through project reference",
                     solutionFiles: [`./own/main.ts`],
                     solutionOptions: {
                         outDir: "./target/",
@@ -1267,7 +1282,8 @@ bar;`,
                     content: fileResolvingToMainDts.content,
                 };
                 verifyDisableReferencedProjectLoad({
-                    scenario: "solution with its own files and disables looking into the child project if disableReferencedProjectLoad is set",
+                    scenario:
+                        "solution with its own files and disables looking into the child project if disableReferencedProjectLoad is set",
                     solutionFiles: [`./own/main.ts`],
                     solutionOptions: {
                         outDir: "./target/",
@@ -1374,14 +1390,21 @@ bar;`,
             host.runQueuedTimeoutCallbacks();
 
             // Add excluded file to referenced project
-            host.ensureFileOrFolder({ path: `/user/username/projects/myproject/projects/project1/temp/file.d.ts`, content: `declare class file {}` });
+            host.ensureFileOrFolder({
+                path: `/user/username/projects/myproject/projects/project1/temp/file.d.ts`,
+                content: `declare class file {}`,
+            });
             host.runQueuedTimeoutCallbacks();
 
             // Add output from new class to referenced project
             const class3Dts = `/user/username/projects/myproject/projects/project1/class3.d.ts`;
             host.writeFile(class3Dts, `declare class class3 {}`);
             host.runQueuedTimeoutCallbacks();
-            baselineTsserverLogs("projectReferences", `new file is added to the referenced project when referenced project is not open`, session);
+            baselineTsserverLogs(
+                "projectReferences",
+                `new file is added to the referenced project when referenced project is not open`,
+                session,
+            );
         });
 
         it("when referenced project is open", () => {
@@ -1393,13 +1416,20 @@ bar;`,
             host.writeFile(class3, `class class3 {}`);
             host.runQueuedTimeoutCallbacks();
             // Add excluded file to referenced project
-            host.ensureFileOrFolder({ path: `/user/username/projects/myproject/projects/project1/temp/file.d.ts`, content: `declare class file {}` });
+            host.ensureFileOrFolder({
+                path: `/user/username/projects/myproject/projects/project1/temp/file.d.ts`,
+                content: `declare class file {}`,
+            });
             host.runQueuedTimeoutCallbacks();
             // Add output from new class to referenced project
             const class3Dts = `/user/username/projects/myproject/projects/project1/class3.d.ts`;
             host.writeFile(class3Dts, `declare class class3 {}`);
             host.runQueuedTimeoutCallbacks();
-            baselineTsserverLogs("projectReferences", `new file is added to the referenced project when referenced project is open`, session);
+            baselineTsserverLogs(
+                "projectReferences",
+                `new file is added to the referenced project when referenced project is open`,
+                session,
+            );
         });
 
         it("when referenced project is not open with disableSourceOfProjectReferenceRedirect", () => {
@@ -1414,7 +1444,10 @@ bar;`,
             host.writeFile(class3Dts, `declare class class3 {}`);
             host.runQueuedTimeoutCallbacks();
             // Add excluded file to referenced project
-            host.ensureFileOrFolder({ path: `/user/username/projects/myproject/projects/project1/temp/file.d.ts`, content: `declare class file {}` });
+            host.ensureFileOrFolder({
+                path: `/user/username/projects/myproject/projects/project1/temp/file.d.ts`,
+                content: `declare class file {}`,
+            });
             host.runQueuedTimeoutCallbacks();
             // Delete output from new class to referenced project
             host.deleteFile(class3Dts);
@@ -1442,7 +1475,10 @@ bar;`,
             host.writeFile(class3Dts, `declare class class3 {}`);
             host.runQueuedTimeoutCallbacks();
             // Add excluded file to referenced project
-            host.ensureFileOrFolder({ path: `/user/username/projects/myproject/projects/project1/temp/file.d.ts`, content: `declare class file {}` });
+            host.ensureFileOrFolder({
+                path: `/user/username/projects/myproject/projects/project1/temp/file.d.ts`,
+                content: `declare class file {}`,
+            });
             host.runQueuedTimeoutCallbacks();
             // Delete output from new class to referenced project
             host.deleteFile(class3Dts);
@@ -1557,7 +1593,11 @@ bar;`,
     });
 
     it("when files from two projects are open and one project references", () => {
-        function getPackageAndFile(packageName: string, references?: string[], optionsToExtend?: ts.CompilerOptions): [file: File, config: File] {
+        function getPackageAndFile(
+            packageName: string,
+            references?: string[],
+            optionsToExtend?: ts.CompilerOptions,
+        ): [file: File, config: File] {
             const file: File = {
                 path: `/user/username/projects/myproject/${packageName}/src/file1.ts`,
                 content: `export const ${packageName}Const = 10;`,
@@ -1584,11 +1624,15 @@ bar;`,
         const [noCoreRef1File, noCoreRef1Config] = getPackageAndFile("noCoreRef1");
         const [indirectFile, indirectConfig] = getPackageAndFile("indirect", ["coreRef1"]);
         const [coreRef1File, coreRef1Config] = getPackageAndFile("coreRef1", ["core"]);
-        const [indirectDisabledChildLoad1File, indirectDisabledChildLoad1Config] = getPackageAndFile("indirectDisabledChildLoad1", ["coreRef2"], {
+        const [indirectDisabledChildLoad1File, indirectDisabledChildLoad1Config] = getPackageAndFile("indirectDisabledChildLoad1", [
+            "coreRef2",
+        ], {
             disableReferencedProjectLoad: true,
         });
         const [coreRef2File, coreRef2Config] = getPackageAndFile("coreRef2", ["core"]);
-        const [indirectDisabledChildLoad2File, indirectDisabledChildLoad2Config] = getPackageAndFile("indirectDisabledChildLoad2", ["coreRef3"], {
+        const [indirectDisabledChildLoad2File, indirectDisabledChildLoad2Config] = getPackageAndFile("indirectDisabledChildLoad2", [
+            "coreRef3",
+        ], {
             disableReferencedProjectLoad: true,
         });
         const [coreRef3File, coreRef3Config] = getPackageAndFile("coreRef3", ["core"]);

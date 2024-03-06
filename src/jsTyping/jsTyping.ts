@@ -464,7 +464,12 @@ export function renderPackageNameValidationFailure(result: PackageNameValidation
         renderPackageNameValidationFailureWorker(typing, result, typing, /*isScopeName*/ false);
 }
 
-function renderPackageNameValidationFailureWorker(typing: string, result: NameValidationResult, name: string, isScopeName: boolean): string {
+function renderPackageNameValidationFailureWorker(
+    typing: string,
+    result: NameValidationResult,
+    name: string,
+    isScopeName: boolean,
+): string {
     const kind = isScopeName ? "Scope" : "Package";
     switch (result) {
         case NameValidationResult.EmptyName:

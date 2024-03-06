@@ -168,7 +168,9 @@ function getInliningInfo(
 
         // Make sure we're not inlining something like "let foo;" or "for (let i = 0; i < 5; i++) {}".
         const declaration = definition.declarations[0];
-        if (!isInitializedVariable(declaration) || !isVariableDeclarationInVariableStatement(declaration) || !isIdentifier(declaration.name)) {
+        if (
+            !isInitializedVariable(declaration) || !isVariableDeclarationInVariableStatement(declaration) || !isIdentifier(declaration.name)
+        ) {
             return undefined;
         }
 

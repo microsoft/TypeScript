@@ -87,7 +87,9 @@ function baselineProgram(
         if (state.semanticDiagnosticsPerFile?.size) {
             baseline.push("Semantic diagnostics in builder refreshed for::");
             for (const file of program.getSourceFiles()) {
-                if (!internalState.semanticDiagnosticsFromOldState || !internalState.semanticDiagnosticsFromOldState.has(file.resolvedPath)) {
+                if (
+                    !internalState.semanticDiagnosticsFromOldState || !internalState.semanticDiagnosticsFromOldState.has(file.resolvedPath)
+                ) {
                     baseline.push(file.fileName);
                 }
             }
@@ -186,7 +188,9 @@ export type ReadableProgramBundleEmitBuildInfo = Omit<ts.ProgramBundleEmitBuildI
 
 export type ReadableProgramBuildInfo = ReadableProgramMultiFileEmitBuildInfo | ReadableProgramBundleEmitBuildInfo;
 
-export function isReadableProgramBundleEmitBuildInfo(info: ReadableProgramBuildInfo | undefined): info is ReadableProgramBundleEmitBuildInfo {
+export function isReadableProgramBundleEmitBuildInfo(
+    info: ReadableProgramBuildInfo | undefined,
+): info is ReadableProgramBundleEmitBuildInfo {
     return !!info && !!info.options?.outFile;
 }
 export type ReadableBuildInfo = Omit<ts.BuildInfo, "program"> & { program: ReadableProgramBuildInfo | undefined; size: number; };
@@ -216,10 +220,14 @@ function generateBuildInfoProgramBaseline(sys: ts.System, buildInfoPath: string,
     else if (buildInfo.program) {
         const fileInfos: ReadableProgramMultiFileEmitBuildInfo["fileInfos"] = {};
         buildInfo.program?.fileInfos?.forEach((fileInfo, index) =>
-            fileInfos[toFileName(index + 1 as ts.ProgramBuildInfoFileId)] = toReadableFileInfo(fileInfo, ts.toBuilderStateFileInfoForMultiEmit)
+            fileInfos[toFileName(index + 1 as ts.ProgramBuildInfoFileId)] = toReadableFileInfo(
+                fileInfo,
+                ts.toBuilderStateFileInfoForMultiEmit,
+            )
         );
         fileNamesList = buildInfo.program.fileIdsList?.map(fileIdsListId => fileIdsListId.map(toFileName));
-        const fullEmitForOptions = buildInfo.program.affectedFilesPendingEmit ? ts.getBuilderFileEmit(buildInfo.program.options || {}) : undefined;
+        const fullEmitForOptions = buildInfo.program.affectedFilesPendingEmit ? ts.getBuilderFileEmit(buildInfo.program.options || {})
+            : undefined;
         program = buildInfo.program && {
             fileNames: buildInfo.program.fileNames,
             fileNamesList,
@@ -259,7 +267,10 @@ function generateBuildInfoProgramBaseline(sys: ts.System, buildInfoPath: string,
         return fileNamesList![fileIdsListId - 1];
     }
 
-    function toReadableFileInfo<T>(original: T, toFileInfo: (fileInfo: T) => ts.BuilderState.FileInfo): ReadableProgramBuildInfoFileInfo<T> {
+    function toReadableFileInfo<T>(
+        original: T,
+        toFileInfo: (fileInfo: T) => ts.BuilderState.FileInfo,
+    ): ReadableProgramBuildInfoFileInfo<T> {
         const info = toFileInfo(original);
         return {
             original: ts.isString(original) ? undefined : original,
@@ -338,7 +349,13 @@ export function baselineBuildInfo(
     generateBuildInfoProgramBaseline(sys, buildInfoPath, buildInfo);
 }
 
-export function tscBaselineName(scenario: string, subScenario: string, commandLineArgs: readonly string[], isWatch?: boolean, suffix?: string) {
+export function tscBaselineName(
+    scenario: string,
+    subScenario: string,
+    commandLineArgs: readonly string[],
+    isWatch?: boolean,
+    suffix?: string,
+) {
     return `${ts.isBuild(commandLineArgs) ? "tsbuild" : "tsc"}${isWatch ? "Watch" : ""}/${scenario}/${subScenario.split(" ").join("-")}${
         suffix ? suffix : ""
     }.js`;

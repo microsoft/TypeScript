@@ -242,13 +242,25 @@ export function transformES2017(context: TransformationContext): (x: SourceFile 
                 return visitAwaitExpression(node as AwaitExpression);
 
             case SyntaxKind.MethodDeclaration:
-                return doWithContext(ContextFlags.NonTopLevel | ContextFlags.HasLexicalThis, visitMethodDeclaration, node as MethodDeclaration);
+                return doWithContext(
+                    ContextFlags.NonTopLevel | ContextFlags.HasLexicalThis,
+                    visitMethodDeclaration,
+                    node as MethodDeclaration,
+                );
 
             case SyntaxKind.FunctionDeclaration:
-                return doWithContext(ContextFlags.NonTopLevel | ContextFlags.HasLexicalThis, visitFunctionDeclaration, node as FunctionDeclaration);
+                return doWithContext(
+                    ContextFlags.NonTopLevel | ContextFlags.HasLexicalThis,
+                    visitFunctionDeclaration,
+                    node as FunctionDeclaration,
+                );
 
             case SyntaxKind.FunctionExpression:
-                return doWithContext(ContextFlags.NonTopLevel | ContextFlags.HasLexicalThis, visitFunctionExpression, node as FunctionExpression);
+                return doWithContext(
+                    ContextFlags.NonTopLevel | ContextFlags.HasLexicalThis,
+                    visitFunctionExpression,
+                    node as FunctionExpression,
+                );
 
             case SyntaxKind.ArrowFunction:
                 return doWithContext(ContextFlags.NonTopLevel, visitArrowFunction, node as ArrowFunction);

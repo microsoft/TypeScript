@@ -377,7 +377,10 @@ function tryCamelCaseMatch(candidate: string, candidateParts: TextSpan[], chunk:
             // obviously contiguous.
             contiguous = contiguous === undefined ? true : contiguous;
 
-            candidatePart = createTextSpan(candidatePart.start + chunkCharacterSpan.length, candidatePart.length - chunkCharacterSpan.length);
+            candidatePart = createTextSpan(
+                candidatePart.start + chunkCharacterSpan.length,
+                candidatePart.length - chunkCharacterSpan.length,
+            );
         }
 
         // Check if we matched anything at all.  If we didn't, then we need to unset the

@@ -103,7 +103,10 @@ registerRefactor(refactorName, {
         Debug.assert(actionName === defaultToNamedAction.name || actionName === namedToDefaultAction.name, "Unexpected action name");
         const info = getInfo(context);
         Debug.assert(info && !isRefactorErrorInfo(info), "Expected applicable refactor info");
-        const edits = textChanges.ChangeTracker.with(context, t => doChange(context.file, context.program, info, t, context.cancellationToken));
+        const edits = textChanges.ChangeTracker.with(
+            context,
+            t => doChange(context.file, context.program, info, t, context.cancellationToken),
+        );
         return { edits, renameFilename: undefined, renameLocation: undefined };
     },
 });
@@ -129,9 +132,13 @@ function getInfo(context: RefactorContext, considerPartialSpans = true): ExportI
     const { file, program } = context;
     const span = getRefactorContextSpan(context);
     const token = getTokenAtPosition(file, span.start);
-    const exportNode = !!(token.parent && getSyntacticModifierFlags(token.parent) & ModifierFlags.Export) && considerPartialSpans ? token.parent
+    const exportNode = !!(token.parent && getSyntacticModifierFlags(token.parent) & ModifierFlags.Export) && considerPartialSpans ?
+        token.parent
         : getParentNodeInSpan(token, file, span);
-    if (!exportNode || (!isSourceFile(exportNode.parent) && !(isModuleBlock(exportNode.parent) && isAmbientModule(exportNode.parent.parent)))) {
+    if (
+        !exportNode ||
+        (!isSourceFile(exportNode.parent) && !(isModuleBlock(exportNode.parent) && isAmbientModule(exportNode.parent.parent)))
+    ) {
         return { error: getLocaleSpecificMessage(Diagnostics.Could_not_find_export_statement) };
     }
 
@@ -254,7 +261,11 @@ function changeExport(
             case SyntaxKind.ModuleDeclaration:
                 // `export type T = number;` -> `type T = number; export default T;`
                 changes.deleteModifier(exportingSourceFile, exportKeyword);
-                changes.insertNodeAfter(exportingSourceFile, exportNode, factory.createExportDefault(factory.createIdentifier(exportName.text)));
+                changes.insertNodeAfter(
+                    exportingSourceFile,
+                    exportNode,
+                    factory.createExportDefault(factory.createIdentifier(exportName.text)),
+                );
                 break;
             default:
                 Debug.fail(`Unexpected exportNode kind ${(exportNode as ExportToConvert).kind}`);
@@ -291,7 +302,12 @@ function changeImports(
     );
 }
 
-function changeDefaultToNamedImport(importingSourceFile: SourceFile, ref: Identifier, changes: textChanges.ChangeTracker, exportName: string): void {
+function changeDefaultToNamedImport(
+    importingSourceFile: SourceFile,
+    ref: Identifier,
+    changes: textChanges.ChangeTracker,
+    exportName: string,
+): void {
     const { parent } = ref;
     switch (parent.kind) {
         case SyntaxKind.PropertyAccessExpression:

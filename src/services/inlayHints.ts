@@ -191,7 +191,9 @@ export function provideInlayHints(context: InlayHintsContext): InlayHint[] {
             visitCallOrNewExpression(node);
         }
         else {
-            if (preferences.includeInlayFunctionParameterTypeHints && isFunctionLikeDeclaration(node) && hasContextSensitiveParameters(node)) {
+            if (
+                preferences.includeInlayFunctionParameterTypeHints && isFunctionLikeDeclaration(node) && hasContextSensitiveParameters(node)
+            ) {
                 visitFunctionLikeForParameterType(node);
             }
             if (preferences.includeInlayFunctionLikeReturnTypeHints && isSignatureSupportingReturnAnnotation(node)) {
@@ -419,7 +421,9 @@ export function provideInlayHints(context: InlayHintsContext): InlayHint[] {
         }
     }
 
-    function getTypeAnnotationPosition(decl: FunctionDeclaration | ArrowFunction | FunctionExpression | MethodDeclaration | GetAccessorDeclaration) {
+    function getTypeAnnotationPosition(
+        decl: FunctionDeclaration | ArrowFunction | FunctionExpression | MethodDeclaration | GetAccessorDeclaration,
+    ) {
         const closeParenToken = findChildOfKind(decl, SyntaxKind.CloseParenToken, file);
         if (closeParenToken) {
             return closeParenToken.end;
@@ -467,7 +471,8 @@ export function provideInlayHints(context: InlayHintsContext): InlayHint[] {
     }
 
     function printTypeInSingleLine(type: Type) {
-        const flags = NodeBuilderFlags.IgnoreErrors | NodeBuilderFlags.AllowUniqueESSymbolType | NodeBuilderFlags.UseAliasDefinedOutsideCurrentScope;
+        const flags = NodeBuilderFlags.IgnoreErrors | NodeBuilderFlags.AllowUniqueESSymbolType |
+            NodeBuilderFlags.UseAliasDefinedOutsideCurrentScope;
         const printer = createPrinterWithRemoveComments();
 
         return usingSingleLineStringWriter(writer => {
@@ -482,7 +487,8 @@ export function provideInlayHints(context: InlayHintsContext): InlayHint[] {
             return printTypeInSingleLine(type);
         }
 
-        const flags = NodeBuilderFlags.IgnoreErrors | NodeBuilderFlags.AllowUniqueESSymbolType | NodeBuilderFlags.UseAliasDefinedOutsideCurrentScope;
+        const flags = NodeBuilderFlags.IgnoreErrors | NodeBuilderFlags.AllowUniqueESSymbolType |
+            NodeBuilderFlags.UseAliasDefinedOutsideCurrentScope;
         const typeNode = checker.typeToTypeNode(type, /*enclosingDeclaration*/ undefined, flags);
         Debug.assertIsDefined(typeNode, "should always get typenode");
 

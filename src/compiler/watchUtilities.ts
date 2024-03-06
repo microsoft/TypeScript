@@ -70,7 +70,13 @@ export interface DirectoryStructureHost {
     // TODO: GH#18217 Optional methods are frequently used as non-optional
     directoryExists?(path: string): boolean;
     getDirectories?(path: string): string[];
-    readDirectory?(path: string, extensions?: readonly string[], exclude?: readonly string[], include?: readonly string[], depth?: number): string[];
+    readDirectory?(
+        path: string,
+        extensions?: readonly string[],
+        exclude?: readonly string[],
+        include?: readonly string[],
+        depth?: number,
+    ): string[];
     realpath?(path: string): string;
 
     createDirectory?(path: string): void;
@@ -88,7 +94,13 @@ export interface CachedDirectoryStructureHost extends DirectoryStructureHost {
     useCaseSensitiveFileNames: boolean;
 
     getDirectories(path: string): string[];
-    readDirectory(path: string, extensions?: readonly string[], exclude?: readonly string[], include?: readonly string[], depth?: number): string[];
+    readDirectory(
+        path: string,
+        extensions?: readonly string[],
+        exclude?: readonly string[],
+        include?: readonly string[],
+        depth?: number,
+    ): string[];
 
     /** Returns the queried result for the file exists and directory exists if at all it was done */
     addOrDeleteFileOrDirectory(fileOrDirectory: string, fileOrDirectoryPath: Path): FileAndDirectoryExistence | undefined;
@@ -168,8 +180,10 @@ export function createCachedDirectoryStructureHost(
     function createCachedFileSystemEntries(rootDir: string, rootDirPath: Path) {
         if (!host.realpath || ensureTrailingDirectorySeparator(toPath(host.realpath(rootDir))) === rootDirPath) {
             const resultFromHost: MutableFileSystemEntries = {
-                files:
-                    map(host.readDirectory!(rootDir, /*extensions*/ undefined, /*exclude*/ undefined, /*include*/ ["*.*"]), getBaseNameOfFileName) ||
+                files: map(
+                    host.readDirectory!(rootDir, /*extensions*/ undefined, /*exclude*/ undefined, /*include*/ ["*.*"]),
+                    getBaseNameOfFileName,
+                ) ||
                     [],
                 directories: host.getDirectories!(rootDir) || [],
             };
@@ -300,7 +314,10 @@ export function createCachedDirectoryStructureHost(
         function getFileSystemEntriesFromHost(dir: string, path: Path): FileSystemEntries {
             if (rootSymLinkResult && path === rootDirPath) return rootSymLinkResult;
             const result: FileSystemEntries = {
-                files: map(host.readDirectory!(dir, /*extensions*/ undefined, /*exclude*/ undefined, /*include*/ ["*.*"]), getBaseNameOfFileName) ||
+                files: map(
+                    host.readDirectory!(dir, /*extensions*/ undefined, /*exclude*/ undefined, /*include*/ ["*.*"]),
+                    getBaseNameOfFileName,
+                ) ||
                     emptyArray,
                 directories: host.getDirectories!(dir) || emptyArray,
             };
@@ -363,7 +380,11 @@ export function createCachedDirectoryStructureHost(
         }
     }
 
-    function updateFilesOfFileSystemEntry(parentResult: SortedAndCanonicalizedMutableFileSystemEntries, baseName: string, fileExists: boolean): void {
+    function updateFilesOfFileSystemEntry(
+        parentResult: SortedAndCanonicalizedMutableFileSystemEntries,
+        baseName: string,
+        fileExists: boolean,
+    ): void {
         const canonicalizedFiles = parentResult.sortedAndCanonicalizedFiles;
         const canonicalizedBaseName = getCanonicalFileName(baseName);
         if (fileExists) {
@@ -799,7 +820,8 @@ export function getWatchFactory<X, Y = undefined>(
     ) {
         log(`ExcludeWatcher:: Added:: ${getWatchInfo(file, flags, options, detailInfo1, detailInfo2, getDetailWatchInfo)}`);
         return {
-            close: () => log(`ExcludeWatcher:: Close:: ${getWatchInfo(file, flags, options, detailInfo1, detailInfo2, getDetailWatchInfo)}`),
+            close: () =>
+                log(`ExcludeWatcher:: Close:: ${getWatchInfo(file, flags, options, detailInfo1, detailInfo2, getDetailWatchInfo)}`),
         };
     }
 
@@ -837,7 +859,9 @@ export function getWatchFactory<X, Y = undefined>(
         log(`Elapsed:: ${elapsed}ms ${watchInfo}`);
         return {
             close: () => {
-                const watchInfo = `DirectoryWatcher:: Close:: ${getWatchInfo(file, flags, options, detailInfo1, detailInfo2, getDetailWatchInfo)}`;
+                const watchInfo = `DirectoryWatcher:: Close:: ${
+                    getWatchInfo(file, flags, options, detailInfo1, detailInfo2, getDetailWatchInfo)
+                }`;
                 log(watchInfo);
                 const start = timestamp();
                 watcher.close();

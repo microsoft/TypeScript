@@ -250,7 +250,8 @@ export namespace DocumentHighlights {
         else if (isTryStatement(node)) {
             // Exceptions thrown within a try block lacking a catch clause are "owned" in the current context.
             return concatenate(
-                node.catchClause ? aggregateOwnedThrowStatements(node.catchClause) : node.tryBlock && aggregateOwnedThrowStatements(node.tryBlock),
+                node.catchClause ? aggregateOwnedThrowStatements(node.catchClause)
+                    : node.tryBlock && aggregateOwnedThrowStatements(node.tryBlock),
                 node.finallyBlock && aggregateOwnedThrowStatements(node.finallyBlock),
             );
         }

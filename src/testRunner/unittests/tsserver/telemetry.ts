@@ -39,7 +39,9 @@ describe("unittests:: tsserver:: project telemetry", () => {
     });
 
     it("counts files by extension", () => {
-        const files = ["ts.ts", "tsx.tsx", "moo.ts", "dts.d.ts", "jsx.jsx", "js.js", "badExtension.badExtension"].map(f => makeFile(`/src/${f}`));
+        const files = ["ts.ts", "tsx.tsx", "moo.ts", "dts.d.ts", "jsx.jsx", "js.js", "badExtension.badExtension"].map(f =>
+            makeFile(`/src/${f}`)
+        );
         const notIncludedFile = makeFile("/bin/ts.js");
         const compilerOptions: ts.CompilerOptions = { allowJs: true };
         const tsconfig = makeFile("/tsconfig.json", { compilerOptions, include: ["src"] });

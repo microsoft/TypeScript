@@ -54,7 +54,9 @@ describe("unittests:: tsserver:: moduleSpecifierCache", () => {
     it("caches importability within a file", () => {
         const { session, moduleSpecifierCache } = setup();
         session.logger.info(
-            `importability: ${moduleSpecifierCache.get(bTs.path as ts.Path, aTs.path as ts.Path, {}, {})?.isBlockedByPackageJsonDependencies}`,
+            `importability: ${
+                moduleSpecifierCache.get(bTs.path as ts.Path, aTs.path as ts.Path, {}, {})?.isBlockedByPackageJsonDependencies
+            }`,
         );
         baselineTsserverLogs("moduleSpecifierCache", "caches importability within a file", session);
     });
@@ -63,7 +65,9 @@ describe("unittests:: tsserver:: moduleSpecifierCache", () => {
         const { session, moduleSpecifierCache, triggerCompletions } = setup();
         // Completion at an import statement will calculate and cache module specifiers
         triggerCompletions({ file: cTs.path, line: 1, offset: cTs.content.length + 1 });
-        session.logger.info(`mobxCache: ${jsonToReadableText(moduleSpecifierCache.get(cTs.path as ts.Path, mobxDts.path as ts.Path, {}, {}))}`);
+        session.logger.info(
+            `mobxCache: ${jsonToReadableText(moduleSpecifierCache.get(cTs.path as ts.Path, mobxDts.path as ts.Path, {}, {}))}`,
+        );
         baselineTsserverLogs("moduleSpecifierCache", "caches module specifiers within a file", session);
     });
 
@@ -86,7 +90,9 @@ describe("unittests:: tsserver:: moduleSpecifierCache", () => {
         host.writeFile("/src/a2.ts", aTs.content);
         host.runQueuedTimeoutCallbacks();
         session.logger.info(
-            `importability: ${moduleSpecifierCache.get(bTs.path as ts.Path, aTs.path as ts.Path, {}, {})?.isBlockedByPackageJsonDependencies}`,
+            `importability: ${
+                moduleSpecifierCache.get(bTs.path as ts.Path, aTs.path as ts.Path, {}, {})?.isBlockedByPackageJsonDependencies
+            }`,
         );
         baselineTsserverLogs("moduleSpecifierCache", "does not invalidate the cache when new files are added", session);
     });

@@ -432,7 +432,10 @@ export class Verify extends VerifyNegatable {
         this.state.baselineGoToImplementation(/*markerOrRange*/ undefined, rangeText);
     }
 
-    public baselineDocumentHighlights(markerOrRange?: ArrayOrSingle<FourSlash.MarkerOrNameOrRange>, options?: VerifyDocumentHighlightsOptions) {
+    public baselineDocumentHighlights(
+        markerOrRange?: ArrayOrSingle<FourSlash.MarkerOrNameOrRange>,
+        options?: VerifyDocumentHighlightsOptions,
+    ) {
         this.state.baselineDocumentHighlights(markerOrRange, /*rangeText*/ undefined, options);
     }
 
@@ -1172,7 +1175,10 @@ export namespace Completion {
         providedByHarness: readonly ExpectedCompletionEntry[],
         providedByTest: readonly ExpectedCompletionEntry[],
     ): ExpectedExactCompletionsPlus {
-        return Object.assign(sorted([...providedByHarness, ...providedByTest]), { plusFunctionName: functionName, plusArgument: providedByTest });
+        return Object.assign(sorted([...providedByHarness, ...providedByTest]), {
+            plusFunctionName: functionName,
+            plusArgument: providedByTest,
+        });
     }
 
     export function typeKeywordsPlus(plus: readonly ExpectedCompletionEntry[]) {
@@ -1372,7 +1378,13 @@ export namespace Completion {
 
     export const classElementInJsKeywords = getInJsKeywords(classElementKeywords);
 
-    export const constructorParameterKeywords: readonly ExpectedCompletionEntryObject[] = ["override", "private", "protected", "public", "readonly"]
+    export const constructorParameterKeywords: readonly ExpectedCompletionEntryObject[] = [
+        "override",
+        "private",
+        "protected",
+        "public",
+        "readonly",
+    ]
         .map((
             name,
         ): ExpectedCompletionEntryObject => ({

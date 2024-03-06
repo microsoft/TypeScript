@@ -50,7 +50,12 @@ describe("unittests:: tsserver:: getEditsForFileRename", () => {
             resolveModuleNames: (moduleNames, containingFile) =>
                 moduleNames.map(name => ts.resolveModuleName(name, containingFile, options, lsHost, moduleResolutionCache).resolvedModule),
             getResolvedModuleWithFailedLookupLocationsFromCache: (moduleName, containingFile, mode) =>
-                moduleResolutionCache.getFromDirectoryCache(moduleName, mode, ts.getDirectoryPath(containingFile), /*redirectedReference*/ undefined),
+                moduleResolutionCache.getFromDirectoryCache(
+                    moduleName,
+                    mode,
+                    ts.getDirectoryPath(containingFile),
+                    /*redirectedReference*/ undefined,
+                ),
         };
         const service = ts.createLanguageService(lsHost);
         const edits = service.getEditsForFileRename("/old.ts", "/new.ts", ts.testFormatSettings, ts.emptyOptions);

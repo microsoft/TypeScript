@@ -11,7 +11,8 @@ describe("unittests:: config:: showConfig", () => {
                 const configPath = ts.combinePaths(cwd, "tsconfig.json");
                 const configContents = configJson ? JSON.stringify(configJson) : undefined;
                 const configParseHost: ts.ParseConfigFileHost = {
-                    fileExists: path => ts.comparePaths(ts.getNormalizedAbsolutePath(path, cwd), configPath) === ts.Comparison.EqualTo ? true : false,
+                    fileExists: path =>
+                        ts.comparePaths(ts.getNormalizedAbsolutePath(path, cwd), configPath) === ts.Comparison.EqualTo ? true : false,
                     getCurrentDirectory() {
                         return cwd;
                     },
@@ -23,7 +24,8 @@ describe("unittests:: config:: showConfig", () => {
                         return [];
                     },
                     readFile: path =>
-                        ts.comparePaths(ts.getNormalizedAbsolutePath(path, cwd), configPath) === ts.Comparison.EqualTo ? configContents : undefined,
+                        ts.comparePaths(ts.getNormalizedAbsolutePath(path, cwd), configPath) === ts.Comparison.EqualTo ? configContents
+                            : undefined,
                 };
                 let commandLine = ts.parseCommandLine(commandLinesArgs);
                 if (commandLine.options.project) {
@@ -54,7 +56,11 @@ describe("unittests:: config:: showConfig", () => {
 
     showTSConfigCorrectly("Show TSConfig with incorrect compiler option", ["--showConfig", "--someNonExistOption"]);
 
-    showTSConfigCorrectly("Show TSConfig with incorrect compiler option value", ["--showConfig", "--lib", "nonExistLib,es5,es2015.promise"]);
+    showTSConfigCorrectly("Show TSConfig with incorrect compiler option value", [
+        "--showConfig",
+        "--lib",
+        "nonExistLib,es5,es2015.promise",
+    ]);
 
     showTSConfigCorrectly("Show TSConfig with advanced options", [
         "--showConfig",

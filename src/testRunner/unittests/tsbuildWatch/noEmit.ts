@@ -27,7 +27,8 @@ describe("unittests:: tsbuildWatch:: watchMode:: with noEmit", () => {
         edits: [
             {
                 caption: "No change",
-                edit: sys => sys.writeFile(`/user/username/projects/myproject/a.js`, sys.readFile(`/user/username/projects/myproject/a.js`)!),
+                edit: sys =>
+                    sys.writeFile(`/user/username/projects/myproject/a.js`, sys.readFile(`/user/username/projects/myproject/a.js`)!),
                 // build project
                 timeouts: sys => sys.runQueuedTimeoutCallbacks(),
             },

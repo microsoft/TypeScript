@@ -61,21 +61,25 @@ export class ProjectRunner extends Harness.RunnerBase {
 
     private runProjectTestCase(testCaseFileName: string) {
         for (const { name, payload } of ProjectTestCase.getConfigurations(testCaseFileName)) {
-            describe("Compiling project for " + payload.testCase.scenario + ": testcase " + testCaseFileName + (name ? ` (${name})` : ``), () => {
-                let projectTestCase: ProjectTestCase | undefined;
-                before(() => {
-                    projectTestCase = new ProjectTestCase(testCaseFileName, payload);
-                });
-                it(`Correct module resolution tracing for ${testCaseFileName}`, () => projectTestCase && projectTestCase.verifyResolution());
-                it(`Correct errors for ${testCaseFileName}`, () => projectTestCase && projectTestCase.verifyDiagnostics());
-                it(`Correct JS output for ${testCaseFileName}`, () => projectTestCase && projectTestCase.verifyJavaScriptOutput());
-                // NOTE: This check was commented out in previous code. Leaving this here to eventually be restored if needed.
-                // it(`Correct sourcemap content for ${testCaseFileName}`, () => projectTestCase && projectTestCase.verifySourceMapRecord());
-                it(`Correct declarations for ${testCaseFileName}`, () => projectTestCase && projectTestCase.verifyDeclarations());
-                after(() => {
-                    projectTestCase = undefined;
-                });
-            });
+            describe(
+                "Compiling project for " + payload.testCase.scenario + ": testcase " + testCaseFileName + (name ? ` (${name})` : ``),
+                () => {
+                    let projectTestCase: ProjectTestCase | undefined;
+                    before(() => {
+                        projectTestCase = new ProjectTestCase(testCaseFileName, payload);
+                    });
+                    it(`Correct module resolution tracing for ${testCaseFileName}`, () =>
+                        projectTestCase && projectTestCase.verifyResolution());
+                    it(`Correct errors for ${testCaseFileName}`, () => projectTestCase && projectTestCase.verifyDiagnostics());
+                    it(`Correct JS output for ${testCaseFileName}`, () => projectTestCase && projectTestCase.verifyJavaScriptOutput());
+                    // NOTE: This check was commented out in previous code. Leaving this here to eventually be restored if needed.
+                    // it(`Correct sourcemap content for ${testCaseFileName}`, () => projectTestCase && projectTestCase.verifySourceMapRecord());
+                    it(`Correct declarations for ${testCaseFileName}`, () => projectTestCase && projectTestCase.verifyDeclarations());
+                    after(() => {
+                        projectTestCase = undefined;
+                    });
+                },
+            );
         }
     }
 }
@@ -309,7 +313,10 @@ class ProjectTestCase {
                     }
 
                     const content = Utils.removeTestPathPrefixes(output.text, /*retainTrailingDirectorySeparator*/ true);
-                    Harness.Baseline.runBaseline(this.getBaselineFolder(this.compilerResult.moduleKind) + diskRelativeName, content as string | null); // TODO: GH#18217
+                    Harness.Baseline.runBaseline(
+                        this.getBaselineFolder(this.compilerResult.moduleKind) + diskRelativeName,
+                        content as string | null,
+                    ); // TODO: GH#18217
                 }
                 catch (e) {
                     errs.push(e);
@@ -469,7 +476,10 @@ class ProjectTestCase {
         );
 
         function findOutputDtsFile(fileName: string) {
-            return ts.forEach(compilerResult.outputFiles, outputFile => outputFile.meta.get("fileName") === fileName ? outputFile : undefined);
+            return ts.forEach(
+                compilerResult.outputFiles,
+                outputFile => outputFile.meta.get("fileName") === fileName ? outputFile : undefined,
+            );
         }
     }
 }

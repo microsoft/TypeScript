@@ -41,7 +41,10 @@ describe("unittests:: tsserver:: externalProjects", () => {
                     preferences: { lazyConfiguredProjectsFromExternalProject },
                 },
             });
-            const upperCaseConfigFilePath = ts.combinePaths(ts.getDirectoryPath(config.path).toUpperCase(), ts.getBaseFileName(config.path));
+            const upperCaseConfigFilePath = ts.combinePaths(
+                ts.getDirectoryPath(config.path).toUpperCase(),
+                ts.getBaseFileName(config.path),
+            );
             openExternalProjectForSession({
                 projectFileName: "/a/b/project.csproj",
                 rootFiles: toExternalFiles([f1.path, upperCaseConfigFilePath]),
@@ -84,7 +87,11 @@ describe("unittests:: tsserver:: externalProjects", () => {
                         proxy.getSemanticDiagnostics = filename => {
                             const prev = info.languageService.getSemanticDiagnostics(filename);
                             const sourceFile: ts.SourceFile = info.project.getSourceFile(
-                                ts.toPath(filename, /*basePath*/ undefined, ts.createGetCanonicalFileName(info.serverHost.useCaseSensitiveFileNames)),
+                                ts.toPath(
+                                    filename,
+                                    /*basePath*/ undefined,
+                                    ts.createGetCanonicalFileName(info.serverHost.useCaseSensitiveFileNames),
+                                ),
                             )!;
                             prev.push({
                                 category: ts.DiagnosticCategory.Warning,

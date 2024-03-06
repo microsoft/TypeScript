@@ -30,11 +30,15 @@ describe("unittests:: tsc:: moduleResolution::", () => {
             {
                 caption: "add the alternateResult in @types",
                 edit: fs =>
-                    fs.writeFileSync("/home/src/projects/project/node_modules/@types/bar/index.d.ts", getFsContentsForAlternateResultDts("bar")),
+                    fs.writeFileSync(
+                        "/home/src/projects/project/node_modules/@types/bar/index.d.ts",
+                        getFsContentsForAlternateResultDts("bar"),
+                    ),
             },
             {
                 caption: "add the ndoe10Result in package/types",
-                edit: fs => fs.writeFileSync("/home/src/projects/project/node_modules/foo/index.d.ts", getFsContentsForAlternateResultDts("foo")),
+                edit: fs =>
+                    fs.writeFileSync("/home/src/projects/project/node_modules/foo/index.d.ts", getFsContentsForAlternateResultDts("foo")),
             },
             {
                 caption: "update package.json from @types so error is fixed",
@@ -79,11 +83,15 @@ describe("unittests:: tsc:: moduleResolution::", () => {
             {
                 caption: "add the alternateResult in @types",
                 edit: fs =>
-                    fs.writeFileSync("/home/src/projects/project/node_modules/@types/bar2/index.d.ts", getFsContentsForAlternateResultDts("bar2")),
+                    fs.writeFileSync(
+                        "/home/src/projects/project/node_modules/@types/bar2/index.d.ts",
+                        getFsContentsForAlternateResultDts("bar2"),
+                    ),
             },
             {
                 caption: "add the ndoe10Result in package/types",
-                edit: fs => fs.writeFileSync("/home/src/projects/project/node_modules/foo2/index.d.ts", getFsContentsForAlternateResultDts("foo2")),
+                edit: fs =>
+                    fs.writeFileSync("/home/src/projects/project/node_modules/foo2/index.d.ts", getFsContentsForAlternateResultDts("foo2")),
             },
         ],
     });

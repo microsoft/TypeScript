@@ -213,9 +213,12 @@ function getFirstTypeAt(file: SourceFile, startPosition: number, range: TextRang
     for (const f of currentNodes) {
         const current = f();
         const overlappingRange = nodeOverlapsWithStartEnd(current, file, range.pos, range.end);
-        const firstType = findAncestor(current, node =>
-            node.parent && isTypeNode(node) && !rangeContainsSkipTrivia(range, node.parent, file) &&
-            (isCursorRequest || overlappingRange));
+        const firstType = findAncestor(
+            current,
+            node =>
+                node.parent && isTypeNode(node) && !rangeContainsSkipTrivia(range, node.parent, file) &&
+                (isCursorRequest || overlappingRange),
+        );
         if (firstType) {
             return firstType;
         }
@@ -223,7 +226,10 @@ function getFirstTypeAt(file: SourceFile, startPosition: number, range: TextRang
     return undefined;
 }
 
-function flattenTypeLiteralNodeReference(checker: TypeChecker, selection: TypeNode | TypeNode[] | undefined): readonly TypeElement[] | undefined {
+function flattenTypeLiteralNodeReference(
+    checker: TypeChecker,
+    selection: TypeNode | TypeNode[] | undefined,
+): readonly TypeElement[] | undefined {
     if (!selection) return undefined;
     if (isArray(selection)) {
         const result: TypeElement[] = [];
@@ -299,7 +305,10 @@ function collectTypeParameters(
             }
         }
         else if (isInferTypeNode(node)) {
-            const conditionalTypeNode = findAncestor(node, n => isConditionalTypeNode(n) && rangeContainsSkipTrivia(n.extendsType, node, file));
+            const conditionalTypeNode = findAncestor(
+                node,
+                n => isConditionalTypeNode(n) && rangeContainsSkipTrivia(n.extendsType, node, file),
+            );
             if (!conditionalTypeNode || !rangeContainsSkipTrivia(selectionRange, conditionalTypeNode, file)) {
                 return true;
             }
@@ -347,7 +356,9 @@ function doTypeAliasChange(changes: textChanges.ChangeTracker, file: SourceFile,
     const newTypeDeclaration = factory.createTypeAliasDeclaration(
         /*modifiers*/ undefined,
         name,
-        typeParameters.map(id => factory.updateTypeParameterDeclaration(id, id.modifiers, id.name, id.constraint, /*defaultType*/ undefined)),
+        typeParameters.map(id =>
+            factory.updateTypeParameterDeclaration(id, id.modifiers, id.name, id.constraint, /*defaultType*/ undefined)
+        ),
         newTypeNode,
     );
     changes.insertNodeBefore(file, enclosingNode, ignoreSourceNewlines(newTypeDeclaration), /*blankLineBetween*/ true);
@@ -355,7 +366,10 @@ function doTypeAliasChange(changes: textChanges.ChangeTracker, file: SourceFile,
         file,
         firstTypeNode,
         lastTypeNode,
-        factory.createTypeReferenceNode(name, typeParameters.map(id => factory.createTypeReferenceNode(id.name, /*typeArguments*/ undefined))),
+        factory.createTypeReferenceNode(
+            name,
+            typeParameters.map(id => factory.createTypeReferenceNode(id.name, /*typeArguments*/ undefined)),
+        ),
         {
             leadingTriviaOption: textChanges.LeadingTriviaOption.Exclude,
             trailingTriviaOption: textChanges.TrailingTriviaOption.ExcludeWhitespace,
@@ -381,7 +395,10 @@ function doInterfaceChange(changes: textChanges.ChangeTracker, file: SourceFile,
         file,
         firstTypeNode,
         lastTypeNode,
-        factory.createTypeReferenceNode(name, typeParameters.map(id => factory.createTypeReferenceNode(id.name, /*typeArguments*/ undefined))),
+        factory.createTypeReferenceNode(
+            name,
+            typeParameters.map(id => factory.createTypeReferenceNode(id.name, /*typeArguments*/ undefined)),
+        ),
         {
             leadingTriviaOption: textChanges.LeadingTriviaOption.Exclude,
             trailingTriviaOption: textChanges.TrailingTriviaOption.ExcludeWhitespace,
@@ -429,7 +446,10 @@ function doTypedefChange(changes: textChanges.ChangeTracker, context: RefactorCo
         file,
         firstTypeNode,
         lastTypeNode,
-        factory.createTypeReferenceNode(name, typeParameters.map(id => factory.createTypeReferenceNode(id.name, /*typeArguments*/ undefined))),
+        factory.createTypeReferenceNode(
+            name,
+            typeParameters.map(id => factory.createTypeReferenceNode(id.name, /*typeArguments*/ undefined)),
+        ),
     );
 }
 

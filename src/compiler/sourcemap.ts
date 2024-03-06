@@ -143,7 +143,11 @@ export function createSourceMapGenerator(
             || pendingGeneratedCharacter !== generatedCharacter;
     }
 
-    function isBacktrackingSourcePosition(sourceIndex: number | undefined, sourceLine: number | undefined, sourceCharacter: number | undefined) {
+    function isBacktrackingSourcePosition(
+        sourceIndex: number | undefined,
+        sourceLine: number | undefined,
+        sourceCharacter: number | undefined,
+    ) {
         return sourceIndex !== undefined
             && sourceLine !== undefined
             && sourceCharacter !== undefined
@@ -441,7 +445,8 @@ export function isRawSourceMap(x: any): x is RawSourceMap {
         && typeof x.mappings === "string"
         && isArray(x.sources) && every(x.sources, isString)
         && (x.sourceRoot === undefined || x.sourceRoot === null || typeof x.sourceRoot === "string")
-        && (x.sourcesContent === undefined || x.sourcesContent === null || isArray(x.sourcesContent) && every(x.sourcesContent, isStringOrNull))
+        && (x.sourcesContent === undefined || x.sourcesContent === null ||
+            isArray(x.sourcesContent) && every(x.sourcesContent, isStringOrNull))
         && (x.names === undefined || x.names === null || isArray(x.names) && every(x.names, isString));
 }
 /* eslint-enable no-null/no-null */
@@ -555,7 +560,9 @@ export function decodeMappings(mappings: string): MappingsDecoder {
                         if (hasReportedError()) return stopIterating();
                         if (nameIndex < 0) return setErrorAndStopIterating("Invalid nameIndex found");
 
-                        if (!isSourceMappingSegmentEnd()) return setErrorAndStopIterating("Unsupported Error Format: Entries after nameIndex");
+                        if (!isSourceMappingSegmentEnd()) {
+                            return setErrorAndStopIterating("Unsupported Error Format: Entries after nameIndex");
+                        }
                     }
                 }
 

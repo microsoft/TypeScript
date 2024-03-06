@@ -189,7 +189,11 @@ enum BuildResultFlags {
 /** @internal */
 export type ResolvedConfigFilePath = ResolvedConfigFileName & Path;
 
-function getOrCreateValueFromConfigFileMap<T>(configFileMap: Map<ResolvedConfigFilePath, T>, resolved: ResolvedConfigFilePath, createT: () => T): T {
+function getOrCreateValueFromConfigFileMap<T>(
+    configFileMap: Map<ResolvedConfigFilePath, T>,
+    resolved: ResolvedConfigFilePath,
+    createT: () => T,
+): T {
     const existingValue = configFileMap.get(resolved);
     let newValue: T | undefined;
     if (!existingValue) {
@@ -335,7 +339,9 @@ export function createSolutionBuilderHost<T extends BuilderProgram = EmitAndSema
     reportSolutionBuilderStatus?: DiagnosticReporter,
     reportErrorSummary?: ReportEmitErrorSummary,
 ) {
-    const host = createSolutionBuilderHostBase(system, createProgram, reportDiagnostic, reportSolutionBuilderStatus) as SolutionBuilderHost<T>;
+    const host = createSolutionBuilderHostBase(system, createProgram, reportDiagnostic, reportSolutionBuilderStatus) as SolutionBuilderHost<
+        T
+    >;
     host.reportErrorSummary = reportErrorSummary;
     return host;
 }
@@ -347,7 +353,12 @@ export function createSolutionBuilderWithWatchHost<T extends BuilderProgram = Em
     reportSolutionBuilderStatus?: DiagnosticReporter,
     reportWatchStatus?: WatchStatusReporter,
 ) {
-    const host = createSolutionBuilderHostBase(system, createProgram, reportDiagnostic, reportSolutionBuilderStatus) as SolutionBuilderWithWatchHost<
+    const host = createSolutionBuilderHostBase(
+        system,
+        createProgram,
+        reportDiagnostic,
+        reportSolutionBuilderStatus,
+    ) as SolutionBuilderWithWatchHost<
         T
     >;
     const watchHost = createWatchHost(system, reportWatchStatus);
@@ -543,7 +554,12 @@ function createSolutionBuilderState<T extends BuilderProgram>(
             );
     }
     compilerHost.getBuildInfo = (fileName, configFilePath) =>
-        getBuildInfo(state, fileName, toResolvedConfigFilePath(state, configFilePath as ResolvedConfigFileName), /*modifiedTime*/ undefined);
+        getBuildInfo(
+            state,
+            fileName,
+            toResolvedConfigFilePath(state, configFilePath as ResolvedConfigFileName),
+            /*modifiedTime*/ undefined,
+        );
 
     const { watchFile, watchDirectory, writeLog } = createWatchFactory<ResolvedConfigFileName>(hostWithWatch, options);
 
@@ -656,7 +672,13 @@ function parseConfigFile<T extends BuilderProgram>(
     }
     else {
         parseConfigFileHost.onUnRecoverableConfigFileDiagnostic = d => diagnostic = d;
-        parsed = getParsedCommandLineOfConfigFile(configFileName, baseCompilerOptions, parseConfigFileHost, extendedConfigCache, baseWatchOptions);
+        parsed = getParsedCommandLineOfConfigFile(
+            configFileName,
+            baseCompilerOptions,
+            parseConfigFileHost,
+            extendedConfigCache,
+            baseWatchOptions,
+        );
         parseConfigFileHost.onUnRecoverableConfigFileDiagnostic = noop;
     }
     configFileCache.set(configFilePath, parsed || diagnostic!);
@@ -673,7 +695,10 @@ function resolveProjectName<T extends BuilderProgram>(state: SolutionBuilderStat
     return resolveConfigFileProjectName(resolvePath(state.compilerHost.getCurrentDirectory(), name));
 }
 
-function createBuildOrder<T extends BuilderProgram>(state: SolutionBuilderState<T>, roots: readonly ResolvedConfigFileName[]): AnyBuildOrder {
+function createBuildOrder<T extends BuilderProgram>(
+    state: SolutionBuilderState<T>,
+    roots: readonly ResolvedConfigFileName[],
+): AnyBuildOrder {
     const temporaryMarks = new Map<ResolvedConfigFilePath, true>();
     const permanentMarks = new Map<ResolvedConfigFilePath, true>();
     const circularityReportStack: string[] = [];
@@ -850,8 +875,15 @@ function enableCache<T extends BuilderProgram>(state: SolutionBuilderState<T>) {
 function disableCache<T extends BuilderProgram>(state: SolutionBuilderState<T>) {
     if (!state.cache) return;
 
-    const { cache, host, compilerHost, extendedConfigCache, moduleResolutionCache, typeReferenceDirectiveResolutionCache, libraryResolutionCache } =
-        state;
+    const {
+        cache,
+        host,
+        compilerHost,
+        extendedConfigCache,
+        moduleResolutionCache,
+        typeReferenceDirectiveResolutionCache,
+        libraryResolutionCache,
+    } = state;
 
     host.readFile = cache.originalReadFile;
     host.fileExists = cache.originalFileExists;
@@ -1212,7 +1244,11 @@ function createBuildOrUpdateInvalidedProject<T extends BuilderProgram>(
         );
     }
 
-    function emit(writeFileCallback?: WriteFileCallback, cancellationToken?: CancellationToken, customTransformers?: CustomTransformers): EmitResult {
+    function emit(
+        writeFileCallback?: WriteFileCallback,
+        cancellationToken?: CancellationToken,
+        customTransformers?: CustomTransformers,
+    ): EmitResult {
         Debug.assertIsDefined(program);
         Debug.assert(step === BuildStep.Emit);
         // Before emitting lets backup state, so we can revert it back if there are declaration errors to handle emit and declaration errors correctly
@@ -1262,7 +1298,13 @@ function createBuildOrUpdateInvalidedProject<T extends BuilderProgram>(
             emittedOutputs.set(toPath(state, name), name);
             if (data?.buildInfo) setBuildInfo(state, data.buildInfo, projectPath, options, resultFlags);
             const modifiedTime = data?.differsOnlyInMap ? ts_getModifiedTime(state.host, name) : undefined;
-            writeFile(writeFileCallback ? { writeFile: writeFileCallback } : compilerHost, emitterDiagnostics, name, text, writeByteOrderMark);
+            writeFile(
+                writeFileCallback ? { writeFile: writeFileCallback } : compilerHost,
+                emitterDiagnostics,
+                name,
+                text,
+                writeByteOrderMark,
+            );
             // Revert the timestamp for the d.ts that is same
             if (data?.differsOnlyInMap) state.host.setModifiedTime(name, modifiedTime!);
             else if (!isIncremental && state.watch) {
@@ -1284,7 +1326,13 @@ function createBuildOrUpdateInvalidedProject<T extends BuilderProgram>(
         Debug.assert(step === BuildStep.EmitBuildInfo);
         const emitResult = program.emitBuildInfo((name, text, writeByteOrderMark, onError, sourceFiles, data) => {
             if (data?.buildInfo) {
-                setBuildInfo(state, data.buildInfo, projectPath, program!.getCompilerOptions(), BuildResultFlags.DeclarationOutputUnchanged);
+                setBuildInfo(
+                    state,
+                    data.buildInfo,
+                    projectPath,
+                    program!.getCompilerOptions(),
+                    BuildResultFlags.DeclarationOutputUnchanged,
+                );
             }
             if (writeFileCallback) writeFileCallback(name, text, writeByteOrderMark, onError, sourceFiles, data);
             else state.compilerHost.writeFile(name, text, writeByteOrderMark, onError, sourceFiles, data);
@@ -1328,7 +1376,13 @@ function createBuildOrUpdateInvalidedProject<T extends BuilderProgram>(
         }
 
         // Update time stamps for rest of the outputs
-        updateOutputTimestampsWorker(state, config, projectPath, Diagnostics.Updating_unchanged_output_timestamps_of_project_0, emittedOutputs);
+        updateOutputTimestampsWorker(
+            state,
+            config,
+            projectPath,
+            Diagnostics.Updating_unchanged_output_timestamps_of_project_0,
+            emittedOutputs,
+        );
         state.diagnostics.delete(projectPath);
         state.projectStatus.set(projectPath, {
             type: UpToDateStatusType.UpToDate,
@@ -1370,7 +1424,15 @@ function createBuildOrUpdateInvalidedProject<T extends BuilderProgram>(
                     break;
 
                 case BuildStep.QueueReferencingProjects:
-                    queueReferencingProjects(state, project, projectPath, projectIndex, config, buildOrder, Debug.checkDefined(buildResult));
+                    queueReferencingProjects(
+                        state,
+                        project,
+                        projectPath,
+                        projectIndex,
+                        config,
+                        buildOrder,
+                        Debug.checkDefined(buildResult),
+                    );
                     step++;
                     break;
 
@@ -1460,7 +1522,9 @@ function getNextInvalidatedProjectCreateInfo<T extends BuilderProgram>(
                 continue;
             }
 
-            if (status.type === UpToDateStatusType.UpToDateWithUpstreamTypes || status.type === UpToDateStatusType.UpToDateWithInputFileText) {
+            if (
+                status.type === UpToDateStatusType.UpToDateWithUpstreamTypes || status.type === UpToDateStatusType.UpToDateWithInputFileText
+            ) {
                 reportAndStoreErrors(state, projectPath, getConfigFileParsingDiagnostics(config));
                 return {
                     kind: InvalidatedProjectKind.UpdateOutputFileStamps,
@@ -1719,7 +1783,11 @@ function getBuildInfo<T extends BuilderProgram>(
     }
     const value = state.readFileWithCache(buildInfoPath);
     const buildInfo = value ? ts_getBuildInfo(buildInfoPath, value) : undefined;
-    state.buildInfoCache.set(resolvedConfigPath, { path, buildInfo: buildInfo || false, modifiedTime: modifiedTime || missingFileModifiedTime });
+    state.buildInfoCache.set(resolvedConfigPath, {
+        path,
+        buildInfo: buildInfo || false,
+        modifiedTime: modifiedTime || missingFileModifiedTime,
+    });
     return buildInfo;
 }
 
@@ -2141,7 +2209,11 @@ function updateOutputTimestamps<T extends BuilderProgram>(
     resolvedPath: ResolvedConfigFilePath,
 ) {
     if (state.options.dry) {
-        return reportStatus(state, Diagnostics.A_non_dry_build_would_update_timestamps_for_output_of_project_0, proj.options.configFilePath!);
+        return reportStatus(
+            state,
+            Diagnostics.A_non_dry_build_would_update_timestamps_for_output_of_project_0,
+            proj.options.configFilePath!,
+        );
     }
     updateOutputTimestampsWorker(state, proj, resolvedPath, Diagnostics.Updating_output_timestamps_of_project_0);
     state.projectStatus.set(resolvedPath, {
@@ -2269,7 +2341,11 @@ function clean<T extends BuilderProgram>(state: SolutionBuilderState<T>, project
     return result;
 }
 
-function cleanWorker<T extends BuilderProgram>(state: SolutionBuilderState<T>, project: string | undefined, onlyReferences: boolean | undefined) {
+function cleanWorker<T extends BuilderProgram>(
+    state: SolutionBuilderState<T>,
+    project: string | undefined,
+    onlyReferences: boolean | undefined,
+) {
     const buildOrder = getBuildOrderFor(state, project, onlyReferences);
     if (!buildOrder) return ExitStatus.InvalidProject_OutputsSkipped;
 
@@ -2307,7 +2383,11 @@ function cleanWorker<T extends BuilderProgram>(state: SolutionBuilderState<T>, p
     }
 
     if (filesToDelete) {
-        reportStatus(state, Diagnostics.A_non_dry_build_would_delete_the_following_files_Colon_0, filesToDelete.map(f => `\r\n * ${f}`).join(""));
+        reportStatus(
+            state,
+            Diagnostics.A_non_dry_build_would_delete_the_following_files_Colon_0,
+            filesToDelete.map(f => `\r\n * ${f}`).join(""),
+        );
     }
 
     return ExitStatus.Success;
@@ -2359,7 +2439,11 @@ function scheduleBuildInvalidatedProject<T extends BuilderProgram>(state: Soluti
     );
 }
 
-function buildNextInvalidatedProject<T extends BuilderProgram>(_timeoutType: string, state: SolutionBuilderState<T>, changeDetected: boolean) {
+function buildNextInvalidatedProject<T extends BuilderProgram>(
+    _timeoutType: string,
+    state: SolutionBuilderState<T>,
+    changeDetected: boolean,
+) {
     performance.mark("SolutionBuilder::beforeBuild");
     const buildOrder = buildNextInvalidatedProjectWorker(state, changeDetected);
     performance.mark("SolutionBuilder::afterBuild");
@@ -2559,7 +2643,11 @@ function startWatching<T extends BuilderProgram>(state: SolutionBuilderState<T>,
         }
     }
     performance.mark("SolutionBuilder::afterWatcherCreation");
-    performance.measure("SolutionBuilder::Watcher creation", "SolutionBuilder::beforeWatcherCreation", "SolutionBuilder::afterWatcherCreation");
+    performance.measure(
+        "SolutionBuilder::Watcher creation",
+        "SolutionBuilder::beforeWatcherCreation",
+        "SolutionBuilder::afterWatcherCreation",
+    );
 }
 
 function stopWatching<T extends BuilderProgram>(state: SolutionBuilderState<T>) {
@@ -2612,7 +2700,8 @@ function createSolutionBuilderWorker<T extends BuilderProgram>(
             const configFilePath = toResolvedConfigFilePath(state, configFileName);
             return getUpToDateStatus(state, parseConfigFile(state, configFileName, configFilePath), configFilePath);
         },
-        invalidateProject: (configFilePath, updateLevel) => invalidateProject(state, configFilePath, updateLevel || ProgramUpdateLevel.Update),
+        invalidateProject: (configFilePath, updateLevel) =>
+            invalidateProject(state, configFilePath, updateLevel || ProgramUpdateLevel.Update),
         close: () => stopWatching(state),
     };
 }
@@ -2625,15 +2714,27 @@ function reportStatus<T extends BuilderProgram>(state: SolutionBuilderState<T>, 
     state.host.reportSolutionBuilderStatus(createCompilerDiagnostic(message, ...args));
 }
 
-function reportWatchStatus<T extends BuilderProgram>(state: SolutionBuilderState<T>, message: DiagnosticMessage, ...args: DiagnosticArguments) {
-    state.hostWithWatch.onWatchStatusChange?.(createCompilerDiagnostic(message, ...args), state.host.getNewLine(), state.baseCompilerOptions);
+function reportWatchStatus<T extends BuilderProgram>(
+    state: SolutionBuilderState<T>,
+    message: DiagnosticMessage,
+    ...args: DiagnosticArguments
+) {
+    state.hostWithWatch.onWatchStatusChange?.(
+        createCompilerDiagnostic(message, ...args),
+        state.host.getNewLine(),
+        state.baseCompilerOptions,
+    );
 }
 
 function reportErrors<T extends BuilderProgram>({ host }: SolutionBuilderState<T>, errors: readonly Diagnostic[]) {
     errors.forEach(err => host.reportDiagnostic(err));
 }
 
-function reportAndStoreErrors<T extends BuilderProgram>(state: SolutionBuilderState<T>, proj: ResolvedConfigFilePath, errors: readonly Diagnostic[]) {
+function reportAndStoreErrors<T extends BuilderProgram>(
+    state: SolutionBuilderState<T>,
+    proj: ResolvedConfigFilePath,
+    errors: readonly Diagnostic[],
+) {
     reportErrors(state, errors);
     state.projectErrorsReported.set(proj, true);
     if (errors.length) {
@@ -2667,7 +2768,9 @@ function reportErrorSummary<T extends BuilderProgram>(state: SolutionBuilderStat
             }
         });
         if (canReportSummary) diagnostics.forEach(singleProjectErrors => totalErrors += getErrorCountForSummary(singleProjectErrors));
-        if (canReportSummary) diagnostics.forEach(singleProjectErrors => [...filesInError, ...getFilesInErrorForSummary(singleProjectErrors)]);
+        if (canReportSummary) {
+            diagnostics.forEach(singleProjectErrors => [...filesInError, ...getFilesInErrorForSummary(singleProjectErrors)]);
+        }
     }
 
     if (state.watch) {
@@ -2736,7 +2839,8 @@ function reportUpToDateStatus<T extends BuilderProgram>(state: SolutionBuilderSt
         case UpToDateStatusType.OutOfDateRoots:
             return reportStatus(
                 state,
-                Diagnostics.Project_0_is_out_of_date_because_buildinfo_file_1_indicates_that_file_2_was_root_file_of_compilation_but_not_any_more,
+                Diagnostics
+                    .Project_0_is_out_of_date_because_buildinfo_file_1_indicates_that_file_2_was_root_file_of_compilation_but_not_any_more,
                 relName(state, configFileName),
                 relName(state, status.buildInfoFile),
                 relName(state, status.inputFile),
@@ -2816,7 +2920,11 @@ function reportUpToDateStatus<T extends BuilderProgram>(state: SolutionBuilderSt
 /**
  * Report the up-to-date status of a project if we're in verbose mode
  */
-function verboseReportProjectStatus<T extends BuilderProgram>(state: SolutionBuilderState<T>, configFileName: string, status: UpToDateStatus) {
+function verboseReportProjectStatus<T extends BuilderProgram>(
+    state: SolutionBuilderState<T>,
+    configFileName: string,
+    status: UpToDateStatus,
+) {
     if (state.options.verbose) {
         reportUpToDateStatus(state, configFileName, status);
     }

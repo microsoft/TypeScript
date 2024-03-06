@@ -15,7 +15,10 @@ describe("unittests:: tsserver:: libraryResolution", () => {
         const host = getServerHostForLibResolution();
         const session = new TestSession(host);
         openFilesForSession(["/home/src/projects/project1/index.ts"], session);
-        host.ensureFileOrFolder({ path: "/home/src/projects/node_modules/@typescript/lib-dom/index.d.ts", content: "interface DOMInterface { }" });
+        host.ensureFileOrFolder({
+            path: "/home/src/projects/node_modules/@typescript/lib-dom/index.d.ts",
+            content: "interface DOMInterface { }",
+        });
         host.runQueuedTimeoutCallbacks();
         host.runQueuedTimeoutCallbacks();
         host.appendFile("/home/src/projects/project1/file.ts", "export const xyz = 10;");
@@ -47,7 +50,10 @@ describe("unittests:: tsserver:: libraryResolution", () => {
                 },
             }),
         );
-        host.ensureFileOrFolder({ path: "/home/src/projects/node_modules/@typescript/lib-dom/index.d.ts", content: "interface DOMInterface { }" });
+        host.ensureFileOrFolder({
+            path: "/home/src/projects/node_modules/@typescript/lib-dom/index.d.ts",
+            content: "interface DOMInterface { }",
+        });
         host.runQueuedTimeoutCallbacks();
         host.ensureFileOrFolder({
             path: "/home/src/projects/node_modules/@typescript/lib-webworker/index.d.ts",
@@ -69,7 +75,10 @@ describe("unittests:: tsserver:: libraryResolution", () => {
         host.runQueuedTimeoutCallbacks();
         host.deleteFile("/home/src/projects/project1/core.d.ts");
         host.runQueuedTimeoutCallbacks();
-        host.ensureFileOrFolder({ path: "/home/src/projects/node_modules/@typescript/lib-dom/index.d.ts", content: "interface DOMInterface { }" });
+        host.ensureFileOrFolder({
+            path: "/home/src/projects/node_modules/@typescript/lib-dom/index.d.ts",
+            content: "interface DOMInterface { }",
+        });
         host.runQueuedTimeoutCallbacks();
         host.runQueuedTimeoutCallbacks();
         host.writeFile(

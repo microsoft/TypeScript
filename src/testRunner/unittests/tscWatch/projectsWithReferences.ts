@@ -296,7 +296,9 @@ X;`,
                 createWatchedSystem(
                     {
                         [libFile.path]: libFile.content,
-                        "/user/username/projects/transitiveReferences/a/tsconfig.json": jsonToReadableText({ compilerOptions: { composite: true } }),
+                        "/user/username/projects/transitiveReferences/a/tsconfig.json": jsonToReadableText({
+                            compilerOptions: { composite: true },
+                        }),
                         "/user/username/projects/transitiveReferences/b/tsconfig.json": jsonToReadableText({
                             compilerOptions: { composite: true, baseUrl: "./", paths: { "@ref/*": ["../*"] } },
                             references: [{ path: `../a` }],
@@ -403,7 +405,11 @@ X;`,
             {
                 caption: "change declration map in core",
                 edit: sys => {
-                    sys.replaceFileText("/user/username/projects/sample1/core/tsconfig.json", `"declarationMap": true,`, `"declarationMap": false,`);
+                    sys.replaceFileText(
+                        "/user/username/projects/sample1/core/tsconfig.json",
+                        `"declarationMap": true,`,
+                        `"declarationMap": false,`,
+                    );
                     const solutionBuilder = createSolutionBuilder(sys, ["core"]);
                     solutionBuilder.build();
                 },

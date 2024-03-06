@@ -131,7 +131,8 @@ describe("unittests:: tsserver:: autoImportProvider", () => {
         ]);
 
         openFilesForSession([indexTs], session);
-        const autoImportProvider = session.getProjectService().configuredProjects.get(tsconfig.path)!.getLanguageService().getAutoImportProvider();
+        const autoImportProvider = session.getProjectService().configuredProjects.get(tsconfig.path)!.getLanguageService()
+            .getAutoImportProvider();
         assert.ok(autoImportProvider);
         session.host.baselineHost("After getAutoImportProvider");
 
@@ -189,7 +190,11 @@ describe("unittests:: tsserver:: autoImportProvider", () => {
         hostProject.getPackageJsonAutoImportProvider();
         assert.isFalse(session.getProjectService().pendingEnsureProjectForOpenFiles);
         session.host.baselineHost("After getPackageJsonAutoImportProvider");
-        baselineTsserverLogs("autoImportProvider", "Does not schedule ensureProjectForOpenFiles on AutoImportProviderProject creation", session);
+        baselineTsserverLogs(
+            "autoImportProvider",
+            "Does not schedule ensureProjectForOpenFiles on AutoImportProviderProject creation",
+            session,
+        );
     });
 
     it("Responds to automatic changes in node_modules", () => {
@@ -219,7 +224,9 @@ describe("unittests:: tsserver:: autoImportProvider", () => {
         session.host.baselineHost("Before getAutoImportProvider");
         const autoImportProvider = project.getLanguageService().getAutoImportProvider();
         session.host.baselineHost("After getAutoImportProvider");
-        const completionsAfter = project.getLanguageService().getCompletionsAtPosition(indexTs.path, 0, { includeCompletionsForModuleExports: true });
+        const completionsAfter = project.getLanguageService().getCompletionsAtPosition(indexTs.path, 0, {
+            includeCompletionsForModuleExports: true,
+        });
         assert.equal(autoImportProvider!.getSourceFile(angularFormsDts.path)!.getText(), "");
         assert.isFalse(completionsAfter?.entries.some(c => c.name === "PatternValidator"));
         session.host.baselineHost("After Completions");
@@ -245,7 +252,9 @@ describe("unittests:: tsserver:: autoImportProvider", () => {
         assert.isTrue(completionsBefore?.entries.some(c => c.name === "PatternValidator"));
 
         updateFile(angularFormsDts.path, "export class ValidatorPattern {}");
-        const completionsAfter = project.getLanguageService().getCompletionsAtPosition(indexTs.path, 0, { includeCompletionsForModuleExports: true });
+        const completionsAfter = project.getLanguageService().getCompletionsAtPosition(indexTs.path, 0, {
+            includeCompletionsForModuleExports: true,
+        });
         assert.isFalse(completionsAfter?.entries.some(c => c.name === "PatternValidator"));
         assert.isTrue(completionsAfter?.entries.some(c => c.name === "ValidatorPattern"));
         baselineTsserverLogs("autoImportProvider", "Responds to manual changes in node_modules", session);
@@ -296,7 +305,10 @@ describe("unittests:: tsserver:: autoImportProvider", () => {
     it("Shared source files between AutoImportProvider and main program do not cause duplicate entries in export info map", () => {
         const files = [
             // node_modules/memfs - AutoImportProvider only
-            { path: "/node_modules/memfs/package.json", content: jsonToReadableText({ name: "memfs", version: "1.0.0", types: "lib/index.d.ts" }) },
+            {
+                path: "/node_modules/memfs/package.json",
+                content: jsonToReadableText({ name: "memfs", version: "1.0.0", types: "lib/index.d.ts" }),
+            },
             { path: "/node_modules/memfs/lib/index.d.ts", content: `/// <reference types="node" />\nexport declare class Volume {}` },
 
             // node_modules/@types/node - AutoImportProvider and main program
@@ -344,7 +356,10 @@ describe("unittests:: tsserver:: autoImportProvider - monorepo", () => {
 
             // packages/a
             { path: "/packages/a/package.json", content: packageJson.content },
-            { path: "/packages/a/tsconfig.json", content: `{ "compilerOptions": { "composite": true }, "references": [{ "path": "../b" }] }` },
+            {
+                path: "/packages/a/tsconfig.json",
+                content: `{ "compilerOptions": { "composite": true }, "references": [{ "path": "../b" }] }`,
+            },
             { path: "/packages/a/index.ts", content: "import { B } from '../b';" },
 
             // packages/b
@@ -363,7 +378,11 @@ describe("unittests:: tsserver:: autoImportProvider - monorepo", () => {
             session.getProjectService().configuredProjects.get("/packages/a/tsconfig.json")!.getLanguageService().getAutoImportProvider(),
         );
         session.host.baselineHost("After getAutoImportProvider");
-        baselineTsserverLogs("autoImportProvider", "Does not create auto import providers upon opening projects for find-all-references", session);
+        baselineTsserverLogs(
+            "autoImportProvider",
+            "Does not create auto import providers upon opening projects for find-all-references",
+            session,
+        );
     });
 
     it("Does not close when root files are redirects that don't actually exist", () => {
@@ -384,9 +403,13 @@ describe("unittests:: tsserver:: autoImportProvider - monorepo", () => {
 
         const { session } = setup(files);
         openFilesForSession([files[2]], session);
-        assert.isDefined(session.getProjectService().configuredProjects.get("/packages/a/tsconfig.json")!.getPackageJsonAutoImportProvider());
+        assert.isDefined(
+            session.getProjectService().configuredProjects.get("/packages/a/tsconfig.json")!.getPackageJsonAutoImportProvider(),
+        );
         session.host.baselineHost("After getPackageJsonAutoImportProvider");
-        assert.isDefined(session.getProjectService().configuredProjects.get("/packages/a/tsconfig.json")!.getPackageJsonAutoImportProvider());
+        assert.isDefined(
+            session.getProjectService().configuredProjects.get("/packages/a/tsconfig.json")!.getPackageJsonAutoImportProvider(),
+        );
         session.host.baselineHost("After getPackageJsonAutoImportProvider");
         baselineTsserverLogs("autoImportProvider", "Does not close when root files are redirects that dont actually exist", session);
     });

@@ -95,7 +95,11 @@ describe("unittests:: tsserver:: exportMapCache", () => {
         assert.ok(!exportMapCache.isUsableByFile(bTs.path as ts.Path));
         assert.ok(exportMapCache.isEmpty());
         session.host.baselineHost("After getPackageJsonAutoImportProvider");
-        baselineTsserverLogs("exportMapCache", "invalidates the cache when package.json change results in AutoImportProvider change", session);
+        baselineTsserverLogs(
+            "exportMapCache",
+            "invalidates the cache when package.json change results in AutoImportProvider change",
+            session,
+        );
     });
 
     it("does not store transient symbols through program updates", () => {

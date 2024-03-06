@@ -662,7 +662,11 @@ export class TestServerHost implements server.ServerHost, FormatDiagnosticsHost,
         options?: Partial<WatchInvokeOptions>,
     ) {
         if (!this.fs.has(fileOrDirectory.path)) {
-            insertSorted(folder.entries, fileOrDirectory, (a, b) => compareStringsCaseSensitive(getBaseFileName(a.path), getBaseFileName(b.path)));
+            insertSorted(
+                folder.entries,
+                fileOrDirectory,
+                (a, b) => compareStringsCaseSensitive(getBaseFileName(a.path), getBaseFileName(b.path)),
+            );
         }
         folder.modifiedTime = this.now();
         this.fs.set(fileOrDirectory.path, fileOrDirectory);
@@ -688,7 +692,11 @@ export class TestServerHost implements server.ServerHost, FormatDiagnosticsHost,
         this.inodeWatching = inodeWatching;
     }
 
-    private removeFileOrFolder(fileOrDirectory: FsFile | FsFolder | FsSymLink, isRenaming?: boolean, options?: Partial<WatchInvokeOptions>) {
+    private removeFileOrFolder(
+        fileOrDirectory: FsFile | FsFolder | FsSymLink,
+        isRenaming?: boolean,
+        options?: Partial<WatchInvokeOptions>,
+    ) {
         const basePath = getDirectoryPath(fileOrDirectory.path);
         const baseFolder = this.fs.get(basePath) as FsFolder;
         if (basePath !== fileOrDirectory.path) {
@@ -846,9 +854,19 @@ export class TestServerHost implements server.ServerHost, FormatDiagnosticsHost,
         this.invokeRecursiveFsWatches(fullPath, eventName, modifiedTime, /*entryFullPath*/ undefined, useTildeSuffix);
     }
 
-    private invokeFileAndFsWatches(fileOrFolderFullPath: string, eventKind: FileWatcherEventKind, modifiedTime?: Date, useTildeSuffix?: boolean) {
+    private invokeFileAndFsWatches(
+        fileOrFolderFullPath: string,
+        eventKind: FileWatcherEventKind,
+        modifiedTime?: Date,
+        useTildeSuffix?: boolean,
+    ) {
         this.invokeFileWatcher(fileOrFolderFullPath, eventKind, modifiedTime);
-        this.invokeFsWatches(fileOrFolderFullPath, eventKind === FileWatcherEventKind.Changed ? "change" : "rename", modifiedTime, useTildeSuffix);
+        this.invokeFsWatches(
+            fileOrFolderFullPath,
+            eventKind === FileWatcherEventKind.Changed ? "change" : "rename",
+            modifiedTime,
+            useTildeSuffix,
+        );
     }
 
     private toFsEntry(path: string): FSEntryBase {
@@ -974,7 +992,13 @@ export class TestServerHost implements server.ServerHost, FormatDiagnosticsHost,
         return [];
     }
 
-    readDirectory(path: string, extensions?: readonly string[], exclude?: readonly string[], include?: readonly string[], depth?: number): string[] {
+    readDirectory(
+        path: string,
+        extensions?: readonly string[],
+        exclude?: readonly string[],
+        include?: readonly string[],
+        depth?: number,
+    ): string[] {
         return matchFiles(path, extensions, exclude, include, this.useCaseSensitiveFileNames, this.getCurrentDirectory(), depth, dir => {
             const directories: string[] = [];
             const files: string[] = [];

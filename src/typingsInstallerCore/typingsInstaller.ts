@@ -138,7 +138,9 @@ export abstract class TypingsInstaller {
     ) {
         const isLoggingEnabled = this.log.isEnabled();
         if (isLoggingEnabled) {
-            this.log.writeLine(`Global cache location '${globalCachePath}', safe file path '${safeListPath}', types map path ${typesMapLocation}`);
+            this.log.writeLine(
+                `Global cache location '${globalCachePath}', safe file path '${safeListPath}', types map path ${typesMapLocation}`,
+            );
         }
         this.processCacheLocation(this.globalCachePath);
     }
@@ -378,7 +380,9 @@ export abstract class TypingsInstaller {
             }
             if (!this.typesRegistry.has(typingKey)) {
                 if (this.log.isEnabled()) {
-                    this.log.writeLine(`'${typing}':: Entry for package '${typingKey}' does not exist in local types registry - skipping...`);
+                    this.log.writeLine(
+                        `'${typing}':: Entry for package '${typingKey}' does not exist in local types registry - skipping...`,
+                    );
                 }
                 return undefined;
             }
@@ -439,7 +443,9 @@ export abstract class TypingsInstaller {
                 if (!ok) {
                     if (this.log.isEnabled()) {
                         this.log.writeLine(
-                            `install request failed, marking packages as missing to prevent repeated requests: ${JSON.stringify(filteredTypings)}`,
+                            `install request failed, marking packages as missing to prevent repeated requests: ${
+                                JSON.stringify(filteredTypings)
+                            }`,
                         );
                     }
                     for (const typing of filteredTypings) {
@@ -544,7 +550,12 @@ export abstract class TypingsInstaller {
         }
     }
 
-    protected abstract installWorker(requestId: number, packageNames: string[], cwd: string, onRequestCompleted: RequestCompletedAction): void;
+    protected abstract installWorker(
+        requestId: number,
+        packageNames: string[],
+        cwd: string,
+        onRequestCompleted: RequestCompletedAction,
+    ): void;
     protected abstract sendResponse(
         response: SetTypings | InvalidateCachedTypings | BeginInstallTypes | EndInstallTypes | WatchTypingLocations,
     ): void;

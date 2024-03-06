@@ -395,7 +395,8 @@ export namespace Compiler {
         currentDirectory: string | undefined,
         symlinks?: vfs.FileSet,
     ): compiler.CompilationResult {
-        const options: ts.CompilerOptions & HarnessOptions = compilerOptions ? ts.cloneCompilerOptions(compilerOptions) : { noResolve: false };
+        const options: ts.CompilerOptions & HarnessOptions = compilerOptions ? ts.cloneCompilerOptions(compilerOptions)
+            : { noResolve: false };
         options.newLine = options.newLine || ts.NewLineKind.CarriageReturnLineFeed;
         options.noErrorTruncation = true;
         options.skipDefaultLibCheck = typeof options.skipDefaultLibCheck === "undefined" ? true : options.skipDefaultLibCheck;
@@ -592,7 +593,9 @@ export namespace Compiler {
         const formatDiagnsoticHost = {
             getCurrentDirectory: () => options && options.currentDirectory ? options.currentDirectory : "",
             getNewLine: () => IO.newLine(),
-            getCanonicalFileName: ts.createGetCanonicalFileName(options && options.caseSensitive !== undefined ? options.caseSensitive : true),
+            getCanonicalFileName: ts.createGetCanonicalFileName(
+                options && options.caseSensitive !== undefined ? options.caseSensitive : true,
+            ),
         };
 
         function outputErrorText(error: ts.Diagnostic) {
@@ -610,7 +613,9 @@ export namespace Compiler {
                     if (location && isDefaultLibraryFile(info.file!.fileName)) {
                         location = location.replace(/(lib(?:.*)\.d\.ts):\d+:\d+/i, "$1:--:--");
                     }
-                    errLines.push(`!!! related TS${info.code}${location}: ${ts.flattenDiagnosticMessageText(info.messageText, IO.newLine())}`);
+                    errLines.push(
+                        `!!! related TS${info.code}${location}: ${ts.flattenDiagnosticMessageText(info.messageText, IO.newLine())}`,
+                    );
                 }
             }
             errLines.forEach(e => outputLines += newLine() + e);
@@ -657,7 +662,8 @@ export namespace Compiler {
             });
 
             // Header
-            outputLines += newLine() + "==== " + Utils.removeTestPathPrefixes(inputFile.unitName) + " (" + fileErrors.length + " errors) ====";
+            outputLines += newLine() + "==== " + Utils.removeTestPathPrefixes(inputFile.unitName) + " (" + fileErrors.length +
+                " errors) ====";
 
             // Make sure we emit something for every error
             let markedErrorCount = 0;
@@ -744,7 +750,12 @@ export namespace Compiler {
         );
     }
 
-    export function doErrorBaseline(baselinePath: string, inputFiles: readonly TestFile[], errors: readonly ts.Diagnostic[], pretty?: boolean) {
+    export function doErrorBaseline(
+        baselinePath: string,
+        inputFiles: readonly TestFile[],
+        errors: readonly ts.Diagnostic[],
+        pretty?: boolean,
+    ) {
         Baseline.runBaseline(
             baselinePath.replace(/\.tsx?$/, ".errors.txt"),
             !errors || (errors.length === 0) ? null : getErrorBaseline(inputFiles, errors, pretty),
@@ -849,7 +860,8 @@ export namespace Compiler {
                 const { unitName } = file;
                 let typeLines = "=== " + unitName + " ===\r\n";
                 const codeLines = ts.flatMap(file.content.split(/\r?\n/g), e => e.split(/[\r\u2028\u2029]/g));
-                const gen: IterableIterator<TypeWriterResult> = isSymbolBaseline ? fullWalker.getSymbols(unitName) : fullWalker.getTypes(unitName);
+                const gen: IterableIterator<TypeWriterResult> = isSymbolBaseline ? fullWalker.getSymbols(unitName)
+                    : fullWalker.getTypes(unitName);
                 let lastIndexWritten: number | undefined;
                 for (const result of gen) {
                     if (isSymbolBaseline && !result.symbol) {
@@ -1215,7 +1227,9 @@ export function getFileBasedTestConfigurations(
                 if (!varyByEntries) varyByEntries = [];
                 variationCount *= entries.length;
                 if (variationCount > 25) {
-                    throw new Error(`Provided test options exceeded the maximum number of variations: ${varyBy.map(v => `'@${v}'`).join(", ")}`);
+                    throw new Error(
+                        `Provided test options exceeded the maximum number of variations: ${varyBy.map(v => `'@${v}'`).join(", ")}`,
+                    );
                 }
                 varyByEntries.push([varyByKey, entries]);
             }
@@ -1346,7 +1360,8 @@ export namespace TestCaseParser {
                     currentFileName = testMetaData[2].trim();
                     if (
                         currentFileContent &&
-                        ts.skipTrivia(currentFileContent, 0, /*stopAfterLineBreak*/ false, /*stopAtComments*/ false) !== currentFileContent.length
+                        ts.skipTrivia(currentFileContent, 0, /*stopAfterLineBreak*/ false, /*stopAtComments*/ false) !==
+                            currentFileContent.length
                     ) {
                         throw new Error("Non-comment test content appears before the first '// @Filename' directive");
                     }
@@ -1596,7 +1611,9 @@ export namespace Baseline {
 
         const referenceDir = referencePath(relativeFileBase, opts && opts.Baselinefolder, opts && opts.Subfolder);
         let existing = IO.readDirectory(referenceDir, referencedExtensions || [extension]);
-        if (extension === ".ts" || referencedExtensions && referencedExtensions.includes(".ts") && !referencedExtensions.includes(".d.ts")) {
+        if (
+            extension === ".ts" || referencedExtensions && referencedExtensions.includes(".ts") && !referencedExtensions.includes(".d.ts")
+        ) {
             // special-case and filter .d.ts out of .ts results
             existing = existing.filter(f => !ts.endsWith(f, ".d.ts"));
         }
@@ -1627,7 +1644,8 @@ export namespace Baseline {
             if (missing.length) {
                 const writtenFilesArray = ts.arrayFrom(writtenFiles.keys());
                 errorMsg += `Baseline missing ${missing.length} files:${
-                    "\n    " + missing.slice(0, 5).join("\n    ") + (missing.length > 5 ? "\n" + `    and ${missing.length - 5} more` : "") + "\n"
+                    "\n    " + missing.slice(0, 5).join("\n    ") +
+                    (missing.length > 5 ? "\n" + `    and ${missing.length - 5} more` : "") + "\n"
                 }Written ${writtenFiles.size} files:${
                     "\n    " + writtenFilesArray.slice(0, 5).join("\n    ") +
                     (writtenFilesArray.length > 5 ? "\n" + `    and ${writtenFilesArray.length - 5} more` : "")

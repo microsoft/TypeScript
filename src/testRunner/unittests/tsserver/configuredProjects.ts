@@ -360,7 +360,11 @@ describe("unittests:: tsserver:: ConfiguredProjects", () => {
 
         host.writeFile(configFile.path, configFile.content);
         host.runQueuedTimeoutCallbacks(); // load configured project from disk + ensureProjectsForOpenFiles
-        baselineTsserverLogs("configuredProjects", "open file become a part of configured project if it is referenced from root file", session);
+        baselineTsserverLogs(
+            "configuredProjects",
+            "open file become a part of configured project if it is referenced from root file",
+            session,
+        );
     });
 
     it("can correctly update configured project when set of root files has changed (new file on disk)", () => {
@@ -1112,6 +1116,10 @@ describe("unittests:: tsserver:: ConfiguredProjects:: when reading tsconfig file
         };
         openFilesForSession([file1], session);
 
-        baselineTsserverLogs("configuredProjects", "should be tolerated without crashing the server when reading tsconfig file fails", session);
+        baselineTsserverLogs(
+            "configuredProjects",
+            "should be tolerated without crashing the server when reading tsconfig file fails",
+            session,
+        );
     });
 });

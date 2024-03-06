@@ -99,7 +99,14 @@ registerCodeFix({
             context,
             errorCodes,
             (changes, err) =>
-                doChange(changes, err.file, err.start, context.program.getTypeChecker(), context.preferences, context.program.getCompilerOptions()),
+                doChange(
+                    changes,
+                    err.file,
+                    err.start,
+                    context.program.getTypeChecker(),
+                    context.preferences,
+                    context.program.getCompilerOptions(),
+                ),
         ),
 });
 
@@ -168,7 +175,8 @@ function doChange(
                 if (key === "constructor" && member.valueDeclaration) {
                     const prototypeAssignment = symbol.exports?.get("prototype" as __String)?.declarations?.[0]?.parent;
                     if (
-                        prototypeAssignment && isBinaryExpression(prototypeAssignment) && isObjectLiteralExpression(prototypeAssignment.right) &&
+                        prototypeAssignment && isBinaryExpression(prototypeAssignment) &&
+                        isObjectLiteralExpression(prototypeAssignment.right) &&
                         some(prototypeAssignment.right.properties, isConstructorAssignment)
                     ) {
                         // fn.prototype = { constructor: fn }
@@ -234,8 +242,9 @@ function doChange(
             }
 
             // delete the entire statement if this expression is the sole expression to take care of the semicolon at the end
-            const nodeToDelete = assignmentBinaryExpression.parent && assignmentBinaryExpression.parent.kind === SyntaxKind.ExpressionStatement
-                ? assignmentBinaryExpression.parent : assignmentBinaryExpression;
+            const nodeToDelete =
+                assignmentBinaryExpression.parent && assignmentBinaryExpression.parent.kind === SyntaxKind.ExpressionStatement
+                    ? assignmentBinaryExpression.parent : assignmentBinaryExpression;
             changes.delete(sourceFile, nodeToDelete);
 
             if (!assignmentExpr) {
@@ -295,7 +304,11 @@ function doChange(
                 return;
             }
 
-            function createFunctionLikeExpressionMember(members: ClassElement[], expression: FunctionExpression | ArrowFunction, name: PropertyName) {
+            function createFunctionLikeExpressionMember(
+                members: ClassElement[],
+                expression: FunctionExpression | ArrowFunction,
+                name: PropertyName,
+            ) {
                 if (isFunctionExpression(expression)) return createFunctionExpressionMember(members, expression, name);
                 else return createArrowFunctionExpressionMember(members, expression, name);
             }
@@ -358,7 +371,13 @@ function doChange(
         }
 
         const modifiers = getModifierKindFromSource(node.parent.parent, SyntaxKind.ExportKeyword);
-        const cls = factory.createClassDeclaration(modifiers, node.name, /*typeParameters*/ undefined, /*heritageClauses*/ undefined, memberElements);
+        const cls = factory.createClassDeclaration(
+            modifiers,
+            node.name,
+            /*typeParameters*/ undefined,
+            /*heritageClauses*/ undefined,
+            memberElements,
+        );
         // Don't call copyComments here because we'll already leave them in place
         return cls;
     }
@@ -370,7 +389,13 @@ function doChange(
         }
 
         const modifiers = getModifierKindFromSource(node, SyntaxKind.ExportKeyword);
-        const cls = factory.createClassDeclaration(modifiers, node.name, /*typeParameters*/ undefined, /*heritageClauses*/ undefined, memberElements);
+        const cls = factory.createClassDeclaration(
+            modifiers,
+            node.name,
+            /*typeParameters*/ undefined,
+            /*heritageClauses*/ undefined,
+            memberElements,
+        );
         // Don't call copyComments here because we'll already leave them in place
         return cls;
     }
@@ -386,7 +411,11 @@ function isConstructorAssignment(x: ObjectLiteralElementLike | PropertyAccessExp
     return false;
 }
 
-function tryGetPropertyName(node: AccessExpression, compilerOptions: CompilerOptions, quotePreference: QuotePreference): PropertyName | undefined {
+function tryGetPropertyName(
+    node: AccessExpression,
+    compilerOptions: CompilerOptions,
+    quotePreference: QuotePreference,
+): PropertyName | undefined {
     if (isPropertyAccessExpression(node)) {
         return node.name;
     }
@@ -398,7 +427,8 @@ function tryGetPropertyName(node: AccessExpression, compilerOptions: CompilerOpt
 
     if (isStringLiteralLike(propName)) {
         return isIdentifierText(propName.text, getEmitScriptTarget(compilerOptions)) ? factory.createIdentifier(propName.text)
-            : isNoSubstitutionTemplateLiteral(propName) ? factory.createStringLiteral(propName.text, quotePreference === QuotePreference.Single)
+            : isNoSubstitutionTemplateLiteral(propName) ?
+            factory.createStringLiteral(propName.text, quotePreference === QuotePreference.Single)
             : propName;
     }
 

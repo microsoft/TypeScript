@@ -124,7 +124,11 @@ describe("unittests:: tsserver:: documentRegistry:: document registry in project
         assert.notEqual(moduleInfo.cacheSourceFile!.sourceFile, sourceFile);
         assert.equal(project.getSourceFile(moduleInfo.path), moduleInfo.cacheSourceFile!.sourceFile);
         assert.equal(moduleInfo.cacheSourceFile!.sourceFile.text, updatedModuleContent);
-        baselineTsserverLogs("documentRegistry", "Caches the source file if script info is orphan, and orphan script info changes", session);
+        baselineTsserverLogs(
+            "documentRegistry",
+            "Caches the source file if script info is orphan, and orphan script info changes",
+            session,
+        );
     });
 });
 

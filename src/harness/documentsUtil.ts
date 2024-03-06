@@ -113,7 +113,14 @@ export class SourceMap {
                     sourceColumn += segment[3];
                 }
 
-                const mapping: Mapping = { mappingIndex: mappings.length, emittedLine, emittedColumn, sourceIndex, sourceLine, sourceColumn };
+                const mapping: Mapping = {
+                    mappingIndex: mappings.length,
+                    emittedLine,
+                    emittedColumn,
+                    sourceIndex,
+                    sourceLine,
+                    sourceColumn,
+                };
                 if (segment.length === 5) {
                     nameIndex += segment[4];
                     mapping.nameIndex = nameIndex;
@@ -125,7 +132,8 @@ export class SourceMap {
                     (this._emittedLineMappings[mapping.emittedLine] = []);
                 mappingsForEmittedLine.push(mapping);
 
-                const mappingsForSource = this._sourceLineMappings[mapping.sourceIndex] || (this._sourceLineMappings[mapping.sourceIndex] = []);
+                const mappingsForSource = this._sourceLineMappings[mapping.sourceIndex] ||
+                    (this._sourceLineMappings[mapping.sourceIndex] = []);
                 const mappingsForSourceLine = mappingsForSource[mapping.sourceLine] || (mappingsForSource[mapping.sourceLine] = []);
                 mappingsForSourceLine.push(mapping);
             }

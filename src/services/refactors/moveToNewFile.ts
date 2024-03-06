@@ -192,7 +192,10 @@ function getNewFileImportsAndAddExportInOldFile(
     const copiedOldImports: SupportedImportStatement[] = [];
     for (const oldStatement of oldFile.statements) {
         forEachImportInStatement(oldStatement, i => {
-            append(copiedOldImports, filterImport(i, moduleSpecifierFromImport(i), name => importsToCopy.has(checker.getSymbolAtLocation(name)!)));
+            append(
+                copiedOldImports,
+                filterImport(i, moduleSpecifierFromImport(i), name => importsToCopy.has(checker.getSymbolAtLocation(name)!)),
+            );
         });
     }
 

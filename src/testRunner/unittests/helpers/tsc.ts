@@ -235,7 +235,10 @@ export interface VerifyTscCompileLike {
 /**
  * Verify by baselining after initializing FS and custom compile
  */
-export function verifyTscCompileLike<T extends VerifyTscCompileLike>(verifier: (input: T) => { baseLine: TscCompileSystem["baseLine"]; }, input: T) {
+export function verifyTscCompileLike<T extends VerifyTscCompileLike>(
+    verifier: (input: T) => { baseLine: TscCompileSystem["baseLine"]; },
+    input: T,
+) {
     describe(`tsc ${input.commandLineArgs.join(" ")} ${input.scenario}:: ${input.subScenario}`, () => {
         describe(input.scenario, () => {
             describe(input.subScenario, () => {
@@ -310,9 +313,10 @@ function verifyTscEditDiscrepancies({
         }
         else if (incrementalBuildText !== cleanBuildText) {
             // Verify build info without affectedFilesPendingEmit
-            const { buildInfo: incrementalBuildInfo, readableBuildInfo: incrementalReadableBuildInfo } = getBuildInfoForIncrementalCorrectnessCheck(
-                incrementalBuildText,
-            );
+            const { buildInfo: incrementalBuildInfo, readableBuildInfo: incrementalReadableBuildInfo } =
+                getBuildInfoForIncrementalCorrectnessCheck(
+                    incrementalBuildText,
+                );
             const { buildInfo: cleanBuildInfo, readableBuildInfo: cleanReadableBuildInfo } = getBuildInfoForIncrementalCorrectnessCheck(
                 cleanBuildText,
             );
@@ -601,7 +605,8 @@ export function verifyTsc({
                 });
                 return {
                     file,
-                    text: `currentDirectory:: ${sys.getCurrentDirectory()} useCaseSensitiveFileNames: ${sys.useCaseSensitiveFileNames}\r\n` +
+                    text:
+                        `currentDirectory:: ${sys.getCurrentDirectory()} useCaseSensitiveFileNames: ${sys.useCaseSensitiveFileNames}\r\n` +
                         texts.join("\r\n"),
                 };
             },

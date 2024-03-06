@@ -387,7 +387,12 @@ export class A {
                     sys.modifyFile(
                         "/tsconfig.json",
                         jsonToReadableText({
-                            compilerOptions: { target: "es6", verbatimModuleSyntax: true, experimentalDecorators: true, emitDecoratorMetadata: true },
+                            compilerOptions: {
+                                target: "es6",
+                                verbatimModuleSyntax: true,
+                                experimentalDecorators: true,
+                                emitDecoratorMetadata: true,
+                            },
                         }),
                     ),
                 timeouts: sys => sys.runQueuedTimeoutCallbacks(),
@@ -790,7 +795,11 @@ export class A {
         edits: [
             {
                 caption: "Modify config to set outFile option",
-                edit: sys => sys.writeFile(configFilePath, jsonToReadableText({ compilerOptions: { outFile: "out.js" }, files: ["f1.ts", "f2.ts"] })),
+                edit: sys =>
+                    sys.writeFile(
+                        configFilePath,
+                        jsonToReadableText({ compilerOptions: { outFile: "out.js" }, files: ["f1.ts", "f2.ts"] }),
+                    ),
                 timeouts: sys => sys.runQueuedTimeoutCallbacks(),
             },
         ],
@@ -1170,7 +1179,8 @@ declare const eval: any`,
 
     verifyTscWatch({
         scenario,
-        subScenario: "non-existing directories listed in config file input array should be able to handle @types if input file list is empty",
+        subScenario:
+            "non-existing directories listed in config file input array should be able to handle @types if input file list is empty",
         commandLineArgs: ["-w", "-p", "/a/tsconfig.json"],
         sys: () => {
             const f = {
@@ -1283,7 +1293,9 @@ declare const eval: any`,
                             compilerOptions: compilerOptionsToConfigJson(options),
                         }),
                     };
-                    return createWatchedSystem([file1, file2, libFile, tsconfig], { currentDirectory: "/user/username/projects/myproject" });
+                    return createWatchedSystem([file1, file2, libFile, tsconfig], {
+                        currentDirectory: "/user/username/projects/myproject",
+                    });
                 },
                 edits: [
                     noopChange,
@@ -1391,7 +1403,11 @@ export function two() {
         return {
             caption: `Changed ${parameterName} type to ${toType}`,
             edit: sys =>
-                sys.replaceFileText(`/user/username/projects/myproject/b.ts`, new RegExp(`${parameterName}: [a-z]*`), `${parameterName}: ${toType}`),
+                sys.replaceFileText(
+                    `/user/username/projects/myproject/b.ts`,
+                    new RegExp(`${parameterName}: [a-z]*`),
+                    `${parameterName}: ${toType}`,
+                ),
             timeouts: sys => sys.runQueuedTimeoutCallbacks(),
         };
     }
@@ -1533,7 +1549,10 @@ class D extends C { prop = 1; }`,
             {
                 caption: "Enable useDefineForClassFields",
                 edit: sys =>
-                    sys.writeFile(`/tsconfig.json`, jsonToReadableText({ compilerOptions: { target: "es6", useDefineForClassFields: true } })),
+                    sys.writeFile(
+                        `/tsconfig.json`,
+                        jsonToReadableText({ compilerOptions: { target: "es6", useDefineForClassFields: true } }),
+                    ),
                 timeouts: sys => sys.runQueuedTimeoutCallbacks(),
             },
         ],
@@ -1607,7 +1626,8 @@ export function f(p: C) { return p; }`,
         edits: [
             {
                 caption: "Enable forceConsistentCasingInFileNames",
-                edit: sys => sys.writeFile(`/tsconfig.json`, jsonToReadableText({ compilerOptions: { forceConsistentCasingInFileNames: true } })),
+                edit: sys =>
+                    sys.writeFile(`/tsconfig.json`, jsonToReadableText({ compilerOptions: { forceConsistentCasingInFileNames: true } })),
                 timeouts: sys => sys.runQueuedTimeoutCallbacks(),
             },
         ],
@@ -1784,7 +1804,9 @@ interface Document {
                 path: `/user/username/projects/myproject/tsconfig.json`,
                 content: "{}",
             };
-            return createWatchedSystem([aFile, bFile, configFile, libFileWithDocument], { currentDirectory: "/user/username/projects/myproject" });
+            return createWatchedSystem([aFile, bFile, configFile, libFileWithDocument], {
+                currentDirectory: "/user/username/projects/myproject",
+            });
         },
         edits: [
             changeWhenLibCheckChanges({ skipLibCheck: true }),
@@ -1916,7 +1938,8 @@ import { x } from "../b";`,
         edits: [
             {
                 caption: "Update 'jsx' to 'preserve'",
-                edit: sys => sys.writeFile(`/user/username/projects/myproject/tsconfig.json`, '{ "compilerOptions": { "jsx": "preserve" } }'),
+                edit: sys =>
+                    sys.writeFile(`/user/username/projects/myproject/tsconfig.json`, '{ "compilerOptions": { "jsx": "preserve" } }'),
                 timeouts: sys => sys.runQueuedTimeoutCallbacks(),
             },
         ],
@@ -2040,13 +2063,18 @@ import { x } from "../b";`,
                     include: ["client/**/*", "folder2"],
                 }),
             };
-            return createWatchedSystem([module1, module2, symlink, config, libFile], { currentDirectory: "/user/username/projects/myproject" });
+            return createWatchedSystem([module1, module2, symlink, config, libFile], {
+                currentDirectory: "/user/username/projects/myproject",
+            });
         },
         edits: [
             {
                 caption: "Add module3 to folder2",
                 edit: sys =>
-                    sys.writeFile(`/user/username/projects/myproject/client/linktofolder2/module3.ts`, `import * as M from "folder1/module1";`),
+                    sys.writeFile(
+                        `/user/username/projects/myproject/client/linktofolder2/module3.ts`,
+                        `import * as M from "folder1/module1";`,
+                    ),
                 timeouts: sys => sys.runQueuedTimeoutCallbacks(),
             },
         ],

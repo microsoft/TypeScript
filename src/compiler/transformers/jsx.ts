@@ -297,7 +297,10 @@ export function transformJsx(context: TransformationContext): (x: SourceFile | B
     function hasKeyAfterPropsSpread(node: JsxOpeningLikeElement) {
         let spread = false;
         for (const elem of node.attributes.properties) {
-            if (isJsxSpreadAttribute(elem) && (!isObjectLiteralExpression(elem.expression) || elem.expression.properties.some(isSpreadAssignment))) {
+            if (
+                isJsxSpreadAttribute(elem) &&
+                (!isObjectLiteralExpression(elem.expression) || elem.expression.properties.some(isSpreadAssignment))
+            ) {
                 spread = true;
             }
             else if (spread && isJsxAttribute(elem) && isIdentifier(elem.name) && elem.name.escapedText === "key") {
@@ -312,7 +315,8 @@ export function transformJsx(context: TransformationContext): (x: SourceFile | B
     }
 
     function visitJsxElement(node: JsxElement, isChild: boolean) {
-        const tagTransform = shouldUseCreateElement(node.openingElement) ? visitJsxOpeningLikeElementCreateElement : visitJsxOpeningLikeElementJSX;
+        const tagTransform = shouldUseCreateElement(node.openingElement) ? visitJsxOpeningLikeElementCreateElement
+            : visitJsxOpeningLikeElementJSX;
         return tagTransform(node.openingElement, node.children, isChild, /*location*/ node);
     }
 
@@ -322,7 +326,8 @@ export function transformJsx(context: TransformationContext): (x: SourceFile | B
     }
 
     function visitJsxFragment(node: JsxFragment, isChild: boolean) {
-        const tagTransform = currentFileState.importSpecifier === undefined ? visitJsxOpeningFragmentCreateElement : visitJsxOpeningFragmentJSX;
+        const tagTransform = currentFileState.importSpecifier === undefined ? visitJsxOpeningFragmentCreateElement
+            : visitJsxOpeningFragmentJSX;
         return tagTransform(node.openingFragment, node.children, isChild, /*location*/ node);
     }
 
@@ -468,7 +473,12 @@ export function transformJsx(context: TransformationContext): (x: SourceFile | B
         );
     }
 
-    function visitJsxOpeningFragmentCreateElement(node: JsxOpeningFragment, children: readonly JsxChild[], isChild: boolean, location: TextRange) {
+    function visitJsxOpeningFragmentCreateElement(
+        node: JsxOpeningFragment,
+        children: readonly JsxChild[],
+        isChild: boolean,
+        location: TextRange,
+    ) {
         const element = createExpressionForJsxFragment(
             factory,
             context.getEmitResolver().getJsxFactoryEntity(currentSourceFile),
@@ -495,7 +505,8 @@ export function transformJsx(context: TransformationContext): (x: SourceFile | B
 
     function transformJsxAttributesToObjectProps(attrs: readonly (JsxSpreadAttribute | JsxAttribute)[], children?: PropertyAssignment) {
         const target = getEmitScriptTarget(compilerOptions);
-        return target && target >= ScriptTarget.ES2018 ? factory.createObjectLiteralExpression(transformJsxAttributesToProps(attrs, children)) :
+        return target && target >= ScriptTarget.ES2018 ?
+            factory.createObjectLiteralExpression(transformJsxAttributesToProps(attrs, children)) :
             transformJsxAttributesToExpression(attrs, children);
     }
 

@@ -233,7 +233,8 @@ function tryGetFunctionFromVariableDeclaration(
     const initializer = variableDeclaration.initializer;
     if (
         initializer &&
-        (isArrowFunction(initializer) || isFunctionExpression(initializer) && !isFunctionReferencedInFile(sourceFile, typeChecker, initializer))
+        (isArrowFunction(initializer) ||
+            isFunctionExpression(initializer) && !isFunctionReferencedInFile(sourceFile, typeChecker, initializer))
     ) {
         return initializer;
     }

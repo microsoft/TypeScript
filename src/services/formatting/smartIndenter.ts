@@ -79,7 +79,12 @@ export namespace SmartIndenter {
      * When inserting some text after an open brace, we would like to get indentation as if a newline was already there.
      * By default indentation at `position` will be 0 so 'assumeNewLineBeforeCloseBrace' overrides this behavior.
      */
-    export function getIndentation(position: number, sourceFile: SourceFile, options: EditorSettings, assumeNewLineBeforeCloseBrace = false): number {
+    export function getIndentation(
+        position: number,
+        sourceFile: SourceFile,
+        options: EditorSettings,
+        assumeNewLineBeforeCloseBrace = false,
+    ): number {
         if (position > sourceFile.text.length) {
             return getBaseIndentation(options); // past EOF
         }
@@ -134,7 +139,8 @@ export namespace SmartIndenter {
         //          y: undefined,
         //      }
         // ```
-        const isObjectLiteral = currentToken.kind === SyntaxKind.OpenBraceToken && currentToken.parent.kind === SyntaxKind.ObjectLiteralExpression;
+        const isObjectLiteral = currentToken.kind === SyntaxKind.OpenBraceToken &&
+            currentToken.parent.kind === SyntaxKind.ObjectLiteralExpression;
         if (options.indentStyle === IndentStyle.Block || isObjectLiteral) {
             return getBlockIndent(sourceFile, position, options);
         }
@@ -158,7 +164,12 @@ export namespace SmartIndenter {
         return getSmartIndent(sourceFile, position, precedingToken, lineAtPosition, assumeNewLineBeforeCloseBrace, options);
     }
 
-    function getCommentIndent(sourceFile: SourceFile, position: number, options: EditorSettings, enclosingCommentRange: CommentRange): number {
+    function getCommentIndent(
+        sourceFile: SourceFile,
+        position: number,
+        options: EditorSettings,
+        enclosingCommentRange: CommentRange,
+    ): number {
         const previousLine = getLineAndCharacterOfPosition(sourceFile, position).line - 1;
         const commentStartLine = getLineAndCharacterOfPosition(sourceFile, enclosingCommentRange.pos).line;
 
@@ -246,7 +257,12 @@ export namespace SmartIndenter {
         return getBaseIndentation(options);
     }
 
-    export function getIndentationForNode(n: Node, ignoreActualIndentationRange: TextRange, sourceFile: SourceFile, options: EditorSettings): number {
+    export function getIndentationForNode(
+        n: Node,
+        ignoreActualIndentationRange: TextRange,
+        sourceFile: SourceFile,
+        options: EditorSettings,
+    ): number {
         const start = sourceFile.getLineAndCharacterOfPosition(n.getStart(sourceFile));
         return getIndentationForNodeWorker(
             n,
@@ -315,7 +331,14 @@ export namespace SmartIndenter {
                 }
 
                 // try to fetch actual indentation for current node from source text
-                actualIndentation = getActualIndentationForNode(current, parent, currentStart, parentAndChildShareLine, sourceFile, options);
+                actualIndentation = getActualIndentationForNode(
+                    current,
+                    parent,
+                    currentStart,
+                    parentAndChildShareLine,
+                    sourceFile,
+                    options,
+                );
                 if (actualIndentation !== Value.Unknown) {
                     return actualIndentation + indentationDelta;
                 }
@@ -339,7 +362,8 @@ export namespace SmartIndenter {
 
             current = parent;
             parent = current.parent;
-            currentStart = useTrueStart ? sourceFile.getLineAndCharacterOfPosition(current.getStart(sourceFile)) : containingListOrParentStart;
+            currentStart = useTrueStart ? sourceFile.getLineAndCharacterOfPosition(current.getStart(sourceFile))
+                : containingListOrParentStart;
         }
 
         return indentationDelta + getBaseIndentation(options);
@@ -573,7 +597,8 @@ export namespace SmartIndenter {
             case SyntaxKind.TypeAliasDeclaration:
             case SyntaxKind.JSDocTemplateTag:
                 return getList(
-                    (node as ClassDeclaration | ClassExpression | InterfaceDeclaration | TypeAliasDeclaration | JSDocTemplateTag).typeParameters,
+                    (node as ClassDeclaration | ClassExpression | InterfaceDeclaration | TypeAliasDeclaration | JSDocTemplateTag)
+                        .typeParameters,
                 );
             case SyntaxKind.NewExpression:
             case SyntaxKind.CallExpression:
@@ -610,7 +635,12 @@ export namespace SmartIndenter {
         return findColumnForFirstNonWhitespaceCharacterInLine(sourceFile.getLineAndCharacterOfPosition(list.pos), sourceFile, options);
     }
 
-    function getActualIndentationForListItem(node: Node, sourceFile: SourceFile, options: EditorSettings, listIndentsChild: boolean): number {
+    function getActualIndentationForListItem(
+        node: Node,
+        sourceFile: SourceFile,
+        options: EditorSettings,
+        listIndentsChild: boolean,
+    ): number {
         if (node.parent && node.parent.kind === SyntaxKind.VariableDeclarationList) {
             // VariableDeclarationList has no wrapping tokens
             return Value.Unknown;
@@ -629,7 +659,12 @@ export namespace SmartIndenter {
         return Value.Unknown;
     }
 
-    function deriveActualIndentationFromList(list: readonly Node[], index: number, sourceFile: SourceFile, options: EditorSettings): number {
+    function deriveActualIndentationFromList(
+        list: readonly Node[],
+        index: number,
+        sourceFile: SourceFile,
+        options: EditorSettings,
+    ): number {
         Debug.assert(index >= 0 && index < list.length);
         const node = list[index];
 
@@ -667,7 +702,12 @@ export namespace SmartIndenter {
      * value of 'character' for '$' is 3
      * value of 'column' for '$' is 6 (assuming that tab size is 4)
      */
-    export function findFirstNonWhitespaceCharacterAndColumn(startPos: number, endPos: number, sourceFile: SourceFileLike, options: EditorSettings) {
+    export function findFirstNonWhitespaceCharacterAndColumn(
+        startPos: number,
+        endPos: number,
+        sourceFile: SourceFileLike,
+        options: EditorSettings,
+    ) {
         let character = 0;
         let column = 0;
         for (let pos = startPos; pos < endPos; pos++) {
@@ -688,7 +728,12 @@ export namespace SmartIndenter {
         return { column, character };
     }
 
-    export function findFirstNonWhitespaceColumn(startPos: number, endPos: number, sourceFile: SourceFileLike, options: EditorSettings): number {
+    export function findFirstNonWhitespaceColumn(
+        startPos: number,
+        endPos: number,
+        sourceFile: SourceFileLike,
+        options: EditorSettings,
+    ): number {
         return findFirstNonWhitespaceCharacterAndColumn(startPos, endPos, sourceFile, options).column;
     }
 
@@ -751,7 +796,10 @@ export namespace SmartIndenter {
             case SyntaxKind.VariableDeclaration:
             case SyntaxKind.PropertyAssignment:
             case SyntaxKind.BinaryExpression:
-                if (!settings.indentMultiLineObjectLiteralBeginningOnBlankLine && sourceFile && childKind === SyntaxKind.ObjectLiteralExpression) { // TODO: GH#18217
+                if (
+                    !settings.indentMultiLineObjectLiteralBeginningOnBlankLine && sourceFile &&
+                    childKind === SyntaxKind.ObjectLiteralExpression
+                ) { // TODO: GH#18217
                     return rangeIsOnOneLine(sourceFile, child!);
                 }
                 if (parent.kind === SyntaxKind.BinaryExpression && sourceFile && child && childKind === SyntaxKind.JsxElement) {

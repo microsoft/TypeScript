@@ -445,22 +445,33 @@ describe("unittests:: TransformAPI", () => {
             function visitNode(sf: ts.SourceFile) {
                 // produce `class Foo { constructor(@Dec private x) {} }`;
                 // The decorator is required to trigger ts.ts transformations.
-                const classDecl = ts.factory.createClassDeclaration([], "Foo", /*typeParameters*/ undefined, /*heritageClauses*/ undefined, [
-                    ts.factory.createConstructorDeclaration(/*modifiers*/ undefined, [
-                        ts.factory.createParameterDeclaration(
-                            [ts.factory.createDecorator(ts.factory.createIdentifier("Dec")), ts.factory.createModifier(ts.SyntaxKind.PrivateKeyword)],
-                            /*dotDotDotToken*/ undefined,
-                            "x",
-                        ),
-                    ], ts.factory.createBlock([])),
-                ]);
+                const classDecl = ts.factory.createClassDeclaration(
+                    [],
+                    "Foo",
+                    /*typeParameters*/ undefined,
+                    /*heritageClauses*/ undefined,
+                    [
+                        ts.factory.createConstructorDeclaration(/*modifiers*/ undefined, [
+                            ts.factory.createParameterDeclaration(
+                                [
+                                    ts.factory.createDecorator(ts.factory.createIdentifier("Dec")),
+                                    ts.factory.createModifier(ts.SyntaxKind.PrivateKeyword),
+                                ],
+                                /*dotDotDotToken*/ undefined,
+                                "x",
+                            ),
+                        ], ts.factory.createBlock([])),
+                    ],
+                );
                 return ts.factory.updateSourceFile(sf, [classDecl]);
             }
         }
     });
 
     function baselineDeclarationTransform(text: string, opts: ts.TranspileOptions) {
-        const fs = vfs.createFromFileSystem(Harness.IO, /*ignoreCase*/ true, { documents: [new documents.TextDocument("/.src/index.ts", text)] });
+        const fs = vfs.createFromFileSystem(Harness.IO, /*ignoreCase*/ true, {
+            documents: [new documents.TextDocument("/.src/index.ts", text)],
+        });
         const host = new fakes.CompilerHost(fs, opts.compilerOptions);
         const program = ts.createProgram(["/.src/index.ts"], opts.compilerOptions!, host);
         program.emit(
@@ -655,9 +666,12 @@ module MyModule {
     // https://github.com/Microsoft/TypeScript/issues/24709
     testBaseline("issue24709", () => {
         const fs = vfs.createFromFileSystem(Harness.IO, /*ignoreCase*/ true);
-        const transformed = ts.transform(ts.createSourceFile("source.ts", "class X { echo(x: string) { return x; } }", ts.ScriptTarget.ES5), [
-            transformSourceFile,
-        ]);
+        const transformed = ts.transform(
+            ts.createSourceFile("source.ts", "class X { echo(x: string) { return x; } }", ts.ScriptTarget.ES5),
+            [
+                transformSourceFile,
+            ],
+        );
         const transformedSourceFile = transformed.transformed[0];
         transformed.dispose();
         const host = new fakes.CompilerHost(fs);

@@ -145,7 +145,12 @@ export interface DocumentRegistry {
      * @param scriptKind The script kind of the file to be released
      * @param impliedNodeFormat The implied source file format of the file to be released
      */
-    releaseDocument(fileName: string, compilationSettings: CompilerOptions, scriptKind: ScriptKind, impliedNodeFormat: ResolutionMode): void; // eslint-disable-line @typescript-eslint/unified-signatures
+    releaseDocument(
+        fileName: string,
+        compilationSettings: CompilerOptions,
+        scriptKind: ScriptKind,
+        impliedNodeFormat: ResolutionMode,
+    ): void; // eslint-disable-line @typescript-eslint/unified-signatures
     /**
      * @deprecated pass scriptKind for and impliedNodeFormat correctness */
     releaseDocumentWithKey(path: Path, key: DocumentRegistryBucketKey, scriptKind?: ScriptKind): void;
@@ -244,7 +249,16 @@ export function createDocumentRegistryInternal(
     ): SourceFile {
         const path = toPath(fileName, currentDirectory, getCanonicalFileName);
         const key = getKeyForCompilationSettings(getCompilationSettings(compilationSettings));
-        return acquireDocumentWithKey(fileName, path, compilationSettings, key, scriptSnapshot, version, scriptKind, languageVersionOrOptions);
+        return acquireDocumentWithKey(
+            fileName,
+            path,
+            compilationSettings,
+            key,
+            scriptSnapshot,
+            version,
+            scriptKind,
+            languageVersionOrOptions,
+        );
     }
 
     function acquireDocumentWithKey(
@@ -280,7 +294,16 @@ export function createDocumentRegistryInternal(
     ): SourceFile {
         const path = toPath(fileName, currentDirectory, getCanonicalFileName);
         const key = getKeyForCompilationSettings(getCompilationSettings(compilationSettings));
-        return updateDocumentWithKey(fileName, path, compilationSettings, key, scriptSnapshot, version, scriptKind, languageVersionOrOptions);
+        return updateDocumentWithKey(
+            fileName,
+            path,
+            compilationSettings,
+            key,
+            scriptSnapshot,
+            version,
+            scriptKind,
+            languageVersionOrOptions,
+        );
     }
 
     function updateDocumentWithKey(
@@ -309,7 +332,10 @@ export function createDocumentRegistryInternal(
     function getDocumentRegistryEntry(bucketEntry: BucketEntry, scriptKind: ScriptKind | undefined) {
         const entry = isDocumentRegistryEntry(bucketEntry) ? bucketEntry
             : bucketEntry.get(
-                Debug.checkDefined(scriptKind, "If there are more than one scriptKind's for same document the scriptKind should be provided"),
+                Debug.checkDefined(
+                    scriptKind,
+                    "If there are more than one scriptKind's for same document the scriptKind should be provided",
+                ),
             );
         Debug.assert(
             scriptKind === undefined || !entry || entry.sourceFile.scriptKind === scriptKind,
@@ -463,7 +489,12 @@ export function createDocumentRegistryInternal(
         return releaseDocumentWithKey(path, key, scriptKind, impliedNodeFormat);
     }
 
-    function releaseDocumentWithKey(path: Path, key: DocumentRegistryBucketKey, scriptKind?: ScriptKind, impliedNodeFormat?: ResolutionMode): void {
+    function releaseDocumentWithKey(
+        path: Path,
+        key: DocumentRegistryBucketKey,
+        scriptKind?: ScriptKind,
+        impliedNodeFormat?: ResolutionMode,
+    ): void {
         const bucket = Debug.checkDefined(buckets.get(getDocumentRegistryBucketKeyWithMode(key, impliedNodeFormat)));
         const bucketEntry = bucket.get(path)!;
         const entry = getDocumentRegistryEntry(bucketEntry, scriptKind)!;

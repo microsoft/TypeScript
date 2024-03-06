@@ -302,9 +302,17 @@ function convertVariableStatement(
                 foundImport = true;
                 return convertSingleImport(name, initializer.arguments[0], checker, identifiers, target, quotePreference);
             }
-            else if (isPropertyAccessExpression(initializer) && isRequireCall(initializer.expression, /*requireStringLiteralLikeArgument*/ true)) {
+            else if (
+                isPropertyAccessExpression(initializer) && isRequireCall(initializer.expression, /*requireStringLiteralLikeArgument*/ true)
+            ) {
                 foundImport = true;
-                return convertPropertyAccessImport(name, initializer.name.text, initializer.expression.arguments[0], identifiers, quotePreference);
+                return convertPropertyAccessImport(
+                    name,
+                    initializer.name.text,
+                    initializer.expression.arguments[0],
+                    identifiers,
+                    quotePreference,
+                );
             }
         }
         // Move it out to its own variable statement. (This will not be used if `!foundImport`)
@@ -413,7 +421,12 @@ function tryChangeModuleExportsObject(
                     : convertExportsDotXEquals_replaceNode(prop.name.text, prop.initializer, useSitesToUnqualify);
             case SyntaxKind.MethodDeclaration:
                 return !isIdentifier(prop.name) ? undefined
-                    : functionExpressionToDeclaration(prop.name.text, [factory.createToken(SyntaxKind.ExportKeyword)], prop, useSitesToUnqualify);
+                    : functionExpressionToDeclaration(
+                        prop.name.text,
+                        [factory.createToken(SyntaxKind.ExportKeyword)],
+                        prop,
+                        useSitesToUnqualify,
+                    );
             default:
                 Debug.assertNever(prop, `Convert to ES6 got invalid prop kind ${(prop as ObjectLiteralElementLike).kind}`);
         }
@@ -454,13 +467,17 @@ function convertReExportAll(reExported: StringLiteralLike, checker: TypeChecker)
     return exports.has(InternalSymbolName.ExportEquals) ? [[reExportDefault(moduleSpecifier)], true] :
         !exports.has(InternalSymbolName.Default) ? [[reExportStar(moduleSpecifier)], false] :
         // If there's some non-default export, must include both `export *` and `export default`.
-        exports.size > 1 ? [[reExportStar(moduleSpecifier), reExportDefault(moduleSpecifier)], true] : [[reExportDefault(moduleSpecifier)], true];
+        exports.size > 1 ? [[reExportStar(moduleSpecifier), reExportDefault(moduleSpecifier)], true]
+        : [[reExportDefault(moduleSpecifier)], true];
 }
 function reExportStar(moduleSpecifier: string): ExportDeclaration {
     return makeExportDeclaration(/*exportSpecifiers*/ undefined, moduleSpecifier);
 }
 function reExportDefault(moduleSpecifier: string): ExportDeclaration {
-    return makeExportDeclaration([factory.createExportSpecifier(/*isTypeOnly*/ false, /*propertyName*/ undefined, "default")], moduleSpecifier);
+    return makeExportDeclaration(
+        [factory.createExportSpecifier(/*isTypeOnly*/ false, /*propertyName*/ undefined, "default")],
+        moduleSpecifier,
+    );
 }
 
 function convertExportsPropertyAssignment(

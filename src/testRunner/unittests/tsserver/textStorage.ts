@@ -124,7 +124,11 @@ describe("unittests:: tsserver:: Text storage", () => {
         assert.isFalse(ts1.hasScriptVersionCache_TestOnly());
 
         assert.strictEqual(largeFile.content.length, ts1.getTelemetryFileSize());
-        baselineTsserverLogs("textStorage", "should be able to return the file size when a JS file is too large to load into text", session);
+        baselineTsserverLogs(
+            "textStorage",
+            "should be able to return the file size when a JS file is too large to load into text",
+            session,
+        );
     });
 
     it("should return the file size without reloading the file", () => {

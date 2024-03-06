@@ -89,7 +89,8 @@ describe("unittests:: tsserver:: with declaration file maps:: project references
 
     const userTs: File = {
         path: "/user/user.ts",
-        content: 'import * as a from "../a/bin/a";\nimport * as b from "../b/bin/b";\nexport function fnUser() { a.fnA(); b.fnB(); a.instanceA; }',
+        content:
+            'import * as a from "../a/bin/a";\nimport * as b from "../b/bin/b";\nexport function fnUser() { a.fnA(); b.fnB(); a.instanceA; }',
     };
 
     const userTsForConfigProject: File = {
@@ -413,7 +414,11 @@ describe("unittests:: tsserver:: with declaration file maps:: project references
                 newFilePath: "/a/src/a1.ts",
             },
         });
-        baselineTsserverLogs("declarationFileMaps", "getEditsForFileRename when referencing project doesnt include file and its renamed", session);
+        baselineTsserverLogs(
+            "declarationFileMaps",
+            "getEditsForFileRename when referencing project doesnt include file and its renamed",
+            session,
+        );
     });
 
     it("does not jump to source if inlined sources", () => {

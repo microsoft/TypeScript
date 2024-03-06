@@ -220,7 +220,9 @@ new C();`,
                     verifyGetErrRequest({ session, files: [recognizersDateTimeSrcFile] });
                     baselineTsserverLogs(
                         "symLinks",
-                        `module resolution${withPathMapping ? " with path mapping" : ""} when project recompiles after deleting generated folders`,
+                        `module resolution${
+                            withPathMapping ? " with path mapping" : ""
+                        } when project recompiles after deleting generated folders`,
                         session,
                     );
                 });

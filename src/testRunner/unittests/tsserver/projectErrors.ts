@@ -800,7 +800,10 @@ describe("unittests:: tsserver:: projectErrors:: with npm install when", () => {
                 path: `/user/username/projects/myproject/node_modules/.staging/@angular/cli-c1e44b05/models/analytics.d.ts`,
                 content: `export const x = 10;`,
             },
-            { path: `/user/username/projects/myproject/node_modules/.staging/@angular/core-0963aebf/index.d.ts`, content: `export const y = 10;` },
+            {
+                path: `/user/username/projects/myproject/node_modules/.staging/@angular/core-0963aebf/index.d.ts`,
+                content: `export const y = 10;`,
+            },
         ];
         // Since we added/removed in .staging no timeout
         verifyWhileNpmInstall();

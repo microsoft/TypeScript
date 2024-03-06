@@ -48,20 +48,23 @@ registerCodeFix({
     getCodeActions(context) {
         const { sourceFile, span } = context;
         const classDeclaration = getClass(sourceFile, span.start);
-        return mapDefined<ExpressionWithTypeArguments, CodeFixAction>(getEffectiveImplementsTypeNodes(classDeclaration), implementedTypeNode => {
-            const changes = textChanges.ChangeTracker.with(
-                context,
-                t => addMissingDeclarations(context, implementedTypeNode, sourceFile, classDeclaration, t, context.preferences),
-            );
-            return changes.length === 0 ? undefined
-                : createCodeFixAction(
-                    fixId,
-                    changes,
-                    [Diagnostics.Implement_interface_0, implementedTypeNode.getText(sourceFile)],
-                    fixId,
-                    Diagnostics.Implement_all_unimplemented_interfaces,
+        return mapDefined<ExpressionWithTypeArguments, CodeFixAction>(
+            getEffectiveImplementsTypeNodes(classDeclaration),
+            implementedTypeNode => {
+                const changes = textChanges.ChangeTracker.with(
+                    context,
+                    t => addMissingDeclarations(context, implementedTypeNode, sourceFile, classDeclaration, t, context.preferences),
                 );
-        });
+                return changes.length === 0 ? undefined
+                    : createCodeFixAction(
+                        fixId,
+                        changes,
+                        [Diagnostics.Implement_interface_0, implementedTypeNode.getText(sourceFile)],
+                        fixId,
+                        Diagnostics.Implement_all_unimplemented_interfaces,
+                    );
+            },
+        );
     },
     fixIds: [fixId],
     getAllCodeActions(context) {
@@ -142,7 +145,11 @@ function addMissingDeclarations(
     }
 
     // Either adds the node at the top of the class, or if there's a constructor right after that
-    function insertInterfaceMemberNode(sourceFile: SourceFile, cls: ClassLikeDeclaration | InterfaceDeclaration, newElement: ClassElement): void {
+    function insertInterfaceMemberNode(
+        sourceFile: SourceFile,
+        cls: ClassLikeDeclaration | InterfaceDeclaration,
+        newElement: ClassElement,
+    ): void {
         if (constructor) {
             changeTracker.insertNodeAfter(sourceFile, constructor, newElement);
         }

@@ -379,7 +379,10 @@ export class CompilerHost implements ts.CompilerHost {
         return vpath.resolve(this.getDefaultLibLocation(), ts.getDefaultLibFileName(options));
     }
 
-    public getSourceFile(fileName: string, languageVersionOrOptions: ts.ScriptTarget | ts.CreateSourceFileOptions): ts.SourceFile | undefined {
+    public getSourceFile(
+        fileName: string,
+        languageVersionOrOptions: ts.ScriptTarget | ts.CreateSourceFileOptions,
+    ): ts.SourceFile | undefined {
         const canonicalFileName = this.getCanonicalFileName(vpath.resolve(this.getCurrentDirectory(), fileName));
         const existing = this._sourceFiles.get(canonicalFileName);
         if (existing) return existing;
@@ -409,7 +412,12 @@ export class CompilerHost implements ts.CompilerHost {
             }
         }
 
-        const parsed = ts.createSourceFile(fileName, content, languageVersionOrOptions, this._setParentNodes || this.shouldAssertInvariants);
+        const parsed = ts.createSourceFile(
+            fileName,
+            content,
+            languageVersionOrOptions,
+            this._setParentNodes || this.shouldAssertInvariants,
+        );
         if (this.shouldAssertInvariants) {
             Utils.assertInvariants(parsed, /*parent*/ undefined);
         }
@@ -423,7 +431,8 @@ export class CompilerHost implements ts.CompilerHost {
             let fs = this.vfs;
             while (fs.shadowRoot) {
                 try {
-                    const shadowRootStats = fs.shadowRoot.existsSync(canonicalFileName) ? fs.shadowRoot.statSync(canonicalFileName) : undefined!; // TODO: GH#18217
+                    const shadowRootStats = fs.shadowRoot.existsSync(canonicalFileName) ? fs.shadowRoot.statSync(canonicalFileName)
+                        : undefined!; // TODO: GH#18217
                     if (
                         shadowRootStats.dev !== stats.dev ||
                         shadowRootStats.ino !== stats.ino ||
@@ -604,7 +613,8 @@ export class SolutionBuilderHost extends CompilerHost implements ts.SolutionBuil
         jsDocParsingMode?: ts.JSDocParsingMode,
     ) {
         super(sys, options, setParentNodes, jsDocParsingMode);
-        this.createProgram = createProgram || ts.createEmitAndSemanticDiagnosticsBuilderProgram as unknown as ts.CreateProgram<ts.BuilderProgram>;
+        this.createProgram = createProgram ||
+            ts.createEmitAndSemanticDiagnosticsBuilderProgram as unknown as ts.CreateProgram<ts.BuilderProgram>;
     }
 
     static create(

@@ -552,7 +552,11 @@ export function visitFunctionBody(node: FunctionBody, visitor: Visitor, context:
  * Resumes a suspended lexical environment and visits a function body, ending the lexical
  * environment and merging hoisted declarations upon completion.
  */
-export function visitFunctionBody(node: FunctionBody | undefined, visitor: Visitor, context: TransformationContext): FunctionBody | undefined;
+export function visitFunctionBody(
+    node: FunctionBody | undefined,
+    visitor: Visitor,
+    context: TransformationContext,
+): FunctionBody | undefined;
 /**
  * Resumes a suspended lexical environment and visits a concise body, ending the lexical
  * environment and merging hoisted declarations upon completion.
@@ -745,7 +749,14 @@ const visitEachChildTable: VisitEachChildTable = {
     },
 
     // Signature elements
-    [SyntaxKind.TypeParameter]: function visitEachChildOfTypeParameterDeclaration(node, visitor, context, nodesVisitor, nodeVisitor, _tokenVisitor) {
+    [SyntaxKind.TypeParameter]: function visitEachChildOfTypeParameterDeclaration(
+        node,
+        visitor,
+        context,
+        nodesVisitor,
+        nodeVisitor,
+        _tokenVisitor,
+    ) {
         return context.factory.updateTypeParameterDeclaration(
             node,
             nodesVisitor(node.modifiers, visitor, isModifier),
@@ -775,7 +786,14 @@ const visitEachChildTable: VisitEachChildTable = {
     },
 
     // Type elements
-    [SyntaxKind.PropertySignature]: function visitEachChildOfPropertySignature(node, visitor, context, nodesVisitor, nodeVisitor, tokenVisitor) {
+    [SyntaxKind.PropertySignature]: function visitEachChildOfPropertySignature(
+        node,
+        visitor,
+        context,
+        nodesVisitor,
+        nodeVisitor,
+        tokenVisitor,
+    ) {
         return context.factory.updatePropertySignature(
             node,
             nodesVisitor(node.modifiers, visitor, isModifier),
@@ -785,7 +803,14 @@ const visitEachChildTable: VisitEachChildTable = {
         );
     },
 
-    [SyntaxKind.PropertyDeclaration]: function visitEachChildOfPropertyDeclaration(node, visitor, context, nodesVisitor, nodeVisitor, tokenVisitor) {
+    [SyntaxKind.PropertyDeclaration]: function visitEachChildOfPropertyDeclaration(
+        node,
+        visitor,
+        context,
+        nodesVisitor,
+        nodeVisitor,
+        tokenVisitor,
+    ) {
         return context.factory.updatePropertyDeclaration(
             node,
             nodesVisitor(node.modifiers, visitor, isModifierLike),
@@ -798,7 +823,14 @@ const visitEachChildTable: VisitEachChildTable = {
         );
     },
 
-    [SyntaxKind.MethodSignature]: function visitEachChildOfMethodSignature(node, visitor, context, nodesVisitor, nodeVisitor, tokenVisitor) {
+    [SyntaxKind.MethodSignature]: function visitEachChildOfMethodSignature(
+        node,
+        visitor,
+        context,
+        nodesVisitor,
+        nodeVisitor,
+        tokenVisitor,
+    ) {
         return context.factory.updateMethodSignature(
             node,
             nodesVisitor(node.modifiers, visitor, isModifier),
@@ -810,7 +842,14 @@ const visitEachChildTable: VisitEachChildTable = {
         );
     },
 
-    [SyntaxKind.MethodDeclaration]: function visitEachChildOfMethodDeclaration(node, visitor, context, nodesVisitor, nodeVisitor, tokenVisitor) {
+    [SyntaxKind.MethodDeclaration]: function visitEachChildOfMethodDeclaration(
+        node,
+        visitor,
+        context,
+        nodesVisitor,
+        nodeVisitor,
+        tokenVisitor,
+    ) {
         return context.factory.updateMethodDeclaration(
             node,
             nodesVisitor(node.modifiers, visitor, isModifierLike),
@@ -824,7 +863,14 @@ const visitEachChildTable: VisitEachChildTable = {
         );
     },
 
-    [SyntaxKind.Constructor]: function visitEachChildOfConstructorDeclaration(node, visitor, context, nodesVisitor, nodeVisitor, _tokenVisitor) {
+    [SyntaxKind.Constructor]: function visitEachChildOfConstructorDeclaration(
+        node,
+        visitor,
+        context,
+        nodesVisitor,
+        nodeVisitor,
+        _tokenVisitor,
+    ) {
         return context.factory.updateConstructorDeclaration(
             node,
             nodesVisitor(node.modifiers, visitor, isModifierLike),
@@ -833,7 +879,14 @@ const visitEachChildTable: VisitEachChildTable = {
         );
     },
 
-    [SyntaxKind.GetAccessor]: function visitEachChildOfGetAccessorDeclaration(node, visitor, context, nodesVisitor, nodeVisitor, _tokenVisitor) {
+    [SyntaxKind.GetAccessor]: function visitEachChildOfGetAccessorDeclaration(
+        node,
+        visitor,
+        context,
+        nodesVisitor,
+        nodeVisitor,
+        _tokenVisitor,
+    ) {
         return context.factory.updateGetAccessorDeclaration(
             node,
             nodesVisitor(node.modifiers, visitor, isModifierLike),
@@ -844,7 +897,14 @@ const visitEachChildTable: VisitEachChildTable = {
         );
     },
 
-    [SyntaxKind.SetAccessor]: function visitEachChildOfSetAccessorDeclaration(node, visitor, context, nodesVisitor, nodeVisitor, _tokenVisitor) {
+    [SyntaxKind.SetAccessor]: function visitEachChildOfSetAccessorDeclaration(
+        node,
+        visitor,
+        context,
+        nodesVisitor,
+        nodeVisitor,
+        _tokenVisitor,
+    ) {
         return context.factory.updateSetAccessorDeclaration(
             node,
             nodesVisitor(node.modifiers, visitor, isModifierLike),
@@ -870,7 +930,14 @@ const visitEachChildTable: VisitEachChildTable = {
         );
     },
 
-    [SyntaxKind.CallSignature]: function visitEachChildOfCallSignatureDeclaration(node, visitor, context, nodesVisitor, nodeVisitor, _tokenVisitor) {
+    [SyntaxKind.CallSignature]: function visitEachChildOfCallSignatureDeclaration(
+        node,
+        visitor,
+        context,
+        nodesVisitor,
+        nodeVisitor,
+        _tokenVisitor,
+    ) {
         return context.factory.updateCallSignature(
             node,
             nodesVisitor(node.typeParameters, visitor, isTypeParameterDeclaration),
@@ -912,7 +979,14 @@ const visitEachChildTable: VisitEachChildTable = {
     },
 
     // Types
-    [SyntaxKind.TypePredicate]: function visitEachChildOfTypePredicateNode(node, visitor, context, _nodesVisitor, nodeVisitor, _tokenVisitor) {
+    [SyntaxKind.TypePredicate]: function visitEachChildOfTypePredicateNode(
+        node,
+        visitor,
+        context,
+        _nodesVisitor,
+        nodeVisitor,
+        _tokenVisitor,
+    ) {
         return context.factory.updateTypePredicateNode(
             node,
             nodeVisitor(node.assertsModifier, visitor, isAssertsKeyword),
@@ -921,7 +995,14 @@ const visitEachChildTable: VisitEachChildTable = {
         );
     },
 
-    [SyntaxKind.TypeReference]: function visitEachChildOfTypeReferenceNode(node, visitor, context, nodesVisitor, nodeVisitor, _tokenVisitor) {
+    [SyntaxKind.TypeReference]: function visitEachChildOfTypeReferenceNode(
+        node,
+        visitor,
+        context,
+        nodesVisitor,
+        nodeVisitor,
+        _tokenVisitor,
+    ) {
         return context.factory.updateTypeReferenceNode(
             node,
             Debug.checkDefined(nodeVisitor(node.typeName, visitor, isEntityName)),
@@ -938,7 +1019,14 @@ const visitEachChildTable: VisitEachChildTable = {
         );
     },
 
-    [SyntaxKind.ConstructorType]: function visitEachChildOfConstructorTypeNode(node, visitor, context, nodesVisitor, nodeVisitor, _tokenVisitor) {
+    [SyntaxKind.ConstructorType]: function visitEachChildOfConstructorTypeNode(
+        node,
+        visitor,
+        context,
+        nodesVisitor,
+        nodeVisitor,
+        _tokenVisitor,
+    ) {
         return context.factory.updateConstructorTypeNode(
             node,
             nodesVisitor(node.modifiers, visitor, isModifier),
@@ -977,7 +1065,14 @@ const visitEachChildTable: VisitEachChildTable = {
         );
     },
 
-    [SyntaxKind.OptionalType]: function visitEachChildOfOptionalTypeNode(node, visitor, context, _nodesVisitor, nodeVisitor, _tokenVisitor) {
+    [SyntaxKind.OptionalType]: function visitEachChildOfOptionalTypeNode(
+        node,
+        visitor,
+        context,
+        _nodesVisitor,
+        nodeVisitor,
+        _tokenVisitor,
+    ) {
         return context.factory.updateOptionalTypeNode(
             node,
             Debug.checkDefined(nodeVisitor(node.type, visitor, isTypeNode)),
@@ -998,14 +1093,28 @@ const visitEachChildTable: VisitEachChildTable = {
         );
     },
 
-    [SyntaxKind.IntersectionType]: function visitEachChildOfIntersectionTypeNode(node, visitor, context, nodesVisitor, _nodeVisitor, _tokenVisitor) {
+    [SyntaxKind.IntersectionType]: function visitEachChildOfIntersectionTypeNode(
+        node,
+        visitor,
+        context,
+        nodesVisitor,
+        _nodeVisitor,
+        _tokenVisitor,
+    ) {
         return context.factory.updateIntersectionTypeNode(
             node,
             nodesVisitor(node.types, visitor, isTypeNode),
         );
     },
 
-    [SyntaxKind.ConditionalType]: function visitEachChildOfConditionalTypeNode(node, visitor, context, _nodesVisitor, nodeVisitor, _tokenVisitor) {
+    [SyntaxKind.ConditionalType]: function visitEachChildOfConditionalTypeNode(
+        node,
+        visitor,
+        context,
+        _nodesVisitor,
+        nodeVisitor,
+        _tokenVisitor,
+    ) {
         return context.factory.updateConditionalTypeNode(
             node,
             Debug.checkDefined(nodeVisitor(node.checkType, visitor, isTypeNode)),
@@ -1048,7 +1157,14 @@ const visitEachChildTable: VisitEachChildTable = {
         );
     },
 
-    [SyntaxKind.NamedTupleMember]: function visitEachChildOfNamedTupleMember(node, visitor, context, _nodesVisitor, nodeVisitor, tokenVisitor) {
+    [SyntaxKind.NamedTupleMember]: function visitEachChildOfNamedTupleMember(
+        node,
+        visitor,
+        context,
+        _nodesVisitor,
+        nodeVisitor,
+        tokenVisitor,
+    ) {
         return context.factory.updateNamedTupleMember(
             node,
             tokenVisitor ? nodeVisitor(node.dotDotDotToken, tokenVisitor, isDotDotDotToken) : node.dotDotDotToken,
@@ -1058,21 +1174,42 @@ const visitEachChildTable: VisitEachChildTable = {
         );
     },
 
-    [SyntaxKind.ParenthesizedType]: function visitEachChildOfParenthesizedType(node, visitor, context, _nodesVisitor, nodeVisitor, _tokenVisitor) {
+    [SyntaxKind.ParenthesizedType]: function visitEachChildOfParenthesizedType(
+        node,
+        visitor,
+        context,
+        _nodesVisitor,
+        nodeVisitor,
+        _tokenVisitor,
+    ) {
         return context.factory.updateParenthesizedType(
             node,
             Debug.checkDefined(nodeVisitor(node.type, visitor, isTypeNode)),
         );
     },
 
-    [SyntaxKind.TypeOperator]: function visitEachChildOfTypeOperatorNode(node, visitor, context, _nodesVisitor, nodeVisitor, _tokenVisitor) {
+    [SyntaxKind.TypeOperator]: function visitEachChildOfTypeOperatorNode(
+        node,
+        visitor,
+        context,
+        _nodesVisitor,
+        nodeVisitor,
+        _tokenVisitor,
+    ) {
         return context.factory.updateTypeOperatorNode(
             node,
             Debug.checkDefined(nodeVisitor(node.type, visitor, isTypeNode)),
         );
     },
 
-    [SyntaxKind.IndexedAccessType]: function visitEachChildOfIndexedAccessType(node, visitor, context, _nodesVisitor, nodeVisitor, _tokenVisitor) {
+    [SyntaxKind.IndexedAccessType]: function visitEachChildOfIndexedAccessType(
+        node,
+        visitor,
+        context,
+        _nodesVisitor,
+        nodeVisitor,
+        _tokenVisitor,
+    ) {
         return context.factory.updateIndexedAccessTypeNode(
             node,
             Debug.checkDefined(nodeVisitor(node.objectType, visitor, isTypeNode)),
@@ -1099,7 +1236,14 @@ const visitEachChildTable: VisitEachChildTable = {
         );
     },
 
-    [SyntaxKind.TemplateLiteralType]: function visitEachChildOfTemplateLiteralType(node, visitor, context, nodesVisitor, nodeVisitor, _tokenVisitor) {
+    [SyntaxKind.TemplateLiteralType]: function visitEachChildOfTemplateLiteralType(
+        node,
+        visitor,
+        context,
+        nodesVisitor,
+        nodeVisitor,
+        _tokenVisitor,
+    ) {
         return context.factory.updateTemplateLiteralType(
             node,
             Debug.checkDefined(nodeVisitor(node.head, visitor, isTemplateHead)),
@@ -1305,7 +1449,14 @@ const visitEachChildTable: VisitEachChildTable = {
         );
     },
 
-    [SyntaxKind.FunctionExpression]: function visitEachChildOfFunctionExpression(node, visitor, context, nodesVisitor, nodeVisitor, tokenVisitor) {
+    [SyntaxKind.FunctionExpression]: function visitEachChildOfFunctionExpression(
+        node,
+        visitor,
+        context,
+        nodesVisitor,
+        nodeVisitor,
+        tokenVisitor,
+    ) {
         return context.factory.updateFunctionExpression(
             node,
             nodesVisitor(node.modifiers, visitor, isModifier),
@@ -1331,28 +1482,56 @@ const visitEachChildTable: VisitEachChildTable = {
         );
     },
 
-    [SyntaxKind.DeleteExpression]: function visitEachChildOfDeleteExpression(node, visitor, context, _nodesVisitor, nodeVisitor, _tokenVisitor) {
+    [SyntaxKind.DeleteExpression]: function visitEachChildOfDeleteExpression(
+        node,
+        visitor,
+        context,
+        _nodesVisitor,
+        nodeVisitor,
+        _tokenVisitor,
+    ) {
         return context.factory.updateDeleteExpression(
             node,
             Debug.checkDefined(nodeVisitor(node.expression, visitor, isExpression)),
         );
     },
 
-    [SyntaxKind.TypeOfExpression]: function visitEachChildOfTypeOfExpression(node, visitor, context, _nodesVisitor, nodeVisitor, _tokenVisitor) {
+    [SyntaxKind.TypeOfExpression]: function visitEachChildOfTypeOfExpression(
+        node,
+        visitor,
+        context,
+        _nodesVisitor,
+        nodeVisitor,
+        _tokenVisitor,
+    ) {
         return context.factory.updateTypeOfExpression(
             node,
             Debug.checkDefined(nodeVisitor(node.expression, visitor, isExpression)),
         );
     },
 
-    [SyntaxKind.VoidExpression]: function visitEachChildOfVoidExpression(node, visitor, context, _nodesVisitor, nodeVisitor, _tokenVisitor) {
+    [SyntaxKind.VoidExpression]: function visitEachChildOfVoidExpression(
+        node,
+        visitor,
+        context,
+        _nodesVisitor,
+        nodeVisitor,
+        _tokenVisitor,
+    ) {
         return context.factory.updateVoidExpression(
             node,
             Debug.checkDefined(nodeVisitor(node.expression, visitor, isExpression)),
         );
     },
 
-    [SyntaxKind.AwaitExpression]: function visitEachChildOfAwaitExpression(node, visitor, context, _nodesVisitor, nodeVisitor, _tokenVisitor) {
+    [SyntaxKind.AwaitExpression]: function visitEachChildOfAwaitExpression(
+        node,
+        visitor,
+        context,
+        _nodesVisitor,
+        nodeVisitor,
+        _tokenVisitor,
+    ) {
         return context.factory.updateAwaitExpression(
             node,
             Debug.checkDefined(nodeVisitor(node.expression, visitor, isExpression)),
@@ -1387,7 +1566,14 @@ const visitEachChildTable: VisitEachChildTable = {
         );
     },
 
-    [SyntaxKind.BinaryExpression]: function visitEachChildOfBinaryExpression(node, visitor, context, _nodesVisitor, nodeVisitor, tokenVisitor) {
+    [SyntaxKind.BinaryExpression]: function visitEachChildOfBinaryExpression(
+        node,
+        visitor,
+        context,
+        _nodesVisitor,
+        nodeVisitor,
+        tokenVisitor,
+    ) {
         return context.factory.updateBinaryExpression(
             node,
             Debug.checkDefined(nodeVisitor(node.left, visitor, isExpression)),
@@ -1414,7 +1600,14 @@ const visitEachChildTable: VisitEachChildTable = {
         );
     },
 
-    [SyntaxKind.TemplateExpression]: function visitEachChildOfTemplateExpression(node, visitor, context, nodesVisitor, nodeVisitor, _tokenVisitor) {
+    [SyntaxKind.TemplateExpression]: function visitEachChildOfTemplateExpression(
+        node,
+        visitor,
+        context,
+        nodesVisitor,
+        nodeVisitor,
+        _tokenVisitor,
+    ) {
         return context.factory.updateTemplateExpression(
             node,
             Debug.checkDefined(nodeVisitor(node.head, visitor, isTemplateHead)),
@@ -1422,7 +1615,14 @@ const visitEachChildTable: VisitEachChildTable = {
         );
     },
 
-    [SyntaxKind.YieldExpression]: function visitEachChildOfYieldExpression(node, visitor, context, _nodesVisitor, nodeVisitor, tokenVisitor) {
+    [SyntaxKind.YieldExpression]: function visitEachChildOfYieldExpression(
+        node,
+        visitor,
+        context,
+        _nodesVisitor,
+        nodeVisitor,
+        tokenVisitor,
+    ) {
         return context.factory.updateYieldExpression(
             node,
             tokenVisitor ? nodeVisitor(node.asteriskToken, tokenVisitor, isAsteriskToken) : node.asteriskToken,
@@ -1437,7 +1637,14 @@ const visitEachChildTable: VisitEachChildTable = {
         );
     },
 
-    [SyntaxKind.ClassExpression]: function visitEachChildOfClassExpression(node, visitor, context, nodesVisitor, nodeVisitor, _tokenVisitor) {
+    [SyntaxKind.ClassExpression]: function visitEachChildOfClassExpression(
+        node,
+        visitor,
+        context,
+        nodesVisitor,
+        nodeVisitor,
+        _tokenVisitor,
+    ) {
         return context.factory.updateClassExpression(
             node,
             nodesVisitor(node.modifiers, visitor, isModifierLike),
@@ -1486,7 +1693,14 @@ const visitEachChildTable: VisitEachChildTable = {
         );
     },
 
-    [SyntaxKind.NonNullExpression]: function visitEachChildOfNonNullExpression(node, visitor, context, _nodesVisitor, nodeVisitor, _tokenVisitor) {
+    [SyntaxKind.NonNullExpression]: function visitEachChildOfNonNullExpression(
+        node,
+        visitor,
+        context,
+        _nodesVisitor,
+        nodeVisitor,
+        _tokenVisitor,
+    ) {
         return isOptionalChain(node) ?
             context.factory.updateNonNullChain(
                 node,
@@ -1522,7 +1736,14 @@ const visitEachChildTable: VisitEachChildTable = {
         );
     },
 
-    [SyntaxKind.VariableStatement]: function visitEachChildOfVariableStatement(node, visitor, context, nodesVisitor, nodeVisitor, _tokenVisitor) {
+    [SyntaxKind.VariableStatement]: function visitEachChildOfVariableStatement(
+        node,
+        visitor,
+        context,
+        nodesVisitor,
+        nodeVisitor,
+        _tokenVisitor,
+    ) {
         return context.factory.updateVariableStatement(
             node,
             nodesVisitor(node.modifiers, visitor, isModifierLike),
@@ -1561,7 +1782,14 @@ const visitEachChildTable: VisitEachChildTable = {
         );
     },
 
-    [SyntaxKind.WhileStatement]: function visitEachChildOfWhileStatement(node, visitor, context, _nodesVisitor, nodeVisitor, _tokenVisitor) {
+    [SyntaxKind.WhileStatement]: function visitEachChildOfWhileStatement(
+        node,
+        visitor,
+        context,
+        _nodesVisitor,
+        nodeVisitor,
+        _tokenVisitor,
+    ) {
         return context.factory.updateWhileStatement(
             node,
             Debug.checkDefined(nodeVisitor(node.expression, visitor, isExpression)),
@@ -1579,7 +1807,14 @@ const visitEachChildTable: VisitEachChildTable = {
         );
     },
 
-    [SyntaxKind.ForInStatement]: function visitEachChildOfForInStatement(node, visitor, context, _nodesVisitor, nodeVisitor, _tokenVisitor) {
+    [SyntaxKind.ForInStatement]: function visitEachChildOfForInStatement(
+        node,
+        visitor,
+        context,
+        _nodesVisitor,
+        nodeVisitor,
+        _tokenVisitor,
+    ) {
         return context.factory.updateForInStatement(
             node,
             Debug.checkDefined(nodeVisitor(node.initializer, visitor, isForInitializer)),
@@ -1598,21 +1833,42 @@ const visitEachChildTable: VisitEachChildTable = {
         );
     },
 
-    [SyntaxKind.ContinueStatement]: function visitEachChildOfContinueStatement(node, visitor, context, _nodesVisitor, nodeVisitor, _tokenVisitor) {
+    [SyntaxKind.ContinueStatement]: function visitEachChildOfContinueStatement(
+        node,
+        visitor,
+        context,
+        _nodesVisitor,
+        nodeVisitor,
+        _tokenVisitor,
+    ) {
         return context.factory.updateContinueStatement(
             node,
             nodeVisitor(node.label, visitor, isIdentifier),
         );
     },
 
-    [SyntaxKind.BreakStatement]: function visitEachChildOfBreakStatement(node, visitor, context, _nodesVisitor, nodeVisitor, _tokenVisitor) {
+    [SyntaxKind.BreakStatement]: function visitEachChildOfBreakStatement(
+        node,
+        visitor,
+        context,
+        _nodesVisitor,
+        nodeVisitor,
+        _tokenVisitor,
+    ) {
         return context.factory.updateBreakStatement(
             node,
             nodeVisitor(node.label, visitor, isIdentifier),
         );
     },
 
-    [SyntaxKind.ReturnStatement]: function visitEachChildOfReturnStatement(node, visitor, context, _nodesVisitor, nodeVisitor, _tokenVisitor) {
+    [SyntaxKind.ReturnStatement]: function visitEachChildOfReturnStatement(
+        node,
+        visitor,
+        context,
+        _nodesVisitor,
+        nodeVisitor,
+        _tokenVisitor,
+    ) {
         return context.factory.updateReturnStatement(
             node,
             nodeVisitor(node.expression, visitor, isExpression),
@@ -1627,7 +1883,14 @@ const visitEachChildTable: VisitEachChildTable = {
         );
     },
 
-    [SyntaxKind.SwitchStatement]: function visitEachChildOfSwitchStatement(node, visitor, context, _nodesVisitor, nodeVisitor, _tokenVisitor) {
+    [SyntaxKind.SwitchStatement]: function visitEachChildOfSwitchStatement(
+        node,
+        visitor,
+        context,
+        _nodesVisitor,
+        nodeVisitor,
+        _tokenVisitor,
+    ) {
         return context.factory.updateSwitchStatement(
             node,
             Debug.checkDefined(nodeVisitor(node.expression, visitor, isExpression)),
@@ -1635,7 +1898,14 @@ const visitEachChildTable: VisitEachChildTable = {
         );
     },
 
-    [SyntaxKind.LabeledStatement]: function visitEachChildOfLabeledStatement(node, visitor, context, _nodesVisitor, nodeVisitor, _tokenVisitor) {
+    [SyntaxKind.LabeledStatement]: function visitEachChildOfLabeledStatement(
+        node,
+        visitor,
+        context,
+        _nodesVisitor,
+        nodeVisitor,
+        _tokenVisitor,
+    ) {
         return context.factory.updateLabeledStatement(
             node,
             Debug.checkDefined(nodeVisitor(node.label, visitor, isIdentifier)),
@@ -1643,7 +1913,14 @@ const visitEachChildTable: VisitEachChildTable = {
         );
     },
 
-    [SyntaxKind.ThrowStatement]: function visitEachChildOfThrowStatement(node, visitor, context, _nodesVisitor, nodeVisitor, _tokenVisitor) {
+    [SyntaxKind.ThrowStatement]: function visitEachChildOfThrowStatement(
+        node,
+        visitor,
+        context,
+        _nodesVisitor,
+        nodeVisitor,
+        _tokenVisitor,
+    ) {
         return context.factory.updateThrowStatement(
             node,
             Debug.checkDefined(nodeVisitor(node.expression, visitor, isExpression)),
@@ -1659,7 +1936,14 @@ const visitEachChildTable: VisitEachChildTable = {
         );
     },
 
-    [SyntaxKind.VariableDeclaration]: function visitEachChildOfVariableDeclaration(node, visitor, context, _nodesVisitor, nodeVisitor, tokenVisitor) {
+    [SyntaxKind.VariableDeclaration]: function visitEachChildOfVariableDeclaration(
+        node,
+        visitor,
+        context,
+        _nodesVisitor,
+        nodeVisitor,
+        tokenVisitor,
+    ) {
         return context.factory.updateVariableDeclaration(
             node,
             Debug.checkDefined(nodeVisitor(node.name, visitor, isBindingName)),
@@ -1683,7 +1967,14 @@ const visitEachChildTable: VisitEachChildTable = {
         );
     },
 
-    [SyntaxKind.FunctionDeclaration]: function visitEachChildOfFunctionDeclaration(node, visitor, context, nodesVisitor, nodeVisitor, tokenVisitor) {
+    [SyntaxKind.FunctionDeclaration]: function visitEachChildOfFunctionDeclaration(
+        node,
+        visitor,
+        context,
+        nodesVisitor,
+        nodeVisitor,
+        tokenVisitor,
+    ) {
         return context.factory.updateFunctionDeclaration(
             node,
             nodesVisitor(node.modifiers, visitor, isModifier),
@@ -1696,7 +1987,14 @@ const visitEachChildTable: VisitEachChildTable = {
         );
     },
 
-    [SyntaxKind.ClassDeclaration]: function visitEachChildOfClassDeclaration(node, visitor, context, nodesVisitor, nodeVisitor, _tokenVisitor) {
+    [SyntaxKind.ClassDeclaration]: function visitEachChildOfClassDeclaration(
+        node,
+        visitor,
+        context,
+        nodesVisitor,
+        nodeVisitor,
+        _tokenVisitor,
+    ) {
         return context.factory.updateClassDeclaration(
             node,
             nodesVisitor(node.modifiers, visitor, isModifierLike),
@@ -1742,7 +2040,14 @@ const visitEachChildTable: VisitEachChildTable = {
         );
     },
 
-    [SyntaxKind.EnumDeclaration]: function visitEachChildOfEnumDeclaration(node, visitor, context, nodesVisitor, nodeVisitor, _tokenVisitor) {
+    [SyntaxKind.EnumDeclaration]: function visitEachChildOfEnumDeclaration(
+        node,
+        visitor,
+        context,
+        nodesVisitor,
+        nodeVisitor,
+        _tokenVisitor,
+    ) {
         return context.factory.updateEnumDeclaration(
             node,
             nodesVisitor(node.modifiers, visitor, isModifierLike),
@@ -1751,7 +2056,14 @@ const visitEachChildTable: VisitEachChildTable = {
         );
     },
 
-    [SyntaxKind.ModuleDeclaration]: function visitEachChildOfModuleDeclaration(node, visitor, context, nodesVisitor, nodeVisitor, _tokenVisitor) {
+    [SyntaxKind.ModuleDeclaration]: function visitEachChildOfModuleDeclaration(
+        node,
+        visitor,
+        context,
+        nodesVisitor,
+        nodeVisitor,
+        _tokenVisitor,
+    ) {
         return context.factory.updateModuleDeclaration(
             node,
             nodesVisitor(node.modifiers, visitor, isModifierLike),
@@ -1805,7 +2117,14 @@ const visitEachChildTable: VisitEachChildTable = {
         );
     },
 
-    [SyntaxKind.ImportDeclaration]: function visitEachChildOfImportDeclaration(node, visitor, context, nodesVisitor, nodeVisitor, _tokenVisitor) {
+    [SyntaxKind.ImportDeclaration]: function visitEachChildOfImportDeclaration(
+        node,
+        visitor,
+        context,
+        nodesVisitor,
+        nodeVisitor,
+        _tokenVisitor,
+    ) {
         return context.factory.updateImportDeclaration(
             node,
             nodesVisitor(node.modifiers, visitor, isModifierLike),
@@ -1815,7 +2134,14 @@ const visitEachChildTable: VisitEachChildTable = {
         );
     },
 
-    [SyntaxKind.ImportAttributes]: function visitEachChildOfImportAttributes(node, visitor, context, nodesVisitor, _nodeVisitor, _tokenVisitor) {
+    [SyntaxKind.ImportAttributes]: function visitEachChildOfImportAttributes(
+        node,
+        visitor,
+        context,
+        nodesVisitor,
+        _nodeVisitor,
+        _tokenVisitor,
+    ) {
         return context.factory.updateImportAttributes(
             node,
             nodesVisitor(node.elements, visitor, isImportAttribute),
@@ -1823,7 +2149,14 @@ const visitEachChildTable: VisitEachChildTable = {
         );
     },
 
-    [SyntaxKind.ImportAttribute]: function visitEachChildOfImportAttribute(node, visitor, context, _nodesVisitor, nodeVisitor, _tokenVisitor) {
+    [SyntaxKind.ImportAttribute]: function visitEachChildOfImportAttribute(
+        node,
+        visitor,
+        context,
+        _nodesVisitor,
+        nodeVisitor,
+        _tokenVisitor,
+    ) {
         return context.factory.updateImportAttribute(
             node,
             Debug.checkDefined(nodeVisitor(node.name, visitor, isImportAttributeName)),
@@ -1840,14 +2173,28 @@ const visitEachChildTable: VisitEachChildTable = {
         );
     },
 
-    [SyntaxKind.NamespaceImport]: function visitEachChildOfNamespaceImport(node, visitor, context, _nodesVisitor, nodeVisitor, _tokenVisitor) {
+    [SyntaxKind.NamespaceImport]: function visitEachChildOfNamespaceImport(
+        node,
+        visitor,
+        context,
+        _nodesVisitor,
+        nodeVisitor,
+        _tokenVisitor,
+    ) {
         return context.factory.updateNamespaceImport(
             node,
             Debug.checkDefined(nodeVisitor(node.name, visitor, isIdentifier)),
         );
     },
 
-    [SyntaxKind.NamespaceExport]: function visitEachChildOfNamespaceExport(node, visitor, context, _nodesVisitor, nodeVisitor, _tokenVisitor) {
+    [SyntaxKind.NamespaceExport]: function visitEachChildOfNamespaceExport(
+        node,
+        visitor,
+        context,
+        _nodesVisitor,
+        nodeVisitor,
+        _tokenVisitor,
+    ) {
         return context.factory.updateNamespaceExport(
             node,
             Debug.checkDefined(nodeVisitor(node.name, visitor, isIdentifier)),
@@ -1861,7 +2208,14 @@ const visitEachChildTable: VisitEachChildTable = {
         );
     },
 
-    [SyntaxKind.ImportSpecifier]: function visitEachChildOfImportSpecifier(node, visitor, context, _nodesVisitor, nodeVisitor, _tokenVisitor) {
+    [SyntaxKind.ImportSpecifier]: function visitEachChildOfImportSpecifier(
+        node,
+        visitor,
+        context,
+        _nodesVisitor,
+        nodeVisitor,
+        _tokenVisitor,
+    ) {
         return context.factory.updateImportSpecifier(
             node,
             node.isTypeOnly,
@@ -1870,7 +2224,14 @@ const visitEachChildTable: VisitEachChildTable = {
         );
     },
 
-    [SyntaxKind.ExportAssignment]: function visitEachChildOfExportAssignment(node, visitor, context, nodesVisitor, nodeVisitor, _tokenVisitor) {
+    [SyntaxKind.ExportAssignment]: function visitEachChildOfExportAssignment(
+        node,
+        visitor,
+        context,
+        nodesVisitor,
+        nodeVisitor,
+        _tokenVisitor,
+    ) {
         return context.factory.updateExportAssignment(
             node,
             nodesVisitor(node.modifiers, visitor, isModifierLike),
@@ -1878,7 +2239,14 @@ const visitEachChildTable: VisitEachChildTable = {
         );
     },
 
-    [SyntaxKind.ExportDeclaration]: function visitEachChildOfExportDeclaration(node, visitor, context, nodesVisitor, nodeVisitor, _tokenVisitor) {
+    [SyntaxKind.ExportDeclaration]: function visitEachChildOfExportDeclaration(
+        node,
+        visitor,
+        context,
+        nodesVisitor,
+        nodeVisitor,
+        _tokenVisitor,
+    ) {
         return context.factory.updateExportDeclaration(
             node,
             nodesVisitor(node.modifiers, visitor, isModifierLike),
@@ -1896,7 +2264,14 @@ const visitEachChildTable: VisitEachChildTable = {
         );
     },
 
-    [SyntaxKind.ExportSpecifier]: function visitEachChildOfExportSpecifier(node, visitor, context, _nodesVisitor, nodeVisitor, _tokenVisitor) {
+    [SyntaxKind.ExportSpecifier]: function visitEachChildOfExportSpecifier(
+        node,
+        visitor,
+        context,
+        _nodesVisitor,
+        nodeVisitor,
+        _tokenVisitor,
+    ) {
         return context.factory.updateExportSpecifier(
             node,
             node.isTypeOnly,
@@ -1946,7 +2321,14 @@ const visitEachChildTable: VisitEachChildTable = {
         );
     },
 
-    [SyntaxKind.JsxOpeningElement]: function visitEachChildOfJsxOpeningElement(node, visitor, context, nodesVisitor, nodeVisitor, _tokenVisitor) {
+    [SyntaxKind.JsxOpeningElement]: function visitEachChildOfJsxOpeningElement(
+        node,
+        visitor,
+        context,
+        nodesVisitor,
+        nodeVisitor,
+        _tokenVisitor,
+    ) {
         return context.factory.updateJsxOpeningElement(
             node,
             Debug.checkDefined(nodeVisitor(node.tagName, visitor, isJsxTagNameExpression)),
@@ -1955,14 +2337,28 @@ const visitEachChildTable: VisitEachChildTable = {
         );
     },
 
-    [SyntaxKind.JsxClosingElement]: function visitEachChildOfJsxClosingElement(node, visitor, context, _nodesVisitor, nodeVisitor, _tokenVisitor) {
+    [SyntaxKind.JsxClosingElement]: function visitEachChildOfJsxClosingElement(
+        node,
+        visitor,
+        context,
+        _nodesVisitor,
+        nodeVisitor,
+        _tokenVisitor,
+    ) {
         return context.factory.updateJsxClosingElement(
             node,
             Debug.checkDefined(nodeVisitor(node.tagName, visitor, isJsxTagNameExpression)),
         );
     },
 
-    [SyntaxKind.JsxNamespacedName]: function forEachChildInJsxNamespacedName(node, visitor, context, _nodesVisitor, nodeVisitor, _tokenVisitor) {
+    [SyntaxKind.JsxNamespacedName]: function forEachChildInJsxNamespacedName(
+        node,
+        visitor,
+        context,
+        _nodesVisitor,
+        nodeVisitor,
+        _tokenVisitor,
+    ) {
         return context.factory.updateJsxNamespacedName(
             node,
             Debug.checkDefined(nodeVisitor(node.namespace, visitor, isIdentifier)),
@@ -1994,7 +2390,14 @@ const visitEachChildTable: VisitEachChildTable = {
         );
     },
 
-    [SyntaxKind.JsxSpreadAttribute]: function visitEachChildOfJsxSpreadAttribute(node, visitor, context, _nodesVisitor, nodeVisitor, _tokenVisitor) {
+    [SyntaxKind.JsxSpreadAttribute]: function visitEachChildOfJsxSpreadAttribute(
+        node,
+        visitor,
+        context,
+        _nodesVisitor,
+        nodeVisitor,
+        _tokenVisitor,
+    ) {
         return context.factory.updateJsxSpreadAttribute(
             node,
             Debug.checkDefined(nodeVisitor(node.expression, visitor, isExpression)),
@@ -2024,7 +2427,14 @@ const visitEachChildTable: VisitEachChildTable = {
         );
     },
 
-    [SyntaxKind.HeritageClause]: function visitEachChildOfHeritageClause(node, visitor, context, nodesVisitor, _nodeVisitor, _tokenVisitor) {
+    [SyntaxKind.HeritageClause]: function visitEachChildOfHeritageClause(
+        node,
+        visitor,
+        context,
+        nodesVisitor,
+        _nodeVisitor,
+        _tokenVisitor,
+    ) {
         return context.factory.updateHeritageClause(
             node,
             nodesVisitor(node.types, visitor, isExpressionWithTypeArguments),
@@ -2040,7 +2450,14 @@ const visitEachChildTable: VisitEachChildTable = {
     },
 
     // Property assignments
-    [SyntaxKind.PropertyAssignment]: function visitEachChildOfPropertyAssignment(node, visitor, context, _nodesVisitor, nodeVisitor, _tokenVisitor) {
+    [SyntaxKind.PropertyAssignment]: function visitEachChildOfPropertyAssignment(
+        node,
+        visitor,
+        context,
+        _nodesVisitor,
+        nodeVisitor,
+        _tokenVisitor,
+    ) {
         return context.factory.updatePropertyAssignment(
             node,
             Debug.checkDefined(nodeVisitor(node.name, visitor, isPropertyName)),
@@ -2063,7 +2480,14 @@ const visitEachChildTable: VisitEachChildTable = {
         );
     },
 
-    [SyntaxKind.SpreadAssignment]: function visitEachChildOfSpreadAssignment(node, visitor, context, _nodesVisitor, nodeVisitor, _tokenVisitor) {
+    [SyntaxKind.SpreadAssignment]: function visitEachChildOfSpreadAssignment(
+        node,
+        visitor,
+        context,
+        _nodesVisitor,
+        nodeVisitor,
+        _tokenVisitor,
+    ) {
         return context.factory.updateSpreadAssignment(
             node,
             Debug.checkDefined(nodeVisitor(node.expression, visitor, isExpression)),

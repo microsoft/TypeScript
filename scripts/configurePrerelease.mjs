@@ -80,7 +80,10 @@ function updateTsFile(tsFilePath, tsFileContents, majorMinor, patch, nightlyPatc
     const majorMinorMatch = majorMinorRgx.exec(tsFileContents);
     assert(majorMinorMatch !== null, `The file '${tsFilePath}' seems to no longer have a string matching '${majorMinorRgx}'.`);
     const parsedMajorMinor = majorMinorMatch[1];
-    assert(parsedMajorMinor === majorMinor, `versionMajorMinor does not match. ${tsFilePath}: '${parsedMajorMinor}'; package.json: '${majorMinor}'`);
+    assert(
+        parsedMajorMinor === majorMinor,
+        `versionMajorMinor does not match. ${tsFilePath}: '${parsedMajorMinor}'; package.json: '${majorMinor}'`,
+    );
 
     const versionRgx = /export const version(?:: string)? = `\$\{versionMajorMinor\}\.(\d)(-\w+)?`;/;
     const patchMatch = versionRgx.exec(tsFileContents);

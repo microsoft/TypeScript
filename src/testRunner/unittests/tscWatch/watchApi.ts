@@ -394,13 +394,22 @@ describe("unittests:: tsc-watch:: watchAPI:: when watchHost uses createSemanticD
             const { sys, config, mainFile, emitSys } = result;
 
             // No Emit
-            verifyBuilder(baseline, emitBaseline, config, sys, emitSys, ts.createEmitAndSemanticDiagnosticsBuilderProgram, { noEmit: true });
+            verifyBuilder(baseline, emitBaseline, config, sys, emitSys, ts.createEmitAndSemanticDiagnosticsBuilderProgram, {
+                noEmit: true,
+            });
 
             // Emit on both sys should result in same output
             verifyBuilder(baseline, emitBaseline, config, sys, emitSys, ts.createEmitAndSemanticDiagnosticsBuilderProgram);
 
             // Change file
-            applyChangeForBuilderTest(baseline, emitBaseline, sys, emitSys, sys => sys.appendFile(mainFile.path, "\n// SomeComment"), "Add comment");
+            applyChangeForBuilderTest(
+                baseline,
+                emitBaseline,
+                sys,
+                emitSys,
+                sys => sys.appendFile(mainFile.path, "\n// SomeComment"),
+                "Add comment",
+            );
 
             // Verify noEmit results in same output
             verifyBuilder(baseline, emitBaseline, config, sys, emitSys, ts.createSemanticDiagnosticsBuilderProgram, { noEmit: true });
@@ -409,7 +418,14 @@ describe("unittests:: tsc-watch:: watchAPI:: when watchHost uses createSemanticD
             verifyBuilder(baseline, emitBaseline, config, sys, emitSys, ts.createEmitAndSemanticDiagnosticsBuilderProgram);
 
             // Change file
-            applyChangeForBuilderTest(baseline, emitBaseline, sys, emitSys, sys => sys.appendFile(mainFile.path, "\n// SomeComment"), "Add comment");
+            applyChangeForBuilderTest(
+                baseline,
+                emitBaseline,
+                sys,
+                emitSys,
+                sys => sys.appendFile(mainFile.path, "\n// SomeComment"),
+                "Add comment",
+            );
 
             // Emit on both the builders should result in same files
             verifyBuilder(baseline, emitBaseline, config, sys, emitSys, ts.createSemanticDiagnosticsBuilderProgram);
@@ -441,7 +457,14 @@ describe("unittests:: tsc-watch:: watchAPI:: when watchHost uses createSemanticD
             verifyBuilder(baseline, emitBaseline, config, sys, emitSys, ts.createSemanticDiagnosticsBuilderProgram);
 
             // Change file
-            applyChangeForBuilderTest(baseline, emitBaseline, sys, emitSys, sys => sys.appendFile(mainFile.path, "\n// SomeComment"), "Add comment");
+            applyChangeForBuilderTest(
+                baseline,
+                emitBaseline,
+                sys,
+                emitSys,
+                sys => sys.appendFile(mainFile.path, "\n// SomeComment"),
+                "Add comment",
+            );
 
             // Verify noEmit results in same output
             verifyBuilder(baseline, emitBaseline, config, sys, emitSys, ts.createSemanticDiagnosticsBuilderProgram);
@@ -487,7 +510,12 @@ describe("unittests:: tsc-watch:: watchAPI:: when watchHost uses createSemanticD
             const diagnostics = ts.sortAndDeduplicateDiagnostics(program.getSemanticDiagnostics());
             diagnostics.forEach(reportDiagnostic);
             // Buildinfo should still have affectedFilesPendingEmit since we are only emitting dts files
-            program.emit(/*targetSourceFile*/ undefined, /*writeFile*/ undefined, /*cancellationToken*/ undefined, /*emitOnlyDtsFiles*/ true);
+            program.emit(
+                /*targetSourceFile*/ undefined,
+                /*writeFile*/ undefined,
+                /*cancellationToken*/ undefined,
+                /*emitOnlyDtsFiles*/ true,
+            );
             reportWatchStatus(
                 ts.createCompilerDiagnostic(ts.getWatchErrorSummaryDiagnosticMessage(diagnostics.length), diagnostics.length),
                 sys.newLine,
@@ -561,7 +589,8 @@ describe("unittests:: tsc-watch:: watchAPI:: when getParsedCommandLine is implem
                 fileExists: path => system.fileExists(path),
                 readFile: path => system.readFile(path),
                 getCurrentDirectory: () => system.getCurrentDirectory(),
-                readDirectory: (path, extensions, excludes, includes, depth) => system.readDirectory(path, extensions, excludes, includes, depth),
+                readDirectory: (path, extensions, excludes, includes, depth) =>
+                    system.readDirectory(path, extensions, excludes, includes, depth),
                 onUnRecoverableConfigFileDiagnostic: ts.noop,
             });
         };
@@ -596,7 +625,8 @@ describe("unittests:: tsc-watch:: watchAPI:: when getParsedCommandLine is implem
                 },
                 {
                     caption: "Add output of class3",
-                    edit: sys => sys.writeFile(`/user/username/projects/myproject/projects/project1/class3.d.ts`, `declare class class3 {}`),
+                    edit: sys =>
+                        sys.writeFile(`/user/username/projects/myproject/projects/project1/class3.d.ts`, `declare class class3 {}`),
                     timeouts: ts.noop,
                 },
             ],
@@ -624,7 +654,8 @@ describe("unittests:: tsc-watch:: watchAPI:: when getParsedCommandLine is implem
                 },
                 {
                     caption: "Add class3 output to project1",
-                    edit: sys => sys.writeFile(`/user/username/projects/myproject/projects/project1/class3.d.ts`, `declare class class3 {}`),
+                    edit: sys =>
+                        sys.writeFile(`/user/username/projects/myproject/projects/project1/class3.d.ts`, `declare class class3 {}`),
                     timeouts: sys => sys.runQueuedTimeoutCallbacks(),
                 },
                 {
@@ -643,7 +674,8 @@ describe("unittests:: tsc-watch:: watchAPI:: when getParsedCommandLine is implem
                 },
                 {
                     caption: "Add output of class3",
-                    edit: sys => sys.writeFile(`/user/username/projects/myproject/projects/project1/class3.d.ts`, `declare class class3 {}`),
+                    edit: sys =>
+                        sys.writeFile(`/user/username/projects/myproject/projects/project1/class3.d.ts`, `declare class class3 {}`),
                     timeouts: sys => sys.runQueuedTimeoutCallbacks(),
                 },
             ],
@@ -745,7 +777,12 @@ describe("unittests:: tsc-watch:: watchAPI:: when builder emit occurs with emitO
                 }
                 else {
                     program.getSemanticDiagnostics(); // Get Diagnostics
-                    program.emit(/*targetSourceFile*/ undefined, /*writeFile*/ undefined, /*cancellationToken*/ undefined, /*emitOnlyDtsFiles*/ true);
+                    program.emit(
+                        /*targetSourceFile*/ undefined,
+                        /*writeFile*/ undefined,
+                        /*cancellationToken*/ undefined,
+                        /*emitOnlyDtsFiles*/ true,
+                    );
                     baseline.cb(program);
                 }
             }
@@ -788,7 +825,8 @@ describe("unittests:: tsc-watch:: watchAPI:: when creating program with project 
                 fileExists: path => system.fileExists(path),
                 readFile: path => system.readFile(path),
                 getCurrentDirectory: () => system.getCurrentDirectory(),
-                readDirectory: (path, extensions, excludes, includes, depth) => system.readDirectory(path, extensions, excludes, includes, depth),
+                readDirectory: (path, extensions, excludes, includes, depth) =>
+                    system.readDirectory(path, extensions, excludes, includes, depth),
                 onUnRecoverableConfigFileDiagnostic: ts.noop,
             },
         )!;

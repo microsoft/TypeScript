@@ -574,7 +574,10 @@ export function transformES2018(context: TransformationContext): (x: SourceFile 
         const statement = concatenate(
             visited.statements,
             taggedTemplateStringDeclarations && [
-                factory.createVariableStatement(/*modifiers*/ undefined, factory.createVariableDeclarationList(taggedTemplateStringDeclarations)),
+                factory.createVariableStatement(
+                    /*modifiers*/ undefined,
+                    factory.createVariableDeclarationList(taggedTemplateStringDeclarations),
+                ),
             ],
         );
         const result = factory.updateSourceFile(visited, setTextRange(factory.createNodeArray(statement), node.statements));
@@ -706,7 +709,10 @@ export function transformES2018(context: TransformationContext): (x: SourceFile 
         return visitVariableDeclarationWorker(node, /*exportedVariableStatement*/ false);
     }
 
-    function visitVariableDeclarationWorker(node: VariableDeclaration, exportedVariableStatement: boolean): VisitResult<VariableDeclaration> {
+    function visitVariableDeclarationWorker(
+        node: VariableDeclaration,
+        exportedVariableStatement: boolean,
+    ): VisitResult<VariableDeclaration> {
         // If we are here it is because the name contains a binding pattern with a rest somewhere in it.
         if (isBindingPattern(node.name) && node.name.transformFlags & TransformFlags.ContainsObjectRestOrSpread) {
             return flattenDestructuringBinding(
@@ -854,7 +860,11 @@ export function transformES2018(context: TransformationContext): (x: SourceFile 
         const catchVariable = factory.getGeneratedNameForNode(errorRecord);
         const returnMethod = factory.createTempVariable(/*recordTempVariable*/ undefined);
         const callValues = setTextRange(emitHelpers().createAsyncValuesHelper(expression), node.expression);
-        const callNext = factory.createCallExpression(factory.createPropertyAccessExpression(iterator, "next"), /*typeArguments*/ undefined, []);
+        const callNext = factory.createCallExpression(
+            factory.createPropertyAccessExpression(iterator, "next"),
+            /*typeArguments*/ undefined,
+            [],
+        );
         const getDone = factory.createPropertyAccessExpression(result, "done");
         const getValue = factory.createPropertyAccessExpression(result, "value");
         const callReturn = factory.createFunctionCallCall(returnMethod, iterator, []);
@@ -880,7 +890,12 @@ export function transformES2018(context: TransformationContext): (x: SourceFile 
                                     factory.createTrue(),
                                 ),
                                 setTextRange(
-                                    factory.createVariableDeclaration(iterator, /*exclamationToken*/ undefined, /*type*/ undefined, initializer),
+                                    factory.createVariableDeclaration(
+                                        iterator,
+                                        /*exclamationToken*/ undefined,
+                                        /*type*/ undefined,
+                                        initializer,
+                                    ),
                                     node.expression,
                                 ),
                                 factory.createVariableDeclaration(result),
@@ -1167,7 +1182,9 @@ export function transformES2018(context: TransformationContext): (x: SourceFile 
         return updated;
     }
 
-    function transformAsyncGeneratorFunctionParameterList(node: MethodDeclaration | AccessorDeclaration | FunctionDeclaration | FunctionExpression) {
+    function transformAsyncGeneratorFunctionParameterList(
+        node: MethodDeclaration | AccessorDeclaration | FunctionDeclaration | FunctionExpression,
+    ) {
         if (isSimpleParameterList(node.parameters)) {
             return visitParameterList(node.parameters, visitor, context);
         }
@@ -1276,7 +1293,10 @@ export function transformES2018(context: TransformationContext): (x: SourceFile 
         return body;
     }
 
-    function appendObjectRestAssignmentsIfNeeded(statements: Statement[] | undefined, node: FunctionLikeDeclaration): Statement[] | undefined {
+    function appendObjectRestAssignmentsIfNeeded(
+        statements: Statement[] | undefined,
+        node: FunctionLikeDeclaration,
+    ): Statement[] | undefined {
         let containsPrecedingObjectRestOrSpread = false;
         for (const parameter of node.parameters) {
             if (containsPrecedingObjectRestOrSpread) {
@@ -1334,7 +1354,10 @@ export function transformES2018(context: TransformationContext): (x: SourceFile 
 
                     const block = factory.createBlock([factory.createExpressionStatement(assignment)]);
                     setTextRange(block, parameter);
-                    setEmitFlags(block, EmitFlags.SingleLine | EmitFlags.NoTrailingSourceMap | EmitFlags.NoTokenSourceMaps | EmitFlags.NoComments);
+                    setEmitFlags(
+                        block,
+                        EmitFlags.SingleLine | EmitFlags.NoTrailingSourceMap | EmitFlags.NoTokenSourceMaps | EmitFlags.NoComments,
+                    );
 
                     const typeCheck = factory.createTypeCheck(factory.cloneNode(parameter.name), "undefined");
                     const statement = factory.createIfStatement(typeCheck, block);

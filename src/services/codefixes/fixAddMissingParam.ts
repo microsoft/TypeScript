@@ -79,7 +79,11 @@ registerCodeFix({
                 createCodeFixAction(
                     addOptionalParamFixId,
                     textChanges.ChangeTracker.with(context, t => doChange(t, context.sourceFile, declarations, newOptionalParameters)),
-                    [length(newOptionalParameters) > 1 ? Diagnostics.Add_optional_parameters_to_0 : Diagnostics.Add_optional_parameter_to_0, name],
+                    [
+                        length(newOptionalParameters) > 1 ? Diagnostics.Add_optional_parameters_to_0
+                            : Diagnostics.Add_optional_parameter_to_0,
+                        name,
+                    ],
                     addOptionalParamFixId,
                     Diagnostics.Add_all_optional_parameters,
                 ),

@@ -381,7 +381,8 @@ export function getBaseFileName(path: string, extensions?: string | readonly str
     // separator but not including any trailing directory separator.
     path = removeTrailingDirectorySeparator(path);
     const name = path.slice(Math.max(getRootLength(path), path.lastIndexOf(directorySeparator) + 1));
-    const extension = extensions !== undefined && ignoreCase !== undefined ? getAnyExtensionFromPath(name, extensions, ignoreCase) : undefined;
+    const extension = extensions !== undefined && ignoreCase !== undefined ? getAnyExtensionFromPath(name, extensions, ignoreCase)
+        : undefined;
     return extension ? name.slice(0, name.length - extension.length) : name;
 }
 
@@ -959,7 +960,11 @@ export function getRelativePathFromDirectory(from: string, to: string, ignoreCas
  */
 export function getRelativePathFromDirectory(fromDirectory: string, to: string, getCanonicalFileName: GetCanonicalFileName): string; // eslint-disable-line @typescript-eslint/unified-signatures
 /** @internal */
-export function getRelativePathFromDirectory(fromDirectory: string, to: string, getCanonicalFileNameOrIgnoreCase: GetCanonicalFileName | boolean) {
+export function getRelativePathFromDirectory(
+    fromDirectory: string,
+    to: string,
+    getCanonicalFileNameOrIgnoreCase: GetCanonicalFileName | boolean,
+) {
     Debug.assert((getRootLength(fromDirectory) > 0) === (getRootLength(to) > 0), "Paths must either both be absolute or both be relative");
     const getCanonicalFileName = typeof getCanonicalFileNameOrIgnoreCase === "function" ? getCanonicalFileNameOrIgnoreCase : identity;
     const ignoreCase = typeof getCanonicalFileNameOrIgnoreCase === "boolean" ? getCanonicalFileNameOrIgnoreCase : false;
@@ -973,7 +978,11 @@ export function getRelativePathFromDirectory(fromDirectory: string, to: string, 
 }
 
 /** @internal */
-export function convertToRelativePath(absoluteOrRelativePath: string, basePath: string, getCanonicalFileName: (path: string) => string): string {
+export function convertToRelativePath(
+    absoluteOrRelativePath: string,
+    basePath: string,
+    getCanonicalFileName: (path: string) => string,
+): string {
     return !isRootedDiskPath(absoluteOrRelativePath)
         ? absoluteOrRelativePath
         : getRelativePathToDirectoryOrUrl(basePath, absoluteOrRelativePath, basePath, getCanonicalFileName, /*isAbsolutePathAnUrl*/ false);

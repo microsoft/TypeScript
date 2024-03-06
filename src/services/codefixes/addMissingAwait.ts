@@ -169,7 +169,13 @@ function getUseSiteFix(
     return createCodeFixAction(fixId, changes, Diagnostics.Add_await, fixId, Diagnostics.Fix_all_expressions_possibly_missing_await);
 }
 
-function isMissingAwaitError(sourceFile: SourceFile, errorCode: number, span: TextSpan, cancellationToken: CancellationToken, program: Program) {
+function isMissingAwaitError(
+    sourceFile: SourceFile,
+    errorCode: number,
+    span: TextSpan,
+    cancellationToken: CancellationToken,
+    program: Program,
+) {
     const checker = program.getTypeChecker();
     const diagnostics = checker.getDiagnostics(sourceFile, cancellationToken);
     return some(
@@ -278,7 +284,12 @@ function getIdentifiersFromErrorSpanExpression(expression: Node, checker: TypeCh
     }
 }
 
-function symbolReferenceIsAlsoMissingAwait(reference: Identifier, diagnostics: readonly Diagnostic[], sourceFile: SourceFile, checker: TypeChecker) {
+function symbolReferenceIsAlsoMissingAwait(
+    reference: Identifier,
+    diagnostics: readonly Diagnostic[],
+    sourceFile: SourceFile,
+    checker: TypeChecker,
+) {
     const errorNode = isPropertyAccessExpression(reference.parent) ? reference.parent.name :
         isBinaryExpression(reference.parent) ? reference.parent :
         reference;
@@ -370,7 +381,11 @@ function makeChange(
                 return;
             }
         }
-        changeTracker.replaceNode(sourceFile, insertionSite, factory.createParenthesizedExpression(factory.createAwaitExpression(insertionSite)));
+        changeTracker.replaceNode(
+            sourceFile,
+            insertionSite,
+            factory.createParenthesizedExpression(factory.createAwaitExpression(insertionSite)),
+        );
         insertLeadingSemicolonIfNeeded(changeTracker, insertionSite, sourceFile);
     }
     else {

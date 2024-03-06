@@ -160,7 +160,8 @@ function containsTopLevelCommonjs(sourceFile: SourceFile): boolean {
         switch (statement.kind) {
             case SyntaxKind.VariableStatement:
                 return (statement as VariableStatement).declarationList.declarations.some(decl =>
-                    !!decl.initializer && isRequireCall(propertyAccessLeftHandSide(decl.initializer), /*requireStringLiteralLikeArgument*/ true)
+                    !!decl.initializer &&
+                    isRequireCall(propertyAccessLeftHandSide(decl.initializer), /*requireStringLiteralLikeArgument*/ true)
                 );
             case SyntaxKind.ExpressionStatement: {
                 const { expression } = statement as ExpressionStatement;
@@ -239,7 +240,10 @@ export function isReturnStatementWithFixablePromiseHandler(
 /** @internal */
 export function isFixablePromiseHandler(node: Node, checker: TypeChecker): boolean {
     // ensure outermost call exists and is a promise handler
-    if (!isPromiseHandler(node) || !hasSupportedNumberOfArguments(node) || !node.arguments.every(arg => isFixablePromiseArgument(arg, checker))) {
+    if (
+        !isPromiseHandler(node) || !hasSupportedNumberOfArguments(node) ||
+        !node.arguments.every(arg => isFixablePromiseArgument(arg, checker))
+    ) {
         return false;
     }
 
@@ -247,7 +251,9 @@ export function isFixablePromiseHandler(node: Node, checker: TypeChecker): boole
     let currentNode = node.expression.expression;
     while (isPromiseHandler(currentNode) || isPropertyAccessExpression(currentNode)) {
         if (isCallExpression(currentNode)) {
-            if (!hasSupportedNumberOfArguments(currentNode) || !currentNode.arguments.every(arg => isFixablePromiseArgument(arg, checker))) {
+            if (
+                !hasSupportedNumberOfArguments(currentNode) || !currentNode.arguments.every(arg => isFixablePromiseArgument(arg, checker))
+            ) {
                 return false;
             }
             currentNode = currentNode.expression.expression;

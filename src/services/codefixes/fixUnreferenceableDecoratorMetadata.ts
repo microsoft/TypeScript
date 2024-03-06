@@ -121,6 +121,11 @@ function doTypeOnlyImportChange(
     changes.insertModifierBefore(sourceFile, SyntaxKind.TypeKeyword, importClause);
 }
 
-function doNamespaceImportChange(changes: textChanges.ChangeTracker, sourceFile: SourceFile, importDeclaration: ImportSpecifier, program: Program) {
+function doNamespaceImportChange(
+    changes: textChanges.ChangeTracker,
+    sourceFile: SourceFile,
+    importDeclaration: ImportSpecifier,
+    program: Program,
+) {
     refactor.doChangeNamedToNamespaceOrDefault(sourceFile, program, changes, importDeclaration.parent);
 }

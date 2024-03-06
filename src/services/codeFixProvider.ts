@@ -28,8 +28,18 @@ const errorCodeToFixes = createMultiMap<string, CodeFixRegistration>();
 const fixIdToRegistration = new Map<string, CodeFixRegistration>();
 
 /** @internal */
-export function createCodeFixActionWithoutFixAll(fixName: string, changes: FileTextChanges[], description: DiagnosticOrDiagnosticAndArguments) {
-    return createCodeFixActionWorker(fixName, diagnosticToString(description), changes, /*fixId*/ undefined, /*fixAllDescription*/ undefined);
+export function createCodeFixActionWithoutFixAll(
+    fixName: string,
+    changes: FileTextChanges[],
+    description: DiagnosticOrDiagnosticAndArguments,
+) {
+    return createCodeFixActionWorker(
+        fixName,
+        diagnosticToString(description),
+        changes,
+        /*fixId*/ undefined,
+        /*fixAllDescription*/ undefined,
+    );
 }
 
 /** @internal */
@@ -41,7 +51,14 @@ export function createCodeFixAction(
     fixAllDescription: DiagnosticOrDiagnosticAndArguments,
     command?: CodeActionCommand,
 ): CodeFixAction {
-    return createCodeFixActionWorker(fixName, diagnosticToString(description), changes, fixId, diagnosticToString(fixAllDescription), command);
+    return createCodeFixActionWorker(
+        fixName,
+        diagnosticToString(description),
+        changes,
+        fixId,
+        diagnosticToString(fixAllDescription),
+        command,
+    );
 }
 
 /** @internal */
@@ -143,7 +160,11 @@ export function codeFixAll(
 }
 
 /** @internal */
-export function eachDiagnostic(context: CodeFixAllContext, errorCodes: readonly number[], cb: (diag: DiagnosticWithLocation) => void): void {
+export function eachDiagnostic(
+    context: CodeFixAllContext,
+    errorCodes: readonly number[],
+    cb: (diag: DiagnosticWithLocation) => void,
+): void {
     for (const diag of getDiagnostics(context)) {
         if (contains(errorCodes, diag.code)) {
             cb(diag as DiagnosticWithLocation);

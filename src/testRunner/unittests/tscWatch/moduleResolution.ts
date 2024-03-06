@@ -205,7 +205,10 @@ describe("unittests:: tsc-watch:: moduleResolution", () => {
                 {
                     caption: "Modify package.json file to remove type module",
                     edit: sys =>
-                        sys.writeFile(`/user/username/projects/myproject/package.json`, jsonToReadableText({ name: "app", version: "1.0.0" })),
+                        sys.writeFile(
+                            `/user/username/projects/myproject/package.json`,
+                            jsonToReadableText({ name: "app", version: "1.0.0" }),
+                        ),
                     timeouts: host => {
                         host.runQueuedTimeoutCallbacks(); // Failed lookup updates
                         host.runQueuedTimeoutCallbacks(); // Actual update
@@ -260,7 +263,10 @@ describe("unittests:: tsc-watch:: moduleResolution", () => {
                 {
                     caption: "Modify package.json file to remove type module",
                     edit: sys =>
-                        sys.writeFile(`/user/username/projects/myproject/package.json`, jsonToReadableText({ name: "app", version: "1.0.0" })),
+                        sys.writeFile(
+                            `/user/username/projects/myproject/package.json`,
+                            jsonToReadableText({ name: "app", version: "1.0.0" }),
+                        ),
                     timeouts: host => {
                         host.runQueuedTimeoutCallbacks(); // Failed lookup updates
                         host.runQueuedTimeoutCallbacks(); // Actual update
@@ -293,7 +299,10 @@ describe("unittests:: tsc-watch:: moduleResolution", () => {
                 {
                     caption: "Modify package json file to without type module",
                     edit: sys =>
-                        sys.writeFile(`/user/username/projects/myproject/package.json`, jsonToReadableText({ name: "app", version: "1.0.0" })),
+                        sys.writeFile(
+                            `/user/username/projects/myproject/package.json`,
+                            jsonToReadableText({ name: "app", version: "1.0.0" }),
+                        ),
                     timeouts: host => {
                         host.runQueuedTimeoutCallbacks(); // Failed lookup updates
                         host.runQueuedTimeoutCallbacks(); // Actual update
@@ -545,7 +554,8 @@ describe("unittests:: tsc-watch:: moduleResolution", () => {
         edits: [
             {
                 caption: "modify aFile by adding import",
-                edit: sys => sys.prependFile(`/user/username/projects/myproject/a.ts`, `/// <reference types="pkg" resolution-mode="import"/>\n`),
+                edit: sys =>
+                    sys.prependFile(`/user/username/projects/myproject/a.ts`, `/// <reference types="pkg" resolution-mode="import"/>\n`),
                 timeouts: sys => sys.runQueuedTimeoutCallbacks(),
             },
         ],
@@ -576,7 +586,10 @@ describe("unittests:: tsc-watch:: moduleResolution", () => {
             {
                 caption: "add the alternateResult in @types",
                 edit: sys =>
-                    sys.writeFile("/home/src/projects/project/node_modules/@types/bar/index.d.ts", getFsContentsForAlternateResultDts("bar")),
+                    sys.writeFile(
+                        "/home/src/projects/project/node_modules/@types/bar/index.d.ts",
+                        getFsContentsForAlternateResultDts("bar"),
+                    ),
                 timeouts: sys => {
                     sys.runQueuedTimeoutCallbacks();
                     sys.runQueuedTimeoutCallbacks();
@@ -584,7 +597,8 @@ describe("unittests:: tsc-watch:: moduleResolution", () => {
             },
             {
                 caption: "add the alternateResult in package/types",
-                edit: sys => sys.writeFile("/home/src/projects/project/node_modules/foo/index.d.ts", getFsContentsForAlternateResultDts("foo")),
+                edit: sys =>
+                    sys.writeFile("/home/src/projects/project/node_modules/foo/index.d.ts", getFsContentsForAlternateResultDts("foo")),
                 timeouts: sys => {
                     sys.runQueuedTimeoutCallbacks();
                     sys.runQueuedTimeoutCallbacks();
@@ -657,7 +671,10 @@ describe("unittests:: tsc-watch:: moduleResolution", () => {
             {
                 caption: "add the alternateResult in @types",
                 edit: sys =>
-                    sys.writeFile("/home/src/projects/project/node_modules/@types/bar2/index.d.ts", getFsContentsForAlternateResultDts("bar2")),
+                    sys.writeFile(
+                        "/home/src/projects/project/node_modules/@types/bar2/index.d.ts",
+                        getFsContentsForAlternateResultDts("bar2"),
+                    ),
                 timeouts: sys => {
                     sys.runQueuedTimeoutCallbacks();
                     sys.runQueuedTimeoutCallbacks();
@@ -665,7 +682,8 @@ describe("unittests:: tsc-watch:: moduleResolution", () => {
             },
             {
                 caption: "add the ndoe10Result in package/types",
-                edit: sys => sys.writeFile("/home/src/projects/project/node_modules/foo2/index.d.ts", getFsContentsForAlternateResultDts("foo2")),
+                edit: sys =>
+                    sys.writeFile("/home/src/projects/project/node_modules/foo2/index.d.ts", getFsContentsForAlternateResultDts("foo2")),
                 timeouts: sys => {
                     sys.runQueuedTimeoutCallbacks();
                     sys.runQueuedTimeoutCallbacks();

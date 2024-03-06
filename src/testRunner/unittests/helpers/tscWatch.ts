@@ -56,7 +56,9 @@ export interface TscWatchCheckOptions {
     baselineSourceMap?: boolean;
     baselineDependencies?: boolean;
 }
-export interface TscWatchCompileBase<T extends ts.BuilderProgram = ts.EmitAndSemanticDiagnosticsBuilderProgram> extends TscWatchCheckOptions {
+export interface TscWatchCompileBase<T extends ts.BuilderProgram = ts.EmitAndSemanticDiagnosticsBuilderProgram>
+    extends TscWatchCheckOptions
+{
     scenario: string;
     subScenario: string;
     commandLineArgs: readonly string[];
@@ -154,7 +156,9 @@ export function createSolutionBuilderWithWatchHostForBaseline(sys: TestServerHos
     return host;
 }
 
-interface CreateWatchCompilerHostOfConfigFileForBaseline<T extends ts.BuilderProgram> extends ts.CreateWatchCompilerHostOfConfigFileInput<T> {
+interface CreateWatchCompilerHostOfConfigFileForBaseline<T extends ts.BuilderProgram>
+    extends ts.CreateWatchCompilerHostOfConfigFileInput<T>
+{
     system: TestServerHost;
     cb: ts.ExecuteCommandLineCallbacks;
 }
@@ -253,7 +257,8 @@ export function runWatchBaseline<T extends ts.BuilderProgram = ts.EmitAndSemanti
                 baselineSourceMap,
                 baselineDependencies,
                 caption,
-                resolutionCache: !skipStructureCheck ? (watchOrSolution as ts.WatchOfConfigFile<T> | undefined)?.getResolutionCache?.() : undefined,
+                resolutionCache: !skipStructureCheck ? (watchOrSolution as ts.WatchOfConfigFile<T> | undefined)?.getResolutionCache?.()
+                    : undefined,
                 useSourceOfProjectReferenceRedirect,
                 symlinksNotReflected,
             });

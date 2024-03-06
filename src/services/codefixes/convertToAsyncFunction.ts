@@ -96,11 +96,21 @@ registerCodeFix({
             t => convertToAsyncFunction(t, context.sourceFile, context.span.start, context.program.getTypeChecker()),
         );
         return codeActionSucceeded
-            ? [createCodeFixAction(fixId, changes, Diagnostics.Convert_to_async_function, fixId, Diagnostics.Convert_all_to_async_functions)] : [];
+            ? [createCodeFixAction(
+                fixId,
+                changes,
+                Diagnostics.Convert_to_async_function,
+                fixId,
+                Diagnostics.Convert_all_to_async_functions,
+            )] : [];
     },
     fixIds: [fixId],
     getAllCodeActions: context =>
-        codeFixAll(context, errorCodes, (changes, err) => convertToAsyncFunction(changes, err.file, err.start, context.program.getTypeChecker())),
+        codeFixAll(
+            context,
+            errorCodes,
+            (changes, err) => convertToAsyncFunction(changes, err.file, err.start, context.program.getTypeChecker()),
+        ),
 });
 
 const enum SynthBindingNameKind {
@@ -328,7 +338,10 @@ function renameCollidingVarNames(
             // will eventually become
             //   const response = await fetch('...')
             // so we push an entry for 'response'.
-            if (lastCallSignature && !isParameter(node.parent) && !isFunctionLikeDeclaration(node.parent) && !synthNamesMap.has(symbolIdString)) {
+            if (
+                lastCallSignature && !isParameter(node.parent) && !isFunctionLikeDeclaration(node.parent) &&
+                !synthNamesMap.has(symbolIdString)
+            ) {
                 const firstParameter = firstOrUndefined(lastCallSignature.parameters);
                 const ident = firstParameter?.valueDeclaration
                         && isParameter(firstParameter.valueDeclaration)
@@ -411,7 +424,14 @@ function transformExpression(
     continuationArgName?: SynthBindingName,
 ): readonly Statement[] {
     if (isPromiseReturningCallExpression(node, transformer.checker, "then")) {
-        return transformThen(node, elementAt(node.arguments, 0), elementAt(node.arguments, 1), transformer, hasContinuation, continuationArgName);
+        return transformThen(
+            node,
+            elementAt(node.arguments, 0),
+            elementAt(node.arguments, 1),
+            transformer,
+            hasContinuation,
+            continuationArgName,
+        );
     }
     if (isPromiseReturningCallExpression(node, transformer.checker, "catch")) {
         return transformCatch(node, elementAt(node.arguments, 0), transformer, hasContinuation, continuationArgName);
@@ -503,7 +523,10 @@ function finishCatchOrFinallyTransform(
         const unionTypeNode = transformer.isInJSFile ? undefined
             : transformer.checker.typeToTypeNode(unionType, /*enclosingDeclaration*/ undefined, /*flags*/ undefined);
         const varDecl = [factory.createVariableDeclaration(varDeclIdentifier, /*exclamationToken*/ undefined, unionTypeNode)];
-        const varDeclList = factory.createVariableStatement(/*modifiers*/ undefined, factory.createVariableDeclarationList(varDecl, NodeFlags.Let));
+        const varDeclList = factory.createVariableStatement(
+            /*modifiers*/ undefined,
+            factory.createVariableDeclarationList(varDecl, NodeFlags.Let),
+        );
         statements.push(varDeclList);
     }
 
@@ -539,7 +562,13 @@ function transformFinally(
 ): readonly Statement[] {
     if (!onFinally || isNullOrUndefined(transformer, onFinally)) {
         // Ignore this call as it has no effect on the result
-        return transformExpression(/* returnContextNode */ node, node.expression.expression, transformer, hasContinuation, continuationArgName);
+        return transformExpression(
+            /* returnContextNode */ node,
+            node.expression.expression,
+            transformer,
+            hasContinuation,
+            continuationArgName,
+        );
     }
 
     const possibleNameForVarDecl = getPossibleNameForVarDecl(node, transformer, continuationArgName);
@@ -585,7 +614,13 @@ function transformCatch(
 ): readonly Statement[] {
     if (!onRejected || isNullOrUndefined(transformer, onRejected)) {
         // Ignore this call as it has no effect on the result
-        return transformExpression(/* returnContextNode */ node, node.expression.expression, transformer, hasContinuation, continuationArgName);
+        return transformExpression(
+            /* returnContextNode */ node,
+            node.expression.expression,
+            transformer,
+            hasContinuation,
+            continuationArgName,
+        );
     }
 
     const inputArgName = getArgBindingName(onRejected, transformer);
@@ -675,7 +710,11 @@ function transformPromiseExpressionOfPropertyAccess(
         return [factory.createReturnStatement(returnValue)];
     }
 
-    return createVariableOrAssignmentOrExpressionStatement(continuationArgName, factory.createAwaitExpression(node), /*typeAnnotation*/ undefined);
+    return createVariableOrAssignmentOrExpressionStatement(
+        continuationArgName,
+        factory.createAwaitExpression(node),
+        /*typeAnnotation*/ undefined,
+    );
 }
 
 function createVariableOrAssignmentOrExpressionStatement(
@@ -755,7 +794,10 @@ function transformCallbackArgument(
             );
 
             if (shouldReturn(parent, transformer)) {
-                return maybeAnnotateAndReturn(synthCall, getExplicitPromisedTypeOfPromiseReturningCallExpression(parent, func, transformer.checker));
+                return maybeAnnotateAndReturn(
+                    synthCall,
+                    getExplicitPromisedTypeOfPromiseReturningCallExpression(parent, func, transformer.checker),
+                );
             }
 
             const type = transformer.checker.getTypeAtLocation(func);
@@ -789,7 +831,12 @@ function transformCallbackArgument(
                         seenReturnStatement = true;
                         if (isReturnStatementWithFixablePromiseHandler(statement, transformer.checker)) {
                             refactoredStmts = refactoredStmts.concat(
-                                transformReturnStatementWithFixablePromiseHandler(transformer, statement, hasContinuation, continuationArgName),
+                                transformReturnStatementWithFixablePromiseHandler(
+                                    transformer,
+                                    statement,
+                                    hasContinuation,
+                                    continuationArgName,
+                                ),
                             );
                         }
                         else {
@@ -933,7 +980,9 @@ function removeReturns(
                 }
                 else if (isSynthIdentifier(prevArgName) && prevArgName.hasBeenDeclared) {
                     ret.push(
-                        factory.createExpressionStatement(factory.createAssignment(referenceSynthIdentifier(prevArgName), possiblyAwaitedExpression)),
+                        factory.createExpressionStatement(
+                            factory.createAssignment(referenceSynthIdentifier(prevArgName), possiblyAwaitedExpression),
+                        ),
                     );
                 }
                 else {

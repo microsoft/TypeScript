@@ -393,7 +393,11 @@ describe("unittests:: tsserver:: CachingFileSystemInformation:: tsserverProjectS
 
             logSemanticDiagnostics(session, project, file1);
             logSemanticDiagnostics(session, project, file2);
-            baselineTsserverLogs("cachingFileSystemInformation", `includes the parent folder FLLs in ${resolution} module resolution mode`, session);
+            baselineTsserverLogs(
+                "cachingFileSystemInformation",
+                `includes the parent folder FLLs in ${resolution} module resolution mode`,
+                session,
+            );
         }
 
         it("Includes the parent folder FLLs in node module resolution mode", () => {
@@ -483,7 +487,10 @@ describe("unittests:: tsserver:: CachingFileSystemInformation:: tsserverProjectS
                     content:
                         '{\n    "name": "typescript",\n    "author": "Microsoft Corp.",\n    "homepage": "http://typescriptlang.org/",\n    "version": "2.4.2",\n    "license": "Apache-2.0",\n    "description": "TypeScript is a language for application scale JavaScript development",\n    "keywords": [\n        "TypeScript",\n        "Microsoft",\n        "compiler",\n        "language",\n        "javascript"\n    ],\n    "bugs": {\n        "url": "https://github.com/Microsoft/TypeScript/issues"\n    },\n    "repository": {\n        "type": "git",\n        "url": "https://github.com/Microsoft/TypeScript.git"\n    },\n    "main": "./lib/typescript.js",\n    "typings": "./lib/typescript.d.ts",\n    "bin": {\n        "tsc": "./bin/tsc",\n        "tsserver": "./bin/tsserver"\n    },\n    "engines": {\n        "node": ">=4.2.0"\n    },\n    "devDependencies": {\n        "@types/browserify": "latest",\n        "@types/chai": "latest",\n        "@types/convert-source-map": "latest",\n        "@types/del": "latest",\n        "@types/glob": "latest",\n        "@types/gulp": "latest",\n        "@types/gulp-concat": "latest",\n        "@types/gulp-help": "latest",\n        "@types/gulp-newer": "latest",\n        "@types/gulp-sourcemaps": "latest",\n        "@types/merge2": "latest",\n        "@types/minimatch": "latest",\n        "@types/minimist": "latest",\n        "@types/mkdirp": "latest",\n        "@types/mocha": "latest",\n        "@types/node": "latest",\n        "@types/q": "latest",\n        "@types/run-sequence": "latest",\n        "@types/through2": "latest",\n        "browserify": "latest",\n        "chai": "latest",\n        "convert-source-map": "latest",\n        "del": "latest",\n        "gulp": "latest",\n        "gulp-clone": "latest",\n        "gulp-concat": "latest",\n        "gulp-help": "latest",\n        "gulp-insert": "latest",\n        "gulp-newer": "latest",\n        "gulp-sourcemaps": "latest",\n        "gulp-typescript": "latest",\n        "into-stream": "latest",\n        "istanbul": "latest",\n        "jake": "latest",\n        "merge2": "latest",\n        "minimist": "latest",\n        "mkdirp": "latest",\n        "mocha": "latest",\n        "mocha-fivemat-progress-reporter": "latest",\n        "q": "latest",\n        "run-sequence": "latest",\n        "sorcery": "latest",\n        "through2": "latest",\n        "travis-fold": "latest",\n        "ts-node": "latest",\n        "eslint": "5.16.0",\n        "typescript": "^2.4"\n    },\n    "scripts": {\n        "pretest": "jake tests",\n        "test": "jake runtests-parallel",\n        "build": "npm run build:compiler && npm run build:tests",\n        "build:compiler": "jake local",\n        "build:tests": "jake tests",\n        "start": "node lib/tsc",\n        "clean": "jake clean",\n        "gulp": "gulp",\n        "jake": "jake",\n        "lint": "jake lint",\n        "setup-hooks": "node scripts/link-hooks.js"\n    },\n    "browser": {\n        "buffer": false,\n        "fs": false,\n        "os": false,\n        "path": false\n    }\n}',
                 },
-                { path: "/a/b/node_modules/.staging/symbol-observable-24bcbbff/index.js", content: "module.exports = require('./lib/index');\n" },
+                {
+                    path: "/a/b/node_modules/.staging/symbol-observable-24bcbbff/index.js",
+                    content: "module.exports = require('./lib/index');\n",
+                },
                 {
                     path: "/a/b/node_modules/.staging/symbol-observable-24bcbbff/index.d.ts",
                     content: "declare const observableSymbol: symbol;\nexport default observableSymbol;\n",

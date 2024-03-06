@@ -47,7 +47,9 @@ export function transformES2021(context: TransformationContext): (x: SourceFile 
         return visitEachChild(node, visitor, context);
     }
 
-    function transformLogicalAssignment(binaryExpression: AssignmentExpression<Token<LogicalOrCoalescingAssignmentOperator>>): VisitResult<Node> {
+    function transformLogicalAssignment(
+        binaryExpression: AssignmentExpression<Token<LogicalOrCoalescingAssignmentOperator>>,
+    ): VisitResult<Node> {
         const operator = binaryExpression.operatorToken;
         const nonAssignmentOperator = getNonAssignmentOperatorForCompoundAssignment(operator.kind);
         let left = skipParentheses(visitNode(binaryExpression.left, visitor, isLeftHandSideExpression));

@@ -205,7 +205,10 @@ function isDefaultModifier(node: Node) {
 }
 
 /** Gets the symbol for a call hierarchy declaration. */
-function getSymbolOfCallHierarchyDeclaration(typeChecker: TypeChecker, node: Exclude<CallHierarchyDeclaration, ClassStaticBlockDeclaration>) {
+function getSymbolOfCallHierarchyDeclaration(
+    typeChecker: TypeChecker,
+    node: Exclude<CallHierarchyDeclaration, ClassStaticBlockDeclaration>,
+) {
     const location = getCallHierarchyDeclarationReferenceNode(node);
     return location && typeChecker.getSymbolAtLocation(location);
 }
@@ -260,7 +263,8 @@ function getCallHierarchyItemName(program: Program, node: CallHierarchyDeclarati
 function getCallHierarchItemContainerName(node: CallHierarchyDeclaration): string | undefined {
     if (isAssignedExpression(node)) {
         if (isPropertyDeclaration(node.parent) && isClassLike(node.parent.parent)) {
-            return isClassExpression(node.parent.parent) ? getAssignedName(node.parent.parent)?.getText() : node.parent.parent.name?.getText();
+            return isClassExpression(node.parent.parent) ? getAssignedName(node.parent.parent)?.getText()
+                : node.parent.parent.name?.getText();
         }
         if (isModuleBlock(node.parent.parent.parent.parent) && isIdentifier(node.parent.parent.parent.parent.parent.name)) {
             return node.parent.parent.parent.parent.parent.name.getText();
@@ -350,7 +354,10 @@ function findImplementationOrAllInitialDeclarations(
  *
  * @internal
  */
-export function resolveCallHierarchyDeclaration(program: Program, location: Node): CallHierarchyDeclaration | CallHierarchyDeclaration[] | undefined {
+export function resolveCallHierarchyDeclaration(
+    program: Program,
+    location: Node,
+): CallHierarchyDeclaration | CallHierarchyDeclaration[] | undefined {
     // A call hierarchy item must refer to either a SourceFile, Module Declaration, Class Static Block, or something intrinsically callable that has a name:
     // - Class Declarations
     // - Class Expressions (with a name)
@@ -733,5 +740,9 @@ export function getOutgoingCalls(program: Program, declaration: CallHierarchyDec
     if (declaration.flags & NodeFlags.Ambient || isMethodSignature(declaration)) {
         return [];
     }
-    return group(collectCallSites(program, declaration), getCallSiteGroupKey, entries => convertCallSiteGroupToOutgoingCall(program, entries));
+    return group(
+        collectCallSites(program, declaration),
+        getCallSiteGroupKey,
+        entries => convertCallSiteGroupToOutgoingCall(program, entries),
+    );
 }

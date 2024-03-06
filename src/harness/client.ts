@@ -102,7 +102,10 @@ export function extractMessage(message: string): string {
     Debug.assert(lines.length >= 2, "Malformed response: Expected 3 lines in the response.");
 
     const contentLengthText = lines[0];
-    Debug.assert(contentLengthText.indexOf(contentLengthPrefix) === 0, "Malformed response: Response text did not contain content-length header.");
+    Debug.assert(
+        contentLengthText.indexOf(contentLengthPrefix) === 0,
+        "Malformed response: Response text did not contain content-length header.",
+    );
     const contentLength = parseInt(contentLengthText.substring(contentLengthPrefix.length));
 
     // Read the body
@@ -187,7 +190,9 @@ export class SessionClient implements LanguageService {
                 }
             }
             catch (e) {
-                throw new Error("Malformed response: Failed to parse server response: " + lastMessage + ". \r\n  Error details: " + e.message);
+                throw new Error(
+                    "Malformed response: Failed to parse server response: " + lastMessage + ". \r\n  Error details: " + e.message,
+                );
             }
         }
 
@@ -196,7 +201,10 @@ export class SessionClient implements LanguageService {
             throw new Error("Error " + response.message);
         }
 
-        Debug.assert(response.request_seq === request.seq, "Malformed response: response sequence number did not match request sequence number.");
+        Debug.assert(
+            response.request_seq === request.seq,
+            "Malformed response: response sequence number did not match request sequence number.",
+        );
         Debug.assert(expectEmptyBody || !!response.body, "Malformed response: Unexpected empty response body.");
         Debug.assert(!expectEmptyBody || !response.body, "Malformed response: Unexpected non-empty response body.");
 
@@ -535,7 +543,9 @@ export class SessionClient implements LanguageService {
             },
         );
         const response = this.processResponse<
-            protocol.SyntacticDiagnosticsSyncResponse | protocol.SemanticDiagnosticsSyncResponse | protocol.SuggestionDiagnosticsSyncResponse
+            | protocol.SyntacticDiagnosticsSyncResponse
+            | protocol.SemanticDiagnosticsSyncResponse
+            | protocol.SuggestionDiagnosticsSyncResponse
         >(
             request,
         );
@@ -564,9 +574,19 @@ export class SessionClient implements LanguageService {
         return notImplemented();
     }
 
-    getRenameInfo(fileName: string, position: number, _preferences: UserPreferences, findInStrings?: boolean, findInComments?: boolean): RenameInfo {
+    getRenameInfo(
+        fileName: string,
+        position: number,
+        _preferences: UserPreferences,
+        findInStrings?: boolean,
+        findInComments?: boolean,
+    ): RenameInfo {
         // Not passing along 'options' because server should already have those from the 'configure' command
-        const args: protocol.RenameRequestArgs = { ...this.createFileLocationRequestArgs(fileName, position), findInStrings, findInComments };
+        const args: protocol.RenameRequestArgs = {
+            ...this.createFileLocationRequestArgs(fileName, position),
+            findInStrings,
+            findInComments,
+        };
 
         const request = this.processRequest<protocol.RenameRequest>(protocol.CommandTypes.Rename, args);
         const response = this.processResponse<protocol.RenameResponse>(request);
@@ -648,7 +668,11 @@ export class SessionClient implements LanguageService {
         return this.lastRenameEntry!.locations;
     }
 
-    private decodeNavigationBarItems(items: protocol.NavigationBarItem[] | undefined, fileName: string, lineMap: number[]): NavigationBarItem[] {
+    private decodeNavigationBarItems(
+        items: protocol.NavigationBarItem[] | undefined,
+        fileName: string,
+        lineMap: number[],
+    ): NavigationBarItem[] {
         if (!items) {
             return [];
         }
@@ -733,7 +757,8 @@ export class SessionClient implements LanguageService {
             return undefined;
         }
 
-        const { items: encodedItems, applicableSpan: encodedApplicableSpan, selectedItemIndex, argumentIndex, argumentCount } = response.body;
+        const { items: encodedItems, applicableSpan: encodedApplicableSpan, selectedItemIndex, argumentIndex, argumentCount } =
+            response.body;
 
         const applicableSpan = encodedApplicableSpan as unknown as TextSpan;
         const items = (encodedItems as (SignatureHelpItem | protocol.SignatureHelpItem)[]).map(item => ({
@@ -808,7 +833,14 @@ export class SessionClient implements LanguageService {
         const response = this.processResponse<protocol.CodeFixResponse>(request);
 
         return response.body!.map<CodeFixAction>(({ fixName, description, changes, commands, fixId, fixAllDescription }) => // TODO: GH#18217
-        ({ fixName, description, changes: this.convertChanges(changes, file), commands: commands as CodeActionCommand[], fixId, fixAllDescription }));
+        ({
+            fixName,
+            description,
+            changes: this.convertChanges(changes, file),
+            commands: commands as CodeActionCommand[],
+            fixId,
+            fixAllDescription,
+        }));
     }
 
     getCombinedCodeFix = notImplemented;
@@ -841,7 +873,10 @@ export class SessionClient implements LanguageService {
         });
     }
 
-    private createFileLocationOrRangeRequestArgs(positionOrRange: number | TextRange, fileName: string): protocol.FileLocationOrRangeRequestArgs {
+    private createFileLocationOrRangeRequestArgs(
+        positionOrRange: number | TextRange,
+        fileName: string,
+    ): protocol.FileLocationOrRangeRequestArgs {
         return typeof positionOrRange === "number"
             ? this.createFileLocationRequestArgs(fileName, positionOrRange)
             : this.createFileRangeRequestArgs(fileName, positionOrRange.pos, positionOrRange.end);

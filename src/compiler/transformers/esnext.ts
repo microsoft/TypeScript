@@ -315,7 +315,13 @@ export function transformESNext(context: TransformationContext): (x: SourceFile 
 
             const isAwaitUsing = getUsingKindOfVariableDeclarationList(forInitializer) === UsingKind.Async;
             const temp = factory.getGeneratedNameForNode(forDecl.name);
-            const usingVar = factory.updateVariableDeclaration(forDecl, forDecl.name, /*exclamationToken*/ undefined, /*type*/ undefined, temp);
+            const usingVar = factory.updateVariableDeclaration(
+                forDecl,
+                forDecl.name,
+                /*exclamationToken*/ undefined,
+                /*type*/ undefined,
+                temp,
+            );
             const usingVarList = factory.createVariableDeclarationList([usingVar], isAwaitUsing ? NodeFlags.AwaitUsing : NodeFlags.Using);
             const usingVarStatement = factory.createVariableStatement(/*modifiers*/ undefined, usingVarList);
             return visitNode(
@@ -349,13 +355,25 @@ export function transformESNext(context: TransformationContext): (x: SourceFile 
                 return factory.updateCaseClause(
                     node,
                     visitNode(node.expression, visitor, isExpression),
-                    transformUsingDeclarations(node.statements, /*start*/ 0, node.statements.length, envBinding, /*topLevelStatements*/ undefined),
+                    transformUsingDeclarations(
+                        node.statements,
+                        /*start*/ 0,
+                        node.statements.length,
+                        envBinding,
+                        /*topLevelStatements*/ undefined,
+                    ),
                 );
             }
             else {
                 return factory.updateDefaultClause(
                     node,
-                    transformUsingDeclarations(node.statements, /*start*/ 0, node.statements.length, envBinding, /*topLevelStatements*/ undefined),
+                    transformUsingDeclarations(
+                        node.statements,
+                        /*start*/ 0,
+                        node.statements.length,
+                        envBinding,
+                        /*topLevelStatements*/ undefined,
+                    ),
                 );
             }
         }
@@ -724,7 +742,12 @@ export function transformESNext(context: TransformationContext): (x: SourceFile 
         }
     }
 
-    function hoistBindingIdentifier(node: Identifier, isExport: boolean, exportAlias: string | Identifier | undefined, original: Node | undefined) {
+    function hoistBindingIdentifier(
+        node: Identifier,
+        isExport: boolean,
+        exportAlias: string | Identifier | undefined,
+        original: Node | undefined,
+    ) {
         // NOTE: `node` has already been visited
         const name = isGeneratedIdentifier(node) ? node : factory.cloneNode(node);
         if (isExport) {

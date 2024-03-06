@@ -51,7 +51,14 @@ export namespace tracingEnabled {
 
     // The actual constraint is that JSON.stringify be able to serialize it without throwing.
     interface Args {
-        [key: string]: string | number | boolean | null | undefined | Args | readonly (string | number | boolean | null | undefined | Args)[];
+        [key: string]:
+            | string
+            | number
+            | boolean
+            | null
+            | undefined
+            | Args
+            | readonly (string | number | boolean | null | undefined | Args)[];
     }
 
     /** Starts tracing for the given project. */
@@ -187,7 +194,14 @@ export namespace tracingEnabled {
         }
     }
 
-    function writeEvent(eventType: string, phase: Phase, name: string, args: Args | undefined, extras?: string, time: number = 1000 * timestamp()) {
+    function writeEvent(
+        eventType: string,
+        phase: Phase,
+        name: string,
+        args: Args | undefined,
+        extras?: string,
+        time: number = 1000 * timestamp(),
+    ) {
         // In server mode, there's no easy way to dump type information, so we drop events that would require it.
         if (mode === "server" && phase === Phase.CheckTypes) return;
 

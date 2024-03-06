@@ -44,7 +44,14 @@ export function getFileEmitOutput(
     forceDtsEmit?: boolean,
 ): EmitOutput {
     const outputFiles: OutputFile[] = [];
-    const { emitSkipped, diagnostics } = program.emit(sourceFile, writeFile, cancellationToken, emitOnlyDtsFiles, customTransformers, forceDtsEmit);
+    const { emitSkipped, diagnostics } = program.emit(
+        sourceFile,
+        writeFile,
+        cancellationToken,
+        emitOnlyDtsFiles,
+        customTransformers,
+        forceDtsEmit,
+    );
     return { outputFiles, emitSkipped, diagnostics };
 
     function writeFile(fileName: string, text: string, writeByteOrderMark: boolean) {
@@ -123,7 +130,11 @@ export namespace BuilderState {
     }
 
     export function createManyToManyPathMap(): ManyToManyPathMap {
-        function create(forward: Map<Path, ReadonlySet<Path>>, reverse: Map<Path, Set<Path>>, deleted: Set<Path> | undefined): ManyToManyPathMap {
+        function create(
+            forward: Map<Path, ReadonlySet<Path>>,
+            reverse: Map<Path, Set<Path>>,
+            deleted: Set<Path> | undefined,
+        ): ManyToManyPathMap {
             const map: ManyToManyPathMap = {
                 getKeys: v => reverse.get(v),
                 getValues: k => forward.get(k),
@@ -218,7 +229,11 @@ export namespace BuilderState {
     /**
      * Gets the referenced files for a file from the program with values for the keys as referenced file's path to be true
      */
-    function getReferencedFiles(program: Program, sourceFile: SourceFile, getCanonicalFileName: GetCanonicalFileName): Set<Path> | undefined {
+    function getReferencedFiles(
+        program: Program,
+        sourceFile: SourceFile,
+        getCanonicalFileName: GetCanonicalFileName,
+    ): Set<Path> | undefined {
         let referencedFiles: Set<Path> | undefined;
 
         // We need to use a set here since the code can contain the same import twice,
@@ -236,7 +251,12 @@ export namespace BuilderState {
         // Handle triple slash references
         if (sourceFile.referencedFiles && sourceFile.referencedFiles.length > 0) {
             for (const referencedFile of sourceFile.referencedFiles) {
-                const referencedPath = getReferencedFileFromFileName(program, referencedFile.fileName, sourceFileDirectory, getCanonicalFileName);
+                const referencedPath = getReferencedFileFromFileName(
+                    program,
+                    referencedFile.fileName,
+                    sourceFileDirectory,
+                    getCanonicalFileName,
+                );
                 addReferencedFile(referencedPath);
             }
         }

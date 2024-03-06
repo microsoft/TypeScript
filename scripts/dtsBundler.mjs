@@ -459,8 +459,15 @@ function emitAsNamespace(name, parent, moduleSymbol, needExportModifier) {
     });
 
     exportedStatements.forEach(([statement, ...rest]) => {
-        let updated = ts.visitEachChild(statement, node => removeDeclareConstExport(node, childrenNeedExportModifier), /*context*/ undefined);
-        if (childrenNeedExportModifier && ts.canHaveModifiers(updated) && !updated.modifiers?.some(m => m.kind === ts.SyntaxKind.ExportKeyword)) {
+        let updated = ts.visitEachChild(
+            statement,
+            node => removeDeclareConstExport(node, childrenNeedExportModifier),
+            /*context*/ undefined,
+        );
+        if (
+            childrenNeedExportModifier && ts.canHaveModifiers(updated) &&
+            !updated.modifiers?.some(m => m.kind === ts.SyntaxKind.ExportKeyword)
+        ) {
             updated = ts.factory.replaceModifiers(
                 updated,
                 [

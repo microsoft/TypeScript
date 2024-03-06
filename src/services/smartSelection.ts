@@ -76,7 +76,8 @@ export function getSmartSelectionRange(pos: number, sourceFile: SourceFile): Sel
             if (positionShouldSnapToNode(sourceFile, pos, node)) {
                 if (
                     isFunctionBody(node)
-                    && isFunctionLikeDeclaration(parentNode) && !positionsAreOnSameLine(node.getStart(sourceFile), node.getEnd(), sourceFile)
+                    && isFunctionLikeDeclaration(parentNode) &&
+                    !positionsAreOnSameLine(node.getStart(sourceFile), node.getEnd(), sourceFile)
                 ) {
                     pushSelectionRange(node.getStart(sourceFile), node.getEnd());
                 }

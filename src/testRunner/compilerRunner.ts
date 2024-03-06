@@ -178,7 +178,11 @@ class CompilerTest {
     // equivalent to other files on the file system not directly passed to the compiler (ie things that are referenced by other files)
     private otherFiles: Compiler.TestFile[];
 
-    constructor(fileName: string, testCaseContent?: TestCaseParser.TestCaseContent, configurationOverrides?: TestCaseParser.CompilerSettings) {
+    constructor(
+        fileName: string,
+        testCaseContent?: TestCaseParser.TestCaseContent,
+        configurationOverrides?: TestCaseParser.CompilerSettings,
+    ) {
         const absoluteRootDir = vfs.srcFolder;
         this.fileName = fileName;
         this.justName = vpath.basename(fileName);
@@ -239,7 +243,10 @@ class CompilerTest {
             // If the last file in a test uses require or a triple slash reference we'll assume all other files will be brought in via references,
             // otherwise, assume all files are just meant to be in the same compilation session without explicit references to one another.
 
-            if (testCaseContent.settings.noImplicitReferences || /require\(/.test(lastUnit.content) || /reference\spath/.test(lastUnit.content)) {
+            if (
+                testCaseContent.settings.noImplicitReferences || /require\(/.test(lastUnit.content) ||
+                /reference\spath/.test(lastUnit.content)
+            ) {
                 this.toBeCompiled.push(this.createHarnessTestFile(lastUnit));
                 units.forEach(unit => {
                     if (unit.name !== lastUnit.name) {

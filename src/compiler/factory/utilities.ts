@@ -681,7 +681,9 @@ export function isCommaExpression(node: Expression): node is BinaryExpression & 
 }
 
 /** @internal */
-export function isCommaSequence(node: Expression): node is BinaryExpression & { operatorToken: Token<SyntaxKind.CommaToken>; } | CommaListExpression {
+export function isCommaSequence(
+    node: Expression,
+): node is BinaryExpression & { operatorToken: Token<SyntaxKind.CommaToken>; } | CommaListExpression {
     return isCommaExpression(node) || isCommaListExpression(node);
 }
 
@@ -900,7 +902,8 @@ export function getLocalNameForExternalImport(
     const namespaceDeclaration = getNamespaceDeclarationNode(node);
     if (namespaceDeclaration && !isDefaultImport(node) && !isExportNamespaceAsDefaultDeclaration(node)) {
         const name = namespaceDeclaration.name;
-        return isGeneratedIdentifier(name) ? name : factory.createIdentifier(getSourceTextOfNodeFromSourceFile(sourceFile, name) || idText(name));
+        return isGeneratedIdentifier(name) ? name
+            : factory.createIdentifier(getSourceTextOfNodeFromSourceFile(sourceFile, name) || idText(name));
     }
     if (node.kind === SyntaxKind.ImportDeclaration && node.importClause) {
         return factory.getGeneratedNameForNode(node);
@@ -1035,7 +1038,9 @@ export function getInitializerOfBindingOrAssignmentElement(bindingElement: Bindi
  *
  * @internal
  */
-export function getTargetOfBindingOrAssignmentElement(bindingElement: BindingOrAssignmentElement): BindingOrAssignmentElementTarget | undefined {
+export function getTargetOfBindingOrAssignmentElement(
+    bindingElement: BindingOrAssignmentElement,
+): BindingOrAssignmentElementTarget | undefined {
     if (isDeclarationBindingElement(bindingElement)) {
         // `a` in `let { a } = ...`
         // `a` in `let { a = 1 } = ...`

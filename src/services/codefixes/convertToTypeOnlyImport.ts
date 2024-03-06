@@ -27,7 +27,8 @@ import {
 
 const errorCodes = [
     Diagnostics._0_is_a_type_and_must_be_imported_using_a_type_only_import_when_verbatimModuleSyntax_is_enabled.code,
-    Diagnostics._0_resolves_to_a_type_only_declaration_and_must_be_imported_using_a_type_only_import_when_verbatimModuleSyntax_is_enabled.code,
+    Diagnostics._0_resolves_to_a_type_only_declaration_and_must_be_imported_using_a_type_only_import_when_verbatimModuleSyntax_is_enabled
+        .code,
 ];
 const fixId = "convertToTypeOnlyImport";
 
@@ -152,7 +153,10 @@ function doChange(changes: textChanges.ChangeTracker, sourceFile: SourceFile, de
             const newNamedBindings = importClause.namedBindings?.kind === SyntaxKind.NamedImports
                 ? factory.updateNamedImports(
                     importClause.namedBindings,
-                    sameMap(importClause.namedBindings.elements, e => factory.updateImportSpecifier(e, /*isTypeOnly*/ false, e.propertyName, e.name)),
+                    sameMap(
+                        importClause.namedBindings.elements,
+                        e => factory.updateImportSpecifier(e, /*isTypeOnly*/ false, e.propertyName, e.name),
+                    ),
                 )
                 : importClause.namedBindings;
             const importDeclaration = factory.updateImportDeclaration(

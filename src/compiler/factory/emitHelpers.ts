@@ -156,7 +156,12 @@ export interface EmitHelperFactory {
     createImportDefaultHelper(expression: Expression): Expression;
     createExportStarHelper(moduleExpression: Expression, exportsExpression?: Expression): Expression;
     // Class Fields Helpers
-    createClassPrivateFieldGetHelper(receiver: Expression, state: Identifier, kind: PrivateIdentifierKind, f: Identifier | undefined): Expression;
+    createClassPrivateFieldGetHelper(
+        receiver: Expression,
+        state: Identifier,
+        kind: PrivateIdentifierKind,
+        f: Identifier | undefined,
+    ): Expression;
     createClassPrivateFieldSetHelper(
         receiver: Expression,
         state: Identifier,
@@ -229,7 +234,12 @@ export function createEmitHelperFactory(context: TransformationContext): EmitHel
 
     // TypeScript Helpers
 
-    function createDecorateHelper(decoratorExpressions: Expression[], target: Expression, memberName?: Expression, descriptor?: Expression) {
+    function createDecorateHelper(
+        decoratorExpressions: Expression[],
+        target: Expression,
+        memberName?: Expression,
+        descriptor?: Expression,
+    ) {
         context.requestEmitHelper(decorateHelper);
 
         const argumentsArray: Expression[] = [];
@@ -387,8 +397,14 @@ export function createEmitHelperFactory(context: TransformationContext): EmitHel
                 factory.createIdentifier("name"),
                 contextIn.name.computed ? contextIn.name.name : factory.createStringLiteralFromNode(contextIn.name.name),
             ),
-            factory.createPropertyAssignment(factory.createIdentifier("static"), contextIn.static ? factory.createTrue() : factory.createFalse()),
-            factory.createPropertyAssignment(factory.createIdentifier("private"), contextIn.private ? factory.createTrue() : factory.createFalse()),
+            factory.createPropertyAssignment(
+                factory.createIdentifier("static"),
+                contextIn.static ? factory.createTrue() : factory.createFalse(),
+            ),
+            factory.createPropertyAssignment(
+                factory.createIdentifier("private"),
+                contextIn.private ? factory.createTrue() : factory.createFalse(),
+            ),
             factory.createPropertyAssignment(
                 factory.createIdentifier("access"),
                 createESDecorateClassElementAccessObject(contextIn.name, contextIn.access),
@@ -462,7 +478,8 @@ export function createEmitHelperFactory(context: TransformationContext): EmitHel
         context.requestEmitHelper(asyncGeneratorHelper);
 
         // Mark this node as originally an async function
-        (generatorFunc.emitNode || (generatorFunc.emitNode = {} as EmitNode)).flags |= EmitFlags.AsyncFunctionBody | EmitFlags.ReuseTempVariableScope;
+        (generatorFunc.emitNode || (generatorFunc.emitNode = {} as EmitNode)).flags |= EmitFlags.AsyncFunctionBody |
+            EmitFlags.ReuseTempVariableScope;
 
         return factory.createCallExpression(
             getUnscopedHelperName("__asyncGenerator"),
@@ -569,7 +586,8 @@ export function createEmitHelperFactory(context: TransformationContext): EmitHel
         );
 
         // Mark this node as originally an async function
-        (generatorFunc.emitNode || (generatorFunc.emitNode = {} as EmitNode)).flags |= EmitFlags.AsyncFunctionBody | EmitFlags.ReuseTempVariableScope;
+        (generatorFunc.emitNode || (generatorFunc.emitNode = {} as EmitNode)).flags |= EmitFlags.AsyncFunctionBody |
+            EmitFlags.ReuseTempVariableScope;
 
         return factory.createCallExpression(
             getUnscopedHelperName("__awaiter"),
@@ -700,7 +718,12 @@ export function createEmitHelperFactory(context: TransformationContext): EmitHel
 
     // Class Fields Helpers
 
-    function createClassPrivateFieldGetHelper(receiver: Expression, state: Identifier, kind: PrivateIdentifierKind, f: Identifier | undefined) {
+    function createClassPrivateFieldGetHelper(
+        receiver: Expression,
+        state: Identifier,
+        kind: PrivateIdentifierKind,
+        f: Identifier | undefined,
+    ) {
         context.requestEmitHelper(classPrivateFieldGetHelper);
         let args;
         if (!f) {

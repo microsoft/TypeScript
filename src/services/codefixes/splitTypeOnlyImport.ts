@@ -48,7 +48,11 @@ function getImportDeclaration(sourceFile: SourceFile, span: TextSpan) {
     return findAncestor(getTokenAtPosition(sourceFile, span.start), isImportDeclaration);
 }
 
-function splitTypeOnlyImport(changes: textChanges.ChangeTracker, importDeclaration: ImportDeclaration | undefined, context: CodeFixContextBase) {
+function splitTypeOnlyImport(
+    changes: textChanges.ChangeTracker,
+    importDeclaration: ImportDeclaration | undefined,
+    context: CodeFixContextBase,
+) {
     if (!importDeclaration) {
         return;
     }

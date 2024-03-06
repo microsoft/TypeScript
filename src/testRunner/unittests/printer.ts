@@ -70,7 +70,8 @@ describe("unittests:: PrinterAPI", () => {
         printsCorrectly(
             "templateLiteral",
             {},
-            printer => printer.printFile(ts.createSourceFile("source.ts", "let greeting = `Hi ${name}, how are you?`;", ts.ScriptTarget.ES2017)),
+            printer =>
+                printer.printFile(ts.createSourceFile("source.ts", "let greeting = `Hi ${name}, how are you?`;", ts.ScriptTarget.ES2017)),
         );
 
         // https://github.com/microsoft/TypeScript/issues/18071
@@ -212,7 +213,11 @@ describe("unittests:: PrinterAPI", () => {
                 ts.EmitHint.Unspecified,
                 ts.factory.createNewExpression(
                     ts.factory.createPropertyAccessExpression(
-                        ts.factory.createCallExpression(ts.factory.createIdentifier("f"), /*typeArguments*/ undefined, /*argumentsArray*/ undefined),
+                        ts.factory.createCallExpression(
+                            ts.factory.createIdentifier("f"),
+                            /*typeArguments*/ undefined,
+                            /*argumentsArray*/ undefined,
+                        ),
                         "x",
                     ),
                     /*typeArguments*/ undefined,

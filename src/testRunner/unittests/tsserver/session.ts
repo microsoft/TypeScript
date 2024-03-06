@@ -170,7 +170,10 @@ describe("unittests:: tsserver:: Session:: General functionality", () => {
 
             session.onMessage(JSON.stringify(configureRequest));
 
-            assert.equal(session.getProjectService().getFormatCodeOptions("" as ts.server.NormalizedPath).indentStyle, ts.IndentStyle.Block);
+            assert.equal(
+                session.getProjectService().getFormatCodeOptions("" as ts.server.NormalizedPath).indentStyle,
+                ts.IndentStyle.Block,
+            );
 
             const setOptionsRequest: ts.server.protocol.SetCompilerOptionsForInferredProjectsRequest = {
                 command: ts.server.protocol.CommandTypes.CompilerOptionsForInferredProjects,

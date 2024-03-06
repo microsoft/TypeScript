@@ -98,7 +98,10 @@ export function processTaggedTemplateExpression(
     return factory.createCallExpression(tag, /*typeArguments*/ undefined, templateArguments);
 }
 
-function createTemplateCooked(factory: NodeFactory, template: TemplateHead | TemplateMiddle | TemplateTail | NoSubstitutionTemplateLiteral) {
+function createTemplateCooked(
+    factory: NodeFactory,
+    template: TemplateHead | TemplateMiddle | TemplateTail | NoSubstitutionTemplateLiteral,
+) {
     return template.templateFlags! & TokenFlags.IsInvalid ? factory.createVoidZero() : factory.createStringLiteral(template.text);
 }
 

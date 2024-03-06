@@ -73,7 +73,13 @@ export class SourceText implements ts.IScriptSnapshot {
     }
     public updateProgram(newProgram: string): SourceText {
         ts.Debug.assert(newProgram !== undefined);
-        return new SourceText(this.references, this.importsAndExports, newProgram, this.changedPart | ChangedPart.program, this.version + 1);
+        return new SourceText(
+            this.references,
+            this.importsAndExports,
+            newProgram,
+            this.changedPart | ChangedPart.program,
+            this.version + 1,
+        );
     }
 
     public getFullText() {

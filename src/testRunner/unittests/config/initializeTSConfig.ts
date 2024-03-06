@@ -28,7 +28,11 @@ describe("unittests:: config:: initTSConfig", () => {
 
     initTSConfigCorrectly("Initialized TSConfig with incorrect compiler option", ["--init", "--someNonExistOption"]);
 
-    initTSConfigCorrectly("Initialized TSConfig with incorrect compiler option value", ["--init", "--lib", "nonExistLib,es5,es2015.promise"]);
+    initTSConfigCorrectly("Initialized TSConfig with incorrect compiler option value", [
+        "--init",
+        "--lib",
+        "nonExistLib,es5,es2015.promise",
+    ]);
 
     initTSConfigCorrectly("Initialized TSConfig with advanced options", [
         "--init",

@@ -196,7 +196,8 @@ export function getJsDocCommentsFromDeclarations(declarations: readonly Declarat
             const inheritDoc = isJSDoc(jsdoc) && jsdoc.tags &&
                 find(
                     jsdoc.tags,
-                    t => t.kind === SyntaxKind.JSDocTag && (t.tagName.escapedText === "inheritDoc" || t.tagName.escapedText === "inheritdoc"),
+                    t => t.kind === SyntaxKind.JSDocTag &&
+                        (t.tagName.escapedText === "inheritDoc" || t.tagName.escapedText === "inheritdoc"),
                 );
             // skip comments containing @typedefs since they're not associated with particular declarations
             // Exceptions:
@@ -578,7 +579,10 @@ interface CommentOwnerInfo {
 function getCommentOwnerInfo(tokenAtPos: Node, options: DocCommentTemplateOptions | undefined): CommentOwnerInfo | undefined {
     return forEachAncestor(tokenAtPos, n => getCommentOwnerInfoWorker(n, options));
 }
-function getCommentOwnerInfoWorker(commentOwner: Node, options: DocCommentTemplateOptions | undefined): CommentOwnerInfo | undefined | "quit" {
+function getCommentOwnerInfoWorker(
+    commentOwner: Node,
+    options: DocCommentTemplateOptions | undefined,
+): CommentOwnerInfo | undefined | "quit" {
     switch (commentOwner.kind) {
         case SyntaxKind.FunctionDeclaration:
         case SyntaxKind.FunctionExpression:

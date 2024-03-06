@@ -137,7 +137,10 @@ function getRefactorActionsToConvertParametersToDestructuredObject(context: Refa
     }];
 }
 
-function getRefactorEditsToConvertParametersToDestructuredObject(context: RefactorContext, actionName: string): RefactorEditInfo | undefined {
+function getRefactorEditsToConvertParametersToDestructuredObject(
+    context: RefactorContext,
+    actionName: string,
+): RefactorEditInfo | undefined {
     Debug.assert(actionName === refactorName, "Unexpected action name");
     const { file, startPosition, program, cancellationToken, host } = context;
     const functionDeclaration = getFunctionDeclarationAtPosition(file, startPosition, program.getTypeChecker());
@@ -145,7 +148,10 @@ function getRefactorEditsToConvertParametersToDestructuredObject(context: Refact
 
     const groupedReferences = getGroupedReferences(functionDeclaration, program, cancellationToken);
     if (groupedReferences.valid) {
-        const edits = textChanges.ChangeTracker.with(context, t => doChange(file, program, host, t, functionDeclaration, groupedReferences));
+        const edits = textChanges.ChangeTracker.with(
+            context,
+            t => doChange(file, program, host, t, functionDeclaration, groupedReferences),
+        );
         return { renameFilename: undefined, renameLocation: undefined, edits };
     }
 
@@ -161,7 +167,10 @@ function doChange(
     groupedReferences: GroupedReferences,
 ): void {
     const signature = groupedReferences.signature;
-    const newFunctionDeclarationParams = map(createNewParameters(functionDeclaration, program, host), param => getSynthesizedDeepClone(param));
+    const newFunctionDeclarationParams = map(
+        createNewParameters(functionDeclaration, program, host),
+        param => getSynthesizedDeepClone(param),
+    );
 
     if (signature) {
         const newSignatureParams = map(createNewParameters(signature, program, host), param => getSynthesizedDeepClone(param));
@@ -178,7 +187,10 @@ function doChange(
                 first(call.arguments),
                 last(call.arguments),
                 newArgument,
-                { leadingTriviaOption: textChanges.LeadingTriviaOption.IncludeAll, trailingTriviaOption: textChanges.TrailingTriviaOption.Include },
+                {
+                    leadingTriviaOption: textChanges.LeadingTriviaOption.IncludeAll,
+                    trailingTriviaOption: textChanges.TrailingTriviaOption.Include,
+                },
             );
         }
     }
@@ -400,7 +412,10 @@ function entryToFunctionCall(entry: FindAllReferences.NodeEntry): CallExpression
             // x["foo"](...)
             case SyntaxKind.ElementAccessExpression:
                 const elementAccessExpression = tryCast(parent, isElementAccessExpression);
-                if (elementAccessExpression && elementAccessExpression.parent && elementAccessExpression.argumentExpression === functionReference) {
+                if (
+                    elementAccessExpression && elementAccessExpression.parent &&
+                    elementAccessExpression.argumentExpression === functionReference
+                ) {
                     const callOrNewExpression = tryCast(elementAccessExpression.parent, isCallOrNewExpression);
                     if (callOrNewExpression && callOrNewExpression.expression === elementAccessExpression) {
                         return callOrNewExpression;
@@ -444,7 +459,11 @@ function entryToType(entry: FindAllReferences.NodeEntry): Node | undefined {
     return undefined;
 }
 
-function getFunctionDeclarationAtPosition(file: SourceFile, startPosition: number, checker: TypeChecker): ValidFunctionDeclaration | undefined {
+function getFunctionDeclarationAtPosition(
+    file: SourceFile,
+    startPosition: number,
+    checker: TypeChecker,
+): ValidFunctionDeclaration | undefined {
     const node = getTouchingToken(file, startPosition);
     const functionDeclaration = getContainingFunctionDeclaration(node);
 
@@ -564,7 +583,10 @@ function createPropertyOrShorthandAssignment(name: string, initializer: Expressi
     return factory.createPropertyAssignment(name, initializer);
 }
 
-function createNewArgument(functionDeclaration: ValidFunctionDeclaration, functionArguments: NodeArray<Expression>): ObjectLiteralExpression {
+function createNewArgument(
+    functionDeclaration: ValidFunctionDeclaration,
+    functionArguments: NodeArray<Expression>,
+): ObjectLiteralExpression {
     const parameters = getRefactorableParameters(functionDeclaration.parameters);
     const hasRestParameter = isRestParameter(last(parameters));
     const nonRestArguments = hasRestParameter ? functionArguments.slice(0, parameters.length - 1) : functionArguments;

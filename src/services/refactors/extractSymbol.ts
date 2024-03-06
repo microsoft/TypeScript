@@ -383,9 +383,10 @@ export namespace Messages {
     export const cannotExtractRangeContainingLabeledBreakOrContinueStatementWithTargetOutsideOfTheRange: DiagnosticMessage = createMessage(
         "Cannot extract range containing labeled break or continue with target outside of the range.",
     );
-    export const cannotExtractRangeThatContainsWritesToReferencesLocatedOutsideOfTheTargetRangeInGenerators: DiagnosticMessage = createMessage(
-        "Cannot extract range containing writes to references located outside of the target range in generators.",
-    );
+    export const cannotExtractRangeThatContainsWritesToReferencesLocatedOutsideOfTheTargetRangeInGenerators: DiagnosticMessage =
+        createMessage(
+            "Cannot extract range containing writes to references located outside of the target range in generators.",
+        );
     export const typeWillNotBeVisibleInTheNewScope = createMessage("Type will not visible in the new scope.");
     export const functionWillNotBeVisibleInTheNewScope = createMessage("Function will not visible in the new scope.");
     export const cannotExtractIdentifier = createMessage("Select more than a single identifier.");
@@ -617,10 +618,16 @@ export function getRangeToExtract(sourceFile: SourceFile, span: TextSpan, invoke
         }
 
         // We believe it's true because the node is from the (unmodified) tree.
-        Debug.assert(nodeToCheck.pos <= nodeToCheck.end, "This failure could trigger https://github.com/Microsoft/TypeScript/issues/20809 (1)");
+        Debug.assert(
+            nodeToCheck.pos <= nodeToCheck.end,
+            "This failure could trigger https://github.com/Microsoft/TypeScript/issues/20809 (1)",
+        );
 
         // For understanding how skipTrivia functioned:
-        Debug.assert(!positionIsSynthesized(nodeToCheck.pos), "This failure could trigger https://github.com/Microsoft/TypeScript/issues/20809 (2)");
+        Debug.assert(
+            !positionIsSynthesized(nodeToCheck.pos),
+            "This failure could trigger https://github.com/Microsoft/TypeScript/issues/20809 (2)",
+        );
 
         if (
             !isStatement(nodeToCheck) && !(isExpressionNode(nodeToCheck) && isExtractableExpression(nodeToCheck)) &&
@@ -689,7 +696,10 @@ export function getRangeToExtract(sourceFile: SourceFile, span: TextSpan, invoke
                     if (node.parent.kind === SyntaxKind.CallExpression) {
                         // Super constructor call
                         const containingClass = getContainingClass(node);
-                        if (containingClass === undefined || containingClass.pos < span.start || containingClass.end >= (span.start + span.length)) {
+                        if (
+                            containingClass === undefined || containingClass.pos < span.start ||
+                            containingClass.end >= (span.start + span.length)
+                        ) {
                             (errors ||= []).push(createDiagnosticForNode(node, Messages.cannotExtractSuper));
                             return true;
                         }
@@ -741,7 +751,9 @@ export function getRangeToExtract(sourceFile: SourceFile, span: TextSpan, invoke
                     permittedJumps = PermittedJumps.None;
                     break;
                 case SyntaxKind.Block:
-                    if (node.parent && node.parent.kind === SyntaxKind.TryStatement && (node.parent as TryStatement).finallyBlock === node) {
+                    if (
+                        node.parent && node.parent.kind === SyntaxKind.TryStatement && (node.parent as TryStatement).finallyBlock === node
+                    ) {
                         // allow unconditional returns from finally blocks
                         permittedJumps = PermittedJumps.Return;
                     }
@@ -787,7 +799,9 @@ export function getRangeToExtract(sourceFile: SourceFile, span: TextSpan, invoke
                         }
                     }
                     else {
-                        if (!(permittedJumps & (node.kind === SyntaxKind.BreakStatement ? PermittedJumps.Break : PermittedJumps.Continue))) {
+                        if (
+                            !(permittedJumps & (node.kind === SyntaxKind.BreakStatement ? PermittedJumps.Break : PermittedJumps.Continue))
+                        ) {
                             // attempt to break or continue in a forbidden context
                             (errors ||= []).push(
                                 createDiagnosticForNode(node, Messages.cannotExtractRangeContainingConditionalBreakOrContinueStatements),
@@ -807,7 +821,9 @@ export function getRangeToExtract(sourceFile: SourceFile, span: TextSpan, invoke
                         rangeFacts |= RangeFacts.HasReturn;
                     }
                     else {
-                        (errors ||= []).push(createDiagnosticForNode(node, Messages.cannotExtractRangeContainingConditionalReturnStatement));
+                        (errors ||= []).push(
+                            createDiagnosticForNode(node, Messages.cannotExtractRangeContainingConditionalReturnStatement),
+                        );
                     }
                     break;
                 default:
@@ -897,10 +913,11 @@ function collectEnclosingScopes(range: TargetRange): Scope[] {
 }
 
 function getFunctionExtractionAtIndex(targetRange: TargetRange, context: RefactorContext, requestedChangesIndex: number): RefactorEditInfo {
-    const { scopes, readsAndWrites: { target, usagesPerScope, functionErrorsPerScope, exposedVariableDeclarations } } = getPossibleExtractionsWorker(
-        targetRange,
-        context,
-    );
+    const { scopes, readsAndWrites: { target, usagesPerScope, functionErrorsPerScope, exposedVariableDeclarations } } =
+        getPossibleExtractionsWorker(
+            targetRange,
+            context,
+        );
     Debug.assert(!functionErrorsPerScope[requestedChangesIndex].length, "The extraction went missing? How?");
     context.cancellationToken!.throwIfCancellationRequested(); // TODO: GH#18217
     return extractFunctionInScope(
@@ -914,17 +931,24 @@ function getFunctionExtractionAtIndex(targetRange: TargetRange, context: Refacto
 }
 
 function getConstantExtractionAtIndex(targetRange: TargetRange, context: RefactorContext, requestedChangesIndex: number): RefactorEditInfo {
-    const { scopes, readsAndWrites: { target, usagesPerScope, constantErrorsPerScope, exposedVariableDeclarations } } = getPossibleExtractionsWorker(
-        targetRange,
-        context,
-    );
+    const { scopes, readsAndWrites: { target, usagesPerScope, constantErrorsPerScope, exposedVariableDeclarations } } =
+        getPossibleExtractionsWorker(
+            targetRange,
+            context,
+        );
     Debug.assert(!constantErrorsPerScope[requestedChangesIndex].length, "The extraction went missing? How?");
     Debug.assert(exposedVariableDeclarations.length === 0, "Extract constant accepted a range containing a variable declaration?");
     context.cancellationToken!.throwIfCancellationRequested();
     const expression = isExpression(target)
         ? target
         : (target.statements[0] as ExpressionStatement).expression;
-    return extractConstantInScope(expression, scopes[requestedChangesIndex], usagesPerScope[requestedChangesIndex], targetRange.facts, context);
+    return extractConstantInScope(
+        expression,
+        scopes[requestedChangesIndex],
+        usagesPerScope[requestedChangesIndex],
+        targetRange.facts,
+        context,
+    );
 }
 
 interface Extraction {
@@ -943,7 +967,10 @@ interface ScopeExtractions {
  * or an error explaining why we can't extract into that scope.
  */
 function getPossibleExtractions(targetRange: TargetRange, context: RefactorContext): readonly ScopeExtractions[] | undefined {
-    const { scopes, readsAndWrites: { functionErrorsPerScope, constantErrorsPerScope } } = getPossibleExtractionsWorker(targetRange, context);
+    const { scopes, readsAndWrites: { functionErrorsPerScope, constantErrorsPerScope } } = getPossibleExtractionsWorker(
+        targetRange,
+        context,
+    );
     // Need the inner type annotation to avoid https://github.com/Microsoft/TypeScript/issues/7547
     const extractions = scopes.map((scope, i): ScopeExtractions => {
         const functionDescriptionPart = getDescriptionForFunctionInScope(scope);
@@ -1380,7 +1407,9 @@ function extractFunctionInScope(
             // emit e.g.
             //   { a, b, __return } = newFunction(a, b);
             //   return __return;
-            newNodes.push(factory.createExpressionStatement(factory.createAssignment(factory.createObjectLiteralExpression(assignments), call)));
+            newNodes.push(
+                factory.createExpressionStatement(factory.createAssignment(factory.createObjectLiteralExpression(assignments), call)),
+            );
             if (returnValueProperty) {
                 newNodes.push(factory.createReturnStatement(factory.createIdentifier(returnValueProperty)));
             }
@@ -1500,7 +1529,12 @@ function extractConstantInScope(
         changeTracker.replaceNode(context.file, node, localReference);
     }
     else {
-        const newVariableDeclaration = factory.createVariableDeclaration(localNameText, /*exclamationToken*/ undefined, variableType, initializer);
+        const newVariableDeclaration = factory.createVariableDeclaration(
+            localNameText,
+            /*exclamationToken*/ undefined,
+            variableType,
+            initializer,
+        );
 
         // If the node is part of an initializer in a list of variable declarations, insert a new
         // variable declaration into the list (in case it depends on earlier ones).
@@ -1570,7 +1604,9 @@ function extractConstantInScope(
         // If no contextual type exists there is nothing to transfer to the function signature
         if (variableType === undefined) return { variableType, initializer };
         // Only do this for function expressions and arrow functions that are not generic
-        if (!isFunctionExpression(initializer) && !isArrowFunction(initializer) || !!initializer.typeParameters) return { variableType, initializer };
+        if (!isFunctionExpression(initializer) && !isArrowFunction(initializer) || !!initializer.typeParameters) {
+            return { variableType, initializer };
+        }
         const functionType = checker.getTypeAtLocation(node);
         const functionSignature = singleOrUndefined(checker.getSignaturesOfType(functionType, SignatureKind.Call));
 
@@ -1724,7 +1760,8 @@ function transformFunctionBody(
     let returnValueProperty: string | undefined;
     let ignoreReturns = false;
     const statements = factory.createNodeArray(
-        isBlock(body) ? body.statements.slice(0) : [isStatement(body) ? body : factory.createReturnStatement(skipParentheses(body as Expression))],
+        isBlock(body) ? body.statements.slice(0)
+            : [isStatement(body) ? body : factory.createReturnStatement(skipParentheses(body as Expression))],
     );
     // rewrite body if either there are writes that should be propagated back via return statements or there are substitutions
     if (hasWritesOrVariableDeclarations || substitutions.size) {
@@ -1756,7 +1793,9 @@ function transformFunctionBody(
                 if (!returnValueProperty) {
                     returnValueProperty = "__return";
                 }
-                assignments.unshift(factory.createPropertyAssignment(returnValueProperty, visitNode(node.expression, visitor, isExpression)));
+                assignments.unshift(
+                    factory.createPropertyAssignment(returnValueProperty, visitNode(node.expression, visitor, isExpression)),
+                );
             }
             if (assignments.length === 1) {
                 return factory.createReturnStatement(assignments[0].name as Expression);
@@ -2065,7 +2104,9 @@ function collectReadsAndWrites(
         }
 
         if (targetRange.facts & RangeFacts.UsesThisInFunction && isClassLike(scopes[i])) {
-            functionErrorsPerScope[i].push(createDiagnosticForNode(targetRange.thisNode!, Messages.cannotExtractFunctionsContainingThisToMethod));
+            functionErrorsPerScope[i].push(
+                createDiagnosticForNode(targetRange.thisNode!, Messages.cannotExtractFunctionsContainingThisToMethod),
+            );
         }
 
         let hasWrite = false;
@@ -2095,7 +2136,10 @@ function collectReadsAndWrites(
             constantErrorsPerScope[i].push(diag);
         }
         else if (readonlyClassPropertyWrite && i > 0) {
-            const diag = createDiagnosticForNode(readonlyClassPropertyWrite, Messages.cannotExtractReadonlyPropertyInitializerOutsideConstructor);
+            const diag = createDiagnosticForNode(
+                readonlyClassPropertyWrite,
+                Messages.cannotExtractReadonlyPropertyInitializerOutsideConstructor,
+            );
             functionErrorsPerScope[i].push(diag);
             constantErrorsPerScope[i].push(diag);
         }
@@ -2362,7 +2406,8 @@ function isExtractableExpression(node: Node): boolean {
 
 function isInJSXContent(node: Node) {
     return isStringLiteralJsxAttribute(node) ||
-        (isJsxElement(node) || isJsxSelfClosingElement(node) || isJsxFragment(node)) && (isJsxElement(node.parent) || isJsxFragment(node.parent));
+        (isJsxElement(node) || isJsxSelfClosingElement(node) || isJsxFragment(node)) &&
+            (isJsxElement(node.parent) || isJsxFragment(node.parent));
 }
 
 function isStringLiteralJsxAttribute(node: Node): node is StringLiteral {

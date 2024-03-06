@@ -57,7 +57,11 @@ interface Atomics {
      * this atomic operation completes, any other read or write operation against the array will
      * block.
      */
-    exchange(typedArray: Int8Array | Uint8Array | Int16Array | Uint16Array | Int32Array | Uint32Array, index: number, value: number): number;
+    exchange(
+        typedArray: Int8Array | Uint8Array | Int16Array | Uint16Array | Int32Array | Uint32Array,
+        index: number,
+        value: number,
+    ): number;
 
     /**
      * Returns a value indicating whether high-performance algorithms can use atomic operations

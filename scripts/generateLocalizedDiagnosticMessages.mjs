@@ -28,7 +28,9 @@ async function main() {
     const args = process.argv.slice(2);
     if (args.length !== 3) {
         console.log("Usage:");
-        console.log("\tnode generateLocalizedDiagnosticMessages.js <lcl source directory> <output directory> <generated diagnostics map file>");
+        console.log(
+            "\tnode generateLocalizedDiagnosticMessages.js <lcl source directory> <output directory> <generated diagnostics map file>",
+        );
         return;
     }
 

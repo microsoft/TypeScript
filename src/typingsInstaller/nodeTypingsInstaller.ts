@@ -80,7 +80,9 @@ function loadTypesRegistryFile(typesRegistryFilePath: string, host: InstallTypin
     }
     catch (e) {
         if (log.isEnabled()) {
-            log.writeLine(`Error when loading types registry file '${typesRegistryFilePath}': ${(e as Error).message}, ${(e as Error).stack}`);
+            log.writeLine(
+                `Error when loading types registry file '${typesRegistryFilePath}': ${(e as Error).message}, ${(e as Error).stack}`,
+            );
         }
         return new Map<string, MapLike<string>>();
     }
@@ -165,7 +167,11 @@ export class NodeTypingsInstaller extends TypingsInstaller {
             };
         }
 
-        this.typesRegistry = loadTypesRegistryFile(getTypesRegistryFileLocation(globalTypingsCacheLocation), this.installTypingHost, this.log);
+        this.typesRegistry = loadTypesRegistryFile(
+            getTypesRegistryFileLocation(globalTypingsCacheLocation),
+            this.installTypingHost,
+            this.log,
+        );
     }
 
     override handleRequest(req: TypingInstallerRequestUnion) {

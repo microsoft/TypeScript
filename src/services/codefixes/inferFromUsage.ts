@@ -165,7 +165,17 @@ registerCodeFix({
         const token = getTokenAtPosition(sourceFile, start);
         let declaration: Declaration | undefined;
         const changes = textChanges.ChangeTracker.with(context, changes => {
-            declaration = doChange(changes, sourceFile, token, errorCode, program, cancellationToken, /*markSeen*/ returnTrue, host, preferences);
+            declaration = doChange(
+                changes,
+                sourceFile,
+                token,
+                errorCode,
+                program,
+                cancellationToken,
+                /*markSeen*/ returnTrue,
+                host,
+                preferences,
+            );
         });
         const name = declaration && getNameOfDeclaration(declaration);
         return !name || changes.length === 0 ? undefined
@@ -182,7 +192,17 @@ registerCodeFix({
         const { sourceFile, program, cancellationToken, host, preferences } = context;
         const markSeen = nodeSeenTracker();
         return codeFixAll(context, errorCodes, (changes, err) => {
-            doChange(changes, sourceFile, getTokenAtPosition(err.file, err.start), err.code, program, cancellationToken, markSeen, host, preferences);
+            doChange(
+                changes,
+                sourceFile,
+                getTokenAtPosition(err.file, err.start),
+                err.code,
+                program,
+                cancellationToken,
+                markSeen,
+                host,
+                preferences,
+            );
         });
     },
 });
@@ -399,14 +419,19 @@ function annotateParameters(
         annotateJSDocParameters(changes, sourceFile, parameterInferences, program, host);
     }
     else {
-        const needParens = isArrowFunction(containingFunction) && !findChildOfKind(containingFunction, SyntaxKind.OpenParenToken, sourceFile);
-        if (needParens) changes.insertNodeBefore(sourceFile, first(containingFunction.parameters), factory.createToken(SyntaxKind.OpenParenToken));
+        const needParens = isArrowFunction(containingFunction) &&
+            !findChildOfKind(containingFunction, SyntaxKind.OpenParenToken, sourceFile);
+        if (needParens) {
+            changes.insertNodeBefore(sourceFile, first(containingFunction.parameters), factory.createToken(SyntaxKind.OpenParenToken));
+        }
         for (const { declaration, type } of parameterInferences) {
             if (declaration && !declaration.type && !declaration.initializer) {
                 annotate(changes, importAdder, sourceFile, declaration, type, program, host);
             }
         }
-        if (needParens) changes.insertNodeAfter(sourceFile, last(containingFunction.parameters), factory.createToken(SyntaxKind.CloseParenToken));
+        if (needParens) {
+            changes.insertNodeAfter(sourceFile, last(containingFunction.parameters), factory.createToken(SyntaxKind.CloseParenToken));
+        }
     }
 }
 
@@ -436,7 +461,12 @@ function annotateThis(
     }
 }
 
-function annotateJSDocThis(changes: textChanges.ChangeTracker, sourceFile: SourceFile, containingFunction: SignatureDeclaration, typeNode: TypeNode) {
+function annotateJSDocThis(
+    changes: textChanges.ChangeTracker,
+    sourceFile: SourceFile,
+    containingFunction: SignatureDeclaration,
+    typeNode: TypeNode,
+) {
     changes.addJSDocTags(sourceFile, containingFunction, [
         factory.createJSDocThisTag(/*tagName*/ undefined, factory.createJSDocTypeExpression(typeNode)),
     ]);
@@ -594,17 +624,27 @@ function getReferences(
     );
 }
 
-function inferTypeForVariableFromUsage(token: Identifier | PrivateIdentifier, program: Program, cancellationToken: CancellationToken): Type {
+function inferTypeForVariableFromUsage(
+    token: Identifier | PrivateIdentifier,
+    program: Program,
+    cancellationToken: CancellationToken,
+): Type {
     const references = getReferences(token, program, cancellationToken);
     return inferTypeFromReferences(program, references, cancellationToken).single();
 }
 
-function inferTypeForParametersFromUsage(func: SignatureDeclaration, sourceFile: SourceFile, program: Program, cancellationToken: CancellationToken) {
+function inferTypeForParametersFromUsage(
+    func: SignatureDeclaration,
+    sourceFile: SourceFile,
+    program: Program,
+    cancellationToken: CancellationToken,
+) {
     const references = getFunctionReferences(func, sourceFile, program, cancellationToken);
     return references && inferTypeFromReferences(program, references, cancellationToken).parameters(func) ||
         func.parameters.map<ParameterInference>(p => ({
             declaration: p,
-            type: isIdentifier(p.name) ? inferTypeForVariableFromUsage(p.name, program, cancellationToken) : program.getTypeChecker().getAnyType(),
+            type: isIdentifier(p.name) ? inferTypeForVariableFromUsage(p.name, program, cancellationToken)
+                : program.getTypeChecker().getAnyType(),
         }));
 }
 
@@ -617,7 +657,11 @@ function getFunctionReferences(
     let searchToken;
     switch (containingFunction.kind) {
         case SyntaxKind.Constructor:
-            searchToken = findChildOfKind<Token<SyntaxKind.ConstructorKeyword>>(containingFunction, SyntaxKind.ConstructorKeyword, sourceFile);
+            searchToken = findChildOfKind<Token<SyntaxKind.ConstructorKeyword>>(
+                containingFunction,
+                SyntaxKind.ConstructorKeyword,
+                sourceFile,
+            );
             break;
         case SyntaxKind.ArrowFunction:
         case SyntaxKind.FunctionExpression:
@@ -1106,7 +1150,8 @@ function inferTypeFromReferences(program: Program, references: readonly Identifi
                 low: t => !!(t.flags & (TypeFlags.Any | TypeFlags.Void)),
             },
             {
-                high: t => !(t.flags & (TypeFlags.Nullable | TypeFlags.Any | TypeFlags.Void)) && !(getObjectFlags(t) & ObjectFlags.Anonymous),
+                high: t =>
+                    !(t.flags & (TypeFlags.Nullable | TypeFlags.Any | TypeFlags.Void)) && !(getObjectFlags(t) & ObjectFlags.Anonymous),
                 low: t => !!(getObjectFlags(t) & ObjectFlags.Anonymous),
             },
         ];
@@ -1132,7 +1177,10 @@ function inferTypeFromReferences(program: Program, references: readonly Identifi
         const props = createMultiMap<__String, Type>();
         for (const anon of anons) {
             for (const p of checker.getPropertiesOfType(anon)) {
-                props.add(p.escapedName, p.valueDeclaration ? checker.getTypeOfSymbolAtLocation(p, p.valueDeclaration) : checker.getAnyType());
+                props.add(
+                    p.escapedName,
+                    p.valueDeclaration ? checker.getTypeOfSymbolAtLocation(p, p.valueDeclaration) : checker.getAnyType(),
+                );
             }
             calls.push(...checker.getSignaturesOfType(anon, SignatureKind.Call));
             constructs.push(...checker.getSignaturesOfType(anon, SignatureKind.Construct));
@@ -1309,14 +1357,16 @@ function inferTypeFromReferences(program: Program, references: readonly Identifi
             if (!usageParam) {
                 break;
             }
-            let genericParamType = genericParam.valueDeclaration ? checker.getTypeOfSymbolAtLocation(genericParam, genericParam.valueDeclaration)
+            let genericParamType = genericParam.valueDeclaration ?
+                checker.getTypeOfSymbolAtLocation(genericParam, genericParam.valueDeclaration)
                 : checker.getAnyType();
             const elementType = isRest && checker.getElementTypeOfArrayType(genericParamType);
             if (elementType) {
                 genericParamType = elementType;
             }
             const targetType = tryCast(usageParam, isTransientSymbol)?.links.type
-                || (usageParam.valueDeclaration ? checker.getTypeOfSymbolAtLocation(usageParam, usageParam.valueDeclaration) : checker.getAnyType());
+                || (usageParam.valueDeclaration ? checker.getTypeOfSymbolAtLocation(usageParam, usageParam.valueDeclaration)
+                    : checker.getAnyType());
             types.push(...inferTypeParameters(genericParamType, targetType, typeParameter));
         }
         const genericReturn = checker.getReturnTypeOfSignature(genericSig);
@@ -1326,7 +1376,13 @@ function inferTypeFromReferences(program: Program, references: readonly Identifi
     }
 
     function getFunctionFromCalls(calls: CallUsage[]) {
-        return checker.createAnonymousType(/*symbol*/ undefined, createSymbolTable(), [getSignatureFromCalls(calls)], emptyArray, emptyArray);
+        return checker.createAnonymousType(
+            /*symbol*/ undefined,
+            createSymbolTable(),
+            [getSignatureFromCalls(calls)],
+            emptyArray,
+            emptyArray,
+        );
     }
 
     function getSignatureFromCalls(calls: CallUsage[]): Signature {

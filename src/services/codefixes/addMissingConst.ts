@@ -33,7 +33,10 @@ const errorCodes = [
 registerCodeFix({
     errorCodes,
     getCodeActions: function getCodeActionsToAddMissingConst(context) {
-        const changes = textChanges.ChangeTracker.with(context, t => makeChange(t, context.sourceFile, context.span.start, context.program));
+        const changes = textChanges.ChangeTracker.with(
+            context,
+            t => makeChange(t, context.sourceFile, context.span.start, context.program),
+        );
         if (changes.length > 0) {
             return [
                 createCodeFixAction(
@@ -53,7 +56,13 @@ registerCodeFix({
     },
 });
 
-function makeChange(changeTracker: textChanges.ChangeTracker, sourceFile: SourceFile, pos: number, program: Program, fixedNodes?: Set<Node>) {
+function makeChange(
+    changeTracker: textChanges.ChangeTracker,
+    sourceFile: SourceFile,
+    pos: number,
+    program: Program,
+    fixedNodes?: Set<Node>,
+) {
     const token = getTokenAtPosition(sourceFile, pos);
     const forInitializer = findAncestor(token, node =>
         isForInOrOfStatement(node.parent) ? node.parent.initializer === node :

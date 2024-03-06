@@ -720,7 +720,8 @@ function startNodeSession(options: StartSessionOptions, logger: Logger, cancella
 
     const eventPort: number | undefined = parseEventPort(findArgument("--eventPort"));
     const typingSafeListLocation = findArgument(Arguments.TypingSafeListLocation)!; // TODO: GH#18217
-    const typesMapLocation = findArgument(Arguments.TypesMapLocation) || combinePaths(getDirectoryPath(sys.getExecutingFilePath()), "typesMap.json");
+    const typesMapLocation = findArgument(Arguments.TypesMapLocation) ||
+        combinePaths(getDirectoryPath(sys.getExecutingFilePath()), "typesMap.json");
     const npmLocation = findArgument(Arguments.NpmLocation);
     const validateDefaultNpmLocation = hasArgument(Arguments.ValidateDefaultNpmLocation);
     const disableAutomaticTypingAcquisition = hasArgument("--disableAutomaticTypingAcquisition");

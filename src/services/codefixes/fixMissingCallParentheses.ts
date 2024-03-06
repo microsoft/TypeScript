@@ -29,7 +29,15 @@ registerCodeFix({
         if (!callName) return;
 
         const changes = textChanges.ChangeTracker.with(context, t => doChange(t, context.sourceFile, callName));
-        return [createCodeFixAction(fixId, changes, Diagnostics.Add_missing_call_parentheses, fixId, Diagnostics.Add_all_missing_call_parentheses)];
+        return [
+            createCodeFixAction(
+                fixId,
+                changes,
+                Diagnostics.Add_missing_call_parentheses,
+                fixId,
+                Diagnostics.Add_all_missing_call_parentheses,
+            ),
+        ];
     },
     getAllCodeActions: context =>
         codeFixAll(context, errorCodes, (changes, diag) => {

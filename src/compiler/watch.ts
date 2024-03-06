@@ -250,7 +250,10 @@ export function getFilesInErrorForSummary(diagnostics: readonly Diagnostic[]): (
             return undefined;
         }
 
-        const diagnosticForFileName = find(diagnostics, diagnostic => diagnostic.file !== undefined && diagnostic.file.fileName === fileName);
+        const diagnosticForFileName = find(
+            diagnostics,
+            diagnostic => diagnostic.file !== undefined && diagnostic.file.fileName === fileName,
+        );
 
         if (diagnosticForFileName !== undefined) {
             const { line } = getLineAndCharacterOfPosition(diagnosticForFileName.file!, diagnosticForFileName.start!);
@@ -294,7 +297,8 @@ export function getErrorSummaryText(
 
     let messageAndArgs: DiagnosticAndArguments;
     if (errorCount === 1) {
-        messageAndArgs = filesInError[0] !== undefined ? [Diagnostics.Found_1_error_in_0, firstFileReference!] : [Diagnostics.Found_1_error];
+        messageAndArgs = filesInError[0] !== undefined ? [Diagnostics.Found_1_error_in_0, firstFileReference!]
+            : [Diagnostics.Found_1_error];
     }
     else {
         messageAndArgs = distinctFileNamesWithLines.length === 0 ? [Diagnostics.Found_0_errors, errorCount] :
@@ -360,10 +364,13 @@ export function listFiles<T extends BuilderProgram>(program: Program | T, write:
 /** @internal */
 export function explainFiles(program: Program, write: (s: string) => void) {
     const reasons = program.getFileIncludeReasons();
-    const relativeFileName = (fileName: string) => convertToRelativePath(fileName, program.getCurrentDirectory(), program.getCanonicalFileName);
+    const relativeFileName = (fileName: string) =>
+        convertToRelativePath(fileName, program.getCurrentDirectory(), program.getCanonicalFileName);
     for (const file of program.getSourceFiles()) {
         write(`${toFileName(file, relativeFileName)}`);
-        reasons.get(file.path)?.forEach(reason => write(`  ${fileIncludeReasonToDiagnostics(program, reason, relativeFileName).messageText}`));
+        reasons.get(file.path)?.forEach(reason =>
+            write(`  ${fileIncludeReasonToDiagnostics(program, reason, relativeFileName).messageText}`)
+        );
         explainIfFileIsRedirectAndImpliedFormat(file, relativeFileName)?.forEach(d => write(`  ${d.messageText}`));
     }
 }
@@ -465,7 +472,10 @@ export function fileIncludeReasonToDiagnostics(
             referenceLocation.file.text.substring(referenceLocation.pos, referenceLocation.end)
             : `"${referenceLocation.text}"`;
         let message: DiagnosticMessage;
-        Debug.assert(isReferenceFileLocation(referenceLocation) || reason.kind === FileIncludeKind.Import, "Only synthetic references are imports");
+        Debug.assert(
+            isReferenceFileLocation(referenceLocation) || reason.kind === FileIncludeKind.Import,
+            "Only synthetic references are imports",
+        );
         switch (reason.kind) {
             case FileIncludeKind.Import:
                 if (isReferenceFileLocation(referenceLocation)) {
@@ -557,16 +567,27 @@ export function fileIncludeReasonToDiagnostics(
                     ] :
                     [Diagnostics.Entry_point_of_type_library_0_specified_in_compilerOptions, reason.typeReference] :
                 reason.packageId ?
-                [Diagnostics.Entry_point_for_implicit_type_library_0_with_packageId_1, reason.typeReference, packageIdToString(reason.packageId)] :
+                [
+                    Diagnostics.Entry_point_for_implicit_type_library_0_with_packageId_1,
+                    reason.typeReference,
+                    packageIdToString(reason.packageId),
+                ] :
                 [Diagnostics.Entry_point_for_implicit_type_library_0, reason.typeReference];
 
             return chainDiagnosticMessages(/*details*/ undefined, ...messageAndArgs);
         }
         case FileIncludeKind.LibFile: {
             if (reason.index !== undefined) {
-                return chainDiagnosticMessages(/*details*/ undefined, Diagnostics.Library_0_specified_in_compilerOptions, options.lib![reason.index]);
+                return chainDiagnosticMessages(
+                    /*details*/ undefined,
+                    Diagnostics.Library_0_specified_in_compilerOptions,
+                    options.lib![reason.index],
+                );
             }
-            const target = forEachEntry(targetOptionDeclaration.type, (value, key) => value === getEmitScriptTarget(options) ? key : undefined);
+            const target = forEachEntry(
+                targetOptionDeclaration.type,
+                (value, key) => value === getEmitScriptTarget(options) ? key : undefined,
+            );
             const messageAndArgs: DiagnosticAndArguments = target ? [Diagnostics.Default_library_for_target_0, target]
                 : [Diagnostics.Default_library];
             return chainDiagnosticMessages(/*details*/ undefined, ...messageAndArgs);

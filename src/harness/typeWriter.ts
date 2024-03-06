@@ -112,7 +112,8 @@ export class TypeWriterWalker {
 
             // Workaround to ensure we output 'C' instead of 'typeof C' for base class expressions
             // let type = this.checker.getTypeAtLocation(node);
-            let type = ts.isExpressionWithTypeArgumentsInClassExtendsClause(node.parent) ? this.checker.getTypeAtLocation(node.parent) : undefined;
+            let type = ts.isExpressionWithTypeArgumentsInClassExtendsClause(node.parent) ? this.checker.getTypeAtLocation(node.parent)
+                : undefined;
             if (!type || type.flags & ts.TypeFlags.Any) type = this.checker.getTypeAtLocation(node);
             // Distinguish `errorType`s from `any`s; but only if the file has no errors.
             // Additionally,
@@ -145,7 +146,10 @@ export class TypeWriterWalker {
                 const typeFormatFlags = ts.TypeFormatFlags.NoTruncation | ts.TypeFormatFlags.AllowUniqueESSymbolType |
                     ts.TypeFormatFlags.GenerateNamesForShadowedTypeParams;
                 typeString = this.checker.typeToString(type, node.parent, typeFormatFlags);
-                if (ts.isIdentifier(node) && ts.isTypeAliasDeclaration(node.parent) && node.parent.name === node && typeString === ts.idText(node)) {
+                if (
+                    ts.isIdentifier(node) && ts.isTypeAliasDeclaration(node.parent) && node.parent.name === node &&
+                    typeString === ts.idText(node)
+                ) {
                     // for a complex type alias `type T = ...`, showing "T : T" isn't very helpful for type tests. When the type produced is the same as
                     // the name of the type alias, recreate the type string without reusing the alias name
                     typeString = this.checker.typeToString(type, node.parent, typeFormatFlags | ts.TypeFormatFlags.InTypeAlias);

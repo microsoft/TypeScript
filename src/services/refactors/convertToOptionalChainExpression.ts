@@ -86,7 +86,10 @@ function getRefactorActionsToConvertToOptionalChain(context: RefactorContext): r
 function getRefactorEditsToConvertToOptionalChain(context: RefactorContext, actionName: string): RefactorEditInfo | undefined {
     const info = getInfo(context);
     Debug.assert(info && !isRefactorErrorInfo(info), "Expected applicable refactor info");
-    const edits = textChanges.ChangeTracker.with(context, t => doChange(context.file, context.program.getTypeChecker(), t, info, actionName));
+    const edits = textChanges.ChangeTracker.with(
+        context,
+        t => doChange(context.file, context.program.getTypeChecker(), t, info, actionName),
+    );
     return { edits, renameFilename: undefined, renameLocation: undefined };
 }
 
@@ -203,7 +206,10 @@ function getOccurrencesInExpression(matchTo: Expression, expression: Expression)
 /**
  * Returns subchain if chain begins with subchain syntactically.
  */
-function getMatchingStart(chain: Expression, subchain: Expression): PropertyAccessExpression | ElementAccessExpression | Identifier | undefined {
+function getMatchingStart(
+    chain: Expression,
+    subchain: Expression,
+): PropertyAccessExpression | ElementAccessExpression | Identifier | undefined {
     if (!isIdentifier(subchain) && !isPropertyAccessExpression(subchain) && !isElementAccessExpression(subchain)) {
         return undefined;
     }
@@ -317,7 +323,12 @@ function convertOccurrences(checker: TypeChecker, toConvert: Expression, occurre
         if (isOccurrence) occurrences.pop();
         if (isCallExpression(toConvert)) {
             return isOccurrence ?
-                factory.createCallChain(chain, factory.createToken(SyntaxKind.QuestionDotToken), toConvert.typeArguments, toConvert.arguments) :
+                factory.createCallChain(
+                    chain,
+                    factory.createToken(SyntaxKind.QuestionDotToken),
+                    toConvert.typeArguments,
+                    toConvert.arguments,
+                ) :
                 factory.createCallChain(chain, toConvert.questionDotToken, toConvert.typeArguments, toConvert.arguments);
         }
         else if (isPropertyAccessExpression(toConvert)) {

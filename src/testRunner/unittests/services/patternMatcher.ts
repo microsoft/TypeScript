@@ -179,7 +179,10 @@ describe("unittests:: services:: PatternMatcher", () => {
         });
 
         it("AllLowerPattern1", () => {
-            assertSegmentMatch("FogBarChangedEventArgs", "changedeventargs", { kind: ts.PatternMatchKind.substring, isCaseSensitive: false });
+            assertSegmentMatch("FogBarChangedEventArgs", "changedeventargs", {
+                kind: ts.PatternMatchKind.substring,
+                isCaseSensitive: false,
+            });
         });
 
         it("AllLowerPattern2", () => {

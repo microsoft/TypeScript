@@ -58,7 +58,9 @@ registerCodeFix({
         if (typeNode.kind === SyntaxKind.JSDocNullableType) {
             // for nullable types, suggest the flow-compatible `T | null | undefined`
             // in addition to the jsdoc/closure-compatible `T | null`
-            actions.push(fix(type, fixIdNullable, Diagnostics.Change_all_jsdoc_style_types_to_TypeScript_and_add_undefined_to_nullable_types));
+            actions.push(
+                fix(type, fixIdNullable, Diagnostics.Change_all_jsdoc_style_types_to_TypeScript_and_add_undefined_to_nullable_types),
+            );
         }
         return actions;
 
@@ -89,11 +91,25 @@ registerCodeFix({
     },
 });
 
-function doChange(changes: textChanges.ChangeTracker, sourceFile: SourceFile, oldTypeNode: TypeNode, newType: Type, checker: TypeChecker): void {
-    changes.replaceNode(sourceFile, oldTypeNode, checker.typeToTypeNode(newType, /*enclosingDeclaration*/ oldTypeNode, /*flags*/ undefined)!); // TODO: GH#18217
+function doChange(
+    changes: textChanges.ChangeTracker,
+    sourceFile: SourceFile,
+    oldTypeNode: TypeNode,
+    newType: Type,
+    checker: TypeChecker,
+): void {
+    changes.replaceNode(
+        sourceFile,
+        oldTypeNode,
+        checker.typeToTypeNode(newType, /*enclosingDeclaration*/ oldTypeNode, /*flags*/ undefined)!,
+    ); // TODO: GH#18217
 }
 
-function getInfo(sourceFile: SourceFile, pos: number, checker: TypeChecker): { readonly typeNode: TypeNode; readonly type: Type; } | undefined {
+function getInfo(
+    sourceFile: SourceFile,
+    pos: number,
+    checker: TypeChecker,
+): { readonly typeNode: TypeNode; readonly type: Type; } | undefined {
     const decl = findAncestor(getTokenAtPosition(sourceFile, pos), isTypeContainer);
     const typeNode = decl && decl.type;
     return typeNode && { typeNode, type: getType(checker, typeNode) };

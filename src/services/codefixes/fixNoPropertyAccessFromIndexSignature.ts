@@ -48,7 +48,12 @@ registerCodeFix({
         ),
 });
 
-function doChange(changes: textChanges.ChangeTracker, sourceFile: SourceFile, node: PropertyAccessExpression, preferences: UserPreferences): void {
+function doChange(
+    changes: textChanges.ChangeTracker,
+    sourceFile: SourceFile,
+    node: PropertyAccessExpression,
+    preferences: UserPreferences,
+): void {
     const quotePreference = getQuotePreference(sourceFile, preferences);
     const argumentsExpression = factory.createStringLiteral(node.name.text, quotePreference === QuotePreference.Single);
     changes.replaceNode(

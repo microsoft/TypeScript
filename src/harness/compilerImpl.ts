@@ -16,7 +16,11 @@ export interface Project {
     errors?: ts.Diagnostic[];
 }
 
-export function readProject(host: fakes.ParseConfigHost, project: string | undefined, existingOptions?: ts.CompilerOptions): Project | undefined {
+export function readProject(
+    host: fakes.ParseConfigHost,
+    project: string | undefined,
+    existingOptions?: ts.CompilerOptions,
+): Project | undefined {
     if (project) {
         project = vpath.isTsConfigFile(project) ? project : vpath.combine(project, "tsconfig.json");
     }
@@ -80,9 +84,18 @@ export class CompilationResult {
         this.options = program ? program.getCompilerOptions() : options;
 
         // collect outputs
-        const js = this.js = new collections.SortedMap<string, documents.TextDocument>({ comparer: this.vfs.stringComparer, sort: "insertion" });
-        const dts = this.dts = new collections.SortedMap<string, documents.TextDocument>({ comparer: this.vfs.stringComparer, sort: "insertion" });
-        const maps = this.maps = new collections.SortedMap<string, documents.TextDocument>({ comparer: this.vfs.stringComparer, sort: "insertion" });
+        const js = this.js = new collections.SortedMap<string, documents.TextDocument>({
+            comparer: this.vfs.stringComparer,
+            sort: "insertion",
+        });
+        const dts = this.dts = new collections.SortedMap<string, documents.TextDocument>({
+            comparer: this.vfs.stringComparer,
+            sort: "insertion",
+        });
+        const maps = this.maps = new collections.SortedMap<string, documents.TextDocument>({
+            comparer: this.vfs.stringComparer,
+            sort: "insertion",
+        });
         for (const document of this.host.outputs) {
             if (vpath.isJavaScript(document.file) || ts.fileExtensionIs(document.file, ts.Extension.Json)) {
                 js.set(document.file, document);
@@ -96,7 +109,10 @@ export class CompilationResult {
         }
 
         // correlate inputs and outputs
-        this._inputsAndOutputs = new collections.SortedMap<string, CompilationOutput>({ comparer: this.vfs.stringComparer, sort: "insertion" });
+        this._inputsAndOutputs = new collections.SortedMap<string, CompilationOutput>({
+            comparer: this.vfs.stringComparer,
+            sort: "insertion",
+        });
         if (program) {
             if (this.options.outFile) {
                 const outFile = vpath.resolve(this.vfs.cwd(), this.options.outFile);
@@ -136,7 +152,9 @@ export class CompilationResult {
                             const outputs: CompilationOutput = {
                                 inputs: [input],
                                 js: js.get(this.getOutputPath(sourceFile.fileName, extname)),
-                                dts: dts.get(this.getOutputPath(sourceFile.fileName, ts.getDeclarationEmitExtensionForPath(sourceFile.fileName))),
+                                dts: dts.get(
+                                    this.getOutputPath(sourceFile.fileName, ts.getDeclarationEmitExtensionForPath(sourceFile.fileName)),
+                                ),
                                 map: maps.get(this.getOutputPath(sourceFile.fileName, extname + ".map")),
                             };
 

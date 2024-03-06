@@ -1163,7 +1163,11 @@ describe("unittests:: tsserver:: typingsInstaller:: General functionality", () =
         proj.updateGraph();
         const version2 = proj.lastCachedUnresolvedImportsList;
         assert.strictEqual(version1, version2, "set of unresolved imports should change");
-        baselineTsserverLogs("typingsInstaller", "cached unresolved typings are not recomputed if program structure did not change", session);
+        baselineTsserverLogs(
+            "typingsInstaller",
+            "cached unresolved typings are not recomputed if program structure did not change",
+            session,
+        );
     });
 
     it("multiple projects", () => {
@@ -1370,8 +1374,16 @@ describe("unittests:: tsserver:: typingsInstaller:: Validate package name:", () 
         assert.equal(validatePackageName("@scope/bar"), NameValidationResult.Ok);
     });
     it("scoped name in scoped package name cannot start with dot", () => {
-        assert.deepEqual(validatePackageName("@.scope/bar"), { name: ".scope", isScopeName: true, result: NameValidationResult.NameStartsWithDot });
-        assert.deepEqual(validatePackageName("@.scope/.bar"), { name: ".scope", isScopeName: true, result: NameValidationResult.NameStartsWithDot });
+        assert.deepEqual(validatePackageName("@.scope/bar"), {
+            name: ".scope",
+            isScopeName: true,
+            result: NameValidationResult.NameStartsWithDot,
+        });
+        assert.deepEqual(validatePackageName("@.scope/.bar"), {
+            name: ".scope",
+            isScopeName: true,
+            result: NameValidationResult.NameStartsWithDot,
+        });
     });
     it("scope name in scoped package name cannot start with underscore", () => {
         assert.deepEqual(validatePackageName("@_scope/bar"), {
@@ -1403,7 +1415,11 @@ describe("unittests:: tsserver:: typingsInstaller:: Validate package name:", () 
         });
     });
     it("package name in scoped package name cannot start with dot", () => {
-        assert.deepEqual(validatePackageName("@scope/.bar"), { name: ".bar", isScopeName: false, result: NameValidationResult.NameStartsWithDot });
+        assert.deepEqual(validatePackageName("@scope/.bar"), {
+            name: ".bar",
+            isScopeName: false,
+            result: NameValidationResult.NameStartsWithDot,
+        });
     });
     it("package name in scoped package name cannot start with underscore", () => {
         assert.deepEqual(validatePackageName("@scope/_bar"), {
@@ -1516,7 +1532,9 @@ describe("unittests:: tsserver:: typingsInstaller:: discover typings", () => {
             content: "",
         };
         const { discoverTypings, baseline } = setup([f, node]);
-        const cache = new Map(Object.entries<ts.JsTyping.CachedTyping>({ node: { typingLocation: node.path, version: new ts.Version("1.3.0") } }));
+        const cache = new Map(
+            Object.entries<ts.JsTyping.CachedTyping>({ node: { typingLocation: node.path, version: new ts.Version("1.3.0") } }),
+        );
         const registry = createTypesRegistry("node");
         discoverTypings(
             [f.path],
@@ -1541,7 +1559,9 @@ describe("unittests:: tsserver:: typingsInstaller:: discover typings", () => {
             content: "",
         };
         const { discoverTypings, baseline } = setup([f, node]);
-        const cache = new Map(Object.entries<ts.JsTyping.CachedTyping>({ node: { typingLocation: node.path, version: new ts.Version("1.3.0") } }));
+        const cache = new Map(
+            Object.entries<ts.JsTyping.CachedTyping>({ node: { typingLocation: node.path, version: new ts.Version("1.3.0") } }),
+        );
         discoverTypings(
             [f.path],
             ts.getDirectoryPath(f.path as ts.Path),

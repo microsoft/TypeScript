@@ -38,7 +38,9 @@ describe("unittests:: Reuse program structure:: General", () => {
                 baselines.push(`${cacheType}:`);
             }
             baselines.push(
-                `${key}: ${mode ? ts.getNameOfCompilerOptionValue(mode, ts.moduleOptionDeclaration.type) + ": " : ""}${jsonToReadableText(resolved)}`,
+                `${key}: ${mode ? ts.getNameOfCompilerOptionValue(mode, ts.moduleOptionDeclaration.type) + ": " : ""}${
+                    jsonToReadableText(resolved)
+                }`,
             );
         }
     }
@@ -205,7 +207,12 @@ describe("unittests:: Reuse program structure:: General", () => {
         const program1 = newProgram(getFiles(), ["a.ts"], { target, module: ts.ModuleKind.CommonJS, configFilePath: "/a/b/tsconfig.json" });
         const baselines: string[] = [];
         baselineProgram(baselines, program1);
-        const program2 = updateProgram(program1, ["a.ts"], { target, module: ts.ModuleKind.CommonJS, configFilePath: "/a/c/tsconfig.json" }, ts.noop);
+        const program2 = updateProgram(
+            program1,
+            ["a.ts"],
+            { target, module: ts.ModuleKind.CommonJS, configFilePath: "/a/c/tsconfig.json" },
+            ts.noop,
+        );
         baselineProgram(baselines, program2);
         runBaseline("config path changes", baselines);
     });
@@ -424,7 +431,9 @@ describe("unittests:: Reuse program structure:: General", () => {
         baselineProgram(baselines, program1);
         const indexOfF1 = 6;
         const program2 = updateProgram(program1, program1.getRootFileNames(), options, f => {
-            const newSourceText = f[indexOfF1].text.updateReferences(`/// <reference path="a1.ts"/>${newLine}/// <reference types="typerefs1"/>`);
+            const newSourceText = f[indexOfF1].text.updateReferences(
+                `/// <reference path="a1.ts"/>${newLine}/// <reference types="typerefs1"/>`,
+            );
             f[indexOfF1] = { name: "f1.ts", text: newSourceText };
         });
         baselineProgram(baselines, program2);
@@ -469,7 +478,10 @@ describe("unittests:: Reuse program structure:: General", () => {
         const root = "/a.ts";
         const compilerOptions = { target, moduleResolution: ts.ModuleResolutionKind.Node10 };
 
-        function createRedirectProgram(useGetSourceFileByPath: boolean, options?: { bText: string; bVersion: string; }): ProgramWithSourceTexts {
+        function createRedirectProgram(
+            useGetSourceFileByPath: boolean,
+            options?: { bText: string; bVersion: string; },
+        ): ProgramWithSourceTexts {
             const files: NamedSourceText[] = [
                 {
                     name: "/node_modules/a/index.d.ts",

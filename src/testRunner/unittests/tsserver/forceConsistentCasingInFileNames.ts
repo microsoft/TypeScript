@@ -57,7 +57,11 @@ describe("unittests:: tsserver:: forceConsistentCasingInFileNames", () => {
                 projectFileName: tsconfig.path,
             },
         });
-        baselineTsserverLogs("forceConsistentCasingInFileNames", "works when extends is specified with a case insensitive file system", session);
+        baselineTsserverLogs(
+            "forceConsistentCasingInFileNames",
+            "works when extends is specified with a case insensitive file system",
+            session,
+        );
     });
 
     it("works when renaming file with different casing", () => {
@@ -84,7 +88,10 @@ describe("unittests:: tsserver:: forceConsistentCasingInFileNames", () => {
         const newLoggerPath = loggerFile.path.toLowerCase();
         host.renameFile(loggerFile.path, newLoggerPath);
         closeFilesForSession([loggerFile], session);
-        openFilesForSession([{ file: newLoggerPath, content: loggerFile.content, projectRootPath: "/user/username/projects/myproject" }], session);
+        openFilesForSession(
+            [{ file: newLoggerPath, content: loggerFile.content, projectRootPath: "/user/username/projects/myproject" }],
+            session,
+        );
 
         // Apply edits for rename
         openFilesForSession([{ file: anotherFile, projectRootPath: "/user/username/projects/myproject" }], session);

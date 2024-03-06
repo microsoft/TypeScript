@@ -242,7 +242,8 @@ function createBundler(entrypoint, outfile, taskOptions = {}) {
             // For historical reasons, TypeScript does not set __esModule. Hack esbuild's __toCommonJS to be a noop.
             // We reference `__copyProps` to ensure the final bundle doesn't have any unreferenced code.
             const toCommonJsRegExp = /var __toCommonJS .*/;
-            const toCommonJsRegExpReplacement = "var __toCommonJS = (mod) => (__copyProps, mod); // Modified helper to skip setting __esModule.";
+            const toCommonJsRegExpReplacement =
+                "var __toCommonJS = (mod) => (__copyProps, mod); // Modified helper to skip setting __esModule.";
 
             options.plugins = [
                 {
@@ -710,7 +711,10 @@ export const runTestsAndWatch = task({
             if (!token.signaled) {
                 running = true;
                 try {
-                    await runConsoleTests(testRunner, "mocha-fivemat-progress-reporter", /*runInParallel*/ false, { token, watching: true });
+                    await runConsoleTests(testRunner, "mocha-fivemat-progress-reporter", /*runInParallel*/ false, {
+                        token,
+                        watching: true,
+                    });
                 }
                 catch {
                     // ignore

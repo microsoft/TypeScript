@@ -576,7 +576,10 @@ export class FileSystem {
     public renameSync(oldpath: string, newpath: string) {
         if (this.isReadonly) throw createIOError("EROFS");
 
-        const { parent: oldParent, links: oldParentLinks, node, basename: oldBasename } = this._walk(this._resolve(oldpath), /*noFollow*/ true);
+        const { parent: oldParent, links: oldParentLinks, node, basename: oldBasename } = this._walk(
+            this._resolve(oldpath),
+            /*noFollow*/ true,
+        );
         if (!oldParent) throw createIOError("EPERM");
         if (!node) throw createIOError("ENOENT");
 
@@ -745,7 +748,8 @@ export class FileSystem {
                             hasChanges;
                     }
                     if (isFile(changedNode) && isFile(baseNode)) {
-                        return hasChanges = FileSystem.fileDiff(container, basename, changed, changedNode, base, baseNode, options) || hasChanges;
+                        return hasChanges = FileSystem.fileDiff(container, basename, changed, changedNode, base, baseNode, options) ||
+                            hasChanges;
                     }
                     if (isSymlink(changedNode) && isSymlink(baseNode)) {
                         return hasChanges = FileSystem.symlinkDiff(container, basename, changedNode, baseNode) || hasChanges;
@@ -914,7 +918,13 @@ export class FileSystem {
         };
     }
 
-    private _addLink(parent: DirectoryInode | undefined, links: collections.SortedMap<string, Inode>, name: string, node: Inode, time = this.time()) {
+    private _addLink(
+        parent: DirectoryInode | undefined,
+        links: collections.SortedMap<string, Inode>,
+        name: string,
+        node: Inode,
+        time = this.time(),
+    ) {
         links.set(name, node);
         node.nlink++;
         node.ctimeMs = time;
@@ -1071,7 +1081,11 @@ export class FileSystem {
      *
      * @link http://man7.org/linux/man-pages/man7/path_resolution.7.html
      */
-    private _walk(path: string, noFollow?: boolean, onError?: (error: NodeJS.ErrnoException, fragment: WalkResult) => "retry" | "throw"): WalkResult;
+    private _walk(
+        path: string,
+        noFollow?: boolean,
+        onError?: (error: NodeJS.ErrnoException, fragment: WalkResult) => "retry" | "throw",
+    ): WalkResult;
     private _walk(
         path: string,
         noFollow?: boolean,

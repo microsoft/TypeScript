@@ -307,7 +307,10 @@ interface BigInt64Array {
      * the accumulation. The first call to the callbackfn function provides this value as an argument
      * instead of an array value.
      */
-    reduceRight<U>(callbackfn: (previousValue: U, currentValue: bigint, currentIndex: number, array: BigInt64Array) => U, initialValue: U): U;
+    reduceRight<U>(
+        callbackfn: (previousValue: U, currentValue: bigint, currentIndex: number, array: BigInt64Array) => U,
+        initialValue: U,
+    ): U;
 
     /** Reverses the elements in the array. */
     reverse(): this;
@@ -579,7 +582,10 @@ interface BigUint64Array {
      * the accumulation. The first call to the callbackfn function provides this value as an argument
      * instead of an array value.
      */
-    reduceRight<U>(callbackfn: (previousValue: U, currentValue: bigint, currentIndex: number, array: BigUint64Array) => U, initialValue: U): U;
+    reduceRight<U>(
+        callbackfn: (previousValue: U, currentValue: bigint, currentIndex: number, array: BigUint64Array) => U,
+        initialValue: U,
+    ): U;
 
     /** Reverses the elements in the array. */
     reverse(): this;

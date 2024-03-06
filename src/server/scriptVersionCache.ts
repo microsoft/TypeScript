@@ -46,7 +46,13 @@ export interface LineIndexWalker {
     done: boolean;
     leaf(relativeStart: number, relativeLength: number, lineCollection: LineLeaf): void;
     pre?(relativeStart: number, relativeLength: number, lineCollection: LineCollection, parent: LineNode, nodeType: CharRangeSection): void;
-    post?(relativeStart: number, relativeLength: number, lineCollection: LineCollection, parent: LineNode, nodeType: CharRangeSection): void;
+    post?(
+        relativeStart: number,
+        relativeLength: number,
+        lineCollection: LineCollection,
+        parent: LineNode,
+        nodeType: CharRangeSection,
+    ): void;
 }
 
 class EditWalker implements LineIndexWalker {
@@ -164,7 +170,13 @@ class EditWalker implements LineIndexWalker {
         this.stack.pop();
     }
 
-    pre(_relativeStart: number, _relativeLength: number, lineCollection: LineCollection, _parent: LineCollection, nodeType: CharRangeSection): void {
+    pre(
+        _relativeStart: number,
+        _relativeLength: number,
+        lineCollection: LineCollection,
+        _parent: LineCollection,
+        nodeType: CharRangeSection,
+    ): void {
         // currentNode corresponds to parent, but in the new tree
         const currentNode = this.stack[this.stack.length - 1];
 
@@ -627,7 +639,13 @@ export class LineNode implements LineCollection {
         return walkFns.done;
     }
 
-    private skipChild(relativeStart: number, relativeLength: number, childIndex: number, walkFns: LineIndexWalker, nodeType: CharRangeSection) {
+    private skipChild(
+        relativeStart: number,
+        relativeLength: number,
+        childIndex: number,
+        walkFns: LineIndexWalker,
+        nodeType: CharRangeSection,
+    ) {
         if (walkFns.pre && (!walkFns.done)) {
             walkFns.pre(relativeStart, relativeLength, this.children[childIndex], this, nodeType);
             walkFns.goSubtree = true;

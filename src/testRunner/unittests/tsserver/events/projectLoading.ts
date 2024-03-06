@@ -166,7 +166,11 @@ describe("unittests:: tsserver:: events:: ProjectLoadingStart and ProjectLoading
 
                 it("when lazyConfiguredProjectsFromExternalProject is false", () => {
                     const session = createSessionAndOpenProject(/*lazyConfiguredProjectsFromExternalProject*/ false);
-                    baselineTsserverLogs("events/projectLoading", `lazyConfiguredProjectsFromExternalProject is false ${sessionType}`, session);
+                    baselineTsserverLogs(
+                        "events/projectLoading",
+                        `lazyConfiguredProjectsFromExternalProject is false ${sessionType}`,
+                        session,
+                    );
                 });
 
                 it("when lazyConfiguredProjectsFromExternalProject is true and file is opened", () => {
@@ -187,7 +191,11 @@ describe("unittests:: tsserver:: events:: ProjectLoadingStart and ProjectLoading
                             preferences: { lazyConfiguredProjectsFromExternalProject: false },
                         },
                     });
-                    baselineTsserverLogs("events/projectLoading", `lazyConfiguredProjectsFromExternalProject is disabled ${sessionType}`, session);
+                    baselineTsserverLogs(
+                        "events/projectLoading",
+                        `lazyConfiguredProjectsFromExternalProject is disabled ${sessionType}`,
+                        session,
+                    );
                 });
             });
         });

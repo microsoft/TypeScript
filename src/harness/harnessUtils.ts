@@ -186,7 +186,11 @@ export function sourceFileToJSON(file: ts.Node): string {
             o.containsParseError = true;
         }
 
-        for (const propertyName of Object.getOwnPropertyNames(n) as readonly (keyof ts.SourceFile | keyof ts.Identifier | keyof ts.StringLiteral)[]) {
+        for (
+            const propertyName of Object.getOwnPropertyNames(
+                n,
+            ) as readonly (keyof ts.SourceFile | keyof ts.Identifier | keyof ts.StringLiteral)[]
+        ) {
             switch (propertyName) {
                 case "parent":
                 case "symbol":

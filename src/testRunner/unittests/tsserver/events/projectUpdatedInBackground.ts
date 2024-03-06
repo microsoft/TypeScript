@@ -231,7 +231,11 @@ describe("unittests:: tsserver:: events:: ProjectsUpdatedInBackground", () => {
                 // Delete file1Consumer2
                 host.deleteFile(file1Consumer2.path);
                 host.runQueuedTimeoutCallbacks();
-                baselineTsserverLogs("events/projectUpdatedInBackground", `${scenario} and should be up-to-date with deleted files`, session);
+                baselineTsserverLogs(
+                    "events/projectUpdatedInBackground",
+                    `${scenario} and should be up-to-date with deleted files`,
+                    session,
+                );
             });
 
             it("should be up-to-date with newly created files", () => {
@@ -240,7 +244,11 @@ describe("unittests:: tsserver:: events:: ProjectsUpdatedInBackground", () => {
                 host.writeFile(moduleFile1.path, `export var T: number;export function Foo() { };`);
                 host.writeFile("/users/username/projects/project/file1Consumer3.ts", `import {Foo} from "./moduleFile1"; let y = Foo();`);
                 host.runQueuedTimeoutCallbacks();
-                baselineTsserverLogs("events/projectUpdatedInBackground", `${scenario} and should be up-to-date with newly created files`, session);
+                baselineTsserverLogs(
+                    "events/projectUpdatedInBackground",
+                    `${scenario} and should be up-to-date with newly created files`,
+                    session,
+                );
             });
 
             it("should detect changes in non-root files", () => {
@@ -254,7 +262,11 @@ describe("unittests:: tsserver:: events:: ProjectsUpdatedInBackground", () => {
                 // change file1 internal, and verify only file1 is affected
                 host.writeFile(moduleFile1.path, moduleFile1.content + "var T1: number;");
                 host.runQueuedTimeoutCallbacks();
-                baselineTsserverLogs("events/projectUpdatedInBackground", `${scenario} and should detect changes in non-root files`, session);
+                baselineTsserverLogs(
+                    "events/projectUpdatedInBackground",
+                    `${scenario} and should detect changes in non-root files`,
+                    session,
+                );
             });
 
             it("should return all files if a global file changed shape", () => {
@@ -318,7 +330,11 @@ describe("unittests:: tsserver:: events:: ProjectsUpdatedInBackground", () => {
                 updateContentOfOpenFile(file1Consumer1, file1Consumer1.content + "export var T2: number;");
                 host.writeFile(moduleFile1.path, `export var T2: number;export function Foo() { };`);
                 host.runQueuedTimeoutCallbacks();
-                baselineTsserverLogs("events/projectUpdatedInBackground", `${scenario} and should return cascaded affected file list`, session);
+                baselineTsserverLogs(
+                    "events/projectUpdatedInBackground",
+                    `${scenario} and should return cascaded affected file list`,
+                    session,
+                );
             });
 
             it("should work fine for files with circular references", () => {

@@ -70,7 +70,9 @@ export type OverloadFunction<T extends OverloadDefinitions> = UnionToIntersectio
  *
  * @internal
  */
-export type OverloadBinders<T extends OverloadDefinitions> = { [P in OverloadKeys<T>]: (args: OverloadParameters<T>) => boolean | undefined; };
+export type OverloadBinders<T extends OverloadDefinitions> = {
+    [P in OverloadKeys<T>]: (args: OverloadParameters<T>) => boolean | undefined;
+};
 
 /**
  * Defines deprecations for specific overloads by ordinal.

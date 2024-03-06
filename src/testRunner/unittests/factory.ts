@@ -2,7 +2,11 @@ import * as ts from "../_namespaces/ts";
 
 describe("unittests:: FactoryAPI", () => {
     function assertSyntaxKind(node: ts.Node, expected: ts.SyntaxKind) {
-        assert.strictEqual(node.kind, expected, `Actual: ${ts.Debug.formatSyntaxKind(node.kind)} Expected: ${ts.Debug.formatSyntaxKind(expected)}`);
+        assert.strictEqual(
+            node.kind,
+            expected,
+            `Actual: ${ts.Debug.formatSyntaxKind(node.kind)} Expected: ${ts.Debug.formatSyntaxKind(expected)}`,
+        );
     }
     describe("factory.createExportAssignment", () => {
         it("parenthesizes default export if necessary", () => {
@@ -45,13 +49,23 @@ describe("unittests:: FactoryAPI", () => {
             checkExpression(func);
             checkExpression(ts.factory.createCallExpression(func, /*typeArguments*/ undefined, /*argumentsArray*/ undefined));
             checkExpression(
-                ts.factory.createTaggedTemplateExpression(func, /*typeArguments*/ undefined, ts.factory.createNoSubstitutionTemplateLiteral("")),
+                ts.factory.createTaggedTemplateExpression(
+                    func,
+                    /*typeArguments*/ undefined,
+                    ts.factory.createNoSubstitutionTemplateLiteral(""),
+                ),
             );
 
             checkExpression(
-                ts.factory.createBinaryExpression(ts.factory.createStringLiteral("a"), ts.SyntaxKind.CommaToken, ts.factory.createStringLiteral("b")),
+                ts.factory.createBinaryExpression(
+                    ts.factory.createStringLiteral("a"),
+                    ts.SyntaxKind.CommaToken,
+                    ts.factory.createStringLiteral("b"),
+                ),
             );
-            checkExpression(ts.factory.createCommaListExpression([ts.factory.createStringLiteral("a"), ts.factory.createStringLiteral("b")]));
+            checkExpression(
+                ts.factory.createCommaListExpression([ts.factory.createStringLiteral("a"), ts.factory.createStringLiteral("b")]),
+            );
         });
     });
 
@@ -78,11 +92,17 @@ describe("unittests:: FactoryAPI", () => {
                 ),
             );
             checkBody(
-                ts.factory.createNonNullExpression(ts.factory.createPropertyAccessExpression(ts.factory.createObjectLiteralExpression(), "prop")),
+                ts.factory.createNonNullExpression(
+                    ts.factory.createPropertyAccessExpression(ts.factory.createObjectLiteralExpression(), "prop"),
+                ),
             );
             checkBody(ts.factory.createCommaListExpression([ts.factory.createStringLiteral("a"), ts.factory.createStringLiteral("b")]));
             checkBody(
-                ts.factory.createBinaryExpression(ts.factory.createStringLiteral("a"), ts.SyntaxKind.CommaToken, ts.factory.createStringLiteral("b")),
+                ts.factory.createBinaryExpression(
+                    ts.factory.createStringLiteral("a"),
+                    ts.SyntaxKind.CommaToken,
+                    ts.factory.createStringLiteral("b"),
+                ),
             );
         });
     });

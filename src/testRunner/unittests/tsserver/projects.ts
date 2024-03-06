@@ -366,7 +366,9 @@ describe("unittests:: tsserver:: projects::", () => {
                 options: {},
                 rootFiles: toExternalFiles([file1.path, office.path]),
             }, session);
-            session.logger.log(`TypeAcquisition:: ${jsonToReadableText(session.getProjectService().externalProjects[0].getTypeAcquisition())}`);
+            session.logger.log(
+                `TypeAcquisition:: ${jsonToReadableText(session.getProjectService().externalProjects[0].getTypeAcquisition())}`,
+            );
         }
         finally {
             session.getProjectService().resetSafeList();
@@ -396,7 +398,11 @@ describe("unittests:: tsserver:: projects::", () => {
             rootFiles: toExternalFiles([file1.path, constructorFile.path, bliss.path]),
         }, session);
 
-        baselineTsserverLogs("projects", "file with name constructor.js doesnt cause issue with typeAcquisition when safe type list", session);
+        baselineTsserverLogs(
+            "projects",
+            "file with name constructor.js doesnt cause issue with typeAcquisition when safe type list",
+            session,
+        );
     });
 
     it("ignores files excluded by the default type list", () => {
@@ -437,7 +443,9 @@ describe("unittests:: tsserver:: projects::", () => {
                 options: {},
                 rootFiles: toExternalFiles(files.map(f => f.path)),
             }, session);
-            session.logger.log(`TypeAcquisition:: ${jsonToReadableText(session.getProjectService().externalProjects[0].getTypeAcquisition())}`);
+            session.logger.log(
+                `TypeAcquisition:: ${jsonToReadableText(session.getProjectService().externalProjects[0].getTypeAcquisition())}`,
+            );
         }
         finally {
             session.getProjectService().resetSafeList();
@@ -699,7 +707,9 @@ describe("unittests:: tsserver:: projects::", () => {
         const extraFileExtensions = [{ extension: ".html", scriptKind: ts.ScriptKind.JS, isMixedContent: true }];
         verfiy(
             config1,
-            createServerHost([file1, file2, config1, libFile], { executingFilePath: ts.combinePaths(ts.getDirectoryPath(libFile.path), "tsc.js") }),
+            createServerHost([file1, file2, config1, libFile], {
+                executingFilePath: ts.combinePaths(ts.getDirectoryPath(libFile.path), "tsc.js"),
+            }),
         );
 
         //  #2. Ensure no errors when allowJs is false
@@ -709,7 +719,9 @@ describe("unittests:: tsserver:: projects::", () => {
         };
         verfiy(
             config2,
-            createServerHost([file1, file2, config2, libFile], { executingFilePath: ts.combinePaths(ts.getDirectoryPath(libFile.path), "tsc.js") }),
+            createServerHost([file1, file2, config2, libFile], {
+                executingFilePath: ts.combinePaths(ts.getDirectoryPath(libFile.path), "tsc.js"),
+            }),
         );
 
         //  #3. Ensure no errors when compiler options aren't specified
@@ -720,7 +732,9 @@ describe("unittests:: tsserver:: projects::", () => {
 
         verfiy(
             config3,
-            createServerHost([file1, file2, config3, libFile], { executingFilePath: ts.combinePaths(ts.getDirectoryPath(libFile.path), "tsc.js") }),
+            createServerHost([file1, file2, config3, libFile], {
+                executingFilePath: ts.combinePaths(ts.getDirectoryPath(libFile.path), "tsc.js"),
+            }),
         );
 
         //  #4. Ensure no errors when files are explicitly specified in tsconfig
@@ -731,7 +745,9 @@ describe("unittests:: tsserver:: projects::", () => {
 
         verfiy(
             config4,
-            createServerHost([file1, file2, config4, libFile], { executingFilePath: ts.combinePaths(ts.getDirectoryPath(libFile.path), "tsc.js") }),
+            createServerHost([file1, file2, config4, libFile], {
+                executingFilePath: ts.combinePaths(ts.getDirectoryPath(libFile.path), "tsc.js"),
+            }),
         );
 
         //  #4. Ensure no errors when files are explicitly excluded in tsconfig
@@ -742,7 +758,9 @@ describe("unittests:: tsserver:: projects::", () => {
 
         const session = verfiy(
             config5,
-            createServerHost([file1, file2, config5, libFile], { executingFilePath: ts.combinePaths(ts.getDirectoryPath(libFile.path), "tsc.js") }),
+            createServerHost([file1, file2, config5, libFile], {
+                executingFilePath: ts.combinePaths(ts.getDirectoryPath(libFile.path), "tsc.js"),
+            }),
         );
         baselineTsserverLogs("projects", "no tsconfig script block diagnostic errors", session);
 

@@ -127,12 +127,18 @@ describe("unittests:: tsc:: declarationEmit::", () => {
             rootProject: "plugin-one",
             files: [
                 { path: `/user/username/projects/myproject/plugin-two/index.d.ts`, content: pluginTwoDts() },
-                { path: `/user/username/projects/myproject/plugin-two/node_modules/typescript-fsa/package.json`, content: fsaPackageJson() },
+                {
+                    path: `/user/username/projects/myproject/plugin-two/node_modules/typescript-fsa/package.json`,
+                    content: fsaPackageJson(),
+                },
                 { path: `/user/username/projects/myproject/plugin-two/node_modules/typescript-fsa/index.d.ts`, content: fsaIndex() },
                 { path: `/user/username/projects/myproject/plugin-one/tsconfig.json`, content: pluginOneConfig() },
                 { path: `/user/username/projects/myproject/plugin-one/index.ts`, content: pluginOneIndex() },
                 { path: `/user/username/projects/myproject/plugin-one/action.ts`, content: pluginOneAction() },
-                { path: `/user/username/projects/myproject/plugin-one/node_modules/typescript-fsa/package.json`, content: fsaPackageJson() },
+                {
+                    path: `/user/username/projects/myproject/plugin-one/node_modules/typescript-fsa/package.json`,
+                    content: fsaPackageJson(),
+                },
                 { path: `/user/username/projects/myproject/plugin-one/node_modules/typescript-fsa/index.d.ts`, content: fsaIndex() },
                 {
                     path: `/user/username/projects/myproject/plugin-one/node_modules/plugin-two`,
@@ -156,7 +162,10 @@ describe("unittests:: tsc:: declarationEmit::", () => {
                     }),
                 },
                 { path: `/user/username/projects/myproject/plugin-two/dist/commonjs/index.d.ts`, content: pluginTwoDts() },
-                { path: `/user/username/projects/myproject/plugin-two/node_modules/typescript-fsa/package.json`, content: fsaPackageJson() },
+                {
+                    path: `/user/username/projects/myproject/plugin-two/node_modules/typescript-fsa/package.json`,
+                    content: fsaPackageJson(),
+                },
                 { path: `/user/username/projects/myproject/plugin-two/node_modules/typescript-fsa/index.d.ts`, content: fsaIndex() },
                 { path: `/user/username/projects/myproject/plugin-one/tsconfig.json`, content: pluginOneConfig() },
                 {
@@ -164,10 +173,16 @@ describe("unittests:: tsc:: declarationEmit::", () => {
                     content: `${pluginOneIndex()}
 ${pluginOneAction()}`,
                 },
-                { path: `/user/username/projects/myproject/plugin-one/node_modules/typescript-fsa/package.json`, content: fsaPackageJson() },
+                {
+                    path: `/user/username/projects/myproject/plugin-one/node_modules/typescript-fsa/package.json`,
+                    content: fsaPackageJson(),
+                },
                 { path: `/user/username/projects/myproject/plugin-one/node_modules/typescript-fsa/index.d.ts`, content: fsaIndex() },
                 { path: `/temp/yarn/data/link/plugin-two`, symLink: `/user/username/projects/myproject/plugin-two` },
-                { path: `/user/username/projects/myproject/plugin-one/node_modules/plugin-two`, symLink: `/temp/yarn/data/link/plugin-two` },
+                {
+                    path: `/user/username/projects/myproject/plugin-one/node_modules/plugin-two`,
+                    symLink: `/temp/yarn/data/link/plugin-two`,
+                },
                 libFile,
             ],
             changeCaseFileTestPath: str => str.includes("/plugin-two"),

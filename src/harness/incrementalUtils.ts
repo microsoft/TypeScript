@@ -48,7 +48,9 @@ function verifyDocumentRegistryStats(
                 expected?.forEach((value, kind) =>
                     ts.Debug.assert(
                         entry.has(kind),
-                        `Document registry expected language service ref count for ${key} ${path} ${ts.Debug.formatScriptKind(kind)} ${value}`,
+                        `Document registry expected language service ref count for ${key} ${path} ${
+                            ts.Debug.formatScriptKind(kind)
+                        } ${value}`,
                         reportStats,
                     )
                 );
@@ -162,7 +164,9 @@ function getLibResolutionCacheDetails(
             addedCacheType = true;
             baseline.push(`${indent}Libs:`);
         }
-        baseline.push(`${indent}  ${libFileName}: Actual: ${resolved.actual} Resolution: ${getResolvedModuleFileName(resolved.resolution)}`);
+        baseline.push(
+            `${indent}  ${libFileName}: Actual: ${resolved.actual} Resolution: ${getResolvedModuleFileName(resolved.resolution)}`,
+        );
     });
 }
 
@@ -217,10 +221,16 @@ export function verifyResolutionCache(
     projectName: string,
 ) {
     const currentDirectory = resolutionHostCacheHost.getCurrentDirectory!();
-    const expected = ts.createResolutionCache(resolutionHostCacheHost, actual.rootDirForResolution, /*logChangesWhenResolvingModule*/ false);
+    const expected = ts.createResolutionCache(
+        resolutionHostCacheHost,
+        actual.rootDirForResolution,
+        /*logChangesWhenResolvingModule*/ false,
+    );
     expected.startCachingPerDirectoryResolution();
 
-    type ExpectedResolution = ts.CachedResolvedModuleWithFailedLookupLocations & ts.CachedResolvedTypeReferenceDirectiveWithFailedLookupLocations;
+    type ExpectedResolution =
+        & ts.CachedResolvedModuleWithFailedLookupLocations
+        & ts.CachedResolvedTypeReferenceDirectiveWithFailedLookupLocations;
 
     const expectedToResolution = new Map<ExpectedResolution, ts.ResolutionWithFailedLookupLocations>();
     const resolutionToExpected = new Map<ts.ResolutionWithFailedLookupLocations, ExpectedResolution>();
@@ -273,7 +283,9 @@ export function verifyResolutionCache(
         );
         ts.Debug.assert(
             resolutionToExpected.get(resolution)!.refCount === resolution.refCount,
-            `${projectName}:: Expected Resolution ref count ${resolutionToExpected.get(resolution)!.refCount} but got ${resolution.refCount}`,
+            `${projectName}:: Expected Resolution ref count ${
+                resolutionToExpected.get(resolution)!.refCount
+            } but got ${resolution.refCount}`,
         );
         verifySet(resolutionToExpected.get(resolution)!.files, resolution.files, `${projectName}:: Resolution files`);
     });
@@ -303,8 +315,14 @@ export function verifyResolutionCache(
         expected.resolutionsWithOnlyAffectingLocations.size === 0,
         `${projectName}:: resolutionsWithOnlyAffectingLocations should be released`,
     );
-    ts.Debug.assert(expected.directoryWatchesOfFailedLookups.size === 0, `${projectName}:: directoryWatchesOfFailedLookups should be released`);
-    ts.Debug.assert(expected.fileWatchesOfAffectingLocations.size === 0, `${projectName}:: fileWatchesOfAffectingLocations should be released`);
+    ts.Debug.assert(
+        expected.directoryWatchesOfFailedLookups.size === 0,
+        `${projectName}:: directoryWatchesOfFailedLookups should be released`,
+    );
+    ts.Debug.assert(
+        expected.fileWatchesOfAffectingLocations.size === 0,
+        `${projectName}:: fileWatchesOfAffectingLocations should be released`,
+    );
 
     function collectResolutionToRefFromCache<T extends ts.ResolutionWithFailedLookupLocations>(
         cacheType: string,
@@ -321,7 +339,15 @@ export function verifyResolutionCache(
         let expectedCache: ts.ModeAwareCache<ts.ResolutionWithFailedLookupLocations> | undefined;
         cache?.forEach((resolved, name, mode) => {
             const resolvedFileName = getResolvedFileName(resolved);
-            const expected = collectResolution(cacheType, fileName, resolved, resolvedFileName, name, mode, deferWatchingNonRelativeResolution);
+            const expected = collectResolution(
+                cacheType,
+                fileName,
+                resolved,
+                resolvedFileName,
+                name,
+                mode,
+                deferWatchingNonRelativeResolution,
+            );
             if (!expectedCache) storeExpcted.set(fileName, expectedCache = ts.createModeAwareCache());
             expectedCache.set(name, mode, expected);
         });
@@ -457,7 +483,8 @@ function verifyProgram(service: ts.server.ProjectService, project: ts.server.Pro
     compilerHost.getCurrentDirectory = project.getCurrentDirectory.bind(project);
     const getDefaultLibLocation = compilerHost.getDefaultLibLocation!;
     compilerHost.getDefaultLibLocation = () => ts.getNormalizedAbsolutePath(getDefaultLibLocation(), service.host.getCurrentDirectory());
-    compilerHost.getDefaultLibFileName = options => ts.combinePaths(compilerHost.getDefaultLibLocation!(), ts.getDefaultLibFileName(options));
+    compilerHost.getDefaultLibFileName = options =>
+        ts.combinePaths(compilerHost.getDefaultLibLocation!(), ts.getDefaultLibFileName(options));
     compilerHost.trace = ts.noop; // We dont want to update host just because of trace
     const readFile = compilerHost.readFile;
     compilerHost.readFile = fileName => {

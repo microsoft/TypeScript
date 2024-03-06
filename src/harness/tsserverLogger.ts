@@ -59,7 +59,9 @@ function handleLoggerGroup(logger: Logger, host: ts.server.ServerHost, sanitizeL
     logger.hasLevel = ts.returnTrue;
     logger.loggingEnabled = ts.returnTrue;
     logger.host = host;
-    if (host) logger.logs!.push(`currentDirectory:: ${host.getCurrentDirectory()} useCaseSensitiveFileNames: ${host.useCaseSensitiveFileNames}`);
+    if (host) {
+        logger.logs!.push(`currentDirectory:: ${host.getCurrentDirectory()} useCaseSensitiveFileNames: ${host.useCaseSensitiveFileNames}`);
+    }
 
     let inGroup = false;
     let firstInGroup = false;
@@ -118,13 +120,19 @@ export function sanitizeLog(s: string): string {
     s = s.replace(/getCompletionData: Get current token: \d+(?:\.\d+)?/g, `getCompletionData: Get current token: *`);
     s = s.replace(/getCompletionData: Is inside comment: \d+(?:\.\d+)?/g, `getCompletionData: Is inside comment: *`);
     s = s.replace(/getCompletionData: Get previous token: \d+(?:\.\d+)?/g, `getCompletionData: Get previous token: *`);
-    s = s.replace(/getCompletionsAtPosition: isCompletionListBlocker: \d+(?:\.\d+)?/g, `getCompletionsAtPosition: isCompletionListBlocker: *`);
+    s = s.replace(
+        /getCompletionsAtPosition: isCompletionListBlocker: \d+(?:\.\d+)?/g,
+        `getCompletionsAtPosition: isCompletionListBlocker: *`,
+    );
     s = s.replace(/getCompletionData: Semantic work: \d+(?:\.\d+)?/g, `getCompletionData: Semantic work: *`);
     s = s.replace(
         /getCompletionsAtPosition: getCompletionEntriesFromSymbols: \d+(?:\.\d+)?/g,
         `getCompletionsAtPosition: getCompletionEntriesFromSymbols: *`,
     );
-    s = s.replace(/forEachExternalModuleToImportFrom autoImportProvider: \d+(?:\.\d+)?/g, `forEachExternalModuleToImportFrom autoImportProvider: *`);
+    s = s.replace(
+        /forEachExternalModuleToImportFrom autoImportProvider: \d+(?:\.\d+)?/g,
+        `forEachExternalModuleToImportFrom autoImportProvider: *`,
+    );
     s = s.replace(/getExportInfoMap: done in \d+(?:\.\d+)?/g, `getExportInfoMap: done in *`);
     s = s.replace(/collectAutoImports: \d+(?:\.\d+)?/g, `collectAutoImports: *`);
     s = s.replace(/continuePreviousIncompleteResponse: \d+(?:\.\d+)?/g, `continuePreviousIncompleteResponse: *`);

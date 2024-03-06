@@ -157,7 +157,11 @@ import { value1 } from "../node_modules/.cache/someFile.d.ts";`,
             command: ts.server.protocol.CommandTypes.GetMoveToRefactoringFileSuggestions,
             arguments: { file: file1.path, line: 1, offset: 7 },
         });
-        baselineTsserverLogs("getMoveToRefactoringFileSuggestions", "should show ts files when moving non-tsx content from tsx file", session);
+        baselineTsserverLogs(
+            "getMoveToRefactoringFileSuggestions",
+            "should show ts files when moving non-tsx content from tsx file",
+            session,
+        );
     });
 
     it("should show js files when moving non-jsx content from jsx file", () => {
@@ -186,6 +190,10 @@ import { value1 } from "../node_modules/.cache/someFile.d.ts";`,
             command: ts.server.protocol.CommandTypes.GetMoveToRefactoringFileSuggestions,
             arguments: { file: file1.path, line: 1, offset: 7 },
         });
-        baselineTsserverLogs("getMoveToRefactoringFileSuggestions", "should show js files when moving non-jsx content from jsx file", session);
+        baselineTsserverLogs(
+            "getMoveToRefactoringFileSuggestions",
+            "should show js files when moving non-jsx content from jsx file",
+            session,
+        );
     });
 });

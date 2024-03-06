@@ -338,7 +338,13 @@ export interface LanguageServiceHost extends GetEffectiveTypeRootsHost, MinimalR
      * LS host can optionally implement these methods to support completions for module specifiers.
      * Without these methods, only completions for ambient modules will be provided.
      */
-    readDirectory?(path: string, extensions?: readonly string[], exclude?: readonly string[], include?: readonly string[], depth?: number): string[];
+    readDirectory?(
+        path: string,
+        extensions?: readonly string[],
+        exclude?: readonly string[],
+        include?: readonly string[],
+        depth?: number,
+    ): string[];
     realpath?(path: string): string;
     /** @internal */ createHash?: ((data: string) => string) | undefined;
 
@@ -529,11 +535,19 @@ export interface LanguageService {
 
     /** @deprecated Use getEncodedSyntacticClassifications instead. */
     getSyntacticClassifications(fileName: string, span: TextSpan): ClassifiedSpan[];
-    getSyntacticClassifications(fileName: string, span: TextSpan, format: SemanticClassificationFormat): ClassifiedSpan[] | ClassifiedSpan2020[];
+    getSyntacticClassifications(
+        fileName: string,
+        span: TextSpan,
+        format: SemanticClassificationFormat,
+    ): ClassifiedSpan[] | ClassifiedSpan2020[];
 
     /** @deprecated Use getEncodedSemanticClassifications instead. */
     getSemanticClassifications(fileName: string, span: TextSpan): ClassifiedSpan[];
-    getSemanticClassifications(fileName: string, span: TextSpan, format: SemanticClassificationFormat): ClassifiedSpan[] | ClassifiedSpan2020[];
+    getSemanticClassifications(
+        fileName: string,
+        span: TextSpan,
+        format: SemanticClassificationFormat,
+    ): ClassifiedSpan[] | ClassifiedSpan2020[];
 
     /** Encoded as triples of [start, length, ClassificationType]. */
     getEncodedSyntacticClassifications(fileName: string, span: TextSpan): Classifications;
@@ -601,7 +615,11 @@ export interface LanguageService {
 
     getBreakpointStatementAtPosition(fileName: string, position: number): TextSpan | undefined;
 
-    getSignatureHelpItems(fileName: string, position: number, options: SignatureHelpItemsOptions | undefined): SignatureHelpItems | undefined;
+    getSignatureHelpItems(
+        fileName: string,
+        position: number,
+        options: SignatureHelpItemsOptions | undefined,
+    ): SignatureHelpItems | undefined;
 
     getRenameInfo(fileName: string, position: number, preferences: UserPreferences): RenameInfo;
     /** @deprecated Use the signature with `UserPreferences` instead. */
@@ -672,7 +690,12 @@ export interface LanguageService {
 
     getFormattingEditsForRange(fileName: string, start: number, end: number, options: FormatCodeOptions | FormatCodeSettings): TextChange[];
     getFormattingEditsForDocument(fileName: string, options: FormatCodeOptions | FormatCodeSettings): TextChange[];
-    getFormattingEditsAfterKeystroke(fileName: string, position: number, key: string, options: FormatCodeOptions | FormatCodeSettings): TextChange[];
+    getFormattingEditsAfterKeystroke(
+        fileName: string,
+        position: number,
+        key: string,
+        options: FormatCodeOptions | FormatCodeSettings,
+    ): TextChange[];
 
     getDocCommentTemplateAtPosition(
         fileName: string,
@@ -705,7 +728,12 @@ export interface LanguageService {
         formatOptions: FormatCodeSettings,
         preferences: UserPreferences,
     ): readonly CodeFixAction[];
-    getCombinedCodeFix(scope: CombinedCodeFixScope, fixId: {}, formatOptions: FormatCodeSettings, preferences: UserPreferences): CombinedCodeActions;
+    getCombinedCodeFix(
+        scope: CombinedCodeFixScope,
+        fixId: {},
+        formatOptions: FormatCodeSettings,
+        preferences: UserPreferences,
+    ): CombinedCodeActions;
 
     applyCodeActionCommand(action: CodeActionCommand, formatSettings?: FormatCodeSettings): Promise<ApplyCodeActionCommandResult>;
     applyCodeActionCommand(action: CodeActionCommand[], formatSettings?: FormatCodeSettings): Promise<ApplyCodeActionCommandResult[]>;

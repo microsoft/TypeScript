@@ -79,7 +79,11 @@ export function toNormalizedPath(fileName: string): NormalizedPath {
     return normalizePath(fileName) as NormalizedPath;
 }
 
-export function normalizedPathToPath(normalizedPath: NormalizedPath, currentDirectory: string, getCanonicalFileName: (f: string) => string): Path {
+export function normalizedPathToPath(
+    normalizedPath: NormalizedPath,
+    currentDirectory: string,
+    getCanonicalFileName: (f: string) => string,
+): Path {
     const f = isRootedDiskPath(normalizedPath) ? normalizedPath : getNormalizedAbsolutePath(normalizedPath, currentDirectory);
     return getCanonicalFileName(f) as Path;
 }

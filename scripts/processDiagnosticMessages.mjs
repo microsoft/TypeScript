@@ -99,7 +99,9 @@ function buildInfoFileOutput(messageTable, inputFilePathRel) {
         const propName = convertPropertyName(name);
         const argReportsUnnecessary = reportsUnnecessary ? `, /*reportsUnnecessary*/ ${reportsUnnecessary}` : "";
         const argElidedInCompatabilityPyramid = elidedInCompatabilityPyramid
-            ? `${!reportsUnnecessary ? ", /*reportsUnnecessary*/ undefined" : ""}, /*elidedInCompatabilityPyramid*/ ${elidedInCompatabilityPyramid}` :
+            ? `${
+                !reportsUnnecessary ? ", /*reportsUnnecessary*/ undefined" : ""
+            }, /*elidedInCompatabilityPyramid*/ ${elidedInCompatabilityPyramid}` :
             "";
         const argReportsDeprecated = reportsDeprecated
             ? `${

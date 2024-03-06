@@ -534,7 +534,10 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
         this.getCanonicalFileName = this.projectService.toCanonicalFileName;
         this.jsDocParsingMode = this.projectService.jsDocParsingMode;
 
-        this.cancellationToken = new ThrottledCancellationToken(this.projectService.cancellationToken, this.projectService.throttleWaitMilliseconds);
+        this.cancellationToken = new ThrottledCancellationToken(
+            this.projectService.cancellationToken,
+            this.projectService.throttleWaitMilliseconds,
+        );
         if (!this.compilerOptions) {
             this.compilerOptions = getDefaultCompilerOptions();
             this.compilerOptions.allowNonTsExtensions = true;
@@ -593,7 +596,11 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
         return this.typingsCache.isKnownTypesPackageName(name);
     }
     installPackage(options: InstallPackageOptions): Promise<ApplyCodeActionCommandResult> {
-        return this.typingsCache.installPackage({ ...options, projectName: this.projectName, projectRootPath: this.toPath(this.currentDirectory) });
+        return this.typingsCache.installPackage({
+            ...options,
+            projectName: this.projectName,
+            projectRootPath: this.toPath(this.currentDirectory),
+        });
     }
 
     /** @internal */
@@ -659,7 +666,11 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
     }
 
     private getOrCreateScriptInfoAndAttachToProject(fileName: string) {
-        const scriptInfo = this.projectService.getOrCreateScriptInfoNotOpenedByClient(fileName, this.currentDirectory, this.directoryStructureHost);
+        const scriptInfo = this.projectService.getOrCreateScriptInfoNotOpenedByClient(
+            fileName,
+            this.currentDirectory,
+            this.directoryStructureHost,
+        );
         if (scriptInfo) {
             const existingValue = this.rootFilesMap.get(scriptInfo.path);
             if (existingValue && existingValue.info !== scriptInfo) {
@@ -680,7 +691,11 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
     getScriptVersion(filename: string) {
         // Don't attach to the project if version is asked
 
-        const info = this.projectService.getOrCreateScriptInfoNotOpenedByClient(filename, this.currentDirectory, this.directoryStructureHost);
+        const info = this.projectService.getOrCreateScriptInfoNotOpenedByClient(
+            filename,
+            this.currentDirectory,
+            this.directoryStructureHost,
+        );
         return (info && info.getLatestVersion())!; // TODO: GH#18217
     }
 
@@ -708,7 +723,13 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
         return this.projectService.host.useCaseSensitiveFileNames;
     }
 
-    readDirectory(path: string, extensions?: readonly string[], exclude?: readonly string[], include?: readonly string[], depth?: number): string[] {
+    readDirectory(
+        path: string,
+        extensions?: readonly string[],
+        exclude?: readonly string[],
+        include?: readonly string[],
+        depth?: number,
+    ): string[] {
         return this.directoryStructureHost.readDirectory!(path, extensions, exclude, include, depth);
     }
 
@@ -771,7 +792,12 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
     }
 
     /** @internal */
-    resolveLibrary(libraryName: string, resolveFrom: string, options: CompilerOptions, libFileName: string): ResolvedModuleWithFailedLookupLocations {
+    resolveLibrary(
+        libraryName: string,
+        resolveFrom: string,
+        options: CompilerOptions,
+        libFileName: string,
+    ): ResolvedModuleWithFailedLookupLocations {
         return this.resolutionCache.resolveLibrary(libraryName, resolveFrom, options, libFileName);
     }
 
@@ -1183,7 +1209,8 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
             Debug.assert(
                 !!scriptInfo,
                 "getScriptInfo",
-                () => `scriptInfo for a file '${sourceFile.fileName}' Path: '${sourceFile.path}' / '${sourceFile.resolvedPath}' is missing.`,
+                () =>
+                    `scriptInfo for a file '${sourceFile.fileName}' Path: '${sourceFile.path}' / '${sourceFile.resolvedPath}' is missing.`,
             );
             return scriptInfo;
         });
@@ -1405,7 +1432,11 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
                 this.lastCachedUnresolvedImportsList = getUnresolvedImports(this.program!, this.cachedUnresolvedImportsPerFile);
             }
 
-            this.projectService.typingsCache.enqueueInstallTypingsForProject(this, this.lastCachedUnresolvedImportsList, hasAddedorRemovedFiles);
+            this.projectService.typingsCache.enqueueInstallTypingsForProject(
+                this,
+                this.lastCachedUnresolvedImportsList,
+                hasAddedorRemovedFiles,
+            );
         }
         else {
             this.lastCachedUnresolvedImportsList = undefined;
@@ -1604,7 +1635,10 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
         // - oldProgram is not set - this is a first time updateGraph is called
         // - newProgram is different from the old program and structure of the old program was not reused.
         let hasNewProgram = false;
-        if (this.program && (!oldProgram || (this.program !== oldProgram && this.program.structureIsReused !== StructureIsReused.Completely))) {
+        if (
+            this.program &&
+            (!oldProgram || (this.program !== oldProgram && this.program.structureIsReused !== StructureIsReused.Completely))
+        ) {
             hasNewProgram = true;
             if (oldProgram) {
                 for (const f of oldProgram.getSourceFiles()) {
@@ -1612,7 +1646,11 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
                     if (!newFile || (f.resolvedPath === f.path && newFile.resolvedPath !== f.path)) {
                         // new program does not contain this file - detach it from the project
                         // - remove resolutions only if the new program doesnt contain source file by the path (not resolvedPath since path is used for resolution)
-                        this.detachScriptInfoFromProject(f.fileName, !!this.program.getSourceFileByPath(f.path), /*syncDirWatcherRemove*/ true);
+                        this.detachScriptInfoFromProject(
+                            f.fileName,
+                            !!this.program.getSourceFileByPath(f.path),
+                            /*syncDirWatcherRemove*/ true,
+                        );
                     }
                 }
 
@@ -1706,7 +1744,9 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
             this.changedFilesForExportMapCache.clear();
         }
 
-        if (this.hasAddedOrRemovedSymlinks || this.program && !this.program.structureIsReused && this.getCompilerOptions().preserveSymlinks) {
+        if (
+            this.hasAddedOrRemovedSymlinks || this.program && !this.program.structureIsReused && this.getCompilerOptions().preserveSymlinks
+        ) {
             // With --preserveSymlinks, we may not determine that a file is a symlink, so we never set `hasAddedOrRemovedSymlinks`
             this.symlinks = undefined;
             this.moduleSpecifierCache.clear();
@@ -1774,7 +1814,9 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
     private addMissingFileWatcher(missingFilePath: Path, missingFileName: string): FileWatcher {
         if (isConfiguredProject(this)) {
             // If this file is referenced config file, we are already watching it, no need to watch again
-            const configFileExistenceInfo = this.projectService.configFileExistenceInfoCache.get(missingFilePath as string as NormalizedPath);
+            const configFileExistenceInfo = this.projectService.configFileExistenceInfoCache.get(
+                missingFilePath as string as NormalizedPath,
+            );
             if (configFileExistenceInfo?.config?.projects.has(this.canonicalConfigFilePath)) return noopFileWatcher;
         }
         const fileWatcher = this.projectService.watchFactory.watchFile(
@@ -1910,9 +1952,17 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
         ));
         this.writeLog("-----------------------------------------------");
         if (this.autoImportProviderHost) {
-            this.autoImportProviderHost.print(/*writeProjectFileNames*/ false, /*writeFileExplaination*/ false, /*writeFileVersionAndText*/ false);
+            this.autoImportProviderHost.print(
+                /*writeProjectFileNames*/ false,
+                /*writeFileExplaination*/ false,
+                /*writeFileVersionAndText*/ false,
+            );
         }
-        this.noDtsResolutionProject?.print(/*writeProjectFileNames*/ false, /*writeFileExplaination*/ false, /*writeFileVersionAndText*/ false);
+        this.noDtsResolutionProject?.print(
+            /*writeProjectFileNames*/ false,
+            /*writeFileExplaination*/ false,
+            /*writeFileVersionAndText*/ false,
+        );
     }
 
     setCompilerOptions(compilerOptions: CompilerOptions) {
@@ -1957,10 +2007,13 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
     getChangesSinceVersion(lastKnownVersion?: number, includeProjectReferenceRedirectInfo?: boolean): ProjectFilesWithTSDiagnostics {
         const includeProjectReferenceRedirectInfoIfRequested = includeProjectReferenceRedirectInfo
             ? (files: Map<string, boolean>) =>
-                arrayFrom(files.entries(), ([fileName, isSourceOfProjectReferenceRedirect]): protocol.FileWithProjectReferenceRedirectInfo => ({
-                    fileName,
-                    isSourceOfProjectReferenceRedirect,
-                }))
+                arrayFrom(
+                    files.entries(),
+                    ([fileName, isSourceOfProjectReferenceRedirect]): protocol.FileWithProjectReferenceRedirectInfo => ({
+                        fileName,
+                        isSourceOfProjectReferenceRedirect,
+                    }),
+                )
             : (files: Map<string, boolean>) => arrayFrom(files.keys());
 
         // Update the graph only if initial configured project load is not pending
@@ -2006,7 +2059,9 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
                 if (!lastReportedFileNames.has(fileName)) {
                     added.set(fileName, isSourceOfProjectReferenceRedirect);
                 }
-                else if (includeProjectReferenceRedirectInfo && isSourceOfProjectReferenceRedirect !== lastReportedFileNames.get(fileName)) {
+                else if (
+                    includeProjectReferenceRedirectInfo && isSourceOfProjectReferenceRedirect !== lastReportedFileNames.get(fileName)
+                ) {
                     updatedRedirects.push({
                         fileName,
                         isSourceOfProjectReferenceRedirect,
@@ -2084,7 +2139,9 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
         const host = this.projectService.host;
 
         if (!host.require && !host.importPlugin) {
-            this.projectService.logger.info("Plugins were requested but not running in environment that supports 'require'. Nothing will be loaded");
+            this.projectService.logger.info(
+                "Plugins were requested but not running in environment that supports 'require'. Nothing will be loaded",
+            );
             return;
         }
 
@@ -2112,7 +2169,9 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
     enableProxy(pluginModuleFactory: PluginModuleFactory, configEntry: PluginImport) {
         try {
             if (typeof pluginModuleFactory !== "function") {
-                this.projectService.logger.info(`Skipped loading plugin ${configEntry.name} because it did not expose a proper factory function`);
+                this.projectService.logger.info(
+                    `Skipped loading plugin ${configEntry.name} because it did not expose a proper factory function`,
+                );
                 return;
             }
 
@@ -2477,7 +2536,12 @@ export class InferredProject extends Project {
 /** @internal */
 export class AuxiliaryProject extends Project {
     /** @internal */ rootFile: NormalizedPath | undefined;
-    constructor(projectService: ProjectService, documentRegistry: DocumentRegistry, compilerOptions: CompilerOptions, currentDirectory: string) {
+    constructor(
+        projectService: ProjectService,
+        documentRegistry: DocumentRegistry,
+        compilerOptions: CompilerOptions,
+        currentDirectory: string,
+    ) {
         super(
             projectService.newAuxiliaryProjectName(),
             ProjectKind.Auxiliary,
@@ -2539,7 +2603,9 @@ export class AutoImportProviderProject extends Project {
             for (const name of arrayFrom(dependencyNames.keys())) {
                 // Avoid creating a large project that would significantly slow down time to editor interactivity
                 if (dependencySelection === PackageJsonAutoImportPreference.Auto && dependenciesAdded > this.maxDependencies) {
-                    hostProject.log(`AutoImportProviderProject: attempted to add more than ${this.maxDependencies} dependencies. Aborting.`);
+                    hostProject.log(
+                        `AutoImportProviderProject: attempted to add more than ${this.maxDependencies} dependencies. Aborting.`,
+                    );
                     return ts.emptyArray;
                 }
 
@@ -2598,7 +2664,9 @@ export class AutoImportProviderProject extends Project {
 
         if (rootNames?.length) {
             hostProject.log(
-                `AutoImportProviderProject: found ${rootNames.length} root files in ${dependenciesAdded} dependencies in ${timestamp() - start} ms`,
+                `AutoImportProviderProject: found ${rootNames.length} root files in ${dependenciesAdded} dependencies in ${
+                    timestamp() - start
+                } ms`,
             );
         }
         return rootNames || ts.emptyArray;
@@ -2609,7 +2677,12 @@ export class AutoImportProviderProject extends Project {
             }
         }
 
-        function getRootNamesFromPackageJson(packageJson: PackageJsonInfo, program: Program, symlinkCache: SymlinkCache, resolveJs?: boolean) {
+        function getRootNamesFromPackageJson(
+            packageJson: PackageJsonInfo,
+            program: Program,
+            symlinkCache: SymlinkCache,
+            resolveJs?: boolean,
+        ) {
             const entrypoints = getEntrypointsFromPackageJsonInfo(
                 packageJson,
                 compilerOptions,
@@ -2750,7 +2823,9 @@ export class AutoImportProviderProject extends Project {
     }
 
     override getLanguageService(): never {
-        throw new Error("AutoImportProviderProject language service should never be used. To get the program, use `project.getCurrentProgram()`.");
+        throw new Error(
+            "AutoImportProviderProject language service should never be used. To get the program, use `project.getCurrentProgram()`.",
+        );
     }
 
     /** @internal */
@@ -2974,7 +3049,9 @@ export class ConfiguredProject extends Project {
         if (!options.plugins?.length && !this.projectService.globalPlugins.length) return;
         const host = this.projectService.host;
         if (!host.require && !host.importPlugin) {
-            this.projectService.logger.info("Plugins were requested but not running in environment that supports 'require'. Nothing will be loaded");
+            this.projectService.logger.info(
+                "Plugins were requested but not running in environment that supports 'require'. Nothing will be loaded",
+            );
             return;
         }
 

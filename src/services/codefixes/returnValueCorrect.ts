@@ -129,7 +129,12 @@ function createObjectTypeFromLabeledExpression(checker: TypeChecker, label: Iden
     return checker.createAnonymousType(/*symbol*/ undefined, members, [], [], []);
 }
 
-function getFixInfo(checker: TypeChecker, declaration: FunctionLikeDeclaration, expectType: Type, isFunctionType: boolean): Info | undefined {
+function getFixInfo(
+    checker: TypeChecker,
+    declaration: FunctionLikeDeclaration,
+    expectType: Type,
+    isFunctionType: boolean,
+): Info | undefined {
     if (!declaration.body || !isBlock(declaration.body) || length(declaration.body.statements) !== 1) return undefined;
 
     const firstStatement = first(declaration.body.statements);
@@ -172,7 +177,11 @@ function getFixInfo(checker: TypeChecker, declaration: FunctionLikeDeclaration, 
             const node = factory.createObjectLiteralExpression([
                 factory.createPropertyAssignment(firstBlockStatement.label, firstBlockStatement.statement.expression),
             ]);
-            const nodeType = createObjectTypeFromLabeledExpression(checker, firstBlockStatement.label, firstBlockStatement.statement.expression);
+            const nodeType = createObjectTypeFromLabeledExpression(
+                checker,
+                firstBlockStatement.label,
+                firstBlockStatement.statement.expression,
+            );
             if (checkFixedAssignableTo(checker, declaration, nodeType, expectType, isFunctionType)) {
                 return {
                     declaration,
@@ -188,7 +197,13 @@ function getFixInfo(checker: TypeChecker, declaration: FunctionLikeDeclaration, 
     return undefined;
 }
 
-function checkFixedAssignableTo(checker: TypeChecker, declaration: FunctionLikeDeclaration, exprType: Type, type: Type, isFunctionType: boolean) {
+function checkFixedAssignableTo(
+    checker: TypeChecker,
+    declaration: FunctionLikeDeclaration,
+    exprType: Type,
+    type: Type,
+    isFunctionType: boolean,
+) {
     if (isFunctionType) {
         const sig = checker.getSignatureFromDeclaration(declaration);
         if (sig) {
@@ -289,7 +304,12 @@ function removeBlockBodyBrace(
     changes.replaceNode(sourceFile, declaration.body, newBody);
 }
 
-function wrapBlockWithParen(changes: textChanges.ChangeTracker, sourceFile: SourceFile, declaration: ArrowFunction, expression: Expression) {
+function wrapBlockWithParen(
+    changes: textChanges.ChangeTracker,
+    sourceFile: SourceFile,
+    declaration: ArrowFunction,
+    expression: Expression,
+) {
     changes.replaceNode(sourceFile, declaration.body, factory.createParenthesizedExpression(expression));
 }
 

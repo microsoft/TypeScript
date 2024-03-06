@@ -77,9 +77,19 @@ export function getAllRules(): RuleSpec[] {
         SyntaxKind.NewKeyword,
     ];
     const unaryPreincrementExpressions = [SyntaxKind.Identifier, SyntaxKind.OpenParenToken, SyntaxKind.ThisKeyword, SyntaxKind.NewKeyword];
-    const unaryPostincrementExpressions = [SyntaxKind.Identifier, SyntaxKind.CloseParenToken, SyntaxKind.CloseBracketToken, SyntaxKind.NewKeyword];
+    const unaryPostincrementExpressions = [
+        SyntaxKind.Identifier,
+        SyntaxKind.CloseParenToken,
+        SyntaxKind.CloseBracketToken,
+        SyntaxKind.NewKeyword,
+    ];
     const unaryPredecrementExpressions = [SyntaxKind.Identifier, SyntaxKind.OpenParenToken, SyntaxKind.ThisKeyword, SyntaxKind.NewKeyword];
-    const unaryPostdecrementExpressions = [SyntaxKind.Identifier, SyntaxKind.CloseParenToken, SyntaxKind.CloseBracketToken, SyntaxKind.NewKeyword];
+    const unaryPostdecrementExpressions = [
+        SyntaxKind.Identifier,
+        SyntaxKind.CloseParenToken,
+        SyntaxKind.CloseBracketToken,
+        SyntaxKind.NewKeyword,
+    ];
     const comments = [SyntaxKind.SingleLineCommentTrivia, SyntaxKind.MultiLineCommentTrivia];
     const typeNames = [SyntaxKind.Identifier, ...typeKeywords];
 
@@ -160,7 +170,13 @@ export function getAllRules(): RuleSpec[] {
             [isNonJsxSameLineTokenContext, isNotPropertyAccessOnIntegerLiteral],
             RuleAction.DeleteSpace,
         ),
-        rule("NoSpaceAfterDot", [SyntaxKind.DotToken, SyntaxKind.QuestionDotToken], anyToken, [isNonJsxSameLineTokenContext], RuleAction.DeleteSpace),
+        rule(
+            "NoSpaceAfterDot",
+            [SyntaxKind.DotToken, SyntaxKind.QuestionDotToken],
+            anyToken,
+            [isNonJsxSameLineTokenContext],
+            RuleAction.DeleteSpace,
+        ),
 
         rule(
             "NoSpaceBetweenImportParenInImportType",
@@ -331,7 +347,13 @@ export function getAllRules(): RuleSpec[] {
 
         rule("SpaceAfterFunctionInFuncDecl", SyntaxKind.FunctionKeyword, anyToken, [isFunctionDeclContext], RuleAction.InsertSpace),
         // Insert new line after { and before } in multi-line contexts.
-        rule("NewLineAfterOpenBraceInBlockContext", SyntaxKind.OpenBraceToken, anyToken, [isMultilineBlockContext], RuleAction.InsertNewLine),
+        rule(
+            "NewLineAfterOpenBraceInBlockContext",
+            SyntaxKind.OpenBraceToken,
+            anyToken,
+            [isMultilineBlockContext],
+            RuleAction.InsertNewLine,
+        ),
 
         // For get/set members, we check for (identifier,identifier) since get/set don't have tokens and they are represented as just an identifier token.
         // Though, we do extra check on the context to make sure we are dealing with get/set node. Example:
@@ -413,7 +435,13 @@ export function getAllRules(): RuleSpec[] {
             RuleAction.InsertSpace,
         ),
 
-        rule("SpaceAfterVoidOperator", SyntaxKind.VoidKeyword, anyToken, [isNonJsxSameLineTokenContext, isVoidOpContext], RuleAction.InsertSpace),
+        rule(
+            "SpaceAfterVoidOperator",
+            SyntaxKind.VoidKeyword,
+            anyToken,
+            [isNonJsxSameLineTokenContext, isVoidOpContext],
+            RuleAction.InsertSpace,
+        ),
 
         // Async-await
         rule(
@@ -548,7 +576,13 @@ export function getAllRules(): RuleSpec[] {
         rule("SpaceAfterArrow", SyntaxKind.EqualsGreaterThanToken, anyToken, [isNonJsxSameLineTokenContext], RuleAction.InsertSpace),
 
         // Optional parameters and let args
-        rule("NoSpaceAfterEllipsis", SyntaxKind.DotDotDotToken, SyntaxKind.Identifier, [isNonJsxSameLineTokenContext], RuleAction.DeleteSpace),
+        rule(
+            "NoSpaceAfterEllipsis",
+            SyntaxKind.DotDotDotToken,
+            SyntaxKind.Identifier,
+            [isNonJsxSameLineTokenContext],
+            RuleAction.DeleteSpace,
+        ),
         rule(
             "NoSpaceAfterOptionalParameters",
             SyntaxKind.QuestionToken,
@@ -752,7 +786,13 @@ export function getAllRules(): RuleSpec[] {
             [isOptionEnabled("insertSpaceAfterOpeningAndBeforeClosingNonemptyParenthesis"), isNonJsxSameLineTokenContext],
             RuleAction.InsertSpace,
         ),
-        rule("NoSpaceBetweenParens", SyntaxKind.OpenParenToken, SyntaxKind.CloseParenToken, [isNonJsxSameLineTokenContext], RuleAction.DeleteSpace),
+        rule(
+            "NoSpaceBetweenParens",
+            SyntaxKind.OpenParenToken,
+            SyntaxKind.CloseParenToken,
+            [isNonJsxSameLineTokenContext],
+            RuleAction.DeleteSpace,
+        ),
         rule(
             "NoSpaceAfterOpenParen",
             SyntaxKind.OpenParenToken,
@@ -895,14 +935,22 @@ export function getAllRules(): RuleSpec[] {
             "SpaceAfterOpenBraceInJsxExpression",
             SyntaxKind.OpenBraceToken,
             anyToken,
-            [isOptionEnabled("insertSpaceAfterOpeningAndBeforeClosingJsxExpressionBraces"), isNonJsxSameLineTokenContext, isJsxExpressionContext],
+            [
+                isOptionEnabled("insertSpaceAfterOpeningAndBeforeClosingJsxExpressionBraces"),
+                isNonJsxSameLineTokenContext,
+                isJsxExpressionContext,
+            ],
             RuleAction.InsertSpace,
         ),
         rule(
             "SpaceBeforeCloseBraceInJsxExpression",
             anyToken,
             SyntaxKind.CloseBraceToken,
-            [isOptionEnabled("insertSpaceAfterOpeningAndBeforeClosingJsxExpressionBraces"), isNonJsxSameLineTokenContext, isJsxExpressionContext],
+            [
+                isOptionEnabled("insertSpaceAfterOpeningAndBeforeClosingJsxExpressionBraces"),
+                isNonJsxSameLineTokenContext,
+                isJsxExpressionContext,
+            ],
             RuleAction.InsertSpace,
         ),
         rule(
@@ -1140,7 +1188,13 @@ export function getAllRules(): RuleSpec[] {
         ),
 
         // Remove extra spaces between ... and type name in tuple spread
-        rule("SpaceBetweenDotDotDotAndTypeName", SyntaxKind.DotDotDotToken, typeNames, [isNonJsxSameLineTokenContext], RuleAction.DeleteSpace),
+        rule(
+            "SpaceBetweenDotDotDotAndTypeName",
+            SyntaxKind.DotDotDotToken,
+            typeNames,
+            [isNonJsxSameLineTokenContext],
+            RuleAction.DeleteSpace,
+        ),
 
         // Add a space between statements. All keywords except (do,else,case) has open/close parens after them.
         // So, we have a rule to add a space for [),Any], [do,Any], [else,Any], and [case,Any]
@@ -1233,7 +1287,8 @@ function isOptionDisabledOrUndefined(optionName: keyof FormatCodeSettings): (con
 }
 
 function isOptionDisabledOrUndefinedOrTokensOnSameLine(optionName: keyof FormatCodeSettings): (context: FormattingContext) => boolean {
-    return context => !context.options || !hasProperty(context.options, optionName) || !context.options[optionName] || context.TokensAreOnSameLine();
+    return context =>
+        !context.options || !hasProperty(context.options, optionName) || !context.options[optionName] || context.TokensAreOnSameLine();
 }
 
 function isOptionEnabledOrUndefined(optionName: keyof FormatCodeSettings): (context: FormattingContext) => boolean {

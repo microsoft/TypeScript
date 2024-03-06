@@ -178,7 +178,10 @@ function transformJSDocOptionalType(node: JSDocOptionalType) {
 }
 
 function transformJSDocNullableType(node: JSDocNullableType) {
-    return factory.createUnionTypeNode([visitNode(node.type, transformJSDocType, isTypeNode), factory.createTypeReferenceNode("null", emptyArray)]);
+    return factory.createUnionTypeNode([
+        visitNode(node.type, transformJSDocType, isTypeNode),
+        factory.createTypeReferenceNode("null", emptyArray),
+    ]);
 }
 
 function transformJSDocVariadicType(node: JSDocVariadicType) {
@@ -251,7 +254,9 @@ function transformJSDocIndexSignature(node: TypeReferenceNode) {
         factory.createTypeReferenceNode(node.typeArguments![0].kind === SyntaxKind.NumberKeyword ? "number" : "string", []),
         /*initializer*/ undefined,
     );
-    const indexSignature = factory.createTypeLiteralNode([factory.createIndexSignature(/*modifiers*/ undefined, [index], node.typeArguments![1])]);
+    const indexSignature = factory.createTypeLiteralNode([
+        factory.createIndexSignature(/*modifiers*/ undefined, [index], node.typeArguments![1]),
+    ]);
     setEmitFlags(indexSignature, EmitFlags.SingleLine);
     return indexSignature;
 }

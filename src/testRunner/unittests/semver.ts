@@ -4,7 +4,10 @@ import * as Utils from "../_namespaces/Utils";
 import theory = Utils.theory;
 describe("unittests:: semver", () => {
     describe("Version", () => {
-        function assertVersion(version: ts.Version, [major, minor, patch, prerelease, build]: [number, number, number, string[]?, string[]?]) {
+        function assertVersion(
+            version: ts.Version,
+            [major, minor, patch, prerelease, build]: [number, number, number, string[]?, string[]?],
+        ) {
             assert.strictEqual(version.major, major);
             assert.strictEqual(version.minor, minor);
             assert.strictEqual(version.patch, patch);

@@ -57,7 +57,11 @@ describe("unittests:: services:: Colorization", () => {
         return { value, classification, position };
     }
 
-    function testLexicalClassification(text: string, initialEndOfLineState: ts.EndOfLineState, ...expectedEntries: ClassificationEntry[]): void {
+    function testLexicalClassification(
+        text: string,
+        initialEndOfLineState: ts.EndOfLineState,
+        ...expectedEntries: ClassificationEntry[]
+    ): void {
         const result = classifier.getClassificationsForLine(text, initialEndOfLineState, /*syntacticClassifierAbsent*/ false);
 
         for (const expectedEntry of expectedEntries) {
@@ -65,16 +69,21 @@ describe("unittests:: services:: Colorization", () => {
                 assert.equal(result.finalLexState, expectedEntry.value, "final endOfLineState does not match expected.");
             }
             else {
-                const actualEntryPosition = expectedEntry.position !== undefined ? expectedEntry.position : text.indexOf(expectedEntry.value);
+                const actualEntryPosition = expectedEntry.position !== undefined ? expectedEntry.position
+                    : text.indexOf(expectedEntry.value);
                 assert(actualEntryPosition >= 0, "token: '" + expectedEntry.value + "' does not exit in text: '" + text + "'.");
 
                 const actualEntry = getEntryAtPosition(result, actualEntryPosition)!;
 
-                assert(actualEntry, "Could not find classification entry for '" + expectedEntry.value + "' at position: " + actualEntryPosition);
+                assert(
+                    actualEntry,
+                    "Could not find classification entry for '" + expectedEntry.value + "' at position: " + actualEntryPosition,
+                );
                 assert.equal(
                     actualEntry.classification,
                     expectedEntry.classification,
-                    "Classification class does not match expected. Expected: " + ts.TokenClass[expectedEntry.classification] + ", Actual: " +
+                    "Classification class does not match expected. Expected: " + ts.TokenClass[expectedEntry.classification] +
+                        ", Actual: " +
                         ts.TokenClass[actualEntry.classification],
                 );
                 assert.equal(
@@ -152,11 +161,21 @@ describe("unittests:: services:: Colorization", () => {
         });
 
         it("correctly classifies an unterminated single-line string with no backslashes", () => {
-            testLexicalClassification("'line1", ts.EndOfLineState.None, stringLiteral("'line1"), finalEndOfLineState(ts.EndOfLineState.None));
+            testLexicalClassification(
+                "'line1",
+                ts.EndOfLineState.None,
+                stringLiteral("'line1"),
+                finalEndOfLineState(ts.EndOfLineState.None),
+            );
         });
 
         it("correctly classifies an unterminated single-line string with two backslashes", () => {
-            testLexicalClassification("'line1\\\\", ts.EndOfLineState.None, stringLiteral("'line1\\\\"), finalEndOfLineState(ts.EndOfLineState.None));
+            testLexicalClassification(
+                "'line1\\\\",
+                ts.EndOfLineState.None,
+                stringLiteral("'line1\\\\"),
+                finalEndOfLineState(ts.EndOfLineState.None),
+            );
         });
 
         it("correctly classifies an unterminated single-line string with four backslashes", () => {
@@ -223,7 +242,12 @@ describe("unittests:: services:: Colorization", () => {
         });
 
         it("correctly classifies an unterminated multiline comment", () => {
-            testLexicalClassification("/*", ts.EndOfLineState.None, comment("/*"), finalEndOfLineState(ts.EndOfLineState.InMultiLineCommentTrivia));
+            testLexicalClassification(
+                "/*",
+                ts.EndOfLineState.None,
+                comment("/*"),
+                finalEndOfLineState(ts.EndOfLineState.InMultiLineCommentTrivia),
+            );
         });
 
         it("correctly classifies the termination of a multiline comment", () => {
@@ -254,7 +278,12 @@ describe("unittests:: services:: Colorization", () => {
         });
 
         it("correctly classifies an unterminated multiline comment with trailing space", () => {
-            testLexicalClassification("/* ", ts.EndOfLineState.None, comment("/* "), finalEndOfLineState(ts.EndOfLineState.InMultiLineCommentTrivia));
+            testLexicalClassification(
+                "/* ",
+                ts.EndOfLineState.None,
+                comment("/* "),
+                finalEndOfLineState(ts.EndOfLineState.InMultiLineCommentTrivia),
+            );
         });
 
         it("correctly classifies a keyword after a dot", () => {

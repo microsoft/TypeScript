@@ -139,6 +139,10 @@ const bar: Bar = {
                 offset: 5,
             },
         });
-        baselineTsserverLogs("findAllReferences", "does not try to open a file in a project that was updated and no longer has the file", session);
+        baselineTsserverLogs(
+            "findAllReferences",
+            "does not try to open a file in a project that was updated and no longer has the file",
+            session,
+        );
     });
 });

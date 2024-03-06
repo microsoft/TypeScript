@@ -120,7 +120,13 @@ export const notImplementedHost: ts.LanguageServiceHost = {
     fileExists: ts.notImplemented,
 };
 
-export function testExtractSymbol(caption: string, text: string, baselineFolder: string, description: ts.DiagnosticMessage, includeLib?: boolean) {
+export function testExtractSymbol(
+    caption: string,
+    text: string,
+    baselineFolder: string,
+    description: ts.DiagnosticMessage,
+    includeLib?: boolean,
+) {
     const t = extractTest(text);
     const selectionRange = t.ranges.get("selection")!;
     if (!selectionRange) {

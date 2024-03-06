@@ -118,8 +118,13 @@ export function organizeImports(
     for (const ambientModule of sourceFile.statements.filter(isAmbientModule)) {
         if (!ambientModule.body) continue;
 
-        const ambientModuleImportGroupDecls = groupByNewlineContiguous(sourceFile, ambientModule.body.statements.filter(isImportDeclaration));
-        ambientModuleImportGroupDecls.forEach(importGroupDecl => organizeImportsWorker(importGroupDecl, processImportsOfSameModuleSpecifier));
+        const ambientModuleImportGroupDecls = groupByNewlineContiguous(
+            sourceFile,
+            ambientModule.body.statements.filter(isImportDeclaration),
+        );
+        ambientModuleImportGroupDecls.forEach(importGroupDecl =>
+            organizeImportsWorker(importGroupDecl, processImportsOfSameModuleSpecifier)
+        );
 
         // Exports are always used
         if (mode !== OrganizeImportsMode.RemoveUnused) {
@@ -375,7 +380,11 @@ function coalesceImportsWorker(
                 // Add the namespace import to the existing default ImportDeclaration.
                 const defaultImport = defaultImports[0];
                 coalescedImports.push(
-                    updateImportDeclarationAndClause(defaultImport, defaultImport.importClause.name, namespaceImports[0].importClause.namedBindings),
+                    updateImportDeclarationAndClause(
+                        defaultImport,
+                        defaultImport.importClause.name,
+                        namespaceImports[0].importClause.namedBindings,
+                    ),
                 );
 
                 continue;
@@ -408,7 +417,11 @@ function coalesceImportsWorker(
             else {
                 for (const defaultImport of defaultImports) {
                     newImportSpecifiers.push(
-                        factory.createImportSpecifier(/*isTypeOnly*/ false, factory.createIdentifier("default"), defaultImport.importClause.name),
+                        factory.createImportSpecifier(
+                            /*isTypeOnly*/ false,
+                            factory.createIdentifier("default"),
+                            defaultImport.importClause.name,
+                        ),
                     );
                 }
             }
@@ -783,54 +796,62 @@ class ImportSpecifierSortingCache implements MemoizeCache<[readonly ImportSpecif
 }
 
 /** @internal */
-export const detectImportSpecifierSorting = memoizeCached((specifiers: readonly ImportSpecifier[], preferences: UserPreferences): SortKind => {
-    // If types are not sorted as specified, then imports are assumed to be unsorted.
-    // If there is no type sorting specification, we default to "last" and move on to case sensitivity detection.
-    switch (preferences.organizeImportsTypeOrder) {
-        case "first":
-            if (!arrayIsSorted(specifiers, (s1, s2) => compareBooleans(s2.isTypeOnly, s1.isTypeOnly))) return SortKind.None;
-            break;
-        case "inline":
-            if (
-                !arrayIsSorted(specifiers, (s1, s2) => {
-                    const comparer = getStringComparer(/*ignoreCase*/ true);
-                    return comparer(s1.name.text, s2.name.text);
-                })
-            ) {
+export const detectImportSpecifierSorting = memoizeCached(
+    (specifiers: readonly ImportSpecifier[], preferences: UserPreferences): SortKind => {
+        // If types are not sorted as specified, then imports are assumed to be unsorted.
+        // If there is no type sorting specification, we default to "last" and move on to case sensitivity detection.
+        switch (preferences.organizeImportsTypeOrder) {
+            case "first":
+                if (!arrayIsSorted(specifiers, (s1, s2) => compareBooleans(s2.isTypeOnly, s1.isTypeOnly))) return SortKind.None;
+                break;
+            case "inline":
+                if (
+                    !arrayIsSorted(specifiers, (s1, s2) => {
+                        const comparer = getStringComparer(/*ignoreCase*/ true);
+                        return comparer(s1.name.text, s2.name.text);
+                    })
+                ) {
+                    return SortKind.None;
+                }
+                break;
+            default:
+                if (!arrayIsSorted(specifiers, (s1, s2) => compareBooleans(s1.isTypeOnly, s2.isTypeOnly))) return SortKind.None;
+                break;
+        }
+
+        const collateCaseSensitive = getOrganizeImportsComparer(preferences, /*ignoreCase*/ false);
+        const collateCaseInsensitive = getOrganizeImportsComparer(preferences, /*ignoreCase*/ true);
+
+        if (preferences.organizeImportsTypeOrder !== "inline") {
+            const { type: regularImports, regular: typeImports } = groupBy(specifiers, s => s.isTypeOnly ? "type" : "regular");
+            const regularCaseSensitivity = regularImports?.length
+                ? detectSortCaseSensitivity(regularImports, specifier => specifier.name.text, collateCaseSensitive, collateCaseInsensitive)
+                : undefined;
+            const typeCaseSensitivity = typeImports?.length
+                ? detectSortCaseSensitivity(
+                    typeImports,
+                    specifier => specifier.name.text ?? "",
+                    collateCaseSensitive,
+                    collateCaseInsensitive,
+                )
+                : undefined;
+            if (regularCaseSensitivity === undefined) {
+                return typeCaseSensitivity ?? SortKind.None;
+            }
+            if (typeCaseSensitivity === undefined) {
+                return regularCaseSensitivity;
+            }
+            if (regularCaseSensitivity === SortKind.None || typeCaseSensitivity === SortKind.None) {
                 return SortKind.None;
             }
-            break;
-        default:
-            if (!arrayIsSorted(specifiers, (s1, s2) => compareBooleans(s1.isTypeOnly, s2.isTypeOnly))) return SortKind.None;
-            break;
-    }
-
-    const collateCaseSensitive = getOrganizeImportsComparer(preferences, /*ignoreCase*/ false);
-    const collateCaseInsensitive = getOrganizeImportsComparer(preferences, /*ignoreCase*/ true);
-
-    if (preferences.organizeImportsTypeOrder !== "inline") {
-        const { type: regularImports, regular: typeImports } = groupBy(specifiers, s => s.isTypeOnly ? "type" : "regular");
-        const regularCaseSensitivity = regularImports?.length
-            ? detectSortCaseSensitivity(regularImports, specifier => specifier.name.text, collateCaseSensitive, collateCaseInsensitive)
-            : undefined;
-        const typeCaseSensitivity = typeImports?.length
-            ? detectSortCaseSensitivity(typeImports, specifier => specifier.name.text ?? "", collateCaseSensitive, collateCaseInsensitive)
-            : undefined;
-        if (regularCaseSensitivity === undefined) {
-            return typeCaseSensitivity ?? SortKind.None;
+            return typeCaseSensitivity & regularCaseSensitivity;
         }
-        if (typeCaseSensitivity === undefined) {
-            return regularCaseSensitivity;
-        }
-        if (regularCaseSensitivity === SortKind.None || typeCaseSensitivity === SortKind.None) {
-            return SortKind.None;
-        }
-        return typeCaseSensitivity & regularCaseSensitivity;
-    }
 
-    // else inline
-    return detectSortCaseSensitivity(specifiers, specifier => specifier.name.text, collateCaseSensitive, collateCaseInsensitive);
-}, new ImportSpecifierSortingCache());
+        // else inline
+        return detectSortCaseSensitivity(specifiers, specifier => specifier.name.text, collateCaseSensitive, collateCaseInsensitive);
+    },
+    new ImportSpecifierSortingCache(),
+);
 
 /** @internal */
 export function getImportDeclarationInsertionIndex(
@@ -849,13 +870,23 @@ export function getImportSpecifierInsertionIndex(
     comparer: Comparer<string>,
     preferences: UserPreferences,
 ) {
-    const index = binarySearch(sortedImports, newImport, identity, (s1, s2) => compareImportOrExportSpecifiers(s1, s2, comparer, preferences));
+    const index = binarySearch(
+        sortedImports,
+        newImport,
+        identity,
+        (s1, s2) => compareImportOrExportSpecifiers(s1, s2, comparer, preferences),
+    );
     return index < 0 ? ~index : index;
 }
 
 /** @internal */
-export function compareImportsOrRequireStatements(s1: AnyImportOrRequireStatement, s2: AnyImportOrRequireStatement, comparer: Comparer<string>) {
-    return compareModuleSpecifiersWorker(getModuleSpecifierExpression(s1), getModuleSpecifierExpression(s2), comparer) || compareImportKind(s1, s2);
+export function compareImportsOrRequireStatements(
+    s1: AnyImportOrRequireStatement,
+    s2: AnyImportOrRequireStatement,
+    comparer: Comparer<string>,
+) {
+    return compareModuleSpecifiersWorker(getModuleSpecifierExpression(s1), getModuleSpecifierExpression(s2), comparer) ||
+        compareImportKind(s1, s2);
 }
 
 function compareImportKind(s1: AnyImportOrRequireStatement, s2: AnyImportOrRequireStatement) {
@@ -893,7 +924,12 @@ function getNewImportSpecifiers(namedImports: ImportDeclaration[]) {
                 importSpecifier =>
                     importSpecifier.name && importSpecifier.propertyName &&
                         importSpecifier.name.escapedText === importSpecifier.propertyName.escapedText
-                        ? factory.updateImportSpecifier(importSpecifier, importSpecifier.isTypeOnly, /*propertyName*/ undefined, importSpecifier.name)
+                        ? factory.updateImportSpecifier(
+                            importSpecifier,
+                            importSpecifier.isTypeOnly,
+                            /*propertyName*/ undefined,
+                            importSpecifier.name,
+                        )
                         : importSpecifier,
             ),
     );

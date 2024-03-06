@@ -212,7 +212,10 @@ export function getDefinitionAtPosition(
 
     if (searchOtherFilesOnly && failedAliasResolution) {
         // We couldn't resolve the specific import, try on the module specifier.
-        const importDeclaration = forEach([node, ...symbol?.declarations || emptyArray], n => findAncestor(n, isAnyImportOrBareOrAccessedRequire));
+        const importDeclaration = forEach(
+            [node, ...symbol?.declarations || emptyArray],
+            n => findAncestor(n, isAnyImportOrBareOrAccessedRequire),
+        );
         const moduleSpecifier = importDeclaration && tryGetModuleSpecifierFromDeclaration(importDeclaration);
         if (moduleSpecifier) {
             ({ symbol, failedAliasResolution } = getSymbol(moduleSpecifier, typeChecker, stopAtAlias));
@@ -486,7 +489,12 @@ function getFirstTypeArgumentDefinitions(
         const declaration = type.aliasSymbol?.declarations?.[0];
 
         if (declaration && isTypeAliasDeclaration(declaration) && isTypeReferenceNode(declaration.type) && declaration.type.typeArguments) {
-            return definitionFromType(typeChecker.getTypeAtLocation(declaration.type.typeArguments[0]), typeChecker, node, failedAliasResolution);
+            return definitionFromType(
+                typeChecker.getTypeAtLocation(declaration.type.typeArguments[0]),
+                typeChecker,
+                node,
+                failedAliasResolution,
+            );
         }
     }
 
@@ -520,13 +528,19 @@ export function getTypeDefinitionAtPosition(
         [returnType, fromReturnType] :
         [typeAtLocation, definitionFromType(typeAtLocation, typeChecker, node, failedAliasResolution)];
 
-    return typeDefinitions.length ? [...getFirstTypeArgumentDefinitions(typeChecker, resolvedType, node, failedAliasResolution), ...typeDefinitions]
+    return typeDefinitions.length ?
+        [...getFirstTypeArgumentDefinitions(typeChecker, resolvedType, node, failedAliasResolution), ...typeDefinitions]
         : !(symbol.flags & SymbolFlags.Value) && symbol.flags & SymbolFlags.Type ?
         getDefinitionFromSymbol(typeChecker, skipAlias(symbol, typeChecker), node, failedAliasResolution)
         : undefined;
 }
 
-function definitionFromType(type: Type, checker: TypeChecker, node: Node, failedAliasResolution: boolean | undefined): readonly DefinitionInfo[] {
+function definitionFromType(
+    type: Type,
+    checker: TypeChecker,
+    node: Node,
+    failedAliasResolution: boolean | undefined,
+): readonly DefinitionInfo[] {
     return flatMap(
         type.isUnion() && !(type.flags & TypeFlags.Enum) ? type.types : [type],
         t => t.symbol && getDefinitionFromSymbol(checker, t.symbol, node, failedAliasResolution),
@@ -549,7 +563,11 @@ function tryGetReturnTypeOfFunction(symbol: Symbol, type: Type, checker: TypeChe
 }
 
 /** @internal */
-export function getDefinitionAndBoundSpan(program: Program, sourceFile: SourceFile, position: number): DefinitionInfoAndBoundSpan | undefined {
+export function getDefinitionAndBoundSpan(
+    program: Program,
+    sourceFile: SourceFile,
+    position: number,
+): DefinitionInfoAndBoundSpan | undefined {
     const definitions = getDefinitionAtPosition(program, sourceFile, position);
 
     if (!definitions || definitions.length === 0) {
@@ -654,7 +672,10 @@ function getDefinitionFromSymbol(
     const withoutExpandos = filter(filteredDeclarations, d => !isExpandoDeclaration(d));
     const results = some(withoutExpandos) ? withoutExpandos : filteredDeclarations;
     return getConstructSignatureDefinition() || getCallSignatureDefinition() ||
-        map(results, declaration => createDefinitionInfo(declaration, typeChecker, symbol, node, /*unverified*/ false, failedAliasResolution));
+        map(
+            results,
+            declaration => createDefinitionInfo(declaration, typeChecker, symbol, node, /*unverified*/ false, failedAliasResolution),
+        );
 
     function getConstructSignatureDefinition(): DefinitionInfo[] | undefined {
         // Applicable only if we are in a new expression, or we are on a constructor declaration
@@ -663,7 +684,8 @@ function getDefinitionFromSymbol(
             symbol.flags & SymbolFlags.Class && !(symbol.flags & (SymbolFlags.Function | SymbolFlags.Variable)) &&
             (isNewExpressionTarget(node) || node.kind === SyntaxKind.ConstructorKeyword)
         ) {
-            const cls = find(filteredDeclarations, isClassLike) || Debug.fail("Expected declaration to have at least one class-like declaration");
+            const cls = find(filteredDeclarations, isClassLike) ||
+                Debug.fail("Expected declaration to have at least one class-like declaration");
             return getSignatureDefinition(cls.members, /*selectConstructors*/ true);
         }
     }

@@ -36,7 +36,9 @@ registerCodeFix({
 
         const { suggestion, expression, arg } = info;
         const changes = textChanges.ChangeTracker.with(context, t => doChange(t, sourceFile, arg, expression));
-        return [createCodeFixAction(fixId, changes, [Diagnostics.Use_0, suggestion], fixId, Diagnostics.Use_Number_isNaN_in_all_conditions)];
+        return [
+            createCodeFixAction(fixId, changes, [Diagnostics.Use_0, suggestion], fixId, Diagnostics.Use_Number_isNaN_in_all_conditions),
+        ];
     },
     fixIds: [fixId],
     getAllCodeActions: context => {

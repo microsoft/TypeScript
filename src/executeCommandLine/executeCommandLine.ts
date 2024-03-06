@@ -208,7 +208,8 @@ function createColors(sys: System) {
     // There are ~3 types of terminal color support: 16 colors, 256 and 16m colors
     // If there is richer color support, e.g. 256+ we can use extended ANSI codes which are not just generic 'blue'
     // but a 'lighter blue' which is closer to the blue in the TS logo.
-    const supportsRicherColors = sys.getEnvironmentVariable("COLORTERM") === "truecolor" || sys.getEnvironmentVariable("TERM") === "xterm-256color";
+    const supportsRicherColors = sys.getEnvironmentVariable("COLORTERM") === "truecolor" ||
+        sys.getEnvironmentVariable("TERM") === "xterm-256color";
     function blueBackground(str: string) {
         if (supportsRicherColors) {
             return `\x1B[48;5;68m${str}\x1B[39;49m`;
@@ -261,7 +262,10 @@ function generateOptionOutput(sys: System, option: CommandLineOption, rightAlign
         if (option.description) {
             description = getDiagnosticText(option.description);
         }
-        text.push(...getPrettyOutput(name, description, rightAlignOfLeft, leftAlignOfRight, terminalWidth, /*colorLeft*/ true), sys.newLine);
+        text.push(
+            ...getPrettyOutput(name, description, rightAlignOfLeft, leftAlignOfRight, terminalWidth, /*colorLeft*/ true),
+            sys.newLine,
+        );
         if (showAdditionalInfoOutput(valueCandidates, option)) {
             if (valueCandidates) {
                 text.push(
@@ -733,7 +737,9 @@ function executeCommandLineWorker(
         else {
             configFileName = fileOrDirectory;
             if (!sys.fileExists(configFileName)) {
-                reportDiagnostic(createCompilerDiagnostic(Diagnostics.The_specified_path_does_not_exist_Colon_0, commandLine.options.project));
+                reportDiagnostic(
+                    createCompilerDiagnostic(Diagnostics.The_specified_path_does_not_exist_Colon_0, commandLine.options.project),
+                );
                 return sys.exit(ExitStatus.DiagnosticsPresent_OutputsSkipped);
             }
         }
@@ -825,7 +831,9 @@ function executeCommandLineWorker(
     else {
         if (commandLineOptions.showConfig) {
             // eslint-disable-next-line no-null/no-null
-            sys.write(JSON.stringify(convertToTSConfig(commandLine, combinePaths(currentDirectory, "tsconfig.json"), sys), null, 4) + sys.newLine);
+            sys.write(
+                JSON.stringify(convertToTSConfig(commandLine, combinePaths(currentDirectory, "tsconfig.json"), sys), null, 4) + sys.newLine,
+            );
             return sys.exit(ExitStatus.Success);
         }
         reportDiagnostic = updateReportDiagnostic(

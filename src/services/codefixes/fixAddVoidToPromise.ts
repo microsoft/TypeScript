@@ -59,9 +59,17 @@ registerCodeFix({
     },
 });
 
-function makeChange(changes: textChanges.ChangeTracker, sourceFile: SourceFile, span: TextSpan, program: Program, seen?: Set<ParameterDeclaration>) {
+function makeChange(
+    changes: textChanges.ChangeTracker,
+    sourceFile: SourceFile,
+    span: TextSpan,
+    program: Program,
+    seen?: Set<ParameterDeclaration>,
+) {
     const node = getTokenAtPosition(sourceFile, span.start);
-    if (!isIdentifier(node) || !isCallExpression(node.parent) || node.parent.expression !== node || node.parent.arguments.length !== 0) return;
+    if (!isIdentifier(node) || !isCallExpression(node.parent) || node.parent.expression !== node || node.parent.arguments.length !== 0) {
+        return;
+    }
 
     const checker = program.getTypeChecker();
     const symbol = checker.getSymbolAtLocation(node);
@@ -79,7 +87,9 @@ function makeChange(changes: textChanges.ChangeTracker, sourceFile: SourceFile, 
         // append ` | void` to type argument
         const typeArgument = typeArguments[0];
         const needsParens = !isUnionTypeNode(typeArgument) && !isParenthesizedTypeNode(typeArgument) &&
-            isParenthesizedTypeNode(factory.createUnionTypeNode([typeArgument, factory.createKeywordTypeNode(SyntaxKind.VoidKeyword)]).types[0]);
+            isParenthesizedTypeNode(
+                factory.createUnionTypeNode([typeArgument, factory.createKeywordTypeNode(SyntaxKind.VoidKeyword)]).types[0],
+            );
         if (needsParens) {
             changes.insertText(sourceFile, typeArgument.pos, "(");
         }
@@ -110,7 +120,9 @@ function getEffectiveTypeArguments(node: NewExpression) {
     if (isInJSFile(node)) {
         if (isParenthesizedExpression(node.parent)) {
             const jsDocType = getJSDocTypeTag(node.parent)?.typeExpression.type;
-            if (jsDocType && isTypeReferenceNode(jsDocType) && isIdentifier(jsDocType.typeName) && idText(jsDocType.typeName) === "Promise") {
+            if (
+                jsDocType && isTypeReferenceNode(jsDocType) && isIdentifier(jsDocType.typeName) && idText(jsDocType.typeName) === "Promise"
+            ) {
                 return jsDocType.typeArguments;
             }
         }

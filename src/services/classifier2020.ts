@@ -120,7 +120,11 @@ function getSemanticTokens(program: Program, sourceFile: SourceFile, span: TextS
     const resultTokens: number[] = [];
 
     const collector = (node: Node, typeIdx: number, modifierSet: number) => {
-        resultTokens.push(node.getStart(sourceFile), node.getWidth(sourceFile), ((typeIdx + 1) << TokenEncodingConsts.typeOffset) + modifierSet);
+        resultTokens.push(
+            node.getStart(sourceFile),
+            node.getWidth(sourceFile),
+            ((typeIdx + 1) << TokenEncodingConsts.typeOffset) + modifierSet,
+        );
     };
 
     if (program && sourceFile) {
@@ -173,7 +177,8 @@ function collectTokens(
                 if (typeIdx !== undefined) {
                     let modifierSet = 0;
                     if (node.parent) {
-                        const parentIsDeclaration = isBindingElement(node.parent) || tokenFromDeclarationMapping.get(node.parent.kind) === typeIdx;
+                        const parentIsDeclaration = isBindingElement(node.parent) ||
+                            tokenFromDeclarationMapping.get(node.parent.kind) === typeIdx;
                         if (parentIsDeclaration && (node.parent as NamedDeclaration).name === node) {
                             modifierSet = 1 << TokenModifier.declaration;
                         }
@@ -198,7 +203,8 @@ function collectTokens(
                         }
                         if (typeIdx !== TokenType.class && typeIdx !== TokenType.interface) {
                             if (
-                                (modifiers & ModifierFlags.Readonly) || (nodeFlags & NodeFlags.Const) || (symbol.getFlags() & SymbolFlags.EnumMember)
+                                (modifiers & ModifierFlags.Readonly) || (nodeFlags & NodeFlags.Const) ||
+                                (symbol.getFlags() & SymbolFlags.EnumMember)
                             ) {
                                 modifierSet |= 1 << TokenModifier.readonly;
                             }
@@ -262,7 +268,10 @@ function reclassifyByType(typeChecker: TypeChecker, node: Node, typeIdx: TokenTy
             if (typeIdx !== TokenType.parameter && test(t => t.getConstructSignatures().length > 0)) {
                 return TokenType.class;
             }
-            if (test(t => t.getCallSignatures().length > 0) && !test(t => t.getProperties().length > 0) || isExpressionInCallExpression(node)) {
+            if (
+                test(t => t.getCallSignatures().length > 0) && !test(t => t.getProperties().length > 0) ||
+                isExpressionInCallExpression(node)
+            ) {
                 return typeIdx === TokenType.property ? TokenType.member : TokenType.function;
             }
         }
@@ -307,7 +316,8 @@ function isExpressionInCallExpression(node: Node): boolean {
 }
 
 function isRightSideOfQualifiedNameOrPropertyAccess(node: Node): boolean {
-    return (isQualifiedName(node.parent) && node.parent.right === node) || (isPropertyAccessExpression(node.parent) && node.parent.name === node);
+    return (isQualifiedName(node.parent) && node.parent.right === node) ||
+        (isPropertyAccessExpression(node.parent) && node.parent.name === node);
 }
 
 const tokenFromDeclarationMapping = new Map<SyntaxKind, TokenType>([

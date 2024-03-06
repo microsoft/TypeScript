@@ -27,25 +27,50 @@ describe("unittests:: services:: DocumentRegistry", () => {
 
         // change compilation setting that doesn't affect parsing - should have the same document
         compilerOptions.declaration = true;
-        const f1 = documentRegistry.acquireDocument("file1.ts", compilerOptions, ts.ScriptSnapshot.fromString("var x = 1;"), /* version */ "1");
+        const f1 = documentRegistry.acquireDocument(
+            "file1.ts",
+            compilerOptions,
+            ts.ScriptSnapshot.fromString("var x = 1;"),
+            /* version */ "1",
+        );
         compilerOptions.declaration = false;
-        const f2 = documentRegistry.acquireDocument("file1.ts", compilerOptions, ts.ScriptSnapshot.fromString("var x = 1;"), /* version */ "1");
+        const f2 = documentRegistry.acquireDocument(
+            "file1.ts",
+            compilerOptions,
+            ts.ScriptSnapshot.fromString("var x = 1;"),
+            /* version */ "1",
+        );
 
         assert(f1 === f2, "Expected to have the same document instance");
 
         // change value of compilation setting that is used during production of AST - new document is required
         compilerOptions.target = ts.ScriptTarget.ESNext;
-        const f3 = documentRegistry.acquireDocument("file1.ts", compilerOptions, ts.ScriptSnapshot.fromString("var x = 1;"), /* version */ "1");
+        const f3 = documentRegistry.acquireDocument(
+            "file1.ts",
+            compilerOptions,
+            ts.ScriptSnapshot.fromString("var x = 1;"),
+            /* version */ "1",
+        );
 
         assert(f1 !== f3, "Changed target: Expected to have different instances of document");
 
         compilerOptions.preserveConstEnums = true;
-        const f4 = documentRegistry.acquireDocument("file1.ts", compilerOptions, ts.ScriptSnapshot.fromString("var x = 1;"), /* version */ "1");
+        const f4 = documentRegistry.acquireDocument(
+            "file1.ts",
+            compilerOptions,
+            ts.ScriptSnapshot.fromString("var x = 1;"),
+            /* version */ "1",
+        );
 
         assert(f3 === f4, "Changed preserveConstEnums: Expected to have the same instance of the document");
 
         compilerOptions.module = ts.ModuleKind.System;
-        const f5 = documentRegistry.acquireDocument("file1.ts", compilerOptions, ts.ScriptSnapshot.fromString("var x = 1;"), /* version */ "1");
+        const f5 = documentRegistry.acquireDocument(
+            "file1.ts",
+            compilerOptions,
+            ts.ScriptSnapshot.fromString("var x = 1;"),
+            /* version */ "1",
+        );
 
         assert(f4 !== f5, "Changed module: Expected to have different instances of the document");
     });

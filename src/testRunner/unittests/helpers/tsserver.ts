@@ -162,7 +162,8 @@ export class TestSession extends ts.server.Session {
             this.logger.info(
                 `response:${
                     ts.server.stringifyIndented(
-                        response.response === ts.getSupportedCodeFixes() ? { ...response, response: "ts.getSupportedCodeFixes()" } : response,
+                        response.response === ts.getSupportedCodeFixes() ? { ...response, response: "ts.getSupportedCodeFixes()" }
+                            : response,
                     )
                 }`,
             );
@@ -224,7 +225,11 @@ export function createSessionWithCustomEventHandler(
     }
 }
 
-export function protocolLocationFromSubstring(str: string, substring: string, options?: SpanFromSubstringOptions): ts.server.protocol.Location {
+export function protocolLocationFromSubstring(
+    str: string,
+    substring: string,
+    options?: SpanFromSubstringOptions,
+): ts.server.protocol.Location {
     const start = nthIndexOf(str, substring, options ? options.index : 0);
     ts.Debug.assert(start !== -1);
     return protocolToLocation(str)(start);
@@ -238,7 +243,11 @@ export function protocolToLocation(text: string): (pos: number) => ts.server.pro
     };
 }
 
-export function protocolTextSpanFromSubstring(str: string, substring: string, options?: SpanFromSubstringOptions): ts.server.protocol.TextSpan {
+export function protocolTextSpanFromSubstring(
+    str: string,
+    substring: string,
+    options?: SpanFromSubstringOptions,
+): ts.server.protocol.TextSpan {
     const span = textSpanFromSubstring(str, substring, options);
     const toLocation = protocolToLocation(str);
     return { start: toLocation(span.start), end: toLocation(ts.textSpanEnd(span)) };

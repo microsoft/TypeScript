@@ -193,7 +193,11 @@ registerRefactor(refactorNameForMoveToFile, {
         }
         return emptyArray;
     },
-    getEditsForAction: function getRefactorEditsToMoveToFile(context, actionName, interactiveRefactorArguments): RefactorEditInfo | undefined {
+    getEditsForAction: function getRefactorEditsToMoveToFile(
+        context,
+        actionName,
+        interactiveRefactorArguments,
+    ): RefactorEditInfo | undefined {
         Debug.assert(actionName === refactorNameForMoveToFile, "Wrong refactor invoked");
         const statements = Debug.checkDefined(getStatementsToMove(context));
         const { host, program } = context;
@@ -488,7 +492,16 @@ function getTargetFileImportsAndAddExportInOldFile(
         )
         : append(
             copiedOldImports,
-            makeImportOrRequire(oldFile, oldFileDefault, oldFileNamedImports, oldFile.fileName, program, host, useEsModuleSyntax, quotePreference),
+            makeImportOrRequire(
+                oldFile,
+                oldFileDefault,
+                oldFileNamedImports,
+                oldFile.fileName,
+                program,
+                host,
+                useEsModuleSyntax,
+                quotePreference,
+            ),
         );
 }
 
@@ -539,7 +552,10 @@ export function deleteUnusedOldImports(
 ) {
     for (const statement of oldFile.statements) {
         if (contains(toMove, statement)) continue;
-        forEachImportInStatement(statement, i => deleteUnusedImports(oldFile, i, changes, name => toDelete.has(checker.getSymbolAtLocation(name)!)));
+        forEachImportInStatement(
+            statement,
+            i => deleteUnusedImports(oldFile, i, changes, name => toDelete.has(checker.getSymbolAtLocation(name)!)),
+        );
     }
 }
 
@@ -580,7 +596,18 @@ export function updateImportsInOtherFiles(
                 if (newImportDeclaration) changes.insertNodeAfter(sourceFile, statement, newImportDeclaration);
 
                 const ns = getNamespaceLikeImport(importNode);
-                if (ns) updateNamespaceLikeImport(changes, sourceFile, checker, movedSymbols, newModuleSpecifier, ns, importNode, quotePreference);
+                if (ns) {
+                    updateNamespaceLikeImport(
+                        changes,
+                        sourceFile,
+                        checker,
+                        movedSymbols,
+                        newModuleSpecifier,
+                        ns,
+                        importNode,
+                        quotePreference,
+                    );
+                }
             });
         }
     }
@@ -589,7 +616,8 @@ export function updateImportsInOtherFiles(
 function getNamespaceLikeImport(node: SupportedImport): Identifier | undefined {
     switch (node.kind) {
         case SyntaxKind.ImportDeclaration:
-            return node.importClause && node.importClause.namedBindings && node.importClause.namedBindings.kind === SyntaxKind.NamespaceImport ?
+            return node.importClause && node.importClause.namedBindings &&
+                    node.importClause.namedBindings.kind === SyntaxKind.NamespaceImport ?
                 node.importClause.namedBindings.name : undefined;
         case SyntaxKind.ImportEqualsDeclaration:
             return node.name;
@@ -731,7 +759,16 @@ export function createOldFileImportsFromTargetFile(
             imports.push(symbol.name);
         }
     });
-    return makeImportOrRequire(sourceFile, defaultImport, imports, targetFileNameWithExtension, program, host, useEs6Imports, quotePreference);
+    return makeImportOrRequire(
+        sourceFile,
+        defaultImport,
+        imports,
+        targetFileNameWithExtension,
+        program,
+        host,
+        useEs6Imports,
+        quotePreference,
+    );
 }
 
 /** @internal */
@@ -781,7 +818,10 @@ function makeVariableStatement(
 ) {
     return factory.createVariableStatement(
         /*modifiers*/ undefined,
-        factory.createVariableDeclarationList([factory.createVariableDeclaration(name, /*exclamationToken*/ undefined, type, initializer)], flags),
+        factory.createVariableDeclarationList(
+            [factory.createVariableDeclaration(name, /*exclamationToken*/ undefined, type, initializer)],
+            flags,
+        ),
     );
 }
 
@@ -862,7 +902,12 @@ function deleteUnusedImportsInDeclaration(
                 changes.replaceNode(
                     sourceFile,
                     importDecl.importClause,
-                    factory.updateImportClause(importDecl.importClause, importDecl.importClause.isTypeOnly, name, /*namedBindings*/ undefined),
+                    factory.updateImportClause(
+                        importDecl.importClause,
+                        importDecl.importClause.isTypeOnly,
+                        name,
+                        /*namedBindings*/ undefined,
+                    ),
                 );
             }
             else if (namedBindings.kind === SyntaxKind.NamedImports) {
@@ -887,7 +932,8 @@ function deleteUnusedImportsInVariableDeclaration(
                 if (varDecl.initializer && isRequireCall(varDecl.initializer, /*requireStringLiteralLikeArgument*/ true)) {
                     changes.delete(
                         sourceFile,
-                        isVariableDeclarationList(varDecl.parent) && length(varDecl.parent.declarations) === 1 ? varDecl.parent.parent : varDecl,
+                        isVariableDeclarationList(varDecl.parent) && length(varDecl.parent.declarations) === 1 ? varDecl.parent.parent
+                            : varDecl,
                     );
                 }
                 else {
@@ -1065,7 +1111,10 @@ export function getTopLevelDeclarationStatement(d: TopLevelDeclaration): TopLeve
             return d.parent.parent;
         case SyntaxKind.BindingElement:
             return getTopLevelDeclarationStatement(
-                cast(d.parent.parent, (p): p is TopLevelVariableDeclaration | BindingElement => isVariableDeclaration(p) || isBindingElement(p)),
+                cast(
+                    d.parent.parent,
+                    (p): p is TopLevelVariableDeclaration | BindingElement => isVariableDeclaration(p) || isBindingElement(p),
+                ),
             );
         default:
             return d;
@@ -1318,7 +1367,13 @@ export function getUsageInfo(
         });
     }
 
-    return { movedSymbols, targetFileImportsFromOldFile, oldFileImportsFromTargetFile, oldImportsNeededByTargetFile, unusedImportsFromOldFile };
+    return {
+        movedSymbols,
+        targetFileImportsFromOldFile,
+        oldFileImportsFromTargetFile,
+        oldImportsNeededByTargetFile,
+        unusedImportsFromOldFile,
+    };
 
     function getJsxNamespaceSymbol(containsJsx: Node | undefined) {
         if (containsJsx === undefined) {
@@ -1431,10 +1486,18 @@ function sourceFileOfTopLevelDeclaration(node: TopLevelDeclaration): Node {
 function forEachTopLevelDeclarationInBindingName<T>(name: BindingName, cb: (node: TopLevelDeclaration) => T): T | undefined {
     switch (name.kind) {
         case SyntaxKind.Identifier:
-            return cb(cast(name.parent, (x): x is TopLevelVariableDeclaration | BindingElement => isVariableDeclaration(x) || isBindingElement(x)));
+            return cb(
+                cast(
+                    name.parent,
+                    (x): x is TopLevelVariableDeclaration | BindingElement => isVariableDeclaration(x) || isBindingElement(x),
+                ),
+            );
         case SyntaxKind.ArrayBindingPattern:
         case SyntaxKind.ObjectBindingPattern:
-            return firstDefined(name.elements, em => isOmittedExpression(em) ? undefined : forEachTopLevelDeclarationInBindingName(em.name, cb));
+            return firstDefined(
+                name.elements,
+                em => isOmittedExpression(em) ? undefined : forEachTopLevelDeclarationInBindingName(em.name, cb),
+            );
         default:
             return Debug.assertNever(name, `Unexpected name kind ${(name as BindingName).kind}`);
     }
@@ -1477,14 +1540,20 @@ function moveStatementsToTargetFile(
                         isExportDeclaration(d) ? d :
                             isExportSpecifier(d) ? tryCast(d.parent.parent, isExportDeclaration) : undefined);
                     if (exportDeclaration && exportDeclaration.moduleSpecifier) {
-                        targetToSourceExports.set(exportDeclaration, (targetToSourceExports.get(exportDeclaration) || new Set()).add(declaration));
+                        targetToSourceExports.set(
+                            exportDeclaration,
+                            (targetToSourceExports.get(exportDeclaration) || new Set()).add(declaration),
+                        );
                     }
                 });
             }
         }
 
         for (const [exportDeclaration, topLevelDeclarations] of arrayFrom(targetToSourceExports)) {
-            if (exportDeclaration.exportClause && isNamedExports(exportDeclaration.exportClause) && length(exportDeclaration.exportClause.elements)) {
+            if (
+                exportDeclaration.exportClause && isNamedExports(exportDeclaration.exportClause) &&
+                length(exportDeclaration.exportClause.elements)
+            ) {
                 const elements = exportDeclaration.exportClause.elements;
                 const updatedElements = filter(
                     elements,

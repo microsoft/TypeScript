@@ -44,7 +44,12 @@ function getCodeFixesForImportDeclaration(context: CodeFixContext, node: ImportD
             context,
             sourceFile,
             node,
-            makeImport(namespace.name, /*namedImports*/ undefined, node.moduleSpecifier, getQuotePreference(sourceFile, context.preferences)),
+            makeImport(
+                namespace.name,
+                /*namedImports*/ undefined,
+                node.moduleSpecifier,
+                getQuotePreference(sourceFile, context.preferences),
+            ),
         ),
     );
 
@@ -81,8 +86,11 @@ registerCodeFix({
 
 function getActionsForUsageOfInvalidImport(context: CodeFixContext): CodeFixAction[] | undefined {
     const sourceFile = context.sourceFile;
-    const targetKind = Diagnostics.This_expression_is_not_callable.code === context.errorCode ? SyntaxKind.CallExpression : SyntaxKind.NewExpression;
-    const node = findAncestor(getTokenAtPosition(sourceFile, context.span.start), a => a.kind === targetKind) as CallExpression | NewExpression;
+    const targetKind = Diagnostics.This_expression_is_not_callable.code === context.errorCode ? SyntaxKind.CallExpression
+        : SyntaxKind.NewExpression;
+    const node = findAncestor(getTokenAtPosition(sourceFile, context.span.start), a => a.kind === targetKind) as
+        | CallExpression
+        | NewExpression;
     if (!node) {
         return [];
     }

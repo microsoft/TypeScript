@@ -96,17 +96,28 @@ export function transformES2020(context: TransformationContext): (x: SourceFile 
         return { expression: chain.expression, chain: links };
     }
 
-    function visitNonOptionalParenthesizedExpression(node: ParenthesizedExpression, captureThisArg: boolean, isDelete: boolean): Expression {
+    function visitNonOptionalParenthesizedExpression(
+        node: ParenthesizedExpression,
+        captureThisArg: boolean,
+        isDelete: boolean,
+    ): Expression {
         const expression = visitNonOptionalExpression(node.expression, captureThisArg, isDelete);
         if (isSyntheticReference(expression)) {
             // `(a.b)` -> { expression `((_a = a).b)`, thisArg: `_a` }
             // `(a[b])` -> { expression `((_a = a)[b])`, thisArg: `_a` }
-            return factory.createSyntheticReferenceExpression(factory.updateParenthesizedExpression(node, expression.expression), expression.thisArg);
+            return factory.createSyntheticReferenceExpression(
+                factory.updateParenthesizedExpression(node, expression.expression),
+                expression.thisArg,
+            );
         }
         return factory.updateParenthesizedExpression(node, expression);
     }
 
-    function visitNonOptionalPropertyOrElementAccessExpression(node: AccessExpression, captureThisArg: boolean, isDelete: boolean): Expression {
+    function visitNonOptionalPropertyOrElementAccessExpression(
+        node: AccessExpression,
+        captureThisArg: boolean,
+        isDelete: boolean,
+    ): Expression {
         if (isOptionalChain(node)) {
             // If `node` is an optional chain, then it is the outermost chain of an optional expression.
             return visitOptionalExpression(node, captureThisArg, isDelete);
@@ -191,7 +202,10 @@ export function transformES2020(context: TransformationContext): (x: SourceFile 
                     }
                     rightExpression = segment.kind === SyntaxKind.PropertyAccessExpression
                         ? factory.createPropertyAccessExpression(rightExpression, visitNode(segment.name, visitor, isIdentifier))
-                        : factory.createElementAccessExpression(rightExpression, visitNode(segment.argumentExpression, visitor, isExpression));
+                        : factory.createElementAccessExpression(
+                            rightExpression,
+                            visitNode(segment.argumentExpression, visitor, isExpression),
+                        );
                     break;
                 case SyntaxKind.CallExpression:
                     if (i === 0 && leftThisArg) {

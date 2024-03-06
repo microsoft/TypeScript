@@ -223,7 +223,12 @@ function getImportersForExport(
                         break; // TODO: GH#23879
 
                     case SyntaxKind.ImportEqualsDeclaration:
-                        handleNamespaceImport(direct, direct.name, hasSyntacticModifier(direct, ModifierFlags.Export), /*alreadyAddedDirect*/ false);
+                        handleNamespaceImport(
+                            direct,
+                            direct.name,
+                            hasSyntacticModifier(direct, ModifierFlags.Export),
+                            /*alreadyAddedDirect*/ false,
+                        );
                         break;
 
                     case SyntaxKind.ImportDeclaration:
@@ -555,13 +560,19 @@ function getDirectImportsMap(
 
 /** Iterates over all statements at the top level or in module declarations. Returns the first truthy result. */
 function forEachPossibleImportOrExportStatement<T>(sourceFileLike: SourceFileLike, action: (statement: Statement) => T) {
-    return forEach(sourceFileLike.kind === SyntaxKind.SourceFile ? sourceFileLike.statements : sourceFileLike.body!.statements, statement =>
-        // TODO: GH#18217
-        action(statement) || (isAmbientModuleDeclaration(statement) && forEach(statement.body && statement.body.statements, action)));
+    return forEach(
+        sourceFileLike.kind === SyntaxKind.SourceFile ? sourceFileLike.statements : sourceFileLike.body!.statements,
+        statement =>
+            // TODO: GH#18217
+            action(statement) || (isAmbientModuleDeclaration(statement) && forEach(statement.body && statement.body.statements, action)),
+    );
 }
 
 /** Calls `action` for each import, re-export, or require() in a file. */
-function forEachImport(sourceFile: SourceFile, action: (importStatement: ImporterOrCallExpression, imported: StringLiteralLike) => void): void {
+function forEachImport(
+    sourceFile: SourceFile,
+    action: (importStatement: ImporterOrCallExpression, imported: StringLiteralLike) => void,
+): void {
     if (sourceFile.externalModuleIndicator || sourceFile.imports !== undefined) {
         for (const i of sourceFile.imports) {
             action(importFromModuleSpecifier(i), i);
@@ -757,10 +768,12 @@ function getExportEqualsLocalSymbol(importedSymbol: Symbol, checker: TypeChecker
 // If a reference is a class expression, the exported node would be its parent.
 // If a reference is a variable declaration, the exported node would be the variable statement.
 function getExportNode(parent: Node, node: Node): Node | undefined {
-    const declaration = isVariableDeclaration(parent) ? parent : isBindingElement(parent) ? walkUpBindingElementsAndPatterns(parent) : undefined;
+    const declaration = isVariableDeclaration(parent) ? parent
+        : isBindingElement(parent) ? walkUpBindingElementsAndPatterns(parent) : undefined;
     if (declaration) {
         return (parent as VariableDeclaration | BindingElement).name !== node ? undefined :
-            isCatchClause(declaration.parent) ? undefined : isVariableStatement(declaration.parent.parent) ? declaration.parent.parent : undefined;
+            isCatchClause(declaration.parent) ? undefined
+            : isVariableStatement(declaration.parent.parent) ? declaration.parent.parent : undefined;
     }
     else {
         return parent;
@@ -846,5 +859,6 @@ function isAmbientModuleDeclaration(node: Node): node is AmbientModuleDeclaratio
 function isExternalModuleImportEquals(
     eq: ImportEqualsDeclaration,
 ): eq is ImportEqualsDeclaration & { moduleReference: { expression: StringLiteral; }; } {
-    return eq.moduleReference.kind === SyntaxKind.ExternalModuleReference && eq.moduleReference.expression.kind === SyntaxKind.StringLiteral;
+    return eq.moduleReference.kind === SyntaxKind.ExternalModuleReference &&
+        eq.moduleReference.expression.kind === SyntaxKind.StringLiteral;
 }

@@ -171,7 +171,9 @@ export class TestTypingsInstallerWorker extends ts.server.typingsInstaller.Typin
                 for (const file of typingFiles) {
                     this.testTypingInstaller.session.host.ensureFileOrFolder(file);
                 }
-                this.testTypingInstaller.session.host.baselineHost(`TI:: Installation ${pendingInstallInfo} complete with success::${!!success}`);
+                this.testTypingInstaller.session.host.baselineHost(
+                    `TI:: Installation ${pendingInstallInfo} complete with success::${!!success}`,
+                );
                 onRequestCompleted(!!success);
             },
             `#${requestId} with arguments:: ${jsonToReadableText(packageNames)}`,

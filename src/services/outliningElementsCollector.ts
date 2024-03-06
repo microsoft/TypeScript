@@ -96,7 +96,10 @@ function addNodeOutliningSpans(sourceFile: SourceFile, cancellationToken: Cancel
         if (depthRemaining === 0) return;
         cancellationToken.throwIfCancellationRequested();
 
-        if (isDeclaration(n) || isVariableStatement(n) || isReturnStatement(n) || isCallOrNewExpression(n) || n.kind === SyntaxKind.EndOfFileToken) {
+        if (
+            isDeclaration(n) || isVariableStatement(n) || isReturnStatement(n) || isCallOrNewExpression(n) ||
+            n.kind === SyntaxKind.EndOfFileToken
+        ) {
             addOutliningForLeadingCommentsForNode(n, sourceFile, cancellationToken, out);
         }
 
@@ -176,7 +179,12 @@ function isRegionDelimiter(lineText: string) {
     return regionDelimiterRegExp.exec(lineText);
 }
 
-function addOutliningForLeadingCommentsForPos(pos: number, sourceFile: SourceFile, cancellationToken: CancellationToken, out: OutliningSpan[]): void {
+function addOutliningForLeadingCommentsForPos(
+    pos: number,
+    sourceFile: SourceFile,
+    cancellationToken: CancellationToken,
+    out: OutliningSpan[],
+): void {
     const comments = getLeadingCommentRanges(sourceFile.text, pos);
     if (!comments) return;
 
@@ -223,7 +231,12 @@ function addOutliningForLeadingCommentsForPos(pos: number, sourceFile: SourceFil
     }
 }
 
-function addOutliningForLeadingCommentsForNode(n: Node, sourceFile: SourceFile, cancellationToken: CancellationToken, out: OutliningSpan[]): void {
+function addOutliningForLeadingCommentsForNode(
+    n: Node,
+    sourceFile: SourceFile,
+    cancellationToken: CancellationToken,
+    out: OutliningSpan[],
+): void {
     if (isJsxText(n)) return;
     addOutliningForLeadingCommentsForPos(n.pos, sourceFile, cancellationToken, out);
 }
@@ -428,7 +441,10 @@ function spanBetweenTokens(
     autoCollapse = false,
     useFullStart = true,
 ): OutliningSpan {
-    const textSpan = createTextSpanFromBounds(useFullStart ? openToken.getFullStart() : openToken.getStart(sourceFile), closeToken.getEnd());
+    const textSpan = createTextSpanFromBounds(
+        useFullStart ? openToken.getFullStart() : openToken.getStart(sourceFile),
+        closeToken.getEnd(),
+    );
     return createOutliningSpan(textSpan, OutliningSpanKind.Code, createTextSpanFromNode(hintSpanNode, sourceFile), autoCollapse);
 }
 

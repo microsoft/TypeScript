@@ -9,7 +9,10 @@ describe("unittests:: assert", () => {
             )
         );
         assert.throws(() =>
-            assert.deepEqual(ts.factory.createNodeArray([], /*hasTrailingComma*/ true), ts.factory.createNodeArray([], /*hasTrailingComma*/ false))
+            assert.deepEqual(
+                ts.factory.createNodeArray([], /*hasTrailingComma*/ true),
+                ts.factory.createNodeArray([], /*hasTrailingComma*/ false),
+            )
         );
         assert.deepEqual(
             ts.factory.createNodeArray([ts.factory.createIdentifier("A")], /*hasTrailingComma*/ true),

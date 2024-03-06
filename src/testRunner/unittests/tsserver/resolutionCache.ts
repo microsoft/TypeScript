@@ -361,7 +361,10 @@ describe("unittests:: tsserver:: resolutionCache:: tsserverProjectSystem rename 
             });
         }
         verifyTypesLoad("types should load from config file path if config exists", /*includeTypeRoots*/ false);
-        verifyTypesLoad("types should not load from config file path if config exists but does not specifies typeRoots", /*includeTypeRoots*/ true);
+        verifyTypesLoad(
+            "types should not load from config file path if config exists but does not specifies typeRoots",
+            /*includeTypeRoots*/ true,
+        );
     });
 });
 
@@ -573,7 +576,12 @@ export const x = 10;`,
                 const host = createServerHost(files);
                 const session = new TestSession(host);
                 openFilesForSession(
-                    [{ file: srcFile.path, content: srcFile.content, scriptKindName: "TS", projectRootPath: "/user/username/projects/myproject" }],
+                    [{
+                        file: srcFile.path,
+                        content: srcFile.content,
+                        scriptKindName: "TS",
+                        projectRootPath: "/user/username/projects/myproject",
+                    }],
                     session,
                 );
                 baselineTsserverLogs("resolutionCache", scenario, session);
@@ -604,7 +612,11 @@ export const x = 10;`,
 
             host.ensureFileOrFolder(npmCacheFile);
             session.host.baselineHost("After npm cache update");
-            baselineTsserverLogs("resolutionCache", "when watching node_modules in inferred project for failed lookup/closed script infos", session);
+            baselineTsserverLogs(
+                "resolutionCache",
+                "when watching node_modules in inferred project for failed lookup/closed script infos",
+                session,
+            );
         });
         it("when watching node_modules as part of wild card directories in config project", () => {
             const config: File = {
@@ -618,7 +630,11 @@ export const x = 10;`,
 
             host.ensureFileOrFolder(npmCacheFile);
             session.host.baselineHost("After npm cache update");
-            baselineTsserverLogs("resolutionCache", "when watching node_modules as part of wild card directories in config project", session);
+            baselineTsserverLogs(
+                "resolutionCache",
+                "when watching node_modules as part of wild card directories in config project",
+                session,
+            );
         });
     });
 

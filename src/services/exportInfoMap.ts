@@ -128,7 +128,12 @@ export interface ExportInfoMap {
         importingFile: Path,
         preferCapitalized: boolean,
         matches: (name: string, targetFlags: SymbolFlags) => boolean,
-        action: (info: readonly SymbolExportInfo[], symbolName: string, isFromAmbientModule: boolean, key: ExportMapInfoKey) => T | undefined,
+        action: (
+            info: readonly SymbolExportInfo[],
+            symbolName: string,
+            isFromAmbientModule: boolean,
+            key: ExportMapInfoKey,
+        ) => T | undefined,
     ): T | undefined;
     releaseSymbols(): void;
     isEmpty(): boolean;
@@ -456,18 +461,24 @@ export function forEachExternalModuleToImportFrom(
     if (autoImportProvider) {
         const start = timestamp();
         const checker = program.getTypeChecker();
-        forEachExternalModule(autoImportProvider.getTypeChecker(), autoImportProvider.getSourceFiles(), excludePatterns, host, (module, file) => {
-            if (
-                file && !program.getSourceFile(file.fileName) ||
-                !file && !checker.resolveName(module.name, /*location*/ undefined, SymbolFlags.Module, /*excludeGlobals*/ false)
-            ) {
-                // The AutoImportProvider filters files already in the main program out of its *root* files,
-                // but non-root files can still be present in both programs, and already in the export info map
-                // at this point. This doesn't create any incorrect behavior, but is a waste of time and memory,
-                // so we filter them out here.
-                cb(module, file, autoImportProvider, /*isFromPackageJson*/ true);
-            }
-        });
+        forEachExternalModule(
+            autoImportProvider.getTypeChecker(),
+            autoImportProvider.getSourceFiles(),
+            excludePatterns,
+            host,
+            (module, file) => {
+                if (
+                    file && !program.getSourceFile(file.fileName) ||
+                    !file && !checker.resolveName(module.name, /*location*/ undefined, SymbolFlags.Module, /*excludeGlobals*/ false)
+                ) {
+                    // The AutoImportProvider filters files already in the main program out of its *root* files,
+                    // but non-root files can still be present in both programs, and already in the export info map
+                    // at this point. This doesn't create any incorrect behavior, but is a waste of time and memory,
+                    // so we filter them out here.
+                    cb(module, file, autoImportProvider, /*isFromPackageJson*/ true);
+                }
+            },
+        );
         host.log?.(`forEachExternalModuleToImportFrom autoImportProvider: ${timestamp() - start}`);
     }
 }
@@ -596,7 +607,8 @@ export function getDefaultLikeExportInfo(moduleSymbol: Symbol, checker: TypeChec
 }
 
 function isImportableSymbol(symbol: Symbol, checker: TypeChecker) {
-    return !checker.isUndefinedSymbol(symbol) && !checker.isUnknownSymbol(symbol) && !isKnownSymbol(symbol) && !isPrivateIdentifierSymbol(symbol);
+    return !checker.isUndefinedSymbol(symbol) && !checker.isUnknownSymbol(symbol) && !isKnownSymbol(symbol) &&
+        !isPrivateIdentifierSymbol(symbol);
 }
 
 function getDefaultLikeExportWorker(

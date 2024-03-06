@@ -354,14 +354,22 @@ export function transformESDecorators(context: TransformationContext): (x: Sourc
     }
 
     function exitClass() {
-        Debug.assert(top?.kind === "class", "Incorrect value for top.kind.", () => `Expected top.kind to be 'class' but got '${top?.kind}' instead.`);
+        Debug.assert(
+            top?.kind === "class",
+            "Incorrect value for top.kind.",
+            () => `Expected top.kind to be 'class' but got '${top?.kind}' instead.`,
+        );
         pendingExpressions = top.savedPendingExpressions;
         top = top.next;
         updateState();
     }
 
     function enterClassElement(node: ClassElement) {
-        Debug.assert(top?.kind === "class", "Incorrect value for top.kind.", () => `Expected top.kind to be 'class' but got '${top?.kind}' instead.`);
+        Debug.assert(
+            top?.kind === "class",
+            "Incorrect value for top.kind.",
+            () => `Expected top.kind to be 'class' but got '${top?.kind}' instead.`,
+        );
         top = { kind: "class-element", next: top };
         if (isClassStaticBlockDeclaration(node) || isPropertyDeclaration(node) && hasStaticModifier(node)) {
             top.classThis = top.next.classInfo?.classThis;
@@ -396,7 +404,11 @@ export function transformESDecorators(context: TransformationContext): (x: Sourc
     }
 
     function exitName() {
-        Debug.assert(top?.kind === "name", "Incorrect value for top.kind.", () => `Expected top.kind to be 'name' but got '${top?.kind}' instead.`);
+        Debug.assert(
+            top?.kind === "name",
+            "Incorrect value for top.kind.",
+            () => `Expected top.kind to be 'name' but got '${top?.kind}' instead.`,
+        );
         top = top.next;
         updateState();
     }
@@ -414,7 +426,11 @@ export function transformESDecorators(context: TransformationContext): (x: Sourc
     }
 
     function exitOther() {
-        Debug.assert(top?.kind === "other", "Incorrect value for top.kind.", () => `Expected top.kind to be 'other' but got '${top?.kind}' instead.`);
+        Debug.assert(
+            top?.kind === "other",
+            "Incorrect value for top.kind.",
+            () => `Expected top.kind to be 'other' but got '${top?.kind}' instead.`,
+        );
         if (top.depth > 0) {
             Debug.assert(!pendingExpressions);
             top.depth--;
@@ -591,7 +607,10 @@ export function transformESDecorators(context: TransformationContext): (x: Sourc
     }
 
     function createClassInfo(node: ClassLikeDeclaration): ClassInfo {
-        const metadataReference = factory.createUniqueName("_metadata", GeneratedIdentifierFlags.Optimistic | GeneratedIdentifierFlags.FileLevel);
+        const metadataReference = factory.createUniqueName(
+            "_metadata",
+            GeneratedIdentifierFlags.Optimistic | GeneratedIdentifierFlags.FileLevel,
+        );
         let instanceMethodExtraInitializersName: Identifier | undefined;
         let staticMethodExtraInitializersName: Identifier | undefined;
         let hasStaticInitializers = false;
@@ -610,7 +629,8 @@ export function transformESDecorators(context: TransformationContext): (x: Sourc
             const needsUniqueClassThis = some(
                 node.members,
                 member =>
-                    (isPrivateIdentifierClassElementDeclaration(member) || isAutoAccessorPropertyDeclaration(member)) && hasStaticModifier(member),
+                    (isPrivateIdentifierClassElementDeclaration(member) || isAutoAccessorPropertyDeclaration(member)) &&
+                    hasStaticModifier(member),
             );
             classThis = factory.createUniqueName(
                 "_classThis",
@@ -643,7 +663,10 @@ export function transformESDecorators(context: TransformationContext): (x: Sourc
                             "_instanceExtraInitializers",
                             GeneratedIdentifierFlags.Optimistic | GeneratedIdentifierFlags.FileLevel,
                         );
-                        const initializer = emitHelpers().createRunInitializersHelper(factory.createThis(), instanceMethodExtraInitializersName);
+                        const initializer = emitHelpers().createRunInitializersHelper(
+                            factory.createThis(),
+                            instanceMethodExtraInitializersName,
+                        );
                         setSourceMapRange(initializer, node.name ?? moveRangePastDecorators(node));
                         pendingInstanceInitializers ??= [];
                         pendingInstanceInitializers.push(initializer);
@@ -668,7 +691,10 @@ export function transformESDecorators(context: TransformationContext): (x: Sourc
                 }
             }
 
-            if ((isPrivateIdentifierClassElementDeclaration(member) || isAutoAccessorPropertyDeclaration(member)) && hasStaticModifier(member)) {
+            if (
+                (isPrivateIdentifierClassElementDeclaration(member) || isAutoAccessorPropertyDeclaration(member)) &&
+                hasStaticModifier(member)
+            ) {
                 hasStaticPrivateClassElements = true;
             }
 
@@ -703,7 +729,9 @@ export function transformESDecorators(context: TransformationContext): (x: Sourc
 
         // When a class has class decorators we end up transforming it into a statement that would otherwise give it an
         // assigned name. If the class doesn't have an assigned name, we'll give it an assigned name of `""`)
-        if (!classHasDeclaredOrExplicitlyAssignedName(node) && classOrConstructorParameterIsDecorated(/*useLegacyDecorators*/ false, node)) {
+        if (
+            !classHasDeclaredOrExplicitlyAssignedName(node) && classOrConstructorParameterIsDecorated(/*useLegacyDecorators*/ false, node)
+        ) {
             node = injectClassNamedEvaluationHelperBlockIfMissing(context, node, factory.createStringLiteral(""));
         }
 
@@ -756,7 +784,10 @@ export function transformESDecorators(context: TransformationContext): (x: Sourc
         const extendsElement = extendsClause && firstOrUndefined(extendsClause.types);
         const extendsExpression = extendsElement && visitNode(extendsElement.expression, visitor, isExpression);
         if (extendsExpression) {
-            classInfo.classSuper = factory.createUniqueName("_classSuper", GeneratedIdentifierFlags.Optimistic | GeneratedIdentifierFlags.FileLevel);
+            classInfo.classSuper = factory.createUniqueName(
+                "_classSuper",
+                GeneratedIdentifierFlags.Optimistic | GeneratedIdentifierFlags.FileLevel,
+            );
 
             // Ensure we do not give the class or function an assigned name due to the variable by prefixing it
             // with `0, `.
@@ -873,10 +904,14 @@ export function transformESDecorators(context: TransformationContext): (x: Sourc
                 if (isStatic(member)) {
                     classDefinitionStatements.push(createLet(memberInfo.memberDecoratorsName));
                     if (memberInfo.memberInitializersName) {
-                        classDefinitionStatements.push(createLet(memberInfo.memberInitializersName, factory.createArrayLiteralExpression()));
+                        classDefinitionStatements.push(
+                            createLet(memberInfo.memberInitializersName, factory.createArrayLiteralExpression()),
+                        );
                     }
                     if (memberInfo.memberExtraInitializersName) {
-                        classDefinitionStatements.push(createLet(memberInfo.memberExtraInitializersName, factory.createArrayLiteralExpression()));
+                        classDefinitionStatements.push(
+                            createLet(memberInfo.memberExtraInitializersName, factory.createArrayLiteralExpression()),
+                        );
                     }
                     if (memberInfo.memberDescriptorName) {
                         classDefinitionStatements.push(createLet(memberInfo.memberDescriptorName));
@@ -891,10 +926,14 @@ export function transformESDecorators(context: TransformationContext): (x: Sourc
                 if (!isStatic(member)) {
                     classDefinitionStatements.push(createLet(memberInfo.memberDecoratorsName));
                     if (memberInfo.memberInitializersName) {
-                        classDefinitionStatements.push(createLet(memberInfo.memberInitializersName, factory.createArrayLiteralExpression()));
+                        classDefinitionStatements.push(
+                            createLet(memberInfo.memberInitializersName, factory.createArrayLiteralExpression()),
+                        );
                     }
                     if (memberInfo.memberExtraInitializersName) {
-                        classDefinitionStatements.push(createLet(memberInfo.memberExtraInitializersName, factory.createArrayLiteralExpression()));
+                        classDefinitionStatements.push(
+                            createLet(memberInfo.memberExtraInitializersName, factory.createArrayLiteralExpression()),
+                        );
                     }
                     if (memberInfo.memberDescriptorName) {
                         classDefinitionStatements.push(createLet(memberInfo.memberDescriptorName));
@@ -963,7 +1002,10 @@ export function transformESDecorators(context: TransformationContext): (x: Sourc
 
         // 13. Class extra initializers are evaluated
         if (classInfo.classExtraInitializersName) {
-            const runClassInitializersHelper = emitHelpers().createRunInitializersHelper(renamedClassThis, classInfo.classExtraInitializersName);
+            const runClassInitializersHelper = emitHelpers().createRunInitializersHelper(
+                renamedClassThis,
+                classInfo.classExtraInitializersName,
+            );
             const runClassInitializersStatement = factory.createExpressionStatement(runClassInitializersHelper);
             setSourceMapRange(runClassInitializersStatement, node.name ?? moveRangePastDecorators(node));
             trailingBlockStatements = append(trailingBlockStatements, runClassInitializersStatement);
@@ -1098,14 +1140,19 @@ export function transformESDecorators(context: TransformationContext): (x: Sourc
         if (shouldTransformPrivateStaticElementsInClass) {
             addInternalEmitFlags(classExpression, InternalEmitFlags.TransformPrivateStaticElements);
             for (const member of classExpression.members) {
-                if ((isPrivateIdentifierClassElementDeclaration(member) || isAutoAccessorPropertyDeclaration(member)) && hasStaticModifier(member)) {
+                if (
+                    (isPrivateIdentifierClassElementDeclaration(member) || isAutoAccessorPropertyDeclaration(member)) &&
+                    hasStaticModifier(member)
+                ) {
                     addInternalEmitFlags(member, InternalEmitFlags.TransformPrivateStaticElements);
                 }
             }
         }
 
         setOriginalNode(classExpression, node);
-        return factory.createImmediatelyInvokedArrowFunction(factory.mergeLexicalEnvironment(classDefinitionStatements, lexicalEnvironment));
+        return factory.createImmediatelyInvokedArrowFunction(
+            factory.mergeLexicalEnvironment(classDefinitionStatements, lexicalEnvironment),
+        );
     }
 
     function isDecoratedClassLike(node: ClassLikeDeclaration) {
@@ -1117,7 +1164,8 @@ export function transformESDecorators(context: TransformationContext): (x: Sourc
         if (isDecoratedClassLike(node)) {
             const statements: Statement[] = [];
             const originalClass = getOriginalNode(node, isClassLike) ?? node;
-            const className = originalClass.name ? factory.createStringLiteralFromNode(originalClass.name) : factory.createStringLiteral("default");
+            const className = originalClass.name ? factory.createStringLiteralFromNode(originalClass.name)
+                : factory.createStringLiteral("default");
             const isExport = hasSyntacticModifier(node, ModifierFlags.Export);
             const isDefault = hasSyntacticModifier(node, ModifierFlags.Default);
             if (!node.name) {
@@ -1159,7 +1207,8 @@ export function transformESDecorators(context: TransformationContext): (x: Sourc
                 //  let C = (() => { ... })();
                 Debug.assertIsDefined(node.name, "A class declaration that is not a default export must have a name.");
                 const iife = transformClassLike(node);
-                const modifierVisitorNoExport = isExport ? ((node: ModifierLike) => isExportModifier(node) ? undefined : modifierVisitor(node))
+                const modifierVisitorNoExport = isExport ? ((node: ModifierLike) =>
+                    isExportModifier(node) ? undefined : modifierVisitor(node))
                     : modifierVisitor;
                 const modifiers = visitNodes(node.modifiers, modifierVisitorNoExport, isModifier);
                 const declName = factory.getLocalName(node, /*allowComments*/ false, /*allowSourceMaps*/ true);
@@ -1538,7 +1587,10 @@ export function transformESDecorators(context: TransformationContext): (x: Sourc
             const parameters = visitNodes(node.parameters, visitor, isParameter);
             const body = visitNode(node.body, visitor, isBlock);
             exitClassElement();
-            return finishClassElement(factory.updateGetAccessorDeclaration(node, modifiers, name, parameters, /*type*/ undefined, body), node);
+            return finishClassElement(
+                factory.updateGetAccessorDeclaration(node, modifiers, name, parameters, /*type*/ undefined, body),
+                node,
+            );
         }
     }
 
@@ -1712,7 +1764,11 @@ export function transformESDecorators(context: TransformationContext): (x: Sourc
                 }
             }
 
-            const modifiersWithoutAccessor = visitNodes(modifiers, node => node.kind !== SyntaxKind.AccessorKeyword ? node : undefined, isModifier);
+            const modifiersWithoutAccessor = visitNodes(
+                modifiers,
+                node => node.kind !== SyntaxKind.AccessorKeyword ? node : undefined,
+                isModifier,
+            );
 
             const backingField = createAccessorPropertyBackingField(factory, node, modifiersWithoutAccessor, initializer);
             setOriginalNode(backingField, node);
@@ -1734,7 +1790,14 @@ export function transformESDecorators(context: TransformationContext): (x: Sourc
         }
 
         return finishClassElement(
-            factory.updatePropertyDeclaration(node, modifiers, name, /*questionOrExclamationToken*/ undefined, /*type*/ undefined, initializer),
+            factory.updatePropertyDeclaration(
+                node,
+                modifiers,
+                name,
+                /*questionOrExclamationToken*/ undefined,
+                /*type*/ undefined,
+                initializer,
+            ),
             node,
         );
     }
@@ -2013,7 +2076,13 @@ export function transformESDecorators(context: TransformationContext): (x: Sourc
                     // result of the operation so that we can provide it to `y` when the assignment is complete.
 
                     const temp = discarded ? undefined : factory.createTempVariable(hoistVariableDeclaration);
-                    expression = expandPreOrPostfixIncrementOrDecrementExpression(factory, node, expression, hoistVariableDeclaration, temp);
+                    expression = expandPreOrPostfixIncrementOrDecrementExpression(
+                        factory,
+                        node,
+                        expression,
+                        hoistVariableDeclaration,
+                        temp,
+                    );
                     expression = factory.createReflectSetCall(classSuper, setterName, expression, classThis);
                     setOriginalNode(expression, node);
                     setTextRange(expression, node);
@@ -2380,7 +2449,12 @@ export function transformESDecorators(context: TransformationContext): (x: Sourc
         // preserve the 'this' binding for an access expression
         const innerExpression = skipOuterExpressions(expression);
         if (isAccessExpression(innerExpression)) {
-            const { target, thisArg } = factory.createCallBinding(expression, hoistVariableDeclaration, languageVersion, /*cacheIdentifiers*/ true);
+            const { target, thisArg } = factory.createCallBinding(
+                expression,
+                hoistVariableDeclaration,
+                languageVersion,
+                /*cacheIdentifiers*/ true,
+            );
             return factory.restoreOuterExpressions(expression, factory.createFunctionBindCall(target, thisArg, []));
         }
         return expression;

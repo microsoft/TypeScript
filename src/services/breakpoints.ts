@@ -368,7 +368,9 @@ export function spanInSourceFileAtLocation(sourceFile: SourceFile, position: num
                             );
                         }
 
-                        if (operatorToken.kind === SyntaxKind.EqualsToken && isArrayLiteralOrObjectLiteralDestructuringPattern(node.parent)) {
+                        if (
+                            operatorToken.kind === SyntaxKind.EqualsToken && isArrayLiteralOrObjectLiteralDestructuringPattern(node.parent)
+                        ) {
                             // Set breakpoint on assignment expression element of destructuring pattern
                             // a = expression of
                             // [a = expression, b, c] = someExpression or
@@ -456,8 +458,12 @@ export function spanInSourceFileAtLocation(sourceFile: SourceFile, position: num
             }
         }
 
-        function textSpanFromVariableDeclaration(variableDeclaration: VariableDeclaration | PropertyDeclaration | PropertySignature): TextSpan {
-            if (isVariableDeclarationList(variableDeclaration.parent) && variableDeclaration.parent.declarations[0] === variableDeclaration) {
+        function textSpanFromVariableDeclaration(
+            variableDeclaration: VariableDeclaration | PropertyDeclaration | PropertySignature,
+        ): TextSpan {
+            if (
+                isVariableDeclarationList(variableDeclaration.parent) && variableDeclaration.parent.declarations[0] === variableDeclaration
+            ) {
                 // First declaration - include let keyword
                 return textSpan(findPrecedingToken(variableDeclaration.pos, sourceFile, variableDeclaration.parent)!, variableDeclaration);
             }
@@ -467,7 +473,9 @@ export function spanInSourceFileAtLocation(sourceFile: SourceFile, position: num
             }
         }
 
-        function spanInVariableDeclaration(variableDeclaration: VariableDeclaration | PropertyDeclaration | PropertySignature): TextSpan | undefined {
+        function spanInVariableDeclaration(
+            variableDeclaration: VariableDeclaration | PropertyDeclaration | PropertySignature,
+        ): TextSpan | undefined {
             // If declaration of for in statement, just set the span in parent
             if (variableDeclaration.parent.parent.kind === SyntaxKind.ForInStatement) {
                 return spanInNode(variableDeclaration.parent.parent);

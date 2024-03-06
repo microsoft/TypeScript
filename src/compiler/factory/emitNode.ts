@@ -365,7 +365,10 @@ export function getTypeNode<T extends Node>(node: T): TypeNode | undefined {
 }
 
 /** @internal */
-export function setIdentifierTypeArguments<T extends Identifier>(node: T, typeArguments: NodeArray<TypeNode | TypeParameterDeclaration> | undefined) {
+export function setIdentifierTypeArguments<T extends Identifier>(
+    node: T,
+    typeArguments: NodeArray<TypeNode | TypeParameterDeclaration> | undefined,
+) {
     getOrCreateEmitNode(node).identifierTypeArguments = typeArguments;
     return node;
 }
@@ -387,7 +390,10 @@ export function getIdentifierAutoGenerate(node: Identifier | PrivateIdentifier):
 }
 
 /** @internal */
-export function setIdentifierGeneratedImportReference<T extends Identifier | PrivateIdentifier>(node: T, value: ImportSpecifier | undefined) {
+export function setIdentifierGeneratedImportReference<T extends Identifier | PrivateIdentifier>(
+    node: T,
+    value: ImportSpecifier | undefined,
+) {
     getOrCreateEmitNode(node).generatedImportReference = value;
     return node;
 }

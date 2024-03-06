@@ -447,7 +447,8 @@ export function createRuntimeTypeSerializer(context: TransformationContext): Run
 
             if (
                 !strictNullChecks &&
-                ((isLiteralTypeNode(typeNode) && typeNode.literal.kind === SyntaxKind.NullKeyword) || typeNode.kind === SyntaxKind.UndefinedKeyword)
+                ((isLiteralTypeNode(typeNode) && typeNode.literal.kind === SyntaxKind.NullKeyword) ||
+                    typeNode.kind === SyntaxKind.UndefinedKeyword)
             ) {
                 continue; // Elide null and undefined from unions for metadata, just like what we did prior to the implementation of strict null checks
             }
@@ -522,7 +523,12 @@ export function createRuntimeTypeSerializer(context: TransformationContext): Run
         switch (kind) {
             case TypeReferenceSerializationKind.Unknown:
                 // From conditional type type reference that cannot be resolved is Similar to any or unknown
-                if (findAncestor(node, n => n.parent && isConditionalTypeNode(n.parent) && (n.parent.trueType === n || n.parent.falseType === n))) {
+                if (
+                    findAncestor(
+                        node,
+                        n => n.parent && isConditionalTypeNode(n.parent) && (n.parent.trueType === n || n.parent.falseType === n),
+                    )
+                ) {
                     return factory.createIdentifier("Object");
                 }
 
@@ -642,7 +648,10 @@ export function createRuntimeTypeSerializer(context: TransformationContext): Run
      * @param node The qualified name to serialize.
      */
     function serializeQualifiedNameAsExpression(node: QualifiedName): SerializedEntityName {
-        return factory.createPropertyAccessExpression(serializeEntityNameAsExpression(node.left), node.right) as PropertyAccessEntityNameExpression;
+        return factory.createPropertyAccessExpression(
+            serializeEntityNameAsExpression(node.left),
+            node.right,
+        ) as PropertyAccessEntityNameExpression;
     }
 
     function getGlobalConstructorWithFallback(name: string) {

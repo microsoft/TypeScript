@@ -135,7 +135,10 @@ export function createNodeConverters(factory: NodeFactory): NodeConverters {
                 );
             }
             Debug.assertNode(element.name, isIdentifier);
-            return setOriginalNode(setTextRange(factory.createShorthandPropertyAssignment(element.name, element.initializer), element), element);
+            return setOriginalNode(
+                setTextRange(factory.createShorthandPropertyAssignment(element.name, element.initializer), element),
+                element,
+            );
         }
 
         return cast(element, isObjectLiteralElementLike);

@@ -196,7 +196,10 @@ registerCodeFix({
             ];
         }
         if (info.kind === InfoKind.Enum) {
-            const changes = textChanges.ChangeTracker.with(context, t => addEnumMemberDeclaration(t, context.program.getTypeChecker(), info));
+            const changes = textChanges.ChangeTracker.with(
+                context,
+                t => addEnumMemberDeclaration(t, context.program.getTypeChecker(), info),
+            );
             return [
                 createCodeFixAction(
                     fixMissingMember,
@@ -223,7 +226,8 @@ registerCodeFix({
                     !info ||
                     !addToSeen(
                         seen,
-                        getNodeId(info.parentDeclaration) + "#" + (info.kind === InfoKind.ObjectLiteral ? info.identifier : info.token.text),
+                        getNodeId(info.parentDeclaration) + "#" +
+                            (info.kind === InfoKind.ObjectLiteral ? info.identifier : info.token.text),
                     )
                 ) {
                     return;
@@ -265,11 +269,25 @@ registerCodeFix({
                     const { parentDeclaration, declSourceFile, modifierFlags, token, call, isJSFile } = info;
                     // Always prefer to add a method declaration if possible.
                     if (call && !isPrivateIdentifier(token)) {
-                        addMethodDeclaration(context, changes, call, token, modifierFlags & ModifierFlags.Static, parentDeclaration, declSourceFile);
+                        addMethodDeclaration(
+                            context,
+                            changes,
+                            call,
+                            token,
+                            modifierFlags & ModifierFlags.Static,
+                            parentDeclaration,
+                            declSourceFile,
+                        );
                     }
                     else {
                         if (isJSFile && !isInterfaceDeclaration(parentDeclaration) && !isTypeLiteralNode(parentDeclaration)) {
-                            addMissingMemberInJs(changes, declSourceFile, parentDeclaration, token, !!(modifierFlags & ModifierFlags.Static));
+                            addMissingMemberInJs(
+                                changes,
+                                declSourceFile,
+                                parentDeclaration,
+                                token,
+                                !!(modifierFlags & ModifierFlags.Static),
+                            );
                         }
                         else {
                             const typeNode = getTypeNode(checker, parentDeclaration, token);
@@ -348,7 +366,9 @@ function getInfo(sourceFile: SourceFile, tokenPos: number, errorCode: number, ch
     const parent = token.parent;
 
     if (errorCode === Diagnostics.Argument_of_type_0_is_not_assignable_to_parameter_of_type_1.code) {
-        if (!(token.kind === SyntaxKind.OpenBraceToken && isObjectLiteralExpression(parent) && isCallExpression(parent.parent))) return undefined;
+        if (!(token.kind === SyntaxKind.OpenBraceToken && isObjectLiteralExpression(parent) && isCallExpression(parent.parent))) {
+            return undefined;
+        }
 
         const argIndex = findIndex(parent.parent.arguments, arg => arg === parent);
         if (argIndex < 0) return undefined;
@@ -473,7 +493,10 @@ function getInfo(sourceFile: SourceFile, tokenPos: number, errorCode: number, ch
 
     // Prefer to change the class instead of the interface if they are merged
     const declaration = classDeclaration ||
-        find(symbol.declarations, d => isInterfaceDeclaration(d) || isTypeLiteralNode(d)) as InterfaceDeclaration | TypeLiteralNode | undefined;
+        find(symbol.declarations, d => isInterfaceDeclaration(d) || isTypeLiteralNode(d)) as
+            | InterfaceDeclaration
+            | TypeLiteralNode
+            | undefined;
     if (declaration && !isSourceFileFromLibrary(program, declaration.getSourceFile())) {
         const makeStatic = !isTypeLiteralNode(declaration) &&
             ((leftExpressionType as TypeReference).target || leftExpressionType) !== checker.getDeclaredTypeOfSymbol(symbol);
@@ -570,7 +593,9 @@ function addMissingMemberInJs(
 }
 
 function initializePropertyToUndefined(obj: Expression, propertyName: string) {
-    return factory.createExpressionStatement(factory.createAssignment(factory.createPropertyAccessExpression(obj, propertyName), createUndefined()));
+    return factory.createExpressionStatement(
+        factory.createAssignment(factory.createPropertyAccessExpression(obj, propertyName), createUndefined()),
+    );
 }
 
 function createActionsForAddMissingMemberInTypeScriptFile(
@@ -622,7 +647,8 @@ function getTypeNode(checker: TypeChecker, node: ClassLikeDeclaration | Interfac
     }
     else {
         const contextualType = checker.getContextualType(token.parent as Expression);
-        typeNode = contextualType ? checker.typeToTypeNode(contextualType, /*enclosingDeclaration*/ undefined, NodeBuilderFlags.NoTruncation)
+        typeNode = contextualType ?
+            checker.typeToTypeNode(contextualType, /*enclosingDeclaration*/ undefined, NodeBuilderFlags.NoTruncation)
             : undefined;
     }
     return typeNode || factory.createKeywordTypeNode(SyntaxKind.AnyKeyword);
@@ -639,7 +665,13 @@ function addPropertyDeclaration(
     const modifiers = modifierFlags ? factory.createNodeArray(factory.createModifiersFromModifierFlags(modifierFlags)) : undefined;
 
     const property = isClassLike(node)
-        ? factory.createPropertyDeclaration(modifiers, tokenName, /*questionOrExclamationToken*/ undefined, typeNode, /*initializer*/ undefined)
+        ? factory.createPropertyDeclaration(
+            modifiers,
+            tokenName,
+            /*questionOrExclamationToken*/ undefined,
+            typeNode,
+            /*initializer*/ undefined,
+        )
         : factory.createPropertySignature(/*modifiers*/ undefined, tokenName, /*questionToken*/ undefined, typeNode);
 
     const lastProp = getNodeToInsertPropertyAfter(node);
@@ -652,7 +684,9 @@ function addPropertyDeclaration(
 }
 
 // Gets the last of the first run of PropertyDeclarations, or undefined if the class does not start with a PropertyDeclaration.
-function getNodeToInsertPropertyAfter(node: ClassLikeDeclaration | InterfaceDeclaration | TypeLiteralNode): PropertyDeclaration | undefined {
+function getNodeToInsertPropertyAfter(
+    node: ClassLikeDeclaration | InterfaceDeclaration | TypeLiteralNode,
+): PropertyDeclaration | undefined {
     let res: PropertyDeclaration | undefined;
     for (const member of node.members) {
         if (!isPropertyDeclaration(member)) break;
@@ -697,7 +731,10 @@ function getActionsForMissingMethodDeclaration(context: CodeFixContext, info: Ty
 
     const methodName = token.text;
     const addMethodDeclarationChanges = (modifierFlags: ModifierFlags) =>
-        textChanges.ChangeTracker.with(context, t => addMethodDeclaration(context, t, call, token, modifierFlags, parentDeclaration, declSourceFile));
+        textChanges.ChangeTracker.with(
+            context,
+            t => addMethodDeclaration(context, t, call, token, modifierFlags, parentDeclaration, declSourceFile),
+        );
     const actions = [
         createCodeFixAction(
             fixMissingMember,
@@ -811,7 +848,14 @@ function addJsxAttributes(changes: textChanges.ChangeTracker, context: CodeFixCo
     const jsxAttributesNode = info.parentDeclaration.attributes;
     const hasSpreadAttribute = some(jsxAttributesNode.properties, isJsxSpreadAttribute);
     const attrs = map(info.attributes, attr => {
-        const value = tryGetValueFromType(context, checker, importAdder, quotePreference, checker.getTypeOfSymbol(attr), info.parentDeclaration);
+        const value = tryGetValueFromType(
+            context,
+            checker,
+            importAdder,
+            quotePreference,
+            checker.getTypeOfSymbol(attr),
+            info.parentDeclaration,
+        );
         const name = factory.createIdentifier(attr.name);
         const jsxAttribute = factory.createJsxAttribute(name, factory.createJsxExpression(/*dotDotDotToken*/ undefined, value));
         // formattingScanner requires the Identifier to have a context for scanning attributes with "-" (data-foo).
@@ -897,10 +941,14 @@ function tryGetValueFromType(
         return factory.createBigIntLiteral((type as BigIntLiteralType).value);
     }
     if (type.flags & TypeFlags.StringLiteral) {
-        return factory.createStringLiteral((type as StringLiteralType).value, /* isSingleQuote */ quotePreference === QuotePreference.Single);
+        return factory.createStringLiteral(
+            (type as StringLiteralType).value,
+            /* isSingleQuote */ quotePreference === QuotePreference.Single,
+        );
     }
     if (type.flags & TypeFlags.BooleanLiteral) {
-        return (type === checker.getFalseType() || type === checker.getFalseType(/*fresh*/ true)) ? factory.createFalse() : factory.createTrue();
+        return (type === checker.getFalseType() || type === checker.getFalseType(/*fresh*/ true)) ? factory.createFalse()
+            : factory.createTrue();
     }
     if (type.flags & TypeFlags.Null) {
         return factory.createNull();
@@ -959,7 +1007,11 @@ function tryGetValueFromType(
         const constructorDeclaration = getFirstConstructorWithBody(classDeclaration);
         if (constructorDeclaration && length(constructorDeclaration.parameters)) return createUndefined();
 
-        return factory.createNewExpression(factory.createIdentifier(type.symbol.name), /*typeArguments*/ undefined, /*argumentsArray*/ undefined);
+        return factory.createNewExpression(
+            factory.createIdentifier(type.symbol.name),
+            /*typeArguments*/ undefined,
+            /*argumentsArray*/ undefined,
+        );
     }
     return createUndefined();
 }
@@ -997,11 +1049,15 @@ function getUnmatchedAttributes(checker: TypeChecker, target: ScriptTarget, sour
         targetProps,
         targetProp =>
             isIdentifierText(targetProp.name, target, LanguageVariant.JSX) &&
-            !((targetProp.flags & SymbolFlags.Optional || getCheckFlags(targetProp) & CheckFlags.Partial) || seenNames.has(targetProp.escapedName)),
+            !((targetProp.flags & SymbolFlags.Optional || getCheckFlags(targetProp) & CheckFlags.Partial) ||
+                seenNames.has(targetProp.escapedName)),
     );
 }
 
-function tryGetContainingMethodDeclaration(node: ClassLikeDeclaration | InterfaceDeclaration | TypeLiteralNode, callExpression: CallExpression) {
+function tryGetContainingMethodDeclaration(
+    node: ClassLikeDeclaration | InterfaceDeclaration | TypeLiteralNode,
+    callExpression: CallExpression,
+) {
     if (isTypeLiteralNode(node)) {
         return undefined;
     }
@@ -1011,7 +1067,12 @@ function tryGetContainingMethodDeclaration(node: ClassLikeDeclaration | Interfac
 
 function createPropertyNameFromSymbol(symbol: Symbol, target: ScriptTarget, quotePreference: QuotePreference, checker: TypeChecker) {
     if (isTransientSymbol(symbol)) {
-        const prop = checker.symbolToNode(symbol, SymbolFlags.Value, /*enclosingDeclaration*/ undefined, NodeBuilderFlags.WriteComputedProps);
+        const prop = checker.symbolToNode(
+            symbol,
+            SymbolFlags.Value,
+            /*enclosingDeclaration*/ undefined,
+            NodeBuilderFlags.WriteComputedProps,
+        );
         if (prop && isComputedPropertyName(prop)) return prop;
     }
     // We're using these nodes as property names in an object literal; no need to quote names when not needed.

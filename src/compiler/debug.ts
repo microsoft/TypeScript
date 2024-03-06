@@ -218,7 +218,8 @@ export namespace Debug {
         if (!expression) {
             message = message ? `False expression: ${message}` : "False expression.";
             if (verboseDebugInfo) {
-                message += "\r\nVerbose Debug Information: " + (typeof verboseDebugInfo === "string" ? verboseDebugInfo : verboseDebugInfo());
+                message += "\r\nVerbose Debug Information: " +
+                    (typeof verboseDebugInfo === "string" ? verboseDebugInfo : verboseDebugInfo());
             }
             fail(message, stackCrawlMark || assert);
         }
@@ -347,7 +348,12 @@ export namespace Debug {
         message?: string,
         stackCrawlMark?: AnyFunction,
     ): void;
-    export function assertNode(node: Node | undefined, test: ((node: Node) => boolean) | undefined, message?: string, stackCrawlMark?: AnyFunction) {
+    export function assertNode(
+        node: Node | undefined,
+        test: ((node: Node) => boolean) | undefined,
+        message?: string,
+        stackCrawlMark?: AnyFunction,
+    ) {
         if (shouldAssertFunction(AssertionLevel.Normal, "assertNode")) {
             assert(
                 node !== undefined && (test === undefined || test(node)),
@@ -432,8 +438,18 @@ export namespace Debug {
         message?: string,
         stackCrawlMark?: AnyFunction,
     ): asserts node is Extract<T, { readonly kind: K; }> | undefined;
-    export function assertOptionalToken(node: Node | undefined, kind: SyntaxKind | undefined, message?: string, stackCrawlMark?: AnyFunction): void;
-    export function assertOptionalToken(node: Node | undefined, kind: SyntaxKind | undefined, message?: string, stackCrawlMark?: AnyFunction) {
+    export function assertOptionalToken(
+        node: Node | undefined,
+        kind: SyntaxKind | undefined,
+        message?: string,
+        stackCrawlMark?: AnyFunction,
+    ): void;
+    export function assertOptionalToken(
+        node: Node | undefined,
+        kind: SyntaxKind | undefined,
+        message?: string,
+        stackCrawlMark?: AnyFunction,
+    ) {
         if (shouldAssertFunction(AssertionLevel.Normal, "assertOptionalToken")) {
             assert(
                 kind === undefined || node === undefined || node.kind === kind,
@@ -721,7 +737,9 @@ export namespace Debug {
                     const symbolHeader = this.flags & SymbolFlags.Transient ? "TransientSymbol" :
                         "Symbol";
                     const remainingSymbolFlags = this.flags & ~SymbolFlags.Transient;
-                    return `${symbolHeader} '${symbolName(this)}'${remainingSymbolFlags ? ` (${formatSymbolFlags(remainingSymbolFlags)})` : ""}`;
+                    return `${symbolHeader} '${symbolName(this)}'${
+                        remainingSymbolFlags ? ` (${formatSymbolFlags(remainingSymbolFlags)})` : ""
+                    }`;
                 },
             },
             __debugFlags: {
@@ -742,7 +760,9 @@ export namespace Debug {
                         this.flags & TypeFlags.Nullable ? "NullableType" :
                         this.flags & TypeFlags.StringOrNumberLiteral ? `LiteralType ${JSON.stringify((this as LiteralType).value)}` :
                         this.flags & TypeFlags.BigIntLiteral ?
-                        `LiteralType ${(this as BigIntLiteralType).value.negative ? "-" : ""}${(this as BigIntLiteralType).value.base10Value}n` :
+                        `LiteralType ${(this as BigIntLiteralType).value.negative ? "-" : ""}${
+                            (this as BigIntLiteralType).value.base10Value
+                        }n` :
                         this.flags & TypeFlags.UniqueESSymbol ? "UniqueESSymbolType" :
                         this.flags & TypeFlags.Enum ? "EnumType" :
                         this.flags & TypeFlags.Union ? "UnionType" :
@@ -762,7 +782,8 @@ export namespace Debug {
                             (this as ObjectType).objectFlags & ObjectFlags.EvolvingArray ? "EvolvingArrayType" :
                             "ObjectType" :
                         "Type";
-                    const remainingObjectFlags = this.flags & TypeFlags.Object ? (this as ObjectType).objectFlags & ~ObjectFlags.ObjectTypeKindMask
+                    const remainingObjectFlags = this.flags & TypeFlags.Object ?
+                        (this as ObjectType).objectFlags & ~ObjectFlags.ObjectTypeKindMask
                         : 0;
                     return `${typeHeader}${this.symbol ? ` '${symbolName(this.symbol)}'` : ""}${
                         remainingObjectFlags ? ` (${formatObjectFlags(remainingObjectFlags)})` : ""
@@ -1292,7 +1313,10 @@ m2: ${(this.mapper2 as unknown as DebugTypeMapper).__debugToString().split("\n")
                         }
                     }
                     writeLane(lane, getBoxCharacter(connector));
-                    writeLane(lane, connector & Connection.Right && column < columnCount - 1 && !grid[column + 1][lane] ? BoxCharacter.lr : " ");
+                    writeLane(
+                        lane,
+                        connector & Connection.Right && column < columnCount - 1 && !grid[column + 1][lane] ? BoxCharacter.lr : " ",
+                    );
                 }
             }
 

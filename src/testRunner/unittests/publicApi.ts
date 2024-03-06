@@ -46,7 +46,10 @@ describe("unittests:: Public APIs:: token to string", () => {
 
 describe("unittests:: Public APIs:: createPrivateIdentifier", () => {
     it("throws when name doesn't start with #", () => {
-        assert.throw(() => ts.factory.createPrivateIdentifier("not"), "Debug Failure. First character of private identifier must be #: not");
+        assert.throw(
+            () => ts.factory.createPrivateIdentifier("not"),
+            "Debug Failure. First character of private identifier must be #: not",
+        );
     });
 });
 
@@ -191,7 +194,10 @@ describe("unittests:: Public APIs:: validateLocaleAndSetLanguage", () => {
                     return expectedToReadFile;
                 },
                 readFile: fileName => {
-                    assert.isTrue(expectedToReadFile, `Locale : ${locale} ${expectedToReadFile ? "should" : "should not"} read ${fileName}.`);
+                    assert.isTrue(
+                        expectedToReadFile,
+                        `Locale : ${locale} ${expectedToReadFile ? "should" : "should not"} read ${fileName}.`,
+                    );
                     // Throw error here so that actual change to localized diagnostics messages doesnt take place
                     throw new Error("cannot read file");
                 },

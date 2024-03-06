@@ -974,7 +974,11 @@ function bar() {
 
             // Change file2 get affected file list = will return only file2 if --declaration otherwise all files
             verifyLocalEdit(file2, "world", "hello");
-            baselineTsserverLogs("compileOnSave", `emit in project${hasModule ? " with module" : ""}${declaration ? " with dts emit" : ""}`, session);
+            baselineTsserverLogs(
+                "compileOnSave",
+                `emit in project${hasModule ? " with module" : ""}${declaration ? " with dts emit" : ""}`,
+                session,
+            );
 
             function verifyFileSave(file: File) {
                 session.executeCommandSeq<ts.server.protocol.CompileOnSaveEmitFileRequest>({

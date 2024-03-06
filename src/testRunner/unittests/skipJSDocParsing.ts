@@ -26,7 +26,10 @@ describe("unittests:: skipJSDocParsing", () => {
                         jsDocParsingMode: undefined,
                     });
                     assert.isTrue(sourceFile && sourceFile.parseDiagnostics.length === 0, "no errors issued");
-                    const sourceFileSkipped = ts.createSourceFile(filename, content, { languageVersion: ts.ScriptTarget.ESNext, jsDocParsingMode });
+                    const sourceFileSkipped = ts.createSourceFile(filename, content, {
+                        languageVersion: ts.ScriptTarget.ESNext,
+                        jsDocParsingMode,
+                    });
                     assert.isTrue(sourceFileSkipped && sourceFileSkipped.parseDiagnostics.length === 0, "no errors issued");
 
                     const patch = Diff.createTwoFilesPatch(

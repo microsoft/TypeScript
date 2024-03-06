@@ -15,7 +15,9 @@ function verifyMissingFilePaths(missing: ReturnType<ts.Program["getMissingFilePa
         const value = map.has(missing);
         assert.isTrue(
             value,
-            `${missing} to be ${value === undefined ? "not present" : "present only once"}, in actual: ${missingPaths} expected: ${expected}`,
+            `${missing} to be ${
+                value === undefined ? "not present" : "present only once"
+            }, in actual: ${missingPaths} expected: ${expected}`,
         );
         map.delete(missing);
     }
@@ -194,7 +196,11 @@ describe("unittests:: Program.getNodeCount / Program.getIdentifierCount", () => 
         const pkg = new documents.TextDocument("/package.json", jsonToReadableText({ version: "1.0.0" }));
 
         const fs = vfs.createFromFileSystem(Harness.IO, /*ignoreCase*/ false, { documents: [main, pkg], cwd: "/" });
-        const program = ts.createProgram(["/main.ts"], { resolveJsonModule: true }, new fakes.CompilerHost(fs, { newLine: ts.NewLineKind.LineFeed }));
+        const program = ts.createProgram(
+            ["/main.ts"],
+            { resolveJsonModule: true },
+            new fakes.CompilerHost(fs, { newLine: ts.NewLineKind.LineFeed }),
+        );
 
         const json = program.getSourceFile("/package.json")!;
         assert.equal(json.scriptKind, ts.ScriptKind.JSON);

@@ -64,7 +64,11 @@ describe("unittests:: tsbuild - graph-ordering", () => {
                 const child = getProjectFileName(dep[0]);
                 if (!buildQueue.includes(child)) continue;
                 const parent = getProjectFileName(dep[1]);
-                assert.isAbove(buildQueue.indexOf(child), buildQueue.indexOf(parent), `Expecting child ${child} to be built after parent ${parent}`);
+                assert.isAbove(
+                    buildQueue.indexOf(child),
+                    buildQueue.indexOf(parent),
+                    `Expecting child ${child} to be built after parent ${parent}`,
+                );
             }
         }
     }

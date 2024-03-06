@@ -110,7 +110,9 @@ export function patchServiceForStateBaseline(service: ProjectService) {
                 if (project.autoImportProviderHost) autoImportProviderProjects.push(project.autoImportProviderHost);
                 if (project.noDtsResolutionProject) auxiliaryProjects.push(project.noDtsResolutionProject);
                 let projectDiff = newOrDeleted(project, projects, data);
-                if (projectDiff !== Diff.Deleted) getSourceMapper(project)?.documentPositionMappers.forEach(mapper => currentMappers.add(mapper));
+                if (projectDiff !== Diff.Deleted) {
+                    getSourceMapper(project)?.documentPositionMappers.forEach(mapper => currentMappers.add(mapper));
+                }
                 const projectPropertyLogs = [] as string[];
                 projectDiff = printProperty(
                     PrintPropertyWhen.Always,
@@ -128,7 +130,14 @@ export function patchServiceForStateBaseline(service: ProjectService) {
                     projectDiff,
                     projectPropertyLogs,
                 );
-                projectDiff = printProperty(PrintPropertyWhen.TruthyOrChangedOrNew, data, "dirty", project.dirty, projectDiff, projectPropertyLogs);
+                projectDiff = printProperty(
+                    PrintPropertyWhen.TruthyOrChangedOrNew,
+                    data,
+                    "dirty",
+                    project.dirty,
+                    projectDiff,
+                    projectPropertyLogs,
+                );
                 projectDiff = printProperty(
                     PrintPropertyWhen.TruthyOrChangedOrNew,
                     data,
@@ -217,7 +226,14 @@ export function patchServiceForStateBaseline(service: ProjectService) {
                 const infoPropertyLogs = [] as string[];
                 const isOpen = info.isScriptOpen();
                 infoDiff = printProperty(PrintPropertyWhen.Changed, data, "open", isOpen, infoDiff, infoPropertyLogs);
-                infoDiff = printProperty(PrintPropertyWhen.Always, data, "version", info.textStorage.getVersion(), infoDiff, infoPropertyLogs);
+                infoDiff = printProperty(
+                    PrintPropertyWhen.Always,
+                    data,
+                    "version",
+                    info.textStorage.getVersion(),
+                    infoDiff,
+                    infoPropertyLogs,
+                );
                 infoDiff = printProperty(
                     PrintPropertyWhen.TruthyOrChangedOrNew,
                     data,

@@ -74,7 +74,12 @@ export function f22() { } // trailing`,
         );
         buildHost.afterProgramEmitAndDiagnostics = cb;
         const builder = ts.createSolutionBuilder(buildHost, [commandLineArgs[1]], { verbose: true });
-        const exitStatus = builder.build(/*project*/ undefined, /*cancellationToken*/ undefined, /*writeFile*/ undefined, getCustomTransformers);
+        const exitStatus = builder.build(
+            /*project*/ undefined,
+            /*cancellationToken*/ undefined,
+            /*writeFile*/ undefined,
+            getCustomTransformers,
+        );
         sys.exit(exitStatus);
         sys.write(`exitCode:: ExitStatus.${ts.ExitStatus[sys.exitCode as ts.ExitStatus]}\n`);
         const baseline: string[] = [];
@@ -108,7 +113,12 @@ ${patch ? vfs.formatPatch(patch) : ""}`,
                     }
                 }
                 function visitFunction(node: ts.FunctionDeclaration) {
-                    ts.addSyntheticLeadingComment(node, ts.SyntaxKind.MultiLineCommentTrivia, `@before${project}`, /*hasTrailingNewLine*/ true);
+                    ts.addSyntheticLeadingComment(
+                        node,
+                        ts.SyntaxKind.MultiLineCommentTrivia,
+                        `@before${project}`,
+                        /*hasTrailingNewLine*/ true,
+                    );
                     return node;
                 }
             };

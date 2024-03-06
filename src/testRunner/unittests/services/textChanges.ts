@@ -25,7 +25,8 @@ describe("unittests:: services:: textChanges", () => {
 
     function getRuleProvider(placeOpenBraceOnNewLineForFunctions: boolean): ts.formatting.FormatContext {
         return ts.formatting.getFormatContext(
-            placeOpenBraceOnNewLineForFunctions ? { ...ts.testFormatSettings, placeOpenBraceOnNewLineForFunctions: true } : ts.testFormatSettings,
+            placeOpenBraceOnNewLineForFunctions ? { ...ts.testFormatSettings, placeOpenBraceOnNewLineForFunctions: true }
+                : ts.testFormatSettings,
             notImplementedHost,
         );
     }
@@ -312,7 +313,10 @@ var a = 4; // comment 7
                 ts.factory.createHeritageClause(
                     ts.SyntaxKind.ImplementsKeyword,
                     [
-                        ts.factory.createExpressionWithTypeArguments(ts.factory.createIdentifier("interface1"), /*typeArguments*/ undefined),
+                        ts.factory.createExpressionWithTypeArguments(
+                            ts.factory.createIdentifier("interface1"),
+                            /*typeArguments*/ undefined,
+                        ),
                     ],
                 ),
             ],
@@ -336,11 +340,17 @@ var y = 2; // comment 4
 var z = 3; // comment 5
 // comment 6
 var a = 4; // comment 7`;
-        runSingleFileTest("replaceRange", /*placeOpenBraceOnNewLineForFunctions*/ true, text, /*validateNodes*/ true, (sourceFile, changeTracker) => {
-            changeTracker.replaceRange(sourceFile, { pos: text.indexOf("var y"), end: text.indexOf("var a") }, createTestClass(), {
-                suffix: newLineCharacter,
-            });
-        });
+        runSingleFileTest(
+            "replaceRange",
+            /*placeOpenBraceOnNewLineForFunctions*/ true,
+            text,
+            /*validateNodes*/ true,
+            (sourceFile, changeTracker) => {
+                changeTracker.replaceRange(sourceFile, { pos: text.indexOf("var y"), end: text.indexOf("var a") }, createTestClass(), {
+                    suffix: newLineCharacter,
+                });
+            },
+        );
         runSingleFileTest(
             "replaceRangeWithForcedIndentation",
             /*placeOpenBraceOnNewLineForFunctions*/ true,
@@ -392,34 +402,66 @@ var y = 2; // comment 4
 var z = 3; // comment 5
 // comment 6
 var a = 4; // comment 7`;
-        runSingleFileTest("replaceNode1", /*placeOpenBraceOnNewLineForFunctions*/ true, text, /*validateNodes*/ true, (sourceFile, changeTracker) => {
-            changeTracker.replaceNode(sourceFile, findVariableStatementContaining("y", sourceFile), createTestClass(), { suffix: newLineCharacter });
-        });
-        runSingleFileTest("replaceNode2", /*placeOpenBraceOnNewLineForFunctions*/ true, text, /*validateNodes*/ true, (sourceFile, changeTracker) => {
-            changeTracker.replaceNode(sourceFile, findVariableStatementContaining("y", sourceFile), createTestClass(), {
-                leadingTriviaOption: ts.textChanges.LeadingTriviaOption.Exclude,
-                suffix: newLineCharacter,
-                prefix: newLineCharacter,
-            });
-        });
-        runSingleFileTest("replaceNode3", /*placeOpenBraceOnNewLineForFunctions*/ true, text, /*validateNodes*/ true, (sourceFile, changeTracker) => {
-            changeTracker.replaceNode(sourceFile, findVariableStatementContaining("y", sourceFile), createTestClass(), {
-                trailingTriviaOption: ts.textChanges.TrailingTriviaOption.Exclude,
-                suffix: newLineCharacter,
-            });
-        });
-        runSingleFileTest("replaceNode4", /*placeOpenBraceOnNewLineForFunctions*/ true, text, /*validateNodes*/ true, (sourceFile, changeTracker) => {
-            changeTracker.replaceNode(sourceFile, findVariableStatementContaining("y", sourceFile), createTestClass(), {
-                leadingTriviaOption: ts.textChanges.LeadingTriviaOption.Exclude,
-                trailingTriviaOption: ts.textChanges.TrailingTriviaOption.Exclude,
-            });
-        });
-        runSingleFileTest("replaceNode5", /*placeOpenBraceOnNewLineForFunctions*/ true, text, /*validateNodes*/ true, (sourceFile, changeTracker) => {
-            changeTracker.replaceNode(sourceFile, findVariableStatementContaining("x", sourceFile), createTestClass(), {
-                leadingTriviaOption: ts.textChanges.LeadingTriviaOption.Exclude,
-                trailingTriviaOption: ts.textChanges.TrailingTriviaOption.Exclude,
-            });
-        });
+        runSingleFileTest(
+            "replaceNode1",
+            /*placeOpenBraceOnNewLineForFunctions*/ true,
+            text,
+            /*validateNodes*/ true,
+            (sourceFile, changeTracker) => {
+                changeTracker.replaceNode(sourceFile, findVariableStatementContaining("y", sourceFile), createTestClass(), {
+                    suffix: newLineCharacter,
+                });
+            },
+        );
+        runSingleFileTest(
+            "replaceNode2",
+            /*placeOpenBraceOnNewLineForFunctions*/ true,
+            text,
+            /*validateNodes*/ true,
+            (sourceFile, changeTracker) => {
+                changeTracker.replaceNode(sourceFile, findVariableStatementContaining("y", sourceFile), createTestClass(), {
+                    leadingTriviaOption: ts.textChanges.LeadingTriviaOption.Exclude,
+                    suffix: newLineCharacter,
+                    prefix: newLineCharacter,
+                });
+            },
+        );
+        runSingleFileTest(
+            "replaceNode3",
+            /*placeOpenBraceOnNewLineForFunctions*/ true,
+            text,
+            /*validateNodes*/ true,
+            (sourceFile, changeTracker) => {
+                changeTracker.replaceNode(sourceFile, findVariableStatementContaining("y", sourceFile), createTestClass(), {
+                    trailingTriviaOption: ts.textChanges.TrailingTriviaOption.Exclude,
+                    suffix: newLineCharacter,
+                });
+            },
+        );
+        runSingleFileTest(
+            "replaceNode4",
+            /*placeOpenBraceOnNewLineForFunctions*/ true,
+            text,
+            /*validateNodes*/ true,
+            (sourceFile, changeTracker) => {
+                changeTracker.replaceNode(sourceFile, findVariableStatementContaining("y", sourceFile), createTestClass(), {
+                    leadingTriviaOption: ts.textChanges.LeadingTriviaOption.Exclude,
+                    trailingTriviaOption: ts.textChanges.TrailingTriviaOption.Exclude,
+                });
+            },
+        );
+        runSingleFileTest(
+            "replaceNode5",
+            /*placeOpenBraceOnNewLineForFunctions*/ true,
+            text,
+            /*validateNodes*/ true,
+            (sourceFile, changeTracker) => {
+                changeTracker.replaceNode(sourceFile, findVariableStatementContaining("x", sourceFile), createTestClass(), {
+                    leadingTriviaOption: ts.textChanges.LeadingTriviaOption.Exclude,
+                    trailingTriviaOption: ts.textChanges.TrailingTriviaOption.Exclude,
+                });
+            },
+        );
     }
     {
         const text = `
@@ -527,7 +569,11 @@ var a = 4; // comment 7`;
             text,
             /*validateNodes*/ false,
             (sourceFile, changeTracker) => {
-                changeTracker.insertNodeAfter(sourceFile, findVariableDeclarationContaining("y", sourceFile), createTestVariableDeclaration("z1"));
+                changeTracker.insertNodeAfter(
+                    sourceFile,
+                    findVariableDeclarationContaining("y", sourceFile),
+                    createTestVariableDeclaration("z1"),
+                );
             },
         );
     }
@@ -888,7 +934,12 @@ const x = 1, y = 2;`;
                 changeTracker.insertNodeInListAfter(
                     sourceFile,
                     findChild("x", sourceFile),
-                    ts.factory.createVariableDeclaration("z", /*exclamationToken*/ undefined, /*type*/ undefined, ts.factory.createNumericLiteral(1)),
+                    ts.factory.createVariableDeclaration(
+                        "z",
+                        /*exclamationToken*/ undefined,
+                        /*type*/ undefined,
+                        ts.factory.createNumericLiteral(1),
+                    ),
                 );
             },
         );
@@ -901,7 +952,12 @@ const x = 1, y = 2;`;
                 changeTracker.insertNodeInListAfter(
                     sourceFile,
                     findChild("y", sourceFile),
-                    ts.factory.createVariableDeclaration("z", /*exclamationToken*/ undefined, /*type*/ undefined, ts.factory.createNumericLiteral(1)),
+                    ts.factory.createVariableDeclaration(
+                        "z",
+                        /*exclamationToken*/ undefined,
+                        /*type*/ undefined,
+                        ts.factory.createNumericLiteral(1),
+                    ),
                 );
             },
         );
@@ -918,7 +974,12 @@ const /*x*/ x = 1, /*y*/ y = 2;`;
                 changeTracker.insertNodeInListAfter(
                     sourceFile,
                     findChild("x", sourceFile),
-                    ts.factory.createVariableDeclaration("z", /*exclamationToken*/ undefined, /*type*/ undefined, ts.factory.createNumericLiteral(1)),
+                    ts.factory.createVariableDeclaration(
+                        "z",
+                        /*exclamationToken*/ undefined,
+                        /*type*/ undefined,
+                        ts.factory.createNumericLiteral(1),
+                    ),
                 );
             },
         );
@@ -931,7 +992,12 @@ const /*x*/ x = 1, /*y*/ y = 2;`;
                 changeTracker.insertNodeInListAfter(
                     sourceFile,
                     findChild("y", sourceFile),
-                    ts.factory.createVariableDeclaration("z", /*exclamationToken*/ undefined, /*type*/ undefined, ts.factory.createNumericLiteral(1)),
+                    ts.factory.createVariableDeclaration(
+                        "z",
+                        /*exclamationToken*/ undefined,
+                        /*type*/ undefined,
+                        ts.factory.createNumericLiteral(1),
+                    ),
                 );
             },
         );
@@ -948,7 +1014,12 @@ const x = 1;`;
                 changeTracker.insertNodeInListAfter(
                     sourceFile,
                     findChild("x", sourceFile),
-                    ts.factory.createVariableDeclaration("z", /*exclamationToken*/ undefined, /*type*/ undefined, ts.factory.createNumericLiteral(1)),
+                    ts.factory.createVariableDeclaration(
+                        "z",
+                        /*exclamationToken*/ undefined,
+                        /*type*/ undefined,
+                        ts.factory.createNumericLiteral(1),
+                    ),
                 );
             },
         );
@@ -966,7 +1037,12 @@ const x = 1,
                 changeTracker.insertNodeInListAfter(
                     sourceFile,
                     findChild("x", sourceFile),
-                    ts.factory.createVariableDeclaration("z", /*exclamationToken*/ undefined, /*type*/ undefined, ts.factory.createNumericLiteral(1)),
+                    ts.factory.createVariableDeclaration(
+                        "z",
+                        /*exclamationToken*/ undefined,
+                        /*type*/ undefined,
+                        ts.factory.createNumericLiteral(1),
+                    ),
                 );
             },
         );
@@ -979,7 +1055,12 @@ const x = 1,
                 changeTracker.insertNodeInListAfter(
                     sourceFile,
                     findChild("y", sourceFile),
-                    ts.factory.createVariableDeclaration("z", /*exclamationToken*/ undefined, /*type*/ undefined, ts.factory.createNumericLiteral(1)),
+                    ts.factory.createVariableDeclaration(
+                        "z",
+                        /*exclamationToken*/ undefined,
+                        /*type*/ undefined,
+                        ts.factory.createNumericLiteral(1),
+                    ),
                 );
             },
         );
@@ -997,7 +1078,12 @@ const /*x*/ x = 1,
                 changeTracker.insertNodeInListAfter(
                     sourceFile,
                     findChild("x", sourceFile),
-                    ts.factory.createVariableDeclaration("z", /*exclamationToken*/ undefined, /*type*/ undefined, ts.factory.createNumericLiteral(1)),
+                    ts.factory.createVariableDeclaration(
+                        "z",
+                        /*exclamationToken*/ undefined,
+                        /*type*/ undefined,
+                        ts.factory.createNumericLiteral(1),
+                    ),
                 );
             },
         );
@@ -1010,7 +1096,12 @@ const /*x*/ x = 1,
                 changeTracker.insertNodeInListAfter(
                     sourceFile,
                     findChild("y", sourceFile),
-                    ts.factory.createVariableDeclaration("z", /*exclamationToken*/ undefined, /*type*/ undefined, ts.factory.createNumericLiteral(1)),
+                    ts.factory.createVariableDeclaration(
+                        "z",
+                        /*exclamationToken*/ undefined,
+                        /*type*/ undefined,
+                        ts.factory.createNumericLiteral(1),
+                    ),
                 );
             },
         );
@@ -1029,7 +1120,11 @@ import {
                 changeTracker.insertNodeInListAfter(
                     sourceFile,
                     findChild("x", sourceFile),
-                    ts.factory.createImportSpecifier(/*isTypeOnly*/ false, ts.factory.createIdentifier("b"), ts.factory.createIdentifier("a")),
+                    ts.factory.createImportSpecifier(
+                        /*isTypeOnly*/ false,
+                        ts.factory.createIdentifier("b"),
+                        ts.factory.createIdentifier("a"),
+                    ),
                 );
             },
         );
@@ -1048,7 +1143,11 @@ import {
                 changeTracker.insertNodeInListAfter(
                     sourceFile,
                     findChild("x", sourceFile),
-                    ts.factory.createImportSpecifier(/*isTypeOnly*/ false, ts.factory.createIdentifier("b"), ts.factory.createIdentifier("a")),
+                    ts.factory.createImportSpecifier(
+                        /*isTypeOnly*/ false,
+                        ts.factory.createIdentifier("b"),
+                        ts.factory.createIdentifier("a"),
+                    ),
                 );
             },
         );
@@ -1106,7 +1205,11 @@ import {
                 changeTracker.insertNodeInListAfter(
                     sourceFile,
                     findChild("x", sourceFile),
-                    ts.factory.createImportSpecifier(/*isTypeOnly*/ false, ts.factory.createIdentifier("b"), ts.factory.createIdentifier("a")),
+                    ts.factory.createImportSpecifier(
+                        /*isTypeOnly*/ false,
+                        ts.factory.createIdentifier("b"),
+                        ts.factory.createIdentifier("a"),
+                    ),
                 );
             },
         );
@@ -1126,7 +1229,11 @@ import {
                 changeTracker.insertNodeInListAfter(
                     sourceFile,
                     findChild("x", sourceFile),
-                    ts.factory.createImportSpecifier(/*isTypeOnly*/ false, ts.factory.createIdentifier("b"), ts.factory.createIdentifier("a")),
+                    ts.factory.createImportSpecifier(
+                        /*isTypeOnly*/ false,
+                        ts.factory.createIdentifier("b"),
+                        ts.factory.createIdentifier("a"),
+                    ),
                 );
             },
         );
@@ -1192,15 +1299,25 @@ import {
     }
     {
         const runTest = (name: string, text: string) =>
-            runSingleFileTest(name, /*placeOpenBraceOnNewLineForFunctions*/ false, text, /*validateNodes*/ false, (sourceFile, changeTracker) => {
-                for (const specifier of ["x3", "x4", "x5"]) {
-                    changeTracker.insertNodeInListAfter(
-                        sourceFile,
-                        findChild("x2", sourceFile),
-                        ts.factory.createImportSpecifier(/*isTypeOnly*/ false, /*propertyName*/ undefined, ts.factory.createIdentifier(specifier)),
-                    );
-                }
-            });
+            runSingleFileTest(
+                name,
+                /*placeOpenBraceOnNewLineForFunctions*/ false,
+                text,
+                /*validateNodes*/ false,
+                (sourceFile, changeTracker) => {
+                    for (const specifier of ["x3", "x4", "x5"]) {
+                        changeTracker.insertNodeInListAfter(
+                            sourceFile,
+                            findChild("x2", sourceFile),
+                            ts.factory.createImportSpecifier(
+                                /*isTypeOnly*/ false,
+                                /*propertyName*/ undefined,
+                                ts.factory.createIdentifier(specifier),
+                            ),
+                        );
+                    }
+                },
+            );
 
         const crlfText = 'import {\r\nx1,\r\nx2\r\n} from "bar";';
         runTest("insertNodeInListAfter19", crlfText);
@@ -1427,7 +1544,9 @@ let x = foo
             text,
             /*validateNodes*/ false,
             (sourceFile, changeTracker) => {
-                const newNode = ts.factory.createExpressionStatement(ts.factory.createParenthesizedExpression(ts.factory.createNumericLiteral(1)));
+                const newNode = ts.factory.createExpressionStatement(
+                    ts.factory.createParenthesizedExpression(ts.factory.createNumericLiteral(1)),
+                );
                 changeTracker.insertNodeAfter(sourceFile, findVariableStatementContaining("x", sourceFile), newNode);
             },
         );

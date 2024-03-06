@@ -280,7 +280,14 @@ export function transformSystemModule(context: TransformationContext): (x: Sourc
         const groupIndices = new Map<string, number>();
         const dependencyGroups: DependencyGroup[] = [];
         for (const externalImport of externalImports) {
-            const externalModuleName = getExternalModuleNameLiteral(factory, externalImport, currentSourceFile, host, resolver, compilerOptions);
+            const externalModuleName = getExternalModuleNameLiteral(
+                factory,
+                externalImport,
+                currentSourceFile,
+                host,
+                resolver,
+                compilerOptions,
+            );
             if (externalModuleName) {
                 const text = externalModuleName.text;
                 const groupIndex = groupIndices.get(text);
@@ -894,7 +901,10 @@ export function transformSystemModule(context: TransformationContext): (x: Sourc
             }
 
             if (expressions) {
-                statements = append(statements, setTextRange(factory.createExpressionStatement(factory.inlineExpressions(expressions)), node));
+                statements = append(
+                    statements,
+                    setTextRange(factory.createExpressionStatement(factory.inlineExpressions(expressions)), node),
+                );
             }
         }
 
@@ -982,7 +992,12 @@ export function transformSystemModule(context: TransformationContext): (x: Sourc
      * @param location The source map location for the assignment.
      * @param isExportedDeclaration A value indicating whether the variable is exported.
      */
-    function createVariableAssignment(name: Identifier, value: Expression, location: TextRange | undefined, isExportedDeclaration: boolean) {
+    function createVariableAssignment(
+        name: Identifier,
+        value: Expression,
+        location: TextRange | undefined,
+        isExportedDeclaration: boolean,
+    ) {
         hoistVariableDeclaration(factory.cloneNode(name));
         return isExportedDeclaration
             ? createExportExpression(name, preventSubstitution(setTextRange(factory.createAssignment(name, value), location)))
@@ -1040,7 +1055,10 @@ export function transformSystemModule(context: TransformationContext): (x: Sourc
      * appended.
      * @param decl The declaration whose exports are to be recorded.
      */
-    function appendExportsOfImportEqualsDeclaration(statements: Statement[] | undefined, decl: ImportEqualsDeclaration): Statement[] | undefined {
+    function appendExportsOfImportEqualsDeclaration(
+        statements: Statement[] | undefined,
+        decl: ImportEqualsDeclaration,
+    ): Statement[] | undefined {
         if (moduleInfo.exportEquals) {
             return statements;
         }
@@ -1156,7 +1174,11 @@ export function transformSystemModule(context: TransformationContext): (x: Sourc
      * @param decl The declaration to export.
      * @param excludeName An optional name to exclude from exports.
      */
-    function appendExportsOfDeclaration(statements: Statement[] | undefined, decl: Declaration, excludeName?: string): Statement[] | undefined {
+    function appendExportsOfDeclaration(
+        statements: Statement[] | undefined,
+        decl: Declaration,
+        excludeName?: string,
+    ): Statement[] | undefined {
         if (moduleInfo.exportEquals) {
             return statements;
         }
@@ -1638,9 +1660,10 @@ export function transformSystemModule(context: TransformationContext): (x: Sourc
         const externalModuleName = getExternalModuleNameLiteral(factory, node, currentSourceFile, host, resolver, compilerOptions);
         const firstArgument = visitNode(firstOrUndefined(node.arguments), visitor, isExpression);
         // Only use the external module name if it differs from the first argument. This allows us to preserve the quote style of the argument on output.
-        const argument = externalModuleName && (!firstArgument || !isStringLiteral(firstArgument) || firstArgument.text !== externalModuleName.text) ?
-            externalModuleName
-            : firstArgument;
+        const argument =
+            externalModuleName && (!firstArgument || !isStringLiteral(firstArgument) || firstArgument.text !== externalModuleName.text) ?
+                externalModuleName
+                : firstArgument;
         return factory.createCallExpression(
             factory.createPropertyAccessExpression(
                 contextObject,
@@ -2034,7 +2057,9 @@ export function transformSystemModule(context: TransformationContext): (x: Sourc
             const declarations = resolver.getReferencedValueDeclarations(name);
             if (declarations) {
                 for (const declaration of declarations) {
-                    if (declaration !== valueDeclaration && moduleInfo?.exportedBindings[getOriginalNodeId(declaration)]) return declaration;
+                    if (declaration !== valueDeclaration && moduleInfo?.exportedBindings[getOriginalNodeId(declaration)]) {
+                        return declaration;
+                    }
                 }
             }
 

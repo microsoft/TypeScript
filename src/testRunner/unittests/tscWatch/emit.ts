@@ -143,7 +143,16 @@ describe("unittests:: tsc-watch:: emit for configured projects", () => {
                     content: jsonToReadableText(configObj || {}),
                 };
                 const additionalFiles = getAdditionalFileOrFolder?.() || ts.emptyArray;
-                const files = [moduleFile1, file1Consumer1, file1Consumer2, globalFile3, moduleFile2, configFile, libFile, ...additionalFiles];
+                const files = [
+                    moduleFile1,
+                    file1Consumer1,
+                    file1Consumer2,
+                    globalFile3,
+                    moduleFile2,
+                    configFile,
+                    libFile,
+                    ...additionalFiles,
+                ];
                 return createWatchedSystem(
                     firstReloadFileList ?
                         ts.map(firstReloadFileList, fileName => ts.find(files, file => file.path === fileName)!) :
@@ -164,7 +173,8 @@ describe("unittests:: tsc-watch:: emit for configured projects", () => {
     };
 
     verifyTscWatchEmit({
-        subScenario: "should contains only itself if a module file's shape didn't change, and all files referencing it if its shape changed",
+        subScenario:
+            "should contains only itself if a module file's shape didn't change, and all files referencing it if its shape changed",
         changes: [
             changeModuleFile1Shape,
             {
@@ -486,7 +496,9 @@ describe("unittests:: tsc-watch:: emit file content", () => {
             {
                 caption: "file is deleted and then created to modify content",
                 edit: sys =>
-                    sys.appendFile("/home/username/project/app/file.ts", "\nvar b = 10;", { invokeFileDeleteCreateAsPartInsteadOfChange: true }),
+                    sys.appendFile("/home/username/project/app/file.ts", "\nvar b = 10;", {
+                        invokeFileDeleteCreateAsPartInsteadOfChange: true,
+                    }),
                 timeouts: sys => sys.runQueuedTimeoutCallbacks(),
             },
         ],

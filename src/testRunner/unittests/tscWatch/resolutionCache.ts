@@ -373,7 +373,8 @@ declare module "fs" {
         edits: [
             {
                 caption: "npm install",
-                edit: sys => sys.renameFolder(`/user/username/projects/myproject/node_modules2`, `/user/username/projects/myproject/node_modules`),
+                edit: sys =>
+                    sys.renameFolder(`/user/username/projects/myproject/node_modules2`, `/user/username/projects/myproject/node_modules`),
                 timeouts: sys => sys.runQueuedTimeoutCallbacks(),
             },
         ],
@@ -405,7 +406,8 @@ declare module "fs" {
                         caption: "npm install file and folder that start with '.'",
                         edit: sys =>
                             sys.ensureFileOrFolder({
-                                path: `/user/username/projects/myproject/node_modules/.cache/babel-loader/89c02171edab901b9926470ba6d5677e.ts`,
+                                path:
+                                    `/user/username/projects/myproject/node_modules/.cache/babel-loader/89c02171edab901b9926470ba6d5677e.ts`,
                                 content: jsonToReadableText({ something: 10 }),
                             }),
                         timeouts: ts.noop,
@@ -497,7 +499,12 @@ declare namespace myapp {
             };
             const linkedPackageJson: File = {
                 path: `${linkedPackageRoot}/package.json`,
-                content: jsonToReadableText({ name: "@scoped/linked-package", version: "0.0.1", types: "dist/index.d.ts", main: "dist/index.js" }),
+                content: jsonToReadableText({
+                    name: "@scoped/linked-package",
+                    version: "0.0.1",
+                    types: "dist/index.d.ts",
+                    main: "dist/index.js",
+                }),
             };
             const linkedPackageIndex: File = {
                 path: `${linkedPackageRoot}/dist/index.d.ts`,
@@ -552,7 +559,15 @@ declare namespace NodeJS {
                     content: "{}",
                 };
                 const { nodeAtTypesIndex, nodeAtTypesBase, nodeAtTypes36Base, nodeAtTypesGlobals } = getNodeAtTypes();
-                return createWatchedSystem([file, libFile, tsconfig, nodeAtTypesIndex, nodeAtTypesBase, nodeAtTypes36Base, nodeAtTypesGlobals], {
+                return createWatchedSystem([
+                    file,
+                    libFile,
+                    tsconfig,
+                    nodeAtTypesIndex,
+                    nodeAtTypesBase,
+                    nodeAtTypes36Base,
+                    nodeAtTypesGlobals,
+                ], {
                     currentDirectory: "/user/username/projects/myproject",
                 });
             },

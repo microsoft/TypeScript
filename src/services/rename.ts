@@ -121,7 +121,14 @@ function getRenameInfoForNode(
             : undefined;
     const displayName = specifierName || typeChecker.symbolToString(symbol);
     const fullDisplayName = specifierName || typeChecker.getFullyQualifiedName(symbol);
-    return getRenameInfoSuccess(displayName, fullDisplayName, kind, SymbolDisplay.getSymbolModifiers(typeChecker, symbol), node, sourceFile);
+    return getRenameInfoSuccess(
+        displayName,
+        fullDisplayName,
+        kind,
+        SymbolDisplay.getSymbolModifiers(typeChecker, symbol),
+        node,
+        sourceFile,
+    );
 }
 
 function isDefinedInLibraryFile(program: Program, declaration: Node) {

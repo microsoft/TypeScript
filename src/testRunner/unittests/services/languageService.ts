@@ -196,7 +196,8 @@ export function Component(x: Config): any;`,
                     fileExists: path => system.fileExists(path),
                     readFile: path => system.readFile(path),
                     getCurrentDirectory: () => system.getCurrentDirectory(),
-                    readDirectory: (path, extensions, excludes, includes, depth) => system.readDirectory(path, extensions, excludes, includes, depth),
+                    readDirectory: (path, extensions, excludes, includes, depth) =>
+                        system.readDirectory(path, extensions, excludes, includes, depth),
                     onUnRecoverableConfigFileDiagnostic: ts.noop,
                 },
             )!;
@@ -215,7 +216,8 @@ export function Component(x: Config): any;`,
                     const text = system.readFile(path);
                     return text ? ts.ScriptSnapshot.fromString(text) : undefined;
                 },
-                readDirectory: (path, extensions, excludes, includes, depth) => system.readDirectory(path, extensions, excludes, includes, depth),
+                readDirectory: (path, extensions, excludes, includes, depth) =>
+                    system.readDirectory(path, extensions, excludes, includes, depth),
                 getCurrentDirectory: () => system.getCurrentDirectory(),
                 getDefaultLibFileName: () => libFile.path,
                 getProjectReferences: () => result.projectReferences,

@@ -434,7 +434,9 @@ switch (x) {
         [ts.refactor.extractSymbol.Messages.cannotExtractRangeContainingConditionalBreakOrContinueStatements.message],
     );
 
-    testExtractRangeFailed("extractRangeFailed12", `let [#|x|];`, [ts.refactor.extractSymbol.Messages.statementOrExpressionExpected.message]);
+    testExtractRangeFailed("extractRangeFailed12", `let [#|x|];`, [
+        ts.refactor.extractSymbol.Messages.statementOrExpressionExpected.message,
+    ]);
 
     testExtractRangeFailed("extractRangeFailed13", `[#|return;|]`, [ts.refactor.extractSymbol.Messages.cannotExtractRange.message]);
 

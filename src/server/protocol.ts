@@ -44,7 +44,9 @@ export {
     UserPreferences,
 };
 
-type ChangeStringIndexSignature<T, NewStringIndexSignatureType> = { [K in keyof T]: string extends K ? NewStringIndexSignatureType : T[K]; };
+type ChangeStringIndexSignature<T, NewStringIndexSignatureType> = {
+    [K in keyof T]: string extends K ? NewStringIndexSignatureType : T[K];
+};
 type ChangePropertyTypes<T, Substitutions extends { [K in keyof T]?: any; }> = {
     [K in keyof T]: K extends keyof Substitutions ? Substitutions[K] : T[K];
 };

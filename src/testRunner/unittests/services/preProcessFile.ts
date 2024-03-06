@@ -4,7 +4,12 @@ import {
 } from "../helpers";
 
 describe("unittests:: services:: PreProcessFile:", () => {
-    function test(sourceText: string, readImportFile: boolean, detectJavaScriptImports: boolean, expectedPreProcess: ts.PreProcessedFileInfo): void {
+    function test(
+        sourceText: string,
+        readImportFile: boolean,
+        detectJavaScriptImports: boolean,
+        expectedPreProcess: ts.PreProcessedFileInfo,
+    ): void {
         const resultPreProcess = ts.preProcessFile(sourceText, readImportFile, detectJavaScriptImports);
 
         assert.equal(
@@ -16,8 +21,16 @@ describe("unittests:: services:: PreProcessFile:", () => {
 
         checkFileReferenceList("Imported files", expectedPreProcess.importedFiles, resultPreProcess.importedFiles);
         checkFileReferenceList("Referenced files", expectedPreProcess.referencedFiles, resultPreProcess.referencedFiles);
-        checkFileReferenceList("Type reference directives", expectedPreProcess.typeReferenceDirectives, resultPreProcess.typeReferenceDirectives);
-        checkFileReferenceList("Lib reference directives", expectedPreProcess.libReferenceDirectives, resultPreProcess.libReferenceDirectives);
+        checkFileReferenceList(
+            "Type reference directives",
+            expectedPreProcess.typeReferenceDirectives,
+            resultPreProcess.typeReferenceDirectives,
+        );
+        checkFileReferenceList(
+            "Lib reference directives",
+            expectedPreProcess.libReferenceDirectives,
+            resultPreProcess.libReferenceDirectives,
+        );
 
         assert.deepEqual(resultPreProcess.ambientExternalModules, expectedPreProcess.ambientExternalModules);
     }
@@ -59,7 +72,8 @@ describe("unittests:: services:: PreProcessFile:", () => {
 
         it("Do not return reference path because of invalid triple-slash syntax", () => {
             test(
-                '///<reference path"refFile1.ts" />' + "\n" + '///<reference path ="refFile2.ts">' + "\n" + '///<referencepath="refFile3.ts" />' +
+                '///<reference path"refFile1.ts" />' + "\n" + '///<reference path ="refFile2.ts">' + "\n" +
+                    '///<referencepath="refFile3.ts" />' +
                     "\n" +
                     '///<reference pat= "refFile4d.ts" />',
                 /*readImportFile*/ true,
@@ -254,14 +268,19 @@ describe("unittests:: services:: PreProcessFile:", () => {
 
         it("Ignores imports in template strings", () => {
             /* eslint-disable no-template-curly-in-string */
-            test('a ? `&${a}` : `#${b}`;\n\n `import("${moduleSpecifier}").${id}`;', /*readImportFile*/ true, /*detectJavaScriptImports*/ true, {
-                referencedFiles: [],
-                typeReferenceDirectives: [],
-                libReferenceDirectives: [],
-                importedFiles: [],
-                ambientExternalModules: undefined,
-                isLibFile: false,
-            });
+            test(
+                'a ? `&${a}` : `#${b}`;\n\n `import("${moduleSpecifier}").${id}`;',
+                /*readImportFile*/ true,
+                /*detectJavaScriptImports*/ true,
+                {
+                    referencedFiles: [],
+                    typeReferenceDirectives: [],
+                    libReferenceDirectives: [],
+                    importedFiles: [],
+                    ambientExternalModules: undefined,
+                    isLibFile: false,
+                },
+            );
             /* eslint-enable no-template-curly-in-string */
         });
 

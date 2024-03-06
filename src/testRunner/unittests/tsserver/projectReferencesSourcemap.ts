@@ -266,7 +266,9 @@ fn5();
             runActions(session, options.actionAfterChange || options.action);
             baselineTsserverLogs(
                 "projectReferencesSourcemap",
-                `${options.scenarioLocation}/${options.type}/${options.scenario}${timeoutBeforeAction ? " with timeout before request" : ""}`,
+                `${options.scenarioLocation}/${options.type}/${options.scenario}${
+                    timeoutBeforeAction ? " with timeout before request" : ""
+                }`,
                 session,
             );
         });

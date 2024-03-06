@@ -165,7 +165,8 @@ export function getImportNeedsImportDefaultHelper(node: ImportDeclaration): bool
     // Import default is needed if there's a default import or a default ref and no other refs (meaning an import star helper wasn't requested)
     return !getImportNeedsImportStarHelper(node) &&
         (isDefaultImport(node) ||
-            (!!node.importClause && isNamedImports(node.importClause.namedBindings!) && containsDefaultReference(node.importClause.namedBindings))); // TODO: GH#18217
+            (!!node.importClause && isNamedImports(node.importClause.namedBindings!) &&
+                containsDefaultReference(node.importClause.namedBindings))); // TODO: GH#18217
 }
 
 /** @internal */
@@ -428,11 +429,23 @@ export class IdentifierNameMap<V> {
             if ((autoGenerate.flags & GeneratedIdentifierFlags.KindMask) === GeneratedIdentifierFlags.Node) {
                 const node = getNodeForGeneratedName(name);
                 const baseName = isMemberName(node) && node !== name ? IdentifierNameMap.toKey(node) : `(generated@${getNodeId(node)})`;
-                return formatGeneratedName(/*privateName*/ false, autoGenerate.prefix, baseName, autoGenerate.suffix, IdentifierNameMap.toKey);
+                return formatGeneratedName(
+                    /*privateName*/ false,
+                    autoGenerate.prefix,
+                    baseName,
+                    autoGenerate.suffix,
+                    IdentifierNameMap.toKey,
+                );
             }
             else {
                 const baseName = `(auto@${autoGenerate.id})`;
-                return formatGeneratedName(/*privateName*/ false, autoGenerate.prefix, baseName, autoGenerate.suffix, IdentifierNameMap.toKey);
+                return formatGeneratedName(
+                    /*privateName*/ false,
+                    autoGenerate.prefix,
+                    baseName,
+                    autoGenerate.suffix,
+                    IdentifierNameMap.toKey,
+                );
             }
         }
         if (isPrivateIdentifier(name)) {
@@ -669,7 +682,8 @@ export function isInitializedProperty(member: ClassElement): member is PropertyD
 export function isNonStaticMethodOrAccessorWithPrivateName(
     member: ClassElement,
 ): member is PrivateIdentifierMethodDeclaration | PrivateIdentifierAccessorDeclaration | PrivateIdentifierAutoAccessorPropertyDeclaration {
-    return !isStatic(member) && (isMethodOrAccessor(member) || isAutoAccessorPropertyDeclaration(member)) && isPrivateIdentifier(member.name);
+    return !isStatic(member) && (isMethodOrAccessor(member) || isAutoAccessorPropertyDeclaration(member)) &&
+        isPrivateIdentifier(member.name);
 }
 
 /**

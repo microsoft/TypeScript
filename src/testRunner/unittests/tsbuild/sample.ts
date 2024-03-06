@@ -261,7 +261,12 @@ describe("unittests:: tsbuild:: on 'sample1' project", () => {
             subScenario: "does not rebuild if there is no program and bundle in the ts build info event if version doesnt match ts version",
             fs: () => {
                 const fs = projFs.shadow();
-                const host = fakes.SolutionBuilderHost.create(fs, /*options*/ undefined, /*setParentNodes*/ undefined, ts.createAbstractBuilder);
+                const host = fakes.SolutionBuilderHost.create(
+                    fs,
+                    /*options*/ undefined,
+                    /*setParentNodes*/ undefined,
+                    ts.createAbstractBuilder,
+                );
                 const builder = ts.createSolutionBuilder(host, ["tests"], { verbose: true });
                 builder.build();
                 fs.makeReadonly();

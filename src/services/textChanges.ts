@@ -391,7 +391,8 @@ function getAdjustedStartPosition(sourceFile: SourceFile, node: Node, options: C
     if (hasTrailingComment) {
         // Check first for leading comments as if the node is the first import, we want to exclude the trivia;
         // otherwise we get the trailing comments.
-        const comment = getLeadingCommentRanges(sourceFile.text, fullStart)?.[0] || getTrailingCommentRanges(sourceFile.text, fullStart)?.[0];
+        const comment = getLeadingCommentRanges(sourceFile.text, fullStart)?.[0] ||
+            getTrailingCommentRanges(sourceFile.text, fullStart)?.[0];
         if (comment) {
             return skipTrivia(sourceFile.text, comment.end, /*stopAfterLineBreak*/ true, /*stopAtComments*/ true);
         }
@@ -585,7 +586,8 @@ export class ChangeTracker {
         options: ConfigurableStartEnd = { leadingTriviaOption: LeadingTriviaOption.IncludeAll },
     ): void {
         const startPosition = getAdjustedStartPosition(sourceFile, startNode, options);
-        const endPosition = afterEndNode === undefined ? sourceFile.text.length : getAdjustedStartPosition(sourceFile, afterEndNode, options);
+        const endPosition = afterEndNode === undefined ? sourceFile.text.length
+            : getAdjustedStartPosition(sourceFile, afterEndNode, options);
         this.deleteRange(sourceFile, { pos: startPosition, end: endPosition });
     }
 
@@ -639,7 +641,11 @@ export class ChangeTracker {
         this.replaceRangeWithNodes(sourceFile, getAdjustedRange(sourceFile, startNode, endNode, options), newNodes, options);
     }
 
-    public nodeHasTrailingComment(sourceFile: SourceFile, oldNode: Node, configurableEnd: ConfigurableEnd = useNonAdjustedPositions): boolean {
+    public nodeHasTrailingComment(
+        sourceFile: SourceFile,
+        oldNode: Node,
+        configurableEnd: ConfigurableEnd = useNonAdjustedPositions,
+    ): boolean {
         return !!getEndPositionOfMultilineTrailingComment(sourceFile, oldNode, configurableEnd);
     }
 
@@ -657,7 +663,12 @@ export class ChangeTracker {
         this.replaceRange(sourceFile, createRange(pos), newNode, options);
     }
 
-    private insertNodesAt(sourceFile: SourceFile, pos: number, newNodes: readonly Node[], options: ReplaceWithMultipleNodesOptions = {}): void {
+    private insertNodesAt(
+        sourceFile: SourceFile,
+        pos: number,
+        newNodes: readonly Node[],
+        options: ReplaceWithMultipleNodesOptions = {},
+    ): void {
         this.replaceRangeWithNodes(sourceFile, createRange(pos), newNodes, options);
     }
 
@@ -673,7 +684,8 @@ export class ChangeTracker {
         const pos = getInsertionPositionAtSourceFileTop(sourceFile);
         const options = {
             prefix: pos === 0 ? undefined : this.newLineCharacter,
-            suffix: (isLineBreak(sourceFile.text.charCodeAt(pos)) ? "" : this.newLineCharacter) + (blankLineBetween ? this.newLineCharacter : ""),
+            suffix: (isLineBreak(sourceFile.text.charCodeAt(pos)) ? "" : this.newLineCharacter) +
+                (blankLineBetween ? this.newLineCharacter : ""),
         };
         if (isArray(insert)) {
             this.insertNodesAt(sourceFile, pos, insert, options);
@@ -704,7 +716,11 @@ export class ChangeTracker {
         this.insertNodesAt(sourceFile, pos, insert, options);
     }
 
-    private insertStatementsInNewFile(fileName: string, statements: readonly (Statement | SyntaxKind.NewLineTrivia)[], oldFile?: SourceFile): void {
+    private insertStatementsInNewFile(
+        fileName: string,
+        statements: readonly (Statement | SyntaxKind.NewLineTrivia)[],
+        oldFile?: SourceFile,
+    ): void {
         if (!this.newFileChanges) {
             this.newFileChanges = createMultiMap<string, NewFileInsertion>();
         }
@@ -721,7 +737,13 @@ export class ChangeTracker {
         }
     }
 
-    public insertNodeBefore(sourceFile: SourceFile, before: Node, newNode: Node, blankLineBetween = false, options: ConfigurableStartEnd = {}): void {
+    public insertNodeBefore(
+        sourceFile: SourceFile,
+        before: Node,
+        newNode: Node,
+        blankLineBetween = false,
+        options: ConfigurableStartEnd = {},
+    ): void {
         this.insertNodeAt(
             sourceFile,
             getAdjustedStartPosition(sourceFile, before, options),
@@ -850,7 +872,11 @@ export class ChangeTracker {
         this.insertNodeAt(sourceFile, start, type, { prefix: "this: ", suffix });
     }
 
-    public insertTypeParameters(sourceFile: SourceFile, node: SignatureDeclaration, typeParameters: readonly TypeParameterDeclaration[]): void {
+    public insertTypeParameters(
+        sourceFile: SourceFile,
+        node: SignatureDeclaration,
+        typeParameters: readonly TypeParameterDeclaration[],
+    ): void {
         // If no `(`, is an arrow function `x => x`, so use the pos of the first parameter
         const start = (findChildOfKind(node, SyntaxKind.OpenParenToken, sourceFile) || first(node.parameters)).getStart(sourceFile);
         this.insertNodesAt(sourceFile, start, typeParameters, { prefix: "<", suffix: ">", joiner: ", " });
@@ -935,7 +961,8 @@ export class ChangeTracker {
         node: ClassLikeDeclaration | InterfaceDeclaration | ObjectLiteralExpression | TypeLiteralNode | EnumDeclaration,
         newElement: ClassElement | ObjectLiteralElementLike | PropertySignature | MethodSignature | EnumMember,
     ): void {
-        const indentation = this.guessIndentationFromExistingMembers(sourceFile, node) ?? this.computeIndentationForNewMember(sourceFile, node);
+        const indentation = this.guessIndentationFromExistingMembers(sourceFile, node) ??
+            this.computeIndentationForNewMember(sourceFile, node);
         this.insertNodeAt(
             sourceFile,
             getMembersOrProperties(node).pos,
@@ -1126,9 +1153,12 @@ export class ChangeTracker {
             }
         }
         else {
-            const pos =
-                findChildOfKind(node, node.kind === SyntaxKind.FunctionExpression ? SyntaxKind.FunctionKeyword : SyntaxKind.ClassKeyword, sourceFile)!
-                    .end;
+            const pos = findChildOfKind(
+                node,
+                node.kind === SyntaxKind.FunctionExpression ? SyntaxKind.FunctionKeyword : SyntaxKind.ClassKeyword,
+                sourceFile,
+            )!
+                .end;
             this.insertNodeAt(sourceFile, pos, factory.createIdentifier(name), { prefix: " " });
         }
     }
@@ -1137,7 +1167,12 @@ export class ChangeTracker {
         this.insertText(sourceFile, node.getStart(sourceFile), "export ");
     }
 
-    public insertImportSpecifierAtIndex(sourceFile: SourceFile, importSpecifier: ImportSpecifier, namedImports: NamedImports, index: number) {
+    public insertImportSpecifierAtIndex(
+        sourceFile: SourceFile,
+        importSpecifier: ImportSpecifier,
+        namedImports: NamedImports,
+        index: number,
+    ) {
         const prevSpecifier = namedImports.elements[index - 1];
         if (prevSpecifier) {
             this.insertNodeInListAfter(sourceFile, prevSpecifier, importSpecifier);
@@ -1223,7 +1258,10 @@ export class ChangeTracker {
                 const tokenBeforeInsertPosition = findPrecedingToken(after.pos, sourceFile);
                 separator = isSeparator(after, tokenBeforeInsertPosition) ? tokenBeforeInsertPosition.kind : SyntaxKind.CommaToken;
                 // determine if list is multiline by checking lines of after element and element that precedes it.
-                const afterMinusOneStartLinePosition = getLineStartPositionForPosition(containingList[index - 1].getStart(sourceFile), sourceFile);
+                const afterMinusOneStartLinePosition = getLineStartPositionForPosition(
+                    containingList[index - 1].getStart(sourceFile),
+                    sourceFile,
+                );
                 multilineList = afterMinusOneStartLinePosition !== afterStartLinePosition;
             }
             if (
@@ -1324,7 +1362,11 @@ export class ChangeTracker {
         return changes;
     }
 
-    public createNewFile(oldFile: SourceFile | undefined, fileName: string, statements: readonly (Statement | SyntaxKind.NewLineTrivia)[]): void {
+    public createNewFile(
+        oldFile: SourceFile | undefined,
+        fileName: string,
+        statements: readonly (Statement | SyntaxKind.NewLineTrivia)[],
+    ): void {
         this.insertStatementsInNewFile(fileName, statements, oldFile);
     }
 }
@@ -1437,7 +1479,8 @@ namespace changesToText {
 
             const textChanges = mapDefined(normalized, c => {
                 const span = createTextSpanFromRange(c.range);
-                const targetSourceFile = c.kind === ChangeKind.ReplaceWithSingleNode ? getSourceFileOfNode(getOriginalNode(c.node)) ?? c.sourceFile :
+                const targetSourceFile = c.kind === ChangeKind.ReplaceWithSingleNode ?
+                    getSourceFileOfNode(getOriginalNode(c.node)) ?? c.sourceFile :
                     c.kind === ChangeKind.ReplaceWithMultipleNodes ? getSourceFileOfNode(getOriginalNode(c.nodes[0])) ?? c.sourceFile :
                     c.sourceFile;
                 const newText = computeNewText(c, targetSourceFile, sourceFile, newLineCharacter, formatContext, validate);
@@ -1473,7 +1516,9 @@ namespace changesToText {
         const nonFormattedText = flatMap(
             insertions,
             insertion =>
-                insertion.statements.map(s => s === SyntaxKind.NewLineTrivia ? "" : getNonformattedText(s, insertion.oldFile, newLineCharacter).text),
+                insertion.statements.map(s =>
+                    s === SyntaxKind.NewLineTrivia ? "" : getNonformattedText(s, insertion.oldFile, newLineCharacter).text
+                ),
         )
             .join(
                 newLineCharacter,
@@ -1505,7 +1550,8 @@ namespace changesToText {
         }
 
         const { options = {}, range: { pos } } = change;
-        const format = (n: Node) => getFormattedTextOfNode(n, targetSourceFile, sourceFile, pos, options, newLineCharacter, formatContext, validate);
+        const format = (n: Node) =>
+            getFormattedTextOfNode(n, targetSourceFile, sourceFile, pos, options, newLineCharacter, formatContext, validate);
         const text = change.kind === ChangeKind.ReplaceWithMultipleNodes
             ? change.nodes.map(n => removeSuffix(format(n), newLineCharacter)).join(change.options?.joiner || newLineCharacter)
             : format(change.node);
@@ -1557,7 +1603,11 @@ namespace changesToText {
     }
 
     /** Note: output node may be mutated input node. */
-    export function getNonformattedText(node: Node, sourceFile: SourceFile | undefined, newLineCharacter: string): { text: string; node: Node; } {
+    export function getNonformattedText(
+        node: Node,
+        sourceFile: SourceFile | undefined,
+        newLineCharacter: string,
+    ): { text: string; node: Node; } {
         const writer = createWriter(newLineCharacter);
         const newLine = getNewLineKind(newLineCharacter);
         createPrinter({
@@ -1595,7 +1645,13 @@ const textChangesTransformationContext: TransformationContext = {
 
 /** @internal */
 export function assignPositionsToNode(node: Node): Node {
-    const visited = visitEachChild(node, assignPositionsToNode, textChangesTransformationContext, assignPositionsToNodeArray, assignPositionsToNode);
+    const visited = visitEachChild(
+        node,
+        assignPositionsToNode,
+        textChangesTransformationContext,
+        assignPositionsToNodeArray,
+        assignPositionsToNode,
+    );
     // create proxy node for non synthesized nodes
     const newNode = nodeIsSynthesized(visited) ? visited : Object.create(visited) as Node;
     setTextRangePosEnd(newNode, getPos(node), getEnd(node));
@@ -1844,7 +1900,9 @@ function getInsertionPositionAtSourceFileTop(sourceFile: SourceFile): number {
         }
 
         if (sourceFile.statements.length) {
-            if (firstNodeLine === undefined) firstNodeLine = sourceFile.getLineAndCharacterOfPosition(sourceFile.statements[0].getStart()).line;
+            if (firstNodeLine === undefined) {
+                firstNodeLine = sourceFile.getLineAndCharacterOfPosition(sourceFile.statements[0].getStart()).line;
+            }
             const commentEndLine = sourceFile.getLineAndCharacterOfPosition(range.end).line;
             if (firstNodeLine < commentEndLine + 2) break;
         }
@@ -1863,7 +1921,10 @@ function getInsertionPositionAtSourceFileTop(sourceFile: SourceFile): number {
             if (isLineBreak(charCode)) {
                 position++;
 
-                if (position < text.length && charCode === CharacterCodes.carriageReturn && text.charCodeAt(position) === CharacterCodes.lineFeed) {
+                if (
+                    position < text.length && charCode === CharacterCodes.carriageReturn &&
+                    text.charCodeAt(position) === CharacterCodes.lineFeed
+                ) {
                     position++;
                 }
             }
@@ -1878,7 +1939,8 @@ export function isValidLocationToAddComment(sourceFile: SourceFile, position: nu
 }
 
 function needSemicolonBetween(a: Node, b: Node): boolean {
-    return (isPropertySignature(a) || isPropertyDeclaration(a)) && isClassOrTypeElement(b) && b.name!.kind === SyntaxKind.ComputedPropertyName
+    return (isPropertySignature(a) || isPropertyDeclaration(a)) && isClassOrTypeElement(b) &&
+            b.name!.kind === SyntaxKind.ComputedPropertyName
         || isStatementButNotDeclaration(a) && isStatementButNotDeclaration(b); // TODO: only if b would start with a `(` or `[`
 }
 

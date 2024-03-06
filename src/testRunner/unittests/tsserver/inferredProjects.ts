@@ -232,8 +232,14 @@ describe("unittests:: tsserver:: inferredProjects", () => {
         });
     }
 
-    verifyProjectRootWithCaseSensitivity("inferred projects per project root with case sensitive system", /*useCaseSensitiveFileNames*/ true);
-    verifyProjectRootWithCaseSensitivity("inferred projects per project root with case insensitive system", /*useCaseSensitiveFileNames*/ false);
+    verifyProjectRootWithCaseSensitivity(
+        "inferred projects per project root with case sensitive system",
+        /*useCaseSensitiveFileNames*/ true,
+    );
+    verifyProjectRootWithCaseSensitivity(
+        "inferred projects per project root with case insensitive system",
+        /*useCaseSensitiveFileNames*/ false,
+    );
 
     it("should still retain configured project created while opening the file", () => {
         const appFile: File = {
@@ -281,8 +287,14 @@ describe("unittests:: tsserver:: inferredProjects", () => {
         const inferredProject = session.getProjectService().inferredProjects[0];
         session.logger.log(`typeAcquisition : setting to undefined`);
         inferredProject.setTypeAcquisition(undefined);
-        session.logger.log(`typeAcquisition should be inferred for inferred projects: ${jsonToReadableText(inferredProject.getTypeAcquisition())}`);
-        baselineTsserverLogs("inferredProjects", "regression test - should infer typeAcquisition for inferred projects when set undefined", session);
+        session.logger.log(
+            `typeAcquisition should be inferred for inferred projects: ${jsonToReadableText(inferredProject.getTypeAcquisition())}`,
+        );
+        baselineTsserverLogs(
+            "inferredProjects",
+            "regression test - should infer typeAcquisition for inferred projects when set undefined",
+            session,
+        );
     });
 
     it("Setting compiler options for inferred projects when there are no open files should not schedule any refresh", () => {

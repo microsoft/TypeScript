@@ -66,7 +66,10 @@ function getRefactorActionsToConvertToTemplateString(context: RefactorContext): 
         return emptyArray;
     }
 
-    if (isExpressionNode(maybeBinary) && (nodeIsStringLiteral || isBinaryExpression(maybeBinary) && treeToArray(maybeBinary).isValidConcatenation)) {
+    if (
+        isExpressionNode(maybeBinary) &&
+        (nodeIsStringLiteral || isBinaryExpression(maybeBinary) && treeToArray(maybeBinary).isValidConcatenation)
+    ) {
         refactorInfo.actions.push(convertStringAction);
         return [refactorInfo];
     }
@@ -152,7 +155,9 @@ function getParentBinaryExpression(expr: Node) {
 }
 
 function treeToArray(current: Expression) {
-    const loop = (current: Node): { nodes: Expression[]; operators: Token<BinaryOperator>[]; hasString: boolean; validOperators: boolean; } => {
+    const loop = (
+        current: Node,
+    ): { nodes: Expression[]; operators: Token<BinaryOperator>[]; hasString: boolean; validOperators: boolean; } => {
         if (!isBinaryExpression(current)) {
             return {
                 nodes: [current as Expression],

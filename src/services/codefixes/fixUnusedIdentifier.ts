@@ -89,7 +89,9 @@ registerCodeFix({
         const token = getTokenAtPosition(sourceFile, context.span.start);
 
         if (isJSDocTemplateTag(token)) {
-            return [createDeleteFix(textChanges.ChangeTracker.with(context, t => t.delete(sourceFile, token)), Diagnostics.Remove_template_tag)];
+            return [
+                createDeleteFix(textChanges.ChangeTracker.with(context, t => t.delete(sourceFile, token)), Diagnostics.Remove_template_tag),
+            ];
         }
         if (token.kind === SyntaxKind.LessThanToken) {
             const changes = textChanges.ChangeTracker.with(context, t => deleteTypeParameters(t, sourceFile, token));
@@ -130,7 +132,8 @@ registerCodeFix({
             if (isParameter(token.parent.parent)) {
                 const elements = token.parent.elements;
                 const diagnostic: [DiagnosticMessage, string] = [
-                    elements.length > 1 ? Diagnostics.Remove_unused_declarations_for_Colon_0 : Diagnostics.Remove_unused_declaration_for_Colon_0,
+                    elements.length > 1 ? Diagnostics.Remove_unused_declarations_for_Colon_0
+                        : Diagnostics.Remove_unused_declaration_for_Colon_0,
                     map(elements, e => e.getText(sourceFile)).join(", "),
                 ];
                 return [
@@ -223,7 +226,16 @@ registerCodeFix({
                         changes.delete(sourceFile, importDecl);
                     }
                     else if (isImport(token)) {
-                        tryDeleteDeclaration(sourceFile, token, changes, checker, sourceFiles, program, cancellationToken, /*isFixAll*/ true);
+                        tryDeleteDeclaration(
+                            sourceFile,
+                            token,
+                            changes,
+                            checker,
+                            sourceFiles,
+                            program,
+                            cancellationToken,
+                            /*isFixAll*/ true,
+                        );
                     }
                     break;
                 }
@@ -252,7 +264,16 @@ registerCodeFix({
                         deleteEntireVariableStatement(changes, sourceFile, token.parent as VariableDeclarationList);
                     }
                     else {
-                        tryDeleteDeclaration(sourceFile, token, changes, checker, sourceFiles, program, cancellationToken, /*isFixAll*/ true);
+                        tryDeleteDeclaration(
+                            sourceFile,
+                            token,
+                            changes,
+                            checker,
+                            sourceFiles,
+                            program,
+                            cancellationToken,
+                            /*isFixAll*/ true,
+                        );
                     }
                     break;
                 }
@@ -279,7 +300,10 @@ function createDeleteFix(changes: FileTextChanges[], diag: DiagnosticOrDiagnosti
 function deleteTypeParameters(changes: textChanges.ChangeTracker, sourceFile: SourceFile, token: Node): void {
     changes.delete(
         sourceFile,
-        Debug.checkDefined(cast(token.parent, isDeclarationWithTypeParameterChildren).typeParameters, "The type parameter to delete should exist"),
+        Debug.checkDefined(
+            cast(token.parent, isDeclarationWithTypeParameterChildren).typeParameters,
+            "The type parameter to delete should exist",
+        ),
     );
 }
 
@@ -302,7 +326,11 @@ function deleteEntireVariableStatement(changes: textChanges.ChangeTracker, sourc
     changes.delete(sourceFile, node.parent.kind === SyntaxKind.VariableStatement ? node.parent : node);
 }
 
-function deleteDestructuringElements(changes: textChanges.ChangeTracker, sourceFile: SourceFile, node: ObjectBindingPattern | ArrayBindingPattern) {
+function deleteDestructuringElements(
+    changes: textChanges.ChangeTracker,
+    sourceFile: SourceFile,
+    node: ObjectBindingPattern | ArrayBindingPattern,
+) {
     forEach(node.elements, n => changes.delete(sourceFile, n));
 }
 
@@ -440,7 +468,12 @@ function tryDeleteParameter(
 function isNotProvidedArguments(parameter: ParameterDeclaration, checker: TypeChecker, sourceFiles: readonly SourceFile[]) {
     const index = parameter.parent.parameters.indexOf(parameter);
     // Just in case the call didn't provide enough arguments.
-    return !FindAllReferences.Core.someSignatureUsage(parameter.parent, sourceFiles, checker, (_, call) => !call || call.arguments.length > index);
+    return !FindAllReferences.Core.someSignatureUsage(
+        parameter.parent,
+        sourceFiles,
+        checker,
+        (_, call) => !call || call.arguments.length > index,
+    );
 }
 
 function mayDeleteParameter(
@@ -458,7 +491,13 @@ function mayDeleteParameter(
         case SyntaxKind.Constructor:
             const index = parent.parameters.indexOf(parameter);
             const referent = isMethodDeclaration(parent) ? parent.name : parent;
-            const entries = FindAllReferences.Core.getReferencedSymbolsForNode(parent.pos, referent, program, sourceFiles, cancellationToken);
+            const entries = FindAllReferences.Core.getReferencedSymbolsForNode(
+                parent.pos,
+                referent,
+                program,
+                sourceFiles,
+                cancellationToken,
+            );
             if (entries) {
                 for (const entry of entries) {
                     for (const reference of entry.references) {
@@ -473,7 +512,8 @@ function mayDeleteParameter(
                                 && isCallExpression(reference.node.parent.parent)
                                 && reference.node.parent.parent.arguments.length > index;
                             // parameter in overridden or overriding method
-                            const isOverriddenMethod = (isMethodDeclaration(reference.node.parent) || isMethodSignature(reference.node.parent))
+                            const isOverriddenMethod =
+                                (isMethodDeclaration(reference.node.parent) || isMethodSignature(reference.node.parent))
                                 && reference.node.parent !== parameter.parent
                                 && reference.node.parent.parameters.length > index;
                             if (isSuperCall || isSuperMethodCall || isOverriddenMethod) return false;

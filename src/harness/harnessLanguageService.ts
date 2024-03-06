@@ -320,7 +320,13 @@ class NativeLanguageServiceHost extends LanguageServiceAdapterHost implements ts
         return this.sys.fileExists(fileName);
     }
 
-    readDirectory(path: string, extensions?: readonly string[], exclude?: readonly string[], include?: readonly string[], depth?: number): string[] {
+    readDirectory(
+        path: string,
+        extensions?: readonly string[],
+        exclude?: readonly string[],
+        include?: readonly string[],
+        depth?: number,
+    ): string[] {
         return this.sys.readDirectory(path, extensions, exclude, include, depth);
     }
 
@@ -466,7 +472,13 @@ class SessionServerHost implements ts.server.ServerHost {
         return ts.sys.getEnvironmentVariable(name);
     }
 
-    readDirectory(path: string, extensions?: readonly string[], exclude?: readonly string[], include?: readonly string[], depth?: number): string[] {
+    readDirectory(
+        path: string,
+        extensions?: readonly string[],
+        exclude?: readonly string[],
+        include?: readonly string[],
+        depth?: number,
+    ): string[] {
         return this.host.readDirectory(path, extensions, exclude, include, depth);
     }
 
@@ -619,7 +631,9 @@ class FourslashSession extends ts.server.Session {
     }
     getText(fileName: string) {
         return ts.getSnapshotText(
-            this.projectService.getDefaultProjectForFile(ts.server.toNormalizedPath(fileName), /*ensureProject*/ true)!.getScriptSnapshot(fileName)!,
+            this.projectService.getDefaultProjectForFile(ts.server.toNormalizedPath(fileName), /*ensureProject*/ true)!.getScriptSnapshot(
+                fileName,
+            )!,
         );
     }
 

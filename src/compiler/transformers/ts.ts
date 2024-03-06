@@ -459,7 +459,10 @@ export function transformTypeScript(context: TransformationContext) {
                 if (node.isTypeOnly !== parsed.isTypeOnly) {
                     return true; // no longer safe to elide as `type` modifier has changed
                 }
-                if (node.moduleReference !== parsed.moduleReference && (isEntityName(node.moduleReference) || isEntityName(parsed.moduleReference))) {
+                if (
+                    node.moduleReference !== parsed.moduleReference &&
+                    (isEntityName(node.moduleReference) || isEntityName(parsed.moduleReference))
+                ) {
                     return true; // no longer safe to elide as EntityName reference has changed.
                 }
                 break;
@@ -1899,7 +1902,12 @@ export function transformTypeScript(context: TransformationContext) {
 
         // `exportName` is the expression used within this node's container for any exported references.
         const exportName = isExportOfNamespace(node)
-            ? factory.getExternalModuleOrNamespaceExportName(currentNamespaceContainerName, node, /*allowComments*/ false, /*allowSourceMaps*/ true)
+            ? factory.getExternalModuleOrNamespaceExportName(
+                currentNamespaceContainerName,
+                node,
+                /*allowComments*/ false,
+                /*allowSourceMaps*/ true,
+            )
             : factory.getDeclarationName(node, /*allowComments*/ false, /*allowSourceMaps*/ true);
 
         //  x || (x = {})
@@ -2181,7 +2189,12 @@ export function transformTypeScript(context: TransformationContext) {
 
         // `exportName` is the expression used within this node's container for any exported references.
         const exportName = isExportOfNamespace(node)
-            ? factory.getExternalModuleOrNamespaceExportName(currentNamespaceContainerName, node, /*allowComments*/ false, /*allowSourceMaps*/ true)
+            ? factory.getExternalModuleOrNamespaceExportName(
+                currentNamespaceContainerName,
+                node,
+                /*allowComments*/ false,
+                /*allowSourceMaps*/ true,
+            )
             : factory.getDeclarationName(node, /*allowComments*/ false, /*allowSourceMaps*/ true);
 
         //  x || (x = {})
@@ -2254,7 +2267,10 @@ export function transformTypeScript(context: TransformationContext) {
         let blockLocation: TextRange | undefined;
         if (node.body) {
             if (node.body.kind === SyntaxKind.ModuleBlock) {
-                saveStateAndInvoke(node.body, body => addRange(statements, visitNodes(body.statements, namespaceElementVisitor, isStatement)));
+                saveStateAndInvoke(
+                    node.body,
+                    body => addRange(statements, visitNodes(body.statements, namespaceElementVisitor, isStatement)),
+                );
                 statementsLocation = node.body.statements;
                 blockLocation = node.body;
             }
@@ -2584,7 +2600,12 @@ export function transformTypeScript(context: TransformationContext) {
 
     function createExportMemberAssignmentStatement(node: ClassDeclaration | FunctionDeclaration) {
         const expression = factory.createAssignment(
-            factory.getExternalModuleOrNamespaceExportName(currentNamespaceContainerName, node, /*allowComments*/ false, /*allowSourceMaps*/ true),
+            factory.getExternalModuleOrNamespaceExportName(
+                currentNamespaceContainerName,
+                node,
+                /*allowComments*/ false,
+                /*allowSourceMaps*/ true,
+            ),
             factory.getLocalName(node),
         );
         setSourceMapRange(expression, createRange(node.name ? node.name.pos : node.pos, node.end));
@@ -2602,7 +2623,12 @@ export function transformTypeScript(context: TransformationContext) {
         return setTextRange(
             factory.createExpressionStatement(
                 factory.createAssignment(
-                    factory.getNamespaceMemberName(currentNamespaceContainerName, exportName, /*allowComments*/ false, /*allowSourceMaps*/ true),
+                    factory.getNamespaceMemberName(
+                        currentNamespaceContainerName,
+                        exportName,
+                        /*allowComments*/ false,
+                        /*allowSourceMaps*/ true,
+                    ),
                     exportValue,
                 ),
             ),
@@ -2611,7 +2637,10 @@ export function transformTypeScript(context: TransformationContext) {
     }
 
     function createNamespaceExportExpression(exportName: Identifier, exportValue: Expression, location?: TextRange) {
-        return setTextRange(factory.createAssignment(getNamespaceMemberNameWithSourceMapsAndWithoutComments(exportName), exportValue), location);
+        return setTextRange(
+            factory.createAssignment(getNamespaceMemberNameWithSourceMapsAndWithoutComments(exportName), exportValue),
+            location,
+        );
     }
 
     function getNamespaceMemberNameWithSourceMapsAndWithoutComments(name: Identifier) {
@@ -2753,9 +2782,10 @@ export function transformTypeScript(context: TransformationContext) {
             // an identifier that is exported from a merged namespace.
             const container = resolver.getReferencedExportContainer(node, /*prefixLocals*/ false);
             if (container && container.kind !== SyntaxKind.SourceFile) {
-                const substitute =
-                    (applicableSubstitutions & TypeScriptSubstitutionFlags.NamespaceExports && container.kind === SyntaxKind.ModuleDeclaration) ||
-                    (applicableSubstitutions & TypeScriptSubstitutionFlags.NonQualifiedEnumMembers && container.kind === SyntaxKind.EnumDeclaration);
+                const substitute = (applicableSubstitutions & TypeScriptSubstitutionFlags.NamespaceExports &&
+                    container.kind === SyntaxKind.ModuleDeclaration) ||
+                    (applicableSubstitutions & TypeScriptSubstitutionFlags.NonQualifiedEnumMembers &&
+                        container.kind === SyntaxKind.EnumDeclaration);
                 if (substitute) {
                     return setTextRange(
                         factory.createPropertyAccessExpression(factory.getGeneratedNameForNode(container), node),
@@ -2786,12 +2816,17 @@ export function transformTypeScript(context: TransformationContext) {
             // track the constant value on the node for the printer in mayNeedDotDotForPropertyAccess
             setConstantValue(node, constantValue);
             const substitute = typeof constantValue === "string" ? factory.createStringLiteral(constantValue) :
-                constantValue < 0 ? factory.createPrefixUnaryExpression(SyntaxKind.MinusToken, factory.createNumericLiteral(-constantValue)) :
+                constantValue < 0 ?
+                factory.createPrefixUnaryExpression(SyntaxKind.MinusToken, factory.createNumericLiteral(-constantValue)) :
                 factory.createNumericLiteral(constantValue);
 
             if (!compilerOptions.removeComments) {
                 const originalNode = getOriginalNode(node, isAccessExpression);
-                addSyntheticTrailingComment(substitute, SyntaxKind.MultiLineCommentTrivia, ` ${safeMultiLineComment(getTextOfNode(originalNode))} `);
+                addSyntheticTrailingComment(
+                    substitute,
+                    SyntaxKind.MultiLineCommentTrivia,
+                    ` ${safeMultiLineComment(getTextOfNode(originalNode))} `,
+                );
             }
             return substitute;
         }

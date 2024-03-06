@@ -9,7 +9,13 @@ function lineColToPosition(lineIndex: ts.server.LineIndex, line: number, col: nu
     return lineIndex.absolutePositionOfStartOfLine(line) + (col - 1);
 }
 
-function validateEdit(lineIndex: ts.server.LineIndex, sourceText: string, position: number, deleteLength: number, insertString: string): void {
+function validateEdit(
+    lineIndex: ts.server.LineIndex,
+    sourceText: string,
+    position: number,
+    deleteLength: number,
+    insertString: string,
+): void {
     const checkText = editFlat(position, deleteLength, insertString, sourceText);
     const snapshot = lineIndex.edit(position, deleteLength, insertString);
     const editedText = snapshot.getText(0, snapshot.getLength());
@@ -155,7 +161,11 @@ and grew 1cm per day`;
     });
 
     it(`Insert multiple line breaks`, () => {
-        validateEditAtPosition(21, 1, "cr...\r\ncr...\r\ncr...\r\ncr...\r\ncr...\r\ncr...\r\ncr...\r\ncr...\r\ncr...\r\ncr...\r\ncr...\r\ncr");
+        validateEditAtPosition(
+            21,
+            1,
+            "cr...\r\ncr...\r\ncr...\r\ncr...\r\ncr...\r\ncr...\r\ncr...\r\ncr...\r\ncr...\r\ncr...\r\ncr...\r\ncr",
+        );
     });
 
     it(`Insert multiple line breaks`, () => {

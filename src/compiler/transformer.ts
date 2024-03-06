@@ -349,7 +349,8 @@ export function transformNodes<T extends Node>(
         tracing?.push(
             tracing.Phase.Emit,
             "transformNodes",
-            node.kind === SyntaxKind.SourceFile ? { path: (node as any as SourceFile).path } : { kind: node.kind, pos: node.pos, end: node.end },
+            node.kind === SyntaxKind.SourceFile ? { path: (node as any as SourceFile).path }
+                : { kind: node.kind, pos: node.pos, end: node.end },
         );
         transformed.push((allowDtsFiles ? transformation : transformRoot)(node));
         tracing?.pop();

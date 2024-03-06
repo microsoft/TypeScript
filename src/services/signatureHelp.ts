@@ -204,7 +204,9 @@ function getCandidateOrTypeInfo(
         }
         case InvocationKind.TypeArgs: {
             const { called } = invocation;
-            if (onlyUseSyntacticOwners && !containsPrecedingToken(startingToken, sourceFile, isIdentifier(called) ? called.parent : called)) {
+            if (
+                onlyUseSyntacticOwners && !containsPrecedingToken(startingToken, sourceFile, isIdentifier(called) ? called.parent : called)
+            ) {
                 return undefined;
             }
             const candidates = getPossibleGenericSignatures(called, argumentCount, checker);
@@ -376,7 +378,13 @@ function getImmediatelyContainingArgumentInfo(
         if (!info) return undefined;
         const { list, argumentIndex, argumentCount, argumentsSpan } = info;
         const isTypeParameterList = !!parent.typeArguments && parent.typeArguments.pos === list.pos;
-        return { isTypeParameterList, invocation: { kind: InvocationKind.Call, node: invocation }, argumentsSpan, argumentIndex, argumentCount };
+        return {
+            isTypeParameterList,
+            invocation: { kind: InvocationKind.Call, node: invocation },
+            argumentsSpan,
+            argumentIndex,
+            argumentCount,
+        };
     }
     else if (isNoSubstitutionTemplateLiteral(node) && isTaggedTemplateExpression(parent)) {
         // Check if we're actually inside the template;
@@ -431,7 +439,13 @@ function getImmediatelyContainingArgumentInfo(
             const { called, nTypeArguments } = typeArgInfo;
             const invocation: Invocation = { kind: InvocationKind.TypeArgs, called };
             const argumentsSpan = createTextSpanFromBounds(called.getStart(sourceFile), node.end);
-            return { isTypeParameterList: true, invocation, argumentsSpan, argumentIndex: nTypeArguments, argumentCount: nTypeArguments + 1 };
+            return {
+                isTypeParameterList: true,
+                invocation,
+                argumentsSpan,
+                argumentIndex: nTypeArguments,
+                argumentCount: nTypeArguments + 1,
+            };
         }
         return undefined;
     }
@@ -443,7 +457,8 @@ function getImmediatelyContainingArgumentOrContextualParameterInfo(
     sourceFile: SourceFile,
     checker: TypeChecker,
 ): ArgumentListInfo | undefined {
-    return tryGetParameterInfo(node, position, sourceFile, checker) || getImmediatelyContainingArgumentInfo(node, position, sourceFile, checker);
+    return tryGetParameterInfo(node, position, sourceFile, checker) ||
+        getImmediatelyContainingArgumentInfo(node, position, sourceFile, checker);
 }
 
 function getHighestBinary(b: BinaryExpression): BinaryExpression {
@@ -454,7 +469,12 @@ function countBinaryExpressionParameters(b: BinaryExpression): number {
     return isBinaryExpression(b.left) ? countBinaryExpressionParameters(b.left) + 1 : 2;
 }
 
-function tryGetParameterInfo(startingToken: Node, position: number, sourceFile: SourceFile, checker: TypeChecker): ArgumentListInfo | undefined {
+function tryGetParameterInfo(
+    startingToken: Node,
+    position: number,
+    sourceFile: SourceFile,
+    checker: TypeChecker,
+): ArgumentListInfo | undefined {
     const node = getAdjustedNode(startingToken);
     if (node === undefined) return undefined;
 
@@ -471,7 +491,12 @@ function tryGetParameterInfo(startingToken: Node, position: number, sourceFile: 
     const signature = lastOrUndefined(nonNullableContextualType.getCallSignatures());
     if (signature === undefined) return undefined;
 
-    const invocation: ContextualInvocation = { kind: InvocationKind.Contextual, signature, node: startingToken, symbol: chooseBetterSymbol(symbol) };
+    const invocation: ContextualInvocation = {
+        kind: InvocationKind.Contextual,
+        signature,
+        node: startingToken,
+        symbol: chooseBetterSymbol(symbol),
+    };
     return { isTypeParameterList: false, invocation, argumentsSpan, argumentIndex, argumentCount };
 }
 
@@ -515,7 +540,8 @@ function getContextualSignatureLocationInfo(
         case SyntaxKind.BinaryExpression: {
             const highestBinary = getHighestBinary(parent as BinaryExpression);
             const contextualType = checker.getContextualType(highestBinary);
-            const argumentIndex = node.kind === SyntaxKind.OpenParenToken ? 0 : countBinaryExpressionParameters(parent as BinaryExpression) - 1;
+            const argumentIndex = node.kind === SyntaxKind.OpenParenToken ? 0
+                : countBinaryExpressionParameters(parent as BinaryExpression) - 1;
             const argumentCount = countBinaryExpressionParameters(highestBinary);
             return contextualType && { contextualType, argumentIndex, argumentCount, argumentsSpan: createTextSpanFromNode(parent) };
         }
@@ -627,7 +653,11 @@ function getArgumentIndexForTemplatePiece(spanIndex: number, node: Node, positio
     return spanIndex + 1;
 }
 
-function getArgumentListInfoForTemplate(tagExpression: TaggedTemplateExpression, argumentIndex: number, sourceFile: SourceFile): ArgumentListInfo {
+function getArgumentListInfoForTemplate(
+    tagExpression: TaggedTemplateExpression,
+    argumentIndex: number,
+    sourceFile: SourceFile,
+): ArgumentListInfo {
     // argumentCount is either 1 or (numSpans + 1) to account for the template strings array argument.
     const argumentCount = isNoSubstitutionTemplateLiteral(tagExpression.template) ? 1 : tagExpression.template.templateSpans.length + 1;
     if (argumentIndex !== 0) {
@@ -730,14 +760,22 @@ function createSignatureHelpItems(
 ): SignatureHelpItems {
     const enclosingDeclaration = getEnclosingDeclarationFromInvocation(invocation);
     const callTargetSymbol = invocation.kind === InvocationKind.Contextual ? invocation.symbol
-        : (typeChecker.getSymbolAtLocation(getExpressionFromInvocation(invocation)) || useFullPrefix && resolvedSignature.declaration?.symbol);
+        : (typeChecker.getSymbolAtLocation(getExpressionFromInvocation(invocation)) ||
+            useFullPrefix && resolvedSignature.declaration?.symbol);
     const callTargetDisplayParts = callTargetSymbol ?
         symbolToDisplayParts(typeChecker, callTargetSymbol, useFullPrefix ? sourceFile : undefined, /*meaning*/ undefined)
         : emptyArray;
     const items = map(
         candidates,
         candidateSignature =>
-            getSignatureHelpItem(candidateSignature, callTargetDisplayParts, isTypeParameterList, typeChecker, enclosingDeclaration, sourceFile),
+            getSignatureHelpItem(
+                candidateSignature,
+                callTargetDisplayParts,
+                isTypeParameterList,
+                typeChecker,
+                enclosingDeclaration,
+                sourceFile,
+            ),
     );
 
     if (argumentIndex !== 0) {
@@ -803,7 +841,9 @@ function getTypeHelpItem(
     const typeSymbolDisplay = symbolToDisplayParts(checker, symbol);
 
     const printer = createPrinterWithRemoveComments();
-    const parameters = typeParameters.map(t => createSignatureHelpParameterForTypeParameter(t, checker, enclosingDeclaration, sourceFile, printer));
+    const parameters = typeParameters.map(t =>
+        createSignatureHelpParameterForTypeParameter(t, checker, enclosingDeclaration, sourceFile, printer)
+    );
 
     const documentation = symbol.getDocumentationComment(checker);
     const tags = symbol.getJsDocTags(checker);
@@ -844,7 +884,11 @@ function getSignatureHelpItem(
     });
 }
 
-function returnTypeToDisplayParts(candidateSignature: Signature, enclosingDeclaration: Node, checker: TypeChecker): readonly SymbolDisplayPart[] {
+function returnTypeToDisplayParts(
+    candidateSignature: Signature,
+    enclosingDeclaration: Node,
+    checker: TypeChecker,
+): readonly SymbolDisplayPart[] {
     return mapToDisplayParts(writer => {
         writer.writePunctuation(":");
         writer.writeSpace(" ");

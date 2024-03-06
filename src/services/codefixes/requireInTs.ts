@@ -38,7 +38,9 @@ registerCodeFix({
             return undefined;
         }
         const changes = textChanges.ChangeTracker.with(context, t => doChange(t, context.sourceFile, info));
-        return [createCodeFixAction(fixId, changes, Diagnostics.Convert_require_to_import, fixId, Diagnostics.Convert_all_require_to_import)];
+        return [
+            createCodeFixAction(fixId, changes, Diagnostics.Convert_require_to_import, fixId, Diagnostics.Convert_all_require_to_import),
+        ];
     },
     fixIds: [fixId],
     getAllCodeActions: context =>
@@ -105,7 +107,9 @@ function tryCreateNamedImportsFromObjectBindingPattern(node: ObjectBindingPatter
         if (!isIdentifier(element.name) || element.initializer) {
             return undefined;
         }
-        importSpecifiers.push(factory.createImportSpecifier(/*isTypeOnly*/ false, tryCast(element.propertyName, isIdentifier), element.name));
+        importSpecifiers.push(
+            factory.createImportSpecifier(/*isTypeOnly*/ false, tryCast(element.propertyName, isIdentifier), element.name),
+        );
     }
 
     if (importSpecifiers.length) {

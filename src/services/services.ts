@@ -696,7 +696,10 @@ class SymbolObject implements Symbol {
         if (context) {
             if (isGetAccessor(context)) {
                 if (!this.contextualGetAccessorDocumentationComment) {
-                    this.contextualGetAccessorDocumentationComment = getDocumentationComment(filter(this.declarations, isGetAccessor), checker);
+                    this.contextualGetAccessorDocumentationComment = getDocumentationComment(
+                        filter(this.declarations, isGetAccessor),
+                        checker,
+                    );
                 }
                 if (length(this.contextualGetAccessorDocumentationComment)) {
                     return this.contextualGetAccessorDocumentationComment;
@@ -704,7 +707,10 @@ class SymbolObject implements Symbol {
             }
             if (isSetAccessor(context)) {
                 if (!this.contextualSetAccessorDocumentationComment) {
-                    this.contextualSetAccessorDocumentationComment = getDocumentationComment(filter(this.declarations, isSetAccessor), checker);
+                    this.contextualSetAccessorDocumentationComment = getDocumentationComment(
+                        filter(this.declarations, isSetAccessor),
+                        checker,
+                    );
                 }
                 if (length(this.contextualSetAccessorDocumentationComment)) {
                     return this.contextualSetAccessorDocumentationComment;
@@ -938,7 +944,8 @@ class SignatureObject implements Signature {
     }
 
     getDocumentationComment(): SymbolDisplayPart[] {
-        return this.documentationComment || (this.documentationComment = getDocumentationComment(singleElementArray(this.declaration), this.checker));
+        return this.documentationComment ||
+            (this.documentationComment = getDocumentationComment(singleElementArray(this.declaration), this.checker));
     }
 
     getJsDocTags(): JSDocTagInfo[] {
@@ -1002,8 +1009,13 @@ function getDocumentationComment(declarations: readonly Declaration[] | undefine
     return doc;
 }
 
-function findBaseOfDeclaration<T>(checker: TypeChecker, declaration: Declaration, cb: (symbol: Symbol) => T[] | undefined): T[] | undefined {
-    const classOrInterfaceDeclaration = declaration.parent?.kind === SyntaxKind.Constructor ? declaration.parent.parent : declaration.parent;
+function findBaseOfDeclaration<T>(
+    checker: TypeChecker,
+    declaration: Declaration,
+    cb: (symbol: Symbol) => T[] | undefined,
+): T[] | undefined {
+    const classOrInterfaceDeclaration = declaration.parent?.kind === SyntaxKind.Constructor ? declaration.parent.parent
+        : declaration.parent;
     if (!classOrInterfaceDeclaration) return;
 
     const isStaticMember = hasStaticModifier(declaration);
@@ -1449,7 +1461,10 @@ export function updateLanguageServiceSourceFile(
             }
             else {
                 // it was actual edit, fetch the fragment of new text that correspond to new span
-                const changedText = scriptSnapshot.getText(textChangeRange.span.start, textChangeRange.span.start + textChangeRange.newLength);
+                const changedText = scriptSnapshot.getText(
+                    textChangeRange.span.start,
+                    textChangeRange.span.start + textChangeRange.newLength,
+                );
                 // combine prefix, changed text and suffix
                 newText = prefix && suffix
                     ? prefix + changedText + suffix
@@ -1484,7 +1499,14 @@ export function updateLanguageServiceSourceFile(
         jsDocParsingMode: sourceFile.jsDocParsingMode,
     };
     // Otherwise, just create a new source file.
-    return createLanguageServiceSourceFile(sourceFile.fileName, scriptSnapshot, options, version, /*setNodeParents*/ true, sourceFile.scriptKind);
+    return createLanguageServiceSourceFile(
+        sourceFile.fileName,
+        scriptSnapshot,
+        options,
+        version,
+        /*setNodeParents*/ true,
+        sourceFile.scriptKind,
+    );
 }
 
 const NoopCancellationToken: CancellationToken = {
@@ -2005,7 +2027,10 @@ export function createLanguageService(
         return host.getPackageJsonAutoImportProvider?.();
     }
 
-    function updateIsDefinitionOfReferencedSymbols(referencedSymbols: readonly ReferencedSymbol[], knownSymbolSpans: Set<DocumentSpan>): boolean {
+    function updateIsDefinitionOfReferencedSymbols(
+        referencedSymbols: readonly ReferencedSymbol[],
+        knownSymbolSpans: Set<DocumentSpan>,
+    ): boolean {
         const checker = program.getTypeChecker();
         const symbol = getSymbolForProgram();
 
@@ -2065,7 +2090,10 @@ export function createLanguageService(
         if (program) {
             // Use paths to ensure we are using correct key and paths as document registry could be created with different current directory than host
             const key = documentRegistry.getKeyForCompilationSettings(program.getCompilerOptions());
-            forEach(program.getSourceFiles(), f => documentRegistry.releaseDocumentWithKey(f.resolvedPath, key, f.scriptKind, f.impliedNodeFormat));
+            forEach(
+                program.getSourceFiles(),
+                f => documentRegistry.releaseDocumentWithKey(f.resolvedPath, key, f.scriptKind, f.impliedNodeFormat),
+            );
             program = undefined!; // TODO: GH#18217
         }
     }
@@ -2173,7 +2201,15 @@ export function createLanguageService(
         preferences: UserPreferences = emptyOptions,
     ): Symbol | undefined {
         synchronizeHostData();
-        return Completions.getCompletionEntrySymbol(program, log, getValidSourceFile(fileName), position, { name, source }, host, preferences);
+        return Completions.getCompletionEntrySymbol(
+            program,
+            log,
+            getValidSourceFile(fileName),
+            position,
+            { name, source },
+            host,
+            preferences,
+        );
     }
 
     function getQuickInfoAtPosition(fileName: string, position: number): QuickInfo | undefined {
@@ -2191,7 +2227,8 @@ export function createLanguageService(
         const symbol = getSymbolAtLocationForQuickInfo(nodeForQuickInfo, typeChecker);
 
         if (!symbol || typeChecker.isUnknownSymbol(symbol)) {
-            const type = shouldGetType(sourceFile, nodeForQuickInfo, position) ? typeChecker.getTypeAtLocation(nodeForQuickInfo) : undefined;
+            const type = shouldGetType(sourceFile, nodeForQuickInfo, position) ? typeChecker.getTypeAtLocation(nodeForQuickInfo)
+                : undefined;
             return type && {
                 kind: ScriptElementKind.unknown,
                 kindModifiers: ScriptElementKindModifier.none,
@@ -2318,7 +2355,10 @@ export function createLanguageService(
         const sourceFile = getValidSourceFile(fileName);
         const node = getAdjustedRenameLocation(getTouchingPropertyName(sourceFile, position));
         if (!Rename.nodeIsEligibleForRename(node)) return undefined;
-        if (isIdentifier(node) && (isJsxOpeningElement(node.parent) || isJsxClosingElement(node.parent)) && isIntrinsicJsxName(node.escapedText)) {
+        if (
+            isIdentifier(node) && (isJsxOpeningElement(node.parent) || isJsxClosingElement(node.parent)) &&
+            isIntrinsicJsxName(node.escapedText)
+        ) {
             const { openingElement, closingElement } = node.parent.parent;
             return [openingElement, closingElement].map((node): RenameLocation => {
                 const textSpan = createTextSpanFromNode(node.tagName, sourceFile);
@@ -2338,7 +2378,13 @@ export function createLanguageService(
                 position,
                 { findInStrings, findInComments, providePrefixAndSuffixTextForRename, use: FindAllReferences.FindReferencesUse.Rename },
                 (entry, originalNode, checker) =>
-                    FindAllReferences.toRenameLocation(entry, originalNode, checker, providePrefixAndSuffixTextForRename || false, quotePreference),
+                    FindAllReferences.toRenameLocation(
+                        entry,
+                        originalNode,
+                        checker,
+                        providePrefixAndSuffixTextForRename || false,
+                        quotePreference,
+                    ),
             );
         }
     }
@@ -2371,12 +2417,20 @@ export function createLanguageService(
 
     function findReferences(fileName: string, position: number): ReferencedSymbol[] | undefined {
         synchronizeHostData();
-        return FindAllReferences.findReferencedSymbols(program, cancellationToken, program.getSourceFiles(), getValidSourceFile(fileName), position);
+        return FindAllReferences.findReferencedSymbols(
+            program,
+            cancellationToken,
+            program.getSourceFiles(),
+            getValidSourceFile(fileName),
+            position,
+        );
     }
 
     function getFileReferences(fileName: string): ReferenceEntry[] {
         synchronizeHostData();
-        return FindAllReferences.Core.getReferencesForFileName(fileName, program, program.getSourceFiles()).map(FindAllReferences.toReferenceEntry);
+        return FindAllReferences.Core.getReferencesForFileName(fileName, program, program.getSourceFiles()).map(
+            FindAllReferences.toReferenceEntry,
+        );
     }
 
     function getNavigateToItems(
@@ -2573,7 +2627,8 @@ export function createLanguageService(
         const matchKind = token.getStart(sourceFile) === position ? braceMatching.get(token.kind.toString()) : undefined;
         const match = matchKind && findChildOfKind(token.parent, matchKind, sourceFile);
         // We want to order the braces when we return the result.
-        return match ? [createTextSpanFromNode(token, sourceFile), createTextSpanFromNode(match, sourceFile)].sort((a, b) => a.start - b.start)
+        return match ?
+            [createTextSpanFromNode(token, sourceFile), createTextSpanFromNode(match, sourceFile)].sort((a, b) => a.start - b.start)
             : emptyArray;
     }
 
@@ -2591,7 +2646,12 @@ export function createLanguageService(
         return result;
     }
 
-    function getFormattingEditsForRange(fileName: string, start: number, end: number, options: FormatCodeOptions | FormatCodeSettings): TextChange[] {
+    function getFormattingEditsForRange(
+        fileName: string,
+        start: number,
+        end: number,
+        options: FormatCodeOptions | FormatCodeSettings,
+    ): TextChange[] {
         const sourceFile = syntaxTreeCache.getCurrentSourceFile(fileName);
         return formatting.formatSelection(start, end, sourceFile, formatting.getFormatContext(toEditorSettings(options), host));
     }
@@ -2693,7 +2753,10 @@ export function createLanguageService(
     }
 
     function applyCodeActionCommand(action: CodeActionCommand, formatSettings?: FormatCodeSettings): Promise<ApplyCodeActionCommandResult>;
-    function applyCodeActionCommand(action: CodeActionCommand[], formatSettings?: FormatCodeSettings): Promise<ApplyCodeActionCommandResult[]>;
+    function applyCodeActionCommand(
+        action: CodeActionCommand[],
+        formatSettings?: FormatCodeSettings,
+    ): Promise<ApplyCodeActionCommandResult[]>;
     function applyCodeActionCommand(
         action: CodeActionCommand | CodeActionCommand[],
         formatSettings?: FormatCodeSettings,
@@ -2833,7 +2896,10 @@ export function createLanguageService(
             ) return undefined;
 
             // only return linked cursors if the cursor is within a tag name
-            if (!(openTagNameStart <= position && position <= openTagNameEnd || closeTagNameStart <= position && position <= closeTagNameEnd)) {
+            if (
+                !(openTagNameStart <= position && position <= openTagNameEnd ||
+                    closeTagNameStart <= position && position <= closeTagNameEnd)
+            ) {
                 return undefined;
             }
 
@@ -3086,7 +3152,11 @@ export function createLanguageService(
                         break;
                     case SyntaxKind.MultiLineCommentTrivia:
                         textChanges.push(
-                            ...toggleMultilineComment(fileName, { end: commentRange.end, pos: commentRange.pos + 1 }, /*insertComment*/ false),
+                            ...toggleMultilineComment(
+                                fileName,
+                                { end: commentRange.end, pos: commentRange.pos + 1 },
+                                /*insertComment*/ false,
+                            ),
                         );
                 }
 
@@ -3213,7 +3283,8 @@ export function createLanguageService(
             // Match any of the above three TODO comment start regexps.
             // Note that the outermost group *is* a capture group.  We want to capture the preamble
             // so that we can determine the starting position of the TODO comment match.
-            const preamble = "(" + anyNumberOfSpacesAndAsterisksAtStartOfLine + "|" + singleLineCommentStart + "|" + multiLineCommentStart + ")";
+            const preamble = "(" + anyNumberOfSpacesAndAsterisksAtStartOfLine + "|" + singleLineCommentStart + "|" + multiLineCommentStart +
+                ")";
 
             // Takes the descriptors and forms a regexp that matches them as if they were literals.
             // For example, if the descriptors are "TODO(jason)" and "HACK", then this will be:
@@ -3381,7 +3452,10 @@ export function createLanguageService(
 
     function prepareCallHierarchy(fileName: string, position: number): CallHierarchyItem | CallHierarchyItem[] | undefined {
         synchronizeHostData();
-        const declarations = CallHierarchy.resolveCallHierarchyDeclaration(program, getTouchingPropertyName(getValidSourceFile(fileName), position));
+        const declarations = CallHierarchy.resolveCallHierarchyDeclaration(
+            program,
+            getTouchingPropertyName(getValidSourceFile(fileName), position),
+        );
         return declarations && mapOneOrMany(declarations, declaration => CallHierarchy.createCallHierarchyItem(program, declaration));
     }
 
@@ -3389,7 +3463,10 @@ export function createLanguageService(
         synchronizeHostData();
         const sourceFile = getValidSourceFile(fileName);
         const declaration = firstOrOnly(
-            CallHierarchy.resolveCallHierarchyDeclaration(program, position === 0 ? sourceFile : getTouchingPropertyName(sourceFile, position)),
+            CallHierarchy.resolveCallHierarchyDeclaration(
+                program,
+                position === 0 ? sourceFile : getTouchingPropertyName(sourceFile, position),
+            ),
         );
         return declaration ? CallHierarchy.getIncomingCalls(program, declaration, cancellationToken) : [];
     }
@@ -3398,7 +3475,10 @@ export function createLanguageService(
         synchronizeHostData();
         const sourceFile = getValidSourceFile(fileName);
         const declaration = firstOrOnly(
-            CallHierarchy.resolveCallHierarchyDeclaration(program, position === 0 ? sourceFile : getTouchingPropertyName(sourceFile, position)),
+            CallHierarchy.resolveCallHierarchyDeclaration(
+                program,
+                position === 0 ? sourceFile : getTouchingPropertyName(sourceFile, position),
+            ),
         );
         return declaration ? CallHierarchy.getOutgoingCalls(program, declaration) : [];
     }
@@ -3558,7 +3638,8 @@ function literalIsName(node: StringLiteralLike | NumericLiteral): boolean {
  */
 export function getContainingObjectLiteralElement(node: Node): ObjectLiteralElementWithName | undefined {
     const element = getContainingObjectLiteralElementWorker(node);
-    return element && (isObjectLiteralExpression(element.parent) || isJsxAttributes(element.parent)) ? element as ObjectLiteralElementWithName
+    return element && (isObjectLiteralExpression(element.parent) || isJsxAttributes(element.parent)) ?
+        element as ObjectLiteralElementWithName
         : undefined;
 }
 function getContainingObjectLiteralElementWorker(node: Node): ObjectLiteralElement | undefined {
@@ -3573,7 +3654,8 @@ function getContainingObjectLiteralElementWorker(node: Node): ObjectLiteralEleme
 
         case SyntaxKind.Identifier:
             return isObjectLiteralElement(node.parent) &&
-                    (node.parent.parent.kind === SyntaxKind.ObjectLiteralExpression || node.parent.parent.kind === SyntaxKind.JsxAttributes) &&
+                    (node.parent.parent.kind === SyntaxKind.ObjectLiteralExpression ||
+                        node.parent.parent.kind === SyntaxKind.JsxAttributes) &&
                     node.parent.name === node ? node.parent : undefined;
     }
     return undefined;
@@ -3616,7 +3698,9 @@ export function getPropertySymbolsFromContextualType(
         ? filter(contextualType.types, t => !checker.isTypeInvalidDueToUnionDiscriminant(t, node.parent))
         : contextualType.types;
     const discriminatedPropertySymbols = mapDefined(filteredTypes, t => t.getProperty(name));
-    if (unionSymbolOk && (discriminatedPropertySymbols.length === 0 || discriminatedPropertySymbols.length === contextualType.types.length)) {
+    if (
+        unionSymbolOk && (discriminatedPropertySymbols.length === 0 || discriminatedPropertySymbols.length === contextualType.types.length)
+    ) {
         const symbol = contextualType.getProperty(name);
         if (symbol) return [symbol];
     }

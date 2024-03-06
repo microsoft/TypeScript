@@ -69,7 +69,12 @@ interface FlattenContext {
     hoistTempVariables: boolean;
     hasTransformedPriorElement?: boolean; // indicates whether we've transformed a prior declaration
     emitExpression: (value: Expression) => void;
-    emitBindingOrAssignment: (target: BindingOrAssignmentElementTarget, value: Expression, location: TextRange, original: Node | undefined) => void;
+    emitBindingOrAssignment: (
+        target: BindingOrAssignmentElementTarget,
+        value: Expression,
+        location: TextRange,
+        original: Node | undefined,
+    ) => void;
     createArrayBindingOrAssignmentPattern: (elements: BindingOrAssignmentElement[]) => ArrayBindingOrAssignmentPattern;
     createObjectBindingOrAssignmentPattern: (elements: BindingOrAssignmentElement[]) => ObjectBindingOrAssignmentPattern;
     createArrayBindingOrAssignmentElement: (node: Identifier) => BindingOrAssignmentElement;
@@ -180,7 +185,12 @@ export function flattenDestructuringAssignment(
         expressions = append(expressions, expression);
     }
 
-    function emitBindingOrAssignment(target: BindingOrAssignmentElementTarget, value: Expression, location: TextRange, original: Node | undefined) {
+    function emitBindingOrAssignment(
+        target: BindingOrAssignmentElementTarget,
+        value: Expression,
+        location: TextRange,
+        original: Node | undefined,
+    ) {
         Debug.assertNode(target, createAssignmentCallback ? isIdentifier : isExpression);
         const expression = createAssignmentCallback
             ? createAssignmentCallback(target as Identifier, value, location)
@@ -250,8 +260,13 @@ export function flattenDestructuringBinding(
     skipInitializer?: boolean,
 ): VariableDeclaration[] {
     let pendingExpressions: Expression[] | undefined;
-    const pendingDeclarations: { pendingExpressions?: Expression[]; name: BindingName; value: Expression; location?: TextRange; original?: Node; }[] =
-        [];
+    const pendingDeclarations: {
+        pendingExpressions?: Expression[];
+        name: BindingName;
+        value: Expression;
+        location?: TextRange;
+        original?: Node;
+    }[] = [];
     const declarations: VariableDeclaration[] = [];
     const flattenContext: FlattenContext = {
         context,
@@ -280,7 +295,13 @@ export function flattenDestructuringBinding(
                 /*reuseIdentifierExpressions*/ false,
                 initializer,
             );
-            node = context.factory.updateVariableDeclaration(node, node.name, /*exclamationToken*/ undefined, /*type*/ undefined, initializer);
+            node = context.factory.updateVariableDeclaration(
+                node,
+                node.name,
+                /*exclamationToken*/ undefined,
+                /*type*/ undefined,
+                initializer,
+            );
         }
     }
 
@@ -437,7 +458,10 @@ function flattenObjectBindingOrAssignmentPattern(
                 }
                 const rhsValue = createDestructuringPropertyAccess(flattenContext, value, propertyName);
                 if (isComputedPropertyName(propertyName)) {
-                    computedTempVariables = append<Expression>(computedTempVariables, (rhsValue as ElementAccessExpression).argumentExpression);
+                    computedTempVariables = append<Expression>(
+                        computedTempVariables,
+                        (rhsValue as ElementAccessExpression).argumentExpression,
+                    );
                 }
                 flattenBindingOrAssignmentElement(flattenContext, element, rhsValue, /*location*/ element);
             }
@@ -452,12 +476,22 @@ function flattenObjectBindingOrAssignmentPattern(
                 );
                 bindingElements = undefined;
             }
-            const rhsValue = flattenContext.context.getEmitHelperFactory().createRestHelper(value, elements, computedTempVariables, pattern);
+            const rhsValue = flattenContext.context.getEmitHelperFactory().createRestHelper(
+                value,
+                elements,
+                computedTempVariables,
+                pattern,
+            );
             flattenBindingOrAssignmentElement(flattenContext, element, rhsValue, element);
         }
     }
     if (bindingElements) {
-        flattenContext.emitBindingOrAssignment(flattenContext.createObjectBindingOrAssignmentPattern(bindingElements), value, location, pattern);
+        flattenContext.emitBindingOrAssignment(
+            flattenContext.createObjectBindingOrAssignmentPattern(bindingElements),
+            value,
+            location,
+            pattern,
+        );
     }
 }
 
@@ -546,7 +580,12 @@ function flattenArrayBindingOrAssignmentPattern(
         }
     }
     if (bindingElements) {
-        flattenContext.emitBindingOrAssignment(flattenContext.createArrayBindingOrAssignmentPattern(bindingElements), value, location, pattern);
+        flattenContext.emitBindingOrAssignment(
+            flattenContext.createArrayBindingOrAssignmentPattern(bindingElements),
+            value,
+            location,
+            pattern,
+        );
     }
     if (restContainingElements) {
         for (const [id, element] of restContainingElements) {
@@ -562,7 +601,9 @@ function isSimpleBindingOrAssignmentElement(element: BindingOrAssignmentElement)
     if (propertyName && !isPropertyNameLiteral(propertyName)) return false;
     const initializer = getInitializerOfBindingOrAssignmentElement(element);
     if (initializer && !isSimpleInlineableExpression(initializer)) return false;
-    if (isBindingOrAssignmentPattern(target)) return every(getElementsOfBindingOrAssignmentPattern(target), isSimpleBindingOrAssignmentElement);
+    if (isBindingOrAssignmentPattern(target)) {
+        return every(getElementsOfBindingOrAssignmentPattern(target), isSimpleBindingOrAssignmentElement);
+    }
     return isIdentifier(target);
 }
 
@@ -574,7 +615,12 @@ function isSimpleBindingOrAssignmentElement(element: BindingOrAssignmentElement)
  * @param defaultValue The default value to use if `value` is `undefined` at runtime.
  * @param location The location to use for source maps and comments.
  */
-function createDefaultValueCheck(flattenContext: FlattenContext, value: Expression, defaultValue: Expression, location: TextRange): Expression {
+function createDefaultValueCheck(
+    flattenContext: FlattenContext,
+    value: Expression,
+    defaultValue: Expression,
+    location: TextRange,
+): Expression {
     value = ensureIdentifier(flattenContext, value, /*reuseIdentifierExpressions*/ true, location);
     return flattenContext.context.factory.createConditionalExpression(
         flattenContext.context.factory.createTypeCheck(value, "undefined"),
@@ -595,7 +641,11 @@ function createDefaultValueCheck(flattenContext: FlattenContext, value: Expressi
  * @param value The RHS value that is the source of the property.
  * @param propertyName The destructuring property name.
  */
-function createDestructuringPropertyAccess(flattenContext: FlattenContext, value: Expression, propertyName: PropertyName): LeftHandSideExpression {
+function createDestructuringPropertyAccess(
+    flattenContext: FlattenContext,
+    value: Expression,
+    propertyName: PropertyName,
+): LeftHandSideExpression {
     const { factory } = flattenContext.context;
     if (isComputedPropertyName(propertyName)) {
         const argumentExpression = ensureIdentifier(

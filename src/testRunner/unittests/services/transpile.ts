@@ -82,7 +82,8 @@ describe("unittests:: services:: Transpile", () => {
                     it("Correct errors (old transpile) for " + justName, () => {
                         Harness.Baseline.runBaseline(
                             justName.replace(/\.tsx?$/, ".oldTranspile.errors.txt"),
-                            oldTranspileDiagnostics.length === 0 ? null : Harness.Compiler.getErrorBaseline(toBeCompiled, oldTranspileDiagnostics),
+                            oldTranspileDiagnostics.length === 0 ? null
+                                : Harness.Compiler.getErrorBaseline(toBeCompiled, oldTranspileDiagnostics),
                         );
                     });
                 }
@@ -272,7 +273,11 @@ var x = 0;`,
     });
 
     transpilesCorrectly("Support options with lib values", "const a = 10;", {
-        options: { compilerOptions: { lib: ["es6", "dom"], module: ts.ModuleKind.CommonJS }, fileName: "input.js", reportDiagnostics: true },
+        options: {
+            compilerOptions: { lib: ["es6", "dom"], module: ts.ModuleKind.CommonJS },
+            fileName: "input.js",
+            reportDiagnostics: true,
+        },
         testVerbatimModuleSyntax: true,
     });
 
@@ -336,7 +341,11 @@ var x = 0;`,
     });
 
     transpilesCorrectly("Supports setting 'emitDecoratorMetadata'", "x;", {
-        options: { compilerOptions: { emitDecoratorMetadata: true, experimentalDecorators: true }, fileName: "input.js", reportDiagnostics: true },
+        options: {
+            compilerOptions: { emitDecoratorMetadata: true, experimentalDecorators: true },
+            fileName: "input.js",
+            reportDiagnostics: true,
+        },
         testVerbatimModuleSyntax: true,
     });
 

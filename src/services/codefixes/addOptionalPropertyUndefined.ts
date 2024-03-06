@@ -35,7 +35,8 @@ import {
 const addOptionalPropertyUndefined = "addOptionalPropertyUndefined";
 
 const errorCodes = [
-    Diagnostics.Type_0_is_not_assignable_to_type_1_with_exactOptionalPropertyTypes_Colon_true_Consider_adding_undefined_to_the_type_of_the_target
+    Diagnostics
+        .Type_0_is_not_assignable_to_type_1_with_exactOptionalPropertyTypes_Colon_true_Consider_adding_undefined_to_the_type_of_the_target
         .code,
     Diagnostics
         .Type_0_is_not_assignable_to_type_1_with_exactOptionalPropertyTypes_Colon_true_Consider_adding_undefined_to_the_types_of_the_target_s_properties
@@ -54,7 +55,9 @@ registerCodeFix({
             return undefined;
         }
         const changes = textChanges.ChangeTracker.with(context, t => addUndefinedToOptionalProperty(t, toAdd));
-        return [createCodeFixActionWithoutFixAll(addOptionalPropertyUndefined, changes, Diagnostics.Add_undefined_to_optional_property_type)];
+        return [
+            createCodeFixActionWithoutFixAll(addOptionalPropertyUndefined, changes, Diagnostics.Add_undefined_to_optional_property_type),
+        ];
     },
     fixIds: [addOptionalPropertyUndefined],
 });
