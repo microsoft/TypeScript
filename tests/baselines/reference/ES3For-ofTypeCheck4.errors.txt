@@ -1,7 +1,0 @@
-error TS5108: Option 'target=ES3' has been removed. Please remove it from your configuration.
-
-
-!!! error TS5108: Option 'target=ES3' has been removed. Please remove it from your configuration.
-==== ES3For-ofTypeCheck4.ts (0 errors) ====
-    var union: string | string[];
-    for (const v of union) { }
