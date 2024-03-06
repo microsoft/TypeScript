@@ -1,6 +1,6 @@
 {
     "indentWidth": 4,
-    "lineWidth": 600,
+    "lineWidth": 500,
     "newLineKind": "auto",
     "useTabs": false,
     "typescript": {
