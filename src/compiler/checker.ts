@@ -37453,7 +37453,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         };
 
         if (isBinaryExpression(expr)) {
-            const {operatorToken} = expr;
+            // fast path for x => x === y and other similar patterns
+            // This can only be a type predicate if y is a unit type (e.g. null) but it can be quite expensive to determine that via the usual code path.
+            const { operatorToken } = expr;
             const operator = operatorToken.kind;
             let target;
             switch (operator) {
@@ -37461,7 +37463,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 case SyntaxKind.ExclamationEqualsToken:
                 case SyntaxKind.EqualsEqualsEqualsToken:
                 case SyntaxKind.ExclamationEqualsEqualsToken:
-                    const {left, right} = expr;
+                    const { left, right } = expr;
                     if (isMatchingReference(param.name, left)) {
                         target = right;
                     }
@@ -37489,19 +37491,22 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         };
 
         if ((trueType.flags & TypeFlags.Union) && (trueType as UnionType).types.length >= 20) {
+            // For large unions, try the false check on just the first ten.
+            // If this is non-never then we can skip checking the remaining constituents.
             const unionType = trueType as UnionType;
-            const head: UnionType = {...unionType, types: unionType.types.slice(0, 10)};
+            const head: UnionType = { ...unionType, types: unionType.types.slice(0, 10) };
             const falseSubTypeHead = getFlowTypeOfReference(param.name, head, head, func, falseCondition);
             if (!(falseSubTypeHead.flags & TypeFlags.Never)) {
                 return undefined;
             }
-            const rest: UnionType = {...unionType, types: unionType.types.slice(10)};
+            const rest: UnionType = { ...unionType, types: unionType.types.slice(10) };
             const falseSubTypeRest = getFlowTypeOfReference(param.name, rest, rest, func, falseCondition);
             if (!(falseSubTypeRest.flags & TypeFlags.Never)) {
                 return undefined;
             }
             return trueType;
-        } else {
+        }
+        else {
             const falseSubtype = getFlowTypeOfReference(param.name, trueType, trueType, func, falseCondition);
             const isNever = !!(falseSubtype.flags & TypeFlags.Never);
             return isNever ? trueType : undefined;
