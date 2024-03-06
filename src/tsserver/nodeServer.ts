@@ -143,7 +143,11 @@ function parseServerMode(): LanguageServiceMode | string | undefined {
 export function initializeNodeSystem(): StartInput {
     const sys = Debug.checkDefined(ts.sys) as ServerHost;
     const childProcess: {
-        execFileSync(file: string, args: string[], options: { stdio: "ignore"; env: MapLike<string>; }): string | Buffer;
+        execFileSync(
+            file: string,
+            args: string[],
+            options: { stdio: "ignore"; env: MapLike<string>; },
+        ): string | Buffer;
     } = require("child_process");
 
     interface Stats {
@@ -294,7 +298,10 @@ export function initializeNodeSystem(): StartInput {
     let canWrite = true;
 
     if (useWatchGuard) {
-        const currentDrive = extractWatchDirectoryCacheKey(sys.resolvePath(sys.getCurrentDirectory()), /*currentDriveKey*/ undefined);
+        const currentDrive = extractWatchDirectoryCacheKey(
+            sys.resolvePath(sys.getCurrentDirectory()),
+            /*currentDriveKey*/ undefined,
+        );
         const statusCache = new Map<string, boolean>();
         sys.watchDirectory = (path, callback, recursive, options) => {
             const cacheKey = extractWatchDirectoryCacheKey(path, currentDrive);
@@ -308,7 +315,10 @@ export function initializeNodeSystem(): StartInput {
                     if (logger.hasLevel(LogLevel.verbose)) {
                         logger.info(`Starting ${process.execPath} with args:${stringifyIndented(args)}`);
                     }
-                    childProcess.execFileSync(process.execPath, args, { stdio: "ignore", env: { ELECTRON_RUN_AS_NODE: "1" } });
+                    childProcess.execFileSync(process.execPath, args, {
+                        stdio: "ignore",
+                        env: { ELECTRON_RUN_AS_NODE: "1" },
+                    });
                     status = true;
                     if (logger.hasLevel(LogLevel.verbose)) {
                         logger.info(`WatchGuard for path ${path} returned: OK`);
@@ -454,7 +464,12 @@ export function initializeNodeSystem(): StartInput {
 
     // This is the function that catches the exceptions when watching directory, and yet lets project service continue to function
     // Eg. on linux the number of watches are limited and one could easily exhaust watches and the exception ENOSPC is thrown when creating watcher at that point
-    function watchDirectorySwallowingException(path: string, callback: DirectoryWatcherCallback, recursive?: boolean, options?: WatchOptions): FileWatcher {
+    function watchDirectorySwallowingException(
+        path: string,
+        callback: DirectoryWatcherCallback,
+        recursive?: boolean,
+        options?: WatchOptions,
+    ): FileWatcher {
         try {
             return originalWatchDirectory(path, callback, recursive, options);
         }
@@ -471,7 +486,11 @@ function parseEventPort(eventPortStr: string | undefined) {
 }
 function startNodeSession(options: StartSessionOptions, logger: Logger, cancellationToken: ServerCancellationToken) {
     const childProcess: {
-        fork(modulePath: string, args: string[], options?: { execArgv: string[]; env?: MapLike<string>; }): NodeChildProcess;
+        fork(
+            modulePath: string,
+            args: string[],
+            options?: { execArgv: string[]; env?: MapLike<string>; },
+        ): NodeChildProcess;
     } = require("child_process");
 
     const os: {
@@ -533,7 +552,13 @@ function startNodeSession(options: StartSessionOptions, logger: Logger, cancella
                 args.push(Arguments.EnableTelemetry);
             }
             if (this.logger.loggingEnabled() && this.logger.getLogFileName()) {
-                args.push(Arguments.LogFile, combinePaths(getDirectoryPath(normalizeSlashes(this.logger.getLogFileName()!)), `ti-${process.pid}.log`));
+                args.push(
+                    Arguments.LogFile,
+                    combinePaths(
+                        getDirectoryPath(normalizeSlashes(this.logger.getLogFileName()!)),
+                        `ti-${process.pid}.log`,
+                    ),
+                );
             }
             if (this.typingSafeListLocation) {
                 args.push(Arguments.TypingSafeListLocation, this.typingSafeListLocation);
@@ -595,7 +620,17 @@ function startNodeSession(options: StartSessionOptions, logger: Logger, cancella
 
             const typingsInstaller = disableAutomaticTypingAcquisition
                 ? undefined
-                : new NodeTypingsInstallerAdapter(telemetryEnabled, logger, host, getGlobalTypingsCacheLocation(), typingSafeListLocation, typesMapLocation, npmLocation, validateDefaultNpmLocation, event);
+                : new NodeTypingsInstallerAdapter(
+                    telemetryEnabled,
+                    logger,
+                    host,
+                    getGlobalTypingsCacheLocation(),
+                    typingSafeListLocation,
+                    typesMapLocation,
+                    npmLocation,
+                    validateDefaultNpmLocation,
+                    event,
+                );
 
             super({
                 host,
@@ -627,7 +662,10 @@ function startNodeSession(options: StartSessionOptions, logger: Logger, cancella
         }
 
         override event<T extends object>(body: T, eventName: string): void {
-            Debug.assert(!!this.constructed, "Should only call `IOSession.prototype.event` on an initialized IOSession");
+            Debug.assert(
+                !!this.constructed,
+                "Should only call `IOSession.prototype.event` on an initialized IOSession",
+            );
 
             if (this.canUseEvents && this.eventPort) {
                 if (!this.eventSocket) {
@@ -648,7 +686,10 @@ function startNodeSession(options: StartSessionOptions, logger: Logger, cancella
         }
 
         private writeToEventSocket(body: object, eventName: string): void {
-            this.eventSocket!.write(formatMessage(toEvent(eventName, body), this.logger, this.byteLength, this.host.newLine), "utf8");
+            this.eventSocket!.write(
+                formatMessage(toEvent(eventName, body), this.logger, this.byteLength, this.host.newLine),
+                "utf8",
+            );
         }
 
         override exit() {
@@ -702,7 +743,8 @@ function startNodeSession(options: StartSessionOptions, logger: Logger, cancella
 
     const eventPort: number | undefined = parseEventPort(findArgument("--eventPort"));
     const typingSafeListLocation = findArgument(Arguments.TypingSafeListLocation)!; // TODO: GH#18217
-    const typesMapLocation = findArgument(Arguments.TypesMapLocation) || combinePaths(getDirectoryPath(sys.getExecutingFilePath()), "typesMap.json");
+    const typesMapLocation = findArgument(Arguments.TypesMapLocation) ||
+        combinePaths(getDirectoryPath(sys.getExecutingFilePath()), "typesMap.json");
     const npmLocation = findArgument(Arguments.NpmLocation);
     const validateDefaultNpmLocation = hasArgument(Arguments.ValidateDefaultNpmLocation);
     const disableAutomaticTypingAcquisition = hasArgument("--disableAutomaticTypingAcquisition");
@@ -732,9 +774,13 @@ function startNodeSession(options: StartSessionOptions, logger: Logger, cancella
                     process.env.APPDATA ||
                     (os.homedir && os.homedir()) ||
                     process.env.USERPROFILE ||
-                    (process.env.HOMEDRIVE && process.env.HOMEPATH && normalizeSlashes(process.env.HOMEDRIVE + process.env.HOMEPATH)) ||
+                    (process.env.HOMEDRIVE && process.env.HOMEPATH &&
+                        normalizeSlashes(process.env.HOMEDRIVE + process.env.HOMEPATH)) ||
                     os.tmpdir();
-                return combinePaths(combinePaths(normalizeSlashes(basePath), "Microsoft/TypeScript"), versionMajorMinor);
+                return combinePaths(
+                    combinePaths(normalizeSlashes(basePath), "Microsoft/TypeScript"),
+                    versionMajorMinor,
+                );
             }
             case "openbsd":
             case "freebsd":

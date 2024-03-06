@@ -124,7 +124,12 @@ registerRefactor(refactorName, {
     },
 });
 
-function getInliningInfo(file: SourceFile, startPosition: number, tryWithReferenceToken: boolean, program: Program): InliningInfo | RefactorErrorInfo | undefined {
+function getInliningInfo(
+    file: SourceFile,
+    startPosition: number,
+    tryWithReferenceToken: boolean,
+    program: Program,
+): InliningInfo | RefactorErrorInfo | undefined {
     const checker = program.getTypeChecker();
     const token = getTouchingPropertyName(file, startPosition);
     const parent = token.parent;
@@ -135,10 +140,14 @@ function getInliningInfo(file: SourceFile, startPosition: number, tryWithReferen
 
     // If triggered in a variable declaration, make sure it's not in a catch clause or for-loop
     // and that it has a value.
-    if (isInitializedVariable(parent) && isVariableDeclarationInVariableStatement(parent) && isIdentifier(parent.name)) {
+    if (
+        isInitializedVariable(parent) && isVariableDeclarationInVariableStatement(parent) && isIdentifier(parent.name)
+    ) {
         // Don't inline the variable if it has multiple declarations.
         if (checker.getMergedSymbol(parent.symbol).declarations?.length !== 1) {
-            return { error: getLocaleSpecificMessage(Diagnostics.Variables_with_multiple_declarations_cannot_be_inlined) };
+            return {
+                error: getLocaleSpecificMessage(Diagnostics.Variables_with_multiple_declarations_cannot_be_inlined),
+            };
         }
 
         // Do not inline if the variable is exported.
@@ -158,12 +167,17 @@ function getInliningInfo(file: SourceFile, startPosition: number, tryWithReferen
 
         // Don't inline the variable if it has multiple declarations.
         if (definition?.declarations?.length !== 1) {
-            return { error: getLocaleSpecificMessage(Diagnostics.Variables_with_multiple_declarations_cannot_be_inlined) };
+            return {
+                error: getLocaleSpecificMessage(Diagnostics.Variables_with_multiple_declarations_cannot_be_inlined),
+            };
         }
 
         // Make sure we're not inlining something like "let foo;" or "for (let i = 0; i < 5; i++) {}".
         const declaration = definition.declarations[0];
-        if (!isInitializedVariable(declaration) || !isVariableDeclarationInVariableStatement(declaration) || !isIdentifier(declaration.name)) {
+        if (
+            !isInitializedVariable(declaration) || !isVariableDeclarationInVariableStatement(declaration) ||
+            !isIdentifier(declaration.name)
+        ) {
             return undefined;
         }
 
@@ -186,33 +200,42 @@ function isDeclarationExported(declaration: InitializedVariableDeclaration): boo
     return some(variableStatement.modifiers, isExportModifier);
 }
 
-function getReferenceNodes(declaration: InitializedVariableDeclaration, checker: TypeChecker, file: SourceFile): Identifier[] | undefined {
+function getReferenceNodes(
+    declaration: InitializedVariableDeclaration,
+    checker: TypeChecker,
+    file: SourceFile,
+): Identifier[] | undefined {
     const references: Identifier[] = [];
-    const cannotInline = FindAllReferences.Core.eachSymbolReferenceInFile(declaration.name as Identifier, checker, file, ref => {
-        // Only inline if all references are reads, or if it includes a shorthand property assignment.
-        // Else we might end up with an invalid scenario like:
-        // const y = x++ + 1 -> const y = 2++ + 1,
-        if (FindAllReferences.isWriteAccessForReference(ref) && !isShorthandPropertyAssignment(ref.parent)) {
-            return true;
-        }
+    const cannotInline = FindAllReferences.Core.eachSymbolReferenceInFile(
+        declaration.name as Identifier,
+        checker,
+        file,
+        ref => {
+            // Only inline if all references are reads, or if it includes a shorthand property assignment.
+            // Else we might end up with an invalid scenario like:
+            // const y = x++ + 1 -> const y = 2++ + 1,
+            if (FindAllReferences.isWriteAccessForReference(ref) && !isShorthandPropertyAssignment(ref.parent)) {
+                return true;
+            }
 
-        // We cannot inline exported variables like "export { x as y }" or "export default foo".
-        if (isExportSpecifier(ref.parent) || isExportAssignment(ref.parent)) {
-            return true;
-        }
+            // We cannot inline exported variables like "export { x as y }" or "export default foo".
+            if (isExportSpecifier(ref.parent) || isExportAssignment(ref.parent)) {
+                return true;
+            }
 
-        // typeof needs an identifier, so we can't inline a value in there.
-        if (isTypeQueryNode(ref.parent)) {
-            return true;
-        }
+            // typeof needs an identifier, so we can't inline a value in there.
+            if (isTypeQueryNode(ref.parent)) {
+                return true;
+            }
 
-        // Cannot inline recursive declarations (e.g. const foo = () => foo();)
-        if (textRangeContainsPositionInclusive(declaration, ref.pos)) {
-            return true;
-        }
+            // Cannot inline recursive declarations (e.g. const foo = () => foo();)
+            if (textRangeContainsPositionInclusive(declaration, ref.pos)) {
+                return true;
+            }
 
-        references.push(ref);
-    });
+            references.push(ref);
+        },
+    );
 
     return references.length === 0 || cannotInline ? undefined : references;
 }
@@ -229,7 +252,10 @@ function getReplacementExpression(reference: Node, replacement: Expression) {
     // Note that binaryOperandNeedsParentheses has further logic when the precedences
     // are equal, but for the purposes of this refactor we keep things simple and
     // instead just check for special cases with needsParentheses.
-    if (isExpression(parent) && (getExpressionPrecedence(replacement) < getExpressionPrecedence(parent) || needsParentheses(parent))) {
+    if (
+        isExpression(parent) &&
+        (getExpressionPrecedence(replacement) < getExpressionPrecedence(parent) || needsParentheses(parent))
+    ) {
         return factory.createParenthesizedExpression(replacement);
     }
 
@@ -241,7 +267,9 @@ function getReplacementExpression(reference: Node, replacement: Expression) {
 
     // Property access of numeric literals and objects need parentheses.
     // E.g.: const x = 1; x.toString(); -> (1).toString();
-    if (isPropertyAccessExpression(parent) && (isNumericLiteral(replacement) || isObjectLiteralExpression(replacement))) {
+    if (
+        isPropertyAccessExpression(parent) && (isNumericLiteral(replacement) || isObjectLiteralExpression(replacement))
+    ) {
         return factory.createParenthesizedExpression(replacement);
     }
 

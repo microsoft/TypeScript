@@ -28,7 +28,10 @@ export function createModuleSpecifierCache(host: ModuleSpecifierResolutionCacheH
             return cache.get(toFileName);
         },
         set(fromFileName, toFileName, preferences, options, modulePaths, moduleSpecifiers) {
-            ensureCache(fromFileName, preferences, options).set(toFileName, createInfo(modulePaths, moduleSpecifiers, /*isBlockedByPackageJsonDependencies*/ false));
+            ensureCache(fromFileName, preferences, options).set(
+                toFileName,
+                createInfo(modulePaths, moduleSpecifiers, /*isBlockedByPackageJsonDependencies*/ false),
+            );
 
             // If any module specifiers were generated based off paths in node_modules,
             // a package.json file in that package was read and is an input to the cached.
@@ -39,7 +42,10 @@ export function createModuleSpecifierCache(host: ModuleSpecifierResolutionCacheH
                 for (const p of modulePaths) {
                     if (p.isInNodeModules) {
                         // No trailing slash
-                        const nodeModulesPath = p.path.substring(0, p.path.indexOf(nodeModulesPathPart) + nodeModulesPathPart.length - 1);
+                        const nodeModulesPath = p.path.substring(
+                            0,
+                            p.path.indexOf(nodeModulesPathPart) + nodeModulesPathPart.length - 1,
+                        );
                         const key = host.toPath(nodeModulesPath);
                         if (!containedNodeModulesWatchers?.has(key)) {
                             (containedNodeModulesWatchers ||= new Map()).set(
@@ -58,17 +64,37 @@ export function createModuleSpecifierCache(host: ModuleSpecifierResolutionCacheH
                 info.modulePaths = modulePaths;
             }
             else {
-                cache.set(toFileName, createInfo(modulePaths, /*moduleSpecifiers*/ undefined, /*isBlockedByPackageJsonDependencies*/ undefined));
+                cache.set(
+                    toFileName,
+                    createInfo(
+                        modulePaths,
+                        /*moduleSpecifiers*/ undefined,
+                        /*isBlockedByPackageJsonDependencies*/ undefined,
+                    ),
+                );
             }
         },
-        setBlockedByPackageJsonDependencies(fromFileName, toFileName, preferences, options, isBlockedByPackageJsonDependencies) {
+        setBlockedByPackageJsonDependencies(
+            fromFileName,
+            toFileName,
+            preferences,
+            options,
+            isBlockedByPackageJsonDependencies,
+        ) {
             const cache = ensureCache(fromFileName, preferences, options);
             const info = cache.get(toFileName);
             if (info) {
                 info.isBlockedByPackageJsonDependencies = isBlockedByPackageJsonDependencies;
             }
             else {
-                cache.set(toFileName, createInfo(/*modulePaths*/ undefined, /*moduleSpecifiers*/ undefined, isBlockedByPackageJsonDependencies));
+                cache.set(
+                    toFileName,
+                    createInfo(
+                        /*modulePaths*/ undefined,
+                        /*moduleSpecifiers*/ undefined,
+                        isBlockedByPackageJsonDependencies,
+                    ),
+                );
             }
         },
         clear() {

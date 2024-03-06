@@ -62,7 +62,10 @@ describe("unittests:: tsserver:: moduleResolution", () => {
                         }
                     `,
             };
-            const host = createServerHost([configFile, fileA, fileB, packageFile, { ...libFile, path: "/a/lib/lib.es2016.full.d.ts" }]);
+            const host = createServerHost([configFile, fileA, fileB, packageFile, {
+                ...libFile,
+                path: "/a/lib/lib.es2016.full.d.ts",
+            }]);
             const session = new TestSession(host);
             openFilesForSession([fileA], session);
             return {
@@ -73,7 +76,9 @@ describe("unittests:: tsserver:: moduleResolution", () => {
             };
         }
         it("package json file is edited", () => {
-            const { host, session, packageFile, verifyErr } = setup(jsonToReadableText({ name: "app", version: "1.0.0" }));
+            const { host, session, packageFile, verifyErr } = setup(
+                jsonToReadableText({ name: "app", version: "1.0.0" }),
+            );
 
             session.logger.info("Modify package json file to add type module");
             host.writeFile(
@@ -159,7 +164,11 @@ describe("unittests:: tsserver:: moduleResolution", () => {
             host.runQueuedTimeoutCallbacks(); // Actual update
             verifyErr();
 
-            baselineTsserverLogs("moduleResolution", "package json file is edited when package json with type module exists", session);
+            baselineTsserverLogs(
+                "moduleResolution",
+                "package json file is edited when package json with type module exists",
+                session,
+            );
         });
     });
 
@@ -175,25 +184,49 @@ describe("unittests:: tsserver:: moduleResolution", () => {
         verifyErrors();
         host.deleteFile("/home/src/projects/project/node_modules/foo/index.d.ts");
         verifyErrors();
-        host.writeFile("/home/src/projects/project/node_modules/@types/bar/index.d.ts", getFsContentsForAlternateResultDts("bar"));
+        host.writeFile(
+            "/home/src/projects/project/node_modules/@types/bar/index.d.ts",
+            getFsContentsForAlternateResultDts("bar"),
+        );
         verifyErrors();
-        host.writeFile("/home/src/projects/project/node_modules/foo/index.d.ts", getFsContentsForAlternateResultDts("foo"));
+        host.writeFile(
+            "/home/src/projects/project/node_modules/foo/index.d.ts",
+            getFsContentsForAlternateResultDts("foo"),
+        );
         verifyErrors();
-        host.writeFile("/home/src/projects/project/node_modules/@types/bar/package.json", getFsConentsForAlternateResultAtTypesPackageJson("bar", /*addTypesCondition*/ true));
+        host.writeFile(
+            "/home/src/projects/project/node_modules/@types/bar/package.json",
+            getFsConentsForAlternateResultAtTypesPackageJson("bar", /*addTypesCondition*/ true),
+        );
         verifyErrors();
-        host.writeFile("/home/src/projects/project/node_modules/foo/package.json", getFsContentsForAlternateResultPackageJson("foo", /*addTypes*/ true, /*addTypesCondition*/ true));
+        host.writeFile(
+            "/home/src/projects/project/node_modules/foo/package.json",
+            getFsContentsForAlternateResultPackageJson("foo", /*addTypes*/ true, /*addTypesCondition*/ true),
+        );
         verifyErrors();
-        host.writeFile("/home/src/projects/project/node_modules/@types/bar2/package.json", getFsConentsForAlternateResultAtTypesPackageJson("bar2", /*addTypesCondition*/ false));
+        host.writeFile(
+            "/home/src/projects/project/node_modules/@types/bar2/package.json",
+            getFsConentsForAlternateResultAtTypesPackageJson("bar2", /*addTypesCondition*/ false),
+        );
         verifyErrors();
-        host.writeFile("/home/src/projects/project/node_modules/foo2/package.json", getFsContentsForAlternateResultPackageJson("foo2", /*addTypes*/ true, /*addTypesCondition*/ false));
+        host.writeFile(
+            "/home/src/projects/project/node_modules/foo2/package.json",
+            getFsContentsForAlternateResultPackageJson("foo2", /*addTypes*/ true, /*addTypesCondition*/ false),
+        );
         verifyErrors();
         host.deleteFile("/home/src/projects/project/node_modules/@types/bar2/index.d.ts");
         verifyErrors();
         host.deleteFile("/home/src/projects/project/node_modules/foo2/index.d.ts");
         verifyErrors();
-        host.writeFile("/home/src/projects/project/node_modules/@types/bar2/index.d.ts", getFsContentsForAlternateResultDts("bar2"));
+        host.writeFile(
+            "/home/src/projects/project/node_modules/@types/bar2/index.d.ts",
+            getFsContentsForAlternateResultDts("bar2"),
+        );
         verifyErrors();
-        host.writeFile("/home/src/projects/project/node_modules/foo2/index.d.ts", getFsContentsForAlternateResultDts("foo2"));
+        host.writeFile(
+            "/home/src/projects/project/node_modules/foo2/index.d.ts",
+            getFsContentsForAlternateResultDts("foo2"),
+        );
         verifyErrors();
 
         baselineTsserverLogs("moduleResolution", "alternateResult", session);
@@ -228,8 +261,12 @@ describe("unittests:: tsserver:: moduleResolution", () => {
                 "/home/src/projects/project/packages/package-b/package.json": getPackageJson("package-b"),
                 "/home/src/projects/project/packages/package-b/tsconfig.json": getTsConfig([{ path: "../package-a" }]),
                 "/home/src/projects/project/packages/package-b/src/index.ts": indexContent,
-                "/home/src/projects/project/node_modules/package-a": { symLink: "/home/src/projects/project/packages/package-a" },
-                "/home/src/projects/project/node_modules/package-b": { symLink: "/home/src/projects/project/packages/package-b" },
+                "/home/src/projects/project/node_modules/package-a": {
+                    symLink: "/home/src/projects/project/packages/package-a",
+                },
+                "/home/src/projects/project/node_modules/package-b": {
+                    symLink: "/home/src/projects/project/packages/package-b",
+                },
                 "/a/lib/lib.es2021.d.ts": libContent,
             }, { currentDirectory: "/home/src/projects/project" });
             if (built) {

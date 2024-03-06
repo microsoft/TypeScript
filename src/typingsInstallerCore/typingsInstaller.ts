@@ -59,9 +59,19 @@ const nullLog: Log = {
     writeLine: noop,
 };
 
-function typingToFileName(cachePath: string, packageName: string, installTypingHost: InstallTypingHost, log: Log): string | undefined {
+function typingToFileName(
+    cachePath: string,
+    packageName: string,
+    installTypingHost: InstallTypingHost,
+    log: Log,
+): string | undefined {
     try {
-        const result = resolveModuleName(packageName, combinePaths(cachePath, "index.d.ts"), { moduleResolution: ModuleResolutionKind.Node10 }, installTypingHost);
+        const result = resolveModuleName(
+            packageName,
+            combinePaths(cachePath, "index.d.ts"),
+            { moduleResolution: ModuleResolutionKind.Node10 },
+            installTypingHost,
+        );
         return result.resolvedModule && result.resolvedModule.resolvedFileName;
     }
     catch (e) {
@@ -73,7 +83,12 @@ function typingToFileName(cachePath: string, packageName: string, installTypingH
 }
 
 /** @internal */
-export function installNpmPackages(npmPath: string, tsVersion: string, packageNames: string[], install: (command: string) => boolean) {
+export function installNpmPackages(
+    npmPath: string,
+    tsVersion: string,
+    packageNames: string[],
+    install: (command: string) => boolean,
+) {
     let hasError = false;
     for (let remaining = packageNames.length; remaining > 0;) {
         const result = getNpmCommandForInstallation(npmPath, tsVersion, packageNames, remaining);
@@ -84,11 +99,19 @@ export function installNpmPackages(npmPath: string, tsVersion: string, packageNa
 }
 
 /** @internal */
-export function getNpmCommandForInstallation(npmPath: string, tsVersion: string, packageNames: string[], remaining: number) {
+export function getNpmCommandForInstallation(
+    npmPath: string,
+    tsVersion: string,
+    packageNames: string[],
+    remaining: number,
+) {
     const sliceStart = packageNames.length - remaining;
     let command: string, toSlice = remaining;
     while (true) {
-        command = `${npmPath} install --ignore-scripts ${(toSlice === packageNames.length ? packageNames : packageNames.slice(sliceStart, sliceStart + toSlice)).join(" ")} --save-dev --user-agent="typesInstaller/${tsVersion}"`;
+        command = `${npmPath} install --ignore-scripts ${
+            (toSlice === packageNames.length ? packageNames : packageNames.slice(sliceStart, sliceStart + toSlice))
+                .join(" ")
+        } --save-dev --user-agent="typesInstaller/${tsVersion}"`;
         if (command.length < 8000) {
             break;
         }
@@ -131,7 +154,9 @@ export abstract class TypingsInstaller {
     ) {
         const isLoggingEnabled = this.log.isEnabled();
         if (isLoggingEnabled) {
-            this.log.writeLine(`Global cache location '${globalCachePath}', safe file path '${safeListPath}', types map path ${typesMapLocation}`);
+            this.log.writeLine(
+                `Global cache location '${globalCachePath}', safe file path '${safeListPath}', types map path ${typesMapLocation}`,
+            );
         }
         this.processCacheLocation(this.globalCachePath);
     }
@@ -221,7 +246,12 @@ export abstract class TypingsInstaller {
 
         // install typings
         if (discoverTypingsResult.newTypingNames.length) {
-            this.installTypings(req, req.cachePath || this.globalCachePath, discoverTypingsResult.cachedTypingPaths, discoverTypingsResult.newTypingNames);
+            this.installTypings(
+                req,
+                req.cachePath || this.globalCachePath,
+                discoverTypingsResult.cachedTypingPaths,
+                discoverTypingsResult.newTypingNames,
+            );
         }
         else {
             this.sendResponse(this.createSetTypings(req, discoverTypingsResult.cachedTypingPaths));
@@ -325,7 +355,9 @@ export abstract class TypingsInstaller {
                         }
 
                         if (this.log.isEnabled()) {
-                            this.log.writeLine(`New typing for package ${packageName} from '${typingFile}' conflicts with existing typing file '${existingTypingFile}'`);
+                            this.log.writeLine(
+                                `New typing for package ${packageName} from '${typingFile}' conflicts with existing typing file '${existingTypingFile}'`,
+                            );
                         }
                     }
                     if (this.log.isEnabled()) {
@@ -337,7 +369,10 @@ export abstract class TypingsInstaller {
                         continue;
                     }
 
-                    const newTyping: JsTyping.CachedTyping = { typingLocation: typingFile, version: new Version(version) };
+                    const newTyping: JsTyping.CachedTyping = {
+                        typingLocation: typingFile,
+                        version: new Version(version),
+                    };
                     this.packageNameToTypingLocation.set(packageName, newTyping);
                 }
             }
@@ -352,22 +387,38 @@ export abstract class TypingsInstaller {
         return mapDefined(typingsToInstall, typing => {
             const typingKey = mangleScopedPackageName(typing);
             if (this.missingTypingsSet.has(typingKey)) {
-                if (this.log.isEnabled()) this.log.writeLine(`'${typing}':: '${typingKey}' is in missingTypingsSet - skipping...`);
+                if (this.log.isEnabled()) {
+                    this.log.writeLine(`'${typing}':: '${typingKey}' is in missingTypingsSet - skipping...`);
+                }
                 return undefined;
             }
             const validationResult = JsTyping.validatePackageName(typing);
             if (validationResult !== JsTyping.NameValidationResult.Ok) {
                 // add typing name to missing set so we won't process it again
                 this.missingTypingsSet.add(typingKey);
-                if (this.log.isEnabled()) this.log.writeLine(JsTyping.renderPackageNameValidationFailure(validationResult, typing));
+                if (this.log.isEnabled()) {
+                    this.log.writeLine(JsTyping.renderPackageNameValidationFailure(validationResult, typing));
+                }
                 return undefined;
             }
             if (!this.typesRegistry.has(typingKey)) {
-                if (this.log.isEnabled()) this.log.writeLine(`'${typing}':: Entry for package '${typingKey}' does not exist in local types registry - skipping...`);
+                if (this.log.isEnabled()) {
+                    this.log.writeLine(
+                        `'${typing}':: Entry for package '${typingKey}' does not exist in local types registry - skipping...`,
+                    );
+                }
                 return undefined;
             }
-            if (this.packageNameToTypingLocation.get(typingKey) && JsTyping.isTypingUpToDate(this.packageNameToTypingLocation.get(typingKey)!, this.typesRegistry.get(typingKey)!)) {
-                if (this.log.isEnabled()) this.log.writeLine(`'${typing}':: '${typingKey}' already has an up-to-date typing - skipping...`);
+            if (
+                this.packageNameToTypingLocation.get(typingKey) &&
+                JsTyping.isTypingUpToDate(
+                    this.packageNameToTypingLocation.get(typingKey)!,
+                    this.typesRegistry.get(typingKey)!,
+                )
+            ) {
+                if (this.log.isEnabled()) {
+                    this.log.writeLine(`'${typing}':: '${typingKey}' already has an up-to-date typing - skipping...`);
+                }
                 return undefined;
             }
             return typingKey;
@@ -388,7 +439,12 @@ export abstract class TypingsInstaller {
         }
     }
 
-    private installTypings(req: DiscoverTypings, cachePath: string, currentlyCachedTypings: string[], typingsToInstall: string[]) {
+    private installTypings(
+        req: DiscoverTypings,
+        cachePath: string,
+        currentlyCachedTypings: string[],
+        typingsToInstall: string[],
+    ) {
         if (this.log.isEnabled()) {
             this.log.writeLine(`Installing typings ${JSON.stringify(typingsToInstall)}`);
         }
@@ -419,7 +475,11 @@ export abstract class TypingsInstaller {
             try {
                 if (!ok) {
                     if (this.log.isEnabled()) {
-                        this.log.writeLine(`install request failed, marking packages as missing to prevent repeated requests: ${JSON.stringify(filteredTypings)}`);
+                        this.log.writeLine(
+                            `install request failed, marking packages as missing to prevent repeated requests: ${
+                                JSON.stringify(filteredTypings)
+                            }`,
+                        );
                     }
                     for (const typing of filteredTypings) {
                         this.missingTypingsSet.add(typing);
@@ -506,7 +566,12 @@ export abstract class TypingsInstaller {
         };
     }
 
-    private installTypingsAsync(requestId: number, packageNames: string[], cwd: string, onRequestCompleted: RequestCompletedAction): void {
+    private installTypingsAsync(
+        requestId: number,
+        packageNames: string[],
+        cwd: string,
+        onRequestCompleted: RequestCompletedAction,
+    ): void {
         this.pendingRunRequests.unshift({ requestId, packageNames, cwd, onRequestCompleted });
         this.executeWithThrottling();
     }
@@ -523,10 +588,26 @@ export abstract class TypingsInstaller {
         }
     }
 
-    protected abstract installWorker(requestId: number, packageNames: string[], cwd: string, onRequestCompleted: RequestCompletedAction): void;
-    protected abstract sendResponse(response: SetTypings | InvalidateCachedTypings | BeginInstallTypes | EndInstallTypes | WatchTypingLocations): void;
+    protected abstract installWorker(
+        requestId: number,
+        packageNames: string[],
+        cwd: string,
+        onRequestCompleted: RequestCompletedAction,
+    ): void;
+    protected abstract sendResponse(
+        response: SetTypings | InvalidateCachedTypings | BeginInstallTypes | EndInstallTypes | WatchTypingLocations,
+    ): void;
     /** @internal */
-    protected abstract sendResponse(response: SetTypings | InvalidateCachedTypings | BeginInstallTypes | EndInstallTypes | WatchTypingLocations | PackageInstalledResponse | TypesRegistryResponse): void; // eslint-disable-line @typescript-eslint/unified-signatures
+    protected abstract sendResponse(
+        response:
+            | SetTypings
+            | InvalidateCachedTypings
+            | BeginInstallTypes
+            | EndInstallTypes
+            | WatchTypingLocations
+            | PackageInstalledResponse
+            | TypesRegistryResponse,
+    ): void; // eslint-disable-line @typescript-eslint/unified-signatures
     protected readonly latestDistTag = "latest";
 }
 

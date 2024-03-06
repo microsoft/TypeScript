@@ -75,7 +75,11 @@ export interface ParallelTimeoutChangeMessage {
     payload: TaskTimeout;
 }
 
-export type ParallelClientMessage = ParallelErrorMessage | ParallelResultMessage | ParallelBatchProgressMessage | ParallelTimeoutChangeMessage;
+export type ParallelClientMessage =
+    | ParallelErrorMessage
+    | ParallelResultMessage
+    | ParallelBatchProgressMessage
+    | ParallelTimeoutChangeMessage;
 
 export function shimNoopTestInterface(global: Mocha.MochaGlobals) {
     global.before = ts.noop;

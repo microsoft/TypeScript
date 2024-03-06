@@ -43,7 +43,10 @@ registerCodeFix({
         );
         if (!node) return;
 
-        const changes = textChanges.ChangeTracker.with(context, t => doChange(t, node, context.sourceFile, newLineCharacter));
+        const changes = textChanges.ChangeTracker.with(
+            context,
+            t => doChange(t, node, context.sourceFile, newLineCharacter),
+        );
 
         if (changes.length > 0) {
             return [

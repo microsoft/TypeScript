@@ -94,7 +94,9 @@ function makeAssertChanges(getProgram: () => ts.Program): (fileNames: readonly s
     };
 }
 
-function makeAssertChangesWithCancellationToken(getProgram: () => ts.Program): (fileNames: readonly string[], cancelAfterEmitLength?: number) => void {
+function makeAssertChangesWithCancellationToken(
+    getProgram: () => ts.Program,
+): (fileNames: readonly string[], cancelAfterEmitLength?: number) => void {
     const host: ts.BuilderProgramHost = {};
     let builderProgram: ts.EmitAndSemanticDiagnosticsBuilderProgram | undefined;
     let cancel = false;
@@ -132,7 +134,11 @@ function makeAssertChangesWithCancellationToken(getProgram: () => ts.Program): (
     };
 }
 
-function updateProgramFile(program: ProgramWithSourceTexts, fileName: string, fileContent: string): ProgramWithSourceTexts {
+function updateProgramFile(
+    program: ProgramWithSourceTexts,
+    fileName: string,
+    fileContent: string,
+): ProgramWithSourceTexts {
     return updateProgram(program, program.getRootFileNames(), program.getCompilerOptions(), files => {
         updateProgramText(files, fileName, fileContent);
     });

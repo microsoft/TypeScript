@@ -29,7 +29,11 @@ import {
 } from "../_namespaces/ts.codefix";
 
 const fixId = "fixConvertToMappedObjectType";
-const errorCodes = [Diagnostics.An_index_signature_parameter_type_cannot_be_a_literal_type_or_generic_type_Consider_using_a_mapped_object_type_instead.code];
+const errorCodes = [
+    Diagnostics
+        .An_index_signature_parameter_type_cannot_be_a_literal_type_or_generic_type_Consider_using_a_mapped_object_type_instead
+        .code,
+];
 
 type FixableDeclaration = InterfaceDeclaration | TypeAliasDeclaration;
 
@@ -41,7 +45,12 @@ registerCodeFix({
         if (!info) return undefined;
         const changes = textChanges.ChangeTracker.with(context, t => doChange(t, sourceFile, info));
         const name = idText(info.container.name);
-        return [createCodeFixAction(fixId, changes, [Diagnostics.Convert_0_to_mapped_object_type, name], fixId, [Diagnostics.Convert_0_to_mapped_object_type, name])];
+        return [
+            createCodeFixAction(fixId, changes, [Diagnostics.Convert_0_to_mapped_object_type, name], fixId, [
+                Diagnostics.Convert_0_to_mapped_object_type,
+                name,
+            ]),
+        ];
     },
     fixIds: [fixId],
     getAllCodeActions: context =>
@@ -60,21 +69,35 @@ function getInfo(sourceFile: SourceFile, pos: number): Info | undefined {
     const indexSignature = tryCast(token.parent.parent, isIndexSignatureDeclaration);
     if (!indexSignature) return undefined;
 
-    const container = isInterfaceDeclaration(indexSignature.parent) ? indexSignature.parent : tryCast(indexSignature.parent.parent, isTypeAliasDeclaration);
+    const container = isInterfaceDeclaration(indexSignature.parent) ? indexSignature.parent
+        : tryCast(indexSignature.parent.parent, isTypeAliasDeclaration);
     if (!container) return undefined;
 
     return { indexSignature, container };
 }
 
 function createTypeAliasFromInterface(declaration: FixableDeclaration, type: TypeNode): TypeAliasDeclaration {
-    return factory.createTypeAliasDeclaration(declaration.modifiers, declaration.name, declaration.typeParameters, type);
+    return factory.createTypeAliasDeclaration(
+        declaration.modifiers,
+        declaration.name,
+        declaration.typeParameters,
+        type,
+    );
 }
 
-function doChange(changes: textChanges.ChangeTracker, sourceFile: SourceFile, { indexSignature, container }: Info): void {
+function doChange(
+    changes: textChanges.ChangeTracker,
+    sourceFile: SourceFile,
+    { indexSignature, container }: Info,
+): void {
     const members = isInterfaceDeclaration(container) ? container.members : (container.type as TypeLiteralNode).members;
     const otherMembers = members.filter(member => !isIndexSignatureDeclaration(member));
     const parameter = first(indexSignature.parameters);
-    const mappedTypeParameter = factory.createTypeParameterDeclaration(/*modifiers*/ undefined, cast(parameter.name, isIdentifier), parameter.type);
+    const mappedTypeParameter = factory.createTypeParameterDeclaration(
+        /*modifiers*/ undefined,
+        cast(parameter.name, isIdentifier),
+        parameter.type,
+    );
     const mappedIntersectionType = factory.createMappedTypeNode(
         hasEffectiveReadonlyModifier(indexSignature) ? factory.createModifier(SyntaxKind.ReadonlyKeyword) : undefined,
         mappedTypeParameter,

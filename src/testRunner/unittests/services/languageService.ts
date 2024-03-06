@@ -124,7 +124,10 @@ export function Component(x: Config): any;`,
 
             // Change other
             projectVersion = "2";
-            files.set("/project/other.ts", { version: "2", text: `export function foo() { } export function bar() { }` });
+            files.set("/project/other.ts", {
+                version: "2",
+                text: `export function foo() { } export function bar() { }`,
+            });
             const program3 = ls.getProgram()!;
             assert.notStrictEqual(program2, program3);
             verifyProgramFiles(program3);
@@ -188,14 +191,19 @@ export function Component(x: Config): any;`,
                 content: `class class2 {}`,
             };
             const system = createServerHost([config1, class1, class1Dts, config2, class2, libFile]);
-            const result = ts.getParsedCommandLineOfConfigFile(`/user/username/projects/myproject/projects/project2/tsconfig.json`, /*optionsToExtend*/ undefined, {
-                useCaseSensitiveFileNames: true,
-                fileExists: path => system.fileExists(path),
-                readFile: path => system.readFile(path),
-                getCurrentDirectory: () => system.getCurrentDirectory(),
-                readDirectory: (path, extensions, excludes, includes, depth) => system.readDirectory(path, extensions, excludes, includes, depth),
-                onUnRecoverableConfigFileDiagnostic: ts.noop,
-            })!;
+            const result = ts.getParsedCommandLineOfConfigFile(
+                `/user/username/projects/myproject/projects/project2/tsconfig.json`,
+                /*optionsToExtend*/ undefined,
+                {
+                    useCaseSensitiveFileNames: true,
+                    fileExists: path => system.fileExists(path),
+                    readFile: path => system.readFile(path),
+                    getCurrentDirectory: () => system.getCurrentDirectory(),
+                    readDirectory: (path, extensions, excludes, includes, depth) =>
+                        system.readDirectory(path, extensions, excludes, includes, depth),
+                    onUnRecoverableConfigFileDiagnostic: ts.noop,
+                },
+            )!;
             const host: ts.LanguageServiceHost = {
                 useCaseSensitiveFileNames: ts.returnTrue,
                 useSourceOfProjectReferenceRedirect,
@@ -211,7 +219,8 @@ export function Component(x: Config): any;`,
                     const text = system.readFile(path);
                     return text ? ts.ScriptSnapshot.fromString(text) : undefined;
                 },
-                readDirectory: (path, extensions, excludes, includes, depth) => system.readDirectory(path, extensions, excludes, includes, depth),
+                readDirectory: (path, extensions, excludes, includes, depth) =>
+                    system.readDirectory(path, extensions, excludes, includes, depth),
                 getCurrentDirectory: () => system.getCurrentDirectory(),
                 getDefaultLibFileName: () => libFile.path,
                 getProjectReferences: () => result.projectReferences,
@@ -234,10 +243,16 @@ export function Component(x: Config): any;`,
                 [libFile.path, class1.path, class3, class2.path],
             );
             // Add excluded file to referenced project
-            system.ensureFileOrFolder({ path: `/user/username/projects/myproject/projects/project1/temp/file.d.ts`, content: `declare class file {}` });
+            system.ensureFileOrFolder({
+                path: `/user/username/projects/myproject/projects/project1/temp/file.d.ts`,
+                content: `declare class file {}`,
+            });
             assert.strictEqual(ls.getProgram(), program);
             // Add output from new class to referenced project
-            system.writeFile(`/user/username/projects/myproject/projects/project1/class3.d.ts`, `declare class class3 {}`);
+            system.writeFile(
+                `/user/username/projects/myproject/projects/project1/class3.d.ts`,
+                `declare class class3 {}`,
+            );
             assert.strictEqual(ls.getProgram(), program);
         });
 
@@ -265,7 +280,10 @@ export function Component(x: Config): any;`,
                 [libFile.path, class1Dts.path, class3Dts, class2.path],
             );
             // Add excluded file to referenced project
-            system.ensureFileOrFolder({ path: `/user/username/projects/myproject/projects/project1/temp/file.d.ts`, content: `declare class file {}` });
+            system.ensureFileOrFolder({
+                path: `/user/username/projects/myproject/projects/project1/temp/file.d.ts`,
+                content: `declare class file {}`,
+            });
             assert.strictEqual(ls.getProgram(), program2);
             // Delete output from new class to referenced project
             system.deleteFile(class3Dts);

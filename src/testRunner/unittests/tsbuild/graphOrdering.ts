@@ -53,7 +53,11 @@ describe("unittests:: tsbuild - graph-ordering", () => {
     });
 
     function checkGraphOrdering(rootNames: string[], expectedBuildSet: string[], circular?: true) {
-        const builder = ts.createSolutionBuilder(host!, rootNames.map(getProjectFileName), { dry: true, force: false, verbose: false });
+        const builder = ts.createSolutionBuilder(host!, rootNames.map(getProjectFileName), {
+            dry: true,
+            force: false,
+            verbose: false,
+        });
         const buildOrder = builder.getBuildOrder();
         assert.equal(ts.isCircularBuildOrder(buildOrder), !!circular);
         const buildQueue = ts.getBuildOrderFromAnyBuildOrder(buildOrder);
@@ -64,7 +68,11 @@ describe("unittests:: tsbuild - graph-ordering", () => {
                 const child = getProjectFileName(dep[0]);
                 if (!buildQueue.includes(child)) continue;
                 const parent = getProjectFileName(dep[1]);
-                assert.isAbove(buildQueue.indexOf(child), buildQueue.indexOf(parent), `Expecting child ${child} to be built after parent ${parent}`);
+                assert.isAbove(
+                    buildQueue.indexOf(child),
+                    buildQueue.indexOf(parent),
+                    `Expecting child ${child} to be built after parent ${parent}`,
+                );
             }
         }
     }
@@ -76,8 +84,12 @@ describe("unittests:: tsbuild - graph-ordering", () => {
     function writeProjects(fileSystem: vfs.FileSystem, projectNames: string[], deps: [string, string][]): string[] {
         const projFileNames: string[] = [];
         for (const dep of deps) {
-            if (!projectNames.includes(dep[0])) throw new Error(`Invalid dependency - project ${dep[0]} does not exist`);
-            if (!projectNames.includes(dep[1])) throw new Error(`Invalid dependency - project ${dep[1]} does not exist`);
+            if (!projectNames.includes(dep[0])) {
+                throw new Error(`Invalid dependency - project ${dep[0]} does not exist`);
+            }
+            if (!projectNames.includes(dep[1])) {
+                throw new Error(`Invalid dependency - project ${dep[1]} does not exist`);
+            }
         }
         for (const proj of projectNames) {
             fileSystem.mkdirpSync(`/project/${proj}`);

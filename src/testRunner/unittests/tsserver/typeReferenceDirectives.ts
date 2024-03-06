@@ -64,7 +64,11 @@ declare class TestLib {
         openFilesForSession([testFile], session);
         host.writeFile(appLib.path, appLib.content.replace("test()", "test2()"));
         host.runQueuedTimeoutCallbacks();
-        baselineTsserverLogs("typeReferenceDirectives", "when typeReferenceDirective contains UpperCasePackage", session);
+        baselineTsserverLogs(
+            "typeReferenceDirectives",
+            "when typeReferenceDirective contains UpperCasePackage",
+            session,
+        );
     });
 
     it("when typeReferenceDirective is relative path and in a sibling folder", () => {
@@ -91,6 +95,10 @@ declare class TestLib {
         const host = createServerHost(files);
         const session = new TestSession(host);
         openFilesForSession([file], session);
-        baselineTsserverLogs("typeReferenceDirectives", "when typeReferenceDirective is relative path and in a sibling folder", session);
+        baselineTsserverLogs(
+            "typeReferenceDirectives",
+            "when typeReferenceDirective is relative path and in a sibling folder",
+            session,
+        );
     });
 });

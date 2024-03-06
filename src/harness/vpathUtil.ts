@@ -54,10 +54,12 @@ export const enum ValidationFlags {
     Root = RequireRoot | AllowRoot | AllowTrailingSeparator,
 
     /** Path must be a absolute */
-    Absolute = RequireRoot | AllowRoot | AllowDirname | AllowBasename | AllowExtname | AllowTrailingSeparator | AllowNavigation,
+    Absolute = RequireRoot | AllowRoot | AllowDirname | AllowBasename | AllowExtname | AllowTrailingSeparator |
+        AllowNavigation,
 
     /** Path may be relative or absolute */
-    RelativeOrAbsolute = AllowRoot | AllowDirname | AllowBasename | AllowExtname | AllowTrailingSeparator | AllowNavigation,
+    RelativeOrAbsolute = AllowRoot | AllowDirname | AllowBasename | AllowExtname | AllowTrailingSeparator |
+        AllowNavigation,
 
     /** Path may only be a filename */
     Basename = RequireBasename | AllowExtname,
@@ -69,8 +71,10 @@ function validateComponents(components: string[], flags: ValidationFlags, hasTra
     const hasBasename = components.length > 1;
     const hasExtname = hasBasename && extRegExp.test(components[components.length - 1]);
     const invalidComponentRegExp = flags & ValidationFlags.AllowNavigation
-        ? flags & ValidationFlags.AllowWildcard ? invalidNavigableComponentWithWildcardsRegExp : invalidNavigableComponentRegExp
-        : flags & ValidationFlags.AllowWildcard ? invalidNonNavigableComponentWithWildcardsRegExp : invalidNonNavigableComponentRegExp;
+        ? flags & ValidationFlags.AllowWildcard ? invalidNavigableComponentWithWildcardsRegExp
+            : invalidNavigableComponentRegExp
+        : flags & ValidationFlags.AllowWildcard ? invalidNonNavigableComponentWithWildcardsRegExp
+        : invalidNonNavigableComponentRegExp;
 
     // Validate required components
     if (flags & ValidationFlags.RequireRoot && !hasRoot) return false;

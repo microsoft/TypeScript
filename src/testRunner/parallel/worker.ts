@@ -115,16 +115,28 @@ export function start() {
      */
     function shimTestInterface(rootSuite: Mocha.Suite, context: Mocha.MochaGlobals) {
         const suites = [rootSuite];
-        context.before = (title: string | Mocha.Func | Mocha.AsyncFunc, fn?: Mocha.Func | Mocha.AsyncFunc) => suites[0].beforeAll(title as string, fn);
-        context.after = (title: string | Mocha.Func | Mocha.AsyncFunc, fn?: Mocha.Func | Mocha.AsyncFunc) => suites[0].afterAll(title as string, fn);
-        context.beforeEach = (title: string | Mocha.Func | Mocha.AsyncFunc, fn?: Mocha.Func | Mocha.AsyncFunc) => suites[0].beforeEach(title as string, fn);
-        context.afterEach = (title: string | Mocha.Func | Mocha.AsyncFunc, fn?: Mocha.Func | Mocha.AsyncFunc) => suites[0].afterEach(title as string, fn);
-        context.describe = context.context = ((title: string, fn: (this: Mocha.Suite) => void) => addSuite(title, fn)) as Mocha.SuiteFunction;
-        context.describe.skip = context.xdescribe = context.xcontext = (title: string) => addSuite(title, /*fn*/ undefined);
+        context.before = (title: string | Mocha.Func | Mocha.AsyncFunc, fn?: Mocha.Func | Mocha.AsyncFunc) =>
+            suites[0].beforeAll(title as string, fn);
+        context.after = (title: string | Mocha.Func | Mocha.AsyncFunc, fn?: Mocha.Func | Mocha.AsyncFunc) =>
+            suites[0].afterAll(title as string, fn);
+        context.beforeEach = (title: string | Mocha.Func | Mocha.AsyncFunc, fn?: Mocha.Func | Mocha.AsyncFunc) =>
+            suites[0].beforeEach(title as string, fn);
+        context.afterEach = (title: string | Mocha.Func | Mocha.AsyncFunc, fn?: Mocha.Func | Mocha.AsyncFunc) =>
+            suites[0].afterEach(title as string, fn);
+        context.describe =
+            context.context =
+                ((title: string, fn: (this: Mocha.Suite) => void) => addSuite(title, fn)) as Mocha.SuiteFunction;
+        context.describe.skip = context.xdescribe = context.xcontext = (title: string) =>
+            addSuite(title, /*fn*/ undefined);
         context.describe.only = (title: string, fn?: (this: Mocha.Suite) => void) => addSuite(title, fn);
-        context.it = context.specify = ((title: string | Mocha.Func | Mocha.AsyncFunc, fn?: Mocha.Func | Mocha.AsyncFunc) => addTest(title, fn)) as Mocha.TestFunction;
-        context.it.skip = context.xit = context.xspecify = (title: string | Mocha.Func | Mocha.AsyncFunc) => addTest(typeof title === "function" ? title.name : title, /*fn*/ undefined);
-        context.it.only = (title: string | Mocha.Func | Mocha.AsyncFunc, fn?: Mocha.Func | Mocha.AsyncFunc) => addTest(title, fn);
+        context.it =
+            context.specify =
+                ((title: string | Mocha.Func | Mocha.AsyncFunc, fn?: Mocha.Func | Mocha.AsyncFunc) =>
+                    addTest(title, fn)) as Mocha.TestFunction;
+        context.it.skip = context.xit = context.xspecify = (title: string | Mocha.Func | Mocha.AsyncFunc) =>
+            addTest(typeof title === "function" ? title.name : title, /*fn*/ undefined);
+        context.it.only = (title: string | Mocha.Func | Mocha.AsyncFunc, fn?: Mocha.Func | Mocha.AsyncFunc) =>
+            addTest(title, fn);
 
         function addSuite(title: string, fn: ((this: Mocha.Suite) => void) | undefined): Mocha.Suite {
             const suite = new Suite(title, suites[0].ctx);
@@ -138,7 +150,10 @@ export function start() {
             return suite;
         }
 
-        function addTest(title: string | Mocha.Func | Mocha.AsyncFunc, fn: Mocha.Func | Mocha.AsyncFunc | undefined): Mocha.Test {
+        function addTest(
+            title: string | Mocha.Func | Mocha.AsyncFunc,
+            fn: Mocha.Func | Mocha.AsyncFunc | undefined,
+        ): Mocha.Test {
             if (typeof title === "function") {
                 fn = title;
                 title = fn.name;

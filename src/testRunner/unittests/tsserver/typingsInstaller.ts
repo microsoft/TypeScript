@@ -372,7 +372,11 @@ describe("unittests:: tsserver:: typingsInstaller:: General functionality", () =
 
         host.runPendingInstalls();
         // files should not be removed from project if ATA is skipped
-        baselineTsserverLogs("typingsInstaller", "external projects type acquisition with disableFilenameBasedTypeAcquisition", session);
+        baselineTsserverLogs(
+            "typingsInstaller",
+            "external projects type acquisition with disableFilenameBasedTypeAcquisition",
+            session,
+        );
     });
 
     it("external project - no type acquisition, with js & ts files", () => {
@@ -600,7 +604,11 @@ describe("unittests:: tsserver:: typingsInstaller:: General functionality", () =
             openExternalProjectForSession({
                 projectFileName: projectFileName1,
                 options: { allowJS: true, moduleResolution: ts.ModuleResolutionKind.Node10 },
-                rootFiles: [toExternalFile(lodashJs.path), toExternalFile(commanderJs.path), toExternalFile(file3.path)],
+                rootFiles: [
+                    toExternalFile(lodashJs.path),
+                    toExternalFile(commanderJs.path),
+                    toExternalFile(file3.path),
+                ],
                 typeAcquisition: { include: ["jquery", "cordova"] },
             }, session);
 
@@ -632,7 +640,11 @@ describe("unittests:: tsserver:: typingsInstaller:: General functionality", () =
             openExternalProjectForSession({
                 projectFileName: projectFileName1,
                 options: { allowJS: true, moduleResolution: ts.ModuleResolutionKind.Node10 },
-                rootFiles: [toExternalFile(lodashJs.path), toExternalFile(commanderJs.path), toExternalFile(file3.path)],
+                rootFiles: [
+                    toExternalFile(lodashJs.path),
+                    toExternalFile(commanderJs.path),
+                    toExternalFile(file3.path),
+                ],
                 typeAcquisition: { include: ["jquery", "cordova"] },
             }, session);
 
@@ -650,7 +662,11 @@ describe("unittests:: tsserver:: typingsInstaller:: General functionality", () =
 
             host.runQueuedTimeoutCallbacks(id); // Send the request to worker for project2
             host.runPendingInstalls(); // Actual install for project2
-            baselineTsserverLogs("typingsInstaller", "throttle scheduled run install requests without reaching limit", session);
+            baselineTsserverLogs(
+                "typingsInstaller",
+                "throttle scheduled run install requests without reaching limit",
+                session,
+            );
         });
 
         it("Throttle - scheduled run install requests with defer", () => {
@@ -666,7 +682,11 @@ describe("unittests:: tsserver:: typingsInstaller:: General functionality", () =
             openExternalProjectForSession({
                 projectFileName: projectFileName1,
                 options: { allowJS: true, moduleResolution: ts.ModuleResolutionKind.Node10 },
-                rootFiles: [toExternalFile(lodashJs.path), toExternalFile(commanderJs.path), toExternalFile(file3.path)],
+                rootFiles: [
+                    toExternalFile(lodashJs.path),
+                    toExternalFile(commanderJs.path),
+                    toExternalFile(file3.path),
+                ],
                 typeAcquisition: { include: ["jquery", "cordova"] },
             }, session);
 
@@ -725,7 +745,11 @@ describe("unittests:: tsserver:: typingsInstaller:: General functionality", () =
 
             host.runQueuedTimeoutCallbacks(id); // Send the request to worker for project2
             host.runPendingInstalls(); // Actual install for project2
-            baselineTsserverLogs("typingsInstaller", "throttle scheduled run install requests with defer refreshed", session);
+            baselineTsserverLogs(
+                "typingsInstaller",
+                "throttle scheduled run install requests with defer refreshed",
+                session,
+            );
         });
 
         it("Throttle - scheduled run install requests with defer while queuing again", () => {
@@ -771,7 +795,11 @@ describe("unittests:: tsserver:: typingsInstaller:: General functionality", () =
             host.runQueuedTimeoutCallbacks(id2); // Send the request to worker for project3
             host.runPendingInstalls(); // Actual install for project3
 
-            baselineTsserverLogs("typingsInstaller", "throttle scheduled run install requests with defer while queuing again", session);
+            baselineTsserverLogs(
+                "typingsInstaller",
+                "throttle scheduled run install requests with defer while queuing again",
+                session,
+            );
         });
     });
 
@@ -883,7 +911,16 @@ describe("unittests:: tsserver:: typingsInstaller:: General functionality", () =
                 path: "/tmp/node_modules/@types/jquery/index.d.ts",
                 content: "",
             };
-            const host = createServerHost([app, jsconfig, pkgJson, commander, commanderPackage, jquery, jqueryPackage, nestedPackage]);
+            const host = createServerHost([
+                app,
+                jsconfig,
+                pkgJson,
+                commander,
+                commanderPackage,
+                jquery,
+                jqueryPackage,
+                nestedPackage,
+            ]);
             const session = new TestSession({
                 host,
                 useSingleInferredProject: true,
@@ -1163,7 +1200,11 @@ describe("unittests:: tsserver:: typingsInstaller:: General functionality", () =
         proj.updateGraph();
         const version2 = proj.lastCachedUnresolvedImportsList;
         assert.strictEqual(version1, version2, "set of unresolved imports should change");
-        baselineTsserverLogs("typingsInstaller", "cached unresolved typings are not recomputed if program structure did not change", session);
+        baselineTsserverLogs(
+            "typingsInstaller",
+            "cached unresolved typings are not recomputed if program structure did not change",
+            session,
+        );
     });
 
     it("multiple projects", () => {
@@ -1363,34 +1404,81 @@ describe("unittests:: tsserver:: typingsInstaller:: Validate package name:", () 
     });
     it("package non URI safe characters are not supported", () => {
         assert.equal(validatePackageName("  scope  "), NameValidationResult.NameContainsNonURISafeCharacters);
-        assert.equal(validatePackageName("; say ‘Hello from TypeScript!’ #"), NameValidationResult.NameContainsNonURISafeCharacters);
+        assert.equal(
+            validatePackageName("; say ‘Hello from TypeScript!’ #"),
+            NameValidationResult.NameContainsNonURISafeCharacters,
+        );
         assert.equal(validatePackageName("a/b/c"), NameValidationResult.NameContainsNonURISafeCharacters);
     });
     it("scoped package name is supported", () => {
         assert.equal(validatePackageName("@scope/bar"), NameValidationResult.Ok);
     });
     it("scoped name in scoped package name cannot start with dot", () => {
-        assert.deepEqual(validatePackageName("@.scope/bar"), { name: ".scope", isScopeName: true, result: NameValidationResult.NameStartsWithDot });
-        assert.deepEqual(validatePackageName("@.scope/.bar"), { name: ".scope", isScopeName: true, result: NameValidationResult.NameStartsWithDot });
+        assert.deepEqual(validatePackageName("@.scope/bar"), {
+            name: ".scope",
+            isScopeName: true,
+            result: NameValidationResult.NameStartsWithDot,
+        });
+        assert.deepEqual(validatePackageName("@.scope/.bar"), {
+            name: ".scope",
+            isScopeName: true,
+            result: NameValidationResult.NameStartsWithDot,
+        });
     });
     it("scope name in scoped package name cannot start with underscore", () => {
-        assert.deepEqual(validatePackageName("@_scope/bar"), { name: "_scope", isScopeName: true, result: NameValidationResult.NameStartsWithUnderscore });
-        assert.deepEqual(validatePackageName("@_scope/_bar"), { name: "_scope", isScopeName: true, result: NameValidationResult.NameStartsWithUnderscore });
+        assert.deepEqual(validatePackageName("@_scope/bar"), {
+            name: "_scope",
+            isScopeName: true,
+            result: NameValidationResult.NameStartsWithUnderscore,
+        });
+        assert.deepEqual(validatePackageName("@_scope/_bar"), {
+            name: "_scope",
+            isScopeName: true,
+            result: NameValidationResult.NameStartsWithUnderscore,
+        });
     });
     it("scope name in scoped package name with non URI safe characters are not supported", () => {
-        assert.deepEqual(validatePackageName("@  scope  /bar"), { name: "  scope  ", isScopeName: true, result: NameValidationResult.NameContainsNonURISafeCharacters });
-        assert.deepEqual(validatePackageName("@; say ‘Hello from TypeScript!’ #/bar"), { name: "; say ‘Hello from TypeScript!’ #", isScopeName: true, result: NameValidationResult.NameContainsNonURISafeCharacters });
-        assert.deepEqual(validatePackageName("@  scope  /  bar  "), { name: "  scope  ", isScopeName: true, result: NameValidationResult.NameContainsNonURISafeCharacters });
+        assert.deepEqual(validatePackageName("@  scope  /bar"), {
+            name: "  scope  ",
+            isScopeName: true,
+            result: NameValidationResult.NameContainsNonURISafeCharacters,
+        });
+        assert.deepEqual(validatePackageName("@; say ‘Hello from TypeScript!’ #/bar"), {
+            name: "; say ‘Hello from TypeScript!’ #",
+            isScopeName: true,
+            result: NameValidationResult.NameContainsNonURISafeCharacters,
+        });
+        assert.deepEqual(validatePackageName("@  scope  /  bar  "), {
+            name: "  scope  ",
+            isScopeName: true,
+            result: NameValidationResult.NameContainsNonURISafeCharacters,
+        });
     });
     it("package name in scoped package name cannot start with dot", () => {
-        assert.deepEqual(validatePackageName("@scope/.bar"), { name: ".bar", isScopeName: false, result: NameValidationResult.NameStartsWithDot });
+        assert.deepEqual(validatePackageName("@scope/.bar"), {
+            name: ".bar",
+            isScopeName: false,
+            result: NameValidationResult.NameStartsWithDot,
+        });
     });
     it("package name in scoped package name cannot start with underscore", () => {
-        assert.deepEqual(validatePackageName("@scope/_bar"), { name: "_bar", isScopeName: false, result: NameValidationResult.NameStartsWithUnderscore });
+        assert.deepEqual(validatePackageName("@scope/_bar"), {
+            name: "_bar",
+            isScopeName: false,
+            result: NameValidationResult.NameStartsWithUnderscore,
+        });
     });
     it("package name in scoped package name with non URI safe characters are not supported", () => {
-        assert.deepEqual(validatePackageName("@scope/  bar  "), { name: "  bar  ", isScopeName: false, result: NameValidationResult.NameContainsNonURISafeCharacters });
-        assert.deepEqual(validatePackageName("@scope/; say ‘Hello from TypeScript!’ #"), { name: "; say ‘Hello from TypeScript!’ #", isScopeName: false, result: NameValidationResult.NameContainsNonURISafeCharacters });
+        assert.deepEqual(validatePackageName("@scope/  bar  "), {
+            name: "  bar  ",
+            isScopeName: false,
+            result: NameValidationResult.NameContainsNonURISafeCharacters,
+        });
+        assert.deepEqual(validatePackageName("@scope/; say ‘Hello from TypeScript!’ #"), {
+            name: "; say ‘Hello from TypeScript!’ #",
+            isScopeName: false,
+            result: NameValidationResult.NameContainsNonURISafeCharacters,
+        });
     });
 });
 
@@ -1484,9 +1572,22 @@ describe("unittests:: tsserver:: typingsInstaller:: discover typings", () => {
             content: "",
         };
         const { discoverTypings, baseline } = setup([f, node]);
-        const cache = new Map(Object.entries<ts.JsTyping.CachedTyping>({ node: { typingLocation: node.path, version: new ts.Version("1.3.0") } }));
+        const cache = new Map(
+            Object.entries<ts.JsTyping.CachedTyping>({
+                node: { typingLocation: node.path, version: new ts.Version("1.3.0") },
+            }),
+        );
         const registry = createTypesRegistry("node");
-        discoverTypings([f.path], ts.getDirectoryPath(f.path as ts.Path), emptySafeList, cache, { enable: true }, ["fs", "bar"], registry, ts.emptyOptions);
+        discoverTypings(
+            [f.path],
+            ts.getDirectoryPath(f.path as ts.Path),
+            emptySafeList,
+            cache,
+            { enable: true },
+            ["fs", "bar"],
+            registry,
+            ts.emptyOptions,
+        );
         baseline("should use cached locations");
     });
 
@@ -1500,7 +1601,11 @@ describe("unittests:: tsserver:: typingsInstaller:: discover typings", () => {
             content: "",
         };
         const { discoverTypings, baseline } = setup([f, node]);
-        const cache = new Map(Object.entries<ts.JsTyping.CachedTyping>({ node: { typingLocation: node.path, version: new ts.Version("1.3.0") } }));
+        const cache = new Map(
+            Object.entries<ts.JsTyping.CachedTyping>({
+                node: { typingLocation: node.path, version: new ts.Version("1.3.0") },
+            }),
+        );
         discoverTypings(
             [f.path],
             ts.getDirectoryPath(f.path as ts.Path),
@@ -2312,8 +2417,15 @@ describe("unittests:: tsserver:: typingsInstaller:: npm installation command", (
         "@types/react-content-loader@ts2.8",
     ];
     const expectedCommands = [
-        ts.server.typingsInstaller.getNpmCommandForInstallation(npmPath, tsVersion, packageNames, packageNames.length).command,
-        ts.server.typingsInstaller.getNpmCommandForInstallation(npmPath, tsVersion, packageNames, packageNames.length - Math.ceil(packageNames.length / 2)).command,
+        ts.server.typingsInstaller.getNpmCommandForInstallation(npmPath, tsVersion, packageNames, packageNames.length)
+            .command,
+        ts.server.typingsInstaller.getNpmCommandForInstallation(
+            npmPath,
+            tsVersion,
+            packageNames,
+            packageNames.length - Math.ceil(packageNames.length / 2),
+        )
+            .command,
     ];
     it("works when the command is too long to install all packages at once", () => {
         const commands: string[] = [];
@@ -2344,7 +2456,9 @@ describe("unittests:: tsserver:: typingsInstaller:: recomputing resolutions of u
         const program = project.getLanguageService().getProgram()!;
         const sourceFile = program.getSourceFileByPath(appPath)!;
         const foooResolution = program.getResolvedModule(sourceFile, "fooo", /*mode*/ undefined)!.resolvedModule!;
-        project.writeLog(`Resolution from : ${sourceFile.fileName} for "fooo" goes to: ${jsonToReadableText(foooResolution)}`);
+        project.writeLog(
+            `Resolution from : ${sourceFile.fileName} for "fooo" goes to: ${jsonToReadableText(foooResolution)}`,
+        );
         return foooResolution;
     }
 
@@ -2542,7 +2656,14 @@ describe("unittests:: tsserver:: typingsInstaller:: tsserver:: with inferred Pro
             }),
         };
 
-        const files = [file, packageJsonInCurrentDirectory, packageJsonOfPkgcurrentdirectory, indexOfPkgcurrentdirectory, typingsCachePackageJson, typingsCachePackageLockJson];
+        const files = [
+            file,
+            packageJsonInCurrentDirectory,
+            packageJsonOfPkgcurrentdirectory,
+            indexOfPkgcurrentdirectory,
+            typingsCachePackageJson,
+            typingsCachePackageLockJson,
+        ];
         const host = createServerHost(files, { currentDirectory });
         const session = new TestSession({
             host,

@@ -58,7 +58,9 @@ registerRefactor(refactorName, {
     getAvailableActions: getRefactorActionsToConvertOverloadsToOneSignature,
 });
 
-function getRefactorActionsToConvertOverloadsToOneSignature(context: RefactorContext): readonly ApplicableRefactorInfo[] {
+function getRefactorActionsToConvertOverloadsToOneSignature(
+    context: RefactorContext,
+): readonly ApplicableRefactorInfo[] {
     const { file, startPosition, program } = context;
     const info = getConvertableOverloadListAtPosition(file, startPosition, program);
     if (!info) return emptyArray;
@@ -147,7 +149,10 @@ function getRefactorEditsToConvertOverloadsToOneSignature(context: RefactorConte
             break;
         }
         default:
-            return Debug.failBadSyntaxKind(lastDeclaration, "Unhandled signature kind in overload list conversion refactoring");
+            return Debug.failBadSyntaxKind(
+                lastDeclaration,
+                "Unhandled signature kind in overload list conversion refactoring",
+            );
     }
 
     if (updated === lastDeclaration) {
@@ -160,7 +165,16 @@ function getRefactorEditsToConvertOverloadsToOneSignature(context: RefactorConte
 
     return { renameFilename: undefined, renameLocation: undefined, edits };
 
-    function getNewParametersForCombinedSignature(signatureDeclarations: (MethodSignature | MethodDeclaration | CallSignatureDeclaration | ConstructorDeclaration | ConstructSignatureDeclaration | FunctionDeclaration)[]): NodeArray<ParameterDeclaration> {
+    function getNewParametersForCombinedSignature(
+        signatureDeclarations: (
+            | MethodSignature
+            | MethodDeclaration
+            | CallSignatureDeclaration
+            | ConstructorDeclaration
+            | ConstructSignatureDeclaration
+            | FunctionDeclaration
+        )[],
+    ): NodeArray<ParameterDeclaration> {
         const lastSig = signatureDeclarations[signatureDeclarations.length - 1];
         if (isFunctionLikeDeclaration(lastSig) && lastSig.body) {
             // Trim away implementation signature arguments (they should already be compatible with overloads, but are likely less precise to guarantee compatability with the overloads)
@@ -177,9 +191,20 @@ function getRefactorEditsToConvertOverloadsToOneSignature(context: RefactorConte
         ]);
     }
 
-    function convertSignatureParametersToTuple(decl: MethodSignature | MethodDeclaration | CallSignatureDeclaration | ConstructorDeclaration | ConstructSignatureDeclaration | FunctionDeclaration): TupleTypeNode {
+    function convertSignatureParametersToTuple(
+        decl:
+            | MethodSignature
+            | MethodDeclaration
+            | CallSignatureDeclaration
+            | ConstructorDeclaration
+            | ConstructSignatureDeclaration
+            | FunctionDeclaration,
+    ): TupleTypeNode {
         const members = map(decl.parameters, convertParameterToNamedTupleMember);
-        return setEmitFlags(factory.createTupleTypeNode(members), some(members, m => !!length(getSyntheticLeadingComments(m))) ? EmitFlags.None : EmitFlags.SingleLine);
+        return setEmitFlags(
+            factory.createTupleTypeNode(members),
+            some(members, m => !!length(getSyntheticLeadingComments(m))) ? EmitFlags.None : EmitFlags.SingleLine,
+        );
     }
 
     function convertParameterToNamedTupleMember(p: ParameterDeclaration): NamedTupleMember {
@@ -213,7 +238,16 @@ ${newComment.split("\n").map(c => ` * ${c}`).join("\n")}
     }
 }
 
-function isConvertableSignatureDeclaration(d: Node): d is MethodSignature | MethodDeclaration | CallSignatureDeclaration | ConstructorDeclaration | ConstructSignatureDeclaration | FunctionDeclaration {
+function isConvertableSignatureDeclaration(
+    d: Node,
+): d is
+    | MethodSignature
+    | MethodDeclaration
+    | CallSignatureDeclaration
+    | ConstructorDeclaration
+    | ConstructSignatureDeclaration
+    | FunctionDeclaration
+{
     switch (d.kind) {
         case SyntaxKind.MethodSignature:
         case SyntaxKind.MethodDeclaration:
@@ -232,7 +266,10 @@ function getConvertableOverloadListAtPosition(file: SourceFile, startPosition: n
     if (!containingDecl) {
         return;
     }
-    if (isFunctionLikeDeclaration(containingDecl) && containingDecl.body && rangeContainsPosition(containingDecl.body, startPosition)) {
+    if (
+        isFunctionLikeDeclaration(containingDecl) && containingDecl.body &&
+        rangeContainsPosition(containingDecl.body, startPosition)
+    ) {
         return;
     }
 
@@ -255,8 +292,17 @@ function getConvertableOverloadListAtPosition(file: SourceFile, startPosition: n
     if (!every(decls, d => d.kind === kindOne)) {
         return;
     }
-    const signatureDecls = decls as (MethodSignature | MethodDeclaration | CallSignatureDeclaration | ConstructorDeclaration | ConstructSignatureDeclaration | FunctionDeclaration)[];
-    if (some(signatureDecls, d => !!d.typeParameters || some(d.parameters, p => !!p.modifiers || !isIdentifier(p.name)))) {
+    const signatureDecls = decls as (
+        | MethodSignature
+        | MethodDeclaration
+        | CallSignatureDeclaration
+        | ConstructorDeclaration
+        | ConstructSignatureDeclaration
+        | FunctionDeclaration
+    )[];
+    if (
+        some(signatureDecls, d => !!d.typeParameters || some(d.parameters, p => !!p.modifiers || !isIdentifier(p.name)))
+    ) {
         return;
     }
     const signatures = mapDefined(signatureDecls, d => checker.getSignatureFromDeclaration(d));

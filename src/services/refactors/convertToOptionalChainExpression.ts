@@ -48,7 +48,9 @@ import {
 } from "../_namespaces/ts.refactor";
 
 const refactorName = "Convert to optional chain expression";
-const convertToOptionalChainExpressionMessage = getLocaleSpecificMessage(Diagnostics.Convert_to_optional_chain_expression);
+const convertToOptionalChainExpressionMessage = getLocaleSpecificMessage(
+    Diagnostics.Convert_to_optional_chain_expression,
+);
 
 const toOptionalChainAction = {
     name: refactorName,
@@ -83,10 +85,16 @@ function getRefactorActionsToConvertToOptionalChain(context: RefactorContext): r
     return emptyArray;
 }
 
-function getRefactorEditsToConvertToOptionalChain(context: RefactorContext, actionName: string): RefactorEditInfo | undefined {
+function getRefactorEditsToConvertToOptionalChain(
+    context: RefactorContext,
+    actionName: string,
+): RefactorEditInfo | undefined {
     const info = getInfo(context);
     Debug.assert(info && !isRefactorErrorInfo(info), "Expected applicable refactor info");
-    const edits = textChanges.ChangeTracker.with(context, t => doChange(context.file, context.program.getTypeChecker(), t, info, actionName));
+    const edits = textChanges.ChangeTracker.with(
+        context,
+        t => doChange(context.file, context.program.getTypeChecker(), t, info, actionName),
+    );
     return { edits, renameFilename: undefined, renameLocation: undefined };
 }
 
@@ -122,7 +130,10 @@ function isValidExpressionOrStatement(node: Node): node is ValidExpressionOrStat
     return isValidExpression(node) || isValidStatement(node);
 }
 
-function getInfo(context: RefactorContext, considerEmptySpans = true): OptionalChainInfo | RefactorErrorInfo | undefined {
+function getInfo(
+    context: RefactorContext,
+    considerEmptySpans = true,
+): OptionalChainInfo | RefactorErrorInfo | undefined {
     const { file, program } = context;
     const span = getRefactorContextSpan(context);
 
@@ -132,17 +143,26 @@ function getInfo(context: RefactorContext, considerEmptySpans = true): OptionalC
     // selecting fo[|o && foo.ba|]r should be valid, so adjust span to fit start and end tokens
     const startToken = getTokenAtPosition(file, span.start);
     const endToken = findTokenOnLeftOfPosition(file, span.start + span.length);
-    const adjustedSpan = createTextSpanFromBounds(startToken.pos, endToken && endToken.end >= startToken.pos ? endToken.getEnd() : startToken.getEnd());
+    const adjustedSpan = createTextSpanFromBounds(
+        startToken.pos,
+        endToken && endToken.end >= startToken.pos ? endToken.getEnd() : startToken.getEnd(),
+    );
 
-    const parent = forEmptySpan ? getValidParentNodeOfEmptySpan(startToken) : getValidParentNodeContainingSpan(startToken, adjustedSpan);
+    const parent = forEmptySpan ? getValidParentNodeOfEmptySpan(startToken)
+        : getValidParentNodeContainingSpan(startToken, adjustedSpan);
     const expression = parent && isValidExpressionOrStatement(parent) ? getExpression(parent) : undefined;
-    if (!expression) return { error: getLocaleSpecificMessage(Diagnostics.Could_not_find_convertible_access_expression) };
+    if (!expression) {
+        return { error: getLocaleSpecificMessage(Diagnostics.Could_not_find_convertible_access_expression) };
+    }
 
     const checker = program.getTypeChecker();
     return isConditionalExpression(expression) ? getConditionalInfo(expression, checker) : getBinaryInfo(expression);
 }
 
-function getConditionalInfo(expression: ConditionalExpression, checker: TypeChecker): OptionalChainInfo | RefactorErrorInfo | undefined {
+function getConditionalInfo(
+    expression: ConditionalExpression,
+    checker: TypeChecker,
+): OptionalChainInfo | RefactorErrorInfo | undefined {
     const condition = expression.condition;
     const finalExpression = getFinalExpressionInChain(expression.whenTrue);
 
@@ -169,7 +189,9 @@ function getBinaryInfo(expression: BinaryExpression): OptionalChainInfo | Refact
     }
     const finalExpression = getFinalExpressionInChain(expression.right);
 
-    if (!finalExpression) return { error: getLocaleSpecificMessage(Diagnostics.Could_not_find_convertible_access_expression) };
+    if (!finalExpression) {
+        return { error: getLocaleSpecificMessage(Diagnostics.Could_not_find_convertible_access_expression) };
+    }
 
     const occurrences = getOccurrencesInExpression(finalExpression.expression, expression.left);
     return occurrences ? { finalExpression, occurrences, expression } :
@@ -200,7 +222,10 @@ function getOccurrencesInExpression(matchTo: Expression, expression: Expression)
 /**
  * Returns subchain if chain begins with subchain syntactically.
  */
-function getMatchingStart(chain: Expression, subchain: Expression): PropertyAccessExpression | ElementAccessExpression | Identifier | undefined {
+function getMatchingStart(
+    chain: Expression,
+    subchain: Expression,
+): PropertyAccessExpression | ElementAccessExpression | Identifier | undefined {
     if (!isIdentifier(subchain) && !isPropertyAccessExpression(subchain) && !isElementAccessExpression(subchain)) {
         return undefined;
     }
@@ -289,7 +314,9 @@ function getExpression(node: ValidExpressionOrStatement): ValidExpression | unde
  * it is followed by a different binary operator.
  * @param node the right child of a binary expression or a call expression.
  */
-function getFinalExpressionInChain(node: Expression): CallExpression | PropertyAccessExpression | ElementAccessExpression | undefined {
+function getFinalExpressionInChain(
+    node: Expression,
+): CallExpression | PropertyAccessExpression | ElementAccessExpression | undefined {
     // foo && |foo.bar === 1|; - here the right child of the && binary expression is another binary expression.
     // the rightmost member of the && chain should be the leftmost child of that expression.
     node = skipParentheses(node);
@@ -297,7 +324,10 @@ function getFinalExpressionInChain(node: Expression): CallExpression | PropertyA
         return getFinalExpressionInChain(node.left);
     }
     // foo && |foo.bar()()| - nested calls are treated like further accesses.
-    else if ((isPropertyAccessExpression(node) || isElementAccessExpression(node) || isCallExpression(node)) && !isOptionalChain(node)) {
+    else if (
+        (isPropertyAccessExpression(node) || isElementAccessExpression(node) || isCallExpression(node)) &&
+        !isOptionalChain(node)
+    ) {
         return node;
     }
     return undefined;
@@ -314,33 +344,69 @@ function convertOccurrences(checker: TypeChecker, toConvert: Expression, occurre
         if (isOccurrence) occurrences.pop();
         if (isCallExpression(toConvert)) {
             return isOccurrence ?
-                factory.createCallChain(chain, factory.createToken(SyntaxKind.QuestionDotToken), toConvert.typeArguments, toConvert.arguments) :
-                factory.createCallChain(chain, toConvert.questionDotToken, toConvert.typeArguments, toConvert.arguments);
+                factory.createCallChain(
+                    chain,
+                    factory.createToken(SyntaxKind.QuestionDotToken),
+                    toConvert.typeArguments,
+                    toConvert.arguments,
+                ) :
+                factory.createCallChain(
+                    chain,
+                    toConvert.questionDotToken,
+                    toConvert.typeArguments,
+                    toConvert.arguments,
+                );
         }
         else if (isPropertyAccessExpression(toConvert)) {
             return isOccurrence ?
-                factory.createPropertyAccessChain(chain, factory.createToken(SyntaxKind.QuestionDotToken), toConvert.name) :
+                factory.createPropertyAccessChain(
+                    chain,
+                    factory.createToken(SyntaxKind.QuestionDotToken),
+                    toConvert.name,
+                ) :
                 factory.createPropertyAccessChain(chain, toConvert.questionDotToken, toConvert.name);
         }
         else if (isElementAccessExpression(toConvert)) {
             return isOccurrence ?
-                factory.createElementAccessChain(chain, factory.createToken(SyntaxKind.QuestionDotToken), toConvert.argumentExpression) :
+                factory.createElementAccessChain(
+                    chain,
+                    factory.createToken(SyntaxKind.QuestionDotToken),
+                    toConvert.argumentExpression,
+                ) :
                 factory.createElementAccessChain(chain, toConvert.questionDotToken, toConvert.argumentExpression);
         }
     }
     return toConvert;
 }
 
-function doChange(sourceFile: SourceFile, checker: TypeChecker, changes: textChanges.ChangeTracker, info: OptionalChainInfo, _actionName: string): void {
+function doChange(
+    sourceFile: SourceFile,
+    checker: TypeChecker,
+    changes: textChanges.ChangeTracker,
+    info: OptionalChainInfo,
+    _actionName: string,
+): void {
     const { finalExpression, occurrences, expression } = info;
     const firstOccurrence = occurrences[occurrences.length - 1];
     const convertedChain = convertOccurrences(checker, finalExpression, occurrences);
-    if (convertedChain && (isPropertyAccessExpression(convertedChain) || isElementAccessExpression(convertedChain) || isCallExpression(convertedChain))) {
+    if (
+        convertedChain &&
+        (isPropertyAccessExpression(convertedChain) || isElementAccessExpression(convertedChain) ||
+            isCallExpression(convertedChain))
+    ) {
         if (isBinaryExpression(expression)) {
             changes.replaceNodeRange(sourceFile, firstOccurrence, finalExpression, convertedChain);
         }
         else if (isConditionalExpression(expression)) {
-            changes.replaceNode(sourceFile, expression, factory.createBinaryExpression(convertedChain, factory.createToken(SyntaxKind.QuestionQuestionToken), expression.whenFalse));
+            changes.replaceNode(
+                sourceFile,
+                expression,
+                factory.createBinaryExpression(
+                    convertedChain,
+                    factory.createToken(SyntaxKind.QuestionQuestionToken),
+                    expression.whenFalse,
+                ),
+            );
         }
     }
 }

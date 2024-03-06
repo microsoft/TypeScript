@@ -31,7 +31,13 @@ export interface TestCompilerHost extends ts.CompilerHost {
 export class SourceText implements ts.IScriptSnapshot {
     private fullText: string | undefined;
 
-    constructor(private references: string, private importsAndExports: string, private program: string, private changedPart = ChangedPart.none, private version = 0) {
+    constructor(
+        private references: string,
+        private importsAndExports: string,
+        private program: string,
+        private changedPart = ChangedPart.none,
+        private version = 0,
+    ) {
     }
 
     static New(references: string, importsAndExports: string, program: string): SourceText {
@@ -47,15 +53,33 @@ export class SourceText implements ts.IScriptSnapshot {
 
     public updateReferences(newReferences: string): SourceText {
         ts.Debug.assert(newReferences !== undefined);
-        return new SourceText(newReferences + newLine, this.importsAndExports, this.program, this.changedPart | ChangedPart.references, this.version + 1);
+        return new SourceText(
+            newReferences + newLine,
+            this.importsAndExports,
+            this.program,
+            this.changedPart | ChangedPart.references,
+            this.version + 1,
+        );
     }
     public updateImportsAndExports(newImportsAndExports: string): SourceText {
         ts.Debug.assert(newImportsAndExports !== undefined);
-        return new SourceText(this.references, newImportsAndExports + newLine, this.program, this.changedPart | ChangedPart.importsAndExports, this.version + 1);
+        return new SourceText(
+            this.references,
+            newImportsAndExports + newLine,
+            this.program,
+            this.changedPart | ChangedPart.importsAndExports,
+            this.version + 1,
+        );
     }
     public updateProgram(newProgram: string): SourceText {
         ts.Debug.assert(newProgram !== undefined);
-        return new SourceText(this.references, this.importsAndExports, newProgram, this.changedPart | ChangedPart.program, this.version + 1);
+        return new SourceText(
+            this.references,
+            this.importsAndExports,
+            newProgram,
+            this.changedPart | ChangedPart.program,
+            this.version + 1,
+        );
     }
 
     public getFullText() {
@@ -84,7 +108,10 @@ export class SourceText implements ts.IScriptSnapshot {
                 newLength = this.importsAndExports.length;
                 break;
             case ChangedPart.program:
-                oldSpan = ts.createTextSpan(oldText.references.length + oldText.importsAndExports.length, oldText.program.length);
+                oldSpan = ts.createTextSpan(
+                    oldText.references.length + oldText.importsAndExports.length,
+                    oldText.program.length,
+                );
                 newLength = this.program.length;
                 break;
             default:
@@ -102,7 +129,12 @@ function createSourceFileWithText(fileName: string, sourceText: SourceText, targ
     return file;
 }
 
-export function createTestCompilerHost(texts: readonly NamedSourceText[], target: ts.ScriptTarget, oldProgram?: ProgramWithSourceTexts, useGetSourceFileByPath?: boolean) {
+export function createTestCompilerHost(
+    texts: readonly NamedSourceText[],
+    target: ts.ScriptTarget,
+    oldProgram?: ProgramWithSourceTexts,
+    useGetSourceFileByPath?: boolean,
+) {
     const files = ts.arrayToMap(texts, t => t.name, t => {
         if (oldProgram) {
             let oldFile = oldProgram.getSourceFile(t.name) as SourceFileWithText;
@@ -137,13 +169,21 @@ export function createTestCompilerHost(texts: readonly NamedSourceText[], target
         },
     };
     if (useGetSourceFileByPath) {
-        const filesByPath = ts.mapEntries(files, (fileName, file) => [ts.toPath(fileName, "", getCanonicalFileName), file]);
+        const filesByPath = ts.mapEntries(
+            files,
+            (fileName, file) => [ts.toPath(fileName, "", getCanonicalFileName), file],
+        );
         result.getSourceFileByPath = (_fileName, path) => filesByPath.get(path);
     }
     return result;
 }
 
-export function newProgram(texts: NamedSourceText[], rootNames: string[], options: ts.CompilerOptions, useGetSourceFileByPath?: boolean): ProgramWithSourceTexts {
+export function newProgram(
+    texts: NamedSourceText[],
+    rootNames: string[],
+    options: ts.CompilerOptions,
+    useGetSourceFileByPath?: boolean,
+): ProgramWithSourceTexts {
     const host = createTestCompilerHost(texts, options.target!, /*oldProgram*/ undefined, useGetSourceFileByPath);
     const program = ts.createProgram(rootNames, options, host) as ProgramWithSourceTexts;
     program.sourceTexts = texts;
@@ -151,7 +191,14 @@ export function newProgram(texts: NamedSourceText[], rootNames: string[], option
     return program;
 }
 
-export function updateProgram(oldProgram: ProgramWithSourceTexts, rootNames: readonly string[], options: ts.CompilerOptions, updater: (files: NamedSourceText[]) => void, newTexts?: NamedSourceText[], useGetSourceFileByPath?: boolean) {
+export function updateProgram(
+    oldProgram: ProgramWithSourceTexts,
+    rootNames: readonly string[],
+    options: ts.CompilerOptions,
+    updater: (files: NamedSourceText[]) => void,
+    newTexts?: NamedSourceText[],
+    useGetSourceFileByPath?: boolean,
+) {
     if (!newTexts) {
         newTexts = oldProgram.sourceTexts!.slice(0);
     }

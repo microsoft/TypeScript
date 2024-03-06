@@ -123,10 +123,23 @@ export function createNodeConverters(factory: NodeFactory): NodeConverters {
             }
             if (element.propertyName) {
                 const expression = convertToAssignmentElementTarget(element.name);
-                return setOriginalNode(setTextRange(factory.createPropertyAssignment(element.propertyName, element.initializer ? factory.createAssignment(expression, element.initializer) : expression), element), element);
+                return setOriginalNode(
+                    setTextRange(
+                        factory.createPropertyAssignment(
+                            element.propertyName,
+                            element.initializer ? factory.createAssignment(expression, element.initializer)
+                                : expression,
+                        ),
+                        element,
+                    ),
+                    element,
+                );
             }
             Debug.assertNode(element.name, isIdentifier);
-            return setOriginalNode(setTextRange(factory.createShorthandPropertyAssignment(element.name, element.initializer), element), element);
+            return setOriginalNode(
+                setTextRange(factory.createShorthandPropertyAssignment(element.name, element.initializer), element),
+                element,
+            );
         }
 
         return cast(element, isObjectLiteralElementLike);

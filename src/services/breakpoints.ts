@@ -117,7 +117,10 @@ export function spanInSourceFileAtLocation(sourceFile: SourceFile, position: num
     }
 
     function textSpanEndingAtNextToken(startNode: Node, previousTokenToFindNextEndToken: Node): TextSpan {
-        return textSpan(startNode, findNextToken(previousTokenToFindNextEndToken, previousTokenToFindNextEndToken.parent, sourceFile));
+        return textSpan(
+            startNode,
+            findNextToken(previousTokenToFindNextEndToken, previousTokenToFindNextEndToken.parent, sourceFile),
+        );
     }
 
     function spanInNodeIfStartsOnSameLine(node: Node | undefined, otherwiseOnNode?: Node): TextSpan | undefined {
@@ -127,7 +130,11 @@ export function spanInSourceFileAtLocation(sourceFile: SourceFile, position: num
         return spanInNode(otherwiseOnNode);
     }
 
-    function spanInNodeArray<T extends Node>(nodeArray: NodeArray<T> | undefined, node: T, match: (value: Node) => boolean) {
+    function spanInNodeArray<T extends Node>(
+        nodeArray: NodeArray<T> | undefined,
+        node: T,
+        match: (value: Node) => boolean,
+    ) {
         if (nodeArray) {
             const index = nodeArray.indexOf(node);
             if (index >= 0) {
@@ -135,7 +142,10 @@ export function spanInSourceFileAtLocation(sourceFile: SourceFile, position: num
                 let end = index + 1;
                 while (start > 0 && match(nodeArray[start - 1])) start--;
                 while (end < nodeArray.length && match(nodeArray[end])) end++;
-                return createTextSpanFromBounds(skipTrivia(sourceFile.text, nodeArray[start].pos), nodeArray[end - 1].end);
+                return createTextSpanFromBounds(
+                    skipTrivia(sourceFile.text, nodeArray[start].pos),
+                    nodeArray[end - 1].end,
+                );
             }
         }
         return textSpan(node);
@@ -160,7 +170,9 @@ export function spanInSourceFileAtLocation(sourceFile: SourceFile, position: num
                 case SyntaxKind.VariableDeclaration:
                 case SyntaxKind.PropertyDeclaration:
                 case SyntaxKind.PropertySignature:
-                    return spanInVariableDeclaration(node as VariableDeclaration | PropertyDeclaration | PropertySignature);
+                    return spanInVariableDeclaration(
+                        node as VariableDeclaration | PropertyDeclaration | PropertySignature,
+                    );
 
                 case SyntaxKind.Parameter:
                     return spanInParameterDeclaration(node as ParameterDeclaration);
@@ -368,7 +380,10 @@ export function spanInSourceFileAtLocation(sourceFile: SourceFile, position: num
                             );
                         }
 
-                        if (operatorToken.kind === SyntaxKind.EqualsToken && isArrayLiteralOrObjectLiteralDestructuringPattern(node.parent)) {
+                        if (
+                            operatorToken.kind === SyntaxKind.EqualsToken &&
+                            isArrayLiteralOrObjectLiteralDestructuringPattern(node.parent)
+                        ) {
                             // Set breakpoint on assignment expression element of destructuring pattern
                             // a = expression of
                             // [a = expression, b, c] = someExpression or
@@ -456,10 +471,18 @@ export function spanInSourceFileAtLocation(sourceFile: SourceFile, position: num
             }
         }
 
-        function textSpanFromVariableDeclaration(variableDeclaration: VariableDeclaration | PropertyDeclaration | PropertySignature): TextSpan {
-            if (isVariableDeclarationList(variableDeclaration.parent) && variableDeclaration.parent.declarations[0] === variableDeclaration) {
+        function textSpanFromVariableDeclaration(
+            variableDeclaration: VariableDeclaration | PropertyDeclaration | PropertySignature,
+        ): TextSpan {
+            if (
+                isVariableDeclarationList(variableDeclaration.parent) &&
+                variableDeclaration.parent.declarations[0] === variableDeclaration
+            ) {
                 // First declaration - include let keyword
-                return textSpan(findPrecedingToken(variableDeclaration.pos, sourceFile, variableDeclaration.parent)!, variableDeclaration);
+                return textSpan(
+                    findPrecedingToken(variableDeclaration.pos, sourceFile, variableDeclaration.parent)!,
+                    variableDeclaration,
+                );
             }
             else {
                 // Span only on this declaration
@@ -467,7 +490,9 @@ export function spanInSourceFileAtLocation(sourceFile: SourceFile, position: num
             }
         }
 
-        function spanInVariableDeclaration(variableDeclaration: VariableDeclaration | PropertyDeclaration | PropertySignature): TextSpan | undefined {
+        function spanInVariableDeclaration(
+            variableDeclaration: VariableDeclaration | PropertyDeclaration | PropertySignature,
+        ): TextSpan | undefined {
             // If declaration of for in statement, just set the span in parent
             if (variableDeclaration.parent.parent.kind === SyntaxKind.ForInStatement) {
                 return spanInNode(variableDeclaration.parent.parent);
@@ -532,7 +557,8 @@ export function spanInSourceFileAtLocation(sourceFile: SourceFile, position: num
 
         function canFunctionHaveSpanInWholeDeclaration(functionDeclaration: FunctionLikeDeclaration) {
             return hasSyntacticModifier(functionDeclaration, ModifierFlags.Export) ||
-                (functionDeclaration.parent.kind === SyntaxKind.ClassDeclaration && functionDeclaration.kind !== SyntaxKind.Constructor);
+                (functionDeclaration.parent.kind === SyntaxKind.ClassDeclaration &&
+                    functionDeclaration.kind !== SyntaxKind.Constructor);
         }
 
         function spanInFunctionDeclaration(functionDeclaration: FunctionLikeDeclaration): TextSpan | undefined {
@@ -562,7 +588,9 @@ export function spanInSourceFileAtLocation(sourceFile: SourceFile, position: num
         function spanInBlock(block: Block): TextSpan | undefined {
             switch (block.parent.kind) {
                 case SyntaxKind.ModuleDeclaration:
-                    if (getModuleInstanceState(block.parent as ModuleDeclaration) !== ModuleInstanceState.Instantiated) {
+                    if (
+                        getModuleInstanceState(block.parent as ModuleDeclaration) !== ModuleInstanceState.Instantiated
+                    ) {
                         return undefined;
                     }
 
@@ -576,14 +604,19 @@ export function spanInSourceFileAtLocation(sourceFile: SourceFile, position: num
                 // Set span on previous token if it starts on same line otherwise on the first statement of the block
                 case SyntaxKind.ForStatement:
                 case SyntaxKind.ForOfStatement:
-                    return spanInNodeIfStartsOnSameLine(findPrecedingToken(block.pos, sourceFile, block.parent), block.statements[0]);
+                    return spanInNodeIfStartsOnSameLine(
+                        findPrecedingToken(block.pos, sourceFile, block.parent),
+                        block.statements[0],
+                    );
             }
 
             // Default action is to set on first statement
             return spanInNode(block.statements[0]);
         }
 
-        function spanInInitializerOfForLike(forLikeStatement: ForStatement | ForOfStatement | ForInStatement): TextSpan | undefined {
+        function spanInInitializerOfForLike(
+            forLikeStatement: ForStatement | ForOfStatement | ForInStatement,
+        ): TextSpan | undefined {
             if (forLikeStatement.initializer!.kind === SyntaxKind.VariableDeclarationList) {
                 // Declaration list - set breakpoint in first declaration
                 const variableDeclarationList = forLikeStatement.initializer as VariableDeclarationList;
@@ -612,7 +645,10 @@ export function spanInSourceFileAtLocation(sourceFile: SourceFile, position: num
 
         function spanInBindingPattern(bindingPattern: BindingPattern): TextSpan | undefined {
             // Set breakpoint in first binding element
-            const firstBindingElement = forEach(bindingPattern.elements, element => element.kind !== SyntaxKind.OmittedExpression ? element : undefined);
+            const firstBindingElement = forEach(
+                bindingPattern.elements,
+                element => element.kind !== SyntaxKind.OmittedExpression ? element : undefined,
+            );
 
             if (firstBindingElement) {
                 return spanInNode(firstBindingElement);
@@ -627,11 +663,19 @@ export function spanInSourceFileAtLocation(sourceFile: SourceFile, position: num
             return textSpanFromVariableDeclaration(bindingPattern.parent as VariableDeclaration);
         }
 
-        function spanInArrayLiteralOrObjectLiteralDestructuringPattern(node: DestructuringPattern): TextSpan | undefined {
+        function spanInArrayLiteralOrObjectLiteralDestructuringPattern(
+            node: DestructuringPattern,
+        ): TextSpan | undefined {
             Debug.assert(node.kind !== SyntaxKind.ArrayBindingPattern && node.kind !== SyntaxKind.ObjectBindingPattern);
-            const elements: NodeArray<Expression | ObjectLiteralElement> = node.kind === SyntaxKind.ArrayLiteralExpression ? node.elements : node.properties;
+            const elements: NodeArray<Expression | ObjectLiteralElement> =
+                node.kind === SyntaxKind.ArrayLiteralExpression ?
+                    node.elements
+                    : node.properties;
 
-            const firstBindingElement = forEach(elements, element => element.kind !== SyntaxKind.OmittedExpression ? element : undefined);
+            const firstBindingElement = forEach(
+                elements,
+                element => element.kind !== SyntaxKind.OmittedExpression ? element : undefined,
+            );
 
             if (firstBindingElement) {
                 return spanInNode(firstBindingElement);
@@ -649,11 +693,19 @@ export function spanInSourceFileAtLocation(sourceFile: SourceFile, position: num
             switch (node.parent.kind) {
                 case SyntaxKind.EnumDeclaration:
                     const enumDeclaration = node.parent as EnumDeclaration;
-                    return spanInNodeIfStartsOnSameLine(findPrecedingToken(node.pos, sourceFile, node.parent), enumDeclaration.members.length ? enumDeclaration.members[0] : enumDeclaration.getLastToken(sourceFile));
+                    return spanInNodeIfStartsOnSameLine(
+                        findPrecedingToken(node.pos, sourceFile, node.parent),
+                        enumDeclaration.members.length ? enumDeclaration.members[0]
+                            : enumDeclaration.getLastToken(sourceFile),
+                    );
 
                 case SyntaxKind.ClassDeclaration:
                     const classDeclaration = node.parent as ClassDeclaration;
-                    return spanInNodeIfStartsOnSameLine(findPrecedingToken(node.pos, sourceFile, node.parent), classDeclaration.members.length ? classDeclaration.members[0] : classDeclaration.getLastToken(sourceFile));
+                    return spanInNodeIfStartsOnSameLine(
+                        findPrecedingToken(node.pos, sourceFile, node.parent),
+                        classDeclaration.members.length ? classDeclaration.members[0]
+                            : classDeclaration.getLastToken(sourceFile),
+                    );
 
                 case SyntaxKind.CaseBlock:
                     return spanInNodeIfStartsOnSameLine(node.parent.parent, (node.parent as CaseBlock).clauses[0]);
@@ -667,7 +719,10 @@ export function spanInSourceFileAtLocation(sourceFile: SourceFile, position: num
             switch (node.parent.kind) {
                 case SyntaxKind.ModuleBlock:
                     // If this is not an instantiated module block, no bp span
-                    if (getModuleInstanceState(node.parent.parent as ModuleDeclaration) !== ModuleInstanceState.Instantiated) {
+                    if (
+                        getModuleInstanceState(node.parent.parent as ModuleDeclaration) !==
+                            ModuleInstanceState.Instantiated
+                    ) {
                         return undefined;
                     }
                     // falls through

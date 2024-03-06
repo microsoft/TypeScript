@@ -72,7 +72,9 @@ const actions = {
 
 registerRefactor(refactorName, {
     kinds: getOwnValues(actions).map(a => a.kind),
-    getAvailableActions: function getRefactorActionsToConvertBetweenNamedAndNamespacedImports(context): readonly ApplicableRefactorInfo[] {
+    getAvailableActions: function getRefactorActionsToConvertBetweenNamedAndNamespacedImports(
+        context,
+    ): readonly ApplicableRefactorInfo[] {
         const info = getImportConversionInfo(context, context.triggerReason === "invoked");
         if (!info) return emptyArray;
 
@@ -91,7 +93,10 @@ registerRefactor(refactorName, {
 
         return emptyArray;
     },
-    getEditsForAction: function getRefactorEditsToConvertBetweenNamedAndNamespacedImports(context, actionName): RefactorEditInfo {
+    getEditsForAction: function getRefactorEditsToConvertBetweenNamedAndNamespacedImports(
+        context,
+        actionName,
+    ): RefactorEditInfo {
         Debug.assert(some(getOwnValues(actions), action => action.name === actionName), "Unexpected action name");
         const info = getImportConversionInfo(context);
         Debug.assert(info && !isRefactorErrorInfo(info), "Expected applicable refactor info");
@@ -106,11 +111,15 @@ type ImportConversionInfo =
     | { convertTo: ImportKind.Namespace; import: NamedImports; }
     | { convertTo: ImportKind.Named; import: NamespaceImport; };
 
-function getImportConversionInfo(context: RefactorContext, considerPartialSpans = true): ImportConversionInfo | RefactorErrorInfo | undefined {
+function getImportConversionInfo(
+    context: RefactorContext,
+    considerPartialSpans = true,
+): ImportConversionInfo | RefactorErrorInfo | undefined {
     const { file } = context;
     const span = getRefactorContextSpan(context);
     const token = getTokenAtPosition(file, span.start);
-    const importDecl = considerPartialSpans ? findAncestor(token, isImportDeclaration) : getParentNodeInSpan(token, file, span);
+    const importDecl = considerPartialSpans ? findAncestor(token, isImportDeclaration)
+        : getParentNodeInSpan(token, file, span);
     if (!importDecl || !isImportDeclaration(importDecl)) return { error: "Selection is not an import declaration." };
 
     const end = span.start + span.length;
@@ -141,17 +150,40 @@ function getShouldUseDefault(program: Program, importClause: ImportClause) {
         && isExportEqualsModule(importClause.parent.moduleSpecifier, program.getTypeChecker());
 }
 
-function doChange(sourceFile: SourceFile, program: Program, changes: textChanges.ChangeTracker, info: ImportConversionInfo): void {
+function doChange(
+    sourceFile: SourceFile,
+    program: Program,
+    changes: textChanges.ChangeTracker,
+    info: ImportConversionInfo,
+): void {
     const checker = program.getTypeChecker();
     if (info.convertTo === ImportKind.Named) {
-        doChangeNamespaceToNamed(sourceFile, checker, changes, info.import, getAllowSyntheticDefaultImports(program.getCompilerOptions()));
+        doChangeNamespaceToNamed(
+            sourceFile,
+            checker,
+            changes,
+            info.import,
+            getAllowSyntheticDefaultImports(program.getCompilerOptions()),
+        );
     }
     else {
-        doChangeNamedToNamespaceOrDefault(sourceFile, program, changes, info.import, info.convertTo === ImportKind.Default);
+        doChangeNamedToNamespaceOrDefault(
+            sourceFile,
+            program,
+            changes,
+            info.import,
+            info.convertTo === ImportKind.Default,
+        );
     }
 }
 
-function doChangeNamespaceToNamed(sourceFile: SourceFile, checker: TypeChecker, changes: textChanges.ChangeTracker, toConvert: NamespaceImport, allowSyntheticDefaultImports: boolean): void {
+function doChangeNamespaceToNamed(
+    sourceFile: SourceFile,
+    checker: TypeChecker,
+    changes: textChanges.ChangeTracker,
+    toConvert: NamespaceImport,
+    allowSyntheticDefaultImports: boolean,
+): void {
     let usedAsNamespaceOrDefault = false;
 
     const nodesToReplace: (PropertyAccessExpression | QualifiedName)[] = [];
@@ -178,36 +210,69 @@ function doChangeNamespaceToNamed(sourceFile: SourceFile, checker: TypeChecker, 
         const exportName = getRightOfPropertyAccessOrQualifiedName(propertyAccessOrQualifiedName).text;
         let importName = exportNameToImportName.get(exportName);
         if (importName === undefined) {
-            exportNameToImportName.set(exportName, importName = conflictingNames.has(exportName) ? getUniqueName(exportName, sourceFile) : exportName);
+            exportNameToImportName.set(
+                exportName,
+                importName = conflictingNames.has(exportName) ? getUniqueName(exportName, sourceFile) : exportName,
+            );
         }
         changes.replaceNode(sourceFile, propertyAccessOrQualifiedName, factory.createIdentifier(importName));
     }
 
     const importSpecifiers: ImportSpecifier[] = [];
     exportNameToImportName.forEach((name, propertyName) => {
-        importSpecifiers.push(factory.createImportSpecifier(/*isTypeOnly*/ false, name === propertyName ? undefined : factory.createIdentifier(propertyName), factory.createIdentifier(name)));
+        importSpecifiers.push(
+            factory.createImportSpecifier(
+                /*isTypeOnly*/ false,
+                name === propertyName ? undefined : factory.createIdentifier(propertyName),
+                factory.createIdentifier(name),
+            ),
+        );
     });
 
     const importDecl = toConvert.parent.parent;
     if (usedAsNamespaceOrDefault && !allowSyntheticDefaultImports) {
         // Need to leave the namespace import alone
-        changes.insertNodeAfter(sourceFile, importDecl, updateImport(importDecl, /*defaultImportName*/ undefined, importSpecifiers));
+        changes.insertNodeAfter(
+            sourceFile,
+            importDecl,
+            updateImport(importDecl, /*defaultImportName*/ undefined, importSpecifiers),
+        );
     }
     else {
-        changes.replaceNode(sourceFile, importDecl, updateImport(importDecl, usedAsNamespaceOrDefault ? factory.createIdentifier(toConvert.name.text) : undefined, importSpecifiers));
+        changes.replaceNode(
+            sourceFile,
+            importDecl,
+            updateImport(
+                importDecl,
+                usedAsNamespaceOrDefault ? factory.createIdentifier(toConvert.name.text) : undefined,
+                importSpecifiers,
+            ),
+        );
     }
 }
 
-function getRightOfPropertyAccessOrQualifiedName(propertyAccessOrQualifiedName: PropertyAccessExpression | QualifiedName) {
-    return isPropertyAccessExpression(propertyAccessOrQualifiedName) ? propertyAccessOrQualifiedName.name : propertyAccessOrQualifiedName.right;
+function getRightOfPropertyAccessOrQualifiedName(
+    propertyAccessOrQualifiedName: PropertyAccessExpression | QualifiedName,
+) {
+    return isPropertyAccessExpression(propertyAccessOrQualifiedName) ? propertyAccessOrQualifiedName.name
+        : propertyAccessOrQualifiedName.right;
 }
 
-function getLeftOfPropertyAccessOrQualifiedName(propertyAccessOrQualifiedName: PropertyAccessExpression | QualifiedName) {
-    return isPropertyAccessExpression(propertyAccessOrQualifiedName) ? propertyAccessOrQualifiedName.expression : propertyAccessOrQualifiedName.left;
+function getLeftOfPropertyAccessOrQualifiedName(
+    propertyAccessOrQualifiedName: PropertyAccessExpression | QualifiedName,
+) {
+    return isPropertyAccessExpression(propertyAccessOrQualifiedName) ? propertyAccessOrQualifiedName.expression
+        : propertyAccessOrQualifiedName.left;
 }
 
 /** @internal */
-export function doChangeNamedToNamespaceOrDefault(sourceFile: SourceFile, program: Program, changes: textChanges.ChangeTracker, toConvert: NamedImports, shouldUseDefault = getShouldUseDefault(program, toConvert.parent)): void {
+export function doChangeNamedToNamespaceOrDefault(
+    sourceFile: SourceFile,
+    program: Program,
+    changes: textChanges.ChangeTracker,
+    toConvert: NamedImports,
+    shouldUseDefault = getShouldUseDefault(program, toConvert.parent),
+): void {
     const checker = program.getTypeChecker();
     const importDecl = toConvert.parent.parent;
     const { moduleSpecifier } = importDecl;
@@ -219,7 +284,9 @@ export function doChangeNamedToNamespaceOrDefault(sourceFile: SourceFile, progra
             toConvertSymbols.add(symbol);
         }
     });
-    const preferredName = moduleSpecifier && isStringLiteral(moduleSpecifier) ? codefix.moduleSpecifierToValidIdentifier(moduleSpecifier.text, ScriptTarget.ESNext) : "module";
+    const preferredName = moduleSpecifier && isStringLiteral(moduleSpecifier) ?
+        codefix.moduleSpecifierToValidIdentifier(moduleSpecifier.text, ScriptTarget.ESNext)
+        : "module";
     function hasNamespaceNameConflict(namedImport: ImportSpecifier): boolean {
         // We need to check if the preferred namespace name (`preferredName`) we'd like to use in the refactored code will present a name conflict.
         // A name conflict means that, in a scope where we would like to use the preferred namespace name, there already exists a symbol with that name in that scope.
@@ -246,7 +313,10 @@ export function doChangeNamedToNamespaceOrDefault(sourceFile: SourceFile, progra
     for (const element of toConvert.elements) {
         const propertyName = (element.propertyName || element.name).text;
         FindAllReferences.Core.eachSymbolReferenceInFile(element.name, checker, sourceFile, id => {
-            const access = factory.createPropertyAccessExpression(factory.createIdentifier(namespaceImportName), propertyName);
+            const access = factory.createPropertyAccessExpression(
+                factory.createIdentifier(namespaceImportName),
+                propertyName,
+            );
             if (isShorthandPropertyAssignment(id.parent)) {
                 changes.replaceNode(sourceFile, id.parent, factory.createPropertyAssignment(id.text, access));
             }
@@ -267,8 +337,20 @@ export function doChangeNamedToNamespaceOrDefault(sourceFile: SourceFile, progra
             : factory.createNamespaceImport(factory.createIdentifier(namespaceImportName)),
     );
     if (neededNamedImports.size) {
-        const newNamedImports: ImportSpecifier[] = arrayFrom(neededNamedImports.values(), element => factory.createImportSpecifier(element.isTypeOnly, element.propertyName && factory.createIdentifier(element.propertyName.text), factory.createIdentifier(element.name.text)));
-        changes.insertNodeAfter(sourceFile, toConvert.parent.parent, updateImport(importDecl, /*defaultImportName*/ undefined, newNamedImports));
+        const newNamedImports: ImportSpecifier[] = arrayFrom(
+            neededNamedImports.values(),
+            element =>
+                factory.createImportSpecifier(
+                    element.isTypeOnly,
+                    element.propertyName && factory.createIdentifier(element.propertyName.text),
+                    factory.createIdentifier(element.name.text),
+                ),
+        );
+        changes.insertNodeAfter(
+            sourceFile,
+            toConvert.parent.parent,
+            updateImport(importDecl, /*defaultImportName*/ undefined, newNamedImports),
+        );
     }
 }
 
@@ -279,6 +361,19 @@ function isExportEqualsModule(moduleSpecifier: Expression, checker: TypeChecker)
     return externalModule !== exportEquals;
 }
 
-function updateImport(old: ImportDeclaration, defaultImportName: Identifier | undefined, elements: readonly ImportSpecifier[] | undefined): ImportDeclaration {
-    return factory.createImportDeclaration(/*modifiers*/ undefined, factory.createImportClause(/*isTypeOnly*/ false, defaultImportName, elements && elements.length ? factory.createNamedImports(elements) : undefined), old.moduleSpecifier, /*attributes*/ undefined);
+function updateImport(
+    old: ImportDeclaration,
+    defaultImportName: Identifier | undefined,
+    elements: readonly ImportSpecifier[] | undefined,
+): ImportDeclaration {
+    return factory.createImportDeclaration(
+        /*modifiers*/ undefined,
+        factory.createImportClause(
+            /*isTypeOnly*/ false,
+            defaultImportName,
+            elements && elements.length ? factory.createNamedImports(elements) : undefined,
+        ),
+        old.moduleSpecifier,
+        /*attributes*/ undefined,
+    );
 }

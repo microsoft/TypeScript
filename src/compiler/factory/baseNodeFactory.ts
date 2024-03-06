@@ -39,22 +39,43 @@ export function createBaseNodeFactory(): BaseNodeFactory {
     };
 
     function createBaseSourceFileNode(kind: SyntaxKind.SourceFile): Node {
-        return new (SourceFileConstructor || (SourceFileConstructor = objectAllocator.getSourceFileConstructor()))(kind, /*pos*/ -1, /*end*/ -1);
+        return new (SourceFileConstructor || (SourceFileConstructor = objectAllocator.getSourceFileConstructor()))(
+            kind,
+            /*pos*/ -1,
+            /*end*/ -1,
+        );
     }
 
     function createBaseIdentifierNode(kind: SyntaxKind.Identifier): Node {
-        return new (IdentifierConstructor || (IdentifierConstructor = objectAllocator.getIdentifierConstructor()))(kind, /*pos*/ -1, /*end*/ -1);
+        return new (IdentifierConstructor || (IdentifierConstructor = objectAllocator.getIdentifierConstructor()))(
+            kind,
+            /*pos*/ -1,
+            /*end*/ -1,
+        );
     }
 
     function createBasePrivateIdentifierNode(kind: SyntaxKind.PrivateIdentifier): Node {
-        return new (PrivateIdentifierConstructor || (PrivateIdentifierConstructor = objectAllocator.getPrivateIdentifierConstructor()))(kind, /*pos*/ -1, /*end*/ -1);
+        return new (PrivateIdentifierConstructor ||
+            (PrivateIdentifierConstructor = objectAllocator.getPrivateIdentifierConstructor()))(
+            kind,
+            /*pos*/ -1,
+            /*end*/ -1,
+        );
     }
 
     function createBaseTokenNode(kind: SyntaxKind): Node {
-        return new (TokenConstructor || (TokenConstructor = objectAllocator.getTokenConstructor()))(kind, /*pos*/ -1, /*end*/ -1);
+        return new (TokenConstructor || (TokenConstructor = objectAllocator.getTokenConstructor()))(
+            kind,
+            /*pos*/ -1,
+            /*end*/ -1,
+        );
     }
 
     function createBaseNode(kind: SyntaxKind): Node {
-        return new (NodeConstructor || (NodeConstructor = objectAllocator.getNodeConstructor()))(kind, /*pos*/ -1, /*end*/ -1);
+        return new (NodeConstructor || (NodeConstructor = objectAllocator.getNodeConstructor()))(
+            kind,
+            /*pos*/ -1,
+            /*end*/ -1,
+        );
     }
 }

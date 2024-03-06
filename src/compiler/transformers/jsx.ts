@@ -108,7 +108,15 @@ export function transformJsx(context: TransformationContext): (x: SourceFile | B
         if (currentFileState.filenameDeclaration) {
             return currentFileState.filenameDeclaration.name;
         }
-        const declaration = factory.createVariableDeclaration(factory.createUniqueName("_jsxFileName", GeneratedIdentifierFlags.Optimistic | GeneratedIdentifierFlags.FileLevel), /*exclamationToken*/ undefined, /*type*/ undefined, factory.createStringLiteral(currentSourceFile.fileName));
+        const declaration = factory.createVariableDeclaration(
+            factory.createUniqueName(
+                "_jsxFileName",
+                GeneratedIdentifierFlags.Optimistic | GeneratedIdentifierFlags.FileLevel,
+            ),
+            /*exclamationToken*/ undefined,
+            /*type*/ undefined,
+            factory.createStringLiteral(currentSourceFile.fileName),
+        );
         currentFileState.filenameDeclaration = declaration as VariableDeclaration & { name: Identifier; };
         return currentFileState.filenameDeclaration.name;
     }
@@ -142,8 +150,16 @@ export function transformJsx(context: TransformationContext): (x: SourceFile | B
             specifierSourceImports = new Map();
             currentFileState.utilizedImplicitRuntimeImports.set(importSource, specifierSourceImports);
         }
-        const generatedName = factory.createUniqueName(`_${name}`, GeneratedIdentifierFlags.Optimistic | GeneratedIdentifierFlags.FileLevel | GeneratedIdentifierFlags.AllowNameSubstitution);
-        const specifier = factory.createImportSpecifier(/*isTypeOnly*/ false, factory.createIdentifier(name), generatedName);
+        const generatedName = factory.createUniqueName(
+            `_${name}`,
+            GeneratedIdentifierFlags.Optimistic | GeneratedIdentifierFlags.FileLevel |
+                GeneratedIdentifierFlags.AllowNameSubstitution,
+        );
+        const specifier = factory.createImportSpecifier(
+            /*isTypeOnly*/ false,
+            factory.createIdentifier(name),
+            generatedName,
+        );
         setIdentifierGeneratedImportReference(generatedName, specifier);
         specifierSourceImports.set(name, specifier);
         return generatedName;
@@ -166,13 +182,32 @@ export function transformJsx(context: TransformationContext): (x: SourceFile | B
         addEmitHelpers(visited, context.readEmitHelpers());
         let statements: readonly Statement[] = visited.statements;
         if (currentFileState.filenameDeclaration) {
-            statements = insertStatementAfterCustomPrologue(statements.slice(), factory.createVariableStatement(/*modifiers*/ undefined, factory.createVariableDeclarationList([currentFileState.filenameDeclaration], NodeFlags.Const)));
+            statements = insertStatementAfterCustomPrologue(
+                statements.slice(),
+                factory.createVariableStatement(
+                    /*modifiers*/ undefined,
+                    factory.createVariableDeclarationList([currentFileState.filenameDeclaration], NodeFlags.Const),
+                ),
+            );
         }
         if (currentFileState.utilizedImplicitRuntimeImports) {
-            for (const [importSource, importSpecifiersMap] of arrayFrom(currentFileState.utilizedImplicitRuntimeImports.entries())) {
+            for (
+                const [importSource, importSpecifiersMap] of arrayFrom(
+                    currentFileState.utilizedImplicitRuntimeImports.entries(),
+                )
+            ) {
                 if (isExternalModule(node)) {
                     // Add `import` statement
-                    const importStatement = factory.createImportDeclaration(/*modifiers*/ undefined, factory.createImportClause(/*isTypeOnly*/ false, /*name*/ undefined, factory.createNamedImports(arrayFrom(importSpecifiersMap.values()))), factory.createStringLiteral(importSource), /*attributes*/ undefined);
+                    const importStatement = factory.createImportDeclaration(
+                        /*modifiers*/ undefined,
+                        factory.createImportClause(
+                            /*isTypeOnly*/ false,
+                            /*name*/ undefined,
+                            factory.createNamedImports(arrayFrom(importSpecifiersMap.values())),
+                        ),
+                        factory.createStringLiteral(importSource),
+                        /*attributes*/ undefined,
+                    );
                     setParentRecursive(importStatement, /*incremental*/ false);
                     statements = insertStatementAfterCustomPrologue(statements.slice(), importStatement);
                 }
@@ -182,10 +217,25 @@ export function transformJsx(context: TransformationContext): (x: SourceFile | B
                         /*modifiers*/ undefined,
                         factory.createVariableDeclarationList([
                             factory.createVariableDeclaration(
-                                factory.createObjectBindingPattern(arrayFrom(importSpecifiersMap.values(), s => factory.createBindingElement(/*dotDotDotToken*/ undefined, s.propertyName, s.name))),
+                                factory.createObjectBindingPattern(
+                                    arrayFrom(
+                                        importSpecifiersMap.values(),
+                                        s => factory.createBindingElement(
+                                            /*dotDotDotToken*/ undefined,
+                                            s.propertyName,
+                                            s.name,
+                                        ),
+                                    ),
+                                ),
                                 /*exclamationToken*/ undefined,
                                 /*type*/ undefined,
-                                factory.createCallExpression(factory.createIdentifier("require"), /*typeArguments*/ undefined, [factory.createStringLiteral(importSource)]),
+                                factory.createCallExpression(
+                                    factory.createIdentifier("require"),
+                                    /*typeArguments*/ undefined,
+                                    [
+                                        factory.createStringLiteral(importSource),
+                                    ],
+                                ),
                             ),
                         ], NodeFlags.Const),
                     );
@@ -257,7 +307,8 @@ export function transformJsx(context: TransformationContext): (x: SourceFile | B
     function hasProto(obj: ObjectLiteralExpression) {
         return obj.properties.some(p =>
             isPropertyAssignment(p) &&
-            (isIdentifier(p.name) && idText(p.name) === "__proto__" || isStringLiteral(p.name) && p.name.text === "__proto__")
+            (isIdentifier(p.name) && idText(p.name) === "__proto__" ||
+                isStringLiteral(p.name) && p.name.text === "__proto__")
         );
     }
 
@@ -267,7 +318,10 @@ export function transformJsx(context: TransformationContext): (x: SourceFile | B
     function hasKeyAfterPropsSpread(node: JsxOpeningLikeElement) {
         let spread = false;
         for (const elem of node.attributes.properties) {
-            if (isJsxSpreadAttribute(elem) && (!isObjectLiteralExpression(elem.expression) || elem.expression.properties.some(isSpreadAssignment))) {
+            if (
+                isJsxSpreadAttribute(elem) &&
+                (!isObjectLiteralExpression(elem.expression) || elem.expression.properties.some(isSpreadAssignment))
+            ) {
                 spread = true;
             }
             else if (spread && isJsxAttribute(elem) && isIdentifier(elem.name) && elem.name.escapedText === "key") {
@@ -282,17 +336,20 @@ export function transformJsx(context: TransformationContext): (x: SourceFile | B
     }
 
     function visitJsxElement(node: JsxElement, isChild: boolean) {
-        const tagTransform = shouldUseCreateElement(node.openingElement) ? visitJsxOpeningLikeElementCreateElement : visitJsxOpeningLikeElementJSX;
+        const tagTransform = shouldUseCreateElement(node.openingElement) ? visitJsxOpeningLikeElementCreateElement
+            : visitJsxOpeningLikeElementJSX;
         return tagTransform(node.openingElement, node.children, isChild, /*location*/ node);
     }
 
     function visitJsxSelfClosingElement(node: JsxSelfClosingElement, isChild: boolean) {
-        const tagTransform = shouldUseCreateElement(node) ? visitJsxOpeningLikeElementCreateElement : visitJsxOpeningLikeElementJSX;
+        const tagTransform = shouldUseCreateElement(node) ? visitJsxOpeningLikeElementCreateElement
+            : visitJsxOpeningLikeElementJSX;
         return tagTransform(node, /*children*/ undefined, isChild, /*location*/ node);
     }
 
     function visitJsxFragment(node: JsxFragment, isChild: boolean) {
-        const tagTransform = currentFileState.importSpecifier === undefined ? visitJsxOpeningFragmentCreateElement : visitJsxOpeningFragmentJSX;
+        const tagTransform = currentFileState.importSpecifier === undefined ? visitJsxOpeningFragmentCreateElement
+            : visitJsxOpeningFragmentJSX;
         return tagTransform(node.openingFragment, node.children, isChild, /*location*/ node);
     }
 
@@ -308,13 +365,26 @@ export function transformJsx(context: TransformationContext): (x: SourceFile | B
             return result && factory.createPropertyAssignment("children", result);
         }
         const result = mapDefined(children, transformJsxChildToExpression);
-        return length(result) ? factory.createPropertyAssignment("children", factory.createArrayLiteralExpression(result)) : undefined;
+        return length(result) ?
+            factory.createPropertyAssignment("children", factory.createArrayLiteralExpression(result))
+            : undefined;
     }
 
-    function visitJsxOpeningLikeElementJSX(node: JsxOpeningLikeElement, children: readonly JsxChild[] | undefined, isChild: boolean, location: TextRange) {
+    function visitJsxOpeningLikeElementJSX(
+        node: JsxOpeningLikeElement,
+        children: readonly JsxChild[] | undefined,
+        isChild: boolean,
+        location: TextRange,
+    ) {
         const tagName = getTagName(node);
-        const childrenProp = children && children.length ? convertJsxChildrenToChildrenPropAssignment(children) : undefined;
-        const keyAttr = find(node.attributes.properties, p => !!p.name && isIdentifier(p.name) && p.name.escapedText === "key") as JsxAttribute | undefined;
+        const childrenProp = children && children.length ? convertJsxChildrenToChildrenPropAssignment(children)
+            : undefined;
+        const keyAttr = find(
+            node.attributes.properties,
+            p => !!p.name && isIdentifier(p.name) && p.name.escapedText === "key",
+        ) as
+            | JsxAttribute
+            | undefined;
         const attrs = keyAttr ? filter(node.attributes.properties, p => p !== keyAttr) : node.attributes.properties;
         const objectProperties = length(attrs) ? transformJsxAttributesToObjectProps(attrs, childrenProp) :
             factory.createObjectLiteralExpression(childrenProp ? [childrenProp] : emptyArray); // When there are no attributes, React wants {}
@@ -337,7 +407,8 @@ export function transformJsx(context: TransformationContext): (x: SourceFile | B
         location: TextRange,
     ) {
         const nonWhitespaceChildren = getSemanticJsxChildren(children);
-        const isStaticChildren = length(nonWhitespaceChildren) > 1 || !!(nonWhitespaceChildren[0] as JsxExpression)?.dotDotDotToken;
+        const isStaticChildren = length(nonWhitespaceChildren) > 1 ||
+            !!(nonWhitespaceChildren[0] as JsxExpression)?.dotDotDotToken;
         const args: Expression[] = [tagName, objectProperties];
         // function jsx(type, config, maybeKey) {}
         // "maybeKey" is optional. It is acceptable to use "_jsx" without a third argument
@@ -358,7 +429,10 @@ export function transformJsx(context: TransformationContext): (x: SourceFile | B
                 args.push(factory.createObjectLiteralExpression([
                     factory.createPropertyAssignment("fileName", getCurrentFileNameExpression()),
                     factory.createPropertyAssignment("lineNumber", factory.createNumericLiteral(lineCol.line + 1)),
-                    factory.createPropertyAssignment("columnNumber", factory.createNumericLiteral(lineCol.character + 1)),
+                    factory.createPropertyAssignment(
+                        "columnNumber",
+                        factory.createNumericLiteral(lineCol.character + 1),
+                    ),
                 ]));
                 // __self development flag
                 args.push(factory.createThis());
@@ -377,7 +451,12 @@ export function transformJsx(context: TransformationContext): (x: SourceFile | B
         return element;
     }
 
-    function visitJsxOpeningLikeElementCreateElement(node: JsxOpeningLikeElement, children: readonly JsxChild[] | undefined, isChild: boolean, location: TextRange) {
+    function visitJsxOpeningLikeElementCreateElement(
+        node: JsxOpeningLikeElement,
+        children: readonly JsxChild[] | undefined,
+        isChild: boolean,
+        location: TextRange,
+    ) {
         const tagName = getTagName(node);
         const attrs = node.attributes.properties;
         const objectProperties = length(attrs) ? transformJsxAttributesToObjectProps(attrs) :
@@ -408,7 +487,12 @@ export function transformJsx(context: TransformationContext): (x: SourceFile | B
         return element;
     }
 
-    function visitJsxOpeningFragmentJSX(_node: JsxOpeningFragment, children: readonly JsxChild[], isChild: boolean, location: TextRange) {
+    function visitJsxOpeningFragmentJSX(
+        _node: JsxOpeningFragment,
+        children: readonly JsxChild[],
+        isChild: boolean,
+        location: TextRange,
+    ) {
         let childrenProps: Expression | undefined;
         if (children && children.length) {
             const result = convertJsxChildrenToChildrenPropObject(children);
@@ -426,7 +510,12 @@ export function transformJsx(context: TransformationContext): (x: SourceFile | B
         );
     }
 
-    function visitJsxOpeningFragmentCreateElement(node: JsxOpeningFragment, children: readonly JsxChild[], isChild: boolean, location: TextRange) {
+    function visitJsxOpeningFragmentCreateElement(
+        node: JsxOpeningFragment,
+        children: readonly JsxChild[],
+        isChild: boolean,
+        location: TextRange,
+    ) {
         const element = createExpressionForJsxFragment(
             factory,
             context.getEmitResolver().getJsxFactoryEntity(currentSourceFile),
@@ -446,26 +535,50 @@ export function transformJsx(context: TransformationContext): (x: SourceFile | B
 
     function transformJsxSpreadAttributeToProps(node: JsxSpreadAttribute) {
         if (isObjectLiteralExpression(node.expression) && !hasProto(node.expression)) {
-            return sameMap(node.expression.properties, p => Debug.checkDefined(visitNode(p, visitor, isObjectLiteralElementLike)));
+            return sameMap(
+                node.expression.properties,
+                p => Debug.checkDefined(visitNode(p, visitor, isObjectLiteralElementLike)),
+            );
         }
         return factory.createSpreadAssignment(Debug.checkDefined(visitNode(node.expression, visitor, isExpression)));
     }
 
-    function transformJsxAttributesToObjectProps(attrs: readonly (JsxSpreadAttribute | JsxAttribute)[], children?: PropertyAssignment) {
+    function transformJsxAttributesToObjectProps(
+        attrs: readonly (JsxSpreadAttribute | JsxAttribute)[],
+        children?: PropertyAssignment,
+    ) {
         const target = getEmitScriptTarget(compilerOptions);
-        return target && target >= ScriptTarget.ES2018 ? factory.createObjectLiteralExpression(transformJsxAttributesToProps(attrs, children)) :
+        return target && target >= ScriptTarget.ES2018 ?
+            factory.createObjectLiteralExpression(transformJsxAttributesToProps(attrs, children)) :
             transformJsxAttributesToExpression(attrs, children);
     }
 
-    function transformJsxAttributesToProps(attrs: readonly (JsxSpreadAttribute | JsxAttribute)[], children?: PropertyAssignment) {
-        const props = flatten(spanMap(attrs, isJsxSpreadAttribute, (attrs, isSpread) => flatten(map(attrs, attr => isSpread ? transformJsxSpreadAttributeToProps(attr as JsxSpreadAttribute) : transformJsxAttributeToObjectLiteralElement(attr as JsxAttribute)))));
+    function transformJsxAttributesToProps(
+        attrs: readonly (JsxSpreadAttribute | JsxAttribute)[],
+        children?: PropertyAssignment,
+    ) {
+        const props = flatten(
+            spanMap(
+                attrs,
+                isJsxSpreadAttribute,
+                (attrs, isSpread) =>
+                    flatten(
+                        map(attrs, attr =>
+                            isSpread ? transformJsxSpreadAttributeToProps(attr as JsxSpreadAttribute)
+                                : transformJsxAttributeToObjectLiteralElement(attr as JsxAttribute)),
+                    ),
+            ),
+        );
         if (children) {
             props.push(children);
         }
         return props;
     }
 
-    function transformJsxAttributesToExpression(attrs: readonly (JsxSpreadAttribute | JsxAttribute)[], children?: PropertyAssignment) {
+    function transformJsxAttributesToExpression(
+        attrs: readonly (JsxSpreadAttribute | JsxAttribute)[],
+        children?: PropertyAssignment,
+    ) {
         const expressions: Expression[] = [];
         let properties: ObjectLiteralElementLike[] = [];
 
@@ -527,7 +640,8 @@ export function transformJsx(context: TransformationContext): (x: SourceFile | B
         if (node.kind === SyntaxKind.StringLiteral) {
             // Always recreate the literal to escape any escape sequences or newlines which may be in the original jsx string and which
             // Need to be escaped to be handled correctly in a normal string
-            const singleQuote = node.singleQuote !== undefined ? node.singleQuote : !isStringDoubleQuoted(node, currentSourceFile);
+            const singleQuote = node.singleQuote !== undefined ? node.singleQuote
+                : !isStringDoubleQuoted(node, currentSourceFile);
             const literal = factory.createStringLiteral(tryDecodeEntities(node.text) || node.text, singleQuote);
             return setTextRange(literal, node);
         }
@@ -585,7 +699,10 @@ export function transformJsx(context: TransformationContext): (x: SourceFile | B
                 // If we've seen any non-whitespace characters on this line, add the 'trim' of the line.
                 // (lastNonWhitespace === -1 is a special flag to detect whether the first line is all whitespace.)
                 if (firstNonWhitespace !== -1 && lastNonWhitespace !== -1) {
-                    acc = addLineOfJsxText(acc, text.substr(firstNonWhitespace, lastNonWhitespace - firstNonWhitespace + 1));
+                    acc = addLineOfJsxText(
+                        acc,
+                        text.substr(firstNonWhitespace, lastNonWhitespace - firstNonWhitespace + 1),
+                    );
                 }
 
                 // Reset firstNonWhitespace for the next line.
@@ -619,19 +736,22 @@ export function transformJsx(context: TransformationContext): (x: SourceFile | B
      * See https://en.wikipedia.org/wiki/List_of_XML_and_HTML_character_entity_references
      */
     function decodeEntities(text: string): string {
-        return text.replace(/&((#((\d+)|x([\da-fA-F]+)))|(\w+));/g, (match, _all, _number, _digits, decimal, hex, word) => {
-            if (decimal) {
-                return utf16EncodeAsString(parseInt(decimal, 10));
-            }
-            else if (hex) {
-                return utf16EncodeAsString(parseInt(hex, 16));
-            }
-            else {
-                const ch = entities.get(word);
-                // If this is not a valid entity, then just use `match` (replace it with itself, i.e. don't replace)
-                return ch ? utf16EncodeAsString(ch) : match;
-            }
-        });
+        return text.replace(
+            /&((#((\d+)|x([\da-fA-F]+)))|(\w+));/g,
+            (match, _all, _number, _digits, decimal, hex, word) => {
+                if (decimal) {
+                    return utf16EncodeAsString(parseInt(decimal, 10));
+                }
+                else if (hex) {
+                    return utf16EncodeAsString(parseInt(hex, 16));
+                }
+                else {
+                    const ch = entities.get(word);
+                    // If this is not a valid entity, then just use `match` (replace it with itself, i.e. don't replace)
+                    return ch ? utf16EncodeAsString(ch) : match;
+                }
+            },
+        );
     }
 
     /** Like `decodeEntities` but returns `undefined` if there were no entities to decode. */

@@ -33,8 +33,14 @@ for (const symbolName of symbolNames) {
     }
 }
 
-export function evaluateTypeScript(source: string | { files: vfs.FileSet; rootFiles: string[]; main: string; }, options?: ts.CompilerOptions, globals?: Record<string, any>) {
-    if (typeof source === "string") source = { files: { [sourceFile]: source }, rootFiles: [sourceFile], main: sourceFile };
+export function evaluateTypeScript(
+    source: string | { files: vfs.FileSet; rootFiles: string[]; main: string; },
+    options?: ts.CompilerOptions,
+    globals?: Record<string, any>,
+) {
+    if (typeof source === "string") {
+        source = { files: { [sourceFile]: source }, rootFiles: [sourceFile], main: sourceFile };
+    }
     const fs = vfs.createFromFileSystem(Harness.IO, /*ignoreCase*/ false, { files: source.files });
     const compilerOptions: ts.CompilerOptions = {
         target: ts.ScriptTarget.ES5,
@@ -68,7 +74,11 @@ export function evaluateJavaScript(sourceText: string, globals?: Record<string, 
     return new CommonJsLoader(fs, globals).import(sourceFile);
 }
 
-function getLoader(compilerOptions: ts.CompilerOptions, fs: vfs.FileSystem, globals: Record<string, any>): Loader<unknown> {
+function getLoader(
+    compilerOptions: ts.CompilerOptions,
+    fs: vfs.FileSystem,
+    globals: Record<string, any>,
+): Loader<unknown> {
     const moduleKind = ts.getEmitModuleKind(compilerOptions);
     switch (moduleKind) {
         case ts.ModuleKind.UMD:
@@ -189,10 +199,27 @@ class CommonJsLoader extends Loader<CommonJSModule> {
         }
         const base = vpath.dirname(file);
         const localRequire = (id: string) => this.import(id, base);
-        const evaluateText = `(function (module, exports, require, __dirname, __filename, ${globalNames.join(", ")}) { ${text}\n})`;
+        const evaluateText = `(function (module, exports, require, __dirname, __filename, ${
+            globalNames.join(", ")
+        }) { ${text}\n})`;
         // eslint-disable-next-line no-eval
-        const evaluateThunk = (void 0, eval)(evaluateText) as (module: any, exports: any, require: (id: string) => any, dirname: string, filename: string, ...globalArgs: any[]) => void;
-        evaluateThunk.call(this.globals, module, module.exports, localRequire, vpath.dirname(file), file, ...globalArgs);
+        const evaluateThunk = (void 0, eval)(evaluateText) as (
+            module: any,
+            exports: any,
+            require: (id: string) => any,
+            dirname: string,
+            filename: string,
+            ...globalArgs: any[]
+        ) => void;
+        evaluateThunk.call(
+            this.globals,
+            module,
+            module.exports,
+            localRequire,
+            vpath.dirname(file),
+            file,
+            ...globalArgs,
+        );
     }
 }
 
@@ -237,7 +264,10 @@ interface SystemModuleContext {
     meta: any;
 }
 
-type SystemModuleRegisterCallback = (exporter: SystemModuleExporter, context: SystemModuleContext) => SystemModuleDeclaration;
+type SystemModuleRegisterCallback = (
+    exporter: SystemModuleExporter,
+    context: SystemModuleContext,
+) => SystemModuleDeclaration;
 type SystemModuleDependencySetter = (dependency: any) => void;
 
 interface SystemModuleDeclaration {
@@ -311,7 +341,11 @@ class SystemLoader extends Loader<SystemModule> {
         }
     }
 
-    private instantiateModule(module: SystemModule, dependencies: string[], registration?: SystemModuleRegisterCallback) {
+    private instantiateModule(
+        module: SystemModule,
+        dependencies: string[],
+        registration?: SystemModuleRegisterCallback,
+    ) {
         function exporter<T>(name: string, value: T): T;
         function exporter<T>(value: T): T;
         function exporter<T>(...args: [string, T] | [T]) {
@@ -337,7 +371,10 @@ class SystemLoader extends Loader<SystemModule> {
                 throw new Error("Dynamic import not implemented.");
             },
             meta: {
-                url: ts.isUrl(module.file) ? module.file : `file:///${ts.normalizeSlashes(module.file).replace(/^\//, "").split("/").map(encodeURIComponent).join("/")}`,
+                url: ts.isUrl(module.file) ? module.file
+                    : `file:///${
+                        ts.normalizeSlashes(module.file).replace(/^\//, "").split("/").map(encodeURIComponent).join("/")
+                    }`,
             },
         };
 
@@ -517,9 +554,15 @@ type AmdDefineArgsUnnamedModuleNoDependencies = [declare: AmdModuleDeclaration];
 type AmdDefineArgsUnnamedModule = [dependencies: string[], declare: AmdModuleDeclaration];
 type AmdDefineArgsNamedModuleNoDependencies = [id: string, declare: AmdModuleDeclaration];
 type AmdDefineArgsNamedModule = [id: string, dependencies: string[], declare: AmdModuleDeclaration];
-type AmdDefineArgs = AmdDefineArgsUnnamedModuleNoDependencies | AmdDefineArgsUnnamedModule | AmdDefineArgsNamedModuleNoDependencies | AmdDefineArgsNamedModule;
+type AmdDefineArgs =
+    | AmdDefineArgsUnnamedModuleNoDependencies
+    | AmdDefineArgsUnnamedModule
+    | AmdDefineArgsNamedModuleNoDependencies
+    | AmdDefineArgsNamedModule;
 
-function isAmdDefineArgsUnnamedModuleNoDependencies(args: AmdDefineArgs): args is AmdDefineArgsUnnamedModuleNoDependencies {
+function isAmdDefineArgsUnnamedModuleNoDependencies(
+    args: AmdDefineArgs,
+): args is AmdDefineArgsUnnamedModuleNoDependencies {
     return args.length === 1;
 }
 

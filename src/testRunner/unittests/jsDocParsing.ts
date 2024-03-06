@@ -9,7 +9,10 @@ describe("unittests:: JSDocParsing", () => {
                 const typeAndDiagnostics = ts.parseJSDocTypeExpressionForTests(content);
                 assert.isTrue(typeAndDiagnostics && typeAndDiagnostics.diagnostics.length === 0, "no errors issued");
 
-                Harness.Baseline.runBaseline("JSDocParsing/TypeExpressions.parsesCorrectly." + name + ".json", Utils.sourceFileToJSON(typeAndDiagnostics!.jsDocTypeExpression.type));
+                Harness.Baseline.runBaseline(
+                    "JSDocParsing/TypeExpressions.parsesCorrectly." + name + ".json",
+                    Utils.sourceFileToJSON(typeAndDiagnostics!.jsDocTypeExpression.type),
+                );
             });
         }
 
@@ -98,7 +101,14 @@ describe("unittests:: JSDocParsing", () => {
                     ts.Debug.fail("Comment has at least one diagnostic: " + comment.diagnostics[0].messageText);
                 }
 
-                Harness.Baseline.runBaseline("JSDocParsing/DocComments.parsesCorrectly." + name + ".json", JSON.stringify(comment.jsDoc, (_, v) => v && v.pos !== undefined ? JSON.parse(Utils.sourceFileToJSON(v)) : v, 4));
+                Harness.Baseline.runBaseline(
+                    "JSDocParsing/DocComments.parsesCorrectly." + name + ".json",
+                    JSON.stringify(
+                        comment.jsDoc,
+                        (_, v) => v && v.pos !== undefined ? JSON.parse(Utils.sourceFileToJSON(v)) : v,
+                        4,
+                    ),
+                );
             });
         }
 
@@ -486,7 +496,12 @@ oh.no
     });
     describe("getFirstToken", () => {
         it("gets jsdoc", () => {
-            const root = ts.createSourceFile("foo.ts", "/** comment */var a = true;", ts.ScriptTarget.ES5, /*setParentNodes*/ true);
+            const root = ts.createSourceFile(
+                "foo.ts",
+                "/** comment */var a = true;",
+                ts.ScriptTarget.ES5,
+                /*setParentNodes*/ true,
+            );
             assert.isDefined(root);
             assert.equal(root.kind, ts.SyntaxKind.SourceFile);
             const first = root.getFirstToken();
@@ -496,7 +511,12 @@ oh.no
     });
     describe("getLastToken", () => {
         it("gets jsdoc", () => {
-            const root = ts.createSourceFile("foo.ts", "var a = true;/** comment */", ts.ScriptTarget.ES5, /*setParentNodes*/ true);
+            const root = ts.createSourceFile(
+                "foo.ts",
+                "var a = true;/** comment */",
+                ts.ScriptTarget.ES5,
+                /*setParentNodes*/ true,
+            );
             assert.isDefined(root);
             const last = root.getLastToken();
             assert.isDefined(last);
@@ -505,7 +525,12 @@ oh.no
     });
     describe("getStart", () => {
         it("runs when node with JSDoc but no parent pointers", () => {
-            const root = ts.createSourceFile("foo.ts", "/** */var a = true;", ts.ScriptTarget.ES5, /*setParentNodes*/ false);
+            const root = ts.createSourceFile(
+                "foo.ts",
+                "/** */var a = true;",
+                ts.ScriptTarget.ES5,
+                /*setParentNodes*/ false,
+            );
             root.statements[0].getStart(root, /*includeJsDocComment*/ true);
         });
     });

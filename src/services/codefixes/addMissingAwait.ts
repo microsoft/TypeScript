@@ -69,8 +69,12 @@ const errorCodes = [
     Diagnostics.This_condition_will_always_return_true_since_this_0_is_always_defined.code,
     Diagnostics.Type_0_is_not_an_array_type.code,
     Diagnostics.Type_0_is_not_an_array_type_or_a_string_type.code,
-    Diagnostics.Type_0_can_only_be_iterated_through_when_using_the_downlevelIteration_flag_or_with_a_target_of_es2015_or_higher.code,
-    Diagnostics.Type_0_is_not_an_array_type_or_a_string_type_or_does_not_have_a_Symbol_iterator_method_that_returns_an_iterator.code,
+    Diagnostics
+        .Type_0_can_only_be_iterated_through_when_using_the_downlevelIteration_flag_or_with_a_target_of_es2015_or_higher
+        .code,
+    Diagnostics
+        .Type_0_is_not_an_array_type_or_a_string_type_or_does_not_have_a_Symbol_iterator_method_that_returns_an_iterator
+        .code,
     Diagnostics.Type_0_is_not_an_array_type_or_does_not_have_a_Symbol_iterator_method_that_returns_an_iterator.code,
     Diagnostics.Type_0_must_have_a_Symbol_iterator_method_that_returns_an_iterator.code,
     Diagnostics.Type_0_must_have_a_Symbol_asyncIterator_method_that_returns_an_async_iterator.code,
@@ -101,7 +105,13 @@ registerCodeFix({
         const checker = context.program.getTypeChecker();
         const fixedDeclarations = new Set<number>();
         return codeFixAll(context, errorCodes, (t, diagnostic) => {
-            const expression = getAwaitErrorSpanExpression(sourceFile, diagnostic.code, diagnostic, cancellationToken, program);
+            const expression = getAwaitErrorSpanExpression(
+                sourceFile,
+                diagnostic.code,
+                diagnostic,
+                cancellationToken,
+                program,
+            );
             if (!expression) {
                 return;
             }
@@ -112,19 +122,41 @@ registerCodeFix({
     },
 });
 
-function getAwaitErrorSpanExpression(sourceFile: SourceFile, errorCode: number, span: TextSpan, cancellationToken: CancellationToken, program: Program) {
+function getAwaitErrorSpanExpression(
+    sourceFile: SourceFile,
+    errorCode: number,
+    span: TextSpan,
+    cancellationToken: CancellationToken,
+    program: Program,
+) {
     const expression = getFixableErrorSpanExpression(sourceFile, span);
     return expression
             && isMissingAwaitError(sourceFile, errorCode, span, cancellationToken, program)
             && isInsideAwaitableBody(expression) ? expression : undefined;
 }
 
-function getDeclarationSiteFix(context: CodeFixContext | CodeFixAllContext, expression: Expression, errorCode: number, checker: TypeChecker, trackChanges: ContextualTrackChangesFunction, fixedDeclarations?: Set<number>) {
+function getDeclarationSiteFix(
+    context: CodeFixContext | CodeFixAllContext,
+    expression: Expression,
+    errorCode: number,
+    checker: TypeChecker,
+    trackChanges: ContextualTrackChangesFunction,
+    fixedDeclarations?: Set<number>,
+) {
     const { sourceFile, program, cancellationToken } = context;
-    const awaitableInitializers = findAwaitableInitializers(expression, sourceFile, cancellationToken, program, checker);
+    const awaitableInitializers = findAwaitableInitializers(
+        expression,
+        sourceFile,
+        cancellationToken,
+        program,
+        checker,
+    );
     if (awaitableInitializers) {
         const initializerChanges = trackChanges(t => {
-            forEach(awaitableInitializers.initializers, ({ expression }) => makeChange(t, errorCode, sourceFile, checker, expression, fixedDeclarations));
+            forEach(
+                awaitableInitializers.initializers,
+                ({ expression }) => makeChange(t, errorCode, sourceFile, checker, expression, fixedDeclarations),
+            );
             if (fixedDeclarations && awaitableInitializers.needsSecondPassForFixAll) {
                 makeChange(t, errorCode, sourceFile, checker, expression, fixedDeclarations);
             }
@@ -135,25 +167,52 @@ function getDeclarationSiteFix(context: CodeFixContext | CodeFixAllContext, expr
             "addMissingAwaitToInitializer",
             initializerChanges,
             awaitableInitializers.initializers.length === 1
-                ? [Diagnostics.Add_await_to_initializer_for_0, awaitableInitializers.initializers[0].declarationSymbol.name]
+                ? [
+                    Diagnostics.Add_await_to_initializer_for_0,
+                    awaitableInitializers.initializers[0].declarationSymbol.name,
+                ]
                 : Diagnostics.Add_await_to_initializers,
         );
     }
 }
 
-function getUseSiteFix(context: CodeFixContext | CodeFixAllContext, expression: Expression, errorCode: number, checker: TypeChecker, trackChanges: ContextualTrackChangesFunction, fixedDeclarations?: Set<number>) {
-    const changes = trackChanges(t => makeChange(t, errorCode, context.sourceFile, checker, expression, fixedDeclarations));
-    return createCodeFixAction(fixId, changes, Diagnostics.Add_await, fixId, Diagnostics.Fix_all_expressions_possibly_missing_await);
+function getUseSiteFix(
+    context: CodeFixContext | CodeFixAllContext,
+    expression: Expression,
+    errorCode: number,
+    checker: TypeChecker,
+    trackChanges: ContextualTrackChangesFunction,
+    fixedDeclarations?: Set<number>,
+) {
+    const changes = trackChanges(t =>
+        makeChange(t, errorCode, context.sourceFile, checker, expression, fixedDeclarations)
+    );
+    return createCodeFixAction(
+        fixId,
+        changes,
+        Diagnostics.Add_await,
+        fixId,
+        Diagnostics.Fix_all_expressions_possibly_missing_await,
+    );
 }
 
-function isMissingAwaitError(sourceFile: SourceFile, errorCode: number, span: TextSpan, cancellationToken: CancellationToken, program: Program) {
+function isMissingAwaitError(
+    sourceFile: SourceFile,
+    errorCode: number,
+    span: TextSpan,
+    cancellationToken: CancellationToken,
+    program: Program,
+) {
     const checker = program.getTypeChecker();
     const diagnostics = checker.getDiagnostics(sourceFile, cancellationToken);
-    return some(diagnostics, ({ start, length, relatedInformation, code }) =>
-        isNumber(start) && isNumber(length) && textSpansEqual({ start, length }, span) &&
-        code === errorCode &&
-        !!relatedInformation &&
-        some(relatedInformation, related => related.code === Diagnostics.Did_you_forget_to_use_await.code));
+    return some(
+        diagnostics,
+        ({ start, length, relatedInformation, code }) =>
+            isNumber(start) && isNumber(length) && textSpansEqual({ start, length }, span) &&
+            code === errorCode &&
+            !!relatedInformation &&
+            some(relatedInformation, related => related.code === Diagnostics.Did_you_forget_to_use_await.code),
+    );
 }
 
 interface AwaitableInitializer {
@@ -203,9 +262,15 @@ function findAwaitableInitializers(
         }
 
         const diagnostics = program.getSemanticDiagnostics(sourceFile, cancellationToken);
-        const isUsedElsewhere = FindAllReferences.Core.eachSymbolReferenceInFile(variableName, checker, sourceFile, reference => {
-            return identifier !== reference && !symbolReferenceIsAlsoMissingAwait(reference, diagnostics, sourceFile, checker);
-        });
+        const isUsedElsewhere = FindAllReferences.Core.eachSymbolReferenceInFile(
+            variableName,
+            checker,
+            sourceFile,
+            reference => {
+                return identifier !== reference &&
+                    !symbolReferenceIsAlsoMissingAwait(reference, diagnostics, sourceFile, checker);
+            },
+        );
 
         if (isUsedElsewhere) {
             isCompleteFix = false;
@@ -252,7 +317,12 @@ function getIdentifiersFromErrorSpanExpression(expression: Node, checker: TypeCh
     }
 }
 
-function symbolReferenceIsAlsoMissingAwait(reference: Identifier, diagnostics: readonly Diagnostic[], sourceFile: SourceFile, checker: TypeChecker) {
+function symbolReferenceIsAlsoMissingAwait(
+    reference: Identifier,
+    diagnostics: readonly Diagnostic[],
+    sourceFile: SourceFile,
+    checker: TypeChecker,
+) {
     const errorNode = isPropertyAccessExpression(reference.parent) ? reference.parent.name :
         isBinaryExpression(reference.parent) ? reference.parent :
         reference;
@@ -272,23 +342,44 @@ function symbolReferenceIsAlsoMissingAwait(reference: Identifier, diagnostics: r
 }
 
 function isInsideAwaitableBody(node: Node) {
-    return node.flags & NodeFlags.AwaitContext || !!findAncestor(node, ancestor =>
-        ancestor.parent && isArrowFunction(ancestor.parent) && ancestor.parent.body === ancestor ||
-        isBlock(ancestor) && (
-                ancestor.parent.kind === SyntaxKind.FunctionDeclaration ||
-                ancestor.parent.kind === SyntaxKind.FunctionExpression ||
-                ancestor.parent.kind === SyntaxKind.ArrowFunction ||
-                ancestor.parent.kind === SyntaxKind.MethodDeclaration
-            ));
+    return node.flags & NodeFlags.AwaitContext ||
+        !!findAncestor(
+            node,
+            ancestor =>
+                ancestor.parent && isArrowFunction(ancestor.parent) && ancestor.parent.body === ancestor ||
+                isBlock(ancestor) && (
+                        ancestor.parent.kind === SyntaxKind.FunctionDeclaration ||
+                        ancestor.parent.kind === SyntaxKind.FunctionExpression ||
+                        ancestor.parent.kind === SyntaxKind.ArrowFunction ||
+                        ancestor.parent.kind === SyntaxKind.MethodDeclaration
+                    ),
+        );
 }
 
-function makeChange(changeTracker: textChanges.ChangeTracker, errorCode: number, sourceFile: SourceFile, checker: TypeChecker, insertionSite: Expression, fixedDeclarations?: Set<number>) {
+function makeChange(
+    changeTracker: textChanges.ChangeTracker,
+    errorCode: number,
+    sourceFile: SourceFile,
+    checker: TypeChecker,
+    insertionSite: Expression,
+    fixedDeclarations?: Set<number>,
+) {
     if (isForOfStatement(insertionSite.parent) && !insertionSite.parent.awaitModifier) {
         const exprType = checker.getTypeAtLocation(insertionSite);
         const asyncIter = checker.getAsyncIterableType();
         if (asyncIter && checker.isTypeAssignableTo(exprType, asyncIter)) {
             const forOf = insertionSite.parent;
-            changeTracker.replaceNode(sourceFile, forOf, factory.updateForOfStatement(forOf, factory.createToken(SyntaxKind.AwaitKeyword), forOf.initializer, forOf.expression, forOf.statement));
+            changeTracker.replaceNode(
+                sourceFile,
+                forOf,
+                factory.updateForOfStatement(
+                    forOf,
+                    factory.createToken(SyntaxKind.AwaitKeyword),
+                    forOf.initializer,
+                    forOf.expression,
+                    forOf.statement,
+                ),
+            );
             return;
         }
     }
@@ -326,11 +417,17 @@ function makeChange(changeTracker: textChanges.ChangeTracker, errorCode: number,
                 return;
             }
         }
-        changeTracker.replaceNode(sourceFile, insertionSite, factory.createParenthesizedExpression(factory.createAwaitExpression(insertionSite)));
+        changeTracker.replaceNode(
+            sourceFile,
+            insertionSite,
+            factory.createParenthesizedExpression(factory.createAwaitExpression(insertionSite)),
+        );
         insertLeadingSemicolonIfNeeded(changeTracker, insertionSite, sourceFile);
     }
     else {
-        if (fixedDeclarations && isVariableDeclaration(insertionSite.parent) && isIdentifier(insertionSite.parent.name)) {
+        if (
+            fixedDeclarations && isVariableDeclaration(insertionSite.parent) && isIdentifier(insertionSite.parent.name)
+        ) {
             const symbol = checker.getSymbolAtLocation(insertionSite.parent.name);
             if (symbol && !tryAddToSet(fixedDeclarations, getSymbolId(symbol))) {
                 return;
@@ -340,7 +437,11 @@ function makeChange(changeTracker: textChanges.ChangeTracker, errorCode: number,
     }
 }
 
-function insertLeadingSemicolonIfNeeded(changeTracker: textChanges.ChangeTracker, beforeNode: Node, sourceFile: SourceFile) {
+function insertLeadingSemicolonIfNeeded(
+    changeTracker: textChanges.ChangeTracker,
+    beforeNode: Node,
+    sourceFile: SourceFile,
+) {
     const precedingToken = findPrecedingToken(beforeNode.pos, sourceFile);
     if (precedingToken && positionIsASICandidate(precedingToken.end, precedingToken.parent, sourceFile)) {
         changeTracker.insertText(sourceFile, beforeNode.getStart(sourceFile), ";");

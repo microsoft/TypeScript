@@ -74,7 +74,10 @@ export function Test2() {
         host.writeFile(unitTest1.path, unitTest1WithChangedContent.content);
         host.runQueuedTimeoutCallbacks();
 
-        openFilesForSession([{ file: unitTest1WithChangedContent, content: unitTest1WithChangedContent.content }], session);
+        openFilesForSession(
+            [{ file: unitTest1WithChangedContent, content: unitTest1WithChangedContent.content }],
+            session,
+        );
 
         session.executeCommandSeq<ts.server.protocol.FileRequest>({
             command: ts.server.protocol.CommandTypes.NavBarFull,

@@ -16,7 +16,10 @@ describe("unittests:: tsc-watch:: libraryResolution", () => {
         return ["-w", ...getCommandLineArgsForLibResolution(withoutConfig), "--extendedDiagnostics"];
     }
 
-    function editOptions(withoutConfig: true | undefined, changeLib: (sys: TscWatchSystem) => void): TscWatchCompileChange[] {
+    function editOptions(
+        withoutConfig: true | undefined,
+        changeLib: (sys: TscWatchSystem) => void,
+    ): TscWatchCompileChange[] {
         return withoutConfig ? [] : [
             {
                 caption: "change program options to update module resolution",
@@ -63,7 +66,11 @@ describe("unittests:: tsc-watch:: libraryResolution", () => {
             edits: [
                 {
                     caption: "write redirect file dom",
-                    edit: sys => sys.ensureFileOrFolder({ path: "/home/src/projects/node_modules/@typescript/lib-dom/index.d.ts", content: "interface DOMInterface { }" }),
+                    edit: sys =>
+                        sys.ensureFileOrFolder({
+                            path: "/home/src/projects/node_modules/@typescript/lib-dom/index.d.ts",
+                            content: "interface DOMInterface { }",
+                        }),
                     timeouts: sys => {
                         sys.runQueuedTimeoutCallbacks();
                         sys.runQueuedTimeoutCallbacks();
@@ -84,10 +91,21 @@ describe("unittests:: tsc-watch:: libraryResolution", () => {
                     edit: sys => sys.deleteFile("/home/src/projects/node_modules/@typescript/lib-dom/index.d.ts"),
                     timeouts: sys => sys.runQueuedTimeoutCallbacks(),
                 },
-                ...editOptions(withoutConfig, sys => sys.ensureFileOrFolder({ path: "/home/src/projects/node_modules/@typescript/lib-dom/index.d.ts", content: "interface DOMInterface { }" })),
+                ...editOptions(
+                    withoutConfig,
+                    sys =>
+                        sys.ensureFileOrFolder({
+                            path: "/home/src/projects/node_modules/@typescript/lib-dom/index.d.ts",
+                            content: "interface DOMInterface { }",
+                        }),
+                ),
                 {
                     caption: "write redirect file webworker",
-                    edit: sys => sys.ensureFileOrFolder({ path: "/home/src/projects/node_modules/@typescript/lib-webworker/index.d.ts", content: "interface WebworkerInterface { }" }),
+                    edit: sys =>
+                        sys.ensureFileOrFolder({
+                            path: "/home/src/projects/node_modules/@typescript/lib-webworker/index.d.ts",
+                            content: "interface WebworkerInterface { }",
+                        }),
                     timeouts: sys => {
                         sys.runQueuedTimeoutCallbacks();
                         sys.runQueuedTimeoutCallbacks();
@@ -124,13 +142,20 @@ describe("unittests:: tsc-watch:: libraryResolution", () => {
                 },
                 {
                     caption: "write redirect file dom",
-                    edit: sys => sys.ensureFileOrFolder({ path: "/home/src/projects/node_modules/@typescript/lib-dom/index.d.ts", content: "interface DOMInterface { }" }),
+                    edit: sys =>
+                        sys.ensureFileOrFolder({
+                            path: "/home/src/projects/node_modules/@typescript/lib-dom/index.d.ts",
+                            content: "interface DOMInterface { }",
+                        }),
                     timeouts: sys => {
                         sys.runQueuedTimeoutCallbacks();
                         sys.runQueuedTimeoutCallbacks();
                     },
                 },
-                ...editOptions(withoutConfig, sys => sys.deleteFile("/home/src/projects/node_modules/@typescript/lib-dom/index.d.ts")),
+                ...editOptions(
+                    withoutConfig,
+                    sys => sys.deleteFile("/home/src/projects/node_modules/@typescript/lib-dom/index.d.ts"),
+                ),
                 {
                     caption: "delete redirect file webworker",
                     edit: sys => sys.deleteFile("/home/src/projects/node_modules/@typescript/lib-webworker/index.d.ts"),
@@ -138,7 +163,11 @@ describe("unittests:: tsc-watch:: libraryResolution", () => {
                 },
                 {
                     caption: "write redirect file webworker",
-                    edit: sys => sys.ensureFileOrFolder({ path: "/home/src/projects/node_modules/@typescript/lib-webworker/index.d.ts", content: "interface WebworkerInterface { }" }),
+                    edit: sys =>
+                        sys.ensureFileOrFolder({
+                            path: "/home/src/projects/node_modules/@typescript/lib-webworker/index.d.ts",
+                            content: "interface WebworkerInterface { }",
+                        }),
                     timeouts: sys => {
                         sys.runQueuedTimeoutCallbacks();
                         sys.runQueuedTimeoutCallbacks();

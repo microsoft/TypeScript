@@ -16,9 +16,18 @@ import {
 
 function checkDeclarationFiles(file: File, session: TestSession): void {
     openFilesForSession([file], session);
-    const project = ts.Debug.checkDefined(session.getProjectService().getDefaultProjectForFile(file.path as ts.server.NormalizedPath, /*ensureProject*/ false));
+    const project = ts.Debug.checkDefined(
+        session.getProjectService().getDefaultProjectForFile(
+            file.path as ts.server.NormalizedPath,
+            /*ensureProject*/ false,
+        ),
+    );
     const program = project.getCurrentProgram()!;
-    const output = ts.getFileEmitOutput(program, ts.Debug.checkDefined(program.getSourceFile(file.path)), /*emitOnlyDtsFiles*/ true);
+    const output = ts.getFileEmitOutput(
+        program,
+        ts.Debug.checkDefined(program.getSourceFile(file.path)),
+        /*emitOnlyDtsFiles*/ true,
+    );
     session.logger.log(`ts.getFileEmitOutput: ${file.path}: ${jsonToReadableText(output)}`);
     closeFilesForSession([file], session);
 }
@@ -52,7 +61,8 @@ describe("unittests:: tsserver:: with declaration file maps:: project references
     const aDts: File = {
         path: "/a/bin/a.d.ts",
         // ${""} is needed to mangle the sourceMappingURL part or it breaks the build
-        content: `export declare function fnA(): void;\nexport interface IfaceA {\n}\nexport declare const instanceA: IfaceA;\n//# source${""}MappingURL=a.d.ts.map`,
+        content:
+            `export declare function fnA(): void;\nexport interface IfaceA {\n}\nexport declare const instanceA: IfaceA;\n//# source${""}MappingURL=a.d.ts.map`,
     };
 
     const bTs: File = {
@@ -86,12 +96,14 @@ describe("unittests:: tsserver:: with declaration file maps:: project references
 
     const userTs: File = {
         path: "/user/user.ts",
-        content: 'import * as a from "../a/bin/a";\nimport * as b from "../b/bin/b";\nexport function fnUser() { a.fnA(); b.fnB(); a.instanceA; }',
+        content:
+            'import * as a from "../a/bin/a";\nimport * as b from "../b/bin/b";\nexport function fnUser() { a.fnA(); b.fnB(); a.instanceA; }',
     };
 
     const userTsForConfigProject: File = {
         path: "/user/user.ts",
-        content: 'import * as a from "../a/a";\nimport * as b from "../b/b";\nexport function fnUser() { a.fnA(); b.fnB(); a.instanceA; }',
+        content:
+            'import * as a from "../a/a";\nimport * as b from "../b/b";\nexport function fnUser() { a.fnA(); b.fnB(); a.instanceA; }',
     };
 
     const userTsconfig: File = {
@@ -103,7 +115,18 @@ describe("unittests:: tsserver:: with declaration file maps:: project references
     };
 
     function makeSampleProjects(addUserTsConfig?: boolean, keepAllFiles?: boolean) {
-        const host = createServerHost([aTs, aTsconfig, aDtsMap, aDts, bTsconfig, bTs, bDtsMap, bDts, ...(addUserTsConfig ? [userTsForConfigProject, userTsconfig] : [userTs]), dummyFile]);
+        const host = createServerHost([
+            aTs,
+            aTsconfig,
+            aDtsMap,
+            aDts,
+            bTsconfig,
+            bTs,
+            bDtsMap,
+            bDts,
+            ...(addUserTsConfig ? [userTsForConfigProject, userTsconfig] : [userTs]),
+            dummyFile,
+        ]);
         const session = new TestSession(host);
 
         checkDeclarationFiles(aTs, session);
@@ -270,14 +293,29 @@ describe("unittests:: tsserver:: with declaration file maps:: project references
         const aTs: File = { path: "/a/a.ts", content: `function f() {}` };
         const aTsconfig: File = {
             path: "/a/tsconfig.json",
-            content: jsonToReadableText({ compilerOptions: { declaration: true, declarationMap: true, outFile: "../bin/a.js" } }),
+            content: jsonToReadableText({
+                compilerOptions: { declaration: true, declarationMap: true, outFile: "../bin/a.js" },
+            }),
         };
         const bTs: File = { path: "/b/b.ts", content: `f();` };
-        const bTsconfig: File = { path: "/b/tsconfig.json", content: jsonToReadableText({ references: [{ path: "../a" }] }) };
-        const aDts: File = { path: "/bin/a.d.ts", content: `declare function f(): void;\n//# sourceMappingURL=a.d.ts.map` };
+        const bTsconfig: File = {
+            path: "/b/tsconfig.json",
+            content: jsonToReadableText({ references: [{ path: "../a" }] }),
+        };
+        const aDts: File = {
+            path: "/bin/a.d.ts",
+            content: `declare function f(): void;\n//# sourceMappingURL=a.d.ts.map`,
+        };
         const aDtsMap: File = {
             path: "/bin/a.d.ts.map",
-            content: jsonToReadableText({ version: 3, file: "a.d.ts", sourceRoot: "", sources: ["../a/a.ts"], names: [], mappings: "AAAA,iBAAS,CAAC,SAAK" }),
+            content: jsonToReadableText({
+                version: 3,
+                file: "a.d.ts",
+                sourceRoot: "",
+                sources: ["../a/a.ts"],
+                names: [],
+                mappings: "AAAA,iBAAS,CAAC,SAAK",
+            }),
         };
 
         const host = createServerHost([aTs, aTsconfig, bTs, bTsconfig, aDts, aDtsMap]);
@@ -392,7 +430,11 @@ describe("unittests:: tsserver:: with declaration file maps:: project references
                 newFilePath: "/a/src/a1.ts",
             },
         });
-        baselineTsserverLogs("declarationFileMaps", "getEditsForFileRename when referencing project doesnt include file and its renamed", session);
+        baselineTsserverLogs(
+            "declarationFileMaps",
+            "getEditsForFileRename when referencing project doesnt include file and its renamed",
+            session,
+        );
     });
 
     it("does not jump to source if inlined sources", () => {

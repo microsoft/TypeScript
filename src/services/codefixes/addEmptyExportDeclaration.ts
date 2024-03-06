@@ -10,9 +10,15 @@ import {
 
 registerCodeFix({
     errorCodes: [
-        Diagnostics.await_expressions_are_only_allowed_at_the_top_level_of_a_file_when_that_file_is_a_module_but_this_file_has_no_imports_or_exports_Consider_adding_an_empty_export_to_make_this_file_a_module.code,
-        Diagnostics.await_using_statements_are_only_allowed_at_the_top_level_of_a_file_when_that_file_is_a_module_but_this_file_has_no_imports_or_exports_Consider_adding_an_empty_export_to_make_this_file_a_module.code,
-        Diagnostics.for_await_loops_are_only_allowed_at_the_top_level_of_a_file_when_that_file_is_a_module_but_this_file_has_no_imports_or_exports_Consider_adding_an_empty_export_to_make_this_file_a_module.code,
+        Diagnostics
+            .await_expressions_are_only_allowed_at_the_top_level_of_a_file_when_that_file_is_a_module_but_this_file_has_no_imports_or_exports_Consider_adding_an_empty_export_to_make_this_file_a_module
+            .code,
+        Diagnostics
+            .await_using_statements_are_only_allowed_at_the_top_level_of_a_file_when_that_file_is_a_module_but_this_file_has_no_imports_or_exports_Consider_adding_an_empty_export_to_make_this_file_a_module
+            .code,
+        Diagnostics
+            .for_await_loops_are_only_allowed_at_the_top_level_of_a_file_when_that_file_is_a_module_but_this_file_has_no_imports_or_exports_Consider_adding_an_empty_export_to_make_this_file_a_module
+            .code,
     ],
     getCodeActions: function getCodeActionsToAddEmptyExportDeclaration(context) {
         const { sourceFile } = context;
@@ -25,6 +31,12 @@ registerCodeFix({
             );
             changes.insertNodeAtEndOfScope(sourceFile, sourceFile, exportDeclaration);
         });
-        return [createCodeFixActionWithoutFixAll("addEmptyExportDeclaration", changes, Diagnostics.Add_export_to_make_this_file_into_a_module)];
+        return [
+            createCodeFixActionWithoutFixAll(
+                "addEmptyExportDeclaration",
+                changes,
+                Diagnostics.Add_export_to_make_this_file_into_a_module,
+            ),
+        ];
     },
 });

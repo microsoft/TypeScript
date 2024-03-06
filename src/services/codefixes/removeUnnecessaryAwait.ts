@@ -30,7 +30,15 @@ registerCodeFix({
     getCodeActions: function getCodeActionsToRemoveUnnecessaryAwait(context) {
         const changes = textChanges.ChangeTracker.with(context, t => makeChange(t, context.sourceFile, context.span));
         if (changes.length > 0) {
-            return [createCodeFixAction(fixId, changes, Diagnostics.Remove_unnecessary_await, fixId, Diagnostics.Remove_all_unnecessary_uses_of_await)];
+            return [
+                createCodeFixAction(
+                    fixId,
+                    changes,
+                    Diagnostics.Remove_unnecessary_await,
+                    fixId,
+                    Diagnostics.Remove_all_unnecessary_uses_of_await,
+                ),
+            ];
         }
     },
     fixIds: [fixId],
@@ -40,7 +48,10 @@ registerCodeFix({
 });
 
 function makeChange(changeTracker: textChanges.ChangeTracker, sourceFile: SourceFile, span: TextSpan) {
-    const awaitKeyword = tryCast(getTokenAtPosition(sourceFile, span.start), (node): node is AwaitKeyword => node.kind === SyntaxKind.AwaitKeyword);
+    const awaitKeyword = tryCast(
+        getTokenAtPosition(sourceFile, span.start),
+        (node): node is AwaitKeyword => node.kind === SyntaxKind.AwaitKeyword,
+    );
     const awaitExpression = awaitKeyword && tryCast(awaitKeyword.parent, isAwaitExpression);
     if (!awaitExpression) {
         return;

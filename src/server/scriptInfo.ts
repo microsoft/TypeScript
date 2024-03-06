@@ -273,7 +273,9 @@ export class TextStorage {
             if (fileSize > maxFileSize) {
                 Debug.assert(!!this.info.containingProjects.length);
                 const service = this.info.containingProjects[0].projectService;
-                service.logger.info(`Skipped loading contents of large file ${fileName} for info ${this.info.fileName}: fileSize: ${fileSize}`);
+                service.logger.info(
+                    `Skipped loading contents of large file ${fileName} for info ${this.info.fileName}: fileSize: ${fileSize}`,
+                );
                 this.info.containingProjects[0].projectService.sendLargeFileReferencedEvent(fileName, fileSize);
                 return { text: "", fileSize };
             }
@@ -312,7 +314,10 @@ export class TextStorage {
 
     private getOrLoadText() {
         if (this.text === undefined || this.pendingReloadFromDisk) {
-            Debug.assert(!this.svc || this.pendingReloadFromDisk, "ScriptVersionCache should not be set when reloading from disk");
+            Debug.assert(
+                !this.svc || this.pendingReloadFromDisk,
+                "ScriptVersionCache should not be set when reloading from disk",
+            );
             this.reloadWithFileText();
         }
         return this.text!;
@@ -547,7 +552,11 @@ export class ScriptInfo {
     detachAllProjects() {
         for (const p of this.containingProjects) {
             if (isConfiguredProject(p)) {
-                p.getCachedDirectoryStructureHost().addOrDeleteFile(this.fileName, this.path, FileWatcherEventKind.Deleted);
+                p.getCachedDirectoryStructureHost().addOrDeleteFile(
+                    this.fileName,
+                    this.path,
+                    FileWatcherEventKind.Deleted,
+                );
             }
             const existingRoot = p.getRootFilesMap().get(this.path);
             // detach is unnecessary since we'll clean the list of containing projects anyways
@@ -590,10 +599,13 @@ export class ScriptInfo {
                                 defaultConfiguredProject === undefined &&
                                 index !== this.containingProjects.length - 1
                             ) {
-                                defaultConfiguredProject = project.projectService.findDefaultConfiguredProject(this) || false;
+                                defaultConfiguredProject = project.projectService.findDefaultConfiguredProject(this) ||
+                                    false;
                             }
                             if (defaultConfiguredProject === project) return project;
-                            if (!firstNonSourceOfProjectReferenceRedirect) firstNonSourceOfProjectReferenceRedirect = project;
+                            if (!firstNonSourceOfProjectReferenceRedirect) {
+                                firstNonSourceOfProjectReferenceRedirect = project;
+                            }
                         }
                         if (!firstConfiguredProject) firstConfiguredProject = project;
                     }

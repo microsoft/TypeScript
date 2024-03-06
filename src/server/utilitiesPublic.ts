@@ -41,10 +41,17 @@ export enum Msg {
     Perf = "Perf",
 }
 
-export function createInstallTypingsRequest(project: Project, typeAcquisition: TypeAcquisition, unresolvedImports: SortedReadonlyArray<string>, cachePath?: string): DiscoverTypings {
+export function createInstallTypingsRequest(
+    project: Project,
+    typeAcquisition: TypeAcquisition,
+    unresolvedImports: SortedReadonlyArray<string>,
+    cachePath?: string,
+): DiscoverTypings {
     return {
         projectName: project.getProjectName(),
-        fileNames: project.getFileNames(/*excludeFilesFromExternalLibraries*/ true, /*excludeConfigFiles*/ true).concat(project.getExcludedFiles() as NormalizedPath[]),
+        fileNames: project.getFileNames(/*excludeFilesFromExternalLibraries*/ true, /*excludeConfigFiles*/ true).concat(
+            project.getExcludedFiles() as NormalizedPath[],
+        ),
         compilerOptions: project.getCompilationSettings(),
         typeAcquisition,
         unresolvedImports,
@@ -72,8 +79,13 @@ export function toNormalizedPath(fileName: string): NormalizedPath {
     return normalizePath(fileName) as NormalizedPath;
 }
 
-export function normalizedPathToPath(normalizedPath: NormalizedPath, currentDirectory: string, getCanonicalFileName: (f: string) => string): Path {
-    const f = isRootedDiskPath(normalizedPath) ? normalizedPath : getNormalizedAbsolutePath(normalizedPath, currentDirectory);
+export function normalizedPathToPath(
+    normalizedPath: NormalizedPath,
+    currentDirectory: string,
+    getCanonicalFileName: (f: string) => string,
+): Path {
+    const f = isRootedDiskPath(normalizedPath) ? normalizedPath
+        : getNormalizedAbsolutePath(normalizedPath, currentDirectory);
     return getCanonicalFileName(f) as Path;
 }
 

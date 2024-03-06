@@ -54,7 +54,8 @@ function main() {
     // Ensure we are actually changing something - the user probably wants to know that the update failed.
     if (tsFileContents === modifiedTsFileContents) {
         let err = `\n  '${tsFilePath}' was not updated while configuring for a prerelease publish for '${tag}'.\n    `;
-        err += `Ensure that you have not already run this script; otherwise, erase your changes using 'git checkout -- "${tsFilePath}"'.`;
+        err +=
+            `Ensure that you have not already run this script; otherwise, erase your changes using 'git checkout -- "${tsFilePath}"'.`;
         throw new Error(err + "\n");
     }
 
@@ -78,19 +79,31 @@ function main() {
 function updateTsFile(tsFilePath, tsFileContents, majorMinor, patch, nightlyPatch) {
     const majorMinorRgx = /export const versionMajorMinor = "(\d+\.\d+)"/;
     const majorMinorMatch = majorMinorRgx.exec(tsFileContents);
-    assert(majorMinorMatch !== null, `The file '${tsFilePath}' seems to no longer have a string matching '${majorMinorRgx}'.`);
+    assert(
+        majorMinorMatch !== null,
+        `The file '${tsFilePath}' seems to no longer have a string matching '${majorMinorRgx}'.`,
+    );
     const parsedMajorMinor = majorMinorMatch[1];
-    assert(parsedMajorMinor === majorMinor, `versionMajorMinor does not match. ${tsFilePath}: '${parsedMajorMinor}'; package.json: '${majorMinor}'`);
+    assert(
+        parsedMajorMinor === majorMinor,
+        `versionMajorMinor does not match. ${tsFilePath}: '${parsedMajorMinor}'; package.json: '${majorMinor}'`,
+    );
 
     const versionRgx = /export const version(?:: string)? = `\$\{versionMajorMinor\}\.(\d)(-\w+)?`;/;
     const patchMatch = versionRgx.exec(tsFileContents);
-    assert(patchMatch !== null, `The file '${tsFilePath}' seems to no longer have a string matching '${versionRgx.toString()}'.`);
+    assert(
+        patchMatch !== null,
+        `The file '${tsFilePath}' seems to no longer have a string matching '${versionRgx.toString()}'.`,
+    );
     const parsedPatch = patchMatch[1];
     if (parsedPatch !== patch) {
         throw new Error(`patch does not match. ${tsFilePath}: '${parsedPatch}; package.json: '${patch}'`);
     }
 
-    return tsFileContents.replace(versionRgx, `export const version: string = \`\${versionMajorMinor}.${nightlyPatch}\`;`);
+    return tsFileContents.replace(
+        versionRgx,
+        `export const version: string = \`\${versionMajorMinor}.${nightlyPatch}\`;`,
+    );
 }
 
 /**

@@ -22,12 +22,21 @@ export function createSolutionBuilderHostForBaseline(
 ) {
     if (sys instanceof fakes.System) makeSystemReadyForBaseline(sys, versionToWrite);
     const { cb } = commandLineCallbacks(sys, originalRead);
-    const host = ts.createSolutionBuilderHost(sys, /*createProgram*/ undefined, ts.createDiagnosticReporter(sys, /*pretty*/ true), ts.createBuilderStatusReporter(sys, /*pretty*/ true));
+    const host = ts.createSolutionBuilderHost(
+        sys,
+        /*createProgram*/ undefined,
+        ts.createDiagnosticReporter(sys, /*pretty*/ true),
+        ts.createBuilderStatusReporter(sys, /*pretty*/ true),
+    );
     host.afterProgramEmitAndDiagnostics = cb;
     return host;
 }
 
-export function createSolutionBuilder(system: TestServerHost, rootNames: readonly string[], originalRead?: TestServerHost["readFile"]) {
+export function createSolutionBuilder(
+    system: TestServerHost,
+    rootNames: readonly string[],
+    originalRead?: TestServerHost["readFile"],
+) {
     const host = createSolutionBuilderHostForBaseline(system, /*versionToWrite*/ undefined, originalRead);
     return ts.createSolutionBuilder(host, rootNames, {});
 }
@@ -38,7 +47,11 @@ export function ensureErrorFreeBuild(host: TestServerHost, rootNames: readonly s
     assert.equal(host.getOutput().length, 0, jsonToReadableText(host.getOutput()));
 }
 
-export function solutionBuildWithBaseline(sys: TestServerHost, solutionRoots: readonly string[], originalRead?: TestServerHost["readFile"]) {
+export function solutionBuildWithBaseline(
+    sys: TestServerHost,
+    solutionRoots: readonly string[],
+    originalRead?: TestServerHost["readFile"],
+) {
     const originalReadFile = sys.readFile;
     const originalWrite = sys.write;
     const originalWriteFile = sys.writeFile;

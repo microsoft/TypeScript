@@ -35,9 +35,15 @@ import {
 const addOptionalPropertyUndefined = "addOptionalPropertyUndefined";
 
 const errorCodes = [
-    Diagnostics.Type_0_is_not_assignable_to_type_1_with_exactOptionalPropertyTypes_Colon_true_Consider_adding_undefined_to_the_type_of_the_target.code,
-    Diagnostics.Type_0_is_not_assignable_to_type_1_with_exactOptionalPropertyTypes_Colon_true_Consider_adding_undefined_to_the_types_of_the_target_s_properties.code,
-    Diagnostics.Argument_of_type_0_is_not_assignable_to_parameter_of_type_1_with_exactOptionalPropertyTypes_Colon_true_Consider_adding_undefined_to_the_types_of_the_target_s_properties.code,
+    Diagnostics
+        .Type_0_is_not_assignable_to_type_1_with_exactOptionalPropertyTypes_Colon_true_Consider_adding_undefined_to_the_type_of_the_target
+        .code,
+    Diagnostics
+        .Type_0_is_not_assignable_to_type_1_with_exactOptionalPropertyTypes_Colon_true_Consider_adding_undefined_to_the_types_of_the_target_s_properties
+        .code,
+    Diagnostics
+        .Argument_of_type_0_is_not_assignable_to_parameter_of_type_1_with_exactOptionalPropertyTypes_Colon_true_Consider_adding_undefined_to_the_types_of_the_target_s_properties
+        .code,
 ];
 
 registerCodeFix({
@@ -49,7 +55,13 @@ registerCodeFix({
             return undefined;
         }
         const changes = textChanges.ChangeTracker.with(context, t => addUndefinedToOptionalProperty(t, toAdd));
-        return [createCodeFixActionWithoutFixAll(addOptionalPropertyUndefined, changes, Diagnostics.Add_undefined_to_optional_property_type)];
+        return [
+            createCodeFixActionWithoutFixAll(
+                addOptionalPropertyUndefined,
+                changes,
+                Diagnostics.Add_undefined_to_optional_property_type,
+            ),
+        ];
     },
     fixIds: [addOptionalPropertyUndefined],
 });
@@ -69,7 +81,11 @@ function getPropertiesToAdd(file: SourceFile, span: TextSpan, checker: TypeCheck
     return checker.getExactOptionalProperties(target);
 }
 
-function shouldUseParentTypeOfProperty(sourceNode: Node, targetNode: Node, checker: TypeChecker): targetNode is PropertyAccessExpression {
+function shouldUseParentTypeOfProperty(
+    sourceNode: Node,
+    targetNode: Node,
+    checker: TypeChecker,
+): targetNode is PropertyAccessExpression {
     return isPropertyAccessExpression(targetNode)
         && !!checker.getExactOptionalProperties(checker.getTypeAtLocation(targetNode.expression)).length
         && checker.getTypeAtLocation(sourceNode) === checker.getUndefinedType();
@@ -79,7 +95,10 @@ function shouldUseParentTypeOfProperty(sourceNode: Node, targetNode: Node, check
  * Find the source and target of the incorrect assignment.
  * The call is recursive for property assignments.
  */
-function getSourceTarget(errorNode: Node | undefined, checker: TypeChecker): { source: Node; target: Node; } | undefined {
+function getSourceTarget(
+    errorNode: Node | undefined,
+    checker: TypeChecker,
+): { source: Node; target: Node; } | undefined {
     if (!errorNode) {
         return undefined;
     }
@@ -104,7 +123,10 @@ function getSourceTarget(errorNode: Node | undefined, checker: TypeChecker): { s
     ) {
         const parentTarget = getSourceTarget(errorNode.parent.parent, checker);
         if (!parentTarget) return undefined;
-        const prop = checker.getPropertyOfType(checker.getTypeAtLocation(parentTarget.target), (errorNode.parent.name as Identifier).text);
+        const prop = checker.getPropertyOfType(
+            checker.getTypeAtLocation(parentTarget.target),
+            (errorNode.parent.name as Identifier).text,
+        );
         const declaration = prop?.declarations?.[0];
         if (!declaration) return undefined;
         return {

@@ -123,7 +123,10 @@ describe("unittests:: tsc:: builder cancellationToken", () => {
             noChange("Clean build");
             baselineCleanBuild();
 
-            Harness.Baseline.runBaseline(`tsc/cancellationToken/${scenario.split(" ").join("-")}.js`, baseline.join("\r\n"));
+            Harness.Baseline.runBaseline(
+                `tsc/cancellationToken/${scenario.split(" ").join("-")}.js`,
+                baseline.join("\r\n"),
+            );
 
             function noChange(caption: string) {
                 applyEdit(sys, baseline, ts.noop, caption);

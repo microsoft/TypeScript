@@ -42,7 +42,9 @@ describe("unittests:: TransformAPI", () => {
         return (file: ts.SourceFile) => ts.visitNode(file, visitor, ts.isSourceFile);
     }
 
-    function replaceIdentifiersNamedOldNameWithNewName<T extends ts.SourceFile | ts.Bundle>(context: ts.TransformationContext) {
+    function replaceIdentifiersNamedOldNameWithNewName<T extends ts.SourceFile | ts.Bundle>(
+        context: ts.TransformationContext,
+    ) {
         const previousOnSubstituteNode = context.onSubstituteNode;
         context.enableSubstitution(ts.SyntaxKind.Identifier);
         context.onSubstituteNode = (hint, node) => {
@@ -79,7 +81,10 @@ describe("unittests:: TransformAPI", () => {
     }
 
     function transformSourceFile(sourceText: string, transformers: ts.TransformerFactory<ts.SourceFile>[]) {
-        const transformed = ts.transform(ts.createSourceFile("source.ts", sourceText, ts.ScriptTarget.ES2015), transformers);
+        const transformed = ts.transform(
+            ts.createSourceFile("source.ts", sourceText, ts.ScriptTarget.ES2015),
+            transformers,
+        );
         const printer = ts.createPrinter({ newLine: ts.NewLineKind.CarriageReturnLineFeed }, {
             onEmitNode: transformed.emitNodeWithNotification,
             substituteNode: transformed.substituteNode,
@@ -264,8 +269,18 @@ describe("unittests:: TransformAPI", () => {
                 const result = ts.factory.updateSourceFile(
                     sourceFile,
                     ts.factory.createNodeArray([
-                        ts.factory.createClassDeclaration(/*modifiers*/ undefined, "Foo", /*typeParameters*/ undefined, /*heritageClauses*/ undefined, /*members*/ undefined!), // TODO: GH#18217
-                        ts.factory.createModuleDeclaration(/*modifiers*/ undefined, ts.factory.createIdentifier("Foo"), ts.factory.createModuleBlock([ts.factory.createEmptyStatement()])),
+                        ts.factory.createClassDeclaration(
+                            /*modifiers*/ undefined,
+                            "Foo",
+                            /*typeParameters*/ undefined,
+                            /*heritageClauses*/ undefined,
+                            /*members*/ undefined!,
+                        ), // TODO: GH#18217
+                        ts.factory.createModuleDeclaration(
+                            /*modifiers*/ undefined,
+                            ts.factory.createIdentifier("Foo"),
+                            ts.factory.createModuleBlock([ts.factory.createEmptyStatement()]),
+                        ),
                     ]),
                 );
                 return result;
@@ -307,9 +322,18 @@ describe("unittests:: TransformAPI", () => {
                     if (node.kind === ts.SyntaxKind.ExportDeclaration) {
                         const ed = node as ts.Node as ts.ExportDeclaration;
                         const exports = [{ name: "x" }];
-                        const exportSpecifiers = exports.map(e => ts.factory.createExportSpecifier(/*isTypeOnly*/ false, e.name, e.name));
+                        const exportSpecifiers = exports.map(e =>
+                            ts.factory.createExportSpecifier(/*isTypeOnly*/ false, e.name, e.name)
+                        );
                         const exportClause = ts.factory.createNamedExports(exportSpecifiers);
-                        const newEd = ts.factory.updateExportDeclaration(ed, ed.modifiers, ed.isTypeOnly, exportClause, ed.moduleSpecifier, ed.attributes);
+                        const newEd = ts.factory.updateExportDeclaration(
+                            ed,
+                            ed.modifiers,
+                            ed.isTypeOnly,
+                            exportClause,
+                            ed.moduleSpecifier,
+                            ed.attributes,
+                        );
 
                         return newEd as ts.Node as T;
                     }
@@ -373,9 +397,24 @@ describe("unittests:: TransformAPI", () => {
             };
             function visitNode(sf: ts.SourceFile) {
                 // produce `class Foo { @Bar baz() {} }`;
-                const classDecl = ts.factory.createClassDeclaration(/*modifiers*/ undefined, "Foo", /*typeParameters*/ undefined, /*heritageClauses*/ undefined, [
-                    ts.factory.createMethodDeclaration([ts.factory.createDecorator(ts.factory.createIdentifier("Bar"))], /*asteriskToken*/ undefined, "baz", /*questionToken*/ undefined, /*typeParameters*/ undefined, [], /*type*/ undefined, ts.factory.createBlock([])),
-                ]);
+                const classDecl = ts.factory.createClassDeclaration(
+                    /*modifiers*/ undefined,
+                    "Foo",
+                    /*typeParameters*/ undefined,
+                    /*heritageClauses*/ undefined,
+                    [
+                        ts.factory.createMethodDeclaration(
+                            [ts.factory.createDecorator(ts.factory.createIdentifier("Bar"))],
+                            /*asteriskToken*/ undefined,
+                            "baz",
+                            /*questionToken*/ undefined,
+                            /*typeParameters*/ undefined,
+                            [],
+                            /*type*/ undefined,
+                            ts.factory.createBlock([]),
+                        ),
+                    ],
+                );
                 return ts.factory.updateSourceFile(sf, [classDecl]);
             }
         }
@@ -413,21 +452,42 @@ describe("unittests:: TransformAPI", () => {
             function visitNode(sf: ts.SourceFile) {
                 // produce `class Foo { constructor(@Dec private x) {} }`;
                 // The decorator is required to trigger ts.ts transformations.
-                const classDecl = ts.factory.createClassDeclaration([], "Foo", /*typeParameters*/ undefined, /*heritageClauses*/ undefined, [
-                    ts.factory.createConstructorDeclaration(/*modifiers*/ undefined, [
-                        ts.factory.createParameterDeclaration([ts.factory.createDecorator(ts.factory.createIdentifier("Dec")), ts.factory.createModifier(ts.SyntaxKind.PrivateKeyword)], /*dotDotDotToken*/ undefined, "x"),
-                    ], ts.factory.createBlock([])),
-                ]);
+                const classDecl = ts.factory.createClassDeclaration(
+                    [],
+                    "Foo",
+                    /*typeParameters*/ undefined,
+                    /*heritageClauses*/ undefined,
+                    [
+                        ts.factory.createConstructorDeclaration(/*modifiers*/ undefined, [
+                            ts.factory.createParameterDeclaration(
+                                [
+                                    ts.factory.createDecorator(ts.factory.createIdentifier("Dec")),
+                                    ts.factory.createModifier(ts.SyntaxKind.PrivateKeyword),
+                                ],
+                                /*dotDotDotToken*/ undefined,
+                                "x",
+                            ),
+                        ], ts.factory.createBlock([])),
+                    ],
+                );
                 return ts.factory.updateSourceFile(sf, [classDecl]);
             }
         }
     });
 
     function baselineDeclarationTransform(text: string, opts: ts.TranspileOptions) {
-        const fs = vfs.createFromFileSystem(Harness.IO, /*ignoreCase*/ true, { documents: [new documents.TextDocument("/.src/index.ts", text)] });
+        const fs = vfs.createFromFileSystem(Harness.IO, /*ignoreCase*/ true, {
+            documents: [new documents.TextDocument("/.src/index.ts", text)],
+        });
         const host = new fakes.CompilerHost(fs, opts.compilerOptions);
         const program = ts.createProgram(["/.src/index.ts"], opts.compilerOptions!, host);
-        program.emit(program.getSourceFile("/.src/index.ts"), (p, s, bom) => host.writeFile(p, s, bom), /*cancellationToken*/ undefined, /*emitOnlyDtsFiles*/ true, opts.transformers);
+        program.emit(
+            program.getSourceFile("/.src/index.ts"),
+            (p, s, bom) => host.writeFile(p, s, bom),
+            /*cancellationToken*/ undefined,
+            /*emitOnlyDtsFiles*/ true,
+            opts.transformers,
+        );
         return fs.readFileSync("/.src/index.d.ts").toString();
     }
 
@@ -439,7 +499,13 @@ describe("unittests:: TransformAPI", () => {
             function rootTransform<T extends ts.Node>(node: T): ts.VisitResult<T> {
                 if (nodeFilter(node)) {
                     ts.setEmitFlags(node, ts.EmitFlags.NoLeadingComments);
-                    ts.setSyntheticLeadingComments(node, [{ kind: ts.SyntaxKind.MultiLineCommentTrivia, text: "comment", pos: -1, end: -1, hasTrailingNewLine: true }]);
+                    ts.setSyntheticLeadingComments(node, [{
+                        kind: ts.SyntaxKind.MultiLineCommentTrivia,
+                        text: "comment",
+                        pos: -1,
+                        end: -1,
+                        hasTrailingNewLine: true,
+                    }]);
                 }
                 return ts.visitEachChild(node, rootTransform, context);
             }
@@ -497,7 +563,12 @@ export {Value};
 `,
             {
                 transformers: {
-                    before: [addSyntheticComment(n => ts.isImportDeclaration(n) || ts.isExportDeclaration(n) || ts.isImportSpecifier(n) || ts.isExportSpecifier(n))],
+                    before: [
+                        addSyntheticComment(n =>
+                            ts.isImportDeclaration(n) || ts.isExportDeclaration(n) || ts.isImportSpecifier(n) ||
+                            ts.isExportSpecifier(n)
+                        ),
+                    ],
                 },
                 compilerOptions: {
                     target: ts.ScriptTarget.ES5,
@@ -523,7 +594,13 @@ class Clazz {
 `,
             {
                 transformers: {
-                    before: [addSyntheticComment(n => ts.isPropertyDeclaration(n) || ts.isParameterPropertyDeclaration(n, n.parent) || ts.isClassDeclaration(n) || ts.isConstructorDeclaration(n))],
+                    before: [
+                        addSyntheticComment(n =>
+                            ts.isPropertyDeclaration(n) || ts.isParameterPropertyDeclaration(n, n.parent) ||
+                            ts.isClassDeclaration(n) ||
+                            ts.isConstructorDeclaration(n)
+                        ),
+                    ],
                 },
                 compilerOptions: {
                     target: ts.ScriptTarget.ES2015,
@@ -582,7 +659,13 @@ module MyModule {
             };
             function rootTransform<T extends ts.Node>(node: T): ts.Node {
                 if (ts.isVariableDeclaration(node)) {
-                    return ts.factory.updateVariableDeclaration(node, ts.factory.createIdentifier("newName"), /*exclamationToken*/ undefined, /*type*/ undefined, node.initializer);
+                    return ts.factory.updateVariableDeclaration(
+                        node,
+                        ts.factory.createIdentifier("newName"),
+                        /*exclamationToken*/ undefined,
+                        /*type*/ undefined,
+                        node.initializer,
+                    );
                 }
                 return ts.visitEachChild(node, rootTransform, context);
             }
@@ -592,7 +675,12 @@ module MyModule {
     // https://github.com/Microsoft/TypeScript/issues/24709
     testBaseline("issue24709", () => {
         const fs = vfs.createFromFileSystem(Harness.IO, /*ignoreCase*/ true);
-        const transformed = ts.transform(ts.createSourceFile("source.ts", "class X { echo(x: string) { return x; } }", ts.ScriptTarget.ES5), [transformSourceFile]);
+        const transformed = ts.transform(
+            ts.createSourceFile("source.ts", "class X { echo(x: string) { return x; } }", ts.ScriptTarget.ES5),
+            [
+                transformSourceFile,
+            ],
+        );
         const transformedSourceFile = transformed.transformed[0];
         transformed.dispose();
         const host = new fakes.CompilerHost(fs);
@@ -658,8 +746,22 @@ module MyModule {
         };
         function rootTransform<T extends ts.Node>(node: T): ts.Node {
             if (ts.isClassLike(node)) {
-                const newMembers = [ts.factory.createPropertyDeclaration([ts.factory.createModifier(ts.SyntaxKind.StaticKeyword)], "newField", /*questionOrExclamationToken*/ undefined, /*type*/ undefined, ts.factory.createStringLiteral("x"))];
-                ts.setSyntheticLeadingComments(newMembers[0], [{ kind: ts.SyntaxKind.MultiLineCommentTrivia, text: "comment", pos: -1, end: -1, hasTrailingNewLine: true }]);
+                const newMembers = [
+                    ts.factory.createPropertyDeclaration(
+                        [ts.factory.createModifier(ts.SyntaxKind.StaticKeyword)],
+                        "newField",
+                        /*questionOrExclamationToken*/ undefined,
+                        /*type*/ undefined,
+                        ts.factory.createStringLiteral("x"),
+                    ),
+                ];
+                ts.setSyntheticLeadingComments(newMembers[0], [{
+                    kind: ts.SyntaxKind.MultiLineCommentTrivia,
+                    text: "comment",
+                    pos: -1,
+                    end: -1,
+                    hasTrailingNewLine: true,
+                }]);
                 return ts.isClassDeclaration(node) ?
                     ts.factory.updateClassDeclaration(
                         node,

@@ -53,8 +53,20 @@ export class Version {
     readonly build: readonly string[];
 
     constructor(text: string);
-    constructor(major: number, minor?: number, patch?: number, prerelease?: string | readonly string[], build?: string | readonly string[]);
-    constructor(major: number | string, minor = 0, patch = 0, prerelease: string | readonly string[] = "", build: string | readonly string[] = "") {
+    constructor(
+        major: number,
+        minor?: number,
+        patch?: number,
+        prerelease?: string | readonly string[],
+        build?: string | readonly string[],
+    );
+    constructor(
+        major: number | string,
+        minor = 0,
+        patch = 0,
+        prerelease: string | readonly string[] = "",
+        build: string | readonly string[] = "",
+    ) {
         if (typeof major === "string") {
             const result = Debug.checkDefined(tryParseComponents(major), "Invalid version");
             ({ major, minor, patch, prerelease, build } = result);
@@ -119,7 +131,15 @@ export class Version {
         }
     }
 
-    with(fields: { major?: number; minor?: number; patch?: number; prerelease?: string | readonly string[]; build?: string | readonly string[]; }) {
+    with(
+        fields: {
+            major?: number;
+            minor?: number;
+            patch?: number;
+            prerelease?: string | readonly string[];
+            build?: string | readonly string[];
+        },
+    ) {
         const {
             major = this.major,
             minor = this.minor,
@@ -257,7 +277,8 @@ const whitespaceRegExp = /\s+/g;
 // build        ::= parts
 // parts        ::= part ( '.' part ) *
 // part         ::= nr | [-0-9A-Za-z]+
-const partialRegExp = /^([xX*0]|[1-9]\d*)(?:\.([xX*0]|[1-9]\d*)(?:\.([xX*0]|[1-9]\d*)(?:-([a-z0-9-.]+))?(?:\+([a-z0-9-.]+))?)?)?$/i;
+const partialRegExp =
+    /^([xX*0]|[1-9]\d*)(?:\.([xX*0]|[1-9]\d*)(?:\.([xX*0]|[1-9]\d*)(?:-([a-z0-9-.]+))?(?:\+([a-z0-9-.]+))?)?)?$/i;
 
 // https://github.com/npm/node-semver#range-grammar
 //
@@ -362,15 +383,24 @@ function parseComparator(operator: string, text: string, comparators: Comparator
             case "<":
             case ">=":
                 comparators.push(
-                    isWildcard(minor) || isWildcard(patch) ? createComparator(operator, version.with({ prerelease: "0" })) :
+                    isWildcard(minor) || isWildcard(patch) ?
+                        createComparator(operator, version.with({ prerelease: "0" })) :
                         createComparator(operator, version),
                 );
                 break;
             case "<=":
             case ">":
                 comparators.push(
-                    isWildcard(minor) ? createComparator(operator === "<=" ? "<" : ">=", version.increment("major").with({ prerelease: "0" })) :
-                        isWildcard(patch) ? createComparator(operator === "<=" ? "<" : ">=", version.increment("minor").with({ prerelease: "0" })) :
+                    isWildcard(minor) ?
+                        createComparator(
+                            operator === "<=" ? "<" : ">=",
+                            version.increment("major").with({ prerelease: "0" }),
+                        ) :
+                        isWildcard(patch) ?
+                        createComparator(
+                            operator === "<=" ? "<" : ">=",
+                            version.increment("minor").with({ prerelease: "0" }),
+                        ) :
                         createComparator(operator, version),
                 );
                 break;
@@ -378,7 +408,12 @@ function parseComparator(operator: string, text: string, comparators: Comparator
             case undefined:
                 if (isWildcard(minor) || isWildcard(patch)) {
                     comparators.push(createComparator(">=", version.with({ prerelease: "0" })));
-                    comparators.push(createComparator("<", version.increment(isWildcard(minor) ? "major" : "minor").with({ prerelease: "0" })));
+                    comparators.push(
+                        createComparator(
+                            "<",
+                            version.increment(isWildcard(minor) ? "major" : "minor").with({ prerelease: "0" }),
+                        ),
+                    );
                 }
                 else {
                     comparators.push(createComparator("=", version));

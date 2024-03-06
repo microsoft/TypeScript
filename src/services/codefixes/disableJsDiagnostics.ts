@@ -38,7 +38,8 @@ registerCodeFix({
             return undefined;
         }
 
-        const newLineCharacter = sourceFile.checkJsDirective ? "" : getNewLineOrDefaultFromHost(host, formatContext.options);
+        const newLineCharacter = sourceFile.checkJsDirective ? ""
+            : getNewLineOrDefaultFromHost(host, formatContext.options);
         const fixes: CodeFixAction[] = [
             // fixId unnecessary because adding `// @ts-nocheck` even once will ignore every error in the file.
             createCodeFixActionWithoutFixAll(
@@ -56,7 +57,15 @@ registerCodeFix({
         ];
 
         if (textChanges.isValidLocationToAddComment(sourceFile, span.start)) {
-            fixes.unshift(createCodeFixAction(fixName, textChanges.ChangeTracker.with(context, t => makeChange(t, sourceFile, span.start)), Diagnostics.Ignore_this_error_message, fixId, Diagnostics.Add_ts_ignore_to_all_error_messages));
+            fixes.unshift(
+                createCodeFixAction(
+                    fixName,
+                    textChanges.ChangeTracker.with(context, t => makeChange(t, sourceFile, span.start)),
+                    Diagnostics.Ignore_this_error_message,
+                    fixId,
+                    Diagnostics.Add_ts_ignore_to_all_error_messages,
+                ),
+            );
         }
 
         return fixes;
@@ -72,7 +81,12 @@ registerCodeFix({
     },
 });
 
-function makeChange(changes: textChanges.ChangeTracker, sourceFile: SourceFile, position: number, seenLines?: Set<number>) {
+function makeChange(
+    changes: textChanges.ChangeTracker,
+    sourceFile: SourceFile,
+    position: number,
+    seenLines?: Set<number>,
+) {
     const { line: lineNumber } = getLineAndCharacterOfPosition(sourceFile, position);
     // Only need to add `// @ts-ignore` for a line once.
     if (!seenLines || tryAddToSet(seenLines, lineNumber)) {

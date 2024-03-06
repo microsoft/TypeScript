@@ -125,7 +125,8 @@ export function createPatternMatcher(pattern: string): PatternMatcher | undefine
     // The pattern is an empty string, and it matches everything.
     if (dotSeparatedSegments.length === 1 && dotSeparatedSegments[0].totalTextChunk.text === "") {
         return {
-            getMatchForLastSegmentOfPattern: () => createPatternMatch(PatternMatchKind.substring, /*isCaseSensitive*/ true),
+            getMatchForLastSegmentOfPattern: () =>
+                createPatternMatch(PatternMatchKind.substring, /*isCaseSensitive*/ true),
             getFullMatch: () => createPatternMatch(PatternMatchKind.substring, /*isCaseSensitive*/ true),
             patternContainsDots: false,
         };
@@ -134,13 +135,20 @@ export function createPatternMatcher(pattern: string): PatternMatcher | undefine
     if (dotSeparatedSegments.some(segment => !segment.subWordTextChunks.length)) return undefined;
 
     return {
-        getFullMatch: (containers, candidate) => getFullMatch(containers, candidate, dotSeparatedSegments, stringToWordSpans),
-        getMatchForLastSegmentOfPattern: candidate => matchSegment(candidate, last(dotSeparatedSegments), stringToWordSpans),
+        getFullMatch: (containers, candidate) =>
+            getFullMatch(containers, candidate, dotSeparatedSegments, stringToWordSpans),
+        getMatchForLastSegmentOfPattern: candidate =>
+            matchSegment(candidate, last(dotSeparatedSegments), stringToWordSpans),
         patternContainsDots: dotSeparatedSegments.length > 1,
     };
 }
 
-function getFullMatch(candidateContainers: readonly string[], candidate: string, dotSeparatedSegments: readonly Segment[], stringToWordSpans: Map<string, TextSpan[]>): PatternMatch | undefined {
+function getFullMatch(
+    candidateContainers: readonly string[],
+    candidate: string,
+    dotSeparatedSegments: readonly Segment[],
+    stringToWordSpans: Map<string, TextSpan[]>,
+): PatternMatch | undefined {
     // First, check that the last part of the dot separated pattern matches the name of the
     // candidate.  If not, then there's no point in proceeding and doing the more
     // expensive work.
@@ -159,7 +167,10 @@ function getFullMatch(candidateContainers: readonly string[], candidate: string,
 
     let bestMatch: PatternMatch | undefined;
     for (let i = dotSeparatedSegments.length - 2, j = candidateContainers.length - 1; i >= 0; i -= 1, j -= 1) {
-        bestMatch = betterMatch(bestMatch, matchSegment(candidateContainers[j], dotSeparatedSegments[i], stringToWordSpans));
+        bestMatch = betterMatch(
+            bestMatch,
+            matchSegment(candidateContainers[j], dotSeparatedSegments[i], stringToWordSpans),
+        );
     }
     return bestMatch;
 }
@@ -172,12 +183,19 @@ function getWordSpans(word: string, stringToWordSpans: Map<string, TextSpan[]>):
     return spans;
 }
 
-function matchTextChunk(candidate: string, chunk: TextChunk, stringToWordSpans: Map<string, TextSpan[]>): PatternMatch | undefined {
+function matchTextChunk(
+    candidate: string,
+    chunk: TextChunk,
+    stringToWordSpans: Map<string, TextSpan[]>,
+): PatternMatch | undefined {
     const index = indexOfIgnoringCase(candidate, chunk.textLowerCase);
     if (index === 0) {
         // a) Check if the word is a prefix of the candidate, in a case insensitive or
         //    sensitive manner. If it does, return that there was an exact match if the word and candidate are the same length, else a prefix match.
-        return createPatternMatch(chunk.text.length === candidate.length ? PatternMatchKind.exact : PatternMatchKind.prefix, /*isCaseSensitive:*/ startsWith(candidate, chunk.text));
+        return createPatternMatch(
+            chunk.text.length === candidate.length ? PatternMatchKind.exact : PatternMatchKind.prefix,
+            /*isCaseSensitive:*/ startsWith(candidate, chunk.text),
+        );
     }
 
     if (chunk.isLowerCase) {
@@ -192,7 +210,10 @@ function matchTextChunk(candidate: string, chunk: TextChunk, stringToWordSpans: 
         const wordSpans = getWordSpans(candidate, stringToWordSpans);
         for (const span of wordSpans) {
             if (partStartsWith(candidate, span, chunk.text, /*ignoreCase*/ true)) {
-                return createPatternMatch(PatternMatchKind.substring, /*isCaseSensitive:*/ partStartsWith(candidate, span, chunk.text, /*ignoreCase*/ false));
+                return createPatternMatch(
+                    PatternMatchKind.substring,
+                    /*isCaseSensitive:*/ partStartsWith(candidate, span, chunk.text, /*ignoreCase*/ false),
+                );
             }
         }
         // c) Is the pattern a substring of the candidate starting on one of the candidate's word boundaries?
@@ -224,7 +245,11 @@ function matchTextChunk(candidate: string, chunk: TextChunk, stringToWordSpans: 
     }
 }
 
-function matchSegment(candidate: string, segment: Segment, stringToWordSpans: Map<string, TextSpan[]>): PatternMatch | undefined {
+function matchSegment(
+    candidate: string,
+    segment: Segment,
+    stringToWordSpans: Map<string, TextSpan[]>,
+): PatternMatch | undefined {
     // First check if the segment matches as is.  This is also useful if the segment contains
     // characters we would normally strip when splitting into parts that we also may want to
     // match in the candidate.  For example if the segment is "@int" and the candidate is
@@ -289,16 +314,35 @@ function compareMatches(a: PatternMatch | undefined, b: PatternMatch | undefined
         : compareValues(a.kind, b.kind) || compareBooleans(!a.isCaseSensitive, !b.isCaseSensitive);
 }
 
-function partStartsWith(candidate: string, candidateSpan: TextSpan, pattern: string, ignoreCase: boolean, patternSpan: TextSpan = { start: 0, length: pattern.length }): boolean {
+function partStartsWith(
+    candidate: string,
+    candidateSpan: TextSpan,
+    pattern: string,
+    ignoreCase: boolean,
+    patternSpan: TextSpan = { start: 0, length: pattern.length },
+): boolean {
     return patternSpan.length <= candidateSpan.length // If pattern part is longer than the candidate part there can never be a match.
-        && everyInRange(0, patternSpan.length, i => equalChars(pattern.charCodeAt(patternSpan.start + i), candidate.charCodeAt(candidateSpan.start + i), ignoreCase));
+        && everyInRange(
+            0,
+            patternSpan.length,
+            i => equalChars(
+                pattern.charCodeAt(patternSpan.start + i),
+                candidate.charCodeAt(candidateSpan.start + i),
+                ignoreCase,
+            ),
+        );
 }
 
 function equalChars(ch1: number, ch2: number, ignoreCase: boolean): boolean {
     return ignoreCase ? toLowerCase(ch1) === toLowerCase(ch2) : ch1 === ch2;
 }
 
-function tryCamelCaseMatch(candidate: string, candidateParts: TextSpan[], chunk: TextChunk, ignoreCase: boolean): boolean {
+function tryCamelCaseMatch(
+    candidate: string,
+    candidateParts: TextSpan[],
+    chunk: TextChunk,
+    ignoreCase: boolean,
+): boolean {
     const chunkCharacterSpans = chunk.characterSpans;
 
     // Note: we may have more pattern parts than candidate parts.  This is because multiple
@@ -356,7 +400,10 @@ function tryCamelCaseMatch(candidate: string, candidateParts: TextSpan[], chunk:
             // obviously contiguous.
             contiguous = contiguous === undefined ? true : contiguous;
 
-            candidatePart = createTextSpan(candidatePart.start + chunkCharacterSpan.length, candidatePart.length - chunkCharacterSpan.length);
+            candidatePart = createTextSpan(
+                candidatePart.start + chunkCharacterSpan.length,
+                candidatePart.length - chunkCharacterSpan.length,
+            );
         }
 
         // Check if we matched anything at all.  If we didn't, then we need to unset the
@@ -444,7 +491,8 @@ function isDigit(ch: number) {
 }
 
 function isWordChar(ch: number) {
-    return isUpperCaseLetter(ch) || isLowerCaseLetter(ch) || isDigit(ch) || ch === CharacterCodes._ || ch === CharacterCodes.$;
+    return isUpperCaseLetter(ch) || isLowerCaseLetter(ch) || isDigit(ch) || ch === CharacterCodes._ ||
+        ch === CharacterCodes.$;
 }
 
 function breakPatternIntoTextChunks(pattern: string): TextChunk[] {

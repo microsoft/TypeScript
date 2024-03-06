@@ -75,7 +75,9 @@ export class TypeWriterWalker {
     }
 
     private isImportStatementName(node: ts.Node) {
-        if (ts.isImportSpecifier(node.parent) && (node.parent.name === node || node.parent.propertyName === node)) return true;
+        if (ts.isImportSpecifier(node.parent) && (node.parent.name === node || node.parent.propertyName === node)) {
+            return true;
+        }
         if (ts.isImportClause(node.parent) && node.parent.name === node) return true;
         if (ts.isImportEqualsDeclaration(node.parent) && node.parent.name === node) return true;
         return false;
@@ -83,7 +85,9 @@ export class TypeWriterWalker {
 
     private isExportStatementName(node: ts.Node) {
         if (ts.isExportAssignment(node.parent) && node.parent.expression === node) return true;
-        if (ts.isExportSpecifier(node.parent) && (node.parent.name === node || node.parent.propertyName === node)) return true;
+        if (ts.isExportSpecifier(node.parent) && (node.parent.name === node || node.parent.propertyName === node)) {
+            return true;
+        }
         return false;
     }
 
@@ -102,13 +106,19 @@ export class TypeWriterWalker {
         if (!isSymbolWalk) {
             // Don't try to get the type of something that's already a type.
             // Exception for `T` in `type T = something` because that may evaluate to some interesting type.
-            if (ts.isPartOfTypeNode(node) || ts.isIdentifier(node) && !(ts.getMeaningFromDeclaration(node.parent) & ts.SemanticMeaning.Value) && !(ts.isTypeAliasDeclaration(node.parent) && node.parent.name === node)) {
+            if (
+                ts.isPartOfTypeNode(node) ||
+                ts.isIdentifier(node) && !(ts.getMeaningFromDeclaration(node.parent) & ts.SemanticMeaning.Value) &&
+                    !(ts.isTypeAliasDeclaration(node.parent) && node.parent.name === node)
+            ) {
                 return undefined;
             }
 
             // Workaround to ensure we output 'C' instead of 'typeof C' for base class expressions
             // let type = this.checker.getTypeAtLocation(node);
-            let type = ts.isExpressionWithTypeArgumentsInClassExtendsClause(node.parent) ? this.checker.getTypeAtLocation(node.parent) : undefined;
+            let type = ts.isExpressionWithTypeArgumentsInClassExtendsClause(node.parent) ?
+                this.checker.getTypeAtLocation(node.parent)
+                : undefined;
             if (!type || type.flags & ts.TypeFlags.Any) type = this.checker.getTypeAtLocation(node);
             // Distinguish `errorType`s from `any`s; but only if the file has no errors.
             // Additionally,
@@ -138,12 +148,20 @@ export class TypeWriterWalker {
                 typeString = (type as ts.IntrinsicType).intrinsicName;
             }
             else {
-                const typeFormatFlags = ts.TypeFormatFlags.NoTruncation | ts.TypeFormatFlags.AllowUniqueESSymbolType | ts.TypeFormatFlags.GenerateNamesForShadowedTypeParams;
+                const typeFormatFlags = ts.TypeFormatFlags.NoTruncation | ts.TypeFormatFlags.AllowUniqueESSymbolType |
+                    ts.TypeFormatFlags.GenerateNamesForShadowedTypeParams;
                 typeString = this.checker.typeToString(type, node.parent, typeFormatFlags);
-                if (ts.isIdentifier(node) && ts.isTypeAliasDeclaration(node.parent) && node.parent.name === node && typeString === ts.idText(node)) {
+                if (
+                    ts.isIdentifier(node) && ts.isTypeAliasDeclaration(node.parent) && node.parent.name === node &&
+                    typeString === ts.idText(node)
+                ) {
                     // for a complex type alias `type T = ...`, showing "T : T" isn't very helpful for type tests. When the type produced is the same as
                     // the name of the type alias, recreate the type string without reusing the alias name
-                    typeString = this.checker.typeToString(type, node.parent, typeFormatFlags | ts.TypeFormatFlags.InTypeAlias);
+                    typeString = this.checker.typeToString(
+                        type,
+                        node.parent,
+                        typeFormatFlags | ts.TypeFormatFlags.InTypeAlias,
+                    );
                 }
             }
             return {
@@ -175,7 +193,9 @@ export class TypeWriterWalker {
                 const declLineAndCharacter = declSourceFile.getLineAndCharacterOfPosition(declaration.pos);
                 const fileName = ts.getBaseFileName(declSourceFile.fileName);
                 const isLibFile = /lib(.*)\.d\.ts/i.test(fileName);
-                const declText = `Decl(${fileName}, ${isLibFile ? "--" : declLineAndCharacter.line}, ${isLibFile ? "--" : declLineAndCharacter.character})`;
+                const declText = `Decl(${fileName}, ${isLibFile ? "--" : declLineAndCharacter.line}, ${
+                    isLibFile ? "--" : declLineAndCharacter.character
+                })`;
                 symbolString += declText;
                 (declaration as any).__symbolTestOutputCache = declText;
             }

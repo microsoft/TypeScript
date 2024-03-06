@@ -30,9 +30,23 @@ import {
 } from "./_namespaces/ts";
 
 // These types/enums used to be defined in duplicate here and exported. They are re-exported to avoid breaking changes.
-export { ApplicableRefactorInfo, ClassificationType, CompletionsTriggerCharacter, CompletionTriggerKind, OrganizeImportsMode, RefactorTriggerReason, RenameInfoFailure, SemicolonPreference, SignatureHelpTriggerReason, SymbolDisplayPart, UserPreferences };
+export {
+    ApplicableRefactorInfo,
+    ClassificationType,
+    CompletionsTriggerCharacter,
+    CompletionTriggerKind,
+    OrganizeImportsMode,
+    RefactorTriggerReason,
+    RenameInfoFailure,
+    SemicolonPreference,
+    SignatureHelpTriggerReason,
+    SymbolDisplayPart,
+    UserPreferences,
+};
 
-type ChangeStringIndexSignature<T, NewStringIndexSignatureType> = { [K in keyof T]: string extends K ? NewStringIndexSignatureType : T[K]; };
+type ChangeStringIndexSignature<T, NewStringIndexSignatureType> = {
+    [K in keyof T]: string extends K ? NewStringIndexSignatureType : T[K];
+};
 type ChangePropertyTypes<T, Substitutions extends { [K in keyof T]?: any; }> = {
     [K in keyof T]: K extends keyof Substitutions ? Substitutions[K] : T[K];
 };
@@ -3076,15 +3090,21 @@ export const enum IndentStyle {
 
 export type EditorSettings = ChangePropertyTypes<ts.EditorSettings, { indentStyle: IndentStyle | ts.IndentStyle; }>;
 
-export type FormatCodeSettings = ChangePropertyTypes<ts.FormatCodeSettings, { indentStyle: IndentStyle | ts.IndentStyle; }>;
+export type FormatCodeSettings = ChangePropertyTypes<
+    ts.FormatCodeSettings,
+    { indentStyle: IndentStyle | ts.IndentStyle; }
+>;
 
-export type CompilerOptions = ChangePropertyTypes<ChangeStringIndexSignature<ts.CompilerOptions, CompilerOptionsValue>, {
-    jsx: JsxEmit | ts.JsxEmit;
-    module: ModuleKind | ts.ModuleKind;
-    moduleResolution: ModuleResolutionKind | ts.ModuleResolutionKind;
-    newLine: NewLineKind | ts.NewLineKind;
-    target: ScriptTarget | ts.ScriptTarget;
-}>;
+export type CompilerOptions = ChangePropertyTypes<
+    ChangeStringIndexSignature<ts.CompilerOptions, CompilerOptionsValue>,
+    {
+        jsx: JsxEmit | ts.JsxEmit;
+        module: ModuleKind | ts.ModuleKind;
+        moduleResolution: ModuleResolutionKind | ts.ModuleResolutionKind;
+        newLine: NewLineKind | ts.NewLineKind;
+        target: ScriptTarget | ts.ScriptTarget;
+    }
+>;
 
 export const enum JsxEmit {
     None = "none",

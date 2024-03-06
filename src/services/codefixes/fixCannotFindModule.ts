@@ -35,7 +35,14 @@ registerCodeFix({
         const typesPackageName = getTypesPackageNameToInstall(packageName, host, context.errorCode);
         return typesPackageName === undefined
             ? []
-            : [createCodeFixAction(fixName, /*changes*/ [], [Diagnostics.Install_0, typesPackageName], fixIdInstallTypesPackage, Diagnostics.Install_all_missing_types_packages, getInstallCommand(sourceFile.fileName, typesPackageName))];
+            : [createCodeFixAction(
+                fixName,
+                /*changes*/ [],
+                [Diagnostics.Install_0, typesPackageName],
+                fixIdInstallTypesPackage,
+                Diagnostics.Install_all_missing_types_packages,
+                getInstallCommand(sourceFile.fileName, typesPackageName),
+            )];
     },
     fixIds: [fixIdInstallTypesPackage],
     getAllCodeActions: context => {
@@ -69,7 +76,11 @@ function tryGetImportedPackageName(sourceFile: SourceFile, pos: number): string 
     return isExternalModuleNameRelative(packageName) ? undefined : packageName;
 }
 
-function getTypesPackageNameToInstall(packageName: string, host: LanguageServiceHost, diagCode: number): string | undefined {
+function getTypesPackageNameToInstall(
+    packageName: string,
+    host: LanguageServiceHost,
+    diagCode: number,
+): string | undefined {
     return diagCode === errorCodeCannotFindModule
         ? (JsTyping.nodeCoreModules.has(packageName) ? "@types/node" : undefined)
         : (host.isKnownTypesPackageName?.(packageName) ? getTypesPackageName(packageName) : undefined);

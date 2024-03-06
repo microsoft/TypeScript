@@ -80,7 +80,14 @@ export interface AccessorInfo {
 }
 
 /** @internal */
-export function generateAccessorFromProperty(file: SourceFile, program: Program, start: number, end: number, context: textChanges.TextChangesContext, _actionName: string): FileTextChanges[] | undefined {
+export function generateAccessorFromProperty(
+    file: SourceFile,
+    program: Program,
+    start: number,
+    end: number,
+    context: textChanges.TextChangesContext,
+    _actionName: string,
+): FileTextChanges[] | undefined {
     const fieldInfo = getAccessorConvertiblePropertyAtPosition(file, program, start, end);
     if (!fieldInfo || refactor.isRefactorErrorInfo(fieldInfo)) return undefined;
 
@@ -102,7 +109,9 @@ export function generateAccessorFromProperty(file: SourceFile, program: Program,
             fieldModifiers = modifiers;
         }
         else {
-            accessorModifiers = factory.createModifiersFromModifierFlags(prepareModifierFlagsForAccessor(modifierFlags));
+            accessorModifiers = factory.createModifiersFromModifierFlags(
+                prepareModifierFlagsForAccessor(modifierFlags),
+            );
             fieldModifiers = factory.createModifiersFromModifierFlags(prepareModifierFlagsForField(modifierFlags));
         }
         if (canHaveDecorators(declaration)) {
@@ -120,7 +129,13 @@ export function generateAccessorFromProperty(file: SourceFile, program: Program,
         // readonly modifier only existed in classLikeDeclaration
         const constructor = getFirstConstructorWithBody(container as ClassLikeDeclaration);
         if (constructor) {
-            updateReadonlyPropertyInitializerStatementConstructor(changeTracker, file, constructor, fieldName.text, originalName);
+            updateReadonlyPropertyInitializerStatementConstructor(
+                changeTracker,
+                file,
+                constructor,
+                fieldName.text,
+                originalName,
+            );
         }
     }
     else {
@@ -137,16 +152,22 @@ function isConvertibleName(name: DeclarationName): name is AcceptedNameType {
 }
 
 function isAcceptedDeclaration(node: Node): node is AcceptedDeclaration {
-    return isParameterPropertyDeclaration(node, node.parent) || isPropertyDeclaration(node) || isPropertyAssignment(node);
+    return isParameterPropertyDeclaration(node, node.parent) || isPropertyDeclaration(node) ||
+        isPropertyAssignment(node);
 }
 
 function createPropertyName(name: string, originalName: AcceptedNameType) {
     return isIdentifier(originalName) ? factory.createIdentifier(name) : factory.createStringLiteral(name);
 }
 
-function createAccessorAccessExpression(fieldName: AcceptedNameType, isStatic: boolean, container: ContainerDeclaration) {
+function createAccessorAccessExpression(
+    fieldName: AcceptedNameType,
+    isStatic: boolean,
+    container: ContainerDeclaration,
+) {
     const leftHead = isStatic ? (container as ClassLikeDeclaration).name! : factory.createThis(); // TODO: GH#18217
-    return isIdentifier(fieldName) ? factory.createPropertyAccessExpression(leftHead, fieldName) : factory.createElementAccessExpression(leftHead, factory.createStringLiteralFromNode(fieldName));
+    return isIdentifier(fieldName) ? factory.createPropertyAccessExpression(leftHead, fieldName)
+        : factory.createElementAccessExpression(leftHead, factory.createStringLiteralFromNode(fieldName));
 }
 
 function prepareModifierFlagsForAccessor(modifierFlags: ModifierFlags): ModifierFlags {
@@ -168,7 +189,13 @@ function prepareModifierFlagsForField(modifierFlags: ModifierFlags): ModifierFla
 }
 
 /** @internal */
-export function getAccessorConvertiblePropertyAtPosition(file: SourceFile, program: Program, start: number, end: number, considerEmptySpans = true): AccessorOrRefactorErrorInfo | undefined {
+export function getAccessorConvertiblePropertyAtPosition(
+    file: SourceFile,
+    program: Program,
+    start: number,
+    end: number,
+    considerEmptySpans = true,
+): AccessorOrRefactorErrorInfo | undefined {
     const node = getTokenAtPosition(file, start);
     const cursorRequest = start === end && considerEmptySpans;
     const declaration = findAncestor(node.parent, isAcceptedDeclaration);
@@ -195,8 +222,14 @@ export function getAccessorConvertiblePropertyAtPosition(file: SourceFile, progr
 
     const name = declaration.name.text;
     const startWithUnderscore = startsWithUnderscore(name);
-    const fieldName = createPropertyName(startWithUnderscore ? name : getUniqueName(`_${name}`, file), declaration.name);
-    const accessorName = createPropertyName(startWithUnderscore ? getUniqueName(name.substring(1), file) : name, declaration.name);
+    const fieldName = createPropertyName(
+        startWithUnderscore ? name : getUniqueName(`_${name}`, file),
+        declaration.name,
+    );
+    const accessorName = createPropertyName(
+        startWithUnderscore ? getUniqueName(name.substring(1), file) : name,
+        declaration.name,
+    );
     return {
         isStatic: hasStaticModifier(declaration),
         isReadonly: hasEffectiveReadonlyModifier(declaration),
@@ -210,7 +243,14 @@ export function getAccessorConvertiblePropertyAtPosition(file: SourceFile, progr
     };
 }
 
-function generateGetAccessor(fieldName: AcceptedNameType, accessorName: AcceptedNameType, type: TypeNode | undefined, modifiers: readonly ModifierLike[] | undefined, isStatic: boolean, container: ContainerDeclaration) {
+function generateGetAccessor(
+    fieldName: AcceptedNameType,
+    accessorName: AcceptedNameType,
+    type: TypeNode | undefined,
+    modifiers: readonly ModifierLike[] | undefined,
+    isStatic: boolean,
+    container: ContainerDeclaration,
+) {
     return factory.createGetAccessorDeclaration(
         modifiers,
         accessorName,
@@ -224,7 +264,14 @@ function generateGetAccessor(fieldName: AcceptedNameType, accessorName: Accepted
     );
 }
 
-function generateSetAccessor(fieldName: AcceptedNameType, accessorName: AcceptedNameType, type: TypeNode | undefined, modifiers: readonly ModifierLike[] | undefined, isStatic: boolean, container: ContainerDeclaration) {
+function generateSetAccessor(
+    fieldName: AcceptedNameType,
+    accessorName: AcceptedNameType,
+    type: TypeNode | undefined,
+    modifiers: readonly ModifierLike[] | undefined,
+    isStatic: boolean,
+    container: ContainerDeclaration,
+) {
     return factory.createSetAccessorDeclaration(
         modifiers,
         accessorName,
@@ -246,7 +293,14 @@ function generateSetAccessor(fieldName: AcceptedNameType, accessorName: Accepted
     );
 }
 
-function updatePropertyDeclaration(changeTracker: textChanges.ChangeTracker, file: SourceFile, declaration: PropertyDeclaration, type: TypeNode | undefined, fieldName: AcceptedNameType, modifiers: readonly ModifierLike[] | undefined) {
+function updatePropertyDeclaration(
+    changeTracker: textChanges.ChangeTracker,
+    file: SourceFile,
+    declaration: PropertyDeclaration,
+    type: TypeNode | undefined,
+    fieldName: AcceptedNameType,
+    modifiers: readonly ModifierLike[] | undefined,
+) {
     const property = factory.updatePropertyDeclaration(
         declaration,
         modifiers,
@@ -258,7 +312,12 @@ function updatePropertyDeclaration(changeTracker: textChanges.ChangeTracker, fil
     changeTracker.replaceNode(file, declaration, property);
 }
 
-function updatePropertyAssignmentDeclaration(changeTracker: textChanges.ChangeTracker, file: SourceFile, declaration: PropertyAssignment, fieldName: AcceptedNameType) {
+function updatePropertyAssignmentDeclaration(
+    changeTracker: textChanges.ChangeTracker,
+    file: SourceFile,
+    declaration: PropertyAssignment,
+    fieldName: AcceptedNameType,
+) {
     let assignment = factory.updatePropertyAssignment(declaration, fieldName, declaration.initializer);
     // Remove grammar errors from assignment
     if (assignment.modifiers || assignment.questionToken || assignment.exclamationToken) {
@@ -270,7 +329,14 @@ function updatePropertyAssignmentDeclaration(changeTracker: textChanges.ChangeTr
     changeTracker.replacePropertyAssignment(file, declaration, assignment);
 }
 
-function updateFieldDeclaration(changeTracker: textChanges.ChangeTracker, file: SourceFile, declaration: AcceptedDeclaration, type: TypeNode | undefined, fieldName: AcceptedNameType, modifiers: readonly ModifierLike[] | undefined) {
+function updateFieldDeclaration(
+    changeTracker: textChanges.ChangeTracker,
+    file: SourceFile,
+    declaration: AcceptedDeclaration,
+    type: TypeNode | undefined,
+    fieldName: AcceptedNameType,
+    modifiers: readonly ModifierLike[] | undefined,
+) {
     if (isPropertyDeclaration(declaration)) {
         updatePropertyDeclaration(changeTracker, file, declaration, type, fieldName, modifiers);
     }
@@ -278,17 +344,42 @@ function updateFieldDeclaration(changeTracker: textChanges.ChangeTracker, file: 
         updatePropertyAssignmentDeclaration(changeTracker, file, declaration, fieldName);
     }
     else {
-        changeTracker.replaceNode(file, declaration, factory.updateParameterDeclaration(declaration, modifiers, declaration.dotDotDotToken, cast(fieldName, isIdentifier), declaration.questionToken, declaration.type, declaration.initializer));
+        changeTracker.replaceNode(
+            file,
+            declaration,
+            factory.updateParameterDeclaration(
+                declaration,
+                modifiers,
+                declaration.dotDotDotToken,
+                cast(fieldName, isIdentifier),
+                declaration.questionToken,
+                declaration.type,
+                declaration.initializer,
+            ),
+        );
     }
 }
 
-function insertAccessor(changeTracker: textChanges.ChangeTracker, file: SourceFile, accessor: AccessorDeclaration, declaration: AcceptedDeclaration, container: ContainerDeclaration) {
-    isParameterPropertyDeclaration(declaration, declaration.parent) ? changeTracker.insertMemberAtStart(file, container as ClassLikeDeclaration, accessor) :
+function insertAccessor(
+    changeTracker: textChanges.ChangeTracker,
+    file: SourceFile,
+    accessor: AccessorDeclaration,
+    declaration: AcceptedDeclaration,
+    container: ContainerDeclaration,
+) {
+    isParameterPropertyDeclaration(declaration, declaration.parent) ?
+        changeTracker.insertMemberAtStart(file, container as ClassLikeDeclaration, accessor) :
         isPropertyAssignment(declaration) ? changeTracker.insertNodeAfterComma(file, declaration, accessor) :
         changeTracker.insertNodeAfter(file, declaration, accessor);
 }
 
-function updateReadonlyPropertyInitializerStatementConstructor(changeTracker: textChanges.ChangeTracker, file: SourceFile, constructor: ConstructorDeclaration, fieldName: string, originalName: string) {
+function updateReadonlyPropertyInitializerStatementConstructor(
+    changeTracker: textChanges.ChangeTracker,
+    file: SourceFile,
+    constructor: ConstructorDeclaration,
+    fieldName: string,
+    originalName: string,
+) {
     if (!constructor.body) return;
     constructor.body.forEachChild(function recur(node) {
         if (
@@ -300,7 +391,11 @@ function updateReadonlyPropertyInitializerStatementConstructor(changeTracker: te
         ) {
             changeTracker.replaceNode(file, node.argumentExpression, factory.createStringLiteral(fieldName));
         }
-        if (isPropertyAccessExpression(node) && node.expression.kind === SyntaxKind.ThisKeyword && node.name.text === originalName && isWriteAccess(node)) {
+        if (
+            isPropertyAccessExpression(node) && node.expression.kind === SyntaxKind.ThisKeyword &&
+            node.name.text === originalName &&
+            isWriteAccess(node)
+        ) {
             changeTracker.replaceNode(file, node.name, factory.createIdentifier(fieldName));
         }
         if (!isFunctionLike(node) && !isClassLike(node)) {

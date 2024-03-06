@@ -48,7 +48,10 @@ interface ScriptInfoData {
     open: ReturnType<ScriptInfo["isScriptOpen"]>;
     version: ReturnType<TextStorage["getVersion"]>;
     pendingReloadFromDisk: TextStorage["pendingReloadFromDisk"];
-    sourceMapFilePath: Exclude<ScriptInfo["sourceMapFilePath"], SourceMapFileWatcher> | SourceMapFileWatcherData | undefined;
+    sourceMapFilePath:
+        | Exclude<ScriptInfo["sourceMapFilePath"], SourceMapFileWatcher>
+        | SourceMapFileWatcherData
+        | undefined;
     declarationInfoPath: ScriptInfo["declarationInfoPath"];
     sourceInfos: ScriptInfo["sourceInfos"];
     documentPositionMapper: ScriptInfo["documentPositionMapper"];
@@ -104,20 +107,70 @@ export function patchServiceForStateBaseline(service: ProjectService) {
         const autoImportProviderProjects = [] as AutoImportProviderProject[];
         const auxiliaryProjects = [] as AuxiliaryProject[];
         return baselineState(
-            [service.externalProjects, service.configuredProjects, service.inferredProjects, autoImportProviderProjects, auxiliaryProjects],
+            [
+                service.externalProjects,
+                service.configuredProjects,
+                service.inferredProjects,
+                autoImportProviderProjects,
+                auxiliaryProjects,
+            ],
             projects,
             (logs, project, data) => {
                 if (project.autoImportProviderHost) autoImportProviderProjects.push(project.autoImportProviderHost);
                 if (project.noDtsResolutionProject) auxiliaryProjects.push(project.noDtsResolutionProject);
                 let projectDiff = newOrDeleted(project, projects, data);
-                if (projectDiff !== Diff.Deleted) getSourceMapper(project)?.documentPositionMappers.forEach(mapper => currentMappers.add(mapper));
+                if (projectDiff !== Diff.Deleted) {
+                    getSourceMapper(project)?.documentPositionMappers.forEach(mapper => currentMappers.add(mapper));
+                }
                 const projectPropertyLogs = [] as string[];
-                projectDiff = printProperty(PrintPropertyWhen.Always, data, "projectStateVersion", project.projectStateVersion, projectDiff, projectPropertyLogs);
-                projectDiff = printProperty(PrintPropertyWhen.Always, data, "projectProgramVersion", project.projectProgramVersion, projectDiff, projectPropertyLogs);
-                projectDiff = printProperty(PrintPropertyWhen.TruthyOrChangedOrNew, data, "dirty", project.dirty, projectDiff, projectPropertyLogs);
-                projectDiff = printProperty(PrintPropertyWhen.TruthyOrChangedOrNew, data, "isClosed", project.isClosed(), projectDiff, projectPropertyLogs);
-                projectDiff = printProperty(PrintPropertyWhen.TruthyOrChangedOrNew, data, "isOrphan", !isBackgroundProject(project) && project.isOrphan(), projectDiff, projectPropertyLogs);
-                projectDiff = printProperty(PrintPropertyWhen.TruthyOrChangedOrNew, data, "noOpenRef", isConfiguredProject(project) && !project.hasOpenRef(), projectDiff, projectPropertyLogs);
+                projectDiff = printProperty(
+                    PrintPropertyWhen.Always,
+                    data,
+                    "projectStateVersion",
+                    project.projectStateVersion,
+                    projectDiff,
+                    projectPropertyLogs,
+                );
+                projectDiff = printProperty(
+                    PrintPropertyWhen.Always,
+                    data,
+                    "projectProgramVersion",
+                    project.projectProgramVersion,
+                    projectDiff,
+                    projectPropertyLogs,
+                );
+                projectDiff = printProperty(
+                    PrintPropertyWhen.TruthyOrChangedOrNew,
+                    data,
+                    "dirty",
+                    project.dirty,
+                    projectDiff,
+                    projectPropertyLogs,
+                );
+                projectDiff = printProperty(
+                    PrintPropertyWhen.TruthyOrChangedOrNew,
+                    data,
+                    "isClosed",
+                    project.isClosed(),
+                    projectDiff,
+                    projectPropertyLogs,
+                );
+                projectDiff = printProperty(
+                    PrintPropertyWhen.TruthyOrChangedOrNew,
+                    data,
+                    "isOrphan",
+                    !isBackgroundProject(project) && project.isOrphan(),
+                    projectDiff,
+                    projectPropertyLogs,
+                );
+                projectDiff = printProperty(
+                    PrintPropertyWhen.TruthyOrChangedOrNew,
+                    data,
+                    "noOpenRef",
+                    isConfiguredProject(project) && !project.hasOpenRef(),
+                    projectDiff,
+                    projectPropertyLogs,
+                );
                 projectDiff = printMapPropertyValue(
                     PrintPropertyWhen.Changed,
                     data?.documentPositionMappers,
@@ -127,8 +180,26 @@ export function patchServiceForStateBaseline(service: ProjectService) {
                     projectPropertyLogs,
                     toStringDocumentPostionMapper,
                 );
-                projectDiff = printProperty(PrintPropertyWhen.DefinedOrChangedOrNew, data, "autoImportProviderHost", project.autoImportProviderHost, projectDiff, projectPropertyLogs, project.autoImportProviderHost ? project.autoImportProviderHost.projectName : project.autoImportProviderHost);
-                projectDiff = printProperty(PrintPropertyWhen.DefinedOrChangedOrNew, data, "noDtsResolutionProject", project.noDtsResolutionProject, projectDiff, projectPropertyLogs, project.noDtsResolutionProject ? project.noDtsResolutionProject.projectName : project.noDtsResolutionProject);
+                projectDiff = printProperty(
+                    PrintPropertyWhen.DefinedOrChangedOrNew,
+                    data,
+                    "autoImportProviderHost",
+                    project.autoImportProviderHost,
+                    projectDiff,
+                    projectPropertyLogs,
+                    project.autoImportProviderHost ? project.autoImportProviderHost.projectName
+                        : project.autoImportProviderHost,
+                );
+                projectDiff = printProperty(
+                    PrintPropertyWhen.DefinedOrChangedOrNew,
+                    data,
+                    "noDtsResolutionProject",
+                    project.noDtsResolutionProject,
+                    projectDiff,
+                    projectPropertyLogs,
+                    project.noDtsResolutionProject ? project.noDtsResolutionProject.projectName
+                        : project.noDtsResolutionProject,
+                );
                 return printSetPropertyAndCreateStatementLog(
                     logs,
                     `${project.projectName} (${ProjectKind[project.projectKind]})`,
@@ -150,7 +221,8 @@ export function patchServiceForStateBaseline(service: ProjectService) {
                 noOpenRef: isConfiguredProject(project) && !project.hasOpenRef(),
                 autoImportProviderHost: project.autoImportProviderHost,
                 noDtsResolutionProject: project.noDtsResolutionProject,
-                originalConfiguredProjects: project.originalConfiguredProjects && new Set(project.originalConfiguredProjects),
+                originalConfiguredProjects: project.originalConfiguredProjects &&
+                    new Set(project.originalConfiguredProjects),
                 documentPositionMappers: new Map(getSourceMapper(project)?.documentPositionMappers),
             }),
         );
@@ -162,16 +234,56 @@ export function patchServiceForStateBaseline(service: ProjectService) {
             scriptInfos,
             (logs, info, data) => {
                 let infoDiff = newOrDeleted(info, scriptInfos, data);
-                if (infoDiff !== Diff.Deleted && info.documentPositionMapper) currentMappers.add(info.documentPositionMapper);
+                if (infoDiff !== Diff.Deleted && info.documentPositionMapper) {
+                    currentMappers.add(info.documentPositionMapper);
+                }
                 const infoPropertyLogs = [] as string[];
                 const isOpen = info.isScriptOpen();
                 infoDiff = printProperty(PrintPropertyWhen.Changed, data, "open", isOpen, infoDiff, infoPropertyLogs);
-                infoDiff = printProperty(PrintPropertyWhen.Always, data, "version", info.textStorage.getVersion(), infoDiff, infoPropertyLogs);
-                infoDiff = printProperty(PrintPropertyWhen.TruthyOrChangedOrNew, data, "pendingReloadFromDisk", info.textStorage.pendingReloadFromDisk, infoDiff, infoPropertyLogs);
+                infoDiff = printProperty(
+                    PrintPropertyWhen.Always,
+                    data,
+                    "version",
+                    info.textStorage.getVersion(),
+                    infoDiff,
+                    infoPropertyLogs,
+                );
+                infoDiff = printProperty(
+                    PrintPropertyWhen.TruthyOrChangedOrNew,
+                    data,
+                    "pendingReloadFromDisk",
+                    info.textStorage.pendingReloadFromDisk,
+                    infoDiff,
+                    infoPropertyLogs,
+                );
                 infoDiff = printScriptInfoSourceMapFilePath(data, info, infoDiff, infoPropertyLogs);
-                infoDiff = printProperty(PrintPropertyWhen.DefinedOrChangedOrNew, data, "declarationInfoPath", info.declarationInfoPath, infoDiff, infoPropertyLogs);
-                infoDiff = printSetPropertyValueWorker(PrintPropertyWhen.DefinedOrChangedOrNew, data?.sourceInfos, "sourceInfos", info.sourceInfos, infoDiff, infoPropertyLogs, identity);
-                infoDiff = printProperty(PrintPropertyWhen.DefinedOrChangedOrNew, data, "documentPositionMapper", info.documentPositionMapper, infoDiff, infoPropertyLogs, info.documentPositionMapper ? toStringDocumentPostionMapper(info.documentPositionMapper) : undefined);
+                infoDiff = printProperty(
+                    PrintPropertyWhen.DefinedOrChangedOrNew,
+                    data,
+                    "declarationInfoPath",
+                    info.declarationInfoPath,
+                    infoDiff,
+                    infoPropertyLogs,
+                );
+                infoDiff = printSetPropertyValueWorker(
+                    PrintPropertyWhen.DefinedOrChangedOrNew,
+                    data?.sourceInfos,
+                    "sourceInfos",
+                    info.sourceInfos,
+                    infoDiff,
+                    infoPropertyLogs,
+                    identity,
+                );
+                infoDiff = printProperty(
+                    PrintPropertyWhen.DefinedOrChangedOrNew,
+                    data,
+                    "documentPositionMapper",
+                    info.documentPositionMapper,
+                    infoDiff,
+                    infoPropertyLogs,
+                    info.documentPositionMapper ? toStringDocumentPostionMapper(info.documentPositionMapper)
+                        : undefined,
+                );
                 let defaultProject: Project | undefined;
                 try {
                     if (isOpen) defaultProject = info.getDefaultProject();
@@ -444,7 +556,8 @@ export function patchServiceForStateBaseline(service: ProjectService) {
             ) :
             printSetPropertyValueWorker(
                 PrintPropertyWhen.DefinedOrChangedOrNew,
-                data?.sourceMapFilePath && !isString(data?.sourceMapFilePath) ? data.sourceMapFilePath.sourceInfos : undefined,
+                data?.sourceMapFilePath && !isString(data?.sourceMapFilePath) ? data.sourceMapFilePath.sourceInfos
+                    : undefined,
                 "sourceMapFilePath sourceInfos",
                 info.sourceMapFilePath.sourceInfos,
                 infoDiff,

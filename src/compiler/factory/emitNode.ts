@@ -43,14 +43,18 @@ export function getOrCreateEmitNode(node: Node): EmitNode {
                 return node.emitNode = { annotatedNodes: [node] } as EmitNode;
             }
 
-            const sourceFile = getSourceFileOfNode(getParseTreeNode(getSourceFileOfNode(node))) ?? Debug.fail("Could not determine parsed source file.");
+            const sourceFile = getSourceFileOfNode(getParseTreeNode(getSourceFileOfNode(node))) ??
+                Debug.fail("Could not determine parsed source file.");
             getOrCreateEmitNode(sourceFile).annotatedNodes!.push(node);
         }
 
         node.emitNode = {} as EmitNode;
     }
     else {
-        Debug.assert(!(node.emitNode.internalFlags & InternalEmitFlags.Immutable), "Invalid attempt to mutate an immutable node.");
+        Debug.assert(
+            !(node.emitNode.internalFlags & InternalEmitFlags.Immutable),
+            "Invalid attempt to mutate an immutable node.",
+        );
     }
     return node.emitNode;
 }
@@ -201,8 +205,22 @@ export function setSyntheticLeadingComments<T extends Node>(node: T, comments: S
     return node;
 }
 
-export function addSyntheticLeadingComment<T extends Node>(node: T, kind: SyntaxKind.SingleLineCommentTrivia | SyntaxKind.MultiLineCommentTrivia, text: string, hasTrailingNewLine?: boolean) {
-    return setSyntheticLeadingComments(node, append<SynthesizedComment>(getSyntheticLeadingComments(node), { kind, pos: -1, end: -1, hasTrailingNewLine, text }));
+export function addSyntheticLeadingComment<T extends Node>(
+    node: T,
+    kind: SyntaxKind.SingleLineCommentTrivia | SyntaxKind.MultiLineCommentTrivia,
+    text: string,
+    hasTrailingNewLine?: boolean,
+) {
+    return setSyntheticLeadingComments(
+        node,
+        append<SynthesizedComment>(getSyntheticLeadingComments(node), {
+            kind,
+            pos: -1,
+            end: -1,
+            hasTrailingNewLine,
+            text,
+        }),
+    );
 }
 
 export function getSyntheticTrailingComments(node: Node): SynthesizedComment[] | undefined {
@@ -214,8 +232,22 @@ export function setSyntheticTrailingComments<T extends Node>(node: T, comments: 
     return node;
 }
 
-export function addSyntheticTrailingComment<T extends Node>(node: T, kind: SyntaxKind.SingleLineCommentTrivia | SyntaxKind.MultiLineCommentTrivia, text: string, hasTrailingNewLine?: boolean) {
-    return setSyntheticTrailingComments(node, append<SynthesizedComment>(getSyntheticTrailingComments(node), { kind, pos: -1, end: -1, hasTrailingNewLine, text }));
+export function addSyntheticTrailingComment<T extends Node>(
+    node: T,
+    kind: SyntaxKind.SingleLineCommentTrivia | SyntaxKind.MultiLineCommentTrivia,
+    text: string,
+    hasTrailingNewLine?: boolean,
+) {
+    return setSyntheticTrailingComments(
+        node,
+        append<SynthesizedComment>(getSyntheticTrailingComments(node), {
+            kind,
+            pos: -1,
+            end: -1,
+            hasTrailingNewLine,
+            text,
+        }),
+    );
 }
 
 export function moveSyntheticComments<T extends Node>(node: T, original: Node): T {
@@ -348,18 +380,26 @@ export function getTypeNode<T extends Node>(node: T): TypeNode | undefined {
 }
 
 /** @internal */
-export function setIdentifierTypeArguments<T extends Identifier>(node: T, typeArguments: NodeArray<TypeNode | TypeParameterDeclaration> | undefined) {
+export function setIdentifierTypeArguments<T extends Identifier>(
+    node: T,
+    typeArguments: NodeArray<TypeNode | TypeParameterDeclaration> | undefined,
+) {
     getOrCreateEmitNode(node).identifierTypeArguments = typeArguments;
     return node;
 }
 
 /** @internal */
-export function getIdentifierTypeArguments(node: Identifier): NodeArray<TypeNode | TypeParameterDeclaration> | undefined {
+export function getIdentifierTypeArguments(
+    node: Identifier,
+): NodeArray<TypeNode | TypeParameterDeclaration> | undefined {
     return node.emitNode?.identifierTypeArguments;
 }
 
 /** @internal */
-export function setIdentifierAutoGenerate<T extends Identifier | PrivateIdentifier>(node: T, autoGenerate: AutoGenerateInfo | undefined) {
+export function setIdentifierAutoGenerate<T extends Identifier | PrivateIdentifier>(
+    node: T,
+    autoGenerate: AutoGenerateInfo | undefined,
+) {
     getOrCreateEmitNode(node).autoGenerate = autoGenerate;
     return node;
 }
@@ -370,12 +410,17 @@ export function getIdentifierAutoGenerate(node: Identifier | PrivateIdentifier):
 }
 
 /** @internal */
-export function setIdentifierGeneratedImportReference<T extends Identifier | PrivateIdentifier>(node: T, value: ImportSpecifier | undefined) {
+export function setIdentifierGeneratedImportReference<T extends Identifier | PrivateIdentifier>(
+    node: T,
+    value: ImportSpecifier | undefined,
+) {
     getOrCreateEmitNode(node).generatedImportReference = value;
     return node;
 }
 
 /** @internal */
-export function getIdentifierGeneratedImportReference(node: Identifier | PrivateIdentifier): ImportSpecifier | undefined {
+export function getIdentifierGeneratedImportReference(
+    node: Identifier | PrivateIdentifier,
+): ImportSpecifier | undefined {
     return node.emitNode?.generatedImportReference;
 }

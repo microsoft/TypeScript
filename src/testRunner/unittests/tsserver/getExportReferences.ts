@@ -67,7 +67,11 @@ export const { nest: [valueE, { valueF }] } = { nest: [0, { valueF: 1 }] };
             command: ts.server.protocol.CommandTypes.References,
             arguments: protocolFileLocationFromSubstring(modTs, "renamedD"),
         });
-        baselineTsserverLogs("getExportReferences", "object declaration references that renames destructured property", session);
+        baselineTsserverLogs(
+            "getExportReferences",
+            "object declaration references that renames destructured property",
+            session,
+        );
     });
 
     it("should get nested object declaration references", () => {

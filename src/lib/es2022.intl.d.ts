@@ -85,7 +85,10 @@ declare namespace Intl {
          *
          * [MDN](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/Segmenter/supportedLocalesOf)
          */
-        supportedLocalesOf(locales: LocalesArgument, options?: Pick<SegmenterOptions, "localeMatcher">): UnicodeBCP47LocaleIdentifier[];
+        supportedLocalesOf(
+            locales: LocalesArgument,
+            options?: Pick<SegmenterOptions, "localeMatcher">,
+        ): UnicodeBCP47LocaleIdentifier[];
     };
 
     /**
@@ -95,5 +98,7 @@ declare namespace Intl {
      * @param key A string indicating the category of values to return.
      * @returns A sorted array of the supported values.
      */
-    function supportedValuesOf(key: "calendar" | "collation" | "currency" | "numberingSystem" | "timeZone" | "unit"): string[];
+    function supportedValuesOf(
+        key: "calendar" | "collation" | "currency" | "numberingSystem" | "timeZone" | "unit",
+    ): string[];
 }

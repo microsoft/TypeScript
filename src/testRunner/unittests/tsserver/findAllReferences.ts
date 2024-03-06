@@ -128,7 +128,11 @@ const bar: Bar = {
         const loadingIndicatorScriptInfo = session.getProjectService().getScriptInfo(files[3].path)!;
         // At this point, we haven't updated `babel-loader` project yet,
         // so `babel-loader` is still a containing project of `loading-indicator` file.
-        assert(loadingIndicatorScriptInfo.containingProjects.find(p => p.projectName === "/packages/babel-loader/tsconfig.json"));
+        assert(
+            loadingIndicatorScriptInfo.containingProjects.find(p =>
+                p.projectName === "/packages/babel-loader/tsconfig.json"
+            ),
+        );
         // When calling find all references,
         // we shouldn't crash due to using outdated information on a file's containig projects.
         session.executeCommandSeq<protocol.ReferencesRequest>({
@@ -139,6 +143,10 @@ const bar: Bar = {
                 offset: 5,
             },
         });
-        baselineTsserverLogs("findAllReferences", "does not try to open a file in a project that was updated and no longer has the file", session);
+        baselineTsserverLogs(
+            "findAllReferences",
+            "does not try to open a file in a project that was updated and no longer has the file",
+            session,
+        );
     });
 });

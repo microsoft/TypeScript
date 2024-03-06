@@ -89,7 +89,12 @@ registerCodeFix({
         const token = getTokenAtPosition(sourceFile, context.span.start);
 
         if (isJSDocTemplateTag(token)) {
-            return [createDeleteFix(textChanges.ChangeTracker.with(context, t => t.delete(sourceFile, token)), Diagnostics.Remove_template_tag)];
+            return [
+                createDeleteFix(
+                    textChanges.ChangeTracker.with(context, t => t.delete(sourceFile, token)),
+                    Diagnostics.Remove_template_tag,
+                ),
+            ];
         }
         if (token.kind === SyntaxKind.LessThanToken) {
             const changes = textChanges.ChangeTracker.with(context, t => deleteTypeParameters(t, sourceFile, token));
@@ -98,12 +103,40 @@ registerCodeFix({
         const importDecl = tryGetFullImport(token);
         if (importDecl) {
             const changes = textChanges.ChangeTracker.with(context, t => t.delete(sourceFile, importDecl));
-            return [createCodeFixAction(fixName, changes, [Diagnostics.Remove_import_from_0, showModuleSpecifier(importDecl)], fixIdDeleteImports, Diagnostics.Delete_all_unused_imports)];
+            return [
+                createCodeFixAction(
+                    fixName,
+                    changes,
+                    [Diagnostics.Remove_import_from_0, showModuleSpecifier(importDecl)],
+                    fixIdDeleteImports,
+                    Diagnostics.Delete_all_unused_imports,
+                ),
+            ];
         }
         else if (isImport(token)) {
-            const deletion = textChanges.ChangeTracker.with(context, t => tryDeleteDeclaration(sourceFile, token, t, checker, sourceFiles, program, cancellationToken, /*isFixAll*/ false));
+            const deletion = textChanges.ChangeTracker.with(
+                context,
+                t => tryDeleteDeclaration(
+                    sourceFile,
+                    token,
+                    t,
+                    checker,
+                    sourceFiles,
+                    program,
+                    cancellationToken,
+                    /*isFixAll*/ false,
+                ),
+            );
             if (deletion.length) {
-                return [createCodeFixAction(fixName, deletion, [Diagnostics.Remove_unused_declaration_for_Colon_0, token.getText(sourceFile)], fixIdDeleteImports, Diagnostics.Delete_all_unused_imports)];
+                return [
+                    createCodeFixAction(
+                        fixName,
+                        deletion,
+                        [Diagnostics.Remove_unused_declaration_for_Colon_0, token.getText(sourceFile)],
+                        fixIdDeleteImports,
+                        Diagnostics.Delete_all_unused_imports,
+                    ),
+                ];
             }
         }
 
@@ -111,21 +144,49 @@ registerCodeFix({
             if (isParameter(token.parent.parent)) {
                 const elements = token.parent.elements;
                 const diagnostic: [DiagnosticMessage, string] = [
-                    elements.length > 1 ? Diagnostics.Remove_unused_declarations_for_Colon_0 : Diagnostics.Remove_unused_declaration_for_Colon_0,
+                    elements.length > 1 ? Diagnostics.Remove_unused_declarations_for_Colon_0
+                        : Diagnostics.Remove_unused_declaration_for_Colon_0,
                     map(elements, e => e.getText(sourceFile)).join(", "),
                 ];
                 return [
-                    createDeleteFix(textChanges.ChangeTracker.with(context, t => deleteDestructuringElements(t, sourceFile, token.parent as ObjectBindingPattern | ArrayBindingPattern)), diagnostic),
+                    createDeleteFix(
+                        textChanges.ChangeTracker.with(
+                            context,
+                            t => deleteDestructuringElements(
+                                t,
+                                sourceFile,
+                                token.parent as ObjectBindingPattern | ArrayBindingPattern,
+                            ),
+                        ),
+                        diagnostic,
+                    ),
                 ];
             }
             return [
-                createDeleteFix(textChanges.ChangeTracker.with(context, t => deleteDestructuring(context, t, sourceFile, token.parent as ObjectBindingPattern | ArrayBindingPattern)), Diagnostics.Remove_unused_destructuring_declaration),
+                createDeleteFix(
+                    textChanges.ChangeTracker.with(
+                        context,
+                        t => deleteDestructuring(
+                            context,
+                            t,
+                            sourceFile,
+                            token.parent as ObjectBindingPattern | ArrayBindingPattern,
+                        ),
+                    ),
+                    Diagnostics.Remove_unused_destructuring_declaration,
+                ),
             ];
         }
 
         if (canDeleteEntireVariableStatement(sourceFile, token)) {
             return [
-                createDeleteFix(textChanges.ChangeTracker.with(context, t => deleteEntireVariableStatement(t, sourceFile, token.parent as VariableDeclarationList)), Diagnostics.Remove_variable_statement),
+                createDeleteFix(
+                    textChanges.ChangeTracker.with(
+                        context,
+                        t => deleteEntireVariableStatement(t, sourceFile, token.parent as VariableDeclarationList),
+                    ),
+                    Diagnostics.Remove_variable_statement,
+                ),
             ];
         }
 
@@ -133,19 +194,55 @@ registerCodeFix({
         if (token.kind === SyntaxKind.InferKeyword) {
             const changes = textChanges.ChangeTracker.with(context, t => changeInferToUnknown(t, sourceFile, token));
             const name = cast(token.parent, isInferTypeNode).typeParameter.name.text;
-            result.push(createCodeFixAction(fixName, changes, [Diagnostics.Replace_infer_0_with_unknown, name], fixIdInfer, Diagnostics.Replace_all_unused_infer_with_unknown));
+            result.push(
+                createCodeFixAction(
+                    fixName,
+                    changes,
+                    [Diagnostics.Replace_infer_0_with_unknown, name],
+                    fixIdInfer,
+                    Diagnostics.Replace_all_unused_infer_with_unknown,
+                ),
+            );
         }
         else {
-            const deletion = textChanges.ChangeTracker.with(context, t => tryDeleteDeclaration(sourceFile, token, t, checker, sourceFiles, program, cancellationToken, /*isFixAll*/ false));
+            const deletion = textChanges.ChangeTracker.with(
+                context,
+                t => tryDeleteDeclaration(
+                    sourceFile,
+                    token,
+                    t,
+                    checker,
+                    sourceFiles,
+                    program,
+                    cancellationToken,
+                    /*isFixAll*/ false,
+                ),
+            );
             if (deletion.length) {
                 const name = isComputedPropertyName(token.parent) ? token.parent : token;
-                result.push(createDeleteFix(deletion, [Diagnostics.Remove_unused_declaration_for_Colon_0, name.getText(sourceFile)]));
+                result.push(
+                    createDeleteFix(deletion, [
+                        Diagnostics.Remove_unused_declaration_for_Colon_0,
+                        name.getText(sourceFile),
+                    ]),
+                );
             }
         }
 
-        const prefix = textChanges.ChangeTracker.with(context, t => tryPrefixDeclaration(t, errorCode, sourceFile, token));
+        const prefix = textChanges.ChangeTracker.with(
+            context,
+            t => tryPrefixDeclaration(t, errorCode, sourceFile, token),
+        );
         if (prefix.length) {
-            result.push(createCodeFixAction(fixName, prefix, [Diagnostics.Prefix_0_with_an_underscore, token.getText(sourceFile)], fixIdPrefix, Diagnostics.Prefix_all_unused_declarations_with_where_possible));
+            result.push(
+                createCodeFixAction(
+                    fixName,
+                    prefix,
+                    [Diagnostics.Prefix_0_with_an_underscore, token.getText(sourceFile)],
+                    fixIdPrefix,
+                    Diagnostics.Prefix_all_unused_declarations_with_where_possible,
+                ),
+            );
         }
 
         return result;
@@ -167,7 +264,16 @@ registerCodeFix({
                         changes.delete(sourceFile, importDecl);
                     }
                     else if (isImport(token)) {
-                        tryDeleteDeclaration(sourceFile, token, changes, checker, sourceFiles, program, cancellationToken, /*isFixAll*/ true);
+                        tryDeleteDeclaration(
+                            sourceFile,
+                            token,
+                            changes,
+                            checker,
+                            sourceFiles,
+                            program,
+                            cancellationToken,
+                            /*isFixAll*/ true,
+                        );
                     }
                     break;
                 }
@@ -185,7 +291,10 @@ registerCodeFix({
                         if (token.parent.parent.initializer) {
                             break;
                         }
-                        else if (!isParameter(token.parent.parent) || isNotProvidedArguments(token.parent.parent, checker, sourceFiles)) {
+                        else if (
+                            !isParameter(token.parent.parent) ||
+                            isNotProvidedArguments(token.parent.parent, checker, sourceFiles)
+                        ) {
                             changes.delete(sourceFile, token.parent.parent);
                         }
                     }
@@ -196,7 +305,16 @@ registerCodeFix({
                         deleteEntireVariableStatement(changes, sourceFile, token.parent as VariableDeclarationList);
                     }
                     else {
-                        tryDeleteDeclaration(sourceFile, token, changes, checker, sourceFiles, program, cancellationToken, /*isFixAll*/ true);
+                        tryDeleteDeclaration(
+                            sourceFile,
+                            token,
+                            changes,
+                            checker,
+                            sourceFiles,
+                            program,
+                            cancellationToken,
+                            /*isFixAll*/ true,
+                        );
                     }
                     break;
                 }
@@ -221,12 +339,19 @@ function createDeleteFix(changes: FileTextChanges[], diag: DiagnosticOrDiagnosti
 }
 
 function deleteTypeParameters(changes: textChanges.ChangeTracker, sourceFile: SourceFile, token: Node): void {
-    changes.delete(sourceFile, Debug.checkDefined(cast(token.parent, isDeclarationWithTypeParameterChildren).typeParameters, "The type parameter to delete should exist"));
+    changes.delete(
+        sourceFile,
+        Debug.checkDefined(
+            cast(token.parent, isDeclarationWithTypeParameterChildren).typeParameters,
+            "The type parameter to delete should exist",
+        ),
+    );
 }
 
 function isImport(token: Node) {
     return token.kind === SyntaxKind.ImportKeyword
-        || token.kind === SyntaxKind.Identifier && (token.parent.kind === SyntaxKind.ImportSpecifier || token.parent.kind === SyntaxKind.ImportClause);
+        || token.kind === SyntaxKind.Identifier &&
+            (token.parent.kind === SyntaxKind.ImportSpecifier || token.parent.kind === SyntaxKind.ImportClause);
 }
 
 /** Sometimes the diagnostic span is an entire ImportDeclaration, so we should remove the whole thing. */
@@ -238,15 +363,28 @@ function canDeleteEntireVariableStatement(sourceFile: SourceFile, token: Node): 
     return isVariableDeclarationList(token.parent) && first(token.parent.getChildren(sourceFile)) === token;
 }
 
-function deleteEntireVariableStatement(changes: textChanges.ChangeTracker, sourceFile: SourceFile, node: VariableDeclarationList) {
+function deleteEntireVariableStatement(
+    changes: textChanges.ChangeTracker,
+    sourceFile: SourceFile,
+    node: VariableDeclarationList,
+) {
     changes.delete(sourceFile, node.parent.kind === SyntaxKind.VariableStatement ? node.parent : node);
 }
 
-function deleteDestructuringElements(changes: textChanges.ChangeTracker, sourceFile: SourceFile, node: ObjectBindingPattern | ArrayBindingPattern) {
+function deleteDestructuringElements(
+    changes: textChanges.ChangeTracker,
+    sourceFile: SourceFile,
+    node: ObjectBindingPattern | ArrayBindingPattern,
+) {
     forEach(node.elements, n => changes.delete(sourceFile, n));
 }
 
-function deleteDestructuring(context: CodeFixContext, changes: textChanges.ChangeTracker, sourceFile: SourceFile, { parent }: ObjectBindingPattern | ArrayBindingPattern) {
+function deleteDestructuring(
+    context: CodeFixContext,
+    changes: textChanges.ChangeTracker,
+    sourceFile: SourceFile,
+    { parent }: ObjectBindingPattern | ArrayBindingPattern,
+) {
     if (isVariableDeclaration(parent) && parent.initializer && isCallLikeExpression(parent.initializer)) {
         if (isVariableDeclarationList(parent.parent) && length(parent.parent.declarations) > 1) {
             const varStatement = parent.parent.parent;
@@ -254,7 +392,8 @@ function deleteDestructuring(context: CodeFixContext, changes: textChanges.Chang
             const end = varStatement.end;
             changes.delete(sourceFile, parent);
             changes.insertNodeAt(sourceFile, end, parent.initializer, {
-                prefix: getNewLineOrDefaultFromHost(context.host, context.formatContext.options) + sourceFile.text.slice(getPrecedingNonSpaceCharacterPosition(sourceFile.text, pos - 1), pos),
+                prefix: getNewLineOrDefaultFromHost(context.host, context.formatContext.options) +
+                    sourceFile.text.slice(getPrecedingNonSpaceCharacterPosition(sourceFile.text, pos - 1), pos),
                 suffix: probablyUsesSemicolons(sourceFile) ? ";" : "",
             });
         }
@@ -267,7 +406,12 @@ function deleteDestructuring(context: CodeFixContext, changes: textChanges.Chang
     }
 }
 
-function tryPrefixDeclaration(changes: textChanges.ChangeTracker, errorCode: number, sourceFile: SourceFile, token: Node): void {
+function tryPrefixDeclaration(
+    changes: textChanges.ChangeTracker,
+    errorCode: number,
+    sourceFile: SourceFile,
+    token: Node,
+): void {
     // Don't offer to prefix a property.
     if (errorCode === Diagnostics.Property_0_is_declared_but_its_value_is_never_read.code) return;
     if (token.kind === SyntaxKind.InferKeyword) {
@@ -302,7 +446,16 @@ function canPrefix(token: Identifier): boolean {
     return false;
 }
 
-function tryDeleteDeclaration(sourceFile: SourceFile, token: Node, changes: textChanges.ChangeTracker, checker: TypeChecker, sourceFiles: readonly SourceFile[], program: Program, cancellationToken: CancellationToken, isFixAll: boolean) {
+function tryDeleteDeclaration(
+    sourceFile: SourceFile,
+    token: Node,
+    changes: textChanges.ChangeTracker,
+    checker: TypeChecker,
+    sourceFiles: readonly SourceFile[],
+    program: Program,
+    cancellationToken: CancellationToken,
+    isFixAll: boolean,
+) {
     tryDeleteDeclarationWorker(token, changes, sourceFile, checker, sourceFiles, program, cancellationToken, isFixAll);
     if (isIdentifier(token)) {
         FindAllReferences.Core.eachSymbolReferenceInFile(token, checker, sourceFile, (ref: Node) => {
@@ -314,12 +467,24 @@ function tryDeleteDeclaration(sourceFile: SourceFile, token: Node, changes: text
     }
 }
 
-function tryDeleteDeclarationWorker(token: Node, changes: textChanges.ChangeTracker, sourceFile: SourceFile, checker: TypeChecker, sourceFiles: readonly SourceFile[], program: Program, cancellationToken: CancellationToken, isFixAll: boolean): void {
+function tryDeleteDeclarationWorker(
+    token: Node,
+    changes: textChanges.ChangeTracker,
+    sourceFile: SourceFile,
+    checker: TypeChecker,
+    sourceFiles: readonly SourceFile[],
+    program: Program,
+    cancellationToken: CancellationToken,
+    isFixAll: boolean,
+): void {
     const { parent } = token;
     if (isParameter(parent)) {
         tryDeleteParameter(changes, sourceFile, parent, checker, sourceFiles, program, cancellationToken, isFixAll);
     }
-    else if (!(isFixAll && isIdentifier(token) && FindAllReferences.Core.isSymbolReferencedInFile(token, checker, sourceFile))) {
+    else if (
+        !(isFixAll && isIdentifier(token) &&
+            FindAllReferences.Core.isSymbolReferencedInFile(token, checker, sourceFile))
+    ) {
         const node = isImportClause(parent) ? token : isComputedPropertyName(parent) ? parent.parent : parent;
         Debug.assert(node !== sourceFile, "should not delete whole source file");
         changes.delete(sourceFile, node);
@@ -339,7 +504,8 @@ function tryDeleteParameter(
     if (mayDeleteParameter(checker, sourceFile, parameter, sourceFiles, program, cancellationToken, isFixAll)) {
         if (
             parameter.modifiers && parameter.modifiers.length > 0 &&
-            (!isIdentifier(parameter.name) || FindAllReferences.Core.isSymbolReferencedInFile(parameter.name, checker, sourceFile))
+            (!isIdentifier(parameter.name) ||
+                FindAllReferences.Core.isSymbolReferencedInFile(parameter.name, checker, sourceFile))
         ) {
             for (const modifier of parameter.modifiers) {
                 if (isModifier(modifier)) {
@@ -353,20 +519,43 @@ function tryDeleteParameter(
     }
 }
 
-function isNotProvidedArguments(parameter: ParameterDeclaration, checker: TypeChecker, sourceFiles: readonly SourceFile[]) {
+function isNotProvidedArguments(
+    parameter: ParameterDeclaration,
+    checker: TypeChecker,
+    sourceFiles: readonly SourceFile[],
+) {
     const index = parameter.parent.parameters.indexOf(parameter);
     // Just in case the call didn't provide enough arguments.
-    return !FindAllReferences.Core.someSignatureUsage(parameter.parent, sourceFiles, checker, (_, call) => !call || call.arguments.length > index);
+    return !FindAllReferences.Core.someSignatureUsage(
+        parameter.parent,
+        sourceFiles,
+        checker,
+        (_, call) => !call || call.arguments.length > index,
+    );
 }
 
-function mayDeleteParameter(checker: TypeChecker, sourceFile: SourceFile, parameter: ParameterDeclaration, sourceFiles: readonly SourceFile[], program: Program, cancellationToken: CancellationToken, isFixAll: boolean): boolean {
+function mayDeleteParameter(
+    checker: TypeChecker,
+    sourceFile: SourceFile,
+    parameter: ParameterDeclaration,
+    sourceFiles: readonly SourceFile[],
+    program: Program,
+    cancellationToken: CancellationToken,
+    isFixAll: boolean,
+): boolean {
     const { parent } = parameter;
     switch (parent.kind) {
         case SyntaxKind.MethodDeclaration:
         case SyntaxKind.Constructor:
             const index = parent.parameters.indexOf(parameter);
             const referent = isMethodDeclaration(parent) ? parent.name : parent;
-            const entries = FindAllReferences.Core.getReferencedSymbolsForNode(parent.pos, referent, program, sourceFiles, cancellationToken);
+            const entries = FindAllReferences.Core.getReferencedSymbolsForNode(
+                parent.pos,
+                referent,
+                program,
+                sourceFiles,
+                cancellationToken,
+            );
             if (entries) {
                 for (const entry of entries) {
                     for (const reference of entry.references) {
@@ -381,7 +570,8 @@ function mayDeleteParameter(checker: TypeChecker, sourceFile: SourceFile, parame
                                 && isCallExpression(reference.node.parent.parent)
                                 && reference.node.parent.parent.arguments.length > index;
                             // parameter in overridden or overriding method
-                            const isOverriddenMethod = (isMethodDeclaration(reference.node.parent) || isMethodSignature(reference.node.parent))
+                            const isOverriddenMethod =
+                                (isMethodDeclaration(reference.node.parent) || isMethodSignature(reference.node.parent))
                                 && reference.node.parent !== parameter.parent
                                 && reference.node.parent.parameters.length > index;
                             if (isSuperCall || isSuperMethodCall || isOverriddenMethod) return false;
@@ -415,7 +605,14 @@ function mayDeleteParameter(checker: TypeChecker, sourceFile: SourceFile, parame
 }
 
 function isCallbackLike(checker: TypeChecker, sourceFile: SourceFile, name: Identifier): boolean {
-    return !!FindAllReferences.Core.eachSymbolReferenceInFile(name, checker, sourceFile, reference => isIdentifier(reference) && isCallExpression(reference.parent) && reference.parent.arguments.includes(reference));
+    return !!FindAllReferences.Core.eachSymbolReferenceInFile(
+        name,
+        checker,
+        sourceFile,
+        reference =>
+            isIdentifier(reference) && isCallExpression(reference.parent) &&
+            reference.parent.arguments.includes(reference),
+    );
 }
 
 function isLastParameter(func: FunctionLikeDeclaration, parameter: ParameterDeclaration, isFixAll: boolean): boolean {
@@ -429,5 +626,7 @@ function isLastParameter(func: FunctionLikeDeclaration, parameter: ParameterDecl
 
 function mayDeleteExpression(node: Node) {
     return ((isBinaryExpression(node.parent) && node.parent.left === node) ||
-        ((isPostfixUnaryExpression(node.parent) || isPrefixUnaryExpression(node.parent)) && node.parent.operand === node)) && isExpressionStatement(node.parent.parent);
+        ((isPostfixUnaryExpression(node.parent) || isPrefixUnaryExpression(node.parent)) &&
+            node.parent.operand === node)) &&
+        isExpressionStatement(node.parent.parent);
 }

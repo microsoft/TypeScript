@@ -21,4 +21,5 @@ export function findUpFile(name: string): string {
     }
 }
 
-export const findUpRoot: { (): string; cached?: string; } = () => findUpRoot.cached ||= dirname(findUpFile("Herebyfile.mjs"));
+export const findUpRoot: { (): string; cached?: string; } = () =>
+    findUpRoot.cached ||= dirname(findUpFile("Herebyfile.mjs"));

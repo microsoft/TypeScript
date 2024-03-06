@@ -138,17 +138,23 @@ class FailedTestsReporter extends Mocha.reporters.Base {
     done(failures, fn) {
         assert(this.reporterOptions);
         assert(this.reporterOptions.file);
-        FailedTestsReporter.writeFailures(this.reporterOptions.file, this.passes, this.failures, this.reporterOptions.keepFailed || this.stats.tests === 0, err => {
-            const reporter = this.reporter;
-            if (reporter && reporter.done) {
-                reporter.done(failures, fn);
-            }
-            else if (fn) {
-                fn(failures);
-            }
+        FailedTestsReporter.writeFailures(
+            this.reporterOptions.file,
+            this.passes,
+            this.failures,
+            this.reporterOptions.keepFailed || this.stats.tests === 0,
+            err => {
+                const reporter = this.reporter;
+                if (reporter && reporter.done) {
+                    reporter.done(failures, fn);
+                }
+                else if (fn) {
+                    fn(failures);
+                }
 
-            if (err) console.error(err);
-        });
+                if (err) console.error(err);
+            },
+        );
     }
 }
 

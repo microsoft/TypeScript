@@ -209,11 +209,17 @@ export namespace Debug {
         );
     }
 
-    export function assert(expression: unknown, message?: string, verboseDebugInfo?: string | (() => string), stackCrawlMark?: AnyFunction): asserts expression {
+    export function assert(
+        expression: unknown,
+        message?: string,
+        verboseDebugInfo?: string | (() => string),
+        stackCrawlMark?: AnyFunction,
+    ): asserts expression {
         if (!expression) {
             message = message ? `False expression: ${message}` : "False expression.";
             if (verboseDebugInfo) {
-                message += "\r\nVerbose Debug Information: " + (typeof verboseDebugInfo === "string" ? verboseDebugInfo : verboseDebugInfo());
+                message += "\r\nVerbose Debug Information: " +
+                    (typeof verboseDebugInfo === "string" ? verboseDebugInfo : verboseDebugInfo());
             }
             fail(message, stackCrawlMark || assert);
         }
@@ -244,7 +250,11 @@ export namespace Debug {
         }
     }
 
-    export function assertIsDefined<T>(value: T, message?: string, stackCrawlMark?: AnyFunction): asserts value is NonNullable<T> {
+    export function assertIsDefined<T>(
+        value: T,
+        message?: string,
+        stackCrawlMark?: AnyFunction,
+    ): asserts value is NonNullable<T> {
         // eslint-disable-next-line no-null/no-null
         if (value === undefined || value === null) {
             fail(message, stackCrawlMark || assertIsDefined);
@@ -256,30 +266,74 @@ export namespace Debug {
         return value;
     }
 
-    export function assertEachIsDefined<T extends Node>(value: NodeArray<T>, message?: string, stackCrawlMark?: AnyFunction): asserts value is NodeArray<T>;
-    export function assertEachIsDefined<T>(value: readonly T[], message?: string, stackCrawlMark?: AnyFunction): asserts value is readonly NonNullable<T>[];
+    export function assertEachIsDefined<T extends Node>(
+        value: NodeArray<T>,
+        message?: string,
+        stackCrawlMark?: AnyFunction,
+    ): asserts value is NodeArray<T>;
+    export function assertEachIsDefined<T>(
+        value: readonly T[],
+        message?: string,
+        stackCrawlMark?: AnyFunction,
+    ): asserts value is readonly NonNullable<T>[];
     export function assertEachIsDefined<T>(value: readonly T[], message?: string, stackCrawlMark?: AnyFunction) {
         for (const v of value) {
             assertIsDefined(v, message, stackCrawlMark || assertEachIsDefined);
         }
     }
 
-    export function checkEachDefined<T, A extends readonly T[]>(value: A, message?: string, stackCrawlMark?: AnyFunction): A {
+    export function checkEachDefined<T, A extends readonly T[]>(
+        value: A,
+        message?: string,
+        stackCrawlMark?: AnyFunction,
+    ): A {
         assertEachIsDefined(value, message, stackCrawlMark || checkEachDefined);
         return value;
     }
 
     export function assertNever(member: never, message = "Illegal value:", stackCrawlMark?: AnyFunction): never {
-        const detail = typeof member === "object" && hasProperty(member, "kind") && hasProperty(member, "pos") ? "SyntaxKind: " + formatSyntaxKind((member as Node).kind) : JSON.stringify(member);
+        const detail = typeof member === "object" && hasProperty(member, "kind") && hasProperty(member, "pos") ?
+            "SyntaxKind: " + formatSyntaxKind((member as Node).kind)
+            : JSON.stringify(member);
         return fail(`${message} ${detail}`, stackCrawlMark || assertNever);
     }
 
-    export function assertEachNode<T extends Node, U extends T>(nodes: NodeArray<T>, test: (node: T) => node is U, message?: string, stackCrawlMark?: AnyFunction): asserts nodes is NodeArray<U>;
-    export function assertEachNode<T extends Node, U extends T>(nodes: readonly T[], test: (node: T) => node is U, message?: string, stackCrawlMark?: AnyFunction): asserts nodes is readonly U[];
-    export function assertEachNode<T extends Node, U extends T>(nodes: NodeArray<T> | undefined, test: (node: T) => node is U, message?: string, stackCrawlMark?: AnyFunction): asserts nodes is NodeArray<U> | undefined;
-    export function assertEachNode<T extends Node, U extends T>(nodes: readonly T[] | undefined, test: (node: T) => node is U, message?: string, stackCrawlMark?: AnyFunction): asserts nodes is readonly U[] | undefined;
-    export function assertEachNode(nodes: readonly Node[], test: ((node: Node) => boolean) | undefined, message?: string, stackCrawlMark?: AnyFunction): void;
-    export function assertEachNode(nodes: readonly Node[] | undefined, test: ((node: Node) => boolean) | undefined, message?: string, stackCrawlMark?: AnyFunction) {
+    export function assertEachNode<T extends Node, U extends T>(
+        nodes: NodeArray<T>,
+        test: (node: T) => node is U,
+        message?: string,
+        stackCrawlMark?: AnyFunction,
+    ): asserts nodes is NodeArray<U>;
+    export function assertEachNode<T extends Node, U extends T>(
+        nodes: readonly T[],
+        test: (node: T) => node is U,
+        message?: string,
+        stackCrawlMark?: AnyFunction,
+    ): asserts nodes is readonly U[];
+    export function assertEachNode<T extends Node, U extends T>(
+        nodes: NodeArray<T> | undefined,
+        test: (node: T) => node is U,
+        message?: string,
+        stackCrawlMark?: AnyFunction,
+    ): asserts nodes is NodeArray<U> | undefined;
+    export function assertEachNode<T extends Node, U extends T>(
+        nodes: readonly T[] | undefined,
+        test: (node: T) => node is U,
+        message?: string,
+        stackCrawlMark?: AnyFunction,
+    ): asserts nodes is readonly U[] | undefined;
+    export function assertEachNode(
+        nodes: readonly Node[],
+        test: ((node: Node) => boolean) | undefined,
+        message?: string,
+        stackCrawlMark?: AnyFunction,
+    ): void;
+    export function assertEachNode(
+        nodes: readonly Node[] | undefined,
+        test: ((node: Node) => boolean) | undefined,
+        message?: string,
+        stackCrawlMark?: AnyFunction,
+    ) {
         if (shouldAssertFunction(AssertionLevel.Normal, "assertEachNode")) {
             assert(
                 test === undefined || every(nodes, test),
@@ -290,9 +344,24 @@ export namespace Debug {
         }
     }
 
-    export function assertNode<T extends Node, U extends T>(node: T | undefined, test: (node: T) => node is U, message?: string, stackCrawlMark?: AnyFunction): asserts node is U;
-    export function assertNode(node: Node | undefined, test: ((node: Node) => boolean) | undefined, message?: string, stackCrawlMark?: AnyFunction): void;
-    export function assertNode(node: Node | undefined, test: ((node: Node) => boolean) | undefined, message?: string, stackCrawlMark?: AnyFunction) {
+    export function assertNode<T extends Node, U extends T>(
+        node: T | undefined,
+        test: (node: T) => node is U,
+        message?: string,
+        stackCrawlMark?: AnyFunction,
+    ): asserts node is U;
+    export function assertNode(
+        node: Node | undefined,
+        test: ((node: Node) => boolean) | undefined,
+        message?: string,
+        stackCrawlMark?: AnyFunction,
+    ): void;
+    export function assertNode(
+        node: Node | undefined,
+        test: ((node: Node) => boolean) | undefined,
+        message?: string,
+        stackCrawlMark?: AnyFunction,
+    ) {
         if (shouldAssertFunction(AssertionLevel.Normal, "assertNode")) {
             assert(
                 node !== undefined && (test === undefined || test(node)),
@@ -303,9 +372,24 @@ export namespace Debug {
         }
     }
 
-    export function assertNotNode<T extends Node, U extends T>(node: T | undefined, test: (node: Node) => node is U, message?: string, stackCrawlMark?: AnyFunction): asserts node is Exclude<T, U>;
-    export function assertNotNode(node: Node | undefined, test: ((node: Node) => boolean) | undefined, message?: string, stackCrawlMark?: AnyFunction): void;
-    export function assertNotNode(node: Node | undefined, test: ((node: Node) => boolean) | undefined, message?: string, stackCrawlMark?: AnyFunction) {
+    export function assertNotNode<T extends Node, U extends T>(
+        node: T | undefined,
+        test: (node: Node) => node is U,
+        message?: string,
+        stackCrawlMark?: AnyFunction,
+    ): asserts node is Exclude<T, U>;
+    export function assertNotNode(
+        node: Node | undefined,
+        test: ((node: Node) => boolean) | undefined,
+        message?: string,
+        stackCrawlMark?: AnyFunction,
+    ): void;
+    export function assertNotNode(
+        node: Node | undefined,
+        test: ((node: Node) => boolean) | undefined,
+        message?: string,
+        stackCrawlMark?: AnyFunction,
+    ) {
         if (shouldAssertFunction(AssertionLevel.Normal, "assertNotNode")) {
             assert(
                 node === undefined || test === undefined || !test(node),
@@ -316,10 +400,30 @@ export namespace Debug {
         }
     }
 
-    export function assertOptionalNode<T extends Node, U extends T>(node: T, test: (node: T) => node is U, message?: string, stackCrawlMark?: AnyFunction): asserts node is U;
-    export function assertOptionalNode<T extends Node, U extends T>(node: T | undefined, test: (node: T) => node is U, message?: string, stackCrawlMark?: AnyFunction): asserts node is U | undefined;
-    export function assertOptionalNode(node: Node | undefined, test: ((node: Node) => boolean) | undefined, message?: string, stackCrawlMark?: AnyFunction): void;
-    export function assertOptionalNode(node: Node | undefined, test: ((node: Node) => boolean) | undefined, message?: string, stackCrawlMark?: AnyFunction) {
+    export function assertOptionalNode<T extends Node, U extends T>(
+        node: T,
+        test: (node: T) => node is U,
+        message?: string,
+        stackCrawlMark?: AnyFunction,
+    ): asserts node is U;
+    export function assertOptionalNode<T extends Node, U extends T>(
+        node: T | undefined,
+        test: (node: T) => node is U,
+        message?: string,
+        stackCrawlMark?: AnyFunction,
+    ): asserts node is U | undefined;
+    export function assertOptionalNode(
+        node: Node | undefined,
+        test: ((node: Node) => boolean) | undefined,
+        message?: string,
+        stackCrawlMark?: AnyFunction,
+    ): void;
+    export function assertOptionalNode(
+        node: Node | undefined,
+        test: ((node: Node) => boolean) | undefined,
+        message?: string,
+        stackCrawlMark?: AnyFunction,
+    ) {
         if (shouldAssertFunction(AssertionLevel.Normal, "assertOptionalNode")) {
             assert(
                 test === undefined || node === undefined || test(node),
@@ -330,10 +434,30 @@ export namespace Debug {
         }
     }
 
-    export function assertOptionalToken<T extends Node, K extends SyntaxKind>(node: T, kind: K, message?: string, stackCrawlMark?: AnyFunction): asserts node is Extract<T, { readonly kind: K; }>;
-    export function assertOptionalToken<T extends Node, K extends SyntaxKind>(node: T | undefined, kind: K, message?: string, stackCrawlMark?: AnyFunction): asserts node is Extract<T, { readonly kind: K; }> | undefined;
-    export function assertOptionalToken(node: Node | undefined, kind: SyntaxKind | undefined, message?: string, stackCrawlMark?: AnyFunction): void;
-    export function assertOptionalToken(node: Node | undefined, kind: SyntaxKind | undefined, message?: string, stackCrawlMark?: AnyFunction) {
+    export function assertOptionalToken<T extends Node, K extends SyntaxKind>(
+        node: T,
+        kind: K,
+        message?: string,
+        stackCrawlMark?: AnyFunction,
+    ): asserts node is Extract<T, { readonly kind: K; }>;
+    export function assertOptionalToken<T extends Node, K extends SyntaxKind>(
+        node: T | undefined,
+        kind: K,
+        message?: string,
+        stackCrawlMark?: AnyFunction,
+    ): asserts node is Extract<T, { readonly kind: K; }> | undefined;
+    export function assertOptionalToken(
+        node: Node | undefined,
+        kind: SyntaxKind | undefined,
+        message?: string,
+        stackCrawlMark?: AnyFunction,
+    ): void;
+    export function assertOptionalToken(
+        node: Node | undefined,
+        kind: SyntaxKind | undefined,
+        message?: string,
+        stackCrawlMark?: AnyFunction,
+    ) {
         if (shouldAssertFunction(AssertionLevel.Normal, "assertOptionalToken")) {
             assert(
                 kind === undefined || node === undefined || node.kind === kind,
@@ -344,7 +468,11 @@ export namespace Debug {
         }
     }
 
-    export function assertMissingNode(node: Node | undefined, message?: string, stackCrawlMark?: AnyFunction): asserts node is undefined;
+    export function assertMissingNode(
+        node: Node | undefined,
+        message?: string,
+        stackCrawlMark?: AnyFunction,
+    ): asserts node is undefined;
     export function assertMissingNode(node: Node | undefined, message?: string, stackCrawlMark?: AnyFunction) {
         if (shouldAssertFunction(AssertionLevel.Normal, "assertMissingNode")) {
             assert(
@@ -379,7 +507,9 @@ export namespace Debug {
     }
 
     export function formatSymbol(symbol: Symbol): string {
-        return `{ name: ${unescapeLeadingUnderscores(symbol.escapedName)}; flags: ${formatSymbolFlags(symbol.flags)}; declarations: ${map(symbol.declarations, node => formatSyntaxKind(node.kind))} }`;
+        return `{ name: ${unescapeLeadingUnderscores(symbol.escapedName)}; flags: ${
+            formatSymbolFlags(symbol.flags)
+        }; declarations: ${map(symbol.declarations, node => formatSyntaxKind(node.kind))} }`;
     }
 
     /**
@@ -619,7 +749,9 @@ export namespace Debug {
                     const symbolHeader = this.flags & SymbolFlags.Transient ? "TransientSymbol" :
                         "Symbol";
                     const remainingSymbolFlags = this.flags & ~SymbolFlags.Transient;
-                    return `${symbolHeader} '${symbolName(this)}'${remainingSymbolFlags ? ` (${formatSymbolFlags(remainingSymbolFlags)})` : ""}`;
+                    return `${symbolHeader} '${symbolName(this)}'${
+                        remainingSymbolFlags ? ` (${formatSymbolFlags(remainingSymbolFlags)})` : ""
+                    }`;
                 },
             },
             __debugFlags: {
@@ -633,10 +765,18 @@ export namespace Debug {
             // for use with vscode-js-debug's new customDescriptionGenerator in launch.json
             __tsDebuggerDisplay: {
                 value(this: Type) {
-                    const typeHeader = this.flags & TypeFlags.Intrinsic ? `IntrinsicType ${(this as IntrinsicType).intrinsicName}${(this as IntrinsicType).debugIntrinsicName ? ` (${(this as IntrinsicType).debugIntrinsicName})` : ""}` :
+                    const typeHeader = this.flags & TypeFlags.Intrinsic ?
+                        `IntrinsicType ${(this as IntrinsicType).intrinsicName}${
+                            (this as IntrinsicType).debugIntrinsicName
+                                ? ` (${(this as IntrinsicType).debugIntrinsicName})` : ""
+                        }` :
                         this.flags & TypeFlags.Nullable ? "NullableType" :
-                        this.flags & TypeFlags.StringOrNumberLiteral ? `LiteralType ${JSON.stringify((this as LiteralType).value)}` :
-                        this.flags & TypeFlags.BigIntLiteral ? `LiteralType ${(this as BigIntLiteralType).value.negative ? "-" : ""}${(this as BigIntLiteralType).value.base10Value}n` :
+                        this.flags & TypeFlags.StringOrNumberLiteral ?
+                        `LiteralType ${JSON.stringify((this as LiteralType).value)}` :
+                        this.flags & TypeFlags.BigIntLiteral ?
+                        `LiteralType ${(this as BigIntLiteralType).value.negative ? "-" : ""}${
+                            (this as BigIntLiteralType).value.base10Value
+                        }n` :
                         this.flags & TypeFlags.UniqueESSymbol ? "UniqueESSymbolType" :
                         this.flags & TypeFlags.Enum ? "EnumType" :
                         this.flags & TypeFlags.Union ? "UnionType" :
@@ -656,8 +796,12 @@ export namespace Debug {
                             (this as ObjectType).objectFlags & ObjectFlags.EvolvingArray ? "EvolvingArrayType" :
                             "ObjectType" :
                         "Type";
-                    const remainingObjectFlags = this.flags & TypeFlags.Object ? (this as ObjectType).objectFlags & ~ObjectFlags.ObjectTypeKindMask : 0;
-                    return `${typeHeader}${this.symbol ? ` '${symbolName(this.symbol)}'` : ""}${remainingObjectFlags ? ` (${formatObjectFlags(remainingObjectFlags)})` : ""}`;
+                    const remainingObjectFlags = this.flags & TypeFlags.Object ?
+                        (this as ObjectType).objectFlags & ~ObjectFlags.ObjectTypeKindMask
+                        : 0;
+                    return `${typeHeader}${this.symbol ? ` '${symbolName(this.symbol)}'` : ""}${
+                        remainingObjectFlags ? ` (${formatObjectFlags(remainingObjectFlags)})` : ""
+                    }`;
                 },
             },
             __debugFlags: {
@@ -712,7 +856,10 @@ export namespace Debug {
                             const nodeHeader = isGeneratedIdentifier(this) ? "GeneratedIdentifier" :
                                 isIdentifier(this) ? `Identifier '${idText(this)}'` :
                                 isPrivateIdentifier(this) ? `PrivateIdentifier '${idText(this)}'` :
-                                isStringLiteral(this) ? `StringLiteral ${JSON.stringify(this.text.length < 10 ? this.text : this.text.slice(10) + "...")}` :
+                                isStringLiteral(this) ?
+                                `StringLiteral ${
+                                    JSON.stringify(this.text.length < 10 ? this.text : this.text.slice(10) + "...")
+                                }` :
                                 isNumericLiteral(this) ? `NumericLiteral ${this.text}` :
                                 isBigIntLiteral(this) ? `BigIntLiteral ${this.text}n` :
                                 isTypeParameterDeclaration(this) ? "TypeParameterDeclaration" :
@@ -787,7 +934,8 @@ export namespace Debug {
                             if (text === undefined) {
                                 const parseNode = getParseTreeNode(this);
                                 const sourceFile = parseNode && getSourceFileOfNode(parseNode);
-                                text = sourceFile ? getSourceTextOfNodeFromSourceFile(sourceFile, parseNode, includeTrivia) : "";
+                                text = sourceFile
+                                    ? getSourceTextOfNodeFromSourceFile(sourceFile, parseNode, includeTrivia) : "";
                                 weakNodeTextMap.set(this, text);
                             }
                             return text;
@@ -825,22 +973,28 @@ export namespace Debug {
                 case TypeMapKind.Function:
                     return this.debugInfo?.() || "(function mapper)";
                 case TypeMapKind.Simple:
-                    return `${(this.source as DebugType).__debugTypeToString()} -> ${(this.target as DebugType).__debugTypeToString()}`;
+                    return `${(this.source as DebugType).__debugTypeToString()} -> ${
+                        (this.target as DebugType).__debugTypeToString()
+                    }`;
                 case TypeMapKind.Array:
                     return zipWith<DebugType, DebugType | string, unknown>(
                         this.sources as readonly DebugType[],
                         this.targets as readonly DebugType[] || map(this.sources, () => "any"),
-                        (s, t) => `${s.__debugTypeToString()} -> ${typeof t === "string" ? t : t.__debugTypeToString()}`,
+                        (s, t) =>
+                            `${s.__debugTypeToString()} -> ${typeof t === "string" ? t : t.__debugTypeToString()}`,
                     ).join(", ");
                 case TypeMapKind.Deferred:
                     return zipWith(
                         this.sources,
                         this.targets,
-                        (s, t) => `${(s as DebugType).__debugTypeToString()} -> ${(t() as DebugType).__debugTypeToString()}`,
+                        (s, t) =>
+                            `${(s as DebugType).__debugTypeToString()} -> ${(t() as DebugType).__debugTypeToString()}`,
                     ).join(", ");
                 case TypeMapKind.Merged:
                 case TypeMapKind.Composite:
-                    return `m1: ${(this.mapper1 as unknown as DebugTypeMapper).__debugToString().split("\n").join("\n    ")}
+                    return `m1: ${
+                        (this.mapper1 as unknown as DebugTypeMapper).__debugToString().split("\n").join("\n    ")
+                    }
 m2: ${(this.mapper2 as unknown as DebugTypeMapper).__debugToString().split("\n").join("\n    ")}`;
                 default:
                     return assertNever(this);
@@ -1005,7 +1159,16 @@ m2: ${(this.mapper2 as unknown as DebugTypeMapper).__debugToString().split("\n")
             }
             seen.add(flowNode);
             if (!graphNode) {
-                links[id] = graphNode = { id, flowNode, edges: [], text: "", lane: -1, endLane: -1, level: -1, circular: false };
+                links[id] = graphNode = {
+                    id,
+                    flowNode,
+                    edges: [],
+                    text: "",
+                    lane: -1,
+                    endLane: -1,
+                    level: -1,
+                    circular: false,
+                };
                 nodes.push(graphNode);
                 if (hasAntecedents(flowNode)) {
                     for (const antecedent of flowNode.antecedents) {
@@ -1182,7 +1345,12 @@ m2: ${(this.mapper2 as unknown as DebugTypeMapper).__debugToString().split("\n")
                         }
                     }
                     writeLane(lane, getBoxCharacter(connector));
-                    writeLane(lane, connector & Connection.Right && column < columnCount - 1 && !grid[column + 1][lane] ? BoxCharacter.lr : " ");
+                    writeLane(
+                        lane,
+                        connector & Connection.Right && column < columnCount - 1 && !grid[column + 1][lane] ?
+                            BoxCharacter.lr
+                            : " ",
+                    );
                 }
             }
 

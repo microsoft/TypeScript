@@ -22,12 +22,18 @@ describe("unittests:: tsbuildWatch:: watchMode:: with noEmit", () => {
                 [libFile.path]: libContent,
                 "/user/username/projects/myproject/a.js": "",
                 "/user/username/projects/myproject/b.ts": "",
-                "/user/username/projects/myproject/tsconfig.json": jsonToReadableText({ compilerOptions: { allowJs: true, noEmit: true } }),
+                "/user/username/projects/myproject/tsconfig.json": jsonToReadableText({
+                    compilerOptions: { allowJs: true, noEmit: true },
+                }),
             }, { currentDirectory: "/user/username/projects/myproject" }),
         edits: [
             {
                 caption: "No change",
-                edit: sys => sys.writeFile(`/user/username/projects/myproject/a.js`, sys.readFile(`/user/username/projects/myproject/a.js`)!),
+                edit: sys =>
+                    sys.writeFile(
+                        `/user/username/projects/myproject/a.js`,
+                        sys.readFile(`/user/username/projects/myproject/a.js`)!,
+                    ),
                 // build project
                 timeouts: sys => sys.runQueuedTimeoutCallbacks(),
             },

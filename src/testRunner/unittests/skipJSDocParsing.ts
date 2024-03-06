@@ -21,12 +21,26 @@ describe("unittests:: skipJSDocParsing", () => {
             for (const filename of filenames) {
                 const testName = `${name}-${kindName}-${filename}`;
                 it(testName, () => {
-                    const sourceFile = ts.createSourceFile(filename, content, { languageVersion: ts.ScriptTarget.ESNext, jsDocParsingMode: undefined });
+                    const sourceFile = ts.createSourceFile(filename, content, {
+                        languageVersion: ts.ScriptTarget.ESNext,
+                        jsDocParsingMode: undefined,
+                    });
                     assert.isTrue(sourceFile && sourceFile.parseDiagnostics.length === 0, "no errors issued");
-                    const sourceFileSkipped = ts.createSourceFile(filename, content, { languageVersion: ts.ScriptTarget.ESNext, jsDocParsingMode });
-                    assert.isTrue(sourceFileSkipped && sourceFileSkipped.parseDiagnostics.length === 0, "no errors issued");
+                    const sourceFileSkipped = ts.createSourceFile(filename, content, {
+                        languageVersion: ts.ScriptTarget.ESNext,
+                        jsDocParsingMode,
+                    });
+                    assert.isTrue(
+                        sourceFileSkipped && sourceFileSkipped.parseDiagnostics.length === 0,
+                        "no errors issued",
+                    );
 
-                    const patch = Diff.createTwoFilesPatch("default", kindName, Utils.sourceFileToJSON(sourceFile), Utils.sourceFileToJSON(sourceFileSkipped));
+                    const patch = Diff.createTwoFilesPatch(
+                        "default",
+                        kindName,
+                        Utils.sourceFileToJSON(sourceFile),
+                        Utils.sourceFileToJSON(sourceFileSkipped),
+                    );
                     Harness.Baseline.runBaseline("skipJSDocParsing/" + testName + ".diff", patch);
                 });
             }

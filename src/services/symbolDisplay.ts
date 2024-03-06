@@ -110,7 +110,8 @@ import {
     VariableDeclaration,
 } from "./_namespaces/ts";
 
-const symbolDisplayNodeBuilderFlags = NodeBuilderFlags.OmitParameterModifiers | NodeBuilderFlags.IgnoreErrors | NodeBuilderFlags.UseAliasDefinedOutsideCurrentScope;
+const symbolDisplayNodeBuilderFlags = NodeBuilderFlags.OmitParameterModifiers | NodeBuilderFlags.IgnoreErrors |
+    NodeBuilderFlags.UseAliasDefinedOutsideCurrentScope;
 
 // TODO(drosen): use contextual SemanticMeaning.
 /** @internal */
@@ -136,7 +137,11 @@ export function getSymbolKind(typeChecker: TypeChecker, symbol: Symbol, location
     return result;
 }
 
-function getSymbolKindOfConstructorPropertyMethodAccessorFunctionOrVar(typeChecker: TypeChecker, symbol: Symbol, location: Node): ScriptElementKind {
+function getSymbolKindOfConstructorPropertyMethodAccessorFunctionOrVar(
+    typeChecker: TypeChecker,
+    symbol: Symbol,
+    location: Node,
+): ScriptElementKind {
     const roots = typeChecker.getRootSymbols(symbol);
     // If this is a method from a mapped type, leave as a method so long as it still has a call signature.
     if (
@@ -174,9 +179,13 @@ function getSymbolKindOfConstructorPropertyMethodAccessorFunctionOrVar(typeCheck
         else if (forEach(symbol.declarations, isLet)) {
             return ScriptElementKind.letElement;
         }
-        return isLocalVariableOrFunction(symbol) ? ScriptElementKind.localVariableElement : ScriptElementKind.variableElement;
+        return isLocalVariableOrFunction(symbol) ? ScriptElementKind.localVariableElement
+            : ScriptElementKind.variableElement;
     }
-    if (flags & SymbolFlags.Function) return isLocalVariableOrFunction(symbol) ? ScriptElementKind.localFunctionElement : ScriptElementKind.functionElement;
+    if (flags & SymbolFlags.Function) {
+        return isLocalVariableOrFunction(symbol) ? ScriptElementKind.localFunctionElement
+            : ScriptElementKind.functionElement;
+    }
     // FIXME: getter and setter use the same symbol. And it is rare to use only setter without getter, so in most cases the symbol always has getter flag.
     // So, even when the location is just on the declaration of setter, this function returns getter.
     if (flags & SymbolFlags.GetAccessor) return ScriptElementKind.memberGetAccessorElement;
@@ -216,7 +225,8 @@ function getNormalizedSymbolModifiers(symbol: Symbol) {
     if (symbol.declarations && symbol.declarations.length) {
         const [declaration, ...declarations] = symbol.declarations;
         // omit deprecated flag if some declarations are not deprecated
-        const excludeFlags = length(declarations) && isDeprecatedDeclaration(declaration) && some(declarations, d => !isDeprecatedDeclaration(d))
+        const excludeFlags = length(declarations) && isDeprecatedDeclaration(declaration) && some(declarations, d =>
+                !isDeprecatedDeclaration(d))
             ? ModifierFlags.Deprecated
             : ModifierFlags.None;
         const modifiers = getNodeModifiers(declaration, excludeFlags);
@@ -256,27 +266,52 @@ export interface SymbolDisplayPartsDocumentationAndSymbolKind {
     tags: JSDocTagInfo[] | undefined;
 }
 
-function getSymbolDisplayPartsDocumentationAndSymbolKindWorker(typeChecker: TypeChecker, symbol: Symbol, sourceFile: SourceFile, enclosingDeclaration: Node | undefined, location: Node, type: Type | undefined, semanticMeaning: SemanticMeaning, alias?: Symbol): SymbolDisplayPartsDocumentationAndSymbolKind {
+function getSymbolDisplayPartsDocumentationAndSymbolKindWorker(
+    typeChecker: TypeChecker,
+    symbol: Symbol,
+    sourceFile: SourceFile,
+    enclosingDeclaration: Node | undefined,
+    location: Node,
+    type: Type | undefined,
+    semanticMeaning: SemanticMeaning,
+    alias?: Symbol,
+): SymbolDisplayPartsDocumentationAndSymbolKind {
     const displayParts: SymbolDisplayPart[] = [];
     let documentation: SymbolDisplayPart[] = [];
     let tags: JSDocTagInfo[] = [];
     const symbolFlags = getCombinedLocalAndExportSymbolFlags(symbol);
-    let symbolKind = semanticMeaning & SemanticMeaning.Value ? getSymbolKindOfConstructorPropertyMethodAccessorFunctionOrVar(typeChecker, symbol, location) : ScriptElementKind.unknown;
+    let symbolKind = semanticMeaning & SemanticMeaning.Value ?
+        getSymbolKindOfConstructorPropertyMethodAccessorFunctionOrVar(typeChecker, symbol, location)
+        : ScriptElementKind.unknown;
     let hasAddedSymbolInfo = false;
-    const isThisExpression = location.kind === SyntaxKind.ThisKeyword && isInExpressionContext(location) || isThisInTypeQuery(location);
+    const isThisExpression = location.kind === SyntaxKind.ThisKeyword && isInExpressionContext(location) ||
+        isThisInTypeQuery(location);
     let documentationFromAlias: SymbolDisplayPart[] | undefined;
     let tagsFromAlias: JSDocTagInfo[] | undefined;
     let hasMultipleSignatures = false;
 
     if (location.kind === SyntaxKind.ThisKeyword && !isThisExpression) {
-        return { displayParts: [keywordPart(SyntaxKind.ThisKeyword)], documentation: [], symbolKind: ScriptElementKind.primitiveType, tags: undefined };
+        return {
+            displayParts: [keywordPart(SyntaxKind.ThisKeyword)],
+            documentation: [],
+            symbolKind: ScriptElementKind.primitiveType,
+            tags: undefined,
+        };
     }
 
     // Class at constructor site need to be shown as constructor apart from property,method, vars
-    if (symbolKind !== ScriptElementKind.unknown || symbolFlags & SymbolFlags.Class || symbolFlags & SymbolFlags.Alias) {
+    if (
+        symbolKind !== ScriptElementKind.unknown || symbolFlags & SymbolFlags.Class || symbolFlags & SymbolFlags.Alias
+    ) {
         // If symbol is accessor, they are allowed only if location is at declaration identifier of the accessor
-        if (symbolKind === ScriptElementKind.memberGetAccessorElement || symbolKind === ScriptElementKind.memberSetAccessorElement) {
-            const declaration = find(symbol.declarations as ((GetAccessorDeclaration | SetAccessorDeclaration | PropertyDeclaration)[]), declaration => declaration.name === location);
+        if (
+            symbolKind === ScriptElementKind.memberGetAccessorElement ||
+            symbolKind === ScriptElementKind.memberSetAccessorElement
+        ) {
+            const declaration = find(
+                symbol.declarations as ((GetAccessorDeclaration | SetAccessorDeclaration | PropertyDeclaration)[]),
+                declaration => declaration.name === location,
+            );
             if (declaration) {
                 switch (declaration.kind) {
                     case SyntaxKind.GetAccessor:
@@ -298,7 +333,8 @@ function getSymbolDisplayPartsDocumentationAndSymbolKindWorker(typeChecker: Type
         }
 
         let signature: Signature | undefined;
-        type ??= isThisExpression ? typeChecker.getTypeAtLocation(location) : typeChecker.getTypeOfSymbolAtLocation(symbol, location);
+        type ??= isThisExpression ? typeChecker.getTypeAtLocation(location)
+            : typeChecker.getTypeOfSymbolAtLocation(symbol, location);
 
         if (location.parent && location.parent.kind === SyntaxKind.PropertyAccessExpression) {
             const right = (location.parent as PropertyAccessExpression).name;
@@ -309,21 +345,32 @@ function getSymbolDisplayPartsDocumentationAndSymbolKindWorker(typeChecker: Type
         }
 
         // try get the call/construct signature from the type if it matches
-        let callExpressionLike: CallExpression | NewExpression | JsxOpeningLikeElement | TaggedTemplateExpression | undefined;
+        let callExpressionLike:
+            | CallExpression
+            | NewExpression
+            | JsxOpeningLikeElement
+            | TaggedTemplateExpression
+            | undefined;
         if (isCallOrNewExpression(location)) {
             callExpressionLike = location;
         }
         else if (isCallExpressionTarget(location) || isNewExpressionTarget(location)) {
             callExpressionLike = location.parent as CallExpression | NewExpression;
         }
-        else if (location.parent && (isJsxOpeningLikeElement(location.parent) || isTaggedTemplateExpression(location.parent)) && isFunctionLike(symbol.valueDeclaration)) {
+        else if (
+            location.parent &&
+            (isJsxOpeningLikeElement(location.parent) || isTaggedTemplateExpression(location.parent)) &&
+            isFunctionLike(symbol.valueDeclaration)
+        ) {
             callExpressionLike = location.parent;
         }
 
         if (callExpressionLike) {
             signature = typeChecker.getResolvedSignature(callExpressionLike); // TODO: GH#18217
 
-            const useConstructSignatures = callExpressionLike.kind === SyntaxKind.NewExpression || (isCallExpression(callExpressionLike) && callExpressionLike.expression.kind === SyntaxKind.SuperKeyword);
+            const useConstructSignatures = callExpressionLike.kind === SyntaxKind.NewExpression ||
+                (isCallExpression(callExpressionLike) &&
+                    callExpressionLike.expression.kind === SyntaxKind.SuperKeyword);
 
             const allSignatures = useConstructSignatures ? type.getConstructSignatures() : type.getCallSignatures();
 
@@ -369,7 +416,17 @@ function getSymbolDisplayPartsDocumentationAndSymbolKindWorker(typeChecker: Type
                         displayParts.push(punctuationPart(SyntaxKind.ColonToken));
                         displayParts.push(spacePart());
                         if (!(getObjectFlags(type) & ObjectFlags.Anonymous) && type.symbol) {
-                            addRange(displayParts, symbolToDisplayParts(typeChecker, type.symbol, enclosingDeclaration, /*meaning*/ undefined, SymbolFormatFlags.AllowAnyNodeKind | SymbolFormatFlags.WriteTypeParametersOrArguments));
+                            addRange(
+                                displayParts,
+                                symbolToDisplayParts(
+                                    typeChecker,
+                                    type.symbol,
+                                    enclosingDeclaration,
+                                    /*meaning*/ undefined,
+                                    SymbolFormatFlags.AllowAnyNodeKind |
+                                        SymbolFormatFlags.WriteTypeParametersOrArguments,
+                                ),
+                            );
                             displayParts.push(lineBreakPart());
                         }
                         if (useConstructSignatures) {
@@ -398,10 +455,19 @@ function getSymbolDisplayPartsDocumentationAndSymbolKindWorker(typeChecker: Type
             // get the signature from the declaration and write it
             const functionDeclaration = location.parent as SignatureDeclaration;
             // Use function declaration to write the signatures only if the symbol corresponding to this declaration
-            const locationIsSymbolDeclaration = symbol.declarations && find(symbol.declarations, declaration => declaration === (location.kind === SyntaxKind.ConstructorKeyword ? functionDeclaration.parent : functionDeclaration));
+            const locationIsSymbolDeclaration = symbol.declarations &&
+                find(
+                    symbol.declarations,
+                    declaration =>
+                        declaration ===
+                            (location.kind === SyntaxKind.ConstructorKeyword ? functionDeclaration.parent
+                                : functionDeclaration),
+                );
 
             if (locationIsSymbolDeclaration) {
-                const allSignatures = functionDeclaration.kind === SyntaxKind.Constructor ? type.getNonNullableType().getConstructSignatures() : type.getNonNullableType().getCallSignatures();
+                const allSignatures = functionDeclaration.kind === SyntaxKind.Constructor ?
+                    type.getNonNullableType().getConstructSignatures()
+                    : type.getNonNullableType().getCallSignatures();
                 if (!typeChecker.isImplementationOfOverload(functionDeclaration)) {
                     signature = typeChecker.getSignatureFromDeclaration(functionDeclaration); // TODO: GH#18217
                 }
@@ -418,7 +484,10 @@ function getSymbolDisplayPartsDocumentationAndSymbolKindWorker(typeChecker: Type
                     // (function/method) symbol(..signature)
                     addPrefixForAnyFunctionOrVar(
                         functionDeclaration.kind === SyntaxKind.CallSignature &&
-                            !(type.symbol.flags & SymbolFlags.TypeLiteral || type.symbol.flags & SymbolFlags.ObjectLiteral) ? type.symbol : symbol,
+                            !(type.symbol.flags & SymbolFlags.TypeLiteral ||
+                                type.symbol.flags & SymbolFlags.ObjectLiteral) ?
+                            type.symbol :
+                            symbol,
                         symbolKind,
                     );
                 }
@@ -462,7 +531,17 @@ function getSymbolDisplayPartsDocumentationAndSymbolKindWorker(typeChecker: Type
         displayParts.push(spacePart());
         displayParts.push(operatorPart(SyntaxKind.EqualsToken));
         displayParts.push(spacePart());
-        addRange(displayParts, typeToDisplayParts(typeChecker, location.parent && isConstTypeReference(location.parent) ? typeChecker.getTypeAtLocation(location.parent) : typeChecker.getDeclaredTypeOfSymbol(symbol), enclosingDeclaration, TypeFormatFlags.InTypeAlias));
+        addRange(
+            displayParts,
+            typeToDisplayParts(
+                typeChecker,
+                location.parent && isConstTypeReference(location.parent) ?
+                    typeChecker.getTypeAtLocation(location.parent)
+                    : typeChecker.getDeclaredTypeOfSymbol(symbol),
+                enclosingDeclaration,
+                TypeFormatFlags.InTypeAlias,
+            ),
+        );
     }
     if (symbolFlags & SymbolFlags.Enum) {
         prefixNextMeaning();
@@ -512,7 +591,15 @@ function getSymbolDisplayPartsDocumentationAndSymbolKindWorker(typeChecker: Type
                     else if (declaration.kind !== SyntaxKind.CallSignature && declaration.name) {
                         addFullSymbolName(declaration.symbol);
                     }
-                    addRange(displayParts, signatureToDisplayParts(typeChecker, signature, sourceFile, TypeFormatFlags.WriteTypeArgumentsOfSignature));
+                    addRange(
+                        displayParts,
+                        signatureToDisplayParts(
+                            typeChecker,
+                            signature,
+                            sourceFile,
+                            TypeFormatFlags.WriteTypeArgumentsOfSignature,
+                        ),
+                    );
                 }
                 else if (isTypeAliasDeclaration(declaration)) {
                     // Type alias type parameter
@@ -537,7 +624,13 @@ function getSymbolDisplayPartsDocumentationAndSymbolKindWorker(typeChecker: Type
                 displayParts.push(spacePart());
                 displayParts.push(operatorPart(SyntaxKind.EqualsToken));
                 displayParts.push(spacePart());
-                displayParts.push(displayPart(getTextOfConstantValue(constantValue), typeof constantValue === "number" ? SymbolDisplayPartKind.numericLiteral : SymbolDisplayPartKind.stringLiteral));
+                displayParts.push(
+                    displayPart(
+                        getTextOfConstantValue(constantValue),
+                        typeof constantValue === "number" ? SymbolDisplayPartKind.numericLiteral
+                            : SymbolDisplayPartKind.stringLiteral,
+                    ),
+                );
             }
         }
     }
@@ -569,7 +662,10 @@ function getSymbolDisplayPartsDocumentationAndSymbolKindWorker(typeChecker: Type
                     tagsFromAlias = resolvedInfo.tags;
                 }
                 else {
-                    documentationFromAlias = resolvedSymbol.getContextualDocumentationComment(resolvedNode, typeChecker);
+                    documentationFromAlias = resolvedSymbol.getContextualDocumentationComment(
+                        resolvedNode,
+                        typeChecker,
+                    );
                     tagsFromAlias = resolvedSymbol.getJsDocTags(typeChecker);
                 }
             }
@@ -585,7 +681,12 @@ function getSymbolDisplayPartsDocumentationAndSymbolKindWorker(typeChecker: Type
                 case SyntaxKind.ExportAssignment:
                     displayParts.push(keywordPart(SyntaxKind.ExportKeyword));
                     displayParts.push(spacePart());
-                    displayParts.push(keywordPart((symbol.declarations[0] as ExportAssignment).isExportEquals ? SyntaxKind.EqualsToken : SyntaxKind.DefaultKeyword));
+                    displayParts.push(
+                        keywordPart(
+                            (symbol.declarations[0] as ExportAssignment).isExportEquals ? SyntaxKind.EqualsToken
+                                : SyntaxKind.DefaultKeyword,
+                        ),
+                    );
                     break;
                 case SyntaxKind.ExportSpecifier:
                     displayParts.push(keywordPart(SyntaxKind.ExportKeyword));
@@ -605,11 +706,18 @@ function getSymbolDisplayPartsDocumentationAndSymbolKindWorker(typeChecker: Type
                     displayParts.push(spacePart());
                     displayParts.push(keywordPart(SyntaxKind.RequireKeyword));
                     displayParts.push(punctuationPart(SyntaxKind.OpenParenToken));
-                    displayParts.push(displayPart(getTextOfNode(getExternalModuleImportEqualsDeclarationExpression(importEqualsDeclaration)), SymbolDisplayPartKind.stringLiteral));
+                    displayParts.push(
+                        displayPart(
+                            getTextOfNode(getExternalModuleImportEqualsDeclarationExpression(importEqualsDeclaration)),
+                            SymbolDisplayPartKind.stringLiteral,
+                        ),
+                    );
                     displayParts.push(punctuationPart(SyntaxKind.CloseParenToken));
                 }
                 else {
-                    const internalAliasSymbol = typeChecker.getSymbolAtLocation(importEqualsDeclaration.moduleReference);
+                    const internalAliasSymbol = typeChecker.getSymbolAtLocation(
+                        importEqualsDeclaration.moduleReference,
+                    );
                     if (internalAliasSymbol) {
                         displayParts.push(spacePart());
                         displayParts.push(operatorPart(SyntaxKind.EqualsToken));
@@ -648,17 +756,32 @@ function getSymbolDisplayPartsDocumentationAndSymbolKindWorker(typeChecker: Type
                     displayParts.push(punctuationPart(SyntaxKind.ColonToken));
                     displayParts.push(spacePart());
                     // If the type is type parameter, format it specially
-                    if (type.symbol && type.symbol.flags & SymbolFlags.TypeParameter && symbolKind !== ScriptElementKind.indexSignatureElement) {
+                    if (
+                        type.symbol && type.symbol.flags & SymbolFlags.TypeParameter &&
+                        symbolKind !== ScriptElementKind.indexSignatureElement
+                    ) {
                         const typeParameterParts = mapToDisplayParts(writer => {
-                            const param = typeChecker.typeParameterToDeclaration(type as TypeParameter, enclosingDeclaration, symbolDisplayNodeBuilderFlags)!;
-                            getPrinter().writeNode(EmitHint.Unspecified, param, getSourceFileOfNode(getParseTreeNode(enclosingDeclaration)), writer);
+                            const param = typeChecker.typeParameterToDeclaration(
+                                type as TypeParameter,
+                                enclosingDeclaration,
+                                symbolDisplayNodeBuilderFlags,
+                            )!;
+                            getPrinter().writeNode(
+                                EmitHint.Unspecified,
+                                param,
+                                getSourceFileOfNode(getParseTreeNode(enclosingDeclaration)),
+                                writer,
+                            );
                         });
                         addRange(displayParts, typeParameterParts);
                     }
                     else {
                         addRange(displayParts, typeToDisplayParts(typeChecker, type, enclosingDeclaration));
                     }
-                    if (isTransientSymbol(symbol) && symbol.links.target && isTransientSymbol(symbol.links.target) && symbol.links.target.links.tupleLabelDeclaration) {
+                    if (
+                        isTransientSymbol(symbol) && symbol.links.target && isTransientSymbol(symbol.links.target) &&
+                        symbol.links.target.links.tupleLabelDeclaration
+                    ) {
                         const labelDecl = symbol.links.target.links.tupleLabelDeclaration;
                         Debug.assertNode(labelDecl.name, isIdentifier);
                         displayParts.push(spacePart());
@@ -696,7 +819,10 @@ function getSymbolDisplayPartsDocumentationAndSymbolKindWorker(typeChecker: Type
         // For some special property access expressions like `exports.foo = foo` or `module.exports.foo = foo`
         // there documentation comments might be attached to the right hand side symbol of their declarations.
         // The pattern of such special property access is that the parent symbol is the symbol of the file.
-        if (symbol.parent && symbol.declarations && forEach(symbol.parent.declarations, declaration => declaration.kind === SyntaxKind.SourceFile)) {
+        if (
+            symbol.parent && symbol.declarations &&
+            forEach(symbol.parent.declarations, declaration => declaration.kind === SyntaxKind.SourceFile)
+        ) {
             for (const declaration of symbol.declarations) {
                 if (!declaration.parent || declaration.parent.kind !== SyntaxKind.BinaryExpression) {
                     continue;
@@ -716,7 +842,10 @@ function getSymbolDisplayPartsDocumentationAndSymbolKindWorker(typeChecker: Type
         }
     }
 
-    if (documentation.length === 0 && isIdentifier(location) && symbol.valueDeclaration && isBindingElement(symbol.valueDeclaration)) {
+    if (
+        documentation.length === 0 && isIdentifier(location) && symbol.valueDeclaration &&
+        isBindingElement(symbol.valueDeclaration)
+    ) {
         const declaration = symbol.valueDeclaration;
         const parent = declaration.parent;
         const name = declaration.propertyName || declaration.name;
@@ -797,7 +926,14 @@ function getSymbolDisplayPartsDocumentationAndSymbolKindWorker(typeChecker: Type
             fullSymbolDisplayParts.push(punctuationPart(SyntaxKind.CloseBracketToken));
         }
         else {
-            fullSymbolDisplayParts = symbolToDisplayParts(typeChecker, symbolToDisplay, enclosingDeclaration || sourceFile, /*meaning*/ undefined, SymbolFormatFlags.WriteTypeParametersOrArguments | SymbolFormatFlags.UseOnlyExternalAliasing | SymbolFormatFlags.AllowAnyNodeKind);
+            fullSymbolDisplayParts = symbolToDisplayParts(
+                typeChecker,
+                symbolToDisplay,
+                enclosingDeclaration || sourceFile,
+                /*meaning*/ undefined,
+                SymbolFormatFlags.WriteTypeParametersOrArguments | SymbolFormatFlags.UseOnlyExternalAliasing |
+                    SymbolFormatFlags.AllowAnyNodeKind,
+            );
         }
         addRange(displayParts, fullSymbolDisplayParts);
         if (symbol.flags & SymbolFlags.Optional) {
@@ -809,7 +945,13 @@ function getSymbolDisplayPartsDocumentationAndSymbolKindWorker(typeChecker: Type
         prefixNextMeaning();
         if (symbolKind) {
             pushSymbolKind(symbolKind);
-            if (symbol && !some(symbol.declarations, d => isArrowFunction(d) || (isFunctionExpression(d) || isClassExpression(d)) && !d.name)) {
+            if (
+                symbol &&
+                !some(
+                    symbol.declarations,
+                    d => isArrowFunction(d) || (isFunctionExpression(d) || isClassExpression(d)) && !d.name,
+                )
+            ) {
                 displayParts.push(spacePart());
                 addFullSymbolName(symbol);
             }
@@ -835,8 +977,20 @@ function getSymbolDisplayPartsDocumentationAndSymbolKindWorker(typeChecker: Type
         }
     }
 
-    function addSignatureDisplayParts(signature: Signature, allSignatures: readonly Signature[], flags = TypeFormatFlags.None) {
-        addRange(displayParts, signatureToDisplayParts(typeChecker, signature, enclosingDeclaration, flags | TypeFormatFlags.WriteTypeArgumentsOfSignature));
+    function addSignatureDisplayParts(
+        signature: Signature,
+        allSignatures: readonly Signature[],
+        flags = TypeFormatFlags.None,
+    ) {
+        addRange(
+            displayParts,
+            signatureToDisplayParts(
+                typeChecker,
+                signature,
+                enclosingDeclaration,
+                flags | TypeFormatFlags.WriteTypeArgumentsOfSignature,
+            ),
+        );
         if (allSignatures.length > 1) {
             displayParts.push(spacePart());
             displayParts.push(punctuationPart(SyntaxKind.OpenParenToken));
@@ -857,8 +1011,17 @@ function getSymbolDisplayPartsDocumentationAndSymbolKindWorker(typeChecker: Type
 
     function writeTypeParametersOfSymbol(symbol: Symbol, enclosingDeclaration: Node | undefined) {
         const typeParameterParts = mapToDisplayParts(writer => {
-            const params = typeChecker.symbolToTypeParameterDeclarations(symbol, enclosingDeclaration, symbolDisplayNodeBuilderFlags);
-            getPrinter().writeList(ListFormat.TypeParameters, params, getSourceFileOfNode(getParseTreeNode(enclosingDeclaration)), writer);
+            const params = typeChecker.symbolToTypeParameterDeclarations(
+                symbol,
+                enclosingDeclaration,
+                symbolDisplayNodeBuilderFlags,
+            );
+            getPrinter().writeList(
+                ListFormat.TypeParameters,
+                params,
+                getSourceFileOfNode(getParseTreeNode(enclosingDeclaration)),
+                writer,
+            );
         });
         addRange(displayParts, typeParameterParts);
     }
@@ -866,8 +1029,25 @@ function getSymbolDisplayPartsDocumentationAndSymbolKindWorker(typeChecker: Type
 
 // TODO(drosen): Currently completion entry details passes the SemanticMeaning.All instead of using semanticMeaning of location
 /** @internal */
-export function getSymbolDisplayPartsDocumentationAndSymbolKind(typeChecker: TypeChecker, symbol: Symbol, sourceFile: SourceFile, enclosingDeclaration: Node | undefined, location: Node, semanticMeaning = getMeaningFromLocation(location), alias?: Symbol): SymbolDisplayPartsDocumentationAndSymbolKind {
-    return getSymbolDisplayPartsDocumentationAndSymbolKindWorker(typeChecker, symbol, sourceFile, enclosingDeclaration, location, /*type*/ undefined, semanticMeaning, alias);
+export function getSymbolDisplayPartsDocumentationAndSymbolKind(
+    typeChecker: TypeChecker,
+    symbol: Symbol,
+    sourceFile: SourceFile,
+    enclosingDeclaration: Node | undefined,
+    location: Node,
+    semanticMeaning = getMeaningFromLocation(location),
+    alias?: Symbol,
+): SymbolDisplayPartsDocumentationAndSymbolKind {
+    return getSymbolDisplayPartsDocumentationAndSymbolKindWorker(
+        typeChecker,
+        symbol,
+        sourceFile,
+        enclosingDeclaration,
+        location,
+        /*type*/ undefined,
+        semanticMeaning,
+        alias,
+    );
 }
 
 function isLocalVariableOrFunction(symbol: Symbol) {
@@ -881,7 +1061,9 @@ function isLocalVariableOrFunction(symbol: Symbol) {
             return true;
         }
 
-        if (declaration.kind !== SyntaxKind.VariableDeclaration && declaration.kind !== SyntaxKind.FunctionDeclaration) {
+        if (
+            declaration.kind !== SyntaxKind.VariableDeclaration && declaration.kind !== SyntaxKind.FunctionDeclaration
+        ) {
             return false;
         }
 

@@ -16,13 +16,18 @@ export interface Project {
     errors?: ts.Diagnostic[];
 }
 
-export function readProject(host: fakes.ParseConfigHost, project: string | undefined, existingOptions?: ts.CompilerOptions): Project | undefined {
+export function readProject(
+    host: fakes.ParseConfigHost,
+    project: string | undefined,
+    existingOptions?: ts.CompilerOptions,
+): Project | undefined {
     if (project) {
         project = vpath.isTsConfigFile(project) ? project : vpath.combine(project, "tsconfig.json");
     }
     else {
         [project] = host.vfs.scanSync(".", "ancestors-or-self", {
-            accept: (path, stats) => stats.isFile() && host.vfs.stringComparer(vpath.basename(path), "tsconfig.json") === 0,
+            accept: (path, stats) =>
+                stats.isFile() && host.vfs.stringComparer(vpath.basename(path), "tsconfig.json") === 0,
         });
     }
 
@@ -66,7 +71,13 @@ export class CompilationResult {
     private _inputs: documents.TextDocument[] = [];
     private _inputsAndOutputs: collections.SortedMap<string, CompilationOutput>;
 
-    constructor(host: fakes.CompilerHost, options: ts.CompilerOptions, program: ts.Program | undefined, result: ts.EmitResult | undefined, diagnostics: readonly ts.Diagnostic[]) {
+    constructor(
+        host: fakes.CompilerHost,
+        options: ts.CompilerOptions,
+        program: ts.Program | undefined,
+        result: ts.EmitResult | undefined,
+        diagnostics: readonly ts.Diagnostic[],
+    ) {
         this.host = host;
         this.program = program;
         this.result = result;
@@ -74,9 +85,18 @@ export class CompilationResult {
         this.options = program ? program.getCompilerOptions() : options;
 
         // collect outputs
-        const js = this.js = new collections.SortedMap<string, documents.TextDocument>({ comparer: this.vfs.stringComparer, sort: "insertion" });
-        const dts = this.dts = new collections.SortedMap<string, documents.TextDocument>({ comparer: this.vfs.stringComparer, sort: "insertion" });
-        const maps = this.maps = new collections.SortedMap<string, documents.TextDocument>({ comparer: this.vfs.stringComparer, sort: "insertion" });
+        const js = this.js = new collections.SortedMap<string, documents.TextDocument>({
+            comparer: this.vfs.stringComparer,
+            sort: "insertion",
+        });
+        const dts = this.dts = new collections.SortedMap<string, documents.TextDocument>({
+            comparer: this.vfs.stringComparer,
+            sort: "insertion",
+        });
+        const maps = this.maps = new collections.SortedMap<string, documents.TextDocument>({
+            comparer: this.vfs.stringComparer,
+            sort: "insertion",
+        });
         for (const document of this.host.outputs) {
             if (vpath.isJavaScript(document.file) || ts.fileExtensionIs(document.file, ts.Extension.Json)) {
                 js.set(document.file, document);
@@ -90,7 +110,10 @@ export class CompilationResult {
         }
 
         // correlate inputs and outputs
-        this._inputsAndOutputs = new collections.SortedMap<string, CompilationOutput>({ comparer: this.vfs.stringComparer, sort: "insertion" });
+        this._inputsAndOutputs = new collections.SortedMap<string, CompilationOutput>({
+            comparer: this.vfs.stringComparer,
+            sort: "insertion",
+        });
         if (program) {
             if (this.options.outFile) {
                 const outFile = vpath.resolve(this.vfs.cwd(), this.options.outFile);
@@ -130,7 +153,12 @@ export class CompilationResult {
                             const outputs: CompilationOutput = {
                                 inputs: [input],
                                 js: js.get(this.getOutputPath(sourceFile.fileName, extname)),
-                                dts: dts.get(this.getOutputPath(sourceFile.fileName, ts.getDeclarationEmitExtensionForPath(sourceFile.fileName))),
+                                dts: dts.get(
+                                    this.getOutputPath(
+                                        sourceFile.fileName,
+                                        ts.getDeclarationEmitExtensionForPath(sourceFile.fileName),
+                                    ),
+                                ),
                                 map: maps.get(this.getOutputPath(sourceFile.fileName, extname + ".map")),
                             };
 
@@ -191,7 +219,12 @@ export class CompilationResult {
     public getSourceMapRecord(): string | undefined {
         const maps = this.result!.sourceMaps;
         if (maps && maps.length > 0) {
-            return Harness.SourceMapRecorder.getSourceMapRecord(maps, this.program!, ts.arrayFrom(this.js.values()).filter(d => !ts.fileExtensionIs(d.file, ts.Extension.Json)), ts.arrayFrom(this.dts.values()));
+            return Harness.SourceMapRecorder.getSourceMapRecord(
+                maps,
+                this.program!,
+                ts.arrayFrom(this.js.values()).filter(d => !ts.fileExtensionIs(d.file, ts.Extension.Json)),
+                ts.arrayFrom(this.dts.values()),
+            );
         }
     }
 
@@ -213,7 +246,10 @@ export class CompilationResult {
         }
         else {
             path = vpath.resolve(this.vfs.cwd(), path);
-            const outDir = ext === ".d.ts" || ext === ".d.mts" || ext === ".d.cts" || (ext.endsWith(".ts") || ext.includes(".d.")) ? this.options.declarationDir || this.options.outDir : this.options.outDir;
+            const outDir = ext === ".d.ts" || ext === ".d.mts" || ext === ".d.cts" ||
+                    (ext.endsWith(".ts") || ext.includes(".d.")) ?
+                this.options.declarationDir || this.options.outDir
+                : this.options.outDir;
             if (outDir) {
                 const common = this.commonSourceDirectory;
                 if (common) {
@@ -241,12 +277,23 @@ export class CompilationResult {
     }
 }
 
-export function compileFiles(host: fakes.CompilerHost, rootFiles: string[] | undefined, compilerOptions: ts.CompilerOptions, typeScriptVersion?: string): CompilationResult {
+export function compileFiles(
+    host: fakes.CompilerHost,
+    rootFiles: string[] | undefined,
+    compilerOptions: ts.CompilerOptions,
+    typeScriptVersion?: string,
+): CompilationResult {
     if (compilerOptions.project || !rootFiles || rootFiles.length === 0) {
         const project = readProject(host.parseConfigHost, compilerOptions.project, compilerOptions);
         if (project) {
             if (project.errors && project.errors.length > 0) {
-                return new CompilationResult(host, compilerOptions, /*program*/ undefined, /*result*/ undefined, project.errors);
+                return new CompilationResult(
+                    host,
+                    compilerOptions,
+                    /*program*/ undefined,
+                    /*result*/ undefined,
+                    project.errors,
+                );
             }
             if (project.config) {
                 rootFiles = project.config.fileNames;
@@ -263,8 +310,16 @@ export function compileFiles(host: fakes.CompilerHost, rootFiles: string[] | und
 
     // pre-emit/post-emit error comparison requires declaration emit twice, which can be slow. If it's unlikely to flag any error consistency issues
     // and if the test is running `skipLibCheck` - an indicator that we want the tets to run quickly - skip the before/after error comparison, too
-    const skipErrorComparison = ts.length(rootFiles) >= 100 || (!!compilerOptions.skipLibCheck && !!compilerOptions.declaration);
-    const preProgram = !skipErrorComparison ? ts.createProgram({ rootNames: rootFiles || [], options: { ...compilerOptions, configFile: compilerOptions.configFile, traceResolution: false }, host, typeScriptVersion }) : undefined;
+    const skipErrorComparison = ts.length(rootFiles) >= 100 ||
+        (!!compilerOptions.skipLibCheck && !!compilerOptions.declaration);
+    const preProgram = !skipErrorComparison ?
+        ts.createProgram({
+            rootNames: rootFiles || [],
+            options: { ...compilerOptions, configFile: compilerOptions.configFile, traceResolution: false },
+            host,
+            typeScriptVersion,
+        })
+        : undefined;
     const preErrors = preProgram && ts.getPreEmitDiagnostics(preProgram);
 
     const program = ts.createProgram({ rootNames: rootFiles || [], options: compilerOptions, host, typeScriptVersion });
@@ -279,7 +334,8 @@ export function compileFiles(host: fakes.CompilerHost, rootFiles: string[] | und
                 category: ts.DiagnosticCategory.Error,
                 code: -1,
                 key: "-1",
-                message: `Pre-emit (${preErrors.length}) and post-emit (${postErrors.length}) diagnostic counts do not match! This can indicate that a semantic _error_ was added by the emit resolver - such an error may not be reflected on the command line or in the editor, but may be captured in a baseline here!`,
+                message:
+                    `Pre-emit (${preErrors.length}) and post-emit (${postErrors.length}) diagnostic counts do not match! This can indicate that a semantic _error_ was added by the emit resolver - such an error may not be reflected on the command line or in the editor, but may be captured in a baseline here!`,
             }),
             ts.createCompilerDiagnostic({
                 category: ts.DiagnosticCategory.Error,
@@ -287,7 +343,10 @@ export function compileFiles(host: fakes.CompilerHost, rootFiles: string[] | und
                 key: "-1",
                 message: `The excess diagnostics are:`,
             }),
-            ...ts.filter(longerErrors!, p => !ts.some(shorterErrors, p2 => ts.compareDiagnostics(p, p2) === ts.Comparison.EqualTo)),
+            ...ts.filter(
+                longerErrors!,
+                p => !ts.some(shorterErrors, p2 => ts.compareDiagnostics(p, p2) === ts.Comparison.EqualTo),
+            ),
         ),
     ] : postErrors;
     return new CompilationResult(host, compilerOptions, program, emitResult, errors);

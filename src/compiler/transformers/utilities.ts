@@ -119,7 +119,10 @@ function isNamedDefaultReference(e: ImportSpecifier): boolean {
 }
 
 /** @internal */
-export function chainBundle(context: CoreTransformationContext, transformSourceFile: (x: SourceFile) => SourceFile): (x: SourceFile | Bundle) => SourceFile | Bundle {
+export function chainBundle(
+    context: CoreTransformationContext,
+    transformSourceFile: (x: SourceFile) => SourceFile,
+): (x: SourceFile | Bundle) => SourceFile | Bundle {
     return transformSourceFileOrBundle;
 
     function transformSourceFileOrBundle(node: SourceFile | Bundle) {
@@ -153,13 +156,17 @@ export function getImportNeedsImportStarHelper(node: ImportDeclaration): boolean
         }
     }
     // Import star is required if there's default named refs mixed with non-default refs, or if theres non-default refs and it has a default import
-    return (defaultRefCount > 0 && defaultRefCount !== bindings.elements.length) || (!!(bindings.elements.length - defaultRefCount) && isDefaultImport(node));
+    return (defaultRefCount > 0 && defaultRefCount !== bindings.elements.length) ||
+        (!!(bindings.elements.length - defaultRefCount) && isDefaultImport(node));
 }
 
 /** @internal */
 export function getImportNeedsImportDefaultHelper(node: ImportDeclaration): boolean {
     // Import default is needed if there's a default import or a default ref and no other refs (meaning an import star helper wasn't requested)
-    return !getImportNeedsImportStarHelper(node) && (isDefaultImport(node) || (!!node.importClause && isNamedImports(node.importClause.namedBindings!) && containsDefaultReference(node.importClause.namedBindings))); // TODO: GH#18217
+    return !getImportNeedsImportStarHelper(node) &&
+        (isDefaultImport(node) ||
+            (!!node.importClause && isNamedImports(node.importClause.namedBindings!) &&
+                containsDefaultReference(node.importClause.namedBindings))); // TODO: GH#18217
 }
 
 /** @internal */
@@ -243,7 +250,12 @@ export function collectExternalModuleInfo(context: TransformationContext, source
             case SyntaxKind.VariableStatement:
                 if (hasSyntacticModifier(node, ModifierFlags.Export)) {
                     for (const decl of (node as VariableStatement).declarationList.declarations) {
-                        exportedNames = collectExportedVariableInfo(decl, uniqueExports, exportedNames, exportedBindings);
+                        exportedNames = collectExportedVariableInfo(
+                            decl,
+                            uniqueExports,
+                            exportedNames,
+                            exportedBindings,
+                        );
                     }
                 }
                 break;
@@ -253,7 +265,11 @@ export function collectExternalModuleInfo(context: TransformationContext, source
                     if (hasSyntacticModifier(node, ModifierFlags.Default)) {
                         // export default function() { }
                         if (!hasExportDefault) {
-                            multiMapSparseArrayAdd(exportedBindings, getOriginalNodeId(node), context.factory.getDeclarationName(node as FunctionDeclaration));
+                            multiMapSparseArrayAdd(
+                                exportedBindings,
+                                getOriginalNodeId(node),
+                                context.factory.getDeclarationName(node as FunctionDeclaration),
+                            );
                             hasExportDefault = true;
                         }
                     }
@@ -274,7 +290,11 @@ export function collectExternalModuleInfo(context: TransformationContext, source
                     if (hasSyntacticModifier(node, ModifierFlags.Default)) {
                         // export default class { }
                         if (!hasExportDefault) {
-                            multiMapSparseArrayAdd(exportedBindings, getOriginalNodeId(node), context.factory.getDeclarationName(node as ClassDeclaration));
+                            multiMapSparseArrayAdd(
+                                exportedBindings,
+                                getOriginalNodeId(node),
+                                context.factory.getDeclarationName(node as ClassDeclaration),
+                            );
                             hasExportDefault = true;
                         }
                     }
@@ -292,12 +312,28 @@ export function collectExternalModuleInfo(context: TransformationContext, source
         }
     }
 
-    const externalHelpersImportDeclaration = createExternalHelpersImportDeclarationIfNeeded(context.factory, context.getEmitHelperFactory(), sourceFile, compilerOptions, hasExportStarsToExportValues, hasImportStar, hasImportDefault);
+    const externalHelpersImportDeclaration = createExternalHelpersImportDeclarationIfNeeded(
+        context.factory,
+        context.getEmitHelperFactory(),
+        sourceFile,
+        compilerOptions,
+        hasExportStarsToExportValues,
+        hasImportStar,
+        hasImportDefault,
+    );
     if (externalHelpersImportDeclaration) {
         externalImports.unshift(externalHelpersImportDeclaration);
     }
 
-    return { externalImports, exportSpecifiers, exportEquals, hasExportStarsToExportValues, exportedBindings, exportedNames, externalHelpersImportDeclaration };
+    return {
+        externalImports,
+        exportSpecifiers,
+        exportEquals,
+        hasExportStarsToExportValues,
+        exportedBindings,
+        exportedNames,
+        externalHelpersImportDeclaration,
+    };
 
     function addExportedNamesForExportDeclaration(node: ExportDeclaration) {
         for (const specifier of cast(node.exportClause, isNamedExports).elements) {
@@ -321,7 +357,12 @@ export function collectExternalModuleInfo(context: TransformationContext, source
     }
 }
 
-function collectExportedVariableInfo(decl: VariableDeclaration | BindingElement, uniqueExports: Map<string, boolean>, exportedNames: Identifier[] | undefined, exportedBindings: Identifier[][]) {
+function collectExportedVariableInfo(
+    decl: VariableDeclaration | BindingElement,
+    uniqueExports: Map<string, boolean>,
+    exportedNames: Identifier[] | undefined,
+    exportedBindings: Identifier[][],
+) {
     if (isBindingPattern(decl.name)) {
         for (const element of decl.name.elements) {
             if (!isOmittedExpression(element)) {
@@ -392,12 +433,25 @@ export class IdentifierNameMap<V> {
             const autoGenerate = name.emitNode.autoGenerate;
             if ((autoGenerate.flags & GeneratedIdentifierFlags.KindMask) === GeneratedIdentifierFlags.Node) {
                 const node = getNodeForGeneratedName(name);
-                const baseName = isMemberName(node) && node !== name ? IdentifierNameMap.toKey(node) : `(generated@${getNodeId(node)})`;
-                return formatGeneratedName(/*privateName*/ false, autoGenerate.prefix, baseName, autoGenerate.suffix, IdentifierNameMap.toKey);
+                const baseName = isMemberName(node) && node !== name ? IdentifierNameMap.toKey(node)
+                    : `(generated@${getNodeId(node)})`;
+                return formatGeneratedName(
+                    /*privateName*/ false,
+                    autoGenerate.prefix,
+                    baseName,
+                    autoGenerate.suffix,
+                    IdentifierNameMap.toKey,
+                );
             }
             else {
                 const baseName = `(auto@${autoGenerate.id})`;
-                return formatGeneratedName(/*privateName*/ false, autoGenerate.prefix, baseName, autoGenerate.suffix, IdentifierNameMap.toKey);
+                return formatGeneratedName(
+                    /*privateName*/ false,
+                    autoGenerate.prefix,
+                    baseName,
+                    autoGenerate.suffix,
+                    IdentifierNameMap.toKey,
+                );
             }
         }
         if (isPrivateIdentifier(name)) {
@@ -463,7 +517,9 @@ export function isCompoundAssignment(kind: BinaryOperator): kind is CompoundAssi
 }
 
 /** @internal */
-export function getNonAssignmentOperatorForCompoundAssignment(kind: CompoundAssignmentOperator): LogicalOperatorOrHigher | SyntaxKind.QuestionQuestionToken {
+export function getNonAssignmentOperatorForCompoundAssignment(
+    kind: CompoundAssignmentOperator,
+): LogicalOperatorOrHigher | SyntaxKind.QuestionQuestionToken {
     switch (kind) {
         case SyntaxKind.PlusEqualsToken:
             return SyntaxKind.PlusToken;
@@ -521,7 +577,9 @@ function findSuperStatementIndexPathWorker(statements: NodeArray<Statement>, sta
             indices.unshift(i);
             return true;
         }
-        else if (isTryStatement(statement) && findSuperStatementIndexPathWorker(statement.tryBlock.statements, 0, indices)) {
+        else if (
+            isTryStatement(statement) && findSuperStatementIndexPathWorker(statement.tryBlock.statements, 0, indices)
+        ) {
             indices.unshift(i);
             return true;
         }
@@ -552,24 +610,47 @@ export function findSuperStatementIndexPath(statements: NodeArray<Statement>, st
  *
  * @internal
  */
-export function getProperties(node: ClassExpression | ClassDeclaration, requireInitializer: true, isStatic: boolean): readonly InitializedPropertyDeclaration[];
+export function getProperties(
+    node: ClassExpression | ClassDeclaration,
+    requireInitializer: true,
+    isStatic: boolean,
+): readonly InitializedPropertyDeclaration[];
 /** @internal */
-export function getProperties(node: ClassExpression | ClassDeclaration, requireInitializer: boolean, isStatic: boolean): readonly PropertyDeclaration[];
+export function getProperties(
+    node: ClassExpression | ClassDeclaration,
+    requireInitializer: boolean,
+    isStatic: boolean,
+): readonly PropertyDeclaration[];
 /** @internal */
-export function getProperties(node: ClassExpression | ClassDeclaration, requireInitializer: boolean, isStatic: boolean): readonly PropertyDeclaration[] {
-    return filter(node.members, m => isInitializedOrStaticProperty(m, requireInitializer, isStatic)) as PropertyDeclaration[];
+export function getProperties(
+    node: ClassExpression | ClassDeclaration,
+    requireInitializer: boolean,
+    isStatic: boolean,
+): readonly PropertyDeclaration[] {
+    return filter(
+        node.members,
+        m => isInitializedOrStaticProperty(m, requireInitializer, isStatic),
+    ) as PropertyDeclaration[];
 }
 
-function isStaticPropertyDeclarationOrClassStaticBlockDeclaration(element: ClassElement): element is PropertyDeclaration | ClassStaticBlockDeclaration {
+function isStaticPropertyDeclarationOrClassStaticBlockDeclaration(
+    element: ClassElement,
+): element is PropertyDeclaration | ClassStaticBlockDeclaration {
     return isStaticPropertyDeclaration(element) || isClassStaticBlockDeclaration(element);
 }
 
 /** @internal */
-export function getStaticPropertiesAndClassStaticBlock(node: ClassExpression | ClassDeclaration): readonly (PropertyDeclaration | ClassStaticBlockDeclaration)[];
+export function getStaticPropertiesAndClassStaticBlock(
+    node: ClassExpression | ClassDeclaration,
+): readonly (PropertyDeclaration | ClassStaticBlockDeclaration)[];
 /** @internal */
-export function getStaticPropertiesAndClassStaticBlock(node: ClassExpression | ClassDeclaration): readonly (PropertyDeclaration | ClassStaticBlockDeclaration)[];
+export function getStaticPropertiesAndClassStaticBlock(
+    node: ClassExpression | ClassDeclaration,
+): readonly (PropertyDeclaration | ClassStaticBlockDeclaration)[];
 /** @internal */
-export function getStaticPropertiesAndClassStaticBlock(node: ClassExpression | ClassDeclaration): readonly (PropertyDeclaration | ClassStaticBlockDeclaration)[] {
+export function getStaticPropertiesAndClassStaticBlock(
+    node: ClassExpression | ClassDeclaration,
+): readonly (PropertyDeclaration | ClassStaticBlockDeclaration)[] {
     return filter(node.members, isStaticPropertyDeclarationOrClassStaticBlockDeclaration);
 }
 
@@ -597,7 +678,9 @@ function isStaticPropertyDeclaration(member: ClassElement) {
  *
  * @internal
  */
-export function isInitializedProperty(member: ClassElement): member is PropertyDeclaration & { initializer: Expression; } {
+export function isInitializedProperty(
+    member: ClassElement,
+): member is PropertyDeclaration & { initializer: Expression; } {
     return member.kind === SyntaxKind.PropertyDeclaration
         && (member as PropertyDeclaration).initializer !== undefined;
 }
@@ -609,8 +692,15 @@ export function isInitializedProperty(member: ClassElement): member is PropertyD
  *
  * @internal
  */
-export function isNonStaticMethodOrAccessorWithPrivateName(member: ClassElement): member is PrivateIdentifierMethodDeclaration | PrivateIdentifierAccessorDeclaration | PrivateIdentifierAutoAccessorPropertyDeclaration {
-    return !isStatic(member) && (isMethodOrAccessor(member) || isAutoAccessorPropertyDeclaration(member)) && isPrivateIdentifier(member.name);
+export function isNonStaticMethodOrAccessorWithPrivateName(
+    member: ClassElement,
+): member is
+    | PrivateIdentifierMethodDeclaration
+    | PrivateIdentifierAccessorDeclaration
+    | PrivateIdentifierAutoAccessorPropertyDeclaration
+{
+    return !isStatic(member) && (isMethodOrAccessor(member) || isAutoAccessorPropertyDeclaration(member)) &&
+        isPrivateIdentifier(member.name);
 }
 
 /**
@@ -670,7 +760,11 @@ export function getAllDecoratorsOfClass(node: ClassLikeDeclaration): AllDecorato
  *
  * @internal
  */
-export function getAllDecoratorsOfClassElement(member: ClassElement, parent: ClassLikeDeclaration, useLegacyDecorators: boolean): AllDecorators | undefined {
+export function getAllDecoratorsOfClassElement(
+    member: ClassElement,
+    parent: ClassLikeDeclaration,
+    useLegacyDecorators: boolean,
+): AllDecorators | undefined {
     switch (member.kind) {
         case SyntaxKind.GetAccessor:
         case SyntaxKind.SetAccessor:
@@ -696,12 +790,18 @@ export function getAllDecoratorsOfClassElement(member: ClassElement, parent: Cla
  * @param parent The class node that contains the accessor.
  * @param accessor The class accessor member.
  */
-function getAllDecoratorsOfAccessors(accessor: AccessorDeclaration, parent: ClassExpression | ClassDeclaration): AllDecorators | undefined {
+function getAllDecoratorsOfAccessors(
+    accessor: AccessorDeclaration,
+    parent: ClassExpression | ClassDeclaration,
+): AllDecorators | undefined {
     if (!accessor.body) {
         return undefined;
     }
 
-    const { firstAccessor, secondAccessor, getAccessor, setAccessor } = getAllAccessorDeclarations(parent.members, accessor);
+    const { firstAccessor, secondAccessor, getAccessor, setAccessor } = getAllAccessorDeclarations(
+        parent.members,
+        accessor,
+    );
     const firstAccessorWithDecorators = hasDecorators(firstAccessor) ? firstAccessor :
         secondAccessor && hasDecorators(secondAccessor) ? secondAccessor :
         undefined;

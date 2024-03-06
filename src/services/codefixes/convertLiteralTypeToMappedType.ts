@@ -18,7 +18,9 @@ import {
 } from "../_namespaces/ts.codefix";
 
 const fixId = "convertLiteralTypeToMappedType";
-const errorCodes = [Diagnostics._0_only_refers_to_a_type_but_is_being_used_as_a_value_here_Did_you_mean_to_use_1_in_0.code];
+const errorCodes = [
+    Diagnostics._0_only_refers_to_a_type_but_is_being_used_as_a_value_here_Did_you_mean_to_use_1_in_0.code,
+];
 
 registerCodeFix({
     errorCodes,
@@ -30,7 +32,15 @@ registerCodeFix({
         }
         const { name, constraint } = info;
         const changes = textChanges.ChangeTracker.with(context, t => doChange(t, sourceFile, info));
-        return [createCodeFixAction(fixId, changes, [Diagnostics.Convert_0_to_1_in_0, constraint, name], fixId, Diagnostics.Convert_all_type_literals_to_mapped_type)];
+        return [
+            createCodeFixAction(
+                fixId,
+                changes,
+                [Diagnostics.Convert_0_to_1_in_0, constraint, name],
+                fixId,
+                Diagnostics.Convert_all_type_literals_to_mapped_type,
+            ),
+        ];
     },
     fixIds: [fixId],
     getAllCodeActions: context =>
@@ -64,13 +74,21 @@ function getInfo(sourceFile: SourceFile, pos: number): Info | undefined {
     return undefined;
 }
 
-function doChange(changes: textChanges.ChangeTracker, sourceFile: SourceFile, { container, typeNode, constraint, name }: Info): void {
+function doChange(
+    changes: textChanges.ChangeTracker,
+    sourceFile: SourceFile,
+    { container, typeNode, constraint, name }: Info,
+): void {
     changes.replaceNode(
         sourceFile,
         container,
         factory.createMappedTypeNode(
             /*readonlyToken*/ undefined,
-            factory.createTypeParameterDeclaration(/*modifiers*/ undefined, name, factory.createTypeReferenceNode(constraint)),
+            factory.createTypeParameterDeclaration(
+                /*modifiers*/ undefined,
+                name,
+                factory.createTypeReferenceNode(constraint),
+            ),
             /*nameType*/ undefined,
             /*questionToken*/ undefined,
             typeNode,

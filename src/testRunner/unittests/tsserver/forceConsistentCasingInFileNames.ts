@@ -47,7 +47,9 @@ describe("unittests:: tsserver:: forceConsistentCasingInFileNames", () => {
             content: jsonToReadableText({ extends: "./tsconfig.all.json" }),
         };
 
-        const host = createServerHost([file1, file2, file2Dts, libFile, tsconfig, tsconfigAll], { useCaseSensitiveFileNames: false });
+        const host = createServerHost([file1, file2, file2Dts, libFile, tsconfig, tsconfigAll], {
+            useCaseSensitiveFileNames: false,
+        });
         const session = new TestSession(host);
 
         openFilesForSession([file1], session);
@@ -57,7 +59,11 @@ describe("unittests:: tsserver:: forceConsistentCasingInFileNames", () => {
                 projectFileName: tsconfig.path,
             },
         });
-        baselineTsserverLogs("forceConsistentCasingInFileNames", "works when extends is specified with a case insensitive file system", session);
+        baselineTsserverLogs(
+            "forceConsistentCasingInFileNames",
+            "works when extends is specified with a case insensitive file system",
+            session,
+        );
     });
 
     it("works when renaming file with different casing", () => {
@@ -84,7 +90,14 @@ describe("unittests:: tsserver:: forceConsistentCasingInFileNames", () => {
         const newLoggerPath = loggerFile.path.toLowerCase();
         host.renameFile(loggerFile.path, newLoggerPath);
         closeFilesForSession([loggerFile], session);
-        openFilesForSession([{ file: newLoggerPath, content: loggerFile.content, projectRootPath: "/user/username/projects/myproject" }], session);
+        openFilesForSession(
+            [{
+                file: newLoggerPath,
+                content: loggerFile.content,
+                projectRootPath: "/user/username/projects/myproject",
+            }],
+            session,
+        );
 
         // Apply edits for rename
         openFilesForSession([{ file: anotherFile, projectRootPath: "/user/username/projects/myproject" }], session);
@@ -106,7 +119,11 @@ describe("unittests:: tsserver:: forceConsistentCasingInFileNames", () => {
 
         // Check errors in both files
         verifyGetErrRequest({ session, files: [newLoggerPath, anotherFile] });
-        baselineTsserverLogs("forceConsistentCasingInFileNames", "works when renaming file with different casing", session);
+        baselineTsserverLogs(
+            "forceConsistentCasingInFileNames",
+            "works when renaming file with different casing",
+            session,
+        );
     });
 
     it("when changing module name with different casing", () => {
@@ -148,6 +165,10 @@ describe("unittests:: tsserver:: forceConsistentCasingInFileNames", () => {
 
         // Check errors in both files
         verifyGetErrRequest({ session, files: [anotherFile] });
-        baselineTsserverLogs("forceConsistentCasingInFileNames", "when changing module name with different casing", session);
+        baselineTsserverLogs(
+            "forceConsistentCasingInFileNames",
+            "when changing module name with different casing",
+            session,
+        );
     });
 });

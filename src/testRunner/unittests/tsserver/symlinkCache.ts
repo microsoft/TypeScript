@@ -75,7 +75,11 @@ describe("unittests:: tsserver:: symlinkCache", () => {
             project.getSymlinkCache()?.getSymlinkedDirectories()?.get(link.path + "/" as ts.Path),
             { real: "/packages/dep/", realPath: "/packages/dep/" as ts.Path },
         );
-        baselineTsserverLogs("symlinkCache", "contains symlinks discovered by project references resolution after program creation", session);
+        baselineTsserverLogs(
+            "symlinkCache",
+            "contains symlinks discovered by project references resolution after program creation",
+            session,
+        );
     });
 
     it("works for paths close to the root", () => {

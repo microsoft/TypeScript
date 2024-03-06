@@ -16,7 +16,10 @@ import {
 } from "../../helpers/virtualFileSystemWithWatch";
 
 describe("unittests:: tsserver:: events:: ProjectsUpdatedInBackground", () => {
-    function verifyProjectsUpdatedInBackgroundEvent(scenario: string, createSession: (host: TestServerHost) => TestSession) {
+    function verifyProjectsUpdatedInBackgroundEvent(
+        scenario: string,
+        createSession: (host: TestServerHost) => TestSession,
+    ) {
         it("when adding new file", () => {
             const commonFile1: File = {
                 path: "/users/username/projects/project/file1.ts",
@@ -75,7 +78,11 @@ describe("unittests:: tsserver:: events:: ProjectsUpdatedInBackground", () => {
 
                     host.writeFile(f2.path, "export let x = 11");
                     host.runQueuedTimeoutCallbacks();
-                    baselineTsserverLogs("events/projectUpdatedInBackground", `${scenario} and ${subScenario}`, session);
+                    baselineTsserverLogs(
+                        "events/projectUpdatedInBackground",
+                        `${scenario} and ${subScenario}`,
+                        session,
+                    );
                 });
             }
             verifyEventWithOutSettings("when both options are not set");
@@ -94,7 +101,9 @@ describe("unittests:: tsserver:: events:: ProjectsUpdatedInBackground", () => {
                 /** initial list of files to reload in fs and first file in this list being the file to open */
                 firstReloadFileList?: string[];
             }
-            function getInitialState({ configObj = {}, getAdditionalFileOrFolder, firstReloadFileList }: InitialStateParams = {}) {
+            function getInitialState(
+                { configObj = {}, getAdditionalFileOrFolder, firstReloadFileList }: InitialStateParams = {},
+            ) {
                 const moduleFile1: File = {
                     path: moduleFile1Path,
                     content: "export function Foo() { };",
@@ -126,9 +135,20 @@ describe("unittests:: tsserver:: events:: ProjectsUpdatedInBackground", () => {
                     content: jsonToReadableText(configObj || { compilerOptions: {} }),
                 };
 
-                const files: File[] = [file1Consumer1, moduleFile1, file1Consumer2, moduleFile2, ...additionalFiles, globalFile3, libFile, configFile];
+                const files: File[] = [
+                    file1Consumer1,
+                    moduleFile1,
+                    file1Consumer2,
+                    moduleFile2,
+                    ...additionalFiles,
+                    globalFile3,
+                    libFile,
+                    configFile,
+                ];
 
-                const filesToReload = firstReloadFileList?.map(fileName => ts.find(files, file => file.path === fileName)!) || files;
+                const filesToReload =
+                    firstReloadFileList?.map(fileName => ts.find(files, file => file.path === fileName)!) ||
+                    files;
                 const host = createServerHost([filesToReload[0], configFile]);
 
                 // Initial project creation
@@ -177,7 +197,11 @@ describe("unittests:: tsserver:: events:: ProjectsUpdatedInBackground", () => {
                 // Change the content of moduleFile1 to `export var T: number;export function Foo() { console.log('hi'); };`
                 host.writeFile(moduleFile1.path, `export var T: number;export function Foo() { console.log('hi'); };`);
                 host.runQueuedTimeoutCallbacks();
-                baselineTsserverLogs("events/projectUpdatedInBackground", `${scenario} and should contains only itself`, session);
+                baselineTsserverLogs(
+                    "events/projectUpdatedInBackground",
+                    `${scenario} and should contains only itself`,
+                    session,
+                );
             });
 
             it("should be up-to-date with the reference map changes", () => {
@@ -196,7 +220,10 @@ describe("unittests:: tsserver:: events:: ProjectsUpdatedInBackground", () => {
                 host.runQueuedTimeoutCallbacks();
 
                 // Change the content of moduleFile1 to `export var T: number;export var T2: string;export function Foo() { };`
-                host.writeFile(moduleFile1.path, `export var T: number;export var T2: string;export function Foo() { };`);
+                host.writeFile(
+                    moduleFile1.path,
+                    `export var T: number;export var T2: string;export function Foo() { };`,
+                );
                 host.runQueuedTimeoutCallbacks();
 
                 // Multiple file edits in one go:
@@ -206,7 +233,11 @@ describe("unittests:: tsserver:: events:: ProjectsUpdatedInBackground", () => {
                 updateContentOfOpenFile(file1Consumer1, `export let y = Foo();`);
                 host.writeFile(moduleFile1.path, `export var T: number;export function Foo() { };`);
                 host.runQueuedTimeoutCallbacks();
-                baselineTsserverLogs("events/projectUpdatedInBackground", `${scenario} and should be up-to-date with the reference map changes`, session);
+                baselineTsserverLogs(
+                    "events/projectUpdatedInBackground",
+                    `${scenario} and should be up-to-date with the reference map changes`,
+                    session,
+                );
             });
 
             it("should be up-to-date with deleted files", () => {
@@ -218,16 +249,27 @@ describe("unittests:: tsserver:: events:: ProjectsUpdatedInBackground", () => {
                 // Delete file1Consumer2
                 host.deleteFile(file1Consumer2.path);
                 host.runQueuedTimeoutCallbacks();
-                baselineTsserverLogs("events/projectUpdatedInBackground", `${scenario} and should be up-to-date with deleted files`, session);
+                baselineTsserverLogs(
+                    "events/projectUpdatedInBackground",
+                    `${scenario} and should be up-to-date with deleted files`,
+                    session,
+                );
             });
 
             it("should be up-to-date with newly created files", () => {
                 const { host, moduleFile1, session } = getInitialState();
 
                 host.writeFile(moduleFile1.path, `export var T: number;export function Foo() { };`);
-                host.writeFile("/users/username/projects/project/file1Consumer3.ts", `import {Foo} from "./moduleFile1"; let y = Foo();`);
+                host.writeFile(
+                    "/users/username/projects/project/file1Consumer3.ts",
+                    `import {Foo} from "./moduleFile1"; let y = Foo();`,
+                );
                 host.runQueuedTimeoutCallbacks();
-                baselineTsserverLogs("events/projectUpdatedInBackground", `${scenario} and should be up-to-date with newly created files`, session);
+                baselineTsserverLogs(
+                    "events/projectUpdatedInBackground",
+                    `${scenario} and should be up-to-date with newly created files`,
+                    session,
+                );
             });
 
             it("should detect changes in non-root files", () => {
@@ -241,7 +283,11 @@ describe("unittests:: tsserver:: events:: ProjectsUpdatedInBackground", () => {
                 // change file1 internal, and verify only file1 is affected
                 host.writeFile(moduleFile1.path, moduleFile1.content + "var T1: number;");
                 host.runQueuedTimeoutCallbacks();
-                baselineTsserverLogs("events/projectUpdatedInBackground", `${scenario} and should detect changes in non-root files`, session);
+                baselineTsserverLogs(
+                    "events/projectUpdatedInBackground",
+                    `${scenario} and should detect changes in non-root files`,
+                    session,
+                );
             });
 
             it("should return all files if a global file changed shape", () => {
@@ -249,7 +295,11 @@ describe("unittests:: tsserver:: events:: ProjectsUpdatedInBackground", () => {
 
                 host.writeFile(globalFile3.path, globalFile3.content + "var T2: string;");
                 host.runQueuedTimeoutCallbacks();
-                baselineTsserverLogs("events/projectUpdatedInBackground", `${scenario} and should return all files if a global file changed shape`, session);
+                baselineTsserverLogs(
+                    "events/projectUpdatedInBackground",
+                    `${scenario} and should return all files if a global file changed shape`,
+                    session,
+                );
             });
 
             it("should always return the file itself if '--isolatedModules' is specified", () => {
@@ -259,7 +309,11 @@ describe("unittests:: tsserver:: events:: ProjectsUpdatedInBackground", () => {
 
                 host.writeFile(moduleFile1.path, `export var T: number;export function Foo() { };`);
                 host.runQueuedTimeoutCallbacks();
-                baselineTsserverLogs("events/projectUpdatedInBackground", `${scenario} and should always return the file itself if --isolatedModules is specified`, session);
+                baselineTsserverLogs(
+                    "events/projectUpdatedInBackground",
+                    `${scenario} and should always return the file itself if --isolatedModules is specified`,
+                    session,
+                );
             });
 
             it("should always return the file itself if '--out' or '--outFile' is specified", () => {
@@ -270,7 +324,11 @@ describe("unittests:: tsserver:: events:: ProjectsUpdatedInBackground", () => {
 
                 host.writeFile(moduleFile1.path, `export var T: number;export function Foo() { };`);
                 host.runQueuedTimeoutCallbacks();
-                baselineTsserverLogs("events/projectUpdatedInBackground", `${scenario} and should always return the file itself if --out or --outFile is specified`, session);
+                baselineTsserverLogs(
+                    "events/projectUpdatedInBackground",
+                    `${scenario} and should always return the file itself if --out or --outFile is specified`,
+                    session,
+                );
             });
 
             it("should return cascaded affected file list", () => {
@@ -293,7 +351,11 @@ describe("unittests:: tsserver:: events:: ProjectsUpdatedInBackground", () => {
                 updateContentOfOpenFile(file1Consumer1, file1Consumer1.content + "export var T2: number;");
                 host.writeFile(moduleFile1.path, `export var T2: number;export function Foo() { };`);
                 host.runQueuedTimeoutCallbacks();
-                baselineTsserverLogs("events/projectUpdatedInBackground", `${scenario} and should return cascaded affected file list`, session);
+                baselineTsserverLogs(
+                    "events/projectUpdatedInBackground",
+                    `${scenario} and should return cascaded affected file list`,
+                    session,
+                );
             });
 
             it("should work fine for files with circular references", () => {
@@ -316,7 +378,11 @@ describe("unittests:: tsserver:: events:: ProjectsUpdatedInBackground", () => {
 
                 host.writeFile(file2.path, file2.content + "export var t3 = 10;");
                 host.runQueuedTimeoutCallbacks();
-                baselineTsserverLogs("events/projectUpdatedInBackground", `${scenario} and should work fine for files with circular references`, session);
+                baselineTsserverLogs(
+                    "events/projectUpdatedInBackground",
+                    `${scenario} and should work fine for files with circular references`,
+                    session,
+                );
             });
 
             it("should detect removed code file", () => {
@@ -333,7 +399,11 @@ describe("unittests:: tsserver:: events:: ProjectsUpdatedInBackground", () => {
 
                 host.deleteFile(moduleFile1Path);
                 host.runQueuedTimeoutCallbacks();
-                baselineTsserverLogs("events/projectUpdatedInBackground", `${scenario} and should detect removed code file`, session);
+                baselineTsserverLogs(
+                    "events/projectUpdatedInBackground",
+                    `${scenario} and should detect removed code file`,
+                    session,
+                );
             });
 
             it("should detect non-existing code file", () => {
@@ -354,14 +424,23 @@ describe("unittests:: tsserver:: events:: ProjectsUpdatedInBackground", () => {
                 // Create module File2 and see both files are saved
                 host.writeFile(moduleFile2.path, moduleFile2.content);
                 host.runQueuedTimeoutCallbacks();
-                baselineTsserverLogs("events/projectUpdatedInBackground", `${scenario} and should detect non-existing code file`, session);
+                baselineTsserverLogs(
+                    "events/projectUpdatedInBackground",
+                    `${scenario} and should detect non-existing code file`,
+                    session,
+                );
             });
         });
 
         describe("resolution when resolution cache size", () => {
-            function verifyWithMaxCacheLimit(subScenario: string, useSlashRootAsSomeNotRootFolderInUserDirectory: boolean) {
+            function verifyWithMaxCacheLimit(
+                subScenario: string,
+                useSlashRootAsSomeNotRootFolderInUserDirectory: boolean,
+            ) {
                 it(subScenario, () => {
-                    const rootFolder = useSlashRootAsSomeNotRootFolderInUserDirectory ? "/user/username/rootfolder/otherfolder/" : "/";
+                    const rootFolder = useSlashRootAsSomeNotRootFolderInUserDirectory ?
+                        "/user/username/rootfolder/otherfolder/"
+                        : "/";
                     const file1: File = {
                         path: rootFolder + "a/b/project/file1.ts",
                         content: 'import a from "file2"',
@@ -391,16 +470,29 @@ describe("unittests:: tsserver:: events:: ProjectsUpdatedInBackground", () => {
                     host.runQueuedTimeoutCallbacks(); // For invalidation
                     host.runQueuedTimeoutCallbacks(); // For actual update
 
-                    baselineTsserverLogs("events/projectUpdatedInBackground", `${scenario} and ${subScenario}`, session);
+                    baselineTsserverLogs(
+                        "events/projectUpdatedInBackground",
+                        `${scenario} and ${subScenario}`,
+                        session,
+                    );
                 });
             }
-            verifyWithMaxCacheLimit("project is not at root level", /*useSlashRootAsSomeNotRootFolderInUserDirectory*/ true);
-            verifyWithMaxCacheLimit("project is at root level", /*useSlashRootAsSomeNotRootFolderInUserDirectory*/ false);
+            verifyWithMaxCacheLimit(
+                "project is not at root level",
+                /*useSlashRootAsSomeNotRootFolderInUserDirectory*/ true,
+            );
+            verifyWithMaxCacheLimit(
+                "project is at root level",
+                /*useSlashRootAsSomeNotRootFolderInUserDirectory*/ false,
+            );
         });
     }
 
     describe("when event handler is set in the session", () => {
-        verifyProjectsUpdatedInBackgroundEvent("when event handler is set in the session", createSessionWithCustomEventHandler);
+        verifyProjectsUpdatedInBackgroundEvent(
+            "when event handler is set in the session",
+            createSessionWithCustomEventHandler,
+        );
     });
 
     describe("when event handler is not set but session is created with canUseEvents = true", () => {

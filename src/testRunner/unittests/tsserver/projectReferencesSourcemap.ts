@@ -32,7 +32,9 @@ export function fn5() { }
     };
     const dependencyConfig: File = {
         path: `${dependecyLocation}/tsconfig.json`,
-        content: jsonToReadableText({ compilerOptions: { composite: true, declarationMap: true, declarationDir: "../decls" } }),
+        content: jsonToReadableText({
+            compilerOptions: { composite: true, declarationMap: true, declarationDir: "../decls" },
+        }),
     };
 
     const mainTs: File = {
@@ -93,7 +95,8 @@ fn5();
                 sourceRoot: "",
                 sources: ["../dependency/FnS.ts"],
                 names: [],
-                mappings: "AAAA,wBAAgB,GAAG,SAAM;AACzB,wBAAgB,GAAG,SAAM;AACzB,wBAAgB,GAAG,SAAM;AACzB,wBAAgB,GAAG,SAAM;AACzB,wBAAgB,GAAG,SAAM;AACzB,eAAO,MAAM,CAAC,KAAK,CAAC",
+                mappings:
+                    "AAAA,wBAAgB,GAAG,SAAM;AACzB,wBAAgB,GAAG,SAAM;AACzB,wBAAgB,GAAG,SAAM;AACzB,wBAAgB,GAAG,SAAM;AACzB,wBAAgB,GAAG,SAAM;AACzB,eAAO,MAAM,CAAC,KAAK,CAAC",
             }),
         );
     }
@@ -211,7 +214,13 @@ fn5();
         });
     }
 
-    function setup(type: SessionType, openFiles: readonly File[], action: Action | Action[], max?: number, onHostCreate?: OnHostCreate) {
+    function setup(
+        type: SessionType,
+        openFiles: readonly File[],
+        action: Action | Action[],
+        max?: number,
+        onHostCreate?: OnHostCreate,
+    ) {
         const session = type === SessionType.NoReference ? createSessionWithoutProjectReferences(onHostCreate) :
             type === SessionType.ProjectReference ? createSessionWithProjectReferences(onHostCreate) :
             type === SessionType.DisableSourceOfProjectReferenceRedirect ?
@@ -240,7 +249,11 @@ fn5();
         it(options.scenario, () => {
             const session = setup(options.type, options.openFiles, options.action);
             verifyScriptInfoCollectionWith(session, options.openFiles);
-            baselineTsserverLogs("projectReferencesSourcemap", `${options.scenarioLocation}/${options.type}/${options.scenario}`, session);
+            baselineTsserverLogs(
+                "projectReferencesSourcemap",
+                `${options.scenarioLocation}/${options.type}/${options.scenario}`,
+                session,
+            );
         });
     }
     interface VerifyScenarioWithChangesOptions {
@@ -263,7 +276,13 @@ fn5();
 
             // action
             runActions(session, options.actionAfterChange || options.action);
-            baselineTsserverLogs("projectReferencesSourcemap", `${options.scenarioLocation}/${options.type}/${options.scenario}${timeoutBeforeAction ? " with timeout before request" : ""}`, session);
+            baselineTsserverLogs(
+                "projectReferencesSourcemap",
+                `${options.scenarioLocation}/${options.type}/${options.scenario}${
+                    timeoutBeforeAction ? " with timeout before request" : ""
+                }`,
+                session,
+            );
         });
     }
     function verifyScenarioWithChanges(options: VerifyScenarioWithChangesOptions) {
@@ -282,9 +301,19 @@ fn5();
             return options.file === "dts" ? dtsLocation : dtsMapLocation;
         }
         it(`with ${options.file} file, when file is not present`, () => {
-            const session = setup(options.type, options.openFiles, options.action, undefined, host => host.deleteFile(file(options)));
+            const session = setup(
+                options.type,
+                options.openFiles,
+                options.action,
+                undefined,
+                host => host.deleteFile(file(options)),
+            );
             verifyScriptInfoCollectionWith(session, options.openFiles);
-            baselineTsserverLogs("projectReferencesSourcemap", `${options.scenarioLocation}/${options.type}/dependency ${options.file} not present`, session);
+            baselineTsserverLogs(
+                "projectReferencesSourcemap",
+                `${options.scenarioLocation}/${options.type}/dependency ${options.file} not present`,
+                session,
+            );
         });
         it(`with ${options.file} file, when file is created after actions on projects`, () => {
             let fileContents: string;
@@ -296,14 +325,22 @@ fn5();
             session.host.writeFile(location, fileContents!);
             runActions(session, options.action);
             verifyScriptInfoCollectionWith(session, options.openFiles);
-            baselineTsserverLogs("projectReferencesSourcemap", `${options.scenarioLocation}/${options.type}/dependency ${options.file} created`, session);
+            baselineTsserverLogs(
+                "projectReferencesSourcemap",
+                `${options.scenarioLocation}/${options.type}/dependency ${options.file} created`,
+                session,
+            );
         });
         it(`with ${options.file} file, when file is deleted after actions on the projects`, () => {
             const session = setup(options.type, options.openFiles, options.action, 1);
             session.host.deleteFile(file(options));
             runActions(session, options.action);
             verifyScriptInfoCollectionWith(session, options.openFiles);
-            baselineTsserverLogs("projectReferencesSourcemap", `${options.scenarioLocation}/${options.type}/dependency ${options.file} deleted`, session);
+            baselineTsserverLogs(
+                "projectReferencesSourcemap",
+                `${options.scenarioLocation}/${options.type}/dependency ${options.file} deleted`,
+                session,
+            );
         });
     }
 
@@ -389,7 +426,11 @@ fn5();
             openFilesForSession(options.openFiles, session);
             runActions(session, options.action);
             verifyScriptInfoCollectionWith(session, options.openFiles);
-            baselineTsserverLogs("projectReferencesSourcemap", `${options.scenarioLocation}/${type}/when projects are not built`, session);
+            baselineTsserverLogs(
+                "projectReferencesSourcemap",
+                `${options.scenarioLocation}/${type}/when projects are not built`,
+                session,
+            );
         });
     }
 

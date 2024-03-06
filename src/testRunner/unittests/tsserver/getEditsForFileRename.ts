@@ -30,7 +30,11 @@ describe("unittests:: tsserver:: getEditsForFileRename", () => {
 
         const host = createServerHost([userTs, newTs, tsconfig]);
         const options: ts.CompilerOptions = {};
-        const moduleResolutionCache = ts.createModuleResolutionCache(host.getCurrentDirectory(), ts.createGetCanonicalFileName(host.useCaseSensitiveFileNames), options);
+        const moduleResolutionCache = ts.createModuleResolutionCache(
+            host.getCurrentDirectory(),
+            ts.createGetCanonicalFileName(host.useCaseSensitiveFileNames),
+            options,
+        );
         const lsHost: ts.LanguageServiceHost = {
             getCompilationSettings: () => options,
             getScriptFileNames: () => [newTs.path, userTs.path],
@@ -43,8 +47,17 @@ describe("unittests:: tsserver:: getEditsForFileRename", () => {
             getDefaultLibFileName: options => ts.getDefaultLibFileName(options),
             readFile: path => host.readFile(path),
             fileExists: path => host.fileExists(path),
-            resolveModuleNames: (moduleNames, containingFile) => moduleNames.map(name => ts.resolveModuleName(name, containingFile, options, lsHost, moduleResolutionCache).resolvedModule),
-            getResolvedModuleWithFailedLookupLocationsFromCache: (moduleName, containingFile, mode) => moduleResolutionCache.getFromDirectoryCache(moduleName, mode, ts.getDirectoryPath(containingFile), /*redirectedReference*/ undefined),
+            resolveModuleNames: (moduleNames, containingFile) =>
+                moduleNames.map(name =>
+                    ts.resolveModuleName(name, containingFile, options, lsHost, moduleResolutionCache).resolvedModule
+                ),
+            getResolvedModuleWithFailedLookupLocationsFromCache: (moduleName, containingFile, mode) =>
+                moduleResolutionCache.getFromDirectoryCache(
+                    moduleName,
+                    mode,
+                    ts.getDirectoryPath(containingFile),
+                    /*redirectedReference*/ undefined,
+                ),
         };
         const service = ts.createLanguageService(lsHost);
         const edits = service.getEditsForFileRename("/old.ts", "/new.ts", ts.testFormatSettings, ts.emptyOptions);

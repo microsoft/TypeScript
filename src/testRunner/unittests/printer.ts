@@ -5,9 +5,16 @@ import * as vfs from "../_namespaces/vfs";
 
 describe("unittests:: PrinterAPI", () => {
     function makePrintsCorrectly(prefix: string) {
-        return function printsCorrectly(name: string, options: ts.PrinterOptions, printCallback: (printer: ts.Printer) => string) {
+        return function printsCorrectly(
+            name: string,
+            options: ts.PrinterOptions,
+            printCallback: (printer: ts.Printer) => string,
+        ) {
             it(name, () => {
-                Harness.Baseline.runBaseline(`printerApi/${prefix}.${name}.js`, printCallback(ts.createPrinter({ newLine: ts.NewLineKind.CarriageReturnLineFeed, ...options })));
+                Harness.Baseline.runBaseline(
+                    `printerApi/${prefix}.${name}.js`,
+                    printCallback(ts.createPrinter({ newLine: ts.NewLineKind.CarriageReturnLineFeed, ...options })),
+                );
             });
         };
     }
@@ -64,13 +71,34 @@ describe("unittests:: PrinterAPI", () => {
 
         // https://github.com/microsoft/TypeScript/issues/14948
         // eslint-disable-next-line no-template-curly-in-string
-        printsCorrectly("templateLiteral", {}, printer => printer.printFile(ts.createSourceFile("source.ts", "let greeting = `Hi ${name}, how are you?`;", ts.ScriptTarget.ES2017)));
+        printsCorrectly(
+            "templateLiteral",
+            {},
+            printer =>
+                printer.printFile(
+                    ts.createSourceFile(
+                        "source.ts",
+                        "let greeting = `Hi ${name}, how are you?`;",
+                        ts.ScriptTarget.ES2017,
+                    ),
+                ),
+        );
 
         // https://github.com/microsoft/TypeScript/issues/18071
-        printsCorrectly("regularExpressionLiteral", {}, printer => printer.printFile(ts.createSourceFile("source.ts", "let regex = /abc/;", ts.ScriptTarget.ES2017)));
+        printsCorrectly(
+            "regularExpressionLiteral",
+            {},
+            printer =>
+                printer.printFile(ts.createSourceFile("source.ts", "let regex = /abc/;", ts.ScriptTarget.ES2017)),
+        );
 
         // https://github.com/microsoft/TypeScript/issues/22239
-        printsCorrectly("importStatementRemoveComments", { removeComments: true }, printer => printer.printFile(ts.createSourceFile("source.ts", "import {foo} from 'foo';", ts.ScriptTarget.ESNext)));
+        printsCorrectly(
+            "importStatementRemoveComments",
+            { removeComments: true },
+            printer =>
+                printer.printFile(ts.createSourceFile("source.ts", "import {foo} from 'foo';", ts.ScriptTarget.ESNext)),
+        );
         printsCorrectly("classHeritageClauses", {}, printer =>
             printer.printFile(ts.createSourceFile(
                 "source.ts",
@@ -121,7 +149,8 @@ describe("unittests:: PrinterAPI", () => {
             const host = new fakes.CompilerHost(
                 new vfs.FileSystem(/*ignoreCase*/ true, {
                     files: {
-                        "/test.d.ts": `/// <reference types="node" />\n/// <reference path="./src/test.d.ts />\nvar a: number;\n`,
+                        "/test.d.ts":
+                            `/// <reference types="node" />\n/// <reference path="./src/test.d.ts />\nvar a: number;\n`,
                     },
                 }),
             );
@@ -197,7 +226,11 @@ describe("unittests:: PrinterAPI", () => {
                 ts.EmitHint.Unspecified,
                 ts.factory.createNewExpression(
                     ts.factory.createPropertyAccessExpression(
-                        ts.factory.createCallExpression(ts.factory.createIdentifier("f"), /*typeArguments*/ undefined, /*argumentsArray*/ undefined),
+                        ts.factory.createCallExpression(
+                            ts.factory.createIdentifier("f"),
+                            /*typeArguments*/ undefined,
+                            /*argumentsArray*/ undefined,
+                        ),
                         "x",
                     ),
                     /*typeArguments*/ undefined,

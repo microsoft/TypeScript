@@ -90,17 +90,29 @@ export interface DocumentHighlights {
 
 /** @internal */
 export namespace DocumentHighlights {
-    export function getDocumentHighlights(program: Program, cancellationToken: CancellationToken, sourceFile: SourceFile, position: number, sourceFilesToSearch: readonly SourceFile[]): DocumentHighlights[] | undefined {
+    export function getDocumentHighlights(
+        program: Program,
+        cancellationToken: CancellationToken,
+        sourceFile: SourceFile,
+        position: number,
+        sourceFilesToSearch: readonly SourceFile[],
+    ): DocumentHighlights[] | undefined {
         const node = getTouchingPropertyName(sourceFile, position);
 
-        if (node.parent && (isJsxOpeningElement(node.parent) && node.parent.tagName === node || isJsxClosingElement(node.parent))) {
+        if (
+            node.parent &&
+            (isJsxOpeningElement(node.parent) && node.parent.tagName === node || isJsxClosingElement(node.parent))
+        ) {
             // For a JSX element, just highlight the matching tag, not all references.
             const { openingElement, closingElement } = node.parent.parent;
-            const highlightSpans = [openingElement, closingElement].map(({ tagName }) => getHighlightSpanForNode(tagName, sourceFile));
+            const highlightSpans = [openingElement, closingElement].map(({ tagName }) =>
+                getHighlightSpanForNode(tagName, sourceFile)
+            );
             return [{ fileName: sourceFile.fileName, highlightSpans }];
         }
 
-        return getSemanticDocumentHighlights(position, node, program, cancellationToken, sourceFilesToSearch) || getSyntacticDocumentHighlights(node, sourceFile);
+        return getSemanticDocumentHighlights(position, node, program, cancellationToken, sourceFilesToSearch) ||
+            getSyntacticDocumentHighlights(node, sourceFile);
     }
 
     function getHighlightSpanForNode(node: Node, sourceFile: SourceFile): HighlightSpan {
@@ -111,19 +123,44 @@ export namespace DocumentHighlights {
         };
     }
 
-    function getSemanticDocumentHighlights(position: number, node: Node, program: Program, cancellationToken: CancellationToken, sourceFilesToSearch: readonly SourceFile[]): DocumentHighlights[] | undefined {
+    function getSemanticDocumentHighlights(
+        position: number,
+        node: Node,
+        program: Program,
+        cancellationToken: CancellationToken,
+        sourceFilesToSearch: readonly SourceFile[],
+    ): DocumentHighlights[] | undefined {
         const sourceFilesSet = new Set(sourceFilesToSearch.map(f => f.fileName));
-        const referenceEntries = FindAllReferences.getReferenceEntriesForNode(position, node, program, sourceFilesToSearch, cancellationToken, /*options*/ undefined, sourceFilesSet);
+        const referenceEntries = FindAllReferences.getReferenceEntriesForNode(
+            position,
+            node,
+            program,
+            sourceFilesToSearch,
+            cancellationToken,
+            /*options*/ undefined,
+            sourceFilesSet,
+        );
         if (!referenceEntries) return undefined;
-        const map = arrayToMultiMap(referenceEntries.map(FindAllReferences.toHighlightSpan), e => e.fileName, e => e.span);
+        const map = arrayToMultiMap(
+            referenceEntries.map(FindAllReferences.toHighlightSpan),
+            e => e.fileName,
+            e => e.span,
+        );
         const getCanonicalFileName = createGetCanonicalFileName(program.useCaseSensitiveFileNames());
         return arrayFrom(mapDefinedIterator(map.entries(), ([fileName, highlightSpans]) => {
             if (!sourceFilesSet.has(fileName)) {
-                if (!program.redirectTargetsMap.has(toPath(fileName, program.getCurrentDirectory(), getCanonicalFileName))) {
+                if (
+                    !program.redirectTargetsMap.has(
+                        toPath(fileName, program.getCurrentDirectory(), getCanonicalFileName),
+                    )
+                ) {
                     return undefined;
                 }
                 const redirectTarget = program.getSourceFile(fileName);
-                const redirect = find(sourceFilesToSearch, f => !!f.redirectInfo && f.redirectInfo.redirectTarget === redirectTarget)!;
+                const redirect = find(
+                    sourceFilesToSearch,
+                    f => !!f.redirectInfo && f.redirectInfo.redirectTarget === redirectTarget,
+                )!;
                 fileName = redirect.fileName;
                 Debug.assert(sourceFilesSet.has(fileName));
             }
@@ -165,7 +202,11 @@ export namespace DocumentHighlights {
             case SyntaxKind.ForKeyword:
             case SyntaxKind.WhileKeyword:
             case SyntaxKind.DoKeyword:
-                return useParent(node.parent, (n): n is IterationStatement => isIterationStatement(n, /*lookInLabeledStatements*/ true), getLoopBreakContinueOccurrences);
+                return useParent(
+                    node.parent,
+                    (n): n is IterationStatement => isIterationStatement(n, /*lookInLabeledStatements*/ true),
+                    getLoopBreakContinueOccurrences,
+                );
             case SyntaxKind.ConstructorKeyword:
                 return getFromAllDeclarations(isConstructorDeclaration, [SyntaxKind.ConstructorKeyword]);
             case SyntaxKind.GetKeyword:
@@ -186,11 +227,26 @@ export namespace DocumentHighlights {
                     : undefined;
         }
 
-        function getFromAllDeclarations<T extends Node>(nodeTest: (node: Node) => node is T, keywords: readonly SyntaxKind[]): HighlightSpan[] | undefined {
-            return useParent(node.parent, nodeTest, decl => mapDefined(tryCast(decl, canHaveSymbol)?.symbol.declarations, d => nodeTest(d) ? find(d.getChildren(sourceFile), c => contains(keywords, c.kind)) : undefined));
+        function getFromAllDeclarations<T extends Node>(
+            nodeTest: (node: Node) => node is T,
+            keywords: readonly SyntaxKind[],
+        ): HighlightSpan[] | undefined {
+            return useParent(
+                node.parent,
+                nodeTest,
+                decl =>
+                    mapDefined(
+                        tryCast(decl, canHaveSymbol)?.symbol.declarations,
+                        d => nodeTest(d) ? find(d.getChildren(sourceFile), c => contains(keywords, c.kind)) : undefined,
+                    ),
+            );
         }
 
-        function useParent<T extends Node>(node: Node, nodeTest: (node: Node) => node is T, getNodes: (node: T, sourceFile: SourceFile) => readonly Node[] | undefined): HighlightSpan[] | undefined {
+        function useParent<T extends Node>(
+            node: Node,
+            nodeTest: (node: Node) => node is T,
+            getNodes: (node: T, sourceFile: SourceFile) => readonly Node[] | undefined,
+        ): HighlightSpan[] | undefined {
             return nodeTest(node) ? highlightSpans(getNodes(node, sourceFile)) : undefined;
         }
 
@@ -210,7 +266,8 @@ export namespace DocumentHighlights {
         else if (isTryStatement(node)) {
             // Exceptions thrown within a try block lacking a catch clause are "owned" in the current context.
             return concatenate(
-                node.catchClause ? aggregateOwnedThrowStatements(node.catchClause) : node.tryBlock && aggregateOwnedThrowStatements(node.tryBlock),
+                node.catchClause ? aggregateOwnedThrowStatements(node.catchClause)
+                    : node.tryBlock && aggregateOwnedThrowStatements(node.tryBlock),
                 node.finallyBlock && aggregateOwnedThrowStatements(node.finallyBlock),
             );
         }
@@ -246,7 +303,8 @@ export namespace DocumentHighlights {
     }
 
     function aggregateAllBreakAndContinueStatements(node: Node): readonly BreakOrContinueStatement[] | undefined {
-        return isBreakOrContinueStatement(node) ? [node] : isFunctionLike(node) ? undefined : flatMapChildren(node, aggregateAllBreakAndContinueStatements);
+        return isBreakOrContinueStatement(node) ? [node]
+            : isFunctionLike(node) ? undefined : flatMapChildren(node, aggregateAllBreakAndContinueStatements);
     }
 
     function flatMapChildren<T>(node: Node, cb: (child: Node) => readonly T[] | T | undefined): readonly T[] {
@@ -289,12 +347,25 @@ export namespace DocumentHighlights {
     }
 
     function getModifierOccurrences(modifier: Modifier["kind"], declaration: Node): Node[] {
-        return mapDefined(getNodesToSearchForModifier(declaration, modifierToFlag(modifier)), node => findModifier(node, modifier));
+        return mapDefined(
+            getNodesToSearchForModifier(declaration, modifierToFlag(modifier)),
+            node => findModifier(node, modifier),
+        );
     }
 
     function getNodesToSearchForModifier(declaration: Node, modifierFlag: ModifierFlags): readonly Node[] | undefined {
         // Types of node whose children might have modifiers.
-        const container = declaration.parent as ModuleBlock | SourceFile | Block | CaseClause | DefaultClause | ConstructorDeclaration | MethodDeclaration | FunctionDeclaration | ObjectTypeDeclaration | ObjectLiteralExpression;
+        const container = declaration.parent as
+            | ModuleBlock
+            | SourceFile
+            | Block
+            | CaseClause
+            | DefaultClause
+            | ConstructorDeclaration
+            | MethodDeclaration
+            | FunctionDeclaration
+            | ObjectTypeDeclaration
+            | ObjectLiteralExpression;
         switch (container.kind) {
             case SyntaxKind.ModuleBlock:
             case SyntaxKind.SourceFile:
@@ -352,7 +423,15 @@ export namespace DocumentHighlights {
     function getLoopBreakContinueOccurrences(loopNode: IterationStatement): Node[] {
         const keywords: Node[] = [];
 
-        if (pushKeywordIf(keywords, loopNode.getFirstToken(), SyntaxKind.ForKeyword, SyntaxKind.WhileKeyword, SyntaxKind.DoKeyword)) {
+        if (
+            pushKeywordIf(
+                keywords,
+                loopNode.getFirstToken(),
+                SyntaxKind.ForKeyword,
+                SyntaxKind.WhileKeyword,
+                SyntaxKind.DoKeyword,
+            )
+        ) {
             // If we succeeded and got a do-while loop, then start looking for a 'while' keyword.
             if (loopNode.kind === SyntaxKind.DoStatement) {
                 const loopTokens = loopNode.getChildren();
@@ -374,7 +453,9 @@ export namespace DocumentHighlights {
         return keywords;
     }
 
-    function getBreakOrContinueStatementOccurrences(breakOrContinueStatement: BreakOrContinueStatement): Node[] | undefined {
+    function getBreakOrContinueStatementOccurrences(
+        breakOrContinueStatement: BreakOrContinueStatement,
+    ): Node[] | undefined {
         const owner = getBreakOrContinueOwner(breakOrContinueStatement);
 
         if (owner) {
@@ -519,7 +600,12 @@ export namespace DocumentHighlights {
     // Do not cross function/class/interface/module/type boundaries.
     function traverseWithoutCrossingFunction(node: Node, cb: (node: Node) => void) {
         cb(node);
-        if (!isFunctionLike(node) && !isClassLike(node) && !isInterfaceDeclaration(node) && !isModuleDeclaration(node) && !isTypeAliasDeclaration(node) && !isTypeNode(node)) {
+        if (
+            !isFunctionLike(node) && !isClassLike(node) && !isInterfaceDeclaration(node) &&
+            !isModuleDeclaration(node) &&
+            !isTypeAliasDeclaration(node) &&
+            !isTypeNode(node)
+        ) {
             forEachChild(node, child => traverseWithoutCrossingFunction(child, cb));
         }
     }
@@ -598,6 +684,9 @@ export namespace DocumentHighlights {
      * Note: 'node' cannot be a SourceFile.
      */
     function isLabeledBy(node: Node, labelName: __String): boolean {
-        return !!findAncestor(node.parent, owner => !isLabeledStatement(owner) ? "quit" : owner.label.escapedText === labelName);
+        return !!findAncestor(
+            node.parent,
+            owner => !isLabeledStatement(owner) ? "quit" : owner.label.escapedText === labelName,
+        );
     }
 }

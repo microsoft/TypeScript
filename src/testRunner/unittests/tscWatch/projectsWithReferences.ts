@@ -167,7 +167,8 @@ describe("unittests:: tsc-watch:: projects with references: invoking when refere
                             files: ["b.ts"],
                             references: [{ path: "tsconfig.a.json" }],
                         }),
-                        "/user/username/projects/transitiveReferences/b.ts": `import {A} from "a";export const b = new A();`,
+                        "/user/username/projects/transitiveReferences/b.ts":
+                            `import {A} from "a";export const b = new A();`,
                     },
                     { currentDirectory: `/user/username/projects/transitiveReferences` },
                 ),
@@ -206,7 +207,8 @@ export const b = new A();`,
 import {X} from "@ref/a";
 b;
 X;`,
-                        "/user/username/projects/transitiveReferences/refs/a.d.ts": getFsContentsForTransitiveReferencesRefsAdts(),
+                        "/user/username/projects/transitiveReferences/refs/a.d.ts":
+                            getFsContentsForTransitiveReferencesRefsAdts(),
                     },
                     { currentDirectory: `/user/username/projects/transitiveReferences` },
                 ),
@@ -296,7 +298,9 @@ X;`,
                 createWatchedSystem(
                     {
                         [libFile.path]: libFile.content,
-                        "/user/username/projects/transitiveReferences/a/tsconfig.json": jsonToReadableText({ compilerOptions: { composite: true } }),
+                        "/user/username/projects/transitiveReferences/a/tsconfig.json": jsonToReadableText({
+                            compilerOptions: { composite: true },
+                        }),
                         "/user/username/projects/transitiveReferences/b/tsconfig.json": jsonToReadableText({
                             compilerOptions: { composite: true, baseUrl: "./", paths: { "@ref/*": ["../*"] } },
                             references: [{ path: `../a` }],
@@ -312,7 +316,8 @@ export const b = new A();`,
 import {X} from "@ref/a";
 b;
 X;`,
-                        "/user/username/projects/transitiveReferences/refs/a.d.ts": getFsContentsForTransitiveReferencesRefsAdts(),
+                        "/user/username/projects/transitiveReferences/refs/a.d.ts":
+                            getFsContentsForTransitiveReferencesRefsAdts(),
                     },
                     { currentDirectory: `/user/username/projects/transitiveReferences` },
                 ),
@@ -403,7 +408,11 @@ X;`,
             {
                 caption: "change declration map in core",
                 edit: sys => {
-                    sys.replaceFileText("/user/username/projects/sample1/core/tsconfig.json", `"declarationMap": true,`, `"declarationMap": false,`);
+                    sys.replaceFileText(
+                        "/user/username/projects/sample1/core/tsconfig.json",
+                        `"declarationMap": true,`,
+                        `"declarationMap": false,`,
+                    );
                     const solutionBuilder = createSolutionBuilder(sys, ["core"]);
                     solutionBuilder.build();
                 },

@@ -11,7 +11,10 @@ describe("unittests:: config:: showConfig", () => {
                 const configPath = ts.combinePaths(cwd, "tsconfig.json");
                 const configContents = configJson ? JSON.stringify(configJson) : undefined;
                 const configParseHost: ts.ParseConfigFileHost = {
-                    fileExists: path => ts.comparePaths(ts.getNormalizedAbsolutePath(path, cwd), configPath) === ts.Comparison.EqualTo ? true : false,
+                    fileExists: path =>
+                        ts.comparePaths(ts.getNormalizedAbsolutePath(path, cwd), configPath) === ts.Comparison.EqualTo ?
+                            true
+                            : false,
                     getCurrentDirectory() {
                         return cwd;
                     },
@@ -22,11 +25,18 @@ describe("unittests:: config:: showConfig", () => {
                     readDirectory() {
                         return [];
                     },
-                    readFile: path => ts.comparePaths(ts.getNormalizedAbsolutePath(path, cwd), configPath) === ts.Comparison.EqualTo ? configContents : undefined,
+                    readFile: path =>
+                        ts.comparePaths(ts.getNormalizedAbsolutePath(path, cwd), configPath) === ts.Comparison.EqualTo ?
+                            configContents
+                            : undefined,
                 };
                 let commandLine = ts.parseCommandLine(commandLinesArgs);
                 if (commandLine.options.project) {
-                    const result = ts.getParsedCommandLineOfConfigFile(commandLine.options.project, commandLine.options, configParseHost);
+                    const result = ts.getParsedCommandLineOfConfigFile(
+                        commandLine.options.project,
+                        commandLine.options,
+                        configParseHost,
+                    );
                     if (result) {
                         commandLine = result;
                     }
@@ -45,17 +55,38 @@ describe("unittests:: config:: showConfig", () => {
 
     showTSConfigCorrectly("Show TSConfig with boolean value compiler options", ["--showConfig", "--noUnusedLocals"]);
 
-    showTSConfigCorrectly("Show TSConfig with enum value compiler options", ["--showConfig", "--target", "es5", "--jsx", "react"]);
+    showTSConfigCorrectly("Show TSConfig with enum value compiler options", [
+        "--showConfig",
+        "--target",
+        "es5",
+        "--jsx",
+        "react",
+    ]);
 
     showTSConfigCorrectly("Show TSConfig with list compiler options", ["--showConfig", "--types", "jquery,mocha"]);
 
-    showTSConfigCorrectly("Show TSConfig with list compiler options with enum value", ["--showConfig", "--lib", "es5,es2015.core"]);
+    showTSConfigCorrectly("Show TSConfig with list compiler options with enum value", [
+        "--showConfig",
+        "--lib",
+        "es5,es2015.core",
+    ]);
 
     showTSConfigCorrectly("Show TSConfig with incorrect compiler option", ["--showConfig", "--someNonExistOption"]);
 
-    showTSConfigCorrectly("Show TSConfig with incorrect compiler option value", ["--showConfig", "--lib", "nonExistLib,es5,es2015.promise"]);
+    showTSConfigCorrectly("Show TSConfig with incorrect compiler option value", [
+        "--showConfig",
+        "--lib",
+        "nonExistLib,es5,es2015.promise",
+    ]);
 
-    showTSConfigCorrectly("Show TSConfig with advanced options", ["--showConfig", "--declaration", "--declarationDir", "lib", "--skipLibCheck", "--noErrorTruncation"]);
+    showTSConfigCorrectly("Show TSConfig with advanced options", [
+        "--showConfig",
+        "--declaration",
+        "--declarationDir",
+        "lib",
+        "--skipLibCheck",
+        "--noErrorTruncation",
+    ]);
 
     showTSConfigCorrectly("Show TSConfig with compileOnSave and more", ["-p", "tsconfig.json"], {
         compilerOptions: {

@@ -98,8 +98,12 @@ export function processTaggedTemplateExpression(
     return factory.createCallExpression(tag, /*typeArguments*/ undefined, templateArguments);
 }
 
-function createTemplateCooked(factory: NodeFactory, template: TemplateHead | TemplateMiddle | TemplateTail | NoSubstitutionTemplateLiteral) {
-    return template.templateFlags! & TokenFlags.IsInvalid ? factory.createVoidZero() : factory.createStringLiteral(template.text);
+function createTemplateCooked(
+    factory: NodeFactory,
+    template: TemplateHead | TemplateMiddle | TemplateTail | NoSubstitutionTemplateLiteral,
+) {
+    return template.templateFlags! & TokenFlags.IsInvalid ? factory.createVoidZero()
+        : factory.createStringLiteral(template.text);
 }
 
 /**
@@ -113,7 +117,10 @@ function getRawLiteral(factory: NodeFactory, node: TemplateLiteralLikeNode, curr
     // Examples: `\n` is converted to "\\n", a template string with a newline to "\n".
     let text = node.rawText;
     if (text === undefined) {
-        Debug.assertIsDefined(currentSourceFile, "Template literal node is missing 'rawText' and does not have a source file. Possibly bad transform.");
+        Debug.assertIsDefined(
+            currentSourceFile,
+            "Template literal node is missing 'rawText' and does not have a source file. Possibly bad transform.",
+        );
         text = getSourceTextOfNodeFromSourceFile(currentSourceFile, node);
 
         // text contains the original source, it will also contain quotes ("`"), dolar signs and braces ("${" and "}"),

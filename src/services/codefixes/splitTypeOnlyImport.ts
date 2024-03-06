@@ -27,7 +27,15 @@ registerCodeFix({
             return splitTypeOnlyImport(t, getImportDeclaration(context.sourceFile, context.span), context);
         });
         if (changes.length) {
-            return [createCodeFixAction(fixId, changes, Diagnostics.Split_into_two_separate_import_declarations, fixId, Diagnostics.Split_all_invalid_type_only_imports)];
+            return [
+                createCodeFixAction(
+                    fixId,
+                    changes,
+                    Diagnostics.Split_into_two_separate_import_declarations,
+                    fixId,
+                    Diagnostics.Split_all_invalid_type_only_imports,
+                ),
+            ];
         }
     },
     getAllCodeActions: context =>
@@ -40,7 +48,11 @@ function getImportDeclaration(sourceFile: SourceFile, span: TextSpan) {
     return findAncestor(getTokenAtPosition(sourceFile, span.start), isImportDeclaration);
 }
 
-function splitTypeOnlyImport(changes: textChanges.ChangeTracker, importDeclaration: ImportDeclaration | undefined, context: CodeFixContextBase) {
+function splitTypeOnlyImport(
+    changes: textChanges.ChangeTracker,
+    importDeclaration: ImportDeclaration | undefined,
+    context: CodeFixContextBase,
+) {
     if (!importDeclaration) {
         return;
     }
@@ -51,7 +63,12 @@ function splitTypeOnlyImport(changes: textChanges.ChangeTracker, importDeclarati
         factory.updateImportDeclaration(
             importDeclaration,
             importDeclaration.modifiers,
-            factory.updateImportClause(importClause, importClause.isTypeOnly, importClause.name, /*namedBindings*/ undefined),
+            factory.updateImportClause(
+                importClause,
+                importClause.isTypeOnly,
+                importClause.name,
+                /*namedBindings*/ undefined,
+            ),
             importDeclaration.moduleSpecifier,
             importDeclaration.attributes,
         ),
@@ -62,7 +79,12 @@ function splitTypeOnlyImport(changes: textChanges.ChangeTracker, importDeclarati
         importDeclaration,
         factory.createImportDeclaration(
             /*modifiers*/ undefined,
-            factory.updateImportClause(importClause, importClause.isTypeOnly, /*name*/ undefined, importClause.namedBindings),
+            factory.updateImportClause(
+                importClause,
+                importClause.isTypeOnly,
+                /*name*/ undefined,
+                importClause.namedBindings,
+            ),
             importDeclaration.moduleSpecifier,
             importDeclaration.attributes,
         ),

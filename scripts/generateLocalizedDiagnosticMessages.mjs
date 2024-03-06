@@ -28,7 +28,9 @@ async function main() {
     const args = process.argv.slice(2);
     if (args.length !== 3) {
         console.log("Usage:");
-        console.log("\tnode generateLocalizedDiagnosticMessages.js <lcl source directory> <output directory> <generated diagnostics map file>");
+        console.log(
+            "\tnode generateLocalizedDiagnosticMessages.js <lcl source directory> <output directory> <generated diagnostics map file>",
+        );
         return;
     }
 
@@ -62,7 +64,10 @@ async function main() {
             console.error(`Invalid output locale name for '${result.LCX.$_TgtCul}'.`);
             process.exit(1);
         }
-        await writeFile(path.join(outputPath, outputDirectoryName, "diagnosticMessages.generated.json"), xmlObjectToString(result));
+        await writeFile(
+            path.join(outputPath, outputDirectoryName, "diagnosticMessages.generated.json"),
+            xmlObjectToString(result),
+        );
     }
 
     /**

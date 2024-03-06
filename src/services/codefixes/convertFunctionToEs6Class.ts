@@ -72,16 +72,57 @@ const errorCodes = [Diagnostics.This_constructor_function_may_be_converted_to_a_
 registerCodeFix({
     errorCodes,
     getCodeActions(context: CodeFixContext) {
-        const changes = textChanges.ChangeTracker.with(context, t => doChange(t, context.sourceFile, context.span.start, context.program.getTypeChecker(), context.preferences, context.program.getCompilerOptions()));
-        return [createCodeFixAction(fixId, changes, Diagnostics.Convert_function_to_an_ES2015_class, fixId, Diagnostics.Convert_all_constructor_functions_to_classes)];
+        const changes = textChanges.ChangeTracker.with(
+            context,
+            t => doChange(
+                t,
+                context.sourceFile,
+                context.span.start,
+                context.program.getTypeChecker(),
+                context.preferences,
+                context.program.getCompilerOptions(),
+            ),
+        );
+        return [
+            createCodeFixAction(
+                fixId,
+                changes,
+                Diagnostics.Convert_function_to_an_ES2015_class,
+                fixId,
+                Diagnostics.Convert_all_constructor_functions_to_classes,
+            ),
+        ];
     },
     fixIds: [fixId],
-    getAllCodeActions: context => codeFixAll(context, errorCodes, (changes, err) => doChange(changes, err.file, err.start, context.program.getTypeChecker(), context.preferences, context.program.getCompilerOptions())),
+    getAllCodeActions: context =>
+        codeFixAll(
+            context,
+            errorCodes,
+            (changes, err) =>
+                doChange(
+                    changes,
+                    err.file,
+                    err.start,
+                    context.program.getTypeChecker(),
+                    context.preferences,
+                    context.program.getCompilerOptions(),
+                ),
+        ),
 });
 
-function doChange(changes: textChanges.ChangeTracker, sourceFile: SourceFile, position: number, checker: TypeChecker, preferences: UserPreferences, compilerOptions: CompilerOptions): void {
+function doChange(
+    changes: textChanges.ChangeTracker,
+    sourceFile: SourceFile,
+    position: number,
+    checker: TypeChecker,
+    preferences: UserPreferences,
+    compilerOptions: CompilerOptions,
+): void {
     const ctorSymbol = checker.getSymbolAtLocation(getTokenAtPosition(sourceFile, position))!;
-    if (!ctorSymbol || !ctorSymbol.valueDeclaration || !(ctorSymbol.flags & (SymbolFlags.Function | SymbolFlags.Variable))) {
+    if (
+        !ctorSymbol || !ctorSymbol.valueDeclaration ||
+        !(ctorSymbol.flags & (SymbolFlags.Function | SymbolFlags.Variable))
+    ) {
         // Bad input
         return undefined;
     }
@@ -136,7 +177,11 @@ function doChange(changes: textChanges.ChangeTracker, sourceFile: SourceFile, po
             symbol.members.forEach((member, key) => {
                 if (key === "constructor" && member.valueDeclaration) {
                     const prototypeAssignment = symbol.exports?.get("prototype" as __String)?.declarations?.[0]?.parent;
-                    if (prototypeAssignment && isBinaryExpression(prototypeAssignment) && isObjectLiteralExpression(prototypeAssignment.right) && some(prototypeAssignment.right.properties, isConstructorAssignment)) {
+                    if (
+                        prototypeAssignment && isBinaryExpression(prototypeAssignment) &&
+                        isObjectLiteralExpression(prototypeAssignment.right) &&
+                        some(prototypeAssignment.right.properties, isConstructorAssignment)
+                    ) {
                         // fn.prototype = { constructor: fn }
                         // Already deleted in `createClassElement` in first pass
                     }
@@ -165,7 +210,11 @@ function doChange(changes: textChanges.ChangeTracker, sourceFile: SourceFile, po
                     // a() {}
                     if (isMethodDeclaration(property) || isGetOrSetAccessorDeclaration(property)) return true;
                     // a: function() {}
-                    if (isPropertyAssignment(property) && isFunctionExpression(property.initializer) && !!property.name) return true;
+                    if (
+                        isPropertyAssignment(property) && isFunctionExpression(property.initializer) && !!property.name
+                    ) {
+                        return true;
+                    }
                     // x.prototype.constructor = fn
                     if (isConstructorAssignment(property)) return true;
                     return false;
@@ -200,17 +249,29 @@ function doChange(changes: textChanges.ChangeTracker, sourceFile: SourceFile, po
             }
 
             // delete the entire statement if this expression is the sole expression to take care of the semicolon at the end
-            const nodeToDelete = assignmentBinaryExpression.parent && assignmentBinaryExpression.parent.kind === SyntaxKind.ExpressionStatement
+            const nodeToDelete = assignmentBinaryExpression.parent &&
+                    assignmentBinaryExpression.parent.kind === SyntaxKind.ExpressionStatement
                 ? assignmentBinaryExpression.parent : assignmentBinaryExpression;
             changes.delete(sourceFile, nodeToDelete);
 
             if (!assignmentExpr) {
-                members.push(factory.createPropertyDeclaration(modifiers, symbol.name, /*questionOrExclamationToken*/ undefined, /*type*/ undefined, /*initializer*/ undefined));
+                members.push(
+                    factory.createPropertyDeclaration(
+                        modifiers,
+                        symbol.name,
+                        /*questionOrExclamationToken*/ undefined,
+                        /*type*/ undefined,
+                        /*initializer*/ undefined,
+                    ),
+                );
                 return;
             }
 
             // f.x = expr
-            if (isAccessExpression(memberDeclaration) && (isFunctionExpression(assignmentExpr) || isArrowFunction(assignmentExpr))) {
+            if (
+                isAccessExpression(memberDeclaration) &&
+                (isFunctionExpression(assignmentExpr) || isArrowFunction(assignmentExpr))
+            ) {
                 const quotePreference = getQuotePreference(sourceFile, preferences);
                 const name = tryGetPropertyName(memberDeclaration, compilerOptions, quotePreference);
                 if (name) {
@@ -241,26 +302,56 @@ function doChange(changes: textChanges.ChangeTracker, sourceFile: SourceFile, po
                 // Don't try to declare members in JavaScript files
                 if (isSourceFileJS(sourceFile)) return;
                 if (!isPropertyAccessExpression(memberDeclaration)) return;
-                const prop = factory.createPropertyDeclaration(modifiers, memberDeclaration.name, /*questionOrExclamationToken*/ undefined, /*type*/ undefined, assignmentExpr);
+                const prop = factory.createPropertyDeclaration(
+                    modifiers,
+                    memberDeclaration.name,
+                    /*questionOrExclamationToken*/ undefined,
+                    /*type*/ undefined,
+                    assignmentExpr,
+                );
                 copyLeadingComments(assignmentBinaryExpression.parent, prop, sourceFile);
                 members.push(prop);
                 return;
             }
 
-            function createFunctionLikeExpressionMember(members: ClassElement[], expression: FunctionExpression | ArrowFunction, name: PropertyName) {
+            function createFunctionLikeExpressionMember(
+                members: ClassElement[],
+                expression: FunctionExpression | ArrowFunction,
+                name: PropertyName,
+            ) {
                 if (isFunctionExpression(expression)) return createFunctionExpressionMember(members, expression, name);
                 else return createArrowFunctionExpressionMember(members, expression, name);
             }
 
-            function createFunctionExpressionMember(members: ClassElement[], functionExpression: FunctionExpression, name: PropertyName) {
-                const fullModifiers = concatenate(modifiers, getModifierKindFromSource(functionExpression, SyntaxKind.AsyncKeyword));
-                const method = factory.createMethodDeclaration(fullModifiers, /*asteriskToken*/ undefined, name, /*questionToken*/ undefined, /*typeParameters*/ undefined, functionExpression.parameters, /*type*/ undefined, functionExpression.body);
+            function createFunctionExpressionMember(
+                members: ClassElement[],
+                functionExpression: FunctionExpression,
+                name: PropertyName,
+            ) {
+                const fullModifiers = concatenate(
+                    modifiers,
+                    getModifierKindFromSource(functionExpression, SyntaxKind.AsyncKeyword),
+                );
+                const method = factory.createMethodDeclaration(
+                    fullModifiers,
+                    /*asteriskToken*/ undefined,
+                    name,
+                    /*questionToken*/ undefined,
+                    /*typeParameters*/ undefined,
+                    functionExpression.parameters,
+                    /*type*/ undefined,
+                    functionExpression.body,
+                );
                 copyLeadingComments(assignmentBinaryExpression, method, sourceFile);
                 members.push(method);
                 return;
             }
 
-            function createArrowFunctionExpressionMember(members: ClassElement[], arrowFunction: ArrowFunction, name: PropertyName) {
+            function createArrowFunctionExpressionMember(
+                members: ClassElement[],
+                arrowFunction: ArrowFunction,
+                name: PropertyName,
+            ) {
                 const arrowFunctionBody = arrowFunction.body;
                 let bodyBlock: Block;
 
@@ -272,8 +363,20 @@ function doChange(changes: textChanges.ChangeTracker, sourceFile: SourceFile, po
                 else {
                     bodyBlock = factory.createBlock([factory.createReturnStatement(arrowFunctionBody)]);
                 }
-                const fullModifiers = concatenate(modifiers, getModifierKindFromSource(arrowFunction, SyntaxKind.AsyncKeyword));
-                const method = factory.createMethodDeclaration(fullModifiers, /*asteriskToken*/ undefined, name, /*questionToken*/ undefined, /*typeParameters*/ undefined, arrowFunction.parameters, /*type*/ undefined, bodyBlock);
+                const fullModifiers = concatenate(
+                    modifiers,
+                    getModifierKindFromSource(arrowFunction, SyntaxKind.AsyncKeyword),
+                );
+                const method = factory.createMethodDeclaration(
+                    fullModifiers,
+                    /*asteriskToken*/ undefined,
+                    name,
+                    /*questionToken*/ undefined,
+                    /*typeParameters*/ undefined,
+                    arrowFunction.parameters,
+                    /*type*/ undefined,
+                    bodyBlock,
+                );
                 copyLeadingComments(assignmentBinaryExpression, method, sourceFile);
                 members.push(method);
             }
@@ -288,11 +391,19 @@ function doChange(changes: textChanges.ChangeTracker, sourceFile: SourceFile, po
 
         const memberElements = createClassElementsFromSymbol(node.symbol);
         if (initializer.body) {
-            memberElements.unshift(factory.createConstructorDeclaration(/*modifiers*/ undefined, initializer.parameters, initializer.body));
+            memberElements.unshift(
+                factory.createConstructorDeclaration(/*modifiers*/ undefined, initializer.parameters, initializer.body),
+            );
         }
 
         const modifiers = getModifierKindFromSource(node.parent.parent, SyntaxKind.ExportKeyword);
-        const cls = factory.createClassDeclaration(modifiers, node.name, /*typeParameters*/ undefined, /*heritageClauses*/ undefined, memberElements);
+        const cls = factory.createClassDeclaration(
+            modifiers,
+            node.name,
+            /*typeParameters*/ undefined,
+            /*heritageClauses*/ undefined,
+            memberElements,
+        );
         // Don't call copyComments here because we'll already leave them in place
         return cls;
     }
@@ -300,18 +411,28 @@ function doChange(changes: textChanges.ChangeTracker, sourceFile: SourceFile, po
     function createClassFromFunction(node: FunctionDeclaration | FunctionExpression): ClassDeclaration {
         const memberElements = createClassElementsFromSymbol(ctorSymbol);
         if (node.body) {
-            memberElements.unshift(factory.createConstructorDeclaration(/*modifiers*/ undefined, node.parameters, node.body));
+            memberElements.unshift(
+                factory.createConstructorDeclaration(/*modifiers*/ undefined, node.parameters, node.body),
+            );
         }
 
         const modifiers = getModifierKindFromSource(node, SyntaxKind.ExportKeyword);
-        const cls = factory.createClassDeclaration(modifiers, node.name, /*typeParameters*/ undefined, /*heritageClauses*/ undefined, memberElements);
+        const cls = factory.createClassDeclaration(
+            modifiers,
+            node.name,
+            /*typeParameters*/ undefined,
+            /*heritageClauses*/ undefined,
+            memberElements,
+        );
         // Don't call copyComments here because we'll already leave them in place
         return cls;
     }
 }
 
 function getModifierKindFromSource(source: Node, kind: Modifier["kind"]): readonly Modifier[] | undefined {
-    return canHaveModifiers(source) ? filter(source.modifiers, (modifier): modifier is Modifier => modifier.kind === kind) : undefined;
+    return canHaveModifiers(source) ?
+        filter(source.modifiers, (modifier): modifier is Modifier => modifier.kind === kind)
+        : undefined;
 }
 
 function isConstructorAssignment(x: ObjectLiteralElementLike | PropertyAccessExpression) {
@@ -320,7 +441,11 @@ function isConstructorAssignment(x: ObjectLiteralElementLike | PropertyAccessExp
     return false;
 }
 
-function tryGetPropertyName(node: AccessExpression, compilerOptions: CompilerOptions, quotePreference: QuotePreference): PropertyName | undefined {
+function tryGetPropertyName(
+    node: AccessExpression,
+    compilerOptions: CompilerOptions,
+    quotePreference: QuotePreference,
+): PropertyName | undefined {
     if (isPropertyAccessExpression(node)) {
         return node.name;
     }
@@ -331,8 +456,10 @@ function tryGetPropertyName(node: AccessExpression, compilerOptions: CompilerOpt
     }
 
     if (isStringLiteralLike(propName)) {
-        return isIdentifierText(propName.text, getEmitScriptTarget(compilerOptions)) ? factory.createIdentifier(propName.text)
-            : isNoSubstitutionTemplateLiteral(propName) ? factory.createStringLiteral(propName.text, quotePreference === QuotePreference.Single)
+        return isIdentifierText(propName.text, getEmitScriptTarget(compilerOptions)) ?
+            factory.createIdentifier(propName.text)
+            : isNoSubstitutionTemplateLiteral(propName) ?
+            factory.createStringLiteral(propName.text, quotePreference === QuotePreference.Single)
             : propName;
     }
 

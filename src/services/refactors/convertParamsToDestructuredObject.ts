@@ -123,7 +123,9 @@ registerRefactor(refactorName, {
     getAvailableActions: getRefactorActionsToConvertParametersToDestructuredObject,
 });
 
-function getRefactorActionsToConvertParametersToDestructuredObject(context: RefactorContext): readonly ApplicableRefactorInfo[] {
+function getRefactorActionsToConvertParametersToDestructuredObject(
+    context: RefactorContext,
+): readonly ApplicableRefactorInfo[] {
     const { file, startPosition } = context;
     const isJSFile = isSourceFileJS(file);
     if (isJSFile) return emptyArray; // TODO: GH#30113
@@ -137,7 +139,10 @@ function getRefactorActionsToConvertParametersToDestructuredObject(context: Refa
     }];
 }
 
-function getRefactorEditsToConvertParametersToDestructuredObject(context: RefactorContext, actionName: string): RefactorEditInfo | undefined {
+function getRefactorEditsToConvertParametersToDestructuredObject(
+    context: RefactorContext,
+    actionName: string,
+): RefactorEditInfo | undefined {
     Debug.assert(actionName === refactorName, "Unexpected action name");
     const { file, startPosition, program, cancellationToken, host } = context;
     const functionDeclaration = getFunctionDeclarationAtPosition(file, startPosition, program.getTypeChecker());
@@ -145,7 +150,10 @@ function getRefactorEditsToConvertParametersToDestructuredObject(context: Refact
 
     const groupedReferences = getGroupedReferences(functionDeclaration, program, cancellationToken);
     if (groupedReferences.valid) {
-        const edits = textChanges.ChangeTracker.with(context, t => doChange(file, program, host, t, functionDeclaration, groupedReferences));
+        const edits = textChanges.ChangeTracker.with(
+            context,
+            t => doChange(file, program, host, t, functionDeclaration, groupedReferences),
+        );
         return { renameFilename: undefined, renameLocation: undefined, edits };
     }
 
@@ -161,29 +169,47 @@ function doChange(
     groupedReferences: GroupedReferences,
 ): void {
     const signature = groupedReferences.signature;
-    const newFunctionDeclarationParams = map(createNewParameters(functionDeclaration, program, host), param => getSynthesizedDeepClone(param));
+    const newFunctionDeclarationParams = map(
+        createNewParameters(functionDeclaration, program, host),
+        param => getSynthesizedDeepClone(param),
+    );
 
     if (signature) {
-        const newSignatureParams = map(createNewParameters(signature, program, host), param => getSynthesizedDeepClone(param));
+        const newSignatureParams = map(
+            createNewParameters(signature, program, host),
+            param => getSynthesizedDeepClone(param),
+        );
         replaceParameters(signature, newSignatureParams);
     }
     replaceParameters(functionDeclaration, newFunctionDeclarationParams);
 
-    const functionCalls = sortAndDeduplicate(groupedReferences.functionCalls, /*comparer*/ (a, b) => compareValues(a.pos, b.pos));
+    const functionCalls = sortAndDeduplicate(
+        groupedReferences.functionCalls,
+        /*comparer*/ (a, b) => compareValues(a.pos, b.pos),
+    );
     for (const call of functionCalls) {
         if (call.arguments && call.arguments.length) {
-            const newArgument = getSynthesizedDeepClone(createNewArgument(functionDeclaration, call.arguments), /*includeTrivia*/ true);
+            const newArgument = getSynthesizedDeepClone(
+                createNewArgument(functionDeclaration, call.arguments),
+                /*includeTrivia*/ true,
+            );
             changes.replaceNodeRange(
                 getSourceFileOfNode(call),
                 first(call.arguments),
                 last(call.arguments),
                 newArgument,
-                { leadingTriviaOption: textChanges.LeadingTriviaOption.IncludeAll, trailingTriviaOption: textChanges.TrailingTriviaOption.Include },
+                {
+                    leadingTriviaOption: textChanges.LeadingTriviaOption.IncludeAll,
+                    trailingTriviaOption: textChanges.TrailingTriviaOption.Include,
+                },
             );
         }
     }
 
-    function replaceParameters(declarationOrSignature: ValidFunctionDeclaration | ValidMethodSignature, parameterDeclarations: ParameterDeclaration[]) {
+    function replaceParameters(
+        declarationOrSignature: ValidFunctionDeclaration | ValidMethodSignature,
+        parameterDeclarations: ParameterDeclaration[],
+    ) {
         changes.replaceNodeRangeWithNodes(
             sourceFile,
             first(declarationOrSignature.parameters),
@@ -200,13 +226,27 @@ function doChange(
     }
 }
 
-function getGroupedReferences(functionDeclaration: ValidFunctionDeclaration, program: Program, cancellationToken: CancellationToken): GroupedReferences {
+function getGroupedReferences(
+    functionDeclaration: ValidFunctionDeclaration,
+    program: Program,
+    cancellationToken: CancellationToken,
+): GroupedReferences {
     const functionNames = getFunctionNames(functionDeclaration);
     const classNames = isConstructorDeclaration(functionDeclaration) ? getClassNames(functionDeclaration) : [];
     const names = deduplicate([...functionNames, ...classNames], equateValues);
     const checker = program.getTypeChecker();
 
-    const references = flatMap(names, /*mapfn*/ name => FindAllReferences.getReferenceEntriesForNode(-1, name, program, program.getSourceFiles(), cancellationToken));
+    const references = flatMap(
+        names,
+        /*mapfn*/ name =>
+            FindAllReferences.getReferenceEntriesForNode(
+                -1,
+                name,
+                program,
+                program.getSourceFiles(),
+                cancellationToken,
+            ),
+    );
     const groupedReferences = groupReferences(references);
 
     if (!every(groupedReferences.declarations, /*callback*/ decl => contains(names, decl))) {
@@ -217,7 +257,12 @@ function getGroupedReferences(functionDeclaration: ValidFunctionDeclaration, pro
 
     function groupReferences(referenceEntries: readonly FindAllReferences.Entry[]): GroupedReferences {
         const classReferences: ClassReferences = { accessExpressions: [], typeUsages: [] };
-        const groupedReferences: GroupedReferences = { functionCalls: [], declarations: [], classReferences, valid: true };
+        const groupedReferences: GroupedReferences = {
+            functionCalls: [],
+            declarations: [],
+            classReferences,
+            valid: true,
+        };
         const functionSymbols = map(functionNames, getSymbolTargetAtLocation);
         const classSymbols = map(classNames, getSymbolTargetAtLocation);
         const isConstructor = isConstructorDeclaration(functionDeclaration);
@@ -380,7 +425,10 @@ function entryToFunctionCall(entry: FindAllReferences.NodeEntry): CallExpression
             // x.foo(...)
             case SyntaxKind.PropertyAccessExpression:
                 const propertyAccessExpression = tryCast(parent, isPropertyAccessExpression);
-                if (propertyAccessExpression && propertyAccessExpression.parent && propertyAccessExpression.name === functionReference) {
+                if (
+                    propertyAccessExpression && propertyAccessExpression.parent &&
+                    propertyAccessExpression.name === functionReference
+                ) {
                     const callOrNewExpression = tryCast(propertyAccessExpression.parent, isCallOrNewExpression);
                     if (callOrNewExpression && callOrNewExpression.expression === propertyAccessExpression) {
                         return callOrNewExpression;
@@ -390,7 +438,10 @@ function entryToFunctionCall(entry: FindAllReferences.NodeEntry): CallExpression
             // x["foo"](...)
             case SyntaxKind.ElementAccessExpression:
                 const elementAccessExpression = tryCast(parent, isElementAccessExpression);
-                if (elementAccessExpression && elementAccessExpression.parent && elementAccessExpression.argumentExpression === functionReference) {
+                if (
+                    elementAccessExpression && elementAccessExpression.parent &&
+                    elementAccessExpression.argumentExpression === functionReference
+                ) {
                     const callOrNewExpression = tryCast(elementAccessExpression.parent, isCallOrNewExpression);
                     if (callOrNewExpression && callOrNewExpression.expression === elementAccessExpression) {
                         return callOrNewExpression;
@@ -402,7 +453,9 @@ function entryToFunctionCall(entry: FindAllReferences.NodeEntry): CallExpression
     return undefined;
 }
 
-function entryToAccessExpression(entry: FindAllReferences.NodeEntry): ElementAccessExpression | PropertyAccessExpression | undefined {
+function entryToAccessExpression(
+    entry: FindAllReferences.NodeEntry,
+): ElementAccessExpression | PropertyAccessExpression | undefined {
     if (entry.node.parent) {
         const reference = entry.node;
         const parent = reference.parent;
@@ -428,13 +481,20 @@ function entryToAccessExpression(entry: FindAllReferences.NodeEntry): ElementAcc
 
 function entryToType(entry: FindAllReferences.NodeEntry): Node | undefined {
     const reference = entry.node;
-    if (getMeaningFromLocation(reference) === SemanticMeaning.Type || isExpressionWithTypeArgumentsInClassExtendsClause(reference.parent)) {
+    if (
+        getMeaningFromLocation(reference) === SemanticMeaning.Type ||
+        isExpressionWithTypeArgumentsInClassExtendsClause(reference.parent)
+    ) {
         return reference;
     }
     return undefined;
 }
 
-function getFunctionDeclarationAtPosition(file: SourceFile, startPosition: number, checker: TypeChecker): ValidFunctionDeclaration | undefined {
+function getFunctionDeclarationAtPosition(
+    file: SourceFile,
+    startPosition: number,
+    checker: TypeChecker,
+): ValidFunctionDeclaration | undefined {
     const node = getTouchingToken(file, startPosition);
     const functionDeclaration = getContainingFunctionDeclaration(node);
 
@@ -476,12 +536,14 @@ function isValidFunctionDeclaration(
             if (isObjectLiteralExpression(functionDeclaration.parent)) {
                 const contextualSymbol = getSymbolForContextualType(functionDeclaration.name, checker);
                 // don't offer the refactor when there are multiple signatures since we won't know which ones the user wants to change
-                return contextualSymbol?.declarations?.length === 1 && isSingleImplementation(functionDeclaration, checker);
+                return contextualSymbol?.declarations?.length === 1 &&
+                    isSingleImplementation(functionDeclaration, checker);
             }
             return isSingleImplementation(functionDeclaration, checker);
         case SyntaxKind.Constructor:
             if (isClassDeclaration(functionDeclaration.parent)) {
-                return hasNameOrDefault(functionDeclaration.parent) && isSingleImplementation(functionDeclaration, checker);
+                return hasNameOrDefault(functionDeclaration.parent) &&
+                    isSingleImplementation(functionDeclaration, checker);
             }
             else {
                 return isValidVariableDeclaration(functionDeclaration.parent.parent)
@@ -540,21 +602,29 @@ function getRefactorableParametersLength(parameters: NodeArray<ParameterDeclarat
     return parameters.length;
 }
 
-function getRefactorableParameters(parameters: NodeArray<ValidParameterDeclaration>): NodeArray<ValidParameterDeclaration> {
+function getRefactorableParameters(
+    parameters: NodeArray<ValidParameterDeclaration>,
+): NodeArray<ValidParameterDeclaration> {
     if (hasThisParameter(parameters)) {
         parameters = factory.createNodeArray(parameters.slice(1), parameters.hasTrailingComma);
     }
     return parameters;
 }
 
-function createPropertyOrShorthandAssignment(name: string, initializer: Expression): PropertyAssignment | ShorthandPropertyAssignment {
+function createPropertyOrShorthandAssignment(
+    name: string,
+    initializer: Expression,
+): PropertyAssignment | ShorthandPropertyAssignment {
     if (isIdentifier(initializer) && getTextOfIdentifierOrLiteral(initializer) === name) {
         return factory.createShorthandPropertyAssignment(name);
     }
     return factory.createPropertyAssignment(name, initializer);
 }
 
-function createNewArgument(functionDeclaration: ValidFunctionDeclaration, functionArguments: NodeArray<Expression>): ObjectLiteralExpression {
+function createNewArgument(
+    functionDeclaration: ValidFunctionDeclaration,
+    functionArguments: NodeArray<Expression>,
+): ObjectLiteralExpression {
     const parameters = getRefactorableParameters(functionDeclaration.parameters);
     const hasRestParameter = isRestParameter(last(parameters));
     const nonRestArguments = hasRestParameter ? functionArguments.slice(0, parameters.length - 1) : functionArguments;
@@ -570,7 +640,10 @@ function createNewArgument(functionDeclaration: ValidFunctionDeclaration, functi
 
     if (hasRestParameter && functionArguments.length >= parameters.length) {
         const restArguments = functionArguments.slice(parameters.length - 1);
-        const restProperty = factory.createPropertyAssignment(getParameterName(last(parameters)), factory.createArrayLiteralExpression(restArguments));
+        const restProperty = factory.createPropertyAssignment(
+            getParameterName(last(parameters)),
+            factory.createArrayLiteralExpression(restArguments),
+        );
         properties.push(restProperty);
     }
 
@@ -578,7 +651,11 @@ function createNewArgument(functionDeclaration: ValidFunctionDeclaration, functi
     return objectLiteral;
 }
 
-function createNewParameters(functionDeclaration: ValidFunctionDeclaration | ValidMethodSignature, program: Program, host: LanguageServiceHost): NodeArray<ParameterDeclaration> {
+function createNewParameters(
+    functionDeclaration: ValidFunctionDeclaration | ValidMethodSignature,
+    program: Program,
+    host: LanguageServiceHost,
+): NodeArray<ParameterDeclaration> {
     const checker = program.getTypeChecker();
     const refactorableParameters = getRefactorableParameters(functionDeclaration.parameters);
     const bindingElements = map(refactorableParameters, createBindingElementFromParameterDeclaration);
@@ -621,12 +698,16 @@ function createNewParameters(functionDeclaration: ValidFunctionDeclaration | Val
     }
     return factory.createNodeArray([objectParameter]);
 
-    function createBindingElementFromParameterDeclaration(parameterDeclaration: ValidParameterDeclaration): BindingElement {
+    function createBindingElementFromParameterDeclaration(
+        parameterDeclaration: ValidParameterDeclaration,
+    ): BindingElement {
         const element = factory.createBindingElement(
             /*dotDotDotToken*/ undefined,
             /*propertyName*/ undefined,
             getParameterName(parameterDeclaration),
-            isRestParameter(parameterDeclaration) && isOptionalParameter(parameterDeclaration) ? factory.createArrayLiteralExpression() : parameterDeclaration.initializer,
+            isRestParameter(parameterDeclaration) && isOptionalParameter(parameterDeclaration) ?
+                factory.createArrayLiteralExpression()
+                : parameterDeclaration.initializer,
         );
 
         suppressLeadingAndTrailingTrivia(element);
@@ -642,7 +723,9 @@ function createNewParameters(functionDeclaration: ValidFunctionDeclaration | Val
         return typeNode;
     }
 
-    function createPropertySignatureFromParameterDeclaration(parameterDeclaration: ValidParameterDeclaration): PropertySignature {
+    function createPropertySignatureFromParameterDeclaration(
+        parameterDeclaration: ValidParameterDeclaration,
+    ): PropertySignature {
         let parameterType = parameterDeclaration.type;
         if (!parameterType && (parameterDeclaration.initializer || isRestParameter(parameterDeclaration))) {
             parameterType = getTypeNode(parameterDeclaration);
@@ -651,7 +734,8 @@ function createNewParameters(functionDeclaration: ValidFunctionDeclaration | Val
         const propertySignature = factory.createPropertySignature(
             /*modifiers*/ undefined,
             getParameterName(parameterDeclaration),
-            isOptionalParameter(parameterDeclaration) ? factory.createToken(SyntaxKind.QuestionToken) : parameterDeclaration.questionToken,
+            isOptionalParameter(parameterDeclaration) ? factory.createToken(SyntaxKind.QuestionToken)
+                : parameterDeclaration.questionToken,
             parameterType,
         );
 
@@ -718,7 +802,11 @@ function getFunctionNames(functionDeclaration: ValidFunctionDeclaration): Node[]
             return [functionDeclaration.name];
         case SyntaxKind.Constructor:
             const ctrKeyword = Debug.checkDefined(
-                findChildOfKind(functionDeclaration, SyntaxKind.ConstructorKeyword, functionDeclaration.getSourceFile()),
+                findChildOfKind(
+                    functionDeclaration,
+                    SyntaxKind.ConstructorKeyword,
+                    functionDeclaration.getSourceFile(),
+                ),
                 "Constructor declaration should have constructor keyword",
             );
             if (functionDeclaration.parent.kind === SyntaxKind.ClassExpression) {
@@ -732,7 +820,10 @@ function getFunctionNames(functionDeclaration: ValidFunctionDeclaration): Node[]
             if (functionDeclaration.name) return [functionDeclaration.name, functionDeclaration.parent.name];
             return [functionDeclaration.parent.name];
         default:
-            return Debug.assertNever(functionDeclaration, `Unexpected function declaration kind ${(functionDeclaration as ValidFunctionDeclaration).kind}`);
+            return Debug.assertNever(
+                functionDeclaration,
+                `Unexpected function declaration kind ${(functionDeclaration as ValidFunctionDeclaration).kind}`,
+            );
     }
 }
 
@@ -773,7 +864,12 @@ interface ValidMethodSignature extends MethodSignature {
     parameters: NodeArray<ValidParameterDeclaration>;
 }
 
-type ValidFunctionDeclaration = ValidConstructor | ValidFunction | ValidMethod | ValidArrowFunction | ValidFunctionExpression;
+type ValidFunctionDeclaration =
+    | ValidConstructor
+    | ValidFunction
+    | ValidMethod
+    | ValidArrowFunction
+    | ValidFunctionExpression;
 
 interface ValidParameterDeclaration extends ParameterDeclaration {
     name: Identifier;

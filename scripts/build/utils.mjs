@@ -28,7 +28,10 @@ export async function exec(cmd, args, options = {}) {
         const { ignoreExitCode, waitForExit = true, ignoreStdout } = options;
 
         if (!options.hidePrompt) console.log(`> ${chalk.green(cmd)} ${args.join(" ")}`);
-        const proc = spawn(which.sync(cmd), args, { stdio: waitForExit ? ignoreStdout ? ["inherit", "ignore", "inherit"] : "inherit" : "ignore", detached: !waitForExit });
+        const proc = spawn(which.sync(cmd), args, {
+            stdio: waitForExit ? ignoreStdout ? ["inherit", "ignore", "inherit"] : "inherit" : "ignore",
+            detached: !waitForExit,
+        });
         if (waitForExit) {
             const onCanceled = () => {
                 proc.kill();

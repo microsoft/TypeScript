@@ -81,13 +81,24 @@ import {
 export function createClassifier(): Classifier {
     const scanner = createScanner(ScriptTarget.Latest, /*skipTrivia*/ false);
 
-    function getClassificationsForLine(text: string, lexState: EndOfLineState, syntacticClassifierAbsent: boolean): ClassificationResult {
-        return convertClassificationsToResult(getEncodedLexicalClassifications(text, lexState, syntacticClassifierAbsent), text);
+    function getClassificationsForLine(
+        text: string,
+        lexState: EndOfLineState,
+        syntacticClassifierAbsent: boolean,
+    ): ClassificationResult {
+        return convertClassificationsToResult(
+            getEncodedLexicalClassifications(text, lexState, syntacticClassifierAbsent),
+            text,
+        );
     }
 
     // If there is a syntactic classifier ('syntacticClassifierAbsent' is false),
     // we will be more conservative in order to avoid conflicting with the syntactic classifier.
-    function getEncodedLexicalClassifications(text: string, lexState: EndOfLineState, syntacticClassifierAbsent: boolean): Classifications {
+    function getEncodedLexicalClassifications(
+        text: string,
+        lexState: EndOfLineState,
+        syntacticClassifierAbsent: boolean,
+    ): Classifications {
         let token = SyntaxKind.Unknown;
         let lastNonTriviaToken = SyntaxKind.Unknown;
 
@@ -167,7 +178,10 @@ export function createClassifier(): Classifier {
             switch (token) {
                 case SyntaxKind.SlashToken:
                 case SyntaxKind.SlashEqualsToken:
-                    if (!noRegexTable[lastNonTriviaToken] && scanner.reScanSlashToken() === SyntaxKind.RegularExpressionLiteral) {
+                    if (
+                        !noRegexTable[lastNonTriviaToken] &&
+                        scanner.reScanSlashToken() === SyntaxKind.RegularExpressionLiteral
+                    ) {
                         token = SyntaxKind.RegularExpressionLiteral;
                     }
                     break;
@@ -221,11 +235,19 @@ export function createClassifier(): Classifier {
                                 templateStack.pop();
                             }
                             else {
-                                Debug.assertEqual(token, SyntaxKind.TemplateMiddle, "Should have been a template middle.");
+                                Debug.assertEqual(
+                                    token,
+                                    SyntaxKind.TemplateMiddle,
+                                    "Should have been a template middle.",
+                                );
                             }
                         }
                         else {
-                            Debug.assertEqual(lastTemplateStackToken, SyntaxKind.OpenBraceToken, "Should have been an open brace");
+                            Debug.assertEqual(
+                                lastTemplateStackToken,
+                                SyntaxKind.OpenBraceToken,
+                                "Should have been an open brace",
+                            );
                             templateStack.pop();
                         }
                     }
@@ -238,7 +260,9 @@ export function createClassifier(): Classifier {
                     if (lastNonTriviaToken === SyntaxKind.DotToken) {
                         token = SyntaxKind.Identifier;
                     }
-                    else if (isKeyword(lastNonTriviaToken) && isKeyword(token) && !canFollow(lastNonTriviaToken, token)) {
+                    else if (
+                        isKeyword(lastNonTriviaToken) && isKeyword(token) && !canFollow(lastNonTriviaToken, token)
+                    ) {
                         // We have two keywords in a row.  Only treat the second as a keyword if
                         // it's a sequence that could legally occur in the language.  Otherwise
                         // treat it as an identifier.  This way, if someone writes "private var"
@@ -278,7 +302,11 @@ const noRegexTable: true[] = arrayToNumericMap<SyntaxKind, true>(
     () => true,
 );
 
-function getNewEndOfLineState(scanner: Scanner, token: SyntaxKind, lastOnTemplateStack: SyntaxKind | undefined): EndOfLineState | undefined {
+function getNewEndOfLineState(
+    scanner: Scanner,
+    token: SyntaxKind,
+    lastOnTemplateStack: SyntaxKind | undefined,
+): EndOfLineState | undefined {
     switch (token) {
         case SyntaxKind.StringLiteral: {
             // Check to see if we finished up on a multiline string literal.
@@ -293,7 +321,8 @@ function getNewEndOfLineState(scanner: Scanner, token: SyntaxKind, lastOnTemplat
 
             // If we have an odd number of backslashes, then the multiline string is unclosed
             if ((numBackslashes & 1) === 0) return undefined;
-            return tokenText.charCodeAt(0) === CharacterCodes.doubleQuote ? EndOfLineState.InDoubleQuoteStringLiteral : EndOfLineState.InSingleQuoteStringLiteral;
+            return tokenText.charCodeAt(0) === CharacterCodes.doubleQuote ? EndOfLineState.InDoubleQuoteStringLiteral
+                : EndOfLineState.InSingleQuoteStringLiteral;
         }
         case SyntaxKind.MultiLineCommentTrivia:
             // Check to see if the multiline comment was unclosed.
@@ -309,14 +338,24 @@ function getNewEndOfLineState(scanner: Scanner, token: SyntaxKind, lastOnTemplat
                     case SyntaxKind.NoSubstitutionTemplateLiteral:
                         return EndOfLineState.InTemplateHeadOrNoSubstitutionTemplate;
                     default:
-                        return Debug.fail("Only 'NoSubstitutionTemplateLiteral's and 'TemplateTail's can be unterminated; got SyntaxKind #" + token);
+                        return Debug.fail(
+                            "Only 'NoSubstitutionTemplateLiteral's and 'TemplateTail's can be unterminated; got SyntaxKind #" +
+                                token,
+                        );
                 }
             }
-            return lastOnTemplateStack === SyntaxKind.TemplateHead ? EndOfLineState.InTemplateSubstitutionPosition : undefined;
+            return lastOnTemplateStack === SyntaxKind.TemplateHead ? EndOfLineState.InTemplateSubstitutionPosition
+                : undefined;
     }
 }
 
-function pushEncodedClassification(start: number, end: number, offset: number, classification: ClassificationType, result: number[]): void {
+function pushEncodedClassification(
+    start: number,
+    end: number,
+    offset: number,
+    classification: ClassificationType,
+    result: number[],
+): void {
     if (classification === ClassificationType.whiteSpace) {
         // Don't bother with whitespace classifications.  They're not needed.
         return;
@@ -545,8 +584,16 @@ function classFromKind(token: SyntaxKind): ClassificationType {
 }
 
 /** @internal */
-export function getSemanticClassifications(typeChecker: TypeChecker, cancellationToken: CancellationToken, sourceFile: SourceFile, classifiableNames: ReadonlySet<__String>, span: TextSpan): ClassifiedSpan[] {
-    return convertClassificationsToSpans(getEncodedSemanticClassifications(typeChecker, cancellationToken, sourceFile, classifiableNames, span));
+export function getSemanticClassifications(
+    typeChecker: TypeChecker,
+    cancellationToken: CancellationToken,
+    sourceFile: SourceFile,
+    classifiableNames: ReadonlySet<__String>,
+    span: TextSpan,
+): ClassifiedSpan[] {
+    return convertClassificationsToSpans(
+        getEncodedSemanticClassifications(typeChecker, cancellationToken, sourceFile, classifiableNames, span),
+    );
 }
 
 function checkForClassificationCancellation(cancellationToken: CancellationToken, kind: SyntaxKind) {
@@ -573,7 +620,13 @@ function checkForClassificationCancellation(cancellationToken: CancellationToken
 }
 
 /** @internal */
-export function getEncodedSemanticClassifications(typeChecker: TypeChecker, cancellationToken: CancellationToken, sourceFile: SourceFile, classifiableNames: ReadonlySet<__String>, span: TextSpan): Classifications {
+export function getEncodedSemanticClassifications(
+    typeChecker: TypeChecker,
+    cancellationToken: CancellationToken,
+    sourceFile: SourceFile,
+    classifiableNames: ReadonlySet<__String>,
+    span: TextSpan,
+): Classifications {
     const spans: number[] = [];
     sourceFile.forEachChild(function cb(node: Node): void {
         // Only walk into nodes that intersect the requested span.
@@ -606,7 +659,11 @@ export function getEncodedSemanticClassifications(typeChecker: TypeChecker, canc
     }
 }
 
-function classifySymbol(symbol: Symbol, meaningAtPosition: SemanticMeaning, checker: TypeChecker): ClassificationType | undefined {
+function classifySymbol(
+    symbol: Symbol,
+    meaningAtPosition: SemanticMeaning,
+    checker: TypeChecker,
+): ClassificationType | undefined {
     const flags = symbol.getFlags();
     if ((flags & SymbolFlags.Classifiable) === SymbolFlags.None) {
         return undefined;
@@ -624,13 +681,17 @@ function classifySymbol(symbol: Symbol, meaningAtPosition: SemanticMeaning, chec
         // Only classify a module as such if
         //  - It appears in a namespace context.
         //  - There exists a module declaration which actually impacts the value side.
-        return meaningAtPosition & SemanticMeaning.Namespace || meaningAtPosition & SemanticMeaning.Value && hasValueSideModule(symbol) ? ClassificationType.moduleName : undefined;
+        return meaningAtPosition & SemanticMeaning.Namespace ||
+                meaningAtPosition & SemanticMeaning.Value && hasValueSideModule(symbol) ?
+            ClassificationType.moduleName
+            : undefined;
     }
     else if (flags & SymbolFlags.Alias) {
         return classifySymbol(checker.getAliasedSymbol(symbol), meaningAtPosition, checker);
     }
     else if (meaningAtPosition & SemanticMeaning.Type) {
-        return flags & SymbolFlags.Interface ? ClassificationType.interfaceName : flags & SymbolFlags.TypeParameter ? ClassificationType.typeParameterName : undefined;
+        return flags & SymbolFlags.Interface ? ClassificationType.interfaceName
+            : flags & SymbolFlags.TypeParameter ? ClassificationType.typeParameterName : undefined;
     }
     else {
         return undefined;
@@ -639,7 +700,12 @@ function classifySymbol(symbol: Symbol, meaningAtPosition: SemanticMeaning, chec
 
 /** Returns true if there exists a module that introduces entities on the value side. */
 function hasValueSideModule(symbol: Symbol): boolean {
-    return some(symbol.declarations, declaration => isModuleDeclaration(declaration) && getModuleInstanceState(declaration) === ModuleInstanceState.Instantiated);
+    return some(
+        symbol.declarations,
+        declaration =>
+            isModuleDeclaration(declaration) &&
+            getModuleInstanceState(declaration) === ModuleInstanceState.Instantiated,
+    );
 }
 
 function getClassificationTypeName(type: ClassificationType): ClassificationTypeNames {
@@ -712,18 +778,36 @@ function convertClassificationsToSpans(classifications: Classifications): Classi
 }
 
 /** @internal */
-export function getSyntacticClassifications(cancellationToken: CancellationToken, sourceFile: SourceFile, span: TextSpan): ClassifiedSpan[] {
+export function getSyntacticClassifications(
+    cancellationToken: CancellationToken,
+    sourceFile: SourceFile,
+    span: TextSpan,
+): ClassifiedSpan[] {
     return convertClassificationsToSpans(getEncodedSyntacticClassifications(cancellationToken, sourceFile, span));
 }
 
 /** @internal */
-export function getEncodedSyntacticClassifications(cancellationToken: CancellationToken, sourceFile: SourceFile, span: TextSpan): Classifications {
+export function getEncodedSyntacticClassifications(
+    cancellationToken: CancellationToken,
+    sourceFile: SourceFile,
+    span: TextSpan,
+): Classifications {
     const spanStart = span.start;
     const spanLength = span.length;
 
     // Make a scanner we can get trivia from.
-    const triviaScanner = createScanner(ScriptTarget.Latest, /*skipTrivia*/ false, sourceFile.languageVariant, sourceFile.text);
-    const mergeConflictScanner = createScanner(ScriptTarget.Latest, /*skipTrivia*/ false, sourceFile.languageVariant, sourceFile.text);
+    const triviaScanner = createScanner(
+        ScriptTarget.Latest,
+        /*skipTrivia*/ false,
+        sourceFile.languageVariant,
+        sourceFile.text,
+    );
+    const mergeConflictScanner = createScanner(
+        ScriptTarget.Latest,
+        /*skipTrivia*/ false,
+        sourceFile.languageVariant,
+        sourceFile.text,
+    );
 
     const result: number[] = [];
     processElement(sourceFile);
@@ -836,7 +920,11 @@ export function getEncodedSyntacticClassifications(cancellationToken: Cancellati
                 }
 
                 pushClassification(tag.pos, 1, ClassificationType.punctuation); // "@"
-                pushClassification(tag.tagName.pos, tag.tagName.end - tag.tagName.pos, ClassificationType.docCommentTagName); // e.g. "param"
+                pushClassification(
+                    tag.tagName.pos,
+                    tag.tagName.end - tag.tagName.pos,
+                    ClassificationType.docCommentTagName,
+                ); // e.g. "param"
 
                 pos = tag.tagName.end;
                 let commentStart = tag.tagName.end;
@@ -858,7 +946,10 @@ export function getEncodedSyntacticClassifications(cancellationToken: Cancellati
                         break;
                     case SyntaxKind.JSDocTypedefTag:
                         const type = tag as JSDocTypedefTag;
-                        commentStart = type.typeExpression?.kind === SyntaxKind.JSDocTypeExpression && type.fullName?.end || type.typeExpression?.end || commentStart;
+                        commentStart =
+                            type.typeExpression?.kind === SyntaxKind.JSDocTypeExpression && type.fullName?.end ||
+                            type.typeExpression?.end ||
+                            commentStart;
                         break;
                     case SyntaxKind.JSDocCallbackTag:
                         commentStart = (tag as JSDocCallbackTag).typeExpression.end;
@@ -1154,7 +1245,9 @@ export function getEncodedSyntacticClassifications(cancellationToken: Cancellati
             return ClassificationType.bigintLiteral;
         }
         else if (tokenKind === SyntaxKind.StringLiteral) {
-            return token && token.parent.kind === SyntaxKind.JsxAttribute ? ClassificationType.jsxAttributeStringLiteralValue : ClassificationType.stringLiteral;
+            return token && token.parent.kind === SyntaxKind.JsxAttribute ?
+                ClassificationType.jsxAttributeStringLiteralValue
+                : ClassificationType.stringLiteral;
         }
         else if (tokenKind === SyntaxKind.RegularExpressionLiteral) {
             // TODO: we should get another classification type for these literals.
@@ -1197,7 +1290,8 @@ export function getEncodedSyntacticClassifications(cancellationToken: Cancellati
                         return;
                     case SyntaxKind.Parameter:
                         if ((token.parent as ParameterDeclaration).name === token) {
-                            return isThisIdentifier(token) ? ClassificationType.keyword : ClassificationType.parameterName;
+                            return isThisIdentifier(token) ? ClassificationType.keyword
+                                : ClassificationType.parameterName;
                         }
                         return;
                 }

@@ -94,13 +94,29 @@ function getInfo(sourceFile: SourceFile, pos: number): Info | undefined {
     return undefined;
 }
 
-function getActionForAddMissingDefiniteAssignmentAssertion(context: CodeFixContext, info: Info): CodeFixAction | undefined {
+function getActionForAddMissingDefiniteAssignmentAssertion(
+    context: CodeFixContext,
+    info: Info,
+): CodeFixAction | undefined {
     if (info.isJs) return undefined;
-    const changes = textChanges.ChangeTracker.with(context, t => addDefiniteAssignmentAssertion(t, context.sourceFile, info.prop));
-    return createCodeFixAction(fixName, changes, [Diagnostics.Add_definite_assignment_assertion_to_property_0, info.prop.getText()], fixIdAddDefiniteAssignmentAssertions, Diagnostics.Add_definite_assignment_assertions_to_all_uninitialized_properties);
+    const changes = textChanges.ChangeTracker.with(
+        context,
+        t => addDefiniteAssignmentAssertion(t, context.sourceFile, info.prop),
+    );
+    return createCodeFixAction(
+        fixName,
+        changes,
+        [Diagnostics.Add_definite_assignment_assertion_to_property_0, info.prop.getText()],
+        fixIdAddDefiniteAssignmentAssertions,
+        Diagnostics.Add_definite_assignment_assertions_to_all_uninitialized_properties,
+    );
 }
 
-function addDefiniteAssignmentAssertion(changeTracker: textChanges.ChangeTracker, propertyDeclarationSourceFile: SourceFile, propertyDeclaration: PropertyDeclaration): void {
+function addDefiniteAssignmentAssertion(
+    changeTracker: textChanges.ChangeTracker,
+    propertyDeclarationSourceFile: SourceFile,
+    propertyDeclaration: PropertyDeclaration,
+): void {
     suppressLeadingAndTrailingTrivia(propertyDeclaration);
     const property = factory.updatePropertyDeclaration(
         propertyDeclaration,
@@ -115,15 +131,24 @@ function addDefiniteAssignmentAssertion(changeTracker: textChanges.ChangeTracker
 
 function getActionForAddMissingUndefinedType(context: CodeFixContext, info: Info): CodeFixAction {
     const changes = textChanges.ChangeTracker.with(context, t => addUndefinedType(t, context.sourceFile, info));
-    return createCodeFixAction(fixName, changes, [Diagnostics.Add_undefined_type_to_property_0, info.prop.name.getText()], fixIdAddUndefinedType, Diagnostics.Add_undefined_type_to_all_uninitialized_properties);
+    return createCodeFixAction(
+        fixName,
+        changes,
+        [Diagnostics.Add_undefined_type_to_property_0, info.prop.name.getText()],
+        fixIdAddUndefinedType,
+        Diagnostics.Add_undefined_type_to_all_uninitialized_properties,
+    );
 }
 
 function addUndefinedType(changeTracker: textChanges.ChangeTracker, sourceFile: SourceFile, info: Info): void {
     const undefinedTypeNode = factory.createKeywordTypeNode(SyntaxKind.UndefinedKeyword);
-    const types = isUnionTypeNode(info.type) ? info.type.types.concat(undefinedTypeNode) : [info.type, undefinedTypeNode];
+    const types = isUnionTypeNode(info.type) ? info.type.types.concat(undefinedTypeNode)
+        : [info.type, undefinedTypeNode];
     const unionTypeNode = factory.createUnionTypeNode(types);
     if (info.isJs) {
-        changeTracker.addJSDocTags(sourceFile, info.prop, [factory.createJSDocTypeTag(/*tagName*/ undefined, factory.createJSDocTypeExpression(unionTypeNode))]);
+        changeTracker.addJSDocTags(sourceFile, info.prop, [
+            factory.createJSDocTypeTag(/*tagName*/ undefined, factory.createJSDocTypeExpression(unionTypeNode)),
+        ]);
     }
     else {
         changeTracker.replaceNode(sourceFile, info.type, unionTypeNode);
@@ -137,11 +162,25 @@ function getActionForAddMissingInitializer(context: CodeFixContext, info: Info):
     const initializer = getInitializer(checker, info.prop);
     if (!initializer) return undefined;
 
-    const changes = textChanges.ChangeTracker.with(context, t => addInitializer(t, context.sourceFile, info.prop, initializer));
-    return createCodeFixAction(fixName, changes, [Diagnostics.Add_initializer_to_property_0, info.prop.name.getText()], fixIdAddInitializer, Diagnostics.Add_initializers_to_all_uninitialized_properties);
+    const changes = textChanges.ChangeTracker.with(
+        context,
+        t => addInitializer(t, context.sourceFile, info.prop, initializer),
+    );
+    return createCodeFixAction(
+        fixName,
+        changes,
+        [Diagnostics.Add_initializer_to_property_0, info.prop.name.getText()],
+        fixIdAddInitializer,
+        Diagnostics.Add_initializers_to_all_uninitialized_properties,
+    );
 }
 
-function addInitializer(changeTracker: textChanges.ChangeTracker, propertyDeclarationSourceFile: SourceFile, propertyDeclaration: PropertyDeclaration, initializer: Expression): void {
+function addInitializer(
+    changeTracker: textChanges.ChangeTracker,
+    propertyDeclarationSourceFile: SourceFile,
+    propertyDeclaration: PropertyDeclaration,
+    initializer: Expression,
+): void {
     suppressLeadingAndTrailingTrivia(propertyDeclaration);
     const property = factory.updatePropertyDeclaration(
         propertyDeclaration,
@@ -160,7 +199,9 @@ function getInitializer(checker: TypeChecker, propertyDeclaration: PropertyDecla
 
 function getDefaultValueFromType(checker: TypeChecker, type: Type): Expression | undefined {
     if (type.flags & TypeFlags.BooleanLiteral) {
-        return (type === checker.getFalseType() || type === checker.getFalseType(/*fresh*/ true)) ? factory.createFalse() : factory.createTrue();
+        return (type === checker.getFalseType() || type === checker.getFalseType(/*fresh*/ true)) ?
+            factory.createFalse()
+            : factory.createTrue();
     }
     else if (type.isStringLiteral()) {
         return factory.createStringLiteral(type.value);
@@ -181,7 +222,11 @@ function getDefaultValueFromType(checker: TypeChecker, type: Type): Expression |
         const constructorDeclaration = getFirstConstructorWithBody(classDeclaration);
         if (constructorDeclaration && constructorDeclaration.parameters.length) return undefined;
 
-        return factory.createNewExpression(factory.createIdentifier(type.symbol.name), /*typeArguments*/ undefined, /*argumentsArray*/ undefined);
+        return factory.createNewExpression(
+            factory.createIdentifier(type.symbol.name),
+            /*typeArguments*/ undefined,
+            /*argumentsArray*/ undefined,
+        );
     }
     else if (checker.isArrayLikeType(type)) {
         return factory.createArrayLiteralExpression();

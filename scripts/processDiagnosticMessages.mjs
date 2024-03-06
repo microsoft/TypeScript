@@ -95,14 +95,28 @@ function buildInfoFileOutput(messageTable, inputFilePathRel) {
         "/** @internal */",
         "export const Diagnostics = {",
     ];
-    messageTable.forEach(({ code, category, reportsUnnecessary, elidedInCompatabilityPyramid, reportsDeprecated }, name) => {
-        const propName = convertPropertyName(name);
-        const argReportsUnnecessary = reportsUnnecessary ? `, /*reportsUnnecessary*/ ${reportsUnnecessary}` : "";
-        const argElidedInCompatabilityPyramid = elidedInCompatabilityPyramid ? `${!reportsUnnecessary ? ", /*reportsUnnecessary*/ undefined" : ""}, /*elidedInCompatabilityPyramid*/ ${elidedInCompatabilityPyramid}` : "";
-        const argReportsDeprecated = reportsDeprecated ? `${!argElidedInCompatabilityPyramid ? ", /*reportsUnnecessary*/ undefined, /*elidedInCompatabilityPyramid*/ undefined" : ""}, /*reportsDeprecated*/ ${reportsDeprecated}` : "";
+    messageTable.forEach(
+        ({ code, category, reportsUnnecessary, elidedInCompatabilityPyramid, reportsDeprecated }, name) => {
+            const propName = convertPropertyName(name);
+            const argReportsUnnecessary = reportsUnnecessary ? `, /*reportsUnnecessary*/ ${reportsUnnecessary}` : "";
+            const argElidedInCompatabilityPyramid = elidedInCompatabilityPyramid
+                ? `${
+                    !reportsUnnecessary ? ", /*reportsUnnecessary*/ undefined" : ""
+                }, /*elidedInCompatabilityPyramid*/ ${elidedInCompatabilityPyramid}` :
+                "";
+            const argReportsDeprecated = reportsDeprecated
+                ? `${
+                    !argElidedInCompatabilityPyramid
+                        ? ", /*reportsUnnecessary*/ undefined, /*elidedInCompatabilityPyramid*/ undefined" : ""
+                }, /*reportsDeprecated*/ ${reportsDeprecated}` : "";
 
-        result.push(`    ${propName}: diag(${code}, DiagnosticCategory.${category}, "${createKey(propName, code)}", ${JSON.stringify(name)}${argReportsUnnecessary}${argElidedInCompatabilityPyramid}${argReportsDeprecated}),`);
-    });
+            result.push(
+                `    ${propName}: diag(${code}, DiagnosticCategory.${category}, "${createKey(propName, code)}", ${
+                    JSON.stringify(name)
+                }${argReportsUnnecessary}${argElidedInCompatabilityPyramid}${argReportsDeprecated}),`,
+            );
+        },
+    );
 
     result.push("};");
 

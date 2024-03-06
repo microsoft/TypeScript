@@ -141,7 +141,9 @@ describe("unittests:: tsserver:: watchEnvironment:: recursiveWatchDirectory", ()
         };
         const environmentVariables = new Map<string, string>();
         environmentVariables.set("TSC_WATCHDIRECTORY", Tsc_WatchDirectory.NonRecursiveWatchDirectory);
-        const host = createServerHost([index, file1, configFile, libFile, nodeModulesExistingUnusedFile], { environmentVariables });
+        const host = createServerHost([index, file1, configFile, libFile, nodeModulesExistingUnusedFile], {
+            environmentVariables,
+        });
         const session = new TestSession(host);
         openFilesForSession([index], session);
 
@@ -180,7 +182,11 @@ describe("unittests:: tsserver:: watchEnvironment:: recursiveWatchDirectory", ()
             session.host.baselineHost("After writing ignored file or folder");
         });
 
-        baselineTsserverLogs("watchEnvironment", `recursive directory does not watch files starting with dot in node_modules`, session);
+        baselineTsserverLogs(
+            "watchEnvironment",
+            `recursive directory does not watch files starting with dot in node_modules`,
+            session,
+        );
     });
 });
 
@@ -203,7 +209,9 @@ describe("unittests:: tsserver:: watchEnvironment:: networkStylePaths", () => {
             );
             logger.host = host;
             logger.info(`For files of style ${path}`);
-            logger.log(`currentDirectory:: ${host.getCurrentDirectory()} useCaseSensitiveFileNames: ${host.useCaseSensitiveFileNames}`);
+            logger.log(
+                `currentDirectory:: ${host.getCurrentDirectory()} useCaseSensitiveFileNames: ${host.useCaseSensitiveFileNames}`,
+            );
             const session = new TestSession({ host, logger });
             openFilesForSession([file], session);
         }
@@ -257,7 +265,10 @@ describe("unittests:: tsserver:: watchEnvironment:: handles watch compiler optio
             content: "{}",
         };
         const files = [libFile, commonFile2, configFile];
-        const host = createServerHost(files.concat(commonFile1), { runWithoutRecursiveWatches: true, runWithFallbackPolling: true });
+        const host = createServerHost(files.concat(commonFile1), {
+            runWithoutRecursiveWatches: true,
+            runWithFallbackPolling: true,
+        });
         const session = new TestSession(host);
         session.executeCommandSeq<ts.server.protocol.ConfigureRequest>({
             command: ts.server.protocol.CommandTypes.Configure,
@@ -313,7 +324,10 @@ describe("unittests:: tsserver:: watchEnvironment:: handles watch compiler optio
             }),
         };
         const files = [libFile, commonFile2, configFile];
-        const host = createServerHost(files.concat(commonFile1), { runWithoutRecursiveWatches: true, runWithFallbackPolling: true });
+        const host = createServerHost(files.concat(commonFile1), {
+            runWithoutRecursiveWatches: true,
+            runWithFallbackPolling: true,
+        });
         const session = new TestSession(host);
         session.executeCommandSeq<ts.server.protocol.ConfigureRequest>({
             command: ts.server.protocol.CommandTypes.Configure,
@@ -357,7 +371,10 @@ describe("unittests:: tsserver:: watchEnvironment:: handles watch compiler optio
         function setup(configureHost?: boolean) {
             const configFile: File = {
                 path: `/user/username/projects/myproject/tsconfig.json`,
-                content: jsonToReadableText({ include: ["src"], watchOptions: { excludeDirectories: ["node_modules"] } }),
+                content: jsonToReadableText({
+                    include: ["src"],
+                    watchOptions: { excludeDirectories: ["node_modules"] },
+                }),
             };
             const { main, bar, foo } = setupFiles();
             const files = [libFile, main, bar, foo, configFile];
@@ -515,7 +532,10 @@ describe("unittests:: tsserver:: watchEnvironment:: watching at workspaces codes
             path: "/workspaces/somerepo/node_modules/@types/random-seed/index.d.ts",
             content: `export function randomSeed(): string;`,
         };
-        const host = createServerHost([config, main, randomSeed, libFile], { inodeWatching: true, runWithoutRecursiveWatches: true });
+        const host = createServerHost([config, main, randomSeed, libFile], {
+            inodeWatching: true,
+            runWithoutRecursiveWatches: true,
+        });
         const session = new TestSession(host);
         openFilesForSession([main], session);
         verifyGetErrRequest({ session, files: [main] });
@@ -528,7 +548,11 @@ describe("unittests:: tsserver:: watchEnvironment:: watching at workspaces codes
         host.ensureFileOrFolder(randomSeed);
         verifyGetErrRequest({ session, files: [main], existingTimeouts: true });
         host.runQueuedTimeoutCallbacks();
-        baselineTsserverLogs("watchEnvironment", "watching npm install in codespaces where workspaces folder is hosted at root", session);
+        baselineTsserverLogs(
+            "watchEnvironment",
+            "watching npm install in codespaces where workspaces folder is hosted at root",
+            session,
+        );
     });
 });
 
@@ -539,7 +563,10 @@ describe("unittests:: tsserver:: watchEnvironment:: perVolumeCasing", () => {
         host.getCanonicalFileName = s => ts.startsWith(s, "/Volumes/") ? s : ts.toFileNameLowerCase(s);
         host.ensureFileOrFolder({ path: "/Volumes/git/projects/project/foo.ts", content: `export const foo = "foo";` });
         host.writeFile("/Volumes/git/projects/project/tsconfig.json", "{ }");
-        host.writeFile("/Volumes/git/projects/project/package.json", jsonToReadableText({ name: "project", version: "1.0.0" }));
+        host.writeFile(
+            "/Volumes/git/projects/project/package.json",
+            jsonToReadableText({ name: "project", version: "1.0.0" }),
+        );
         const session = new TestSession(host);
         openFilesForSession(["/Volumes/git/projects/project/foo.ts"], session);
         host.writeFile("/Volumes/git/projects/project/Bar.ts", `export const bar = "bar";`);

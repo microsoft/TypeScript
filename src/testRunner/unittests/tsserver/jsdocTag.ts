@@ -60,10 +60,14 @@ var x = 1
 ;`,
     };
 
-    assertQuickInfoJSDoc("for quickinfo, should provide display parts plus a span for a working link in a tag", linkInTag, {
-        command: ts.server.protocol.CommandTypes.Quickinfo,
-        displayPartsForJSDoc: true,
-    });
+    assertQuickInfoJSDoc(
+        "for quickinfo, should provide display parts plus a span for a working link in a tag",
+        linkInTag,
+        {
+            command: ts.server.protocol.CommandTypes.Quickinfo,
+            displayPartsForJSDoc: true,
+        },
+    );
 
     assertQuickInfoJSDoc("for quickinfo, should provide a string for a working link in a tag", linkInTag, {
         command: ts.server.protocol.CommandTypes.Quickinfo,
@@ -80,20 +84,28 @@ var x = 1
         displayPartsForJSDoc: false,
     });
 
-    assertQuickInfoJSDoc("for quickinfo-full, should provide display parts plus a span for a working link in a tag", linkInTag, {
-        command: ts.server.protocol.CommandTypes.QuickinfoFull,
-        displayPartsForJSDoc: true,
-    });
+    assertQuickInfoJSDoc(
+        "for quickinfo-full, should provide display parts plus a span for a working link in a tag",
+        linkInTag,
+        {
+            command: ts.server.protocol.CommandTypes.QuickinfoFull,
+            displayPartsForJSDoc: true,
+        },
+    );
 
     assertQuickInfoJSDoc("for quickinfo-full, should provide a string for a working link in a tag", linkInTag, {
         command: ts.server.protocol.CommandTypes.QuickinfoFull,
         displayPartsForJSDoc: false,
     });
 
-    assertQuickInfoJSDoc("for quickinfo-full, should provide display parts plus a span for a working link in a comment", linkInComment, {
-        command: ts.server.protocol.CommandTypes.QuickinfoFull,
-        displayPartsForJSDoc: true,
-    });
+    assertQuickInfoJSDoc(
+        "for quickinfo-full, should provide display parts plus a span for a working link in a comment",
+        linkInComment,
+        {
+            command: ts.server.protocol.CommandTypes.QuickinfoFull,
+            displayPartsForJSDoc: true,
+        },
+    );
 
     assertQuickInfoJSDoc("for quickinfo-full, should provide a string for a working link in a comment", linkInComment, {
         command: ts.server.protocol.CommandTypes.QuickinfoFull,

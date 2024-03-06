@@ -45,27 +45,132 @@ interface BigIntToLocaleStringOptions {
     /**
      * The minimum number of integer digits to use. Possible values are from 1 to 21; the default is 1.
      */
-    minimumIntegerDigits?: 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12 | 13 | 14 | 15 | 16 | 17 | 18 | 19 | 20 | 21;
+    minimumIntegerDigits?:
+        | 1
+        | 2
+        | 3
+        | 4
+        | 5
+        | 6
+        | 7
+        | 8
+        | 9
+        | 10
+        | 11
+        | 12
+        | 13
+        | 14
+        | 15
+        | 16
+        | 17
+        | 18
+        | 19
+        | 20
+        | 21;
 
     /**
      * The minimum number of fraction digits to use. Possible values are from 0 to 20; the default for plain number and percent formatting is 0; the default for currency formatting is the number of minor unit digits provided by the {@link http://www.currency-iso.org/en/home/tables/table-a1.html ISO 4217 currency codes list} (2 if the list doesn't provide that information).
      */
-    minimumFractionDigits?: 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12 | 13 | 14 | 15 | 16 | 17 | 18 | 19 | 20;
+    minimumFractionDigits?:
+        | 0
+        | 1
+        | 2
+        | 3
+        | 4
+        | 5
+        | 6
+        | 7
+        | 8
+        | 9
+        | 10
+        | 11
+        | 12
+        | 13
+        | 14
+        | 15
+        | 16
+        | 17
+        | 18
+        | 19
+        | 20;
 
     /**
      * The maximum number of fraction digits to use. Possible values are from 0 to 20; the default for plain number formatting is the larger of minimumFractionDigits and 3; the default for currency formatting is the larger of minimumFractionDigits and the number of minor unit digits provided by the {@link http://www.currency-iso.org/en/home/tables/table-a1.html ISO 4217 currency codes list} (2 if the list doesn't provide that information); the default for percent formatting is the larger of minimumFractionDigits and 0.
      */
-    maximumFractionDigits?: 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12 | 13 | 14 | 15 | 16 | 17 | 18 | 19 | 20;
+    maximumFractionDigits?:
+        | 0
+        | 1
+        | 2
+        | 3
+        | 4
+        | 5
+        | 6
+        | 7
+        | 8
+        | 9
+        | 10
+        | 11
+        | 12
+        | 13
+        | 14
+        | 15
+        | 16
+        | 17
+        | 18
+        | 19
+        | 20;
 
     /**
      * The minimum number of significant digits to use. Possible values are from 1 to 21; the default is 1.
      */
-    minimumSignificantDigits?: 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12 | 13 | 14 | 15 | 16 | 17 | 18 | 19 | 20 | 21;
+    minimumSignificantDigits?:
+        | 1
+        | 2
+        | 3
+        | 4
+        | 5
+        | 6
+        | 7
+        | 8
+        | 9
+        | 10
+        | 11
+        | 12
+        | 13
+        | 14
+        | 15
+        | 16
+        | 17
+        | 18
+        | 19
+        | 20
+        | 21;
 
     /**
      * The maximum number of significant digits to use. Possible values are from 1 to 21; the default is 21.
      */
-    maximumSignificantDigits?: 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12 | 13 | 14 | 15 | 16 | 17 | 18 | 19 | 20 | 21;
+    maximumSignificantDigits?:
+        | 1
+        | 2
+        | 3
+        | 4
+        | 5
+        | 6
+        | 7
+        | 8
+        | 9
+        | 10
+        | 11
+        | 12
+        | 13
+        | 14
+        | 15
+        | 16
+        | 17
+        | 18
+        | 19
+        | 20
+        | 21;
 
     /**
      * The formatting that should be displayed for the number, the defaults is "standard"
@@ -271,7 +376,9 @@ interface BigInt64Array {
      * the accumulation. The first call to the callbackfn function provides this value as an argument
      * instead of an array value.
      */
-    reduce(callbackfn: (previousValue: bigint, currentValue: bigint, currentIndex: number, array: BigInt64Array) => bigint): bigint;
+    reduce(
+        callbackfn: (previousValue: bigint, currentValue: bigint, currentIndex: number, array: BigInt64Array) => bigint,
+    ): bigint;
 
     /**
      * Calls the specified callback function for all the elements in an array. The return value of
@@ -283,7 +390,10 @@ interface BigInt64Array {
      * the accumulation. The first call to the callbackfn function provides this value as an argument
      * instead of an array value.
      */
-    reduce<U>(callbackfn: (previousValue: U, currentValue: bigint, currentIndex: number, array: BigInt64Array) => U, initialValue: U): U;
+    reduce<U>(
+        callbackfn: (previousValue: U, currentValue: bigint, currentIndex: number, array: BigInt64Array) => U,
+        initialValue: U,
+    ): U;
 
     /**
      * Calls the specified callback function for all the elements in an array, in descending order.
@@ -295,7 +405,9 @@ interface BigInt64Array {
      * the accumulation. The first call to the callbackfn function provides this value as an
      * argument instead of an array value.
      */
-    reduceRight(callbackfn: (previousValue: bigint, currentValue: bigint, currentIndex: number, array: BigInt64Array) => bigint): bigint;
+    reduceRight(
+        callbackfn: (previousValue: bigint, currentValue: bigint, currentIndex: number, array: BigInt64Array) => bigint,
+    ): bigint;
 
     /**
      * Calls the specified callback function for all the elements in an array, in descending order.
@@ -307,7 +419,10 @@ interface BigInt64Array {
      * the accumulation. The first call to the callbackfn function provides this value as an argument
      * instead of an array value.
      */
-    reduceRight<U>(callbackfn: (previousValue: U, currentValue: bigint, currentIndex: number, array: BigInt64Array) => U, initialValue: U): U;
+    reduceRight<U>(
+        callbackfn: (previousValue: U, currentValue: bigint, currentIndex: number, array: BigInt64Array) => U,
+        initialValue: U,
+    ): U;
 
     /** Reverses the elements in the array. */
     reverse(): this;
@@ -465,7 +580,10 @@ interface BigUint64Array {
      * @param thisArg If provided, it will be used as the this value for each invocation of
      * predicate. If it is not provided, undefined is used instead.
      */
-    find(predicate: (value: bigint, index: number, array: BigUint64Array) => boolean, thisArg?: any): bigint | undefined;
+    find(
+        predicate: (value: bigint, index: number, array: BigUint64Array) => boolean,
+        thisArg?: any,
+    ): bigint | undefined;
 
     /**
      * Returns the index of the first element in the array where predicate is true, and -1
@@ -543,7 +661,14 @@ interface BigUint64Array {
      * the accumulation. The first call to the callbackfn function provides this value as an argument
      * instead of an array value.
      */
-    reduce(callbackfn: (previousValue: bigint, currentValue: bigint, currentIndex: number, array: BigUint64Array) => bigint): bigint;
+    reduce(
+        callbackfn: (
+            previousValue: bigint,
+            currentValue: bigint,
+            currentIndex: number,
+            array: BigUint64Array,
+        ) => bigint,
+    ): bigint;
 
     /**
      * Calls the specified callback function for all the elements in an array. The return value of
@@ -555,7 +680,10 @@ interface BigUint64Array {
      * the accumulation. The first call to the callbackfn function provides this value as an argument
      * instead of an array value.
      */
-    reduce<U>(callbackfn: (previousValue: U, currentValue: bigint, currentIndex: number, array: BigUint64Array) => U, initialValue: U): U;
+    reduce<U>(
+        callbackfn: (previousValue: U, currentValue: bigint, currentIndex: number, array: BigUint64Array) => U,
+        initialValue: U,
+    ): U;
 
     /**
      * Calls the specified callback function for all the elements in an array, in descending order.
@@ -567,7 +695,14 @@ interface BigUint64Array {
      * the accumulation. The first call to the callbackfn function provides this value as an
      * argument instead of an array value.
      */
-    reduceRight(callbackfn: (previousValue: bigint, currentValue: bigint, currentIndex: number, array: BigUint64Array) => bigint): bigint;
+    reduceRight(
+        callbackfn: (
+            previousValue: bigint,
+            currentValue: bigint,
+            currentIndex: number,
+            array: BigUint64Array,
+        ) => bigint,
+    ): bigint;
 
     /**
      * Calls the specified callback function for all the elements in an array, in descending order.
@@ -579,7 +714,10 @@ interface BigUint64Array {
      * the accumulation. The first call to the callbackfn function provides this value as an argument
      * instead of an array value.
      */
-    reduceRight<U>(callbackfn: (previousValue: U, currentValue: bigint, currentIndex: number, array: BigUint64Array) => U, initialValue: U): U;
+    reduceRight<U>(
+        callbackfn: (previousValue: U, currentValue: bigint, currentIndex: number, array: BigUint64Array) => U,
+        initialValue: U,
+    ): U;
 
     /** Reverses the elements in the array. */
     reverse(): this;

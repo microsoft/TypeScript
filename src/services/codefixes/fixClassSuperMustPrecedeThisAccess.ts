@@ -33,7 +33,15 @@ registerCodeFix({
         if (!nodes) return undefined;
         const { constructor, superCall } = nodes;
         const changes = textChanges.ChangeTracker.with(context, t => doChange(t, sourceFile, constructor, superCall));
-        return [createCodeFixAction(fixId, changes, Diagnostics.Make_super_call_the_first_statement_in_the_constructor, fixId, Diagnostics.Make_all_super_calls_the_first_statement_in_their_constructor)];
+        return [
+            createCodeFixAction(
+                fixId,
+                changes,
+                Diagnostics.Make_super_call_the_first_statement_in_the_constructor,
+                fixId,
+                Diagnostics.Make_all_super_calls_the_first_statement_in_their_constructor,
+            ),
+        ];
     },
     fixIds: [fixId],
     getAllCodeActions(context) {
@@ -50,19 +58,30 @@ registerCodeFix({
     },
 });
 
-function doChange(changes: textChanges.ChangeTracker, sourceFile: SourceFile, constructor: ConstructorDeclaration, superCall: ExpressionStatement): void {
+function doChange(
+    changes: textChanges.ChangeTracker,
+    sourceFile: SourceFile,
+    constructor: ConstructorDeclaration,
+    superCall: ExpressionStatement,
+): void {
     changes.insertNodeAtConstructorStart(sourceFile, constructor, superCall);
     changes.delete(sourceFile, superCall);
 }
 
-function getNodes(sourceFile: SourceFile, pos: number): { readonly constructor: ConstructorDeclaration; readonly superCall: ExpressionStatement; } | undefined {
+function getNodes(
+    sourceFile: SourceFile,
+    pos: number,
+): { readonly constructor: ConstructorDeclaration; readonly superCall: ExpressionStatement; } | undefined {
     const token = getTokenAtPosition(sourceFile, pos);
     if (token.kind !== SyntaxKind.ThisKeyword) return undefined;
     const constructor = getContainingFunction(token) as ConstructorDeclaration;
     const superCall = findSuperCall(constructor.body!);
     // figure out if the `this` access is actually inside the supercall
     // i.e. super(this.a), since in that case we won't suggest a fix
-    return superCall && !superCall.expression.arguments.some(arg => isPropertyAccessExpression(arg) && arg.expression === token) ? { constructor, superCall } : undefined;
+    return superCall &&
+            !superCall.expression.arguments.some(arg => isPropertyAccessExpression(arg) && arg.expression === token) ?
+        { constructor, superCall }
+        : undefined;
 }
 
 function findSuperCall(n: Node): ExpressionStatement & { expression: CallExpression; } | undefined {

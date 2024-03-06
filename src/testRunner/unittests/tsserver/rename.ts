@@ -114,7 +114,11 @@ describe("unittests:: tsserver:: rename", () => {
             command: ts.server.protocol.CommandTypes.Rename,
             arguments: protocolFileLocationFromSubstring(bTs, "aTest("),
         });
-        baselineTsserverLogs("rename", "export default anonymous function works with prefixText and suffixText when disabled", session);
+        baselineTsserverLogs(
+            "rename",
+            "export default anonymous function works with prefixText and suffixText when disabled",
+            session,
+        );
     });
 
     it("rename behavior is based on file of rename initiation", () => {

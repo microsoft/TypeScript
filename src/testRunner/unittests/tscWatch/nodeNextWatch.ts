@@ -50,7 +50,10 @@ describe("unittests:: tsc-watch:: nodeNextWatch:: emit when module emit is speci
                 path: "/project/src/deps.d.ts",
                 content: `declare module "thing";`,
             };
-            return createWatchedSystem([configFile, file1, declFile, packageFile, { ...libFile, path: "/a/lib/lib.es2020.full.d.ts" }]);
+            return createWatchedSystem([configFile, file1, declFile, packageFile, {
+                ...libFile,
+                path: "/a/lib/lib.es2020.full.d.ts",
+            }]);
         },
         edits: [
             {

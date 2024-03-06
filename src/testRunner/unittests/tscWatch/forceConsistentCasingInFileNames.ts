@@ -29,7 +29,9 @@ describe("unittests:: tsc-watch:: forceConsistentCasingInFileNames", () => {
         }),
     };
 
-    function verifyConsistentFileNames({ subScenario, changes }: { subScenario: string; changes: TscWatchCompileChange[]; }) {
+    function verifyConsistentFileNames(
+        { subScenario, changes }: { subScenario: string; changes: TscWatchCompileChange[]; },
+    ) {
         verifyTscWatch({
             scenario: "forceConsistentCasingInFileNames",
             subScenario,
@@ -82,7 +84,9 @@ describe("unittests:: tsc-watch:: forceConsistentCasingInFileNames", () => {
                 path: `/user/username/projects/myproject/tsconfig.json`,
                 content: jsonToReadableText({ compilerOptions: { forceConsistentCasingInFileNames: true } }),
             };
-            return createWatchedSystem([moduleA, moduleB, moduleC, libFile, tsconfig], { currentDirectory: "/user/username/projects/myproject" });
+            return createWatchedSystem([moduleA, moduleB, moduleC, libFile, tsconfig], {
+                currentDirectory: "/user/username/projects/myproject",
+            });
         },
         edits: [
             {
@@ -131,7 +135,11 @@ export const Fragment: unique symbol;
                 {
                     path: `/user/username/projects/myproject/tsconfig.json`,
                     content: jsonToReadableText({
-                        compilerOptions: { jsx: "react-jsx", jsxImportSource: "react", forceConsistentCasingInFileNames: true },
+                        compilerOptions: {
+                            jsx: "react-jsx",
+                            jsxImportSource: "react",
+                            forceConsistentCasingInFileNames: true,
+                        },
                         files: ["node_modules/react/Jsx-Runtime/index.d.ts", "index.tsx"],
                     }),
                 },
@@ -164,7 +172,10 @@ a;b;
                     path: `${windowsStyleRoot}/${projectRootRelative}/tsconfig.json`,
                     content: jsonToReadableText({ compilerOptions: { forceConsistentCasingInFileNames: true } }),
                 };
-                return createWatchedSystem([moduleA, moduleB, libFile, tsconfig], { windowsStyleRoot, useCaseSensitiveFileNames: false });
+                return createWatchedSystem([moduleA, moduleB, libFile, tsconfig], {
+                    windowsStyleRoot,
+                    useCaseSensitiveFileNames: false,
+                });
             },
             edits: [
                 {
@@ -214,7 +225,9 @@ a;b;
                     path: `/user/username/projects/myproject/tsconfig.json`,
                     content: jsonToReadableText({ compilerOptions: { forceConsistentCasingInFileNames: true } }),
                 };
-                return createWatchedSystem([moduleA, symlinkA, moduleB, libFile, tsconfig], { currentDirectory: "/user/username/projects/myproject" });
+                return createWatchedSystem([moduleA, symlinkA, moduleB, libFile, tsconfig], {
+                    currentDirectory: "/user/username/projects/myproject",
+                });
             },
             edits: [
                 {
@@ -232,11 +245,36 @@ a;b;
         });
     }
 
-    verifyFileSymlink("when both file symlink target and import match disk", `/user/username/projects/myproject/XY.ts`, `/user/username/projects/myproject/XY.ts`, `./XY`);
-    verifyFileSymlink("when file symlink target matches disk but import does not", `/user/username/projects/myproject/XY.ts`, `/user/username/projects/myproject/Xy.ts`, `./XY`);
-    verifyFileSymlink("when import matches disk but file symlink target does not", `/user/username/projects/myproject/XY.ts`, `/user/username/projects/myproject/XY.ts`, `./Xy`);
-    verifyFileSymlink("when import and file symlink target agree but do not match disk", `/user/username/projects/myproject/XY.ts`, `/user/username/projects/myproject/Xy.ts`, `./Xy`);
-    verifyFileSymlink("when import, file symlink target, and disk are all different", `/user/username/projects/myproject/XY.ts`, `/user/username/projects/myproject/Xy.ts`, `./yX`);
+    verifyFileSymlink(
+        "when both file symlink target and import match disk",
+        `/user/username/projects/myproject/XY.ts`,
+        `/user/username/projects/myproject/XY.ts`,
+        `./XY`,
+    );
+    verifyFileSymlink(
+        "when file symlink target matches disk but import does not",
+        `/user/username/projects/myproject/XY.ts`,
+        `/user/username/projects/myproject/Xy.ts`,
+        `./XY`,
+    );
+    verifyFileSymlink(
+        "when import matches disk but file symlink target does not",
+        `/user/username/projects/myproject/XY.ts`,
+        `/user/username/projects/myproject/XY.ts`,
+        `./Xy`,
+    );
+    verifyFileSymlink(
+        "when import and file symlink target agree but do not match disk",
+        `/user/username/projects/myproject/XY.ts`,
+        `/user/username/projects/myproject/Xy.ts`,
+        `./Xy`,
+    );
+    verifyFileSymlink(
+        "when import, file symlink target, and disk are all different",
+        `/user/username/projects/myproject/XY.ts`,
+        `/user/username/projects/myproject/Xy.ts`,
+        `./yX`,
+    );
 
     function verifyDirSymlink(subScenario: string, diskPath: string, targetPath: string, importedPath: string) {
         verifyTscWatch({
@@ -267,9 +305,17 @@ a;b;
                 const tsconfig: File = {
                     path: `/user/username/projects/myproject/tsconfig.json`,
                     // Use outFile because otherwise the real and linked files will have the same output path
-                    content: jsonToReadableText({ compilerOptions: { forceConsistentCasingInFileNames: true, outFile: "out.js", module: "system" } }),
+                    content: jsonToReadableText({
+                        compilerOptions: {
+                            forceConsistentCasingInFileNames: true,
+                            outFile: "out.js",
+                            module: "system",
+                        },
+                    }),
                 };
-                return createWatchedSystem([moduleA, symlinkA, moduleB, libFile, tsconfig], { currentDirectory: "/user/username/projects/myproject" });
+                return createWatchedSystem([moduleA, symlinkA, moduleB, libFile, tsconfig], {
+                    currentDirectory: "/user/username/projects/myproject",
+                });
             },
             edits: [
                 {
@@ -287,11 +333,36 @@ a;b;
         });
     }
 
-    verifyDirSymlink("when both directory symlink target and import match disk", `/user/username/projects/myproject/XY`, `/user/username/projects/myproject/XY`, `./XY`);
-    verifyDirSymlink("when directory symlink target matches disk but import does not", `/user/username/projects/myproject/XY`, `/user/username/projects/myproject/Xy`, `./XY`);
-    verifyDirSymlink("when import matches disk but directory symlink target does not", `/user/username/projects/myproject/XY`, `/user/username/projects/myproject/XY`, `./Xy`);
-    verifyDirSymlink("when import and directory symlink target agree but do not match disk", `/user/username/projects/myproject/XY`, `/user/username/projects/myproject/Xy`, `./Xy`);
-    verifyDirSymlink("when import, directory symlink target, and disk are all different", `/user/username/projects/myproject/XY`, `/user/username/projects/myproject/Xy`, `./yX`);
+    verifyDirSymlink(
+        "when both directory symlink target and import match disk",
+        `/user/username/projects/myproject/XY`,
+        `/user/username/projects/myproject/XY`,
+        `./XY`,
+    );
+    verifyDirSymlink(
+        "when directory symlink target matches disk but import does not",
+        `/user/username/projects/myproject/XY`,
+        `/user/username/projects/myproject/Xy`,
+        `./XY`,
+    );
+    verifyDirSymlink(
+        "when import matches disk but directory symlink target does not",
+        `/user/username/projects/myproject/XY`,
+        `/user/username/projects/myproject/XY`,
+        `./Xy`,
+    );
+    verifyDirSymlink(
+        "when import and directory symlink target agree but do not match disk",
+        `/user/username/projects/myproject/XY`,
+        `/user/username/projects/myproject/Xy`,
+        `./Xy`,
+    );
+    verifyDirSymlink(
+        "when import, directory symlink target, and disk are all different",
+        `/user/username/projects/myproject/XY`,
+        `/user/username/projects/myproject/Xy`,
+        `./yX`,
+    );
 
     verifyTscWatch({
         scenario: "forceConsistentCasingInFileNames",

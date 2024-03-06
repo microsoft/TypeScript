@@ -2,7 +2,12 @@ import * as Harness from "../_namespaces/Harness";
 import * as ts from "../_namespaces/ts";
 
 describe("unittests:: customTransforms", () => {
-    function emitsCorrectly(name: string, sources: { file: string; text: string; }[], customTransformers: ts.CustomTransformers, options: ts.CompilerOptions = {}) {
+    function emitsCorrectly(
+        name: string,
+        sources: { file: string; text: string; }[],
+        customTransformers: ts.CustomTransformers,
+        options: ts.CompilerOptions = {},
+    ) {
         it(name, () => {
             const roots = sources.map(source => ts.createSourceFile(source.file, source.text, ts.ScriptTarget.ES2015));
             const fileMap = ts.arrayToMap(roots, file => file.fileName);
@@ -20,8 +25,18 @@ describe("unittests:: customTransforms", () => {
                 writeFile: (fileName, text) => outputs.set(fileName, text),
             };
 
-            const program = ts.createProgram(ts.arrayFrom(fileMap.keys()), { newLine: ts.NewLineKind.LineFeed, ...options }, host);
-            program.emit(/*targetSourceFile*/ undefined, host.writeFile, /*cancellationToken*/ undefined, /*emitOnlyDtsFiles*/ false, customTransformers);
+            const program = ts.createProgram(
+                ts.arrayFrom(fileMap.keys()),
+                { newLine: ts.NewLineKind.LineFeed, ...options },
+                host,
+            );
+            program.emit(
+                /*targetSourceFile*/ undefined,
+                host.writeFile,
+                /*cancellationToken*/ undefined,
+                /*emitOnlyDtsFiles*/ false,
+                customTransformers,
+            );
             let content = "";
             for (const [file, text] of outputs.entries()) {
                 if (content) content += "\n\n";
@@ -54,7 +69,12 @@ describe("unittests:: customTransforms", () => {
             }
         }
         function visitFunction(node: ts.FunctionDeclaration) {
-            ts.addSyntheticLeadingComment(node, ts.SyntaxKind.MultiLineCommentTrivia, "@before", /*hasTrailingNewLine*/ true);
+            ts.addSyntheticLeadingComment(
+                node,
+                ts.SyntaxKind.MultiLineCommentTrivia,
+                "@before",
+                /*hasTrailingNewLine*/ true,
+            );
             return node;
         }
     };
@@ -91,7 +111,9 @@ describe("unittests:: customTransforms", () => {
         before: [
             context => node =>
                 ts.visitNode(node, function visitor(node: ts.Node): ts.Node {
-                    if (ts.isStringLiteral(node) && node.text === "change") return ts.factory.createStringLiteral("changed");
+                    if (ts.isStringLiteral(node) && node.text === "change") {
+                        return ts.factory.createStringLiteral("changed");
+                    }
                     return ts.visitEachChild(node, visitor, context);
                 }, ts.isSourceFile),
         ],
@@ -124,7 +146,8 @@ describe("unittests:: customTransforms", () => {
                                 text,
                                 fileName: "another.html",
                                 lineMap,
-                                getLineAndCharacterOfPosition: pos => ts.computeLineAndCharacterOfPosition(lineMap, pos),
+                                getLineAndCharacterOfPosition: pos =>
+                                    ts.computeLineAndCharacterOfPosition(lineMap, pos),
                             },
                         });
                         return node;
@@ -191,7 +214,9 @@ describe("unittests:: customTransforms", () => {
                         );
                     }
 
-                    if (ts.isExportDeclaration(node) && node.moduleSpecifier && ts.isStringLiteral(node.moduleSpecifier)) {
+                    if (
+                        ts.isExportDeclaration(node) && node.moduleSpecifier && ts.isStringLiteral(node.moduleSpecifier)
+                    ) {
                         return factory.updateExportDeclaration(
                             node,
                             node.modifiers,

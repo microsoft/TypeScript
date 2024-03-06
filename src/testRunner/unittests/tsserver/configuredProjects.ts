@@ -111,7 +111,11 @@ describe("unittests:: tsserver:: ConfiguredProjects", () => {
         host.deleteFile(configFile.path);
         host.runQueuedTimeoutCallbacks(); // Refresh inferred projects
 
-        baselineTsserverLogs("configuredProjects", "add and then remove a config file in a folder with loose files", session);
+        baselineTsserverLogs(
+            "configuredProjects",
+            "add and then remove a config file in a folder with loose files",
+            session,
+        );
     });
 
     it("add new files to a configured project without file list", () => {
@@ -143,7 +147,11 @@ describe("unittests:: tsserver:: ConfiguredProjects", () => {
         const host = createServerHost([commonFile1, commonFile2, configFile]);
         const session = new TestSession(host);
         openFilesForSession([commonFile1, commonFile2], session);
-        baselineTsserverLogs("configuredProjects", "should ignore non-existing files specified in the config file", session);
+        baselineTsserverLogs(
+            "configuredProjects",
+            "should ignore non-existing files specified in the config file",
+            session,
+        );
     });
 
     it("handle recreated files correctly", () => {
@@ -230,7 +238,11 @@ describe("unittests:: tsserver:: ConfiguredProjects", () => {
         // will not remove project 1
         // Open random file and it will reuse first inferred project
         openFilesForSession([randomFile], session);
-        baselineTsserverLogs("configuredProjects", "should properly handle module resolution changes in config file", session);
+        baselineTsserverLogs(
+            "configuredProjects",
+            "should properly handle module resolution changes in config file",
+            session,
+        );
     });
 
     it("should keep the configured project when the opened file is referenced by the project but not its root", () => {
@@ -256,7 +268,11 @@ describe("unittests:: tsserver:: ConfiguredProjects", () => {
         openFilesForSession([file1], session);
         closeFilesForSession([file1], session);
         openFilesForSession([file2], session);
-        baselineTsserverLogs("configuredProjects", "should keep the configured project when the opened file is referenced by the project but not its root", session);
+        baselineTsserverLogs(
+            "configuredProjects",
+            "should keep the configured project when the opened file is referenced by the project but not its root",
+            session,
+        );
     });
 
     it("should tolerate config file errors and still try to build a project", () => {
@@ -273,7 +289,11 @@ describe("unittests:: tsserver:: ConfiguredProjects", () => {
         const host = createServerHost([commonFile1, commonFile2, libFile, configFile]);
         const session = new TestSession(host);
         openFilesForSession([commonFile1], session);
-        baselineTsserverLogs("configuredProjects", "should tolerate config file errors and still try to build a project", session);
+        baselineTsserverLogs(
+            "configuredProjects",
+            "should tolerate config file errors and still try to build a project",
+            session,
+        );
     });
 
     it("should reuse same project if file is opened from the configured project that has no open files", () => {
@@ -299,7 +319,11 @@ describe("unittests:: tsserver:: ConfiguredProjects", () => {
         openFilesForSession([file1], session);
         closeFilesForSession([file1], session);
         openFilesForSession([file2], session);
-        baselineTsserverLogs("configuredProjects", "should reuse same project if file is opened from the configured project that has no open files", session);
+        baselineTsserverLogs(
+            "configuredProjects",
+            "should reuse same project if file is opened from the configured project that has no open files",
+            session,
+        );
     });
 
     it("should not close configured project after closing last open file, but should be closed on next file open if its not the file from same project", () => {
@@ -321,7 +345,11 @@ describe("unittests:: tsserver:: ConfiguredProjects", () => {
         openFilesForSession([file1], session);
         closeFilesForSession([file1], session);
         openFilesForSession([libFile], session);
-        baselineTsserverLogs("configuredProjects", "should not close configured project after closing last open file, but should be closed on next file open if its not the file from same project", session);
+        baselineTsserverLogs(
+            "configuredProjects",
+            "should not close configured project after closing last open file, but should be closed on next file open if its not the file from same project",
+            session,
+        );
     });
 
     it("open file become a part of configured project if it is referenced from root file", () => {
@@ -348,7 +376,11 @@ describe("unittests:: tsserver:: ConfiguredProjects", () => {
 
         host.writeFile(configFile.path, configFile.content);
         host.runQueuedTimeoutCallbacks(); // load configured project from disk + ensureProjectsForOpenFiles
-        baselineTsserverLogs("configuredProjects", "open file become a part of configured project if it is referenced from root file", session);
+        baselineTsserverLogs(
+            "configuredProjects",
+            "open file become a part of configured project if it is referenced from root file",
+            session,
+        );
     });
 
     it("can correctly update configured project when set of root files has changed (new file on disk)", () => {
@@ -373,7 +405,11 @@ describe("unittests:: tsserver:: ConfiguredProjects", () => {
 
         host.runQueuedTimeoutCallbacks();
 
-        baselineTsserverLogs("configuredProjects", "can correctly update configured project when set of root files has changed (new file on disk)", session);
+        baselineTsserverLogs(
+            "configuredProjects",
+            "can correctly update configured project when set of root files has changed (new file on disk)",
+            session,
+        );
     });
 
     it("can correctly update configured project when set of root files has changed (new file in list of files)", () => {
@@ -397,7 +433,11 @@ describe("unittests:: tsserver:: ConfiguredProjects", () => {
         host.writeFile(configFile.path, jsonToReadableText({ compilerOptions: {}, files: ["f1.ts", "f2.ts"] }));
 
         host.runQueuedTimeoutCallbacks();
-        baselineTsserverLogs("configuredProjects", "can correctly update configured project when set of root files has changed (new file in list of files)", session);
+        baselineTsserverLogs(
+            "configuredProjects",
+            "can correctly update configured project when set of root files has changed (new file in list of files)",
+            session,
+        );
     });
 
     it("can update configured project when set of root files was not changed", () => {
@@ -418,10 +458,17 @@ describe("unittests:: tsserver:: ConfiguredProjects", () => {
         const session = new TestSession(host);
         openFilesForSession([file1], session);
 
-        host.writeFile(configFile.path, jsonToReadableText({ compilerOptions: { outFile: "out.js" }, files: ["f1.ts", "f2.ts"] }));
+        host.writeFile(
+            configFile.path,
+            jsonToReadableText({ compilerOptions: { outFile: "out.js" }, files: ["f1.ts", "f2.ts"] }),
+        );
         host.runQueuedTimeoutCallbacks();
 
-        baselineTsserverLogs("configuredProjects", "can update configured project when set of root files was not changed", session);
+        baselineTsserverLogs(
+            "configuredProjects",
+            "can update configured project when set of root files was not changed",
+            session,
+        );
     });
 
     it("Open ref of configured project when open file gets added to the project as part of configured file update", () => {
@@ -465,7 +512,11 @@ describe("unittests:: tsserver:: ConfiguredProjects", () => {
         session.host.baselineHost("File5 written");
         openFilesForSession([file5], session);
 
-        baselineTsserverLogs("configuredProjects", "Open ref of configured project when open file gets added to the project as part of configured file update", session);
+        baselineTsserverLogs(
+            "configuredProjects",
+            "Open ref of configured project when open file gets added to the project as part of configured file update",
+            session,
+        );
     });
 
     it("Open ref of configured project when open file gets added to the project as part of configured file update buts its open file references are all closed when the update happens", () => {
@@ -504,7 +555,11 @@ describe("unittests:: tsserver:: ConfiguredProjects", () => {
         openFilesForSession([file4], session);
 
         host.runQueuedTimeoutCallbacks();
-        baselineTsserverLogs("configuredProjects", "Open ref of configured project when open file gets added to the project as part of configured file update buts its open file references are all closed when the update happens", session);
+        baselineTsserverLogs(
+            "configuredProjects",
+            "Open ref of configured project when open file gets added to the project as part of configured file update buts its open file references are all closed when the update happens",
+            session,
+        );
     });
 
     it("files are properly detached when language service is disabled", () => {
@@ -526,7 +581,8 @@ describe("unittests:: tsserver:: ConfiguredProjects", () => {
         };
         const host = createServerHost([f1, f2, f3, config]);
         const originalGetFileSize = host.getFileSize;
-        host.getFileSize = (filePath: string) => filePath === f2.path ? ts.server.maxProgramSizeForNonTsFiles + 1 : originalGetFileSize.call(host, filePath);
+        host.getFileSize = (filePath: string) =>
+            filePath === f2.path ? ts.server.maxProgramSizeForNonTsFiles + 1 : originalGetFileSize.call(host, filePath);
 
         const session = new TestSession(host);
         openFilesForSession([f1], session);
@@ -537,7 +593,11 @@ describe("unittests:: tsserver:: ConfiguredProjects", () => {
         };
         host.writeFile(f4.path, f4.content);
         openFilesForSession([f4], session);
-        baselineTsserverLogs("configuredProjects", "files are properly detached when language service is disabled", session);
+        baselineTsserverLogs(
+            "configuredProjects",
+            "files are properly detached when language service is disabled",
+            session,
+        );
     });
 
     it("syntactic features work even if language service is disabled", () => {
@@ -555,10 +615,15 @@ describe("unittests:: tsserver:: ConfiguredProjects", () => {
         };
         const host = createServerHost([f1, f2, config]);
         const originalGetFileSize = host.getFileSize;
-        host.getFileSize = (filePath: string) => filePath === f2.path ? ts.server.maxProgramSizeForNonTsFiles + 1 : originalGetFileSize.call(host, filePath);
+        host.getFileSize = (filePath: string) =>
+            filePath === f2.path ? ts.server.maxProgramSizeForNonTsFiles + 1 : originalGetFileSize.call(host, filePath);
         const session = new TestSession(host);
         openFilesForSession([f1], session);
-        session.logger.log(`Language languageServiceEnabled:: ${session.getProjectService().configuredProjects.get(config.path)!.languageServiceEnabled}`);
+        session.logger.log(
+            `Language languageServiceEnabled:: ${
+                session.getProjectService().configuredProjects.get(config.path)!.languageServiceEnabled
+            }`,
+        );
 
         session.executeCommandSeq({
             command: ts.server.protocol.CommandTypes.FormatFull,
@@ -566,7 +631,11 @@ describe("unittests:: tsserver:: ConfiguredProjects", () => {
                 file: f1.path,
             },
         });
-        baselineTsserverLogs("configuredProjects", "syntactic features work even if language service is disabled", session);
+        baselineTsserverLogs(
+            "configuredProjects",
+            "syntactic features work even if language service is disabled",
+            session,
+        );
     });
 
     it("when multiple projects are open, detects correct default project", () => {
@@ -621,7 +690,11 @@ declare var console: {
         const session = new TestSession(host);
         openFilesForSession([fooIndex, barIndex], session);
         verifyGetErrRequest({ session, files: [barIndex, fooIndex] });
-        baselineTsserverLogs("configuredProjects", "when multiple projects are open detects correct default project", session);
+        baselineTsserverLogs(
+            "configuredProjects",
+            "when multiple projects are open detects correct default project",
+            session,
+        );
     });
 
     it("when file name starts with ^", () => {
@@ -662,7 +735,10 @@ declare var console: {
             path: `/user/username/projects/myproject/src/sub/fooBar.ts`,
             content: "export function fooBar() { }",
         };
-        function verifySessionWorker({ withExclude, openFileBeforeCreating }: VerifySession, errorOnNewFileBeforeOldFile: boolean) {
+        function verifySessionWorker(
+            { withExclude, openFileBeforeCreating }: VerifySession,
+            errorOnNewFileBeforeOldFile: boolean,
+        ) {
             const host = createServerHost([
                 foo,
                 bar,
@@ -708,7 +784,15 @@ declare var console: {
                     [foo, fooBar],
                 existingTimeouts: !withExclude,
             });
-            baselineTsserverLogs("configuredProjects", `creating new file and then open it ${openFileBeforeCreating ? "before" : "after"} watcher is invoked, ask errors on it ${errorOnNewFileBeforeOldFile ? "before" : "after"} old one${withExclude ? " without file being in config" : ""}`, session);
+            baselineTsserverLogs(
+                "configuredProjects",
+                `creating new file and then open it ${
+                    openFileBeforeCreating ? "before" : "after"
+                } watcher is invoked, ask errors on it ${errorOnNewFileBeforeOldFile ? "before" : "after"} old one${
+                    withExclude ? " without file being in config" : ""
+                }`,
+                session,
+            );
         }
         interface VerifySession {
             withExclude?: boolean;
@@ -795,8 +879,16 @@ foo();`,
                 endOffset: 1,
             },
         });
-        session.logger.log(`Default project for file: ${fooDts}: ${session.getProjectService().tryGetDefaultProjectForFile(ts.server.toNormalizedPath(fooDts))?.projectName}`);
-        baselineTsserverLogs("configuredProjects", "when default configured project does not contain the file", session);
+        session.logger.log(
+            `Default project for file: ${fooDts}: ${
+                session.getProjectService().tryGetDefaultProjectForFile(ts.server.toNormalizedPath(fooDts))?.projectName
+            }`,
+        );
+        baselineTsserverLogs(
+            "configuredProjects",
+            "when default configured project does not contain the file",
+            session,
+        );
     });
 
     describe("watches extended config files", () => {
@@ -834,7 +926,15 @@ foo();`,
                 content: `let b = 1;`,
             };
 
-            const host = createServerHost([alphaExtendedConfig, aConfig, aFile, bravoExtendedConfig, bConfig, bFile, ...(additionalFiles || ts.emptyArray)]);
+            const host = createServerHost([
+                alphaExtendedConfig,
+                aConfig,
+                aFile,
+                bravoExtendedConfig,
+                bConfig,
+                bFile,
+                ...(additionalFiles || ts.emptyArray),
+            ]);
             const session = new TestSession(host);
             return { host, session, aFile, bFile, aConfig, bConfig, alphaExtendedConfig, bravoExtendedConfig };
         }
@@ -875,7 +975,11 @@ foo();`,
 
             host.writeFile(alphaExtendedConfig.path, "{}");
             host.runQueuedTimeoutCallbacks();
-            baselineTsserverLogs("configuredProjects", "should watch the extended configs of multiple projects", session);
+            baselineTsserverLogs(
+                "configuredProjects",
+                "should watch the extended configs of multiple projects",
+                session,
+            );
         });
 
         it("should stop watching the extended configs of closed projects", () => {
@@ -896,7 +1000,11 @@ foo();`,
 
             closeFilesForSession([aFile, dummy], session);
             openFilesForSession([dummy], session);
-            baselineTsserverLogs("configuredProjects", "should stop watching the extended configs of closed projects", session);
+            baselineTsserverLogs(
+                "configuredProjects",
+                "should stop watching the extended configs of closed projects",
+                session,
+            );
         });
     });
 });
@@ -949,7 +1057,11 @@ describe("unittests:: tsserver:: ConfiguredProjects:: non-existing directories l
         openFilesForSession([f], session);
 
         // Since f refers to config file as the default project, it needs to be kept alive
-        baselineTsserverLogs("configuredProjects", "should be able to handle @types if input file list is empty", session);
+        baselineTsserverLogs(
+            "configuredProjects",
+            "should be able to handle @types if input file list is empty",
+            session,
+        );
     });
 
     it("should tolerate invalid include files that start in subDirectory", () => {
@@ -974,7 +1086,11 @@ describe("unittests:: tsserver:: ConfiguredProjects:: non-existing directories l
         openFilesForSession([f], session);
 
         // Since f refers to config file as the default project, it needs to be kept alive
-        baselineTsserverLogs("configuredProjects", "should tolerate invalid include files that start in subDirectory", session);
+        baselineTsserverLogs(
+            "configuredProjects",
+            "should tolerate invalid include files that start in subDirectory",
+            session,
+        );
     });
 
     it("Changed module resolution reflected when specifying files list", () => {
@@ -1005,7 +1121,11 @@ describe("unittests:: tsserver:: ConfiguredProjects:: non-existing directories l
 
         // On next file open the files file2a should be closed and not watched any more
         openFilesForSession([file2], session);
-        baselineTsserverLogs("configuredProjects", "changed module resolution reflected when specifying files list", session);
+        baselineTsserverLogs(
+            "configuredProjects",
+            "changed module resolution reflected when specifying files list",
+            session,
+        );
     });
 
     it("Failed lookup locations uses parent most node_modules directory", () => {
@@ -1037,7 +1157,11 @@ describe("unittests:: tsserver:: ConfiguredProjects:: non-existing directories l
         const host = createServerHost(files);
         const session = new TestSession(host);
         openFilesForSession([file1], session);
-        baselineTsserverLogs("configuredProjects", "failed lookup locations uses parent most node_modules directory", session);
+        baselineTsserverLogs(
+            "configuredProjects",
+            "failed lookup locations uses parent most node_modules directory",
+            session,
+        );
     });
 });
 
@@ -1062,6 +1186,10 @@ describe("unittests:: tsserver:: ConfiguredProjects:: when reading tsconfig file
         };
         openFilesForSession([file1], session);
 
-        baselineTsserverLogs("configuredProjects", "should be tolerated without crashing the server when reading tsconfig file fails", session);
+        baselineTsserverLogs(
+            "configuredProjects",
+            "should be tolerated without crashing the server when reading tsconfig file fails",
+            session,
+        );
     });
 });

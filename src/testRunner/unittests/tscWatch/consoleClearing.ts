@@ -72,7 +72,8 @@ describe("unittests:: tsc-watch:: console clearing", () => {
         });
         verifyTscWatch({
             scenario,
-            subScenario: "when preserveWatchOutput is true in config file/when createWatchProgram is invoked with configFileParseResult on WatchCompilerHostOfConfigFile",
+            subScenario:
+                "when preserveWatchOutput is true in config file/when createWatchProgram is invoked with configFileParseResult on WatchCompilerHostOfConfigFile",
             commandLineArgs: ["--w", "-p", configFile.path],
             sys: () => createWatchedSystem(files),
             edits: makeChangeToFile,

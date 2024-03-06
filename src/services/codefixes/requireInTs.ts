@@ -38,7 +38,15 @@ registerCodeFix({
             return undefined;
         }
         const changes = textChanges.ChangeTracker.with(context, t => doChange(t, context.sourceFile, info));
-        return [createCodeFixAction(fixId, changes, Diagnostics.Convert_require_to_import, fixId, Diagnostics.Convert_all_require_to_import)];
+        return [
+            createCodeFixAction(
+                fixId,
+                changes,
+                Diagnostics.Convert_require_to_import,
+                fixId,
+                Diagnostics.Convert_all_require_to_import,
+            ),
+        ];
     },
     fixIds: [fixId],
     getAllCodeActions: context =>
@@ -56,8 +64,18 @@ function doChange(changes: textChanges.ChangeTracker, sourceFile: SourceFile, in
         sourceFile,
         statement,
         defaultImportName && !allowSyntheticDefaults
-            ? factory.createImportEqualsDeclaration(/*modifiers*/ undefined, /*isTypeOnly*/ false, defaultImportName, factory.createExternalModuleReference(required))
-            : factory.createImportDeclaration(/*modifiers*/ undefined, factory.createImportClause(/*isTypeOnly*/ false, defaultImportName, namedImports), required, /*attributes*/ undefined),
+            ? factory.createImportEqualsDeclaration(
+                /*modifiers*/ undefined,
+                /*isTypeOnly*/ false,
+                defaultImportName,
+                factory.createExternalModuleReference(required),
+            )
+            : factory.createImportDeclaration(
+                /*modifiers*/ undefined,
+                factory.createImportClause(/*isTypeOnly*/ false, defaultImportName, namedImports),
+                required,
+                /*attributes*/ undefined,
+            ),
     );
 }
 
@@ -77,7 +95,8 @@ function getInfo(sourceFile: SourceFile, program: Program, pos: number): Info | 
 
     const decl = cast(parent.parent, isVariableDeclaration);
     const defaultImportName = tryCast(decl.name, isIdentifier);
-    const namedImports = isObjectBindingPattern(decl.name) ? tryCreateNamedImportsFromObjectBindingPattern(decl.name) : undefined;
+    const namedImports = isObjectBindingPattern(decl.name) ? tryCreateNamedImportsFromObjectBindingPattern(decl.name)
+        : undefined;
     if (defaultImportName || namedImports) {
         return {
             allowSyntheticDefaults: getAllowSyntheticDefaultImports(program.getCompilerOptions()),
@@ -95,7 +114,13 @@ function tryCreateNamedImportsFromObjectBindingPattern(node: ObjectBindingPatter
         if (!isIdentifier(element.name) || element.initializer) {
             return undefined;
         }
-        importSpecifiers.push(factory.createImportSpecifier(/*isTypeOnly*/ false, tryCast(element.propertyName, isIdentifier), element.name));
+        importSpecifiers.push(
+            factory.createImportSpecifier(
+                /*isTypeOnly*/ false,
+                tryCast(element.propertyName, isIdentifier),
+                element.name,
+            ),
+        );
     }
 
     if (importSpecifiers.length) {

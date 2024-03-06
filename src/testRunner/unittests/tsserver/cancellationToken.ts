@@ -194,7 +194,9 @@ describe("unittests:: tsserver:: cancellationToken", () => {
         }
         baselineTsserverLogs("cancellationT", "Lower priority tasks are cancellable", session);
 
-        function verifyExecuteCommandSeqIsCancellable<T extends ts.server.protocol.Request>(request: TestSessionRequest<T>) {
+        function verifyExecuteCommandSeqIsCancellable<T extends ts.server.protocol.Request>(
+            request: TestSessionRequest<T>,
+        ) {
             // Set the next request to be cancellable
             // The cancellation token will cancel the request the third time
             // isCancellationRequested() is called.
@@ -205,10 +207,16 @@ describe("unittests:: tsserver:: cancellationToken", () => {
                 session.executeCommandSeq(request);
             }
             catch (e) {
-                session.logger.log(`Exception is OperationCanceledException: ${e instanceof ts.OperationCanceledException}`);
+                session.logger.log(
+                    `Exception is OperationCanceledException: ${e instanceof ts.OperationCanceledException}`,
+                );
                 operationCanceledExceptionThrown = true;
             }
-            if (!operationCanceledExceptionThrown) session.logger.log("Operation Canceled Exception not thrown for request: " + jsonToReadableText(request));
+            if (!operationCanceledExceptionThrown) {
+                session.logger.log(
+                    "Operation Canceled Exception not thrown for request: " + jsonToReadableText(request),
+                );
+            }
         }
     });
 });

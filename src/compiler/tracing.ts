@@ -51,7 +51,14 @@ export namespace tracingEnabled {
 
     // The actual constraint is that JSON.stringify be able to serialize it without throwing.
     interface Args {
-        [key: string]: string | number | boolean | null | undefined | Args | readonly (string | number | boolean | null | undefined | Args)[];
+        [key: string]:
+            | string
+            | number
+            | boolean
+            | null
+            | undefined
+            | Args
+            | readonly (string | number | boolean | null | undefined | Args)[];
     }
 
     /** Starts tracing for the given project. */
@@ -99,7 +106,15 @@ export namespace tracingEnabled {
         fs.writeSync(
             traceFd,
             "[\n"
-                + [{ name: "process_name", args: { name: "tsc" }, ...meta }, { name: "thread_name", args: { name: "Main" }, ...meta }, { name: "TracingStartedInBrowser", ...meta, cat: "disabled-by-default-devtools.timeline" }]
+                + [{ name: "process_name", args: { name: "tsc" }, ...meta }, {
+                    name: "thread_name",
+                    args: { name: "Main" },
+                    ...meta,
+                }, {
+                    name: "TracingStartedInBrowser",
+                    ...meta,
+                    cat: "disabled-by-default-devtools.timeline",
+                }]
                     .map(v => JSON.stringify(v)).join(",\n"),
         );
     }
@@ -183,7 +198,14 @@ export namespace tracingEnabled {
         }
     }
 
-    function writeEvent(eventType: string, phase: Phase, name: string, args: Args | undefined, extras?: string, time: number = 1000 * timestamp()) {
+    function writeEvent(
+        eventType: string,
+        phase: Phase,
+        name: string,
+        args: Args | undefined,
+        extras?: string,
+        time: number = 1000 * timestamp(),
+    ) {
         // In server mode, there's no easy way to dump type information, so we drop events that would require it.
         if (mode === "server" && phase === Phase.CheckTypes) return;
 
@@ -319,7 +341,10 @@ export namespace tracingEnabled {
                 recursionId: recursionToken,
                 isTuple: objectFlags & ObjectFlags.Tuple ? true : undefined,
                 unionTypes: (type.flags & TypeFlags.Union) ? (type as UnionType).types?.map(t => t.id) : undefined,
-                intersectionTypes: (type.flags & TypeFlags.Intersection) ? (type as IntersectionType).types.map(t => t.id) : undefined,
+                intersectionTypes: (type.flags & TypeFlags.Intersection) ? (type as IntersectionType).types.map(t =>
+                    t.id
+                )
+                    : undefined,
                 aliasTypeArguments: type.aliasTypeArguments?.map(t => t.id),
                 keyofType: (type.flags & TypeFlags.Index) ? (type as IndexType).type?.id : undefined,
                 ...indexedAccessProperties,

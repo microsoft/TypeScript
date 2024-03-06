@@ -285,11 +285,23 @@ describe("unittests:: core paths", () => {
         assert.strictEqual(ts.getRelativePathFromDirectory("file:///a/", "file:///a", /*ignoreCase*/ false), "");
         assert.strictEqual(ts.getRelativePathFromDirectory("file:///a", "file:///", /*ignoreCase*/ false), "..");
         assert.strictEqual(ts.getRelativePathFromDirectory("file:///a", "file:///b", /*ignoreCase*/ false), "../b");
-        assert.strictEqual(ts.getRelativePathFromDirectory("file:///a/b", "file:///b", /*ignoreCase*/ false), "../../b");
-        assert.strictEqual(ts.getRelativePathFromDirectory("file:///a/b/c", "file:///b", /*ignoreCase*/ false), "../../../b");
-        assert.strictEqual(ts.getRelativePathFromDirectory("file:///a/b/c", "file:///b/c", /*ignoreCase*/ false), "../../../b/c");
+        assert.strictEqual(
+            ts.getRelativePathFromDirectory("file:///a/b", "file:///b", /*ignoreCase*/ false),
+            "../../b",
+        );
+        assert.strictEqual(
+            ts.getRelativePathFromDirectory("file:///a/b/c", "file:///b", /*ignoreCase*/ false),
+            "../../../b",
+        );
+        assert.strictEqual(
+            ts.getRelativePathFromDirectory("file:///a/b/c", "file:///b/c", /*ignoreCase*/ false),
+            "../../../b/c",
+        );
         assert.strictEqual(ts.getRelativePathFromDirectory("file:///a/b/c", "file:///a/b", /*ignoreCase*/ false), "..");
-        assert.strictEqual(ts.getRelativePathFromDirectory("file:///c:", "file:///d:", /*ignoreCase*/ false), "file:///d:/");
+        assert.strictEqual(
+            ts.getRelativePathFromDirectory("file:///c:", "file:///d:", /*ignoreCase*/ false),
+            "file:///d:/",
+        );
     });
     it("toFileNameLowerCase", () => {
         assert.strictEqual(

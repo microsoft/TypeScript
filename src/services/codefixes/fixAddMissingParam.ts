@@ -65,8 +65,15 @@ registerCodeFix({
                 actions,
                 createCodeFixAction(
                     addMissingParamFixId,
-                    textChanges.ChangeTracker.with(context, t => doChange(t, context.sourceFile, declarations, newParameters)),
-                    [length(newParameters) > 1 ? Diagnostics.Add_missing_parameters_to_0 : Diagnostics.Add_missing_parameter_to_0, name],
+                    textChanges.ChangeTracker.with(
+                        context,
+                        t => doChange(t, context.sourceFile, declarations, newParameters),
+                    ),
+                    [
+                        length(newParameters) > 1 ? Diagnostics.Add_missing_parameters_to_0
+                            : Diagnostics.Add_missing_parameter_to_0,
+                        name,
+                    ],
                     addMissingParamFixId,
                     Diagnostics.Add_all_missing_parameters,
                 ),
@@ -78,8 +85,15 @@ registerCodeFix({
                 actions,
                 createCodeFixAction(
                     addOptionalParamFixId,
-                    textChanges.ChangeTracker.with(context, t => doChange(t, context.sourceFile, declarations, newOptionalParameters)),
-                    [length(newOptionalParameters) > 1 ? Diagnostics.Add_optional_parameters_to_0 : Diagnostics.Add_optional_parameter_to_0, name],
+                    textChanges.ChangeTracker.with(
+                        context,
+                        t => doChange(t, context.sourceFile, declarations, newOptionalParameters),
+                    ),
+                    [
+                        length(newOptionalParameters) > 1 ? Diagnostics.Add_optional_parameters_to_0
+                            : Diagnostics.Add_optional_parameter_to_0,
+                        name,
+                    ],
                     addOptionalParamFixId,
                     Diagnostics.Add_all_optional_parameters,
                 ),
@@ -157,7 +171,10 @@ function getInfo(sourceFile: SourceFile, program: Program, pos: number): Signatu
         return undefined;
     }
 
-    const declarations = [nonOverloadDeclaration, ...getOverloads(nonOverloadDeclaration, convertibleSignatureDeclarations)];
+    const declarations = [
+        nonOverloadDeclaration,
+        ...getOverloads(nonOverloadDeclaration, convertibleSignatureDeclarations),
+    ];
     for (let i = 0, pos = 0, paramIndex = 0; i < argumentsLength; i++) {
         const arg = callExpression.arguments[i];
         const expr = isAccessExpression(arg) ? getNameOfAccessExpression(arg) : arg;
@@ -291,7 +308,10 @@ function updateParameters(node: ConvertibleSignatureDeclaration, newParameters: 
     return parameters;
 }
 
-function getOverloads(implementation: ConvertibleSignatureDeclaration, declarations: readonly ConvertibleSignatureDeclaration[]): ConvertibleSignatureDeclaration[] {
+function getOverloads(
+    implementation: ConvertibleSignatureDeclaration,
+    declarations: readonly ConvertibleSignatureDeclaration[],
+): ConvertibleSignatureDeclaration[] {
     const overloads: ConvertibleSignatureDeclaration[] = [];
     for (const declaration of declarations) {
         if (isOverload(declaration)) {
@@ -323,5 +343,9 @@ function createParameter(name: string, type: TypeNode, questionToken: QuestionTo
 }
 
 function isOptionalPos(declarations: ConvertibleSignatureDeclaration[], pos: number) {
-    return length(declarations) && some(declarations, d => pos < length(d.parameters) && !!d.parameters[pos] && d.parameters[pos].questionToken === undefined);
+    return length(declarations) &&
+        some(
+            declarations,
+            d => pos < length(d.parameters) && !!d.parameters[pos] && d.parameters[pos].questionToken === undefined,
+        );
 }

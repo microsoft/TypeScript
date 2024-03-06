@@ -25,16 +25,41 @@ const errorCodes = [Diagnostics.Unreachable_code_detected.code];
 registerCodeFix({
     errorCodes,
     getCodeActions(context) {
-        const syntacticDiagnostics = context.program.getSyntacticDiagnostics(context.sourceFile, context.cancellationToken);
+        const syntacticDiagnostics = context.program.getSyntacticDiagnostics(
+            context.sourceFile,
+            context.cancellationToken,
+        );
         if (syntacticDiagnostics.length) return;
-        const changes = textChanges.ChangeTracker.with(context, t => doChange(t, context.sourceFile, context.span.start, context.span.length, context.errorCode));
-        return [createCodeFixAction(fixId, changes, Diagnostics.Remove_unreachable_code, fixId, Diagnostics.Remove_all_unreachable_code)];
+        const changes = textChanges.ChangeTracker.with(
+            context,
+            t => doChange(t, context.sourceFile, context.span.start, context.span.length, context.errorCode),
+        );
+        return [
+            createCodeFixAction(
+                fixId,
+                changes,
+                Diagnostics.Remove_unreachable_code,
+                fixId,
+                Diagnostics.Remove_all_unreachable_code,
+            ),
+        ];
     },
     fixIds: [fixId],
-    getAllCodeActions: context => codeFixAll(context, errorCodes, (changes, diag) => doChange(changes, diag.file, diag.start, diag.length, diag.code)),
+    getAllCodeActions: context =>
+        codeFixAll(
+            context,
+            errorCodes,
+            (changes, diag) => doChange(changes, diag.file, diag.start, diag.length, diag.code),
+        ),
 });
 
-function doChange(changes: textChanges.ChangeTracker, sourceFile: SourceFile, start: number, length: number, errorCode: number): void {
+function doChange(
+    changes: textChanges.ChangeTracker,
+    sourceFile: SourceFile,
+    start: number,
+    length: number,
+    errorCode: number,
+): void {
     const token = getTokenAtPosition(sourceFile, start);
     const statement = findAncestor(token, isStatement)!;
     if (statement.getStart(sourceFile) !== token.getStart(sourceFile)) {
@@ -71,7 +96,10 @@ function doChange(changes: textChanges.ChangeTracker, sourceFile: SourceFile, st
 
     if (isBlock(statement.parent)) {
         const end = start + length;
-        const lastStatement = Debug.checkDefined(lastWhere(sliceAfter(statement.parent.statements, statement), s => s.pos < end), "Some statement should be last");
+        const lastStatement = Debug.checkDefined(
+            lastWhere(sliceAfter(statement.parent.statements, statement), s => s.pos < end),
+            "Some statement should be last",
+        );
         changes.deleteNodeRange(sourceFile, statement, lastStatement);
     }
     else {

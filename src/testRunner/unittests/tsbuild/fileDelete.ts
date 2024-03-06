@@ -69,7 +69,12 @@ describe("unittests:: tsbuild:: fileDelete::", () => {
         scenario: "fileDelete",
         subScenario: `detects deleted file with outFile`,
         commandLineArgs: ["--b", "/src/main/tsconfig.json", "-v", "--traceResolution", "--explainFiles"],
-        fs: () => fs({ composite: true, outFile: "../childResult.js", module: ts.ModuleKind.AMD }, { composite: true, outFile: "../mainResult.js", module: ts.ModuleKind.AMD }),
+        fs: () =>
+            fs({ composite: true, outFile: "../childResult.js", module: ts.ModuleKind.AMD }, {
+                composite: true,
+                outFile: "../mainResult.js",
+                module: ts.ModuleKind.AMD,
+            }),
         edits: [{
             caption: "delete child2 file",
             edit: fs => fs.rimrafSync("/src/child/child2.ts"),

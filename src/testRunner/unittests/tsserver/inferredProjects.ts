@@ -71,7 +71,11 @@ describe("unittests:: tsserver:: inferredProjects", () => {
 
         host.writeFile(configFile.path, configFile.content);
         host.runQueuedTimeoutCallbacks(); // load configured project from disk + ensureProjectsForOpenFiles
-        baselineTsserverLogs("inferredProjects", "should use only one inferred project if useOneInferredProject is set", session);
+        baselineTsserverLogs(
+            "inferredProjects",
+            "should use only one inferred project if useOneInferredProject is set",
+            session,
+        );
     });
 
     it("disable inferred project", () => {
@@ -81,11 +85,17 @@ describe("unittests:: tsserver:: inferredProjects", () => {
         };
 
         const host = createServerHost([file1]);
-        const session = new TestSession({ host, useSingleInferredProject: true, serverMode: ts.LanguageServiceMode.Syntactic });
+        const session = new TestSession({
+            host,
+            useSingleInferredProject: true,
+            serverMode: ts.LanguageServiceMode.Syntactic,
+        });
 
         openFilesForSession([file1], session);
 
-        session.logger.log(`LanguageServiceEnabled:: ${session.getProjectService().inferredProjects[0].languageServiceEnabled}`);
+        session.logger.log(
+            `LanguageServiceEnabled:: ${session.getProjectService().inferredProjects[0].languageServiceEnabled}`,
+        );
         baselineTsserverLogs("inferredProjects", "disable inferred project", session);
     });
 
@@ -183,7 +193,11 @@ describe("unittests:: tsserver:: inferredProjects", () => {
                 { path: "/c/file3.ts", content: "let z = 4;" },
             ];
             const host = createServerHost(files, { useCaseSensitiveFileNames });
-            const session = new TestSession({ host, useSingleInferredProject: true, useInferredProjectPerProjectRoot: true });
+            const session = new TestSession({
+                host,
+                useSingleInferredProject: true,
+                useInferredProjectPerProjectRoot: true,
+            });
             setCompilerOptionsForInferredProjectsRequestForSession({
                 allowJs: true,
                 target: ts.server.protocol.ScriptTarget.ESNext,
@@ -217,8 +231,20 @@ describe("unittests:: tsserver:: inferredProjects", () => {
             closeClientFiles();
             baselineTsserverLogs("inferredProjects", subScenario, session);
 
-            function openClientFiles(projectRoots: [string | undefined, string | undefined, string | undefined, string | undefined]) {
-                files.forEach((file, index) => openFilesForSession([{ file: file.path, content: file.content, scriptKindName: "JS", projectRootPath: projectRoots[index] }], session));
+            function openClientFiles(
+                projectRoots: [string | undefined, string | undefined, string | undefined, string | undefined],
+            ) {
+                files.forEach((file, index) =>
+                    openFilesForSession(
+                        [{
+                            file: file.path,
+                            content: file.content,
+                            scriptKindName: "JS",
+                            projectRootPath: projectRoots[index],
+                        }],
+                        session,
+                    )
+                );
             }
 
             function closeClientFiles() {
@@ -227,8 +253,14 @@ describe("unittests:: tsserver:: inferredProjects", () => {
         });
     }
 
-    verifyProjectRootWithCaseSensitivity("inferred projects per project root with case sensitive system", /*useCaseSensitiveFileNames*/ true);
-    verifyProjectRootWithCaseSensitivity("inferred projects per project root with case insensitive system", /*useCaseSensitiveFileNames*/ false);
+    verifyProjectRootWithCaseSensitivity(
+        "inferred projects per project root with case sensitive system",
+        /*useCaseSensitiveFileNames*/ true,
+    );
+    verifyProjectRootWithCaseSensitivity(
+        "inferred projects per project root with case insensitive system",
+        /*useCaseSensitiveFileNames*/ false,
+    );
 
     it("should still retain configured project created while opening the file", () => {
         const appFile: File = {
@@ -262,7 +294,11 @@ describe("unittests:: tsserver:: inferredProjects", () => {
 
         // When opening file that doesnt fall back to the config file, we remove the config project
         openFilesForSession([libFile], session);
-        baselineTsserverLogs("inferredProjects", "should still retain configured project created while opening the file", session);
+        baselineTsserverLogs(
+            "inferredProjects",
+            "should still retain configured project created while opening the file",
+            session,
+        );
     });
 
     it("regression test - should infer typeAcquisition for inferred projects when set undefined", () => {
@@ -276,8 +312,16 @@ describe("unittests:: tsserver:: inferredProjects", () => {
         const inferredProject = session.getProjectService().inferredProjects[0];
         session.logger.log(`typeAcquisition : setting to undefined`);
         inferredProject.setTypeAcquisition(undefined);
-        session.logger.log(`typeAcquisition should be inferred for inferred projects: ${jsonToReadableText(inferredProject.getTypeAcquisition())}`);
-        baselineTsserverLogs("inferredProjects", "regression test - should infer typeAcquisition for inferred projects when set undefined", session);
+        session.logger.log(
+            `typeAcquisition should be inferred for inferred projects: ${
+                jsonToReadableText(inferredProject.getTypeAcquisition())
+            }`,
+        );
+        baselineTsserverLogs(
+            "inferredProjects",
+            "regression test - should infer typeAcquisition for inferred projects when set undefined",
+            session,
+        );
     });
 
     it("Setting compiler options for inferred projects when there are no open files should not schedule any refresh", () => {
@@ -287,7 +331,11 @@ describe("unittests:: tsserver:: inferredProjects", () => {
             allowJs: true,
             target: ts.server.protocol.ScriptTarget.ES2015,
         }, session);
-        baselineTsserverLogs("inferredProjects", "Setting compiler options for inferred projects when there are no open files should not schedule any refresh", session);
+        baselineTsserverLogs(
+            "inferredProjects",
+            "Setting compiler options for inferred projects when there are no open files should not schedule any refresh",
+            session,
+        );
     });
 
     it("when existing inferred project has no root files", () => {

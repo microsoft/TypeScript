@@ -6,7 +6,10 @@ import {
 export const HarnessLSCouldNotResolveModule = "HarnessLanguageService:: Could not resolve module";
 
 export function replaceAll(source: string, searchValue: string, replaceValue: string): string {
-    let result: string | undefined = (source as string & { replaceAll: typeof source.replace; }).replaceAll?.(searchValue, replaceValue);
+    let result: string | undefined = (source as string & { replaceAll: typeof source.replace; }).replaceAll?.(
+        searchValue,
+        replaceValue,
+    );
 
     if (result !== undefined) {
         return result;
@@ -59,7 +62,11 @@ function handleLoggerGroup(logger: Logger, host: ts.server.ServerHost, sanitizeL
     logger.hasLevel = ts.returnTrue;
     logger.loggingEnabled = ts.returnTrue;
     logger.host = host;
-    if (host) logger.logs!.push(`currentDirectory:: ${host.getCurrentDirectory()} useCaseSensitiveFileNames: ${host.useCaseSensitiveFileNames}`);
+    if (host) {
+        logger.logs!.push(
+            `currentDirectory:: ${host.getCurrentDirectory()} useCaseSensitiveFileNames: ${host.useCaseSensitiveFileNames}`,
+        );
+    }
 
     let inGroup = false;
     let firstInGroup = false;
@@ -74,7 +81,9 @@ function handleLoggerGroup(logger: Logger, host: ts.server.ServerHost, sanitizeL
     return logger;
 
     function log(...args: string[]) {
-        args.forEach(s => originaPush.call(logger.logs, (sanitizeLibs ? sanitizeLibFileText : ts.identity)(sanitizeLog(s))));
+        args.forEach(s =>
+            originaPush.call(logger.logs, (sanitizeLibs ? sanitizeLibFileText : ts.identity)(sanitizeLog(s)))
+        );
         return 0;
     }
 
@@ -113,22 +122,40 @@ export function createLoggerWritingToConsole(host: ts.server.ServerHost, sanitiz
 export function sanitizeLog(s: string): string {
     s = s.replace(/Elapsed::?\s*\d+(?:\.\d+)?ms/g, "Elapsed:: *ms");
     s = s.replace(/"updateGraphDurationMs":\s*\d+(?:\.\d+)?/g, `"updateGraphDurationMs": *`);
-    s = s.replace(/"createAutoImportProviderProgramDurationMs":\s*\d+(?:\.\d+)?/g, `"createAutoImportProviderProgramDurationMs": *`);
+    s = s.replace(
+        /"createAutoImportProviderProgramDurationMs":\s*\d+(?:\.\d+)?/g,
+        `"createAutoImportProviderProgramDurationMs": *`,
+    );
     s = replaceAll(s, ts.version, "FakeVersion");
     s = s.replace(/getCompletionData: Get current token: \d+(?:\.\d+)?/g, `getCompletionData: Get current token: *`);
     s = s.replace(/getCompletionData: Is inside comment: \d+(?:\.\d+)?/g, `getCompletionData: Is inside comment: *`);
     s = s.replace(/getCompletionData: Get previous token: \d+(?:\.\d+)?/g, `getCompletionData: Get previous token: *`);
-    s = s.replace(/getCompletionsAtPosition: isCompletionListBlocker: \d+(?:\.\d+)?/g, `getCompletionsAtPosition: isCompletionListBlocker: *`);
+    s = s.replace(
+        /getCompletionsAtPosition: isCompletionListBlocker: \d+(?:\.\d+)?/g,
+        `getCompletionsAtPosition: isCompletionListBlocker: *`,
+    );
     s = s.replace(/getCompletionData: Semantic work: \d+(?:\.\d+)?/g, `getCompletionData: Semantic work: *`);
-    s = s.replace(/getCompletionsAtPosition: getCompletionEntriesFromSymbols: \d+(?:\.\d+)?/g, `getCompletionsAtPosition: getCompletionEntriesFromSymbols: *`);
-    s = s.replace(/forEachExternalModuleToImportFrom autoImportProvider: \d+(?:\.\d+)?/g, `forEachExternalModuleToImportFrom autoImportProvider: *`);
+    s = s.replace(
+        /getCompletionsAtPosition: getCompletionEntriesFromSymbols: \d+(?:\.\d+)?/g,
+        `getCompletionsAtPosition: getCompletionEntriesFromSymbols: *`,
+    );
+    s = s.replace(
+        /forEachExternalModuleToImportFrom autoImportProvider: \d+(?:\.\d+)?/g,
+        `forEachExternalModuleToImportFrom autoImportProvider: *`,
+    );
     s = s.replace(/getExportInfoMap: done in \d+(?:\.\d+)?/g, `getExportInfoMap: done in *`);
     s = s.replace(/collectAutoImports: \d+(?:\.\d+)?/g, `collectAutoImports: *`);
     s = s.replace(/continuePreviousIncompleteResponse: \d+(?:\.\d+)?/g, `continuePreviousIncompleteResponse: *`);
     s = s.replace(/dependencies in \d+(?:\.\d+)?/g, `dependencies in *`);
     s = s.replace(/"exportMapKey":\s*"\d+ \d+ /g, match => match.replace(/ \d+ /, ` * `));
-    s = s.replace(/getIndentationAtPosition: getCurrentSourceFile: \d+(?:\.\d+)?/, `getIndentationAtPosition: getCurrentSourceFile: *`);
-    s = s.replace(/getIndentationAtPosition: computeIndentation\s*: \d+(?:\.\d+)?/, `getIndentationAtPosition: computeIndentation: *`);
+    s = s.replace(
+        /getIndentationAtPosition: getCurrentSourceFile: \d+(?:\.\d+)?/,
+        `getIndentationAtPosition: getCurrentSourceFile: *`,
+    );
+    s = s.replace(
+        /getIndentationAtPosition: computeIndentation\s*: \d+(?:\.\d+)?/,
+        `getIndentationAtPosition: computeIndentation: *`,
+    );
     s = replaceAll(s, `@ts${ts.versionMajorMinor}`, `@tsFakeMajor.Minor`);
     s = sanitizeHarnessLSException(s);
     return s;

@@ -194,6 +194,10 @@ describe("unittests:: tsserver:: refactors", () => {
                 interactiveRefactorArguments: { targetFile: "/Foo/a.ts" },
             },
         });
-        baselineTsserverLogs("refactors", "handles moving statements to a TS file that is not included in the TS project", session);
+        baselineTsserverLogs(
+            "refactors",
+            "handles moving statements to a TS file that is not included in the TS project",
+            session,
+        );
     });
 });

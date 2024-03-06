@@ -96,7 +96,10 @@ function buildMap(rules: readonly RuleSpec[]): readonly (readonly Rule[])[] {
 }
 
 function getRuleBucketIndex(row: number, column: number): number {
-    Debug.assert(row <= SyntaxKind.LastKeyword && column <= SyntaxKind.LastKeyword, "Must compute formatting context from tokens");
+    Debug.assert(
+        row <= SyntaxKind.LastKeyword && column <= SyntaxKind.LastKeyword,
+        "Must compute formatting context from tokens",
+    );
     return (row * mapRowLength) + column;
 }
 
@@ -128,7 +131,13 @@ enum RulesPosition {
 // Example:
 // In order to insert a rule to the end of sub-bucket (3), we get the index by adding
 // the values in the bitmap segments 3rd, 2nd, and 1st.
-function addRule(rules: Rule[], rule: Rule, specificTokens: boolean, constructionState: number[], rulesBucketIndex: number): void {
+function addRule(
+    rules: Rule[],
+    rule: Rule,
+    specificTokens: boolean,
+    constructionState: number[],
+    rulesBucketIndex: number,
+): void {
     const position = rule.action & RuleAction.StopAction ?
         specificTokens ? RulesPosition.StopRulesSpecific : RulesPosition.StopRulesAny :
         rule.context !== anyContext ?
@@ -151,6 +160,9 @@ function getInsertionIndex(indexBitmap: number, maskPosition: RulesPosition) {
 
 function increaseInsertionIndex(indexBitmap: number, maskPosition: RulesPosition): number {
     const value = ((indexBitmap >> maskPosition) & mask) + 1;
-    Debug.assert((value & mask) === value, "Adding more rules into the sub-bucket than allowed. Maximum allowed is 32 rules.");
+    Debug.assert(
+        (value & mask) === value,
+        "Adding more rules into the sub-bucket than allowed. Maximum allowed is 32 rules.",
+    );
     return (indexBitmap & ~(mask << maskPosition)) | (value << maskPosition);
 }

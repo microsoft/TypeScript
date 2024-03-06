@@ -31,28 +31,45 @@ interface Atomics {
      * Until this atomic operation completes, any other read or write operation against the array
      * will block.
      */
-    add(typedArray: Int8Array | Uint8Array | Int16Array | Uint16Array | Int32Array | Uint32Array, index: number, value: number): number;
+    add(
+        typedArray: Int8Array | Uint8Array | Int16Array | Uint16Array | Int32Array | Uint32Array,
+        index: number,
+        value: number,
+    ): number;
 
     /**
      * Stores the bitwise AND of a value with the value at the given position in the array,
      * returning the original value. Until this atomic operation completes, any other read or
      * write operation against the array will block.
      */
-    and(typedArray: Int8Array | Uint8Array | Int16Array | Uint16Array | Int32Array | Uint32Array, index: number, value: number): number;
+    and(
+        typedArray: Int8Array | Uint8Array | Int16Array | Uint16Array | Int32Array | Uint32Array,
+        index: number,
+        value: number,
+    ): number;
 
     /**
      * Replaces the value at the given position in the array if the original value equals the given
      * expected value, returning the original value. Until this atomic operation completes, any
      * other read or write operation against the array will block.
      */
-    compareExchange(typedArray: Int8Array | Uint8Array | Int16Array | Uint16Array | Int32Array | Uint32Array, index: number, expectedValue: number, replacementValue: number): number;
+    compareExchange(
+        typedArray: Int8Array | Uint8Array | Int16Array | Uint16Array | Int32Array | Uint32Array,
+        index: number,
+        expectedValue: number,
+        replacementValue: number,
+    ): number;
 
     /**
      * Replaces the value at the given position in the array, returning the original value. Until
      * this atomic operation completes, any other read or write operation against the array will
      * block.
      */
-    exchange(typedArray: Int8Array | Uint8Array | Int16Array | Uint16Array | Int32Array | Uint32Array, index: number, value: number): number;
+    exchange(
+        typedArray: Int8Array | Uint8Array | Int16Array | Uint16Array | Int32Array | Uint32Array,
+        index: number,
+        value: number,
+    ): number;
 
     /**
      * Returns a value indicating whether high-performance algorithms can use atomic operations
@@ -65,27 +82,42 @@ interface Atomics {
      * Returns the value at the given position in the array. Until this atomic operation completes,
      * any other read or write operation against the array will block.
      */
-    load(typedArray: Int8Array | Uint8Array | Int16Array | Uint16Array | Int32Array | Uint32Array, index: number): number;
+    load(
+        typedArray: Int8Array | Uint8Array | Int16Array | Uint16Array | Int32Array | Uint32Array,
+        index: number,
+    ): number;
 
     /**
      * Stores the bitwise OR of a value with the value at the given position in the array,
      * returning the original value. Until this atomic operation completes, any other read or write
      * operation against the array will block.
      */
-    or(typedArray: Int8Array | Uint8Array | Int16Array | Uint16Array | Int32Array | Uint32Array, index: number, value: number): number;
+    or(
+        typedArray: Int8Array | Uint8Array | Int16Array | Uint16Array | Int32Array | Uint32Array,
+        index: number,
+        value: number,
+    ): number;
 
     /**
      * Stores a value at the given position in the array, returning the new value. Until this
      * atomic operation completes, any other read or write operation against the array will block.
      */
-    store(typedArray: Int8Array | Uint8Array | Int16Array | Uint16Array | Int32Array | Uint32Array, index: number, value: number): number;
+    store(
+        typedArray: Int8Array | Uint8Array | Int16Array | Uint16Array | Int32Array | Uint32Array,
+        index: number,
+        value: number,
+    ): number;
 
     /**
      * Subtracts a value from the value at the given position in the array, returning the original
      * value. Until this atomic operation completes, any other read or write operation against the
      * array will block.
      */
-    sub(typedArray: Int8Array | Uint8Array | Int16Array | Uint16Array | Int32Array | Uint32Array, index: number, value: number): number;
+    sub(
+        typedArray: Int8Array | Uint8Array | Int16Array | Uint16Array | Int32Array | Uint32Array,
+        index: number,
+        value: number,
+    ): number;
 
     /**
      * If the value at the given position in the array is equal to the provided value, the current
@@ -109,7 +141,11 @@ interface Atomics {
      * returning the original value. Until this atomic operation completes, any other read or write
      * operation against the array will block.
      */
-    xor(typedArray: Int8Array | Uint8Array | Int16Array | Uint16Array | Int32Array | Uint32Array, index: number, value: number): number;
+    xor(
+        typedArray: Int8Array | Uint8Array | Int16Array | Uint16Array | Int32Array | Uint32Array,
+        index: number,
+        value: number,
+    ): number;
 
     readonly [Symbol.toStringTag]: "Atomics";
 }

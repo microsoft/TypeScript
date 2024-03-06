@@ -243,7 +243,13 @@ describe("unittests:: tsserver:: projectErrors:: are reported as appropriate", (
 
             // Since this is not js project so no typings are queued
             verifyGetErrRequest({ session, files: [untitledFile] });
-            baselineTsserverLogs("projectErrors", `when opening new file that doesnt exist on disk yet ${useProjectRoot ? "with projectRoot" : "without projectRoot"}`, session);
+            baselineTsserverLogs(
+                "projectErrors",
+                `when opening new file that doesnt exist on disk yet ${
+                    useProjectRoot ? "with projectRoot" : "without projectRoot"
+                }`,
+                session,
+            );
         }
 
         it("has projectRoot", () => {
@@ -267,7 +273,10 @@ describe("unittests:: tsserver:: projectErrors:: are reported as appropriate", (
         };
         const configFile: File = {
             path: `${projectDir}/tsconfig.json`,
-            content: jsonToReadableText({ compilerOptions: { module: "none", targer: "es5" }, exclude: ["node_modules"] }),
+            content: jsonToReadableText({
+                compilerOptions: { module: "none", targer: "es5" },
+                exclude: ["node_modules"],
+            }),
         };
         const host = createServerHost([app, foo, configFile]);
         const session = new TestSession(host);
@@ -324,9 +333,16 @@ describe("unittests:: tsserver:: projectErrors:: are reported as appropriate", (
         openFilesForSession([{ file: backendTest, projectRootPath: "/user/username/projects/myproject" }], session);
         verifyGetErrRequest({ session, files: [backendTest.path, app.path] });
         closeFilesForSession([backendTest], session);
-        openFilesForSession([{ file: serverUtilities.path, projectRootPath: "/user/username/projects/myproject" }], session);
+        openFilesForSession(
+            [{ file: serverUtilities.path, projectRootPath: "/user/username/projects/myproject" }],
+            session,
+        );
         verifyGetErrRequest({ session, files: [serverUtilities.path, app.path] });
-        baselineTsserverLogs("projectErrors", `reports errors correctly when file referenced by inferred project root, is opened right after closing the root file`, session);
+        baselineTsserverLogs(
+            "projectErrors",
+            `reports errors correctly when file referenced by inferred project root, is opened right after closing the root file`,
+            session,
+        );
     });
 
     it("Correct errors when resolution resolves to file that has same ambient module and is also module", () => {
@@ -374,7 +390,11 @@ declare module '@custom/plugin' {
             },
         });
         verifyGetErrRequest({ session, files: [aFile] });
-        baselineTsserverLogs("projectErrors", `correct errors when resolution resolves to file that has same ambient module and is also module`, session);
+        baselineTsserverLogs(
+            "projectErrors",
+            `correct errors when resolution resolves to file that has same ambient module and is also module`,
+            session,
+        );
     });
 
     describe("when semantic error returns includes global error", () => {
@@ -417,7 +437,11 @@ describe("unittests:: tsserver:: Project Errors for Configure file diagnostics e
         const host = createServerHost([file, libFile, configFile]);
         const session = new TestSession(host);
         openFilesForSession([file], session);
-        baselineTsserverLogs("projectErrors", "configFileDiagnostic events are generated when the config file has errors", session);
+        baselineTsserverLogs(
+            "projectErrors",
+            "configFileDiagnostic events are generated when the config file has errors",
+            session,
+        );
     });
 
     it("are generated when the config file doesn't have errors", () => {
@@ -434,7 +458,11 @@ describe("unittests:: tsserver:: Project Errors for Configure file diagnostics e
         const host = createServerHost([file, libFile, configFile]);
         const session = new TestSession(host);
         openFilesForSession([file], session);
-        baselineTsserverLogs("projectErrors", "configFileDiagnostic events are generated when the config file doesnt have errors", session);
+        baselineTsserverLogs(
+            "projectErrors",
+            "configFileDiagnostic events are generated when the config file doesnt have errors",
+            session,
+        );
     });
 
     it("are generated when the config file changes", () => {
@@ -466,7 +494,11 @@ describe("unittests:: tsserver:: Project Errors for Configure file diagnostics e
             }`;
         host.writeFile(configFile.path, configFile.content);
         host.runQueuedTimeoutCallbacks();
-        baselineTsserverLogs("projectErrors", "configFileDiagnostic events are generated when the config file changes", session);
+        baselineTsserverLogs(
+            "projectErrors",
+            "configFileDiagnostic events are generated when the config file changes",
+            session,
+        );
     });
 
     it("are not generated when the config file does not include file opened and config file has errors", () => {
@@ -498,7 +530,11 @@ describe("unittests:: tsserver:: Project Errors for Configure file diagnostics e
         openFilesForSession([file], session);
         // We generate only if project is created when opening file from the project
         openFilesForSession([file3], session);
-        baselineTsserverLogs("projectErrors", "configFileDiagnostic events are not generated when the config file does not include file opened and config file has errors", session);
+        baselineTsserverLogs(
+            "projectErrors",
+            "configFileDiagnostic events are not generated when the config file does not include file opened and config file has errors",
+            session,
+        );
     });
 
     it("are not generated when the config file has errors but suppressDiagnosticEvents is true", () => {
@@ -518,7 +554,11 @@ describe("unittests:: tsserver:: Project Errors for Configure file diagnostics e
         const host = createServerHost([file, libFile, configFile]);
         const session = new TestSession({ host, suppressDiagnosticEvents: true });
         openFilesForSession([file], session);
-        baselineTsserverLogs("projectErrors", "configFileDiagnostic events are not generated when the config file has errors but suppressDiagnosticEvents is true", session);
+        baselineTsserverLogs(
+            "projectErrors",
+            "configFileDiagnostic events are not generated when the config file has errors but suppressDiagnosticEvents is true",
+            session,
+        );
     });
 
     it("are not generated when the config file does not include file opened and doesnt contain any errors", () => {
@@ -547,7 +587,11 @@ describe("unittests:: tsserver:: Project Errors for Configure file diagnostics e
         openFilesForSession([file], session);
         // We generate only if project is created when opening file from the project
         openFilesForSession([file3], session);
-        baselineTsserverLogs("projectErrors", "configFileDiagnostic events are not generated when the config file does not include file opened and doesnt contain any errors", session);
+        baselineTsserverLogs(
+            "projectErrors",
+            "configFileDiagnostic events are not generated when the config file does not include file opened and doesnt contain any errors",
+            session,
+        );
     });
 
     it("contains the project reference errors", () => {
@@ -567,7 +611,11 @@ describe("unittests:: tsserver:: Project Errors for Configure file diagnostics e
         const host = createServerHost([file, libFile, configFile]);
         const session = new TestSession(host);
         openFilesForSession([file], session);
-        baselineTsserverLogs("projectErrors", "configFileDiagnostic events contains the project reference errors", session);
+        baselineTsserverLogs(
+            "projectErrors",
+            "configFileDiagnostic events contains the project reference errors",
+            session,
+        );
     });
 });
 
@@ -587,7 +635,10 @@ describe("unittests:: tsserver:: projectErrors:: dont include overwrite emit err
             arguments: { projectFileName },
         });
 
-        setCompilerOptionsForInferredProjectsRequestForSession({ module: ts.server.protocol.ModuleKind.CommonJS }, session);
+        setCompilerOptionsForInferredProjectsRequestForSession(
+            { module: ts.server.protocol.ModuleKind.CommonJS },
+            session,
+        );
         session.executeCommandSeq<ts.server.protocol.CompilerOptionsDiagnosticsRequest>({
             command: ts.server.protocol.CommandTypes.CompilerOptionsDiagnosticsFull,
             arguments: { projectFileName },
@@ -643,7 +694,8 @@ describe("unittests:: tsserver:: projectErrors:: reports Options Diagnostic loca
                     "mapRoot": "./"
                 }
             }`;
-        const configFileContentWithComment = configFileContentBeforeComment + configFileContentComment + configFileContentAfterComment;
+        const configFileContentWithComment = configFileContentBeforeComment + configFileContentComment +
+            configFileContentAfterComment;
         const configFileContentWithoutCommentLine = configFileContentBeforeComment + configFileContentAfterComment;
 
         const configFile = {
@@ -672,7 +724,8 @@ describe("unittests:: tsserver:: projectErrors:: reports Options Diagnostic loca
 describe("unittests:: tsserver:: projectErrors:: with config file change", () => {
     it("Updates diagnostics when '--noUnusedLabels' changes", () => {
         const aTs: File = { path: "/a.ts", content: "label: while (1) {}" };
-        const options = (allowUnusedLabels: boolean) => `{ "compilerOptions": { "allowUnusedLabels": ${allowUnusedLabels} } }`;
+        const options = (allowUnusedLabels: boolean) =>
+            `{ "compilerOptions": { "allowUnusedLabels": ${allowUnusedLabels} } }`;
         const tsconfig: File = { path: "/tsconfig.json", content: options(/*allowUnusedLabels*/ true) };
 
         const host = createServerHost([aTs, tsconfig]);
@@ -725,7 +778,11 @@ console.log(blabla);`,
             include: ["./src/*.ts", "./src/*.json"],
         });
         verifyGetErrRequest({ session, files: [test] });
-        baselineTsserverLogs("projectErrors", `should not report incorrect error when json is root file found by tsconfig`, session);
+        baselineTsserverLogs(
+            "projectErrors",
+            `should not report incorrect error when json is root file found by tsconfig`,
+            session,
+        );
     });
 
     it("should report error when json is not root file found by tsconfig", () => {
@@ -733,7 +790,11 @@ console.log(blabla);`,
             include: ["./src/*.ts"],
         });
         verifyGetErrRequest({ session, files: [test] });
-        baselineTsserverLogs("projectErrors", `should report error when json is not root file found by tsconfig`, session);
+        baselineTsserverLogs(
+            "projectErrors",
+            `should report error when json is not root file found by tsconfig`,
+            session,
+        );
     });
 });
 
@@ -771,15 +832,29 @@ describe("unittests:: tsserver:: projectErrors:: with npm install when", () => {
         verifyWhileNpmInstall();
 
         filesAndFoldersToAdd = [
-            { path: `/user/username/projects/myproject/node_modules/.staging/@angular/platform-browser-dynamic-5efaaa1a` },
-            { path: `/user/username/projects/myproject/node_modules/.staging/@angular/cli-c1e44b05/models/analytics.d.ts`, content: `export const x = 10;` },
-            { path: `/user/username/projects/myproject/node_modules/.staging/@angular/core-0963aebf/index.d.ts`, content: `export const y = 10;` },
+            {
+                path:
+                    `/user/username/projects/myproject/node_modules/.staging/@angular/platform-browser-dynamic-5efaaa1a`,
+            },
+            {
+                path:
+                    `/user/username/projects/myproject/node_modules/.staging/@angular/cli-c1e44b05/models/analytics.d.ts`,
+                content: `export const x = 10;`,
+            },
+            {
+                path: `/user/username/projects/myproject/node_modules/.staging/@angular/core-0963aebf/index.d.ts`,
+                content: `export const y = 10;`,
+            },
         ];
         // Since we added/removed in .staging no timeout
         verifyWhileNpmInstall();
 
         filesAndFoldersToAdd = [];
-        host.ensureFileOrFolder(moduleFile, /*ignoreWatchInvokedWithTriggerAsFileCreate*/ true, /*ignoreParentWatch*/ true);
+        host.ensureFileOrFolder(
+            moduleFile,
+            /*ignoreWatchInvokedWithTriggerAsFileCreate*/ true,
+            /*ignoreParentWatch*/ true,
+        );
         // Since we added/removed in .staging no timeout
         verifyWhileNpmInstall();
 
@@ -790,7 +865,11 @@ describe("unittests:: tsserver:: projectErrors:: with npm install when", () => {
         // Additional watch for watching script infos from node_modules
         verifyWhileNpmInstall();
 
-        baselineTsserverLogs("projectErrors", `npm install when timeout occurs ${timeoutDuringPartialInstallation ? "inbetween" : "after"} installation`, session);
+        baselineTsserverLogs(
+            "projectErrors",
+            `npm install when timeout occurs ${timeoutDuringPartialInstallation ? "inbetween" : "after"} installation`,
+            session,
+        );
 
         function verifyWhileNpmInstall() {
             filesAndFoldersToAdd.forEach(f => host.ensureFileOrFolder(f));
@@ -798,7 +877,11 @@ describe("unittests:: tsserver:: projectErrors:: with npm install when", () => {
                 host.runQueuedTimeoutCallbacks(); // Invalidation of failed lookups
                 host.runQueuedTimeoutCallbacks(); // Actual update
             }
-            verifyGetErrRequest({ session, files: [main], existingTimeouts: !npmInstallComplete && !timeoutDuringPartialInstallation });
+            verifyGetErrRequest({
+                session,
+                files: [main],
+                existingTimeouts: !npmInstallComplete && !timeoutDuringPartialInstallation,
+            });
         }
     }
 

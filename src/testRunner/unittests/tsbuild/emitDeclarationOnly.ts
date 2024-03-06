@@ -68,7 +68,9 @@ describe("unittests:: tsbuild:: on project with emitDeclarationOnly set to true"
 
     function verifyEmitDeclarationOnly(disableMap?: true) {
         verifyTsc({
-            subScenario: `only dts output in circular import project with emitDeclarationOnly${disableMap ? "" : " and declarationMap"}`,
+            subScenario: `only dts output in circular import project with emitDeclarationOnly${
+                disableMap ? "" : " and declarationMap"
+            }`,
             fs: () => projFs,
             scenario: "emitDeclarationOnly",
             commandLineArgs: ["--b", "/src", "--verbose"],

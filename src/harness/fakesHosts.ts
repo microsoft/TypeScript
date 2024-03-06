@@ -103,8 +103,24 @@ export class System implements ts.System {
         return result;
     }
 
-    public readDirectory(path: string, extensions?: readonly string[], exclude?: readonly string[], include?: readonly string[], depth?: number): string[] {
-        return ts.matchFiles(path, extensions, exclude, include, this.useCaseSensitiveFileNames, this.getCurrentDirectory(), depth, path => this.getAccessibleFileSystemEntries(path), path => this.realpath(path));
+    public readDirectory(
+        path: string,
+        extensions?: readonly string[],
+        exclude?: readonly string[],
+        include?: readonly string[],
+        depth?: number,
+    ): string[] {
+        return ts.matchFiles(
+            path,
+            extensions,
+            exclude,
+            include,
+            this.useCaseSensitiveFileNames,
+            this.getCurrentDirectory(),
+            depth,
+            path => this.getAccessibleFileSystemEntries(path),
+            path => this.realpath(path),
+        );
     }
 
     public getAccessibleFileSystemEntries(path: string): ts.FileSystemEntries {
@@ -221,7 +237,13 @@ export class ParseConfigHost implements ts.ParseConfigHost {
         return this.sys.readFile(path);
     }
 
-    public readDirectory(path: string, extensions: string[], excludes: string[], includes: string[], depth: number): string[] {
+    public readDirectory(
+        path: string,
+        extensions: string[],
+        excludes: string[],
+        includes: string[],
+        depth: number,
+    ): string[] {
         return this.sys.readDirectory(path, extensions, excludes, includes, depth);
     }
 
@@ -255,12 +277,20 @@ export class CompilerHost implements ts.CompilerHost {
     private _parseConfigHost: ParseConfigHost | undefined;
     private _newLine: string;
 
-    constructor(sys: System | vfs.FileSystem, options = ts.getDefaultCompilerOptions(), setParentNodes = false, jsDocParsingMode?: ts.JSDocParsingMode) {
+    constructor(
+        sys: System | vfs.FileSystem,
+        options = ts.getDefaultCompilerOptions(),
+        setParentNodes = false,
+        jsDocParsingMode?: ts.JSDocParsingMode,
+    ) {
         if (sys instanceof vfs.FileSystem) sys = new System(sys);
         this.sys = sys;
         this.defaultLibLocation = sys.vfs.meta.get("defaultLibLocation") || "";
         this._newLine = ts.getNewLineCharacter(options);
-        this._sourceFiles = new collections.SortedMap<string, ts.SourceFile>({ comparer: sys.vfs.stringComparer, sort: "insertion" });
+        this._sourceFiles = new collections.SortedMap<string, ts.SourceFile>({
+            comparer: sys.vfs.stringComparer,
+            sort: "insertion",
+        });
         this._setParentNodes = setParentNodes;
         this._outputsMap = new collections.SortedMap(this.vfs.stringComparer);
         this.jsDocParsingMode = jsDocParsingMode;
@@ -314,7 +344,13 @@ export class CompilerHost implements ts.CompilerHost {
         return this.sys.getDirectories(path);
     }
 
-    public readDirectory(path: string, extensions?: readonly string[], exclude?: readonly string[], include?: readonly string[], depth?: number): string[] {
+    public readDirectory(
+        path: string,
+        extensions?: readonly string[],
+        exclude?: readonly string[],
+        include?: readonly string[],
+        depth?: number,
+    ): string[] {
         return this.sys.readDirectory(path, extensions, exclude, include, depth);
     }
 
@@ -352,7 +388,10 @@ export class CompilerHost implements ts.CompilerHost {
         return vpath.resolve(this.getDefaultLibLocation(), ts.getDefaultLibFileName(options));
     }
 
-    public getSourceFile(fileName: string, languageVersionOrOptions: ts.ScriptTarget | ts.CreateSourceFileOptions): ts.SourceFile | undefined {
+    public getSourceFile(
+        fileName: string,
+        languageVersionOrOptions: ts.ScriptTarget | ts.CreateSourceFileOptions,
+    ): ts.SourceFile | undefined {
         const canonicalFileName = this.getCanonicalFileName(vpath.resolve(this.getCurrentDirectory(), fileName));
         const existing = this._sourceFiles.get(canonicalFileName);
         if (existing) return existing;
@@ -371,7 +410,8 @@ export class CompilerHost implements ts.CompilerHost {
         // and so any options bag will be keyed as "[object Object]", and we'll incorrectly share
         // SourceFiles parsed with different options. But fixing this doesn't expose any bugs and
         // doubles the memory usage of a test run, so I'm leaving it for now.
-        const cacheKey = this.vfs.shadowRoot && `SourceFile[languageVersionOrOptions=${languageVersionOrOptions},setParentNodes=${this._setParentNodes}]`;
+        const cacheKey = this.vfs.shadowRoot &&
+            `SourceFile[languageVersionOrOptions=${languageVersionOrOptions},setParentNodes=${this._setParentNodes}]`;
         if (cacheKey) {
             const meta = this.vfs.filemeta(canonicalFileName);
             const sourceFileFromMetadata = meta.get(cacheKey) as ts.SourceFile | undefined;
@@ -381,7 +421,12 @@ export class CompilerHost implements ts.CompilerHost {
             }
         }
 
-        const parsed = ts.createSourceFile(fileName, content, languageVersionOrOptions, this._setParentNodes || this.shouldAssertInvariants);
+        const parsed = ts.createSourceFile(
+            fileName,
+            content,
+            languageVersionOrOptions,
+            this._setParentNodes || this.shouldAssertInvariants,
+        );
         if (this.shouldAssertInvariants) {
             Utils.assertInvariants(parsed, /*parent*/ undefined);
         }
@@ -395,7 +440,9 @@ export class CompilerHost implements ts.CompilerHost {
             let fs = this.vfs;
             while (fs.shadowRoot) {
                 try {
-                    const shadowRootStats = fs.shadowRoot.existsSync(canonicalFileName) ? fs.shadowRoot.statSync(canonicalFileName) : undefined!; // TODO: GH#18217
+                    const shadowRootStats = fs.shadowRoot.existsSync(canonicalFileName) ?
+                        fs.shadowRoot.statSync(canonicalFileName)
+                        : undefined!; // TODO: GH#18217
                     if (
                         shadowRootStats.dev !== stats.dev ||
                         shadowRootStats.ino !== stats.ino ||
@@ -477,7 +524,9 @@ function expectedDiagnosticMessageChainToText({ message, next }: ExpectedDiagnos
     return text;
 }
 
-function expectedDiagnosticRelatedInformationToText({ location, ...diagnosticMessage }: ExpectedDiagnosticRelatedInformation) {
+function expectedDiagnosticRelatedInformationToText(
+    { location, ...diagnosticMessage }: ExpectedDiagnosticRelatedInformation,
+) {
     const text = expectedDiagnosticMessageChainToText(diagnosticMessage);
     if (location) {
         const { file, start, length } = location;
@@ -486,7 +535,9 @@ function expectedDiagnosticRelatedInformationToText({ location, ...diagnosticMes
     return text;
 }
 
-function expectedErrorDiagnosticToText({ relatedInformation, ...diagnosticRelatedInformation }: ExpectedErrorDiagnostic) {
+function expectedErrorDiagnosticToText(
+    { relatedInformation, ...diagnosticRelatedInformation }: ExpectedErrorDiagnostic,
+) {
     let text = `${DiagnosticKind.Error}!: ${expectedDiagnosticRelatedInformationToText(diagnosticRelatedInformation)}`;
     if (relatedInformation) {
         for (const kid of relatedInformation) {
@@ -521,7 +572,9 @@ function diagnosticRelatedInformationToText({ file, start, length, messageText }
         text;
 }
 
-function diagnosticToText({ kind, diagnostic: { relatedInformation, ...diagnosticRelatedInformation } }: SolutionBuilderDiagnostic) {
+function diagnosticToText(
+    { kind, diagnostic: { relatedInformation, ...diagnosticRelatedInformation } }: SolutionBuilderDiagnostic,
+) {
     let text = `${kind}!: ${diagnosticRelatedInformationToText(diagnosticRelatedInformation)}`;
     if (relatedInformation) {
         for (const kid of relatedInformation) {
@@ -568,12 +621,25 @@ export function patchHostForBuildInfoWrite<T extends ts.System>(sys: T, version:
 export class SolutionBuilderHost extends CompilerHost implements ts.SolutionBuilderHost<ts.BuilderProgram> {
     createProgram: ts.CreateProgram<ts.BuilderProgram>;
 
-    private constructor(sys: System | vfs.FileSystem, options?: ts.CompilerOptions, setParentNodes?: boolean, createProgram?: ts.CreateProgram<ts.BuilderProgram>, jsDocParsingMode?: ts.JSDocParsingMode) {
+    private constructor(
+        sys: System | vfs.FileSystem,
+        options?: ts.CompilerOptions,
+        setParentNodes?: boolean,
+        createProgram?: ts.CreateProgram<ts.BuilderProgram>,
+        jsDocParsingMode?: ts.JSDocParsingMode,
+    ) {
         super(sys, options, setParentNodes, jsDocParsingMode);
-        this.createProgram = createProgram || ts.createEmitAndSemanticDiagnosticsBuilderProgram as unknown as ts.CreateProgram<ts.BuilderProgram>;
+        this.createProgram = createProgram ||
+            ts.createEmitAndSemanticDiagnosticsBuilderProgram as unknown as ts.CreateProgram<ts.BuilderProgram>;
     }
 
-    static create(sys: System | vfs.FileSystem, options?: ts.CompilerOptions, setParentNodes?: boolean, createProgram?: ts.CreateProgram<ts.BuilderProgram>, jsDocParsingMode?: ts.JSDocParsingMode) {
+    static create(
+        sys: System | vfs.FileSystem,
+        options?: ts.CompilerOptions,
+        setParentNodes?: boolean,
+        createProgram?: ts.CreateProgram<ts.BuilderProgram>,
+        jsDocParsingMode?: ts.JSDocParsingMode,
+    ) {
         const host = new SolutionBuilderHost(sys, options, setParentNodes, createProgram, jsDocParsingMode);
         patchHostForBuildInfoReadWrite(host.sys);
         return host;

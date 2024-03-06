@@ -17,7 +17,10 @@ const errorCodes = [
 registerCodeFix({
     errorCodes,
     getCodeActions(context) {
-        const callExpression = findAncestor(getTokenAtPosition(context.sourceFile, context.span.start), isCallExpression);
+        const callExpression = findAncestor(
+            getTokenAtPosition(context.sourceFile, context.span.start),
+            isCallExpression,
+        );
         if (!callExpression) {
             return undefined;
         }

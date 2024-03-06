@@ -53,11 +53,13 @@ describe("unittests:: tsc-watch:: emit with outFile or out setting", () => {
             sys: () => {
                 const file1: File = {
                     path: "/a/b/output/AnotherDependency/file1.d.ts",
-                    content: "declare namespace Common.SomeComponent.DynamicMenu { enum Z { Full = 0,  Min = 1, Average = 2, } }",
+                    content:
+                        "declare namespace Common.SomeComponent.DynamicMenu { enum Z { Full = 0,  Min = 1, Average = 2, } }",
                 };
                 const file2: File = {
                     path: "/a/b/dependencies/file2.d.ts",
-                    content: "declare namespace Dependencies.SomeComponent { export class SomeClass { version: string; } }",
+                    content:
+                        "declare namespace Dependencies.SomeComponent { export class SomeClass { version: string; } }",
                 };
                 const file3: File = {
                     path: "/a/b/project/src/main.ts",
@@ -65,7 +67,8 @@ describe("unittests:: tsc-watch:: emit with outFile or out setting", () => {
                 };
                 const file4: File = {
                     path: "/a/b/project/src/main2.ts",
-                    content: "namespace main.file4 { import DynamicMenu = Common.SomeComponent.DynamicMenu; export function foo(a: DynamicMenu.z) {  } }",
+                    content:
+                        "namespace main.file4 { import DynamicMenu = Common.SomeComponent.DynamicMenu; export function foo(a: DynamicMenu.z) {  } }",
                 };
                 const configFile: File = {
                     path: "/a/b/project/tsconfig.json",
@@ -142,7 +145,16 @@ describe("unittests:: tsc-watch:: emit for configured projects", () => {
                     content: jsonToReadableText(configObj || {}),
                 };
                 const additionalFiles = getAdditionalFileOrFolder?.() || ts.emptyArray;
-                const files = [moduleFile1, file1Consumer1, file1Consumer2, globalFile3, moduleFile2, configFile, libFile, ...additionalFiles];
+                const files = [
+                    moduleFile1,
+                    file1Consumer1,
+                    file1Consumer2,
+                    globalFile3,
+                    moduleFile2,
+                    configFile,
+                    libFile,
+                    ...additionalFiles,
+                ];
                 return createWatchedSystem(
                     firstReloadFileList ?
                         ts.map(firstReloadFileList, fileName => ts.find(files, file => file.path === fileName)!) :
@@ -163,12 +175,18 @@ describe("unittests:: tsc-watch:: emit for configured projects", () => {
     };
 
     verifyTscWatchEmit({
-        subScenario: "should contains only itself if a module file's shape didn't change, and all files referencing it if its shape changed",
+        subScenario:
+            "should contains only itself if a module file's shape didn't change, and all files referencing it if its shape changed",
         changes: [
             changeModuleFile1Shape,
             {
-                caption: "Change the content of moduleFile1 to `export var T: number;export function Foo() { console.log('hi'); };`",
-                edit: sys => sys.writeFile(moduleFile1Path, `export var T: number;export function Foo() { console.log('hi'); };`),
+                caption:
+                    "Change the content of moduleFile1 to `export var T: number;export function Foo() { console.log('hi'); };`",
+                edit: sys =>
+                    sys.writeFile(
+                        moduleFile1Path,
+                        `export var T: number;export function Foo() { console.log('hi'); };`,
+                    ),
                 timeouts: sys => sys.runQueuedTimeoutCallbacks(),
             },
         ],
@@ -189,7 +207,8 @@ describe("unittests:: tsc-watch:: emit for configured projects", () => {
                 timeouts: sys => sys.runQueuedTimeoutCallbacks(),
             },
             {
-                caption: "Change the content of moduleFile1 to `export var T: number;export var T2: string;export function Foo() { };`",
+                caption:
+                    "Change the content of moduleFile1 to `export var T: number;export var T2: string;export function Foo() { };`",
                 edit: sys => sys.writeFile(moduleFile1Path, `export let y = Foo();`),
                 timeouts: sys => sys.runQueuedTimeoutCallbacks(),
             },
@@ -454,7 +473,8 @@ describe("unittests:: tsc-watch:: emit file content", () => {
         edits: [
             {
                 caption: "Append content to file3",
-                edit: sys => sys.appendFile("/user/someone/projects/myproject/file3.ts", "function foo2() { return 2; }"),
+                edit: sys =>
+                    sys.appendFile("/user/someone/projects/myproject/file3.ts", "function foo2() { return 2; }"),
                 timeouts: sys => sys.runQueuedTimeoutCallbacks(),
             },
         ],
@@ -484,7 +504,10 @@ describe("unittests:: tsc-watch:: emit file content", () => {
         edits: [
             {
                 caption: "file is deleted and then created to modify content",
-                edit: sys => sys.appendFile("/home/username/project/app/file.ts", "\nvar b = 10;", { invokeFileDeleteCreateAsPartInsteadOfChange: true }),
+                edit: sys =>
+                    sys.appendFile("/home/username/project/app/file.ts", "\nvar b = 10;", {
+                        invokeFileDeleteCreateAsPartInsteadOfChange: true,
+                    }),
                 timeouts: sys => sys.runQueuedTimeoutCallbacks(),
             },
         ],
@@ -494,7 +517,8 @@ describe("unittests:: tsc-watch:: emit file content", () => {
 describe("unittests:: tsc-watch:: emit with when module emit is specified as node", () => {
     verifyTscWatch({
         scenario,
-        subScenario: "when module emit is specified as node/when instead of filechanged recursive directory watcher is invoked",
+        subScenario:
+            "when module emit is specified as node/when instead of filechanged recursive directory watcher is invoked",
         commandLineArgs: ["--w", "--p", "/a/rootFolder/project/tsconfig.json"],
         sys: () => {
             const configFile: File = {

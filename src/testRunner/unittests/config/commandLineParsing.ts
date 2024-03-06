@@ -5,11 +5,18 @@ import {
 } from "../helpers";
 
 describe("unittests:: config:: commandLineParsing:: parseCommandLine", () => {
-    function assertParseResult(subScenario: string, commandLine: string[], workerDiagnostic?: () => ts.ParseCommandLineWorkerDiagnostics) {
+    function assertParseResult(
+        subScenario: string,
+        commandLine: string[],
+        workerDiagnostic?: () => ts.ParseCommandLineWorkerDiagnostics,
+    ) {
         it(subScenario, () => {
             const baseline: string[] = [];
             baseline.push(commandLine.join(" "));
-            const parsed = ts.parseCommandLineWorker(workerDiagnostic?.() || ts.compilerOptionsDidYouMeanDiagnostics, commandLine);
+            const parsed = ts.parseCommandLineWorker(
+                workerDiagnostic?.() || ts.compilerOptionsDidYouMeanDiagnostics,
+                commandLine,
+            );
             baseline.push("CompilerOptions::");
             baseline.push(jsonToReadableText(parsed.options));
             baseline.push("WatchOptions::");
@@ -22,7 +29,10 @@ describe("unittests:: config:: commandLineParsing:: parseCommandLine", () => {
                 getCanonicalFileName: ts.identity,
                 getNewLine: () => "\n",
             }));
-            Harness.Baseline.runBaseline(`config/commandLineParsing/parseCommandLine/${subScenario}.js`, baseline.join("\n"));
+            Harness.Baseline.runBaseline(
+                `config/commandLineParsing/parseCommandLine/${subScenario}.js`,
+                baseline.join("\n"),
+            );
         });
     }
 
@@ -57,11 +67,35 @@ describe("unittests:: config:: commandLineParsing:: parseCommandLine", () => {
     // --lib es5, es7 0.ts
     assertParseResult("Parse --lib option with trailing white-space", ["--lib", "es5, ", "es7", "0.ts"]);
     // --lib es5,es2015.symbol.wellknown --target es5 0.ts
-    assertParseResult("Parse multiple compiler flags with input files at the end", ["--lib", "es5,es2015.symbol.wellknown", "--target", "es5", "0.ts"]);
+    assertParseResult("Parse multiple compiler flags with input files at the end", [
+        "--lib",
+        "es5,es2015.symbol.wellknown",
+        "--target",
+        "es5",
+        "0.ts",
+    ]);
     // --module commonjs --target es5 0.ts --lib es5,es2015.symbol.wellknown
-    assertParseResult("Parse multiple compiler flags with input files in the middle", ["--module", "commonjs", "--target", "es5", "0.ts", "--lib", "es5,es2015.symbol.wellknown"]);
+    assertParseResult("Parse multiple compiler flags with input files in the middle", [
+        "--module",
+        "commonjs",
+        "--target",
+        "es5",
+        "0.ts",
+        "--lib",
+        "es5,es2015.symbol.wellknown",
+    ]);
     // --module commonjs --target es5 --lib es5 0.ts --library es2015.array,es2015.symbol.wellknown
-    assertParseResult("Parse multiple library compiler flags ", ["--module", "commonjs", "--target", "es5", "--lib", "es5", "0.ts", "--lib", "es2015.core, es2015.symbol.wellknown "]);
+    assertParseResult("Parse multiple library compiler flags ", [
+        "--module",
+        "commonjs",
+        "--target",
+        "es5",
+        "--lib",
+        "es5",
+        "0.ts",
+        "--lib",
+        "es2015.core, es2015.symbol.wellknown ",
+    ]);
     assertParseResult("Parse explicit boolean flag value", ["--strictNullChecks", "false", "0.ts"]);
     assertParseResult("Parse non boolean argument after boolean flag", ["--noImplicitAny", "t", "0.ts"]);
     assertParseResult("Parse implicit boolean flag value", ["--strictNullChecks"]);
@@ -181,7 +215,13 @@ describe("unittests:: config:: commandLineParsing:: parseCommandLine", () => {
         });
     });
 
-    assertParseResult("allows tsconfig only option to be set to null", ["--composite", "null", "-tsBuildInfoFile", "null", "0.ts"]);
+    assertParseResult("allows tsconfig only option to be set to null", [
+        "--composite",
+        "null",
+        "-tsBuildInfoFile",
+        "null",
+        "0.ts",
+    ]);
 
     describe("Watch options", () => {
         assertParseResult("parse --watchFile", ["--watchFile", "UseFsEvents", "0.ts"]);
@@ -214,15 +254,28 @@ describe("unittests:: config:: commandLineParsing:: parseBuildOptions", () => {
                 getCanonicalFileName: ts.identity,
                 getNewLine: () => "\n",
             }));
-            Harness.Baseline.runBaseline(`config/commandLineParsing/parseBuildOptions/${subScenario}.js`, baseline.join("\n"));
+            Harness.Baseline.runBaseline(
+                `config/commandLineParsing/parseBuildOptions/${subScenario}.js`,
+                baseline.join("\n"),
+            );
         });
     }
     assertParseResult("parse build without any options ", []);
     assertParseResult("Parse multiple options", ["--verbose", "--force", "tests"]);
     assertParseResult("Parse option with invalid option", ["--verbose", "--invalidOption"]);
     assertParseResult("Parse multiple flags with input projects at the end", ["--force", "--verbose", "src", "tests"]);
-    assertParseResult("Parse multiple flags with input projects in the middle", ["--force", "src", "tests", "--verbose"]);
-    assertParseResult("Parse multiple flags with input projects in the beginning", ["src", "tests", "--force", "--verbose"]);
+    assertParseResult("Parse multiple flags with input projects in the middle", [
+        "--force",
+        "src",
+        "tests",
+        "--verbose",
+    ]);
+    assertParseResult("Parse multiple flags with input projects in the beginning", [
+        "src",
+        "tests",
+        "--force",
+        "--verbose",
+    ]);
     assertParseResult("parse build with --incremental", ["--incremental", "tests"]);
     assertParseResult("parse build with --locale en-us", ["--locale", "en-us", "src"]);
     assertParseResult("parse build with --tsBuildInfoFile", ["--tsBuildInfoFile", "build.tsbuildinfo", "tests"]);

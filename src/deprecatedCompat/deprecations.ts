@@ -52,7 +52,9 @@ export type OverloadKeys<T extends OverloadDefinitions> = Extract<keyof T, numbe
  *
  * @internal
  */
-export type OverloadParameters<T extends OverloadDefinitions> = Parameters<{ [P in OverloadKeys<T>]: T[P]; }[OverloadKeys<T>]>;
+export type OverloadParameters<T extends OverloadDefinitions> = Parameters<
+    { [P in OverloadKeys<T>]: T[P]; }[OverloadKeys<T>]
+>;
 
 // NOTE: the following doesn't work in TS 4.4 (the current LKG in main), so we have to use UnionToIntersection for now
 // type OverloadFunction<T extends OverloadDefinitions, R extends ((...args: any[]) => any)[] = [], O = unknown> =
@@ -70,7 +72,9 @@ export type OverloadFunction<T extends OverloadDefinitions> = UnionToIntersectio
  *
  * @internal
  */
-export type OverloadBinders<T extends OverloadDefinitions> = { [P in OverloadKeys<T>]: (args: OverloadParameters<T>) => boolean | undefined; };
+export type OverloadBinders<T extends OverloadDefinitions> = {
+    [P in OverloadKeys<T>]: (args: OverloadParameters<T>) => boolean | undefined;
+};
 
 /**
  * Defines deprecations for specific overloads by ordinal.
@@ -80,7 +84,12 @@ export type OverloadBinders<T extends OverloadDefinitions> = { [P in OverloadKey
 export type OverloadDeprecations<T extends OverloadDefinitions> = { [P in OverloadKeys<T>]?: DeprecationOptions; };
 
 /** @internal */
-export function createOverload<T extends OverloadDefinitions>(name: string, overloads: T, binder: OverloadBinders<T>, deprecations?: OverloadDeprecations<T>) {
+export function createOverload<T extends OverloadDefinitions>(
+    name: string,
+    overloads: T,
+    binder: OverloadBinders<T>,
+    deprecations?: OverloadDeprecations<T>,
+) {
     Object.defineProperty(call, "name", { ...Object.getOwnPropertyDescriptor(call, "name"), value: name });
 
     if (deprecations) {

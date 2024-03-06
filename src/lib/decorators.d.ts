@@ -17,7 +17,8 @@ type DecoratorContext =
 
 type DecoratorMetadataObject = Record<PropertyKey, unknown> & object;
 
-type DecoratorMetadata = typeof globalThis extends { Symbol: { readonly metadata: symbol; }; } ? DecoratorMetadataObject : DecoratorMetadataObject | undefined;
+type DecoratorMetadata = typeof globalThis extends { Symbol: { readonly metadata: symbol; }; } ? DecoratorMetadataObject
+    : DecoratorMetadataObject | undefined;
 
 /**
  * Context provided to a class decorator.

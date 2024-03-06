@@ -143,68 +143,101 @@ new C();`,
         }
 
         function verifyModuleResolution(withPathMapping: boolean) {
-            describe(withPathMapping ? "when tsconfig file contains path mapping" : "when tsconfig does not contain path mapping", () => {
-                const filesWithSources = [libFile, recognizersDateTimeSrcFile, withPathMapping ? recognizerDateTimeTsconfigWithPathMapping : recognizerDateTimeTsconfigWithoutPathMapping, recognizerTextSrcFile, recongnizerTextPackageJson];
-                it("when project compiles from sources", () => {
-                    const host = createServerHost(filesWithSources);
-                    const session = createSessionAndOpenFile(host);
-                    verifyGetErrRequest({ session, files: [recognizersDateTimeSrcFile] });
+            describe(
+                withPathMapping ? "when tsconfig file contains path mapping"
+                    : "when tsconfig does not contain path mapping",
+                () => {
+                    const filesWithSources = [
+                        libFile,
+                        recognizersDateTimeSrcFile,
+                        withPathMapping ? recognizerDateTimeTsconfigWithPathMapping
+                            : recognizerDateTimeTsconfigWithoutPathMapping,
+                        recognizerTextSrcFile,
+                        recongnizerTextPackageJson,
+                    ];
+                    it("when project compiles from sources", () => {
+                        const host = createServerHost(filesWithSources);
+                        const session = createSessionAndOpenFile(host);
+                        verifyGetErrRequest({ session, files: [recognizersDateTimeSrcFile] });
 
-                    host.ensureFileOrFolder(nodeModulesRecorgnizersText);
-                    host.writeFile(recongnizerTextDistTypingFile.path, recongnizerTextDistTypingFile.content);
-                    host.runQueuedTimeoutCallbacks(); // Scheduled invalidation of resolutions
-                    host.runQueuedTimeoutCallbacks(); // Actual update
+                        host.ensureFileOrFolder(nodeModulesRecorgnizersText);
+                        host.writeFile(recongnizerTextDistTypingFile.path, recongnizerTextDistTypingFile.content);
+                        host.runQueuedTimeoutCallbacks(); // Scheduled invalidation of resolutions
+                        host.runQueuedTimeoutCallbacks(); // Actual update
 
-                    verifyGetErrRequest({ session, files: [recognizersDateTimeSrcFile] });
+                        verifyGetErrRequest({ session, files: [recognizersDateTimeSrcFile] });
 
-                    // Change config file's module resolution affecting option
-                    const config = JSON.parse(host.readFile(recognizerDateTimeTsconfigPath)!);
-                    host.writeFile(
-                        recognizerDateTimeTsconfigPath,
-                        jsonToReadableText({
-                            ...config,
-                            compilerOptions: { ...config.compilerOptions, resolveJsonModule: true },
-                        }),
-                    );
-                    host.runQueuedTimeoutCallbacks(); // Scheduled invalidation of resolutions
-                    host.runQueuedTimeoutCallbacks(); // Actual update
+                        // Change config file's module resolution affecting option
+                        const config = JSON.parse(host.readFile(recognizerDateTimeTsconfigPath)!);
+                        host.writeFile(
+                            recognizerDateTimeTsconfigPath,
+                            jsonToReadableText({
+                                ...config,
+                                compilerOptions: { ...config.compilerOptions, resolveJsonModule: true },
+                            }),
+                        );
+                        host.runQueuedTimeoutCallbacks(); // Scheduled invalidation of resolutions
+                        host.runQueuedTimeoutCallbacks(); // Actual update
 
-                    baselineTsserverLogs("symLinks", `module resolution${withPathMapping ? " with path mapping" : ""} when project compiles from sources`, session);
-                });
+                        baselineTsserverLogs(
+                            "symLinks",
+                            `module resolution${
+                                withPathMapping ? " with path mapping" : ""
+                            } when project compiles from sources`,
+                            session,
+                        );
+                    });
 
-                it("when project has node_modules setup but doesnt have modules in typings folder and then recompiles", () => {
-                    const host = createServerHost([...filesWithSources, nodeModulesRecorgnizersText]);
-                    const session = createSessionAndOpenFile(host);
-                    verifyGetErrRequest({ session, files: [recognizersDateTimeSrcFile] });
+                    it("when project has node_modules setup but doesnt have modules in typings folder and then recompiles", () => {
+                        const host = createServerHost([...filesWithSources, nodeModulesRecorgnizersText]);
+                        const session = createSessionAndOpenFile(host);
+                        verifyGetErrRequest({ session, files: [recognizersDateTimeSrcFile] });
 
-                    host.writeFile(recongnizerTextDistTypingFile.path, recongnizerTextDistTypingFile.content);
-                    host.runQueuedTimeoutCallbacks(); // Scheduled invalidation of resolutions
-                    host.runQueuedTimeoutCallbacks(); // Actual update
+                        host.writeFile(recongnizerTextDistTypingFile.path, recongnizerTextDistTypingFile.content);
+                        host.runQueuedTimeoutCallbacks(); // Scheduled invalidation of resolutions
+                        host.runQueuedTimeoutCallbacks(); // Actual update
 
-                    verifyGetErrRequest({ session, files: [recognizersDateTimeSrcFile] });
-                    baselineTsserverLogs("symLinks", `module resolution${withPathMapping ? " with path mapping" : ""} when project has node_modules setup but doesnt have modules in typings folder and then recompiles`, session);
-                });
+                        verifyGetErrRequest({ session, files: [recognizersDateTimeSrcFile] });
+                        baselineTsserverLogs(
+                            "symLinks",
+                            `module resolution${
+                                withPathMapping ? " with path mapping" : ""
+                            } when project has node_modules setup but doesnt have modules in typings folder and then recompiles`,
+                            session,
+                        );
+                    });
 
-                it("when project recompiles after deleting generated folders", () => {
-                    const host = createServerHost([...filesWithSources, nodeModulesRecorgnizersText, recongnizerTextDistTypingFile]);
-                    const session = createSessionAndOpenFile(host);
+                    it("when project recompiles after deleting generated folders", () => {
+                        const host = createServerHost([
+                            ...filesWithSources,
+                            nodeModulesRecorgnizersText,
+                            recongnizerTextDistTypingFile,
+                        ]);
+                        const session = createSessionAndOpenFile(host);
 
-                    verifyGetErrRequest({ session, files: [recognizersDateTimeSrcFile] });
+                        verifyGetErrRequest({ session, files: [recognizersDateTimeSrcFile] });
 
-                    host.deleteFolder(recognizersTextDist, /*recursive*/ true);
-                    host.runQueuedTimeoutCallbacks(); // Scheduled invalidation of resolutions
-                    host.runQueuedTimeoutCallbacks(); // Actual update
+                        host.deleteFolder(recognizersTextDist, /*recursive*/ true);
+                        host.runQueuedTimeoutCallbacks(); // Scheduled invalidation of resolutions
+                        host.runQueuedTimeoutCallbacks(); // Actual update
 
-                    verifyGetErrRequest({ session, files: [recognizersDateTimeSrcFile] });
+                        verifyGetErrRequest({ session, files: [recognizersDateTimeSrcFile] });
 
-                    host.ensureFileOrFolder(recongnizerTextDistTypingFile);
-                    host.runQueuedTimeoutCallbacks(); // Scheduled invalidation of resolutions
-                    host.runQueuedTimeoutCallbacks(); // Actual update
+                        host.ensureFileOrFolder(recongnizerTextDistTypingFile);
+                        host.runQueuedTimeoutCallbacks(); // Scheduled invalidation of resolutions
+                        host.runQueuedTimeoutCallbacks(); // Actual update
 
-                    verifyGetErrRequest({ session, files: [recognizersDateTimeSrcFile] });
-                    baselineTsserverLogs("symLinks", `module resolution${withPathMapping ? " with path mapping" : ""} when project recompiles after deleting generated folders`, session);
-                });
-            });
+                        verifyGetErrRequest({ session, files: [recognizersDateTimeSrcFile] });
+                        baselineTsserverLogs(
+                            "symLinks",
+                            `module resolution${
+                                withPathMapping ? " with path mapping" : ""
+                            } when project recompiles after deleting generated folders`,
+                            session,
+                        );
+                    });
+                },
+            );
         }
 
         verifyModuleResolution(/*withPathMapping*/ false);

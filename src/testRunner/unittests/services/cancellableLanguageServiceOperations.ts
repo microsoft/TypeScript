@@ -9,9 +9,14 @@ describe("unittests:: services:: cancellableLanguageServiceOperations", () => {
         foo(f);
         `;
     it("can cancel signature help mid-request", () => {
-        verifyOperationCancelledAfter(file, 4, service =>
-            // Two calls are top-level in services, one is the root type, and the second should be for the parameter type
-            service.getSignatureHelpItems("file.ts", file.lastIndexOf("f"), ts.emptyOptions)!, r => assert.exists(r.items[0]));
+        verifyOperationCancelledAfter(
+            file,
+            4,
+            service =>
+                // Two calls are top-level in services, one is the root type, and the second should be for the parameter type
+                service.getSignatureHelpItems("file.ts", file.lastIndexOf("f"), ts.emptyOptions)!,
+            r => assert.exists(r.items[0]),
+        );
     });
 
     it("can cancel find all references mid-request", () => {
@@ -48,9 +53,22 @@ describe("unittests:: services:: cancellableLanguageServiceOperations", () => {
             placeOpenBraceOnNewLineForFunctions: false,
             placeOpenBraceOnNewLineForControlBlocks: false,
         };
-        verifyOperationCancelledAfter(file, 1, service =>
-            // The LS doesn't do any top-level checks on the token for completion entry details, so the first check is within the checker
-            service.getCompletionEntryDetails("file.ts", file.lastIndexOf("f"), "foo", options, /*source*/ undefined, {}, /*data*/ undefined)!, r => assert.exists(r.displayParts));
+        verifyOperationCancelledAfter(
+            file,
+            1,
+            service =>
+                // The LS doesn't do any top-level checks on the token for completion entry details, so the first check is within the checker
+                service.getCompletionEntryDetails(
+                    "file.ts",
+                    file.lastIndexOf("f"),
+                    "foo",
+                    options,
+                    /*source*/ undefined,
+                    {},
+                    /*data*/ undefined,
+                )!,
+            r => assert.exists(r.displayParts),
+        );
     });
 
     it("can cancel suggestion diagnostics mid-request", () => {
@@ -68,7 +86,15 @@ describe("unittests:: services:: cancellableLanguageServiceOperations", () => {
     });
 });
 
-function verifyOperationCancelledAfter<T>(content: string, cancelAfter: number, operation: (service: ts.LanguageService) => T, validator: (arg: T) => void, fileName?: string, fileContent?: string, options?: ts.CompilerOptions) {
+function verifyOperationCancelledAfter<T>(
+    content: string,
+    cancelAfter: number,
+    operation: (service: ts.LanguageService) => T,
+    validator: (arg: T) => void,
+    fileName?: string,
+    fileContent?: string,
+    options?: ts.CompilerOptions,
+) {
     let checks = 0;
     const token: ts.HostCancellationToken = {
         isCancellationRequested() {

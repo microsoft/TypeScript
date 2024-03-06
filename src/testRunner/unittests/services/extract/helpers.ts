@@ -18,7 +18,9 @@ import {
 export interface TestProjectServiceOptions extends ts.server.ProjectServiceOptions {
     host: TestServerHost;
 }
-export type TestProjectServicePartialOptionsAndHost = Partial<Omit<TestProjectServiceOptions, "typingsInstaller" | "logger" | "host">> & Pick<TestProjectServiceOptions, "host">;
+export type TestProjectServicePartialOptionsAndHost =
+    & Partial<Omit<TestProjectServiceOptions, "typingsInstaller" | "logger" | "host">>
+    & Pick<TestProjectServiceOptions, "host">;
 
 export class TestProjectService extends ts.server.ProjectService {
     constructor(optsOrHost: TestServerHost | TestProjectServicePartialOptionsAndHost) {
@@ -60,7 +62,8 @@ export function extractTest(source: string): Test {
     while (pos < source.length) {
         if (
             source.charCodeAt(pos) === ts.CharacterCodes.openBracket &&
-            (source.charCodeAt(pos + 1) === ts.CharacterCodes.hash || source.charCodeAt(pos + 1) === ts.CharacterCodes.$)
+            (source.charCodeAt(pos + 1) === ts.CharacterCodes.hash ||
+                source.charCodeAt(pos + 1) === ts.CharacterCodes.$)
         ) {
             const saved = pos;
             pos += 2;
@@ -81,7 +84,10 @@ export function extractTest(source: string): Test {
                 pos = saved;
             }
         }
-        else if (source.charCodeAt(pos) === ts.CharacterCodes.bar && source.charCodeAt(pos + 1) === ts.CharacterCodes.closeBracket) {
+        else if (
+            source.charCodeAt(pos) === ts.CharacterCodes.bar &&
+            source.charCodeAt(pos + 1) === ts.CharacterCodes.closeBracket
+        ) {
             text += source.substring(lastPos, pos);
             activeRanges[activeRanges.length - 1].end = text.length;
             const range = activeRanges.pop()!;
@@ -118,14 +124,22 @@ export const notImplementedHost: ts.LanguageServiceHost = {
     fileExists: ts.notImplemented,
 };
 
-export function testExtractSymbol(caption: string, text: string, baselineFolder: string, description: ts.DiagnosticMessage, includeLib?: boolean) {
+export function testExtractSymbol(
+    caption: string,
+    text: string,
+    baselineFolder: string,
+    description: ts.DiagnosticMessage,
+    includeLib?: boolean,
+) {
     const t = extractTest(text);
     const selectionRange = t.ranges.get("selection")!;
     if (!selectionRange) {
         throw new Error(`Test ${caption} does not specify selection range`);
     }
 
-    [ts.Extension.Ts, ts.Extension.Js].forEach(extension => it(`${caption} [${extension}]`, () => runBaseline(extension)));
+    [ts.Extension.Ts, ts.Extension.Js].forEach(extension =>
+        it(`${caption} [${extension}]`, () => runBaseline(extension))
+    );
 
     function runBaseline(extension: ts.Extension) {
         const path = "/a" + extension;
@@ -148,8 +162,15 @@ export function testExtractSymbol(caption: string, text: string, baselineFolder:
             formatContext: ts.formatting.getFormatContext(ts.testFormatSettings, notImplementedHost),
             preferences: ts.emptyOptions,
         };
-        const rangeToExtract = ts.refactor.extractSymbol.getRangeToExtract(sourceFile, ts.createTextSpanFromRange(selectionRange));
-        assert.equal(rangeToExtract.errors, undefined, rangeToExtract.errors && "Range error: " + rangeToExtract.errors[0].messageText);
+        const rangeToExtract = ts.refactor.extractSymbol.getRangeToExtract(
+            sourceFile,
+            ts.createTextSpanFromRange(selectionRange),
+        );
+        assert.equal(
+            rangeToExtract.errors,
+            undefined,
+            rangeToExtract.errors && "Range error: " + rangeToExtract.errors[0].messageText,
+        );
         const infos = ts.refactor.extractSymbol.getRefactorActionsToExtractSymbol(context);
         const actions = ts.find(infos, info => info.description === description.message)!.actions;
 
@@ -157,7 +178,10 @@ export function testExtractSymbol(caption: string, text: string, baselineFolder:
         data.push(`// ==ORIGINAL==`);
         data.push(text.replace("[#|", "/*[#|*/").replace("|]", "/*|]*/"));
         for (const action of actions) {
-            const { renameLocation, edits } = ts.refactor.extractSymbol.getRefactorEditsToExtractSymbol(context, action.name)!;
+            const { renameLocation, edits } = ts.refactor.extractSymbol.getRefactorEditsToExtractSymbol(
+                context,
+                action.name,
+            )!;
             assert.lengthOf(edits, 1);
             data.push(`// ==SCOPE::${action.description}==`);
             const newText = ts.textChanges.applyChanges(sourceFile.text, edits[0].textChanges);
@@ -211,8 +235,14 @@ export function testExtractSymbolFailed(caption: string, text: string, descripti
             formatContext: ts.formatting.getFormatContext(ts.testFormatSettings, notImplementedHost),
             preferences: ts.emptyOptions,
         };
-        const rangeToExtract = ts.refactor.extractSymbol.getRangeToExtract(sourceFile, ts.createTextSpanFromRange(selectionRange));
-        assert.isUndefined(rangeToExtract.errors, rangeToExtract.errors && "Range error: " + rangeToExtract.errors[0].messageText);
+        const rangeToExtract = ts.refactor.extractSymbol.getRangeToExtract(
+            sourceFile,
+            ts.createTextSpanFromRange(selectionRange),
+        );
+        assert.isUndefined(
+            rangeToExtract.errors,
+            rangeToExtract.errors && "Range error: " + rangeToExtract.errors[0].messageText,
+        );
         const infos = ts.refactor.extractSymbol.getRefactorActionsToExtractSymbol(context);
         assert.isUndefined(ts.find(infos, info => info.description === description.message));
     });

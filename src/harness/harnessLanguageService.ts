@@ -142,7 +142,10 @@ export abstract class LanguageServiceAdapterHost {
     private scriptInfos: collections.SortedMap<string, ScriptInfo>;
     public jsDocParsingMode: ts.JSDocParsingMode | undefined;
 
-    constructor(protected cancellationToken = DefaultHostCancellationToken.instance, protected settings = ts.getDefaultCompilerOptions()) {
+    constructor(
+        protected cancellationToken = DefaultHostCancellationToken.instance,
+        protected settings = ts.getDefaultCompilerOptions(),
+    ) {
         this.scriptInfos = new collections.SortedMap({ comparer: this.vfs.stringComparer, sort: "insertion" });
     }
 
@@ -211,7 +214,12 @@ export abstract class LanguageServiceAdapterHost {
         this.vfs.mkdirpSync(ts.getDirectoryPath(newPath));
         this.vfs.renameSync(oldPath, newPath);
 
-        const updater = ts.getPathUpdater(oldPath, newPath, ts.createGetCanonicalFileName(this.useCaseSensitiveFileNames()), /*sourceMapper*/ undefined);
+        const updater = ts.getPathUpdater(
+            oldPath,
+            newPath,
+            ts.createGetCanonicalFileName(this.useCaseSensitiveFileNames()),
+            /*sourceMapper*/ undefined,
+        );
         this.scriptInfos.forEach((scriptInfo, key) => {
             const newFileName = updater(key);
             if (newFileName !== undefined) {
@@ -249,7 +257,11 @@ export abstract class LanguageServiceAdapterHost {
     public lineAndCharacterToPosition(fileName: string, lineAndCharacter: ts.LineAndCharacter): number {
         const script: ScriptInfo = this.getScriptInfo(fileName)!;
         assert.isOk(script);
-        return ts.computePositionOfLineAndCharacter(script.getLineMap(), lineAndCharacter.line, lineAndCharacter.character);
+        return ts.computePositionOfLineAndCharacter(
+            script.getLineMap(),
+            lineAndCharacter.line,
+            lineAndCharacter.character,
+        );
     }
 
     useCaseSensitiveFileNames() {
@@ -258,7 +270,9 @@ export abstract class LanguageServiceAdapterHost {
 }
 
 /// Native adapter
-class NativeLanguageServiceHost extends LanguageServiceAdapterHost implements ts.LanguageServiceHost, LanguageServiceAdapterHost {
+class NativeLanguageServiceHost extends LanguageServiceAdapterHost
+    implements ts.LanguageServiceHost, LanguageServiceAdapterHost
+{
     isKnownTypesPackageName(name: string): boolean {
         return !!this.typesRegistry && this.typesRegistry.has(name);
     }
@@ -315,7 +329,13 @@ class NativeLanguageServiceHost extends LanguageServiceAdapterHost implements ts
         return this.sys.fileExists(fileName);
     }
 
-    readDirectory(path: string, extensions?: readonly string[], exclude?: readonly string[], include?: readonly string[], depth?: number): string[] {
+    readDirectory(
+        path: string,
+        extensions?: readonly string[],
+        exclude?: readonly string[],
+        include?: readonly string[],
+        depth?: number,
+    ): string[] {
         return this.sys.readDirectory(path, extensions, exclude, include, depth);
     }
 
@@ -461,7 +481,13 @@ class SessionServerHost implements ts.server.ServerHost {
         return ts.sys.getEnvironmentVariable(name);
     }
 
-    readDirectory(path: string, extensions?: readonly string[], exclude?: readonly string[], include?: readonly string[], depth?: number): string[] {
+    readDirectory(
+        path: string,
+        extensions?: readonly string[],
+        exclude?: readonly string[],
+        include?: readonly string[],
+        depth?: number,
+    ): string[] {
         return this.host.readDirectory(path, extensions, exclude, include, depth);
     }
 
@@ -539,7 +565,13 @@ class SessionServerHost implements ts.server.ServerHost {
                             const proxy = makeDefaultProxy(info);
                             proxy.getSemanticDiagnostics = filename => {
                                 const prev = info.languageService.getSemanticDiagnostics(filename);
-                                const sourceFile: ts.SourceFile = info.project.getSourceFile(ts.toPath(filename, /*basePath*/ undefined, ts.createGetCanonicalFileName(info.serverHost.useCaseSensitiveFileNames)))!;
+                                const sourceFile: ts.SourceFile = info.project.getSourceFile(
+                                    ts.toPath(
+                                        filename,
+                                        /*basePath*/ undefined,
+                                        ts.createGetCanonicalFileName(info.serverHost.useCaseSensitiveFileNames),
+                                    ),
+                                )!;
                                 prev.push({
                                     category: ts.DiagnosticCategory.Warning,
                                     file: sourceFile,
@@ -566,7 +598,13 @@ class SessionServerHost implements ts.server.ServerHost {
                             const proxy = makeDefaultProxy(info);
                             proxy.getSemanticDiagnostics = filename => {
                                 const prev = info.languageService.getSemanticDiagnostics(filename);
-                                const sourceFile: ts.SourceFile = info.project.getSourceFile(ts.toPath(filename, /*basePath*/ undefined, ts.createGetCanonicalFileName(info.serverHost.useCaseSensitiveFileNames)))!;
+                                const sourceFile: ts.SourceFile = info.project.getSourceFile(
+                                    ts.toPath(
+                                        filename,
+                                        /*basePath*/ undefined,
+                                        ts.createGetCanonicalFileName(info.serverHost.useCaseSensitiveFileNames),
+                                    ),
+                                )!;
                                 prev.push({
                                     category: ts.DiagnosticCategory.Error,
                                     file: sourceFile,
@@ -601,7 +639,12 @@ class FourslashSession extends ts.server.Session {
         patchServiceForStateBaseline(this.projectService);
     }
     getText(fileName: string) {
-        return ts.getSnapshotText(this.projectService.getDefaultProjectForFile(ts.server.toNormalizedPath(fileName), /*ensureProject*/ true)!.getScriptSnapshot(fileName)!);
+        return ts.getSnapshotText(
+            this.projectService.getDefaultProjectForFile(ts.server.toNormalizedPath(fileName), /*ensureProject*/ true)!
+                .getScriptSnapshot(
+                    fileName,
+                )!,
+        );
     }
 
     protected override toStringMessage(message: string): string {
@@ -638,7 +681,10 @@ export class ServerLanguageServiceAdapter implements LanguageServiceAdapter {
             cancellationToken: ts.server.nullCancellationToken,
             useSingleInferredProject: false,
             useInferredProjectPerProjectRoot: false,
-            typingsInstaller: { ...ts.server.nullTypingsInstaller, globalTypingsCacheLocation: "/Library/Caches/typescript" },
+            typingsInstaller: {
+                ...ts.server.nullTypingsInstaller,
+                globalTypingsCacheLocation: "/Library/Caches/typescript",
+            },
             byteLength: Buffer.byteLength,
             hrtime: process.hrtime,
             logger: this.logger,

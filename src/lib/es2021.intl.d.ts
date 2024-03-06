@@ -17,7 +17,10 @@ declare namespace Intl {
 
     interface DateTimeFormat {
         formatRange(startDate: Date | number | bigint, endDate: Date | number | bigint): string;
-        formatRangeToParts(startDate: Date | number | bigint, endDate: Date | number | bigint): DateTimeRangeFormatPart[];
+        formatRangeToParts(
+            startDate: Date | number | bigint,
+            endDate: Date | number | bigint,
+        ): DateTimeRangeFormatPart[];
     }
 
     interface ResolvedDateTimeFormatOptions {
@@ -143,6 +146,9 @@ declare namespace Intl {
          *
          * [MDN](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/ListFormat/supportedLocalesOf).
          */
-        supportedLocalesOf(locales: LocalesArgument, options?: Pick<ListFormatOptions, "localeMatcher">): UnicodeBCP47LocaleIdentifier[];
+        supportedLocalesOf(
+            locales: LocalesArgument,
+            options?: Pick<ListFormatOptions, "localeMatcher">,
+        ): UnicodeBCP47LocaleIdentifier[];
     };
 }

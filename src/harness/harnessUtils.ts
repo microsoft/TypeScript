@@ -138,7 +138,11 @@ export function assertInvariants(node: ts.Node | undefined, parent: ts.Node | un
                 }
                 const child = (node as any)[childName];
                 if (isNodeOrArray(child)) {
-                    assert.isFalse(!childNodesAndArrays.includes(child), "Missing child when forEach'ing over node: " + ts.Debug.formatSyntaxKind(node.kind) + "-" + childName);
+                    assert.isFalse(
+                        !childNodesAndArrays.includes(child),
+                        "Missing child when forEach'ing over node: " + ts.Debug.formatSyntaxKind(node.kind) + "-" +
+                            childName,
+                    );
                 }
             }
         }
@@ -183,7 +187,11 @@ export function sourceFileToJSON(file: ts.Node): string {
             o.containsParseError = true;
         }
 
-        for (const propertyName of Object.getOwnPropertyNames(n) as readonly (keyof ts.SourceFile | keyof ts.Identifier | keyof ts.StringLiteral)[]) {
+        for (
+            const propertyName of Object.getOwnPropertyNames(
+                n,
+            ) as readonly (keyof ts.SourceFile | keyof ts.Identifier | keyof ts.StringLiteral)[]
+        ) {
             switch (propertyName) {
                 case "parent":
                 case "symbol":
@@ -231,7 +239,11 @@ export function sourceFileToJSON(file: ts.Node): string {
 
                 case "nextContainer":
                     if ((n as ts.HasLocals).nextContainer) {
-                        o[propertyName] = { kind: (n as ts.HasLocals).nextContainer!.kind, pos: (n as ts.HasLocals).nextContainer!.pos, end: (n as ts.HasLocals).nextContainer!.end };
+                        o[propertyName] = {
+                            kind: (n as ts.HasLocals).nextContainer!.kind,
+                            pos: (n as ts.HasLocals).nextContainer!.pos,
+                            end: (n as ts.HasLocals).nextContainer!.end,
+                        };
                     }
                     break;
 
@@ -291,7 +303,11 @@ export function assertStructuralEquals(node1: ts.Node, node2: ts.Node) {
     // call this on both nodes to ensure all propagated flags have been set (and thus can be
     // compared).
     assert.equal(ts.containsParseError(node1), ts.containsParseError(node2));
-    assert.equal(node1.flags & ~ts.NodeFlags.ReachabilityAndEmitFlags, node2.flags & ~ts.NodeFlags.ReachabilityAndEmitFlags, "node1.flags !== node2.flags");
+    assert.equal(
+        node1.flags & ~ts.NodeFlags.ReachabilityAndEmitFlags,
+        node2.flags & ~ts.NodeFlags.ReachabilityAndEmitFlags,
+        "node1.flags !== node2.flags",
+    );
 
     ts.forEachChild(node1, child1 => {
         const childName = findChildName(node1, child1);

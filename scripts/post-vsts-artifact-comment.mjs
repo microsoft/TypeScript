@@ -35,7 +35,8 @@ async function main() {
         issue_number: +process.env.SOURCE_ISSUE,
         owner: "Microsoft",
         repo: "TypeScript",
-        body: `Hey @${process.env.REQUESTING_USER}, I've packed this into [an installable tgz](${link}). You can install it for testing by referencing it in your \`package.json\` like so:
+        body:
+            `Hey @${process.env.REQUESTING_USER}, I've packed this into [an installable tgz](${link}). You can install it for testing by referencing it in your \`package.json\` like so:
 \`\`\`
 {
     "devDependencies": {
@@ -49,7 +50,10 @@ and then running \`npm install\`.
 
     // Temporarily disable until we get access controls set up right
     // Send a ping to https://github.com/microsoft/typescript-make-monaco-builds#pull-request-builds
-    await gh.request("POST /repos/microsoft/typescript-make-monaco-builds/dispatches", { event_type: process.env.SOURCE_ISSUE, headers: { Accept: "application/vnd.github.everest-preview+json" } });
+    await gh.request("POST /repos/microsoft/typescript-make-monaco-builds/dispatches", {
+        event_type: process.env.SOURCE_ISSUE,
+        headers: { Accept: "application/vnd.github.everest-preview+json" },
+    });
 }
 
 main().catch(async e => {
@@ -63,7 +67,8 @@ main().catch(async e => {
             issue_number: +process.env.SOURCE_ISSUE,
             owner: "Microsoft",
             repo: "TypeScript",
-            body: `Hey @${process.env.REQUESTING_USER}, something went wrong when looking for the build artifact. ([You can check the log here](https://typescript.visualstudio.com/TypeScript/_build/index?buildId=${process.env.BUILD_BUILDID}&_a=summary)).`,
+            body:
+                `Hey @${process.env.REQUESTING_USER}, something went wrong when looking for the build artifact. ([You can check the log here](https://typescript.visualstudio.com/TypeScript/_build/index?buildId=${process.env.BUILD_BUILDID}&_a=summary)).`,
         });
     }
 });

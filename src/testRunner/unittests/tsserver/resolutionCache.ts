@@ -265,7 +265,11 @@ describe("unittests:: tsserver:: resolutionCache:: tsserverProjectSystem rename 
             command: ts.server.protocol.CommandTypes.SemanticDiagnosticsSync,
             arguments: { file: file1.path },
         });
-        baselineTsserverLogs("resolutionCache", "renaming module should restore the states for inferred projects", session);
+        baselineTsserverLogs(
+            "resolutionCache",
+            "renaming module should restore the states for inferred projects",
+            session,
+        );
     });
 
     it("should restore the states for configured projects", () => {
@@ -304,7 +308,11 @@ describe("unittests:: tsserver:: resolutionCache:: tsserverProjectSystem rename 
             command: ts.server.protocol.CommandTypes.SemanticDiagnosticsSync,
             arguments: { file: file1.path },
         });
-        baselineTsserverLogs("resolutionCache", "renaming module should restore the states for configured projects", session);
+        baselineTsserverLogs(
+            "resolutionCache",
+            "renaming module should restore the states for configured projects",
+            session,
+        );
     });
 
     it("should property handle missing config files", () => {
@@ -345,7 +353,9 @@ describe("unittests:: tsserver:: resolutionCache:: tsserverProjectSystem rename 
                 };
                 const config = {
                     path: "/a/b/tsconfig.json",
-                    content: jsonToReadableText({ compilerOptions: { types: ["node"], typeRoots: includeTypeRoots ? [] : undefined } }),
+                    content: jsonToReadableText({
+                        compilerOptions: { types: ["node"], typeRoots: includeTypeRoots ? [] : undefined },
+                    }),
                 };
                 const node = {
                     path: "/a/b/node_modules/@types/node/index.d.ts",
@@ -361,7 +371,10 @@ describe("unittests:: tsserver:: resolutionCache:: tsserverProjectSystem rename 
             });
         }
         verifyTypesLoad("types should load from config file path if config exists", /*includeTypeRoots*/ false);
-        verifyTypesLoad("types should not load from config file path if config exists but does not specifies typeRoots", /*includeTypeRoots*/ true);
+        verifyTypesLoad(
+            "types should not load from config file path if config exists but does not specifies typeRoots",
+            /*includeTypeRoots*/ true,
+        );
     });
 });
 
@@ -399,7 +412,10 @@ describe("unittests:: tsserver:: resolutionCache:: tsserverProjectSystem module 
         it("relative module name", () => {
             const fileContent = `import { module1 } from "./module1";import { module2 } from "../module2";`;
             const { file1, file2 } = getFiles(fileContent);
-            const { module1, module2 } = getModules(`/user/username/projects/myproject/src/module1.ts`, `/user/username/projects/myproject/module2.ts`);
+            const { module1, module2 } = getModules(
+                `/user/username/projects/myproject/src/module1.ts`,
+                `/user/username/projects/myproject/module2.ts`,
+            );
             const files = [module1, module2, file1, file2, configFile, libFile];
             const host = createServerHost(files);
             const session = new TestSession(host);
@@ -414,7 +430,10 @@ describe("unittests:: tsserver:: resolutionCache:: tsserverProjectSystem module 
         it("non relative module name", () => {
             const fileContent = `import { module1 } from "module1";import { module2 } from "module2";`;
             const { file1, file2 } = getFiles(fileContent);
-            const { module1, module2 } = getModules(`/user/username/projects/myproject/src/node_modules/module1/index.ts`, `/user/username/projects/myproject/node_modules/module2/index.ts`);
+            const { module1, module2 } = getModules(
+                `/user/username/projects/myproject/src/node_modules/module1/index.ts`,
+                `/user/username/projects/myproject/node_modules/module2/index.ts`,
+            );
             const files = [module1, module2, file1, file2, configFile, libFile];
             const host = createServerHost(files);
             const session = new TestSession(host);
@@ -427,7 +446,12 @@ describe("unittests:: tsserver:: resolutionCache:: tsserverProjectSystem module 
     });
 
     describe("from files in different folders", () => {
-        function getFiles(fileContent1: string, fileContent2 = fileContent1, fileContent3 = fileContent1, fileContent4 = fileContent1) {
+        function getFiles(
+            fileContent1: string,
+            fileContent2 = fileContent1,
+            fileContent3 = fileContent1,
+            fileContent4 = fileContent1,
+        ) {
             const file1: File = {
                 path: `/user/username/projects/myproject/product/src/file1.ts`,
                 content: fileContent1,
@@ -453,7 +477,10 @@ describe("unittests:: tsserver:: resolutionCache:: tsserverProjectSystem module 
             const fileContent3 = `import { module1 } from "../../src/module1";import { module2 } from "../../module2";`;
             const fileContent4 = `import { module1 } from "../src/module1}";import { module2 } from "../module2";`;
             const { file1, file2, file3, file4 } = getFiles(fileContent1, fileContent2, fileContent3, fileContent4);
-            const { module1, module2 } = getModules(`/user/username/projects/myproject/product/src/module1.ts`, `/user/username/projects/myproject/product/module2.ts`);
+            const { module1, module2 } = getModules(
+                `/user/username/projects/myproject/product/src/module1.ts`,
+                `/user/username/projects/myproject/product/module2.ts`,
+            );
             const files = [module1, module2, file1, file2, file3, file4, configFile, libFile];
             const host = createServerHost(files);
             const session = new TestSession(host);
@@ -469,7 +496,10 @@ describe("unittests:: tsserver:: resolutionCache:: tsserverProjectSystem module 
         it("non relative module name", () => {
             const fileContent = `import { module1 } from "module1";import { module2 } from "module2";`;
             const { file1, file2, file3, file4 } = getFiles(fileContent);
-            const { module1, module2 } = getModules(`/user/username/projects/myproject/product/node_modules/module1/index.ts`, `/user/username/projects/myproject/node_modules/module2/index.ts`);
+            const { module1, module2 } = getModules(
+                `/user/username/projects/myproject/product/node_modules/module1/index.ts`,
+                `/user/username/projects/myproject/node_modules/module2/index.ts`,
+            );
             const files = [module1, module2, file1, file2, file3, file4, configFile, libFile];
             const host = createServerHost(files);
             const session = new TestSession(host);
@@ -479,7 +509,11 @@ describe("unittests:: tsserver:: resolutionCache:: tsserverProjectSystem module 
             host.writeFile(file3.path, file3.content + fileContent);
             host.writeFile(file4.path, file4.content + fileContent);
             host.runQueuedTimeoutCallbacks();
-            baselineTsserverLogs("resolutionCache", "non relative module name from files in different folders", session);
+            baselineTsserverLogs(
+                "resolutionCache",
+                "non relative module name from files in different folders",
+                session,
+            );
         });
 
         it("non relative module name from inferred project", () => {
@@ -488,9 +522,18 @@ describe("unittests:: tsserver:: resolutionCache:: tsserverProjectSystem module 
             const file2Name = "./feature/file2";
             const file3Name = "../test/src/file3";
             const file4Name = "../test/file4";
-            const importModuleContent = `import { module1 } from "${module1Name}";import { module2 } from "${module2Name}";`;
-            const { file1, file2, file3, file4 } = getFiles(`import "${file2Name}"; import "${file4Name}"; import "${file3Name}"; ${importModuleContent}`, importModuleContent, importModuleContent, importModuleContent);
-            const { module1, module2 } = getModules(`/user/username/projects/myproject/product/node_modules/module1/index.ts`, `/user/username/projects/myproject/node_modules/module2/index.ts`);
+            const importModuleContent =
+                `import { module1 } from "${module1Name}";import { module2 } from "${module2Name}";`;
+            const { file1, file2, file3, file4 } = getFiles(
+                `import "${file2Name}"; import "${file4Name}"; import "${file3Name}"; ${importModuleContent}`,
+                importModuleContent,
+                importModuleContent,
+                importModuleContent,
+            );
+            const { module1, module2 } = getModules(
+                `/user/username/projects/myproject/product/node_modules/module1/index.ts`,
+                `/user/username/projects/myproject/node_modules/module2/index.ts`,
+            );
             const files = [module1, module2, file1, file2, file3, file4, libFile];
             const host = createServerHost(files);
             const session = new TestSession(host);
@@ -549,10 +592,25 @@ export const x = 10;`,
                     }),
                 };
 
-                const files = [...(useNodeFile ? [nodeFile] : []), electronFile, srcFile, moduleFile, configFile, libFile];
+                const files = [
+                    ...(useNodeFile ? [nodeFile] : []),
+                    electronFile,
+                    srcFile,
+                    moduleFile,
+                    configFile,
+                    libFile,
+                ];
                 const host = createServerHost(files);
                 const session = new TestSession(host);
-                openFilesForSession([{ file: srcFile.path, content: srcFile.content, scriptKindName: "TS", projectRootPath: "/user/username/projects/myproject" }], session);
+                openFilesForSession(
+                    [{
+                        file: srcFile.path,
+                        content: srcFile.content,
+                        scriptKindName: "TS",
+                        projectRootPath: "/user/username/projects/myproject",
+                    }],
+                    session,
+                );
                 baselineTsserverLogs("resolutionCache", scenario, session);
             });
         }
@@ -562,7 +620,8 @@ export const x = 10;`,
 
     describe("ignores files/folder changes in node_modules that start with '.'", () => {
         const npmCacheFile: File = {
-            path: `/user/username/projects/myproject/node_modules/.cache/babel-loader/89c02171edab901b9926470ba6d5677e.ts`,
+            path:
+                `/user/username/projects/myproject/node_modules/.cache/babel-loader/89c02171edab901b9926470ba6d5677e.ts`,
             content: jsonToReadableText({ something: 10 }),
         };
         const file1: File = {
@@ -581,7 +640,11 @@ export const x = 10;`,
 
             host.ensureFileOrFolder(npmCacheFile);
             session.host.baselineHost("After npm cache update");
-            baselineTsserverLogs("resolutionCache", "when watching node_modules in inferred project for failed lookup/closed script infos", session);
+            baselineTsserverLogs(
+                "resolutionCache",
+                "when watching node_modules in inferred project for failed lookup/closed script infos",
+                session,
+            );
         });
         it("when watching node_modules as part of wild card directories in config project", () => {
             const config: File = {
@@ -595,7 +658,11 @@ export const x = 10;`,
 
             host.ensureFileOrFolder(npmCacheFile);
             session.host.baselineHost("After npm cache update");
-            baselineTsserverLogs("resolutionCache", "when watching node_modules as part of wild card directories in config project", session);
+            baselineTsserverLogs(
+                "resolutionCache",
+                "when watching node_modules as part of wild card directories in config project",
+                session,
+            );
         });
     });
 
@@ -606,7 +673,10 @@ export const x = 10;`,
                 path: `/user/username/projects/myproject/src/file1.ts`,
                 content: fileContent,
             };
-            const { module1, module2 } = getModules(`/user/username/projects/myproject/src/node_modules/module1/index.ts`, `/user/username/projects/myproject/node_modules/module2/index.ts`);
+            const { module1, module2 } = getModules(
+                `/user/username/projects/myproject/src/node_modules/module1/index.ts`,
+                `/user/username/projects/myproject/node_modules/module2/index.ts`,
+            );
             const files = [module1, module2, file1, configFile, libFile];
             const host = createServerHost(files);
             const session = new TestSession(host);

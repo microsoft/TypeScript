@@ -18,7 +18,15 @@ import {
 } from "./_namespaces/ts.server";
 
 export interface TypingInstallerResponse {
-    readonly kind: ActionSet | ActionInvalidate | EventTypesRegistry | ActionPackageInstalled | EventBeginInstallTypes | EventEndInstallTypes | EventInitializationFailed | ActionWatchTypingLocations;
+    readonly kind:
+        | ActionSet
+        | ActionInvalidate
+        | EventTypesRegistry
+        | ActionPackageInstalled
+        | EventBeginInstallTypes
+        | EventEndInstallTypes
+        | EventInitializationFailed
+        | ActionWatchTypingLocations;
 }
 
 export interface TypingInstallerRequestWithProjectName {
@@ -119,4 +127,11 @@ export interface WatchTypingLocations extends ProjectResponse {
 }
 
 /** @internal */
-export type TypingInstallerResponseUnion = SetTypings | InvalidateCachedTypings | TypesRegistryResponse | PackageInstalledResponse | InstallTypes | InitializationFailedResponse | WatchTypingLocations;
+export type TypingInstallerResponseUnion =
+    | SetTypings
+    | InvalidateCachedTypings
+    | TypesRegistryResponse
+    | PackageInstalledResponse
+    | InstallTypes
+    | InitializationFailedResponse
+    | WatchTypingLocations;

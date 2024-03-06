@@ -51,7 +51,11 @@ describe("unittests:: tsserver:: configFileSearch:: searching for config file", 
         // Delete config file - should create inferred project and not configured project
         host.deleteFile(configFile.path);
         host.runQueuedTimeoutCallbacks();
-        baselineTsserverLogs("configFileSearch", "should use projectRootPath when searching for inferred project again", session);
+        baselineTsserverLogs(
+            "configFileSearch",
+            "should use projectRootPath when searching for inferred project again",
+            session,
+        );
     });
 
     it("should use projectRootPath when searching for inferred project again 2", () => {
@@ -80,7 +84,11 @@ describe("unittests:: tsserver:: configFileSearch:: searching for config file", 
         // Delete config file - should create inferred project with project root path set
         host.deleteFile(configFile.path);
         host.runQueuedTimeoutCallbacks();
-        baselineTsserverLogs("configFileSearch", "should use projectRootPath when searching for inferred project again 2", session);
+        baselineTsserverLogs(
+            "configFileSearch",
+            "should use projectRootPath when searching for inferred project again 2",
+            session,
+        );
     });
 
     describe("when the opened file is not from project root", () => {
@@ -129,7 +137,9 @@ describe("unittests:: tsserver:: configFileSearch:: searching for config file", 
         function verifyConfigFileWatch(scenario: string, projectRootPath: string | undefined) {
             it(scenario, () => {
                 const path = `/root/teams/VSCode68/Shared Documents/General/jt-ts-test-workspace/x.js`;
-                const host = createServerHost([libFile, { path, content: "const x = 10" }], { useCaseSensitiveFileNames: true });
+                const host = createServerHost([libFile, { path, content: "const x = 10" }], {
+                    useCaseSensitiveFileNames: true,
+                });
                 const session = new TestSession(host);
                 openFilesForSession([{ file: path, projectRootPath }], session);
                 baselineTsserverLogs("configFileSearch", scenario, session);

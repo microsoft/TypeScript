@@ -6,17 +6,26 @@ export function reportDocumentRegistryStats(documentRegistry: ts.DocumentRegistr
         str.push(`  Key:: ${key}`);
         bucketEntries.forEach((entry, path) => {
             if (ts.isDocumentRegistryEntry(entry)) {
-                str.push(`    ${path}: ${ts.Debug.formatScriptKind(entry.sourceFile.scriptKind)} ${entry.languageServiceRefCount}`);
+                str.push(
+                    `    ${path}: ${
+                        ts.Debug.formatScriptKind(entry.sourceFile.scriptKind)
+                    } ${entry.languageServiceRefCount}`,
+                );
             }
             else {
-                entry.forEach((real, kind) => str.push(`    ${path}: ${ts.Debug.formatScriptKind(kind)} ${real.languageServiceRefCount}`));
+                entry.forEach((real, kind) =>
+                    str.push(`    ${path}: ${ts.Debug.formatScriptKind(kind)} ${real.languageServiceRefCount}`)
+                );
             }
         });
     });
     return str;
 }
 
-type DocumentRegistryExpectedStats = Map<ts.DocumentRegistryBucketKeyWithMode, Map<ts.Path, Map<ts.ScriptKind, number>>>;
+type DocumentRegistryExpectedStats = Map<
+    ts.DocumentRegistryBucketKeyWithMode,
+    Map<ts.Path, Map<ts.ScriptKind, number>>
+>;
 function verifyDocumentRegistryStats(
     documentRegistry: ts.DocumentRegistry,
     stats: DocumentRegistryExpectedStats,
@@ -27,8 +36,11 @@ function verifyDocumentRegistryStats(
             const expected = statsByPath?.get(path);
             if (ts.isDocumentRegistryEntry(entry)) {
                 ts.Debug.assert(
-                    expected?.size === 1 && expected.has(entry.sourceFile.scriptKind) && expected.get(entry.sourceFile.scriptKind) === entry.languageServiceRefCount,
-                    `Document registry has unexpected language service ref count for ${key} ${path} ${ts.Debug.formatScriptKind(entry.sourceFile.scriptKind)} ${entry.languageServiceRefCount}`,
+                    expected?.size === 1 && expected.has(entry.sourceFile.scriptKind) &&
+                        expected.get(entry.sourceFile.scriptKind) === entry.languageServiceRefCount,
+                    `Document registry has unexpected language service ref count for ${key} ${path} ${
+                        ts.Debug.formatScriptKind(entry.sourceFile.scriptKind)
+                    } ${entry.languageServiceRefCount}`,
                     reportStats,
                 );
             }
@@ -36,14 +48,18 @@ function verifyDocumentRegistryStats(
                 entry.forEach((real, kind) =>
                     ts.Debug.assert(
                         real.languageServiceRefCount === expected?.get(kind),
-                        `Document registry has unexpected language service ref count for ${key} ${path} ${ts.Debug.formatScriptKind(kind)} ${real.languageServiceRefCount}`,
+                        `Document registry has unexpected language service ref count for ${key} ${path} ${
+                            ts.Debug.formatScriptKind(kind)
+                        } ${real.languageServiceRefCount}`,
                         reportStats,
                     )
                 );
                 expected?.forEach((value, kind) =>
                     ts.Debug.assert(
                         entry.has(kind),
-                        `Document registry expected language service ref count for ${key} ${path} ${ts.Debug.formatScriptKind(kind)} ${value}`,
+                        `Document registry expected language service ref count for ${key} ${path} ${
+                            ts.Debug.formatScriptKind(kind)
+                        } ${value}`,
                         reportStats,
                     )
                 );
@@ -70,7 +86,11 @@ function verifyDocumentRegistryStats(
         str.push("Expected::");
         stats?.forEach((statsByPath, key) => {
             str.push(`  Key:: ${key}`);
-            statsByPath.forEach((entry, path) => entry.forEach((refCount, kind) => str.push(`    ${path}: ${ts.Debug.formatScriptKind(kind)} ${refCount}`)));
+            statsByPath.forEach((entry, path) =>
+                entry.forEach((refCount, kind) =>
+                    str.push(`    ${path}: ${ts.Debug.formatScriptKind(kind)} ${refCount}`)
+                )
+            );
         });
         return str.join("\n");
     }
@@ -128,7 +148,11 @@ function getResolutionCacheDetails<File, T extends ts.ResolutionWithFailedLookup
             addedCacheType = true;
             baseline.push(`${indent}${cacheType}:`);
         }
-        baseline.push(`${indent}  ${key}: ${mode ? ts.getNameOfCompilerOptionValue(mode, ts.moduleOptionDeclaration.type) + ":" : ""}${getResolvedFileName(resolved)}`);
+        baseline.push(
+            `${indent}  ${key}: ${
+                mode ? ts.getNameOfCompilerOptionValue(mode, ts.moduleOptionDeclaration.type) + ":" : ""
+            }${getResolvedFileName(resolved)}`,
+        );
     }, file);
 }
 
@@ -151,14 +175,20 @@ function getLibResolutionCacheDetails(
             addedCacheType = true;
             baseline.push(`${indent}Libs:`);
         }
-        baseline.push(`${indent}  ${libFileName}: Actual: ${resolved.actual} Resolution: ${getResolvedModuleFileName(resolved.resolution)}`);
+        baseline.push(
+            `${indent}  ${libFileName}: Actual: ${resolved.actual} Resolution: ${
+                getResolvedModuleFileName(resolved.resolution)
+            }`,
+        );
     });
 }
 
 function getProgramStructure(program: ts.Program | undefined) {
     const baseline: string[] = [];
     program?.getSourceFiles().slice().sort((f1, f2) => ts.comparePathsCaseSensitive(f1.path, f2.path)).forEach(f => {
-        baseline.push(`  File: ${f.fileName} Path: ${f.path} ResolvedPath: ${f.resolvedPath} impliedNodeFormat: ${f.impliedNodeFormat}`);
+        baseline.push(
+            `  File: ${f.fileName} Path: ${f.path} ResolvedPath: ${f.resolvedPath} impliedNodeFormat: ${f.impliedNodeFormat}`,
+        );
         baseline.push(f.text.split(/\r?\n/g).map(l => l ? "    " + l : "").join("\n"));
         getResolutionCacheDetails(
             baseline,
@@ -206,10 +236,16 @@ export function verifyResolutionCache(
     projectName: string,
 ) {
     const currentDirectory = resolutionHostCacheHost.getCurrentDirectory!();
-    const expected = ts.createResolutionCache(resolutionHostCacheHost, actual.rootDirForResolution, /*logChangesWhenResolvingModule*/ false);
+    const expected = ts.createResolutionCache(
+        resolutionHostCacheHost,
+        actual.rootDirForResolution,
+        /*logChangesWhenResolvingModule*/ false,
+    );
     expected.startCachingPerDirectoryResolution();
 
-    type ExpectedResolution = ts.CachedResolvedModuleWithFailedLookupLocations & ts.CachedResolvedTypeReferenceDirectiveWithFailedLookupLocations;
+    type ExpectedResolution =
+        & ts.CachedResolvedModuleWithFailedLookupLocations
+        & ts.CachedResolvedTypeReferenceDirectiveWithFailedLookupLocations;
 
     const expectedToResolution = new Map<ExpectedResolution, ts.ResolutionWithFailedLookupLocations>();
     const resolutionToExpected = new Map<ts.ResolutionWithFailedLookupLocations, ExpectedResolution>();
@@ -262,15 +298,35 @@ export function verifyResolutionCache(
         );
         ts.Debug.assert(
             resolutionToExpected.get(resolution)!.refCount === resolution.refCount,
-            `${projectName}:: Expected Resolution ref count ${resolutionToExpected.get(resolution)!.refCount} but got ${resolution.refCount}`,
+            `${projectName}:: Expected Resolution ref count ${
+                resolutionToExpected.get(resolution)!.refCount
+            } but got ${resolution.refCount}`,
         );
         verifySet(resolutionToExpected.get(resolution)!.files, resolution.files, `${projectName}:: Resolution files`);
     });
-    verifyMapOfResolutionSet(expected.resolvedFileToResolution, actual.resolvedFileToResolution, `resolvedFileToResolution`);
-    verifyResolutionSet(expected.resolutionsWithFailedLookups, actual.resolutionsWithFailedLookups, `resolutionsWithFailedLookups`);
-    verifyResolutionSet(expected.resolutionsWithOnlyAffectingLocations, actual.resolutionsWithOnlyAffectingLocations, `resolutionsWithOnlyAffectingLocations`);
-    verifyDirectoryWatchesOfFailedLookups(expected.directoryWatchesOfFailedLookups, actual.directoryWatchesOfFailedLookups);
-    verifyFileWatchesOfAffectingLocations(expected.fileWatchesOfAffectingLocations, actual.fileWatchesOfAffectingLocations);
+    verifyMapOfResolutionSet(
+        expected.resolvedFileToResolution,
+        actual.resolvedFileToResolution,
+        `resolvedFileToResolution`,
+    );
+    verifyResolutionSet(
+        expected.resolutionsWithFailedLookups,
+        actual.resolutionsWithFailedLookups,
+        `resolutionsWithFailedLookups`,
+    );
+    verifyResolutionSet(
+        expected.resolutionsWithOnlyAffectingLocations,
+        actual.resolutionsWithOnlyAffectingLocations,
+        `resolutionsWithOnlyAffectingLocations`,
+    );
+    verifyDirectoryWatchesOfFailedLookups(
+        expected.directoryWatchesOfFailedLookups,
+        actual.directoryWatchesOfFailedLookups,
+    );
+    verifyFileWatchesOfAffectingLocations(
+        expected.fileWatchesOfAffectingLocations,
+        actual.fileWatchesOfAffectingLocations,
+    );
 
     // Stop watching resolutions to verify everything gets closed.
     expected.startCachingPerDirectoryResolution();
@@ -282,11 +338,26 @@ export function verifyResolutionCache(
         ts.Debug.assert(!expected.refCount, `${projectName}:: All the resolution should be released`);
         ts.Debug.assert(!expected.files?.size, `${projectName}:: Shouldnt ref to any files`);
     });
-    ts.Debug.assert(expected.resolvedFileToResolution.size === 0, `${projectName}:: resolvedFileToResolution should be released`);
-    ts.Debug.assert(expected.resolutionsWithFailedLookups.size === 0, `${projectName}:: resolutionsWithFailedLookups should be released`);
-    ts.Debug.assert(expected.resolutionsWithOnlyAffectingLocations.size === 0, `${projectName}:: resolutionsWithOnlyAffectingLocations should be released`);
-    ts.Debug.assert(expected.directoryWatchesOfFailedLookups.size === 0, `${projectName}:: directoryWatchesOfFailedLookups should be released`);
-    ts.Debug.assert(expected.fileWatchesOfAffectingLocations.size === 0, `${projectName}:: fileWatchesOfAffectingLocations should be released`);
+    ts.Debug.assert(
+        expected.resolvedFileToResolution.size === 0,
+        `${projectName}:: resolvedFileToResolution should be released`,
+    );
+    ts.Debug.assert(
+        expected.resolutionsWithFailedLookups.size === 0,
+        `${projectName}:: resolutionsWithFailedLookups should be released`,
+    );
+    ts.Debug.assert(
+        expected.resolutionsWithOnlyAffectingLocations.size === 0,
+        `${projectName}:: resolutionsWithOnlyAffectingLocations should be released`,
+    );
+    ts.Debug.assert(
+        expected.directoryWatchesOfFailedLookups.size === 0,
+        `${projectName}:: directoryWatchesOfFailedLookups should be released`,
+    );
+    ts.Debug.assert(
+        expected.fileWatchesOfAffectingLocations.size === 0,
+        `${projectName}:: fileWatchesOfAffectingLocations should be released`,
+    );
 
     function collectResolutionToRefFromCache<T extends ts.ResolutionWithFailedLookupLocations>(
         cacheType: string,
@@ -303,7 +374,15 @@ export function verifyResolutionCache(
         let expectedCache: ts.ModeAwareCache<ts.ResolutionWithFailedLookupLocations> | undefined;
         cache?.forEach((resolved, name, mode) => {
             const resolvedFileName = getResolvedFileName(resolved);
-            const expected = collectResolution(cacheType, fileName, resolved, resolvedFileName, name, mode, deferWatchingNonRelativeResolution);
+            const expected = collectResolution(
+                cacheType,
+                fileName,
+                resolved,
+                resolvedFileName,
+                name,
+                mode,
+                deferWatchingNonRelativeResolution,
+            );
             if (!expectedCache) storeExpcted.set(fileName, expectedCache = ts.createModeAwareCache());
             expectedCache.set(name, mode, expected);
         });
@@ -336,7 +415,13 @@ export function verifyResolutionCache(
             expectedToResolution.set(expectedResolution, resolved);
             resolutionToExpected.set(resolved, expectedResolution);
         }
-        expected.watchFailedLookupLocationsOfExternalModuleResolutions(name, expectedResolution, fileName, () => ({ resolvedFileName }), deferWatchingNonRelativeResolution);
+        expected.watchFailedLookupLocationsOfExternalModuleResolutions(
+            name,
+            expectedResolution,
+            fileName,
+            () => ({ resolvedFileName }),
+            deferWatchingNonRelativeResolution,
+        );
         return expectedResolution;
     }
 
@@ -367,11 +452,17 @@ export function verifyResolutionCache(
         );
     }
 
-    function verifyDirectoryWatchesOfFailedLookups(expected: Map<string, ts.DirectoryWatchesOfFailedLookup>, actual: Map<string, ts.DirectoryWatchesOfFailedLookup>) {
+    function verifyDirectoryWatchesOfFailedLookups(
+        expected: Map<string, ts.DirectoryWatchesOfFailedLookup>,
+        actual: Map<string, ts.DirectoryWatchesOfFailedLookup>,
+    ) {
         verifyMap(expected, actual, (expected, actual, caption) => {
             ts.Debug.assert(expected?.refCount === actual?.refCount, `${projectName}:: ${caption}:: refCount`);
             ts.Debug.assert(!!expected?.refCount, `${projectName}:: ${caption}:: expected refCount to be non zero`);
-            ts.Debug.assert(expected?.nonRecursive === actual?.nonRecursive, `${projectName}:: ${caption}:: nonRecursive`);
+            ts.Debug.assert(
+                expected?.nonRecursive === actual?.nonRecursive,
+                `${projectName}:: ${caption}:: nonRecursive`,
+            );
         }, "directoryWatchesOfFailedLookups");
     }
 
@@ -429,8 +520,10 @@ function verifyProgram(service: ts.server.ProjectService, project: ts.server.Pro
     compilerHost.useSourceOfProjectReferenceRedirect = project.useSourceOfProjectReferenceRedirect?.bind(project);
     compilerHost.getCurrentDirectory = project.getCurrentDirectory.bind(project);
     const getDefaultLibLocation = compilerHost.getDefaultLibLocation!;
-    compilerHost.getDefaultLibLocation = () => ts.getNormalizedAbsolutePath(getDefaultLibLocation(), service.host.getCurrentDirectory());
-    compilerHost.getDefaultLibFileName = options => ts.combinePaths(compilerHost.getDefaultLibLocation!(), ts.getDefaultLibFileName(options));
+    compilerHost.getDefaultLibLocation = () =>
+        ts.getNormalizedAbsolutePath(getDefaultLibLocation(), service.host.getCurrentDirectory());
+    compilerHost.getDefaultLibFileName = options =>
+        ts.combinePaths(compilerHost.getDefaultLibLocation!(), ts.getDefaultLibFileName(options));
     compilerHost.trace = ts.noop; // We dont want to update host just because of trace
     const readFile = compilerHost.readFile;
     compilerHost.readFile = fileName => {
@@ -483,25 +576,34 @@ function verifyProgram(service: ts.server.ProjectService, project: ts.server.Pro
         getCachedDirectoryStructureHost: ts.returnUndefined,
         writeLog: ts.noop,
     };
-    const moduleResolutionCache = ts.createModuleResolutionCache(compilerHost.getCurrentDirectory(), compilerHost.getCanonicalFileName, project.getCompilerOptions());
-    compilerHost.resolveModuleNameLiterals = (moduleNames, containingFile, redirectedReference, options, containingSourceFile) =>
-        ts.loadWithModeAwareCache(
-            moduleNames,
-            containingFile,
-            redirectedReference,
-            options,
-            containingSourceFile,
-            compilerHost,
-            moduleResolutionCache,
-            (containingFile, redirectedReference, options) =>
-                ts.createModuleResolutionLoaderUsingGlobalCache(
-                    containingFile,
-                    redirectedReference,
-                    options,
-                    resolutionHostCacheHost,
-                    moduleResolutionCache,
-                ),
-        );
+    const moduleResolutionCache = ts.createModuleResolutionCache(
+        compilerHost.getCurrentDirectory(),
+        compilerHost.getCanonicalFileName,
+        project.getCompilerOptions(),
+    );
+    compilerHost.resolveModuleNameLiterals = (
+        moduleNames,
+        containingFile,
+        redirectedReference,
+        options,
+        containingSourceFile,
+    ) => ts.loadWithModeAwareCache(
+        moduleNames,
+        containingFile,
+        redirectedReference,
+        options,
+        containingSourceFile,
+        compilerHost,
+        moduleResolutionCache,
+        (containingFile, redirectedReference, options) =>
+            ts.createModuleResolutionLoaderUsingGlobalCache(
+                containingFile,
+                redirectedReference,
+                options,
+                resolutionHostCacheHost,
+                moduleResolutionCache,
+            ),
+    );
     verifyProgramStructure(
         ts.createProgram({
             rootNames: project.getScriptFileNames(),
@@ -512,11 +614,22 @@ function verifyProgram(service: ts.server.ProjectService, project: ts.server.Pro
         project.getCurrentProgram()!,
         project.projectName,
     );
-    verifyResolutionCache(project.resolutionCache, project.getCurrentProgram()!, resolutionHostCacheHost, project.projectName);
+    verifyResolutionCache(
+        project.resolutionCache,
+        project.getCurrentProgram()!,
+        resolutionHostCacheHost,
+        project.projectName,
+    );
 }
 
 interface ResolveSingleModuleNameWithoutWatchingData {
-    resolutionToData: Map<ts.ResolutionWithFailedLookupLocations, Pick<ts.ResolvedModuleWithFailedLookupLocations, "failedLookupLocations" | "affectingLocations" | "resolutionDiagnostics">>;
+    resolutionToData: Map<
+        ts.ResolutionWithFailedLookupLocations,
+        Pick<
+            ts.ResolvedModuleWithFailedLookupLocations,
+            "failedLookupLocations" | "affectingLocations" | "resolutionDiagnostics"
+        >
+    >;
     packageJsonMap: Map<ts.Path, ts.PackageJsonInfoCacheEntry> | undefined;
 }
 
@@ -579,8 +692,10 @@ function afterResolveSingleModuleNameWithoutWatching(
 function onProjectCreation(project: ts.server.Project) {
     if (project.projectKind !== ts.server.ProjectKind.Auxiliary) return;
 
-    (project as ts.ResolutionCacheHost).beforeResolveSingleModuleNameWithoutWatching = beforeResolveSingleModuleNameWithoutWatching;
-    (project as ts.ResolutionCacheHost).afterResolveSingleModuleNameWithoutWatching = afterResolveSingleModuleNameWithoutWatching;
+    (project as ts.ResolutionCacheHost).beforeResolveSingleModuleNameWithoutWatching =
+        beforeResolveSingleModuleNameWithoutWatching;
+    (project as ts.ResolutionCacheHost).afterResolveSingleModuleNameWithoutWatching =
+        afterResolveSingleModuleNameWithoutWatching;
 }
 
 export interface IncrementalVerifierCallbacks {

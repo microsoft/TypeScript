@@ -25,8 +25,19 @@ registerCodeFix({
         const nodes = getNodes(sourceFile, context.span.start);
         if (!nodes) return undefined;
         const { extendsToken, heritageClauses } = nodes;
-        const changes = textChanges.ChangeTracker.with(context, t => doChanges(t, sourceFile, extendsToken, heritageClauses));
-        return [createCodeFixAction(fixId, changes, Diagnostics.Change_extends_to_implements, fixId, Diagnostics.Change_all_extended_interfaces_to_implements)];
+        const changes = textChanges.ChangeTracker.with(
+            context,
+            t => doChanges(t, sourceFile, extendsToken, heritageClauses),
+        );
+        return [
+            createCodeFixAction(
+                fixId,
+                changes,
+                Diagnostics.Change_extends_to_implements,
+                fixId,
+                Diagnostics.Change_all_extended_interfaces_to_implements,
+            ),
+        ];
     },
     fixIds: [fixId],
     getAllCodeActions: context =>
@@ -43,7 +54,12 @@ function getNodes(sourceFile: SourceFile, pos: number) {
     return extendsToken.kind === SyntaxKind.ExtendsKeyword ? { extendsToken, heritageClauses } : undefined;
 }
 
-function doChanges(changes: textChanges.ChangeTracker, sourceFile: SourceFile, extendsToken: Node, heritageClauses: readonly HeritageClause[]): void {
+function doChanges(
+    changes: textChanges.ChangeTracker,
+    sourceFile: SourceFile,
+    extendsToken: Node,
+    heritageClauses: readonly HeritageClause[],
+): void {
     changes.replaceNode(sourceFile, extendsToken, factory.createToken(SyntaxKind.ImplementsKeyword));
 
     // If there is already an implements clause, replace the implements keyword with a comma.
@@ -54,7 +70,11 @@ function doChanges(changes: textChanges.ChangeTracker, sourceFile: SourceFile, e
     ) {
         const implementsToken = heritageClauses[1].getFirstToken()!;
         const implementsFullStart = implementsToken.getFullStart();
-        changes.replaceRange(sourceFile, { pos: implementsFullStart, end: implementsFullStart }, factory.createToken(SyntaxKind.CommaToken));
+        changes.replaceRange(
+            sourceFile,
+            { pos: implementsFullStart, end: implementsFullStart },
+            factory.createToken(SyntaxKind.CommaToken),
+        );
 
         // Rough heuristic: delete trailing whitespace after keyword so that it's not excessive.
         // (Trailing because leading might be indentation, which is more sensitive.)

@@ -85,7 +85,12 @@ describe("unittests:: tsbuild:: on 'sample1' project", () => {
                 fs.writeFileSync(
                     "logic/tsconfig.json",
                     jsonToReadableText({
-                        compilerOptions: { composite: true, declaration: true, sourceMap: true, declarationDir: "out/decls" },
+                        compilerOptions: {
+                            composite: true,
+                            declaration: true,
+                            sourceMap: true,
+                            declarationDir: "out/decls",
+                        },
                         references: [{ path: "../core" }],
                     }),
                 ),
@@ -173,7 +178,12 @@ describe("unittests:: tsbuild:: on 'sample1' project", () => {
                 {
                     caption: "rebuilds when tsconfig changes",
                     edit: fs => {
-                        replaceText(fs, "tests/tsconfig.json", `"composite": true`, `"composite": true, "target": "es2020"`);
+                        replaceText(
+                            fs,
+                            "tests/tsconfig.json",
+                            `"composite": true`,
+                            `"composite": true, "target": "es2020"`,
+                        );
                         fs.writeFileSync(libPath("es2020.full"), libContent);
                     },
                 },
@@ -204,11 +214,13 @@ describe("unittests:: tsbuild:: on 'sample1' project", () => {
             edits: [
                 {
                     caption: "Disable declarationMap",
-                    edit: fs => replaceText(fs, "core/tsconfig.json", `"declarationMap": true,`, `"declarationMap": false,`),
+                    edit: fs =>
+                        replaceText(fs, "core/tsconfig.json", `"declarationMap": true,`, `"declarationMap": false,`),
                 },
                 {
                     caption: "Enable declarationMap",
-                    edit: fs => replaceText(fs, "core/tsconfig.json", `"declarationMap": false,`, `"declarationMap": true,`),
+                    edit: fs =>
+                        replaceText(fs, "core/tsconfig.json", `"declarationMap": false,`, `"declarationMap": true,`),
                 },
             ],
         });
@@ -258,10 +270,16 @@ describe("unittests:: tsbuild:: on 'sample1' project", () => {
 
         verifyTscCompileLike(testTscCompileLike, {
             scenario: "sample1",
-            subScenario: "does not rebuild if there is no program and bundle in the ts build info event if version doesnt match ts version",
+            subScenario:
+                "does not rebuild if there is no program and bundle in the ts build info event if version doesnt match ts version",
             fs: () => {
                 const fs = projFs.shadow();
-                const host = fakes.SolutionBuilderHost.create(fs, /*options*/ undefined, /*setParentNodes*/ undefined, ts.createAbstractBuilder);
+                const host = fakes.SolutionBuilderHost.create(
+                    fs,
+                    /*options*/ undefined,
+                    /*setParentNodes*/ undefined,
+                    ts.createAbstractBuilder,
+                );
                 const builder = ts.createSolutionBuilder(host, ["tests"], { verbose: true });
                 builder.build();
                 fs.makeReadonly();
@@ -282,8 +300,16 @@ describe("unittests:: tsbuild:: on 'sample1' project", () => {
             fs: () => projFs,
             commandLineArgs: ["--b", "tests", "--verbose"],
             modifyFs: fs => {
-                fs.writeFileSync("tests/tsconfig.base.json", jsonToReadableText({ compilerOptions: { target: "es5" } }));
-                replaceText(fs, "tests/tsconfig.json", `"references": [`, `"extends": "./tsconfig.base.json", "references": [`);
+                fs.writeFileSync(
+                    "tests/tsconfig.base.json",
+                    jsonToReadableText({ compilerOptions: { target: "es5" } }),
+                );
+                replaceText(
+                    fs,
+                    "tests/tsconfig.json",
+                    `"references": [`,
+                    `"extends": "./tsconfig.base.json", "references": [`,
+                );
             },
             edits: [{
                 caption: "incremental-declaration-changes",
@@ -331,7 +357,10 @@ describe("unittests:: tsbuild:: on 'sample1' project", () => {
             verifyBuildNextResult(); // logic
             verifyBuildNextResult(); // tests
             verifyBuildNextResult(); // All Done
-            Harness.Baseline.runBaseline(`tsbuild/sample1/building-using-getNextInvalidatedProject.js`, baseline.join("\r\n"));
+            Harness.Baseline.runBaseline(
+                `tsbuild/sample1/building-using-getNextInvalidatedProject.js`,
+                baseline.join("\r\n"),
+            );
 
             function verifyBuildNextResult() {
                 const project = builder.getNextInvalidatedProject();
@@ -394,7 +423,9 @@ describe("unittests:: tsbuild:: on 'sample1' project", () => {
 
             function verifyInvalidation(heading: string) {
                 // Rebuild this project
-                builder.invalidateProject("/user/username/projects/sample1/logic/tsconfig.json" as ts.ResolvedConfigFilePath);
+                builder.invalidateProject(
+                    "/user/username/projects/sample1/logic/tsconfig.json" as ts.ResolvedConfigFilePath,
+                );
                 builder.getNextInvalidatedProject()?.done();
                 baselineState(`${heading}:: After rebuilding logicConfig`);
 
@@ -517,7 +548,13 @@ class someClass2 { }`,
                 ),
             edits: [{
                 caption: "incremental-declaration-changes",
-                edit: fs => replaceText(fs, "core/tsconfig.json", `"incremental": true,`, `"incremental": true, "declaration": true,`),
+                edit: fs =>
+                    replaceText(
+                        fs,
+                        "core/tsconfig.json",
+                        `"incremental": true,`,
+                        `"incremental": true, "declaration": true,`,
+                    ),
             }],
         });
 
@@ -602,7 +639,8 @@ class someClass2 { }`,
                 ),
             edits: [{
                 caption: "incremental-declaration-changes",
-                edit: fs => replaceText(fs, "tests/tsconfig.json", `"esModuleInterop": false`, `"esModuleInterop": true`),
+                edit: fs =>
+                    replaceText(fs, "tests/tsconfig.json", `"esModuleInterop": false`, `"esModuleInterop": true`),
             }],
         });
 

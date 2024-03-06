@@ -51,7 +51,11 @@ export function loggerToTypingsInstallerLog(logger: LoggerWithInMemoryLogs): ts.
 interface TypesRegistryFile {
     entries: ts.MapLike<ts.MapLike<string>>;
 }
-function loadTypesRegistryFile(typesRegistryFilePath: string, host: TestServerHost, log: ts.server.typingsInstaller.Log): Map<string, ts.MapLike<string>> {
+function loadTypesRegistryFile(
+    typesRegistryFilePath: string,
+    host: TestServerHost,
+    log: ts.server.typingsInstaller.Log,
+): Map<string, ts.MapLike<string>> {
     if (!host.fileExists(typesRegistryFilePath)) {
         log.writeLine(`Types registry file '${typesRegistryFilePath}' does not exist`);
         return new Map<string, ts.MapLike<string>>();
@@ -61,13 +65,20 @@ function loadTypesRegistryFile(typesRegistryFilePath: string, host: TestServerHo
         return new Map(Object.entries(content.entries));
     }
     catch (e) {
-        log.writeLine(`Error when loading types registry file '${typesRegistryFilePath}': ${(e as Error).message}, ${(e as Error).stack}`);
+        log.writeLine(
+            `Error when loading types registry file '${typesRegistryFilePath}': ${(e as Error).message}, ${
+                (e as Error).stack
+            }`,
+        );
         return new Map<string, ts.MapLike<string>>();
     }
 }
 const typesRegistryPackageName = "types-registry";
 function getTypesRegistryFileLocation(globalTypingsCacheLocation: string): string {
-    return ts.combinePaths(ts.normalizeSlashes(globalTypingsCacheLocation), `node_modules/${typesRegistryPackageName}/index.json`);
+    return ts.combinePaths(
+        ts.normalizeSlashes(globalTypingsCacheLocation),
+        `node_modules/${typesRegistryPackageName}/index.json`,
+    );
 }
 
 export interface FileWithPackageName extends File {
@@ -122,7 +133,12 @@ export class TestTypingsInstallerWorker extends ts.server.typingsInstaller.Typin
         testTypingInstaller.session.host.baselineHost("TI:: typing installer creation complete");
     }
 
-    installWorker(requestId: number, packageNames: string[], cwd: string, onRequestCompleted: ts.server.typingsInstaller.RequestCompletedAction): void {
+    installWorker(
+        requestId: number,
+        packageNames: string[],
+        cwd: string,
+        onRequestCompleted: ts.server.typingsInstaller.RequestCompletedAction,
+    ): void {
         this.log.writeLine(`#${requestId} with cwd: ${cwd} arguments: ${jsonToReadableText(packageNames)}`);
         if (typeof this.testTypingInstaller.installAction === "boolean") {
             this.scheduleInstall(
@@ -137,7 +153,9 @@ export class TestTypingsInstallerWorker extends ts.server.typingsInstaller.Typin
             assert(false, this.testTypingInstaller.installAction);
         }
         else {
-            const typingFiles = this.testTypingInstaller.installAction.filter(f => !f.package || packageNames.includes(ts.server.typingsInstaller.typingsName(f.package)));
+            const typingFiles = this.testTypingInstaller.installAction.filter(f =>
+                !f.package || packageNames.includes(ts.server.typingsInstaller.typingsName(f.package))
+            );
             this.scheduleInstall(
                 requestId,
                 packageNames,
@@ -160,14 +178,24 @@ export class TestTypingsInstallerWorker extends ts.server.typingsInstaller.Typin
                 for (const file of typingFiles) {
                     this.testTypingInstaller.session.host.ensureFileOrFolder(file);
                 }
-                this.testTypingInstaller.session.host.baselineHost(`TI:: Installation ${pendingInstallInfo} complete with success::${!!success}`);
+                this.testTypingInstaller.session.host.baselineHost(
+                    `TI:: Installation ${pendingInstallInfo} complete with success::${!!success}`,
+                );
                 onRequestCompleted(!!success);
             },
             `#${requestId} with arguments:: ${jsonToReadableText(packageNames)}`,
         );
     }
 
-    sendResponse(response: ts.server.SetTypings | ts.server.InvalidateCachedTypings | ts.server.BeginInstallTypes | ts.server.EndInstallTypes | ts.server.WatchTypingLocations | ts.server.PackageInstalledResponse) {
+    sendResponse(
+        response:
+            | ts.server.SetTypings
+            | ts.server.InvalidateCachedTypings
+            | ts.server.BeginInstallTypes
+            | ts.server.EndInstallTypes
+            | ts.server.WatchTypingLocations
+            | ts.server.PackageInstalledResponse,
+    ) {
         this.log.writeLine(`Sending response:${stringifyIndented(response)}`);
         this.testTypingInstaller.handleMessage(response);
     }
@@ -193,7 +221,8 @@ export class TestTypingsInstallerAdapter extends ts.server.TypingsInstallerAdapt
     readonly throttledRequests: number | undefined;
 
     constructor(options: TestTypingsInstallerOptions) {
-        const globalTypingsCacheLocation = options.globalTypingsCacheLocation || options.host.getHostSpecificPath("/a/data");
+        const globalTypingsCacheLocation = options.globalTypingsCacheLocation ||
+            options.host.getHostSpecificPath("/a/data");
         super(
             /*telemetryEnabled*/ false,
             options.throttledRequests === undefined ?

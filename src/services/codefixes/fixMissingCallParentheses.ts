@@ -17,7 +17,9 @@ import {
 
 const fixId = "fixMissingCallParentheses";
 const errorCodes = [
-    Diagnostics.This_condition_will_always_return_true_since_this_function_is_always_defined_Did_you_mean_to_call_it_instead.code,
+    Diagnostics
+        .This_condition_will_always_return_true_since_this_function_is_always_defined_Did_you_mean_to_call_it_instead
+        .code,
 ];
 
 registerCodeFix({
@@ -29,7 +31,15 @@ registerCodeFix({
         if (!callName) return;
 
         const changes = textChanges.ChangeTracker.with(context, t => doChange(t, context.sourceFile, callName));
-        return [createCodeFixAction(fixId, changes, Diagnostics.Add_missing_call_parentheses, fixId, Diagnostics.Add_all_missing_call_parentheses)];
+        return [
+            createCodeFixAction(
+                fixId,
+                changes,
+                Diagnostics.Add_missing_call_parentheses,
+                fixId,
+                Diagnostics.Add_all_missing_call_parentheses,
+            ),
+        ];
     },
     getAllCodeActions: context =>
         codeFixAll(context, errorCodes, (changes, diag) => {
@@ -38,7 +48,11 @@ registerCodeFix({
         }),
 });
 
-function doChange(changes: textChanges.ChangeTracker, sourceFile: SourceFile, name: Identifier | PrivateIdentifier): void {
+function doChange(
+    changes: textChanges.ChangeTracker,
+    sourceFile: SourceFile,
+    name: Identifier | PrivateIdentifier,
+): void {
     changes.replaceNodeWithText(sourceFile, name, `${name.text}()`);
 }
 

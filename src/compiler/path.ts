@@ -381,11 +381,17 @@ export function getBaseFileName(path: string, extensions?: string | readonly str
     // separator but not including any trailing directory separator.
     path = removeTrailingDirectorySeparator(path);
     const name = path.slice(Math.max(getRootLength(path), path.lastIndexOf(directorySeparator) + 1));
-    const extension = extensions !== undefined && ignoreCase !== undefined ? getAnyExtensionFromPath(name, extensions, ignoreCase) : undefined;
+    const extension = extensions !== undefined && ignoreCase !== undefined ?
+        getAnyExtensionFromPath(name, extensions, ignoreCase)
+        : undefined;
     return extension ? name.slice(0, name.length - extension.length) : name;
 }
 
-function tryGetExtensionFromPath(path: string, extension: string, stringEqualityComparer: (a: string, b: string) => boolean) {
+function tryGetExtensionFromPath(
+    path: string,
+    extension: string,
+    stringEqualityComparer: (a: string, b: string) => boolean,
+) {
     if (!startsWith(extension, ".")) extension = "." + extension;
     if (path.length >= extension.length && path.charCodeAt(path.length - extension.length) === CharacterCodes.dot) {
         const pathExtension = path.slice(path.length - extension.length);
@@ -395,7 +401,11 @@ function tryGetExtensionFromPath(path: string, extension: string, stringEquality
     }
 }
 
-function getAnyExtensionFromPathWorker(path: string, extensions: string | readonly string[], stringEqualityComparer: (a: string, b: string) => boolean) {
+function getAnyExtensionFromPathWorker(
+    path: string,
+    extensions: string | readonly string[],
+    stringEqualityComparer: (a: string, b: string) => boolean,
+) {
     if (typeof extensions === "string") {
         return tryGetExtensionFromPath(path, extensions, stringEqualityComparer) || "";
     }
@@ -430,13 +440,25 @@ export function getAnyExtensionFromPath(path: string): string;
  *
  * @internal
  */
-export function getAnyExtensionFromPath(path: string, extensions: string | readonly string[], ignoreCase: boolean): string;
+export function getAnyExtensionFromPath(
+    path: string,
+    extensions: string | readonly string[],
+    ignoreCase: boolean,
+): string;
 /** @internal */
-export function getAnyExtensionFromPath(path: string, extensions?: string | readonly string[], ignoreCase?: boolean): string {
+export function getAnyExtensionFromPath(
+    path: string,
+    extensions?: string | readonly string[],
+    ignoreCase?: boolean,
+): string {
     // Retrieves any string from the final "." onwards from a base file name.
     // Unlike extensionFromPath, which throws an exception on unrecognized extensions.
     if (extensions) {
-        return getAnyExtensionFromPathWorker(removeTrailingDirectorySeparator(path), extensions, ignoreCase ? equateStringsCaseInsensitive : equateStringsCaseSensitive);
+        return getAnyExtensionFromPathWorker(
+            removeTrailingDirectorySeparator(path),
+            extensions,
+            ignoreCase ? equateStringsCaseInsensitive : equateStringsCaseSensitive,
+        );
     }
     const baseFileName = getBaseFileName(path);
     const extensionIndex = baseFileName.lastIndexOf(".");
@@ -645,7 +667,8 @@ export function normalizePath(path: string): string {
     }
     // Other paths require full normalization
     const normalized = getPathFromPathComponents(reducePathComponents(getPathComponents(path)));
-    return normalized && hasTrailingDirectorySeparator(path) ? ensureTrailingDirectorySeparator(normalized) : normalized;
+    return normalized && hasTrailingDirectorySeparator(path) ? ensureTrailingDirectorySeparator(normalized)
+        : normalized;
 }
 
 function getPathWithoutRoot(pathComponents: readonly string[]) {
@@ -659,7 +682,11 @@ export function getNormalizedAbsolutePathWithoutRoot(fileName: string, currentDi
 }
 
 /** @internal */
-export function toPath(fileName: string, basePath: string | undefined, getCanonicalFileName: (path: string) => string): Path {
+export function toPath(
+    fileName: string,
+    basePath: string | undefined,
+    getCanonicalFileName: (path: string) => string,
+): Path {
     const nonCanonicalizedPath = isRootedDiskPath(fileName)
         ? normalizePath(fileName)
         : getNormalizedAbsolutePath(fileName, basePath);
@@ -750,10 +777,22 @@ export function changeAnyExtension(path: string, ext: string): string;
  *
  * @internal
  */
-export function changeAnyExtension(path: string, ext: string, extensions: string | readonly string[], ignoreCase: boolean): string;
+export function changeAnyExtension(
+    path: string,
+    ext: string,
+    extensions: string | readonly string[],
+    ignoreCase: boolean,
+): string;
 /** @internal */
-export function changeAnyExtension(path: string, ext: string, extensions?: string | readonly string[], ignoreCase?: boolean) {
-    const pathext = extensions !== undefined && ignoreCase !== undefined ? getAnyExtensionFromPath(path, extensions, ignoreCase) : getAnyExtensionFromPath(path);
+export function changeAnyExtension(
+    path: string,
+    ext: string,
+    extensions?: string | readonly string[],
+    ignoreCase?: boolean,
+) {
+    const pathext = extensions !== undefined && ignoreCase !== undefined ?
+        getAnyExtensionFromPath(path, extensions, ignoreCase)
+        : getAnyExtensionFromPath(path);
     return pathext ? path.slice(0, path.length - pathext.length) + (startsWith(ext, ".") ? ext : "." + ext) : path;
 }
 
@@ -899,16 +938,26 @@ export function containsPath(parent: string, child: string, currentDirectory?: s
  *
  * @internal
  */
-export function startsWithDirectory(fileName: string, directoryName: string, getCanonicalFileName: GetCanonicalFileName): boolean {
+export function startsWithDirectory(
+    fileName: string,
+    directoryName: string,
+    getCanonicalFileName: GetCanonicalFileName,
+): boolean {
     const canonicalFileName = getCanonicalFileName(fileName);
     const canonicalDirectoryName = getCanonicalFileName(directoryName);
-    return startsWith(canonicalFileName, canonicalDirectoryName + "/") || startsWith(canonicalFileName, canonicalDirectoryName + "\\");
+    return startsWith(canonicalFileName, canonicalDirectoryName + "/") ||
+        startsWith(canonicalFileName, canonicalDirectoryName + "\\");
 }
 
 //// Relative Paths
 
 /** @internal */
-export function getPathComponentsRelativeTo(from: string, to: string, stringEqualityComparer: (a: string, b: string) => boolean, getCanonicalFileName: GetCanonicalFileName) {
+export function getPathComponentsRelativeTo(
+    from: string,
+    to: string,
+    stringEqualityComparer: (a: string, b: string) => boolean,
+    getCanonicalFileName: GetCanonicalFileName,
+) {
     const fromComponents = reducePathComponents(getPathComponents(from));
     const toComponents = reducePathComponents(getPathComponents(to));
 
@@ -943,21 +992,49 @@ export function getRelativePathFromDirectory(from: string, to: string, ignoreCas
  *
  * @internal
  */
-export function getRelativePathFromDirectory(fromDirectory: string, to: string, getCanonicalFileName: GetCanonicalFileName): string; // eslint-disable-line @typescript-eslint/unified-signatures
+export function getRelativePathFromDirectory(
+    fromDirectory: string,
+    to: string,
+    getCanonicalFileName: GetCanonicalFileName,
+): string; // eslint-disable-line @typescript-eslint/unified-signatures
 /** @internal */
-export function getRelativePathFromDirectory(fromDirectory: string, to: string, getCanonicalFileNameOrIgnoreCase: GetCanonicalFileName | boolean) {
-    Debug.assert((getRootLength(fromDirectory) > 0) === (getRootLength(to) > 0), "Paths must either both be absolute or both be relative");
-    const getCanonicalFileName = typeof getCanonicalFileNameOrIgnoreCase === "function" ? getCanonicalFileNameOrIgnoreCase : identity;
+export function getRelativePathFromDirectory(
+    fromDirectory: string,
+    to: string,
+    getCanonicalFileNameOrIgnoreCase: GetCanonicalFileName | boolean,
+) {
+    Debug.assert(
+        (getRootLength(fromDirectory) > 0) === (getRootLength(to) > 0),
+        "Paths must either both be absolute or both be relative",
+    );
+    const getCanonicalFileName = typeof getCanonicalFileNameOrIgnoreCase === "function" ?
+        getCanonicalFileNameOrIgnoreCase
+        : identity;
     const ignoreCase = typeof getCanonicalFileNameOrIgnoreCase === "boolean" ? getCanonicalFileNameOrIgnoreCase : false;
-    const pathComponents = getPathComponentsRelativeTo(fromDirectory, to, ignoreCase ? equateStringsCaseInsensitive : equateStringsCaseSensitive, getCanonicalFileName);
+    const pathComponents = getPathComponentsRelativeTo(
+        fromDirectory,
+        to,
+        ignoreCase ? equateStringsCaseInsensitive : equateStringsCaseSensitive,
+        getCanonicalFileName,
+    );
     return getPathFromPathComponents(pathComponents);
 }
 
 /** @internal */
-export function convertToRelativePath(absoluteOrRelativePath: string, basePath: string, getCanonicalFileName: (path: string) => string): string {
+export function convertToRelativePath(
+    absoluteOrRelativePath: string,
+    basePath: string,
+    getCanonicalFileName: (path: string) => string,
+): string {
     return !isRootedDiskPath(absoluteOrRelativePath)
         ? absoluteOrRelativePath
-        : getRelativePathToDirectoryOrUrl(basePath, absoluteOrRelativePath, basePath, getCanonicalFileName, /*isAbsolutePathAnUrl*/ false);
+        : getRelativePathToDirectoryOrUrl(
+            basePath,
+            absoluteOrRelativePath,
+            basePath,
+            getCanonicalFileName,
+            /*isAbsolutePathAnUrl*/ false,
+        );
 }
 
 /** @internal */
@@ -966,7 +1043,13 @@ export function getRelativePathFromFile(from: string, to: string, getCanonicalFi
 }
 
 /** @internal */
-export function getRelativePathToDirectoryOrUrl(directoryPathOrUrl: string, relativeOrAbsolutePath: string, currentDirectory: string, getCanonicalFileName: GetCanonicalFileName, isAbsolutePathAnUrl: boolean) {
+export function getRelativePathToDirectoryOrUrl(
+    directoryPathOrUrl: string,
+    relativeOrAbsolutePath: string,
+    currentDirectory: string,
+    getCanonicalFileName: GetCanonicalFileName,
+    isAbsolutePathAnUrl: boolean,
+) {
     const pathComponents = getPathComponentsRelativeTo(
         resolvePath(currentDirectory, directoryPathOrUrl),
         resolvePath(currentDirectory, relativeOrAbsolutePath),
@@ -990,11 +1073,20 @@ export function getRelativePathToDirectoryOrUrl(directoryPathOrUrl: string, rela
  *
  * @internal
  */
-export function forEachAncestorDirectory<T>(directory: Path, callback: (directory: Path) => T | undefined): T | undefined;
+export function forEachAncestorDirectory<T>(
+    directory: Path,
+    callback: (directory: Path) => T | undefined,
+): T | undefined;
 /** @internal */
-export function forEachAncestorDirectory<T>(directory: string, callback: (directory: string) => T | undefined): T | undefined;
+export function forEachAncestorDirectory<T>(
+    directory: string,
+    callback: (directory: string) => T | undefined,
+): T | undefined;
 /** @internal */
-export function forEachAncestorDirectory<T, P extends string>(directory: P, callback: (directory: P) => T | undefined): T | undefined {
+export function forEachAncestorDirectory<T, P extends string>(
+    directory: P,
+    callback: (directory: P) => T | undefined,
+): T | undefined {
     while (true) {
         const result = callback(directory);
         if (result !== undefined) {

@@ -61,7 +61,9 @@ const optionsRedundantWithVerbatimModuleSyntax = new Set([
 export function transpileModule(input: string, transpileOptions: TranspileOptions): TranspileOutput {
     const diagnostics: Diagnostic[] = [];
 
-    const options: CompilerOptions = transpileOptions.compilerOptions ? fixupCompilerOptions(transpileOptions.compilerOptions, diagnostics) : {};
+    const options: CompilerOptions = transpileOptions.compilerOptions ?
+        fixupCompilerOptions(transpileOptions.compilerOptions, diagnostics)
+        : {};
 
     // mix in default options
     const defaultOptions = getDefaultCompilerOptions();
@@ -112,13 +114,19 @@ export function transpileModule(input: string, transpileOptions: TranspileOption
     };
 
     // if jsx is specified then treat file as .tsx
-    const inputFileName = transpileOptions.fileName || (transpileOptions.compilerOptions && transpileOptions.compilerOptions.jsx ? "module.tsx" : "module.ts");
+    const inputFileName = transpileOptions.fileName ||
+        (transpileOptions.compilerOptions && transpileOptions.compilerOptions.jsx ? "module.tsx" : "module.ts");
     const sourceFile = createSourceFile(
         inputFileName,
         input,
         {
             languageVersion: getEmitScriptTarget(options),
-            impliedNodeFormat: getImpliedNodeFormatForFile(toPath(inputFileName, "", compilerHost.getCanonicalFileName), /*packageJsonInfoCache*/ undefined, compilerHost, options),
+            impliedNodeFormat: getImpliedNodeFormatForFile(
+                toPath(inputFileName, "", compilerHost.getCanonicalFileName),
+                /*packageJsonInfoCache*/ undefined,
+                compilerHost,
+                options,
+            ),
             setExternalModuleIndicator: getSetExternalModuleIndicator(options),
             jsDocParsingMode: transpileOptions.jsDocParsingMode ?? JSDocParsingMode.ParseAll,
         },
@@ -142,7 +150,13 @@ export function transpileModule(input: string, transpileOptions: TranspileOption
         addRange(/*to*/ diagnostics, /*from*/ program.getOptionsDiagnostics());
     }
     // Emit
-    program.emit(/*targetSourceFile*/ undefined, /*writeFile*/ undefined, /*cancellationToken*/ undefined, /*emitOnlyDtsFiles*/ undefined, transpileOptions.transformers);
+    program.emit(
+        /*targetSourceFile*/ undefined,
+        /*writeFile*/ undefined,
+        /*cancellationToken*/ undefined,
+        /*emitOnlyDtsFiles*/ undefined,
+        transpileOptions.transformers,
+    );
 
     if (outputText === undefined) return Debug.fail("Output generation failed");
 
@@ -152,7 +166,13 @@ export function transpileModule(input: string, transpileOptions: TranspileOption
 /*
  * This is a shortcut function for transpileModule - it accepts transpileOptions as parameters and returns only outputText part of the result.
  */
-export function transpile(input: string, compilerOptions?: CompilerOptions, fileName?: string, diagnostics?: Diagnostic[], moduleName?: string): string {
+export function transpile(
+    input: string,
+    compilerOptions?: CompilerOptions,
+    fileName?: string,
+    diagnostics?: Diagnostic[],
+    moduleName?: string,
+): string {
     const output = transpileModule(input, { compilerOptions, fileName, reportDiagnostics: !!diagnostics, moduleName });
     // addRange correctly handles cases when wither 'from' or 'to' argument is missing
     addRange(diagnostics, output.diagnostics);
@@ -169,7 +189,10 @@ let commandLineOptionsStringToEnum: CommandLineOptionOfCustomType[];
 export function fixupCompilerOptions(options: CompilerOptions, diagnostics: Diagnostic[]): CompilerOptions {
     // Lazily create this value to fix module loading errors.
     commandLineOptionsStringToEnum = commandLineOptionsStringToEnum ||
-        filter(optionDeclarations, o => typeof o.type === "object" && !forEachEntry(o.type, v => typeof v !== "number")) as CommandLineOptionOfCustomType[];
+        filter(
+            optionDeclarations,
+            o => typeof o.type === "object" && !forEachEntry(o.type, v => typeof v !== "number"),
+        ) as CommandLineOptionOfCustomType[];
 
     options = cloneCompilerOptions(options);
 

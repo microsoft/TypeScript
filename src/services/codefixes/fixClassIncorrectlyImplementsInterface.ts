@@ -40,7 +40,8 @@ import {
 
 const errorCodes = [
     Diagnostics.Class_0_incorrectly_implements_interface_1.code,
-    Diagnostics.Class_0_incorrectly_implements_class_1_Did_you_mean_to_extend_1_and_inherit_its_members_as_a_subclass.code,
+    Diagnostics.Class_0_incorrectly_implements_class_1_Did_you_mean_to_extend_1_and_inherit_its_members_as_a_subclass
+        .code,
 ];
 const fixId = "fixClassIncorrectlyImplementsInterface"; // TODO: share a group with fixClassDoesntImplementInheritedAbstractMember?
 registerCodeFix({
@@ -48,10 +49,30 @@ registerCodeFix({
     getCodeActions(context) {
         const { sourceFile, span } = context;
         const classDeclaration = getClass(sourceFile, span.start);
-        return mapDefined<ExpressionWithTypeArguments, CodeFixAction>(getEffectiveImplementsTypeNodes(classDeclaration), implementedTypeNode => {
-            const changes = textChanges.ChangeTracker.with(context, t => addMissingDeclarations(context, implementedTypeNode, sourceFile, classDeclaration, t, context.preferences));
-            return changes.length === 0 ? undefined : createCodeFixAction(fixId, changes, [Diagnostics.Implement_interface_0, implementedTypeNode.getText(sourceFile)], fixId, Diagnostics.Implement_all_unimplemented_interfaces);
-        });
+        return mapDefined<ExpressionWithTypeArguments, CodeFixAction>(
+            getEffectiveImplementsTypeNodes(classDeclaration),
+            implementedTypeNode => {
+                const changes = textChanges.ChangeTracker.with(
+                    context,
+                    t => addMissingDeclarations(
+                        context,
+                        implementedTypeNode,
+                        sourceFile,
+                        classDeclaration,
+                        t,
+                        context.preferences,
+                    ),
+                );
+                return changes.length === 0 ? undefined
+                    : createCodeFixAction(
+                        fixId,
+                        changes,
+                        [Diagnostics.Implement_interface_0, implementedTypeNode.getText(sourceFile)],
+                        fixId,
+                        Diagnostics.Implement_all_unimplemented_interfaces,
+                    );
+            },
+        );
     },
     fixIds: [fixId],
     getAllCodeActions(context) {
@@ -60,7 +81,14 @@ registerCodeFix({
             const classDeclaration = getClass(diag.file, diag.start);
             if (addToSeen(seenClassDeclarations, getNodeId(classDeclaration))) {
                 for (const implementedTypeNode of getEffectiveImplementsTypeNodes(classDeclaration)!) {
-                    addMissingDeclarations(context, implementedTypeNode, diag.file, classDeclaration, changes, context.preferences);
+                    addMissingDeclarations(
+                        context,
+                        implementedTypeNode,
+                        diag.file,
+                        classDeclaration,
+                        changes,
+                        context.preferences,
+                    );
                 }
             }
         });
@@ -68,7 +96,10 @@ registerCodeFix({
 });
 
 function getClass(sourceFile: SourceFile, pos: number): ClassLikeDeclaration {
-    return Debug.checkDefined(getContainingClass(getTokenAtPosition(sourceFile, pos)), "There should be a containing class");
+    return Debug.checkDefined(
+        getContainingClass(getTokenAtPosition(sourceFile, pos)),
+        "There should be a containing class",
+    );
 }
 
 function symbolPointsToNonPrivateMember(symbol: Symbol) {
@@ -89,7 +120,9 @@ function addMissingDeclarations(
     // so duplicates cannot occur.
     const implementedType = checker.getTypeAtLocation(implementedTypeNode) as InterfaceType;
     const implementedTypeSymbols = checker.getPropertiesOfType(implementedType);
-    const nonPrivateAndNotExistedInHeritageClauseMembers = implementedTypeSymbols.filter(and(symbolPointsToNonPrivateMember, symbol => !maybeHeritageClauseSymbol.has(symbol.escapedName)));
+    const nonPrivateAndNotExistedInHeritageClauseMembers = implementedTypeSymbols.filter(
+        and(symbolPointsToNonPrivateMember, symbol => !maybeHeritageClauseSymbol.has(symbol.escapedName)),
+    );
 
     const classType = checker.getTypeAtLocation(classDeclaration);
     const constructor = find(classDeclaration.members, m => isConstructorDeclaration(m));
@@ -102,18 +135,39 @@ function addMissingDeclarations(
     }
 
     const importAdder = createImportAdder(sourceFile, context.program, preferences, context.host);
-    createMissingMemberNodes(classDeclaration, nonPrivateAndNotExistedInHeritageClauseMembers, sourceFile, context, preferences, importAdder, member => insertInterfaceMemberNode(sourceFile, classDeclaration, member as ClassElement));
+    createMissingMemberNodes(
+        classDeclaration,
+        nonPrivateAndNotExistedInHeritageClauseMembers,
+        sourceFile,
+        context,
+        preferences,
+        importAdder,
+        member => insertInterfaceMemberNode(sourceFile, classDeclaration, member as ClassElement),
+    );
     importAdder.writeFixes(changeTracker);
 
     function createMissingIndexSignatureDeclaration(type: InterfaceType, kind: IndexKind): void {
         const indexInfoOfKind = checker.getIndexInfoOfType(type, kind);
         if (indexInfoOfKind) {
-            insertInterfaceMemberNode(sourceFile, classDeclaration, checker.indexInfoToIndexSignatureDeclaration(indexInfoOfKind, classDeclaration, /*flags*/ undefined, getNoopSymbolTrackerWithResolver(context))!);
+            insertInterfaceMemberNode(
+                sourceFile,
+                classDeclaration,
+                checker.indexInfoToIndexSignatureDeclaration(
+                    indexInfoOfKind,
+                    classDeclaration,
+                    /*flags*/ undefined,
+                    getNoopSymbolTrackerWithResolver(context),
+                )!,
+            );
         }
     }
 
     // Either adds the node at the top of the class, or if there's a constructor right after that
-    function insertInterfaceMemberNode(sourceFile: SourceFile, cls: ClassLikeDeclaration | InterfaceDeclaration, newElement: ClassElement): void {
+    function insertInterfaceMemberNode(
+        sourceFile: SourceFile,
+        cls: ClassLikeDeclaration | InterfaceDeclaration,
+        newElement: ClassElement,
+    ): void {
         if (constructor) {
             changeTracker.insertNodeAfter(sourceFile, constructor, newElement);
         }

@@ -163,7 +163,10 @@ const moveToFileAction = {
 };
 registerRefactor(refactorNameForMoveToFile, {
     kinds: [moveToFileAction.kind],
-    getAvailableActions: function getRefactorActionsToMoveToFile(context, interactiveRefactorArguments): readonly ApplicableRefactorInfo[] {
+    getAvailableActions: function getRefactorActionsToMoveToFile(
+        context,
+        interactiveRefactorArguments,
+    ): readonly ApplicableRefactorInfo[] {
         const statements = getStatementsToMove(context);
         if (!interactiveRefactorArguments) {
             return emptyArray;
@@ -174,7 +177,10 @@ registerRefactor(refactorNameForMoveToFile, {
             const file = context.file;
             const startNodeAncestor = findAncestor(getTokenAtPosition(file, context.startPosition), isBlockLike);
             const endNodeAncestor = findAncestor(getTokenAtPosition(file, context.endPosition), isBlockLike);
-            if (startNodeAncestor && !isSourceFile(startNodeAncestor) && endNodeAncestor && !isSourceFile(endNodeAncestor)) {
+            if (
+                startNodeAncestor && !isSourceFile(startNodeAncestor) && endNodeAncestor &&
+                !isSourceFile(endNodeAncestor)
+            ) {
                 return emptyArray;
             }
         }
@@ -182,11 +188,24 @@ registerRefactor(refactorNameForMoveToFile, {
             return [{ name: refactorNameForMoveToFile, description, actions: [moveToFileAction] }];
         }
         if (context.preferences.provideRefactorNotApplicableReason) {
-            return [{ name: refactorNameForMoveToFile, description, actions: [{ ...moveToFileAction, notApplicableReason: getLocaleSpecificMessage(Diagnostics.Selection_is_not_a_valid_statement_or_statements) }] }];
+            return [{
+                name: refactorNameForMoveToFile,
+                description,
+                actions: [{
+                    ...moveToFileAction,
+                    notApplicableReason: getLocaleSpecificMessage(
+                        Diagnostics.Selection_is_not_a_valid_statement_or_statements,
+                    ),
+                }],
+            }];
         }
         return emptyArray;
     },
-    getEditsForAction: function getRefactorEditsToMoveToFile(context, actionName, interactiveRefactorArguments): RefactorEditInfo | undefined {
+    getEditsForAction: function getRefactorEditsToMoveToFile(
+        context,
+        actionName,
+        interactiveRefactorArguments,
+    ): RefactorEditInfo | undefined {
         Debug.assert(actionName === refactorNameForMoveToFile, "Wrong refactor invoked");
         const statements = Debug.checkDefined(getStatementsToMove(context));
         const { host, program } = context;
@@ -196,7 +215,19 @@ registerRefactor(refactorNameForMoveToFile, {
             if (host.fileExists(targetFile) && program.getSourceFile(targetFile) === undefined) {
                 return error(getLocaleSpecificMessage(Diagnostics.Cannot_move_statements_to_the_selected_file));
             }
-            const edits = textChanges.ChangeTracker.with(context, t => doChange(context, context.file, interactiveRefactorArguments.targetFile, context.program, statements, t, context.host, context.preferences));
+            const edits = textChanges.ChangeTracker.with(
+                context,
+                t => doChange(
+                    context,
+                    context.file,
+                    interactiveRefactorArguments.targetFile,
+                    context.program,
+                    statements,
+                    t,
+                    context.host,
+                    context.preferences,
+                ),
+            );
             return { edits, renameFilename: undefined, renameLocation: undefined };
         }
         return error(getLocaleSpecificMessage(Diagnostics.Cannot_move_to_file_selected_file_is_invalid));
@@ -207,17 +238,54 @@ function error(notApplicableReason: string) {
     return { edits: [], renameFilename: undefined, renameLocation: undefined, notApplicableReason };
 }
 
-function doChange(context: RefactorContext, oldFile: SourceFile, targetFile: string, program: Program, toMove: ToMove, changes: textChanges.ChangeTracker, host: LanguageServiceHost, preferences: UserPreferences): void {
+function doChange(
+    context: RefactorContext,
+    oldFile: SourceFile,
+    targetFile: string,
+    program: Program,
+    toMove: ToMove,
+    changes: textChanges.ChangeTracker,
+    host: LanguageServiceHost,
+    preferences: UserPreferences,
+): void {
     const checker = program.getTypeChecker();
     // For a new file
     if (!host.fileExists(targetFile)) {
-        changes.createNewFile(oldFile, targetFile, getNewStatementsAndRemoveFromOldFile(oldFile, targetFile, getUsageInfo(oldFile, toMove.all, checker), changes, toMove, program, host, preferences));
+        changes.createNewFile(
+            oldFile,
+            targetFile,
+            getNewStatementsAndRemoveFromOldFile(
+                oldFile,
+                targetFile,
+                getUsageInfo(oldFile, toMove.all, checker),
+                changes,
+                toMove,
+                program,
+                host,
+                preferences,
+            ),
+        );
         addNewFileToTsconfig(program, changes, oldFile.fileName, targetFile, hostGetCanonicalFileName(host));
     }
     else {
         const targetSourceFile = Debug.checkDefined(program.getSourceFile(targetFile));
-        const importAdder = codefix.createImportAdder(targetSourceFile, context.program, context.preferences, context.host);
-        getNewStatementsAndRemoveFromOldFile(oldFile, targetSourceFile, getUsageInfo(oldFile, toMove.all, checker, getExistingLocals(targetSourceFile, toMove.all, checker)), changes, toMove, program, host, preferences, importAdder);
+        const importAdder = codefix.createImportAdder(
+            targetSourceFile,
+            context.program,
+            context.preferences,
+            context.host,
+        );
+        getNewStatementsAndRemoveFromOldFile(
+            oldFile,
+            targetSourceFile,
+            getUsageInfo(oldFile, toMove.all, checker, getExistingLocals(targetSourceFile, toMove.all, checker)),
+            changes,
+            toMove,
+            program,
+            host,
+            preferences,
+            importAdder,
+        );
     }
 }
 
@@ -234,7 +302,12 @@ function getNewStatementsAndRemoveFromOldFile(
 ) {
     const checker = program.getTypeChecker();
     const prologueDirectives = takeWhile(oldFile.statements, isPrologueDirective);
-    if (oldFile.externalModuleIndicator === undefined && oldFile.commonJsModuleIndicator === undefined && usage.oldImportsNeededByTargetFile.size === 0 && usage.targetFileImportsFromOldFile.size === 0 && typeof targetFile === "string") {
+    if (
+        oldFile.externalModuleIndicator === undefined && oldFile.commonJsModuleIndicator === undefined &&
+        usage.oldImportsNeededByTargetFile.size === 0 &&
+        usage.targetFileImportsFromOldFile.size === 0 &&
+        typeof targetFile === "string"
+    ) {
         deleteMovedStatements(oldFile, toMove.ranges, changes);
         return [...prologueDirectives, ...toMove.all];
     }
@@ -242,9 +315,22 @@ function getNewStatementsAndRemoveFromOldFile(
     // If the targetFile is a string, it’s the file name for a new file, if it’s a SourceFile, it’s the existing target file.
     const targetFileName = typeof targetFile === "string" ? targetFile : targetFile.fileName;
 
-    const useEsModuleSyntax = !fileShouldUseJavaScriptRequire(targetFileName, program, host, !!oldFile.commonJsModuleIndicator);
+    const useEsModuleSyntax = !fileShouldUseJavaScriptRequire(
+        targetFileName,
+        program,
+        host,
+        !!oldFile.commonJsModuleIndicator,
+    );
     const quotePreference = getQuotePreference(oldFile, preferences);
-    const importsFromTargetFile = createOldFileImportsFromTargetFile(oldFile, usage.oldFileImportsFromTargetFile, targetFileName, program, host, useEsModuleSyntax, quotePreference);
+    const importsFromTargetFile = createOldFileImportsFromTargetFile(
+        oldFile,
+        usage.oldFileImportsFromTargetFile,
+        targetFileName,
+        program,
+        host,
+        useEsModuleSyntax,
+        quotePreference,
+    );
     if (importsFromTargetFile) {
         insertImports(changes, oldFile, importsFromTargetFile, /*blankLineBetween*/ true, preferences);
     }
@@ -253,7 +339,19 @@ function getNewStatementsAndRemoveFromOldFile(
     deleteMovedStatements(oldFile, toMove.ranges, changes);
     updateImportsInOtherFiles(changes, program, host, oldFile, usage.movedSymbols, targetFileName, quotePreference);
 
-    const imports = getTargetFileImportsAndAddExportInOldFile(oldFile, targetFileName, usage.oldImportsNeededByTargetFile, usage.targetFileImportsFromOldFile, changes, checker, program, host, useEsModuleSyntax, quotePreference, importAdder);
+    const imports = getTargetFileImportsAndAddExportInOldFile(
+        oldFile,
+        targetFileName,
+        usage.oldImportsNeededByTargetFile,
+        usage.targetFileImportsFromOldFile,
+        changes,
+        checker,
+        program,
+        host,
+        useEsModuleSyntax,
+        quotePreference,
+        importAdder,
+    );
     const body = addExports(oldFile, toMove.all, usage.oldFileImportsFromTargetFile, useEsModuleSyntax);
     if (typeof targetFile !== "string") {
         if (targetFile.statements.length > 0) {
@@ -312,7 +410,14 @@ function getTargetFileImportsAndAddExportInOldFile(
             catch {
                 for (const oldStatement of oldFile.statements) {
                     forEachImportInStatement(oldStatement, i => {
-                        append(copiedOldImports, filterImport(i, factory.createStringLiteral(moduleSpecifierFromImport(i).text), name => importsToCopy.has(checker.getSymbolAtLocation(name)!)));
+                        append(
+                            copiedOldImports,
+                            filterImport(
+                                i,
+                                factory.createStringLiteral(moduleSpecifierFromImport(i).text),
+                                name => importsToCopy.has(checker.getSymbolAtLocation(name)!),
+                            ),
+                        );
                     });
                 }
             }
@@ -328,11 +433,31 @@ function getTargetFileImportsAndAddExportInOldFile(
                 const resolved = program.getResolvedModuleFromModuleSpecifier(moduleSpecifier);
                 const fileName = resolved?.resolvedModule?.resolvedFileName;
                 if (fileName && targetSourceFile) {
-                    const newModuleSpecifier = getModuleSpecifier(compilerOptions, targetSourceFile, targetSourceFile.fileName, fileName, createModuleSpecifierResolutionHost(program, host));
-                    append(copiedOldImports, filterImport(i, makeStringLiteral(newModuleSpecifier, quotePreference), name => importsToCopy.has(checker.getSymbolAtLocation(name)!)));
+                    const newModuleSpecifier = getModuleSpecifier(
+                        compilerOptions,
+                        targetSourceFile,
+                        targetSourceFile.fileName,
+                        fileName,
+                        createModuleSpecifierResolutionHost(program, host),
+                    );
+                    append(
+                        copiedOldImports,
+                        filterImport(
+                            i,
+                            makeStringLiteral(newModuleSpecifier, quotePreference),
+                            name => importsToCopy.has(checker.getSymbolAtLocation(name)!),
+                        ),
+                    );
                 }
                 else {
-                    append(copiedOldImports, filterImport(i, factory.createStringLiteral(moduleSpecifierFromImport(i).text), name => importsToCopy.has(checker.getSymbolAtLocation(name)!)));
+                    append(
+                        copiedOldImports,
+                        filterImport(
+                            i,
+                            factory.createStringLiteral(moduleSpecifierFromImport(i).text),
+                            name => importsToCopy.has(checker.getSymbolAtLocation(name)!),
+                        ),
+                    );
                 }
             });
         }
@@ -370,12 +495,42 @@ function getTargetFileImportsAndAddExportInOldFile(
         }
     });
     return targetFileSourceFile
-        ? append(copiedOldImports, makeImportOrRequire(targetFileSourceFile, oldFileDefault, oldFileNamedImports, oldFile.fileName, program, host, useEsModuleSyntax, quotePreference))
-        : append(copiedOldImports, makeImportOrRequire(oldFile, oldFileDefault, oldFileNamedImports, oldFile.fileName, program, host, useEsModuleSyntax, quotePreference));
+        ? append(
+            copiedOldImports,
+            makeImportOrRequire(
+                targetFileSourceFile,
+                oldFileDefault,
+                oldFileNamedImports,
+                oldFile.fileName,
+                program,
+                host,
+                useEsModuleSyntax,
+                quotePreference,
+            ),
+        )
+        : append(
+            copiedOldImports,
+            makeImportOrRequire(
+                oldFile,
+                oldFileDefault,
+                oldFileNamedImports,
+                oldFile.fileName,
+                program,
+                host,
+                useEsModuleSyntax,
+                quotePreference,
+            ),
+        );
 }
 
 /** @internal */
-export function addNewFileToTsconfig(program: Program, changes: textChanges.ChangeTracker, oldFileName: string, newFileNameWithExtension: string, getCanonicalFileName: GetCanonicalFileName): void {
+export function addNewFileToTsconfig(
+    program: Program,
+    changes: textChanges.ChangeTracker,
+    oldFileName: string,
+    newFileNameWithExtension: string,
+    getCanonicalFileName: GetCanonicalFileName,
+): void {
     const cfg = program.getCompilerOptions().configFile;
     if (!cfg) return;
 
@@ -383,24 +538,47 @@ export function addNewFileToTsconfig(program: Program, changes: textChanges.Chan
     const newFilePath = getRelativePathFromFile(cfg.fileName, newFileAbsolutePath, getCanonicalFileName);
 
     const cfgObject = cfg.statements[0] && tryCast(cfg.statements[0].expression, isObjectLiteralExpression);
-    const filesProp = cfgObject && find(cfgObject.properties, (prop): prop is PropertyAssignment => isPropertyAssignment(prop) && isStringLiteral(prop.name) && prop.name.text === "files");
+    const filesProp = cfgObject &&
+        find(
+            cfgObject.properties,
+            (prop): prop is PropertyAssignment =>
+                isPropertyAssignment(prop) && isStringLiteral(prop.name) && prop.name.text === "files",
+        );
     if (filesProp && isArrayLiteralExpression(filesProp.initializer)) {
-        changes.insertNodeInListAfter(cfg, last(filesProp.initializer.elements), factory.createStringLiteral(newFilePath), filesProp.initializer.elements);
+        changes.insertNodeInListAfter(
+            cfg,
+            last(filesProp.initializer.elements),
+            factory.createStringLiteral(newFilePath),
+            filesProp.initializer.elements,
+        );
     }
 }
 
 /** @internal */
-export function deleteMovedStatements(sourceFile: SourceFile, moved: readonly StatementRange[], changes: textChanges.ChangeTracker) {
+export function deleteMovedStatements(
+    sourceFile: SourceFile,
+    moved: readonly StatementRange[],
+    changes: textChanges.ChangeTracker,
+) {
     for (const { first, afterLast } of moved) {
         changes.deleteNodeRangeExcludingEnd(sourceFile, first, afterLast);
     }
 }
 
 /** @internal */
-export function deleteUnusedOldImports(oldFile: SourceFile, toMove: readonly Statement[], changes: textChanges.ChangeTracker, toDelete: Set<Symbol>, checker: TypeChecker) {
+export function deleteUnusedOldImports(
+    oldFile: SourceFile,
+    toMove: readonly Statement[],
+    changes: textChanges.ChangeTracker,
+    toDelete: Set<Symbol>,
+    checker: TypeChecker,
+) {
     for (const statement of oldFile.statements) {
         if (contains(toMove, statement)) continue;
-        forEachImportInStatement(statement, i => deleteUnusedImports(oldFile, i, changes, name => toDelete.has(checker.getSymbolAtLocation(name)!)));
+        forEachImportInStatement(
+            statement,
+            i => deleteUnusedImports(oldFile, i, changes, name => toDelete.has(checker.getSymbolAtLocation(name)!)),
+        );
     }
 }
 
@@ -423,19 +601,43 @@ export function updateImportsInOtherFiles(
 
                 const shouldMove = (name: Identifier): boolean => {
                     const symbol = isBindingElement(name.parent)
-                        ? getPropertySymbolFromBindingElement(checker, name.parent as ObjectBindingElementWithoutPropertyName)
+                        ? getPropertySymbolFromBindingElement(
+                            checker,
+                            name.parent as ObjectBindingElementWithoutPropertyName,
+                        )
                         : skipAlias(checker.getSymbolAtLocation(name)!, checker);
                     return !!symbol && movedSymbols.has(symbol);
                 };
                 deleteUnusedImports(sourceFile, importNode, changes, shouldMove); // These will be changed to imports from the new file
 
                 const pathToTargetFileWithExtension = resolvePath(getDirectoryPath(oldFile.path), targetFileName);
-                const newModuleSpecifier = getModuleSpecifier(program.getCompilerOptions(), sourceFile, sourceFile.fileName, pathToTargetFileWithExtension, createModuleSpecifierResolutionHost(program, host));
-                const newImportDeclaration = filterImport(importNode, makeStringLiteral(newModuleSpecifier, quotePreference), shouldMove);
+                const newModuleSpecifier = getModuleSpecifier(
+                    program.getCompilerOptions(),
+                    sourceFile,
+                    sourceFile.fileName,
+                    pathToTargetFileWithExtension,
+                    createModuleSpecifierResolutionHost(program, host),
+                );
+                const newImportDeclaration = filterImport(
+                    importNode,
+                    makeStringLiteral(newModuleSpecifier, quotePreference),
+                    shouldMove,
+                );
                 if (newImportDeclaration) changes.insertNodeAfter(sourceFile, statement, newImportDeclaration);
 
                 const ns = getNamespaceLikeImport(importNode);
-                if (ns) updateNamespaceLikeImport(changes, sourceFile, checker, movedSymbols, newModuleSpecifier, ns, importNode, quotePreference);
+                if (ns) {
+                    updateNamespaceLikeImport(
+                        changes,
+                        sourceFile,
+                        checker,
+                        movedSymbols,
+                        newModuleSpecifier,
+                        ns,
+                        importNode,
+                        quotePreference,
+                    );
+                }
             });
         }
     }
@@ -444,7 +646,8 @@ export function updateImportsInOtherFiles(
 function getNamespaceLikeImport(node: SupportedImport): Identifier | undefined {
     switch (node.kind) {
         case SyntaxKind.ImportDeclaration:
-            return node.importClause && node.importClause.namedBindings && node.importClause.namedBindings.kind === SyntaxKind.NamespaceImport ?
+            return node.importClause && node.importClause.namedBindings &&
+                    node.importClause.namedBindings.kind === SyntaxKind.NamespaceImport ?
                 node.importClause.namedBindings.name : undefined;
         case SyntaxKind.ImportEqualsDeclaration:
             return node.name;
@@ -470,43 +673,75 @@ function updateNamespaceLikeImport(
     const toChange: Identifier[] = [];
     FindAllReferences.Core.eachSymbolReferenceInFile(oldImportId, checker, sourceFile, ref => {
         if (!isPropertyAccessExpression(ref.parent)) return;
-        needUniqueName = needUniqueName || !!checker.resolveName(preferredNewNamespaceName, ref, SymbolFlags.All, /*excludeGlobals*/ true);
+        needUniqueName = needUniqueName ||
+            !!checker.resolveName(preferredNewNamespaceName, ref, SymbolFlags.All, /*excludeGlobals*/ true);
         if (movedSymbols.has(checker.getSymbolAtLocation(ref.parent.name)!)) {
             toChange.push(ref);
         }
     });
 
     if (toChange.length) {
-        const newNamespaceName = needUniqueName ? getUniqueName(preferredNewNamespaceName, sourceFile) : preferredNewNamespaceName;
+        const newNamespaceName = needUniqueName ? getUniqueName(preferredNewNamespaceName, sourceFile)
+            : preferredNewNamespaceName;
         for (const ref of toChange) {
             changes.replaceNode(sourceFile, ref, factory.createIdentifier(newNamespaceName));
         }
-        changes.insertNodeAfter(sourceFile, oldImportNode, updateNamespaceLikeImportNode(oldImportNode, preferredNewNamespaceName, newModuleSpecifier, quotePreference));
+        changes.insertNodeAfter(
+            sourceFile,
+            oldImportNode,
+            updateNamespaceLikeImportNode(
+                oldImportNode,
+                preferredNewNamespaceName,
+                newModuleSpecifier,
+                quotePreference,
+            ),
+        );
     }
 }
 
-function updateNamespaceLikeImportNode(node: SupportedImport, newNamespaceName: string, newModuleSpecifier: string, quotePreference: QuotePreference): Node {
+function updateNamespaceLikeImportNode(
+    node: SupportedImport,
+    newNamespaceName: string,
+    newModuleSpecifier: string,
+    quotePreference: QuotePreference,
+): Node {
     const newNamespaceId = factory.createIdentifier(newNamespaceName);
     const newModuleString = makeStringLiteral(newModuleSpecifier, quotePreference);
     switch (node.kind) {
         case SyntaxKind.ImportDeclaration:
             return factory.createImportDeclaration(
                 /*modifiers*/ undefined,
-                factory.createImportClause(/*isTypeOnly*/ false, /*name*/ undefined, factory.createNamespaceImport(newNamespaceId)),
+                factory.createImportClause(
+                    /*isTypeOnly*/ false,
+                    /*name*/ undefined,
+                    factory.createNamespaceImport(newNamespaceId),
+                ),
                 newModuleString,
                 /*attributes*/ undefined,
             );
         case SyntaxKind.ImportEqualsDeclaration:
-            return factory.createImportEqualsDeclaration(/*modifiers*/ undefined, /*isTypeOnly*/ false, newNamespaceId, factory.createExternalModuleReference(newModuleString));
+            return factory.createImportEqualsDeclaration(
+                /*modifiers*/ undefined,
+                /*isTypeOnly*/ false,
+                newNamespaceId,
+                factory.createExternalModuleReference(newModuleString),
+            );
         case SyntaxKind.VariableDeclaration:
-            return factory.createVariableDeclaration(newNamespaceId, /*exclamationToken*/ undefined, /*type*/ undefined, createRequireCall(newModuleString));
+            return factory.createVariableDeclaration(
+                newNamespaceId,
+                /*exclamationToken*/ undefined,
+                /*type*/ undefined,
+                createRequireCall(newModuleString),
+            );
         default:
             return Debug.assertNever(node, `Unexpected node kind ${(node as SupportedImport).kind}`);
     }
 }
 
 function createRequireCall(moduleSpecifier: StringLiteralLike): CallExpression {
-    return factory.createCallExpression(factory.createIdentifier("require"), /*typeArguments*/ undefined, [moduleSpecifier]);
+    return factory.createCallExpression(factory.createIdentifier("require"), /*typeArguments*/ undefined, [
+        moduleSpecifier,
+    ]);
 }
 
 /** @internal */
@@ -522,7 +757,10 @@ export function forEachImportInStatement(statement: Statement, cb: (importNode: 
         if (isStringLiteral(statement.moduleSpecifier)) cb(statement as SupportedImport);
     }
     else if (isImportEqualsDeclaration(statement)) {
-        if (isExternalModuleReference(statement.moduleReference) && isStringLiteralLike(statement.moduleReference.expression)) {
+        if (
+            isExternalModuleReference(statement.moduleReference) &&
+            isStringLiteralLike(statement.moduleReference.expression)
+        ) {
             cb(statement as SupportedImport);
         }
     }
@@ -567,7 +805,16 @@ export function createOldFileImportsFromTargetFile(
             imports.push(symbol.name);
         }
     });
-    return makeImportOrRequire(sourceFile, defaultImport, imports, targetFileNameWithExtension, program, host, useEs6Imports, quotePreference);
+    return makeImportOrRequire(
+        sourceFile,
+        defaultImport,
+        imports,
+        targetFileNameWithExtension,
+        program,
+        host,
+        useEs6Imports,
+        quotePreference,
+    );
 }
 
 /** @internal */
@@ -582,32 +829,65 @@ export function makeImportOrRequire(
     quotePreference: QuotePreference,
 ): AnyImportOrRequireStatement | undefined {
     const pathToTargetFile = resolvePath(getDirectoryPath(sourceFile.path), targetFileNameWithExtension);
-    const pathToTargetFileWithCorrectExtension = getModuleSpecifier(program.getCompilerOptions(), sourceFile, sourceFile.fileName, pathToTargetFile, createModuleSpecifierResolutionHost(program, host));
+    const pathToTargetFileWithCorrectExtension = getModuleSpecifier(
+        program.getCompilerOptions(),
+        sourceFile,
+        sourceFile.fileName,
+        pathToTargetFile,
+        createModuleSpecifierResolutionHost(program, host),
+    );
 
     if (useEs6Imports) {
-        const specifiers = imports.map(i => factory.createImportSpecifier(/*isTypeOnly*/ false, /*propertyName*/ undefined, factory.createIdentifier(i)));
+        const specifiers = imports.map(i =>
+            factory.createImportSpecifier(/*isTypeOnly*/ false, /*propertyName*/ undefined, factory.createIdentifier(i))
+        );
         return makeImportIfNecessary(defaultImport, specifiers, pathToTargetFileWithCorrectExtension, quotePreference);
     }
     else {
         Debug.assert(!defaultImport, "No default import should exist"); // If there's a default export, it should have been an es6 module.
-        const bindingElements = imports.map(i => factory.createBindingElement(/*dotDotDotToken*/ undefined, /*propertyName*/ undefined, i));
+        const bindingElements = imports.map(i =>
+            factory.createBindingElement(/*dotDotDotToken*/ undefined, /*propertyName*/ undefined, i)
+        );
         return bindingElements.length
-            ? makeVariableStatement(factory.createObjectBindingPattern(bindingElements), /*type*/ undefined, createRequireCall(makeStringLiteral(pathToTargetFileWithCorrectExtension, quotePreference))) as RequireVariableStatement
+            ? makeVariableStatement(
+                factory.createObjectBindingPattern(bindingElements),
+                /*type*/ undefined,
+                createRequireCall(makeStringLiteral(pathToTargetFileWithCorrectExtension, quotePreference)),
+            ) as RequireVariableStatement
             : undefined;
     }
 }
 
-function makeVariableStatement(name: BindingName, type: TypeNode | undefined, initializer: Expression | undefined, flags: NodeFlags = NodeFlags.Const) {
-    return factory.createVariableStatement(/*modifiers*/ undefined, factory.createVariableDeclarationList([factory.createVariableDeclaration(name, /*exclamationToken*/ undefined, type, initializer)], flags));
+function makeVariableStatement(
+    name: BindingName,
+    type: TypeNode | undefined,
+    initializer: Expression | undefined,
+    flags: NodeFlags = NodeFlags.Const,
+) {
+    return factory.createVariableStatement(
+        /*modifiers*/ undefined,
+        factory.createVariableDeclarationList(
+            [factory.createVariableDeclaration(name, /*exclamationToken*/ undefined, type, initializer)],
+            flags,
+        ),
+    );
 }
 
 /** @internal */
-export function addExports(sourceFile: SourceFile, toMove: readonly Statement[], needExport: Set<Symbol>, useEs6Exports: boolean): readonly Statement[] {
+export function addExports(
+    sourceFile: SourceFile,
+    toMove: readonly Statement[],
+    needExport: Set<Symbol>,
+    useEs6Exports: boolean,
+): readonly Statement[] {
     return flatMap(toMove, statement => {
         if (
             isTopLevelDeclarationStatement(statement) &&
             !isExported(sourceFile, statement, useEs6Exports) &&
-            forEachTopLevelDeclaration(statement, d => needExport.has(Debug.checkDefined(tryCast(d, canHaveSymbol)?.symbol)))
+            forEachTopLevelDeclaration(
+                statement,
+                d => needExport.has(Debug.checkDefined(tryCast(d, canHaveSymbol)?.symbol)),
+            )
         ) {
             const exports = addExport(getSynthesizedDeepClone(statement), useEs6Exports);
             if (exports) return exports;
@@ -616,16 +896,27 @@ export function addExports(sourceFile: SourceFile, toMove: readonly Statement[],
     });
 }
 
-function isExported(sourceFile: SourceFile, decl: TopLevelDeclarationStatement, useEs6Exports: boolean, name?: Identifier): boolean {
+function isExported(
+    sourceFile: SourceFile,
+    decl: TopLevelDeclarationStatement,
+    useEs6Exports: boolean,
+    name?: Identifier,
+): boolean {
     if (useEs6Exports) {
-        return !isExpressionStatement(decl) && hasSyntacticModifier(decl, ModifierFlags.Export) || !!(name && sourceFile.symbol && sourceFile.symbol.exports?.has(name.escapedText));
+        return !isExpressionStatement(decl) && hasSyntacticModifier(decl, ModifierFlags.Export) ||
+            !!(name && sourceFile.symbol && sourceFile.symbol.exports?.has(name.escapedText));
     }
     return !!sourceFile.symbol && !!sourceFile.symbol.exports &&
         getNamesToExportInCommonJS(decl).some(name => sourceFile.symbol.exports!.has(escapeLeadingUnderscores(name)));
 }
 
 /** @internal */
-export function deleteUnusedImports(sourceFile: SourceFile, importDecl: SupportedImport, changes: textChanges.ChangeTracker, isUnused: (name: Identifier) => boolean): void {
+export function deleteUnusedImports(
+    sourceFile: SourceFile,
+    importDecl: SupportedImport,
+    changes: textChanges.ChangeTracker,
+    isUnused: (name: Identifier) => boolean,
+): void {
     switch (importDecl.kind) {
         case SyntaxKind.ImportDeclaration:
             deleteUnusedImportsInDeclaration(sourceFile, importDecl, changes, isUnused);
@@ -643,12 +934,18 @@ export function deleteUnusedImports(sourceFile: SourceFile, importDecl: Supporte
     }
 }
 
-function deleteUnusedImportsInDeclaration(sourceFile: SourceFile, importDecl: ImportDeclaration, changes: textChanges.ChangeTracker, isUnused: (name: Identifier) => boolean): void {
+function deleteUnusedImportsInDeclaration(
+    sourceFile: SourceFile,
+    importDecl: ImportDeclaration,
+    changes: textChanges.ChangeTracker,
+    isUnused: (name: Identifier) => boolean,
+): void {
     if (!importDecl.importClause) return;
     const { name, namedBindings } = importDecl.importClause;
     const defaultUnused = !name || isUnused(name);
     const namedBindingsUnused = !namedBindings ||
-        (namedBindings.kind === SyntaxKind.NamespaceImport ? isUnused(namedBindings.name) : namedBindings.elements.length !== 0 && namedBindings.elements.every(e => isUnused(e.name)));
+        (namedBindings.kind === SyntaxKind.NamespaceImport ? isUnused(namedBindings.name)
+            : namedBindings.elements.length !== 0 && namedBindings.elements.every(e => isUnused(e.name)));
     if (defaultUnused && namedBindingsUnused) {
         changes.delete(sourceFile, importDecl);
     }
@@ -661,7 +958,12 @@ function deleteUnusedImportsInDeclaration(sourceFile: SourceFile, importDecl: Im
                 changes.replaceNode(
                     sourceFile,
                     importDecl.importClause,
-                    factory.updateImportClause(importDecl.importClause, importDecl.importClause.isTypeOnly, name, /*namedBindings*/ undefined),
+                    factory.updateImportClause(
+                        importDecl.importClause,
+                        importDecl.importClause.isTypeOnly,
+                        name,
+                        /*namedBindings*/ undefined,
+                    ),
                 );
             }
             else if (namedBindings.kind === SyntaxKind.NamedImports) {
@@ -673,13 +975,25 @@ function deleteUnusedImportsInDeclaration(sourceFile: SourceFile, importDecl: Im
     }
 }
 
-function deleteUnusedImportsInVariableDeclaration(sourceFile: SourceFile, varDecl: VariableDeclaration, changes: textChanges.ChangeTracker, isUnused: (name: Identifier) => boolean) {
+function deleteUnusedImportsInVariableDeclaration(
+    sourceFile: SourceFile,
+    varDecl: VariableDeclaration,
+    changes: textChanges.ChangeTracker,
+    isUnused: (name: Identifier) => boolean,
+) {
     const { name } = varDecl;
     switch (name.kind) {
         case SyntaxKind.Identifier:
             if (isUnused(name)) {
-                if (varDecl.initializer && isRequireCall(varDecl.initializer, /*requireStringLiteralLikeArgument*/ true)) {
-                    changes.delete(sourceFile, isVariableDeclarationList(varDecl.parent) && length(varDecl.parent.declarations) === 1 ? varDecl.parent.parent : varDecl);
+                if (
+                    varDecl.initializer && isRequireCall(varDecl.initializer, /*requireStringLiteralLikeArgument*/ true)
+                ) {
+                    changes.delete(
+                        sourceFile,
+                        isVariableDeclarationList(varDecl.parent) && length(varDecl.parent.declarations) === 1 ?
+                            varDecl.parent.parent
+                            : varDecl,
+                    );
                 }
                 else {
                     changes.delete(sourceFile, name);
@@ -690,7 +1004,12 @@ function deleteUnusedImportsInVariableDeclaration(sourceFile: SourceFile, varDec
             break;
         case SyntaxKind.ObjectBindingPattern:
             if (name.elements.every(e => isIdentifier(e.name) && isUnused(e.name))) {
-                changes.delete(sourceFile, isVariableDeclarationList(varDecl.parent) && varDecl.parent.declarations.length === 1 ? varDecl.parent.parent : varDecl);
+                changes.delete(
+                    sourceFile,
+                    isVariableDeclarationList(varDecl.parent) && varDecl.parent.declarations.length === 1 ?
+                        varDecl.parent.parent
+                        : varDecl,
+                );
             }
             else {
                 for (const element of name.elements) {
@@ -716,13 +1035,31 @@ function addExport(decl: TopLevelDeclarationStatement, useEs6Exports: boolean): 
 }
 
 function addEs6Export(d: TopLevelDeclarationStatement): TopLevelDeclarationStatement {
-    const modifiers = canHaveModifiers(d) ? concatenate([factory.createModifier(SyntaxKind.ExportKeyword)], getModifiers(d)) : undefined;
+    const modifiers = canHaveModifiers(d) ?
+        concatenate([factory.createModifier(SyntaxKind.ExportKeyword)], getModifiers(d))
+        : undefined;
     switch (d.kind) {
         case SyntaxKind.FunctionDeclaration:
-            return factory.updateFunctionDeclaration(d, modifiers, d.asteriskToken, d.name, d.typeParameters, d.parameters, d.type, d.body);
+            return factory.updateFunctionDeclaration(
+                d,
+                modifiers,
+                d.asteriskToken,
+                d.name,
+                d.typeParameters,
+                d.parameters,
+                d.type,
+                d.body,
+            );
         case SyntaxKind.ClassDeclaration:
             const decorators = canHaveDecorators(d) ? getDecorators(d) : undefined;
-            return factory.updateClassDeclaration(d, concatenate<ModifierLike>(decorators, modifiers), d.name, d.typeParameters, d.heritageClauses, d.members);
+            return factory.updateClassDeclaration(
+                d,
+                concatenate<ModifierLike>(decorators, modifiers),
+                d.name,
+                d.typeParameters,
+                d.heritageClauses,
+                d.members,
+            );
         case SyntaxKind.VariableStatement:
             return factory.updateVariableStatement(d, modifiers, d.declarationList);
         case SyntaxKind.ModuleDeclaration:
@@ -732,7 +1069,14 @@ function addEs6Export(d: TopLevelDeclarationStatement): TopLevelDeclarationState
         case SyntaxKind.TypeAliasDeclaration:
             return factory.updateTypeAliasDeclaration(d, modifiers, d.name, d.typeParameters, d.type);
         case SyntaxKind.InterfaceDeclaration:
-            return factory.updateInterfaceDeclaration(d, modifiers, d.name, d.typeParameters, d.heritageClauses, d.members);
+            return factory.updateInterfaceDeclaration(
+                d,
+                modifiers,
+                d.name,
+                d.typeParameters,
+                d.heritageClauses,
+                d.members,
+            );
         case SyntaxKind.ImportEqualsDeclaration:
             return factory.updateImportEqualsDeclaration(d, modifiers, d.isTypeOnly, d.name, d.moduleReference);
         case SyntaxKind.ExpressionStatement:
@@ -779,7 +1123,11 @@ function getNamesToExportInCommonJS(decl: TopLevelDeclarationStatement): readonl
 }
 
 /** @internal */
-export function filterImport(i: SupportedImport, moduleSpecifier: StringLiteralLike, keep: (name: Identifier) => boolean): SupportedImportStatement | undefined {
+export function filterImport(
+    i: SupportedImport,
+    moduleSpecifier: StringLiteralLike,
+    keep: (name: Identifier) => boolean,
+): SupportedImportStatement | undefined {
     switch (i.kind) {
         case SyntaxKind.ImportDeclaration: {
             const clause = i.importClause;
@@ -787,21 +1135,30 @@ export function filterImport(i: SupportedImport, moduleSpecifier: StringLiteralL
             const defaultImport = clause.name && keep(clause.name) ? clause.name : undefined;
             const namedBindings = clause.namedBindings && filterNamedBindings(clause.namedBindings, keep);
             return defaultImport || namedBindings
-                ? factory.createImportDeclaration(/*modifiers*/ undefined, factory.createImportClause(clause.isTypeOnly, defaultImport, namedBindings), getSynthesizedDeepClone(moduleSpecifier), /*attributes*/ undefined)
+                ? factory.createImportDeclaration(
+                    /*modifiers*/ undefined,
+                    factory.createImportClause(clause.isTypeOnly, defaultImport, namedBindings),
+                    getSynthesizedDeepClone(moduleSpecifier),
+                    /*attributes*/ undefined,
+                )
                 : undefined;
         }
         case SyntaxKind.ImportEqualsDeclaration:
             return keep(i.name) ? i : undefined;
         case SyntaxKind.VariableDeclaration: {
             const name = filterBindingName(i.name, keep);
-            return name ? makeVariableStatement(name, i.type, createRequireCall(moduleSpecifier), i.parent.flags) : undefined;
+            return name ? makeVariableStatement(name, i.type, createRequireCall(moduleSpecifier), i.parent.flags)
+                : undefined;
         }
         default:
             return Debug.assertNever(i, `Unexpected import kind ${(i as SupportedImport).kind}`);
     }
 }
 
-function filterNamedBindings(namedBindings: NamedImportBindings, keep: (name: Identifier) => boolean): NamedImportBindings | undefined {
+function filterNamedBindings(
+    namedBindings: NamedImportBindings,
+    keep: (name: Identifier) => boolean,
+): NamedImportBindings | undefined {
     if (namedBindings.kind === SyntaxKind.NamespaceImport) {
         return keep(namedBindings.name) ? namedBindings : undefined;
     }
@@ -819,7 +1176,9 @@ function filterBindingName(name: BindingName, keep: (name: Identifier) => boolea
             return name;
         case SyntaxKind.ObjectBindingPattern: {
             // We can't handle nested destructurings or property names well here, so just copy them all.
-            const newElements = name.elements.filter(prop => prop.propertyName || !isIdentifier(prop.name) || keep(prop.name));
+            const newElements = name.elements.filter(prop =>
+                prop.propertyName || !isIdentifier(prop.name) || keep(prop.name)
+            );
             return newElements.length ? factory.createObjectBindingPattern(newElements) : undefined;
         }
     }
@@ -837,7 +1196,11 @@ export function getTopLevelDeclarationStatement(d: TopLevelDeclaration): TopLeve
             return d.parent.parent;
         case SyntaxKind.BindingElement:
             return getTopLevelDeclarationStatement(
-                cast(d.parent.parent, (p): p is TopLevelVariableDeclaration | BindingElement => isVariableDeclaration(p) || isBindingElement(p)),
+                cast(
+                    d.parent.parent,
+                    (p): p is TopLevelVariableDeclaration | BindingElement =>
+                        isVariableDeclaration(p) || isBindingElement(p),
+                ),
             );
         default:
             return d;
@@ -845,7 +1208,13 @@ export function getTopLevelDeclarationStatement(d: TopLevelDeclaration): TopLeve
 }
 
 /** @internal */
-export function addExportToChanges(sourceFile: SourceFile, decl: TopLevelDeclarationStatement, name: Identifier, changes: textChanges.ChangeTracker, useEs6Exports: boolean): void {
+export function addExportToChanges(
+    sourceFile: SourceFile,
+    decl: TopLevelDeclarationStatement,
+    name: Identifier,
+    changes: textChanges.ChangeTracker,
+    useEs6Exports: boolean,
+): void {
     if (isExported(sourceFile, decl, useEs6Exports, name)) return;
     if (useEs6Exports) {
         if (!isExpressionStatement(decl)) changes.insertExportModifier(sourceFile, decl);
@@ -884,7 +1253,9 @@ export interface UsageInfo {
 }
 
 /** @internal */
-export type TopLevelExpressionStatement = ExpressionStatement & { expression: BinaryExpression & { left: PropertyAccessExpression; }; }; // 'exports.x = ...'
+export type TopLevelExpressionStatement = ExpressionStatement & {
+    expression: BinaryExpression & { left: PropertyAccessExpression; };
+}; // 'exports.x = ...'
 
 /** @internal */
 export type NonVariableTopLevelDeclaration =
@@ -906,7 +1277,12 @@ export interface TopLevelVariableDeclaration extends VariableDeclaration {
 export type TopLevelDeclaration = NonVariableTopLevelDeclaration | TopLevelVariableDeclaration | BindingElement;
 
 /** @internal */
-export function createNewFileName(oldFile: SourceFile, program: Program, host: LanguageServiceHost, toMove: ToMove | undefined): string {
+export function createNewFileName(
+    oldFile: SourceFile,
+    program: Program,
+    host: LanguageServiceHost,
+    toMove: ToMove | undefined,
+): string {
     const checker = program.getTypeChecker();
     if (toMove) {
         const usage = getUsageInfo(oldFile, toMove.all, checker);
@@ -1004,14 +1380,21 @@ function isPureImport(node: Node): boolean {
         case SyntaxKind.ImportEqualsDeclaration:
             return !hasSyntacticModifier(node, ModifierFlags.Export);
         case SyntaxKind.VariableStatement:
-            return (node as VariableStatement).declarationList.declarations.every(d => !!d.initializer && isRequireCall(d.initializer, /*requireStringLiteralLikeArgument*/ true));
+            return (node as VariableStatement).declarationList.declarations.every(d =>
+                !!d.initializer && isRequireCall(d.initializer, /*requireStringLiteralLikeArgument*/ true)
+            );
         default:
             return false;
     }
 }
 
 /** @internal */
-export function getUsageInfo(oldFile: SourceFile, toMove: readonly Statement[], checker: TypeChecker, existingTargetLocals: ReadonlySet<Symbol> = new Set()): UsageInfo {
+export function getUsageInfo(
+    oldFile: SourceFile,
+    toMove: readonly Statement[],
+    checker: TypeChecker,
+    existingTargetLocals: ReadonlySet<Symbol> = new Set(),
+): UsageInfo {
     const movedSymbols = new Set<Symbol>();
     const oldImportsNeededByTargetFile = new Map<Symbol, /*isValidTypeOnlyUseSite*/ boolean>();
     const targetFileImportsFromOldFile = new Set<Symbol>();
@@ -1024,7 +1407,12 @@ export function getUsageInfo(oldFile: SourceFile, toMove: readonly Statement[], 
 
     for (const statement of toMove) {
         forEachTopLevelDeclaration(statement, decl => {
-            movedSymbols.add(Debug.checkDefined(isExpressionStatement(decl) ? checker.getSymbolAtLocation(decl.expression.left) : decl.symbol, "Need a symbol here"));
+            movedSymbols.add(
+                Debug.checkDefined(
+                    isExpressionStatement(decl) ? checker.getSymbolAtLocation(decl.expression.left) : decl.symbol,
+                    "Need a symbol here",
+                ),
+            );
         });
     }
 
@@ -1041,9 +1429,16 @@ export function getUsageInfo(oldFile: SourceFile, toMove: readonly Statement[], 
             for (const decl of symbol.declarations) {
                 if (isInImport(decl)) {
                     const prevIsTypeOnly = oldImportsNeededByTargetFile.get(symbol);
-                    oldImportsNeededByTargetFile.set(symbol, prevIsTypeOnly === undefined ? isValidTypeOnlyUseSite : prevIsTypeOnly && isValidTypeOnlyUseSite);
+                    oldImportsNeededByTargetFile.set(
+                        symbol,
+                        prevIsTypeOnly === undefined ? isValidTypeOnlyUseSite
+                            : prevIsTypeOnly && isValidTypeOnlyUseSite,
+                    );
                 }
-                else if (isTopLevelDeclaration(decl) && sourceFileOfTopLevelDeclaration(decl) === oldFile && !movedSymbols.has(symbol)) {
+                else if (
+                    isTopLevelDeclaration(decl) && sourceFileOfTopLevelDeclaration(decl) === oldFile &&
+                    !movedSymbols.has(symbol)
+                ) {
                     targetFileImportsFromOldFile.add(symbol);
                 }
             }
@@ -1069,7 +1464,13 @@ export function getUsageInfo(oldFile: SourceFile, toMove: readonly Statement[], 
         });
     }
 
-    return { movedSymbols, targetFileImportsFromOldFile, oldFileImportsFromTargetFile, oldImportsNeededByTargetFile, unusedImportsFromOldFile };
+    return {
+        movedSymbols,
+        targetFileImportsFromOldFile,
+        oldFileImportsFromTargetFile,
+        oldImportsNeededByTargetFile,
+        unusedImportsFromOldFile,
+    };
 
     function getJsxNamespaceSymbol(containsJsx: Node | undefined) {
         if (containsJsx === undefined) {
@@ -1081,7 +1482,12 @@ export function getUsageInfo(oldFile: SourceFile, toMove: readonly Statement[], 
         // Strictly speaking, this could resolve to a symbol other than the JSX namespace.
         // This will produce erroneous output (probably, an incorrectly copied import) but
         // is expected to be very rare and easily reversible.
-        const jsxNamespaceSymbol = checker.resolveName(jsxNamespace, containsJsx, SymbolFlags.Namespace, /*excludeGlobals*/ true);
+        const jsxNamespaceSymbol = checker.resolveName(
+            jsxNamespace,
+            containsJsx,
+            SymbolFlags.Namespace,
+            /*excludeGlobals*/ true,
+        );
 
         return !!jsxNamespaceSymbol && some(jsxNamespaceSymbol.declarations, isInImport)
             ? jsxNamespaceSymbol
@@ -1089,7 +1495,12 @@ export function getUsageInfo(oldFile: SourceFile, toMove: readonly Statement[], 
     }
 }
 
-function makeUniqueFilename(proposedFilename: string, extension: string, inDirectory: string, host: LanguageServiceHost): string {
+function makeUniqueFilename(
+    proposedFilename: string,
+    extension: string,
+    inDirectory: string,
+    host: LanguageServiceHost,
+): string {
     let newFilename = proposedFilename;
     for (let i = 1;; i++) {
         const name = combinePaths(inDirectory, newFilename + extension);
@@ -1099,10 +1510,15 @@ function makeUniqueFilename(proposedFilename: string, extension: string, inDirec
 }
 
 function inferNewFileName(importsFromNewFile: Set<Symbol>, movedSymbols: Set<Symbol>): string {
-    return forEachKey(importsFromNewFile, symbolNameNoDefault) || forEachKey(movedSymbols, symbolNameNoDefault) || "newFile";
+    return forEachKey(importsFromNewFile, symbolNameNoDefault) || forEachKey(movedSymbols, symbolNameNoDefault) ||
+        "newFile";
 }
 
-function forEachReference(node: Node, checker: TypeChecker, onReference: (s: Symbol, isValidTypeOnlyUseSite: boolean) => void) {
+function forEachReference(
+    node: Node,
+    checker: TypeChecker,
+    onReference: (s: Symbol, isValidTypeOnlyUseSite: boolean) => void,
+) {
     node.forEachChild(function cb(node) {
         if (isIdentifier(node) && !isDeclarationName(node)) {
             const sym = checker.getSymbolAtLocation(node);
@@ -1123,14 +1539,27 @@ function forEachTopLevelDeclaration<T>(statement: Statement, cb: (node: TopLevel
         case SyntaxKind.TypeAliasDeclaration:
         case SyntaxKind.InterfaceDeclaration:
         case SyntaxKind.ImportEqualsDeclaration:
-            return cb(statement as FunctionDeclaration | ClassDeclaration | EnumDeclaration | ModuleDeclaration | TypeAliasDeclaration | InterfaceDeclaration | ImportEqualsDeclaration);
+            return cb(
+                statement as
+                    | FunctionDeclaration
+                    | ClassDeclaration
+                    | EnumDeclaration
+                    | ModuleDeclaration
+                    | TypeAliasDeclaration
+                    | InterfaceDeclaration
+                    | ImportEqualsDeclaration,
+            );
 
         case SyntaxKind.VariableStatement:
-            return firstDefined((statement as VariableStatement).declarationList.declarations, decl => forEachTopLevelDeclarationInBindingName(decl.name, cb));
+            return firstDefined(
+                (statement as VariableStatement).declarationList.declarations,
+                decl => forEachTopLevelDeclarationInBindingName(decl.name, cb),
+            );
 
         case SyntaxKind.ExpressionStatement: {
             const { expression } = statement as ExpressionStatement;
-            return isBinaryExpression(expression) && getAssignmentDeclarationKind(expression) === AssignmentDeclarationKind.ExportsProperty
+            return isBinaryExpression(expression) &&
+                    getAssignmentDeclarationKind(expression) === AssignmentDeclarationKind.ExportsProperty
                 ? cb(statement as TopLevelExpressionStatement)
                 : undefined;
         }
@@ -1160,19 +1589,32 @@ function isVariableDeclarationInImport(decl: VariableDeclaration) {
 
 /** @internal */
 export function isTopLevelDeclaration(node: Node): node is TopLevelDeclaration {
-    return isNonVariableTopLevelDeclaration(node) && isSourceFile(node.parent) || isVariableDeclaration(node) && isSourceFile(node.parent.parent.parent);
+    return isNonVariableTopLevelDeclaration(node) && isSourceFile(node.parent) ||
+        isVariableDeclaration(node) && isSourceFile(node.parent.parent.parent);
 }
 function sourceFileOfTopLevelDeclaration(node: TopLevelDeclaration): Node {
     return isVariableDeclaration(node) ? node.parent.parent.parent : node.parent;
 }
 
-function forEachTopLevelDeclarationInBindingName<T>(name: BindingName, cb: (node: TopLevelDeclaration) => T): T | undefined {
+function forEachTopLevelDeclarationInBindingName<T>(
+    name: BindingName,
+    cb: (node: TopLevelDeclaration) => T,
+): T | undefined {
     switch (name.kind) {
         case SyntaxKind.Identifier:
-            return cb(cast(name.parent, (x): x is TopLevelVariableDeclaration | BindingElement => isVariableDeclaration(x) || isBindingElement(x)));
+            return cb(
+                cast(
+                    name.parent,
+                    (x): x is TopLevelVariableDeclaration | BindingElement =>
+                        isVariableDeclaration(x) || isBindingElement(x),
+                ),
+            );
         case SyntaxKind.ArrayBindingPattern:
         case SyntaxKind.ObjectBindingPattern:
-            return firstDefined(name.elements, em => isOmittedExpression(em) ? undefined : forEachTopLevelDeclarationInBindingName(em.name, cb));
+            return firstDefined(
+                name.elements,
+                em => isOmittedExpression(em) ? undefined : forEachTopLevelDeclarationInBindingName(em.name, cb),
+            );
         default:
             return Debug.assertNever(name, `Unexpected name kind ${(name as BindingName).kind}`);
     }
@@ -1193,7 +1635,13 @@ function isNonVariableTopLevelDeclaration(node: Node): node is NonVariableTopLev
     }
 }
 
-function moveStatementsToTargetFile(changes: textChanges.ChangeTracker, program: Program, statements: readonly Statement[], targetFile: SourceFile, toMove: ToMove) {
+function moveStatementsToTargetFile(
+    changes: textChanges.ChangeTracker,
+    program: Program,
+    statements: readonly Statement[],
+    targetFile: SourceFile,
+    toMove: ToMove,
+) {
     const removedExports = new Set<ExportDeclaration>();
     const targetExports = targetFile.symbol?.exports;
     if (targetExports) {
@@ -1203,21 +1651,37 @@ function moveStatementsToTargetFile(changes: textChanges.ChangeTracker, program:
         for (const node of toMove.all) {
             if (isTopLevelDeclarationStatement(node) && hasSyntacticModifier(node, ModifierFlags.Export)) {
                 forEachTopLevelDeclaration(node, declaration => {
-                    const targetDeclarations = canHaveSymbol(declaration) ? targetExports.get(declaration.symbol.escapedName)?.declarations : undefined;
+                    const targetDeclarations = canHaveSymbol(declaration) ?
+                        targetExports.get(declaration.symbol.escapedName)?.declarations
+                        : undefined;
                     const exportDeclaration = firstDefined(targetDeclarations, d =>
                         isExportDeclaration(d) ? d :
                             isExportSpecifier(d) ? tryCast(d.parent.parent, isExportDeclaration) : undefined);
                     if (exportDeclaration && exportDeclaration.moduleSpecifier) {
-                        targetToSourceExports.set(exportDeclaration, (targetToSourceExports.get(exportDeclaration) || new Set()).add(declaration));
+                        targetToSourceExports.set(
+                            exportDeclaration,
+                            (targetToSourceExports.get(exportDeclaration) || new Set()).add(declaration),
+                        );
                     }
                 });
             }
         }
 
         for (const [exportDeclaration, topLevelDeclarations] of arrayFrom(targetToSourceExports)) {
-            if (exportDeclaration.exportClause && isNamedExports(exportDeclaration.exportClause) && length(exportDeclaration.exportClause.elements)) {
+            if (
+                exportDeclaration.exportClause && isNamedExports(exportDeclaration.exportClause) &&
+                length(exportDeclaration.exportClause.elements)
+            ) {
                 const elements = exportDeclaration.exportClause.elements;
-                const updatedElements = filter(elements, elem => find(skipAlias(elem.symbol, checker).declarations, d => isTopLevelDeclaration(d) && topLevelDeclarations.has(d)) === undefined);
+                const updatedElements = filter(
+                    elements,
+                    elem =>
+                        find(
+                            skipAlias(elem.symbol, checker).declarations,
+                            d => isTopLevelDeclaration(d) && topLevelDeclarations.has(d),
+                        ) ===
+                            undefined,
+                );
 
                 if (length(updatedElements) === 0) {
                     changes.deleteNode(targetFile, exportDeclaration);
@@ -1226,13 +1690,30 @@ function moveStatementsToTargetFile(changes: textChanges.ChangeTracker, program:
                 }
 
                 if (length(updatedElements) < length(elements)) {
-                    changes.replaceNode(targetFile, exportDeclaration, factory.updateExportDeclaration(exportDeclaration, exportDeclaration.modifiers, exportDeclaration.isTypeOnly, factory.updateNamedExports(exportDeclaration.exportClause, factory.createNodeArray(updatedElements, elements.hasTrailingComma)), exportDeclaration.moduleSpecifier, exportDeclaration.attributes));
+                    changes.replaceNode(
+                        targetFile,
+                        exportDeclaration,
+                        factory.updateExportDeclaration(
+                            exportDeclaration,
+                            exportDeclaration.modifiers,
+                            exportDeclaration.isTypeOnly,
+                            factory.updateNamedExports(
+                                exportDeclaration.exportClause,
+                                factory.createNodeArray(updatedElements, elements.hasTrailingComma),
+                            ),
+                            exportDeclaration.moduleSpecifier,
+                            exportDeclaration.attributes,
+                        ),
+                    );
                 }
             }
         }
     }
 
-    const lastReExport = findLast(targetFile.statements, n => isExportDeclaration(n) && !!n.moduleSpecifier && !removedExports.has(n));
+    const lastReExport = findLast(
+        targetFile.statements,
+        n => isExportDeclaration(n) && !!n.moduleSpecifier && !removedExports.has(n),
+    );
     if (lastReExport) {
         changes.insertNodesBefore(targetFile, lastReExport, statements, /*blankLineBetween*/ true);
     }
@@ -1249,7 +1730,10 @@ function getOverloadRangeToMove(sourceFile: SourceFile, statement: Statement) {
         }
         const firstDecl = declarations[0];
         const lastDecl = declarations[length(declarations) - 1];
-        const statementsToMove = mapDefined(declarations, d => getSourceFileOfNode(d) === sourceFile && isStatement(d) ? d : undefined);
+        const statementsToMove = mapDefined(
+            declarations,
+            d => getSourceFileOfNode(d) === sourceFile && isStatement(d) ? d : undefined,
+        );
         const end = findIndex(sourceFile.statements, s => s.end >= lastDecl.end);
         const start = findIndex(sourceFile.statements, s => s.end >= firstDecl.end);
         return { toMove: statementsToMove, start, end };
@@ -1272,7 +1756,10 @@ function getExistingLocals(sourceFile: SourceFile, statements: readonly Statemen
                 }
             }
         }
-        if (isVariableDeclarationInitializedToRequire(declaration.parent) && isObjectBindingPattern(declaration.parent.name)) {
+        if (
+            isVariableDeclarationInitializedToRequire(declaration.parent) &&
+            isObjectBindingPattern(declaration.parent.name)
+        ) {
             for (const e of declaration.parent.name.elements) {
                 const symbol = checker.getSymbolAtLocation(e.propertyName || e.name);
                 if (symbol) {

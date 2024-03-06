@@ -69,7 +69,10 @@ declare module "../compiler/types" {
         /** @internal */
         getLastToken(sourceFile?: SourceFileLike): Node | undefined; // eslint-disable-line @typescript-eslint/unified-signatures
         // See ts.forEachChild for documentation.
-        forEachChild<T>(cbNode: (node: Node) => T | undefined, cbNodeArray?: (nodes: NodeArray<Node>) => T | undefined): T | undefined;
+        forEachChild<T>(
+            cbNode: (node: Node) => T | undefined,
+            cbNodeArray?: (nodes: NodeArray<Node>) => T | undefined,
+        ): T | undefined;
     }
 }
 
@@ -97,7 +100,10 @@ declare module "../compiler/types" {
         getDeclarations(): Declaration[] | undefined;
         getDocumentationComment(typeChecker: TypeChecker | undefined): SymbolDisplayPart[];
         /** @internal */
-        getContextualDocumentationComment(context: Node | undefined, checker: TypeChecker | undefined): SymbolDisplayPart[];
+        getContextualDocumentationComment(
+            context: Node | undefined,
+            checker: TypeChecker | undefined,
+        ): SymbolDisplayPart[];
         getJsDocTags(checker?: TypeChecker): JSDocTagInfo[];
         /** @internal */
         getContextualJsDocTags(context: Node | undefined, checker: TypeChecker | undefined): JSDocTagInfo[];
@@ -338,7 +344,13 @@ export interface LanguageServiceHost extends GetEffectiveTypeRootsHost, MinimalR
      * LS host can optionally implement these methods to support completions for module specifiers.
      * Without these methods, only completions for ambient modules will be provided.
      */
-    readDirectory?(path: string, extensions?: readonly string[], exclude?: readonly string[], include?: readonly string[], depth?: number): string[];
+    readDirectory?(
+        path: string,
+        extensions?: readonly string[],
+        exclude?: readonly string[],
+        include?: readonly string[],
+        depth?: number,
+    ): string[];
     realpath?(path: string): string;
     /** @internal */ createHash?: ((data: string) => string) | undefined;
 
@@ -362,10 +374,27 @@ export interface LanguageServiceHost extends GetEffectiveTypeRootsHost, MinimalR
      * If this is implemented, `getResolvedModuleWithFailedLookupLocationsFromCache` should be too.
      */
     /** @deprecated supply resolveModuleNameLiterals instead for resolution that can handle newer resolution modes like nodenext */
-    resolveModuleNames?(moduleNames: string[], containingFile: string, reusedNames: string[] | undefined, redirectedReference: ResolvedProjectReference | undefined, options: CompilerOptions, containingSourceFile?: SourceFile): (ResolvedModule | undefined)[];
-    getResolvedModuleWithFailedLookupLocationsFromCache?(modulename: string, containingFile: string, resolutionMode?: ResolutionMode): ResolvedModuleWithFailedLookupLocations | undefined;
+    resolveModuleNames?(
+        moduleNames: string[],
+        containingFile: string,
+        reusedNames: string[] | undefined,
+        redirectedReference: ResolvedProjectReference | undefined,
+        options: CompilerOptions,
+        containingSourceFile?: SourceFile,
+    ): (ResolvedModule | undefined)[];
+    getResolvedModuleWithFailedLookupLocationsFromCache?(
+        modulename: string,
+        containingFile: string,
+        resolutionMode?: ResolutionMode,
+    ): ResolvedModuleWithFailedLookupLocations | undefined;
     /** @deprecated supply resolveTypeReferenceDirectiveReferences instead for resolution that can handle newer resolution modes like nodenext */
-    resolveTypeReferenceDirectives?(typeDirectiveNames: string[] | FileReference[], containingFile: string, redirectedReference: ResolvedProjectReference | undefined, options: CompilerOptions, containingFileMode?: ResolutionMode): (ResolvedTypeReferenceDirective | undefined)[];
+    resolveTypeReferenceDirectives?(
+        typeDirectiveNames: string[] | FileReference[],
+        containingFile: string,
+        redirectedReference: ResolvedProjectReference | undefined,
+        options: CompilerOptions,
+        containingFileMode?: ResolutionMode,
+    ): (ResolvedTypeReferenceDirective | undefined)[];
     resolveModuleNameLiterals?(
         moduleLiterals: readonly StringLiteralLike[],
         containingFile: string,
@@ -417,9 +446,15 @@ export interface LanguageServiceHost extends GetEffectiveTypeRootsHost, MinimalR
     installPackage?(options: InstallPackageOptions): Promise<ApplyCodeActionCommandResult>;
     writeFile?(fileName: string, content: string): void;
 
-    /** @internal */ getDocumentPositionMapper?(generatedFileName: string, sourceFileName?: string): DocumentPositionMapper | undefined;
+    /** @internal */ getDocumentPositionMapper?(
+        generatedFileName: string,
+        sourceFileName?: string,
+    ): DocumentPositionMapper | undefined;
     /** @internal */ getSourceFileLike?(fileName: string): SourceFileLike | undefined;
-    /** @internal */ getPackageJsonsVisibleToFile?(fileName: string, rootDir?: string): readonly ProjectPackageJsonInfo[];
+    /** @internal */ getPackageJsonsVisibleToFile?(
+        fileName: string,
+        rootDir?: string,
+    ): readonly ProjectPackageJsonInfo[];
     /** @internal */ getNearestAncestorDirectoryWithPackageJson?(fileName: string): string | undefined;
     /** @internal */ getPackageJsonsForAutoImport?(rootDir?: string): readonly ProjectPackageJsonInfo[];
     /** @internal */ getCachedExportInfoMap?(): ExportInfoMap;
@@ -429,7 +464,11 @@ export interface LanguageServiceHost extends GetEffectiveTypeRootsHost, MinimalR
     /** @internal */ getPackageJsonAutoImportProvider?(): Program | undefined;
     /** @internal */ sendPerformanceEvent?(kind: PerformanceEvent["kind"], durationMs: number): void;
     getParsedCommandLine?(fileName: string): ParsedCommandLine | undefined;
-    /** @internal */ onReleaseParsedCommandLine?(configFileName: string, oldResolvedRef: ResolvedProjectReference | undefined, optionOptions: CompilerOptions): void;
+    /** @internal */ onReleaseParsedCommandLine?(
+        configFileName: string,
+        oldResolvedRef: ResolvedProjectReference | undefined,
+        optionOptions: CompilerOptions,
+    ): void;
     /** @internal */ getIncompleteCompletionsCache?(): IncompleteCompletionsCache;
 
     jsDocParsingMode?: JSDocParsingMode | undefined;
@@ -508,11 +547,19 @@ export interface LanguageService {
 
     /** @deprecated Use getEncodedSyntacticClassifications instead. */
     getSyntacticClassifications(fileName: string, span: TextSpan): ClassifiedSpan[];
-    getSyntacticClassifications(fileName: string, span: TextSpan, format: SemanticClassificationFormat): ClassifiedSpan[] | ClassifiedSpan2020[];
+    getSyntacticClassifications(
+        fileName: string,
+        span: TextSpan,
+        format: SemanticClassificationFormat,
+    ): ClassifiedSpan[] | ClassifiedSpan2020[];
 
     /** @deprecated Use getEncodedSemanticClassifications instead. */
     getSemanticClassifications(fileName: string, span: TextSpan): ClassifiedSpan[];
-    getSemanticClassifications(fileName: string, span: TextSpan, format: SemanticClassificationFormat): ClassifiedSpan[] | ClassifiedSpan2020[];
+    getSemanticClassifications(
+        fileName: string,
+        span: TextSpan,
+        format: SemanticClassificationFormat,
+    ): ClassifiedSpan[] | ClassifiedSpan2020[];
 
     /** Encoded as triples of [start, length, ClassificationType]. */
     getEncodedSyntacticClassifications(fileName: string, span: TextSpan): Classifications;
@@ -526,7 +573,11 @@ export interface LanguageService {
      * @param format Which format to use, defaults to "original"
      * @returns a number array encoded as triples of [start, length, ClassificationType, ...].
      */
-    getEncodedSemanticClassifications(fileName: string, span: TextSpan, format?: SemanticClassificationFormat): Classifications;
+    getEncodedSemanticClassifications(
+        fileName: string,
+        span: TextSpan,
+        format?: SemanticClassificationFormat,
+    ): Classifications;
 
     /**
      * Gets completion entries at a particular position in a file.
@@ -537,7 +588,12 @@ export interface LanguageService {
      * of code actions can be returned with the completions.
      * @param formattingSettings settings needed for calling formatting functions.
      */
-    getCompletionsAtPosition(fileName: string, position: number, options: GetCompletionsAtPositionOptions | undefined, formattingSettings?: FormatCodeSettings): WithMetadata<CompletionInfo> | undefined;
+    getCompletionsAtPosition(
+        fileName: string,
+        position: number,
+        options: GetCompletionsAtPositionOptions | undefined,
+        formattingSettings?: FormatCodeSettings,
+    ): WithMetadata<CompletionInfo> | undefined;
 
     /**
      * Gets the extended details for a completion entry retrieved from `getCompletionsAtPosition`.
@@ -560,7 +616,12 @@ export interface LanguageService {
         data: CompletionEntryData | undefined,
     ): CompletionEntryDetails | undefined;
 
-    getCompletionEntrySymbol(fileName: string, position: number, name: string, source: string | undefined): Symbol | undefined;
+    getCompletionEntrySymbol(
+        fileName: string,
+        position: number,
+        name: string,
+        source: string | undefined,
+    ): Symbol | undefined;
 
     /**
      * Gets semantic information about the identifier at a particular position in a
@@ -575,22 +636,48 @@ export interface LanguageService {
 
     getBreakpointStatementAtPosition(fileName: string, position: number): TextSpan | undefined;
 
-    getSignatureHelpItems(fileName: string, position: number, options: SignatureHelpItemsOptions | undefined): SignatureHelpItems | undefined;
+    getSignatureHelpItems(
+        fileName: string,
+        position: number,
+        options: SignatureHelpItemsOptions | undefined,
+    ): SignatureHelpItems | undefined;
 
     getRenameInfo(fileName: string, position: number, preferences: UserPreferences): RenameInfo;
     /** @deprecated Use the signature with `UserPreferences` instead. */
     getRenameInfo(fileName: string, position: number, options?: RenameInfoOptions): RenameInfo;
 
-    findRenameLocations(fileName: string, position: number, findInStrings: boolean, findInComments: boolean, preferences: UserPreferences): readonly RenameLocation[] | undefined;
+    findRenameLocations(
+        fileName: string,
+        position: number,
+        findInStrings: boolean,
+        findInComments: boolean,
+        preferences: UserPreferences,
+    ): readonly RenameLocation[] | undefined;
     /** @deprecated Pass `providePrefixAndSuffixTextForRename` as part of a `UserPreferences` parameter. */
-    findRenameLocations(fileName: string, position: number, findInStrings: boolean, findInComments: boolean, providePrefixAndSuffixTextForRename?: boolean): readonly RenameLocation[] | undefined;
+    findRenameLocations(
+        fileName: string,
+        position: number,
+        findInStrings: boolean,
+        findInComments: boolean,
+        providePrefixAndSuffixTextForRename?: boolean,
+    ): readonly RenameLocation[] | undefined;
 
     getSmartSelectionRange(fileName: string, position: number): SelectionRange;
 
     /** @internal */
-    getDefinitionAtPosition(fileName: string, position: number, searchOtherFilesOnly: false, stopAtAlias: boolean): readonly DefinitionInfo[] | undefined;
+    getDefinitionAtPosition(
+        fileName: string,
+        position: number,
+        searchOtherFilesOnly: false,
+        stopAtAlias: boolean,
+    ): readonly DefinitionInfo[] | undefined;
     /** @internal */
-    getDefinitionAtPosition(fileName: string, position: number, searchOtherFilesOnly: boolean, stopAtAlias: false): readonly DefinitionInfo[] | undefined;
+    getDefinitionAtPosition(
+        fileName: string,
+        position: number,
+        searchOtherFilesOnly: boolean,
+        stopAtAlias: false,
+    ): readonly DefinitionInfo[] | undefined;
     getDefinitionAtPosition(fileName: string, position: number): readonly DefinitionInfo[] | undefined;
     getDefinitionAndBoundSpan(fileName: string, position: number): DefinitionInfoAndBoundSpan | undefined;
     getTypeDefinitionAtPosition(fileName: string, position: number): readonly DefinitionInfo[] | undefined;
@@ -598,10 +685,20 @@ export interface LanguageService {
 
     getReferencesAtPosition(fileName: string, position: number): ReferenceEntry[] | undefined;
     findReferences(fileName: string, position: number): ReferencedSymbol[] | undefined;
-    getDocumentHighlights(fileName: string, position: number, filesToSearch: string[]): DocumentHighlights[] | undefined;
+    getDocumentHighlights(
+        fileName: string,
+        position: number,
+        filesToSearch: string[],
+    ): DocumentHighlights[] | undefined;
     getFileReferences(fileName: string): ReferenceEntry[];
 
-    getNavigateToItems(searchValue: string, maxResultCount?: number, fileName?: string, excludeDtsFiles?: boolean, excludeLibFiles?: boolean): NavigateToItem[];
+    getNavigateToItems(
+        searchValue: string,
+        maxResultCount?: number,
+        fileName?: string,
+        excludeDtsFiles?: boolean,
+        excludeLibFiles?: boolean,
+    ): NavigateToItem[];
     getNavigationBarItems(fileName: string): NavigationBarItem[];
     getNavigationTree(fileName: string): NavigationTree;
 
@@ -616,11 +713,26 @@ export interface LanguageService {
     getBraceMatchingAtPosition(fileName: string, position: number): TextSpan[];
     getIndentationAtPosition(fileName: string, position: number, options: EditorOptions | EditorSettings): number;
 
-    getFormattingEditsForRange(fileName: string, start: number, end: number, options: FormatCodeOptions | FormatCodeSettings): TextChange[];
+    getFormattingEditsForRange(
+        fileName: string,
+        start: number,
+        end: number,
+        options: FormatCodeOptions | FormatCodeSettings,
+    ): TextChange[];
     getFormattingEditsForDocument(fileName: string, options: FormatCodeOptions | FormatCodeSettings): TextChange[];
-    getFormattingEditsAfterKeystroke(fileName: string, position: number, key: string, options: FormatCodeOptions | FormatCodeSettings): TextChange[];
+    getFormattingEditsAfterKeystroke(
+        fileName: string,
+        position: number,
+        key: string,
+        options: FormatCodeOptions | FormatCodeSettings,
+    ): TextChange[];
 
-    getDocCommentTemplateAtPosition(fileName: string, position: number, options?: DocCommentTemplateOptions, formatOptions?: FormatCodeSettings): TextInsertion | undefined;
+    getDocCommentTemplateAtPosition(
+        fileName: string,
+        position: number,
+        options?: DocCommentTemplateOptions,
+        formatOptions?: FormatCodeSettings,
+    ): TextInsertion | undefined;
 
     isValidBraceCompletionAtPosition(fileName: string, position: number, openingBrace: number): boolean;
     /**
@@ -638,18 +750,42 @@ export interface LanguageService {
     /** @internal */
     clearSourceMapperCache(): void;
 
-    getCodeFixesAtPosition(fileName: string, start: number, end: number, errorCodes: readonly number[], formatOptions: FormatCodeSettings, preferences: UserPreferences): readonly CodeFixAction[];
-    getCombinedCodeFix(scope: CombinedCodeFixScope, fixId: {}, formatOptions: FormatCodeSettings, preferences: UserPreferences): CombinedCodeActions;
+    getCodeFixesAtPosition(
+        fileName: string,
+        start: number,
+        end: number,
+        errorCodes: readonly number[],
+        formatOptions: FormatCodeSettings,
+        preferences: UserPreferences,
+    ): readonly CodeFixAction[];
+    getCombinedCodeFix(
+        scope: CombinedCodeFixScope,
+        fixId: {},
+        formatOptions: FormatCodeSettings,
+        preferences: UserPreferences,
+    ): CombinedCodeActions;
 
-    applyCodeActionCommand(action: CodeActionCommand, formatSettings?: FormatCodeSettings): Promise<ApplyCodeActionCommandResult>;
-    applyCodeActionCommand(action: CodeActionCommand[], formatSettings?: FormatCodeSettings): Promise<ApplyCodeActionCommandResult[]>;
-    applyCodeActionCommand(action: CodeActionCommand | CodeActionCommand[], formatSettings?: FormatCodeSettings): Promise<ApplyCodeActionCommandResult | ApplyCodeActionCommandResult[]>;
+    applyCodeActionCommand(
+        action: CodeActionCommand,
+        formatSettings?: FormatCodeSettings,
+    ): Promise<ApplyCodeActionCommandResult>;
+    applyCodeActionCommand(
+        action: CodeActionCommand[],
+        formatSettings?: FormatCodeSettings,
+    ): Promise<ApplyCodeActionCommandResult[]>;
+    applyCodeActionCommand(
+        action: CodeActionCommand | CodeActionCommand[],
+        formatSettings?: FormatCodeSettings,
+    ): Promise<ApplyCodeActionCommandResult | ApplyCodeActionCommandResult[]>;
     /** @deprecated `fileName` will be ignored */
     applyCodeActionCommand(fileName: string, action: CodeActionCommand): Promise<ApplyCodeActionCommandResult>;
     /** @deprecated `fileName` will be ignored */
     applyCodeActionCommand(fileName: string, action: CodeActionCommand[]): Promise<ApplyCodeActionCommandResult[]>;
     /** @deprecated `fileName` will be ignored */
-    applyCodeActionCommand(fileName: string, action: CodeActionCommand | CodeActionCommand[]): Promise<ApplyCodeActionCommandResult | ApplyCodeActionCommandResult[]>;
+    applyCodeActionCommand(
+        fileName: string,
+        action: CodeActionCommand | CodeActionCommand[],
+    ): Promise<ApplyCodeActionCommandResult | ApplyCodeActionCommandResult[]>;
 
     /**
      * @param includeInteractiveActions Include refactor actions that require additional arguments to be
@@ -657,11 +793,41 @@ export interface LanguageService {
      * property of each returned `RefactorActionInfo` and ensure they are able to collect the appropriate
      * arguments for any interactive action before offering it.
      */
-    getApplicableRefactors(fileName: string, positionOrRange: number | TextRange, preferences: UserPreferences | undefined, triggerReason?: RefactorTriggerReason, kind?: string, includeInteractiveActions?: boolean): ApplicableRefactorInfo[];
-    getEditsForRefactor(fileName: string, formatOptions: FormatCodeSettings, positionOrRange: number | TextRange, refactorName: string, actionName: string, preferences: UserPreferences | undefined, interactiveRefactorArguments?: InteractiveRefactorArguments): RefactorEditInfo | undefined;
-    getMoveToRefactoringFileSuggestions(fileName: string, positionOrRange: number | TextRange, preferences: UserPreferences | undefined, triggerReason?: RefactorTriggerReason, kind?: string): { newFileName: string; files: string[]; };
-    organizeImports(args: OrganizeImportsArgs, formatOptions: FormatCodeSettings, preferences: UserPreferences | undefined): readonly FileTextChanges[];
-    getEditsForFileRename(oldFilePath: string, newFilePath: string, formatOptions: FormatCodeSettings, preferences: UserPreferences | undefined): readonly FileTextChanges[];
+    getApplicableRefactors(
+        fileName: string,
+        positionOrRange: number | TextRange,
+        preferences: UserPreferences | undefined,
+        triggerReason?: RefactorTriggerReason,
+        kind?: string,
+        includeInteractiveActions?: boolean,
+    ): ApplicableRefactorInfo[];
+    getEditsForRefactor(
+        fileName: string,
+        formatOptions: FormatCodeSettings,
+        positionOrRange: number | TextRange,
+        refactorName: string,
+        actionName: string,
+        preferences: UserPreferences | undefined,
+        interactiveRefactorArguments?: InteractiveRefactorArguments,
+    ): RefactorEditInfo | undefined;
+    getMoveToRefactoringFileSuggestions(
+        fileName: string,
+        positionOrRange: number | TextRange,
+        preferences: UserPreferences | undefined,
+        triggerReason?: RefactorTriggerReason,
+        kind?: string,
+    ): { newFileName: string; files: string[]; };
+    organizeImports(
+        args: OrganizeImportsArgs,
+        formatOptions: FormatCodeSettings,
+        preferences: UserPreferences | undefined,
+    ): readonly FileTextChanges[];
+    getEditsForFileRename(
+        oldFilePath: string,
+        newFilePath: string,
+        formatOptions: FormatCodeSettings,
+        preferences: UserPreferences | undefined,
+    ): readonly FileTextChanges[];
 
     getEmitOutput(fileName: string, emitOnlyDtsFiles?: boolean, forceDtsEmit?: boolean): EmitOutput;
 
@@ -674,7 +840,10 @@ export interface LanguageService {
     /// Returns true if a suitable symbol was found in the project.
     /// May set isDefinition properties in `referencedSymbols` to false.
     /// May add elements to `knownSymbolSpans`.
-    /** @internal */ updateIsDefinitionOfReferencedSymbols(referencedSymbols: readonly ReferencedSymbol[], knownSymbolSpans: Set<DocumentSpan>): boolean;
+    /** @internal */ updateIsDefinitionOfReferencedSymbols(
+        referencedSymbols: readonly ReferencedSymbol[],
+        knownSymbolSpans: Set<DocumentSpan>,
+    ): boolean;
 
     toggleLineComment(fileName: string, textRange: TextRange): TextChange[];
     toggleMultilineComment(fileName: string, textRange: TextRange): TextChange[];
@@ -1640,8 +1809,16 @@ export interface Classifier {
      *                                  subsume the classification.
      * @deprecated Use getLexicalClassifications instead.
      */
-    getClassificationsForLine(text: string, lexState: EndOfLineState, syntacticClassifierAbsent: boolean): ClassificationResult;
-    getEncodedLexicalClassifications(text: string, endOfLineState: EndOfLineState, syntacticClassifierAbsent: boolean): Classifications;
+    getClassificationsForLine(
+        text: string,
+        lexState: EndOfLineState,
+        syntacticClassifierAbsent: boolean,
+    ): ClassificationResult;
+    getEncodedLexicalClassifications(
+        text: string,
+        endOfLineState: EndOfLineState,
+        syntacticClassifierAbsent: boolean,
+    ): Classifications;
 }
 
 export const enum ScriptElementKind {
@@ -1884,10 +2061,18 @@ export interface Refactor {
     kinds?: string[];
 
     /** Compute the associated code actions */
-    getEditsForAction(context: RefactorContext, actionName: string, interactiveRefactorArguments?: InteractiveRefactorArguments): RefactorEditInfo | undefined;
+    getEditsForAction(
+        context: RefactorContext,
+        actionName: string,
+        interactiveRefactorArguments?: InteractiveRefactorArguments,
+    ): RefactorEditInfo | undefined;
 
     /** Compute (quickly) which actions are available here */
-    getAvailableActions(context: RefactorContext, includeInteractive?: boolean, interactiveRefactorArguments?: InteractiveRefactorArguments): readonly ApplicableRefactorInfo[];
+    getAvailableActions(
+        context: RefactorContext,
+        includeInteractive?: boolean,
+        interactiveRefactorArguments?: InteractiveRefactorArguments,
+    ): readonly ApplicableRefactorInfo[];
 }
 
 /** @internal */

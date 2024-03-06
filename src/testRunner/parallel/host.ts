@@ -40,7 +40,9 @@ export function start() {
     const { statSync } = require("fs") as typeof import("fs");
 
     // NOTE: paths for module and types for FailedTestReporter _do not_ line up due to our use of --outFile for run.js
-    const FailedTestReporter = require(Utils.findUpFile("scripts/failed-tests.cjs")) as typeof import("../../../scripts/failed-tests.cjs");
+    const FailedTestReporter = require(
+        Utils.findUpFile("scripts/failed-tests.cjs"),
+    ) as typeof import("../../../scripts/failed-tests.cjs");
 
     const perfdataFileNameFragment = ".parallelperf";
     const perfData = readSavedPerfData(configOption);
@@ -213,7 +215,10 @@ export function start() {
     }
 
     function startDelayed(perfData: { [testHash: string]: number; } | undefined, totalCost: number) {
-        console.log(`Discovered ${tasks.length} unittest suites` + (newTasks.length ? ` and ${newTasks.length} new suites.` : "."));
+        console.log(
+            `Discovered ${tasks.length} unittest suites` +
+                (newTasks.length ? ` and ${newTasks.length} new suites.` : "."),
+        );
         console.log("Discovering runner-based tests...");
         const discoverStart = +(new Date());
         for (const runner of runners) {
@@ -226,7 +231,11 @@ export function start() {
                     catch {
                         // May be a directory
                         try {
-                            size = IO.listFiles(path.join(runner.workingDirectory, file), /.*/g, { recursive: true }).reduce((acc, elem) => acc + statSync(elem).size, 0);
+                            size = IO.listFiles(path.join(runner.workingDirectory, file), /.*/g, { recursive: true })
+                                .reduce(
+                                    (acc, elem) => acc + statSync(elem).size,
+                                    0,
+                                );
                         }
                         catch {
                             // Unknown test kind, just return 0 and let the historical analysis take over after one run
@@ -275,11 +284,19 @@ export function start() {
         let closedWorkers = 0;
         for (let i = 0; i < workerCount; i++) {
             // TODO: Just send the config over the IPC channel or in the command line arguments
-            const config: TestConfig = { light: lightMode, listenForWork: true, runUnitTests, stackTraceLimit, timeout: globalTimeout };
+            const config: TestConfig = {
+                light: lightMode,
+                listenForWork: true,
+                runUnitTests,
+                stackTraceLimit,
+                timeout: globalTimeout,
+            };
             const configPath = ts.combinePaths(taskConfigsFolder, `task-config${i}.json`);
             IO.writeFile(configPath, JSON.stringify(config));
             const worker: Worker = {
-                process: fork(process.argv[1], [`--config="${configPath}"`], { stdio: ["pipe", "pipe", "pipe", "ipc"] }),
+                process: fork(process.argv[1], [`--config="${configPath}"`], {
+                    stdio: ["pipe", "pipe", "pipe", "ipc"],
+                }),
                 accumulatedOutput: "",
                 currentTasks: undefined,
                 timer: undefined,
@@ -292,7 +309,13 @@ export function start() {
             worker.process.stdout!.on("data", appendOutput);
             const killChild = (timeout: TaskTimeout) => {
                 worker.process.kill();
-                console.error(`Worker exceeded ${timeout.duration}ms timeout ${worker.currentTasks && worker.currentTasks.length ? `while running test '${worker.currentTasks[0].file}'.` : `during test setup.`}`);
+                console.error(
+                    `Worker exceeded ${timeout.duration}ms timeout ${
+                        worker.currentTasks && worker.currentTasks.length ?
+                            `while running test '${worker.currentTasks[0].file}'.`
+                            : `during test setup.`
+                    }`,
+                );
                 return process.exit(2);
             };
             worker.process.on("error", err => {
@@ -310,9 +333,13 @@ export function start() {
             worker.process.on("message", (data: ParallelClientMessage) => {
                 switch (data.type) {
                     case "error": {
-                        console.error(`Test worker encountered unexpected error${data.payload.name ? ` during the execution of test ${data.payload.name}` : ""} and was forced to close:
+                        console.error(
+                            `Test worker encountered unexpected error${
+                                data.payload.name ? ` during the execution of test ${data.payload.name}` : ""
+                            } and was forced to close:
             Message: ${data.payload.error}
-            Stack: ${data.payload.stack}`);
+            Stack: ${data.payload.stack}`,
+                        );
                         return process.exit(2);
                     }
                     case "timeout": {
@@ -349,7 +376,11 @@ export function start() {
                             while (nextProgress < progress) {
                                 nextProgress += progressUpdateInterval;
                             }
-                            updateProgress(progress, errorResults.length ? `${errorResults.length} failing` : `${totalPassing} passing`, errorResults.length ? "fail" : undefined);
+                            updateProgress(
+                                progress,
+                                errorResults.length ? `${errorResults.length} failing` : `${totalPassing} passing`,
+                                errorResults.length ? "fail" : undefined,
+                            );
                         }
 
                         if (data.type === "result") {
@@ -369,7 +400,9 @@ export function start() {
                             }
                             worker.currentTasks = taskList;
                             if (taskList.length === 1) {
-                                worker.process.send({ type: "test", payload: taskList[0] } satisfies ParallelHostMessage); // TODO: GH#18217
+                                worker.process.send(
+                                    { type: "test", payload: taskList[0] } satisfies ParallelHostMessage,
+                                ); // TODO: GH#18217
                             }
                             else {
                                 worker.process.send({ type: "batch", payload: taskList } satisfies ParallelHostMessage); // TODO: GH#18217
@@ -384,14 +417,18 @@ export function start() {
         // It's only really worth doing an initial batching if there are a ton of files to go through (and they have estimates)
         if (totalFiles > 1000 && batchSize > 0) {
             console.log("Batching initial test lists...");
-            const batches: { runner: TestRunnerKind | "unittest"; file: string; size: number; }[][] = new Array(batchCount);
+            const batches: { runner: TestRunnerKind | "unittest"; file: string; size: number; }[][] = new Array(
+                batchCount,
+            );
             const doneBatching = new Array(batchCount);
             let scheduledTotal = 0;
             batcher:
             while (true) {
                 for (let i = 0; i < batchCount; i++) {
                     if (tasks.length <= workerCount) { // Keep a small reserve even in the suboptimally packed case
-                        console.log(`Suboptimal packing detected: no tests remain to be stolen. Reduce packing fraction from ${packfraction} to fix.`);
+                        console.log(
+                            `Suboptimal packing detected: no tests remain to be stolen. Reduce packing fraction from ${packfraction} to fix.`,
+                        );
                         break batcher;
                     }
                     if (doneBatching[i]) {
@@ -421,7 +458,11 @@ export function start() {
                 console.log(`${prefix}. Unprofiled tests including ${unknownValue} will be run first.`);
             }
             else {
-                console.log(`${prefix} with approximate total ${perfData ? "time" : "file sizes"} of ${perfData ? ms(batchSize) : `${Math.floor(batchSize)} bytes`} in each group. (${(scheduledTotal / totalCost * 100).toFixed(1)}% of total tests batched)`);
+                console.log(
+                    `${prefix} with approximate total ${perfData ? "time" : "file sizes"} of ${
+                        perfData ? ms(batchSize) : `${Math.floor(batchSize)} bytes`
+                    } in each group. (${(scheduledTotal / totalCost * 100).toFixed(1)}% of total tests batched)`,
+                );
             }
             for (const worker of workers) {
                 const payload = batches.pop();
@@ -455,12 +496,15 @@ export function start() {
             const summaryColor = isPartitionFail ? "fail" : "green";
             const summarySymbol = isPartitionFail ? Base.symbols.err : Base.symbols.ok;
 
-            const summaryTests = (isPartitionFail ? totalPassing + "/" + (errorResults.length + totalPassing) : totalPassing) + " passing";
+            const summaryTests =
+                (isPartitionFail ? totalPassing + "/" + (errorResults.length + totalPassing) : totalPassing) +
+                " passing";
             const summaryDuration = "(" + ms(duration) + ")";
             const savedUseColors = Base.useColors;
             Base.useColors = !noColors;
 
-            const summary = color(summaryColor, summarySymbol + " " + summaryTests) + " " + color("light", summaryDuration);
+            const summary = color(summaryColor, summarySymbol + " " + summaryTests) + " " +
+                color("light", summaryDuration);
             Base.useColors = savedUseColors;
 
             updateProgress(1, summary);
@@ -545,7 +589,11 @@ export function start() {
             function replayTest(runner: Mocha.Runner, test: RemoteTest) {
                 runner.emit("test", test);
                 if (test.isFailed()) {
-                    runner.emit("fail", test, "error" in test.info ? rebuildError(test.info) : new Error("Unknown error")); // eslint-disable-line local/no-in-operator
+                    runner.emit(
+                        "fail",
+                        test,
+                        "error" in test.info ? rebuildError(test.info) : new Error("Unknown error"),
+                    ); // eslint-disable-line local/no-in-operator
                 }
                 else {
                     runner.emit("pass", test);

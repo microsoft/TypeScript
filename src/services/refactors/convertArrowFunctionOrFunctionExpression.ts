@@ -129,7 +129,8 @@ function getRefactorActionsToConvertFunctionExpressions(context: RefactorContext
     }
 
     if (refactorKindBeginsWith(toArrowFunctionAction.kind, kind)) {
-        const error = isFunctionExpression(func) ? undefined : getLocaleSpecificMessage(Diagnostics.Could_not_convert_to_arrow_function);
+        const error = isFunctionExpression(func) ? undefined
+            : getLocaleSpecificMessage(Diagnostics.Could_not_convert_to_arrow_function);
         if (error) {
             errors.push({ ...toArrowFunctionAction, notApplicableReason: error });
         }
@@ -146,7 +147,10 @@ function getRefactorActionsToConvertFunctionExpressions(context: RefactorContext
     }];
 }
 
-function getRefactorEditsToConvertFunctionExpressions(context: RefactorContext, actionName: string): RefactorEditInfo | undefined {
+function getRefactorEditsToConvertFunctionExpressions(
+    context: RefactorContext,
+    actionName: string,
+): RefactorEditInfo | undefined {
     const { file, startPosition, program } = context;
     const info = getFunctionInfo(file, startPosition, program);
 
@@ -210,7 +214,9 @@ function getFunctionInfo(file: SourceFile, startPosition: number, program: Progr
         !containingThis(maybeFunc.body) &&
         !typeChecker.containsArgumentsReference(maybeFunc)
     ) {
-        if (isFunctionExpression(maybeFunc) && isFunctionReferencedInFile(file, typeChecker, maybeFunc)) return undefined;
+        if (isFunctionExpression(maybeFunc) && isFunctionReferencedInFile(file, typeChecker, maybeFunc)) {
+            return undefined;
+        }
         return { selectedVariableDeclaration: false, func: maybeFunc };
     }
 
@@ -221,13 +227,21 @@ function isSingleVariableDeclaration(parent: Node): parent is VariableDeclaratio
     return isVariableDeclaration(parent) || (isVariableDeclarationList(parent) && parent.declarations.length === 1);
 }
 
-function tryGetFunctionFromVariableDeclaration(sourceFile: SourceFile, typeChecker: TypeChecker, parent: Node): ArrowFunction | FunctionExpression | undefined {
+function tryGetFunctionFromVariableDeclaration(
+    sourceFile: SourceFile,
+    typeChecker: TypeChecker,
+    parent: Node,
+): ArrowFunction | FunctionExpression | undefined {
     if (!isSingleVariableDeclaration(parent)) {
         return undefined;
     }
     const variableDeclaration = isVariableDeclaration(parent) ? parent : first(parent.declarations);
     const initializer = variableDeclaration.initializer;
-    if (initializer && (isArrowFunction(initializer) || isFunctionExpression(initializer) && !isFunctionReferencedInFile(sourceFile, typeChecker, initializer))) {
+    if (
+        initializer &&
+        (isArrowFunction(initializer) ||
+            isFunctionExpression(initializer) && !isFunctionReferencedInFile(sourceFile, typeChecker, initializer))
+    ) {
         return initializer;
     }
     return undefined;
@@ -239,7 +253,13 @@ function convertToBlock(body: ConciseBody): Block {
         const file = body.getSourceFile();
         setTextRange(returnStatement, body);
         suppressLeadingAndTrailingTrivia(returnStatement);
-        copyTrailingAsLeadingComments(body, returnStatement, file, /*commentKind*/ undefined, /*hasTrailingNewLine*/ true);
+        copyTrailingAsLeadingComments(
+            body,
+            returnStatement,
+            file,
+            /*commentKind*/ undefined,
+            /*hasTrailingNewLine*/ true,
+        );
         return factory.createBlock([returnStatement], /*multiLine*/ true);
     }
     else {
@@ -249,32 +269,63 @@ function convertToBlock(body: ConciseBody): Block {
 
 function getVariableInfo(func: FunctionExpression | ArrowFunction): VariableInfo | undefined {
     const variableDeclaration = func.parent;
-    if (!isVariableDeclaration(variableDeclaration) || !isVariableDeclarationInVariableStatement(variableDeclaration)) return undefined;
+    if (!isVariableDeclaration(variableDeclaration) || !isVariableDeclarationInVariableStatement(variableDeclaration)) {
+        return undefined;
+    }
 
     const variableDeclarationList = variableDeclaration.parent;
     const statement = variableDeclarationList.parent;
-    if (!isVariableDeclarationList(variableDeclarationList) || !isVariableStatement(statement) || !isIdentifier(variableDeclaration.name)) return undefined;
+    if (
+        !isVariableDeclarationList(variableDeclarationList) || !isVariableStatement(statement) ||
+        !isIdentifier(variableDeclaration.name)
+    ) {
+        return undefined;
+    }
 
     return { variableDeclaration, variableDeclarationList, statement, name: variableDeclaration.name };
 }
 
-function getEditInfoForConvertToAnonymousFunction(context: RefactorContext, func: FunctionExpression | ArrowFunction): FileTextChanges[] {
+function getEditInfoForConvertToAnonymousFunction(
+    context: RefactorContext,
+    func: FunctionExpression | ArrowFunction,
+): FileTextChanges[] {
     const { file } = context;
     const body = convertToBlock(func.body);
-    const newNode = factory.createFunctionExpression(func.modifiers, func.asteriskToken, /*name*/ undefined, func.typeParameters, func.parameters, func.type, body);
+    const newNode = factory.createFunctionExpression(
+        func.modifiers,
+        func.asteriskToken,
+        /*name*/ undefined,
+        func.typeParameters,
+        func.parameters,
+        func.type,
+        body,
+    );
     return textChanges.ChangeTracker.with(context, t => t.replaceNode(file, func, newNode));
 }
 
-function getEditInfoForConvertToNamedFunction(context: RefactorContext, func: FunctionExpression | ArrowFunction, variableInfo: VariableInfo): FileTextChanges[] {
+function getEditInfoForConvertToNamedFunction(
+    context: RefactorContext,
+    func: FunctionExpression | ArrowFunction,
+    variableInfo: VariableInfo,
+): FileTextChanges[] {
     const { file } = context;
     const body = convertToBlock(func.body);
 
     const { variableDeclaration, variableDeclarationList, statement, name } = variableInfo;
     suppressLeadingTrivia(statement);
 
-    const modifiersFlags = (getCombinedModifierFlags(variableDeclaration) & ModifierFlags.Export) | getEffectiveModifierFlags(func);
+    const modifiersFlags = (getCombinedModifierFlags(variableDeclaration) & ModifierFlags.Export) |
+        getEffectiveModifierFlags(func);
     const modifiers = factory.createModifiersFromModifierFlags(modifiersFlags);
-    const newNode = factory.createFunctionDeclaration(length(modifiers) ? modifiers : undefined, func.asteriskToken, name, func.typeParameters, func.parameters, func.type, body);
+    const newNode = factory.createFunctionDeclaration(
+        length(modifiers) ? modifiers : undefined,
+        func.asteriskToken,
+        name,
+        func.typeParameters,
+        func.parameters,
+        func.type,
+        body,
+    );
 
     if (variableDeclarationList.declarations.length === 1) {
         return textChanges.ChangeTracker.with(context, t => t.replaceNode(file, statement, newNode));
@@ -302,7 +353,14 @@ function getEditInfoForConvertToArrowFunction(context: RefactorContext, func: Fu
         body = func.body;
     }
 
-    const newNode = factory.createArrowFunction(func.modifiers, func.typeParameters, func.parameters, func.type, factory.createToken(SyntaxKind.EqualsGreaterThanToken), body);
+    const newNode = factory.createArrowFunction(
+        func.modifiers,
+        func.typeParameters,
+        func.parameters,
+        func.type,
+        factory.createToken(SyntaxKind.EqualsGreaterThanToken),
+        body,
+    );
     return textChanges.ChangeTracker.with(context, t => t.replaceNode(file, func, newNode));
 }
 
@@ -310,6 +368,10 @@ function canBeConvertedToExpression(body: Block, head: Statement): head is Retur
     return body.statements.length === 1 && (isReturnStatement(head) && !!head.expression);
 }
 
-function isFunctionReferencedInFile(sourceFile: SourceFile, typeChecker: TypeChecker, node: FunctionExpression): boolean {
+function isFunctionReferencedInFile(
+    sourceFile: SourceFile,
+    typeChecker: TypeChecker,
+    node: FunctionExpression,
+): boolean {
     return !!node.name && FindAllReferences.Core.isSymbolReferencedInFile(node.name, typeChecker, sourceFile);
 }

@@ -117,7 +117,13 @@ export function getSourceMapper(host: SourceMapperHost): SourceMapper {
 
         const declarationPath = outPath ?
             removeFileExtension(outPath) + Extension.Dts :
-            getDeclarationEmitOutputFilePathWorker(info.fileName, program.getCompilerOptions(), currentDirectory, program.getCommonSourceDirectory(), getCanonicalFileName);
+            getDeclarationEmitOutputFilePathWorker(
+                info.fileName,
+                program.getCompilerOptions(),
+                currentDirectory,
+                program.getCommonSourceDirectory(),
+                getCanonicalFileName,
+            );
         if (declarationPath === undefined) return undefined;
 
         const newLoc = getDocumentPositionMapper(declarationPath, info.fileName).getGeneratedPosition(info);
@@ -175,7 +181,10 @@ export function getSourceMapper(host: SourceMapperHost): SourceMapper {
  *
  * @internal
  */
-export type ReadMapFile = (mapFileName: string, mapFileNameFromDts: string | undefined) => string | undefined | DocumentPositionMapper | false;
+export type ReadMapFile = (
+    mapFileName: string,
+    mapFileNameFromDts: string | undefined,
+) => string | undefined | DocumentPositionMapper | false;
 
 /** @internal */
 export function getDocumentPositionMapper(
@@ -201,7 +210,8 @@ export function getDocumentPositionMapper(
         possibleMapLocations.push(mapFileName);
     }
     possibleMapLocations.push(generatedFileName + ".map");
-    const originalMapFileName = mapFileName && getNormalizedAbsolutePath(mapFileName, getDirectoryPath(generatedFileName));
+    const originalMapFileName = mapFileName &&
+        getNormalizedAbsolutePath(mapFileName, getDirectoryPath(generatedFileName));
     for (const location of possibleMapLocations) {
         const mapFileName = getNormalizedAbsolutePath(location, getDirectoryPath(generatedFileName));
         const mapFileContents = readMapFile(mapFileName, originalMapFileName);

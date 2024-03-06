@@ -54,7 +54,11 @@ import {
  * Gets a string literal to use as the assigned name of an anonymous class or function declaration.
  * @internal
  */
-export function getAssignedNameOfIdentifier(factory: NodeFactory, name: Identifier, expression: WrappedExpression<AnonymousFunctionDefinition>): StringLiteral {
+export function getAssignedNameOfIdentifier(
+    factory: NodeFactory,
+    name: Identifier,
+    expression: WrappedExpression<AnonymousFunctionDefinition>,
+): StringLiteral {
     const original = getOriginalNode(skipOuterExpressions(expression));
     if (
         (isClassDeclaration(original) || isFunctionDeclaration(original)) &&
@@ -65,7 +69,11 @@ export function getAssignedNameOfIdentifier(factory: NodeFactory, name: Identifi
     return factory.createStringLiteralFromNode(name);
 }
 
-function getAssignedNameOfPropertyName(context: TransformationContext, name: PropertyName, assignedNameText: string | undefined) {
+function getAssignedNameOfPropertyName(
+    context: TransformationContext,
+    name: PropertyName,
+    assignedNameText: string | undefined,
+) {
     const { factory } = context;
     if (assignedNameText !== undefined) {
         const assignedName = factory.createStringLiteral(assignedNameText);
@@ -100,7 +108,11 @@ function getAssignedNameOfPropertyName(context: TransformationContext, name: Pro
  * expression that has already had its `EmitFlags` set or may have been tracked to prevent substitution.
  * @internal
  */
-export function createClassNamedEvaluationHelperBlock(context: TransformationContext, assignedName: Expression, thisExpression: Expression = context.factory.createThis()): ClassNamedEvaluationHelperBlock {
+export function createClassNamedEvaluationHelperBlock(
+    context: TransformationContext,
+    assignedName: Expression,
+    thisExpression: Expression = context.factory.createThis(),
+): ClassNamedEvaluationHelperBlock {
     // produces:
     //
     //  static { __setFunctionName(this, "C"); }
@@ -249,13 +261,21 @@ function finishTransformNamedEvaluation(
     const innerExpression = skipOuterExpressions(expression);
 
     const updatedExpression = isClassExpression(innerExpression) ?
-        cast(injectClassNamedEvaluationHelperBlockIfMissing(context, innerExpression, assignedName), isClassExpression) :
+        cast(
+            injectClassNamedEvaluationHelperBlockIfMissing(context, innerExpression, assignedName),
+            isClassExpression,
+        ) :
         context.getEmitHelperFactory().createSetFunctionNameHelper(innerExpression, assignedName);
 
     return factory.restoreOuterExpressions(expression, updatedExpression);
 }
 
-function transformNamedEvaluationOfPropertyAssignment(context: TransformationContext, node: NamedEvaluation & PropertyAssignment, ignoreEmptyStringLiteral?: boolean, assignedNameText?: string) {
+function transformNamedEvaluationOfPropertyAssignment(
+    context: TransformationContext,
+    node: NamedEvaluation & PropertyAssignment,
+    ignoreEmptyStringLiteral?: boolean,
+    assignedNameText?: string,
+) {
     // 13.2.5.5 RS: PropertyDefinitionEvaluation
     //   PropertyAssignment : PropertyName `:` AssignmentExpression
     //     ...
@@ -265,7 +285,12 @@ function transformNamedEvaluationOfPropertyAssignment(context: TransformationCon
 
     const { factory } = context;
     const { assignedName, name } = getAssignedNameOfPropertyName(context, node.name, assignedNameText);
-    const initializer = finishTransformNamedEvaluation(context, node.initializer, assignedName, ignoreEmptyStringLiteral);
+    const initializer = finishTransformNamedEvaluation(
+        context,
+        node.initializer,
+        assignedName,
+        ignoreEmptyStringLiteral,
+    );
     return factory.updatePropertyAssignment(
         node,
         name,
@@ -273,7 +298,12 @@ function transformNamedEvaluationOfPropertyAssignment(context: TransformationCon
     );
 }
 
-function transformNamedEvaluationOfShorthandAssignmentProperty(context: TransformationContext, node: NamedEvaluation & ShorthandPropertyAssignment, ignoreEmptyStringLiteral?: boolean, assignedNameText?: string) {
+function transformNamedEvaluationOfShorthandAssignmentProperty(
+    context: TransformationContext,
+    node: NamedEvaluation & ShorthandPropertyAssignment,
+    ignoreEmptyStringLiteral?: boolean,
+    assignedNameText?: string,
+) {
     // 13.15.5.3 RS: PropertyDestructuringAssignmentEvaluation
     //   AssignmentProperty : IdentifierReference Initializer?
     //     ...
@@ -285,7 +315,12 @@ function transformNamedEvaluationOfShorthandAssignmentProperty(context: Transfor
     const { factory } = context;
     const assignedName = assignedNameText !== undefined ? factory.createStringLiteral(assignedNameText) :
         getAssignedNameOfIdentifier(factory, node.name, node.objectAssignmentInitializer);
-    const objectAssignmentInitializer = finishTransformNamedEvaluation(context, node.objectAssignmentInitializer, assignedName, ignoreEmptyStringLiteral);
+    const objectAssignmentInitializer = finishTransformNamedEvaluation(
+        context,
+        node.objectAssignmentInitializer,
+        assignedName,
+        ignoreEmptyStringLiteral,
+    );
     return factory.updateShorthandPropertyAssignment(
         node,
         node.name,
@@ -293,7 +328,12 @@ function transformNamedEvaluationOfShorthandAssignmentProperty(context: Transfor
     );
 }
 
-function transformNamedEvaluationOfVariableDeclaration(context: TransformationContext, node: NamedEvaluation & VariableDeclaration, ignoreEmptyStringLiteral?: boolean, assignedNameText?: string) {
+function transformNamedEvaluationOfVariableDeclaration(
+    context: TransformationContext,
+    node: NamedEvaluation & VariableDeclaration,
+    ignoreEmptyStringLiteral?: boolean,
+    assignedNameText?: string,
+) {
     // 14.3.1.2 RS: Evaluation
     //   LexicalBinding : BindingIdentifier Initializer
     //     ...
@@ -311,7 +351,12 @@ function transformNamedEvaluationOfVariableDeclaration(context: TransformationCo
     const { factory } = context;
     const assignedName = assignedNameText !== undefined ? factory.createStringLiteral(assignedNameText) :
         getAssignedNameOfIdentifier(factory, node.name, node.initializer);
-    const initializer = finishTransformNamedEvaluation(context, node.initializer, assignedName, ignoreEmptyStringLiteral);
+    const initializer = finishTransformNamedEvaluation(
+        context,
+        node.initializer,
+        assignedName,
+        ignoreEmptyStringLiteral,
+    );
     return factory.updateVariableDeclaration(
         node,
         node.name,
@@ -321,7 +366,12 @@ function transformNamedEvaluationOfVariableDeclaration(context: TransformationCo
     );
 }
 
-function transformNamedEvaluationOfParameterDeclaration(context: TransformationContext, node: NamedEvaluation & ParameterDeclaration, ignoreEmptyStringLiteral?: boolean, assignedNameText?: string) {
+function transformNamedEvaluationOfParameterDeclaration(
+    context: TransformationContext,
+    node: NamedEvaluation & ParameterDeclaration,
+    ignoreEmptyStringLiteral?: boolean,
+    assignedNameText?: string,
+) {
     // 8.6.3 RS: IteratorBindingInitialization
     //   SingleNameBinding : BindingIdentifier Initializer?
     //     ...
@@ -341,7 +391,12 @@ function transformNamedEvaluationOfParameterDeclaration(context: TransformationC
     const { factory } = context;
     const assignedName = assignedNameText !== undefined ? factory.createStringLiteral(assignedNameText) :
         getAssignedNameOfIdentifier(factory, node.name, node.initializer);
-    const initializer = finishTransformNamedEvaluation(context, node.initializer, assignedName, ignoreEmptyStringLiteral);
+    const initializer = finishTransformNamedEvaluation(
+        context,
+        node.initializer,
+        assignedName,
+        ignoreEmptyStringLiteral,
+    );
     return factory.updateParameterDeclaration(
         node,
         node.modifiers,
@@ -353,7 +408,12 @@ function transformNamedEvaluationOfParameterDeclaration(context: TransformationC
     );
 }
 
-function transformNamedEvaluationOfBindingElement(context: TransformationContext, node: NamedEvaluation & BindingElement, ignoreEmptyStringLiteral?: boolean, assignedNameText?: string) {
+function transformNamedEvaluationOfBindingElement(
+    context: TransformationContext,
+    node: NamedEvaluation & BindingElement,
+    ignoreEmptyStringLiteral?: boolean,
+    assignedNameText?: string,
+) {
     // 8.6.3 RS: IteratorBindingInitialization
     //   SingleNameBinding : BindingIdentifier Initializer?
     //     ...
@@ -373,7 +433,12 @@ function transformNamedEvaluationOfBindingElement(context: TransformationContext
     const { factory } = context;
     const assignedName = assignedNameText !== undefined ? factory.createStringLiteral(assignedNameText) :
         getAssignedNameOfIdentifier(factory, node.name, node.initializer);
-    const initializer = finishTransformNamedEvaluation(context, node.initializer, assignedName, ignoreEmptyStringLiteral);
+    const initializer = finishTransformNamedEvaluation(
+        context,
+        node.initializer,
+        assignedName,
+        ignoreEmptyStringLiteral,
+    );
     return factory.updateBindingElement(
         node,
         node.dotDotDotToken,
@@ -383,7 +448,12 @@ function transformNamedEvaluationOfBindingElement(context: TransformationContext
     );
 }
 
-function transformNamedEvaluationOfPropertyDeclaration(context: TransformationContext, node: NamedEvaluation & PropertyDeclaration, ignoreEmptyStringLiteral?: boolean, assignedNameText?: string) {
+function transformNamedEvaluationOfPropertyDeclaration(
+    context: TransformationContext,
+    node: NamedEvaluation & PropertyDeclaration,
+    ignoreEmptyStringLiteral?: boolean,
+    assignedNameText?: string,
+) {
     // 10.2.1.3 RS: EvaluateBody
     //   Initializer : `=` AssignmentExpression
     //     ...
@@ -393,7 +463,12 @@ function transformNamedEvaluationOfPropertyDeclaration(context: TransformationCo
 
     const { factory } = context;
     const { assignedName, name } = getAssignedNameOfPropertyName(context, node.name, assignedNameText);
-    const initializer = finishTransformNamedEvaluation(context, node.initializer, assignedName, ignoreEmptyStringLiteral);
+    const initializer = finishTransformNamedEvaluation(
+        context,
+        node.initializer,
+        assignedName,
+        ignoreEmptyStringLiteral,
+    );
     return factory.updatePropertyDeclaration(
         node,
         node.modifiers,
@@ -404,7 +479,12 @@ function transformNamedEvaluationOfPropertyDeclaration(context: TransformationCo
     );
 }
 
-function transformNamedEvaluationOfAssignmentExpression(context: TransformationContext, node: NamedEvaluation & BinaryExpression, ignoreEmptyStringLiteral?: boolean, assignedNameText?: string) {
+function transformNamedEvaluationOfAssignmentExpression(
+    context: TransformationContext,
+    node: NamedEvaluation & BinaryExpression,
+    ignoreEmptyStringLiteral?: boolean,
+    assignedNameText?: string,
+) {
     // 13.15.2 RS: Evaluation
     //   AssignmentExpression : LeftHandSideExpression `=` AssignmentExpression
     //     1. If |LeftHandSideExpression| is neither an |ObjectLiteral| nor an |ArrayLiteral|, then
@@ -443,7 +523,12 @@ function transformNamedEvaluationOfAssignmentExpression(context: TransformationC
     );
 }
 
-function transformNamedEvaluationOfExportAssignment(context: TransformationContext, node: NamedEvaluation & ExportAssignment, ignoreEmptyStringLiteral?: boolean, assignedNameText?: string) {
+function transformNamedEvaluationOfExportAssignment(
+    context: TransformationContext,
+    node: NamedEvaluation & ExportAssignment,
+    ignoreEmptyStringLiteral?: boolean,
+    assignedNameText?: string,
+) {
     // 16.2.3.7 RS: Evaluation
     //   ExportDeclaration : `export` `default` AssignmentExpression `;`
     //     1. If IsAnonymousFunctionDefinition(|AssignmentExpression|) is *true*, then
@@ -468,23 +553,48 @@ function transformNamedEvaluationOfExportAssignment(context: TransformationConte
  * Performs a shallow transformation of a `NamedEvaluation` node, such that a valid name will be assigned.
  * @internal
  */
-export function transformNamedEvaluation<T extends NamedEvaluation>(context: TransformationContext, node: T, ignoreEmptyStringLiteral?: boolean, assignedName?: string): Extract<NamedEvaluation, Pick<T, "kind" | keyof T & "operatorToken" | keyof T & "name">>;
-export function transformNamedEvaluation(context: TransformationContext, node: NamedEvaluation, ignoreEmptyStringLiteral?: boolean, assignedName?: string) {
+export function transformNamedEvaluation<T extends NamedEvaluation>(
+    context: TransformationContext,
+    node: T,
+    ignoreEmptyStringLiteral?: boolean,
+    assignedName?: string,
+): Extract<NamedEvaluation, Pick<T, "kind" | keyof T & "operatorToken" | keyof T & "name">>;
+export function transformNamedEvaluation(
+    context: TransformationContext,
+    node: NamedEvaluation,
+    ignoreEmptyStringLiteral?: boolean,
+    assignedName?: string,
+) {
     switch (node.kind) {
         case SyntaxKind.PropertyAssignment:
             return transformNamedEvaluationOfPropertyAssignment(context, node, ignoreEmptyStringLiteral, assignedName);
         case SyntaxKind.ShorthandPropertyAssignment:
-            return transformNamedEvaluationOfShorthandAssignmentProperty(context, node, ignoreEmptyStringLiteral, assignedName);
+            return transformNamedEvaluationOfShorthandAssignmentProperty(
+                context,
+                node,
+                ignoreEmptyStringLiteral,
+                assignedName,
+            );
         case SyntaxKind.VariableDeclaration:
             return transformNamedEvaluationOfVariableDeclaration(context, node, ignoreEmptyStringLiteral, assignedName);
         case SyntaxKind.Parameter:
-            return transformNamedEvaluationOfParameterDeclaration(context, node, ignoreEmptyStringLiteral, assignedName);
+            return transformNamedEvaluationOfParameterDeclaration(
+                context,
+                node,
+                ignoreEmptyStringLiteral,
+                assignedName,
+            );
         case SyntaxKind.BindingElement:
             return transformNamedEvaluationOfBindingElement(context, node, ignoreEmptyStringLiteral, assignedName);
         case SyntaxKind.PropertyDeclaration:
             return transformNamedEvaluationOfPropertyDeclaration(context, node, ignoreEmptyStringLiteral, assignedName);
         case SyntaxKind.BinaryExpression:
-            return transformNamedEvaluationOfAssignmentExpression(context, node, ignoreEmptyStringLiteral, assignedName);
+            return transformNamedEvaluationOfAssignmentExpression(
+                context,
+                node,
+                ignoreEmptyStringLiteral,
+                assignedName,
+            );
         case SyntaxKind.ExportAssignment:
             return transformNamedEvaluationOfExportAssignment(context, node, ignoreEmptyStringLiteral, assignedName);
     }

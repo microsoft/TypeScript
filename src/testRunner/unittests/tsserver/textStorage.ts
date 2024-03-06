@@ -20,7 +20,11 @@ describe("unittests:: tsserver:: Text storage", () => {
     };
 
     function getDummyScriptInfo(fileName: string) {
-        return { fileName, closeSourceMapFileWatcher: ts.noop, isDynamicOrHasMixedContent: ts.returnFalse } as ts.server.ScriptInfo;
+        return {
+            fileName,
+            closeSourceMapFileWatcher: ts.noop,
+            isDynamicOrHasMixedContent: ts.returnFalse,
+        } as ts.server.ScriptInfo;
     }
 
     it("text based storage should be have exactly the same as script version cache", () => {
@@ -40,20 +44,32 @@ describe("unittests:: tsserver:: Text storage", () => {
             for (let offset = 0; offset < end - start; offset++) {
                 const pos1 = ts1.lineOffsetToPosition(line + 1, offset + 1);
                 const pos2 = ts2.lineOffsetToPosition(line + 1, offset + 1);
-                assert.strictEqual(pos1, pos2, `lineOffsetToPosition ${line + 1}-${offset + 1}: expected ${pos1} to equal ${pos2}`);
+                assert.strictEqual(
+                    pos1,
+                    pos2,
+                    `lineOffsetToPosition ${line + 1}-${offset + 1}: expected ${pos1} to equal ${pos2}`,
+                );
             }
 
             const { start: start1, length: length1 } = ts1.lineToTextSpan(line);
             const { start: start2, length: length2 } = ts2.lineToTextSpan(line);
             assert.strictEqual(start1, start2, `lineToTextSpan ${line}::start:: expected ${start1} to equal ${start2}`);
-            assert.strictEqual(length1, length2, `lineToTextSpan ${line}::length:: expected ${length1} to equal ${length2}`);
+            assert.strictEqual(
+                length1,
+                length2,
+                `lineToTextSpan ${line}::length:: expected ${length1} to equal ${length2}`,
+            );
         }
 
         for (let pos = 0; pos < f.content.length; pos++) {
             const { line: line1, offset: offset1 } = ts1.positionToLineOffset(pos);
             const { line: line2, offset: offset2 } = ts2.positionToLineOffset(pos);
             assert.strictEqual(line1, line2, `positionToLineOffset ${pos}::line:: expected ${line1} to equal ${line2}`);
-            assert.strictEqual(offset1, offset2, `positionToLineOffset ${pos}::offset:: expected ${offset1} to equal ${offset2}`);
+            assert.strictEqual(
+                offset1,
+                offset2,
+                `positionToLineOffset ${pos}::offset:: expected ${offset1} to equal ${offset2}`,
+            );
         }
     });
 
@@ -124,7 +140,11 @@ describe("unittests:: tsserver:: Text storage", () => {
         assert.isFalse(ts1.hasScriptVersionCache_TestOnly());
 
         assert.strictEqual(largeFile.content.length, ts1.getTelemetryFileSize());
-        baselineTsserverLogs("textStorage", "should be able to return the file size when a JS file is too large to load into text", session);
+        baselineTsserverLogs(
+            "textStorage",
+            "should be able to return the file size when a JS file is too large to load into text",
+            session,
+        );
     });
 
     it("should return the file size without reloading the file", () => {

@@ -368,7 +368,9 @@ export function transformTypeScript(context: TransformationContext) {
                     // These nodes should always have names unless they are default-exports;
                     // however, class declaration parsing allows for undefined names, so syntactically invalid
                     // programs may also have an undefined name.
-                    Debug.assert(node.kind === SyntaxKind.ClassDeclaration || hasSyntacticModifier(node, ModifierFlags.Default));
+                    Debug.assert(
+                        node.kind === SyntaxKind.ClassDeclaration || hasSyntacticModifier(node, ModifierFlags.Default),
+                    );
                 }
 
                 break;
@@ -416,7 +418,9 @@ export function transformTypeScript(context: TransformationContext) {
             case SyntaxKind.ImportEqualsDeclaration:
             case SyntaxKind.ExportAssignment:
             case SyntaxKind.ExportDeclaration:
-                return visitElidableStatement(node as ImportDeclaration | ImportEqualsDeclaration | ExportAssignment | ExportDeclaration);
+                return visitElidableStatement(
+                    node as ImportDeclaration | ImportEqualsDeclaration | ExportAssignment | ExportDeclaration,
+                );
             default:
                 return visitorWorker(node);
         }
@@ -430,7 +434,9 @@ export function transformTypeScript(context: TransformationContext) {
      * transform, although we will continue to allow it if the statement hasn't replaced a node of a different kind and
      * as long as the local bindings for the declarations are unchanged.
      */
-    function isElisionBlocked(node: ImportDeclaration | ImportEqualsDeclaration | ExportAssignment | ExportDeclaration) {
+    function isElisionBlocked(
+        node: ImportDeclaration | ImportEqualsDeclaration | ExportAssignment | ExportDeclaration,
+    ) {
         const parsed = getParseTreeNode(node);
         if (parsed === node || isExportAssignment(node)) {
             return false;
@@ -459,7 +465,10 @@ export function transformTypeScript(context: TransformationContext) {
                 if (node.isTypeOnly !== parsed.isTypeOnly) {
                     return true; // no longer safe to elide as `type` modifier has changed
                 }
-                if (node.moduleReference !== parsed.moduleReference && (isEntityName(node.moduleReference) || isEntityName(parsed.moduleReference))) {
+                if (
+                    node.moduleReference !== parsed.moduleReference &&
+                    (isEntityName(node.moduleReference) || isEntityName(parsed.moduleReference))
+                ) {
                     return true; // no longer safe to elide as EntityName reference has changed.
                 }
                 break;
@@ -477,7 +486,9 @@ export function transformTypeScript(context: TransformationContext) {
         return false;
     }
 
-    function visitElidableStatement(node: ImportDeclaration | ImportEqualsDeclaration | ExportAssignment | ExportDeclaration): VisitResult<Node | undefined> {
+    function visitElidableStatement(
+        node: ImportDeclaration | ImportEqualsDeclaration | ExportAssignment | ExportDeclaration,
+    ): VisitResult<Node | undefined> {
         if (isElisionBlocked(node)) {
             // We do not reuse `visitorWorker`, as the ellidable statement syntax kinds are technically unrecognized by
             // the switch-case in `visitTypeScript`, and will trigger debug failures when debug verbosity is turned up.
@@ -527,7 +538,9 @@ export function transformTypeScript(context: TransformationContext) {
             // do not emit ES6 imports and exports since they are illegal inside a namespace
             return undefined;
         }
-        else if (node.transformFlags & TransformFlags.ContainsTypeScript || hasSyntacticModifier(node, ModifierFlags.Export)) {
+        else if (
+            node.transformFlags & TransformFlags.ContainsTypeScript || hasSyntacticModifier(node, ModifierFlags.Export)
+        ) {
             return visitTypeScript(node);
         }
 
@@ -586,11 +599,16 @@ export function transformTypeScript(context: TransformationContext) {
         }
     }
 
-    function getObjectLiteralElementVisitor(parent: ObjectLiteralExpression): <T extends Node>(node: T) => VisitResult<Node | undefined> {
+    function getObjectLiteralElementVisitor(
+        parent: ObjectLiteralExpression,
+    ): <T extends Node>(node: T) => VisitResult<Node | undefined> {
         return node => saveStateAndInvoke(node, n => objectLiteralElementVisitorWorker(n, parent));
     }
 
-    function objectLiteralElementVisitorWorker(node: Node, parent: ObjectLiteralExpression): VisitResult<Node | undefined> {
+    function objectLiteralElementVisitorWorker(
+        node: Node,
+        parent: ObjectLiteralExpression,
+    ): VisitResult<Node | undefined> {
         switch (node.kind) {
             case SyntaxKind.PropertyAssignment:
             case SyntaxKind.ShorthandPropertyAssignment:
@@ -856,10 +874,19 @@ export function transformTypeScript(context: TransformationContext) {
 
     function getClassFacts(node: ClassDeclaration) {
         let facts = ClassFacts.None;
-        if (some(getProperties(node, /*requireInitializer*/ true, /*isStatic*/ true))) facts |= ClassFacts.HasStaticInitializedProperties;
+        if (some(getProperties(node, /*requireInitializer*/ true, /*isStatic*/ true))) {
+            facts |= ClassFacts.HasStaticInitializedProperties;
+        }
         const extendsClauseElement = getEffectiveBaseTypeNode(node);
-        if (extendsClauseElement && skipOuterExpressions(extendsClauseElement.expression).kind !== SyntaxKind.NullKeyword) facts |= ClassFacts.IsDerivedClass;
-        if (classOrConstructorParameterIsDecorated(legacyDecorators, node)) facts |= ClassFacts.HasClassOrConstructorParameterDecorators;
+        if (
+            extendsClauseElement &&
+            skipOuterExpressions(extendsClauseElement.expression).kind !== SyntaxKind.NullKeyword
+        ) {
+            facts |= ClassFacts.IsDerivedClass;
+        }
+        if (classOrConstructorParameterIsDecorated(legacyDecorators, node)) {
+            facts |= ClassFacts.HasClassOrConstructorParameterDecorators;
+        }
         if (childIsDecorated(legacyDecorators, node)) facts |= ClassFacts.HasMemberDecorators;
         if (isExportOfNamespace(node)) facts |= ClassFacts.IsExportOfNamespace;
         else if (isDefaultExternalModuleExport(node)) facts |= ClassFacts.IsDefaultExternalExport;
@@ -959,7 +986,10 @@ export function transformTypeScript(context: TransformationContext) {
             //  }();
             //
             const statements: Statement[] = [classDeclaration];
-            const closingBraceLocation = createTokenRange(skipTrivia(currentSourceFile.text, node.members.end), SyntaxKind.CloseBraceToken);
+            const closingBraceLocation = createTokenRange(
+                skipTrivia(currentSourceFile.text, node.members.end),
+                SyntaxKind.CloseBraceToken,
+            );
             const localName = factory.getInternalName(node);
 
             // The following partially-emitted expression exists purely to align our sourcemap
@@ -1011,13 +1041,17 @@ export function transformTypeScript(context: TransformationContext) {
             if (facts & ClassFacts.IsDefaultExternalExport) {
                 return [
                     statement,
-                    factory.createExportDefault(factory.getLocalName(node, /*allowComments*/ false, /*allowSourceMaps*/ true)),
+                    factory.createExportDefault(
+                        factory.getLocalName(node, /*allowComments*/ false, /*allowSourceMaps*/ true),
+                    ),
                 ];
             }
             if (facts & ClassFacts.IsNamedExternalExport) {
                 return [
                     statement,
-                    factory.createExternalModuleExport(factory.getDeclarationName(node, /*allowComments*/ false, /*allowSourceMaps*/ true)),
+                    factory.createExternalModuleExport(
+                        factory.getDeclarationName(node, /*allowComments*/ false, /*allowSourceMaps*/ true),
+                    ),
                 ];
             }
         }
@@ -1052,7 +1086,10 @@ export function transformTypeScript(context: TransformationContext) {
         let newMembers: ClassElement[] | undefined;
         const constructor = getFirstConstructorWithBody(node);
         const parametersWithPropertyAssignments = constructor &&
-            filter(constructor.parameters, (p): p is ParameterPropertyDeclaration => isParameterPropertyDeclaration(p, constructor));
+            filter(
+                constructor.parameters,
+                (p): p is ParameterPropertyDeclaration => isParameterPropertyDeclaration(p, constructor),
+            );
 
         if (parametersWithPropertyAssignments) {
             for (const parameter of parametersWithPropertyAssignments) {
@@ -1090,8 +1127,14 @@ export function transformTypeScript(context: TransformationContext) {
         return modifiers;
     }
 
-    function injectClassElementTypeMetadata(modifiers: NodeArray<ModifierLike> | undefined, node: ClassElement, container: ClassLikeDeclaration | ObjectLiteralExpression) {
-        if (isClassLike(container) && classElementOrClassElementParameterIsDecorated(legacyDecorators, node, container)) {
+    function injectClassElementTypeMetadata(
+        modifiers: NodeArray<ModifierLike> | undefined,
+        node: ClassElement,
+        container: ClassLikeDeclaration | ObjectLiteralExpression,
+    ) {
+        if (
+            isClassLike(container) && classElementOrClassElementParameterIsDecorated(legacyDecorators, node, container)
+        ) {
             const metadata = getTypeMetadata(node, container);
             if (some(metadata)) {
                 const modifiersArray: ModifierLike[] = [];
@@ -1121,15 +1164,31 @@ export function transformTypeScript(context: TransformationContext) {
         if (typeSerializer) {
             let decorators: Decorator[] | undefined;
             if (shouldAddTypeMetadata(node)) {
-                const typeMetadata = emitHelpers().createMetadataHelper("design:type", typeSerializer.serializeTypeOfNode({ currentLexicalScope, currentNameScope: container }, node));
+                const typeMetadata = emitHelpers().createMetadataHelper(
+                    "design:type",
+                    typeSerializer.serializeTypeOfNode({ currentLexicalScope, currentNameScope: container }, node),
+                );
                 decorators = append(decorators, factory.createDecorator(typeMetadata));
             }
             if (shouldAddParamTypesMetadata(node)) {
-                const paramTypesMetadata = emitHelpers().createMetadataHelper("design:paramtypes", typeSerializer.serializeParameterTypesOfNode({ currentLexicalScope, currentNameScope: container }, node, container));
+                const paramTypesMetadata = emitHelpers().createMetadataHelper(
+                    "design:paramtypes",
+                    typeSerializer.serializeParameterTypesOfNode(
+                        { currentLexicalScope, currentNameScope: container },
+                        node,
+                        container,
+                    ),
+                );
                 decorators = append(decorators, factory.createDecorator(paramTypesMetadata));
             }
             if (shouldAddReturnTypeMetadata(node)) {
-                const returnTypeMetadata = emitHelpers().createMetadataHelper("design:returntype", typeSerializer.serializeReturnTypeOfNode({ currentLexicalScope, currentNameScope: container }, node));
+                const returnTypeMetadata = emitHelpers().createMetadataHelper(
+                    "design:returntype",
+                    typeSerializer.serializeReturnTypeOfNode(
+                        { currentLexicalScope, currentNameScope: container },
+                        node,
+                    ),
+                );
                 decorators = append(decorators, factory.createDecorator(returnTypeMetadata));
             }
             return decorators;
@@ -1140,19 +1199,59 @@ export function transformTypeScript(context: TransformationContext) {
         if (typeSerializer) {
             let properties: ObjectLiteralElementLike[] | undefined;
             if (shouldAddTypeMetadata(node)) {
-                const typeProperty = factory.createPropertyAssignment("type", factory.createArrowFunction(/*modifiers*/ undefined, /*typeParameters*/ undefined, [], /*type*/ undefined, factory.createToken(SyntaxKind.EqualsGreaterThanToken), typeSerializer.serializeTypeOfNode({ currentLexicalScope, currentNameScope: container }, node)));
+                const typeProperty = factory.createPropertyAssignment(
+                    "type",
+                    factory.createArrowFunction(
+                        /*modifiers*/ undefined,
+                        /*typeParameters*/ undefined,
+                        [],
+                        /*type*/ undefined,
+                        factory.createToken(SyntaxKind.EqualsGreaterThanToken),
+                        typeSerializer.serializeTypeOfNode({ currentLexicalScope, currentNameScope: container }, node),
+                    ),
+                );
                 properties = append(properties, typeProperty);
             }
             if (shouldAddParamTypesMetadata(node)) {
-                const paramTypeProperty = factory.createPropertyAssignment("paramTypes", factory.createArrowFunction(/*modifiers*/ undefined, /*typeParameters*/ undefined, [], /*type*/ undefined, factory.createToken(SyntaxKind.EqualsGreaterThanToken), typeSerializer.serializeParameterTypesOfNode({ currentLexicalScope, currentNameScope: container }, node, container)));
+                const paramTypeProperty = factory.createPropertyAssignment(
+                    "paramTypes",
+                    factory.createArrowFunction(
+                        /*modifiers*/ undefined,
+                        /*typeParameters*/ undefined,
+                        [],
+                        /*type*/ undefined,
+                        factory.createToken(SyntaxKind.EqualsGreaterThanToken),
+                        typeSerializer.serializeParameterTypesOfNode(
+                            { currentLexicalScope, currentNameScope: container },
+                            node,
+                            container,
+                        ),
+                    ),
+                );
                 properties = append(properties, paramTypeProperty);
             }
             if (shouldAddReturnTypeMetadata(node)) {
-                const returnTypeProperty = factory.createPropertyAssignment("returnType", factory.createArrowFunction(/*modifiers*/ undefined, /*typeParameters*/ undefined, [], /*type*/ undefined, factory.createToken(SyntaxKind.EqualsGreaterThanToken), typeSerializer.serializeReturnTypeOfNode({ currentLexicalScope, currentNameScope: container }, node)));
+                const returnTypeProperty = factory.createPropertyAssignment(
+                    "returnType",
+                    factory.createArrowFunction(
+                        /*modifiers*/ undefined,
+                        /*typeParameters*/ undefined,
+                        [],
+                        /*type*/ undefined,
+                        factory.createToken(SyntaxKind.EqualsGreaterThanToken),
+                        typeSerializer.serializeReturnTypeOfNode(
+                            { currentLexicalScope, currentNameScope: container },
+                            node,
+                        ),
+                    ),
+                );
                 properties = append(properties, returnTypeProperty);
             }
             if (properties) {
-                const typeInfoMetadata = emitHelpers().createMetadataHelper("design:typeinfo", factory.createObjectLiteralExpression(properties, /*multiLine*/ true));
+                const typeInfoMetadata = emitHelpers().createMetadataHelper(
+                    "design:typeinfo",
+                    factory.createObjectLiteralExpression(properties, /*multiLine*/ true),
+                );
                 return [factory.createDecorator(typeInfoMetadata)];
             }
         }
@@ -1165,7 +1264,9 @@ export function transformTypeScript(context: TransformationContext) {
      *
      * @param node The node to test.
      */
-    function shouldAddTypeMetadata(node: Declaration): node is MethodDeclaration | AccessorDeclaration | PropertyDeclaration {
+    function shouldAddTypeMetadata(
+        node: Declaration,
+    ): node is MethodDeclaration | AccessorDeclaration | PropertyDeclaration {
         const kind = node.kind;
         return kind === SyntaxKind.MethodDeclaration
             || kind === SyntaxKind.GetAccessor
@@ -1191,7 +1292,9 @@ export function transformTypeScript(context: TransformationContext) {
      *
      * @param node The node to test.
      */
-    function shouldAddParamTypesMetadata(node: Declaration): node is ClassLikeDeclaration & { _hasConstructorBrand: never; } | MethodDeclaration | AccessorDeclaration {
+    function shouldAddParamTypesMetadata(
+        node: Declaration,
+    ): node is ClassLikeDeclaration & { _hasConstructorBrand: never; } | MethodDeclaration | AccessorDeclaration {
         switch (node.kind) {
             case SyntaxKind.ClassDeclaration:
             case SyntaxKind.ClassExpression:
@@ -1210,7 +1313,10 @@ export function transformTypeScript(context: TransformationContext) {
      *
      * @param member The member whose name should be converted into an expression.
      */
-    function getExpressionForPropertyName(member: ClassElement | EnumMember, generateNameForComputedPropertyName: boolean): Expression {
+    function getExpressionForPropertyName(
+        member: ClassElement | EnumMember,
+        generateNameForComputedPropertyName: boolean,
+    ): Expression {
         const name = member.name!;
         if (isPrivateIdentifier(name)) {
             return factory.createIdentifier("");
@@ -1241,7 +1347,11 @@ export function transformTypeScript(context: TransformationContext) {
         // The names are used more than once when:
         //   - the property is non-static and its initializer is moved to the constructor (when there are parameter property assignments).
         //   - the property has a decorator.
-        if (isComputedPropertyName(name) && ((!hasStaticModifier(member) && currentClassHasParameterProperties) || hasDecorators(member) && legacyDecorators)) {
+        if (
+            isComputedPropertyName(name) &&
+            ((!hasStaticModifier(member) && currentClassHasParameterProperties) ||
+                hasDecorators(member) && legacyDecorators)
+        ) {
             const expression = visitNode(name.expression, visitor, isExpression);
             Debug.assert(expression);
             const innerExpression = skipPartiallyEmittedExpressions(expression);
@@ -1293,7 +1403,9 @@ export function transformTypeScript(context: TransformationContext) {
      *
      * @param node The declaration node.
      */
-    function shouldEmitFunctionLikeDeclaration<T extends FunctionLikeDeclaration>(node: T): node is T & { body: NonNullable<T["body"]>; } {
+    function shouldEmitFunctionLikeDeclaration<T extends FunctionLikeDeclaration>(
+        node: T,
+    ): node is T & { body: NonNullable<T["body"]>; } {
         return !nodeIsMissing(node.body);
     }
 
@@ -1345,10 +1457,20 @@ export function transformTypeScript(context: TransformationContext) {
         );
     }
 
-    function transformConstructorBodyWorker(statementsOut: Statement[], statementsIn: NodeArray<Statement>, statementOffset: number, superPath: readonly number[], superPathDepth: number, initializerStatements: readonly Statement[]) {
+    function transformConstructorBodyWorker(
+        statementsOut: Statement[],
+        statementsIn: NodeArray<Statement>,
+        statementOffset: number,
+        superPath: readonly number[],
+        superPathDepth: number,
+        initializerStatements: readonly Statement[],
+    ) {
         const superStatementIndex = superPath[superPathDepth];
         const superStatement = statementsIn[superStatementIndex];
-        addRange(statementsOut, visitNodes(statementsIn, visitor, isStatement, statementOffset, superStatementIndex - statementOffset));
+        addRange(
+            statementsOut,
+            visitNodes(statementsIn, visitor, isStatement, statementOffset, superStatementIndex - statementOffset),
+        );
         if (isTryStatement(superStatement)) {
             const tryBlockStatements: Statement[] = [];
 
@@ -1380,7 +1502,9 @@ export function transformTypeScript(context: TransformationContext) {
 
     function transformConstructorBody(body: Block, constructor: ConstructorDeclaration) {
         const parametersWithPropertyAssignments = constructor &&
-            filter(constructor.parameters, p => isParameterPropertyDeclaration(p, constructor)) as readonly ParameterPropertyDeclaration[] | undefined;
+            filter(constructor.parameters, p => isParameterPropertyDeclaration(p, constructor)) as
+                | readonly ParameterPropertyDeclaration[]
+                | undefined;
         if (!some(parametersWithPropertyAssignments)) {
             return visitFunctionBody(body, visitor, context);
         }
@@ -1389,7 +1513,12 @@ export function transformTypeScript(context: TransformationContext) {
 
         resumeLexicalEnvironment();
 
-        const prologueStatementCount = factory.copyPrologue(body.statements, statements, /*ensureUseStrict*/ false, visitor);
+        const prologueStatementCount = factory.copyPrologue(
+            body.statements,
+            statements,
+            /*ensureUseStrict*/ false,
+            visitor,
+        );
         const superPath = findSuperStatementIndexPath(body.statements, prologueStatementCount);
 
         // Transform parameters into property assignments. Transforms this:
@@ -1404,9 +1533,19 @@ export function transformTypeScript(context: TransformationContext) {
         //      this.y = y;
         //  }
         //
-        const parameterPropertyAssignments = mapDefined(parametersWithPropertyAssignments, transformParameterWithPropertyAssignment);
+        const parameterPropertyAssignments = mapDefined(
+            parametersWithPropertyAssignments,
+            transformParameterWithPropertyAssignment,
+        );
         if (superPath.length) {
-            transformConstructorBodyWorker(statements, body.statements, prologueStatementCount, superPath, /*superPathDepth*/ 0, parameterPropertyAssignments);
+            transformConstructorBodyWorker(
+                statements,
+                body.statements,
+                prologueStatementCount,
+                superPath,
+                /*superPathDepth*/ 0,
+                parameterPropertyAssignments,
+            );
         }
         else {
             addRange(statements, parameterPropertyAssignments);
@@ -1415,7 +1554,10 @@ export function transformTypeScript(context: TransformationContext) {
 
         // End the lexical environment.
         statements = factory.mergeLexicalEnvironment(statements, endLexicalEnvironment());
-        const block = factory.createBlock(setTextRange(factory.createNodeArray(statements), body.statements), /*multiLine*/ true);
+        const block = factory.createBlock(
+            setTextRange(factory.createNodeArray(statements), body.statements),
+            /*multiLine*/ true,
+        );
         setTextRange(block, /*location*/ body);
         setOriginalNode(block, body);
         return block;
@@ -1828,7 +1970,12 @@ export function transformTypeScript(context: TransformationContext) {
 
         // `exportName` is the expression used within this node's container for any exported references.
         const exportName = isExportOfNamespace(node)
-            ? factory.getExternalModuleOrNamespaceExportName(currentNamespaceContainerName, node, /*allowComments*/ false, /*allowSourceMaps*/ true)
+            ? factory.getExternalModuleOrNamespaceExportName(
+                currentNamespaceContainerName,
+                node,
+                /*allowComments*/ false,
+                /*allowSourceMaps*/ true,
+            )
             : factory.getDeclarationName(node, /*allowComments*/ false, /*allowSourceMaps*/ true);
 
         //  x || (x = {})
@@ -1860,7 +2007,11 @@ export function transformTypeScript(context: TransformationContext) {
                     /*asteriskToken*/ undefined,
                     /*name*/ undefined,
                     /*typeParameters*/ undefined,
-                    [factory.createParameterDeclaration(/*modifiers*/ undefined, /*dotDotDotToken*/ undefined, parameterName)],
+                    [factory.createParameterDeclaration(
+                        /*modifiers*/ undefined,
+                        /*dotDotDotToken*/ undefined,
+                        parameterName,
+                    )],
                     /*type*/ undefined,
                     transformEnumBody(node, containerName),
                 ),
@@ -1951,7 +2102,8 @@ export function transformTypeScript(context: TransformationContext) {
         const value = resolver.getConstantValue(member);
         if (value !== undefined) {
             return typeof value === "string" ? factory.createStringLiteral(value) :
-                value < 0 ? factory.createPrefixUnaryExpression(SyntaxKind.MinusToken, factory.createNumericLiteral(-value)) :
+                value < 0 ?
+                factory.createPrefixUnaryExpression(SyntaxKind.MinusToken, factory.createNumericLiteral(-value)) :
                 factory.createNumericLiteral(value);
         }
         else {
@@ -1983,7 +2135,9 @@ export function transformTypeScript(context: TransformationContext) {
      * Records that a declaration was emitted in the current scope, if it was the first
      * declaration for the provided symbol.
      */
-    function recordEmittedDeclarationInScope(node: FunctionDeclaration | ClassDeclaration | ModuleDeclaration | EnumDeclaration) {
+    function recordEmittedDeclarationInScope(
+        node: FunctionDeclaration | ClassDeclaration | ModuleDeclaration | EnumDeclaration,
+    ) {
         if (!currentScopeFirstDeclarationsOfName) {
             currentScopeFirstDeclarationsOfName = new Map();
         }
@@ -2006,7 +2160,9 @@ export function transformTypeScript(context: TransformationContext) {
         return true;
     }
 
-    function declaredNameInScope(node: FunctionDeclaration | ClassDeclaration | ModuleDeclaration | EnumDeclaration): __String {
+    function declaredNameInScope(
+        node: FunctionDeclaration | ClassDeclaration | ModuleDeclaration | EnumDeclaration,
+    ): __String {
         Debug.assertNode(node.name, isIdentifier);
         return node.name.escapedText;
     }
@@ -2018,7 +2174,9 @@ export function transformTypeScript(context: TransformationContext) {
         // Emit a variable statement for the module. We emit top-level enums as a `var`
         // declaration to avoid static errors in global scripts scripts due to redeclaration.
         // enums in any other scope are emitted as a `let` declaration.
-        const varDecl = factory.createVariableDeclaration(factory.getLocalName(node, /*allowComments*/ false, /*allowSourceMaps*/ true));
+        const varDecl = factory.createVariableDeclaration(
+            factory.getLocalName(node, /*allowComments*/ false, /*allowSourceMaps*/ true),
+        );
         const varFlags = currentLexicalScope.kind === SyntaxKind.SourceFile ? NodeFlags.None : NodeFlags.Let;
         const statement = factory.createVariableStatement(
             visitNodes(node.modifiers, modifierVisitor, isModifier),
@@ -2110,7 +2268,12 @@ export function transformTypeScript(context: TransformationContext) {
 
         // `exportName` is the expression used within this node's container for any exported references.
         const exportName = isExportOfNamespace(node)
-            ? factory.getExternalModuleOrNamespaceExportName(currentNamespaceContainerName, node, /*allowComments*/ false, /*allowSourceMaps*/ true)
+            ? factory.getExternalModuleOrNamespaceExportName(
+                currentNamespaceContainerName,
+                node,
+                /*allowComments*/ false,
+                /*allowSourceMaps*/ true,
+            )
             : factory.getDeclarationName(node, /*allowComments*/ false, /*allowSourceMaps*/ true);
 
         //  x || (x = {})
@@ -2141,7 +2304,11 @@ export function transformTypeScript(context: TransformationContext) {
                     /*asteriskToken*/ undefined,
                     /*name*/ undefined,
                     /*typeParameters*/ undefined,
-                    [factory.createParameterDeclaration(/*modifiers*/ undefined, /*dotDotDotToken*/ undefined, parameterName)],
+                    [factory.createParameterDeclaration(
+                        /*modifiers*/ undefined,
+                        /*dotDotDotToken*/ undefined,
+                        parameterName,
+                    )],
                     /*type*/ undefined,
                     transformModuleBody(node, containerName),
                 ),
@@ -2183,7 +2350,10 @@ export function transformTypeScript(context: TransformationContext) {
         let blockLocation: TextRange | undefined;
         if (node.body) {
             if (node.body.kind === SyntaxKind.ModuleBlock) {
-                saveStateAndInvoke(node.body, body => addRange(statements, visitNodes(body.statements, namespaceElementVisitor, isStatement)));
+                saveStateAndInvoke(
+                    node.body,
+                    body => addRange(statements, visitNodes(body.statements, namespaceElementVisitor, isStatement)),
+                );
                 statementsLocation = node.body.statements;
                 blockLocation = node.body;
             }
@@ -2243,9 +2413,13 @@ export function transformTypeScript(context: TransformationContext) {
         return block;
     }
 
-    function getInnerMostModuleDeclarationFromDottedModule(moduleDeclaration: ModuleDeclaration): ModuleDeclaration | undefined {
+    function getInnerMostModuleDeclarationFromDottedModule(
+        moduleDeclaration: ModuleDeclaration,
+    ): ModuleDeclaration | undefined {
         if (moduleDeclaration.body!.kind === SyntaxKind.ModuleDeclaration) {
-            const recursiveInnerModule = getInnerMostModuleDeclarationFromDottedModule(moduleDeclaration.body as ModuleDeclaration);
+            const recursiveInnerModule = getInnerMostModuleDeclarationFromDottedModule(
+                moduleDeclaration.body as ModuleDeclaration,
+            );
             return recursiveInnerModule || moduleDeclaration.body as ModuleDeclaration;
         }
     }
@@ -2289,7 +2463,8 @@ export function transformTypeScript(context: TransformationContext) {
         // Elide the import clause if we elide both its name and its named bindings.
         const name = shouldEmitAliasDeclaration(node) ? node.name : undefined;
         const namedBindings = visitNode(node.namedBindings, visitNamedImportBindings, isNamedImportBindings);
-        return (name || namedBindings) ? factory.updateImportClause(node, /*isTypeOnly*/ false, name, namedBindings) : undefined;
+        return (name || namedBindings) ? factory.updateImportClause(node, /*isTypeOnly*/ false, name, namedBindings)
+            : undefined;
     }
 
     /**
@@ -2385,7 +2560,10 @@ export function transformTypeScript(context: TransformationContext) {
         return factory.updateNamespaceExport(node, Debug.checkDefined(visitNode(node.name, visitor, isIdentifier)));
     }
 
-    function visitNamedExportBindings(node: NamedExportBindings, allowEmpty: boolean): VisitResult<NamedExportBindings> | undefined {
+    function visitNamedExportBindings(
+        node: NamedExportBindings,
+        allowEmpty: boolean,
+    ): VisitResult<NamedExportBindings> | undefined {
         return isNamespaceExport(node) ? visitNamespaceExports(node) : visitNamedExports(node, allowEmpty);
     }
 
@@ -2396,7 +2574,9 @@ export function transformTypeScript(context: TransformationContext) {
      */
     function visitExportSpecifier(node: ExportSpecifier): VisitResult<ExportSpecifier> | undefined {
         // Elide an export specifier if it does not reference a value.
-        return !node.isTypeOnly && (compilerOptions.verbatimModuleSyntax || resolver.isValueAliasDeclaration(node)) ? node : undefined;
+        return !node.isTypeOnly && (compilerOptions.verbatimModuleSyntax || resolver.isValueAliasDeclaration(node)) ?
+            node
+            : undefined;
     }
 
     /**
@@ -2513,7 +2693,12 @@ export function transformTypeScript(context: TransformationContext) {
 
     function createExportMemberAssignmentStatement(node: ClassDeclaration | FunctionDeclaration) {
         const expression = factory.createAssignment(
-            factory.getExternalModuleOrNamespaceExportName(currentNamespaceContainerName, node, /*allowComments*/ false, /*allowSourceMaps*/ true),
+            factory.getExternalModuleOrNamespaceExportName(
+                currentNamespaceContainerName,
+                node,
+                /*allowComments*/ false,
+                /*allowSourceMaps*/ true,
+            ),
             factory.getLocalName(node),
         );
         setSourceMapRange(expression, createRange(node.name ? node.name.pos : node.pos, node.end));
@@ -2531,7 +2716,12 @@ export function transformTypeScript(context: TransformationContext) {
         return setTextRange(
             factory.createExpressionStatement(
                 factory.createAssignment(
-                    factory.getNamespaceMemberName(currentNamespaceContainerName, exportName, /*allowComments*/ false, /*allowSourceMaps*/ true),
+                    factory.getNamespaceMemberName(
+                        currentNamespaceContainerName,
+                        exportName,
+                        /*allowComments*/ false,
+                        /*allowSourceMaps*/ true,
+                    ),
                     exportValue,
                 ),
             ),
@@ -2540,11 +2730,19 @@ export function transformTypeScript(context: TransformationContext) {
     }
 
     function createNamespaceExportExpression(exportName: Identifier, exportValue: Expression, location?: TextRange) {
-        return setTextRange(factory.createAssignment(getNamespaceMemberNameWithSourceMapsAndWithoutComments(exportName), exportValue), location);
+        return setTextRange(
+            factory.createAssignment(getNamespaceMemberNameWithSourceMapsAndWithoutComments(exportName), exportValue),
+            location,
+        );
     }
 
     function getNamespaceMemberNameWithSourceMapsAndWithoutComments(name: Identifier) {
-        return factory.getNamespaceMemberName(currentNamespaceContainerName, name, /*allowComments*/ false, /*allowSourceMaps*/ true);
+        return factory.getNamespaceMemberName(
+            currentNamespaceContainerName,
+            name,
+            /*allowComments*/ false,
+            /*allowSourceMaps*/ true,
+        );
     }
 
     /**
@@ -2608,11 +2806,16 @@ export function transformTypeScript(context: TransformationContext) {
             currentSourceFile = node;
         }
 
-        if (enabledSubstitutions & TypeScriptSubstitutionFlags.NamespaceExports && isTransformedModuleDeclaration(node)) {
+        if (
+            enabledSubstitutions & TypeScriptSubstitutionFlags.NamespaceExports && isTransformedModuleDeclaration(node)
+        ) {
             applicableSubstitutions |= TypeScriptSubstitutionFlags.NamespaceExports;
         }
 
-        if (enabledSubstitutions & TypeScriptSubstitutionFlags.NonQualifiedEnumMembers && isTransformedEnumDeclaration(node)) {
+        if (
+            enabledSubstitutions & TypeScriptSubstitutionFlags.NonQualifiedEnumMembers &&
+            isTransformedEnumDeclaration(node)
+        ) {
             applicableSubstitutions |= TypeScriptSubstitutionFlags.NonQualifiedEnumMembers;
         }
 
@@ -2682,8 +2885,10 @@ export function transformTypeScript(context: TransformationContext) {
             // an identifier that is exported from a merged namespace.
             const container = resolver.getReferencedExportContainer(node, /*prefixLocals*/ false);
             if (container && container.kind !== SyntaxKind.SourceFile) {
-                const substitute = (applicableSubstitutions & TypeScriptSubstitutionFlags.NamespaceExports && container.kind === SyntaxKind.ModuleDeclaration) ||
-                    (applicableSubstitutions & TypeScriptSubstitutionFlags.NonQualifiedEnumMembers && container.kind === SyntaxKind.EnumDeclaration);
+                const substitute = (applicableSubstitutions & TypeScriptSubstitutionFlags.NamespaceExports &&
+                    container.kind === SyntaxKind.ModuleDeclaration) ||
+                    (applicableSubstitutions & TypeScriptSubstitutionFlags.NonQualifiedEnumMembers &&
+                        container.kind === SyntaxKind.EnumDeclaration);
                 if (substitute) {
                     return setTextRange(
                         factory.createPropertyAccessExpression(factory.getGeneratedNameForNode(container), node),
@@ -2714,12 +2919,20 @@ export function transformTypeScript(context: TransformationContext) {
             // track the constant value on the node for the printer in mayNeedDotDotForPropertyAccess
             setConstantValue(node, constantValue);
             const substitute = typeof constantValue === "string" ? factory.createStringLiteral(constantValue) :
-                constantValue < 0 ? factory.createPrefixUnaryExpression(SyntaxKind.MinusToken, factory.createNumericLiteral(-constantValue)) :
+                constantValue < 0 ?
+                factory.createPrefixUnaryExpression(
+                    SyntaxKind.MinusToken,
+                    factory.createNumericLiteral(-constantValue),
+                ) :
                 factory.createNumericLiteral(constantValue);
 
             if (!compilerOptions.removeComments) {
                 const originalNode = getOriginalNode(node, isAccessExpression);
-                addSyntheticTrailingComment(substitute, SyntaxKind.MultiLineCommentTrivia, ` ${safeMultiLineComment(getTextOfNode(originalNode))} `);
+                addSyntheticTrailingComment(
+                    substitute,
+                    SyntaxKind.MultiLineCommentTrivia,
+                    ` ${safeMultiLineComment(getTextOfNode(originalNode))} `,
+                );
             }
             return substitute;
         }
@@ -2731,7 +2944,8 @@ export function transformTypeScript(context: TransformationContext) {
             return undefined;
         }
 
-        return isPropertyAccessExpression(node) || isElementAccessExpression(node) ? resolver.getConstantValue(node) : undefined;
+        return isPropertyAccessExpression(node) || isElementAccessExpression(node) ? resolver.getConstantValue(node)
+            : undefined;
     }
 
     function shouldEmitAliasDeclaration(node: Node): boolean {

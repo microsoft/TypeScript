@@ -23,11 +23,16 @@ function findArgumentStringArray(argName: string): readonly string[] {
     return arg.split(",").filter(name => name !== "");
 }
 
-function start({ args, logger, cancellationToken, serverMode, unknownServerMode, startSession: startServer }: StartInput, platform: string) {
+function start(
+    { args, logger, cancellationToken, serverMode, unknownServerMode, startSession: startServer }: StartInput,
+    platform: string,
+) {
     logger.info(`Starting TS Server`);
     logger.info(`Version: ${version}`);
     logger.info(`Arguments: ${args.join(" ")}`);
-    logger.info(`Platform: ${platform} NodeVersion: ${process.version} CaseSensitive: ${sys.useCaseSensitiveFileNames}`);
+    logger.info(
+        `Platform: ${platform} NodeVersion: ${process.version} CaseSensitive: ${sys.useCaseSensitiveFileNames}`,
+    );
     logger.info(`ServerMode: ${serverMode} hasUnknownServerMode: ${unknownServerMode}`);
 
     setStackTraceLimit();

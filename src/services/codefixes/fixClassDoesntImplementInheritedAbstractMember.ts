@@ -33,8 +33,18 @@ registerCodeFix({
     errorCodes,
     getCodeActions: function getCodeActionsToFixClassNotImplementingInheritedMembers(context) {
         const { sourceFile, span } = context;
-        const changes = textChanges.ChangeTracker.with(context, t => addMissingMembers(getClass(sourceFile, span.start), sourceFile, context, t, context.preferences));
-        return changes.length === 0 ? undefined : [createCodeFixAction(fixId, changes, Diagnostics.Implement_inherited_abstract_class, fixId, Diagnostics.Implement_all_inherited_abstract_classes)];
+        const changes = textChanges.ChangeTracker.with(
+            context,
+            t => addMissingMembers(getClass(sourceFile, span.start), sourceFile, context, t, context.preferences),
+        );
+        return changes.length === 0 ? undefined
+            : [createCodeFixAction(
+                fixId,
+                changes,
+                Diagnostics.Implement_inherited_abstract_class,
+                fixId,
+                Diagnostics.Implement_all_inherited_abstract_classes,
+            )];
     },
     fixIds: [fixId],
     getAllCodeActions: function getAllCodeActionsToFixClassDoesntImplementInheritedAbstractMember(context) {
@@ -55,17 +65,33 @@ function getClass(sourceFile: SourceFile, pos: number): ClassLikeDeclaration {
     return cast(token.parent, isClassLike);
 }
 
-function addMissingMembers(classDeclaration: ClassLikeDeclaration, sourceFile: SourceFile, context: TypeConstructionContext, changeTracker: textChanges.ChangeTracker, preferences: UserPreferences): void {
+function addMissingMembers(
+    classDeclaration: ClassLikeDeclaration,
+    sourceFile: SourceFile,
+    context: TypeConstructionContext,
+    changeTracker: textChanges.ChangeTracker,
+    preferences: UserPreferences,
+): void {
     const extendsNode = getEffectiveBaseTypeNode(classDeclaration)!;
     const checker = context.program.getTypeChecker();
     const instantiatedExtendsType = checker.getTypeAtLocation(extendsNode);
 
     // Note that this is ultimately derived from a map indexed by symbol names,
     // so duplicates cannot occur.
-    const abstractAndNonPrivateExtendsSymbols = checker.getPropertiesOfType(instantiatedExtendsType).filter(symbolPointsToNonPrivateAndAbstractMember);
+    const abstractAndNonPrivateExtendsSymbols = checker.getPropertiesOfType(instantiatedExtendsType).filter(
+        symbolPointsToNonPrivateAndAbstractMember,
+    );
 
     const importAdder = createImportAdder(sourceFile, context.program, preferences, context.host);
-    createMissingMemberNodes(classDeclaration, abstractAndNonPrivateExtendsSymbols, sourceFile, context, preferences, importAdder, member => changeTracker.insertMemberAtStart(sourceFile, classDeclaration, member as ClassElement));
+    createMissingMemberNodes(
+        classDeclaration,
+        abstractAndNonPrivateExtendsSymbols,
+        sourceFile,
+        context,
+        preferences,
+        importAdder,
+        member => changeTracker.insertMemberAtStart(sourceFile, classDeclaration, member as ClassElement),
+    );
     importAdder.writeFixes(changeTracker);
 }
 

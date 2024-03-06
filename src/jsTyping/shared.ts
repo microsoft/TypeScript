@@ -63,7 +63,9 @@ export function findArgument(argumentName: string): string | undefined {
 export function nowString() {
     // E.g. "12:34:56.789"
     const d = new Date();
-    return `${d.getHours().toString().padStart(2, "0")}:${d.getMinutes().toString().padStart(2, "0")}:${d.getSeconds().toString().padStart(2, "0")}.${d.getMilliseconds().toString().padStart(3, "0")}`;
+    return `${d.getHours().toString().padStart(2, "0")}:${d.getMinutes().toString().padStart(2, "0")}:${
+        d.getSeconds().toString().padStart(2, "0")
+    }.${d.getMilliseconds().toString().padStart(3, "0")}`;
 }
 
 const indentStr = "\n    ";

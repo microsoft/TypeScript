@@ -111,7 +111,16 @@ describe("unittests:: tsserver:: with project references and tsbuild", () => {
                     ],
                 }),
             };
-            const files = [libFile, containerLibConfig, containerLibIndex, containerExecConfig, containerExecIndex, containerCompositeExecConfig, containerCompositeExecIndex, containerConfig];
+            const files = [
+                libFile,
+                containerLibConfig,
+                containerLibIndex,
+                containerExecConfig,
+                containerExecIndex,
+                containerCompositeExecConfig,
+                containerCompositeExecIndex,
+                containerConfig,
+            ];
             if (tempFile) files.push(tempFile);
             const host = createHostWithSolutionBuild(files, [containerConfig.path]);
             const session = new TestSession(host);
@@ -265,7 +274,13 @@ function foo() {
                 command: ts.server.protocol.CommandTypes.References,
                 arguments: protocolFileLocationFromSubstring(keyboardTs, searchStr),
             });
-            baselineTsserverLogs("projectReferences", `root file is file from referenced project${disableSourceOfProjectReferenceRedirect ? " and using declaration maps" : ""}`, session);
+            baselineTsserverLogs(
+                "projectReferences",
+                `root file is file from referenced project${
+                    disableSourceOfProjectReferenceRedirect ? " and using declaration maps" : ""
+                }`,
+                session,
+            );
         }
 
         it(`when using declaration file maps to navigate between projects`, () => {
@@ -344,7 +359,11 @@ function foo() {
         session.host.baselineHost("a2Ts modified");
         assert.isTrue(projectA.dirty);
         projectA.updateGraph();
-        baselineTsserverLogs("projectReferences", "reusing d.ts files from composite and non composite projects", session);
+        baselineTsserverLogs(
+            "projectReferences",
+            "reusing d.ts files from composite and non composite projects",
+            session,
+        );
     });
 
     describe("when references are monorepo like with symlinks", () => {
@@ -377,7 +396,12 @@ function foo() {
             });
         }
 
-        function verifySession(scenario: string, { bPackageJson, aTest, bFoo, bBar, bSymlink }: Packages, alreadyBuilt: boolean, extraOptions: ts.CompilerOptions) {
+        function verifySession(
+            scenario: string,
+            { bPackageJson, aTest, bFoo, bBar, bSymlink }: Packages,
+            alreadyBuilt: boolean,
+            extraOptions: ts.CompilerOptions,
+        ) {
             const aConfig = config("A", extraOptions, ["../B"]);
             const bConfig = config("B", extraOptions);
             const files = [libFile, bPackageJson, aConfig, bConfig, aTest, bFoo, bBar, bSymlink];
@@ -403,7 +427,13 @@ function foo() {
                 },
             });
             verifyGetErrRequest({ session, files: [aTest] });
-            baselineTsserverLogs("projectReferences", `monorepo like with symlinks ${scenario} and solution is ${alreadyBuilt ? "built" : "not built"}${extraOptions.preserveSymlinks ? " with preserveSymlinks" : ""}`, session);
+            baselineTsserverLogs(
+                "projectReferences",
+                `monorepo like with symlinks ${scenario} and solution is ${alreadyBuilt ? "built" : "not built"}${
+                    extraOptions.preserveSymlinks ? " with preserveSymlinks" : ""
+                }`,
+                session,
+            );
         }
 
         function config(packageName: string, extraOptions: ts.CompilerOptions, references?: string[]): File {
@@ -430,30 +460,33 @@ function foo() {
         }
 
         function verifyMonoRepoLike(scope = "") {
-            verifySymlinkScenario(`when packageJson has types field and has index.ts${scope ? " with scoped package" : ""}`, () => ({
-                bPackageJson: {
-                    path: `/user/username/projects/myproject/packages/B/package.json`,
-                    content: jsonToReadableText({
-                        main: "lib/index.js",
-                        types: "lib/index.d.ts",
-                    }),
-                },
-                aTest: file(
-                    "A",
-                    "index.ts",
-                    `import { foo } from '${scope}b';
+            verifySymlinkScenario(
+                `when packageJson has types field and has index.ts${scope ? " with scoped package" : ""}`,
+                () => ({
+                    bPackageJson: {
+                        path: `/user/username/projects/myproject/packages/B/package.json`,
+                        content: jsonToReadableText({
+                            main: "lib/index.js",
+                            types: "lib/index.d.ts",
+                        }),
+                    },
+                    aTest: file(
+                        "A",
+                        "index.ts",
+                        `import { foo } from '${scope}b';
 import { bar } from '${scope}b/lib/bar';
 foo();
 bar();
 `,
-                ),
-                bFoo: file("B", "index.ts", `export function foo() { }`),
-                bBar: file("B", "bar.ts", `export function bar() { }`),
-                bSymlink: {
-                    path: `/user/username/projects/myproject/node_modules/${scope}b`,
-                    symLink: `/user/username/projects/myproject/packages/B`,
-                },
-            }));
+                    ),
+                    bFoo: file("B", "index.ts", `export function foo() { }`),
+                    bBar: file("B", "bar.ts", `export function bar() { }`),
+                    bSymlink: {
+                        path: `/user/username/projects/myproject/node_modules/${scope}b`,
+                        symLink: `/user/username/projects/myproject/packages/B`,
+                    },
+                }),
+            );
 
             verifySymlinkScenario(`when referencing file from subFolder${scope ? " with scoped package" : ""}`, () => ({
                 bPackageJson: {
@@ -544,11 +577,26 @@ testCompositeFunction('why hello there', 42);`,
             path: `/user/username/projects/myproject/node_modules/emit-composite`,
             symLink: `/user/username/projects/myproject/packages/emit-composite`,
         };
-        const host = createServerHost([libFile, compositeConfig, compositePackageJson, compositeIndex, compositeTestModule, consumerConfig, consumerIndex, symlink], { useCaseSensitiveFileNames: true });
+        const host = createServerHost([
+            libFile,
+            compositeConfig,
+            compositePackageJson,
+            compositeIndex,
+            compositeTestModule,
+            consumerConfig,
+            consumerIndex,
+            symlink,
+        ], {
+            useCaseSensitiveFileNames: true,
+        });
         const session = new TestSession(host);
         openFilesForSession([consumerIndex], session);
         verifyGetErrRequest({ session, files: [consumerIndex] });
-        baselineTsserverLogs("projectReferences", `when the referenced projects have allowJs and emitDeclarationOnly`, session);
+        baselineTsserverLogs(
+            "projectReferences",
+            `when the referenced projects have allowJs and emitDeclarationOnly`,
+            session,
+        );
     });
 
     it("when finding local reference doesnt load ancestor/sibling projects", () => {
@@ -613,7 +661,16 @@ testCompositeFunction('why hello there', 42);`,
                 }`,
         };
 
-        const files = [libFile, solution, compilerConfig, typesFile, programFile, servicesConfig, servicesFile, libFile];
+        const files = [
+            libFile,
+            solution,
+            compilerConfig,
+            typesFile,
+            programFile,
+            servicesConfig,
+            servicesFile,
+            libFile,
+        ];
         const host = createServerHost(files);
         const session = new TestSession(host);
         openFilesForSession([programFile], session);
@@ -631,7 +688,11 @@ testCompositeFunction('why hello there', 42);`,
             command: ts.server.protocol.CommandTypes.References,
             arguments: protocolFileLocationFromSubstring(programFile, "getSourceFiles"),
         });
-        baselineTsserverLogs("projectReferences", `finding local reference doesnt load ancestor/sibling projects`, session);
+        baselineTsserverLogs(
+            "projectReferences",
+            `finding local reference doesnt load ancestor/sibling projects`,
+            session,
+        );
     });
 
     it("when finding references in overlapping projects", () => {
@@ -733,7 +794,19 @@ testCompositeFunction('why hello there', 42);`,
                 `,
         };
 
-        const files = [libFile, solutionConfig, aConfig, aFile, bConfig, bFile, cConfig, cFile, dConfig, dFile, libFile];
+        const files = [
+            libFile,
+            solutionConfig,
+            aConfig,
+            aFile,
+            bConfig,
+            bFile,
+            cConfig,
+            cFile,
+            dConfig,
+            dFile,
+            libFile,
+        ];
         const host = createServerHost(files);
         const session = new TestSession(host);
         openFilesForSession([bFile], session);
@@ -808,7 +881,17 @@ ${usage}`,
                     path: `${solutionLocation}/shared/src/index.ts`,
                     content: definition,
                 };
-                const host = createServerHost([libFile, solution, libFile, apiConfig, apiFile, appConfig, appFile, sharedConfig, sharedFile]);
+                const host = createServerHost([
+                    libFile,
+                    solution,
+                    libFile,
+                    apiConfig,
+                    apiFile,
+                    appConfig,
+                    appFile,
+                    sharedConfig,
+                    sharedFile,
+                ]);
                 const session = new TestSession(host);
                 openFilesForSession([apiFile], session);
 
@@ -924,7 +1007,16 @@ export const foo = local;`,
                 }`,
         };
 
-        const files = [libFile, solution, compilerConfig, typesFile, programFile, servicesConfig, servicesFile, libFile];
+        const files = [
+            libFile,
+            solution,
+            compilerConfig,
+            typesFile,
+            programFile,
+            servicesConfig,
+            servicesFile,
+            libFile,
+        ];
         const host = createServerHost(files);
         const session = new TestSession(host);
         openFilesForSession([programFile], session);
@@ -935,7 +1027,11 @@ export const foo = local;`,
             command: ts.server.protocol.CommandTypes.References,
             arguments: protocolFileLocationFromSubstring(programFile, "getSourceFiles"),
         });
-        baselineTsserverLogs("projectReferences", `with disableSolutionSearching solution and siblings are not loaded`, session);
+        baselineTsserverLogs(
+            "projectReferences",
+            `with disableSolutionSearching solution and siblings are not loaded`,
+            session,
+        );
     });
 
     describe("when default project is solution project", () => {
@@ -1055,7 +1151,11 @@ export function bar() {}`,
             const info = session.getProjectService().getScriptInfoForPath(main.path as ts.Path)!;
             session.logger.startGroup();
             session.logger.info(`getDefaultProject for ${main.path}: ${info.getDefaultProject().projectName}`);
-            session.logger.info(`findDefaultConfiguredProject for ${main.path}: ${session.getProjectService().findDefaultConfiguredProject(info)!.projectName}`);
+            session.logger.info(
+                `findDefaultConfiguredProject for ${main.path}: ${
+                    session.getProjectService().findDefaultConfiguredProject(info)!.projectName
+                }`,
+            );
             session.logger.endGroup();
 
             // Verify errors
@@ -1121,7 +1221,11 @@ export function bar() {}`,
             const info = session.getProjectService().getScriptInfoForPath(main.path as ts.Path)!;
             session.logger.startGroup();
             session.logger.info(`getDefaultProject for ${main.path}: ${info.getDefaultProject().projectName}`);
-            session.logger.info(`findDefaultConfiguredProject for ${main.path}: ${session.getProjectService().findDefaultConfiguredProject(info)?.projectName}`);
+            session.logger.info(
+                `findDefaultConfiguredProject for ${main.path}: ${
+                    session.getProjectService().findDefaultConfiguredProject(info)?.projectName
+                }`,
+            );
             session.logger.endGroup();
 
             // Verify collection of script infos
@@ -1167,7 +1271,8 @@ export function bar() {}`,
         it("disables looking into the child project if disableReferencedProjectLoad is set in indirect project", () => {
             const { tsconfigIndirect, indirect } = getIndirectProject("1", { disableReferencedProjectLoad: true });
             verifyDisableReferencedProjectLoad({
-                scenario: "disables looking into the child project if disableReferencedProjectLoad is set in indirect project",
+                scenario:
+                    "disables looking into the child project if disableReferencedProjectLoad is set in indirect project",
                 configRefs: ["./tsconfig-indirect1.json"],
                 additionalFiles: [tsconfigIndirect, indirect],
             });
@@ -1177,7 +1282,8 @@ export function bar() {}`,
             const { tsconfigIndirect, indirect } = getIndirectProject("1", { disableReferencedProjectLoad: true });
             const { tsconfigIndirect: tsconfigIndirect2, indirect: indirect2 } = getIndirectProject("2");
             verifyDisableReferencedProjectLoad({
-                scenario: "disables looking into the child project if disableReferencedProjectLoad is set in first indirect project but not in another one",
+                scenario:
+                    "disables looking into the child project if disableReferencedProjectLoad is set in first indirect project but not in another one",
                 configRefs: ["./tsconfig-indirect1.json", "./tsconfig-indirect2.json"],
                 additionalFiles: [tsconfigIndirect, indirect, tsconfigIndirect2, indirect2],
             });
@@ -1190,7 +1296,8 @@ export function bar() {}`,
                     content: fileResolvingToMainDts.content,
                 };
                 verifySolutionScenario({
-                    scenario: "solution with its own files and project found is not solution but references open file through project reference",
+                    scenario:
+                        "solution with its own files and project found is not solution but references open file through project reference",
                     solutionFiles: [`./own/main.ts`],
                     solutionOptions: {
                         outDir: "./target/",
@@ -1227,7 +1334,8 @@ bar;`,
                     content: fileResolvingToMainDts.content,
                 };
                 verifyDisableReferencedProjectLoad({
-                    scenario: "solution with its own files and disables looking into the child project if disableReferencedProjectLoad is set",
+                    scenario:
+                        "solution with its own files and disables looking into the child project if disableReferencedProjectLoad is set",
                     solutionFiles: [`./own/main.ts`],
                     solutionOptions: {
                         outDir: "./target/",
@@ -1247,7 +1355,8 @@ bar;`,
                 };
                 const { tsconfigIndirect, indirect } = getIndirectProject("1", { disableReferencedProjectLoad: true });
                 verifyDisableReferencedProjectLoad({
-                    scenario: "solution with its own files and disables looking into the child project if disableReferencedProjectLoad is set in indirect project",
+                    scenario:
+                        "solution with its own files and disables looking into the child project if disableReferencedProjectLoad is set in indirect project",
                     solutionFiles: [`./own/main.ts`],
                     solutionOptions: {
                         outDir: "./target/",
@@ -1267,7 +1376,8 @@ bar;`,
                 const { tsconfigIndirect, indirect } = getIndirectProject("1", { disableReferencedProjectLoad: true });
                 const { tsconfigIndirect: tsconfigIndirect2, indirect: indirect2 } = getIndirectProject("2");
                 verifyDisableReferencedProjectLoad({
-                    scenario: "solution with its own files and disables looking into the child project if disableReferencedProjectLoad is set in first indirect project but not in another one",
+                    scenario:
+                        "solution with its own files and disables looking into the child project if disableReferencedProjectLoad is set in first indirect project but not in another one",
                     solutionFiles: [`./own/main.ts`],
                     solutionOptions: {
                         outDir: "./target/",
@@ -1332,14 +1442,21 @@ bar;`,
             host.runQueuedTimeoutCallbacks();
 
             // Add excluded file to referenced project
-            host.ensureFileOrFolder({ path: `/user/username/projects/myproject/projects/project1/temp/file.d.ts`, content: `declare class file {}` });
+            host.ensureFileOrFolder({
+                path: `/user/username/projects/myproject/projects/project1/temp/file.d.ts`,
+                content: `declare class file {}`,
+            });
             host.runQueuedTimeoutCallbacks();
 
             // Add output from new class to referenced project
             const class3Dts = `/user/username/projects/myproject/projects/project1/class3.d.ts`;
             host.writeFile(class3Dts, `declare class class3 {}`);
             host.runQueuedTimeoutCallbacks();
-            baselineTsserverLogs("projectReferences", `new file is added to the referenced project when referenced project is not open`, session);
+            baselineTsserverLogs(
+                "projectReferences",
+                `new file is added to the referenced project when referenced project is not open`,
+                session,
+            );
         });
 
         it("when referenced project is open", () => {
@@ -1351,13 +1468,20 @@ bar;`,
             host.writeFile(class3, `class class3 {}`);
             host.runQueuedTimeoutCallbacks();
             // Add excluded file to referenced project
-            host.ensureFileOrFolder({ path: `/user/username/projects/myproject/projects/project1/temp/file.d.ts`, content: `declare class file {}` });
+            host.ensureFileOrFolder({
+                path: `/user/username/projects/myproject/projects/project1/temp/file.d.ts`,
+                content: `declare class file {}`,
+            });
             host.runQueuedTimeoutCallbacks();
             // Add output from new class to referenced project
             const class3Dts = `/user/username/projects/myproject/projects/project1/class3.d.ts`;
             host.writeFile(class3Dts, `declare class class3 {}`);
             host.runQueuedTimeoutCallbacks();
-            baselineTsserverLogs("projectReferences", `new file is added to the referenced project when referenced project is open`, session);
+            baselineTsserverLogs(
+                "projectReferences",
+                `new file is added to the referenced project when referenced project is open`,
+                session,
+            );
         });
 
         it("when referenced project is not open with disableSourceOfProjectReferenceRedirect", () => {
@@ -1372,7 +1496,10 @@ bar;`,
             host.writeFile(class3Dts, `declare class class3 {}`);
             host.runQueuedTimeoutCallbacks();
             // Add excluded file to referenced project
-            host.ensureFileOrFolder({ path: `/user/username/projects/myproject/projects/project1/temp/file.d.ts`, content: `declare class file {}` });
+            host.ensureFileOrFolder({
+                path: `/user/username/projects/myproject/projects/project1/temp/file.d.ts`,
+                content: `declare class file {}`,
+            });
             host.runQueuedTimeoutCallbacks();
             // Delete output from new class to referenced project
             host.deleteFile(class3Dts);
@@ -1380,7 +1507,11 @@ bar;`,
             // Write back output of new class to referenced project
             host.writeFile(class3Dts, `declare class class3 {}`);
             host.runQueuedTimeoutCallbacks();
-            baselineTsserverLogs("projectReferences", `new file is added to the referenced project when referenced project is not open with disableSourceOfProjectReferenceRedirect`, session);
+            baselineTsserverLogs(
+                "projectReferences",
+                `new file is added to the referenced project when referenced project is not open with disableSourceOfProjectReferenceRedirect`,
+                session,
+            );
         });
 
         it("when referenced project is open with disableSourceOfProjectReferenceRedirect", () => {
@@ -1396,7 +1527,10 @@ bar;`,
             host.writeFile(class3Dts, `declare class class3 {}`);
             host.runQueuedTimeoutCallbacks();
             // Add excluded file to referenced project
-            host.ensureFileOrFolder({ path: `/user/username/projects/myproject/projects/project1/temp/file.d.ts`, content: `declare class file {}` });
+            host.ensureFileOrFolder({
+                path: `/user/username/projects/myproject/projects/project1/temp/file.d.ts`,
+                content: `declare class file {}`,
+            });
             host.runQueuedTimeoutCallbacks();
             // Delete output from new class to referenced project
             host.deleteFile(class3Dts);
@@ -1404,7 +1538,11 @@ bar;`,
             // Write back output of new class to referenced project
             host.writeFile(class3Dts, `declare class class3 {}`);
             host.runQueuedTimeoutCallbacks();
-            baselineTsserverLogs("projectReferences", `new file is added to the referenced project when referenced project is open with disableSourceOfProjectReferenceRedirect`, session);
+            baselineTsserverLogs(
+                "projectReferences",
+                `new file is added to the referenced project when referenced project is open with disableSourceOfProjectReferenceRedirect`,
+                session,
+            );
         });
     });
 
@@ -1467,7 +1605,17 @@ bar;`,
                 path: `/user/username/projects/myproject/node_modules/shared`,
                 symLink: `/user/username/projects/myproject/shared`,
             };
-            const files = [solnConfig, sharedConfig, sharedIndex, sharedPackage, appConfig, appBar, appIndex, sharedSymlink, libFile];
+            const files = [
+                solnConfig,
+                sharedConfig,
+                sharedIndex,
+                sharedPackage,
+                appConfig,
+                appBar,
+                appIndex,
+                sharedSymlink,
+                libFile,
+            ];
             const host = createServerHost(files);
             if (built) {
                 solutionBuildWithBaseline(host, [solnConfig.path]);
@@ -1486,7 +1634,13 @@ bar;`,
                     errorCodes: [ts.Diagnostics.Cannot_find_name_0.code],
                 },
             });
-            baselineTsserverLogs("projectReferences", `auto import with referenced project${built ? " when built" : ""}${disableSourceOfProjectReferenceRedirect ? " with disableSourceOfProjectReferenceRedirect" : ""}`, session);
+            baselineTsserverLogs(
+                "projectReferences",
+                `auto import with referenced project${built ? " when built" : ""}${
+                    disableSourceOfProjectReferenceRedirect ? " with disableSourceOfProjectReferenceRedirect" : ""
+                }`,
+                session,
+            );
         }
 
         it("when project is built", () => {
@@ -1501,7 +1655,11 @@ bar;`,
     });
 
     it("when files from two projects are open and one project references", () => {
-        function getPackageAndFile(packageName: string, references?: string[], optionsToExtend?: ts.CompilerOptions): [file: File, config: File] {
+        function getPackageAndFile(
+            packageName: string,
+            references?: string[],
+            optionsToExtend?: ts.CompilerOptions,
+        ): [file: File, config: File] {
             const file: File = {
                 path: `/user/username/projects/myproject/${packageName}/src/file1.ts`,
                 content: `export const ${packageName}Const = 10;`,
@@ -1515,14 +1673,38 @@ bar;`,
             };
             return [file, config];
         }
-        const [mainFile, mainConfig] = getPackageAndFile("main", ["core", "indirect", "noCoreRef1", "indirectDisabledChildLoad1", "indirectDisabledChildLoad2", "refToCoreRef3", "indirectNoCoreRef"]);
+        const [mainFile, mainConfig] = getPackageAndFile("main", [
+            "core",
+            "indirect",
+            "noCoreRef1",
+            "indirectDisabledChildLoad1",
+            "indirectDisabledChildLoad2",
+            "refToCoreRef3",
+            "indirectNoCoreRef",
+        ]);
         const [coreFile, coreConfig] = getPackageAndFile("core");
         const [noCoreRef1File, noCoreRef1Config] = getPackageAndFile("noCoreRef1");
         const [indirectFile, indirectConfig] = getPackageAndFile("indirect", ["coreRef1"]);
         const [coreRef1File, coreRef1Config] = getPackageAndFile("coreRef1", ["core"]);
-        const [indirectDisabledChildLoad1File, indirectDisabledChildLoad1Config] = getPackageAndFile("indirectDisabledChildLoad1", ["coreRef2"], { disableReferencedProjectLoad: true });
+        const [indirectDisabledChildLoad1File, indirectDisabledChildLoad1Config] = getPackageAndFile(
+            "indirectDisabledChildLoad1",
+            [
+                "coreRef2",
+            ],
+            {
+                disableReferencedProjectLoad: true,
+            },
+        );
         const [coreRef2File, coreRef2Config] = getPackageAndFile("coreRef2", ["core"]);
-        const [indirectDisabledChildLoad2File, indirectDisabledChildLoad2Config] = getPackageAndFile("indirectDisabledChildLoad2", ["coreRef3"], { disableReferencedProjectLoad: true });
+        const [indirectDisabledChildLoad2File, indirectDisabledChildLoad2Config] = getPackageAndFile(
+            "indirectDisabledChildLoad2",
+            [
+                "coreRef3",
+            ],
+            {
+                disableReferencedProjectLoad: true,
+            },
+        );
         const [coreRef3File, coreRef3Config] = getPackageAndFile("coreRef3", ["core"]);
         const [refToCoreRef3File, refToCoreRef3Config] = getPackageAndFile("refToCoreRef3", ["coreRef3"]);
         const [indirectNoCoreRefFile, indirectNoCoreRefConfig] = getPackageAndFile("indirectNoCoreRef", ["noCoreRef2"]);
@@ -1563,7 +1745,11 @@ bar;`,
             command: ts.server.protocol.CommandTypes.References,
             arguments: protocolFileLocationFromSubstring(coreFile, `coreConst`),
         });
-        baselineTsserverLogs("projectReferences", `when files from two projects are open and one project references`, session);
+        baselineTsserverLogs(
+            "projectReferences",
+            `when files from two projects are open and one project references`,
+            session,
+        );
     });
 
     describe("find refs to decl in other proj", () => {
@@ -1645,7 +1831,15 @@ const b: B = new B();`,
                     }),
                 };
 
-                const host = createServerHost([configA, indexA, configB, indexB, helperB, dtsB, ...(dtsMapPresent ? [dtsMapB] : [])]);
+                const host = createServerHost([
+                    configA,
+                    indexA,
+                    configB,
+                    indexB,
+                    helperB,
+                    dtsB,
+                    ...(dtsMapPresent ? [dtsMapB] : []),
+                ]);
                 const session = new TestSession(host);
                 openFilesForSession([indexA, ...(projectAlreadyLoaded ? [helperB] : [])], session);
 

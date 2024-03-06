@@ -28,21 +28,66 @@ const errorCodeToFixes = createMultiMap<string, CodeFixRegistration>();
 const fixIdToRegistration = new Map<string, CodeFixRegistration>();
 
 /** @internal */
-export function createCodeFixActionWithoutFixAll(fixName: string, changes: FileTextChanges[], description: DiagnosticOrDiagnosticAndArguments) {
-    return createCodeFixActionWorker(fixName, diagnosticToString(description), changes, /*fixId*/ undefined, /*fixAllDescription*/ undefined);
+export function createCodeFixActionWithoutFixAll(
+    fixName: string,
+    changes: FileTextChanges[],
+    description: DiagnosticOrDiagnosticAndArguments,
+) {
+    return createCodeFixActionWorker(
+        fixName,
+        diagnosticToString(description),
+        changes,
+        /*fixId*/ undefined,
+        /*fixAllDescription*/ undefined,
+    );
 }
 
 /** @internal */
-export function createCodeFixAction(fixName: string, changes: FileTextChanges[], description: DiagnosticOrDiagnosticAndArguments, fixId: {}, fixAllDescription: DiagnosticOrDiagnosticAndArguments, command?: CodeActionCommand): CodeFixAction {
-    return createCodeFixActionWorker(fixName, diagnosticToString(description), changes, fixId, diagnosticToString(fixAllDescription), command);
+export function createCodeFixAction(
+    fixName: string,
+    changes: FileTextChanges[],
+    description: DiagnosticOrDiagnosticAndArguments,
+    fixId: {},
+    fixAllDescription: DiagnosticOrDiagnosticAndArguments,
+    command?: CodeActionCommand,
+): CodeFixAction {
+    return createCodeFixActionWorker(
+        fixName,
+        diagnosticToString(description),
+        changes,
+        fixId,
+        diagnosticToString(fixAllDescription),
+        command,
+    );
 }
 
 /** @internal */
-export function createCodeFixActionMaybeFixAll(fixName: string, changes: FileTextChanges[], description: DiagnosticOrDiagnosticAndArguments, fixId?: {}, fixAllDescription?: DiagnosticOrDiagnosticAndArguments, command?: CodeActionCommand) {
-    return createCodeFixActionWorker(fixName, diagnosticToString(description), changes, fixId, fixAllDescription && diagnosticToString(fixAllDescription), command);
+export function createCodeFixActionMaybeFixAll(
+    fixName: string,
+    changes: FileTextChanges[],
+    description: DiagnosticOrDiagnosticAndArguments,
+    fixId?: {},
+    fixAllDescription?: DiagnosticOrDiagnosticAndArguments,
+    command?: CodeActionCommand,
+) {
+    return createCodeFixActionWorker(
+        fixName,
+        diagnosticToString(description),
+        changes,
+        fixId,
+        fixAllDescription && diagnosticToString(fixAllDescription),
+        command,
+    );
 }
 
-function createCodeFixActionWorker(fixName: string, description: string, changes: FileTextChanges[], fixId?: {}, fixAllDescription?: string, command?: CodeActionCommand): CodeFixAction {
+function createCodeFixActionWorker(
+    fixName: string,
+    description: string,
+    changes: FileTextChanges[],
+    fixId?: {},
+    fixAllDescription?: string,
+    command?: CodeActionCommand,
+): CodeFixAction {
     return { fixName, description, changes, fixId, fixAllDescription, commands: command ? [command] : undefined };
 }
 
@@ -94,7 +139,10 @@ export function getAllFixes(context: CodeFixAllContext): CombinedCodeActions {
 }
 
 /** @internal */
-export function createCombinedCodeActions(changes: FileTextChanges[], commands?: CodeActionCommand[]): CombinedCodeActions {
+export function createCombinedCodeActions(
+    changes: FileTextChanges[],
+    commands?: CodeActionCommand[],
+): CombinedCodeActions {
     return { changes, commands };
 }
 
@@ -110,12 +158,19 @@ export function codeFixAll(
     use: (changes: textChanges.ChangeTracker, error: DiagnosticWithLocation, commands: CodeActionCommand[]) => void,
 ): CombinedCodeActions {
     const commands: CodeActionCommand[] = [];
-    const changes = textChanges.ChangeTracker.with(context, t => eachDiagnostic(context, errorCodes, diag => use(t, diag, commands)));
+    const changes = textChanges.ChangeTracker.with(
+        context,
+        t => eachDiagnostic(context, errorCodes, diag => use(t, diag, commands)),
+    );
     return createCombinedCodeActions(changes, commands.length === 0 ? undefined : commands);
 }
 
 /** @internal */
-export function eachDiagnostic(context: CodeFixAllContext, errorCodes: readonly number[], cb: (diag: DiagnosticWithLocation) => void): void {
+export function eachDiagnostic(
+    context: CodeFixAllContext,
+    errorCodes: readonly number[],
+    cb: (diag: DiagnosticWithLocation) => void,
+): void {
     for (const diag of getDiagnostics(context)) {
         if (contains(errorCodes, diag.code)) {
             cb(diag as DiagnosticWithLocation);

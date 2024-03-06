@@ -43,9 +43,13 @@ const errorCodes = [
     // Diagnostics.This_type_parameter_probably_needs_an_extends_0_constraint
     Diagnostics.Type_0_is_not_comparable_to_type_1.code,
     Diagnostics.Type_0_is_not_assignable_to_type_1_Two_different_types_with_this_name_exist_but_they_are_unrelated.code,
-    Diagnostics.Type_0_is_not_assignable_to_type_1_with_exactOptionalPropertyTypes_Colon_true_Consider_adding_undefined_to_the_types_of_the_target_s_properties.code,
+    Diagnostics
+        .Type_0_is_not_assignable_to_type_1_with_exactOptionalPropertyTypes_Colon_true_Consider_adding_undefined_to_the_types_of_the_target_s_properties
+        .code,
     Diagnostics.Type_0_is_not_assignable_to_type_1.code,
-    Diagnostics.Argument_of_type_0_is_not_assignable_to_parameter_of_type_1_with_exactOptionalPropertyTypes_Colon_true_Consider_adding_undefined_to_the_types_of_the_target_s_properties.code,
+    Diagnostics
+        .Argument_of_type_0_is_not_assignable_to_parameter_of_type_1_with_exactOptionalPropertyTypes_Colon_true_Consider_adding_undefined_to_the_types_of_the_target_s_properties
+        .code,
     Diagnostics.Property_0_is_incompatible_with_index_signature.code,
     Diagnostics.Property_0_in_type_1_is_not_assignable_to_type_2.code,
     Diagnostics.Type_0_does_not_satisfy_the_constraint_1.code,
@@ -57,8 +61,19 @@ registerCodeFix({
         const info = getInfo(program, sourceFile, span);
         if (info === undefined) return;
 
-        const changes = textChanges.ChangeTracker.with(context, t => addMissingConstraint(t, program, preferences, host, sourceFile, info));
-        return [createCodeFixAction(fixId, changes, Diagnostics.Add_extends_constraint, fixId, Diagnostics.Add_extends_constraint_to_all_type_parameters)];
+        const changes = textChanges.ChangeTracker.with(
+            context,
+            t => addMissingConstraint(t, program, preferences, host, sourceFile, info),
+        );
+        return [
+            createCodeFixAction(
+                fixId,
+                changes,
+                Diagnostics.Add_extends_constraint,
+                fixId,
+                Diagnostics.Add_extends_constraint_to_all_type_parameters,
+            ),
+        ];
     },
     fixIds: [fixId],
     getAllCodeActions: context => {
@@ -86,11 +101,22 @@ interface Info {
 }
 
 function getInfo(program: Program, sourceFile: SourceFile, span: TextSpan): Info | undefined {
-    const diag = find(program.getSemanticDiagnostics(sourceFile), diag => diag.start === span.start && diag.length === span.length);
+    const diag = find(
+        program.getSemanticDiagnostics(sourceFile),
+        diag => diag.start === span.start && diag.length === span.length,
+    );
     if (diag === undefined || diag.relatedInformation === undefined) return;
 
-    const related = find(diag.relatedInformation, related => related.code === Diagnostics.This_type_parameter_might_need_an_extends_0_constraint.code);
-    if (related === undefined || related.file === undefined || related.start === undefined || related.length === undefined) return;
+    const related = find(
+        diag.relatedInformation,
+        related => related.code === Diagnostics.This_type_parameter_might_need_an_extends_0_constraint.code,
+    );
+    if (
+        related === undefined || related.file === undefined || related.start === undefined ||
+        related.length === undefined
+    ) {
+        return;
+    }
 
     let declaration = findAncestorMatchingSpan(related.file, createTextSpan(related.start, related.length));
     if (declaration === undefined) return;
@@ -105,14 +131,22 @@ function getInfo(program: Program, sourceFile: SourceFile, span: TextSpan): Info
 
         const token = getTokenAtPosition(sourceFile, span.start);
         const checker = program.getTypeChecker();
-        const constraint = tryGetConstraintType(checker, token) || tryGetConstraintFromDiagnosticMessage(related.messageText);
+        const constraint = tryGetConstraintType(checker, token) ||
+            tryGetConstraintFromDiagnosticMessage(related.messageText);
 
         return { constraint, declaration, token };
     }
     return undefined;
 }
 
-function addMissingConstraint(changes: textChanges.ChangeTracker, program: Program, preferences: UserPreferences, host: LanguageServiceHost, sourceFile: SourceFile, info: Info): void {
+function addMissingConstraint(
+    changes: textChanges.ChangeTracker,
+    program: Program,
+    preferences: UserPreferences,
+    host: LanguageServiceHost,
+    sourceFile: SourceFile,
+    info: Info,
+): void {
     const { declaration, constraint } = info;
     const checker = program.getTypeChecker();
 
@@ -123,9 +157,27 @@ function addMissingConstraint(changes: textChanges.ChangeTracker, program: Progr
         const scriptTarget = getEmitScriptTarget(program.getCompilerOptions());
         const tracker = getNoopSymbolTrackerWithResolver({ program, host });
         const importAdder = createImportAdder(sourceFile, program, preferences, host);
-        const typeNode = typeToAutoImportableTypeNode(checker, importAdder, constraint, /*contextNode*/ undefined, scriptTarget, /*flags*/ undefined, tracker);
+        const typeNode = typeToAutoImportableTypeNode(
+            checker,
+            importAdder,
+            constraint,
+            /*contextNode*/ undefined,
+            scriptTarget,
+            /*flags*/ undefined,
+            tracker,
+        );
         if (typeNode) {
-            changes.replaceNode(sourceFile, declaration, factory.updateTypeParameterDeclaration(declaration, /*modifiers*/ undefined, declaration.name, typeNode, declaration.default));
+            changes.replaceNode(
+                sourceFile,
+                declaration,
+                factory.updateTypeParameterDeclaration(
+                    declaration,
+                    /*modifiers*/ undefined,
+                    declaration.name,
+                    typeNode,
+                    declaration.default,
+                ),
+            );
             importAdder.writeFixes(changes);
         }
     }

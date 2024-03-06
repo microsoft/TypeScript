@@ -28,8 +28,19 @@ registerCodeFix({
         const { sourceFile, span: { start } } = context;
         const info = getInfo(sourceFile, start);
         if (!info) return undefined;
-        const changes = textChanges.ChangeTracker.with(context, t => doChange(t, sourceFile, info, context.preferences));
-        return [createCodeFixAction(fixId, changes, Diagnostics.Convert_to_default_import, fixId, Diagnostics.Convert_all_to_default_imports)];
+        const changes = textChanges.ChangeTracker.with(
+            context,
+            t => doChange(t, sourceFile, info, context.preferences),
+        );
+        return [
+            createCodeFixAction(
+                fixId,
+                changes,
+                Diagnostics.Convert_to_default_import,
+                fixId,
+                Diagnostics.Convert_all_to_default_imports,
+            ),
+        ];
     },
     fixIds: [fixId],
     getAllCodeActions: context =>
@@ -57,6 +68,20 @@ function getInfo(sourceFile: SourceFile, pos: number): Info | undefined {
     }
 }
 
-function doChange(changes: textChanges.ChangeTracker, sourceFile: SourceFile, info: Info, preferences: UserPreferences): void {
-    changes.replaceNode(sourceFile, info.importNode, makeImport(info.name, /*namedImports*/ undefined, info.moduleSpecifier, getQuotePreference(sourceFile, preferences)));
+function doChange(
+    changes: textChanges.ChangeTracker,
+    sourceFile: SourceFile,
+    info: Info,
+    preferences: UserPreferences,
+): void {
+    changes.replaceNode(
+        sourceFile,
+        info.importNode,
+        makeImport(
+            info.name,
+            /*namedImports*/ undefined,
+            info.moduleSpecifier,
+            getQuotePreference(sourceFile, preferences),
+        ),
+    );
 }

@@ -83,11 +83,28 @@ function baselineParseConfigWith(
         it(jsonTest, () => {
             const baseline: string[] = [];
             header?.(baseline);
-            for (const { createHost, jsonText, configFileName, existingOptions, basePath, existingWatchOptions, baselineParsed } of input()) {
+            for (
+                const {
+                    createHost,
+                    jsonText,
+                    configFileName,
+                    existingOptions,
+                    basePath,
+                    existingWatchOptions,
+                    baselineParsed,
+                } of input()
+            ) {
                 const host = createHost(baseline);
                 if (!skipFs) baselineParseConfigHost(baseline, host);
                 baseline.push(`configFileName:: ${configFileName}`);
-                const parsed = getParsed(jsonText, configFileName, host, basePath, existingOptions, existingWatchOptions);
+                const parsed = getParsed(
+                    jsonText,
+                    configFileName,
+                    host,
+                    basePath,
+                    existingOptions,
+                    existingWatchOptions,
+                );
                 baselineParsed(baseline, parsed);
                 if (!skipErrors) {
                     baseline.push("Errors::");

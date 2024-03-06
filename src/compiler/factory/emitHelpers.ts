@@ -100,11 +100,23 @@ export type ESDecorateContext =
 export interface EmitHelperFactory {
     getUnscopedHelperName(name: string): Identifier;
     // TypeScript Helpers
-    createDecorateHelper(decoratorExpressions: readonly Expression[], target: Expression, memberName?: Expression, descriptor?: Expression): Expression;
+    createDecorateHelper(
+        decoratorExpressions: readonly Expression[],
+        target: Expression,
+        memberName?: Expression,
+        descriptor?: Expression,
+    ): Expression;
     createMetadataHelper(metadataKey: string, metadataValue: Expression): Expression;
     createParamHelper(expression: Expression, parameterOffset: number): Expression;
     // ES Decorators Helpers
-    createESDecorateHelper(ctor: Expression, descriptorIn: Expression, decorators: Expression, contextIn: ESDecorateContext, initializers: Expression, extraInitializers: Expression): Expression;
+    createESDecorateHelper(
+        ctor: Expression,
+        descriptorIn: Expression,
+        decorators: Expression,
+        contextIn: ESDecorateContext,
+        initializers: Expression,
+        extraInitializers: Expression,
+    ): Expression;
     createRunInitializersHelper(thisArg: Expression, initializers: Expression, value?: Expression): Expression;
     // ES2018 Helpers
     createAssignHelper(attributesSegments: readonly Expression[]): Expression;
@@ -113,9 +125,20 @@ export interface EmitHelperFactory {
     createAsyncDelegatorHelper(expression: Expression): Expression;
     createAsyncValuesHelper(expression: Expression): Expression;
     // ES2018 Destructuring Helpers
-    createRestHelper(value: Expression, elements: readonly BindingOrAssignmentElement[], computedTempVariables: readonly Expression[] | undefined, location: TextRange): Expression;
+    createRestHelper(
+        value: Expression,
+        elements: readonly BindingOrAssignmentElement[],
+        computedTempVariables: readonly Expression[] | undefined,
+        location: TextRange,
+    ): Expression;
     // ES2017 Helpers
-    createAwaiterHelper(hasLexicalThis: boolean, argumentsExpression: Expression | undefined, promiseConstructor: EntityName | Expression | undefined, parameters: readonly ParameterDeclaration[] | undefined, body: Block): Expression;
+    createAwaiterHelper(
+        hasLexicalThis: boolean,
+        argumentsExpression: Expression | undefined,
+        promiseConstructor: EntityName | Expression | undefined,
+        parameters: readonly ParameterDeclaration[] | undefined,
+        body: Block,
+    ): Expression;
     // ES2015 Helpers
     createExtendsHelper(name: Identifier): Expression;
     createTemplateObjectHelper(cooked: ArrayLiteralExpression, raw: ArrayLiteralExpression): Expression;
@@ -133,8 +156,19 @@ export interface EmitHelperFactory {
     createImportDefaultHelper(expression: Expression): Expression;
     createExportStarHelper(moduleExpression: Expression, exportsExpression?: Expression): Expression;
     // Class Fields Helpers
-    createClassPrivateFieldGetHelper(receiver: Expression, state: Identifier, kind: PrivateIdentifierKind, f: Identifier | undefined): Expression;
-    createClassPrivateFieldSetHelper(receiver: Expression, state: Identifier, value: Expression, kind: PrivateIdentifierKind, f: Identifier | undefined): Expression;
+    createClassPrivateFieldGetHelper(
+        receiver: Expression,
+        state: Identifier,
+        kind: PrivateIdentifierKind,
+        f: Identifier | undefined,
+    ): Expression;
+    createClassPrivateFieldSetHelper(
+        receiver: Expression,
+        state: Identifier,
+        value: Expression,
+        kind: PrivateIdentifierKind,
+        f: Identifier | undefined,
+    ): Expression;
     createClassPrivateFieldInHelper(state: Identifier, receiver: Expression): Expression;
     // 'using' helpers
     createAddDisposableResourceHelper(envBinding: Expression, value: Expression, async: boolean): Expression;
@@ -200,7 +234,12 @@ export function createEmitHelperFactory(context: TransformationContext): EmitHel
 
     // TypeScript Helpers
 
-    function createDecorateHelper(decoratorExpressions: Expression[], target: Expression, memberName?: Expression, descriptor?: Expression) {
+    function createDecorateHelper(
+        decoratorExpressions: Expression[],
+        target: Expression,
+        memberName?: Expression,
+        descriptor?: Expression,
+    ) {
         context.requestEmitHelper(decorateHelper);
 
         const argumentsArray: Expression[] = [];
@@ -353,11 +392,27 @@ export function createEmitHelperFactory(context: TransformationContext): EmitHel
 
     function createESDecorateClassElementContextObject(contextIn: ESDecorateClassElementContext) {
         const properties = [
-            factory.createPropertyAssignment(factory.createIdentifier("kind"), factory.createStringLiteral(contextIn.kind)),
-            factory.createPropertyAssignment(factory.createIdentifier("name"), contextIn.name.computed ? contextIn.name.name : factory.createStringLiteralFromNode(contextIn.name.name)),
-            factory.createPropertyAssignment(factory.createIdentifier("static"), contextIn.static ? factory.createTrue() : factory.createFalse()),
-            factory.createPropertyAssignment(factory.createIdentifier("private"), contextIn.private ? factory.createTrue() : factory.createFalse()),
-            factory.createPropertyAssignment(factory.createIdentifier("access"), createESDecorateClassElementAccessObject(contextIn.name, contextIn.access)),
+            factory.createPropertyAssignment(
+                factory.createIdentifier("kind"),
+                factory.createStringLiteral(contextIn.kind),
+            ),
+            factory.createPropertyAssignment(
+                factory.createIdentifier("name"),
+                contextIn.name.computed ? contextIn.name.name
+                    : factory.createStringLiteralFromNode(contextIn.name.name),
+            ),
+            factory.createPropertyAssignment(
+                factory.createIdentifier("static"),
+                contextIn.static ? factory.createTrue() : factory.createFalse(),
+            ),
+            factory.createPropertyAssignment(
+                factory.createIdentifier("private"),
+                contextIn.private ? factory.createTrue() : factory.createFalse(),
+            ),
+            factory.createPropertyAssignment(
+                factory.createIdentifier("access"),
+                createESDecorateClassElementAccessObject(contextIn.name, contextIn.access),
+            ),
             factory.createPropertyAssignment(factory.createIdentifier("metadata"), contextIn.metadata),
         ];
         return factory.createObjectLiteralExpression(properties);
@@ -368,7 +423,14 @@ export function createEmitHelperFactory(context: TransformationContext): EmitHel
             createESDecorateClassElementContextObject(contextIn);
     }
 
-    function createESDecorateHelper(ctor: Expression, descriptorIn: Expression, decorators: Expression, contextIn: ESDecorateContext, initializers: Expression, extraInitializers: Expression) {
+    function createESDecorateHelper(
+        ctor: Expression,
+        descriptorIn: Expression,
+        decorators: Expression,
+        contextIn: ESDecorateContext,
+        initializers: Expression,
+        extraInitializers: Expression,
+    ) {
         context.requestEmitHelper(esDecorateHelper);
         return factory.createCallExpression(
             getUnscopedHelperName("__esDecorate"),
@@ -396,7 +458,11 @@ export function createEmitHelperFactory(context: TransformationContext): EmitHel
 
     function createAssignHelper(attributesSegments: Expression[]) {
         if (getEmitScriptTarget(context.getCompilerOptions()) >= ScriptTarget.ES2015) {
-            return factory.createCallExpression(factory.createPropertyAccessExpression(factory.createIdentifier("Object"), "assign"), /*typeArguments*/ undefined, attributesSegments);
+            return factory.createCallExpression(
+                factory.createPropertyAccessExpression(factory.createIdentifier("Object"), "assign"),
+                /*typeArguments*/ undefined,
+                attributesSegments,
+            );
         }
         context.requestEmitHelper(assignHelper);
         return factory.createCallExpression(
@@ -408,7 +474,9 @@ export function createEmitHelperFactory(context: TransformationContext): EmitHel
 
     function createAwaitHelper(expression: Expression) {
         context.requestEmitHelper(awaitHelper);
-        return factory.createCallExpression(getUnscopedHelperName("__await"), /*typeArguments*/ undefined, [expression]);
+        return factory.createCallExpression(getUnscopedHelperName("__await"), /*typeArguments*/ undefined, [
+            expression,
+        ]);
     }
 
     function createAsyncGeneratorHelper(generatorFunc: FunctionExpression, hasLexicalThis: boolean) {
@@ -416,7 +484,8 @@ export function createEmitHelperFactory(context: TransformationContext): EmitHel
         context.requestEmitHelper(asyncGeneratorHelper);
 
         // Mark this node as originally an async function
-        (generatorFunc.emitNode || (generatorFunc.emitNode = {} as EmitNode)).flags |= EmitFlags.AsyncFunctionBody | EmitFlags.ReuseTempVariableScope;
+        (generatorFunc.emitNode || (generatorFunc.emitNode = {} as EmitNode)).flags |= EmitFlags.AsyncFunctionBody |
+            EmitFlags.ReuseTempVariableScope;
 
         return factory.createCallExpression(
             getUnscopedHelperName("__asyncGenerator"),
@@ -453,7 +522,12 @@ export function createEmitHelperFactory(context: TransformationContext): EmitHel
     /** Given value: o, propName: p, pattern: { a, b, ...p } from the original statement
      * `{ a, b, ...p } = o`, create `p = __rest(o, ["a", "b"]);`
      */
-    function createRestHelper(value: Expression, elements: readonly BindingOrAssignmentElement[], computedTempVariables: readonly Expression[] | undefined, location: TextRange): Expression {
+    function createRestHelper(
+        value: Expression,
+        elements: readonly BindingOrAssignmentElement[],
+        computedTempVariables: readonly Expression[] | undefined,
+        location: TextRange,
+    ): Expression {
         context.requestEmitHelper(restHelper);
         const propertyNames: Expression[] = [];
         let computedTempVariableOffset = 0;
@@ -461,7 +535,10 @@ export function createEmitHelperFactory(context: TransformationContext): EmitHel
             const propertyName = getPropertyNameOfBindingOrAssignmentElement(elements[i]);
             if (propertyName) {
                 if (isComputedPropertyName(propertyName)) {
-                    Debug.assertIsDefined(computedTempVariables, "Encountered computed property name but 'computedTempVariables' argument was not provided.");
+                    Debug.assertIsDefined(
+                        computedTempVariables,
+                        "Encountered computed property name but 'computedTempVariables' argument was not provided.",
+                    );
                     const temp = computedTempVariables[computedTempVariableOffset];
                     computedTempVariableOffset++;
                     // typeof _tmp === "symbol" ? _tmp : _tmp + ""
@@ -495,7 +572,13 @@ export function createEmitHelperFactory(context: TransformationContext): EmitHel
 
     // ES2017 Helpers
 
-    function createAwaiterHelper(hasLexicalThis: boolean, argumentsExpression: Expression | undefined, promiseConstructor: EntityName | Expression | undefined, parameters: readonly ParameterDeclaration[], body: Block) {
+    function createAwaiterHelper(
+        hasLexicalThis: boolean,
+        argumentsExpression: Expression | undefined,
+        promiseConstructor: EntityName | Expression | undefined,
+        parameters: readonly ParameterDeclaration[],
+        body: Block,
+    ) {
         context.requestEmitHelper(awaiterHelper);
 
         const generatorFunc = factory.createFunctionExpression(
@@ -509,7 +592,8 @@ export function createEmitHelperFactory(context: TransformationContext): EmitHel
         );
 
         // Mark this node as originally an async function
-        (generatorFunc.emitNode || (generatorFunc.emitNode = {} as EmitNode)).flags |= EmitFlags.AsyncFunctionBody | EmitFlags.ReuseTempVariableScope;
+        (generatorFunc.emitNode || (generatorFunc.emitNode = {} as EmitNode)).flags |= EmitFlags.AsyncFunctionBody |
+            EmitFlags.ReuseTempVariableScope;
 
         return factory.createCallExpression(
             getUnscopedHelperName("__awaiter"),
@@ -517,7 +601,8 @@ export function createEmitHelperFactory(context: TransformationContext): EmitHel
             [
                 hasLexicalThis ? factory.createThis() : factory.createVoidZero(),
                 argumentsExpression ?? factory.createVoidZero(),
-                promiseConstructor ? createExpressionFromEntityName(factory, promiseConstructor) : factory.createVoidZero(),
+                promiseConstructor ? createExpressionFromEntityName(factory, promiseConstructor)
+                    : factory.createVoidZero(),
                 generatorFunc,
             ],
         );
@@ -530,7 +615,13 @@ export function createEmitHelperFactory(context: TransformationContext): EmitHel
         return factory.createCallExpression(
             getUnscopedHelperName("__extends"),
             /*typeArguments*/ undefined,
-            [name, factory.createUniqueName("_super", GeneratedIdentifierFlags.Optimistic | GeneratedIdentifierFlags.FileLevel)],
+            [
+                name,
+                factory.createUniqueName(
+                    "_super",
+                    GeneratedIdentifierFlags.Optimistic | GeneratedIdentifierFlags.FileLevel,
+                ),
+            ],
         );
     }
 
@@ -628,7 +719,10 @@ export function createEmitHelperFactory(context: TransformationContext): EmitHel
         );
     }
 
-    function createExportStarHelper(moduleExpression: Expression, exportsExpression: Expression = factory.createIdentifier("exports")) {
+    function createExportStarHelper(
+        moduleExpression: Expression,
+        exportsExpression: Expression = factory.createIdentifier("exports"),
+    ) {
         context.requestEmitHelper(exportStarHelper);
         context.requestEmitHelper(createBindingHelper);
         return factory.createCallExpression(
@@ -640,7 +734,12 @@ export function createEmitHelperFactory(context: TransformationContext): EmitHel
 
     // Class Fields Helpers
 
-    function createClassPrivateFieldGetHelper(receiver: Expression, state: Identifier, kind: PrivateIdentifierKind, f: Identifier | undefined) {
+    function createClassPrivateFieldGetHelper(
+        receiver: Expression,
+        state: Identifier,
+        kind: PrivateIdentifierKind,
+        f: Identifier | undefined,
+    ) {
         context.requestEmitHelper(classPrivateFieldGetHelper);
         let args;
         if (!f) {
@@ -649,10 +748,20 @@ export function createEmitHelperFactory(context: TransformationContext): EmitHel
         else {
             args = [receiver, state, factory.createStringLiteral(kind), f];
         }
-        return factory.createCallExpression(getUnscopedHelperName("__classPrivateFieldGet"), /*typeArguments*/ undefined, args);
+        return factory.createCallExpression(
+            getUnscopedHelperName("__classPrivateFieldGet"),
+            /*typeArguments*/ undefined,
+            args,
+        );
     }
 
-    function createClassPrivateFieldSetHelper(receiver: Expression, state: Identifier, value: Expression, kind: PrivateIdentifierKind, f: Identifier | undefined) {
+    function createClassPrivateFieldSetHelper(
+        receiver: Expression,
+        state: Identifier,
+        value: Expression,
+        kind: PrivateIdentifierKind,
+        f: Identifier | undefined,
+    ) {
         context.requestEmitHelper(classPrivateFieldSetHelper);
         let args;
         if (!f) {
@@ -661,12 +770,23 @@ export function createEmitHelperFactory(context: TransformationContext): EmitHel
         else {
             args = [receiver, state, value, factory.createStringLiteral(kind), f];
         }
-        return factory.createCallExpression(getUnscopedHelperName("__classPrivateFieldSet"), /*typeArguments*/ undefined, args);
+        return factory.createCallExpression(
+            getUnscopedHelperName("__classPrivateFieldSet"),
+            /*typeArguments*/ undefined,
+            args,
+        );
     }
 
     function createClassPrivateFieldInHelper(state: Identifier, receiver: Expression) {
         context.requestEmitHelper(classPrivateFieldInHelper);
-        return factory.createCallExpression(getUnscopedHelperName("__classPrivateFieldIn"), /*typeArguments*/ undefined, [state, receiver]);
+        return factory.createCallExpression(
+            getUnscopedHelperName("__classPrivateFieldIn"),
+            /*typeArguments*/ undefined,
+            [
+                state,
+                receiver,
+            ],
+        );
     }
 
     function createAddDisposableResourceHelper(envBinding: Expression, value: Expression, async: boolean): Expression {
@@ -680,7 +800,9 @@ export function createEmitHelperFactory(context: TransformationContext): EmitHel
 
     function createDisposeResourcesHelper(envBinding: Expression) {
         context.requestEmitHelper(disposeResourcesHelper);
-        return factory.createCallExpression(getUnscopedHelperName("__disposeResources"), /*typeArguments*/ undefined, [envBinding]);
+        return factory.createCallExpression(getUnscopedHelperName("__disposeResources"), /*typeArguments*/ undefined, [
+            envBinding,
+        ]);
     }
 }
 

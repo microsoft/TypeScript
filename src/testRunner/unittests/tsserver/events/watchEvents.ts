@@ -23,7 +23,10 @@ import {
 describe("unittests:: tsserver:: events:: watchEvents", () => {
     interface TestServerHostWithCustomWatch extends TestServerHost {
         factoryData: {
-            watchUtils: WatchUtils<ts.server.protocol.CreateFileWatcherEventBody, ts.server.protocol.CreateDirectoryWatcherEventBody>;
+            watchUtils: WatchUtils<
+                ts.server.protocol.CreateFileWatcherEventBody,
+                ts.server.protocol.CreateDirectoryWatcherEventBody
+            >;
             watchFile(data: ts.server.protocol.CreateFileWatcherEventBody): void;
             watchDirectory(data: ts.server.protocol.CreateDirectoryWatcherEventBody): void;
             closeWatcher(data: ts.server.protocol.CloseFileWatcherEventBody): void;
@@ -38,7 +41,10 @@ describe("unittests:: tsserver:: events:: watchEvents", () => {
         const originalSerializeWatches = host.serializeWatches;
         host.serializeWatches = serializeWatches;
         host.factoryData = {
-            watchUtils: createWatchUtils<ts.server.protocol.CreateFileWatcherEventBody, ts.server.protocol.CreateDirectoryWatcherEventBody>(
+            watchUtils: createWatchUtils<
+                ts.server.protocol.CreateFileWatcherEventBody,
+                ts.server.protocol.CreateDirectoryWatcherEventBody
+            >(
                 "Custom WatchedFiles",
                 "Custom WatchedDirectories",
                 host.getCanonicalFileName,
@@ -138,7 +144,10 @@ describe("unittests:: tsserver:: events:: watchEvents", () => {
 
     it("canUseWatchEvents", () => {
         const { host, logger } = setup();
-        const session = createSessionWithCustomEventHandler({ host, canUseWatchEvents: true, logger }, handleWatchEvents);
+        const session = createSessionWithCustomEventHandler(
+            { host, canUseWatchEvents: true, logger },
+            handleWatchEvents,
+        );
         openFilesForSession(["/user/username/projects/myproject/a.ts"], session);
 
         // Directory watcher

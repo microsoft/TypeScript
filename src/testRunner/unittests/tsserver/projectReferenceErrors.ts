@@ -13,7 +13,13 @@ describe("unittests:: tsserver:: with project references and error reporting", (
     const dependecyLocation = `/user/username/projects/myproject/dependency`;
     const usageLocation = `/user/username/projects/myproject/usage`;
 
-    function verifyUsageAndDependency(scenario: string, dependencyTs: File, dependencyConfig: File, usageTs: File, usageConfig: File) {
+    function verifyUsageAndDependency(
+        scenario: string,
+        dependencyTs: File,
+        dependencyConfig: File,
+        usageTs: File,
+        usageConfig: File,
+    ) {
         function usageProjectDiagnostics(): GetErrForProjectDiagnostics {
             return { project: usageTs, files: [usageTs, dependencyTs] };
         }

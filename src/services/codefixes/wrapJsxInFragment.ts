@@ -27,7 +27,15 @@ registerCodeFix({
         const node = findNodeToFix(sourceFile, span.start);
         if (!node) return undefined;
         const changes = textChanges.ChangeTracker.with(context, t => doChange(t, sourceFile, node));
-        return [createCodeFixAction(fixID, changes, Diagnostics.Wrap_in_JSX_fragment, fixID, Diagnostics.Wrap_all_unparented_JSX_in_JSX_fragment)];
+        return [
+            createCodeFixAction(
+                fixID,
+                changes,
+                Diagnostics.Wrap_in_JSX_fragment,
+                fixID,
+                Diagnostics.Wrap_all_unparented_JSX_in_JSX_fragment,
+            ),
+        ];
     },
     fixIds: [fixID],
     getAllCodeActions: context =>
@@ -55,7 +63,13 @@ function findNodeToFix(sourceFile: SourceFile, pos: number): BinaryExpression | 
 
 function doChange(changeTracker: textChanges.ChangeTracker, sf: SourceFile, node: Node) {
     const jsx = flattenInvalidBinaryExpr(node);
-    if (jsx) changeTracker.replaceNode(sf, node, factory.createJsxFragment(factory.createJsxOpeningFragment(), jsx, factory.createJsxJsxClosingFragment()));
+    if (jsx) {
+        changeTracker.replaceNode(
+            sf,
+            node,
+            factory.createJsxFragment(factory.createJsxOpeningFragment(), jsx, factory.createJsxJsxClosingFragment()),
+        );
+    }
 }
 // The invalid syntax is constructed as
 // InvalidJsxTree :: One of
@@ -65,7 +79,10 @@ function flattenInvalidBinaryExpr(node: Node): JsxChild[] | undefined {
     const children: JsxChild[] = [];
     let current = node;
     while (true) {
-        if (isBinaryExpression(current) && nodeIsMissing(current.operatorToken) && current.operatorToken.kind === SyntaxKind.CommaToken) {
+        if (
+            isBinaryExpression(current) && nodeIsMissing(current.operatorToken) &&
+            current.operatorToken.kind === SyntaxKind.CommaToken
+        ) {
             children.push(current.left as JsxChild);
             if (isJsxChild(current.right)) {
                 children.push(current.right);

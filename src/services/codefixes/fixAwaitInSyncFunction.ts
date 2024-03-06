@@ -40,7 +40,15 @@ registerCodeFix({
         const nodes = getNodes(sourceFile, span.start);
         if (!nodes) return undefined;
         const changes = textChanges.ChangeTracker.with(context, t => doChange(t, sourceFile, nodes));
-        return [createCodeFixAction(fixId, changes, Diagnostics.Add_async_modifier_to_containing_function, fixId, Diagnostics.Add_all_missing_async_modifiers)];
+        return [
+            createCodeFixAction(
+                fixId,
+                changes,
+                Diagnostics.Add_async_modifier_to_containing_function,
+                fixId,
+                Diagnostics.Add_all_missing_async_modifiers,
+            ),
+        ];
     },
     fixIds: [fixId],
     getAllCodeActions: function getAllCodeActionsToFixAwaitInSyncFunction(context) {
@@ -66,7 +74,10 @@ function getReturnType(expr: FunctionDeclaration | MethodDeclaration | FunctionE
     }
 }
 
-function getNodes(sourceFile: SourceFile, start: number): { insertBefore: Node; returnType: TypeNode | undefined; } | undefined {
+function getNodes(
+    sourceFile: SourceFile,
+    start: number,
+): { insertBefore: Node; returnType: TypeNode | undefined; } | undefined {
     const token = getTokenAtPosition(sourceFile, start);
     const containingFunction = getContainingFunction(token);
     if (!containingFunction) {
@@ -84,7 +95,8 @@ function getNodes(sourceFile: SourceFile, start: number): { insertBefore: Node; 
             break;
         case SyntaxKind.ArrowFunction:
             const kind = containingFunction.typeParameters ? SyntaxKind.LessThanToken : SyntaxKind.OpenParenToken;
-            insertBefore = findChildOfKind(containingFunction, kind, sourceFile) || first(containingFunction.parameters);
+            insertBefore = findChildOfKind(containingFunction, kind, sourceFile) ||
+                first(containingFunction.parameters);
             break;
         default:
             return;
@@ -104,7 +116,11 @@ function doChange(
     if (returnType) {
         const entityName = getEntityNameFromTypeNode(returnType);
         if (!entityName || entityName.kind !== SyntaxKind.Identifier || entityName.text !== "Promise") {
-            changes.replaceNode(sourceFile, returnType, factory.createTypeReferenceNode("Promise", factory.createNodeArray([returnType])));
+            changes.replaceNode(
+                sourceFile,
+                returnType,
+                factory.createTypeReferenceNode("Promise", factory.createNodeArray([returnType])),
+            );
         }
     }
     changes.insertModifierBefore(sourceFile, SyntaxKind.AsyncKeyword, insertBefore);

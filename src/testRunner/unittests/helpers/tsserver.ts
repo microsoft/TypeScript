@@ -30,8 +30,15 @@ import {
     TestServerHostTrackingWrittenFiles,
 } from "./virtualFileSystemWithWatch";
 
-export function baselineTsserverLogs(scenario: string, subScenario: string, sessionOrService: { logger: LoggerWithInMemoryLogs; }) {
-    Harness.Baseline.runBaseline(`tsserver/${scenario}/${subScenario.split(" ").join("-")}.js`, sessionOrService.logger.logs.join("\r\n"));
+export function baselineTsserverLogs(
+    scenario: string,
+    subScenario: string,
+    sessionOrService: { logger: LoggerWithInMemoryLogs; },
+) {
+    Harness.Baseline.runBaseline(
+        `tsserver/${scenario}/${subScenario.split(" ").join("-")}.js`,
+        sessionOrService.logger.logs.join("\r\n"),
+    );
 }
 
 export function toExternalFile(fileName: string): ts.server.protocol.ExternalFile {
@@ -88,11 +95,15 @@ export interface TestSessionOptions extends ts.server.SessionOptions, TestTyping
     disableAutomaticTypingAcquisition?: boolean;
     useCancellationToken?: boolean | number;
 }
-export type TestSessionPartialOptionsAndHost = Partial<Omit<TestSessionOptions, "typingsInstaller" | "cancellationToken">> & Pick<TestSessionOptions, "host">;
+export type TestSessionPartialOptionsAndHost =
+    & Partial<Omit<TestSessionOptions, "typingsInstaller" | "cancellationToken">>
+    & Pick<TestSessionOptions, "host">;
 export type TestSessionConstructorOptions = TestServerHost | TestSessionPartialOptionsAndHost;
 export type TestSessionRequest<T extends ts.server.protocol.Request> = Pick<T, "command" | "arguments">;
 
-function getTestSessionPartialOptionsAndHost(optsOrHost: TestSessionConstructorOptions): TestSessionPartialOptionsAndHost {
+function getTestSessionPartialOptionsAndHost(
+    optsOrHost: TestSessionConstructorOptions,
+): TestSessionPartialOptionsAndHost {
     // eslint-disable-next-line local/no-in-operator
     return "host" in optsOrHost ?
         optsOrHost :
@@ -108,7 +119,8 @@ export class TestSession extends ts.server.Session {
     constructor(optsOrHost: TestSessionConstructorOptions) {
         const opts = getTestSessionPartialOptionsAndHost(optsOrHost);
         opts.logger = opts.logger || createLoggerWithInMemoryLogs(opts.host);
-        const typingsInstaller = !opts.disableAutomaticTypingAcquisition ? new TestTypingsInstallerAdapter(opts) : undefined;
+        const typingsInstaller = !opts.disableAutomaticTypingAcquisition ? new TestTypingsInstallerAdapter(opts)
+            : undefined;
         const cancellationToken = opts.useCancellationToken ?
             new TestServerCancellationToken(
                 opts.logger,
@@ -157,7 +169,15 @@ export class TestSession extends ts.server.Session {
         }
         const response = super.executeCommand(request);
         if (this.logger.hasLevel(ts.server.LogLevel.verbose)) {
-            this.logger.info(`response:${ts.server.stringifyIndented(response.response === ts.getSupportedCodeFixes() ? { ...response, response: "ts.getSupportedCodeFixes()" } : response)}`);
+            this.logger.info(
+                `response:${
+                    ts.server.stringifyIndented(
+                        response.response === ts.getSupportedCodeFixes() ?
+                            { ...response, response: "ts.getSupportedCodeFixes()" }
+                            : response,
+                    )
+                }`,
+            );
             this.host.baselineHost("After request");
         }
         return response;
@@ -200,7 +220,13 @@ export function createSessionWithCustomEventHandler(
                 break;
             // Map diagnostics
             case ts.server.ConfigFileDiagEvent:
-                data = { ...data, diagnostics: ts.map(event.data.diagnostics, diagnostic => ts.server.formatDiagnosticToProtocol(diagnostic, /*includeFileName*/ true)) };
+                data = {
+                    ...data,
+                    diagnostics: ts.map(
+                        event.data.diagnostics,
+                        diagnostic => ts.server.formatDiagnosticToProtocol(diagnostic, /*includeFileName*/ true),
+                    ),
+                };
                 break;
             default:
                 ts.Debug.assertNever(event);
@@ -210,7 +236,11 @@ export function createSessionWithCustomEventHandler(
     }
 }
 
-export function protocolLocationFromSubstring(str: string, substring: string, options?: SpanFromSubstringOptions): ts.server.protocol.Location {
+export function protocolLocationFromSubstring(
+    str: string,
+    substring: string,
+    options?: SpanFromSubstringOptions,
+): ts.server.protocol.Location {
     const start = nthIndexOf(str, substring, options ? options.index : 0);
     ts.Debug.assert(start !== -1);
     return protocolToLocation(str)(start);
@@ -224,7 +254,11 @@ export function protocolToLocation(text: string): (pos: number) => ts.server.pro
     };
 }
 
-export function protocolTextSpanFromSubstring(str: string, substring: string, options?: SpanFromSubstringOptions): ts.server.protocol.TextSpan {
+export function protocolTextSpanFromSubstring(
+    str: string,
+    substring: string,
+    options?: SpanFromSubstringOptions,
+): ts.server.protocol.TextSpan {
     const span = textSpanFromSubstring(str, substring, options);
     const toLocation = protocolToLocation(str);
     return { start: toLocation(span.start), end: toLocation(ts.textSpanEnd(span)) };
@@ -236,7 +270,11 @@ export function textSpanFromSubstring(str: string, substring: string, options?: 
     return ts.createTextSpan(start, substring.length);
 }
 
-export function protocolFileLocationFromSubstring(file: File, substring: string, options?: SpanFromSubstringOptions): ts.server.protocol.FileLocationRequestArgs {
+export function protocolFileLocationFromSubstring(
+    file: File,
+    substring: string,
+    options?: SpanFromSubstringOptions,
+): ts.server.protocol.FileLocationRequestArgs {
     return { file: file.path, ...protocolLocationFromSubstring(file.content, substring, options) };
 }
 
@@ -279,7 +317,11 @@ export class TestServerCancellationToken implements ts.server.ServerCancellation
     }
 
     resetRequest(requestId: number) {
-        this.logger.log(`TestServerCancellationToken:: resetRequest:: ${requestId} is ${requestId === this.currentId ? "as expected" : `expected to be ${this.currentId}`}`);
+        this.logger.log(
+            `TestServerCancellationToken:: resetRequest:: ${requestId} is ${
+                requestId === this.currentId ? "as expected" : `expected to be ${this.currentId}`
+            }`,
+        );
         assert.equal(requestId, this.currentId, "unexpected request id in cancellation");
         this.currentId = undefined;
     }
@@ -289,7 +331,8 @@ export class TestServerCancellationToken implements ts.server.ServerCancellation
         // If the request id is the request to cancel and isCancellationRequestedCount
         // has been met then cancel the request. Ex: cancel the request if it is a
         // nav bar request & isCancellationRequested() has already been called three times.
-        const result = this.requestToCancel === this.currentId && this.isCancellationRequestedCount >= this.cancelAfterRequest;
+        const result = this.requestToCancel === this.currentId &&
+            this.isCancellationRequestedCount >= this.cancelAfterRequest;
         if (result) this.logger.log(`TestServerCancellationToken:: Cancellation is requested`);
         return result;
     }
@@ -351,7 +394,9 @@ export function openExternalProjectsForSession(projects: ts.server.protocol.Exte
 }
 
 export function setCompilerOptionsForInferredProjectsRequestForSession(
-    options: ts.server.protocol.InferredProjectCompilerOptions | ts.server.protocol.SetCompilerOptionsForInferredProjectsArgs,
+    options:
+        | ts.server.protocol.InferredProjectCompilerOptions
+        | ts.server.protocol.SetCompilerOptionsForInferredProjectsArgs,
     session: TestSession,
 ) {
     session.executeCommandSeq<ts.server.protocol.SetCompilerOptionsForInferredProjectsRequest>({
@@ -362,7 +407,12 @@ export function setCompilerOptionsForInferredProjectsRequestForSession(
     });
 }
 
-export function logDiagnostics(sessionOrService: TestSession, diagnosticsType: string, project: ts.server.Project, diagnostics: readonly ts.Diagnostic[]) {
+export function logDiagnostics(
+    sessionOrService: TestSession,
+    diagnosticsType: string,
+    project: ts.server.Project,
+    diagnostics: readonly ts.Diagnostic[],
+) {
     sessionOrService.logger.info(`${diagnosticsType}:: ${diagnostics.length}`);
     diagnostics.forEach(d => sessionOrService.logger.info(ts.formatDiagnostic(d, project)));
 }
@@ -414,7 +464,9 @@ function verifyErrorsUsingGeterr({ scenario, subScenario, allFiles, openFiles, g
     });
 }
 
-function verifyErrorsUsingGeterrForProject({ scenario, subScenario, allFiles, openFiles, getErrForProjectRequest }: VerifyGetErrScenario) {
+function verifyErrorsUsingGeterrForProject(
+    { scenario, subScenario, allFiles, openFiles, getErrForProjectRequest }: VerifyGetErrScenario,
+) {
     it("verifies the errors in projects", () => {
         const host = createServerHost([...allFiles(), libFile]);
         const session = new TestSession(host);
@@ -431,7 +483,9 @@ function verifyErrorsUsingGeterrForProject({ scenario, subScenario, allFiles, op
     });
 }
 
-function verifyErrorsUsingSyncMethods({ scenario, subScenario, allFiles, openFiles, syncDiagnostics }: VerifyGetErrScenario) {
+function verifyErrorsUsingSyncMethods(
+    { scenario, subScenario, allFiles, openFiles, syncDiagnostics }: VerifyGetErrScenario,
+) {
     it("verifies the errors using sync commands", () => {
         const host = createServerHost([...allFiles(), libFile]);
         const session = new TestSession(host);

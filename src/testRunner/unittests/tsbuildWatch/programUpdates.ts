@@ -211,7 +211,12 @@ describe("unittests:: tsbuildWatch:: watchMode:: program updates", () => {
             },
             {
                 caption: "Make local change and build core",
-                edit: sys => sys.replaceFileText("sample1/core/index.ts", `\nfunction myFunc() { return 10; }`, `\nfunction myFunc() { return 100; }`),
+                edit: sys =>
+                    sys.replaceFileText(
+                        "sample1/core/index.ts",
+                        `\nfunction myFunc() { return 10; }`,
+                        `\nfunction myFunc() { return 100; }`,
+                    ),
                 timeouts: sys => sys.runQueuedTimeoutCallbacks(), // Builds core
             },
             {
@@ -345,7 +350,8 @@ createSomeObject().message;`,
 
             const changeFileWithoutError: TscWatchCompileChange = {
                 caption: "Change fileWithoutError",
-                edit: sys => sys.writeFile(fileWithoutError.path, fileWithoutError.content.replace(/myClass/g, "myClass2")),
+                edit: sys =>
+                    sys.writeFile(fileWithoutError.path, fileWithoutError.content.replace(/myClass/g, "myClass2")),
                 timeouts: sys => sys.runQueuedTimeoutCallbacks(),
             };
 
@@ -386,7 +392,8 @@ createSomeObject().message;`,
 
                 verifyTscWatch({
                     scenario: "programUpdates",
-                    subScenario: "reportErrors/declarationEmitErrors/introduceError/when fixing errors only changed file is emitted",
+                    subScenario:
+                        "reportErrors/declarationEmitErrors/introduceError/when fixing errors only changed file is emitted",
                     commandLineArgs: ["-b", "-w", subProject],
                     sys: () =>
                         createWatchedSystem(
@@ -430,7 +437,8 @@ createSomeObject().message;`,
             },
             {
                 caption: "Make dts change",
-                edit: sys => sys.replaceFileText("logic/index.ts", `\nfunction someFn() { }`, `\nexport function someFn() { }`),
+                edit: sys =>
+                    sys.replaceFileText("logic/index.ts", `\nfunction someFn() { }`, `\nexport function someFn() { }`),
                 timeouts: sys => {
                     sys.runQueuedTimeoutCallbacks(); // build logic
                     sys.runQueuedTimeoutCallbacks(); // build tests
@@ -456,7 +464,9 @@ createSomeObject().message;`,
                     },
                 }),
             };
-            return createWatchedSystem([index, configFile, libFile], { currentDirectory: "/user/username/projects/myproject" });
+            return createWatchedSystem([index, configFile, libFile], {
+                currentDirectory: "/user/username/projects/myproject",
+            });
         },
         edits: [
             {
@@ -516,7 +526,14 @@ createSomeObject().message;`,
     verifyTscWatch({
         scenario: "programUpdates",
         subScenario: "works with extended source files",
-        commandLineArgs: ["-b", "-w", "-v", "project1.tsconfig.json", "project2.tsconfig.json", "project3.tsconfig.json"],
+        commandLineArgs: [
+            "-b",
+            "-w",
+            "-v",
+            "project1.tsconfig.json",
+            "project2.tsconfig.json",
+            "project3.tsconfig.json",
+        ],
         sys: () => {
             const alphaExtendedConfigFile: File = {
                 path: "/a/b/alpha.tsconfig.json",
@@ -583,7 +600,11 @@ createSomeObject().message;`,
             const project3Config: File = {
                 path: "/a/b/project3.tsconfig.json",
                 content: jsonToReadableText({
-                    extends: ["./extendsConfig1.tsconfig.json", "./extendsConfig2.tsconfig.json", "./extendsConfig3.tsconfig.json"],
+                    extends: [
+                        "./extendsConfig1.tsconfig.json",
+                        "./extendsConfig2.tsconfig.json",
+                        "./extendsConfig3.tsconfig.json",
+                    ],
                     compilerOptions: {
                         composite: false,
                     },

@@ -113,7 +113,11 @@ export abstract class TypingsInstallerAdapter implements ITypingsInstaller {
         this.installer.send({ projectName: p.getProjectName(), kind: "closeProject" });
     }
 
-    enqueueInstallTypingsRequest(project: Project, typeAcquisition: TypeAcquisition, unresolvedImports: SortedReadonlyArray<string>): void {
+    enqueueInstallTypingsRequest(
+        project: Project,
+        typeAcquisition: TypeAcquisition,
+        unresolvedImports: SortedReadonlyArray<string>,
+    ): void {
         const request = createInstallTypingsRequest(project, typeAcquisition, unresolvedImports);
         if (this.logger.hasLevel(LogLevel.verbose)) {
             this.logger.info(`TIAdapter:: Scheduling throttled operation:${stringifyIndented(request)}`);
@@ -131,7 +135,17 @@ export abstract class TypingsInstallerAdapter implements ITypingsInstaller {
         }
     }
 
-    handleMessage(response: TypesRegistryResponse | PackageInstalledResponse | SetTypings | InvalidateCachedTypings | BeginInstallTypes | EndInstallTypes | InitializationFailedResponse | server.WatchTypingLocations) {
+    handleMessage(
+        response:
+            | TypesRegistryResponse
+            | PackageInstalledResponse
+            | SetTypings
+            | InvalidateCachedTypings
+            | BeginInstallTypes
+            | EndInstallTypes
+            | InitializationFailedResponse
+            | server.WatchTypingLocations,
+    ) {
         if (this.logger.hasLevel(LogLevel.verbose)) {
             this.logger.info(`TIAdapter:: Received response:${stringifyIndented(response)}`);
         }
@@ -160,7 +174,8 @@ export abstract class TypingsInstallerAdapter implements ITypingsInstaller {
                 const body: protocol.TypesInstallerInitializationFailedEventBody = {
                     message: response.message,
                 };
-                const eventName: protocol.TypesInstallerInitializationFailedEventName = "typesInstallerInitializationFailed";
+                const eventName: protocol.TypesInstallerInitializationFailedEventName =
+                    "typesInstallerInitializationFailed";
                 this.event(body, eventName);
                 break;
             }

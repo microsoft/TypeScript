@@ -76,7 +76,8 @@ export function getSmartSelectionRange(pos: number, sourceFile: SourceFile): Sel
             if (positionShouldSnapToNode(sourceFile, pos, node)) {
                 if (
                     isFunctionBody(node)
-                    && isFunctionLikeDeclaration(parentNode) && !positionsAreOnSameLine(node.getStart(sourceFile), node.getEnd(), sourceFile)
+                    && isFunctionLikeDeclaration(parentNode) &&
+                    !positionsAreOnSameLine(node.getStart(sourceFile), node.getEnd(), sourceFile)
                 ) {
                     pushSelectionRange(node.getStart(sourceFile), node.getEnd());
                 }
@@ -109,7 +110,8 @@ export function getSmartSelectionRange(pos: number, sourceFile: SourceFile): Sel
 
                 // Blocks with braces, brackets, parens, or JSX tags on separate lines should be
                 // selected from open to close, including whitespace but not including the braces/etc. themselves.
-                const isBetweenMultiLineBookends = isSyntaxList(node) && isListOpener(prevNode) && isListCloser(nextNode)
+                const isBetweenMultiLineBookends = isSyntaxList(node) && isListOpener(prevNode) &&
+                    isListCloser(nextNode)
                     && !positionsAreOnSameLine(prevNode.getStart(), nextNode.getStart(), sourceFile);
                 let start = isBetweenMultiLineBookends ? prevNode.getEnd() : node.getStart();
                 const end = isBetweenMultiLineBookends ? nextNode.getStart() : getEndPos(sourceFile, node);
@@ -125,7 +127,10 @@ export function getSmartSelectionRange(pos: number, sourceFile: SourceFile): Sel
                 // covering the JSDoc comment before diving further.
                 if (isSyntaxList(node)) {
                     const firstChild = node.getChildren()[0];
-                    if (firstChild && hasJSDocNodes(firstChild) && firstChild.jsDoc?.length && firstChild.getStart() !== node.pos) {
+                    if (
+                        firstChild && hasJSDocNodes(firstChild) && firstChild.jsDoc?.length &&
+                        firstChild.getStart() !== node.pos
+                    ) {
                         start = Math.min(start, first(firstChild.jsDoc).getStart());
                     }
                 }
@@ -235,14 +240,20 @@ function getSelectionChildren(node: Node): readonly Node[] {
         Debug.assertEqual(openBraceToken.kind, SyntaxKind.OpenBraceToken);
         Debug.assertEqual(closeBraceToken.kind, SyntaxKind.CloseBraceToken);
         // Group `-/+readonly` and `-/+?`
-        const groupedWithPlusMinusTokens = groupChildren(children, child =>
-            child === node.readonlyToken || child.kind === SyntaxKind.ReadonlyKeyword ||
-            child === node.questionToken || child.kind === SyntaxKind.QuestionToken);
+        const groupedWithPlusMinusTokens = groupChildren(
+            children,
+            child =>
+                child === node.readonlyToken || child.kind === SyntaxKind.ReadonlyKeyword ||
+                child === node.questionToken || child.kind === SyntaxKind.QuestionToken,
+        );
         // Group type parameter with surrounding brackets
-        const groupedWithBrackets = groupChildren(groupedWithPlusMinusTokens, ({ kind }) =>
-            kind === SyntaxKind.OpenBracketToken ||
-            kind === SyntaxKind.TypeParameter ||
-            kind === SyntaxKind.CloseBracketToken);
+        const groupedWithBrackets = groupChildren(
+            groupedWithPlusMinusTokens,
+            ({ kind }) =>
+                kind === SyntaxKind.OpenBracketToken ||
+                kind === SyntaxKind.TypeParameter ||
+                kind === SyntaxKind.CloseBracketToken,
+        );
         return [
             openBraceToken,
             // Pivot on `:`
@@ -253,7 +264,10 @@ function getSelectionChildren(node: Node): readonly Node[] {
 
     // Group modifiers and property name, then pivot on `:`.
     if (isPropertySignature(node)) {
-        const children = groupChildren(node.getChildren(), child => child === node.name || contains(node.modifiers, child));
+        const children = groupChildren(
+            node.getChildren(),
+            child => child === node.name || contains(node.modifiers, child),
+        );
         const firstJSDocChild = children[0]?.kind === SyntaxKind.JSDoc ? children[0] : undefined;
         const withJSDocSeparated = firstJSDocChild ? children.slice(1) : children;
         const splittedChildren = splitChildren(withJSDocSeparated, ({ kind }) => kind === SyntaxKind.ColonToken);
@@ -262,8 +276,14 @@ function getSelectionChildren(node: Node): readonly Node[] {
 
     // Group the parameter name with its `...`, then that group with its `?`, then pivot on `=`.
     if (isParameter(node)) {
-        const groupedDotDotDotAndName = groupChildren(node.getChildren(), child => child === node.dotDotDotToken || child === node.name);
-        const groupedWithQuestionToken = groupChildren(groupedDotDotDotAndName, child => child === groupedDotDotDotAndName[0] || child === node.questionToken);
+        const groupedDotDotDotAndName = groupChildren(
+            node.getChildren(),
+            child => child === node.dotDotDotToken || child === node.name,
+        );
+        const groupedWithQuestionToken = groupChildren(
+            groupedDotDotDotAndName,
+            child => child === groupedDotDotDotAndName[0] || child === node.questionToken,
+        );
         return splitChildren(groupedWithQuestionToken, ({ kind }) => kind === SyntaxKind.EqualsToken);
     }
 

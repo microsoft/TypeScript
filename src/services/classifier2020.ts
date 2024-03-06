@@ -82,7 +82,12 @@ export const enum TokenModifier {
  *
  * @internal
  */
-export function getSemanticClassifications(program: Program, cancellationToken: CancellationToken, sourceFile: SourceFile, span: TextSpan): ClassifiedSpan2020[] {
+export function getSemanticClassifications(
+    program: Program,
+    cancellationToken: CancellationToken,
+    sourceFile: SourceFile,
+    span: TextSpan,
+): ClassifiedSpan2020[] {
     const classifications = getEncodedSemanticClassifications(program, cancellationToken, sourceFile, span);
 
     Debug.assert(classifications.spans.length % 3 === 0);
@@ -99,18 +104,32 @@ export function getSemanticClassifications(program: Program, cancellationToken: 
 }
 
 /** @internal */
-export function getEncodedSemanticClassifications(program: Program, cancellationToken: CancellationToken, sourceFile: SourceFile, span: TextSpan): Classifications {
+export function getEncodedSemanticClassifications(
+    program: Program,
+    cancellationToken: CancellationToken,
+    sourceFile: SourceFile,
+    span: TextSpan,
+): Classifications {
     return {
         spans: getSemanticTokens(program, sourceFile, span, cancellationToken),
         endOfLineState: EndOfLineState.None,
     };
 }
 
-function getSemanticTokens(program: Program, sourceFile: SourceFile, span: TextSpan, cancellationToken: CancellationToken): number[] {
+function getSemanticTokens(
+    program: Program,
+    sourceFile: SourceFile,
+    span: TextSpan,
+    cancellationToken: CancellationToken,
+): number[] {
     const resultTokens: number[] = [];
 
     const collector = (node: Node, typeIdx: number, modifierSet: number) => {
-        resultTokens.push(node.getStart(sourceFile), node.getWidth(sourceFile), ((typeIdx + 1) << TokenEncodingConsts.typeOffset) + modifierSet);
+        resultTokens.push(
+            node.getStart(sourceFile),
+            node.getWidth(sourceFile),
+            ((typeIdx + 1) << TokenEncodingConsts.typeOffset) + modifierSet,
+        );
     };
 
     if (program && sourceFile) {
@@ -119,7 +138,13 @@ function getSemanticTokens(program: Program, sourceFile: SourceFile, span: TextS
     return resultTokens;
 }
 
-function collectTokens(program: Program, sourceFile: SourceFile, span: TextSpan, collector: (node: Node, tokenType: number, tokenModifier: number) => void, cancellationToken: CancellationToken) {
+function collectTokens(
+    program: Program,
+    sourceFile: SourceFile,
+    span: TextSpan,
+    collector: (node: Node, tokenType: number, tokenModifier: number) => void,
+    cancellationToken: CancellationToken,
+) {
     const typeChecker = program.getTypeChecker();
 
     let inJSXElement = false;
@@ -157,7 +182,8 @@ function collectTokens(program: Program, sourceFile: SourceFile, span: TextSpan,
                 if (typeIdx !== undefined) {
                     let modifierSet = 0;
                     if (node.parent) {
-                        const parentIsDeclaration = isBindingElement(node.parent) || tokenFromDeclarationMapping.get(node.parent.kind) === typeIdx;
+                        const parentIsDeclaration = isBindingElement(node.parent) ||
+                            tokenFromDeclarationMapping.get(node.parent.kind) === typeIdx;
                         if (parentIsDeclaration && (node.parent as NamedDeclaration).name === node) {
                             modifierSet = 1 << TokenModifier.declaration;
                         }
@@ -181,18 +207,27 @@ function collectTokens(program: Program, sourceFile: SourceFile, span: TextSpan,
                             modifierSet |= 1 << TokenModifier.async;
                         }
                         if (typeIdx !== TokenType.class && typeIdx !== TokenType.interface) {
-                            if ((modifiers & ModifierFlags.Readonly) || (nodeFlags & NodeFlags.Const) || (symbol.getFlags() & SymbolFlags.EnumMember)) {
+                            if (
+                                (modifiers & ModifierFlags.Readonly) || (nodeFlags & NodeFlags.Const) ||
+                                (symbol.getFlags() & SymbolFlags.EnumMember)
+                            ) {
                                 modifierSet |= 1 << TokenModifier.readonly;
                             }
                         }
-                        if ((typeIdx === TokenType.variable || typeIdx === TokenType.function) && isLocalDeclaration(decl, sourceFile)) {
+                        if (
+                            (typeIdx === TokenType.variable || typeIdx === TokenType.function) &&
+                            isLocalDeclaration(decl, sourceFile)
+                        ) {
                             modifierSet |= 1 << TokenModifier.local;
                         }
                         if (program.isSourceFileDefaultLibrary(decl.getSourceFile())) {
                             modifierSet |= 1 << TokenModifier.defaultLibrary;
                         }
                     }
-                    else if (symbol.declarations && symbol.declarations.some(d => program.isSourceFileDefaultLibrary(d.getSourceFile()))) {
+                    else if (
+                        symbol.declarations &&
+                        symbol.declarations.some(d => program.isSourceFileDefaultLibrary(d.getSourceFile()))
+                    ) {
                         modifierSet |= 1 << TokenModifier.defaultLibrary;
                     }
 
@@ -244,7 +279,10 @@ function reclassifyByType(typeChecker: TypeChecker, node: Node, typeIdx: TokenTy
             if (typeIdx !== TokenType.parameter && test(t => t.getConstructSignatures().length > 0)) {
                 return TokenType.class;
             }
-            if (test(t => t.getCallSignatures().length > 0) && !test(t => t.getProperties().length > 0) || isExpressionInCallExpression(node)) {
+            if (
+                test(t => t.getCallSignatures().length > 0) && !test(t => t.getProperties().length > 0) ||
+                isExpressionInCallExpression(node)
+            ) {
                 return typeIdx === TokenType.property ? TokenType.member : TokenType.function;
             }
         }
@@ -257,7 +295,8 @@ function isLocalDeclaration(decl: Declaration, sourceFile: SourceFile): boolean 
         decl = getDeclarationForBindingElement(decl);
     }
     if (isVariableDeclaration(decl)) {
-        return (!isSourceFile(decl.parent.parent.parent) || isCatchClause(decl.parent)) && decl.getSourceFile() === sourceFile;
+        return (!isSourceFile(decl.parent.parent.parent) || isCatchClause(decl.parent)) &&
+            decl.getSourceFile() === sourceFile;
     }
     else if (isFunctionDeclaration(decl)) {
         return !isSourceFile(decl.parent) && decl.getSourceFile() === sourceFile;
@@ -289,7 +328,8 @@ function isExpressionInCallExpression(node: Node): boolean {
 }
 
 function isRightSideOfQualifiedNameOrPropertyAccess(node: Node): boolean {
-    return (isQualifiedName(node.parent) && node.parent.right === node) || (isPropertyAccessExpression(node.parent) && node.parent.name === node);
+    return (isQualifiedName(node.parent) && node.parent.right === node) ||
+        (isPropertyAccessExpression(node.parent) && node.parent.name === node);
 }
 
 const tokenFromDeclarationMapping = new Map<SyntaxKind, TokenType>([

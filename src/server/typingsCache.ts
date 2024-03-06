@@ -28,7 +28,11 @@ export interface InstallPackageOptionsWithProject extends InstallPackageOptions 
 export interface ITypingsInstaller {
     isKnownTypesPackageName(name: string): boolean;
     installPackage(options: InstallPackageOptionsWithProject): Promise<ApplyCodeActionCommandResult>;
-    enqueueInstallTypingsRequest(p: Project, typeAcquisition: TypeAcquisition, unresolvedImports: SortedReadonlyArray<string> | undefined): void;
+    enqueueInstallTypingsRequest(
+        p: Project,
+        typeAcquisition: TypeAcquisition,
+        unresolvedImports: SortedReadonlyArray<string> | undefined,
+    ): void;
     attach(projectService: ProjectService): void;
     onProjectClosed(p: Project): void;
     readonly globalTypingsCacheLocation: string | undefined;
@@ -93,7 +97,10 @@ function compilerOptionsChanged(opt1: CompilerOptions, opt2: CompilerOptions): b
     return getAllowJSCompilerOption(opt1) !== getAllowJSCompilerOption(opt2);
 }
 
-function unresolvedImportsChanged(imports1: SortedReadonlyArray<string> | undefined, imports2: SortedReadonlyArray<string> | undefined): boolean {
+function unresolvedImportsChanged(
+    imports1: SortedReadonlyArray<string> | undefined,
+    imports2: SortedReadonlyArray<string> | undefined,
+): boolean {
     if (imports1 === imports2) {
         return false;
     }
@@ -115,7 +122,11 @@ export class TypingsCache {
         return this.installer.installPackage(options);
     }
 
-    enqueueInstallTypingsForProject(project: Project, unresolvedImports: SortedReadonlyArray<string> | undefined, forceRefresh: boolean) {
+    enqueueInstallTypingsForProject(
+        project: Project,
+        unresolvedImports: SortedReadonlyArray<string> | undefined,
+        forceRefresh: boolean,
+    ) {
         const typeAcquisition = project.getTypeAcquisition();
 
         if (!typeAcquisition || !typeAcquisition.enable) {
@@ -144,7 +155,13 @@ export class TypingsCache {
         }
     }
 
-    updateTypingsForProject(projectName: string, compilerOptions: CompilerOptions, typeAcquisition: TypeAcquisition, unresolvedImports: SortedReadonlyArray<string>, newTypings: string[]) {
+    updateTypingsForProject(
+        projectName: string,
+        compilerOptions: CompilerOptions,
+        typeAcquisition: TypeAcquisition,
+        unresolvedImports: SortedReadonlyArray<string>,
+        newTypings: string[],
+    ) {
         const typings = sort(newTypings);
         this.perProjectCache.set(projectName, {
             compilerOptions,

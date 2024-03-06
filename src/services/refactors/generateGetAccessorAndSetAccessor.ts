@@ -27,21 +27,45 @@ registerRefactor(actionName, {
     kinds: [generateGetSetAction.kind],
     getEditsForAction: function getRefactorActionsToGenerateGetAndSetAccessors(context, actionName) {
         if (!context.endPosition) return undefined;
-        const info = codefix.getAccessorConvertiblePropertyAtPosition(context.file, context.program, context.startPosition, context.endPosition);
+        const info = codefix.getAccessorConvertiblePropertyAtPosition(
+            context.file,
+            context.program,
+            context.startPosition,
+            context.endPosition,
+        );
         Debug.assert(info && !isRefactorErrorInfo(info), "Expected applicable refactor info");
-        const edits = codefix.generateAccessorFromProperty(context.file, context.program, context.startPosition, context.endPosition, context, actionName);
+        const edits = codefix.generateAccessorFromProperty(
+            context.file,
+            context.program,
+            context.startPosition,
+            context.endPosition,
+            context,
+            actionName,
+        );
         if (!edits) return undefined;
 
         const renameFilename = context.file.fileName;
         const nameNeedRename = info.renameAccessor ? info.accessorName : info.fieldName;
         const renameLocationOffset = isIdentifier(nameNeedRename) ? 0 : -1;
-        const renameLocation = renameLocationOffset + getRenameLocation(edits, renameFilename, nameNeedRename.text, /*preferLastLocation*/ isParameter(info.declaration));
+        const renameLocation = renameLocationOffset +
+            getRenameLocation(
+                edits,
+                renameFilename,
+                nameNeedRename.text,
+                /*preferLastLocation*/ isParameter(info.declaration),
+            );
 
         return { renameFilename, renameLocation, edits };
     },
     getAvailableActions(context: RefactorContext): readonly ApplicableRefactorInfo[] {
         if (!context.endPosition) return emptyArray;
-        const info = codefix.getAccessorConvertiblePropertyAtPosition(context.file, context.program, context.startPosition, context.endPosition, context.triggerReason === "invoked");
+        const info = codefix.getAccessorConvertiblePropertyAtPosition(
+            context.file,
+            context.program,
+            context.startPosition,
+            context.endPosition,
+            context.triggerReason === "invoked",
+        );
         if (!info) return emptyArray;
 
         if (!isRefactorErrorInfo(info)) {

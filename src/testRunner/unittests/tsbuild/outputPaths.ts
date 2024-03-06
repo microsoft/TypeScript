@@ -25,7 +25,10 @@ describe("unittests:: tsbuild - output file paths", () => {
         noChangeProject,
     ];
 
-    function verify(input: Pick<VerifyTscWithEditsInput, "subScenario" | "fs" | "edits">, expectedOuptutNames: readonly string[]) {
+    function verify(
+        input: Pick<VerifyTscWithEditsInput, "subScenario" | "fs" | "edits">,
+        expectedOuptutNames: readonly string[],
+    ) {
         verifyTsc({
             scenario: "outputPaths",
             commandLineArgs: ["--b", "/src/tsconfig.json", "-v"],
@@ -33,11 +36,20 @@ describe("unittests:: tsbuild - output file paths", () => {
         });
 
         it("verify getOutputFileNames", () => {
-            const sys = new fakes.System(input.fs().makeReadonly(), { executingFilePath: "/lib/tsc" }) as TscCompileSystem;
+            const sys = new fakes.System(input.fs().makeReadonly(), {
+                executingFilePath: "/lib/tsc",
+            }) as TscCompileSystem;
 
             assert.deepEqual(
                 ts.getOutputFileNames(
-                    ts.parseConfigFileWithSystem("/src/tsconfig.json", {}, /*extendedConfigCache*/ undefined, {}, sys, ts.noop)!,
+                    ts.parseConfigFileWithSystem(
+                        "/src/tsconfig.json",
+                        {},
+                        /*extendedConfigCache*/ undefined,
+                        {},
+                        sys,
+                        ts.noop,
+                    )!,
                     "/src/src/index.ts",
                     /*ignoreCase*/ false,
                 ),

@@ -52,7 +52,13 @@ const enum ScanAction {
 }
 
 /** @internal */
-export function getFormattingScanner<T>(text: string, languageVariant: LanguageVariant, startPos: number, endPos: number, cb: (scanner: FormattingScanner) => T): T {
+export function getFormattingScanner<T>(
+    text: string,
+    languageVariant: LanguageVariant,
+    startPos: number,
+    endPos: number,
+    cb: (scanner: FormattingScanner) => T,
+): T {
     const scanner = languageVariant === LanguageVariant.JSX ? jsxScanner : standardScanner;
 
     scanner.setText(text);

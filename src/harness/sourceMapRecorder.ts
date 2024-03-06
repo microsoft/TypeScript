@@ -58,7 +58,11 @@ namespace SourceMapSpanWriter {
     let nextJsLineToWrite: number;
     let spanMarkerContinues: boolean;
 
-    export function initializeSourceMapSpanWriter(sourceMapRecordWriter: Compiler.WriterAggregator, sourceMap: ts.RawSourceMap, currentJsFile: documents.TextDocument) {
+    export function initializeSourceMapSpanWriter(
+        sourceMapRecordWriter: Compiler.WriterAggregator,
+        sourceMap: ts.RawSourceMap,
+        currentJsFile: documents.TextDocument,
+    ) {
         sourceMapRecorder = sourceMapRecordWriter;
         sourceMapSources = sourceMap.sources;
         sourceMapNames = sourceMap.names;
@@ -86,7 +90,10 @@ namespace SourceMapSpanWriter {
     function getSourceMapSpanString(mapEntry: ts.Mapping, getAbsentNameIndex?: boolean) {
         let mapString = "Emitted(" + (mapEntry.generatedLine + 1) + ", " + (mapEntry.generatedCharacter + 1) + ")";
         if (ts.isSourceMapping(mapEntry)) {
-            mapString += " Source(" + (mapEntry.sourceLine + 1) + ", " + (mapEntry.sourceCharacter + 1) + ") + SourceIndex(" + mapEntry.sourceIndex + ")";
+            mapString += " Source(" + (mapEntry.sourceLine + 1) + ", " + (mapEntry.sourceCharacter + 1) +
+                ") + SourceIndex(" +
+                mapEntry.sourceIndex +
+                ")";
             if (mapEntry.nameIndex! >= 0 && mapEntry.nameIndex! < sourceMapNames!.length) {
                 mapString += " name (" + sourceMapNames![mapEntry.nameIndex!] + ")";
             }
@@ -106,15 +113,26 @@ namespace SourceMapSpanWriter {
         let decodeErrors: string[] | undefined;
         if (typeof decodeResult.error === "string" || !ts.sameMapping(decodeResult.sourceMapSpan, sourceMapSpan)) {
             if (decodeResult.error) {
-                decodeErrors = ["!!^^ !!^^ There was decoding error in the sourcemap at this location: " + decodeResult.error];
+                decodeErrors = [
+                    "!!^^ !!^^ There was decoding error in the sourcemap at this location: " + decodeResult.error,
+                ];
             }
             else {
-                decodeErrors = ["!!^^ !!^^ The decoded span from sourcemap's mapping entry does not match what was encoded for this span:"];
+                decodeErrors = [
+                    "!!^^ !!^^ The decoded span from sourcemap's mapping entry does not match what was encoded for this span:",
+                ];
             }
-            decodeErrors.push("!!^^ !!^^ Decoded span from sourcemap's mappings entry: " + getSourceMapSpanString(decodeResult.sourceMapSpan, /*getAbsentNameIndex*/ true) + " Span encoded by the emitter:" + getSourceMapSpanString(sourceMapSpan, /*getAbsentNameIndex*/ true));
+            decodeErrors.push(
+                "!!^^ !!^^ Decoded span from sourcemap's mappings entry: " +
+                    getSourceMapSpanString(decodeResult.sourceMapSpan, /*getAbsentNameIndex*/ true) +
+                    " Span encoded by the emitter:" +
+                    getSourceMapSpanString(sourceMapSpan, /*getAbsentNameIndex*/ true),
+            );
         }
 
-        if (spansOnSingleLine.length && spansOnSingleLine[0].sourceMapSpan.generatedLine !== sourceMapSpan.generatedLine) {
+        if (
+            spansOnSingleLine.length && spansOnSingleLine[0].sourceMapSpan.generatedLine !== sourceMapSpan.generatedLine
+        ) {
             // On different line from the one that we have been recording till now,
             writeRecordedSpans();
             spansOnSingleLine = [];
@@ -124,7 +142,10 @@ namespace SourceMapSpanWriter {
 
     export function recordNewSourceFileSpan(sourceMapSpan: ts.Mapping, newSourceFileCode: string) {
         let continuesLine = false;
-        if (spansOnSingleLine.length > 0 && spansOnSingleLine[0].sourceMapSpan.generatedCharacter === sourceMapSpan.generatedLine) {
+        if (
+            spansOnSingleLine.length > 0 &&
+            spansOnSingleLine[0].sourceMapSpan.generatedCharacter === sourceMapSpan.generatedLine
+        ) {
             writeRecordedSpans();
             spansOnSingleLine = [];
             nextJsLineToWrite--; // walk back one line to reprint the line
@@ -135,7 +156,10 @@ namespace SourceMapSpanWriter {
 
         assert.isTrue(spansOnSingleLine.length === 1);
         sourceMapRecorder.WriteLine("-------------------------------------------------------------------");
-        sourceMapRecorder.WriteLine("emittedFile:" + jsFile.file + (continuesLine ? ` (${sourceMapSpan.generatedLine + 1}, ${sourceMapSpan.generatedCharacter + 1})` : ""));
+        sourceMapRecorder.WriteLine(
+            "emittedFile:" + jsFile.file +
+                (continuesLine ? ` (${sourceMapSpan.generatedLine + 1}, ${sourceMapSpan.generatedCharacter + 1})` : ""),
+        );
         sourceMapRecorder.WriteLine("sourceFile:" + sourceMapSources[spansOnSingleLine[0].sourceMapSpan.sourceIndex!]);
         sourceMapRecorder.WriteLine("-------------------------------------------------------------------");
 
@@ -149,8 +173,12 @@ namespace SourceMapSpanWriter {
         writeRecordedSpans();
 
         if (!SourceMapDecoder.hasCompletedDecoding()) {
-            sourceMapRecorder.WriteLine("!!!! **** There are more source map entries in the sourceMap's mapping than what was encoded");
-            sourceMapRecorder.WriteLine("!!!! **** Remaining decoded string: " + SourceMapDecoder.getRemainingDecodeString());
+            sourceMapRecorder.WriteLine(
+                "!!!! **** There are more source map entries in the sourceMap's mapping than what was encoded",
+            );
+            sourceMapRecorder.WriteLine(
+                "!!!! **** Remaining decoded string: " + SourceMapDecoder.getRemainingDecodeString(),
+            );
         }
 
         // write remaining js lines
@@ -205,7 +233,12 @@ namespace SourceMapSpanWriter {
             }
         }
 
-        function writeSourceMapMarker(currentSpan: SourceMapSpanWithDecodeErrors, index: number, endColumn = currentSpan.sourceMapSpan.generatedCharacter, endContinues = false) {
+        function writeSourceMapMarker(
+            currentSpan: SourceMapSpanWithDecodeErrors,
+            index: number,
+            endColumn = currentSpan.sourceMapSpan.generatedCharacter,
+            endContinues = false,
+        ) {
             const markerId = getMarkerId(index);
             markerIds.push(markerId);
 
@@ -222,7 +255,8 @@ namespace SourceMapSpanWriter {
         }
 
         function writeSourceMapSourceText(currentSpan: SourceMapSpanWithDecodeErrors, index: number) {
-            const sourcePos = tsLineMap[currentSpan.sourceMapSpan.sourceLine!] + (currentSpan.sourceMapSpan.sourceCharacter!);
+            const sourcePos = tsLineMap[currentSpan.sourceMapSpan.sourceLine!] +
+                (currentSpan.sourceMapSpan.sourceCharacter!);
             let sourceText = "";
             if (prevWrittenSourcePos < sourcePos) {
                 // Position that goes forward, get text
@@ -265,7 +299,12 @@ namespace SourceMapSpanWriter {
             const jsFileText = getTextOfLine(currentJsLine + 1, jsLineMap, jsFile.text);
             if (prevEmittedCol < jsFileText.length - 1) {
                 // There is remaining text on this line that will be part of next source span so write marker that continues
-                writeSourceMapMarker(/*currentSpan*/ undefined!, spansOnSingleLine.length, /*endColumn*/ jsFileText.length - 1, /*endContinues*/ true); // TODO: GH#18217
+                writeSourceMapMarker(
+                    /*currentSpan*/ undefined!,
+                    spansOnSingleLine.length,
+                    /*endColumn*/ jsFileText.length - 1,
+                    /*endContinues*/ true,
+                ); // TODO: GH#18217
             }
 
             // Emit Source text
@@ -279,7 +318,12 @@ namespace SourceMapSpanWriter {
     }
 }
 
-export function getSourceMapRecord(sourceMapDataList: readonly ts.SourceMapEmitResult[], program: ts.Program, jsFiles: readonly documents.TextDocument[], declarationFiles: readonly documents.TextDocument[]) {
+export function getSourceMapRecord(
+    sourceMapDataList: readonly ts.SourceMapEmitResult[],
+    program: ts.Program,
+    jsFiles: readonly documents.TextDocument[],
+    declarationFiles: readonly documents.TextDocument[],
+) {
     const sourceMapRecorder = new Compiler.WriterAggregator();
 
     for (let i = 0; i < sourceMapDataList.length; i++) {
@@ -333,9 +377,12 @@ export function getSourceMapRecordWithSystem(sys: ts.System, sourceMapFile: stri
     const sourceMap = ts.tryParseRawSourceMap(sys.readFile(sourceMapFile, "utf8")!);
     if (sourceMap) {
         const mapDirectory = ts.getDirectoryPath(sourceMapFile);
-        const sourceRoot = sourceMap.sourceRoot ? ts.getNormalizedAbsolutePath(sourceMap.sourceRoot, mapDirectory) : mapDirectory;
+        const sourceRoot = sourceMap.sourceRoot ? ts.getNormalizedAbsolutePath(sourceMap.sourceRoot, mapDirectory)
+            : mapDirectory;
         const generatedAbsoluteFilePath = ts.getNormalizedAbsolutePath(sourceMap.file, mapDirectory);
-        const sourceFileAbsolutePaths = sourceMap.sources.map(source => ts.getNormalizedAbsolutePath(source, sourceRoot));
+        const sourceFileAbsolutePaths = sourceMap.sources.map(source =>
+            ts.getNormalizedAbsolutePath(source, sourceRoot)
+        );
         const currentFile = getFile(generatedAbsoluteFilePath);
 
         SourceMapSpanWriter.initializeSourceMapSpanWriter(sourceMapRecorder, sourceMap, currentFile);

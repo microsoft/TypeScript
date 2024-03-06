@@ -23,10 +23,23 @@ registerCodeFix({
         const { sourceFile, span } = context;
         const ctr = getNode(sourceFile, span.start);
         const changes = textChanges.ChangeTracker.with(context, t => doChange(t, sourceFile, ctr));
-        return [createCodeFixAction(fixId, changes, Diagnostics.Add_missing_super_call, fixId, Diagnostics.Add_all_missing_super_calls)];
+        return [
+            createCodeFixAction(
+                fixId,
+                changes,
+                Diagnostics.Add_missing_super_call,
+                fixId,
+                Diagnostics.Add_all_missing_super_calls,
+            ),
+        ];
     },
     fixIds: [fixId],
-    getAllCodeActions: context => codeFixAll(context, errorCodes, (changes, diag) => doChange(changes, context.sourceFile, getNode(diag.file, diag.start))),
+    getAllCodeActions: context =>
+        codeFixAll(
+            context,
+            errorCodes,
+            (changes, diag) => doChange(changes, context.sourceFile, getNode(diag.file, diag.start)),
+        ),
 });
 
 function getNode(sourceFile: SourceFile, pos: number): ConstructorDeclaration {
@@ -36,6 +49,8 @@ function getNode(sourceFile: SourceFile, pos: number): ConstructorDeclaration {
 }
 
 function doChange(changes: textChanges.ChangeTracker, sourceFile: SourceFile, ctr: ConstructorDeclaration) {
-    const superCall = factory.createExpressionStatement(factory.createCallExpression(factory.createSuper(), /*typeArguments*/ undefined, /*argumentsArray*/ emptyArray));
+    const superCall = factory.createExpressionStatement(
+        factory.createCallExpression(factory.createSuper(), /*typeArguments*/ undefined, /*argumentsArray*/ emptyArray),
+    );
     changes.insertNodeAtConstructorStart(sourceFile, ctr, superCall);
 }

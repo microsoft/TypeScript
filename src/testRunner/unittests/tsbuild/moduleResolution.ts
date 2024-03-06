@@ -78,14 +78,16 @@ describe("unittests:: tsbuild:: moduleResolution:: handles the modules and optio
 
     verifyTscWatch({
         scenario: "moduleResolution",
-        subScenario: `resolves specifier in output declaration file from referenced project correctly with preserveSymlinks`,
+        subScenario:
+            `resolves specifier in output declaration file from referenced project correctly with preserveSymlinks`,
         sys: () => sys({ preserveSymlinks: true }),
         commandLineArgs: ["-b", "packages/pkg1", "--verbose", "--traceResolution"],
     });
 
     verifyTsc({
         scenario: "moduleResolution",
-        subScenario: `type reference resolution uses correct options for different resolution options referenced project`,
+        subScenario:
+            `type reference resolution uses correct options for different resolution options referenced project`,
         fs: () =>
             loadProjectFromFiles({
                 "/src/packages/pkg1_index.ts": `export const theNum: TheNum = "type1";`,
@@ -101,7 +103,13 @@ describe("unittests:: tsbuild:: moduleResolution:: handles the modules and optio
                 }),
                 "/src/packages/typeroot2/sometype/index.d.ts": Utils.dedent`declare type TheNum2 = "type2";`,
             }),
-        commandLineArgs: ["-b", "/src/packages/pkg1.tsconfig.json", "/src/packages/pkg2.tsconfig.json", "--verbose", "--traceResolution"],
+        commandLineArgs: [
+            "-b",
+            "/src/packages/pkg1.tsconfig.json",
+            "/src/packages/pkg2.tsconfig.json",
+            "--verbose",
+            "--traceResolution",
+        ],
     });
 });
 
@@ -133,7 +141,14 @@ describe("unittests:: tsbuild:: moduleResolution:: impliedNodeFormat differs bet
                 }),
             }),
         modifyFs: fs => fs.writeFileSync("/lib/lib.es2022.full.d.ts", libFile.content),
-        commandLineArgs: ["-b", "/src/projects/a", "/src/projects/b", "--verbose", "--traceResolution", "--explainFiles"],
+        commandLineArgs: [
+            "-b",
+            "/src/projects/a",
+            "/src/projects/b",
+            "--verbose",
+            "--traceResolution",
+            "--explainFiles",
+        ],
         edits: noChangeOnlyRuns,
     });
 });

@@ -9,7 +9,9 @@ describe("unittests:: convertToBase64", () => {
 
     if (Buffer) {
         it("Converts ASCII charaters correctly", () => {
-            runTest(" !\"#$ %&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~");
+            runTest(
+                " !\"#$ %&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~",
+            );
         });
 
         it("Converts escape sequences correctly", () => {

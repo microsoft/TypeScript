@@ -38,7 +38,13 @@ export interface TypingResolutionHost {
     directoryExists(path: string): boolean;
     fileExists(fileName: string): boolean;
     readFile(path: string, encoding?: string): string | undefined;
-    readDirectory(rootDir: string, extensions: readonly string[], excludes: readonly string[] | undefined, includes: readonly string[] | undefined, depth?: number): string[];
+    readDirectory(
+        rootDir: string,
+        extensions: readonly string[],
+        excludes: readonly string[] | undefined,
+        includes: readonly string[] | undefined,
+        depth?: number,
+    ): string[];
 }
 
 interface PackageJson {
@@ -59,7 +65,10 @@ export interface CachedTyping {
 
 /** @internal */
 export function isTypingUpToDate(cachedTyping: CachedTyping, availableTypingVersions: MapLike<string>) {
-    const availableVersion = new Version(getProperty(availableTypingVersions, `ts${versionMajorMinor}`) || getProperty(availableTypingVersions, "latest")!);
+    const availableVersion = new Version(
+        getProperty(availableTypingVersions, `ts${versionMajorMinor}`) ||
+            getProperty(availableTypingVersions, "latest")!,
+    );
     return availableVersion.compareTo(cachedTyping.version) <= 0;
 }
 
@@ -223,7 +232,10 @@ export function discoverTypings(
     // Add the cached typing locations for inferred typings that are already installed
     packageNameToTypingLocation.forEach((typing, name) => {
         const registryEntry = typesRegistry.get(name);
-        if (inferredTypings.get(name) === false && registryEntry !== undefined && isTypingUpToDate(typing, registryEntry)) {
+        if (
+            inferredTypings.get(name) === false && registryEntry !== undefined &&
+            isTypingUpToDate(typing, registryEntry)
+        ) {
             inferredTypings.set(name, typing.typingLocation);
         }
     });
@@ -260,7 +272,12 @@ export function discoverTypings(
      * @param modulesDirName is the directory name for modules (node_modules or bower_components). Should be lowercase!
      * @param filesToWatch are the files to watch for changes. We will push things into this array.
      */
-    function getTypingNames(projectRootPath: string, manifestName: string, modulesDirName: string, filesToWatch: string[]): void {
+    function getTypingNames(
+        projectRootPath: string,
+        manifestName: string,
+        modulesDirName: string,
+        filesToWatch: string[],
+    ): void {
         // First, we check the manifests themselves. They're not
         // _required_, but they allow us to do some filtering when dealing
         // with big flat dep directories.
@@ -270,7 +287,15 @@ export function discoverTypings(
         if (host.fileExists(manifestPath)) {
             filesToWatch.push(manifestPath);
             manifest = readConfigFile(manifestPath, path => host.readFile(path)).config;
-            manifestTypingNames = flatMap([manifest.dependencies, manifest.devDependencies, manifest.optionalDependencies, manifest.peerDependencies], getOwnKeys);
+            manifestTypingNames = flatMap(
+                [
+                    manifest.dependencies,
+                    manifest.devDependencies,
+                    manifest.optionalDependencies,
+                    manifest.peerDependencies,
+                ],
+                getOwnKeys,
+            );
             addInferredTypings(manifestTypingNames, `Typing names in '${manifestPath}' dependencies`);
         }
 
@@ -303,7 +328,13 @@ export function discoverTypings(
             // This is #1 described above.
             ? manifestTypingNames.map(typingName => combinePaths(packagesFolderPath, typingName, manifestName))
             // And #2. Depth = 3 because scoped packages look like `node_modules/@foo/bar/package.json`
-            : host.readDirectory(packagesFolderPath, [Extension.Json], /*excludes*/ undefined, /*includes*/ undefined, /*depth*/ 3)
+            : host.readDirectory(
+                packagesFolderPath,
+                [Extension.Json],
+                /*excludes*/ undefined,
+                /*includes*/ undefined,
+                /*depth*/ 3,
+            )
                 .filter(manifestPath => {
                     if (getBaseFileName(manifestPath) !== manifestName) {
                         return false;
@@ -315,11 +346,16 @@ export function discoverTypings(
                     // packages. So that needs this dance here.
                     const pathComponents = getPathComponents(normalizePath(manifestPath));
                     const isScoped = pathComponents[pathComponents.length - 3][0] === "@";
-                    return isScoped && toFileNameLowerCase(pathComponents[pathComponents.length - 4]) === modulesDirName || // `node_modules/@foo/bar`
+                    return isScoped &&
+                            toFileNameLowerCase(pathComponents[pathComponents.length - 4]) === modulesDirName || // `node_modules/@foo/bar`
                         !isScoped && toFileNameLowerCase(pathComponents[pathComponents.length - 3]) === modulesDirName; // `node_modules/foo`
                 });
 
-        if (log) log(`Searching for typing names in ${packagesFolderPath}; all files: ${JSON.stringify(dependencyManifestNames)}`);
+        if (log) {
+            log(`Searching for typing names in ${packagesFolderPath}; all files: ${
+                JSON.stringify(dependencyManifestNames)
+            }`);
+        }
 
         // Once we have the names of things to look up, we iterate over
         // and either collect their included typings, or add them to the
@@ -453,7 +489,12 @@ export function renderPackageNameValidationFailure(result: PackageNameValidation
         renderPackageNameValidationFailureWorker(typing, result, typing, /*isScopeName*/ false);
 }
 
-function renderPackageNameValidationFailureWorker(typing: string, result: NameValidationResult, name: string, isScopeName: boolean): string {
+function renderPackageNameValidationFailureWorker(
+    typing: string,
+    result: NameValidationResult,
+    name: string,
+    isScopeName: boolean,
+): string {
     const kind = isScopeName ? "Scope" : "Package";
     switch (result) {
         case NameValidationResult.EmptyName:

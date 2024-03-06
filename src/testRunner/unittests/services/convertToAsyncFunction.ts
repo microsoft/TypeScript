@@ -286,7 +286,9 @@ type WithSkipAndOnly<T extends any[]> = ((...args: T) => void) & {
     only: (...args: T) => void;
 };
 
-function createTestWrapper<T extends any[]>(fn: (it: Mocha.PendingTestFunction, ...args: T) => void): WithSkipAndOnly<T> {
+function createTestWrapper<T extends any[]>(
+    fn: (it: Mocha.PendingTestFunction, ...args: T) => void,
+): WithSkipAndOnly<T> {
     wrapped.skip = (...args: T) => fn(it.skip, ...args);
     wrapped.only = (...args: T) => fn(it.only, ...args);
     return wrapped;
@@ -308,7 +310,13 @@ const enum ConvertToAsyncTestFlags {
     ExpectFailed = ExpectNoSuggestionDiagnostic | ExpectNoAction,
 }
 
-function testConvertToAsyncFunction(it: Mocha.PendingTestFunction, caption: string, text: string, baselineFolder: string, flags: ConvertToAsyncTestFlags) {
+function testConvertToAsyncFunction(
+    it: Mocha.PendingTestFunction,
+    caption: string,
+    text: string,
+    baselineFolder: string,
+    flags: ConvertToAsyncTestFlags,
+) {
     const includeLib = !!(flags & ConvertToAsyncTestFlags.IncludeLib);
     const includeModule = !!(flags & ConvertToAsyncTestFlags.IncludeModule);
     const expectSuggestionDiagnostic = !!(flags & ConvertToAsyncTestFlags.ExpectSuggestionDiagnostic);
@@ -316,7 +324,10 @@ function testConvertToAsyncFunction(it: Mocha.PendingTestFunction, caption: stri
     const expectAction = !!(flags & ConvertToAsyncTestFlags.ExpectAction);
     const expectNoAction = !!(flags & ConvertToAsyncTestFlags.ExpectNoAction);
     const expectFailure = expectNoSuggestionDiagnostic || expectNoAction;
-    ts.Debug.assert(!(expectSuggestionDiagnostic && expectNoSuggestionDiagnostic), "Cannot combine both 'ExpectSuggestionDiagnostic' and 'ExpectNoSuggestionDiagnostic'");
+    ts.Debug.assert(
+        !(expectSuggestionDiagnostic && expectNoSuggestionDiagnostic),
+        "Cannot combine both 'ExpectSuggestionDiagnostic' and 'ExpectNoSuggestionDiagnostic'",
+    );
     ts.Debug.assert(!(expectAction && expectNoAction), "Cannot combine both 'ExpectAction' and 'ExpectNoAction'");
 
     const t = extractTest(text);
@@ -358,11 +369,17 @@ function testConvertToAsyncFunction(it: Mocha.PendingTestFunction, caption: stri
         };
 
         const diagnostics = languageService.getSuggestionDiagnostics(f.path);
-        const diagnostic = ts.find(diagnostics, diagnostic =>
-            diagnostic.messageText === ts.Diagnostics.This_may_be_converted_to_an_async_function.message &&
-            diagnostic.start === context.span.start && diagnostic.length === context.span.length);
+        const diagnostic = ts.find(
+            diagnostics,
+            diagnostic =>
+                diagnostic.messageText === ts.Diagnostics.This_may_be_converted_to_an_async_function.message &&
+                diagnostic.start === context.span.start && diagnostic.length === context.span.length,
+        );
         const actions = ts.codefix.getFixes(context);
-        const action = ts.find(actions, action => action.description === ts.Diagnostics.Convert_to_async_function.message);
+        const action = ts.find(
+            actions,
+            action => action.description === ts.Diagnostics.Convert_to_async_function.message,
+        );
 
         let outputText: string | null;
         if (action?.changes.length) {
@@ -376,7 +393,8 @@ function testConvertToAsyncFunction(it: Mocha.PendingTestFunction, caption: stri
             const newText = ts.textChanges.applyChanges(sourceFile.text, changes[0].textChanges);
             data.push(newText);
 
-            const diagProgram = makeLanguageService({ path, content: newText }, includeLib, includeModule).getProgram()!;
+            const diagProgram = makeLanguageService({ path, content: newText }, includeLib, includeModule)
+                .getProgram()!;
             assert.isFalse(hasSyntacticDiagnostics(diagProgram));
             outputText = data.join(newLineCharacter);
         }
@@ -425,23 +443,56 @@ function testConvertToAsyncFunction(it: Mocha.PendingTestFunction, caption: stri
 }
 
 const _testConvertToAsyncFunction = createTestWrapper((it, caption: string, text: string) => {
-    testConvertToAsyncFunction(it, caption, text, "convertToAsyncFunction", ConvertToAsyncTestFlags.IncludeLib | ConvertToAsyncTestFlags.ExpectSuccess);
+    testConvertToAsyncFunction(
+        it,
+        caption,
+        text,
+        "convertToAsyncFunction",
+        ConvertToAsyncTestFlags.IncludeLib | ConvertToAsyncTestFlags.ExpectSuccess,
+    );
 });
 
 const _testConvertToAsyncFunctionFailed = createTestWrapper((it, caption: string, text: string) => {
-    testConvertToAsyncFunction(it, caption, text, "convertToAsyncFunction", ConvertToAsyncTestFlags.IncludeLib | ConvertToAsyncTestFlags.ExpectFailed);
+    testConvertToAsyncFunction(
+        it,
+        caption,
+        text,
+        "convertToAsyncFunction",
+        ConvertToAsyncTestFlags.IncludeLib | ConvertToAsyncTestFlags.ExpectFailed,
+    );
 });
 
 const _testConvertToAsyncFunctionFailedSuggestion = createTestWrapper((it, caption: string, text: string) => {
-    testConvertToAsyncFunction(it, caption, text, "convertToAsyncFunction", ConvertToAsyncTestFlags.IncludeLib | ConvertToAsyncTestFlags.ExpectNoSuggestionDiagnostic | ConvertToAsyncTestFlags.ExpectAction);
+    testConvertToAsyncFunction(
+        it,
+        caption,
+        text,
+        "convertToAsyncFunction",
+        ConvertToAsyncTestFlags.IncludeLib | ConvertToAsyncTestFlags.ExpectNoSuggestionDiagnostic |
+            ConvertToAsyncTestFlags.ExpectAction,
+    );
 });
 
 const _testConvertToAsyncFunctionFailedAction = createTestWrapper((it, caption: string, text: string) => {
-    testConvertToAsyncFunction(it, caption, text, "convertToAsyncFunction", ConvertToAsyncTestFlags.IncludeLib | ConvertToAsyncTestFlags.ExpectSuggestionDiagnostic | ConvertToAsyncTestFlags.ExpectNoAction);
+    testConvertToAsyncFunction(
+        it,
+        caption,
+        text,
+        "convertToAsyncFunction",
+        ConvertToAsyncTestFlags.IncludeLib | ConvertToAsyncTestFlags.ExpectSuggestionDiagnostic |
+            ConvertToAsyncTestFlags.ExpectNoAction,
+    );
 });
 
 const _testConvertToAsyncFunctionWithModule = createTestWrapper((it, caption: string, text: string) => {
-    testConvertToAsyncFunction(it, caption, text, "convertToAsyncFunction", ConvertToAsyncTestFlags.IncludeLib | ConvertToAsyncTestFlags.IncludeModule | ConvertToAsyncTestFlags.ExpectSuccess);
+    testConvertToAsyncFunction(
+        it,
+        caption,
+        text,
+        "convertToAsyncFunction",
+        ConvertToAsyncTestFlags.IncludeLib | ConvertToAsyncTestFlags.IncludeModule |
+            ConvertToAsyncTestFlags.ExpectSuccess,
+    );
 });
 
 describe("unittests:: services:: convertToAsyncFunction", () => {

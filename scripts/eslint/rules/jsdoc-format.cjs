@@ -10,7 +10,8 @@ module.exports = createRule({
             internalCommentInNonJSDocError: `@internal should not appear in non-JSDoc comment for declaration.`,
             internalCommentNotLastError: `@internal should only appear in final JSDoc comment for declaration.`,
             multipleJSDocError: `Declaration has multiple JSDoc comments.`,
-            internalCommentOnParameterProperty: `@internal cannot appear on a JSDoc comment; use a declared property and an assignment in the constructor instead.`,
+            internalCommentOnParameterProperty:
+                `@internal cannot appear on a JSDoc comment; use a declared property and an assignment in the constructor instead.`,
         },
         schema: [],
         type: "problem",
@@ -79,13 +80,25 @@ module.exports = createRule({
                 }
 
                 if (!isJSDoc) {
-                    context.report({ messageId: "internalCommentInNonJSDocError", node: c, loc: getAtInternalLoc(c, indexInComment) });
+                    context.report({
+                        messageId: "internalCommentInNonJSDocError",
+                        node: c,
+                        loc: getAtInternalLoc(c, indexInComment),
+                    });
                 }
                 else if (i !== last) {
-                    context.report({ messageId: "internalCommentNotLastError", node: c, loc: getAtInternalLoc(c, indexInComment) });
+                    context.report({
+                        messageId: "internalCommentNotLastError",
+                        node: c,
+                        loc: getAtInternalLoc(c, indexInComment),
+                    });
                 }
                 else if (node.type === "TSParameterProperty") {
-                    context.report({ messageId: "internalCommentOnParameterProperty", node: c, loc: getAtInternalLoc(c, indexInComment) });
+                    context.report({
+                        messageId: "internalCommentOnParameterProperty",
+                        node: c,
+                        loc: getAtInternalLoc(c, indexInComment),
+                    });
                 }
             }
         };

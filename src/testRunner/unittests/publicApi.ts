@@ -46,7 +46,10 @@ describe("unittests:: Public APIs:: token to string", () => {
 
 describe("unittests:: Public APIs:: createPrivateIdentifier", () => {
     it("throws when name doesn't start with #", () => {
-        assert.throw(() => ts.factory.createPrivateIdentifier("not"), "Debug Failure. First character of private identifier must be #: not");
+        assert.throw(
+            () => ts.factory.createPrivateIdentifier("not"),
+            "Debug Failure. First character of private identifier must be #: not",
+        );
     });
 });
 
@@ -60,7 +63,12 @@ describe("unittests:: Public APIs:: JSDoc newlines", () => {
 */
 function test() {}`;
 
-        const testSourceFile = ts.createSourceFile(testFilePath, testFileText, ts.ScriptTarget.Latest, /*setParentNodes*/ true);
+        const testSourceFile = ts.createSourceFile(
+            testFilePath,
+            testFileText,
+            ts.ScriptTarget.Latest,
+            /*setParentNodes*/ true,
+        );
         const funcDec = testSourceFile.statements.find(ts.isFunctionDeclaration)!;
         const tags = ts.getJSDocTags(funcDec);
         assert.isDefined(tags[0].comment);
@@ -146,7 +154,8 @@ describe("unittests:: Public APIs:: getTypeAtLocation", () => {
 
         const checker = program.getTypeChecker();
         const file = program.getSourceFile("/file.ts")!;
-        const [declaration] = (ts.findLast(file.statements, ts.isVariableStatement) as ts.VariableStatement).declarationList.declarations;
+        const [declaration] =
+            (ts.findLast(file.statements, ts.isVariableStatement) as ts.VariableStatement).declarationList.declarations;
         assert.equal(checker.getTypeAtLocation(declaration.initializer!).flags, ts.TypeFlags.Object);
     });
 
@@ -167,7 +176,8 @@ describe("unittests:: Public APIs:: getTypeAtLocation", () => {
 
         const checker = program.getTypeChecker();
         const file = program.getSourceFile("/file.ts")!;
-        const [declaration] = (ts.findLast(file.statements, ts.isVariableStatement) as ts.VariableStatement).declarationList.declarations;
+        const [declaration] =
+            (ts.findLast(file.statements, ts.isVariableStatement) as ts.VariableStatement).declarationList.declarations;
         assert.equal(checker.getTypeAtLocation(declaration).flags, ts.TypeFlags.Any);
     });
 });
@@ -184,11 +194,19 @@ describe("unittests:: Public APIs:: validateLocaleAndSetLanguage", () => {
                 getExecutingFilePath: () => "/tsc.js",
                 resolvePath: ts.identity,
                 fileExists: fileName => {
-                    assert.isTrue(expectedToReadFile, `Locale : ${locale} ${expectedToReadFile ? "should" : "should not"} check if ${fileName} exists.`);
+                    assert.isTrue(
+                        expectedToReadFile,
+                        `Locale : ${locale} ${
+                            expectedToReadFile ? "should" : "should not"
+                        } check if ${fileName} exists.`,
+                    );
                     return expectedToReadFile;
                 },
                 readFile: fileName => {
-                    assert.isTrue(expectedToReadFile, `Locale : ${locale} ${expectedToReadFile ? "should" : "should not"} read ${fileName}.`);
+                    assert.isTrue(
+                        expectedToReadFile,
+                        `Locale : ${locale} ${expectedToReadFile ? "should" : "should not"} read ${fileName}.`,
+                    );
                     // Throw error here so that actual change to localized diagnostics messages doesnt take place
                     throw new Error("cannot read file");
                 },

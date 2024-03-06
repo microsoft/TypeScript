@@ -65,7 +65,15 @@ export function getEditsForFileRename(
     const oldToNew = getPathUpdater(oldFileOrDirPath, newFileOrDirPath, getCanonicalFileName, sourceMapper);
     const newToOld = getPathUpdater(newFileOrDirPath, oldFileOrDirPath, getCanonicalFileName, sourceMapper);
     return textChanges.ChangeTracker.with({ host, formatContext, preferences }, changeTracker => {
-        updateTsconfigFiles(program, changeTracker, oldToNew, oldFileOrDirPath, newFileOrDirPath, host.getCurrentDirectory(), useCaseSensitiveFileNames);
+        updateTsconfigFiles(
+            program,
+            changeTracker,
+            oldToNew,
+            oldFileOrDirPath,
+            newFileOrDirPath,
+            host.getCurrentDirectory(),
+            useCaseSensitiveFileNames,
+        );
         updateImports(program, changeTracker, oldToNew, newToOld, host, getCanonicalFileName);
     });
 }
@@ -78,13 +86,19 @@ export function getEditsForFileRename(
 export type PathUpdater = (path: string) => string | undefined;
 // exported for tests
 /** @internal */
-export function getPathUpdater(oldFileOrDirPath: string, newFileOrDirPath: string, getCanonicalFileName: GetCanonicalFileName, sourceMapper: SourceMapper | undefined): PathUpdater {
+export function getPathUpdater(
+    oldFileOrDirPath: string,
+    newFileOrDirPath: string,
+    getCanonicalFileName: GetCanonicalFileName,
+    sourceMapper: SourceMapper | undefined,
+): PathUpdater {
     const canonicalOldPath = getCanonicalFileName(oldFileOrDirPath);
     return path => {
         const originalPath = sourceMapper && sourceMapper.tryGetSourcePosition({ fileName: path, pos: 0 });
         const updatedPath = getUpdatedPath(originalPath ? originalPath.fileName : path);
         return originalPath
-            ? updatedPath === undefined ? undefined : makeCorrespondingRelativeChange(originalPath.fileName, updatedPath, path, getCanonicalFileName)
+            ? updatedPath === undefined ? undefined
+                : makeCorrespondingRelativeChange(originalPath.fileName, updatedPath, path, getCanonicalFileName)
             : updatedPath;
     };
 
@@ -96,12 +110,25 @@ export function getPathUpdater(oldFileOrDirPath: string, newFileOrDirPath: strin
 }
 
 // Relative path from a0 to b0 should be same as relative path from a1 to b1. Returns b1.
-function makeCorrespondingRelativeChange(a0: string, b0: string, a1: string, getCanonicalFileName: GetCanonicalFileName): string {
+function makeCorrespondingRelativeChange(
+    a0: string,
+    b0: string,
+    a1: string,
+    getCanonicalFileName: GetCanonicalFileName,
+): string {
     const rel = getRelativePathFromFile(a0, b0, getCanonicalFileName);
     return combinePathsSafe(getDirectoryPath(a1), rel);
 }
 
-function updateTsconfigFiles(program: Program, changeTracker: textChanges.ChangeTracker, oldToNew: PathUpdater, oldFileOrDirPath: string, newFileOrDirPath: string, currentDirectory: string, useCaseSensitiveFileNames: boolean): void {
+function updateTsconfigFiles(
+    program: Program,
+    changeTracker: textChanges.ChangeTracker,
+    oldToNew: PathUpdater,
+    oldFileOrDirPath: string,
+    newFileOrDirPath: string,
+    currentDirectory: string,
+    useCaseSensitiveFileNames: boolean,
+): void {
     const { configFile } = program.getCompilerOptions();
     if (!configFile) return;
     const configDir = getDirectoryPath(configFile.fileName);
@@ -115,16 +142,37 @@ function updateTsconfigFiles(program: Program, changeTracker: textChanges.Change
             case "include":
             case "exclude": {
                 const foundExactMatch = updatePaths(property);
-                if (foundExactMatch || propertyName !== "include" || !isArrayLiteralExpression(property.initializer)) return;
-                const includes = mapDefined(property.initializer.elements, e => isStringLiteral(e) ? e.text : undefined);
+                if (foundExactMatch || propertyName !== "include" || !isArrayLiteralExpression(property.initializer)) {
+                    return;
+                }
+                const includes = mapDefined(
+                    property.initializer.elements,
+                    e => isStringLiteral(e) ? e.text : undefined,
+                );
                 if (includes.length === 0) return;
-                const matchers = getFileMatcherPatterns(configDir, /*excludes*/ [], includes, useCaseSensitiveFileNames, currentDirectory);
+                const matchers = getFileMatcherPatterns(
+                    configDir,
+                    /*excludes*/ [],
+                    includes,
+                    useCaseSensitiveFileNames,
+                    currentDirectory,
+                );
                 // If there isn't some include for this, add a new one.
                 if (
-                    getRegexFromPattern(Debug.checkDefined(matchers.includeFilePattern), useCaseSensitiveFileNames).test(oldFileOrDirPath) &&
-                    !getRegexFromPattern(Debug.checkDefined(matchers.includeFilePattern), useCaseSensitiveFileNames).test(newFileOrDirPath)
+                    getRegexFromPattern(Debug.checkDefined(matchers.includeFilePattern), useCaseSensitiveFileNames)
+                        .test(
+                            oldFileOrDirPath,
+                        ) &&
+                    !getRegexFromPattern(Debug.checkDefined(matchers.includeFilePattern), useCaseSensitiveFileNames)
+                        .test(
+                            newFileOrDirPath,
+                        )
                 ) {
-                    changeTracker.insertNodeAfter(configFile, last(property.initializer.elements), factory.createStringLiteral(relativePath(newFileOrDirPath)));
+                    changeTracker.insertNodeAfter(
+                        configFile,
+                        last(property.initializer.elements),
+                        factory.createStringLiteral(relativePath(newFileOrDirPath)),
+                    );
                 }
                 return;
             }
@@ -149,7 +197,8 @@ function updateTsconfigFiles(program: Program, changeTracker: textChanges.Change
     });
 
     function updatePaths(property: PropertyAssignment): boolean {
-        const elements = isArrayLiteralExpression(property.initializer) ? property.initializer.elements : [property.initializer];
+        const elements = isArrayLiteralExpression(property.initializer) ? property.initializer.elements
+            : [property.initializer];
         let foundExactMatch = false;
         for (const element of elements) {
             foundExactMatch = tryUpdateString(element) || foundExactMatch;
@@ -163,7 +212,11 @@ function updateTsconfigFiles(program: Program, changeTracker: textChanges.Change
 
         const updated = oldToNew(elementFileName);
         if (updated !== undefined) {
-            changeTracker.replaceRangeWithText(configFile!, createStringRange(element, configFile!), relativePath(updated));
+            changeTracker.replaceRangeWithText(
+                configFile!,
+                createStringRange(element, configFile!),
+                relativePath(updated),
+            );
             return true;
         }
         return false;
@@ -198,21 +251,44 @@ function updateImports(
             if (!pathIsRelative(referenceText)) return undefined;
             const oldAbsolute = combinePathsSafe(oldImportFromDirectory, referenceText);
             const newAbsolute = oldToNew(oldAbsolute);
-            return newAbsolute === undefined ? undefined : ensurePathIsNonModuleName(getRelativePathFromDirectory(newImportFromDirectory, newAbsolute, getCanonicalFileName));
+            return newAbsolute === undefined ? undefined
+                : ensurePathIsNonModuleName(
+                    getRelativePathFromDirectory(newImportFromDirectory, newAbsolute, getCanonicalFileName),
+                );
         }, importLiteral => {
             const importedModuleSymbol = program.getTypeChecker().getSymbolAtLocation(importLiteral);
             // No need to update if it's an ambient module^M
-            if (importedModuleSymbol?.declarations && importedModuleSymbol.declarations.some(d => isAmbientModule(d))) return undefined;
+            if (importedModuleSymbol?.declarations && importedModuleSymbol.declarations.some(d => isAmbientModule(d))) {
+                return undefined;
+            }
 
             const toImport = oldFromNew !== undefined
                 // If we're at the new location (file was already renamed), need to redo module resolution starting from the old location.
                 // TODO:GH#18217
-                ? getSourceFileToImportFromResolved(importLiteral, resolveModuleName(importLiteral.text, oldImportFromPath, program.getCompilerOptions(), host as ModuleResolutionHost), oldToNew, allFiles)
+                ? getSourceFileToImportFromResolved(
+                    importLiteral,
+                    resolveModuleName(
+                        importLiteral.text,
+                        oldImportFromPath,
+                        program.getCompilerOptions(),
+                        host as ModuleResolutionHost,
+                    ),
+                    oldToNew,
+                    allFiles,
+                )
                 : getSourceFileToImport(importedModuleSymbol, importLiteral, sourceFile, program, host, oldToNew);
 
             // Need an update if the imported file moved, or the importing file moved and was using a relative path.
-            return toImport !== undefined && (toImport.updated || (importingSourceFileMoved && pathIsRelative(importLiteral.text)))
-                ? moduleSpecifiers.updateModuleSpecifier(program.getCompilerOptions(), sourceFile, newImportFromPath, toImport.newFileName, createModuleSpecifierResolutionHost(program, host), importLiteral.text)
+            return toImport !== undefined &&
+                    (toImport.updated || (importingSourceFileMoved && pathIsRelative(importLiteral.text)))
+                ? moduleSpecifiers.updateModuleSpecifier(
+                    program.getCompilerOptions(),
+                    sourceFile,
+                    newImportFromPath,
+                    toImport.newFileName,
+                    createModuleSpecifierResolutionHost(program, host),
+                    importLiteral.text,
+                )
                 : undefined;
         });
     }
@@ -242,18 +318,29 @@ function getSourceFileToImport(
         // `find` should succeed because we checked for ambient modules before calling this function.
         const oldFileName = find(importedModuleSymbol.declarations, isSourceFile)!.fileName;
         const newFileName = oldToNew(oldFileName);
-        return newFileName === undefined ? { newFileName: oldFileName, updated: false } : { newFileName, updated: true };
+        return newFileName === undefined ? { newFileName: oldFileName, updated: false }
+            : { newFileName, updated: true };
     }
     else {
         const mode = program.getModeForUsageLocation(importingSourceFile, importLiteral);
         const resolved = host.resolveModuleNameLiterals || !host.resolveModuleNames ?
             program.getResolvedModuleFromModuleSpecifier(importLiteral) :
-            host.getResolvedModuleWithFailedLookupLocationsFromCache && host.getResolvedModuleWithFailedLookupLocationsFromCache(importLiteral.text, importingSourceFile.fileName, mode);
+            host.getResolvedModuleWithFailedLookupLocationsFromCache &&
+            host.getResolvedModuleWithFailedLookupLocationsFromCache(
+                importLiteral.text,
+                importingSourceFile.fileName,
+                mode,
+            );
         return getSourceFileToImportFromResolved(importLiteral, resolved, oldToNew, program.getSourceFiles());
     }
 }
 
-function getSourceFileToImportFromResolved(importLiteral: StringLiteralLike, resolved: ResolvedModuleWithFailedLookupLocations | undefined, oldToNew: PathUpdater, sourceFiles: readonly SourceFile[]): ToImport | undefined {
+function getSourceFileToImportFromResolved(
+    importLiteral: StringLiteralLike,
+    resolved: ResolvedModuleWithFailedLookupLocations | undefined,
+    oldToNew: PathUpdater,
+    sourceFiles: readonly SourceFile[],
+): ToImport | undefined {
     // Search through all locations looking for a moved file, and only then test already existing files.
     // This is because if `a.ts` is compiled to `a.js` and `a.ts` is moved, we don't want to resolve anything to `a.js`, but to `a.ts`'s new location.
     if (!resolved) return undefined;
@@ -268,7 +355,8 @@ function getSourceFileToImportFromResolved(importLiteral: StringLiteralLike, res
     const result = forEach(resolved.failedLookupLocations, tryChangeWithIgnoringPackageJsonExisting)
         // Then failed lookups except package.json since we dont want to touch them (only included ts/js files).
         // At this point, the confidence level of this fix being correct is too low to change bare specifiers or absolute paths.
-        || pathIsRelative(importLiteral.text) && forEach(resolved.failedLookupLocations, tryChangeWithIgnoringPackageJson);
+        || pathIsRelative(importLiteral.text) &&
+            forEach(resolved.failedLookupLocations, tryChangeWithIgnoringPackageJson);
     if (result) return result;
 
     // If nothing changed, then result is resolved module file thats not updated
@@ -290,15 +378,24 @@ function getSourceFileToImportFromResolved(importLiteral: StringLiteralLike, res
     }
 }
 
-function updateImportsWorker(sourceFile: SourceFile, changeTracker: textChanges.ChangeTracker, updateRef: (refText: string) => string | undefined, updateImport: (importLiteral: StringLiteralLike) => string | undefined) {
+function updateImportsWorker(
+    sourceFile: SourceFile,
+    changeTracker: textChanges.ChangeTracker,
+    updateRef: (refText: string) => string | undefined,
+    updateImport: (importLiteral: StringLiteralLike) => string | undefined,
+) {
     for (const ref of sourceFile.referencedFiles || emptyArray) { // TODO: GH#26162
         const updated = updateRef(ref.fileName);
-        if (updated !== undefined && updated !== sourceFile.text.slice(ref.pos, ref.end)) changeTracker.replaceRangeWithText(sourceFile, ref, updated);
+        if (updated !== undefined && updated !== sourceFile.text.slice(ref.pos, ref.end)) {
+            changeTracker.replaceRangeWithText(sourceFile, ref, updated);
+        }
     }
 
     for (const importStringLiteral of sourceFile.imports) {
         const updated = updateImport(importStringLiteral);
-        if (updated !== undefined && updated !== importStringLiteral.text) changeTracker.replaceRangeWithText(sourceFile, createStringRange(importStringLiteral, sourceFile), updated);
+        if (updated !== undefined && updated !== importStringLiteral.text) {
+            changeTracker.replaceRangeWithText(sourceFile, createStringRange(importStringLiteral, sourceFile), updated);
+        }
     }
 }
 

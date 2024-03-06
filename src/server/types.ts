@@ -12,14 +12,27 @@ export interface CompressedData {
     data: any;
 }
 
-export type ModuleImportResult = { module: {}; error: undefined; } | { module: undefined; error: { stack?: string; message?: string; }; };
+export type ModuleImportResult = { module: {}; error: undefined; } | {
+    module: undefined;
+    error: { stack?: string; message?: string; };
+};
 
 /** @deprecated Use {@link ModuleImportResult} instead. */
 export type RequireResult = ModuleImportResult;
 
 export interface ServerHost extends System {
-    watchFile(path: string, callback: FileWatcherCallback, pollingInterval?: number, options?: WatchOptions): FileWatcher;
-    watchDirectory(path: string, callback: DirectoryWatcherCallback, recursive?: boolean, options?: WatchOptions): FileWatcher;
+    watchFile(
+        path: string,
+        callback: FileWatcherCallback,
+        pollingInterval?: number,
+        options?: WatchOptions,
+    ): FileWatcher;
+    watchDirectory(
+        path: string,
+        callback: DirectoryWatcherCallback,
+        recursive?: boolean,
+        options?: WatchOptions,
+    ): FileWatcher;
     setTimeout(callback: (...args: any[]) => void, ms: number, ...args: any[]): any;
     clearTimeout(timeoutId: any): void;
     setImmediate(callback: (...args: any[]) => void, ...args: any[]): any;

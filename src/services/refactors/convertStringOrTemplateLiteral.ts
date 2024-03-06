@@ -66,12 +66,20 @@ function getRefactorActionsToConvertToTemplateString(context: RefactorContext): 
         return emptyArray;
     }
 
-    if (isExpressionNode(maybeBinary) && (nodeIsStringLiteral || isBinaryExpression(maybeBinary) && treeToArray(maybeBinary).isValidConcatenation)) {
+    if (
+        isExpressionNode(maybeBinary) &&
+        (nodeIsStringLiteral || isBinaryExpression(maybeBinary) && treeToArray(maybeBinary).isValidConcatenation)
+    ) {
         refactorInfo.actions.push(convertStringAction);
         return [refactorInfo];
     }
     else if (context.preferences.provideRefactorNotApplicableReason) {
-        refactorInfo.actions.push({ ...convertStringAction, notApplicableReason: getLocaleSpecificMessage(Diagnostics.Can_only_convert_string_concatenations_and_string_literals) });
+        refactorInfo.actions.push({
+            ...convertStringAction,
+            notApplicableReason: getLocaleSpecificMessage(
+                Diagnostics.Can_only_convert_string_concatenations_and_string_literals,
+            ),
+        });
         return [refactorInfo];
     }
     return emptyArray;
@@ -92,7 +100,10 @@ function getNodeOrParentOfParentheses(file: SourceFile, startPosition: number) {
     return node;
 }
 
-function getRefactorEditsToConvertToTemplateString(context: RefactorContext, actionName: string): RefactorEditInfo | undefined {
+function getRefactorEditsToConvertToTemplateString(
+    context: RefactorContext,
+    actionName: string,
+): RefactorEditInfo | undefined {
     const { file, startPosition } = context;
     const node = getNodeOrParentOfParentheses(file, startPosition);
 
@@ -128,7 +139,8 @@ function getEditsForToTemplateLiteral(context: RefactorContext, node: Node) {
 }
 
 function isNotEqualsOperator(node: BinaryExpression) {
-    return !(node.operatorToken.kind === SyntaxKind.EqualsToken || node.operatorToken.kind === SyntaxKind.PlusEqualsToken);
+    return !(node.operatorToken.kind === SyntaxKind.EqualsToken ||
+        node.operatorToken.kind === SyntaxKind.PlusEqualsToken);
 }
 
 function getParentBinaryExpression(expr: Node) {
@@ -149,9 +161,16 @@ function getParentBinaryExpression(expr: Node) {
 }
 
 function treeToArray(current: Expression) {
-    const loop = (current: Node): { nodes: Expression[]; operators: Token<BinaryOperator>[]; hasString: boolean; validOperators: boolean; } => {
+    const loop = (
+        current: Node,
+    ): { nodes: Expression[]; operators: Token<BinaryOperator>[]; hasString: boolean; validOperators: boolean; } => {
         if (!isBinaryExpression(current)) {
-            return { nodes: [current as Expression], operators: [], validOperators: true, hasString: isStringLiteral(current) || isNoSubstitutionTemplateLiteral(current) };
+            return {
+                nodes: [current as Expression],
+                operators: [],
+                validOperators: true,
+                hasString: isStringLiteral(current) || isNoSubstitutionTemplateLiteral(current),
+            };
         }
         const { nodes, operators, hasString: leftHasString, validOperators: leftOperatorValid } = loop(current.left);
 
@@ -173,21 +192,36 @@ function treeToArray(current: Expression) {
 
 // to copy comments following the operator
 // "foo" + /* comment */ "bar"
-const copyTrailingOperatorComments = (operators: Token<BinaryOperator>[], file: SourceFile) => (index: number, targetNode: Node) => {
-    if (index < operators.length) {
-        copyTrailingComments(operators[index], targetNode, file, SyntaxKind.MultiLineCommentTrivia, /*hasTrailingNewLine*/ false);
-    }
-};
+const copyTrailingOperatorComments =
+    (operators: Token<BinaryOperator>[], file: SourceFile) => (index: number, targetNode: Node) => {
+        if (index < operators.length) {
+            copyTrailingComments(
+                operators[index],
+                targetNode,
+                file,
+                SyntaxKind.MultiLineCommentTrivia,
+                /*hasTrailingNewLine*/ false,
+            );
+        }
+    };
 
 // to copy comments following the string
 // "foo" /* comment */ + "bar" /* comment */ + "bar2"
-const copyCommentFromMultiNode = (nodes: readonly Expression[], file: SourceFile, copyOperatorComments: (index: number, targetNode: Node) => void) => (indexes: number[], targetNode: Node) => {
-    while (indexes.length > 0) {
-        const index = indexes.shift()!;
-        copyTrailingComments(nodes[index], targetNode, file, SyntaxKind.MultiLineCommentTrivia, /*hasTrailingNewLine*/ false);
-        copyOperatorComments(index, targetNode);
-    }
-};
+const copyCommentFromMultiNode =
+    (nodes: readonly Expression[], file: SourceFile, copyOperatorComments: (index: number, targetNode: Node) => void) =>
+    (indexes: number[], targetNode: Node) => {
+        while (indexes.length > 0) {
+            const index = indexes.shift()!;
+            copyTrailingComments(
+                nodes[index],
+                targetNode,
+                file,
+                SyntaxKind.MultiLineCommentTrivia,
+                /*hasTrailingNewLine*/ false,
+            );
+            copyOperatorComments(index, targetNode);
+        }
+    };
 
 function escapeRawStringForTemplate(s: string) {
     // Escaping for $s in strings that are to be used in template strings
@@ -205,7 +239,10 @@ function getRawTextOfTemplate(node: TemplateHead | TemplateMiddle | TemplateTail
     return getTextOfNode(node).slice(1, rightShaving);
 }
 
-function concatConsecutiveString(index: number, nodes: readonly Expression[]): [nextIndex: number, text: string, rawText: string, usedIndexes: number[]] {
+function concatConsecutiveString(
+    index: number,
+    nodes: readonly Expression[],
+): [nextIndex: number, text: string, rawText: string, usedIndexes: number[]] {
     const indexes = [];
     let text = "", rawText = "";
     while (index < nodes.length) {
@@ -228,7 +265,10 @@ function concatConsecutiveString(index: number, nodes: readonly Expression[]): [
     return [index, text, rawText, indexes];
 }
 
-function nodesToTemplate({ nodes, operators }: { nodes: readonly Expression[]; operators: Token<BinaryOperator>[]; }, file: SourceFile) {
+function nodesToTemplate(
+    { nodes, operators }: { nodes: readonly Expression[]; operators: Token<BinaryOperator>[]; },
+    file: SourceFile,
+) {
     const copyOperatorComments = copyTrailingOperatorComments(operators, file);
     const copyCommentFromStringLiterals = copyCommentFromMultiNode(nodes, file, copyOperatorComments);
     const [begin, headText, rawHeadText, headIndexes] = concatConsecutiveString(0, nodes);
@@ -283,7 +323,13 @@ function nodesToTemplate({ nodes, operators }: { nodes: readonly Expression[]; o
 function copyExpressionComments(node: ParenthesizedExpression | TemplateSpan) {
     const file = node.getSourceFile();
     copyTrailingComments(node, node.expression, file, SyntaxKind.MultiLineCommentTrivia, /*hasTrailingNewLine*/ false);
-    copyTrailingAsLeadingComments(node.expression, node.expression, file, SyntaxKind.MultiLineCommentTrivia, /*hasTrailingNewLine*/ false);
+    copyTrailingAsLeadingComments(
+        node.expression,
+        node.expression,
+        file,
+        SyntaxKind.MultiLineCommentTrivia,
+        /*hasTrailingNewLine*/ false,
+    );
 }
 
 function getExpressionFromParenthesesOrExpression(node: Expression) {
