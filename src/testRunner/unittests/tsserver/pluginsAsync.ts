@@ -39,7 +39,9 @@ describe("unittests:: tsserver:: pluginsAsync:: async loaded plugins", () => {
         openFilesForSession([{ file: "^memfs:/foo.ts", content: "" }], session);
         const projectService = session.getProjectService();
 
-        session.logger.log(`This should be false because 'executeCommand' should have already triggered plugin enablement asynchronously and there are no plugin enablements currently being processed`);
+        session.logger.log(
+            `This should be false because 'executeCommand' should have already triggered plugin enablement asynchronously and there are no plugin enablements currently being processed`,
+        );
         session.logger.log(`hasNewPluginEnablementRequests:: ${projectService.hasNewPluginEnablementRequests()}`);
 
         session.logger.log(`Should be true because async imports have already been triggered in the background`);

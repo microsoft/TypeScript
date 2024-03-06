@@ -90,7 +90,13 @@ export interface DocumentHighlights {
 
 /** @internal */
 export namespace DocumentHighlights {
-    export function getDocumentHighlights(program: Program, cancellationToken: CancellationToken, sourceFile: SourceFile, position: number, sourceFilesToSearch: readonly SourceFile[]): DocumentHighlights[] | undefined {
+    export function getDocumentHighlights(
+        program: Program,
+        cancellationToken: CancellationToken,
+        sourceFile: SourceFile,
+        position: number,
+        sourceFilesToSearch: readonly SourceFile[],
+    ): DocumentHighlights[] | undefined {
         const node = getTouchingPropertyName(sourceFile, position);
 
         if (node.parent && (isJsxOpeningElement(node.parent) && node.parent.tagName === node || isJsxClosingElement(node.parent))) {
@@ -111,7 +117,13 @@ export namespace DocumentHighlights {
         };
     }
 
-    function getSemanticDocumentHighlights(position: number, node: Node, program: Program, cancellationToken: CancellationToken, sourceFilesToSearch: readonly SourceFile[]): DocumentHighlights[] | undefined {
+    function getSemanticDocumentHighlights(
+        position: number,
+        node: Node,
+        program: Program,
+        cancellationToken: CancellationToken,
+        sourceFilesToSearch: readonly SourceFile[],
+    ): DocumentHighlights[] | undefined {
         const sourceFilesSet = new Set(sourceFilesToSearch.map(f => f.fileName));
         const referenceEntries = FindAllReferences.getReferenceEntriesForNode(position, node, program, sourceFilesToSearch, cancellationToken, /*options*/ undefined, sourceFilesSet);
         if (!referenceEntries) return undefined;
@@ -187,7 +199,11 @@ export namespace DocumentHighlights {
         }
 
         function getFromAllDeclarations<T extends Node>(nodeTest: (node: Node) => node is T, keywords: readonly SyntaxKind[]): HighlightSpan[] | undefined {
-            return useParent(node.parent, nodeTest, decl => mapDefined(tryCast(decl, canHaveSymbol)?.symbol.declarations, d => nodeTest(d) ? find(d.getChildren(sourceFile), c => contains(keywords, c.kind)) : undefined));
+            return useParent(
+                node.parent,
+                nodeTest,
+                decl => mapDefined(tryCast(decl, canHaveSymbol)?.symbol.declarations, d => nodeTest(d) ? find(d.getChildren(sourceFile), c => contains(keywords, c.kind)) : undefined),
+            );
         }
 
         function useParent<T extends Node>(node: Node, nodeTest: (node: Node) => node is T, getNodes: (node: T, sourceFile: SourceFile) => readonly Node[] | undefined): HighlightSpan[] | undefined {

@@ -435,7 +435,11 @@ export function computePositionOfLineAndCharacter(lineStarts: readonly number[],
             line = line < 0 ? 0 : line >= lineStarts.length ? lineStarts.length - 1 : line;
         }
         else {
-            Debug.fail(`Bad line number. Line: ${line}, lineStarts.length: ${lineStarts.length} , line map is correct? ${debugText !== undefined ? arraysEqual(lineStarts, computeLineStarts(debugText)) : "unknown"}`);
+            Debug.fail(
+                `Bad line number. Line: ${line}, lineStarts.length: ${lineStarts.length} , line map is correct? ${
+                    debugText !== undefined ? arraysEqual(lineStarts, computeLineStarts(debugText)) : "unknown"
+                }`,
+            );
         }
     }
 
@@ -963,7 +967,15 @@ export function isIdentifierText(name: string, languageVersion: ScriptTarget | u
 }
 
 // Creates a scanner over a (possibly unspecified) range of a piece of text.
-export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean, languageVariant = LanguageVariant.Standard, textInitial?: string, onError?: ErrorCallback, start?: number, length?: number): Scanner {
+export function createScanner(
+    languageVersion: ScriptTarget,
+    skipTrivia: boolean,
+    languageVariant = LanguageVariant.Standard,
+    textInitial?: string,
+    onError?: ErrorCallback,
+    start?: number,
+    length?: number,
+): Scanner {
     // Why var? It avoids TDZ checks in the runtime which can be costly.
     // See: https://github.com/microsoft/TypeScript/issues/52924
     /* eslint-disable no-var */

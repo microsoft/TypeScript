@@ -167,7 +167,15 @@ export class TestTypingsInstallerWorker extends ts.server.typingsInstaller.Typin
         );
     }
 
-    sendResponse(response: ts.server.SetTypings | ts.server.InvalidateCachedTypings | ts.server.BeginInstallTypes | ts.server.EndInstallTypes | ts.server.WatchTypingLocations | ts.server.PackageInstalledResponse) {
+    sendResponse(
+        response:
+            | ts.server.SetTypings
+            | ts.server.InvalidateCachedTypings
+            | ts.server.BeginInstallTypes
+            | ts.server.EndInstallTypes
+            | ts.server.WatchTypingLocations
+            | ts.server.PackageInstalledResponse,
+    ) {
         this.log.writeLine(`Sending response:${stringifyIndented(response)}`);
         this.testTypingInstaller.handleMessage(response);
     }

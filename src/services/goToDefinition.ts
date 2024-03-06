@@ -252,7 +252,9 @@ export function getDefinitionAtPosition(program: Program, sourceFile: SourceFile
     // assignment. This case and others are handled by the following code.
     if (node.parent.kind === SyntaxKind.ShorthandPropertyAssignment) {
         const shorthandSymbol = typeChecker.getShorthandAssignmentValueSymbol(symbol.valueDeclaration);
-        const definitions = shorthandSymbol?.declarations ? shorthandSymbol.declarations.map(decl => createDefinitionInfo(decl, typeChecker, shorthandSymbol, node, /*unverified*/ false, failedAliasResolution))
+        const definitions = shorthandSymbol?.declarations ? shorthandSymbol.declarations.map(decl =>
+            createDefinitionInfo(decl, typeChecker, shorthandSymbol, node, /*unverified*/ false, failedAliasResolution)
+        )
             : emptyArray;
         return concatenate(definitions, getDefinitionFromObjectLiteralElement(typeChecker, node));
     }
@@ -310,7 +312,10 @@ function getDefinitionFromObjectLiteralElement(typeChecker: TypeChecker, node: N
     if (element) {
         const contextualType = element && typeChecker.getContextualType(element.parent);
         if (contextualType) {
-            return flatMap(getPropertySymbolsFromContextualType(element, typeChecker, contextualType, /*unionSymbolOk*/ false), propertySymbol => getDefinitionFromSymbol(typeChecker, propertySymbol, node));
+            return flatMap(
+                getPropertySymbolsFromContextualType(element, typeChecker, contextualType, /*unionSymbolOk*/ false),
+                propertySymbol => getDefinitionFromSymbol(typeChecker, propertySymbol, node),
+            );
         }
     }
     return emptyArray;
@@ -339,7 +344,11 @@ function getDefinitionFromOverriddenMember(typeChecker: TypeChecker, node: Node)
 }
 
 /** @internal */
-export function getReferenceAtPosition(sourceFile: SourceFile, position: number, program: Program): { reference: FileReference; fileName: string; unverified: boolean; file?: SourceFile; } | undefined {
+export function getReferenceAtPosition(
+    sourceFile: SourceFile,
+    position: number,
+    program: Program,
+): { reference: FileReference; fileName: string; unverified: boolean; file?: SourceFile; } | undefined {
     const referencePath = findReferenceInPosition(sourceFile.referencedFiles, position);
     if (referencePath) {
         const file = program.getSourceFileFromReference(sourceFile, referencePath);
@@ -348,7 +357,8 @@ export function getReferenceAtPosition(sourceFile: SourceFile, position: number,
 
     const typeReferenceDirective = findReferenceInPosition(sourceFile.typeReferenceDirectives, position);
     if (typeReferenceDirective) {
-        const reference = program.getResolvedTypeReferenceDirectives().get(typeReferenceDirective.fileName, typeReferenceDirective.resolutionMode || sourceFile.impliedNodeFormat)?.resolvedTypeReferenceDirective;
+        const reference = program.getResolvedTypeReferenceDirectives().get(typeReferenceDirective.fileName, typeReferenceDirective.resolutionMode || sourceFile.impliedNodeFormat)
+            ?.resolvedTypeReferenceDirective;
         const file = reference && program.getSourceFile(reference.resolvedFileName!); // TODO:GH#18217
         return file && { reference: typeReferenceDirective, fileName: file.fileName, file, unverified: false };
     }
@@ -589,7 +599,8 @@ function getDefinitionFromSymbol(typeChecker: TypeChecker, symbol: Symbol, node:
     const filteredDeclarations = filter(symbol.declarations, d => d !== excludeDeclaration);
     const withoutExpandos = filter(filteredDeclarations, d => !isExpandoDeclaration(d));
     const results = some(withoutExpandos) ? withoutExpandos : filteredDeclarations;
-    return getConstructSignatureDefinition() || getCallSignatureDefinition() || map(results, declaration => createDefinitionInfo(declaration, typeChecker, symbol, node, /*unverified*/ false, failedAliasResolution));
+    return getConstructSignatureDefinition() || getCallSignatureDefinition() ||
+        map(results, declaration => createDefinitionInfo(declaration, typeChecker, symbol, node, /*unverified*/ false, failedAliasResolution));
 
     function getConstructSignatureDefinition(): DefinitionInfo[] | undefined {
         // Applicable only if we are in a new expression, or we are on a constructor declaration

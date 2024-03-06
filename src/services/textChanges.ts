@@ -556,7 +556,12 @@ export class ChangeTracker {
         this.deleteRange(sourceFile, { pos: startPosition, end: endPosition });
     }
 
-    public deleteNodeRangeExcludingEnd(sourceFile: SourceFile, startNode: Node, afterEndNode: Node | undefined, options: ConfigurableStartEnd = { leadingTriviaOption: LeadingTriviaOption.IncludeAll }): void {
+    public deleteNodeRangeExcludingEnd(
+        sourceFile: SourceFile,
+        startNode: Node,
+        afterEndNode: Node | undefined,
+        options: ConfigurableStartEnd = { leadingTriviaOption: LeadingTriviaOption.IncludeAll },
+    ): void {
         const startPosition = getAdjustedStartPosition(sourceFile, startNode, options);
         const endPosition = afterEndNode === undefined ? sourceFile.text.length : getAdjustedStartPosition(sourceFile, afterEndNode, options);
         this.deleteRange(sourceFile, { pos: startPosition, end: endPosition });
@@ -586,7 +591,13 @@ export class ChangeTracker {
         this.replaceRangeWithText(sourceFile, getAdjustedRange(sourceFile, oldNode, oldNode, useNonAdjustedPositions), text);
     }
 
-    public replaceNodeRangeWithNodes(sourceFile: SourceFile, startNode: Node, endNode: Node, newNodes: readonly Node[], options: ReplaceWithMultipleNodesOptions & ConfigurableStartEnd = useNonAdjustedPositions): void {
+    public replaceNodeRangeWithNodes(
+        sourceFile: SourceFile,
+        startNode: Node,
+        endNode: Node,
+        newNodes: readonly Node[],
+        options: ReplaceWithMultipleNodesOptions & ConfigurableStartEnd = useNonAdjustedPositions,
+    ): void {
         this.replaceRangeWithNodes(sourceFile, getAdjustedRange(sourceFile, startNode, endNode, options), newNodes, options);
     }
 
@@ -879,7 +890,12 @@ export class ChangeTracker {
                 return undefined;
             }
             const memberStart = member.getStart(sourceFile);
-            const memberIndentation = formatting.SmartIndenter.findFirstNonWhitespaceColumn(getLineStartPositionForPosition(memberStart, sourceFile), memberStart, sourceFile, this.formatContext.options);
+            const memberIndentation = formatting.SmartIndenter.findFirstNonWhitespaceColumn(
+                getLineStartPositionForPosition(memberStart, sourceFile),
+                memberStart,
+                sourceFile,
+                this.formatContext.options,
+            );
             if (indentation === undefined) {
                 indentation = memberIndentation;
             }
@@ -1009,7 +1025,10 @@ export class ChangeTracker {
 
             if (node.body.kind !== SyntaxKind.Block) {
                 // `() => 0` => `function f() { return 0; }`
-                this.insertNodesAt(sourceFile, node.body.getStart(sourceFile), [factory.createToken(SyntaxKind.OpenBraceToken), factory.createToken(SyntaxKind.ReturnKeyword)], { joiner: " ", suffix: " " });
+                this.insertNodesAt(sourceFile, node.body.getStart(sourceFile), [factory.createToken(SyntaxKind.OpenBraceToken), factory.createToken(SyntaxKind.ReturnKeyword)], {
+                    joiner: " ",
+                    suffix: " ",
+                });
                 this.insertNodesAt(sourceFile, node.body.end, [factory.createToken(SyntaxKind.SemicolonToken), factory.createToken(SyntaxKind.CloseBraceToken)], { joiner: " " });
             }
         }
@@ -1271,7 +1290,12 @@ function getMembersOrProperties(node: ClassLikeDeclaration | InterfaceDeclaratio
 export type ValidateNonFormattedText = (node: Node, text: string) => void;
 
 namespace changesToText {
-    export function getTextChangesFromChanges(changes: readonly Change[], newLineCharacter: string, formatContext: formatting.FormatContext, validate: ValidateNonFormattedText | undefined): FileTextChanges[] {
+    export function getTextChangesFromChanges(
+        changes: readonly Change[],
+        newLineCharacter: string,
+        formatContext: formatting.FormatContext,
+        validate: ValidateNonFormattedText | undefined,
+    ): FileTextChanges[] {
         return mapDefined(group(changes, c => c.sourceFile.path), changesInFile => {
             const sourceFile = changesInFile[0].sourceFile;
             // order changes by start position
@@ -1307,10 +1331,17 @@ namespace changesToText {
 
     export function newFileChangesWorker(scriptKind: ScriptKind, insertions: readonly NewFileInsertion[], newLineCharacter: string, formatContext: formatting.FormatContext): string {
         // TODO: this emits the file, parses it back, then formats it that -- may be a less roundabout way to do this
-        const nonFormattedText = flatMap(insertions, insertion => insertion.statements.map(s => s === SyntaxKind.NewLineTrivia ? "" : getNonformattedText(s, insertion.oldFile, newLineCharacter).text)).join(
-            newLineCharacter,
+        const nonFormattedText = flatMap(insertions, insertion => insertion.statements.map(s => s === SyntaxKind.NewLineTrivia ? "" : getNonformattedText(s, insertion.oldFile, newLineCharacter).text))
+            .join(
+                newLineCharacter,
+            );
+        const sourceFile = createSourceFile(
+            "any file name",
+            nonFormattedText,
+            { languageVersion: ScriptTarget.ESNext, jsDocParsingMode: JSDocParsingMode.ParseNone },
+            /*setParentNodes*/ true,
+            scriptKind,
         );
-        const sourceFile = createSourceFile("any file name", nonFormattedText, { languageVersion: ScriptTarget.ESNext, jsDocParsingMode: JSDocParsingMode.ParseNone }, /*setParentNodes*/ true, scriptKind);
         const changes = formatting.formatDocument(sourceFile, formatContext);
         return applyChanges(nonFormattedText, changes) + newLineCharacter;
     }

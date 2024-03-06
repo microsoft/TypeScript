@@ -585,7 +585,14 @@ export class Verify extends VerifyNegatable {
         this.state.baselineRename(/*markerOrRange*/ undefined, rangeText, options);
     }
 
-    public verifyQuickInfoDisplayParts(kind: string, kindModifiers: string, textSpan: FourSlash.TextSpan, displayParts: ts.SymbolDisplayPart[], documentation: ts.SymbolDisplayPart[], tags: ts.JSDocTagInfo[]) {
+    public verifyQuickInfoDisplayParts(
+        kind: string,
+        kindModifiers: string,
+        textSpan: FourSlash.TextSpan,
+        displayParts: ts.SymbolDisplayPart[],
+        documentation: ts.SymbolDisplayPart[],
+        tags: ts.JSDocTagInfo[],
+    ) {
         this.state.verifyQuickInfoDisplayParts(kind, kindModifiers, textSpan, displayParts, documentation, tags);
     }
 

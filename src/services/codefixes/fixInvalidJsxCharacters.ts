@@ -29,8 +29,20 @@ registerCodeFix({
         const changeToHtmlEntity = textChanges.ChangeTracker.with(context, t => doChange(t, preferences, sourceFile, span.start, /*useHtmlEntity*/ true));
 
         return [
-            createCodeFixAction(fixIdExpression, changeToExpression, Diagnostics.Wrap_invalid_character_in_an_expression_container, fixIdExpression, Diagnostics.Wrap_all_invalid_characters_in_an_expression_container),
-            createCodeFixAction(fixIdHtmlEntity, changeToHtmlEntity, Diagnostics.Convert_invalid_character_to_its_html_entity_code, fixIdHtmlEntity, Diagnostics.Convert_all_invalid_characters_to_HTML_entity_code),
+            createCodeFixAction(
+                fixIdExpression,
+                changeToExpression,
+                Diagnostics.Wrap_invalid_character_in_an_expression_container,
+                fixIdExpression,
+                Diagnostics.Wrap_all_invalid_characters_in_an_expression_container,
+            ),
+            createCodeFixAction(
+                fixIdHtmlEntity,
+                changeToHtmlEntity,
+                Diagnostics.Convert_invalid_character_to_its_html_entity_code,
+                fixIdHtmlEntity,
+                Diagnostics.Convert_all_invalid_characters_to_HTML_entity_code,
+            ),
         ];
     },
     getAllCodeActions(context) {

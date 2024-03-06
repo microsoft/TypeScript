@@ -378,7 +378,14 @@ function visitArrayWorker(
  * Starts a new lexical environment and visits a statement list, ending the lexical environment
  * and merging hoisted declarations upon completion.
  */
-export function visitLexicalEnvironment(statements: NodeArray<Statement>, visitor: Visitor, context: TransformationContext, start?: number, ensureUseStrict?: boolean, nodesVisitor: NodesVisitor = visitNodes) {
+export function visitLexicalEnvironment(
+    statements: NodeArray<Statement>,
+    visitor: Visitor,
+    context: TransformationContext,
+    start?: number,
+    ensureUseStrict?: boolean,
+    nodesVisitor: NodesVisitor = visitNodes,
+) {
     context.startLexicalEnvironment();
     statements = nodesVisitor(statements, visitor, isStatement, start);
     if (ensureUseStrict) statements = context.factory.ensureUseStrict(statements);
@@ -390,7 +397,12 @@ export function visitLexicalEnvironment(statements: NodeArray<Statement>, visito
  * environment upon completion.
  */
 export function visitParameterList(nodes: NodeArray<ParameterDeclaration>, visitor: Visitor, context: TransformationContext, nodesVisitor?: NodesVisitor): NodeArray<ParameterDeclaration>;
-export function visitParameterList(nodes: NodeArray<ParameterDeclaration> | undefined, visitor: Visitor, context: TransformationContext, nodesVisitor?: NodesVisitor): NodeArray<ParameterDeclaration> | undefined;
+export function visitParameterList(
+    nodes: NodeArray<ParameterDeclaration> | undefined,
+    visitor: Visitor,
+    context: TransformationContext,
+    nodesVisitor?: NodesVisitor,
+): NodeArray<ParameterDeclaration> | undefined;
 export function visitParameterList(nodes: NodeArray<ParameterDeclaration> | undefined, visitor: Visitor, context: TransformationContext, nodesVisitor = visitNodes) {
     let updated: NodeArray<ParameterDeclaration> | undefined;
     context.startLexicalEnvironment();
@@ -467,7 +479,15 @@ function addDefaultValueAssignmentForBindingPattern(parameter: ParameterDeclarat
             ]),
         ),
     );
-    return factory.updateParameterDeclaration(parameter, parameter.modifiers, parameter.dotDotDotToken, factory.getGeneratedNameForNode(parameter), parameter.questionToken, parameter.type, /*initializer*/ undefined);
+    return factory.updateParameterDeclaration(
+        parameter,
+        parameter.modifiers,
+        parameter.dotDotDotToken,
+        factory.getGeneratedNameForNode(parameter),
+        parameter.questionToken,
+        parameter.type,
+        /*initializer*/ undefined,
+    );
 }
 
 function addDefaultValueAssignmentForInitializer(parameter: ParameterDeclaration, name: Identifier, initializer: Expression, context: TransformationContext) {
@@ -583,7 +603,14 @@ export function visitCommaListElements(elements: NodeArray<Expression>, visitor:
  */
 export function visitEachChild<T extends Node>(node: T, visitor: Visitor, context: TransformationContext | undefined): T;
 /** @internal */
-export function visitEachChild<T extends Node>(node: T, visitor: Visitor, context: TransformationContext | undefined, nodesVisitor?: NodesVisitor, tokenVisitor?: Visitor, nodeVisitor?: NodeVisitor): T; // eslint-disable-line @typescript-eslint/unified-signatures
+export function visitEachChild<T extends Node>(
+    node: T,
+    visitor: Visitor,
+    context: TransformationContext | undefined,
+    nodesVisitor?: NodesVisitor,
+    tokenVisitor?: Visitor,
+    nodeVisitor?: NodeVisitor,
+): T; // eslint-disable-line @typescript-eslint/unified-signatures
 /**
  * Visits each child of a Node using the supplied visitor, possibly returning a new Node of the same kind in its place.
  *
@@ -591,7 +618,13 @@ export function visitEachChild<T extends Node>(node: T, visitor: Visitor, contex
  * @param visitor The callback used to visit each child.
  * @param context A lexical environment context for the visitor.
  */
-export function visitEachChild<T extends Node>(node: T | undefined, visitor: Visitor, context: TransformationContext | undefined, nodesVisitor?: typeof visitNodes, tokenVisitor?: Visitor): T | undefined;
+export function visitEachChild<T extends Node>(
+    node: T | undefined,
+    visitor: Visitor,
+    context: TransformationContext | undefined,
+    nodesVisitor?: typeof visitNodes,
+    tokenVisitor?: Visitor,
+): T | undefined;
 /** @internal */
 export function visitEachChild<T extends Node>(
     node: T | undefined,

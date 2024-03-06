@@ -193,7 +193,8 @@ export function getJsDocCommentsFromDeclarations(declarations: readonly Declarat
     const parts: SymbolDisplayPart[][] = [];
     forEachUnique(declarations, declaration => {
         for (const jsdoc of getCommentHavingNodes(declaration)) {
-            const inheritDoc = isJSDoc(jsdoc) && jsdoc.tags && find(jsdoc.tags, t => t.kind === SyntaxKind.JSDocTag && (t.tagName.escapedText === "inheritDoc" || t.tagName.escapedText === "inheritdoc"));
+            const inheritDoc = isJSDoc(jsdoc) && jsdoc.tags &&
+                find(jsdoc.tags, t => t.kind === SyntaxKind.JSDocTag && (t.tagName.escapedText === "inheritDoc" || t.tagName.escapedText === "inheritdoc"));
             // skip comments containing @typedefs since they're not associated with particular declarations
             // Exceptions:
             // - @typedefs are themselves declarations with associated comments
@@ -266,7 +267,10 @@ export function getJsDocTagsFromDeclarations(declarations?: Declaration[], check
 }
 
 function getJSDocPropertyTagsInfo(nodes: readonly JSDocTag[] | undefined, checker: TypeChecker | undefined): readonly JSDocTagInfo[] {
-    return flatMap(nodes, propTag => concatenate([{ name: propTag.tagName.text, text: getCommentDisplayParts(propTag, checker) }], getJSDocPropertyTagsInfo(tryGetJSDocPropertyTags(propTag), checker)));
+    return flatMap(
+        nodes,
+        propTag => concatenate([{ name: propTag.tagName.text, text: getCommentDisplayParts(propTag, checker) }], getJSDocPropertyTagsInfo(tryGetJSDocPropertyTags(propTag), checker)),
+    );
 }
 
 function tryGetJSDocPropertyTags(node: JSDocTag) {

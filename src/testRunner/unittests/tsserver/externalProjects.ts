@@ -49,7 +49,11 @@ describe("unittests:: tsserver:: externalProjects", () => {
             }, session);
 
             openFilesForSession([f1], session);
-            baselineTsserverLogs("externalProjects", `can handle tsconfig file name with difference casing${lazyConfiguredProjectsFromExternalProject ? " with lazyConfiguredProjectsFromExternalProject" : ""}`, session);
+            baselineTsserverLogs(
+                "externalProjects",
+                `can handle tsconfig file name with difference casing${lazyConfiguredProjectsFromExternalProject ? " with lazyConfiguredProjectsFromExternalProject" : ""}`,
+                session,
+            );
         }
 
         it("when lazyConfiguredProjectsFromExternalProject not set", () => {
@@ -77,7 +81,9 @@ describe("unittests:: tsserver:: externalProjects", () => {
                         const proxy = Harness.LanguageService.makeDefaultProxy(info);
                         proxy.getSemanticDiagnostics = filename => {
                             const prev = info.languageService.getSemanticDiagnostics(filename);
-                            const sourceFile: ts.SourceFile = info.project.getSourceFile(ts.toPath(filename, /*basePath*/ undefined, ts.createGetCanonicalFileName(info.serverHost.useCaseSensitiveFileNames)))!;
+                            const sourceFile: ts.SourceFile = info.project.getSourceFile(
+                                ts.toPath(filename, /*basePath*/ undefined, ts.createGetCanonicalFileName(info.serverHost.useCaseSensitiveFileNames)),
+                            )!;
                             prev.push({
                                 category: ts.DiagnosticCategory.Warning,
                                 file: sourceFile,
@@ -534,7 +540,11 @@ describe("unittests:: tsserver:: externalProjects", () => {
                 rootFiles: toExternalFiles([f1.path, f2.path]),
                 options: {},
             }, session);
-            baselineTsserverLogs("externalProjects", `correctly handling add or remove tsconfig - 1${lazyConfiguredProjectsFromExternalProject ? " with lazyConfiguredProjectsFromExternalProject" : ""}`, session);
+            baselineTsserverLogs(
+                "externalProjects",
+                `correctly handling add or remove tsconfig - 1${lazyConfiguredProjectsFromExternalProject ? " with lazyConfiguredProjectsFromExternalProject" : ""}`,
+                session,
+            );
         }
         it("when lazyConfiguredProjectsFromExternalProject not set", () => {
             verifyAddRemoveConfig(/*lazyConfiguredProjectsFromExternalProject*/ false);
@@ -621,7 +631,11 @@ describe("unittests:: tsserver:: externalProjects", () => {
                 command: ts.server.protocol.CommandTypes.CloseExternalProject,
                 arguments: { projectFileName },
             });
-            baselineTsserverLogs("externalProjects", `correctly handling add or remove tsconfig - 2${lazyConfiguredProjectsFromExternalProject ? " with lazyConfiguredProjectsFromExternalProject" : ""}`, session);
+            baselineTsserverLogs(
+                "externalProjects",
+                `correctly handling add or remove tsconfig - 2${lazyConfiguredProjectsFromExternalProject ? " with lazyConfiguredProjectsFromExternalProject" : ""}`,
+                session,
+            );
         }
 
         it("when lazyConfiguredProjectsFromExternalProject not set", () => {

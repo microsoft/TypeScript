@@ -37,7 +37,10 @@ registerCodeFix({
         const importDeclaration = getImportDeclaration(context.sourceFile, context.program, context.span.start);
         if (!importDeclaration) return;
 
-        const namespaceChanges = textChanges.ChangeTracker.with(context, t => importDeclaration.kind === SyntaxKind.ImportSpecifier && doNamespaceImportChange(t, context.sourceFile, importDeclaration, context.program));
+        const namespaceChanges = textChanges.ChangeTracker.with(
+            context,
+            t => importDeclaration.kind === SyntaxKind.ImportSpecifier && doNamespaceImportChange(t, context.sourceFile, importDeclaration, context.program),
+        );
         const typeOnlyChanges = textChanges.ChangeTracker.with(context, t => doTypeOnlyImportChange(t, context.sourceFile, importDeclaration, context.program));
         let actions: CodeFixAction[] | undefined;
         if (namespaceChanges.length) {

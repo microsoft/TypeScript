@@ -3091,7 +3091,13 @@ export function typeToDisplayParts(typechecker: TypeChecker, type: Type, enclosi
 }
 
 /** @internal */
-export function symbolToDisplayParts(typeChecker: TypeChecker, symbol: Symbol, enclosingDeclaration?: Node, meaning?: SymbolFlags, flags: SymbolFormatFlags = SymbolFormatFlags.None): SymbolDisplayPart[] {
+export function symbolToDisplayParts(
+    typeChecker: TypeChecker,
+    symbol: Symbol,
+    enclosingDeclaration?: Node,
+    meaning?: SymbolFlags,
+    flags: SymbolFormatFlags = SymbolFormatFlags.None,
+): SymbolDisplayPart[] {
     return mapToDisplayParts(writer => {
         typeChecker.writeSymbol(symbol, enclosingDeclaration, meaning, flags | SymbolFormatFlags.UseAliasDefinedOutsideCurrentScope, writer);
     });
@@ -3647,7 +3653,13 @@ export function tryGetDirectories(host: Pick<LanguageServiceHost, "getDirectorie
 }
 
 /** @internal */
-export function tryReadDirectory(host: Pick<LanguageServiceHost, "readDirectory">, path: string, extensions?: readonly string[], exclude?: readonly string[], include?: readonly string[]): readonly string[] {
+export function tryReadDirectory(
+    host: Pick<LanguageServiceHost, "readDirectory">,
+    path: string,
+    extensions?: readonly string[],
+    exclude?: readonly string[],
+    include?: readonly string[],
+): readonly string[] {
     return tryIOAndConsumeErrors(host, host.readDirectory, path, extensions, exclude, include) || emptyArray;
 }
 

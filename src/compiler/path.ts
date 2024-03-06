@@ -966,7 +966,13 @@ export function getRelativePathFromFile(from: string, to: string, getCanonicalFi
 }
 
 /** @internal */
-export function getRelativePathToDirectoryOrUrl(directoryPathOrUrl: string, relativeOrAbsolutePath: string, currentDirectory: string, getCanonicalFileName: GetCanonicalFileName, isAbsolutePathAnUrl: boolean) {
+export function getRelativePathToDirectoryOrUrl(
+    directoryPathOrUrl: string,
+    relativeOrAbsolutePath: string,
+    currentDirectory: string,
+    getCanonicalFileName: GetCanonicalFileName,
+    isAbsolutePathAnUrl: boolean,
+) {
     const pathComponents = getPathComponentsRelativeTo(
         resolvePath(currentDirectory, directoryPathOrUrl),
         resolvePath(currentDirectory, relativeOrAbsolutePath),

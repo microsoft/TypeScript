@@ -104,7 +104,17 @@ export class System implements ts.System {
     }
 
     public readDirectory(path: string, extensions?: readonly string[], exclude?: readonly string[], include?: readonly string[], depth?: number): string[] {
-        return ts.matchFiles(path, extensions, exclude, include, this.useCaseSensitiveFileNames, this.getCurrentDirectory(), depth, path => this.getAccessibleFileSystemEntries(path), path => this.realpath(path));
+        return ts.matchFiles(
+            path,
+            extensions,
+            exclude,
+            include,
+            this.useCaseSensitiveFileNames,
+            this.getCurrentDirectory(),
+            depth,
+            path => this.getAccessibleFileSystemEntries(path),
+            path => this.realpath(path),
+        );
     }
 
     public getAccessibleFileSystemEntries(path: string): ts.FileSystemEntries {
@@ -568,7 +578,13 @@ export function patchHostForBuildInfoWrite<T extends ts.System>(sys: T, version:
 export class SolutionBuilderHost extends CompilerHost implements ts.SolutionBuilderHost<ts.BuilderProgram> {
     createProgram: ts.CreateProgram<ts.BuilderProgram>;
 
-    private constructor(sys: System | vfs.FileSystem, options?: ts.CompilerOptions, setParentNodes?: boolean, createProgram?: ts.CreateProgram<ts.BuilderProgram>, jsDocParsingMode?: ts.JSDocParsingMode) {
+    private constructor(
+        sys: System | vfs.FileSystem,
+        options?: ts.CompilerOptions,
+        setParentNodes?: boolean,
+        createProgram?: ts.CreateProgram<ts.BuilderProgram>,
+        jsDocParsingMode?: ts.JSDocParsingMode,
+    ) {
         super(sys, options, setParentNodes, jsDocParsingMode);
         this.createProgram = createProgram || ts.createEmitAndSemanticDiagnosticsBuilderProgram as unknown as ts.CreateProgram<ts.BuilderProgram>;
     }

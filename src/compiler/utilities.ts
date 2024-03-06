@@ -771,7 +771,9 @@ export function moduleResolutionIsEqualTo(oldResolution: ResolvedModuleWithFaile
 export function createModuleNotFoundChain(sourceFile: SourceFile, host: TypeCheckerHost, moduleReference: string, mode: ResolutionMode, packageName: string) {
     const alternateResult = host.getResolvedModule(sourceFile, moduleReference, mode)?.alternateResult;
     const alternateResultMessage = alternateResult && (getEmitModuleResolutionKind(host.getCompilerOptions()) === ModuleResolutionKind.Node10
-        ? [Diagnostics.There_are_types_at_0_but_this_result_could_not_be_resolved_under_your_current_moduleResolution_setting_Consider_updating_to_node16_nodenext_or_bundler, [alternateResult]] as const
+        ? [Diagnostics.There_are_types_at_0_but_this_result_could_not_be_resolved_under_your_current_moduleResolution_setting_Consider_updating_to_node16_nodenext_or_bundler, [
+            alternateResult,
+        ]] as const
         : [
             Diagnostics.There_are_types_at_0_but_this_result_could_not_be_resolved_when_respecting_package_json_exports_The_1_library_may_need_to_update_its_package_json_or_typings,
             [alternateResult, alternateResult.includes(nodeModulesPathPart + "@types/") ? `@types/${mangleScopedPackageName(packageName)}` : packageName],
@@ -1004,9 +1006,12 @@ export function isGrammarError(parent: Node, child: Node | NodeArray<Node>) {
     if (isClassStaticBlockDeclaration(parent)) return child === parent.modifiers;
     if (isPropertySignature(parent)) return child === parent.initializer;
     if (isPropertyDeclaration(parent)) return child === parent.questionToken && isAutoAccessorPropertyDeclaration(parent);
-    if (isPropertyAssignment(parent)) return child === parent.modifiers || child === parent.questionToken || child === parent.exclamationToken || isGrammarErrorElement(parent.modifiers, child, isModifierLike);
+    if (isPropertyAssignment(parent)) {
+        return child === parent.modifiers || child === parent.questionToken || child === parent.exclamationToken || isGrammarErrorElement(parent.modifiers, child, isModifierLike);
+    }
     if (isShorthandPropertyAssignment(parent)) {
-        return child === parent.equalsToken || child === parent.modifiers || child === parent.questionToken || child === parent.exclamationToken || isGrammarErrorElement(parent.modifiers, child, isModifierLike);
+        return child === parent.equalsToken || child === parent.modifiers || child === parent.questionToken || child === parent.exclamationToken ||
+            isGrammarErrorElement(parent.modifiers, child, isModifierLike);
     }
     if (isMethodDeclaration(parent)) return child === parent.exclamationToken;
     if (isConstructorDeclaration(parent)) return child === parent.typeParameters || child === parent.type || isGrammarErrorElement(parent.typeParameters, child, isTypeParameterDeclaration);
@@ -2116,7 +2121,12 @@ export function createDiagnosticForNodeInSourceFile(sourceFile: SourceFile, node
 }
 
 /** @internal */
-export function createDiagnosticForNodeFromMessageChain(sourceFile: SourceFile, node: Node, messageChain: DiagnosticMessageChain, relatedInformation?: DiagnosticRelatedInformation[]): DiagnosticWithLocation {
+export function createDiagnosticForNodeFromMessageChain(
+    sourceFile: SourceFile,
+    node: Node,
+    messageChain: DiagnosticMessageChain,
+    relatedInformation?: DiagnosticRelatedInformation[],
+): DiagnosticWithLocation {
     const span = getErrorSpanForNode(sourceFile, node);
     return createFileDiagnosticFromMessageChain(sourceFile, span.start, span.length, messageChain, relatedInformation);
 }
@@ -2140,7 +2150,13 @@ function assertDiagnosticLocation(sourceText: string, start: number, length: num
 }
 
 /** @internal */
-export function createFileDiagnosticFromMessageChain(file: SourceFile, start: number, length: number, messageChain: DiagnosticMessageChain, relatedInformation?: DiagnosticRelatedInformation[]): DiagnosticWithLocation {
+export function createFileDiagnosticFromMessageChain(
+    file: SourceFile,
+    start: number,
+    length: number,
+    messageChain: DiagnosticMessageChain,
+    relatedInformation?: DiagnosticRelatedInformation[],
+): DiagnosticWithLocation {
     assertDiagnosticLocation(file.text, start, length);
     return {
         file,
@@ -3699,7 +3715,8 @@ export function isDefaultedExpandoInitializer(node: BinaryExpression) {
  */
 export function getNameOfExpando(node: Declaration): DeclarationName | undefined {
     if (isBinaryExpression(node.parent)) {
-        const parent = ((node.parent.operatorToken.kind === SyntaxKind.BarBarToken || node.parent.operatorToken.kind === SyntaxKind.QuestionQuestionToken) && isBinaryExpression(node.parent.parent)) ? node.parent.parent
+        const parent = ((node.parent.operatorToken.kind === SyntaxKind.BarBarToken || node.parent.operatorToken.kind === SyntaxKind.QuestionQuestionToken) && isBinaryExpression(node.parent.parent)) ?
+            node.parent.parent
             : node.parent;
         if (parent.operatorToken.kind === SyntaxKind.EqualsToken && isIdentifier(parent.left)) {
             return parent.left;
@@ -3858,7 +3875,8 @@ function getAssignmentDeclarationKindWorker(expr: BinaryExpression | CallExpress
         return AssignmentDeclarationKind.None;
     }
     if (
-        isBindableStaticNameExpression(expr.left.expression, /*excludeThisKeyword*/ true) && getElementOrPropertyAccessName(expr.left) === "prototype" && isObjectLiteralExpression(getInitializerOfBinaryExpression(expr))
+        isBindableStaticNameExpression(expr.left.expression, /*excludeThisKeyword*/ true) && getElementOrPropertyAccessName(expr.left) === "prototype" &&
+        isObjectLiteralExpression(getInitializerOfBinaryExpression(expr))
     ) {
         // F.prototype = { ... }
         return AssignmentDeclarationKind.Prototype;
@@ -5266,7 +5284,10 @@ export type NamedEvaluation =
     | BindingElement & { readonly name: Identifier; readonly dotDotDotToken: undefined; readonly initializer: WrappedExpression<AnonymousFunctionDefinition>; }
     | PropertyDeclaration & { readonly initializer: WrappedExpression<AnonymousFunctionDefinition>; }
     | AssignmentExpression<EqualsToken> & { readonly left: Identifier; readonly right: WrappedExpression<AnonymousFunctionDefinition>; }
-    | AssignmentExpression<AmpersandAmpersandEqualsToken | BarBarEqualsToken | QuestionQuestionEqualsToken> & { readonly left: Identifier; readonly right: WrappedExpression<AnonymousFunctionDefinition>; }
+    | AssignmentExpression<AmpersandAmpersandEqualsToken | BarBarEqualsToken | QuestionQuestionEqualsToken> & {
+        readonly left: Identifier;
+        readonly right: WrappedExpression<AnonymousFunctionDefinition>;
+    }
     | ExportAssignment & { readonly expression: WrappedExpression<AnonymousFunctionDefinition>; };
 
 /** @internal */
@@ -6277,7 +6298,13 @@ export function getDeclarationEmitOutputFilePath(fileName: string, host: EmitHos
 }
 
 /** @internal */
-export function getDeclarationEmitOutputFilePathWorker(fileName: string, options: CompilerOptions, currentDirectory: string, commonSourceDirectory: string, getCanonicalFileName: GetCanonicalFileName): string {
+export function getDeclarationEmitOutputFilePathWorker(
+    fileName: string,
+    options: CompilerOptions,
+    currentDirectory: string,
+    commonSourceDirectory: string,
+    getCanonicalFileName: GetCanonicalFileName,
+): string {
     const outputDir = options.declarationDir || options.outDir; // Prefer declaration folder if specified
 
     const path = outputDir
@@ -8310,7 +8337,14 @@ export function getLocaleSpecificMessage(message: DiagnosticMessage) {
 }
 
 /** @internal */
-export function createDetachedDiagnostic(fileName: string, sourceText: string, start: number, length: number, message: DiagnosticMessage, ...args: DiagnosticArguments): DiagnosticWithDetachedLocation {
+export function createDetachedDiagnostic(
+    fileName: string,
+    sourceText: string,
+    start: number,
+    length: number,
+    message: DiagnosticMessage,
+    ...args: DiagnosticArguments
+): DiagnosticWithDetachedLocation {
     if ((start + length) > sourceText.length) {
         length = sourceText.length - start;
     }
@@ -8580,7 +8614,8 @@ function isFileForcedToBeModuleByFormat(file: SourceFile): true | undefined {
     // Excludes declaration files - they still require an explicit `export {}` or the like
     // for back compat purposes. The only non-declaration files _not_ forced to be a module are `.js` files
     // that aren't esm-mode (meaning not in a `type: module` scope).
-    return (file.impliedNodeFormat === ModuleKind.ESNext || (fileExtensionIsOneOf(file.fileName, [Extension.Cjs, Extension.Cts, Extension.Mjs, Extension.Mts]))) && !file.isDeclarationFile ? true : undefined;
+    return (file.impliedNodeFormat === ModuleKind.ESNext || (fileExtensionIsOneOf(file.fileName, [Extension.Cjs, Extension.Cts, Extension.Mjs, Extension.Mts]))) && !file.isDeclarationFile ? true
+        : undefined;
 }
 
 /** @internal */
@@ -9335,7 +9370,13 @@ export interface FileMatcherPatterns {
  *
  * @internal
  */
-export function getFileMatcherPatterns(path: string, excludes: readonly string[] | undefined, includes: readonly string[] | undefined, useCaseSensitiveFileNames: boolean, currentDirectory: string): FileMatcherPatterns {
+export function getFileMatcherPatterns(
+    path: string,
+    excludes: readonly string[] | undefined,
+    includes: readonly string[] | undefined,
+    useCaseSensitiveFileNames: boolean,
+    currentDirectory: string,
+): FileMatcherPatterns {
     path = normalizePath(path);
     currentDirectory = normalizePath(currentDirectory);
     const absolutePath = combinePaths(currentDirectory, path);
@@ -9554,7 +9595,10 @@ export function getSupportedExtensions(options?: CompilerOptions, extraFileExten
     const flatBuiltins = flatten(builtins);
     const extensions = [
         ...builtins,
-        ...mapDefined(extraFileExtensions, x => x.scriptKind === ScriptKind.Deferred || needJsExtensions && isJSLike(x.scriptKind) && !flatBuiltins.includes(x.extension as Extension) ? [x.extension] : undefined),
+        ...mapDefined(
+            extraFileExtensions,
+            x => x.scriptKind === ScriptKind.Deferred || needJsExtensions && isJSLike(x.scriptKind) && !flatBuiltins.includes(x.extension as Extension) ? [x.extension] : undefined,
+        ),
     ];
 
     return extensions;
@@ -9720,7 +9764,20 @@ export function compareNumberOfDirectorySeparators(path1: string, path2: string)
     );
 }
 
-const extensionsToRemove = [Extension.Dts, Extension.Dmts, Extension.Dcts, Extension.Mjs, Extension.Mts, Extension.Cjs, Extension.Cts, Extension.Ts, Extension.Js, Extension.Tsx, Extension.Jsx, Extension.Json];
+const extensionsToRemove = [
+    Extension.Dts,
+    Extension.Dmts,
+    Extension.Dcts,
+    Extension.Mjs,
+    Extension.Mts,
+    Extension.Cjs,
+    Extension.Cts,
+    Extension.Ts,
+    Extension.Js,
+    Extension.Tsx,
+    Extension.Jsx,
+    Extension.Json,
+];
 /** @internal */
 export function removeFileExtension(path: string): string {
     for (const ext of extensionsToRemove) {

@@ -2391,7 +2391,15 @@ export class Session<TMessage = string> implements EventSender {
 
         const result = mapDefined(args.entryNames, entryName => {
             const { name, source, data } = typeof entryName === "string" ? { name: entryName, source: undefined, data: undefined } : entryName;
-            return project.getLanguageService().getCompletionEntryDetails(file, position, name, formattingOptions, source, this.getPreferences(file), data ? cast(data, isCompletionEntryData) : undefined);
+            return project.getLanguageService().getCompletionEntryDetails(
+                file,
+                position,
+                name,
+                formattingOptions,
+                source,
+                this.getPreferences(file),
+                data ? cast(data, isCompletionEntryData) : undefined,
+            );
         });
         return fullResult
             ? (useDisplayParts ? result : result.map(details => ({ ...details, tags: this.mapJSDocTagInfo(details.tags, project, /*richResponse*/ false) as JSDocTagInfo[] })))
@@ -2756,7 +2764,14 @@ export class Session<TMessage = string> implements EventSender {
     private getApplicableRefactors(args: protocol.GetApplicableRefactorsRequestArgs): protocol.ApplicableRefactorInfo[] {
         const { file, project } = this.getFileAndProject(args);
         const scriptInfo = project.getScriptInfoForNormalizedPath(file)!;
-        return project.getLanguageService().getApplicableRefactors(file, this.extractPositionOrRange(args, scriptInfo), this.getPreferences(file), args.triggerReason, args.kind, args.includeInteractiveActions);
+        return project.getLanguageService().getApplicableRefactors(
+            file,
+            this.extractPositionOrRange(args, scriptInfo),
+            this.getPreferences(file),
+            args.triggerReason,
+            args.kind,
+            args.includeInteractiveActions,
+        );
     }
 
     private getEditsForRefactor(args: protocol.GetEditsForRefactorRequestArgs, simplifiedResult: boolean): RefactorEditInfo | protocol.RefactorEditInfo {
@@ -2872,7 +2887,9 @@ export class Session<TMessage = string> implements EventSender {
             );
             const badCode = args.errorCodes.find(c => !existingDiagCodes.includes(c));
             if (badCode !== undefined) {
-                e.message = `BADCLIENT: Bad error code, ${badCode} not found in range ${startPosition}..${endPosition} (found: ${existingDiagCodes.join(", ")}); could have caused this error:\n${e.message}`;
+                e.message = `BADCLIENT: Bad error code, ${badCode} not found in range ${startPosition}..${endPosition} (found: ${
+                    existingDiagCodes.join(", ")
+                }); could have caused this error:\n${e.message}`;
             }
             throw e;
         }

@@ -237,7 +237,12 @@ export function createJsxFactoryExpression(factory: NodeFactory, jsxFactoryEntit
         );
 }
 
-function createJsxFragmentFactoryExpression(factory: NodeFactory, jsxFragmentFactoryEntity: EntityName | undefined, reactNamespace: string, parent: JsxOpeningLikeElement | JsxOpeningFragment): Expression {
+function createJsxFragmentFactoryExpression(
+    factory: NodeFactory,
+    jsxFragmentFactoryEntity: EntityName | undefined,
+    reactNamespace: string,
+    parent: JsxOpeningLikeElement | JsxOpeningFragment,
+): Expression {
     return jsxFragmentFactoryEntity ?
         createJsxFactoryExpressionFromEntityName(factory, jsxFragmentFactoryEntity, parent) :
         factory.createPropertyAccessExpression(
@@ -503,7 +508,13 @@ export function createExpressionForObjectLiteralElementLike(factory: NodeFactory
     switch (property.kind) {
         case SyntaxKind.GetAccessor:
         case SyntaxKind.SetAccessor:
-            return createExpressionForAccessorDeclaration(factory, node.properties, property as typeof property & { readonly name: Exclude<PropertyName, PrivateIdentifier>; }, receiver, !!node.multiLine);
+            return createExpressionForAccessorDeclaration(
+                factory,
+                node.properties,
+                property as typeof property & { readonly name: Exclude<PropertyName, PrivateIdentifier>; },
+                receiver,
+                !!node.multiLine,
+            );
         case SyntaxKind.PropertyAssignment:
             return createExpressionForPropertyAssignment(factory, property, receiver);
         case SyntaxKind.ShorthandPropertyAssignment:
@@ -797,7 +808,13 @@ export function createExternalHelpersImportDeclarationIfNeeded(
 }
 
 /** @internal */
-export function getOrCreateExternalHelpersModuleNameIfNeeded(factory: NodeFactory, node: SourceFile, compilerOptions: CompilerOptions, hasExportStarsToExportValues?: boolean, hasImportStarOrImportDefault?: boolean) {
+export function getOrCreateExternalHelpersModuleNameIfNeeded(
+    factory: NodeFactory,
+    node: SourceFile,
+    compilerOptions: CompilerOptions,
+    hasExportStarsToExportValues?: boolean,
+    hasImportStarOrImportDefault?: boolean,
+) {
     if (compilerOptions.importHelpers && isEffectiveExternalModule(node, compilerOptions)) {
         const externalHelpersModuleName = getExternalHelpersModuleName(node);
         if (externalHelpersModuleName) {

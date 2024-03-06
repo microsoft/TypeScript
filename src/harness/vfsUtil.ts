@@ -714,7 +714,14 @@ export class FileSystem {
             undefined;
     }
 
-    private static diffWorker(container: FileSet, changed: FileSystem, changedLinks: ReadonlyMap<string, Inode> | undefined, base: FileSystem, baseLinks: ReadonlyMap<string, Inode> | undefined, options: DiffOptions) {
+    private static diffWorker(
+        container: FileSet,
+        changed: FileSystem,
+        changedLinks: ReadonlyMap<string, Inode> | undefined,
+        base: FileSystem,
+        baseLinks: ReadonlyMap<string, Inode> | undefined,
+        options: DiffOptions,
+    ) {
         if (changedLinks && !baseLinks) return FileSystem.trackCreatedInodes(container, changed, changedLinks);
         if (baseLinks && !changedLinks) return FileSystem.trackDeletedInodes(container, baseLinks);
         if (changedLinks && baseLinks) {
@@ -1309,7 +1316,20 @@ export class Stats {
     public birthtime: Date;
 
     constructor();
-    constructor(dev: number, ino: number, mode: number, nlink: number, rdev: number, size: number, blksize: number, blocks: number, atimeMs: number, mtimeMs: number, ctimeMs: number, birthtimeMs: number);
+    constructor(
+        dev: number,
+        ino: number,
+        mode: number,
+        nlink: number,
+        rdev: number,
+        size: number,
+        blksize: number,
+        blocks: number,
+        atimeMs: number,
+        mtimeMs: number,
+        ctimeMs: number,
+        birthtimeMs: number,
+    );
     constructor(dev = 0, ino = 0, mode = 0, nlink = 0, rdev = 0, size = 0, blksize = 0, blocks = 0, atimeMs = 0, mtimeMs = 0, ctimeMs = 0, birthtimeMs = 0) {
         this.dev = dev;
         this.ino = ino;

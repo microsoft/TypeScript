@@ -599,7 +599,13 @@ function transformThen(
 /**
  * Transforms the 'x' part of `x.then(...)`, or the 'y()' part of `y().catch(...)`, where 'x' and 'y()' are Promises.
  */
-function transformPromiseExpressionOfPropertyAccess(returnContextNode: Expression, node: Expression, transformer: Transformer, hasContinuation: boolean, continuationArgName?: SynthBindingName): readonly Statement[] {
+function transformPromiseExpressionOfPropertyAccess(
+    returnContextNode: Expression,
+    node: Expression,
+    transformer: Transformer,
+    hasContinuation: boolean,
+    continuationArgName?: SynthBindingName,
+): readonly Statement[] {
     if (shouldReturn(returnContextNode, transformer)) {
         let returnValue = getSynthesizedDeepClone(node);
         if (hasContinuation) {
@@ -716,7 +722,8 @@ function transformCallbackArgument(
                             refactoredStmts = refactoredStmts.concat(transformReturnStatementWithFixablePromiseHandler(transformer, statement, hasContinuation, continuationArgName));
                         }
                         else {
-                            const possiblyAwaitedRightHandSide = returnType && statement.expression ? getPossiblyAwaitedRightHandSide(transformer.checker, returnType, statement.expression) : statement.expression;
+                            const possiblyAwaitedRightHandSide = returnType && statement.expression ? getPossiblyAwaitedRightHandSide(transformer.checker, returnType, statement.expression)
+                                : statement.expression;
                             refactoredStmts.push(...maybeAnnotateAndReturn(possiblyAwaitedRightHandSide, getExplicitPromisedTypeOfPromiseReturningCallExpression(parent, func, transformer.checker)));
                         }
                     }

@@ -214,7 +214,10 @@ export function createGetSymbolAccessibilityDiagnosticForNode(node: DeclarationD
     else if (isSetAccessor(node) || isGetAccessor(node)) {
         return getAccessorDeclarationTypeVisibilityError;
     }
-    else if (isConstructSignatureDeclaration(node) || isCallSignatureDeclaration(node) || isMethodDeclaration(node) || isMethodSignature(node) || isFunctionDeclaration(node) || isIndexSignatureDeclaration(node)) {
+    else if (
+        isConstructSignatureDeclaration(node) || isCallSignatureDeclaration(node) || isMethodDeclaration(node) || isMethodSignature(node) || isFunctionDeclaration(node) ||
+        isIndexSignatureDeclaration(node)
+    ) {
         return getReturnTypeVisibilityError;
     }
     else if (isParameter(node)) {
@@ -250,7 +253,8 @@ export function createGetSymbolAccessibilityDiagnosticForNode(node: DeclarationD
         // This check is to ensure we don't report error on constructor parameter property as that error would be reported during parameter emit
         // The only exception here is if the constructor was marked as private. we are not emitting the constructor parameters at all.
         else if (
-            node.kind === SyntaxKind.PropertyDeclaration || node.kind === SyntaxKind.PropertyAccessExpression || node.kind === SyntaxKind.ElementAccessExpression || node.kind === SyntaxKind.BinaryExpression ||
+            node.kind === SyntaxKind.PropertyDeclaration || node.kind === SyntaxKind.PropertyAccessExpression || node.kind === SyntaxKind.ElementAccessExpression ||
+            node.kind === SyntaxKind.BinaryExpression ||
             node.kind === SyntaxKind.PropertySignature ||
             (node.kind === SyntaxKind.Parameter && hasSyntacticModifier(node.parent, ModifierFlags.Private))
         ) {

@@ -107,7 +107,10 @@ function getRenameAction(context: CodeFixContext, { name, jsDocHost, signature, 
         jsDocParameterTag.isNameFirst,
         jsDocParameterTag.comment,
     );
-    const changes = textChanges.ChangeTracker.with(context, changeTracker => changeTracker.replaceJSDocComment(sourceFile, jsDocHost, map(tags, t => t === jsDocParameterTag ? newJSDocParameterTag : t)));
+    const changes = textChanges.ChangeTracker.with(
+        context,
+        changeTracker => changeTracker.replaceJSDocComment(sourceFile, jsDocHost, map(tags, t => t === jsDocParameterTag ? newJSDocParameterTag : t)),
+    );
     return createCodeFixActionWithoutFixAll(renameUnmatchedParameter, changes, [Diagnostics.Rename_param_tag_name_0_to_1, name.getText(sourceFile), parameterName]);
 }
 

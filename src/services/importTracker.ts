@@ -315,7 +315,13 @@ function getImportersForExport(
  * The returned `importSearches` will result in the entire source file being searched.
  * But re-exports will be placed in 'singleReferences' since they cannot be locally referenced.
  */
-function getSearchesFromDirectImports(directImports: Importer[], exportSymbol: Symbol, exportKind: ExportKind, checker: TypeChecker, isForRename: boolean): Pick<ImportsResult, "importSearches" | "singleReferences"> {
+function getSearchesFromDirectImports(
+    directImports: Importer[],
+    exportSymbol: Symbol,
+    exportKind: ExportKind,
+    checker: TypeChecker,
+    isForRename: boolean,
+): Pick<ImportsResult, "importSearches" | "singleReferences"> {
     const importSearches: [Identifier, Symbol][] = [];
     const singleReferences: (Identifier | StringLiteral)[] = [];
     function addSearch(location: Identifier, symbol: Symbol): void {

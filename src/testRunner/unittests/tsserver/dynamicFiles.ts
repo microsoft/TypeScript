@@ -229,7 +229,10 @@ describe("unittests:: tsserver:: dynamicFiles:: ", () => {
     });
 
     describe("verify accepts known schemas as dynamic file", () => {
-        verifyPathRecognizedAsDynamic("walkThroughSnippet", "walkThroughSnippet:/usr/share/code/resources/app/out/vs/workbench/contrib/welcome/walkThrough/browser/editor/^vs_code_editor_walkthrough.md#1.ts");
+        verifyPathRecognizedAsDynamic(
+            "walkThroughSnippet",
+            "walkThroughSnippet:/usr/share/code/resources/app/out/vs/workbench/contrib/welcome/walkThrough/browser/editor/^vs_code_editor_walkthrough.md#1.ts",
+        );
         verifyPathRecognizedAsDynamic("untitled", "untitled:/Users/matb/projects/san/^newFile.ts");
     });
 });

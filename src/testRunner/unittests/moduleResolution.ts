@@ -138,7 +138,12 @@ describe("unittests:: moduleResolution:: Node module resolution - relative paths
                 const indexFile = { name: indexPath };
 
                 baselines.push(`Resolving "b" from ${containingFile.name} with typings: ${jsonToReadableText(typings)}${hasDirectoryExists ? "" : " with host that doesnt have directoryExists"}`);
-                const resolution = ts.nodeModuleNameResolver("b", containingFile.name, {}, createModuleResolutionHost(baselines, hasDirectoryExists, containingFile, packageJson, moduleFile, indexFile));
+                const resolution = ts.nodeModuleNameResolver(
+                    "b",
+                    containingFile.name,
+                    {},
+                    createModuleResolutionHost(baselines, hasDirectoryExists, containingFile, packageJson, moduleFile, indexFile),
+                );
                 baselines.push(`Resolution:: ${jsonToReadableText(resolution)}`);
                 baselines.push("");
             }
@@ -940,7 +945,9 @@ describe("unittests:: moduleResolution:: ModuleResolutionHost.directoryExists", 
 describe("unittests:: moduleResolution:: Type reference directive resolution: ", () => {
     function testWorker(baselines: string[], hasDirectoryExists: boolean, typesRoot: string | undefined, typeDirective: string, initialFile: File, targetFile: File, ...otherFiles: File[]) {
         const host = createModuleResolutionHost(baselines, hasDirectoryExists, ...[initialFile, targetFile].concat(...otherFiles));
-        baselines.push(`Resolving "${typeDirective}" from ${initialFile.name} typesRoots: ${typesRoot ? `[${typesRoot}]` : undefined}${hasDirectoryExists ? "" : " with host that doesnt have directoryExists"}`);
+        baselines.push(
+            `Resolving "${typeDirective}" from ${initialFile.name} typesRoots: ${typesRoot ? `[${typesRoot}]` : undefined}${hasDirectoryExists ? "" : " with host that doesnt have directoryExists"}`,
+        );
         const result = ts.resolveTypeReferenceDirective(typeDirective, initialFile.name, typesRoot ? { typeRoots: [typesRoot] } : {}, host);
         baselines.push(`Resolution:: ${jsonToReadableText(result)}`);
         baselines.push("");

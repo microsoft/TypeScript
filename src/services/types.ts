@@ -550,7 +550,12 @@ export interface LanguageService {
      * of code actions can be returned with the completions.
      * @param formattingSettings settings needed for calling formatting functions.
      */
-    getCompletionsAtPosition(fileName: string, position: number, options: GetCompletionsAtPositionOptions | undefined, formattingSettings?: FormatCodeSettings): WithMetadata<CompletionInfo> | undefined;
+    getCompletionsAtPosition(
+        fileName: string,
+        position: number,
+        options: GetCompletionsAtPositionOptions | undefined,
+        formattingSettings?: FormatCodeSettings,
+    ): WithMetadata<CompletionInfo> | undefined;
 
     /**
      * Gets the extended details for a completion entry retrieved from `getCompletionsAtPosition`.

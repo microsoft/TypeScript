@@ -1400,7 +1400,13 @@ export function createLanguageServiceSourceFile(
     return sourceFile;
 }
 
-export function updateLanguageServiceSourceFile(sourceFile: SourceFile, scriptSnapshot: IScriptSnapshot, version: string, textChangeRange: TextChangeRange | undefined, aggressiveChecks?: boolean): SourceFile {
+export function updateLanguageServiceSourceFile(
+    sourceFile: SourceFile,
+    scriptSnapshot: IScriptSnapshot,
+    version: string,
+    textChangeRange: TextChangeRange | undefined,
+    aggressiveChecks?: boolean,
+): SourceFile {
     // If we were given a text change range, and our version or open-ness changed, then
     // incrementally parse this file.
     if (textChangeRange) {
@@ -2040,7 +2046,12 @@ export function createLanguageService(
         return [...program.getOptionsDiagnostics(cancellationToken), ...program.getGlobalDiagnostics(cancellationToken)];
     }
 
-    function getCompletionsAtPosition(fileName: string, position: number, options: GetCompletionsAtPositionOptions = emptyOptions, formattingSettings?: FormatCodeSettings): CompletionInfo | undefined {
+    function getCompletionsAtPosition(
+        fileName: string,
+        position: number,
+        options: GetCompletionsAtPositionOptions = emptyOptions,
+        formattingSettings?: FormatCodeSettings,
+    ): CompletionInfo | undefined {
         // Convert from deprecated options names to new names
         const fullPreferences: UserPreferences = {
             ...identity<UserPreferences>(options), // avoid excess property check
@@ -2231,7 +2242,12 @@ export function createLanguageService(
 
     function getReferencesAtPosition(fileName: string, position: number): ReferenceEntry[] | undefined {
         synchronizeHostData();
-        return getReferencesWorker(getTouchingPropertyName(getValidSourceFile(fileName), position), position, { use: FindAllReferences.FindReferencesUse.References }, FindAllReferences.toReferenceEntry);
+        return getReferencesWorker(
+            getTouchingPropertyName(getValidSourceFile(fileName), position),
+            position,
+            { use: FindAllReferences.FindReferencesUse.References },
+            FindAllReferences.toReferenceEntry,
+        );
     }
 
     function getReferencesWorker<T>(node: Node, position: number, options: FindAllReferences.Options, cb: FindAllReferences.ToReferenceOrRenameEntry<T>): T[] | undefined {
@@ -2461,7 +2477,14 @@ export function createLanguageService(
         return [];
     }
 
-    function getCodeFixesAtPosition(fileName: string, start: number, end: number, errorCodes: readonly number[], formatOptions: FormatCodeSettings, preferences: UserPreferences = emptyOptions): readonly CodeFixAction[] {
+    function getCodeFixesAtPosition(
+        fileName: string,
+        start: number,
+        end: number,
+        errorCodes: readonly number[],
+        formatOptions: FormatCodeSettings,
+        preferences: UserPreferences = emptyOptions,
+    ): readonly CodeFixAction[] {
         synchronizeHostData();
         const sourceFile = getValidSourceFile(fileName);
         const span = createTextSpanFromBounds(start, end);
@@ -3105,7 +3128,8 @@ export function createLanguageService(
                 extension === Extension.Dts && startsWith(getBaseFileName(file.fileName), "lib.") && fileNameExtension === Extension.Dts
             );
             return isValidSourceFile &&
-                    (extension === fileNameExtension || (extension === Extension.Tsx && fileNameExtension === Extension.Ts || extension === Extension.Jsx && fileNameExtension === Extension.Js) && !toMoveContainsJsx)
+                    (extension === fileNameExtension ||
+                        (extension === Extension.Tsx && fileNameExtension === Extension.Ts || extension === Extension.Jsx && fileNameExtension === Extension.Js) && !toMoveContainsJsx)
                 ? file.fileName : undefined;
         });
 

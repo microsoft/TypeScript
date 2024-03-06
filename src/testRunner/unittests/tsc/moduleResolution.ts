@@ -41,7 +41,8 @@ describe("unittests:: tsc:: moduleResolution::", () => {
             },
             {
                 caption: "update package.json so error is fixed",
-                edit: fs => fs.writeFileSync("/home/src/projects/project/node_modules/foo/package.json", getFsContentsForAlternateResultPackageJson("foo", /*addTypes*/ true, /*addTypesCondition*/ true)),
+                edit: fs =>
+                    fs.writeFileSync("/home/src/projects/project/node_modules/foo/package.json", getFsContentsForAlternateResultPackageJson("foo", /*addTypes*/ true, /*addTypesCondition*/ true)),
             },
             {
                 caption: "update package.json from @types so error is introduced",
@@ -49,7 +50,8 @@ describe("unittests:: tsc:: moduleResolution::", () => {
             },
             {
                 caption: "update package.json so error is introduced",
-                edit: fs => fs.writeFileSync("/home/src/projects/project/node_modules/foo2/package.json", getFsContentsForAlternateResultPackageJson("foo2", /*addTypes*/ true, /*addTypesCondition*/ false)),
+                edit: fs =>
+                    fs.writeFileSync("/home/src/projects/project/node_modules/foo2/package.json", getFsContentsForAlternateResultPackageJson("foo2", /*addTypes*/ true, /*addTypesCondition*/ false)),
             },
             {
                 caption: "delete the alternateResult in @types",

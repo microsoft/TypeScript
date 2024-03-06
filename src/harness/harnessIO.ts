@@ -535,7 +535,9 @@ export namespace Compiler {
             outputLines += content;
         }
         if (pretty) {
-            outputLines += Utils.removeTestPathPrefixes(ts.getErrorSummaryText(ts.getErrorCountForSummary(diagnostics), ts.getFilesInErrorForSummary(diagnostics), IO.newLine(), { getCurrentDirectory: () => "" }));
+            outputLines += Utils.removeTestPathPrefixes(
+                ts.getErrorSummaryText(ts.getErrorCountForSummary(diagnostics), ts.getFilesInErrorForSummary(diagnostics), IO.newLine(), { getCurrentDirectory: () => "" }),
+            );
         }
         return outputLines;
     }
@@ -621,7 +623,12 @@ export namespace Compiler {
             const fileErrors = diagnostics.filter((e): e is ts.DiagnosticWithLocation => {
                 const errFn = e.file;
                 return !!errFn &&
-                    ts.comparePaths(Utils.removeTestPathPrefixes(errFn.fileName), Utils.removeTestPathPrefixes(inputFile.unitName), options && options.currentDirectory || "", !(options && options.caseSensitive)) ===
+                    ts.comparePaths(
+                            Utils.removeTestPathPrefixes(errFn.fileName),
+                            Utils.removeTestPathPrefixes(inputFile.unitName),
+                            options && options.currentDirectory || "",
+                            !(options && options.caseSensitive),
+                        ) ===
                         ts.Comparison.EqualTo;
             });
 
@@ -920,7 +927,13 @@ export namespace Compiler {
                 jsCode += "\r\n";
             }
             if (!result.diagnostics.length && !ts.endsWith(file.file, ts.Extension.Json)) {
-                const fileParseResult = ts.createSourceFile(file.file, file.text, ts.getEmitScriptTarget(options), /*setParentNodes*/ false, ts.endsWith(file.file, "x") ? ts.ScriptKind.JSX : ts.ScriptKind.JS);
+                const fileParseResult = ts.createSourceFile(
+                    file.file,
+                    file.text,
+                    ts.getEmitScriptTarget(options),
+                    /*setParentNodes*/ false,
+                    ts.endsWith(file.file, "x") ? ts.ScriptKind.JSX : ts.ScriptKind.JS,
+                );
                 if (ts.length(fileParseResult.parseDiagnostics)) {
                     jsCode += getErrorBaseline([file.asTestFile()], fileParseResult.parseDiagnostics);
                     return;
@@ -1531,7 +1544,9 @@ export namespace Baseline {
                 const writtenFilesArray = ts.arrayFrom(writtenFiles.keys());
                 errorMsg += `Baseline missing ${missing.length} files:${
                     "\n    " + missing.slice(0, 5).join("\n    ") + (missing.length > 5 ? "\n" + `    and ${missing.length - 5} more` : "") + "\n"
-                }Written ${writtenFiles.size} files:${"\n    " + writtenFilesArray.slice(0, 5).join("\n    ") + (writtenFilesArray.length > 5 ? "\n" + `    and ${writtenFilesArray.length - 5} more` : "")}`;
+                }Written ${writtenFiles.size} files:${
+                    "\n    " + writtenFilesArray.slice(0, 5).join("\n    ") + (writtenFilesArray.length > 5 ? "\n" + `    and ${writtenFilesArray.length - 5} more` : "")
+                }`;
             }
             throw new Error(errorMsg);
         }

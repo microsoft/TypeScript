@@ -1125,11 +1125,17 @@ export function transformTypeScript(context: TransformationContext) {
                 decorators = append(decorators, factory.createDecorator(typeMetadata));
             }
             if (shouldAddParamTypesMetadata(node)) {
-                const paramTypesMetadata = emitHelpers().createMetadataHelper("design:paramtypes", typeSerializer.serializeParameterTypesOfNode({ currentLexicalScope, currentNameScope: container }, node, container));
+                const paramTypesMetadata = emitHelpers().createMetadataHelper(
+                    "design:paramtypes",
+                    typeSerializer.serializeParameterTypesOfNode({ currentLexicalScope, currentNameScope: container }, node, container),
+                );
                 decorators = append(decorators, factory.createDecorator(paramTypesMetadata));
             }
             if (shouldAddReturnTypeMetadata(node)) {
-                const returnTypeMetadata = emitHelpers().createMetadataHelper("design:returntype", typeSerializer.serializeReturnTypeOfNode({ currentLexicalScope, currentNameScope: container }, node));
+                const returnTypeMetadata = emitHelpers().createMetadataHelper(
+                    "design:returntype",
+                    typeSerializer.serializeReturnTypeOfNode({ currentLexicalScope, currentNameScope: container }, node),
+                );
                 decorators = append(decorators, factory.createDecorator(returnTypeMetadata));
             }
             return decorators;

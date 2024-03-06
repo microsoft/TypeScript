@@ -284,10 +284,22 @@ function getActionForfixAddReturnStatement(context: CodeFixContext, expression: 
 
 function getActionForFixRemoveBracesFromArrowFunctionBody(context: CodeFixContext, declaration: ArrowFunction, expression: Expression, commentSource: Node) {
     const changes = textChanges.ChangeTracker.with(context, t => removeBlockBodyBrace(t, context.sourceFile, declaration, expression, commentSource, /*withParen*/ false));
-    return createCodeFixAction(fixId, changes, Diagnostics.Remove_braces_from_arrow_function_body, fixRemoveBracesFromArrowFunctionBody, Diagnostics.Remove_braces_from_all_arrow_function_bodies_with_relevant_issues);
+    return createCodeFixAction(
+        fixId,
+        changes,
+        Diagnostics.Remove_braces_from_arrow_function_body,
+        fixRemoveBracesFromArrowFunctionBody,
+        Diagnostics.Remove_braces_from_all_arrow_function_bodies_with_relevant_issues,
+    );
 }
 
 function getActionForfixWrapTheBlockWithParen(context: CodeFixContext, declaration: ArrowFunction, expression: Expression) {
     const changes = textChanges.ChangeTracker.with(context, t => wrapBlockWithParen(t, context.sourceFile, declaration, expression));
-    return createCodeFixAction(fixId, changes, Diagnostics.Wrap_the_following_body_with_parentheses_which_should_be_an_object_literal, fixIdWrapTheBlockWithParen, Diagnostics.Wrap_all_object_literal_with_parentheses);
+    return createCodeFixAction(
+        fixId,
+        changes,
+        Diagnostics.Wrap_the_following_body_with_parentheses_which_should_be_an_object_literal,
+        fixIdWrapTheBlockWithParen,
+        Diagnostics.Wrap_all_object_literal_with_parentheses,
+    );
 }

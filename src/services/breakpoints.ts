@@ -649,11 +649,17 @@ export function spanInSourceFileAtLocation(sourceFile: SourceFile, position: num
             switch (node.parent.kind) {
                 case SyntaxKind.EnumDeclaration:
                     const enumDeclaration = node.parent as EnumDeclaration;
-                    return spanInNodeIfStartsOnSameLine(findPrecedingToken(node.pos, sourceFile, node.parent), enumDeclaration.members.length ? enumDeclaration.members[0] : enumDeclaration.getLastToken(sourceFile));
+                    return spanInNodeIfStartsOnSameLine(
+                        findPrecedingToken(node.pos, sourceFile, node.parent),
+                        enumDeclaration.members.length ? enumDeclaration.members[0] : enumDeclaration.getLastToken(sourceFile),
+                    );
 
                 case SyntaxKind.ClassDeclaration:
                     const classDeclaration = node.parent as ClassDeclaration;
-                    return spanInNodeIfStartsOnSameLine(findPrecedingToken(node.pos, sourceFile, node.parent), classDeclaration.members.length ? classDeclaration.members[0] : classDeclaration.getLastToken(sourceFile));
+                    return spanInNodeIfStartsOnSameLine(
+                        findPrecedingToken(node.pos, sourceFile, node.parent),
+                        classDeclaration.members.length ? classDeclaration.members[0] : classDeclaration.getLastToken(sourceFile),
+                    );
 
                 case SyntaxKind.CaseBlock:
                     return spanInNodeIfStartsOnSameLine(node.parent.parent, (node.parent as CaseBlock).clauses[0]);

@@ -110,7 +110,17 @@ describe("unittests:: services:: Colorization", () => {
         });
 
         it("correctly classifies a literal after a divide operator", () => {
-            testLexicalClassification("1 / 2, 3 / 4", ts.EndOfLineState.None, numberLiteral("1"), whitespace(" "), operator("/"), numberLiteral("2"), numberLiteral("3"), numberLiteral("4"), operator(","));
+            testLexicalClassification(
+                "1 / 2, 3 / 4",
+                ts.EndOfLineState.None,
+                numberLiteral("1"),
+                whitespace(" "),
+                operator("/"),
+                numberLiteral("2"),
+                numberLiteral("3"),
+                numberLiteral("4"),
+                operator(","),
+            );
         });
 
         it("correctly classifies a multiline string with one backslash", () => {
@@ -166,7 +176,12 @@ describe("unittests:: services:: Colorization", () => {
         });
 
         it("correctly classifies the continuation of a multiline comment", () => {
-            testLexicalClassification("LOREM IPSUM DOLOR   ", ts.EndOfLineState.InMultiLineCommentTrivia, comment("LOREM IPSUM DOLOR   "), finalEndOfLineState(ts.EndOfLineState.InMultiLineCommentTrivia));
+            testLexicalClassification(
+                "LOREM IPSUM DOLOR   ",
+                ts.EndOfLineState.InMultiLineCommentTrivia,
+                comment("LOREM IPSUM DOLOR   "),
+                finalEndOfLineState(ts.EndOfLineState.InMultiLineCommentTrivia),
+            );
         });
 
         it("correctly classifies an unterminated multiline comment on a line ending in '/*/'", () => {
@@ -224,7 +239,12 @@ describe("unittests:: services:: Colorization", () => {
             testLexicalClassification("`hello world", ts.EndOfLineState.None, stringLiteral("`hello world"), finalEndOfLineState(ts.EndOfLineState.InTemplateHeadOrNoSubstitutionTemplate));
         });
         it("classifies the entire line of an unterminated multiline no-substitution/head template", () => {
-            testLexicalClassification("...", ts.EndOfLineState.InTemplateHeadOrNoSubstitutionTemplate, stringLiteral("..."), finalEndOfLineState(ts.EndOfLineState.InTemplateHeadOrNoSubstitutionTemplate));
+            testLexicalClassification(
+                "...",
+                ts.EndOfLineState.InTemplateHeadOrNoSubstitutionTemplate,
+                stringLiteral("..."),
+                finalEndOfLineState(ts.EndOfLineState.InTemplateHeadOrNoSubstitutionTemplate),
+            );
         });
         it("classifies the entire line of an unterminated multiline template middle/end", () => {
             testLexicalClassification("...", ts.EndOfLineState.InTemplateMiddleOrTail, stringLiteral("..."), finalEndOfLineState(ts.EndOfLineState.InTemplateMiddleOrTail));

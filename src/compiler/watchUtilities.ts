@@ -590,7 +590,15 @@ export function isIgnoredFileFromWildCardWatching({
         return true;
     }
 
-    if (isExcludedFile(fileOrDirectory, options.configFile!.configFileSpecs!, getNormalizedAbsolutePath(getDirectoryPath(configFileName), currentDirectory), useCaseSensitiveFileNames, currentDirectory)) {
+    if (
+        isExcludedFile(
+            fileOrDirectory,
+            options.configFile!.configFileSpecs!,
+            getNormalizedAbsolutePath(getDirectoryPath(configFileName), currentDirectory),
+            useCaseSensitiveFileNames,
+            currentDirectory,
+        )
+    ) {
         writeLog(`Project: ${configFileName} Detected excluded file: ${fileOrDirectory}`);
         return true;
     }
@@ -820,7 +828,9 @@ export function getWatchFactory<X, Y = undefined>(host: WatchFactoryHost, watchL
     }
 
     function getWatchInfo<T>(file: string, flags: T, options: WatchOptions | undefined, detailInfo1: X, detailInfo2: Y | undefined, getDetailWatchInfo: GetDetailWatchInfo<X, Y> | undefined) {
-        return `WatchInfo: ${file} ${flags} ${JSON.stringify(options)} ${getDetailWatchInfo ? getDetailWatchInfo(detailInfo1, detailInfo2) : detailInfo2 === undefined ? detailInfo1 : `${detailInfo1} ${detailInfo2}`}`;
+        return `WatchInfo: ${file} ${flags} ${JSON.stringify(options)} ${
+            getDetailWatchInfo ? getDetailWatchInfo(detailInfo1, detailInfo2) : detailInfo2 === undefined ? detailInfo1 : `${detailInfo1} ${detailInfo2}`
+        }`;
     }
 }
 

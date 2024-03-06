@@ -101,7 +101,12 @@ export function classHasClassThisAssignment(node: ClassLikeDeclaration) {
  * expression that has already had its `EmitFlags` set or may have been tracked to prevent substitution.
  * @internal
  */
-export function injectClassThisAssignmentIfMissing<T extends ClassLikeDeclaration>(factory: NodeFactory, node: T, classThis: Identifier, thisExpression?: ThisExpression): Extract<ClassLikeDeclaration, Pick<T, "kind">>;
+export function injectClassThisAssignmentIfMissing<T extends ClassLikeDeclaration>(
+    factory: NodeFactory,
+    node: T,
+    classThis: Identifier,
+    thisExpression?: ThisExpression,
+): Extract<ClassLikeDeclaration, Pick<T, "kind">>;
 export function injectClassThisAssignmentIfMissing<T extends ClassLikeDeclaration>(factory: NodeFactory, node: T, classThis: Identifier, thisExpression?: ThisExpression) {
     // given:
     //

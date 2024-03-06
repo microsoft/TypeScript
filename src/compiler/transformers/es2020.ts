@@ -225,7 +225,13 @@ export function transformES2020(context: TransformationContext): (x: SourceFile 
                 /*colonToken*/ undefined,
                 factory.createDeleteExpression(rightExpression),
             )
-            : factory.createConditionalExpression(createNotNullCondition(leftExpression, capturedLeft, /*invert*/ true), /*questionToken*/ undefined, factory.createVoidZero(), /*colonToken*/ undefined, rightExpression);
+            : factory.createConditionalExpression(
+                createNotNullCondition(leftExpression, capturedLeft, /*invert*/ true),
+                /*questionToken*/ undefined,
+                factory.createVoidZero(),
+                /*colonToken*/ undefined,
+                rightExpression,
+            );
         setTextRange(target, node);
         return thisArg ? factory.createSyntheticReferenceExpression(target, thisArg) : target;
     }

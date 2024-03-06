@@ -497,24 +497,33 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
     const getPrefixUnaryCreateFunction = memoizeOne((operator: PrefixUnaryOperator) => (operand: Expression) => createPrefixUnaryExpression(operator, operand));
     const getPostfixUnaryCreateFunction = memoizeOne((operator: PostfixUnaryOperator) => (operand: Expression) => createPostfixUnaryExpression(operand, operator));
     const getJSDocPrimaryTypeCreateFunction = memoizeOne(<T extends JSDocType>(kind: T["kind"]) => () => createJSDocPrimaryTypeWorker(kind));
-    const getJSDocUnaryTypeCreateFunction = memoizeOne(<T extends JSDocType & { readonly type: TypeNode | undefined; }>(kind: T["kind"]) => (type: T["type"]) => createJSDocUnaryTypeWorker<T>(kind, type));
-    const getJSDocUnaryTypeUpdateFunction = memoizeOne(<T extends JSDocType & { readonly type: TypeNode | undefined; }>(kind: T["kind"]) => (node: T, type: T["type"]) => updateJSDocUnaryTypeWorker<T>(kind, node, type));
-    const getJSDocPrePostfixUnaryTypeCreateFunction = memoizeOne(<T extends JSDocType & { readonly type: TypeNode | undefined; readonly postfix: boolean; }>(kind: T["kind"]) => (type: T["type"], postfix?: boolean) =>
-        createJSDocPrePostfixUnaryTypeWorker<T>(kind, type, postfix)
+    const getJSDocUnaryTypeCreateFunction = memoizeOne(<T extends JSDocType & { readonly type: TypeNode | undefined; }>(kind: T["kind"]) => (type: T["type"]) =>
+        createJSDocUnaryTypeWorker<T>(kind, type)
     );
-    const getJSDocPrePostfixUnaryTypeUpdateFunction = memoizeOne(<T extends JSDocType & { readonly type: TypeNode | undefined; readonly postfix: boolean; }>(kind: T["kind"]) => (node: T, type: T["type"]) =>
-        updateJSDocPrePostfixUnaryTypeWorker<T>(kind, node, type)
+    const getJSDocUnaryTypeUpdateFunction = memoizeOne(<T extends JSDocType & { readonly type: TypeNode | undefined; }>(kind: T["kind"]) => (node: T, type: T["type"]) =>
+        updateJSDocUnaryTypeWorker<T>(kind, node, type)
     );
-    const getJSDocSimpleTagCreateFunction = memoizeOne(<T extends JSDocTag>(kind: T["kind"]) => (tagName: Identifier | undefined, comment?: NodeArray<JSDocComment>) => createJSDocSimpleTagWorker(kind, tagName, comment));
+    const getJSDocPrePostfixUnaryTypeCreateFunction = memoizeOne(
+        <T extends JSDocType & { readonly type: TypeNode | undefined; readonly postfix: boolean; }>(kind: T["kind"]) => (type: T["type"], postfix?: boolean) =>
+            createJSDocPrePostfixUnaryTypeWorker<T>(kind, type, postfix),
+    );
+    const getJSDocPrePostfixUnaryTypeUpdateFunction = memoizeOne(
+        <T extends JSDocType & { readonly type: TypeNode | undefined; readonly postfix: boolean; }>(kind: T["kind"]) => (node: T, type: T["type"]) =>
+            updateJSDocPrePostfixUnaryTypeWorker<T>(kind, node, type),
+    );
+    const getJSDocSimpleTagCreateFunction = memoizeOne(<T extends JSDocTag>(kind: T["kind"]) => (tagName: Identifier | undefined, comment?: NodeArray<JSDocComment>) =>
+        createJSDocSimpleTagWorker(kind, tagName, comment)
+    );
     const getJSDocSimpleTagUpdateFunction = memoizeOne(<T extends JSDocTag>(kind: T["kind"]) => (node: T, tagName: Identifier | undefined, comment?: NodeArray<JSDocComment>) =>
         updateJSDocSimpleTagWorker(kind, node, tagName, comment)
     );
     const getJSDocTypeLikeTagCreateFunction = memoizeOne(
-        <T extends JSDocTag & { typeExpression?: JSDocTypeExpression; }>(kind: T["kind"]) => (tagName: Identifier | undefined, typeExpression?: JSDocTypeExpression, comment?: NodeArray<JSDocComment>) =>
-            createJSDocTypeLikeTagWorker(kind, tagName, typeExpression, comment),
+        <T extends JSDocTag & { typeExpression?: JSDocTypeExpression; }>(kind: T["kind"]) =>
+        (tagName: Identifier | undefined, typeExpression?: JSDocTypeExpression, comment?: NodeArray<JSDocComment>) => createJSDocTypeLikeTagWorker(kind, tagName, typeExpression, comment),
     );
     const getJSDocTypeLikeTagUpdateFunction = memoizeOne(
-        <T extends JSDocTag & { typeExpression?: JSDocTypeExpression; }>(kind: T["kind"]) => (node: T, tagName: Identifier | undefined, typeExpression?: JSDocTypeExpression, comment?: NodeArray<JSDocComment>) =>
+        <T extends JSDocTag & { typeExpression?: JSDocTypeExpression; }>(kind: T["kind"]) =>
+        (node: T, tagName: Identifier | undefined, typeExpression?: JSDocTypeExpression, comment?: NodeArray<JSDocComment>) =>
             updateJSDocTypeLikeTagWorker(kind, node, tagName, typeExpression, comment),
     );
 
@@ -1351,7 +1360,12 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
     }
 
     // @api
-    function createTempVariable(recordTempVariable: ((node: Identifier) => void) | undefined, reservedInNestedScopes?: boolean, prefix?: string | GeneratedNamePart, suffix?: string): GeneratedIdentifier {
+    function createTempVariable(
+        recordTempVariable: ((node: Identifier) => void) | undefined,
+        reservedInNestedScopes?: boolean,
+        prefix?: string | GeneratedNamePart,
+        suffix?: string,
+    ): GeneratedIdentifier {
         let flags = GeneratedIdentifierFlags.Auto;
         if (reservedInNestedScopes) flags |= GeneratedIdentifierFlags.ReservedInNestedScopes;
         const name = createBaseGeneratedIdentifier("", flags, prefix, suffix);
@@ -2551,7 +2565,11 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
             : node;
     }
 
-    function createUnionOrIntersectionTypeNode(kind: SyntaxKind.UnionType | SyntaxKind.IntersectionType, types: readonly TypeNode[], parenthesize: (nodes: readonly TypeNode[]) => readonly TypeNode[]) {
+    function createUnionOrIntersectionTypeNode(
+        kind: SyntaxKind.UnionType | SyntaxKind.IntersectionType,
+        types: readonly TypeNode[],
+        parenthesize: (nodes: readonly TypeNode[]) => readonly TypeNode[],
+    ) {
         const node = createBaseNode<UnionTypeNode | IntersectionTypeNode>(kind);
         node.types = factory.createNodeArray(parenthesize(types));
         node.transformFlags = TransformFlags.ContainsTypeScript;
@@ -3039,7 +3057,12 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
             : node;
     }
 
-    function createBaseCallExpression(expression: LeftHandSideExpression, questionDotToken: QuestionDotToken | undefined, typeArguments: NodeArray<TypeNode> | undefined, argumentsArray: NodeArray<Expression>) {
+    function createBaseCallExpression(
+        expression: LeftHandSideExpression,
+        questionDotToken: QuestionDotToken | undefined,
+        typeArguments: NodeArray<TypeNode> | undefined,
+        argumentsArray: NodeArray<Expression>,
+    ) {
         const node = createBaseDeclaration<CallExpression>(SyntaxKind.CallExpression);
         node.expression = expression;
         node.questionDotToken = questionDotToken;
@@ -3085,7 +3108,12 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
     }
 
     // @api
-    function createCallChain(expression: Expression, questionDotToken: QuestionDotToken | undefined, typeArguments: readonly TypeNode[] | undefined, argumentsArray: readonly Expression[] | undefined) {
+    function createCallChain(
+        expression: Expression,
+        questionDotToken: QuestionDotToken | undefined,
+        typeArguments: readonly TypeNode[] | undefined,
+        argumentsArray: readonly Expression[] | undefined,
+    ) {
         const node = createBaseCallExpression(
             parenthesizerRules().parenthesizeLeftSideOfAccess(expression, /*optionalChain*/ true),
             questionDotToken,
@@ -3098,7 +3126,13 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
     }
 
     // @api
-    function updateCallChain(node: CallChain, expression: Expression, questionDotToken: QuestionDotToken | undefined, typeArguments: readonly TypeNode[] | undefined, argumentsArray: readonly Expression[]) {
+    function updateCallChain(
+        node: CallChain,
+        expression: Expression,
+        questionDotToken: QuestionDotToken | undefined,
+        typeArguments: readonly TypeNode[] | undefined,
+        argumentsArray: readonly Expression[],
+    ) {
         Debug.assert(!!(node.flags & NodeFlags.OptionalChain), "Cannot update a CallExpression using updateCallChain. Use updateCall instead.");
         return node.expression !== expression
                 || node.questionDotToken !== questionDotToken
@@ -5195,7 +5229,12 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
     }
 
     // @api
-    function updateJSDocSignature(node: JSDocSignature, typeParameters: readonly JSDocTemplateTag[] | undefined, parameters: readonly JSDocParameterTag[], type: JSDocReturnTag | undefined): JSDocSignature {
+    function updateJSDocSignature(
+        node: JSDocSignature,
+        typeParameters: readonly JSDocTemplateTag[] | undefined,
+        parameters: readonly JSDocParameterTag[],
+        type: JSDocReturnTag | undefined,
+    ): JSDocSignature {
         return node.typeParameters !== typeParameters
                 || node.parameters !== parameters
                 || node.type !== type
@@ -5255,7 +5294,12 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
     }
 
     // @api
-    function createJSDocTypedefTag(tagName: Identifier | undefined, typeExpression?: JSDocTypeExpression, fullName?: Identifier | JSDocNamespaceDeclaration, comment?: string | NodeArray<JSDocComment>): JSDocTypedefTag {
+    function createJSDocTypedefTag(
+        tagName: Identifier | undefined,
+        typeExpression?: JSDocTypeExpression,
+        fullName?: Identifier | JSDocNamespaceDeclaration,
+        comment?: string | NodeArray<JSDocComment>,
+    ): JSDocTypedefTag {
         const node = createBaseJSDocTagDeclaration<JSDocTypedefTag>(SyntaxKind.JSDocTypedefTag, tagName ?? createIdentifier("typedef"), comment);
         node.typeExpression = typeExpression;
         node.fullName = fullName;
@@ -5357,7 +5401,12 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
     }
 
     // @api
-    function createJSDocCallbackTag(tagName: Identifier | undefined, typeExpression: JSDocSignature, fullName?: Identifier | JSDocNamespaceDeclaration, comment?: string | NodeArray<JSDocComment>): JSDocCallbackTag {
+    function createJSDocCallbackTag(
+        tagName: Identifier | undefined,
+        typeExpression: JSDocSignature,
+        fullName?: Identifier | JSDocNamespaceDeclaration,
+        comment?: string | NodeArray<JSDocComment>,
+    ): JSDocCallbackTag {
         const node = createBaseJSDocTagDeclaration<JSDocCallbackTag>(SyntaxKind.JSDocCallbackTag, tagName ?? createIdentifier("callback"), comment);
         node.typeExpression = typeExpression;
         node.fullName = fullName;
@@ -5392,7 +5441,12 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
     }
 
     // @api
-    function updateJSDocOverloadTag(node: JSDocOverloadTag, tagName: Identifier = getDefaultTagName(node), typeExpression: JSDocSignature, comment: string | NodeArray<JSDocComment> | undefined): JSDocOverloadTag {
+    function updateJSDocOverloadTag(
+        node: JSDocOverloadTag,
+        tagName: Identifier = getDefaultTagName(node),
+        typeExpression: JSDocSignature,
+        comment: string | NodeArray<JSDocComment> | undefined,
+    ): JSDocOverloadTag {
         return node.tagName !== tagName
                 || node.typeExpression !== typeExpression
                 || node.comment !== comment
@@ -5408,7 +5462,12 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
     }
 
     // @api
-    function updateJSDocAugmentsTag(node: JSDocAugmentsTag, tagName: Identifier = getDefaultTagName(node), className: JSDocAugmentsTag["class"], comment: string | NodeArray<JSDocComment> | undefined): JSDocAugmentsTag {
+    function updateJSDocAugmentsTag(
+        node: JSDocAugmentsTag,
+        tagName: Identifier = getDefaultTagName(node),
+        className: JSDocAugmentsTag["class"],
+        comment: string | NodeArray<JSDocComment> | undefined,
+    ): JSDocAugmentsTag {
         return node.tagName !== tagName
                 || node.class !== className
                 || node.comment !== comment

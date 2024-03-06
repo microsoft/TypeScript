@@ -144,7 +144,16 @@ export type ReadableProgramBuildInfoRoot =
 export type ReadableProgramMultiFileEmitBuildInfo =
     & Omit<
         ts.ProgramMultiFileEmitBuildInfo,
-        "fileIdsList" | "fileInfos" | "root" | "referencedMap" | "exportedModulesMap" | "semanticDiagnosticsPerFile" | "emitDiagnosticsPerFile" | "affectedFilesPendingEmit" | "changeFileSet" | "emitSignatures"
+        | "fileIdsList"
+        | "fileInfos"
+        | "root"
+        | "referencedMap"
+        | "exportedModulesMap"
+        | "semanticDiagnosticsPerFile"
+        | "emitDiagnosticsPerFile"
+        | "affectedFilesPendingEmit"
+        | "changeFileSet"
+        | "emitSignatures"
     >
     & {
         fileNamesList: readonly (readonly string[])[] | undefined;

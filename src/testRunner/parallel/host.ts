@@ -292,7 +292,11 @@ export function start() {
             worker.process.stdout!.on("data", appendOutput);
             const killChild = (timeout: TaskTimeout) => {
                 worker.process.kill();
-                console.error(`Worker exceeded ${timeout.duration}ms timeout ${worker.currentTasks && worker.currentTasks.length ? `while running test '${worker.currentTasks[0].file}'.` : `during test setup.`}`);
+                console.error(
+                    `Worker exceeded ${timeout.duration}ms timeout ${
+                        worker.currentTasks && worker.currentTasks.length ? `while running test '${worker.currentTasks[0].file}'.` : `during test setup.`
+                    }`,
+                );
                 return process.exit(2);
             };
             worker.process.on("error", err => {

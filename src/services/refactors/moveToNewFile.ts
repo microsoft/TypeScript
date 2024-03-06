@@ -67,7 +67,11 @@ registerRefactor(refactorName, {
             return [{ name: refactorName, description, actions: [moveToNewFileAction] }];
         }
         if (context.preferences.provideRefactorNotApplicableReason) {
-            return [{ name: refactorName, description, actions: [{ ...moveToNewFileAction, notApplicableReason: getLocaleSpecificMessage(Diagnostics.Selection_is_not_a_valid_statement_or_statements) }] }];
+            return [{
+                name: refactorName,
+                description,
+                actions: [{ ...moveToNewFileAction, notApplicableReason: getLocaleSpecificMessage(Diagnostics.Selection_is_not_a_valid_statement_or_statements) }],
+            }];
         }
         return emptyArray;
     },
@@ -118,7 +122,17 @@ function getNewStatementsAndRemoveFromOldFile(
     deleteMovedStatements(oldFile, toMove.ranges, changes);
     updateImportsInOtherFiles(changes, program, host, oldFile, usage.movedSymbols, newFilename, quotePreference);
 
-    const imports = getNewFileImportsAndAddExportInOldFile(oldFile, usage.oldImportsNeededByTargetFile, usage.targetFileImportsFromOldFile, changes, checker, program, host, useEsModuleSyntax, quotePreference);
+    const imports = getNewFileImportsAndAddExportInOldFile(
+        oldFile,
+        usage.oldImportsNeededByTargetFile,
+        usage.targetFileImportsFromOldFile,
+        changes,
+        checker,
+        program,
+        host,
+        useEsModuleSyntax,
+        quotePreference,
+    );
     const body = addExports(oldFile, toMove.all, usage.oldFileImportsFromTargetFile, useEsModuleSyntax);
     if (imports.length && body.length) {
         return [

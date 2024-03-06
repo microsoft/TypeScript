@@ -595,7 +595,17 @@ function startNodeSession(options: StartSessionOptions, logger: Logger, cancella
 
             const typingsInstaller = disableAutomaticTypingAcquisition
                 ? undefined
-                : new NodeTypingsInstallerAdapter(telemetryEnabled, logger, host, getGlobalTypingsCacheLocation(), typingSafeListLocation, typesMapLocation, npmLocation, validateDefaultNpmLocation, event);
+                : new NodeTypingsInstallerAdapter(
+                    telemetryEnabled,
+                    logger,
+                    host,
+                    getGlobalTypingsCacheLocation(),
+                    typingSafeListLocation,
+                    typesMapLocation,
+                    npmLocation,
+                    validateDefaultNpmLocation,
+                    event,
+                );
 
             super({
                 host,

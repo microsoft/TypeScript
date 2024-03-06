@@ -186,7 +186,13 @@ interface TypeInfo {
     readonly symbol: Symbol;
 }
 
-function getCandidateOrTypeInfo({ invocation, argumentCount }: ArgumentListInfo, checker: TypeChecker, sourceFile: SourceFile, startingToken: Node, onlyUseSyntacticOwners: boolean): CandidateInfo | TypeInfo | undefined {
+function getCandidateOrTypeInfo(
+    { invocation, argumentCount }: ArgumentListInfo,
+    checker: TypeChecker,
+    sourceFile: SourceFile,
+    startingToken: Node,
+    onlyUseSyntacticOwners: boolean,
+): CandidateInfo | TypeInfo | undefined {
     switch (invocation.kind) {
         case InvocationKind.Call: {
             if (onlyUseSyntacticOwners && !isSyntacticOwner(startingToken, invocation.node, sourceFile)) {
@@ -835,7 +841,13 @@ function createSignatureHelpParameterForParameter(parameter: Symbol, checker: Ty
     return { name: parameter.name, documentation: parameter.getDocumentationComment(checker), displayParts, isOptional, isRest };
 }
 
-function createSignatureHelpParameterForTypeParameter(typeParameter: TypeParameter, checker: TypeChecker, enclosingDeclaration: Node, sourceFile: SourceFile, printer: Printer): SignatureHelpParameter {
+function createSignatureHelpParameterForTypeParameter(
+    typeParameter: TypeParameter,
+    checker: TypeChecker,
+    enclosingDeclaration: Node,
+    sourceFile: SourceFile,
+    printer: Printer,
+): SignatureHelpParameter {
     const displayParts = mapToDisplayParts(writer => {
         const param = checker.typeParameterToDeclaration(typeParameter, enclosingDeclaration, signatureHelpNodeBuilderFlags)!;
         printer.writeNode(EmitHint.Unspecified, param, sourceFile, writer);

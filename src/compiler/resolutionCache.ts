@@ -521,7 +521,10 @@ function resolveModuleNameUsingGlobalCache(
 }
 
 /** @internal */
-export type GetResolutionWithResolvedFileName<T extends ResolutionWithFailedLookupLocations = ResolutionWithFailedLookupLocations, R extends ResolutionWithResolvedFileName = ResolutionWithResolvedFileName> = (
+export type GetResolutionWithResolvedFileName<
+    T extends ResolutionWithFailedLookupLocations = ResolutionWithFailedLookupLocations,
+    R extends ResolutionWithResolvedFileName = ResolutionWithResolvedFileName,
+> = (
     resolution: T,
 ) => R | undefined;
 

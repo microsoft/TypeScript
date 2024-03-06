@@ -55,7 +55,13 @@ function getClass(sourceFile: SourceFile, pos: number): ClassLikeDeclaration {
     return cast(token.parent, isClassLike);
 }
 
-function addMissingMembers(classDeclaration: ClassLikeDeclaration, sourceFile: SourceFile, context: TypeConstructionContext, changeTracker: textChanges.ChangeTracker, preferences: UserPreferences): void {
+function addMissingMembers(
+    classDeclaration: ClassLikeDeclaration,
+    sourceFile: SourceFile,
+    context: TypeConstructionContext,
+    changeTracker: textChanges.ChangeTracker,
+    preferences: UserPreferences,
+): void {
     const extendsNode = getEffectiveBaseTypeNode(classDeclaration)!;
     const checker = context.program.getTypeChecker();
     const instantiatedExtendsType = checker.getTypeAtLocation(extendsNode);

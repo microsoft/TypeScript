@@ -576,7 +576,14 @@ export function getImportCompletionAction(
 }
 
 /** @internal */
-export function getPromoteTypeOnlyCompletionAction(sourceFile: SourceFile, symbolToken: Identifier, program: Program, host: LanguageServiceHost, formatContext: formatting.FormatContext, preferences: UserPreferences) {
+export function getPromoteTypeOnlyCompletionAction(
+    sourceFile: SourceFile,
+    symbolToken: Identifier,
+    program: Program,
+    host: LanguageServiceHost,
+    formatContext: formatting.FormatContext,
+    preferences: UserPreferences,
+) {
     const compilerOptions = program.getCompilerOptions();
     const symbolName = single(getSymbolNamesToImport(sourceFile, program.getTypeChecker(), symbolToken, compilerOptions));
     const fix = getTypeOnlyPromotionFix(sourceFile, symbolToken, symbolName, program);
@@ -753,7 +760,12 @@ function getAddAsTypeOnly(
     return AddAsTypeOnly.Allowed;
 }
 
-function tryAddToExistingImport(existingImports: readonly FixAddToExistingImportInfo[], isValidTypeOnlyUseSite: boolean, checker: TypeChecker, compilerOptions: CompilerOptions): FixAddToExistingImport | undefined {
+function tryAddToExistingImport(
+    existingImports: readonly FixAddToExistingImportInfo[],
+    isValidTypeOnlyUseSite: boolean,
+    checker: TypeChecker,
+    compilerOptions: CompilerOptions,
+): FixAddToExistingImport | undefined {
     let best: FixAddToExistingImport | undefined;
     for (const existingImport of existingImports) {
         const fix = getAddToExistingImportFix(existingImport);
@@ -779,7 +791,13 @@ function tryAddToExistingImport(existingImports: readonly FixAddToExistingImport
 
         if (declaration.kind === SyntaxKind.VariableDeclaration) {
             return (importKind === ImportKind.Named || importKind === ImportKind.Default) && declaration.name.kind === SyntaxKind.ObjectBindingPattern
-                ? { kind: ImportFixKind.AddToExisting, importClauseOrBindingPattern: declaration.name, importKind, moduleSpecifier: declaration.initializer.arguments[0].text, addAsTypeOnly: AddAsTypeOnly.NotAllowed }
+                ? {
+                    kind: ImportFixKind.AddToExisting,
+                    importClauseOrBindingPattern: declaration.name,
+                    importKind,
+                    moduleSpecifier: declaration.initializer.arguments[0].text,
+                    addAsTypeOnly: AddAsTypeOnly.NotAllowed,
+                }
                 : undefined;
         }
 
@@ -908,9 +926,21 @@ function getNewImportFixes(
     const moduleResolution = getEmitModuleResolutionKind(compilerOptions);
     const rejectNodeModulesRelativePaths = moduleResolutionUsesNodeModules(moduleResolution);
     const getModuleSpecifiers = fromCacheOnly
-        ? (moduleSymbol: Symbol) => ({ moduleSpecifiers: moduleSpecifiers.tryGetModuleSpecifiersFromCache(moduleSymbol, sourceFile, moduleSpecifierResolutionHost, preferences), computedWithoutCache: false })
+        ? (moduleSymbol: Symbol) => ({
+            moduleSpecifiers: moduleSpecifiers.tryGetModuleSpecifiersFromCache(moduleSymbol, sourceFile, moduleSpecifierResolutionHost, preferences),
+            computedWithoutCache: false,
+        })
         : (moduleSymbol: Symbol, checker: TypeChecker) =>
-            moduleSpecifiers.getModuleSpecifiersWithCacheInfo(moduleSymbol, checker, compilerOptions, sourceFile, moduleSpecifierResolutionHost, preferences, /*options*/ undefined, /*forAutoImport*/ true);
+            moduleSpecifiers.getModuleSpecifiersWithCacheInfo(
+                moduleSymbol,
+                checker,
+                compilerOptions,
+                sourceFile,
+                moduleSpecifierResolutionHost,
+                preferences,
+                /*options*/ undefined,
+                /*forAutoImport*/ true,
+            );
 
     let computedWithoutCacheCount = 0;
     const fixes = flatMap(exportInfo, (exportInfo, i) => {
@@ -976,8 +1006,12 @@ function getFixesForAddImport(
     preferences: UserPreferences,
     fromCacheOnly?: boolean,
 ): { computedWithoutCacheCount?: number; fixes: readonly (FixAddNewImport | FixAddJsdocTypeImport)[]; } {
-    const existingDeclaration = firstDefined(existingImports, info => newImportInfoFromExistingSpecifier(info, isValidTypeOnlyUseSite, useRequire, program.getTypeChecker(), program.getCompilerOptions()));
-    return existingDeclaration ? { fixes: [existingDeclaration] } : getNewImportFixes(program, sourceFile, usagePosition, isValidTypeOnlyUseSite, useRequire, exportInfos, host, preferences, fromCacheOnly);
+    const existingDeclaration = firstDefined(
+        existingImports,
+        info => newImportInfoFromExistingSpecifier(info, isValidTypeOnlyUseSite, useRequire, program.getTypeChecker(), program.getCompilerOptions()),
+    );
+    return existingDeclaration ? { fixes: [existingDeclaration] }
+        : getNewImportFixes(program, sourceFile, usagePosition, isValidTypeOnlyUseSite, useRequire, exportInfos, host, preferences, fromCacheOnly);
 }
 
 function newImportInfoFromExistingSpecifier(
@@ -1117,7 +1151,14 @@ function getFixesInfoForUMDImport({ sourceFile, program, host, preferences }: Co
     if (!umdSymbol) return undefined;
     const symbol = checker.getAliasedSymbol(umdSymbol);
     const symbolName = umdSymbol.name;
-    const exportInfo: readonly SymbolExportInfo[] = [{ symbol: umdSymbol, moduleSymbol: symbol, moduleFileName: undefined, exportKind: ExportKind.UMD, targetFlags: symbol.flags, isFromPackageJson: false }];
+    const exportInfo: readonly SymbolExportInfo[] = [{
+        symbol: umdSymbol,
+        moduleSymbol: symbol,
+        moduleFileName: undefined,
+        exportKind: ExportKind.UMD,
+        targetFlags: symbol.flags,
+        isFromPackageJson: false,
+    }];
     const useRequire = shouldUseRequire(sourceFile, program);
     // `usagePosition` is undefined because `token` may not actually be a usage of the symbol we're importing.
     // For example, we might need to import `React` in order to use an arbitrary JSX tag. We could send a position
@@ -1218,7 +1259,10 @@ function getFixesInfoForNonUMDImport(
         const useRequire = shouldUseRequire(sourceFile, program);
         const exportInfo = getExportInfos(symbolName, isJSXTagName(symbolToken), getMeaningFromLocation(symbolToken), cancellationToken, sourceFile, program, useAutoImportProvider, host, preferences);
         return arrayFrom(
-            flatMapIterator(exportInfo.values(), exportInfos => getImportFixes(exportInfos, symbolToken.getStart(sourceFile), isValidTypeOnlyUseSite, useRequire, program, sourceFile, host, preferences).fixes),
+            flatMapIterator(
+                exportInfo.values(),
+                exportInfos => getImportFixes(exportInfos, symbolToken.getStart(sourceFile), isValidTypeOnlyUseSite, useRequire, program, sourceFile, host, preferences).fixes,
+            ),
             fix => ({ fix, symbolName, errorIdentifierText: symbolToken.text, isJsxNamespaceFix: symbolName !== symbolToken.text }),
         );
     });

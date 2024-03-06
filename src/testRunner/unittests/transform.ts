@@ -424,7 +424,11 @@ describe("unittests:: TransformAPI", () => {
                 // The decorator is required to trigger ts.ts transformations.
                 const classDecl = ts.factory.createClassDeclaration([], "Foo", /*typeParameters*/ undefined, /*heritageClauses*/ undefined, [
                     ts.factory.createConstructorDeclaration(/*modifiers*/ undefined, [
-                        ts.factory.createParameterDeclaration([ts.factory.createDecorator(ts.factory.createIdentifier("Dec")), ts.factory.createModifier(ts.SyntaxKind.PrivateKeyword)], /*dotDotDotToken*/ undefined, "x"),
+                        ts.factory.createParameterDeclaration(
+                            [ts.factory.createDecorator(ts.factory.createIdentifier("Dec")), ts.factory.createModifier(ts.SyntaxKind.PrivateKeyword)],
+                            /*dotDotDotToken*/ undefined,
+                            "x",
+                        ),
                     ], ts.factory.createBlock([])),
                 ]);
                 return ts.factory.updateSourceFile(sf, [classDecl]);

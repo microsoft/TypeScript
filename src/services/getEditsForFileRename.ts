@@ -215,12 +215,24 @@ function updateImports(
             const toImport = oldFromNew !== undefined
                 // If we're at the new location (file was already renamed), need to redo module resolution starting from the old location.
                 // TODO:GH#18217
-                ? getSourceFileToImportFromResolved(importLiteral, resolveModuleName(importLiteral.text, oldImportFromPath, program.getCompilerOptions(), host as ModuleResolutionHost), oldToNew, allFiles)
+                ? getSourceFileToImportFromResolved(
+                    importLiteral,
+                    resolveModuleName(importLiteral.text, oldImportFromPath, program.getCompilerOptions(), host as ModuleResolutionHost),
+                    oldToNew,
+                    allFiles,
+                )
                 : getSourceFileToImport(importedModuleSymbol, importLiteral, sourceFile, program, host, oldToNew);
 
             // Need an update if the imported file moved, or the importing file moved and was using a relative path.
             return toImport !== undefined && (toImport.updated || (importingSourceFileMoved && pathIsRelative(importLiteral.text)))
-                ? moduleSpecifiers.updateModuleSpecifier(program.getCompilerOptions(), sourceFile, newImportFromPath, toImport.newFileName, createModuleSpecifierResolutionHost(program, host), importLiteral.text)
+                ? moduleSpecifiers.updateModuleSpecifier(
+                    program.getCompilerOptions(),
+                    sourceFile,
+                    newImportFromPath,
+                    toImport.newFileName,
+                    createModuleSpecifierResolutionHost(program, host),
+                    importLiteral.text,
+                )
                 : undefined;
         });
     }
@@ -303,7 +315,12 @@ function getSourceFileToImportFromResolved(
     }
 }
 
-function updateImportsWorker(sourceFile: SourceFile, changeTracker: textChanges.ChangeTracker, updateRef: (refText: string) => string | undefined, updateImport: (importLiteral: StringLiteralLike) => string | undefined) {
+function updateImportsWorker(
+    sourceFile: SourceFile,
+    changeTracker: textChanges.ChangeTracker,
+    updateRef: (refText: string) => string | undefined,
+    updateImport: (importLiteral: StringLiteralLike) => string | undefined,
+) {
     for (const ref of sourceFile.referencedFiles || emptyArray) { // TODO: GH#26162
         const updated = updateRef(ref.fileName);
         if (updated !== undefined && updated !== sourceFile.text.slice(ref.pos, ref.end)) changeTracker.replaceRangeWithText(sourceFile, ref, updated);

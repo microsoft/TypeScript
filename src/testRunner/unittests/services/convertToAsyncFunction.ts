@@ -433,11 +433,23 @@ const _testConvertToAsyncFunctionFailed = createTestWrapper((it, caption: string
 });
 
 const _testConvertToAsyncFunctionFailedSuggestion = createTestWrapper((it, caption: string, text: string) => {
-    testConvertToAsyncFunction(it, caption, text, "convertToAsyncFunction", ConvertToAsyncTestFlags.IncludeLib | ConvertToAsyncTestFlags.ExpectNoSuggestionDiagnostic | ConvertToAsyncTestFlags.ExpectAction);
+    testConvertToAsyncFunction(
+        it,
+        caption,
+        text,
+        "convertToAsyncFunction",
+        ConvertToAsyncTestFlags.IncludeLib | ConvertToAsyncTestFlags.ExpectNoSuggestionDiagnostic | ConvertToAsyncTestFlags.ExpectAction,
+    );
 });
 
 const _testConvertToAsyncFunctionFailedAction = createTestWrapper((it, caption: string, text: string) => {
-    testConvertToAsyncFunction(it, caption, text, "convertToAsyncFunction", ConvertToAsyncTestFlags.IncludeLib | ConvertToAsyncTestFlags.ExpectSuggestionDiagnostic | ConvertToAsyncTestFlags.ExpectNoAction);
+    testConvertToAsyncFunction(
+        it,
+        caption,
+        text,
+        "convertToAsyncFunction",
+        ConvertToAsyncTestFlags.IncludeLib | ConvertToAsyncTestFlags.ExpectSuggestionDiagnostic | ConvertToAsyncTestFlags.ExpectNoAction,
+    );
 });
 
 const _testConvertToAsyncFunctionWithModule = createTestWrapper((it, caption: string, text: string) => {

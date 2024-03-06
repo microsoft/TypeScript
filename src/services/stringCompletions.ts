@@ -383,7 +383,10 @@ interface StringLiteralCompletionsFromTypes {
     readonly types: readonly StringLiteralType[];
     readonly isNewIdentifier: boolean;
 }
-type StringLiteralCompletion = { readonly kind: StringLiteralCompletionKind.Paths; readonly paths: readonly PathCompletion[]; } | StringLiteralCompletionsFromProperties | StringLiteralCompletionsFromTypes;
+type StringLiteralCompletion =
+    | { readonly kind: StringLiteralCompletionKind.Paths; readonly paths: readonly PathCompletion[]; }
+    | StringLiteralCompletionsFromProperties
+    | StringLiteralCompletionsFromTypes;
 function getStringLiteralCompletionEntries(
     sourceFile: SourceFile,
     node: StringLiteralLike,
@@ -615,11 +618,23 @@ function addReplacementSpans(text: string, textStart: number, names: readonly Na
     );
 }
 
-function getStringLiteralCompletionsFromModuleNames(sourceFile: SourceFile, node: LiteralExpression, program: Program, host: LanguageServiceHost, preferences: UserPreferences): readonly PathCompletion[] {
+function getStringLiteralCompletionsFromModuleNames(
+    sourceFile: SourceFile,
+    node: LiteralExpression,
+    program: Program,
+    host: LanguageServiceHost,
+    preferences: UserPreferences,
+): readonly PathCompletion[] {
     return addReplacementSpans(node.text, node.getStart(sourceFile) + 1, getStringLiteralCompletionsFromModuleNamesWorker(sourceFile, node, program, host, preferences));
 }
 
-function getStringLiteralCompletionsFromModuleNamesWorker(sourceFile: SourceFile, node: LiteralExpression, program: Program, host: LanguageServiceHost, preferences: UserPreferences): readonly NameAndKind[] {
+function getStringLiteralCompletionsFromModuleNamesWorker(
+    sourceFile: SourceFile,
+    node: LiteralExpression,
+    program: Program,
+    host: LanguageServiceHost,
+    preferences: UserPreferences,
+): readonly NameAndKind[] {
     const literalValue = normalizeSlashes(node.text);
     const mode = isStringLiteralLike(node) ? program.getModeForUsageLocation(sourceFile, node) : undefined;
 
@@ -658,7 +673,14 @@ function getExtensionOptions(
         resolutionMode,
     };
 }
-function getCompletionEntriesForRelativeModules(literalValue: string, scriptDirectory: string, compilerOptions: CompilerOptions, host: LanguageServiceHost, scriptPath: Path, extensionOptions: ExtensionOptions) {
+function getCompletionEntriesForRelativeModules(
+    literalValue: string,
+    scriptDirectory: string,
+    compilerOptions: CompilerOptions,
+    host: LanguageServiceHost,
+    scriptPath: Path,
+    extensionOptions: ExtensionOptions,
+) {
     if (compilerOptions.rootDirs) {
         return getCompletionEntriesForDirectoryFragmentWithRootDirs(
             compilerOptions.rootDirs,
@@ -722,7 +744,10 @@ function getCompletionEntriesForDirectoryFragmentWithRootDirs(
     const ignoreCase = !(host.useCaseSensitiveFileNames && host.useCaseSensitiveFileNames());
     const baseDirectories = getBaseDirectoriesFromRootDirs(rootDirs, basePath, scriptDirectory, ignoreCase);
     return deduplicate<NameAndKind>(
-        flatMap(baseDirectories, baseDirectory => arrayFrom(getCompletionEntriesForDirectoryFragment(fragment, baseDirectory, extensionOptions, host, /*moduleSpecifierIsRelative*/ true, exclude).values())),
+        flatMap(
+            baseDirectories,
+            baseDirectory => arrayFrom(getCompletionEntriesForDirectoryFragment(fragment, baseDirectory, extensionOptions, host, /*moduleSpecifierIsRelative*/ true, exclude).values()),
+        ),
         (itemA, itemB) => itemA.name === itemB.name && itemA.kind === itemB.kind && itemA.extension === itemB.extension,
     );
 }
@@ -820,7 +845,12 @@ function getCompletionEntriesForDirectoryFragment(
     return result;
 }
 
-function getFilenameWithExtensionOption(name: string, compilerOptions: CompilerOptions, extensionOptions: ExtensionOptions, isExportsWildcard: boolean): { name: string; extension: Extension | undefined; } {
+function getFilenameWithExtensionOption(
+    name: string,
+    compilerOptions: CompilerOptions,
+    extensionOptions: ExtensionOptions,
+    isExportsWildcard: boolean,
+): { name: string; extension: Extension | undefined; } {
     const nonJsResult = moduleSpecifiers.tryGetRealFileNameForNonJsDeclarationFileName(name);
     if (nonJsResult) {
         return { name: nonJsResult, extension: tryGetExtensionFromPath(nonJsResult) };
@@ -1207,8 +1237,16 @@ function getTripleSlashReferenceCompletion(sourceFile: SourceFile, position: num
     const [, prefix, kind, toComplete] = match;
     const scriptPath = getDirectoryPath(sourceFile.path);
     const names = kind === "path" ?
-        getCompletionEntriesForDirectoryFragment(toComplete, scriptPath, getExtensionOptions(compilerOptions, ReferenceKind.Filename, sourceFile), host, /*moduleSpecifierIsRelative*/ true, sourceFile.path)
-        : kind === "types" ? getCompletionEntriesFromTypings(host, compilerOptions, scriptPath, getFragmentDirectory(toComplete), getExtensionOptions(compilerOptions, ReferenceKind.ModuleSpecifier, sourceFile))
+        getCompletionEntriesForDirectoryFragment(
+            toComplete,
+            scriptPath,
+            getExtensionOptions(compilerOptions, ReferenceKind.Filename, sourceFile),
+            host,
+            /*moduleSpecifierIsRelative*/ true,
+            sourceFile.path,
+        )
+        : kind === "types" ?
+        getCompletionEntriesFromTypings(host, compilerOptions, scriptPath, getFragmentDirectory(toComplete), getExtensionOptions(compilerOptions, ReferenceKind.ModuleSpecifier, sourceFile))
         : Debug.fail();
     return addReplacementSpans(toComplete, range.pos + prefix.length, arrayFrom(names.values()));
 }

@@ -86,7 +86,13 @@ registerCodeFix({
     getCodeActions(context) {
         const { sourceFile, program, preferences } = context;
         const changes = textChanges.ChangeTracker.with(context, changes => {
-            const moduleExportsChangedToDefault = convertFileToEsModule(sourceFile, program.getTypeChecker(), changes, getEmitScriptTarget(program.getCompilerOptions()), getQuotePreference(sourceFile, preferences));
+            const moduleExportsChangedToDefault = convertFileToEsModule(
+                sourceFile,
+                program.getTypeChecker(),
+                changes,
+                getEmitScriptTarget(program.getCompilerOptions()),
+                getQuotePreference(sourceFile, preferences),
+            );
             if (moduleExportsChangedToDefault) {
                 for (const importingFile of program.getSourceFiles()) {
                     fixImportOfModuleExports(importingFile, sourceFile, program, changes, getQuotePreference(importingFile, preferences));
@@ -574,7 +580,8 @@ function convertSingleIdentifierImport(name: Identifier, moduleSpecifier: String
         : arrayFrom(
             mapIterator(
                 namedBindingsNames.entries(),
-                ([propertyName, idName]) => factory.createImportSpecifier(/*isTypeOnly*/ false, propertyName === idName ? undefined : factory.createIdentifier(propertyName), factory.createIdentifier(idName)),
+                ([propertyName, idName]) =>
+                    factory.createImportSpecifier(/*isTypeOnly*/ false, propertyName === idName ? undefined : factory.createIdentifier(propertyName), factory.createIdentifier(idName)),
             ),
         );
     if (!namedBindings) {
@@ -674,7 +681,11 @@ function makeSingleImport(localName: string, propertyName: string, moduleSpecifi
 }
 
 function makeImportSpecifier(propertyName: string | undefined, name: string): ImportSpecifier {
-    return factory.createImportSpecifier(/*isTypeOnly*/ false, propertyName !== undefined && propertyName !== name ? factory.createIdentifier(propertyName) : undefined, factory.createIdentifier(name));
+    return factory.createImportSpecifier(
+        /*isTypeOnly*/ false,
+        propertyName !== undefined && propertyName !== name ? factory.createIdentifier(propertyName) : undefined,
+        factory.createIdentifier(name),
+    );
 }
 
 function makeConst(modifiers: readonly Modifier[] | undefined, name: string | BindingName, init: Expression): VariableStatement {

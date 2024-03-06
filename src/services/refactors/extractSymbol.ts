@@ -1374,10 +1374,11 @@ function extractConstantInScope(
 
     // Make a unique name for the extracted variable
     const file = scope.getSourceFile();
-    const localNameText = isPropertyAccessExpression(node) && !isClassLike(scope) && !checker.resolveName(node.name.text, node, SymbolFlags.Value, /*excludeGlobals*/ false) && !isPrivateIdentifier(node.name) &&
+    const localNameText =
+        isPropertyAccessExpression(node) && !isClassLike(scope) && !checker.resolveName(node.name.text, node, SymbolFlags.Value, /*excludeGlobals*/ false) && !isPrivateIdentifier(node.name) &&
             !identifierToKeywordKind(node.name)
-        ? node.name.text
-        : getUniqueName(isClassLike(scope) ? "newProperty" : "newLocal", file);
+            ? node.name.text
+            : getUniqueName(isClassLike(scope) ? "newProperty" : "newLocal", file);
     const isJS = isInJSFile(scope);
 
     let variableType = isJS || !checker.isContextSensitive(node)
@@ -1517,7 +1518,15 @@ function extractConstantInScope(
                 if (paramType === checker.getAnyType()) hasAny = true;
 
                 parameters.push(
-                    factory.updateParameterDeclaration(p, p.modifiers, p.dotDotDotToken, p.name, p.questionToken, p.type || checker.typeToTypeNode(paramType, scope, NodeBuilderFlags.NoTruncation), p.initializer),
+                    factory.updateParameterDeclaration(
+                        p,
+                        p.modifiers,
+                        p.dotDotDotToken,
+                        p.name,
+                        p.questionToken,
+                        p.type || checker.typeToTypeNode(paramType, scope, NodeBuilderFlags.NoTruncation),
+                        p.initializer,
+                    ),
                 );
             }
         }

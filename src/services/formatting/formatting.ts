@@ -434,7 +434,14 @@ function getOwnOrInheritedDelta(n: Node, options: FormatCodeSettings, sourceFile
 }
 
 /** @internal */
-export function formatNodeGivenIndentation(node: Node, sourceFileLike: SourceFileLike, languageVariant: LanguageVariant, initialIndentation: number, delta: number, formatContext: FormatContext): TextChange[] {
+export function formatNodeGivenIndentation(
+    node: Node,
+    sourceFileLike: SourceFileLike,
+    languageVariant: LanguageVariant,
+    initialIndentation: number,
+    delta: number,
+    formatContext: FormatContext,
+): TextChange[] {
     const range = { pos: node.pos, end: node.end };
     return getFormattingScanner(sourceFileLike.text, languageVariant, range.pos, range.end, scanner =>
         formatSpanWorker(
@@ -1020,7 +1027,12 @@ function formatSpanWorker(
                 let indentNextTokenOrTrivia = true;
                 if (currentTokenInfo.leadingTrivia) {
                     const commentIndentation = dynamicIndentation.getIndentationForComment(currentTokenInfo.token.kind, tokenIndentation, container);
-                    indentNextTokenOrTrivia = indentTriviaItems(currentTokenInfo.leadingTrivia, commentIndentation, indentNextTokenOrTrivia, item => insertIndentation(item.pos, commentIndentation, /*lineAdded*/ false));
+                    indentNextTokenOrTrivia = indentTriviaItems(
+                        currentTokenInfo.leadingTrivia,
+                        commentIndentation,
+                        indentNextTokenOrTrivia,
+                        item => insertIndentation(item.pos, commentIndentation, /*lineAdded*/ false),
+                    );
                 }
 
                 // indent token only if is it is in target range and does not overlap with any error ranges

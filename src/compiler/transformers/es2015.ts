@@ -363,7 +363,12 @@ interface ConvertedLoopState {
     loopOutParameters: LoopOutParameter[];
 }
 
-type LoopConverter<T extends IterationStatement> = (node: T, outermostLabeledStatement: LabeledStatement | undefined, convertedLoopBodyStatements: Statement[] | undefined, ancestorFacts: HierarchyFacts) => Statement;
+type LoopConverter<T extends IterationStatement> = (
+    node: T,
+    outermostLabeledStatement: LabeledStatement | undefined,
+    convertedLoopBodyStatements: Statement[] | undefined,
+    ancestorFacts: HierarchyFacts,
+) => Statement;
 
 // Facts we track as we traverse the tree
 // dprint-ignore
@@ -2356,7 +2361,12 @@ export function transformES2015(context: TransformationContext): (x: SourceFile 
      *
      * @param receiver The receiver for the member.
      */
-    function transformAccessorsToExpression(receiver: LeftHandSideExpression, { firstAccessor, getAccessor, setAccessor }: AllAccessorDeclarations, container: Node, startsOnNewLine: boolean): Expression {
+    function transformAccessorsToExpression(
+        receiver: LeftHandSideExpression,
+        { firstAccessor, getAccessor, setAccessor }: AllAccessorDeclarations,
+        container: Node,
+        startsOnNewLine: boolean,
+    ): Expression {
         // To align with source maps in the old emitter, the receiver and property name
         // arguments are both mapped contiguously to the accessor name.
         // TODO(rbuckton): Does this need to be parented?
@@ -3171,7 +3181,10 @@ export function transformES2015(context: TransformationContext): (x: SourceFile 
                 /*initializer*/ setEmitFlags(
                     setTextRange(
                         factory.createVariableDeclarationList([
-                            setTextRange(factory.createVariableDeclaration(counter, /*exclamationToken*/ undefined, /*type*/ undefined, factory.createNumericLiteral(0)), moveRangePos(node.expression, -1)),
+                            setTextRange(
+                                factory.createVariableDeclaration(counter, /*exclamationToken*/ undefined, /*type*/ undefined, factory.createNumericLiteral(0)),
+                                moveRangePos(node.expression, -1),
+                            ),
                             setTextRange(factory.createVariableDeclaration(rhsReference, /*exclamationToken*/ undefined, /*type*/ undefined, expression), node.expression),
                         ]),
                         node.expression,
@@ -3796,7 +3809,11 @@ export function transformES2015(context: TransformationContext): (x: SourceFile 
      * preserve the per-iteration environment semantics of
      * [13.7.4.8 RS: ForBodyEvaluation](https://tc39.github.io/ecma262/#sec-forbodyevaluation).
      */
-    function createFunctionForBodyOfIterationStatement(node: IterationStatement, currentState: ConvertedLoopState, outerState: ConvertedLoopState | undefined): IterationStatementPartFunction<Statement[]> {
+    function createFunctionForBodyOfIterationStatement(
+        node: IterationStatement,
+        currentState: ConvertedLoopState,
+        outerState: ConvertedLoopState | undefined,
+    ): IterationStatementPartFunction<Statement[]> {
         const functionName = factory.createUniqueName("_loop");
         startLexicalEnvironment();
         const statement = visitNode(node.statement, visitor, isStatement, factory.liftToBlock);

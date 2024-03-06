@@ -323,7 +323,12 @@ function getInfo(sourceFile: SourceFile, tokenPos: number, errorCode: number, ch
         if (!(param && isParameter(param) && isIdentifier(param.name))) return undefined;
 
         const properties = arrayFrom(
-            checker.getUnmatchedProperties(checker.getTypeAtLocation(parent), checker.getParameterType(signature, argIndex), /*requireOptionalProperties*/ false, /*matchDiscriminantProperties*/ false),
+            checker.getUnmatchedProperties(
+                checker.getTypeAtLocation(parent),
+                checker.getParameterType(signature, argIndex),
+                /*requireOptionalProperties*/ false,
+                /*matchDiscriminantProperties*/ false,
+            ),
         );
         if (!length(properties)) return undefined;
         return { kind: InfoKind.ObjectLiteral, token: param.name, identifier: param.name.text, properties, parentDeclaration: parent };
@@ -344,7 +349,9 @@ function getInfo(sourceFile: SourceFile, tokenPos: number, errorCode: number, ch
 
     if (isIdentifier(token) && hasInitializer(parent) && parent.initializer && isObjectLiteralExpression(parent.initializer)) {
         const targetType = checker.getContextualType(token) || checker.getTypeAtLocation(token);
-        const properties = arrayFrom(checker.getUnmatchedProperties(checker.getTypeAtLocation(parent.initializer), targetType, /*requireOptionalProperties*/ false, /*matchDiscriminantProperties*/ false));
+        const properties = arrayFrom(
+            checker.getUnmatchedProperties(checker.getTypeAtLocation(parent.initializer), targetType, /*requireOptionalProperties*/ false, /*matchDiscriminantProperties*/ false),
+        );
         if (!length(properties)) return undefined;
 
         return { kind: InfoKind.ObjectLiteral, token, identifier: token.text, properties, parentDeclaration: parent.initializer };
@@ -437,7 +444,13 @@ function createActionForAddMissingMemberInJavascriptFile(context: CodeFixContext
     return createCodeFixAction(fixMissingMember, changes, [diagnostic, token.text], fixMissingMember, Diagnostics.Add_all_missing_members);
 }
 
-function addMissingMemberInJs(changeTracker: textChanges.ChangeTracker, sourceFile: SourceFile, classDeclaration: ClassLikeDeclaration, token: Identifier | PrivateIdentifier, makeStatic: boolean): void {
+function addMissingMemberInJs(
+    changeTracker: textChanges.ChangeTracker,
+    sourceFile: SourceFile,
+    classDeclaration: ClassLikeDeclaration,
+    token: Identifier | PrivateIdentifier,
+    makeStatic: boolean,
+): void {
     const tokenName = token.text;
     if (makeStatic) {
         if (classDeclaration.kind === SyntaxKind.ClassExpression) {
@@ -482,7 +495,8 @@ function createActionsForAddMissingMemberInTypeScriptFile(context: CodeFixContex
     const memberName = token.text;
     const isStatic = modifierFlags & ModifierFlags.Static;
     const typeNode = getTypeNode(context.program.getTypeChecker(), parentDeclaration, token);
-    const addPropertyDeclarationChanges = (modifierFlags: ModifierFlags) => textChanges.ChangeTracker.with(context, t => addPropertyDeclaration(t, declSourceFile, parentDeclaration, memberName, typeNode, modifierFlags));
+    const addPropertyDeclarationChanges = (modifierFlags: ModifierFlags) =>
+        textChanges.ChangeTracker.with(context, t => addPropertyDeclaration(t, declSourceFile, parentDeclaration, memberName, typeNode, modifierFlags));
 
     const actions = [
         createCodeFixAction(
@@ -553,7 +567,13 @@ function getNodeToInsertPropertyAfter(node: ClassLikeDeclaration | InterfaceDecl
     return res;
 }
 
-function createAddIndexSignatureAction(context: CodeFixContext, sourceFile: SourceFile, node: ClassLikeDeclaration | InterfaceDeclaration | TypeLiteralNode, tokenName: string, typeNode: TypeNode): CodeFixAction {
+function createAddIndexSignatureAction(
+    context: CodeFixContext,
+    sourceFile: SourceFile,
+    node: ClassLikeDeclaration | InterfaceDeclaration | TypeLiteralNode,
+    tokenName: string,
+    typeNode: TypeNode,
+): CodeFixAction {
     // Index signatures cannot have the static modifier.
     const stringTypeNode = factory.createKeywordTypeNode(SyntaxKind.StringKeyword);
     const indexingParameter = factory.createParameterDeclaration(
@@ -582,7 +602,8 @@ function getActionsForMissingMethodDeclaration(context: CodeFixContext, info: Ty
     }
 
     const methodName = token.text;
-    const addMethodDeclarationChanges = (modifierFlags: ModifierFlags) => textChanges.ChangeTracker.with(context, t => addMethodDeclaration(context, t, call, token, modifierFlags, parentDeclaration, declSourceFile));
+    const addMethodDeclarationChanges = (modifierFlags: ModifierFlags) =>
+        textChanges.ChangeTracker.with(context, t => addMethodDeclaration(context, t, call, token, modifierFlags, parentDeclaration, declSourceFile));
     const actions = [
         createCodeFixAction(
             fixMissingMember,
@@ -706,7 +727,14 @@ function addObjectLiteralProperties(changes: textChanges.ChangeTracker, context:
     importAdder.writeFixes(changes);
 }
 
-function tryGetValueFromType(context: CodeFixContextBase, checker: TypeChecker, importAdder: ImportAdder, quotePreference: QuotePreference, type: Type, enclosingDeclaration: Node | undefined): Expression {
+function tryGetValueFromType(
+    context: CodeFixContextBase,
+    checker: TypeChecker,
+    importAdder: ImportAdder,
+    quotePreference: QuotePreference,
+    type: Type,
+    enclosingDeclaration: Node | undefined,
+): Expression {
     if (type.flags & TypeFlags.AnyOrUnknown) {
         return createUndefined();
     }
@@ -724,7 +752,12 @@ function tryGetValueFromType(context: CodeFixContextBase, checker: TypeChecker, 
     }
     if (type.flags & TypeFlags.EnumLike) {
         const enumMember = type.symbol.exports ? firstOrUndefinedIterator(type.symbol.exports.values()) : type.symbol;
-        const name = checker.symbolToExpression(type.symbol.parent ? type.symbol.parent : type.symbol, SymbolFlags.Value, /*enclosingDeclaration*/ undefined, /*flags*/ NodeBuilderFlags.UseFullyQualifiedType);
+        const name = checker.symbolToExpression(
+            type.symbol.parent ? type.symbol.parent : type.symbol,
+            SymbolFlags.Value,
+            /*enclosingDeclaration*/ undefined,
+            /*flags*/ NodeBuilderFlags.UseFullyQualifiedType,
+        );
         return enumMember === undefined || name === undefined ? factory.createNumericLiteral(0) : factory.createPropertyAccessExpression(name, checker.symbolToString(enumMember));
     }
     if (type.flags & TypeFlags.NumberLiteral) {
@@ -822,7 +855,8 @@ function getUnmatchedAttributes(checker: TypeChecker, target: ScriptTarget, sour
     return filter(
         targetProps,
         targetProp =>
-            isIdentifierText(targetProp.name, target, LanguageVariant.JSX) && !((targetProp.flags & SymbolFlags.Optional || getCheckFlags(targetProp) & CheckFlags.Partial) || seenNames.has(targetProp.escapedName)),
+            isIdentifierText(targetProp.name, target, LanguageVariant.JSX) &&
+            !((targetProp.flags & SymbolFlags.Optional || getCheckFlags(targetProp) & CheckFlags.Partial) || seenNames.has(targetProp.escapedName)),
     );
 }
 

@@ -554,7 +554,12 @@ function getOutputPathWithoutChangingExt(
 }
 
 /** @internal */
-export function getOutputDeclarationFileName(inputFileName: string, configFile: ParsedCommandLine, ignoreCase: boolean, getCommonSourceDirectory = () => getCommonSourceDirectoryOfConfig(configFile, ignoreCase)) {
+export function getOutputDeclarationFileName(
+    inputFileName: string,
+    configFile: ParsedCommandLine,
+    ignoreCase: boolean,
+    getCommonSourceDirectory = () => getCommonSourceDirectoryOfConfig(configFile, ignoreCase),
+) {
     return getOutputDeclarationFileNameWorker(inputFileName, configFile.options, ignoreCase, getCommonSourceDirectory);
 }
 
@@ -605,7 +610,13 @@ function getSingleOutputFileNames(configFile: ParsedCommandLine, addOutput: Retu
     addOutput(buildInfoPath);
 }
 
-function getOwnOutputFileNames(configFile: ParsedCommandLine, inputFileName: string, ignoreCase: boolean, addOutput: ReturnType<typeof createAddOutput>["addOutput"], getCommonSourceDirectory?: () => string) {
+function getOwnOutputFileNames(
+    configFile: ParsedCommandLine,
+    inputFileName: string,
+    ignoreCase: boolean,
+    addOutput: ReturnType<typeof createAddOutput>["addOutput"],
+    getCommonSourceDirectory?: () => string,
+) {
     if (isDeclarationFileName(inputFileName)) return;
     const js = getOutputJSFileName(inputFileName, configFile, ignoreCase, getCommonSourceDirectory);
     addOutput(js);
@@ -2783,8 +2794,10 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
         // The same is true of minus of course.
         const operand = node.operand;
         return operand.kind === SyntaxKind.PrefixUnaryExpression
-            && ((node.operator === SyntaxKind.PlusToken && ((operand as PrefixUnaryExpression).operator === SyntaxKind.PlusToken || (operand as PrefixUnaryExpression).operator === SyntaxKind.PlusPlusToken))
-                || (node.operator === SyntaxKind.MinusToken && ((operand as PrefixUnaryExpression).operator === SyntaxKind.MinusToken || (operand as PrefixUnaryExpression).operator === SyntaxKind.MinusMinusToken)));
+            && ((node.operator === SyntaxKind.PlusToken &&
+                ((operand as PrefixUnaryExpression).operator === SyntaxKind.PlusToken || (operand as PrefixUnaryExpression).operator === SyntaxKind.PlusPlusToken))
+                || (node.operator === SyntaxKind.MinusToken &&
+                    ((operand as PrefixUnaryExpression).operator === SyntaxKind.MinusToken || (operand as PrefixUnaryExpression).operator === SyntaxKind.MinusMinusToken)));
     }
 
     function emitPostfixUnaryExpression(node: PostfixUnaryExpression) {
@@ -3845,7 +3858,8 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
 
     function emitJsxExpression(node: JsxExpression) {
         if (node.expression || (!commentsDisabled && !nodeIsSynthesized(node) && hasCommentsAtPosition(node.pos))) { // preserve empty expressions if they contain comments!
-            const isMultiline = currentSourceFile && !nodeIsSynthesized(node) && getLineAndCharacterOfPosition(currentSourceFile, node.pos).line !== getLineAndCharacterOfPosition(currentSourceFile, node.end).line;
+            const isMultiline = currentSourceFile && !nodeIsSynthesized(node) &&
+                getLineAndCharacterOfPosition(currentSourceFile, node.pos).line !== getLineAndCharacterOfPosition(currentSourceFile, node.end).line;
             if (isMultiline) {
                 writer.increaseIndent();
             }
@@ -4469,7 +4483,10 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
         emitList(parentNode, typeArguments, ListFormat.TypeArguments, typeArgumentParenthesizerRuleSelector);
     }
 
-    function emitTypeParameters(parentNode: SignatureDeclaration | InterfaceDeclaration | TypeAliasDeclaration | ClassDeclaration | ClassExpression, typeParameters: NodeArray<TypeParameterDeclaration> | undefined) {
+    function emitTypeParameters(
+        parentNode: SignatureDeclaration | InterfaceDeclaration | TypeAliasDeclaration | ClassDeclaration | ClassExpression,
+        typeParameters: NodeArray<TypeParameterDeclaration> | undefined,
+    ) {
         if (isFunctionLike(parentNode) && parentNode.typeArguments) { // Quick info uses type arguments in place of type parameters on instantiated signatures
             return emitTypeArguments(parentNode, parentNode.typeArguments);
         }
@@ -5382,7 +5399,8 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
     function generateNameCached(node: Node, privateName: boolean, flags?: GeneratedIdentifierFlags, prefix?: string | GeneratedNamePart, suffix?: string) {
         const nodeId = getNodeId(node);
         const cache = privateName ? nodeIdToGeneratedPrivateName : nodeIdToGeneratedName;
-        return cache[nodeId] || (cache[nodeId] = generateNameForNode(node, privateName, flags ?? GeneratedIdentifierFlags.None, formatGeneratedNamePart(prefix, generateName), formatGeneratedNamePart(suffix)));
+        return cache[nodeId] ||
+            (cache[nodeId] = generateNameForNode(node, privateName, flags ?? GeneratedIdentifierFlags.None, formatGeneratedNamePart(prefix, generateName), formatGeneratedNamePart(suffix)));
     }
 
     /**
@@ -5511,7 +5529,15 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
      * makeUniqueName are guaranteed to never conflict.
      * If `optimistic` is set, the first instance will use 'baseName' verbatim instead of 'baseName_1'
      */
-    function makeUniqueName(baseName: string, checkFn: (name: string, privateName: boolean) => boolean = isUniqueName, optimistic: boolean, scoped: boolean, privateName: boolean, prefix: string, suffix: string): string {
+    function makeUniqueName(
+        baseName: string,
+        checkFn: (name: string, privateName: boolean) => boolean = isUniqueName,
+        optimistic: boolean,
+        scoped: boolean,
+        privateName: boolean,
+        prefix: string,
+        suffix: string,
+    ): string {
         if (baseName.length > 0 && baseName.charCodeAt(0) === CharacterCodes.hash) {
             baseName = baseName.slice(1);
         }
@@ -5566,7 +5592,8 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
     function generateNameForModuleOrEnum(node: ModuleDeclaration | EnumDeclaration) {
         const name = getTextOfNode(node.name);
         // Use module/enum name itself if it is unique, otherwise make a unique variation
-        return isUniqueLocalName(name, tryCast(node, canHaveLocals)) ? name : makeUniqueName(name, isUniqueName, /*optimistic*/ false, /*scoped*/ false, /*privateName*/ false, /*prefix*/ "", /*suffix*/ "");
+        return isUniqueLocalName(name, tryCast(node, canHaveLocals)) ? name
+            : makeUniqueName(name, isUniqueName, /*optimistic*/ false, /*scoped*/ false, /*privateName*/ false, /*prefix*/ "", /*suffix*/ "");
     }
 
     /**

@@ -63,7 +63,10 @@ describe("unittests:: tsc-watch:: emit file --incremental", () => {
             build();
         }
 
-        Harness.Baseline.runBaseline(`${ts.isBuild(argsToPass) ? "tsbuild/watchMode" : "tscWatch"}/incremental/${subScenario.split(" ").join("-")}-${incremental ? "incremental" : "watch"}.js`, baseline.join("\r\n"));
+        Harness.Baseline.runBaseline(
+            `${ts.isBuild(argsToPass) ? "tsbuild/watchMode" : "tscWatch"}/incremental/${subScenario.split(" ").join("-")}-${incremental ? "incremental" : "watch"}.js`,
+            baseline.join("\r\n"),
+        );
 
         function build() {
             const closer = ts.executeCommandLine(

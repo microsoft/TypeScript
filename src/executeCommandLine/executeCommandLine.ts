@@ -267,7 +267,10 @@ function generateOptionOutput(sys: System, option: CommandLineOption, rightAlign
                 text.push(...getPrettyOutput(valueCandidates.valueType, valueCandidates.possibleValues, rightAlignOfLeft, leftAlignOfRight, terminalWidth, /*colorLeft*/ false), sys.newLine);
             }
             if (defaultValueDescription) {
-                text.push(...getPrettyOutput(getDiagnosticText(Diagnostics.default_Colon), defaultValueDescription, rightAlignOfLeft, leftAlignOfRight, terminalWidth, /*colorLeft*/ false), sys.newLine);
+                text.push(
+                    ...getPrettyOutput(getDiagnosticText(Diagnostics.default_Colon), defaultValueDescription, rightAlignOfLeft, leftAlignOfRight, terminalWidth, /*colorLeft*/ false),
+                    sys.newLine,
+                );
             }
         }
         text.push(sys.newLine);
@@ -433,7 +436,14 @@ function generateGroupOptionOutput(sys: System, optionsList: readonly CommandLin
     return lines;
 }
 
-function generateSectionOptionsOutput(sys: System, sectionName: string, options: readonly CommandLineOption[], subCategory: boolean, beforeOptionsDescription?: string, afterOptionsDescription?: string) {
+function generateSectionOptionsOutput(
+    sys: System,
+    sectionName: string,
+    options: readonly CommandLineOption[],
+    subCategory: boolean,
+    beforeOptionsDescription?: string,
+    afterOptionsDescription?: string,
+) {
     let res: string[] = [];
     res.push(createColors(sys).bold(sectionName) + sys.newLine + sys.newLine);
     if (beforeOptionsDescription) {
@@ -484,7 +494,14 @@ function printEasyHelp(sys: System, simpleOptions: readonly CommandLineOption[])
 
     output = [
         ...output,
-        ...generateSectionOptionsOutput(sys, getDiagnosticText(Diagnostics.COMMAND_LINE_FLAGS), cliCommands, /*subCategory*/ false, /*beforeOptionsDescription*/ undefined, /*afterOptionsDescription*/ undefined),
+        ...generateSectionOptionsOutput(
+            sys,
+            getDiagnosticText(Diagnostics.COMMAND_LINE_FLAGS),
+            cliCommands,
+            /*subCategory*/ false,
+            /*beforeOptionsDescription*/ undefined,
+            /*afterOptionsDescription*/ undefined,
+        ),
         ...generateSectionOptionsOutput(
             sys,
             getDiagnosticText(Diagnostics.COMMON_COMPILER_OPTIONS),
@@ -1135,7 +1152,10 @@ function reportSolutionBuilderTimes(
     if (!solutionPerformance) return;
 
     if (!performance.isEnabled()) {
-        sys.write(Diagnostics.Performance_timings_for_diagnostics_or_extendedDiagnostics_are_not_available_in_this_session_A_native_implementation_of_the_Web_Performance_API_could_not_be_found.message + "\n");
+        sys.write(
+            Diagnostics.Performance_timings_for_diagnostics_or_extendedDiagnostics_are_not_available_in_this_session_A_native_implementation_of_the_Web_Performance_API_could_not_be_found.message +
+                "\n",
+        );
         return;
     }
 
@@ -1258,7 +1278,10 @@ function reportStatistics(sys: System, program: Program, solutionPerformance: So
         }
         reportAllStatistics(sys, statistics);
         if (!isPerformanceEnabled) {
-            sys.write(Diagnostics.Performance_timings_for_diagnostics_or_extendedDiagnostics_are_not_available_in_this_session_A_native_implementation_of_the_Web_Performance_API_could_not_be_found.message + "\n");
+            sys.write(
+                Diagnostics.Performance_timings_for_diagnostics_or_extendedDiagnostics_are_not_available_in_this_session_A_native_implementation_of_the_Web_Performance_API_could_not_be_found.message +
+                    "\n",
+            );
         }
         else {
             if (solutionPerformance) {

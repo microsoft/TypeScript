@@ -148,7 +148,14 @@ function getDeclarationSiteFix(
     }
 }
 
-function getUseSiteFix(context: CodeFixContext | CodeFixAllContext, expression: Expression, errorCode: number, checker: TypeChecker, trackChanges: ContextualTrackChangesFunction, fixedDeclarations?: Set<number>) {
+function getUseSiteFix(
+    context: CodeFixContext | CodeFixAllContext,
+    expression: Expression,
+    errorCode: number,
+    checker: TypeChecker,
+    trackChanges: ContextualTrackChangesFunction,
+    fixedDeclarations?: Set<number>,
+) {
     const changes = trackChanges(t => makeChange(t, errorCode, context.sourceFile, checker, expression, fixedDeclarations));
     return createCodeFixAction(fixId, changes, Diagnostics.Add_await, fixId, Diagnostics.Fix_all_expressions_possibly_missing_await);
 }

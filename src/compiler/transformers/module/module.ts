@@ -1193,7 +1193,8 @@ export function transformModule(context: TransformationContext): (x: SourceFile 
         // });
         needUMDDynamicImportHelper = true;
         if (isSimpleCopiableExpression(arg)) {
-            const argClone = isGeneratedIdentifier(arg) ? arg : isStringLiteral(arg) ? factory.createStringLiteralFromNode(arg) : setEmitFlags(setTextRange(factory.cloneNode(arg), arg), EmitFlags.NoComments);
+            const argClone = isGeneratedIdentifier(arg) ? arg
+                : isStringLiteral(arg) ? factory.createStringLiteralFromNode(arg) : setEmitFlags(setTextRange(factory.cloneNode(arg), arg), EmitFlags.NoComments);
             return factory.createConditionalExpression(
                 /*condition*/ factory.createIdentifier("__syncRequire"),
                 /*questionToken*/ undefined,
@@ -1272,7 +1273,9 @@ export function transformModule(context: TransformationContext): (x: SourceFile 
 
         const promise = factory.createNewExpression(factory.createIdentifier("Promise"), /*typeArguments*/ undefined, [func]);
         if (getESModuleInterop(compilerOptions)) {
-            return factory.createCallExpression(factory.createPropertyAccessExpression(promise, factory.createIdentifier("then")), /*typeArguments*/ undefined, [emitHelpers().createImportStarCallbackHelper()]);
+            return factory.createCallExpression(factory.createPropertyAccessExpression(promise, factory.createIdentifier("then")), /*typeArguments*/ undefined, [
+                emitHelpers().createImportStarCallbackHelper(),
+            ]);
         }
         return promise;
     }

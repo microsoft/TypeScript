@@ -713,7 +713,14 @@ export class TestServerHost implements server.ServerHost, FormatDiagnosticsHost,
         this.watchUtils.pollingWatches.forEach(fileFullPath, ({ cb }) => cb(fileFullPath, eventKind, modifiedTime));
     }
 
-    private fsWatchCallback(watches: Watches<TestFsWatcher>, fullPath: string, eventName: "rename" | "change", modifiedTime: Date | undefined, entryFullPath: string | undefined, useTildeSuffix: boolean | undefined) {
+    private fsWatchCallback(
+        watches: Watches<TestFsWatcher>,
+        fullPath: string,
+        eventName: "rename" | "change",
+        modifiedTime: Date | undefined,
+        entryFullPath: string | undefined,
+        useTildeSuffix: boolean | undefined,
+    ) {
         const path = this.toPath(fullPath);
         const currentInode = this.inodes?.get(path);
         watches.forEach(path, ({ cb, inode }) => {

@@ -179,7 +179,9 @@ function getRefactorEditsToConvertOverloadsToOneSignature(context: RefactorConte
         ]);
     }
 
-    function convertSignatureParametersToTuple(decl: MethodSignature | MethodDeclaration | CallSignatureDeclaration | ConstructorDeclaration | ConstructSignatureDeclaration | FunctionDeclaration): TupleTypeNode {
+    function convertSignatureParametersToTuple(
+        decl: MethodSignature | MethodDeclaration | CallSignatureDeclaration | ConstructorDeclaration | ConstructSignatureDeclaration | FunctionDeclaration,
+    ): TupleTypeNode {
         const members = map(decl.parameters, convertParameterToNamedTupleMember);
         return setEmitFlags(factory.createTupleTypeNode(members), some(members, m => !!length(getSyntheticLeadingComments(m))) ? EmitFlags.None : EmitFlags.SingleLine);
     }
@@ -215,7 +217,9 @@ ${newComment.split("\n").map(c => ` * ${c}`).join("\n")}
     }
 }
 
-function isConvertableSignatureDeclaration(d: Node): d is MethodSignature | MethodDeclaration | CallSignatureDeclaration | ConstructorDeclaration | ConstructSignatureDeclaration | FunctionDeclaration {
+function isConvertableSignatureDeclaration(
+    d: Node,
+): d is MethodSignature | MethodDeclaration | CallSignatureDeclaration | ConstructorDeclaration | ConstructSignatureDeclaration | FunctionDeclaration {
     switch (d.kind) {
         case SyntaxKind.MethodSignature:
         case SyntaxKind.MethodDeclaration:

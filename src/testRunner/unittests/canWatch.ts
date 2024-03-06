@@ -59,7 +59,8 @@ describe("unittests:: canWatch::", () => {
     ) {
         baselineCanWatch(
             scenario,
-            () => `Determines whether to watch given failed lookup location (file that didnt exist) when resolving module.\r\nIt also determines the directory to watch and whether to watch it recursively or not.`,
+            () =>
+                `Determines whether to watch given failed lookup location (file that didnt exist) when resolving module.\r\nIt also determines the directory to watch and whether to watch it recursively or not.`,
             (paths, longestPathLength, baseline) => {
                 const recursive = "Recursive";
                 const maxLength = longestPathLength + ts.combinePaths(forPath, "dir/subdir/somefile.d.ts").length;

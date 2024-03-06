@@ -100,7 +100,11 @@ function getAssignedNameOfPropertyName(context: TransformationContext, name: Pro
  * expression that has already had its `EmitFlags` set or may have been tracked to prevent substitution.
  * @internal
  */
-export function createClassNamedEvaluationHelperBlock(context: TransformationContext, assignedName: Expression, thisExpression: Expression = context.factory.createThis()): ClassNamedEvaluationHelperBlock {
+export function createClassNamedEvaluationHelperBlock(
+    context: TransformationContext,
+    assignedName: Expression,
+    thisExpression: Expression = context.factory.createThis(),
+): ClassNamedEvaluationHelperBlock {
     // produces:
     //
     //  static { __setFunctionName(this, "C"); }
@@ -273,7 +277,12 @@ function transformNamedEvaluationOfPropertyAssignment(context: TransformationCon
     );
 }
 
-function transformNamedEvaluationOfShorthandAssignmentProperty(context: TransformationContext, node: NamedEvaluation & ShorthandPropertyAssignment, ignoreEmptyStringLiteral?: boolean, assignedNameText?: string) {
+function transformNamedEvaluationOfShorthandAssignmentProperty(
+    context: TransformationContext,
+    node: NamedEvaluation & ShorthandPropertyAssignment,
+    ignoreEmptyStringLiteral?: boolean,
+    assignedNameText?: string,
+) {
     // 13.15.5.3 RS: PropertyDestructuringAssignmentEvaluation
     //   AssignmentProperty : IdentifierReference Initializer?
     //     ...

@@ -372,7 +372,14 @@ function annotateParameters(
     }
 }
 
-function annotateThis(changes: textChanges.ChangeTracker, sourceFile: SourceFile, containingFunction: textChanges.ThisTypeAnnotatable, program: Program, host: LanguageServiceHost, cancellationToken: CancellationToken) {
+function annotateThis(
+    changes: textChanges.ChangeTracker,
+    sourceFile: SourceFile,
+    containingFunction: textChanges.ThisTypeAnnotatable,
+    program: Program,
+    host: LanguageServiceHost,
+    cancellationToken: CancellationToken,
+) {
     const references = getFunctionReferences(containingFunction, sourceFile, program, cancellationToken);
     if (!references || !references.length) {
         return;
@@ -421,7 +428,15 @@ function annotateSetAccessor(
     }
 }
 
-function annotate(changes: textChanges.ChangeTracker, importAdder: ImportAdder, sourceFile: SourceFile, declaration: textChanges.TypeAnnotatable, type: Type, program: Program, host: LanguageServiceHost): void {
+function annotate(
+    changes: textChanges.ChangeTracker,
+    importAdder: ImportAdder,
+    sourceFile: SourceFile,
+    declaration: textChanges.TypeAnnotatable,
+    type: Type,
+    program: Program,
+    host: LanguageServiceHost,
+): void {
     const typeNode = getTypeNodeIfAccessible(type, declaration, program, host);
     if (typeNode) {
         if (isInJSFile(sourceFile) && declaration.kind !== SyntaxKind.PropertySignature) {
@@ -1248,7 +1263,16 @@ function inferTypeFromReferences(program: Program, references: readonly Identifi
             parameters.push(symbol);
         }
         const returnType = combineFromUsage(combineUsages(calls.map(call => call.return_)));
-        return checker.createSignature(/*declaration*/ undefined, /*typeParameters*/ undefined, /*thisParameter*/ undefined, parameters, returnType, /*typePredicate*/ undefined, length, SignatureFlags.None);
+        return checker.createSignature(
+            /*declaration*/ undefined,
+            /*typeParameters*/ undefined,
+            /*thisParameter*/ undefined,
+            parameters,
+            returnType,
+            /*typePredicate*/ undefined,
+            length,
+            SignatureFlags.None,
+        );
     }
 
     function addCandidateType(usage: Usage, type: Type | undefined) {

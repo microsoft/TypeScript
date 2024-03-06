@@ -16,7 +16,13 @@ describe("unittests:: FactoryAPI", () => {
             }
 
             const clazz = ts.factory.createClassExpression(/*modifiers*/ undefined, "C", /*typeParameters*/ undefined, /*heritageClauses*/ undefined, [
-                ts.factory.createPropertyDeclaration([ts.factory.createToken(ts.SyntaxKind.StaticKeyword)], "prop", /*questionOrExclamationToken*/ undefined, /*type*/ undefined, ts.factory.createStringLiteral("1")),
+                ts.factory.createPropertyDeclaration(
+                    [ts.factory.createToken(ts.SyntaxKind.StaticKeyword)],
+                    "prop",
+                    /*questionOrExclamationToken*/ undefined,
+                    /*type*/ undefined,
+                    ts.factory.createStringLiteral("1"),
+                ),
             ]);
             checkExpression(clazz);
             checkExpression(ts.factory.createPropertyAccessExpression(clazz, "prop"));
@@ -55,7 +61,12 @@ describe("unittests:: FactoryAPI", () => {
 
             checkBody(ts.factory.createObjectLiteralExpression());
             checkBody(ts.factory.createPropertyAccessExpression(ts.factory.createObjectLiteralExpression(), "prop"));
-            checkBody(ts.factory.createAsExpression(ts.factory.createPropertyAccessExpression(ts.factory.createObjectLiteralExpression(), "prop"), ts.factory.createTypeReferenceNode("T", /*typeArguments*/ undefined)));
+            checkBody(
+                ts.factory.createAsExpression(
+                    ts.factory.createPropertyAccessExpression(ts.factory.createObjectLiteralExpression(), "prop"),
+                    ts.factory.createTypeReferenceNode("T", /*typeArguments*/ undefined),
+                ),
+            );
             checkBody(ts.factory.createNonNullExpression(ts.factory.createPropertyAccessExpression(ts.factory.createObjectLiteralExpression(), "prop")));
             checkBody(ts.factory.createCommaListExpression([ts.factory.createStringLiteral("a"), ts.factory.createStringLiteral("b")]));
             checkBody(ts.factory.createBinaryExpression(ts.factory.createStringLiteral("a"), ts.SyntaxKind.CommaToken, ts.factory.createStringLiteral("b")));

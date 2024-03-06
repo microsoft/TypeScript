@@ -131,7 +131,17 @@ export abstract class TypingsInstallerAdapter implements ITypingsInstaller {
         }
     }
 
-    handleMessage(response: TypesRegistryResponse | PackageInstalledResponse | SetTypings | InvalidateCachedTypings | BeginInstallTypes | EndInstallTypes | InitializationFailedResponse | server.WatchTypingLocations) {
+    handleMessage(
+        response:
+            | TypesRegistryResponse
+            | PackageInstalledResponse
+            | SetTypings
+            | InvalidateCachedTypings
+            | BeginInstallTypes
+            | EndInstallTypes
+            | InitializationFailedResponse
+            | server.WatchTypingLocations,
+    ) {
         if (this.logger.hasLevel(LogLevel.verbose)) {
             this.logger.info(`TIAdapter:: Received response:${stringifyIndented(response)}`);
         }

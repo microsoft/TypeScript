@@ -82,7 +82,13 @@ function addNodeOutliningSpans(sourceFile: SourceFile, cancellationToken: Cancel
         }
         const lastImport = current - 1;
         if (lastImport !== firstImport) {
-            out.push(createOutliningSpanFromBounds(findChildOfKind(statements[firstImport], SyntaxKind.ImportKeyword, sourceFile)!.getStart(sourceFile), statements[lastImport].getEnd(), OutliningSpanKind.Imports));
+            out.push(
+                createOutliningSpanFromBounds(
+                    findChildOfKind(statements[firstImport], SyntaxKind.ImportKeyword, sourceFile)!.getStart(sourceFile),
+                    statements[lastImport].getEnd(),
+                    OutliningSpanKind.Imports,
+                ),
+            );
         }
     }
 

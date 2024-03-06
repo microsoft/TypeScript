@@ -492,7 +492,16 @@ export function createSignatureDeclarationFromSignature(
     const questionToken = optional ? factory.createToken(SyntaxKind.QuestionToken) : undefined;
     const asteriskToken = signatureDeclaration.asteriskToken;
     if (isFunctionExpression(signatureDeclaration)) {
-        return factory.updateFunctionExpression(signatureDeclaration, modifiers, signatureDeclaration.asteriskToken, tryCast(name, isIdentifier), typeParameters, parameters, type, body ?? signatureDeclaration.body);
+        return factory.updateFunctionExpression(
+            signatureDeclaration,
+            modifiers,
+            signatureDeclaration.asteriskToken,
+            tryCast(name, isIdentifier),
+            typeParameters,
+            parameters,
+            type,
+            body ?? signatureDeclaration.body,
+        );
     }
     if (isArrowFunction(signatureDeclaration)) {
         return factory.updateArrowFunction(signatureDeclaration, modifiers, typeParameters, parameters, type, signatureDeclaration.equalsGreaterThanToken, body ?? signatureDeclaration.body);
@@ -501,7 +510,16 @@ export function createSignatureDeclarationFromSignature(
         return factory.updateMethodDeclaration(signatureDeclaration, modifiers, asteriskToken, name ?? factory.createIdentifier(""), questionToken, typeParameters, parameters, type, body);
     }
     if (isFunctionDeclaration(signatureDeclaration)) {
-        return factory.updateFunctionDeclaration(signatureDeclaration, modifiers, signatureDeclaration.asteriskToken, tryCast(name, isIdentifier), typeParameters, parameters, type, body ?? signatureDeclaration.body);
+        return factory.updateFunctionDeclaration(
+            signatureDeclaration,
+            modifiers,
+            signatureDeclaration.asteriskToken,
+            tryCast(name, isIdentifier),
+            typeParameters,
+            parameters,
+            type,
+            body ?? signatureDeclaration.body,
+        );
     }
     return undefined;
 }
@@ -746,7 +764,13 @@ function getFirstTypeParameterName(type: Type): string | undefined {
         : undefined;
 }
 
-function createDummyParameters(argCount: number, names: (string | undefined)[] | undefined, types: (TypeNode | undefined)[] | undefined, minArgumentCount: number | undefined, inJs: boolean): ParameterDeclaration[] {
+function createDummyParameters(
+    argCount: number,
+    names: (string | undefined)[] | undefined,
+    types: (TypeNode | undefined)[] | undefined,
+    minArgumentCount: number | undefined,
+    inJs: boolean,
+): ParameterDeclaration[] {
     const parameters: ParameterDeclaration[] = [];
     const parameterNameCounts = new Map<string, number>();
     for (let i = 0; i < argCount; i++) {

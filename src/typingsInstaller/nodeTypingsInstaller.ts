@@ -104,14 +104,23 @@ export class NodeTypingsInstaller extends TypingsInstaller {
 
     private delayedInitializationError: InitializationFailedResponse | undefined;
 
-    constructor(globalTypingsCacheLocation: string, typingSafeListLocation: string, typesMapLocation: string, npmLocation: string | undefined, validateDefaultNpmLocation: boolean, throttleLimit: number, log: Log) {
+    constructor(
+        globalTypingsCacheLocation: string,
+        typingSafeListLocation: string,
+        typesMapLocation: string,
+        npmLocation: string | undefined,
+        validateDefaultNpmLocation: boolean,
+        throttleLimit: number,
+        log: Log,
+    ) {
         const libDirectory = getDirectoryPath(normalizePath(sys.getExecutingFilePath()));
         super(
             sys,
             globalTypingsCacheLocation,
             typingSafeListLocation ? toPath(typingSafeListLocation, "", createGetCanonicalFileName(sys.useCaseSensitiveFileNames))
                 : toPath("typingSafeList.json", libDirectory, createGetCanonicalFileName(sys.useCaseSensitiveFileNames)),
-            typesMapLocation ? toPath(typesMapLocation, "", createGetCanonicalFileName(sys.useCaseSensitiveFileNames)) : toPath("typesMap.json", libDirectory, createGetCanonicalFileName(sys.useCaseSensitiveFileNames)),
+            typesMapLocation ? toPath(typesMapLocation, "", createGetCanonicalFileName(sys.useCaseSensitiveFileNames))
+                : toPath("typesMap.json", libDirectory, createGetCanonicalFileName(sys.useCaseSensitiveFileNames)),
             throttleLimit,
             log,
         );

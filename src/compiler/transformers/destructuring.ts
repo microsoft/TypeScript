@@ -382,7 +382,13 @@ function flattenBindingOrAssignmentElement(
  * @param value The current RHS value to assign to the element.
  * @param location The location to use for source maps and comments.
  */
-function flattenObjectBindingOrAssignmentPattern(flattenContext: FlattenContext, parent: BindingOrAssignmentElement, pattern: ObjectBindingOrAssignmentPattern, value: Expression, location: TextRange) {
+function flattenObjectBindingOrAssignmentPattern(
+    flattenContext: FlattenContext,
+    parent: BindingOrAssignmentElement,
+    pattern: ObjectBindingOrAssignmentPattern,
+    value: Expression,
+    location: TextRange,
+) {
     const elements = getElementsOfBindingOrAssignmentPattern(pattern);
     const numElements = elements.length;
     if (numElements !== 1) {
@@ -539,7 +545,13 @@ function isSimpleBindingOrAssignmentElement(element: BindingOrAssignmentElement)
  */
 function createDefaultValueCheck(flattenContext: FlattenContext, value: Expression, defaultValue: Expression, location: TextRange): Expression {
     value = ensureIdentifier(flattenContext, value, /*reuseIdentifierExpressions*/ true, location);
-    return flattenContext.context.factory.createConditionalExpression(flattenContext.context.factory.createTypeCheck(value, "undefined"), /*questionToken*/ undefined, defaultValue, /*colonToken*/ undefined, value);
+    return flattenContext.context.factory.createConditionalExpression(
+        flattenContext.context.factory.createTypeCheck(value, "undefined"),
+        /*questionToken*/ undefined,
+        defaultValue,
+        /*colonToken*/ undefined,
+        value,
+    );
 }
 
 /**

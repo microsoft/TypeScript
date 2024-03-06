@@ -80,7 +80,14 @@ export interface AccessorInfo {
 }
 
 /** @internal */
-export function generateAccessorFromProperty(file: SourceFile, program: Program, start: number, end: number, context: textChanges.TextChangesContext, _actionName: string): FileTextChanges[] | undefined {
+export function generateAccessorFromProperty(
+    file: SourceFile,
+    program: Program,
+    start: number,
+    end: number,
+    context: textChanges.TextChangesContext,
+    _actionName: string,
+): FileTextChanges[] | undefined {
     const fieldInfo = getAccessorConvertiblePropertyAtPosition(file, program, start, end);
     if (!fieldInfo || refactor.isRefactorErrorInfo(fieldInfo)) return undefined;
 
@@ -210,7 +217,14 @@ export function getAccessorConvertiblePropertyAtPosition(file: SourceFile, progr
     };
 }
 
-function generateGetAccessor(fieldName: AcceptedNameType, accessorName: AcceptedNameType, type: TypeNode | undefined, modifiers: readonly ModifierLike[] | undefined, isStatic: boolean, container: ContainerDeclaration) {
+function generateGetAccessor(
+    fieldName: AcceptedNameType,
+    accessorName: AcceptedNameType,
+    type: TypeNode | undefined,
+    modifiers: readonly ModifierLike[] | undefined,
+    isStatic: boolean,
+    container: ContainerDeclaration,
+) {
     return factory.createGetAccessorDeclaration(
         modifiers,
         accessorName,
@@ -224,7 +238,14 @@ function generateGetAccessor(fieldName: AcceptedNameType, accessorName: Accepted
     );
 }
 
-function generateSetAccessor(fieldName: AcceptedNameType, accessorName: AcceptedNameType, type: TypeNode | undefined, modifiers: readonly ModifierLike[] | undefined, isStatic: boolean, container: ContainerDeclaration) {
+function generateSetAccessor(
+    fieldName: AcceptedNameType,
+    accessorName: AcceptedNameType,
+    type: TypeNode | undefined,
+    modifiers: readonly ModifierLike[] | undefined,
+    isStatic: boolean,
+    container: ContainerDeclaration,
+) {
     return factory.createSetAccessorDeclaration(
         modifiers,
         accessorName,
@@ -306,7 +327,13 @@ function insertAccessor(changeTracker: textChanges.ChangeTracker, file: SourceFi
         changeTracker.insertNodeAfter(file, declaration, accessor);
 }
 
-function updateReadonlyPropertyInitializerStatementConstructor(changeTracker: textChanges.ChangeTracker, file: SourceFile, constructor: ConstructorDeclaration, fieldName: string, originalName: string) {
+function updateReadonlyPropertyInitializerStatementConstructor(
+    changeTracker: textChanges.ChangeTracker,
+    file: SourceFile,
+    constructor: ConstructorDeclaration,
+    fieldName: string,
+    originalName: string,
+) {
     if (!constructor.body) return;
     constructor.body.forEachChild(function recur(node) {
         if (

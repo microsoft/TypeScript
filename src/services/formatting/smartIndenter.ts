@@ -627,7 +627,13 @@ export namespace SmartIndenter {
         return findFirstNonWhitespaceCharacterAndColumn(startPos, endPos, sourceFile, options).column;
     }
 
-    export function nodeWillIndentChild(settings: FormatCodeSettings, parent: TextRangeWithKind, child: TextRangeWithKind | undefined, sourceFile: SourceFileLike | undefined, indentByDefault: boolean): boolean {
+    export function nodeWillIndentChild(
+        settings: FormatCodeSettings,
+        parent: TextRangeWithKind,
+        child: TextRangeWithKind | undefined,
+        sourceFile: SourceFileLike | undefined,
+        indentByDefault: boolean,
+    ): boolean {
         const childKind = child ? child.kind : SyntaxKind.Unknown;
 
         switch (parent.kind) {

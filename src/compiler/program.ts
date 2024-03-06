@@ -1205,7 +1205,8 @@ export function getReferencedFileLocation(program: Program, ref: ReferencedFile)
             break;
         case FileIncludeKind.TypeReferenceDirective:
             ({ pos, end, resolutionMode } = file.typeReferenceDirectives[index]);
-            packageId = program.getResolvedTypeReferenceDirective(file, toFileNameLowerCase(file.typeReferenceDirectives[index].fileName), resolutionMode || file.impliedNodeFormat)?.resolvedTypeReferenceDirective
+            packageId = program.getResolvedTypeReferenceDirective(file, toFileNameLowerCase(file.typeReferenceDirectives[index].fileName), resolutionMode || file.impliedNodeFormat)
+                ?.resolvedTypeReferenceDirective
                 ?.packageId;
             break;
         case FileIncludeKind.LibReferenceDirective:
@@ -2062,7 +2063,11 @@ export function createProgram(
         if (fromCache) addResolutionDiagnostics(fromCache);
     }
 
-    function resolveModuleNamesWorker(moduleNames: readonly StringLiteralLike[], containingFile: SourceFile, reusedNames: readonly StringLiteralLike[] | undefined): readonly ResolvedModuleWithFailedLookupLocations[] {
+    function resolveModuleNamesWorker(
+        moduleNames: readonly StringLiteralLike[],
+        containingFile: SourceFile,
+        reusedNames: readonly StringLiteralLike[] | undefined,
+    ): readonly ResolvedModuleWithFailedLookupLocations[] {
         if (!moduleNames.length) return emptyArray;
         const containingFileName = getNormalizedAbsolutePath(containingFile.originalFileName, currentDirectory);
         const redirectedReference = getRedirectReferenceForResolution(containingFile);
@@ -2295,7 +2300,10 @@ export function createProgram(
         }
     }
 
-    function resolveTypeReferenceDirectiveNamesReusingOldState(typeDirectiveNames: readonly FileReference[], containingFile: SourceFile): readonly ResolvedTypeReferenceDirectiveWithFailedLookupLocations[];
+    function resolveTypeReferenceDirectiveNamesReusingOldState(
+        typeDirectiveNames: readonly FileReference[],
+        containingFile: SourceFile,
+    ): readonly ResolvedTypeReferenceDirectiveWithFailedLookupLocations[];
     function resolveTypeReferenceDirectiveNamesReusingOldState(typeDirectiveNames: string[], containingFile: string): readonly ResolvedTypeReferenceDirectiveWithFailedLookupLocations[];
     function resolveTypeReferenceDirectiveNamesReusingOldState<T extends string | FileReference>(
         typeDirectiveNames: readonly T[],
@@ -3065,7 +3073,9 @@ export function createProgram(
                     case SyntaxKind.ImportSpecifier:
                     case SyntaxKind.ExportSpecifier:
                         if ((node as ImportOrExportSpecifier).isTypeOnly) {
-                            diagnostics.push(createDiagnosticForNode(node, Diagnostics._0_declarations_can_only_be_used_in_TypeScript_files, isImportSpecifier(node) ? "import...type" : "export...type"));
+                            diagnostics.push(
+                                createDiagnosticForNode(node, Diagnostics._0_declarations_can_only_be_used_in_TypeScript_files, isImportSpecifier(node) ? "import...type" : "export...type"),
+                            );
                             return "skip";
                         }
                         break;
@@ -3151,7 +3161,10 @@ export function createProgram(
                                     const trailingDecoratorIndex = findIndex(parent.modifiers, isDecorator, exportIndex);
                                     if (trailingDecoratorIndex >= 0) {
                                         diagnostics.push(addRelatedInfo(
-                                            createDiagnosticForNode(parent.modifiers[trailingDecoratorIndex], Diagnostics.Decorators_may_not_appear_after_export_or_export_default_if_they_also_appear_before_export),
+                                            createDiagnosticForNode(
+                                                parent.modifiers[trailingDecoratorIndex],
+                                                Diagnostics.Decorators_may_not_appear_after_export_or_export_default_if_they_also_appear_before_export,
+                                            ),
                                             createDiagnosticForNode(parent.modifiers[decoratorIndex], Diagnostics.Decorator_used_before_export_here),
                                         ));
                                     }
@@ -4340,20 +4353,31 @@ export function createProgram(
         const firstNonAmbientExternalModuleSourceFile = find(files, f => isExternalModule(f) && !f.isDeclarationFile);
         if (options.isolatedModules || options.verbatimModuleSyntax) {
             if (options.module === ModuleKind.None && languageVersion < ScriptTarget.ES2015 && options.isolatedModules) {
-                createDiagnosticForOptionName(Diagnostics.Option_isolatedModules_can_only_be_used_when_either_option_module_is_provided_or_option_target_is_ES2015_or_higher, "isolatedModules", "target");
+                createDiagnosticForOptionName(
+                    Diagnostics.Option_isolatedModules_can_only_be_used_when_either_option_module_is_provided_or_option_target_is_ES2015_or_higher,
+                    "isolatedModules",
+                    "target",
+                );
             }
 
             if (options.preserveConstEnums === false) {
-                createDiagnosticForOptionName(Diagnostics.Option_preserveConstEnums_cannot_be_disabled_when_0_is_enabled, options.verbatimModuleSyntax ? "verbatimModuleSyntax" : "isolatedModules", "preserveConstEnums");
+                createDiagnosticForOptionName(
+                    Diagnostics.Option_preserveConstEnums_cannot_be_disabled_when_0_is_enabled,
+                    options.verbatimModuleSyntax ? "verbatimModuleSyntax" : "isolatedModules",
+                    "preserveConstEnums",
+                );
             }
         }
         else if (firstNonAmbientExternalModuleSourceFile && languageVersion < ScriptTarget.ES2015 && options.module === ModuleKind.None) {
             // We cannot use createDiagnosticFromNode because nodes do not have parents yet
             const span = getErrorSpanForNode(
                 firstNonAmbientExternalModuleSourceFile,
-                typeof firstNonAmbientExternalModuleSourceFile.externalModuleIndicator === "boolean" ? firstNonAmbientExternalModuleSourceFile : firstNonAmbientExternalModuleSourceFile.externalModuleIndicator!,
+                typeof firstNonAmbientExternalModuleSourceFile.externalModuleIndicator === "boolean" ? firstNonAmbientExternalModuleSourceFile
+                    : firstNonAmbientExternalModuleSourceFile.externalModuleIndicator!,
             );
-            programDiagnostics.add(createFileDiagnostic(firstNonAmbientExternalModuleSourceFile, span.start, span.length, Diagnostics.Cannot_use_imports_exports_or_module_augmentations_when_module_is_none));
+            programDiagnostics.add(
+                createFileDiagnostic(firstNonAmbientExternalModuleSourceFile, span.start, span.length, Diagnostics.Cannot_use_imports_exports_or_module_augmentations_when_module_is_none),
+            );
         }
 
         // Cannot specify module gen that isn't amd or system with --out
@@ -4364,10 +4388,17 @@ export function createProgram(
             else if (options.module === undefined && firstNonAmbientExternalModuleSourceFile) {
                 const span = getErrorSpanForNode(
                     firstNonAmbientExternalModuleSourceFile,
-                    typeof firstNonAmbientExternalModuleSourceFile.externalModuleIndicator === "boolean" ? firstNonAmbientExternalModuleSourceFile : firstNonAmbientExternalModuleSourceFile.externalModuleIndicator!,
+                    typeof firstNonAmbientExternalModuleSourceFile.externalModuleIndicator === "boolean" ? firstNonAmbientExternalModuleSourceFile
+                        : firstNonAmbientExternalModuleSourceFile.externalModuleIndicator!,
                 );
                 programDiagnostics.add(
-                    createFileDiagnostic(firstNonAmbientExternalModuleSourceFile, span.start, span.length, Diagnostics.Cannot_compile_modules_using_option_0_unless_the_module_flag_is_amd_or_system, "outFile"),
+                    createFileDiagnostic(
+                        firstNonAmbientExternalModuleSourceFile,
+                        span.start,
+                        span.length,
+                        Diagnostics.Cannot_compile_modules_using_option_0_unless_the_module_flag_is_amd_or_system,
+                        "outFile",
+                    ),
                 );
             }
         }
@@ -4524,7 +4555,8 @@ export function createProgram(
                         // The program is from either an inferred project or an external project
                         chain = chainDiagnosticMessages(
                             /*details*/ undefined,
-                            Diagnostics.Adding_a_tsconfig_json_file_will_help_organize_projects_that_contain_both_TypeScript_and_JavaScript_files_Learn_more_at_https_Colon_Slash_Slashaka_ms_Slashtsconfig,
+                            Diagnostics
+                                .Adding_a_tsconfig_json_file_will_help_organize_projects_that_contain_both_TypeScript_and_JavaScript_files_Learn_more_at_https_Colon_Slash_Slashaka_ms_Slashtsconfig,
                         );
                     }
                     chain = chainDiagnosticMessages(chain, Diagnostics.Cannot_write_file_0_because_it_would_overwrite_input_file, emitFileName);
@@ -4669,7 +4701,12 @@ export function createProgram(
         });
     }
 
-    function createDiagnosticExplainingFile(file: SourceFile | undefined, fileProcessingReason: FileIncludeReason | undefined, diagnostic: DiagnosticMessage, args: DiagnosticArguments | undefined): Diagnostic {
+    function createDiagnosticExplainingFile(
+        file: SourceFile | undefined,
+        fileProcessingReason: FileIncludeReason | undefined,
+        diagnostic: DiagnosticMessage,
+        args: DiagnosticArguments | undefined,
+    ): Diagnostic {
         let fileIncludeReasons: DiagnosticMessageChain[] | undefined;
         let relatedInfo: Diagnostic[] | undefined;
         let locationReason = isReferencedFile(fileProcessingReason) ? fileProcessingReason : undefined;
@@ -4680,7 +4717,11 @@ export function createProgram(
         const location = locationReason && getReferencedFileLocation(program, locationReason);
         const fileIncludeReasonDetails = fileIncludeReasons && chainDiagnosticMessages(fileIncludeReasons, Diagnostics.The_file_is_in_the_program_because_Colon);
         const redirectInfo = file && explainIfFileIsRedirectAndImpliedFormat(file);
-        const chain = chainDiagnosticMessages(redirectInfo ? fileIncludeReasonDetails ? [fileIncludeReasonDetails, ...redirectInfo] : redirectInfo : fileIncludeReasonDetails, diagnostic, ...args || emptyArray);
+        const chain = chainDiagnosticMessages(
+            redirectInfo ? fileIncludeReasonDetails ? [fileIncludeReasonDetails, ...redirectInfo] : redirectInfo : fileIncludeReasonDetails,
+            diagnostic,
+            ...args || emptyArray,
+        );
         return location && isReferenceFileLocation(location) ?
             createFileDiagnosticFromMessageChain(location.file, location.pos, location.end - location.pos, chain, relatedInfo) :
             createCompilerDiagnosticFromMessageChain(chain, relatedInfo);
@@ -4770,7 +4811,11 @@ export function createProgram(
                 );
                 if (!referenceInfo) return undefined;
                 const { sourceFile, index } = referenceInfo;
-                const referencesSyntax = forEachTsConfigPropArray(sourceFile as TsConfigSourceFile, "references", property => isArrayLiteralExpression(property.initializer) ? property.initializer : undefined);
+                const referencesSyntax = forEachTsConfigPropArray(
+                    sourceFile as TsConfigSourceFile,
+                    "references",
+                    property => isArrayLiteralExpression(property.initializer) ? property.initializer : undefined,
+                );
                 return referencesSyntax && referencesSyntax.elements.length > index ?
                     createDiagnosticForNodeInSourceFile(
                         sourceFile,
@@ -4898,7 +4943,11 @@ export function createProgram(
     }
 
     function createDiagnosticForReference(sourceFile: JsonSourceFile | undefined, index: number, message: DiagnosticMessage, ...args: DiagnosticArguments) {
-        const referencesSyntax = forEachTsConfigPropArray(sourceFile || options.configFile, "references", property => isArrayLiteralExpression(property.initializer) ? property.initializer : undefined);
+        const referencesSyntax = forEachTsConfigPropArray(
+            sourceFile || options.configFile,
+            "references",
+            property => isArrayLiteralExpression(property.initializer) ? property.initializer : undefined,
+        );
         if (referencesSyntax && referencesSyntax.elements.length > index) {
             programDiagnostics.add(createDiagnosticForNodeInSourceFile(sourceFile || options.configFile!, referencesSyntax.elements[index], message, ...args));
         }
@@ -4937,7 +4986,14 @@ export function createProgram(
     }
 
     function createOptionDiagnosticInObjectLiteralSyntax(objectLiteral: ObjectLiteralExpression, onKey: boolean, key1: string, key2: string | undefined, messageChain: DiagnosticMessageChain): boolean;
-    function createOptionDiagnosticInObjectLiteralSyntax(objectLiteral: ObjectLiteralExpression, onKey: boolean, key1: string, key2: string | undefined, message: DiagnosticMessage, ...args: DiagnosticArguments): boolean;
+    function createOptionDiagnosticInObjectLiteralSyntax(
+        objectLiteral: ObjectLiteralExpression,
+        onKey: boolean,
+        key1: string,
+        key2: string | undefined,
+        message: DiagnosticMessage,
+        ...args: DiagnosticArguments
+    ): boolean;
     function createOptionDiagnosticInObjectLiteralSyntax(
         objectLiteral: ObjectLiteralExpression,
         onKey: boolean,
@@ -5296,7 +5352,11 @@ export function resolveProjectReferencePath(ref: ProjectReference): ResolvedConf
  *
  * @internal
  */
-export function getResolutionDiagnostic(options: CompilerOptions, { extension }: ResolvedModuleFull, { isDeclarationFile }: { isDeclarationFile: SourceFile["isDeclarationFile"]; }): DiagnosticMessage | undefined {
+export function getResolutionDiagnostic(
+    options: CompilerOptions,
+    { extension }: ResolvedModuleFull,
+    { isDeclarationFile }: { isDeclarationFile: SourceFile["isDeclarationFile"]; },
+): DiagnosticMessage | undefined {
     switch (extension) {
         case Extension.Ts:
         case Extension.Dts:
@@ -5324,7 +5384,8 @@ export function getResolutionDiagnostic(options: CompilerOptions, { extension }:
         return options.jsx ? undefined : Diagnostics.Module_0_was_resolved_to_1_but_jsx_is_not_set;
     }
     function needAllowJs() {
-        return getAllowJSCompilerOption(options) || !getStrictOptionValue(options, "noImplicitAny") ? undefined : Diagnostics.Could_not_find_a_declaration_file_for_module_0_1_implicitly_has_an_any_type;
+        return getAllowJSCompilerOption(options) || !getStrictOptionValue(options, "noImplicitAny") ? undefined
+            : Diagnostics.Could_not_find_a_declaration_file_for_module_0_1_implicitly_has_an_any_type;
     }
     function needResolveJsonModule() {
         return getResolveJsonModule(options) ? undefined : Diagnostics.Module_0_was_resolved_to_1_but_resolveJsonModule_is_not_used;

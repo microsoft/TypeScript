@@ -182,7 +182,11 @@ registerRefactor(refactorNameForMoveToFile, {
             return [{ name: refactorNameForMoveToFile, description, actions: [moveToFileAction] }];
         }
         if (context.preferences.provideRefactorNotApplicableReason) {
-            return [{ name: refactorNameForMoveToFile, description, actions: [{ ...moveToFileAction, notApplicableReason: getLocaleSpecificMessage(Diagnostics.Selection_is_not_a_valid_statement_or_statements) }] }];
+            return [{
+                name: refactorNameForMoveToFile,
+                description,
+                actions: [{ ...moveToFileAction, notApplicableReason: getLocaleSpecificMessage(Diagnostics.Selection_is_not_a_valid_statement_or_statements) }],
+            }];
         }
         return emptyArray;
     },
@@ -196,7 +200,10 @@ registerRefactor(refactorNameForMoveToFile, {
             if (host.fileExists(targetFile) && program.getSourceFile(targetFile) === undefined) {
                 return error(getLocaleSpecificMessage(Diagnostics.Cannot_move_statements_to_the_selected_file));
             }
-            const edits = textChanges.ChangeTracker.with(context, t => doChange(context, context.file, interactiveRefactorArguments.targetFile, context.program, statements, t, context.host, context.preferences));
+            const edits = textChanges.ChangeTracker.with(
+                context,
+                t => doChange(context, context.file, interactiveRefactorArguments.targetFile, context.program, statements, t, context.host, context.preferences),
+            );
             return { edits, renameFilename: undefined, renameLocation: undefined };
         }
         return error(getLocaleSpecificMessage(Diagnostics.Cannot_move_to_file_selected_file_is_invalid));
@@ -207,7 +214,16 @@ function error(notApplicableReason: string) {
     return { edits: [], renameFilename: undefined, renameLocation: undefined, notApplicableReason };
 }
 
-function doChange(context: RefactorContext, oldFile: SourceFile, targetFile: string, program: Program, toMove: ToMove, changes: textChanges.ChangeTracker, host: LanguageServiceHost, preferences: UserPreferences): void {
+function doChange(
+    context: RefactorContext,
+    oldFile: SourceFile,
+    targetFile: string,
+    program: Program,
+    toMove: ToMove,
+    changes: textChanges.ChangeTracker,
+    host: LanguageServiceHost,
+    preferences: UserPreferences,
+): void {
     const checker = program.getTypeChecker();
     // For a new file
     if (!host.fileExists(targetFile)) {
@@ -245,7 +261,8 @@ function getNewStatementsAndRemoveFromOldFile(
     const checker = program.getTypeChecker();
     const prologueDirectives = takeWhile(oldFile.statements, isPrologueDirective);
     if (
-        oldFile.externalModuleIndicator === undefined && oldFile.commonJsModuleIndicator === undefined && usage.oldImportsNeededByTargetFile.size === 0 && usage.targetFileImportsFromOldFile.size === 0 &&
+        oldFile.externalModuleIndicator === undefined && oldFile.commonJsModuleIndicator === undefined && usage.oldImportsNeededByTargetFile.size === 0 &&
+        usage.targetFileImportsFromOldFile.size === 0 &&
         typeof targetFile === "string"
     ) {
         deleteMovedStatements(oldFile, toMove.ranges, changes);
@@ -455,7 +472,13 @@ export function updateImportsInOtherFiles(
                 deleteUnusedImports(sourceFile, importNode, changes, shouldMove); // These will be changed to imports from the new file
 
                 const pathToTargetFileWithExtension = resolvePath(getDirectoryPath(oldFile.path), targetFileName);
-                const newModuleSpecifier = getModuleSpecifier(program.getCompilerOptions(), sourceFile, sourceFile.fileName, pathToTargetFileWithExtension, createModuleSpecifierResolutionHost(program, host));
+                const newModuleSpecifier = getModuleSpecifier(
+                    program.getCompilerOptions(),
+                    sourceFile,
+                    sourceFile.fileName,
+                    pathToTargetFileWithExtension,
+                    createModuleSpecifierResolutionHost(program, host),
+                );
                 const newImportDeclaration = filterImport(importNode, makeStringLiteral(newModuleSpecifier, quotePreference), shouldMove);
                 if (newImportDeclaration) changes.insertNodeAfter(sourceFile, statement, newImportDeclaration);
 
@@ -607,7 +630,13 @@ export function makeImportOrRequire(
     quotePreference: QuotePreference,
 ): AnyImportOrRequireStatement | undefined {
     const pathToTargetFile = resolvePath(getDirectoryPath(sourceFile.path), targetFileNameWithExtension);
-    const pathToTargetFileWithCorrectExtension = getModuleSpecifier(program.getCompilerOptions(), sourceFile, sourceFile.fileName, pathToTargetFile, createModuleSpecifierResolutionHost(program, host));
+    const pathToTargetFileWithCorrectExtension = getModuleSpecifier(
+        program.getCompilerOptions(),
+        sourceFile,
+        sourceFile.fileName,
+        pathToTargetFile,
+        createModuleSpecifierResolutionHost(program, host),
+    );
 
     if (useEs6Imports) {
         const specifiers = imports.map(i => factory.createImportSpecifier(/*isTypeOnly*/ false, /*propertyName*/ undefined, factory.createIdentifier(i)));
@@ -627,7 +656,10 @@ export function makeImportOrRequire(
 }
 
 function makeVariableStatement(name: BindingName, type: TypeNode | undefined, initializer: Expression | undefined, flags: NodeFlags = NodeFlags.Const) {
-    return factory.createVariableStatement(/*modifiers*/ undefined, factory.createVariableDeclarationList([factory.createVariableDeclaration(name, /*exclamationToken*/ undefined, type, initializer)], flags));
+    return factory.createVariableStatement(
+        /*modifiers*/ undefined,
+        factory.createVariableDeclarationList([factory.createVariableDeclaration(name, /*exclamationToken*/ undefined, type, initializer)], flags),
+    );
 }
 
 /** @internal */
@@ -816,7 +848,12 @@ export function filterImport(i: SupportedImport, moduleSpecifier: StringLiteralL
             const defaultImport = clause.name && keep(clause.name) ? clause.name : undefined;
             const namedBindings = clause.namedBindings && filterNamedBindings(clause.namedBindings, keep);
             return defaultImport || namedBindings
-                ? factory.createImportDeclaration(/*modifiers*/ undefined, factory.createImportClause(clause.isTypeOnly, defaultImport, namedBindings), getSynthesizedDeepClone(moduleSpecifier), /*attributes*/ undefined)
+                ? factory.createImportDeclaration(
+                    /*modifiers*/ undefined,
+                    factory.createImportClause(clause.isTypeOnly, defaultImport, namedBindings),
+                    getSynthesizedDeepClone(moduleSpecifier),
+                    /*attributes*/ undefined,
+                )
                 : undefined;
         }
         case SyntaxKind.ImportEqualsDeclaration:

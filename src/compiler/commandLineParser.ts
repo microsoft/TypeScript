@@ -2410,10 +2410,14 @@ export function convertToJson(
 
         // Not in expected format
         if (option) {
-            errors.push(createDiagnosticForNodeInSourceFile(sourceFile, valueExpression, Diagnostics.Compiler_option_0_requires_a_value_of_type_1, option.name, getCompilerOptionValueTypeString(option)));
+            errors.push(
+                createDiagnosticForNodeInSourceFile(sourceFile, valueExpression, Diagnostics.Compiler_option_0_requires_a_value_of_type_1, option.name, getCompilerOptionValueTypeString(option)),
+            );
         }
         else {
-            errors.push(createDiagnosticForNodeInSourceFile(sourceFile, valueExpression, Diagnostics.Property_value_can_only_be_string_literal_numeric_literal_true_false_null_object_literal_or_array_literal));
+            errors.push(
+                createDiagnosticForNodeInSourceFile(sourceFile, valueExpression, Diagnostics.Property_value_can_only_be_string_literal_numeric_literal_true_false_null_object_literal_or_array_literal),
+            );
         }
 
         return undefined;
@@ -2620,7 +2624,10 @@ function serializeOptionBaseObject(
                     // There is no map associated with this compiler option then use the value as-is
                     // This is the case if the value is expect to be string, number, boolean or list of string
                     if (pathOptions && optionDefinition.isFilePath) {
-                        result.set(name, getRelativePathFromFile(pathOptions.configFilePath, getNormalizedAbsolutePath(value as string, getDirectoryPath(pathOptions.configFilePath)), getCanonicalFileName!));
+                        result.set(
+                            name,
+                            getRelativePathFromFile(pathOptions.configFilePath, getNormalizedAbsolutePath(value as string, getDirectoryPath(pathOptions.configFilePath)), getCanonicalFileName!),
+                        );
                     }
                     else {
                         result.set(name, value);
@@ -2838,7 +2845,18 @@ export function parseJsonConfigFileContent(
     extendedConfigCache?: Map<string, ExtendedConfigCacheEntry>,
     existingWatchOptions?: WatchOptions,
 ): ParsedCommandLine {
-    return parseJsonConfigFileContentWorker(json, /*sourceFile*/ undefined, host, basePath, existingOptions, existingWatchOptions, configFileName, resolutionStack, extraFileExtensions, extendedConfigCache);
+    return parseJsonConfigFileContentWorker(
+        json,
+        /*sourceFile*/ undefined,
+        host,
+        basePath,
+        existingOptions,
+        existingWatchOptions,
+        configFileName,
+        resolutionStack,
+        extraFileExtensions,
+        extendedConfigCache,
+    );
 }
 
 /**
@@ -2860,7 +2878,18 @@ export function parseJsonSourceFileConfigFileContent(
     existingWatchOptions?: WatchOptions,
 ): ParsedCommandLine {
     tracing?.push(tracing.Phase.Parse, "parseJsonSourceFileConfigFileContent", { path: sourceFile.fileName });
-    const result = parseJsonConfigFileContentWorker(/*json*/ undefined, sourceFile, host, basePath, existingOptions, existingWatchOptions, configFileName, resolutionStack, extraFileExtensions, extendedConfigCache);
+    const result = parseJsonConfigFileContentWorker(
+        /*json*/ undefined,
+        sourceFile,
+        host,
+        basePath,
+        existingOptions,
+        existingWatchOptions,
+        configFileName,
+        resolutionStack,
+        extraFileExtensions,
+        extendedConfigCache,
+    );
     tracing?.pop();
     return result;
 }
@@ -3422,7 +3451,16 @@ function getExtendedConfig(
     else {
         extendedResult = readJsonConfigFile(extendedConfigPath, path => host.readFile(path));
         if (!extendedResult.parseDiagnostics.length) {
-            extendedConfig = parseConfig(/*json*/ undefined, extendedResult, host, getDirectoryPath(extendedConfigPath), getBaseFileName(extendedConfigPath), resolutionStack, errors, extendedConfigCache);
+            extendedConfig = parseConfig(
+                /*json*/ undefined,
+                extendedResult,
+                host,
+                getDirectoryPath(extendedConfigPath),
+                getBaseFileName(extendedConfigPath),
+                resolutionStack,
+                errors,
+                extendedConfigCache,
+            );
         }
         if (extendedConfigCache) {
             extendedConfigCache.set(path, { extendedResult, extendedConfig });
@@ -3570,7 +3608,15 @@ export function convertJsonOption(
         return isNullOrUndefined(validatedValue) ? validatedValue : normalizeNonListOptionValue(opt, basePath, validatedValue);
     }
     else {
-        errors.push(createDiagnosticForNodeInSourceFileOrCompilerDiagnostic(sourceFile, valueExpression, Diagnostics.Compiler_option_0_requires_a_value_of_type_1, opt.name, getCompilerOptionValueTypeString(opt)));
+        errors.push(
+            createDiagnosticForNodeInSourceFileOrCompilerDiagnostic(
+                sourceFile,
+                valueExpression,
+                Diagnostics.Compiler_option_0_requires_a_value_of_type_1,
+                opt.name,
+                getCompilerOptionValueTypeString(opt),
+            ),
+        );
     }
 }
 
@@ -3625,7 +3671,10 @@ function convertJsonOptionOfListType(
     valueExpression: ArrayLiteralExpression | undefined,
     sourceFile: TsConfigSourceFile | undefined,
 ): any[] {
-    return filter(map(values, (v, index) => convertJsonOption(option.element, v, basePath, errors, propertyAssignment, valueExpression?.elements[index], sourceFile)), v => option.listPreserveFalsyValues ? true : !!v);
+    return filter(
+        map(values, (v, index) => convertJsonOption(option.element, v, basePath, errors, propertyAssignment, valueExpression?.elements[index], sourceFile)),
+        v => option.listPreserveFalsyValues ? true : !!v,
+    );
 }
 
 /**
@@ -3850,7 +3899,11 @@ function specToDiagnostic(spec: CompilerOptionsValue, disallowTrailingRecursion?
 /**
  * Gets directories in a set of include patterns that should be watched for changes.
  */
-function getWildcardDirectories({ validatedIncludeSpecs: include, validatedExcludeSpecs: exclude }: ConfigFileSpecs, basePath: string, useCaseSensitiveFileNames: boolean): MapLike<WatchDirectoryFlags> {
+function getWildcardDirectories(
+    { validatedIncludeSpecs: include, validatedExcludeSpecs: exclude }: ConfigFileSpecs,
+    basePath: string,
+    useCaseSensitiveFileNames: boolean,
+): MapLike<WatchDirectoryFlags> {
     // We watch a directory recursively if it contains a wildcard anywhere in a directory segment
     // of the pattern:
     //
@@ -3946,7 +3999,13 @@ function getWildcardDirectoryFromSpec(spec: string, useCaseSensitiveFileNames: b
  *
  * @param file The path to the file.
  */
-function hasFileWithHigherPriorityExtension(file: string, literalFiles: Map<string, string>, wildcardFiles: Map<string, string>, extensions: readonly string[][], keyMapper: (value: string) => string) {
+function hasFileWithHigherPriorityExtension(
+    file: string,
+    literalFiles: Map<string, string>,
+    wildcardFiles: Map<string, string>,
+    extensions: readonly string[][],
+    keyMapper: (value: string) => string,
+) {
     const extensionGroup = forEach(extensions, group => fileExtensionIsOneOf(file, group) ? group : undefined);
     if (!extensionGroup) {
         return false;

@@ -348,8 +348,18 @@ interface PackageJson extends PackageJsonPathFields {
     version?: string;
 }
 
-function readPackageJsonField<K extends MatchingKeys<PackageJson, string | undefined>>(jsonContent: PackageJson, fieldName: K, typeOfTag: "string", state: ModuleResolutionState): PackageJson[K] | undefined;
-function readPackageJsonField<K extends MatchingKeys<PackageJson, object | undefined>>(jsonContent: PackageJson, fieldName: K, typeOfTag: "object", state: ModuleResolutionState): PackageJson[K] | undefined; // eslint-disable-line @typescript-eslint/unified-signatures
+function readPackageJsonField<K extends MatchingKeys<PackageJson, string | undefined>>(
+    jsonContent: PackageJson,
+    fieldName: K,
+    typeOfTag: "string",
+    state: ModuleResolutionState,
+): PackageJson[K] | undefined;
+function readPackageJsonField<K extends MatchingKeys<PackageJson, object | undefined>>(
+    jsonContent: PackageJson,
+    fieldName: K,
+    typeOfTag: "object",
+    state: ModuleResolutionState,
+): PackageJson[K] | undefined; // eslint-disable-line @typescript-eslint/unified-signatures
 function readPackageJsonField<K extends keyof PackageJson>(jsonContent: PackageJson, fieldName: K, typeOfTag: "string" | "object", state: ModuleResolutionState): PackageJson[K] | undefined {
     if (!hasProperty(jsonContent, fieldName)) {
         if (state.traceEnabled) {
@@ -368,7 +378,12 @@ function readPackageJsonField<K extends keyof PackageJson>(jsonContent: PackageJ
     return value;
 }
 
-function readPackageJsonPathField<K extends "typings" | "types" | "main" | "tsconfig">(jsonContent: PackageJson, fieldName: K, baseDirectory: string, state: ModuleResolutionState): PackageJson[K] | undefined {
+function readPackageJsonPathField<K extends "typings" | "types" | "main" | "tsconfig">(
+    jsonContent: PackageJson,
+    fieldName: K,
+    baseDirectory: string,
+    state: ModuleResolutionState,
+): PackageJson[K] | undefined {
     const fileName = readPackageJsonField(jsonContent, fieldName, "string", state);
     if (fileName === undefined) {
         return;
@@ -871,7 +886,10 @@ export function getAutomaticTypeDirectiveNames(options: CompilerOptions, host: M
 }
 
 export interface TypeReferenceDirectiveResolutionCache
-    extends PerDirectoryResolutionCache<ResolvedTypeReferenceDirectiveWithFailedLookupLocations>, NonRelativeNameResolutionCache<ResolvedTypeReferenceDirectiveWithFailedLookupLocations>, PackageJsonInfoCache
+    extends
+        PerDirectoryResolutionCache<ResolvedTypeReferenceDirectiveWithFailedLookupLocations>,
+        NonRelativeNameResolutionCache<ResolvedTypeReferenceDirectiveWithFailedLookupLocations>,
+        PackageJsonInfoCache
 {
     /** @internal */ clearAllExceptPackageJsonInfoCache(): void;
 }
@@ -1418,7 +1436,13 @@ export function getOptionsForLibraryResolution(options: CompilerOptions) {
 }
 
 /** @internal */
-export function resolveLibrary(libraryName: string, resolveFrom: string, compilerOptions: CompilerOptions, host: ModuleResolutionHost, cache?: ModuleResolutionCache): ResolvedModuleWithFailedLookupLocations {
+export function resolveLibrary(
+    libraryName: string,
+    resolveFrom: string,
+    compilerOptions: CompilerOptions,
+    host: ModuleResolutionHost,
+    cache?: ModuleResolutionCache,
+): ResolvedModuleWithFailedLookupLocations {
     return resolveModuleName(libraryName, resolveFrom, getOptionsForLibraryResolution(compilerOptions), host, cache);
 }
 
@@ -1477,13 +1501,29 @@ export function resolveModuleName(
                 result = nodeNextModuleNameResolver(moduleName, containingFile, compilerOptions, host, cache, redirectedReference, resolutionMode);
                 break;
             case ModuleResolutionKind.Node10:
-                result = nodeModuleNameResolver(moduleName, containingFile, compilerOptions, host, cache, redirectedReference, resolutionMode ? getConditions(compilerOptions, resolutionMode) : undefined);
+                result = nodeModuleNameResolver(
+                    moduleName,
+                    containingFile,
+                    compilerOptions,
+                    host,
+                    cache,
+                    redirectedReference,
+                    resolutionMode ? getConditions(compilerOptions, resolutionMode) : undefined,
+                );
                 break;
             case ModuleResolutionKind.Classic:
                 result = classicNameResolver(moduleName, containingFile, compilerOptions, host, cache, redirectedReference);
                 break;
             case ModuleResolutionKind.Bundler:
-                result = bundlerModuleNameResolver(moduleName, containingFile, compilerOptions, host, cache, redirectedReference, resolutionMode ? getConditions(compilerOptions, resolutionMode) : undefined);
+                result = bundlerModuleNameResolver(
+                    moduleName,
+                    containingFile,
+                    compilerOptions,
+                    host,
+                    cache,
+                    redirectedReference,
+                    resolutionMode ? getConditions(compilerOptions, resolutionMode) : undefined,
+                );
                 break;
             default:
                 return Debug.fail(`Unexpected moduleResolution: ${moduleResolution}`);
@@ -1503,7 +1543,13 @@ export function resolveModuleName(
     if (traceEnabled) {
         if (result.resolvedModule) {
             if (result.resolvedModule.packageId) {
-                trace(host, Diagnostics.Module_name_0_was_successfully_resolved_to_1_with_Package_ID_2, moduleName, result.resolvedModule.resolvedFileName, packageIdToString(result.resolvedModule.packageId));
+                trace(
+                    host,
+                    Diagnostics.Module_name_0_was_successfully_resolved_to_1_with_Package_ID_2,
+                    moduleName,
+                    result.resolvedModule.resolvedFileName,
+                    packageIdToString(result.resolvedModule.packageId),
+                );
             }
             else {
                 trace(host, Diagnostics.Module_name_0_was_successfully_resolved_to_1, moduleName, result.resolvedModule.resolvedFileName);
@@ -1587,7 +1633,13 @@ type ResolutionKindSpecificLoader = (extensions: Extensions, candidate: string, 
  * be converted to a path relative to found rootDir entry './content/protocols/file2' (*). As a last step compiler will check all remaining
  * entries in 'rootDirs', use them to build absolute path out of (*) and try to resolve module from this location.
  */
-function tryLoadModuleUsingOptionalResolutionSettings(extensions: Extensions, moduleName: string, containingDirectory: string, loader: ResolutionKindSpecificLoader, state: ModuleResolutionState): Resolved | undefined {
+function tryLoadModuleUsingOptionalResolutionSettings(
+    extensions: Extensions,
+    moduleName: string,
+    containingDirectory: string,
+    loader: ResolutionKindSpecificLoader,
+    state: ModuleResolutionState,
+): Resolved | undefined {
     const resolved = tryLoadModuleUsingPathsIfEligible(extensions, moduleName, loader, state);
     if (resolved) return resolved.value;
 
@@ -1851,7 +1903,18 @@ export function bundlerModuleNameResolver(
     if (getResolveJsonModule(compilerOptions)) {
         extensions |= Extensions.Json;
     }
-    return nodeModuleNameResolverWorker(getNodeResolutionFeatures(compilerOptions), moduleName, containingDirectory, compilerOptions, host, cache, extensions, /*isConfigLookup*/ false, redirectedReference, conditions);
+    return nodeModuleNameResolverWorker(
+        getNodeResolutionFeatures(compilerOptions),
+        moduleName,
+        containingDirectory,
+        compilerOptions,
+        host,
+        cache,
+        extensions,
+        /*isConfigLookup*/ false,
+        redirectedReference,
+        conditions,
+    );
 }
 
 export function nodeModuleNameResolver(
@@ -2037,7 +2100,8 @@ function nodeModuleNameResolverWorker(
     );
 
     function tryResolve(extensions: Extensions, state: ModuleResolutionState): SearchResult<{ resolved: Resolved; isExternalLibraryImport: boolean; }> {
-        const loader: ResolutionKindSpecificLoader = (extensions, candidate, onlyRecordFailures, state) => nodeLoadModuleByRelativeName(extensions, candidate, onlyRecordFailures, state, /*considerPackageJson*/ true);
+        const loader: ResolutionKindSpecificLoader = (extensions, candidate, onlyRecordFailures, state) =>
+            nodeLoadModuleByRelativeName(extensions, candidate, onlyRecordFailures, state, /*considerPackageJson*/ true);
         const resolved = tryLoadModuleUsingOptionalResolutionSettings(extensions, moduleName, containingDirectory, loader, state);
         if (resolved) {
             return toSearchResult({ resolved, isExternalLibraryImport: pathContainsNodeModules(resolved.path) });
@@ -2635,9 +2699,24 @@ function loadNodeModuleFromDirectoryWorker(
     if (versionPaths && (!packageFile || containsPath(candidate, packageFile))) {
         const moduleName = getRelativePathFromDirectory(candidate, packageFile || indexPath, /*ignoreCase*/ false);
         if (state.traceEnabled) {
-            trace(state.host, Diagnostics.package_json_has_a_typesVersions_entry_0_that_matches_compiler_version_1_looking_for_a_pattern_to_match_module_name_2, versionPaths.version, version, moduleName);
+            trace(
+                state.host,
+                Diagnostics.package_json_has_a_typesVersions_entry_0_that_matches_compiler_version_1_looking_for_a_pattern_to_match_module_name_2,
+                versionPaths.version,
+                version,
+                moduleName,
+            );
         }
-        const result = tryLoadModuleUsingPaths(extensions, moduleName, candidate, versionPaths.paths, /*pathPatterns*/ undefined, loader, onlyRecordFailuresForPackageFile || onlyRecordFailuresForIndex, state);
+        const result = tryLoadModuleUsingPaths(
+            extensions,
+            moduleName,
+            candidate,
+            versionPaths.paths,
+            /*pathPatterns*/ undefined,
+            loader,
+            onlyRecordFailuresForPackageFile || onlyRecordFailuresForIndex,
+            state,
+        );
         if (result) {
             return removeIgnoredPackageId(result.value);
         }
@@ -3063,7 +3142,9 @@ function getLoadModuleFromTargetImportOrExport(
                     // be a file outside of `./src/sub` in the program (the file we resolved to), making us de-facto right. So this fallback lookup
                     // logic may influence what files are pulled in by self-names, which in turn influences the output path shape, but it's all
                     // internally consistent so the paths should be stable so long as we prefer the "most general" (meaning: top-most-level directory) possible results first.
-                    const commonDir = toAbsolutePath(getCommonSourceDirectory(state.compilerOptions, () => [requestingFile, toAbsolutePath(packagePath)], state.host.getCurrentDirectory?.() || "", getCanonicalFileName));
+                    const commonDir = toAbsolutePath(
+                        getCommonSourceDirectory(state.compilerOptions, () => [requestingFile, toAbsolutePath(packagePath)], state.host.getCurrentDirectory?.() || "", getCanonicalFileName),
+                    );
                     commonSourceDirGuesses.push(commonDir);
 
                     let fragment = ensureTrailingDirectorySeparator(commonDir);
@@ -3099,7 +3180,9 @@ function getLoadModuleFromTargetImportOrExport(
                                         if (!extensionIsOk(extensions, possibleExt)) continue;
                                         const possibleInputWithInputExtension = changeAnyExtension(possibleInputBase, possibleExt, ext, !useCaseSensitiveFileNames(state));
                                         if (state.host.fileExists(possibleInputWithInputExtension)) {
-                                            return toSearchResult(withPackageId(scope, loadFileNameFromPackageJsonField(extensions, possibleInputWithInputExtension, /*onlyRecordFailures*/ false, state)));
+                                            return toSearchResult(
+                                                withPackageId(scope, loadFileNameFromPackageJsonField(extensions, possibleInputWithInputExtension, /*onlyRecordFailures*/ false, state)),
+                                            );
                                         }
                                     }
                                 }
@@ -3226,7 +3309,15 @@ function loadModuleFromImmediateNodeModulesDirectory(
             }
             nodeModulesAtTypesExists = false;
         }
-        return loadModuleFromSpecificNodeModulesDirectory(Extensions.Declaration, mangleScopedPackageNameWithTrace(moduleName, state), nodeModulesAtTypes, nodeModulesAtTypesExists, state, cache, redirectedReference);
+        return loadModuleFromSpecificNodeModulesDirectory(
+            Extensions.Declaration,
+            mangleScopedPackageNameWithTrace(moduleName, state),
+            nodeModulesAtTypes,
+            nodeModulesAtTypesExists,
+            state,
+            cache,
+            redirectedReference,
+        );
     }
 }
 
@@ -3562,7 +3653,15 @@ export function loadModuleFromGlobalCache(
         candidateIsFromPackageJsonField: false,
         resolvedPackageDirectory: false,
     };
-    const resolved = loadModuleFromImmediateNodeModulesDirectory(Extensions.Declaration, moduleName, globalCache, state, /*typesScopeOnly*/ false, /*cache*/ undefined, /*redirectedReference*/ undefined);
+    const resolved = loadModuleFromImmediateNodeModulesDirectory(
+        Extensions.Declaration,
+        moduleName,
+        globalCache,
+        state,
+        /*typesScopeOnly*/ false,
+        /*cache*/ undefined,
+        /*redirectedReference*/ undefined,
+    );
     return createResolvedModuleWithFailedLookupLocations(
         resolved,
         /*isExternalLibraryImport*/ true,

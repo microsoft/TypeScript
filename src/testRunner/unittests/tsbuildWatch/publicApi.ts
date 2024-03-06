@@ -54,7 +54,9 @@ export enum e2 { }
 export function f22() { } // trailing`,
     };
     const commandLineArgs = ["--b", "--w"];
-    const { sys, baseline, cb, getPrograms } = createBaseline(createWatchedSystem([libFile, solution, sharedConfig, sharedIndex, webpackConfig, webpackIndex], { currentDirectory: "/user/username/projects/myproject" }));
+    const { sys, baseline, cb, getPrograms } = createBaseline(
+        createWatchedSystem([libFile, solution, sharedConfig, sharedIndex, webpackConfig, webpackIndex], { currentDirectory: "/user/username/projects/myproject" }),
+    );
     const buildHost = createSolutionBuilderWithWatchHostForBaseline(sys, cb);
     buildHost.getCustomTransformers = getCustomTransformers;
     const builder = ts.createSolutionBuilderWithWatch(buildHost, [solution.path], { verbose: true });

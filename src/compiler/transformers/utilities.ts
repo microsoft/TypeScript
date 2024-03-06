@@ -159,7 +159,8 @@ export function getImportNeedsImportStarHelper(node: ImportDeclaration): boolean
 /** @internal */
 export function getImportNeedsImportDefaultHelper(node: ImportDeclaration): boolean {
     // Import default is needed if there's a default import or a default ref and no other refs (meaning an import star helper wasn't requested)
-    return !getImportNeedsImportStarHelper(node) && (isDefaultImport(node) || (!!node.importClause && isNamedImports(node.importClause.namedBindings!) && containsDefaultReference(node.importClause.namedBindings))); // TODO: GH#18217
+    return !getImportNeedsImportStarHelper(node) &&
+        (isDefaultImport(node) || (!!node.importClause && isNamedImports(node.importClause.namedBindings!) && containsDefaultReference(node.importClause.namedBindings))); // TODO: GH#18217
 }
 
 /** @internal */
@@ -617,7 +618,9 @@ export function isInitializedProperty(member: ClassElement): member is PropertyD
  *
  * @internal
  */
-export function isNonStaticMethodOrAccessorWithPrivateName(member: ClassElement): member is PrivateIdentifierMethodDeclaration | PrivateIdentifierAccessorDeclaration | PrivateIdentifierAutoAccessorPropertyDeclaration {
+export function isNonStaticMethodOrAccessorWithPrivateName(
+    member: ClassElement,
+): member is PrivateIdentifierMethodDeclaration | PrivateIdentifierAccessorDeclaration | PrivateIdentifierAutoAccessorPropertyDeclaration {
     return !isStatic(member) && (isMethodOrAccessor(member) || isAutoAccessorPropertyDeclaration(member)) && isPrivateIdentifier(member.name);
 }
 

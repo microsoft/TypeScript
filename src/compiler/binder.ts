@@ -727,7 +727,11 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
             case SyntaxKind.Parameter:
                 // Parameters with names are handled at the top of this function.  Parameters
                 // without names can only come from JSDocFunctionTypes.
-                Debug.assert(node.parent.kind === SyntaxKind.JSDocFunctionType, "Impossible parameter parent kind", () => `parent is: ${Debug.formatSyntaxKind(node.parent.kind)}, expected JSDocFunctionType`);
+                Debug.assert(
+                    node.parent.kind === SyntaxKind.JSDocFunctionType,
+                    "Impossible parameter parent kind",
+                    () => `parent is: ${Debug.formatSyntaxKind(node.parent.kind)}, expected JSDocFunctionType`,
+                );
                 const functionType = node.parent as JSDocFunctionType;
                 const index = functionType.parameters.indexOf(node as ParameterDeclaration);
                 return "arg" + index as __String;
@@ -746,7 +750,15 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
      * @param includes - The SymbolFlags that node has in addition to its declaration type (eg: export, ambient, etc.)
      * @param excludes - The flags which node cannot be declared alongside in a symbol table. Used to report forbidden declarations.
      */
-    function declareSymbol(symbolTable: SymbolTable, parent: Symbol | undefined, node: Declaration, includes: SymbolFlags, excludes: SymbolFlags, isReplaceableByMethod?: boolean, isComputedName?: boolean): Symbol {
+    function declareSymbol(
+        symbolTable: SymbolTable,
+        parent: Symbol | undefined,
+        node: Declaration,
+        includes: SymbolFlags,
+        excludes: SymbolFlags,
+        isReplaceableByMethod?: boolean,
+        isComputedName?: boolean,
+    ): Symbol {
         Debug.assert(isComputedName || !hasDynamicName(node));
 
         const isDefaultExport = hasSyntacticModifier(node, ModifierFlags.Default) || isExportSpecifier(node) && node.name.escapedText === "default";
@@ -848,7 +860,10 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
                     }
 
                     const relatedInformation: DiagnosticRelatedInformation[] = [];
-                    if (isTypeAliasDeclaration(node) && nodeIsMissing(node.type) && hasSyntacticModifier(node, ModifierFlags.Export) && symbol.flags & (SymbolFlags.Alias | SymbolFlags.Type | SymbolFlags.Namespace)) {
+                    if (
+                        isTypeAliasDeclaration(node) && nodeIsMissing(node.type) && hasSyntacticModifier(node, ModifierFlags.Export) &&
+                        symbol.flags & (SymbolFlags.Alias | SymbolFlags.Type | SymbolFlags.Namespace)
+                    ) {
                         // export type T; - may have meant export type { T }?
                         relatedInformation.push(createDiagnosticForNode(node, Diagnostics.Did_you_mean_0, `export type { ${unescapeLeadingUnderscores(node.name.escapedText)} }`));
                     }
@@ -858,7 +873,8 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
                         const decl = getNameOfDeclaration(declaration) || declaration;
                         const diag = messageNeedsName ? createDiagnosticForNode(decl, message, getDisplayName(declaration)) : createDiagnosticForNode(decl, message);
                         file.bindDiagnostics.push(
-                            multipleDefaultExports ? addRelatedInfo(diag, createDiagnosticForNode(declarationName, index === 0 ? Diagnostics.Another_export_default_is_here : Diagnostics.and_here)) : diag,
+                            multipleDefaultExports ? addRelatedInfo(diag, createDiagnosticForNode(declarationName, index === 0 ? Diagnostics.Another_export_default_is_here : Diagnostics.and_here))
+                                : diag,
                         );
                         if (multipleDefaultExports) {
                             relatedInformation.push(createDiagnosticForNode(decl, Diagnostics.The_first_export_default_is_here));
@@ -1015,9 +1031,10 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
             }
             // We create a return control flow graph for IIFEs and constructors. For constructors
             // we use the return control flow graph in strict property initialization checks.
-            currentReturnTarget = isImmediatelyInvoked || node.kind === SyntaxKind.Constructor || (isInJSFile(node) && (node.kind === SyntaxKind.FunctionDeclaration || node.kind === SyntaxKind.FunctionExpression)) ?
-                createBranchLabel()
-                : undefined;
+            currentReturnTarget =
+                isImmediatelyInvoked || node.kind === SyntaxKind.Constructor || (isInJSFile(node) && (node.kind === SyntaxKind.FunctionDeclaration || node.kind === SyntaxKind.FunctionExpression)) ?
+                    createBranchLabel()
+                    : undefined;
             currentExceptionTarget = undefined;
             currentBreakTarget = undefined;
             currentContinueTarget = undefined;
@@ -3361,7 +3378,13 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
         bindPropertyAssignment(node.expression, node, /*isPrototypeProperty*/ false, /*containerIsClass*/ false);
     }
 
-    function bindPotentiallyMissingNamespaces(namespaceSymbol: Symbol | undefined, entityName: BindableStaticNameExpression, isToplevel: boolean, isPrototypeProperty: boolean, containerIsClass: boolean) {
+    function bindPotentiallyMissingNamespaces(
+        namespaceSymbol: Symbol | undefined,
+        entityName: BindableStaticNameExpression,
+        isToplevel: boolean,
+        isPrototypeProperty: boolean,
+        containerIsClass: boolean,
+    ) {
         if (namespaceSymbol?.flags! & SymbolFlags.Alias) {
             return namespaceSymbol;
         }
@@ -3629,7 +3652,13 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
         // containing class.
         if (isParameterPropertyDeclaration(node, node.parent)) {
             const classDeclaration = node.parent.parent;
-            declareSymbol(classDeclaration.symbol.members!, classDeclaration.symbol, node, SymbolFlags.Property | (node.questionToken ? SymbolFlags.Optional : SymbolFlags.None), SymbolFlags.PropertyExcludes);
+            declareSymbol(
+                classDeclaration.symbol.members!,
+                classDeclaration.symbol,
+                node,
+                SymbolFlags.Property | (node.questionToken ? SymbolFlags.Optional : SymbolFlags.None),
+                SymbolFlags.PropertyExcludes,
+            );
         }
     }
 
@@ -3846,7 +3875,8 @@ export function getContainerFlags(node: Node): ContainerFlags {
         case SyntaxKind.SetAccessor:
         case SyntaxKind.MethodDeclaration:
             if (isObjectLiteralOrClassExpressionMethodOrAccessor(node)) {
-                return ContainerFlags.IsContainer | ContainerFlags.IsControlFlowContainer | ContainerFlags.HasLocals | ContainerFlags.IsFunctionLike | ContainerFlags.IsObjectLiteralOrClassExpressionMethodOrAccessor;
+                return ContainerFlags.IsContainer | ContainerFlags.IsControlFlowContainer | ContainerFlags.HasLocals | ContainerFlags.IsFunctionLike |
+                    ContainerFlags.IsObjectLiteralOrClassExpressionMethodOrAccessor;
             }
             // falls through
         case SyntaxKind.Constructor:

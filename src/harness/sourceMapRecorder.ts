@@ -282,7 +282,12 @@ namespace SourceMapSpanWriter {
     }
 }
 
-export function getSourceMapRecord(sourceMapDataList: readonly ts.SourceMapEmitResult[], program: ts.Program, jsFiles: readonly documents.TextDocument[], declarationFiles: readonly documents.TextDocument[]) {
+export function getSourceMapRecord(
+    sourceMapDataList: readonly ts.SourceMapEmitResult[],
+    program: ts.Program,
+    jsFiles: readonly documents.TextDocument[],
+    declarationFiles: readonly documents.TextDocument[],
+) {
     const sourceMapRecorder = new Compiler.WriterAggregator();
 
     for (let i = 0; i < sourceMapDataList.length; i++) {

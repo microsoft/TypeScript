@@ -445,7 +445,10 @@ export function transformDeclarations(context: TransformationContext) {
     function reportTruncationError() {
         if (errorNameNode || errorFallbackNode) {
             context.addDiagnostic(
-                createDiagnosticForNode((errorNameNode || errorFallbackNode)!, Diagnostics.The_inferred_type_of_this_node_exceeds_the_maximum_length_the_compiler_will_serialize_An_explicit_type_annotation_is_needed),
+                createDiagnosticForNode(
+                    (errorNameNode || errorFallbackNode)!,
+                    Diagnostics.The_inferred_type_of_this_node_exceeds_the_maximum_length_the_compiler_will_serialize_An_explicit_type_annotation_is_needed,
+                ),
             );
         }
     }
@@ -465,7 +468,9 @@ export function transformDeclarations(context: TransformationContext) {
 
     function reportNonSerializableProperty(propertyName: string) {
         if (errorNameNode || errorFallbackNode) {
-            context.addDiagnostic(createDiagnosticForNode((errorNameNode || errorFallbackNode)!, Diagnostics.The_type_of_this_node_cannot_be_serialized_because_its_property_0_cannot_be_serialized, propertyName));
+            context.addDiagnostic(
+                createDiagnosticForNode((errorNameNode || errorFallbackNode)!, Diagnostics.The_type_of_this_node_cannot_be_serialized_because_its_property_0_cannot_be_serialized, propertyName),
+            );
         }
     }
 
@@ -530,7 +535,8 @@ export function transformDeclarations(context: TransformationContext) {
                         return newFile;
                     }
                     needsDeclare = true;
-                    const updated = isSourceFileJS(sourceFile) ? factory.createNodeArray(transformDeclarationsForJS(sourceFile)) : visitNodes(sourceFile.statements, visitDeclarationStatements, isStatement);
+                    const updated = isSourceFileJS(sourceFile) ? factory.createNodeArray(transformDeclarationsForJS(sourceFile))
+                        : visitNodes(sourceFile.statements, visitDeclarationStatements, isStatement);
                     return factory.updateSourceFile(
                         sourceFile,
                         transformAndReplaceLatePaintedStatements(updated),
@@ -932,7 +938,10 @@ export function transformDeclarations(context: TransformationContext) {
         return setCommentRange(updated, getCommentRange(original));
     }
 
-    function rewriteModuleSpecifier<T extends Node>(parent: ImportEqualsDeclaration | ImportDeclaration | ExportDeclaration | ModuleDeclaration | ImportTypeNode, input: T | undefined): T | StringLiteral {
+    function rewriteModuleSpecifier<T extends Node>(
+        parent: ImportEqualsDeclaration | ImportDeclaration | ExportDeclaration | ModuleDeclaration | ImportTypeNode,
+        input: T | undefined,
+    ): T | StringLiteral {
         if (!input) return undefined!; // TODO: GH#18217
         resultHasExternalModuleIndicator = resultHasExternalModuleIndicator || (parent.kind !== SyntaxKind.ModuleDeclaration && parent.kind !== SyntaxKind.ImportType);
         if (isStringLiteralLike(input)) {
@@ -1423,7 +1432,10 @@ export function transformDeclarations(context: TransformationContext) {
                         /*initializer*/ undefined,
                     );
                     errorFallbackNode = undefined;
-                    const statement = factory.createVariableStatement(needsDeclare ? [factory.createModifier(SyntaxKind.DeclareKeyword)] : [], factory.createVariableDeclarationList([varDecl], NodeFlags.Const));
+                    const statement = factory.createVariableStatement(
+                        needsDeclare ? [factory.createModifier(SyntaxKind.DeclareKeyword)] : [],
+                        factory.createVariableDeclarationList([varDecl], NodeFlags.Const),
+                    );
 
                     preserveJsDoc(statement, input);
                     removeAllComments(input);
@@ -1551,7 +1563,12 @@ export function transformDeclarations(context: TransformationContext) {
                 if (clean && resolver.isExpandoFunctionDeclaration(input) && shouldEmitFunctionProperties(input)) {
                     const props = resolver.getPropertiesOfContainerFunction(input);
                     // Use parseNodeFactory so it is usable as an enclosing declaration
-                    const fakespace = parseNodeFactory.createModuleDeclaration(/*modifiers*/ undefined, clean.name || factory.createIdentifier("_default"), factory.createModuleBlock([]), NodeFlags.Namespace);
+                    const fakespace = parseNodeFactory.createModuleDeclaration(
+                        /*modifiers*/ undefined,
+                        clean.name || factory.createIdentifier("_default"),
+                        factory.createModuleBlock([]),
+                        NodeFlags.Namespace,
+                    );
                     setParent(fakespace, enclosingDeclaration as SourceFile | NamespaceDeclaration);
                     fakespace.locals = createSymbolTable(props);
                     fakespace.symbol = props[0].parent!;
@@ -1573,7 +1590,10 @@ export function transformDeclarations(context: TransformationContext) {
                             exportMappings.push([name, nameStr]);
                         }
                         const varDecl = factory.createVariableDeclaration(name, /*exclamationToken*/ undefined, type, /*initializer*/ undefined);
-                        return factory.createVariableStatement(isNonContextualKeywordName ? undefined : [factory.createToken(SyntaxKind.ExportKeyword)], factory.createVariableDeclarationList([varDecl]));
+                        return factory.createVariableStatement(
+                            isNonContextualKeywordName ? undefined : [factory.createToken(SyntaxKind.ExportKeyword)],
+                            factory.createVariableDeclarationList([varDecl]),
+                        );
                     });
                     if (!exportMappings.length) {
                         declarations = mapDefined(declarations, declaration => factory.replaceModifiers(declaration, ModifierFlags.None));
@@ -1766,7 +1786,10 @@ export function transformDeclarations(context: TransformationContext) {
                         resolver.createTypeOfExpression(extendsClause.expression, input, declarationEmitNodeBuilderFlags, symbolTracker),
                         /*initializer*/ undefined,
                     );
-                    const statement = factory.createVariableStatement(needsDeclare ? [factory.createModifier(SyntaxKind.DeclareKeyword)] : [], factory.createVariableDeclarationList([varDecl], NodeFlags.Const));
+                    const statement = factory.createVariableStatement(
+                        needsDeclare ? [factory.createModifier(SyntaxKind.DeclareKeyword)] : [],
+                        factory.createVariableDeclarationList([varDecl], NodeFlags.Const),
+                    );
                     const heritageClauses = factory.createNodeArray(map(input.heritageClauses, clause => {
                         if (clause.token === SyntaxKind.ExtendsKeyword) {
                             const oldDiag = getSymbolAccessibilityDiagnostic;

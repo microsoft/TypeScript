@@ -501,7 +501,13 @@ export function createEmitHelperFactory(context: TransformationContext): EmitHel
 
     // ES2017 Helpers
 
-    function createAwaiterHelper(hasLexicalThis: boolean, argumentsExpression: Expression | undefined, promiseConstructor: EntityName | Expression | undefined, parameters: readonly ParameterDeclaration[], body: Block) {
+    function createAwaiterHelper(
+        hasLexicalThis: boolean,
+        argumentsExpression: Expression | undefined,
+        promiseConstructor: EntityName | Expression | undefined,
+        parameters: readonly ParameterDeclaration[],
+        body: Block,
+    ) {
         context.requestEmitHelper(awaiterHelper);
 
         const generatorFunc = factory.createFunctionExpression(

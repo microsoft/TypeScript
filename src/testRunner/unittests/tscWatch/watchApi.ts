@@ -94,7 +94,8 @@ describe("unittests:: tsc-watch:: watchAPI:: tsc-watch with custom module resolu
                     system: sys,
                     cb,
                 });
-                host.resolveModuleNames = (moduleNames, containingFile, _reusedNames, _redirectedReference, options) => moduleNames.map(m => ts.resolveModuleName(m, containingFile, options, host).resolvedModule);
+                host.resolveModuleNames = (moduleNames, containingFile, _reusedNames, _redirectedReference, options) =>
+                    moduleNames.map(m => ts.resolveModuleName(m, containingFile, options, host).resolvedModule);
                 // Invalidate resolutions only when ts file is created
                 if (implementHasInvalidatedResolution) host.hasInvalidatedResolutions = () => sys.fileExists(`/user/username/projects/myproject/other.ts`);
                 const watch = ts.createWatchProgram(host);

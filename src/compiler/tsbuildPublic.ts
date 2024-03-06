@@ -298,7 +298,12 @@ export function createBuilderStatusReporter(system: System, pretty?: boolean): D
     };
 }
 
-function createSolutionBuilderHostBase<T extends BuilderProgram>(system: System, createProgram: CreateProgram<T> | undefined, reportDiagnostic?: DiagnosticReporter, reportSolutionBuilderStatus?: DiagnosticReporter) {
+function createSolutionBuilderHostBase<T extends BuilderProgram>(
+    system: System,
+    createProgram: CreateProgram<T> | undefined,
+    reportDiagnostic?: DiagnosticReporter,
+    reportSolutionBuilderStatus?: DiagnosticReporter,
+) {
     const host = createProgramHost(system, createProgram) as SolutionBuilderHostBase<T>;
     host.getModifiedTime = system.getModifiedTime ? path => system.getModifiedTime!(path) : returnUndefined;
     host.setModifiedTime = system.setModifiedTime ? (path, date) => system.setModifiedTime!(path, date) : noop;
@@ -495,7 +500,12 @@ function createSolutionBuilderState<T extends BuilderProgram>(
     }
     let libraryResolutionCache: ModuleResolutionCache | undefined;
     if (!compilerHost.resolveLibrary) {
-        libraryResolutionCache = createModuleResolutionCache(compilerHost.getCurrentDirectory(), compilerHost.getCanonicalFileName, /*options*/ undefined, moduleResolutionCache?.getPackageJsonInfoCache());
+        libraryResolutionCache = createModuleResolutionCache(
+            compilerHost.getCurrentDirectory(),
+            compilerHost.getCanonicalFileName,
+            /*options*/ undefined,
+            moduleResolutionCache?.getPackageJsonInfoCache(),
+        );
         compilerHost.resolveLibrary = (libraryName, resolveFrom, options) =>
             resolveLibrary(
                 libraryName,
@@ -892,7 +902,13 @@ export interface BuildInvalidedProject<T extends BuilderProgram> extends Invalid
      * (if that emit of that source file is required it would be emitted again when making sure invalidated project is completed)
      * This emit is not considered actual emit (and hence uptodate status is not reflected if
      */
-    emit(targetSourceFile?: SourceFile, writeFile?: WriteFileCallback, cancellationToken?: CancellationToken, emitOnlyDtsFiles?: boolean, customTransformers?: CustomTransformers): EmitResult | undefined;
+    emit(
+        targetSourceFile?: SourceFile,
+        writeFile?: WriteFileCallback,
+        cancellationToken?: CancellationToken,
+        emitOnlyDtsFiles?: boolean,
+        customTransformers?: CustomTransformers,
+    ): EmitResult | undefined;
     // TODO(shkamat):: investigate later if we can emit even when there are declaration diagnostics
     // emitNextAffectedFile(writeFile?: WriteFileCallback, cancellationToken?: CancellationToken, customTransformers?: CustomTransformers): AffectedFileResult<EmitResult>;
 }
@@ -1600,7 +1616,12 @@ function getBuildInfoCacheEntry<T extends BuilderProgram>(state: SolutionBuilder
     return existing?.path === path ? existing : undefined;
 }
 
-function getBuildInfo<T extends BuilderProgram>(state: SolutionBuilderState<T>, buildInfoPath: string, resolvedConfigPath: ResolvedConfigFilePath, modifiedTime: Date | undefined): BuildInfo | undefined {
+function getBuildInfo<T extends BuilderProgram>(
+    state: SolutionBuilderState<T>,
+    buildInfoPath: string,
+    resolvedConfigPath: ResolvedConfigFilePath,
+    modifiedTime: Date | undefined,
+): BuildInfo | undefined {
     const path = toPath(state, buildInfoPath);
     const existing = state.buildInfoCache.get(resolvedConfigPath);
     if (existing !== undefined && existing.path === path) {
@@ -1612,7 +1633,12 @@ function getBuildInfo<T extends BuilderProgram>(state: SolutionBuilderState<T>, 
     return buildInfo;
 }
 
-function checkConfigFileUpToDateStatus<T extends BuilderProgram>(state: SolutionBuilderState<T>, configFile: string, oldestOutputFileTime: Date, oldestOutputFileName: string): Status.OutOfDateWithSelf | undefined {
+function checkConfigFileUpToDateStatus<T extends BuilderProgram>(
+    state: SolutionBuilderState<T>,
+    configFile: string,
+    oldestOutputFileTime: Date,
+    oldestOutputFileName: string,
+): Status.OutOfDateWithSelf | undefined {
     // Check tsconfig time
     const tsconfigTime = getModifiedTime(state, configFile);
     if (oldestOutputFileTime < tsconfigTime) {
@@ -1892,7 +1918,10 @@ function getUpToDateStatusWorker<T extends BuilderProgram>(state: SolutionBuilde
     if (configStatus) return configStatus;
 
     // Check extended config time
-    const extendedConfigStatus = forEach(project.options.configFile!.extendedSourceFiles || emptyArray, configFile => checkConfigFileUpToDateStatus(state, configFile, oldestOutputFileTime, oldestOutputFileName!));
+    const extendedConfigStatus = forEach(
+        project.options.configFile!.extendedSourceFiles || emptyArray,
+        configFile => checkConfigFileUpToDateStatus(state, configFile, oldestOutputFileTime, oldestOutputFileName!),
+    );
     if (extendedConfigStatus) return extendedConfigStatus;
 
     // Check package file time
@@ -2272,7 +2301,10 @@ function watchExtendedConfigFiles<T extends BuilderProgram>(state: SolutionBuild
             watchFile(
                 state,
                 extendedConfigFileName,
-                () => state.allWatchedExtendedConfigFiles.get(extendedConfigFilePath)?.projects.forEach(projectConfigFilePath => invalidateProjectAndScheduleBuilds(state, projectConfigFilePath, ProgramUpdateLevel.Full)),
+                () =>
+                    state.allWatchedExtendedConfigFiles.get(extendedConfigFilePath)?.projects.forEach(projectConfigFilePath =>
+                        invalidateProjectAndScheduleBuilds(state, projectConfigFilePath, ProgramUpdateLevel.Full)
+                    ),
                 PollingInterval.High,
                 parsed?.watchOptions,
                 WatchType.ExtendedConfigFile,

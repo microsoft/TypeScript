@@ -704,7 +704,9 @@ export class TestState {
     }
 
     private anyErrorInRange(predicate: (errorMinChar: number, errorLimChar: number, startPos: number, endPos: number | undefined) => boolean, startMarker: Marker, endMarker?: Marker): boolean {
-        return this.getDiagnostics(startMarker.fileName).some(({ start, length }) => predicate(start!, start! + length!, startMarker.position, endMarker === undefined ? undefined : endMarker.position)); // TODO: GH#18217
+        return this.getDiagnostics(startMarker.fileName).some(({ start, length }) =>
+            predicate(start!, start! + length!, startMarker.position, endMarker === undefined ? undefined : endMarker.position)
+        ); // TODO: GH#18217
     }
 
     private printErrorLog(expectErrors: boolean, errors: readonly ts.Diagnostic[]): void {
@@ -751,7 +753,8 @@ export class TestState {
                 !ts.isAnySupportedFileExtension(fileName)
                 || Harness.getConfigNameFromFileName(fileName)
                 // Can't get a Program in Server tests
-                || this.testType !== FourSlashTestType.Server && !ts.getAllowJSCompilerOption(this.getProgram().getCompilerOptions()) && !ts.resolutionExtensionIsTSOrJson(ts.extensionFromPath(fileName))
+                || this.testType !== FourSlashTestType.Server && !ts.getAllowJSCompilerOption(this.getProgram().getCompilerOptions()) &&
+                    !ts.resolutionExtensionIsTSOrJson(ts.extensionFromPath(fileName))
                 || ts.getBaseFileName(fileName) === "package.json"
             ) return;
             const errors = this.getDiagnostics(fileName).filter(e => e.category !== ts.DiagnosticCategory.Suggestion);
@@ -1187,7 +1190,10 @@ export class TestState {
         }
 
         if (expected.text !== undefined) {
-            const actualDetails = ts.Debug.checkDefined(this.getCompletionEntryDetails(actual.name, actual.source, actual.data), `No completion details available for name '${actual.name}' and source '${actual.source}'`);
+            const actualDetails = ts.Debug.checkDefined(
+                this.getCompletionEntryDetails(actual.name, actual.source, actual.data),
+                `No completion details available for name '${actual.name}' and source '${actual.source}'`,
+            );
             assert.equal(ts.displayPartsToString(actualDetails.displayParts), expected.text, "Expected 'text' property to match 'displayParts' string");
             assert.equal(ts.displayPartsToString(actualDetails.documentation), expected.documentation || "", "Expected 'documentation' property to match 'documentation' display parts string");
             // TODO: GH#23587
@@ -1793,7 +1799,12 @@ export class TestState {
         );
     }
 
-    private getCompletionEntryDetails(entryName: string, source: string | undefined, data: ts.CompletionEntryData | undefined, preferences?: ts.UserPreferences): ts.CompletionEntryDetails | undefined {
+    private getCompletionEntryDetails(
+        entryName: string,
+        source: string | undefined,
+        data: ts.CompletionEntryData | undefined,
+        preferences?: ts.UserPreferences,
+    ): ts.CompletionEntryDetails | undefined {
         if (preferences) {
             this.configure(preferences);
         }
@@ -1886,7 +1897,14 @@ export class TestState {
         }
     }
 
-    public verifyQuickInfoDisplayParts(kind: string, kindModifiers: string, textSpan: TextSpan, displayParts: ts.SymbolDisplayPart[], documentation: ts.SymbolDisplayPart[], tags: ts.JSDocTagInfo[] | undefined) {
+    public verifyQuickInfoDisplayParts(
+        kind: string,
+        kindModifiers: string,
+        textSpan: TextSpan,
+        displayParts: ts.SymbolDisplayPart[],
+        documentation: ts.SymbolDisplayPart[],
+        tags: ts.JSDocTagInfo[] | undefined,
+    ) {
         const actualQuickInfo = this.languageService.getQuickInfoAtPosition(this.activeFile.fileName, this.currentCaretPosition)!;
         assert.equal(actualQuickInfo.kind, kind, this.messageAtLastKnownMarker("QuickInfo kind"));
         assert.equal(actualQuickInfo.kindModifiers, kindModifiers, this.messageAtLastKnownMarker("QuickInfo kindModifiers"));
@@ -2661,7 +2679,9 @@ export class TestState {
         const longestNameLength = max(entries, m => m.name.length);
         const longestKindLength = max(entries, m => m.kind.length);
         entries.sort((m, n) => m.sortText > n.sortText ? 1 : m.sortText < n.sortText ? -1 : m.name > n.name ? 1 : m.name < n.name ? -1 : 0);
-        const membersString = entries.map(m => `${pad(m.name, longestNameLength)} ${pad(m.kind, longestKindLength)} ${m.kindModifiers} ${m.isRecommended ? "recommended " : ""}${m.source === undefined ? "" : m.source}`)
+        const membersString = entries.map(m =>
+            `${pad(m.name, longestNameLength)} ${pad(m.kind, longestKindLength)} ${m.kindModifiers} ${m.isRecommended ? "recommended " : ""}${m.source === undefined ? "" : m.source}`
+        )
             .join("\n");
         Harness.IO.log(membersString);
     }
@@ -2969,7 +2989,11 @@ export class TestState {
             throw new Error(`verifyCaretAtMarker failed - expected to be in file "${pos.fileName}", but was in file "${this.activeFile.fileName}"`);
         }
         if (pos.position !== this.currentCaretPosition) {
-            throw new Error(`verifyCaretAtMarker failed - expected to be at marker "/*${markerName}*/, but was at position ${this.currentCaretPosition}(${this.getLineColStringAtPosition(this.currentCaretPosition)})`);
+            throw new Error(
+                `verifyCaretAtMarker failed - expected to be at marker "/*${markerName}*/, but was at position ${this.currentCaretPosition}(${
+                    this.getLineColStringAtPosition(this.currentCaretPosition)
+                })`,
+            );
         }
     }
 
@@ -3095,7 +3119,11 @@ export class TestState {
         return [tokenTypes[typeIdx], ...tokenModifiers.filter((_, i) => modSet & 1 << i)].join(".");
     }
 
-    private verifyClassifications(expected: { classificationType: string | number; text?: string; textSpan?: TextSpan; }[], actual: (ts.ClassifiedSpan | ts.ClassifiedSpan2020)[], sourceFileText: string) {
+    private verifyClassifications(
+        expected: { classificationType: string | number; text?: string; textSpan?: TextSpan; }[],
+        actual: (ts.ClassifiedSpan | ts.ClassifiedSpan2020)[],
+        sourceFileText: string,
+    ) {
         if (actual.length !== expected.length) {
             this.raiseError(
                 "verifyClassifications failed - expected total classifications to be " + expected.length +
@@ -3106,7 +3134,8 @@ export class TestState {
 
         ts.zipWith(expected, actual, (expectedClassification, actualClassification) => {
             const expectedType = expectedClassification.classificationType;
-            const actualType = typeof actualClassification.classificationType === "number" ? this.classificationToIdentifier(actualClassification.classificationType) : actualClassification.classificationType;
+            const actualType = typeof actualClassification.classificationType === "number" ? this.classificationToIdentifier(actualClassification.classificationType)
+                : actualClassification.classificationType;
 
             if (expectedType !== actualType) {
                 this.raiseError(
@@ -3243,7 +3272,9 @@ export class TestState {
 
         ts.zipWith(spans, filterActual, (expectedSpan, actualSpan, i) => {
             if (expectedSpan.pos !== actualSpan.textSpan.start || expectedSpan.end !== ts.textSpanEnd(actualSpan.textSpan)) {
-                return this.raiseError(`verifyOutliningSpans failed - span ${(i + 1)} expected: (${expectedSpan.pos},${expectedSpan.end}),  actual: (${actualSpan.textSpan.start},${ts.textSpanEnd(actualSpan.textSpan)})`);
+                return this.raiseError(
+                    `verifyOutliningSpans failed - span ${(i + 1)} expected: (${expectedSpan.pos},${expectedSpan.end}),  actual: (${actualSpan.textSpan.start},${ts.textSpanEnd(actualSpan.textSpan)})`,
+                );
             }
             if (kind !== undefined && actualSpan.kind !== kind) {
                 return this.raiseError(`verifyOutliningSpans failed - span ${(i + 1)} expected kind: ('${kind}'),  actual: ('${actualSpan.kind}')`);
@@ -3260,7 +3291,9 @@ export class TestState {
 
         ts.zipWith(spans, actual, (expectedSpan, actualSpan, i) => {
             if (expectedSpan.pos !== actualSpan.hintSpan.start || expectedSpan.end !== ts.textSpanEnd(actualSpan.hintSpan)) {
-                return this.raiseError(`verifyOutliningSpans failed - span ${(i + 1)} expected: (${expectedSpan.pos},${expectedSpan.end}),  actual: (${actualSpan.hintSpan.start},${ts.textSpanEnd(actualSpan.hintSpan)})`);
+                return this.raiseError(
+                    `verifyOutliningSpans failed - span ${(i + 1)} expected: (${expectedSpan.pos},${expectedSpan.end}),  actual: (${actualSpan.hintSpan.start},${ts.textSpanEnd(actualSpan.hintSpan)})`,
+                );
             }
         });
     }
@@ -3276,7 +3309,9 @@ export class TestState {
             const actualCommentSpan = ts.createTextSpan(actualComment.position, actualComment.message.length);
 
             if (expectedSpan.pos !== actualCommentSpan.start || expectedSpan.end !== ts.textSpanEnd(actualCommentSpan)) {
-                this.raiseError(`verifyOutliningSpans failed - span ${(i + 1)} expected: (${expectedSpan.pos},${expectedSpan.end}),  actual: (${actualCommentSpan.start},${ts.textSpanEnd(actualCommentSpan)})`);
+                this.raiseError(
+                    `verifyOutliningSpans failed - span ${(i + 1)} expected: (${expectedSpan.pos},${expectedSpan.end}),  actual: (${actualCommentSpan.start},${ts.textSpanEnd(actualCommentSpan)})`,
+                );
             }
         });
     }
@@ -3577,7 +3612,12 @@ export class TestState {
 
     public verifyDocCommentTemplate(expected: ts.TextInsertion | undefined, options?: ts.DocCommentTemplateOptions) {
         const name = "verifyDocCommentTemplate";
-        const actual = this.languageService.getDocCommentTemplateAtPosition(this.activeFile.fileName, this.currentCaretPosition, options || { generateReturnInDocTemplate: true }, this.formatCodeSettings)!;
+        const actual = this.languageService.getDocCommentTemplateAtPosition(
+            this.activeFile.fileName,
+            this.currentCaretPosition,
+            options || { generateReturnInDocTemplate: true },
+            this.formatCodeSettings,
+        )!;
 
         if (expected === undefined) {
             if (actual) {
@@ -3663,7 +3703,8 @@ export class TestState {
                 const sortedChanges = [...changes, completionChange].sort((a, b) => a.span.start - b.span.start);
                 let newFileContent = this.activeFile.content;
                 for (let i = sortedChanges.length - 1; i >= 0; i--) {
-                    newFileContent = newFileContent.substring(0, sortedChanges[i].span.start) + sortedChanges[i].newText + newFileContent.substring(sortedChanges[i].span.start + sortedChanges[i].span.length);
+                    newFileContent = newFileContent.substring(0, sortedChanges[i].span.start) + sortedChanges[i].newText +
+                        newFileContent.substring(sortedChanges[i].span.start + sortedChanges[i].span.length);
                 }
                 baselineText += codeFence(newFileContent, lang) + "\n\n";
             });
@@ -3800,9 +3841,9 @@ export class TestState {
         }
         else {
             this.raiseError(
-                `verifyMatchingBracePosition failed - could not find the brace position: ${bracePosition} in the returned list: (${actual[0].start},${ts.textSpanEnd(actual[0])}) and (${actual[1].start},${
-                    ts.textSpanEnd(actual[1])
-                })`,
+                `verifyMatchingBracePosition failed - could not find the brace position: ${bracePosition} in the returned list: (${actual[0].start},${ts.textSpanEnd(actual[0])}) and (${
+                    actual[1].start
+                },${ts.textSpanEnd(actual[1])})`,
             );
         }
 
@@ -4252,7 +4293,14 @@ export class TestState {
         return text;
     }
 
-    private formatCallHierarchyItem(file: FourSlashFile, callHierarchyItem: ts.CallHierarchyItem, direction: CallHierarchyItemDirection, seen: Map<string, boolean>, prefix: string, trailingPrefix: string = prefix) {
+    private formatCallHierarchyItem(
+        file: FourSlashFile,
+        callHierarchyItem: ts.CallHierarchyItem,
+        direction: CallHierarchyItemDirection,
+        seen: Map<string, boolean>,
+        prefix: string,
+        trailingPrefix: string = prefix,
+    ) {
         const key = `${callHierarchyItem.file}|${JSON.stringify(callHierarchyItem.span)}|${direction}`;
         const alreadySeen = seen.has(key);
         seen.set(key, true);
@@ -4492,7 +4540,14 @@ export class TestState {
         kind?: string,
         includeInteractiveActions?: boolean,
     ): readonly ts.ApplicableRefactorInfo[] {
-        return this.getApplicableRefactorsWorker("position" in rangeOrMarker ? rangeOrMarker.position : rangeOrMarker, rangeOrMarker.fileName, preferences, triggerReason, kind, includeInteractiveActions); // eslint-disable-line local/no-in-operator
+        return this.getApplicableRefactorsWorker(
+            "position" in rangeOrMarker ? rangeOrMarker.position : rangeOrMarker,
+            rangeOrMarker.fileName,
+            preferences,
+            triggerReason,
+            kind,
+            includeInteractiveActions,
+        ); // eslint-disable-line local/no-in-operator
     }
     private getApplicableRefactorsWorker(
         positionOrRange: number | ts.TextRange,
@@ -4627,9 +4682,10 @@ export function runFourSlashTestContent(basePath: string, testType: FourSlashTes
 function runCode(code: string, state: TestState, fileName: string): void {
     // Compile and execute the test
     const generatedFile = ts.changeExtension(fileName, ".js");
-    const wrappedCode = `(function(ts, test, goTo, config, verify, edit, debug, format, cancellation, classification, completion, verifyOperationIsCancelled, ignoreInterpolations) {${code}\n//# sourceURL=${
-        ts.getBaseFileName(generatedFile)
-    }\n})`;
+    const wrappedCode =
+        `(function(ts, test, goTo, config, verify, edit, debug, format, cancellation, classification, completion, verifyOperationIsCancelled, ignoreInterpolations) {${code}\n//# sourceURL=${
+            ts.getBaseFileName(generatedFile)
+        }\n})`;
 
     type SourceMapSupportModule = typeof import("source-map-support") & {
         // TODO(rbuckton): This is missing from the DT definitions and needs to be added.

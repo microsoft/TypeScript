@@ -332,7 +332,8 @@ function getSymbolDisplayPartsDocumentationAndSymbolKindWorker(
         if (callExpressionLike) {
             signature = typeChecker.getResolvedSignature(callExpressionLike); // TODO: GH#18217
 
-            const useConstructSignatures = callExpressionLike.kind === SyntaxKind.NewExpression || (isCallExpression(callExpressionLike) && callExpressionLike.expression.kind === SyntaxKind.SuperKeyword);
+            const useConstructSignatures = callExpressionLike.kind === SyntaxKind.NewExpression ||
+                (isCallExpression(callExpressionLike) && callExpressionLike.expression.kind === SyntaxKind.SuperKeyword);
 
             const allSignatures = useConstructSignatures ? type.getConstructSignatures() : type.getCallSignatures();
 
@@ -380,7 +381,13 @@ function getSymbolDisplayPartsDocumentationAndSymbolKindWorker(
                         if (!(getObjectFlags(type) & ObjectFlags.Anonymous) && type.symbol) {
                             addRange(
                                 displayParts,
-                                symbolToDisplayParts(typeChecker, type.symbol, enclosingDeclaration, /*meaning*/ undefined, SymbolFormatFlags.AllowAnyNodeKind | SymbolFormatFlags.WriteTypeParametersOrArguments),
+                                symbolToDisplayParts(
+                                    typeChecker,
+                                    type.symbol,
+                                    enclosingDeclaration,
+                                    /*meaning*/ undefined,
+                                    SymbolFormatFlags.AllowAnyNodeKind | SymbolFormatFlags.WriteTypeParametersOrArguments,
+                                ),
                             );
                             displayParts.push(lineBreakPart());
                         }

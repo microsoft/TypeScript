@@ -1417,7 +1417,15 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
 
     /** @internal */
     updateTypingFiles(typingFiles: SortedReadonlyArray<string>) {
-        if (enumerateInsertsAndDeletes<string, string>(typingFiles, this.typingFiles, getStringComparer(!this.useCaseSensitiveFileNames()), /*inserted*/ noop, removed => this.detachScriptInfoFromProject(removed))) {
+        if (
+            enumerateInsertsAndDeletes<string, string>(
+                typingFiles,
+                this.typingFiles,
+                getStringComparer(!this.useCaseSensitiveFileNames()),
+                /*inserted*/ noop,
+                removed => this.detachScriptInfoFromProject(removed),
+            )
+        ) {
             // If typing files changed, then only schedule project update
             this.typingFiles = typingFiles;
             // Invalidate files with unresolved imports
@@ -1619,7 +1627,13 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
                                 !sourceFile ||
                                 sourceFile.resolvedPath !== source ||
                                 !this.isValidGeneratedFileWatcher(
-                                    getDeclarationEmitOutputFilePathWorker(sourceFile.fileName, this.compilerOptions, this.currentDirectory, this.program!.getCommonSourceDirectory(), this.getCanonicalFileName),
+                                    getDeclarationEmitOutputFilePathWorker(
+                                        sourceFile.fileName,
+                                        this.compilerOptions,
+                                        this.currentDirectory,
+                                        this.program!.getCommonSourceDirectory(),
+                                        this.getCanonicalFileName,
+                                    ),
                                     watcher,
                                 )
                             ) {
@@ -2577,7 +2591,12 @@ export class AutoImportProviderProject extends Project {
     };
 
     /** @internal */
-    static create(dependencySelection: PackageJsonAutoImportPreference, hostProject: Project, host: GetPackageJsonEntrypointsHost, documentRegistry: DocumentRegistry): AutoImportProviderProject | undefined {
+    static create(
+        dependencySelection: PackageJsonAutoImportPreference,
+        hostProject: Project,
+        host: GetPackageJsonEntrypointsHost,
+        documentRegistry: DocumentRegistry,
+    ): AutoImportProviderProject | undefined {
         if (dependencySelection === PackageJsonAutoImportPreference.Off) {
             return undefined;
         }

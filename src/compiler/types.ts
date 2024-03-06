@@ -4628,7 +4628,14 @@ export interface Program extends ScriptReferenceHost {
      */
     emit(targetSourceFile?: SourceFile, writeFile?: WriteFileCallback, cancellationToken?: CancellationToken, emitOnlyDtsFiles?: boolean, customTransformers?: CustomTransformers): EmitResult;
     /** @internal */
-    emit(targetSourceFile?: SourceFile, writeFile?: WriteFileCallback, cancellationToken?: CancellationToken, emitOnly?: boolean | EmitOnly, customTransformers?: CustomTransformers, forceDtsEmit?: boolean): EmitResult;
+    emit(
+        targetSourceFile?: SourceFile,
+        writeFile?: WriteFileCallback,
+        cancellationToken?: CancellationToken,
+        emitOnly?: boolean | EmitOnly,
+        customTransformers?: CustomTransformers,
+        forceDtsEmit?: boolean,
+    ): EmitResult;
 
     getOptionsDiagnostics(cancellationToken?: CancellationToken): readonly Diagnostic[];
     getGlobalDiagnostics(cancellationToken?: CancellationToken): readonly Diagnostic[];
@@ -7456,7 +7463,13 @@ export interface CommandLineOptionOfListType extends CommandLineOptionBase {
 }
 
 /** @internal */
-export type CommandLineOption = CommandLineOptionOfCustomType | CommandLineOptionOfStringType | CommandLineOptionOfNumberType | CommandLineOptionOfBooleanType | TsConfigOnlyOption | CommandLineOptionOfListType;
+export type CommandLineOption =
+    | CommandLineOptionOfCustomType
+    | CommandLineOptionOfStringType
+    | CommandLineOptionOfNumberType
+    | CommandLineOptionOfBooleanType
+    | TsConfigOnlyOption
+    | CommandLineOptionOfListType;
 
 // dprint-ignore
 /** @internal */
@@ -7745,7 +7758,13 @@ export type HasChangedAutomaticTypeDirectiveNames = () => boolean;
 
 export interface CompilerHost extends ModuleResolutionHost {
     getSourceFile(fileName: string, languageVersionOrOptions: ScriptTarget | CreateSourceFileOptions, onError?: (message: string) => void, shouldCreateNewSourceFile?: boolean): SourceFile | undefined;
-    getSourceFileByPath?(fileName: string, path: Path, languageVersionOrOptions: ScriptTarget | CreateSourceFileOptions, onError?: (message: string) => void, shouldCreateNewSourceFile?: boolean): SourceFile | undefined;
+    getSourceFileByPath?(
+        fileName: string,
+        path: Path,
+        languageVersionOrOptions: ScriptTarget | CreateSourceFileOptions,
+        onError?: (message: string) => void,
+        shouldCreateNewSourceFile?: boolean,
+    ): SourceFile | undefined;
     getCancellationToken?(): CancellationToken;
     getDefaultLibFileName(options: CompilerOptions): string;
     getDefaultLibLocation?(): string;
@@ -7912,19 +7931,24 @@ export const enum TransformFlags {
     OuterExpressionExcludes = HasComputedFlags,
     PropertyAccessExcludes = OuterExpressionExcludes,
     NodeExcludes = PropertyAccessExcludes,
-    ArrowFunctionExcludes = NodeExcludes | ContainsTypeScriptClassSyntax | ContainsBlockScopedBinding | ContainsYield | ContainsAwait | ContainsHoistedDeclarationOrCompletion | ContainsBindingPattern |
+    ArrowFunctionExcludes = NodeExcludes | ContainsTypeScriptClassSyntax | ContainsBlockScopedBinding | ContainsYield | ContainsAwait | ContainsHoistedDeclarationOrCompletion |
+        ContainsBindingPattern |
         ContainsObjectRestOrSpread |
         ContainsPossibleTopLevelAwait,
-    FunctionExcludes = NodeExcludes | ContainsTypeScriptClassSyntax | ContainsLexicalThis | ContainsLexicalSuper | ContainsBlockScopedBinding | ContainsYield | ContainsAwait | ContainsHoistedDeclarationOrCompletion |
+    FunctionExcludes = NodeExcludes | ContainsTypeScriptClassSyntax | ContainsLexicalThis | ContainsLexicalSuper | ContainsBlockScopedBinding | ContainsYield | ContainsAwait |
+        ContainsHoistedDeclarationOrCompletion |
         ContainsBindingPattern | ContainsObjectRestOrSpread |
         ContainsPossibleTopLevelAwait,
-    ConstructorExcludes = NodeExcludes | ContainsLexicalThis | ContainsLexicalSuper | ContainsBlockScopedBinding | ContainsYield | ContainsAwait | ContainsHoistedDeclarationOrCompletion | ContainsBindingPattern |
+    ConstructorExcludes = NodeExcludes | ContainsLexicalThis | ContainsLexicalSuper | ContainsBlockScopedBinding | ContainsYield | ContainsAwait | ContainsHoistedDeclarationOrCompletion |
+        ContainsBindingPattern |
         ContainsObjectRestOrSpread | ContainsPossibleTopLevelAwait,
-    MethodOrAccessorExcludes = NodeExcludes | ContainsLexicalThis | ContainsLexicalSuper | ContainsBlockScopedBinding | ContainsYield | ContainsAwait | ContainsHoistedDeclarationOrCompletion | ContainsBindingPattern |
+    MethodOrAccessorExcludes = NodeExcludes | ContainsLexicalThis | ContainsLexicalSuper | ContainsBlockScopedBinding | ContainsYield | ContainsAwait | ContainsHoistedDeclarationOrCompletion |
+        ContainsBindingPattern |
         ContainsObjectRestOrSpread,
     PropertyExcludes = NodeExcludes | ContainsLexicalThis | ContainsLexicalSuper,
     ClassExcludes = NodeExcludes | ContainsTypeScriptClassSyntax | ContainsComputedPropertyName,
-    ModuleExcludes = NodeExcludes | ContainsTypeScriptClassSyntax | ContainsLexicalThis | ContainsLexicalSuper | ContainsBlockScopedBinding | ContainsHoistedDeclarationOrCompletion | ContainsPossibleTopLevelAwait,
+    ModuleExcludes = NodeExcludes | ContainsTypeScriptClassSyntax | ContainsLexicalThis | ContainsLexicalSuper | ContainsBlockScopedBinding | ContainsHoistedDeclarationOrCompletion |
+        ContainsPossibleTopLevelAwait,
     TypeExcludes = ~ContainsTypeScript,
     ObjectLiteralExcludes = NodeExcludes | ContainsTypeScriptClassSyntax | ContainsComputedPropertyName | ContainsObjectRestOrSpread,
     ArrayLiteralOrCallOrNewExcludes = NodeExcludes | ContainsRestOrSpread,
@@ -8314,7 +8338,12 @@ export interface NodeFactory {
      * setting `EmitFlags.ReuseTempVariableScope` on the nested function itself.
      */
     createTempVariable(recordTempVariable: ((node: Identifier) => void) | undefined, reservedInNestedScopes?: boolean): Identifier;
-    /** @internal */ createTempVariable(recordTempVariable: ((node: Identifier) => void) | undefined, reservedInNestedScopes?: boolean, prefix?: string | GeneratedNamePart, suffix?: string): Identifier; // eslint-disable-line @typescript-eslint/unified-signatures
+    /** @internal */ createTempVariable(
+        recordTempVariable: ((node: Identifier) => void) | undefined,
+        reservedInNestedScopes?: boolean,
+        prefix?: string | GeneratedNamePart,
+        suffix?: string,
+    ): Identifier; // eslint-disable-line @typescript-eslint/unified-signatures
 
     /**
      * Create a unique temporary variable for use in a loop.
@@ -8418,7 +8447,13 @@ export interface NodeFactory {
     //
 
     createPropertySignature(modifiers: readonly Modifier[] | undefined, name: PropertyName | string, questionToken: QuestionToken | undefined, type: TypeNode | undefined): PropertySignature;
-    updatePropertySignature(node: PropertySignature, modifiers: readonly Modifier[] | undefined, name: PropertyName, questionToken: QuestionToken | undefined, type: TypeNode | undefined): PropertySignature;
+    updatePropertySignature(
+        node: PropertySignature,
+        modifiers: readonly Modifier[] | undefined,
+        name: PropertyName,
+        questionToken: QuestionToken | undefined,
+        type: TypeNode | undefined,
+    ): PropertySignature;
     createPropertyDeclaration(
         modifiers: readonly ModifierLike[] | undefined,
         name: string | PropertyName,
@@ -8473,7 +8508,12 @@ export interface NodeFactory {
         body: Block | undefined,
     ): MethodDeclaration;
     createConstructorDeclaration(modifiers: readonly ModifierLike[] | undefined, parameters: readonly ParameterDeclaration[], body: Block | undefined): ConstructorDeclaration;
-    updateConstructorDeclaration(node: ConstructorDeclaration, modifiers: readonly ModifierLike[] | undefined, parameters: readonly ParameterDeclaration[], body: Block | undefined): ConstructorDeclaration;
+    updateConstructorDeclaration(
+        node: ConstructorDeclaration,
+        modifiers: readonly ModifierLike[] | undefined,
+        parameters: readonly ParameterDeclaration[],
+        body: Block | undefined,
+    ): ConstructorDeclaration;
     createGetAccessorDeclaration(
         modifiers: readonly ModifierLike[] | undefined,
         name: string | PropertyName,
@@ -8489,7 +8529,12 @@ export interface NodeFactory {
         type: TypeNode | undefined,
         body: Block | undefined,
     ): GetAccessorDeclaration;
-    createSetAccessorDeclaration(modifiers: readonly ModifierLike[] | undefined, name: string | PropertyName, parameters: readonly ParameterDeclaration[], body: Block | undefined): SetAccessorDeclaration;
+    createSetAccessorDeclaration(
+        modifiers: readonly ModifierLike[] | undefined,
+        name: string | PropertyName,
+        parameters: readonly ParameterDeclaration[],
+        body: Block | undefined,
+    ): SetAccessorDeclaration;
     updateSetAccessorDeclaration(
         node: SetAccessorDeclaration,
         modifiers: readonly ModifierLike[] | undefined,
@@ -8498,7 +8543,12 @@ export interface NodeFactory {
         body: Block | undefined,
     ): SetAccessorDeclaration;
     createCallSignature(typeParameters: readonly TypeParameterDeclaration[] | undefined, parameters: readonly ParameterDeclaration[], type: TypeNode | undefined): CallSignatureDeclaration;
-    updateCallSignature(node: CallSignatureDeclaration, typeParameters: NodeArray<TypeParameterDeclaration> | undefined, parameters: NodeArray<ParameterDeclaration>, type: TypeNode | undefined): CallSignatureDeclaration;
+    updateCallSignature(
+        node: CallSignatureDeclaration,
+        typeParameters: NodeArray<TypeParameterDeclaration> | undefined,
+        parameters: NodeArray<ParameterDeclaration>,
+        type: TypeNode | undefined,
+    ): CallSignatureDeclaration;
     createConstructSignature(typeParameters: readonly TypeParameterDeclaration[] | undefined, parameters: readonly ParameterDeclaration[], type: TypeNode | undefined): ConstructSignatureDeclaration;
     updateConstructSignature(
         node: ConstructSignatureDeclaration,
@@ -8607,7 +8657,13 @@ export interface NodeFactory {
     createArrayBindingPattern(elements: readonly ArrayBindingElement[]): ArrayBindingPattern;
     updateArrayBindingPattern(node: ArrayBindingPattern, elements: readonly ArrayBindingElement[]): ArrayBindingPattern;
     createBindingElement(dotDotDotToken: DotDotDotToken | undefined, propertyName: string | PropertyName | undefined, name: string | BindingName, initializer?: Expression): BindingElement;
-    updateBindingElement(node: BindingElement, dotDotDotToken: DotDotDotToken | undefined, propertyName: PropertyName | undefined, name: BindingName, initializer: Expression | undefined): BindingElement;
+    updateBindingElement(
+        node: BindingElement,
+        dotDotDotToken: DotDotDotToken | undefined,
+        propertyName: PropertyName | undefined,
+        name: BindingName,
+        initializer: Expression | undefined,
+    ): BindingElement;
 
     //
     // Expression
@@ -8627,8 +8683,19 @@ export interface NodeFactory {
     updateElementAccessChain(node: ElementAccessChain, expression: Expression, questionDotToken: QuestionDotToken | undefined, argumentExpression: Expression): ElementAccessChain;
     createCallExpression(expression: Expression, typeArguments: readonly TypeNode[] | undefined, argumentsArray: readonly Expression[] | undefined): CallExpression;
     updateCallExpression(node: CallExpression, expression: Expression, typeArguments: readonly TypeNode[] | undefined, argumentsArray: readonly Expression[]): CallExpression;
-    createCallChain(expression: Expression, questionDotToken: QuestionDotToken | undefined, typeArguments: readonly TypeNode[] | undefined, argumentsArray: readonly Expression[] | undefined): CallChain;
-    updateCallChain(node: CallChain, expression: Expression, questionDotToken: QuestionDotToken | undefined, typeArguments: readonly TypeNode[] | undefined, argumentsArray: readonly Expression[]): CallChain;
+    createCallChain(
+        expression: Expression,
+        questionDotToken: QuestionDotToken | undefined,
+        typeArguments: readonly TypeNode[] | undefined,
+        argumentsArray: readonly Expression[] | undefined,
+    ): CallChain;
+    updateCallChain(
+        node: CallChain,
+        expression: Expression,
+        questionDotToken: QuestionDotToken | undefined,
+        typeArguments: readonly TypeNode[] | undefined,
+        argumentsArray: readonly Expression[],
+    ): CallChain;
     createNewExpression(expression: Expression, typeArguments: readonly TypeNode[] | undefined, argumentsArray: readonly Expression[] | undefined): NewExpression;
     updateNewExpression(node: NewExpression, expression: Expression, typeArguments: readonly TypeNode[] | undefined, argumentsArray: readonly Expression[] | undefined): NewExpression;
     createTaggedTemplateExpression(tag: Expression, typeArguments: readonly TypeNode[] | undefined, template: TemplateLiteral): TaggedTemplateExpression;
@@ -8687,8 +8754,21 @@ export interface NodeFactory {
     updatePostfixUnaryExpression(node: PostfixUnaryExpression, operand: Expression): PostfixUnaryExpression;
     createBinaryExpression(left: Expression, operator: BinaryOperator | BinaryOperatorToken, right: Expression): BinaryExpression;
     updateBinaryExpression(node: BinaryExpression, left: Expression, operator: BinaryOperator | BinaryOperatorToken, right: Expression): BinaryExpression;
-    createConditionalExpression(condition: Expression, questionToken: QuestionToken | undefined, whenTrue: Expression, colonToken: ColonToken | undefined, whenFalse: Expression): ConditionalExpression;
-    updateConditionalExpression(node: ConditionalExpression, condition: Expression, questionToken: QuestionToken, whenTrue: Expression, colonToken: ColonToken, whenFalse: Expression): ConditionalExpression;
+    createConditionalExpression(
+        condition: Expression,
+        questionToken: QuestionToken | undefined,
+        whenTrue: Expression,
+        colonToken: ColonToken | undefined,
+        whenFalse: Expression,
+    ): ConditionalExpression;
+    updateConditionalExpression(
+        node: ConditionalExpression,
+        condition: Expression,
+        questionToken: QuestionToken,
+        whenTrue: Expression,
+        colonToken: ColonToken,
+        whenFalse: Expression,
+    ): ConditionalExpression;
     createTemplateExpression(head: TemplateHead, templateSpans: readonly TemplateSpan[]): TemplateExpression;
     updateTemplateExpression(node: TemplateExpression, head: TemplateHead, templateSpans: readonly TemplateSpan[]): TemplateExpression;
     createTemplateHead(text: string, rawText?: string, templateFlags?: TokenFlags): TemplateHead;
@@ -8785,7 +8865,13 @@ export interface NodeFactory {
     updateTryStatement(node: TryStatement, tryBlock: Block, catchClause: CatchClause | undefined, finallyBlock: Block | undefined): TryStatement;
     createDebuggerStatement(): DebuggerStatement;
     createVariableDeclaration(name: string | BindingName, exclamationToken?: ExclamationToken, type?: TypeNode, initializer?: Expression): VariableDeclaration;
-    updateVariableDeclaration(node: VariableDeclaration, name: BindingName, exclamationToken: ExclamationToken | undefined, type: TypeNode | undefined, initializer: Expression | undefined): VariableDeclaration;
+    updateVariableDeclaration(
+        node: VariableDeclaration,
+        name: BindingName,
+        exclamationToken: ExclamationToken | undefined,
+        type: TypeNode | undefined,
+        initializer: Expression | undefined,
+    ): VariableDeclaration;
     createVariableDeclarationList(declarations: readonly VariableDeclaration[], flags?: NodeFlags): VariableDeclarationList;
     updateVariableDeclarationList(node: VariableDeclarationList, declarations: readonly VariableDeclaration[]): VariableDeclarationList;
     createFunctionDeclaration(
@@ -8837,7 +8923,12 @@ export interface NodeFactory {
         heritageClauses: readonly HeritageClause[] | undefined,
         members: readonly TypeElement[],
     ): InterfaceDeclaration;
-    createTypeAliasDeclaration(modifiers: readonly ModifierLike[] | undefined, name: string | Identifier, typeParameters: readonly TypeParameterDeclaration[] | undefined, type: TypeNode): TypeAliasDeclaration;
+    createTypeAliasDeclaration(
+        modifiers: readonly ModifierLike[] | undefined,
+        name: string | Identifier,
+        typeParameters: readonly TypeParameterDeclaration[] | undefined,
+        type: TypeNode,
+    ): TypeAliasDeclaration;
     updateTypeAliasDeclaration(
         node: TypeAliasDeclaration,
         modifiers: readonly ModifierLike[] | undefined,
@@ -8856,7 +8947,13 @@ export interface NodeFactory {
     createNamespaceExportDeclaration(name: string | Identifier): NamespaceExportDeclaration;
     updateNamespaceExportDeclaration(node: NamespaceExportDeclaration, name: Identifier): NamespaceExportDeclaration;
     createImportEqualsDeclaration(modifiers: readonly ModifierLike[] | undefined, isTypeOnly: boolean, name: string | Identifier, moduleReference: ModuleReference): ImportEqualsDeclaration;
-    updateImportEqualsDeclaration(node: ImportEqualsDeclaration, modifiers: readonly ModifierLike[] | undefined, isTypeOnly: boolean, name: Identifier, moduleReference: ModuleReference): ImportEqualsDeclaration;
+    updateImportEqualsDeclaration(
+        node: ImportEqualsDeclaration,
+        modifiers: readonly ModifierLike[] | undefined,
+        isTypeOnly: boolean,
+        name: Identifier,
+        moduleReference: ModuleReference,
+    ): ImportEqualsDeclaration;
     createImportDeclaration(modifiers: readonly ModifierLike[] | undefined, importClause: ImportClause | undefined, moduleSpecifier: Expression, attributes?: ImportAttributes): ImportDeclaration;
     updateImportDeclaration(
         node: ImportDeclaration,
@@ -8950,7 +9047,12 @@ export interface NodeFactory {
     updateJSDocTypeLiteral(node: JSDocTypeLiteral, jsDocPropertyTags: readonly JSDocPropertyLikeTag[] | undefined, isArrayType: boolean | undefined): JSDocTypeLiteral;
     createJSDocSignature(typeParameters: readonly JSDocTemplateTag[] | undefined, parameters: readonly JSDocParameterTag[], type?: JSDocReturnTag): JSDocSignature;
     updateJSDocSignature(node: JSDocSignature, typeParameters: readonly JSDocTemplateTag[] | undefined, parameters: readonly JSDocParameterTag[], type: JSDocReturnTag | undefined): JSDocSignature;
-    createJSDocTemplateTag(tagName: Identifier | undefined, constraint: JSDocTypeExpression | undefined, typeParameters: readonly TypeParameterDeclaration[], comment?: string | NodeArray<JSDocComment>): JSDocTemplateTag;
+    createJSDocTemplateTag(
+        tagName: Identifier | undefined,
+        constraint: JSDocTypeExpression | undefined,
+        typeParameters: readonly TypeParameterDeclaration[],
+        comment?: string | NodeArray<JSDocComment>,
+    ): JSDocTemplateTag;
     updateJSDocTemplateTag(
         node: JSDocTemplateTag,
         tagName: Identifier | undefined,
@@ -9015,7 +9117,12 @@ export interface NodeFactory {
     updateJSDocThisTag(node: JSDocThisTag, tagName: Identifier | undefined, typeExpression: JSDocTypeExpression | undefined, comment: string | NodeArray<JSDocComment> | undefined): JSDocThisTag;
     createJSDocEnumTag(tagName: Identifier | undefined, typeExpression: JSDocTypeExpression, comment?: string | NodeArray<JSDocComment>): JSDocEnumTag;
     updateJSDocEnumTag(node: JSDocEnumTag, tagName: Identifier | undefined, typeExpression: JSDocTypeExpression, comment: string | NodeArray<JSDocComment> | undefined): JSDocEnumTag;
-    createJSDocCallbackTag(tagName: Identifier | undefined, typeExpression: JSDocSignature, fullName?: Identifier | JSDocNamespaceDeclaration, comment?: string | NodeArray<JSDocComment>): JSDocCallbackTag;
+    createJSDocCallbackTag(
+        tagName: Identifier | undefined,
+        typeExpression: JSDocSignature,
+        fullName?: Identifier | JSDocNamespaceDeclaration,
+        comment?: string | NodeArray<JSDocComment>,
+    ): JSDocCallbackTag;
     updateJSDocCallbackTag(
         node: JSDocCallbackTag,
         tagName: Identifier | undefined,
@@ -9028,7 +9135,12 @@ export interface NodeFactory {
     createJSDocAugmentsTag(tagName: Identifier | undefined, className: JSDocAugmentsTag["class"], comment?: string | NodeArray<JSDocComment>): JSDocAugmentsTag;
     updateJSDocAugmentsTag(node: JSDocAugmentsTag, tagName: Identifier | undefined, className: JSDocAugmentsTag["class"], comment: string | NodeArray<JSDocComment> | undefined): JSDocAugmentsTag;
     createJSDocImplementsTag(tagName: Identifier | undefined, className: JSDocImplementsTag["class"], comment?: string | NodeArray<JSDocComment>): JSDocImplementsTag;
-    updateJSDocImplementsTag(node: JSDocImplementsTag, tagName: Identifier | undefined, className: JSDocImplementsTag["class"], comment: string | NodeArray<JSDocComment> | undefined): JSDocImplementsTag;
+    updateJSDocImplementsTag(
+        node: JSDocImplementsTag,
+        tagName: Identifier | undefined,
+        className: JSDocImplementsTag["class"],
+        comment: string | NodeArray<JSDocComment> | undefined,
+    ): JSDocImplementsTag;
     createJSDocAuthorTag(tagName: Identifier | undefined, comment?: string | NodeArray<JSDocComment>): JSDocAuthorTag;
     updateJSDocAuthorTag(node: JSDocAuthorTag, tagName: Identifier | undefined, comment: string | NodeArray<JSDocComment> | undefined): JSDocAuthorTag;
     createJSDocClassTag(tagName: Identifier | undefined, comment?: string | NodeArray<JSDocComment>): JSDocClassTag;
@@ -9048,7 +9160,12 @@ export interface NodeFactory {
     createJSDocOverrideTag(tagName: Identifier | undefined, comment?: string | NodeArray<JSDocComment>): JSDocOverrideTag;
     updateJSDocOverrideTag(node: JSDocOverrideTag, tagName: Identifier | undefined, comment?: string | NodeArray<JSDocComment>): JSDocOverrideTag;
     createJSDocThrowsTag(tagName: Identifier, typeExpression: JSDocTypeExpression | undefined, comment?: string | NodeArray<JSDocComment>): JSDocThrowsTag;
-    updateJSDocThrowsTag(node: JSDocThrowsTag, tagName: Identifier | undefined, typeExpression: JSDocTypeExpression | undefined, comment?: string | NodeArray<JSDocComment> | undefined): JSDocThrowsTag;
+    updateJSDocThrowsTag(
+        node: JSDocThrowsTag,
+        tagName: Identifier | undefined,
+        typeExpression: JSDocTypeExpression | undefined,
+        comment?: string | NodeArray<JSDocComment> | undefined,
+    ): JSDocThrowsTag;
     createJSDocSatisfiesTag(tagName: Identifier | undefined, typeExpression: JSDocTypeExpression, comment?: string | NodeArray<JSDocComment>): JSDocSatisfiesTag;
     updateJSDocSatisfiesTag(node: JSDocSatisfiesTag, tagName: Identifier | undefined, typeExpression: JSDocTypeExpression, comment: string | NodeArray<JSDocComment> | undefined): JSDocSatisfiesTag;
     createJSDocText(text: string): JSDocText;
@@ -9351,7 +9468,13 @@ export interface NodeFactory {
      *
      * @internal
      */
-    copyCustomPrologue(source: readonly Statement[], target: Statement[], statementOffset: number, visitor?: (node: Node) => VisitResult<Node | undefined>, filter?: (node: Statement) => boolean): number;
+    copyCustomPrologue(
+        source: readonly Statement[],
+        target: Statement[],
+        statementOffset: number,
+        visitor?: (node: Node) => VisitResult<Node | undefined>,
+        filter?: (node: Statement) => boolean,
+    ): number;
     /** @internal */ copyCustomPrologue(
         source: readonly Statement[],
         target: Statement[],

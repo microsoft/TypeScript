@@ -72,11 +72,15 @@ const errorCodes = [Diagnostics.This_constructor_function_may_be_converted_to_a_
 registerCodeFix({
     errorCodes,
     getCodeActions(context: CodeFixContext) {
-        const changes = textChanges.ChangeTracker.with(context, t => doChange(t, context.sourceFile, context.span.start, context.program.getTypeChecker(), context.preferences, context.program.getCompilerOptions()));
+        const changes = textChanges.ChangeTracker.with(
+            context,
+            t => doChange(t, context.sourceFile, context.span.start, context.program.getTypeChecker(), context.preferences, context.program.getCompilerOptions()),
+        );
         return [createCodeFixAction(fixId, changes, Diagnostics.Convert_function_to_an_ES2015_class, fixId, Diagnostics.Convert_all_constructor_functions_to_classes)];
     },
     fixIds: [fixId],
-    getAllCodeActions: context => codeFixAll(context, errorCodes, (changes, err) => doChange(changes, err.file, err.start, context.program.getTypeChecker(), context.preferences, context.program.getCompilerOptions())),
+    getAllCodeActions: context =>
+        codeFixAll(context, errorCodes, (changes, err) => doChange(changes, err.file, err.start, context.program.getTypeChecker(), context.preferences, context.program.getCompilerOptions())),
 });
 
 function doChange(changes: textChanges.ChangeTracker, sourceFile: SourceFile, position: number, checker: TypeChecker, preferences: UserPreferences, compilerOptions: CompilerOptions): void {
@@ -136,7 +140,10 @@ function doChange(changes: textChanges.ChangeTracker, sourceFile: SourceFile, po
             symbol.members.forEach((member, key) => {
                 if (key === "constructor" && member.valueDeclaration) {
                     const prototypeAssignment = symbol.exports?.get("prototype" as __String)?.declarations?.[0]?.parent;
-                    if (prototypeAssignment && isBinaryExpression(prototypeAssignment) && isObjectLiteralExpression(prototypeAssignment.right) && some(prototypeAssignment.right.properties, isConstructorAssignment)) {
+                    if (
+                        prototypeAssignment && isBinaryExpression(prototypeAssignment) && isObjectLiteralExpression(prototypeAssignment.right) &&
+                        some(prototypeAssignment.right.properties, isConstructorAssignment)
+                    ) {
                         // fn.prototype = { constructor: fn }
                         // Already deleted in `createClassElement` in first pass
                     }

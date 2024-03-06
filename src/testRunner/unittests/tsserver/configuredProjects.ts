@@ -321,7 +321,11 @@ describe("unittests:: tsserver:: ConfiguredProjects", () => {
         openFilesForSession([file1], session);
         closeFilesForSession([file1], session);
         openFilesForSession([libFile], session);
-        baselineTsserverLogs("configuredProjects", "should not close configured project after closing last open file, but should be closed on next file open if its not the file from same project", session);
+        baselineTsserverLogs(
+            "configuredProjects",
+            "should not close configured project after closing last open file, but should be closed on next file open if its not the file from same project",
+            session,
+        );
     });
 
     it("open file become a part of configured project if it is referenced from root file", () => {

@@ -1416,7 +1416,8 @@ export function computeSignatureWithDiagnostics(
     text = getTextHandlingSourceMapForSignature(text, data);
     let sourceFileDirectory: string | undefined;
     if (data?.diagnostics?.length) {
-        text += data.diagnostics.map(diagnostic => `${locationInfo(diagnostic)}${DiagnosticCategory[diagnostic.category]}${diagnostic.code}: ${flattenDiagnosticMessageText(diagnostic.messageText)}`).join("\n");
+        text += data.diagnostics.map(diagnostic => `${locationInfo(diagnostic)}${DiagnosticCategory[diagnostic.category]}${diagnostic.code}: ${flattenDiagnosticMessageText(diagnostic.messageText)}`)
+            .join("\n");
     }
     return (host.createHash ?? generateDjb2Hash)(text);
 
@@ -1509,7 +1510,12 @@ export function createBuilderProgram(kind: BuilderProgramKind, { newProgram, hos
      * The first of writeFile if provided, writeFile of BuilderProgramHost if provided, writeFile of compiler host
      * in that order would be used to write the files
      */
-    function emitNextAffectedFile(writeFile?: WriteFileCallback, cancellationToken?: CancellationToken, emitOnlyDtsFiles?: boolean, customTransformers?: CustomTransformers): AffectedFileResult<EmitResult> {
+    function emitNextAffectedFile(
+        writeFile?: WriteFileCallback,
+        cancellationToken?: CancellationToken,
+        emitOnlyDtsFiles?: boolean,
+        customTransformers?: CustomTransformers,
+    ): AffectedFileResult<EmitResult> {
         let affected = getNextAffectedFile(state, cancellationToken, host);
         const programEmitKind = getBuilderFileEmit(state.compilerOptions);
         let emitKind: BuilderFileEmit = emitOnlyDtsFiles ?
@@ -1682,7 +1688,13 @@ export function createBuilderProgram(kind: BuilderProgramKind, { newProgram, hos
      * The first of writeFile if provided, writeFile of BuilderProgramHost if provided, writeFile of compiler host
      * in that order would be used to write the files
      */
-    function emit(targetSourceFile?: SourceFile, writeFile?: WriteFileCallback, cancellationToken?: CancellationToken, emitOnlyDtsFiles?: boolean, customTransformers?: CustomTransformers): EmitResult {
+    function emit(
+        targetSourceFile?: SourceFile,
+        writeFile?: WriteFileCallback,
+        cancellationToken?: CancellationToken,
+        emitOnlyDtsFiles?: boolean,
+        customTransformers?: CustomTransformers,
+    ): EmitResult {
         if (kind === BuilderProgramKind.EmitAndSemanticDiagnosticsBuilderProgram) {
             assertSourceFileOkWithoutNextAffectedCall(state, targetSourceFile);
         }
@@ -1972,7 +1984,10 @@ export function getBuildInfoFileVersionMap(
 }
 
 /** @internal */
-export function createRedirectedBuilderProgram(getState: () => { program?: Program | undefined; compilerOptions: CompilerOptions; }, configFileParsingDiagnostics: readonly Diagnostic[]): BuilderProgram {
+export function createRedirectedBuilderProgram(
+    getState: () => { program?: Program | undefined; compilerOptions: CompilerOptions; },
+    configFileParsingDiagnostics: readonly Diagnostic[],
+): BuilderProgram {
     return {
         getState: notImplemented,
         saveEmitState: noop as BuilderProgram["saveEmitState"],

@@ -135,7 +135,9 @@ describe("unittests:: tsserver:: moduleSpecifierCache", () => {
 
         function getWithPreferences(preferences: ts.UserPreferences) {
             session.logger.info(
-                `moduleSpecifierCache for ${jsonToReadableText(preferences)} (${bTs.path} -> ${aTs.path}) ${jsonToReadableText(moduleSpecifierCache.get(bTs.path as ts.Path, aTs.path as ts.Path, preferences, {}))}`,
+                `moduleSpecifierCache for ${jsonToReadableText(preferences)} (${bTs.path} -> ${aTs.path}) ${
+                    jsonToReadableText(moduleSpecifierCache.get(bTs.path as ts.Path, aTs.path as ts.Path, preferences, {}))
+                }`,
             );
         }
     });

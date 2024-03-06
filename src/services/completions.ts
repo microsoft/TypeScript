@@ -1441,7 +1441,9 @@ function getExhaustiveCaseSnippets(
                         );
                         break;
                     case "number":
-                        elements.push(type.value < 0 ? factory.createPrefixUnaryExpression(SyntaxKind.MinusToken, factory.createNumericLiteral(-type.value)) : factory.createNumericLiteral(type.value));
+                        elements.push(
+                            type.value < 0 ? factory.createPrefixUnaryExpression(SyntaxKind.MinusToken, factory.createNumericLiteral(-type.value)) : factory.createNumericLiteral(type.value),
+                        );
                         break;
                     case "string":
                         elements.push(factory.createStringLiteral(type.value, quotePreference === QuotePreference.Single));
@@ -1799,7 +1801,8 @@ function createCompletionEntry(
         ) {
             if (
                 type.flags & TypeFlags.StringLike ||
-                (type.flags & TypeFlags.Union && every((type as UnionType).types, type => !!(type.flags & (TypeFlags.StringLike | TypeFlags.Undefined) || isStringAndEmptyAnonymousObjectIntersection(type))))
+                (type.flags & TypeFlags.Union &&
+                    every((type as UnionType).types, type => !!(type.flags & (TypeFlags.StringLike | TypeFlags.Undefined) || isStringAndEmptyAnonymousObjectIntersection(type))))
             ) {
                 // If is string like or undefined use quotes
                 insertText = `${escapeSnippetText(name)}=${quote(sourceFile, preferences, "$1")}`;
@@ -2149,7 +2152,12 @@ function getEntryForObjectLiteralMethodCompletion(
         newLine: getNewLineKind(getNewLineOrDefaultFromHost(host, formatContext?.options)),
     });
     if (formatContext) {
-        insertText = printer.printAndFormatSnippetList(ListFormat.CommaDelimited | ListFormat.AllowTrailingComma, factory.createNodeArray([method], /*hasTrailingComma*/ true), sourceFile, formatContext);
+        insertText = printer.printAndFormatSnippetList(
+            ListFormat.CommaDelimited | ListFormat.AllowTrailingComma,
+            factory.createNodeArray([method], /*hasTrailingComma*/ true),
+            sourceFile,
+            formatContext,
+        );
     }
     else {
         insertText = printer.printSnippetList(ListFormat.CommaDelimited | ListFormat.AllowTrailingComma, factory.createNodeArray([method], /*hasTrailingComma*/ true), sourceFile);
@@ -2562,7 +2570,10 @@ export function getCompletionEntriesFromSymbols(
         const symbol = symbols[i];
         const origin = symbolToOriginInfoMap?.[i];
         const info = getCompletionEntryDisplayNameForSymbol(symbol, target, origin, kind, !!jsxIdentifierExpected);
-        if (!info || (uniques.get(info.name) && (!origin || !originIsObjectLiteralMethod(origin))) || kind === CompletionKind.Global && symbolToSortTextMap && !shouldIncludeSymbol(symbol, symbolToSortTextMap)) {
+        if (
+            !info || (uniques.get(info.name) && (!origin || !originIsObjectLiteralMethod(origin))) ||
+            kind === CompletionKind.Global && symbolToSortTextMap && !shouldIncludeSymbol(symbol, symbolToSortTextMap)
+        ) {
             continue;
         }
 
@@ -2605,7 +2616,8 @@ export function getCompletionEntriesFromSymbols(
         }
 
         /** True for locals; false for globals, module exports from other files, `this.` completions. */
-        const shouldShadowLaterSymbols = (!origin || originIsTypeOnlyAlias(origin)) && !(symbol.parent === undefined && !some(symbol.declarations, d => d.getSourceFile() === location.getSourceFile()));
+        const shouldShadowLaterSymbols = (!origin || originIsTypeOnlyAlias(origin)) &&
+            !(symbol.parent === undefined && !some(symbol.declarations, d => d.getSourceFile() === location.getSourceFile()));
         uniques.set(name, shouldShadowLaterSymbols);
         insertSorted(entries, entry, compareCompletionEntries, /*allowDuplicates*/ true);
     }
@@ -4931,7 +4943,8 @@ function getCompletionData(
             && !isJsxAttribute(contextToken.parent)
             // Don't block completions if we're in `class C /**/`, `interface I /**/` or `<T /**/>` , because we're *past* the end of the identifier and might want to complete `extends`.
             // If `contextToken !== previousToken`, this is `class C ex/**/`, `interface I ex/**/` or `<T ex/**/>`.
-            && !((isClassLike(contextToken.parent) || isInterfaceDeclaration(contextToken.parent) || isTypeParameterDeclaration(contextToken.parent)) && (contextToken !== previousToken || position > previousToken.end));
+            && !((isClassLike(contextToken.parent) || isInterfaceDeclaration(contextToken.parent) || isTypeParameterDeclaration(contextToken.parent)) &&
+                (contextToken !== previousToken || position > previousToken.end));
     }
 
     function isPreviousPropertyDeclarationTerminated(contextToken: Node, position: number) {
@@ -5194,7 +5207,8 @@ function tryGetObjectLikeCompletionContainer(contextToken: Node | undefined, pos
                 break;
             default:
                 if (
-                    parent.parent?.parent && (isMethodDeclaration(parent.parent) || isGetAccessorDeclaration(parent.parent) || isSetAccessorDeclaration(parent.parent)) && isObjectLiteralExpression(parent.parent.parent)
+                    parent.parent?.parent && (isMethodDeclaration(parent.parent) || isGetAccessorDeclaration(parent.parent) || isSetAccessorDeclaration(parent.parent)) &&
+                    isObjectLiteralExpression(parent.parent.parent)
                 ) {
                     return parent.parent.parent;
                 }
@@ -5272,7 +5286,10 @@ function getCompletionEntryDisplayNameForSymbol(
     }
 
     const validNameResult: CompletionEntryDisplayNameForSymbol = { name, needsConvertPropertyAccess: false };
-    if (isIdentifierText(name, target, jsxIdentifierExpected ? LanguageVariant.JSX : LanguageVariant.Standard) || symbol.valueDeclaration && isPrivateIdentifierClassElementDeclaration(symbol.valueDeclaration)) {
+    if (
+        isIdentifierText(name, target, jsxIdentifierExpected ? LanguageVariant.JSX : LanguageVariant.Standard) ||
+        symbol.valueDeclaration && isPrivateIdentifierClassElementDeclaration(symbol.valueDeclaration)
+    ) {
         return validNameResult;
     }
     switch (kind) {
@@ -5575,7 +5592,8 @@ function tryGetObjectTypeDeclarationCompletionContainer(sourceFile: SourceFile, 
                     return location;
                 }
                 const isValidKeyword = isClassLike(contextToken.parent.parent) ? isClassMemberCompletionKeyword : isInterfaceOrTypeLiteralCompletionKeyword;
-                return (isValidKeyword(contextToken.kind) || contextToken.kind === SyntaxKind.AsteriskToken || isIdentifier(contextToken) && isValidKeyword(identifierToKeywordKind(contextToken) ?? SyntaxKind.Unknown))
+                return (isValidKeyword(contextToken.kind) || contextToken.kind === SyntaxKind.AsteriskToken ||
+                        isIdentifier(contextToken) && isValidKeyword(identifierToKeywordKind(contextToken) ?? SyntaxKind.Unknown))
                     ? contextToken.parent.parent as ObjectTypeDeclaration : undefined;
             }
             return undefined;

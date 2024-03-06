@@ -840,10 +840,13 @@ function getNewImportSpecifiers(namedImports: ImportDeclaration[]) {
     return flatMap(
         namedImports,
         namedImport =>
-            map(tryGetNamedBindingElements(namedImport), importSpecifier =>
-                importSpecifier.name && importSpecifier.propertyName && importSpecifier.name.escapedText === importSpecifier.propertyName.escapedText
-                    ? factory.updateImportSpecifier(importSpecifier, importSpecifier.isTypeOnly, /*propertyName*/ undefined, importSpecifier.name)
-                    : importSpecifier),
+            map(
+                tryGetNamedBindingElements(namedImport),
+                importSpecifier =>
+                    importSpecifier.name && importSpecifier.propertyName && importSpecifier.name.escapedText === importSpecifier.propertyName.escapedText
+                        ? factory.updateImportSpecifier(importSpecifier, importSpecifier.isTypeOnly, /*propertyName*/ undefined, importSpecifier.name)
+                        : importSpecifier,
+            ),
     );
 }
 

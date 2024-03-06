@@ -245,7 +245,16 @@ export function getModuleSpecifier(
     host: ModuleSpecifierResolutionHost,
     options: ModuleSpecifierOptions = {},
 ): string {
-    return getModuleSpecifierWorker(compilerOptions, importingSourceFile, importingSourceFileName, toFileName, host, getModuleSpecifierPreferences({}, compilerOptions, importingSourceFile), {}, options);
+    return getModuleSpecifierWorker(
+        compilerOptions,
+        importingSourceFile,
+        importingSourceFileName,
+        toFileName,
+        host,
+        getModuleSpecifierPreferences({}, compilerOptions, importingSourceFile),
+        {},
+        options,
+    );
 }
 
 /** @internal */
@@ -259,7 +268,10 @@ export function getNodeModulesPackageName(
 ): string | undefined {
     const info = getInfo(importingSourceFile.fileName, host);
     const modulePaths = getAllModulePaths(info, nodeModulesFileName, host, preferences, options);
-    return firstDefined(modulePaths, modulePath => tryGetModuleNameAsNodeModule(modulePath, info, importingSourceFile, host, compilerOptions, preferences, /*packageNameOnly*/ true, options.overrideImportMode));
+    return firstDefined(
+        modulePaths,
+        modulePath => tryGetModuleNameAsNodeModule(modulePath, info, importingSourceFile, host, compilerOptions, preferences, /*packageNameOnly*/ true, options.overrideImportMode),
+    );
 }
 
 function getModuleSpecifierWorker(
@@ -400,7 +412,9 @@ function computeModuleSpecifiers(
                 if (reason.kind !== FileIncludeKind.Import || reason.file !== importingSourceFile.path) return undefined;
                 // If the candidate import mode doesn't match the mode we're generating for, don't consider it
                 // TODO: maybe useful to keep around as an alternative option for certain contexts where the mode is overridable
-                if (importingSourceFile.impliedNodeFormat && importingSourceFile.impliedNodeFormat !== getModeForResolutionAtIndex(importingSourceFile, reason.index, compilerOptions)) return undefined;
+                if (importingSourceFile.impliedNodeFormat && importingSourceFile.impliedNodeFormat !== getModeForResolutionAtIndex(importingSourceFile, reason.index, compilerOptions)) {
+                    return undefined;
+                }
                 const specifier = getModuleNameStringLiteralAt(importingSourceFile, reason.index).text;
                 // If the preference is for non relative and the module specifier is relative, ignore it
                 return preferences.relativePreference !== RelativePreference.NonRelative || !pathIsRelative(specifier) ?
@@ -503,7 +517,14 @@ function getInfo(importingSourceFileName: string, host: ModuleSpecifierResolutio
     };
 }
 
-function getLocalModuleSpecifier(moduleFileName: string, info: Info, compilerOptions: CompilerOptions, host: ModuleSpecifierResolutionHost, importMode: ResolutionMode, preferences: ModuleSpecifierPreferences): string;
+function getLocalModuleSpecifier(
+    moduleFileName: string,
+    info: Info,
+    compilerOptions: CompilerOptions,
+    host: ModuleSpecifierResolutionHost,
+    importMode: ResolutionMode,
+    preferences: ModuleSpecifierPreferences,
+): string;
 function getLocalModuleSpecifier(
     moduleFileName: string,
     info: Info,

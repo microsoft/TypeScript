@@ -489,7 +489,12 @@ describe("unittests:: tsserver:: resolutionCache:: tsserverProjectSystem module 
             const file3Name = "../test/src/file3";
             const file4Name = "../test/file4";
             const importModuleContent = `import { module1 } from "${module1Name}";import { module2 } from "${module2Name}";`;
-            const { file1, file2, file3, file4 } = getFiles(`import "${file2Name}"; import "${file4Name}"; import "${file3Name}"; ${importModuleContent}`, importModuleContent, importModuleContent, importModuleContent);
+            const { file1, file2, file3, file4 } = getFiles(
+                `import "${file2Name}"; import "${file4Name}"; import "${file3Name}"; ${importModuleContent}`,
+                importModuleContent,
+                importModuleContent,
+                importModuleContent,
+            );
             const { module1, module2 } = getModules(`/user/username/projects/myproject/product/node_modules/module1/index.ts`, `/user/username/projects/myproject/node_modules/module2/index.ts`);
             const files = [module1, module2, file1, file2, file3, file4, libFile];
             const host = createServerHost(files);

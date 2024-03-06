@@ -127,7 +127,11 @@ describe("unittests:: tsserver:: events:: ProjectLoadingStart and ProjectLoading
                             ...protocolLocationFromSubstring(bTs.content, "A()"),
                         },
                     });
-                    baselineTsserverLogs("events/projectLoading", `opening original location project${disableSourceOfProjectReferenceRedirect ? " disableSourceOfProjectReferenceRedirect" : ""} ${sessionType}`, session);
+                    baselineTsserverLogs(
+                        "events/projectLoading",
+                        `opening original location project${disableSourceOfProjectReferenceRedirect ? " disableSourceOfProjectReferenceRedirect" : ""} ${sessionType}`,
+                        session,
+                    );
                 }
             });
 

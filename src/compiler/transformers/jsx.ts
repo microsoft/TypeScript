@@ -475,7 +475,8 @@ export function transformJsx(context: TransformationContext): (x: SourceFile | B
             spanMap(
                 attrs,
                 isJsxSpreadAttribute,
-                (attrs, isSpread) => flatten(map(attrs, attr => isSpread ? transformJsxSpreadAttributeToProps(attr as JsxSpreadAttribute) : transformJsxAttributeToObjectLiteralElement(attr as JsxAttribute))),
+                (attrs, isSpread) =>
+                    flatten(map(attrs, attr => isSpread ? transformJsxSpreadAttributeToProps(attr as JsxSpreadAttribute) : transformJsxAttributeToObjectLiteralElement(attr as JsxAttribute))),
             ),
         );
         if (children) {
