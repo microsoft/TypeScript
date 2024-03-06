@@ -1,0 +1,52 @@
+//// [tests/cases/compiler/verbatim-declarations-assertions-js.ts] ////
+
+=== jsFile.js ===
+// Types will not currently be preserved from type assertion
+// string | string will become string
+
+export let vLet = /** @type {string | string} */(null)
+>vLet : Symbol(vLet, Decl(jsFile.js, 3, 10))
+
+export const vConst = /** @type {string | string} */(null)
+>vConst : Symbol(vConst, Decl(jsFile.js, 4, 12))
+
+export function fn(p = /** @type {string | string} */(null)) {}
+>fn : Symbol(fn, Decl(jsFile.js, 4, 58))
+>p : Symbol(p, Decl(jsFile.js, 6, 19))
+
+/**
+ * @param {number} req 
+*/
+export function fnWithRequiredDefaultParam(p = /** @type {string | string} */(null), req) {}
+>fnWithRequiredDefaultParam : Symbol(fnWithRequiredDefaultParam, Decl(jsFile.js, 6, 63))
+>p : Symbol(p, Decl(jsFile.js, 11, 43))
+>req : Symbol(req, Decl(jsFile.js, 11, 84))
+
+export class C {
+>C : Symbol(C, Decl(jsFile.js, 11, 92))
+
+    field = /** @type {string | string} */(null)
+>field : Symbol(C.field, Decl(jsFile.js, 13, 16))
+
+    /** @readonly */
+    roFiled = /** @type {string | string} */(null);
+>roFiled : Symbol(C.roFiled, Decl(jsFile.js, 14, 48))
+
+    method(p = /** @type {string | string} */(null)) {}
+>method : Symbol(C.method, Decl(jsFile.js, 16, 51))
+>p : Symbol(p, Decl(jsFile.js, 17, 11))
+
+    /**
+     * @param {number} req 
+    */
+    methodWithRequiredDefault(p = /** @type {string | string} */(null), req) {}
+>methodWithRequiredDefault : Symbol(C.methodWithRequiredDefault, Decl(jsFile.js, 17, 55))
+>p : Symbol(p, Decl(jsFile.js, 21, 30))
+>req : Symbol(req, Decl(jsFile.js, 21, 71))
+
+    constructor(ctorField = /** @type {string | string} */(null)) {}
+>ctorField : Symbol(ctorField, Decl(jsFile.js, 23, 16))
+}
+
+export default /** @type {string | string} */(null);
+

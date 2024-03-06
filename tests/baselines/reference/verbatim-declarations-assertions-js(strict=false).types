@@ -1,0 +1,62 @@
+//// [tests/cases/compiler/verbatim-declarations-assertions-js.ts] ////
+
+=== jsFile.js ===
+// Types will not currently be preserved from type assertion
+// string | string will become string
+
+export let vLet = /** @type {string | string} */(null)
+>vLet : string
+>(null) : string
+
+export const vConst = /** @type {string | string} */(null)
+>vConst : string
+>(null) : string
+
+export function fn(p = /** @type {string | string} */(null)) {}
+>fn : (p?: string) => void
+>p : string
+>(null) : string
+
+/**
+ * @param {number} req 
+*/
+export function fnWithRequiredDefaultParam(p = /** @type {string | string} */(null), req) {}
+>fnWithRequiredDefaultParam : (p: string, req: number) => void
+>p : string
+>(null) : string
+>req : number
+
+export class C {
+>C : C
+
+    field = /** @type {string | string} */(null)
+>field : string
+>(null) : string
+
+    /** @readonly */
+    roFiled = /** @type {string | string} */(null);
+>roFiled : string
+>(null) : string
+
+    method(p = /** @type {string | string} */(null)) {}
+>method : (p?: string) => void
+>p : string
+>(null) : string
+
+    /**
+     * @param {number} req 
+    */
+    methodWithRequiredDefault(p = /** @type {string | string} */(null), req) {}
+>methodWithRequiredDefault : (p: string, req: number) => void
+>p : string
+>(null) : string
+>req : number
+
+    constructor(ctorField = /** @type {string | string} */(null)) {}
+>ctorField : string
+>(null) : string
+}
+
+export default /** @type {string | string} */(null);
+>(null) : string
+
