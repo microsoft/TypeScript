@@ -1,0 +1,23 @@
+main.ts(2,1): error TS18055: Declaration file contains hand-written type reference directives: "node"
+
+
+==== node_modules/@types/node/index.d.ts (0 errors) ====
+    /// <reference path="fs.d.ts" />
+==== node_modules/@types/node/fs.d.ts (0 errors) ====
+    declare module "fs" {
+        interface FSWatcher {}
+    }
+==== node_modules/@types/node/package.json (0 errors) ====
+    {
+        "name": "@types/node",
+        "version": "1.0.0"
+    }
+==== main.ts (1 errors) ====
+    /// <reference types="node" />
+    import { FSWatcher } from "fs";
+    ~~~~~~
+!!! error TS18055: Declaration file contains hand-written type reference directives: "node"
+    export function f() {
+        return {} as FSWatcher;
+    }
+    

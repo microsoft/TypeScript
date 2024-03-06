@@ -1,10 +1,6 @@
-error TS5102: Option 'out' has been removed. Please remove it from your configuration.
-  Use 'outFile' instead.
 error TS5108: Option 'target=ES3' has been removed. Please remove it from your configuration.
 
 
-!!! error TS5102: Option 'out' has been removed. Please remove it from your configuration.
-!!! error TS5102:   Use 'outFile' instead.
 !!! error TS5108: Option 'target=ES3' has been removed. Please remove it from your configuration.
 ==== a.ts (0 errors) ====
     var a = 0;
@@ -13,3 +9,4 @@ error TS5108: Option 'target=ES3' has been removed. Please remove it from your c
 ==== b.ts (0 errors) ====
     var b = 0;
     console.log(b);
+    

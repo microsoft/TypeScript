@@ -32,8 +32,3 @@ x.foo().x;
 Object.defineProperty(exports, "__esModule", { value: true });
 var x;
 x.foo().x;
-
-
-//// [main.d.ts]
-/// <reference path="O.d.ts" />
-export {};

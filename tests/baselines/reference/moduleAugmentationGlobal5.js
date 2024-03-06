@@ -27,10 +27,3 @@ Object.defineProperty(exports, "__esModule", { value: true });
 /// <reference path="f2.d.ts"/>
 require("A");
 require("B");
-
-
-//// [f3.d.ts]
-/// <reference path="f1.d.ts" />
-/// <reference path="f2.d.ts" />
-import "A";
-import "B";

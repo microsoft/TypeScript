@@ -63,11 +63,8 @@ import obj2 from "./sub2/uses.js";
 export default [obj1, obj2.default];
 
 
-//// [uses.d.ts]
+//// [index.d.ts]
 /// <reference types="pkg" />
-declare const _default: ImportInterface;
-export default _default;
-//// [uses.d.ts]
-/// <reference types="pkg" />
-declare const _default: RequireInterface;
+/// <reference types="pkg" resolution-mode="require"/>
+declare const _default: readonly [ImportInterface, RequireInterface];
 export default _default;

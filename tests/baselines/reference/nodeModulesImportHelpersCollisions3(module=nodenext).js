@@ -36,3 +36,11 @@ Object.defineProperty(exports, "default", { enumerable: true, get: function () {
 //// [index.js]
 // esm format file
 export { default } from "fs";
+
+
+//// [index.d.ts]
+/// <reference path="../types.d.ts" />
+export { default } from "fs";
+//// [index.d.ts]
+/// <reference path="types.d.ts" />
+export { default } from "fs";

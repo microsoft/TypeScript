@@ -1,10 +1,6 @@
-error TS5102: Option 'out' has been removed. Please remove it from your configuration.
-  Use 'outFile' instead.
-e.ts(1,1): error TS18056: Declaration file contains synthesized file reference directives: '"c.d.ts"'
+d.ts(3,1): error TS18056: Declaration file contains hand-written file reference directives: "c.d.ts"
 
 
-!!! error TS5102: Option 'out' has been removed. Please remove it from your configuration.
-!!! error TS5102:   Use 'outFile' instead.
 ==== a.ts (0 errors) ====
     export class A {}
     
@@ -16,10 +12,12 @@ e.ts(1,1): error TS18056: Declaration file contains synthesized file reference d
         class Cls {y: string; }
     }
     
-==== d.ts (0 errors) ====
+==== d.ts (1 errors) ====
     /// <reference path="c.d.ts"/>
     
     import {A} from "./a";
+    ~~~~~~
+!!! error TS18056: Declaration file contains hand-written file reference directives: "c.d.ts"
     import {B} from "./b";
     
     A.prototype.getB = function () { return undefined; }
@@ -30,10 +28,8 @@ e.ts(1,1): error TS18056: Declaration file contains synthesized file reference d
         }
     }
     
-==== e.ts (1 errors) ====
+==== e.ts (0 errors) ====
     import {A} from "./a";
-    ~~~~~~
-!!! error TS18056: Declaration file contains synthesized file reference directives: '"c.d.ts"'
     import {Cls} from "C";
     
     A.prototype.getCls = function () { return undefined; }
@@ -52,3 +48,4 @@ e.ts(1,1): error TS18056: Declaration file contains synthesized file reference d
     let a: A;
     let b = a.getB().x.toFixed();
     let c = a.getCls().y.toLowerCase();
+    

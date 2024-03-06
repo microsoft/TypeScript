@@ -182,7 +182,7 @@ describe("unittests:: tsbuildWatch:: watchMode:: program updates", () => {
 
     verifyTscWatch({
         scenario: "programUpdates",
-        subScenario: "when referenced using prepend builds referencing project even for non local change",
+        subScenario: "with outFile and non local change",
         commandLineArgs: ["-b", "-w", "sample1/logic"],
         sys: () =>
             createWatchedSystem({
@@ -192,8 +192,8 @@ describe("unittests:: tsbuildWatch:: watchMode:: program updates", () => {
                 }),
                 "/user/username/projects/sample1/core/index.ts": `function foo() { return 10; }`,
                 "/user/username/projects/sample1/logic/tsconfig.json": jsonToReadableText({
-                    compilerOptions: { ignoreDeprecations: "5.0", composite: true, declaration: true, outFile: "index.js" },
-                    references: [{ path: "../core", prepend: true }],
+                    compilerOptions: { composite: true, declaration: true, outFile: "index.js" },
+                    references: [{ path: "../core" }],
                 }),
                 "/user/username/projects/sample1/logic/index.ts": `function bar() { return foo() + 1 };`,
             }, { currentDirectory: "/user/username/projects" }),

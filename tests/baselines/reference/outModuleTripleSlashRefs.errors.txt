@@ -1,17 +1,17 @@
-ref/a.ts(2,1): error TS18056: Declaration file contains synthesized file reference directives: '"b.d.ts"'
+ref/b.ts(2,1): error TS18056: Declaration file contains hand-written file reference directives: "c.d.ts"
 
 
-==== ref/a.ts (1 errors) ====
+==== ref/a.ts (0 errors) ====
     /// <reference path="./b.ts" />
     export class A {
-    ~~~~~~
-!!! error TS18056: Declaration file contains synthesized file reference directives: '"b.d.ts"'
     	member: typeof GlobalFoo;
     }
     
-==== ref/b.ts (0 errors) ====
+==== ref/b.ts (1 errors) ====
     /// <reference path="./c.d.ts" />
     class Foo {
+    ~~~~~
+!!! error TS18056: Declaration file contains hand-written file reference directives: "c.d.ts"
     	member: Bar;
     }
     declare var GlobalFoo: Foo;

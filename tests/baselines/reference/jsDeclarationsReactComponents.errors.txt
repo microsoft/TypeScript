@@ -1,10 +1,11 @@
-jsDeclarationsReactComponents2.jsx(1,1): error TS18056: Declaration file contains synthesized file reference directives: '"../..react16.d.ts"'
-jsDeclarationsReactComponents5.jsx(1,1): error TS18056: Declaration file contains synthesized file reference directives: '"../..react16.d.ts"'
+jsDeclarationsReactComponents1.jsx(2,1): error TS18056: Declaration file contains hand-written file reference directives: "../..react16.d.ts"
 
 
-==== jsDeclarationsReactComponents1.jsx (0 errors) ====
+==== jsDeclarationsReactComponents1.jsx (1 errors) ====
     /// <reference path="/.lib/react16.d.ts" />
     import React from "react";
+    ~~~~~~
+!!! error TS18056: Declaration file contains hand-written file reference directives: "../..react16.d.ts"
     import PropTypes from "prop-types"
     
     const TabbedShowLayout = ({
@@ -25,10 +26,8 @@ jsDeclarationsReactComponents5.jsx(1,1): error TS18056: Declaration file contain
     
     export default TabbedShowLayout;
     
-==== jsDeclarationsReactComponents2.jsx (1 errors) ====
+==== jsDeclarationsReactComponents2.jsx (0 errors) ====
     import React from "react";
-    ~~~~~~
-!!! error TS18056: Declaration file contains synthesized file reference directives: '"../..react16.d.ts"'
     /**
      * @type {React.SFC}
      */
@@ -80,10 +79,8 @@ jsDeclarationsReactComponents5.jsx(1,1): error TS18056: Declaration file contain
     };
     
     export default TabbedShowLayout;
-==== jsDeclarationsReactComponents5.jsx (1 errors) ====
+==== jsDeclarationsReactComponents5.jsx (0 errors) ====
     import React from 'react';
-    ~~~~~~
-!!! error TS18056: Declaration file contains synthesized file reference directives: '"../..react16.d.ts"'
     import PropTypes from 'prop-types';
     
     function Tree({ allowDropOnRoot }) {

@@ -23,10 +23,3 @@ var thing = new Something();
 module.exports = {
     thing: thing
 };
-
-
-//// [index.d.ts]
-/// <reference types="node" />
-export const thing: Something;
-import Something_1 = require("fs");
-import Something = Something_1.Something;

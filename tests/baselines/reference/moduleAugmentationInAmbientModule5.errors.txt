@@ -1,0 +1,26 @@
+f.ts(2,1): error TS18056: Declaration file contains hand-written file reference directives: "array.d.ts"
+
+
+==== f.ts (1 errors) ====
+    /// <reference path="array.d.ts"/>
+    import "array";
+    ~~~~~~
+!!! error TS18056: Declaration file contains hand-written file reference directives: "array.d.ts"
+    
+    let x = [1];
+    let y = x.getA().x;
+    
+==== array.d.ts (0 errors) ====
+    declare module "A" {
+        class A { x: number; }
+    }
+    
+    declare module "array" {
+        import {A} from "A";
+        global {
+            interface Array<T> {
+                getA(): A;
+            }
+        }
+    }
+    

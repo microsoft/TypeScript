@@ -27,9 +27,3 @@ export interface LocalInterface extends ImportInterface {}
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 /// <reference types="pkg" resolution-mode="import"/>
-
-
-//// [index.d.ts]
-/// <reference types="pkg" resolution-mode="import"/>
-export interface LocalInterface extends ImportInterface {
-}

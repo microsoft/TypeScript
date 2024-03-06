@@ -61,6 +61,3 @@ declare module "observable" {
     }
 }
 export {};
-//// [main.d.ts]
-/// <reference path="observable.d.ts" />
-import "./map";

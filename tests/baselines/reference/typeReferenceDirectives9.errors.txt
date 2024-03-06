@@ -1,10 +1,8 @@
-/mod2.ts(1,1): error TS18055: Declaration file contains synthesized type reference directives: '"lib"'
+/mod1.ts(3,1): error TS18055: Declaration file contains hand-written type reference directives: "lib"
 
 
-==== /mod2.ts (1 errors) ====
+==== /mod2.ts (0 errors) ====
     import { Cls } from "./main";
-    ~~~~~~
-!!! error TS18055: Declaration file contains synthesized type reference directives: '"lib"'
     import "./mod1";
     
     export const cls = Cls;
@@ -18,10 +16,12 @@
         x
     }
     
-==== /mod1.ts (0 errors) ====
+==== /mod1.ts (1 errors) ====
     /// <reference types="lib" />
     
     import {Cls} from "./main";
+    ~~~~~~
+!!! error TS18055: Declaration file contains hand-written type reference directives: "lib"
     Cls.prototype.foo = function() { return undefined; }
     
     declare module "./main" {

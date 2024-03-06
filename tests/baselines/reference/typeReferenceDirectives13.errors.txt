@@ -1,0 +1,18 @@
+/app.ts(2,1): error TS18055: Declaration file contains hand-written type reference directives: "lib"
+
+
+==== /app.ts (1 errors) ====
+    /// <reference types="lib"/>
+    import {$} from "./ref";
+    ~~~~~~
+!!! error TS18055: Declaration file contains hand-written type reference directives: "lib"
+    export interface A {
+        x: () => typeof $
+    }
+    
+==== /ref.d.ts (0 errors) ====
+    export interface $ { x }
+    
+==== /types/lib/index.d.ts (0 errors) ====
+    declare let $: { x: number }
+    

@@ -1,19 +1,19 @@
-error TS5102: Option 'out' has been removed. Please remove it from your configuration.
-  Use 'outFile' instead.
+main.ts(3,1): error TS18056: Declaration file contains hand-written file reference directives: "d.d.ts", "e.d.ts"
 
 
-!!! error TS5102: Option 'out' has been removed. Please remove it from your configuration.
-!!! error TS5102:   Use 'outFile' instead.
-==== main.ts (0 errors) ====
+==== main.ts (1 errors) ====
     /// <reference path="d.d.ts"/>
     /// <reference path="e.d.ts"/>
     import {A} from "./a";
+    ~~~~~~
+!!! error TS18056: Declaration file contains hand-written file reference directives: "d.d.ts", "e.d.ts"
     import "D";
     import "E";
     
     let a: A;
     let b = a.getB().x.toFixed();
     let c = a.getCls().y.toLowerCase();
+    
 ==== a.ts (0 errors) ====
     export class A {}
     

@@ -1,0 +1,13 @@
+/app.ts(2,1): error TS18055: Declaration file contains hand-written type reference directives: "lib"
+
+
+==== /app.ts (1 errors) ====
+    /// <reference types="lib"/>
+    interface A {
+    ~~~~~~~~~
+!!! error TS18055: Declaration file contains hand-written type reference directives: "lib"
+        x: $
+    }
+==== /types/lib/index.d.ts (0 errors) ====
+    interface $ { x }
+    

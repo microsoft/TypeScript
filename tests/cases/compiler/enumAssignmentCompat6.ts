@@ -1,4 +1,4 @@
-// @filename a.ts
+// @filename: a.ts
 namespace numerics {
     export enum DiagnosticCategory {
         Warning,

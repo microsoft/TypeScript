@@ -1,0 +1,16 @@
+/a/app.ts(2,1): error TS18055: Declaration file contains hand-written type reference directives: "jquery"
+
+
+==== /a/node_modules/@types/jquery/index.d.ts (0 errors) ====
+    interface JQuery {
+    
+    }
+    
+==== /a/app.ts (1 errors) ====
+    /// <reference types="jquery"/>
+    namespace Test {
+    ~~~~~~~~~
+!!! error TS18055: Declaration file contains hand-written type reference directives: "jquery"
+        export var x: JQuery;
+    }
+    

@@ -1,12 +1,7 @@
-error TS5102: Option 'out' has been removed. Please remove it from your configuration.
-  Use 'outFile' instead.
-error TS6082: Only 'amd' and 'system' modules are supported alongside --out.
-test.ts(2,1): error TS18056: Declaration file contains synthesized file reference directives: '"m1.d.ts"'
+error TS6082: Only 'amd' and 'system' modules are supported alongside --outFile.
 
 
-!!! error TS5102: Option 'out' has been removed. Please remove it from your configuration.
-!!! error TS5102:   Use 'outFile' instead.
-!!! error TS6082: Only 'amd' and 'system' modules are supported alongside --out.
+!!! error TS6082: Only 'amd' and 'system' modules are supported alongside --outFile.
 ==== m1.ts (0 errors) ====
     var m1_a1 = 10;
     class m1_c1 {
@@ -17,11 +12,9 @@ test.ts(2,1): error TS18056: Declaration file contains synthesized file referenc
     function m1_f1() {
         return m1_instance1;
     }
-==== test.ts (1 errors) ====
+==== test.ts (0 errors) ====
     /// <reference path='m1.ts'/>
     var a1 = 10;
-    ~~~
-!!! error TS18056: Declaration file contains synthesized file reference directives: '"m1.d.ts"'
     class c1 {
         public p1: number;
     }

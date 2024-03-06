@@ -31,9 +31,3 @@ export interface LocalInterface extends RequireInterface {}
 //// [index.js]
 /// <reference types="pkg" resolution-mode="require"/>
 export {};
-
-
-//// [index.d.ts]
-/// <reference types="pkg" resolution-mode="require"/>
-export interface LocalInterface extends RequireInterface {
-}

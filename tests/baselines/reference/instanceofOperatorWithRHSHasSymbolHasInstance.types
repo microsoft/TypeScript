@@ -609,3 +609,56 @@ if (obj instanceof B) {
     obj; // B
 >obj : B
 }
+
+// intersections
+// https://github.com/microsoft/TypeScript/issues/56536
+
+interface HasInstanceOf { [Symbol.hasInstance](x: unknown): boolean }
+>[Symbol.hasInstance] : (x: unknown) => boolean
+>Symbol.hasInstance : unique symbol
+>Symbol : SymbolConstructor
+>hasInstance : unique symbol
+>x : unknown
+
+type Rhs14 = HasInstanceOf & object;
+>Rhs14 : HasInstanceOf & object
+
+declare const rhs14: Rhs14;
+>rhs14 : Rhs14
+
+lhs0 instanceof rhs14 && lhs0;
+>lhs0 instanceof rhs14 && lhs0 : any
+>lhs0 instanceof rhs14 : boolean
+>lhs0 : any
+>rhs14 : Rhs14
+>lhs0 : any
+
+// unions
+
+interface HasInstanceOf1 { [Symbol.hasInstance](x: unknown): x is Point }
+>[Symbol.hasInstance] : (x: unknown) => x is Point
+>Symbol.hasInstance : unique symbol
+>Symbol : SymbolConstructor
+>hasInstance : unique symbol
+>x : unknown
+
+interface HasInstanceOf2 { [Symbol.hasInstance](x: unknown): x is Line }
+>[Symbol.hasInstance] : (x: unknown) => x is Line
+>Symbol.hasInstance : unique symbol
+>Symbol : SymbolConstructor
+>hasInstance : unique symbol
+>x : unknown
+
+type Rhs15 = HasInstanceOf1 | HasInstanceOf2;
+>Rhs15 : HasInstanceOf1 | HasInstanceOf2
+
+declare const rhs15: Rhs15;
+>rhs15 : Rhs15
+
+lhs0 instanceof rhs15 && lhs0;
+>lhs0 instanceof rhs15 && lhs0 : Point | Line
+>lhs0 instanceof rhs15 : boolean
+>lhs0 : any
+>rhs15 : Rhs15
+>lhs0 : Point | Line
+

@@ -35,14 +35,3 @@ var A;
         var thing = new Something();
     })(B = A.B || (A.B = {}));
 })(A || (exports.A = A = {}));
-
-
-//// [index.d.ts]
-/// <reference types="node" />
-export const Something: 2;
-export namespace A {
-    namespace B {
-        export { thing };
-        export let thing: import("fs").Something;
-    }
-}

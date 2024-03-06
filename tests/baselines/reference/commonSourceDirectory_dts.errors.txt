@@ -1,0 +1,23 @@
+/app/src/index.ts(2,1): error TS18056: Declaration file contains hand-written file reference directives: "../lib/bar.d.ts"
+
+
+==== /app/tsconfig.json (0 errors) ====
+    {
+        "compilerOptions": {
+            "outDir": "bin",
+            "sourceMap": true,
+            "mapRoot": "myMapRoot",
+            "sourceRoot": "mySourceRoot",
+            "declaration": true
+        }
+    }
+    
+==== /app/lib/bar.d.ts (0 errors) ====
+    declare const y: number;
+    
+==== /app/src/index.ts (1 errors) ====
+    /// <reference path="../lib/bar.d.ts" />
+    export const x = y;
+    ~~~~~~
+!!! error TS18056: Declaration file contains hand-written file reference directives: "../lib/bar.d.ts"
+    

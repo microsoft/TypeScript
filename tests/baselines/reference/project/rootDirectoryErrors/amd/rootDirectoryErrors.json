@@ -18,6 +18,7 @@
     "emittedFiles": [
         "outdir/simple/fileC.js",
         "outdir/simple/fileC.d.ts",
-        "FolderA/FolderB/fileB.js"
+        "FolderA/FolderB/fileB.js",
+        "FolderA/FolderB/fileB.d.ts"
     ]
 }

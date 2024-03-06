@@ -29,8 +29,3 @@ Object.defineProperty(exports, "__esModule", { value: true });
 require("array");
 var x = [1];
 var y = x.getA().x;
-
-
-//// [f.d.ts]
-/// <reference path="array.d.ts" />
-import "array";

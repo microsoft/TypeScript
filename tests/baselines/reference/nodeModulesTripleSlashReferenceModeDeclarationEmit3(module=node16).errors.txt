@@ -1,0 +1,32 @@
+/index.ts(2,1): error TS18055: Declaration file contains hand-written type reference directives: "pkg"
+
+
+==== /index.ts (1 errors) ====
+    /// <reference types="pkg" resolution-mode="require"/>
+    export interface LocalInterface extends RequireInterface {}
+    ~~~~~~
+!!! error TS18055: Declaration file contains hand-written type reference directives: "pkg"
+==== /node_modules/pkg/package.json (0 errors) ====
+    {
+        "name": "pkg",
+        "version": "0.0.1",
+        "exports": {
+            "import": "./import.js",
+            "require": "./require.js"
+        }
+    }
+==== /node_modules/pkg/import.d.ts (0 errors) ====
+    export {};
+    declare global {
+        interface ImportInterface {}
+    }
+==== /node_modules/pkg/require.d.ts (0 errors) ====
+    export {};
+    declare global {
+        interface RequireInterface {}
+    }
+==== /package.json (0 errors) ====
+    {
+        "private": true,
+        "type": "module"
+    }

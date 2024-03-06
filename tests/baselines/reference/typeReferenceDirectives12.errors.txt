@@ -1,34 +1,31 @@
-error TS5102: Option 'out' has been removed. Please remove it from your configuration.
-  Use 'outFile' instead.
-/main.ts(1,14): error TS6131: Cannot compile modules using option 'out' unless the '--module' flag is 'amd' or 'system'.
-/mod2.ts(1,1): error TS18055: Declaration file contains synthesized type reference directives: '"lib"'
+/main.ts(1,14): error TS6131: Cannot compile modules using option 'outFile' unless the '--module' flag is 'amd' or 'system'.
+/mod1.ts(3,1): error TS18055: Declaration file contains hand-written type reference directives: "lib"
 
 
-!!! error TS5102: Option 'out' has been removed. Please remove it from your configuration.
-!!! error TS5102:   Use 'outFile' instead.
-==== /mod2.ts (1 errors) ====
+==== /mod2.ts (0 errors) ====
     import { Cls } from "./main";
-    ~~~~~~
-!!! error TS18055: Declaration file contains synthesized type reference directives: '"lib"'
     import "./mod1";
     
     export const cls = Cls;
     export const foo = new Cls().foo();
     export const bar = Cls.bar();
+    
 ==== /types/lib/index.d.ts (0 errors) ====
     interface Lib { x }
     
 ==== /main.ts (1 errors) ====
     export class Cls {
                  ~~~
-!!! error TS6131: Cannot compile modules using option 'out' unless the '--module' flag is 'amd' or 'system'.
+!!! error TS6131: Cannot compile modules using option 'outFile' unless the '--module' flag is 'amd' or 'system'.
         x
     }
     
-==== /mod1.ts (0 errors) ====
+==== /mod1.ts (1 errors) ====
     /// <reference types="lib" />
     
     import {Cls} from "./main";
+    ~~~~~~
+!!! error TS18055: Declaration file contains hand-written type reference directives: "lib"
     Cls.prototype.foo = function() { return undefined; }
     
     declare module "./main" {

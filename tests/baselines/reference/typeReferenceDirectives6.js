@@ -1,8 +1,6 @@
 //// [tests/cases/compiler/typeReferenceDirectives6.ts] ////
 
 //// [ref.d.ts]
-// $ comes from type declaration file - type reference directive should be added
-
 declare let $: { x: number }
     
 //// [index.d.ts]
@@ -23,10 +21,3 @@ let y = () => x
 /// <reference types="lib"/>
 var x;
 var y = function () { return x; };
-
-
-//// [app.d.ts]
-/// <reference path="ref.d.ts" />
-/// <reference types="lib" />
-declare let x: $;
-declare let y: () => $;

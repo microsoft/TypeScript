@@ -21,14 +21,3 @@ module.exports.A = {};
 module.exports.A.B = {
     thing: new Something()
 };
-
-
-//// [index.d.ts]
-/// <reference types="node" />
-export namespace A {
-    namespace B {
-        let thing: Something;
-    }
-}
-import Something_1 = require("fs");
-import Something = Something_1.Something;

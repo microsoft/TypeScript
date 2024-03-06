@@ -22,7 +22,7 @@ import {
 export {};
 
 declare module 'react' {
->'react' : any
+>'react' : error
 
     interface DOMAttributes<T> {
         css?: any

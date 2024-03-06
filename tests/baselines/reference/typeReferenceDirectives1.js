@@ -11,10 +11,3 @@ interface A {
 
 //// [app.js]
 /// <reference types="lib"/>
-
-
-//// [app.d.ts]
-/// <reference types="lib" />
-interface A {
-    x: $;
-}

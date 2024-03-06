@@ -27,9 +27,3 @@ function f() {
     return {};
 }
 exports.f = f;
-
-
-//// [main.d.ts]
-/// <reference types="node" />
-import { FSWatcher } from "fs";
-export declare function f(): FSWatcher;

@@ -1,11 +1,10 @@
-/index.ts(2,1): error TS18055: Declaration file contains synthesized type reference directives: '"pkg", "pkg"'
+/sub1/uses.ts(2,1): error TS18055: Declaration file contains hand-written type reference directives: "pkg"
+/sub2/uses.ts(2,1): error TS18055: Declaration file contains hand-written type reference directives: "pkg"
 
 
-==== /index.ts (1 errors) ====
+==== /index.ts (0 errors) ====
     // only an esm file can `import` both kinds of files
     import obj1 from "./sub1/uses.js"
-    ~~~~~~
-!!! error TS18055: Declaration file contains synthesized type reference directives: '"pkg", "pkg"'
     import obj2 from "./sub2/uses.js"
     export default [obj1, obj2.default] as const;
 ==== /node_modules/pkg/package.json (0 errors) ====
@@ -29,17 +28,21 @@
         interface RequireInterface { _r: any; }
         function getInterR(): RequireInterface;
     }
-==== /sub1/uses.ts (0 errors) ====
+==== /sub1/uses.ts (1 errors) ====
     /// <reference types="pkg" />
     export default getInterI();
+    ~~~~~~
+!!! error TS18055: Declaration file contains hand-written type reference directives: "pkg"
 ==== /sub1/package.json (0 errors) ====
     {
         "private": true,
         "type": "module"
     }
-==== /sub2/uses.ts (0 errors) ====
+==== /sub2/uses.ts (1 errors) ====
     /// <reference types="pkg" />
     export default getInterR();
+    ~~~~~~
+!!! error TS18055: Declaration file contains hand-written type reference directives: "pkg"
 ==== /sub2/package.json (0 errors) ====
     {
         "private": true,

@@ -1,7 +1,6 @@
 import {
     __String,
     ArrayLiteralExpression,
-    arrayToMap,
     BindingOrAssignmentElement,
     Block,
     compareValues,
@@ -1449,44 +1448,6 @@ export const disposeResourcesHelper: UnscopedEmitHelper = {
             return e.name = "SuppressedError", e.error = error, e.suppressed = suppressed, e;
         });`,
 };
-
-let allUnscopedEmitHelpers: ReadonlyMap<string, UnscopedEmitHelper> | undefined;
-
-/** @internal */
-export function getAllUnscopedEmitHelpers() {
-    return allUnscopedEmitHelpers || (allUnscopedEmitHelpers = arrayToMap([
-        decorateHelper,
-        metadataHelper,
-        paramHelper,
-        esDecorateHelper,
-        runInitializersHelper,
-        assignHelper,
-        awaitHelper,
-        asyncGeneratorHelper,
-        asyncDelegator,
-        asyncValues,
-        restHelper,
-        awaiterHelper,
-        extendsHelper,
-        templateObjectHelper,
-        spreadArrayHelper,
-        valuesHelper,
-        readHelper,
-        propKeyHelper,
-        setFunctionNameHelper,
-        generatorHelper,
-        importStarHelper,
-        importDefaultHelper,
-        exportStarHelper,
-        classPrivateFieldGetHelper,
-        classPrivateFieldSetHelper,
-        classPrivateFieldInHelper,
-        createBindingHelper,
-        setModuleDefaultHelper,
-        addDisposableResourceHelper,
-        disposeResourcesHelper,
-    ], helper => helper.name));
-}
 
 /** @internal */
 export const asyncSuperHelper: EmitHelper = {

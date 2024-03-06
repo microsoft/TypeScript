@@ -1,7 +1,6 @@
 //// [tests/cases/compiler/fillInMissingTypeArgsOnJSConstructCalls.ts] ////
 
 === BaseA.js ===
-// regression test for #18254
 export default class BaseA {
 >BaseA : BaseA
 }

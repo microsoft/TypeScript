@@ -1,0 +1,15 @@
+/a/app.ts(2,1): error TS18055: Declaration file contains hand-written type reference directives: "node"
+
+
+==== /a/node_modules/@types/node/index.d.ts (0 errors) ====
+    interface Error2 {
+        stack2: string;
+    }
+    
+==== /a/app.ts (1 errors) ====
+    /// <reference types="node"/>
+    function foo(): Error2 {
+    ~~~~~~~~
+!!! error TS18055: Declaration file contains hand-written type reference directives: "node"
+        return undefined;
+    }

@@ -126,54 +126,19 @@ Output::
 
 [[90m12:00:23 AM[0m] Building project '/src/solution/tsconfig.json'...
 
-exitCode:: ExitStatus.Success
+[96msrc/solution/src/common/nominal.ts[0m:[93m2[0m:[93m1[0m - [91merror[0m[90m TS18056: [0mDeclaration file contains hand-written file reference directives: "../../../src/common/types.d.ts"
+
+[7m2[0m export declare type Nominal<T, Name extends string> = MyNominal<T, Name>;
+[7m [0m [91m~~~~~~[0m
 
 
-//// [/src/solution/lib/src/common/nominal.d.ts]
-/// <reference path="../../../src/common/types.d.ts" />
-export declare type Nominal<T, Name extends string> = MyNominal<T, Name>;
+Found 1 error.
 
-
-//// [/src/solution/lib/src/common/nominal.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-/// <reference path="./types.d.ts" />
-
-
-//// [/src/solution/lib/src/subProject/index.d.ts]
-import { Nominal } from '../common/nominal';
-export type MyNominal = Nominal<string, 'MyNominal'>;
-
-
-//// [/src/solution/lib/src/subProject/index.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-
-
-//// [/src/solution/lib/src/subProject2/index.d.ts]
-import { MyNominal } from '../subProject/index';
-declare const variable: {
-    key: MyNominal;
-};
-export declare function getVar(): keyof typeof variable;
-export {};
-
-
-//// [/src/solution/lib/src/subProject2/index.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.getVar = void 0;
-var variable = {
-    key: 'value',
-};
-function getVar() {
-    return 'key';
-}
-exports.getVar = getVar;
+exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
 
 
 //// [/src/solution/lib/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../../lib/lib.d.ts","../src/common/types.d.ts","../src/common/nominal.ts","../src/subproject/index.ts","../src/subproject2/index.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"23815050294-declare type MyNominal<T, Name extends string> = T & {\n    specialKey: Name;\n};","affectsGlobalScope":true},{"version":"4107369137-/// <reference path=\"./types.d.ts\" />\nexport declare type Nominal<T, Name extends string> = MyNominal<T, Name>;","signature":"-3146239410-/// <reference path=\"../../../src/common/types.d.ts\" />\nexport declare type Nominal<T, Name extends string> = MyNominal<T, Name>;\n"},{"version":"-25117049605-import { Nominal } from '../common/nominal';\nexport type MyNominal = Nominal<string, 'MyNominal'>;","signature":"-25703752603-import { Nominal } from '../common/nominal';\nexport type MyNominal = Nominal<string, 'MyNominal'>;\n"},{"version":"2747033208-import { MyNominal } from '../subProject/index';\nconst variable = {\n    key: 'value' as MyNominal,\n};\nexport function getVar(): keyof typeof variable {\n    return 'key';\n}","signature":"-29417180885-import { MyNominal } from '../subProject/index';\ndeclare const variable: {\n    key: MyNominal;\n};\nexport declare function getVar(): keyof typeof variable;\nexport {};\n"}],"root":[[2,5]],"options":{"composite":true,"outDir":"./","rootDir":".."},"fileIdsList":[[2],[3],[4]],"referencedMap":[[3,1],[4,2],[5,3]],"exportedModulesMap":[[4,2],[5,3]],"semanticDiagnosticsPerFile":[1,3,2,4,5],"latestChangedDtsFile":"./src/subProject2/index.d.ts"},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../../lib/lib.d.ts","../src/common/types.d.ts","../src/common/nominal.ts","../src/subproject/index.ts","../src/subproject2/index.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"23815050294-declare type MyNominal<T, Name extends string> = T & {\n    specialKey: Name;\n};","affectsGlobalScope":true},"4107369137-/// <reference path=\"./types.d.ts\" />\nexport declare type Nominal<T, Name extends string> = MyNominal<T, Name>;",{"version":"-25117049605-import { Nominal } from '../common/nominal';\nexport type MyNominal = Nominal<string, 'MyNominal'>;","signature":"-25703752603-import { Nominal } from '../common/nominal';\nexport type MyNominal = Nominal<string, 'MyNominal'>;\n"},{"version":"2747033208-import { MyNominal } from '../subProject/index';\nconst variable = {\n    key: 'value' as MyNominal,\n};\nexport function getVar(): keyof typeof variable {\n    return 'key';\n}","signature":"-29417180885-import { MyNominal } from '../subProject/index';\ndeclare const variable: {\n    key: MyNominal;\n};\nexport declare function getVar(): keyof typeof variable;\nexport {};\n"}],"root":[[2,5]],"options":{"composite":true,"outDir":"./","rootDir":".."},"fileIdsList":[[2],[3],[4]],"referencedMap":[[3,1],[4,2],[5,3]],"exportedModulesMap":[[3,1],[4,2],[5,3]],"semanticDiagnosticsPerFile":[1,3,2,4,5],"affectedFilesPendingEmit":[3,4,5],"emitSignatures":[3,4,5]},"version":"FakeTSVersion"}
 
 //// [/src/solution/lib/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -216,12 +181,8 @@ exports.getVar = getVar;
         "affectsGlobalScope": true
       },
       "../src/common/nominal.ts": {
-        "original": {
-          "version": "4107369137-/// <reference path=\"./types.d.ts\" />\nexport declare type Nominal<T, Name extends string> = MyNominal<T, Name>;",
-          "signature": "-3146239410-/// <reference path=\"../../../src/common/types.d.ts\" />\nexport declare type Nominal<T, Name extends string> = MyNominal<T, Name>;\n"
-        },
         "version": "4107369137-/// <reference path=\"./types.d.ts\" />\nexport declare type Nominal<T, Name extends string> = MyNominal<T, Name>;",
-        "signature": "-3146239410-/// <reference path=\"../../../src/common/types.d.ts\" />\nexport declare type Nominal<T, Name extends string> = MyNominal<T, Name>;\n"
+        "signature": "4107369137-/// <reference path=\"./types.d.ts\" />\nexport declare type Nominal<T, Name extends string> = MyNominal<T, Name>;"
       },
       "../src/subproject/index.ts": {
         "original": {
@@ -271,6 +232,9 @@ exports.getVar = getVar;
       ]
     },
     "exportedModulesMap": {
+      "../src/common/nominal.ts": [
+        "../src/common/types.d.ts"
+      ],
       "../src/subproject/index.ts": [
         "../src/common/nominal.ts"
       ],
@@ -285,9 +249,27 @@ exports.getVar = getVar;
       "../src/subproject/index.ts",
       "../src/subproject2/index.ts"
     ],
-    "latestChangedDtsFile": "./src/subProject2/index.d.ts"
+    "affectedFilesPendingEmit": [
+      [
+        "../src/common/nominal.ts",
+        "Js | Dts"
+      ],
+      [
+        "../src/subproject/index.ts",
+        "Js | Dts"
+      ],
+      [
+        "../src/subproject2/index.ts",
+        "Js | Dts"
+      ]
+    ],
+    "emitSignatures": [
+      "../src/common/nominal.ts",
+      "../src/subproject/index.ts",
+      "../src/subproject2/index.ts"
+    ]
   },
   "version": "FakeTSVersion",
-  "size": 2044
+  "size": 1883
 }
 

@@ -1,0 +1,23 @@
+/app.ts(4,1): error TS18055: Declaration file contains hand-written type reference directives: "lib"
+/app.ts(4,1): error TS18056: Declaration file contains hand-written file reference directives: "ref.d.ts"
+
+
+==== /app.ts (2 errors) ====
+    /// <reference path="./ref.d.ts"/>
+    /// <reference types="lib"/>
+    
+    let x: $;
+    ~~~
+!!! error TS18055: Declaration file contains hand-written type reference directives: "lib"
+    ~~~
+!!! error TS18056: Declaration file contains hand-written file reference directives: "ref.d.ts"
+    let y = () => x
+    
+    
+==== /ref.d.ts (0 errors) ====
+    declare let $: { x: number }
+        
+==== /types/lib/index.d.ts (0 errors) ====
+    interface $ { x }
+    
+    

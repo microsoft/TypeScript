@@ -16,8 +16,3 @@ function foo(): Error2 {
 function foo() {
     return undefined;
 }
-
-
-//// [app.d.ts]
-/// <reference types="node" />
-declare function foo(): Error2;

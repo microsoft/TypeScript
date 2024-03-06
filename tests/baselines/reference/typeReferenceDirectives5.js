@@ -16,10 +16,3 @@ export interface A {
 //// [app.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-
-
-//// [app.d.ts]
-/// <reference types="lib" />
-export interface A {
-    x: typeof $;
-}

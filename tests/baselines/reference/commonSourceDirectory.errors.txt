@@ -1,0 +1,31 @@
+/app/index.ts(2,1): error TS18056: Declaration file contains hand-written file reference directives: "../../types/bar.d.ts"
+
+
+==== /app/tsconfig.json (0 errors) ====
+    {
+        "compilerOptions": {
+            "outDir": "bin",
+            "typeRoots": ["../types"],
+            "sourceMap": true,
+            "mapRoot": "myMapRoot",
+            "sourceRoot": "mySourceRoot",
+            "declaration": true
+        }
+    }
+    
+==== /app/index.ts (1 errors) ====
+    /// <reference path="../types/bar.d.ts"/>
+    import { x } from "foo";
+    ~~~~~~
+!!! error TS18056: Declaration file contains hand-written file reference directives: "../../types/bar.d.ts"
+    import { y } from "bar";
+    x + y;
+    
+==== /node_modules/foo/index.ts (0 errors) ====
+    export const x = 0;
+    
+==== /types/bar.d.ts (0 errors) ====
+    declare module "bar" {
+        export const y = 0;
+    }
+    

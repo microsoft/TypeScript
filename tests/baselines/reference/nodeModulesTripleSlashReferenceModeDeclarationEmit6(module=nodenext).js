@@ -43,7 +43,7 @@ const uses_js_1 = __importDefault(require("./uses.js"));
 exports.default = uses_js_1.default;
 
 
-//// [uses.d.ts]
+//// [index.d.ts]
 /// <reference types="pkg" />
 declare const _default: RequireInterface;
 export default _default;
