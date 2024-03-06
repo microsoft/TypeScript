@@ -7277,6 +7277,9 @@ export const enum ScriptKind {
     Deferred = 7,
 }
 
+// NOTE: We must reevaluate the target for upcoming features when each successive TC39 edition is ratified in
+//       June of each year. This includes changes to `LanguageFeatureMinimumTarget`, `ScriptTarget`,
+//       transformers/esnext.ts, commandLineParser.ts, and the contents of each lib/esnext.*.d.ts file.
 export const enum ScriptTarget {
     /** @deprecated */
     ES3 = 0,
@@ -8087,6 +8090,9 @@ export namespace LanguageFeatureMinimumTarget {
     export const ShebangComments = ScriptTarget.ESNext;
 
     // Upcoming Features
+    // NOTE: We must reevaluate the target for upcoming features when each successive TC39 edition is ratified in
+    //       June of each year. This includes changes to `LanguageFeatureMinimumTarget`, `ScriptTarget`,
+    //       transformers/esnext.ts, commandLineParser.ts, and the contents of each lib/esnext.*.d.ts file.
     export const UsingAndAwaitUsing = ScriptTarget.ESNext; // `using x = y`, `await using x = y`
     export const ClassAndClassElementDecorators = ScriptTarget.ESNext; // `@dec class C {}`, `class C { @dec m() {} }`
 }
