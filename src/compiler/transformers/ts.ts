@@ -1149,14 +1149,28 @@ export function transformTypeScript(context: TransformationContext) {
             if (shouldAddParamTypesMetadata(node)) {
                 const paramTypeProperty = factory.createPropertyAssignment(
                     "paramTypes",
-                    factory.createArrowFunction(/*modifiers*/ undefined, /*typeParameters*/ undefined, [], /*type*/ undefined, factory.createToken(SyntaxKind.EqualsGreaterThanToken), typeSerializer.serializeParameterTypesOfNode({ currentLexicalScope, currentNameScope: container }, node, container)),
+                    factory.createArrowFunction(
+                        /*modifiers*/ undefined,
+                        /*typeParameters*/ undefined,
+                        [],
+                        /*type*/ undefined,
+                        factory.createToken(SyntaxKind.EqualsGreaterThanToken),
+                        typeSerializer.serializeParameterTypesOfNode({ currentLexicalScope, currentNameScope: container }, node, container),
+                    ),
                 );
                 properties = append(properties, paramTypeProperty);
             }
             if (shouldAddReturnTypeMetadata(node)) {
                 const returnTypeProperty = factory.createPropertyAssignment(
                     "returnType",
-                    factory.createArrowFunction(/*modifiers*/ undefined, /*typeParameters*/ undefined, [], /*type*/ undefined, factory.createToken(SyntaxKind.EqualsGreaterThanToken), typeSerializer.serializeReturnTypeOfNode({ currentLexicalScope, currentNameScope: container }, node)),
+                    factory.createArrowFunction(
+                        /*modifiers*/ undefined,
+                        /*typeParameters*/ undefined,
+                        [],
+                        /*type*/ undefined,
+                        factory.createToken(SyntaxKind.EqualsGreaterThanToken),
+                        typeSerializer.serializeReturnTypeOfNode({ currentLexicalScope, currentNameScope: container }, node),
+                    ),
                 );
                 properties = append(properties, returnTypeProperty);
             }

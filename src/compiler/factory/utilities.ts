@@ -280,7 +280,15 @@ export function createExpressionForJsxElement(factory: NodeFactory, callee: Expr
 }
 
 /** @internal */
-export function createExpressionForJsxFragment(factory: NodeFactory, jsxFactoryEntity: EntityName | undefined, jsxFragmentFactoryEntity: EntityName | undefined, reactNamespace: string, children: readonly Expression[], parentElement: JsxOpeningFragment, location: TextRange): LeftHandSideExpression {
+export function createExpressionForJsxFragment(
+    factory: NodeFactory,
+    jsxFactoryEntity: EntityName | undefined,
+    jsxFragmentFactoryEntity: EntityName | undefined,
+    reactNamespace: string,
+    children: readonly Expression[],
+    parentElement: JsxOpeningFragment,
+    location: TextRange,
+): LeftHandSideExpression {
     const tagName = createJsxFragmentFactoryExpression(factory, jsxFragmentFactoryEntity, reactNamespace, parentElement);
     const argumentsList = [tagName, factory.createNull()];
 
@@ -1678,9 +1686,21 @@ export function formatGeneratedName(privateName: boolean, prefix: string | undef
  *
  * @internal
  */
-export function formatGeneratedName(privateName: boolean, prefix: string | GeneratedNamePart | undefined, baseName: string | Identifier | PrivateIdentifier, suffix: string | GeneratedNamePart | undefined, generateName: (name: GeneratedIdentifier | GeneratedPrivateIdentifier) => string): string;
+export function formatGeneratedName(
+    privateName: boolean,
+    prefix: string | GeneratedNamePart | undefined,
+    baseName: string | Identifier | PrivateIdentifier,
+    suffix: string | GeneratedNamePart | undefined,
+    generateName: (name: GeneratedIdentifier | GeneratedPrivateIdentifier) => string,
+): string;
 /** @internal */
-export function formatGeneratedName(privateName: boolean, prefix: string | GeneratedNamePart | undefined, baseName: string | Identifier | PrivateIdentifier, suffix: string | GeneratedNamePart | undefined, generateName?: (name: GeneratedIdentifier | GeneratedPrivateIdentifier) => string) {
+export function formatGeneratedName(
+    privateName: boolean,
+    prefix: string | GeneratedNamePart | undefined,
+    baseName: string | Identifier | PrivateIdentifier,
+    suffix: string | GeneratedNamePart | undefined,
+    generateName?: (name: GeneratedIdentifier | GeneratedPrivateIdentifier) => string,
+) {
     prefix = formatGeneratedNamePart(prefix, generateName!);
     suffix = formatGeneratedNamePart(suffix, generateName!);
     baseName = formatIdentifier(baseName, generateName);

@@ -708,7 +708,11 @@ declare var console: {
                     [foo, fooBar],
                 existingTimeouts: !withExclude,
             });
-            baselineTsserverLogs("configuredProjects", `creating new file and then open it ${openFileBeforeCreating ? "before" : "after"} watcher is invoked, ask errors on it ${errorOnNewFileBeforeOldFile ? "before" : "after"} old one${withExclude ? " without file being in config" : ""}`, session);
+            baselineTsserverLogs(
+                "configuredProjects",
+                `creating new file and then open it ${openFileBeforeCreating ? "before" : "after"} watcher is invoked, ask errors on it ${errorOnNewFileBeforeOldFile ? "before" : "after"} old one${withExclude ? " without file being in config" : ""}`,
+                session,
+            );
         }
         interface VerifySession {
             withExclude?: boolean;

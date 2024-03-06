@@ -5606,7 +5606,13 @@ export interface EmitResolver {
     requiresAddingImplicitUndefined(node: ParameterDeclaration): boolean;
     isExpandoFunctionDeclaration(node: FunctionDeclaration): boolean;
     getPropertiesOfContainerFunction(node: Declaration): Symbol[];
-    createTypeOfDeclaration(declaration: AccessorDeclaration | VariableLikeDeclaration | PropertyAccessExpression | ElementAccessExpression | BinaryExpression, enclosingDeclaration: Node, flags: NodeBuilderFlags, tracker: SymbolTracker, addUndefined?: boolean): TypeNode | undefined;
+    createTypeOfDeclaration(
+        declaration: AccessorDeclaration | VariableLikeDeclaration | PropertyAccessExpression | ElementAccessExpression | BinaryExpression,
+        enclosingDeclaration: Node,
+        flags: NodeBuilderFlags,
+        tracker: SymbolTracker,
+        addUndefined?: boolean,
+    ): TypeNode | undefined;
     createReturnTypeOfSignatureDeclaration(signatureDeclaration: SignatureDeclaration, enclosingDeclaration: Node, flags: NodeBuilderFlags, tracker: SymbolTracker): TypeNode | undefined;
     createTypeOfExpression(expr: Expression, enclosingDeclaration: Node, flags: NodeBuilderFlags, tracker: SymbolTracker): TypeNode | undefined;
     createLiteralConstValue(node: VariableDeclaration | PropertyDeclaration | PropertySignature | ParameterDeclaration, tracker: SymbolTracker): Expression;
@@ -7752,7 +7758,13 @@ export interface CompilerHost extends ModuleResolutionHost {
      *
      * This method is a companion for 'resolveModuleNames' and is used to resolve 'types' references to actual type declaration files
      */
-    resolveTypeReferenceDirectives?(typeReferenceDirectiveNames: string[] | readonly FileReference[], containingFile: string, redirectedReference: ResolvedProjectReference | undefined, options: CompilerOptions, containingFileMode?: ResolutionMode): (ResolvedTypeReferenceDirective | undefined)[];
+    resolveTypeReferenceDirectives?(
+        typeReferenceDirectiveNames: string[] | readonly FileReference[],
+        containingFile: string,
+        redirectedReference: ResolvedProjectReference | undefined,
+        options: CompilerOptions,
+        containingFileMode?: ResolutionMode,
+    ): (ResolvedTypeReferenceDirective | undefined)[];
     resolveModuleNameLiterals?(
         moduleLiterals: readonly StringLiteralLike[],
         containingFile: string,
@@ -8367,8 +8379,22 @@ export interface NodeFactory {
     createPropertySignature(modifiers: readonly Modifier[] | undefined, name: PropertyName | string, questionToken: QuestionToken | undefined, type: TypeNode | undefined): PropertySignature;
     updatePropertySignature(node: PropertySignature, modifiers: readonly Modifier[] | undefined, name: PropertyName, questionToken: QuestionToken | undefined, type: TypeNode | undefined): PropertySignature;
     createPropertyDeclaration(modifiers: readonly ModifierLike[] | undefined, name: string | PropertyName, questionOrExclamationToken: QuestionToken | ExclamationToken | undefined, type: TypeNode | undefined, initializer: Expression | undefined): PropertyDeclaration;
-    updatePropertyDeclaration(node: PropertyDeclaration, modifiers: readonly ModifierLike[] | undefined, name: string | PropertyName, questionOrExclamationToken: QuestionToken | ExclamationToken | undefined, type: TypeNode | undefined, initializer: Expression | undefined): PropertyDeclaration;
-    createMethodSignature(modifiers: readonly Modifier[] | undefined, name: string | PropertyName, questionToken: QuestionToken | undefined, typeParameters: readonly TypeParameterDeclaration[] | undefined, parameters: readonly ParameterDeclaration[], type: TypeNode | undefined): MethodSignature;
+    updatePropertyDeclaration(
+        node: PropertyDeclaration,
+        modifiers: readonly ModifierLike[] | undefined,
+        name: string | PropertyName,
+        questionOrExclamationToken: QuestionToken | ExclamationToken | undefined,
+        type: TypeNode | undefined,
+        initializer: Expression | undefined,
+    ): PropertyDeclaration;
+    createMethodSignature(
+        modifiers: readonly Modifier[] | undefined,
+        name: string | PropertyName,
+        questionToken: QuestionToken | undefined,
+        typeParameters: readonly TypeParameterDeclaration[] | undefined,
+        parameters: readonly ParameterDeclaration[],
+        type: TypeNode | undefined,
+    ): MethodSignature;
     updateMethodSignature(
         node: MethodSignature,
         modifiers: readonly Modifier[] | undefined,
@@ -8541,7 +8567,14 @@ export interface NodeFactory {
         type: TypeNode | undefined,
         body: Block,
     ): FunctionExpression;
-    createArrowFunction(modifiers: readonly Modifier[] | undefined, typeParameters: readonly TypeParameterDeclaration[] | undefined, parameters: readonly ParameterDeclaration[], type: TypeNode | undefined, equalsGreaterThanToken: EqualsGreaterThanToken | undefined, body: ConciseBody): ArrowFunction;
+    createArrowFunction(
+        modifiers: readonly Modifier[] | undefined,
+        typeParameters: readonly TypeParameterDeclaration[] | undefined,
+        parameters: readonly ParameterDeclaration[],
+        type: TypeNode | undefined,
+        equalsGreaterThanToken: EqualsGreaterThanToken | undefined,
+        body: ConciseBody,
+    ): ArrowFunction;
     updateArrowFunction(
         node: ArrowFunction,
         modifiers: readonly Modifier[] | undefined,
@@ -8585,8 +8618,21 @@ export interface NodeFactory {
     updateYieldExpression(node: YieldExpression, asteriskToken: AsteriskToken | undefined, expression: Expression | undefined): YieldExpression;
     createSpreadElement(expression: Expression): SpreadElement;
     updateSpreadElement(node: SpreadElement, expression: Expression): SpreadElement;
-    createClassExpression(modifiers: readonly ModifierLike[] | undefined, name: string | Identifier | undefined, typeParameters: readonly TypeParameterDeclaration[] | undefined, heritageClauses: readonly HeritageClause[] | undefined, members: readonly ClassElement[]): ClassExpression;
-    updateClassExpression(node: ClassExpression, modifiers: readonly ModifierLike[] | undefined, name: Identifier | undefined, typeParameters: readonly TypeParameterDeclaration[] | undefined, heritageClauses: readonly HeritageClause[] | undefined, members: readonly ClassElement[]): ClassExpression;
+    createClassExpression(
+        modifiers: readonly ModifierLike[] | undefined,
+        name: string | Identifier | undefined,
+        typeParameters: readonly TypeParameterDeclaration[] | undefined,
+        heritageClauses: readonly HeritageClause[] | undefined,
+        members: readonly ClassElement[],
+    ): ClassExpression;
+    updateClassExpression(
+        node: ClassExpression,
+        modifiers: readonly ModifierLike[] | undefined,
+        name: Identifier | undefined,
+        typeParameters: readonly TypeParameterDeclaration[] | undefined,
+        heritageClauses: readonly HeritageClause[] | undefined,
+        members: readonly ClassElement[],
+    ): ClassExpression;
     createOmittedExpression(): OmittedExpression;
     createExpressionWithTypeArguments(expression: Expression, typeArguments: readonly TypeNode[] | undefined): ExpressionWithTypeArguments;
     updateExpressionWithTypeArguments(node: ExpressionWithTypeArguments, expression: Expression, typeArguments: readonly TypeNode[] | undefined): ExpressionWithTypeArguments;
@@ -8672,7 +8718,13 @@ export interface NodeFactory {
         type: TypeNode | undefined,
         body: Block | undefined,
     ): FunctionDeclaration;
-    createClassDeclaration(modifiers: readonly ModifierLike[] | undefined, name: string | Identifier | undefined, typeParameters: readonly TypeParameterDeclaration[] | undefined, heritageClauses: readonly HeritageClause[] | undefined, members: readonly ClassElement[]): ClassDeclaration;
+    createClassDeclaration(
+        modifiers: readonly ModifierLike[] | undefined,
+        name: string | Identifier | undefined,
+        typeParameters: readonly TypeParameterDeclaration[] | undefined,
+        heritageClauses: readonly HeritageClause[] | undefined,
+        members: readonly ClassElement[],
+    ): ClassDeclaration;
     updateClassDeclaration(
         node: ClassDeclaration,
         modifiers: readonly ModifierLike[] | undefined,
@@ -8681,7 +8733,13 @@ export interface NodeFactory {
         heritageClauses: readonly HeritageClause[] | undefined,
         members: readonly ClassElement[],
     ): ClassDeclaration;
-    createInterfaceDeclaration(modifiers: readonly ModifierLike[] | undefined, name: string | Identifier, typeParameters: readonly TypeParameterDeclaration[] | undefined, heritageClauses: readonly HeritageClause[] | undefined, members: readonly TypeElement[]): InterfaceDeclaration;
+    createInterfaceDeclaration(
+        modifiers: readonly ModifierLike[] | undefined,
+        name: string | Identifier,
+        typeParameters: readonly TypeParameterDeclaration[] | undefined,
+        heritageClauses: readonly HeritageClause[] | undefined,
+        members: readonly TypeElement[],
+    ): InterfaceDeclaration;
     updateInterfaceDeclaration(
         node: InterfaceDeclaration,
         modifiers: readonly ModifierLike[] | undefined,
@@ -8781,7 +8839,13 @@ export interface NodeFactory {
     createJSDocTemplateTag(tagName: Identifier | undefined, constraint: JSDocTypeExpression | undefined, typeParameters: readonly TypeParameterDeclaration[], comment?: string | NodeArray<JSDocComment>): JSDocTemplateTag;
     updateJSDocTemplateTag(node: JSDocTemplateTag, tagName: Identifier | undefined, constraint: JSDocTypeExpression | undefined, typeParameters: readonly TypeParameterDeclaration[], comment: string | NodeArray<JSDocComment> | undefined): JSDocTemplateTag;
     createJSDocTypedefTag(tagName: Identifier | undefined, typeExpression?: JSDocTypeExpression | JSDocTypeLiteral, fullName?: Identifier | JSDocNamespaceDeclaration, comment?: string | NodeArray<JSDocComment>): JSDocTypedefTag;
-    updateJSDocTypedefTag(node: JSDocTypedefTag, tagName: Identifier | undefined, typeExpression: JSDocTypeExpression | JSDocTypeLiteral | undefined, fullName: Identifier | JSDocNamespaceDeclaration | undefined, comment: string | NodeArray<JSDocComment> | undefined): JSDocTypedefTag;
+    updateJSDocTypedefTag(
+        node: JSDocTypedefTag,
+        tagName: Identifier | undefined,
+        typeExpression: JSDocTypeExpression | JSDocTypeLiteral | undefined,
+        fullName: Identifier | JSDocNamespaceDeclaration | undefined,
+        comment: string | NodeArray<JSDocComment> | undefined,
+    ): JSDocTypedefTag;
     createJSDocParameterTag(tagName: Identifier | undefined, name: EntityName, isBracketed: boolean, typeExpression?: JSDocTypeExpression, isNameFirst?: boolean, comment?: string | NodeArray<JSDocComment>): JSDocParameterTag;
     updateJSDocParameterTag(node: JSDocParameterTag, tagName: Identifier | undefined, name: EntityName, isBracketed: boolean, typeExpression: JSDocTypeExpression | undefined, isNameFirst: boolean, comment: string | NodeArray<JSDocComment> | undefined): JSDocParameterTag;
     createJSDocPropertyTag(tagName: Identifier | undefined, name: EntityName, isBracketed: boolean, typeExpression?: JSDocTypeExpression, isNameFirst?: boolean, comment?: string | NodeArray<JSDocComment>): JSDocPropertyTag;

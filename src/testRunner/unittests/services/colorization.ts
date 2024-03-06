@@ -367,7 +367,20 @@ class D { }\r\n\
         });
 
         it("'of' keyword", () => {
-            testLexicalClassification("for (var of of of) { }", ts.EndOfLineState.None, keyword("for"), punctuation("("), keyword("var"), keyword("of"), keyword("of"), keyword("of"), punctuation(")"), punctuation("{"), punctuation("}"), finalEndOfLineState(ts.EndOfLineState.None));
+            testLexicalClassification(
+                "for (var of of of) { }",
+                ts.EndOfLineState.None,
+                keyword("for"),
+                punctuation("("),
+                keyword("var"),
+                keyword("of"),
+                keyword("of"),
+                keyword("of"),
+                punctuation(")"),
+                punctuation("{"),
+                punctuation("}"),
+                finalEndOfLineState(ts.EndOfLineState.None),
+            );
         });
     });
 });

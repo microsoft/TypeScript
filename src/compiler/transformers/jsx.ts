@@ -108,7 +108,12 @@ export function transformJsx(context: TransformationContext): (x: SourceFile | B
         if (currentFileState.filenameDeclaration) {
             return currentFileState.filenameDeclaration.name;
         }
-        const declaration = factory.createVariableDeclaration(factory.createUniqueName("_jsxFileName", GeneratedIdentifierFlags.Optimistic | GeneratedIdentifierFlags.FileLevel), /*exclamationToken*/ undefined, /*type*/ undefined, factory.createStringLiteral(currentSourceFile.fileName));
+        const declaration = factory.createVariableDeclaration(
+            factory.createUniqueName("_jsxFileName", GeneratedIdentifierFlags.Optimistic | GeneratedIdentifierFlags.FileLevel),
+            /*exclamationToken*/ undefined,
+            /*type*/ undefined,
+            factory.createStringLiteral(currentSourceFile.fileName),
+        );
         currentFileState.filenameDeclaration = declaration as VariableDeclaration & { name: Identifier; };
         return currentFileState.filenameDeclaration.name;
     }

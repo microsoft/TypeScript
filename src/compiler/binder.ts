@@ -2552,7 +2552,8 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
         // Provide specialized messages to help the user understand why we think they're in
         // strict mode.
         if (getContainingClass(node)) {
-            return Diagnostics.Code_contained_in_a_class_is_evaluated_in_JavaScript_s_strict_mode_which_does_not_allow_this_use_of_0_For_more_information_see_https_Colon_Slash_Slashdeveloper_mozilla_org_Slashen_US_Slashdocs_SlashWeb_SlashJavaScript_SlashReference_SlashStrict_mode;
+            return Diagnostics
+                .Code_contained_in_a_class_is_evaluated_in_JavaScript_s_strict_mode_which_does_not_allow_this_use_of_0_For_more_information_see_https_Colon_Slash_Slashdeveloper_mozilla_org_Slashen_US_Slashdocs_SlashWeb_SlashJavaScript_SlashReference_SlashStrict_mode;
         }
 
         if (file.externalModuleIndicator) {

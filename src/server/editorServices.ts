@@ -3217,12 +3217,17 @@ export class ProjectService {
                 isRootedDiskPath(fileName) || isDynamic || openedByClient,
                 "",
                 () =>
-                    `${JSON.stringify({ fileName, currentDirectory, hostCurrentDirectory: this.currentDirectory, openKeys: arrayFrom(this.openFilesWithNonRootedDiskPath.keys()) })}\nScript info with non-dynamic relative file name can only be open script info or in context of host currentDirectory`,
+                    `${
+                        JSON.stringify({ fileName, currentDirectory, hostCurrentDirectory: this.currentDirectory, openKeys: arrayFrom(this.openFilesWithNonRootedDiskPath.keys()) })
+                    }\nScript info with non-dynamic relative file name can only be open script info or in context of host currentDirectory`,
             );
             Debug.assert(
                 !isRootedDiskPath(fileName) || this.currentDirectory === currentDirectory || !this.openFilesWithNonRootedDiskPath.has(this.toCanonicalFileName(fileName)),
                 "",
-                () => `${JSON.stringify({ fileName, currentDirectory, hostCurrentDirectory: this.currentDirectory, openKeys: arrayFrom(this.openFilesWithNonRootedDiskPath.keys()) })}\nOpen script files with non rooted disk path opened with current directory context cannot have same canonical names`,
+                () =>
+                    `${
+                        JSON.stringify({ fileName, currentDirectory, hostCurrentDirectory: this.currentDirectory, openKeys: arrayFrom(this.openFilesWithNonRootedDiskPath.keys()) })
+                    }\nOpen script files with non rooted disk path opened with current directory context cannot have same canonical names`,
             );
             Debug.assert(
                 !isDynamic || this.currentDirectory === currentDirectory || this.useInferredProjectPerProjectRoot,

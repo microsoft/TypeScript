@@ -853,7 +853,11 @@ export class ChangeTracker {
         this.insertNodeAtStartWorker(sourceFile, obj, newElement);
     }
 
-    private insertNodeAtStartWorker(sourceFile: SourceFile, node: ClassLikeDeclaration | InterfaceDeclaration | ObjectLiteralExpression | TypeLiteralNode | EnumDeclaration, newElement: ClassElement | ObjectLiteralElementLike | PropertySignature | MethodSignature | EnumMember): void {
+    private insertNodeAtStartWorker(
+        sourceFile: SourceFile,
+        node: ClassLikeDeclaration | InterfaceDeclaration | ObjectLiteralExpression | TypeLiteralNode | EnumDeclaration,
+        newElement: ClassElement | ObjectLiteralElementLike | PropertySignature | MethodSignature | EnumMember,
+    ): void {
         const indentation = this.guessIndentationFromExistingMembers(sourceFile, node) ?? this.computeIndentationForNewMember(sourceFile, node);
         this.insertNodeAt(sourceFile, getMembersOrProperties(node).pos, newElement, this.getInsertNodeAtStartInsertOptions(sourceFile, node, indentation));
     }
@@ -1322,7 +1326,16 @@ namespace changesToText {
     }
 
     /** Note: this may mutate `nodeIn`. */
-    function getFormattedTextOfNode(nodeIn: Node, targetSourceFile: SourceFile, sourceFile: SourceFile, pos: number, { indentation, prefix, delta }: InsertNodeOptions, newLineCharacter: string, formatContext: formatting.FormatContext, validate: ValidateNonFormattedText | undefined): string {
+    function getFormattedTextOfNode(
+        nodeIn: Node,
+        targetSourceFile: SourceFile,
+        sourceFile: SourceFile,
+        pos: number,
+        { indentation, prefix, delta }: InsertNodeOptions,
+        newLineCharacter: string,
+        formatContext: formatting.FormatContext,
+        validate: ValidateNonFormattedText | undefined,
+    ): string {
         const { node, text } = getNonformattedText(nodeIn, targetSourceFile, newLineCharacter);
         if (validate) validate(node, text);
         const formatOptions = getFormatCodeSettingsForWriting(formatContext, targetSourceFile);

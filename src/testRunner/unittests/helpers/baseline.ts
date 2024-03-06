@@ -141,18 +141,20 @@ export type ReadableProgramBuildInfoFileInfo<T> = Omit<ts.BuilderState.FileInfo,
 export type ReadableProgramBuildInfoRoot =
     | [original: ts.ProgramBuildInfoFileId, readable: string]
     | [original: ts.ProgramBuildInfoRootStartEnd, readable: readonly string[]];
-export type ReadableProgramMultiFileEmitBuildInfo = Omit<ts.ProgramMultiFileEmitBuildInfo, "fileIdsList" | "fileInfos" | "root" | "referencedMap" | "exportedModulesMap" | "semanticDiagnosticsPerFile" | "emitDiagnosticsPerFile" | "affectedFilesPendingEmit" | "changeFileSet" | "emitSignatures"> & {
-    fileNamesList: readonly (readonly string[])[] | undefined;
-    fileInfos: ts.MapLike<ReadableProgramBuildInfoFileInfo<ts.ProgramMultiFileEmitBuildInfoFileInfo>>;
-    root: readonly ReadableProgramBuildInfoRoot[];
-    referencedMap: ts.MapLike<string[]> | undefined;
-    exportedModulesMap: ts.MapLike<string[]> | undefined;
-    semanticDiagnosticsPerFile: readonly ReadableProgramBuildInfoDiagnostic[] | undefined;
-    emitDiagnosticsPerFile: readonly ReadableProgramBuildInfoDiagnostic[] | undefined;
-    affectedFilesPendingEmit: readonly ReadableProgramBuilderInfoFilePendingEmit[] | undefined;
-    changeFileSet: readonly string[] | undefined;
-    emitSignatures: readonly ReadableProgramBuildInfoEmitSignature[] | undefined;
-};
+export type ReadableProgramMultiFileEmitBuildInfo =
+    & Omit<ts.ProgramMultiFileEmitBuildInfo, "fileIdsList" | "fileInfos" | "root" | "referencedMap" | "exportedModulesMap" | "semanticDiagnosticsPerFile" | "emitDiagnosticsPerFile" | "affectedFilesPendingEmit" | "changeFileSet" | "emitSignatures">
+    & {
+        fileNamesList: readonly (readonly string[])[] | undefined;
+        fileInfos: ts.MapLike<ReadableProgramBuildInfoFileInfo<ts.ProgramMultiFileEmitBuildInfoFileInfo>>;
+        root: readonly ReadableProgramBuildInfoRoot[];
+        referencedMap: ts.MapLike<string[]> | undefined;
+        exportedModulesMap: ts.MapLike<string[]> | undefined;
+        semanticDiagnosticsPerFile: readonly ReadableProgramBuildInfoDiagnostic[] | undefined;
+        emitDiagnosticsPerFile: readonly ReadableProgramBuildInfoDiagnostic[] | undefined;
+        affectedFilesPendingEmit: readonly ReadableProgramBuilderInfoFilePendingEmit[] | undefined;
+        changeFileSet: readonly string[] | undefined;
+        emitSignatures: readonly ReadableProgramBuildInfoEmitSignature[] | undefined;
+    };
 export type ReadableProgramBuildInfoBundlePendingEmit = [emitKind: ReadableBuilderFileEmit, original: ts.ProgramBuildInfoBundlePendingEmit];
 export type ReadableProgramBundleEmitBuildInfo = Omit<ts.ProgramBundleEmitBuildInfo, "fileInfos" | "root" | "pendingEmit"> & {
     fileInfos: ts.MapLike<string | ReadableProgramBuildInfoFileInfo<ts.BuilderState.FileInfo>>;

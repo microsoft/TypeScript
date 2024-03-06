@@ -474,7 +474,9 @@ function createActionsForAddMissingMemberInTypeScriptFile(context: CodeFixContex
     const typeNode = getTypeNode(context.program.getTypeChecker(), parentDeclaration, token);
     const addPropertyDeclarationChanges = (modifierFlags: ModifierFlags) => textChanges.ChangeTracker.with(context, t => addPropertyDeclaration(t, declSourceFile, parentDeclaration, memberName, typeNode, modifierFlags));
 
-    const actions = [createCodeFixAction(fixMissingMember, addPropertyDeclarationChanges(modifierFlags & ModifierFlags.Static), [isStatic ? Diagnostics.Declare_static_property_0 : Diagnostics.Declare_property_0, memberName], fixMissingMember, Diagnostics.Add_all_missing_members)];
+    const actions = [
+        createCodeFixAction(fixMissingMember, addPropertyDeclarationChanges(modifierFlags & ModifierFlags.Static), [isStatic ? Diagnostics.Declare_static_property_0 : Diagnostics.Declare_property_0, memberName], fixMissingMember, Diagnostics.Add_all_missing_members),
+    ];
     if (isStatic || isPrivateIdentifier(token)) {
         return actions;
     }
@@ -559,7 +561,13 @@ function getActionsForMissingMethodDeclaration(context: CodeFixContext, info: Ty
     const methodName = token.text;
     const addMethodDeclarationChanges = (modifierFlags: ModifierFlags) => textChanges.ChangeTracker.with(context, t => addMethodDeclaration(context, t, call, token, modifierFlags, parentDeclaration, declSourceFile));
     const actions = [
-        createCodeFixAction(fixMissingMember, addMethodDeclarationChanges(modifierFlags & ModifierFlags.Static), [modifierFlags & ModifierFlags.Static ? Diagnostics.Declare_static_method_0 : Diagnostics.Declare_method_0, methodName], fixMissingMember, Diagnostics.Add_all_missing_members),
+        createCodeFixAction(
+            fixMissingMember,
+            addMethodDeclarationChanges(modifierFlags & ModifierFlags.Static),
+            [modifierFlags & ModifierFlags.Static ? Diagnostics.Declare_static_method_0 : Diagnostics.Declare_method_0, methodName],
+            fixMissingMember,
+            Diagnostics.Add_all_missing_members,
+        ),
     ];
     if (modifierFlags & ModifierFlags.Private) {
         actions.unshift(createCodeFixActionWithoutFixAll(fixMissingMember, addMethodDeclarationChanges(ModifierFlags.Private), [Diagnostics.Declare_private_method_0, methodName]));

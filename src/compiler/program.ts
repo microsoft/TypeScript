@@ -2737,7 +2737,15 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
         return hasEmitBlockingDiagnostics.has(toPath(emitFileName));
     }
 
-    function emitWorker(program: Program, sourceFile: SourceFile | undefined, writeFileCallback: WriteFileCallback | undefined, cancellationToken: CancellationToken | undefined, emitOnly?: boolean | EmitOnly, customTransformers?: CustomTransformers, forceDtsEmit?: boolean): EmitResult {
+    function emitWorker(
+        program: Program,
+        sourceFile: SourceFile | undefined,
+        writeFileCallback: WriteFileCallback | undefined,
+        cancellationToken: CancellationToken | undefined,
+        emitOnly?: boolean | EmitOnly,
+        customTransformers?: CustomTransformers,
+        forceDtsEmit?: boolean,
+    ): EmitResult {
         if (!forceDtsEmit) {
             const result = handleNoEmitOptions(program, sourceFile, writeFileCallback, cancellationToken);
             if (result) return result;
@@ -4293,7 +4301,10 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
         }
         else if (firstNonAmbientExternalModuleSourceFile && languageVersion < ScriptTarget.ES2015 && options.module === ModuleKind.None) {
             // We cannot use createDiagnosticFromNode because nodes do not have parents yet
-            const span = getErrorSpanForNode(firstNonAmbientExternalModuleSourceFile, typeof firstNonAmbientExternalModuleSourceFile.externalModuleIndicator === "boolean" ? firstNonAmbientExternalModuleSourceFile : firstNonAmbientExternalModuleSourceFile.externalModuleIndicator!);
+            const span = getErrorSpanForNode(
+                firstNonAmbientExternalModuleSourceFile,
+                typeof firstNonAmbientExternalModuleSourceFile.externalModuleIndicator === "boolean" ? firstNonAmbientExternalModuleSourceFile : firstNonAmbientExternalModuleSourceFile.externalModuleIndicator!,
+            );
             programDiagnostics.add(createFileDiagnostic(firstNonAmbientExternalModuleSourceFile, span.start, span.length, Diagnostics.Cannot_use_imports_exports_or_module_augmentations_when_module_is_none));
         }
 
@@ -4303,7 +4314,10 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
                 createDiagnosticForOptionName(Diagnostics.Only_amd_and_system_modules_are_supported_alongside_0, "outFile", "module");
             }
             else if (options.module === undefined && firstNonAmbientExternalModuleSourceFile) {
-                const span = getErrorSpanForNode(firstNonAmbientExternalModuleSourceFile, typeof firstNonAmbientExternalModuleSourceFile.externalModuleIndicator === "boolean" ? firstNonAmbientExternalModuleSourceFile : firstNonAmbientExternalModuleSourceFile.externalModuleIndicator!);
+                const span = getErrorSpanForNode(
+                    firstNonAmbientExternalModuleSourceFile,
+                    typeof firstNonAmbientExternalModuleSourceFile.externalModuleIndicator === "boolean" ? firstNonAmbientExternalModuleSourceFile : firstNonAmbientExternalModuleSourceFile.externalModuleIndicator!,
+                );
                 programDiagnostics.add(createFileDiagnostic(firstNonAmbientExternalModuleSourceFile, span.start, span.length, Diagnostics.Cannot_compile_modules_using_option_0_unless_the_module_flag_is_amd_or_system, "outFile"));
             }
         }

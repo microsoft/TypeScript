@@ -127,8 +127,24 @@ export function patchServiceForStateBaseline(service: ProjectService) {
                     projectPropertyLogs,
                     toStringDocumentPostionMapper,
                 );
-                projectDiff = printProperty(PrintPropertyWhen.DefinedOrChangedOrNew, data, "autoImportProviderHost", project.autoImportProviderHost, projectDiff, projectPropertyLogs, project.autoImportProviderHost ? project.autoImportProviderHost.projectName : project.autoImportProviderHost);
-                projectDiff = printProperty(PrintPropertyWhen.DefinedOrChangedOrNew, data, "noDtsResolutionProject", project.noDtsResolutionProject, projectDiff, projectPropertyLogs, project.noDtsResolutionProject ? project.noDtsResolutionProject.projectName : project.noDtsResolutionProject);
+                projectDiff = printProperty(
+                    PrintPropertyWhen.DefinedOrChangedOrNew,
+                    data,
+                    "autoImportProviderHost",
+                    project.autoImportProviderHost,
+                    projectDiff,
+                    projectPropertyLogs,
+                    project.autoImportProviderHost ? project.autoImportProviderHost.projectName : project.autoImportProviderHost,
+                );
+                projectDiff = printProperty(
+                    PrintPropertyWhen.DefinedOrChangedOrNew,
+                    data,
+                    "noDtsResolutionProject",
+                    project.noDtsResolutionProject,
+                    projectDiff,
+                    projectPropertyLogs,
+                    project.noDtsResolutionProject ? project.noDtsResolutionProject.projectName : project.noDtsResolutionProject,
+                );
                 return printSetPropertyAndCreateStatementLog(
                     logs,
                     `${project.projectName} (${ProjectKind[project.projectKind]})`,

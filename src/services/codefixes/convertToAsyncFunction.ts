@@ -629,7 +629,14 @@ function maybeAnnotateAndReturn(expressionToReturn: Expression | undefined, type
  * @param continuationArgName The argument name for the continuation that follows this call.
  * @param inputArgName The argument name provided to this call
  */
-function transformCallbackArgument(func: Expression, hasContinuation: boolean, continuationArgName: SynthBindingName | undefined, inputArgName: SynthBindingName | undefined, parent: PromiseReturningCallExpression<"then" | "catch" | "finally">, transformer: Transformer): readonly Statement[] {
+function transformCallbackArgument(
+    func: Expression,
+    hasContinuation: boolean,
+    continuationArgName: SynthBindingName | undefined,
+    inputArgName: SynthBindingName | undefined,
+    parent: PromiseReturningCallExpression<"then" | "catch" | "finally">,
+    transformer: Transformer,
+): readonly Statement[] {
     switch (func.kind) {
         case SyntaxKind.NullKeyword:
             // do not produce a transformed statement for a null argument
@@ -792,7 +799,12 @@ function removeReturns(stmts: readonly Statement[], prevArgName: SynthBindingNam
                     ret.push(factory.createExpressionStatement(factory.createAssignment(referenceSynthIdentifier(prevArgName), possiblyAwaitedExpression)));
                 }
                 else {
-                    ret.push(factory.createVariableStatement(/*modifiers*/ undefined, factory.createVariableDeclarationList([factory.createVariableDeclaration(declareSynthBindingName(prevArgName), /*exclamationToken*/ undefined, /*type*/ undefined, possiblyAwaitedExpression)], NodeFlags.Const)));
+                    ret.push(
+                        factory.createVariableStatement(
+                            /*modifiers*/ undefined,
+                            factory.createVariableDeclarationList([factory.createVariableDeclaration(declareSynthBindingName(prevArgName), /*exclamationToken*/ undefined, /*type*/ undefined, possiblyAwaitedExpression)], NodeFlags.Const),
+                        ),
+                    );
                 }
             }
         }
@@ -803,7 +815,12 @@ function removeReturns(stmts: readonly Statement[], prevArgName: SynthBindingNam
 
     // if block has no return statement, need to define prevArgName as undefined to prevent undeclared variables
     if (!seenReturnStatement && prevArgName !== undefined) {
-        ret.push(factory.createVariableStatement(/*modifiers*/ undefined, factory.createVariableDeclarationList([factory.createVariableDeclaration(declareSynthBindingName(prevArgName), /*exclamationToken*/ undefined, /*type*/ undefined, factory.createIdentifier("undefined"))], NodeFlags.Const)));
+        ret.push(
+            factory.createVariableStatement(
+                /*modifiers*/ undefined,
+                factory.createVariableDeclarationList([factory.createVariableDeclaration(declareSynthBindingName(prevArgName), /*exclamationToken*/ undefined, /*type*/ undefined, factory.createIdentifier("undefined"))], NodeFlags.Const),
+            ),
+        );
     }
 
     return ret;

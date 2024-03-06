@@ -1409,7 +1409,15 @@ export function resolveModuleNameFromCache(moduleName: string, containingFile: s
     return cache.getFromDirectoryCache(moduleName, mode, containingDirectory, /*redirectedReference*/ undefined);
 }
 
-export function resolveModuleName(moduleName: string, containingFile: string, compilerOptions: CompilerOptions, host: ModuleResolutionHost, cache?: ModuleResolutionCache, redirectedReference?: ResolvedProjectReference, resolutionMode?: ResolutionMode): ResolvedModuleWithFailedLookupLocations {
+export function resolveModuleName(
+    moduleName: string,
+    containingFile: string,
+    compilerOptions: CompilerOptions,
+    host: ModuleResolutionHost,
+    cache?: ModuleResolutionCache,
+    redirectedReference?: ResolvedProjectReference,
+    resolutionMode?: ResolutionMode,
+): ResolvedModuleWithFailedLookupLocations {
     const traceEnabled = isTraceEnabled(compilerOptions, host);
     if (redirectedReference) {
         compilerOptions = redirectedReference.commandLine.options;
@@ -1715,7 +1723,15 @@ export enum NodeResolutionFeatures {
     EsmMode = 1 << 5,
 }
 
-function node16ModuleNameResolver(moduleName: string, containingFile: string, compilerOptions: CompilerOptions, host: ModuleResolutionHost, cache?: ModuleResolutionCache, redirectedReference?: ResolvedProjectReference, resolutionMode?: ResolutionMode): ResolvedModuleWithFailedLookupLocations {
+function node16ModuleNameResolver(
+    moduleName: string,
+    containingFile: string,
+    compilerOptions: CompilerOptions,
+    host: ModuleResolutionHost,
+    cache?: ModuleResolutionCache,
+    redirectedReference?: ResolvedProjectReference,
+    resolutionMode?: ResolutionMode,
+): ResolvedModuleWithFailedLookupLocations {
     return nodeNextModuleNameResolverWorker(
         NodeResolutionFeatures.Node16Default,
         moduleName,
@@ -1728,7 +1744,15 @@ function node16ModuleNameResolver(moduleName: string, containingFile: string, co
     );
 }
 
-function nodeNextModuleNameResolver(moduleName: string, containingFile: string, compilerOptions: CompilerOptions, host: ModuleResolutionHost, cache?: ModuleResolutionCache, redirectedReference?: ResolvedProjectReference, resolutionMode?: ResolutionMode): ResolvedModuleWithFailedLookupLocations {
+function nodeNextModuleNameResolver(
+    moduleName: string,
+    containingFile: string,
+    compilerOptions: CompilerOptions,
+    host: ModuleResolutionHost,
+    cache?: ModuleResolutionCache,
+    redirectedReference?: ResolvedProjectReference,
+    resolutionMode?: ResolutionMode,
+): ResolvedModuleWithFailedLookupLocations {
     return nodeNextModuleNameResolverWorker(
         NodeResolutionFeatures.NodeNextDefault,
         moduleName,
@@ -1779,8 +1803,24 @@ function tryResolveJSModuleWorker(moduleName: string, initialDir: string, host: 
 }
 export function bundlerModuleNameResolver(moduleName: string, containingFile: string, compilerOptions: CompilerOptions, host: ModuleResolutionHost, cache?: ModuleResolutionCache, redirectedReference?: ResolvedProjectReference): ResolvedModuleWithFailedLookupLocations;
 /** @internal */
-export function bundlerModuleNameResolver(moduleName: string, containingFile: string, compilerOptions: CompilerOptions, host: ModuleResolutionHost, cache?: ModuleResolutionCache, redirectedReference?: ResolvedProjectReference, conditions?: string[]): ResolvedModuleWithFailedLookupLocations; // eslint-disable-line @typescript-eslint/unified-signatures
-export function bundlerModuleNameResolver(moduleName: string, containingFile: string, compilerOptions: CompilerOptions, host: ModuleResolutionHost, cache?: ModuleResolutionCache, redirectedReference?: ResolvedProjectReference, conditions?: string[]): ResolvedModuleWithFailedLookupLocations {
+export function bundlerModuleNameResolver(
+    moduleName: string,
+    containingFile: string,
+    compilerOptions: CompilerOptions,
+    host: ModuleResolutionHost,
+    cache?: ModuleResolutionCache,
+    redirectedReference?: ResolvedProjectReference,
+    conditions?: string[],
+): ResolvedModuleWithFailedLookupLocations; // eslint-disable-line @typescript-eslint/unified-signatures
+export function bundlerModuleNameResolver(
+    moduleName: string,
+    containingFile: string,
+    compilerOptions: CompilerOptions,
+    host: ModuleResolutionHost,
+    cache?: ModuleResolutionCache,
+    redirectedReference?: ResolvedProjectReference,
+    conditions?: string[],
+): ResolvedModuleWithFailedLookupLocations {
     const containingDirectory = getDirectoryPath(containingFile);
     let extensions = compilerOptions.noDtsResolution ? Extensions.ImplementationFiles : Extensions.TypeScript | Extensions.JavaScript | Extensions.Declaration;
     if (getResolveJsonModule(compilerOptions)) {
@@ -2633,7 +2673,10 @@ function loadModuleFromExports(scope: PackageJsonInfo, extensions: Extensions, s
 
     if (subpath === ".") {
         let mainExport;
-        if (typeof scope.contents.packageJsonContent.exports === "string" || Array.isArray(scope.contents.packageJsonContent.exports) || (typeof scope.contents.packageJsonContent.exports === "object" && noKeyStartsWithDot(scope.contents.packageJsonContent.exports as MapLike<unknown>))) {
+        if (
+            typeof scope.contents.packageJsonContent.exports === "string" || Array.isArray(scope.contents.packageJsonContent.exports) ||
+            (typeof scope.contents.packageJsonContent.exports === "object" && noKeyStartsWithDot(scope.contents.packageJsonContent.exports as MapLike<unknown>))
+        ) {
             mainExport = scope.contents.packageJsonContent.exports;
         }
         else if (hasProperty(scope.contents.packageJsonContent.exports as MapLike<unknown>, ".")) {
@@ -3053,7 +3096,15 @@ function loadModuleFromNearestNodeModulesDirectoryWorker(
     }
 }
 
-function loadModuleFromImmediateNodeModulesDirectory(extensions: Extensions, moduleName: string, directory: string, state: ModuleResolutionState, typesScopeOnly: boolean, cache: ModuleResolutionCache | undefined, redirectedReference: ResolvedProjectReference | undefined): Resolved | undefined {
+function loadModuleFromImmediateNodeModulesDirectory(
+    extensions: Extensions,
+    moduleName: string,
+    directory: string,
+    state: ModuleResolutionState,
+    typesScopeOnly: boolean,
+    cache: ModuleResolutionCache | undefined,
+    redirectedReference: ResolvedProjectReference | undefined,
+): Resolved | undefined {
     const nodeModulesFolder = combinePaths(directory, "node_modules");
     const nodeModulesFolderExists = directoryProbablyExists(nodeModulesFolder, state.host);
     if (!nodeModulesFolderExists && state.traceEnabled) {
@@ -3250,7 +3301,14 @@ export function unmangleScopedPackageName(typesPackageName: string): string {
         typesPackageName;
 }
 
-function tryFindNonRelativeModuleNameInCache(cache: NonRelativeModuleNameResolutionCache | undefined, moduleName: string, mode: ResolutionMode, containingDirectory: string, redirectedReference: ResolvedProjectReference | undefined, state: ModuleResolutionState): SearchResult<Resolved> {
+function tryFindNonRelativeModuleNameInCache(
+    cache: NonRelativeModuleNameResolutionCache | undefined,
+    moduleName: string,
+    mode: ResolutionMode,
+    containingDirectory: string,
+    redirectedReference: ResolvedProjectReference | undefined,
+    state: ModuleResolutionState,
+): SearchResult<Resolved> {
     const result = cache && cache.getFromNonRelativeNameCache(moduleName, mode, containingDirectory, redirectedReference);
     if (result) {
         if (state.traceEnabled) {

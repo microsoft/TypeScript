@@ -154,7 +154,14 @@ export function createIncrementalProgram<T extends BuilderProgram = EmitAndSeman
 
 export type WatchStatusReporter = (diagnostic: Diagnostic, newLine: string, options: CompilerOptions, errorCount?: number) => void;
 /** Create the program with rootNames and options, if they are undefined, oldProgram and new configFile diagnostics create new program */
-export type CreateProgram<T extends BuilderProgram> = (rootNames: readonly string[] | undefined, options: CompilerOptions | undefined, host?: CompilerHost, oldProgram?: T, configFileParsingDiagnostics?: readonly Diagnostic[], projectReferences?: readonly ProjectReference[] | undefined) => T;
+export type CreateProgram<T extends BuilderProgram> = (
+    rootNames: readonly string[] | undefined,
+    options: CompilerOptions | undefined,
+    host?: CompilerHost,
+    oldProgram?: T,
+    configFileParsingDiagnostics?: readonly Diagnostic[],
+    projectReferences?: readonly ProjectReference[] | undefined,
+) => T;
 
 /** Host that has watch functionality used in --watch mode */
 export interface WatchHost {
@@ -220,7 +227,13 @@ export interface ProgramHost<T extends BuilderProgram> {
      *
      * If provided, used to resolve type reference directives, otherwise typescript's default resolution
      */
-    resolveTypeReferenceDirectives?(typeReferenceDirectiveNames: string[] | readonly FileReference[], containingFile: string, redirectedReference: ResolvedProjectReference | undefined, options: CompilerOptions, containingFileMode?: ResolutionMode): (ResolvedTypeReferenceDirective | undefined)[];
+    resolveTypeReferenceDirectives?(
+        typeReferenceDirectiveNames: string[] | readonly FileReference[],
+        containingFile: string,
+        redirectedReference: ResolvedProjectReference | undefined,
+        options: CompilerOptions,
+        containingFileMode?: ResolutionMode,
+    ): (ResolvedTypeReferenceDirective | undefined)[];
     resolveModuleNameLiterals?(
         moduleLiterals: readonly StringLiteralLike[],
         containingFile: string,

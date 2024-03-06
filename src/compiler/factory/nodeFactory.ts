@@ -5239,7 +5239,13 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
     }
 
     // @api
-    function updateJSDocTypedefTag(node: JSDocTypedefTag, tagName: Identifier = getDefaultTagName(node), typeExpression: JSDocTypeExpression | undefined, fullName: Identifier | JSDocNamespaceDeclaration | undefined, comment: string | NodeArray<JSDocComment> | undefined): JSDocTypedefTag {
+    function updateJSDocTypedefTag(
+        node: JSDocTypedefTag,
+        tagName: Identifier = getDefaultTagName(node),
+        typeExpression: JSDocTypeExpression | undefined,
+        fullName: Identifier | JSDocNamespaceDeclaration | undefined,
+        comment: string | NodeArray<JSDocComment> | undefined,
+    ): JSDocTypedefTag {
         return node.tagName !== tagName
                 || node.typeExpression !== typeExpression
                 || node.fullName !== fullName
@@ -5259,7 +5265,15 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
     }
 
     // @api
-    function updateJSDocParameterTag(node: JSDocParameterTag, tagName: Identifier = getDefaultTagName(node), name: EntityName, isBracketed: boolean, typeExpression: JSDocTypeExpression | undefined, isNameFirst: boolean, comment: string | NodeArray<JSDocComment> | undefined): JSDocParameterTag {
+    function updateJSDocParameterTag(
+        node: JSDocParameterTag,
+        tagName: Identifier = getDefaultTagName(node),
+        name: EntityName,
+        isBracketed: boolean,
+        typeExpression: JSDocTypeExpression | undefined,
+        isNameFirst: boolean,
+        comment: string | NodeArray<JSDocComment> | undefined,
+    ): JSDocParameterTag {
         return node.tagName !== tagName
                 || node.name !== name
                 || node.isBracketed !== isBracketed
@@ -5281,7 +5295,15 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
     }
 
     // @api
-    function updateJSDocPropertyTag(node: JSDocPropertyTag, tagName: Identifier = getDefaultTagName(node), name: EntityName, isBracketed: boolean, typeExpression: JSDocTypeExpression | undefined, isNameFirst: boolean, comment: string | NodeArray<JSDocComment> | undefined): JSDocPropertyTag {
+    function updateJSDocPropertyTag(
+        node: JSDocPropertyTag,
+        tagName: Identifier = getDefaultTagName(node),
+        name: EntityName,
+        isBracketed: boolean,
+        typeExpression: JSDocTypeExpression | undefined,
+        isNameFirst: boolean,
+        comment: string | NodeArray<JSDocComment> | undefined,
+    ): JSDocPropertyTag {
         return node.tagName !== tagName
                 || node.name !== name
                 || node.isBracketed !== isBracketed
@@ -5501,7 +5523,13 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
     // updateJSDocThisTag
     // updateJSDocEnumTag
     // updateJSDocSatisfiesTag
-    function updateJSDocTypeLikeTagWorker<T extends JSDocTag & { typeExpression?: JSDocTypeExpression; }>(kind: T["kind"], node: T, tagName: Identifier = getDefaultTagName(node), typeExpression: JSDocTypeExpression | undefined, comment: string | NodeArray<JSDocComment> | undefined) {
+    function updateJSDocTypeLikeTagWorker<T extends JSDocTag & { typeExpression?: JSDocTypeExpression; }>(
+        kind: T["kind"],
+        node: T,
+        tagName: Identifier = getDefaultTagName(node),
+        typeExpression: JSDocTypeExpression | undefined,
+        comment: string | NodeArray<JSDocComment> | undefined,
+    ) {
         return node.tagName !== tagName
                 || node.typeExpression !== typeExpression
                 || node.comment !== comment

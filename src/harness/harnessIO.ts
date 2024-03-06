@@ -706,7 +706,17 @@ export namespace Compiler {
         Baseline.runBaseline(baselinePath.replace(/\.tsx?$/, ".errors.txt"), !errors || (errors.length === 0) ? null : getErrorBaseline(inputFiles, errors, pretty)); // eslint-disable-line no-null/no-null
     }
 
-    export function doTypeAndSymbolBaseline(baselinePath: string, header: string, program: ts.Program, allFiles: { unitName: string; content: string; }[], opts?: Baseline.BaselineOptions, multifile?: boolean, skipTypeBaselines?: boolean, skipSymbolBaselines?: boolean, hasErrorBaseline?: boolean) {
+    export function doTypeAndSymbolBaseline(
+        baselinePath: string,
+        header: string,
+        program: ts.Program,
+        allFiles: { unitName: string; content: string; }[],
+        opts?: Baseline.BaselineOptions,
+        multifile?: boolean,
+        skipTypeBaselines?: boolean,
+        skipSymbolBaselines?: boolean,
+        hasErrorBaseline?: boolean,
+    ) {
         // The full walker simulates the types that you would get from doing a full
         // compile.  The pull walker simulates the types you get when you just do
         // a type query for a random node (like how the LS would do it).  Most of the
@@ -874,7 +884,16 @@ export namespace Compiler {
         return "\n//// https://sokra.github.io/source-map-visualization" + hash + "\n";
     }
 
-    export function doJsEmitBaseline(baselinePath: string, header: string, options: ts.CompilerOptions, result: compiler.CompilationResult, tsConfigFiles: readonly TestFile[], toBeCompiled: readonly TestFile[], otherFiles: readonly TestFile[], harnessSettings: TestCaseParser.CompilerSettings) {
+    export function doJsEmitBaseline(
+        baselinePath: string,
+        header: string,
+        options: ts.CompilerOptions,
+        result: compiler.CompilationResult,
+        tsConfigFiles: readonly TestFile[],
+        toBeCompiled: readonly TestFile[],
+        otherFiles: readonly TestFile[],
+        harnessSettings: TestCaseParser.CompilerSettings,
+    ) {
         if (!options.noEmit && !options.emitDeclarationOnly && result.js.size === 0 && result.diagnostics.length === 0) {
             throw new Error("Expected at least one js file to be emitted or at least one error to be created.");
         }
