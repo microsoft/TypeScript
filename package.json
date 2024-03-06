@@ -78,7 +78,7 @@
         "playwright": "^1.41.0",
         "source-map-support": "^0.5.21",
         "tslib": "^2.6.2",
-        "typescript": "5.4.0-dev.20240119",
+        "typescript": "^5.4.2",
         "which": "^3.0.1"
     },
     "overrides": {
