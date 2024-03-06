@@ -32938,9 +32938,11 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         const isAnyLike = isTypeAny(apparentType) || apparentType === silentNeverType;
         let prop: Symbol | undefined;
         if (isPrivateIdentifier(right)) {
-            if (languageVersion < LanguageFeatureMinimumTarget.PrivateNamesAndClassStaticBlocks ||
+            if (
+                languageVersion < LanguageFeatureMinimumTarget.PrivateNamesAndClassStaticBlocks ||
                 languageVersion < LanguageFeatureMinimumTarget.ClassAndClassElementDecorators ||
-                !useDefineForClassFields) {
+                !useDefineForClassFields
+            ) {
                 if (assignmentKind !== AssignmentKind.None) {
                     checkExternalEmitHelpers(node, ExternalEmitHelpers.ClassPrivateFieldSet);
                 }
@@ -38045,9 +38047,11 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             return silentNeverType;
         }
         if (isPrivateIdentifier(left)) {
-            if (languageVersion < LanguageFeatureMinimumTarget.PrivateNamesAndClassStaticBlocks ||
+            if (
+                languageVersion < LanguageFeatureMinimumTarget.PrivateNamesAndClassStaticBlocks ||
                 languageVersion < LanguageFeatureMinimumTarget.ClassAndClassElementDecorators ||
-                !useDefineForClassFields) {
+                !useDefineForClassFields
+            ) {
                 checkExternalEmitHelpers(left, ExternalEmitHelpers.ClassPrivateFieldIn);
             }
             // Unlike in 'checkPrivateIdentifierExpression' we now have access to the RHS type
@@ -40155,9 +40159,11 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
     function setNodeLinksForPrivateIdentifierScope(node: PropertyDeclaration | PropertySignature | MethodDeclaration | MethodSignature | AccessorDeclaration) {
         if (isPrivateIdentifier(node.name)) {
-            if (languageVersion < LanguageFeatureMinimumTarget.PrivateNamesAndClassStaticBlocks ||
+            if (
+                languageVersion < LanguageFeatureMinimumTarget.PrivateNamesAndClassStaticBlocks ||
                 languageVersion < LanguageFeatureMinimumTarget.ClassAndClassElementDecorators ||
-                !useDefineForClassFields) {
+                !useDefineForClassFields
+            ) {
                 for (let lexicalScope = getEnclosingBlockScopeContainer(node); !!lexicalScope; lexicalScope = getEnclosingBlockScopeContainer(lexicalScope)) {
                     getNodeLinks(lexicalScope).flags |= NodeCheckFlags.ContainsClassWithPrivateIdentifiers;
                 }
