@@ -1446,7 +1446,12 @@ export function resolveLibrary(
     return resolveModuleName(libraryName, resolveFrom, getOptionsForLibraryResolution(compilerOptions), host, cache);
 }
 
-export function resolveModuleNameFromCache(moduleName: string, containingFile: string, cache: ModuleResolutionCache, mode?: ResolutionMode): ResolvedModuleWithFailedLookupLocations | undefined {
+export function resolveModuleNameFromCache(
+    moduleName: string,
+    containingFile: string,
+    cache: ModuleResolutionCache,
+    mode?: ResolutionMode,
+): ResolvedModuleWithFailedLookupLocations | undefined {
     const containingDirectory = getDirectoryPath(containingFile);
     return cache.getFromDirectoryCache(moduleName, mode, containingDirectory, /*redirectedReference*/ undefined);
 }
@@ -1666,7 +1671,13 @@ function tryLoadModuleUsingPathsIfEligible(extensions: Extensions, moduleName: s
     }
 }
 
-function tryLoadModuleUsingRootDirs(extensions: Extensions, moduleName: string, containingDirectory: string, loader: ResolutionKindSpecificLoader, state: ModuleResolutionState): Resolved | undefined {
+function tryLoadModuleUsingRootDirs(
+    extensions: Extensions,
+    moduleName: string,
+    containingDirectory: string,
+    loader: ResolutionKindSpecificLoader,
+    state: ModuleResolutionState,
+): Resolved | undefined {
     if (!state.compilerOptions.rootDirs) {
         return undefined;
     }
@@ -1854,7 +1865,18 @@ function nodeNextModuleNameResolverWorker(
     if (getResolveJsonModule(compilerOptions)) {
         extensions |= Extensions.Json;
     }
-    return nodeModuleNameResolverWorker(features | esmMode, moduleName, containingDirectory, compilerOptions, host, cache, extensions, /*isConfigLookup*/ false, redirectedReference, conditions);
+    return nodeModuleNameResolverWorker(
+        features | esmMode,
+        moduleName,
+        containingDirectory,
+        compilerOptions,
+        host,
+        cache,
+        extensions,
+        /*isConfigLookup*/ false,
+        redirectedReference,
+        conditions,
+    );
 }
 
 function tryResolveJSModuleWorker(moduleName: string, initialDir: string, host: ModuleResolutionHost): ResolvedModuleWithFailedLookupLocations {
@@ -2167,7 +2189,13 @@ function realPath(path: string, host: ModuleResolutionHost, traceEnabled: boolea
     return real;
 }
 
-function nodeLoadModuleByRelativeName(extensions: Extensions, candidate: string, onlyRecordFailures: boolean, state: ModuleResolutionState, considerPackageJson: boolean): Resolved | undefined {
+function nodeLoadModuleByRelativeName(
+    extensions: Extensions,
+    candidate: string,
+    onlyRecordFailures: boolean,
+    state: ModuleResolutionState,
+    considerPackageJson: boolean,
+): Resolved | undefined {
     if (state.traceEnabled) {
         trace(state.host, Diagnostics.Loading_module_as_file_Slash_folder_candidate_module_location_0_target_file_types_Colon_1, candidate, formatExtensions(extensions));
     }
@@ -3105,7 +3133,8 @@ function getLoadModuleFromTargetImportOrExport(
                 !state.isConfigLookup
                 && (state.compilerOptions.declarationDir || state.compilerOptions.outDir)
                 && !finalPath.includes("/node_modules/")
-                && (state.compilerOptions.configFile ? containsPath(scope.packageDirectory, toAbsolutePath(state.compilerOptions.configFile.fileName), !useCaseSensitiveFileNames(state)) : true)
+                && (state.compilerOptions.configFile ? containsPath(scope.packageDirectory, toAbsolutePath(state.compilerOptions.configFile.fileName), !useCaseSensitiveFileNames(state))
+                    : true)
             ) {
                 // So that all means we'll only try these guesses for files outside `node_modules` in a directory where the `package.json` and `tsconfig.json` are siblings.
                 // Even with all that, we still don't know if the root of the output file structure will be (relative to the package file)
@@ -3232,7 +3261,15 @@ function loadModuleFromNearestNodeModulesDirectory(
 
 function loadModuleFromNearestNodeModulesDirectoryTypesScope(moduleName: string, directory: string, state: ModuleResolutionState): SearchResult<Resolved> {
     // Extensions parameter here doesn't actually matter, because typesOnly ensures we're just doing @types lookup, which is always DtsOnly.
-    return loadModuleFromNearestNodeModulesDirectoryWorker(Extensions.Declaration, moduleName, directory, state, /*typesScopeOnly*/ true, /*cache*/ undefined, /*redirectedReference*/ undefined);
+    return loadModuleFromNearestNodeModulesDirectoryWorker(
+        Extensions.Declaration,
+        moduleName,
+        directory,
+        state,
+        /*typesScopeOnly*/ true,
+        /*cache*/ undefined,
+        /*redirectedReference*/ undefined,
+    );
 }
 
 function loadModuleFromNearestNodeModulesDirectoryWorker(
@@ -3397,7 +3434,13 @@ function loadModuleFromSpecificNodeModulesDirectory(
     const versionPaths = rest !== "" && packageInfo ? getVersionPathsOfPackageJsonInfo(packageInfo, state) : undefined;
     if (versionPaths) {
         if (state.traceEnabled) {
-            trace(state.host, Diagnostics.package_json_has_a_typesVersions_entry_0_that_matches_compiler_version_1_looking_for_a_pattern_to_match_module_name_2, versionPaths.version, version, rest);
+            trace(
+                state.host,
+                Diagnostics.package_json_has_a_typesVersions_entry_0_that_matches_compiler_version_1_looking_for_a_pattern_to_match_module_name_2,
+                versionPaths.version,
+                version,
+                rest,
+            );
         }
         const packageDirectoryExists = nodeModulesDirectoryExists && directoryProbablyExists(packageDirectory, state.host);
         const fromPaths = tryLoadModuleUsingPaths(extensions, rest, packageDirectory, versionPaths.paths, /*pathPatterns*/ undefined, loader, !packageDirectoryExists, state);

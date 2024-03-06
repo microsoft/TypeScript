@@ -84,7 +84,13 @@ class ProjectCompilerHost extends fakes.CompilerHost {
     private _testCase: ProjectRunnerTestCase & ts.CompilerOptions;
     private _projectParseConfigHost: ProjectParseConfigHost | undefined;
 
-    constructor(sys: fakes.System | vfs.FileSystem, compilerOptions: ts.CompilerOptions, _testCaseJustName: string, testCase: ProjectRunnerTestCase & ts.CompilerOptions, _moduleKind: ts.ModuleKind) {
+    constructor(
+        sys: fakes.System | vfs.FileSystem,
+        compilerOptions: ts.CompilerOptions,
+        _testCaseJustName: string,
+        testCase: ProjectRunnerTestCase & ts.CompilerOptions,
+        _moduleKind: ts.ModuleKind,
+    ) {
         super(sys, compilerOptions);
         this._testCase = testCase;
     }

@@ -2524,7 +2524,12 @@ export function transformES2015(context: TransformationContext): (x: SourceFile 
      * @param location The source-map location for the new FunctionExpression.
      * @param name The name of the new FunctionExpression.
      */
-    function transformFunctionLikeToExpression(node: FunctionLikeDeclaration, location: TextRange | undefined, name: Identifier | undefined, container: Node | undefined): FunctionExpression {
+    function transformFunctionLikeToExpression(
+        node: FunctionLikeDeclaration,
+        location: TextRange | undefined,
+        name: Identifier | undefined,
+        container: Node | undefined,
+    ): FunctionExpression {
         const savedConvertedLoopState = convertedLoopState;
         convertedLoopState = undefined;
         const ancestorFacts = container && isClassLike(container) && !isStatic(node)
@@ -3736,7 +3741,10 @@ export function transformES2015(context: TransformationContext): (x: SourceFile 
      * used to preserve the per-iteration environment semantics of
      * [13.7.4.8 RS: ForBodyEvaluation](https://tc39.github.io/ecma262/#sec-forbodyevaluation).
      */
-    function createFunctionForInitializerOfForStatement(node: ForStatementWithConvertibleInitializer, currentState: ConvertedLoopState): IterationStatementPartFunction<VariableDeclarationList> {
+    function createFunctionForInitializerOfForStatement(
+        node: ForStatementWithConvertibleInitializer,
+        currentState: ConvertedLoopState,
+    ): IterationStatementPartFunction<VariableDeclarationList> {
         const functionName = factory.createUniqueName("_loop_init");
 
         const containsYield = (node.initializer.transformFlags & TransformFlags.ContainsYield) !== 0;
@@ -4657,7 +4665,12 @@ export function transformES2015(context: TransformationContext): (x: SourceFile 
                 factory.createFunctionApplyCall(
                     Debug.checkDefined(visitNode(target, visitor, isExpression)),
                     thisArg,
-                    transformAndSpreadElements(factory.createNodeArray([factory.createVoidZero(), ...node.arguments!]), /*isArgumentList*/ true, /*multiLine*/ false, /*hasTrailingComma*/ false),
+                    transformAndSpreadElements(
+                        factory.createNodeArray([factory.createVoidZero(), ...node.arguments!]),
+                        /*isArgumentList*/ true,
+                        /*multiLine*/ false,
+                        /*hasTrailingComma*/ false,
+                    ),
                 ),
                 /*typeArguments*/ undefined,
                 [],

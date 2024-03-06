@@ -536,7 +536,9 @@ class Clazz {
 `,
             {
                 transformers: {
-                    before: [addSyntheticComment(n => ts.isPropertyDeclaration(n) || ts.isParameterPropertyDeclaration(n, n.parent) || ts.isClassDeclaration(n) || ts.isConstructorDeclaration(n))],
+                    before: [
+                        addSyntheticComment(n => ts.isPropertyDeclaration(n) || ts.isParameterPropertyDeclaration(n, n.parent) || ts.isClassDeclaration(n) || ts.isConstructorDeclaration(n)),
+                    ],
                 },
                 compilerOptions: {
                     target: ts.ScriptTarget.ES2015,

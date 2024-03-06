@@ -250,7 +250,12 @@ describe("unittests:: services:: Colorization", () => {
             testLexicalClassification("...", ts.EndOfLineState.InTemplateMiddleOrTail, stringLiteral("..."), finalEndOfLineState(ts.EndOfLineState.InTemplateMiddleOrTail));
         });
         it("classifies a termination of a multiline template head", () => {
-            testLexicalClassification("...${", ts.EndOfLineState.InTemplateHeadOrNoSubstitutionTemplate, stringLiteral("...${"), finalEndOfLineState(ts.EndOfLineState.InTemplateSubstitutionPosition));
+            testLexicalClassification(
+                "...${",
+                ts.EndOfLineState.InTemplateHeadOrNoSubstitutionTemplate,
+                stringLiteral("...${"),
+                finalEndOfLineState(ts.EndOfLineState.InTemplateSubstitutionPosition),
+            );
         });
         it("classifies the termination of a multiline no substitution template", () => {
             testLexicalClassification("...`", ts.EndOfLineState.InTemplateHeadOrNoSubstitutionTemplate, stringLiteral("...`"), finalEndOfLineState(ts.EndOfLineState.None));

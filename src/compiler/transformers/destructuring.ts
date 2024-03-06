@@ -273,7 +273,12 @@ export function flattenDestructuringBinding(
         ) {
             // If the right-hand value of the assignment is also an assignment target then
             // we need to cache the right-hand value.
-            initializer = ensureIdentifier(flattenContext, Debug.checkDefined(visitNode(initializer, flattenContext.visitor, isExpression)), /*reuseIdentifierExpressions*/ false, initializer);
+            initializer = ensureIdentifier(
+                flattenContext,
+                Debug.checkDefined(visitNode(initializer, flattenContext.visitor, isExpression)),
+                /*reuseIdentifierExpressions*/ false,
+                initializer,
+            );
             node = context.factory.updateVariableDeclaration(node, node.name, /*exclamationToken*/ undefined, /*type*/ undefined, initializer);
         }
     }
@@ -448,7 +453,13 @@ function flattenObjectBindingOrAssignmentPattern(
  * @param value The current RHS value to assign to the element.
  * @param location The location to use for source maps and comments.
  */
-function flattenArrayBindingOrAssignmentPattern(flattenContext: FlattenContext, parent: BindingOrAssignmentElement, pattern: ArrayBindingOrAssignmentPattern, value: Expression, location: TextRange) {
+function flattenArrayBindingOrAssignmentPattern(
+    flattenContext: FlattenContext,
+    parent: BindingOrAssignmentElement,
+    pattern: ArrayBindingOrAssignmentPattern,
+    value: Expression,
+    location: TextRange,
+) {
     const elements = getElementsOfBindingOrAssignmentPattern(pattern);
     const numElements = elements.length;
     if (flattenContext.level < FlattenLevel.ObjectRest && flattenContext.downlevelIteration) {

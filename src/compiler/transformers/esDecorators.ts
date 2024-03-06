@@ -592,7 +592,10 @@ export function transformESDecorators(context: TransformationContext): (x: Sourc
         if (nodeIsDecorated(/*useLegacyDecorators*/ false, node)) {
             // We do not mark _classThis as FileLevel if it may be reused by class private fields, which requires the
             // ability access the captured `_classThis` of outer scopes.
-            const needsUniqueClassThis = some(node.members, member => (isPrivateIdentifierClassElementDeclaration(member) || isAutoAccessorPropertyDeclaration(member)) && hasStaticModifier(member));
+            const needsUniqueClassThis = some(
+                node.members,
+                member => (isPrivateIdentifierClassElementDeclaration(member) || isAutoAccessorPropertyDeclaration(member)) && hasStaticModifier(member),
+            );
             classThis = factory.createUniqueName(
                 "_classThis",
                 needsUniqueClassThis ?
@@ -614,7 +617,10 @@ export function transformESDecorators(context: TransformationContext): (x: Sourc
                 }
                 else {
                     if (!instanceMethodExtraInitializersName) {
-                        instanceMethodExtraInitializersName = factory.createUniqueName("_instanceExtraInitializers", GeneratedIdentifierFlags.Optimistic | GeneratedIdentifierFlags.FileLevel);
+                        instanceMethodExtraInitializersName = factory.createUniqueName(
+                            "_instanceExtraInitializers",
+                            GeneratedIdentifierFlags.Optimistic | GeneratedIdentifierFlags.FileLevel,
+                        );
                         const initializer = emitHelpers().createRunInitializersHelper(factory.createThis(), instanceMethodExtraInitializersName);
                         setSourceMapRange(initializer, node.name ?? moveRangePastDecorators(node));
                         pendingInstanceInitializers ??= [];

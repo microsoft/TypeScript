@@ -1319,7 +1319,9 @@ export namespace Completion {
 
     export const classElementInJsKeywords = getInJsKeywords(classElementKeywords);
 
-    export const constructorParameterKeywords: readonly ExpectedCompletionEntryObject[] = ["override", "private", "protected", "public", "readonly"].map((name): ExpectedCompletionEntryObject => ({
+    export const constructorParameterKeywords: readonly ExpectedCompletionEntryObject[] = ["override", "private", "protected", "public", "readonly"].map((
+        name,
+    ): ExpectedCompletionEntryObject => ({
         name,
         kind: "keyword",
         sortText: SortText.GlobalsOrKeywords,

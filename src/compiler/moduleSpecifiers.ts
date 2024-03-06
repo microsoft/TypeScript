@@ -799,7 +799,9 @@ function tryGetModuleNameFromAmbientModule(moduleSymbol: Symbol, checker: TypeCh
                 && isAmbientModule(topNamespace.parent.parent)
                 && isSourceFile(topNamespace.parent.parent.parent))
         ) return;
-        const exportAssignment = (topNamespace.parent.parent.symbol.exports?.get("export=" as __String)?.valueDeclaration as ExportAssignment)?.expression as PropertyAccessExpression | Identifier;
+        const exportAssignment = (topNamespace.parent.parent.symbol.exports?.get("export=" as __String)?.valueDeclaration as ExportAssignment)?.expression as
+            | PropertyAccessExpression
+            | Identifier;
         if (!exportAssignment) return;
         const exportSymbol = checker.getSymbolAtLocation(exportAssignment);
         if (!exportSymbol) return;
@@ -1028,7 +1030,17 @@ function tryGetModuleNameFromExports(
             const mode = endsWith(k, "/") ? MatchingMode.Directory
                 : k.includes("*") ? MatchingMode.Pattern
                 : MatchingMode.Exact;
-            return tryGetModuleNameFromExportsOrImports(options, host, targetFilePath, packageDirectory, subPackageName, (exports as MapLike<unknown>)[k], conditions, mode, /*isImports*/ false);
+            return tryGetModuleNameFromExportsOrImports(
+                options,
+                host,
+                targetFilePath,
+                packageDirectory,
+                subPackageName,
+                (exports as MapLike<unknown>)[k],
+                conditions,
+                mode,
+                /*isImports*/ false,
+            );
         });
     }
     return tryGetModuleNameFromExportsOrImports(options, host, targetFilePath, packageDirectory, packageName, exports, conditions, MatchingMode.Exact, /*isImports*/ false);
@@ -1059,7 +1071,17 @@ function tryGetModuleNameFromPackageJsonImports(moduleFileName: string, sourceDi
         const mode = endsWith(k, "/") ? MatchingMode.Directory
             : k.includes("*") ? MatchingMode.Pattern
             : MatchingMode.Exact;
-        return tryGetModuleNameFromExportsOrImports(options, host, moduleFileName, ancestorDirectoryWithPackageJson, k, (imports as MapLike<unknown>)[k], conditions, mode, /*isImports*/ true);
+        return tryGetModuleNameFromExportsOrImports(
+            options,
+            host,
+            moduleFileName,
+            ancestorDirectoryWithPackageJson,
+            k,
+            (imports as MapLike<unknown>)[k],
+            conditions,
+            mode,
+            /*isImports*/ true,
+        );
     })?.moduleFileToTry;
 }
 
@@ -1149,7 +1171,10 @@ function tryGetModuleNameAsNodeModule(
     // Get a path that's relative to node_modules or the importing file's path
     // if node_modules folder is in this folder or any of its parent folders, no need to keep it.
     const pathToTopLevelNodeModules = getCanonicalFileName(moduleSpecifier.substring(0, parts.topLevelNodeModulesIndex));
-    if (!(startsWith(canonicalSourceDirectory, pathToTopLevelNodeModules) || globalTypingsCacheLocation && startsWith(getCanonicalFileName(globalTypingsCacheLocation), pathToTopLevelNodeModules))) {
+    if (
+        !(startsWith(canonicalSourceDirectory, pathToTopLevelNodeModules) ||
+            globalTypingsCacheLocation && startsWith(getCanonicalFileName(globalTypingsCacheLocation), pathToTopLevelNodeModules))
+    ) {
         return undefined;
     }
 
@@ -1248,7 +1273,9 @@ function tryGetModuleNameAsNodeModule(
 function tryGetAnyFileFromPath(host: ModuleSpecifierResolutionHost, path: string) {
     if (!host.fileExists) return;
     // We check all js, `node` and `json` extensions in addition to TS, since node module resolution would also choose those over the directory
-    const extensions = flatten(getSupportedExtensions({ allowJs: true }, [{ extension: "node", isMixedContent: false }, { extension: "json", isMixedContent: false, scriptKind: ScriptKind.JSON }]));
+    const extensions = flatten(
+        getSupportedExtensions({ allowJs: true }, [{ extension: "node", isMixedContent: false }, { extension: "json", isMixedContent: false, scriptKind: ScriptKind.JSON }]),
+    );
     for (const e of extensions) {
         const fullPath = path + e;
         if (host.fileExists(fullPath)) {

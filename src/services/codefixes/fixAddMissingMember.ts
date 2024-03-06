@@ -336,7 +336,9 @@ function getInfo(sourceFile: SourceFile, tokenPos: number, errorCode: number, ch
 
     if (token.kind === SyntaxKind.OpenBraceToken && isObjectLiteralExpression(parent)) {
         const targetType = checker.getContextualType(parent) || checker.getTypeAtLocation(parent);
-        const properties = arrayFrom(checker.getUnmatchedProperties(checker.getTypeAtLocation(parent), targetType, /*requireOptionalProperties*/ false, /*matchDiscriminantProperties*/ false));
+        const properties = arrayFrom(
+            checker.getUnmatchedProperties(checker.getTypeAtLocation(parent), targetType, /*requireOptionalProperties*/ false, /*matchDiscriminantProperties*/ false),
+        );
         if (!length(properties)) return undefined;
 
         // no identifier needed because the whole parentDeclaration has the error
@@ -428,7 +430,10 @@ function getActionsForMissingMemberDeclaration(context: CodeFixContext, info: Ty
         createActionsForAddMissingMemberInTypeScriptFile(context, info);
 }
 
-function createActionForAddMissingMemberInJavascriptFile(context: CodeFixContext, { parentDeclaration, declSourceFile, modifierFlags, token }: TypeLikeDeclarationInfo): CodeFixAction | undefined {
+function createActionForAddMissingMemberInJavascriptFile(
+    context: CodeFixContext,
+    { parentDeclaration, declSourceFile, modifierFlags, token }: TypeLikeDeclarationInfo,
+): CodeFixAction | undefined {
     if (isInterfaceDeclaration(parentDeclaration) || isTypeLiteralNode(parentDeclaration)) {
         return undefined;
     }
@@ -491,7 +496,10 @@ function initializePropertyToUndefined(obj: Expression, propertyName: string) {
     return factory.createExpressionStatement(factory.createAssignment(factory.createPropertyAccessExpression(obj, propertyName), createUndefined()));
 }
 
-function createActionsForAddMissingMemberInTypeScriptFile(context: CodeFixContext, { parentDeclaration, declSourceFile, modifierFlags, token }: TypeLikeDeclarationInfo): CodeFixAction[] | undefined {
+function createActionsForAddMissingMemberInTypeScriptFile(
+    context: CodeFixContext,
+    { parentDeclaration, declSourceFile, modifierFlags, token }: TypeLikeDeclarationInfo,
+): CodeFixAction[] | undefined {
     const memberName = token.text;
     const isStatic = modifierFlags & ModifierFlags.Static;
     const typeNode = getTypeNode(context.program.getTypeChecker(), parentDeclaration, token);

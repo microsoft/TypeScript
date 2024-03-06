@@ -259,7 +259,12 @@ function finishTransformNamedEvaluation(
     return factory.restoreOuterExpressions(expression, updatedExpression);
 }
 
-function transformNamedEvaluationOfPropertyAssignment(context: TransformationContext, node: NamedEvaluation & PropertyAssignment, ignoreEmptyStringLiteral?: boolean, assignedNameText?: string) {
+function transformNamedEvaluationOfPropertyAssignment(
+    context: TransformationContext,
+    node: NamedEvaluation & PropertyAssignment,
+    ignoreEmptyStringLiteral?: boolean,
+    assignedNameText?: string,
+) {
     // 13.2.5.5 RS: PropertyDefinitionEvaluation
     //   PropertyAssignment : PropertyName `:` AssignmentExpression
     //     ...
@@ -302,7 +307,12 @@ function transformNamedEvaluationOfShorthandAssignmentProperty(
     );
 }
 
-function transformNamedEvaluationOfVariableDeclaration(context: TransformationContext, node: NamedEvaluation & VariableDeclaration, ignoreEmptyStringLiteral?: boolean, assignedNameText?: string) {
+function transformNamedEvaluationOfVariableDeclaration(
+    context: TransformationContext,
+    node: NamedEvaluation & VariableDeclaration,
+    ignoreEmptyStringLiteral?: boolean,
+    assignedNameText?: string,
+) {
     // 14.3.1.2 RS: Evaluation
     //   LexicalBinding : BindingIdentifier Initializer
     //     ...
@@ -330,7 +340,12 @@ function transformNamedEvaluationOfVariableDeclaration(context: TransformationCo
     );
 }
 
-function transformNamedEvaluationOfParameterDeclaration(context: TransformationContext, node: NamedEvaluation & ParameterDeclaration, ignoreEmptyStringLiteral?: boolean, assignedNameText?: string) {
+function transformNamedEvaluationOfParameterDeclaration(
+    context: TransformationContext,
+    node: NamedEvaluation & ParameterDeclaration,
+    ignoreEmptyStringLiteral?: boolean,
+    assignedNameText?: string,
+) {
     // 8.6.3 RS: IteratorBindingInitialization
     //   SingleNameBinding : BindingIdentifier Initializer?
     //     ...
@@ -392,7 +407,12 @@ function transformNamedEvaluationOfBindingElement(context: TransformationContext
     );
 }
 
-function transformNamedEvaluationOfPropertyDeclaration(context: TransformationContext, node: NamedEvaluation & PropertyDeclaration, ignoreEmptyStringLiteral?: boolean, assignedNameText?: string) {
+function transformNamedEvaluationOfPropertyDeclaration(
+    context: TransformationContext,
+    node: NamedEvaluation & PropertyDeclaration,
+    ignoreEmptyStringLiteral?: boolean,
+    assignedNameText?: string,
+) {
     // 10.2.1.3 RS: EvaluateBody
     //   Initializer : `=` AssignmentExpression
     //     ...
@@ -413,7 +433,12 @@ function transformNamedEvaluationOfPropertyDeclaration(context: TransformationCo
     );
 }
 
-function transformNamedEvaluationOfAssignmentExpression(context: TransformationContext, node: NamedEvaluation & BinaryExpression, ignoreEmptyStringLiteral?: boolean, assignedNameText?: string) {
+function transformNamedEvaluationOfAssignmentExpression(
+    context: TransformationContext,
+    node: NamedEvaluation & BinaryExpression,
+    ignoreEmptyStringLiteral?: boolean,
+    assignedNameText?: string,
+) {
     // 13.15.2 RS: Evaluation
     //   AssignmentExpression : LeftHandSideExpression `=` AssignmentExpression
     //     1. If |LeftHandSideExpression| is neither an |ObjectLiteral| nor an |ArrayLiteral|, then

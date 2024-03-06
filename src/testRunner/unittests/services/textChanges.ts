@@ -906,9 +906,15 @@ interface A {
         const text = `
 let x = foo
 `;
-        runSingleFileTest("insertNodeInStatementListAfterNodeWithoutSeparator1", /*placeOpenBraceOnNewLineForFunctions*/ false, text, /*validateNodes*/ false, (sourceFile, changeTracker) => {
-            const newNode = ts.factory.createExpressionStatement(ts.factory.createParenthesizedExpression(ts.factory.createNumericLiteral(1)));
-            changeTracker.insertNodeAfter(sourceFile, findVariableStatementContaining("x", sourceFile), newNode);
-        });
+        runSingleFileTest(
+            "insertNodeInStatementListAfterNodeWithoutSeparator1",
+            /*placeOpenBraceOnNewLineForFunctions*/ false,
+            text,
+            /*validateNodes*/ false,
+            (sourceFile, changeTracker) => {
+                const newNode = ts.factory.createExpressionStatement(ts.factory.createParenthesizedExpression(ts.factory.createNumericLiteral(1)));
+                changeTracker.insertNodeAfter(sourceFile, findVariableStatementContaining("x", sourceFile), newNode);
+            },
+        );
     }
 });

@@ -105,7 +105,9 @@ export function computeSuggestionDiagnostics(sourceFile: SourceFile, program: Pr
     function check(node: Node) {
         if (isJsFile) {
             if (canBeConvertedToClass(node, checker)) {
-                diags.push(createDiagnosticForNode(isVariableDeclaration(node.parent) ? node.parent.name : node, Diagnostics.This_constructor_function_may_be_converted_to_a_class_declaration));
+                diags.push(
+                    createDiagnosticForNode(isVariableDeclaration(node.parent) ? node.parent.name : node, Diagnostics.This_constructor_function_may_be_converted_to_a_class_declaration),
+                );
             }
         }
         else {

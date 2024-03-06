@@ -376,7 +376,9 @@ describe("unittests:: config:: tsconfigParsing:: parseConfigFileTextToJson", () 
                     basePath,
                     baselineParsed: (baseline, parsed) => {
                         baseline.push("Wildcards::");
-                        ts.getOwnKeys(parsed.wildcardDirectories!).forEach(dir => baseline.push(`${dir}: WatchDirectoryFlags.${(ts as any).WatchDirectoryFlags[parsed.wildcardDirectories![dir]]}`));
+                        ts.getOwnKeys(parsed.wildcardDirectories!).forEach(dir =>
+                            baseline.push(`${dir}: WatchDirectoryFlags.${(ts as any).WatchDirectoryFlags[parsed.wildcardDirectories![dir]]}`)
+                        );
                     },
                 })),
             skipErrors: true,

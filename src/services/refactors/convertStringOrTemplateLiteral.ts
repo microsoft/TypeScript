@@ -181,13 +181,14 @@ const copyTrailingOperatorComments = (operators: Token<BinaryOperator>[], file: 
 
 // to copy comments following the string
 // "foo" /* comment */ + "bar" /* comment */ + "bar2"
-const copyCommentFromMultiNode = (nodes: readonly Expression[], file: SourceFile, copyOperatorComments: (index: number, targetNode: Node) => void) => (indexes: number[], targetNode: Node) => {
-    while (indexes.length > 0) {
-        const index = indexes.shift()!;
-        copyTrailingComments(nodes[index], targetNode, file, SyntaxKind.MultiLineCommentTrivia, /*hasTrailingNewLine*/ false);
-        copyOperatorComments(index, targetNode);
-    }
-};
+const copyCommentFromMultiNode =
+    (nodes: readonly Expression[], file: SourceFile, copyOperatorComments: (index: number, targetNode: Node) => void) => (indexes: number[], targetNode: Node) => {
+        while (indexes.length > 0) {
+            const index = indexes.shift()!;
+            copyTrailingComments(nodes[index], targetNode, file, SyntaxKind.MultiLineCommentTrivia, /*hasTrailingNewLine*/ false);
+            copyOperatorComments(index, targetNode);
+        }
+    };
 
 function escapeRawStringForTemplate(s: string) {
     // Escaping for $s in strings that are to be used in template strings

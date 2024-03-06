@@ -515,7 +515,8 @@ function createSolutionBuilderState<T extends BuilderProgram>(
                 libraryResolutionCache,
             );
     }
-    compilerHost.getBuildInfo = (fileName, configFilePath) => getBuildInfo(state, fileName, toResolvedConfigFilePath(state, configFilePath as ResolvedConfigFileName), /*modifiedTime*/ undefined);
+    compilerHost.getBuildInfo = (fileName, configFilePath) =>
+        getBuildInfo(state, fileName, toResolvedConfigFilePath(state, configFilePath as ResolvedConfigFileName), /*modifiedTime*/ undefined);
 
     const { watchFile, watchDirectory, writeLog } = createWatchFactory<ResolvedConfigFileName>(hostWithWatch, options);
 
@@ -601,7 +602,11 @@ function getCachedParsedConfigFile<T extends BuilderProgram>(state: SolutionBuil
     return value && isParsedCommandLine(value) ? value : undefined;
 }
 
-function parseConfigFile<T extends BuilderProgram>(state: SolutionBuilderState<T>, configFileName: ResolvedConfigFileName, configFilePath: ResolvedConfigFilePath): ParsedCommandLine | undefined {
+function parseConfigFile<T extends BuilderProgram>(
+    state: SolutionBuilderState<T>,
+    configFileName: ResolvedConfigFileName,
+    configFilePath: ResolvedConfigFilePath,
+): ParsedCommandLine | undefined {
     const { configFileCache } = state;
     const value = configFileCache.get(configFilePath);
     if (value) {
@@ -2276,7 +2281,12 @@ function buildNextInvalidatedProjectWorker<T extends BuilderProgram>(state: Solu
     return buildOrder;
 }
 
-function watchConfigFile<T extends BuilderProgram>(state: SolutionBuilderState<T>, resolved: ResolvedConfigFileName, resolvedPath: ResolvedConfigFilePath, parsed: ParsedCommandLine | undefined) {
+function watchConfigFile<T extends BuilderProgram>(
+    state: SolutionBuilderState<T>,
+    resolved: ResolvedConfigFileName,
+    resolvedPath: ResolvedConfigFilePath,
+    parsed: ParsedCommandLine | undefined,
+) {
     if (!state.watch || state.allWatchedConfigFiles.has(resolvedPath)) return;
     state.allWatchedConfigFiles.set(
         resolvedPath,
@@ -2313,7 +2323,12 @@ function watchExtendedConfigFiles<T extends BuilderProgram>(state: SolutionBuild
     );
 }
 
-function watchWildCardDirectories<T extends BuilderProgram>(state: SolutionBuilderState<T>, resolved: ResolvedConfigFileName, resolvedPath: ResolvedConfigFilePath, parsed: ParsedCommandLine) {
+function watchWildCardDirectories<T extends BuilderProgram>(
+    state: SolutionBuilderState<T>,
+    resolved: ResolvedConfigFileName,
+    resolvedPath: ResolvedConfigFilePath,
+    parsed: ParsedCommandLine,
+) {
     if (!state.watch) return;
     updateWatchingWildcardDirectories(
         getOrCreateValueMapFromConfigFileMap(state.allWatchedWildcardDirectories, resolvedPath),
@@ -2445,7 +2460,8 @@ function createSolutionBuilderWorker<T extends BuilderProgram>(
     return {
         build: (project, cancellationToken, writeFile, getCustomTransformers) => build(state, project, cancellationToken, writeFile, getCustomTransformers),
         clean: project => clean(state, project),
-        buildReferences: (project, cancellationToken, writeFile, getCustomTransformers) => build(state, project, cancellationToken, writeFile, getCustomTransformers, /*onlyReferences*/ true),
+        buildReferences: (project, cancellationToken, writeFile, getCustomTransformers) =>
+            build(state, project, cancellationToken, writeFile, getCustomTransformers, /*onlyReferences*/ true),
         cleanReferences: project => clean(state, project, /*onlyReferences*/ true),
         getNextInvalidatedProject: cancellationToken => {
             setupInitialBuild(state, cancellationToken);

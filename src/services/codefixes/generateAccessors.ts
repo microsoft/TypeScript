@@ -153,7 +153,8 @@ function createPropertyName(name: string, originalName: AcceptedNameType) {
 
 function createAccessorAccessExpression(fieldName: AcceptedNameType, isStatic: boolean, container: ContainerDeclaration) {
     const leftHead = isStatic ? (container as ClassLikeDeclaration).name! : factory.createThis(); // TODO: GH#18217
-    return isIdentifier(fieldName) ? factory.createPropertyAccessExpression(leftHead, fieldName) : factory.createElementAccessExpression(leftHead, factory.createStringLiteralFromNode(fieldName));
+    return isIdentifier(fieldName) ? factory.createPropertyAccessExpression(leftHead, fieldName)
+        : factory.createElementAccessExpression(leftHead, factory.createStringLiteralFromNode(fieldName));
 }
 
 function prepareModifierFlagsForAccessor(modifierFlags: ModifierFlags): ModifierFlags {
@@ -316,7 +317,15 @@ function updateFieldDeclaration(
         changeTracker.replaceNode(
             file,
             declaration,
-            factory.updateParameterDeclaration(declaration, modifiers, declaration.dotDotDotToken, cast(fieldName, isIdentifier), declaration.questionToken, declaration.type, declaration.initializer),
+            factory.updateParameterDeclaration(
+                declaration,
+                modifiers,
+                declaration.dotDotDotToken,
+                cast(fieldName, isIdentifier),
+                declaration.questionToken,
+                declaration.type,
+                declaration.initializer,
+            ),
         );
     }
 }

@@ -185,7 +185,9 @@ function doChangeNamespaceToNamed(sourceFile: SourceFile, checker: TypeChecker, 
 
     const importSpecifiers: ImportSpecifier[] = [];
     exportNameToImportName.forEach((name, propertyName) => {
-        importSpecifiers.push(factory.createImportSpecifier(/*isTypeOnly*/ false, name === propertyName ? undefined : factory.createIdentifier(propertyName), factory.createIdentifier(name)));
+        importSpecifiers.push(
+            factory.createImportSpecifier(/*isTypeOnly*/ false, name === propertyName ? undefined : factory.createIdentifier(propertyName), factory.createIdentifier(name)),
+        );
     });
 
     const importDecl = toConvert.parent.parent;
@@ -275,7 +277,8 @@ export function doChangeNamedToNamespaceOrDefault(
     if (neededNamedImports.size) {
         const newNamedImports: ImportSpecifier[] = arrayFrom(
             neededNamedImports.values(),
-            element => factory.createImportSpecifier(element.isTypeOnly, element.propertyName && factory.createIdentifier(element.propertyName.text), factory.createIdentifier(element.name.text)),
+            element =>
+                factory.createImportSpecifier(element.isTypeOnly, element.propertyName && factory.createIdentifier(element.propertyName.text), factory.createIdentifier(element.name.text)),
         );
         changes.insertNodeAfter(sourceFile, toConvert.parent.parent, updateImport(importDecl, /*defaultImportName*/ undefined, newNamedImports));
     }

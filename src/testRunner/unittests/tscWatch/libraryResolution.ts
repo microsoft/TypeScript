@@ -84,7 +84,10 @@ describe("unittests:: tsc-watch:: libraryResolution", () => {
                     edit: sys => sys.deleteFile("/home/src/projects/node_modules/@typescript/lib-dom/index.d.ts"),
                     timeouts: sys => sys.runQueuedTimeoutCallbacks(),
                 },
-                ...editOptions(withoutConfig, sys => sys.ensureFileOrFolder({ path: "/home/src/projects/node_modules/@typescript/lib-dom/index.d.ts", content: "interface DOMInterface { }" })),
+                ...editOptions(
+                    withoutConfig,
+                    sys => sys.ensureFileOrFolder({ path: "/home/src/projects/node_modules/@typescript/lib-dom/index.d.ts", content: "interface DOMInterface { }" }),
+                ),
                 {
                     caption: "write redirect file webworker",
                     edit: sys => sys.ensureFileOrFolder({ path: "/home/src/projects/node_modules/@typescript/lib-webworker/index.d.ts", content: "interface WebworkerInterface { }" }),

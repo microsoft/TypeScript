@@ -824,7 +824,10 @@ export function packageIdToString(packageId: PackageId): string {
 }
 
 /** @internal */
-export function typeDirectiveIsEqualTo(oldResolution: ResolvedTypeReferenceDirectiveWithFailedLookupLocations, newResolution: ResolvedTypeReferenceDirectiveWithFailedLookupLocations): boolean {
+export function typeDirectiveIsEqualTo(
+    oldResolution: ResolvedTypeReferenceDirectiveWithFailedLookupLocations,
+    newResolution: ResolvedTypeReferenceDirectiveWithFailedLookupLocations,
+): boolean {
     return oldResolution === newResolution ||
         oldResolution.resolvedTypeReferenceDirective === newResolution.resolvedTypeReferenceDirective ||
         !!oldResolution.resolvedTypeReferenceDirective &&
@@ -2170,7 +2173,11 @@ export function createFileDiagnosticFromMessageChain(
 }
 
 /** @internal */
-export function createDiagnosticForFileFromMessageChain(sourceFile: SourceFile, messageChain: DiagnosticMessageChain, relatedInformation?: DiagnosticRelatedInformation[]): DiagnosticWithLocation {
+export function createDiagnosticForFileFromMessageChain(
+    sourceFile: SourceFile,
+    messageChain: DiagnosticMessageChain,
+    relatedInformation?: DiagnosticRelatedInformation[],
+): DiagnosticWithLocation {
     return {
         file: sourceFile,
         start: 0,
@@ -2699,7 +2706,8 @@ export function isVariableDeclarationInVariableStatement(node: VariableDeclarati
 /** @internal */
 export function isCommonJsExportedExpression(node: Node) {
     if (!isInJSFile(node)) return false;
-    return (isObjectLiteralExpression(node.parent) && isBinaryExpression(node.parent.parent) && getAssignmentDeclarationKind(node.parent.parent) === AssignmentDeclarationKind.ModuleExports) ||
+    return (isObjectLiteralExpression(node.parent) && isBinaryExpression(node.parent.parent) &&
+        getAssignmentDeclarationKind(node.parent.parent) === AssignmentDeclarationKind.ModuleExports) ||
         isCommonJsExportPropertyAssignment(node.parent);
 }
 
@@ -3525,7 +3533,10 @@ export function isJSDocIndexSignature(node: TypeReferenceNode | ExpressionWithTy
  *
  * @internal
  */
-export function isRequireCall(callExpression: Node, requireStringLiteralLikeArgument: true): callExpression is RequireOrImportCall & { expression: Identifier; arguments: [StringLiteralLike]; };
+export function isRequireCall(
+    callExpression: Node,
+    requireStringLiteralLikeArgument: true,
+): callExpression is RequireOrImportCall & { expression: Identifier; arguments: [StringLiteralLike]; };
 /** @internal */
 export function isRequireCall(callExpression: Node, requireStringLiteralLikeArgument: boolean): callExpression is CallExpression;
 /** @internal */
@@ -3715,9 +3726,10 @@ export function isDefaultedExpandoInitializer(node: BinaryExpression) {
  */
 export function getNameOfExpando(node: Declaration): DeclarationName | undefined {
     if (isBinaryExpression(node.parent)) {
-        const parent = ((node.parent.operatorToken.kind === SyntaxKind.BarBarToken || node.parent.operatorToken.kind === SyntaxKind.QuestionQuestionToken) && isBinaryExpression(node.parent.parent)) ?
-            node.parent.parent
-            : node.parent;
+        const parent =
+            ((node.parent.operatorToken.kind === SyntaxKind.BarBarToken || node.parent.operatorToken.kind === SyntaxKind.QuestionQuestionToken) && isBinaryExpression(node.parent.parent)) ?
+                node.parent.parent
+                : node.parent;
         if (parent.operatorToken.kind === SyntaxKind.EqualsToken && isIdentifier(parent.left)) {
             return parent.left;
         }
@@ -3828,7 +3840,8 @@ export function isLiteralLikeElementAccess(node: Node): node is LiteralLikeEleme
  */
 export function isBindableStaticAccessExpression(node: Node, excludeThisKeyword?: boolean): node is BindableStaticAccessExpression {
     return isPropertyAccessExpression(node) &&
-            (!excludeThisKeyword && node.expression.kind === SyntaxKind.ThisKeyword || isIdentifier(node.name) && isBindableStaticNameExpression(node.expression, /*excludeThisKeyword*/ true))
+            (!excludeThisKeyword && node.expression.kind === SyntaxKind.ThisKeyword ||
+                isIdentifier(node.name) && isBindableStaticNameExpression(node.expression, /*excludeThisKeyword*/ true))
         || isBindableStaticElementAccessExpression(node, excludeThisKeyword);
 }
 
@@ -3894,7 +3907,9 @@ function isVoidZero(node: Node) {
  *
  * @internal
  */
-export function getElementOrPropertyAccessArgumentExpressionOrName(node: AccessExpression): Identifier | PrivateIdentifier | StringLiteralLike | NumericLiteral | ElementAccessExpression | undefined {
+export function getElementOrPropertyAccessArgumentExpressionOrName(
+    node: AccessExpression,
+): Identifier | PrivateIdentifier | StringLiteralLike | NumericLiteral | ElementAccessExpression | undefined {
     if (isPropertyAccessExpression(node)) {
         return node.name;
     }
@@ -6341,7 +6356,8 @@ export function getPossibleOriginalInputExtensionForExtension(path: string) {
  */
 export function getPathsBasePath(options: CompilerOptions, host: { getCurrentDirectory?(): string; }) {
     if (!options.paths) return undefined;
-    return options.baseUrl ?? Debug.checkDefined(options.pathsBasePath || host.getCurrentDirectory?.(), "Encountered 'paths' without a 'baseUrl', config file, or host 'getCurrentDirectory'.");
+    return options.baseUrl ??
+        Debug.checkDefined(options.pathsBasePath || host.getCurrentDirectory?.(), "Encountered 'paths' without a 'baseUrl', config file, or host 'getCurrentDirectory'.");
 }
 
 /** @internal */
@@ -6426,7 +6442,13 @@ export function getSourceFilePathInNewDir(fileName: string, host: EmitHost, newD
 }
 
 /** @internal */
-export function getSourceFilePathInNewDirWorker(fileName: string, newDirPath: string, currentDirectory: string, commonSourceDirectory: string, getCanonicalFileName: GetCanonicalFileName): string {
+export function getSourceFilePathInNewDirWorker(
+    fileName: string,
+    newDirPath: string,
+    currentDirectory: string,
+    commonSourceDirectory: string,
+    getCanonicalFileName: GetCanonicalFileName,
+): string {
     let sourceFilePath = getNormalizedAbsolutePath(fileName, currentDirectory);
     const isSourceFileInCommonSourceDirectory = getCanonicalFileName(sourceFilePath).indexOf(getCanonicalFileName(commonSourceDirectory)) === 0;
     sourceFilePath = isSourceFileInCommonSourceDirectory ? sourceFilePath.substring(commonSourceDirectory.length) : sourceFilePath;
@@ -8186,7 +8208,8 @@ export function getLeftmostExpression(node: Expression, stopAtCallExpressions: b
             case SyntaxKind.NonNullExpression:
             case SyntaxKind.PartiallyEmittedExpression:
             case SyntaxKind.SatisfiesExpression:
-                node = (node as CallExpression | PropertyAccessExpression | ElementAccessExpression | AsExpression | NonNullExpression | PartiallyEmittedExpression | SatisfiesExpression).expression;
+                node = (node as CallExpression | PropertyAccessExpression | ElementAccessExpression | AsExpression | NonNullExpression | PartiallyEmittedExpression | SatisfiesExpression)
+                    .expression;
                 continue;
         }
 
@@ -8486,7 +8509,11 @@ export function createCompilerDiagnosticFromMessageChain(chain: DiagnosticMessag
 }
 
 /** @internal */
-export function chainDiagnosticMessages(details: DiagnosticMessageChain | DiagnosticMessageChain[] | undefined, message: DiagnosticMessage, ...args: DiagnosticArguments): DiagnosticMessageChain {
+export function chainDiagnosticMessages(
+    details: DiagnosticMessageChain | DiagnosticMessageChain[] | undefined,
+    message: DiagnosticMessage,
+    ...args: DiagnosticArguments
+): DiagnosticMessageChain {
     let text = getLocaleSpecificMessage(message);
 
     if (some(args)) {
@@ -8614,7 +8641,8 @@ function isFileForcedToBeModuleByFormat(file: SourceFile): true | undefined {
     // Excludes declaration files - they still require an explicit `export {}` or the like
     // for back compat purposes. The only non-declaration files _not_ forced to be a module are `.js` files
     // that aren't esm-mode (meaning not in a `type: module` scope).
-    return (file.impliedNodeFormat === ModuleKind.ESNext || (fileExtensionIsOneOf(file.fileName, [Extension.Cjs, Extension.Cts, Extension.Mjs, Extension.Mts]))) && !file.isDeclarationFile ? true
+    return (file.impliedNodeFormat === ModuleKind.ESNext || (fileExtensionIsOneOf(file.fileName, [Extension.Cjs, Extension.Cts, Extension.Mjs, Extension.Mts]))) && !file.isDeclarationFile ?
+        true
         : undefined;
 }
 

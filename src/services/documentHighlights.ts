@@ -206,7 +206,11 @@ export namespace DocumentHighlights {
             );
         }
 
-        function useParent<T extends Node>(node: Node, nodeTest: (node: Node) => node is T, getNodes: (node: T, sourceFile: SourceFile) => readonly Node[] | undefined): HighlightSpan[] | undefined {
+        function useParent<T extends Node>(
+            node: Node,
+            nodeTest: (node: Node) => node is T,
+            getNodes: (node: T, sourceFile: SourceFile) => readonly Node[] | undefined,
+        ): HighlightSpan[] | undefined {
             return nodeTest(node) ? highlightSpans(getNodes(node, sourceFile)) : undefined;
         }
 

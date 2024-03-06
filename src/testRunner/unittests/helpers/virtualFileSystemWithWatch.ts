@@ -576,7 +576,12 @@ export class TestServerHost implements server.ServerHost, FormatDiagnosticsHost,
         }
     }
 
-    ensureFileOrFolder(fileOrDirectoryOrSymLink: FileOrFolderOrSymLink, ignoreWatchInvokedWithTriggerAsFileCreate?: boolean, ignoreParentWatch?: boolean, options?: Partial<WatchInvokeOptions>) {
+    ensureFileOrFolder(
+        fileOrDirectoryOrSymLink: FileOrFolderOrSymLink,
+        ignoreWatchInvokedWithTriggerAsFileCreate?: boolean,
+        ignoreParentWatch?: boolean,
+        options?: Partial<WatchInvokeOptions>,
+    ) {
         if (isFile(fileOrDirectoryOrSymLink)) {
             const file = this.toFsFile(fileOrDirectoryOrSymLink);
             // file may already exist when updating existing type declaration file
@@ -651,7 +656,9 @@ export class TestServerHost implements server.ServerHost, FormatDiagnosticsHost,
         if (isFsFolder(fileOrDirectory)) {
             Debug.assert(fileOrDirectory.entries.length === 0 || isRenaming);
         }
-        if (!options?.ignoreDelete) this.invokeFileAndFsWatches(fileOrDirectory.fullPath, FileWatcherEventKind.Deleted, /*modifiedTime*/ undefined, options?.useTildeAsSuffixInRenameEventFileName);
+        if (!options?.ignoreDelete) {
+            this.invokeFileAndFsWatches(fileOrDirectory.fullPath, FileWatcherEventKind.Deleted, /*modifiedTime*/ undefined, options?.useTildeAsSuffixInRenameEventFileName);
+        }
         this.inodes?.delete(fileOrDirectory.path);
         if (!options?.ignoreDelete) this.invokeFileAndFsWatches(baseFolder.fullPath, FileWatcherEventKind.Changed, baseFolder.modifiedTime, options?.useTildeAsSuffixInRenameEventFileName);
     }

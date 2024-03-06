@@ -374,7 +374,9 @@ export namespace Messages {
     export const expressionExpected: DiagnosticMessage = createMessage("expression expected.");
     export const uselessConstantType: DiagnosticMessage = createMessage("No reason to extract constant of type.");
     export const statementOrExpressionExpected: DiagnosticMessage = createMessage("Statement or expression expected.");
-    export const cannotExtractRangeContainingConditionalBreakOrContinueStatements: DiagnosticMessage = createMessage("Cannot extract range containing conditional break or continue statements.");
+    export const cannotExtractRangeContainingConditionalBreakOrContinueStatements: DiagnosticMessage = createMessage(
+        "Cannot extract range containing conditional break or continue statements.",
+    );
     export const cannotExtractRangeContainingConditionalReturnStatement: DiagnosticMessage = createMessage("Cannot extract range containing conditional return statement.");
     export const cannotExtractRangeContainingLabeledBreakOrContinueStatementWithTargetOutsideOfTheRange: DiagnosticMessage = createMessage(
         "Cannot extract range containing labeled break or continue with target outside of the range.",
@@ -1374,11 +1376,11 @@ function extractConstantInScope(
 
     // Make a unique name for the extracted variable
     const file = scope.getSourceFile();
-    const localNameText =
-        isPropertyAccessExpression(node) && !isClassLike(scope) && !checker.resolveName(node.name.text, node, SymbolFlags.Value, /*excludeGlobals*/ false) && !isPrivateIdentifier(node.name) &&
+    const localNameText = isPropertyAccessExpression(node) && !isClassLike(scope) && !checker.resolveName(node.name.text, node, SymbolFlags.Value, /*excludeGlobals*/ false) &&
+            !isPrivateIdentifier(node.name) &&
             !identifierToKeywordKind(node.name)
-            ? node.name.text
-            : getUniqueName(isClassLike(scope) ? "newProperty" : "newLocal", file);
+        ? node.name.text
+        : getUniqueName(isClassLike(scope) ? "newProperty" : "newLocal", file);
     const isJS = isInJSFile(scope);
 
     let variableType = isJS || !checker.isContextSensitive(node)

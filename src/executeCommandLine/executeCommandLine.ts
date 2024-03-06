@@ -556,7 +556,8 @@ function printAllHelp(sys: System, compilerOptions: readonly CommandLineOption[]
             buildOptions,
             /*subCategory*/ false,
             formatMessage(
-                Diagnostics.Using_build_b_will_make_tsc_behave_more_like_a_build_orchestrator_than_a_compiler_This_is_used_to_trigger_building_composite_projects_which_you_can_learn_more_about_at_0,
+                Diagnostics
+                    .Using_build_b_will_make_tsc_behave_more_like_a_build_orchestrator_than_a_compiler_This_is_used_to_trigger_building_composite_projects_which_you_can_learn_more_about_at_0,
                 "https://aka.ms/tsc-composite-builds",
             ),
         ),
@@ -576,7 +577,8 @@ function printBuildHelp(sys: System, buildOptions: readonly CommandLineOption[])
             buildOptions,
             /*subCategory*/ false,
             formatMessage(
-                Diagnostics.Using_build_b_will_make_tsc_behave_more_like_a_build_orchestrator_than_a_compiler_This_is_used_to_trigger_building_composite_projects_which_you_can_learn_more_about_at_0,
+                Diagnostics
+                    .Using_build_b_will_make_tsc_behave_more_like_a_build_orchestrator_than_a_compiler_This_is_used_to_trigger_building_composite_projects_which_you_can_learn_more_about_at_0,
                 "https://aka.ms/tsc-composite-builds",
             ),
         ),
@@ -1153,7 +1155,8 @@ function reportSolutionBuilderTimes(
 
     if (!performance.isEnabled()) {
         sys.write(
-            Diagnostics.Performance_timings_for_diagnostics_or_extendedDiagnostics_are_not_available_in_this_session_A_native_implementation_of_the_Web_Performance_API_could_not_be_found.message +
+            Diagnostics.Performance_timings_for_diagnostics_or_extendedDiagnostics_are_not_available_in_this_session_A_native_implementation_of_the_Web_Performance_API_could_not_be_found
+                .message +
                 "\n",
         );
         return;
@@ -1279,7 +1282,8 @@ function reportStatistics(sys: System, program: Program, solutionPerformance: So
         reportAllStatistics(sys, statistics);
         if (!isPerformanceEnabled) {
             sys.write(
-                Diagnostics.Performance_timings_for_diagnostics_or_extendedDiagnostics_are_not_available_in_this_session_A_native_implementation_of_the_Web_Performance_API_could_not_be_found.message +
+                Diagnostics.Performance_timings_for_diagnostics_or_extendedDiagnostics_are_not_available_in_this_session_A_native_implementation_of_the_Web_Performance_API_could_not_be_found
+                    .message +
                     "\n",
             );
         }

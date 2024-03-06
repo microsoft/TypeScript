@@ -574,7 +574,13 @@ export function getImplementationsAtPosition(
     return map(referenceEntries, entry => toImplementationLocation(entry, checker));
 }
 
-function getImplementationReferenceEntries(program: Program, cancellationToken: CancellationToken, sourceFiles: readonly SourceFile[], node: Node, position: number): readonly Entry[] | undefined {
+function getImplementationReferenceEntries(
+    program: Program,
+    cancellationToken: CancellationToken,
+    sourceFiles: readonly SourceFile[],
+    node: Node,
+    position: number,
+): readonly Entry[] | undefined {
     if (node.kind === SyntaxKind.SourceFile) {
         return undefined;
     }
@@ -609,7 +615,10 @@ export function findReferenceOrRenameEntries<T>(
     options: Options | undefined,
     convertEntry: ToReferenceOrRenameEntry<T>,
 ): T[] | undefined {
-    return map(flattenEntries(Core.getReferencedSymbolsForNode(position, node, program, sourceFiles, cancellationToken, options)), entry => convertEntry(entry, node, program.getTypeChecker()));
+    return map(
+        flattenEntries(Core.getReferencedSymbolsForNode(position, node, program, sourceFiles, cancellationToken, options)),
+        entry => convertEntry(entry, node, program.getTypeChecker()),
+    );
 }
 
 /** @internal */
@@ -633,65 +642,66 @@ function flattenEntries(referenceSymbols: readonly SymbolAndEntries[] | undefine
 }
 
 function definitionToReferencedSymbolDefinitionInfo(def: Definition, checker: TypeChecker, originalNode: Node): ReferencedSymbolDefinitionInfo {
-    const info = ((): { sourceFile: SourceFile; textSpan: TextSpan; name: string; kind: ScriptElementKind; displayParts: SymbolDisplayPart[]; context?: Node | ContextWithStartAndEndNode; } => {
-        switch (def.type) {
-            case DefinitionKind.Symbol: {
-                const { symbol } = def;
-                const { displayParts, kind } = getDefinitionKindAndDisplayParts(symbol, checker, originalNode);
-                const name = displayParts.map(p => p.text).join("");
-                const declaration = symbol.declarations && firstOrUndefined(symbol.declarations);
-                const node = declaration ? (getNameOfDeclaration(declaration) || declaration) : originalNode;
-                return {
-                    ...getFileAndTextSpanFromNode(node),
-                    name,
-                    kind,
-                    displayParts,
-                    context: getContextNode(declaration),
-                };
+    const info =
+        ((): { sourceFile: SourceFile; textSpan: TextSpan; name: string; kind: ScriptElementKind; displayParts: SymbolDisplayPart[]; context?: Node | ContextWithStartAndEndNode; } => {
+            switch (def.type) {
+                case DefinitionKind.Symbol: {
+                    const { symbol } = def;
+                    const { displayParts, kind } = getDefinitionKindAndDisplayParts(symbol, checker, originalNode);
+                    const name = displayParts.map(p => p.text).join("");
+                    const declaration = symbol.declarations && firstOrUndefined(symbol.declarations);
+                    const node = declaration ? (getNameOfDeclaration(declaration) || declaration) : originalNode;
+                    return {
+                        ...getFileAndTextSpanFromNode(node),
+                        name,
+                        kind,
+                        displayParts,
+                        context: getContextNode(declaration),
+                    };
+                }
+                case DefinitionKind.Label: {
+                    const { node } = def;
+                    return { ...getFileAndTextSpanFromNode(node), name: node.text, kind: ScriptElementKind.label, displayParts: [displayPart(node.text, SymbolDisplayPartKind.text)] };
+                }
+                case DefinitionKind.Keyword: {
+                    const { node } = def;
+                    const name = tokenToString(node.kind)!;
+                    return { ...getFileAndTextSpanFromNode(node), name, kind: ScriptElementKind.keyword, displayParts: [{ text: name, kind: ScriptElementKind.keyword }] };
+                }
+                case DefinitionKind.This: {
+                    const { node } = def;
+                    const symbol = checker.getSymbolAtLocation(node);
+                    const displayParts = symbol && SymbolDisplay.getSymbolDisplayPartsDocumentationAndSymbolKind(
+                                checker,
+                                symbol,
+                                node.getSourceFile(),
+                                getContainerNode(node),
+                                node,
+                            ).displayParts || [textPart("this")];
+                    return { ...getFileAndTextSpanFromNode(node), name: "this", kind: ScriptElementKind.variableElement, displayParts };
+                }
+                case DefinitionKind.String: {
+                    const { node } = def;
+                    return {
+                        ...getFileAndTextSpanFromNode(node),
+                        name: node.text,
+                        kind: ScriptElementKind.variableElement,
+                        displayParts: [displayPart(getTextOfNode(node), SymbolDisplayPartKind.stringLiteral)],
+                    };
+                }
+                case DefinitionKind.TripleSlashReference: {
+                    return {
+                        textSpan: createTextSpanFromRange(def.reference),
+                        sourceFile: def.file,
+                        name: def.reference.fileName,
+                        kind: ScriptElementKind.string,
+                        displayParts: [displayPart(`"${def.reference.fileName}"`, SymbolDisplayPartKind.stringLiteral)],
+                    };
+                }
+                default:
+                    return Debug.assertNever(def);
             }
-            case DefinitionKind.Label: {
-                const { node } = def;
-                return { ...getFileAndTextSpanFromNode(node), name: node.text, kind: ScriptElementKind.label, displayParts: [displayPart(node.text, SymbolDisplayPartKind.text)] };
-            }
-            case DefinitionKind.Keyword: {
-                const { node } = def;
-                const name = tokenToString(node.kind)!;
-                return { ...getFileAndTextSpanFromNode(node), name, kind: ScriptElementKind.keyword, displayParts: [{ text: name, kind: ScriptElementKind.keyword }] };
-            }
-            case DefinitionKind.This: {
-                const { node } = def;
-                const symbol = checker.getSymbolAtLocation(node);
-                const displayParts = symbol && SymbolDisplay.getSymbolDisplayPartsDocumentationAndSymbolKind(
-                            checker,
-                            symbol,
-                            node.getSourceFile(),
-                            getContainerNode(node),
-                            node,
-                        ).displayParts || [textPart("this")];
-                return { ...getFileAndTextSpanFromNode(node), name: "this", kind: ScriptElementKind.variableElement, displayParts };
-            }
-            case DefinitionKind.String: {
-                const { node } = def;
-                return {
-                    ...getFileAndTextSpanFromNode(node),
-                    name: node.text,
-                    kind: ScriptElementKind.variableElement,
-                    displayParts: [displayPart(getTextOfNode(node), SymbolDisplayPartKind.stringLiteral)],
-                };
-            }
-            case DefinitionKind.TripleSlashReference: {
-                return {
-                    textSpan: createTextSpanFromRange(def.reference),
-                    sourceFile: def.file,
-                    name: def.reference.fileName,
-                    kind: ScriptElementKind.string,
-                    displayParts: [displayPart(`"${def.reference.fileName}"`, SymbolDisplayPartKind.stringLiteral)],
-                };
-            }
-            default:
-                return Debug.assertNever(def);
-        }
-    })();
+        })();
 
     const { sourceFile, textSpan, name, kind, displayParts, context } = info;
     return {
@@ -1382,7 +1392,8 @@ export namespace Core {
         else {
             const search = state.createSearch(node, symbol, /*comingFrom*/ undefined, {
                 allSearchSymbols: node
-                    ? populateSearchSymbolSet(symbol, node, checker, options.use === FindReferencesUse.Rename, !!options.providePrefixAndSuffixTextForRename, !!options.implementations) : [symbol],
+                    ? populateSearchSymbolSet(symbol, node, checker, options.use === FindReferencesUse.Rename, !!options.providePrefixAndSuffixTextForRename, !!options.implementations) :
+                    [symbol],
             });
             getReferencesInContainerOrFiles(symbol, state, search);
         }
@@ -1992,7 +2003,10 @@ export namespace Core {
             // This wasn't the start of a token.  Check to see if it might be a
             // match in a comment or string if that's what the caller is asking
             // for.
-            if (!state.options.implementations && (state.options.findInStrings && isInString(sourceFile, position) || state.options.findInComments && isInNonReferenceComment(sourceFile, position))) {
+            if (
+                !state.options.implementations &&
+                (state.options.findInStrings && isInString(sourceFile, position) || state.options.findInComments && isInNonReferenceComment(sourceFile, position))
+            ) {
                 // In the case where we're looking inside comments/strings, we don't have
                 // an actual definition.  So just use 'undefined' here.  Features like
                 // 'Rename' won't care (as they ignore the definitions), and features like
@@ -2541,7 +2555,8 @@ export namespace Core {
                     case SyntaxKind.ObjectLiteralExpression:
                         // Make sure the container belongs to the same class/object literals
                         // and has the appropriate static modifier from the original container.
-                        return container.parent && canHaveSymbol(container.parent) && (searchSpaceNode as ClassLikeDeclaration | ObjectLiteralExpression).symbol === container.parent.symbol &&
+                        return container.parent && canHaveSymbol(container.parent) &&
+                            (searchSpaceNode as ClassLikeDeclaration | ObjectLiteralExpression).symbol === container.parent.symbol &&
                             isStatic(container) === !!staticFlag;
                     case SyntaxKind.SourceFile:
                         return container.kind === SyntaxKind.SourceFile && !isExternalModule(container) && !isParameterName(node);

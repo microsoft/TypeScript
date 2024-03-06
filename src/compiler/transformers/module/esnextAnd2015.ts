@@ -175,7 +175,10 @@ export function transformECMAScriptModule(context: TransformationContext): (x: S
                             /*exclamationToken*/ undefined,
                             /*type*/ undefined,
                             factory.createCallExpression(factory.cloneNode(createRequireName), /*typeArguments*/ undefined, [
-                                factory.createPropertyAccessExpression(factory.createMetaProperty(SyntaxKind.ImportKeyword, factory.createIdentifier("meta")), factory.createIdentifier("url")),
+                                factory.createPropertyAccessExpression(
+                                    factory.createMetaProperty(SyntaxKind.ImportKeyword, factory.createIdentifier("meta")),
+                                    factory.createIdentifier("url"),
+                                ),
                             ]),
                         ),
                     ],

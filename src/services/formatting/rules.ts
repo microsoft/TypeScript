@@ -213,7 +213,13 @@ export function getAllRules(): RuleSpec[] {
             [isNonJsxSameLineTokenContext, isStartOfVariableDeclarationList],
             RuleAction.InsertSpace,
         ),
-        rule("NoSpaceBeforeOpenParenInFuncCall", anyToken, SyntaxKind.OpenParenToken, [isNonJsxSameLineTokenContext, isFunctionCallOrNewContext, isPreviousTokenNotComma], RuleAction.DeleteSpace),
+        rule(
+            "NoSpaceBeforeOpenParenInFuncCall",
+            anyToken,
+            SyntaxKind.OpenParenToken,
+            [isNonJsxSameLineTokenContext, isFunctionCallOrNewContext, isPreviousTokenNotComma],
+            RuleAction.DeleteSpace,
+        ),
 
         // Special case for binary operators (that are keywords). For these we have to add a space and shouldn't follow any user options.
         rule("SpaceBeforeBinaryKeywordOperator", anyToken, binaryKeywordOperators, [isNonJsxSameLineTokenContext, isBinaryOpContext], RuleAction.InsertSpace),
@@ -357,14 +363,26 @@ export function getAllRules(): RuleSpec[] {
         ),
 
         rule("NoSpaceBeforeNonNullAssertionOperator", anyToken, SyntaxKind.ExclamationToken, [isNonJsxSameLineTokenContext, isNonNullAssertionContext], RuleAction.DeleteSpace),
-        rule("NoSpaceAfterNewKeywordOnConstructorSignature", SyntaxKind.NewKeyword, SyntaxKind.OpenParenToken, [isNonJsxSameLineTokenContext, isConstructorSignatureContext], RuleAction.DeleteSpace),
+        rule(
+            "NoSpaceAfterNewKeywordOnConstructorSignature",
+            SyntaxKind.NewKeyword,
+            SyntaxKind.OpenParenToken,
+            [isNonJsxSameLineTokenContext, isConstructorSignatureContext],
+            RuleAction.DeleteSpace,
+        ),
         rule("SpaceLessThanAndNonJSXTypeAnnotation", SyntaxKind.LessThanToken, SyntaxKind.LessThanToken, [isNonJsxSameLineTokenContext], RuleAction.InsertSpace),
     ];
 
     // These rules are applied after high priority
     const userConfigurableRules = [
         // Treat constructor as an identifier in a function declaration, and remove spaces between constructor and following left parentheses
-        rule("SpaceAfterConstructor", SyntaxKind.ConstructorKeyword, SyntaxKind.OpenParenToken, [isOptionEnabled("insertSpaceAfterConstructor"), isNonJsxSameLineTokenContext], RuleAction.InsertSpace),
+        rule(
+            "SpaceAfterConstructor",
+            SyntaxKind.ConstructorKeyword,
+            SyntaxKind.OpenParenToken,
+            [isOptionEnabled("insertSpaceAfterConstructor"), isNonJsxSameLineTokenContext],
+            RuleAction.InsertSpace,
+        ),
         rule(
             "NoSpaceAfterConstructor",
             SyntaxKind.ConstructorKeyword,
@@ -402,7 +420,13 @@ export function getAllRules(): RuleSpec[] {
         ], RuleAction.DeleteSpace),
 
         // Insert space after keywords in control flow statements
-        rule("SpaceAfterKeywordInControl", keywords, SyntaxKind.OpenParenToken, [isOptionEnabled("insertSpaceAfterKeywordsInControlFlowStatements"), isControlDeclContext], RuleAction.InsertSpace),
+        rule(
+            "SpaceAfterKeywordInControl",
+            keywords,
+            SyntaxKind.OpenParenToken,
+            [isOptionEnabled("insertSpaceAfterKeywordsInControlFlowStatements"), isControlDeclContext],
+            RuleAction.InsertSpace,
+        ),
         rule(
             "NoSpaceAfterKeywordInControl",
             keywords,
@@ -512,7 +536,13 @@ export function getAllRules(): RuleSpec[] {
         ),
 
         // Insert a space after opening and before closing empty brace brackets
-        rule("SpaceBetweenEmptyBraceBrackets", SyntaxKind.OpenBraceToken, SyntaxKind.CloseBraceToken, [isOptionEnabled("insertSpaceAfterOpeningAndBeforeClosingEmptyBraces")], RuleAction.InsertSpace),
+        rule(
+            "SpaceBetweenEmptyBraceBrackets",
+            SyntaxKind.OpenBraceToken,
+            SyntaxKind.CloseBraceToken,
+            [isOptionEnabled("insertSpaceAfterOpeningAndBeforeClosingEmptyBraces")],
+            RuleAction.InsertSpace,
+        ),
         rule(
             "NoSpaceBetweenEmptyBraceBrackets",
             SyntaxKind.OpenBraceToken,
@@ -704,7 +734,13 @@ export function getAllRules(): RuleSpec[] {
             RuleAction.DeleteSpace,
         ),
 
-        rule("NoOptionalSemicolon", SyntaxKind.SemicolonToken, anyTokenIncludingEOF, [optionEquals("semicolons", SemicolonPreference.Remove), isSemicolonDeletionContext], RuleAction.DeleteToken),
+        rule(
+            "NoOptionalSemicolon",
+            SyntaxKind.SemicolonToken,
+            anyTokenIncludingEOF,
+            [optionEquals("semicolons", SemicolonPreference.Remove), isSemicolonDeletionContext],
+            RuleAction.DeleteToken,
+        ),
         rule("OptionalSemicolon", anyToken, anyTokenIncludingEOF, [optionEquals("semicolons", SemicolonPreference.Insert), isSemicolonInsertionContext], RuleAction.InsertTrailingSemicolon),
     ];
 
@@ -747,7 +783,13 @@ export function getAllRules(): RuleSpec[] {
         rule("NoSpaceBeforeComma", anyToken, SyntaxKind.CommaToken, [isNonJsxSameLineTokenContext], RuleAction.DeleteSpace),
 
         // No space before and after indexer `x[]`
-        rule("NoSpaceBeforeOpenBracket", anyTokenExcept(SyntaxKind.AsyncKeyword, SyntaxKind.CaseKeyword), SyntaxKind.OpenBracketToken, [isNonJsxSameLineTokenContext], RuleAction.DeleteSpace),
+        rule(
+            "NoSpaceBeforeOpenBracket",
+            anyTokenExcept(SyntaxKind.AsyncKeyword, SyntaxKind.CaseKeyword),
+            SyntaxKind.OpenBracketToken,
+            [isNonJsxSameLineTokenContext],
+            RuleAction.DeleteSpace,
+        ),
         rule("NoSpaceAfterCloseBracket", SyntaxKind.CloseBracketToken, anyToken, [isNonJsxSameLineTokenContext, isNotBeforeBlockInFunctionDeclarationContext], RuleAction.DeleteSpace),
         rule("SpaceAfterSemicolon", SyntaxKind.SemicolonToken, anyToken, [isNonJsxSameLineTokenContext], RuleAction.InsertSpace),
 
@@ -901,7 +943,8 @@ function isBinaryOpContext(context: FormattingContext): boolean {
         // "in" keyword in [P in keyof T]: T[P]
         // falls through
         case SyntaxKind.TypeParameter:
-            return context.currentTokenSpan.kind === SyntaxKind.InKeyword || context.nextTokenSpan.kind === SyntaxKind.InKeyword || context.currentTokenSpan.kind === SyntaxKind.EqualsToken ||
+            return context.currentTokenSpan.kind === SyntaxKind.InKeyword || context.nextTokenSpan.kind === SyntaxKind.InKeyword ||
+                context.currentTokenSpan.kind === SyntaxKind.EqualsToken ||
                 context.nextTokenSpan.kind === SyntaxKind.EqualsToken;
         // Technically, "of" is not a binary operator, but format it the same way as "in"
         case SyntaxKind.ForOfStatement:

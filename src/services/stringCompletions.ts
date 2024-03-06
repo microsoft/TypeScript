@@ -500,7 +500,11 @@ function getStringLiteralCompletionEntries(
                 }
                 const alreadyUsedTypes = getAlreadyUsedTypesInStringLiteralUnion(grandParent as UnionTypeNode, parent as LiteralTypeNode);
                 if (result.kind === StringLiteralCompletionKind.Properties) {
-                    return { kind: StringLiteralCompletionKind.Properties, symbols: result.symbols.filter(sym => !contains(alreadyUsedTypes, sym.name)), hasIndexSignature: result.hasIndexSignature };
+                    return {
+                        kind: StringLiteralCompletionKind.Properties,
+                        symbols: result.symbols.filter(sym => !contains(alreadyUsedTypes, sym.name)),
+                        hasIndexSignature: result.hasIndexSignature,
+                    };
                 }
                 return { kind: StringLiteralCompletionKind.Types, types: result.types.filter(t => !contains(alreadyUsedTypes, t.value)), isNewIdentifier: false };
             }
@@ -721,7 +725,10 @@ function getBaseDirectoriesFromRootDirs(rootDirs: string[], basePath: string, sc
     rootDirs = rootDirs.map(rootDirectory => ensureTrailingDirectorySeparator(normalizePath(isRootedDiskPath(rootDirectory) ? rootDirectory : combinePaths(basePath, rootDirectory))));
 
     // Determine the path to the directory containing the script relative to the root directory it is contained within
-    const relativeDirectory = firstDefined(rootDirs, rootDirectory => containsPath(rootDirectory, scriptDirectory, basePath, ignoreCase) ? scriptDirectory.substr(rootDirectory.length) : undefined)!; // TODO: GH#18217
+    const relativeDirectory = firstDefined(
+        rootDirs,
+        rootDirectory => containsPath(rootDirectory, scriptDirectory, basePath, ignoreCase) ? scriptDirectory.substr(rootDirectory.length) : undefined,
+    )!; // TODO: GH#18217
 
     // Now find a path for each potential directory that is to be merged with the one containing the script
     return deduplicate<string>(

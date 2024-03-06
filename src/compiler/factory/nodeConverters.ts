@@ -124,7 +124,10 @@ export function createNodeConverters(factory: NodeFactory): NodeConverters {
             if (element.propertyName) {
                 const expression = convertToAssignmentElementTarget(element.name);
                 return setOriginalNode(
-                    setTextRange(factory.createPropertyAssignment(element.propertyName, element.initializer ? factory.createAssignment(expression, element.initializer) : expression), element),
+                    setTextRange(
+                        factory.createPropertyAssignment(element.propertyName, element.initializer ? factory.createAssignment(expression, element.initializer) : expression),
+                        element,
+                    ),
                     element,
                 );
             }

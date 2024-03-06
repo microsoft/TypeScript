@@ -298,7 +298,11 @@ export class TestState {
         }
     }
 
-    private getLanguageServiceAdapter(testType: FourSlashTestType, cancellationToken: TestCancellationToken, compilationOptions: ts.CompilerOptions): Harness.LanguageService.LanguageServiceAdapter {
+    private getLanguageServiceAdapter(
+        testType: FourSlashTestType,
+        cancellationToken: TestCancellationToken,
+        compilationOptions: ts.CompilerOptions,
+    ): Harness.LanguageService.LanguageServiceAdapter {
         switch (testType) {
             case FourSlashTestType.Native:
                 return new Harness.LanguageService.NativeLanguageServiceAdapter(cancellationToken, compilationOptions);
@@ -632,7 +636,8 @@ export class TestState {
     public verifyErrorExistsBetweenMarkers(startMarkerName: string, endMarkerName: string, shouldExist: boolean) {
         const startMarker = this.getMarkerByName(startMarkerName);
         const endMarker = this.getMarkerByName(endMarkerName);
-        const predicate = (errorMinChar: number, errorLimChar: number, startPos: number, endPos: number | undefined) => ((errorMinChar === startPos) && (errorLimChar === endPos)) ? true : false;
+        const predicate = (errorMinChar: number, errorLimChar: number, startPos: number, endPos: number | undefined) =>
+            ((errorMinChar === startPos) && (errorLimChar === endPos)) ? true : false;
 
         const exists = this.anyErrorInRange(predicate, startMarker, endMarker);
 
@@ -703,7 +708,11 @@ export class TestState {
         }
     }
 
-    private anyErrorInRange(predicate: (errorMinChar: number, errorLimChar: number, startPos: number, endPos: number | undefined) => boolean, startMarker: Marker, endMarker?: Marker): boolean {
+    private anyErrorInRange(
+        predicate: (errorMinChar: number, errorLimChar: number, startPos: number, endPos: number | undefined) => boolean,
+        startMarker: Marker,
+        endMarker?: Marker,
+    ): boolean {
         return this.getDiagnostics(startMarker.fileName).some(({ start, length }) =>
             predicate(start!, start! + length!, startMarker.position, endMarker === undefined ? undefined : endMarker.position)
         ); // TODO: GH#18217
@@ -1124,7 +1133,9 @@ export class TestState {
                 const { name, source, description, newFileContent, newRangeContent } = options;
                 const data = nameAndSourceToData.get(`${options.name}|${options.source}`);
                 if (data === false) {
-                    this.raiseError(`Multiple completion entries found for '${options.name}' from '${options.source}'. This API cannot be used. Use 'verify.applyCodeActionFromCompletion' instead.`);
+                    this.raiseError(
+                        `Multiple completion entries found for '${options.name}' from '${options.source}'. This API cannot be used. Use 'verify.applyCodeActionFromCompletion' instead.`,
+                    );
                 }
                 if (data === undefined) {
                     this.raiseError(`No completion entry found for '${options.name}' from '${options.source}'`);
@@ -1195,11 +1206,19 @@ export class TestState {
                 `No completion details available for name '${actual.name}' and source '${actual.source}'`,
             );
             assert.equal(ts.displayPartsToString(actualDetails.displayParts), expected.text, "Expected 'text' property to match 'displayParts' string");
-            assert.equal(ts.displayPartsToString(actualDetails.documentation), expected.documentation || "", "Expected 'documentation' property to match 'documentation' display parts string");
+            assert.equal(
+                ts.displayPartsToString(actualDetails.documentation),
+                expected.documentation || "",
+                "Expected 'documentation' property to match 'documentation' display parts string",
+            );
             // TODO: GH#23587
             // assert.equal(actualDetails.kind, actual.kind);
             assert.equal(actualDetails.kindModifiers, actual.kindModifiers, "Expected 'kindModifiers' properties to match");
-            assert.equal(actualDetails.source && ts.displayPartsToString(actualDetails.source), expected.sourceDisplay, "Expected 'sourceDisplay' property to match 'source' display parts string");
+            assert.equal(
+                actualDetails.source && ts.displayPartsToString(actualDetails.source),
+                expected.sourceDisplay,
+                "Expected 'sourceDisplay' property to match 'source' display parts string",
+            );
             if (!actual.sourceDisplay) {
                 assert.equal(
                     actualDetails.sourceDisplay && ts.displayPartsToString(actualDetails.sourceDisplay),
@@ -2048,7 +2067,11 @@ export class TestState {
             assert.equal(ts.displayPartsToString(currentParameter!.displayParts), options.parameterSpan);
         }
         if (currentParameter) {
-            assert.equal(ts.displayPartsToString(currentParameter.documentation), options.parameterDocComment || "", this.assertionMessageAtLastKnownMarker("current parameter Help DocComment"));
+            assert.equal(
+                ts.displayPartsToString(currentParameter.documentation),
+                options.parameterDocComment || "",
+                this.assertionMessageAtLastKnownMarker("current parameter Help DocComment"),
+            );
         }
         if (options.parameterCount !== undefined) {
             assert.equal(selectedItem.parameters.length, options.parameterCount);
@@ -2209,7 +2232,8 @@ export class TestState {
                 const isEmpty = selectionStart.line === selectionEnd.line && selectionStart.character === selectionEnd.character;
                 const selectionPadLength = lineNumber === selectionStart.line ? selectionStart.character : 0;
                 const selectionPad = " ".repeat(selectionPadLength + lineNumberPrefixLength);
-                const selectionLength = isEmpty ? 0 : Math.max(lineNumber < selectionEnd.line ? spanLine.trimRight().length - selectionPadLength : selectionEnd.character - selectionPadLength, 1);
+                const selectionLength = isEmpty ? 0
+                    : Math.max(lineNumber < selectionEnd.line ? spanLine.trimRight().length - selectionPadLength : selectionEnd.character - selectionPadLength, 1);
                 const selectionLine = isEmpty ? "<" : "^".repeat(selectionLength);
                 output.push(`${selectionPad}${selectionLine}`);
             }
@@ -2227,7 +2251,8 @@ export class TestState {
                 }
                 resultString += prefixString + spanLines[i];
             }
-            resultString += "\n" + prefixString + ":=> (" + this.getLineColStringAtPosition(spanInfo.start, file) + ") to (" + this.getLineColStringAtPosition(ts.textSpanEnd(spanInfo), file) + ")";
+            resultString += "\n" + prefixString + ":=> (" + this.getLineColStringAtPosition(spanInfo.start, file) + ") to (" +
+                this.getLineColStringAtPosition(ts.textSpanEnd(spanInfo), file) + ")";
         }
 
         return resultString;
@@ -2263,7 +2288,8 @@ export class TestState {
                 if (resultString.length) {
                     resultString += "\n--------------------------------";
                 }
-                currentLine = "\n" + nextLine.toString() + ts.repeatString(" ", 3 - nextLine.toString().length) + ">" + this.activeFile.content.substring(pos, fileLineMap[nextLine]) + "\n    ";
+                currentLine = "\n" + nextLine.toString() + ts.repeatString(" ", 3 - nextLine.toString().length) + ">" + this.activeFile.content.substring(pos, fileLineMap[nextLine]) +
+                    "\n    ";
                 startColumn = 0;
                 length = 0;
             }
@@ -3267,13 +3293,17 @@ export class TestState {
 
         const filterActual = ts.filter(actual, f => kind === undefined ? true : f.kind === kind);
         if (filterActual.length !== spans.length) {
-            this.raiseError(`verifyOutliningSpans failed - expected total spans to be ${spans.length}, but was ${actual.length}\n\nFound Spans:\n\n${this.printOutliningSpansInline(actual)}`);
+            this.raiseError(
+                `verifyOutliningSpans failed - expected total spans to be ${spans.length}, but was ${actual.length}\n\nFound Spans:\n\n${this.printOutliningSpansInline(actual)}`,
+            );
         }
 
         ts.zipWith(spans, filterActual, (expectedSpan, actualSpan, i) => {
             if (expectedSpan.pos !== actualSpan.textSpan.start || expectedSpan.end !== ts.textSpanEnd(actualSpan.textSpan)) {
                 return this.raiseError(
-                    `verifyOutliningSpans failed - span ${(i + 1)} expected: (${expectedSpan.pos},${expectedSpan.end}),  actual: (${actualSpan.textSpan.start},${ts.textSpanEnd(actualSpan.textSpan)})`,
+                    `verifyOutliningSpans failed - span ${(i + 1)} expected: (${expectedSpan.pos},${expectedSpan.end}),  actual: (${actualSpan.textSpan.start},${
+                        ts.textSpanEnd(actualSpan.textSpan)
+                    })`,
                 );
             }
             if (kind !== undefined && actualSpan.kind !== kind) {
@@ -3292,7 +3322,9 @@ export class TestState {
         ts.zipWith(spans, actual, (expectedSpan, actualSpan, i) => {
             if (expectedSpan.pos !== actualSpan.hintSpan.start || expectedSpan.end !== ts.textSpanEnd(actualSpan.hintSpan)) {
                 return this.raiseError(
-                    `verifyOutliningSpans failed - span ${(i + 1)} expected: (${expectedSpan.pos},${expectedSpan.end}),  actual: (${actualSpan.hintSpan.start},${ts.textSpanEnd(actualSpan.hintSpan)})`,
+                    `verifyOutliningSpans failed - span ${(i + 1)} expected: (${expectedSpan.pos},${expectedSpan.end}),  actual: (${actualSpan.hintSpan.start},${
+                        ts.textSpanEnd(actualSpan.hintSpan)
+                    })`,
                 );
             }
         });
@@ -3310,7 +3342,9 @@ export class TestState {
 
             if (expectedSpan.pos !== actualCommentSpan.start || expectedSpan.end !== ts.textSpanEnd(actualCommentSpan)) {
                 this.raiseError(
-                    `verifyOutliningSpans failed - span ${(i + 1)} expected: (${expectedSpan.pos},${expectedSpan.end}),  actual: (${actualCommentSpan.start},${ts.textSpanEnd(actualCommentSpan)})`,
+                    `verifyOutliningSpans failed - span ${(i + 1)} expected: (${expectedSpan.pos},${expectedSpan.end}),  actual: (${actualCommentSpan.start},${
+                        ts.textSpanEnd(actualCommentSpan)
+                    })`,
                 );
             }
         });
@@ -3410,7 +3444,12 @@ export class TestState {
         );
         ts.Debug.assertEqual(fixWithId.fixAllDescription, fixAllDescription);
 
-        const { changes, commands } = this.languageService.getCombinedCodeFix({ type: "file", fileName: this.activeFile.fileName }, fixId, this.formatCodeSettings, preferences || ts.emptyOptions);
+        const { changes, commands } = this.languageService.getCombinedCodeFix(
+            { type: "file", fileName: this.activeFile.fileName },
+            fixId,
+            this.formatCodeSettings,
+            preferences || ts.emptyOptions,
+        );
         assert.deepEqual<readonly {}[] | undefined>(commands, expectedCommands);
         this.verifyNewContent({ newFileContent }, changes);
     }
@@ -3421,7 +3460,9 @@ export class TestState {
         let index = options.index;
         if (index === undefined) {
             if (!(actions && actions.length === 1)) {
-                this.raiseError(`Should find exactly one codefix, but ${actions ? actions.length : "none"} found. ${actions ? actions.map(a => `${Harness.IO.newLine()} "${a.description}"`) : ""}`);
+                this.raiseError(
+                    `Should find exactly one codefix, but ${actions ? actions.length : "none"} found. ${actions ? actions.map(a => `${Harness.IO.newLine()} "${a.description}"`) : ""}`,
+                );
             }
             index = 0;
         }
@@ -3699,7 +3740,10 @@ export class TestState {
                 assert(details.codeActions[0].changes.length === 1, `Entry '${c.name}' from "${c.source}" returned a code action changing more than one file`);
                 assert(details.codeActions[0].changes[0].fileName === this.activeFile.fileName, `Entry '${c.name}' from "${c.source}" returned a code action changing a different file`);
                 const changes = details.codeActions[0].changes[0].textChanges;
-                const completionChange: ts.TextChange = { newText: c.insertText || c.name, span: c.replacementSpan || completions.optionalReplacementSpan || { start: marker.position, length: 0 } };
+                const completionChange: ts.TextChange = {
+                    newText: c.insertText || c.name,
+                    span: c.replacementSpan || completions.optionalReplacementSpan || { start: marker.position, length: 0 },
+                };
                 const sortedChanges = [...changes, completionChange].sort((a, b) => a.span.start - b.span.start);
                 let newFileContent = this.activeFile.content;
                 for (let i = sortedChanges.length - 1; i >= 0; i--) {
@@ -4671,7 +4715,11 @@ export function runFourSlashTestContent(basePath: string, testType: FourSlashTes
     const state = new TestState(absoluteFileName, absoluteBasePath, testType, testData);
     if (serverLogBaseliner) serverLogBaseliner.baseline = () => state.baselineTsserverLog();
     const actualFileName = Harness.IO.resolvePath(fileName) || absoluteFileName;
-    const output = ts.transpileModule(content, { reportDiagnostics: true, fileName: actualFileName, compilerOptions: { target: ts.ScriptTarget.ES2015, inlineSourceMap: true, inlineSources: true } });
+    const output = ts.transpileModule(content, {
+        reportDiagnostics: true,
+        fileName: actualFileName,
+        compilerOptions: { target: ts.ScriptTarget.ES2015, inlineSourceMap: true, inlineSources: true },
+    });
     if (output.diagnostics!.length > 0) {
         throw new Error(`Syntax error in ${absoluteBasePath}: ${output.diagnostics![0].messageText}`);
     }
@@ -4720,7 +4768,21 @@ function runCode(code: string, state: TestState, fileName: string): void {
         const cancellation = new FourSlashInterface.Cancellation(state);
         // eslint-disable-next-line no-eval
         const f = (0, eval)(wrappedCode);
-        f(ts, test, goTo, config, verify, edit, debug, format, cancellation, FourSlashInterface.classification, FourSlashInterface.Completion, verifyOperationIsCancelled, ignoreInterpolations);
+        f(
+            ts,
+            test,
+            goTo,
+            config,
+            verify,
+            edit,
+            debug,
+            format,
+            cancellation,
+            FourSlashInterface.classification,
+            FourSlashInterface.Completion,
+            verifyOperationIsCancelled,
+            ignoreInterpolations,
+        );
     }
     catch (err) {
         // ensure 'source-map-support' is triggered while we still have the handler attached by accessing `error.stack`.

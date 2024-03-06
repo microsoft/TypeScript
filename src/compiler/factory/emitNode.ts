@@ -201,7 +201,12 @@ export function setSyntheticLeadingComments<T extends Node>(node: T, comments: S
     return node;
 }
 
-export function addSyntheticLeadingComment<T extends Node>(node: T, kind: SyntaxKind.SingleLineCommentTrivia | SyntaxKind.MultiLineCommentTrivia, text: string, hasTrailingNewLine?: boolean) {
+export function addSyntheticLeadingComment<T extends Node>(
+    node: T,
+    kind: SyntaxKind.SingleLineCommentTrivia | SyntaxKind.MultiLineCommentTrivia,
+    text: string,
+    hasTrailingNewLine?: boolean,
+) {
     return setSyntheticLeadingComments(node, append<SynthesizedComment>(getSyntheticLeadingComments(node), { kind, pos: -1, end: -1, hasTrailingNewLine, text }));
 }
 
@@ -214,7 +219,12 @@ export function setSyntheticTrailingComments<T extends Node>(node: T, comments: 
     return node;
 }
 
-export function addSyntheticTrailingComment<T extends Node>(node: T, kind: SyntaxKind.SingleLineCommentTrivia | SyntaxKind.MultiLineCommentTrivia, text: string, hasTrailingNewLine?: boolean) {
+export function addSyntheticTrailingComment<T extends Node>(
+    node: T,
+    kind: SyntaxKind.SingleLineCommentTrivia | SyntaxKind.MultiLineCommentTrivia,
+    text: string,
+    hasTrailingNewLine?: boolean,
+) {
     return setSyntheticTrailingComments(node, append<SynthesizedComment>(getSyntheticTrailingComments(node), { kind, pos: -1, end: -1, hasTrailingNewLine, text }));
 }
 

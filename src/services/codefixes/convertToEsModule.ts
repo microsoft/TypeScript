@@ -132,7 +132,13 @@ function fixImportOfModuleExports(
 }
 
 /** @returns Whether we converted a `module.exports =` to a default export. */
-function convertFileToEsModule(sourceFile: SourceFile, checker: TypeChecker, changes: textChanges.ChangeTracker, target: ScriptTarget, quotePreference: QuotePreference): ModuleExportsChanged {
+function convertFileToEsModule(
+    sourceFile: SourceFile,
+    checker: TypeChecker,
+    changes: textChanges.ChangeTracker,
+    target: ScriptTarget,
+    quotePreference: QuotePreference,
+): ModuleExportsChanged {
     const identifiers: Identifiers = { original: collectFreeIdentifiers(sourceFile), additional: new Set() };
     const exports = collectExportRenames(sourceFile, checker, identifiers);
     convertExportsAccesses(sourceFile, exports, changes);
@@ -290,7 +296,13 @@ function convertVariableStatement(
 }
 
 /** Converts `const name = require("moduleSpecifier").propertyName` */
-function convertPropertyAccessImport(name: BindingName, propertyName: string, moduleSpecifier: StringLiteralLike, identifiers: Identifiers, quotePreference: QuotePreference): ConvertedImports {
+function convertPropertyAccessImport(
+    name: BindingName,
+    propertyName: string,
+    moduleSpecifier: StringLiteralLike,
+    identifiers: Identifiers,
+    quotePreference: QuotePreference,
+): ConvertedImports {
     switch (name.kind) {
         case SyntaxKind.ObjectBindingPattern:
         case SyntaxKind.ArrayBindingPattern: {
@@ -537,7 +549,13 @@ function convertSingleImport(
  * - Convert `x.default()` to `x()` to handle ES6 default export
  * - Converts uses like `x.y()` to `y()` and uses a named import.
  */
-function convertSingleIdentifierImport(name: Identifier, moduleSpecifier: StringLiteralLike, checker: TypeChecker, identifiers: Identifiers, quotePreference: QuotePreference): ConvertedImports {
+function convertSingleIdentifierImport(
+    name: Identifier,
+    moduleSpecifier: StringLiteralLike,
+    checker: TypeChecker,
+    identifiers: Identifiers,
+    quotePreference: QuotePreference,
+): ConvertedImports {
     const nameSymbol = checker.getSymbolAtLocation(name);
     // Maps from module property name to name actually used. (The same if there isn't shadowing.)
     const namedBindingsNames = new Map<string, string>();
@@ -664,7 +682,12 @@ function functionExpressionToDeclaration(
     );
 }
 
-function classExpressionToDeclaration(name: string | undefined, additionalModifiers: readonly Modifier[], cls: ClassExpression, useSitesToUnqualify: Map<Node, Node> | undefined): ClassDeclaration {
+function classExpressionToDeclaration(
+    name: string | undefined,
+    additionalModifiers: readonly Modifier[],
+    cls: ClassExpression,
+    useSitesToUnqualify: Map<Node, Node> | undefined,
+): ClassDeclaration {
     return factory.createClassDeclaration(
         concatenate(additionalModifiers, getSynthesizedDeepClones(cls.modifiers)),
         name,

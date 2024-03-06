@@ -119,7 +119,13 @@ function getSemanticTokens(program: Program, sourceFile: SourceFile, span: TextS
     return resultTokens;
 }
 
-function collectTokens(program: Program, sourceFile: SourceFile, span: TextSpan, collector: (node: Node, tokenType: number, tokenModifier: number) => void, cancellationToken: CancellationToken) {
+function collectTokens(
+    program: Program,
+    sourceFile: SourceFile,
+    span: TextSpan,
+    collector: (node: Node, tokenType: number, tokenModifier: number) => void,
+    cancellationToken: CancellationToken,
+) {
     const typeChecker = program.getTypeChecker();
 
     let inJSXElement = false;

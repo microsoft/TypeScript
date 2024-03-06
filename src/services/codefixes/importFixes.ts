@@ -331,7 +331,12 @@ function createImportAdderWorker(
             return Math.max(prevValue ?? 0, newValue);
         }
 
-        function getNewImportEntry(moduleSpecifier: string, importKind: ImportKind, useRequire: boolean, addAsTypeOnly: AddAsTypeOnly): Mutable<ImportsCollection & { useRequire: boolean; }> {
+        function getNewImportEntry(
+            moduleSpecifier: string,
+            importKind: ImportKind,
+            useRequire: boolean,
+            addAsTypeOnly: AddAsTypeOnly,
+        ): Mutable<ImportsCollection & { useRequire: boolean; }> {
             // A default import that requires type-only makes the whole import type-only.
             // (We could add `default` as a named import, but that style seems undesirable.)
             // Under `--preserveValueImports` and `--importsNotUsedAsValues=error`, if a
@@ -610,7 +615,13 @@ function getImportFixForSymbol(
     preferences: UserPreferences,
 ) {
     const packageJsonImportFilter = createPackageJsonImportFilter(sourceFile, preferences, host);
-    return getBestFix(getImportFixes(exportInfos, position, isValidTypeOnlyUseSite, useRequire, program, sourceFile, host, preferences).fixes, sourceFile, program, packageJsonImportFilter, host);
+    return getBestFix(
+        getImportFixes(exportInfos, position, isValidTypeOnlyUseSite, useRequire, program, sourceFile, host, preferences).fixes,
+        sourceFile,
+        program,
+        packageJsonImportFilter,
+        host,
+    );
 }
 
 function codeFixActionToCodeAction({ description, changes, commands }: CodeFixAction): CodeAction {
@@ -649,7 +660,14 @@ function getSingleExportInfoForSymbol(symbol: Symbol, symbolName: string, module
     function getInfoWithChecker(checker: TypeChecker, isFromPackageJson: boolean): SymbolExportInfo | undefined {
         const defaultInfo = getDefaultLikeExportInfo(moduleSymbol, checker, compilerOptions);
         if (defaultInfo && skipAlias(defaultInfo.symbol, checker) === symbol) {
-            return { symbol: defaultInfo.symbol, moduleSymbol, moduleFileName: undefined, exportKind: defaultInfo.exportKind, targetFlags: skipAlias(symbol, checker).flags, isFromPackageJson };
+            return {
+                symbol: defaultInfo.symbol,
+                moduleSymbol,
+                moduleFileName: undefined,
+                exportKind: defaultInfo.exportKind,
+                targetFlags: skipAlias(symbol, checker).flags,
+                isFromPackageJson,
+            };
         }
         const named = checker.tryGetMemberInModuleExportsAndProperties(symbolName, moduleSymbol);
         if (named && skipAlias(named, checker) === symbol) {
@@ -1257,7 +1275,17 @@ function getFixesInfoForNonUMDImport(
         }
         const isValidTypeOnlyUseSite = isValidTypeOnlyAliasUseSite(symbolToken);
         const useRequire = shouldUseRequire(sourceFile, program);
-        const exportInfo = getExportInfos(symbolName, isJSXTagName(symbolToken), getMeaningFromLocation(symbolToken), cancellationToken, sourceFile, program, useAutoImportProvider, host, preferences);
+        const exportInfo = getExportInfos(
+            symbolName,
+            isJSXTagName(symbolToken),
+            getMeaningFromLocation(symbolToken),
+            cancellationToken,
+            sourceFile,
+            program,
+            useAutoImportProvider,
+            host,
+            preferences,
+        );
         return arrayFrom(
             flatMapIterator(
                 exportInfo.values(),
@@ -1504,7 +1532,10 @@ function promoteFromTypeOnly(
                         return aliasDeclaration;
                     }
                 }
-                changes.deleteRange(sourceFile, { pos: getTokenPosOfNode(aliasDeclaration.getFirstToken()!), end: getTokenPosOfNode(aliasDeclaration.propertyName ?? aliasDeclaration.name) });
+                changes.deleteRange(sourceFile, {
+                    pos: getTokenPosOfNode(aliasDeclaration.getFirstToken()!),
+                    end: getTokenPosOfNode(aliasDeclaration.propertyName ?? aliasDeclaration.name),
+                });
                 return aliasDeclaration;
             }
             else {
@@ -1679,7 +1710,12 @@ function addNamespaceQualifier(changes: textChanges.ChangeTracker, sourceFile: S
     changes.insertText(sourceFile, usagePosition, namespacePrefix + ".");
 }
 
-function addImportType(changes: textChanges.ChangeTracker, sourceFile: SourceFile, { moduleSpecifier, usagePosition: position }: FixAddJsdocTypeImport, quotePreference: QuotePreference): void {
+function addImportType(
+    changes: textChanges.ChangeTracker,
+    sourceFile: SourceFile,
+    { moduleSpecifier, usagePosition: position }: FixAddJsdocTypeImport,
+    quotePreference: QuotePreference,
+): void {
     changes.insertText(sourceFile, position, getImportTypePrefix(moduleSpecifier, quotePreference));
 }
 

@@ -1811,7 +1811,8 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
             propagateNameFlags(node.name) |
             propagateChildFlags(node.initializer) |
             (isAmbient || node.questionToken || node.exclamationToken || node.type ? TransformFlags.ContainsTypeScript : TransformFlags.None) |
-            (isComputedPropertyName(node.name) || modifiersToFlags(node.modifiers) & ModifierFlags.Static && node.initializer ? TransformFlags.ContainsTypeScriptClassSyntax : TransformFlags.None) |
+            (isComputedPropertyName(node.name) || modifiersToFlags(node.modifiers) & ModifierFlags.Static && node.initializer ? TransformFlags.ContainsTypeScriptClassSyntax
+                : TransformFlags.None) |
             TransformFlags.ContainsClassFields;
 
         node.jsDoc = undefined; // initialized by parser (JsDocContainer)
@@ -2576,7 +2577,11 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
         return node;
     }
 
-    function updateUnionOrIntersectionTypeNode<T extends UnionOrIntersectionTypeNode>(node: T, types: NodeArray<TypeNode>, parenthesize: (nodes: readonly TypeNode[]) => readonly TypeNode[]): T {
+    function updateUnionOrIntersectionTypeNode<T extends UnionOrIntersectionTypeNode>(
+        node: T,
+        types: NodeArray<TypeNode>,
+        parenthesize: (nodes: readonly TypeNode[]) => readonly TypeNode[],
+    ): T {
         return node.types !== types
             ? update(createUnionOrIntersectionTypeNode(node.kind, types, parenthesize) as T, node)
             : node;
@@ -2873,7 +2878,13 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
     }
 
     // @api
-    function updateBindingElement(node: BindingElement, dotDotDotToken: DotDotDotToken | undefined, propertyName: PropertyName | undefined, name: BindingName, initializer: Expression | undefined) {
+    function updateBindingElement(
+        node: BindingElement,
+        dotDotDotToken: DotDotDotToken | undefined,
+        propertyName: PropertyName | undefined,
+        name: BindingName,
+        initializer: Expression | undefined,
+    ) {
         return node.propertyName !== propertyName
                 || node.dotDotDotToken !== dotDotDotToken
                 || node.name !== name
@@ -4319,7 +4330,13 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
     }
 
     // @api
-    function updateVariableDeclaration(node: VariableDeclaration, name: BindingName, exclamationToken: ExclamationToken | undefined, type: TypeNode | undefined, initializer: Expression | undefined) {
+    function updateVariableDeclaration(
+        node: VariableDeclaration,
+        name: BindingName,
+        exclamationToken: ExclamationToken | undefined,
+        type: TypeNode | undefined,
+        initializer: Expression | undefined,
+    ) {
         return node.name !== name
                 || node.type !== type
                 || node.exclamationToken !== exclamationToken
@@ -5124,7 +5141,11 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
     // @api
     // createJSDocNullableType
     // createJSDocNonNullableType
-    function createJSDocPrePostfixUnaryTypeWorker<T extends JSDocType & { readonly type: TypeNode | undefined; readonly postfix: boolean; }>(kind: T["kind"], type: T["type"], postfix = false): T {
+    function createJSDocPrePostfixUnaryTypeWorker<T extends JSDocType & { readonly type: TypeNode | undefined; readonly postfix: boolean; }>(
+        kind: T["kind"],
+        type: T["type"],
+        postfix = false,
+    ): T {
         const node = createJSDocUnaryTypeWorker(
             kind,
             postfix ? type && parenthesizerRules().parenthesizeNonArrayTypeOfPostfixType(type) : type,
@@ -5679,7 +5700,12 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
     }
 
     // @api
-    function updateJSDocEnumTag(node: JSDocEnumTag, tagName: Identifier = getDefaultTagName(node), typeExpression: JSDocTypeExpression, comment: string | NodeArray<JSDocComment> | undefined) {
+    function updateJSDocEnumTag(
+        node: JSDocEnumTag,
+        tagName: Identifier = getDefaultTagName(node),
+        typeExpression: JSDocTypeExpression,
+        comment: string | NodeArray<JSDocComment> | undefined,
+    ) {
         return node.tagName !== tagName
                 || node.typeExpression !== typeExpression
                 || node.comment !== comment
@@ -6972,7 +6998,12 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
      * @param allowComments A value indicating whether comments may be emitted for the name.
      * @param allowSourceMaps A value indicating whether source maps may be emitted for the name.
      */
-    function getExternalModuleOrNamespaceExportName(ns: Identifier | undefined, node: Declaration, allowComments?: boolean, allowSourceMaps?: boolean): Identifier | PropertyAccessExpression {
+    function getExternalModuleOrNamespaceExportName(
+        ns: Identifier | undefined,
+        node: Declaration,
+        allowComments?: boolean,
+        allowSourceMaps?: boolean,
+    ): Identifier | PropertyAccessExpression {
         if (ns && hasSyntacticModifier(node, ModifierFlags.Export)) {
             return getNamespaceMemberName(ns, getName(node), allowComments, allowSourceMaps);
         }
@@ -7037,7 +7068,13 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
      * @param statementOffset The offset at which to begin the copy.
      * @param visitor Optional callback used to visit any custom prologue directives.
      */
-    function copyCustomPrologue(source: readonly Statement[], target: Statement[], statementOffset: number, visitor?: (node: Node) => VisitResult<Node>, filter?: (node: Statement) => boolean): number;
+    function copyCustomPrologue(
+        source: readonly Statement[],
+        target: Statement[],
+        statementOffset: number,
+        visitor?: (node: Node) => VisitResult<Node>,
+        filter?: (node: Statement) => boolean,
+    ): number;
     function copyCustomPrologue(
         source: readonly Statement[],
         target: Statement[],
@@ -7208,7 +7245,8 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
             isPropertySignature(node) ? updatePropertySignature(node, modifierArray, node.name, node.questionToken, node.type) :
             isPropertyDeclaration(node) ? updatePropertyDeclaration(node, modifierArray, node.name, node.questionToken ?? node.exclamationToken, node.type, node.initializer) :
             isMethodSignature(node) ? updateMethodSignature(node, modifierArray, node.name, node.questionToken, node.typeParameters, node.parameters, node.type) :
-            isMethodDeclaration(node) ? updateMethodDeclaration(node, modifierArray, node.asteriskToken, node.name, node.questionToken, node.typeParameters, node.parameters, node.type, node.body) :
+            isMethodDeclaration(node) ?
+            updateMethodDeclaration(node, modifierArray, node.asteriskToken, node.name, node.questionToken, node.typeParameters, node.parameters, node.type, node.body) :
             isConstructorDeclaration(node) ? updateConstructorDeclaration(node, modifierArray, node.parameters, node.body) :
             isGetAccessorDeclaration(node) ? updateGetAccessorDeclaration(node, modifierArray, node.name, node.parameters, node.type, node.body) :
             isSetAccessorDeclaration(node) ? updateSetAccessorDeclaration(node, modifierArray, node.name, node.parameters, node.body) :
@@ -7234,7 +7272,8 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
     function replaceDecoratorsAndModifiers(node: HasModifiers & HasDecorators, modifierArray: readonly ModifierLike[]) {
         return isParameter(node) ? updateParameterDeclaration(node, modifierArray, node.dotDotDotToken, node.name, node.questionToken, node.type, node.initializer) :
             isPropertyDeclaration(node) ? updatePropertyDeclaration(node, modifierArray, node.name, node.questionToken ?? node.exclamationToken, node.type, node.initializer) :
-            isMethodDeclaration(node) ? updateMethodDeclaration(node, modifierArray, node.asteriskToken, node.name, node.questionToken, node.typeParameters, node.parameters, node.type, node.body) :
+            isMethodDeclaration(node) ?
+            updateMethodDeclaration(node, modifierArray, node.asteriskToken, node.name, node.questionToken, node.typeParameters, node.parameters, node.type, node.body) :
             isGetAccessorDeclaration(node) ? updateGetAccessorDeclaration(node, modifierArray, node.name, node.parameters, node.type, node.body) :
             isSetAccessorDeclaration(node) ? updateSetAccessorDeclaration(node, modifierArray, node.name, node.parameters, node.body) :
             isClassExpression(node) ? updateClassExpression(node, modifierArray, node.name, node.typeParameters, node.heritageClauses, node.members) :
@@ -7242,7 +7281,10 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
             Debug.assertNever(node);
     }
 
-    function replacePropertyName<T extends AccessorDeclaration | MethodDeclaration | MethodSignature | PropertyDeclaration | PropertySignature | PropertyAssignment>(node: T, name: T["name"]): T;
+    function replacePropertyName<T extends AccessorDeclaration | MethodDeclaration | MethodSignature | PropertyDeclaration | PropertySignature | PropertyAssignment>(
+        node: T,
+        name: T["name"],
+    ): T;
     function replacePropertyName(node: AccessorDeclaration | MethodDeclaration | MethodSignature | PropertyDeclaration | PropertySignature | PropertyAssignment, name: PropertyName) {
         switch (node.kind) {
             case SyntaxKind.GetAccessor:
@@ -7268,7 +7310,9 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
         return array ? createNodeArray(array) : undefined;
     }
 
-    function asName<T extends DeclarationName | Identifier | BindingName | PropertyName | NoSubstitutionTemplateLiteral | EntityName | ThisTypeNode | undefined>(name: string | T): T | Identifier {
+    function asName<T extends DeclarationName | Identifier | BindingName | PropertyName | NoSubstitutionTemplateLiteral | EntityName | ThisTypeNode | undefined>(
+        name: string | T,
+    ): T | Identifier {
         return typeof name === "string" ? createIdentifier(name) :
             name;
     }

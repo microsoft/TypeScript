@@ -732,7 +732,10 @@ export function transformES2017(context: TransformationContext): (x: SourceFile 
         return newParametersArray;
     }
 
-    function transformAsyncFunctionBody(node: MethodDeclaration | AccessorDeclaration | FunctionDeclaration | FunctionExpression, outerParameters: NodeArray<ParameterDeclaration>): FunctionBody;
+    function transformAsyncFunctionBody(
+        node: MethodDeclaration | AccessorDeclaration | FunctionDeclaration | FunctionExpression,
+        outerParameters: NodeArray<ParameterDeclaration>,
+    ): FunctionBody;
     function transformAsyncFunctionBody(node: ArrowFunction, outerParameters: NodeArray<ParameterDeclaration>): ConciseBody;
     function transformAsyncFunctionBody(node: FunctionLikeDeclaration, outerParameters: NodeArray<ParameterDeclaration>): ConciseBody {
         const innerParameters = !isSimpleParameterList(node.parameters) ? visitParameterList(node.parameters, visitor, context) : undefined;

@@ -111,7 +111,16 @@ describe("unittests:: tsserver:: with project references and tsbuild", () => {
                     ],
                 }),
             };
-            const files = [libFile, containerLibConfig, containerLibIndex, containerExecConfig, containerExecIndex, containerCompositeExecConfig, containerCompositeExecIndex, containerConfig];
+            const files = [
+                libFile,
+                containerLibConfig,
+                containerLibIndex,
+                containerExecConfig,
+                containerExecIndex,
+                containerCompositeExecConfig,
+                containerCompositeExecIndex,
+                containerConfig,
+            ];
             if (tempFile) files.push(tempFile);
             const host = createHostWithSolutionBuild(files, [containerConfig.path]);
             const session = new TestSession(host);
@@ -1273,7 +1282,8 @@ bar;`,
                 const { tsconfigIndirect, indirect } = getIndirectProject("1", { disableReferencedProjectLoad: true });
                 const { tsconfigIndirect: tsconfigIndirect2, indirect: indirect2 } = getIndirectProject("2");
                 verifyDisableReferencedProjectLoad({
-                    scenario: "solution with its own files and disables looking into the child project if disableReferencedProjectLoad is set in first indirect project but not in another one",
+                    scenario:
+                        "solution with its own files and disables looking into the child project if disableReferencedProjectLoad is set in first indirect project but not in another one",
                     solutionFiles: [`./own/main.ts`],
                     solutionOptions: {
                         outDir: "./target/",
@@ -1386,7 +1396,11 @@ bar;`,
             // Write back output of new class to referenced project
             host.writeFile(class3Dts, `declare class class3 {}`);
             host.runQueuedTimeoutCallbacks();
-            baselineTsserverLogs("projectReferences", `new file is added to the referenced project when referenced project is not open with disableSourceOfProjectReferenceRedirect`, session);
+            baselineTsserverLogs(
+                "projectReferences",
+                `new file is added to the referenced project when referenced project is not open with disableSourceOfProjectReferenceRedirect`,
+                session,
+            );
         });
 
         it("when referenced project is open with disableSourceOfProjectReferenceRedirect", () => {
@@ -1525,7 +1539,15 @@ bar;`,
             };
             return [file, config];
         }
-        const [mainFile, mainConfig] = getPackageAndFile("main", ["core", "indirect", "noCoreRef1", "indirectDisabledChildLoad1", "indirectDisabledChildLoad2", "refToCoreRef3", "indirectNoCoreRef"]);
+        const [mainFile, mainConfig] = getPackageAndFile("main", [
+            "core",
+            "indirect",
+            "noCoreRef1",
+            "indirectDisabledChildLoad1",
+            "indirectDisabledChildLoad2",
+            "refToCoreRef3",
+            "indirectNoCoreRef",
+        ]);
         const [coreFile, coreConfig] = getPackageAndFile("core");
         const [noCoreRef1File, noCoreRef1Config] = getPackageAndFile("noCoreRef1");
         const [indirectFile, indirectConfig] = getPackageAndFile("indirect", ["coreRef1"]);

@@ -537,9 +537,15 @@ export function* mapDefinedIterator<T, U>(iter: Iterable<T>, mapFn: (x: T) => U 
 /** @internal */
 export function mapDefinedEntries<K1, V1, K2, V2>(map: ReadonlyMap<K1, V1>, f: (key: K1, value: V1) => readonly [K2, V2] | undefined): Map<K2, V2>;
 /** @internal */
-export function mapDefinedEntries<K1, V1, K2, V2>(map: ReadonlyMap<K1, V1> | undefined, f: (key: K1, value: V1) => readonly [K2 | undefined, V2 | undefined] | undefined): Map<K2, V2> | undefined;
+export function mapDefinedEntries<K1, V1, K2, V2>(
+    map: ReadonlyMap<K1, V1> | undefined,
+    f: (key: K1, value: V1) => readonly [K2 | undefined, V2 | undefined] | undefined,
+): Map<K2, V2> | undefined;
 /** @internal */
-export function mapDefinedEntries<K1, V1, K2, V2>(map: ReadonlyMap<K1, V1> | undefined, f: (key: K1, value: V1) => readonly [K2 | undefined, V2 | undefined] | undefined): Map<K2, V2> | undefined {
+export function mapDefinedEntries<K1, V1, K2, V2>(
+    map: ReadonlyMap<K1, V1> | undefined,
+    f: (key: K1, value: V1) => readonly [K2 | undefined, V2 | undefined] | undefined,
+): Map<K2, V2> | undefined {
     if (!map) {
         return undefined;
     }

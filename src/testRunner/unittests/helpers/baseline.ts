@@ -48,7 +48,12 @@ export function commandLineCallbacks(
     };
 }
 
-export function baselinePrograms(baseline: string[], programs: readonly CommandLineProgram[], oldPrograms: readonly (CommandLineProgram | undefined)[], baselineDependencies: boolean | undefined) {
+export function baselinePrograms(
+    baseline: string[],
+    programs: readonly CommandLineProgram[],
+    oldPrograms: readonly (CommandLineProgram | undefined)[],
+    baselineDependencies: boolean | undefined,
+) {
     for (let i = 0; i < programs.length; i++) {
         baselineProgram(baseline, programs[i], oldPrograms[i], baselineDependencies);
     }
@@ -205,7 +210,9 @@ function generateBuildInfoProgramBaseline(sys: ts.System, buildInfoPath: string,
     }
     else if (buildInfo.program) {
         const fileInfos: ReadableProgramMultiFileEmitBuildInfo["fileInfos"] = {};
-        buildInfo.program?.fileInfos?.forEach((fileInfo, index) => fileInfos[toFileName(index + 1 as ts.ProgramBuildInfoFileId)] = toReadableFileInfo(fileInfo, ts.toBuilderStateFileInfoForMultiEmit));
+        buildInfo.program?.fileInfos?.forEach((fileInfo, index) =>
+            fileInfos[toFileName(index + 1 as ts.ProgramBuildInfoFileId)] = toReadableFileInfo(fileInfo, ts.toBuilderStateFileInfoForMultiEmit)
+        );
         fileNamesList = buildInfo.program.fileIdsList?.map(fileIdsListId => fileIdsListId.map(toFileName));
         const fullEmitForOptions = buildInfo.program.affectedFilesPendingEmit ? ts.getBuilderFileEmit(buildInfo.program.options || {}) : undefined;
         program = buildInfo.program && {

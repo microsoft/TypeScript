@@ -421,7 +421,8 @@ function getSymbolDisplayPartsDocumentationAndSymbolKindWorker(
                 find(symbol.declarations, declaration => declaration === (location.kind === SyntaxKind.ConstructorKeyword ? functionDeclaration.parent : functionDeclaration));
 
             if (locationIsSymbolDeclaration) {
-                const allSignatures = functionDeclaration.kind === SyntaxKind.Constructor ? type.getNonNullableType().getConstructSignatures() : type.getNonNullableType().getCallSignatures();
+                const allSignatures = functionDeclaration.kind === SyntaxKind.Constructor ? type.getNonNullableType().getConstructSignatures()
+                    : type.getNonNullableType().getCallSignatures();
                 if (!typeChecker.isImplementationOfOverload(functionDeclaration)) {
                     signature = typeChecker.getSignatureFromDeclaration(functionDeclaration); // TODO: GH#18217
                 }
@@ -565,7 +566,9 @@ function getSymbolDisplayPartsDocumentationAndSymbolKindWorker(
                 displayParts.push(spacePart());
                 displayParts.push(operatorPart(SyntaxKind.EqualsToken));
                 displayParts.push(spacePart());
-                displayParts.push(displayPart(getTextOfConstantValue(constantValue), typeof constantValue === "number" ? SymbolDisplayPartKind.numericLiteral : SymbolDisplayPartKind.stringLiteral));
+                displayParts.push(
+                    displayPart(getTextOfConstantValue(constantValue), typeof constantValue === "number" ? SymbolDisplayPartKind.numericLiteral : SymbolDisplayPartKind.stringLiteral),
+                );
             }
         }
     }

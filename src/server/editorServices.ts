@@ -2348,7 +2348,12 @@ export class ProjectService {
     }
 
     /** Get a filename if the language service exceeds the maximum allowed program size; otherwise returns undefined. */
-    private getFilenameForExceededTotalSizeLimitForNonTsFiles<T>(name: string, options: CompilerOptions | undefined, fileNames: T[], propertyReader: FilePropertyReader<T>): string | undefined {
+    private getFilenameForExceededTotalSizeLimitForNonTsFiles<T>(
+        name: string,
+        options: CompilerOptions | undefined,
+        fileNames: T[],
+        propertyReader: FilePropertyReader<T>,
+    ): string | undefined {
         if (options && options.disableSizeLimit || !this.host.getFileSize) {
             return;
         }
@@ -3597,7 +3602,13 @@ export class ProjectService {
         });
 
         // Reload Projects
-        this.reloadConfiguredProjectForFiles(this.openFiles as Map<Path, NormalizedPath | undefined>, /*clearSemanticCache*/ true, /*delayReload*/ false, returnTrue, "User requested reload projects");
+        this.reloadConfiguredProjectForFiles(
+            this.openFiles as Map<Path, NormalizedPath | undefined>,
+            /*clearSemanticCache*/ true,
+            /*delayReload*/ false,
+            returnTrue,
+            "User requested reload projects",
+        );
         this.externalProjects.forEach(project => {
             this.clearSemanticCache(project);
             project.updateGraph();
@@ -3752,7 +3763,13 @@ export class ProjectService {
      * @param fileContent is a known version of the file content that is more up to date than the one on disk
      */
     openClientFile(fileName: string, fileContent?: string, scriptKind?: ScriptKind, projectRootPath?: string): OpenConfiguredProjectResult {
-        return this.openClientFileWithNormalizedPath(toNormalizedPath(fileName), fileContent, scriptKind, /*hasMixedContent*/ false, projectRootPath ? toNormalizedPath(projectRootPath) : undefined);
+        return this.openClientFileWithNormalizedPath(
+            toNormalizedPath(fileName),
+            fileContent,
+            scriptKind,
+            /*hasMixedContent*/ false,
+            projectRootPath ? toNormalizedPath(projectRootPath) : undefined,
+        );
     }
 
     /** @internal */
@@ -3995,7 +4012,10 @@ export class ProjectService {
 
             // find or delay load the project
             const ancestor = this.findConfiguredProjectByProjectName(configFileName) ||
-                this.createConfiguredProjectWithDelayLoad(configFileName, `Creating project possibly referencing default composite project ${project.getProjectName()} of open file ${info.fileName}`);
+                this.createConfiguredProjectWithDelayLoad(
+                    configFileName,
+                    `Creating project possibly referencing default composite project ${project.getProjectName()} of open file ${info.fileName}`,
+                );
             if (ancestor.isInitialLoadPending()) {
                 // Set a potential project reference
                 ancestor.setPotentialProjectReference(project.canonicalConfigFilePath);

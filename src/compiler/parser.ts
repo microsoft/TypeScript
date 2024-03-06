@@ -535,7 +535,11 @@ const forEachChildTable: ForEachChildTable = {
     ): T | undefined {
         return visitNode(cbNode, node.expression);
     },
-    [SyntaxKind.Parameter]: function forEachChildInParameter<T>(node: ParameterDeclaration, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
+    [SyntaxKind.Parameter]: function forEachChildInParameter<T>(
+        node: ParameterDeclaration,
+        cbNode: (node: Node) => T | undefined,
+        cbNodes?: (nodes: NodeArray<Node>) => T | undefined,
+    ): T | undefined {
         return visitNodes(cbNode, cbNodes, node.modifiers) ||
             visitNode(cbNode, node.dotDotDotToken) ||
             visitNode(cbNode, node.name) ||
@@ -755,17 +759,33 @@ const forEachChildTable: ForEachChildTable = {
             visitNode(cbNode, node.parameterName) ||
             visitNode(cbNode, node.type);
     },
-    [SyntaxKind.TypeQuery]: function forEachChildInTypeQuery<T>(node: TypeQueryNode, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
+    [SyntaxKind.TypeQuery]: function forEachChildInTypeQuery<T>(
+        node: TypeQueryNode,
+        cbNode: (node: Node) => T | undefined,
+        cbNodes?: (nodes: NodeArray<Node>) => T | undefined,
+    ): T | undefined {
         return visitNode(cbNode, node.exprName) ||
             visitNodes(cbNode, cbNodes, node.typeArguments);
     },
-    [SyntaxKind.TypeLiteral]: function forEachChildInTypeLiteral<T>(node: TypeLiteralNode, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
+    [SyntaxKind.TypeLiteral]: function forEachChildInTypeLiteral<T>(
+        node: TypeLiteralNode,
+        cbNode: (node: Node) => T | undefined,
+        cbNodes?: (nodes: NodeArray<Node>) => T | undefined,
+    ): T | undefined {
         return visitNodes(cbNode, cbNodes, node.members);
     },
-    [SyntaxKind.ArrayType]: function forEachChildInArrayType<T>(node: ArrayTypeNode, cbNode: (node: Node) => T | undefined, _cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
+    [SyntaxKind.ArrayType]: function forEachChildInArrayType<T>(
+        node: ArrayTypeNode,
+        cbNode: (node: Node) => T | undefined,
+        _cbNodes?: (nodes: NodeArray<Node>) => T | undefined,
+    ): T | undefined {
         return visitNode(cbNode, node.elementType);
     },
-    [SyntaxKind.TupleType]: function forEachChildInTupleType<T>(node: TupleTypeNode, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
+    [SyntaxKind.TupleType]: function forEachChildInTupleType<T>(
+        node: TupleTypeNode,
+        cbNode: (node: Node) => T | undefined,
+        cbNodes?: (nodes: NodeArray<Node>) => T | undefined,
+    ): T | undefined {
         return visitNodes(cbNode, cbNodes, node.elements);
     },
     [SyntaxKind.UnionType]: forEachChildInUnionOrIntersectionType,
@@ -780,10 +800,18 @@ const forEachChildTable: ForEachChildTable = {
             visitNode(cbNode, node.trueType) ||
             visitNode(cbNode, node.falseType);
     },
-    [SyntaxKind.InferType]: function forEachChildInInferType<T>(node: InferTypeNode, cbNode: (node: Node) => T | undefined, _cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
+    [SyntaxKind.InferType]: function forEachChildInInferType<T>(
+        node: InferTypeNode,
+        cbNode: (node: Node) => T | undefined,
+        _cbNodes?: (nodes: NodeArray<Node>) => T | undefined,
+    ): T | undefined {
         return visitNode(cbNode, node.typeParameter);
     },
-    [SyntaxKind.ImportType]: function forEachChildInImportType<T>(node: ImportTypeNode, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
+    [SyntaxKind.ImportType]: function forEachChildInImportType<T>(
+        node: ImportTypeNode,
+        cbNode: (node: Node) => T | undefined,
+        cbNodes?: (nodes: NodeArray<Node>) => T | undefined,
+    ): T | undefined {
         return visitNode(cbNode, node.argument) ||
             visitNode(cbNode, node.attributes) ||
             visitNode(cbNode, node.qualifier) ||
@@ -806,7 +834,11 @@ const forEachChildTable: ForEachChildTable = {
         return visitNode(cbNode, node.objectType) ||
             visitNode(cbNode, node.indexType);
     },
-    [SyntaxKind.MappedType]: function forEachChildInMappedType<T>(node: MappedTypeNode, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
+    [SyntaxKind.MappedType]: function forEachChildInMappedType<T>(
+        node: MappedTypeNode,
+        cbNode: (node: Node) => T | undefined,
+        cbNodes?: (nodes: NodeArray<Node>) => T | undefined,
+    ): T | undefined {
         return visitNode(cbNode, node.readonlyToken) ||
             visitNode(cbNode, node.typeParameter) ||
             visitNode(cbNode, node.nameType) ||
@@ -814,7 +846,11 @@ const forEachChildTable: ForEachChildTable = {
             visitNode(cbNode, node.type) ||
             visitNodes(cbNode, cbNodes, node.members);
     },
-    [SyntaxKind.LiteralType]: function forEachChildInLiteralType<T>(node: LiteralTypeNode, cbNode: (node: Node) => T | undefined, _cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
+    [SyntaxKind.LiteralType]: function forEachChildInLiteralType<T>(
+        node: LiteralTypeNode,
+        cbNode: (node: Node) => T | undefined,
+        _cbNodes?: (nodes: NodeArray<Node>) => T | undefined,
+    ): T | undefined {
         return visitNode(cbNode, node.literal);
     },
     [SyntaxKind.NamedTupleMember]: function forEachChildInNamedTupleMember<T>(
@@ -947,7 +983,11 @@ const forEachChildTable: ForEachChildTable = {
             visitNode(cbNode, node.operatorToken) ||
             visitNode(cbNode, node.right);
     },
-    [SyntaxKind.AsExpression]: function forEachChildInAsExpression<T>(node: AsExpression, cbNode: (node: Node) => T | undefined, _cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
+    [SyntaxKind.AsExpression]: function forEachChildInAsExpression<T>(
+        node: AsExpression,
+        cbNode: (node: Node) => T | undefined,
+        _cbNodes?: (nodes: NodeArray<Node>) => T | undefined,
+    ): T | undefined {
         return visitNode(cbNode, node.expression) ||
             visitNode(cbNode, node.type);
     },
@@ -965,7 +1005,11 @@ const forEachChildTable: ForEachChildTable = {
     ): T | undefined {
         return visitNode(cbNode, node.expression) || visitNode(cbNode, node.type);
     },
-    [SyntaxKind.MetaProperty]: function forEachChildInMetaProperty<T>(node: MetaProperty, cbNode: (node: Node) => T | undefined, _cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
+    [SyntaxKind.MetaProperty]: function forEachChildInMetaProperty<T>(
+        node: MetaProperty,
+        cbNode: (node: Node) => T | undefined,
+        _cbNodes?: (nodes: NodeArray<Node>) => T | undefined,
+    ): T | undefined {
         return visitNode(cbNode, node.name);
     },
     [SyntaxKind.ConditionalExpression]: function forEachChildInConditionalExpression<T>(
@@ -988,7 +1032,11 @@ const forEachChildTable: ForEachChildTable = {
     },
     [SyntaxKind.Block]: forEachChildInBlock,
     [SyntaxKind.ModuleBlock]: forEachChildInBlock,
-    [SyntaxKind.SourceFile]: function forEachChildInSourceFile<T>(node: SourceFile, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
+    [SyntaxKind.SourceFile]: function forEachChildInSourceFile<T>(
+        node: SourceFile,
+        cbNode: (node: Node) => T | undefined,
+        cbNodes?: (nodes: NodeArray<Node>) => T | undefined,
+    ): T | undefined {
         return visitNodes(cbNode, cbNodes, node.statements) ||
             visitNode(cbNode, node.endOfFileToken);
     },
@@ -1014,12 +1062,20 @@ const forEachChildTable: ForEachChildTable = {
     ): T | undefined {
         return visitNode(cbNode, node.expression);
     },
-    [SyntaxKind.IfStatement]: function forEachChildInIfStatement<T>(node: IfStatement, cbNode: (node: Node) => T | undefined, _cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
+    [SyntaxKind.IfStatement]: function forEachChildInIfStatement<T>(
+        node: IfStatement,
+        cbNode: (node: Node) => T | undefined,
+        _cbNodes?: (nodes: NodeArray<Node>) => T | undefined,
+    ): T | undefined {
         return visitNode(cbNode, node.expression) ||
             visitNode(cbNode, node.thenStatement) ||
             visitNode(cbNode, node.elseStatement);
     },
-    [SyntaxKind.DoStatement]: function forEachChildInDoStatement<T>(node: DoStatement, cbNode: (node: Node) => T | undefined, _cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
+    [SyntaxKind.DoStatement]: function forEachChildInDoStatement<T>(
+        node: DoStatement,
+        cbNode: (node: Node) => T | undefined,
+        _cbNodes?: (nodes: NodeArray<Node>) => T | undefined,
+    ): T | undefined {
         return visitNode(cbNode, node.statement) ||
             visitNode(cbNode, node.expression);
     },
@@ -1031,7 +1087,11 @@ const forEachChildTable: ForEachChildTable = {
         return visitNode(cbNode, node.expression) ||
             visitNode(cbNode, node.statement);
     },
-    [SyntaxKind.ForStatement]: function forEachChildInForStatement<T>(node: ForStatement, cbNode: (node: Node) => T | undefined, _cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
+    [SyntaxKind.ForStatement]: function forEachChildInForStatement<T>(
+        node: ForStatement,
+        cbNode: (node: Node) => T | undefined,
+        _cbNodes?: (nodes: NodeArray<Node>) => T | undefined,
+    ): T | undefined {
         return visitNode(cbNode, node.initializer) ||
             visitNode(cbNode, node.condition) ||
             visitNode(cbNode, node.incrementor) ||
@@ -1084,7 +1144,11 @@ const forEachChildTable: ForEachChildTable = {
     [SyntaxKind.CaseBlock]: function forEachChildInCaseBlock<T>(node: CaseBlock, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
         return visitNodes(cbNode, cbNodes, node.clauses);
     },
-    [SyntaxKind.CaseClause]: function forEachChildInCaseClause<T>(node: CaseClause, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
+    [SyntaxKind.CaseClause]: function forEachChildInCaseClause<T>(
+        node: CaseClause,
+        cbNode: (node: Node) => T | undefined,
+        cbNodes?: (nodes: NodeArray<Node>) => T | undefined,
+    ): T | undefined {
         return visitNode(cbNode, node.expression) ||
             visitNodes(cbNode, cbNodes, node.statements);
     },
@@ -1110,12 +1174,20 @@ const forEachChildTable: ForEachChildTable = {
     ): T | undefined {
         return visitNode(cbNode, node.expression);
     },
-    [SyntaxKind.TryStatement]: function forEachChildInTryStatement<T>(node: TryStatement, cbNode: (node: Node) => T | undefined, _cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
+    [SyntaxKind.TryStatement]: function forEachChildInTryStatement<T>(
+        node: TryStatement,
+        cbNode: (node: Node) => T | undefined,
+        _cbNodes?: (nodes: NodeArray<Node>) => T | undefined,
+    ): T | undefined {
         return visitNode(cbNode, node.tryBlock) ||
             visitNode(cbNode, node.catchClause) ||
             visitNode(cbNode, node.finallyBlock);
     },
-    [SyntaxKind.CatchClause]: function forEachChildInCatchClause<T>(node: CatchClause, cbNode: (node: Node) => T | undefined, _cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
+    [SyntaxKind.CatchClause]: function forEachChildInCatchClause<T>(
+        node: CatchClause,
+        cbNode: (node: Node) => T | undefined,
+        _cbNodes?: (nodes: NodeArray<Node>) => T | undefined,
+    ): T | undefined {
         return visitNode(cbNode, node.variableDeclaration) ||
             visitNode(cbNode, node.block);
     },
@@ -1154,7 +1226,11 @@ const forEachChildTable: ForEachChildTable = {
             visitNode(cbNode, node.name) ||
             visitNodes(cbNode, cbNodes, node.members);
     },
-    [SyntaxKind.EnumMember]: function forEachChildInEnumMember<T>(node: EnumMember, cbNode: (node: Node) => T | undefined, _cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
+    [SyntaxKind.EnumMember]: function forEachChildInEnumMember<T>(
+        node: EnumMember,
+        cbNode: (node: Node) => T | undefined,
+        _cbNodes?: (nodes: NodeArray<Node>) => T | undefined,
+    ): T | undefined {
         return visitNode(cbNode, node.name) ||
             visitNode(cbNode, node.initializer);
     },
@@ -1186,7 +1262,11 @@ const forEachChildTable: ForEachChildTable = {
             visitNode(cbNode, node.moduleSpecifier) ||
             visitNode(cbNode, node.attributes);
     },
-    [SyntaxKind.ImportClause]: function forEachChildInImportClause<T>(node: ImportClause, cbNode: (node: Node) => T | undefined, _cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
+    [SyntaxKind.ImportClause]: function forEachChildInImportClause<T>(
+        node: ImportClause,
+        cbNode: (node: Node) => T | undefined,
+        _cbNodes?: (nodes: NodeArray<Node>) => T | undefined,
+    ): T | undefined {
         return visitNode(cbNode, node.name) ||
             visitNode(cbNode, node.namedBindings);
     },
@@ -1257,7 +1337,11 @@ const forEachChildTable: ForEachChildTable = {
         return visitNode(cbNode, node.head) ||
             visitNodes(cbNode, cbNodes, node.templateSpans);
     },
-    [SyntaxKind.TemplateSpan]: function forEachChildInTemplateSpan<T>(node: TemplateSpan, cbNode: (node: Node) => T | undefined, _cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
+    [SyntaxKind.TemplateSpan]: function forEachChildInTemplateSpan<T>(
+        node: TemplateSpan,
+        cbNode: (node: Node) => T | undefined,
+        _cbNodes?: (nodes: NodeArray<Node>) => T | undefined,
+    ): T | undefined {
         return visitNode(cbNode, node.expression) ||
             visitNode(cbNode, node.literal);
     },
@@ -1320,12 +1404,20 @@ const forEachChildTable: ForEachChildTable = {
     ): T | undefined {
         return visitNodes(cbNode, cbNodes, node.elements);
     },
-    [SyntaxKind.JsxElement]: function forEachChildInJsxElement<T>(node: JsxElement, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
+    [SyntaxKind.JsxElement]: function forEachChildInJsxElement<T>(
+        node: JsxElement,
+        cbNode: (node: Node) => T | undefined,
+        cbNodes?: (nodes: NodeArray<Node>) => T | undefined,
+    ): T | undefined {
         return visitNode(cbNode, node.openingElement) ||
             visitNodes(cbNode, cbNodes, node.children) ||
             visitNode(cbNode, node.closingElement);
     },
-    [SyntaxKind.JsxFragment]: function forEachChildInJsxFragment<T>(node: JsxFragment, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
+    [SyntaxKind.JsxFragment]: function forEachChildInJsxFragment<T>(
+        node: JsxFragment,
+        cbNode: (node: Node) => T | undefined,
+        cbNodes?: (nodes: NodeArray<Node>) => T | undefined,
+    ): T | undefined {
         return visitNode(cbNode, node.openingFragment) ||
             visitNodes(cbNode, cbNodes, node.children) ||
             visitNode(cbNode, node.closingFragment);
@@ -1339,7 +1431,11 @@ const forEachChildTable: ForEachChildTable = {
     ): T | undefined {
         return visitNodes(cbNode, cbNodes, node.properties);
     },
-    [SyntaxKind.JsxAttribute]: function forEachChildInJsxAttribute<T>(node: JsxAttribute, cbNode: (node: Node) => T | undefined, _cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
+    [SyntaxKind.JsxAttribute]: function forEachChildInJsxAttribute<T>(
+        node: JsxAttribute,
+        cbNode: (node: Node) => T | undefined,
+        _cbNodes?: (nodes: NodeArray<Node>) => T | undefined,
+    ): T | undefined {
         return visitNode(cbNode, node.name) ||
             visitNode(cbNode, node.initializer);
     },
@@ -1392,7 +1488,11 @@ const forEachChildTable: ForEachChildTable = {
         return (typeof node.comment === "string" ? undefined : visitNodes(cbNode, cbNodes, node.comment))
             || visitNodes(cbNode, cbNodes, node.tags);
     },
-    [SyntaxKind.JSDocSeeTag]: function forEachChildInJSDocSeeTag<T>(node: JSDocSeeTag, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
+    [SyntaxKind.JSDocSeeTag]: function forEachChildInJSDocSeeTag<T>(
+        node: JSDocSeeTag,
+        cbNode: (node: Node) => T | undefined,
+        cbNodes?: (nodes: NodeArray<Node>) => T | undefined,
+    ): T | undefined {
         return visitNode(cbNode, node.tagName) ||
             visitNode(cbNode, node.name) ||
             (typeof node.comment === "string" ? undefined : visitNodes(cbNode, cbNodes, node.comment));
@@ -1544,7 +1644,11 @@ function forEachChildInObjectOrArrayBindingPattern<T>(node: BindingPattern, cbNo
     return visitNodes(cbNode, cbNodes, node.elements);
 }
 
-function forEachChildInCallOrNewExpression<T>(node: CallExpression | NewExpression, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
+function forEachChildInCallOrNewExpression<T>(
+    node: CallExpression | NewExpression,
+    cbNode: (node: Node) => T | undefined,
+    cbNodes?: (nodes: NodeArray<Node>) => T | undefined,
+): T | undefined {
     return visitNode(cbNode, node.expression) ||
         // TODO: should we separate these branches out?
         visitNode(cbNode, (node as CallExpression).questionDotToken) ||
@@ -1576,16 +1680,28 @@ function forEachChildInClassDeclarationOrExpression<T>(
         visitNodes(cbNode, cbNodes, node.members);
 }
 
-function forEachChildInNamedImportsOrExports<T>(node: NamedImports | NamedExports, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
+function forEachChildInNamedImportsOrExports<T>(
+    node: NamedImports | NamedExports,
+    cbNode: (node: Node) => T | undefined,
+    cbNodes?: (nodes: NodeArray<Node>) => T | undefined,
+): T | undefined {
     return visitNodes(cbNode, cbNodes, node.elements);
 }
 
-function forEachChildInImportOrExportSpecifier<T>(node: ImportSpecifier | ExportSpecifier, cbNode: (node: Node) => T | undefined, _cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
+function forEachChildInImportOrExportSpecifier<T>(
+    node: ImportSpecifier | ExportSpecifier,
+    cbNode: (node: Node) => T | undefined,
+    _cbNodes?: (nodes: NodeArray<Node>) => T | undefined,
+): T | undefined {
     return visitNode(cbNode, node.propertyName) ||
         visitNode(cbNode, node.name);
 }
 
-function forEachChildInJsxOpeningOrSelfClosingElement<T>(node: JsxOpeningLikeElement, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
+function forEachChildInJsxOpeningOrSelfClosingElement<T>(
+    node: JsxOpeningLikeElement,
+    cbNode: (node: Node) => T | undefined,
+    cbNodes?: (nodes: NodeArray<Node>) => T | undefined,
+): T | undefined {
     return visitNode(cbNode, node.tagName) ||
         visitNodes(cbNode, cbNodes, node.typeArguments) ||
         visitNode(cbNode, node.attributes);
@@ -1638,7 +1754,11 @@ function forEachChildInJSDocTag<T>(
         || (typeof node.comment === "string" ? undefined : visitNodes(cbNode, cbNodes, node.comment));
 }
 
-function forEachChildInPartiallyEmittedExpression<T>(node: PartiallyEmittedExpression, cbNode: (node: Node) => T | undefined, _cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
+function forEachChildInPartiallyEmittedExpression<T>(
+    node: PartiallyEmittedExpression,
+    cbNode: (node: Node) => T | undefined,
+    _cbNodes?: (nodes: NodeArray<Node>) => T | undefined,
+): T | undefined {
     return visitNode(cbNode, node.expression);
 }
 
@@ -1754,7 +1874,13 @@ function setExternalModuleIndicator(sourceFile: SourceFile) {
     sourceFile.externalModuleIndicator = isFileProbablyExternalModule(sourceFile);
 }
 
-export function createSourceFile(fileName: string, sourceText: string, languageVersionOrOptions: ScriptTarget | CreateSourceFileOptions, setParentNodes = false, scriptKind?: ScriptKind): SourceFile {
+export function createSourceFile(
+    fileName: string,
+    sourceText: string,
+    languageVersionOrOptions: ScriptTarget | CreateSourceFileOptions,
+    setParentNodes = false,
+    scriptKind?: ScriptKind,
+): SourceFile {
     tracing?.push(tracing.Phase.Parse, "createSourceFile", { path: fileName }, /*separateBeginAndEnd*/ true);
     performance.mark("beforeParse");
     let result: SourceFile;
@@ -6201,7 +6327,11 @@ namespace Parser {
             const pos = skipTrivia(sourceText, simpleUnaryExpression.pos);
             const { end } = simpleUnaryExpression;
             if (simpleUnaryExpression.kind === SyntaxKind.TypeAssertionExpression) {
-                parseErrorAt(pos, end, Diagnostics.A_type_assertion_expression_is_not_allowed_in_the_left_hand_side_of_an_exponentiation_expression_Consider_enclosing_the_expression_in_parentheses);
+                parseErrorAt(
+                    pos,
+                    end,
+                    Diagnostics.A_type_assertion_expression_is_not_allowed_in_the_left_hand_side_of_an_exponentiation_expression_Consider_enclosing_the_expression_in_parentheses,
+                );
             }
             else {
                 Debug.assert(isKeywordOrPunctuation(unaryOperator));
@@ -8284,7 +8414,13 @@ namespace Parser {
         return parsePropertyDeclaration(pos, hasJSDoc, modifiers, name, questionToken);
     }
 
-    function parseAccessorDeclaration(pos: number, hasJSDoc: boolean, modifiers: NodeArray<ModifierLike> | undefined, kind: AccessorDeclaration["kind"], flags: SignatureFlags): AccessorDeclaration {
+    function parseAccessorDeclaration(
+        pos: number,
+        hasJSDoc: boolean,
+        modifiers: NodeArray<ModifierLike> | undefined,
+        kind: AccessorDeclaration["kind"],
+        flags: SignatureFlags,
+    ): AccessorDeclaration {
         const name = parsePropertyName();
         const typeParameters = parseTypeParameters();
         const parameters = parseParameters(SignatureFlags.None);
@@ -8908,7 +9044,13 @@ namespace Parser {
         return token() === SyntaxKind.CommaToken || token() === SyntaxKind.FromKeyword;
     }
 
-    function parseImportEqualsDeclaration(pos: number, hasJSDoc: boolean, modifiers: NodeArray<ModifierLike> | undefined, identifier: Identifier, isTypeOnly: boolean): ImportEqualsDeclaration {
+    function parseImportEqualsDeclaration(
+        pos: number,
+        hasJSDoc: boolean,
+        modifiers: NodeArray<ModifierLike> | undefined,
+        identifier: Identifier,
+        isTypeOnly: boolean,
+    ): ImportEqualsDeclaration {
         parseExpected(SyntaxKind.EqualsToken);
         const moduleReference = parseModuleReference();
         parseSemicolon();
@@ -9192,7 +9334,16 @@ namespace Parser {
             currentToken = scanner.scan();
             const jsDocTypeExpression = parseJSDocTypeExpression();
 
-            const sourceFile = createSourceFile("file.js", ScriptTarget.Latest, ScriptKind.JS, /*isDeclarationFile*/ false, [], factoryCreateToken(SyntaxKind.EndOfFileToken), NodeFlags.None, noop);
+            const sourceFile = createSourceFile(
+                "file.js",
+                ScriptTarget.Latest,
+                ScriptKind.JS,
+                /*isDeclarationFile*/ false,
+                [],
+                factoryCreateToken(SyntaxKind.EndOfFileToken),
+                NodeFlags.None,
+                noop,
+            );
             const diagnostics = attachFileToDiagnostics(parseDiagnostics, sourceFile);
             if (jsDocDiagnostics) {
                 sourceFile.jsDocDiagnostics = attachFileToDiagnostics(jsDocDiagnostics, sourceFile);
@@ -9416,7 +9567,11 @@ namespace Parser {
                 }
                 if (parts.length && tags) Debug.assertIsDefined(commentsPos, "having parsed tags implies that the end of the comment span should be set");
                 const tagsArray = tags && createNodeArray(tags, tagsPos, tagsEnd);
-                return finishNode(factory.createJSDocComment(parts.length ? createNodeArray(parts, start, commentsPos) : trimmedComments.length ? trimmedComments : undefined, tagsArray), start, end);
+                return finishNode(
+                    factory.createJSDocComment(parts.length ? createNodeArray(parts, start, commentsPos) : trimmedComments.length ? trimmedComments : undefined, tagsArray),
+                    start,
+                    end,
+                );
             }
 
             function removeLeadingNewlines(comments: string[]) {
@@ -9957,7 +10112,9 @@ namespace Parser {
                 scanner.setInJSDocType(true);
                 const typeArguments = tryParseTypeArguments();
                 scanner.setInJSDocType(false);
-                const node = factory.createExpressionWithTypeArguments(expression, typeArguments) as ExpressionWithTypeArguments & { expression: Identifier | PropertyAccessEntityNameExpression; };
+                const node = factory.createExpressionWithTypeArguments(expression, typeArguments) as ExpressionWithTypeArguments & {
+                    expression: Identifier | PropertyAccessEntityNameExpression;
+                };
                 const res = finishNode(node, pos);
                 if (usedBrace) {
                     parseExpected(SyntaxKind.CloseBraceToken);
@@ -10487,7 +10644,14 @@ namespace IncrementalParser {
 
     function moveElementEntirelyPastChangeRange(element: IncrementalNode, isArray: false, delta: number, oldText: string, newText: string, aggressiveChecks: boolean): void;
     function moveElementEntirelyPastChangeRange(element: IncrementalNodeArray, isArray: true, delta: number, oldText: string, newText: string, aggressiveChecks: boolean): void;
-    function moveElementEntirelyPastChangeRange(element: IncrementalNode | IncrementalNodeArray, isArray: boolean, delta: number, oldText: string, newText: string, aggressiveChecks: boolean) {
+    function moveElementEntirelyPastChangeRange(
+        element: IncrementalNode | IncrementalNodeArray,
+        isArray: boolean,
+        delta: number,
+        oldText: string,
+        newText: string,
+        aggressiveChecks: boolean,
+    ) {
         if (isArray) {
             visitArray(element as IncrementalNodeArray);
         }

@@ -1706,7 +1706,13 @@ export let sys: System = (() => {
                 if (node.callFrame.url) {
                     const url = normalizeSlashes(node.callFrame.url);
                     if (containsPath(fileUrlRoot, url, useCaseSensitiveFileNames)) {
-                        node.callFrame.url = getRelativePathToDirectoryOrUrl(fileUrlRoot, url, fileUrlRoot, createGetCanonicalFileName(useCaseSensitiveFileNames), /*isAbsolutePathAnUrl*/ true);
+                        node.callFrame.url = getRelativePathToDirectoryOrUrl(
+                            fileUrlRoot,
+                            url,
+                            fileUrlRoot,
+                            createGetCanonicalFileName(useCaseSensitiveFileNames),
+                            /*isAbsolutePathAnUrl*/ true,
+                        );
                     }
                     else if (!nativePattern.test(url)) {
                         node.callFrame.url = (remappedPaths.has(url) ? remappedPaths : remappedPaths.set(url, `external${externalFileCounter}.js`)).get(url)!;

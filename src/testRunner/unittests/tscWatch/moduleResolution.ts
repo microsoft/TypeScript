@@ -580,7 +580,8 @@ describe("unittests:: tsc-watch:: moduleResolution", () => {
             },
             {
                 caption: "update package.json from @types so error is fixed",
-                edit: sys => sys.writeFile("/home/src/projects/project/node_modules/@types/bar/package.json", getFsConentsForAlternateResultAtTypesPackageJson("bar", /*addTypesCondition*/ true)),
+                edit: sys =>
+                    sys.writeFile("/home/src/projects/project/node_modules/@types/bar/package.json", getFsConentsForAlternateResultAtTypesPackageJson("bar", /*addTypesCondition*/ true)),
                 timeouts: sys => {
                     sys.runQueuedTimeoutCallbacks();
                     sys.runQueuedTimeoutCallbacks();
@@ -589,7 +590,10 @@ describe("unittests:: tsc-watch:: moduleResolution", () => {
             {
                 caption: "update package.json so error is fixed",
                 edit: sys =>
-                    sys.writeFile("/home/src/projects/project/node_modules/foo/package.json", getFsContentsForAlternateResultPackageJson("foo", /*addTypes*/ true, /*addTypesCondition*/ true)),
+                    sys.writeFile(
+                        "/home/src/projects/project/node_modules/foo/package.json",
+                        getFsContentsForAlternateResultPackageJson("foo", /*addTypes*/ true, /*addTypesCondition*/ true),
+                    ),
                 timeouts: sys => {
                     sys.runQueuedTimeoutCallbacks();
                     sys.runQueuedTimeoutCallbacks();
@@ -597,7 +601,8 @@ describe("unittests:: tsc-watch:: moduleResolution", () => {
             },
             {
                 caption: "update package.json from @types so error is introduced",
-                edit: sys => sys.writeFile("/home/src/projects/project/node_modules/@types/bar2/package.json", getFsConentsForAlternateResultAtTypesPackageJson("bar2", /*addTypesCondition*/ false)),
+                edit: sys =>
+                    sys.writeFile("/home/src/projects/project/node_modules/@types/bar2/package.json", getFsConentsForAlternateResultAtTypesPackageJson("bar2", /*addTypesCondition*/ false)),
                 timeouts: sys => {
                     sys.runQueuedTimeoutCallbacks();
                     sys.runQueuedTimeoutCallbacks();
@@ -606,7 +611,10 @@ describe("unittests:: tsc-watch:: moduleResolution", () => {
             {
                 caption: "update package.json so error is introduced",
                 edit: sys =>
-                    sys.writeFile("/home/src/projects/project/node_modules/foo2/package.json", getFsContentsForAlternateResultPackageJson("foo2", /*addTypes*/ true, /*addTypesCondition*/ false)),
+                    sys.writeFile(
+                        "/home/src/projects/project/node_modules/foo2/package.json",
+                        getFsContentsForAlternateResultPackageJson("foo2", /*addTypes*/ true, /*addTypesCondition*/ false),
+                    ),
                 timeouts: sys => {
                     sys.runQueuedTimeoutCallbacks();
                     sys.runQueuedTimeoutCallbacks();

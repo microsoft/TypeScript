@@ -1639,7 +1639,9 @@ function getTokenAtPositionWorker(
             }
 
             // this complex condition makes us left-recur around a zero-length node when includePrecedingTokenAtEndPosition is set, rather than right-recur on it
-            if (includePrecedingTokenAtEndPosition && start === position && children[middle - 1] && children[middle - 1].getEnd() === position && nodeContainsPosition(children[middle - 1])) {
+            if (
+                includePrecedingTokenAtEndPosition && start === position && children[middle - 1] && children[middle - 1].getEnd() === position && nodeContainsPosition(children[middle - 1])
+            ) {
                 return Comparison.GreaterThan;
             }
             return Comparison.LessThan;
@@ -3105,7 +3107,8 @@ export function symbolToDisplayParts(
 
 /** @internal */
 export function signatureToDisplayParts(typechecker: TypeChecker, signature: Signature, enclosingDeclaration?: Node, flags: TypeFormatFlags = TypeFormatFlags.None): SymbolDisplayPart[] {
-    flags |= TypeFormatFlags.UseAliasDefinedOutsideCurrentScope | TypeFormatFlags.MultilineObjectLiterals | TypeFormatFlags.WriteTypeArgumentsOfSignature | TypeFormatFlags.OmitParameterModifiers;
+    flags |= TypeFormatFlags.UseAliasDefinedOutsideCurrentScope | TypeFormatFlags.MultilineObjectLiterals | TypeFormatFlags.WriteTypeArgumentsOfSignature |
+        TypeFormatFlags.OmitParameterModifiers;
     return mapToDisplayParts(writer => {
         typechecker.writeSignature(signature, enclosingDeclaration, flags, /*kind*/ undefined, writer);
     });
@@ -3486,7 +3489,8 @@ export function getTypeNodeIfAccessible(type: Type, enclosingScope: Node, progra
     const notAccessible = () => typeIsAccessible = false;
     const res = checker.typeToTypeNode(type, enclosingScope, NodeBuilderFlags.NoTruncation, {
         trackSymbol: (symbol, declaration, meaning) => {
-            typeIsAccessible = typeIsAccessible && checker.isSymbolAccessible(symbol, declaration, meaning, /*shouldComputeAliasToMarkVisible*/ false).accessibility === SymbolAccessibility.Accessible;
+            typeIsAccessible = typeIsAccessible &&
+                checker.isSymbolAccessible(symbol, declaration, meaning, /*shouldComputeAliasToMarkVisible*/ false).accessibility === SymbolAccessibility.Accessible;
             return !typeIsAccessible;
         },
         reportInaccessibleThisError: notAccessible,

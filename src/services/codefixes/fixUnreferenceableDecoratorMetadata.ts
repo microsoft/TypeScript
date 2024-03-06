@@ -30,7 +30,9 @@ import {
 } from "../_namespaces/ts.codefix";
 
 const fixId = "fixUnreferenceableDecoratorMetadata";
-const errorCodes = [Diagnostics.A_type_referenced_in_a_decorated_signature_must_be_imported_with_import_type_or_a_namespace_import_when_isolatedModules_and_emitDecoratorMetadata_are_enabled.code];
+const errorCodes = [
+    Diagnostics.A_type_referenced_in_a_decorated_signature_must_be_imported_with_import_type_or_a_namespace_import_when_isolatedModules_and_emitDecoratorMetadata_are_enabled.code,
+];
 registerCodeFix({
     errorCodes,
     getCodeActions: context => {
@@ -60,7 +62,10 @@ function getImportDeclaration(sourceFile: SourceFile, program: Program, start: n
 
     const checker = program.getTypeChecker();
     const symbol = checker.getSymbolAtLocation(identifier);
-    return find(symbol?.declarations || emptyArray, or(isImportClause, isImportSpecifier, isImportEqualsDeclaration) as (n: Node) => n is ImportClause | ImportSpecifier | ImportEqualsDeclaration);
+    return find(
+        symbol?.declarations || emptyArray,
+        or(isImportClause, isImportSpecifier, isImportEqualsDeclaration) as (n: Node) => n is ImportClause | ImportSpecifier | ImportEqualsDeclaration,
+    );
 }
 
 // Converts the import declaration of the offending import to a type-only import,

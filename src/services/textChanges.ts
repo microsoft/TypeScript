@@ -468,7 +468,8 @@ function getAdjustedEndPosition(sourceFile: SourceFile, node: Node, options: Con
  * Checks if 'candidate' argument is a legal separator in the list that contains 'node' as an element
  */
 function isSeparator(node: Node, candidate: Node | undefined): candidate is Token<SyntaxKind.CommaToken | SyntaxKind.SemicolonToken> {
-    return !!candidate && !!node.parent && (candidate.kind === SyntaxKind.CommaToken || (candidate.kind === SyntaxKind.SemicolonToken && node.parent.kind === SyntaxKind.ObjectLiteralExpression));
+    return !!candidate && !!node.parent &&
+        (candidate.kind === SyntaxKind.CommaToken || (candidate.kind === SyntaxKind.SemicolonToken && node.parent.kind === SyntaxKind.ObjectLiteralExpression));
 }
 
 /** @internal */
@@ -493,7 +494,10 @@ export function isThisTypeAnnotatable(containingFunction: SignatureDeclaration):
 export class ChangeTracker {
     private readonly changes: Change[] = [];
     private newFileChanges?: MultiMap<string, NewFileInsertion>;
-    private readonly classesWithNodesInsertedAtStart = new Map<number, { readonly node: ClassLikeDeclaration | InterfaceDeclaration | ObjectLiteralExpression; readonly sourceFile: SourceFile; }>(); // Set<ClassDeclaration> implemented as Map<node id, ClassDeclaration>
+    private readonly classesWithNodesInsertedAtStart = new Map<
+        number,
+        { readonly node: ClassLikeDeclaration | InterfaceDeclaration | ObjectLiteralExpression; readonly sourceFile: SourceFile; }
+    >(); // Set<ClassDeclaration> implemented as Map<node id, ClassDeclaration>
     private readonly deletedNodes: { readonly sourceFile: SourceFile; readonly node: Node | NodeArray<TypeParameterDeclaration>; }[] = [];
 
     public static fromContext(context: TextChangesContext): ChangeTracker {
@@ -534,7 +538,12 @@ export class ChangeTracker {
         this.deleteRange(sourceFile, getAdjustedRange(sourceFile, node, node, options));
     }
 
-    public deleteNodes(sourceFile: SourceFile, nodes: readonly Node[], options: ConfigurableStartEnd = { leadingTriviaOption: LeadingTriviaOption.IncludeAll }, hasTrailingComment: boolean): void {
+    public deleteNodes(
+        sourceFile: SourceFile,
+        nodes: readonly Node[],
+        options: ConfigurableStartEnd = { leadingTriviaOption: LeadingTriviaOption.IncludeAll },
+        hasTrailingComment: boolean,
+    ): void {
         // When deleting multiple nodes we need to track if the end position is including multiline trailing comments.
         for (const node of nodes) {
             const pos = getAdjustedStartPosition(sourceFile, node, options, hasTrailingComment);
@@ -1253,7 +1262,12 @@ function tryMergeJsdocTags(oldTag: JSDocTag, newTag: JSDocTag): JSDocTag | undef
 
 // find first non-whitespace position in the leading trivia of the node
 function startPositionToDeleteNodeInList(sourceFile: SourceFile, node: Node): number {
-    return skipTrivia(sourceFile.text, getAdjustedStartPosition(sourceFile, node, { leadingTriviaOption: LeadingTriviaOption.IncludeAll }), /*stopAfterLineBreak*/ false, /*stopAtComments*/ true);
+    return skipTrivia(
+        sourceFile.text,
+        getAdjustedStartPosition(sourceFile, node, { leadingTriviaOption: LeadingTriviaOption.IncludeAll }),
+        /*stopAfterLineBreak*/ false,
+        /*stopAtComments*/ true,
+    );
 }
 
 function endPositionToDeleteNodeInList(sourceFile: SourceFile, node: Node, prevNode: Node | undefined, nextNode: Node): number {
@@ -1303,7 +1317,11 @@ namespace changesToText {
             const normalized = stableSort(changesInFile, (a, b) => (a.range.pos - b.range.pos) || (a.range.end - b.range.end));
             // verify that change intervals do not overlap, except possibly at end points.
             for (let i = 0; i < normalized.length - 1; i++) {
-                Debug.assert(normalized[i].range.end <= normalized[i + 1].range.pos, "Changes overlap", () => `${JSON.stringify(normalized[i].range)} and ${JSON.stringify(normalized[i + 1].range)}`);
+                Debug.assert(
+                    normalized[i].range.end <= normalized[i + 1].range.pos,
+                    "Changes overlap",
+                    () => `${JSON.stringify(normalized[i].range)} and ${JSON.stringify(normalized[i + 1].range)}`,
+                );
             }
 
             const textChanges = mapDefined(normalized, c => {
@@ -1331,7 +1349,10 @@ namespace changesToText {
 
     export function newFileChangesWorker(scriptKind: ScriptKind, insertions: readonly NewFileInsertion[], newLineCharacter: string, formatContext: formatting.FormatContext): string {
         // TODO: this emits the file, parses it back, then formats it that -- may be a less roundabout way to do this
-        const nonFormattedText = flatMap(insertions, insertion => insertion.statements.map(s => s === SyntaxKind.NewLineTrivia ? "" : getNonformattedText(s, insertion.oldFile, newLineCharacter).text))
+        const nonFormattedText = flatMap(
+            insertions,
+            insertion => insertion.statements.map(s => s === SyntaxKind.NewLineTrivia ? "" : getNonformattedText(s, insertion.oldFile, newLineCharacter).text),
+        )
             .join(
                 newLineCharacter,
             );
@@ -1922,6 +1943,7 @@ function deleteNodeInList(changes: ChangeTracker, deletedNodesInLists: Set<Node>
 
     changes.deleteRange(sourceFile, {
         pos: startPositionToDeleteNodeInList(sourceFile, node),
-        end: index === containingList.length - 1 ? getAdjustedEndPosition(sourceFile, node, {}) : endPositionToDeleteNodeInList(sourceFile, node, containingList[index - 1], containingList[index + 1]),
+        end: index === containingList.length - 1 ? getAdjustedEndPosition(sourceFile, node, {})
+            : endPositionToDeleteNodeInList(sourceFile, node, containingList[index - 1], containingList[index + 1]),
     });
 }

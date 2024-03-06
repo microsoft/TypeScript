@@ -263,7 +263,11 @@ fn5();
 
             // action
             runActions(session, options.actionAfterChange || options.action);
-            baselineTsserverLogs("projectReferencesSourcemap", `${options.scenarioLocation}/${options.type}/${options.scenario}${timeoutBeforeAction ? " with timeout before request" : ""}`, session);
+            baselineTsserverLogs(
+                "projectReferencesSourcemap",
+                `${options.scenarioLocation}/${options.type}/${options.scenario}${timeoutBeforeAction ? " with timeout before request" : ""}`,
+                session,
+            );
         });
     }
     function verifyScenarioWithChanges(options: VerifyScenarioWithChangesOptions) {

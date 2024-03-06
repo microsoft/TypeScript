@@ -140,7 +140,12 @@ export function createPatternMatcher(pattern: string): PatternMatcher | undefine
     };
 }
 
-function getFullMatch(candidateContainers: readonly string[], candidate: string, dotSeparatedSegments: readonly Segment[], stringToWordSpans: Map<string, TextSpan[]>): PatternMatch | undefined {
+function getFullMatch(
+    candidateContainers: readonly string[],
+    candidate: string,
+    dotSeparatedSegments: readonly Segment[],
+    stringToWordSpans: Map<string, TextSpan[]>,
+): PatternMatch | undefined {
     // First, check that the last part of the dot separated pattern matches the name of the
     // candidate.  If not, then there's no point in proceeding and doing the more
     // expensive work.

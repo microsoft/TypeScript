@@ -102,7 +102,12 @@ export type ImportTracker = (exportSymbol: Symbol, exportInfo: ExportInfo, isFor
  *
  * @internal
  */
-export function createImportTracker(sourceFiles: readonly SourceFile[], sourceFilesSet: ReadonlySet<string>, checker: TypeChecker, cancellationToken: CancellationToken | undefined): ImportTracker {
+export function createImportTracker(
+    sourceFiles: readonly SourceFile[],
+    sourceFilesSet: ReadonlySet<string>,
+    checker: TypeChecker,
+    cancellationToken: CancellationToken | undefined,
+): ImportTracker {
     const allDirectImports = getDirectImportsMap(sourceFiles, checker, cancellationToken);
     return (exportSymbol, exportInfo, isForRename) => {
         const { directImports, indirectUsers } = getImportersForExport(sourceFiles, sourceFilesSet, allDirectImports, exportInfo, checker, cancellationToken);

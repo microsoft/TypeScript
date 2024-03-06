@@ -104,7 +104,14 @@ export interface EmitHelperFactory {
     createMetadataHelper(metadataKey: string, metadataValue: Expression): Expression;
     createParamHelper(expression: Expression, parameterOffset: number): Expression;
     // ES Decorators Helpers
-    createESDecorateHelper(ctor: Expression, descriptorIn: Expression, decorators: Expression, contextIn: ESDecorateContext, initializers: Expression, extraInitializers: Expression): Expression;
+    createESDecorateHelper(
+        ctor: Expression,
+        descriptorIn: Expression,
+        decorators: Expression,
+        contextIn: ESDecorateContext,
+        initializers: Expression,
+        extraInitializers: Expression,
+    ): Expression;
     createRunInitializersHelper(thisArg: Expression, initializers: Expression, value?: Expression): Expression;
     // ES2018 Helpers
     createAssignHelper(attributesSegments: readonly Expression[]): Expression;
@@ -374,7 +381,14 @@ export function createEmitHelperFactory(context: TransformationContext): EmitHel
             createESDecorateClassElementContextObject(contextIn);
     }
 
-    function createESDecorateHelper(ctor: Expression, descriptorIn: Expression, decorators: Expression, contextIn: ESDecorateContext, initializers: Expression, extraInitializers: Expression) {
+    function createESDecorateHelper(
+        ctor: Expression,
+        descriptorIn: Expression,
+        decorators: Expression,
+        contextIn: ESDecorateContext,
+        initializers: Expression,
+        extraInitializers: Expression,
+    ) {
         context.requestEmitHelper(esDecorateHelper);
         return factory.createCallExpression(
             getUnscopedHelperName("__esDecorate"),

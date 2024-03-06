@@ -104,7 +104,13 @@ registerCodeFix({
             const deletion = textChanges.ChangeTracker.with(context, t => tryDeleteDeclaration(sourceFile, token, t, checker, sourceFiles, program, cancellationToken, /*isFixAll*/ false));
             if (deletion.length) {
                 return [
-                    createCodeFixAction(fixName, deletion, [Diagnostics.Remove_unused_declaration_for_Colon_0, token.getText(sourceFile)], fixIdDeleteImports, Diagnostics.Delete_all_unused_imports),
+                    createCodeFixAction(
+                        fixName,
+                        deletion,
+                        [Diagnostics.Remove_unused_declaration_for_Colon_0, token.getText(sourceFile)],
+                        fixIdDeleteImports,
+                        Diagnostics.Delete_all_unused_imports,
+                    ),
                 ];
             }
         }
@@ -117,7 +123,10 @@ registerCodeFix({
                     map(elements, e => e.getText(sourceFile)).join(", "),
                 ];
                 return [
-                    createDeleteFix(textChanges.ChangeTracker.with(context, t => deleteDestructuringElements(t, sourceFile, token.parent as ObjectBindingPattern | ArrayBindingPattern)), diagnostic),
+                    createDeleteFix(
+                        textChanges.ChangeTracker.with(context, t => deleteDestructuringElements(t, sourceFile, token.parent as ObjectBindingPattern | ArrayBindingPattern)),
+                        diagnostic,
+                    ),
                 ];
             }
             return [
@@ -154,7 +163,13 @@ registerCodeFix({
         const prefix = textChanges.ChangeTracker.with(context, t => tryPrefixDeclaration(t, errorCode, sourceFile, token));
         if (prefix.length) {
             result.push(
-                createCodeFixAction(fixName, prefix, [Diagnostics.Prefix_0_with_an_underscore, token.getText(sourceFile)], fixIdPrefix, Diagnostics.Prefix_all_unused_declarations_with_where_possible),
+                createCodeFixAction(
+                    fixName,
+                    prefix,
+                    [Diagnostics.Prefix_0_with_an_underscore, token.getText(sourceFile)],
+                    fixIdPrefix,
+                    Diagnostics.Prefix_all_unused_declarations_with_where_possible,
+                ),
             );
         }
 
@@ -264,7 +279,8 @@ function deleteDestructuring(context: CodeFixContext, changes: textChanges.Chang
             const end = varStatement.end;
             changes.delete(sourceFile, parent);
             changes.insertNodeAt(sourceFile, end, parent.initializer, {
-                prefix: getNewLineOrDefaultFromHost(context.host, context.formatContext.options) + sourceFile.text.slice(getPrecedingNonSpaceCharacterPosition(sourceFile.text, pos - 1), pos),
+                prefix: getNewLineOrDefaultFromHost(context.host, context.formatContext.options) +
+                    sourceFile.text.slice(getPrecedingNonSpaceCharacterPosition(sourceFile.text, pos - 1), pos),
                 suffix: probablyUsesSemicolons(sourceFile) ? ";" : "",
             });
         }

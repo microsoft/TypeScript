@@ -589,7 +589,13 @@ export class SolutionBuilderHost extends CompilerHost implements ts.SolutionBuil
         this.createProgram = createProgram || ts.createEmitAndSemanticDiagnosticsBuilderProgram as unknown as ts.CreateProgram<ts.BuilderProgram>;
     }
 
-    static create(sys: System | vfs.FileSystem, options?: ts.CompilerOptions, setParentNodes?: boolean, createProgram?: ts.CreateProgram<ts.BuilderProgram>, jsDocParsingMode?: ts.JSDocParsingMode) {
+    static create(
+        sys: System | vfs.FileSystem,
+        options?: ts.CompilerOptions,
+        setParentNodes?: boolean,
+        createProgram?: ts.CreateProgram<ts.BuilderProgram>,
+        jsDocParsingMode?: ts.JSDocParsingMode,
+    ) {
         const host = new SolutionBuilderHost(sys, options, setParentNodes, createProgram, jsDocParsingMode);
         patchHostForBuildInfoReadWrite(host.sys);
         return host;

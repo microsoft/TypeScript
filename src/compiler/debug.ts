@@ -270,12 +270,23 @@ export namespace Debug {
     }
 
     export function assertNever(member: never, message = "Illegal value:", stackCrawlMark?: AnyFunction): never {
-        const detail = typeof member === "object" && hasProperty(member, "kind") && hasProperty(member, "pos") ? "SyntaxKind: " + formatSyntaxKind((member as Node).kind) : JSON.stringify(member);
+        const detail = typeof member === "object" && hasProperty(member, "kind") && hasProperty(member, "pos") ? "SyntaxKind: " + formatSyntaxKind((member as Node).kind)
+            : JSON.stringify(member);
         return fail(`${message} ${detail}`, stackCrawlMark || assertNever);
     }
 
-    export function assertEachNode<T extends Node, U extends T>(nodes: NodeArray<T>, test: (node: T) => node is U, message?: string, stackCrawlMark?: AnyFunction): asserts nodes is NodeArray<U>;
-    export function assertEachNode<T extends Node, U extends T>(nodes: readonly T[], test: (node: T) => node is U, message?: string, stackCrawlMark?: AnyFunction): asserts nodes is readonly U[];
+    export function assertEachNode<T extends Node, U extends T>(
+        nodes: NodeArray<T>,
+        test: (node: T) => node is U,
+        message?: string,
+        stackCrawlMark?: AnyFunction,
+    ): asserts nodes is NodeArray<U>;
+    export function assertEachNode<T extends Node, U extends T>(
+        nodes: readonly T[],
+        test: (node: T) => node is U,
+        message?: string,
+        stackCrawlMark?: AnyFunction,
+    ): asserts nodes is readonly U[];
     export function assertEachNode<T extends Node, U extends T>(
         nodes: NodeArray<T> | undefined,
         test: (node: T) => node is U,
@@ -313,7 +324,12 @@ export namespace Debug {
         }
     }
 
-    export function assertNotNode<T extends Node, U extends T>(node: T | undefined, test: (node: Node) => node is U, message?: string, stackCrawlMark?: AnyFunction): asserts node is Exclude<T, U>;
+    export function assertNotNode<T extends Node, U extends T>(
+        node: T | undefined,
+        test: (node: Node) => node is U,
+        message?: string,
+        stackCrawlMark?: AnyFunction,
+    ): asserts node is Exclude<T, U>;
     export function assertNotNode(node: Node | undefined, test: ((node: Node) => boolean) | undefined, message?: string, stackCrawlMark?: AnyFunction): void;
     export function assertNotNode(node: Node | undefined, test: ((node: Node) => boolean) | undefined, message?: string, stackCrawlMark?: AnyFunction) {
         if (shouldAssertFunction(AssertionLevel.Normal, "assertNotNode")) {
@@ -327,7 +343,12 @@ export namespace Debug {
     }
 
     export function assertOptionalNode<T extends Node, U extends T>(node: T, test: (node: T) => node is U, message?: string, stackCrawlMark?: AnyFunction): asserts node is U;
-    export function assertOptionalNode<T extends Node, U extends T>(node: T | undefined, test: (node: T) => node is U, message?: string, stackCrawlMark?: AnyFunction): asserts node is U | undefined;
+    export function assertOptionalNode<T extends Node, U extends T>(
+        node: T | undefined,
+        test: (node: T) => node is U,
+        message?: string,
+        stackCrawlMark?: AnyFunction,
+    ): asserts node is U | undefined;
     export function assertOptionalNode(node: Node | undefined, test: ((node: Node) => boolean) | undefined, message?: string, stackCrawlMark?: AnyFunction): void;
     export function assertOptionalNode(node: Node | undefined, test: ((node: Node) => boolean) | undefined, message?: string, stackCrawlMark?: AnyFunction) {
         if (shouldAssertFunction(AssertionLevel.Normal, "assertOptionalNode")) {
@@ -340,7 +361,12 @@ export namespace Debug {
         }
     }
 
-    export function assertOptionalToken<T extends Node, K extends SyntaxKind>(node: T, kind: K, message?: string, stackCrawlMark?: AnyFunction): asserts node is Extract<T, { readonly kind: K; }>;
+    export function assertOptionalToken<T extends Node, K extends SyntaxKind>(
+        node: T,
+        kind: K,
+        message?: string,
+        stackCrawlMark?: AnyFunction,
+    ): asserts node is Extract<T, { readonly kind: K; }>;
     export function assertOptionalToken<T extends Node, K extends SyntaxKind>(
         node: T | undefined,
         kind: K,
@@ -394,7 +420,9 @@ export namespace Debug {
     }
 
     export function formatSymbol(symbol: Symbol): string {
-        return `{ name: ${unescapeLeadingUnderscores(symbol.escapedName)}; flags: ${formatSymbolFlags(symbol.flags)}; declarations: ${map(symbol.declarations, node => formatSyntaxKind(node.kind))} }`;
+        return `{ name: ${unescapeLeadingUnderscores(symbol.escapedName)}; flags: ${formatSymbolFlags(symbol.flags)}; declarations: ${
+            map(symbol.declarations, node => formatSyntaxKind(node.kind))
+        } }`;
     }
 
     /**

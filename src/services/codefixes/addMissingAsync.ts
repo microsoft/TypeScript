@@ -64,7 +64,8 @@ registerCodeFix({
         const { sourceFile } = context;
         const fixedDeclarations = new Set<number>();
         return codeFixAll(context, errorCodes, (t, diagnostic) => {
-            const span = diagnostic.relatedInformation && find(diagnostic.relatedInformation, r => r.code === Diagnostics.Did_you_mean_to_mark_this_function_as_async.code) as TextSpan | undefined;
+            const span = diagnostic.relatedInformation &&
+                find(diagnostic.relatedInformation, r => r.code === Diagnostics.Did_you_mean_to_mark_this_function_as_async.code) as TextSpan | undefined;
             const decl = getFixableErrorSpanDeclaration(sourceFile, span);
             if (!decl) {
                 return;
@@ -109,7 +110,8 @@ function getFixableErrorSpanDeclaration(sourceFile: SourceFile, span: TextSpan |
         if (node.getStart(sourceFile) < span.start || node.getEnd() > textSpanEnd(span)) {
             return "quit";
         }
-        return (isArrowFunction(node) || isMethodDeclaration(node) || isFunctionExpression(node) || isFunctionDeclaration(node)) && textSpansEqual(span, createTextSpanFromNode(node, sourceFile));
+        return (isArrowFunction(node) || isMethodDeclaration(node) || isFunctionExpression(node) || isFunctionDeclaration(node)) &&
+            textSpansEqual(span, createTextSpanFromNode(node, sourceFile));
     }) as FixableDeclaration | undefined;
 
     return decl;

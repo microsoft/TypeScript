@@ -227,7 +227,11 @@ function doChange(
     const checker = program.getTypeChecker();
     // For a new file
     if (!host.fileExists(targetFile)) {
-        changes.createNewFile(oldFile, targetFile, getNewStatementsAndRemoveFromOldFile(oldFile, targetFile, getUsageInfo(oldFile, toMove.all, checker), changes, toMove, program, host, preferences));
+        changes.createNewFile(
+            oldFile,
+            targetFile,
+            getNewStatementsAndRemoveFromOldFile(oldFile, targetFile, getUsageInfo(oldFile, toMove.all, checker), changes, toMove, program, host, preferences),
+        );
         addNewFileToTsconfig(program, changes, oldFile.fileName, targetFile, hostGetCanonicalFileName(host));
     }
     else {
@@ -354,7 +358,10 @@ function getTargetFileImportsAndAddExportInOldFile(
             catch {
                 for (const oldStatement of oldFile.statements) {
                     forEachImportInStatement(oldStatement, i => {
-                        append(copiedOldImports, filterImport(i, factory.createStringLiteral(moduleSpecifierFromImport(i).text), name => importsToCopy.has(checker.getSymbolAtLocation(name)!)));
+                        append(
+                            copiedOldImports,
+                            filterImport(i, factory.createStringLiteral(moduleSpecifierFromImport(i).text), name => importsToCopy.has(checker.getSymbolAtLocation(name)!)),
+                        );
                     });
                 }
             }
@@ -417,7 +424,13 @@ function getTargetFileImportsAndAddExportInOldFile(
 }
 
 /** @internal */
-export function addNewFileToTsconfig(program: Program, changes: textChanges.ChangeTracker, oldFileName: string, newFileNameWithExtension: string, getCanonicalFileName: GetCanonicalFileName): void {
+export function addNewFileToTsconfig(
+    program: Program,
+    changes: textChanges.ChangeTracker,
+    oldFileName: string,
+    newFileNameWithExtension: string,
+    getCanonicalFileName: GetCanonicalFileName,
+): void {
     const cfg = program.getCompilerOptions().configFile;
     if (!cfg) return;
 
@@ -1283,7 +1296,10 @@ function moveStatementsToTargetFile(changes: textChanges.ChangeTracker, program:
         for (const [exportDeclaration, topLevelDeclarations] of arrayFrom(targetToSourceExports)) {
             if (exportDeclaration.exportClause && isNamedExports(exportDeclaration.exportClause) && length(exportDeclaration.exportClause.elements)) {
                 const elements = exportDeclaration.exportClause.elements;
-                const updatedElements = filter(elements, elem => find(skipAlias(elem.symbol, checker).declarations, d => isTopLevelDeclaration(d) && topLevelDeclarations.has(d)) === undefined);
+                const updatedElements = filter(
+                    elements,
+                    elem => find(skipAlias(elem.symbol, checker).declarations, d => isTopLevelDeclaration(d) && topLevelDeclarations.has(d)) === undefined,
+                );
 
                 if (length(updatedElements) === 0) {
                     changes.deleteNode(targetFile, exportDeclaration);

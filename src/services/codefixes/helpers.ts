@@ -609,7 +609,11 @@ export interface ArgumentTypeParameterAndConstraint {
     constraint?: TypeNode;
 }
 
-function createTypeParametersForArguments(checker: TypeChecker, argumentTypeParameters: [string, ArgumentTypeParameterAndConstraint | undefined][], typeArguments: NodeArray<TypeNode> | undefined) {
+function createTypeParametersForArguments(
+    checker: TypeChecker,
+    argumentTypeParameters: [string, ArgumentTypeParameterAndConstraint | undefined][],
+    typeArguments: NodeArray<TypeNode> | undefined,
+) {
     const usedNames = new Set(argumentTypeParameters.map(pair => pair[0]));
     const constraintsByName = new Map(argumentTypeParameters);
 
@@ -846,7 +850,12 @@ function createMethodImplementingSignatures(
     );
 }
 
-function getReturnTypeFromSignatures(signatures: readonly Signature[], checker: TypeChecker, context: TypeConstructionContext, enclosingDeclaration: ClassLikeDeclaration): TypeNode | undefined {
+function getReturnTypeFromSignatures(
+    signatures: readonly Signature[],
+    checker: TypeChecker,
+    context: TypeConstructionContext,
+    enclosingDeclaration: ClassLikeDeclaration,
+): TypeNode | undefined {
     if (length(signatures)) {
         const type = checker.getUnionType(map(signatures, checker.getReturnTypeOfSignature));
         return checker.typeToTypeNode(type, enclosingDeclaration, NodeBuilderFlags.NoTruncation, getNoopSymbolTrackerWithResolver(context));

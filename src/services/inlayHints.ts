@@ -872,7 +872,8 @@ export function provideInlayHints(context: InlayHintsContext): InlayHint[] {
         function getLiteralText(node: LiteralLikeNode) {
             switch (node.kind) {
                 case SyntaxKind.StringLiteral:
-                    return quotePreference === QuotePreference.Single ? `'${escapeString(node.text, CharacterCodes.singleQuote)}'` : `"${escapeString(node.text, CharacterCodes.doubleQuote)}"`;
+                    return quotePreference === QuotePreference.Single ? `'${escapeString(node.text, CharacterCodes.singleQuote)}'`
+                        : `"${escapeString(node.text, CharacterCodes.doubleQuote)}"`;
                 case SyntaxKind.TemplateHead:
                 case SyntaxKind.TemplateMiddle:
                 case SyntaxKind.TemplateTail: {

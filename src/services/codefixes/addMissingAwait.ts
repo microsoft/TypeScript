@@ -302,7 +302,11 @@ function makeChange(changeTracker: textChanges.ChangeTracker, errorCode: number,
         const asyncIter = checker.getAsyncIterableType();
         if (asyncIter && checker.isTypeAssignableTo(exprType, asyncIter)) {
             const forOf = insertionSite.parent;
-            changeTracker.replaceNode(sourceFile, forOf, factory.updateForOfStatement(forOf, factory.createToken(SyntaxKind.AwaitKeyword), forOf.initializer, forOf.expression, forOf.statement));
+            changeTracker.replaceNode(
+                sourceFile,
+                forOf,
+                factory.updateForOfStatement(forOf, factory.createToken(SyntaxKind.AwaitKeyword), forOf.initializer, forOf.expression, forOf.statement),
+            );
             return;
         }
     }

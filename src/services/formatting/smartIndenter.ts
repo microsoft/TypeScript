@@ -342,7 +342,14 @@ export namespace SmartIndenter {
     /*
      * Function returns Value.Unknown if actual indentation for node should not be used (i.e because node is nested expression)
      */
-    function getActualIndentationForNode(current: Node, parent: Node, currentLineAndChar: LineAndCharacter, parentAndChildShareLine: boolean, sourceFile: SourceFile, options: EditorSettings): number {
+    function getActualIndentationForNode(
+        current: Node,
+        parent: Node,
+        currentLineAndChar: LineAndCharacter,
+        parentAndChildShareLine: boolean,
+        sourceFile: SourceFile,
+        options: EditorSettings,
+    ): number {
         // actual indentation is used for statements\declarations if one of cases below is true:
         // - parent is SourceFile - by default immediate children of SourceFile are not indented except when user indents them manually
         // - parent and child are not on the same line

@@ -518,7 +518,10 @@ export function transformESNext(context: TransformationContext): (x: SourceFile 
         //   // body
         //   default_1 = expr;
 
-        defaultExportBinding = factory.createUniqueName("_default", GeneratedIdentifierFlags.ReservedInNestedScopes | GeneratedIdentifierFlags.FileLevel | GeneratedIdentifierFlags.Optimistic);
+        defaultExportBinding = factory.createUniqueName(
+            "_default",
+            GeneratedIdentifierFlags.ReservedInNestedScopes | GeneratedIdentifierFlags.FileLevel | GeneratedIdentifierFlags.Optimistic,
+        );
         hoistBindingIdentifier(defaultExportBinding, /*isExport*/ true, "default", node);
 
         // give a class or function expression an assigned name, if needed.
@@ -557,7 +560,10 @@ export function transformESNext(context: TransformationContext): (x: SourceFile 
         //   // top level suffix
         //   export = default_1;
 
-        exportEqualsBinding = factory.createUniqueName("_default", GeneratedIdentifierFlags.ReservedInNestedScopes | GeneratedIdentifierFlags.FileLevel | GeneratedIdentifierFlags.Optimistic);
+        exportEqualsBinding = factory.createUniqueName(
+            "_default",
+            GeneratedIdentifierFlags.ReservedInNestedScopes | GeneratedIdentifierFlags.FileLevel | GeneratedIdentifierFlags.Optimistic,
+        );
         hoistVariableDeclaration(exportEqualsBinding);
 
         // give a class or function expression an assigned name, if needed.
@@ -638,7 +644,10 @@ export function transformESNext(context: TransformationContext): (x: SourceFile 
             //  }
             //
             // Though we will never reassign `default_1`, this most closely matches the specified runtime semantics.
-            defaultExportBinding = factory.createUniqueName("_default", GeneratedIdentifierFlags.ReservedInNestedScopes | GeneratedIdentifierFlags.FileLevel | GeneratedIdentifierFlags.Optimistic);
+            defaultExportBinding = factory.createUniqueName(
+                "_default",
+                GeneratedIdentifierFlags.ReservedInNestedScopes | GeneratedIdentifierFlags.FileLevel | GeneratedIdentifierFlags.Optimistic,
+            );
             hoistBindingIdentifier(defaultExportBinding, /*isExport*/ true, "default", node);
             expression = factory.createAssignment(defaultExportBinding, expression);
             if (isNamedEvaluation(expression)) {

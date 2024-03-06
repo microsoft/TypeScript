@@ -1301,7 +1301,10 @@ export function isProgramUptoDate(
             (seenResolvedRefs || (seenResolvedRefs = [])).push(oldResolvedRef);
 
             // If child project references are upto date, this project reference is uptodate
-            return !forEach(oldResolvedRef.references, (childResolvedRef, index) => !resolvedProjectReferenceUptoDate(childResolvedRef, oldResolvedRef.commandLine.projectReferences![index]));
+            return !forEach(
+                oldResolvedRef.references,
+                (childResolvedRef, index) => !resolvedProjectReferenceUptoDate(childResolvedRef, oldResolvedRef.commandLine.projectReferences![index]),
+            );
         }
 
         // In old program, not able to resolve project reference path,
@@ -1429,7 +1432,8 @@ export const plainJSErrors = new Set<number>([
     Diagnostics.Only_a_single_variable_declaration_is_allowed_in_a_for_in_statement.code,
     Diagnostics.Only_a_single_variable_declaration_is_allowed_in_a_for_of_statement.code,
     Diagnostics.Private_identifiers_are_not_allowed_outside_class_bodies.code,
-    Diagnostics.Private_identifiers_are_only_allowed_in_class_bodies_and_may_only_be_used_as_part_of_a_class_member_declaration_property_access_or_on_the_left_hand_side_of_an_in_expression.code,
+    Diagnostics.Private_identifiers_are_only_allowed_in_class_bodies_and_may_only_be_used_as_part_of_a_class_member_declaration_property_access_or_on_the_left_hand_side_of_an_in_expression
+        .code,
     Diagnostics.Property_0_is_not_accessible_outside_class_1_because_it_has_a_private_identifier.code,
     Diagnostics.Tagged_template_expressions_are_not_permitted_in_an_optional_chain.code,
     Diagnostics.The_left_hand_side_of_a_for_of_statement_may_not_be_async.code,
@@ -1514,7 +1518,13 @@ export function createProgram(createProgramOptions: CreateProgramOptions): Progr
  * @param configFileParsingDiagnostics - error during config file parsing
  * @returns A 'Program' object.
  */
-export function createProgram(rootNames: readonly string[], options: CompilerOptions, host?: CompilerHost, oldProgram?: Program, configFileParsingDiagnostics?: readonly Diagnostic[]): Program;
+export function createProgram(
+    rootNames: readonly string[],
+    options: CompilerOptions,
+    host?: CompilerHost,
+    oldProgram?: Program,
+    configFileParsingDiagnostics?: readonly Diagnostic[],
+): Program;
 export function createProgram(
     rootNamesOrOptions: readonly string[] | CreateProgramOptions,
     _options?: CompilerOptions,
@@ -1522,7 +1532,8 @@ export function createProgram(
     _oldProgram?: Program,
     _configFileParsingDiagnostics?: readonly Diagnostic[],
 ): Program {
-    const createProgramOptions = isArray(rootNamesOrOptions) ? createCreateProgramOptions(rootNamesOrOptions, _options!, _host, _oldProgram, _configFileParsingDiagnostics) : rootNamesOrOptions; // TODO: GH#18217
+    const createProgramOptions = isArray(rootNamesOrOptions) ? createCreateProgramOptions(rootNamesOrOptions, _options!, _host, _oldProgram, _configFileParsingDiagnostics)
+        : rootNamesOrOptions; // TODO: GH#18217
     const { rootNames, options, configFileParsingDiagnostics, projectReferences, typeScriptVersion } = createProgramOptions;
     let { oldProgram } = createProgramOptions;
 
@@ -1963,7 +1974,12 @@ export function createProgram(
         switch (diagnostic.kind) {
             case FilePreprocessingDiagnosticsKind.FilePreprocessingFileExplainingDiagnostic:
                 return programDiagnostics.add(
-                    createDiagnosticExplainingFile(diagnostic.file && getSourceFileByPath(diagnostic.file), diagnostic.fileProcessingReason, diagnostic.diagnostic, diagnostic.args || emptyArray),
+                    createDiagnosticExplainingFile(
+                        diagnostic.file && getSourceFileByPath(diagnostic.file),
+                        diagnostic.fileProcessingReason,
+                        diagnostic.diagnostic,
+                        diagnostic.args || emptyArray,
+                    ),
                 );
             case FilePreprocessingDiagnosticsKind.FilePreprocessingReferencedDiagnostic:
                 const { file, pos, end } = getReferencedFileLocation(program, diagnostic.reason) as ReferenceFileLocation;
@@ -2235,7 +2251,12 @@ export function createProgram(
             if (contains(file.ambientModuleNames, moduleName.text)) {
                 resolvesToAmbientModuleInNonModifiedFile = true;
                 if (isTraceEnabled(options, host)) {
-                    trace(host, Diagnostics.Module_0_was_resolved_as_locally_declared_ambient_module_in_file_1, moduleName.text, getNormalizedAbsolutePath(file.originalFileName, currentDirectory));
+                    trace(
+                        host,
+                        Diagnostics.Module_0_was_resolved_as_locally_declared_ambient_module_in_file_1,
+                        moduleName.text,
+                        getNormalizedAbsolutePath(file.originalFileName, currentDirectory),
+                    );
                 }
             }
             else {
@@ -2953,7 +2974,13 @@ export function createProgram(
                 checkDiagnostics = filter(checkDiagnostics, d => plainJSErrors.has(d.code));
             }
             // skip ts-expect-error errors in plain JS files, and skip JSDoc errors except in checked JS
-            return getMergedBindAndCheckDiagnostics(sourceFile, includeBindAndCheckDiagnostics && !isPlainJs, bindDiagnostics, checkDiagnostics, isCheckJs ? sourceFile.jsDocDiagnostics : undefined);
+            return getMergedBindAndCheckDiagnostics(
+                sourceFile,
+                includeBindAndCheckDiagnostics && !isPlainJs,
+                bindDiagnostics,
+                checkDiagnostics,
+                isCheckJs ? sourceFile.jsDocDiagnostics : undefined,
+            );
         });
     }
 
@@ -3557,7 +3584,9 @@ export function createProgram(
 
             // Only try adding extensions from the first supported group (which should be .ts/.tsx/.d.ts)
             const sourceFileWithAddedExtension = forEach(supportedExtensions[0], extension => getSourceFile(fileName + extension));
-            if (fail && !sourceFileWithAddedExtension) fail(Diagnostics.Could_not_resolve_the_path_0_with_the_extensions_Colon_1, fileName, "'" + flatten(supportedExtensions).join("', '") + "'");
+            if (fail && !sourceFileWithAddedExtension) {
+                fail(Diagnostics.Could_not_resolve_the_path_0_with_the_extensions_Colon_1, fileName, "'" + flatten(supportedExtensions).join("', '") + "'");
+            }
             return sourceFileWithAddedExtension;
         }
     }
@@ -3579,10 +3608,16 @@ export function createProgram(
     function reportFileNamesDifferOnlyInCasingError(fileName: string, existingFile: SourceFile, reason: FileIncludeReason): void {
         const hasExistingReasonToReportErrorOn = !isReferencedFile(reason) && some(fileReasons.get(existingFile.path), isReferencedFile);
         if (hasExistingReasonToReportErrorOn) {
-            addFilePreprocessingFileExplainingDiagnostic(existingFile, reason, Diagnostics.Already_included_file_name_0_differs_from_file_name_1_only_in_casing, [existingFile.fileName, fileName]);
+            addFilePreprocessingFileExplainingDiagnostic(existingFile, reason, Diagnostics.Already_included_file_name_0_differs_from_file_name_1_only_in_casing, [
+                existingFile.fileName,
+                fileName,
+            ]);
         }
         else {
-            addFilePreprocessingFileExplainingDiagnostic(existingFile, reason, Diagnostics.File_name_0_differs_from_already_included_file_name_1_only_in_casing, [fileName, existingFile.fileName]);
+            addFilePreprocessingFileExplainingDiagnostic(existingFile, reason, Diagnostics.File_name_0_differs_from_already_included_file_name_1_only_in_casing, [
+                fileName,
+                existingFile.fileName,
+            ]);
         }
     }
 
@@ -3990,7 +4025,13 @@ export function createProgram(
                 }
                 else {
                     // First resolution of this library
-                    processSourceFile(resolvedTypeReferenceDirective.resolvedFileName!, /*isDefaultLib*/ false, /*ignoreNoDefaultLib*/ false, resolvedTypeReferenceDirective.packageId, reason);
+                    processSourceFile(
+                        resolvedTypeReferenceDirective.resolvedFileName!,
+                        /*isDefaultLib*/ false,
+                        /*ignoreNoDefaultLib*/ false,
+                        resolvedTypeReferenceDirective.packageId,
+                        reason,
+                    );
                 }
             }
 
@@ -4261,7 +4302,9 @@ export function createProgram(
             }
         }
         else if (options.incremental && !outputFile && !options.configFilePath) {
-            programDiagnostics.add(createCompilerDiagnostic(Diagnostics.Option_incremental_can_only_be_specified_using_tsconfig_emitting_to_single_file_or_when_option_tsBuildInfoFile_is_specified));
+            programDiagnostics.add(
+                createCompilerDiagnostic(Diagnostics.Option_incremental_can_only_be_specified_using_tsconfig_emitting_to_single_file_or_when_option_tsBuildInfoFile_is_specified),
+            );
         }
 
         verifyDeprecatedCompilerOptions();
@@ -4521,7 +4564,12 @@ export function createProgram(
             !(ModuleResolutionKind.Node16 <= moduleResolution && moduleResolution <= ModuleResolutionKind.NodeNext)
         ) {
             const moduleKindName = ModuleKind[moduleKind];
-            createOptionValueDiagnostic("moduleResolution", Diagnostics.Option_moduleResolution_must_be_set_to_0_or_left_unspecified_when_option_module_is_set_to_1, moduleKindName, moduleKindName);
+            createOptionValueDiagnostic(
+                "moduleResolution",
+                Diagnostics.Option_moduleResolution_must_be_set_to_0_or_left_unspecified_when_option_module_is_set_to_1,
+                moduleKindName,
+                moduleKindName,
+            );
         }
         else if (
             ModuleResolutionKind[moduleResolution] &&
@@ -4870,7 +4918,13 @@ export function createProgram(
                 }
             }
             if (!parent && buildInfoPath && buildInfoPath === getTsBuildInfoEmitOutputFilePath(options)) {
-                createDiagnosticForReference(parentFile, index, Diagnostics.Cannot_write_file_0_because_it_will_overwrite_tsbuildinfo_file_generated_by_referenced_project_1, buildInfoPath, ref.path);
+                createDiagnosticForReference(
+                    parentFile,
+                    index,
+                    Diagnostics.Cannot_write_file_0_because_it_will_overwrite_tsbuildinfo_file_generated_by_referenced_project_1,
+                    buildInfoPath,
+                    ref.path,
+                );
                 hasEmitBlockingDiagnostics.set(toPath(buildInfoPath), true);
             }
         });
@@ -4958,7 +5012,13 @@ export function createProgram(
 
     function createDiagnosticForOption(onKey: boolean, option1: string, option2: string | undefined, message: DiagnosticMessageChain): void;
     function createDiagnosticForOption(onKey: boolean, option1: string, option2: string | undefined, message: DiagnosticMessage, ...args: DiagnosticArguments): void;
-    function createDiagnosticForOption(onKey: boolean, option1: string, option2: string | undefined, message: DiagnosticMessage | DiagnosticMessageChain, ...args: DiagnosticArguments): void {
+    function createDiagnosticForOption(
+        onKey: boolean,
+        option1: string,
+        option2: string | undefined,
+        message: DiagnosticMessage | DiagnosticMessageChain,
+        ...args: DiagnosticArguments
+    ): void {
         const compilerOptionsObjectLiteralSyntax = getCompilerOptionsObjectLiteralSyntax();
         const needCompilerDiagnostic = !compilerOptionsObjectLiteralSyntax ||
             !createOptionDiagnosticInObjectLiteralSyntax(compilerOptionsObjectLiteralSyntax, onKey, option1, option2, message, ...args);
@@ -4985,7 +5045,13 @@ export function createProgram(
         return _compilerOptionsObjectLiteralSyntax || undefined;
     }
 
-    function createOptionDiagnosticInObjectLiteralSyntax(objectLiteral: ObjectLiteralExpression, onKey: boolean, key1: string, key2: string | undefined, messageChain: DiagnosticMessageChain): boolean;
+    function createOptionDiagnosticInObjectLiteralSyntax(
+        objectLiteral: ObjectLiteralExpression,
+        onKey: boolean,
+        key1: string,
+        key2: string | undefined,
+        messageChain: DiagnosticMessageChain,
+    ): boolean;
     function createOptionDiagnosticInObjectLiteralSyntax(
         objectLiteral: ObjectLiteralExpression,
         onKey: boolean,

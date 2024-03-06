@@ -535,7 +535,8 @@ describe("unittests:: tsc-watch:: watchEnvironment:: tsc-watch with different po
                         },
                         {
                             caption: "add new folder to temp",
-                            edit: sys => sys.ensureFileOrFolder({ path: `/user/username/projects/myproject/node_modules/bar/temp/fooBar/index.d.ts`, content: "export function temp(): string;" }),
+                            edit: sys =>
+                                sys.ensureFileOrFolder({ path: `/user/username/projects/myproject/node_modules/bar/temp/fooBar/index.d.ts`, content: "export function temp(): string;" }),
                             timeouts: ts.noop,
                         },
                     ],

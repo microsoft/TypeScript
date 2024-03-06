@@ -571,7 +571,12 @@ export function getOutputDeclarationFileNameWorker(inputFileName: string, option
     );
 }
 
-function getOutputJSFileName(inputFileName: string, configFile: ParsedCommandLine, ignoreCase: boolean, getCommonSourceDirectory = () => getCommonSourceDirectoryOfConfig(configFile, ignoreCase)) {
+function getOutputJSFileName(
+    inputFileName: string,
+    configFile: ParsedCommandLine,
+    ignoreCase: boolean,
+    getCommonSourceDirectory = () => getCommonSourceDirectoryOfConfig(configFile, ignoreCase),
+) {
     if (configFile.options.emitDeclarationOnly) return undefined;
     const isJsonFile = fileExtensionIs(inputFileName, Extension.Json);
     const outputFileName = getOutputJSFileNameWorker(inputFileName, configFile.options, ignoreCase, getCommonSourceDirectory);
@@ -741,7 +746,8 @@ export function emitFiles(
     // See: https://github.com/microsoft/TypeScript/issues/52924
     /* eslint-disable no-var */
     var compilerOptions = host.getCompilerOptions();
-    var sourceMapDataList: SourceMapEmitResult[] | undefined = (compilerOptions.sourceMap || compilerOptions.inlineSourceMap || getAreDeclarationMapsEnabled(compilerOptions)) ? [] : undefined;
+    var sourceMapDataList: SourceMapEmitResult[] | undefined = (compilerOptions.sourceMap || compilerOptions.inlineSourceMap || getAreDeclarationMapsEnabled(compilerOptions)) ? []
+        : undefined;
     var emittedFilesList: string[] | undefined = compilerOptions.listEmittedFiles ? [] : undefined;
     var emitterDiagnostics = createDiagnosticCollection();
     var newLine = getNewLineCharacter(compilerOptions);
@@ -769,7 +775,10 @@ export function emitFiles(
         sourceMaps: sourceMapDataList,
     };
 
-    function emitSourceFileOrBundle({ jsFilePath, sourceMapFilePath, declarationFilePath, declarationMapPath, buildInfoPath }: EmitFileNames, sourceFileOrBundle: SourceFile | Bundle | undefined) {
+    function emitSourceFileOrBundle(
+        { jsFilePath, sourceMapFilePath, declarationFilePath, declarationMapPath, buildInfoPath }: EmitFileNames,
+        sourceFileOrBundle: SourceFile | Bundle | undefined,
+    ) {
         tracing?.push(tracing.Phase.Emit, "emitJsFileOrBundle", { jsFilePath });
         emitJsFileOrBundle(sourceFileOrBundle, jsFilePath, sourceMapFilePath);
         tracing?.pop();
@@ -939,7 +948,13 @@ export function emitFiles(
         forEachChild(node, collectLinkedAliases);
     }
 
-    function printSourceFileOrBundle(jsFilePath: string, sourceMapFilePath: string | undefined, transform: TransformationResult<SourceFile | Bundle>, printer: Printer, mapOptions: SourceMapOptions) {
+    function printSourceFileOrBundle(
+        jsFilePath: string,
+        sourceMapFilePath: string | undefined,
+        transform: TransformationResult<SourceFile | Bundle>,
+        printer: Printer,
+        mapOptions: SourceMapOptions,
+    ) {
         const sourceFileOrBundle = transform.transformed[0];
         const bundle = sourceFileOrBundle.kind === SyntaxKind.Bundle ? sourceFileOrBundle : undefined;
         const sourceFile = sourceFileOrBundle.kind === SyntaxKind.SourceFile ? sourceFileOrBundle : undefined;
@@ -1043,7 +1058,13 @@ export function emitFiles(
         return getDirectoryPath(normalizePath(filePath));
     }
 
-    function getSourceMappingURL(mapOptions: SourceMapOptions, sourceMapGenerator: SourceMapGenerator, filePath: string, sourceMapFilePath: string | undefined, sourceFile: SourceFile | undefined) {
+    function getSourceMappingURL(
+        mapOptions: SourceMapOptions,
+        sourceMapGenerator: SourceMapGenerator,
+        filePath: string,
+        sourceMapFilePath: string | undefined,
+        sourceFile: SourceFile | undefined,
+    ) {
         if (mapOptions.inlineSourceMap) {
             // Encode the sourceMap into the sourceMap url
             const sourceMapText = sourceMapGenerator.toString();
@@ -2602,7 +2623,8 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
         }
 
         const preferNewLine = node.multiLine ? ListFormat.PreferNewLine : ListFormat.None;
-        const allowTrailingComma = currentSourceFile && currentSourceFile.languageVersion >= ScriptTarget.ES5 && !isJsonSourceFile(currentSourceFile) ? ListFormat.AllowTrailingComma : ListFormat.None;
+        const allowTrailingComma = currentSourceFile && currentSourceFile.languageVersion >= ScriptTarget.ES5 && !isJsonSourceFile(currentSourceFile) ? ListFormat.AllowTrailingComma
+            : ListFormat.None;
         emitList(node, node.properties, ListFormat.ObjectLiteralExpressionProperties | allowTrailingComma | preferNewLine);
 
         if (indentedFlag) {
@@ -5702,7 +5724,9 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
                 );
         }
 
-        return Debug.fail(`Unsupported GeneratedIdentifierKind: ${Debug.formatEnum(autoGenerate.flags & GeneratedIdentifierFlags.KindMask, (ts as any).GeneratedIdentifierFlags, /*isFlags*/ true)}.`);
+        return Debug.fail(
+            `Unsupported GeneratedIdentifierKind: ${Debug.formatEnum(autoGenerate.flags & GeneratedIdentifierFlags.KindMask, (ts as any).GeneratedIdentifierFlags, /*isFlags*/ true)}.`,
+        );
     }
 
     // Comments
@@ -5780,7 +5804,15 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
         exitComment();
     }
 
-    function emitTrailingCommentsOfNode(node: Node, emitFlags: EmitFlags, pos: number, end: number, savedContainerPos: number, savedContainerEnd: number, savedDeclarationListContainerEnd: number) {
+    function emitTrailingCommentsOfNode(
+        node: Node,
+        emitFlags: EmitFlags,
+        pos: number,
+        end: number,
+        savedContainerPos: number,
+        savedContainerEnd: number,
+        savedDeclarationListContainerEnd: number,
+    ) {
         enterComment();
         const skipTrailingComments = end < 0 || (emitFlags & EmitFlags.NoTrailingComments) !== 0 || node.kind === SyntaxKind.JsxText;
         forEach(getSyntheticTrailingComments(node), emitTrailingSynthesizedComment);

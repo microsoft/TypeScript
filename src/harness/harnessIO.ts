@@ -962,7 +962,10 @@ export namespace Compiler {
         if (declFileCompilationResult && declFileCompilationResult.declResult.diagnostics.length) {
             jsCode += "\r\n\r\n//// [DtsFileErrors]\r\n";
             jsCode += "\r\n\r\n";
-            jsCode += getErrorBaseline(tsConfigFiles.concat(declFileCompilationResult.declInputFiles, declFileCompilationResult.declOtherFiles), declFileCompilationResult.declResult.diagnostics);
+            jsCode += getErrorBaseline(
+                tsConfigFiles.concat(declFileCompilationResult.declInputFiles, declFileCompilationResult.declOtherFiles),
+                declFileCompilationResult.declResult.diagnostics,
+            );
         }
 
         // eslint-disable-next-line no-null/no-null
@@ -1099,7 +1102,12 @@ function splitVaryBySettingValue(text: string, varyBy: string): string[] | undef
     return ts.map(variations, v => v.key);
 }
 
-function computeFileBasedTestConfigurationVariations(configurations: FileBasedTestConfiguration[], variationState: FileBasedTestConfiguration, varyByEntries: [string, string[]][], offset: number) {
+function computeFileBasedTestConfigurationVariations(
+    configurations: FileBasedTestConfiguration[],
+    variationState: FileBasedTestConfiguration,
+    varyByEntries: [string, string[]][],
+    offset: number,
+) {
     if (offset >= varyByEntries.length) {
         // make a copy of the current variation state
         configurations.push({ ...variationState });

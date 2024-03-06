@@ -453,7 +453,13 @@ const _testConvertToAsyncFunctionFailedAction = createTestWrapper((it, caption: 
 });
 
 const _testConvertToAsyncFunctionWithModule = createTestWrapper((it, caption: string, text: string) => {
-    testConvertToAsyncFunction(it, caption, text, "convertToAsyncFunction", ConvertToAsyncTestFlags.IncludeLib | ConvertToAsyncTestFlags.IncludeModule | ConvertToAsyncTestFlags.ExpectSuccess);
+    testConvertToAsyncFunction(
+        it,
+        caption,
+        text,
+        "convertToAsyncFunction",
+        ConvertToAsyncTestFlags.IncludeLib | ConvertToAsyncTestFlags.IncludeModule | ConvertToAsyncTestFlags.ExpectSuccess,
+    );
 });
 
 describe("unittests:: services:: convertToAsyncFunction", () => {

@@ -2501,7 +2501,10 @@ export function transformClassFields(context: TransformationContext): (x: Source
      * @param propertiesOrClassStaticBlocks An array of property declarations to transform.
      * @param receiver The receiver on which each property should be assigned.
      */
-    function generateInitializedPropertyExpressionsOrClassStaticBlock(propertiesOrClassStaticBlocks: readonly (PropertyDeclaration | ClassStaticBlockDeclaration)[], receiver: LeftHandSideExpression) {
+    function generateInitializedPropertyExpressionsOrClassStaticBlock(
+        propertiesOrClassStaticBlocks: readonly (PropertyDeclaration | ClassStaticBlockDeclaration)[],
+        receiver: LeftHandSideExpression,
+    ) {
         const expressions: Expression[] = [];
         for (const property of propertiesOrClassStaticBlocks) {
             const expression = isClassStaticBlockDeclaration(property) ?
@@ -2678,7 +2681,11 @@ export function transformClassFields(context: TransformationContext): (x: Source
      * @param methods An array of method declarations.
      * @param receiver The receiver on which each method should be assigned.
      */
-    function addInstanceMethodStatements(statements: Statement[], methods: readonly (MethodDeclaration | AccessorDeclaration | AutoAccessorPropertyDeclaration)[], receiver: LeftHandSideExpression) {
+    function addInstanceMethodStatements(
+        statements: Statement[],
+        methods: readonly (MethodDeclaration | AccessorDeclaration | AutoAccessorPropertyDeclaration)[],
+        receiver: LeftHandSideExpression,
+    ) {
         if (!shouldTransformPrivateElementsOrClassStaticBlocks || !some(methods)) {
             return;
         }
@@ -2964,7 +2971,8 @@ export function transformClassFields(context: TransformationContext): (x: Source
     function createHoistedVariableForClass(name: string | PrivateIdentifier | undefined, node: PrivateIdentifier | ClassStaticBlockDeclaration, suffix?: string): Identifier {
         const { className } = getPrivateIdentifierEnvironment().data;
         const prefix: GeneratedNamePart | string = className ? { prefix: "_", node: className, suffix: "_" } : "_";
-        const identifier = typeof name === "object" ? factory.getGeneratedNameForNode(name, GeneratedIdentifierFlags.Optimistic | GeneratedIdentifierFlags.ReservedInNestedScopes, prefix, suffix) :
+        const identifier = typeof name === "object" ?
+            factory.getGeneratedNameForNode(name, GeneratedIdentifierFlags.Optimistic | GeneratedIdentifierFlags.ReservedInNestedScopes, prefix, suffix) :
             typeof name === "string" ? factory.createUniqueName(name, GeneratedIdentifierFlags.Optimistic, prefix, suffix) :
             factory.createTempVariable(/*recordTempVariable*/ undefined, /*reservedInNestedScopes*/ true, prefix, suffix);
 

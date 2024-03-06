@@ -3043,7 +3043,13 @@ export class ConfiguredProject extends Project {
 
     /** @internal */
     updateErrorOnNoInputFiles(fileNames: string[]) {
-        updateErrorForNoInputFiles(fileNames, this.getConfigFilePath(), this.getCompilerOptions().configFile!.configFileSpecs!, this.projectErrors!, this.canConfigFileJsonReportNoInputFiles);
+        updateErrorForNoInputFiles(
+            fileNames,
+            this.getConfigFilePath(),
+            this.getCompilerOptions().configFile!.configFileSpecs!,
+            this.projectErrors!,
+            this.canConfigFileJsonReportNoInputFiles,
+        );
     }
 }
 

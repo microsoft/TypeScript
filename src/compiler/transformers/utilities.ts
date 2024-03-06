@@ -330,7 +330,12 @@ export function collectExternalModuleInfo(context: TransformationContext, source
     }
 }
 
-function collectExportedVariableInfo(decl: VariableDeclaration | BindingElement, uniqueExports: Map<string, boolean>, exportedNames: Identifier[] | undefined, exportedBindings: Identifier[][]) {
+function collectExportedVariableInfo(
+    decl: VariableDeclaration | BindingElement,
+    uniqueExports: Map<string, boolean>,
+    exportedNames: Identifier[] | undefined,
+    exportedBindings: Identifier[][],
+) {
     if (isBindingPattern(decl.name)) {
         for (const element of decl.name.elements) {
             if (!isOmittedExpression(element)) {

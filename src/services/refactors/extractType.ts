@@ -305,7 +305,10 @@ function collectTypeParameters(checker: TypeChecker, selection: TypeNode | TypeN
         else if (isTypeQueryNode(node)) {
             if (isIdentifier(node.exprName)) {
                 const symbol = checker.resolveName(node.exprName.text, node.exprName, SymbolFlags.Value, /*excludeGlobals*/ false);
-                if (symbol?.valueDeclaration && rangeContainsSkipTrivia(enclosingNode, symbol.valueDeclaration, file) && !rangeContainsSkipTrivia(selectionRange, symbol.valueDeclaration, file)) {
+                if (
+                    symbol?.valueDeclaration && rangeContainsSkipTrivia(enclosingNode, symbol.valueDeclaration, file) &&
+                    !rangeContainsSkipTrivia(selectionRange, symbol.valueDeclaration, file)
+                ) {
                     return true;
                 }
             }
@@ -408,7 +411,12 @@ function doTypedefChange(changes: textChanges.ChangeTracker, context: RefactorCo
     else {
         changes.insertNodeBefore(file, enclosingNode, jsDoc, /*blankLineBetween*/ true);
     }
-    changes.replaceNodeRange(file, firstTypeNode, lastTypeNode, factory.createTypeReferenceNode(name, typeParameters.map(id => factory.createTypeReferenceNode(id.name, /*typeArguments*/ undefined))));
+    changes.replaceNodeRange(
+        file,
+        firstTypeNode,
+        lastTypeNode,
+        factory.createTypeReferenceNode(name, typeParameters.map(id => factory.createTypeReferenceNode(id.name, /*typeArguments*/ undefined))),
+    );
 }
 
 function getNodesToEdit(info: ExtractInfo) {

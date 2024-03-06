@@ -113,7 +113,16 @@ interface CachedSymbolExportInfo {
 export interface ExportInfoMap {
     isUsableByFile(importingFile: Path): boolean;
     clear(): void;
-    add(importingFile: Path, symbol: Symbol, key: __String, moduleSymbol: Symbol, moduleFile: SourceFile | undefined, exportKind: ExportKind, isFromPackageJson: boolean, checker: TypeChecker): void;
+    add(
+        importingFile: Path,
+        symbol: Symbol,
+        key: __String,
+        moduleSymbol: Symbol,
+        moduleFile: SourceFile | undefined,
+        exportKind: ExportKind,
+        isFromPackageJson: boolean,
+        checker: TypeChecker,
+    ): void;
     get(importingFile: Path, key: ExportMapInfoKey): readonly SymbolExportInfo[] | undefined;
     search<T>(
         importingFile: Path,
@@ -581,7 +590,11 @@ function getDefaultLikeExportWorker(moduleSymbol: Symbol, checker: TypeChecker):
 }
 
 /** @internal */
-export function getDefaultExportInfoWorker(defaultExport: Symbol, checker: TypeChecker, compilerOptions: CompilerOptions): { readonly resolvedSymbol: Symbol; readonly name: string; } | undefined {
+export function getDefaultExportInfoWorker(
+    defaultExport: Symbol,
+    checker: TypeChecker,
+    compilerOptions: CompilerOptions,
+): { readonly resolvedSymbol: Symbol; readonly name: string; } | undefined {
     const localSymbol = getLocalSymbolForExportDefault(defaultExport);
     if (localSymbol) return { resolvedSymbol: localSymbol, name: localSymbol.name };
 

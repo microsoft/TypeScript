@@ -28,7 +28,9 @@ function verifyDocumentRegistryStats(
             if (ts.isDocumentRegistryEntry(entry)) {
                 ts.Debug.assert(
                     expected?.size === 1 && expected.has(entry.sourceFile.scriptKind) && expected.get(entry.sourceFile.scriptKind) === entry.languageServiceRefCount,
-                    `Document registry has unexpected language service ref count for ${key} ${path} ${ts.Debug.formatScriptKind(entry.sourceFile.scriptKind)} ${entry.languageServiceRefCount}`,
+                    `Document registry has unexpected language service ref count for ${key} ${path} ${
+                        ts.Debug.formatScriptKind(entry.sourceFile.scriptKind)
+                    } ${entry.languageServiceRefCount}`,
                     reportStats,
                 );
             }

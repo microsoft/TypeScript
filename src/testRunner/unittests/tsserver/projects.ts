@@ -1121,7 +1121,11 @@ describe("unittests:: tsserver:: projects::", () => {
             // Allow allowNonTsExtensions will be set to true for deferred extensions.
             session.logger.info(`Has allowNonTsExtension: ${session.getProjectService().configuredProjects.get(tsconfig.path)!.getCompilerOptions().allowNonTsExtensions}`);
 
-            baselineTsserverLogs("projects", `deferred files in the project context${lazyConfiguredProjectsFromExternalProject ? " with lazyConfiguredProjectsFromExternalProject" : ""}`, session);
+            baselineTsserverLogs(
+                "projects",
+                `deferred files in the project context${lazyConfiguredProjectsFromExternalProject ? " with lazyConfiguredProjectsFromExternalProject" : ""}`,
+                session,
+            );
         }
 
         it("when lazyConfiguredProjectsFromExternalProject not set", () => {

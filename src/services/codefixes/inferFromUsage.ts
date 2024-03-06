@@ -471,7 +471,13 @@ function tryReplaceImportTypeNodeWithAutoImport(
     return false;
 }
 
-function annotateJSDocParameters(changes: textChanges.ChangeTracker, sourceFile: SourceFile, parameterInferences: readonly ParameterInference[], program: Program, host: LanguageServiceHost): void {
+function annotateJSDocParameters(
+    changes: textChanges.ChangeTracker,
+    sourceFile: SourceFile,
+    parameterInferences: readonly ParameterInference[],
+    program: Program,
+    host: LanguageServiceHost,
+): void {
     const signature = parameterInferences.length && parameterInferences[0].declaration.parent;
     if (!signature) {
         return;
@@ -515,7 +521,14 @@ function annotateJSDocParameters(changes: textChanges.ChangeTracker, sourceFile:
         const paramTags = map(
             inferences,
             ({ name, typeNode, isOptional }) =>
-                factory.createJSDocParameterTag(/*tagName*/ undefined, name, /*isBracketed*/ !!isOptional, factory.createJSDocTypeExpression(typeNode), /*isNameFirst*/ false, /*comment*/ undefined),
+                factory.createJSDocParameterTag(
+                    /*tagName*/ undefined,
+                    name,
+                    /*isBracketed*/ !!isOptional,
+                    factory.createJSDocTypeExpression(typeNode),
+                    /*isNameFirst*/ false,
+                    /*comment*/ undefined,
+                ),
         );
         changes.addJSDocTags(sourceFile, signature, paramTags);
     }

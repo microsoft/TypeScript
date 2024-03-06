@@ -1825,7 +1825,12 @@ export class Session<TMessage = string> implements EventSender {
         if (configFile) {
             return this.getConfigFileDiagnostics(configFile, project!, !!args.includeLinePosition); // TODO: GH#18217
         }
-        return this.getDiagnosticsWorker(args, /*isSemantic*/ true, (project, file) => project.getLanguageService().getSemanticDiagnostics(file).filter(d => !!d.file), !!args.includeLinePosition);
+        return this.getDiagnosticsWorker(
+            args,
+            /*isSemantic*/ true,
+            (project, file) => project.getLanguageService().getSemanticDiagnostics(file).filter(d => !!d.file),
+            !!args.includeLinePosition,
+        );
     }
 
     private getSuggestionDiagnosticsSync(args: protocol.SuggestionDiagnosticsSyncRequestArgs) {

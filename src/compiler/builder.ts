@@ -1416,7 +1416,9 @@ export function computeSignatureWithDiagnostics(
     text = getTextHandlingSourceMapForSignature(text, data);
     let sourceFileDirectory: string | undefined;
     if (data?.diagnostics?.length) {
-        text += data.diagnostics.map(diagnostic => `${locationInfo(diagnostic)}${DiagnosticCategory[diagnostic.category]}${diagnostic.code}: ${flattenDiagnosticMessageText(diagnostic.messageText)}`)
+        text += data.diagnostics.map(diagnostic =>
+            `${locationInfo(diagnostic)}${DiagnosticCategory[diagnostic.category]}${diagnostic.code}: ${flattenDiagnosticMessageText(diagnostic.messageText)}`
+        )
             .join("\n");
     }
     return (host.createHash ?? generateDjb2Hash)(text);
@@ -1452,7 +1454,10 @@ export function computeSignature(text: string, host: HostForComputeHash, data?: 
 /** @internal */
 export function createBuilderProgram(kind: BuilderProgramKind.SemanticDiagnosticsBuilderProgram, builderCreationParameters: BuilderCreationParameters): SemanticDiagnosticsBuilderProgram;
 /** @internal */
-export function createBuilderProgram(kind: BuilderProgramKind.EmitAndSemanticDiagnosticsBuilderProgram, builderCreationParameters: BuilderCreationParameters): EmitAndSemanticDiagnosticsBuilderProgram;
+export function createBuilderProgram(
+    kind: BuilderProgramKind.EmitAndSemanticDiagnosticsBuilderProgram,
+    builderCreationParameters: BuilderCreationParameters,
+): EmitAndSemanticDiagnosticsBuilderProgram;
 /** @internal */
 export function createBuilderProgram(kind: BuilderProgramKind, { newProgram, host, oldProgram, configFileParsingDiagnostics }: BuilderCreationParameters) {
     // Return same program if underlying program doesnt change
@@ -1742,7 +1747,10 @@ export function createBuilderProgram(kind: BuilderProgramKind, { newProgram, hos
      * Return the semantic diagnostics for the next affected file or undefined if iteration is complete
      * If provided ignoreSourceFile would be called before getting the diagnostics and would ignore the sourceFile if the returned value was true
      */
-    function getSemanticDiagnosticsOfNextAffectedFile(cancellationToken?: CancellationToken, ignoreSourceFile?: (sourceFile: SourceFile) => boolean): AffectedFileResult<readonly Diagnostic[]> {
+    function getSemanticDiagnosticsOfNextAffectedFile(
+        cancellationToken?: CancellationToken,
+        ignoreSourceFile?: (sourceFile: SourceFile) => boolean,
+    ): AffectedFileResult<readonly Diagnostic[]> {
         while (true) {
             const affected = getNextAffectedFile(state, cancellationToken, host);
             let result;
@@ -1816,7 +1824,12 @@ export function toBuilderStateFileInfoForMultiEmit(fileInfo: ProgramMultiFileEmi
         { version: fileInfo, signature: fileInfo, affectsGlobalScope: undefined, impliedFormat: undefined } :
         isString(fileInfo.signature) ?
         fileInfo as BuilderState.FileInfo :
-        { version: fileInfo.version, signature: fileInfo.signature === false ? undefined : fileInfo.version, affectsGlobalScope: fileInfo.affectsGlobalScope, impliedFormat: fileInfo.impliedFormat };
+        {
+            version: fileInfo.version,
+            signature: fileInfo.signature === false ? undefined : fileInfo.version,
+            affectsGlobalScope: fileInfo.affectsGlobalScope,
+            impliedFormat: fileInfo.impliedFormat,
+        };
 }
 
 /** @internal */

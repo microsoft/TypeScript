@@ -228,7 +228,12 @@ function createJsxFactoryExpressionFromEntityName(factory: NodeFactory, jsxFacto
 }
 
 /** @internal */
-export function createJsxFactoryExpression(factory: NodeFactory, jsxFactoryEntity: EntityName | undefined, reactNamespace: string, parent: JsxOpeningLikeElement | JsxOpeningFragment): Expression {
+export function createJsxFactoryExpression(
+    factory: NodeFactory,
+    jsxFactoryEntity: EntityName | undefined,
+    reactNamespace: string,
+    parent: JsxOpeningLikeElement | JsxOpeningFragment,
+): Expression {
     return jsxFactoryEntity ?
         createJsxFactoryExpressionFromEntityName(factory, jsxFactoryEntity, parent) :
         factory.createPropertyAccessExpression(
@@ -501,7 +506,12 @@ function createExpressionForMethodDeclaration(factory: NodeFactory, method: Meth
 }
 
 /** @internal */
-export function createExpressionForObjectLiteralElementLike(factory: NodeFactory, node: ObjectLiteralExpression, property: ObjectLiteralElementLike, receiver: Expression): Expression | undefined {
+export function createExpressionForObjectLiteralElementLike(
+    factory: NodeFactory,
+    node: ObjectLiteralExpression,
+    property: ObjectLiteralElementLike,
+    receiver: Expression,
+): Expression | undefined {
     if (property.name && isPrivateIdentifier(property.name)) {
         Debug.failBadSyntaxKind(property.name, "Private identifiers are not allowed in object literals.");
     }
@@ -789,7 +799,13 @@ export function createExternalHelpersImportDeclarationIfNeeded(
         }
         else {
             // use a namespace import
-            const externalHelpersModuleName = getOrCreateExternalHelpersModuleNameIfNeeded(nodeFactory, sourceFile, compilerOptions, hasExportStarsToExportValues, hasImportStar || hasImportDefault);
+            const externalHelpersModuleName = getOrCreateExternalHelpersModuleNameIfNeeded(
+                nodeFactory,
+                sourceFile,
+                compilerOptions,
+                hasExportStarsToExportValues,
+                hasImportStar || hasImportDefault,
+            );
             if (externalHelpersModuleName) {
                 namedBindings = nodeFactory.createNamespaceImport(externalHelpersModuleName);
             }

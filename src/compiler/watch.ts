@@ -449,7 +449,8 @@ export function fileIncludeReasonToDiagnostics(program: Program, reason: FileInc
     const options = program.getCompilerOptions();
     if (isReferencedFile(reason)) {
         const referenceLocation = getReferencedFileLocation(program, reason);
-        const referenceText = isReferenceFileLocation(referenceLocation) ? referenceLocation.file.text.substring(referenceLocation.pos, referenceLocation.end) : `"${referenceLocation.text}"`;
+        const referenceText = isReferenceFileLocation(referenceLocation) ? referenceLocation.file.text.substring(referenceLocation.pos, referenceLocation.end)
+            : `"${referenceLocation.text}"`;
         let message: DiagnosticMessage;
         Debug.assert(isReferenceFileLocation(referenceLocation) || reason.kind === FileIncludeKind.Import, "Only synthetic references are imports");
         switch (reason.kind) {

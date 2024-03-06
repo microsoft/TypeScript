@@ -272,7 +272,8 @@ export function transformModule(context: TransformationContext): (x: SourceFile 
                     factory.createExpressionStatement(
                         reduceLeft(
                             currentModuleInfo.exportedNames!.slice(i, i + chunkSize),
-                            (prev, nextId) => factory.createAssignment(factory.createPropertyAccessExpression(factory.createIdentifier("exports"), factory.createIdentifier(idText(nextId))), prev),
+                            (prev, nextId) =>
+                                factory.createAssignment(factory.createPropertyAccessExpression(factory.createIdentifier("exports"), factory.createIdentifier(idText(nextId))), prev),
                             factory.createVoidZero() as Expression,
                         ),
                     ),
@@ -607,7 +608,8 @@ export function transformModule(context: TransformationContext): (x: SourceFile 
                 factory.createExpressionStatement(
                     reduceLeft(
                         currentModuleInfo.exportedNames,
-                        (prev, nextId) => factory.createAssignment(factory.createPropertyAccessExpression(factory.createIdentifier("exports"), factory.createIdentifier(idText(nextId))), prev),
+                        (prev, nextId) =>
+                            factory.createAssignment(factory.createPropertyAccessExpression(factory.createIdentifier("exports"), factory.createIdentifier(idText(nextId))), prev),
                         factory.createVoidZero() as Expression,
                     ),
                 ),
@@ -1798,7 +1800,9 @@ export function transformModule(context: TransformationContext): (x: SourceFile 
                     }
                 }
                 else if (variable.initializer) {
-                    if (!isBindingPattern(variable.name) && (isArrowFunction(variable.initializer) || isFunctionExpression(variable.initializer) || isClassExpression(variable.initializer))) {
+                    if (
+                        !isBindingPattern(variable.name) && (isArrowFunction(variable.initializer) || isFunctionExpression(variable.initializer) || isClassExpression(variable.initializer))
+                    ) {
                         const expression = factory.createAssignment(
                             setTextRange(
                                 factory.createPropertyAccessExpression(

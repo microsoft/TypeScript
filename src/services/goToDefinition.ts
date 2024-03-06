@@ -112,7 +112,13 @@ import {
 } from "./_namespaces/ts.FindAllReferences";
 
 /** @internal */
-export function getDefinitionAtPosition(program: Program, sourceFile: SourceFile, position: number, searchOtherFilesOnly?: boolean, stopAtAlias?: boolean): readonly DefinitionInfo[] | undefined {
+export function getDefinitionAtPosition(
+    program: Program,
+    sourceFile: SourceFile,
+    position: number,
+    searchOtherFilesOnly?: boolean,
+    stopAtAlias?: boolean,
+): readonly DefinitionInfo[] | undefined {
     const resolvedRef = getReferenceAtPosition(sourceFile, position, program);
     const fileReferenceDefinition = resolvedRef && [getDefinitionInfoForFileReference(resolvedRef.reference.fileName, resolvedRef.fileName, resolvedRef.unverified)] || emptyArray;
     if (resolvedRef?.file) {
@@ -182,10 +188,19 @@ export function getDefinitionAtPosition(program: Program, sourceFile: SourceFile
         return map(staticBlocks, staticBlock => {
             let { pos } = moveRangePastModifiers(staticBlock);
             pos = skipTrivia(sourceFile.text, pos);
-            return createDefinitionInfoFromName(typeChecker, staticBlock, ScriptElementKind.constructorImplementationElement, "static {}", containerName, /*unverified*/ false, failedAliasResolution, {
-                start: pos,
-                length: "static".length,
-            });
+            return createDefinitionInfoFromName(
+                typeChecker,
+                staticBlock,
+                ScriptElementKind.constructorImplementationElement,
+                "static {}",
+                containerName,
+                /*unverified*/ false,
+                failedAliasResolution,
+                {
+                    start: pos,
+                    length: "static".length,
+                },
+            );
         });
     }
 
@@ -283,7 +298,10 @@ export function getDefinitionAtPosition(program: Program, sourceFile: SourceFile
     }
 
     const objectLiteralElementDefinition = getDefinitionFromObjectLiteralElement(typeChecker, node);
-    return concatenate(fileReferenceDefinition, objectLiteralElementDefinition.length ? objectLiteralElementDefinition : getDefinitionFromSymbol(typeChecker, symbol, node, failedAliasResolution));
+    return concatenate(
+        fileReferenceDefinition,
+        objectLiteralElementDefinition.length ? objectLiteralElementDefinition : getDefinitionFromSymbol(typeChecker, symbol, node, failedAliasResolution),
+    );
 }
 
 /**
@@ -605,7 +623,10 @@ function getDefinitionFromSymbol(typeChecker: TypeChecker, symbol: Symbol, node:
     function getConstructSignatureDefinition(): DefinitionInfo[] | undefined {
         // Applicable only if we are in a new expression, or we are on a constructor declaration
         // and in either case the symbol has a construct signature definition, i.e. class
-        if (symbol.flags & SymbolFlags.Class && !(symbol.flags & (SymbolFlags.Function | SymbolFlags.Variable)) && (isNewExpressionTarget(node) || node.kind === SyntaxKind.ConstructorKeyword)) {
+        if (
+            symbol.flags & SymbolFlags.Class && !(symbol.flags & (SymbolFlags.Function | SymbolFlags.Variable)) &&
+            (isNewExpressionTarget(node) || node.kind === SyntaxKind.ConstructorKeyword)
+        ) {
             const cls = find(filteredDeclarations, isClassLike) || Debug.fail("Expected declaration to have at least one class-like declaration");
             return getSignatureDefinition(cls.members, /*selectConstructors*/ true);
         }

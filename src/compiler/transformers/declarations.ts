@@ -221,7 +221,15 @@ import * as moduleSpecifiers from "../_namespaces/ts.moduleSpecifiers";
 /** @internal */
 export function getDeclarationDiagnostics(host: EmitHost, resolver: EmitResolver, file: SourceFile | undefined): DiagnosticWithLocation[] | undefined {
     const compilerOptions = host.getCompilerOptions();
-    const result = transformNodes(resolver, host, factory, compilerOptions, file ? [file] : filter(host.getSourceFiles(), isSourceFileNotJson), [transformDeclarations], /*allowDtsFiles*/ false);
+    const result = transformNodes(
+        resolver,
+        host,
+        factory,
+        compilerOptions,
+        file ? [file] : filter(host.getSourceFiles(), isSourceFileNotJson),
+        [transformDeclarations],
+        /*allowDtsFiles*/ false,
+    );
     return result.diagnostics;
 }
 
@@ -469,7 +477,11 @@ export function transformDeclarations(context: TransformationContext) {
     function reportNonSerializableProperty(propertyName: string) {
         if (errorNameNode || errorFallbackNode) {
             context.addDiagnostic(
-                createDiagnosticForNode((errorNameNode || errorFallbackNode)!, Diagnostics.The_type_of_this_node_cannot_be_serialized_because_its_property_0_cannot_be_serialized, propertyName),
+                createDiagnosticForNode(
+                    (errorNameNode || errorFallbackNode)!,
+                    Diagnostics.The_type_of_this_node_cannot_be_serialized_because_its_property_0_cannot_be_serialized,
+                    propertyName,
+                ),
             );
         }
     }
@@ -591,7 +603,15 @@ export function transformDeclarations(context: TransformationContext) {
                 combinedStatements = setTextRange(factory.createNodeArray([...combinedStatements, createEmptyExports(factory)]), combinedStatements);
             }
         }
-        const updated = factory.updateSourceFile(node, combinedStatements, /*isDeclarationFile*/ true, references, getFileReferencesForUsedTypeReferences(), node.hasNoDefaultLib, getLibReferences());
+        const updated = factory.updateSourceFile(
+            node,
+            combinedStatements,
+            /*isDeclarationFile*/ true,
+            references,
+            getFileReferencesForUsedTypeReferences(),
+            node.hasNoDefaultLib,
+            getLibReferences(),
+        );
         updated.exportedModulesFromDeclarationEmit = exportedModulesFromDeclarationEmit;
         return updated;
 
@@ -1140,13 +1160,16 @@ export function transformDeclarations(context: TransformationContext) {
         // We'd see a TDZ violation at runtime
         const canProduceDiagnostic = canProduceDiagnostics(input);
         const oldWithinObjectLiteralType = suppressNewDiagnosticContexts;
-        let shouldEnterSuppressNewDiagnosticsContextContext = (input.kind === SyntaxKind.TypeLiteral || input.kind === SyntaxKind.MappedType) && input.parent.kind !== SyntaxKind.TypeAliasDeclaration;
+        let shouldEnterSuppressNewDiagnosticsContextContext = (input.kind === SyntaxKind.TypeLiteral || input.kind === SyntaxKind.MappedType) &&
+            input.parent.kind !== SyntaxKind.TypeAliasDeclaration;
 
         // Emit methods which are private as properties with no type information
         if (isMethodDeclaration(input) || isMethodSignature(input)) {
             if (hasEffectiveModifier(input, ModifierFlags.Private)) {
                 if (input.symbol && input.symbol.declarations && input.symbol.declarations[0] !== input) return; // Elide all but the first overload
-                return cleanup(factory.createPropertyDeclaration(ensureModifiers(input), input.name, /*questionOrExclamationToken*/ undefined, /*type*/ undefined, /*initializer*/ undefined));
+                return cleanup(
+                    factory.createPropertyDeclaration(ensureModifiers(input), input.name, /*questionOrExclamationToken*/ undefined, /*type*/ undefined, /*initializer*/ undefined),
+                );
             }
         }
 

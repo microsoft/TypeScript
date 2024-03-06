@@ -80,7 +80,11 @@ registerCodeFix({
     },
     fixIds: [fixId],
     getAllCodeActions: context =>
-        codeFixAll(context, errorCodes, (changes, err) => doChange(changes, err.file, err.start, context.program.getTypeChecker(), context.preferences, context.program.getCompilerOptions())),
+        codeFixAll(
+            context,
+            errorCodes,
+            (changes, err) => doChange(changes, err.file, err.start, context.program.getTypeChecker(), context.preferences, context.program.getCompilerOptions()),
+        ),
 });
 
 function doChange(changes: textChanges.ChangeTracker, sourceFile: SourceFile, position: number, checker: TypeChecker, preferences: UserPreferences, compilerOptions: CompilerOptions): void {

@@ -286,7 +286,10 @@ function getCallHierarchItemContainerName(node: CallHierarchyDeclaration): strin
 }
 
 /** Finds the implementation of a function-like declaration, if one exists. */
-function findImplementation(typeChecker: TypeChecker, node: Extract<CallHierarchyDeclaration, FunctionLikeDeclaration>): Extract<CallHierarchyDeclaration, FunctionLikeDeclaration> | undefined;
+function findImplementation(
+    typeChecker: TypeChecker,
+    node: Extract<CallHierarchyDeclaration, FunctionLikeDeclaration>,
+): Extract<CallHierarchyDeclaration, FunctionLikeDeclaration> | undefined;
 function findImplementation(typeChecker: TypeChecker, node: FunctionLikeDeclaration): FunctionLikeDeclaration | undefined;
 function findImplementation(typeChecker: TypeChecker, node: FunctionLikeDeclaration): FunctionLikeDeclaration | undefined {
     if (node.body) {
@@ -496,7 +499,15 @@ export function getIncomingCalls(program: Program, declaration: CallHierarchyDec
 
 function createCallSiteCollector(program: Program, callSites: CallSite[]): (node: Node | undefined) => void {
     function recordCallSite(
-        node: CallExpression | NewExpression | TaggedTemplateExpression | PropertyAccessExpression | ElementAccessExpression | Decorator | JsxOpeningLikeElement | ClassStaticBlockDeclaration,
+        node:
+            | CallExpression
+            | NewExpression
+            | TaggedTemplateExpression
+            | PropertyAccessExpression
+            | ElementAccessExpression
+            | Decorator
+            | JsxOpeningLikeElement
+            | ClassStaticBlockDeclaration,
     ) {
         const target = isTaggedTemplateExpression(node) ? node.tag :
             isJsxOpeningLikeElement(node) ? node.tagName :

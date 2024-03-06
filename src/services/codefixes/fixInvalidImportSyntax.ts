@@ -39,7 +39,9 @@ function getCodeFixesForImportDeclaration(context: CodeFixContext, node: ImportD
     const variations: CodeFixAction[] = [];
 
     // import Bluebird from "bluebird";
-    variations.push(createAction(context, sourceFile, node, makeImport(namespace.name, /*namedImports*/ undefined, node.moduleSpecifier, getQuotePreference(sourceFile, context.preferences))));
+    variations.push(
+        createAction(context, sourceFile, node, makeImport(namespace.name, /*namedImports*/ undefined, node.moduleSpecifier, getQuotePreference(sourceFile, context.preferences))),
+    );
 
     if (getEmitModuleKind(opts) === ModuleKind.CommonJS) {
         // import Bluebird = require("bluebird");

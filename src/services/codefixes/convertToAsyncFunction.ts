@@ -162,7 +162,8 @@ function convertToAsyncFunction(changes: textChanges.ChangeTracker, sourceFile: 
         return;
     }
 
-    const returnStatements = functionToConvertRenamed.body && isBlock(functionToConvertRenamed.body) ? getReturnStatementsWithPromiseHandlers(functionToConvertRenamed.body, checker) : emptyArray;
+    const returnStatements = functionToConvertRenamed.body && isBlock(functionToConvertRenamed.body) ? getReturnStatementsWithPromiseHandlers(functionToConvertRenamed.body, checker)
+        : emptyArray;
     const transformer: Transformer = { checker, synthNamesMap, setOfExpressionsToReturn, isInJSFile: isInJavascript };
     if (!returnStatements.length) {
         return;
@@ -384,7 +385,13 @@ function silentFail() {
  * @param hasContinuation Whether another `then`, `catch`, or `finally` continuation follows the continuation to which this expression belongs.
  * @param continuationArgName The argument name for the continuation that follows this call.
  */
-function transformExpression(returnContextNode: Expression, node: Expression, transformer: Transformer, hasContinuation: boolean, continuationArgName?: SynthBindingName): readonly Statement[] {
+function transformExpression(
+    returnContextNode: Expression,
+    node: Expression,
+    transformer: Transformer,
+    hasContinuation: boolean,
+    continuationArgName?: SynthBindingName,
+): readonly Statement[] {
     if (isPromiseReturningCallExpression(node, transformer.checker, "then")) {
         return transformThen(node, elementAt(node.arguments, 0), elementAt(node.arguments, 1), transformer, hasContinuation, continuationArgName);
     }
@@ -724,7 +731,9 @@ function transformCallbackArgument(
                         else {
                             const possiblyAwaitedRightHandSide = returnType && statement.expression ? getPossiblyAwaitedRightHandSide(transformer.checker, returnType, statement.expression)
                                 : statement.expression;
-                            refactoredStmts.push(...maybeAnnotateAndReturn(possiblyAwaitedRightHandSide, getExplicitPromisedTypeOfPromiseReturningCallExpression(parent, func, transformer.checker)));
+                            refactoredStmts.push(
+                                ...maybeAnnotateAndReturn(possiblyAwaitedRightHandSide, getExplicitPromisedTypeOfPromiseReturningCallExpression(parent, func, transformer.checker)),
+                            );
                         }
                     }
                     else if (hasContinuation && forEachReturnStatement(statement, returnTrue)) {

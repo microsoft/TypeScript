@@ -873,7 +873,8 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
                         const decl = getNameOfDeclaration(declaration) || declaration;
                         const diag = messageNeedsName ? createDiagnosticForNode(decl, message, getDisplayName(declaration)) : createDiagnosticForNode(decl, message);
                         file.bindDiagnostics.push(
-                            multipleDefaultExports ? addRelatedInfo(diag, createDiagnosticForNode(declarationName, index === 0 ? Diagnostics.Another_export_default_is_here : Diagnostics.and_here))
+                            multipleDefaultExports ?
+                                addRelatedInfo(diag, createDiagnosticForNode(declarationName, index === 0 ? Diagnostics.Another_export_default_is_here : Diagnostics.and_here))
                                 : diag,
                         );
                         if (multipleDefaultExports) {
@@ -1031,10 +1032,10 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
             }
             // We create a return control flow graph for IIFEs and constructors. For constructors
             // we use the return control flow graph in strict property initialization checks.
-            currentReturnTarget =
-                isImmediatelyInvoked || node.kind === SyntaxKind.Constructor || (isInJSFile(node) && (node.kind === SyntaxKind.FunctionDeclaration || node.kind === SyntaxKind.FunctionExpression)) ?
-                    createBranchLabel()
-                    : undefined;
+            currentReturnTarget = isImmediatelyInvoked || node.kind === SyntaxKind.Constructor ||
+                    (isInJSFile(node) && (node.kind === SyntaxKind.FunctionDeclaration || node.kind === SyntaxKind.FunctionExpression)) ?
+                createBranchLabel()
+                : undefined;
             currentExceptionTarget = undefined;
             currentBreakTarget = undefined;
             currentContinueTarget = undefined;
@@ -1043,7 +1044,10 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
             bindChildren(node);
             // Reset all reachability check related flags on node (for incremental scenarios)
             node.flags &= ~NodeFlags.ReachabilityAndEmitFlags;
-            if (!(currentFlow.flags & FlowFlags.Unreachable) && containerFlags & ContainerFlags.IsFunctionLike && nodeIsPresent((node as FunctionLikeDeclaration | ClassStaticBlockDeclaration).body)) {
+            if (
+                !(currentFlow.flags & FlowFlags.Unreachable) && containerFlags & ContainerFlags.IsFunctionLike &&
+                nodeIsPresent((node as FunctionLikeDeclaration | ClassStaticBlockDeclaration).body)
+            ) {
                 node.flags |= NodeFlags.HasImplicitReturn;
                 if (hasExplicitReturn) node.flags |= NodeFlags.HasExplicitReturn;
                 (node as FunctionLikeDeclaration | ClassStaticBlockDeclaration).endFlowNode = currentFlow;
@@ -1265,7 +1269,8 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
         return isDottedName(expr)
             || (isPropertyAccessExpression(expr) || isNonNullExpression(expr) || isParenthesizedExpression(expr)) && isNarrowableReference(expr.expression)
             || isBinaryExpression(expr) && expr.operatorToken.kind === SyntaxKind.CommaToken && isNarrowableReference(expr.right)
-            || isElementAccessExpression(expr) && (isStringOrNumericLiteralLike(expr.argumentExpression) || isEntityNameExpression(expr.argumentExpression)) && isNarrowableReference(expr.expression)
+            || isElementAccessExpression(expr) && (isStringOrNumericLiteralLike(expr.argumentExpression) || isEntityNameExpression(expr.argumentExpression)) &&
+                isNarrowableReference(expr.expression)
             || isAssignmentExpression(expr) && isNarrowableReference(expr.left);
     }
 
@@ -2497,7 +2502,9 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
             }
             else if (originalKeywordKind === SyntaxKind.AwaitKeyword) {
                 if (isExternalModule(file) && isInTopLevelContext(node)) {
-                    file.bindDiagnostics.push(createDiagnosticForNode(node, Diagnostics.Identifier_expected_0_is_a_reserved_word_at_the_top_level_of_a_module, declarationNameToString(node)));
+                    file.bindDiagnostics.push(
+                        createDiagnosticForNode(node, Diagnostics.Identifier_expected_0_is_a_reserved_word_at_the_top_level_of_a_module, declarationNameToString(node)),
+                    );
                 }
                 else if (node.flags & NodeFlags.AwaitContext) {
                     file.bindDiagnostics.push(createDiagnosticForNode(node, Diagnostics.Identifier_expected_0_is_a_reserved_word_that_cannot_be_used_here, declarationNameToString(node)));
@@ -2830,7 +2837,13 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
                     isModuleExportsAccessExpression(expr) &&
                     !lookupSymbolForName(blockScopeContainer, "module" as __String)
                 ) {
-                    declareSymbol(file.locals!, /*parent*/ undefined, expr.expression, SymbolFlags.FunctionScopedVariable | SymbolFlags.ModuleExports, SymbolFlags.FunctionScopedVariableExcludes);
+                    declareSymbol(
+                        file.locals!,
+                        /*parent*/ undefined,
+                        expr.expression,
+                        SymbolFlags.FunctionScopedVariable | SymbolFlags.ModuleExports,
+                        SymbolFlags.FunctionScopedVariableExcludes,
+                    );
                 }
                 break;
             case SyntaxKind.BinaryExpression:
@@ -3230,7 +3243,13 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
                         bindDynamicallyNamedThisPropertyAssignment(node, constructorSymbol, constructorSymbol.members);
                     }
                     else {
-                        declareSymbol(constructorSymbol.members, constructorSymbol, node, SymbolFlags.Property | SymbolFlags.Assignment, SymbolFlags.PropertyExcludes & ~SymbolFlags.Property);
+                        declareSymbol(
+                            constructorSymbol.members,
+                            constructorSymbol,
+                            node,
+                            SymbolFlags.Property | SymbolFlags.Assignment,
+                            SymbolFlags.PropertyExcludes & ~SymbolFlags.Property,
+                        );
                     }
                     addDeclarationToSymbol(constructorSymbol, constructorSymbol.valueDeclaration, SymbolFlags.Class);
                 }
@@ -3360,7 +3379,13 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
         }
         else if (hasDynamicName(node)) {
             bindAnonymousDeclaration(node, SymbolFlags.Property | SymbolFlags.Assignment, InternalSymbolName.Computed);
-            const sym = bindPotentiallyMissingNamespaces(parentSymbol, node.left.expression, isTopLevelNamespaceAssignment(node.left), /*isPrototypeProperty*/ false, /*containerIsClass*/ false);
+            const sym = bindPotentiallyMissingNamespaces(
+                parentSymbol,
+                node.left.expression,
+                isTopLevelNamespaceAssignment(node.left),
+                /*isPrototypeProperty*/ false,
+                /*containerIsClass*/ false,
+            );
             addLateBoundAssignmentDeclarationToSymbol(node, sym);
         }
         else {

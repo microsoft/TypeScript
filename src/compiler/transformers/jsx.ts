@@ -195,7 +195,9 @@ export function transformJsx(context: TransformationContext): (x: SourceFile | B
                         /*modifiers*/ undefined,
                         factory.createVariableDeclarationList([
                             factory.createVariableDeclaration(
-                                factory.createObjectBindingPattern(arrayFrom(importSpecifiersMap.values(), s => factory.createBindingElement(/*dotDotDotToken*/ undefined, s.propertyName, s.name))),
+                                factory.createObjectBindingPattern(
+                                    arrayFrom(importSpecifiersMap.values(), s => factory.createBindingElement(/*dotDotDotToken*/ undefined, s.propertyName, s.name)),
+                                ),
                                 /*exclamationToken*/ undefined,
                                 /*type*/ undefined,
                                 factory.createCallExpression(factory.createIdentifier("require"), /*typeArguments*/ undefined, [factory.createStringLiteral(importSource)]),
@@ -476,7 +478,9 @@ export function transformJsx(context: TransformationContext): (x: SourceFile | B
                 attrs,
                 isJsxSpreadAttribute,
                 (attrs, isSpread) =>
-                    flatten(map(attrs, attr => isSpread ? transformJsxSpreadAttributeToProps(attr as JsxSpreadAttribute) : transformJsxAttributeToObjectLiteralElement(attr as JsxAttribute))),
+                    flatten(
+                        map(attrs, attr => isSpread ? transformJsxSpreadAttributeToProps(attr as JsxSpreadAttribute) : transformJsxAttributeToObjectLiteralElement(attr as JsxAttribute)),
+                    ),
             ),
         );
         if (children) {

@@ -2411,12 +2411,22 @@ export function convertToJson(
         // Not in expected format
         if (option) {
             errors.push(
-                createDiagnosticForNodeInSourceFile(sourceFile, valueExpression, Diagnostics.Compiler_option_0_requires_a_value_of_type_1, option.name, getCompilerOptionValueTypeString(option)),
+                createDiagnosticForNodeInSourceFile(
+                    sourceFile,
+                    valueExpression,
+                    Diagnostics.Compiler_option_0_requires_a_value_of_type_1,
+                    option.name,
+                    getCompilerOptionValueTypeString(option),
+                ),
             );
         }
         else {
             errors.push(
-                createDiagnosticForNodeInSourceFile(sourceFile, valueExpression, Diagnostics.Property_value_can_only_be_string_literal_numeric_literal_true_false_null_object_literal_or_array_literal),
+                createDiagnosticForNodeInSourceFile(
+                    sourceFile,
+                    valueExpression,
+                    Diagnostics.Property_value_can_only_be_string_literal_numeric_literal_true_false_null_object_literal_or_array_literal,
+                ),
             );
         }
 
@@ -2612,7 +2622,9 @@ function serializeOptionBaseObject(
         if (hasProperty(options, name)) {
             // tsconfig only options cannot be specified via command line,
             // so we can assume that only types that can appear here string | number | boolean
-            if (optionsNameMap.has(name) && (optionsNameMap.get(name)!.category === Diagnostics.Command_line_Options || optionsNameMap.get(name)!.category === Diagnostics.Output_Formatting)) {
+            if (
+                optionsNameMap.has(name) && (optionsNameMap.get(name)!.category === Diagnostics.Command_line_Options || optionsNameMap.get(name)!.category === Diagnostics.Output_Formatting)
+            ) {
                 continue;
             }
             const value = options[name] as CompilerOptionsValue;
@@ -2626,7 +2638,11 @@ function serializeOptionBaseObject(
                     if (pathOptions && optionDefinition.isFilePath) {
                         result.set(
                             name,
-                            getRelativePathFromFile(pathOptions.configFilePath, getNormalizedAbsolutePath(value as string, getDirectoryPath(pathOptions.configFilePath)), getCanonicalFileName!),
+                            getRelativePathFromFile(
+                                pathOptions.configFilePath,
+                                getNormalizedAbsolutePath(value as string, getDirectoryPath(pathOptions.configFilePath)),
+                                getCanonicalFileName!,
+                            ),
                         );
                     }
                     else {
@@ -3116,7 +3132,13 @@ export function canJsonReportNoInputFiles(raw: any) {
 }
 
 /** @internal */
-export function updateErrorForNoInputFiles(fileNames: string[], configFileName: string, configFileSpecs: ConfigFileSpecs, configParseDiagnostics: Diagnostic[], canJsonReportNoInutFiles: boolean) {
+export function updateErrorForNoInputFiles(
+    fileNames: string[],
+    configFileName: string,
+    configFileSpecs: ConfigFileSpecs,
+    configParseDiagnostics: Diagnostic[],
+    canJsonReportNoInutFiles: boolean,
+) {
     const existingErrors = configParseDiagnostics.length;
     if (shouldReportNoInputFiles(fileNames, canJsonReportNoInutFiles)) {
         configParseDiagnostics.push(getErrorForNoInputFiles(configFileSpecs, configFileName));
@@ -3297,7 +3319,15 @@ function getExtendsConfigPathOrArray(
                 );
             }
             else {
-                convertJsonOption(extendsOptionDeclaration.element, value, basePath, errors, propertyAssignment, (valueExpression as ArrayLiteralExpression | undefined)?.elements[index], sourceFile);
+                convertJsonOption(
+                    extendsOptionDeclaration.element,
+                    value,
+                    basePath,
+                    errors,
+                    propertyAssignment,
+                    (valueExpression as ArrayLiteralExpression | undefined)?.elements[index],
+                    sourceFile,
+                );
             }
         }
     }
@@ -3571,7 +3601,12 @@ function convertOptionsFromJson(
     return defaultOptions;
 }
 
-function createDiagnosticForNodeInSourceFileOrCompilerDiagnostic(sourceFile: TsConfigSourceFile | undefined, node: Node | undefined, message: DiagnosticMessage, ...args: DiagnosticArguments) {
+function createDiagnosticForNodeInSourceFileOrCompilerDiagnostic(
+    sourceFile: TsConfigSourceFile | undefined,
+    node: Node | undefined,
+    message: DiagnosticMessage,
+    ...args: DiagnosticArguments
+) {
     return sourceFile && node ?
         createDiagnosticForNodeInSourceFile(sourceFile, node, message, ...args) :
         createCompilerDiagnostic(message, ...args);
@@ -3870,7 +3905,13 @@ function matchesExcludeWorker(
     return !hasExtension(pathToCheck) && excludeRegex.test(ensureTrailingDirectorySeparator(pathToCheck));
 }
 
-function validateSpecs(specs: readonly string[], errors: Diagnostic[], disallowTrailingRecursion: boolean, jsonSourceFile: TsConfigSourceFile | undefined, specKey: string): readonly string[] {
+function validateSpecs(
+    specs: readonly string[],
+    errors: Diagnostic[],
+    disallowTrailingRecursion: boolean,
+    jsonSourceFile: TsConfigSourceFile | undefined,
+    specKey: string,
+): readonly string[] {
     return specs.filter(spec => {
         if (!isString(spec)) return false;
         const diag = specToDiagnostic(spec, disallowTrailingRecursion);

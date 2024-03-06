@@ -221,7 +221,12 @@ function changeExport(exportingSourceFile: SourceFile, { wasDefault, exportNode,
     }
 }
 
-function changeImports(program: Program, { wasDefault, exportName, exportingModuleSymbol }: ExportInfo, changes: textChanges.ChangeTracker, cancellationToken: CancellationToken | undefined): void {
+function changeImports(
+    program: Program,
+    { wasDefault, exportName, exportingModuleSymbol }: ExportInfo,
+    changes: textChanges.ChangeTracker,
+    cancellationToken: CancellationToken | undefined,
+): void {
     const checker = program.getTypeChecker();
     const exportSymbol = Debug.checkDefined(checker.getSymbolAtLocation(exportName), "Export name should resolve to a symbol");
     FindAllReferences.Core.eachExportReference(program.getSourceFiles(), checker, cancellationToken, exportSymbol, exportingModuleSymbol, exportName.text, wasDefault, ref => {
@@ -262,7 +267,8 @@ function changeDefaultToNamedImport(importingSourceFile: SourceFile, ref: Identi
             else if (namedBindings.kind === SyntaxKind.NamespaceImport) {
                 // `import foo, * as a from "./a";` --> `import * as a from ".a/"; import { foo } from "./a";`
                 changes.deleteRange(importingSourceFile, { pos: ref.getStart(importingSourceFile), end: namedBindings.getStart(importingSourceFile) });
-                const quotePreference = isStringLiteral(clause.parent.moduleSpecifier) ? quotePreferenceFromString(clause.parent.moduleSpecifier, importingSourceFile) : QuotePreference.Double;
+                const quotePreference = isStringLiteral(clause.parent.moduleSpecifier) ? quotePreferenceFromString(clause.parent.moduleSpecifier, importingSourceFile)
+                    : QuotePreference.Double;
                 const newImport = makeImport(/*defaultImport*/ undefined, [makeImportSpecifier(exportName, ref.text)], clause.parent.moduleSpecifier, quotePreference);
                 changes.insertNodeAfter(importingSourceFile, clause.parent, newImport);
             }

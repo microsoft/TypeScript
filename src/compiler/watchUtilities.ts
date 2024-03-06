@@ -696,7 +696,12 @@ export interface WatchFactory<X, Y = undefined> {
 /** @internal */
 export type GetDetailWatchInfo<X, Y> = (detailInfo1: X, detailInfo2: Y | undefined) => string;
 /** @internal */
-export function getWatchFactory<X, Y = undefined>(host: WatchFactoryHost, watchLogLevel: WatchLogLevel, log: (s: string) => void, getDetailWatchInfo?: GetDetailWatchInfo<X, Y>): WatchFactory<X, Y> {
+export function getWatchFactory<X, Y = undefined>(
+    host: WatchFactoryHost,
+    watchLogLevel: WatchLogLevel,
+    log: (s: string) => void,
+    getDetailWatchInfo?: GetDetailWatchInfo<X, Y>,
+): WatchFactory<X, Y> {
     setSysLog(watchLogLevel === WatchLogLevel.Verbose ? log : noop);
     const plainInvokeFactory: WatchFactory<X, Y> = {
         watchFile: (file, callback, pollingInterval, options) => host.watchFile(file, callback, pollingInterval, options),
@@ -827,7 +832,14 @@ export function getWatchFactory<X, Y = undefined>(host: WatchFactoryHost, watchL
         );
     }
 
-    function getWatchInfo<T>(file: string, flags: T, options: WatchOptions | undefined, detailInfo1: X, detailInfo2: Y | undefined, getDetailWatchInfo: GetDetailWatchInfo<X, Y> | undefined) {
+    function getWatchInfo<T>(
+        file: string,
+        flags: T,
+        options: WatchOptions | undefined,
+        detailInfo1: X,
+        detailInfo2: Y | undefined,
+        getDetailWatchInfo: GetDetailWatchInfo<X, Y> | undefined,
+    ) {
         return `WatchInfo: ${file} ${flags} ${JSON.stringify(options)} ${
             getDetailWatchInfo ? getDetailWatchInfo(detailInfo1, detailInfo2) : detailInfo2 === undefined ? detailInfo1 : `${detailInfo1} ${detailInfo2}`
         }`;

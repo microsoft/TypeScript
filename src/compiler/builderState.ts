@@ -398,7 +398,13 @@ export namespace BuilderState {
             return [sourceFile];
         }
 
-        return (state.referencedMap ? getFilesAffectedByUpdatedShapeWhenModuleEmit : getFilesAffectedByUpdatedShapeWhenNonModuleEmit)(state, programOfThisState, sourceFile, cancellationToken, host);
+        return (state.referencedMap ? getFilesAffectedByUpdatedShapeWhenModuleEmit : getFilesAffectedByUpdatedShapeWhenNonModuleEmit)(
+            state,
+            programOfThisState,
+            sourceFile,
+            cancellationToken,
+            host,
+        );
     }
 
     export function updateSignatureOfFile(state: BuilderState, signature: string | undefined, path: Path) {

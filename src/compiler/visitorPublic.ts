@@ -650,7 +650,14 @@ export function visitEachChild<T extends Node>(
     return fn === undefined ? node : fn(node, visitor, context, nodesVisitor, nodeVisitor, tokenVisitor);
 }
 
-type VisitEachChildFunction<T extends Node> = (node: T, visitor: Visitor, context: TransformationContext, nodesVisitor: NodesVisitor, nodeVisitor: NodeVisitor, tokenVisitor: Visitor | undefined) => T;
+type VisitEachChildFunction<T extends Node> = (
+    node: T,
+    visitor: Visitor,
+    context: TransformationContext,
+    nodesVisitor: NodesVisitor,
+    nodeVisitor: NodeVisitor,
+    tokenVisitor: Visitor | undefined,
+) => T;
 
 // A type that correlates a `SyntaxKind` to a `VisitEachChildFunction<T>`, for nodes in the `HasChildren` union.
 // This looks something like:

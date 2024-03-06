@@ -52,7 +52,8 @@ describe("unittests:: services:: PreProcessFile:", () => {
 
         it("Do not return reference path because of invalid triple-slash syntax", () => {
             test(
-                '///<reference path"refFile1.ts" />' + "\n" + '///<reference path ="refFile2.ts">' + "\n" + '///<referencepath="refFile3.ts" />' + "\n" + '///<reference pat= "refFile4d.ts" />',
+                '///<reference path"refFile1.ts" />' + "\n" + '///<reference path ="refFile2.ts">' + "\n" + '///<referencepath="refFile3.ts" />' + "\n" +
+                    '///<reference pat= "refFile4d.ts" />',
                 /*readImportFile*/ true,
                 /*detectJavaScriptImports*/ false,
                 {
@@ -157,7 +158,8 @@ describe("unittests:: services:: PreProcessFile:", () => {
 
         it("Correctly return referenced files and import files even with some invalid syntax", () => {
             test(
-                '///<reference path="refFile1.ts" />' + "\n" + '///<reference path "refFile2.ts"/>' + "\n" + 'import i1 = require("r1.ts"); import = require("r2.ts"); import i2 = require("r3.ts");',
+                '///<reference path="refFile1.ts" />' + "\n" + '///<reference path "refFile2.ts"/>' + "\n" +
+                    'import i1 = require("r1.ts"); import = require("r2.ts"); import i2 = require("r3.ts");',
                 /*readImportFile*/ true,
                 /*detectJavaScriptImports*/ false,
                 {

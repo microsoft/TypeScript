@@ -70,7 +70,11 @@ describe("unittests:: PrinterAPI", () => {
         printsCorrectly("regularExpressionLiteral", {}, printer => printer.printFile(ts.createSourceFile("source.ts", "let regex = /abc/;", ts.ScriptTarget.ES2017)));
 
         // https://github.com/microsoft/TypeScript/issues/22239
-        printsCorrectly("importStatementRemoveComments", { removeComments: true }, printer => printer.printFile(ts.createSourceFile("source.ts", "import {foo} from 'foo';", ts.ScriptTarget.ESNext)));
+        printsCorrectly(
+            "importStatementRemoveComments",
+            { removeComments: true },
+            printer => printer.printFile(ts.createSourceFile("source.ts", "import {foo} from 'foo';", ts.ScriptTarget.ESNext)),
+        );
         printsCorrectly("classHeritageClauses", {}, printer =>
             printer.printFile(ts.createSourceFile(
                 "source.ts",
