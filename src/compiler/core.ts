@@ -988,7 +988,10 @@ export function relativeComplement<T>(arrayA: T[] | undefined, arrayB: T[] | und
  *
  * @internal
  */
-export function append<TArray extends any[] | undefined, TValue extends NonNullable<TArray>[number] | undefined>(to: TArray, value: TValue): [undefined, undefined] extends [TArray, TValue] ? TArray : NonNullable<TArray>[number][];
+export function append<TArray extends any[] | undefined, TValue extends NonNullable<TArray>[number] | undefined>(
+    to: TArray,
+    value: TValue,
+): [undefined, undefined] extends [TArray, TValue] ? TArray : NonNullable<TArray>[number][];
 /** @internal */
 export function append<T>(to: T[], value: T | undefined): T[];
 /** @internal */

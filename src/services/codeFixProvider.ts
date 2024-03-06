@@ -45,7 +45,14 @@ export function createCodeFixAction(
 }
 
 /** @internal */
-export function createCodeFixActionMaybeFixAll(fixName: string, changes: FileTextChanges[], description: DiagnosticOrDiagnosticAndArguments, fixId?: {}, fixAllDescription?: DiagnosticOrDiagnosticAndArguments, command?: CodeActionCommand) {
+export function createCodeFixActionMaybeFixAll(
+    fixName: string,
+    changes: FileTextChanges[],
+    description: DiagnosticOrDiagnosticAndArguments,
+    fixId?: {},
+    fixAllDescription?: DiagnosticOrDiagnosticAndArguments,
+    command?: CodeActionCommand,
+) {
     return createCodeFixActionWorker(fixName, diagnosticToString(description), changes, fixId, fixAllDescription && diagnosticToString(fixAllDescription), command);
 }
 

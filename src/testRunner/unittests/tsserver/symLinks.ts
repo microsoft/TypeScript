@@ -144,7 +144,13 @@ new C();`,
 
         function verifyModuleResolution(withPathMapping: boolean) {
             describe(withPathMapping ? "when tsconfig file contains path mapping" : "when tsconfig does not contain path mapping", () => {
-                const filesWithSources = [libFile, recognizersDateTimeSrcFile, withPathMapping ? recognizerDateTimeTsconfigWithPathMapping : recognizerDateTimeTsconfigWithoutPathMapping, recognizerTextSrcFile, recongnizerTextPackageJson];
+                const filesWithSources = [
+                    libFile,
+                    recognizersDateTimeSrcFile,
+                    withPathMapping ? recognizerDateTimeTsconfigWithPathMapping : recognizerDateTimeTsconfigWithoutPathMapping,
+                    recognizerTextSrcFile,
+                    recongnizerTextPackageJson,
+                ];
                 it("when project compiles from sources", () => {
                     const host = createServerHost(filesWithSources);
                     const session = createSessionAndOpenFile(host);
@@ -182,7 +188,11 @@ new C();`,
                     host.runQueuedTimeoutCallbacks(); // Actual update
 
                     verifyGetErrRequest({ session, files: [recognizersDateTimeSrcFile] });
-                    baselineTsserverLogs("symLinks", `module resolution${withPathMapping ? " with path mapping" : ""} when project has node_modules setup but doesnt have modules in typings folder and then recompiles`, session);
+                    baselineTsserverLogs(
+                        "symLinks",
+                        `module resolution${withPathMapping ? " with path mapping" : ""} when project has node_modules setup but doesnt have modules in typings folder and then recompiles`,
+                        session,
+                    );
                 });
 
                 it("when project recompiles after deleting generated folders", () => {

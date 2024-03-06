@@ -452,7 +452,13 @@ export function forEachExternalModuleToImportFrom(
     }
 }
 
-function forEachExternalModule(checker: TypeChecker, allSourceFiles: readonly SourceFile[], excludePatterns: readonly RegExp[] | undefined, host: LanguageServiceHost, cb: (module: Symbol, sourceFile: SourceFile | undefined) => void) {
+function forEachExternalModule(
+    checker: TypeChecker,
+    allSourceFiles: readonly SourceFile[],
+    excludePatterns: readonly RegExp[] | undefined,
+    host: LanguageServiceHost,
+    cb: (module: Symbol, sourceFile: SourceFile | undefined) => void,
+) {
     const realpathsWithSymlinks = host.getSymlinkCache?.().getSymlinkedDirectoriesByRealpath();
     const isExcluded = excludePatterns && (({ fileName, path }: SourceFile) => {
         if (excludePatterns.some(p => p.test(fileName))) return true;

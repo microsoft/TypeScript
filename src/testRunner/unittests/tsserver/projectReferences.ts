@@ -403,7 +403,11 @@ function foo() {
                 },
             });
             verifyGetErrRequest({ session, files: [aTest] });
-            baselineTsserverLogs("projectReferences", `monorepo like with symlinks ${scenario} and solution is ${alreadyBuilt ? "built" : "not built"}${extraOptions.preserveSymlinks ? " with preserveSymlinks" : ""}`, session);
+            baselineTsserverLogs(
+                "projectReferences",
+                `monorepo like with symlinks ${scenario} and solution is ${alreadyBuilt ? "built" : "not built"}${extraOptions.preserveSymlinks ? " with preserveSymlinks" : ""}`,
+                session,
+            );
         }
 
         function config(packageName: string, extraOptions: ts.CompilerOptions, references?: string[]): File {
@@ -1486,7 +1490,11 @@ bar;`,
                     errorCodes: [ts.Diagnostics.Cannot_find_name_0.code],
                 },
             });
-            baselineTsserverLogs("projectReferences", `auto import with referenced project${built ? " when built" : ""}${disableSourceOfProjectReferenceRedirect ? " with disableSourceOfProjectReferenceRedirect" : ""}`, session);
+            baselineTsserverLogs(
+                "projectReferences",
+                `auto import with referenced project${built ? " when built" : ""}${disableSourceOfProjectReferenceRedirect ? " with disableSourceOfProjectReferenceRedirect" : ""}`,
+                session,
+            );
         }
 
         it("when project is built", () => {

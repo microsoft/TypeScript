@@ -176,7 +176,9 @@ function baselineMatches(subScenario: string, json: any, host: fakes.ParseConfig
             basePath,
             baselineParsed: (baseline, parsed) => {
                 const wildcardDirectories = parsed.wildcardDirectories ? {} as ts.MapLike<string> : undefined;
-                if (parsed.wildcardDirectories) ts.getOwnKeys(parsed.wildcardDirectories).forEach(dir => wildcardDirectories![dir] = `WatchDirectoryFlags.${(ts as any).WatchDirectoryFlags[parsed.wildcardDirectories![dir]]}`);
+                if (parsed.wildcardDirectories) {
+                    ts.getOwnKeys(parsed.wildcardDirectories).forEach(dir => wildcardDirectories![dir] = `WatchDirectoryFlags.${(ts as any).WatchDirectoryFlags[parsed.wildcardDirectories![dir]]}`);
+                }
                 baseline.push(
                     "Result",
                     jsonToReadableText({

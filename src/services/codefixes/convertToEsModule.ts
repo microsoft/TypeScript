@@ -422,7 +422,10 @@ function convertExportsPropertyAssignment({ left, right, parent }: BinaryExpress
     }
     else {
         // `exports.f = function g() {}` -> `export const f = function g() {}` -- just replace `exports.` with `export const `
-        changes.replaceNodeRangeWithNodes(sourceFile, left.expression, findChildOfKind(left, SyntaxKind.DotToken, sourceFile)!, [factory.createToken(SyntaxKind.ExportKeyword), factory.createToken(SyntaxKind.ConstKeyword)], {
+        changes.replaceNodeRangeWithNodes(sourceFile, left.expression, findChildOfKind(left, SyntaxKind.DotToken, sourceFile)!, [
+            factory.createToken(SyntaxKind.ExportKeyword),
+            factory.createToken(SyntaxKind.ConstKeyword),
+        ], {
             joiner: " ",
             suffix: " ",
         });

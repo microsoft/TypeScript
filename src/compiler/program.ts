@@ -1205,7 +1205,8 @@ export function getReferencedFileLocation(program: Program, ref: ReferencedFile)
             break;
         case FileIncludeKind.TypeReferenceDirective:
             ({ pos, end, resolutionMode } = file.typeReferenceDirectives[index]);
-            packageId = program.getResolvedTypeReferenceDirective(file, toFileNameLowerCase(file.typeReferenceDirectives[index].fileName), resolutionMode || file.impliedNodeFormat)?.resolvedTypeReferenceDirective?.packageId;
+            packageId = program.getResolvedTypeReferenceDirective(file, toFileNameLowerCase(file.typeReferenceDirectives[index].fileName), resolutionMode || file.impliedNodeFormat)?.resolvedTypeReferenceDirective
+                ?.packageId;
             break;
         case FileIncludeKind.LibReferenceDirective:
             ({ pos, end } = file.libReferenceDirectives[index]);
@@ -1469,7 +1470,14 @@ function shouldProgramCreateNewSourceFiles(program: Program | undefined, newOpti
     return optionsHaveChanges(program.getCompilerOptions(), newOptions, sourceFileAffectingCompilerOptions);
 }
 
-function createCreateProgramOptions(rootNames: readonly string[], options: CompilerOptions, host?: CompilerHost, oldProgram?: Program, configFileParsingDiagnostics?: readonly Diagnostic[], typeScriptVersion?: string): CreateProgramOptions {
+function createCreateProgramOptions(
+    rootNames: readonly string[],
+    options: CompilerOptions,
+    host?: CompilerHost,
+    oldProgram?: Program,
+    configFileParsingDiagnostics?: readonly Diagnostic[],
+    typeScriptVersion?: string,
+): CreateProgramOptions {
     return {
         rootNames,
         options,
@@ -1506,7 +1514,13 @@ export function createProgram(createProgramOptions: CreateProgramOptions): Progr
  * @returns A 'Program' object.
  */
 export function createProgram(rootNames: readonly string[], options: CompilerOptions, host?: CompilerHost, oldProgram?: Program, configFileParsingDiagnostics?: readonly Diagnostic[]): Program;
-export function createProgram(rootNamesOrOptions: readonly string[] | CreateProgramOptions, _options?: CompilerOptions, _host?: CompilerHost, _oldProgram?: Program, _configFileParsingDiagnostics?: readonly Diagnostic[]): Program {
+export function createProgram(
+    rootNamesOrOptions: readonly string[] | CreateProgramOptions,
+    _options?: CompilerOptions,
+    _host?: CompilerHost,
+    _oldProgram?: Program,
+    _configFileParsingDiagnostics?: readonly Diagnostic[],
+): Program {
     const createProgramOptions = isArray(rootNamesOrOptions) ? createCreateProgramOptions(rootNamesOrOptions, _options!, _host, _oldProgram, _configFileParsingDiagnostics) : rootNamesOrOptions; // TODO: GH#18217
     const { rootNames, options, configFileParsingDiagnostics, projectReferences, typeScriptVersion } = createProgramOptions;
     let { oldProgram } = createProgramOptions;
@@ -1947,7 +1961,9 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
     fileProcessingDiagnostics?.forEach(diagnostic => {
         switch (diagnostic.kind) {
             case FilePreprocessingDiagnosticsKind.FilePreprocessingFileExplainingDiagnostic:
-                return programDiagnostics.add(createDiagnosticExplainingFile(diagnostic.file && getSourceFileByPath(diagnostic.file), diagnostic.fileProcessingReason, diagnostic.diagnostic, diagnostic.args || emptyArray));
+                return programDiagnostics.add(
+                    createDiagnosticExplainingFile(diagnostic.file && getSourceFileByPath(diagnostic.file), diagnostic.fileProcessingReason, diagnostic.diagnostic, diagnostic.args || emptyArray),
+                );
             case FilePreprocessingDiagnosticsKind.FilePreprocessingReferencedDiagnostic:
                 const { file, pos, end } = getReferencedFileLocation(program, diagnostic.reason) as ReferenceFileLocation;
                 return programDiagnostics.add(createFileDiagnostic(file, Debug.checkDefined(pos), Debug.checkDefined(end) - pos, diagnostic.diagnostic, ...diagnostic.args || emptyArray));
@@ -2281,7 +2297,10 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
 
     function resolveTypeReferenceDirectiveNamesReusingOldState(typeDirectiveNames: readonly FileReference[], containingFile: SourceFile): readonly ResolvedTypeReferenceDirectiveWithFailedLookupLocations[];
     function resolveTypeReferenceDirectiveNamesReusingOldState(typeDirectiveNames: string[], containingFile: string): readonly ResolvedTypeReferenceDirectiveWithFailedLookupLocations[];
-    function resolveTypeReferenceDirectiveNamesReusingOldState<T extends string | FileReference>(typeDirectiveNames: readonly T[], containingFile: string | SourceFile): readonly ResolvedTypeReferenceDirectiveWithFailedLookupLocations[] {
+    function resolveTypeReferenceDirectiveNamesReusingOldState<T extends string | FileReference>(
+        typeDirectiveNames: readonly T[],
+        containingFile: string | SourceFile,
+    ): readonly ResolvedTypeReferenceDirectiveWithFailedLookupLocations[] {
         if (structureIsReused === StructureIsReused.Not) {
             // If the old program state does not permit reusing resolutions and `file` does not contain locally defined ambient modules,
             // the best we can do is fallback to the default logic.
@@ -2735,7 +2754,14 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
         return typeChecker || (typeChecker = createTypeChecker(program));
     }
 
-    function emit(sourceFile?: SourceFile, writeFileCallback?: WriteFileCallback, cancellationToken?: CancellationToken, emitOnly?: boolean | EmitOnly, transformers?: CustomTransformers, forceDtsEmit?: boolean): EmitResult {
+    function emit(
+        sourceFile?: SourceFile,
+        writeFileCallback?: WriteFileCallback,
+        cancellationToken?: CancellationToken,
+        emitOnly?: boolean | EmitOnly,
+        transformers?: CustomTransformers,
+        forceDtsEmit?: boolean,
+    ): EmitResult {
         tracing?.push(tracing.Phase.Emit, "emit", { path: sourceFile?.path }, /*separateBeginAndEnd*/ true);
         const result = runWithCancellationToken(() => emitWorker(program, sourceFile, writeFileCallback, cancellationToken, emitOnly, transformers, forceDtsEmit));
         tracing?.pop();
@@ -3547,7 +3573,15 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
         }
     }
 
-    function createRedirectedSourceFile(redirectTarget: SourceFile, unredirected: SourceFile, fileName: string, path: Path, resolvedPath: Path, originalFileName: string, sourceFileOptions: CreateSourceFileOptions): SourceFile {
+    function createRedirectedSourceFile(
+        redirectTarget: SourceFile,
+        unredirected: SourceFile,
+        fileName: string,
+        path: Path,
+        resolvedPath: Path,
+        originalFileName: string,
+        sourceFileOptions: CreateSourceFileOptions,
+    ): SourceFile {
         const redirect = parseNodeFactory.createRedirectedSourceFile({ redirectTarget, unredirected });
         redirect.fileName = fileName;
         redirect.path = path;
@@ -4332,7 +4366,9 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
                     firstNonAmbientExternalModuleSourceFile,
                     typeof firstNonAmbientExternalModuleSourceFile.externalModuleIndicator === "boolean" ? firstNonAmbientExternalModuleSourceFile : firstNonAmbientExternalModuleSourceFile.externalModuleIndicator!,
                 );
-                programDiagnostics.add(createFileDiagnostic(firstNonAmbientExternalModuleSourceFile, span.start, span.length, Diagnostics.Cannot_compile_modules_using_option_0_unless_the_module_flag_is_amd_or_system, "outFile"));
+                programDiagnostics.add(
+                    createFileDiagnostic(firstNonAmbientExternalModuleSourceFile, span.start, span.length, Diagnostics.Cannot_compile_modules_using_option_0_unless_the_module_flag_is_amd_or_system, "outFile"),
+                );
             }
         }
 

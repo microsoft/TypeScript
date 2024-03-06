@@ -216,7 +216,15 @@ export class VerifyNegatable {
         this.state.verifyRefactorAvailable(this.negative, "implicit", name, actionName, actionDescription, kind, preferences, includeInteractiveActions);
     }
 
-    public refactorAvailableForTriggerReason(triggerReason: ts.RefactorTriggerReason, name: string, actionName?: string, actionDescription?: string, kind?: string, preferences = ts.emptyOptions, includeInteractiveActions?: boolean) {
+    public refactorAvailableForTriggerReason(
+        triggerReason: ts.RefactorTriggerReason,
+        name: string,
+        actionName?: string,
+        actionDescription?: string,
+        kind?: string,
+        preferences = ts.emptyOptions,
+        includeInteractiveActions?: boolean,
+    ) {
         this.state.verifyRefactorAvailable(this.negative, triggerReason, name, actionName, actionDescription, kind, preferences, includeInteractiveActions);
     }
 

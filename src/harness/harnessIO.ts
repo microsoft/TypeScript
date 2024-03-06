@@ -621,7 +621,8 @@ export namespace Compiler {
             const fileErrors = diagnostics.filter((e): e is ts.DiagnosticWithLocation => {
                 const errFn = e.file;
                 return !!errFn &&
-                    ts.comparePaths(Utils.removeTestPathPrefixes(errFn.fileName), Utils.removeTestPathPrefixes(inputFile.unitName), options && options.currentDirectory || "", !(options && options.caseSensitive)) === ts.Comparison.EqualTo;
+                    ts.comparePaths(Utils.removeTestPathPrefixes(errFn.fileName), Utils.removeTestPathPrefixes(inputFile.unitName), options && options.currentDirectory || "", !(options && options.caseSensitive)) ===
+                        ts.Comparison.EqualTo;
             });
 
             // Header
@@ -1528,9 +1529,9 @@ export namespace Baseline {
             }
             if (missing.length) {
                 const writtenFilesArray = ts.arrayFrom(writtenFiles.keys());
-                errorMsg += `Baseline missing ${missing.length} files:${"\n    " + missing.slice(0, 5).join("\n    ") + (missing.length > 5 ? "\n" + `    and ${missing.length - 5} more` : "") + "\n"}Written ${writtenFiles.size} files:${
-                    "\n    " + writtenFilesArray.slice(0, 5).join("\n    ") + (writtenFilesArray.length > 5 ? "\n" + `    and ${writtenFilesArray.length - 5} more` : "")
-                }`;
+                errorMsg += `Baseline missing ${missing.length} files:${
+                    "\n    " + missing.slice(0, 5).join("\n    ") + (missing.length > 5 ? "\n" + `    and ${missing.length - 5} more` : "") + "\n"
+                }Written ${writtenFiles.size} files:${"\n    " + writtenFilesArray.slice(0, 5).join("\n    ") + (writtenFilesArray.length > 5 ? "\n" + `    and ${writtenFilesArray.length - 5} more` : "")}`;
             }
             throw new Error(errorMsg);
         }

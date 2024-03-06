@@ -499,7 +499,8 @@ function annotateJSDocParameters(changes: textChanges.ChangeTracker, sourceFile:
     else {
         const paramTags = map(
             inferences,
-            ({ name, typeNode, isOptional }) => factory.createJSDocParameterTag(/*tagName*/ undefined, name, /*isBracketed*/ !!isOptional, factory.createJSDocTypeExpression(typeNode), /*isNameFirst*/ false, /*comment*/ undefined),
+            ({ name, typeNode, isOptional }) =>
+                factory.createJSDocParameterTag(/*tagName*/ undefined, name, /*isBracketed*/ !!isOptional, factory.createJSDocTypeExpression(typeNode), /*isNameFirst*/ false, /*comment*/ undefined),
         );
         changes.addJSDocTags(sourceFile, signature, paramTags);
     }
@@ -507,7 +508,10 @@ function annotateJSDocParameters(changes: textChanges.ChangeTracker, sourceFile:
 
 function getReferences(token: PropertyName | Token<SyntaxKind.ConstructorKeyword>, program: Program, cancellationToken: CancellationToken): readonly Identifier[] {
     // Position shouldn't matter since token is not a SourceFile.
-    return mapDefined(FindAllReferences.getReferenceEntriesForNode(-1, token, program, program.getSourceFiles(), cancellationToken), entry => entry.kind !== FindAllReferences.EntryKind.Span ? tryCast(entry.node, isIdentifier) : undefined);
+    return mapDefined(
+        FindAllReferences.getReferenceEntriesForNode(-1, token, program, program.getSourceFiles(), cancellationToken),
+        entry => entry.kind !== FindAllReferences.EntryKind.Span ? tryCast(entry.node, isIdentifier) : undefined,
+    );
 }
 
 function inferTypeForVariableFromUsage(token: Identifier | PrivateIdentifier, program: Program, cancellationToken: CancellationToken): Type {

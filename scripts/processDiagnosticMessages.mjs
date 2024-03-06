@@ -99,9 +99,12 @@ function buildInfoFileOutput(messageTable, inputFilePathRel) {
         const propName = convertPropertyName(name);
         const argReportsUnnecessary = reportsUnnecessary ? `, /*reportsUnnecessary*/ ${reportsUnnecessary}` : "";
         const argElidedInCompatabilityPyramid = elidedInCompatabilityPyramid ? `${!reportsUnnecessary ? ", /*reportsUnnecessary*/ undefined" : ""}, /*elidedInCompatabilityPyramid*/ ${elidedInCompatabilityPyramid}` : "";
-        const argReportsDeprecated = reportsDeprecated ? `${!argElidedInCompatabilityPyramid ? ", /*reportsUnnecessary*/ undefined, /*elidedInCompatabilityPyramid*/ undefined" : ""}, /*reportsDeprecated*/ ${reportsDeprecated}` : "";
+        const argReportsDeprecated = reportsDeprecated
+            ? `${!argElidedInCompatabilityPyramid ? ", /*reportsUnnecessary*/ undefined, /*elidedInCompatabilityPyramid*/ undefined" : ""}, /*reportsDeprecated*/ ${reportsDeprecated}` : "";
 
-        result.push(`    ${propName}: diag(${code}, DiagnosticCategory.${category}, "${createKey(propName, code)}", ${JSON.stringify(name)}${argReportsUnnecessary}${argElidedInCompatabilityPyramid}${argReportsDeprecated}),`);
+        result.push(
+            `    ${propName}: diag(${code}, DiagnosticCategory.${category}, "${createKey(propName, code)}", ${JSON.stringify(name)}${argReportsUnnecessary}${argElidedInCompatabilityPyramid}${argReportsDeprecated}),`,
+        );
     });
 
     result.push("};");

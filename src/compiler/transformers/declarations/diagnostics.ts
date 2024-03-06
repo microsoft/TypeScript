@@ -205,7 +205,8 @@ export function createGetSymbolAccessibilityDiagnosticForNodeName(node: Declarat
 /** @internal */
 export function createGetSymbolAccessibilityDiagnosticForNode(node: DeclarationDiagnosticProducing): GetSymbolAccessibilityDiagnostic {
     if (
-        isVariableDeclaration(node) || isPropertyDeclaration(node) || isPropertySignature(node) || isPropertyAccessExpression(node) || isElementAccessExpression(node) || isBinaryExpression(node) || isBindingElement(node) ||
+        isVariableDeclaration(node) || isPropertyDeclaration(node) || isPropertySignature(node) || isPropertyAccessExpression(node) || isElementAccessExpression(node) || isBinaryExpression(node) ||
+        isBindingElement(node) ||
         isConstructorDeclaration(node)
     ) {
         return getVariableDeclarationTypeVisibilityError;

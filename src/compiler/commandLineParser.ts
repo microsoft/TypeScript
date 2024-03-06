@@ -2699,7 +2699,14 @@ export function generateTSConfig(options: CompilerOptions, fileNames: readonly s
 
     function isAllowedOptionForOutput({ category, name, isCommandLineOnly }: CommandLineOption): boolean {
         // Skip options which do not have a category or have categories which are more niche
-        const categoriesToSkip = [Diagnostics.Command_line_Options, Diagnostics.Editor_Support, Diagnostics.Compiler_Diagnostics, Diagnostics.Backwards_Compatibility, Diagnostics.Watch_and_Build_Modes, Diagnostics.Output_Formatting];
+        const categoriesToSkip = [
+            Diagnostics.Command_line_Options,
+            Diagnostics.Editor_Support,
+            Diagnostics.Compiler_Diagnostics,
+            Diagnostics.Backwards_Compatibility,
+            Diagnostics.Watch_and_Build_Modes,
+            Diagnostics.Output_Formatting,
+        ];
         return !isCommandLineOnly && category !== undefined && (!categoriesToSkip.includes(category) || compilerOptionsMap.has(name));
     }
 
@@ -3296,7 +3303,14 @@ function parseOwnConfigOfJsonSourceFile(
     }
 
     if (rootCompilerOptions && json && json.compilerOptions === undefined) {
-        errors.push(createDiagnosticForNodeInSourceFile(sourceFile, rootCompilerOptions[0], Diagnostics._0_should_be_set_inside_the_compilerOptions_object_of_the_config_json_file, getTextOfPropertyName(rootCompilerOptions[0]) as string));
+        errors.push(
+            createDiagnosticForNodeInSourceFile(
+                sourceFile,
+                rootCompilerOptions[0],
+                Diagnostics._0_should_be_set_inside_the_compilerOptions_object_of_the_config_json_file,
+                getTextOfPropertyName(rootCompilerOptions[0]) as string,
+            ),
+        );
     }
 
     return { raw: json, options, watchOptions, typeAcquisition, extendedConfigPath };
@@ -3479,7 +3493,14 @@ function convertWatchOptionsFromJsonWorker(jsonOptions: any, basePath: string, e
     return convertOptionsFromJson(getCommandLineWatchOptionsMap(), jsonOptions, basePath, /*defaultOptions*/ undefined, watchOptionsDidYouMeanDiagnostics, errors);
 }
 
-function convertOptionsFromJson(optionsNameMap: Map<string, CommandLineOption>, jsonOptions: any, basePath: string, defaultOptions: undefined, diagnostics: DidYouMeanOptionsDiagnostics, errors: Diagnostic[]): WatchOptions | undefined;
+function convertOptionsFromJson(
+    optionsNameMap: Map<string, CommandLineOption>,
+    jsonOptions: any,
+    basePath: string,
+    defaultOptions: undefined,
+    diagnostics: DidYouMeanOptionsDiagnostics,
+    errors: Diagnostic[],
+): WatchOptions | undefined;
 function convertOptionsFromJson(
     optionsNameMap: Map<string, CommandLineOption>,
     jsonOptions: any,

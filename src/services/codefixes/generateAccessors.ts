@@ -246,7 +246,14 @@ function generateSetAccessor(fieldName: AcceptedNameType, accessorName: Accepted
     );
 }
 
-function updatePropertyDeclaration(changeTracker: textChanges.ChangeTracker, file: SourceFile, declaration: PropertyDeclaration, type: TypeNode | undefined, fieldName: AcceptedNameType, modifiers: readonly ModifierLike[] | undefined) {
+function updatePropertyDeclaration(
+    changeTracker: textChanges.ChangeTracker,
+    file: SourceFile,
+    declaration: PropertyDeclaration,
+    type: TypeNode | undefined,
+    fieldName: AcceptedNameType,
+    modifiers: readonly ModifierLike[] | undefined,
+) {
     const property = factory.updatePropertyDeclaration(
         declaration,
         modifiers,
@@ -270,7 +277,14 @@ function updatePropertyAssignmentDeclaration(changeTracker: textChanges.ChangeTr
     changeTracker.replacePropertyAssignment(file, declaration, assignment);
 }
 
-function updateFieldDeclaration(changeTracker: textChanges.ChangeTracker, file: SourceFile, declaration: AcceptedDeclaration, type: TypeNode | undefined, fieldName: AcceptedNameType, modifiers: readonly ModifierLike[] | undefined) {
+function updateFieldDeclaration(
+    changeTracker: textChanges.ChangeTracker,
+    file: SourceFile,
+    declaration: AcceptedDeclaration,
+    type: TypeNode | undefined,
+    fieldName: AcceptedNameType,
+    modifiers: readonly ModifierLike[] | undefined,
+) {
     if (isPropertyDeclaration(declaration)) {
         updatePropertyDeclaration(changeTracker, file, declaration, type, fieldName, modifiers);
     }

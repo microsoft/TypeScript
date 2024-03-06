@@ -98,7 +98,10 @@ describe("unittests:: JSDocParsing", () => {
                     ts.Debug.fail("Comment has at least one diagnostic: " + comment.diagnostics[0].messageText);
                 }
 
-                Harness.Baseline.runBaseline("JSDocParsing/DocComments.parsesCorrectly." + name + ".json", JSON.stringify(comment.jsDoc, (_, v) => v && v.pos !== undefined ? JSON.parse(Utils.sourceFileToJSON(v)) : v, 4));
+                Harness.Baseline.runBaseline(
+                    "JSDocParsing/DocComments.parsesCorrectly." + name + ".json",
+                    JSON.stringify(comment.jsDoc, (_, v) => v && v.pos !== undefined ? JSON.parse(Utils.sourceFileToJSON(v)) : v, 4),
+                );
             });
         }
 

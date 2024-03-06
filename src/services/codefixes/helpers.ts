@@ -312,7 +312,17 @@ export function addNewNodeForMemberSymbol(
                 else {
                     Debug.assert(declarations.length === signatures.length, "Declarations and signatures should match count");
                     addClassElement(
-                        createMethodImplementingSignatures(checker, context, enclosingDeclaration, signatures, createName(declarationName), optional && !!(preserveOptional & PreserveOptionalFlags.Method), modifiers, quotePreference, body),
+                        createMethodImplementingSignatures(
+                            checker,
+                            context,
+                            enclosingDeclaration,
+                            signatures,
+                            createName(declarationName),
+                            optional && !!(preserveOptional & PreserveOptionalFlags.Method),
+                            modifiers,
+                            quotePreference,
+                            body,
+                        ),
                     );
                 }
             }
@@ -606,7 +616,15 @@ function createTypeParameterName(index: number) {
 }
 
 /** @internal */
-export function typeToAutoImportableTypeNode(checker: TypeChecker, importAdder: ImportAdder, type: Type, contextNode: Node | undefined, scriptTarget: ScriptTarget, flags?: NodeBuilderFlags, tracker?: SymbolTracker): TypeNode | undefined {
+export function typeToAutoImportableTypeNode(
+    checker: TypeChecker,
+    importAdder: ImportAdder,
+    type: Type,
+    contextNode: Node | undefined,
+    scriptTarget: ScriptTarget,
+    flags?: NodeBuilderFlags,
+    tracker?: SymbolTracker,
+): TypeNode | undefined {
     let typeNode = checker.typeToTypeNode(type, contextNode, flags, tracker);
     if (typeNode && isImportTypeNode(typeNode)) {
         const importableReference = tryGetAutoImportableReferenceFromTypeNode(typeNode, scriptTarget);
@@ -629,7 +647,15 @@ function typeContainsTypeParameter(type: Type) {
 }
 
 /** @internal */
-export function getArgumentTypesAndTypeParameters(checker: TypeChecker, importAdder: ImportAdder, instanceTypes: Type[], contextNode: Node | undefined, scriptTarget: ScriptTarget, flags?: NodeBuilderFlags, tracker?: SymbolTracker) {
+export function getArgumentTypesAndTypeParameters(
+    checker: TypeChecker,
+    importAdder: ImportAdder,
+    instanceTypes: Type[],
+    contextNode: Node | undefined,
+    scriptTarget: ScriptTarget,
+    flags?: NodeBuilderFlags,
+    tracker?: SymbolTracker,
+) {
     // Types to be used as the types of the parameters in the new function
     // E.g. from this source:
     //   added("", 0)

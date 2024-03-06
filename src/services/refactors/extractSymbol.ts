@@ -376,7 +376,9 @@ export namespace Messages {
     export const statementOrExpressionExpected: DiagnosticMessage = createMessage("Statement or expression expected.");
     export const cannotExtractRangeContainingConditionalBreakOrContinueStatements: DiagnosticMessage = createMessage("Cannot extract range containing conditional break or continue statements.");
     export const cannotExtractRangeContainingConditionalReturnStatement: DiagnosticMessage = createMessage("Cannot extract range containing conditional return statement.");
-    export const cannotExtractRangeContainingLabeledBreakOrContinueStatementWithTargetOutsideOfTheRange: DiagnosticMessage = createMessage("Cannot extract range containing labeled break or continue with target outside of the range.");
+    export const cannotExtractRangeContainingLabeledBreakOrContinueStatementWithTargetOutsideOfTheRange: DiagnosticMessage = createMessage(
+        "Cannot extract range containing labeled break or continue with target outside of the range.",
+    );
     export const cannotExtractRangeThatContainsWritesToReferencesLocatedOutsideOfTheTargetRangeInGenerators: DiagnosticMessage = createMessage(
         "Cannot extract range containing writes to references located outside of the target range in generators.",
     );
@@ -1198,7 +1200,12 @@ function extractFunctionInScope(
             newNodes.push(factory.createVariableStatement(
                 /*modifiers*/ undefined,
                 factory.createVariableDeclarationList(
-                    [factory.createVariableDeclaration(getSynthesizedDeepClone(variableDeclaration.name), /*exclamationToken*/ undefined, /*type*/ getSynthesizedDeepClone(variableDeclaration.type), /*initializer*/ call)],
+                    [factory.createVariableDeclaration(
+                        getSynthesizedDeepClone(variableDeclaration.name),
+                        /*exclamationToken*/ undefined,
+                        /*type*/ getSynthesizedDeepClone(variableDeclaration.type),
+                        /*initializer*/ call,
+                    )],
                     variableDeclaration.parent.flags,
                 ),
             ));
@@ -1367,10 +1374,10 @@ function extractConstantInScope(
 
     // Make a unique name for the extracted variable
     const file = scope.getSourceFile();
-    const localNameText =
-        isPropertyAccessExpression(node) && !isClassLike(scope) && !checker.resolveName(node.name.text, node, SymbolFlags.Value, /*excludeGlobals*/ false) && !isPrivateIdentifier(node.name) && !identifierToKeywordKind(node.name)
-            ? node.name.text
-            : getUniqueName(isClassLike(scope) ? "newProperty" : "newLocal", file);
+    const localNameText = isPropertyAccessExpression(node) && !isClassLike(scope) && !checker.resolveName(node.name.text, node, SymbolFlags.Value, /*excludeGlobals*/ false) && !isPrivateIdentifier(node.name) &&
+            !identifierToKeywordKind(node.name)
+        ? node.name.text
+        : getUniqueName(isClassLike(scope) ? "newProperty" : "newLocal", file);
     const isJS = isInJSFile(scope);
 
     let variableType = isJS || !checker.isContextSensitive(node)
@@ -1509,7 +1516,9 @@ function extractConstantInScope(
                 const paramType = checker.getTypeAtLocation(p);
                 if (paramType === checker.getAnyType()) hasAny = true;
 
-                parameters.push(factory.updateParameterDeclaration(p, p.modifiers, p.dotDotDotToken, p.name, p.questionToken, p.type || checker.typeToTypeNode(paramType, scope, NodeBuilderFlags.NoTruncation), p.initializer));
+                parameters.push(
+                    factory.updateParameterDeclaration(p, p.modifiers, p.dotDotDotToken, p.name, p.questionToken, p.type || checker.typeToTypeNode(paramType, scope, NodeBuilderFlags.NoTruncation), p.initializer),
+                );
             }
         }
         // If a parameter was inferred as any we skip adding function parameters at all.

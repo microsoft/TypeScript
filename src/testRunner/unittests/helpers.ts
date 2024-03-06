@@ -151,7 +151,14 @@ export function newProgram(texts: NamedSourceText[], rootNames: string[], option
     return program;
 }
 
-export function updateProgram(oldProgram: ProgramWithSourceTexts, rootNames: readonly string[], options: ts.CompilerOptions, updater: (files: NamedSourceText[]) => void, newTexts?: NamedSourceText[], useGetSourceFileByPath?: boolean) {
+export function updateProgram(
+    oldProgram: ProgramWithSourceTexts,
+    rootNames: readonly string[],
+    options: ts.CompilerOptions,
+    updater: (files: NamedSourceText[]) => void,
+    newTexts?: NamedSourceText[],
+    useGetSourceFileByPath?: boolean,
+) {
     if (!newTexts) {
         newTexts = oldProgram.sourceTexts!.slice(0);
     }

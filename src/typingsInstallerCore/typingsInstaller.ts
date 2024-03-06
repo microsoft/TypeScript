@@ -88,7 +88,9 @@ export function getNpmCommandForInstallation(npmPath: string, tsVersion: string,
     const sliceStart = packageNames.length - remaining;
     let command: string, toSlice = remaining;
     while (true) {
-        command = `${npmPath} install --ignore-scripts ${(toSlice === packageNames.length ? packageNames : packageNames.slice(sliceStart, sliceStart + toSlice)).join(" ")} --save-dev --user-agent="typesInstaller/${tsVersion}"`;
+        command = `${npmPath} install --ignore-scripts ${
+            (toSlice === packageNames.length ? packageNames : packageNames.slice(sliceStart, sliceStart + toSlice)).join(" ")
+        } --save-dev --user-agent="typesInstaller/${tsVersion}"`;
         if (command.length < 8000) {
             break;
         }

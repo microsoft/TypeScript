@@ -163,7 +163,9 @@ const errorCodes: readonly number[] = [
     Diagnostics.Cannot_find_name_0_Do_you_need_to_install_type_definitions_for_jQuery_Try_npm_i_save_dev_types_Slashjquery.code,
     Diagnostics.Cannot_find_name_0_Do_you_need_to_change_your_target_library_Try_changing_the_lib_compiler_option_to_1_or_later.code,
     Diagnostics.Cannot_find_name_0_Do_you_need_to_change_your_target_library_Try_changing_the_lib_compiler_option_to_include_dom.code,
-    Diagnostics.Cannot_find_name_0_Do_you_need_to_install_type_definitions_for_a_test_runner_Try_npm_i_save_dev_types_Slashjest_or_npm_i_save_dev_types_Slashmocha_and_then_add_jest_or_mocha_to_the_types_field_in_your_tsconfig.code,
+    Diagnostics
+        .Cannot_find_name_0_Do_you_need_to_install_type_definitions_for_a_test_runner_Try_npm_i_save_dev_types_Slashjest_or_npm_i_save_dev_types_Slashmocha_and_then_add_jest_or_mocha_to_the_types_field_in_your_tsconfig
+        .code,
     Diagnostics.Cannot_find_name_0_Did_you_mean_to_write_this_in_an_async_function.code,
     Diagnostics.Cannot_find_name_0_Do_you_need_to_install_type_definitions_for_jQuery_Try_npm_i_save_dev_types_Slashjquery_and_then_add_jquery_to_the_types_field_in_your_tsconfig.code,
     Diagnostics.Cannot_find_name_0_Do_you_need_to_install_type_definitions_for_a_test_runner_Try_npm_i_save_dev_types_Slashjest_or_npm_i_save_dev_types_Slashmocha.code,
@@ -222,7 +224,14 @@ interface AddToExistingState {
     readonly namedImports: Map<string, AddAsTypeOnly>;
 }
 
-function createImportAdderWorker(sourceFile: SourceFile, program: Program, useAutoImportProvider: boolean, preferences: UserPreferences, host: LanguageServiceHost, cancellationToken: CancellationToken | undefined): ImportAdder {
+function createImportAdderWorker(
+    sourceFile: SourceFile,
+    program: Program,
+    useAutoImportProvider: boolean,
+    preferences: UserPreferences,
+    host: LanguageServiceHost,
+    cancellationToken: CancellationToken | undefined,
+): ImportAdder {
     const compilerOptions = program.getCompilerOptions();
     // Namespace fixes don't conflict, so just build a list.
     const addToNamespace: FixUseNamespaceImport[] = [];
@@ -1029,7 +1038,13 @@ function sortFixInfo(
         compareModuleSpecifiers(a.fix, b.fix, sourceFile, program, packageJsonImportFilter.allowsImportingSpecifier, _toPath));
 }
 
-function getBestFix(fixes: readonly ImportFixWithModuleSpecifier[], sourceFile: SourceFile, program: Program, packageJsonImportFilter: PackageJsonImportFilter, host: LanguageServiceHost): ImportFixWithModuleSpecifier | undefined {
+function getBestFix(
+    fixes: readonly ImportFixWithModuleSpecifier[],
+    sourceFile: SourceFile,
+    program: Program,
+    packageJsonImportFilter: PackageJsonImportFilter,
+    host: LanguageServiceHost,
+): ImportFixWithModuleSpecifier | undefined {
     if (!some(fixes)) return;
     // These will always be placed first if available, and are better than other kinds
     if (fixes[0].kind === ImportFixKind.UseNamespace || fixes[0].kind === ImportFixKind.AddToExisting) {

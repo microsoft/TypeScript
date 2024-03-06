@@ -101,7 +101,15 @@ function makeCorrespondingRelativeChange(a0: string, b0: string, a1: string, get
     return combinePathsSafe(getDirectoryPath(a1), rel);
 }
 
-function updateTsconfigFiles(program: Program, changeTracker: textChanges.ChangeTracker, oldToNew: PathUpdater, oldFileOrDirPath: string, newFileOrDirPath: string, currentDirectory: string, useCaseSensitiveFileNames: boolean): void {
+function updateTsconfigFiles(
+    program: Program,
+    changeTracker: textChanges.ChangeTracker,
+    oldToNew: PathUpdater,
+    oldFileOrDirPath: string,
+    newFileOrDirPath: string,
+    currentDirectory: string,
+    useCaseSensitiveFileNames: boolean,
+): void {
     const { configFile } = program.getCompilerOptions();
     if (!configFile) return;
     const configDir = getDirectoryPath(configFile.fileName);
@@ -253,7 +261,12 @@ function getSourceFileToImport(
     }
 }
 
-function getSourceFileToImportFromResolved(importLiteral: StringLiteralLike, resolved: ResolvedModuleWithFailedLookupLocations | undefined, oldToNew: PathUpdater, sourceFiles: readonly SourceFile[]): ToImport | undefined {
+function getSourceFileToImportFromResolved(
+    importLiteral: StringLiteralLike,
+    resolved: ResolvedModuleWithFailedLookupLocations | undefined,
+    oldToNew: PathUpdater,
+    sourceFiles: readonly SourceFile[],
+): ToImport | undefined {
     // Search through all locations looking for a moved file, and only then test already existing files.
     // This is because if `a.ts` is compiled to `a.js` and `a.ts` is moved, we don't want to resolve anything to `a.js`, but to `a.ts`'s new location.
     if (!resolved) return undefined;

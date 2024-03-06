@@ -169,7 +169,15 @@ registerCodeFix({
         }
         if (info.kind === InfoKind.Function || info.kind === InfoKind.Signature) {
             const changes = textChanges.ChangeTracker.with(context, t => addFunctionDeclaration(t, context, info));
-            return [createCodeFixAction(fixMissingFunctionDeclaration, changes, [Diagnostics.Add_missing_function_declaration_0, info.token.text], fixMissingFunctionDeclaration, Diagnostics.Add_all_missing_function_declarations)];
+            return [
+                createCodeFixAction(
+                    fixMissingFunctionDeclaration,
+                    changes,
+                    [Diagnostics.Add_missing_function_declaration_0, info.token.text],
+                    fixMissingFunctionDeclaration,
+                    Diagnostics.Add_all_missing_function_declarations,
+                ),
+            ];
         }
         if (info.kind === InfoKind.Enum) {
             const changes = textChanges.ChangeTracker.with(context, t => addEnumMemberDeclaration(t, context.program.getTypeChecker(), info));
@@ -314,7 +322,9 @@ function getInfo(sourceFile: SourceFile, tokenPos: number, errorCode: number, ch
         const param = signature.parameters[argIndex].valueDeclaration;
         if (!(param && isParameter(param) && isIdentifier(param.name))) return undefined;
 
-        const properties = arrayFrom(checker.getUnmatchedProperties(checker.getTypeAtLocation(parent), checker.getParameterType(signature, argIndex), /*requireOptionalProperties*/ false, /*matchDiscriminantProperties*/ false));
+        const properties = arrayFrom(
+            checker.getUnmatchedProperties(checker.getTypeAtLocation(parent), checker.getParameterType(signature, argIndex), /*requireOptionalProperties*/ false, /*matchDiscriminantProperties*/ false),
+        );
         if (!length(properties)) return undefined;
         return { kind: InfoKind.ObjectLiteral, token: param.name, identifier: param.name.text, properties, parentDeclaration: parent };
     }
@@ -811,7 +821,8 @@ function getUnmatchedAttributes(checker: TypeChecker, target: ScriptTarget, sour
     }
     return filter(
         targetProps,
-        targetProp => isIdentifierText(targetProp.name, target, LanguageVariant.JSX) && !((targetProp.flags & SymbolFlags.Optional || getCheckFlags(targetProp) & CheckFlags.Partial) || seenNames.has(targetProp.escapedName)),
+        targetProp =>
+            isIdentifierText(targetProp.name, target, LanguageVariant.JSX) && !((targetProp.flags & SymbolFlags.Optional || getCheckFlags(targetProp) & CheckFlags.Partial) || seenNames.has(targetProp.escapedName)),
     );
 }
 

@@ -6150,7 +6150,13 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
      * @param tokenStartPos The start pos of the token.
      * @param emitCallback The callback used to emit the token.
      */
-    function emitTokenWithSourceMap(node: Node | undefined, token: SyntaxKind, writer: (s: string) => void, tokenPos: number, emitCallback: (token: SyntaxKind, writer: (s: string) => void, tokenStartPos: number) => number) {
+    function emitTokenWithSourceMap(
+        node: Node | undefined,
+        token: SyntaxKind,
+        writer: (s: string) => void,
+        tokenPos: number,
+        emitCallback: (token: SyntaxKind, writer: (s: string) => void, tokenStartPos: number) => number,
+    ) {
         if (sourceMapsDisabled || node && isInJsonFile(node)) {
             return emitCallback(token, writer, tokenPos);
         }

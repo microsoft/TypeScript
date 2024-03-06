@@ -99,7 +99,11 @@ export namespace tracingEnabled {
         fs.writeSync(
             traceFd,
             "[\n"
-                + [{ name: "process_name", args: { name: "tsc" }, ...meta }, { name: "thread_name", args: { name: "Main" }, ...meta }, { name: "TracingStartedInBrowser", ...meta, cat: "disabled-by-default-devtools.timeline" }]
+                + [{ name: "process_name", args: { name: "tsc" }, ...meta }, { name: "thread_name", args: { name: "Main" }, ...meta }, {
+                    name: "TracingStartedInBrowser",
+                    ...meta,
+                    cat: "disabled-by-default-devtools.timeline",
+                }]
                     .map(v => JSON.stringify(v)).join(",\n"),
         );
     }

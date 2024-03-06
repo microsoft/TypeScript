@@ -297,7 +297,14 @@ export function getStringLiteralCompletionDetails(
     return completions && stringLiteralCompletionDetails(name, contextToken, completions, sourceFile, program.getTypeChecker(), cancellationToken);
 }
 
-function stringLiteralCompletionDetails(name: string, location: Node, completion: StringLiteralCompletion, sourceFile: SourceFile, checker: TypeChecker, cancellationToken: CancellationToken): CompletionEntryDetails | undefined {
+function stringLiteralCompletionDetails(
+    name: string,
+    location: Node,
+    completion: StringLiteralCompletion,
+    sourceFile: SourceFile,
+    checker: TypeChecker,
+    cancellationToken: CancellationToken,
+): CompletionEntryDetails | undefined {
     switch (completion.kind) {
         case StringLiteralCompletionKind.Paths: {
             const match = find(completion.paths, p => p.name === name);
@@ -317,7 +324,13 @@ function stringLiteralCompletionDetails(name: string, location: Node, completion
 function convertPathCompletions(pathCompletions: readonly PathCompletion[]): CompletionInfo {
     const isGlobalCompletion = false; // We don't want the editor to offer any other completions, such as snippets, inside a comment.
     const isNewIdentifierLocation = true; // The user may type in a path that doesn't yet exist, creating a "new identifier" with respect to the collection of identifiers the server is aware of.
-    const entries = pathCompletions.map(({ name, kind, span, extension }): CompletionEntry => ({ name, kind, kindModifiers: kindModifiersFromExtension(extension), sortText: SortText.LocationPriority, replacementSpan: span }));
+    const entries = pathCompletions.map(({ name, kind, span, extension }): CompletionEntry => ({
+        name,
+        kind,
+        kindModifiers: kindModifiersFromExtension(extension),
+        sortText: SortText.LocationPriority,
+        replacementSpan: span,
+    }));
     return { isGlobalCompletion, isMemberCompletion: false, isNewIdentifierLocation, entries };
 }
 function kindModifiersFromExtension(extension: Extension | undefined): ScriptElementKindModifier {
@@ -371,7 +384,14 @@ interface StringLiteralCompletionsFromTypes {
     readonly isNewIdentifier: boolean;
 }
 type StringLiteralCompletion = { readonly kind: StringLiteralCompletionKind.Paths; readonly paths: readonly PathCompletion[]; } | StringLiteralCompletionsFromProperties | StringLiteralCompletionsFromTypes;
-function getStringLiteralCompletionEntries(sourceFile: SourceFile, node: StringLiteralLike, position: number, program: Program, host: LanguageServiceHost, preferences: UserPreferences): StringLiteralCompletion | undefined {
+function getStringLiteralCompletionEntries(
+    sourceFile: SourceFile,
+    node: StringLiteralLike,
+    position: number,
+    program: Program,
+    host: LanguageServiceHost,
+    preferences: UserPreferences,
+): StringLiteralCompletion | undefined {
     const typeChecker = program.getTypeChecker();
     const parent = walkUpParentheses(node.parent);
     switch (parent.kind) {
@@ -512,7 +532,12 @@ function getAlreadyUsedTypesInStringLiteralUnion(union: UnionTypeNode, current: 
     return mapDefined(union.types, type => type !== current && isLiteralTypeNode(type) && isStringLiteral(type.literal) ? type.literal.text : undefined);
 }
 
-function getStringLiteralCompletionsFromSignature(call: CallLikeExpression, arg: StringLiteralLike, argumentInfo: SignatureHelp.ArgumentInfoForCompletions, checker: TypeChecker): StringLiteralCompletionsFromTypes | undefined {
+function getStringLiteralCompletionsFromSignature(
+    call: CallLikeExpression,
+    arg: StringLiteralLike,
+    argumentInfo: SignatureHelp.ArgumentInfoForCompletions,
+    checker: TypeChecker,
+): StringLiteralCompletionsFromTypes | undefined {
     let isNewIdentifier = false;
     const uniques = new Map<string, true>();
     const editingArgument = isJsxOpeningLikeElement(call) ? Debug.checkDefined(findAncestor(arg.parent, isJsxAttribute)) : arg;
@@ -585,7 +610,9 @@ function directoryResult(name: string): NameAndKind {
 function addReplacementSpans(text: string, textStart: number, names: readonly NameAndKind[]): readonly PathCompletion[] {
     const span = getDirectoryFragmentTextSpan(text, textStart);
     const wholeSpan = text.length === 0 ? undefined : createTextSpan(textStart, text.length);
-    return names.map(({ name, kind, extension }): PathCompletion => (name.includes(directorySeparator) || name.includes(altDirectorySeparator)) ? { name, kind, extension, span: wholeSpan } : { name, kind, extension, span });
+    return names.map(({ name, kind, extension }): PathCompletion =>
+        (name.includes(directorySeparator) || name.includes(altDirectorySeparator)) ? { name, kind, extension, span: wholeSpan } : { name, kind, extension, span }
+    );
 }
 
 function getStringLiteralCompletionsFromModuleNames(sourceFile: SourceFile, node: LiteralExpression, program: Program, host: LanguageServiceHost, preferences: UserPreferences): readonly PathCompletion[] {
@@ -615,7 +642,14 @@ interface ExtensionOptions {
     readonly resolutionMode?: ResolutionMode;
 }
 
-function getExtensionOptions(compilerOptions: CompilerOptions, referenceKind: ReferenceKind, importingSourceFile: SourceFile, typeChecker?: TypeChecker, preferences?: UserPreferences, resolutionMode?: ResolutionMode): ExtensionOptions {
+function getExtensionOptions(
+    compilerOptions: CompilerOptions,
+    referenceKind: ReferenceKind,
+    importingSourceFile: SourceFile,
+    typeChecker?: TypeChecker,
+    preferences?: UserPreferences,
+    resolutionMode?: ResolutionMode,
+): ExtensionOptions {
     return {
         extensionsToSearch: flatten(getSupportedExtensionsForModuleResolution(compilerOptions, typeChecker)),
         referenceKind,
@@ -1172,13 +1206,21 @@ function getTripleSlashReferenceCompletion(sourceFile: SourceFile, position: num
 
     const [, prefix, kind, toComplete] = match;
     const scriptPath = getDirectoryPath(sourceFile.path);
-    const names = kind === "path" ? getCompletionEntriesForDirectoryFragment(toComplete, scriptPath, getExtensionOptions(compilerOptions, ReferenceKind.Filename, sourceFile), host, /*moduleSpecifierIsRelative*/ true, sourceFile.path)
+    const names = kind === "path" ?
+        getCompletionEntriesForDirectoryFragment(toComplete, scriptPath, getExtensionOptions(compilerOptions, ReferenceKind.Filename, sourceFile), host, /*moduleSpecifierIsRelative*/ true, sourceFile.path)
         : kind === "types" ? getCompletionEntriesFromTypings(host, compilerOptions, scriptPath, getFragmentDirectory(toComplete), getExtensionOptions(compilerOptions, ReferenceKind.ModuleSpecifier, sourceFile))
         : Debug.fail();
     return addReplacementSpans(toComplete, range.pos + prefix.length, arrayFrom(names.values()));
 }
 
-function getCompletionEntriesFromTypings(host: LanguageServiceHost, options: CompilerOptions, scriptPath: string, fragmentDirectory: string | undefined, extensionOptions: ExtensionOptions, result = createNameAndKindSet()): NameAndKindSet {
+function getCompletionEntriesFromTypings(
+    host: LanguageServiceHost,
+    options: CompilerOptions,
+    scriptPath: string,
+    fragmentDirectory: string | undefined,
+    extensionOptions: ExtensionOptions,
+    result = createNameAndKindSet(),
+): NameAndKindSet {
     // Check for typings specified in compiler options
     const seen = new Map<string, true>();
 

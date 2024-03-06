@@ -504,7 +504,11 @@ describe("unittests:: tsserver:: ConfiguredProjects", () => {
         openFilesForSession([file4], session);
 
         host.runQueuedTimeoutCallbacks();
-        baselineTsserverLogs("configuredProjects", "Open ref of configured project when open file gets added to the project as part of configured file update buts its open file references are all closed when the update happens", session);
+        baselineTsserverLogs(
+            "configuredProjects",
+            "Open ref of configured project when open file gets added to the project as part of configured file update buts its open file references are all closed when the update happens",
+            session,
+        );
     });
 
     it("files are properly detached when language service is disabled", () => {

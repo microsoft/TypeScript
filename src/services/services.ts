@@ -1832,7 +1832,12 @@ export function createLanguageService(
             documentRegistry.releaseDocumentWithKey(oldSourceFile.resolvedPath, oldSettingsKey, oldSourceFile.scriptKind, oldSourceFile.impliedNodeFormat);
         }
 
-        function getOrCreateSourceFile(fileName: string, languageVersionOrOptions: ScriptTarget | CreateSourceFileOptions, onError?: (message: string) => void, shouldCreateNewSourceFile?: boolean): SourceFile | undefined {
+        function getOrCreateSourceFile(
+            fileName: string,
+            languageVersionOrOptions: ScriptTarget | CreateSourceFileOptions,
+            onError?: (message: string) => void,
+            shouldCreateNewSourceFile?: boolean,
+        ): SourceFile | undefined {
             return getOrCreateSourceFileByPath(fileName, toPath(fileName, currentDirectory, getCanonicalFileName), languageVersionOrOptions, onError, shouldCreateNewSourceFile);
         }
 
@@ -1892,7 +1897,12 @@ export function createLanguageService(
                     }
                     else {
                         // Release old source file and fall through to aquire new file with new script kind
-                        documentRegistry.releaseDocumentWithKey(oldSourceFile.resolvedPath, documentRegistry.getKeyForCompilationSettings(program.getCompilerOptions()), oldSourceFile.scriptKind, oldSourceFile.impliedNodeFormat);
+                        documentRegistry.releaseDocumentWithKey(
+                            oldSourceFile.resolvedPath,
+                            documentRegistry.getKeyForCompilationSettings(program.getCompilerOptions()),
+                            oldSourceFile.scriptKind,
+                            oldSourceFile.impliedNodeFormat,
+                        );
                         releasedScriptKinds!.add(oldSourceFile.resolvedPath);
                     }
                 }
@@ -3028,7 +3038,14 @@ export function createLanguageService(
         return Rename.getRenameInfo(program, getValidSourceFile(fileName), position, preferences || {});
     }
 
-    function getRefactorContext(file: SourceFile, positionOrRange: number | TextRange, preferences: UserPreferences, formatOptions?: FormatCodeSettings, triggerReason?: RefactorTriggerReason, kind?: string): RefactorContext {
+    function getRefactorContext(
+        file: SourceFile,
+        positionOrRange: number | TextRange,
+        preferences: UserPreferences,
+        formatOptions?: FormatCodeSettings,
+        triggerReason?: RefactorTriggerReason,
+        kind?: string,
+    ): RefactorContext {
         const [startPosition, endPosition] = typeof positionOrRange === "number" ? [positionOrRange, undefined] : [positionOrRange.pos, positionOrRange.end];
         return {
             file,
@@ -3087,7 +3104,8 @@ export function createLanguageService(
                 extension === Extension.Ts && fileNameExtension === Extension.Dts ||
                 extension === Extension.Dts && startsWith(getBaseFileName(file.fileName), "lib.") && fileNameExtension === Extension.Dts
             );
-            return isValidSourceFile && (extension === fileNameExtension || (extension === Extension.Tsx && fileNameExtension === Extension.Ts || extension === Extension.Jsx && fileNameExtension === Extension.Js) && !toMoveContainsJsx)
+            return isValidSourceFile &&
+                    (extension === fileNameExtension || (extension === Extension.Tsx && fileNameExtension === Extension.Ts || extension === Extension.Jsx && fileNameExtension === Extension.Js) && !toMoveContainsJsx)
                 ? file.fileName : undefined;
         });
 

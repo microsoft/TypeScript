@@ -115,7 +115,13 @@ export interface EmitHelperFactory {
     // ES2018 Destructuring Helpers
     createRestHelper(value: Expression, elements: readonly BindingOrAssignmentElement[], computedTempVariables: readonly Expression[] | undefined, location: TextRange): Expression;
     // ES2017 Helpers
-    createAwaiterHelper(hasLexicalThis: boolean, argumentsExpression: Expression | undefined, promiseConstructor: EntityName | Expression | undefined, parameters: readonly ParameterDeclaration[] | undefined, body: Block): Expression;
+    createAwaiterHelper(
+        hasLexicalThis: boolean,
+        argumentsExpression: Expression | undefined,
+        promiseConstructor: EntityName | Expression | undefined,
+        parameters: readonly ParameterDeclaration[] | undefined,
+        body: Block,
+    ): Expression;
     // ES2015 Helpers
     createExtendsHelper(name: Identifier): Expression;
     createTemplateObjectHelper(cooked: ArrayLiteralExpression, raw: ArrayLiteralExpression): Expression;

@@ -89,7 +89,10 @@ export function computeSuggestionDiagnostics(sourceFile: SourceFile, program: Pr
             if (!name) continue;
             const module = program.getResolvedModuleFromModuleSpecifier(moduleSpecifier)?.resolvedModule;
             const resolvedFile = module && program.getSourceFile(module.resolvedFileName);
-            if (resolvedFile && resolvedFile.externalModuleIndicator && resolvedFile.externalModuleIndicator !== true && isExportAssignment(resolvedFile.externalModuleIndicator) && resolvedFile.externalModuleIndicator.isExportEquals) {
+            if (
+                resolvedFile && resolvedFile.externalModuleIndicator && resolvedFile.externalModuleIndicator !== true && isExportAssignment(resolvedFile.externalModuleIndicator) &&
+                resolvedFile.externalModuleIndicator.isExportEquals
+            ) {
                 diags.push(createDiagnosticForNode(name, Diagnostics.Import_may_be_converted_to_a_default_import));
             }
         }
@@ -140,7 +143,9 @@ function containsTopLevelCommonjs(sourceFile: SourceFile): boolean {
     return sourceFile.statements.some(statement => {
         switch (statement.kind) {
             case SyntaxKind.VariableStatement:
-                return (statement as VariableStatement).declarationList.declarations.some(decl => !!decl.initializer && isRequireCall(propertyAccessLeftHandSide(decl.initializer), /*requireStringLiteralLikeArgument*/ true));
+                return (statement as VariableStatement).declarationList.declarations.some(decl =>
+                    !!decl.initializer && isRequireCall(propertyAccessLeftHandSide(decl.initializer), /*requireStringLiteralLikeArgument*/ true)
+                );
             case SyntaxKind.ExpressionStatement: {
                 const { expression } = statement as ExpressionStatement;
                 if (!isBinaryExpression(expression)) return isRequireCall(expression, /*requireStringLiteralLikeArgument*/ true);

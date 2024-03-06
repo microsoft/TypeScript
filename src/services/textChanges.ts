@@ -845,7 +845,11 @@ export class ChangeTracker {
         });
     }
 
-    public insertMemberAtStart(sourceFile: SourceFile, node: ClassLikeDeclaration | InterfaceDeclaration | TypeLiteralNode | EnumDeclaration, newElement: ClassElement | PropertySignature | MethodSignature | EnumMember): void {
+    public insertMemberAtStart(
+        sourceFile: SourceFile,
+        node: ClassLikeDeclaration | InterfaceDeclaration | TypeLiteralNode | EnumDeclaration,
+        newElement: ClassElement | PropertySignature | MethodSignature | EnumMember,
+    ): void {
         this.insertNodeAtStartWorker(sourceFile, node, newElement);
     }
 
@@ -894,7 +898,11 @@ export class ChangeTracker {
             + (this.formatContext.options.indentSize ?? 4);
     }
 
-    private getInsertNodeAtStartInsertOptions(sourceFile: SourceFile, node: ClassLikeDeclaration | InterfaceDeclaration | ObjectLiteralExpression | TypeLiteralNode | EnumDeclaration, indentation: number): InsertNodeOptions {
+    private getInsertNodeAtStartInsertOptions(
+        sourceFile: SourceFile,
+        node: ClassLikeDeclaration | InterfaceDeclaration | ObjectLiteralExpression | TypeLiteralNode | EnumDeclaration,
+        indentation: number,
+    ): InsertNodeOptions {
         // Rules:
         // - Always insert leading newline.
         // - For object literals:
@@ -1299,13 +1307,22 @@ namespace changesToText {
 
     export function newFileChangesWorker(scriptKind: ScriptKind, insertions: readonly NewFileInsertion[], newLineCharacter: string, formatContext: formatting.FormatContext): string {
         // TODO: this emits the file, parses it back, then formats it that -- may be a less roundabout way to do this
-        const nonFormattedText = flatMap(insertions, insertion => insertion.statements.map(s => s === SyntaxKind.NewLineTrivia ? "" : getNonformattedText(s, insertion.oldFile, newLineCharacter).text)).join(newLineCharacter);
+        const nonFormattedText = flatMap(insertions, insertion => insertion.statements.map(s => s === SyntaxKind.NewLineTrivia ? "" : getNonformattedText(s, insertion.oldFile, newLineCharacter).text)).join(
+            newLineCharacter,
+        );
         const sourceFile = createSourceFile("any file name", nonFormattedText, { languageVersion: ScriptTarget.ESNext, jsDocParsingMode: JSDocParsingMode.ParseNone }, /*setParentNodes*/ true, scriptKind);
         const changes = formatting.formatDocument(sourceFile, formatContext);
         return applyChanges(nonFormattedText, changes) + newLineCharacter;
     }
 
-    function computeNewText(change: Change, targetSourceFile: SourceFile, sourceFile: SourceFile, newLineCharacter: string, formatContext: formatting.FormatContext, validate: ValidateNonFormattedText | undefined): string {
+    function computeNewText(
+        change: Change,
+        targetSourceFile: SourceFile,
+        sourceFile: SourceFile,
+        newLineCharacter: string,
+        formatContext: formatting.FormatContext,
+        validate: ValidateNonFormattedText | undefined,
+    ): string {
         if (change.kind === ChangeKind.Remove) {
             return "";
         }

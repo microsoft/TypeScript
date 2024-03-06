@@ -2645,7 +2645,8 @@ export class ProjectService {
                         // Update projects
                         let ensureProjectsForOpenFiles = false;
                         this.sharedExtendedConfigFileWatchers.get(extendedConfigFilePath)?.projects.forEach(canonicalPath => {
-                            ensureProjectsForOpenFiles = this.delayUpdateProjectsFromParsedConfigOnConfigFileChange(canonicalPath, `Change in extended config file ${extendedConfigFileName} detected`) || ensureProjectsForOpenFiles;
+                            ensureProjectsForOpenFiles = this.delayUpdateProjectsFromParsedConfigOnConfigFileChange(canonicalPath, `Change in extended config file ${extendedConfigFileName} detected`) ||
+                                ensureProjectsForOpenFiles;
                         });
                         if (ensureProjectsForOpenFiles) this.delayEnsureProjectForOpenFiles();
                     },
@@ -3205,11 +3206,24 @@ export class ProjectService {
         return undefined;
     }
 
-    private getOrCreateScriptInfoOpenedByClientForNormalizedPath(fileName: NormalizedPath, currentDirectory: string, fileContent: string | undefined, scriptKind: ScriptKind | undefined, hasMixedContent: boolean | undefined) {
+    private getOrCreateScriptInfoOpenedByClientForNormalizedPath(
+        fileName: NormalizedPath,
+        currentDirectory: string,
+        fileContent: string | undefined,
+        scriptKind: ScriptKind | undefined,
+        hasMixedContent: boolean | undefined,
+    ) {
         return this.getOrCreateScriptInfoWorker(fileName, currentDirectory, /*openedByClient*/ true, fileContent, scriptKind, hasMixedContent);
     }
 
-    getOrCreateScriptInfoForNormalizedPath(fileName: NormalizedPath, openedByClient: boolean, fileContent?: string, scriptKind?: ScriptKind, hasMixedContent?: boolean, hostToQueryFileExistsOn?: { fileExists(path: string): boolean; }) {
+    getOrCreateScriptInfoForNormalizedPath(
+        fileName: NormalizedPath,
+        openedByClient: boolean,
+        fileContent?: string,
+        scriptKind?: ScriptKind,
+        hasMixedContent?: boolean,
+        hostToQueryFileExistsOn?: { fileExists(path: string): boolean; },
+    ) {
         return this.getOrCreateScriptInfoWorker(fileName, this.currentDirectory, openedByClient, fileContent, scriptKind, hasMixedContent, hostToQueryFileExistsOn);
     }
 
@@ -3738,7 +3752,10 @@ export class ProjectService {
                     : location;
             }
 
-            configuredProject = this.createAndLoadConfiguredProject(configFileName, `Creating project for original file: ${originalFileInfo.fileName}${location !== originalLocation ? " for location: " + location.fileName : ""}`);
+            configuredProject = this.createAndLoadConfiguredProject(
+                configFileName,
+                `Creating project for original file: ${originalFileInfo.fileName}${location !== originalLocation ? " for location: " + location.fileName : ""}`,
+            );
         }
         updateProjectIfDirty(configuredProject);
 
@@ -3801,7 +3818,13 @@ export class ProjectService {
     }
 
     private getOrCreateOpenScriptInfo(fileName: NormalizedPath, fileContent: string | undefined, scriptKind: ScriptKind | undefined, hasMixedContent: boolean | undefined, projectRootPath: NormalizedPath | undefined) {
-        const info = this.getOrCreateScriptInfoOpenedByClientForNormalizedPath(fileName, projectRootPath ? this.getNormalizedAbsolutePath(projectRootPath) : this.currentDirectory, fileContent, scriptKind, hasMixedContent)!; // TODO: GH#18217
+        const info = this.getOrCreateScriptInfoOpenedByClientForNormalizedPath(
+            fileName,
+            projectRootPath ? this.getNormalizedAbsolutePath(projectRootPath) : this.currentDirectory,
+            fileContent,
+            scriptKind,
+            hasMixedContent,
+        )!; // TODO: GH#18217
         this.openFiles.set(info.path, projectRootPath);
         return info;
     }
@@ -4481,7 +4504,15 @@ export class ProjectService {
                 existingExternalProject.setProjectErrors(watchOptionsAndErrors?.errors);
                 // external project already exists and not config files were added - update the project and return;
                 // The graph update here isnt postponed since any file open operation needs all updated external projects
-                this.updateRootAndOptionsOfNonInferredProject(existingExternalProject, rootFiles, externalFilePropertyReader, compilerOptions, typeAcquisition, proj.options.compileOnSave, watchOptionsAndErrors?.watchOptions);
+                this.updateRootAndOptionsOfNonInferredProject(
+                    existingExternalProject,
+                    rootFiles,
+                    externalFilePropertyReader,
+                    compilerOptions,
+                    typeAcquisition,
+                    proj.options.compileOnSave,
+                    watchOptionsAndErrors?.watchOptions,
+                );
                 existingExternalProject.updateGraph();
             }
             else {

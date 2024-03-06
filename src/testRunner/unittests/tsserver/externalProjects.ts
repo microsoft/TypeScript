@@ -472,7 +472,11 @@ describe("unittests:: tsserver:: externalProjects", () => {
             externalProject.rootFiles.length = 1;
             openExternalProjectsForSession([externalProject], session);
 
-            baselineTsserverLogs("externalProjects", `deleting config file opened from the external project works${lazyConfiguredProjectsFromExternalProject ? " with lazyConfiguredProjectsFromExternalProject" : ""}`, session);
+            baselineTsserverLogs(
+                "externalProjects",
+                `deleting config file opened from the external project works${lazyConfiguredProjectsFromExternalProject ? " with lazyConfiguredProjectsFromExternalProject" : ""}`,
+                session,
+            );
         }
         it("when lazyConfiguredProjectsFromExternalProject not set", () => {
             verifyDeletingConfigFile(/*lazyConfiguredProjectsFromExternalProject*/ false);

@@ -1436,7 +1436,8 @@ function getExhaustiveCaseSnippets(
                 switch (typeof type.value) {
                     case "object":
                         elements.push(
-                            type.value.negative ? factory.createPrefixUnaryExpression(SyntaxKind.MinusToken, factory.createBigIntLiteral({ negative: false, base10Value: type.value.base10Value })) : factory.createBigIntLiteral(type.value),
+                            type.value.negative ? factory.createPrefixUnaryExpression(SyntaxKind.MinusToken, factory.createBigIntLiteral({ negative: false, base10Value: type.value.base10Value }))
+                                : factory.createBigIntLiteral(type.value),
                         );
                         break;
                     case "number":
@@ -2764,7 +2765,17 @@ function getSymbolCompletionFromEntryId(
     }
 
     const compilerOptions = program.getCompilerOptions();
-    const completionData = getCompletionData(program, log, sourceFile, compilerOptions, position, { includeCompletionsForModuleExports: true, includeCompletionsWithInsertText: true }, entryId, host, /*formatContext*/ undefined);
+    const completionData = getCompletionData(
+        program,
+        log,
+        sourceFile,
+        compilerOptions,
+        position,
+        { includeCompletionsForModuleExports: true, includeCompletionsWithInsertText: true },
+        entryId,
+        host,
+        /*formatContext*/ undefined,
+    );
     if (!completionData) {
         return { type: "none" };
     }
@@ -2866,7 +2877,11 @@ export function getCompletionEntryDetails(
         }
         case "literal": {
             const { literal } = symbolCompletion;
-            return createSimpleDetails(completionNameForLiteral(sourceFile, preferences, literal), ScriptElementKind.string, typeof literal === "string" ? SymbolDisplayPartKind.stringLiteral : SymbolDisplayPartKind.numericLiteral);
+            return createSimpleDetails(
+                completionNameForLiteral(sourceFile, preferences, literal),
+                ScriptElementKind.string,
+                typeof literal === "string" ? SymbolDisplayPartKind.stringLiteral : SymbolDisplayPartKind.numericLiteral,
+            );
         }
         case "cases": {
             const snippets = getExhaustiveCaseSnippets(
@@ -5178,7 +5193,9 @@ function tryGetObjectLikeCompletionContainer(contextToken: Node | undefined, pos
                 }
                 break;
             default:
-                if (parent.parent?.parent && (isMethodDeclaration(parent.parent) || isGetAccessorDeclaration(parent.parent) || isSetAccessorDeclaration(parent.parent)) && isObjectLiteralExpression(parent.parent.parent)) {
+                if (
+                    parent.parent?.parent && (isMethodDeclaration(parent.parent) || isGetAccessorDeclaration(parent.parent) || isSetAccessorDeclaration(parent.parent)) && isObjectLiteralExpression(parent.parent.parent)
+                ) {
                     return parent.parent.parent;
                 }
                 if (isSpreadAssignment(parent) && isObjectLiteralExpression(parent.parent)) {
@@ -5206,7 +5223,12 @@ function getRelevantTokens(position: number, sourceFile: SourceFile): { contextT
     return { contextToken: previousToken as Node, previousToken: previousToken as Node };
 }
 
-function getAutoImportSymbolFromCompletionEntryData(name: string, data: CompletionEntryData, program: Program, host: LanguageServiceHost): { symbol: Symbol; origin: SymbolOriginInfoExport | SymbolOriginInfoResolvedExport; } | undefined {
+function getAutoImportSymbolFromCompletionEntryData(
+    name: string,
+    data: CompletionEntryData,
+    program: Program,
+    host: LanguageServiceHost,
+): { symbol: Symbol; origin: SymbolOriginInfoExport | SymbolOriginInfoResolvedExport; } | undefined {
     const containingProgram = data.isPackageJsonImport ? host.getPackageJsonAutoImportProvider!()! : program;
     const checker = containingProgram.getTypeChecker();
     const moduleSymbol = data.ambientModuleName ? checker.tryFindAmbientModule(data.ambientModuleName) :

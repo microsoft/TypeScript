@@ -497,7 +497,13 @@ function finishCatchOrFinallyTransform(
  * @param hasContinuation Whether another `then`, `catch`, or `finally` continuation follows this continuation.
  * @param continuationArgName The argument name for the continuation that follows this call.
  */
-function transformFinally(node: PromiseReturningCallExpression<"finally">, onFinally: Expression | undefined, transformer: Transformer, hasContinuation: boolean, continuationArgName?: SynthBindingName): readonly Statement[] {
+function transformFinally(
+    node: PromiseReturningCallExpression<"finally">,
+    onFinally: Expression | undefined,
+    transformer: Transformer,
+    hasContinuation: boolean,
+    continuationArgName?: SynthBindingName,
+): readonly Statement[] {
     if (!onFinally || isNullOrUndefined(transformer, onFinally)) {
         // Ignore this call as it has no effect on the result
         return transformExpression(/* returnContextNode */ node, node.expression.expression, transformer, hasContinuation, continuationArgName);
@@ -524,7 +530,13 @@ function transformFinally(node: PromiseReturningCallExpression<"finally">, onFin
  * @param hasContinuation Whether another `then`, `catch`, or `finally` continuation follows this continuation.
  * @param continuationArgName The argument name for the continuation that follows this call.
  */
-function transformCatch(node: PromiseReturningCallExpression<"then" | "catch">, onRejected: Expression | undefined, transformer: Transformer, hasContinuation: boolean, continuationArgName?: SynthBindingName): readonly Statement[] {
+function transformCatch(
+    node: PromiseReturningCallExpression<"then" | "catch">,
+    onRejected: Expression | undefined,
+    transformer: Transformer,
+    hasContinuation: boolean,
+    continuationArgName?: SynthBindingName,
+): readonly Statement[] {
     if (!onRejected || isNullOrUndefined(transformer, onRejected)) {
         // Ignore this call as it has no effect on the result
         return transformExpression(/* returnContextNode */ node, node.expression.expression, transformer, hasContinuation, continuationArgName);
@@ -823,7 +835,10 @@ function removeReturns(stmts: readonly Statement[], prevArgName: SynthBindingNam
                     ret.push(
                         factory.createVariableStatement(
                             /*modifiers*/ undefined,
-                            factory.createVariableDeclarationList([factory.createVariableDeclaration(declareSynthBindingName(prevArgName), /*exclamationToken*/ undefined, /*type*/ undefined, possiblyAwaitedExpression)], NodeFlags.Const),
+                            factory.createVariableDeclarationList(
+                                [factory.createVariableDeclaration(declareSynthBindingName(prevArgName), /*exclamationToken*/ undefined, /*type*/ undefined, possiblyAwaitedExpression)],
+                                NodeFlags.Const,
+                            ),
                         ),
                     );
                 }
@@ -839,7 +854,10 @@ function removeReturns(stmts: readonly Statement[], prevArgName: SynthBindingNam
         ret.push(
             factory.createVariableStatement(
                 /*modifiers*/ undefined,
-                factory.createVariableDeclarationList([factory.createVariableDeclaration(declareSynthBindingName(prevArgName), /*exclamationToken*/ undefined, /*type*/ undefined, factory.createIdentifier("undefined"))], NodeFlags.Const),
+                factory.createVariableDeclarationList(
+                    [factory.createVariableDeclaration(declareSynthBindingName(prevArgName), /*exclamationToken*/ undefined, /*type*/ undefined, factory.createIdentifier("undefined"))],
+                    NodeFlags.Const,
+                ),
             ),
         );
     }

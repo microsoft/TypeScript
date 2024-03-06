@@ -171,7 +171,10 @@ export function transformJsx(context: TransformationContext): (x: SourceFile | B
         addEmitHelpers(visited, context.readEmitHelpers());
         let statements: readonly Statement[] = visited.statements;
         if (currentFileState.filenameDeclaration) {
-            statements = insertStatementAfterCustomPrologue(statements.slice(), factory.createVariableStatement(/*modifiers*/ undefined, factory.createVariableDeclarationList([currentFileState.filenameDeclaration], NodeFlags.Const)));
+            statements = insertStatementAfterCustomPrologue(
+                statements.slice(),
+                factory.createVariableStatement(/*modifiers*/ undefined, factory.createVariableDeclarationList([currentFileState.filenameDeclaration], NodeFlags.Const)),
+            );
         }
         if (currentFileState.utilizedImplicitRuntimeImports) {
             for (const [importSource, importSpecifiersMap] of arrayFrom(currentFileState.utilizedImplicitRuntimeImports.entries())) {

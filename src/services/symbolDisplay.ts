@@ -378,7 +378,10 @@ function getSymbolDisplayPartsDocumentationAndSymbolKindWorker(
                         displayParts.push(punctuationPart(SyntaxKind.ColonToken));
                         displayParts.push(spacePart());
                         if (!(getObjectFlags(type) & ObjectFlags.Anonymous) && type.symbol) {
-                            addRange(displayParts, symbolToDisplayParts(typeChecker, type.symbol, enclosingDeclaration, /*meaning*/ undefined, SymbolFormatFlags.AllowAnyNodeKind | SymbolFormatFlags.WriteTypeParametersOrArguments));
+                            addRange(
+                                displayParts,
+                                symbolToDisplayParts(typeChecker, type.symbol, enclosingDeclaration, /*meaning*/ undefined, SymbolFormatFlags.AllowAnyNodeKind | SymbolFormatFlags.WriteTypeParametersOrArguments),
+                            );
                             displayParts.push(lineBreakPart());
                         }
                         if (useConstructSignatures) {
@@ -407,7 +410,8 @@ function getSymbolDisplayPartsDocumentationAndSymbolKindWorker(
             // get the signature from the declaration and write it
             const functionDeclaration = location.parent as SignatureDeclaration;
             // Use function declaration to write the signatures only if the symbol corresponding to this declaration
-            const locationIsSymbolDeclaration = symbol.declarations && find(symbol.declarations, declaration => declaration === (location.kind === SyntaxKind.ConstructorKeyword ? functionDeclaration.parent : functionDeclaration));
+            const locationIsSymbolDeclaration = symbol.declarations &&
+                find(symbol.declarations, declaration => declaration === (location.kind === SyntaxKind.ConstructorKeyword ? functionDeclaration.parent : functionDeclaration));
 
             if (locationIsSymbolDeclaration) {
                 const allSignatures = functionDeclaration.kind === SyntaxKind.Constructor ? type.getNonNullableType().getConstructSignatures() : type.getNonNullableType().getCallSignatures();

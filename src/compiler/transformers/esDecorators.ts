@@ -1159,7 +1159,14 @@ export function transformESDecorators(context: TransformationContext): (x: Sourc
         }
     }
 
-    function transformConstructorBodyWorker(statementsOut: Statement[], statementsIn: NodeArray<Statement>, statementOffset: number, superPath: readonly number[], superPathDepth: number, initializerStatements: readonly Statement[]) {
+    function transformConstructorBodyWorker(
+        statementsOut: Statement[],
+        statementsIn: NodeArray<Statement>,
+        statementOffset: number,
+        superPath: readonly number[],
+        superPathDepth: number,
+        initializerStatements: readonly Statement[],
+    ) {
         const superStatementIndex = superPath[superPathDepth];
         const superStatement = statementsIn[superStatementIndex];
         addRange(statementsOut, visitNodes(statementsIn, visitor, isStatement, statementOffset, superStatementIndex - statementOffset));
@@ -1353,7 +1360,14 @@ export function transformESDecorators(context: TransformationContext): (x: Sourc
                     descriptor = factory.createAssignment(descriptorName, descriptor);
                 }
 
-                const esDecorateExpression = emitHelpers().createESDecorateHelper(factory.createThis(), descriptor ?? factory.createNull(), memberDecoratorsName, context, factory.createNull(), methodExtraInitializersName);
+                const esDecorateExpression = emitHelpers().createESDecorateHelper(
+                    factory.createThis(),
+                    descriptor ?? factory.createNull(),
+                    memberDecoratorsName,
+                    context,
+                    factory.createNull(),
+                    methodExtraInitializersName,
+                );
                 const esDecorateStatement = factory.createExpressionStatement(esDecorateExpression);
                 setSourceMapRange(esDecorateStatement, moveRangePastDecorators(member));
                 statements.push(esDecorateStatement);
@@ -1511,7 +1525,11 @@ export function transformESDecorators(context: TransformationContext): (x: Sourc
         //        a. Let _value_ be ? NamedEvaluation of |Initializer| with argument _functionObject_.[[ClassFieldInitializerName]].
         //     ...
 
-        const { modifiers, name, initializersName, extraInitializersName, descriptorName, thisArg } = partialTransformClassElement(node, classInfo, hasAccessorModifier(node) ? createAccessorPropertyDescriptorObject : undefined);
+        const { modifiers, name, initializersName, extraInitializersName, descriptorName, thisArg } = partialTransformClassElement(
+            node,
+            classInfo,
+            hasAccessorModifier(node) ? createAccessorPropertyDescriptorObject : undefined,
+        );
 
         startLexicalEnvironment();
 

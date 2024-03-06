@@ -64,12 +64,18 @@ describe("unittests:: services:: Transpile", () => {
 
                 /* eslint-disable no-null/no-null */
                 it("Correct errors for " + justName, () => {
-                    Harness.Baseline.runBaseline(justName.replace(/\.tsx?$/, ".errors.txt"), transpileResult.diagnostics!.length === 0 ? null : Harness.Compiler.getErrorBaseline(toBeCompiled, transpileResult.diagnostics!));
+                    Harness.Baseline.runBaseline(
+                        justName.replace(/\.tsx?$/, ".errors.txt"),
+                        transpileResult.diagnostics!.length === 0 ? null : Harness.Compiler.getErrorBaseline(toBeCompiled, transpileResult.diagnostics!),
+                    );
                 });
 
                 if (canUseOldTranspile) {
                     it("Correct errors (old transpile) for " + justName, () => {
-                        Harness.Baseline.runBaseline(justName.replace(/\.tsx?$/, ".oldTranspile.errors.txt"), oldTranspileDiagnostics.length === 0 ? null : Harness.Compiler.getErrorBaseline(toBeCompiled, oldTranspileDiagnostics));
+                        Harness.Baseline.runBaseline(
+                            justName.replace(/\.tsx?$/, ".oldTranspile.errors.txt"),
+                            oldTranspileDiagnostics.length === 0 ? null : Harness.Compiler.getErrorBaseline(toBeCompiled, oldTranspileDiagnostics),
+                        );
                     });
                 }
                 /* eslint-enable no-null/no-null */

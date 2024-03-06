@@ -2289,7 +2289,8 @@ function tryAddingExtensions(candidate: string, extensions: Extensions, original
         case Extension.Js:
         case "":
             return extensions & Extensions.TypeScript &&
-                    (tryExtension(Extension.Ts, originalExtension === Extension.Ts || originalExtension === Extension.Dts) || tryExtension(Extension.Tsx, originalExtension === Extension.Ts || originalExtension === Extension.Dts))
+                    (tryExtension(Extension.Ts, originalExtension === Extension.Ts || originalExtension === Extension.Dts) ||
+                        tryExtension(Extension.Tsx, originalExtension === Extension.Ts || originalExtension === Extension.Dts))
                 || extensions & Extensions.Declaration && tryExtension(Extension.Dts, originalExtension === Extension.Ts || originalExtension === Extension.Dts)
                 || extensions & Extensions.JavaScript && (tryExtension(Extension.Js) || tryExtension(Extension.Jsx))
                 || state.isConfigLookup && tryExtension(Extension.Json)

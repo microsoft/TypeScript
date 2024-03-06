@@ -217,7 +217,17 @@ function doChange(context: RefactorContext, oldFile: SourceFile, targetFile: str
     else {
         const targetSourceFile = Debug.checkDefined(program.getSourceFile(targetFile));
         const importAdder = codefix.createImportAdder(targetSourceFile, context.program, context.preferences, context.host);
-        getNewStatementsAndRemoveFromOldFile(oldFile, targetSourceFile, getUsageInfo(oldFile, toMove.all, checker, getExistingLocals(targetSourceFile, toMove.all, checker)), changes, toMove, program, host, preferences, importAdder);
+        getNewStatementsAndRemoveFromOldFile(
+            oldFile,
+            targetSourceFile,
+            getUsageInfo(oldFile, toMove.all, checker, getExistingLocals(targetSourceFile, toMove.all, checker)),
+            changes,
+            toMove,
+            program,
+            host,
+            preferences,
+            importAdder,
+        );
     }
 }
 
@@ -234,7 +244,10 @@ function getNewStatementsAndRemoveFromOldFile(
 ) {
     const checker = program.getTypeChecker();
     const prologueDirectives = takeWhile(oldFile.statements, isPrologueDirective);
-    if (oldFile.externalModuleIndicator === undefined && oldFile.commonJsModuleIndicator === undefined && usage.oldImportsNeededByTargetFile.size === 0 && usage.targetFileImportsFromOldFile.size === 0 && typeof targetFile === "string") {
+    if (
+        oldFile.externalModuleIndicator === undefined && oldFile.commonJsModuleIndicator === undefined && usage.oldImportsNeededByTargetFile.size === 0 && usage.targetFileImportsFromOldFile.size === 0 &&
+        typeof targetFile === "string"
+    ) {
         deleteMovedStatements(oldFile, toMove.ranges, changes);
         return [...prologueDirectives, ...toMove.all];
     }
@@ -604,7 +617,11 @@ export function makeImportOrRequire(
         Debug.assert(!defaultImport, "No default import should exist"); // If there's a default export, it should have been an es6 module.
         const bindingElements = imports.map(i => factory.createBindingElement(/*dotDotDotToken*/ undefined, /*propertyName*/ undefined, i));
         return bindingElements.length
-            ? makeVariableStatement(factory.createObjectBindingPattern(bindingElements), /*type*/ undefined, createRequireCall(makeStringLiteral(pathToTargetFileWithCorrectExtension, quotePreference))) as RequireVariableStatement
+            ? makeVariableStatement(
+                factory.createObjectBindingPattern(bindingElements),
+                /*type*/ undefined,
+                createRequireCall(makeStringLiteral(pathToTargetFileWithCorrectExtension, quotePreference)),
+            ) as RequireVariableStatement
             : undefined;
     }
 }

@@ -76,7 +76,11 @@ describe("unittests:: services:: Colorization", () => {
                     expectedEntry.classification,
                     "Classification class does not match expected. Expected: " + ts.TokenClass[expectedEntry.classification] + ", Actual: " + ts.TokenClass[actualEntry.classification],
                 );
-                assert.equal(actualEntry.length, expectedEntry.value.length, "Classification length does not match expected. Expected: " + ts.TokenClass[expectedEntry.value.length] + ", Actual: " + ts.TokenClass[actualEntry.length]);
+                assert.equal(
+                    actualEntry.length,
+                    expectedEntry.value.length,
+                    "Classification length does not match expected. Expected: " + ts.TokenClass[expectedEntry.value.length] + ", Actual: " + ts.TokenClass[actualEntry.length],
+                );
             }
         }
     }

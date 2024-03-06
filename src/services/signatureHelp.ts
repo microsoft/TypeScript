@@ -126,7 +126,13 @@ interface ArgumentListInfo {
 }
 
 /** @internal */
-export function getSignatureHelpItems(program: Program, sourceFile: SourceFile, position: number, triggerReason: SignatureHelpTriggerReason | undefined, cancellationToken: CancellationToken): SignatureHelpItems | undefined {
+export function getSignatureHelpItems(
+    program: Program,
+    sourceFile: SourceFile,
+    position: number,
+    triggerReason: SignatureHelpTriggerReason | undefined,
+    cancellationToken: CancellationToken,
+): SignatureHelpItems | undefined {
     const typeChecker = program.getTypeChecker();
 
     // Decide whether to show signature help
@@ -465,7 +471,8 @@ function getContextualSignatureLocationInfo(node: Node, sourceFile: SourceFile, 
             const info = getArgumentOrParameterListInfo(node, position, sourceFile, checker);
             if (!info) return undefined;
             const { argumentIndex, argumentCount, argumentsSpan } = info;
-            const contextualType = isMethodDeclaration(parent) ? checker.getContextualTypeForObjectLiteralElement(parent) : checker.getContextualType(parent as ParenthesizedExpression | FunctionExpression | ArrowFunction);
+            const contextualType = isMethodDeclaration(parent) ? checker.getContextualTypeForObjectLiteralElement(parent)
+                : checker.getContextualType(parent as ParenthesizedExpression | FunctionExpression | ArrowFunction);
             return contextualType && { contextualType, argumentIndex, argumentCount, argumentsSpan };
         case SyntaxKind.BinaryExpression: {
             const highestBinary = getHighestBinary(parent as BinaryExpression);
@@ -672,7 +679,8 @@ function createSignatureHelpItems(
     useFullPrefix?: boolean,
 ): SignatureHelpItems {
     const enclosingDeclaration = getEnclosingDeclarationFromInvocation(invocation);
-    const callTargetSymbol = invocation.kind === InvocationKind.Contextual ? invocation.symbol : (typeChecker.getSymbolAtLocation(getExpressionFromInvocation(invocation)) || useFullPrefix && resolvedSignature.declaration?.symbol);
+    const callTargetSymbol = invocation.kind === InvocationKind.Contextual ? invocation.symbol
+        : (typeChecker.getSymbolAtLocation(getExpressionFromInvocation(invocation)) || useFullPrefix && resolvedSignature.declaration?.symbol);
     const callTargetDisplayParts = callTargetSymbol ? symbolToDisplayParts(typeChecker, callTargetSymbol, useFullPrefix ? sourceFile : undefined, /*meaning*/ undefined) : emptyArray;
     const items = map(candidates, candidateSignature => getSignatureHelpItem(candidateSignature, callTargetDisplayParts, isTypeParameterList, typeChecker, enclosingDeclaration, sourceFile));
 

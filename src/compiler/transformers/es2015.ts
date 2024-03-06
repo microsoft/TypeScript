@@ -2970,7 +2970,13 @@ export function transformES2015(context: TransformationContext): (x: SourceFile 
         }
     }
 
-    function visitIterationStatementWithFacts<T extends IterationStatement>(excludeFacts: HierarchyFacts, includeFacts: HierarchyFacts, node: T, outermostLabeledStatement: LabeledStatement | undefined, convert?: LoopConverter<T>) {
+    function visitIterationStatementWithFacts<T extends IterationStatement>(
+        excludeFacts: HierarchyFacts,
+        includeFacts: HierarchyFacts,
+        node: T,
+        outermostLabeledStatement: LabeledStatement | undefined,
+        convert?: LoopConverter<T>,
+    ) {
         const ancestorFacts = enterSubtree(excludeFacts, includeFacts);
         const updated = convertIterationStatementBodyIfNecessary(node, outermostLabeledStatement, ancestorFacts, convert);
         exitSubtree(ancestorFacts, HierarchyFacts.None, HierarchyFacts.None);
@@ -3195,7 +3201,12 @@ export function transformES2015(context: TransformationContext): (x: SourceFile 
         return factory.restoreEnclosingLabel(forStatement, outermostLabeledStatement, convertedLoopState && resetLabel);
     }
 
-    function convertForOfStatementForIterable(node: ForOfStatement, outermostLabeledStatement: LabeledStatement | undefined, convertedLoopBodyStatements: Statement[] | undefined, ancestorFacts: HierarchyFacts): Statement {
+    function convertForOfStatementForIterable(
+        node: ForOfStatement,
+        outermostLabeledStatement: LabeledStatement | undefined,
+        convertedLoopBodyStatements: Statement[] | undefined,
+        ancestorFacts: HierarchyFacts,
+    ): Statement {
         const expression = visitNode(node.expression, visitor, isExpression);
         Debug.assert(expression);
         const iterator = isIdentifier(expression) ? factory.getGeneratedNameForNode(expression) : factory.createTempVariable(/*recordTempVariable*/ undefined);
@@ -3427,7 +3438,12 @@ export function transformES2015(context: TransformationContext): (x: SourceFile 
         }
     }
 
-    function convertIterationStatementBodyIfNecessary<T extends IterationStatement>(node: T, outermostLabeledStatement: LabeledStatement | undefined, ancestorFacts: HierarchyFacts, convert?: LoopConverter<T>): VisitResult<Statement> {
+    function convertIterationStatementBodyIfNecessary<T extends IterationStatement>(
+        node: T,
+        outermostLabeledStatement: LabeledStatement | undefined,
+        ancestorFacts: HierarchyFacts,
+        convert?: LoopConverter<T>,
+    ): VisitResult<Statement> {
         if (!shouldConvertIterationStatement(node)) {
             let saveAllowedNonLabeledJumps: Jump | undefined;
             if (convertedLoopState) {
@@ -4052,7 +4068,13 @@ export function transformES2015(context: TransformationContext): (x: SourceFile 
         });
     }
 
-    function processLoopVariableDeclaration(container: IterationStatement, decl: VariableDeclaration | BindingElement, loopParameters: ParameterDeclaration[], loopOutParameters: LoopOutParameter[], hasCapturedBindingsInForHead: boolean) {
+    function processLoopVariableDeclaration(
+        container: IterationStatement,
+        decl: VariableDeclaration | BindingElement,
+        loopParameters: ParameterDeclaration[],
+        loopOutParameters: LoopOutParameter[],
+        hasCapturedBindingsInForHead: boolean,
+    ) {
         const name = decl.name;
         if (isBindingPattern(name)) {
             for (const element of name.elements) {

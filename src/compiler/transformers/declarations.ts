@@ -349,7 +349,12 @@ export function transformDeclarations(context: TransformationContext) {
                 }
                 else {
                     context.addDiagnostic(
-                        createDiagnosticForNode(symbolAccessibilityResult.errorNode || errorInfo.errorNode, errorInfo.diagnosticMessage, symbolAccessibilityResult.errorSymbolName!, symbolAccessibilityResult.errorModuleName!),
+                        createDiagnosticForNode(
+                            symbolAccessibilityResult.errorNode || errorInfo.errorNode,
+                            errorInfo.diagnosticMessage,
+                            symbolAccessibilityResult.errorSymbolName!,
+                            symbolAccessibilityResult.errorModuleName!,
+                        ),
                     );
                 }
                 return true;
@@ -389,7 +394,12 @@ export function transformDeclarations(context: TransformationContext) {
     function reportInaccessibleUniqueSymbolError() {
         if (errorNameNode || errorFallbackNode) {
             context.addDiagnostic(
-                createDiagnosticForNode((errorNameNode || errorFallbackNode)!, Diagnostics.The_inferred_type_of_0_references_an_inaccessible_1_type_A_type_annotation_is_necessary, errorDeclarationNameWithFallback(), "unique symbol"),
+                createDiagnosticForNode(
+                    (errorNameNode || errorFallbackNode)!,
+                    Diagnostics.The_inferred_type_of_0_references_an_inaccessible_1_type_A_type_annotation_is_necessary,
+                    errorDeclarationNameWithFallback(),
+                    "unique symbol",
+                ),
             );
         }
     }
@@ -409,7 +419,12 @@ export function transformDeclarations(context: TransformationContext) {
     function reportInaccessibleThisError() {
         if (errorNameNode || errorFallbackNode) {
             context.addDiagnostic(
-                createDiagnosticForNode((errorNameNode || errorFallbackNode)!, Diagnostics.The_inferred_type_of_0_references_an_inaccessible_1_type_A_type_annotation_is_necessary, errorDeclarationNameWithFallback(), "this"),
+                createDiagnosticForNode(
+                    (errorNameNode || errorFallbackNode)!,
+                    Diagnostics.The_inferred_type_of_0_references_an_inaccessible_1_type_A_type_annotation_is_necessary,
+                    errorDeclarationNameWithFallback(),
+                    "this",
+                ),
             );
         }
     }
@@ -429,7 +444,9 @@ export function transformDeclarations(context: TransformationContext) {
 
     function reportTruncationError() {
         if (errorNameNode || errorFallbackNode) {
-            context.addDiagnostic(createDiagnosticForNode((errorNameNode || errorFallbackNode)!, Diagnostics.The_inferred_type_of_this_node_exceeds_the_maximum_length_the_compiler_will_serialize_An_explicit_type_annotation_is_needed));
+            context.addDiagnostic(
+                createDiagnosticForNode((errorNameNode || errorFallbackNode)!, Diagnostics.The_inferred_type_of_this_node_exceeds_the_maximum_length_the_compiler_will_serialize_An_explicit_type_annotation_is_needed),
+            );
         }
     }
 
@@ -495,7 +512,8 @@ export function transformDeclarations(context: TransformationContext) {
                     if (isExternalOrCommonJsModule(sourceFile) || isJsonSourceFile(sourceFile)) {
                         resultHasExternalModuleIndicator = false; // unused in external module bundle emit (all external modules are within module blocks, therefore are known to be modules)
                         needsDeclare = false;
-                        const statements = isSourceFileJS(sourceFile) ? factory.createNodeArray(transformDeclarationsForJS(sourceFile, /*bundled*/ true)) : visitNodes(sourceFile.statements, visitDeclarationStatements, isStatement);
+                        const statements = isSourceFileJS(sourceFile) ? factory.createNodeArray(transformDeclarationsForJS(sourceFile, /*bundled*/ true))
+                            : visitNodes(sourceFile.statements, visitDeclarationStatements, isStatement);
                         const newFile = factory.updateSourceFile(
                             sourceFile,
                             [factory.createModuleDeclaration(
@@ -513,7 +531,15 @@ export function transformDeclarations(context: TransformationContext) {
                     }
                     needsDeclare = true;
                     const updated = isSourceFileJS(sourceFile) ? factory.createNodeArray(transformDeclarationsForJS(sourceFile)) : visitNodes(sourceFile.statements, visitDeclarationStatements, isStatement);
-                    return factory.updateSourceFile(sourceFile, transformAndReplaceLatePaintedStatements(updated), /*isDeclarationFile*/ true, /*referencedFiles*/ [], /*typeReferences*/ [], /*hasNoDefaultLib*/ false, /*libReferences*/ []);
+                    return factory.updateSourceFile(
+                        sourceFile,
+                        transformAndReplaceLatePaintedStatements(updated),
+                        /*isDeclarationFile*/ true,
+                        /*referencedFiles*/ [],
+                        /*typeReferences*/ [],
+                        /*hasNoDefaultLib*/ false,
+                        /*libReferences*/ [],
+                    );
                 }),
             );
             bundle.syntheticFileReferences = [];
@@ -1745,13 +1771,20 @@ export function transformDeclarations(context: TransformationContext) {
                         if (clause.token === SyntaxKind.ExtendsKeyword) {
                             const oldDiag = getSymbolAccessibilityDiagnostic;
                             getSymbolAccessibilityDiagnostic = createGetSymbolAccessibilityDiagnosticForNode(clause.types[0]);
-                            const newClause = factory.updateHeritageClause(clause, map(clause.types, t => factory.updateExpressionWithTypeArguments(t, newId, visitNodes(t.typeArguments, visitDeclarationSubtree, isTypeNode))));
+                            const newClause = factory.updateHeritageClause(
+                                clause,
+                                map(clause.types, t => factory.updateExpressionWithTypeArguments(t, newId, visitNodes(t.typeArguments, visitDeclarationSubtree, isTypeNode))),
+                            );
                             getSymbolAccessibilityDiagnostic = oldDiag;
                             return newClause;
                         }
                         return factory.updateHeritageClause(
                             clause,
-                            visitNodes(factory.createNodeArray(filter(clause.types, t => isEntityNameExpression(t.expression) || t.expression.kind === SyntaxKind.NullKeyword)), visitDeclarationSubtree, isExpressionWithTypeArguments),
+                            visitNodes(
+                                factory.createNodeArray(filter(clause.types, t => isEntityNameExpression(t.expression) || t.expression.kind === SyntaxKind.NullKeyword)),
+                                visitDeclarationSubtree,
+                                isExpressionWithTypeArguments,
+                            ),
                         );
                     }));
                     return [

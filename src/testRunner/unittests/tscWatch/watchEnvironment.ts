@@ -636,12 +636,14 @@ describe("unittests:: tsc-watch:: watchEnvironment:: tsc-watch with different po
             edits: [
                 {
                     caption: "Replace file with rename event that introduces error",
-                    edit: sys => sys.modifyFile(`/user/username/projects/myproject/foo.d.ts`, `export function foo2(): string;`, { invokeFileDeleteCreateAsPartInsteadOfChange: true, useTildeAsSuffixInRenameEventFileName: true }),
+                    edit: sys =>
+                        sys.modifyFile(`/user/username/projects/myproject/foo.d.ts`, `export function foo2(): string;`, { invokeFileDeleteCreateAsPartInsteadOfChange: true, useTildeAsSuffixInRenameEventFileName: true }),
                     timeouts: sys => sys.runQueuedTimeoutCallbacks(),
                 },
                 {
                     caption: "Replace file with rename event that fixes error",
-                    edit: sys => sys.modifyFile(`/user/username/projects/myproject/foo.d.ts`, `export function foo(): string;`, { invokeFileDeleteCreateAsPartInsteadOfChange: true, useTildeAsSuffixInRenameEventFileName: true }),
+                    edit: sys =>
+                        sys.modifyFile(`/user/username/projects/myproject/foo.d.ts`, `export function foo(): string;`, { invokeFileDeleteCreateAsPartInsteadOfChange: true, useTildeAsSuffixInRenameEventFileName: true }),
                     timeouts: sys => sys.runQueuedTimeoutCallbacks(),
                 },
             ],

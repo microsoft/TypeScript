@@ -216,7 +216,16 @@ export function updateModuleSpecifier(
     oldImportSpecifier: string,
     options: ModuleSpecifierOptions = {},
 ): string | undefined {
-    const res = getModuleSpecifierWorker(compilerOptions, importingSourceFile, importingSourceFileName, toFileName, host, getModuleSpecifierPreferences({}, compilerOptions, importingSourceFile, oldImportSpecifier), {}, options);
+    const res = getModuleSpecifierWorker(
+        compilerOptions,
+        importingSourceFile,
+        importingSourceFileName,
+        toFileName,
+        host,
+        getModuleSpecifierPreferences({}, compilerOptions, importingSourceFile, oldImportSpecifier),
+        {},
+        options,
+    );
     if (res === oldImportSpecifier) return undefined;
     return res;
 }
@@ -265,7 +274,10 @@ function getModuleSpecifierWorker(
 ): string {
     const info = getInfo(importingSourceFileName, host);
     const modulePaths = getAllModulePaths(info, toFileName, host, userPreferences, options);
-    return firstDefined(modulePaths, modulePath => tryGetModuleNameAsNodeModule(modulePath, info, importingSourceFile, host, compilerOptions, userPreferences, /*packageNameOnly*/ undefined, options.overrideImportMode)) ||
+    return firstDefined(
+        modulePaths,
+        modulePath => tryGetModuleNameAsNodeModule(modulePath, info, importingSourceFile, host, compilerOptions, userPreferences, /*packageNameOnly*/ undefined, options.overrideImportMode),
+    ) ||
         getLocalModuleSpecifier(toFileName, info, compilerOptions, host, options.overrideImportMode || importingSourceFile.impliedNodeFormat, preferences);
 }
 
@@ -786,7 +798,13 @@ function tryGetModuleNameFromAmbientModule(moduleSymbol: Symbol, checker: TypeCh
     }
 }
 
-function tryGetModuleNameFromPaths(relativeToBaseUrl: string, paths: MapLike<readonly string[]>, allowedEndings: ModuleSpecifierEnding[], host: ModuleSpecifierResolutionHost, compilerOptions: CompilerOptions): string | undefined {
+function tryGetModuleNameFromPaths(
+    relativeToBaseUrl: string,
+    paths: MapLike<readonly string[]>,
+    allowedEndings: ModuleSpecifierEnding[],
+    host: ModuleSpecifierResolutionHost,
+    compilerOptions: CompilerOptions,
+): string | undefined {
     for (const key in paths) {
         for (const patternText of paths[key]) {
             const pattern = normalizePath(patternText);

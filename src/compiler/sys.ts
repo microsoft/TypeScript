@@ -827,7 +827,14 @@ function createDirectoryWatcherSupportingRecursive({
 /** @internal */
 export type FsWatchCallback = (eventName: "rename" | "change", relativeFileName: string | undefined | null, modifiedTime?: Date) => void;
 /** @internal */
-export type FsWatch = (fileOrDirectory: string, entryKind: FileSystemEntryKind, callback: FsWatchCallback, recursive: boolean, fallbackPollingInterval: PollingInterval, fallbackOptions: WatchOptions | undefined) => FileWatcher;
+export type FsWatch = (
+    fileOrDirectory: string,
+    entryKind: FileSystemEntryKind,
+    callback: FsWatchCallback,
+    recursive: boolean,
+    fallbackPollingInterval: PollingInterval,
+    fallbackOptions: WatchOptions | undefined,
+) => FileWatcher;
 /** @internal */
 export interface FsWatchWorkerWatcher extends FileWatcher {
     on(eventName: string, listener: () => void): void;

@@ -555,7 +555,12 @@ function createDefaultValueCheck(flattenContext: FlattenContext, value: Expressi
 function createDestructuringPropertyAccess(flattenContext: FlattenContext, value: Expression, propertyName: PropertyName): LeftHandSideExpression {
     const { factory } = flattenContext.context;
     if (isComputedPropertyName(propertyName)) {
-        const argumentExpression = ensureIdentifier(flattenContext, Debug.checkDefined(visitNode(propertyName.expression, flattenContext.visitor, isExpression)), /*reuseIdentifierExpressions*/ false, /*location*/ propertyName);
+        const argumentExpression = ensureIdentifier(
+            flattenContext,
+            Debug.checkDefined(visitNode(propertyName.expression, flattenContext.visitor, isExpression)),
+            /*reuseIdentifierExpressions*/ false,
+            /*location*/ propertyName,
+        );
         return flattenContext.context.factory.createElementAccessExpression(value, argumentExpression);
     }
     else if (isStringOrNumericLiteralLike(propertyName)) {

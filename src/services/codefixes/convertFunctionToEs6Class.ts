@@ -282,7 +282,16 @@ function doChange(changes: textChanges.ChangeTracker, sourceFile: SourceFile, po
                     bodyBlock = factory.createBlock([factory.createReturnStatement(arrowFunctionBody)]);
                 }
                 const fullModifiers = concatenate(modifiers, getModifierKindFromSource(arrowFunction, SyntaxKind.AsyncKeyword));
-                const method = factory.createMethodDeclaration(fullModifiers, /*asteriskToken*/ undefined, name, /*questionToken*/ undefined, /*typeParameters*/ undefined, arrowFunction.parameters, /*type*/ undefined, bodyBlock);
+                const method = factory.createMethodDeclaration(
+                    fullModifiers,
+                    /*asteriskToken*/ undefined,
+                    name,
+                    /*questionToken*/ undefined,
+                    /*typeParameters*/ undefined,
+                    arrowFunction.parameters,
+                    /*type*/ undefined,
+                    bodyBlock,
+                );
                 copyLeadingComments(assignmentBinaryExpression, method, sourceFile);
                 members.push(method);
             }

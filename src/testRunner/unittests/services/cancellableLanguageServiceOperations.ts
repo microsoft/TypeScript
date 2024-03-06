@@ -68,7 +68,15 @@ describe("unittests:: services:: cancellableLanguageServiceOperations", () => {
     });
 });
 
-function verifyOperationCancelledAfter<T>(content: string, cancelAfter: number, operation: (service: ts.LanguageService) => T, validator: (arg: T) => void, fileName?: string, fileContent?: string, options?: ts.CompilerOptions) {
+function verifyOperationCancelledAfter<T>(
+    content: string,
+    cancelAfter: number,
+    operation: (service: ts.LanguageService) => T,
+    validator: (arg: T) => void,
+    fileName?: string,
+    fileContent?: string,
+    options?: ts.CompilerOptions,
+) {
     let checks = 0;
     const token: ts.HostCancellationToken = {
         isCancellationRequested() {

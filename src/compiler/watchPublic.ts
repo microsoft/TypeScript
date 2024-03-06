@@ -799,7 +799,13 @@ export function createWatchProgram<T extends BuilderProgram>(host: WatchCompiler
         return directoryStructureHost.fileExists(fileName);
     }
 
-    function getVersionedSourceFileByPath(fileName: string, path: Path, languageVersionOrOptions: ScriptTarget | CreateSourceFileOptions, onError?: (message: string) => void, shouldCreateNewSourceFile?: boolean): SourceFile | undefined {
+    function getVersionedSourceFileByPath(
+        fileName: string,
+        path: Path,
+        languageVersionOrOptions: ScriptTarget | CreateSourceFileOptions,
+        onError?: (message: string) => void,
+        shouldCreateNewSourceFile?: boolean,
+    ): SourceFile | undefined {
         const hostSourceFile = sourceFilesCache.get(path);
         // No source file on the host
         if (isFileMissingOnHost(hostSourceFile)) {
@@ -972,8 +978,22 @@ export function createWatchProgram<T extends BuilderProgram>(host: WatchCompiler
         Debug.assert(configFileName);
 
         updateLevel = ProgramUpdateLevel.Update;
-        rootFileNames = getFileNamesFromConfigSpecs(compilerOptions.configFile!.configFileSpecs!, getNormalizedAbsolutePath(getDirectoryPath(configFileName), currentDirectory), compilerOptions, parseConfigFileHost, extraFileExtensions);
-        if (updateErrorForNoInputFiles(rootFileNames, getNormalizedAbsolutePath(configFileName, currentDirectory), compilerOptions.configFile!.configFileSpecs!, configFileParsingDiagnostics!, canConfigFileJsonReportNoInputFiles)) {
+        rootFileNames = getFileNamesFromConfigSpecs(
+            compilerOptions.configFile!.configFileSpecs!,
+            getNormalizedAbsolutePath(getDirectoryPath(configFileName), currentDirectory),
+            compilerOptions,
+            parseConfigFileHost,
+            extraFileExtensions,
+        );
+        if (
+            updateErrorForNoInputFiles(
+                rootFileNames,
+                getNormalizedAbsolutePath(configFileName, currentDirectory),
+                compilerOptions.configFile!.configFileSpecs!,
+                configFileParsingDiagnostics!,
+                canConfigFileJsonReportNoInputFiles,
+            )
+        ) {
             hasChangedConfigFileParsingErrors = true;
         }
 

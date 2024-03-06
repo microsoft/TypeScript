@@ -506,7 +506,9 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
         updateJSDocPrePostfixUnaryTypeWorker<T>(kind, node, type)
     );
     const getJSDocSimpleTagCreateFunction = memoizeOne(<T extends JSDocTag>(kind: T["kind"]) => (tagName: Identifier | undefined, comment?: NodeArray<JSDocComment>) => createJSDocSimpleTagWorker(kind, tagName, comment));
-    const getJSDocSimpleTagUpdateFunction = memoizeOne(<T extends JSDocTag>(kind: T["kind"]) => (node: T, tagName: Identifier | undefined, comment?: NodeArray<JSDocComment>) => updateJSDocSimpleTagWorker(kind, node, tagName, comment));
+    const getJSDocSimpleTagUpdateFunction = memoizeOne(<T extends JSDocTag>(kind: T["kind"]) => (node: T, tagName: Identifier | undefined, comment?: NodeArray<JSDocComment>) =>
+        updateJSDocSimpleTagWorker(kind, node, tagName, comment)
+    );
     const getJSDocTypeLikeTagCreateFunction = memoizeOne(
         <T extends JSDocTag & { typeExpression?: JSDocTypeExpression; }>(kind: T["kind"]) => (tagName: Identifier | undefined, typeExpression?: JSDocTypeExpression, comment?: NodeArray<JSDocComment>) =>
             createJSDocTypeLikeTagWorker(kind, tagName, typeExpression, comment),
@@ -1638,7 +1640,13 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
     }
 
     // @api
-    function updateTypeParameterDeclaration(node: TypeParameterDeclaration, modifiers: readonly Modifier[] | undefined, name: Identifier, constraint: TypeNode | undefined, defaultType: TypeNode | undefined): TypeParameterDeclaration {
+    function updateTypeParameterDeclaration(
+        node: TypeParameterDeclaration,
+        modifiers: readonly Modifier[] | undefined,
+        name: Identifier,
+        constraint: TypeNode | undefined,
+        defaultType: TypeNode | undefined,
+    ): TypeParameterDeclaration {
         return node.modifiers !== modifiers
                 || node.name !== name
                 || node.constraint !== constraint
@@ -5218,7 +5226,12 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
     }
 
     // @api
-    function createJSDocTemplateTag(tagName: Identifier | undefined, constraint: JSDocTypeExpression | undefined, typeParameters: readonly TypeParameterDeclaration[], comment?: string | NodeArray<JSDocComment>): JSDocTemplateTag {
+    function createJSDocTemplateTag(
+        tagName: Identifier | undefined,
+        constraint: JSDocTypeExpression | undefined,
+        typeParameters: readonly TypeParameterDeclaration[],
+        comment?: string | NodeArray<JSDocComment>,
+    ): JSDocTemplateTag {
         const node = createBaseJSDocTag<JSDocTemplateTag>(SyntaxKind.JSDocTemplateTag, tagName ?? createIdentifier("template"), comment);
         node.constraint = constraint;
         node.typeParameters = createNodeArray(typeParameters);
@@ -5270,7 +5283,14 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
     }
 
     // @api
-    function createJSDocParameterTag(tagName: Identifier | undefined, name: EntityName, isBracketed: boolean, typeExpression?: JSDocTypeExpression, isNameFirst?: boolean, comment?: string | NodeArray<JSDocComment>): JSDocParameterTag {
+    function createJSDocParameterTag(
+        tagName: Identifier | undefined,
+        name: EntityName,
+        isBracketed: boolean,
+        typeExpression?: JSDocTypeExpression,
+        isNameFirst?: boolean,
+        comment?: string | NodeArray<JSDocComment>,
+    ): JSDocParameterTag {
         const node = createBaseJSDocTagDeclaration<JSDocParameterTag>(SyntaxKind.JSDocParameterTag, tagName ?? createIdentifier("param"), comment);
         node.typeExpression = typeExpression;
         node.name = name;
@@ -5300,7 +5320,14 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
     }
 
     // @api
-    function createJSDocPropertyTag(tagName: Identifier | undefined, name: EntityName, isBracketed: boolean, typeExpression?: JSDocTypeExpression, isNameFirst?: boolean, comment?: string | NodeArray<JSDocComment>): JSDocPropertyTag {
+    function createJSDocPropertyTag(
+        tagName: Identifier | undefined,
+        name: EntityName,
+        isBracketed: boolean,
+        typeExpression?: JSDocTypeExpression,
+        isNameFirst?: boolean,
+        comment?: string | NodeArray<JSDocComment>,
+    ): JSDocPropertyTag {
         const node = createBaseJSDocTagDeclaration<JSDocPropertyTag>(SyntaxKind.JSDocPropertyTag, tagName ?? createIdentifier("prop"), comment);
         node.typeExpression = typeExpression;
         node.name = name;
@@ -5490,7 +5517,12 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
     }
 
     // @api
-    function updateJSDocImplementsTag(node: JSDocImplementsTag, tagName: Identifier = getDefaultTagName(node), className: JSDocImplementsTag["class"], comment: string | NodeArray<JSDocComment> | undefined): JSDocImplementsTag {
+    function updateJSDocImplementsTag(
+        node: JSDocImplementsTag,
+        tagName: Identifier = getDefaultTagName(node),
+        className: JSDocImplementsTag["class"],
+        comment: string | NodeArray<JSDocComment> | undefined,
+    ): JSDocImplementsTag {
         return node.tagName !== tagName
                 || node.class !== className
                 || node.comment !== comment
@@ -5532,7 +5564,12 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
     // createJSDocThisTag
     // createJSDocEnumTag
     // createJSDocSatisfiesTag
-    function createJSDocTypeLikeTagWorker<T extends JSDocTag & { typeExpression?: JSDocTypeExpression; }>(kind: T["kind"], tagName: Identifier | undefined, typeExpression?: JSDocTypeExpression, comment?: string | NodeArray<JSDocComment>) {
+    function createJSDocTypeLikeTagWorker<T extends JSDocTag & { typeExpression?: JSDocTypeExpression; }>(
+        kind: T["kind"],
+        tagName: Identifier | undefined,
+        typeExpression?: JSDocTypeExpression,
+        comment?: string | NodeArray<JSDocComment>,
+    ) {
         const node = createBaseJSDocTag<T>(kind, tagName ?? createIdentifier(getDefaultTagNameForKind(kind)), comment);
         node.typeExpression = typeExpression;
         return node;
@@ -6942,8 +6979,20 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
      * @param visitor Optional callback used to visit any custom prologue directives.
      */
     function copyCustomPrologue(source: readonly Statement[], target: Statement[], statementOffset: number, visitor?: (node: Node) => VisitResult<Node>, filter?: (node: Statement) => boolean): number;
-    function copyCustomPrologue(source: readonly Statement[], target: Statement[], statementOffset: number | undefined, visitor?: (node: Node) => VisitResult<Node>, filter?: (node: Statement) => boolean): number | undefined;
-    function copyCustomPrologue(source: readonly Statement[], target: Statement[], statementOffset: number | undefined, visitor?: (node: Node) => VisitResult<Node>, filter: (node: Statement) => boolean = returnTrue): number | undefined {
+    function copyCustomPrologue(
+        source: readonly Statement[],
+        target: Statement[],
+        statementOffset: number | undefined,
+        visitor?: (node: Node) => VisitResult<Node>,
+        filter?: (node: Statement) => boolean,
+    ): number | undefined;
+    function copyCustomPrologue(
+        source: readonly Statement[],
+        target: Statement[],
+        statementOffset: number | undefined,
+        visitor?: (node: Node) => VisitResult<Node>,
+        filter: (node: Statement) => boolean = returnTrue,
+    ): number | undefined {
         const numStatements = source.length;
         while (statementOffset !== undefined && statementOffset < numStatements) {
             const statement = source[statementOffset];

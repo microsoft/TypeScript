@@ -1015,7 +1015,8 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
             }
             // We create a return control flow graph for IIFEs and constructors. For constructors
             // we use the return control flow graph in strict property initialization checks.
-            currentReturnTarget = isImmediatelyInvoked || node.kind === SyntaxKind.Constructor || (isInJSFile(node) && (node.kind === SyntaxKind.FunctionDeclaration || node.kind === SyntaxKind.FunctionExpression)) ? createBranchLabel()
+            currentReturnTarget = isImmediatelyInvoked || node.kind === SyntaxKind.Constructor || (isInJSFile(node) && (node.kind === SyntaxKind.FunctionDeclaration || node.kind === SyntaxKind.FunctionExpression)) ?
+                createBranchLabel()
                 : undefined;
             currentExceptionTarget = undefined;
             currentBreakTarget = undefined;
@@ -1038,7 +1039,10 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
             if (currentReturnTarget) {
                 addAntecedent(currentReturnTarget, currentFlow);
                 currentFlow = finishFlowLabel(currentReturnTarget);
-                if (node.kind === SyntaxKind.Constructor || node.kind === SyntaxKind.ClassStaticBlockDeclaration || (isInJSFile(node) && (node.kind === SyntaxKind.FunctionDeclaration || node.kind === SyntaxKind.FunctionExpression))) {
+                if (
+                    node.kind === SyntaxKind.Constructor || node.kind === SyntaxKind.ClassStaticBlockDeclaration ||
+                    (isInJSFile(node) && (node.kind === SyntaxKind.FunctionDeclaration || node.kind === SyntaxKind.FunctionExpression))
+                ) {
                     (node as FunctionLikeDeclaration | ClassStaticBlockDeclaration).returnFlowNode = currentFlow;
                 }
             }
@@ -2397,7 +2401,13 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
                 // typedef anchored to an A.B.C assignment - we need to bind into B's namespace under name C
                 const isTopLevel = isTopLevelNamespaceAssignment(declName.parent);
                 if (isTopLevel) {
-                    bindPotentiallyMissingNamespaces(file.symbol, declName.parent, isTopLevel, !!findAncestor(declName, d => isPropertyAccessExpression(d) && d.name.escapedText === "prototype"), /*containerIsClass*/ false);
+                    bindPotentiallyMissingNamespaces(
+                        file.symbol,
+                        declName.parent,
+                        isTopLevel,
+                        !!findAncestor(declName, d => isPropertyAccessExpression(d) && d.name.escapedText === "prototype"),
+                        /*containerIsClass*/ false,
+                    );
                     const oldContainer = container;
                     switch (getAssignmentDeclarationPropertyAccessKind(declName.parent)) {
                         case AssignmentDeclarationKind.ExportsProperty:
@@ -3465,7 +3475,10 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
         init = init && getRightMostAssignedExpression(init);
         if (init) {
             const isPrototypeAssignment = isPrototypeAccess(isVariableDeclaration(node!) ? node.name : isBinaryExpression(node!) ? node.left : node!);
-            return !!getExpandoInitializer(isBinaryExpression(init) && (init.operatorToken.kind === SyntaxKind.BarBarToken || init.operatorToken.kind === SyntaxKind.QuestionQuestionToken) ? init.right : init, isPrototypeAssignment);
+            return !!getExpandoInitializer(
+                isBinaryExpression(init) && (init.operatorToken.kind === SyntaxKind.BarBarToken || init.operatorToken.kind === SyntaxKind.QuestionQuestionToken) ? init.right : init,
+                isPrototypeAssignment,
+            );
         }
         return false;
     }
@@ -3487,7 +3500,11 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
         }
     }
 
-    function forEachIdentifierInEntityName(e: BindableStaticNameExpression, parent: Symbol | undefined, action: (e: Declaration, symbol: Symbol | undefined, parent: Symbol | undefined) => Symbol | undefined): Symbol | undefined {
+    function forEachIdentifierInEntityName(
+        e: BindableStaticNameExpression,
+        parent: Symbol | undefined,
+        action: (e: Declaration, symbol: Symbol | undefined, parent: Symbol | undefined) => Symbol | undefined,
+    ): Symbol | undefined {
         if (isExportsOrModuleExportsOrAlias(file, e)) {
             return file.symbol;
         }

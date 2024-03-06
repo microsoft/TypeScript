@@ -35,7 +35,14 @@ registerCodeFix({
         const typesPackageName = getTypesPackageNameToInstall(packageName, host, context.errorCode);
         return typesPackageName === undefined
             ? []
-            : [createCodeFixAction(fixName, /*changes*/ [], [Diagnostics.Install_0, typesPackageName], fixIdInstallTypesPackage, Diagnostics.Install_all_missing_types_packages, getInstallCommand(sourceFile.fileName, typesPackageName))];
+            : [createCodeFixAction(
+                fixName,
+                /*changes*/ [],
+                [Diagnostics.Install_0, typesPackageName],
+                fixIdInstallTypesPackage,
+                Diagnostics.Install_all_missing_types_packages,
+                getInstallCommand(sourceFile.fileName, typesPackageName),
+            )];
     },
     fixIds: [fixIdInstallTypesPackage],
     getAllCodeActions: context => {

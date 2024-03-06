@@ -119,7 +119,14 @@ function getAwaitErrorSpanExpression(sourceFile: SourceFile, errorCode: number, 
             && isInsideAwaitableBody(expression) ? expression : undefined;
 }
 
-function getDeclarationSiteFix(context: CodeFixContext | CodeFixAllContext, expression: Expression, errorCode: number, checker: TypeChecker, trackChanges: ContextualTrackChangesFunction, fixedDeclarations?: Set<number>) {
+function getDeclarationSiteFix(
+    context: CodeFixContext | CodeFixAllContext,
+    expression: Expression,
+    errorCode: number,
+    checker: TypeChecker,
+    trackChanges: ContextualTrackChangesFunction,
+    fixedDeclarations?: Set<number>,
+) {
     const { sourceFile, program, cancellationToken } = context;
     const awaitableInitializers = findAwaitableInitializers(expression, sourceFile, cancellationToken, program, checker);
     if (awaitableInitializers) {

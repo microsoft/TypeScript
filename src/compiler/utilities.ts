@@ -785,7 +785,8 @@ export function createModuleNotFoundChain(sourceFile: SourceFile, host: TypeChec
         : host.typesPackageExists(packageName)
         ? chainDiagnosticMessages(
             /*details*/ undefined,
-            Diagnostics.If_the_0_package_actually_exposes_this_module_consider_sending_a_pull_request_to_amend_https_Colon_Slash_Slashgithub_com_SlashDefinitelyTyped_SlashDefinitelyTyped_Slashtree_Slashmaster_Slashtypes_Slash_1,
+            Diagnostics
+                .If_the_0_package_actually_exposes_this_module_consider_sending_a_pull_request_to_amend_https_Colon_Slash_Slashgithub_com_SlashDefinitelyTyped_SlashDefinitelyTyped_Slashtree_Slashmaster_Slashtypes_Slash_1,
             packageName,
             mangleScopedPackageName(packageName),
         )
@@ -2121,7 +2122,12 @@ export function createDiagnosticForNodeFromMessageChain(sourceFile: SourceFile, 
 }
 
 /** @internal */
-export function createDiagnosticForNodeArrayFromMessageChain(sourceFile: SourceFile, nodes: NodeArray<Node>, messageChain: DiagnosticMessageChain, relatedInformation?: DiagnosticRelatedInformation[]): DiagnosticWithLocation {
+export function createDiagnosticForNodeArrayFromMessageChain(
+    sourceFile: SourceFile,
+    nodes: NodeArray<Node>,
+    messageChain: DiagnosticMessageChain,
+    relatedInformation?: DiagnosticRelatedInformation[],
+): DiagnosticWithLocation {
     const start = skipTrivia(sourceFile.text, nodes.pos);
     return createFileDiagnosticFromMessageChain(sourceFile, start, nodes.end - start, messageChain, relatedInformation);
 }
@@ -3693,7 +3699,8 @@ export function isDefaultedExpandoInitializer(node: BinaryExpression) {
  */
 export function getNameOfExpando(node: Declaration): DeclarationName | undefined {
     if (isBinaryExpression(node.parent)) {
-        const parent = ((node.parent.operatorToken.kind === SyntaxKind.BarBarToken || node.parent.operatorToken.kind === SyntaxKind.QuestionQuestionToken) && isBinaryExpression(node.parent.parent)) ? node.parent.parent : node.parent;
+        const parent = ((node.parent.operatorToken.kind === SyntaxKind.BarBarToken || node.parent.operatorToken.kind === SyntaxKind.QuestionQuestionToken) && isBinaryExpression(node.parent.parent)) ? node.parent.parent
+            : node.parent;
         if (parent.operatorToken.kind === SyntaxKind.EqualsToken && isIdentifier(parent.left)) {
             return parent.left;
         }
@@ -3803,7 +3810,8 @@ export function isLiteralLikeElementAccess(node: Node): node is LiteralLikeEleme
  * @internal
  */
 export function isBindableStaticAccessExpression(node: Node, excludeThisKeyword?: boolean): node is BindableStaticAccessExpression {
-    return isPropertyAccessExpression(node) && (!excludeThisKeyword && node.expression.kind === SyntaxKind.ThisKeyword || isIdentifier(node.name) && isBindableStaticNameExpression(node.expression, /*excludeThisKeyword*/ true))
+    return isPropertyAccessExpression(node) &&
+            (!excludeThisKeyword && node.expression.kind === SyntaxKind.ThisKeyword || isIdentifier(node.name) && isBindableStaticNameExpression(node.expression, /*excludeThisKeyword*/ true))
         || isBindableStaticElementAccessExpression(node, excludeThisKeyword);
 }
 
@@ -3849,7 +3857,9 @@ function getAssignmentDeclarationKindWorker(expr: BinaryExpression | CallExpress
     if (expr.operatorToken.kind !== SyntaxKind.EqualsToken || !isAccessExpression(expr.left) || isVoidZero(getRightMostAssignedExpression(expr))) {
         return AssignmentDeclarationKind.None;
     }
-    if (isBindableStaticNameExpression(expr.left.expression, /*excludeThisKeyword*/ true) && getElementOrPropertyAccessName(expr.left) === "prototype" && isObjectLiteralExpression(getInitializerOfBinaryExpression(expr))) {
+    if (
+        isBindableStaticNameExpression(expr.left.expression, /*excludeThisKeyword*/ true) && getElementOrPropertyAccessName(expr.left) === "prototype" && isObjectLiteralExpression(getInitializerOfBinaryExpression(expr))
+    ) {
         // F.prototype = { ... }
         return AssignmentDeclarationKind.Prototype;
     }
@@ -6397,7 +6407,15 @@ export function getSourceFilePathInNewDirWorker(fileName: string, newDirPath: st
 }
 
 /** @internal */
-export function writeFile(host: { writeFile: WriteFileCallback; }, diagnostics: DiagnosticCollection, fileName: string, text: string, writeByteOrderMark: boolean, sourceFiles?: readonly SourceFile[], data?: WriteFileCallbackData) {
+export function writeFile(
+    host: { writeFile: WriteFileCallback; },
+    diagnostics: DiagnosticCollection,
+    fileName: string,
+    text: string,
+    writeByteOrderMark: boolean,
+    sourceFiles?: readonly SourceFile[],
+    data?: WriteFileCallbackData,
+) {
     host.writeFile(
         fileName,
         text,
@@ -9507,7 +9525,11 @@ const supportedTSExtensionsForExtractExtension: readonly Extension[] = [Extensio
 export const supportedJSExtensions: readonly Extension[][] = [[Extension.Js, Extension.Jsx], [Extension.Mjs], [Extension.Cjs]];
 /** @internal */
 export const supportedJSExtensionsFlat: readonly Extension[] = flatten(supportedJSExtensions);
-const allSupportedExtensions: readonly Extension[][] = [[Extension.Ts, Extension.Tsx, Extension.Dts, Extension.Js, Extension.Jsx], [Extension.Cts, Extension.Dcts, Extension.Cjs], [Extension.Mts, Extension.Dmts, Extension.Mjs]];
+const allSupportedExtensions: readonly Extension[][] = [[Extension.Ts, Extension.Tsx, Extension.Dts, Extension.Js, Extension.Jsx], [Extension.Cts, Extension.Dcts, Extension.Cjs], [
+    Extension.Mts,
+    Extension.Dmts,
+    Extension.Mjs,
+]];
 const allSupportedExtensionsWithJson: readonly Extension[][] = [...allSupportedExtensions, [Extension.Json]];
 /** @internal */
 export const supportedDeclarationExtensions: readonly Extension[] = [Extension.Dts, Extension.Dcts, Extension.Dmts];
@@ -9584,7 +9606,12 @@ export function usesExtensionsOnImports({ imports }: SourceFile, hasExtension: (
 }
 
 /** @internal */
-export function getModuleSpecifierEndingPreference(preference: UserPreferences["importModuleSpecifierEnding"], resolutionMode: ResolutionMode, compilerOptions: CompilerOptions, sourceFile: SourceFile): ModuleSpecifierEnding {
+export function getModuleSpecifierEndingPreference(
+    preference: UserPreferences["importModuleSpecifierEnding"],
+    resolutionMode: ResolutionMode,
+    compilerOptions: CompilerOptions,
+    sourceFile: SourceFile,
+): ModuleSpecifierEnding {
     const moduleResolution = getEmitModuleResolutionKind(compilerOptions);
     const moduleResolutionIsNodeNext = ModuleResolutionKind.Node16 <= moduleResolution && moduleResolution <= ModuleResolutionKind.NodeNext;
     if (preference === "js" || resolutionMode === ModuleKind.ESNext && moduleResolutionIsNodeNext) {
@@ -9757,7 +9784,8 @@ export function positionIsSynthesized(pos: number): boolean {
  * @internal
  */
 export function extensionIsTS(ext: string): boolean {
-    return ext === Extension.Ts || ext === Extension.Tsx || ext === Extension.Dts || ext === Extension.Cts || ext === Extension.Mts || ext === Extension.Dmts || ext === Extension.Dcts || (startsWith(ext, ".d.") && endsWith(ext, ".ts"));
+    return ext === Extension.Ts || ext === Extension.Tsx || ext === Extension.Dts || ext === Extension.Cts || ext === Extension.Mts || ext === Extension.Dmts || ext === Extension.Dcts ||
+        (startsWith(ext, ".d.") && endsWith(ext, ".ts"));
 }
 
 /** @internal */
@@ -10486,7 +10514,19 @@ export function getParameterTypeNode(parameter: ParameterDeclaration | JSDocPara
 /** @internal */
 export function isTypeDeclaration(
     node: Node,
-): node is TypeParameterDeclaration | ClassDeclaration | InterfaceDeclaration | TypeAliasDeclaration | JSDocTypedefTag | JSDocCallbackTag | JSDocEnumTag | EnumDeclaration | ImportClause | ImportSpecifier | ExportSpecifier {
+): node is
+    | TypeParameterDeclaration
+    | ClassDeclaration
+    | InterfaceDeclaration
+    | TypeAliasDeclaration
+    | JSDocTypedefTag
+    | JSDocCallbackTag
+    | JSDocEnumTag
+    | EnumDeclaration
+    | ImportClause
+    | ImportSpecifier
+    | ExportSpecifier
+{
     switch (node.kind) {
         case SyntaxKind.TypeParameter:
         case SyntaxKind.ClassDeclaration:

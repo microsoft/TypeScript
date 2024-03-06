@@ -1111,7 +1111,14 @@ export namespace Core {
         return undefined;
     }
 
-    function getReferencedSymbolsForModuleIfDeclaredBySourceFile(symbol: Symbol, program: Program, sourceFiles: readonly SourceFile[], cancellationToken: CancellationToken, options: Options, sourceFilesSet: ReadonlySet<string>) {
+    function getReferencedSymbolsForModuleIfDeclaredBySourceFile(
+        symbol: Symbol,
+        program: Program,
+        sourceFiles: readonly SourceFile[],
+        cancellationToken: CancellationToken,
+        options: Options,
+        sourceFilesSet: ReadonlySet<string>,
+    ) {
         const moduleSourceFile = (symbol.flags & SymbolFlags.Module) && symbol.declarations && find(symbol.declarations, isSourceFile);
         if (!moduleSourceFile) return undefined;
         const exportEquals = symbol.exports!.get(InternalSymbolName.ExportEquals);
@@ -1327,7 +1334,15 @@ export namespace Core {
         const exportSpecifier = !isForRenameWithPrefixAndSuffixText(options) || !symbol.declarations ? undefined : find(symbol.declarations, isExportSpecifier);
         if (exportSpecifier) {
             // When renaming at an export specifier, rename the export and not the thing being exported.
-            getReferencesAtExportSpecifier(exportSpecifier.name, symbol, exportSpecifier, state.createSearch(node, originalSymbol, /*comingFrom*/ undefined), state, /*addReferencesHere*/ true, /*alwaysGetReferences*/ true);
+            getReferencesAtExportSpecifier(
+                exportSpecifier.name,
+                symbol,
+                exportSpecifier,
+                state.createSearch(node, originalSymbol, /*comingFrom*/ undefined),
+                state,
+                /*addReferencesHere*/ true,
+                /*alwaysGetReferences*/ true,
+            );
         }
         else if (node && node.kind === SyntaxKind.DefaultKeyword && symbol.escapedName === InternalSymbolName.Default && symbol.parent) {
             addReference(node, symbol, state);
@@ -2476,7 +2491,8 @@ export namespace Core {
                     case SyntaxKind.ObjectLiteralExpression:
                         // Make sure the container belongs to the same class/object literals
                         // and has the appropriate static modifier from the original container.
-                        return container.parent && canHaveSymbol(container.parent) && (searchSpaceNode as ClassLikeDeclaration | ObjectLiteralExpression).symbol === container.parent.symbol && isStatic(container) === !!staticFlag;
+                        return container.parent && canHaveSymbol(container.parent) && (searchSpaceNode as ClassLikeDeclaration | ObjectLiteralExpression).symbol === container.parent.symbol &&
+                            isStatic(container) === !!staticFlag;
                     case SyntaxKind.SourceFile:
                         return container.kind === SyntaxKind.SourceFile && !isExternalModule(container) && !isParameterName(node);
                 }

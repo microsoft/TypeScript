@@ -292,7 +292,15 @@ export function collectExternalModuleInfo(context: TransformationContext, source
         }
     }
 
-    const externalHelpersImportDeclaration = createExternalHelpersImportDeclarationIfNeeded(context.factory, context.getEmitHelperFactory(), sourceFile, compilerOptions, hasExportStarsToExportValues, hasImportStar, hasImportDefault);
+    const externalHelpersImportDeclaration = createExternalHelpersImportDeclarationIfNeeded(
+        context.factory,
+        context.getEmitHelperFactory(),
+        sourceFile,
+        compilerOptions,
+        hasExportStarsToExportValues,
+        hasImportStar,
+        hasImportDefault,
+    );
     if (externalHelpersImportDeclaration) {
         externalImports.unshift(externalHelpersImportDeclaration);
     }

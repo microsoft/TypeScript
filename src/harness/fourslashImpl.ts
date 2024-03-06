@@ -1195,7 +1195,11 @@ export class TestState {
             assert.equal(actualDetails.kindModifiers, actual.kindModifiers, "Expected 'kindModifiers' properties to match");
             assert.equal(actualDetails.source && ts.displayPartsToString(actualDetails.source), expected.sourceDisplay, "Expected 'sourceDisplay' property to match 'source' display parts string");
             if (!actual.sourceDisplay) {
-                assert.equal(actualDetails.sourceDisplay && ts.displayPartsToString(actualDetails.sourceDisplay), expected.sourceDisplay, "Expected 'sourceDisplay' property to match 'sourceDisplay' display parts string");
+                assert.equal(
+                    actualDetails.sourceDisplay && ts.displayPartsToString(actualDetails.sourceDisplay),
+                    expected.sourceDisplay,
+                    "Expected 'sourceDisplay' property to match 'sourceDisplay' display parts string",
+                );
             }
             assert.deepEqual(actualDetails.tags, expected.tags);
         }
@@ -1204,7 +1208,11 @@ export class TestState {
         }
     }
 
-    private verifyCompletionsAreExactly(actual: readonly ts.CompletionEntry[], expected: ArrayOrSingle<FourSlashInterface.ExpectedCompletionEntry> | FourSlashInterface.ExpectedExactCompletionsPlus, marker?: ArrayOrSingle<string | Marker>) {
+    private verifyCompletionsAreExactly(
+        actual: readonly ts.CompletionEntry[],
+        expected: ArrayOrSingle<FourSlashInterface.ExpectedCompletionEntry> | FourSlashInterface.ExpectedExactCompletionsPlus,
+        marker?: ArrayOrSingle<string | Marker>,
+    ) {
         if (!ts.isArray(expected)) {
             expected = [expected];
         }
@@ -2653,7 +2661,8 @@ export class TestState {
         const longestNameLength = max(entries, m => m.name.length);
         const longestKindLength = max(entries, m => m.kind.length);
         entries.sort((m, n) => m.sortText > n.sortText ? 1 : m.sortText < n.sortText ? -1 : m.name > n.name ? 1 : m.name < n.name ? -1 : 0);
-        const membersString = entries.map(m => `${pad(m.name, longestNameLength)} ${pad(m.kind, longestKindLength)} ${m.kindModifiers} ${m.isRecommended ? "recommended " : ""}${m.source === undefined ? "" : m.source}`).join("\n");
+        const membersString = entries.map(m => `${pad(m.name, longestNameLength)} ${pad(m.kind, longestKindLength)} ${m.kindModifiers} ${m.isRecommended ? "recommended " : ""}${m.source === undefined ? "" : m.source}`)
+            .join("\n");
         Harness.IO.log(membersString);
     }
 
@@ -3791,7 +3800,9 @@ export class TestState {
         }
         else {
             this.raiseError(
-                `verifyMatchingBracePosition failed - could not find the brace position: ${bracePosition} in the returned list: (${actual[0].start},${ts.textSpanEnd(actual[0])}) and (${actual[1].start},${ts.textSpanEnd(actual[1])})`,
+                `verifyMatchingBracePosition failed - could not find the brace position: ${bracePosition} in the returned list: (${actual[0].start},${ts.textSpanEnd(actual[0])}) and (${actual[1].start},${
+                    ts.textSpanEnd(actual[1])
+                })`,
             );
         }
 
@@ -4138,12 +4149,23 @@ export class TestState {
     public moveToFile(options: FourSlashInterface.MoveToFileOptions): void {
         assert(this.getRanges().length === 1, "Must have exactly one fourslash range (source enclosed between '[|' and '|]' delimiters) in the source file");
         const range = this.getRanges()[0];
-        const refactor = ts.find(this.getApplicableRefactors(range, { allowTextChangesInNewFiles: true }, /*triggerReason*/ undefined, /*kind*/ undefined, /*includeInteractiveActions*/ true), r => r.name === "Move to file")!;
+        const refactor = ts.find(
+            this.getApplicableRefactors(range, { allowTextChangesInNewFiles: true }, /*triggerReason*/ undefined, /*kind*/ undefined, /*includeInteractiveActions*/ true),
+            r => r.name === "Move to file",
+        )!;
         assert(refactor.actions.length === 1);
         const action = ts.first(refactor.actions);
         assert(action.name === "Move to file" && action.description === "Move to file");
 
-        const editInfo = this.languageService.getEditsForRefactor(range.fileName, this.formatCodeSettings, range, refactor.name, action.name, options.preferences || ts.emptyOptions, options.interactiveRefactorArguments)!;
+        const editInfo = this.languageService.getEditsForRefactor(
+            range.fileName,
+            this.formatCodeSettings,
+            range,
+            refactor.name,
+            action.name,
+            options.preferences || ts.emptyOptions,
+            options.interactiveRefactorArguments,
+        )!;
         this.verifyNewContent({ newFileContent: options.newFileContents }, editInfo.edits);
     }
 

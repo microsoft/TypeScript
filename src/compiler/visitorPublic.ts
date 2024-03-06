@@ -593,8 +593,22 @@ export function visitEachChild<T extends Node>(node: T, visitor: Visitor, contex
  */
 export function visitEachChild<T extends Node>(node: T | undefined, visitor: Visitor, context: TransformationContext | undefined, nodesVisitor?: typeof visitNodes, tokenVisitor?: Visitor): T | undefined;
 /** @internal */
-export function visitEachChild<T extends Node>(node: T | undefined, visitor: Visitor, context: TransformationContext | undefined, nodesVisitor?: NodesVisitor, tokenVisitor?: Visitor, nodeVisitor?: NodeVisitor): T | undefined;
-export function visitEachChild<T extends Node>(node: T | undefined, visitor: Visitor, context = nullTransformationContext, nodesVisitor = visitNodes, tokenVisitor?: Visitor, nodeVisitor: NodeVisitor = visitNode): T | undefined {
+export function visitEachChild<T extends Node>(
+    node: T | undefined,
+    visitor: Visitor,
+    context: TransformationContext | undefined,
+    nodesVisitor?: NodesVisitor,
+    tokenVisitor?: Visitor,
+    nodeVisitor?: NodeVisitor,
+): T | undefined;
+export function visitEachChild<T extends Node>(
+    node: T | undefined,
+    visitor: Visitor,
+    context = nullTransformationContext,
+    nodesVisitor = visitNodes,
+    tokenVisitor?: Visitor,
+    nodeVisitor: NodeVisitor = visitNode,
+): T | undefined {
     if (node === undefined) {
         return undefined;
     }

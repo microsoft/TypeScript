@@ -902,7 +902,16 @@ export class FileSystem {
         if (parent) parent.mtimeMs = time;
     }
 
-    private _replaceLink(oldParent: DirectoryInode, oldLinks: collections.SortedMap<string, Inode>, oldName: string, newParent: DirectoryInode, newLinks: collections.SortedMap<string, Inode>, newName: string, node: Inode, time: number) {
+    private _replaceLink(
+        oldParent: DirectoryInode,
+        oldLinks: collections.SortedMap<string, Inode>,
+        oldName: string,
+        newParent: DirectoryInode,
+        newLinks: collections.SortedMap<string, Inode>,
+        newName: string,
+        node: Inode,
+        time: number,
+    ) {
         if (oldParent !== newParent) {
             this._removeLink(oldParent, oldLinks, oldName, node, time);
             this._addLink(newParent, newLinks, newName, node, time);

@@ -247,7 +247,14 @@ function createJsxFragmentFactoryExpression(factory: NodeFactory, jsxFragmentFac
 }
 
 /** @internal */
-export function createExpressionForJsxElement(factory: NodeFactory, callee: Expression, tagName: Expression, props: Expression | undefined, children: readonly Expression[] | undefined, location: TextRange): LeftHandSideExpression {
+export function createExpressionForJsxElement(
+    factory: NodeFactory,
+    callee: Expression,
+    tagName: Expression,
+    props: Expression | undefined,
+    children: readonly Expression[] | undefined,
+    location: TextRange,
+): LeftHandSideExpression {
     const argumentsList = [tagName];
     if (props) {
         argumentsList.push(props);
@@ -900,7 +907,13 @@ export function tryGetModuleNameFromFile(factory: NodeFactory, file: SourceFile 
     return undefined;
 }
 
-function tryGetModuleNameFromDeclaration(declaration: ImportEqualsDeclaration | ImportDeclaration | ExportDeclaration | ImportCall, host: EmitHost, factory: NodeFactory, resolver: EmitResolver, compilerOptions: CompilerOptions) {
+function tryGetModuleNameFromDeclaration(
+    declaration: ImportEqualsDeclaration | ImportDeclaration | ExportDeclaration | ImportCall,
+    host: EmitHost,
+    factory: NodeFactory,
+    resolver: EmitResolver,
+    compilerOptions: CompilerOptions,
+) {
     return tryGetModuleNameFromFile(factory, resolver.getExternalModuleFileFromDeclaration(declaration), host, compilerOptions);
 }
 
@@ -1755,7 +1768,13 @@ export function createAccessorPropertyBackingField(factory: NodeFactory, node: P
  *
  * @internal
  */
-export function createAccessorPropertyGetRedirector(factory: NodeFactory, node: PropertyDeclaration, modifiers: readonly Modifier[] | undefined, name: PropertyName, receiver: Expression = factory.createThis()): GetAccessorDeclaration {
+export function createAccessorPropertyGetRedirector(
+    factory: NodeFactory,
+    node: PropertyDeclaration,
+    modifiers: readonly Modifier[] | undefined,
+    name: PropertyName,
+    receiver: Expression = factory.createThis(),
+): GetAccessorDeclaration {
     return factory.createGetAccessorDeclaration(
         modifiers,
         name,
@@ -1777,7 +1796,13 @@ export function createAccessorPropertyGetRedirector(factory: NodeFactory, node: 
  *
  * @internal
  */
-export function createAccessorPropertySetRedirector(factory: NodeFactory, node: PropertyDeclaration, modifiers: readonly Modifier[] | undefined, name: PropertyName, receiver: Expression = factory.createThis()): SetAccessorDeclaration {
+export function createAccessorPropertySetRedirector(
+    factory: NodeFactory,
+    node: PropertyDeclaration,
+    modifiers: readonly Modifier[] | undefined,
+    name: PropertyName,
+    receiver: Expression = factory.createThis(),
+): SetAccessorDeclaration {
     return factory.createSetAccessorDeclaration(
         modifiers,
         name,

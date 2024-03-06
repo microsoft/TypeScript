@@ -21,7 +21,15 @@ describe("unittests:: FactoryAPI", () => {
             checkExpression(clazz);
             checkExpression(ts.factory.createPropertyAccessExpression(clazz, "prop"));
 
-            const func = ts.factory.createFunctionExpression(/*modifiers*/ undefined, /*asteriskToken*/ undefined, "fn", /*typeParameters*/ undefined, /*parameters*/ undefined, /*type*/ undefined, ts.factory.createBlock([]));
+            const func = ts.factory.createFunctionExpression(
+                /*modifiers*/ undefined,
+                /*asteriskToken*/ undefined,
+                "fn",
+                /*typeParameters*/ undefined,
+                /*parameters*/ undefined,
+                /*type*/ undefined,
+                ts.factory.createBlock([]),
+            );
             checkExpression(func);
             checkExpression(ts.factory.createCallExpression(func, /*typeArguments*/ undefined, /*argumentsArray*/ undefined));
             checkExpression(ts.factory.createTaggedTemplateExpression(func, /*typeArguments*/ undefined, ts.factory.createNoSubstitutionTemplateLiteral("")));

@@ -1579,7 +1579,13 @@ export function getTokenAtPosition(sourceFile: SourceFile, position: number): No
 }
 
 /** Get the token whose text contains the position */
-function getTokenAtPositionWorker(sourceFile: SourceFile, position: number, allowPositionInLeadingTrivia: boolean, includePrecedingTokenAtEndPosition: ((n: Node) => boolean) | undefined, includeEndPosition: boolean): Node {
+function getTokenAtPositionWorker(
+    sourceFile: SourceFile,
+    position: number,
+    allowPositionInLeadingTrivia: boolean,
+    includePrecedingTokenAtEndPosition: ((n: Node) => boolean) | undefined,
+    includeEndPosition: boolean,
+): Node {
     let current: Node = sourceFile;
     let foundToken: Node | undefined;
     outer:
@@ -2500,12 +2506,23 @@ export function moduleResolutionUsesNodeModules(moduleResolution: ModuleResoluti
 }
 
 /** @internal */
-export function makeImportIfNecessary(defaultImport: Identifier | undefined, namedImports: readonly ImportSpecifier[] | undefined, moduleSpecifier: string, quotePreference: QuotePreference): ImportDeclaration | undefined {
+export function makeImportIfNecessary(
+    defaultImport: Identifier | undefined,
+    namedImports: readonly ImportSpecifier[] | undefined,
+    moduleSpecifier: string,
+    quotePreference: QuotePreference,
+): ImportDeclaration | undefined {
     return defaultImport || namedImports && namedImports.length ? makeImport(defaultImport, namedImports, moduleSpecifier, quotePreference) : undefined;
 }
 
 /** @internal */
-export function makeImport(defaultImport: Identifier | undefined, namedImports: readonly ImportSpecifier[] | undefined, moduleSpecifier: string | Expression, quotePreference: QuotePreference, isTypeOnly?: boolean): ImportDeclaration {
+export function makeImport(
+    defaultImport: Identifier | undefined,
+    namedImports: readonly ImportSpecifier[] | undefined,
+    moduleSpecifier: string | Expression,
+    quotePreference: QuotePreference,
+    isTypeOnly?: boolean,
+): ImportDeclaration {
     return factory.createImportDeclaration(
         /*modifiers*/ undefined,
         defaultImport || namedImports
@@ -2626,7 +2643,13 @@ export function findModifier(node: Node, kind: Modifier["kind"]): Modifier | und
 }
 
 /** @internal */
-export function insertImports(changes: textChanges.ChangeTracker, sourceFile: SourceFile, imports: AnyImportOrRequireStatement | readonly AnyImportOrRequireStatement[], blankLineBetween: boolean, preferences: UserPreferences): void {
+export function insertImports(
+    changes: textChanges.ChangeTracker,
+    sourceFile: SourceFile,
+    imports: AnyImportOrRequireStatement | readonly AnyImportOrRequireStatement[],
+    blankLineBetween: boolean,
+    preferences: UserPreferences,
+): void {
     const decl = isArray(imports) ? imports[0] : imports;
     const importKindPredicate: (node: Node) => node is AnyImportOrRequireStatement = decl.kind === SyntaxKind.VariableStatement ? isRequireVariableStatement : isAnyImportSyntax;
     const existingImportStatements = filter(sourceFile.statements, importKindPredicate);

@@ -687,7 +687,13 @@ export interface LanguageService {
         preferences: UserPreferences | undefined,
         interactiveRefactorArguments?: InteractiveRefactorArguments,
     ): RefactorEditInfo | undefined;
-    getMoveToRefactoringFileSuggestions(fileName: string, positionOrRange: number | TextRange, preferences: UserPreferences | undefined, triggerReason?: RefactorTriggerReason, kind?: string): { newFileName: string; files: string[]; };
+    getMoveToRefactoringFileSuggestions(
+        fileName: string,
+        positionOrRange: number | TextRange,
+        preferences: UserPreferences | undefined,
+        triggerReason?: RefactorTriggerReason,
+        kind?: string,
+    ): { newFileName: string; files: string[]; };
     organizeImports(args: OrganizeImportsArgs, formatOptions: FormatCodeSettings, preferences: UserPreferences | undefined): readonly FileTextChanges[];
     getEditsForFileRename(oldFilePath: string, newFilePath: string, formatOptions: FormatCodeSettings, preferences: UserPreferences | undefined): readonly FileTextChanges[];
 

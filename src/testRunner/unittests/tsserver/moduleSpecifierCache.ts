@@ -134,7 +134,9 @@ describe("unittests:: tsserver:: moduleSpecifierCache", () => {
         baselineTsserverLogs("moduleSpecifierCache", "invalidates the cache when user preferences change", session);
 
         function getWithPreferences(preferences: ts.UserPreferences) {
-            session.logger.info(`moduleSpecifierCache for ${jsonToReadableText(preferences)} (${bTs.path} -> ${aTs.path}) ${jsonToReadableText(moduleSpecifierCache.get(bTs.path as ts.Path, aTs.path as ts.Path, preferences, {}))}`);
+            session.logger.info(
+                `moduleSpecifierCache for ${jsonToReadableText(preferences)} (${bTs.path} -> ${aTs.path}) ${jsonToReadableText(moduleSpecifierCache.get(bTs.path as ts.Path, aTs.path as ts.Path, preferences, {}))}`,
+            );
         }
     });
 });

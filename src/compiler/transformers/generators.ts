@@ -869,7 +869,12 @@ export function transformGenerators(context: TransformationContext): (x: SourceF
             //  .yield resumeLabel
             //      _a + %sent% + c()
 
-            return factory.updateBinaryExpression(node, cacheExpression(Debug.checkDefined(visitNode(node.left, visitor, isExpression))), node.operatorToken, Debug.checkDefined(visitNode(node.right, visitor, isExpression)));
+            return factory.updateBinaryExpression(
+                node,
+                cacheExpression(Debug.checkDefined(visitNode(node.left, visitor, isExpression))),
+                node.operatorToken,
+                Debug.checkDefined(visitNode(node.right, visitor, isExpression)),
+            );
         }
 
         return visitEachChild(node, visitor, context);

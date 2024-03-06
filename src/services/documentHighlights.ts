@@ -294,7 +294,17 @@ export namespace DocumentHighlights {
 
     function getNodesToSearchForModifier(declaration: Node, modifierFlag: ModifierFlags): readonly Node[] | undefined {
         // Types of node whose children might have modifiers.
-        const container = declaration.parent as ModuleBlock | SourceFile | Block | CaseClause | DefaultClause | ConstructorDeclaration | MethodDeclaration | FunctionDeclaration | ObjectTypeDeclaration | ObjectLiteralExpression;
+        const container = declaration.parent as
+            | ModuleBlock
+            | SourceFile
+            | Block
+            | CaseClause
+            | DefaultClause
+            | ConstructorDeclaration
+            | MethodDeclaration
+            | FunctionDeclaration
+            | ObjectTypeDeclaration
+            | ObjectLiteralExpression;
         switch (container.kind) {
             case SyntaxKind.ModuleBlock:
             case SyntaxKind.SourceFile:

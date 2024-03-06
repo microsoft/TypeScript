@@ -119,7 +119,10 @@ registerCodeFix({
                 ];
             }
             return [
-                createDeleteFix(textChanges.ChangeTracker.with(context, t => deleteDestructuring(context, t, sourceFile, token.parent as ObjectBindingPattern | ArrayBindingPattern)), Diagnostics.Remove_unused_destructuring_declaration),
+                createDeleteFix(
+                    textChanges.ChangeTracker.with(context, t => deleteDestructuring(context, t, sourceFile, token.parent as ObjectBindingPattern | ArrayBindingPattern)),
+                    Diagnostics.Remove_unused_destructuring_declaration,
+                ),
             ];
         }
 
@@ -302,7 +305,16 @@ function canPrefix(token: Identifier): boolean {
     return false;
 }
 
-function tryDeleteDeclaration(sourceFile: SourceFile, token: Node, changes: textChanges.ChangeTracker, checker: TypeChecker, sourceFiles: readonly SourceFile[], program: Program, cancellationToken: CancellationToken, isFixAll: boolean) {
+function tryDeleteDeclaration(
+    sourceFile: SourceFile,
+    token: Node,
+    changes: textChanges.ChangeTracker,
+    checker: TypeChecker,
+    sourceFiles: readonly SourceFile[],
+    program: Program,
+    cancellationToken: CancellationToken,
+    isFixAll: boolean,
+) {
     tryDeleteDeclarationWorker(token, changes, sourceFile, checker, sourceFiles, program, cancellationToken, isFixAll);
     if (isIdentifier(token)) {
         FindAllReferences.Core.eachSymbolReferenceInFile(token, checker, sourceFile, (ref: Node) => {
@@ -368,7 +380,15 @@ function isNotProvidedArguments(parameter: ParameterDeclaration, checker: TypeCh
     return !FindAllReferences.Core.someSignatureUsage(parameter.parent, sourceFiles, checker, (_, call) => !call || call.arguments.length > index);
 }
 
-function mayDeleteParameter(checker: TypeChecker, sourceFile: SourceFile, parameter: ParameterDeclaration, sourceFiles: readonly SourceFile[], program: Program, cancellationToken: CancellationToken, isFixAll: boolean): boolean {
+function mayDeleteParameter(
+    checker: TypeChecker,
+    sourceFile: SourceFile,
+    parameter: ParameterDeclaration,
+    sourceFiles: readonly SourceFile[],
+    program: Program,
+    cancellationToken: CancellationToken,
+    isFixAll: boolean,
+): boolean {
     const { parent } = parameter;
     switch (parent.kind) {
         case SyntaxKind.MethodDeclaration:

@@ -182,7 +182,10 @@ export function getDefinitionAtPosition(program: Program, sourceFile: SourceFile
         return map(staticBlocks, staticBlock => {
             let { pos } = moveRangePastModifiers(staticBlock);
             pos = skipTrivia(sourceFile.text, pos);
-            return createDefinitionInfoFromName(typeChecker, staticBlock, ScriptElementKind.constructorImplementationElement, "static {}", containerName, /*unverified*/ false, failedAliasResolution, { start: pos, length: "static".length });
+            return createDefinitionInfoFromName(typeChecker, staticBlock, ScriptElementKind.constructorImplementationElement, "static {}", containerName, /*unverified*/ false, failedAliasResolution, {
+                start: pos,
+                length: "static".length,
+            });
         });
     }
 
@@ -249,7 +252,8 @@ export function getDefinitionAtPosition(program: Program, sourceFile: SourceFile
     // assignment. This case and others are handled by the following code.
     if (node.parent.kind === SyntaxKind.ShorthandPropertyAssignment) {
         const shorthandSymbol = typeChecker.getShorthandAssignmentValueSymbol(symbol.valueDeclaration);
-        const definitions = shorthandSymbol?.declarations ? shorthandSymbol.declarations.map(decl => createDefinitionInfo(decl, typeChecker, shorthandSymbol, node, /*unverified*/ false, failedAliasResolution)) : emptyArray;
+        const definitions = shorthandSymbol?.declarations ? shorthandSymbol.declarations.map(decl => createDefinitionInfo(decl, typeChecker, shorthandSymbol, node, /*unverified*/ false, failedAliasResolution))
+            : emptyArray;
         return concatenate(definitions, getDefinitionFromObjectLiteralElement(typeChecker, node));
     }
 
