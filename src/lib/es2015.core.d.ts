@@ -55,7 +55,7 @@ interface Array<T> {
      *
      * [MDN](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/toLocaleString)
      */
-    toLocaleString(locales?: Intl.LocalesArgument, options?: Intl.NumberFormatOptions & Intl.DateTimeFormatOptions): string;
+    toLocaleString(locales?: string | string[], options?: Intl.NumberFormatOptions & Intl.DateTimeFormatOptions): string;
 }
 
 interface ArrayConstructor {
@@ -369,7 +369,7 @@ interface ReadonlyArray<T> {
      *
      * [MDN](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/toLocaleString)
      */
-    toLocaleString(locales?: Intl.LocalesArgument, options?: Intl.NumberFormatOptions & Intl.DateTimeFormatOptions): string;
+    toLocaleString(locales?: string | string[], options?: Intl.NumberFormatOptions & Intl.DateTimeFormatOptions): string;
 }
 
 interface RegExp {
