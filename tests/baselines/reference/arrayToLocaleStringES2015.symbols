@@ -1,0 +1,87 @@
+//// [tests/cases/compiler/arrayToLocaleStringES2015.ts] ////
+
+=== arrayToLocaleStringES2015.ts ===
+const arr = [1, 2, 3];
+>arr : Symbol(arr, Decl(arrayToLocaleStringES2015.ts, 0, 5))
+
+let str: string;
+>str : Symbol(str, Decl(arrayToLocaleStringES2015.ts, 1, 3))
+
+str = arr.toLocaleString(); // OK
+>str : Symbol(str, Decl(arrayToLocaleStringES2015.ts, 1, 3))
+>arr.toLocaleString : Symbol(Array.toLocaleString, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+>arr : Symbol(arr, Decl(arrayToLocaleStringES2015.ts, 0, 5))
+>toLocaleString : Symbol(Array.toLocaleString, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+
+str = arr.toLocaleString('en-US'); // OK
+>str : Symbol(str, Decl(arrayToLocaleStringES2015.ts, 1, 3))
+>arr.toLocaleString : Symbol(Array.toLocaleString, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+>arr : Symbol(arr, Decl(arrayToLocaleStringES2015.ts, 0, 5))
+>toLocaleString : Symbol(Array.toLocaleString, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+
+str = arr.toLocaleString('en-US', { style: 'currency' }); // OK
+>str : Symbol(str, Decl(arrayToLocaleStringES2015.ts, 1, 3))
+>arr.toLocaleString : Symbol(Array.toLocaleString, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+>arr : Symbol(arr, Decl(arrayToLocaleStringES2015.ts, 0, 5))
+>toLocaleString : Symbol(Array.toLocaleString, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+>style : Symbol(style, Decl(arrayToLocaleStringES2015.ts, 4, 35))
+
+const dates: readonly Date[] = [new Date(), new Date()];
+>dates : Symbol(dates, Decl(arrayToLocaleStringES2015.ts, 6, 5))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+
+let str2: string;
+>str2 : Symbol(str2, Decl(arrayToLocaleStringES2015.ts, 7, 3))
+
+str2 = dates.toLocaleString(); // OK
+>str2 : Symbol(str2, Decl(arrayToLocaleStringES2015.ts, 7, 3))
+>dates.toLocaleString : Symbol(ReadonlyArray.toLocaleString, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+>dates : Symbol(dates, Decl(arrayToLocaleStringES2015.ts, 6, 5))
+>toLocaleString : Symbol(ReadonlyArray.toLocaleString, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+
+str2 = dates.toLocaleString('fr'); // OK
+>str2 : Symbol(str2, Decl(arrayToLocaleStringES2015.ts, 7, 3))
+>dates.toLocaleString : Symbol(ReadonlyArray.toLocaleString, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+>dates : Symbol(dates, Decl(arrayToLocaleStringES2015.ts, 6, 5))
+>toLocaleString : Symbol(ReadonlyArray.toLocaleString, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+
+str2 = dates.toLocaleString('fr', { timeZone: 'UTC' }); // OK
+>str2 : Symbol(str2, Decl(arrayToLocaleStringES2015.ts, 7, 3))
+>dates.toLocaleString : Symbol(ReadonlyArray.toLocaleString, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+>dates : Symbol(dates, Decl(arrayToLocaleStringES2015.ts, 6, 5))
+>toLocaleString : Symbol(ReadonlyArray.toLocaleString, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+>timeZone : Symbol(timeZone, Decl(arrayToLocaleStringES2015.ts, 10, 35))
+
+const mixed = [1, new Date(), 59782, new Date()];
+>mixed : Symbol(mixed, Decl(arrayToLocaleStringES2015.ts, 12, 5))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+
+let str3: string;
+>str3 : Symbol(str3, Decl(arrayToLocaleStringES2015.ts, 13, 3))
+
+str3 = mixed.toLocaleString(); // OK
+>str3 : Symbol(str3, Decl(arrayToLocaleStringES2015.ts, 13, 3))
+>mixed.toLocaleString : Symbol(Array.toLocaleString, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+>mixed : Symbol(mixed, Decl(arrayToLocaleStringES2015.ts, 12, 5))
+>toLocaleString : Symbol(Array.toLocaleString, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+
+str3 = mixed.toLocaleString('de', { currency: 'EUR' }); // OK
+>str3 : Symbol(str3, Decl(arrayToLocaleStringES2015.ts, 13, 3))
+>mixed.toLocaleString : Symbol(Array.toLocaleString, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+>mixed : Symbol(mixed, Decl(arrayToLocaleStringES2015.ts, 12, 5))
+>toLocaleString : Symbol(Array.toLocaleString, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+>currency : Symbol(currency, Decl(arrayToLocaleStringES2015.ts, 15, 35))
+
+str3 = (mixed as ReadonlyArray<number | Date>).toLocaleString('de', { currency: 'EUR', timeZone: 'UTC' }); // OK
+>str3 : Symbol(str3, Decl(arrayToLocaleStringES2015.ts, 13, 3))
+>(mixed as ReadonlyArray<number | Date>).toLocaleString : Symbol(ReadonlyArray.toLocaleString, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+>mixed : Symbol(mixed, Decl(arrayToLocaleStringES2015.ts, 12, 5))
+>ReadonlyArray : Symbol(ReadonlyArray, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>toLocaleString : Symbol(ReadonlyArray.toLocaleString, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+>currency : Symbol(currency, Decl(arrayToLocaleStringES2015.ts, 16, 69))
+>timeZone : Symbol(timeZone, Decl(arrayToLocaleStringES2015.ts, 16, 86))
+

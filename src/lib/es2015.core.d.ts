@@ -42,6 +42,20 @@ interface Array<T> {
      * @param end If not specified, length of the this object is used as its default value.
      */
     copyWithin(target: number, start: number, end?: number): this;
+
+    /**
+     * Returns a string representation of an array. The elements are converted to string using their toLocaleString methods.
+     *
+     * @param locales A string with a BCP 47 language tag, or an array of such strings. For the general form and
+     * interpretation of the locales argument, see
+     * [the parameter description on the Intl main page](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl#locales_argument).
+     * @param options An object with configuration properties. For numbers, see
+     * [Number.prototype.toLocaleString()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number/toLocaleString#options);
+     * for dates, see [Date.prototype.toLocaleString()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date/toLocaleString#options).
+     *
+     * [MDN](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/toLocaleString)
+     */
+    toLocaleString(locales?: Intl.LocalesArgument, options?: Intl.NumberFormatOptions & Intl.DateTimeFormatOptions): string;
 }
 
 interface ArrayConstructor {
@@ -342,6 +356,20 @@ interface ReadonlyArray<T> {
      * predicate. If it is not provided, undefined is used instead.
      */
     findIndex(predicate: (value: T, index: number, obj: readonly T[]) => unknown, thisArg?: any): number;
+
+    /**
+     * Returns a string representation of an array. The elements are converted to string using their toLocaleString methods.
+     *
+     * @param locales A string with a BCP 47 language tag, or an array of such strings. For the general form and
+     * interpretation of the locales argument, see
+     * [the parameter description on the Intl main page](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl#locales_argument).
+     * @param options An object with configuration properties. For numbers, see
+     * [Number.prototype.toLocaleString()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number/toLocaleString#options);
+     * for dates, see [Date.prototype.toLocaleString()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date/toLocaleString#options).
+     *
+     * [MDN](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/toLocaleString)
+     */
+    toLocaleString(locales?: Intl.LocalesArgument, options?: Intl.NumberFormatOptions & Intl.DateTimeFormatOptions): string;
 }
 
 interface RegExp {

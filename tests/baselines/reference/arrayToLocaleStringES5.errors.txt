@@ -1,0 +1,27 @@
+arrayToLocaleStringES5.ts(4,26): error TS2554: Expected 0 arguments, but got 1.
+arrayToLocaleStringES5.ts(5,26): error TS2554: Expected 0 arguments, but got 2.
+arrayToLocaleStringES5.ts(10,29): error TS2554: Expected 0 arguments, but got 1.
+arrayToLocaleStringES5.ts(11,29): error TS2554: Expected 0 arguments, but got 2.
+
+
+==== arrayToLocaleStringES5.ts (4 errors) ====
+    const arr = [1, 2, 3];
+    let str: string;
+    str = arr.toLocaleString(); // OK
+    str = arr.toLocaleString('en-US'); // should be error
+                             ~~~~~~~
+!!! error TS2554: Expected 0 arguments, but got 1.
+    str = arr.toLocaleString('en-US', { style: 'currency' }); // should be error
+                             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2554: Expected 0 arguments, but got 2.
+    
+    const dates: readonly Date[] = [new Date(), new Date()];
+    let str2: string;
+    str2 = dates.toLocaleString(); // OK
+    str2 = dates.toLocaleString('fr'); // should be error
+                                ~~~~
+!!! error TS2554: Expected 0 arguments, but got 1.
+    str2 = dates.toLocaleString('fr', { timeZone: 'UTC' }); // should be error
+                                ~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2554: Expected 0 arguments, but got 2.
+    
