@@ -8043,58 +8043,58 @@ export type EmitHelperUniqueNameCallback = (name: string) => string;
  *
  * @internal
  */
-export namespace LanguageFeatureMinimumTarget {
+export const enum LanguageFeatureMinimumTarget {
     // ES2015 Features
-    export const Classes = ScriptTarget.ES2015;
-    export const ForOf = ScriptTarget.ES2015;
-    export const Generators = ScriptTarget.ES2015;
-    export const Iteration = ScriptTarget.ES2015;
-    export const SpreadElements = ScriptTarget.ES2015;
-    export const RestElements = ScriptTarget.ES2015;
-    export const TaggedTemplates = ScriptTarget.ES2015;
-    export const DestructuringAssignment = ScriptTarget.ES2015;
-    export const BindingPatterns = ScriptTarget.ES2015;
-    export const ArrowFunctions = ScriptTarget.ES2015;
-    export const BlockScopedVariables = ScriptTarget.ES2015;
-    export const ObjectAssign = ScriptTarget.ES2015;
+    Classes = ScriptTarget.ES2015,
+    ForOf = ScriptTarget.ES2015,
+    Generators = ScriptTarget.ES2015,
+    Iteration = ScriptTarget.ES2015,
+    SpreadElements = ScriptTarget.ES2015,
+    RestElements = ScriptTarget.ES2015,
+    TaggedTemplates = ScriptTarget.ES2015,
+    DestructuringAssignment = ScriptTarget.ES2015,
+    BindingPatterns = ScriptTarget.ES2015,
+    ArrowFunctions = ScriptTarget.ES2015,
+    BlockScopedVariables = ScriptTarget.ES2015,
+    ObjectAssign = ScriptTarget.ES2015,
 
     // ES2016 Features
-    export const Exponentiation = ScriptTarget.ES2016; // `x ** y`
+    Exponentiation = ScriptTarget.ES2016, // `x ** y`
 
     // ES2017 Features
-    export const AsyncFunctions = ScriptTarget.ES2017; // `async function f() {}`
+    AsyncFunctions = ScriptTarget.ES2017, // `async function f() {}`
 
     // ES2018 Features
-    export const ForAwaitOf = ScriptTarget.ES2018; // `for await (const x of y)`
-    export const AsyncGenerators = ScriptTarget.ES2018; // `async function * f() { }`
-    export const AsyncIteration = ScriptTarget.ES2018; // `Symbol.asyncIterator`
-    export const ObjectSpreadRest = ScriptTarget.ES2018; // `{ ...obj }`
+    ForAwaitOf = ScriptTarget.ES2018, // `for await (const x of y)`
+    AsyncGenerators = ScriptTarget.ES2018, // `async function * f() { }`
+    AsyncIteration = ScriptTarget.ES2018, // `Symbol.asyncIterator`
+    ObjectSpreadRest = ScriptTarget.ES2018, // `{ ...obj }`
 
     // ES2019 Features
-    export const BindinglessCatch = ScriptTarget.ES2019; // `try { } catch { }`
+    BindinglessCatch = ScriptTarget.ES2019, // `try { } catch { }`
 
     // ES2020 Features
-    export const BigInt = ScriptTarget.ES2020; // `0n`
-    export const NullishCoalesce = ScriptTarget.ES2020; // `a ?? b`
-    export const OptionalChaining = ScriptTarget.ES2020; // `a?.b`
+    BigInt = ScriptTarget.ES2020, // `0n`
+    NullishCoalesce = ScriptTarget.ES2020, // `a ?? b`
+    OptionalChaining = ScriptTarget.ES2020, // `a?.b`
 
     // ES2021 Features
-    export const LogicalAssignment = ScriptTarget.ES2021; // `a ||= b`, `a &&= b`, `a ??= b`
+    LogicalAssignment = ScriptTarget.ES2021, // `a ||= b`, `a &&= b`, `a ??= b`
 
     // ES2022 Features
-    export const TopLevelAwait = ScriptTarget.ES2022;
-    export const ClassFields = ScriptTarget.ES2022;
-    export const PrivateNamesAndClassStaticBlocks = ScriptTarget.ES2022; // `class C { static {} #x = y, #m() {} }`, `#x in y`
+    TopLevelAwait = ScriptTarget.ES2022,
+    ClassFields = ScriptTarget.ES2022,
+    PrivateNamesAndClassStaticBlocks = ScriptTarget.ES2022, // `class C { static {} #x = y, #m() {} }`, `#x in y`
 
     // ES2023 Features
-    export const ShebangComments = ScriptTarget.ESNext;
+    ShebangComments = ScriptTarget.ESNext,
 
     // Upcoming Features
     // NOTE: We must reevaluate the target for upcoming features when each successive TC39 edition is ratified in
     //       June of each year. This includes changes to `LanguageFeatureMinimumTarget`, `ScriptTarget`,
     //       transformers/esnext.ts, commandLineParser.ts, and the contents of each lib/esnext.*.d.ts file.
-    export const UsingAndAwaitUsing = ScriptTarget.ESNext; // `using x = y`, `await using x = y`
-    export const ClassAndClassElementDecorators = ScriptTarget.ESNext; // `@dec class C {}`, `class C { @dec m() {} }`
+    UsingAndAwaitUsing = ScriptTarget.ESNext, // `using x = y`, `await using x = y`
+    ClassAndClassElementDecorators = ScriptTarget.ESNext, // `@dec class C {}`, `class C { @dec m() {} }`
 }
 
 // dprint-ignore
