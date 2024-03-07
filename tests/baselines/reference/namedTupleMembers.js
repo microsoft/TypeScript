@@ -83,7 +83,9 @@ export const argumentsOfG = f(...getArgsForInjection(g)); // captured arguments 
 //// [namedTupleMembers.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.argumentsOfG = exports.argumentsOfGAsFirstArgument = exports.val = exports.readSegment = exports.useState = exports.func = void 0;
+exports.argumentsOfG = exports.argumentsOfGAsFirstArgument = exports.val = exports.func = void 0;
+exports.useState = useState;
+exports.readSegment = readSegment;
 a = b;
 a = c;
 a = d;
@@ -100,11 +102,9 @@ exports.func = null;
 function useState(initial) {
     return null;
 }
-exports.useState = useState;
 function readSegment(_a) {
     var length = _a[0], count = _a[1];
 }
-exports.readSegment = readSegment;
 // documenting binding pattern behavior (currently does _not_ generate tuple names)
 exports.val = null;
 q = r;

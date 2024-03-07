@@ -31,7 +31,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.Object = exports.exports = exports.require = exports.__esModule = void 0;
 // cjs format file
 function require() { }
-exports.require = require;
 const exports = {};
 exports.exports = exports;
 class Object {

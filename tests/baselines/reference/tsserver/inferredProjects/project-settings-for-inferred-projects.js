@@ -128,7 +128,7 @@ Info seq  [hh:mm:ss:mss] request:
       "command": "compilerOptionsForInferredProjects",
       "arguments": {
         "options": {
-          "moduleResolution": "Classic"
+          "moduleResolution": "classic"
         }
       },
       "seq": 3,
