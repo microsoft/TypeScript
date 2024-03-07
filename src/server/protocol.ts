@@ -2806,7 +2806,7 @@ export interface FileRange {
     endOffset: number;
 }
 
-export interface FileRangesRequestArgs extends FileRequestArgs {
+export interface FileRangesRequestArgs extends Pick<FileRequestArgs, "file"> {
     ranges: FileRange[];
 }
 
@@ -2908,7 +2908,10 @@ export interface DiagnosticEventBody {
      */
     diagnostics: Diagnostic[];
 
-    // >> TODO: maybe we need to send back the ranges for a region semantic diagnostic event
+    /**
+     * Spans where the region diagnostic was requested, if this is a region semantic diagnostic event.
+     */
+    spans?: TextSpan[];
 }
 
 export type DiagnosticEventKind = "semanticDiag" | "syntaxDiag" | "suggestionDiag" | "regionSemanticDiag";

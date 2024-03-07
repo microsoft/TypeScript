@@ -23,6 +23,7 @@ import {
     createSet,
     createTextSpan,
     createTextSpanFromBounds,
+    createTextSpanFromRange,
     Debug,
     decodedTextSpanIntersectsWith,
     deduplicate,
@@ -1280,13 +1281,17 @@ export class Session<TMessage = string> implements EventSender {
 
     private regionSemanticCheck(file: NormalizedPath, project: Project, ranges: TextRange[]) {
         tracing?.push(tracing.Phase.Session, "regionSemanticCheck", { file, configFilePath: (project as ConfiguredProject).canonicalConfigFilePath }); // undefined is fine if the cast fails
-        this.sendDiagnosticsEvent(file, project, project.getLanguageService().getSemanticDiagnostics(file, ranges), "regionSemanticDiag");
+        // >> TODO: get adjusted ranges from the nodes we actually end up checking...
+        this.sendDiagnosticsEvent(file, project, project.getLanguageService().getSemanticDiagnostics(file, ranges), "regionSemanticDiag", ranges.map(createTextSpanFromRange));
         tracing?.pop();
     }
 
-    private sendDiagnosticsEvent(file: NormalizedPath, project: Project, diagnostics: readonly Diagnostic[], kind: protocol.DiagnosticEventKind): void {
+    private sendDiagnosticsEvent(file: NormalizedPath, project: Project, diagnostics: readonly Diagnostic[], kind: protocol.DiagnosticEventKind, spans?: TextSpan[]): void {
         try {
-            this.event<protocol.DiagnosticEventBody>({ file, diagnostics: diagnostics.map(diag => formatDiag(file, project, diag)) }, kind);
+            const scriptInfo = Debug.checkDefined(project.getScriptInfo(file));
+            this.event<protocol.DiagnosticEventBody>(
+                { file, diagnostics: diagnostics.map(diag => formatDiag(file, project, diag)), spans: spans?.map(span => toProtocolTextSpan(span, scriptInfo)) },
+                kind);
         }
         catch (err) {
             this.logError(err, kind);
