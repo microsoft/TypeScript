@@ -19,8 +19,22 @@ Object.defineProperty(exports, "__esModule", { value: true });
 
 
 //// [file1.d.ts]
-/// <reference lib="dom" />
 export declare const elem: HTMLElement;
 //// [file2.d.ts]
-/// <reference lib="dom" />
 export {};
+
+
+//// [DtsFileErrors]
+
+
+file1.d.ts(1,28): error TS2304: Cannot find name 'HTMLElement'.
+
+
+==== file1.d.ts (1 errors) ====
+    export declare const elem: HTMLElement;
+                               ~~~~~~~~~~~
+!!! error TS2304: Cannot find name 'HTMLElement'.
+    
+==== file2.d.ts (0 errors) ====
+    export {};
+    

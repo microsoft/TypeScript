@@ -8006,14 +8006,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 return file.moduleName;
             }
             if (!file) {
-                if (context.tracker.trackReferencedAmbientModule) {
-                    const ambientDecls = filter(symbol.declarations, isAmbientModule);
-                    if (length(ambientDecls)) {
-                        for (const decl of ambientDecls!) {
-                            context.tracker.trackReferencedAmbientModule(decl, symbol);
-                        }
-                    }
-                }
                 if (ambientModuleSymbolRegex.test(symbol.escapedName as string)) {
                     return (symbol.escapedName as string).substring(1, (symbol.escapedName as string).length - 1);
                 }
@@ -48571,8 +48563,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 const node = getParseTreeNode(nodeIn, hasPossibleExternalModuleReference);
                 return node && getExternalModuleFileFromDeclaration(node);
             },
-            getTypeReferenceDirectivesForEntityName,
-            getTypeReferenceDirectivesForSymbol,
             isLiteralConstDeclaration,
             isLateBound: (nodeIn: Declaration): nodeIn is LateBoundDeclaration => {
                 const node = getParseTreeNode(nodeIn, isDeclaration);
@@ -48637,93 +48627,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                             }
                         }
                     }
-                }
-            }
-            return false;
-        }
-
-        function isInHeritageClause(node: PropertyAccessEntityNameExpression) {
-            return node.parent && node.parent.kind === SyntaxKind.ExpressionWithTypeArguments && node.parent.parent && node.parent.parent.kind === SyntaxKind.HeritageClause;
-        }
-
-        // defined here to avoid outer scope pollution
-        function getTypeReferenceDirectivesForEntityName(node: EntityNameOrEntityNameExpression): [specifier: string, mode: ResolutionMode][] | undefined {
-            // program does not have any files with type reference directives - bail out
-            if (!fileToDirective) {
-                return undefined;
-            }
-            // computed property name should use node as value
-            // property access can only be used as values, or types when within an expression with type arguments inside a heritage clause
-            // qualified names can only be used as types\namespaces
-            // identifiers are treated as values only if they appear in type queries
-            let meaning;
-            if (node.parent.kind === SyntaxKind.ComputedPropertyName) {
-                meaning = SymbolFlags.Value | SymbolFlags.ExportValue;
-            }
-            else {
-                meaning = SymbolFlags.Type | SymbolFlags.Namespace;
-                if ((node.kind === SyntaxKind.Identifier && isInTypeQuery(node)) || (node.kind === SyntaxKind.PropertyAccessExpression && !isInHeritageClause(node))) {
-                    meaning = SymbolFlags.Value | SymbolFlags.ExportValue;
-                }
-            }
-
-            const symbol = resolveEntityName(node, meaning, /*ignoreErrors*/ true);
-            return symbol && symbol !== unknownSymbol ? getTypeReferenceDirectivesForSymbol(symbol, meaning) : undefined;
-        }
-
-        // defined here to avoid outer scope pollution
-        function getTypeReferenceDirectivesForSymbol(symbol: Symbol, meaning?: SymbolFlags): [specifier: string, mode: ResolutionMode][] | undefined {
-            // program does not have any files with type reference directives - bail out
-            if (!fileToDirective || !isSymbolFromTypeDeclarationFile(symbol)) {
-                return undefined;
-            }
-            // check what declarations in the symbol can contribute to the target meaning
-            let typeReferenceDirectives: [specifier: string, mode: ResolutionMode][] | undefined;
-            for (const decl of symbol.declarations!) {
-                // check meaning of the local symbol to see if declaration needs to be analyzed further
-                if (decl.symbol && decl.symbol.flags & meaning!) {
-                    const file = getSourceFileOfNode(decl);
-                    const typeReferenceDirective = fileToDirective.get(file.path);
-                    if (typeReferenceDirective) {
-                        (typeReferenceDirectives || (typeReferenceDirectives = [])).push(typeReferenceDirective);
-                    }
-                    else {
-                        // found at least one entry that does not originate from type reference directive
-                        return undefined;
-                    }
-                }
-            }
-            return typeReferenceDirectives;
-        }
-
-        function isSymbolFromTypeDeclarationFile(symbol: Symbol): boolean {
-            // bail out if symbol does not have associated declarations (i.e. this is transient symbol created for property in binding pattern)
-            if (!symbol.declarations) {
-                return false;
-            }
-
-            // walk the parent chain for symbols to make sure that top level parent symbol is in the global scope
-            // external modules cannot define or contribute to type declaration files
-            let current = symbol;
-            while (true) {
-                const parent = getParentOfSymbol(current);
-                if (parent) {
-                    current = parent;
-                }
-                else {
-                    break;
-                }
-            }
-
-            if (current.valueDeclaration && current.valueDeclaration.kind === SyntaxKind.SourceFile && current.flags & SymbolFlags.ValueModule) {
-                return false;
-            }
-
-            // check that at least one declaration of top level symbol originates from type declaration file
-            for (const decl of symbol.declarations) {
-                const file = getSourceFileOfNode(decl);
-                if (fileToDirective.has(file.path)) {
-                    return true;
                 }
             }
             return false;
@@ -51103,13 +51006,6 @@ class SymbolTrackerImpl implements SymbolTracker {
         if (this.inner?.reportTruncationError) {
             this.onDiagnosticReported();
             this.inner.reportTruncationError();
-        }
-    }
-
-    trackReferencedAmbientModule(decl: ModuleDeclaration, symbol: Symbol): void {
-        if (this.inner?.trackReferencedAmbientModule) {
-            this.onDiagnosticReported();
-            this.inner.trackReferencedAmbientModule(decl, symbol);
         }
     }
 

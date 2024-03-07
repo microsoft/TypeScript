@@ -84,8 +84,6 @@ define("main", ["require", "exports", "D", "e"], function (require, exports) {
 
 
 //// [f.d.ts]
-/// <reference path="c.d.ts" />
-/// <reference path="d.d.ts" />
 declare module "a" {
     export class A {
     }
@@ -107,3 +105,52 @@ declare module "main" {
     import "D";
     import "e";
 }
+
+
+//// [DtsFileErrors]
+
+
+f.d.ts(11,25): error TS2792: Cannot find module 'C'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
+
+
+==== f.d.ts (1 errors) ====
+    declare module "a" {
+        export class A {
+        }
+    }
+    declare module "b" {
+        export class B {
+            x: number;
+        }
+    }
+    declare module "e" {
+        import { Cls } from "C";
+                            ~~~
+!!! error TS2792: Cannot find module 'C'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
+        module "a" {
+            interface A {
+                getCls(): Cls;
+            }
+        }
+    }
+    declare module "main" {
+        import "D";
+        import "e";
+    }
+    
+==== c.d.ts (0 errors) ====
+    declare module "C" {
+        class Cls {y: string; }
+    }
+    
+==== d.d.ts (0 errors) ====
+    declare module "D" {
+        import {A} from "a";
+        import {B} from "b";
+        module "a" {
+            interface A {
+                getB(): B;
+            }
+        }
+    }
+    

@@ -1109,8 +1109,6 @@ export const notImplementedResolver: EmitResolver = {
     moduleExportsSomeValue: notImplemented,
     isArgumentsLocalBinding: notImplemented,
     getExternalModuleFileFromDeclaration: notImplemented,
-    getTypeReferenceDirectivesForEntityName: notImplemented,
-    getTypeReferenceDirectivesForSymbol: notImplemented,
     isLiteralConstDeclaration: notImplemented,
     getJsxFactoryEntity: notImplemented,
     getJsxFragmentFactoryEntity: notImplemented,
@@ -4185,19 +4183,23 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
                 writeLine();
             }
         }
+        // TODO(jakebailey): clean up preserve duplication
         for (const directive of files) {
-            writeComment(`/// <reference path="${directive.fileName}" />`);
+            const preserve = directive.preserve ? `preserve="true" ` : "";
+            writeComment(`/// <reference path="${directive.fileName}" ${preserve}/>`);
             writeLine();
         }
         for (const directive of types) {
+            const preserve = directive.preserve ? `preserve="true" ` : "";
             const resolutionMode = directive.resolutionMode && directive.resolutionMode !== currentSourceFile?.impliedNodeFormat
-                ? `resolution-mode="${directive.resolutionMode === ModuleKind.ESNext ? "import" : "require"}"`
+                ? `resolution-mode="${directive.resolutionMode === ModuleKind.ESNext ? "import" : "require"}" `
                 : "";
-            writeComment(`/// <reference types="${directive.fileName}" ${resolutionMode}/>`);
+            writeComment(`/// <reference types="${directive.fileName}" ${resolutionMode}${preserve}/>`);
             writeLine();
         }
         for (const directive of libs) {
-            writeComment(`/// <reference lib="${directive.fileName}" />`);
+            const preserve = directive.preserve ? `preserve="true" ` : "";
+            writeComment(`/// <reference lib="${directive.fileName}" ${preserve}/>`);
             writeLine();
         }
     }

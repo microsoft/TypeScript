@@ -39,8 +39,6 @@ export { default } from "fs";
 
 
 //// [index.d.ts]
-/// <reference path="../types.d.ts" />
 export { default } from "fs";
 //// [index.d.ts]
-/// <reference path="types.d.ts" />
 export { default } from "fs";

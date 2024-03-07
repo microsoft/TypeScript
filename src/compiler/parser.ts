@@ -10510,19 +10510,20 @@ export function processPragmasIntoFields(context: PragmaContext, reportDiagnosti
                 const typeReferenceDirectives = context.typeReferenceDirectives;
                 const libReferenceDirectives = context.libReferenceDirectives;
                 forEach(toArray(entryOrList) as PragmaPseudoMap["reference"][], arg => {
-                    const { types, lib, path, ["resolution-mode"]: res } = arg.arguments;
+                    const { types, lib, path, ["resolution-mode"]: res, preserve: _preserve } = arg.arguments;
+                    const preserve = !!_preserve ? true : undefined;
                     if (arg.arguments["no-default-lib"]) {
                         context.hasNoDefaultLib = true;
                     }
                     else if (types) {
                         const parsed = parseResolutionMode(res, types.pos, types.end, reportDiagnostic);
-                        typeReferenceDirectives.push({ pos: types.pos, end: types.end, fileName: types.value, ...(parsed ? { resolutionMode: parsed } : {}) });
+                        typeReferenceDirectives.push({ pos: types.pos, end: types.end, fileName: types.value, ...(parsed ? { resolutionMode: parsed } : {}), ...(preserve ? { preserve } : {}) });
                     }
                     else if (lib) {
-                        libReferenceDirectives.push({ pos: lib.pos, end: lib.end, fileName: lib.value });
+                        libReferenceDirectives.push({ pos: lib.pos, end: lib.end, fileName: lib.value, ...(preserve ? { preserve } : {}) });
                     }
                     else if (path) {
-                        referencedFiles.push({ pos: path.pos, end: path.end, fileName: path.value });
+                        referencedFiles.push({ pos: path.pos, end: path.end, fileName: path.value, ...(preserve ? { preserve } : {}) });
                     }
                     else {
                         reportDiagnostic(arg.range.pos, arg.range.end - arg.range.pos, Diagnostics.Invalid_reference_directive_syntax);

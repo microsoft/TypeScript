@@ -64,15 +64,72 @@ export default [obj1, obj2.default];
 
 
 //// [uses.d.ts]
-/// <reference types="pkg" />
 declare const _default: ImportInterface;
 export default _default;
 //// [uses.d.ts]
-/// <reference types="pkg" />
 declare const _default: RequireInterface;
 export default _default;
 //// [index.d.ts]
-/// <reference types="pkg" />
-/// <reference types="pkg" resolution-mode="require"/>
 declare const _default: readonly [ImportInterface, RequireInterface];
 export default _default;
+
+
+//// [DtsFileErrors]
+
+
+out/index.d.ts(1,35): error TS2304: Cannot find name 'ImportInterface'.
+out/index.d.ts(1,52): error TS2304: Cannot find name 'RequireInterface'.
+
+
+==== out/index.d.ts (2 errors) ====
+    declare const _default: readonly [ImportInterface, RequireInterface];
+                                      ~~~~~~~~~~~~~~~
+!!! error TS2304: Cannot find name 'ImportInterface'.
+                                                       ~~~~~~~~~~~~~~~~
+!!! error TS2304: Cannot find name 'RequireInterface'.
+    export default _default;
+    
+==== /node_modules/pkg/package.json (0 errors) ====
+    {
+        "name": "pkg",
+        "version": "0.0.1",
+        "exports": {
+            "import": "./import.js",
+            "require": "./require.js"
+        }
+    }
+==== /node_modules/pkg/import.d.ts (0 errors) ====
+    export {};
+    declare global {
+        interface ImportInterface { _i: any; }
+        function getInterI(): ImportInterface;
+    }
+==== /node_modules/pkg/require.d.ts (0 errors) ====
+    export {};
+    declare global {
+        interface RequireInterface { _r: any; }
+        function getInterR(): RequireInterface;
+    }
+==== out/sub1/uses.d.ts (0 errors) ====
+    declare const _default: ImportInterface;
+    export default _default;
+    
+==== /sub1/package.json (0 errors) ====
+    {
+        "private": true,
+        "type": "module"
+    }
+==== out/sub2/uses.d.ts (0 errors) ====
+    declare const _default: RequireInterface;
+    export default _default;
+    
+==== /sub2/package.json (0 errors) ====
+    {
+        "private": true,
+        "type": "commonjs"
+    }
+==== /package.json (0 errors) ====
+    {
+        "private": true,
+        "type": "module"
+    }
