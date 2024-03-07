@@ -10639,3 +10639,23 @@ export function replaceFirstStar(s: string, replacement: string): string {
 export function getNameFromImportAttribute(node: ImportAttribute) {
     return isIdentifier(node.name) ? node.name.escapedText : escapeLeadingUnderscores(node.name.text);
 }
+
+/** @internal */
+export function isSyntacticallyString(expr: Expression): boolean {
+    switch (expr.kind) {
+        case SyntaxKind.BinaryExpression:
+            const left = (expr as BinaryExpression).left;
+            const right = (expr as BinaryExpression).right;
+            return (
+                (expr as BinaryExpression).operatorToken.kind === SyntaxKind.PlusToken &&
+                (isSyntacticallyString(left) || isSyntacticallyString(right))
+            );
+        case SyntaxKind.ParenthesizedExpression:
+            return isSyntacticallyString((expr as ParenthesizedExpression).expression);
+        case SyntaxKind.TemplateExpression:
+        case SyntaxKind.StringLiteral:
+        case SyntaxKind.NoSubstitutionTemplateLiteral:
+            return true;
+    }
+    return false;
+}
