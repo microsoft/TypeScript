@@ -36,8 +36,6 @@ fooLength + 1;
 >1 : 1
 
 === declarations.d.ts ===
-// This test is just like exportDefaultProperty, but with `export =`.
-
 declare namespace foo.bar {
 >foo : typeof foo
 >bar : typeof bar

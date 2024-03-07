@@ -2448,7 +2448,13 @@ export class TestState {
         const annotations = this.annotateContentWithTooltips(
             result,
             "completions",
-            item => item.optionalReplacementSpan,
+            item => {
+                if (item.optionalReplacementSpan) {
+                    const { start, length } = item.optionalReplacementSpan;
+                    return start && length === 0 ? { start, length: 1 } : item.optionalReplacementSpan;
+                }
+                return undefined;
+            },
             item =>
                 item.entries?.flatMap(
                     entry =>
@@ -3521,10 +3527,12 @@ export class TestState {
             actualTextArray.push(text);
 
             // Undo changes to perform next fix
-            const span = change.textChanges[0].span;
-            const deletedText = originalContent.substr(span.start, change.textChanges[0].span.length);
-            const insertedText = change.textChanges[0].newText;
-            this.editScriptAndUpdateMarkers(fileName, span.start, span.start + insertedText.length, deletedText);
+            for (const textChange of change.textChanges) {
+                const span = textChange.span;
+                const deletedText = originalContent.slice(span.start, span.start + textChange.span.length);
+                const insertedText = textChange.newText;
+                this.editScriptAndUpdateMarkers(fileName, span.start, span.start + insertedText.length, deletedText);
+            }
         }
         if (expectedTextArray.length !== actualTextArray.length) {
             this.raiseError(`Expected ${expectedTextArray.length} import fixes, got ${actualTextArray.length}:\n\n${actualTextArray.join("\n\n" + "-".repeat(20) + "\n\n")}`);
@@ -3971,8 +3979,8 @@ export class TestState {
         };
     }
 
-    public verifyRefactorAvailable(negative: boolean, triggerReason: ts.RefactorTriggerReason, name: string, actionName?: string, actionDescription?: string) {
-        let refactors = this.getApplicableRefactorsAtSelection(triggerReason);
+    public verifyRefactorAvailable(negative: boolean, triggerReason: ts.RefactorTriggerReason, name: string, actionName?: string, actionDescription?: string, kind?: string, preferences = ts.emptyOptions, includeInteractiveActions?: boolean) {
+        let refactors = this.getApplicableRefactorsAtSelection(triggerReason, kind, preferences, includeInteractiveActions);
         refactors = refactors.filter(r => r.name === name);
 
         if (actionName !== undefined) {
@@ -4437,8 +4445,8 @@ export class TestState {
         test(renameKeys(newFileContents, key => pathUpdater(key) || key), "with file moved");
     }
 
-    private getApplicableRefactorsAtSelection(triggerReason: ts.RefactorTriggerReason = "implicit", kind?: string, preferences = ts.emptyOptions) {
-        return this.getApplicableRefactorsWorker(this.getSelection(), this.activeFile.fileName, preferences, triggerReason, kind);
+    private getApplicableRefactorsAtSelection(triggerReason: ts.RefactorTriggerReason = "implicit", kind?: string, preferences = ts.emptyOptions, includeInteractiveActions?: boolean) {
+        return this.getApplicableRefactorsWorker(this.getSelection(), this.activeFile.fileName, preferences, triggerReason, kind, includeInteractiveActions);
     }
     private getApplicableRefactors(rangeOrMarker: Range | Marker, preferences = ts.emptyOptions, triggerReason: ts.RefactorTriggerReason = "implicit", kind?: string, includeInteractiveActions?: boolean): readonly ts.ApplicableRefactorInfo[] {
         return this.getApplicableRefactorsWorker("position" in rangeOrMarker ? rangeOrMarker.position : rangeOrMarker, rangeOrMarker.fileName, preferences, triggerReason, kind, includeInteractiveActions); // eslint-disable-line local/no-in-operator

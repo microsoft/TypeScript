@@ -883,7 +883,7 @@ type T17 = DropFirst<[]>;
 >T17 : unknown[]
 
 type T18 = DropFirst<any>;
->T18 : unknown[] | any[]
+>T18 : any[] | unknown[]
 
 type T19 = DropFirst<never>;
 >T19 : never
@@ -943,7 +943,7 @@ type T37 = DropLast<[]>;  // unknown[], maybe should be []
 >T37 : []
 
 type T38 = DropLast<any>;
->T38 : unknown[] | any[]
+>T38 : any[] | unknown[]
 
 type T39 = DropLast<never>;
 >T39 : never
@@ -1454,4 +1454,7 @@ type ToStringLength1<T extends any[]> = `${T['length']}`;
 
 type ToStringLength2<T extends any[]> = `${[...T]['length']}`;
 >ToStringLength2 : `${[...T]["length"]}`
+
+type AnyArr = [...any];
+>AnyArr : any[]
 

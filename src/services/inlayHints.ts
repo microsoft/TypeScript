@@ -22,6 +22,7 @@ import {
     GetAccessorDeclaration,
     getEffectiveReturnTypeNode,
     getEffectiveTypeAnnotationNode,
+    getEmitScriptTarget,
     getLanguageVariant,
     getLeadingCommentRanges,
     getNameOfDeclaration,
@@ -350,7 +351,7 @@ export function provideInlayHints(context: InlayHintsContext): InlayHint[] {
     }
 
     function leadingCommentsContainsParameterName(node: Node, name: string) {
-        if (!isIdentifierText(name, compilerOptions.target, getLanguageVariant(file.scriptKind))) {
+        if (!isIdentifierText(name, getEmitScriptTarget(compilerOptions), getLanguageVariant(file.scriptKind))) {
             return false;
         }
 
@@ -753,9 +754,8 @@ export function provideInlayHints(context: InlayHintsContext): InlayHint[] {
                     break;
                 case SyntaxKind.IndexSignature:
                     Debug.assertNode(node, isIndexSignatureDeclaration);
-                    Debug.assertEqual(node.parameters.length, 1);
                     parts.push({ text: "[" });
-                    visitForDisplayParts(node.parameters[0]);
+                    visitDisplayPartList(node.parameters, ", ");
                     parts.push({ text: "]" });
                     if (node.type) {
                         parts.push({ text: ": " });

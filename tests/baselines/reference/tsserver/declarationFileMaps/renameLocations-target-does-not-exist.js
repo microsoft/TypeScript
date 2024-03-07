@@ -112,7 +112,7 @@ Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /a 1 undefined Co
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /a 1 undefined Config: /a/tsconfig.json WatchType: Wild card directory
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /a/tsconfig.json
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined Project: /a/tsconfig.json WatchType: Missing file
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /a/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /a/tsconfig.json projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/a/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (1)
 	/a/a.ts SVC-1-0 "export function fnA() {}\nexport interface IfaceA {}\nexport const instanceA: IfaceA = {};"
@@ -261,6 +261,17 @@ FsWatchesRecursive::
 /a: *new*
   {}
 
+Projects::
+/a/tsconfig.json (Configured) *new*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+
+ScriptInfos::
+/a/a.ts (Open) *new*
+    version: SVC-1-0
+    containingProjects: 1
+        /a/tsconfig.json *default*
+
 ts.getFileEmitOutput: /a/a.ts: {
   "outputFiles": [
     {
@@ -314,6 +325,19 @@ FsWatchesRecursive::
 /a:
   {}
 
+Projects::
+/a/tsconfig.json (Configured) *changed*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+    noOpenRef: true *changed*
+
+ScriptInfos::
+/a/a.ts *changed*
+    open: false *changed*
+    version: SVC-1-0
+    containingProjects: 1
+        /a/tsconfig.json
+
 Before request
 
 Info seq  [hh:mm:ss:mss] request:
@@ -355,7 +379,7 @@ Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /b 1 undefined Co
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /b 1 undefined Config: /b/tsconfig.json WatchType: Wild card directory
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /b/tsconfig.json
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined Project: /b/tsconfig.json WatchType: Missing file
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /b/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /b/tsconfig.json projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/b/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (1)
 	/b/b.ts SVC-1-0 "export function fnB() {}"
@@ -529,6 +553,26 @@ FsWatchesRecursive *deleted*::
 /a:
   {}
 
+Projects::
+/a/tsconfig.json (Configured) *deleted*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+    isClosed: true *changed*
+    noOpenRef: true
+/b/tsconfig.json (Configured) *new*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+
+ScriptInfos::
+/a/a.ts *deleted*
+    version: SVC-1-0
+    containingProjects: 0 *changed*
+        /a/tsconfig.json *deleted*
+/b/b.ts (Open) *new*
+    version: SVC-1-0
+    containingProjects: 1
+        /b/tsconfig.json *default*
+
 ts.getFileEmitOutput: /b/b.ts: {
   "outputFiles": [
     {
@@ -582,6 +626,19 @@ FsWatchesRecursive::
 /b:
   {}
 
+Projects::
+/b/tsconfig.json (Configured) *changed*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+    noOpenRef: true *changed*
+
+ScriptInfos::
+/b/b.ts *changed*
+    open: false *changed*
+    version: SVC-1-0
+    containingProjects: 1
+        /b/tsconfig.json
+
 Info seq  [hh:mm:ss:mss] FileWatcher:: Triggered with /b/b.ts 2:: WatchInfo: /b/b.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /b/b.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] Scheduled: /b/tsconfig.json
@@ -611,6 +668,19 @@ FsWatchesRecursive::
 Timeout callback:: count: 1
 2: /b/tsconfig.json *new*
 
+Projects::
+/b/tsconfig.json (Configured) *changed*
+    projectStateVersion: 2 *changed*
+    projectProgramVersion: 1
+    dirty: true *changed*
+    noOpenRef: true
+
+ScriptInfos::
+/b/b.ts *deleted*
+    version: SVC-1-0
+    containingProjects: 0 *changed*
+        /b/tsconfig.json *deleted*
+
 Info seq  [hh:mm:ss:mss] request:
     {
       "command": "open",
@@ -626,7 +696,7 @@ Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/inferred
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/bin/a.d.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /b/bin/b.d.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined Project: /dev/null/inferredProject1* WatchType: Missing file
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject1*' (Inferred)
 Info seq  [hh:mm:ss:mss] 	Files (3)
 	/a/bin/a.d.ts Text-1 "export declare function fnA(): void;\nexport interface IfaceA {\n}\nexport declare const instanceA: IfaceA;\n//# sourceMappingURL=a.d.ts.map"
@@ -686,6 +756,31 @@ FsWatches *deleted*::
 FsWatchesRecursive *deleted*::
 /b:
   {}
+
+Projects::
+/b/tsconfig.json (Configured) *deleted*
+    projectStateVersion: 2
+    projectProgramVersion: 1
+    dirty: true
+    isClosed: true *changed*
+    noOpenRef: true
+/dev/null/inferredProject1* (Inferred) *new*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+
+ScriptInfos::
+/a/bin/a.d.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /dev/null/inferredProject1*
+/b/bin/b.d.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /dev/null/inferredProject1*
+/user/user.ts (Open) *new*
+    version: SVC-1-0
+    containingProjects: 1
+        /dev/null/inferredProject1* *default*
 
 Before request
 
@@ -778,6 +873,36 @@ FsWatches::
 /b/bin/b.d.ts.map: *new*
   {}
 
+Projects::
+/dev/null/inferredProject1* (Inferred) *changed*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+    documentPositionMappers: 1 *changed*
+        /b/bin/b.d.ts: DocumentPositionMapper1 *new*
+
+ScriptInfos::
+/a/bin/a.d.ts
+    version: Text-1
+    containingProjects: 1
+        /dev/null/inferredProject1*
+/b/bin/b.d.ts *changed*
+    version: Text-1
+    sourceMapFilePath: /b/bin/b.d.ts.map *changed*
+    containingProjects: 1
+        /dev/null/inferredProject1*
+/b/bin/b.d.ts.map *new*
+    version: Text-1
+    declarationInfoPath: /b/bin/b.d.ts
+    documentPositionMapper: DocumentPositionMapper1
+    containingProjects: 0
+/user/user.ts (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /dev/null/inferredProject1* *default*
+
+DocumentPositionMappers::
+DocumentPositionMapper1 *new*
+
 Before request
 
 Info seq  [hh:mm:ss:mss] request:
@@ -815,6 +940,34 @@ FsWatches::
 /user/user.ts: *new*
   {}
 
+Projects::
+/dev/null/inferredProject1* (Inferred) *changed*
+    projectStateVersion: 2 *changed*
+    projectProgramVersion: 1
+    dirty: true *changed*
+    isOrphan: true *changed*
+
+ScriptInfos::
+/a/bin/a.d.ts
+    version: Text-1
+    containingProjects: 1
+        /dev/null/inferredProject1*
+/b/bin/b.d.ts
+    version: Text-1
+    sourceMapFilePath: /b/bin/b.d.ts.map
+    containingProjects: 1
+        /dev/null/inferredProject1*
+/b/bin/b.d.ts.map
+    version: Text-1
+    declarationInfoPath: /b/bin/b.d.ts
+    documentPositionMapper: DocumentPositionMapper1
+    containingProjects: 0
+/user/user.ts *changed*
+    open: false *changed*
+    version: SVC-1-0
+    containingProjects: 0 *changed*
+        /dev/null/inferredProject1* *deleted*
+
 Before request
 
 Info seq  [hh:mm:ss:mss] request:
@@ -830,7 +983,7 @@ Info seq  [hh:mm:ss:mss] Search path: /dummy
 Info seq  [hh:mm:ss:mss] For info: /dummy/dummy.ts :: No config files found.
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/inferredProject2*
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined Project: /dev/null/inferredProject2* WatchType: Missing file
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/inferredProject2* Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/inferredProject2* projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject2*' (Inferred)
 Info seq  [hh:mm:ss:mss] 	Files (1)
 	/dummy/dummy.ts SVC-1-0 "let a = 10;"
@@ -887,3 +1040,42 @@ FsWatches *deleted*::
   {}
 /user/user.ts:
   {}
+
+Projects::
+/dev/null/inferredProject1* (Inferred) *deleted*
+    projectStateVersion: 2
+    projectProgramVersion: 1
+    dirty: true
+    isClosed: true *changed*
+    isOrphan: true
+    documentPositionMappers: 0 *changed*
+        /b/bin/b.d.ts: DocumentPositionMapper1 *deleted*
+/dev/null/inferredProject2* (Inferred) *new*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+
+ScriptInfos::
+/a/bin/a.d.ts *deleted*
+    version: Text-1
+    containingProjects: 0 *changed*
+        /dev/null/inferredProject1* *deleted*
+/b/bin/b.d.ts *deleted*
+    version: Text-1
+    sourceMapFilePath: /b/bin/b.d.ts.map
+    containingProjects: 0 *changed*
+        /dev/null/inferredProject1* *deleted*
+/b/bin/b.d.ts.map *deleted*
+    version: Text-1
+    declarationInfoPath: /b/bin/b.d.ts
+    documentPositionMapper: DocumentPositionMapper1
+    containingProjects: 0
+/dummy/dummy.ts (Open) *new*
+    version: SVC-1-0
+    containingProjects: 1
+        /dev/null/inferredProject2* *default*
+/user/user.ts *deleted*
+    version: SVC-1-0
+    containingProjects: 0
+
+DocumentPositionMappers::
+DocumentPositionMapper1 *deleted*

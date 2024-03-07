@@ -1,0 +1,47 @@
+//// [tests/cases/compiler/blockScopedEnumVariablesUseBeforeDef_isolatedModules.ts] ////
+
+=== blockScopedEnumVariablesUseBeforeDef_isolatedModules.ts ===
+function foo1() {
+>foo1 : Symbol(foo1, Decl(blockScopedEnumVariablesUseBeforeDef_isolatedModules.ts, 0, 0))
+
+    return E.A
+>E.A : Symbol(E.A, Decl(blockScopedEnumVariablesUseBeforeDef_isolatedModules.ts, 2, 12))
+>E : Symbol(E, Decl(blockScopedEnumVariablesUseBeforeDef_isolatedModules.ts, 1, 14))
+>A : Symbol(E.A, Decl(blockScopedEnumVariablesUseBeforeDef_isolatedModules.ts, 2, 12))
+
+    enum E { A }
+>E : Symbol(E, Decl(blockScopedEnumVariablesUseBeforeDef_isolatedModules.ts, 1, 14))
+>A : Symbol(E.A, Decl(blockScopedEnumVariablesUseBeforeDef_isolatedModules.ts, 2, 12))
+}
+
+function foo2() {
+>foo2 : Symbol(foo2, Decl(blockScopedEnumVariablesUseBeforeDef_isolatedModules.ts, 3, 1))
+
+    return E.A
+>E.A : Symbol(E.A, Decl(blockScopedEnumVariablesUseBeforeDef_isolatedModules.ts, 7, 18))
+>E : Symbol(E, Decl(blockScopedEnumVariablesUseBeforeDef_isolatedModules.ts, 6, 14))
+>A : Symbol(E.A, Decl(blockScopedEnumVariablesUseBeforeDef_isolatedModules.ts, 7, 18))
+
+    const enum E { A }
+>E : Symbol(E, Decl(blockScopedEnumVariablesUseBeforeDef_isolatedModules.ts, 6, 14))
+>A : Symbol(E.A, Decl(blockScopedEnumVariablesUseBeforeDef_isolatedModules.ts, 7, 18))
+}
+
+const config = {
+>config : Symbol(config, Decl(blockScopedEnumVariablesUseBeforeDef_isolatedModules.ts, 10, 5))
+
+    a: AfterObject.A,
+>a : Symbol(a, Decl(blockScopedEnumVariablesUseBeforeDef_isolatedModules.ts, 10, 16))
+>AfterObject.A : Symbol(AfterObject.A, Decl(blockScopedEnumVariablesUseBeforeDef_isolatedModules.ts, 14, 24))
+>AfterObject : Symbol(AfterObject, Decl(blockScopedEnumVariablesUseBeforeDef_isolatedModules.ts, 12, 2))
+>A : Symbol(AfterObject.A, Decl(blockScopedEnumVariablesUseBeforeDef_isolatedModules.ts, 14, 24))
+
+};
+
+const enum AfterObject {
+>AfterObject : Symbol(AfterObject, Decl(blockScopedEnumVariablesUseBeforeDef_isolatedModules.ts, 12, 2))
+
+    A = 2,
+>A : Symbol(AfterObject.A, Decl(blockScopedEnumVariablesUseBeforeDef_isolatedModules.ts, 14, 24))
+}
+

@@ -36,6 +36,7 @@ export interface TranspileOptions {
     moduleName?: string;
     renamedDependencies?: MapLike<string>;
     transformers?: CustomTransformers;
+    jsDocParsingMode?: JSDocParsingMode;
 }
 
 export interface TranspileOutput {
@@ -46,8 +47,6 @@ export interface TranspileOutput {
 
 const optionsRedundantWithVerbatimModuleSyntax = new Set([
     "isolatedModules",
-    "preserveValueImports",
-    "importsNotUsedAsValues",
 ]);
 
 /*
@@ -121,7 +120,7 @@ export function transpileModule(input: string, transpileOptions: TranspileOption
             languageVersion: getEmitScriptTarget(options),
             impliedNodeFormat: getImpliedNodeFormatForFile(toPath(inputFileName, "", compilerHost.getCanonicalFileName), /*packageJsonInfoCache*/ undefined, compilerHost, options),
             setExternalModuleIndicator: getSetExternalModuleIndicator(options),
-            jsDocParsingMode: JSDocParsingMode.ParseNone,
+            jsDocParsingMode: transpileOptions.jsDocParsingMode ?? JSDocParsingMode.ParseAll,
         },
     );
     if (transpileOptions.moduleName) {

@@ -1,0 +1,39 @@
+/main.ts(4,16): error TS5097: An import path can only end with a '.ts' extension when 'allowImportingTsExtensions' is enabled.
+/main.ts(7,16): error TS2307: Cannot find module './redirect/index' or its corresponding type declarations.
+
+
+==== /dir/index.ts (0 errors) ====
+    export const x = 0;
+    
+==== /redirect/package.json (0 errors) ====
+    { "main": "../foo" }
+    
+==== /foo/index.ts (0 errors) ====
+    export const y = 0;
+    
+==== /types/esm.d.ts (0 errors) ====
+    declare const _: string;
+    export default _;
+    
+==== /types/cjs.d.ts (0 errors) ====
+    declare const _: string;
+    export = _;
+    
+==== /main.ts (2 errors) ====
+    import { x } from "./dir";
+    import {} from "./dir/index";
+    import {} from "./dir/index.js";
+    import {} from "./dir/index.ts";
+                   ~~~~~~~~~~~~~~~~
+!!! error TS5097: An import path can only end with a '.ts' extension when 'allowImportingTsExtensions' is enabled.
+    
+    import { y } from "./redirect";
+    import {} from "./redirect/index";
+                   ~~~~~~~~~~~~~~~~~~
+!!! error TS2307: Cannot find module './redirect/index' or its corresponding type declarations.
+    
+    import a from "./types/esm";
+    import * as esm from "./types/esm";
+    import b from "./types/cjs";
+    import * as cjs from "./types/cjs";
+    

@@ -641,15 +641,13 @@ export function transformLegacyDecorators(context: TransformationContext): (x: S
 
         const prefix = getClassMemberPrefix(node, member);
         const memberName = getExpressionForPropertyName(member, /*generateNameForComputedPropertyName*/ !hasSyntacticModifier(member, ModifierFlags.Ambient));
-        const descriptor = languageVersion > ScriptTarget.ES3
-            ? isPropertyDeclaration(member) && !hasAccessorModifier(member)
-                // We emit `void 0` here to indicate to `__decorate` that it can invoke `Object.defineProperty` directly, but that it
-                // should not invoke `Object.getOwnPropertyDescriptor`.
-                ? factory.createVoidZero()
-                // We emit `null` here to indicate to `__decorate` that it can invoke `Object.getOwnPropertyDescriptor` directly.
-                // We have this extra argument here so that we can inject an explicit property descriptor at a later date.
-                : factory.createNull()
-            : undefined;
+        const descriptor = isPropertyDeclaration(member) && !hasAccessorModifier(member)
+            // We emit `void 0` here to indicate to `__decorate` that it can invoke `Object.defineProperty` directly, but that it
+            // should not invoke `Object.getOwnPropertyDescriptor`.
+            ? factory.createVoidZero()
+            // We emit `null` here to indicate to `__decorate` that it can invoke `Object.getOwnPropertyDescriptor` directly.
+            // We have this extra argument here so that we can inject an explicit property descriptor at a later date.
+            : factory.createNull();
 
         const helper = emitHelpers().createDecorateHelper(
             decoratorExpressions,
