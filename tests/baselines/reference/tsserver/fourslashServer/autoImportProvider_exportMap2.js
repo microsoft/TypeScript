@@ -166,6 +166,7 @@ Info seq  [hh:mm:ss:mss] 	Files (1)
 
 	node_modules/dependency/lib/index.d.ts
 	  Root file specified for compilation
+	  File is ECMAScript module because 'node_modules/dependency/package.json' has field "type" with value "module"
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Project '/tsconfig.json' (Configured)
@@ -391,6 +392,7 @@ Info seq  [hh:mm:ss:mss] 	Files (1)
 
 	node_modules/dependency/lib/index.d.ts
 	  Root file specified for compilation
+	  File is ECMAScript module because 'node_modules/dependency/package.json' has field "type" with value "module"
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] getExportInfoMap: cache miss or empty; calculating new results

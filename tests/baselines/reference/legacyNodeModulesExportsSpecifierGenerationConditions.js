@@ -73,7 +73,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.a = void 0;
 var a = function () { return __awaiter(void 0, void 0, void 0, function () { return __generator(this, function (_a) {
     switch (_a.label) {
-        case 0: return [4 /*yield*/, Promise.resolve().then(function () { return require("inner"); })];
+        case 0: return [4 /*yield*/, import("inner")];
         case 1: return [2 /*return*/, (_a.sent()).x()];
     }
 }); }); };

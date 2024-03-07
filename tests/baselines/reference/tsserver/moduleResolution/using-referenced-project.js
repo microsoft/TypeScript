@@ -319,10 +319,13 @@ Info seq  [hh:mm:ss:mss] 	Files (4)
 	  Library 'lib.es2021.d.ts' specified in compilerOptions
 	../package-a/src/subfolder/index.ts
 	  Imported via "./subfolder" from file '../package-a/src/index.ts'
+	  File is ECMAScript module because '../package-a/package.json' has field "type" with value "module"
 	../package-a/src/index.ts
 	  Imported via "package-a" from file 'src/index.ts' with packageId 'package-a/build/index.d.ts@1.0.0'
+	  File is ECMAScript module because '../package-a/package.json' has field "type" with value "module"
 	src/index.ts
 	  Matched by include pattern './src/**/*.ts' in 'tsconfig.json'
+	  File is ECMAScript module because 'package.json' has field "type" with value "module"
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/projects/project/packages/package-b/package.json 250 undefined WatchType: package.json file
@@ -736,6 +739,7 @@ Info seq  [hh:mm:ss:mss] 	Files (2)
 	  Library 'lib.es2021.d.ts' specified in compilerOptions
 	src/index.ts
 	  Matched by include pattern './src/**/*.ts' in 'tsconfig.json'
+	  File is ECMAScript module because 'package.json' has field "type" with value "module"
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] event:
@@ -1055,10 +1059,13 @@ Info seq  [hh:mm:ss:mss] 	Files (4)
 	  Library 'lib.es2021.d.ts' specified in compilerOptions
 	../package-a/src/subfolder/index.ts
 	  Imported via "./subfolder" from file '../package-a/src/index.ts'
+	  File is ECMAScript module because '../package-a/package.json' has field "type" with value "module"
 	../package-a/src/index.ts
 	  Imported via "package-a" from file 'src/index.ts' with packageId 'package-a/build/index.d.ts@1.0.0'
+	  File is ECMAScript module because '../package-a/package.json' has field "type" with value "module"
 	src/index.ts
 	  Matched by include pattern './src/**/*.ts' in 'tsconfig.json'
+	  File is ECMAScript module because 'package.json' has field "type" with value "module"
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] event:

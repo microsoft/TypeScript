@@ -1,4 +1,5 @@
 /a.js(2,1): error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
+/f.cts(1,1): error TS1286: ESM syntax is not allowed in a CommonJS module when 'verbatimModuleSyntax' is enabled.
 /main1.ts(1,13): error TS2305: Module '"./a"' has no exported member 'y'.
 /main1.ts(3,12): error TS2580: Cannot find name 'require'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
 /main1.ts(19,4): error TS2339: Property 'default' does not exist on type '() => void'.
@@ -32,8 +33,10 @@
 ==== /e.mts (0 errors) ====
     export = 0;
     
-==== /f.cts (0 errors) ====
+==== /f.cts (1 errors) ====
     export default 0;
+    ~~~~~~~~~~~~~~~~~
+!!! error TS1286: ESM syntax is not allowed in a CommonJS module when 'verbatimModuleSyntax' is enabled.
     
 ==== /g.js (0 errors) ====
     exports.default = 0;

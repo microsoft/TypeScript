@@ -8599,29 +8599,18 @@ export function getSetExternalModuleIndicator(options: CompilerOptions): (file: 
 }
 
 /** @internal */
-export function impliedNodeFormatAffectsEmit(options: CompilerOptions): boolean {
-    const moduleKind = getEmitModuleKind(options);
-    return ModuleKind.Node16 <= moduleKind && moduleKind <= ModuleKind.NodeNext;
-}
-
-/** @internal */
 export function impliedNodeFormatAffectsModuleResolution(options: CompilerOptions) {
     const moduleResolution = getEmitModuleResolutionKind(options);
     return ModuleResolutionKind.Node16 <= moduleResolution && moduleResolution <= ModuleResolutionKind.NodeNext;
 }
 
 /** @internal */
-export function impliedNodeFormatForModuleResolution(sourceFile: SourceFile, options: CompilerOptions): ResolutionMode {
+export function impliedNodeFormatForModuleResolution(sourceFile: { impliedNodeFormat?: ResolutionMode; }, options: CompilerOptions): ResolutionMode {
     return impliedNodeFormatAffectsModuleResolution(options) ? sourceFile.impliedNodeFormat : undefined;
 }
 
 /** @internal */
-export function impliedNodeFormatForEmit(sourceFile: SourceFile, options: CompilerOptions): ResolutionMode {
-    return impliedNodeFormatAffectsEmit(options) ? sourceFile.impliedNodeFormat : undefined;
-}
-
-/** @internal */
-export function impliedNodeFormatForInteropChecking(sourceFile: SourceFile, options: CompilerOptions): ResolutionMode {
+export function impliedNodeFormatForEmit(sourceFile: Pick<SourceFile, "fileName" | "impliedNodeFormat" | "packageJsonScope">, options: CompilerOptions): ResolutionMode {
     const moduleKind = getEmitModuleKind(options);
     if (ModuleKind.Node16 <= moduleKind && moduleKind <= ModuleKind.NodeNext) {
         return sourceFile.impliedNodeFormat;
@@ -8641,6 +8630,11 @@ export function impliedNodeFormatForInteropChecking(sourceFile: SourceFile, opti
         return ModuleKind.ESNext;
     }
     return undefined;
+}
+
+/** @internal */
+export function impliedNodeFormatForInteropChecking(sourceFile: SourceFile, options: CompilerOptions): ResolutionMode {
+    return impliedNodeFormatForEmit(sourceFile, options);
 }
 
 type CompilerOptionKeys = keyof { [K in keyof CompilerOptions as string extends K ? never : K]: any; };
