@@ -29,9 +29,9 @@ str = arr.toLocaleString('en-US', { style: 'currency', currency: 'EUR' }); // OK
 
 const dates: readonly Date[] = [new Date(), new Date()];
 >dates : Symbol(dates, Decl(arrayToLocaleStringES2015.ts, 6, 5))
->Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
->Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
->Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 
 let str2: string;
 >str2 : Symbol(str2, Decl(arrayToLocaleStringES2015.ts, 7, 3))
@@ -57,8 +57,8 @@ str2 = dates.toLocaleString('fr', { timeZone: 'UTC' }); // OK
 
 const mixed = [1, new Date(), 59782, new Date()];
 >mixed : Symbol(mixed, Decl(arrayToLocaleStringES2015.ts, 12, 5))
->Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
->Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 
 let str3: string;
 >str3 : Symbol(str3, Decl(arrayToLocaleStringES2015.ts, 13, 3))
@@ -82,7 +82,7 @@ str3 = (mixed as ReadonlyArray<number | Date>).toLocaleString('de', { currency: 
 >(mixed as ReadonlyArray<number | Date>).toLocaleString : Symbol(ReadonlyArray.toLocaleString, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
 >mixed : Symbol(mixed, Decl(arrayToLocaleStringES2015.ts, 12, 5))
 >ReadonlyArray : Symbol(ReadonlyArray, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
->Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >toLocaleString : Symbol(ReadonlyArray.toLocaleString, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
 >currency : Symbol(currency, Decl(arrayToLocaleStringES2015.ts, 16, 69))
 >style : Symbol(style, Decl(arrayToLocaleStringES2015.ts, 16, 86))

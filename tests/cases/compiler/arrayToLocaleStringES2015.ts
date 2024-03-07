@@ -1,4 +1,4 @@
-// @target: es2015
+// @lib: es2015
 
 const arr = [1, 2, 3];
 let str: string;

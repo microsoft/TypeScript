@@ -15,26 +15,26 @@ str = arr.toLocaleString(); // OK
 >str = arr.toLocaleString() : string
 >str : string
 >arr.toLocaleString() : string
->arr.toLocaleString : { (): string; (locales?: Intl.LocalesArgument, options?: Intl.NumberFormatOptions & Intl.DateTimeFormatOptions): string; }
+>arr.toLocaleString : { (): string; (locales?: string | string[], options?: Intl.NumberFormatOptions & Intl.DateTimeFormatOptions): string; }
 >arr : number[]
->toLocaleString : { (): string; (locales?: Intl.LocalesArgument, options?: Intl.NumberFormatOptions & Intl.DateTimeFormatOptions): string; }
+>toLocaleString : { (): string; (locales?: string | string[], options?: Intl.NumberFormatOptions & Intl.DateTimeFormatOptions): string; }
 
 str = arr.toLocaleString('en-US'); // OK
 >str = arr.toLocaleString('en-US') : string
 >str : string
 >arr.toLocaleString('en-US') : string
->arr.toLocaleString : { (): string; (locales?: Intl.LocalesArgument, options?: Intl.NumberFormatOptions & Intl.DateTimeFormatOptions): string; }
+>arr.toLocaleString : { (): string; (locales?: string | string[], options?: Intl.NumberFormatOptions & Intl.DateTimeFormatOptions): string; }
 >arr : number[]
->toLocaleString : { (): string; (locales?: Intl.LocalesArgument, options?: Intl.NumberFormatOptions & Intl.DateTimeFormatOptions): string; }
+>toLocaleString : { (): string; (locales?: string | string[], options?: Intl.NumberFormatOptions & Intl.DateTimeFormatOptions): string; }
 >'en-US' : "en-US"
 
 str = arr.toLocaleString('en-US', { style: 'currency', currency: 'EUR' }); // OK
 >str = arr.toLocaleString('en-US', { style: 'currency', currency: 'EUR' }) : string
 >str : string
 >arr.toLocaleString('en-US', { style: 'currency', currency: 'EUR' }) : string
->arr.toLocaleString : { (): string; (locales?: Intl.LocalesArgument, options?: Intl.NumberFormatOptions & Intl.DateTimeFormatOptions): string; }
+>arr.toLocaleString : { (): string; (locales?: string | string[], options?: Intl.NumberFormatOptions & Intl.DateTimeFormatOptions): string; }
 >arr : number[]
->toLocaleString : { (): string; (locales?: Intl.LocalesArgument, options?: Intl.NumberFormatOptions & Intl.DateTimeFormatOptions): string; }
+>toLocaleString : { (): string; (locales?: string | string[], options?: Intl.NumberFormatOptions & Intl.DateTimeFormatOptions): string; }
 >'en-US' : "en-US"
 >{ style: 'currency', currency: 'EUR' } : { style: "currency"; currency: string; }
 >style : "currency"
@@ -57,26 +57,26 @@ str2 = dates.toLocaleString(); // OK
 >str2 = dates.toLocaleString() : string
 >str2 : string
 >dates.toLocaleString() : string
->dates.toLocaleString : { (): string; (locales?: Intl.LocalesArgument, options?: Intl.NumberFormatOptions & Intl.DateTimeFormatOptions): string; }
+>dates.toLocaleString : { (): string; (locales?: string | string[], options?: Intl.NumberFormatOptions & Intl.DateTimeFormatOptions): string; }
 >dates : readonly Date[]
->toLocaleString : { (): string; (locales?: Intl.LocalesArgument, options?: Intl.NumberFormatOptions & Intl.DateTimeFormatOptions): string; }
+>toLocaleString : { (): string; (locales?: string | string[], options?: Intl.NumberFormatOptions & Intl.DateTimeFormatOptions): string; }
 
 str2 = dates.toLocaleString('fr'); // OK
 >str2 = dates.toLocaleString('fr') : string
 >str2 : string
 >dates.toLocaleString('fr') : string
->dates.toLocaleString : { (): string; (locales?: Intl.LocalesArgument, options?: Intl.NumberFormatOptions & Intl.DateTimeFormatOptions): string; }
+>dates.toLocaleString : { (): string; (locales?: string | string[], options?: Intl.NumberFormatOptions & Intl.DateTimeFormatOptions): string; }
 >dates : readonly Date[]
->toLocaleString : { (): string; (locales?: Intl.LocalesArgument, options?: Intl.NumberFormatOptions & Intl.DateTimeFormatOptions): string; }
+>toLocaleString : { (): string; (locales?: string | string[], options?: Intl.NumberFormatOptions & Intl.DateTimeFormatOptions): string; }
 >'fr' : "fr"
 
 str2 = dates.toLocaleString('fr', { timeZone: 'UTC' }); // OK
 >str2 = dates.toLocaleString('fr', { timeZone: 'UTC' }) : string
 >str2 : string
 >dates.toLocaleString('fr', { timeZone: 'UTC' }) : string
->dates.toLocaleString : { (): string; (locales?: Intl.LocalesArgument, options?: Intl.NumberFormatOptions & Intl.DateTimeFormatOptions): string; }
+>dates.toLocaleString : { (): string; (locales?: string | string[], options?: Intl.NumberFormatOptions & Intl.DateTimeFormatOptions): string; }
 >dates : readonly Date[]
->toLocaleString : { (): string; (locales?: Intl.LocalesArgument, options?: Intl.NumberFormatOptions & Intl.DateTimeFormatOptions): string; }
+>toLocaleString : { (): string; (locales?: string | string[], options?: Intl.NumberFormatOptions & Intl.DateTimeFormatOptions): string; }
 >'fr' : "fr"
 >{ timeZone: 'UTC' } : { timeZone: string; }
 >timeZone : string
@@ -99,17 +99,17 @@ str3 = mixed.toLocaleString(); // OK
 >str3 = mixed.toLocaleString() : string
 >str3 : string
 >mixed.toLocaleString() : string
->mixed.toLocaleString : { (): string; (locales?: Intl.LocalesArgument, options?: Intl.NumberFormatOptions & Intl.DateTimeFormatOptions): string; }
+>mixed.toLocaleString : { (): string; (locales?: string | string[], options?: Intl.NumberFormatOptions & Intl.DateTimeFormatOptions): string; }
 >mixed : (number | Date)[]
->toLocaleString : { (): string; (locales?: Intl.LocalesArgument, options?: Intl.NumberFormatOptions & Intl.DateTimeFormatOptions): string; }
+>toLocaleString : { (): string; (locales?: string | string[], options?: Intl.NumberFormatOptions & Intl.DateTimeFormatOptions): string; }
 
 str3 = mixed.toLocaleString('de', { style: 'currency', currency: 'EUR' }); // OK
 >str3 = mixed.toLocaleString('de', { style: 'currency', currency: 'EUR' }) : string
 >str3 : string
 >mixed.toLocaleString('de', { style: 'currency', currency: 'EUR' }) : string
->mixed.toLocaleString : { (): string; (locales?: Intl.LocalesArgument, options?: Intl.NumberFormatOptions & Intl.DateTimeFormatOptions): string; }
+>mixed.toLocaleString : { (): string; (locales?: string | string[], options?: Intl.NumberFormatOptions & Intl.DateTimeFormatOptions): string; }
 >mixed : (number | Date)[]
->toLocaleString : { (): string; (locales?: Intl.LocalesArgument, options?: Intl.NumberFormatOptions & Intl.DateTimeFormatOptions): string; }
+>toLocaleString : { (): string; (locales?: string | string[], options?: Intl.NumberFormatOptions & Intl.DateTimeFormatOptions): string; }
 >'de' : "de"
 >{ style: 'currency', currency: 'EUR' } : { style: "currency"; currency: string; }
 >style : "currency"
@@ -121,11 +121,11 @@ str3 = (mixed as ReadonlyArray<number | Date>).toLocaleString('de', { currency: 
 >str3 = (mixed as ReadonlyArray<number | Date>).toLocaleString('de', { currency: 'EUR', style: 'currency', timeZone: 'UTC' }) : string
 >str3 : string
 >(mixed as ReadonlyArray<number | Date>).toLocaleString('de', { currency: 'EUR', style: 'currency', timeZone: 'UTC' }) : string
->(mixed as ReadonlyArray<number | Date>).toLocaleString : { (): string; (locales?: Intl.LocalesArgument, options?: Intl.NumberFormatOptions & Intl.DateTimeFormatOptions): string; }
+>(mixed as ReadonlyArray<number | Date>).toLocaleString : { (): string; (locales?: string | string[], options?: Intl.NumberFormatOptions & Intl.DateTimeFormatOptions): string; }
 >(mixed as ReadonlyArray<number | Date>) : readonly (number | Date)[]
 >mixed as ReadonlyArray<number | Date> : readonly (number | Date)[]
 >mixed : (number | Date)[]
->toLocaleString : { (): string; (locales?: Intl.LocalesArgument, options?: Intl.NumberFormatOptions & Intl.DateTimeFormatOptions): string; }
+>toLocaleString : { (): string; (locales?: string | string[], options?: Intl.NumberFormatOptions & Intl.DateTimeFormatOptions): string; }
 >'de' : "de"
 >{ currency: 'EUR', style: 'currency', timeZone: 'UTC' } : { currency: string; style: "currency"; timeZone: string; }
 >currency : string
