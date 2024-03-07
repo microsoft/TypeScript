@@ -5,7 +5,7 @@ const arr = [1, 2, 3];
 let str: string;
 str = arr.toLocaleString(); // OK
 str = arr.toLocaleString('en-US'); // should be error
-str = arr.toLocaleString('en-US', { style: 'currency' }); // should be error
+str = arr.toLocaleString('en-US', { style: 'currency', currency: 'EUR' }); // should be error
 
 const dates: readonly Date[] = [new Date(), new Date()];
 let str2: string;
@@ -19,7 +19,7 @@ var arr = [1, 2, 3];
 var str;
 str = arr.toLocaleString(); // OK
 str = arr.toLocaleString('en-US'); // should be error
-str = arr.toLocaleString('en-US', { style: 'currency' }); // should be error
+str = arr.toLocaleString('en-US', { style: 'currency', currency: 'EUR' }); // should be error
 var dates = [new Date(), new Date()];
 var str2;
 str2 = dates.toLocaleString(); // OK

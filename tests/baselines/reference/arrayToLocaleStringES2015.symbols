@@ -19,12 +19,13 @@ str = arr.toLocaleString('en-US'); // OK
 >arr : Symbol(arr, Decl(arrayToLocaleStringES2015.ts, 0, 5))
 >toLocaleString : Symbol(Array.toLocaleString, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
 
-str = arr.toLocaleString('en-US', { style: 'currency' }); // OK
+str = arr.toLocaleString('en-US', { style: 'currency', currency: 'EUR' }); // OK
 >str : Symbol(str, Decl(arrayToLocaleStringES2015.ts, 1, 3))
 >arr.toLocaleString : Symbol(Array.toLocaleString, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
 >arr : Symbol(arr, Decl(arrayToLocaleStringES2015.ts, 0, 5))
 >toLocaleString : Symbol(Array.toLocaleString, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
 >style : Symbol(style, Decl(arrayToLocaleStringES2015.ts, 4, 35))
+>currency : Symbol(currency, Decl(arrayToLocaleStringES2015.ts, 4, 54))
 
 const dates: readonly Date[] = [new Date(), new Date()];
 >dates : Symbol(dates, Decl(arrayToLocaleStringES2015.ts, 6, 5))
@@ -68,14 +69,15 @@ str3 = mixed.toLocaleString(); // OK
 >mixed : Symbol(mixed, Decl(arrayToLocaleStringES2015.ts, 12, 5))
 >toLocaleString : Symbol(Array.toLocaleString, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
 
-str3 = mixed.toLocaleString('de', { currency: 'EUR' }); // OK
+str3 = mixed.toLocaleString('de', { style: 'currency', currency: 'EUR' }); // OK
 >str3 : Symbol(str3, Decl(arrayToLocaleStringES2015.ts, 13, 3))
 >mixed.toLocaleString : Symbol(Array.toLocaleString, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
 >mixed : Symbol(mixed, Decl(arrayToLocaleStringES2015.ts, 12, 5))
 >toLocaleString : Symbol(Array.toLocaleString, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
->currency : Symbol(currency, Decl(arrayToLocaleStringES2015.ts, 15, 35))
+>style : Symbol(style, Decl(arrayToLocaleStringES2015.ts, 15, 35))
+>currency : Symbol(currency, Decl(arrayToLocaleStringES2015.ts, 15, 54))
 
-str3 = (mixed as ReadonlyArray<number | Date>).toLocaleString('de', { currency: 'EUR', timeZone: 'UTC' }); // OK
+str3 = (mixed as ReadonlyArray<number | Date>).toLocaleString('de', { currency: 'EUR', style: 'currency', timeZone: 'UTC' }); // OK
 >str3 : Symbol(str3, Decl(arrayToLocaleStringES2015.ts, 13, 3))
 >(mixed as ReadonlyArray<number | Date>).toLocaleString : Symbol(ReadonlyArray.toLocaleString, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
 >mixed : Symbol(mixed, Decl(arrayToLocaleStringES2015.ts, 12, 5))
@@ -83,5 +85,6 @@ str3 = (mixed as ReadonlyArray<number | Date>).toLocaleString('de', { currency: 
 >Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >toLocaleString : Symbol(ReadonlyArray.toLocaleString, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
 >currency : Symbol(currency, Decl(arrayToLocaleStringES2015.ts, 16, 69))
->timeZone : Symbol(timeZone, Decl(arrayToLocaleStringES2015.ts, 16, 86))
+>style : Symbol(style, Decl(arrayToLocaleStringES2015.ts, 16, 86))
+>timeZone : Symbol(timeZone, Decl(arrayToLocaleStringES2015.ts, 16, 105))
 
