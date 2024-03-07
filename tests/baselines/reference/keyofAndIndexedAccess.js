@@ -1431,7 +1431,11 @@ type DictDict<V extends string, T extends string> = {
 };
 declare function ff1<V extends string, T extends string>(dd: DictDict<V, T>, k1: V, k2: T): number;
 declare function ff2<V extends string, T extends string>(dd: DictDict<V, T>, k1: V, k2: T): number;
-declare const cf1: <T extends { [P in K]: string; } & {
+declare const cf1: <T extends {
+    [P in K]: string;
+} & {
     cool: string;
 }, K extends keyof T>(t: T, k: K) => void;
-declare const cf2: <T extends { [P in K | "cool"]: string; }, K extends keyof T>(t: T, k: K) => void;
+declare const cf2: <T extends {
+    [P in K | "cool"]: string;
+}, K extends keyof T>(t: T, k: K) => void;

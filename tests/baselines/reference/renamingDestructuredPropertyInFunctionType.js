@@ -171,8 +171,8 @@ interface I {
 declare function f1({ a: string }: O): void;
 declare const f2: ({ a: string }: O) => void;
 declare const f3: ({ a: string, b, c }: O) => void;
-declare const f4: ({ a: string }: O) => string;
-declare const f5: ({ a: string, b, c }: O) => string;
+declare const f4: ({ a: string }: O) => typeof string;
+declare const f5: ({ a: string, b, c }: O) => typeof string;
 declare const obj1: {
     method({ a: string }: O): void;
 };

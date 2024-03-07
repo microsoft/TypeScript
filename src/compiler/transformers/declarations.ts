@@ -6,6 +6,7 @@ import {
     append,
     ArrayBindingElement,
     arrayFrom,
+    ArrowFunction,
     AsExpression,
     BindingElement,
     BindingName,
@@ -51,6 +52,7 @@ import {
     flatten,
     forEach,
     FunctionDeclaration,
+    FunctionExpression,
     FunctionTypeNode,
     GeneratedIdentifierFlags,
     GetAccessorDeclaration,
@@ -864,6 +866,9 @@ export function transformDeclarations(context: TransformationContext) {
     }
     function typeFromExpression(node: Expression, requiresUndefined?: boolean): TypeNode | undefined {
         switch (node.kind) {
+            case SyntaxKind.ArrowFunction:
+            case SyntaxKind.FunctionExpression:
+                return typeFromFunctionLikeExpression(node as ArrowFunction | FunctionExpression);
             case SyntaxKind.TypeAssertionExpression:
             case SyntaxKind.AsExpression:
                 const asExpression = node as AsExpression | TypeAssertion;
@@ -877,7 +882,19 @@ export function transformDeclarations(context: TransformationContext) {
         }
         return undefined;
     }
+    function typeFromFunctionLikeExpression(fnNode: FunctionExpression | ArrowFunction) {
+        const oldEnclosingDeclaration = enclosingDeclaration;
+        enclosingDeclaration = fnNode;
 
+        const returnType = fnNode.type ? visitTypeNode(fnNode.type) : inferReturnTypeOfSignatureSignature(fnNode);
+        const fnTypeNode = factory.createFunctionTypeNode(
+            visitNodes(fnNode.typeParameters, visitDeclarationSubtree, isTypeParameterDeclaration),
+            fnNode.parameters.map(p => ensureParameter(p)),
+            returnType,
+        );
+        enclosingDeclaration = oldEnclosingDeclaration;
+        return fnTypeNode;
+    }
     function typeFromAccessor(node: AccessorDeclaration) {
         const accessorDeclarations = resolver.getAllAccessorDeclarations(node);
         const accessorType = getTypeAnnotationFromAllAccessorDeclarations(node, accessorDeclarations);
@@ -892,7 +909,7 @@ export function transformDeclarations(context: TransformationContext) {
             return visitNode(declaredType, visitDeclarationSubtree, isTypeNode)!;
         }
         let resultType;
-        if (node.initializer) {
+        if (node.initializer && !resolver.isExpandoFunctionDeclaration(node)) {
             resultType = typeFromExpression(node.initializer);
         }
         return resultType ?? inferVariableLikeType(node);

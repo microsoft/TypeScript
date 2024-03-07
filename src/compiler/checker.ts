@@ -6329,8 +6329,25 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
         const firstIdentifier = getFirstIdentifier(entityName);
         const symbol = resolveName(enclosingDeclaration, firstIdentifier.escapedText, meaning, /*nameNotFoundMessage*/ undefined, /*nameArg*/ undefined, /*isUse*/ false);
-        if (symbol && symbol.flags & SymbolFlags.TypeParameter && meaning & SymbolFlags.Type) {
-            return { accessibility: SymbolAccessibility.Accessible };
+        if (symbol) {
+            if (symbol.flags & SymbolFlags.TypeParameter && meaning & SymbolFlags.Type) {
+                return { accessibility: SymbolAccessibility.Accessible };
+            }
+
+            // Parameters or binding elements from parameters are always visible in their enclosing function declarations
+            if (symbol.flags & SymbolFlags.FunctionScopedVariable && meaning & SymbolFlags.Value) {
+                let declaration: Node | undefined = symbol.valueDeclaration;
+                while (declaration) {
+                    if (declaration.kind === SyntaxKind.Parameter) break;
+                    if (declaration.kind === SyntaxKind.BindingElement) {
+                        declaration = declaration.parent.parent;
+                    }
+                    break;
+                }
+                if (declaration?.kind === SyntaxKind.Parameter) {
+                    return { accessibility: SymbolAccessibility.Accessible };
+                }
+            }
         }
         if (!symbol && isThisIdentifier(firstIdentifier) && isSymbolAccessible(getSymbolOfDeclaration(getThisContainer(firstIdentifier, /*includeArrowFunctions*/ false, /*includeClassComputedPropertyName*/ false)), firstIdentifier, meaning, /*shouldComputeAliasesToMakeVisible*/ false).accessibility === SymbolAccessibility.Accessible) {
             return { accessibility: SymbolAccessibility.Accessible };
@@ -48160,13 +48177,25 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             hasSyntacticModifier(parameter, ModifierFlags.ParameterPropertyModifier);
     }
 
-    function isExpandoFunctionDeclaration(node: Declaration): boolean {
-        const declaration = getParseTreeNode(node, isFunctionDeclaration);
+    function isExpandoFunctionDeclaration(node: FunctionDeclaration | VariableDeclaration): boolean {
+        const declaration = getParseTreeNode(node, isDeclaration);
         if (!declaration) {
             return false;
         }
-        const symbol = getSymbolOfDeclaration(declaration);
-        if (!symbol || !(symbol.flags & SymbolFlags.Function)) {
+        let symbol: Symbol;
+        if (isVariableDeclaration(declaration)) {
+            if (declaration.type || !isVarConstLike(declaration)) {
+                return false;
+            }
+            if (!(declaration.initializer && isFunctionExpressionOrArrowFunction(declaration.initializer))) {
+                return false;
+            }
+            symbol = getSymbolOfDeclaration(declaration.initializer);
+        }
+        else {
+            symbol = getSymbolOfDeclaration(declaration);
+        }
+        if (!symbol || !(symbol.flags & SymbolFlags.Function | SymbolFlags.Variable)) {
             return false;
         }
         return !!forEachEntry(getExportsOfSymbol(symbol), p => p.flags & SymbolFlags.Value && isExpandoPropertyDeclaration(p.valueDeclaration));

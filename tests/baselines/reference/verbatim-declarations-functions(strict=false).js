@@ -188,45 +188,45 @@ exports.createClient = createClient;
 type P = {
     name: string;
 };
-export declare let vLet: (p: P, p2: P) => P;
-export declare const vConst: (p: P, p2: P) => P;
-export declare function fn(p?: (p: P, p2: P) => P): void;
+export declare let vLet: (/* param */ p: P, p2: typeof p) => P;
+export declare const vConst: (/* param */ p: P, p2: typeof p) => P;
+export declare function fn(p?: (/* param */ p: P, p2: typeof p) => P): void;
 export declare function fnTypeFromBinding({ foo }: {
     foo: number;
-}, p?: (p: P, p2: P, p3: typeof foo) => P): void;
+}, p?: (/* param */ p: P, p2: typeof p, p3: typeof foo) => P): void;
 /** p wil be resolved by the checker (requires | undefined)  */
-export declare function fnWithRequiredDefaultParam(p: (p: P, p2: P) => P, req: number): void;
+export declare function fnWithRequiredDefaultParam(p: (/* param */ p: P, p2: typeof p) => P, req: number): void;
 /** p wil be resolved by the checker (requires | undefined)  */
-export declare const exprWithRequiredDefaultParam: (p: (p: P, p2: P) => P, req: number) => void;
+export declare const exprWithRequiredDefaultParam: (p: (/* param */ p: P, p2: typeof p) => P, req: number) => void;
 export declare class C {
-    ctorField: (p: P, p2: P) => P;
-    field: (p: P, p2: P) => P;
-    readonly roFiled: (p: P, p2: P) => P;
-    method(p?: (p: P, p2: P) => P): void;
+    ctorField: (/* param */ p: P, p2: typeof p) => P;
+    field: (/* param */ p: P, p2: typeof p) => P;
+    readonly roFiled: (/* param */ p: P, p2: typeof p) => P;
+    method(p?: (/* param */ p: P, p2: typeof p) => P): void;
     /** p wil be resolved by the checker (requires | undefined)  */
-    methodWithRequiredDefault(p: (p: P, p2: P) => P, req: number): void;
+    methodWithRequiredDefault(p: (/* param */ p: P, p2: typeof p) => P, req: number): void;
     thisType: () => this;
-    constructor(ctorField?: (p: P, p2: P) => P);
+    constructor(ctorField?: (/* param */ p: P, p2: typeof p) => P);
 }
-declare const _default: (p: P, p2: P) => P;
+declare const _default: (/* param */ p: P, p2: typeof p) => P;
 export default _default;
 //// [functionExpressionPlacement.d.ts]
 type P = {
     name: string;
 };
-export declare let vLet: (p: P, p2: P) => P;
-export declare const vConst: (p: P, p2: P) => P;
-export declare function fn(p?: (p: P, p2: P) => P): void;
+export declare let vLet: (/* param */ p: P, p2: typeof p) => P;
+export declare const vConst: (/* param */ p: P, p2: typeof p) => P;
+export declare function fn(p?: (/* param */ p: P, p2: typeof p) => P): void;
 /** p wil be resolved by the checker (requires | undefined)  */
-export declare function fnWithRequiredDefaultParam(p: (p: P, p2: P) => P, req: number): void;
+export declare function fnWithRequiredDefaultParam(p: (/* param */ p: P, p2: typeof p) => P, req: number): void;
 export declare class C {
-    ctorField: (p: P, p2: P) => P;
-    field: (p: P, p2: P) => P;
-    readonly roFiled: (p: P, p2: P) => P;
-    method(p?: (p: P, p2: P) => P): void;
+    ctorField: (/* param */ p: P, p2: typeof p) => P;
+    field: (/* param */ p: P, p2: typeof p) => P;
+    readonly roFiled: (/* param */ p: P, p2: typeof p) => P;
+    method(p?: (/* param */ p: P, p2: typeof p) => P): void;
     /** p wil be resolved by the checker (requires | undefined)  */
-    methodWithRequiredDefault(p: (p: P, p2: P) => P, req: number): void;
-    constructor(ctorField?: (p: P, p2: P) => P);
+    methodWithRequiredDefault(p: (/* param */ p: P, p2: typeof p) => P, req: number): void;
+    constructor(ctorField?: (/* param */ p: P, p2: typeof p) => P);
 }
 export default function (/* param */ p: P, p2: typeof p): P;
 export {};
@@ -234,12 +234,16 @@ export {};
 type P = {
     name: string;
 };
-export declare let fromAnnotation: (p: P) => string;
+export declare let fromAnnotation: (p: P) => typeof p[keyof typeof p];
 export declare let fromInference: (p: P) => string;
 export {};
 //// [genericFunctions.d.ts]
-export declare let g1: <T extends "name">(p: T) => void;
-export declare let g2: <G2 extends "name">() => G2;
-export declare const createClient: <D>(clientDef: D) => D extends new (...args: any[]) => infer D_1 ? D_1 extends {
-    d: infer D_2;
-} ? D_2 : never : never;
+type G1 = {
+    name: string;
+};
+export declare let g1: <T extends keyof G1>(/* param */ p: T) => void;
+export declare let g2: <G2 extends keyof G1>() => G2;
+export declare const createClient: <D>(clientDef: D) => D extends new (...args: any[]) => infer D ? (D extends {
+    d: infer D;
+} ? D : never) : never;
+export {};
