@@ -2,15 +2,12 @@
 
 // @Filename: a.ts
 // @newline: LF
-// Case: abstract overloads
-////abstract class Base {
-////    abstract M<T>(t: T): void;
-////    abstract M<T>(t: T, x: number): void;
-////}
-////
-////abstract class Derived extends Base {
-////    abstract /*a*/
-////}
+//// abstract class AFoo {
+////     abstract bar(): Promise<void>;
+//// }
+//// class Foo extends AFoo {
+////     async b/*a*/
+//// }
 
 verify.completions({
     marker: "a",
@@ -22,16 +19,15 @@ verify.completions({
     },
     includes: [
         {
-            name: "M",
+            name: "bar",
             sortText: completion.SortText.LocationPriority,
-            insertText:
-`abstract M<T>(t: T): void;
-abstract M<T>(t: T, x: number): void;`,
-            filterText: "M",
+            insertText: "async bar(): Promise<void> {\n}",
+            filterText: "bar",
+            replacementSpan: undefined,
             hasAction: true,
             source: completion.CompletionSource.ClassMemberSnippet,
         },
-    ],
+    ]
 });
 
 verify.applyCodeActionFromCompletion("a", {
@@ -40,16 +36,14 @@ verify.applyCodeActionFromCompletion("a", {
       includeCompletionsWithSnippetText: false,
       includeCompletionsWithClassMemberSnippets: true,
     },
-    name: "M",
+    name: "bar",
     source: completion.CompletionSource.ClassMemberSnippet,
-    description: "Update modifiers of 'M'",
+    description: "Update modifiers of 'bar'",
     newFileContent:
-`abstract class Base {
-    abstract M<T>(t: T): void;
-    abstract M<T>(t: T, x: number): void;
+`abstract class AFoo {
+    abstract bar(): Promise<void>;
 }
-
-abstract class Derived extends Base {
-    
+class Foo extends AFoo {
+    b
 }`
 });
