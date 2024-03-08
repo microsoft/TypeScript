@@ -1,6 +1,24 @@
 // @strict: true
 // @noEmit: true
 
+function f1<T extends Record<string, any>, K extends keyof T>(
+  x: T[K] | undefined,
+) {
+  if (x === undefined) return;
+  x;
+  if (x === undefined) return;
+  x;
+}
+
+function f2<T extends Record<string, any>, K extends keyof T>(x: T[K] | null) {
+  if (x === null) return;
+  x;
+  if (x === null) return;
+  x;
+}
+
+// https://github.com/microsoft/TypeScript/issues/57693
+
 type AnyObject = Record<string, any>;
 type State = AnyObject;
 

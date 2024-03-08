@@ -1,6 +1,51 @@
-//// [tests/cases/compiler/narrowByUndefinedEqualityGeneric1.ts] ////
+//// [tests/cases/compiler/narrowByUndefinedNullEqualityGeneric1.ts] ////
 
-=== narrowByUndefinedEqualityGeneric1.ts ===
+=== narrowByUndefinedNullEqualityGeneric1.ts ===
+function f1<T extends Record<string, any>, K extends keyof T>(
+>f1 : <T extends Record<string, any>, K extends keyof T>(x: T[K] | undefined) => void
+
+  x: T[K] | undefined,
+>x : T[K] | undefined
+
+) {
+  if (x === undefined) return;
+>x === undefined : boolean
+>x : T[K] | undefined
+>undefined : undefined
+
+  x;
+>x : T[K] & ({} | null)
+
+  if (x === undefined) return;
+>x === undefined : boolean
+>x : T[K] & ({} | null)
+>undefined : undefined
+
+  x;
+>x : T[K] & ({} | null)
+}
+
+function f2<T extends Record<string, any>, K extends keyof T>(x: T[K] | null) {
+>f2 : <T extends Record<string, any>, K extends keyof T>(x: T[K] | null) => void
+>x : T[K] | null
+
+  if (x === null) return;
+>x === null : boolean
+>x : T[K] | null
+
+  x;
+>x : T[K] & ({} | undefined)
+
+  if (x === null) return;
+>x === null : boolean
+>x : T[K] & ({} | undefined)
+
+  x;
+>x : T[K] & ({} | undefined)
+}
+
+// https://github.com/microsoft/TypeScript/issues/57693
+
 type AnyObject = Record<string, any>;
 >AnyObject : { [x: string]: any; }
 

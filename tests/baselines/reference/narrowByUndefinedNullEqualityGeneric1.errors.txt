@@ -1,14 +1,32 @@
-narrowByUndefinedEqualityGeneric1.ts(21,23): error TS2345: Argument of type 'P[K] & ({} | null)' is not assignable to parameter of type 'S[K]'.
+narrowByUndefinedNullEqualityGeneric1.ts(39,23): error TS2345: Argument of type 'P[K] & ({} | null)' is not assignable to parameter of type 'S[K]'.
   'P[K] & ({} | null)' is assignable to the constraint of type 'S[K]', but 'S[K]' could be instantiated with a different subtype of constraint 'any'.
     Type 'P[K] & null' is not assignable to type 'S[K]'.
       'P[K] & null' is assignable to the constraint of type 'S[K]', but 'S[K]' could be instantiated with a different subtype of constraint 'any'.
-narrowByUndefinedEqualityGeneric1.ts(24,23): error TS2345: Argument of type 'P[K] & ({} | null)' is not assignable to parameter of type 'S[K]'.
+narrowByUndefinedNullEqualityGeneric1.ts(42,23): error TS2345: Argument of type 'P[K] & ({} | null)' is not assignable to parameter of type 'S[K]'.
   'P[K] & ({} | null)' is assignable to the constraint of type 'S[K]', but 'S[K]' could be instantiated with a different subtype of constraint 'any'.
     Type 'P[K] & null' is not assignable to type 'S[K]'.
       'P[K] & null' is assignable to the constraint of type 'S[K]', but 'S[K]' could be instantiated with a different subtype of constraint 'any'.
 
 
-==== narrowByUndefinedEqualityGeneric1.ts (2 errors) ====
+==== narrowByUndefinedNullEqualityGeneric1.ts (2 errors) ====
+    function f1<T extends Record<string, any>, K extends keyof T>(
+      x: T[K] | undefined,
+    ) {
+      if (x === undefined) return;
+      x;
+      if (x === undefined) return;
+      x;
+    }
+    
+    function f2<T extends Record<string, any>, K extends keyof T>(x: T[K] | null) {
+      if (x === null) return;
+      x;
+      if (x === null) return;
+      x;
+    }
+    
+    // https://github.com/microsoft/TypeScript/issues/57693
+    
     type AnyObject = Record<string, any>;
     type State = AnyObject;
     
