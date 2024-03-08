@@ -60,13 +60,12 @@ Output::
 //// [/user/username/projects/sample1/Library/library.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.createSomeObject = void 0;
+exports.createSomeObject = createSomeObject;
 function createSomeObject() {
     return {
         message: "new Object"
     };
 }
-exports.createSomeObject = createSomeObject;
 
 
 //// [/user/username/projects/sample1/Library/library.d.ts]
@@ -231,13 +230,12 @@ Output::
 //// [/user/username/projects/sample1/Library/library.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.createSomeObject = void 0;
+exports.createSomeObject = createSomeObject;
 function createSomeObject() {
     return {
         message2: "new Object"
     };
 }
-exports.createSomeObject = createSomeObject;
 
 
 //// [/user/username/projects/sample1/Library/library.d.ts]
@@ -399,13 +397,12 @@ Output::
 //// [/user/username/projects/sample1/Library/library.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.createSomeObject = void 0;
+exports.createSomeObject = createSomeObject;
 function createSomeObject() {
     return {
         message: "new Object"
     };
 }
-exports.createSomeObject = createSomeObject;
 
 
 //// [/user/username/projects/sample1/Library/library.d.ts]

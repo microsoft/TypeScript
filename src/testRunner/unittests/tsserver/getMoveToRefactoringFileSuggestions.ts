@@ -116,4 +116,61 @@ import { value1 } from "../node_modules/.cache/someFile.d.ts";`,
         });
         baselineTsserverLogs("getMoveToRefactoringFileSuggestions", "skips lib.d.ts files", session);
     });
+
+    it("should show ts files when moving non-tsx content from tsx file", () => {
+        const file1: File = {
+            path: "/bar.tsx",
+            content: `export function bar() { }`,
+        };
+        const file2: File = {
+            path: "/foo.ts",
+            content: "export function foo() { }",
+        };
+        const tsconfig: File = {
+            path: "/tsconfig.json",
+            content: jsonToReadableText({
+                jsx: "preserve",
+                files: ["./foo.ts", "./bar.tsx"],
+            }),
+        };
+
+        const host = createServerHost([file1, file2, tsconfig]);
+        const session = new TestSession(host);
+        openFilesForSession([file1], session);
+
+        session.executeCommandSeq<ts.server.protocol.GetMoveToRefactoringFileSuggestionsRequest>({
+            command: ts.server.protocol.CommandTypes.GetMoveToRefactoringFileSuggestions,
+            arguments: { file: file1.path, line: 1, offset: 7 },
+        });
+        baselineTsserverLogs("getMoveToRefactoringFileSuggestions", "should show ts files when moving non-tsx content from tsx file", session);
+    });
+
+    it("should show js files when moving non-jsx content from jsx file", () => {
+        const file1: File = {
+            path: "/bar.jsx",
+            content: `export function bar() { }`,
+        };
+        const file2: File = {
+            path: "/foo.js",
+            content: "export function foo() { }",
+        };
+        const tsconfig: File = {
+            path: "/tsconfig.json",
+            content: jsonToReadableText({
+                allowJS: true,
+                jsx: "preserve",
+                files: ["./foo.js", "./bar.jsx"],
+            }),
+        };
+
+        const host = createServerHost([file1, file2, tsconfig]);
+        const session = new TestSession(host);
+        openFilesForSession([file1], session);
+
+        session.executeCommandSeq<ts.server.protocol.GetMoveToRefactoringFileSuggestionsRequest>({
+            command: ts.server.protocol.CommandTypes.GetMoveToRefactoringFileSuggestions,
+            arguments: { file: file1.path, line: 1, offset: 7 },
+        });
+        baselineTsserverLogs("getMoveToRefactoringFileSuggestions", "should show js files when moving non-jsx content from jsx file", session);
+    });
 });

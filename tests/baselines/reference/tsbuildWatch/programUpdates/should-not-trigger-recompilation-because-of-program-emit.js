@@ -126,12 +126,12 @@ export declare const World = "hello";
 //// [/user/username/projects/sample1/core/index.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.multiply = exports.leftPad = exports.someString = void 0;
+exports.someString = void 0;
+exports.leftPad = leftPad;
+exports.multiply = multiply;
 exports.someString = "HELLO WORLD";
 function leftPad(s, n) { return s + n; }
-exports.leftPad = leftPad;
 function multiply(a, b) { return a * b; }
-exports.multiply = multiply;
 
 
 //// [/user/username/projects/sample1/core/index.d.ts.map]

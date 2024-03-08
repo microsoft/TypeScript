@@ -1,6 +1,7 @@
 // @strict: true
 // @noEmit: true
 
+// inference fails for res1 and res2, but ideally should not
 declare function fn1<T>(cb: () => T): string;
 const res1 = fn1(() => res1);
 

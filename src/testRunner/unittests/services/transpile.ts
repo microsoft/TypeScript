@@ -20,7 +20,7 @@ describe("unittests:: services:: Transpile", () => {
                     transpileOptions.compilerOptions = {};
                 }
                 if (transpileOptions.compilerOptions.target === undefined) {
-                    transpileOptions.compilerOptions.target = ts.ScriptTarget.ES3;
+                    transpileOptions.compilerOptions.target = ts.ScriptTarget.ES5;
                 }
 
                 if (transpileOptions.compilerOptions.newLine === undefined) {
