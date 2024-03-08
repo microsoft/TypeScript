@@ -383,18 +383,6 @@ function entrypointBuildTask(options) {
     return { build, bundle, shim, main, watch };
 }
 
-const { main: tsc, watch: watchTsc } = entrypointBuildTask({
-    name: "tsc",
-    description: "Builds the command-line compiler",
-    buildDeps: [generateDiagnostics],
-    project: "src/tsc",
-    srcEntrypoint: "./src/tsc/tsc.ts",
-    builtEntrypoint: "./built/local/tsc/tsc.js",
-    output: "./built/local/tsc.js",
-    mainDeps: [generateLibs],
-});
-export { tsc, watchTsc };
-
 const { main: services, build: buildServices, watch: watchServices } = entrypointBuildTask({
     name: "services",
     description: "Builds the typescript.js library",
@@ -407,6 +395,19 @@ const { main: services, build: buildServices, watch: watchServices } = entrypoin
     bundlerOptions: { exportIsTsObject: true },
 });
 export { services, watchServices };
+
+const { main: tsc, watch: watchTsc } = entrypointBuildTask({
+    name: "tsc",
+    description: "Builds the command-line compiler",
+    buildDeps: [generateDiagnostics],
+    project: "src/tsc",
+    srcEntrypoint: "./src/tsc/tsc.ts",
+    builtEntrypoint: "./built/local/tsc/tsc.js",
+    output: "./built/local/tsc.js",
+    mainDeps: [generateLibs, services],
+    bundlerOptions: { usePublicAPI: true },
+});
+export { tsc, watchTsc };
 
 export const dtsServices = task({
     name: "dts-services",
