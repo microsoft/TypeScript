@@ -184,7 +184,7 @@ async function runDtsBundler(entrypoint, output) {
  * @typedef BundlerTaskOptions
  * @property {boolean} [exportIsTsObject]
  * @property {boolean} [treeShaking]
- * @property {boolean} [useTypeScriptPublicAPI]
+ * @property {boolean} [usePublicAPI]
  * @property {() => void} [onWatchRebuild]
  */
 function createBundler(entrypoint, outfile, taskOptions = {}) {
@@ -209,7 +209,7 @@ function createBundler(entrypoint, outfile, taskOptions = {}) {
             // legalComments: "none", // If we add copyright headers to the source files, uncomment.
         };
 
-        if (taskOptions.useTypeScriptPublicAPI) {
+        if (taskOptions.usePublicAPI) {
             options.external = ["./typescript.js"];
             options.plugins = options.plugins || [];
             options.plugins.push({
@@ -438,7 +438,7 @@ const { main: tsserver, watch: watchTsserver } = entrypointBuildTask({
     builtEntrypoint: "./built/local/tsserver/server.js",
     output: "./built/local/tsserver.js",
     mainDeps: [generateLibs, services],
-    bundlerOptions: { useTypeScriptPublicAPI: true },
+    bundlerOptions: { usePublicAPI: true },
 });
 export { tsserver, watchTsserver };
 
@@ -589,7 +589,7 @@ const { main: typingsInstaller, watch: watchTypingsInstaller } = entrypointBuild
     builtEntrypoint: "./built/local/typingsInstaller/nodeTypingsInstaller.js",
     output: "./built/local/typingsInstaller.js",
     mainDeps: [services],
-    bundlerOptions: { useTypeScriptPublicAPI: true },
+    bundlerOptions: { usePublicAPI: true },
 });
 
 const { main: watchGuard, watch: watchWatchGuard } = entrypointBuildTask({
