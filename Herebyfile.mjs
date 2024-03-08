@@ -588,6 +588,8 @@ const { main: typingsInstaller, watch: watchTypingsInstaller } = entrypointBuild
     srcEntrypoint: "./src/typingsInstaller/nodeTypingsInstaller.ts",
     builtEntrypoint: "./built/local/typingsInstaller/nodeTypingsInstaller.js",
     output: "./built/local/typingsInstaller.js",
+    mainDeps: [services],
+    bundlerOptions: { useTypeScriptPublicAPI: true },
 });
 
 const { main: watchGuard, watch: watchWatchGuard } = entrypointBuildTask({
