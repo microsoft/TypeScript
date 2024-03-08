@@ -60,7 +60,7 @@ declare enum E {
 }
 declare const e = E["some value"];
 declare function f3<T>(a: T, b: T): T;
-declare const x3: string;
+declare const x3: "abc" | "def";
 declare const octal = 14;
 declare const octalParen = 14;
 declare const octalIndirect = 14;
