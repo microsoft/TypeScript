@@ -73,7 +73,7 @@ catch (e) {
 
 const resultsComment = await gh.issues.createComment({
     issue_number: SOURCE_ISSUE,
-    owner: "Microsoft",
+    owner: "microsoft",
     repo: "TypeScript",
     body: newComment,
 });
@@ -84,7 +84,7 @@ for (let i = 0; i < 5; i++) {
     // Get status comment contents
     const statusComment = await gh.rest.issues.getComment({
         comment_id: SOURCE_ISSUE,
-        owner: "Microsoft",
+        owner: "microsoft",
         repo: "TypeScript",
     });
 
@@ -99,7 +99,7 @@ for (let i = 0; i < 5; i++) {
     // Update status comment
     await gh.rest.issues.updateComment({
         comment_id: SOURCE_ISSUE,
-        owner: "Microsoft",
+        owner: "microsoft",
         repo: "TypeScript",
         body: newComment,
     });
