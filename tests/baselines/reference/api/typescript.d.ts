@@ -8811,7 +8811,7 @@ declare namespace ts {
         readonly organizeImportsTypeOrder?: OrganizeImportsTypeOrder;
         readonly excludeLibrarySymbolsInNavTo?: boolean;
     }
-    type OrganizeImportsTypeOrder = "first" | "last" | "inline";
+    type OrganizeImportsTypeOrder = "last" | "inline" | "first";
     /** Represents a bigint literal value without requiring bigint support */
     interface PseudoBigInt {
         negative: boolean;

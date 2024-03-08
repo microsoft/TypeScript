@@ -440,6 +440,41 @@ const x = abc + Abc + I + M + R;`,
 console.log(Type1, Type2, Type3, Type4, Type5, Type6, Type7, Type8, Type9, func1, func2, func3, func4, func5, func6, func7, func8, func9);`,
         });
 
+        testOrganizeImports("detection6", /*skipDestructiveCodeActions*/ false, {
+            path: "/test.ts",
+            content: 
+`import { A, B, a, b } from 'foo';
+console.log(A, B, a, b);`
+        });
+
+        testOrganizeImports("detection7", /*skipDestructiveCodeActions*/ false, {
+            path: "/test.ts",
+            content: 
+`import { A, a, B, b } from 'foo';
+console.log(A, B, a, b);`
+        });
+
+        testOrganizeImports("detection8", /*skipDestructiveCodeActions*/ false, {
+            path: "/test.ts",
+            content: 
+`import { A, a, b, B } from 'foo';
+console.log(A, B, a, b);`
+        });
+
+        testOrganizeImports("detection9", /*skipDestructiveCodeActions*/ false, {
+            path: "/test.ts",
+            content: 
+`import { a, b, A, B } from 'foo';
+console.log(A, B, a, b);`
+        });
+
+        testOrganizeImports("detection10", /*skipDestructiveCodeActions*/ false, {
+            path: "/test.ts",
+            content: 
+`import { a, A, b, B } from 'foo';
+console.log(A, B, a, b);`
+        });
+
         testOrganizeImports("Renamed_used", /*skipDestructiveCodeActions*/ false, {
             path: "/test.ts",
             content: `

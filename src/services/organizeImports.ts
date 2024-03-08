@@ -666,6 +666,33 @@ export function getOrganizeImportsSpecifierComparer<T extends ImportOrExportSpec
     return (s1, s2) => compareImportOrExportSpecifiers(s1, s2, stringComparer, preferences);
 }
 
+/** @internal */
+export function getOrganizeImportsSpecifierComparerWithDetection(importDecl: ImportDeclaration, preferences: UserPreferences, sourceFile?: SourceFile): { specifierComparer: Comparer<ImportSpecifier>, isSorted: boolean | undefined } {
+    const { comparersToTest, typeOrdersToTest } = getDetectionLists(preferences);
+    const detectFromDecl = detectNamedImportOrganizationBySort([importDecl], comparersToTest, typeOrdersToTest);
+    let specifierComparer = getOrganizeImportsSpecifierComparer(preferences, comparersToTest[0]);
+    let isSorted;
+
+    if (typeof preferences.organizeImportsIgnoreCase !== "boolean" || !preferences.organizeImportsTypeOrder) {
+        if (detectFromDecl) {
+            const { namedImportComparer, typeOrder, isSorted: isDetectedSorted } = detectFromDecl;
+            isSorted = isDetectedSorted;
+            specifierComparer = getOrganizeImportsSpecifierComparer({ organizeImportsTypeOrder: typeOrder }, namedImportComparer);
+        } 
+        else if (sourceFile) {
+            // If a sourceFile is specified, we can also try detecting using the other import statements
+            const detectFromFile = detectNamedImportOrganizationBySort(sourceFile.statements.filter(isImportDeclaration), comparersToTest, typeOrdersToTest);
+            if (detectFromFile) {
+                const { namedImportComparer, typeOrder, isSorted: isDetectedSorted } = detectFromFile;
+                isSorted = isDetectedSorted;
+                specifierComparer = getOrganizeImportsSpecifierComparer({ organizeImportsTypeOrder: typeOrder }, namedImportComparer);
+            }
+        }
+    }
+    
+    return { specifierComparer, isSorted };
+}
+
 /**
  * Exported for testing
  *
@@ -792,6 +819,11 @@ function getOrganizeImportsLocale(preferences: UserPreferences): string {
 }
 
 /** @internal */
+export function getOrganizeImportsComparerWithDetection(originalImportDecls: readonly AnyImportOrRequireStatement[], preferences: UserPreferences): { comparer: Comparer<string>, isSorted: boolean } {
+    return detectModuleSpecifierCaseBySort([originalImportDecls], getDetectionLists(preferences).comparersToTest);
+}
+
+/** @internal */
 export function getOrganizeImportsComparer(preferences: UserPreferences, ignoreCase: boolean): Comparer<string> {
     const collation = preferences.organizeImportsCollation ?? "ordinal";
     return collation === "unicode" ?
@@ -841,7 +873,7 @@ export function detectModuleSpecifierCaseBySort(importDeclsByGroup: (readonly An
 }
 
 /** @internal */
-export function detectNamedImportOrganizationBySort(originalGroups: readonly ImportDeclaration[], comparersToTest: Comparer<string>[], typesToTest: OrganizeImportsTypeOrder[]): { namedImportComparer: Comparer<string>; typeOrder: OrganizeImportsTypeOrder | undefined; isSorted: boolean; } | undefined {
+export function detectNamedImportOrganizationBySort(originalGroups: readonly ImportDeclaration[], comparersToTest: Comparer<string>[], typesToTest: OrganizeImportsTypeOrder[]): { namedImportComparer: Comparer<string>; typeOrder: OrganizeImportsTypeOrder | undefined; isSorted: boolean; } | undefined {    
     // Filter for import declarations with named imports. Will be a flat array of import declarations without separations by group
     let bothNamedImports = false;
     const importDeclsWithNamed = originalGroups.filter(i => {
@@ -919,9 +951,6 @@ function detectCaseSensitivityBySort(originalGroups: string[][], comparersToTest
     let bestComparer;
     let bestDiff = Infinity;
 
-    if (comparersToTest.length === 1) {
-        return { comparer: comparersToTest[0], isSorted: true };
-    }
     for (const curComparer of comparersToTest) {
         let diffOfCurrentComparer = 0;
 

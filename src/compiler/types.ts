@@ -10098,7 +10098,7 @@ export interface UserPreferences {
     readonly excludeLibrarySymbolsInNavTo?: boolean;
 }
 
-export type OrganizeImportsTypeOrder = "first" | "last" | "inline";
+export type OrganizeImportsTypeOrder = "last" | "inline" | "first";
 
 /** Represents a bigint literal value without requiring bigint support */
 export interface PseudoBigInt {

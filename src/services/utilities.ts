@@ -4,7 +4,6 @@ import {
     addSyntheticLeadingComment,
     addSyntheticTrailingComment,
     AnyImportOrRequireStatement,
-    arrayIsSorted,
     assertType,
     AssignmentDeclarationKind,
     BinaryExpression,
@@ -2624,13 +2623,12 @@ export function insertImports(changes: textChanges.ChangeTracker, sourceFile: So
     const decl = isArray(imports) ? imports[0] : imports;
     const importKindPredicate: (node: Node) => node is AnyImportOrRequireStatement = decl.kind === SyntaxKind.VariableStatement ? isRequireVariableStatement : isAnyImportSyntax;
     const existingImportStatements = filter(sourceFile.statements, importKindPredicate);
-    const moduleSpecifiersToDetect = existingImportStatements.length > 1 ? [existingImportStatements] : isArray(imports) ? [imports] : [existingImportStatements];
-    const { comparer } = OrganizeImports.detectModuleSpecifierCaseBySort(moduleSpecifiersToDetect, OrganizeImports.getDetectionLists(preferences).comparersToTest);
+    const { comparer, isSorted } = OrganizeImports.getOrganizeImportsComparerWithDetection(existingImportStatements, preferences);
     const sortedNewImports = isArray(imports) ? stableSort(imports, (a, b) => OrganizeImports.compareImportsOrRequireStatements(a, b, comparer)) : [imports];
     if (!existingImportStatements.length) {
         changes.insertNodesAtTopOfFile(sourceFile, sortedNewImports, blankLineBetween);
     }
-    else if (existingImportStatements && arrayIsSorted(existingImportStatements, (s1, s2) => OrganizeImports.compareImportsOrRequireStatements(s1, s2, comparer))) {
+    else if (existingImportStatements && isSorted) {
         for (const newImport of sortedNewImports) {
             const insertionIndex = OrganizeImports.getImportDeclarationInsertionIndex(existingImportStatements, newImport, comparer);
             if (insertionIndex === 0) {
