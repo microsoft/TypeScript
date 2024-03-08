@@ -387,35 +387,35 @@ export const Other = 1;
             assert.isEmpty(changes);
         });
 
-        testOrganizeImports("detection1", /*skipDestructiveCodeActions*/ false, {
+        testDetectionBaseline("detection1", /*skipDestructiveCodeActions*/ false, {
             path: "/test.ts",
             content: `import { abc, Abc } from 'b';
 import { I, M, R } from 'a';
 const x = abc + Abc + I + M + R;`,
         });
 
-        testOrganizeImports("detection2", /*skipDestructiveCodeActions*/ false, {
+        testDetectionBaseline("detection2", /*skipDestructiveCodeActions*/ false, {
             path: "/test.ts",
             content: `import { abc, Abc } from 'a';
 import { I, M, R } from 'b';
 const x = abc + Abc + I + M + R;`,
         });
 
-        testOrganizeImports("detection3", /*skipDestructiveCodeActions*/ false, {
+        testDetectionBaseline("detection3", /*skipDestructiveCodeActions*/ false, {
             path: "/test.ts",
             content: `import { I, M, R } from 'a';
 import { Abc, abc } from 'b';
 const x = abc + Abc + I + M + R;`,
         });
 
-        testOrganizeImports("detection4", /*skipDestructiveCodeActions*/ false, {
+        testDetectionBaseline("detection4", /*skipDestructiveCodeActions*/ false, {
             path: "/test.ts",
             content: `import { I, M, R } from 'a';
 import { abc, Abc } from 'b';
 const x = abc + Abc + I + M + R;`,
         });
 
-        testOrganizeImports("detection5", /*skipDestructiveCodeActions*/ false, {
+        testDetectionBaseline("detection5", /*skipDestructiveCodeActions*/ false, {
             path: "/test.ts",
             content: `import {
     Type9,
@@ -440,37 +440,37 @@ const x = abc + Abc + I + M + R;`,
 console.log(Type1, Type2, Type3, Type4, Type5, Type6, Type7, Type8, Type9, func1, func2, func3, func4, func5, func6, func7, func8, func9);`,
         });
 
-        testOrganizeImports("detection6", /*skipDestructiveCodeActions*/ false, {
+        testDetectionBaseline("detection6", /*skipDestructiveCodeActions*/ false, {
             path: "/test.ts",
-            content: 
+            content:
 `import { A, B, a, b } from 'foo';
 console.log(A, B, a, b);`
         });
 
-        testOrganizeImports("detection7", /*skipDestructiveCodeActions*/ false, {
+        testDetectionBaseline("detection7", /*skipDestructiveCodeActions*/ false, {
             path: "/test.ts",
-            content: 
+            content:
 `import { A, a, B, b } from 'foo';
 console.log(A, B, a, b);`
         });
 
-        testOrganizeImports("detection8", /*skipDestructiveCodeActions*/ false, {
+        testDetectionBaseline("detection8", /*skipDestructiveCodeActions*/ false, {
             path: "/test.ts",
-            content: 
+            content:
 `import { A, a, b, B } from 'foo';
 console.log(A, B, a, b);`
         });
 
-        testOrganizeImports("detection9", /*skipDestructiveCodeActions*/ false, {
+        testDetectionBaseline("detection9", /*skipDestructiveCodeActions*/ false, {
             path: "/test.ts",
-            content: 
+            content:
 `import { a, b, A, B } from 'foo';
 console.log(A, B, a, b);`
         });
 
-        testOrganizeImports("detection10", /*skipDestructiveCodeActions*/ false, {
+        testDetectionBaseline("detection10", /*skipDestructiveCodeActions*/ false, {
             path: "/test.ts",
-            content: 
+            content:
 `import { a, A, b, B } from 'foo';
 console.log(A, B, a, b);`
         });
@@ -1067,6 +1067,27 @@ export * from "lib";
                     newText,
                 ].join(newLineCharacter),
             );
+        }
+
+        function testDetectionBaseline(testName: string, skipDestructiveCodeActions: boolean, testFile: File, ... otherFiles: File[]) {
+            it(testName, () => {
+                // this differs from the test above, in that it doesn't assert that there are changes
+                const baselinePath = `organizeImports/${testName}.ts`;
+                const { path: testPath, content: testContent } = testFile;
+                const languageService = makeLanguageService(testFile, ...otherFiles);
+                const changes = languageService.organizeImports({ skipDestructiveCodeActions, type: "file", fileName: testPath }, ts.testFormatSettings, ts.emptyOptions);
+
+                const newText = changes.length ? ts.textChanges.applyChanges(testContent, changes[0].textChanges) : testContent;
+                Harness.Baseline.runBaseline(
+                    baselinePath,
+                    [
+                        "// ==ORIGINAL==",
+                        testContent,
+                        "// ==ORGANIZED==",
+                        newText,
+                    ].join(newLineCharacter),
+                );
+            });
         }
 
         function makeLanguageService(...files: File[]) {
