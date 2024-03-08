@@ -1,3 +1,4 @@
+// @isolatedModules: true,false
 // @noTypesAndSymbols: true
 // @target: esnext
 
