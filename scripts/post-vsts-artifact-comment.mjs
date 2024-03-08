@@ -18,6 +18,7 @@ const REQUESTING_USER = mustGetEnv("REQUESTING_USER");
 const SOURCE_ISSUE = +mustGetEnv("SOURCE_ISSUE");
 const BUILD_BUILDID = +mustGetEnv("BUILD_BUILDID");
 const DISTINCT_ID = mustGetEnv("DISTINCT_ID");
+const STATUS_COMMENT = +mustGetEnv("STATUS_COMMENT");
 
 const gh = new Octokit({
     auth: process.argv[2],
@@ -83,7 +84,7 @@ let posted = false;
 for (let i = 0; i < 5; i++) {
     // Get status comment contents
     const statusComment = await gh.rest.issues.getComment({
-        comment_id: SOURCE_ISSUE,
+        comment_id: STATUS_COMMENT,
         owner: "microsoft",
         repo: "TypeScript",
     });
@@ -98,7 +99,7 @@ for (let i = 0; i < 5; i++) {
 
     // Update status comment
     await gh.rest.issues.updateComment({
-        comment_id: SOURCE_ISSUE,
+        comment_id: STATUS_COMMENT,
         owner: "microsoft",
         repo: "TypeScript",
         body: newComment,
